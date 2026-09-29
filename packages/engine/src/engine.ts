@@ -1,4 +1,4 @@
-import { produce, setAutoFreeze } from 'immer';
+import { cloneState } from './clone.ts';
 import {
   type Ctx,
   type CustomEffect,
@@ -28,9 +28,6 @@ import {
 } from './turn.ts';
 import type { Action, ApplyResult, CardDb, GameEvent, GameState, PlayerId } from './types.ts';
 
-// Simulations create many states; freezing each one is wasted work.
-setAutoFreeze(false);
-
 export interface ApplyOptions {
   /** Skip the legality check (for callers that picked from getLegalActions). */
   trusted?: boolean;
@@ -40,7 +37,14 @@ export interface Engine {
   readonly db: CardDb;
   newGame(opts: NewGameOptions): GameState;
   getLegalActions(state: GameState, player: PlayerId): Action[];
+  /** Returns a new state; the input is left untouched. */
   applyAction(state: GameState, action: Action, opts?: ApplyOptions): ApplyResult;
+  /**
+   * Mutates `state` directly and returns the events. For simulations that own
+   * their state (clone once with cloneState, then play out). If this throws,
+   * the state may be left half-updated.
+   */
+  applyActionInPlace(state: GameState, action: Action, opts?: ApplyOptions): GameEvent[];
 }
 
 export interface EngineOptions {
@@ -90,22 +94,28 @@ export function createEngine(db: CardDb, options: EngineOptions = {}): Engine {
     },
 
     applyAction(state, action, opts = {}) {
-      if (!opts.trusted && action.type !== 'concede') {
-        const key = actionKey(action);
-        const legal = legalActions(makeCtx(state, db, custom), action.player);
-        if (!legal.some((a) => actionKey(a) === key)) throw new IllegalActionError(action);
-      }
-      if (state.winner) throw new IllegalActionError(action);
-      let events: ApplyResult['events'] = [];
-      const next = produce(state, (draft) => {
-        const ctx = makeCtx(draft, db, custom);
-        apply(ctx, action);
-        // Events may reference draft objects, which are revoked when produce returns.
-        events = JSON.parse(JSON.stringify(ctx.events)) as GameEvent[];
-      });
-      return { state: next, events };
+      validate(state, action, opts);
+      const next = cloneState(state);
+      const ctx = makeCtx(next, db, custom);
+      apply(ctx, action);
+      return { state: next, events: ctx.events };
+    },
+
+    applyActionInPlace(state, action, opts = {}) {
+      validate(state, action, opts);
+      const ctx = makeCtx(state, db, custom);
+      apply(ctx, action);
+      return ctx.events;
     },
   };
+
+  function validate(state: GameState, action: Action, opts: ApplyOptions): void {
+    if (state.winner) throw new IllegalActionError(action);
+    if (opts.trusted || action.type === 'concede') return;
+    const key = actionKey(action);
+    const legal = legalActions(makeCtx(state, db, custom), action.player);
+    if (!legal.some((a) => actionKey(a) === key)) throw new IllegalActionError(action);
+  }
 }
 
 function afterMulliganDecision(ctx: Ctx, player: PlayerId): void {

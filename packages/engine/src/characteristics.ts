@@ -1,5 +1,14 @@
 import { type Ctx, def, defOf, obj } from './context.ts';
-import type { CardFilter, CardType, GameObject, Keyword, ObjectId, PlayerId } from './types.ts';
+import type {
+  CardDb,
+  CardDefId,
+  CardFilter,
+  CardType,
+  GameObject,
+  Keyword,
+  ObjectId,
+  PlayerId,
+} from './types.ts';
 
 export interface Characteristics {
   power: number;
@@ -30,9 +39,11 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
       toughness += e.toughness;
       for (const k of e.keywords) keywords.add(k);
     }
+    const withStatics = staticDefs(ctx.db);
     for (const srcId of ctx.s.battlefield) {
       const src = obj(ctx, srcId);
-      for (const a of def(ctx, srcId).abilities) {
+      if (!withStatics.has(src.defId)) continue;
+      for (const a of defOf(ctx, src.defId).abilities) {
         if (a.kind !== 'static') continue;
         const st = a.effect;
         if (st.kind === 'cantBlock' && srcId === id) cantBlock = true;
@@ -110,9 +121,26 @@ export function matchesFilter(
 
 /** Is life gain prevented for this player (e.g. Giant Cindermaw)? */
 export function lifeGainPrevented(ctx: Ctx): boolean {
-  return ctx.s.battlefield.some((id) =>
-    defOf(ctx, obj(ctx, id).defId).abilities.some(
-      (a) => a.kind === 'static' && a.effect.kind === 'noLifeGain',
-    ),
-  );
+  const withStatics = staticDefs(ctx.db);
+  return ctx.s.battlefield.some((id) => {
+    const defId = obj(ctx, id).defId;
+    return (
+      withStatics.has(defId) &&
+      defOf(ctx, defId).abilities.some((a) => a.kind === 'static' && a.effect.kind === 'noLifeGain')
+    );
+  });
+}
+
+const staticDefsCache = new WeakMap<CardDb, ReadonlySet<CardDefId>>();
+
+/** Card definitions with at least one static ability (computed once per database). */
+function staticDefs(db: CardDb): ReadonlySet<CardDefId> {
+  let set = staticDefsCache.get(db);
+  if (!set) {
+    set = new Set(
+      [...db.values()].filter((d) => d.abilities.some((a) => a.kind === 'static')).map((d) => d.id),
+    );
+    staticDefsCache.set(db, set);
+  }
+  return set;
 }

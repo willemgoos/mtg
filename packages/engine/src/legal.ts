@@ -1,7 +1,7 @@
 import { canTapForAbility, isCreature } from './characteristics.ts';
 import { blockViolations, canAttack, canBlock, defenderOf } from './combat.ts';
 import { type Ctx, def, defOf, obj } from './context.ts';
-import { canPay } from './mana.ts';
+import { canPayFrom, manaSources } from './mana.ts';
 import { targetCombos } from './targets.ts';
 import type { Action, PlayerId } from './types.ts';
 
@@ -22,6 +22,7 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
   const out: Action[] = [{ type: 'passPriority', player }];
   const ps = s.players[player];
   const sorcery = sorceryTiming(ctx, player);
+  const sources = manaSources(ctx, player);
 
   for (const card of ps.hand) {
     const d = def(ctx, card);
@@ -30,7 +31,7 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
       continue;
     }
     if (!d.types.includes('Instant') && !sorcery) continue;
-    if (!canPay(ctx, player, d.manaCost)) continue;
+    if (!canPayFrom(d.manaCost, sources)) continue;
     const specs = d.spell?.targets ?? [];
     for (const targets of targetCombos(ctx, specs, { controller: player, sourceId: card })) {
       out.push({ type: 'castSpell', player, card, targets });
@@ -43,7 +44,8 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
       if (a.kind !== 'activated') return;
       if (a.sorcerySpeed && !sorcery) return;
       if (a.cost.tapSelf && !canTapForAbility(ctx, source)) return;
-      if (!canPay(ctx, player, a.cost.mana, a.cost.tapSelf ? source : undefined)) return;
+      const usable = a.cost.tapSelf ? sources.filter((x) => x.id !== source) : sources;
+      if (!canPayFrom(a.cost.mana, usable)) return;
       for (const targets of targetCombos(ctx, a.targets, {
         controller: player,
         sourceId: source,

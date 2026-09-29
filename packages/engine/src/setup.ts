@@ -58,11 +58,11 @@ export function shuffleLibrary(ctx: Ctx, player: PlayerId): void {
 export function setupGame(ctx: Ctx, opts: NewGameOptions): void {
   const s = ctx.s;
   for (const p of PLAYERS) {
-    for (const defId of opts.decks[p]) {
-      const o = createObject(ctx, defId, p, 'library');
-      s.players[p].library.push(o.id);
-    }
-    shuffleLibrary(ctx, p);
+    // Shuffle before creating objects, so ids don't reveal decklist order.
+    const deck = [...opts.decks[p]];
+    shuffleInPlace(s.rng, deck);
+    for (const defId of deck) s.players[p].library.push(createObject(ctx, defId, p, 'library').id);
+    emit(ctx, { type: 'shuffled', player: p });
   }
   const first = opts.startingPlayer ?? (nextInt(s.rng, 2) === 0 ? 'p1' : 'p2');
   s.turn.activePlayer = first;

@@ -9,8 +9,5 @@
   },
   "scripts": {
     "typecheck": "tsc -p tsconfig.json && tsc -p tsconfig.test.json"
-  },
-  "dependencies": {
-    "immer": "^11.1.18"
   }
 }

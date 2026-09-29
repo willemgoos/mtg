@@ -57,9 +57,10 @@ export function findPayment(cost: ManaCost, sources: readonly ManaSource[]): Obj
   return generic > 0 ? null : [...used];
 }
 
-export function canPay(ctx: Ctx, player: PlayerId, cost: ManaCost | undefined, exclude?: ObjectId) {
+/** Can `sources` pay this cost? (Precompute sources once when checking many costs.) */
+export function canPayFrom(cost: ManaCost | undefined, sources: readonly ManaSource[]): boolean {
   if (!cost || manaValue(cost) === 0) return true;
-  return findPayment(cost, manaSources(ctx, player, exclude)) !== null;
+  return findPayment(cost, sources) !== null;
 }
 
 /**

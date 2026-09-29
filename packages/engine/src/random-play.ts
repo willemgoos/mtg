@@ -1,3 +1,4 @@
+import { cloneState } from './clone.ts';
 import type { Engine } from './engine.ts';
 import { createRng, nextInt } from './rng.ts';
 import type { Action, GameEvent, GameState, PlayerId } from './types.ts';
@@ -14,6 +15,7 @@ export interface RandomGameResult {
 /**
  * Plays both sides by picking uniformly among legal actions. The bot uses its
  * own seeded RNG, so a (game seed, bot seed) pair fully determines the game.
+ * `initial` is not modified: the game is played on a private copy.
  */
 export function playRandomGame(
   engine: Engine,
@@ -26,7 +28,7 @@ export function playRandomGame(
 ): RandomGameResult {
   const maxActions = opts.maxActions ?? 20000;
   const rng = createRng(botSeed);
-  let state = initial;
+  const state = cloneState(initial);
   const actions: Action[] = [];
   while (!state.winner && actions.length < maxActions) {
     const d = state.decision;
@@ -34,9 +36,8 @@ export function playRandomGame(
     const legal = engine.getLegalActions(state, d.player);
     if (legal.length === 0) throw new Error(`No legal actions for ${d.player} at ${d.kind}`);
     const action = legal[nextInt(rng, legal.length)]!;
-    const r = engine.applyAction(state, action, { trusted: true });
-    opts.onEvents?.(r.events, action, r.state);
-    state = r.state;
+    const events = engine.applyActionInPlace(state, action, { trusted: true });
+    opts.onEvents?.(events, action, state);
     actions.push(action);
   }
   return {
