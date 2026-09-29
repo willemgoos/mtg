@@ -1,4 +1,4 @@
-import { DECKS } from '@mtg/cards';
+import { findDeck } from '@mtg/cards';
 import type { GameState } from '@mtg/engine';
 import type { BotKind } from './bot.worker.ts';
 import type { DeckChoice, LogLine } from './useGame.ts';
@@ -21,7 +21,7 @@ export function loadGame(): SavedGame | null {
   try {
     const g = JSON.parse(localStorage.getItem(KEY) ?? 'null') as SavedGame | null;
     if (g?.v !== VERSION) return null;
-    const known = (id: string) => DECKS.some((d) => d.id === id);
+    const known = (id: string) => !!findDeck(id);
     if (!known(g.choice.you) || !known(g.choice.them)) return null;
     if (g.state.decision.kind === 'gameOver') return null;
     return g;

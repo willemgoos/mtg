@@ -40,7 +40,13 @@ export const costSymbols = (cost: string) => [...cost.matchAll(/\{([^}]+)\}/g)].
 
 /** Entries from bundled data; cards we haven't implemented come back with no cost or type. */
 export function deckEntries(deck: Decklist): DeckEntry[] {
-  return deck.cards.map(([name, count]) => {
+  return cardEntries(deck.cards);
+}
+
+export function cardEntries(
+  cards: readonly (readonly [name: string, count: number])[],
+): DeckEntry[] {
+  return cards.map(([name, count]) => {
     const sc = scryfallById.get(slug(name));
     return {
       name,

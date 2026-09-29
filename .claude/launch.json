@@ -5,7 +5,8 @@
       "name": "web",
       "runtimeExecutable": "corepack",
       "runtimeArgs": ["pnpm", "--filter", "@mtg/web", "dev"],
-      "port": 5173
+      "port": 5173,
+      "autoPort": true
     }
   ]
 }

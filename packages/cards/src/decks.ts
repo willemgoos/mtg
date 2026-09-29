@@ -7,10 +7,13 @@ export interface Decklist {
   colors: Color[];
   /** Card shown on the deck box. */
   face: string;
-  /** Where the list comes from ('arena': MTG Arena). */
-  source: 'arena';
-  /** 'starter': two-colour Starter Deck Duel decks; 'colorChallenge': the mono-colour decks Sparky plays. */
-  series: 'starter' | 'colorChallenge';
+  /** Where the list comes from ('arena': MTG Arena; 'custom': ours, like the Jump In packets). */
+  source: 'arena' | 'custom';
+  /**
+   * 'starter': two-colour Starter Deck Duel decks; 'colorChallenge': the
+   * mono-colour decks Sparky plays; 'jumpIn': two Jump In packets together.
+   */
+  series: 'starter' | 'colorChallenge' | 'jumpIn';
   cards: [name: string, count: number][];
 }
 

@@ -1,4 +1,4 @@
-import { DECKS, PLAYABLE_DECKS } from '@mtg/cards';
+import { findDeck, PLAYABLE_DECKS } from '@mtg/cards';
 import type { BotKind } from './bot.worker.ts';
 
 /*
@@ -36,8 +36,8 @@ export interface DeckRecord {
   best: number;
 }
 
-export interface GauntletState {
-  run: Run | null;
+export interface GauntletState<R extends Run = Run> {
+  run: R | null;
   records: Record<string, DeckRecord>;
 }
 
@@ -53,7 +53,7 @@ export function statusOf(r: Run): 'playing' | 'cleared' | 'out' {
 }
 
 /** Small seeded generator (mulberry32), so a run's ladder is fixed by its seed. */
-function rng(seed: number): () => number {
+export function rng(seed: number): () => number {
   let a = seed >>> 0;
   return () => {
     a = (a + 0x6d2b79f5) >>> 0;
@@ -65,11 +65,13 @@ function rng(seed: number): () => number {
 }
 
 /**
- * A fresh run: opponents are the other playable decks from the same series,
- * shuffled, repeating only if there are fewer than six.
+ * A fresh run: opponents are the other playable decks from the same series
+ * (starter decks for a Jump In deck), shuffled, repeating only if there are
+ * fewer than six.
  */
 export function newRun(deck: string, seed: number, pool = PLAYABLE_DECKS): Run {
-  const series = DECKS.find((d) => d.id === deck)?.series;
+  const own = findDeck(deck)?.series;
+  const series = own === 'jumpIn' ? 'starter' : own;
   const same = pool.filter((d) => d.id !== deck && d.series === series);
   const others = (same.length ? same : pool.filter((d) => d.id !== deck)).map((d) => d.id);
   const next = rng(seed);
@@ -89,7 +91,7 @@ export function startRun(s: GauntletState, deck: string, seed: number): Gauntlet
   };
 }
 
-export function startMatch(s: GauntletState, seed: number): GauntletState {
+export function startMatch<R extends Run>(s: GauntletState<R>, seed: number): GauntletState<R> {
   return s.run ? { ...s, run: { ...s.run, match: seed } } : s;
 }
 
@@ -98,14 +100,14 @@ export function startMatch(s: GauntletState, seed: number): GauntletState {
  * waiting on counts, so replays and reloads can't record a result twice.
  * A draw replays the round without costing a life.
  */
-export function recordResult(
-  s: GauntletState,
+export function recordResult<R extends Run>(
+  s: GauntletState<R>,
   seed: number,
   outcome: 'win' | 'loss' | 'draw',
-): GauntletState {
+): GauntletState<R> {
   const run = s.run;
   if (!run || run.match !== seed || statusOf(run) !== 'playing') return s;
-  const next: Run = {
+  const next: R = {
     ...run,
     match: null,
     results: outcome === 'draw' ? run.results : [...run.results, outcome],
@@ -136,7 +138,7 @@ export function loadGauntlet(): GauntletState {
     const g = JSON.parse(localStorage.getItem(KEY) ?? 'null') as
       (GauntletState & { v: number }) | null;
     if (g?.v !== VERSION) return { run: null, records: {} };
-    const known = (id: string) => DECKS.some((d) => d.id === id);
+    const known = (id: string) => !!findDeck(id);
     const run = g.run && known(g.run.deck) && g.run.opponents.every(known) ? g.run : null;
     return { run, records: g.records ?? {} };
   } catch {

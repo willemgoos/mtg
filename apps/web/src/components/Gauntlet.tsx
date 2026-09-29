@@ -1,4 +1,4 @@
-import { DECKS } from '@mtg/cards';
+import { deckById } from '@mtg/cards';
 import { useState } from 'react';
 import { artFor } from '../game/deckArt.ts';
 import {
@@ -12,18 +12,24 @@ import {
 } from '../game/gauntlet.ts';
 import { UiSize } from './UiSize.tsx';
 
-const deckOf = (id: string) => DECKS.find((d) => d.id === id)!;
+const deckOf = (id: string) => deckById(id);
 
 /** The ladder between gauntlet matches: who's beaten, who's next, lives left. */
 export function Gauntlet({
+  name = 'Gauntlet',
   state,
   resumable,
   onPlay,
+  onDeck,
   onAbandon,
   onAgain,
   onMenu,
 }: {
+  /** The mode, for titles ('Gauntlet', 'Expedition'). */
+  name?: string;
   state: GauntletState;
+  /** Opens the deck builder (expeditions). */
+  onDeck?: () => void;
   /** A match for this round was left part-way and can be picked up. */
   resumable: boolean;
   onPlay: () => void;
@@ -43,7 +49,7 @@ export function Gauntlet({
 
   const headline =
     status === 'cleared'
-      ? 'Gauntlet cleared!'
+      ? `${name} cleared!`
       : status === 'out'
         ? `Out after ${won} win${won === 1 ? '' : 's'}`
         : `Round ${round + 1} of ${ROUNDS.length}`;
@@ -58,7 +64,9 @@ export function Gauntlet({
     <div className={`start gauntlet gauntlet--${status}`}>
       <UiSize />
       <div className="start__title">
-        <span className="start__eyebrow">Gauntlet · {deck.name}</span>
+        <span className="start__eyebrow">
+          {name} · {deck.name}
+        </span>
         <h1>{headline}</h1>
         <p>{sub}</p>
       </div>
@@ -125,6 +133,11 @@ export function Gauntlet({
               <button className="btn btn--primary btn--big" onClick={onPlay}>
                 {resumable ? 'Resume match' : `Play round ${round + 1}`}
               </button>
+              {onDeck && !resumable && (
+                <button className="btn btn--ghost" onClick={onDeck}>
+                  Edit deck
+                </button>
+              )}
               <button className="btn btn--ghost" onClick={() => setConfirming(true)}>
                 Abandon run
               </button>

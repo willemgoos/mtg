@@ -3222,3 +3222,545 @@ button {
   flex: none;
   padding-inline: 1.25rem;
 }
+
+/* ------------------------------------------------------------ expedition */
+
+.offer__packs {
+  grid-template-columns: repeat(3, 15rem);
+  justify-content: center;
+}
+
+.builder__pool {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.builder__lands {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1.25rem;
+  padding: 0.75rem 1.5rem;
+  border-bottom: 0.0625rem solid var(--line);
+}
+
+.builder__label {
+  font-family: var(--caps);
+  letter-spacing: 0.08em;
+  color: var(--brass);
+}
+
+.builder__land {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+.builder__step {
+  min-width: 2rem;
+  padding-inline: 0.5rem;
+}
+
+.builder__count {
+  min-width: 1.5rem;
+  font-family: var(--display);
+  font-size: 1.125rem;
+  text-align: center;
+  color: var(--parchment);
+}
+
+.builder__empty {
+  margin: 1rem 0;
+  color: var(--muted);
+}
+
+.dcard.is-pickable,
+.dl-row.is-pickable {
+  cursor: var(--cursor-hover, pointer);
+}
+
+.dcard__new {
+  position: absolute;
+  top: 0.4rem;
+  left: 0.4rem;
+  padding: 0.0625rem 0.4375rem;
+  border-radius: 999px;
+  font-family: var(--caps);
+  font-size: 0.6875rem;
+  letter-spacing: 0.06em;
+  color: #0c1a10;
+  background: var(--moss);
+  box-shadow: 0 0.0625rem 0.25rem rgba(0, 0, 0, 0.6);
+}
+
+@media (max-width: 60rem) {
+  .offer__packs {
+    grid-template-columns: minmax(0, 15rem);
+  }
+}
+
+/* ---------------------------------------------------------- pack opening */
+
+.opening {
+  --ow: clamp(6.5rem, (100vw - 10rem) / 6 - 1rem, 10.5rem);
+  --oh: calc(var(--ow) * 88 / 63);
+  --gap: 1rem;
+}
+
+.opening__stage {
+  display: grid;
+  place-items: center;
+  min-height: calc(2 * var(--oh) + var(--gap) + 2rem);
+}
+
+.opening__actions {
+  min-height: 3.5rem;
+}
+
+/* The sealed booster. */
+.booster-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.booster {
+  position: relative;
+  width: calc(var(--ow) * 1.35);
+  aspect-ratio: 5 / 8.6;
+  padding: 0;
+  border: 0;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  cursor: var(--cursor-hover, pointer);
+  background: linear-gradient(
+    165deg,
+    color-mix(in srgb, var(--glow) 55%, #20160c) 0%,
+    #140d07 55%,
+    color-mix(in srgb, var(--glow) 30%, #0b0805) 100%
+  );
+  box-shadow:
+    0 0 0 0.0625rem rgba(255, 255, 255, 0.12),
+    0 1.5rem 3rem rgba(0, 0, 0, 0.65),
+    0 0 3.5rem color-mix(in srgb, var(--glow) 45%, transparent);
+  animation: booster-bob 3.2s ease-in-out infinite;
+  transition:
+    scale 0.25s var(--ease),
+    box-shadow 0.25s;
+}
+
+.booster:hover {
+  scale: 1.05;
+  box-shadow:
+    0 0 0 0.0625rem rgba(255, 255, 255, 0.25),
+    0 2rem 3.5rem rgba(0, 0, 0, 0.7),
+    0 0 5rem color-mix(in srgb, var(--glow) 75%, transparent);
+}
+
+.booster__art {
+  position: absolute;
+  inset: 14% 9% 30%;
+  border-radius: 0.375rem;
+  background: var(--art) center / cover;
+  box-shadow:
+    0 0 0 0.125rem color-mix(in srgb, var(--glow) 60%, #d9b46a),
+    inset 0 0 1.5rem rgba(0, 0, 0, 0.6);
+}
+
+/* A foil sheen sweeping across the wrapper. */
+.booster__foil {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    115deg,
+    transparent 35%,
+    rgba(255, 255, 255, 0.08) 42%,
+    rgba(255, 255, 255, 0.45) 48%,
+    rgba(255, 240, 200, 0.12) 54%,
+    transparent 62%
+  );
+  background-size: 300% 100%;
+  mix-blend-mode: screen;
+  animation: booster-foil 3s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.booster__label {
+  position: absolute;
+  inset: auto 0 7% 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.125rem;
+  text-align: center;
+}
+
+.booster__set {
+  font-family: var(--display);
+  font-size: calc(var(--ow) * 0.2);
+  line-height: 1;
+  color: var(--brass-hi);
+  text-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.8);
+}
+
+.booster__kind {
+  font-family: var(--caps);
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  color: var(--text);
+}
+
+/* Crimped seals top and bottom; the top one tears off. */
+.booster__crimp {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 7%;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.22) 0 0.1875rem,
+      rgba(0, 0, 0, 0.25) 0.1875rem 0.375rem
+    ),
+    color-mix(in srgb, var(--glow) 35%, #2a1d10);
+}
+
+.booster__crimp--top {
+  top: 0;
+}
+
+.booster__crimp--bottom {
+  bottom: 0;
+}
+
+.booster__hint {
+  font-family: var(--caps);
+  letter-spacing: 0.14em;
+  color: var(--brass);
+  animation: booster-hint 1.6s ease-in-out infinite;
+}
+
+.booster.is-tearing {
+  animation: booster-tear 0.72s cubic-bezier(0.5, 0, 0.9, 0.5) forwards;
+  pointer-events: none;
+}
+
+.booster.is-tearing .booster__crimp--top {
+  animation: booster-rip 0.72s ease-in forwards;
+}
+
+.booster.is-tearing ~ .booster__hint {
+  opacity: 0;
+}
+
+@keyframes booster-bob {
+  0%,
+  100% {
+    translate: 0 0;
+    rotate: -1.5deg;
+  }
+  50% {
+    translate: 0 -0.625rem;
+    rotate: 1.5deg;
+  }
+}
+
+@keyframes booster-foil {
+  from {
+    background-position: 100% 0;
+  }
+  to {
+    background-position: -50% 0;
+  }
+}
+
+@keyframes booster-hint {
+  50% {
+    opacity: 0.45;
+  }
+}
+
+/* Trembling harder and harder, swelling with light, then gone in the burst. */
+@keyframes booster-tear {
+  0% {
+    rotate: 0deg;
+    scale: 1;
+  }
+  15% {
+    rotate: -3deg;
+    scale: 1.04;
+  }
+  30% {
+    rotate: 3deg;
+  }
+  45% {
+    rotate: -5deg;
+    scale: 1.08;
+  }
+  60% {
+    rotate: 5deg;
+    filter: brightness(1.4);
+  }
+  75% {
+    rotate: -7deg;
+    scale: 1.14;
+    filter: brightness(1.8);
+  }
+  90% {
+    rotate: 6deg;
+    scale: 1.2;
+    filter: brightness(2.6);
+  }
+  100% {
+    rotate: 0deg;
+    scale: 1.3;
+    filter: brightness(4);
+    opacity: 0.6;
+  }
+}
+
+@keyframes booster-rip {
+  0%,
+  40% {
+    translate: 0 0;
+    rotate: 0deg;
+  }
+  100% {
+    translate: 30% -180%;
+    rotate: 14deg;
+    opacity: 0;
+  }
+}
+
+/* The cards: dealt out from the middle, face down, then flipped. */
+.pack-cards {
+  display: grid;
+  grid-template-columns: repeat(6, var(--ow));
+  gap: var(--gap);
+  perspective: 80rem;
+}
+
+.pcard {
+  position: relative;
+  /* Keeps the rarity aura (::before, z-index -1) behind the card but above the page. */
+  isolation: isolate;
+  width: var(--ow);
+  aspect-ratio: 63 / 88;
+  cursor: var(--cursor-hover, pointer);
+  animation: pcard-deal 0.55s cubic-bezier(0.2, 0.9, 0.3, 1.15) both;
+  animation-delay: calc(0.05s + var(--i) * 0.045s);
+  transition: translate 0.18s var(--ease);
+}
+
+.pcard:not(.is-up):hover {
+  translate: 0 -0.5rem;
+}
+
+@keyframes pcard-deal {
+  from {
+    transform: translate(
+        calc((2.5 - var(--col)) * (var(--ow) + var(--gap))),
+        calc(((var(--rows) - 1) / 2 - var(--row)) * (var(--oh) + var(--gap)))
+      )
+      rotate(var(--spin)) scale(0.35);
+    opacity: 0;
+  }
+  25% {
+    opacity: 1;
+  }
+}
+
+.pcard__inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.6s cubic-bezier(0.3, 1.35, 0.5, 1);
+}
+
+.pcard.is-up .pcard__inner {
+  transform: rotateY(180deg);
+}
+
+.pcard__back,
+.pcard__face {
+  position: absolute;
+  inset: 0;
+  border-radius: 4.6% / 3.3%;
+  overflow: hidden;
+  backface-visibility: hidden;
+  box-shadow: 0 0.5rem 1.25rem rgba(0, 0, 0, 0.6);
+}
+
+.pcard__face {
+  transform: rotateY(180deg);
+  background: #111;
+}
+
+.pcard__face img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Rarity shows through the back before the flip, like Arena. */
+.pcard::before {
+  content: '';
+  position: absolute;
+  inset: -14%;
+  z-index: -1;
+  border-radius: 1rem;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.pcard--uncommon .pcard__back {
+  box-shadow:
+    0 0 0 0.125rem rgba(200, 225, 240, 0.55),
+    0 0.5rem 1.25rem rgba(0, 0, 0, 0.6);
+}
+
+.pcard--rare::before {
+  opacity: 1;
+  inset: -24%;
+  background: radial-gradient(
+    closest-side,
+    rgba(255, 214, 120, 0.95),
+    rgba(246, 190, 80, 0.4) 60%,
+    transparent
+  );
+  filter: blur(0.5rem);
+  animation: pcard-aura 1.4s ease-in-out infinite;
+}
+
+.pcard--rare .pcard__back {
+  box-shadow:
+    0 0 0 0.1875rem var(--brass-hi),
+    0 0 1.5rem rgba(246, 205, 110, 0.8);
+}
+
+.pcard--mythic::before {
+  opacity: 1;
+  inset: -45%;
+  border-radius: 50%;
+  background:
+    radial-gradient(
+      closest-side,
+      rgba(255, 150, 70, 0.9),
+      rgba(255, 90, 40, 0.35) 55%,
+      transparent
+    ),
+    repeating-conic-gradient(rgba(255, 190, 110, 0.5) 0 6deg, transparent 6deg 24deg);
+  mask: radial-gradient(closest-side, #000 35%, transparent);
+  animation:
+    pcard-rays 7s linear infinite,
+    pcard-aura 1s ease-in-out infinite;
+}
+
+.pcard--mythic .pcard__back {
+  box-shadow:
+    0 0 0 0.1875rem #ffb070,
+    0 0 2rem rgba(255, 120, 60, 0.9);
+}
+
+.pcard--rare.is-up::before,
+.pcard--mythic.is-up::before {
+  animation-duration: 7s, 2.4s;
+  opacity: 0.7;
+}
+
+.pcard--rare.is-up::before {
+  animation-duration: 2.4s;
+}
+
+@keyframes pcard-aura {
+  50% {
+    scale: 1.08;
+    filter: blur(0.5rem) brightness(1.3);
+  }
+}
+
+@keyframes pcard-rays {
+  to {
+    rotate: 360deg;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .booster,
+  .booster__foil,
+  .booster__hint,
+  .pcard,
+  .pcard::before {
+    animation: none !important;
+  }
+
+  .pcard__inner {
+    transition: none;
+  }
+}
+
+/* ------------------------------------------------------------ jump in */
+
+.jumpin__packets {
+  display: grid;
+  grid-template-columns: repeat(3, 15rem);
+  justify-content: center;
+  gap: 1.5rem;
+  padding-bottom: 1rem;
+}
+
+.jumpin__packet {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.jumpin__list {
+  margin: 0;
+  padding: 0.5rem 0.75rem;
+  list-style: none;
+  border-radius: 0.5rem;
+  font-size: 0.8125rem;
+  color: var(--text);
+  background: rgba(0, 0, 0, 0.35);
+  box-shadow: 0 0 0 0.0625rem var(--line);
+  animation: jumpin-in 0.4s var(--ease) both;
+  animation-delay: calc(0.15s + var(--i) * 0.07s);
+}
+
+.jumpin__list li {
+  display: flex;
+  gap: 0.375rem;
+  padding: 0.125rem 0;
+}
+
+.jumpin__list li span {
+  min-width: 1.25rem;
+  color: var(--muted);
+}
+
+.jumpin__list li.is-rare {
+  color: var(--brass-hi);
+}
+
+@keyframes jumpin-in {
+  from {
+    opacity: 0;
+    translate: 0 0.75rem;
+  }
+}
+
+@media (max-width: 60rem) {
+  .jumpin__packets {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.75rem;
+  }
+
+  .jumpin__packets .deck {
+    width: 100%;
+  }
+}

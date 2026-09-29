@@ -1,6 +1,7 @@
 import { cardDb, DECKS, deckIds, describeEvent } from '@mtg/cards';
 import {
   type Action,
+  type CardDefId,
   createEngine,
   type GameEvent,
   type GameState,
@@ -19,6 +20,8 @@ export const BOT: PlayerId = 'p2';
 export interface DeckChoice {
   you: string;
   them: string;
+  /** The human's own cards instead of `you`'s list (an expedition deck). */
+  cards?: CardDefId[];
 }
 
 const engine = createEngine(cardDb);
@@ -82,8 +85,8 @@ export function useGame(
       if (!d) throw new Error(`Unknown deck "${id}"`);
       return deckIds(d);
     };
-    return { p1: list(choice.you), p2: list(choice.them) };
-  }, [choice.you, choice.them]);
+    return { p1: choice.cards ?? list(choice.you), p2: list(choice.them) };
+  }, [choice.you, choice.them, choice.cards]);
 
   const [state, setState] = useState<GameState>(
     () => resume?.state ?? engine.newGame({ decks, seed }),
