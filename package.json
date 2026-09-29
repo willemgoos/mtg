@@ -9,7 +9,8 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "cards:fetch": "pnpm --filter @mtg/cards fetch-scryfall",
-    "sim": "pnpm --filter @mtg/cards sim"
+    "sim": "pnpm --filter @mtg/cards sim",
+    "arena": "pnpm --filter @mtg/ai arena"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

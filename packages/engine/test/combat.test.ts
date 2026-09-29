@@ -192,6 +192,17 @@ describe('combat damage', () => {
     expect(g.legal().some((a) => a.type === 'confirmBlockers')).toBe(true);
   });
 
+  it('with several blockers, the attacker kills the most powerful one it can', () => {
+    const g = fight({ battlefield: ['ogre'] }, { battlefield: ['spider', 'bear'] });
+    const ogre = g.id('p1', 'ogre');
+    g.attack(ogre).passBoth();
+    // Declared weakest-first; the attacker should still kill the 2-power bear, not the 1/3 spider.
+    g.block([g.id('p2', 'spider'), ogre], [g.id('p2', 'bear'), ogre]);
+    toDamage(g);
+    expect(g.state.players.p2.graveyard.map((id) => g.obj(id).defId)).toEqual(['bear']);
+    expect(g.zoneOf(ogre)).toBe('graveyard');
+  });
+
   it('multiple blockers split the attacker’s damage', () => {
     const g = fight({ battlefield: ['trampler'] }, { battlefield: ['bear', 'bear'] });
     const t = g.id('p1', 'trampler');

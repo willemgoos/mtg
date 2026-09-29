@@ -5,8 +5,8 @@
  *   pnpm sim -- 1000      # N games
  *   pnpm sim -- 1 --log   # one game with a readable event log
  */
-import { createEngine, type GameEvent, type GameState, playRandomGame } from '@mtg/engine';
-import { cardDb, deckIds, MONO_GREEN, MONO_RED } from '../src/index.ts';
+import { createEngine, playRandomGame } from '@mtg/engine';
+import { cardDb, deckIds, describeEvent, MONO_GREEN, MONO_RED } from '../src/index.ts';
 
 const args = process.argv.slice(2).filter((a) => a !== '--');
 const n = Number(args.find((a) => /^\d+$/.test(a)) ?? 200);
@@ -14,34 +14,6 @@ const log = args.includes('--log');
 
 const engine = createEngine(cardDb);
 const decks = { p1: deckIds(MONO_RED), p2: deckIds(MONO_GREEN) };
-
-function describe(e: GameEvent, s: GameState): string | null {
-  const name = (id: string) => cardDb.get(s.objects[id]?.defId ?? '')?.name ?? id;
-  switch (e.type) {
-    case 'stepChanged':
-      return e.step === 'upkeep' ? `\n== Turn ${e.turn} (${e.activePlayer}) ==` : null;
-    case 'spellCast':
-      return `${e.player} casts ${name(e.id)}`;
-    case 'abilityActivated':
-      return `${e.player} activates ${name(e.source)}`;
-    case 'objectMoved':
-      if (e.to === 'battlefield' || e.to === 'graveyard')
-        return `  ${cardDb.get(e.defId)?.name} → ${e.to}`;
-      return null;
-    case 'damageDealt': {
-      const to = 'player' in e.to ? e.to.player : name(e.to.object.id);
-      return `  ${name(e.source)} deals ${e.amount} to ${to}${e.combat ? ' (combat)' : ''}`;
-    }
-    case 'lifeChanged':
-      return `  ${e.player} life ${e.life}`;
-    case 'attackersDeclared':
-      return e.attackers.length ? `attacks with ${e.attackers.map(name).join(', ')}` : null;
-    case 'gameOver':
-      return `\nWinner: ${e.winner}`;
-    default:
-      return null;
-  }
-}
 
 const wins = { p1: 0, p2: 0, draw: 0 };
 let turns = 0;
@@ -52,7 +24,7 @@ for (let seed = 1; seed <= n; seed++) {
     onEvents: log
       ? (events, _action, state) => {
           for (const e of events) {
-            const line = describe(e, state);
+            const line = describeEvent(e, state);
             if (line) console.log(line);
           }
         }

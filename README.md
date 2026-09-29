@@ -5,6 +5,7 @@ Single-player Magic: The Gathering client with bot opponents. Mono-red vs. mono-
 ```
 packages/engine   pure TS rules engine (no DOM/Node), deterministic, headless
 packages/cards    card pool, Scryfall loader, behaviors, decklists, sim script
+packages/ai       bots (heuristic lookahead, random) and a bot-vs-bot match runner
 apps/web          (later) Vite + React UI
 ```
 
@@ -19,6 +20,7 @@ corepack pnpm typecheck
 corepack pnpm lint
 corepack pnpm cards:fetch     # re-generate packages/cards/src/generated/scryfall.json
 corepack pnpm sim -- 200      # random-vs-random games; add --log for a play-by-play
+corepack pnpm arena -- 40     # bot-vs-bot win rates; `-- --log 3` shows one game
 ```
 
 TypeScript is pinned to 6.x because typescript-eslint doesn't support TS 7 yet.
@@ -46,8 +48,9 @@ TypeScript is pinned to 6.x because typescript-eslint doesn't support TS 7 yet.
   goes up on each move, so `ObjectRef {id, zcc}` targets go stale correctly (rule 400.7).
 - **Mana** is auto-paid (lands before creatures); `payWith` lets the UI choose. There is
   no floating mana pool yet, because nothing in the pool needs it.
-- **Combat damage** is auto-assigned: lethal damage to each blocker in order, the excess
-  to the player with trample. (Current rules have no damage assignment order.)
+- **Combat damage** is auto-assigned in the attacker's interest: it kills the most
+  powerful blockers it can afford, and with trample the rest goes to the player once
+  every blocker has lethal damage. (Current rules have no damage assignment order.)
 - **Triggers** are collected from the event stream and put on the stack in APNAP order
   whenever a player would receive priority.
 - **Card behavior** is declarative (`TargetSpec`, `EffectDef`, `TriggerDef`, `StaticDef`)
@@ -56,7 +59,30 @@ TypeScript is pinned to 6.x because typescript-eslint doesn't support TS 7 yet.
   rules text. A test fails if a card with rules text has no behavior.
 - `@mtg/engine/testing` has `buildScenario` and `GameDriver` for mid-game test setups.
 
+## AI
+
+Bots implement `chooseAction(view, player)` and only ever see `redactFor(state, player)`.
+Hidden cards become an inert placeholder, so bots don't know or guess your decklist.
+`playMatch` runs bot-vs-bot games and checks every action against the real engine.
+
+The **heuristic bot** is a one-ply lookahead. For each legal action it simulates to the end
+of the stack (or of combat) against a passive opponent and scores the result: life on a
+log scale, creature value from power/toughness/keywords, and cards in hand. Until-end-of-turn
+pumps don't count, so tricks are only used when they change a fight.
+
+- **Attacks** are chosen greedily (plus an all-in check), with the opponent's blocks
+  predicted by a rule-based policy and a penalty for leaving itself open to a lethal
+  counterattack.
+- **Blocks** are chosen per attacker by simulating no block, single blocks and double blocks.
+
+In 40-game runs it beats the random bot about 95% of the time. In the heuristic mirror,
+green beats red about 64% of the time.
+
 ## Known gaps / next steps
+
+- AI: the opponent model is passive (it never casts tricks), and there's no search deeper
+  than one action. Next up is Monte Carlo tree search over `determinize`d states, with the
+  heuristic bot as the playout policy.
 
 - Manual combat damage assignment, and ordering several simultaneous triggers (both
   automatic for now).

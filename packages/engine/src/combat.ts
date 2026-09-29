@@ -88,10 +88,10 @@ interface Assignment {
 }
 
 /**
- * Default damage assignment for an attacker. Under current rules (no damage
- * assignment order) the attacker may split damage freely; we assign lethal
- * damage to each blocker in declaration order, then the rest to the player if
- * it has trample, otherwise to the last blocker.
+ * Default damage assignment for an attacker, made in the attacker's interest.
+ * Under current rules (no damage assignment order) the attacker may split
+ * damage freely: we kill the most powerful blockers we can afford first. Only
+ * if every blocker gets lethal damage can the rest trample over to the player.
  */
 function assignAttackerDamage(
   ctx: Ctx,
@@ -102,26 +102,38 @@ function assignAttackerDamage(
   const player: TargetChoice = { player: a.defender };
   if (!a.blocked) return [{ src, to: player, amount }];
   const trample = hasKeyword(ctx, a.id, 'trample');
-  const blockers = a.blockers;
-  if (blockers.length === 0) return trample ? [{ src, to: player, amount }] : [];
+  if (a.blockers.length === 0) return trample ? [{ src, to: player, amount }] : [];
   const deathtouch = hasKeyword(ctx, a.id, 'deathtouch');
-  const out: Assignment[] = [];
+  const blockers = a.blockers
+    .map((id) => ({ id, power: power(ctx, id), lethal: lethalFor(ctx, id, deathtouch) }))
+    .sort((x, y) => y.power - x.power || x.lethal - y.lethal);
+
+  const assigned = new Map<ObjectId, number>();
   let left = amount;
   for (const b of blockers) {
-    const n = Math.min(left, lethalFor(ctx, b, deathtouch));
-    if (n > 0) out.push({ src, to: { object: { id: b, zcc: obj(ctx, b).zcc } }, amount: n });
-    left -= n;
-  }
-  if (left > 0) {
-    if (trample) out.push({ src, to: player, amount: left });
-    else {
-      const last = blockers[blockers.length - 1]!;
-      const existing = out.find((x) => 'object' in x.to && x.to.object.id === last);
-      if (existing) existing.amount += left;
-      else out.push({ src, to: { object: { id: last, zcc: obj(ctx, last).zcc } }, amount: left });
+    if (b.lethal <= left) {
+      assigned.set(b.id, b.lethal);
+      left -= b.lethal;
     }
   }
-  return out;
+  if (left > 0) {
+    const allLethal = assigned.size === blockers.length;
+    if (trample && allLethal) {
+      const out = toAssignments(ctx, src, assigned);
+      out.push({ src, to: player, amount: left });
+      return out;
+    }
+    // Pile the rest onto the most powerful blocker we couldn't kill (or the first).
+    const target = blockers.find((b) => !assigned.has(b.id)) ?? blockers[0]!;
+    assigned.set(target.id, (assigned.get(target.id) ?? 0) + left);
+  }
+  return toAssignments(ctx, src, assigned);
+}
+
+function toAssignments(ctx: Ctx, src: DamageSource, m: Map<ObjectId, number>): Assignment[] {
+  return [...m]
+    .filter(([, n]) => n > 0)
+    .map(([id, n]) => ({ src, to: { object: { id, zcc: obj(ctx, id).zcc } }, amount: n }));
 }
 
 /** Combat damage step: all assignments first, then all damage dealt simultaneously. */

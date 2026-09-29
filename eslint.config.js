@@ -15,7 +15,7 @@ export default tseslint.config(
   },
   {
     // The engine must stay pure and deterministic.
-    files: ['packages/engine/src/**/*.ts'],
+    files: ['packages/engine/src/**/*.ts', 'packages/ai/src/**/*.ts'],
     rules: {
       'no-restricted-imports': ['error', { patterns: ['node:*', 'fs', 'path', 'react*'] }],
       'no-restricted-properties': [

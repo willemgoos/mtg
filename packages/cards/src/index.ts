@@ -7,6 +7,7 @@ import type { ScryfallCard } from './scryfall-types.ts';
 export { BEHAVIORS, TOKENS } from './behaviors.ts';
 export { buildCard, slug, parseManaCost, parseTypeLine } from './build.ts';
 export { GREEN_POOL, RED_POOL } from './pool.ts';
+export { describeEvent } from './log.ts';
 export type { ScryfallCard } from './scryfall-types.ts';
 
 export const SCRYFALL: readonly ScryfallCard[] = scryfall as ScryfallCard[];
