@@ -50,8 +50,13 @@ export function Battlefield({
     groups.set(d, [...(groups.get(d) ?? []), id]);
   }
 
+  // Cards tucked behind a creature (Equipment) don't take a slot of their own.
+  const slots = nonLands.filter((id) => view.objects[id]!.attachedTo === undefined).length;
   const creatures = (
-    <div className="row row--creatures">
+    <div
+      className="row row--creatures"
+      style={{ '--n': Math.max(1, slots) } as React.CSSProperties}
+    >
       {nonLands.map((id) => {
         const o = view.objects[id]!;
         const def = cardDb.get(o.defId);

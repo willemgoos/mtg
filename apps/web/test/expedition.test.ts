@@ -4,7 +4,9 @@ import {
   camp,
   chooseBoon,
   currentNode,
+  botFor,
   deckCards,
+  difficultyOf,
   enterNode,
   type ExpeditionState,
   FLOORS,
@@ -115,6 +117,24 @@ describe('expedition map', () => {
     s = fight(s, 'win');
     expect(reachable(s.run!)).toEqual([0, 1]);
     expect(enterNode(s, 2)).toEqual(s);
+  });
+});
+
+describe('expedition difficulty', () => {
+  it('climbs a step per floor, with elites two steps up and the final battle at the top', () => {
+    const duel: MapNode = { kind: 'duel' };
+    expect([0, 1, 2, 3, 4, 5].map((f) => difficultyOf(f, duel))).toEqual([1, 2, 3, 4, 5, 6]);
+    expect([0, 1, 2, 3, 4, 5].map((f) => botFor(f, duel))).toEqual([
+      'level1',
+      'level2',
+      'level3',
+      'level4',
+      'level5',
+      'level6',
+    ]);
+    expect(botFor(2, { kind: 'elite' })).toBe('level5');
+    expect(botFor(4, { kind: 'elite' })).toBe('heuristic');
+    expect(botFor(FLOORS - 1, { kind: 'boss' })).toBe('heuristic');
   });
 });
 

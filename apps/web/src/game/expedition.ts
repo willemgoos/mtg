@@ -1,6 +1,6 @@
 import { deckById, type Decklist, findDeck, PLAYABLE_DECKS, SCRYFALL, slug } from '@mtg/cards';
 import type { CardDefId, Color, NewGameOptions } from '@mtg/engine';
-import type { BotKind } from './bot.worker.ts';
+import type { BotKind, LevelBot } from './bot.worker.ts';
 import { type DeckRecord, rng, type RunSummary } from './gauntlet.ts';
 
 /*
@@ -93,20 +93,27 @@ const FLOOR_KINDS: NodeKind[][] = [
 ];
 export const FLOORS = FLOOR_KINDS.length;
 
+/** The top difficulty: the heuristic bot (the Apprentice), met at the final battle. */
+export const MAX_DIFFICULTY = 7;
+
 /**
- * The bot at a fight. Deliberately gentle: Novices first, Apprentices after,
- * and the Master only in elite fights you choose to take on.
+ * How hard a fight is, from 1 to 7. Duels climb one step per floor, elite
+ * fights are two steps above their floor, and the final battle is the top.
  */
-export function botFor(floor: number, node: MapNode): BotKind {
-  if (node.kind === 'elite') return 'search';
-  return floor < 2 ? 'easy' : 'heuristic';
+export function difficultyOf(floor: number, node: MapNode): number {
+  if (node.kind === 'boss') return MAX_DIFFICULTY;
+  return Math.min(MAX_DIFFICULTY, floor + 1 + (node.kind === 'elite' ? 2 : 0));
 }
 
-export const TIER_NAMES: Record<BotKind, string> = {
-  easy: 'Novice',
-  heuristic: 'Apprentice',
-  search: 'Master',
-};
+/** The bot for a difficulty: the easy bot's levels, then the heuristic bot. */
+export function botFor(floor: number, node: MapNode): BotKind {
+  const d = difficultyOf(floor, node);
+  return d >= MAX_DIFFICULTY ? 'heuristic' : (`level${d}` as LevelBot);
+}
+
+export function difficultyName(d: number): string {
+  return d <= 2 ? 'Very easy' : d <= 4 ? 'Easy' : d <= 6 ? 'Fair' : 'Medium';
+}
 
 export function makeMap(deck: string, seed: number): MapNode[][] {
   const next = rng((seed ^ 0x5eed_0f) >>> 0);

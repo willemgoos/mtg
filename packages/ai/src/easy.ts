@@ -10,13 +10,30 @@ export interface EasyOptions {
   skipAttackChance?: number;
   /** Chance to skip blocking when the attack isn't lethal. */
   skipBlockChance?: number;
+  /** Chance to forget its land drop for a turn. */
+  skipLandChance?: number;
+  /** Whether it may act at instant speed (counters, tricks on your turn). */
+  respond?: boolean;
 }
 
 /**
- * A beginner opponent: the heuristic bot with deliberate mistakes. It never
- * responds at instant speed (no counters or combat tricks on your turn),
- * sometimes holds spells, skips attacks and doesn't block, but still blocks
- * when an attack would kill it.
+ * Six steps from a very forgiving opponent up to one just below the heuristic
+ * bot, for the expedition's floors. Level 4 is roughly the Novice.
+ */
+export const EASY_LEVELS: readonly Omit<EasyOptions, 'seed'>[] = [
+  { holdChance: 0.5, skipAttackChance: 0.6, skipBlockChance: 0.8, skipLandChance: 0.25 },
+  { holdChance: 0.4, skipAttackChance: 0.5, skipBlockChance: 0.7, skipLandChance: 0.15 },
+  { holdChance: 0.3, skipAttackChance: 0.4, skipBlockChance: 0.55, skipLandChance: 0.08 },
+  { holdChance: 0.2, skipAttackChance: 0.3, skipBlockChance: 0.4 },
+  { holdChance: 0.12, skipAttackChance: 0.2, skipBlockChance: 0.25, respond: true },
+  { holdChance: 0.06, skipAttackChance: 0.1, skipBlockChance: 0.12, respond: true },
+];
+
+/**
+ * A beginner opponent: the heuristic bot with deliberate mistakes. Unless
+ * `respond` is set it never acts at instant speed (no counters or combat
+ * tricks on your turn); it sometimes holds spells, skips attacks, forgets a
+ * land and doesn't block, but still blocks when an attack would kill it.
  */
 export function createEasyBot(db: CardDb, opts: EasyOptions): Bot {
   const inner = createHeuristicBot(db, 'easy');
@@ -25,6 +42,7 @@ export function createEasyBot(db: CardDb, opts: EasyOptions): Bot {
   const hold = opts.holdChance ?? 0.25;
   const skipAttack = opts.skipAttackChance ?? 0.35;
   const skipBlock = opts.skipBlockChance ?? 0.5;
+  const skipLand = opts.skipLandChance ?? 0;
   // One decision per combat, so it doesn't half-declare attacks.
   const combatChoice = new Map<string, boolean>();
   const decideOnce = (key: string, p: number) => {
@@ -42,9 +60,10 @@ export function createEasyBot(db: CardDb, opts: EasyOptions): Bot {
       if (d.kind === 'priority') {
         const mine = view.turn.activePlayer === me;
         // No instant-speed interaction on the opponent's turn or in response to spells.
-        if (!mine || view.stack.length > 0) return pass;
+        if (!opts.respond && (!mine || view.stack.length > 0)) return pass;
         const a = inner.chooseAction(view, me);
-        if (a.type === 'castSpell' && roll(hold)) return pass;
+        if (a.type === 'castSpell' && mine && roll(hold)) return pass;
+        if (a.type === 'playLand' && decideOnce(`land:${view.turn.number}`, skipLand)) return pass;
         return a;
       }
       if (d.kind === 'declareAttackers' && d.declared.length === 0) {

@@ -119,7 +119,11 @@ function TokenFace({ defId }: { defId: CardDefId }) {
         ? 'green'
         : def.colors[0] === 'W'
           ? 'white'
-          : 'plain';
+          : def.colors[0] === 'U'
+            ? 'blue'
+            : def.colors[0] === 'B'
+              ? 'black'
+              : 'plain';
   const creature = def.types.includes('Creature');
   return (
     <div className={`token token--${color}`}>

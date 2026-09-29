@@ -7,7 +7,6 @@ import {
   BASICS,
   type BoonId,
   BOONS,
-  botFor,
   camp,
   chooseBoon,
   currentNode,
@@ -26,7 +25,9 @@ import {
   runDeck,
   size,
   statusOf,
-  TIER_NAMES,
+  difficultyName,
+  difficultyOf,
+  MAX_DIFFICULTY,
 } from '../game/expedition.ts';
 import { ruleNotes } from '../game/notes.ts';
 import { play } from '../game/sound.ts';
@@ -135,6 +136,12 @@ const ICONS: Record<NodeKind, React.ReactNode> = {
 
 const HEART = <path d="M8 14 2 8a3.5 3.5 0 0 1 6-4 3.5 3.5 0 0 1 6 4z" />;
 
+/** "Easy opponent (3/7) playing Cat Attack". */
+function foe(floor: number, node: MapNode, deck: string): string {
+  const d = difficultyOf(floor, node);
+  return `${difficultyName(d)} opponent (${d}/${MAX_DIFFICULTY}) playing ${deck}`;
+}
+
 function nodeInfo(floor: number, node: MapNode): { title: string; lines: string[] } {
   const title = KIND_NAMES[node.kind];
   const opp = node.opponent ? deckById(node.opponent).name : '';
@@ -142,15 +149,12 @@ function nodeInfo(floor: number, node: MapNode): { title: string; lines: string[
     case 'duel':
       return {
         title,
-        lines: [
-          `${TIER_NAMES[botFor(floor, node)]} playing ${opp}`,
-          `Win: ${packName(node.reward!)}`,
-        ],
+        lines: [`${foe(floor, node, opp)}`, `Win: ${packName(node.reward!)}`],
       };
     case 'elite':
       return {
         title,
-        lines: [`${TIER_NAMES[botFor(floor, node)]} playing ${opp}`, 'Win: Rare pack and a boon'],
+        lines: [`${foe(floor, node, opp)}`, 'Win: Rare pack and a boon'],
       };
     case 'camp':
       return { title, lines: ['Rest to win back a life, or open a booster'] };
@@ -159,7 +163,7 @@ function nodeInfo(floor: number, node: MapNode): { title: string; lines: string[
     case 'boss':
       return {
         title,
-        lines: [`${TIER_NAMES[botFor(floor, node)]} playing ${opp}`, 'Win to clear the expedition'],
+        lines: [`${foe(floor, node, opp)}`, 'Win to clear the expedition'],
       };
   }
 }

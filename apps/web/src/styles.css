@@ -43,12 +43,24 @@
   --side-h: calc(var(--hh) * 0.72);
   --preview-h: 27rem;
 
-  /* Sizes are in rem; the root font size tracks the window (see html below). */
-  --fw: 8.2rem;
-  --fh: calc(var(--fw) * 1.3968);
+  /*
+   * Sizes are in rem; the root font size tracks the window (see html below).
+   * Cards are measured in --k, which is 1rem unless the window is too short:
+   * the board stacks both hand bands and both battlefields (about 50k plus 3rem
+   * of gaps), so a bigger UI size on a short screen grows text and buttons,
+   * and cards only as far as they still fit.
+   *
+   * Battlefield cards are folded like Arena's: only the name bar and art show
+   * (--fold is the visible height over the width); hovering shows the whole card.
+   */
+  --k: min(1rem, calc((100vh - 3rem) / 50));
+  --fold: 0.76;
+  --fw: calc(var(--k) * 10);
+  --fh: calc(var(--fw) * var(--fold));
+  --fh-full: calc(var(--fw) * 1.3968);
   --lw: calc(var(--fw) * 0.66);
-  --lh: calc(var(--lw) * 1.3968);
-  --hw: 9.8rem;
+  --lh: calc(var(--lw) * var(--fold));
+  --hw: calc(var(--k) * 9.8);
   --hh: calc(var(--hw) * 1.3968);
   --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
 }
@@ -240,7 +252,8 @@ button {
   align-items: flex-end;
   justify-content: center;
   gap: 0.75rem;
-  min-height: var(--fh);
+  /* A tapped creature turns sideways and stands a full card width tall. */
+  min-height: var(--fw);
 }
 
 .battlefield--opp .row {
@@ -262,7 +275,7 @@ button {
 
 .card {
   --w: var(--fw);
-  --h: var(--fh);
+  --h: calc(var(--w) * var(--fold));
   position: relative;
   flex: none;
   width: var(--w);
@@ -336,6 +349,15 @@ button {
   object-fit: cover;
 }
 
+/* Folded battlefield cards: the whole card image, clipped to its name bar and art. */
+.card--field .card__body img,
+.card--land .card__body img,
+.card--field .token,
+.card--land .token {
+  height: calc(var(--w) * 1.3968);
+  object-position: top;
+}
+
 .card.is-clickable {
   cursor: var(--cursor-hover, pointer);
 }
@@ -364,6 +386,12 @@ button {
 
 .card.is-sick .card__body {
   filter: saturate(0.7) brightness(0.92);
+}
+
+/* A crowded row shrinks its cards to fit instead of running off the board. */
+.row--creatures .card--field {
+  /* The board is the window minus its side column and left padding (see .board). */
+  --w: min(var(--fw), calc((100vw - var(--side-col) - 3rem - (var(--n) - 1) * 0.75rem) / var(--n)));
 }
 
 .row--creatures .card {
@@ -548,6 +576,18 @@ button {
   background: linear-gradient(160deg, #cfe3bf, #8fb77a);
 }
 
+.token--blue {
+  background: linear-gradient(160deg, #cfe0f2, #86acd6);
+}
+
+.token--black {
+  background: linear-gradient(160deg, #cfc6d6, #8f7fa0);
+}
+
+.token--plain {
+  background: linear-gradient(160deg, #e2ddd2, #b3ab9b);
+}
+
 .token--white {
   background: linear-gradient(160deg, #f6f0dc, #d9ceac);
 }
@@ -617,7 +657,8 @@ button {
    ========================================================================== */
 
 .hand {
-  --spread: clamp(1.9rem, calc(40rem / var(--n)), calc(var(--hw) * 0.74));
+  /* The fan stays within 34rem, clear of your avatar, however many cards you hold. */
+  --spread: clamp(1.9rem, calc((34rem - var(--hw)) / max(var(--n) - 1, 1)), calc(var(--hw) * 0.74));
   position: relative;
   flex: 1;
   height: 100%;
@@ -740,7 +781,7 @@ button {
 .opp-hand__slot {
   position: absolute;
   left: 50%;
-  top: calc(var(--fh) * -0.42);
+  top: calc(var(--fh-full) * -0.42);
   transform: translateX(calc(-50% + var(--o) * 2.125rem)) rotate(calc(180deg - var(--o) * 3deg));
   transition: transform 0.3s var(--ease);
 }
@@ -1120,7 +1161,7 @@ button {
 
 .stack__item {
   position: relative;
-  margin-top: calc(var(--fh) * -1.1);
+  margin-top: calc(var(--fh-full) * -1.1);
   z-index: var(--i);
   animation: to-stack 0.35s var(--ease) both;
 }

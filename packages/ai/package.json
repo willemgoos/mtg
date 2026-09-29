@@ -8,7 +8,8 @@
   },
   "scripts": {
     "typecheck": "tsc -p tsconfig.json",
-    "arena": "tsx scripts/arena.ts"
+    "arena": "tsx scripts/arena.ts",
+    "levels": "tsx scripts/levels.ts"
   },
   "dependencies": {
     "@mtg/engine": "workspace:*"
