@@ -41,11 +41,14 @@ const nameOf = (defId: CardDefId) => cardDb.get(defId)?.name ?? 'Card';
 export function Board({
   game,
   decks,
+  gauntlet,
   onMenu,
   onRematch,
 }: {
   game: GameSession;
   decks: { you: Decklist; them: Decklist };
+  /** Set for a gauntlet round (e.g. "Gauntlet · Round 3 of 6"): no restarts, and "Continue" goes back to the ladder. */
+  gauntlet?: string;
   onMenu: () => void;
   onRematch: () => void;
 }) {
@@ -639,11 +642,23 @@ export function Board({
             {leaving ? (
               <>
                 <span className="drawer__confirm">
-                  {leaving === 'rematch' ? 'Restart this match?' : 'Leave this match?'}
+                  {leaving === 'rematch'
+                    ? gauntlet
+                      ? 'Concede this match? It counts as a loss.'
+                      : 'Restart this match?'
+                    : gauntlet
+                      ? 'Pause the run? You can resume this match later.'
+                      : 'Leave this match?'}
                 </span>
                 <button
                   className="btn btn--primary"
-                  onClick={leaving === 'rematch' ? onRematch : onMenu}
+                  onClick={() => {
+                    if (leaving === 'menu') return onMenu();
+                    if (!gauntlet) return onRematch();
+                    setLeaving(null);
+                    setPanel(null);
+                    apply({ type: 'concede', player: HUMAN });
+                  }}
                 >
                   Yes
                 </button>
@@ -654,7 +669,7 @@ export function Board({
             ) : (
               <>
                 <button className="btn btn--ghost" onClick={() => setLeaving('rematch')}>
-                  Rematch
+                  {gauntlet ? 'Concede' : 'Rematch'}
                 </button>
                 <button className="btn btn--ghost" onClick={() => setLeaving('menu')}>
                   Main menu
@@ -771,10 +786,12 @@ export function Board({
         <div className="overlay overlay--end">
           <div className={`end end--${state.winner === HUMAN ? 'win' : 'loss'}`}>
             <h1>{winnerText(state, HUMAN)}</h1>
-            <p>Turn {state.turn.number}</p>
+            <p>
+              {gauntlet ? `${gauntlet} · turn ${state.turn.number}` : `Turn ${state.turn.number}`}
+            </p>
             <div className="end__actions">
               <button className="btn btn--primary" onClick={onRematch}>
-                Rematch
+                {gauntlet ? 'Continue' : 'Rematch'}
               </button>
               <button className="btn btn--ghost" onClick={onMenu}>
                 Main menu
