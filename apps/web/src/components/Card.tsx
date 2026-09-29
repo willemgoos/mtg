@@ -11,6 +11,7 @@ export type CardMark =
   | 'blocking'
   | 'candidate'
   | 'activatable'
+  | 'hint'
   | null;
 
 /** Hover callback: the card and where it is on screen (for placing the preview). */

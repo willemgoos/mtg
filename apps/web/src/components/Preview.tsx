@@ -36,23 +36,41 @@ export function HoverPreview({ hover, notes }: { hover: HoverState | null; notes
   const clamp = (v: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, v));
 
   const a = hover.anchor?.getBoundingClientRect();
-  const rightSide = !a || a.left + a.width / 2 < innerWidth / 2;
+  let rightSide = !a || a.left + a.width / 2 < innerWidth / 2;
   let left = gap;
   let top = (innerHeight - h) / 2;
+  let height = h;
   if (a) {
-    left = rightSide ? a.right + gap : a.left - gap - total;
-    top = clamp(a.top + a.height / 2 - h / 2, gap, innerHeight - h - gap);
-  }
-  left = clamp(left, gap, innerWidth - total - gap);
+    // Above the card when it fits (below when it fits better), so the row you're
+    // moving along stays uncovered. The preview may shrink a little to fit;
+    // only when neither side has room does it go beside the card.
+    const above = a.top - 2 * gap;
+    const below = innerHeight - a.bottom - 2 * gap;
+    const room = Math.max(above, below);
+    if (room >= h * 0.7) {
+      height = Math.min(h, room);
+      const wide = height * ASPECT;
+      top = above >= below ? a.top - gap - height : a.bottom + gap;
+      left = a.left + a.width / 2 - wide / 2;
+      // Notes go on whichever side of the preview has space.
+      rightSide = left + wide + notesW <= innerWidth - gap;
+      if (!rightSide) left -= notesW;
+      left = clamp(left, gap, innerWidth - wide - notesW - gap);
+    } else {
+      left = rightSide ? a.right + gap : a.left - gap - total;
+      top = clamp(a.top + a.height / 2 - h / 2, gap, innerHeight - h - gap);
+      left = clamp(left, gap, innerWidth - total - gap);
+    }
+  } else left = clamp(left, gap, innerWidth - total - gap);
 
   const img = hover.image ?? cardImage(hover.defId);
   return (
     <div
       className={`hover ${rightSide ? '' : 'hover--flip'}`}
-      style={{ left, top, height: h }}
+      style={{ left, top, height }}
       aria-hidden
     >
-      <div className="hover-preview" style={{ width: w, height: h }}>
+      <div className="hover-preview" style={{ width: height * ASPECT, height }}>
         {img ? (
           <img src={img} alt={cardDb.get(hover.defId)?.name ?? ''} />
         ) : (

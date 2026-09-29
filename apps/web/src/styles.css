@@ -4685,3 +4685,321 @@ button {
     animation: none;
   }
 }
+
+/* ------------------------------------------------------ expedition extras */
+
+.xnode--treasure {
+  --k: var(--brass-hi);
+}
+
+.xnode--merchant {
+  --k: var(--moss);
+}
+
+.xnode--mystery {
+  --k: #c9a0ff;
+}
+
+/* The pack a duel pays out, as a small pip on the node. */
+.xnode__reward {
+  position: absolute;
+  right: -0.125rem;
+  bottom: -0.125rem;
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 50%;
+  background: var(--pip, var(--brass));
+  box-shadow:
+    0 0 0 0.125rem #120f0a,
+    0 0 0.5rem rgba(0, 0, 0, 0.6);
+}
+
+.xnode__reward.pip--W {
+  --pip: var(--mana-W);
+}
+.xnode__reward.pip--U {
+  --pip: var(--mana-U);
+}
+.xnode__reward.pip--B {
+  --pip: var(--mana-B);
+}
+.xnode__reward.pip--R {
+  --pip: var(--mana-R);
+}
+.xnode__reward.pip--G {
+  --pip: var(--mana-G);
+}
+
+.xnode__reward.is-booster {
+  --pip: conic-gradient(
+    var(--mana-W) 0 20%,
+    var(--mana-U) 0 40%,
+    var(--mana-B) 0 60%,
+    var(--mana-R) 0 80%,
+    var(--mana-G) 0
+  );
+}
+
+.xnode__reward.is-rare {
+  --pip: radial-gradient(circle at 40% 35%, #fff3c8, var(--brass) 60%, #7d5a1c);
+}
+
+.xmap__deck {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.2rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.875rem;
+  color: var(--parchment);
+  background: rgba(0, 0, 0, 0.4);
+  box-shadow: inset 0 0 0 0.0625rem var(--line);
+}
+
+/* Your marker on the map; it walks to the node you pick. */
+.xmap__token {
+  position: absolute;
+  z-index: 3;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 50%;
+  translate: -50% -135%;
+  background: center / cover no-repeat;
+  box-shadow:
+    0 0 0 0.1875rem var(--brass-hi),
+    0 0.5rem 1rem rgba(0, 0, 0, 0.7),
+    0 0 1.25rem rgba(246, 195, 91, 0.5);
+  pointer-events: none;
+  transition:
+    left 0.65s var(--ease),
+    top 0.65s var(--ease);
+  animation: token-bob 2.4s ease-in-out infinite;
+}
+
+@keyframes token-bob {
+  50% {
+    translate: -50% -150%;
+  }
+}
+
+/* Mystery text and the card choices (rare draft, merchant). */
+.choice__story {
+  margin-inline: auto;
+  text-align: center;
+  max-width: 44rem;
+  font-size: 1.25rem;
+  font-style: italic;
+  line-height: 1.5;
+}
+
+.card-choice {
+  width: 15rem;
+  padding: 0;
+  border: 0;
+  border-radius: 4.6% / 3.3%;
+  background: none;
+  cursor: var(--cursor-hover, pointer);
+  box-shadow:
+    0 0 0 0.125rem var(--brass-dim),
+    0 1rem 2rem rgba(0, 0, 0, 0.6);
+  animation: choice-in 0.5s var(--ease) both;
+  animation-delay: calc(var(--i) * 0.08s);
+  transition:
+    translate 0.2s var(--ease),
+    box-shadow 0.2s,
+    opacity 0.2s;
+}
+
+.card-choice img {
+  display: block;
+  width: 100%;
+  border-radius: inherit;
+}
+
+.card-choice:hover,
+.card-choice.is-on {
+  translate: 0 -0.5rem;
+  box-shadow:
+    0 0 0 0.25rem var(--brass-hi),
+    0 0 2.5rem rgba(246, 195, 91, 0.5),
+    0 1.5rem 2.5rem rgba(0, 0, 0, 0.6);
+}
+
+.card-choice.is-off {
+  opacity: 0.45;
+}
+
+.merchant .card-choice {
+  width: 11rem;
+}
+
+.merchant__pay {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.625rem;
+  max-width: min(100rem, 92vw);
+}
+
+.merchant__card {
+  position: relative;
+  width: 6.5rem;
+  padding: 0;
+  border: 0;
+  border-radius: 4.6% / 3.3%;
+  background: none;
+  cursor: var(--cursor-hover, pointer);
+  box-shadow: 0 0.375rem 0.875rem rgba(0, 0, 0, 0.55);
+  transition:
+    translate 0.15s var(--ease),
+    box-shadow 0.15s;
+}
+
+.merchant__card img {
+  display: block;
+  width: 100%;
+  border-radius: inherit;
+}
+
+.merchant__card.is-on {
+  translate: 0 -0.375rem;
+  box-shadow:
+    0 0 0 0.1875rem var(--ember),
+    0 0 1.25rem rgba(255, 107, 61, 0.5);
+}
+
+.merchant__give {
+  position: absolute;
+  bottom: 0.375rem;
+  left: 50%;
+  translate: -50% 0;
+  padding: 0.0625rem 0.5rem;
+  border-radius: 999px;
+  font-family: var(--caps);
+  font-size: 0.75rem;
+  color: #fff;
+  background: var(--ember-dim);
+}
+
+/* Deck help in the builder. */
+.builder__suggest {
+  flex: none;
+  min-width: 11rem;
+}
+
+.builder__advice {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  margin: 0;
+  padding: 0.75rem 1.5rem 0.75rem 2.75rem;
+  list-style: none;
+  font-size: 0.9375rem;
+  color: var(--parchment);
+  border-bottom: 0.0625rem solid var(--line);
+  background: rgba(246, 195, 91, 0.06);
+}
+
+.builder__advice li {
+  position: relative;
+}
+
+.builder__advice li::before {
+  content: '!';
+  position: absolute;
+  left: -1.5rem;
+  top: 0.0625rem;
+  display: grid;
+  place-items: center;
+  width: 1.125rem;
+  height: 1.125rem;
+  border-radius: 50%;
+  font-family: var(--display);
+  font-size: 0.75rem;
+  color: #1d150a;
+  background: var(--brass);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .xmap__token,
+  .card-choice {
+    animation: none;
+  }
+}
+
+/* ------------------------------------------------------------------ hints */
+
+.hint {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.hint__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.875rem;
+}
+
+.hint__btn svg {
+  width: 1rem;
+  height: 1rem;
+  color: #9fdcff;
+}
+
+.hint__bubble {
+  position: relative;
+  max-width: 17rem;
+  padding: 0.625rem 0.875rem;
+  border-radius: 0.75rem;
+  font-size: 0.9375rem;
+  line-height: 1.35;
+  text-align: left;
+  color: #0e2230;
+  background: linear-gradient(180deg, #e3f5ff, #b9e3fb);
+  box-shadow:
+    0 0 0 0.0625rem #6cc4f2,
+    0 0.5rem 1.25rem rgba(0, 0, 0, 0.55),
+    0 0 1.5rem rgba(127, 214, 255, 0.35);
+  animation: hint-in 0.3s var(--ease) both;
+}
+
+@keyframes hint-in {
+  from {
+    opacity: 0;
+    translate: 0 0.5rem;
+    scale: 0.96;
+  }
+}
+
+.mark-hint .card__body {
+  box-shadow:
+    0 0 0 0.1875rem #7fd6ff,
+    0 0 1.5rem rgba(127, 214, 255, 0.85);
+  animation: hint-glow 1.2s ease-in-out infinite;
+}
+
+@keyframes hint-glow {
+  50% {
+    box-shadow:
+      0 0 0 0.1875rem #b8ecff,
+      0 0 2.5rem rgba(127, 214, 255, 1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mark-hint .card__body,
+  .hint__bubble {
+    animation: none;
+  }
+}
+
+.mull__hint {
+  max-width: 32rem;
+  margin: 0 auto 1rem;
+  text-align: center;
+}

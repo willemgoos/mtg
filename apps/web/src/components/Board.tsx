@@ -35,6 +35,7 @@ import { UiSize } from './UiSize.tsx';
 import { SoundControl } from './SoundControl.tsx';
 import { heartbeat, playEvents, playHover } from '../game/sound.ts';
 import { isLethal } from '../game/lethal.ts';
+import { type Hint, hintFor } from '../game/hint.ts';
 
 const nameOf = (defId: CardDefId) => cardDb.get(defId)?.name ?? 'Card';
 
@@ -57,6 +58,15 @@ export function Board({
   // Priority we are about to auto-pass is not ours to act on: showing it would
   // flash a Pass button and card glows for a moment on every step.
   const myDecision = d.kind !== 'gameOver' && d.player === HUMAN && !game.autoPassing;
+
+  // A hint from the Apprentice bot; it goes stale as soon as the game moves on.
+  const [hint, setHint] = useState<Hint | null>(null);
+  useEffect(() => setHint(null), [view]);
+  const askHint = () => {
+    if (!myDecision) return;
+    setHint(hintFor(view, HUMAN) ?? { text: 'Nothing to decide right now.', cards: [] });
+    playHover(null);
+  };
 
   const [targeting, setTargeting] = useState<Targeting | null>(null);
   const [blocker, setBlocker] = useState<ObjectId | null>(null);
@@ -248,6 +258,7 @@ export function Board({
   const blocking = new Set(blockPairs.map((b) => b.blocker));
 
   const markOf = (id: ObjectId): CardMark => {
+    if (hint?.cards.includes(id)) return 'hint';
     if (dragTargets) return dragTargets.has(`obj:${id}`) ? 'option' : null;
     if (options) return options.has(`obj:${id}`) ? 'option' : null;
     if (myDecision && d.kind === 'sacrifice') return d.options.includes(id) ? 'option' : null;
@@ -465,14 +476,18 @@ export function Board({
     }
   }
 
-  // Space = primary button, Escape = cancel.
+  // Space = primary button, Escape = cancel, H = hint.
   const barRef = useRef(bar);
   barRef.current = bar;
+  const askRef = useRef(askHint);
+  askRef.current = askHint;
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === ' ' && barRef.current.primary) {
         e.preventDefault();
         barRef.current.primary[1]();
+      } else if (e.key === 'h' || e.key === 'H') {
+        askRef.current();
       } else if (e.key === 'Escape') {
         setTargeting((t) => (t?.skip || d.kind === 'chooseTriggerTargets' ? t : null));
         setBlocker(null);
@@ -575,6 +590,25 @@ export function Board({
       )}
 
       <div className={`action ${myDecision ? 'action--live' : ''}`}>
+        {myDecision && (
+          <div className="hint">
+            {hint && (
+              <div className="hint__bubble" role="status">
+                {hint.text}
+              </div>
+            )}
+            <button
+              className="btn btn--ghost hint__btn"
+              title="What would a good player do? (H)"
+              onClick={askHint}
+            >
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+                <path d="M12 2a7 7 0 0 1 4 12.7V17a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1v-2.3A7 7 0 0 1 12 2zm-3 17h6v1a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2v-1z" />
+              </svg>
+              Hint
+            </button>
+          </div>
+        )}
         <PhaseTrack view={view} me={HUMAN} />
         {respond ? null : myDecision || targeting ? (
           <>
@@ -776,7 +810,7 @@ export function Board({
       )}
 
       {(d.kind === 'mulligan' || d.kind === 'bottomCards') && d.player === HUMAN && (
-        <MulliganOverlay game={game} onHover={setHover} />
+        <MulliganOverlay game={game} onHover={setHover} hint={hint} onHint={askHint} />
       )}
       {d.kind === 'scry' && d.player === HUMAN && (
         <ScryOverlay key={d.cards.join()} game={game} onHover={setHover} />
@@ -1109,7 +1143,17 @@ function ScryOverlay({ game, onHover }: { game: GameSession; onHover: HoverFn })
   );
 }
 
-function MulliganOverlay({ game, onHover }: { game: GameSession; onHover: HoverFn }) {
+function MulliganOverlay({
+  game,
+  onHover,
+  hint,
+  onHint,
+}: {
+  game: GameSession;
+  onHover: HoverFn;
+  hint: Hint | null;
+  onHint: () => void;
+}) {
   const { view, legal, apply, state } = game;
   const d = state.decision;
   const p = view.players[HUMAN];
@@ -1136,7 +1180,7 @@ function MulliganOverlay({ game, onHover }: { game: GameSession; onHover: HoverF
                 id={id}
                 defId={view.objects[id]!.defId}
                 size="mull"
-                mark={bottoming ? 'playable' : null}
+                mark={hint?.cards.includes(id) ? 'hint' : bottoming ? 'playable' : null}
                 {...(bottoming
                   ? { onClick: () => apply({ type: 'bottomCard', player: HUMAN, card: id }) }
                   : {})}
@@ -1145,8 +1189,16 @@ function MulliganOverlay({ game, onHover }: { game: GameSession; onHover: HoverF
             </div>
           ))}
         </div>
+        {hint && (
+          <div className="hint__bubble mull__hint" role="status">
+            {hint.text}
+          </div>
+        )}
         {!bottoming && (
           <div className="mull__buttons">
+            <button className="btn btn--ghost hint__btn" onClick={onHint}>
+              Hint
+            </button>
             {legal.some((a) => a.type === 'mulligan') && (
               <button
                 className="btn btn--ghost"

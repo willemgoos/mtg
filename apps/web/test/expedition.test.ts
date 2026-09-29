@@ -1,7 +1,16 @@
 import { cardDb, PLAYABLE_DECKS, SCRYFALL, slug } from '@mtg/cards';
 import { describe, expect, it } from 'vitest';
 import {
+  applySuggestion,
   camp,
+  canChoose,
+  chooseRare,
+  deckAdvice,
+  type EventId,
+  EVENTS,
+  leaveMerchant,
+  resolveEvent,
+  trade,
   chooseBoon,
   currentNode,
   botFor,
@@ -48,7 +57,7 @@ function fight(s: ExpeditionState, outcome: 'win' | 'loss', seed = 7): Expeditio
 }
 
 /** A run on a hand-made map: every floor has the given kinds in lanes 0, 1, 2. */
-function onMap(kinds: MapNode['kind'][]): ExpeditionState {
+function onMap(kinds: MapNode['kind'][], event: EventId = 'gambler'): ExpeditionState {
   const s = openAll(startExpedition(empty, deck, 5));
   const opponent = PLAYABLE_DECKS.find((d) => d.id !== deck)!.id;
   const node = (kind: MapNode['kind']): MapNode =>
@@ -56,7 +65,9 @@ function onMap(kinds: MapNode['kind'][]): ExpeditionState {
       ? { kind, opponent, reward: { kind: 'booster' } }
       : kind === 'elite' || kind === 'boss'
         ? { kind, opponent }
-        : { kind };
+        : kind === 'mystery'
+          ? { kind, event }
+          : { kind };
   const map = Array.from({ length: FLOORS - 1 }, () => kinds.map(node));
   return { ...s, run: { ...s.run!, map: [...map, [node('boss')]] } };
 }
@@ -178,7 +189,11 @@ describe('expedition run', () => {
     expect(s.run!.outcomes).toEqual(['done']);
 
     s = fight(enterNode(s, 1), 'win');
-    expect(s.run!.build.packs).toEqual([{ kind: 'rare' }]);
+    const rares = s.run!.pending?.kind === 'rareDraft' ? s.run!.pending.options : [];
+    expect(rares).toHaveLength(3);
+    expect(new Set(rares).size).toBe(3);
+    s = chooseRare(s, rares[1]!);
+    expect(s.run!.build.side[rares[1]!]).toBeGreaterThanOrEqual(1);
     expect(s.run!.pending?.kind).toBe('boon');
     s = {
       ...s,
@@ -196,6 +211,74 @@ describe('expedition run', () => {
     });
     expect(keepCount(s.run!)).toBe(4);
     expect(maxLives(s.run!)).toBe(4);
+  });
+
+  it('opens a free booster at a treasure', () => {
+    const s = enterNode(onMap(['treasure', 'treasure', 'treasure']), 1);
+    expect(s.run!.outcomes).toEqual(['done']);
+    expect(s.run!.build.packs).toEqual([{ kind: 'booster' }]);
+  });
+
+  it('resolves mystery events, and never offers a choice that costs the last life', () => {
+    let s = enterNode(onMap(['mystery', 'mystery', 'mystery']), 0);
+    expect(s.run!.pending).toEqual({ kind: 'event', event: 'gambler' });
+    s = resolveEvent(s, 0);
+    expect(s.run!.livesLost).toBe(1);
+    expect(s.run!.build.packs).toEqual([{ kind: 'rare' }]);
+    expect(s.run!.outcomes).toEqual(['done']);
+    const last = { ...s.run!, livesLost: 2 };
+    expect(canChoose(last, EVENTS.gambler.choices[0]!)).toBe(false);
+
+    let lib = enterNode(onMap(['mystery', 'mystery', 'mystery'], 'library'), 0);
+    lib = resolveEvent(lib, 0);
+    expect(lib.run!.pending?.kind).toBe('boon');
+    lib = enterNode(onMap(['mystery', 'mystery', 'mystery'], 'library'), 0);
+    expect(resolveEvent(lib, 1).run!.build.packs[0]).toMatchObject({ kind: 'color' });
+  });
+
+  it("trades two of your cards for one of the merchant's", () => {
+    let s = enterNode(onMap(['merchant', 'merchant', 'merchant']), 0);
+    const offers = s.run!.pending?.kind === 'merchant' ? s.run!.pending.offers : [];
+    expect(offers).toHaveLength(3);
+    const mine = Object.keys(s.run!.build.side).slice(0, 2) as [string, string];
+    const before = s.run!.build;
+    expect(trade(s, offers[0]!, ['Forest', mine[0]])).toEqual(s);
+    s = trade(s, offers[0]!, mine);
+    const b = s.run!.build;
+    expect(b.side[offers[0]!]).toBeGreaterThanOrEqual(1);
+    for (const n of mine)
+      expect((b.side[n] ?? 0) + (b.main[n] ?? 0)).toBe(
+        (before.side[n] ?? 0) + (before.main[n] ?? 0) - 1,
+      );
+    expect(s.run!.outcomes).toEqual(['done']);
+    const left = leaveMerchant(enterNode(onMap(['merchant', 'merchant', 'merchant']), 0));
+    expect(left.run!.pending).toBeNull();
+    expect(left.run!.outcomes).toEqual(['done']);
+  });
+
+  it('suggests a 40-card, two-colour deck with 17 lands, and gives advice', () => {
+    let s = openAll(startExpedition(empty, deck, 5));
+    const advice = deckAdvice(s.run!.build);
+    expect(advice.some((a) => a.includes('60 cards'))).toBe(true);
+    s = applySuggestion(s);
+    const b = s.run!.build;
+    expect(size(b.main)).toBe(40);
+    const lands = Object.entries(b.main)
+      .filter(([n]) => card.get(n)!.typeLine.includes('Land'))
+      .reduce((k, [, c]) => k + c, 0);
+    expect(lands).toBe(17);
+    const colors = new Set(Object.keys(b.main).flatMap((n) => card.get(n)!.colors));
+    expect(colors.size).toBeLessThanOrEqual(2);
+    // Nothing is lost: deck plus collection still hold every card.
+    const count = (x: Record<string, number>) =>
+      Object.entries(x)
+        .filter(([n]) => !card.get(n)!.typeLine.startsWith('Basic'))
+        .reduce((k, [, c]) => k + c, 0);
+    expect(count(b.main) + count(b.side)).toBe(
+      count(openAll(startExpedition(empty, deck, 5)).run!.build.main) +
+        count(openAll(startExpedition(empty, deck, 5)).run!.build.side),
+    );
+    expect(deckAdvice(b).filter((a) => a.includes('lands'))).toEqual([]);
   });
 
   it('retries the final battle after a loss, and clears on a win', () => {

@@ -1,6 +1,7 @@
 import { deckById, type Decklist, findDeck, PLAYABLE_DECKS, SCRYFALL, slug } from '@mtg/cards';
 import type { CardDefId, Color, NewGameOptions } from '@mtg/engine';
 import type { BotKind, LevelBot } from './bot.worker.ts';
+import { manaValue } from './deckView.ts';
 import { type DeckRecord, rng, type RunSummary } from './gauntlet.ts';
 
 /*
@@ -71,7 +72,8 @@ const BOON_IDS = Object.keys(BOONS) as BoonId[];
 // The map
 // ---------------------------------------------------------------------------
 
-export type NodeKind = 'duel' | 'elite' | 'camp' | 'shrine' | 'boss';
+export type NodeKind =
+  'duel' | 'elite' | 'camp' | 'shrine' | 'treasure' | 'merchant' | 'mystery' | 'boss';
 
 export interface MapNode {
   kind: NodeKind;
@@ -79,16 +81,18 @@ export interface MapNode {
   opponent?: string;
   /** What a won duel pays out. */
   reward?: Pack;
+  /** What happens at a mystery node. */
+  event?: EventId;
 }
 
 /** What each floor offers (shuffled into lanes per run). The last floor is the final battle. */
 const FLOOR_KINDS: NodeKind[][] = [
   ['duel', 'duel', 'duel'],
-  ['duel', 'duel', 'shrine'],
+  ['duel', 'mystery', 'shrine'],
   ['duel', 'elite', 'camp'],
-  ['duel', 'duel', 'shrine'],
-  ['duel', 'elite', 'camp'],
-  ['duel', 'camp', 'shrine'],
+  ['duel', 'merchant', 'mystery'],
+  ['duel', 'elite', 'treasure'],
+  ['duel', 'camp', 'mystery'],
   ['boss'],
 ];
 export const FLOORS = FLOOR_KINDS.length;
@@ -128,6 +132,9 @@ export function makeMap(deck: string, seed: number): MapNode[][] {
     if (r < 0.7) return { kind: 'color', color: pick(COLORS.filter((c) => !own.includes(c))) };
     return { kind: 'booster' };
   };
+  // Mystery events don't repeat within a run.
+  const events = [...EVENT_IDS];
+  const event = () => events.splice(Math.floor(next() * events.length), 1)[0] ?? 'spring';
   return FLOOR_KINDS.map((kinds) => {
     const lanes = [...kinds];
     for (let i = lanes.length - 1; i > 0; i--) {
@@ -137,6 +144,7 @@ export function makeMap(deck: string, seed: number): MapNode[][] {
     return lanes.map((kind): MapNode => {
       if (kind === 'duel') return { kind, opponent: pick(foes), reward: reward() };
       if (kind === 'elite' || kind === 'boss') return { kind, opponent: pick(foes) };
+      if (kind === 'mystery') return { kind, event: event() };
       return { kind };
     });
   });
@@ -148,7 +156,73 @@ export function makeMap(deck: string, seed: number): MapNode[][] {
 
 /** How a floor ended: a fight won or lost, or a camp or shrine visited. */
 export type Outcome = 'win' | 'loss' | 'done';
-export type Pending = { kind: 'boon'; options: BoonId[] } | { kind: 'camp' };
+export type Pending =
+  | { kind: 'boon'; options: BoonId[] }
+  | { kind: 'camp' }
+  | { kind: 'event'; event: EventId }
+  | { kind: 'merchant'; offers: string[] }
+  /** After an elite: pick one of three rares, then a boon. */
+  | { kind: 'rareDraft'; options: string[] };
+
+// ---------------------------------------------------------------------------
+// Mystery events: a little story and two choices, none of which cost cards.
+// ---------------------------------------------------------------------------
+
+export type EventId = 'gambler' | 'library' | 'spring' | 'hermit' | 'caravan';
+
+export interface EventChoice {
+  label: string;
+  text: string;
+  /** Lives won back (or lost, when negative). */
+  life?: number;
+  /** 'main' is a colour pack in your deck's main colour. */
+  pack?: 'booster' | 'rare' | 'main';
+  boon?: boolean;
+}
+
+export const EVENTS: Record<EventId, { title: string; text: string; choices: EventChoice[] }> = {
+  gambler: {
+    title: 'A Grinning Gambler',
+    text: 'A stranger rattles a cup of bones. "One life for a rare prize. Fair game, friend?"',
+    choices: [
+      { label: 'Take the bet', text: 'Lose a life, take a rare pack', life: -1, pack: 'rare' },
+      { label: 'Walk on', text: 'Keep your lives' },
+    ],
+  },
+  library: {
+    title: 'A Forgotten Library',
+    text: 'Dusty shelves lean under spellbooks nobody has opened in a century.',
+    choices: [
+      { label: 'Study', text: 'Choose a boon', boon: true },
+      { label: 'Take a tome', text: 'A pack in your main colour', pack: 'main' },
+    ],
+  },
+  spring: {
+    title: 'A Healing Spring',
+    text: 'Clear water bubbles up between the stones, warm to the touch.',
+    choices: [
+      { label: 'Drink', text: 'Win back a life', life: 1 },
+      { label: 'Fill your flasks', text: 'Trade them for a booster in town', pack: 'booster' },
+    ],
+  },
+  hermit: {
+    title: "A Hermit's Hut",
+    text: 'An old mage waves you in for tea and will not stop talking.',
+    choices: [
+      { label: 'Listen', text: 'Choose a boon', boon: true },
+      { label: 'Take the herbs', text: 'Win back a life', life: 1 },
+    ],
+  },
+  caravan: {
+    title: 'A Stranded Caravan',
+    text: 'A merchant wagon sits in a ditch, one wheel spinning.',
+    choices: [
+      { label: 'Help push', text: 'They pay you in cards: a booster', pack: 'booster' },
+      { label: 'Ask about the road', text: 'Choose a boon', boon: true },
+    ],
+  },
+};
+const EVENT_IDS = Object.keys(EVENTS) as EventId[];
 
 export interface ExpeditionRun {
   deck: string;
@@ -244,16 +318,129 @@ function boonOffer(r: ExpeditionRun): BoonId[] {
   return left.slice(0, 3);
 }
 
-/** Travels to a node on the next floor. Camps and shrines ask their question straight away. */
+/**
+ * Three rares or mythics, mostly in the deck's colours, for merchants and
+ * elite rewards. `salt` keeps different offers on the same floor apart.
+ */
+function rareOffer(r: ExpeditionRun, salt: number): string[] {
+  const next = rng((r.seed ^ Math.imul(r.path.length * 31 + salt, 0x68e31da4)) >>> 0);
+  const colors = deckColors(r.build).slice(0, 2);
+  const rares = [...SHEETS.rare, ...SHEETS.mythic];
+  const fits = rares.filter(
+    (c) => c.colors.length > 0 && c.colors.every((x) => colors.includes(x as Color)),
+  );
+  const picked: string[] = [];
+  for (let i = 0; i < 3; i++) {
+    // Two in your colours, one from anywhere.
+    const from = (i < 2 && fits.length > 2 ? fits : rares).filter((c) => !picked.includes(c.name));
+    picked.push(from[Math.floor(next() * from.length)]!.name);
+  }
+  return picked;
+}
+
+/**
+ * Travels to a node on the next floor. Camps, shrines, merchants and mysteries
+ * ask their question straight away; a treasure is a free booster.
+ */
 export function enterNode(s: ExpeditionState, lane: number): ExpeditionState {
   return withRun(s, (r) => {
     if (!reachable(r).includes(lane)) return r;
     const moved = { ...r, path: [...r.path, lane] };
     const node = r.map[r.path.length]![lane]!;
-    if (node.kind === 'camp') return { ...moved, pending: { kind: 'camp' } };
-    if (node.kind === 'shrine')
-      return { ...moved, pending: { kind: 'boon', options: boonOffer(moved) } };
-    return moved;
+    switch (node.kind) {
+      case 'camp':
+        return { ...moved, pending: { kind: 'camp' } };
+      case 'shrine':
+        return { ...moved, pending: { kind: 'boon', options: boonOffer(moved) } };
+      case 'merchant':
+        return { ...moved, pending: { kind: 'merchant', offers: rareOffer(moved, 1) } };
+      case 'mystery':
+        return { ...moved, pending: { kind: 'event', event: node.event ?? 'spring' } };
+      case 'treasure':
+        return {
+          ...moved,
+          outcomes: [...r.outcomes, 'done'],
+          build: { ...r.build, packs: [...r.build.packs, { kind: 'booster' }] },
+        };
+      default:
+        return moved;
+    }
+  });
+}
+
+/** Makes a mystery event's choice. A boon choice asks which boon next. */
+export function resolveEvent(s: ExpeditionState, choice: number): ExpeditionState {
+  return withRun(s, (r) => {
+    if (r.pending?.kind !== 'event') return r;
+    const c = EVENTS[r.pending.event].choices[choice];
+    if (!c || !canChoose(r, c)) return r;
+    let next: ExpeditionRun = { ...r, pending: null, outcomes: [...r.outcomes, 'done'] };
+    if (c.life) next.livesLost = Math.max(0, r.livesLost - c.life);
+    if (c.pack) {
+      const main = deckColors(r.build)[0];
+      const pack: Pack =
+        c.pack === 'main' && main
+          ? { kind: 'color', color: main }
+          : c.pack === 'rare'
+            ? { kind: 'rare' }
+            : { kind: 'booster' };
+      next.build = { ...r.build, packs: [...r.build.packs, pack] };
+    }
+    if (c.boon) {
+      const options = boonOffer(r);
+      if (options.length) next = { ...next, pending: { kind: 'boon', options } };
+    }
+    return next;
+  });
+}
+
+/** A choice that would cost your last life isn't on offer. */
+export const canChoose = (r: ExpeditionRun, c: EventChoice): boolean =>
+  !c.life || c.life > 0 || maxLives(r) - r.livesLost > -c.life;
+
+/** How many copies of a card you own, in the deck or the collection. */
+export const owned = (b: Build, name: string): number => (b.main[name] ?? 0) + (b.side[name] ?? 0);
+
+/**
+ * Buys one of the merchant's cards for two of yours (taken from the
+ * collection first, then the deck). Basic lands aren't currency.
+ */
+export function trade(s: ExpeditionState, buy: string, give: [string, string]): ExpeditionState {
+  return withRun(s, (r) => {
+    if (r.pending?.kind !== 'merchant' || !r.pending.offers.includes(buy)) return r;
+    let b = r.build;
+    for (const name of give) {
+      if (isBasic(name) || owned(b, name) < 1) return r;
+      b = b.side[name]
+        ? { ...b, side: bump(b.side, name, -1) }
+        : { ...b, main: bump(b.main, name, -1) };
+    }
+    return {
+      ...r,
+      pending: null,
+      outcomes: [...r.outcomes, 'done'],
+      build: { ...b, side: bump(b.side, buy, 1), fresh: [buy] },
+    };
+  });
+}
+
+/** Leaves the merchant without buying. */
+export function leaveMerchant(s: ExpeditionState): ExpeditionState {
+  return withRun(s, (r) =>
+    r.pending?.kind === 'merchant' ? { ...r, pending: null, outcomes: [...r.outcomes, 'done'] } : r,
+  );
+}
+
+/** Takes one of an elite's three rares; a boon choice follows. */
+export function chooseRare(s: ExpeditionState, name: string): ExpeditionState {
+  return withRun(s, (r) => {
+    if (r.pending?.kind !== 'rareDraft' || !r.pending.options.includes(name)) return r;
+    const options = boonOffer(r);
+    return {
+      ...r,
+      pending: options.length ? { kind: 'boon', options } : null,
+      build: { ...r.build, side: bump(r.build.side, name, 1), fresh: [name] },
+    };
   });
 }
 
@@ -279,11 +466,7 @@ export function recordMatch(
     next.outcomes = [...r.outcomes, 'win'];
     if (at.node.kind === 'duel' && at.node.reward)
       next.build = { ...r.build, packs: [...r.build.packs, at.node.reward] };
-    if (at.node.kind === 'elite') {
-      next.build = { ...r.build, packs: [...r.build.packs, { kind: 'rare' }] };
-      const options = boonOffer(r);
-      if (options.length) next.pending = { kind: 'boon', options };
-    }
+    if (at.node.kind === 'elite') next.pending = { kind: 'rareDraft', options: rareOffer(r, 2) };
   } else if (outcome === 'loss') {
     next = { ...next, livesLost: r.livesLost + 1 };
     if (at.node.kind !== 'boss') next.outcomes = [...r.outcomes, 'loss'];
@@ -477,6 +660,156 @@ export function runDeck(r: ExpeditionRun): Decklist {
     colors: colors.length ? colors.slice(0, 2) : base.colors,
     cards: Object.entries(r.build.main),
   };
+}
+
+// ---------------------------------------------------------------------------
+// Deck help: friendly notes and a suggested 40
+// ---------------------------------------------------------------------------
+
+export const LANDS_PER_40 = 17;
+const COLOR_WORDS: Record<Color, string> = {
+  W: 'white',
+  U: 'blue',
+  B: 'black',
+  R: 'red',
+  G: 'green',
+};
+const RARITY_SCORE: Record<string, number> = { common: 1, uncommon: 2, rare: 3, mythic: 4 };
+const isLand = (name: string) => byName.get(name)?.typeLine.includes('Land') ?? false;
+const colorsOf = (name: string) => (byName.get(name)?.colors ?? []) as Color[];
+const mv = (name: string) => manaValue(byName.get(name)?.manaCost ?? '');
+
+/** Colours of mana a land makes: basics by name, others from their "Add {G}" text. */
+export function landColors(name: string): Color[] {
+  const basic = COLORS.find((c) => BASICS[c] === name);
+  if (basic) return [basic];
+  const text = byName.get(name)?.oracleText ?? '';
+  return COLORS.filter((c) => new RegExp(`Add[^.]*\\{${c}\\}`).test(text));
+}
+
+/** Plain-language notes on the deck: land count, colours and mana curve. */
+export function deckAdvice(b: Build): string[] {
+  const total = size(b.main);
+  if (total < MIN_DECK) return [];
+  const cards = Object.entries(b.main);
+  const count = (pred: (name: string) => boolean) =>
+    cards.filter(([n]) => pred(n)).reduce((k, [, c]) => k + c, 0);
+  const notes: string[] = [];
+
+  const lands = count(isLand);
+  const want = Math.round((total * LANDS_PER_40) / 40);
+  if (lands < want - 2)
+    notes.push(
+      `Only ${lands} lands. About ${want} is usual for ${total} cards, so you can cast your spells on time.`,
+    );
+  else if (lands > want + 2)
+    notes.push(
+      `${lands} lands is a lot. About ${want} is usual, which leaves more room for spells.`,
+    );
+  if (total > 42)
+    notes.push(`${total} cards. Trimming toward 40 means you draw your best cards more often.`);
+
+  const perColor = COLORS.map((c) => ({
+    c,
+    n: count((name) => !isLand(name) && colorsOf(name).includes(c)),
+  })).filter((x) => x.n > 0);
+  if (perColor.length >= 3) {
+    const least = [...perColor].sort((a, b) => a.n - b.n)[0]!;
+    notes.push(
+      `Your spells use ${perColor.length} colours. Two is much easier to cast; your ${COLOR_WORDS[least.c]} cards (${least.n}) are the easiest to cut.`,
+    );
+  }
+  const makes = new Set(cards.filter(([n]) => isLand(n)).flatMap(([n]) => landColors(n)));
+  for (const { c } of perColor)
+    if (!makes.has(c))
+      notes.push(
+        `You have ${COLOR_WORDS[c]} spells but nothing that makes ${COLOR_WORDS[c]} mana. Add some ${BASICS[c]}s.`,
+      );
+
+  const spells = total - lands;
+  const cheap = count((n) => !isLand(n) && mv(n) <= 2);
+  const big = count((n) => !isLand(n) && mv(n) >= 5);
+  if (spells >= 15 && cheap < Math.round(spells * 0.25))
+    notes.push(`Only ${cheap} spells cost 2 or less. A few more cheap cards help you start fast.`);
+  if (big > Math.round(spells * 0.25))
+    notes.push(`${big} spells cost 5 or more. Too many can leave you with nothing to do early on.`);
+  return notes;
+}
+
+/**
+ * A sensible 40 from everything you own: the two colours with the strongest
+ * cards, their best 23 spells (with only a few expensive ones), matching
+ * non-basic lands, and basics split by the spells' coloured mana symbols.
+ */
+export function suggestDeck(b: Build): Pick<Build, 'main' | 'side'> {
+  const pool: Counts = {};
+  for (const [n, k] of [...Object.entries(b.main), ...Object.entries(b.side)])
+    if (!isBasic(n)) pool[n] = (pool[n] ?? 0) + k;
+  const score = (n: string) =>
+    (RARITY_SCORE[byName.get(n)?.rarity ?? 'common'] ?? 1) +
+    (byName.get(n)?.typeLine.includes('Creature') ? 0.5 : 0) -
+    (mv(n) >= 6 ? 1 : 0);
+
+  const weight = new Map<Color, number>();
+  for (const [n, k] of Object.entries(pool))
+    if (!isLand(n)) for (const c of colorsOf(n)) weight.set(c, (weight.get(c) ?? 0) + score(n) * k);
+  const two = [...weight.entries()]
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 2)
+    .map(([c]) => c);
+  const fits = (n: string) => colorsOf(n).every((c) => two.includes(c));
+
+  const copies = Object.entries(pool)
+    .filter(([n]) => !isLand(n))
+    .flatMap(([n, k]) => Array<string>(k).fill(n))
+    .sort((a, b) => Number(fits(b)) - Number(fits(a)) || score(b) - score(a) || mv(a) - mv(b));
+  const spells: string[] = [];
+  const later: string[] = [];
+  for (const n of copies) {
+    if (spells.length >= MIN_DECK - LANDS_PER_40) break;
+    const expensive = mv(n) >= 5 && spells.filter((x) => mv(x) >= 5).length >= 4;
+    if (!fits(n) || expensive) later.push(n);
+    else spells.push(n);
+  }
+  while (spells.length < MIN_DECK - LANDS_PER_40 && later.length) spells.push(later.shift()!);
+
+  const main: Counts = {};
+  const add = (n: string, k = 1) => (main[n] = (main[n] ?? 0) + k);
+  spells.forEach((n) => add(n));
+  let lands = 0;
+  for (const [n, k] of Object.entries(pool)) {
+    const makes = landColors(n);
+    if (!isLand(n) || !makes.length || !makes.every((c) => two.includes(c))) continue;
+    const take = Math.min(k, LANDS_PER_40 - lands);
+    if (take > 0) add(n, take);
+    lands += take;
+  }
+  // Basics in proportion to the coloured mana symbols the spells ask for.
+  const pips = new Map<Color, number>();
+  for (const n of spells)
+    for (const [, sym] of (byName.get(n)?.manaCost ?? '').matchAll(/\{([^}]+)\}/g))
+      for (const c of COLORS) if (sym!.includes(c)) pips.set(c, (pips.get(c) ?? 0) + 1);
+  const colors = two.length ? two : ['G' as Color];
+  const totalPips = colors.reduce((k, c) => k + (pips.get(c) ?? 0), 0) || colors.length;
+  let left = LANDS_PER_40 - lands;
+  colors.forEach((c, i) => {
+    const k =
+      i === colors.length - 1
+        ? left
+        : Math.round(((pips.get(c) ?? 1) / totalPips) * (LANDS_PER_40 - lands));
+    if (k > 0) add(BASICS[c], k);
+    left -= k;
+  });
+
+  const side: Counts = {};
+  for (const [n, k] of Object.entries(pool))
+    if (k - (main[n] ?? 0) > 0) side[n] = k - (main[n] ?? 0);
+  return { main, side };
+}
+
+/** Replaces the deck with the suggested 40; everything else goes to the collection. */
+export function applySuggestion(s: ExpeditionState): ExpeditionState {
+  return withRun(s, (r) => ({ ...r, build: { ...r.build, ...suggestDeck(r.build) } }));
 }
 
 // ---------------------------------------------------------------------------

@@ -1,4 +1,4 @@
-import { deckById, slug } from '@mtg/cards';
+import { deckById, scryfallById, slug } from '@mtg/cards';
 import type { Color } from '@mtg/engine';
 import { useMemo, useState } from 'react';
 import { artFor } from '../game/deckArt.ts';
@@ -7,7 +7,17 @@ import {
   BASICS,
   type BoonId,
   BOONS,
+  applySuggestion,
   camp,
+  canChoose,
+  chooseRare,
+  deckAdvice,
+  type EventId,
+  EVENTS,
+  leaveMerchant,
+  owned,
+  resolveEvent,
+  trade,
   chooseBoon,
   currentNode,
   enterNode,
@@ -85,6 +95,42 @@ export function Expedition({
     );
   if (run.pending?.kind === 'camp')
     return <Camp run={run} onChoose={(c) => update((s) => camp(s, c))} />;
+  if (run.pending?.kind === 'event')
+    return (
+      <MysteryEvent
+        run={run}
+        event={run.pending.event}
+        onChoose={(i) => {
+          play('chime');
+          update((s) => resolveEvent(s, i));
+        }}
+      />
+    );
+  if (run.pending?.kind === 'rareDraft')
+    return (
+      <CardChoice
+        eyebrow="Expedition · Elite defeated"
+        title="Claim a rare"
+        text="Take one for your collection. A boon comes next."
+        cards={run.pending.options}
+        onChoose={(name) => {
+          play('win', { gain: 0.6 });
+          update((s) => chooseRare(s, name));
+        }}
+      />
+    );
+  if (run.pending?.kind === 'merchant')
+    return (
+      <Merchant
+        run={run}
+        offers={run.pending.offers}
+        onTrade={(buy, give) => {
+          play('chime');
+          update((s) => trade(s, buy, give));
+        }}
+        onLeave={() => update(leaveMerchant)}
+      />
+    );
   if (!resumable && (building || size(b.main) < MIN_DECK))
     return <DeckBuilder run={run} update={update} onDone={() => setBuilding(false)} />;
   return (
@@ -114,6 +160,9 @@ const KIND_NAMES: Record<NodeKind, string> = {
   elite: 'Elite',
   camp: 'Camp',
   shrine: 'Shrine',
+  treasure: 'Treasure',
+  merchant: 'Merchant',
+  mystery: 'Mystery',
   boss: 'Final battle',
 };
 
@@ -130,6 +179,15 @@ const ICONS: Record<NodeKind, React.ReactNode> = {
   ),
   shrine: (
     <path d="M12 1l2.6 6.9L22 8.3l-5.7 4.8L18.2 21 12 16.8 5.8 21l1.9-7.9L2 8.3l7.4-.4L12 1z" />
+  ),
+  treasure: (
+    <path d="M3 9h18v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9zm0-1V6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v2H3zm7 3v4h4v-4h-4z" />
+  ),
+  merchant: (
+    <path d="M7 7V6a5 5 0 0 1 10 0v1h3l-1.5 14h-13L4 7h3zm2 0h6V6a3 3 0 0 0-6 0v1zm1 5a2 2 0 1 0 4 0h-1.5a.5.5 0 0 1-1 0H10z" />
+  ),
+  mystery: (
+    <path d="M12 2a6 6 0 0 1 6 6c0 2.6-1.7 3.8-3 4.7-.9.6-1.5 1.1-1.5 2.3v.5h-3V15c0-2.4 1.5-3.5 2.6-4.3 1-.7 1.9-1.3 1.9-2.7a3 3 0 0 0-6 0H6a6 6 0 0 1 6-6zm-1.5 16h3v3h-3v-3z" />
   ),
   boss: <path d="M3 7l4.5 4L12 4l4.5 7L21 7l-2 12H5L3 7zm2.5 13.5h13V22h-13v-1.5z" />,
 };
@@ -154,12 +212,18 @@ function nodeInfo(floor: number, node: MapNode): { title: string; lines: string[
     case 'elite':
       return {
         title,
-        lines: [`${foe(floor, node, opp)}`, 'Win: Rare pack and a boon'],
+        lines: [`${foe(floor, node, opp)}`, 'Win: choose a rare, then a boon'],
       };
     case 'camp':
       return { title, lines: ['Rest to win back a life, or open a booster'] };
     case 'shrine':
       return { title, lines: ['Choose one of three boons'] };
+    case 'treasure':
+      return { title, lines: ['A free Foundations booster, no fight'] };
+    case 'merchant':
+      return { title, lines: ['Trade two of your cards for one of three rares'] };
+    case 'mystery':
+      return { title, lines: ['Something unexpected waits here'] };
     case 'boss':
       return {
         title,
@@ -203,7 +267,31 @@ function ExpeditionMap({
   const floorNow = Math.min(run.outcomes.length + 1, FLOORS);
   const shown = hover ?? (here && { floor: here.floor, lane: here.lane });
   const info = shown && nodeInfo(shown.floor, run.map[shown.floor]![shown.lane]!);
-  const fight = here && !['camp', 'shrine'].includes(here.node.kind);
+  const fight = !!here?.node.opponent;
+  // The travelling token: at your last node (or the start), or on its way to a new one.
+  const [moving, setMoving] = useState<number | null>(null);
+  const tokenAt =
+    moving !== null
+      ? { x: floorX(run.path.length), y: laneY(run.map[run.path.length]!.length, moving) }
+      : run.path.length
+        ? {
+            x: floorX(run.path.length - 1),
+            y: laneY(run.map[run.path.length - 1]!.length, run.path.at(-1)!),
+          }
+        : { x: floorX(0) - 45 / FLOORS, y: 50 };
+  const travel = (lane: number) => {
+    if (moving !== null) return;
+    const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    setMoving(lane);
+    play('slide');
+    window.setTimeout(
+      () => {
+        onEnter(lane);
+        setMoving(null);
+      },
+      still ? 0 : 650,
+    );
+  };
 
   const headline =
     status === 'cleared'
@@ -255,6 +343,14 @@ function ExpeditionMap({
           {Array.from({ length: lives }, (_, i) => (
             <span key={i} className={`life ${i < left ? 'is-full' : 'is-lost'}`} />
           ))}
+        </span>
+        <span className="xmap__deck" title="Your deck">
+          <span className="deck__pips">
+            {deck.colors.map((c) => (
+              <span key={c} className={`pip pip--${c}`} />
+            ))}
+          </span>
+          {size(run.build.main)} cards
         </span>
         {run.boons.length > 0 && (
           <span className="xmap__boons">
@@ -308,7 +404,7 @@ function ExpeditionMap({
                 }
                 aria-disabled={!canGo}
                 aria-label={`${nodeInfo(f, node).title}, floor ${f + 1}`}
-                onClick={() => canGo && onEnter(lane)}
+                onClick={() => canGo && travel(lane)}
                 onMouseEnter={() => setHover({ floor: f, lane })}
                 onMouseLeave={() => setHover(null)}
               >
@@ -316,10 +412,30 @@ function ExpeditionMap({
                   {ICONS[node.kind]}
                 </svg>
                 {outcome === 'loss' && <span className="xnode__mark">✕</span>}
+                {!onPath && node.reward && (
+                  <span
+                    className={`xnode__reward ${node.reward.kind === 'color' ? `pip--${node.reward.color}` : 'is-booster'}`}
+                    title={packName(node.reward)}
+                  />
+                )}
+                {!onPath && node.kind === 'elite' && (
+                  <span className="xnode__reward is-rare" title="A rare of your choice" />
+                )}
               </button>
             );
           }),
         )}
+        <span
+          className="xmap__token"
+          aria-hidden
+          style={
+            {
+              left: `${tokenAt.x}%`,
+              top: `${tokenAt.y}%`,
+              backgroundImage: `url("${artFor(deck)}")`,
+            } as React.CSSProperties
+          }
+        />
       </div>
 
       <div className="xmap__bar">
@@ -478,6 +594,194 @@ function Camp({ run, onChoose }: { run: ExpeditionRun; onChoose: (c: 'rest' | 'f
   );
 }
 
+function MysteryEvent({
+  run,
+  event,
+  onChoose,
+}: {
+  run: ExpeditionRun;
+  event: EventId;
+  onChoose: (i: number) => void;
+}) {
+  const e = EVENTS[event];
+  return (
+    <div className="start choice">
+      <UiSize />
+      <div className="start__title">
+        <span className="start__eyebrow">Expedition · Mystery</span>
+        <h1>{e.title}</h1>
+        <p className="choice__story">{e.text}</p>
+      </div>
+      <div className="choice__options">
+        {e.choices.map((c, i) => {
+          const ok = canChoose(run, c);
+          return (
+            <button
+              key={c.label}
+              className="choice__option"
+              style={{ '--i': i } as React.CSSProperties}
+              disabled={!ok}
+              onClick={() => onChoose(i)}
+            >
+              <span className="choice__glyph">
+                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+                  {ICONS.mystery}
+                </svg>
+              </span>
+              <span className="choice__name">{c.label}</span>
+              <span className="choice__text">{ok ? c.text : "You can't spare a life."}</span>
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+const imageOf = (name: string) => scryfallById.get(slug(name))?.image?.normal ?? '';
+
+/** Pick one of a few cards, shown large. */
+function CardChoice({
+  eyebrow,
+  title,
+  text,
+  cards,
+  onChoose,
+}: {
+  eyebrow: string;
+  title: string;
+  text: string;
+  cards: string[];
+  onChoose: (name: string) => void;
+}) {
+  const [hover, setHover] = useState<HoverState | null>(null);
+  return (
+    <div className="start choice">
+      <UiSize />
+      <div className="start__title">
+        <span className="start__eyebrow">{eyebrow}</span>
+        <h1>{title}</h1>
+        <p>{text}</p>
+      </div>
+      <div className="choice__options">
+        {cards.map((name, i) => (
+          <button
+            key={name}
+            className="card-choice"
+            style={{ '--i': i } as React.CSSProperties}
+            onClick={() => onChoose(name)}
+            onMouseEnter={(e) => setHover({ defId: slug(name), anchor: e.currentTarget })}
+            onMouseLeave={() => setHover(null)}
+          >
+            <img src={imageOf(name)} alt={name} draggable={false} />
+          </button>
+        ))}
+      </div>
+      <HoverPreview hover={hover} notes={hover ? ruleNotes(hover.defId) : []} />
+    </div>
+  );
+}
+
+/** The merchant: pick a rare, then two of your cards to pay with. */
+function Merchant({
+  run,
+  offers,
+  onTrade,
+  onLeave,
+}: {
+  run: ExpeditionRun;
+  offers: string[];
+  onTrade: (buy: string, give: [string, string]) => void;
+  onLeave: () => void;
+}) {
+  const [buy, setBuy] = useState<string | null>(null);
+  const [give, setGive] = useState<string[]>([]);
+  const [hover, setHover] = useState<HoverState | null>(null);
+  const b = run.build;
+  const yours = useMemo(
+    () =>
+      [...new Set([...Object.keys(b.side), ...Object.keys(b.main)])]
+        .filter((n) => !Object.values(BASICS).includes(n))
+        .sort((x, y) => x.localeCompare(y)),
+    [b],
+  );
+  const toggle = (name: string) => {
+    const i = give.indexOf(name);
+    const taken = give.filter((g) => g === name).length;
+    if (give.length < 2 && taken < owned(b, name)) setGive([...give, name]);
+    else if (i >= 0) setGive(give.filter((_, j) => j !== i));
+  };
+  const hoverProps = (name: string) => ({
+    onMouseEnter: (e: React.MouseEvent) => setHover({ defId: slug(name), anchor: e.currentTarget }),
+    onMouseLeave: () => setHover(null),
+  });
+
+  return (
+    <div className="start choice merchant">
+      <UiSize />
+      <div className="start__title">
+        <span className="start__eyebrow">Expedition · Merchant</span>
+        <h1>{buy ? 'Pay with two cards' : 'A travelling merchant'}</h1>
+        <p>
+          {buy
+            ? 'Choose two cards from your deck or collection to trade away.'
+            : '"Rare wares, friend. Any one of these for two of yours."'}
+        </p>
+      </div>
+      <div className="choice__options">
+        {offers.map((name, i) => (
+          <button
+            key={name}
+            className={`card-choice ${buy === name ? 'is-on' : buy ? 'is-off' : ''}`}
+            style={{ '--i': i } as React.CSSProperties}
+            onClick={() => {
+              setBuy(buy === name ? null : name);
+              play('place', { gain: 0.6 });
+            }}
+            {...hoverProps(name)}
+          >
+            <img src={imageOf(name)} alt={name} draggable={false} />
+          </button>
+        ))}
+      </div>
+      {buy && (
+        <div className="merchant__pay">
+          {yours.map((name) => {
+            const n = give.filter((g) => g === name).length;
+            return (
+              <button
+                key={name}
+                className={`merchant__card ${n ? 'is-on' : ''}`}
+                onClick={() => toggle(name)}
+                {...hoverProps(name)}
+              >
+                <img src={imageOf(name)} alt={name} draggable={false} />
+                {owned(b, name) > 1 && <span className="dcard__qty">×{owned(b, name)}</span>}
+                {n > 0 && <span className="merchant__give">Give{n > 1 ? ` ×${n}` : ''}</span>}
+              </button>
+            );
+          })}
+        </div>
+      )}
+      <div className="gauntlet__actions">
+        {buy && (
+          <button
+            className="btn btn--primary btn--big"
+            disabled={give.length < 2}
+            onClick={() => onTrade(buy, give as [string, string])}
+          >
+            {give.length < 2 ? `Choose ${2 - give.length} more` : 'Trade'}
+          </button>
+        )}
+        <button className="btn btn--ghost" onClick={onLeave}>
+          Leave without trading
+        </button>
+      </div>
+      <HoverPreview hover={hover} notes={hover ? ruleNotes(hover.defId) : []} />
+    </div>
+  );
+}
+
 // ---------------------------------------------------------------------------
 // Deck builder
 // ---------------------------------------------------------------------------
@@ -509,6 +813,14 @@ function DeckBuilder({
   };
   const deck = runDeck(run);
   const n = size(b.main);
+  const advice = useMemo(() => deckAdvice(b), [b]);
+  const [confirming, setConfirming] = useState(false);
+  const suggest = () => {
+    if (!confirming) return setConfirming(true);
+    setConfirming(false);
+    update(applySuggestion);
+    play('shuffle');
+  };
 
   return (
     <div
@@ -531,6 +843,14 @@ function DeckBuilder({
             least {MIN_DECK} cards.
           </p>
         </div>
+        <button
+          className="btn btn--ghost builder__suggest"
+          onClick={suggest}
+          onMouseLeave={() => setConfirming(false)}
+          title="Builds a 40-card deck from your two strongest colours"
+        >
+          {confirming ? 'Replace my deck?' : 'Suggest a deck'}
+        </button>
         <button
           className="btn btn--primary deckview__play"
           disabled={n < MIN_DECK}
@@ -565,6 +885,13 @@ function DeckBuilder({
               </span>
             ))}
           </div>
+          {advice.length > 0 && (
+            <ul className="builder__advice" aria-label="Deck tips">
+              {advice.map((a) => (
+                <li key={a}>{a}</li>
+              ))}
+            </ul>
+          )}
           <div className="deckview__cols">
             {side.length === 0 && (
               <p className="builder__empty">Every card you own is in your deck.</p>
