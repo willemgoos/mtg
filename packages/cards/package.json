@@ -1,0 +1,17 @@
+{
+  "name": "@mtg/cards",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json",
+    "fetch-scryfall": "tsx scripts/fetch-scryfall.ts",
+    "sim": "tsx scripts/sim.ts"
+  },
+  "dependencies": {
+    "@mtg/engine": "workspace:*"
+  }
+}

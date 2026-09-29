@@ -1,0 +1,29 @@
+{
+  "name": "mtg",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@10.34.6",
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "pnpm -r typecheck",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "cards:fetch": "pnpm --filter @mtg/cards fetch-scryfall",
+    "sim": "pnpm --filter @mtg/cards sim"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^26.6.3",
+    "eslint": "^10.11.0",
+    "prettier": "^3.9.9",
+    "tsx": "^4.23.15",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.71.0",
+    "vitest": "^5.0.2"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ]
+  }
+}

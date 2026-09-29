@@ -1,0 +1,1258 @@
+[
+ {
+  "name": "Mountain",
+  "scryfallId": "279df7e2-2a3b-464a-a7df-e91da28e3a8c",
+  "oracleId": "a3fb7228-e76b-4e96-a40e-20b5fed75685",
+  "set": "fdn",
+  "collectorNumber": "278",
+  "rarity": "common",
+  "manaCost": "",
+  "typeLine": "Basic Land — Mountain",
+  "oracleText": "({T}: Add {R}.)",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/7/279df7e2-2a3b-464a-a7df-e91da28e3a8c.jpg?1783909041",
+   "normal": "https://cards.scryfall.io/normal/front/2/7/279df7e2-2a3b-464a-a7df-e91da28e3a8c.jpg?1783909041",
+   "large": "https://cards.scryfall.io/large/front/2/7/279df7e2-2a3b-464a-a7df-e91da28e3a8c.jpg?1783909041",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/7/279df7e2-2a3b-464a-a7df-e91da28e3a8c.jpg?1783909041"
+  }
+ },
+ {
+  "name": "Shock",
+  "scryfallId": "59fa8e8d-bcb8-47bf-b71a-df11c8d0f2c9",
+  "oracleId": "a9d288b8-cdc1-4e55-a0c9-d6edfc95e65d",
+  "set": "m21",
+  "collectorNumber": "159",
+  "rarity": "common",
+  "manaCost": "{R}",
+  "typeLine": "Instant",
+  "oracleText": "Shock deals 2 damage to any target.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/9/59fa8e8d-bcb8-47bf-b71a-df11c8d0f2c9.jpg?1783930686",
+   "normal": "https://cards.scryfall.io/normal/front/5/9/59fa8e8d-bcb8-47bf-b71a-df11c8d0f2c9.jpg?1783930686",
+   "large": "https://cards.scryfall.io/large/front/5/9/59fa8e8d-bcb8-47bf-b71a-df11c8d0f2c9.jpg?1783930686",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/9/59fa8e8d-bcb8-47bf-b71a-df11c8d0f2c9.jpg?1783930686"
+  }
+ },
+ {
+  "name": "Lightning Strike",
+  "scryfallId": "084b7337-c06f-4cbf-8fc0-0b20c221f1dc",
+  "oracleId": "f34b9bc4-7bfe-47fd-ba23-4eeeb46026eb",
+  "set": "m19",
+  "collectorNumber": "152",
+  "rarity": "uncommon",
+  "manaCost": "{1}{R}",
+  "typeLine": "Instant",
+  "oracleText": "Lightning Strike deals 3 damage to any target.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/8/084b7337-c06f-4cbf-8fc0-0b20c221f1dc.jpg?1783934547",
+   "normal": "https://cards.scryfall.io/normal/front/0/8/084b7337-c06f-4cbf-8fc0-0b20c221f1dc.jpg?1783934547",
+   "large": "https://cards.scryfall.io/large/front/0/8/084b7337-c06f-4cbf-8fc0-0b20c221f1dc.jpg?1783934547",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/8/084b7337-c06f-4cbf-8fc0-0b20c221f1dc.jpg?1783934547"
+  }
+ },
+ {
+  "name": "Boltwave",
+  "scryfallId": "8d1ec351-5e70-4eb2-b590-6bff94ef8178",
+  "oracleId": "bb8cccc8-e56f-42fa-a0d7-fc889b5e1c7b",
+  "set": "fdn",
+  "collectorNumber": "79",
+  "rarity": "uncommon",
+  "manaCost": "{R}",
+  "typeLine": "Sorcery",
+  "oracleText": "Boltwave deals 3 damage to each opponent.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/d/8d1ec351-5e70-4eb2-b590-6bff94ef8178.jpg?1783909105",
+   "normal": "https://cards.scryfall.io/normal/front/8/d/8d1ec351-5e70-4eb2-b590-6bff94ef8178.jpg?1783909105",
+   "large": "https://cards.scryfall.io/large/front/8/d/8d1ec351-5e70-4eb2-b590-6bff94ef8178.jpg?1783909105",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/d/8d1ec351-5e70-4eb2-b590-6bff94ef8178.jpg?1783909105"
+  }
+ },
+ {
+  "name": "Kindled Fury",
+  "scryfallId": "af158462-91e3-4ad7-b435-95d4eb32fe0a",
+  "oracleId": "ebeee06e-3345-4f02-896f-cb0b2cfa5548",
+  "set": "fdn",
+  "collectorNumber": "542",
+  "rarity": "common",
+  "manaCost": "{R}",
+  "typeLine": "Instant",
+  "oracleText": "Target creature gets +1/+0 and gains first strike until end of turn. (It deals combat damage before creatures without first strike.)",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/f/af158462-91e3-4ad7-b435-95d4eb32fe0a.jpg?1783908950",
+   "normal": "https://cards.scryfall.io/normal/front/a/f/af158462-91e3-4ad7-b435-95d4eb32fe0a.jpg?1783908950",
+   "large": "https://cards.scryfall.io/large/front/a/f/af158462-91e3-4ad7-b435-95d4eb32fe0a.jpg?1783908950",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/f/af158462-91e3-4ad7-b435-95d4eb32fe0a.jpg?1783908950"
+  }
+ },
+ {
+  "name": "Sure Strike",
+  "scryfallId": "5de6a1e4-5c66-43e6-9f2a-2635bdab03f6",
+  "oracleId": "fb694e7e-f66e-4958-b6ed-aa74bc9ac43e",
+  "set": "fdn",
+  "collectorNumber": "209",
+  "rarity": "common",
+  "manaCost": "{1}{R}",
+  "typeLine": "Instant",
+  "oracleText": "Target creature gets +3/+0 and gains first strike until end of turn. (It deals combat damage before creatures without first strike.)",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/d/5de6a1e4-5c66-43e6-9f2a-2635bdab03f6.jpg?1783909062",
+   "normal": "https://cards.scryfall.io/normal/front/5/d/5de6a1e4-5c66-43e6-9f2a-2635bdab03f6.jpg?1783909062",
+   "large": "https://cards.scryfall.io/large/front/5/d/5de6a1e4-5c66-43e6-9f2a-2635bdab03f6.jpg?1783909062",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/d/5de6a1e4-5c66-43e6-9f2a-2635bdab03f6.jpg?1783909062"
+  }
+ },
+ {
+  "name": "Crash Through",
+  "scryfallId": "9eb16918-6363-4849-8d74-e26822a0ddf7",
+  "oracleId": "41c15160-ee8c-42e3-bc6c-593b8c8ae335",
+  "set": "fdn",
+  "collectorNumber": "620",
+  "rarity": "common",
+  "manaCost": "{R}",
+  "typeLine": "Sorcery",
+  "oracleText": "Creatures you control gain trample until end of turn. (Each of those creatures can deal excess combat damage to the player or planeswalker it's attacking.)\nDraw a card.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/e/9eb16918-6363-4849-8d74-e26822a0ddf7.jpg?1783908924",
+   "normal": "https://cards.scryfall.io/normal/front/9/e/9eb16918-6363-4849-8d74-e26822a0ddf7.jpg?1783908924",
+   "large": "https://cards.scryfall.io/large/front/9/e/9eb16918-6363-4849-8d74-e26822a0ddf7.jpg?1783908924",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/e/9eb16918-6363-4849-8d74-e26822a0ddf7.jpg?1783908924"
+  }
+ },
+ {
+  "name": "Dragon Fodder",
+  "scryfallId": "f9abe517-f601-4784-8d62-2350bd755146",
+  "oracleId": "d0d2c45b-b6e3-4999-bdab-976e8f0d6617",
+  "set": "fdn",
+  "collectorNumber": "535",
+  "rarity": "common",
+  "manaCost": "{1}{R}",
+  "typeLine": "Sorcery",
+  "oracleText": "Create two 1/1 red Goblin creature tokens.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/9/f9abe517-f601-4784-8d62-2350bd755146.jpg?1783908954",
+   "normal": "https://cards.scryfall.io/normal/front/f/9/f9abe517-f601-4784-8d62-2350bd755146.jpg?1783908954",
+   "large": "https://cards.scryfall.io/large/front/f/9/f9abe517-f601-4784-8d62-2350bd755146.jpg?1783908954",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/9/f9abe517-f601-4784-8d62-2350bd755146.jpg?1783908954"
+  }
+ },
+ {
+  "name": "Seismic Rupture",
+  "scryfallId": "2519a51a-26a0-4884-9ba8-9db135c9ee49",
+  "oracleId": "3b1f1a57-d83a-443f-b190-03df63d2bfe6",
+  "set": "fdn",
+  "collectorNumber": "205",
+  "rarity": "uncommon",
+  "manaCost": "{2}{R}",
+  "typeLine": "Sorcery",
+  "oracleText": "Seismic Rupture deals 2 damage to each creature without flying.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/5/2519a51a-26a0-4884-9ba8-9db135c9ee49.jpg?1783909064",
+   "normal": "https://cards.scryfall.io/normal/front/2/5/2519a51a-26a0-4884-9ba8-9db135c9ee49.jpg?1783909064",
+   "large": "https://cards.scryfall.io/large/front/2/5/2519a51a-26a0-4884-9ba8-9db135c9ee49.jpg?1783909064",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/5/2519a51a-26a0-4884-9ba8-9db135c9ee49.jpg?1783909064"
+  }
+ },
+ {
+  "name": "Fanatical Firebrand",
+  "scryfallId": "d1296316-7781-4e98-95e6-7020648be6a5",
+  "oracleId": "d36e11f1-6ab3-4273-8114-a8fbbe21c1c3",
+  "set": "fdn",
+  "collectorNumber": "195",
+  "rarity": "common",
+  "manaCost": "{R}",
+  "typeLine": "Creature — Goblin Pirate",
+  "oracleText": "Haste (This creature can attack and {T} as soon as it comes under your control.)\n{T}, Sacrifice this creature: It deals 1 damage to any target.",
+  "power": "1",
+  "toughness": "1",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Haste"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/1/d1296316-7781-4e98-95e6-7020648be6a5.jpg?1783909067",
+   "normal": "https://cards.scryfall.io/normal/front/d/1/d1296316-7781-4e98-95e6-7020648be6a5.jpg?1783909067",
+   "large": "https://cards.scryfall.io/large/front/d/1/d1296316-7781-4e98-95e6-7020648be6a5.jpg?1783909067",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/1/d1296316-7781-4e98-95e6-7020648be6a5.jpg?1783909067"
+  }
+ },
+ {
+  "name": "Viashino Pyromancer",
+  "scryfallId": "9f52ada2-cabc-46a3-99df-271833a86909",
+  "oracleId": "5e78e6e0-60f0-4c3c-b8dd-bd673f5152b8",
+  "set": "fdn",
+  "collectorNumber": "634",
+  "rarity": "common",
+  "manaCost": "{1}{R}",
+  "typeLine": "Creature — Lizard Wizard",
+  "oracleText": "When this creature enters, it deals 2 damage to target player or planeswalker.",
+  "power": "2",
+  "toughness": "1",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/f/9f52ada2-cabc-46a3-99df-271833a86909.jpg?1783908920",
+   "normal": "https://cards.scryfall.io/normal/front/9/f/9f52ada2-cabc-46a3-99df-271833a86909.jpg?1783908920",
+   "large": "https://cards.scryfall.io/large/front/9/f/9f52ada2-cabc-46a3-99df-271833a86909.jpg?1783908920",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/f/9f52ada2-cabc-46a3-99df-271833a86909.jpg?1783908920"
+  }
+ },
+ {
+  "name": "Heartfire Immolator",
+  "scryfallId": "3ca38f4d-01f5-4a02-9000-01261a440dbf",
+  "oracleId": "1e414a4f-6e76-4cbe-9c69-d52852cd5bc0",
+  "set": "fdn",
+  "collectorNumber": "201",
+  "rarity": "uncommon",
+  "manaCost": "{1}{R}",
+  "typeLine": "Creature — Human Wizard",
+  "oracleText": "Prowess (Whenever you cast a noncreature spell, this creature gets +1/+1 until end of turn.)\n{R}, Sacrifice this creature: It deals damage equal to its power to target creature or planeswalker.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Prowess"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/c/3ca38f4d-01f5-4a02-9000-01261a440dbf.jpg?1783909070",
+   "normal": "https://cards.scryfall.io/normal/front/3/c/3ca38f4d-01f5-4a02-9000-01261a440dbf.jpg?1783909070",
+   "large": "https://cards.scryfall.io/large/front/3/c/3ca38f4d-01f5-4a02-9000-01261a440dbf.jpg?1783909070",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/c/3ca38f4d-01f5-4a02-9000-01261a440dbf.jpg?1783909070"
+  }
+ },
+ {
+  "name": "Swab Goblin",
+  "scryfallId": "8db11970-74c2-463d-88bb-9f88aa079eaa",
+  "oracleId": "343ecf2f-0bbc-4840-8fb3-f5f61b26e76f",
+  "set": "fdn",
+  "collectorNumber": "548",
+  "rarity": "common",
+  "manaCost": "{1}{R}",
+  "typeLine": "Creature — Goblin Pirate",
+  "oracleText": "",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/d/8db11970-74c2-463d-88bb-9f88aa079eaa.jpg?1783908949",
+   "normal": "https://cards.scryfall.io/normal/front/8/d/8db11970-74c2-463d-88bb-9f88aa079eaa.jpg?1783908949",
+   "large": "https://cards.scryfall.io/large/front/8/d/8db11970-74c2-463d-88bb-9f88aa079eaa.jpg?1783908949",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/d/8db11970-74c2-463d-88bb-9f88aa079eaa.jpg?1783908949"
+  }
+ },
+ {
+  "name": "Firebrand Archer",
+  "scryfallId": "fe0312f1-4c98-4b7f-8a34-0059ea80edef",
+  "oracleId": "2e9289d6-dbc6-456d-88cf-d1f534e731d6",
+  "set": "fdn",
+  "collectorNumber": "196",
+  "rarity": "common",
+  "manaCost": "{1}{R}",
+  "typeLine": "Creature — Human Archer",
+  "oracleText": "Whenever you cast a noncreature spell, this creature deals 1 damage to each opponent.",
+  "power": "2",
+  "toughness": "1",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/e/fe0312f1-4c98-4b7f-8a34-0059ea80edef.jpg?1783909067",
+   "normal": "https://cards.scryfall.io/normal/front/f/e/fe0312f1-4c98-4b7f-8a34-0059ea80edef.jpg?1783909067",
+   "large": "https://cards.scryfall.io/large/front/f/e/fe0312f1-4c98-4b7f-8a34-0059ea80edef.jpg?1783909067",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/e/fe0312f1-4c98-4b7f-8a34-0059ea80edef.jpg?1783909067"
+  }
+ },
+ {
+  "name": "Searslicer Goblin",
+  "scryfallId": "94ad0b97-a318-4e76-ac79-b3e83417c333",
+  "oracleId": "86ec0b56-497f-481c-a03a-c4e64e8e7404",
+  "set": "fdn",
+  "collectorNumber": "93",
+  "rarity": "rare",
+  "manaCost": "{1}{R}",
+  "typeLine": "Creature — Goblin Warrior",
+  "oracleText": "Raid — At the beginning of your end step, if you attacked this turn, create a 1/1 red Goblin creature token.",
+  "power": "2",
+  "toughness": "1",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Raid"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/4/94ad0b97-a318-4e76-ac79-b3e83417c333.jpg?1783909102",
+   "normal": "https://cards.scryfall.io/normal/front/9/4/94ad0b97-a318-4e76-ac79-b3e83417c333.jpg?1783909102",
+   "large": "https://cards.scryfall.io/large/front/9/4/94ad0b97-a318-4e76-ac79-b3e83417c333.jpg?1783909102",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/4/94ad0b97-a318-4e76-ac79-b3e83417c333.jpg?1783909102"
+  }
+ },
+ {
+  "name": "Raging Redcap",
+  "scryfallId": "9627b0a7-bda9-44df-81c9-aa70cc976331",
+  "oracleId": "679841ad-f3ac-48e2-ba11-2cf6d78642b4",
+  "set": "fdn",
+  "collectorNumber": "543",
+  "rarity": "common",
+  "manaCost": "{2}{R}",
+  "typeLine": "Creature — Goblin Knight",
+  "oracleText": "Double strike (This creature deals both first-strike and regular combat damage.)",
+  "power": "1",
+  "toughness": "2",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Double strike"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/6/9627b0a7-bda9-44df-81c9-aa70cc976331.jpg?1783908952",
+   "normal": "https://cards.scryfall.io/normal/front/9/6/9627b0a7-bda9-44df-81c9-aa70cc976331.jpg?1783908952",
+   "large": "https://cards.scryfall.io/large/front/9/6/9627b0a7-bda9-44df-81c9-aa70cc976331.jpg?1783908952",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/6/9627b0a7-bda9-44df-81c9-aa70cc976331.jpg?1783908952"
+  }
+ },
+ {
+  "name": "Brazen Scourge",
+  "scryfallId": "eb84b86c-3276-4fc1-a09d-47de388cb729",
+  "oracleId": "422ef4ec-863a-450e-9577-a0707bc16532",
+  "set": "fdn",
+  "collectorNumber": "191",
+  "rarity": "uncommon",
+  "manaCost": "{1}{R}{R}",
+  "typeLine": "Creature — Gremlin",
+  "oracleText": "Haste (This creature can attack and {T} as soon as it comes under your control.)",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Haste"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/b/eb84b86c-3276-4fc1-a09d-47de388cb729.jpg?1783909069",
+   "normal": "https://cards.scryfall.io/normal/front/e/b/eb84b86c-3276-4fc1-a09d-47de388cb729.jpg?1783909069",
+   "large": "https://cards.scryfall.io/large/front/e/b/eb84b86c-3276-4fc1-a09d-47de388cb729.jpg?1783909069",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/b/eb84b86c-3276-4fc1-a09d-47de388cb729.jpg?1783909069"
+  }
+ },
+ {
+  "name": "Guttersnipe",
+  "scryfallId": "dde674d6-f4e7-410b-acf0-34021290576d",
+  "oracleId": "c6bdaf76-6a03-4695-9c4b-f040e73435af",
+  "set": "fdn",
+  "collectorNumber": "716",
+  "rarity": "uncommon",
+  "manaCost": "{2}{R}",
+  "typeLine": "Creature — Goblin Shaman",
+  "oracleText": "Whenever you cast an instant or sorcery spell, this creature deals 2 damage to each opponent.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/d/dde674d6-f4e7-410b-acf0-34021290576d.jpg?1783908892",
+   "normal": "https://cards.scryfall.io/normal/front/d/d/dde674d6-f4e7-410b-acf0-34021290576d.jpg?1783908892",
+   "large": "https://cards.scryfall.io/large/front/d/d/dde674d6-f4e7-410b-acf0-34021290576d.jpg?1783908892",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/d/dde674d6-f4e7-410b-acf0-34021290576d.jpg?1783908892"
+  }
+ },
+ {
+  "name": "Giant Cindermaw",
+  "scryfallId": "d65f5298-0e57-49cf-aaf5-2bb16f3e636c",
+  "oracleId": "bd0c0e85-ff24-46c9-a547-4f633355c131",
+  "set": "fdn",
+  "collectorNumber": "624",
+  "rarity": "uncommon",
+  "manaCost": "{2}{R}",
+  "typeLine": "Creature — Dinosaur Beast",
+  "oracleText": "Trample (This creature can deal excess combat damage to the player or planeswalker it's attacking.)\nPlayers can't gain life.",
+  "power": "4",
+  "toughness": "3",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Trample"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/6/d65f5298-0e57-49cf-aaf5-2bb16f3e636c.jpg?1783908923",
+   "normal": "https://cards.scryfall.io/normal/front/d/6/d65f5298-0e57-49cf-aaf5-2bb16f3e636c.jpg?1783908923",
+   "large": "https://cards.scryfall.io/large/front/d/6/d65f5298-0e57-49cf-aaf5-2bb16f3e636c.jpg?1783908923",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/6/d65f5298-0e57-49cf-aaf5-2bb16f3e636c.jpg?1783908923"
+  }
+ },
+ {
+  "name": "Spitfire Lagac",
+  "scryfallId": "30f600cd-b696-4f49-9cbc-5a33aa43d04c",
+  "oracleId": "7215ca87-bbff-4c14-a1f5-de5ddd97c875",
+  "set": "fdn",
+  "collectorNumber": "208",
+  "rarity": "common",
+  "manaCost": "{3}{R}",
+  "typeLine": "Creature — Lizard",
+  "oracleText": "Landfall — Whenever a land you control enters, this creature deals 1 damage to each opponent.",
+  "power": "3",
+  "toughness": "4",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Landfall"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/0/30f600cd-b696-4f49-9cbc-5a33aa43d04c.jpg?1783909063",
+   "normal": "https://cards.scryfall.io/normal/front/3/0/30f600cd-b696-4f49-9cbc-5a33aa43d04c.jpg?1783909063",
+   "large": "https://cards.scryfall.io/large/front/3/0/30f600cd-b696-4f49-9cbc-5a33aa43d04c.jpg?1783909063",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/0/30f600cd-b696-4f49-9cbc-5a33aa43d04c.jpg?1783909063"
+  }
+ },
+ {
+  "name": "Battlesong Berserker",
+  "scryfallId": "a1f8b199-5d62-485f-b1c3-b30aa550595b",
+  "oracleId": "396cc8ce-9efa-4fc7-90a6-b439b2b021db",
+  "set": "fdn",
+  "collectorNumber": "78",
+  "rarity": "uncommon",
+  "manaCost": "{3}{R}",
+  "typeLine": "Creature — Human Berserker",
+  "oracleText": "Whenever you attack, target creature you control gets +1/+0 and gains menace until end of turn. (It can't be blocked except by two or more creatures.)",
+  "power": "3",
+  "toughness": "4",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/1/a1f8b199-5d62-485f-b1c3-b30aa550595b.jpg?1783909106",
+   "normal": "https://cards.scryfall.io/normal/front/a/1/a1f8b199-5d62-485f-b1c3-b30aa550595b.jpg?1783909106",
+   "large": "https://cards.scryfall.io/large/front/a/1/a1f8b199-5d62-485f-b1c3-b30aa550595b.jpg?1783909106",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/1/a1f8b199-5d62-485f-b1c3-b30aa550595b.jpg?1783909106"
+  }
+ },
+ {
+  "name": "Skyraker Giant",
+  "scryfallId": "5e3fbafb-e915-43eb-8a68-245840ba73ff",
+  "oracleId": "d481630c-83c4-47d2-a770-db331154d2b9",
+  "set": "fdn",
+  "collectorNumber": "547",
+  "rarity": "common",
+  "manaCost": "{2}{R}{R}",
+  "typeLine": "Creature — Giant",
+  "oracleText": "Reach (This creature can block creatures with flying.)",
+  "power": "4",
+  "toughness": "3",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Reach"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/e/5e3fbafb-e915-43eb-8a68-245840ba73ff.jpg?1783908949",
+   "normal": "https://cards.scryfall.io/normal/front/5/e/5e3fbafb-e915-43eb-8a68-245840ba73ff.jpg?1783908949",
+   "large": "https://cards.scryfall.io/large/front/5/e/5e3fbafb-e915-43eb-8a68-245840ba73ff.jpg?1783908949",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/e/5e3fbafb-e915-43eb-8a68-245840ba73ff.jpg?1783908949"
+  }
+ },
+ {
+  "name": "Ravenous Giant",
+  "scryfallId": "050b70c4-9086-4db4-8e65-f9bb5f67cf1b",
+  "oracleId": "46c7a552-4a98-4e1a-8651-8fb0e7153aec",
+  "set": "fdn",
+  "collectorNumber": "630",
+  "rarity": "uncommon",
+  "manaCost": "{2}{R}{R}",
+  "typeLine": "Creature — Giant",
+  "oracleText": "At the beginning of your upkeep, this creature deals 1 damage to you.",
+  "power": "5",
+  "toughness": "5",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/5/050b70c4-9086-4db4-8e65-f9bb5f67cf1b.jpg?1783908920",
+   "normal": "https://cards.scryfall.io/normal/front/0/5/050b70c4-9086-4db4-8e65-f9bb5f67cf1b.jpg?1783908920",
+   "large": "https://cards.scryfall.io/large/front/0/5/050b70c4-9086-4db4-8e65-f9bb5f67cf1b.jpg?1783908920",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/5/050b70c4-9086-4db4-8e65-f9bb5f67cf1b.jpg?1783908920"
+  }
+ },
+ {
+  "name": "Ball Lightning",
+  "scryfallId": "5f27dbf0-6818-40ea-832d-10686b4c2900",
+  "oracleId": "7485cf25-eb41-4397-be13-7f0b8c10c70a",
+  "set": "fdn",
+  "collectorNumber": "618",
+  "rarity": "rare",
+  "manaCost": "{R}{R}{R}",
+  "typeLine": "Creature — Elemental",
+  "oracleText": "Trample (This creature can deal excess combat damage to the player or planeswalker it's attacking.)\nHaste (This creature can attack and {T} as soon as it comes under your control.)\nAt the beginning of the end step, sacrifice this creature.",
+  "power": "6",
+  "toughness": "1",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Haste",
+   "Trample"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/f/5f27dbf0-6818-40ea-832d-10686b4c2900.jpg?1783908925",
+   "normal": "https://cards.scryfall.io/normal/front/5/f/5f27dbf0-6818-40ea-832d-10686b4c2900.jpg?1783908925",
+   "large": "https://cards.scryfall.io/large/front/5/f/5f27dbf0-6818-40ea-832d-10686b4c2900.jpg?1783908925",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/f/5f27dbf0-6818-40ea-832d-10686b4c2900.jpg?1783908925"
+  }
+ },
+ {
+  "name": "Gorehorn Raider",
+  "scryfallId": "78ce6c40-3452-4aa0-a45b-dbfd70f8d220",
+  "oracleId": "41699d92-c209-4fcb-bbd6-685b3437d0c2",
+  "set": "fdn",
+  "collectorNumber": "89",
+  "rarity": "common",
+  "manaCost": "{4}{R}",
+  "typeLine": "Creature — Minotaur Pirate",
+  "oracleText": "Raid — When this creature enters, if you attacked this turn, this creature deals 2 damage to any target.",
+  "power": "4",
+  "toughness": "4",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Raid"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/8/78ce6c40-3452-4aa0-a45b-dbfd70f8d220.jpg?1783909104",
+   "normal": "https://cards.scryfall.io/normal/front/7/8/78ce6c40-3452-4aa0-a45b-dbfd70f8d220.jpg?1783909104",
+   "large": "https://cards.scryfall.io/large/front/7/8/78ce6c40-3452-4aa0-a45b-dbfd70f8d220.jpg?1783909104",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/8/78ce6c40-3452-4aa0-a45b-dbfd70f8d220.jpg?1783909104"
+  }
+ },
+ {
+  "name": "Fire Elemental",
+  "scryfallId": "dc506f58-048d-49cc-ad8c-2eb851b08bb6",
+  "oracleId": "3912d21e-1ebc-4a81-9dc9-f404248d564a",
+  "set": "fdn",
+  "collectorNumber": "538",
+  "rarity": "common",
+  "manaCost": "{3}{R}{R}",
+  "typeLine": "Creature — Elemental",
+  "oracleText": "",
+  "power": "5",
+  "toughness": "4",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/c/dc506f58-048d-49cc-ad8c-2eb851b08bb6.jpg?1783908952",
+   "normal": "https://cards.scryfall.io/normal/front/d/c/dc506f58-048d-49cc-ad8c-2eb851b08bb6.jpg?1783908952",
+   "large": "https://cards.scryfall.io/large/front/d/c/dc506f58-048d-49cc-ad8c-2eb851b08bb6.jpg?1783908952",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/c/dc506f58-048d-49cc-ad8c-2eb851b08bb6.jpg?1783908952"
+  }
+ },
+ {
+  "name": "Dragon Trainer",
+  "scryfallId": "91bd75a1-cb54-4e38-9ce1-e8f32a73c6eb",
+  "oracleId": "328a0691-9453-4f2d-a9c3-5c69da252d20",
+  "set": "fdn",
+  "collectorNumber": "84",
+  "rarity": "uncommon",
+  "manaCost": "{3}{R}{R}",
+  "typeLine": "Creature — Human",
+  "oracleText": "When this creature enters, create a 4/4 red Dragon creature token with flying.",
+  "power": "1",
+  "toughness": "1",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/1/91bd75a1-cb54-4e38-9ce1-e8f32a73c6eb.jpg?1783909103",
+   "normal": "https://cards.scryfall.io/normal/front/9/1/91bd75a1-cb54-4e38-9ce1-e8f32a73c6eb.jpg?1783909103",
+   "large": "https://cards.scryfall.io/large/front/9/1/91bd75a1-cb54-4e38-9ce1-e8f32a73c6eb.jpg?1783909103",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/1/91bd75a1-cb54-4e38-9ce1-e8f32a73c6eb.jpg?1783909103"
+  }
+ },
+ {
+  "name": "Shivan Dragon",
+  "scryfallId": "1fcff1e0-2745-448d-a27b-e31719e222e9",
+  "oracleId": "711eea87-0fa3-46e0-a42b-fa5a86455f04",
+  "set": "fdn",
+  "collectorNumber": "206",
+  "rarity": "uncommon",
+  "manaCost": "{4}{R}{R}",
+  "typeLine": "Creature — Dragon",
+  "oracleText": "Flying\n{R}: This creature gets +1/+0 until end of turn.",
+  "power": "5",
+  "toughness": "5",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/f/1fcff1e0-2745-448d-a27b-e31719e222e9.jpg?1783909064",
+   "normal": "https://cards.scryfall.io/normal/front/1/f/1fcff1e0-2745-448d-a27b-e31719e222e9.jpg?1783909064",
+   "large": "https://cards.scryfall.io/large/front/1/f/1fcff1e0-2745-448d-a27b-e31719e222e9.jpg?1783909064",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/f/1fcff1e0-2745-448d-a27b-e31719e222e9.jpg?1783909064"
+  }
+ },
+ {
+  "name": "Forest",
+  "scryfallId": "d232fcc2-12f6-401a-b1aa-ddff11cb9378",
+  "oracleId": "b34bb2dc-c1af-4d77-b0b3-a0fb342a5fc6",
+  "set": "fdn",
+  "collectorNumber": "280",
+  "rarity": "common",
+  "manaCost": "",
+  "typeLine": "Basic Land — Forest",
+  "oracleText": "({T}: Add {G}.)",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/2/d232fcc2-12f6-401a-b1aa-ddff11cb9378.jpg?1783909039",
+   "normal": "https://cards.scryfall.io/normal/front/d/2/d232fcc2-12f6-401a-b1aa-ddff11cb9378.jpg?1783909039",
+   "large": "https://cards.scryfall.io/large/front/d/2/d232fcc2-12f6-401a-b1aa-ddff11cb9378.jpg?1783909039",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/2/d232fcc2-12f6-401a-b1aa-ddff11cb9378.jpg?1783909039"
+  }
+ },
+ {
+  "name": "Giant Growth",
+  "scryfallId": "bd0bf74e-14c1-4428-88d8-2181a080b5d0",
+  "oracleId": "5748ebf1-24e3-499d-ab7c-c2cebd462a24",
+  "set": "fdn",
+  "collectorNumber": "223",
+  "rarity": "common",
+  "manaCost": "{G}",
+  "typeLine": "Instant",
+  "oracleText": "Target creature gets +3/+3 until end of turn.",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/d/bd0bf74e-14c1-4428-88d8-2181a080b5d0.jpg?1783909057",
+   "normal": "https://cards.scryfall.io/normal/front/b/d/bd0bf74e-14c1-4428-88d8-2181a080b5d0.jpg?1783909057",
+   "large": "https://cards.scryfall.io/large/front/b/d/bd0bf74e-14c1-4428-88d8-2181a080b5d0.jpg?1783909057",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/d/bd0bf74e-14c1-4428-88d8-2181a080b5d0.jpg?1783909057"
+  }
+ },
+ {
+  "name": "Snakeskin Veil",
+  "scryfallId": "6cc4c21d-9bdc-4490-9203-17f51db0ddd1",
+  "oracleId": "1e6a24be-8281-41c1-a5ba-b68f0ef1d7b8",
+  "set": "fdn",
+  "collectorNumber": "233",
+  "rarity": "uncommon",
+  "manaCost": "{G}",
+  "typeLine": "Instant",
+  "oracleText": "Put a +1/+1 counter on target creature you control. It gains hexproof until end of turn. (It can't be the target of spells or abilities your opponents control.)",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/c/6cc4c21d-9bdc-4490-9203-17f51db0ddd1.jpg?1783909056",
+   "normal": "https://cards.scryfall.io/normal/front/6/c/6cc4c21d-9bdc-4490-9203-17f51db0ddd1.jpg?1783909056",
+   "large": "https://cards.scryfall.io/large/front/6/c/6cc4c21d-9bdc-4490-9203-17f51db0ddd1.jpg?1783909056",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/c/6cc4c21d-9bdc-4490-9203-17f51db0ddd1.jpg?1783909056"
+  }
+ },
+ {
+  "name": "Bite Down",
+  "scryfallId": "f8d70b3b-f6f9-4b3c-ad70-0ce369e812b5",
+  "oracleId": "623903de-3c04-4745-9af3-d7ec9fb2574d",
+  "set": "fdn",
+  "collectorNumber": "212",
+  "rarity": "common",
+  "manaCost": "{1}{G}",
+  "typeLine": "Instant",
+  "oracleText": "Target creature you control deals damage equal to its power to target creature or planeswalker you don't control.",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/8/f8d70b3b-f6f9-4b3c-ad70-0ce369e812b5.jpg?1783909062",
+   "normal": "https://cards.scryfall.io/normal/front/f/8/f8d70b3b-f6f9-4b3c-ad70-0ce369e812b5.jpg?1783909062",
+   "large": "https://cards.scryfall.io/large/front/f/8/f8d70b3b-f6f9-4b3c-ad70-0ce369e812b5.jpg?1783909062",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/8/f8d70b3b-f6f9-4b3c-ad70-0ce369e812b5.jpg?1783909062"
+  }
+ },
+ {
+  "name": "Broken Wings",
+  "scryfallId": "61f9cbeb-cc9c-4562-be65-8a77053faefe",
+  "oracleId": "5e316864-d55c-496f-8f46-773567896864",
+  "set": "fdn",
+  "collectorNumber": "214",
+  "rarity": "common",
+  "manaCost": "{2}{G}",
+  "typeLine": "Instant",
+  "oracleText": "Destroy target artifact, enchantment, or creature with flying.",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/1/61f9cbeb-cc9c-4562-be65-8a77053faefe.jpg?1783909061",
+   "normal": "https://cards.scryfall.io/normal/front/6/1/61f9cbeb-cc9c-4562-be65-8a77053faefe.jpg?1783909061",
+   "large": "https://cards.scryfall.io/large/front/6/1/61f9cbeb-cc9c-4562-be65-8a77053faefe.jpg?1783909061",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/1/61f9cbeb-cc9c-4562-be65-8a77053faefe.jpg?1783909061"
+  }
+ },
+ {
+  "name": "Felling Blow",
+  "scryfallId": "96948ae3-b15d-4d6d-aa73-9f52084cd903",
+  "oracleId": "fbfa19ca-98bb-4c7d-a04e-920a8aafb031",
+  "set": "fdn",
+  "collectorNumber": "105",
+  "rarity": "uncommon",
+  "manaCost": "{2}{G}",
+  "typeLine": "Sorcery",
+  "oracleText": "Put a +1/+1 counter on target creature you control. Then that creature deals damage equal to its power to target creature an opponent controls.",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/6/96948ae3-b15d-4d6d-aa73-9f52084cd903.jpg?1783909097",
+   "normal": "https://cards.scryfall.io/normal/front/9/6/96948ae3-b15d-4d6d-aa73-9f52084cd903.jpg?1783909097",
+   "large": "https://cards.scryfall.io/large/front/9/6/96948ae3-b15d-4d6d-aa73-9f52084cd903.jpg?1783909097",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/6/96948ae3-b15d-4d6d-aa73-9f52084cd903.jpg?1783909097"
+  }
+ },
+ {
+  "name": "Overrun",
+  "scryfallId": "1d8e9cbb-8bf4-4a48-a58e-79deb3abdf7f",
+  "oracleId": "204f9afe-c20b-4933-b5cd-aa572784762a",
+  "set": "fdn",
+  "collectorNumber": "230",
+  "rarity": "uncommon",
+  "manaCost": "{2}{G}{G}{G}",
+  "typeLine": "Sorcery",
+  "oracleText": "Creatures you control get +3/+3 and gain trample until end of turn. (Each of those creatures can deal excess combat damage to the player or planeswalker it's attacking.)",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/d/1d8e9cbb-8bf4-4a48-a58e-79deb3abdf7f.jpg?1783909056",
+   "normal": "https://cards.scryfall.io/normal/front/1/d/1d8e9cbb-8bf4-4a48-a58e-79deb3abdf7f.jpg?1783909056",
+   "large": "https://cards.scryfall.io/large/front/1/d/1d8e9cbb-8bf4-4a48-a58e-79deb3abdf7f.jpg?1783909056",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/d/1d8e9cbb-8bf4-4a48-a58e-79deb3abdf7f.jpg?1783909056"
+  }
+ },
+ {
+  "name": "Bear Cub",
+  "scryfallId": "d8662ebb-068b-41d2-b504-4b5854e4d4aa",
+  "oracleId": "ed206651-3d9b-4546-8d45-0682817192fd",
+  "set": "fdn",
+  "collectorNumber": "552",
+  "rarity": "common",
+  "manaCost": "{1}{G}",
+  "typeLine": "Creature — Bear",
+  "oracleText": "",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/8/d8662ebb-068b-41d2-b504-4b5854e4d4aa.jpg?1783908951",
+   "normal": "https://cards.scryfall.io/normal/front/d/8/d8662ebb-068b-41d2-b504-4b5854e4d4aa.jpg?1783908951",
+   "large": "https://cards.scryfall.io/large/front/d/8/d8662ebb-068b-41d2-b504-4b5854e4d4aa.jpg?1783908951",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/8/d8662ebb-068b-41d2-b504-4b5854e4d4aa.jpg?1783908951"
+  }
+ },
+ {
+  "name": "Thornweald Archer",
+  "scryfallId": "189f6199-f2fe-49a5-89ca-3c4cb39fbf2b",
+  "oracleId": "b5ba87f5-3589-4a8b-ad65-2ae2523e98e8",
+  "set": "fdn",
+  "collectorNumber": "559",
+  "rarity": "common",
+  "manaCost": "{1}{G}",
+  "typeLine": "Creature — Elf Archer",
+  "oracleText": "Reach (This creature can block creatures with flying.)\nDeathtouch (Any amount of damage this deals to a creature is enough to destroy it.)",
+  "power": "2",
+  "toughness": "1",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Reach",
+   "Deathtouch"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/8/189f6199-f2fe-49a5-89ca-3c4cb39fbf2b.jpg?1783908944",
+   "normal": "https://cards.scryfall.io/normal/front/1/8/189f6199-f2fe-49a5-89ca-3c4cb39fbf2b.jpg?1783908944",
+   "large": "https://cards.scryfall.io/large/front/1/8/189f6199-f2fe-49a5-89ca-3c4cb39fbf2b.jpg?1783908944",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/8/189f6199-f2fe-49a5-89ca-3c4cb39fbf2b.jpg?1783908944"
+  }
+ },
+ {
+  "name": "Druid of the Cowl",
+  "scryfallId": "db2d0ee9-865c-4fc9-8cb6-540c597e1bf4",
+  "oracleId": "b1793c3b-25d6-4fae-a99d-cfdd2210ca67",
+  "set": "fdn",
+  "collectorNumber": "554",
+  "rarity": "common",
+  "manaCost": "{1}{G}",
+  "typeLine": "Creature — Elf Druid",
+  "oracleText": "{T}: Add {G}.",
+  "power": "1",
+  "toughness": "3",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/b/db2d0ee9-865c-4fc9-8cb6-540c597e1bf4.jpg?1783908947",
+   "normal": "https://cards.scryfall.io/normal/front/d/b/db2d0ee9-865c-4fc9-8cb6-540c597e1bf4.jpg?1783908947",
+   "large": "https://cards.scryfall.io/large/front/d/b/db2d0ee9-865c-4fc9-8cb6-540c597e1bf4.jpg?1783908947",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/b/db2d0ee9-865c-4fc9-8cb6-540c597e1bf4.jpg?1783908947"
+  }
+ },
+ {
+  "name": "Dwynen's Elite",
+  "scryfallId": "89d94c28-ea2e-4a3d-935f-6b2d9f2efc7a",
+  "oracleId": "3d4a7dd3-9258-4bd1-adc4-08f0205e196a",
+  "set": "fdn",
+  "collectorNumber": "218",
+  "rarity": "common",
+  "manaCost": "{1}{G}",
+  "typeLine": "Creature — Elf Warrior",
+  "oracleText": "When this creature enters, if you control another Elf, create a 1/1 green Elf Warrior creature token.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/9/89d94c28-ea2e-4a3d-935f-6b2d9f2efc7a.jpg?1783909060",
+   "normal": "https://cards.scryfall.io/normal/front/8/9/89d94c28-ea2e-4a3d-935f-6b2d9f2efc7a.jpg?1783909060",
+   "large": "https://cards.scryfall.io/large/front/8/9/89d94c28-ea2e-4a3d-935f-6b2d9f2efc7a.jpg?1783909060",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/9/89d94c28-ea2e-4a3d-935f-6b2d9f2efc7a.jpg?1783909060"
+  }
+ },
+ {
+  "name": "Imperious Perfect",
+  "scryfallId": "83b4a09f-ea53-42b4-a41a-4299192a6fd3",
+  "oracleId": "3fa71348-fa4d-4f39-a451-cf1570591991",
+  "set": "fdn",
+  "collectorNumber": "719",
+  "rarity": "uncommon",
+  "manaCost": "{2}{G}",
+  "typeLine": "Creature — Elf Warrior",
+  "oracleText": "Other Elves you control get +1/+1.\n{G}, {T}: Create a 1/1 green Elf Warrior creature token.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/3/83b4a09f-ea53-42b4-a41a-4299192a6fd3.jpg?1783908890",
+   "normal": "https://cards.scryfall.io/normal/front/8/3/83b4a09f-ea53-42b4-a41a-4299192a6fd3.jpg?1783908890",
+   "large": "https://cards.scryfall.io/large/front/8/3/83b4a09f-ea53-42b4-a41a-4299192a6fd3.jpg?1783908890",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/3/83b4a09f-ea53-42b4-a41a-4299192a6fd3.jpg?1783908890"
+  }
+ },
+ {
+  "name": "Beast-Kin Ranger",
+  "scryfallId": "0102e0be-5783-4825-9489-713b1b1df0b2",
+  "oracleId": "db794af5-ba2e-4b10-b213-e481e8a50432",
+  "set": "fdn",
+  "collectorNumber": "100",
+  "rarity": "common",
+  "manaCost": "{2}{G}",
+  "typeLine": "Creature — Elf Ranger",
+  "oracleText": "Trample (This creature can deal excess combat damage to the player or planeswalker it's attacking.)\nWhenever another creature you control enters, this creature gets +1/+0 until end of turn.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Trample"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/1/0102e0be-5783-4825-9489-713b1b1df0b2.jpg?1783909098",
+   "normal": "https://cards.scryfall.io/normal/front/0/1/0102e0be-5783-4825-9489-713b1b1df0b2.jpg?1783909098",
+   "large": "https://cards.scryfall.io/large/front/0/1/0102e0be-5783-4825-9489-713b1b1df0b2.jpg?1783909098",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/1/0102e0be-5783-4825-9489-713b1b1df0b2.jpg?1783909098"
+  }
+ },
+ {
+  "name": "Magnigoth Sentry",
+  "scryfallId": "5624e610-c4c0-4103-a32b-0f1264030a7a",
+  "oracleId": "b52824f9-7897-46b7-a4e5-a0261861cb5b",
+  "set": "fdn",
+  "collectorNumber": "556",
+  "rarity": "common",
+  "manaCost": "{3}{G}",
+  "typeLine": "Creature — Treefolk",
+  "oracleText": "Reach (This creature can block creatures with flying.)",
+  "power": "4",
+  "toughness": "4",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Reach"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/6/5624e610-c4c0-4103-a32b-0f1264030a7a.jpg?1783908947",
+   "normal": "https://cards.scryfall.io/normal/front/5/6/5624e610-c4c0-4103-a32b-0f1264030a7a.jpg?1783908947",
+   "large": "https://cards.scryfall.io/large/front/5/6/5624e610-c4c0-4103-a32b-0f1264030a7a.jpg?1783908947",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/6/5624e610-c4c0-4103-a32b-0f1264030a7a.jpg?1783908947"
+  }
+ },
+ {
+  "name": "Treetop Snarespinner",
+  "scryfallId": "88e68fa3-159d-49a6-8ac6-afc9bd6f1718",
+  "oracleId": "2f57a220-9f64-4143-979a-d6aaf63d49b2",
+  "set": "fdn",
+  "collectorNumber": "114",
+  "rarity": "common",
+  "manaCost": "{3}{G}",
+  "typeLine": "Creature — Spider",
+  "oracleText": "Reach (This creature can block creatures with flying.)\nDeathtouch (Any amount of damage this deals to a creature is enough to destroy it.)\n{2}{G}: Put a +1/+1 counter on target creature you control. Activate only as a sorcery.",
+  "power": "1",
+  "toughness": "4",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Reach",
+   "Deathtouch"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/8/88e68fa3-159d-49a6-8ac6-afc9bd6f1718.jpg?1783909094",
+   "normal": "https://cards.scryfall.io/normal/front/8/8/88e68fa3-159d-49a6-8ac6-afc9bd6f1718.jpg?1783909094",
+   "large": "https://cards.scryfall.io/large/front/8/8/88e68fa3-159d-49a6-8ac6-afc9bd6f1718.jpg?1783909094",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/8/88e68fa3-159d-49a6-8ac6-afc9bd6f1718.jpg?1783909094"
+  }
+ },
+ {
+  "name": "Gnarlback Rhino",
+  "scryfallId": "6b638f3d-7eb6-4675-9538-4a87a7f75c43",
+  "oracleId": "1ae339fd-8e64-4e3a-8e27-e4993932ba62",
+  "set": "fdn",
+  "collectorNumber": "638",
+  "rarity": "uncommon",
+  "manaCost": "{2}{G}{G}",
+  "typeLine": "Creature — Rhino",
+  "oracleText": "Trample (This creature can deal excess combat damage to the player or planeswalker it's attacking.)\nWhenever you cast a spell that targets this creature, draw a card.",
+  "power": "4",
+  "toughness": "4",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Trample"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/b/6b638f3d-7eb6-4675-9538-4a87a7f75c43.jpg?1786400321",
+   "normal": "https://cards.scryfall.io/normal/front/6/b/6b638f3d-7eb6-4675-9538-4a87a7f75c43.jpg?1786400321",
+   "large": "https://cards.scryfall.io/large/front/6/b/6b638f3d-7eb6-4675-9538-4a87a7f75c43.jpg?1786400321",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/b/6b638f3d-7eb6-4675-9538-4a87a7f75c43.jpg?1786400321"
+  }
+ },
+ {
+  "name": "Wildheart Invoker",
+  "scryfallId": "60f42969-bb5c-4183-8bd3-ba87f008391d",
+  "oracleId": "ff8fb796-af5d-4d64-ab3c-7f2469dfa6bf",
+  "set": "fdn",
+  "collectorNumber": "561",
+  "rarity": "common",
+  "manaCost": "{2}{G}{G}",
+  "typeLine": "Creature — Elf Shaman",
+  "oracleText": "{8}: Target creature gets +5/+5 and gains trample until end of turn. (It can deal excess combat damage to the player or planeswalker it's attacking.)",
+  "power": "4",
+  "toughness": "3",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/0/60f42969-bb5c-4183-8bd3-ba87f008391d.jpg?1783908944",
+   "normal": "https://cards.scryfall.io/normal/front/6/0/60f42969-bb5c-4183-8bd3-ba87f008391d.jpg?1783908944",
+   "large": "https://cards.scryfall.io/large/front/6/0/60f42969-bb5c-4183-8bd3-ba87f008391d.jpg?1783908944",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/0/60f42969-bb5c-4183-8bd3-ba87f008391d.jpg?1783908944"
+  }
+ },
+ {
+  "name": "Tajuru Pathwarden",
+  "scryfallId": "da20a0d3-2022-4dea-84c8-85adc5a974f8",
+  "oracleId": "d8c7cd66-d8bf-4a99-add5-1d5651d4e025",
+  "set": "fdn",
+  "collectorNumber": "558",
+  "rarity": "common",
+  "manaCost": "{4}{G}",
+  "typeLine": "Creature — Elf Warrior Ally",
+  "oracleText": "Vigilance (Attacking doesn't cause this creature to tap.)\nTrample (This creature can deal excess combat damage to the player or planeswalker it's attacking.)",
+  "power": "5",
+  "toughness": "4",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Vigilance",
+   "Trample"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/a/da20a0d3-2022-4dea-84c8-85adc5a974f8.jpg?1783908946",
+   "normal": "https://cards.scryfall.io/normal/front/d/a/da20a0d3-2022-4dea-84c8-85adc5a974f8.jpg?1783908946",
+   "large": "https://cards.scryfall.io/large/front/d/a/da20a0d3-2022-4dea-84c8-85adc5a974f8.jpg?1783908946",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/a/da20a0d3-2022-4dea-84c8-85adc5a974f8.jpg?1783908946"
+  }
+ },
+ {
+  "name": "Elfsworn Giant",
+  "scryfallId": "5128a5be-ffa6-4998-8488-872d80b24cb2",
+  "oracleId": "f6abdf34-cfdc-465c-b067-cdebb659406e",
+  "set": "fdn",
+  "collectorNumber": "103",
+  "rarity": "common",
+  "manaCost": "{3}{G}{G}",
+  "typeLine": "Creature — Giant",
+  "oracleText": "Reach (This creature can block creatures with flying.)\nLandfall — Whenever a land you control enters, create a 1/1 green Elf Warrior creature token.",
+  "power": "5",
+  "toughness": "3",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Reach",
+   "Landfall"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/1/5128a5be-ffa6-4998-8488-872d80b24cb2.jpg?1783909097",
+   "normal": "https://cards.scryfall.io/normal/front/5/1/5128a5be-ffa6-4998-8488-872d80b24cb2.jpg?1783909097",
+   "large": "https://cards.scryfall.io/large/front/5/1/5128a5be-ffa6-4998-8488-872d80b24cb2.jpg?1783909097",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/1/5128a5be-ffa6-4998-8488-872d80b24cb2.jpg?1783909097"
+  }
+ },
+ {
+  "name": "Heroes' Bane",
+  "scryfallId": "7f83195c-5150-4763-a2e1-5b109d185d55",
+  "oracleId": "bccd722a-b610-4017-93bd-313f08448f5e",
+  "set": "fdn",
+  "collectorNumber": "639",
+  "rarity": "rare",
+  "manaCost": "{3}{G}{G}",
+  "typeLine": "Creature — Hydra",
+  "oracleText": "This creature enters with four +1/+1 counters on it.\n{2}{G}{G}: Put X +1/+1 counters on this creature, where X is its power.",
+  "power": "0",
+  "toughness": "0",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/f/7f83195c-5150-4763-a2e1-5b109d185d55.jpg?1783908917",
+   "normal": "https://cards.scryfall.io/normal/front/7/f/7f83195c-5150-4763-a2e1-5b109d185d55.jpg?1783908917",
+   "large": "https://cards.scryfall.io/large/front/7/f/7f83195c-5150-4763-a2e1-5b109d185d55.jpg?1783908917",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/f/7f83195c-5150-4763-a2e1-5b109d185d55.jpg?1783908917"
+  }
+ },
+ {
+  "name": "Rampaging Baloths",
+  "scryfallId": "c25ee47b-d099-4788-9c2b-73d151bf56fb",
+  "oracleId": "2d3e6549-6cc6-434f-a189-ba3b55e64c34",
+  "set": "fdn",
+  "collectorNumber": "645",
+  "rarity": "rare",
+  "manaCost": "{4}{G}{G}",
+  "typeLine": "Creature — Beast",
+  "oracleText": "Trample\nLandfall — Whenever a land you control enters, create a 4/4 green Beast creature token.",
+  "power": "6",
+  "toughness": "6",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Trample",
+   "Landfall"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/2/c25ee47b-d099-4788-9c2b-73d151bf56fb.jpg?1783908915",
+   "normal": "https://cards.scryfall.io/normal/front/c/2/c25ee47b-d099-4788-9c2b-73d151bf56fb.jpg?1783908915",
+   "large": "https://cards.scryfall.io/large/front/c/2/c25ee47b-d099-4788-9c2b-73d151bf56fb.jpg?1783908915",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/2/c25ee47b-d099-4788-9c2b-73d151bf56fb.jpg?1783908915"
+  }
+ },
+ {
+  "name": "Affectionate Indrik",
+  "scryfallId": "2da8347d-06a4-46e0-a55e-cc2da4660263",
+  "oracleId": "88aa032d-dc11-4cae-81f3-ce66353963e0",
+  "set": "fdn",
+  "collectorNumber": "211",
+  "rarity": "uncommon",
+  "manaCost": "{5}{G}",
+  "typeLine": "Creature — Beast",
+  "oracleText": "When this creature enters, you may have it fight target creature you don't control. (Each deals damage equal to its power to the other.)",
+  "power": "4",
+  "toughness": "4",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Fight"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/d/2da8347d-06a4-46e0-a55e-cc2da4660263.jpg?1783909062",
+   "normal": "https://cards.scryfall.io/normal/front/2/d/2da8347d-06a4-46e0-a55e-cc2da4660263.jpg?1783909062",
+   "large": "https://cards.scryfall.io/large/front/2/d/2da8347d-06a4-46e0-a55e-cc2da4660263.jpg?1783909062",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/d/2da8347d-06a4-46e0-a55e-cc2da4660263.jpg?1783909062"
+  }
+ },
+ {
+  "name": "Quakestrider Ceratops",
+  "scryfallId": "067f72c2-ead6-4879-bc9d-696c9f87c0b2",
+  "oracleId": "e56629ba-82d4-470f-9a6b-40c29d835af2",
+  "set": "fdn",
+  "collectorNumber": "110",
+  "rarity": "uncommon",
+  "manaCost": "{3}{G}{G}{G}",
+  "typeLine": "Creature — Dinosaur",
+  "oracleText": "",
+  "power": "12",
+  "toughness": "8",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/6/067f72c2-ead6-4879-bc9d-696c9f87c0b2.jpg?1783909095",
+   "normal": "https://cards.scryfall.io/normal/front/0/6/067f72c2-ead6-4879-bc9d-696c9f87c0b2.jpg?1783909095",
+   "large": "https://cards.scryfall.io/large/front/0/6/067f72c2-ead6-4879-bc9d-696c9f87c0b2.jpg?1783909095",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/6/067f72c2-ead6-4879-bc9d-696c9f87c0b2.jpg?1783909095"
+  }
+ },
+ {
+  "name": "Pelakka Wurm",
+  "scryfallId": "fa150070-80b6-453d-b00f-4462175cac79",
+  "oracleId": "d36075c2-de66-4202-9217-b1102a2bc14b",
+  "set": "fdn",
+  "collectorNumber": "720",
+  "rarity": "uncommon",
+  "manaCost": "{4}{G}{G}{G}",
+  "typeLine": "Creature — Wurm",
+  "oracleText": "Trample (This creature can deal excess combat damage to the player or planeswalker it's attacking.)\nWhen this creature enters, you gain 7 life.\nWhen this creature dies, draw a card.",
+  "power": "7",
+  "toughness": "7",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Trample"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/a/fa150070-80b6-453d-b00f-4462175cac79.jpg?1783908890",
+   "normal": "https://cards.scryfall.io/normal/front/f/a/fa150070-80b6-453d-b00f-4462175cac79.jpg?1783908890",
+   "large": "https://cards.scryfall.io/large/front/f/a/fa150070-80b6-453d-b00f-4462175cac79.jpg?1783908890",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/a/fa150070-80b6-453d-b00f-4462175cac79.jpg?1783908890"
+  }
+ },
+ {
+  "name": "Aggressive Mammoth",
+  "scryfallId": "7724b978-999b-4654-96f3-58e28aa7cb34",
+  "oracleId": "032b5fc4-5aca-41b6-9bf6-2c1ed0018968",
+  "set": "fdn",
+  "collectorNumber": "551",
+  "rarity": "rare",
+  "manaCost": "{3}{G}{G}{G}",
+  "typeLine": "Creature — Elephant",
+  "oracleText": "Trample (This creature can deal excess combat damage to the player or planeswalker it's attacking.)\nOther creatures you control have trample.",
+  "power": "8",
+  "toughness": "8",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Trample"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/7/7724b978-999b-4654-96f3-58e28aa7cb34.jpg?1783908947",
+   "normal": "https://cards.scryfall.io/normal/front/7/7/7724b978-999b-4654-96f3-58e28aa7cb34.jpg?1783908947",
+   "large": "https://cards.scryfall.io/large/front/7/7/7724b978-999b-4654-96f3-58e28aa7cb34.jpg?1783908947",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/7/7724b978-999b-4654-96f3-58e28aa7cb34.jpg?1783908947"
+  }
+ },
+ {
+  "name": "Gigantosaurus",
+  "scryfallId": "bc1c518a-dcb4-407c-85be-ed5935a24198",
+  "oracleId": "e666bae7-dd51-4921-8b89-7e8d423caba0",
+  "set": "fdn",
+  "collectorNumber": "718",
+  "rarity": "rare",
+  "manaCost": "{G}{G}{G}{G}{G}",
+  "typeLine": "Creature — Dinosaur",
+  "oracleText": "",
+  "power": "10",
+  "toughness": "10",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/c/bc1c518a-dcb4-407c-85be-ed5935a24198.jpg?1783908891",
+   "normal": "https://cards.scryfall.io/normal/front/b/c/bc1c518a-dcb4-407c-85be-ed5935a24198.jpg?1783908891",
+   "large": "https://cards.scryfall.io/large/front/b/c/bc1c518a-dcb4-407c-85be-ed5935a24198.jpg?1783908891",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/c/bc1c518a-dcb4-407c-85be-ed5935a24198.jpg?1783908891"
+  }
+ }
+]
