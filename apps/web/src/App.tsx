@@ -65,7 +65,8 @@ export function App() {
       choice={match.choice}
       seed={match.seed}
       opponent={opponent}
-      onRestart={() => setMatch(null)}
+      onMenu={() => setMatch(null)}
+      onRematch={() => setMatch((m) => m && { ...m, seed: newSeed() })}
     />
   );
 }
@@ -87,12 +88,14 @@ function Game({
   choice,
   seed,
   opponent,
-  onRestart,
+  onMenu,
+  onRematch,
 }: {
   choice: DeckChoice;
   seed: number;
   opponent: BotKind;
-  onRestart: () => void;
+  onMenu: () => void;
+  onRematch: () => void;
 }) {
   const game = useGame(choice, seed, opponent);
   const deck = (id: string) => DECKS.find((d) => d.id === id)!;
@@ -100,7 +103,8 @@ function Game({
     <Board
       game={game}
       decks={{ you: deck(choice.you), them: deck(choice.them) }}
-      onRestart={onRestart}
+      onMenu={onMenu}
+      onRematch={onRematch}
     />
   );
 }

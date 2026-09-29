@@ -353,16 +353,22 @@ export function StackView({
   onHover,
   markOf,
   onCard,
+  aside,
+  children,
 }: {
   view: GameState;
   onHover: HoverFn;
   /** Spells on the stack can be targets (counterspells). */
   markOf?: (id: ObjectId) => CardMark;
   onCard?: (id: ObjectId) => void;
+  /** Move out of the middle, e.g. while picking a creature it could be covering. */
+  aside?: boolean;
+  /** The prompt and buttons for responding, shown under the stack. */
+  children?: React.ReactNode;
 }) {
   if (view.stack.length === 0) return <div className="stack stack--empty" />;
   return (
-    <div className="stack">
+    <div className={`stack ${aside ? 'stack--aside' : ''}`}>
       {view.stack.map((item, i) => {
         const defId = item.kind === 'spell' ? view.objects[item.id]!.defId : item.sourceDefId;
         return (
@@ -388,6 +394,7 @@ export function StackView({
           </div>
         );
       })}
+      {children}
     </div>
   );
 }

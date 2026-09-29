@@ -865,15 +865,43 @@ button {
   box-shadow: 0 0 0.75rem rgba(255, 107, 61, 0.35);
 }
 
+/* In the middle of the board, where the eye already is. */
 .stack {
   position: absolute;
-  right: 2rem;
+  left: 50%;
   top: 50%;
-  z-index: 4;
+  z-index: 7;
   display: flex;
   flex-direction: column;
   align-items: center;
-  transform: translateY(-60%);
+  transform: translate(-50%, -50%);
+  transition:
+    left 0.35s var(--ease),
+    transform 0.35s var(--ease);
+}
+
+/* Out of the way while picking a target it might be covering. */
+.stack--aside {
+  left: calc(100% - 2rem);
+  transform: translate(-100%, -60%);
+}
+
+.stack__respond {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: 0.75rem;
+  background: rgba(0, 0, 0, 0.6);
+  box-shadow: 0 0.5rem 2rem rgba(0, 0, 0, 0.5);
+  animation: fade-in 0.2s both;
+}
+
+.stack__respond .action__prompt {
+  max-width: 20rem;
+  text-align: center;
 }
 
 .stack--empty {
@@ -962,6 +990,19 @@ button {
   font-size: 0.9375rem;
   color: var(--parchment);
   text-shadow: 0 0.0625rem 0.25rem #000;
+}
+
+/* Fades out only after a pause, so the short gaps between the opponent's
+   actions don't make it blink. */
+.action__prompt--wait {
+  color: var(--muted);
+  opacity: 0;
+  transition: opacity 0.3s 0.6s;
+}
+
+.action__prompt--wait.is-on {
+  opacity: 1;
+  transition-delay: 0s;
 }
 
 .action__buttons {
@@ -1053,6 +1094,24 @@ button {
 
 .drawer--settings {
   gap: 0.875rem;
+}
+
+.drawer__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding-top: 0.875rem;
+  border-top: 0.0625rem solid var(--brass-dim);
+}
+
+.drawer__actions .btn {
+  flex: 1;
+}
+
+.drawer__confirm {
+  flex: 2;
+  font-size: 0.8125rem;
+  color: var(--muted);
 }
 
 .drawer__title {
@@ -1503,6 +1562,12 @@ button {
 
 .end .btn {
   width: 13.75rem;
+}
+
+.end__actions {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
 }
 
 @keyframes rise {

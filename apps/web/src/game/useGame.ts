@@ -106,6 +106,10 @@ export function useGame(choice: DeckChoice, seed: number, opponent: BotKind) {
 
   const legal = useMemo(() => engine.getLegalActions(state, HUMAN), [state]);
   const view = useMemo(() => redactFor(state, HUMAN, cardDb), [state]);
+  const autoPassing = useMemo(
+    () => shouldAutoPass(state, legal, HUMAN, settings),
+    [state, legal, settings],
+  );
 
   // The bot acts, and the human auto-passes where nothing is worth stopping for.
   useEffect(() => {
@@ -144,11 +148,11 @@ export function useGame(choice: DeckChoice, seed: number, opponent: BotKind) {
         setThinking(false);
       };
     }
-    if (shouldAutoPass(state, legal, HUMAN, settings)) {
+    if (autoPassing) {
       const t = setTimeout(() => apply({ type: 'passPriority', player: HUMAN }), 110);
       return () => clearTimeout(t);
     }
-  }, [state, legal, settings, apply, worker, opponent, decks, seed]);
+  }, [state, autoPassing, apply, worker, opponent, decks, seed]);
 
   // "End turn" only lasts for the turn it was pressed in.
   useEffect(() => {
@@ -156,7 +160,7 @@ export function useGame(choice: DeckChoice, seed: number, opponent: BotKind) {
       setSettings((s) => ({ ...s, passTurn: null }));
   }, [state.turn.number, settings.passTurn]);
 
-  return { engine, state, view, legal, apply, log, batch, settings, setSettings, thinking };
+  return { engine, state, view, legal, apply, log, batch, settings, setSettings, thinking, autoPassing };
 }
 
 export type GameSession = ReturnType<typeof useGame>;

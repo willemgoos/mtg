@@ -39,15 +39,19 @@ const nameOf = (defId: CardDefId) => cardDb.get(defId)?.name ?? 'Card';
 export function Board({
   game,
   decks,
-  onRestart,
+  onMenu,
+  onRematch,
 }: {
   game: GameSession;
   decks: { you: Decklist; them: Decklist };
-  onRestart: () => void;
+  onMenu: () => void;
+  onRematch: () => void;
 }) {
   const { state, view, legal, apply, log, batch, settings, setSettings } = game;
   const d = state.decision;
-  const myDecision = d.kind !== 'gameOver' && d.player === HUMAN;
+  // Priority we are about to auto-pass is not ours to act on: showing it would
+  // flash a Pass button and card glows for a moment on every step.
+  const myDecision = d.kind !== 'gameOver' && d.player === HUMAN && !game.autoPassing;
 
   const [targeting, setTargeting] = useState<Targeting | null>(null);
   const [blocker, setBlocker] = useState<ObjectId | null>(null);
@@ -316,6 +320,29 @@ export function Board({
   // ------------------------------------------------------------- action bar
 
   const bar = actionBar();
+  // Responding to the stack happens at the stack, in the middle of the board.
+  const respond = myDecision && !targeting && d.kind === 'priority' && view.stack.length > 0;
+  const buttons = bar.primary || bar.secondary ? (
+    <>
+      <div className="action__buttons">
+        {bar.secondary && (
+          <button className="btn btn--ghost" onClick={bar.secondary[1]}>
+            {bar.secondary[0]}
+          </button>
+        )}
+        {bar.primary && (
+          <button className="btn btn--primary btn--big" onClick={bar.primary[1]}>
+            {bar.primary[0]}
+          </button>
+        )}
+      </div>
+      {bar.primary && (
+        <div className="action__keys">
+          <kbd>Space</kbd> {bar.primary[0].toLowerCase()} · <kbd>Esc</kbd> cancel
+        </div>
+      )}
+    </>
+  ) : null;
   function actionBar(): {
     prompt: string;
     primary?: [string, () => void];
@@ -336,11 +363,7 @@ export function Board({
       if (d.kind === 'chooseTriggerTargets') return { prompt };
       return { prompt, secondary: ['Cancel', () => setTargeting(null)] };
     }
-    if (!myDecision)
-      return {
-        prompt:
-          d.player === BOT ? (game.thinking ? 'Opponent is thinking…' : 'Opponent is acting…') : '',
-      };
+    if (!myDecision) return { prompt: '' };
     const pass: Action = { type: 'passPriority', player: HUMAN };
     const mine = state.turn.activePlayer === HUMAN;
     switch (d.kind) {
@@ -447,7 +470,12 @@ export function Board({
   }, [d.kind]);
 
   const [panel, setPanel] = useState<'log' | 'settings' | null>(null);
-  const togglePanel = (p: 'log' | 'settings') => setPanel((cur) => (cur === p ? null : p));
+  // Mid-match rematch/menu from the settings drawer asks for confirmation first.
+  const [leaving, setLeaving] = useState<'rematch' | 'menu' | null>(null);
+  const togglePanel = (p: 'log' | 'settings') => {
+    setPanel((cur) => (cur === p ? null : p));
+    setLeaving(null);
+  };
   const logRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const el = logRef.current;
@@ -501,7 +529,20 @@ export function Board({
         </footer>
       </main>
 
-      <StackView view={view} onHover={setHover} markOf={markOf} onCard={onCard} />
+      <StackView
+        view={view}
+        onHover={setHover}
+        markOf={markOf}
+        onCard={onCard}
+        aside={!!targeting}
+      >
+        {respond && (
+          <div className="stack__respond">
+            <div className="action__prompt">{bar.prompt}</div>
+            {buttons}
+          </div>
+        )}
+      </StackView>
 
       {panel !== 'log' && recent.length > 0 && (
         <div className="recent" onClick={() => setPanel('log')}>
@@ -518,22 +559,14 @@ export function Board({
 
       <div className={`action ${myDecision ? 'action--live' : ''}`}>
         <PhaseTrack view={view} me={HUMAN} />
-        <div className="action__prompt">{bar.prompt}</div>
-        <div className="action__buttons">
-          {bar.secondary && (
-            <button className="btn btn--ghost" onClick={bar.secondary[1]}>
-              {bar.secondary[0]}
-            </button>
-          )}
-          {bar.primary && (
-            <button className="btn btn--primary btn--big" onClick={bar.primary[1]}>
-              {bar.primary[0]}
-            </button>
-          )}
-        </div>
-        {bar.primary && (
-          <div className="action__keys">
-            <kbd>Space</kbd> {bar.primary[0].toLowerCase()} · <kbd>Esc</kbd> cancel
+        {respond ? null : myDecision || targeting ? (
+          <>
+            <div className="action__prompt">{bar.prompt}</div>
+            {buttons}
+          </>
+        ) : (
+          <div className={`action__prompt action__prompt--wait ${game.thinking ? 'is-on' : ''}`}>
+            Opponent is thinking…
           </div>
         )}
       </div>
@@ -588,6 +621,33 @@ export function Board({
           </label>
           <UiSize />
           <SoundControl />
+          <div className="drawer__actions">
+            {leaving ? (
+              <>
+                <span className="drawer__confirm">
+                  {leaving === 'rematch' ? 'Restart this match?' : 'Leave this match?'}
+                </span>
+                <button
+                  className="btn btn--primary"
+                  onClick={leaving === 'rematch' ? onRematch : onMenu}
+                >
+                  Yes
+                </button>
+                <button className="btn btn--ghost" onClick={() => setLeaving(null)}>
+                  No
+                </button>
+              </>
+            ) : (
+              <>
+                <button className="btn btn--ghost" onClick={() => setLeaving('rematch')}>
+                  Rematch
+                </button>
+                <button className="btn btn--ghost" onClick={() => setLeaving('menu')}>
+                  Main menu
+                </button>
+              </>
+            )}
+          </div>
         </aside>
       )}
 
@@ -698,9 +758,14 @@ export function Board({
           <div className={`end end--${state.winner === HUMAN ? 'win' : 'loss'}`}>
             <h1>{winnerText(state, HUMAN)}</h1>
             <p>Turn {state.turn.number}</p>
-            <button className="btn btn--primary" onClick={onRestart}>
-              Play again
-            </button>
+            <div className="end__actions">
+              <button className="btn btn--primary" onClick={onRematch}>
+                Rematch
+              </button>
+              <button className="btn btn--ghost" onClick={onMenu}>
+                Main menu
+              </button>
+            </div>
           </div>
         </div>
       )}
