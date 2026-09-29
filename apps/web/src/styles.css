@@ -3764,3 +3764,528 @@ button {
     width: 100%;
   }
 }
+
+/* ------------------------------------------------------------ home and nav */
+
+.home,
+.decks-page {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background:
+    radial-gradient(ellipse 60% 48% at 42% 40%, rgba(217, 180, 106, 0.07), transparent 70%),
+    radial-gradient(ellipse at 42% 40%, var(--felt-hi) 0%, var(--felt) 45%, var(--felt-lo) 100%);
+}
+
+.decks-page > .start {
+  flex: 1;
+  min-height: 0;
+  height: auto;
+  background: none;
+}
+
+.nav {
+  position: relative;
+  z-index: 3;
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 2.5rem;
+  height: 5.25rem;
+  padding: 0 2rem;
+  border-bottom: 0.0625rem solid var(--line);
+  background: linear-gradient(180deg, var(--ink), rgba(0, 0, 0, 0.55));
+}
+
+.nav__brand {
+  font-family: var(--display);
+  font-size: 1.875rem;
+  line-height: 1;
+  color: var(--brass-hi);
+}
+
+.nav__brand small {
+  display: block;
+  font-family: var(--caps);
+  font-size: 0.6875rem;
+  letter-spacing: 0.22em;
+  color: var(--brass);
+}
+
+.nav__tabs {
+  display: flex;
+  align-self: stretch;
+  gap: 0.25rem;
+}
+
+.nav__tab {
+  padding: 0 1.25rem;
+  border: 0;
+  border-bottom: 0.1875rem solid transparent;
+  font-family: var(--caps);
+  font-size: 1.125rem;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+  background: none;
+  cursor: var(--cursor-hover, pointer);
+  transition: color 0.15s;
+}
+
+.nav__tab:hover {
+  color: var(--parchment);
+}
+
+.nav__tab.is-on {
+  color: var(--brass-hi);
+  border-bottom-color: var(--brass);
+  background: linear-gradient(0deg, rgba(217, 180, 106, 0.12), transparent);
+}
+
+.nav__end {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.nav__stat {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.3rem 0.875rem;
+  border-radius: 999px;
+  font-size: 0.9375rem;
+  color: var(--parchment);
+  background: rgba(0, 0, 0, 0.35);
+  box-shadow: inset 0 0 0 0.0625rem var(--line);
+}
+
+.nav__stat svg {
+  width: 1rem;
+  height: 1rem;
+  color: var(--brass);
+}
+
+.home__main {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+  padding: 2rem;
+}
+
+/* The featured banner. Art stays at or below its native 626px: a blurred copy fills the rest. */
+.hero {
+  position: relative;
+  flex: 1;
+  min-height: 22rem;
+  overflow: hidden;
+  isolation: isolate;
+  border-radius: 1.25rem;
+  background: var(--ink);
+  box-shadow:
+    0 1.5rem 3rem rgba(0, 0, 0, 0.55),
+    0 0 0 0.0625rem var(--line);
+}
+
+.hero__slide {
+  position: absolute;
+  inset: 0;
+  animation: hero-in 0.8s var(--ease) both;
+}
+
+.hero__slide::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(0deg, rgba(0, 0, 0, 0.6), transparent 55%),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.5), transparent 55%);
+  pointer-events: none;
+}
+
+.hero__wash {
+  position: absolute;
+  inset: -3rem;
+  background: center / cover no-repeat;
+  filter: blur(2rem) brightness(0.45) saturate(1.3);
+}
+
+.hero__art {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  width: min(626px, 58%);
+  height: min(457px, 100%);
+  background: center / cover no-repeat;
+  transform: translateY(-50%);
+  mask-image:
+    linear-gradient(90deg, transparent, #000 40%),
+    linear-gradient(180deg, transparent, #000 12%, #000 88%, transparent);
+  mask-composite: intersect;
+  animation: hero-drift 9s ease-out both;
+}
+
+.hero__copy {
+  position: absolute;
+  left: 3.5rem;
+  bottom: 3.25rem;
+  z-index: 1;
+  width: min(42rem, 52%);
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+  animation: hero-rise 0.7s 0.1s var(--ease) both;
+}
+
+.hero__badge {
+  align-self: flex-start;
+  padding: 0.25rem 0.875rem;
+  border-radius: 999px;
+  font-family: var(--caps);
+  font-size: 0.8125rem;
+  letter-spacing: 0.2em;
+  color: #1d150a;
+  background: linear-gradient(180deg, var(--brass-hi), var(--brass));
+  box-shadow: 0 0 1.25rem rgba(246, 195, 91, 0.45);
+}
+
+.hero__title {
+  margin: 0;
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 5.75rem;
+  line-height: 1;
+  color: var(--parchment);
+  text-shadow: 0 0.125rem 1rem rgba(0, 0, 0, 0.8);
+}
+
+.hero__text {
+  margin: 0;
+  max-width: 36rem;
+  font-size: 1.375rem;
+  line-height: 1.4;
+  color: var(--text);
+}
+
+.hero__actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.hero__cards {
+  position: absolute;
+  right: 4rem;
+  bottom: 3rem;
+  z-index: 1;
+  display: flex;
+  animation: hero-rise 0.8s 0.2s var(--ease) both;
+}
+
+.hero__cards img {
+  width: 9.5rem;
+  border-radius: 4.6% / 3.3%;
+  box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.6);
+}
+
+.hero__cards img + img {
+  margin-left: -3.25rem;
+}
+
+.hero__cards img:nth-child(1) {
+  rotate: -10deg;
+  translate: 0 1rem;
+}
+
+.hero__cards img:nth-child(2) {
+  translate: 0 -0.5rem;
+  box-shadow:
+    0 1rem 2rem rgba(0, 0, 0, 0.6),
+    0 0 1.5rem rgba(246, 195, 91, 0.5);
+}
+
+.hero__cards img:nth-child(2):last-child {
+  rotate: 8deg;
+  translate: 0 0.5rem;
+}
+
+.hero__cards img:nth-child(3) {
+  rotate: 10deg;
+  translate: 0 1rem;
+}
+
+.hero__dots {
+  position: absolute;
+  left: 3.5rem;
+  top: 2.25rem;
+  z-index: 2;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.hero__dot {
+  width: 0.875rem;
+  height: 0.3rem;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.28);
+  cursor: var(--cursor-hover, pointer);
+  transition:
+    width 0.3s var(--ease),
+    background 0.3s;
+}
+
+.hero__dot.is-on {
+  width: 3rem;
+  background: var(--brass-hi);
+}
+
+@keyframes hero-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes hero-rise {
+  from {
+    opacity: 0;
+    translate: 0 1.25rem;
+  }
+}
+
+@keyframes hero-drift {
+  from {
+    transform: translate(1.5rem, -50%);
+  }
+}
+
+/* Mode tiles and the Play button. */
+.home__row {
+  flex: none;
+  display: flex;
+  gap: 1.75rem;
+  height: 17rem;
+}
+
+.modes {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.mode {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-start;
+  gap: 0.25rem;
+  padding: 1.5rem;
+  border: 0;
+  border-radius: 1rem;
+  text-align: left;
+  color: inherit;
+  background: #111;
+  cursor: var(--cursor-hover, pointer);
+  box-shadow:
+    0 0.75rem 1.5rem rgba(0, 0, 0, 0.5),
+    0 0 0 0.0625rem var(--line);
+  transition:
+    box-shadow 0.2s,
+    translate 0.2s var(--ease);
+}
+
+.mode:hover {
+  translate: 0 -0.25rem;
+}
+
+.mode.is-on {
+  box-shadow:
+    0 0.75rem 1.5rem rgba(0, 0, 0, 0.5),
+    0 0 0 0.1875rem var(--brass),
+    0 0 2rem rgba(246, 195, 91, 0.4);
+}
+
+.mode__art {
+  position: absolute;
+  inset: 0;
+  background: var(--art) center 30% / cover;
+  transition: scale 0.4s var(--ease);
+}
+
+.mode:hover .mode__art {
+  scale: 1.04;
+}
+
+.mode::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.92) 12%, transparent 75%);
+}
+
+.mode > :not(.mode__art) {
+  position: relative;
+  z-index: 2;
+}
+
+.mode > .mode__tag {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  padding: 0.125rem 0.5rem;
+  border-radius: 0.25rem;
+  font-family: var(--caps);
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  color: var(--brass-hi);
+  background: rgba(0, 0, 0, 0.6);
+  box-shadow: inset 0 0 0 0.0625rem var(--brass-dim);
+}
+
+.mode__name {
+  font-family: var(--display);
+  font-size: 2.125rem;
+  line-height: 1.1;
+  color: var(--parchment);
+}
+
+.mode__meta {
+  font-size: 1rem;
+  color: var(--text);
+  opacity: 0.8;
+}
+
+.mode__lives {
+  display: flex;
+  gap: 0.25rem;
+  color: var(--ember);
+}
+
+.mode__lives svg {
+  width: 1.125rem;
+  height: 1.125rem;
+}
+
+.mode__lives .is-lost {
+  color: rgba(255, 255, 255, 0.2);
+}
+
+.mode__ladder {
+  align-self: stretch;
+  display: flex;
+  gap: 0.25rem;
+  margin-top: 0.25rem;
+}
+
+.mode__ladder i {
+  flex: 1;
+  height: 0.3rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.mode__ladder i.is-won {
+  background: var(--brass-hi);
+}
+
+.play {
+  flex: none;
+  width: 30rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 0.875rem;
+}
+
+.play__deck {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border: 0;
+  border-radius: 0.75rem;
+  text-align: left;
+  color: inherit;
+  background: rgba(0, 0, 0, 0.35);
+  box-shadow: inset 0 0 0 0.0625rem var(--line);
+  cursor: var(--cursor-hover, pointer);
+}
+
+.play__deck:hover {
+  box-shadow: inset 0 0 0 0.0625rem var(--brass-dim);
+}
+
+.play__label {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  font-size: 1.0625rem;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: var(--parchment);
+}
+
+.play__label small {
+  font-family: var(--caps);
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  color: var(--muted);
+}
+
+.play__change {
+  font-family: var(--caps);
+  font-size: 0.8125rem;
+  letter-spacing: 0.12em;
+  color: var(--brass);
+}
+
+.play__button {
+  height: 9rem;
+  border: 0;
+  border-radius: 1rem;
+  font-family: var(--display);
+  font-size: 4.25rem;
+  letter-spacing: 0.08em;
+  color: #2a1a08;
+  text-shadow: 0 0.0625rem 0 rgba(255, 255, 255, 0.5);
+  background: linear-gradient(180deg, var(--brass-hi) 0%, var(--brass) 55%, var(--ember) 140%);
+  cursor: var(--cursor-hover, pointer);
+  box-shadow:
+    inset 0 0.125rem 0 var(--parchment),
+    inset 0 -0.25rem 0.75rem var(--ember-dim),
+    0 0 0 0.125rem var(--brass-dim),
+    0 0.75rem 2.5rem rgba(156, 58, 31, 0.6),
+    0 0 2rem rgba(246, 195, 91, 0.35);
+  transition:
+    filter 0.15s,
+    translate 0.15s;
+}
+
+.play__button:hover {
+  filter: brightness(1.08);
+  translate: 0 -0.125rem;
+}
+
+.play__button:active {
+  filter: brightness(0.95);
+  translate: 0 0.125rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__slide,
+  .hero__art,
+  .hero__copy,
+  .hero__cards {
+    animation: none;
+  }
+}

@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Menu — V4 Arena Home</title>
+  <meta name="frame" content="1440x810">
+  <link rel="stylesheet" href="../../system/tokens.css">
+  <link rel="stylesheet" href="../../system/base.css">
+  <link rel="stylesheet" href="../../system/components.css">
+  <style>
+    /* V4: Arena's Home screen. Nav bar on top, a big event carousel, mode tiles
+       beneath it, quests and weekly wins on the right, and the one big Play
+       button in the corner. Art is never upscaled: native size, or blurred as a wash. */
+    body { background: radial-gradient(ellipse at 30% 20%, var(--color-felt-hi), var(--color-felt) 45%, var(--color-felt-lo)); }
+
+    /* Nav */
+    .nav { position: absolute; inset: 0 0 auto 0; height: 64px; display: flex; align-items: center; gap: var(--space-7); padding: 0 var(--space-6); background: linear-gradient(180deg, var(--color-ink), var(--color-scrim)); border-bottom: 1px solid var(--color-line-strong); }
+    .brand { font-family: var(--font-display); font-size: var(--text-xl); color: var(--color-brass-hi); line-height: 1; }
+    .brand small { display: block; font-family: var(--font-caps); font-size: var(--text-2xs); letter-spacing: var(--tracking-wide); color: var(--color-brass); }
+    .tabs { display: flex; gap: var(--space-2); height: 100%; }
+    .tab { display: flex; align-items: center; padding: 0 var(--space-4); font-family: var(--font-caps); font-size: var(--text-sm); letter-spacing: var(--tracking-caps); color: var(--color-text-muted); border-bottom: 2px solid transparent; }
+    .tab.is-on { color: var(--color-brass-hi); border-bottom-color: var(--color-brass); background: linear-gradient(0deg, var(--color-glass), transparent); }
+    .stats { margin-left: auto; display: flex; align-items: center; gap: var(--space-3); }
+    .stat { display: flex; align-items: center; gap: var(--space-2); padding: var(--space-1) var(--space-3); border-radius: var(--radius-full); background: var(--color-glass); box-shadow: inset 0 0 0 1px var(--color-line); font-size: var(--text-sm); color: var(--color-text-strong); }
+    .stat svg { width: 16px; height: 16px; color: var(--color-brass); }
+    .avatar { width: 40px; height: 40px; border-radius: var(--radius-full); background: url(../../assets/deck-giada.jpg) center / cover; box-shadow: 0 0 0 2px var(--color-brass), var(--glow-brass); }
+
+    /* Hero carousel */
+    .hero { position: absolute; left: var(--space-6); top: 88px; width: 952px; height: 440px; border-radius: var(--radius-xl); overflow: hidden; box-shadow: var(--shadow-lg), 0 0 0 1px var(--color-line-strong); }
+    .hero__wash { position: absolute; inset: -40px; background: url(../../assets/art-shivan.jpg) center / cover; filter: blur(28px) brightness(0.45) saturate(1.3); }
+    .hero__art { position: absolute; right: 0; top: 0; width: 626px; height: 440px; background: url(../../assets/art-shivan.jpg) center / 626px auto no-repeat; -webkit-mask-image: linear-gradient(90deg, transparent, #000 40%); mask-image: linear-gradient(90deg, transparent, #000 40%); }
+    .hero::after { content: ""; position: absolute; inset: 0; background: linear-gradient(0deg, var(--color-scrim), transparent 55%); pointer-events: none; }
+    .hero__copy { position: absolute; left: var(--space-8); bottom: var(--space-8); width: 470px; z-index: 1; display: flex; flex-direction: column; gap: var(--space-3); }
+    .badge { align-self: flex-start; padding: var(--space-1) var(--space-3); border-radius: var(--radius-full); font-family: var(--font-caps); font-size: var(--text-xs); letter-spacing: var(--tracking-wide); color: var(--color-text-inverse); background: linear-gradient(180deg, var(--color-brass-hi), var(--color-brass)); box-shadow: var(--glow-brass); }
+    .hero__title { font-family: var(--font-display); font-size: var(--text-6xl); line-height: var(--leading-tight); color: var(--color-text-strong); text-shadow: 0 2px 16px var(--color-ink); }
+    .hero__desc { font-size: var(--text-lg); color: var(--color-text); }
+    .hero__actions { display: flex; gap: var(--space-3); margin-top: var(--space-2); }
+    .hero__cards { position: absolute; right: var(--space-8); bottom: var(--space-7); z-index: 1; display: flex; }
+    .hero__cards .c-mtg { --w: 112px; box-shadow: var(--shadow-lg); }
+    .hero__cards .c-mtg + .c-mtg { margin-left: -40px; }
+    .hero__cards .c-mtg:nth-child(1) { transform: rotate(-10deg) translateY(14px); }
+    .hero__cards .c-mtg:nth-child(2) { transform: translateY(-6px); box-shadow: var(--shadow-lg), var(--glow-brass); }
+    .hero__cards .c-mtg:nth-child(3) { transform: rotate(10deg) translateY(14px); }
+    .dots { position: absolute; left: var(--space-8); top: var(--space-6); z-index: 1; display: flex; gap: var(--space-2); }
+    .dot { width: 10px; height: 4px; border-radius: var(--radius-full); background: var(--color-line-strong); }
+    .dot.is-on { width: 36px; background: var(--color-brass-hi); }
+
+    /* Mode tiles */
+    .modes { position: absolute; left: var(--space-6); top: 548px; width: 952px; display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-5); }
+    .mode { position: relative; height: 230px; border-radius: var(--radius-lg); overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end; gap: var(--space-1); padding: var(--space-5); box-shadow: var(--shadow-md), 0 0 0 1px var(--color-line); }
+    .mode__art { position: absolute; inset: 0; background: var(--art) center 30% / cover; }
+    .mode::before { content: ""; position: absolute; inset: 0; z-index: 1; background: linear-gradient(0deg, var(--color-ink) 15%, transparent 75%); }
+    .mode > :not(.mode__art) { position: relative; z-index: 2; }
+    .mode__name { font-family: var(--font-display); font-size: var(--text-2xl); color: var(--color-text-strong); }
+    .mode__meta { font-size: var(--text-sm); color: var(--color-text-muted); }
+    .mode > .mode__tag { position: absolute; top: var(--space-4); right: var(--space-4); padding: 2px var(--space-2); border-radius: var(--radius-sm); font-family: var(--font-caps); font-size: var(--text-2xs); letter-spacing: var(--tracking-wide); color: var(--color-brass-hi); background: var(--color-scrim); box-shadow: inset 0 0 0 1px var(--color-brass-dim); }
+    .mode--live { box-shadow: var(--shadow-md), 0 0 0 2px var(--color-brass), var(--glow-brass); }
+    .lives { display: flex; gap: var(--space-1); }
+    .lives svg { width: 16px; height: 16px; color: var(--color-ember); }
+    .lives svg.is-lost { color: var(--color-line-strong); }
+    .ladder { display: flex; gap: 3px; margin-top: var(--space-1); }
+    .ladder span { flex: 1; height: 4px; border-radius: var(--radius-full); background: var(--color-line-strong); }
+    .ladder span.is-won { background: var(--color-brass-hi); }
+
+    /* Right column */
+    .side { position: absolute; right: var(--space-6); top: 88px; width: 400px; display: flex; flex-direction: column; gap: var(--space-5); }
+    .panel { border-radius: var(--radius-lg); padding: var(--space-5); background: var(--color-glass); box-shadow: inset 0 0 0 1px var(--color-line); }
+    .panel__head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: var(--space-4); }
+    .panel__title { font-family: var(--font-caps); font-size: var(--text-md); letter-spacing: var(--tracking-caps); color: var(--color-brass-hi); }
+    .panel__note { font-size: var(--text-xs); color: var(--color-text-muted); }
+    .quest { display: grid; grid-template-columns: 36px 1fr auto; align-items: center; gap: var(--space-2) var(--space-3); padding: var(--space-3) 0; border-top: 1px solid var(--color-line); }
+    .quest__icon { grid-row: span 2; width: 36px; height: 36px; border-radius: var(--radius-full); display: grid; place-items: center; background: radial-gradient(circle, var(--q), transparent 75%); box-shadow: inset 0 0 0 1px var(--q); }
+    .quest__icon .c-pip { width: 14px; height: 14px; }
+    .quest__text { font-size: var(--text-sm); color: var(--color-text-strong); }
+    .quest__reward { grid-row: span 2; font-family: var(--font-caps); font-size: var(--text-xs); color: var(--color-brass); text-align: right; }
+    .quest__bar { height: 6px; border-radius: var(--radius-full); background: var(--color-scrim); overflow: hidden; }
+    .quest__bar i { display: block; height: 100%; width: var(--p); border-radius: inherit; background: linear-gradient(90deg, var(--color-brass-dim), var(--color-brass-hi)); }
+    .track { display: grid; grid-template-columns: repeat(15, 1fr); gap: 4px; align-items: center; }
+    .track span { height: 10px; border-radius: 2px; background: var(--color-scrim); box-shadow: inset 0 0 0 1px var(--color-line); }
+    .track span.is-won { background: var(--color-moss); box-shadow: 0 0 6px var(--color-moss); }
+    .track span.is-prize { height: 18px; border-radius: 3px; box-shadow: inset 0 0 0 1px var(--color-brass); }
+    .track span.is-prize.is-won { background: var(--color-brass-hi); box-shadow: var(--glow-brass); }
+    .track__labels { display: flex; justify-content: space-between; margin-top: var(--space-2); font-size: var(--text-xs); color: var(--color-text-muted); }
+
+    /* Play */
+    .play { position: absolute; right: var(--space-6); bottom: var(--space-6); width: 400px; display: flex; flex-direction: column; gap: var(--space-3); }
+    .play__deck { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-2); border-radius: var(--radius-md); background: var(--color-glass); box-shadow: inset 0 0 0 1px var(--color-line); }
+    .play__thumb { width: 64px; height: 44px; border-radius: var(--radius-sm); background: url(../../assets/deck-kiora.jpg) center / cover; }
+    .play__label { display: flex; flex-direction: column; font-size: var(--text-sm); color: var(--color-text-strong); }
+    .play__label small { font-family: var(--font-caps); font-size: var(--text-2xs); letter-spacing: var(--tracking-wide); color: var(--color-text-muted); }
+    .play__deck .c-pip { margin-left: auto; }
+    .play__deck .c-pip + .c-pip { margin-left: 0; margin-right: var(--space-2); }
+    .play__button { height: 104px; border-radius: var(--radius-lg); display: grid; place-items: center; font-family: var(--font-display); font-size: var(--text-5xl); letter-spacing: 0.08em; color: var(--color-text-inverse); background: linear-gradient(180deg, var(--color-brass-hi) 0%, var(--color-brass) 55%, var(--color-ember) 140%); box-shadow: inset 0 2px 0 var(--color-parchment), inset 0 -4px 12px var(--color-ember-dim), 0 0 0 2px var(--color-brass-dim), 0 12px 40px var(--color-ember-dim), var(--glow-brass); text-shadow: 0 1px 0 var(--color-parchment); }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <header class="nav" data-name="Nav">
+      <div class="brand" data-name="Brand"><small>A duel of</small>Foundations</div>
+      <nav class="tabs" data-name="Tabs">
+        <span class="tab is-on">Home</span>
+        <span class="tab">Decks</span>
+        <span class="tab">Collection</span>
+        <span class="tab">Records</span>
+      </nav>
+      <div class="stats" data-name="Stats">
+        <span class="stat" data-name="Wins"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M4 1h8v2h3v2a4 4 0 0 1-4 4 4 4 0 0 1-2 2v2h3v2H4v-2h3v-2a4 4 0 0 1-2-2 4 4 0 0 1-4-4V3h3zm-1 4a2 2 0 0 0 1 1.7V5zm10 0h-1v1.7A2 2 0 0 0 13 5z"/></svg>42 wins</span>
+        <span class="stat" data-name="Clears"><svg viewBox="0 0 16 16" fill="currentColor"><path d="m8 1 2.2 4.5 4.8.7-3.5 3.4.8 4.9L8 12.2l-4.3 2.3.8-4.9L1 6.2l4.8-.7z"/></svg>3 clears</span>
+        <span class="avatar" data-name="Avatar"></span>
+      </div>
+    </header>
+
+    <section class="hero" data-name="Hero">
+      <div class="hero__wash"></div>
+      <div class="hero__art"></div>
+      <div class="dots" data-name="Carousel Dots"><span class="dot is-on"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+      <div class="hero__copy" data-name="Copy">
+        <span class="badge">New mode</span>
+        <h1 class="hero__title">Expedition</h1>
+        <p class="hero__desc">Set out with a deck and two packs. Every win opens another, and your deck grows as you go.</p>
+        <div class="hero__actions" data-name="Actions">
+          <span class="c-button c-button--lg" data-component="Button">Set out</span>
+          <span class="c-button c-button--lg c-button--ghost" data-component="Button">How it works</span>
+        </div>
+      </div>
+      <div class="hero__cards" data-name="Cards">
+        <div class="c-mtg" data-component="Card"><img src="../../assets/lightning-strike.jpg" alt=""></div>
+        <div class="c-mtg" data-component="Card"><img src="../../assets/shivan-dragon.jpg" alt=""></div>
+        <div class="c-mtg" data-component="Card"><img src="../../assets/giant-growth.jpg" alt=""></div>
+      </div>
+    </section>
+
+    <section class="modes" data-name="Modes">
+      <div class="mode" style="--art: url(../../assets/deck-kiora.jpg)" data-name="Jump In">
+        <div class="mode__art"></div>
+        <span class="mode__tag">Pick 2 of 10</span>
+        <span class="mode__name">Jump In!</span>
+        <span class="mode__meta">Two themed halves, one new deck every run</span>
+      </div>
+      <div class="mode mode--live" style="--art: url(../../assets/deck-alesha.jpg)" data-name="Gauntlet">
+        <div class="mode__art"></div>
+        <span class="mode__tag">In progress</span>
+        <span class="mode__name">Gauntlet</span>
+        <span class="mode__meta">Round 3 of 6 · Might of the Legion</span>
+        <div class="lives" data-name="Lives">
+          <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 14 2 8a3.5 3.5 0 0 1 6-4 3.5 3.5 0 0 1 6 4z"/></svg>
+          <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 14 2 8a3.5 3.5 0 0 1 6-4 3.5 3.5 0 0 1 6 4z"/></svg>
+          <svg class="is-lost" viewBox="0 0 16 16" fill="currentColor"><path d="M8 14 2 8a3.5 3.5 0 0 1 6-4 3.5 3.5 0 0 1 6 4z"/></svg>
+        </div>
+        <div class="ladder" data-name="Ladder"><span class="is-won"></span><span class="is-won"></span><span></span><span></span><span></span><span></span></div>
+      </div>
+      <div class="mode" style="--art: url(../../assets/art-gigantosaurus.jpg)" data-name="Quick Match">
+        <div class="mode__art"></div>
+        <span class="mode__name">Quick match</span>
+        <span class="mode__meta">Any deck against any opponent</span>
+      </div>
+    </section>
+
+    <aside class="side" data-name="Side">
+      <div class="panel" data-name="Daily Quests">
+        <div class="panel__head"><span class="panel__title">Daily quests</span><span class="panel__note">New in 6h 12m</span></div>
+        <div class="quest" style="--q: var(--mana-R)">
+          <span class="quest__icon"><span class="c-pip c-pip--R"></span></span>
+          <span class="quest__text">Win 2 games with red</span>
+          <span class="quest__reward">+1 pack</span>
+          <span class="quest__bar" style="--p: 50%"><i></i></span>
+        </div>
+        <div class="quest" style="--q: var(--mana-U)">
+          <span class="quest__icon"><span class="c-pip c-pip--U"></span></span>
+          <span class="quest__text">Cast 20 instants or sorceries</span>
+          <span class="quest__reward">+1 pack</span>
+          <span class="quest__bar" style="--p: 65%"><i></i></span>
+        </div>
+        <div class="quest" style="--q: var(--mana-G)">
+          <span class="quest__icon"><span class="c-pip c-pip--G"></span></span>
+          <span class="quest__text">Attack with 25 creatures</span>
+          <span class="quest__reward">Rare pack</span>
+          <span class="quest__bar" style="--p: 28%"><i></i></span>
+        </div>
+      </div>
+      <div class="panel" data-name="Weekly Wins">
+        <div class="panel__head"><span class="panel__title">Weekly wins</span><span class="panel__note">7 of 15</span></div>
+        <div class="track">
+          <span class="is-won"></span><span class="is-won"></span><span class="is-won"></span><span class="is-won"></span><span class="is-prize is-won"></span>
+          <span class="is-won"></span><span class="is-won"></span><span></span><span></span><span class="is-prize"></span>
+          <span></span><span></span><span></span><span></span><span class="is-prize"></span>
+        </div>
+        <div class="track__labels"><span>Pack at 5, 10 and 15 wins</span><span>Resets Monday</span></div>
+      </div>
+    </aside>
+
+    <div class="play" data-name="Play">
+      <div class="play__deck" data-name="Selected">
+        <span class="play__thumb"></span>
+        <span class="play__label"><small>Expedition · Jump In!</small>Pirates + Goblins</span>
+        <span class="c-pip c-pip--U"></span><span class="c-pip c-pip--R"></span>
+      </div>
+      <div class="play__button" data-name="Play Button">Play</div>
+    </div>
+  </div>
+</body>
+</html>

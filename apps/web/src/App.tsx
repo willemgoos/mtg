@@ -13,8 +13,8 @@ import { DeckView } from './components/DeckView.tsx';
 import { ErrorBoundary } from './components/ErrorBoundary.tsx';
 import { Expedition } from './components/Expedition.tsx';
 import { Gauntlet } from './components/Gauntlet.tsx';
+import { type Event, Home, type Mode, Nav, type Tab } from './components/Home.tsx';
 import { JumpIn } from './components/JumpIn.tsx';
-import { UiSize } from './components/UiSize.tsx';
 import type { BotKind } from './game/bot.worker.ts';
 import { artFor, BLURBS } from './game/deckArt.ts';
 import {
@@ -74,8 +74,6 @@ interface Match {
   event: Event | null;
 }
 
-type Event = 'gauntlet' | 'expedition';
-type Mode = 'quick' | Event;
 const EVENT_NAMES: Record<Event, string> = { gauntlet: 'Gauntlet', expedition: 'Expedition' };
 
 export function App() {
@@ -110,21 +108,29 @@ export function App() {
   );
   const [theirDeck, setTheirDeck] = useState<string | null>(null);
   const [viewing, setViewing] = useState<string | null>(null);
-  const pick = (you: string) => {
+  const [tab, setTab] = useState<Tab>('home');
+  const [lastQuick, setLastQuick] = useState(loadLastQuick);
+  const pick = (you: string, bot = opponent) => {
     const seed = newSeed();
     const them = theirDeck ?? randomOther(you, seed);
+    setLastQuick(saveLastQuick({ deck: you, opponent: bot }));
     setMatch({
       choice: { you, them },
       seed,
       resume: null,
       attempt: 0,
-      bot: opponent,
+      bot,
       event: null,
     });
+  };
+  const openDecks = (m: Mode) => {
+    setMode(m);
+    setTab('decks');
   };
   const menu = () => {
     clearGame();
     setMatch(null);
+    setTab('home');
   };
 
   // ------------------------------------------------- gauntlet and expedition
@@ -182,6 +188,13 @@ export function App() {
     setHub(null);
     setMode(e);
   };
+  /** Home's Play button: carry on a run, replay the last quick match, or go pick a deck. */
+  const playHome = (m: Mode) => {
+    setMode(m);
+    if (m !== 'quick' && runOf(m)) return setHub(m);
+    if (m === 'quick' && lastQuick) return pick(lastQuick.deck, lastQuick.opponent);
+    setTab('decks');
+  };
   const onEnd = (outcome: 'win' | 'loss' | 'draw') => {
     const seed = match?.seed;
     if (seed === undefined) return;
@@ -208,7 +221,10 @@ export function App() {
         onPlay={() => playRound('gauntlet')}
         onAbandon={() => endRun('gauntlet')}
         onAgain={() => beginRun('gauntlet', gauntlet.run!.deck)}
-        onMenu={() => setHub(null)}
+        onMenu={() => {
+          setHub(null);
+          setTab('home');
+        }}
       />
     );
   if (!match && hub === 'expedition' && expedition.run)
@@ -225,7 +241,10 @@ export function App() {
           endRun('expedition');
           setJumping(true);
         }}
-        onMenu={() => setHub(null)}
+        onMenu={() => {
+          setHub(null);
+          setTab('home');
+        }}
       />
     );
   if (!match && jumping)
@@ -238,9 +257,30 @@ export function App() {
         onBack={() => setJumping(false)}
       />
     );
+  if (!match && tab === 'home')
+    return (
+      <Home
+        mode={mode}
+        onMode={setMode}
+        gauntlet={gauntlet}
+        expedition={expedition}
+        quick={
+          lastQuick && {
+            deck: deckById(lastQuick.deck),
+            opponent: OPPONENTS.find((o) => o.id === lastQuick.opponent)!.name,
+          }
+        }
+        onPlay={playHome}
+        onDecks={openDecks}
+        onJumpIn={() => setJumping(true)}
+        onTab={setTab}
+      />
+    );
   if (!match)
     return (
       <Start
+        onTab={setTab}
+        clears={clearsOf(gauntlet) + clearsOf(expedition)}
         mode={mode}
         onMode={setMode}
         runs={mode === 'quick' ? null : mode === 'gauntlet' ? gauntlet : expedition}
@@ -283,6 +323,33 @@ export function App() {
 function runLabel(name: string, run: Run | null): string {
   if (!run) return name;
   return `${name} · ${statusOf(run) === 'playing' ? `Round ${roundOf(run) + 1} of ${ROUNDS.length}` : 'Final result'}`;
+}
+
+const clearsOf = (s: GauntletState) => Object.values(s.records).reduce((n, r) => n + r.clears, 0);
+
+interface LastQuick {
+  deck: string;
+  opponent: BotKind;
+}
+const LAST_QUICK = 'mtg.lastQuick';
+
+function loadLastQuick(): LastQuick | null {
+  try {
+    const q = JSON.parse(localStorage.getItem(LAST_QUICK) ?? 'null') as LastQuick | null;
+    const known = q && DECKS.some((d) => d.id === q.deck && isPlayable(d));
+    return known && OPPONENTS.some((o) => o.id === q.opponent) ? q : null;
+  } catch {
+    return null;
+  }
+}
+
+function saveLastQuick(q: LastQuick): LastQuick {
+  try {
+    localStorage.setItem(LAST_QUICK, JSON.stringify(q));
+  } catch {
+    // Storage unavailable: Play on the home screen just opens the deck picker.
+  }
+  return q;
 }
 
 function newSeed(): number {
@@ -363,6 +430,8 @@ const MODES: { id: Mode; name: string; blurb: string }[] = [
 ];
 
 function Start({
+  onTab,
+  clears,
   mode,
   onMode,
   runs,
@@ -376,6 +445,8 @@ function Start({
   theirDeck,
   onTheirDeck,
 }: {
+  onTab: (t: Tab) => void;
+  clears: number;
   mode: Mode;
   onMode: (m: Mode) => void;
   /** The selected run mode's state (null for quick matches). */
@@ -394,131 +465,132 @@ function Start({
   const running = !!run && statusOf(run) === 'playing';
   const name = mode === 'quick' ? '' : EVENT_NAMES[mode];
   return (
-    <div className="start">
-      <UiSize />
-      <div className="start__title">
-        <span className="start__eyebrow">A duel of</span>
-        <h1>Foundations</h1>
-        <p>
-          {mode === 'quick'
-            ? 'Choose your opponent, then your deck.'
-            : running
-              ? 'Your run is waiting.'
-              : mode === 'gauntlet'
-                ? 'Choose a deck to take through the gauntlet.'
-                : 'Choose a starter deck to set out with.'}
-        </p>
-      </div>
-      <div className="start__opponent start__mode" role="radiogroup" aria-label="Mode">
-        {MODES.map((m) => (
-          <button
-            key={m.id}
-            role="radio"
-            aria-checked={mode === m.id}
-            className={`opp ${mode === m.id ? 'is-on' : ''}`}
-            onClick={() => onMode(m.id)}
-          >
-            <span className="opp__name">{m.name}</span>
-            <span className="opp__blurb">{m.blurb}</span>
-          </button>
+    <div className="decks-page">
+      <Nav tab="decks" onTab={onTab} clears={clears} />
+      <div className="start">
+        <div className="start__title">
+          <h1>{mode === 'quick' ? 'Quick match' : name}</h1>
+          <p>
+            {mode === 'quick'
+              ? 'Choose your opponent, then your deck.'
+              : running
+                ? 'Your run is waiting.'
+                : mode === 'gauntlet'
+                  ? 'Choose a deck to take through the gauntlet.'
+                  : 'Choose a starter deck to set out with.'}
+          </p>
+        </div>
+        <div className="start__opponent start__mode" role="radiogroup" aria-label="Mode">
+          {MODES.map((m) => (
+            <button
+              key={m.id}
+              role="radio"
+              aria-checked={mode === m.id}
+              className={`opp ${mode === m.id ? 'is-on' : ''}`}
+              onClick={() => onMode(m.id)}
+            >
+              <span className="opp__name">{m.name}</span>
+              <span className="opp__blurb">{m.blurb}</span>
+            </button>
+          ))}
+        </div>
+        {mode === 'quick' ? (
+          <>
+            <div className="start__opponent" role="radiogroup" aria-label="Opponent">
+              {OPPONENTS.map((o) => (
+                <button
+                  key={o.id}
+                  role="radio"
+                  aria-checked={opponent === o.id}
+                  className={`opp ${opponent === o.id ? 'is-on' : ''}`}
+                  onClick={() => onOpponent(o.id)}
+                >
+                  <span className="opp__name">{o.name}</span>
+                  <span className="opp__blurb">{o.blurb}</span>
+                </button>
+              ))}
+            </div>
+            <label className="start__their-deck">
+              <span className="start__label">Opponent's deck</span>
+              <select
+                className="chip is-on"
+                value={theirDeck ?? ''}
+                onChange={(e) => onTheirDeck(e.target.value || null)}
+              >
+                <option value="">Random</option>
+                {SECTIONS.map((s) => (
+                  <optgroup key={s.title} label={s.title}>
+                    {s.decks.filter(isPlayable).map((d) => (
+                      <option key={d.id} value={d.id}>
+                        {d.name}
+                      </option>
+                    ))}
+                  </optgroup>
+                ))}
+              </select>
+            </label>
+          </>
+        ) : (
+          run && <RunBanner name={name} run={run} onContinue={onContinue} />
+        )}
+        {mode === 'expedition' && (
+          <JumpInSection records={runs?.records ?? {}} locked={running} onJumpIn={onJumpIn} />
+        )}
+        {SECTIONS.map((section, si) => (
+          <section key={section.title} className="start__section">
+            <h2 className="start__section-title">
+              {section.title}
+              <span>{section.blurb}</span>
+            </h2>
+            <div className={`start__decks ${running ? 'is-waiting' : ''}`}>
+              {section.decks.map((d, j) => {
+                const i = si * 10 + j;
+                const locked = !isPlayable(d);
+                const record = runs?.records[d.id];
+                return (
+                  <div key={d.id} className="deck-slot">
+                    <button
+                      className={`deck ${locked ? 'is-locked' : ''}`}
+                      style={
+                        {
+                          '--art': `url("${artFor(d)}")`,
+                          '--glow': `var(--mana-${d.colors[0]})`,
+                          '--i': i,
+                        } as React.CSSProperties
+                      }
+                      disabled={locked || running}
+                      onClick={() => (mode === 'quick' ? onPick(d.id) : onRun(d.id))}
+                    >
+                      <span className="deck__art" />
+                      {record && record.runs > 0 && (
+                        <span className={`deck__record ${record.clears ? 'is-cleared' : ''}`}>
+                          {record.clears
+                            ? `★ Cleared${record.clears > 1 ? ` ×${record.clears}` : ''}`
+                            : `Best ${record.best}/${ROUNDS.length}`}
+                        </span>
+                      )}
+                      <span className="deck__pips">
+                        {d.colors.map((c) => (
+                          <span key={c} className={`pip pip--${c}`} />
+                        ))}
+                      </span>
+                      <span className="deck__name">{d.name}</span>
+                      <span className="deck__blurb">{locked ? 'Coming soon' : BLURBS[d.id]}</span>
+                    </button>
+                    <button
+                      className="deck-slot__view"
+                      style={{ '--i': i } as React.CSSProperties}
+                      onClick={() => onView(d.id)}
+                    >
+                      View deck
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
+          </section>
         ))}
       </div>
-      {mode === 'quick' ? (
-        <>
-          <div className="start__opponent" role="radiogroup" aria-label="Opponent">
-            {OPPONENTS.map((o) => (
-              <button
-                key={o.id}
-                role="radio"
-                aria-checked={opponent === o.id}
-                className={`opp ${opponent === o.id ? 'is-on' : ''}`}
-                onClick={() => onOpponent(o.id)}
-              >
-                <span className="opp__name">{o.name}</span>
-                <span className="opp__blurb">{o.blurb}</span>
-              </button>
-            ))}
-          </div>
-          <label className="start__their-deck">
-            <span className="start__label">Opponent's deck</span>
-            <select
-              className="chip is-on"
-              value={theirDeck ?? ''}
-              onChange={(e) => onTheirDeck(e.target.value || null)}
-            >
-              <option value="">Random</option>
-              {SECTIONS.map((s) => (
-                <optgroup key={s.title} label={s.title}>
-                  {s.decks.filter(isPlayable).map((d) => (
-                    <option key={d.id} value={d.id}>
-                      {d.name}
-                    </option>
-                  ))}
-                </optgroup>
-              ))}
-            </select>
-          </label>
-        </>
-      ) : (
-        run && <RunBanner name={name} run={run} onContinue={onContinue} />
-      )}
-      {mode === 'expedition' && (
-        <JumpInSection records={runs?.records ?? {}} locked={running} onJumpIn={onJumpIn} />
-      )}
-      {SECTIONS.map((section, si) => (
-        <section key={section.title} className="start__section">
-          <h2 className="start__section-title">
-            {section.title}
-            <span>{section.blurb}</span>
-          </h2>
-          <div className={`start__decks ${running ? 'is-waiting' : ''}`}>
-            {section.decks.map((d, j) => {
-              const i = si * 10 + j;
-              const locked = !isPlayable(d);
-              const record = runs?.records[d.id];
-              return (
-                <div key={d.id} className="deck-slot">
-                  <button
-                    className={`deck ${locked ? 'is-locked' : ''}`}
-                    style={
-                      {
-                        '--art': `url("${artFor(d)}")`,
-                        '--glow': `var(--mana-${d.colors[0]})`,
-                        '--i': i,
-                      } as React.CSSProperties
-                    }
-                    disabled={locked || running}
-                    onClick={() => (mode === 'quick' ? onPick(d.id) : onRun(d.id))}
-                  >
-                    <span className="deck__art" />
-                    {record && record.runs > 0 && (
-                      <span className={`deck__record ${record.clears ? 'is-cleared' : ''}`}>
-                        {record.clears
-                          ? `★ Cleared${record.clears > 1 ? ` ×${record.clears}` : ''}`
-                          : `Best ${record.best}/${ROUNDS.length}`}
-                      </span>
-                    )}
-                    <span className="deck__pips">
-                      {d.colors.map((c) => (
-                        <span key={c} className={`pip pip--${c}`} />
-                      ))}
-                    </span>
-                    <span className="deck__name">{d.name}</span>
-                    <span className="deck__blurb">{locked ? 'Coming soon' : BLURBS[d.id]}</span>
-                  </button>
-                  <button
-                    className="deck-slot__view"
-                    style={{ '--i': i } as React.CSSProperties}
-                    onClick={() => onView(d.id)}
-                  >
-                    View deck
-                  </button>
-                </div>
-              );
-            })}
-          </div>
-        </section>
-      ))}
     </div>
   );
 }
