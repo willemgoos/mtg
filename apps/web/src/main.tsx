@@ -11,5 +11,6 @@ initSound();
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <App />
+    <div className="rotate-hint">Turn your device sideways to play</div>
   </StrictMode>,
 );

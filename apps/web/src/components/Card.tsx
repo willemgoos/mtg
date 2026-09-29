@@ -1,6 +1,6 @@
 import { cardDb, scryfallById } from '@mtg/cards';
 import type { CardDefId, ObjectId } from '@mtg/engine';
-import type { MouseEvent } from 'react';
+import { type MouseEvent, useRef } from 'react';
 
 export type CardSize = 'hand' | 'field' | 'land' | 'stack' | 'preview' | 'mull';
 export type CardMark =
@@ -51,6 +51,19 @@ export function Card(p: CardProps) {
       : showPt && p.toughness! < (p.baseToughness ?? 0)
         ? 'down'
         : '';
+  // A power/toughness change pops the stats box (green up, red down). Worked
+  // out while rendering so the new key remounts the box and replays the pop.
+  const pt = useRef({ p: p.power, t: p.toughness, n: 0, dir: '' });
+  if (showPt && (pt.current.p !== p.power || pt.current.t !== p.toughness)) {
+    const was = pt.current;
+    const gain = p.power! - (was.p ?? p.power!) + (p.toughness! - (was.t ?? p.toughness!));
+    pt.current = {
+      p: p.power,
+      t: p.toughness,
+      n: was.p === undefined ? was.n : was.n + 1,
+      dir: gain >= 0 ? 'up' : 'down',
+    };
+  }
   const cls = [
     'card',
     `card--${p.size}`,
@@ -78,7 +91,10 @@ export function Card(p: CardProps) {
           <TokenFace defId={p.defId} />
         )}
         {showPt && (
-          <span className={`card__pt ${ptClass} ${p.damage ? 'hurt' : ''}`}>
+          <span
+            key={pt.current.n}
+            className={`card__pt ${ptClass} ${p.damage ? 'hurt' : ''} ${pt.current.n ? `pop-${pt.current.dir}` : ''}`}
+          >
             {p.power}/{p.toughness! - (p.damage ?? 0)}
           </span>
         )}

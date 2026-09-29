@@ -36,6 +36,8 @@ export function useHandDrag(opts: {
   latest.current = opts;
   const pending = useRef<Pending | null>(null);
   const pos = useRef({ x: 0, y: 0 });
+  /** Swing: the card leans against the way it's pulled, then settles (see swing()). */
+  const lean = useRef({ now: 0, target: 0, lastX: 0, frame: 0 });
   const ghostRef = useRef<HTMLDivElement>(null);
   const justDropped = useRef(false);
   const [dragging, setDragging] = useState<ObjectId | null>(null);
@@ -43,7 +45,17 @@ export function useHandDrag(opts: {
   const place = () => {
     const g = ghostRef.current;
     if (g)
-      g.style.transform = `translate(${pos.current.x}px, ${pos.current.y}px) rotate(-3deg) scale(1.06)`;
+      g.style.transform = `translate(${pos.current.x}px, ${pos.current.y}px) rotate(${-3 + lean.current.now}deg) scale(1.06)`;
+  };
+
+  // Eases the lean toward its target every frame, and lets the target relax
+  // back to upright, so the card swings like it has weight.
+  const swing = () => {
+    const l = lean.current;
+    l.now += (l.target - l.now) * 0.2;
+    l.target *= 0.86;
+    place();
+    l.frame = Math.abs(l.now) + Math.abs(l.target) > 0.05 ? requestAnimationFrame(swing) : 0;
   };
 
   const onHandPointerDown = useCallback((id: ObjectId, e: React.PointerEvent) => {
@@ -67,17 +79,26 @@ export function useHandDrag(opts: {
       if (!p.active) {
         if (Math.hypot(e.clientX - p.x0, e.clientY - p.y0) < THRESHOLD) return;
         p.active = true;
+        lean.current = { now: 0, target: 0, lastX: e.clientX, frame: lean.current.frame };
         setDragging(p.id);
       }
       pos.current = { x: e.clientX - p.dx, y: e.clientY - p.dy };
+      const l = lean.current;
+      l.target = Math.max(-16, Math.min(16, l.target + (e.clientX - l.lastX) * 0.35));
+      l.lastX = e.clientX;
+      if (!l.frame) l.frame = requestAnimationFrame(swing);
       place();
-      board()?.classList.toggle('is-drop', overBoard(e.clientX, e.clientY));
+      const over = overBoard(e.clientX, e.clientY);
+      board()?.classList.toggle('is-drop', over);
+      ghostRef.current?.classList.toggle('is-over', over);
     };
     const end = (e: PointerEvent) => {
       const p = pending.current;
       pending.current = null;
       if (!p?.active) return;
       board()?.classList.remove('is-drop');
+      cancelAnimationFrame(lean.current.frame);
+      lean.current.frame = 0;
       setDragging(null);
       // The click that may follow this pointerup belongs to the drag, not a card click.
       justDropped.current = true;

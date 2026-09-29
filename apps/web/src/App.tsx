@@ -2,9 +2,11 @@ import { DECKS, type Decklist, isPlayable } from '@mtg/cards';
 import { useCallback, useState } from 'react';
 import { Board } from './components/Board.tsx';
 import { DeckView } from './components/DeckView.tsx';
+import { ErrorBoundary } from './components/ErrorBoundary.tsx';
 import { UiSize } from './components/UiSize.tsx';
 import type { BotKind } from './game/bot.worker.ts';
 import { artFor, BLURBS } from './game/deckArt.ts';
+import { clearGame, loadGame, type SavedGame } from './game/saved.ts';
 import { type DeckChoice, useGame } from './game/useGame.ts';
 
 // Playable decks first; the rest show as "coming soon".
@@ -26,15 +28,32 @@ const SECTIONS: { title: string; blurb: string; decks: Decklist[] }[] = [
 });
 const PLAYABLE = DECKS.filter(isPlayable);
 
+interface Match {
+  choice: DeckChoice;
+  seed: number;
+  /** A saved game to pick up from instead of starting fresh. */
+  resume: SavedGame | null;
+  /** Bumped by "Reload game" after a crash, to remount the game. */
+  attempt: number;
+}
+
 export function App() {
-  const [match, setMatch] = useState<{ choice: DeckChoice; seed: number } | null>(null);
-  const [opponent, setOpponent] = useState<BotKind>('easy');
+  // A game in progress when the page was closed or reloaded carries on.
+  const [saved] = useState(loadGame);
+  const [match, setMatch] = useState<Match | null>(
+    () => saved && { choice: saved.choice, seed: saved.seed, resume: saved, attempt: 0 },
+  );
+  const [opponent, setOpponent] = useState<BotKind>(saved?.opponent ?? 'easy');
   const [theirDeck, setTheirDeck] = useState<string | null>(null);
   const [viewing, setViewing] = useState<string | null>(null);
   const pick = (you: string) => {
     const seed = newSeed();
     const them = theirDeck ?? randomOther(you, seed);
-    setMatch({ choice: { you, them }, seed });
+    setMatch({ choice: { you, them }, seed, resume: null, attempt: 0 });
+  };
+  const menu = () => {
+    clearGame();
+    setMatch(null);
   };
   const back = useCallback(() => setViewing(null), []);
   if (!match && viewing)
@@ -60,14 +79,20 @@ export function App() {
       />
     );
   return (
-    <Game
-      key={match.seed}
-      choice={match.choice}
-      seed={match.seed}
-      opponent={opponent}
-      onMenu={() => setMatch(null)}
-      onRematch={() => setMatch((m) => m && { ...m, seed: newSeed() })}
-    />
+    <ErrorBoundary
+      onMenu={menu}
+      onRetry={() => setMatch((m) => m && { ...m, resume: loadGame(), attempt: m.attempt + 1 })}
+    >
+      <Game
+        key={`${match.seed}-${match.attempt}`}
+        choice={match.choice}
+        seed={match.seed}
+        opponent={opponent}
+        resume={match.resume}
+        onMenu={menu}
+        onRematch={() => setMatch((m) => m && { ...m, seed: newSeed(), resume: null, attempt: 0 })}
+      />
+    </ErrorBoundary>
   );
 }
 
@@ -88,16 +113,18 @@ function Game({
   choice,
   seed,
   opponent,
+  resume,
   onMenu,
   onRematch,
 }: {
   choice: DeckChoice;
   seed: number;
   opponent: BotKind;
+  resume: SavedGame | null;
   onMenu: () => void;
   onRematch: () => void;
 }) {
-  const game = useGame(choice, seed, opponent);
+  const game = useGame(choice, seed, opponent, resume);
   const deck = (id: string) => DECKS.find((d) => d.id === id)!;
   return (
     <Board

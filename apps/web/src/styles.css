@@ -60,10 +60,11 @@
 /*
  * Resolution-independent UI: designed at 1920x1080 where 1rem = 16px, and
  * scaled with the window height (width only limits it on narrow 4:3-ish
- * windows), times the user's UI size.
+ * windows), times the user's UI size. The 5px floor only stops it collapsing;
+ * phones in landscape get the same proportions as a desktop, like Arena mobile.
  */
 html {
-  font-size: calc(max(10px, min(1.4815vh, 1vw)) * var(--ui-scale));
+  font-size: calc(max(5px, min(1.4815vh, 1vw)) * var(--ui-scale));
 }
 
 html,
@@ -127,8 +128,39 @@ button {
    Layout
    ========================================================================== */
 
+/* In-game cursors, like Arena's: a gold arrow, a glowing arrow over anything
+   clickable and a reticle while choosing targets. Rules elsewhere read these
+   through var(--cursor*, <system fallback>), so the start screen is untouched. */
 .table {
   display: block;
+  --cursor:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23fff3c8'/%3E%3Cstop offset='.5' stop-color='%23deae4a'/%3E%3Cstop offset='1' stop-color='%23855316'/%3E%3C/linearGradient%3E%3Cpath d='M4 3v21l5.6-5.2 4 9 3.8-1.7-4-8.8H21z' fill='url(%23g)' stroke='%231b1205' stroke-width='1.5' stroke-linejoin='round'/%3E%3C/svg%3E")
+      4 3,
+    default;
+  --cursor-hover:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cfilter id='b' x='-50%25' y='-50%25' width='200%25' height='200%25'%3E%3CfeGaussianBlur stdDeviation='1.4'/%3E%3C/filter%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23fffbe8'/%3E%3Cstop offset='.5' stop-color='%23ffd36e'/%3E%3Cstop offset='1' stop-color='%23b8791f'/%3E%3C/linearGradient%3E%3Cpath d='M4 3v21l5.6-5.2 4 9 3.8-1.7-4-8.8H21z' fill='none' stroke='%23ffc94d' stroke-width='4' opacity='.8' filter='url(%23b)'/%3E%3Cpath d='M4 3v21l5.6-5.2 4 9 3.8-1.7-4-8.8H21z' fill='url(%23g)' stroke='%231b1205' stroke-width='1.5' stroke-linejoin='round'/%3E%3C/svg%3E")
+      4 3,
+    pointer;
+  --cursor-target:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32' fill='none' stroke-linecap='round'%3E%3Cg stroke='%231b1205' stroke-width='4'%3E%3Ccircle cx='16' cy='16' r='8'/%3E%3Cpath d='M16 3v5M16 24v5M3 16h5M24 16h5'/%3E%3C/g%3E%3Cg stroke='%23ffd36e' stroke-width='2'%3E%3Ccircle cx='16' cy='16' r='8'/%3E%3Cpath d='M16 3v5M16 24v5M3 16h5M24 16h5'/%3E%3C/g%3E%3Ccircle cx='16' cy='16' r='1.6' fill='%23ffd36e'/%3E%3C/svg%3E")
+      16 16,
+    crosshair;
+  cursor: var(--cursor);
+}
+
+/* While picking a target, valid targets show the reticle instead of the hand. */
+.table.is-targeting {
+  --cursor-hover: var(--cursor-target);
+}
+
+/* The effects canvas (click embers, combat particles) sits above everything. */
+.fx-layer {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 100;
+  pointer-events: none;
 }
 
 .board {
@@ -305,7 +337,7 @@ button {
 }
 
 .card.is-clickable {
-  cursor: pointer;
+  cursor: var(--cursor-hover, pointer);
 }
 
 .card.is-clickable:hover .card__body {
@@ -637,14 +669,59 @@ button {
   transform: translateX(calc(-50% + var(--o) * var(--spread)))
     translateY(calc(var(--abs) * var(--abs) * 0.1563rem)) rotate(calc(var(--o) * 2.6deg));
   transform-origin: 50% 120%;
-  transition: transform 0.3s var(--ease);
-  animation: draw 0.45s var(--ease) both;
+  transition:
+    transform 0.3s var(--ease),
+    translate 0.3s var(--ease);
+  animation: draw 0.45s var(--ease) backwards;
 }
 
 .hand__slot:hover {
   z-index: 50;
   transform: translateX(calc(-50% + var(--o) * var(--spread))) translateY(calc(var(--hh) * -0.3))
     scale(1.12);
+}
+
+/* Neighbours ease aside to make room for the hovered card. */
+.hand__slot:hover + .hand__slot {
+  translate: calc(var(--spread) * 0.45) 0;
+}
+
+.hand__slot:hover + .hand__slot + .hand__slot {
+  translate: calc(var(--spread) * 0.18) 0;
+}
+
+.hand__slot:has(+ .hand__slot:hover) {
+  translate: calc(var(--spread) * -0.45) 0;
+}
+
+.hand__slot:has(+ .hand__slot + .hand__slot:hover) {
+  translate: calc(var(--spread) * -0.18) 0;
+}
+
+/* The hovered card leans toward the pointer; see tilt() in Zones.tsx. */
+.hand__slot .card__body {
+  transition:
+    transform 0.15s ease-out,
+    box-shadow 0.2s ease;
+}
+
+.hand__slot:hover .card__body {
+  transform: translate(-50%, -50%) perspective(40rem) rotateX(var(--tilt-x, 0deg))
+    rotateY(var(--tilt-y, 0deg));
+}
+
+.hand__slot:hover .card__body::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: radial-gradient(
+    circle at var(--sheen-x, 50%) var(--sheen-y, 30%),
+    rgba(255, 255, 255, 0.32),
+    rgba(255, 255, 255, 0) 55%
+  );
+  mix-blend-mode: soft-light;
 }
 
 @keyframes draw {
@@ -677,7 +754,7 @@ button {
   align-items: center;
   gap: 0.75rem;
   flex: none;
-  cursor: default;
+  cursor: var(--cursor, default);
 }
 
 .badge__portrait {
@@ -707,7 +784,7 @@ button {
 }
 
 .badge--target {
-  cursor: crosshair;
+  cursor: var(--cursor-target, crosshair);
 }
 
 .badge--target .badge__portrait {
@@ -731,14 +808,147 @@ button {
   color: var(--parchment);
   background: var(--ink);
   box-shadow: 0 0 0 0.0625rem var(--brass);
+  transition: color 0.4s ease;
+}
+
+/* Life changes: see LifeCounter.tsx. */
+.badge__life--heal {
+  color: #a6ec7e;
   animation: life-bump 0.5s var(--ease);
+}
+
+.badge__life--hurt {
+  color: #ff7466;
+  animation: life-hurt 0.55s var(--ease);
 }
 
 @keyframes life-bump {
   30% {
-    transform: translateX(-50%) scale(1.18);
-    color: var(--brass-hi);
+    transform: translateX(-50%) scale(1.22);
   }
+}
+
+@keyframes life-hurt {
+  12% {
+    transform: translateX(calc(-50% - 0.25rem)) scale(1.3);
+  }
+  26% {
+    transform: translateX(calc(-50% + 0.25rem)) scale(1.24);
+  }
+  40% {
+    transform: translateX(calc(-50% - 0.125rem)) scale(1.16);
+  }
+}
+
+/* The old total drifting up and away. */
+.badge__ghost {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  color: var(--parchment);
+  text-decoration: line-through;
+  pointer-events: none;
+  animation: life-ghost 0.9s ease-out forwards;
+}
+
+@keyframes life-ghost {
+  from {
+    transform: translateX(-50%);
+    opacity: 0.8;
+  }
+  to {
+    transform: translate(-50%, -1.75rem);
+    opacity: 0;
+  }
+}
+
+.badge__flash {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  pointer-events: none;
+  animation: portrait-flash 0.6s ease-out forwards;
+}
+
+.badge__flash--hurt {
+  background: radial-gradient(circle, rgba(255, 40, 30, 0.15) 30%, rgba(255, 40, 30, 0.75));
+}
+
+.badge__flash--heal {
+  background: radial-gradient(circle, rgba(140, 230, 100, 0.1) 30%, rgba(140, 230, 100, 0.6));
+}
+
+@keyframes portrait-flash {
+  to {
+    opacity: 0;
+  }
+}
+
+/* Lethal incoming: your portrait beats red and the screen edges throb. */
+.table.is-lethal .side--me .badge__portrait {
+  animation: lethal-beat 1s ease-in-out infinite;
+}
+
+@keyframes lethal-beat {
+  0%,
+  45%,
+  100% {
+    scale: 1;
+    box-shadow:
+      0 0 0 0.125rem rgba(255, 60, 45, 0.6),
+      0 0 1rem rgba(255, 40, 30, 0.35);
+  }
+  10% {
+    scale: 1.07;
+    box-shadow:
+      0 0 0 0.25rem rgba(255, 70, 50, 0.95),
+      0 0 2.5rem rgba(255, 40, 30, 0.85);
+  }
+  30% {
+    scale: 1.04;
+    box-shadow:
+      0 0 0 0.1875rem rgba(255, 70, 50, 0.85),
+      0 0 1.75rem rgba(255, 40, 30, 0.6);
+  }
+}
+
+.table.is-lethal::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 95;
+  pointer-events: none;
+  box-shadow: inset 0 0 9rem rgba(190, 0, 0, 0.4);
+  animation: lethal-edge 1s ease-in-out infinite;
+}
+
+@keyframes lethal-edge {
+  0%,
+  45%,
+  100% {
+    opacity: 0.45;
+  }
+  10% {
+    opacity: 1;
+  }
+}
+
+.table.is-lethal .side--me .badge__portrait::before {
+  content: 'Lethal';
+  position: absolute;
+  left: 50%;
+  top: -1.25rem;
+  translate: -50% 0;
+  padding: 0 0.5rem;
+  border-radius: 999px;
+  font-family: var(--caps);
+  font-size: 0.6875rem;
+  letter-spacing: 0.1em;
+  line-height: 1.5;
+  color: #fff;
+  background: #b3261e;
+  box-shadow: 0 0 0.75rem rgba(255, 40, 30, 0.7);
+  z-index: 2;
 }
 
 .badge--priority .badge__portrait::after {
@@ -1042,7 +1252,7 @@ button {
   padding: 0;
   border: 0;
   border-radius: 50%;
-  cursor: pointer;
+  cursor: var(--cursor-hover, pointer);
   color: var(--muted);
   background: rgba(0, 0, 0, 0.5);
   box-shadow: inset 0 0 0 0.0625rem var(--line);
@@ -1166,7 +1376,7 @@ button {
   background: linear-gradient(90deg, rgba(0, 0, 0, 0.5), transparent);
   font-size: 0.75rem;
   line-height: 1.4;
-  cursor: pointer;
+  cursor: var(--cursor-hover, pointer);
 }
 
 .recent__line {
@@ -1190,7 +1400,7 @@ button {
   padding: 0.6875rem 0.5rem;
   border: 0;
   border-radius: 0.375rem;
-  cursor: pointer;
+  cursor: var(--cursor-hover, pointer);
   font-family: var(--caps);
   font-size: 0.9375rem;
   letter-spacing: 0.03em;
@@ -1265,7 +1475,7 @@ button {
   gap: 0.5rem;
   font-size: 0.75rem;
   color: var(--muted);
-  cursor: pointer;
+  cursor: var(--cursor-hover, pointer);
 }
 
 .toggle input {
@@ -1631,7 +1841,7 @@ button {
   padding: 0.625rem 1.125rem;
   border: 0;
   border-radius: 0.5625rem;
-  cursor: pointer;
+  cursor: var(--cursor-hover, pointer);
   text-align: left;
   color: var(--muted);
   background: transparent;
@@ -1665,9 +1875,46 @@ button {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  /* "safe": when the decks don't fit, overflow at the bottom where it can scroll. */
+  justify-content: safe center;
   gap: 2rem;
   overflow-y: auto;
+}
+
+.crash__message {
+  max-width: 40rem;
+  margin-inline: auto;
+  font-family: ui-monospace, monospace;
+  font-size: 0.8125rem;
+  overflow-wrap: anywhere;
+}
+
+.crash__actions {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  gap: 1rem;
+}
+
+/* Like Arena mobile, the game is landscape only. */
+.rotate-hint {
+  display: none;
+}
+
+@media (orientation: portrait) and (pointer: coarse) {
+  .rotate-hint {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: grid;
+    place-items: center;
+    padding: 2rem;
+    background: var(--ink);
+    color: var(--text);
+    font-family: var(--display);
+    font-size: 22px;
+    text-align: center;
+  }
 }
 
 .start__title {
@@ -1726,7 +1973,7 @@ button {
   padding: 0.375rem 0.875rem;
   border: 0;
   border-radius: 999px;
-  cursor: pointer;
+  cursor: var(--cursor-hover, pointer);
   color: var(--muted);
   background: rgba(0, 0, 0, 0.45);
   box-shadow: 0 0 0 0.0625rem var(--line);
@@ -1774,7 +2021,7 @@ button {
 
 .start__their-deck select {
   font: inherit;
-  cursor: pointer;
+  cursor: var(--cursor-hover, pointer);
 }
 
 .start__decks {
@@ -1797,7 +2044,7 @@ button {
   border: 0;
   border-radius: 0.875rem;
   overflow: hidden;
-  cursor: pointer;
+  cursor: var(--cursor-hover, pointer);
   text-align: left;
   color: var(--parchment);
   background: #000;
@@ -1840,7 +2087,7 @@ button {
 }
 
 .deck.is-locked {
-  cursor: default;
+  cursor: var(--cursor, default);
 }
 
 .deck.is-locked:hover {
@@ -2001,7 +2248,7 @@ button {
   padding: 0.15rem 0.5rem;
   border: 0;
   border-radius: 0.25rem;
-  cursor: pointer;
+  cursor: var(--cursor-hover, pointer);
   font-family: var(--caps);
   font-size: 0.8rem;
   color: var(--brass);
@@ -2027,7 +2274,7 @@ button {
   padding: 0.15rem 0.5rem;
   border: 0;
   border-radius: 0.25rem;
-  cursor: pointer;
+  cursor: var(--cursor-hover, pointer);
   font-family: var(--caps);
   font-size: 0.8rem;
   color: var(--brass);
@@ -2239,7 +2486,7 @@ button {
   padding: 0.3125rem 0.75rem;
   border: 0;
   border-radius: 999px;
-  cursor: pointer;
+  cursor: var(--cursor-hover, pointer);
   font-family: var(--caps);
   font-size: 0.8125rem;
   letter-spacing: 0.06em;
@@ -2334,7 +2581,7 @@ button {
 }
 
 .deckview__play:disabled {
-  cursor: default;
+  cursor: var(--cursor, default);
   filter: grayscale(1) brightness(0.6);
 }
 
@@ -2546,7 +2793,7 @@ button {
   padding-right: 0.5rem;
   border-radius: 0.3125rem;
   overflow: hidden;
-  cursor: default;
+  cursor: var(--cursor, default);
   background:
     linear-gradient(90deg, #15130f 40%, rgba(21, 19, 15, 0.35)),
     var(--art, none) right 30% / 60% auto no-repeat,
@@ -2590,4 +2837,80 @@ button {
   width: 0.9375rem;
   height: 0.9375rem;
   filter: drop-shadow(0 0.0625rem 0.0625rem rgba(0, 0, 0, 0.7));
+}
+
+/* ==========================================================================
+   Juice: card flips, stat pops, the idle nudge and drag weight
+   ========================================================================== */
+
+/* The back a card shows while flipping face up on its way in (useFlip). */
+.flip-back {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+}
+
+/* Power/toughness changed: the box pops, green for a buff, red for a shrink. */
+.card__pt.pop-up {
+  animation: pt-pop-up 0.6s var(--ease);
+}
+
+.card__pt.pop-down {
+  animation: pt-pop-down 0.6s var(--ease);
+}
+
+@keyframes pt-pop-up {
+  25% {
+    scale: 1.45;
+    background: #b8f08c;
+    box-shadow: 0 0 1rem rgba(140, 230, 100, 0.9);
+  }
+}
+
+@keyframes pt-pop-down {
+  20% {
+    scale: 1.3;
+    background: #ff8a7a;
+    box-shadow: 0 0 1rem rgba(255, 60, 40, 0.9);
+  }
+  35% {
+    translate: -0.125rem 0;
+  }
+  50% {
+    translate: 0.125rem 0;
+  }
+}
+
+/* Nothing left to play: after a moment the primary button starts to breathe. */
+.btn--nudge {
+  animation: nudge 1.6s ease-in-out 1.2s infinite;
+}
+
+@keyframes nudge {
+  0%,
+  100% {
+    scale: 1;
+  }
+  50% {
+    scale: 1.05;
+    filter: brightness(1.12);
+    box-shadow:
+      inset 0 0.0625rem 0 rgba(255, 255, 255, 0.6),
+      0 0 0 0.125rem #5d4a26,
+      0 0 2.75rem rgba(246, 195, 91, 0.85);
+  }
+}
+
+/* Dragged card over a valid drop: it lifts and glows (the swing is set in useHandDrag). */
+.drag-ghost .card__body {
+  transition:
+    box-shadow 0.2s ease,
+    scale 0.2s var(--ease);
+}
+
+.drag-ghost.is-over .card__body {
+  scale: 1.06;
+  box-shadow:
+    0 0 0 0.1875rem var(--brass-hi),
+    0 0 2.5rem rgba(246, 195, 91, 0.85);
 }

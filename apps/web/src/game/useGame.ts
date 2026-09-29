@@ -11,6 +11,7 @@ import {
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { BotKind, BotRequest, BotResponse } from './bot.worker.ts';
 import { type PassSettings, shouldAutoPass } from './interaction.ts';
+import { type SavedGame, saveGame } from './saved.ts';
 
 export const HUMAN: PlayerId = 'p1';
 export const BOT: PlayerId = 'p2';
@@ -53,13 +54,22 @@ function botDelay(a: Action): number {
   }
 }
 
-export function useGame(choice: DeckChoice, seed: number, opponent: BotKind) {
+export function useGame(
+  choice: DeckChoice,
+  seed: number,
+  opponent: BotKind,
+  resume: SavedGame | null = null,
+) {
+  // Errors in timers and the worker don't reach React by themselves. They are
+  // rethrown while rendering so the error boundary can offer a way out.
+  const [error, setError] = useState<unknown>(null);
   // The bot thinks in a worker so the board stays smooth while it searches.
   // Created in an effect (not useMemo) so StrictMode's remount gets a live worker.
   const [worker, setWorker] = useState<Worker | null>(null);
   useEffect(() => {
     const w = new Worker(new URL('./bot.worker.ts', import.meta.url), { type: 'module' });
     setWorker(w);
+    w.addEventListener('error', (e) => setError(e.error ?? new Error(e.message)));
     return () => {
       w.terminate();
       setWorker(null);
@@ -75,16 +85,24 @@ export function useGame(choice: DeckChoice, seed: number, opponent: BotKind) {
     return { p1: list(choice.you), p2: list(choice.them) };
   }, [choice.you, choice.them]);
 
-  const [state, setState] = useState<GameState>(() => engine.newGame({ decks, seed }));
+  const [state, setState] = useState<GameState>(
+    () => resume?.state ?? engine.newGame({ decks, seed }),
+  );
   const stateRef = useRef(state);
-  const [log, setLog] = useState<LogLine[]>([]);
+  const [log, setLog] = useState<LogLine[]>(() => resume?.log ?? []);
   const [batch, setBatch] = useState<EventBatch>({ seq: 0, events: [] });
   const [settings, setSettings] = useState<PassSettings>({ fullControl: false, passTurn: null });
-  const logId = useRef(0);
+  const logId = useRef(resume?.log.length ? resume.log.at(-1)!.id + 1 : 0);
   const requestId = useRef(0);
 
   const apply = useCallback((action: Action) => {
-    const r = engine.applyAction(stateRef.current, action);
+    let r: ReturnType<typeof engine.applyAction>;
+    try {
+      r = engine.applyAction(stateRef.current, action);
+    } catch (e) {
+      setError(e);
+      return;
+    }
     stateRef.current = r.state;
     const events = redactEvents(r.events, r.state, HUMAN);
     const view = redactFor(r.state, HUMAN, cardDb);
@@ -154,13 +172,32 @@ export function useGame(choice: DeckChoice, seed: number, opponent: BotKind) {
     }
   }, [state, autoPassing, apply, worker, opponent, decks, seed]);
 
+  useEffect(
+    () => saveGame({ choice, seed, opponent, state, log }),
+    [choice, seed, opponent, state, log],
+  );
+
   // "End turn" only lasts for the turn it was pressed in.
   useEffect(() => {
     if (settings.passTurn !== null && settings.passTurn !== state.turn.number)
       setSettings((s) => ({ ...s, passTurn: null }));
   }, [state.turn.number, settings.passTurn]);
 
-  return { engine, state, view, legal, apply, log, batch, settings, setSettings, thinking, autoPassing };
+  if (error) throw error;
+
+  return {
+    engine,
+    state,
+    view,
+    legal,
+    apply,
+    log,
+    batch,
+    settings,
+    setSettings,
+    thinking,
+    autoPassing,
+  };
 }
 
 export type GameSession = ReturnType<typeof useGame>;

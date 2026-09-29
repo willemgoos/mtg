@@ -113,6 +113,32 @@ export function play(name: SoundName, opts: { gain?: number; delay?: number } = 
   });
 }
 
+/**
+ * A low lub-dub for "this attack kills you", synthesised so it needs no
+ * sample. Triangle waves keep a little upper harmonic, so it still reads on
+ * laptop speakers that can't reproduce the fundamental.
+ */
+export function heartbeat(): void {
+  if (!ctx || !master || prefs.muted || prefs.volume === 0) return;
+  const t0 = ctx.currentTime;
+  for (const [at, peak] of [
+    [0, 0.9],
+    [0.24, 0.6],
+  ] as const) {
+    const osc = ctx.createOscillator();
+    const g = ctx.createGain();
+    osc.type = 'triangle';
+    osc.frequency.setValueAtTime(95, t0 + at);
+    osc.frequency.exponentialRampToValueAtTime(48, t0 + at + 0.18);
+    g.gain.setValueAtTime(0.0001, t0 + at);
+    g.gain.exponentialRampToValueAtTime(peak, t0 + at + 0.015);
+    g.gain.exponentialRampToValueAtTime(0.0001, t0 + at + 0.22);
+    osc.connect(g).connect(master);
+    osc.start(t0 + at);
+    osc.stop(t0 + at + 0.25);
+  }
+}
+
 // ---------------------------------------------------------------------------
 // Hovering cards: a soft card slide, quieter on the battlefield than in hand
 // ---------------------------------------------------------------------------

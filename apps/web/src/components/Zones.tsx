@@ -8,6 +8,7 @@ import {
   type Step,
 } from '@mtg/engine';
 import { Card, CardBack, type CardMark, type HoverFn } from './Card.tsx';
+import { LifeCounter } from './LifeCounter.tsx';
 
 export interface ZoneHandlers {
   markOf: (id: ObjectId) => CardMark;
@@ -151,6 +152,25 @@ function withAttachments(view: GameState, ids: ObjectId[]): ObjectId[] {
 // Hands
 // ---------------------------------------------------------------------------
 
+/** A hovered hand card leans toward the pointer, with a sheen that follows it (Balatro, Marvel Snap). */
+function tilt(e: React.PointerEvent<HTMLElement>) {
+  if (e.pointerType !== 'mouse') return;
+  const el = e.currentTarget;
+  const r = el.getBoundingClientRect();
+  const x = (e.clientX - r.left) / r.width;
+  const y = (e.clientY - r.top) / r.height;
+  el.style.setProperty('--tilt-x', `${(0.5 - y) * 14}deg`);
+  el.style.setProperty('--tilt-y', `${(x - 0.5) * 18}deg`);
+  el.style.setProperty('--sheen-x', `${x * 100}%`);
+  el.style.setProperty('--sheen-y', `${y * 100}%`);
+}
+
+function untilt(e: React.PointerEvent<HTMLElement>) {
+  for (const p of ['--tilt-x', '--tilt-y', '--sheen-x', '--sheen-y']) {
+    e.currentTarget.style.removeProperty(p);
+  }
+}
+
 export function Hand({
   view,
   player,
@@ -195,6 +215,8 @@ export function Hand({
             key={id}
             className={`hand__slot ${h.dragging === id ? 'is-dragging' : ''}`}
             onPointerDown={(e) => h.onHandPointerDown?.(id, e)}
+            onPointerMove={tilt}
+            onPointerLeave={untilt}
             style={{ '--o': offset, '--abs': Math.abs(offset) } as React.CSSProperties}
           >
             <Card
@@ -264,9 +286,7 @@ export function PlayerBadge({
       onClick={onClick}
     >
       <div className="badge__portrait" style={{ backgroundImage: `url("${art}")` }}>
-        <div className="badge__life" key={ps.life}>
-          {ps.life}
-        </div>
+        <LifeCounter life={ps.life} />
       </div>
       <div className="badge__meta">
         <div className="badge__name">{name}</div>

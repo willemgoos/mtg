@@ -105,6 +105,36 @@ function fly(el: HTMLElement, from: Spot, to: Spot): void {
   if (to.zone === 'field') setTimeout(() => ring(el), FLIGHT_MS * 0.75);
 }
 
+/**
+ * Turns a card face up on its way in: it leaves the opponent's hand showing
+ * its back and flips over mid-flight (as in Arena). The back is a temporary
+ * overlay, hidden at the halfway point where the card is edge-on.
+ */
+function flipIn(el: HTMLElement): void {
+  const body = el.querySelector<HTMLElement>('.card__body');
+  if (!body) return;
+  const back = document.createElement('div');
+  back.className = 'back flip-back';
+  back.innerHTML = '<div class="back__sigil"></div>';
+  body.appendChild(back);
+  body.animate([{ rotate: 'y 180deg' }, { rotate: 'y 0deg' }], {
+    duration: FLIGHT_MS,
+    easing: 'cubic-bezier(0.45, 0, 0.25, 1)',
+  });
+  back
+    .animate(
+      [{ opacity: 1 }, { opacity: 1, offset: 0.5 }, { opacity: 0, offset: 0.5 }, { opacity: 0 }],
+      {
+        duration: FLIGHT_MS,
+        easing: 'cubic-bezier(0.45, 0, 0.25, 1)',
+      },
+    )
+    .finished.then(
+      () => back.remove(),
+      () => back.remove(),
+    );
+}
+
 /** A brass ring spreading out where a card lands. */
 function ring(el: HTMLElement): void {
   if (!el.isConnected) return;
@@ -169,6 +199,7 @@ export function useFlip(view: GameState, opponent: PlayerId): void {
         origins.delete(id);
       } else if (!was && zone !== 'hand' && oppHand.current.has(id)) {
         fly(el, opponentHandSpot(to), to);
+        flipIn(el);
       } else if (was && zone === 'field' && Math.hypot(was.lx - to.lx, was.ly - to.ly) > 3) {
         shift(el, was, to);
       }

@@ -18,6 +18,7 @@ import { artFor } from '../game/deckArt.ts';
 import { useFlip } from '../game/useFlip.ts';
 import { useHandDrag } from '../game/useHandDrag.ts';
 import { Card, type CardMark, type HoverFn } from './Card.tsx';
+import { FxLayer } from './FxLayer.tsx';
 import { type ArrowSpec, Arrows, Floaters, TurnBanner, winnerText } from './Effects.tsx';
 import {
   Battlefield,
@@ -32,7 +33,8 @@ import { Playmat } from './Playmat.tsx';
 import { HoverPreview, type HoverState } from './Preview.tsx';
 import { UiSize } from './UiSize.tsx';
 import { SoundControl } from './SoundControl.tsx';
-import { playEvents, playHover } from '../game/sound.ts';
+import { heartbeat, playEvents, playHover } from '../game/sound.ts';
+import { isLethal } from '../game/lethal.ts';
 
 const nameOf = (defId: CardDefId) => cardDb.get(defId)?.name ?? 'Card';
 
@@ -322,27 +324,37 @@ export function Board({
   const bar = actionBar();
   // Responding to the stack happens at the stack, in the middle of the board.
   const respond = myDecision && !targeting && d.kind === 'priority' && view.stack.length > 0;
-  const buttons = bar.primary || bar.secondary ? (
-    <>
-      <div className="action__buttons">
-        {bar.secondary && (
-          <button className="btn btn--ghost" onClick={bar.secondary[1]}>
-            {bar.secondary[0]}
-          </button>
-        )}
-        {bar.primary && (
-          <button className="btn btn--primary btn--big" onClick={bar.primary[1]}>
-            {bar.primary[0]}
-          </button>
-        )}
-      </div>
-      {bar.primary && (
-        <div className="action__keys">
-          <kbd>Space</kbd> {bar.primary[0].toLowerCase()} · <kbd>Esc</kbd> cancel
+  // Nothing left to play: the primary button starts to glow so the next move is obvious.
+  const idle =
+    myDecision &&
+    !targeting &&
+    d.kind === 'priority' &&
+    !legal.some((a) => a.type === 'playLand' || a.type === 'castSpell');
+  const buttons =
+    bar.primary || bar.secondary ? (
+      <>
+        <div className="action__buttons">
+          {bar.secondary && (
+            <button className="btn btn--ghost" onClick={bar.secondary[1]}>
+              {bar.secondary[0]}
+            </button>
+          )}
+          {bar.primary && (
+            <button
+              className={`btn btn--primary btn--big ${idle ? 'btn--nudge' : ''}`}
+              onClick={bar.primary[1]}
+            >
+              {bar.primary[0]}
+            </button>
+          )}
         </div>
-      )}
-    </>
-  ) : null;
+        {bar.primary && (
+          <div className="action__keys">
+            <kbd>Space</kbd> {bar.primary[0].toLowerCase()} · <kbd>Esc</kbd> cancel
+          </div>
+        )}
+      </>
+    ) : null;
   function actionBar(): {
     prompt: string;
     primary?: [string, () => void];
@@ -485,11 +497,19 @@ export function Board({
 
   const priorityOf = d.kind === 'priority' ? d.player : null;
   useFlip(view, BOT);
+  const lethal = isLethal(view, HUMAN, d.kind === 'declareBlockers' ? d.declared : []);
+  useEffect(() => {
+    if (!lethal) return;
+    heartbeat();
+    const beat = setInterval(heartbeat, 1000);
+    return () => clearInterval(beat);
+  }, [lethal]);
 
   return (
-    <div className={`table ${targeting ? 'is-targeting' : ''}`}>
+    <div className={`table ${targeting ? 'is-targeting' : ''} ${lethal ? 'is-lethal' : ''}`}>
       <Playmat side="opp" colors={decks.them.colors} />
       <Playmat side="me" colors={decks.you.colors} />
+      <FxLayer batch={batch} view={view} me={HUMAN} />
 
       <main className="board">
         <header className="side side--opp">
@@ -529,13 +549,7 @@ export function Board({
         </footer>
       </main>
 
-      <StackView
-        view={view}
-        onHover={setHover}
-        markOf={markOf}
-        onCard={onCard}
-        aside={!!targeting}
-      >
+      <StackView view={view} onHover={setHover} markOf={markOf} onCard={onCard} aside={!!targeting}>
         {respond && (
           <div className="stack__respond">
             <div className="action__prompt">{bar.prompt}</div>

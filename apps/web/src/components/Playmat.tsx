@@ -78,7 +78,9 @@ export function Playmat({ side, colors }: { side: 'opp' | 'me'; colors: Color[] 
   return (
     <div
       className={`mat mat--${side}`}
-      style={{ '--mat-a': `var(--mat-${c1})`, '--mat-b': `var(--mat-${c2})` } as React.CSSProperties}
+      style={
+        { '--mat-a': `var(--mat-${c1})`, '--mat-b': `var(--mat-${c2})` } as React.CSSProperties
+      }
       aria-hidden
     >
       <div className="mat__cloth" />
