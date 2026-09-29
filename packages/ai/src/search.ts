@@ -309,8 +309,8 @@ export function createSearchBot(
           return best.first;
         }
         case 'priority': {
-          const land = legal.find((a) => a.type === 'playLand');
-          if (land) return land;
+          // Lands: the heuristic picks which one (tapped lands, colours).
+          if (legal.some((a) => a.type === 'playLand')) return heuristic.chooseAction(v, me);
           if (!worthSearching(v, me)) return heuristic.chooseAction(v, me);
           const arms = priorityArms(v, me, legal);
           if (arms.length === 1) return arms[0]!.first;

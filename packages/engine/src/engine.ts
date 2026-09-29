@@ -17,7 +17,19 @@ import {
   setupGame,
   shuffleLibrary,
 } from './setup.ts';
-import { activateAbility, castSpell, pushTrigger } from './stack.ts';
+import {
+  activateAbility,
+  answerDiscard,
+  answerPickExiled,
+  answerPile,
+  answerPunisher,
+  answerSacrifice,
+  answerScry,
+  answerSearch,
+  answerSplit,
+  castSpell,
+  pushTrigger,
+} from './stack.ts';
 import {
   confirmAttackers,
   confirmBlockers,
@@ -163,7 +175,14 @@ function apply(ctx: Ctx, action: Action): void {
       s.turn.passed = [];
       return givePriority(ctx, player);
     case 'castSpell':
-      castSpell(ctx, player, action.card, action.targets, action.payWith);
+      castSpell(
+        ctx,
+        player,
+        action.card,
+        action.targets,
+        { mode: action.mode, kicked: action.kicked, sacrifice: action.sacrifice },
+        action.payWith,
+      );
       s.turn.passed = [];
       return givePriority(ctx, player);
     case 'activateAbility':
@@ -174,6 +193,7 @@ function apply(ctx: Ctx, action: Action): void {
         action.abilityIndex,
         action.targets,
         action.payWith,
+        action.sacrifice,
       );
       s.turn.passed = [];
       return givePriority(ctx, player);
@@ -199,16 +219,33 @@ function apply(ctx: Ctx, action: Action): void {
       return confirmBlockers(ctx);
     case 'chooseTargets': {
       if (d.kind !== 'chooseTriggerTargets') throw new IllegalActionError(action);
-      if (action.targets.length > 0) pushTrigger(ctx, d.trigger, action.targets);
+      if (action.targets.length > 0 || action.mode !== undefined)
+        pushTrigger(ctx, d.trigger, action.targets, action.mode);
       return givePriority(ctx, d.thenPriority);
     }
     case 'discard': {
+      if (d.kind === 'discard') return answerDiscard(ctx, action.card);
       if (d.kind !== 'discardToHandSize') throw new IllegalActionError(action);
       moveObject(ctx, action.card, 'graveyard');
       d.count--;
       if (d.count === 0) finishCleanup(ctx);
       return;
     }
+    case 'scry':
+      if (d.kind !== 'scry') throw new IllegalActionError(action);
+      return answerScry(ctx, action.top, action.bottom);
+    case 'splitPiles':
+      if (d.kind !== 'splitPiles') throw new IllegalActionError(action);
+      return answerSplit(ctx, action.faceUp);
+    case 'choosePile':
+      if (d.kind !== 'choosePile') throw new IllegalActionError(action);
+      return answerPile(ctx, action.pile);
+    case 'chooseCard':
+      if (d.kind === 'sacrifice' && action.card) return answerSacrifice(ctx, action.card);
+      if (d.kind === 'punisher') return answerPunisher(ctx, action.card);
+      if (d.kind === 'pickExiled' && action.card) return answerPickExiled(ctx, action.card);
+      if (d.kind !== 'searchLibrary') throw new IllegalActionError(action);
+      return answerSearch(ctx, action.card);
     case 'concede':
       ps.lost = true;
       checkGameOver(ctx);

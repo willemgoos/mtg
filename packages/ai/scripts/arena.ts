@@ -5,9 +5,18 @@
  *   pnpm arena -- 100
  *   pnpm arena -- --log 3   # play-by-play of one heuristic mirror game (seed 3)
  *   pnpm arena -- 20 --search --rollouts=96   # search bot vs heuristic bot
+ *
+ * Plays every pairing of the playable decks.
  */
 import { createEngine } from '@mtg/engine';
-import { cardDb, deckIds, describeEvent, MONO_GREEN, MONO_RED } from '@mtg/cards';
+import {
+  cardDb,
+  type Decklist,
+  deckIds,
+  describeEvent,
+  deckById,
+  PLAYABLE_DECKS,
+} from '@mtg/cards';
 import {
   type Bot,
   createHeuristicBot,
@@ -18,8 +27,9 @@ import {
 
 const n = Number(process.argv.slice(2).find((a) => /^\d+$/.test(a)) ?? 20);
 const engine = createEngine(cardDb);
-const red = deckIds(MONO_RED);
-const green = deckIds(MONO_GREEN);
+// The pairing used by --log.
+const red = deckIds(deckById('path-of-power'));
+const green = deckIds(deckById('might-of-the-legion'));
 
 type Decks = { p1: string[]; p2: string[] };
 type Maker = (seed: number, decks: Decks) => Bot;
@@ -47,7 +57,7 @@ function run(label: string, p1: Maker, p2: Maker, decks: Decks) {
   }
   const secs = (performance.now() - t0) / 1000;
   console.log(
-    `${label.padEnd(44)} p1 ${String(w1).padStart(3)} – ${String(w2).padEnd(3)} p2` +
+    `${label.padEnd(64)} p1 ${String(w1).padStart(3)} – ${String(w2).padEnd(3)} p2` +
       `  avg ${(turns / n).toFixed(1)} turns, ${(ms / decisions).toFixed(2)} ms/decision, ${secs.toFixed(1)}s`,
   );
 }
@@ -71,13 +81,22 @@ if (process.argv.includes('--log')) {
   process.exit(0);
 }
 
+const lists: readonly Decklist[] = PLAYABLE_DECKS;
+const pairs = lists.flatMap((a, i) => lists.slice(i + 1).map((b) => [a, b] as const));
+const label = (a: string, x: Decklist, b: string, y: Decklist) =>
+  `${a} ${x.name}`.padEnd(30) + ` vs ${b} ${y.name}`;
+const decksOf = (x: Decklist, y: Decklist) => ({ p1: deckIds(x), p2: deckIds(y) });
+
 if (process.argv.includes('--search')) {
-  run('search RED      vs heuristic GREEN', search, heuristic, { p1: red, p2: green });
-  run('heuristic RED   vs search GREEN', heuristic, search, { p1: red, p2: green });
+  for (const [x, y] of pairs) {
+    run(label('search', x, 'heuristic', y), search, heuristic, decksOf(x, y));
+    run(label('heuristic', x, 'search', y), heuristic, search, decksOf(x, y));
+  }
   process.exit(0);
 }
 
-run('heuristic RED   vs random GREEN', heuristic, random, { p1: red, p2: green });
-run('random RED      vs heuristic GREEN', random, heuristic, { p1: red, p2: green });
-run('heuristic RED   vs heuristic GREEN', heuristic, heuristic, { p1: red, p2: green });
-run('heuristic GREEN vs heuristic RED', heuristic, heuristic, { p1: green, p2: red });
+for (const x of lists) run(label('heuristic', x, 'random', x), heuristic, random, decksOf(x, x));
+for (const [x, y] of pairs) {
+  run(label('heuristic', x, 'heuristic', y), heuristic, heuristic, decksOf(x, y));
+  run(label('heuristic', y, 'heuristic', x), heuristic, heuristic, decksOf(y, x));
+}

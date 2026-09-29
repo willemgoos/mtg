@@ -13,6 +13,9 @@ export type CardMark =
   | 'activatable'
   | null;
 
+/** Hover callback: the card and where it is on screen (for placing the preview). */
+export type HoverFn = (defId: CardDefId | null, anchor?: Element) => void;
+
 export function cardImage(defId: CardDefId): string | null {
   return scryfallById.get(defId)?.image?.normal ?? null;
 }
@@ -31,8 +34,10 @@ export interface CardProps {
   damage?: number;
   counters?: number;
   sick?: boolean;
+  /** An Equipment attached to the creature before it. */
+  attached?: boolean;
   onClick?: (e: MouseEvent) => void;
-  onHover?: (defId: CardDefId | null) => void;
+  onHover?: HoverFn;
   style?: React.CSSProperties;
 }
 
@@ -52,6 +57,7 @@ export function Card(p: CardProps) {
     p.tapped ? 'is-tapped' : '',
     p.mark ? `mark-${p.mark}` : '',
     p.sick ? 'is-sick' : '',
+    p.attached ? 'is-attached' : '',
     p.onClick ? 'is-clickable' : '',
   ]
     .filter(Boolean)
@@ -62,7 +68,7 @@ export function Card(p: CardProps) {
       data-oid={p.id}
       style={p.style}
       onClick={p.onClick}
-      onMouseEnter={() => p.onHover?.(p.defId)}
+      onMouseEnter={(e) => p.onHover?.(p.defId, e.currentTarget)}
       onMouseLeave={() => p.onHover?.(null)}
     >
       <div className="card__body">
@@ -82,21 +88,40 @@ export function Card(p: CardProps) {
   );
 }
 
+const TOKEN_TEXT: Record<string, string> = {
+  'treasure-token': '{T}, Sacrifice: Add one mana of any color.',
+  'food-token': '{2}, {T}, Sacrifice: You gain 3 life.',
+};
+
 function TokenFace({ defId }: { defId: CardDefId }) {
   const def = cardDb.get(defId);
   if (!def) return <div className="token token--hidden" />;
-  const color = def.colors[0] === 'R' ? 'red' : def.colors[0] === 'G' ? 'green' : 'plain';
+  const color =
+    def.colors[0] === 'R'
+      ? 'red'
+      : def.colors[0] === 'G'
+        ? 'green'
+        : def.colors[0] === 'W'
+          ? 'white'
+          : 'plain';
+  const creature = def.types.includes('Creature');
   return (
     <div className={`token token--${color}`}>
       <div className="token__name">{def.name}</div>
       <div className="token__art" />
-      <div className="token__type">Token Creature — {def.subtypes.join(' ')}</div>
+      <div className="token__type">
+        Token {def.types.join(' ')} — {def.subtypes.join(' ')}
+      </div>
       <div className="token__text">
-        {def.keywords.map((k) => k[0]!.toUpperCase() + k.slice(1)).join(', ')}
+        {creature
+          ? def.keywords.map((k) => k[0]!.toUpperCase() + k.slice(1)).join(', ')
+          : (TOKEN_TEXT[def.id] ?? '')}
       </div>
-      <div className="token__pt">
-        {def.power}/{def.toughness}
-      </div>
+      {creature && (
+        <div className="token__pt">
+          {def.power}/{def.toughness}
+        </div>
+      )}
     </div>
   );
 }

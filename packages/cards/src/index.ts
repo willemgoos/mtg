@@ -1,13 +1,24 @@
 import type { CardDb, CardDefId, CardDefinition } from '@mtg/engine';
 import { BEHAVIORS, TOKENS } from './behaviors.ts';
 import { buildCard, slug } from './build.ts';
+import { DECKS, type Decklist } from './decks.ts';
 import scryfall from './generated/scryfall.json' with { type: 'json' };
 import type { ScryfallCard } from './scryfall-types.ts';
 
 export { BEHAVIORS, TOKENS } from './behaviors.ts';
 export { buildCard, slug, parseManaCost, parseTypeLine } from './build.ts';
-export { GREEN_POOL, RED_POOL } from './pool.ts';
+export {
+  BLACK_POOL,
+  BLUE_POOL,
+  GREEN_POOL,
+  LAND_POOL,
+  OTHER_POOL,
+  RED_POOL,
+  WHITE_POOL,
+} from './pool.ts';
 export { describeEvent } from './log.ts';
+export { ARENA_DECKS, COLOR_CHALLENGE_DECKS, DECKS } from './decks.ts';
+export type { Decklist } from './decks.ts';
 export type { ScryfallCard } from './scryfall-types.ts';
 
 export const SCRYFALL: readonly ScryfallCard[] = scryfall as ScryfallCard[];
@@ -24,78 +35,22 @@ export const scryfallById: ReadonlyMap<CardDefId, ScryfallCard> = new Map(
   SCRYFALL.map((sc) => [slug(sc.name), sc]),
 );
 
-export interface Decklist {
-  name: string;
-  cards: [name: string, count: number][];
-}
-
-export const MONO_RED: Decklist = {
-  name: 'Mono-Red Aggro',
-  cards: [
-    ['Mountain', 23],
-    ['Shock', 3],
-    ['Lightning Strike', 3],
-    ['Boltwave', 1],
-    ['Kindled Fury', 1],
-    ['Sure Strike', 1],
-    ['Crash Through', 1],
-    ['Dragon Fodder', 1],
-    ['Seismic Rupture', 1],
-    ['Fanatical Firebrand', 2],
-    ['Viashino Pyromancer', 2],
-    ['Heartfire Immolator', 2],
-    ['Swab Goblin', 2],
-    ['Firebrand Archer', 2],
-    ['Searslicer Goblin', 1],
-    ['Raging Redcap', 1],
-    ['Brazen Scourge', 2],
-    ['Guttersnipe', 1],
-    ['Giant Cindermaw', 1],
-    ['Spitfire Lagac', 1],
-    ['Battlesong Berserker', 1],
-    ['Skyraker Giant', 1],
-    ['Ravenous Giant', 1],
-    ['Ball Lightning', 1],
-    ['Gorehorn Raider', 1],
-    ['Fire Elemental', 1],
-    ['Dragon Trainer', 1],
-    ['Shivan Dragon', 1],
-  ],
-};
-
-export const MONO_GREEN: Decklist = {
-  name: 'Mono-Green Stompy',
-  cards: [
-    ['Forest', 24],
-    ['Giant Growth', 3],
-    ['Snakeskin Veil', 1],
-    ['Bite Down', 2],
-    ['Broken Wings', 1],
-    ['Felling Blow', 1],
-    ['Overrun', 1],
-    ['Bear Cub', 3],
-    ['Thornweald Archer', 2],
-    ['Druid of the Cowl', 2],
-    ["Dwynen's Elite", 2],
-    ['Imperious Perfect', 1],
-    ['Beast-Kin Ranger', 2],
-    ['Magnigoth Sentry', 2],
-    ['Treetop Snarespinner', 1],
-    ['Gnarlback Rhino', 2],
-    ['Wildheart Invoker', 1],
-    ['Tajuru Pathwarden', 1],
-    ['Elfsworn Giant', 1],
-    ["Heroes' Bane", 1],
-    ['Rampaging Baloths', 1],
-    ['Affectionate Indrik', 1],
-    ['Quakestrider Ceratops', 1],
-    ['Pelakka Wurm', 1],
-    ['Aggressive Mammoth', 1],
-    ['Gigantosaurus', 1],
-  ],
-};
-
 /** Expands a decklist to card ids. */
 export function deckIds(list: Decklist): CardDefId[] {
   return list.cards.flatMap(([name, n]) => Array<CardDefId>(n).fill(slug(name)));
+}
+
+/** Cards in the list we haven't implemented yet (empty = playable). */
+export function missingCards(list: Decklist): string[] {
+  return list.cards.map(([name]) => name).filter((name) => !cardDb.has(slug(name)));
+}
+
+export const isPlayable = (list: Decklist): boolean => missingCards(list).length === 0;
+
+export const PLAYABLE_DECKS: readonly Decklist[] = DECKS.filter(isPlayable);
+
+export function deckById(id: string): Decklist {
+  const d = DECKS.find((x) => x.id === id);
+  if (!d) throw new Error(`Unknown deck "${id}"`);
+  return d;
 }

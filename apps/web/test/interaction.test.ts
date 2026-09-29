@@ -79,5 +79,9 @@ describe('auto-pass', () => {
       targets: [{ player: 'p2' }],
     });
     expect(shouldAutoPass(g.state, g.legal('p1'), 'p1', settings)).toBe(true);
+    g.do({ type: 'passPriority', player: 'p1' });
+    // p2 can't respond, but still stops so the spell is seen before it resolves.
+    expect(g.legal('p2')).toHaveLength(1);
+    expect(shouldAutoPass(g.state, g.legal('p2'), 'p2', settings)).toBe(false);
   });
 });

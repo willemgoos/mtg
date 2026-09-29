@@ -16,6 +16,7 @@ const KEYWORD_VALUE: Partial<Record<Keyword, number>> = {
   lifelink: 1,
   menace: 0.8,
   hexproof: 0.7,
+  indestructible: 1.5,
   trample: 0.5,
   vigilance: 0.5,
   reach: 0.5,
@@ -24,6 +25,10 @@ const KEYWORD_VALUE: Partial<Record<Keyword, number>> = {
 
 export const CARD_IN_HAND = 2;
 export const LAND_ON_BATTLEFIELD = 0.4;
+/** Treasure, Food and similar one-shot tokens. */
+export const SPENDABLE_TOKEN = 0.8;
+/** Other noncreature permanents (Equipment, enchantments); an attached Equipment also shows in its creature's stats. */
+export const OTHER_PERMANENT = 1.5;
 
 /** Life is worth more the lower it gets. */
 export function lifeValue(life: number): number {
@@ -63,6 +68,7 @@ export function evaluate(s: GameState, db: CardDb, me: PlayerId): number {
       const sign = o.controller === me ? 1 : -1;
       if (def?.types.includes('Creature')) v += sign * creatureValue(s, db, id);
       else if (def?.types.includes('Land')) v += sign * LAND_ON_BATTLEFIELD;
+      else v += sign * (o.isToken ? SPENDABLE_TOKEN : OTHER_PERMANENT);
     }
   } finally {
     s.effects = effects;

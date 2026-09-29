@@ -5,10 +5,16 @@ export type TargetKey = string;
 export const targetKey = (t: TargetChoice): TargetKey =>
   'player' in t ? `player:${t.player}` : `obj:${t.object.id}`;
 
+/**
+ * What the player picks on the board for an action, in order. A creature
+ * sacrificed as a cost (Eaten Alive, Vampiric Rites) is picked first, like a target.
+ */
 export function targetsOf(a: Action): TargetChoice[] {
-  return a.type === 'castSpell' || a.type === 'activateAbility' || a.type === 'chooseTargets'
-    ? a.targets
-    : [];
+  if (a.type === 'castSpell' || a.type === 'activateAbility') {
+    const sac: TargetChoice[] = a.sacrifice ? [{ object: { id: a.sacrifice, zcc: -1 } }] : [];
+    return [...sac, ...a.targets];
+  }
+  return a.type === 'chooseTargets' ? a.targets : [];
 }
 
 /** An in-progress target selection over a set of legal actions that differ only in targets. */
@@ -79,6 +85,17 @@ export function handActions(legal: readonly Action[], card: ObjectId): Action[] 
   );
 }
 
+/** Cast actions grouped by how the spell is cast (mode, kicker), in legal-action order. */
+export function castGroups(casts: readonly Action[]): Action[][] {
+  const groups = new Map<string, Action[]>();
+  for (const a of casts) {
+    if (a.type !== 'castSpell') continue;
+    const key = `${a.mode ?? ''}:${a.kicked ? 'k' : ''}:${a.sacrifice ? 's' : ''}`;
+    groups.set(key, [...(groups.get(key) ?? []), a]);
+  }
+  return [...groups.values()];
+}
+
 export function permanentActions(legal: readonly Action[], id: ObjectId): Action[] {
   return legal.filter(
     (a) =>
@@ -106,11 +123,13 @@ export function shouldAutoPass(
 ): boolean {
   const d = s.decision;
   if (d.kind !== 'priority' || d.player !== me) return false;
+  // Stop on the opponent's spells and abilities even with no possible response,
+  // so the human sees what is about to happen and clicks Resolve (as in Arena).
+  const top = s.stack[s.stack.length - 1];
+  if (top && top.controller !== me) return false;
   if (legal.length <= 1) return true;
   if (settings.fullControl) return false;
-
-  const top = s.stack[s.stack.length - 1];
-  if (top) return top.controller === me; // let my own spells resolve; stop to respond to theirs
+  if (top) return true; // let my own spells resolve
   if (settings.passTurn === s.turn.number) return true;
 
   const myTurn = s.turn.activePlayer === me;

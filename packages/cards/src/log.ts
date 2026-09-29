@@ -27,6 +27,10 @@ export function describeEvent(e: GameEvent, s: GameState): string | null {
       return e.blocks.length
         ? `blocks: ${e.blocks.map((b) => `${name(b.blocker)} → ${name(b.attacker)}`).join(', ')}`
         : null;
+    case 'searched':
+      return `  ${e.player} searches their library for ${name(e.id)}`;
+    case 'revealed':
+      return `  ${e.player} reveals ${name(e.id)} and puts it into their hand`;
     case 'gameOver':
       return `\nWinner: ${e.winner}`;
     default:

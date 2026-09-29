@@ -1,6 +1,6 @@
 import { createEngine, type GameState, type PlayerId, redactFor } from '@mtg/engine';
 import { buildScenario, GameDriver, type ScenarioSpec } from '@mtg/engine/testing';
-import { cardDb, deckIds, MONO_GREEN, MONO_RED } from '@mtg/cards';
+import { cardDb, deckById, deckIds } from '@mtg/cards';
 import { describe, expect, it } from 'vitest';
 import { createHeuristicBot, createSearchBot, playMatch } from '../src/index.ts';
 
@@ -66,7 +66,10 @@ describe('search bot', () => {
   });
 
   it('plays a legal full game against the heuristic bot', () => {
-    const decks = { p1: deckIds(MONO_RED), p2: deckIds(MONO_GREEN) };
+    const decks = {
+      p1: deckIds(deckById('path-of-power')),
+      p2: deckIds(deckById('might-of-the-legion')),
+    };
     const r = playMatch(
       engine,
       decks,

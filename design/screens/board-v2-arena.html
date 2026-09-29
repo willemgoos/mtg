@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Board — V2 Arena Layout</title>
+  <meta name="frame" content="1440x810">
+  <link rel="stylesheet" href="../system/tokens.css">
+  <link rel="stylesheet" href="../system/base.css">
+  <link rel="stylesheet" href="../system/components.css">
+  <style>
+    /* V2: follow MTG Arena's layout. No side rail: the whole width is battlefield.
+       Avatars centred, lands in the back row, stack on the right with a target arrow,
+       one big action button bottom-right, playable cards glow blue. */
+    .table {
+      --card-w-field: 104px;
+      --card-w-land: 64px;
+      --card-w-hand: 128px;
+      background:
+        radial-gradient(ellipse 70% 38% at 50% 72%, rgba(143, 212, 106, 0.08), transparent 70%),
+        radial-gradient(ellipse 70% 38% at 50% 26%, rgba(255, 107, 61, 0.07), transparent 70%),
+        radial-gradient(ellipse at 50% 50%, var(--color-felt-hi), var(--color-felt) 50%, var(--color-ink));
+    }
+    .divider {
+      position: absolute; left: 6%; right: 6%; top: 404px; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--color-line-strong), transparent);
+    }
+
+    .row { position: absolute; left: 0; right: 180px; display: flex; justify-content: center; align-items: center; gap: var(--space-4); }
+    .row--opp-lands { top: 122px; gap: var(--space-2); }
+    .row--opp-creatures { top: 226px; }
+    .row--my-creatures { top: 446px; }
+    .row--my-lands { top: 612px; gap: var(--space-2); }
+    .row--my-creatures .c-mtg--target { transform: translateY(-4px); }
+
+    /* Avatars */
+    .avatar { position: absolute; display: flex; flex-direction: column; align-items: center; }
+    .avatar--opp { left: 50%; top: 10px; transform: translateX(-50%); }
+    .avatar--me { left: 250px; bottom: 18px; }
+    .avatar__portrait {
+      width: 76px; height: 76px; border-radius: 50%;
+      background: var(--color-felt-lo) center / cover no-repeat;
+      border: 2px solid var(--color-brass-dim); box-shadow: var(--shadow-md);
+    }
+    .avatar--me .avatar__portrait { width: 92px; height: 92px; border-color: var(--color-brass); box-shadow: var(--glow-brass); }
+    .avatar__life {
+      margin-top: -16px; min-width: 52px; padding: 0 var(--space-2);
+      border-radius: var(--radius-full); background: var(--color-ink); border: 1px solid var(--color-brass);
+      font-family: var(--font-sans); font-weight: var(--weight-black); font-size: var(--text-xl);
+      color: var(--color-text-strong); text-align: center; line-height: 1.35;
+    }
+    .avatar__name { margin-top: var(--space-1); font-family: var(--font-caps); font-size: var(--text-sm); color: var(--color-text-muted); }
+    .zones { position: absolute; display: flex; gap: var(--space-3); font-size: var(--text-xs); color: var(--color-text-muted); }
+    .zones--opp { left: calc(50% + 60px); top: 36px; }
+    .zones--me { left: 360px; bottom: 30px; }
+    .zones span { display: inline-flex; align-items: center; gap: var(--space-1); }
+
+    .opp-hand { position: absolute; left: calc(50% + 150px); top: -40px; display: flex; }
+    .opp-hand .c-mtg { --w: 50px; margin-left: -18px; }
+
+    /* Hand: fanned, hanging off the bottom */
+    .hand { position: absolute; left: 50%; bottom: -84px; display: flex; transform: translateX(-46%); }
+    .hand .c-mtg { margin-left: -30px; }
+    .hand .c-mtg:nth-child(1) { transform: rotate(-10deg) translateY(18px); }
+    .hand .c-mtg:nth-child(2) { transform: rotate(-5deg) translateY(4px); }
+    .hand .c-mtg:nth-child(3) { transform: translateY(-26px) scale(1.08); z-index: 2; }
+    .hand .c-mtg:nth-child(4) { transform: rotate(5deg) translateY(4px); }
+    .hand .c-mtg:nth-child(5) { transform: rotate(10deg) translateY(18px); }
+
+    /* Stack: big, on the right, with a target arrow */
+    .stack { position: absolute; right: 64px; top: 196px; display: flex; flex-direction: column; align-items: center; gap: var(--space-2); }
+    .stack__label { font-family: var(--font-caps); font-size: var(--text-xs); letter-spacing: var(--tracking-caps); color: var(--color-ember); }
+    .stack .c-mtg { box-shadow: 0 0 0 2px var(--color-ember), var(--shadow-lg); }
+    .arrow { position: absolute; inset: 0; pointer-events: none; }
+
+    /* Action: Arena's big button, prompt above it, phase stops beside */
+    .action { position: absolute; right: 28px; bottom: 26px; display: flex; flex-direction: column; align-items: flex-end; gap: var(--space-2); }
+    .action__prompt { max-width: 260px; text-align: right; font-size: var(--text-sm); color: var(--color-text-strong); text-shadow: 0 1px 3px var(--color-ink); }
+    .action__button {
+      width: 190px; height: 58px; border-radius: var(--radius-full);
+      border: 2px solid var(--color-brass-hi);
+      background: radial-gradient(ellipse at 50% 20%, var(--color-brass-hi), var(--color-priority) 45%, var(--color-priority-lo));
+      color: var(--color-text-inverse); font-family: var(--font-caps); font-size: var(--text-xl);
+      box-shadow: 0 0 28px rgba(246, 195, 91, 0.45), var(--shadow-md);
+    }
+    .action__alt { font-size: var(--text-xs); color: var(--color-text-muted); }
+    .phase-stops { display: flex; gap: 3px; }
+    .phase-stops li {
+      width: 30px; height: 20px; display: grid; place-items: center; border-radius: 3px;
+      font-size: var(--text-2xs); font-weight: var(--weight-bold); color: var(--color-text-muted);
+      background: rgba(0,0,0,0.4); border: 1px solid var(--color-line);
+    }
+    .phase-stops li.is-on { background: var(--color-brass); color: var(--color-text-inverse); border-color: var(--color-brass-hi); }
+    .turn-tag { font-family: var(--font-caps); font-size: var(--text-xs); letter-spacing: var(--tracking-caps); color: var(--color-brass); }
+
+    .corner { position: absolute; right: 16px; top: 14px; display: flex; gap: var(--space-2); }
+    .icon-btn {
+      width: 34px; height: 34px; display: grid; place-items: center; border-radius: 50%;
+      background: rgba(0,0,0,0.45); border: 1px solid var(--color-line); color: var(--color-text-muted); font-size: var(--text-md);
+    }
+    .toast {
+      position: absolute; left: 24px; top: 380px; width: 220px; padding: var(--space-2) var(--space-3);
+      border-left: 2px solid var(--color-ember); background: linear-gradient(90deg, rgba(0,0,0,0.55), transparent);
+      font-size: var(--text-xs); color: var(--color-text);
+    }
+    .toast b { color: var(--color-ember); font-weight: var(--weight-bold); }
+  </style>
+</head>
+<body>
+<div class="frame table" data-name="Table">
+  <div class="divider"></div>
+
+  <div class="avatar avatar--opp" data-name="Opponent Avatar">
+    <div class="avatar__portrait" style="background-image: url(../assets/art-shivan.jpg)"></div>
+    <div class="avatar__life">11</div>
+  </div>
+  <div class="zones zones--opp" data-name="Opponent Zones"><span>Library 47</span><span>Hand 3</span><span>Grave 4</span></div>
+  <div class="opp-hand" data-name="Opponent Hand">
+    <div class="c-mtg c-mtg--back" data-component="MTG Card"></div><div class="c-mtg c-mtg--back" data-component="MTG Card"></div><div class="c-mtg c-mtg--back" data-component="MTG Card"></div>
+  </div>
+
+  <div class="row row--opp-lands" data-name="Opponent Lands">
+    <div class="c-mtg c-mtg--land c-mtg--tapped" data-component="MTG Card"><img src="../assets/mountain.jpg" alt=""></div>
+    <div class="c-mtg c-mtg--land c-mtg--tapped" data-component="MTG Card"><img src="../assets/mountain.jpg" alt=""></div>
+    <div class="c-mtg c-mtg--land c-mtg--tapped" data-component="MTG Card"><img src="../assets/mountain.jpg" alt=""></div>
+    <div class="c-mtg c-mtg--land" data-component="MTG Card"><img src="../assets/mountain.jpg" alt=""></div>
+    <div class="c-mtg c-mtg--land" data-component="MTG Card"><img src="../assets/mountain.jpg" alt=""></div>
+  </div>
+  <div class="row row--opp-creatures" data-name="Opponent Creatures">
+    <div class="c-mtg" data-component="MTG Card"><img src="../assets/heartfire-immolator.jpg" alt=""><span class="c-pt" data-component="PT">2/2</span></div>
+    <div class="c-mtg" data-component="MTG Card"><img src="../assets/fanatical-firebrand.jpg" alt=""><span class="c-pt" data-component="PT">1/1</span></div>
+    <div class="c-mtg" data-component="MTG Card"><img src="../assets/brazen-scourge.jpg" alt=""><span class="c-pt" data-component="PT">3/3</span></div>
+  </div>
+
+  <div class="row row--my-creatures" data-name="My Creatures">
+    <div class="c-mtg" data-component="MTG Card"><img src="../assets/gnarlback-rhino.jpg" alt=""><span class="c-pt" data-component="PT">4/4</span></div>
+    <div class="c-mtg" data-component="MTG Card"><img src="../assets/bear-cub.jpg" alt=""><span class="c-pt" data-component="PT">2/2</span></div>
+    <div class="c-mtg c-mtg--target" data-component="MTG Card"><img src="../assets/druid-of-the-cowl.jpg" alt=""><span class="c-pt c-pt--hurt" data-component="PT">1/3</span></div>
+    <div class="c-mtg" data-component="MTG Card"><img src="../assets/thornweald-archer.jpg" alt=""><span class="c-pt" data-component="PT">2/1</span></div>
+  </div>
+  <div class="row row--my-lands" data-name="My Lands">
+    <div class="c-mtg c-mtg--land c-mtg--tapped" data-component="MTG Card"><img src="../assets/forest.jpg" alt=""></div>
+    <div class="c-mtg c-mtg--land c-mtg--tapped" data-component="MTG Card"><img src="../assets/forest.jpg" alt=""></div>
+    <div class="c-mtg c-mtg--land" data-component="MTG Card"><img src="../assets/forest.jpg" alt=""></div>
+    <div class="c-mtg c-mtg--land" data-component="MTG Card"><img src="../assets/forest.jpg" alt=""></div>
+    <div class="c-mtg c-mtg--land" data-component="MTG Card"><img src="../assets/forest.jpg" alt=""></div>
+    <div class="c-mtg c-mtg--land" data-component="MTG Card"><img src="../assets/forest.jpg" alt=""></div>
+  </div>
+
+  <div class="stack" data-name="Stack">
+    <span class="stack__label">Opponent casts</span>
+    <div class="c-mtg c-mtg--stack" data-component="MTG Card"><img src="../assets/lightning-strike.jpg" alt=""></div>
+  </div>
+  <svg class="arrow" data-name="Target Arrow" viewBox="0 0 1440 810" width="1440" height="810">
+    <defs><marker id="head" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--color-target)"/></marker></defs>
+    <path d="M1238,330 C1080,300 880,360 760,452" fill="none" stroke="var(--color-target)" stroke-width="5" stroke-linecap="round" stroke-dasharray="1 12" opacity="0.9" marker-end="url(#head)"/>
+  </svg>
+
+  <div class="toast" data-name="Last Event">
+    <b>Opponent</b> cast Lightning Strike → Druid of the Cowl
+  </div>
+
+  <div class="avatar avatar--me" data-name="My Avatar">
+    <div class="avatar__portrait" style="background-image: url(../assets/art-gigantosaurus.jpg)"></div>
+    <div class="avatar__life">14</div>
+  </div>
+  <div class="zones zones--me" data-name="My Zones"><span>Library 44</span><span>Grave 2</span></div>
+
+  <div class="hand" data-name="Hand">
+    <div class="c-mtg c-mtg--hand" data-component="MTG Card"><img src="../assets/forest.jpg" alt=""></div>
+    <div class="c-mtg c-mtg--hand" data-component="MTG Card"><img src="../assets/magnigoth-sentry.jpg" alt=""></div>
+    <div class="c-mtg c-mtg--hand c-mtg--playable" data-component="MTG Card"><img src="../assets/giant-growth.jpg" alt=""></div>
+    <div class="c-mtg c-mtg--hand" data-component="MTG Card"><img src="../assets/overrun.jpg" alt=""></div>
+    <div class="c-mtg c-mtg--hand" data-component="MTG Card"><img src="../assets/imperious-perfect.jpg" alt=""></div>
+  </div>
+
+  <div class="action" data-name="Action">
+    <span class="turn-tag">Turn 6 · Your turn</span>
+    <ol class="phase-stops" data-name="Phase Stops">
+      <li>UP</li><li>DR</li><li class="is-on">M1</li><li>CB</li><li>M2</li><li>END</li>
+    </ol>
+    <div class="action__prompt" data-name="Prompt">Respond to Lightning Strike, or let it resolve.</div>
+    <button class="action__button" data-name="Primary Button">Resolve</button>
+    <span class="action__alt">Space · hold Ctrl for full control</span>
+  </div>
+
+  <div class="corner" data-name="Corner Buttons">
+    <span class="icon-btn" title="Game log">☰</span>
+    <span class="icon-btn" title="Settings">⚙</span>
+  </div>
+</div>
+</body>
+</html>

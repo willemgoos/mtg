@@ -1,15 +1,20 @@
 import { describe, expect, it } from 'vitest';
 import {
   BEHAVIORS,
+  BLACK_POOL,
+  BLUE_POOL,
   CARDS,
   cardDb,
+  DECKS,
   deckIds,
   GREEN_POOL,
-  MONO_GREEN,
-  MONO_RED,
+  LAND_POOL,
+  OTHER_POOL,
+  PLAYABLE_DECKS,
   parseManaCost,
   parseTypeLine,
   RED_POOL,
+  WHITE_POOL,
   SCRYFALL,
 } from '../src/index.ts';
 
@@ -27,7 +32,17 @@ function rulesText(oracle: string, keywords: string[]): string {
 describe('card data', () => {
   it('has Scryfall data for every card in the pool', () => {
     const names = SCRYFALL.map((c) => c.name);
-    expect(names.sort()).toEqual([...RED_POOL, ...GREEN_POOL].sort());
+    expect(names.sort()).toEqual(
+      [
+        ...RED_POOL,
+        ...GREEN_POOL,
+        ...WHITE_POOL,
+        ...BLUE_POOL,
+        ...BLACK_POOL,
+        ...OTHER_POOL,
+        ...LAND_POOL,
+      ].sort(),
+    );
     for (const c of SCRYFALL) expect(c.image?.normal).toMatch(/^https:\/\/cards\.scryfall\.io\//);
   });
 
@@ -49,7 +64,7 @@ describe('card data', () => {
   it('spells have effects; permanents are typed correctly', () => {
     for (const c of CARDS) {
       if (c.types.includes('Instant') || c.types.includes('Sorcery'))
-        expect(c.spell, c.name).toBeDefined();
+        expect(c.spell ?? c.modes, c.name).toBeDefined();
       if (c.types.includes('Creature')) expect(c.power, c.name).toBeTypeOf('number');
     }
   });
@@ -73,13 +88,48 @@ describe('card data', () => {
     });
   });
 
-  it('decks are 60 cards, legal (max 4 non-basic copies) and only use pool cards', () => {
-    for (const d of [MONO_RED, MONO_GREEN]) {
-      const ids = deckIds(d);
-      expect(ids, d.name).toHaveLength(60);
-      for (const id of ids) expect(cardDb.has(id), id).toBe(true);
+  it('decks are 60 cards and legal (max 4 non-basic copies), with unique ids', () => {
+    const basics = ['Plains', 'Island', 'Swamp', 'Mountain', 'Forest'];
+    for (const d of DECKS) {
+      expect(deckIds(d), d.name).toHaveLength(60);
+      expect(
+        d.cards.map(([name]) => name),
+        d.name,
+      ).toContain(d.face);
       for (const [name, n] of d.cards)
-        if (!['Mountain', 'Forest'].includes(name)) expect(n).toBeLessThanOrEqual(4);
+        if (!basics.includes(name)) expect(n, name).toBeLessThanOrEqual(4);
+    }
+    expect(new Set(DECKS.map((d) => d.id)).size).toBe(DECKS.length);
+  });
+
+  it('playable decks only use implemented cards', () => {
+    expect(PLAYABLE_DECKS.map((d) => d.id).sort()).toEqual(
+      [
+        'arcane-aerialists',
+        'cat-attack',
+        'learn-from-the-land',
+        'might-of-the-legion',
+        'morbid-machinations',
+        'path-of-power',
+        'reckless-raid',
+        'vampiric-hunger',
+        'wondrous-wizardry',
+        'graveyard-gifts',
+        'keep-the-peace',
+        'goblins-everywhere',
+        'large-and-in-charge',
+      ].sort(),
+    );
+    for (const d of PLAYABLE_DECKS)
+      for (const id of deckIds(d)) expect(cardDb.has(id), id).toBe(true);
+  });
+
+  it('two-colour lands enter tapped and tap for either colour', () => {
+    const produces = (id: string) =>
+      cardDb.get(id)!.abilities.flatMap((a) => (a.kind === 'mana' ? [a.produces] : []));
+    for (const id of ['gruul-guildgate', 'rugged-highlands', 'temple-of-abandon']) {
+      expect(cardDb.get(id)?.entersTapped, id).toBe(true);
+      expect(produces(id), id).toEqual(['R', 'G']);
     }
   });
 });

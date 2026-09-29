@@ -1,5 +1,5 @@
-import { creaturesOnBattlefield, hasKeyword, matchesFilter } from './characteristics.ts';
-import { type Ctx, deref, other, refOf } from './context.ts';
+import { cardMatches, hasKeyword, isCreature, matchesFilter } from './characteristics.ts';
+import { type Ctx, def, deref, obj, other, refOf } from './context.ts';
 import type { ObjectId, PlayerId, TargetChoice, TargetSpec } from './types.ts';
 import { PLAYERS } from './types.ts';
 
@@ -16,21 +16,60 @@ function playerOk(ctx: Ctx, spec: TargetSpec, p: PlayerId, src: TargetingSource)
   return true;
 }
 
-function creatureOk(ctx: Ctx, spec: TargetSpec, id: ObjectId, src: TargetingSource): boolean {
+function permanentOk(ctx: Ctx, spec: TargetSpec, id: ObjectId, src: TargetingSource): boolean {
   const o = ctx.s.objects[id];
   if (!o || o.zone !== 'battlefield') return false;
+  if (spec.what !== 'permanent' && !isCreature(ctx, id)) return false;
   if (spec.controller === 'you' && o.controller !== src.controller) return false;
   if (spec.controller === 'opponent' && o.controller === src.controller) return false;
-  if (o.controller !== src.controller && hasKeyword(ctx, id, 'hexproof')) return false;
+  if (o.controller !== src.controller) {
+    if (hasKeyword(ctx, id, 'hexproof')) return false;
+    if (
+      hasKeyword(ctx, id, 'hexproofFromInstants') &&
+      src.sourceId &&
+      def(ctx, src.sourceId).types.includes('Instant')
+    )
+      return false;
+  }
   return matchesFilter(ctx, id, spec.filter, src.sourceId);
+}
+
+/** A spell on the stack (counterspells). */
+function spellOk(ctx: Ctx, spec: TargetSpec, id: ObjectId, src: TargetingSource): boolean {
+  const o = ctx.s.objects[id];
+  if (!o || o.zone !== 'stack' || !ctx.s.stack.some((x) => x.kind === 'spell' && x.id === id))
+    return false;
+  if (spec.controller === 'you' && o.controller !== src.controller) return false;
+  if (spec.controller === 'opponent' && o.controller === src.controller) return false;
+  if (id === src.sourceId) return false;
+  return !spec.filter || cardMatches(ctx, id, spec.filter, src.sourceId);
+}
+
+function graveyardCardOk(ctx: Ctx, spec: TargetSpec, id: ObjectId, src: TargetingSource): boolean {
+  const o = ctx.s.objects[id];
+  if (!o || o.zone !== 'graveyard') return false;
+  if (spec.controller === 'you' && o.owner !== src.controller) return false;
+  if (spec.controller === 'opponent' && o.owner === src.controller) return false;
+  if (spec.filter?.other && id === src.sourceId) return false;
+  return !spec.filter || cardMatches(ctx, id, spec.filter, src.sourceId);
 }
 
 export function targetCandidates(ctx: Ctx, spec: TargetSpec, src: TargetingSource): TargetChoice[] {
   const out: TargetChoice[] = [];
-  if (spec.what === 'creature' || spec.what === 'any') {
-    for (const c of creaturesOnBattlefield(ctx)) {
-      if (creatureOk(ctx, spec, c.id, src)) out.push({ object: refOf(c) });
+  if (spec.what === 'creature' || spec.what === 'any' || spec.what === 'permanent') {
+    for (const id of ctx.s.battlefield) {
+      if (permanentOk(ctx, spec, id, src)) out.push({ object: refOf(obj(ctx, id)) });
     }
+  }
+  if (spec.what === 'spell') {
+    for (const item of ctx.s.stack)
+      if (item.kind === 'spell' && spellOk(ctx, spec, item.id, src))
+        out.push({ object: refOf(obj(ctx, item.id)) });
+  }
+  if (spec.what === 'graveyardCard') {
+    for (const p of PLAYERS)
+      for (const id of ctx.s.players[p].graveyard)
+        if (graveyardCardOk(ctx, spec, id, src)) out.push({ object: refOf(obj(ctx, id)) });
   }
   if (spec.what === 'player' || spec.what === 'any') {
     for (const p of PLAYERS) if (playerOk(ctx, spec, p, src)) out.push({ player: p });
@@ -45,14 +84,21 @@ export function targetCombos(
   src: TargetingSource,
 ): TargetChoice[][] {
   let combos: TargetChoice[][] = [[]];
+  const done: TargetChoice[][] = [];
+  const same = (a: TargetChoice, b: TargetChoice) =>
+    'object' in a && 'object' in b && a.object.id === b.object.id;
   for (const spec of specs) {
+    // "Up to": stopping here is allowed too.
+    if (spec.optional) done.push(...combos);
     const cands = targetCandidates(ctx, spec, src);
     const next: TargetChoice[][] = [];
-    for (const c of combos) for (const t of cands) next.push([...c, t]);
+    // The same object can't be chosen twice.
+    for (const c of combos)
+      for (const t of cands) if (!c.some((x) => same(x, t))) next.push([...c, t]);
     combos = next;
     if (combos.length === 0) break;
   }
-  return combos;
+  return [...done, ...combos];
 }
 
 /** Is a previously chosen target still legal (checked on resolution)? */
@@ -65,5 +111,9 @@ export function isTargetLegal(
   if ('player' in t) return spec.what !== 'creature' && playerOk(ctx, spec, t.player, src);
   if (spec.what === 'player') return false;
   const o = deref(ctx, t.object);
-  return !!o && creatureOk(ctx, spec, o.id, src);
+  if (!o) return false;
+  if (spec.what === 'spell') return spellOk(ctx, spec, o.id, src);
+  return spec.what === 'graveyardCard'
+    ? graveyardCardOk(ctx, spec, o.id, src)
+    : permanentOk(ctx, spec, o.id, src);
 }

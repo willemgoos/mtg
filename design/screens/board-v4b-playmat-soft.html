@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Board — V4b Playmat, Soft Focus</title>
+  <meta name="frame" content="1440x810">
+  <link rel="stylesheet" href="../system/tokens.css">
+  <link rel="stylesheet" href="../system/base.css">
+  <link rel="stylesheet" href="../system/components.css">
+  <style>
+    /* V4b: V4's playmat, fixed for low-res art. The deck art (626px wide at best on
+       Scryfall) is never enlarged sharp: it becomes a heavily blurred colour wash under
+       grain, and appears crisp only in the life medallions, where it fits at native size. */
+    .table { --card-w-field: 96px; --card-w-land: 64px; --card-w-hand: 124px; }
+    .half { position: absolute; left: 0; right: 0; height: 50%; overflow: hidden; }
+    .half--opp { top: 0; }
+    .half--me { bottom: 0; }
+    /* Printed-mat edge: a crisp brass keyline inset from each half */
+    .half__edge { position: absolute; inset: 10px; border: 1px solid var(--color-line-strong); border-radius: var(--radius-xl); pointer-events: none; }
+    .half--opp .half__edge { bottom: 6px; }
+    .half--me .half__edge { top: 6px; }
+    .half__grain { position: absolute; inset: 0; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 0.9 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); opacity: 0.09; mix-blend-mode: overlay; }
+    /* Deck art only at native size: inside the medallions */
+    .frame .medallion { background-size: cover; background-position: center; text-shadow: 0 2px 6px var(--color-ink); }
+    .frame .medallion--opp { background-image: radial-gradient(circle, var(--color-scrim) 0 45%, transparent 75%), url(../assets/art-shivan.jpg); }
+    .frame .medallion--me { background-image: radial-gradient(circle, var(--color-scrim) 0 45%, transparent 75%), url(../assets/art-gigantosaurus.jpg); }
+    .half__art { position: absolute; inset: -60px; background: center / cover no-repeat; filter: blur(14px) saturate(1.3); }
+    .half--opp .half__art { background-image: url(../assets/art-shivan.jpg); }
+    .half--me .half__art { background-image: url(../assets/art-gigantosaurus.jpg); }
+    .half__shade { position: absolute; inset: 0; background: linear-gradient(var(--color-scrim), var(--color-scrim)); }
+    .half--opp .half__shade { background: linear-gradient(var(--color-scrim), var(--color-scrim)), linear-gradient(180deg, var(--color-ink), transparent 45%); }
+    .half--me .half__shade { background: linear-gradient(var(--color-scrim), var(--color-scrim)), linear-gradient(0deg, var(--color-ink), transparent 45%); }
+    .seam { position: absolute; left: 0; right: 0; top: 50%; height: 2px; transform: translateY(-1px); background: linear-gradient(90deg, transparent, var(--color-brass), transparent); opacity: 0.6; }
+
+    .zone { position: absolute; border: 1px dashed var(--color-line-strong); border-radius: var(--radius-lg); }
+    .zone__label { position: absolute; left: var(--space-3); top: calc(var(--space-2) * -1 - 2px); padding: 0 var(--space-2); background: var(--color-ink); font-family: var(--font-engraved); font-size: var(--text-2xs); letter-spacing: var(--tracking-caps); text-transform: uppercase; color: var(--color-brass); border-radius: var(--radius-sm); }
+    .zone--lands { left: 170px; width: 250px; display: flex; align-items: center; justify-content: center; gap: var(--space-6); }
+    .zone--field { left: 440px; right: 280px; display: flex; align-items: center; justify-content: center; gap: var(--space-4); }
+    .zone--pile { width: 96px; display: grid; place-items: center; }
+    .zone--lib { right: 150px; }
+    .zone--grave { right: 36px; }
+    .opp .zone { top: 88px; height: 190px; }
+    .me .zone { bottom: 118px; height: 190px; }
+    .opp .zone--field { top: 72px; height: 206px; }
+    .pile-count { position: absolute; bottom: var(--space-2); font-family: var(--font-engraved); font-size: var(--text-md); color: var(--color-text-strong); text-shadow: 0 1px 3px var(--color-ink); }
+    .land-stack { position: relative; }
+    .land-stack .c-count { position: absolute; top: -10px; right: -10px; }
+
+    /* Life medallions */
+    .medallion {
+      position: absolute; left: 30px; width: 112px; height: 112px; border-radius: 50%;
+      display: grid; place-items: center; text-align: center;
+      background: radial-gradient(circle at 50% 35%, var(--color-felt-hi), var(--color-ink) 75%);
+      border: 2px solid var(--color-brass-dim); box-shadow: var(--shadow-lg), inset 0 0 0 6px var(--color-felt-lo), inset 0 0 0 7px var(--color-line-strong);
+    }
+    .medallion--opp { top: 128px; }
+    .medallion--me { bottom: 150px; border-color: var(--color-brass); box-shadow: var(--glow-brass), inset 0 0 0 6px var(--color-felt-lo), inset 0 0 0 7px var(--color-line-strong); }
+    .medallion__life { font-family: var(--font-engraved); font-weight: var(--weight-bold); font-size: var(--text-4xl); line-height: 1; color: var(--color-parchment); }
+    .medallion__name { font-family: var(--font-engraved); font-size: var(--text-2xs); letter-spacing: var(--tracking-caps); color: var(--color-brass); margin-top: var(--space-1); }
+
+    /* Ritual circle with the stack */
+    .ritual { position: absolute; left: 50%; top: 50%; width: 236px; height: 236px; transform: translate(-50%, -50%); border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 107, 61, 0.28), transparent 62%), repeating-conic-gradient(from 0deg, var(--color-line-strong) 0 1deg, transparent 1deg 15deg);
+      -webkit-mask: radial-gradient(circle, #000 58%, transparent 59%, transparent 64%, #000 65%, #000 69%, transparent 70%);
+      mask: radial-gradient(circle, #000 58%, transparent 59%, transparent 64%, #000 65%, #000 69%, transparent 70%);
+    }
+    .ritual-ring { position: absolute; left: 50%; top: 50%; width: 236px; height: 236px; transform: translate(-50%, -50%); border-radius: 50%; border: 1px solid var(--color-brass-dim); box-shadow: 0 0 40px rgba(255, 107, 61, 0.35); }
+    .stack { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%) rotate(-4deg); }
+    .stack .c-mtg { box-shadow: 0 0 0 2px var(--color-ember), 0 0 36px var(--color-ember); }
+
+    .turn { position: absolute; left: 50%; top: calc(50% - 150px); transform: translateX(-50%); font-family: var(--font-engraved); font-size: var(--text-xs); letter-spacing: var(--tracking-wide); color: var(--color-brass); white-space: nowrap; }
+    .phases { display: flex; justify-content: space-between; padding-top: var(--space-2); border-top: 1px solid var(--color-line); gap: var(--space-3); font-family: var(--font-engraved); font-size: var(--text-2xs); letter-spacing: var(--tracking-caps); color: var(--color-text-muted); }
+    .phases .is-on { color: var(--color-brass-hi); text-decoration: underline; text-underline-offset: 4px; }
+
+    /* Decision banner beside the circle */
+    .banner {
+      position: absolute; left: calc(50% + 140px); top: 50%; transform: translateY(-50%); width: 300px;
+      padding: var(--space-3) var(--space-4); border: 1px solid var(--color-brass-dim); border-radius: var(--radius-md);
+      background: var(--color-glass); box-shadow: var(--shadow-lg);
+      display: flex; flex-direction: column; gap: var(--space-3);
+    }
+    .banner__text { font-family: var(--font-display); font-size: var(--text-md); color: var(--color-text-strong); line-height: var(--leading-snug); }
+    .banner__text em { font-style: normal; color: var(--color-ember); }
+    .banner__buttons { display: flex; gap: var(--space-2); justify-content: flex-end; }
+    .banner__buttons .c-button { font-family: var(--font-engraved); font-size: var(--text-sm); }
+
+    .hand { position: absolute; left: 50%; bottom: -92px; display: flex; transform: translateX(-50%); }
+    .hand .c-mtg { margin-left: -28px; }
+    .hand .c-mtg:nth-child(1) { transform: rotate(-9deg) translateY(16px); }
+    .hand .c-mtg:nth-child(2) { transform: rotate(-4.5deg) translateY(-14px); }
+    .hand .c-mtg:nth-child(4) { transform: rotate(4.5deg) translateY(4px); }
+    .hand .c-mtg:nth-child(5) { transform: rotate(9deg) translateY(16px); }
+    .opp-hand { position: absolute; left: 50%; top: -44px; display: flex; transform: translateX(-50%); }
+    .opp-hand .c-mtg { --w: 54px; margin-left: -20px; }
+
+    .log-ribbon { position: absolute; right: 24px; bottom: 24px; max-width: 260px; font-size: var(--text-xs); color: var(--color-text-muted); text-align: right; }
+    .log-ribbon b { color: var(--color-ember); font-weight: var(--weight-bold); }
+  </style>
+</head>
+<body>
+<div class="frame table" data-name="Table">
+  <div class="half half--opp" data-name="Opponent Playmat"><div class="half__art"></div><div class="half__shade"></div><div class="half__grain"></div><div class="half__edge"></div></div>
+  <div class="half half--me" data-name="My Playmat"><div class="half__art"></div><div class="half__shade"></div><div class="half__grain"></div><div class="half__edge"></div></div>
+  <div class="seam"></div>
+
+  <div class="opp" data-name="Opponent Zones">
+    <div class="zone zone--lands" data-name="Lands"><span class="zone__label">Lands</span>
+      <div class="land-stack"><div class="c-mtg c-mtg--land c-mtg--tapped" data-component="MTG Card"><img src="../assets/mountain.jpg" alt=""></div><span class="c-count" data-component="Count">3</span></div>
+      <div class="land-stack"><div class="c-mtg c-mtg--land" data-component="MTG Card"><img src="../assets/mountain.jpg" alt=""></div><span class="c-count" data-component="Count">2</span></div>
+    </div>
+    <div class="zone zone--field" data-name="Battlefield"><span class="zone__label">Battlefield</span>
+      <div class="c-mtg" data-component="MTG Card"><img src="../assets/heartfire-immolator.jpg" alt=""><span class="c-pt" data-component="PT">2/2</span></div>
+      <div class="c-mtg" data-component="MTG Card"><img src="../assets/fanatical-firebrand.jpg" alt=""><span class="c-pt" data-component="PT">1/1</span></div>
+      <div class="c-mtg" data-component="MTG Card"><img src="../assets/brazen-scourge.jpg" alt=""><span class="c-pt" data-component="PT">3/3</span></div>
+    </div>
+    <div class="zone zone--pile zone--lib" data-name="Library"><span class="zone__label">Library</span><div class="c-mtg c-mtg--land c-mtg--back" data-component="MTG Card"></div><span class="pile-count">47</span></div>
+    <div class="zone zone--pile zone--grave" data-name="Graveyard"><span class="zone__label">Grave</span><div class="c-mtg c-mtg--land" data-component="MTG Card"><img src="../assets/lightning-strike.jpg" alt=""></div><span class="pile-count">4</span></div>
+  </div>
+  <div class="opp-hand" data-name="Opponent Hand">
+    <div class="c-mtg c-mtg--back" data-component="MTG Card"></div><div class="c-mtg c-mtg--back" data-component="MTG Card"></div><div class="c-mtg c-mtg--back" data-component="MTG Card"></div>
+  </div>
+  <div class="medallion medallion--opp" data-name="Opponent Life"><div><div class="medallion__life">11</div><div class="medallion__name">Opponent</div></div></div>
+
+  <div class="me" data-name="My Zones">
+    <div class="zone zone--lands" data-name="Lands"><span class="zone__label">Lands</span>
+      <div class="land-stack"><div class="c-mtg c-mtg--land c-mtg--tapped" data-component="MTG Card"><img src="../assets/forest.jpg" alt=""></div><span class="c-count" data-component="Count">2</span></div>
+      <div class="land-stack"><div class="c-mtg c-mtg--land" data-component="MTG Card"><img src="../assets/forest.jpg" alt=""></div><span class="c-count" data-component="Count">4</span></div>
+    </div>
+    <div class="zone zone--field" data-name="Battlefield"><span class="zone__label">Battlefield</span>
+      <div class="c-mtg" data-component="MTG Card"><img src="../assets/gnarlback-rhino.jpg" alt=""><span class="c-pt" data-component="PT">4/4</span></div>
+      <div class="c-mtg" data-component="MTG Card"><img src="../assets/bear-cub.jpg" alt=""><span class="c-pt" data-component="PT">2/2</span></div>
+      <div class="c-mtg c-mtg--target" data-component="MTG Card"><img src="../assets/druid-of-the-cowl.jpg" alt=""><span class="c-pt c-pt--hurt" data-component="PT">1/3</span></div>
+      <div class="c-mtg" data-component="MTG Card"><img src="../assets/thornweald-archer.jpg" alt=""><span class="c-pt" data-component="PT">2/1</span></div>
+    </div>
+    <div class="zone zone--pile zone--lib" data-name="Library"><span class="zone__label">Library</span><div class="c-mtg c-mtg--land c-mtg--back" data-component="MTG Card"></div><span class="pile-count">44</span></div>
+    <div class="zone zone--pile zone--grave" data-name="Graveyard"><span class="zone__label">Grave</span><div class="c-mtg c-mtg--land" data-component="MTG Card"><img src="../assets/overrun.jpg" alt=""></div><span class="pile-count">2</span></div>
+  </div>
+  <div class="medallion medallion--me" data-name="My Life"><div><div class="medallion__life">14</div><div class="medallion__name">You</div></div></div>
+
+  <div class="ritual" data-name="Ritual Circle"></div>
+  <div class="ritual-ring"></div>
+  <div class="turn" data-name="Turn">Turn VI · Your Turn</div>
+  <div class="stack" data-name="Stack">
+    <div class="c-mtg" data-component="MTG Card"><img src="../assets/lightning-strike.jpg" alt=""></div>
+  </div>
+
+  <div class="banner" data-name="Decision">
+    <div class="banner__text"><em>Lightning Strike</em> seeks your Druid of the Cowl.</div>
+    <div class="banner__buttons">
+      <button class="c-button c-button--ghost" data-component="Button" data-name="Respond">Respond</button>
+      <button class="c-button" data-component="Button" data-name="Resolve">Resolve</button>
+    </div>
+  <ol class="phases" data-name="Phases"><li>Upkeep</li><li>Draw</li><li class="is-on">Main</li><li>Combat</li><li>Main</li><li>End</li></ol>
+  </div>
+
+  <div class="hand" data-name="Hand">
+    <div class="c-mtg c-mtg--hand" data-component="MTG Card"><img src="../assets/forest.jpg" alt=""></div>
+    <div class="c-mtg c-mtg--hand c-mtg--playable" data-component="MTG Card"><img src="../assets/giant-growth.jpg" alt=""></div>
+    <div class="c-mtg c-mtg--hand" data-component="MTG Card"><img src="../assets/magnigoth-sentry.jpg" alt=""></div>
+    <div class="c-mtg c-mtg--hand" data-component="MTG Card"><img src="../assets/imperious-perfect.jpg" alt=""></div>
+    <div class="c-mtg c-mtg--hand" data-component="MTG Card"><img src="../assets/thornweald-archer.jpg" alt=""></div>
+  </div>
+
+  <div class="log-ribbon" data-name="Log Ribbon"><b>Opponent</b> cast Lightning Strike · You played Forest · You drew a card</div>
+</div>
+</body>
+</html>

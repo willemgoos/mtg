@@ -6,14 +6,16 @@
  *   pnpm sim -- 1 --log   # one game with a readable event log
  */
 import { createEngine, playRandomGame } from '@mtg/engine';
-import { cardDb, deckIds, describeEvent, MONO_GREEN, MONO_RED } from '../src/index.ts';
+import { cardDb, deckById, deckIds, describeEvent } from '../src/index.ts';
 
 const args = process.argv.slice(2).filter((a) => a !== '--');
 const n = Number(args.find((a) => /^\d+$/.test(a)) ?? 200);
 const log = args.includes('--log');
 
 const engine = createEngine(cardDb);
-const decks = { p1: deckIds(MONO_RED), p2: deckIds(MONO_GREEN) };
+const d1 = deckById('path-of-power');
+const d2 = deckById('might-of-the-legion');
+const decks = { p1: deckIds(d1), p2: deckIds(d2) };
 
 const wins = { p1: 0, p2: 0, draw: 0 };
 let turns = 0;
@@ -38,7 +40,5 @@ const secs = (performance.now() - start) / 1000;
 console.log(
   `\n${n} games in ${secs.toFixed(1)}s (${(n / secs).toFixed(0)} games/s, ${(actions / secs).toFixed(0)} actions/s)`,
 );
-console.log(
-  `${MONO_RED.name} (p1): ${wins.p1}  ${MONO_GREEN.name} (p2): ${wins.p2}  draws: ${wins.draw}`,
-);
+console.log(`${d1.name} (p1): ${wins.p1}  ${d2.name} (p2): ${wins.p2}  draws: ${wins.draw}`);
 console.log(`avg turns ${(turns / n).toFixed(1)}, avg actions ${(actions / n).toFixed(0)}`);

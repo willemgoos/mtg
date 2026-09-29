@@ -66,7 +66,17 @@ export function buildScenario(db: CardDb, spec: ScenarioSpec = {}): GameState {
     }
   }
   const active = spec.active ?? 'p1';
-  s.turn = { number: spec.turn ?? 3, activePlayer: active, step: spec.step ?? 'main1', passed: [] };
+  s.turn = {
+    number: spec.turn ?? 3,
+    activePlayer: active,
+    step: spec.step ?? 'main1',
+    passed: [],
+    extraCombats: 0,
+    attackers: [],
+    lifeGains: { p1: 0, p2: 0 },
+    creaturesDied: 0,
+    cardsDrawn: { p1: 0, p2: 0 },
+  };
   if (['beginCombat', 'declareAttackers', 'declareBlockers', 'endCombat'].includes(s.turn.step)) {
     s.combat = { attackers: [], dealtFirstStrikeDamage: [] };
   }

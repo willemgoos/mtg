@@ -1,11 +1,15 @@
 import { canTapForAbility, isCreature } from './characteristics.ts';
-import { type Ctx, def, obj } from './context.ts';
+import { type Ctx, def, moveObject, obj, tap } from './context.ts';
+import { checkCondition } from './triggers.ts';
 import type { ManaCost, ManaType, ObjectId, PlayerId } from './types.ts';
 
 export interface ManaSource {
   id: ObjectId;
-  produces: ManaType;
+  /** Each type it can make (one mana per tap), e.g. ['W', 'U'] for a dual land. */
+  produces: ManaType[];
   isCreature: boolean;
+  /** Sacrificed when used (Treasure). */
+  sacrifice: boolean;
 }
 
 export function manaValue(cost: ManaCost): number {
@@ -14,47 +18,98 @@ export function manaValue(cost: ManaCost): number {
   return n;
 }
 
-/** Untapped permanents with a usable mana ability. Lands sort before creatures. */
-export function manaSources(ctx: Ctx, player: PlayerId, exclude?: ObjectId): ManaSource[] {
+/**
+ * Untapped permanents with usable mana abilities. Lands sort before creatures,
+ * and single-colour sources before flexible ones, so payment keeps the most
+ * useful sources untapped.
+ */
+export function manaSources(
+  ctx: Ctx,
+  player: PlayerId,
+  exclude?: ObjectId,
+  /** Subtypes of the spell being paid for; restricted mana ("only for Angels") needs a match. */
+  forSubtypes: readonly string[] = [],
+): ManaSource[] {
   const out: ManaSource[] = [];
   for (const id of ctx.s.battlefield) {
     if (id === exclude || obj(ctx, id).controller !== player) continue;
+    let produces: ManaType[] | null = null;
+    let sacrifice = false;
+    let double = false;
     for (const a of def(ctx, id).abilities) {
-      if (a.kind !== 'mana' || !a.cost.tapSelf || !canTapForAbility(ctx, id)) continue;
-      out.push({ id, produces: a.produces, isCreature: isCreature(ctx, id) });
-      break;
+      if (a.kind !== 'mana' || !a.cost.tapSelf || a.cost.mana) continue;
+      if (a.onlyFor && !forSubtypes.includes(a.onlyFor)) continue;
+      if (a.doubleIf && checkCondition(ctx, a.doubleIf, player, obj(ctx, id))) double = true;
+      if (a.cost.sacrificeSelf) sacrifice = true;
+      if (!produces) {
+        if (!canTapForAbility(ctx, id)) break;
+        produces = [];
+      }
+      if (!produces.includes(a.produces)) produces.push(a.produces);
+    }
+    if (produces) {
+      const src = { id, produces, isCreature: isCreature(ctx, id), sacrifice };
+      out.push(src);
+      // Two mana from one tap: a second unit with the same id (tapping it twice is harmless).
+      if (double) out.push({ ...src });
     }
   }
-  return out.sort((a, b) => Number(a.isCreature) - Number(b.isCreature));
+  // Treasure last, then creatures, then flexible sources.
+  return out.sort(
+    (a, b) =>
+      Number(a.sacrifice) - Number(b.sacrifice) ||
+      Number(a.isCreature) - Number(b.isCreature) ||
+      a.produces.length - b.produces.length,
+  );
 }
 
 /**
- * Picks sources to tap for a cost. Every source makes exactly one mana of one
- * type, so paying colored pips first and then generic from what's left is
- * optimal. Returns null if the cost can't be paid.
+ * Picks sources to tap for a cost: coloured pips by backtracking search (a
+ * dual land can cover either of its colours), then generic from whatever is
+ * left, in source order. Returns null if the cost can't be paid.
  */
 export function findPayment(cost: ManaCost, sources: readonly ManaSource[]): ObjectId[] | null {
-  const used = new Set<ObjectId>();
-  for (const [type, n] of Object.entries(cost.colored) as [ManaType, number][]) {
-    let need = n;
-    for (const s of sources) {
-      if (need === 0) break;
-      if (!used.has(s.id) && s.produces === type) {
-        used.add(s.id);
-        need--;
-      }
+  const pips: ManaType[] = [];
+  for (const [type, n] of Object.entries(cost.colored) as [ManaType, number][])
+    for (let i = 0; i < n; i++) pips.push(type);
+  const chosen: number[] = [];
+  const used = new Array<boolean>(sources.length).fill(false);
+  const assign = (i: number): boolean => {
+    if (i === pips.length) return true;
+    // Identical pips take sources in increasing order, so we don't retry permutations.
+    const from = i > 0 && pips[i - 1] === pips[i] ? chosen[i - 1]! + 1 : 0;
+    for (let j = from; j < sources.length; j++) {
+      if (used[j] || !sources[j]!.produces.includes(pips[i]!)) continue;
+      used[j] = true;
+      chosen[i] = j;
+      if (assign(i + 1)) return true;
+      used[j] = false;
     }
-    if (need > 0) return null;
-  }
+    return false;
+  };
+  if (!assign(0)) return null;
+  const out = chosen.map((j) => sources[j]!.id);
   let generic = cost.generic;
-  for (const s of sources) {
-    if (generic === 0) break;
-    if (!used.has(s.id)) {
-      used.add(s.id);
-      generic--;
-    }
+  for (let j = 0; j < sources.length && generic > 0; j++) {
+    if (used[j]) continue;
+    out.push(sources[j]!.id);
+    generic--;
   }
-  return generic > 0 ? null : [...used];
+  return generic > 0 ? null : out;
+}
+
+/** "Spend mana as though it were mana of any type": only the total matters. */
+export function anyTypeCost(cost: ManaCost): ManaCost {
+  return { generic: manaValue(cost), colored: {} };
+}
+
+/** Taps the chosen sources, sacrificing those that are used up (Treasure). */
+export function payMana(ctx: Ctx, sources: readonly ObjectId[]): void {
+  for (const id of sources) {
+    tap(ctx, id);
+    if (def(ctx, id).abilities.some((a) => a.kind === 'mana' && a.cost.sacrificeSelf))
+      moveObject(ctx, id, 'graveyard');
+  }
 }
 
 /** Can `sources` pay this cost? (Precompute sources once when checking many costs.) */
@@ -73,9 +128,10 @@ export function planPayment(
   cost: ManaCost | undefined,
   payWith: readonly ObjectId[] | undefined,
   exclude?: ObjectId,
+  forSubtypes?: readonly string[],
 ): ObjectId[] {
   if (!cost || manaValue(cost) === 0) return [];
-  let sources = manaSources(ctx, player, exclude);
+  let sources = manaSources(ctx, player, exclude, forSubtypes);
   if (payWith) sources = sources.filter((s) => payWith.includes(s.id));
   const plan = findPayment(cost, sources);
   if (!plan) throw new Error('Cannot pay mana cost');

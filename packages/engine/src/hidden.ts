@@ -1,6 +1,14 @@
 import { cloneState } from './clone.ts';
 import { createRng, shuffleInPlace } from './rng.ts';
-import type { CardDefId, GameEvent, GameState, ObjectId, PlayerId, ZoneName } from './types.ts';
+import type {
+  CardDb,
+  CardDefId,
+  GameEvent,
+  GameState,
+  ObjectId,
+  PlayerId,
+  ZoneName,
+} from './types.ts';
 import { PLAYERS } from './types.ts';
 
 /** defId of a card whose identity the viewer doesn't know. */
@@ -17,16 +25,46 @@ function zoneVisible(zone: ZoneName | null, owner: PlayerId, viewer: PlayerId): 
  * become HIDDEN_CARD, and the seed/RNG are wiped (they would predict shuffles).
  * Zone sizes, ids and all public zones are kept.
  */
-export function redactFor(state: GameState, viewer: PlayerId): GameState {
+export function redactFor(state: GameState, viewer: PlayerId, db?: CardDb): GameState {
   const s = cloneState(state);
   for (const p of PLAYERS) {
     const ps = s.players[p];
     const hidden = p === viewer ? ps.library : [...ps.library, ...ps.hand];
-    for (const id of hidden) s.objects[id]!.defId = HIDDEN_CARD;
+    const d = state.decision;
+    const seen =
+      p === viewer
+        ? knownLibraryCards(state, viewer, db)
+        : d.kind === 'choosePile' && d.player === viewer && d.owner === p
+          ? d.faceUp
+          : [];
+    for (const id of hidden) if (!seen.includes(id)) s.objects[id]!.defId = HIDDEN_CARD;
   }
   s.seed = 0;
   s.rng = { s: [0, 0, 0, 0] };
   return s;
+}
+
+/**
+ * Library cards `viewer` may look at right now: while scrying or searching,
+ * and the top card with Vizier of the Menagerie (needs `db` to tell).
+ */
+function knownLibraryCards(s: GameState, viewer: PlayerId, db: CardDb | undefined): ObjectId[] {
+  const d = s.decision;
+  const out: ObjectId[] = [];
+  if (d.kind === 'scry' && d.player === viewer) out.push(...d.cards);
+  if (d.kind === 'searchLibrary' && d.player === viewer && !d.fromGraveyard)
+    out.push(...(d.looked ?? s.players[viewer].library));
+  if (d.kind === 'splitPiles' && d.player === viewer) out.push(...d.cards);
+  // The owner knows both piles; the chooser only sees the face-up one (checked below for the owner's library).
+  if (d.kind === 'choosePile' && d.owner === viewer) out.push(...d.faceUp, ...d.faceDown);
+  const top = s.players[viewer].library[0];
+  const vizier = (id: ObjectId) =>
+    s.objects[id]!.controller === viewer &&
+    !!db
+      ?.get(s.objects[id]!.defId)
+      ?.abilities.some((a) => a.kind === 'static' && a.effect.kind === 'creaturesFromTopOfLibrary');
+  if (top && s.battlefield.some(vizier)) out.push(top);
+  return out;
 }
 
 /** Hides card identities in events that move a card between zones the viewer can't see. */

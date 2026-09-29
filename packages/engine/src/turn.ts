@@ -1,17 +1,18 @@
 import { hasKeyword } from './characteristics.ts';
 import {
   anyFirstStrike,
+  canBlock,
   dealCombatDamage,
   defenderOf,
   possibleAttackers,
   possibleBlockers,
 } from './combat.ts';
-import { type Ctx, drawCard, emit, obj, other, untap } from './context.ts';
+import { type Ctx, def, drawCard, emit, obj, other, untap } from './context.ts';
 import { checkGameOver, runSBAs } from './sba.ts';
 import { pushTrigger, resolveTop } from './stack.ts';
 import { targetCombos } from './targets.ts';
 import { collectTriggers, nextPendingTriggerIndex, triggeredAbility } from './triggers.ts';
-import type { PlayerId, Step } from './types.ts';
+import type { ObjectId, PlayerId, Step } from './types.ts';
 
 export const HAND_SIZE = 7;
 
@@ -31,7 +32,16 @@ export function givePriority(ctx: Ctx, player: PlayerId): void {
     const i = nextPendingTriggerIndex(ctx);
     if (i < 0) break;
     const t = s.pendingTriggers.splice(i, 1)[0]!;
-    const a = triggeredAbility(ctx, t.sourceDefId, t.abilityIndex);
+    const a = triggeredAbility(ctx, t);
+    if (a.modes) {
+      s.decision = {
+        kind: 'chooseTriggerTargets',
+        player: t.controller,
+        trigger: t,
+        thenPriority: player,
+      };
+      return;
+    }
     if (a.targets.length > 0) {
       const combos = targetCombos(ctx, a.targets, {
         controller: t.controller,
@@ -60,7 +70,7 @@ export function passPriority(ctx: Ctx, player: PlayerId): void {
   }
   s.turn.passed = [];
   if (s.stack.length > 0) {
-    resolveTop(ctx);
+    if (resolveTop(ctx)) return; // paused to ask a question; answering continues it
     givePriority(ctx, s.turn.activePlayer);
   } else {
     advanceStep(ctx);
@@ -89,6 +99,10 @@ function nextStep(ctx: Ctx, step: Step): Step | 'nextTurn' {
     case 'combatDamage':
       return 'endCombat';
     case 'endCombat':
+      if (ctx.s.turn.extraCombats > 0) {
+        ctx.s.turn.extraCombats--;
+        return 'beginCombat';
+      }
       return 'main2';
     case 'main2':
       return 'end';
@@ -112,6 +126,11 @@ export function startTurn(ctx: Ctx, player: PlayerId): void {
   s.turn.activePlayer = player;
   const p = s.players[player];
   p.landsPlayedThisTurn = 0;
+  s.turn.extraCombats = 0;
+  s.turn.attackers = [];
+  s.turn.lifeGains = { p1: 0, p2: 0 };
+  s.turn.creaturesDied = 0;
+  s.turn.cardsDrawn = { p1: 0, p2: 0 };
   for (const q of Object.values(s.players)) q.attackedThisTurn = false;
   enterStep(ctx, 'untap');
 }
@@ -129,7 +148,10 @@ function enterStep(ctx: Ctx, step: Step): void {
         const o = obj(ctx, id);
         if (o.controller !== ap) continue;
         o.summoningSick = false;
-        untap(ctx, id);
+        const stays = def(ctx, id).abilities.some(
+          (a) => a.kind === 'static' && a.effect.kind === 'doesntUntap',
+        );
+        if (!stays) untap(ctx, id);
       }
       return advanceStep(ctx); // no priority in untap (rule 502.4)
 
@@ -163,7 +185,14 @@ function enterStep(ctx: Ctx, step: Step): void {
       return givePriority(ctx, ap);
 
     case 'cleanup': {
-      const excess = s.players[ap].hand.length - HAND_SIZE;
+      const noMax = s.battlefield.some(
+        (id) =>
+          obj(ctx, id).controller === ap &&
+          def(ctx, id).abilities.some(
+            (a) => a.kind === 'static' && a.effect.kind === 'noMaxHandSize',
+          ),
+      );
+      const excess = noMax ? 0 : s.players[ap].hand.length - HAND_SIZE;
       if (excess > 0) {
         s.decision = { kind: 'discardToHandSize', player: ap, count: excess };
         return;
@@ -195,19 +224,45 @@ export function confirmAttackers(ctx: Ctx): void {
     }
   }
   if (decl.length > 0) s.players[s.turn.activePlayer].attackedThisTurn = true;
+  for (const d of decl) s.turn.attackers.push(d.id);
   emit(ctx, { type: 'attackersDeclared', attackers: decl.map((d) => d.id) });
   givePriority(ctx, s.turn.activePlayer);
 }
 
 export function confirmBlockers(ctx: Ctx): void {
   const s = ctx.s;
-  const decl = s.decision.kind === 'declareBlockers' ? s.decision.declared : [];
+  const decl = enforceLure(ctx, s.decision.kind === 'declareBlockers' ? s.decision.declared : []);
   for (const a of s.combat?.attackers ?? []) {
     a.blockers = decl.filter((d) => d.attacker === a.id).map((d) => d.blocker);
     a.blocked = a.blockers.length > 0;
   }
   emit(ctx, { type: 'blockersDeclared', blocks: decl.map((d) => ({ ...d })) });
   givePriority(ctx, s.turn.activePlayer);
+}
+
+/**
+ * Prized Unicorn: every creature able to block a lure attacker blocks it
+ * (the only legal outcome), whatever else was declared for it.
+ */
+function enforceLure(
+  ctx: Ctx,
+  declared: readonly { blocker: ObjectId; attacker: ObjectId }[],
+): { blocker: ObjectId; attacker: ObjectId }[] {
+  const lures = (ctx.s.combat?.attackers ?? []).filter((a) =>
+    def(ctx, a.id).abilities.some((x) => x.kind === 'static' && x.effect.kind === 'lure'),
+  );
+  if (lures.length === 0) return [...declared];
+  const out = [...declared];
+  const defender = defenderOf(ctx);
+  for (const lure of lures)
+    for (const b of possibleBlockers(ctx, defender)) {
+      if (out.some((d) => d.blocker === b && d.attacker === lure.id)) continue;
+      if (!canBlock(ctx, b, lure.id)) continue;
+      const i = out.findIndex((d) => d.blocker === b);
+      if (i >= 0) out.splice(i, 1);
+      out.push({ blocker: b, attacker: lure.id });
+    }
+  return out;
 }
 
 export function finishCleanup(ctx: Ctx): void {

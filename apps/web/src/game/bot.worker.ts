@@ -1,9 +1,9 @@
 /// <reference lib="webworker" />
-import { type Bot, createHeuristicBot, createSearchBot } from '@mtg/ai';
+import { type Bot, createEasyBot, createHeuristicBot, createSearchBot } from '@mtg/ai';
 import { cardDb } from '@mtg/cards';
 import type { CardDefId, GameState, PlayerId } from '@mtg/engine';
 
-export type BotKind = 'heuristic' | 'search';
+export type BotKind = 'easy' | 'heuristic' | 'search';
 
 export interface BotRequest {
   id: number;
@@ -32,7 +32,9 @@ self.onmessage = (e: MessageEvent<BotRequest>) => {
       bot:
         kind === 'search'
           ? createSearchBot(cardDb, decks, { seed, rollouts: 128, timeMs: 1500 })
-          : createHeuristicBot(cardDb),
+          : kind === 'easy'
+            ? createEasyBot(cardDb, { seed })
+            : createHeuristicBot(cardDb),
     };
   }
   const t0 = performance.now();

@@ -1,3 +1,4 @@
+import { characteristics } from './characteristics.ts';
 import type { EffectSource } from './effects.ts';
 import type {
   CardDb,
@@ -135,6 +136,35 @@ export interface MoveOptions {
 export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptions = {}): void {
   const o = obj(ctx, id);
   const from = o.zone;
+  // "If it would die this turn, exile it instead."
+  if (
+    from === 'battlefield' &&
+    to === 'graveyard' &&
+    ctx.s.effects.some((e) => e.exileIfDies && e.affected.id === id && e.affected.zcc === o.zcc)
+  )
+    to = 'exile';
+  // Equipment and Auras attached to it are dealt with by state-based actions.
+  const returning = from === 'battlefield' ? o.exiledUntilLeaves : undefined;
+  if (from === 'battlefield') {
+    const c = characteristics(ctx, id);
+    o.lastPower = c.power;
+    if (to === 'graveyard' && c.types.includes('Creature')) ctx.s.turn.creaturesDied++;
+    if (o.addedSubtypes) o.lastAddedSubtypes = o.addedSubtypes;
+    else delete o.lastAddedSubtypes;
+    delete o.addedSubtypes;
+    const host = o.attachedTo !== undefined ? ctx.s.objects[o.attachedTo] : undefined;
+    if (host)
+      o.lastAttachedTo = {
+        id: host.id,
+        zcc: host.zone === 'battlefield' ? host.zcc : host.zcc - 1,
+      };
+    else delete o.lastAttachedTo;
+  }
+  delete o.attachedTo;
+  delete o.usedAbilities;
+  delete o.exiledUntilLeaves;
+  delete o.kicked;
+  delete o.counters;
   const src = zoneList(ctx, o, from);
   if (src) {
     const i = src.indexOf(id);
@@ -144,6 +174,7 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
 
   o.zone = to;
   o.zcc++;
+  o.zoneTurn = ctx.s.turn.number;
   o.timestamp = newTimestamp(ctx);
   o.tapped = false;
   o.damage = 0;
@@ -151,6 +182,7 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
   o.plusOneCounters = 0;
   o.summoningSick = true;
   o.controller = to === 'battlefield' || to === 'stack' ? (opts.controller ?? o.owner) : o.owner;
+  if (to === 'battlefield' && defOf(ctx, o.defId).entersTapped) o.tapped = true;
 
   // Tokens cease to exist once they leave the battlefield (rule 111.7).
   const ceases = o.isToken && to !== 'battlefield';
@@ -162,6 +194,9 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
   emit(ctx, { type: 'objectMoved', id, defId: o.defId, from, to });
 
   if (ceases) delete ctx.s.objects[id];
+  // "Until this leaves the battlefield": the exiled cards come back.
+  for (const back of returning ?? [])
+    if (ctx.s.objects[back]?.zone === 'exile') moveObject(ctx, back, 'battlefield');
 }
 
 function removeFromCombat(ctx: Ctx, id: ObjectId): void {
@@ -179,7 +214,8 @@ export function drawCard(ctx: Ctx, player: PlayerId): void {
     return;
   }
   moveObject(ctx, top, 'hand');
-  emit(ctx, { type: 'cardDrawn', player, id: top });
+  const nth = ++ctx.s.turn.cardsDrawn[player];
+  emit(ctx, { type: 'cardDrawn', player, id: top, nth });
 }
 
 export function tap(ctx: Ctx, id: ObjectId): void {

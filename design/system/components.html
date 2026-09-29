@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Components</title>
+  <meta name="frame" content="960">
+  <link rel="stylesheet" href="tokens.css">
+  <link rel="stylesheet" href="base.css">
+  <link rel="stylesheet" href="components.css">
+  <style>
+    body { padding: var(--space-7); background: var(--color-felt); }
+    .gallery-title { font-size: var(--text-3xl); color: var(--color-brass-hi); margin-bottom: var(--space-2); }
+    .gallery-sub { color: var(--color-text-muted); margin-bottom: var(--space-7); }
+    .section { margin-bottom: var(--space-7); }
+    .section-title {
+      font-family: var(--font-caps); font-size: var(--text-sm); letter-spacing: var(--tracking-caps);
+      color: var(--color-brass); margin-bottom: var(--space-3);
+    }
+    .specimen {
+      display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-5);
+      padding: var(--space-5); background: var(--color-felt-lo);
+      border: 1px solid var(--color-line); border-radius: var(--radius-md);
+    }
+    .swatch { width: 88px; }
+    .swatch-chip { height: 48px; border-radius: var(--radius-sm); border: 1px solid var(--color-line); }
+    .swatch-name { font-size: var(--text-xs); color: var(--color-text-muted); margin-top: var(--space-1); font-family: var(--font-mono); }
+    .type-row { display: flex; align-items: baseline; gap: var(--space-5); width: 100%; }
+    .type-row code { width: 110px; flex: none; font-size: var(--text-xs); color: var(--color-text-muted); }
+    .label { font-size: var(--text-xs); color: var(--color-text-muted); text-align: center; margin-top: var(--space-3); }
+  </style>
+</head>
+<body>
+  <h1 class="gallery-title" data-name="Title">Foundations Duel components</h1>
+  <p class="gallery-sub">Tokens and reusable components. Edit system/*.css — every screen updates.</p>
+
+  <section class="section" data-name="Colors">
+    <h2 class="section-title">Table &amp; accents</h2>
+    <div class="specimen">
+      <div class="swatch" data-name="Felt"><div class="swatch-chip" style="background: var(--color-felt)"></div><div class="swatch-name">felt</div></div>
+      <div class="swatch" data-name="Felt Hi"><div class="swatch-chip" style="background: var(--color-felt-hi)"></div><div class="swatch-name">felt-hi</div></div>
+      <div class="swatch" data-name="Ink"><div class="swatch-chip" style="background: var(--color-ink)"></div><div class="swatch-name">ink</div></div>
+      <div class="swatch" data-name="Brass"><div class="swatch-chip" style="background: var(--color-brass)"></div><div class="swatch-name">brass</div></div>
+      <div class="swatch" data-name="Brass Hi"><div class="swatch-chip" style="background: var(--color-brass-hi)"></div><div class="swatch-name">brass-hi</div></div>
+      <div class="swatch" data-name="Ember"><div class="swatch-chip" style="background: var(--color-ember)"></div><div class="swatch-name">ember</div></div>
+      <div class="swatch" data-name="Playable"><div class="swatch-chip" style="background: var(--color-playable)"></div><div class="swatch-name">playable</div></div>
+      <div class="swatch" data-name="Attack"><div class="swatch-chip" style="background: var(--color-attack)"></div><div class="swatch-name">attack</div></div>
+      <div class="swatch" data-name="Target"><div class="swatch-chip" style="background: var(--color-target)"></div><div class="swatch-name">target</div></div>
+    </div>
+  </section>
+
+  <section class="section" data-name="Type">
+    <h2 class="section-title">Type</h2>
+    <div class="specimen">
+      <div class="type-row"><code>display</code><span style="font-family: var(--font-display); font-size: var(--text-4xl); color: var(--color-brass-hi)">Foundations</span></div>
+      <div class="type-row"><code>caps</code><span style="font-family: var(--font-caps); font-size: var(--text-xl)">Declare Attackers</span></div>
+      <div class="type-row"><code>engraved</code><span style="font-family: var(--font-engraved); font-size: var(--text-xl)">Your Turn</span></div>
+      <div class="type-row"><code>sans</code><span>Lightning Strike deals 3 damage to any target.</span></div>
+    </div>
+  </section>
+
+  <section class="section" data-name="Buttons">
+    <h2 class="section-title">Button</h2>
+    <div class="specimen">
+      <button class="c-button" data-component="Button">Resolve</button>
+      <button class="c-button c-button--ghost" data-component="Button">Cancel</button>
+      <button class="c-button c-button--lg" data-component="Button">Play</button>
+    </div>
+  </section>
+
+  <section class="section" data-name="Cards">
+    <h2 class="section-title">MTG card</h2>
+    <div class="specimen" style="align-items: flex-end; gap: var(--space-6)">
+      <div><div class="c-mtg" data-component="MTG Card"><img src="../assets/bear-cub.jpg" alt=""><span class="c-pt" data-component="PT">2/2</span></div><div class="label">field</div></div>
+      <div><div class="c-mtg c-mtg--playable" data-component="MTG Card"><img src="../assets/gnarlback-rhino.jpg" alt=""></div><div class="label">playable</div></div>
+      <div><div class="c-mtg c-mtg--attacking" data-component="MTG Card"><img src="../assets/imperious-perfect.jpg" alt=""><span class="c-pt c-pt--up" data-component="PT">3/3</span></div><div class="label">attacking</div></div>
+      <div><div class="c-mtg c-mtg--target" data-component="MTG Card"><img src="../assets/druid-of-the-cowl.jpg" alt=""><span class="c-pt c-pt--hurt" data-component="PT">1/3</span></div><div class="label">target</div></div>
+      <div><div class="c-mtg c-mtg--land c-mtg--tapped" data-component="MTG Card"><img src="../assets/forest.jpg" alt=""></div><div class="label">tapped land</div></div>
+      <div><div class="c-mtg c-mtg--back" data-component="MTG Card"></div><div class="label">back</div></div>
+    </div>
+  </section>
+
+  <section class="section" data-name="Tiles">
+    <h2 class="section-title">Tile</h2>
+    <div class="specimen" style="gap: var(--space-6)">
+      <div class="c-tile c-tile--G" data-component="Tile"><div class="c-tile__art" style="background-image: url(../assets/art-gnarlback-rhino.jpg)"></div><div class="c-tile__name">Gnarlback Rhino</div><span class="c-tile__pt">4/4</span></div>
+      <div class="c-tile c-tile--R c-tile--tapped" data-component="Tile"><div class="c-tile__art" style="background-image: url(../assets/art-brazen-scourge.jpg)"></div><div class="c-tile__name">Brazen Scourge</div><span class="c-tile__tag">Tapped</span><span class="c-tile__pt">3/3</span></div>
+      <div class="c-tile c-tile--G c-tile--target" data-component="Tile"><div class="c-tile__art" style="background-image: url(../assets/art-druid-of-the-cowl.jpg)"></div><div class="c-tile__name">Druid of the Cowl</div><span class="c-tile__pt">1/3</span></div>
+    </div>
+  </section>
+
+  <section class="section" data-name="Small Bits">
+    <h2 class="section-title">Pips &amp; counts</h2>
+    <div class="specimen">
+      <span class="c-pip c-pip--W" data-component="Pip"></span>
+      <span class="c-pip c-pip--U" data-component="Pip"></span>
+      <span class="c-pip c-pip--B" data-component="Pip"></span>
+      <span class="c-pip c-pip--R" data-component="Pip"></span>
+      <span class="c-pip c-pip--G" data-component="Pip"></span>
+      <span class="c-count" data-component="Count">5</span>
+    </div>
+  </section>
+</body>
+</html>

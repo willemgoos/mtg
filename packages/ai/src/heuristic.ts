@@ -8,6 +8,16 @@ import {
   type ObjectId,
   type PlayerId,
 } from '@mtg/engine';
+import {
+  chooseLandToPlay,
+  choosePickExiled,
+  choosePile,
+  chooseSplit,
+  choosePunishment,
+  chooseSacrifice,
+  chooseScry,
+  chooseSearch,
+} from './choices.ts';
 import { evaluate, lifeValue } from './evaluate.ts';
 import {
   type Block,
@@ -43,9 +53,24 @@ export function createHeuristicBot(db: CardDb, name = 'heuristic'): Bot {
           return keepOrMulligan(engine, view, me, legal);
         case 'bottomCards':
         case 'discardToHandSize':
+        case 'discard':
           return pickCardToLose(engine, view, me, legal);
         case 'chooseTriggerTargets':
           return bestByEvaluation(engine, view, me, legal, 'stack');
+        case 'scry':
+          return chooseScry(engine, view, me, legal);
+        case 'searchLibrary':
+          return chooseSearch(engine, view, me, legal);
+        case 'sacrifice':
+          return chooseSacrifice(engine, view, legal);
+        case 'punisher':
+          return choosePunishment(engine, view, me, legal);
+        case 'pickExiled':
+          return choosePickExiled(engine, view, me, legal);
+        case 'splitPiles':
+          return chooseSplit(engine, view, me, legal);
+        case 'choosePile':
+          return choosePile(view, me);
         case 'declareAttackers':
           return nextAttackAction(
             engine,
@@ -74,8 +99,8 @@ function choosePriorityAction(
   me: PlayerId,
   legal: Action[],
 ): Action {
-  const land = legal.find((a) => a.type === 'playLand');
-  if (land) return land;
+  const lands = legal.filter((a) => a.type === 'playLand');
+  if (lands.length > 0) return chooseLandToPlay(engine, view, me, lands);
 
   const pass = legal.find((a) => a.type === 'passPriority')!;
   const candidates = legal.filter((a) => a.type === 'castSpell' || a.type === 'activateAbility');

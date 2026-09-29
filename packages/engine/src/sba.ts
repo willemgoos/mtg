@@ -1,5 +1,5 @@
-import { creaturesOnBattlefield, toughness } from './characteristics.ts';
-import { type Ctx, emit, moveObject } from './context.ts';
+import { creaturesOnBattlefield, hasKeyword, isCreature, toughness } from './characteristics.ts';
+import { type Ctx, def, emit, moveObject, obj } from './context.ts';
 import type { ObjectId } from './types.ts';
 import { PLAYERS } from './types.ts';
 
@@ -20,12 +20,54 @@ export function runSBAs(ctx: Ctx): void {
     const dying: ObjectId[] = [];
     for (const c of creaturesOnBattlefield(ctx)) {
       const t = toughness(ctx, c.id);
-      if (t <= 0 || c.damage >= t || (c.damage > 0 && c.damagedByDeathtouch)) dying.push(c.id);
+      if (t <= 0) dying.push(c.id);
+      else if (
+        (c.damage >= t || (c.damage > 0 && c.damagedByDeathtouch)) &&
+        !hasKeyword(ctx, c.id, 'indestructible')
+      )
+        dying.push(c.id);
     }
     for (const id of dying) moveObject(ctx, id, 'graveyard');
     if (dying.length) changed = true;
+    // Equipment attached to something that is no longer a creature on the battlefield
+    // falls off; an Aura in that situation (or attached to nothing) goes to the graveyard.
+    const orphanedAuras: ObjectId[] = [];
+    for (const id of ctx.s.battlefield) {
+      const o = obj(ctx, id);
+      const aura = def(ctx, id).subtypes.includes('Aura');
+      const host = o.attachedTo !== undefined ? ctx.s.objects[o.attachedTo] : undefined;
+      if (host && host.zone === 'battlefield' && isCreature(ctx, host.id)) continue;
+      if (aura) orphanedAuras.push(id);
+      else delete o.attachedTo;
+    }
+    for (const id of orphanedAuras) moveObject(ctx, id, 'graveyard');
+    if (orphanedAuras.length) changed = true;
+    const legends = extraLegends(ctx);
+    for (const id of legends) moveObject(ctx, id, 'graveyard');
+    if (legends.length) changed = true;
     if (!changed) return;
   }
+}
+
+/**
+ * Legend rule (704.5j): a player with two or more legendary permanents of the
+ * same name keeps one. The rules let them choose; we keep the newest.
+ */
+function extraLegends(ctx: Ctx): ObjectId[] {
+  const newest = new Map<string, ObjectId>();
+  const out: ObjectId[] = [];
+  for (const id of ctx.s.battlefield) {
+    if (!def(ctx, id).supertypes.includes('Legendary')) continue;
+    const o = obj(ctx, id);
+    const key = `${o.controller}:${o.defId}`;
+    const prev = newest.get(key);
+    if (prev === undefined) newest.set(key, id);
+    else if (obj(ctx, prev).timestamp < o.timestamp) {
+      out.push(prev);
+      newest.set(key, id);
+    } else out.push(id);
+  }
+  return out;
 }
 
 /** Ends the game if a player has lost. Returns true if the game is over. */

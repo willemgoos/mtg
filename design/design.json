@@ -1,0 +1,21 @@
+{
+  "name": "Foundations Duel",
+  "mainPage": "Board",
+  "pages": [
+    {
+      "folder": "menu",
+      "name": "Deck Select"
+    }
+  ],
+  "order": [
+    "board-current.html",
+    "board-v2-arena.html",
+    "board-v3-clarity.html",
+    "board-v4-playmat.html",
+    "board-v4b-playmat-soft.html",
+    "board-v4c-playmat-crafted.html",
+    "menu/menu-current.html",
+    "menu/menu-v2-arena.html",
+    "menu/menu-v3-shelf.html"
+  ]
+}

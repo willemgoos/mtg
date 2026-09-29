@@ -60,7 +60,7 @@ export function playMatch(
     const d = state.decision;
     if (d.kind === 'gameOver') break;
     const t0 = performance.now();
-    const action = bots[d.player].chooseAction(redactFor(state, d.player), d.player);
+    const action = bots[d.player].chooseAction(redactFor(state, d.player, engine.db), d.player);
     thinkMs[d.player] += performance.now() - t0;
     const r = engine.applyAction(state, action);
     state = r.state;

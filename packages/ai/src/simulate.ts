@@ -8,6 +8,15 @@ import {
   type ObjectId,
   type PlayerId,
 } from '@mtg/engine';
+import {
+  choosePickExiled,
+  choosePile,
+  chooseSplit,
+  choosePunishment,
+  chooseSacrifice,
+  chooseScry,
+  chooseSearch,
+} from './choices.ts';
 import { creatureValue, evaluate } from './evaluate.ts';
 
 /**
@@ -70,6 +79,20 @@ function passiveAction(
         'stack',
         depth + 1,
       );
+    case 'scry':
+      return chooseScry(engine, s, d.player, engine.getLegalActions(s, d.player));
+    case 'searchLibrary':
+      return chooseSearch(engine, s, d.player, engine.getLegalActions(s, d.player));
+    case 'sacrifice':
+      return chooseSacrifice(engine, s, engine.getLegalActions(s, d.player));
+    case 'punisher':
+      return choosePunishment(engine, s, d.player, engine.getLegalActions(s, d.player));
+    case 'pickExiled':
+      return choosePickExiled(engine, s, d.player, engine.getLegalActions(s, d.player));
+    case 'splitPiles':
+      return chooseSplit(engine, s, d.player, engine.getLegalActions(s, d.player));
+    case 'choosePile':
+      return choosePile(s, d.player);
     default:
       return engine.getLegalActions(s, d.player)[0]!;
   }

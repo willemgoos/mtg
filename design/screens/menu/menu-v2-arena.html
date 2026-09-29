@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Menu — V2 Arena Play Blade</title>
+  <meta name="frame" content="1440x810">
+  <link rel="stylesheet" href="../../system/tokens.css">
+  <link rel="stylesheet" href="../../system/base.css">
+  <link rel="stylesheet" href="../../system/components.css">
+  <style>
+    /* V2: Arena's Play screen. The selected deck fills the stage with its art and
+       key cards; a blade on the right holds opponent, deck list and one big Play button. */
+    .stage { position: absolute; inset: 0 440px 0 0; background: url(../../assets/art-gigantosaurus.jpg) center 30% / cover no-repeat; }
+    .stage::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, transparent 40%, var(--color-ink)), linear-gradient(0deg, var(--color-ink) 5%, transparent 60%); }
+    .brand { position: absolute; left: var(--space-6); top: var(--space-5); z-index: 1; font-family: var(--font-display); font-size: var(--text-xl); color: var(--color-brass-hi); letter-spacing: 0.02em; }
+    .brand small { display: block; font-family: var(--font-caps); font-size: var(--text-2xs); letter-spacing: var(--tracking-wide); color: var(--color-brass); }
+
+    .hero { position: absolute; left: var(--space-7); bottom: var(--space-7); width: 620px; z-index: 1; display: flex; flex-direction: column; gap: var(--space-3); }
+    .hero__pips { display: flex; gap: var(--space-2); }
+    .hero__pips .c-pip { width: 14px; height: 14px; }
+    .hero__title { font-size: var(--text-5xl); color: var(--color-text-strong); text-shadow: 0 2px 12px var(--color-ink); }
+    .hero__desc { font-size: var(--text-lg); color: var(--color-text); max-width: 480px; }
+    .hero__meta { font-size: var(--text-sm); color: var(--color-text-muted); letter-spacing: var(--tracking-caps); text-transform: uppercase; }
+    .key-cards { display: flex; gap: var(--space-3); margin-top: var(--space-3); }
+    .key-cards .c-mtg { --w: 104px; }
+    .key-cards .c-mtg:nth-child(1) { transform: rotate(-4deg); }
+    .key-cards .c-mtg:nth-child(3) { transform: rotate(4deg); }
+
+    /* Blade */
+    .blade { position: absolute; top: 0; right: 0; bottom: 0; width: 440px; display: flex; flex-direction: column; gap: var(--space-5); padding: var(--space-6) var(--space-6) var(--space-5); background: linear-gradient(180deg, var(--color-felt), var(--color-felt-lo)); border-left: 1px solid var(--color-line-strong); }
+    .blade__title { font-family: var(--font-caps); font-size: var(--text-3xl); color: var(--color-brass-hi); }
+    .label { font-family: var(--font-caps); font-size: var(--text-xs); letter-spacing: var(--tracking-caps); color: var(--color-text-muted); margin-bottom: var(--space-2); }
+    .opponents { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-2); }
+    .opp { padding: var(--space-3); border-radius: var(--radius-md); border: 1px solid var(--color-line); background: rgba(0, 0, 0, 0.25); }
+    .opp b { display: block; font-family: var(--font-caps); font-weight: var(--weight-regular); font-size: var(--text-md); color: var(--color-text-strong); }
+    .opp span { font-size: var(--text-xs); color: var(--color-text-muted); }
+    .opp.is-on { border-color: var(--color-brass); box-shadow: var(--glow-brass); }
+    .opp.is-on b { color: var(--color-brass-hi); }
+    .seg { display: flex; border: 1px solid var(--color-line); border-radius: var(--radius-full); padding: 3px; }
+    .seg li { flex: 1; text-align: center; padding: var(--space-1) 0; border-radius: var(--radius-full); font-size: var(--text-sm); color: var(--color-text-muted); }
+    .seg li.is-on { background: var(--color-brass); color: var(--color-text-inverse); font-weight: var(--weight-bold); }
+
+    .decks { flex: 1; display: flex; flex-direction: column; gap: var(--space-2); min-height: 0; }
+    .deck { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-2); border-radius: var(--radius-md); border: 1px solid var(--color-line); background: rgba(0, 0, 0, 0.25); }
+    .deck__art { width: 72px; height: 44px; border-radius: var(--radius-sm); background: center / cover no-repeat; flex: none; }
+    .deck__name { flex: 1; font-family: var(--font-display); font-size: var(--text-md); color: var(--color-text-strong); }
+    .deck.is-on { border-color: var(--color-brass); background: rgba(217, 180, 106, 0.1); }
+    .deck--soon { opacity: 0.45; }
+    .deck--soon .deck__art { filter: grayscale(1); }
+    .deck__soon { font-size: var(--text-2xs); letter-spacing: var(--tracking-caps); text-transform: uppercase; color: var(--color-text-muted); }
+    .more { font-size: var(--text-sm); color: var(--color-text-muted); padding-left: var(--space-2); }
+
+    .play {
+      height: 64px; border-radius: var(--radius-md); border: 2px solid var(--color-brass-hi);
+      background: radial-gradient(ellipse at 50% 10%, var(--color-brass-hi), var(--color-priority) 45%, var(--color-priority-lo));
+      color: var(--color-text-inverse); font-family: var(--font-caps); font-size: var(--text-2xl); letter-spacing: 0.08em;
+      box-shadow: 0 0 36px rgba(246, 195, 91, 0.4), var(--shadow-md);
+    }
+    .ui-size { position: absolute; right: 460px; top: var(--space-5); z-index: 1; font-size: var(--text-xs); color: var(--color-text-muted); }
+  </style>
+</head>
+<body>
+<div class="frame" data-name="Menu">
+  <div class="stage" data-name="Deck Art"></div>
+  <div class="brand" data-name="Brand"><small>A duel of</small>Foundations</div>
+  <div class="ui-size" data-name="UI Size">UI size · M</div>
+
+  <section class="hero" data-name="Selected Deck">
+    <div class="hero__pips"><span class="c-pip c-pip--G" data-component="Pip"></span></div>
+    <h1 class="hero__title" data-name="Deck Name">Mono-Green Stompy</h1>
+    <p class="hero__desc" data-name="Description">Elves, fight spells and enormous creatures. Survive, then stomp.</p>
+    <div class="hero__meta">60 cards · House deck</div>
+    <div class="key-cards" data-name="Key Cards">
+      <div class="c-mtg" data-component="MTG Card"><img src="../../assets/gnarlback-rhino.jpg" alt=""></div>
+      <div class="c-mtg" data-component="MTG Card"><img src="../../assets/overrun.jpg" alt=""></div>
+      <div class="c-mtg" data-component="MTG Card"><img src="../../assets/magnigoth-sentry.jpg" alt=""></div>
+    </div>
+  </section>
+
+  <aside class="blade" data-name="Play Blade">
+    <h2 class="blade__title">Play</h2>
+    <div data-name="Opponent">
+      <div class="label">Opponent</div>
+      <div class="opponents">
+        <div class="opp" data-name="Apprentice"><b>Apprentice</b><span>Plays fast, thinks one move ahead</span></div>
+        <div class="opp is-on" data-name="Master"><b>Master</b><span>Simulates hundreds of futures</span></div>
+      </div>
+    </div>
+    <div data-name="Opponent Deck">
+      <div class="label">Opponent's deck</div>
+      <ol class="seg"><li class="is-on">Random</li><li>Mono-Red</li><li>Mono-Green</li></ol>
+    </div>
+    <div class="decks" data-name="Your Deck">
+      <div class="label">Your deck</div>
+      <div class="deck" data-name="Mono-Red Aggro"><div class="deck__art" style="background-image: url(../../assets/art-shivan.jpg)"></div><span class="deck__name">Mono-Red Aggro</span><span class="c-pip c-pip--R" data-component="Pip"></span></div>
+      <div class="deck is-on" data-name="Mono-Green Stompy"><div class="deck__art" style="background-image: url(../../assets/art-gigantosaurus.jpg)"></div><span class="deck__name">Mono-Green Stompy</span><span class="c-pip c-pip--G" data-component="Pip"></span></div>
+      <div class="deck deck--soon" data-name="Arcane Aerialists"><div class="deck__art" style="background-image: url(../../assets/deck-giada.jpg)"></div><span class="deck__name">Arcane Aerialists</span><span class="deck__soon">Soon</span></div>
+      <div class="deck deck--soon" data-name="Cat Attack"><div class="deck__art" style="background-image: url(../../assets/deck-arahbo.jpg)"></div><span class="deck__name">Cat Attack</span><span class="deck__soon">Soon</span></div>
+      <div class="more">+ 8 more Foundations Starter Decks coming</div>
+    </div>
+    <button class="play" data-name="Play Button">Play</button>
+  </aside>
+</div>
+</body>
+</html>

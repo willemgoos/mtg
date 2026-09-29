@@ -7,7 +7,15 @@ import type { Decision, GameObject, GameState, ObjectId } from './types.ts';
  */
 export function cloneState(s: GameState): GameState {
   const objects: Record<ObjectId, GameObject> = {};
-  for (const id in s.objects) objects[id] = { ...s.objects[id]! };
+  for (const id in s.objects) {
+    const o = s.objects[id]!;
+    const c = { ...o };
+    if (o.usedAbilities) c.usedAbilities = o.usedAbilities.slice();
+    if (o.exiledUntilLeaves) c.exiledUntilLeaves = o.exiledUntilLeaves.slice();
+    if (o.addedSubtypes) c.addedSubtypes = o.addedSubtypes.slice();
+    if (o.counters) c.counters = { ...o.counters };
+    objects[id] = c;
+  }
   const player = (p: GameState['players']['p1']) => ({
     ...p,
     library: p.library.slice(),
@@ -22,7 +30,13 @@ export function cloneState(s: GameState): GameState {
     objects,
     battlefield: s.battlefield.slice(),
     stack: s.stack.map((x) => ({ ...x })),
-    turn: { ...s.turn, passed: s.turn.passed.slice() },
+    turn: {
+      ...s.turn,
+      passed: s.turn.passed.slice(),
+      attackers: s.turn.attackers.slice(),
+      lifeGains: { ...s.turn.lifeGains },
+      cardsDrawn: { ...s.turn.cardsDrawn },
+    },
     combat: s.combat && {
       attackers: s.combat.attackers.map((a) => ({ ...a, blockers: a.blockers.slice() })),
       dealtFirstStrikeDamage: s.combat.dealtFirstStrikeDamage.slice(),

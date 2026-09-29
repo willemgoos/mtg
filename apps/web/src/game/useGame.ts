@@ -1,4 +1,4 @@
-import { cardDb, deckIds, describeEvent, MONO_GREEN, MONO_RED } from '@mtg/cards';
+import { cardDb, DECKS, deckIds, describeEvent } from '@mtg/cards';
 import {
   type Action,
   createEngine,
@@ -14,7 +14,11 @@ import { type PassSettings, shouldAutoPass } from './interaction.ts';
 
 export const HUMAN: PlayerId = 'p1';
 export const BOT: PlayerId = 'p2';
-export type DeckChoice = 'red' | 'green';
+/** Deck ids (see DECKS in @mtg/cards) for the human and the bot. */
+export interface DeckChoice {
+  you: string;
+  them: string;
+}
 
 const engine = createEngine(cardDb);
 
@@ -49,7 +53,7 @@ function botDelay(a: Action): number {
   }
 }
 
-export function useGame(deck: DeckChoice, seed: number, opponent: BotKind) {
+export function useGame(choice: DeckChoice, seed: number, opponent: BotKind) {
   // The bot thinks in a worker so the board stays smooth while it searches.
   // Created in an effect (not useMemo) so StrictMode's remount gets a live worker.
   const [worker, setWorker] = useState<Worker | null>(null);
@@ -63,10 +67,13 @@ export function useGame(deck: DeckChoice, seed: number, opponent: BotKind) {
   }, []);
   const [thinking, setThinking] = useState(false);
   const decks = useMemo(() => {
-    const red = deckIds(MONO_RED);
-    const green = deckIds(MONO_GREEN);
-    return deck === 'red' ? { p1: red, p2: green } : { p1: green, p2: red };
-  }, [deck]);
+    const list = (id: string) => {
+      const d = DECKS.find((x) => x.id === id);
+      if (!d) throw new Error(`Unknown deck "${id}"`);
+      return deckIds(d);
+    };
+    return { p1: list(choice.you), p2: list(choice.them) };
+  }, [choice.you, choice.them]);
 
   const [state, setState] = useState<GameState>(() => engine.newGame({ decks, seed }));
   const stateRef = useRef(state);
@@ -80,7 +87,7 @@ export function useGame(deck: DeckChoice, seed: number, opponent: BotKind) {
     const r = engine.applyAction(stateRef.current, action);
     stateRef.current = r.state;
     const events = redactEvents(r.events, r.state, HUMAN);
-    const view = redactFor(r.state, HUMAN);
+    const view = redactFor(r.state, HUMAN, cardDb);
     const lines: LogLine[] = [];
     for (const e of events) {
       const text = describeEvent(e, view);
@@ -98,7 +105,7 @@ export function useGame(deck: DeckChoice, seed: number, opponent: BotKind) {
   }, []);
 
   const legal = useMemo(() => engine.getLegalActions(state, HUMAN), [state]);
-  const view = useMemo(() => redactFor(state, HUMAN), [state]);
+  const view = useMemo(() => redactFor(state, HUMAN, cardDb), [state]);
 
   // The bot acts, and the human auto-passes where nothing is worth stopping for.
   useEffect(() => {
@@ -112,7 +119,7 @@ export function useGame(deck: DeckChoice, seed: number, opponent: BotKind) {
         kind: opponent,
         decks,
         seed,
-        view: redactFor(state, BOT),
+        view: redactFor(state, BOT, cardDb),
         player: BOT,
       };
       let timer: ReturnType<typeof setTimeout> | undefined;

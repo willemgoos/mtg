@@ -258,6 +258,45 @@ export const FIXTURES: CardDefinition[] = [
     spell: { targets: [], effects: [{ kind: 'createToken', token: 'goblin', count: 2 }] },
   }),
   creature('goblin', 1, 1, [], { isToken: true }),
+  card({
+    id: 'gate',
+    types: ['Land'],
+    entersTapped: true,
+    abilities: [
+      { kind: 'mana', cost: { tapSelf: true }, produces: 'R' },
+      { kind: 'mana', cost: { tapSelf: true }, produces: 'G' },
+    ],
+  }),
+  card({
+    id: 'temple',
+    types: ['Land'],
+    entersTapped: true,
+    abilities: [
+      {
+        kind: 'triggered',
+        trigger: { on: 'etb' },
+        targets: [],
+        effects: [{ kind: 'scry', amount: 1 }],
+      },
+      { kind: 'mana', cost: { tapSelf: true }, produces: 'R' },
+      { kind: 'mana', cost: { tapSelf: true }, produces: 'G' },
+    ],
+  }),
+  card({
+    id: 'peek',
+    types: ['Instant'],
+    manaCost: cost(0, { R: 1 }),
+    spell: {
+      targets: [],
+      effects: [
+        { kind: 'scry', amount: 2 },
+        { kind: 'draw', who: 'controller', amount: 1 },
+      ],
+    },
+  }),
+  creature('gruul-bear', 3, 3, [], { manaCost: cost(0, { R: 1, G: 1 }) }),
+  creature('big-gruul', 5, 5, [], { manaCost: cost(1, { R: 2, G: 1 }) }),
+  creature('legend', 2, 2, [], { supertypes: ['Legendary'] }),
 ];
 
 export const DB = new Map(FIXTURES.map((c) => [c.id, c]));

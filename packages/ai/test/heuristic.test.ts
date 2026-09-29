@@ -1,8 +1,8 @@
 import { createEngine, redactFor, type Action, type PlayerId } from '@mtg/engine';
 import { buildScenario, GameDriver, type ScenarioSpec } from '@mtg/engine/testing';
-import { cardDb, deckIds, MONO_GREEN, MONO_RED } from '@mtg/cards';
+import { cardDb, deckById, deckIds } from '@mtg/cards';
 import { describe, expect, it } from 'vitest';
-import { createHeuristicBot, createRandomBot, playMatch } from '../src/index.ts';
+import { createEasyBot, createHeuristicBot, createRandomBot, playMatch } from '../src/index.ts';
 
 const engine = createEngine(cardDb);
 const bot = createHeuristicBot(cardDb);
@@ -148,7 +148,10 @@ describe('heuristic bot: combat', () => {
 });
 
 describe('heuristic bot: full games', () => {
-  const decks = { p1: deckIds(MONO_RED), p2: deckIds(MONO_GREEN) };
+  const decks = {
+    p1: deckIds(deckById('path-of-power')),
+    p2: deckIds(deckById('might-of-the-legion')),
+  };
 
   it('plays legal games to completion and beats a random bot with either deck', () => {
     let wins = 0;
@@ -163,5 +166,81 @@ describe('heuristic bot: full games', () => {
       if (r.winner === heuristicSeat) wins++;
     }
     expect(wins).toBeGreaterThanOrEqual(5);
+  });
+
+  it('plays a two-colour deck: pays both colours and uses its lands', () => {
+    const gruul = {
+      p1: deckIds(deckById('cat-attack')),
+      p2: deckIds(deckById('vampiric-hunger')),
+    };
+    let wins = 0;
+    for (let seed = 1; seed <= 6; seed++) {
+      const r = playMatch(engine, gruul, { p1: bot, p2: createRandomBot(cardDb, seed) }, seed);
+      if (r.winner === 'p1') wins++;
+    }
+    expect(wins).toBeGreaterThanOrEqual(5);
+  });
+
+  it('plays the Arena decks (modes, kicker, equipment, extra combats) to completion', () => {
+    const deck = (id: string) => deckIds(deckById(id));
+    const decks = { p1: deck('might-of-the-legion'), p2: deck('path-of-power') };
+    for (let seed = 1; seed <= 4; seed++) {
+      const r = playMatch(engine, decks, { p1: bot, p2: bot }, seed);
+      expect(r.winner).not.toBeNull();
+    }
+  });
+});
+
+describe('heuristic bot: counterspells', () => {
+  it('counters a big creature spell with Essence Scatter', () => {
+    const g = game({
+      p1: { hand: ['gnarlback-rhino'], battlefield: Array(4).fill('forest') },
+      p2: { hand: ['essence-scatter'], battlefield: ['island', 'island'] },
+    });
+    const rhino = g.id('p1', 'gnarlback-rhino', 'hand');
+    g.do({ type: 'castSpell', player: 'p1', card: rhino, targets: [] }).pass();
+    const a = bot.chooseAction(redactFor(g.state, 'p2', cardDb), 'p2');
+    expect(a).toMatchObject({ type: 'castSpell', targets: [{ object: { id: rhino } }] });
+  });
+});
+
+describe('easy bot', () => {
+  it('plays legal games to completion and loses to the heuristic bot most of the time', () => {
+    const decks = {
+      p1: deckIds(deckById('cat-attack')),
+      p2: deckIds(deckById('vampiric-hunger')),
+    };
+    let heuristicWins = 0;
+    for (let seed = 1; seed <= 10; seed++) {
+      const easySeat: PlayerId = seed % 2 ? 'p1' : 'p2';
+      const easy = createEasyBot(cardDb, { seed });
+      const r = playMatch(
+        engine,
+        decks,
+        { p1: easySeat === 'p1' ? easy : bot, p2: easySeat === 'p2' ? easy : bot },
+        seed,
+      );
+      expect(r.winner, `seed ${seed}`).not.toBeNull();
+      if (r.winner !== easySeat) heuristicWins++;
+    }
+    expect(heuristicWins).toBeGreaterThanOrEqual(6);
+  });
+
+  it('never responds on the opponent’s turn', () => {
+    const g = game({
+      p1: { hand: ['gnarlback-rhino'], battlefield: Array(4).fill('forest') },
+      p2: { hand: ['essence-scatter'], battlefield: ['island', 'island'] },
+    });
+    g.do({
+      type: 'castSpell',
+      player: 'p1',
+      card: g.id('p1', 'gnarlback-rhino', 'hand'),
+      targets: [],
+    }).pass();
+    const easy = createEasyBot(cardDb, { seed: 1 });
+    expect(easy.chooseAction(redactFor(g.state, 'p2', cardDb), 'p2')).toEqual({
+      type: 'passPriority',
+      player: 'p2',
+    });
   });
 });

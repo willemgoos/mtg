@@ -1,0 +1,144 @@
+/* Components. Each one is a .c-* class, demoed in components.html,
+   and marked where used with data-component="Name". */
+
+/* Button — brass primary, ghost secondary */
+.c-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  height: 40px;
+  padding: 0 var(--space-5);
+  border: 1px solid var(--color-brass);
+  border-radius: var(--radius-sm);
+  background: linear-gradient(180deg, var(--color-brass-hi), var(--color-brass));
+  color: var(--color-text-inverse);
+  font-family: var(--font-caps);
+  font-size: var(--text-md);
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+}
+.c-button--ghost { background: transparent; color: var(--color-brass-hi); border-color: var(--color-line-strong); }
+.c-button--lg { height: 52px; padding: 0 var(--space-6); font-size: var(--text-lg); }
+.c-button--block { display: flex; width: 100%; }
+
+/* MTG card — a card image; size via --w. Modifiers for board states. */
+.c-mtg {
+  --w: var(--card-w-field);
+  position: relative;
+  flex: none;
+  width: var(--w);
+  height: calc(var(--w) * var(--card-ratio));
+  border-radius: var(--card-radius);
+  background: var(--color-felt-lo) center / cover no-repeat;
+  box-shadow: var(--shadow-md);
+}
+.c-mtg > img { width: 100%; height: 100%; object-fit: cover; border-radius: inherit; }
+.c-mtg--hand { --w: var(--card-w-hand); }
+.c-mtg--land { --w: var(--card-w-land); }
+.c-mtg--stack { --w: var(--card-w-stack); }
+.c-mtg--preview { --w: var(--card-w-preview); border-radius: calc(var(--card-radius) * 2.5); box-shadow: var(--shadow-lg); }
+.c-mtg--tapped { transform: rotate(90deg); margin-inline: calc(var(--w) * 0.2); opacity: 0.92; }
+.c-mtg--playable { box-shadow: var(--glow-playable); }
+.c-mtg--attacking { box-shadow: var(--glow-attack); transform: translateY(-14px); }
+.c-mtg--target { box-shadow: var(--glow-target); }
+.c-mtg--sick { filter: saturate(0.7) brightness(0.85); }
+.c-mtg--back {
+  background:
+    radial-gradient(ellipse at center, #7a4a22 0 30%, transparent 31%),
+    repeating-radial-gradient(ellipse at center, #3b2412 0 3px, #2a190c 3px 6px);
+  border: 2px solid #1a0f06;
+}
+
+/* Power / toughness chip pinned to a card's bottom-right */
+.c-pt {
+  position: absolute;
+  right: -4px;
+  bottom: -6px;
+  min-width: 34px;
+  padding: 1px var(--space-2);
+  border: 1px solid var(--color-brass-dim);
+  border-radius: var(--radius-sm);
+  background: var(--color-ink);
+  color: var(--color-text-strong);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-bold);
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+.c-pt--up { color: var(--color-moss); border-color: var(--color-moss); }
+.c-pt--hurt { color: var(--color-ember); border-color: var(--color-ember); }
+
+/* Mana pip — coloured dot */
+.c-pip {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: var(--radius-full);
+  background: var(--pip, var(--mana-W));
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.6), 0 0 8px var(--pip, var(--mana-W));
+}
+.c-pip--W { --pip: var(--mana-W); }
+.c-pip--U { --pip: var(--mana-U); }
+.c-pip--B { --pip: var(--mana-B); }
+.c-pip--R { --pip: var(--mana-R); }
+.c-pip--G { --pip: var(--mana-G); }
+
+/* Count — small number bubble (land stacks, zone counts) */
+.c-count {
+  display: inline-grid;
+  place-items: center;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 var(--space-1);
+  border-radius: var(--radius-full);
+  background: var(--color-ink);
+  border: 1px solid var(--color-brass-dim);
+  color: var(--color-brass-hi);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-bold);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Tile — battlefield creature as art + name + big P/T (clarity variants).
+   Set --tile-color to the card's mana colour. */
+.c-tile {
+  --tile-color: var(--mana-G);
+  --tile-w: 140px;
+  position: relative;
+  flex: none;
+  width: var(--tile-w);
+  border-radius: var(--radius-md);
+  background: var(--color-ink);
+  border: 1px solid var(--color-line);
+  border-top: 3px solid var(--tile-color);
+  box-shadow: var(--shadow-md);
+}
+.c-tile__art { height: calc(var(--tile-w) * 0.78); border-radius: 0 0 var(--radius-sm) var(--radius-sm); background: var(--color-felt-lo) center / cover no-repeat; }
+.c-tile__name {
+  padding: var(--space-1) var(--space-2) var(--space-2);
+  font-family: var(--font-display); font-size: var(--text-sm); color: var(--color-text-strong);
+  line-height: var(--leading-tight); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.c-tile__pt {
+  position: absolute; right: var(--space-2); top: calc(var(--tile-w) * 0.78 - 22px);
+  min-width: 46px; height: 30px; padding: 0 var(--space-2);
+  display: grid; place-items: center;
+  border-radius: var(--radius-full); background: var(--color-ink);
+  border: 1px solid var(--color-brass); color: var(--color-text-strong);
+  font-weight: var(--weight-black); font-size: var(--text-lg); font-variant-numeric: tabular-nums;
+}
+.c-tile__tag {
+  position: absolute; left: var(--space-2); top: var(--space-2);
+  padding: 0 var(--space-2); border-radius: var(--radius-full);
+  background: var(--color-scrim); font-size: var(--text-2xs); letter-spacing: var(--tracking-caps);
+  text-transform: uppercase; color: var(--color-text); white-space: nowrap;
+}
+.c-tile--R { --tile-color: var(--mana-R); }
+.c-tile--G { --tile-color: var(--mana-G); }
+.c-tile--tapped { transform: rotate(12deg); filter: brightness(0.7); }
+.c-tile--target { box-shadow: var(--glow-target); border-color: var(--color-target); }
+.c-tile--target .c-tile__pt { border-color: var(--color-target); color: var(--color-target); }

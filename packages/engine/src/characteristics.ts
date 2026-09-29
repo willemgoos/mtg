@@ -1,5 +1,7 @@
 import { type Ctx, def, defOf, obj } from './context.ts';
+import { checkCondition } from './triggers.ts';
 import type {
+  Amount,
   CardDb,
   CardDefinition,
   CardDefId,
@@ -19,6 +21,8 @@ export interface Characteristics {
   types: readonly CardType[];
   subtypes: readonly string[];
   cantBlock: boolean;
+  cantBeBlocked: boolean;
+  cantAttack: boolean;
 }
 
 /**
@@ -29,18 +33,26 @@ export interface Characteristics {
 export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
   const o = obj(ctx, id);
   const d = def(ctx, id);
-  let power = (d.power ?? 0) + o.plusOneCounters;
-  let toughness = (d.toughness ?? 0) + o.plusOneCounters;
+  const onField = o.zone === 'battlefield';
+  const base = d.ptEquals !== undefined && onField ? countFor(ctx, o, d) : null;
+  const basePower =
+    d.powerEquals !== undefined && onField ? countOf(ctx, o.controller, d.powerEquals, true) : null;
+  let power = (basePower ?? base ?? d.power ?? 0) + o.plusOneCounters;
+  let toughness = (base ?? d.toughness ?? 0) + o.plusOneCounters;
   // Copy-on-write: most creatures have no granted keywords, so share the printed set.
   let keywords = printedKeywords(d);
   let granted: Set<Keyword> | null = null;
   let cantBlock = false;
+  let cantBeBlocked = false;
+  let cantAttack = false;
 
   if (o.zone === 'battlefield') {
     for (const e of ctx.s.effects) {
       if (e.affected.id !== id || e.affected.zcc !== o.zcc) continue;
       power += e.power;
       toughness += e.toughness;
+      if (e.cantBlock) cantBlock = true;
+      if (e.cantBeBlocked) cantBeBlocked = true;
       if (e.keywords.length) {
         granted ??= new Set(keywords);
         for (const k of e.keywords) granted.add(k);
@@ -54,10 +66,43 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
         if (a.kind !== 'static') continue;
         const st = a.effect;
         if (st.kind === 'cantBlock' && srcId === id) cantBlock = true;
+        if (st.kind === 'while') {
+          if (srcId !== id || !checkCondition(ctx, st.condition, o.controller, o)) continue;
+          power += st.power;
+          toughness += st.toughness;
+          if (st.keywords?.length) {
+            granted ??= new Set(keywords);
+            for (const k of st.keywords) granted.add(k);
+          }
+          continue;
+        }
+        if (st.kind === 'whileLife') {
+          if (srcId !== id || ctx.s.players[o.controller].life < st.minLife) continue;
+          power += st.power;
+          toughness += st.toughness;
+          if (st.keywords?.length) {
+            granted ??= new Set(keywords);
+            for (const k of st.keywords) granted.add(k);
+          }
+          continue;
+        }
+        if (st.kind === 'attached') {
+          if (src.attachedTo !== id) continue;
+          if (st.cantAttackOrBlock) cantAttack = cantBlock = true;
+          power += st.power;
+          toughness += st.toughness;
+          if (st.keywords?.length) {
+            granted ??= new Set(keywords);
+            for (const k of st.keywords) granted.add(k);
+          }
+          continue;
+        }
         if (st.kind !== 'anthem') continue;
         if (src.controller !== o.controller || !d.types.includes('Creature')) continue;
         if (st.affects === 'otherCreaturesYouControl' && srcId === id) continue;
         if (st.filter?.subtype && !d.subtypes.includes(st.filter.subtype)) continue;
+        // Printed keywords only (avoids recursion through other anthems).
+        if (st.filter?.hasKeyword && !d.keywords.includes(st.filter.hasKeyword)) continue;
         power += st.power;
         toughness += st.toughness;
         if (st.keywords?.length) {
@@ -68,7 +113,49 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
     }
   }
   if (granted) keywords = granted;
-  return { power, toughness, keywords, types: d.types, subtypes: d.subtypes, cantBlock };
+  const subtypes = o.addedSubtypes ? [...d.subtypes, ...o.addedSubtypes] : d.subtypes;
+  return {
+    power,
+    toughness,
+    keywords,
+    types: d.types,
+    subtypes,
+    cantBlock,
+    cantBeBlocked,
+    cantAttack,
+  };
+}
+
+/** Characteristic-defining P/T: counts that don't depend on other P/T (no recursion). */
+/**
+ * A count from `player`'s point of view. `printed` uses printed subtypes, for
+ * characteristic-defining abilities (avoids recursing into characteristics).
+ */
+export function countOf(ctx: Ctx, player: PlayerId, a: Amount, printed = false): number {
+  if (typeof a === 'number') return a;
+  if (!('count' in a)) return 0;
+  if (a.count === 'cardsInGraveyard')
+    return (
+      (a.plus ?? 0) +
+      ctx.s.players[player].graveyard.filter(
+        (id) =>
+          (!a.named || obj(ctx, id).defId === a.named) &&
+          (!a.types || a.types.some((t: CardType) => def(ctx, id).types.includes(t))),
+      ).length
+    );
+  const n = ctx.s.battlefield.filter((id) => {
+    if (obj(ctx, id).controller !== player) return false;
+    const d = def(ctx, id);
+    if (a.count === 'landsYouControl') return d.types.includes('Land');
+    if (!d.types.includes('Creature')) return false;
+    if (!a.subtype) return true;
+    return (printed ? d.subtypes : characteristics(ctx, id).subtypes).includes(a.subtype);
+  }).length;
+  return a.max !== undefined ? Math.min(a.max, n) : n;
+}
+
+function countFor(ctx: Ctx, o: GameObject, d: CardDefinition): number {
+  return d.ptEquals === undefined ? 0 : countOf(ctx, o.controller, d.ptEquals, true);
 }
 
 const printedCache = new WeakMap<CardDefinition, ReadonlySet<Keyword>>();
@@ -137,6 +224,47 @@ export function matchesFilter(
   if (filter.tapped !== undefined && obj(ctx, id).tapped !== filter.tapped) return false;
   if (filter.attacking !== undefined && isAttacking(ctx, id) !== filter.attacking) return false;
   if (filter.subtype && !c.subtypes.includes(filter.subtype)) return false;
+  if (filter.minToughness !== undefined && c.toughness < filter.minToughness) return false;
+  if (filter.nontoken && obj(ctx, id).isToken) return false;
+  if (filter.sameNameAsSource && (!sourceId || obj(ctx, id).defId !== obj(ctx, sourceId).defId))
+    return false;
+  if (filter.inCombatBlock) {
+    const c = ctx.s.combat;
+    const blocking = !!c?.attackers.some((a) => a.blockers.includes(id));
+    const blocked = !!c?.attackers.some((a) => a.id === id && a.blocked);
+    if (!blocking && !blocked) return false;
+  }
+  return cardMatches(ctx, id, filter, sourceId);
+}
+
+/**
+ * The parts of a filter that only need the card itself (also used for cards
+ * in graveyards): types, subtypes and mana value.
+ */
+export function cardMatches(
+  ctx: Ctx,
+  id: ObjectId,
+  filter: CardFilter,
+  sourceId?: ObjectId,
+): boolean {
+  const d = def(ctx, id);
+  if (filter.types && !filter.types.some((t) => d.types.includes(t))) return false;
+  if (filter.nonland && d.types.includes('Land')) return false;
+  if (filter.enteredThisTurn && obj(ctx, id).zoneTurn !== ctx.s.turn.number) return false;
+  if (filter.notSubtype && d.subtypes.includes(filter.notSubtype)) return false;
+  if (filter.maxManaValue !== undefined) {
+    const max =
+      filter.maxManaValue === 'sourcePower'
+        ? sourceId
+          ? obj(ctx, sourceId).zone === 'battlefield'
+            ? characteristics(ctx, sourceId).power
+            : (obj(ctx, sourceId).lastPower ?? 0)
+          : 0
+        : filter.maxManaValue;
+    let mv = d.manaCost.generic;
+    for (const v of Object.values(d.manaCost.colored)) mv += v ?? 0;
+    if (mv > max) return false;
+  }
   if (filter.other && id === sourceId) return false;
   return true;
 }

@@ -5,7 +5,7 @@ import {
   power,
   toughness,
 } from './characteristics.ts';
-import { type Ctx, obj, other } from './context.ts';
+import { type Ctx, def, obj, other } from './context.ts';
 import { damageSourceFor, dealDamage, type DamageSource } from './effects.ts';
 import type { Attacker, ObjectId, PlayerId, TargetChoice } from './types.ts';
 
@@ -14,7 +14,7 @@ export function canAttack(ctx: Ctx, id: ObjectId): boolean {
   if (o.zone !== 'battlefield' || o.tapped || o.controller !== ctx.s.turn.activePlayer)
     return false;
   const c = characteristics(ctx, id);
-  if (!c.types.includes('Creature') || c.keywords.has('defender')) return false;
+  if (!c.types.includes('Creature') || c.keywords.has('defender') || c.cantAttack) return false;
   return !o.summoningSick || c.keywords.has('haste');
 }
 
@@ -31,6 +31,7 @@ export function canBlock(ctx: Ctx, blocker: ObjectId, attacker: ObjectId): boole
   if (!bc.types.includes('Creature') || bc.cantBlock) return false;
   const a = ctx.s.combat?.attackers.find((x) => x.id === attacker);
   if (!a || b.controller !== a.defender) return false;
+  if (characteristics(ctx, attacker).cantBeBlocked) return false;
   if (
     hasKeyword(ctx, attacker, 'flying') &&
     !bc.keywords.has('flying') &&
@@ -162,7 +163,16 @@ export function dealCombatDamage(ctx: Ctx, firstStrikeStep: boolean): void {
     }
   }
 
-  for (const x of assignments) dealDamage(ctx, x.src, x.to, x.amount, true);
+  // Fog Bank: combat damage to or from it is prevented.
+  const prevented = (id: ObjectId) =>
+    def(ctx, id).abilities.some(
+      (a) => a.kind === 'static' && a.effect.kind === 'preventCombatDamage',
+    );
+  for (const x of assignments) {
+    if (prevented(x.src.id)) continue;
+    if ('object' in x.to && prevented(x.to.object.id)) continue;
+    dealDamage(ctx, x.src, x.to, x.amount, true);
+  }
   if (firstStrikeStep) combat.dealtFirstStrikeDamage.push(...dealt);
 }
 

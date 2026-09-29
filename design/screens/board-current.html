@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Board — Current</title>
+  <meta name="frame" content="1440x810">
+  <link rel="stylesheet" href="../system/tokens.css">
+  <link rel="stylesheet" href="../system/base.css">
+  <link rel="stylesheet" href="../system/components.css">
+  <style>
+    /* Recreation of today's board (apps/web/src/styles.css) with a mid-game state. */
+    .table {
+      display: grid;
+      grid-template-columns: 1fr var(--rail-w);
+      height: 100%;
+      background: radial-gradient(ellipse at 45% 50%, var(--color-felt-hi), var(--color-felt) 55%, var(--color-felt-lo));
+    }
+    .board {
+      position: relative;
+      display: grid;
+      grid-template-rows: 64px 1fr 52px 1fr 120px;
+      padding: 0 var(--space-4);
+      min-width: 0;
+    }
+    .board::before {
+      content: ""; position: absolute; left: 50%; top: 50%; width: 520px; aspect-ratio: 1;
+      transform: translate(-50%, -50%); border-radius: 50%;
+      border: 1px solid var(--color-line); opacity: 0.5; pointer-events: none;
+    }
+    .side { position: relative; display: flex; gap: var(--space-5); }
+    .side--opp { align-items: flex-start; padding-top: var(--space-2); }
+    .side--me { align-items: flex-end; padding-bottom: var(--space-3); }
+
+    .badge {
+      display: flex; align-items: center; gap: var(--space-3);
+      padding: var(--space-1) var(--space-4) var(--space-1) var(--space-1);
+      border: 1px solid var(--color-line); border-radius: var(--radius-full);
+      background: var(--color-glass); position: relative; z-index: 2;
+    }
+    .badge--active { border-color: var(--color-brass); box-shadow: var(--glow-brass); }
+    .badge__life {
+      display: grid; place-items: center; width: 50px; height: 50px; border-radius: 50%;
+      border: 2px solid var(--color-brass-dim); font-family: var(--font-display);
+      font-size: var(--text-2xl); color: var(--color-parchment);
+    }
+    .badge__name { font-family: var(--font-caps); color: var(--color-parchment); font-size: var(--text-md); }
+    .badge__zones { display: flex; gap: var(--space-2); font-size: var(--text-xs); color: var(--color-text-muted); }
+
+    .opp-hand { position: absolute; left: 50%; top: -48px; display: flex; transform: translateX(-50%); }
+    .opp-hand .c-mtg { --w: 58px; margin-left: -22px; }
+
+    .battlefield { display: flex; flex-direction: column; justify-content: center; gap: var(--space-2); }
+    .row { display: flex; align-items: center; justify-content: center; gap: var(--space-3); }
+    .row--lands { gap: var(--space-5); }
+    .land-stack { position: relative; }
+    .land-stack .c-count { position: absolute; top: -8px; right: -8px; }
+
+    .midline { display: flex; align-items: center; gap: var(--space-5); border-block: 1px solid var(--color-line); background: rgba(0,0,0,0.18); }
+    .phases__turn { display: flex; flex-direction: column; line-height: 1.1; padding-left: var(--space-1); }
+    .phases__num { font-size: var(--text-2xs); letter-spacing: var(--tracking-caps); text-transform: uppercase; color: var(--color-text-muted); }
+    .phases__who { font-family: var(--font-caps); color: var(--color-brass); font-size: var(--text-md); }
+    .phases__list { display: flex; gap: var(--space-2); font-family: var(--font-caps); font-size: var(--text-sm); color: var(--color-text-muted); }
+    .phases__list li { padding: var(--space-1) var(--space-2); border-radius: var(--radius-sm); }
+    .phases__list li.is-on { background: linear-gradient(180deg, var(--color-brass-hi), var(--color-brass)); color: var(--color-text-inverse); }
+    .stack { margin-left: auto; display: flex; align-items: center; gap: var(--space-2); font-size: var(--text-sm); }
+    .stack .c-mtg { --w: 34px; }
+
+    .hand { position: absolute; left: 50%; bottom: -70px; display: flex; transform: translateX(-50%); }
+    .hand .c-mtg { margin-left: -26px; }
+    .hand .c-mtg:nth-child(1) { transform: rotate(-9deg) translateY(14px); }
+    .hand .c-mtg:nth-child(2) { transform: rotate(-4.5deg) translateY(4px); }
+    .hand .c-mtg:nth-child(4) { transform: rotate(4.5deg) translateY(4px); }
+    .hand .c-mtg:nth-child(5) { transform: rotate(9deg) translateY(14px); }
+
+    .rail { display: flex; flex-direction: column; gap: var(--space-3); padding: var(--space-3); border-left: 1px solid var(--color-line); background: rgba(0,0,0,0.25); }
+    .log { flex: 1; overflow: hidden; font-size: var(--text-sm); display: flex; flex-direction: column; gap: var(--space-1); }
+    .log__turn { font-family: var(--font-caps); color: var(--color-brass-dim); font-size: var(--text-xs); letter-spacing: var(--tracking-caps); margin-top: var(--space-2); }
+    .log__line--opp { color: var(--color-ember); }
+    .log__line--me { color: var(--color-moss); }
+    .command { padding: var(--space-3); border: 1px solid var(--color-line); border-radius: var(--radius-md); background: var(--color-glass); display: flex; flex-direction: column; gap: var(--space-3); }
+    .command--live { border-color: var(--color-brass); }
+    .command__prompt { color: var(--color-text-strong); font-weight: var(--weight-medium); }
+    .command__buttons { display: flex; gap: var(--space-2); justify-content: flex-end; }
+    .command__keys, .toggle { font-size: var(--text-xs); color: var(--color-text-muted); }
+    kbd { border: 1px solid var(--color-line-strong); border-radius: 3px; padding: 0 4px; font-size: var(--text-2xs); }
+  </style>
+</head>
+<body>
+<div class="frame table" data-name="Table">
+  <main class="board" data-name="Board">
+    <header class="side side--opp" data-name="Opponent Side">
+      <div class="badge" data-name="Opponent Badge">
+        <div class="badge__life">11</div>
+        <div><div class="badge__name">Opponent</div><div class="badge__zones"><span>▯ 47</span><span>▯ 3</span><span>▯ 4</span></div></div>
+      </div>
+      <div class="opp-hand" data-name="Opponent Hand">
+        <div class="c-mtg c-mtg--back" data-component="MTG Card"></div><div class="c-mtg c-mtg--back" data-component="MTG Card"></div><div class="c-mtg c-mtg--back" data-component="MTG Card"></div>
+      </div>
+    </header>
+
+    <section class="battlefield" data-name="Opponent Battlefield">
+      <div class="row row--lands" data-name="Lands">
+        <div class="land-stack"><div class="c-mtg c-mtg--land c-mtg--tapped" data-component="MTG Card"><img src="../assets/mountain.jpg" alt=""></div><span class="c-count" data-component="Count">3</span></div>
+        <div class="land-stack"><div class="c-mtg c-mtg--land" data-component="MTG Card"><img src="../assets/mountain.jpg" alt=""></div><span class="c-count" data-component="Count">2</span></div>
+      </div>
+      <div class="row" data-name="Creatures">
+        <div class="c-mtg" data-component="MTG Card"><img src="../assets/heartfire-immolator.jpg" alt=""><span class="c-pt" data-component="PT">2/2</span></div>
+        <div class="c-mtg" data-component="MTG Card"><img src="../assets/fanatical-firebrand.jpg" alt=""><span class="c-pt" data-component="PT">1/1</span></div>
+        <div class="c-mtg" data-component="MTG Card"><img src="../assets/brazen-scourge.jpg" alt=""><span class="c-pt" data-component="PT">3/3</span></div>
+      </div>
+    </section>
+
+    <div class="midline" data-name="Midline">
+      <div class="phases__turn"><span class="phases__num">Turn 6</span><span class="phases__who">Your turn</span></div>
+      <ol class="phases__list" data-name="Phases">
+        <li>Upkeep</li><li>Draw</li><li class="is-on">Main</li><li>Combat</li><li>Main</li><li>End</li>
+      </ol>
+      <div class="stack" data-name="Stack">
+        <div class="c-mtg" data-component="MTG Card"><img src="../assets/lightning-strike.jpg" alt=""></div>
+        <span>Lightning Strike → Druid of the Cowl</span>
+      </div>
+    </div>
+
+    <section class="battlefield" data-name="My Battlefield">
+      <div class="row" data-name="Creatures">
+        <div class="c-mtg" data-component="MTG Card"><img src="../assets/gnarlback-rhino.jpg" alt=""><span class="c-pt" data-component="PT">4/4</span></div>
+        <div class="c-mtg" data-component="MTG Card"><img src="../assets/bear-cub.jpg" alt=""><span class="c-pt" data-component="PT">2/2</span></div>
+        <div class="c-mtg" data-component="MTG Card"><img src="../assets/druid-of-the-cowl.jpg" alt=""><span class="c-pt" data-component="PT">1/3</span></div>
+        <div class="c-mtg" data-component="MTG Card"><img src="../assets/thornweald-archer.jpg" alt=""><span class="c-pt" data-component="PT">2/1</span></div>
+      </div>
+      <div class="row row--lands" data-name="Lands">
+        <div class="land-stack"><div class="c-mtg c-mtg--land c-mtg--tapped" data-component="MTG Card"><img src="../assets/forest.jpg" alt=""></div><span class="c-count" data-component="Count">2</span></div>
+        <div class="land-stack"><div class="c-mtg c-mtg--land" data-component="MTG Card"><img src="../assets/forest.jpg" alt=""></div><span class="c-count" data-component="Count">4</span></div>
+      </div>
+    </section>
+
+    <footer class="side side--me" data-name="My Side">
+      <div class="badge badge--active" data-name="My Badge">
+        <div class="badge__life">14</div>
+        <div><div class="badge__name">You</div><div class="badge__zones"><span>▯ 44</span><span>▯ 5</span><span>▯ 2</span></div></div>
+      </div>
+      <div class="hand" data-name="Hand">
+        <div class="c-mtg c-mtg--hand" data-component="MTG Card"><img src="../assets/forest.jpg" alt=""></div>
+        <div class="c-mtg c-mtg--hand" data-component="MTG Card"><img src="../assets/giant-growth.jpg" alt=""></div>
+        <div class="c-mtg c-mtg--hand" data-component="MTG Card"><img src="../assets/overrun.jpg" alt=""></div>
+        <div class="c-mtg c-mtg--hand" data-component="MTG Card"><img src="../assets/magnigoth-sentry.jpg" alt=""></div>
+        <div class="c-mtg c-mtg--hand" data-component="MTG Card"><img src="../assets/imperious-perfect.jpg" alt=""></div>
+      </div>
+    </footer>
+  </main>
+
+  <aside class="rail" data-name="Rail">
+    <div class="log" data-name="Log">
+      <div class="log__turn">Turn 5</div>
+      <div class="log__line--opp">Opponent casts Brazen Scourge.</div>
+      <div class="log__line--opp">Heartfire Immolator attacks you. You take 2.</div>
+      <div class="log__turn">Turn 6</div>
+      <div class="log__line--me">You draw a card.</div>
+      <div class="log__line--me">You play Forest.</div>
+      <div class="log__line--opp">Opponent casts Lightning Strike targeting Druid of the Cowl.</div>
+    </div>
+    <div class="command command--live" data-name="Command">
+      <div class="command__prompt">Lightning Strike targets Druid of the Cowl. Respond?</div>
+      <div class="command__buttons">
+        <button class="c-button" data-component="Button">Resolve</button>
+      </div>
+      <div class="command__keys"><kbd>Space</kbd> confirm · <kbd>Esc</kbd> cancel</div>
+      <label class="toggle">☐ Full control (stop at every priority)</label>
+    </div>
+  </aside>
+</div>
+</body>
+</html>

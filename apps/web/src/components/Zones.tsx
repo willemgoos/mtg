@@ -7,12 +7,16 @@ import {
   type PlayerId,
   type Step,
 } from '@mtg/engine';
-import { Card, CardBack, type CardMark } from './Card.tsx';
+import { Card, CardBack, type CardMark, type HoverFn } from './Card.tsx';
 
 export interface ZoneHandlers {
   markOf: (id: ObjectId) => CardMark;
   onCard: (id: ObjectId) => void;
-  onHover: (defId: CardDefId | null) => void;
+  onHover: HoverFn;
+  /** Starts a possible drag of a hand card. */
+  onHandPointerDown?: (id: ObjectId, e: React.PointerEvent) => void;
+  /** The hand card currently being dragged. */
+  dragging?: ObjectId | null;
 }
 
 const isLand = (s: GameState, id: ObjectId) =>
@@ -34,7 +38,10 @@ export function Battlefield({
   h: ZoneHandlers;
 }) {
   const mine = view.battlefield.filter((id) => view.objects[id]!.controller === player);
-  const nonLands = mine.filter((id) => !isLand(view, id));
+  const nonLands = withAttachments(
+    view,
+    mine.filter((id) => !isLand(view, id)),
+  );
   const lands = mine.filter((id) => isLand(view, id));
   const groups = new Map<CardDefId, ObjectId[]>();
   for (const id of lands) {
@@ -56,6 +63,7 @@ export function Battlefield({
             defId={o.defId}
             size="field"
             tapped={o.tapped}
+            attached={o.attachedTo !== undefined}
             mark={h.markOf(id)}
             sick={
               creature &&
@@ -125,21 +133,68 @@ export function Battlefield({
   );
 }
 
+/** Orders permanents so each Equipment follows the creature it is attached to. */
+function withAttachments(view: GameState, ids: ObjectId[]): ObjectId[] {
+  const attached = ids.filter((id) => {
+    const host = view.objects[id]!.attachedTo;
+    return host !== undefined && ids.includes(host);
+  });
+  const out: ObjectId[] = [];
+  for (const id of ids) {
+    if (attached.includes(id)) continue;
+    out.push(id, ...attached.filter((a) => view.objects[a]!.attachedTo === id));
+  }
+  return out;
+}
+
 // ---------------------------------------------------------------------------
 // Hands
 // ---------------------------------------------------------------------------
 
-export function Hand({ view, player, h }: { view: GameState; player: PlayerId; h: ZoneHandlers }) {
+export function Hand({
+  view,
+  player,
+  h,
+  extras = [],
+}: {
+  view: GameState;
+  player: PlayerId;
+  h: ZoneHandlers;
+  /** Castable cards from elsewhere (flashback, top of library), shown beside the hand. */
+  extras?: { id: ObjectId; label: string }[];
+}) {
   const hand = view.players[player].hand;
   const n = hand.length;
   return (
     <div className="hand" style={{ '--n': n } as React.CSSProperties}>
+      {extras.length > 0 && (
+        <div className="hand-extra">
+          {extras.map(({ id, label }) => (
+            <div
+              key={id}
+              className={`hand-extra__slot ${h.dragging === id ? 'is-dragging' : ''}`}
+              onPointerDown={(e) => h.onHandPointerDown?.(id, e)}
+            >
+              <span className="hand-extra__label">{label}</span>
+              <Card
+                id={id}
+                defId={view.objects[id]!.defId}
+                size="hand"
+                mark={h.markOf(id)}
+                onClick={() => h.onCard(id)}
+                onHover={h.onHover}
+              />
+            </div>
+          ))}
+        </div>
+      )}
       {hand.map((id, i) => {
         const offset = i - (n - 1) / 2;
         return (
           <div
             key={id}
-            className="hand__slot"
+            className={`hand__slot ${h.dragging === id ? 'is-dragging' : ''}`}
+            onPointerDown={(e) => h.onHandPointerDown?.(id, e)}
             style={{ '--o': offset, '--abs': Math.abs(offset) } as React.CSSProperties}
           >
             <Card
@@ -180,6 +235,7 @@ export function PlayerBadge({
   view,
   player,
   name,
+  art,
   targetable,
   active,
   priority,
@@ -189,11 +245,13 @@ export function PlayerBadge({
   view: GameState;
   player: PlayerId;
   name: string;
+  /** Deck face art, shown as the player's portrait. */
+  art: string;
   targetable: boolean;
   active: boolean;
   priority: boolean;
   onClick: () => void;
-  onHover: (defId: CardDefId | null) => void;
+  onHover: HoverFn;
 }) {
   const ps = view.players[player];
   const top = ps.graveyard[ps.graveyard.length - 1];
@@ -205,8 +263,10 @@ export function PlayerBadge({
       data-player={player}
       onClick={onClick}
     >
-      <div className="badge__life" key={ps.life}>
-        {ps.life}
+      <div className="badge__portrait" style={{ backgroundImage: `url("${art}")` }}>
+        <div className="badge__life" key={ps.life}>
+          {ps.life}
+        </div>
       </div>
       <div className="badge__meta">
         <div className="badge__name">{name}</div>
@@ -221,7 +281,7 @@ export function PlayerBadge({
           </span>
           <span
             title="Graveyard"
-            onMouseEnter={() => top && onHover(view.objects[top]!.defId)}
+            onMouseEnter={(e) => top && onHover(view.objects[top]!.defId, e.currentTarget)}
             onMouseLeave={() => onHover(null)}
           >
             <i className="ico ico--grave" />
@@ -271,14 +331,16 @@ export function PhaseTrack({ view, me }: { view: GameState; me: PlayerId }) {
   return (
     <div className={`phases ${mine ? 'phases--me' : 'phases--opp'}`}>
       <div className="phases__turn">
-        <span className="phases__num">Turn {view.turn.number}</span>
         <span className="phases__who">{mine ? 'Your turn' : "Opponent's turn"}</span>
+        <span className="phases__num">
+          Turn {view.turn.number}
+          {STEP_LABEL[step] && ` · ${STEP_LABEL[step]}`}
+        </span>
       </div>
       <ol className="phases__list">
         {PHASES.map((p, i) => (
           <li key={i} className={p.steps.includes(step) ? 'is-on' : ''}>
             {p.label}
-            {p.steps.includes(step) && STEP_LABEL[step] && <small>{STEP_LABEL[step]}</small>}
           </li>
         ))}
       </ol>
@@ -289,9 +351,14 @@ export function PhaseTrack({ view, me }: { view: GameState; me: PlayerId }) {
 export function StackView({
   view,
   onHover,
+  markOf,
+  onCard,
 }: {
   view: GameState;
-  onHover: (d: CardDefId | null) => void;
+  onHover: HoverFn;
+  /** Spells on the stack can be targets (counterspells). */
+  markOf?: (id: ObjectId) => CardMark;
+  onCard?: (id: ObjectId) => void;
 }) {
   if (view.stack.length === 0) return <div className="stack stack--empty" />;
   return (
@@ -301,11 +368,22 @@ export function StackView({
         return (
           <div
             key={item.id}
-            className={`stack__item stack__item--${item.controller === 'p1' ? 'me' : 'opp'}`}
+            className={`stack__item stack__item--${item.controller === 'p1' ? 'me' : 'opp'}${i === view.stack.length - 1 ? ' stack__item--top' : ''}`}
             data-stack={item.id}
             style={{ '--i': i } as React.CSSProperties}
           >
-            <Card defId={defId} size="stack" onHover={onHover} />
+            {item.kind === 'spell' ? (
+              <Card
+                id={item.id}
+                defId={defId}
+                size="stack"
+                mark={markOf?.(item.id) ?? null}
+                onHover={onHover}
+                {...(onCard ? { onClick: () => onCard(item.id) } : {})}
+              />
+            ) : (
+              <Card defId={defId} size="stack" onHover={onHover} />
+            )}
             {item.kind === 'ability' && <span className="stack__tag">Ability</span>}
           </div>
         );
