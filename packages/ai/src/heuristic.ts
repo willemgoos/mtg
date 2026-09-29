@@ -189,13 +189,30 @@ export function planAttacks(
   return plan;
 }
 
+/**
+ * Plans are made once per declaration and then declared one creature at a
+ * time. Keyed by the decision object, which stays the same while a simulation
+ * mutates its state in place (in the real game each action makes a new one).
+ */
+const attackPlans = new WeakMap<object, ObjectId[]>();
+const blockPlans = new WeakMap<object, Block[]>();
+
+function memo<T>(cache: WeakMap<object, T>, key: object, make: () => T): T {
+  let v = cache.get(key);
+  if (v === undefined) {
+    v = make();
+    cache.set(key, v);
+  }
+  return v;
+}
+
 function nextAttackAction(
   engine: Engine,
   view: GameState,
   me: PlayerId,
   declared: ObjectId[],
 ): Action {
-  const plan = planAttacks(engine, view, me, declared);
+  const plan = memo(attackPlans, view.decision, () => planAttacks(engine, view, me, declared));
   const wrong = declared.find((id) => !plan.includes(id));
   if (wrong) return { type: 'removeAttacker', player: me, attacker: wrong };
   const next = plan.find((id) => !declared.includes(id));
@@ -258,7 +275,7 @@ function nextBlockAction(
   me: PlayerId,
   declared: readonly Block[],
 ): Action {
-  const plan = planBlocks(engine, view, me);
+  const plan = memo(blockPlans, view.decision, () => planBlocks(engine, view, me));
   const key = (b: Block) => `${b.blocker}>${b.attacker}`;
   const planned = new Set(plan.map(key));
   const wrong = declared.find((b) => !planned.has(key(b)));

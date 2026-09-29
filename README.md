@@ -79,11 +79,28 @@ pumps don't count, so tricks are only used when they change a fight.
 In 40-game runs it beats the random bot about 95% of the time. In the heuristic mirror,
 green beats red about 64% of the time.
 
+The **search bot** (`createSearchBot(db, decklists, { rollouts, timeMs })`) is determinized
+Monte Carlo search. Unlike the heuristic bot, it knows both decklists, as if it knew the
+format. For each playout it samples the hidden cards from the decklists (`determinize`),
+applies a candidate option, lets the heuristic bot play both sides for about two turns,
+and scores the result.
+
+- **Candidates:** casts and abilities (the heuristic keeps the best two target choices per
+  card), passing, and whole attack or block plans (the heuristic's plan, none, all-in,
+  single attackers, one-change variations).
+- **Budget:** spread with successive halving, and all candidates are compared on the same
+  sampled worlds.
+- **When it searches:** only in its main phase, in combat, or in response to something
+  on the stack. Otherwise it plays like the heuristic bot.
+
+In the web app the opponent (Apprentice = heuristic, Master = search) runs in a Web Worker
+so the board stays smooth while it thinks.
+
 ## Known gaps / next steps
 
-- AI: the opponent model is passive (it never casts tricks), and there's no search deeper
-  than one action. Next up is Monte Carlo tree search over `determinize`d states, with the
-  heuristic bot as the playout policy.
+- AI: search is flat (it compares root options by playouts; there's no tree below the
+  root), and playouts use the heuristic's passive opponent model. The heuristic bot is
+  also the main cost; a cheaper playout policy would allow more playouts.
 
 - Manual combat damage assignment, and ordering several simultaneous triggers (both
   automatic for now).

@@ -1327,6 +1327,58 @@ button {
    Start screen
    ========================================================================== */
 
+.start__opponent {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  margin-bottom: -20px;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.45);
+  box-shadow: 0 0 0 1px var(--line);
+  animation: rise 0.8s var(--ease) both;
+  animation-delay: 0.15s;
+}
+
+.opp {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 220px;
+  padding: 10px 18px;
+  border: 0;
+  border-radius: 9px;
+  cursor: pointer;
+  text-align: left;
+  color: var(--muted);
+  background: transparent;
+  transition:
+    background 0.25s,
+    color 0.25s;
+}
+
+.opp:hover {
+  color: var(--text);
+}
+
+.opp.is-on {
+  color: #1d150a;
+  background: linear-gradient(180deg, var(--brass-hi), var(--brass) 60%, #a8864a);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+.opp__name {
+  font-family: var(--caps);
+  font-size: 18px;
+  letter-spacing: 0.08em;
+}
+
+.opp__blurb {
+  font-size: 13px;
+  opacity: 0.85;
+}
+
 .start {
   display: flex;
   flex-direction: column;

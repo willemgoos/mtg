@@ -207,7 +207,11 @@ export function Board({ game, onRestart }: { game: GameSession; onRestart: () =>
       if (d.kind === 'chooseTriggerTargets') return { prompt };
       return { prompt, secondary: ['Cancel', () => setTargeting(null)] };
     }
-    if (!myDecision) return { prompt: d.player === BOT ? 'Opponent is thinking…' : '' };
+    if (!myDecision)
+      return {
+        prompt:
+          d.player === BOT ? (game.thinking ? 'Opponent is thinking…' : 'Opponent is acting…') : '',
+      };
     const pass: Action = { type: 'passPriority', player: HUMAN };
     const mine = state.turn.activePlayer === HUMAN;
     switch (d.kind) {

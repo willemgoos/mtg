@@ -1,4 +1,3 @@
-import { createHeuristicBot } from '@mtg/ai';
 import { cardDb, deckIds, describeEvent, MONO_GREEN, MONO_RED } from '@mtg/cards';
 import {
   type Action,
@@ -10,6 +9,7 @@ import {
   redactFor,
 } from '@mtg/engine';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import type { BotKind, BotRequest, BotResponse } from './bot.worker.ts';
 import { type PassSettings, shouldAutoPass } from './interaction.ts';
 
 export const HUMAN: PlayerId = 'p1';
@@ -49,8 +49,19 @@ function botDelay(a: Action): number {
   }
 }
 
-export function useGame(deck: DeckChoice, seed: number) {
-  const bot = useMemo(() => createHeuristicBot(cardDb), []);
+export function useGame(deck: DeckChoice, seed: number, opponent: BotKind) {
+  // The bot thinks in a worker so the board stays smooth while it searches.
+  // Created in an effect (not useMemo) so StrictMode's remount gets a live worker.
+  const [worker, setWorker] = useState<Worker | null>(null);
+  useEffect(() => {
+    const w = new Worker(new URL('./bot.worker.ts', import.meta.url), { type: 'module' });
+    setWorker(w);
+    return () => {
+      w.terminate();
+      setWorker(null);
+    };
+  }, []);
+  const [thinking, setThinking] = useState(false);
   const decks = useMemo(() => {
     const red = deckIds(MONO_RED);
     const green = deckIds(MONO_GREEN);
@@ -63,6 +74,7 @@ export function useGame(deck: DeckChoice, seed: number) {
   const [batch, setBatch] = useState<EventBatch>({ seq: 0, events: [] });
   const [settings, setSettings] = useState<PassSettings>({ fullControl: false, passTurn: null });
   const logId = useRef(0);
+  const requestId = useRef(0);
 
   const apply = useCallback((action: Action) => {
     const r = engine.applyAction(stateRef.current, action);
@@ -92,20 +104,44 @@ export function useGame(deck: DeckChoice, seed: number) {
   useEffect(() => {
     const d = state.decision;
     if (d.kind === 'gameOver') return;
-    let action: Action | null = null;
-    let delay = 0;
     if (d.player === BOT) {
-      action = bot.chooseAction(redactFor(state, BOT), BOT);
-      delay = botDelay(action);
-    } else if (shouldAutoPass(state, legal, HUMAN, settings)) {
-      action = { type: 'passPriority', player: HUMAN };
-      delay = 110;
+      if (!worker) return;
+      const id = ++requestId.current;
+      const request: BotRequest = {
+        id,
+        kind: opponent,
+        decks,
+        seed,
+        view: redactFor(state, BOT),
+        player: BOT,
+      };
+      let timer: ReturnType<typeof setTimeout> | undefined;
+      const onMessage = (e: MessageEvent<BotResponse>) => {
+        if (e.data.id !== id) return;
+        setThinking(false);
+        // Keep a minimum pace so the human can follow along.
+        timer = setTimeout(
+          () => apply(e.data.action),
+          Math.max(0, botDelay(e.data.action) - e.data.ms),
+        );
+      };
+      worker.addEventListener('message', onMessage);
+      const slow = setTimeout(() => setThinking(true), 250);
+      // Posted a tick later: StrictMode's throwaway first effect run never sends.
+      const post = setTimeout(() => worker.postMessage(request));
+      return () => {
+        worker.removeEventListener('message', onMessage);
+        clearTimeout(post);
+        clearTimeout(slow);
+        clearTimeout(timer);
+        setThinking(false);
+      };
     }
-    if (!action) return;
-    const a = action;
-    const t = setTimeout(() => apply(a), delay);
-    return () => clearTimeout(t);
-  }, [state, legal, settings, bot, apply]);
+    if (shouldAutoPass(state, legal, HUMAN, settings)) {
+      const t = setTimeout(() => apply({ type: 'passPriority', player: HUMAN }), 110);
+      return () => clearTimeout(t);
+    }
+  }, [state, legal, settings, apply, worker, opponent, decks, seed]);
 
   // "End turn" only lasts for the turn it was pressed in.
   useEffect(() => {
@@ -113,7 +149,7 @@ export function useGame(deck: DeckChoice, seed: number) {
       setSettings((s) => ({ ...s, passTurn: null }));
   }, [state.turn.number, settings.passTurn]);
 
-  return { engine, state, view, legal, apply, log, batch, settings, setSettings };
+  return { engine, state, view, legal, apply, log, batch, settings, setSettings, thinking };
 }
 
 export type GameSession = ReturnType<typeof useGame>;

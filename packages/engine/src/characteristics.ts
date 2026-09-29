@@ -1,6 +1,7 @@
 import { type Ctx, def, defOf, obj } from './context.ts';
 import type {
   CardDb,
+  CardDefinition,
   CardDefId,
   CardFilter,
   CardType,
@@ -13,7 +14,8 @@ import type {
 export interface Characteristics {
   power: number;
   toughness: number;
-  keywords: Set<Keyword>;
+  /** Shared between calls: never mutate. */
+  keywords: ReadonlySet<Keyword>;
   types: readonly CardType[];
   subtypes: readonly string[];
   cantBlock: boolean;
@@ -29,7 +31,9 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
   const d = def(ctx, id);
   let power = (d.power ?? 0) + o.plusOneCounters;
   let toughness = (d.toughness ?? 0) + o.plusOneCounters;
-  const keywords = new Set<Keyword>(d.keywords);
+  // Copy-on-write: most creatures have no granted keywords, so share the printed set.
+  let keywords = printedKeywords(d);
+  let granted: Set<Keyword> | null = null;
   let cantBlock = false;
 
   if (o.zone === 'battlefield') {
@@ -37,7 +41,10 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
       if (e.affected.id !== id || e.affected.zcc !== o.zcc) continue;
       power += e.power;
       toughness += e.toughness;
-      for (const k of e.keywords) keywords.add(k);
+      if (e.keywords.length) {
+        granted ??= new Set(keywords);
+        for (const k of e.keywords) granted.add(k);
+      }
     }
     const withStatics = staticDefs(ctx.db);
     for (const srcId of ctx.s.battlefield) {
@@ -53,11 +60,26 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
         if (st.filter?.subtype && !d.subtypes.includes(st.filter.subtype)) continue;
         power += st.power;
         toughness += st.toughness;
-        for (const k of st.keywords ?? []) keywords.add(k);
+        if (st.keywords?.length) {
+          granted ??= new Set(keywords);
+          for (const k of st.keywords) granted.add(k);
+        }
       }
     }
   }
+  if (granted) keywords = granted;
   return { power, toughness, keywords, types: d.types, subtypes: d.subtypes, cantBlock };
+}
+
+const printedCache = new WeakMap<CardDefinition, ReadonlySet<Keyword>>();
+
+function printedKeywords(d: CardDefinition): ReadonlySet<Keyword> {
+  let set = printedCache.get(d);
+  if (!set) {
+    set = new Set(d.keywords);
+    printedCache.set(d, set);
+  }
+  return set;
 }
 
 export function power(ctx: Ctx, id: ObjectId): number {
