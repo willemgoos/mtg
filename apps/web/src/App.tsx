@@ -17,28 +17,19 @@ import { type Event, Home, type Mode, Nav, type Tab } from './components/Home.ts
 import { JumpIn } from './components/JumpIn.tsx';
 import type { BotKind } from './game/bot.worker.ts';
 import { artFor, BLURBS } from './game/deckArt.ts';
-import {
-  deckCards,
-  type ExpeditionState,
-  loadExpedition,
-  recordExpedition,
-  runDeck,
-  saveExpedition,
-  startExpedition,
-} from './game/expedition.ts';
+import * as X from './game/expedition.ts';
 import {
   type DeckRecord,
   type GauntletState,
-  LIVES,
   loadGauntlet,
   recordResult,
   ROUNDS,
   roundOf,
-  type Run,
+  type RunSummary,
   saveGauntlet,
   startMatch,
   startRun,
-  statusOf,
+  summarize,
 } from './game/gauntlet.ts';
 import { clearGame, loadGame, type SavedGame } from './game/saved.ts';
 import { type DeckChoice, HUMAN, useGame } from './game/useGame.ts';
@@ -80,7 +71,7 @@ export function App() {
   // A game in progress when the page was closed or reloaded carries on.
   const [saved] = useState(loadGame);
   const [gauntlet, setGauntlet] = useState(loadGauntlet);
-  const [expedition, setExpedition] = useState(loadExpedition);
+  const [expedition, setExpedition] = useState(X.loadExpedition);
   const [match, setMatch] = useState<Match | null>(
     () =>
       saved && {
@@ -140,42 +131,50 @@ export function App() {
       saveGauntlet(next);
       return next;
     });
-  const updateExpedition = (f: (s: ExpeditionState) => ExpeditionState) =>
+  const updateExpedition = (f: (s: X.ExpeditionState) => X.ExpeditionState) =>
     setExpedition((s) => {
       const next = f(s);
-      saveExpedition(next);
+      X.saveExpedition(next);
       return next;
     });
-  const runOf = (e: Event): Run | null => (e === 'gauntlet' ? gauntlet.run : expedition.run);
+  const summaries: Record<Event, RunSummary | null> = {
+    gauntlet: gauntlet.run && summarize(gauntlet.run),
+    expedition: expedition.run && X.summarize(expedition.run),
+  };
   const paused = (e: Event) => {
-    const r = runOf(e);
-    return !!r && r.match !== null && loadGame()?.seed === r.match;
+    const m = e === 'gauntlet' ? gauntlet.run?.match : expedition.run?.match;
+    return m != null && loadGame()?.seed === m;
   };
   const beginRun = (e: Event, deck: string) => {
     if (e === 'gauntlet') updateGauntlet((s) => startRun(s, deck, newSeed()));
-    else updateExpedition((s) => startExpedition(s, deck, newSeed()));
+    else updateExpedition((s) => X.startExpedition(s, deck, newSeed()));
     setHub(e);
   };
   const playRound = (e: Event) => {
-    const r = runOf(e);
-    if (!r) return;
     const resume = paused(e) ? loadGame() : null;
     const seed = resume?.seed ?? newSeed();
-    const round = roundOf(r);
-    if (!resume) {
-      if (e === 'gauntlet') updateGauntlet((s) => startMatch(s, seed));
-      else updateExpedition((s) => startMatch(s, seed));
+    const start = (choice: DeckChoice, bot: BotKind) =>
+      setMatch({ choice: resume?.choice ?? choice, seed, resume, attempt: 0, bot, event: e });
+    if (e === 'gauntlet') {
+      const r = gauntlet.run;
+      if (!r) return;
+      if (!resume) updateGauntlet((s) => startMatch(s, seed));
+      const round = roundOf(r);
+      return start({ you: r.deck, them: r.opponents[round]! }, ROUNDS[round]!.bot);
     }
-    const cards =
-      e === 'expedition' && expedition.run ? deckCards(expedition.run.build) : undefined;
-    setMatch({
-      choice: resume?.choice ?? { you: r.deck, them: r.opponents[round]!, cards },
-      seed,
-      resume,
-      attempt: 0,
-      bot: ROUNDS[round]!.bot,
-      event: e,
-    });
+    const r = expedition.run;
+    const at = r && X.currentNode(r);
+    if (!r || !at?.node.opponent) return;
+    if (!resume) updateExpedition((s) => X.startMatch(s, seed));
+    start(
+      {
+        you: r.deck,
+        them: at.node.opponent,
+        cards: X.deckCards(r.build),
+        options: X.gameOptions(r),
+      },
+      X.botFor(at.floor, at.node),
+    );
   };
   // Leaving a run's match keeps it saved, so the round can be resumed rather than restarted.
   const toHub = (e: Event) => {
@@ -191,7 +190,7 @@ export function App() {
   /** Home's Play button: carry on a run, replay the last quick match, or go pick a deck. */
   const playHome = (m: Mode) => {
     setMode(m);
-    if (m !== 'quick' && runOf(m)) return setHub(m);
+    if (m !== 'quick' && summaries[m]) return setHub(m);
     if (m === 'quick' && lastQuick) return pick(lastQuick.deck, lastQuick.opponent);
     setTab('decks');
   };
@@ -199,7 +198,7 @@ export function App() {
     const seed = match?.seed;
     if (seed === undefined) return;
     if (match?.event === 'gauntlet') updateGauntlet((s) => recordResult(s, seed, outcome));
-    if (match?.event === 'expedition') updateExpedition((s) => recordExpedition(s, seed, outcome));
+    if (match?.event === 'expedition') updateExpedition((s) => X.recordMatch(s, seed, outcome));
   };
   const back = useCallback(() => setViewing(null), []);
   if (!match && viewing)
@@ -262,8 +261,8 @@ export function App() {
       <Home
         mode={mode}
         onMode={setMode}
-        gauntlet={gauntlet}
-        expedition={expedition}
+        runs={summaries}
+        clears={clearsOf(gauntlet) + clearsOf(expedition)}
         quick={
           lastQuick && {
             deck: deckById(lastQuick.deck),
@@ -283,7 +282,10 @@ export function App() {
         clears={clearsOf(gauntlet) + clearsOf(expedition)}
         mode={mode}
         onMode={setMode}
-        runs={mode === 'quick' ? null : mode === 'gauntlet' ? gauntlet : expedition}
+        run={mode === 'quick' ? null : summaries[mode]}
+        records={
+          mode === 'quick' ? {} : mode === 'gauntlet' ? gauntlet.records : expedition.records
+        }
         onContinue={() => mode !== 'quick' && setHub(mode)}
         onRun={(deck) => mode !== 'quick' && beginRun(mode, deck)}
         onJumpIn={() => setJumping(true)}
@@ -307,8 +309,12 @@ export function App() {
         opponent={match.bot}
         resume={match.resume}
         onEnd={onEnd}
-        yours={match.event === 'expedition' && expedition.run ? runDeck(expedition.run) : undefined}
-        gauntlet={match.event ? runLabel(EVENT_NAMES[match.event], runOf(match.event)) : undefined}
+        yours={
+          match.event === 'expedition' && expedition.run ? X.runDeck(expedition.run) : undefined
+        }
+        gauntlet={
+          match.event ? runLabel(EVENT_NAMES[match.event], summaries[match.event]) : undefined
+        }
         onMenu={match.event ? () => toHub(match.event!) : menu}
         onRematch={
           match.event
@@ -320,12 +326,13 @@ export function App() {
   );
 }
 
-function runLabel(name: string, run: Run | null): string {
+function runLabel(name: string, run: RunSummary | null): string {
   if (!run) return name;
-  return `${name} · ${statusOf(run) === 'playing' ? `Round ${roundOf(run) + 1} of ${ROUNDS.length}` : 'Final result'}`;
+  return `${name} · ${run.status === 'playing' ? `${run.unit} ${run.step} of ${run.steps}` : 'Final result'}`;
 }
 
-const clearsOf = (s: GauntletState) => Object.values(s.records).reduce((n, r) => n + r.clears, 0);
+const clearsOf = (s: { records: Record<string, DeckRecord> }) =>
+  Object.values(s.records).reduce((n, r) => n + r.clears, 0);
 
 interface LastQuick {
   deck: string;
@@ -434,7 +441,8 @@ function Start({
   clears,
   mode,
   onMode,
-  runs,
+  run,
+  records,
   onContinue,
   onRun,
   onJumpIn,
@@ -450,7 +458,8 @@ function Start({
   mode: Mode;
   onMode: (m: Mode) => void;
   /** The selected run mode's state (null for quick matches). */
-  runs: GauntletState | null;
+  run: RunSummary | null;
+  records: Record<string, DeckRecord>;
   onContinue: () => void;
   onRun: (deckId: string) => void;
   onJumpIn: () => void;
@@ -461,8 +470,7 @@ function Start({
   theirDeck: string | null;
   onTheirDeck: (id: string | null) => void;
 }) {
-  const run = runs?.run;
-  const running = !!run && statusOf(run) === 'playing';
+  const running = run?.status === 'playing';
   const name = mode === 'quick' ? '' : EVENT_NAMES[mode];
   return (
     <div className="decks-page">
@@ -534,7 +542,7 @@ function Start({
           run && <RunBanner name={name} run={run} onContinue={onContinue} />
         )}
         {mode === 'expedition' && (
-          <JumpInSection records={runs?.records ?? {}} locked={running} onJumpIn={onJumpIn} />
+          <JumpInSection records={records} locked={running} onJumpIn={onJumpIn} />
         )}
         {SECTIONS.map((section, si) => (
           <section key={section.title} className="start__section">
@@ -546,7 +554,7 @@ function Start({
               {section.decks.map((d, j) => {
                 const i = si * 10 + j;
                 const locked = !isPlayable(d);
-                const record = runs?.records[d.id];
+                const record = mode === 'quick' ? undefined : records[d.id];
                 return (
                   <div key={d.id} className="deck-slot">
                     <button
@@ -655,10 +663,17 @@ function JumpInSection({
 const JUMP_IN_FACE = 'Krenko, Mob Boss';
 
 /** The run in progress (or just finished), on the start screen. */
-function RunBanner({ name, run, onContinue }: { name: string; run: Run; onContinue: () => void }) {
+function RunBanner({
+  name,
+  run,
+  onContinue,
+}: {
+  name: string;
+  run: RunSummary;
+  onContinue: () => void;
+}) {
   const deck = deckById(run.deck);
-  const status = statusOf(run);
-  const lost = run.results.filter((r) => r === 'loss').length;
+  const status = run.status;
   return (
     <div
       className="run-banner"
@@ -674,7 +689,7 @@ function RunBanner({ name, run, onContinue }: { name: string; run: Run; onContin
         <span className="run-banner__deck">{deck.name}</span>
         <span className="run-banner__state">
           {status === 'playing'
-            ? `Round ${roundOf(run) + 1} of ${ROUNDS.length} · ${LIVES - lost} ${LIVES - lost === 1 ? 'life' : 'lives'} left`
+            ? `${run.unit} ${run.step} of ${run.steps} · ${run.livesLeft} ${run.livesLeft === 1 ? 'life' : 'lives'} left`
             : status === 'cleared'
               ? `${name} cleared!`
               : 'Run over'}

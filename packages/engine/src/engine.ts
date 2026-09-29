@@ -11,7 +11,7 @@ import {
 import { getLegalActions as legalActions } from './legal.ts';
 import { checkGameOver } from './sba.ts';
 import {
-  OPENING_HAND,
+  openingHand,
   type NewGameOptions,
   emptyState,
   setupGame,
@@ -154,7 +154,7 @@ function apply(ctx: Ctx, action: Action): void {
     case 'mulligan': {
       for (const id of [...ps.hand]) moveObject(ctx, id, 'library');
       shuffleLibrary(ctx, player);
-      for (let i = 0; i < OPENING_HAND; i++) drawCard(ctx, player);
+      for (let i = 0; i < openingHand(ps); i++) drawCard(ctx, player);
       ps.mulligans++;
       emit(ctx, { type: 'mulligan', player, count: ps.mulligans });
       s.decision = { kind: 'mulligan', player };

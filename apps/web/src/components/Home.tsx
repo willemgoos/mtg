@@ -1,17 +1,7 @@
 import { deckById, type Decklist, scryfallById, slug } from '@mtg/cards';
 import { useEffect, useState } from 'react';
 import { artFor } from '../game/deckArt.ts';
-import type { ExpeditionState } from '../game/expedition.ts';
-import {
-  type GauntletState,
-  LIVES,
-  losses,
-  ROUNDS,
-  roundOf,
-  type Run,
-  statusOf,
-  wins,
-} from '../game/gauntlet.ts';
+import { ROUNDS, type RunSummary } from '../game/gauntlet.ts';
 import { UiSize } from './UiSize.tsx';
 
 export type Event = 'gauntlet' | 'expedition';
@@ -75,8 +65,8 @@ const SLIDE_MS = 8000;
 export function Home({
   mode,
   onMode,
-  gauntlet,
-  expedition,
+  runs,
+  clears,
   quick,
   onPlay,
   onDecks,
@@ -85,8 +75,9 @@ export function Home({
 }: {
   mode: Mode;
   onMode: (m: Mode) => void;
-  gauntlet: GauntletState;
-  expedition: ExpeditionState;
+  /** The run in progress (or just finished) in each mode. */
+  runs: Record<Event, RunSummary | null>;
+  clears: number;
   /** The last quick match's deck and opponent level, to play again in one click. */
   quick: { deck: Decklist; opponent: string } | null;
   onPlay: (m: Mode) => void;
@@ -100,11 +91,11 @@ export function Home({
       id: 'expedition',
       badge: 'New mode',
       title: 'Expedition',
-      text: 'Set out with a deck and two packs. Every win opens another, and your deck grows as you go.',
-      cta: expedition.run ? 'Continue' : 'Set out',
+      text: 'Choose your path across seven floors. Win packs, keep the best cards, collect boons.',
+      cta: runs.expedition ? 'Continue' : 'Set out',
       art: art('Shivan Dragon'),
       cards: ['Burst Lightning', 'Shivan Dragon', 'Giant Growth'],
-      go: () => (expedition.run ? onPlay('expedition') : onDecks('expedition')),
+      go: () => (runs.expedition ? onPlay('expedition') : onDecks('expedition')),
     },
     {
       id: 'jump-in',
@@ -121,10 +112,10 @@ export function Home({
       badge: 'Challenge',
       title: 'Gauntlet',
       text: `${ROUNDS.length} opponents, each tougher than the last. Three losses and you're out.`,
-      cta: gauntlet.run ? 'Continue' : 'Enter the gauntlet',
+      cta: runs.gauntlet ? 'Continue' : 'Enter the gauntlet',
       art: art('Lyra Dawnbringer'),
       cards: [],
-      go: () => (gauntlet.run ? onPlay('gauntlet') : onDecks('gauntlet')),
+      go: () => (runs.gauntlet ? onPlay('gauntlet') : onDecks('gauntlet')),
     },
   ];
   const [slide, setSlide] = useState(0);
@@ -136,13 +127,7 @@ export function Home({
   }, [slide, paused, slides.length]);
 
   const s = slides[slide]!;
-  const clears = [gauntlet, expedition].reduce(
-    (n, g) => n + Object.values(g.records).reduce((k, r) => k + r.clears, 0),
-    0,
-  );
-  const runOf = (m: Mode): Run | null =>
-    m === 'gauntlet' ? gauntlet.run : m === 'expedition' ? expedition.run : null;
-  const run = runOf(mode);
+  const run = mode === 'quick' ? null : runs[mode];
 
   return (
     <div className="home">
@@ -193,20 +178,20 @@ export function Home({
             <ModeTile
               name="Expedition"
               art={
-                expedition.run ? artFor(deckById(expedition.run.deck)) : art('Rampaging Baloths')
+                runs.expedition ? artFor(deckById(runs.expedition.deck)) : art('Rampaging Baloths')
               }
-              blurb="A deck, two packs, and a new pack for every win"
-              run={expedition.run}
+              blurb="Choose your path, keep the best cards, collect boons"
+              run={runs.expedition}
               on={mode === 'expedition'}
               onClick={() => onMode('expedition')}
             />
             <ModeTile
               name="Gauntlet"
               art={
-                gauntlet.run ? artFor(deckById(gauntlet.run.deck)) : art('Arahbo, the First Fang')
+                runs.gauntlet ? artFor(deckById(runs.gauntlet.deck)) : art('Arahbo, the First Fang')
               }
               blurb={`${ROUNDS.length} opponents, each tougher`}
-              run={gauntlet.run}
+              run={runs.gauntlet}
               on={mode === 'gauntlet'}
               onClick={() => onMode('gauntlet')}
             />
@@ -239,7 +224,7 @@ export function Home({
               <span className="play__change">{run ? 'Decks' : 'Change'}</span>
             </button>
             <button className="play__button" onClick={() => onPlay(mode)}>
-              {run ? (statusOf(run) === 'playing' ? 'Continue' : 'Results') : 'Play'}
+              {run ? (run.status === 'playing' ? 'Continue' : 'Results') : 'Play'}
             </button>
           </div>
         </section>
@@ -259,12 +244,11 @@ function ModeTile({
   name: string;
   art: string;
   blurb: string;
-  run: Run | null;
+  run: RunSummary | null;
   on: boolean;
   onClick: () => void;
 }) {
-  const status = run && statusOf(run);
-  const lost = run ? losses(run) : 0;
+  const status = run?.status;
   return (
     <button
       role="radio"
@@ -282,26 +266,26 @@ function ModeTile({
       <span className="mode__name">{name}</span>
       <span className="mode__meta">
         {run && status === 'playing'
-          ? `Round ${roundOf(run) + 1} of ${ROUNDS.length} · ${deckById(run.deck).name}`
+          ? `${run.unit} ${run.step} of ${run.steps} · ${deckById(run.deck).name}`
           : blurb}
       </span>
       {run && status === 'playing' && (
         <>
-          <span className="mode__lives" aria-label={`${LIVES - lost} of ${LIVES} lives left`}>
-            {Array.from({ length: LIVES }, (_, i) => (
+          <span className="mode__lives" aria-label={`${run.livesLeft} of ${run.lives} lives left`}>
+            {Array.from({ length: run.lives }, (_, i) => (
               <svg
                 key={i}
                 viewBox="0 0 16 16"
                 fill="currentColor"
-                className={i < LIVES - lost ? '' : 'is-lost'}
+                className={i < run.livesLeft ? '' : 'is-lost'}
               >
                 <path d="M8 14 2 8a3.5 3.5 0 0 1 6-4 3.5 3.5 0 0 1 6 4z" />
               </svg>
             ))}
           </span>
           <span className="mode__ladder">
-            {ROUNDS.map((_, i) => (
-              <i key={i} className={i < wins(run) ? 'is-won' : ''} />
+            {Array.from({ length: run.steps }, (_, i) => (
+              <i key={i} className={i < run.done ? 'is-won' : ''} />
             ))}
           </span>
         </>

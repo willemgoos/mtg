@@ -2,6 +2,7 @@ import { cardDb, DECKS, deckIds, describeEvent } from '@mtg/cards';
 import {
   type Action,
   type CardDefId,
+  type NewGameOptions,
   createEngine,
   type GameEvent,
   type GameState,
@@ -22,6 +23,8 @@ export interface DeckChoice {
   them: string;
   /** The human's own cards instead of `you`'s list (an expedition deck). */
   cards?: CardDefId[];
+  /** Setup changes for the game (an expedition's boons). */
+  options?: Omit<NewGameOptions, 'decks' | 'seed'>;
 }
 
 const engine = createEngine(cardDb);
@@ -89,7 +92,7 @@ export function useGame(
   }, [choice.you, choice.them, choice.cards]);
 
   const [state, setState] = useState<GameState>(
-    () => resume?.state ?? engine.newGame({ decks, seed }),
+    () => resume?.state ?? engine.newGame({ ...choice.options, decks, seed }),
   );
   const stateRef = useRef(state);
   const [log, setLog] = useState<LogLine[]>(() => resume?.log ?? []);

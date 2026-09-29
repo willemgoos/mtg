@@ -1,34 +1,45 @@
-import { slug } from '@mtg/cards';
+import { deckById, slug } from '@mtg/cards';
 import type { Color } from '@mtg/engine';
 import { useMemo, useState } from 'react';
 import { artFor } from '../game/deckArt.ts';
 import { cardEntries, type DeckEntry, deckColumns, total } from '../game/deckView.ts';
 import {
   BASICS,
-  choosePack,
-  deckColors,
+  type BoonId,
+  BOONS,
+  botFor,
+  camp,
+  chooseBoon,
+  currentNode,
+  enterNode,
   type ExpeditionRun,
   type ExpeditionState,
+  FLOORS,
+  keepCount,
+  type MapNode,
+  maxLives,
   MIN_DECK,
   moveCard,
+  type NodeKind,
   openPacks,
+  reachable,
   runDeck,
   size,
+  statusOf,
+  TIER_NAMES,
 } from '../game/expedition.ts';
-import { wins } from '../game/gauntlet.ts';
 import { ruleNotes } from '../game/notes.ts';
 import { play } from '../game/sound.ts';
 import { DeckList } from './DeckView.tsx';
-import { Gauntlet } from './Gauntlet.tsx';
+import { PackOpening, packName } from './PackOpening.tsx';
 import { HoverPreview, type HoverState } from './Preview.tsx';
-import { COLOR_NAMES, PackOpening, packArt, packName } from './PackOpening.tsx';
 import { UiSize } from './UiSize.tsx';
 
 type Update = (f: (s: ExpeditionState) => ExpeditionState) => void;
 
 /**
- * Everything between expedition matches: choosing a pack after a win, opening
- * packs, the deck builder, and the ladder itself.
+ * Everything between expedition matches: opening packs, boon and camp
+ * choices, the deck builder, and the map itself.
  */
 export function Expedition({
   state,
@@ -50,24 +61,40 @@ export function Expedition({
   const run = state.run!;
   const b = run.build;
   const [building, setBuilding] = useState(false);
-  if (b.offer) return <PackOffer run={run} onChoose={(i) => update((s) => choosePack(s, i))} />;
   if (b.packs.length)
     return (
       <PackOpening
         run={run}
-        onDone={() => {
-          update(openPacks);
+        onDone={(kept) => {
+          update((s) => openPacks(s, kept));
           setBuilding(true);
         }}
       />
     );
+  if (run.pending?.kind === 'boon')
+    return (
+      <BoonChoice
+        run={run}
+        options={run.pending.options}
+        onChoose={(boon) => {
+          play('chime');
+          update((s) => chooseBoon(s, boon));
+        }}
+      />
+    );
+  if (run.pending?.kind === 'camp')
+    return <Camp run={run} onChoose={(c) => update((s) => camp(s, c))} />;
   if (!resumable && (building || size(b.main) < MIN_DECK))
     return <DeckBuilder run={run} update={update} onDone={() => setBuilding(false)} />;
   return (
-    <Gauntlet
-      name="Expedition"
-      state={state}
+    <ExpeditionMap
+      run={run}
+      best={state.records[run.deck]?.best ?? 0}
       resumable={resumable}
+      onEnter={(lane) => {
+        play('place');
+        update((s) => enterNode(s, lane));
+      }}
       onPlay={onPlay}
       onDeck={() => setBuilding(true)}
       onAbandon={onAbandon}
@@ -78,45 +105,370 @@ export function Expedition({
 }
 
 // ---------------------------------------------------------------------------
-// Packs
+// The map
 // ---------------------------------------------------------------------------
 
-function PackOffer({ run, onChoose }: { run: ExpeditionRun; onChoose: (i: number) => void }) {
-  const mine = deckColors(run.build);
+const KIND_NAMES: Record<NodeKind, string> = {
+  duel: 'Duel',
+  elite: 'Elite',
+  camp: 'Camp',
+  shrine: 'Shrine',
+  boss: 'Final battle',
+};
+
+/** Small glyphs for the map's nodes, drawn on a 24-unit grid. */
+const ICONS: Record<NodeKind, React.ReactNode> = {
+  duel: (
+    <path d="M4 3l7 7-2 2-7-7V3zm16 0v2l-7 7-2-2 7-7h2zM3 18l4-4 3 3-4 4-3-3zm18 0l-3 3-4-4 3-3 4 4zM8 13l3 3-1 1-3-3 1-1zm8 0l1 1-3 3-1-1 3-3z" />
+  ),
+  elite: (
+    <path d="M12 2c4.4 0 8 3.2 8 7.5 0 2.4-1.1 4.2-3 5.4V18a1 1 0 0 1-1 1h-1v2h-2v-2h-2v2H9v-2H8a1 1 0 0 1-1-1v-3.1c-1.9-1.2-3-3-3-5.4C4 5.2 7.6 2 12 2zm-3.5 7a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4z" />
+  ),
+  camp: (
+    <path d="M12 2c1 3 4 4.5 4 8.5A4 4 0 0 1 12 15a4 4 0 0 1-4-4.5c0-1.5.7-2.6 1.6-3.4.1 1.4.8 2.4 1.9 2.9C11 7.5 11 5 12 2zM3 19l18-3 .4 2L3.4 21 3 19zm18 0L3 16l-.4 2 18 3 .4-2z" />
+  ),
+  shrine: (
+    <path d="M12 1l2.6 6.9L22 8.3l-5.7 4.8L18.2 21 12 16.8 5.8 21l1.9-7.9L2 8.3l7.4-.4L12 1z" />
+  ),
+  boss: <path d="M3 7l4.5 4L12 4l4.5 7L21 7l-2 12H5L3 7zm2.5 13.5h13V22h-13v-1.5z" />,
+};
+
+const HEART = <path d="M8 14 2 8a3.5 3.5 0 0 1 6-4 3.5 3.5 0 0 1 6 4z" />;
+
+function nodeInfo(floor: number, node: MapNode): { title: string; lines: string[] } {
+  const title = KIND_NAMES[node.kind];
+  const opp = node.opponent ? deckById(node.opponent).name : '';
+  switch (node.kind) {
+    case 'duel':
+      return {
+        title,
+        lines: [
+          `${TIER_NAMES[botFor(floor, node)]} playing ${opp}`,
+          `Win: ${packName(node.reward!)}`,
+        ],
+      };
+    case 'elite':
+      return {
+        title,
+        lines: [`${TIER_NAMES[botFor(floor, node)]} playing ${opp}`, 'Win: Rare pack and a boon'],
+      };
+    case 'camp':
+      return { title, lines: ['Rest to win back a life, or open a booster'] };
+    case 'shrine':
+      return { title, lines: ['Choose one of three boons'] };
+    case 'boss':
+      return {
+        title,
+        lines: [`${TIER_NAMES[botFor(floor, node)]} playing ${opp}`, 'Win to clear the expedition'],
+      };
+  }
+}
+
+const laneY = (lanes: number, lane: number) => (lanes === 1 ? 50 : ((lane + 0.5) / lanes) * 100);
+const floorX = (floor: number) => ((floor + 0.5) / FLOORS) * 100;
+
+function ExpeditionMap({
+  run,
+  best,
+  resumable,
+  onEnter,
+  onPlay,
+  onDeck,
+  onAbandon,
+  onAgain,
+  onMenu,
+}: {
+  run: ExpeditionRun;
+  best: number;
+  resumable: boolean;
+  onEnter: (lane: number) => void;
+  onPlay: () => void;
+  onDeck: () => void;
+  onAbandon: () => void;
+  onAgain: () => void;
+  onMenu: () => void;
+}) {
+  const [confirming, setConfirming] = useState(false);
+  const [hover, setHover] = useState<{ floor: number; lane: number } | null>(null);
+  const status = statusOf(run);
+  const here = currentNode(run);
+  const open = reachable(run);
+  const deck = runDeck(run);
+  const lives = maxLives(run);
+  const left = lives - run.livesLost;
+  const floorNow = Math.min(run.outcomes.length + 1, FLOORS);
+  const shown = hover ?? (here && { floor: here.floor, lane: here.lane });
+  const info = shown && nodeInfo(shown.floor, run.map[shown.floor]![shown.lane]!);
+  const fight = here && !['camp', 'shrine'].includes(here.node.kind);
+
+  const headline =
+    status === 'cleared'
+      ? 'Expedition cleared!'
+      : status === 'out'
+        ? 'Out of lives'
+        : `Floor ${floorNow} of ${FLOORS}`;
+  const sub =
+    status === 'playing'
+      ? fight
+        ? 'Your next fight is ready.'
+        : 'Choose where to go next.'
+      : `Floors cleared: ${run.outcomes.length} of ${FLOORS} · best with this deck: ${best}`;
+
+  // Edges between every pair of connected nodes; the path taken is drawn in gold.
+  const edges: { key: string; x1: number; y1: number; x2: number; y2: number; state: string }[] =
+    [];
+  for (let f = 0; f < FLOORS - 1; f++) {
+    const a = run.map[f]!;
+    const b = run.map[f + 1]!;
+    a.forEach((_, i) =>
+      b.forEach((__, j) => {
+        if (b.length > 1 && Math.abs(i - j) > 1) return;
+        const taken = run.path[f] === i && run.path[f + 1] === j;
+        const next = run.path.length === f + 1 && run.path[f] === i && open.includes(j);
+        edges.push({
+          key: `${f}-${i}-${j}`,
+          x1: floorX(f),
+          y1: laneY(a.length, i),
+          x2: floorX(f + 1),
+          y2: laneY(b.length, j),
+          state: taken ? 'taken' : next ? 'next' : '',
+        });
+      }),
+    );
+  }
+
   return (
-    <div className="start offer">
+    <div className={`start xmap xmap--${status}`}>
       <UiSize />
       <div className="start__title">
-        <span className="start__eyebrow">Expedition · Round {wins(run)} won</span>
-        <h1>Choose your reward</h1>
-        <p>Deepen your colours or open something new.</p>
+        <span className="start__eyebrow">Expedition · {deck.name}</span>
+        <h1>{headline}</h1>
+        <p>{sub}</p>
       </div>
-      <div className="start__decks offer__packs">
-        {run.build.offer!.map((p, i) => (
+
+      <div className="xmap__status">
+        <span className="lives" aria-label={`${left} of ${lives} lives left`}>
+          {Array.from({ length: lives }, (_, i) => (
+            <span key={i} className={`life ${i < left ? 'is-full' : 'is-lost'}`} />
+          ))}
+        </span>
+        {run.boons.length > 0 && (
+          <span className="xmap__boons">
+            {run.boons.map((b) => (
+              <span key={b} className="boon-chip" title={BOONS[b].text}>
+                {BOONS[b].name}
+              </span>
+            ))}
+          </span>
+        )}
+      </div>
+
+      <div className="xmap__board">
+        <svg className="xmap__lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden>
+          {edges.map((e) => (
+            <line
+              key={e.key}
+              x1={e.x1}
+              y1={e.y1}
+              x2={e.x2}
+              y2={e.y2}
+              className={e.state && `is-${e.state}`}
+              vectorEffect="non-scaling-stroke"
+            />
+          ))}
+        </svg>
+        {run.map.map((nodes, f) =>
+          nodes.map((node, lane) => {
+            const onPath = run.path[f] === lane;
+            const outcome = onPath ? run.outcomes[f] : undefined;
+            const isHere = here?.floor === f && here.lane === lane;
+            const canGo = f === run.path.length && open.includes(lane);
+            const state = isHere
+              ? 'here'
+              : outcome
+                ? `done is-${outcome}`
+                : canGo
+                  ? 'open'
+                  : f < run.path.length
+                    ? 'past'
+                    : 'ahead';
+            return (
+              <button
+                key={`${f}-${lane}`}
+                className={`xnode xnode--${node.kind} is-${state}`}
+                style={
+                  {
+                    left: `${floorX(f)}%`,
+                    top: `${laneY(nodes.length, lane)}%`,
+                  } as React.CSSProperties
+                }
+                aria-disabled={!canGo}
+                aria-label={`${nodeInfo(f, node).title}, floor ${f + 1}`}
+                onClick={() => canGo && onEnter(lane)}
+                onMouseEnter={() => setHover({ floor: f, lane })}
+                onMouseLeave={() => setHover(null)}
+              >
+                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+                  {ICONS[node.kind]}
+                </svg>
+                {outcome === 'loss' && <span className="xnode__mark">✕</span>}
+              </button>
+            );
+          }),
+        )}
+      </div>
+
+      <div className="xmap__bar">
+        <div className="xmap__info">
+          {info ? (
+            <>
+              <span className="xmap__info-title">{info.title}</span>
+              {info.lines.map((l) => (
+                <span key={l}>{l}</span>
+              ))}
+            </>
+          ) : (
+            <span className="xmap__info-hint">Hover a node to see what waits there.</span>
+          )}
+        </div>
+        <div className="gauntlet__actions">
+          {status === 'playing' ? (
+            confirming ? (
+              <>
+                <span className="gauntlet__confirm">
+                  Abandon this run? Your best record is kept.
+                </span>
+                <button className="btn btn--primary" onClick={onAbandon}>
+                  Abandon
+                </button>
+                <button className="btn btn--ghost" onClick={() => setConfirming(false)}>
+                  Keep going
+                </button>
+              </>
+            ) : (
+              <>
+                {fight && (
+                  <button className="btn btn--primary btn--big btn--nudge" onClick={onPlay}>
+                    {resumable ? 'Resume match' : 'Fight'}
+                  </button>
+                )}
+                {!resumable && (
+                  <button className="btn btn--ghost" onClick={onDeck}>
+                    Edit deck
+                  </button>
+                )}
+                <button className="btn btn--ghost" onClick={() => setConfirming(true)}>
+                  Abandon run
+                </button>
+                <button className="btn btn--ghost" onClick={onMenu}>
+                  Main menu
+                </button>
+              </>
+            )
+          ) : (
+            <>
+              <button className="btn btn--primary btn--big" onClick={onAgain}>
+                New expedition
+              </button>
+              <button className="btn btn--ghost" onClick={onMenu}>
+                Main menu
+              </button>
+            </>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Shrines and camps
+// ---------------------------------------------------------------------------
+
+function BoonChoice({
+  run,
+  options,
+  onChoose,
+}: {
+  run: ExpeditionRun;
+  options: BoonId[];
+  onChoose: (b: BoonId) => void;
+}) {
+  const atShrine = currentNode(run)?.node.kind === 'shrine';
+  return (
+    <div className="start choice">
+      <UiSize />
+      <div className="start__title">
+        <span className="start__eyebrow">
+          Expedition · {atShrine ? 'Shrine' : 'Elite defeated'}
+        </span>
+        <h1>Choose a boon</h1>
+        <p>It lasts for the rest of the run.</p>
+      </div>
+      <div className="choice__options">
+        {options.map((b, i) => (
           <button
-            key={i}
-            className="deck"
-            style={
-              {
-                '--art': `url("${packArt(p)}")`,
-                '--glow': p.kind === 'color' ? `var(--mana-${p.color})` : 'var(--brass)',
-                '--i': i,
-              } as React.CSSProperties
-            }
-            onClick={() => onChoose(i)}
+            key={b}
+            className="choice__option"
+            style={{ '--i': i } as React.CSSProperties}
+            onClick={() => onChoose(b)}
           >
-            <span className="deck__art" />
-            <span className="deck__pips">
-              {p.kind === 'color' && <span className={`pip pip--${p.color}`} />}
+            <span className="choice__glyph">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+                {ICONS.shrine}
+              </svg>
             </span>
-            <span className="deck__name">{packName(p)}</span>
-            <span className="deck__blurb">
-              {p.kind === 'color'
-                ? `Mostly ${COLOR_NAMES[p.color].toLowerCase()} cards${mine.includes(p.color) ? ', a colour you play' : ', a new direction'}`
-                : 'Two rares instead of one'}
-            </span>
+            <span className="choice__name">{BOONS[b].name}</span>
+            <span className="choice__text">{BOONS[b].text}</span>
           </button>
         ))}
+      </div>
+    </div>
+  );
+}
+
+function Camp({ run, onChoose }: { run: ExpeditionRun; onChoose: (c: 'rest' | 'forage') => void }) {
+  const hurt = run.livesLost > 0;
+  return (
+    <div className="start choice">
+      <UiSize />
+      <div className="start__title">
+        <span className="start__eyebrow">Expedition · Camp</span>
+        <h1>Make camp</h1>
+        <p>Catch your breath before the next floor.</p>
+      </div>
+      <div className="choice__options">
+        <button
+          className="choice__option"
+          style={{ '--i': 0 } as React.CSSProperties}
+          disabled={!hurt}
+          onClick={() => onChoose('rest')}
+        >
+          <span className="choice__glyph choice__glyph--heart">
+            <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden>
+              {HEART}
+            </svg>
+          </span>
+          <span className="choice__name">Rest</span>
+          <span className="choice__text">
+            {hurt ? 'Win back a life.' : "You're at full lives already."}
+          </span>
+        </button>
+        <button
+          className="choice__option"
+          style={{ '--i': 1 } as React.CSSProperties}
+          onClick={() => onChoose('forage')}
+        >
+          <span className="choice__glyph">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+              {ICONS.camp}
+            </svg>
+          </span>
+          <span className="choice__name">Forage</span>
+          <span className="choice__text">
+            Open a Foundations booster and keep {keepCount(run)}.
+          </span>
+        </button>
       </div>
     </div>
   );

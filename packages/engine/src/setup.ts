@@ -1,4 +1,4 @@
-import { type Ctx, createObject, drawCard, emit } from './context.ts';
+import { type Ctx, createObject, def, drawCard, emit, moveObject } from './context.ts';
 import { createRng, nextInt, shuffleInPlace } from './rng.ts';
 import type { CardDefId, GameState, PlayerId, PlayerState } from './types.ts';
 import { PLAYERS } from './types.ts';
@@ -10,7 +10,16 @@ export interface NewGameOptions {
   decks: Record<PlayerId, readonly CardDefId[]>;
   seed: number;
   startingPlayer?: PlayerId;
+  /** Starting life, if not 20. */
+  life?: Partial<Record<PlayerId, number>>;
+  /** Extra cards in the opening hand (and each mulligan's new hand). */
+  extraCards?: Partial<Record<PlayerId, number>>;
+  /** Players who start with a basic land from their library on the battlefield. */
+  landInPlay?: readonly PlayerId[];
 }
+
+/** Cards a player draws for an opening hand. */
+export const openingHand = (ps: PlayerState): number => ps.openingHand ?? OPENING_HAND;
 
 function emptyPlayer(id: PlayerId): PlayerState {
   return {
@@ -74,8 +83,17 @@ export function setupGame(ctx: Ctx, opts: NewGameOptions): void {
     for (const defId of deck) s.players[p].library.push(createObject(ctx, defId, p, 'library').id);
     emit(ctx, { type: 'shuffled', player: p });
   }
+  for (const p of PLAYERS) {
+    const ps = s.players[p];
+    if (opts.life?.[p] !== undefined) ps.life = opts.life[p]!;
+    if (opts.extraCards?.[p]) ps.openingHand = OPENING_HAND + opts.extraCards[p]!;
+    if (opts.landInPlay?.includes(p)) {
+      const land = ps.library.find((id) => def(ctx, id).supertypes.includes('Basic'));
+      if (land !== undefined) moveObject(ctx, land, 'battlefield', { controller: p });
+    }
+  }
   const first = opts.startingPlayer ?? (nextInt(s.rng, 2) === 0 ? 'p1' : 'p2');
   s.turn.activePlayer = first;
-  for (const p of PLAYERS) for (let i = 0; i < OPENING_HAND; i++) drawCard(ctx, p);
+  for (const p of PLAYERS) for (let i = 0; i < openingHand(s.players[p]); i++) drawCard(ctx, p);
   s.decision = { kind: 'mulligan', player: first };
 }

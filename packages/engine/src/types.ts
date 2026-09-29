@@ -506,6 +506,8 @@ export interface PlayerState {
   mulligans: number;
   keptHand: boolean;
   lost: boolean;
+  /** Cards drawn for an opening hand, if not the usual seven (an expedition boon). */
+  openingHand?: number;
 }
 
 export type StackItem =

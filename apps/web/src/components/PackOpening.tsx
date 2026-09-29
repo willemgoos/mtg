@@ -1,7 +1,13 @@
 import { SCRYFALL, scryfallById, slug } from '@mtg/cards';
 import type { Color } from '@mtg/engine';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { type ExpeditionRun, type Pack, pendingPacks, runDeck } from '../game/expedition.ts';
+import {
+  type ExpeditionRun,
+  keepCount,
+  type Pack,
+  pendingPacks,
+  runDeck,
+} from '../game/expedition.ts';
 import { burst, flash, fxOn, later, mountFx, ring } from '../game/fx.ts';
 import { ruleNotes } from '../game/notes.ts';
 import { play } from '../game/sound.ts';
@@ -45,7 +51,14 @@ const EMBER = '#ff8a4c';
  * per card, with the big effects saved for rares and mythics. Several packs
  * open one after another.
  */
-export function PackOpening({ run, onDone }: { run: ExpeditionRun; onDone: () => void }) {
+export function PackOpening({
+  run,
+  onDone,
+}: {
+  run: ExpeditionRun;
+  /** The cards kept from each pack. */
+  onDone: (kept: string[][]) => void;
+}) {
   // Commons first, the rare last, like Arena's reveal.
   const packs = useMemo(
     () =>
@@ -55,6 +68,7 @@ export function PackOpening({ run, onDone }: { run: ExpeditionRun; onDone: () =>
     [run],
   );
   const [index, setIndex] = useState(0);
+  const [kept, setKept] = useState<string[][]>([]);
   const canvas = useRef<HTMLCanvasElement>(null);
   useEffect(() => mountFx(canvas.current!), []);
   const last = index === packs.length - 1;
@@ -64,32 +78,62 @@ export function PackOpening({ run, onDone }: { run: ExpeditionRun; onDone: () =>
         key={index}
         pack={run.build.packs[index]!}
         cards={packs[index]!}
+        keep={Math.min(keepCount(run), packs[index]!.length)}
         eyebrow={`Expedition · ${runDeck(run).name}${packs.length > 1 ? ` · Pack ${index + 1} of ${packs.length}` : ''}`}
-        next={last ? 'Add to collection' : 'Next pack'}
-        onNext={() => (last ? onDone() : setIndex(index + 1))}
+        onKeep={(names) => {
+          const all = [...kept, names];
+          if (last) onDone(all);
+          else {
+            setKept(all);
+            setIndex(index + 1);
+          }
+        }}
       />
       <canvas ref={canvas} className="fx-layer" aria-hidden />
     </>
   );
 }
 
-type Phase = 'sealed' | 'tearing' | 'open';
+type Phase = 'sealed' | 'tearing' | 'open' | 'leaving';
 
 function OnePack({
   pack,
   cards,
+  keep,
   eyebrow,
-  next,
-  onNext,
+  onKeep,
 }: {
   pack: Pack;
   cards: string[];
+  /** How many cards to keep. */
+  keep: number;
   eyebrow: string;
-  next: string;
-  onNext: () => void;
+  onKeep: (names: string[]) => void;
 }) {
   const [phase, setPhase] = useState<Phase>('sealed');
   const [up, setUp] = useState<ReadonlySet<number>>(new Set());
+  const [chosen, setChosen] = useState<readonly number[]>([]);
+  const choose = (i: number) => {
+    if (phase !== 'open') return;
+    if (chosen.includes(i)) {
+      setChosen(chosen.filter((c) => c !== i));
+      play('slide', { gain: 0.4 });
+    } else if (chosen.length < keep) {
+      setChosen([...chosen, i]);
+      play('place', { gain: 0.7 });
+      const el = els.current[i];
+      if (el) {
+        const r = el.getBoundingClientRect();
+        ring(r.left + r.width / 2, r.top + r.height / 2, GOLD, { r0: 20, r1: 90, life: 18 });
+      }
+    }
+  };
+  const confirm = () => {
+    setPhase('leaving');
+    setHover(null);
+    play('fan', { gain: 0.7 });
+    later(fxOn() ? 650 : 0, () => onKeep(chosen.map((i) => cards[i]!)));
+  };
   const [hover, setHover] = useState<HoverState | null>(null);
   const root = useRef<HTMLDivElement>(null);
   const booster = useRef<HTMLButtonElement>(null);
@@ -220,16 +264,16 @@ function OnePack({
         <span className="start__eyebrow">{eyebrow}</span>
         <h1>{packName(pack)}</h1>
         <p>
-          {phase === 'open'
+          {phase === 'open' || phase === 'leaving'
             ? done
-              ? 'These cards join your collection.'
-              : 'Click the cards to flip them.'
+              ? `Choose ${keep} to keep. The rest go back.`
+              : `Flip the cards, then choose ${keep} to keep.`
             : 'Click the pack to tear it open.'}
         </p>
       </div>
 
       <div className="opening__stage">
-        {phase !== 'open' ? (
+        {phase === 'sealed' || phase === 'tearing' ? (
           <div className="booster-wrap">
             <button
               ref={booster}
@@ -266,7 +310,7 @@ function OnePack({
                   ref={(el) => {
                     els.current[i] = el;
                   }}
-                  className={`pcard pcard--${rarityOf(name)} ${isUp ? 'is-up' : ''}`}
+                  className={`pcard pcard--${rarityOf(name)} ${isUp ? 'is-up' : ''} ${chosen.includes(i) ? 'is-kept' : phase === 'leaving' ? 'is-dropped' : ''}`}
                   style={
                     {
                       '--i': i,
@@ -278,8 +322,9 @@ function OnePack({
                   role="button"
                   tabIndex={0}
                   aria-label={isUp ? name : `Flip card ${i + 1}`}
-                  onClick={() => flip(i)}
-                  onKeyDown={(e) => e.key === 'Enter' && flip(i)}
+                  aria-pressed={isUp ? chosen.includes(i) : undefined}
+                  onClick={() => (isUp ? choose(i) : flip(i))}
+                  onKeyDown={(e) => e.key === 'Enter' && (isUp ? choose(i) : flip(i))}
                   onMouseEnter={(e) => isUp && setHover({ defId, anchor: e.currentTarget })}
                   onMouseLeave={() => setHover(null)}
                 >
@@ -303,8 +348,12 @@ function OnePack({
       <div className="gauntlet__actions opening__actions">
         {phase === 'open' &&
           (done ? (
-            <button className="btn btn--primary btn--big btn--nudge" onClick={onNext}>
-              {next}
+            <button
+              className={`btn btn--primary btn--big ${chosen.length === keep ? 'btn--nudge' : ''}`}
+              disabled={chosen.length < keep}
+              onClick={confirm}
+            >
+              {chosen.length < keep ? `Choose ${keep - chosen.length} more` : 'Keep these'}
             </button>
           ) : (
             <button className="btn btn--ghost" onClick={revealAll}>

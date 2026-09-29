@@ -46,6 +46,33 @@ export const losses = (r: Run): number => r.results.filter((x) => x === 'loss').
 /** Index of the round being played (or the last one, once the run is over). */
 export const roundOf = (r: Run): number => Math.min(wins(r), ROUNDS.length - 1);
 
+/** A run in progress, whatever the mode, for menus and tiles. */
+export interface RunSummary {
+  deck: string;
+  status: 'playing' | 'cleared' | 'out';
+  unit: 'Round' | 'Floor';
+  /** The step being played, from 1. */
+  step: number;
+  steps: number;
+  /** Steps finished (for a progress bar). */
+  done: number;
+  livesLeft: number;
+  lives: number;
+}
+
+export function summarize(r: Run): RunSummary {
+  return {
+    deck: r.deck,
+    status: statusOf(r),
+    unit: 'Round',
+    step: roundOf(r) + 1,
+    steps: ROUNDS.length,
+    done: wins(r),
+    livesLeft: LIVES - losses(r),
+    lives: LIVES,
+  };
+}
+
 export function statusOf(r: Run): 'playing' | 'cleared' | 'out' {
   if (wins(r) >= ROUNDS.length) return 'cleared';
   if (losses(r) >= LIVES) return 'out';
