@@ -4,6 +4,7 @@
   "type": "module",
   "packageManager": "pnpm@10.34.6",
   "scripts": {
+    "dev": "pnpm --filter @mtg/web dev",
     "test": "vitest run",
     "typecheck": "pnpm -r typecheck",
     "lint": "eslint .",

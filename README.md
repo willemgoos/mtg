@@ -6,7 +6,7 @@ Single-player Magic: The Gathering client with bot opponents. Mono-red vs. mono-
 packages/engine   pure TS rules engine (no DOM/Node), deterministic, headless
 packages/cards    card pool, Scryfall loader, behaviors, decklists, sim script
 packages/ai       bots (heuristic lookahead, random) and a bot-vs-bot match runner
-apps/web          (later) Vite + React UI
+apps/web          Vite + React UI: play against the heuristic bot
 ```
 
 ## Commands
@@ -15,6 +15,7 @@ pnpm isn't installed globally here; prefix with `corepack` (or run `corepack ena
 
 ```bash
 corepack pnpm install
+corepack pnpm dev             # play in the browser at http://localhost:5173
 corepack pnpm test            # vitest, all packages
 corepack pnpm typecheck
 corepack pnpm lint

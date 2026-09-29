@@ -1,0 +1,122 @@
+import type { Action, GameState, ObjectId, PlayerId, TargetChoice } from '@mtg/engine';
+
+/** Stable key for a target: "player:p1" or "obj:o12". */
+export type TargetKey = string;
+export const targetKey = (t: TargetChoice): TargetKey =>
+  'player' in t ? `player:${t.player}` : `obj:${t.object.id}`;
+
+export function targetsOf(a: Action): TargetChoice[] {
+  return a.type === 'castSpell' || a.type === 'activateAbility' || a.type === 'chooseTargets'
+    ? a.targets
+    : [];
+}
+
+/** An in-progress target selection over a set of legal actions that differ only in targets. */
+export interface Targeting {
+  /** The card or permanent the spell/ability comes from (for arrows and the prompt). */
+  source: ObjectId | null;
+  label: string;
+  candidates: Action[];
+  chosen: TargetChoice[];
+  /** An optional trigger: choosing nothing is allowed. */
+  skip: Action | null;
+}
+
+export function startTargeting(
+  source: ObjectId | null,
+  label: string,
+  actions: Action[],
+): Targeting {
+  const skip = actions.find((a) => targetsOf(a).length === 0) ?? null;
+  return { source, label, candidates: actions.filter((a) => a !== skip), chosen: [], skip };
+}
+
+function matching(t: Targeting): Action[] {
+  return t.candidates.filter((a) =>
+    t.chosen.every((c, i) => {
+      const x = targetsOf(a)[i];
+      return x !== undefined && targetKey(x) === targetKey(c);
+    }),
+  );
+}
+
+/** Targets that can be picked for the next slot. */
+export function targetOptions(t: Targeting): Map<TargetKey, TargetChoice> {
+  const out = new Map<TargetKey, TargetChoice>();
+  for (const a of matching(t)) {
+    const next = targetsOf(a)[t.chosen.length];
+    if (next) out.set(targetKey(next), next);
+  }
+  return out;
+}
+
+/** Picks a target: returns the finished action, or the narrowed targeting state. */
+export function pickTarget(t: Targeting, key: TargetKey): Action | Targeting | null {
+  const choice = targetOptions(t).get(key);
+  if (!choice) return null;
+  const next: Targeting = { ...t, chosen: [...t.chosen, choice] };
+  const left = matching(next);
+  const done = left.find((a) => targetsOf(a).length === next.chosen.length);
+  return done ?? next;
+}
+
+export function isTargeting(x: Action | Targeting): x is Targeting {
+  return 'candidates' in x;
+}
+
+// ---------------------------------------------------------------------------
+// What clicking a card can do
+// ---------------------------------------------------------------------------
+
+export function handActions(legal: readonly Action[], card: ObjectId): Action[] {
+  return legal.filter(
+    (a) =>
+      (a.type === 'castSpell' ||
+        a.type === 'playLand' ||
+        a.type === 'discard' ||
+        a.type === 'bottomCard') &&
+      a.card === card,
+  );
+}
+
+export function permanentActions(legal: readonly Action[], id: ObjectId): Action[] {
+  return legal.filter(
+    (a) =>
+      (a.type === 'activateAbility' && a.source === id) ||
+      ((a.type === 'addAttacker' || a.type === 'removeAttacker') && a.attacker === id) ||
+      ((a.type === 'addBlock' || a.type === 'removeBlock') && a.blocker === id),
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Auto-pass (Arena-style: only stop when there's something worth deciding)
+// ---------------------------------------------------------------------------
+
+export interface PassSettings {
+  fullControl: boolean;
+  /** Keep passing until this turn number is over ("End turn" button). */
+  passTurn: number | null;
+}
+
+export function shouldAutoPass(
+  s: GameState,
+  legal: readonly Action[],
+  me: PlayerId,
+  settings: PassSettings,
+): boolean {
+  const d = s.decision;
+  if (d.kind !== 'priority' || d.player !== me) return false;
+  if (legal.length <= 1) return true;
+  if (settings.fullControl) return false;
+
+  const top = s.stack[s.stack.length - 1];
+  if (top) return top.controller === me; // let my own spells resolve; stop to respond to theirs
+  if (settings.passTurn === s.turn.number) return true;
+
+  const myTurn = s.turn.activePlayer === me;
+  const step = s.turn.step;
+  if (myTurn && (step === 'main1' || step === 'main2')) return false;
+  // After blocks, stop so combat tricks can be cast.
+  if (step === 'declareBlockers' && !!s.combat?.attackers.length) return false;
+  return true;
+}
