@@ -1,0 +1,190 @@
+# Foundations content inventory
+
+Checked 2026-09-30. Regenerate with `corepack pnpm exec tsx packages/cards/scripts/audit-foundations.ts`.
+
+FDN: 517 unique names; 355 registered; 162 missing. Registration is not a complete rules-fidelity audit.
+Regular Arena pack candidates: 271; 193 registered. Special Guests: 10; 0 registered; bonus slot remains disabled until the complete sheet is supported.
+
+Manifest separates base collector numbers 1–271 from other FDN products, checks Arena availability, excludes basics at runtime, and deduplicates names. This is a provisional store-pack sheet, not a claim of exact Arena collation.
+
+## Missing FDN cards by mechanics
+
+- **Adaptive Automaton** (rare; other FDN product) — Artifact Creature — Construct.
+- **Ajani, Caller of the Pride** (mythic; regular booster) — Legendary Planeswalker — Ajani.
+- **Authority of the Consuls** (rare; regular booster) — Enchantment.
+- **Ayli, Eternal Pilgrim** (rare; other FDN product) — Deathtouch.
+- **Banner of Kinship** (rare; regular booster) — Artifact.
+- **Biogenic Upgrade** (uncommon; other FDN product) — Double.
+- **Blasphemous Edict** (rare; regular booster) — Sorcery.
+- **Bloodthirsty Conqueror** (mythic; regular booster) — Deathtouch, Flying.
+- **Bloodtithe Collector** (uncommon; other FDN product) — Flying.
+- **Bolt Bend** (uncommon; other FDN product) — Instant.
+- **Boros Charm** (uncommon; other FDN product) — Instant.
+- **Burnished Hart** (uncommon; regular booster) — Artifact Creature — Elk.
+- **Campus Guide** (common; regular booster) — Artifact Creature — Golem.
+- **Carnelian Orb of Dragonkind** (common; other FDN product) — Artifact.
+- **Cemetery Recruitment** (common; other FDN product) — Sorcery.
+- **Chandra, Flameshaper** (mythic; regular booster) — Legendary Planeswalker — Chandra.
+- **Charming Prince** (rare; other FDN product) — Scry.
+- **Confiscate** (uncommon; other FDN product) — Enchant.
+- **Consuming Aberration** (rare; regular booster) — Creature — Horror.
+- **Crawling Barrens** (rare; other FDN product) — Land.
+- **Crossway Troublemakers** (rare; other FDN product) — Creature — Vampire.
+- **Crystal Barricade** (rare; regular booster) — Defender.
+- **Cultivator's Caravan** (rare; other FDN product) — Crew.
+- **Darksteel Colossus** (mythic; other FDN product) — Indestructible, Trample.
+- **Deadly Brew** (uncommon; other FDN product) — Sorcery.
+- **Deadly Plot** (uncommon; other FDN product) — Instant.
+- **Demolition Field** (uncommon; other FDN product) — Land.
+- **Demonic Pact** (mythic; other FDN product) — Enchantment.
+- **Desecration Demon** (rare; other FDN product) — Flying.
+- **Devout Decree** (uncommon; other FDN product) — Scry.
+- **Diamond Mare** (uncommon; other FDN product) — Artifact Creature — Horse.
+- **Dictate of Kruphix** (rare; other FDN product) — Flash.
+- **Divine Resilience** (uncommon; regular booster) — Kicker.
+- **Doubling Season** (mythic; regular booster) — Enchantment.
+- **Dragon Mage** (uncommon; other FDN product) — Flying.
+- **Drakuseth, Maw of Flames** (rare; regular booster) — Flying.
+- **Dread Summons** (rare; other FDN product) — Mill.
+- **Dropkick Bomber** (rare; other FDN product) — Creature — Goblin Warrior.
+- **Dryad Militant** (uncommon; other FDN product) — Creature — Dryad Soldier.
+- **Duress** (common; other FDN product) — Sorcery.
+- **Eaten by Piranhas** (uncommon; other FDN product) — Enchant, Flash.
+- **Electroduplicate** (rare; regular booster) — Flashback.
+- **Elspeth's Smite** (uncommon; other FDN product) — Instant.
+- **Elvish Archdruid** (rare; regular booster) — Creature — Elf Druid.
+- **Etali, Primal Storm** (rare; regular booster) — Legendary Creature — Elder Dinosaur.
+- **Exemplar of Light** (rare; regular booster) — Flying.
+- **Exsanguinate** (uncommon; regular booster) — Sorcery.
+- **Extravagant Replication** (rare; regular booster) — Enchantment.
+- **Feed the Swarm** (common; other FDN product) — Sorcery.
+- **Feldon's Cane** (uncommon; other FDN product) — Artifact.
+- **Finale of Revelation** (mythic; other FDN product) — Sorcery.
+- **Firespitter Whelp** (uncommon; regular booster) — Flying.
+- **Fishing Pole** (uncommon; regular booster) — Equip.
+- **Flamewake Phoenix** (rare; regular booster) — Flying, Ferocious, Haste.
+- **Fleeting Flight** (common; regular booster) — Instant.
+- **Fumigate** (rare; other FDN product) — Sorcery.
+- **Fynn, the Fangbearer** (uncommon; other FDN product) — Deathtouch.
+- **Garna, Bloodfist of Keld** (uncommon; other FDN product) — Legendary Creature — Human Berserker.
+- **Gate Colossus** (uncommon; other FDN product) — Affinity.
+- **Gatekeeper of Malakir** (uncommon; other FDN product) — Kicker.
+- **Gateway Sneak** (uncommon; other FDN product) — Creature — Vedalken Rogue.
+- **Genesis Wave** (rare; regular booster) — Sorcery.
+- **Gilded Lotus** (rare; other FDN product) — Artifact.
+- **Goblin Negotiation** (uncommon; regular booster) — Sorcery.
+- **Grappling Kraken** (uncommon; regular booster) — Landfall.
+- **Gratuitous Violence** (rare; other FDN product) — Double.
+- **Grow from the Ashes** (common; regular booster) — Kicker.
+- **Gutless Plunderer** (common; regular booster) — Raid, Deathtouch.
+- **Harbinger of the Tides** (rare; other FDN product) — Creature — Merfolk Wizard.
+- **Harmless Offering** (rare; other FDN product) — Sorcery.
+- **Hedron Archive** (uncommon; other FDN product) — Artifact.
+- **Herald of Eternal Dawn** (mythic; regular booster) — Flying, Flash.
+- **Heraldic Banner** (uncommon; regular booster) — Artifact.
+- **Hidetsugu's Second Rite** (uncommon; regular booster) — Instant.
+- **Hoarding Dragon** (uncommon; other FDN product) — Flying.
+- **Homunculus Horde** (rare; regular booster) — Creature — Homunculus.
+- **Immersturm Predator** (rare; other FDN product) — Flying.
+- **Imprisoned in the Moon** (uncommon; regular booster) — Enchant.
+- **Incinerating Blast** (common; regular booster) — Sorcery.
+- **Ingenious Leonin** (uncommon; other FDN product) — Creature — Cat Soldier.
+- **Involuntary Employment** (common; regular booster) — Treasure.
+- **Joraga Invocation** (uncommon; other FDN product) — Sorcery.
+- **Juggernaut** (uncommon; regular booster) — Artifact Creature — Juggernaut.
+- **Kaito, Cunning Infiltrator** (mythic; regular booster) — Legendary Planeswalker — Kaito.
+- **Kalastria Highborn** (rare; other FDN product) — Creature — Vampire Shaman.
+- **Kellan, Planar Trailblazer** (rare; regular booster) — Legendary Creature — Human Faerie Scout.
+- **Knight of Grace** (uncommon; other FDN product) — Hexproof from, Hexproof, First strike.
+- **Knight of Malice** (uncommon; other FDN product) — Hexproof from, Hexproof, First strike.
+- **Koma, World-Eater** (rare; regular booster) — Trample, Ward.
+- **Kykar, Zephyr Awakener** (rare; regular booster) — Flying.
+- **Lathril, Blade of the Elves** (rare; regular booster) — Menace.
+- **Leyline Axe** (rare; regular booster) — Equip.
+- **Liliana, Dreadhorde General** (mythic; regular booster) — Legendary Planeswalker — Liliana.
+- **Luminous Rebuke** (common; regular booster) — Instant.
+- **Lunar Insight** (rare; regular booster) — Sorcery.
+- **Maelstrom Pulse** (rare; other FDN product) — Sorcery.
+- **Maze's End** (mythic; other FDN product) — Land.
+- **Mazemind Tome** (rare; other FDN product) — Scry.
+- **Midnight Snack** (uncommon; regular booster) — Food, Raid.
+- **Mindsparker** (uncommon; other FDN product) — First strike.
+- **Mold Adder** (uncommon; other FDN product) — Creature — Fungus Snake.
+- **Muldrotha, the Gravetide** (mythic; regular booster) — Legendary Creature — Elemental Avatar.
+- **Myojin of Night's Reach** (rare; other FDN product) — Legendary Creature — Spirit.
+- **New Horizons** (common; other FDN product) — Enchant.
+- **Nine-Lives Familiar** (rare; regular booster) — Creature — Cat.
+- **Obliterating Bolt** (uncommon; other FDN product) — Sorcery.
+- **Omniscience** (mythic; regular booster) — Enchantment.
+- **Ordeal of Nylea** (uncommon; other FDN product) — Enchant.
+- **Painful Quandary** (rare; regular booster) — Enchantment.
+- **Pilfer** (common; regular booster) — Sorcery.
+- **Predator Ooze** (rare; other FDN product) — Indestructible.
+- **Primal Might** (rare; other FDN product) — Fight.
+- **Prime Speaker Zegana** (rare; other FDN product) — Legendary Creature — Merfolk Wizard.
+- **Progenitus** (mythic; regular booster) — Protection.
+- **Pyromancer's Goggles** (mythic; other FDN product) — Legendary Artifact.
+- **Quick-Draw Katana** (common; regular booster) — Equip.
+- **Raise the Past** (rare; regular booster) — Sorcery.
+- **Ramos, Dragon Engine** (mythic; other FDN product) — Flying.
+- **Ravenous Amulet** (uncommon; regular booster) — Artifact.
+- **Redcap Gutter-Dweller** (rare; other FDN product) — Menace.
+- **Rite of Replication** (rare; other FDN product) — Kicker.
+- **Run Away Together** (common; regular booster) — Instant.
+- **Sanguine Indulgence** (common; other FDN product) — Sorcery.
+- **Savage Ventmaw** (uncommon; other FDN product) — Flying.
+- **Secluded Courtyard** (uncommon; regular booster) — Land.
+- **Seize the Spoils** (common; other FDN product) — Treasure.
+- **Self-Reflection** (uncommon; regular booster) — Flashback.
+- **Sire of Seven Deaths** (mythic; regular booster) — Lifelink, Reach, Vigilance, First strike, Trample, Menace, Ward.
+- **Skyknight Squire** (rare; regular booster) — Creature — Cat Scout.
+- **Sorcerous Spyglass** (uncommon; other FDN product) — Artifact.
+- **Soul-Shackled Zombie** (common; regular booster) — Creature — Zombie.
+- **Soulstone Sanctuary** (rare; regular booster) — Land.
+- **Sphinx of Forgotten Lore** (mythic; regular booster) — Flying, Flash.
+- **Springbloom Druid** (common; other FDN product) — Creature — Elf Druid.
+- **Squad Rallier** (common; regular booster) — Creature — Human Scout.
+- **Steel Hellkite** (rare; other FDN product) — Flying.
+- **Stroke of Midnight** (uncommon; regular booster) — Instant.
+- **Stromkirk Bloodthief** (uncommon; regular booster) — Creature — Vampire Rogue.
+- **Stromkirk Noble** (rare; other FDN product) — Creature — Vampire Noble.
+- **Surrak, the Hunt Caller** (rare; other FDN product) — Formidable.
+- **Suspicious Shambler** (common; other FDN product) — Creature — Zombie.
+- **Taurean Mauler** (rare; other FDN product) — Changeling.
+- **Teach by Example** (uncommon; other FDN product) — Instant.
+- **Thousand-Year Storm** (rare; regular booster) — Enchantment.
+- **Three Tree Mascot** (common; other FDN product) — Changeling.
+- **Thrill of Possibility** (common; regular booster) — Instant.
+- **Time Stop** (rare; regular booster) — Instant.
+- **Tinybones, Bauble Burglar** (rare; regular booster) — Legendary Creature — Skeleton Rogue.
+- **Trygon Predator** (uncommon; other FDN product) — Flying.
+- **Twinflame Tyrant** (mythic; regular booster) — Flying, Double.
+- **Uncharted Haven** (common; other FDN product) — Land.
+- **Uncharted Voyage** (common; regular booster) — Surveil.
+- **Valkyrie's Call** (mythic; regular booster) — Enchantment.
+- **Venom Connoisseur** (uncommon; other FDN product) — Alliance.
+- **Vivien Reid** (mythic; regular booster) — Legendary Planeswalker — Vivien.
+- **Wildborn Preserver** (rare; other FDN product) — Reach, Flash.
+- **Wildwood Scourge** (uncommon; regular booster) — Creature — Hydra.
+- **Wilt-Leaf Liege** (rare; other FDN product) — Creature — Elf Knight.
+- **Wishclaw Talisman** (rare; other FDN product) — Artifact.
+- **Witness Protection** (common; regular booster) — Enchant.
+- **Zimone, Paradox Sculptor** (mythic; regular booster) — Double.
+- **Zul Ashur, Lich Lord** (rare; regular booster) — Ward.
+
+## Foundations Special Guests
+
+- Condemn — missing.
+- Sphinx's Tutelage — missing.
+- Grim Tutor — missing.
+- Embercleave — missing.
+- Goblin Bushwhacker — missing.
+- Bloom Tender — missing.
+- Paradise Druid — missing.
+- Akroma's Memorial — missing.
+- Temporal Manipulation — missing.
+- Fiend Artisan — missing.
+
+## Rules fidelity work
+
+For each content batch, inspect existing behavior overrides against the manifest oracle text, implement required engine/player/AI choices, and run rules and bot tests. Prioritize regular booster cards and mechanics needed for curated opponents. Existing simplified behavior is not certified by this inventory.

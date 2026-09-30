@@ -56,6 +56,7 @@ export function createHeuristicBot(db: CardDb, name = 'heuristic'): Bot {
         case 'discard':
           return pickCardToLose(engine, view, me, legal);
         case 'chooseTriggerTargets':
+        case 'optionalEffect':
           return bestByEvaluation(engine, view, me, legal, 'stack');
         case 'scry':
           return chooseScry(engine, view, me, legal);

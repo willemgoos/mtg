@@ -5,7 +5,7 @@ import { Component, type ReactNode } from 'react';
  * go back to the menu, instead of leaving a blank page.
  */
 export class ErrorBoundary extends Component<
-  { onRetry: () => void; onMenu: () => void; children: ReactNode },
+  { onRetry: () => void; onMenu: () => void; children: ReactNode; menuLabel?: string },
   { error: unknown }
 > {
   override state = { error: null as unknown };
@@ -39,7 +39,7 @@ export class ErrorBoundary extends Component<
             Reload game
           </button>
           <button className="btn btn--ghost" onClick={() => this.reset(this.props.onMenu)}>
-            Abandon and go to menu
+            {this.props.menuLabel ?? 'Abandon and go to menu'}
           </button>
         </div>
       </div>

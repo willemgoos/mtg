@@ -26,6 +26,7 @@ import {
   answerSacrifice,
   answerScry,
   answerSearch,
+  answerOptionalEffect,
   answerSplit,
   castSpell,
   pushTrigger,
@@ -217,6 +218,8 @@ function apply(ctx: Ctx, action: Action): void {
       return;
     case 'confirmBlockers':
       return confirmBlockers(ctx);
+    case 'chooseEffect':
+      return answerOptionalEffect(ctx, action.accept);
     case 'chooseTargets': {
       if (d.kind !== 'chooseTriggerTargets') throw new IllegalActionError(action);
       if (action.targets.length > 0 || action.mode !== undefined)

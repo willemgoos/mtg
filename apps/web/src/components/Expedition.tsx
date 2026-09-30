@@ -1,8 +1,6 @@
 import { deckById, scryfallById, slug } from '@mtg/cards';
-import type { Color } from '@mtg/engine';
 import { useMemo, useState } from 'react';
 import { artFor } from '../game/deckArt.ts';
-import { cardEntries, type DeckEntry, deckColumns, total } from '../game/deckView.ts';
 import {
   BASICS,
   type BoonId,
@@ -41,7 +39,7 @@ import {
 } from '../game/expedition.ts';
 import { ruleNotes } from '../game/notes.ts';
 import { play } from '../game/sound.ts';
-import { DeckList } from './DeckView.tsx';
+import { DeckBuilder } from './DeckBuilder.tsx';
 import { PackOpening, packName } from './PackOpening.tsx';
 import { HoverPreview, type HoverState } from './Preview.tsx';
 import { UiSize } from './UiSize.tsx';
@@ -132,7 +130,7 @@ export function Expedition({
       />
     );
   if (!resumable && (building || size(b.main) < MIN_DECK))
-    return <DeckBuilder run={run} update={update} onDone={() => setBuilding(false)} />;
+    return <ExpeditionBuilder run={run} update={update} onDone={() => setBuilding(false)} />;
   return (
     <ExpeditionMap
       run={run}
@@ -786,12 +784,8 @@ function Merchant({
 // Deck builder
 // ---------------------------------------------------------------------------
 
-/**
- * Arena's deck builder, Limited style: your collection in columns by mana
- * value on the left (click to add), the deck list on the right (click to take
- * out), and basic lands free for the taking.
- */
-function DeckBuilder({
+/** The expedition's deck builder: your collection is the pool, basic lands are free. */
+function ExpeditionBuilder({
   run,
   update,
   onDone,
@@ -801,19 +795,9 @@ function DeckBuilder({
   onDone: () => void;
 }) {
   const b = run.build;
-  const main = useMemo(() => cardEntries(Object.entries(b.main)), [b.main]);
-  const side = useMemo(() => cardEntries(Object.entries(b.side)), [b.side]);
   const fresh = useMemo(() => new Set(b.fresh), [b.fresh]);
-  const [hover, setHoverState] = useState<HoverState | null>(null);
-  const setHover = (e: DeckEntry | null, anchor?: Element) =>
-    setHoverState(e ? { defId: e.defId ?? slug(e.name), anchor: anchor ?? null } : null);
-  const move = (name: string, to: 'main' | 'side') => {
-    update((s) => moveCard(s, name, to));
-    play('place', { gain: 0.6 });
-  };
+  const tips = useMemo(() => deckAdvice(b), [b]);
   const deck = runDeck(run);
-  const n = size(b.main);
-  const advice = useMemo(() => deckAdvice(b), [b]);
   const [confirming, setConfirming] = useState(false);
   const suggest = () => {
     if (!confirming) return setConfirming(true);
@@ -821,127 +805,30 @@ function DeckBuilder({
     update(applySuggestion);
     play('shuffle');
   };
-
   return (
-    <div
-      className="deckview builder"
-      style={{ '--glow': `var(--mana-${deck.colors[0]})` } as React.CSSProperties}
-    >
-      <header className="deckview__head">
-        <div
-          className="deckview__banner"
-          style={{ '--art': `url("${artFor(deck)}")` } as React.CSSProperties}
-        >
-          <span className="deck__pips">
-            {deck.colors.map((c) => (
-              <span key={c} className={`pip pip--${c}`} />
-            ))}
-          </span>
-          <h1>Your deck</h1>
-          <p>
-            Click a card in your collection to add it, or a card in your deck to take it out. At
-            least {MIN_DECK} cards.
-          </p>
-        </div>
+    <DeckBuilder
+      name="Your deck"
+      colors={deck.colors}
+      art={artFor(deck)}
+      deck={b.main}
+      pool={b.side}
+      basics
+      fresh={fresh}
+      min={MIN_DECK}
+      tips={tips}
+      tools={
         <button
-          className="btn btn--ghost builder__suggest"
+          className="btn btn--ghost"
           onClick={suggest}
           onMouseLeave={() => setConfirming(false)}
           title="Builds a 40-card deck from your two strongest colours"
         >
           {confirming ? 'Replace my deck?' : 'Suggest a deck'}
         </button>
-        <button
-          className="btn btn--primary deckview__play"
-          disabled={n < MIN_DECK}
-          onClick={onDone}
-        >
-          {n < MIN_DECK ? `${MIN_DECK - n} more to go` : 'Done'}
-        </button>
-      </header>
-      <div className="deckview__body">
-        <main className="builder__pool">
-          <div className="builder__lands" aria-label="Basic lands">
-            <span className="builder__label">Basic lands</span>
-            {(Object.entries(BASICS) as [Color, string][]).map(([c, name]) => (
-              <span key={c} className="builder__land">
-                <button
-                  className="btn btn--ghost builder__step"
-                  aria-label={`Remove a ${name}`}
-                  disabled={!b.main[name]}
-                  onClick={() => move(name, 'side')}
-                >
-                  −
-                </button>
-                <span className={`pip pip--${c}`} title={name} />
-                <span className="builder__count">{b.main[name] ?? 0}</span>
-                <button
-                  className="btn btn--ghost builder__step"
-                  aria-label={`Add a ${name}`}
-                  onClick={() => move(name, 'main')}
-                >
-                  +
-                </button>
-              </span>
-            ))}
-          </div>
-          {advice.length > 0 && (
-            <ul className="builder__advice" aria-label="Deck tips">
-              {advice.map((a) => (
-                <li key={a}>{a}</li>
-              ))}
-            </ul>
-          )}
-          <div className="deckview__cols">
-            {side.length === 0 && (
-              <p className="builder__empty">Every card you own is in your deck.</p>
-            )}
-            {deckColumns(side).map((col) => (
-              <section key={col.label} className="dcol">
-                <div className="dcol__label">
-                  {col.label}
-                  <span>{total(col.cards)}</span>
-                </div>
-                <div className="dcol__stack">
-                  {col.cards.map((e) => (
-                    <div
-                      key={e.name}
-                      className="dcard is-pickable"
-                      role="button"
-                      tabIndex={0}
-                      title="Add to the deck"
-                      onMouseEnter={(ev) => setHover(e, ev.currentTarget)}
-                      onMouseLeave={() => setHover(null)}
-                      onClick={() => {
-                        move(e.name, 'main');
-                        if (e.count === 1) setHover(null);
-                      }}
-                      onKeyDown={(ev) => ev.key === 'Enter' && move(e.name, 'main')}
-                    >
-                      {e.image ? (
-                        <img src={e.image} alt={e.name} draggable={false} />
-                      ) : (
-                        <div className="dcard__blank">{e.name}</div>
-                      )}
-                      {fresh.has(e.name) && <span className="dcard__new">New</span>}
-                      {e.count > 1 && <span className="dcard__qty">×{e.count}</span>}
-                    </div>
-                  ))}
-                </div>
-              </section>
-            ))}
-          </div>
-        </main>
-        <DeckList
-          entries={main}
-          onHover={setHover}
-          onPick={(e) => {
-            move(e.name, 'side');
-            setHover(null);
-          }}
-        />
-      </div>
-      <HoverPreview hover={hover} notes={hover ? ruleNotes(hover.defId) : []} />
-    </div>
+      }
+      onAdd={(name) => update((s) => moveCard(s, name, 'main'))}
+      onRemove={(name) => update((s) => moveCard(s, name, 'side'))}
+      onDone={onDone}
+    />
   );
 }

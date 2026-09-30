@@ -105,16 +105,8 @@ export function DeckView({
   );
 }
 
-/** Arena's deck list panel: curve, type counts and one row per card. `onPick` makes rows clickable. */
-export function DeckList({
-  entries,
-  onHover,
-  onPick,
-}: {
-  entries: DeckEntry[];
-  onHover: Hover;
-  onPick?: (e: DeckEntry) => void;
-}) {
+/** Arena's deck list panel: curve, type counts and one row per card. */
+export function DeckList({ entries, onHover }: { entries: DeckEntry[]; onHover: Hover }) {
   const spells = entries.filter((e) => !isLand(e));
   const curve = ['0–1', '2', '3', '4', '5', '6+'].map((label, i) => {
     const at = spells.filter((e) => Math.min(Math.max(e.manaValue, 1), 6) - 1 === i);
@@ -156,17 +148,10 @@ export function DeckList({
           {s.cards.map((e) => (
             <div
               key={e.name}
-              className={`dl-row ${onPick ? 'is-pickable' : ''}`}
+              className="dl-row"
               style={e.art ? ({ '--art': `url("${e.art}")` } as React.CSSProperties) : undefined}
               onMouseEnter={(ev) => onHover(e, ev.currentTarget)}
               onMouseLeave={() => onHover(null)}
-              {...(onPick && {
-                role: 'button',
-                tabIndex: 0,
-                title: 'Take out of the deck',
-                onClick: () => onPick(e),
-                onKeyDown: (ev: React.KeyboardEvent) => ev.key === 'Enter' && onPick(e),
-              })}
             >
               <span className="dl-row__qty">{e.count}</span>
               <span className="dl-row__name">{e.name}</span>

@@ -65,7 +65,11 @@ export function useGame(
   seed: number,
   opponent: BotKind,
   resume: SavedGame | null = null,
+  /** Overrides global autosaving. Must succeed before advancing the visible state. */
+  persistAction?: (action: Action) => void,
 ) {
+  const persistence = useRef(persistAction);
+  persistence.current = persistAction;
   // Errors in timers and the worker don't reach React by themselves. They are
   // rethrown while rendering so the error boundary can offer a way out.
   const [error, setError] = useState<unknown>(null);
@@ -105,6 +109,7 @@ export function useGame(
     let r: ReturnType<typeof engine.applyAction>;
     try {
       r = engine.applyAction(stateRef.current, action);
+      persistence.current?.(action);
     } catch (e) {
       setError(e);
       return;
@@ -178,10 +183,9 @@ export function useGame(
     }
   }, [state, autoPassing, apply, worker, opponent, decks, seed]);
 
-  useEffect(
-    () => saveGame({ choice, seed, opponent, state, log }),
-    [choice, seed, opponent, state, log],
-  );
+  useEffect(() => {
+    if (!persistAction) saveGame({ choice, seed, opponent, state, log });
+  }, [choice, seed, opponent, state, log, persistAction]);
 
   // "End turn" only lasts for the turn it was pressed in.
   useEffect(() => {

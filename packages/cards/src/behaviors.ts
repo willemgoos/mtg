@@ -1,5 +1,6 @@
 import type { AbilityDef, CardDefinition, EffectDef, ManaType, TargetSpec } from '@mtg/engine';
 import { type Behavior, parseManaCost } from './build.ts';
+import { FOUNDATIONS_BATCH_BEHAVIORS } from './foundations-batch.ts';
 
 // Helpers for the common shapes.
 const t0 = { target: 0 } as const;
@@ -124,6 +125,7 @@ const dualLandBehaviors = (): Record<string, Behavior> =>
  * (cost, types, P/T, keywords) come from Scryfall; only rules text lives here.
  */
 export const BEHAVIORS: Record<string, Behavior> = {
+  ...FOUNDATIONS_BATCH_BEHAVIORS,
   // ---------------------------------------------------------------- red
   Shock: burn(2),
   'Lightning Strike': burn(3),
@@ -2155,6 +2157,13 @@ const artifactToken = (id: string, name: string, abilities: AbilityDef[]): CardD
 });
 
 export const TOKENS: CardDefinition[] = [
+  token('zombie-token', 'Zombie', 'B', ['Zombie'], 2, 2),
+  token('cat-beast-token', 'Cat Beast', 'W', ['Cat', 'Beast'], 2, 2),
+  token('raccoon-token', 'Raccoon', 'G', ['Raccoon'], 3, 3),
+  token('dragon-5-token', 'Dragon', 'R', ['Dragon'], 5, 5, ['flying']),
+  token('knight-3-token', 'Knight', 'W', ['Knight'], 3, 3),
+  token('rabbit-token', 'Rabbit', 'W', ['Rabbit'], 1, 1),
+  token('rat-token', 'Rat', 'B', ['Rat'], 1, 1),
   token('goblin-token', 'Goblin', 'R', ['Goblin'], 1, 1),
   token('dragon-token', 'Dragon', 'R', ['Dragon'], 4, 4, ['flying']),
   token('elf-warrior-token', 'Elf Warrior', 'G', ['Elf', 'Warrior'], 1, 1),

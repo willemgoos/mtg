@@ -151,7 +151,14 @@ function enterStep(ctx: Ctx, step: Step): void {
         const stays = def(ctx, id).abilities.some(
           (a) => a.kind === 'static' && a.effect.kind === 'doesntUntap',
         );
-        if (!stays) untap(ctx, id);
+        const auraStays = s.battlefield.some(
+          (source) =>
+            obj(ctx, source).attachedTo === id &&
+            def(ctx, source).abilities.some(
+              (a) => a.kind === 'static' && a.effect.kind === 'attached' && a.effect.doesntUntap,
+            ),
+        );
+        if (!stays && !auraStays) untap(ctx, id);
       }
       return advanceStep(ctx); // no priority in untap (rule 502.4)
 

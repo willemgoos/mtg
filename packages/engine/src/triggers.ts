@@ -21,8 +21,19 @@ export function checkCondition(
   self: GameObject | undefined,
 ): boolean {
   if (!c) return true;
+  if (c.kind === 'controlsPermanents')
+    return (
+      ctx.s.battlefield.filter(
+        (id) =>
+          obj(ctx, id).controller === controller && matchesFilter(ctx, id, c.filter, self?.id),
+      ).length >= c.min
+    );
   if (c.kind === 'creatureDiedThisTurn') return ctx.s.turn.creaturesDied > 0;
   if (c.kind === 'opponentsTurn') return ctx.s.turn.activePlayer !== controller;
+  if (c.kind === 'yourTurn') return ctx.s.turn.activePlayer === controller;
+  if (c.kind === 'sourceCounters') return !!self && self.plusOneCounters >= c.min;
+  if (c.kind === 'sourceAttacking')
+    return !!self && !!ctx.s.combat?.attackers.some((a) => a.id === self.id);
   if (c.kind === 'beingAttacked')
     return !!ctx.s.combat?.attackers.some((a) => a.defender === controller);
   if (c.kind === 'opponentControlsCreature')
@@ -225,10 +236,14 @@ function detect(ctx: Ctx, ev: GameEvent): void {
       return;
     }
     case 'cardDrawn': {
-      if (ev.nth !== 2) return;
       forEachBattlefieldTrigger(
         ctx,
-        (o, a) => a.trigger.on === 'drawSecondCard' && o.controller === ev.player,
+        (o, a) =>
+          (a.trigger.on === 'drawSecondCard' && ev.nth === 2 && o.controller === ev.player) ||
+          (a.trigger.on === 'drawCard' &&
+            (a.trigger.whose === 'yours'
+              ? o.controller === ev.player
+              : o.controller !== ev.player)),
       );
       return;
     }

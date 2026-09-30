@@ -70,6 +70,7 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
           if (srcId !== id || !checkCondition(ctx, st.condition, o.controller, o)) continue;
           power += st.power;
           toughness += st.toughness;
+          if (st.cantBeBlocked) cantBeBlocked = true;
           if (st.keywords?.length) {
             granted ??= new Set(keywords);
             for (const k of st.keywords) granted.add(k);
@@ -89,8 +90,8 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
         if (st.kind === 'attached') {
           if (src.attachedTo !== id) continue;
           if (st.cantAttackOrBlock) cantAttack = cantBlock = true;
-          power += st.power;
-          toughness += st.toughness;
+          power += countOf(ctx, src.controller, st.power);
+          toughness += countOf(ctx, src.controller, st.toughness);
           if (st.keywords?.length) {
             granted ??= new Set(keywords);
             for (const k of st.keywords) granted.add(k);
@@ -98,13 +99,24 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
           continue;
         }
         if (st.kind !== 'anthem') continue;
+        if (st.filter && !cardMatches(ctx, id, st.filter, srcId)) continue;
+        if (st.condition && !checkCondition(ctx, st.condition, src.controller, src)) continue;
         if (src.controller !== o.controller || !d.types.includes('Creature')) continue;
         if (st.affects === 'otherCreaturesYouControl' && srcId === id) continue;
         if (st.filter?.subtype && !d.subtypes.includes(st.filter.subtype)) continue;
         // Printed keywords only (avoids recursion through other anthems).
         if (st.filter?.hasKeyword && !d.keywords.includes(st.filter.hasKeyword)) continue;
-        power += st.power;
-        toughness += st.toughness;
+        if (
+          st.filter?.minPlusOneCounters !== undefined &&
+          o.plusOneCounters < st.filter.minPlusOneCounters
+        )
+          continue;
+        if (st.filter?.attacking !== undefined && isAttacking(ctx, id) !== st.filter.attacking)
+          continue;
+        if (st.filter?.colors && !st.filter.colors.some((color) => d.colors.includes(color)))
+          continue;
+        power += countOf(ctx, src.controller, st.power);
+        toughness += countOf(ctx, src.controller, st.toughness);
         if (st.keywords?.length) {
           granted ??= new Set(keywords);
           for (const k of st.keywords) granted.add(k);
@@ -131,8 +143,15 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
  * A count from `player`'s point of view. `printed` uses printed subtypes, for
  * characteristic-defining abilities (avoids recursing into characteristics).
  */
-export function countOf(ctx: Ctx, player: PlayerId, a: Amount, printed = false): number {
+export function countOf(
+  ctx: Ctx,
+  player: PlayerId,
+  a: Amount,
+  printed = false,
+  sourceId?: ObjectId,
+): number {
   if (typeof a === 'number') return a;
+  if ('multiply' in a) return a.multiply * countOf(ctx, player, a.amount, printed, sourceId);
   if (!('count' in a)) return 0;
   if (a.count === 'cardsInGraveyard')
     return (
@@ -143,14 +162,29 @@ export function countOf(ctx: Ctx, player: PlayerId, a: Amount, printed = false):
           (!a.types || a.types.some((t: CardType) => def(ctx, id).types.includes(t))),
       ).length
     );
-  const n = ctx.s.battlefield.filter((id) => {
+  const matching = ctx.s.battlefield.filter((id) => {
     if (obj(ctx, id).controller !== player) return false;
+    if (a.named && obj(ctx, id).defId !== a.named) return false;
+    if (a.other && id === sourceId) return false;
+    if (a.attacking !== undefined && isAttacking(ctx, id) !== a.attacking) return false;
+    if (a.minPlusOneCounters !== undefined && obj(ctx, id).plusOneCounters < a.minPlusOneCounters)
+      return false;
     const d = def(ctx, id);
-    if (a.count === 'landsYouControl') return d.types.includes('Land');
+    if (a.basicOnly && !d.supertypes.includes('Basic')) return false;
+    if (a.count === 'landsYouControl')
+      return d.types.includes('Land') && (!a.subtype || d.subtypes.includes(a.subtype));
     if (!d.types.includes('Creature')) return false;
     if (!a.subtype) return true;
     return (printed ? d.subtypes : characteristics(ctx, id).subtypes).includes(a.subtype);
   }).length;
+  const n =
+    a.count === 'totalPowerOfCreaturesYouControl'
+      ? ctx.s.battlefield
+          .filter(
+            (id) => obj(ctx, id).controller === player && def(ctx, id).types.includes('Creature'),
+          )
+          .reduce((n, id) => n + Math.max(0, power(ctx, id)), 0)
+      : matching;
   return a.max !== undefined ? Math.min(a.max, n) : n;
 }
 
@@ -216,8 +250,27 @@ export function matchesFilter(
   sourceId?: ObjectId,
 ): boolean {
   if (!filter) return true;
-  const c = characteristics(ctx, id);
+  // Type/subtype-only conditions must not recurse through their own static ability.
+  const needsComputed =
+    filter.maxPower !== undefined ||
+    filter.minPower !== undefined ||
+    filter.minToughness !== undefined ||
+    !!filter.hasKeyword ||
+    !!filter.lacksKeyword;
+  const c = needsComputed
+    ? characteristics(ctx, id)
+    : {
+        power: 0,
+        toughness: 0,
+        keywords: new Set<Keyword>(),
+        subtypes: [...def(ctx, id).subtypes, ...(obj(ctx, id).addedSubtypes ?? [])],
+      };
   if (filter.maxPower !== undefined && c.power > filter.maxPower) return false;
+  if (
+    filter.minPlusOneCounters !== undefined &&
+    obj(ctx, id).plusOneCounters < filter.minPlusOneCounters
+  )
+    return false;
   if (filter.minPower !== undefined && c.power < filter.minPower) return false;
   if (filter.hasKeyword && !c.keywords.has(filter.hasKeyword)) return false;
   if (filter.lacksKeyword && c.keywords.has(filter.lacksKeyword)) return false;
@@ -234,6 +287,12 @@ export function matchesFilter(
     const blocked = !!c?.attackers.some((a) => a.id === id && a.blocked);
     if (!blocking && !blocked) return false;
   }
+  if (
+    filter.attackingOrBlocking &&
+    !isAttacking(ctx, id) &&
+    !ctx.s.combat?.attackers.some((a) => a.blockers.includes(id))
+  )
+    return false;
   return cardMatches(ctx, id, filter, sourceId);
 }
 
@@ -248,7 +307,34 @@ export function cardMatches(
   sourceId?: ObjectId,
 ): boolean {
   const d = def(ctx, id);
+  const subtypes = [
+    ...d.subtypes,
+    ...(obj(ctx, id).zone === 'battlefield' ? (obj(ctx, id).addedSubtypes ?? []) : []),
+  ];
+  if (
+    filter.anyOf &&
+    !filter.anyOf.some((branch) =>
+      obj(ctx, id).zone === 'battlefield'
+        ? matchesFilter(ctx, id, branch, sourceId)
+        : cardMatches(ctx, id, branch, sourceId),
+    )
+  )
+    return false;
+  if (obj(ctx, id).zone !== 'battlefield') {
+    if (filter.hasKeyword && !d.keywords.includes(filter.hasKeyword)) return false;
+    if (filter.lacksKeyword && d.keywords.includes(filter.lacksKeyword)) return false;
+    if (filter.minPower !== undefined && (d.power ?? 0) < filter.minPower) return false;
+    if (filter.maxPower !== undefined && (d.power ?? 0) > filter.maxPower) return false;
+  }
   if (filter.types && !filter.types.some((t) => d.types.includes(t))) return false;
+  if (filter.subtypes && !filter.subtypes.some((st) => subtypes.includes(st))) return false;
+  if (filter.colors && !filter.colors.some((color) => d.colors.includes(color))) return false;
+  if (filter.notTypes?.some((t) => d.types.includes(t))) return false;
+  const mv =
+    d.manaCost.generic + Object.values(d.manaCost.colored).reduce((n, v) => n + (v ?? 0), 0);
+  if (filter.minManaValue !== undefined && mv < filter.minManaValue) return false;
+  if (filter.manaValue !== undefined && mv !== filter.manaValue) return false;
+  if (filter.subtype && !subtypes.includes(filter.subtype)) return false;
   if (filter.nonland && d.types.includes('Land')) return false;
   if (filter.enteredThisTurn && obj(ctx, id).zoneTurn !== ctx.s.turn.number) return false;
   if (filter.notSubtype && d.subtypes.includes(filter.notSubtype)) return false;

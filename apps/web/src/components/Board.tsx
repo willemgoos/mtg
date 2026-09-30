@@ -29,7 +29,8 @@ import {
   StackView,
   type ZoneHandlers,
 } from './Zones.tsx';
-import { Playmat } from './Playmat.tsx';
+import { ArenaBackdrop } from './ArenaBackdrop.tsx';
+import { ARENA_KEY, loadArenaDetail, type ArenaDetail } from '../game/arena.ts';
 import { HoverPreview, type HoverState } from './Preview.tsx';
 import { UiSize } from './UiSize.tsx';
 import { SoundControl } from './SoundControl.tsx';
@@ -45,6 +46,9 @@ export function Board({
   gauntlet,
   onMenu,
   onRematch,
+  resultText,
+  concedeText,
+  pauseText,
 }: {
   game: GameSession;
   decks: { you: Decklist; them: Decklist };
@@ -52,6 +56,9 @@ export function Board({
   gauntlet?: string;
   onMenu: () => void;
   onRematch: () => void;
+  resultText?: string;
+  concedeText?: string;
+  pauseText?: string;
 }) {
   const { state, view, legal, apply, log, batch, settings, setSettings } = game;
   const d = state.decision;
@@ -500,6 +507,15 @@ export function Board({
   }, [d.kind]);
 
   const [panel, setPanel] = useState<'log' | 'settings' | null>(null);
+  const [arenaDetail, setArenaDetail] = useState<ArenaDetail>(loadArenaDetail);
+  const changeArenaDetail = (detail: ArenaDetail) => {
+    setArenaDetail(detail);
+    try {
+      localStorage.setItem(ARENA_KEY, detail);
+    } catch {
+      /* Session preference still applies. */
+    }
+  };
   // Mid-match rematch/menu from the settings drawer asks for confirmation first.
   const [leaving, setLeaving] = useState<'rematch' | 'menu' | null>(null);
   const togglePanel = (p: 'log' | 'settings') => {
@@ -524,9 +540,10 @@ export function Board({
   }, [lethal]);
 
   return (
-    <div className={`table ${targeting ? 'is-targeting' : ''} ${lethal ? 'is-lethal' : ''}`}>
-      <Playmat side="opp" colors={decks.them.colors} />
-      <Playmat side="me" colors={decks.you.colors} />
+    <div
+      className={`table table--arena ${targeting ? 'is-targeting' : ''} ${lethal ? 'is-lethal' : ''}`}
+    >
+      <ArenaBackdrop detail={arenaDetail} batch={batch} view={view} me={HUMAN} />
       <FxLayer batch={batch} view={view} me={HUMAN} />
 
       <main className="board">
@@ -672,16 +689,28 @@ export function Board({
           </label>
           <UiSize />
           <SoundControl />
+          <label className="arena-detail">
+            Arena detail
+            <select
+              aria-label="Arena detail"
+              value={arenaDetail}
+              onChange={(e) => changeArenaDetail(e.target.value as ArenaDetail)}
+            >
+              <option value="balanced">Balanced</option>
+              <option value="low">Low</option>
+              <option value="static">Static</option>
+            </select>
+          </label>
           <div className="drawer__actions">
             {leaving ? (
               <>
                 <span className="drawer__confirm">
                   {leaving === 'rematch'
                     ? gauntlet
-                      ? 'Concede this match? It counts as a loss.'
+                      ? (concedeText ?? 'Concede this match? It counts as a loss.')
                       : 'Restart this match?'
                     : gauntlet
-                      ? 'Pause the run? You can resume this match later.'
+                      ? (pauseText ?? 'Pause the run? You can resume this match later.')
                       : 'Leave this match?'}
                 </span>
                 <button
@@ -777,6 +806,21 @@ export function Board({
         </div>
       )}
 
+      {d.kind === 'optionalEffect' && d.player === HUMAN && (
+        <div className="menu">
+          <div className="menu__box">
+            <div className="menu__title">{nameOf(d.resume.sourceDefId)}: optional effect</div>
+            {legal.map(
+              (a) =>
+                a.type === 'chooseEffect' && (
+                  <button key={String(a.accept)} className="btn btn--ghost" onClick={() => act(a)}>
+                    {a.accept ? 'Use ability' : 'Decline'}
+                  </button>
+                ),
+            )}
+          </div>
+        </div>
+      )}
       {d.kind === 'chooseTriggerTargets' &&
         d.player === HUMAN &&
         legal.some((a) => a.type === 'chooseTargets' && a.mode !== undefined) && (
@@ -823,6 +867,7 @@ export function Board({
             <p>
               {gauntlet ? `${gauntlet} · turn ${state.turn.number}` : `Turn ${state.turn.number}`}
             </p>
+            {resultText && <p role="status">{resultText}</p>}
             <div className="end__actions">
               <button className="btn btn--primary" onClick={onRematch}>
                 {gauntlet ? 'Continue' : 'Rematch'}

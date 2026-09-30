@@ -163,12 +163,13 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
       if (a.sorcerySpeed && !sorcery) return;
       if (a.once && obj(ctx, source).usedAbilities?.includes(abilityIndex)) return;
       if (a.cost.tapSelf && !canTapForAbility(ctx, source)) return;
+      if (a.condition && !checkCondition(ctx, a.condition, player, obj(ctx, source))) return;
       const usable = a.cost.tapSelf ? sources.filter((x) => x.id !== source) : sources;
       if (!canPayFrom(a.cost.mana, usable)) return;
       const rc = a.cost.removeCounters;
       if (rc && (obj(ctx, source).counters?.[rc.name] ?? 0) < rc.count) return;
       const sacrificeable = a.cost.sacrificeFilter
-        ? creatures.filter((id) => matchesFilter(ctx, id, a.cost.sacrificeFilter))
+        ? creatures.filter((id) => matchesFilter(ctx, id, a.cost.sacrificeFilter, source))
         : creatures;
       for (const sacrifice of a.cost.sacrificeCreature ? sacrificeable : [undefined]) {
         for (const targets of combosFor(a.targets, source, sacrifice)) {
@@ -239,6 +240,13 @@ export function getLegalActions(ctx: Ctx, player: PlayerId): Action[] {
       }
       return out;
     }
+    case 'optionalEffect':
+      return [
+        { type: 'chooseEffect', player, accept: false },
+        ...(canPayFrom(d.cost, manaSources(ctx, player))
+          ? [{ type: 'chooseEffect' as const, player, accept: true }]
+          : []),
+      ];
     case 'scry':
       return scryAnswers(d.cards).map(({ top, bottom }) => ({ type: 'scry', player, top, bottom }));
     case 'discard':
@@ -268,7 +276,7 @@ export function getLegalActions(ctx: Ctx, player: PlayerId): Action[] {
         seen.add(defId);
         out.push({ type: 'chooseCard', player, card });
       }
-      out.push({ type: 'chooseCard', player, card: null });
+      if (!d.required || !d.options.length) out.push({ type: 'chooseCard', player, card: null });
       return out;
     }
     case 'chooseTriggerTargets': {

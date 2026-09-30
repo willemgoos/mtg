@@ -15,6 +15,7 @@ import { Expedition } from './components/Expedition.tsx';
 import { Gauntlet } from './components/Gauntlet.tsx';
 import { type Event, Home, type Mode, Nav, type Tab } from './components/Home.tsx';
 import { JumpIn } from './components/JumpIn.tsx';
+import { Season } from './components/Season.tsx';
 import type { BotKind } from './game/bot.worker.ts';
 import { artFor, BLURBS } from './game/deckArt.ts';
 import * as X from './game/expedition.ts';
@@ -100,6 +101,7 @@ export function App() {
   const [theirDeck, setTheirDeck] = useState<string | null>(null);
   const [viewing, setViewing] = useState<string | null>(null);
   const [tab, setTab] = useState<Tab>('home');
+  const [seasonOpen, setSeasonOpen] = useState(false);
   const [lastQuick, setLastQuick] = useState(loadLastQuick);
   const pick = (you: string, bot = opponent) => {
     const seed = newSeed();
@@ -201,6 +203,7 @@ export function App() {
     if (match?.event === 'expedition') updateExpedition((s) => X.recordMatch(s, seed, outcome));
   };
   const back = useCallback(() => setViewing(null), []);
+  if (seasonOpen) return <Season onHome={() => setSeasonOpen(false)} />;
   if (!match && viewing)
     return (
       <DeckView
@@ -273,6 +276,7 @@ export function App() {
         onDecks={openDecks}
         onJumpIn={() => setJumping(true)}
         onTab={setTab}
+        onSeason={() => setSeasonOpen(true)}
       />
     );
   if (!match)

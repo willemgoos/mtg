@@ -26,6 +26,18 @@ corepack pnpm arena -- 40     # bot-vs-bot win rates; `-- --log 3` shows one gam
 
 TypeScript is pinned to 6.x because typescript-eslint doesn't support TS 7 yet.
 
+## Forest arena
+
+Matches use a stylized Three.js forest ruin behind the existing card UI. Open
+Settings → Arena detail to choose Balanced (default), Low, or Static; the choice
+persists locally. Reduced-motion preferences stop ambient motion and arena
+reactions. Unavailable or lost WebGL contexts fall back to the bundled still image.
+
+The scene uses locally generated geometry and textures with a fixed decoration
+seed. `arenaScene.ts` owns rendering and resource cleanup; `arena.ts` maps existing
+visual cues to bounded spell and combat reactions without changing game state.
+The fallback WebP is a capture of this scene, without cards or controls.
+
 ## Engine design
 
 - **API**: `createEngine(cardDb)` returns `newGame`, `getLegalActions(state, player)` and

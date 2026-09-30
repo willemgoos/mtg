@@ -3271,75 +3271,444 @@ button {
   justify-content: center;
 }
 
-.builder__pool {
-  flex: 1;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-}
-
-.builder__lands {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.5rem 1.25rem;
-  padding: 0.75rem 1.5rem;
-  border-bottom: 0.0625rem solid var(--line);
-}
-
-.builder__label {
-  font-family: var(--caps);
-  letter-spacing: 0.08em;
-  color: var(--brass);
-}
-
-.builder__land {
-  display: flex;
-  align-items: center;
-  gap: 0.375rem;
-}
-
-.builder__step {
-  min-width: 2rem;
-  padding-inline: 0.5rem;
-}
-
-.builder__count {
-  min-width: 1.5rem;
-  font-family: var(--display);
-  font-size: 1.125rem;
-  text-align: center;
-  color: var(--parchment);
-}
-
-.builder__empty {
-  margin: 1rem 0;
-  color: var(--muted);
-}
-
-.dcard.is-pickable,
-.dl-row.is-pickable {
-  cursor: var(--cursor-hover, pointer);
-}
-
-.dcard__new {
-  position: absolute;
-  top: 0.4rem;
-  left: 0.4rem;
-  padding: 0.0625rem 0.4375rem;
-  border-radius: 999px;
-  font-family: var(--caps);
-  font-size: 0.6875rem;
-  letter-spacing: 0.06em;
-  color: #0c1a10;
-  background: var(--moss);
-  box-shadow: 0 0.0625rem 0.25rem rgba(0, 0, 0, 0.6);
-}
-
 @media (max-width: 60rem) {
   .offer__packs {
     grid-template-columns: minmax(0, 15rem);
   }
+}
+
+/* ---------------------------------------------------------- deck builder */
+
+/* Arena's deck builder: collection on top, deck stacks below, a band between. */
+.dbk {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background:
+    linear-gradient(180deg, rgba(8, 17, 14, 0.7), rgba(8, 17, 14, 0.88)),
+    var(--art) center 30% / cover;
+}
+
+.dbk__bar {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.875rem 1.5rem 0.25rem;
+}
+
+.dbk__search {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: min(16rem, 30vw);
+}
+
+.dbk__search input {
+  width: 100%;
+  padding: 0.5rem 2rem 0.5rem 1rem;
+  border: 0.0625rem solid var(--line);
+  border-radius: 999px;
+  font: inherit;
+  color: var(--parchment);
+  background: rgba(0, 0, 0, 0.7);
+  outline: none;
+}
+
+.dbk__search input:focus {
+  border-color: var(--brass-dim);
+}
+
+.dbk__search input::-webkit-search-cancel-button {
+  display: none;
+}
+
+.dbk__search button {
+  position: absolute;
+  right: 0.5rem;
+  width: 1.25rem;
+  height: 1.25rem;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  font-size: 0.875rem;
+  line-height: 1;
+  color: #111;
+  background: var(--text);
+  cursor: var(--cursor-hover, pointer);
+}
+
+.dbk__filters {
+  display: flex;
+  gap: 0.375rem;
+}
+
+/* Round mana-coloured toggles: dim when off, ringed and lit when on. */
+.dbk__filter {
+  --c: #b9b3a3;
+  width: 2rem;
+  height: 2rem;
+  border: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #fff8 0, transparent 45%), var(--c);
+  box-shadow:
+    inset 0 0 0 0.125rem rgba(0, 0, 0, 0.55),
+    0 0.125rem 0.375rem rgba(0, 0, 0, 0.6);
+  opacity: 0.45;
+  cursor: var(--cursor-hover, pointer);
+  transition:
+    opacity 0.15s,
+    box-shadow 0.15s;
+}
+
+.dbk__filter:hover {
+  opacity: 0.75;
+}
+
+.dbk__filter.is-on {
+  opacity: 1;
+  box-shadow:
+    inset 0 0 0 0.125rem rgba(0, 0, 0, 0.55),
+    0 0 0 0.125rem var(--brass-hi),
+    0 0 0.75rem var(--brass);
+}
+
+.dbk__filter--W {
+  --c: var(--mana-W);
+}
+
+.dbk__filter--U {
+  --c: var(--mana-U);
+}
+
+.dbk__filter--B {
+  --c: var(--mana-B);
+}
+
+.dbk__filter--R {
+  --c: var(--mana-R);
+}
+
+.dbk__filter--G {
+  --c: var(--mana-G);
+}
+
+/* Lands: a small mountain peak on a dark coin. */
+.dbk__filter--L {
+  background:
+    linear-gradient(135deg, transparent 47%, var(--text) 47% 55%, transparent 55%) 30% 60% /
+      0.625rem 0.625rem no-repeat,
+    linear-gradient(225deg, transparent 47%, var(--text) 47% 55%, transparent 55%) 70% 60% /
+      0.625rem 0.625rem no-repeat,
+    #3a342a;
+}
+
+.dbk__tools {
+  margin-left: auto;
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* Two rows of full cards that scroll sideways; the mouse wheel scrolls them too. */
+.dbk__pool {
+  flex: 1;
+  min-height: 14rem;
+  container-type: size;
+  overflow: auto hidden;
+  scrollbar-color: var(--brass-dim) transparent;
+}
+
+/* Card width follows the pool's height: two rows, each a copies line over a card. */
+.dbk__grid {
+  --row: calc((100cqh - 1.25rem - 0.75rem) / 2);
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-rows: repeat(2, var(--row));
+  grid-auto-columns: calc((var(--row) - 1rem) * 63 / 88);
+  gap: 0.75rem 0.875rem;
+  width: max-content;
+  padding: 0.5rem 1.5rem 0.75rem;
+}
+
+.dbk-card {
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+/* Arena's copy diamonds: lit for copies you can still add, dark for ones in the deck. */
+.dbk-card__copies {
+  flex: none;
+  display: flex;
+  gap: 0.25rem;
+  height: 0.75rem;
+  font-size: 0.875rem;
+  line-height: 0.75rem;
+  color: var(--brass-hi);
+}
+
+.dbk-card__copies i {
+  width: 0.3125rem;
+  height: 0.3125rem;
+  margin-top: 0.25rem;
+  transform: rotate(45deg);
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.dbk-card__copies i.is-free {
+  background: var(--parchment);
+  box-shadow: 0 0 0.25rem rgba(255, 255, 255, 0.5);
+}
+
+.dbk-card__face {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 63 / 88;
+  border-radius: 4.6% / 3.3%;
+  overflow: hidden;
+  background: #111;
+  box-shadow:
+    0 0 0 0.0625rem rgba(0, 0, 0, 0.8),
+    0 0.375rem 1rem rgba(0, 0, 0, 0.6);
+  cursor: var(--cursor-hover, pointer);
+  transition:
+    transform 0.12s,
+    filter 0.12s;
+}
+
+.dbk-card__face:hover {
+  transform: translateY(-0.25rem);
+  filter: brightness(1.1);
+}
+
+.dbk-card__face.is-new {
+  box-shadow:
+    0 0 0 0.125rem #ffb347,
+    0 0 1rem #ff8c1a,
+    0 0.375rem 1rem rgba(0, 0, 0, 0.6);
+}
+
+.dbk-card.is-out .dbk-card__face {
+  filter: grayscale(0.85) brightness(0.45);
+  cursor: var(--cursor, default);
+  transform: none;
+}
+
+.dbk-card__face img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.dbk-card__new {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  translate: -50% 0;
+  padding: 0 0.5rem 0.0625rem;
+  border-radius: 0 0 0.375rem 0.375rem;
+  font-family: var(--caps);
+  font-size: 0.6875rem;
+  letter-spacing: 0.06em;
+  color: #2a1400;
+  background: linear-gradient(180deg, #ffd27a, #ff9a2e);
+}
+
+.dbk__empty {
+  align-self: center;
+  margin: 1rem 0;
+  color: var(--muted);
+}
+
+/* The band between collection and deck: name plate, count, curve and deck box. */
+.dbk__band {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  height: 4.5rem;
+  padding-right: 1.5rem;
+  border-top: 0.125rem solid var(--brass-dim);
+  background: linear-gradient(180deg, #1d1a14, #0d0c09);
+  box-shadow: 0 -0.5rem 1.5rem rgba(0, 0, 0, 0.5);
+}
+
+.dbk__plate {
+  align-self: stretch;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-content: center;
+  column-gap: 0.625rem;
+  min-width: 16rem;
+  padding: 0 2.5rem 0 1.5rem;
+  background: linear-gradient(90deg, #4a2a18, #2e1a10 80%, transparent);
+}
+
+.dbk__plate .deck__pips {
+  grid-row: span 2;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.dbk__plate h1 {
+  margin: 0;
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 1.625rem;
+  line-height: 1.1;
+  color: var(--parchment);
+}
+
+.dbk__count {
+  font-family: var(--caps);
+  font-size: 0.9375rem;
+  color: var(--text);
+}
+
+.dbk__count.is-short {
+  color: #ff5a4a;
+}
+
+/* Bars for 0–1 to 6+; the lighter top part is creatures. */
+.dbk__curve {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.1875rem;
+  height: 2.5rem;
+  padding: 0.25rem;
+  border-radius: 0.25rem;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.dbk__curve > span {
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: flex-end;
+  width: 0.4375rem;
+  min-height: 0.125rem;
+  background: #f09a2a;
+  transition: height 0.2s;
+}
+
+.dbk__curve > span > span {
+  background: #ffd27a;
+}
+
+/* The deck box, standing on the band like Arena's. */
+.dbk__box {
+  align-self: flex-end;
+  flex: none;
+  width: 6.5rem;
+  height: 5.5rem;
+  margin-bottom: 0.5rem;
+  border-radius: 0.375rem;
+  background:
+    linear-gradient(90deg, transparent 80%, rgba(0, 0, 0, 0.45) 80%),
+    var(--art) center 30% / cover;
+  box-shadow:
+    0 0 0 0.125rem var(--brass-dim),
+    0 0 1.25rem color-mix(in srgb, var(--glow) 60%, transparent),
+    0 0.5rem 1rem rgba(0, 0, 0, 0.7);
+  transform: perspective(20rem) rotateY(-14deg);
+}
+
+.dbk__tips {
+  flex: 1;
+  min-width: 0;
+  max-height: 100%;
+  margin: 0;
+  padding: 0.25rem 0 0.25rem 1rem;
+  overflow: auto;
+  font-size: 0.8125rem;
+  color: var(--text);
+}
+
+.dbk__tips li::marker {
+  color: var(--brass);
+}
+
+/* The deck: columns by mana value, each a stack of title bars with the last card whole. */
+.dbk__deck {
+  --cw: clamp(7rem, 11vw, 11rem);
+  flex: none;
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  height: clamp(13rem, 40vh, 26rem);
+  padding: 1rem 13rem 1rem 1.5rem;
+  overflow: auto;
+  background: var(--felt-lo);
+}
+
+.dbk-col {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  width: var(--cw);
+}
+
+.dbk-stack {
+  position: relative;
+  flex: none;
+  width: var(--cw);
+  aspect-ratio: 63 / 88;
+  border-radius: 4.6% / 3.3%;
+  overflow: hidden;
+  background: #111;
+  box-shadow:
+    0 0 0 0.0625rem rgba(0, 0, 0, 0.8),
+    0 -0.25rem 0.75rem rgba(0, 0, 0, 0.45);
+  cursor: var(--cursor-hover, pointer);
+  transition: filter 0.15s;
+}
+
+.dbk-stack + .dbk-stack {
+  margin-top: calc(var(--cw) * 88 / 63 * -0.78);
+}
+
+.dbk-stack:hover {
+  filter: brightness(1.15);
+}
+
+.dbk-stack img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.dbk-stack__qty {
+  position: absolute;
+  top: calc(var(--cw) * 0.16);
+  right: 0.375rem;
+  font-family: var(--display);
+  font-size: calc(var(--cw) * 0.125);
+  line-height: 1;
+  color: #fff;
+  text-shadow:
+    0 0 0.25rem #000,
+    0 0 0.5rem #000,
+    0 0.0625rem 0.125rem #000;
+}
+
+/* Arena's big orange Done in the bottom-right corner. */
+.dbk__done {
+  position: absolute;
+  right: 1.5rem;
+  bottom: 1.25rem;
+  z-index: 2;
+  min-width: 11rem;
+  padding-block: 0.75rem;
+  font-size: 1.25rem;
+  color: #2a1000;
+  background: linear-gradient(180deg, #ffc46b, #ff8a1f 55%, #d8600c);
+}
+
+.dbk__done:disabled {
+  cursor: var(--cursor, default);
+  filter: grayscale(1) brightness(0.6);
 }
 
 /* ---------------------------------------------------------- pack opening */

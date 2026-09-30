@@ -127,6 +127,7 @@ export type AbilityDef =
       targets: TargetSpec[];
       effects: EffectDef[];
       sorcerySpeed?: boolean;
+      condition?: ConditionDef;
       /** "Activate only once." */
       once?: boolean;
       /** Activated from the graveyard (Reassembling Skeleton). */
@@ -185,6 +186,7 @@ export type TriggerDef =
     }
   /** Whenever you draw your second card each turn. */
   | { on: 'drawSecondCard' }
+  | { on: 'drawCard'; whose: 'yours' | 'opponents' }
   /** Whenever a source you control deals noncombat damage to an opponent ("that many"). */
   | { on: 'yourNoncombatDamageToOpponent' }
   /** Whenever this creature becomes blocked. */
@@ -196,6 +198,7 @@ export type TriggerDef =
   | { on: 'beginningOfEndStep'; whose: 'yours' | 'each' };
 
 export type ConditionDef =
+  | { kind: 'controlsPermanents'; filter: CardFilter; min: number }
   | { kind: 'attackedThisTurn' }
   | { kind: 'controlsAnother'; subtype: string }
   /** You control a creature (or `count` creatures) matching the filter (`other` excludes the source). */
@@ -210,6 +213,9 @@ export type ConditionDef =
   | { kind: 'diedWithout'; subtype: string }
   /** It's not your turn. */
   | { kind: 'opponentsTurn' }
+  | { kind: 'yourTurn' }
+  | { kind: 'sourceAttacking' }
+  | { kind: 'sourceCounters'; min: number }
   /** A creature is attacking you. */
   | { kind: 'beingAttacked' }
   /** An opponent controls a creature matching the filter. */
@@ -221,6 +227,8 @@ export type ConditionDef =
   | { kind: 'custom'; handler: string };
 
 export interface CardFilter {
+  anyOf?: CardFilter[];
+  attackingOrBlocking?: boolean;
   maxPower?: number;
   minPower?: number;
   hasKeyword?: Keyword;
@@ -233,6 +241,12 @@ export interface CardFilter {
   /** Has at least one of these card types. */
   types?: CardType[];
   nonland?: boolean;
+  notTypes?: CardType[];
+  colors?: Color[];
+  subtypes?: string[];
+  minPlusOneCounters?: number;
+  minManaValue?: number;
+  manaValue?: number;
   notSubtype?: string;
   /** Mana value at most this ('sourcePower': the source's power, e.g. as it died). */
   maxManaValue?: number | 'sourcePower';
@@ -267,6 +281,9 @@ export type Ref =
   | 'self'
   | 'controller'
   | 'eachOpponent'
+  | 'eachPlayer'
+  | 'attached'
+  | { each: 'permanent'; controller?: 'you' | 'opponent'; filter?: CardFilter }
   /** The object that caused the trigger ("that creature"). */
   | 'subject'
   | { each: 'creature'; controller?: 'you' | 'opponent'; filter?: CardFilter };
@@ -276,13 +293,24 @@ export type Amount =
   | { powerOf: Ref }
   /** The number of +1/+1 counters on it (Mossborn Hydra doubles them). */
   | { countersOn: Ref }
-  | { count: 'creaturesYouControl' | 'landsYouControl'; subtype?: string; max?: number }
+  | {
+      count: 'creaturesYouControl' | 'landsYouControl' | 'totalPowerOfCreaturesYouControl';
+      subtype?: string;
+      max?: number;
+      named?: CardDefId;
+      other?: boolean;
+      attacking?: boolean;
+      minPlusOneCounters?: number;
+      basicOnly?: boolean;
+    }
+  | { multiply: number; amount: Amount }
   /** Cards in your graveyard (of these types). */
   | { count: 'cardsInGraveyard'; types?: CardType[]; named?: CardDefId; plus?: number }
   /** The amount from the trigger event ("that much damage"). */
   | { event: 'amount' };
 
 export type EffectDef =
+  | { kind: 'may'; effects: EffectDef[]; cost?: ManaCost }
   | { kind: 'damage'; amount: Amount; to: Ref; from?: Ref }
   /** Until end of turn. */
   | {
@@ -324,20 +352,25 @@ export type EffectDef =
   | {
       /** Search your library (Bushwhack, Circuitous Route). Shuffles afterwards unless `shuffle` is false. */
       kind: 'searchLibrary';
-      filter: 'basicLand' | 'basicLandOrGate';
-      to: 'hand' | 'battlefieldTapped';
+      filter: 'basicLand' | 'basicLandOrGate' | CardFilter;
+      to: 'hand' | 'battlefieldTapped' | 'battlefield' | 'graveyard';
+      /** Unrestricted tutors cannot fail to find a card in a nonempty library. */
+      required?: boolean;
       shuffle?: boolean;
     }
   /** Look at the top N; you may put a creature with mana value up to your land count onto the battlefield (Loot). */
   | { kind: 'lookForCreature'; count: number }
   | { kind: 'bounce'; what: Ref }
+  | { kind: 'returnToHand'; what: Ref }
+  | { kind: 'exileGraveyard'; who: Ref }
   | { kind: 'tap'; what: Ref }
   /** The controller discards N cards of their choice. */
   | { kind: 'discard'; count: number; who?: 'controller' | 'eachOpponent' }
   /** Put the top N cards of your library into your graveyard. */
   | { kind: 'mill'; count: number }
   /** Counter a spell on the stack (unless it can't be countered). */
-  | { kind: 'counter'; what: Ref }
+  | { kind: 'counter'; what: Ref; controllerTokens?: { token: CardDefId; count: number } }
+  | { kind: 'bouncePlayerPermanents'; who: Ref; nonland?: boolean }
   /** Return a card of these types from your graveyard to your hand, of your choice (not targeted). */
   | { kind: 'returnFromGraveyard'; types: CardType[] }
   /** Put all creature cards from all graveyards onto the battlefield under your control. */
@@ -376,6 +409,7 @@ export type EffectDef =
       hasteThisTurn?: boolean;
       /** "Tapped and attacking" (Leonin Warleader). */
       attacking?: boolean;
+      tapped?: boolean;
     }
   /** Return all land cards from your graveyard to the battlefield tapped (World Shaper). */
   | { kind: 'returnLandsFromGraveyard' }
@@ -389,8 +423,9 @@ export type StaticDef =
       kind: 'anthem';
       affects: 'otherCreaturesYouControl' | 'creaturesYouControl';
       filter?: CardFilter;
-      power: number;
-      toughness: number;
+      condition?: ConditionDef;
+      power: Amount;
+      toughness: Amount;
       keywords?: Keyword[];
     }
   | { kind: 'noLifeGain' }
@@ -408,11 +443,12 @@ export type StaticDef =
   /** Equipment or Aura: the creature it is attached to gets this. */
   | {
       kind: 'attached';
-      power: number;
-      toughness: number;
+      power: Amount;
+      toughness: Amount;
       keywords?: Keyword[];
       /** Pacifism. */
       cantAttackOrBlock?: boolean;
+      doesntUntap?: boolean;
     }
   /** All creatures able to block this creature do so (Prized Unicorn). */
   | { kind: 'lure' }
@@ -427,9 +463,12 @@ export type StaticDef =
       power: number;
       toughness: number;
       keywords?: Keyword[];
+      cantBeBlocked?: boolean;
     }
   /** Instant and sorcery spells you cast cost {N} less (Archmage of Runes). */
   | { kind: 'instantsAndSorceriesCostLess'; amount: number }
+  | { kind: 'spellsCostLess'; filter: CardFilter; amount: number }
+  | { kind: 'instantsAndSorceriesUncounterable' }
   /** You have no maximum hand size. */
   | { kind: 'noMaxHandSize' }
   /** Vizier: look at the top of your library any time; cast creatures from there with any mana. */
@@ -645,6 +684,14 @@ export interface ReturnWhenDies {
 }
 
 export type Decision =
+  | {
+      kind: 'optionalEffect';
+      player: PlayerId;
+      effects: EffectDef[];
+      cost?: ManaCost;
+      resume: PausedResolution;
+      thenPriority: PlayerId;
+    }
   | { kind: 'mulligan'; player: PlayerId }
   | { kind: 'bottomCards'; player: PlayerId; count: number }
   | { kind: 'priority'; player: PlayerId }
@@ -678,7 +725,8 @@ export type Decision =
       /** Choosing from the graveyard instead of searching the library (Inspiration from Beyond). */
       fromGraveyard?: boolean;
       /** Where the card goes. Default: hand. */
-      to?: 'hand' | 'battlefieldTapped' | 'battlefield';
+      to?: 'hand' | 'battlefieldTapped' | 'battlefield' | 'graveyard';
+      required?: boolean;
       /** Only these top cards were looked at: the rest go to the bottom in a random order (no shuffle). */
       looked?: ObjectId[];
       /** Shuffle afterwards (default true unless `looked`). */
@@ -773,6 +821,7 @@ export interface RngState {
 // ---------------------------------------------------------------------------
 
 export type Action =
+  | { type: 'chooseEffect'; player: PlayerId; accept: boolean }
   | { type: 'keepHand'; player: PlayerId }
   | { type: 'mulligan'; player: PlayerId }
   /** London mulligan: put one card on the bottom (repeated until done). */

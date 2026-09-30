@@ -1,0 +1,1086 @@
+[
+  {
+    "id": "abrade",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "abyssal-harvester",
+    "rarity": "rare"
+  },
+  {
+    "id": "adventuring-gear",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "aegis-turtle",
+    "rarity": "common"
+  },
+  {
+    "id": "aetherize",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "affectionate-indrik",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "ajani-caller-of-the-pride",
+    "rarity": "mythic"
+  },
+  {
+    "id": "ajanis-pridemate",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "alesha-who-laughs-at-fate",
+    "rarity": "rare"
+  },
+  {
+    "id": "ambush-wolf",
+    "rarity": "common"
+  },
+  {
+    "id": "an-offer-you-cant-refuse",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "angel-of-finality",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "anthem-of-champions",
+    "rarity": "rare"
+  },
+  {
+    "id": "apothecary-stomper",
+    "rarity": "common"
+  },
+  {
+    "id": "arahbo-the-first-fang",
+    "rarity": "rare"
+  },
+  {
+    "id": "arbiter-of-woe",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "arcane-epiphany",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "archmage-of-runes",
+    "rarity": "rare"
+  },
+  {
+    "id": "armasaur-guide",
+    "rarity": "common"
+  },
+  {
+    "id": "ashroot-animist",
+    "rarity": "rare"
+  },
+  {
+    "id": "authority-of-the-consuls",
+    "rarity": "rare"
+  },
+  {
+    "id": "axgard-cavalry",
+    "rarity": "common"
+  },
+  {
+    "id": "bake-into-a-pie",
+    "rarity": "common"
+  },
+  {
+    "id": "balmor-battlemage-captain",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "banishing-light",
+    "rarity": "common"
+  },
+  {
+    "id": "banner-of-kinship",
+    "rarity": "rare"
+  },
+  {
+    "id": "battlesong-berserker",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "beast-kin-ranger",
+    "rarity": "common"
+  },
+  {
+    "id": "bigfin-bouncer",
+    "rarity": "common"
+  },
+  {
+    "id": "billowing-shriekmass",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "bite-down",
+    "rarity": "common"
+  },
+  {
+    "id": "blanchwood-armor",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "blasphemous-edict",
+    "rarity": "rare"
+  },
+  {
+    "id": "bloodfell-caves",
+    "rarity": "common"
+  },
+  {
+    "id": "bloodthirsty-conqueror",
+    "rarity": "mythic"
+  },
+  {
+    "id": "blossoming-sands",
+    "rarity": "common"
+  },
+  {
+    "id": "boltwave",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "brasss-bounty",
+    "rarity": "rare"
+  },
+  {
+    "id": "brazen-scourge",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "brineborn-cutthroat",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "broken-wings",
+    "rarity": "common"
+  },
+  {
+    "id": "bulk-up",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "burglar-rat",
+    "rarity": "common"
+  },
+  {
+    "id": "burnished-hart",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "burst-lightning",
+    "rarity": "common"
+  },
+  {
+    "id": "bushwhack",
+    "rarity": "common"
+  },
+  {
+    "id": "cackling-prowler",
+    "rarity": "common"
+  },
+  {
+    "id": "campus-guide",
+    "rarity": "common"
+  },
+  {
+    "id": "cat-collector",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "cathar-commando",
+    "rarity": "common"
+  },
+  {
+    "id": "celestial-armor",
+    "rarity": "rare"
+  },
+  {
+    "id": "cephalid-inkmage",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "chandra-flameshaper",
+    "rarity": "mythic"
+  },
+  {
+    "id": "claws-out",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "clinquant-skymage",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "consuming-aberration",
+    "rarity": "rare"
+  },
+  {
+    "id": "courageous-goblin",
+    "rarity": "common"
+  },
+  {
+    "id": "crackling-cyclops",
+    "rarity": "common"
+  },
+  {
+    "id": "crypt-feaster",
+    "rarity": "common"
+  },
+  {
+    "id": "crystal-barricade",
+    "rarity": "rare"
+  },
+  {
+    "id": "curator-of-destinies",
+    "rarity": "rare"
+  },
+  {
+    "id": "dauntless-veteran",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "day-of-judgment",
+    "rarity": "rare"
+  },
+  {
+    "id": "dazzling-angel",
+    "rarity": "common"
+  },
+  {
+    "id": "diregraf-ghoul",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "dismal-backwater",
+    "rarity": "common"
+  },
+  {
+    "id": "divine-resilience",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "doubling-season",
+    "rarity": "mythic"
+  },
+  {
+    "id": "dragon-trainer",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "drake-hatcher",
+    "rarity": "rare"
+  },
+  {
+    "id": "drakuseth-maw-of-flames",
+    "rarity": "rare"
+  },
+  {
+    "id": "dreadwing-scavenger",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "dwynen-gilt-leaf-daen",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "dwynens-elite",
+    "rarity": "common"
+  },
+  {
+    "id": "eager-trufflesnout",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "eaten-alive",
+    "rarity": "common"
+  },
+  {
+    "id": "electroduplicate",
+    "rarity": "rare"
+  },
+  {
+    "id": "elementalist-adept",
+    "rarity": "common"
+  },
+  {
+    "id": "elenda-saint-of-dusk",
+    "rarity": "rare"
+  },
+  {
+    "id": "elfsworn-giant",
+    "rarity": "common"
+  },
+  {
+    "id": "elvish-archdruid",
+    "rarity": "rare"
+  },
+  {
+    "id": "elvish-regrower",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "empyrean-eagle",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "erudite-wizard",
+    "rarity": "common"
+  },
+  {
+    "id": "essence-scatter",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "etali-primal-storm",
+    "rarity": "rare"
+  },
+  {
+    "id": "evolving-wilds",
+    "rarity": "common"
+  },
+  {
+    "id": "exemplar-of-light",
+    "rarity": "rare"
+  },
+  {
+    "id": "exsanguinate",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "extravagant-replication",
+    "rarity": "rare"
+  },
+  {
+    "id": "faebloom-trick",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "fake-your-own-death",
+    "rarity": "common"
+  },
+  {
+    "id": "fanatical-firebrand",
+    "rarity": "common"
+  },
+  {
+    "id": "felidar-savior",
+    "rarity": "common"
+  },
+  {
+    "id": "felling-blow",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "fiendish-panda",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "fiery-annihilation",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "firebrand-archer",
+    "rarity": "common"
+  },
+  {
+    "id": "firespitter-whelp",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "fishing-pole",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "flamewake-phoenix",
+    "rarity": "rare"
+  },
+  {
+    "id": "fleeting-distraction",
+    "rarity": "common"
+  },
+  {
+    "id": "fleeting-flight",
+    "rarity": "common"
+  },
+  {
+    "id": "frenzied-goblin",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "garruks-uprising",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "genesis-wave",
+    "rarity": "rare"
+  },
+  {
+    "id": "ghalta-primal-hunger",
+    "rarity": "rare"
+  },
+  {
+    "id": "giada-font-of-hope",
+    "rarity": "rare"
+  },
+  {
+    "id": "giant-growth",
+    "rarity": "common"
+  },
+  {
+    "id": "gleaming-barrier",
+    "rarity": "common"
+  },
+  {
+    "id": "gnarlid-colony",
+    "rarity": "common"
+  },
+  {
+    "id": "goblin-boarders",
+    "rarity": "common"
+  },
+  {
+    "id": "goblin-negotiation",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "goblin-surprise",
+    "rarity": "common"
+  },
+  {
+    "id": "goldvein-pick",
+    "rarity": "common"
+  },
+  {
+    "id": "good-fortune-unicorn",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "gorehorn-raider",
+    "rarity": "common"
+  },
+  {
+    "id": "grappling-kraken",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "grow-from-the-ashes",
+    "rarity": "common"
+  },
+  {
+    "id": "guarded-heir",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "gutless-plunderer",
+    "rarity": "common"
+  },
+  {
+    "id": "hare-apparent",
+    "rarity": "common"
+  },
+  {
+    "id": "healers-hawk",
+    "rarity": "common"
+  },
+  {
+    "id": "heartfire-immolator",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "helpful-hunter",
+    "rarity": "common"
+  },
+  {
+    "id": "herald-of-eternal-dawn",
+    "rarity": "mythic"
+  },
+  {
+    "id": "heraldic-banner",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "heros-downfall",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "heroic-reinforcements",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "hidetsugus-second-rite",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "high-fae-trickster",
+    "rarity": "rare"
+  },
+  {
+    "id": "high-society-hunter",
+    "rarity": "rare"
+  },
+  {
+    "id": "homunculus-horde",
+    "rarity": "rare"
+  },
+  {
+    "id": "hungry-ghoul",
+    "rarity": "common"
+  },
+  {
+    "id": "icewind-elemental",
+    "rarity": "common"
+  },
+  {
+    "id": "imprisoned-in-the-moon",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "incinerating-blast",
+    "rarity": "common"
+  },
+  {
+    "id": "infernal-vessel",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "infestation-sage",
+    "rarity": "common"
+  },
+  {
+    "id": "inspiration-from-beyond",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "inspiring-call",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "inspiring-paladin",
+    "rarity": "common"
+  },
+  {
+    "id": "involuntary-employment",
+    "rarity": "common"
+  },
+  {
+    "id": "joust-through",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "juggernaut",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "jungle-hollow",
+    "rarity": "common"
+  },
+  {
+    "id": "kaito-cunning-infiltrator",
+    "rarity": "mythic"
+  },
+  {
+    "id": "kellan-planar-trailblazer",
+    "rarity": "rare"
+  },
+  {
+    "id": "kiora-the-rising-tide",
+    "rarity": "rare"
+  },
+  {
+    "id": "koma-world-eater",
+    "rarity": "rare"
+  },
+  {
+    "id": "krenko-mob-boss",
+    "rarity": "rare"
+  },
+  {
+    "id": "kykar-zephyr-awakener",
+    "rarity": "rare"
+  },
+  {
+    "id": "lathril-blade-of-the-elves",
+    "rarity": "rare"
+  },
+  {
+    "id": "leyline-axe",
+    "rarity": "rare"
+  },
+  {
+    "id": "lightshell-duo",
+    "rarity": "common"
+  },
+  {
+    "id": "liliana-dreadhorde-general",
+    "rarity": "mythic"
+  },
+  {
+    "id": "llanowar-elves",
+    "rarity": "common"
+  },
+  {
+    "id": "loot-exuberant-explorer",
+    "rarity": "rare"
+  },
+  {
+    "id": "luminous-rebuke",
+    "rarity": "common"
+  },
+  {
+    "id": "lunar-insight",
+    "rarity": "rare"
+  },
+  {
+    "id": "macabre-waltz",
+    "rarity": "common"
+  },
+  {
+    "id": "make-your-move",
+    "rarity": "common"
+  },
+  {
+    "id": "marauding-blight-priest",
+    "rarity": "common"
+  },
+  {
+    "id": "meteor-golem",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "micromancer",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "midnight-snack",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "mild-mannered-librarian",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "mischievous-mystic",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "mischievous-pup",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "mocking-sprite",
+    "rarity": "common"
+  },
+  {
+    "id": "mossborn-hydra",
+    "rarity": "rare"
+  },
+  {
+    "id": "muldrotha-the-gravetide",
+    "rarity": "mythic"
+  },
+  {
+    "id": "needletooth-pack",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "nessian-hornbeetle",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "nine-lives-familiar",
+    "rarity": "rare"
+  },
+  {
+    "id": "niv-mizzet-visionary",
+    "rarity": "mythic"
+  },
+  {
+    "id": "omniscience",
+    "rarity": "mythic"
+  },
+  {
+    "id": "overrun",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "painful-quandary",
+    "rarity": "rare"
+  },
+  {
+    "id": "perforating-artist",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "phyrexian-arena",
+    "rarity": "rare"
+  },
+  {
+    "id": "pilfer",
+    "rarity": "common"
+  },
+  {
+    "id": "preposterous-proportions",
+    "rarity": "rare"
+  },
+  {
+    "id": "prideful-parent",
+    "rarity": "common"
+  },
+  {
+    "id": "progenitus",
+    "rarity": "mythic"
+  },
+  {
+    "id": "quakestrider-ceratops",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "quick-draw-katana",
+    "rarity": "common"
+  },
+  {
+    "id": "quilled-greatwurm",
+    "rarity": "mythic"
+  },
+  {
+    "id": "raise-the-past",
+    "rarity": "rare"
+  },
+  {
+    "id": "ravenous-amulet",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "reassembling-skeleton",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "reclamation-sage",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "refute",
+    "rarity": "common"
+  },
+  {
+    "id": "resolute-reinforcements",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "revenge-of-the-rats",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "rise-of-the-dark-realms",
+    "rarity": "mythic"
+  },
+  {
+    "id": "rite-of-the-dragoncaller",
+    "rarity": "mythic"
+  },
+  {
+    "id": "rogues-passage",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "ruby-daring-tracker",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "rugged-highlands",
+    "rarity": "common"
+  },
+  {
+    "id": "run-away-together",
+    "rarity": "common"
+  },
+  {
+    "id": "rune-scarred-demon",
+    "rarity": "rare"
+  },
+  {
+    "id": "rune-sealed-wall",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "sanguine-syphoner",
+    "rarity": "common"
+  },
+  {
+    "id": "savannah-lions",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "scavenging-ooze",
+    "rarity": "rare"
+  },
+  {
+    "id": "scoured-barrens",
+    "rarity": "common"
+  },
+  {
+    "id": "scrawling-crawler",
+    "rarity": "rare"
+  },
+  {
+    "id": "searslicer-goblin",
+    "rarity": "rare"
+  },
+  {
+    "id": "secluded-courtyard",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "seekers-folly",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "seismic-rupture",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "self-reflection",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "serra-angel",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "shivan-dragon",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "sire-of-seven-deaths",
+    "rarity": "mythic"
+  },
+  {
+    "id": "skyknight-squire",
+    "rarity": "rare"
+  },
+  {
+    "id": "skyship-buccaneer",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "slagstorm",
+    "rarity": "rare"
+  },
+  {
+    "id": "slumbering-cerberus",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "snakeskin-veil",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "solemn-simulacrum",
+    "rarity": "rare"
+  },
+  {
+    "id": "soul-shackled-zombie",
+    "rarity": "common"
+  },
+  {
+    "id": "soulstone-sanctuary",
+    "rarity": "rare"
+  },
+  {
+    "id": "sower-of-chaos",
+    "rarity": "common"
+  },
+  {
+    "id": "spectral-sailor",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "sphinx-of-forgotten-lore",
+    "rarity": "mythic"
+  },
+  {
+    "id": "spinner-of-souls",
+    "rarity": "rare"
+  },
+  {
+    "id": "spitfire-lagac",
+    "rarity": "common"
+  },
+  {
+    "id": "squad-rallier",
+    "rarity": "common"
+  },
+  {
+    "id": "stab",
+    "rarity": "common"
+  },
+  {
+    "id": "strix-lookout",
+    "rarity": "common"
+  },
+  {
+    "id": "stroke-of-midnight",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "stromkirk-bloodthief",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "strongbox-raider",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "sun-blessed-healer",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "sure-strike",
+    "rarity": "common"
+  },
+  {
+    "id": "swiftblade-vindicator",
+    "rarity": "rare"
+  },
+  {
+    "id": "swiftfoot-boots",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "swiftwater-cliffs",
+    "rarity": "common"
+  },
+  {
+    "id": "sylvan-scavenging",
+    "rarity": "rare"
+  },
+  {
+    "id": "tatyova-benthic-druid",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "think-twice",
+    "rarity": "common"
+  },
+  {
+    "id": "thornwood-falls",
+    "rarity": "common"
+  },
+  {
+    "id": "thousand-year-storm",
+    "rarity": "rare"
+  },
+  {
+    "id": "thrill-of-possibility",
+    "rarity": "common"
+  },
+  {
+    "id": "time-stop",
+    "rarity": "rare"
+  },
+  {
+    "id": "tinybones-bauble-burglar",
+    "rarity": "rare"
+  },
+  {
+    "id": "tolarian-terror",
+    "rarity": "common"
+  },
+  {
+    "id": "tragic-banshee",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "tranquil-cove",
+    "rarity": "common"
+  },
+  {
+    "id": "treetop-snarespinner",
+    "rarity": "common"
+  },
+  {
+    "id": "twinblade-blessing",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "twinflame-tyrant",
+    "rarity": "mythic"
+  },
+  {
+    "id": "uncharted-voyage",
+    "rarity": "common"
+  },
+  {
+    "id": "valkyries-call",
+    "rarity": "mythic"
+  },
+  {
+    "id": "vampire-gourmand",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "vampire-nighthawk",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "vampire-soulcaller",
+    "rarity": "common"
+  },
+  {
+    "id": "vanguard-seraph",
+    "rarity": "common"
+  },
+  {
+    "id": "vengeful-bloodwitch",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "vivien-reid",
+    "rarity": "mythic"
+  },
+  {
+    "id": "wardens-of-the-cycle",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "wary-thespian",
+    "rarity": "common"
+  },
+  {
+    "id": "wildwood-scourge",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "wind-scarred-crag",
+    "rarity": "common"
+  },
+  {
+    "id": "witness-protection",
+    "rarity": "common"
+  },
+  {
+    "id": "youthful-valkyrie",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "zimone-paradox-sculptor",
+    "rarity": "mythic"
+  },
+  {
+    "id": "zombify",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "zul-ashur-lich-lord",
+    "rarity": "rare"
+  }
+]

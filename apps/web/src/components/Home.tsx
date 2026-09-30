@@ -72,6 +72,7 @@ export function Home({
   onDecks,
   onJumpIn,
   onTab,
+  onSeason,
 }: {
   mode: Mode;
   onMode: (m: Mode) => void;
@@ -85,6 +86,7 @@ export function Home({
   onDecks: (m: Mode) => void;
   onJumpIn: () => void;
   onTab: (t: Tab) => void;
+  onSeason: () => void;
 }) {
   const slides: Slide[] = [
     {
@@ -132,7 +134,7 @@ export function Home({
   return (
     <div className="home">
       <Nav tab="home" onTab={onTab} clears={clears} />
-      <main className="home__main">
+      <main className="home__main home__main--season">
         <section
           className="hero"
           onMouseEnter={() => setPaused(true)}
@@ -173,6 +175,15 @@ export function Home({
           </div>
         </section>
 
+        <section className="season-entry">
+          <div>
+            <h2>Season</h2>
+            <p>Build your collection and earn coins against bot opponents.</p>
+          </div>
+          <button className="btn btn--primary" onClick={onSeason}>
+            Open Season
+          </button>
+        </section>
         <section className="home__row">
           <div className="modes" role="radiogroup" aria-label="Mode">
             <ModeTile

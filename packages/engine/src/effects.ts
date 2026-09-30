@@ -1,5 +1,6 @@
 import {
   characteristics,
+  cardMatches,
   countOf,
   creaturesOnBattlefield,
   hasKeyword,
@@ -130,12 +131,22 @@ export function resolveRef(ctx: Ctx, es: EffectSource, ref: Ref): TargetChoice[]
   }
   if (ref === 'controller') return [{ player: es.controller }];
   if (ref === 'eachOpponent') return [{ player: other(es.controller) }];
+  if (ref === 'eachPlayer') return [{ player: 'p1' }, { player: 'p2' }];
+  if (ref === 'attached') {
+    const host = es.source && ctx.s.objects[es.source.id]?.attachedTo;
+    const o = host && ctx.s.objects[host];
+    return o && o.zone === 'battlefield' ? [{ object: { id: o.id, zcc: o.zcc } }] : [];
+  }
   if (ref === 'subject') {
     const o = es.subject && onBattlefield(ctx, es.subject);
     return o ? [{ object: { id: o.id, zcc: o.zcc } }] : [];
   }
   const sourceId = es.source?.id;
-  return creaturesOnBattlefield(ctx)
+  return (
+    ref.each === 'permanent'
+      ? ctx.s.battlefield.map((id) => obj(ctx, id))
+      : creaturesOnBattlefield(ctx)
+  )
     .filter((c) => {
       if (ref.controller === 'you' && c.controller !== es.controller) return false;
       if (ref.controller === 'opponent' && c.controller === es.controller) return false;
@@ -154,6 +165,7 @@ function playersOf(ctx: Ctx, es: EffectSource, ref: Ref): PlayerId[] {
 
 export function resolveAmount(ctx: Ctx, es: EffectSource, amount: Amount): number {
   if (typeof amount === 'number') return amount;
+  if ('multiply' in amount) return amount.multiply * resolveAmount(ctx, es, amount.amount);
   if ('powerOf' in amount) {
     const ids = objectsOf(ctx, es, amount.powerOf);
     if (ids[0]) return Math.max(0, power(ctx, ids[0]));
@@ -165,7 +177,13 @@ export function resolveAmount(ctx: Ctx, es: EffectSource, amount: Amount): numbe
     const id = objectsOf(ctx, es, amount.countersOn)[0];
     return id ? obj(ctx, id).plusOneCounters : 0;
   }
-  return countOf(ctx, es.controller, amount);
+  return countOf(
+    ctx,
+    es.controller,
+    amount,
+    false,
+    es.source ? onBattlefield(ctx, es.source)?.id : undefined,
+  );
 }
 
 // ---------------------------------------------------------------------------
@@ -198,6 +216,7 @@ export function runEffects(
     }
     if (
       e.kind === 'scry' ||
+      e.kind === 'may' ||
       e.kind === 'surveil' ||
       e.kind === 'searchLibrary' ||
       e.kind === 'lookForCreature' ||
@@ -222,7 +241,16 @@ export function runEffects(
         item,
       };
       const thenPriority = ctx.s.turn.activePlayer;
-      if (e.kind === 'scry' || e.kind === 'surveil') {
+      if (e.kind === 'may') {
+        ctx.s.decision = {
+          kind: 'optionalEffect',
+          player: controller,
+          effects: e.effects,
+          ...(e.cost ? { cost: e.cost } : {}),
+          resume,
+          thenPriority,
+        };
+      } else if (e.kind === 'scry' || e.kind === 'surveil') {
         const cards = lib.slice(0, e.amount);
         if (cards.length === 0) continue;
         ctx.s.decision = {
@@ -310,6 +338,7 @@ export function runEffects(
         };
       } else {
         const options = lib.filter((id) => {
+          if (typeof e.filter === 'object') return cardMatches(ctx, id, e.filter);
           const d = defOf(ctx, obj(ctx, id).defId);
           const basic = d.supertypes.includes('Basic') && d.types.includes('Land');
           return basic || (e.filter === 'basicLandOrGate' && d.subtypes.includes('Gate'));
@@ -318,6 +347,7 @@ export function runEffects(
           kind: 'searchLibrary',
           player: controller,
           options,
+          ...(e.required ? { required: true } : {}),
           ...(e.to !== 'hand' ? { to: e.to } : {}),
           ...(e.shuffle === false ? { shuffle: false } : {}),
           resume,
@@ -436,7 +466,7 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
       const n = resolveAmount(ctx, es, e.count);
       for (let i = 0; i < n; i++) {
         const t = createObject(ctx, e.token, es.controller, 'battlefield', true);
-        if (defOf(ctx, e.token).entersTapped) t.tapped = true;
+        if (defOf(ctx, e.token).entersTapped || e.tapped) t.tapped = true;
         if (e.attacking && ctx.s.combat) {
           // "Tapped and attacking": attacking the same player, never declared (no attack triggers).
           t.tapped = true;
@@ -488,12 +518,36 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
       if (!t || !('object' in t)) return;
       const i = ctx.s.stack.findIndex((x) => x.kind === 'spell' && x.id === t.object.id);
       const item = ctx.s.stack[i];
-      if (!item || item.kind !== 'spell' || def(ctx, item.id).uncounterable) return;
-      ctx.s.stack.splice(i, 1);
-      emit(ctx, { type: 'countered', id: item.id });
-      moveObject(ctx, item.id, item.flashback ? 'exile' : 'graveyard');
+      if (!item || item.kind !== 'spell') return;
+      const controller = item.controller;
+      const protectedByStatic =
+        (def(ctx, item.id).types.includes('Instant') ||
+          def(ctx, item.id).types.includes('Sorcery')) &&
+        ctx.s.battlefield.some(
+          (id) =>
+            obj(ctx, id).controller === controller &&
+            def(ctx, id).abilities.some(
+              (a) => a.kind === 'static' && a.effect.kind === 'instantsAndSorceriesUncounterable',
+            ),
+        );
+      if (!def(ctx, item.id).uncounterable && !protectedByStatic) {
+        ctx.s.stack.splice(i, 1);
+        emit(ctx, { type: 'countered', id: item.id });
+        moveObject(ctx, item.id, item.flashback ? 'exile' : 'graveyard');
+      }
+      if (e.controllerTokens)
+        runEffect(ctx, { ...es, controller }, { kind: 'createToken', ...e.controllerTokens });
       return;
     }
+    case 'bouncePlayerPermanents':
+      for (const player of playersOf(ctx, es, e.who))
+        for (const id of [...ctx.s.battlefield])
+          if (
+            obj(ctx, id).controller === player &&
+            (!e.nonland || !def(ctx, id).types.includes('Land'))
+          )
+            moveObject(ctx, id, 'hand');
+      return;
     case 'reanimateAll':
       for (const p of Object.keys(ctx.s.players) as PlayerId[])
         for (const id of [...ctx.s.players[p].graveyard])
@@ -534,6 +588,17 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
     }
     case 'bounce':
       for (const id of objectsOf(ctx, es, e.what)) moveObject(ctx, id, 'hand');
+      return;
+    case 'returnToHand': {
+      const t = typeof e.what === 'object' && 'target' in e.what ? es.targets[e.what.target] : null;
+      const o = t && 'object' in t && ctx.s.objects[t.object.id];
+      if (o && o.zone === 'graveyard' && t && 'object' in t && o.zcc === t.object.zcc)
+        moveObject(ctx, o.id, 'hand');
+      return;
+    }
+    case 'exileGraveyard':
+      for (const p of playersOf(ctx, es, e.who))
+        for (const id of [...ctx.s.players[p].graveyard]) moveObject(ctx, id, 'exile');
       return;
     case 'tap':
       for (const id of objectsOf(ctx, es, e.what)) tap(ctx, id);
@@ -582,6 +647,7 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
       return;
     }
     case 'if':
+    case 'may':
     case 'punisher':
     case 'exileTopChooseOne':
       return; // handled by runEffects

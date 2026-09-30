@@ -4,6 +4,7 @@ import { buildCard, slug } from './build.ts';
 import { DECKS, type Decklist } from './decks.ts';
 import { PACKETS, packetCards } from './jumpin.ts';
 import scryfall from './generated/scryfall.json' with { type: 'json' };
+import foundations from './generated/foundations-pack-candidates.json' with { type: 'json' };
 import type { ScryfallCard } from './scryfall-types.ts';
 
 export { BEHAVIORS, TOKENS } from './behaviors.ts';
@@ -25,6 +26,7 @@ export type { Packet } from './jumpin.ts';
 export type { ScryfallCard } from './scryfall-types.ts';
 
 export const SCRYFALL: readonly ScryfallCard[] = scryfall as ScryfallCard[];
+export const FOUNDATIONS_PACK_CANDIDATES = foundations;
 
 export const CARDS: readonly CardDefinition[] = [
   ...SCRYFALL.map((sc) => buildCard(sc, BEHAVIORS[sc.name])),

@@ -71,6 +71,7 @@ function passiveAction(
         : { type: 'confirmBlockers', player: d.player };
     }
     case 'chooseTriggerTargets':
+    case 'optionalEffect':
       return bestByEvaluation(
         engine,
         s,

@@ -1,7 +1,7 @@
 import { power } from './characteristics.ts';
 import { type Ctx, def, defOf, emit, moveObject, newId, obj, other, tap } from './context.ts';
 import { type EffectSource, runEffects } from './effects.ts';
-import { characteristics, countOf, hasKeyword } from './characteristics.ts';
+import { characteristics, countOf, hasKeyword, cardMatches } from './characteristics.ts';
 import { changeLife, gainLife } from './effects.ts';
 import { anyTypeCost, manaValue, payMana, planPayment } from './mana.ts';
 import { shuffleInPlace } from './rng.ts';
@@ -85,6 +85,15 @@ export function castCost(ctx: Ctx, player: PlayerId, card: ObjectId, choice: Cas
   if (!v) throw new Error(`${o.defId} can't be cast that way`);
   let cost = v.cost;
   let reduce = d.costReduction !== undefined ? amountFor(ctx, player, d.costReduction) : 0;
+  for (const id of ctx.s.battlefield)
+    if (obj(ctx, id).controller === player)
+      for (const a of def(ctx, id).abilities)
+        if (
+          a.kind === 'static' &&
+          a.effect.kind === 'spellsCostLess' &&
+          cardMatches(ctx, card, a.effect.filter)
+        )
+          reduce += a.effect.amount;
   // Archmage of Runes: instants and sorceries cost less.
   if (d.types.includes('Instant') || d.types.includes('Sorcery'))
     for (const id of ctx.s.battlefield) {
@@ -207,7 +216,10 @@ export function pushTrigger(
 ): void {
   // "You may pay ..." and ward: paid as it goes on the stack.
   const cost = addCosts(
-    triggeredAbility(ctx, t).cost ?? { generic: 0, colored: {} },
+    (triggeredAbility(ctx, t).targets.length ? triggeredAbility(ctx, t).cost : undefined) ?? {
+      generic: 0,
+      colored: {},
+    },
     wardCost(ctx, t.controller, targets),
   );
   if (manaValue(cost) > 0) payMana(ctx, planPayment(ctx, t.controller, cost, undefined));
@@ -309,11 +321,11 @@ export function resolveTop(ctx: Ctx): boolean {
     }
     emit(ctx, { type: 'resolved', id: item.id });
     moveObject(ctx, item.id, 'battlefield', { controller: item.controller });
+    if (item.kicked) o.kicked = true;
     if (d.entersWithCounters && checkCondition(ctx, d.entersWithCountersIf, item.controller, o))
       o.plusOneCounters += d.entersWithCounters;
     if (host) o.attachedTo = host;
     o.plusOneCounters += bonusCounters(ctx, item.controller, o.id, d.subtypes);
-    if (item.kicked) o.kicked = true;
     return false;
   }
 
@@ -332,7 +344,11 @@ export function resolveTop(ctx: Ctx): boolean {
     ...(item.subject ? { subject: item.subject } : {}),
     ...(item.amount !== undefined ? { amount: item.amount } : {}),
   };
-  if (runEffects(ctx, es, a.effects as EffectDef[], { kind: 'ability', id: item.id })) return true;
+  const effects: EffectDef[] =
+    a.kind === 'triggered' && !a.targets.length && (a.optional || a.cost)
+      ? [{ kind: 'may', effects: a.effects, ...(a.cost ? { cost: a.cost } : {}) }]
+      : a.effects;
+  if (runEffects(ctx, es, effects, { kind: 'ability', id: item.id })) return true;
   finishResolution(ctx, { kind: 'ability', id: item.id });
   return false;
 }
@@ -348,6 +364,17 @@ function resume(ctx: Ctx, r: PausedResolution, thenPriority: PlayerId): void {
   if (runEffects(ctx, r, r.effects, r.item)) return;
   finishResolution(ctx, r.item);
   givePriority(ctx, thenPriority);
+}
+
+export function answerOptionalEffect(ctx: Ctx, accept: boolean): void {
+  const d = ctx.s.decision;
+  if (d.kind !== 'optionalEffect') throw Error('Not choosing an optional effect');
+  if (accept) {
+    payMana(ctx, planPayment(ctx, d.player, d.cost, undefined));
+    if (runEffects(ctx, d.resume, [...d.effects, ...d.resume.effects], d.resume.item)) return;
+    finishResolution(ctx, d.resume.item);
+    givePriority(ctx, d.thenPriority);
+  } else resume(ctx, d.resume, d.thenPriority);
 }
 
 /** Applies a scry answer, then carries on with the paused resolution. */
@@ -435,6 +462,7 @@ export function answerSearch(ctx: Ctx, card: ObjectId | null): void {
       return resume(ctx, d.resume, d.thenPriority);
     }
     if (!d.to || d.to === 'hand') moveObject(ctx, card, 'hand');
+    else if (d.to === 'graveyard') moveObject(ctx, card, 'graveyard');
     else {
       moveObject(ctx, card, 'battlefield', { controller: d.player });
       if (d.to === 'battlefieldTapped') obj(ctx, card).tapped = true;
