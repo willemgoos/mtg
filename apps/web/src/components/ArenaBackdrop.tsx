@@ -30,6 +30,7 @@ export function ArenaBackdrop({
 
   useEffect(() => {
     let cancelled = false;
+    const controller = new AbortController();
     accept.current = arenaBatchGate(latest.current);
     const element = canvas.current;
     if (!element || detail === 'static') return;
@@ -40,10 +41,15 @@ export function ArenaBackdrop({
       renderer.current = null;
     };
     void import('../game/arenaScene.ts')
-      .then(({ createArena }) => {
+      .then(async ({ createArena }) => {
         if (cancelled) return;
         try {
-          renderer.current = createArena(element, detail, fail);
+          const next = await createArena(element, detail, fail, controller.signal);
+          if (cancelled) {
+            next.dispose();
+            return;
+          }
+          renderer.current = next;
           // Batches received while the scene was loading are deliberately discarded.
           accept.current = arenaBatchGate(latest.current);
         } catch {
@@ -53,6 +59,7 @@ export function ArenaBackdrop({
       .catch(fail);
     return () => {
       cancelled = true;
+      controller.abort();
       renderer.current?.dispose();
       renderer.current = null;
       element.dataset.ready = 'false';

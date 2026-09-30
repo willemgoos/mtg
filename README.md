@@ -26,17 +26,22 @@ corepack pnpm arena -- 40     # bot-vs-bot win rates; `-- --log 3` shows one gam
 
 TypeScript is pinned to 6.x because typescript-eslint doesn't support TS 7 yet.
 
-## Forest arena
+## Sandstone arena
 
-Matches use a stylized Three.js forest ruin behind the existing card UI. Open
-Settings → Arena detail to choose Balanced (default), Low, or Static; the choice
+Matches use the authored Blender sandstone ruin behind the card UI. Open
+Settings ? Arena detail to choose Balanced (default), Low, or Static; the choice
 persists locally. Reduced-motion preferences stop ambient motion and arena
-reactions. Unavailable or lost WebGL contexts fall back to the bundled still image.
+reactions. Unavailable or lost WebGL contexts fall back to a matching bundled still.
 
-The scene uses locally generated geometry and textures with a fixed decoration
-seed. `arenaScene.ts` owns rendering and resource cleanup; `arena.ts` maps existing
-visual cues to bounded spell and combat reactions without changing game state.
-The fallback WebP is a capture of this scene, without cards or controls.
+The damaged masonry scene is in `art/arena/sandstone-arena-damaged.blend`.
+`art/arena/export_arena.py` bakes the procedural materials and lighting into two
+unlit meshes (a 2048px floor texture and a 4096px scenery atlas), then exports
+`apps/web/public/arena/sandstone-arena.glb`. Run it with Blender in background
+mode, for example: `blender --background --python art/arena/export_arena.py`.
+The runtime loads it lazily, keeps the still visible while loading, and avoids
+real-time shadow passes. Balanced and Low vary pixel density and ambient effects.
+`arenaScene.ts` owns rendering and cleanup; `arena.ts` maps existing visual cues
+to bounded spell and combat reactions without changing game state.
 
 ## Engine design
 

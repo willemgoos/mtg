@@ -18,7 +18,7 @@
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  background: #101e1b url('/arena/forest-ruins.webp') center / 100% 100% no-repeat;
+  background: #101e1b url('/arena/sandstone-fallback.webp') center / 100% 100% no-repeat;
 }
 
 .arena-backdrop::after {
