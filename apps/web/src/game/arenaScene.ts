@@ -32,10 +32,13 @@ export async function createArena(
   renderer.toneMapping = T.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.32;
   const scene = new T.Scene();
-  scene.background = new T.Color('#24271a');
-  const camera = new T.OrthographicCamera(-16, 16, 10, -10, 0.1, 100);
-  // Match the authored Blender camera (glTF converts Z-up to Y-up).
-  camera.position.set(0, 25, 9);
+  scene.background = new T.Color('#17150b');
+  // Fade the finite earth surround into the background on very wide screens.
+  scene.fog = new T.Fog('#17150b', 34, 43);
+  // A steep perspective view gives the far rim a subtle taper, while keeping
+  // scenery close to the overhead orientation of the DOM cards.
+  const camera = new T.PerspectiveCamera(35, 1, 0.1, 100);
+  camera.position.set(0, 32, 7);
   camera.lookAt(0, 0, 0);
   camera.updateMatrixWorld();
   const island = new T.Group();
@@ -170,8 +173,7 @@ export async function createArena(
     if (!r.width || !r.height) return;
     renderer.setSize(r.width, r.height, false);
     const aspect = r.width / r.height;
-    camera.left = -10 * aspect;
-    camera.right = 10 * aspect;
+    camera.aspect = aspect;
     camera.updateProjectionMatrix();
     const fields = table.querySelectorAll('.battlefield');
     if (fields.length === 2) {
@@ -180,11 +182,17 @@ export async function createArena(
       // Center the scenery in the whole viewport; the UI has an asymmetric action column.
       // Symmetric margins keep both pillar bases visible while the floor spans the card rows.
       const margin = r.width * 0.035;
-      const top = screenPoint(r.left + margin, a.top - 12),
-        bottom = screenPoint(r.right - margin, b.bottom + 12);
-      if (top && bottom) {
-        island.position.set((top.x + bottom.x) / 2, 0, (top.z + bottom.z) / 2);
-        island.scale.set(Math.max(8, bottom.x - top.x) / 20, 1, Math.max(6, bottom.z - top.z) / 12);
+      const centerX = r.left + r.width / 2;
+      const centerY = (a.top + b.bottom) / 2;
+      const top = screenPoint(centerX, a.top - 12),
+        bottom = screenPoint(centerX, b.bottom + 12),
+        left = screenPoint(r.left + margin, centerY),
+        right = screenPoint(r.right - margin, centerY);
+      if (top && bottom && left && right) {
+        const scale = Math.min((right.x - left.x) / 20, (bottom.z - top.z) / 12);
+        island.position.set((left.x + right.x) / 2, 0, (top.z + bottom.z) / 2);
+        // Preserve the authored stone and seal proportions at every aspect ratio.
+        island.scale.setScalar(scale);
       }
     }
     renderOnce();

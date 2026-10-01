@@ -11,7 +11,7 @@ bundled GLB into `apps/web/public/arena`; it does not modify the source scene.
 
 The export bakes lighting and procedural shading into an unlit 2048px floor and
 4096px scenery atlas. These textures are embedded in the GLB. The matching static
-WebP comes from `sandstone-damage-preview.png`. Live spell effects remain in the
+WebP is a card-free capture of the runtime perspective camera. Live spell effects remain in the
 Three.js runtime rather than the Blender export.
 
 Initial browser validation at 1920×1080 in headless Microsoft Edge on an RTX 4080
