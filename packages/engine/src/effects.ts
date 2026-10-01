@@ -83,6 +83,7 @@ export function changeLife(ctx: Ctx, player: PlayerId, delta: number): void {
   if (delta === 0) return;
   const p = ctx.s.players[player];
   p.life += delta;
+  if (delta < 0) (ctx.s.turn.lifeLost ??= { p1: 0, p2: 0 })[player]++;
   emit(ctx, { type: 'lifeChanged', player, delta, life: p.life });
 }
 
@@ -132,6 +133,11 @@ export function resolveRef(ctx: Ctx, es: EffectSource, ref: Ref): TargetChoice[]
     return id ? [{ object: { id, zcc: obj(ctx, id).zcc } }] : [];
   }
   if (ref === 'controller') return [{ player: es.controller }];
+  if (typeof ref === 'object' && 'controllerOf' in ref) {
+    const t = es.targets[ref.controllerOf];
+    const o = t && 'object' in t ? ctx.s.objects[t.object.id] : undefined;
+    return o ? [{ player: o.controller }] : [];
+  }
   if (ref === 'eachOpponent') return [{ player: other(es.controller) }];
   if (ref === 'eachPlayer') return [{ player: 'p1' }, { player: 'p2' }];
   if (ref === 'attached') {
@@ -171,13 +177,19 @@ export function resolveAmount(ctx: Ctx, es: EffectSource, amount: Amount): numbe
   if ('powerOf' in amount) {
     const ids = objectsOf(ctx, es, amount.powerOf);
     if (ids[0]) return Math.max(0, power(ctx, ids[0]));
-    if (amount.powerOf === 'self' && es.lkiPower !== undefined) return Math.max(0, es.lkiPower);
+    if (amount.powerOf === 'self') {
+      const last = es.lkiPower ?? (es.source && ctx.s.objects[es.source.id]?.lastPower);
+      return Math.max(0, last ?? 0);
+    }
     return 0;
   }
   if ('event' in amount) return es.amount ?? 0;
   if ('countersOn' in amount) {
     const id = objectsOf(ctx, es, amount.countersOn)[0];
-    return id ? obj(ctx, id).plusOneCounters : 0;
+    if (id) return obj(ctx, id).plusOneCounters;
+    if (amount.countersOn === 'self' && es.source)
+      return ctx.s.objects[es.source.id]?.lastCounters ?? 0;
+    return 0;
   }
   return countOf(
     ctx,
@@ -228,7 +240,9 @@ export function runEffects(
       e.kind === 'opponentSacrifices' ||
       e.kind === 'punisher' ||
       e.kind === 'exileTopChooseOne' ||
-      e.kind === 'forage'
+      e.kind === 'forage' ||
+      e.kind === 'destroyAll' ||
+      e.kind === 'lookAndTake'
     ) {
       const lib = ctx.s.players[es.controller].library;
       const { controller, source, sourceDefId, targets, lkiPower, subject, amount } = es;
@@ -285,6 +299,41 @@ export function runEffects(
         if (options.length === 0) continue;
         for (const id of options) moveObject(ctx, id, 'exile');
         ctx.s.decision = { kind: 'pickExiled', player: controller, options, resume, thenPriority };
+      } else if (e.kind === 'destroyAll') {
+        const died: ObjectId[] = [];
+        for (const c of creaturesOnBattlefield(ctx)) {
+          if (!matchesFilter(ctx, c.id, e.filter) || hasKeyword(ctx, c.id, 'indestructible'))
+            continue;
+          moveObject(ctx, c.id, 'graveyard');
+          died.push(c.id);
+        }
+        // "Return a creature card put into your graveyard this way."
+        const options = died.filter((id) => {
+          const o = ctx.s.objects[id];
+          return o?.zone === 'graveyard' && o.owner === controller;
+        });
+        if (!e.returnOne || options.length === 0) continue;
+        ctx.s.decision = {
+          kind: 'searchLibrary',
+          player: controller,
+          options,
+          fromGraveyard: true,
+          to: 'battlefield',
+          shuffle: false,
+          resume,
+          thenPriority,
+        };
+      } else if (e.kind === 'lookAndTake') {
+        const looked = lib.slice(0, e.count);
+        if (looked.length === 0) continue;
+        ctx.s.decision = {
+          kind: 'searchLibrary',
+          player: controller,
+          options: looked.filter((id) => cardMatches(ctx, id, e.filter)),
+          looked,
+          resume,
+          thenPriority,
+        };
       } else if (e.kind === 'forage') {
         const foods = foodsOf(ctx, controller);
         const graveyard = ctx.s.players[controller].graveyard.length >= 3;
@@ -604,10 +653,13 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
       return;
     }
     case 'namedCounters': {
+      const n = resolveAmount(ctx, es, e.amount);
       const self = es.source && onBattlefield(ctx, es.source);
-      if (!self) return;
-      const c = (self.counters ??= {});
-      c[e.name] = (c[e.name] ?? 0) + resolveAmount(ctx, es, e.amount);
+      const ids = e.to ? objectsOf(ctx, es, e.to) : self ? [self.id] : [];
+      for (const id of ids) {
+        const c = (obj(ctx, id).counters ??= {});
+        c[e.name] = (c[e.name] ?? 0) + n;
+      }
       return;
     }
     case 'bounce':
@@ -644,8 +696,23 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
       const o = ctx.s.objects[t.object.id];
       if (!o || o.zone !== 'graveyard' || o.zcc !== t.object.zcc) return;
       moveObject(ctx, o.id, 'battlefield', { controller: es.controller });
+      if (e.counter) (o.counters ??= {})[e.counter] = 1;
       return;
     }
+    case 'exileTopPlayable': {
+      const lib = ctx.s.players[es.controller].library;
+      const ownTurn = ctx.s.turn.activePlayer === es.controller;
+      const until =
+        e.until === 'endOfTurn' ? ctx.s.turn.number : ctx.s.turn.number + (ownTurn ? 2 : 1);
+      for (const id of lib.slice(0, resolveAmount(ctx, es, e.count))) {
+        moveObject(ctx, id, 'exile');
+        obj(ctx, id).playableUntilTurn = until;
+      }
+      return;
+    }
+    case 'destroyAll':
+    case 'lookAndTake':
+      return; // handled by runEffects
     case 'returnSource': {
       // Only the same card, still in the graveyard it went to.
       const o = es.source && ctx.s.objects[es.source.id];

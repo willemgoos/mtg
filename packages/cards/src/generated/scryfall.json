@@ -10105,5 +10105,857 @@
    "large": "https://cards.scryfall.io/large/front/d/0/d068192a-6270-4981-819d-4945fa4a2b83.jpg?1783910857",
    "artCrop": "https://cards.scryfall.io/art_crop/front/d/0/d068192a-6270-4981-819d-4945fa4a2b83.jpg?1783910857"
   }
+ },
+ {
+  "name": "Lifecreed Duo",
+  "scryfallId": "ca543405-5e12-48a0-9a77-082ac9bcb2f2",
+  "oracleId": "63686c6b-9051-4002-aa8e-da8a3021330f",
+  "set": "blb",
+  "collectorNumber": "20",
+  "rarity": "common",
+  "manaCost": "{1}{W}",
+  "typeLine": "Creature — Bat Bird",
+  "oracleText": "Flying\nWhenever another creature you control enters, you gain 1 life.",
+  "power": "1",
+  "toughness": "2",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/a/ca543405-5e12-48a0-9a77-082ac9bcb2f2.jpg?1783910861",
+   "normal": "https://cards.scryfall.io/normal/front/c/a/ca543405-5e12-48a0-9a77-082ac9bcb2f2.jpg?1783910861",
+   "large": "https://cards.scryfall.io/large/front/c/a/ca543405-5e12-48a0-9a77-082ac9bcb2f2.jpg?1783910861",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/a/ca543405-5e12-48a0-9a77-082ac9bcb2f2.jpg?1783910861"
+  }
+ },
+ {
+  "name": "Starscape Cleric",
+  "scryfallId": "53a938a7-0154-4350-87cb-00da24ec3824",
+  "oracleId": "8d72ddb3-ef6e-4847-b6d4-5d85b1dd5802",
+  "set": "blb",
+  "collectorNumber": "116",
+  "rarity": "uncommon",
+  "manaCost": "{1}{B}",
+  "typeLine": "Creature — Bat Cleric",
+  "oracleText": "Offspring {2}{B} (You may pay an additional {2}{B} as you cast this spell. If you do, when this creature enters, create a 1/1 token copy of it.)\nFlying\nThis creature can't block.\nWhenever you gain life, each opponent loses 1 life.",
+  "power": "2",
+  "toughness": "1",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Flying",
+   "Offspring"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/3/53a938a7-0154-4350-87cb-00da24ec3824.jpg?1783910828",
+   "normal": "https://cards.scryfall.io/normal/front/5/3/53a938a7-0154-4350-87cb-00da24ec3824.jpg?1783910828",
+   "large": "https://cards.scryfall.io/large/front/5/3/53a938a7-0154-4350-87cb-00da24ec3824.jpg?1783910828",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/3/53a938a7-0154-4350-87cb-00da24ec3824.jpg?1783910828"
+  }
+ },
+ {
+  "name": "Essence Channeler",
+  "scryfallId": "5aaf7e4c-4d5d-4acc-a834-e6c4a7629408",
+  "oracleId": "1473580d-7cb2-48f5-a77d-08f49244c5e8",
+  "set": "blb",
+  "collectorNumber": "12",
+  "rarity": "rare",
+  "manaCost": "{1}{W}",
+  "typeLine": "Creature — Bat Cleric",
+  "oracleText": "As long as you've lost life this turn, this creature has flying and vigilance.\nWhenever you gain life, put a +1/+1 counter on this creature.\nWhen this creature dies, put its counters on target creature you control.",
+  "power": "2",
+  "toughness": "1",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/a/5aaf7e4c-4d5d-4acc-a834-e6c4a7629408.jpg?1783910861",
+   "normal": "https://cards.scryfall.io/normal/front/5/a/5aaf7e4c-4d5d-4acc-a834-e6c4a7629408.jpg?1783910861",
+   "large": "https://cards.scryfall.io/large/front/5/a/5aaf7e4c-4d5d-4acc-a834-e6c4a7629408.jpg?1783910861",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/a/5aaf7e4c-4d5d-4acc-a834-e6c4a7629408.jpg?1783910861"
+  }
+ },
+ {
+  "name": "Moonrise Cleric",
+  "scryfallId": "35f2a71f-31e8-4b51-9dd4-51a5336b3b86",
+  "oracleId": "d8067f42-68c0-42da-a1d6-859953939555",
+  "set": "blb",
+  "collectorNumber": "226",
+  "rarity": "common",
+  "manaCost": "{1}{W/B}{W/B}",
+  "typeLine": "Creature — Bat Cleric",
+  "oracleText": "Flying\nWhenever this creature attacks, you gain 1 life.",
+  "power": "2",
+  "toughness": "3",
+  "colors": [
+   "B",
+   "W"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/5/35f2a71f-31e8-4b51-9dd4-51a5336b3b86.jpg?1783910793",
+   "normal": "https://cards.scryfall.io/normal/front/3/5/35f2a71f-31e8-4b51-9dd4-51a5336b3b86.jpg?1783910793",
+   "large": "https://cards.scryfall.io/large/front/3/5/35f2a71f-31e8-4b51-9dd4-51a5336b3b86.jpg?1783910793",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/5/35f2a71f-31e8-4b51-9dd4-51a5336b3b86.jpg?1783910793"
+  }
+ },
+ {
+  "name": "Moonstone Harbinger",
+  "scryfallId": "59e4aa8d-1d06-48db-b205-aa2f1392bbcb",
+  "oracleId": "fcae4f9d-8f81-42f9-93a3-82a482851bdd",
+  "set": "blb",
+  "collectorNumber": "101",
+  "rarity": "uncommon",
+  "manaCost": "{2}{B}",
+  "typeLine": "Creature — Bat Warrior",
+  "oracleText": "Flying, deathtouch\nWhenever you gain or lose life during your turn, Bats you control get +1/+0 and gain deathtouch until end of turn. This ability triggers only once each turn.",
+  "power": "1",
+  "toughness": "3",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Deathtouch",
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/9/59e4aa8d-1d06-48db-b205-aa2f1392bbcb.jpg?1783910833",
+   "normal": "https://cards.scryfall.io/normal/front/5/9/59e4aa8d-1d06-48db-b205-aa2f1392bbcb.jpg?1783910833",
+   "large": "https://cards.scryfall.io/large/front/5/9/59e4aa8d-1d06-48db-b205-aa2f1392bbcb.jpg?1783910833",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/9/59e4aa8d-1d06-48db-b205-aa2f1392bbcb.jpg?1783910833"
+  }
+ },
+ {
+  "name": "Starlit Soothsayer",
+  "scryfallId": "184c1eca-2991-438f-b5d2-cd2529b9c9b4",
+  "oracleId": "0c0940c6-8126-4d58-809e-871cf8588ef9",
+  "set": "blb",
+  "collectorNumber": "115",
+  "rarity": "common",
+  "manaCost": "{2}{B}",
+  "typeLine": "Creature — Bat Cleric",
+  "oracleText": "Flying\nAt the beginning of your end step, if you gained or lost life this turn, surveil 1. (Look at the top card of your library. You may put it into your graveyard.)",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Flying",
+   "Surveil"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/8/184c1eca-2991-438f-b5d2-cd2529b9c9b4.jpg?1783910829",
+   "normal": "https://cards.scryfall.io/normal/front/1/8/184c1eca-2991-438f-b5d2-cd2529b9c9b4.jpg?1783910829",
+   "large": "https://cards.scryfall.io/large/front/1/8/184c1eca-2991-438f-b5d2-cd2529b9c9b4.jpg?1783910829",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/8/184c1eca-2991-438f-b5d2-cd2529b9c9b4.jpg?1783910829"
+  }
+ },
+ {
+  "name": "Wax-Wane Witness",
+  "scryfallId": "d90ea719-5320-46c6-a347-161853a14776",
+  "oracleId": "426dbe89-0cbb-4a3b-8812-d9761d063373",
+  "set": "blb",
+  "collectorNumber": "39",
+  "rarity": "common",
+  "manaCost": "{3}{W}",
+  "typeLine": "Creature — Bat Cleric",
+  "oracleText": "Flying, vigilance\nWhenever you gain or lose life during your turn, this creature gets +1/+0 until end of turn.",
+  "power": "2",
+  "toughness": "4",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Flying",
+   "Vigilance"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/9/d90ea719-5320-46c6-a347-161853a14776.jpg?1783910853",
+   "normal": "https://cards.scryfall.io/normal/front/d/9/d90ea719-5320-46c6-a347-161853a14776.jpg?1783910853",
+   "large": "https://cards.scryfall.io/large/front/d/9/d90ea719-5320-46c6-a347-161853a14776.jpg?1783910853",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/9/d90ea719-5320-46c6-a347-161853a14776.jpg?1783910853"
+  }
+ },
+ {
+  "name": "Star Charter",
+  "scryfallId": "0e209237-00f7-4bf0-8287-ccde02ce8e8d",
+  "oracleId": "578ddb51-e128-43e5-a115-471f0cae1222",
+  "set": "blb",
+  "collectorNumber": "33",
+  "rarity": "uncommon",
+  "manaCost": "{3}{W}",
+  "typeLine": "Creature — Bat Cleric",
+  "oracleText": "Flying\nAt the beginning of your end step, if you gained or lost life this turn, look at the top four cards of your library. You may reveal a creature card with power 3 or less from among them and put it into your hand. Put the rest on the bottom of your library in a random order.",
+  "power": "3",
+  "toughness": "1",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/e/0e209237-00f7-4bf0-8287-ccde02ce8e8d.jpg?1783910856",
+   "normal": "https://cards.scryfall.io/normal/front/0/e/0e209237-00f7-4bf0-8287-ccde02ce8e8d.jpg?1783910856",
+   "large": "https://cards.scryfall.io/large/front/0/e/0e209237-00f7-4bf0-8287-ccde02ce8e8d.jpg?1783910856",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/e/0e209237-00f7-4bf0-8287-ccde02ce8e8d.jpg?1783910856"
+  }
+ },
+ {
+  "name": "Zoraline, Cosmos Caller",
+  "scryfallId": "b7f99fd5-5298-4b27-923d-9d31203c931a",
+  "oracleId": "5a775f50-20f8-4a8f-868c-8907305bfad6",
+  "set": "blb",
+  "collectorNumber": "242",
+  "rarity": "rare",
+  "manaCost": "{1}{W}{B}",
+  "typeLine": "Legendary Creature — Bat Cleric",
+  "oracleText": "Flying, vigilance\nWhenever a Bat you control attacks, you gain 1 life.\nWhenever Zoraline enters or attacks, you may pay {W}{B} and 2 life. When you do, return target nonland permanent card with mana value 3 or less from your graveyard to the battlefield with a finality counter on it.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "B",
+   "W"
+  ],
+  "keywords": [
+   "Flying",
+   "Vigilance"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/7/b7f99fd5-5298-4b27-923d-9d31203c931a.jpg?1783910787",
+   "normal": "https://cards.scryfall.io/normal/front/b/7/b7f99fd5-5298-4b27-923d-9d31203c931a.jpg?1783910787",
+   "large": "https://cards.scryfall.io/large/front/b/7/b7f99fd5-5298-4b27-923d-9d31203c931a.jpg?1783910787",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/7/b7f99fd5-5298-4b27-923d-9d31203c931a.jpg?1783910787"
+  }
+ },
+ {
+  "name": "Starseer Mentor",
+  "scryfallId": "6b2f6dc5-9fe8-49c1-b24c-1d99ce1da619",
+  "oracleId": "12a165c4-229b-458b-8fc7-c1b7cba35a8e",
+  "set": "blb",
+  "collectorNumber": "233",
+  "rarity": "uncommon",
+  "manaCost": "{3}{W}{B}",
+  "typeLine": "Creature — Bat Warlock",
+  "oracleText": "Flying, vigilance\nAt the beginning of your end step, if you gained or lost life this turn, target opponent loses 3 life unless they sacrifice a nonland permanent of their choice or discard a card.",
+  "power": "3",
+  "toughness": "5",
+  "colors": [
+   "B",
+   "W"
+  ],
+  "keywords": [
+   "Flying",
+   "Vigilance"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/b/6b2f6dc5-9fe8-49c1-b24c-1d99ce1da619.jpg?1783910791",
+   "normal": "https://cards.scryfall.io/normal/front/6/b/6b2f6dc5-9fe8-49c1-b24c-1d99ce1da619.jpg?1783910791",
+   "large": "https://cards.scryfall.io/large/front/6/b/6b2f6dc5-9fe8-49c1-b24c-1d99ce1da619.jpg?1783910791",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/b/6b2f6dc5-9fe8-49c1-b24c-1d99ce1da619.jpg?1783910791"
+  }
+ },
+ {
+  "name": "Glidedive Duo",
+  "scryfallId": "4831e7ae-54e3-4bd9-b5af-52dc29f81715",
+  "oracleId": "33c06c11-8d0a-45ce-adea-c9a7a8ac8779",
+  "set": "blb",
+  "collectorNumber": "96",
+  "rarity": "common",
+  "manaCost": "{4}{B}",
+  "typeLine": "Creature — Bat Lizard",
+  "oracleText": "Flying\nWhen this creature enters, each opponent loses 2 life and you gain 2 life.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/8/4831e7ae-54e3-4bd9-b5af-52dc29f81715.jpg?1783910835",
+   "normal": "https://cards.scryfall.io/normal/front/4/8/4831e7ae-54e3-4bd9-b5af-52dc29f81715.jpg?1783910835",
+   "large": "https://cards.scryfall.io/large/front/4/8/4831e7ae-54e3-4bd9-b5af-52dc29f81715.jpg?1783910835",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/8/4831e7ae-54e3-4bd9-b5af-52dc29f81715.jpg?1783910835"
+  }
+ },
+ {
+  "name": "Brightblade Stoat",
+  "scryfallId": "df7fea2e-7414-4bc8-adb0-9342e174c009",
+  "oracleId": "f1d2f437-d474-4617-aea6-102daa5e5a15",
+  "set": "blb",
+  "collectorNumber": "4",
+  "rarity": "uncommon",
+  "manaCost": "{1}{W}",
+  "typeLine": "Creature — Weasel Soldier",
+  "oracleText": "First strike, lifelink",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Lifelink",
+   "First strike"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/f/df7fea2e-7414-4bc8-adb0-9342e174c009.jpg?1783910865",
+   "normal": "https://cards.scryfall.io/normal/front/d/f/df7fea2e-7414-4bc8-adb0-9342e174c009.jpg?1783910865",
+   "large": "https://cards.scryfall.io/large/front/d/f/df7fea2e-7414-4bc8-adb0-9342e174c009.jpg?1783910865",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/f/df7fea2e-7414-4bc8-adb0-9342e174c009.jpg?1783910865"
+  }
+ },
+ {
+  "name": "Sonar Strike",
+  "scryfallId": "a50da179-751f-47a8-a547-8c4a291ed381",
+  "oracleId": "d8c582bc-47de-47ec-8bf9-b2c848e27ab8",
+  "set": "blb",
+  "collectorNumber": "32",
+  "rarity": "common",
+  "manaCost": "{1}{W}",
+  "typeLine": "Instant",
+  "oracleText": "Sonar Strike deals 4 damage to target attacking, blocking, or tapped creature. You gain 3 life if you control a Bat.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/5/a50da179-751f-47a8-a547-8c4a291ed381.jpg?1783910855",
+   "normal": "https://cards.scryfall.io/normal/front/a/5/a50da179-751f-47a8-a547-8c4a291ed381.jpg?1783910855",
+   "large": "https://cards.scryfall.io/large/front/a/5/a50da179-751f-47a8-a547-8c4a291ed381.jpg?1783910855",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/5/a50da179-751f-47a8-a547-8c4a291ed381.jpg?1783910855"
+  }
+ },
+ {
+  "name": "Fell",
+  "scryfallId": "c96ac326-de44-470b-a592-a4c2a052c091",
+  "oracleId": "8f968470-ce00-43a3-95f5-2e3fe987be19",
+  "set": "blb",
+  "collectorNumber": "95",
+  "rarity": "uncommon",
+  "manaCost": "{1}{B}",
+  "typeLine": "Sorcery",
+  "oracleText": "Destroy target creature.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/9/c96ac326-de44-470b-a592-a4c2a052c091.jpg?1783910835",
+   "normal": "https://cards.scryfall.io/normal/front/c/9/c96ac326-de44-470b-a592-a4c2a052c091.jpg?1783910835",
+   "large": "https://cards.scryfall.io/large/front/c/9/c96ac326-de44-470b-a592-a4c2a052c091.jpg?1783910835",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/9/c96ac326-de44-470b-a592-a4c2a052c091.jpg?1783910835"
+  }
+ },
+ {
+  "name": "Diresight",
+  "scryfallId": "fada29c0-5293-40a4-b36d-d073ee99e650",
+  "oracleId": "a7b12df9-fddd-4cd4-8c09-d54a47867ab6",
+  "set": "blb",
+  "collectorNumber": "91",
+  "rarity": "common",
+  "manaCost": "{2}{B}",
+  "typeLine": "Sorcery",
+  "oracleText": "Surveil 2, then draw two cards. You lose 2 life. (To surveil 2, look at the top two cards of your library, then put any number of them into your graveyard and the rest on top of your library in any order.)",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Surveil"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/a/fada29c0-5293-40a4-b36d-d073ee99e650.jpg?1783910834",
+   "normal": "https://cards.scryfall.io/normal/front/f/a/fada29c0-5293-40a4-b36d-d073ee99e650.jpg?1783910834",
+   "large": "https://cards.scryfall.io/large/front/f/a/fada29c0-5293-40a4-b36d-d073ee99e650.jpg?1783910834",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/a/fada29c0-5293-40a4-b36d-d073ee99e650.jpg?1783910834"
+  }
+ },
+ {
+  "name": "Sinister Monolith",
+  "scryfallId": "2a15e06c-2608-4e7a-a16c-d35417669d86",
+  "oracleId": "ae8003eb-9f19-4f23-be3b-0ac3ddc03a72",
+  "set": "blb",
+  "collectorNumber": "113",
+  "rarity": "uncommon",
+  "manaCost": "{3}{B}",
+  "typeLine": "Artifact",
+  "oracleText": "At the beginning of combat on your turn, each opponent loses 1 life and you gain 1 life.\n{T}, Pay 2 life, Sacrifice this artifact: Draw two cards. Activate only as a sorcery.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/a/2a15e06c-2608-4e7a-a16c-d35417669d86.jpg?1783910829",
+   "normal": "https://cards.scryfall.io/normal/front/2/a/2a15e06c-2608-4e7a-a16c-d35417669d86.jpg?1783910829",
+   "large": "https://cards.scryfall.io/large/front/2/a/2a15e06c-2608-4e7a-a16c-d35417669d86.jpg?1783910829",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/a/2a15e06c-2608-4e7a-a16c-d35417669d86.jpg?1783910829"
+  }
+ },
+ {
+  "name": "Lunar Convocation",
+  "scryfallId": "a9ee50d4-c878-457b-964d-29c039ce9852",
+  "oracleId": "cb68d1e4-36aa-4a00-b671-8959e7d526d4",
+  "set": "blb",
+  "collectorNumber": "223",
+  "rarity": "rare",
+  "manaCost": "{W}{B}",
+  "typeLine": "Enchantment",
+  "oracleText": "At the beginning of your end step, if you gained life this turn, each opponent loses 1 life.\nAt the beginning of your end step, if you gained and lost life this turn, create a 1/1 black Bat creature token with flying.\n{1}{B}, Pay 2 life: Draw a card.",
+  "colors": [
+   "B",
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/9/a9ee50d4-c878-457b-964d-29c039ce9852.jpg?1783910794",
+   "normal": "https://cards.scryfall.io/normal/front/a/9/a9ee50d4-c878-457b-964d-29c039ce9852.jpg?1783910794",
+   "large": "https://cards.scryfall.io/large/front/a/9/a9ee50d4-c878-457b-964d-29c039ce9852.jpg?1783910794",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/9/a9ee50d4-c878-457b-964d-29c039ce9852.jpg?1783910794"
+  }
+ },
+ {
+  "name": "Starfall Invocation",
+  "scryfallId": "2aea38e6-ec58-4091-b27c-2761bdd12b13",
+  "oracleId": "7024532b-f99b-43a7-b0ed-5b3e7ec7592b",
+  "set": "blb",
+  "collectorNumber": "34",
+  "rarity": "rare",
+  "manaCost": "{3}{W}{W}",
+  "typeLine": "Sorcery",
+  "oracleText": "Gift a card (You may promise an opponent a gift as you cast this spell. If you do, they draw a card before its other effects.)\nDestroy all creatures. If the gift was promised, return a creature card put into your graveyard this way to the battlefield under your control.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Gift"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/a/2aea38e6-ec58-4091-b27c-2761bdd12b13.jpg?1783910855",
+   "normal": "https://cards.scryfall.io/normal/front/2/a/2aea38e6-ec58-4091-b27c-2761bdd12b13.jpg?1783910855",
+   "large": "https://cards.scryfall.io/large/front/2/a/2aea38e6-ec58-4091-b27c-2761bdd12b13.jpg?1783910855",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/a/2aea38e6-ec58-4091-b27c-2761bdd12b13.jpg?1783910855"
+  }
+ },
+ {
+  "name": "Heartfire Hero",
+  "scryfallId": "48ace959-66b2-40c8-9bff-fd7ed9c99a82",
+  "oracleId": "49e1e202-37bf-46ed-93d1-1adb13726039",
+  "set": "blb",
+  "collectorNumber": "138",
+  "rarity": "uncommon",
+  "manaCost": "{R}",
+  "typeLine": "Creature — Mouse Soldier",
+  "oracleText": "Valiant — Whenever this creature becomes the target of a spell or ability you control for the first time each turn, put a +1/+1 counter on it.\nWhen this creature dies, it deals damage equal to its power to each opponent.",
+  "power": "1",
+  "toughness": "1",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Valiant"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/8/48ace959-66b2-40c8-9bff-fd7ed9c99a82.jpg?1783910820",
+   "normal": "https://cards.scryfall.io/normal/front/4/8/48ace959-66b2-40c8-9bff-fd7ed9c99a82.jpg?1783910820",
+   "large": "https://cards.scryfall.io/large/front/4/8/48ace959-66b2-40c8-9bff-fd7ed9c99a82.jpg?1783910820",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/8/48ace959-66b2-40c8-9bff-fd7ed9c99a82.jpg?1783910820"
+  }
+ },
+ {
+  "name": "Flowerfoot Swordmaster",
+  "scryfallId": "97ff118f-9c3c-43a2-8085-980c7fe7d227",
+  "oracleId": "523d075d-b577-4f24-8c14-9a76761a2eaf",
+  "set": "blb",
+  "collectorNumber": "14",
+  "rarity": "uncommon",
+  "manaCost": "{W}",
+  "typeLine": "Creature — Mouse Soldier",
+  "oracleText": "Offspring {2} (You may pay an additional {2} as you cast this spell. If you do, when this creature enters, create a 1/1 token copy of it.)\nValiant — Whenever this creature becomes the target of a spell or ability you control for the first time each turn, Mice you control get +1/+0 until end of turn.",
+  "power": "1",
+  "toughness": "2",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Offspring",
+   "Valiant"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/7/97ff118f-9c3c-43a2-8085-980c7fe7d227.jpg?1783910861",
+   "normal": "https://cards.scryfall.io/normal/front/9/7/97ff118f-9c3c-43a2-8085-980c7fe7d227.jpg?1783910861",
+   "large": "https://cards.scryfall.io/large/front/9/7/97ff118f-9c3c-43a2-8085-980c7fe7d227.jpg?1783910861",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/7/97ff118f-9c3c-43a2-8085-980c7fe7d227.jpg?1783910861"
+  }
+ },
+ {
+  "name": "Emberheart Challenger",
+  "scryfallId": "0035082e-bb86-4f95-be48-ffc87fe5286d",
+  "oracleId": "5b4b21ed-c24e-4038-83fb-bd7f3c3426cd",
+  "set": "blb",
+  "collectorNumber": "133",
+  "rarity": "rare",
+  "manaCost": "{1}{R}",
+  "typeLine": "Creature — Mouse Warrior",
+  "oracleText": "Haste\nProwess (Whenever you cast a noncreature spell, this creature gets +1/+1 until end of turn.)\nValiant — Whenever this creature becomes the target of a spell or ability you control for the first time each turn, exile the top card of your library. Until end of turn, you may play that card.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Prowess",
+   "Valiant",
+   "Haste"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/0/0035082e-bb86-4f95-be48-ffc87fe5286d.jpg?1783910821",
+   "normal": "https://cards.scryfall.io/normal/front/0/0/0035082e-bb86-4f95-be48-ffc87fe5286d.jpg?1783910821",
+   "large": "https://cards.scryfall.io/large/front/0/0/0035082e-bb86-4f95-be48-ffc87fe5286d.jpg?1783910821",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/0/0035082e-bb86-4f95-be48-ffc87fe5286d.jpg?1783910821"
+  }
+ },
+ {
+  "name": "Whiskerquill Scribe",
+  "scryfallId": "da653996-9bd4-40bd-afb4-48c7e070a269",
+  "oracleId": "cb1e1acc-3805-418b-bed1-65838ddb1d62",
+  "set": "blb",
+  "collectorNumber": "161",
+  "rarity": "common",
+  "manaCost": "{1}{R}",
+  "typeLine": "Creature — Mouse Citizen",
+  "oracleText": "Valiant — Whenever this creature becomes the target of a spell or ability you control for the first time each turn, you may discard a card. If you do, draw a card.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Valiant"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/a/da653996-9bd4-40bd-afb4-48c7e070a269.jpg?1783910814",
+   "normal": "https://cards.scryfall.io/normal/front/d/a/da653996-9bd4-40bd-afb4-48c7e070a269.jpg?1783910814",
+   "large": "https://cards.scryfall.io/large/front/d/a/da653996-9bd4-40bd-afb4-48c7e070a269.jpg?1783910814",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/a/da653996-9bd4-40bd-afb4-48c7e070a269.jpg?1783910814"
+  }
+ },
+ {
+  "name": "Manifold Mouse",
+  "scryfallId": "db3832b5-e83f-4569-bd49-fb7b86fa2d47",
+  "oracleId": "b254ca74-2a96-4590-91bc-650f407daf5d",
+  "set": "blb",
+  "collectorNumber": "143",
+  "rarity": "rare",
+  "manaCost": "{1}{R}",
+  "typeLine": "Creature — Mouse Soldier",
+  "oracleText": "Offspring {2} (You may pay an additional {2} as you cast this spell. If you do, when this creature enters, create a 1/1 token copy of it.)\nAt the beginning of combat on your turn, target Mouse you control gains your choice of double strike or trample until end of turn.",
+  "power": "1",
+  "toughness": "2",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Offspring"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/b/db3832b5-e83f-4569-bd49-fb7b86fa2d47.jpg?1783910819",
+   "normal": "https://cards.scryfall.io/normal/front/d/b/db3832b5-e83f-4569-bd49-fb7b86fa2d47.jpg?1783910819",
+   "large": "https://cards.scryfall.io/large/front/d/b/db3832b5-e83f-4569-bd49-fb7b86fa2d47.jpg?1783910819",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/b/db3832b5-e83f-4569-bd49-fb7b86fa2d47.jpg?1783910819"
+  }
+ },
+ {
+  "name": "Seedglaive Mentor",
+  "scryfallId": "d21c3e41-0636-49a3-8c9c-384c5e5c9c3e",
+  "oracleId": "f50bbe5e-a839-40e1-ba79-1e96f91bd218",
+  "set": "blb",
+  "collectorNumber": "231",
+  "rarity": "uncommon",
+  "manaCost": "{1}{R}{W}",
+  "typeLine": "Creature — Mouse Soldier",
+  "oracleText": "Vigilance, haste\nValiant — Whenever this creature becomes the target of a spell or ability you control for the first time each turn, put a +1/+1 counter on it.",
+  "power": "3",
+  "toughness": "2",
+  "colors": [
+   "R",
+   "W"
+  ],
+  "keywords": [
+   "Vigilance",
+   "Valiant",
+   "Haste"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/2/d21c3e41-0636-49a3-8c9c-384c5e5c9c3e.jpg?1783910791",
+   "normal": "https://cards.scryfall.io/normal/front/d/2/d21c3e41-0636-49a3-8c9c-384c5e5c9c3e.jpg?1783910791",
+   "large": "https://cards.scryfall.io/large/front/d/2/d21c3e41-0636-49a3-8c9c-384c5e5c9c3e.jpg?1783910791",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/2/d21c3e41-0636-49a3-8c9c-384c5e5c9c3e.jpg?1783910791"
+  }
+ },
+ {
+  "name": "Mabel, Heir to Cragflame",
+  "scryfallId": "be6627fd-729d-44f2-b6bf-5299f49d1e3d",
+  "oracleId": "4b11e435-5888-4e3b-a255-db817392163f",
+  "set": "blb",
+  "collectorNumber": "224",
+  "rarity": "rare",
+  "manaCost": "{1}{R}{W}",
+  "typeLine": "Legendary Creature — Mouse Soldier",
+  "oracleText": "Other Mice you control get +1/+1.\nWhen Mabel enters, create Cragflame, a legendary colorless Equipment artifact token with \"Equipped creature gets +1/+1 and has vigilance, trample, and haste\" and equip {2}.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "R",
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/e/be6627fd-729d-44f2-b6bf-5299f49d1e3d.jpg?1783910794",
+   "normal": "https://cards.scryfall.io/normal/front/b/e/be6627fd-729d-44f2-b6bf-5299f49d1e3d.jpg?1783910794",
+   "large": "https://cards.scryfall.io/large/front/b/e/be6627fd-729d-44f2-b6bf-5299f49d1e3d.jpg?1783910794",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/e/be6627fd-729d-44f2-b6bf-5299f49d1e3d.jpg?1783910794"
+  }
+ },
+ {
+  "name": "Mouse Trapper",
+  "scryfallId": "8ba1bc5a-03e7-44ec-893e-44042cbc02ef",
+  "oracleId": "5b0a4530-6e19-41a2-9ea6-e4c8cf85b6c4",
+  "set": "blb",
+  "collectorNumber": "22",
+  "rarity": "uncommon",
+  "manaCost": "{2}{W}",
+  "typeLine": "Creature — Mouse Soldier",
+  "oracleText": "Flash\nValiant — Whenever this creature becomes the target of a spell or ability you control for the first time each turn, tap target creature an opponent controls.",
+  "power": "3",
+  "toughness": "2",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Valiant",
+   "Flash"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/b/8ba1bc5a-03e7-44ec-893e-44042cbc02ef.jpg?1783910860",
+   "normal": "https://cards.scryfall.io/normal/front/8/b/8ba1bc5a-03e7-44ec-893e-44042cbc02ef.jpg?1783910860",
+   "large": "https://cards.scryfall.io/large/front/8/b/8ba1bc5a-03e7-44ec-893e-44042cbc02ef.jpg?1783910860",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/b/8ba1bc5a-03e7-44ec-893e-44042cbc02ef.jpg?1783910860"
+  }
+ },
+ {
+  "name": "Thistledown Players",
+  "scryfallId": "afa8d83f-8586-4127-8b55-9715e9547488",
+  "oracleId": "7054c42b-48dd-4887-b878-69c005259d27",
+  "set": "blb",
+  "collectorNumber": "35",
+  "rarity": "common",
+  "manaCost": "{2}{W}",
+  "typeLine": "Creature — Mouse Bard",
+  "oracleText": "Whenever this creature attacks, untap target nonland permanent.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/f/afa8d83f-8586-4127-8b55-9715e9547488.jpg?1783910855",
+   "normal": "https://cards.scryfall.io/normal/front/a/f/afa8d83f-8586-4127-8b55-9715e9547488.jpg?1783910855",
+   "large": "https://cards.scryfall.io/large/front/a/f/afa8d83f-8586-4127-8b55-9715e9547488.jpg?1783910855",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/f/afa8d83f-8586-4127-8b55-9715e9547488.jpg?1783910855"
+  }
+ },
+ {
+  "name": "Brambleguard Captain",
+  "scryfallId": "e200b8bf-f2f3-4157-8e04-02baf07a963e",
+  "oracleId": "104baa4e-a3f3-45dc-979d-4c58b659ba1a",
+  "set": "blb",
+  "collectorNumber": "127",
+  "rarity": "uncommon",
+  "manaCost": "{3}{R}",
+  "typeLine": "Creature — Mouse Soldier",
+  "oracleText": "At the beginning of combat on your turn, target creature you control gets +X/+0 until end of turn, where X is this creature's power.",
+  "power": "2",
+  "toughness": "3",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/2/e200b8bf-f2f3-4157-8e04-02baf07a963e.jpg?1783910824",
+   "normal": "https://cards.scryfall.io/normal/front/e/2/e200b8bf-f2f3-4157-8e04-02baf07a963e.jpg?1783910824",
+   "large": "https://cards.scryfall.io/large/front/e/2/e200b8bf-f2f3-4157-8e04-02baf07a963e.jpg?1783910824",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/2/e200b8bf-f2f3-4157-8e04-02baf07a963e.jpg?1783910824"
+  }
+ },
+ {
+  "name": "Veteran Guardmouse",
+  "scryfallId": "3db43c46-b616-4ef8-80ed-0fab345ab3d0",
+  "oracleId": "2313a3f9-3eac-4684-a25e-6a6ae445a723",
+  "set": "blb",
+  "collectorNumber": "237",
+  "rarity": "common",
+  "manaCost": "{3}{R/W}",
+  "typeLine": "Creature — Mouse Soldier",
+  "oracleText": "Valiant — Whenever this creature becomes the target of a spell or ability you control for the first time each turn, it gets +1/+0 and gains first strike until end of turn. Scry 1. (Look at the top card of your library. You may put that card on the bottom.)",
+  "power": "3",
+  "toughness": "4",
+  "colors": [
+   "R",
+   "W"
+  ],
+  "keywords": [
+   "Valiant",
+   "Scry"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/d/3db43c46-b616-4ef8-80ed-0fab345ab3d0.jpg?1783910790",
+   "normal": "https://cards.scryfall.io/normal/front/3/d/3db43c46-b616-4ef8-80ed-0fab345ab3d0.jpg?1783910790",
+   "large": "https://cards.scryfall.io/large/front/3/d/3db43c46-b616-4ef8-80ed-0fab345ab3d0.jpg?1783910790",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/d/3db43c46-b616-4ef8-80ed-0fab345ab3d0.jpg?1783910790"
+  }
+ },
+ {
+  "name": "Might of the Meek",
+  "scryfallId": "509bf254-8a2b-4dfa-9ae5-386321b35e8b",
+  "oracleId": "19b5c94b-b4fa-41a9-b649-51c4e6f03602",
+  "set": "blb",
+  "collectorNumber": "144",
+  "rarity": "common",
+  "manaCost": "{R}",
+  "typeLine": "Instant",
+  "oracleText": "Target creature gains trample until end of turn. It also gets +1/+0 until end of turn if you control a Mouse.\nDraw a card.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/0/509bf254-8a2b-4dfa-9ae5-386321b35e8b.jpg?1783910819",
+   "normal": "https://cards.scryfall.io/normal/front/5/0/509bf254-8a2b-4dfa-9ae5-386321b35e8b.jpg?1783910819",
+   "large": "https://cards.scryfall.io/large/front/5/0/509bf254-8a2b-4dfa-9ae5-386321b35e8b.jpg?1783910819",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/0/509bf254-8a2b-4dfa-9ae5-386321b35e8b.jpg?1783910819"
+  }
+ },
+ {
+  "name": "Rabid Gnaw",
+  "scryfallId": "2f815bae-820a-49f6-8eed-46f658e7b6ff",
+  "oracleId": "077ae62d-ed94-4365-a8b7-97fd99cff028",
+  "set": "blb",
+  "collectorNumber": "147",
+  "rarity": "uncommon",
+  "manaCost": "{1}{R}",
+  "typeLine": "Instant",
+  "oracleText": "Target creature you control gets +1/+0 until end of turn. Then it deals damage equal to its power to target creature you don't control.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/f/2f815bae-820a-49f6-8eed-46f658e7b6ff.jpg?1783910819",
+   "normal": "https://cards.scryfall.io/normal/front/2/f/2f815bae-820a-49f6-8eed-46f658e7b6ff.jpg?1783910819",
+   "large": "https://cards.scryfall.io/large/front/2/f/2f815bae-820a-49f6-8eed-46f658e7b6ff.jpg?1783910819",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/f/2f815bae-820a-49f6-8eed-46f658e7b6ff.jpg?1783910819"
+  }
+ },
+ {
+  "name": "War Squeak",
+  "scryfallId": "105964a7-88b7-4340-aa66-e908189a3638",
+  "oracleId": "54702a84-3125-41a7-a875-fe2ec870836d",
+  "set": "blb",
+  "collectorNumber": "160",
+  "rarity": "common",
+  "manaCost": "{R}",
+  "typeLine": "Enchantment — Aura",
+  "oracleText": "Enchant creature\nWhen this Aura enters, target creature an opponent controls can't block this turn.\nEnchanted creature gets +1/+1 and has haste.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Enchant"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/0/105964a7-88b7-4340-aa66-e908189a3638.jpg?1783910814",
+   "normal": "https://cards.scryfall.io/normal/front/1/0/105964a7-88b7-4340-aa66-e908189a3638.jpg?1783910814",
+   "large": "https://cards.scryfall.io/large/front/1/0/105964a7-88b7-4340-aa66-e908189a3638.jpg?1783910814",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/0/105964a7-88b7-4340-aa66-e908189a3638.jpg?1783910814"
+  }
+ },
+ {
+  "name": "Blooming Blast",
+  "scryfallId": "0cd92a83-cec3-4085-a929-3f204e3e0140",
+  "oracleId": "2e5b8973-4f6e-4abe-bbbe-81fdca784997",
+  "set": "blb",
+  "collectorNumber": "126",
+  "rarity": "uncommon",
+  "manaCost": "{1}{R}",
+  "typeLine": "Instant",
+  "oracleText": "Gift a Treasure (You may promise an opponent a gift as you cast this spell. If you do, they create a Treasure token before its other effects. It's an artifact with \"{T}, Sacrifice this token: Add one mana of any color.\")\nBlooming Blast deals 2 damage to target creature. If the gift was promised, Blooming Blast also deals 3 damage to that creature's controller.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Gift",
+   "Treasure"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/c/0cd92a83-cec3-4085-a929-3f204e3e0140.jpg?1783910825",
+   "normal": "https://cards.scryfall.io/normal/front/0/c/0cd92a83-cec3-4085-a929-3f204e3e0140.jpg?1783910825",
+   "large": "https://cards.scryfall.io/large/front/0/c/0cd92a83-cec3-4085-a929-3f204e3e0140.jpg?1783910825",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/c/0cd92a83-cec3-4085-a929-3f204e3e0140.jpg?1783910825"
+  }
+ },
+ {
+  "name": "Valley Rally",
+  "scryfallId": "b6178258-1ad6-4122-a56f-6eb7d0611e84",
+  "oracleId": "5b919920-b1b6-499b-a7fe-c630778a7831",
+  "set": "blb",
+  "collectorNumber": "159",
+  "rarity": "uncommon",
+  "manaCost": "{2}{R}",
+  "typeLine": "Instant",
+  "oracleText": "Gift a Food (You may promise an opponent a gift as you cast this spell. If you do, they create a Food token before its other effects. It's an artifact with \"{2}, {T}, Sacrifice this token: You gain 3 life.\")\nCreatures you control get +2/+0 until end of turn. If the gift was promised, target creature you control gains first strike until end of turn.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Gift",
+   "Food"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/6/b6178258-1ad6-4122-a56f-6eb7d0611e84.jpg?1783910814",
+   "normal": "https://cards.scryfall.io/normal/front/b/6/b6178258-1ad6-4122-a56f-6eb7d0611e84.jpg?1783910814",
+   "large": "https://cards.scryfall.io/large/front/b/6/b6178258-1ad6-4122-a56f-6eb7d0611e84.jpg?1783910814",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/6/b6178258-1ad6-4122-a56f-6eb7d0611e84.jpg?1783910814"
+  }
+ },
+ {
+  "name": "Playful Shove",
+  "scryfallId": "07956edf-34c1-4218-9784-ddbca13e380c",
+  "oracleId": "2094fb68-3859-401f-97f2-c8bae64a4822",
+  "set": "blb",
+  "collectorNumber": "145",
+  "rarity": "uncommon",
+  "manaCost": "{1}{R}",
+  "typeLine": "Sorcery",
+  "oracleText": "Playful Shove deals 1 damage to any target.\nDraw a card.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/7/07956edf-34c1-4218-9784-ddbca13e380c.jpg?1783910820",
+   "normal": "https://cards.scryfall.io/normal/front/0/7/07956edf-34c1-4218-9784-ddbca13e380c.jpg?1783910820",
+   "large": "https://cards.scryfall.io/large/front/0/7/07956edf-34c1-4218-9784-ddbca13e380c.jpg?1783910820",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/7/07956edf-34c1-4218-9784-ddbca13e380c.jpg?1783910820"
+  }
  }
 ]

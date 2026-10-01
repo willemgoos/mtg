@@ -1,5 +1,6 @@
 import { canTapForAbility, isCreature } from './characteristics.ts';
 import { type Ctx, def, emit, obj, sacrifice, tap } from './context.ts';
+import { manaValue, pipsOf } from './cost.ts';
 import { checkCondition } from './triggers.ts';
 import type { ManaCost, ManaType, ObjectId, PlayerId } from './types.ts';
 
@@ -12,11 +13,7 @@ export interface ManaSource {
   sacrifice: boolean;
 }
 
-export function manaValue(cost: ManaCost): number {
-  let n = cost.generic;
-  for (const v of Object.values(cost.colored)) n += v ?? 0;
-  return n;
-}
+export { manaValue };
 
 /**
  * Untapped permanents with usable mana abilities. Lands sort before creatures,
@@ -69,17 +66,16 @@ export function manaSources(
  * left, in source order. Returns null if the cost can't be paid.
  */
 export function findPayment(cost: ManaCost, sources: readonly ManaSource[]): ObjectId[] | null {
-  const pips: ManaType[] = [];
-  for (const [type, n] of Object.entries(cost.colored) as [ManaType, number][])
-    for (let i = 0; i < n; i++) pips.push(type);
+  const pips = pipsOf(cost);
+  const key = pips.map((p) => p.join(''));
   const chosen: number[] = [];
   const used = new Array<boolean>(sources.length).fill(false);
   const assign = (i: number): boolean => {
     if (i === pips.length) return true;
     // Identical pips take sources in increasing order, so we don't retry permutations.
-    const from = i > 0 && pips[i - 1] === pips[i] ? chosen[i - 1]! + 1 : 0;
+    const from = i > 0 && key[i - 1] === key[i] ? chosen[i - 1]! + 1 : 0;
     for (let j = from; j < sources.length; j++) {
-      if (used[j] || !sources[j]!.produces.includes(pips[i]!)) continue;
+      if (used[j] || !pips[i]!.some((t) => sources[j]!.produces.includes(t))) continue;
       used[j] = true;
       chosen[i] = j;
       if (assign(i + 1)) return true;

@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   BEHAVIORS,
   BLACK_POOL,
+  BLOOMBURROW_DECKS,
   BLOOMBURROW_POOL,
   BLUE_POOL,
   CARDS,
@@ -120,8 +121,7 @@ describe('card data', () => {
         'keep-the-peace',
         'goblins-everywhere',
         'large-and-in-charge',
-        'blb-forage-and-feast',
-        'blb-warren-rally',
+        ...BLOOMBURROW_DECKS.map((d) => d.id),
       ].sort(),
     );
     for (const d of PLAYABLE_DECKS)

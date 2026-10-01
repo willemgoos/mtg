@@ -1,51 +1,8 @@
-import { type Action, createEngine, getCharacteristics, type TargetChoice } from '@mtg/engine';
-import { buildScenario, GameDriver, type ScenarioSpec } from '@mtg/engine/testing';
 import { describe, expect, it } from 'vitest';
-import { cardDb } from '../src/index.ts';
+import { type Action } from '@mtg/engine';
+import { all, cast, game, handSize, n, pt, settle } from './blb-helpers.ts';
 
 // Bloomburrow mechanics (offspring, gift, forage, expend, valiant) and cards.
-
-const engine = createEngine(cardDb);
-const game = (spec: ScenarioSpec) => new GameDriver(engine, buildScenario(cardDb, spec));
-const n = (card: string, count: number) => Array<string>(count).fill(card);
-const pt = (g: GameDriver, id: string) => {
-  const c = getCharacteristics(g.state, cardDb, id);
-  return [c.power, c.toughness];
-};
-const cast = (
-  g: GameDriver,
-  defId: string,
-  targets: TargetChoice[] = [],
-  extra: Partial<Extract<Action, { type: 'castSpell' }>> = {},
-) => {
-  const player = g.actor;
-  return g.do({ type: 'castSpell', player, card: g.id(player, defId, 'hand'), targets, ...extra });
-};
-const all = (g: GameDriver, defId: string) =>
-  g.state.battlefield.filter((id) => g.obj(id).defId === defId);
-const handSize = (g: GameDriver, p: 'p1' | 'p2') => g.state.players[p].hand.length;
-
-/** Resolves the stack, giving each trigger its first real target (or `pick`'s). */
-function settle(g: GameDriver, pick?: (legal: Action[]) => Action | undefined): GameDriver {
-  for (let i = 0; i < 60; i++) {
-    const d = g.decision;
-    if (d.kind === 'chooseTriggerTargets') {
-      const legal = g.legal();
-      g.do(
-        pick?.(legal) ??
-          legal.find((a) => a.type === 'chooseTargets' && a.targets.length > 0) ??
-          legal[0]!,
-      );
-      continue;
-    }
-    if (d.kind === 'priority' && g.state.stack.length) {
-      g.pass();
-      continue;
-    }
-    return g;
-  }
-  throw new Error('Stack did not settle');
-}
 
 describe('offspring', () => {
   it('paying it makes a 1/1 token copy, which makes no copy of its own', () => {

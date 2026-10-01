@@ -169,6 +169,7 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
       if (a.once && obj(ctx, source).usedAbilities?.includes(abilityIndex)) return;
       if (a.cost.tapSelf && !canTapForAbility(ctx, source)) return;
       if (a.condition && !checkCondition(ctx, a.condition, player, obj(ctx, source))) return;
+      if ((a.cost.life ?? 0) > ps.life) return;
       const usable = a.cost.tapSelf ? sources.filter((x) => x.id !== source) : sources;
       if (!canPayFrom(a.cost.mana, usable)) return;
       const rc = a.cost.removeCounters;
@@ -306,7 +307,8 @@ export function getLegalActions(ctx: Ctx, player: PlayerId): Action[] {
       const out: Action[] = [];
       // "You may pay" and ward: only offered if they can pay.
       const payable = (targets: TargetChoice[]) =>
-        canPayFrom(addCosts(a.cost ?? NO_COST, wardCost(ctx, player, targets)), pool);
+        canPayFrom(addCosts(a.cost ?? NO_COST, wardCost(ctx, player, targets)), pool) &&
+        (a.lifeCost ?? 0) <= s.players[player].life;
       if (a.modes) {
         a.modes.forEach((m, mode) => {
           for (const targets of targetCombos(ctx, m.targets, src))

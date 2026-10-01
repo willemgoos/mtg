@@ -1,3 +1,4 @@
+import { addCosts } from './cost.ts';
 import type { CardDefinition, ManaCost, SpellDef, ZoneName } from './types.ts';
 
 /** One way to cast a card: a mode, kicked or not, from hand or with flashback. */
@@ -16,12 +17,7 @@ export interface CastVariant {
   spell: SpellDef | null;
 }
 
-export function addCosts(a: ManaCost, b: ManaCost): ManaCost {
-  const colored = { ...a.colored };
-  for (const [k, v] of Object.entries(b.colored) as [keyof ManaCost['colored'], number][])
-    colored[k] = (colored[k] ?? 0) + v;
-  return { generic: a.generic + b.generic, colored };
-}
+export { addCosts };
 
 /** The ways `d` can be cast from `zone` (empty if it can't be cast from there). */
 export function castVariants(d: CardDefinition, zone: ZoneName): CastVariant[] {

@@ -5,6 +5,7 @@ import {
   type Engine,
   type GameState,
   getCharacteristics,
+  manaValue,
   type ObjectId,
   type PlayerId,
 } from '@mtg/engine';
@@ -341,7 +342,7 @@ function pickCardToLose(engine: Engine, view: GameState, me: PlayerId, legal: Ac
   const handLands = p.hand.filter((id) => isLand(engine, view, id));
   const cost = (id: ObjectId) => {
     const c = engine.db.get(view.objects[id]!.defId)!.manaCost;
-    return c.generic + Object.values(c.colored).reduce((n, x) => n + (x ?? 0), 0);
+    return manaValue(c);
   };
   const tooManyLands =
     handLands.length > p.hand.length - handLands.length || landsInPlay + handLands.length > 7;

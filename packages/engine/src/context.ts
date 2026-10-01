@@ -140,7 +140,8 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
   if (
     from === 'battlefield' &&
     to === 'graveyard' &&
-    ctx.s.effects.some((e) => e.exileIfDies && e.affected.id === id && e.affected.zcc === o.zcc)
+    (o.counters?.finality ||
+      ctx.s.effects.some((e) => e.exileIfDies && e.affected.id === id && e.affected.zcc === o.zcc))
   )
     to = 'exile';
   // Equipment and Auras attached to it are dealt with by state-based actions.
@@ -148,6 +149,7 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
   if (from === 'battlefield') {
     const c = characteristics(ctx, id);
     o.lastPower = c.power;
+    o.lastCounters = o.plusOneCounters;
     if (to === 'graveyard' && c.types.includes('Creature')) ctx.s.turn.creaturesDied++;
     if (o.addedSubtypes) o.lastAddedSubtypes = o.addedSubtypes;
     else delete o.lastAddedSubtypes;

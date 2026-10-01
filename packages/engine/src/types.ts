@@ -20,6 +20,10 @@ export type ManaType = Color | 'C';
 export interface ManaCost {
   generic: number;
   colored: Partial<Record<ManaType, number>>;
+  /** Hybrid pips, each payable with either type ({B/G}). */
+  hybrid?: [ManaType, ManaType][];
+  /** How many {X} the cost has (X is chosen as the spell is cast). */
+  x?: number;
 }
 
 // ---------------------------------------------------------------------------
@@ -156,6 +160,10 @@ export type AbilityDef =
       cost?: ManaCost;
       /** "Choose one —": the controller picks a mode as it goes on the stack. */
       modes?: SpellDef[];
+      /** "This ability triggers only once each turn." */
+      oncePerTurn?: boolean;
+      /** "You may pay ... and N life": life paid with `cost` (Zoraline). */
+      lifeCost?: number;
     }
   | { kind: 'static'; effect: StaticDef };
 
@@ -173,6 +181,8 @@ export interface CostDef {
   exileSelf?: boolean;
   /** Forage: exile three cards from your graveyard or sacrifice a Food (Camellia). */
   forage?: boolean;
+  /** Pay this much life. */
+  life?: number;
 }
 
 export type TriggerDef =
@@ -218,6 +228,8 @@ export type TriggerDef =
   | { on: 'expend'; amount: number }
   /** Valiant: this creature becomes the target of your spell or ability for the first time this turn. */
   | { on: 'valiant' }
+  /** Whenever you gain or lose life (Wax-Wane Witness: "during your turn"). */
+  | { on: 'youGainOrLoseLife'; duringYourTurn?: boolean }
   /** When you sacrifice this permanent (Carrot Cake). */
   | { on: 'sacrificed' }
   /** Whenever you sacrifice a permanent matching the filter (Camellia: a Food). */
@@ -256,6 +268,21 @@ export type ConditionDef =
   | { kind: 'amountAtLeast'; amount: Amount; min: number }
   /** This ability has resolved exactly `n` times this turn, counting this one (Harvestrite Host). */
   | { kind: 'resolvedThisTurn'; n: number }
+  /**
+   * Life changes this turn for you or an opponent: `gained` and/or `lost`
+   * (both must hold), or `either`.
+   */
+  | {
+      kind: 'lifeThisTurn';
+      who: 'you' | 'opponent';
+      gained?: boolean;
+      lost?: boolean;
+      either?: boolean;
+    }
+  /** You have at least `min` cards in hand. */
+  | { kind: 'handSize'; min: number }
+  /** Every condition holds. */
+  | { kind: 'all'; of: ConditionDef[] }
   | { kind: 'custom'; handler: string };
 
 export interface CardFilter {
@@ -320,7 +347,9 @@ export type Ref =
   | { each: 'permanent'; controller?: 'you' | 'opponent'; filter?: CardFilter }
   /** The object that caused the trigger ("that creature"). */
   | 'subject'
-  | { each: 'creature'; controller?: 'you' | 'opponent'; filter?: CardFilter };
+  | { each: 'creature'; controller?: 'you' | 'opponent'; filter?: CardFilter }
+  /** The controller of a chosen target (Blooming Blast: "that creature's controller"). */
+  | { controllerOf: number };
 
 export type Amount =
   | number
@@ -415,8 +444,8 @@ export type EffectDef =
   | { kind: 'reanimateAll' }
   /** Exile the target graveyard card and create a token copy of it (Abyssal Harvester). */
   | { kind: 'tokenCopyOf'; what: Ref; addSubtype: string; exileOtherTokensWithSubtype: boolean }
-  /** Put named counters on the source (Drake Hatcher). */
-  | { kind: 'namedCounters'; name: string; amount: Amount }
+  /** Put named counters on the source (Drake Hatcher), or on `to`. */
+  | { kind: 'namedCounters'; name: string; amount: Amount; to?: Ref }
   /** Look at the top N, split them into two piles; an opponent picks one for your hand (Curator of Destinies). */
   | { kind: 'piles'; count: number }
   /**
@@ -428,8 +457,14 @@ export type EffectDef =
   | { kind: 'surveil'; amount: number }
   /** Exile a permanent until the source leaves the battlefield (Banishing Light). */
   | { kind: 'exileUntilSourceLeaves'; what: Ref }
-  /** Put a card from a graveyard onto the battlefield under your control. */
-  | { kind: 'returnToBattlefield'; what: Ref }
+  /** Put a card from a graveyard onto the battlefield under your control (with a named counter: finality). */
+  | { kind: 'returnToBattlefield'; what: Ref; counter?: string }
+  /** Destroy all creatures (matching the filter). `returnOne`: then return one of yours that died (Starfall Invocation). */
+  | { kind: 'destroyAll'; filter?: CardFilter; returnOne?: boolean }
+  /** Look at the top N; you may take a card matching the filter into your hand; the rest go to the bottom at random. */
+  | { kind: 'lookAndTake'; count: number; filter: CardFilter }
+  /** Exile the top N; you may play them until the end of this turn or of your next turn. */
+  | { kind: 'exileTopPlayable'; count: Amount; until: 'endOfTurn' | 'endOfNextTurn' }
   /** The source card goes from its owner's graveyard back to their hand (Angelic Destiny). */
 
   /** Each opponent sacrifices a creature of their choice; optionally you gain life equal to its toughness. */
@@ -576,6 +611,10 @@ export interface GameObject {
   targetedByControllerTurn?: number;
   /** Resolutions of its triggered ability this turn (Harvestrite Host). */
   resolutions?: { turn: number; count: number };
+  /** +1/+1 counters it had as it last left the battlefield (Essence Channeler). */
+  lastCounters?: number;
+  /** "Triggers only once each turn": the turn each such ability (by index) last triggered. */
+  onceTurns?: Record<number, number>;
 }
 
 /** A reference that goes stale when the object changes zones. */
@@ -667,6 +706,8 @@ export interface TurnState {
   cardsDrawn: Record<PlayerId, number>;
   /** Total mana each player spent this turn (expend). Missing in older saves. */
   manaSpent?: Record<PlayerId, number>;
+  /** How many times each player lost life this turn. Missing in older saves. */
+  lifeLost?: Record<PlayerId, number>;
 }
 
 export interface Attacker {

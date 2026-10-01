@@ -206,7 +206,7 @@ export function activateAbility(
     a.cost.tapSelf ? source : undefined,
   );
   if (sacrifice) sacrificePermanent(ctx, sacrifice);
-  changeLife(ctx, player, -wardLife(ctx, player, targets));
+  changeLife(ctx, player, -wardLife(ctx, player, targets) - (a.cost.life ?? 0));
   if (a.cost.removeCounters) {
     const c = (src.counters ??= {});
     c[a.cost.removeCounters.name] =
@@ -251,7 +251,9 @@ export function pushTrigger(
     wardCost(ctx, t.controller, targets),
   );
   if (manaValue(cost) > 0) payMana(ctx, planPayment(ctx, t.controller, cost, undefined));
-  changeLife(ctx, t.controller, -wardLife(ctx, t.controller, targets));
+  const ability = triggeredAbility(ctx, t);
+  const life = ability.targets.length && ability.lifeCost ? ability.lifeCost : 0;
+  changeLife(ctx, t.controller, -wardLife(ctx, t.controller, targets) - life);
   const id = newId(ctx);
   ctx.s.stack.push({
     kind: 'ability',
@@ -524,7 +526,8 @@ export function answerSearch(ctx: Ctx, card: ObjectId | null): void {
   if (d.kind !== 'searchLibrary') throw new Error('Not searching');
   if (card !== null) {
     if (d.fromGraveyard) {
-      moveObject(ctx, card, 'hand');
+      if (d.to === 'battlefield') moveObject(ctx, card, 'battlefield', { controller: d.player });
+      else moveObject(ctx, card, 'hand');
       return resume(ctx, d.resume, d.thenPriority);
     }
     if (!d.to || d.to === 'hand') moveObject(ctx, card, 'hand');

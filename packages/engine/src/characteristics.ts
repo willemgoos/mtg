@@ -1,4 +1,5 @@
 import { type Ctx, def, defOf, obj } from './context.ts';
+import { manaValue } from './cost.ts';
 import { checkCondition } from './triggers.ts';
 import type {
   Amount,
@@ -201,9 +202,7 @@ export function countOf(
 }
 
 function manaValueOfDef(d: CardDefinition): number {
-  let n = d.manaCost.generic;
-  for (const v of Object.values(d.manaCost.colored)) n += v ?? 0;
-  return n;
+  return manaValue(d.manaCost);
 }
 
 function countFor(ctx: Ctx, o: GameObject, d: CardDefinition): number {
@@ -349,8 +348,7 @@ export function cardMatches(
   if (filter.subtypes && !filter.subtypes.some((st) => subtypes.includes(st))) return false;
   if (filter.colors && !filter.colors.some((color) => d.colors.includes(color))) return false;
   if (filter.notTypes?.some((t) => d.types.includes(t))) return false;
-  const mv =
-    d.manaCost.generic + Object.values(d.manaCost.colored).reduce((n, v) => n + (v ?? 0), 0);
+  const mv = manaValue(d.manaCost);
   if (filter.minManaValue !== undefined && mv < filter.minManaValue) return false;
   if (filter.manaValue !== undefined && mv !== filter.manaValue) return false;
   if (filter.subtype && !subtypes.includes(filter.subtype)) return false;
@@ -366,8 +364,6 @@ export function cardMatches(
             : (obj(ctx, sourceId).lastPower ?? 0)
           : 0
         : filter.maxManaValue;
-    let mv = d.manaCost.generic;
-    for (const v of Object.values(d.manaCost.colored)) mv += v ?? 0;
     if (mv > max) return false;
   }
   if (filter.other && id === sourceId) return false;

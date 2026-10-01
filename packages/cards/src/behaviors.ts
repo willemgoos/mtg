@@ -2181,6 +2181,23 @@ export const TOKENS: CardDefinition[] = [
   token('phyrexian-goblin-token', 'Phyrexian Goblin', 'R', ['Phyrexian', 'Goblin'], 1, 1),
   token('squirrel-token', 'Squirrel', 'G', ['Squirrel'], 1, 1),
   token('fish-token', 'Fish', 'U', ['Fish'], 1, 1),
+  token('bat-token', 'Bat', 'B', ['Bat'], 1, 1, ['flying']),
+  {
+    ...artifactToken('cragflame-token', 'Cragflame', [
+      {
+        kind: 'static',
+        effect: {
+          kind: 'attached',
+          power: 1,
+          toughness: 1,
+          keywords: ['vigilance', 'trample', 'haste'],
+        },
+      },
+      equip('{2}'),
+    ]),
+    supertypes: ['Legendary'],
+    subtypes: ['Equipment'],
+  },
   {
     ...token('scion-of-the-deep-token', 'Scion of the Deep', 'U', ['Octopus'], 8, 8),
     supertypes: ['Legendary'],

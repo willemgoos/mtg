@@ -1199,7 +1199,9 @@ function giftText(def: CardDefinition): string {
 
 function manaText(c: ManaCost): string {
   const pips = Object.entries(c.colored).flatMap(([t, n]) => Array<string>(n ?? 0).fill(`{${t}}`));
-  return `${c.generic ? `{${c.generic}}` : ''}${pips.join('')}`;
+  const hybrid = (c.hybrid ?? []).map(([a, b]) => `{${a}/${b}}`);
+  const x = '{X}'.repeat(c.x ?? 0);
+  return `${x}${c.generic ? `{${c.generic}}` : ''}${pips.join('')}${hybrid.join('')}`;
 }
 
 /** Prompt for a triggered ability, mentioning an optional cost ("you may pay"). */

@@ -1,3 +1,5 @@
+import { BLOOMBURROW_BEHAVIORS } from './bloomburrow.ts';
+
 /**
  * Allowed sets, most preferred first: Foundations, then older core sets, then
  * Bloomburrow (late, so cards reprinted there keep their core-set printing).
@@ -384,45 +386,8 @@ export const BLACK_POOL = [
   'Zombify',
 ] as const;
 
-/** Bloomburrow cards for the Golgari Squirrels and Selesnya Rabbits decks. */
-export const BLOOMBURROW_POOL = [
-  'Agate-Blade Assassin',
-  'Bakersbane Duo',
-  'Vinereap Mentor',
-  'Bonebind Orator',
-  'Bushy Bodyguard',
-  'Daggerfang Duo',
-  'Curious Forager',
-  'Honored Dreyleader',
-  'Treetop Sentries',
-  'Thornplate Intimidator',
-  "Wick's Patrol",
-  'Camellia, the Seedmiser',
-  'Feed the Cycle',
-  'Savor',
-  'Nocturnal Hunger',
-  'Longstalk Brawl',
-  'Consumed by Greed',
-  "Hazel's Nocturne",
-  'Seasoned Warrenguard',
-  'Brave-Kin Duo',
-  'Nettle Guard',
-  'Intrepid Rabbit',
-  'Warren Elder',
-  'Burrowguard Mentor',
-  'Harvestrite Host',
-  'Druid of the Spade',
-  'Hazardroot Herbalist',
-  'Finneas, Ace Archer',
-  'Warren Warleader',
-  'Treeguard Duo',
-  'Carrot Cake',
-  'Hop to It',
-  'Crumb and Get It',
-  "Mabel's Mettle",
-  'Rabbit Response',
-  'Repel Calamity',
-];
+/** Bloomburrow cards: every card with Bloomburrow behaviour (vanilla ones have an empty entry). */
+export const BLOOMBURROW_POOL = Object.keys(BLOOMBURROW_BEHAVIORS);
 
 /** Multicoloured and colourless cards. */
 export const OTHER_POOL = [

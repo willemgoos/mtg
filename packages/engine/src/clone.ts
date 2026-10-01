@@ -14,6 +14,7 @@ export function cloneState(s: GameState): GameState {
     if (o.exiledUntilLeaves) c.exiledUntilLeaves = o.exiledUntilLeaves.slice();
     if (o.addedSubtypes) c.addedSubtypes = o.addedSubtypes.slice();
     if (o.counters) c.counters = { ...o.counters };
+    if (o.onceTurns) c.onceTurns = { ...o.onceTurns };
     objects[id] = c;
   }
   const player = (p: GameState['players']['p1']) => ({
@@ -37,6 +38,7 @@ export function cloneState(s: GameState): GameState {
       lifeGains: { ...s.turn.lifeGains },
       cardsDrawn: { ...s.turn.cardsDrawn },
       ...(s.turn.manaSpent ? { manaSpent: { ...s.turn.manaSpent } } : {}),
+      ...(s.turn.lifeLost ? { lifeLost: { ...s.turn.lifeLost } } : {}),
     },
     combat: s.combat && {
       attackers: s.combat.attackers.map((a) => ({ ...a, blockers: a.blockers.slice() })),

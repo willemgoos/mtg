@@ -1,5 +1,6 @@
 import { countOf, creaturesOnBattlefield, matchesFilter } from './characteristics.ts';
 import { type Ctx, def, defOf, obj, other } from './context.ts';
+import { manaValue } from './cost.ts';
 import type {
   AbilityDef,
   EffectDef,
@@ -33,6 +34,15 @@ export function checkCondition(
   }
   if (c.kind === 'amountAtLeast')
     return countOf(ctx, controller, c.amount, false, self?.id) >= c.min;
+  if (c.kind === 'lifeThisTurn') {
+    const p = c.who === 'you' ? controller : other(controller);
+    const gained = ctx.s.turn.lifeGains[p] > 0;
+    const lost = (ctx.s.turn.lifeLost?.[p] ?? 0) > 0;
+    if (c.either) return gained || lost;
+    return (!c.gained || gained) && (!c.lost || lost);
+  }
+  if (c.kind === 'handSize') return ctx.s.players[controller].hand.length >= c.min;
+  if (c.kind === 'all') return c.of.every((x) => checkCondition(ctx, x, controller, self, targets));
   if (c.kind === 'resolvedThisTurn')
     return self?.resolutions?.turn === ctx.s.turn.number && self.resolutions.count === c.n;
   if (c.kind === 'controlsPermanents')
@@ -102,6 +112,12 @@ function queue(
   subject?: GameObject,
   amount?: number,
 ): void {
+  // "This ability triggers only once each turn."
+  const a = defOf(ctx, o.defId).abilities[index];
+  if (a?.kind === 'triggered' && a.oncePerTurn) {
+    if (o.onceTurns?.[index] === ctx.s.turn.number) return;
+    o.onceTurns = { ...o.onceTurns, [index]: ctx.s.turn.number };
+  }
   ctx.s.pendingTriggers.push({
     source: { id: o.id, zcc: o.zcc },
     sourceDefId: o.defId,
@@ -275,10 +291,13 @@ function detect(ctx: Ctx, ev: GameEvent): void {
       return;
     }
     case 'lifeChanged': {
-      if (ev.delta <= 0) return;
+      const yours = s.turn.activePlayer === ev.player;
       forEachBattlefieldTrigger(
         ctx,
-        (o, a) => a.trigger.on === 'youGainLife' && o.controller === ev.player,
+        (o, a) =>
+          o.controller === ev.player &&
+          ((a.trigger.on === 'youGainLife' && ev.delta > 0) ||
+            (a.trigger.on === 'youGainOrLoseLife' && (!a.trigger.duringYourTurn || yours))),
       );
       return;
     }
@@ -453,9 +472,7 @@ function defMatches(d: CardDefinition, f: CardFilter): boolean {
 }
 
 function manaValueOf(d: CardDefinition): number {
-  let n = d.manaCost.generic;
-  for (const v of Object.values(d.manaCost.colored)) n += v ?? 0;
-  return n;
+  return manaValue(d.manaCost);
 }
 
 /** The ability a pending trigger or stack item refers to (granted ones carry their effects). */
