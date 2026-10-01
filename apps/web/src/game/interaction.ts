@@ -21,7 +21,8 @@ export function forageFood(a: Action): ObjectId | null {
  */
 export function targetsOf(a: Action): TargetChoice[] {
   if (a.type === 'castSpell' || a.type === 'activateAbility') {
-    const costs: TargetChoice[] = [a.sacrifice, forageFood(a)].flatMap((id) =>
+    const discard = a.type === 'castSpell' ? a.discard : undefined;
+    const costs: TargetChoice[] = [a.sacrifice, forageFood(a), discard].flatMap((id) =>
       id ? [{ object: { id, zcc: -1 } }] : [],
     );
     return [...costs, ...a.targets];
@@ -108,7 +109,7 @@ export function castGroups(casts: readonly Action[]): Action[][] {
     const forage = a.forage ? (a.forage === 'graveyard' ? 'g' : 'f') : '';
     const key =
       a.type === 'castSpell'
-        ? `${a.mode ?? ''}:${a.kicked ? 'k' : ''}:${a.sacrifice ? 's' : ''}:${forage}`
+        ? `${a.mode ?? ''}:${a.kicked ? 'k' : ''}:${a.sacrifice ? 's' : ''}:${forage}:${a.x ?? ''}`
         : forage;
     groups.set(key, [...(groups.get(key) ?? []), a]);
   }

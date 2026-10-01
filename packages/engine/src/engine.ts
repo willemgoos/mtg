@@ -10,6 +10,7 @@ import {
 } from './context.ts';
 import { getLegalActions as legalActions } from './legal.ts';
 import { checkGameOver } from './sba.ts';
+import { collectTriggers } from './triggers.ts';
 import {
   openingHand,
   type NewGameOptions,
@@ -21,6 +22,8 @@ import {
   activateAbility,
   answerDiscard,
   answerChooseFromHand,
+  answerChooseObject,
+  answerPayOrCounter,
   answerChooseOption,
   answerForage,
   answerForageExile,
@@ -115,6 +118,8 @@ export function createEngine(db: CardDb, options: EngineOptions = {}): Engine {
       const next = cloneState(state);
       const ctx = makeCtx(next, db, custom);
       apply(ctx, action);
+      // A resolution that paused to ask something still owes its triggers so far.
+      collectTriggers(ctx);
       return { state: next, events: ctx.events };
     },
 
@@ -122,6 +127,7 @@ export function createEngine(db: CardDb, options: EngineOptions = {}): Engine {
       validate(state, action, opts);
       const ctx = makeCtx(state, db, custom);
       apply(ctx, action);
+      collectTriggers(ctx);
       return ctx.events;
     },
   };
@@ -191,6 +197,8 @@ function apply(ctx: Ctx, action: Action): void {
           kicked: action.kicked,
           sacrifice: action.sacrifice,
           forage: action.forage,
+          discard: action.discard,
+          x: action.x,
         },
         action.payWith,
       );
@@ -232,6 +240,7 @@ function apply(ctx: Ctx, action: Action): void {
     case 'confirmBlockers':
       return confirmBlockers(ctx);
     case 'chooseEffect':
+      if (d.kind === 'payOrCounter') return answerPayOrCounter(ctx, action.accept);
       return answerOptionalEffect(ctx, action.accept);
     case 'chooseTargets': {
       if (d.kind !== 'chooseTriggerTargets') throw new IllegalActionError(action);
@@ -263,6 +272,7 @@ function apply(ctx: Ctx, action: Action): void {
       if (d.kind !== 'chooseOption') throw new IllegalActionError(action);
       return answerChooseOption(ctx, action.index);
     case 'chooseCard':
+      if (d.kind === 'chooseObject') return answerChooseObject(ctx, action.card);
       if (d.kind === 'chooseFromHand') return answerChooseFromHand(ctx, action.card);
       if (d.kind === 'forageExile' && action.card) return answerForageExile(ctx, action.card);
       if (d.kind === 'sacrifice' && action.card) return answerSacrifice(ctx, action.card);

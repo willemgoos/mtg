@@ -29,6 +29,8 @@ export interface Ctx {
   /** Index into `events` up to which triggers have been collected. */
   triggerCursor: number;
   customEffects: Readonly<Record<string, CustomEffect>>;
+  /** "Whenever one or more" triggers already queued in this batch of events. */
+  batched: Set<string>;
 }
 
 export function makeCtx(
@@ -36,7 +38,7 @@ export function makeCtx(
   db: CardDb,
   customEffects: Readonly<Record<string, CustomEffect>> = {},
 ): Ctx {
-  return { s, db, events: [], triggerCursor: 0, customEffects };
+  return { s, db, events: [], triggerCursor: 0, customEffects, batched: new Set() };
 }
 
 export function other(p: PlayerId): PlayerId {
@@ -205,6 +207,10 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
   o.summoningSick = true;
   o.controller = to === 'battlefield' || to === 'stack' ? (opts.controller ?? o.owner) : o.owner;
   if (to === 'battlefield' && defOf(ctx, o.defId).entersTapped) o.tapped = true;
+  const tappedIf = to === 'battlefield' ? defOf(ctx, o.defId).entersTappedIf : undefined;
+  // Eddymurk Crab: "enters tapped if it's not your turn".
+  if (tappedIf?.kind === 'opponentsTurn' && ctx.s.turn.activePlayer !== o.controller)
+    o.tapped = true;
 
   // Tokens cease to exist once they leave the battlefield (rule 111.7).
   const ceases = o.isToken && to !== 'battlefield';

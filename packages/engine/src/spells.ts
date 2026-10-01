@@ -19,6 +19,11 @@ export interface CastVariant {
 
 export { addCosts };
 
+/** What restricted mana can be spent on: the spell's subtypes and card types ("only for Angels", "only for creature spells"). */
+export function spellTags(d: CardDefinition): string[] {
+  return [...d.subtypes, ...d.types];
+}
+
 /** The ways `d` can be cast from `zone` (empty if it can't be cast from there). */
 export function castVariants(d: CardDefinition, zone: ZoneName): CastVariant[] {
   if (d.types.includes('Land')) return [];
@@ -81,9 +86,14 @@ export function variantOf(
 /** Resolution effects for a spell on the stack. */
 export function spellOnStack(
   d: CardDefinition,
-  item: { mode?: number | undefined; kicked?: boolean | undefined },
+  item: {
+    mode?: number | undefined;
+    kicked?: boolean | undefined;
+    flashback?: boolean | undefined;
+  },
 ): SpellDef | null {
   if (d.modes) return d.modes[item.mode ?? 0] ?? null;
+  if (item.flashback && d.flashbackSpell) return d.flashbackSpell;
   if (item.kicked && d.kicker?.spell) return d.kicker.spell;
   return d.spell ?? null;
 }

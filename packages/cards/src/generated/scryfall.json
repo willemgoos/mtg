@@ -11731,5 +11731,909 @@
    "large": "https://cards.scryfall.io/large/front/7/e/7e24fe6a-607b-49b8-9fca-cecb1e40de7f.jpg?1783910846",
    "artCrop": "https://cards.scryfall.io/art_crop/front/7/e/7e24fe6a-607b-49b8-9fca-cecb1e40de7f.jpg?1783910846"
   }
+ },
+ {
+  "name": "Stormcatch Mentor",
+  "scryfallId": "99754055-6d67-4fde-aff3-41f6af6ea764",
+  "oracleId": "b2252471-01ca-4d58-aa99-4ab0aa5eae12",
+  "set": "blb",
+  "collectorNumber": "234",
+  "rarity": "uncommon",
+  "manaCost": "{U}{R}",
+  "typeLine": "Creature — Otter Wizard",
+  "oracleText": "Haste\nProwess (Whenever you cast a noncreature spell, this creature gets +1/+1 until end of turn.)\nInstant and sorcery spells you cast cost {1} less to cast.",
+  "power": "1",
+  "toughness": "1",
+  "colors": [
+   "R",
+   "U"
+  ],
+  "keywords": [
+   "Prowess",
+   "Haste"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/9/99754055-6d67-4fde-aff3-41f6af6ea764.jpg?1783910790",
+   "normal": "https://cards.scryfall.io/normal/front/9/9/99754055-6d67-4fde-aff3-41f6af6ea764.jpg?1783910790",
+   "large": "https://cards.scryfall.io/large/front/9/9/99754055-6d67-4fde-aff3-41f6af6ea764.jpg?1783910790",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/9/99754055-6d67-4fde-aff3-41f6af6ea764.jpg?1783910790"
+  }
+ },
+ {
+  "name": "Kindlespark Duo",
+  "scryfallId": "a839fba3-1b66-4dd1-bf43-9b015b44fc81",
+  "oracleId": "980cd7d5-a511-49ab-bc52-08b71c65db76",
+  "set": "blb",
+  "collectorNumber": "142",
+  "rarity": "common",
+  "manaCost": "{2}{R}",
+  "typeLine": "Creature — Lizard Otter",
+  "oracleText": "{T}: This creature deals 1 damage to target opponent.\nWhenever you cast a noncreature spell, untap this creature.",
+  "power": "1",
+  "toughness": "3",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/8/a839fba3-1b66-4dd1-bf43-9b015b44fc81.jpg?1783910819",
+   "normal": "https://cards.scryfall.io/normal/front/a/8/a839fba3-1b66-4dd1-bf43-9b015b44fc81.jpg?1783910819",
+   "large": "https://cards.scryfall.io/large/front/a/8/a839fba3-1b66-4dd1-bf43-9b015b44fc81.jpg?1783910819",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/8/a839fba3-1b66-4dd1-bf43-9b015b44fc81.jpg?1783910819"
+  }
+ },
+ {
+  "name": "Coruscation Mage",
+  "scryfallId": "dc2c1de0-6233-469a-be72-a050b97d2c8f",
+  "oracleId": "88bb91b5-2ccd-4ce9-8cd4-e54d63c12abf",
+  "set": "blb",
+  "collectorNumber": "131",
+  "rarity": "uncommon",
+  "manaCost": "{1}{R}",
+  "typeLine": "Creature — Otter Wizard",
+  "oracleText": "Offspring {2} (You may pay an additional {2} as you cast this spell. If you do, when this creature enters, create a 1/1 token copy of it.)\nWhenever you cast a noncreature spell, this creature deals 1 damage to each opponent.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Offspring"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/c/dc2c1de0-6233-469a-be72-a050b97d2c8f.jpg?1783910824",
+   "normal": "https://cards.scryfall.io/normal/front/d/c/dc2c1de0-6233-469a-be72-a050b97d2c8f.jpg?1783910824",
+   "large": "https://cards.scryfall.io/large/front/d/c/dc2c1de0-6233-469a-be72-a050b97d2c8f.jpg?1783910824",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/c/dc2c1de0-6233-469a-be72-a050b97d2c8f.jpg?1783910824"
+  }
+ },
+ {
+  "name": "Tempest Angler",
+  "scryfallId": "850daae4-f0b7-4604-95e7-ad044ec165c3",
+  "oracleId": "60ac490c-b489-4ad2-bcc2-3babaabf8ccb",
+  "set": "blb",
+  "collectorNumber": "235",
+  "rarity": "common",
+  "manaCost": "{1}{U/R}{U/R}",
+  "typeLine": "Creature — Otter Wizard",
+  "oracleText": "Whenever you cast a noncreature spell, put a +1/+1 counter on this creature.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "R",
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/5/850daae4-f0b7-4604-95e7-ad044ec165c3.jpg?1783910789",
+   "normal": "https://cards.scryfall.io/normal/front/8/5/850daae4-f0b7-4604-95e7-ad044ec165c3.jpg?1783910789",
+   "large": "https://cards.scryfall.io/large/front/8/5/850daae4-f0b7-4604-95e7-ad044ec165c3.jpg?1783910789",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/5/850daae4-f0b7-4604-95e7-ad044ec165c3.jpg?1783910789"
+  }
+ },
+ {
+  "name": "Thundertrap Trainer",
+  "scryfallId": "9cf3af94-b7c8-415c-a5a1-d89967fd0bba",
+  "oracleId": "d0be5969-0442-4557-a5fc-bee56e1835c2",
+  "set": "blb",
+  "collectorNumber": "78",
+  "rarity": "rare",
+  "manaCost": "{1}{U}",
+  "typeLine": "Creature — Otter Wizard",
+  "oracleText": "Offspring {4} (You may pay an additional {4} as you cast this spell. If you do, when this creature enters, create a 1/1 token copy of it.)\nWhen this creature enters, look at the top four cards of your library. You may reveal a noncreature, nonland card from among them and put it into your hand. Put the rest on the bottom of your library in a random order.",
+  "power": "1",
+  "toughness": "2",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Offspring"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/c/9cf3af94-b7c8-415c-a5a1-d89967fd0bba.jpg?1783910839",
+   "normal": "https://cards.scryfall.io/normal/front/9/c/9cf3af94-b7c8-415c-a5a1-d89967fd0bba.jpg?1783910839",
+   "large": "https://cards.scryfall.io/large/front/9/c/9cf3af94-b7c8-415c-a5a1-d89967fd0bba.jpg?1783910839",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/c/9cf3af94-b7c8-415c-a5a1-d89967fd0bba.jpg?1783910839"
+  }
+ },
+ {
+  "name": "Harnesser of Storms",
+  "scryfallId": "b56beeb6-88ca-475e-8654-1d4e8b4aa3c0",
+  "oracleId": "fb8f7047-280b-464f-aca2-6add3e21df8f",
+  "set": "blb",
+  "collectorNumber": "137",
+  "rarity": "uncommon",
+  "manaCost": "{2}{R}",
+  "typeLine": "Creature — Otter Wizard",
+  "oracleText": "Whenever you cast a noncreature or Otter spell, you may exile the top card of your library. Until end of turn, you may play that card. This ability triggers only once each turn.",
+  "power": "1",
+  "toughness": "4",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/5/b56beeb6-88ca-475e-8654-1d4e8b4aa3c0.jpg?1783910821",
+   "normal": "https://cards.scryfall.io/normal/front/b/5/b56beeb6-88ca-475e-8654-1d4e8b4aa3c0.jpg?1783910821",
+   "large": "https://cards.scryfall.io/large/front/b/5/b56beeb6-88ca-475e-8654-1d4e8b4aa3c0.jpg?1783910821",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/5/b56beeb6-88ca-475e-8654-1d4e8b4aa3c0.jpg?1783910821"
+  }
+ },
+ {
+  "name": "Valley Floodcaller",
+  "scryfallId": "90b12da0-f666-471d-95f5-15d8c9b31c92",
+  "oracleId": "4879c8f0-8832-4290-bc71-9838940f75cd",
+  "set": "blb",
+  "collectorNumber": "79",
+  "rarity": "rare",
+  "manaCost": "{2}{U}",
+  "typeLine": "Creature — Otter Wizard",
+  "oracleText": "Flash\nYou may cast noncreature spells as though they had flash.\nWhenever you cast a noncreature spell, Birds, Frogs, Otters, and Rats you control get +1/+1 until end of turn. Untap them.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Flash"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/0/90b12da0-f666-471d-95f5-15d8c9b31c92.jpg?1783910840",
+   "normal": "https://cards.scryfall.io/normal/front/9/0/90b12da0-f666-471d-95f5-15d8c9b31c92.jpg?1783910840",
+   "large": "https://cards.scryfall.io/large/front/9/0/90b12da0-f666-471d-95f5-15d8c9b31c92.jpg?1783910840",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/0/90b12da0-f666-471d-95f5-15d8c9b31c92.jpg?1783910840"
+  }
+ },
+ {
+  "name": "Alania's Pathmaker",
+  "scryfallId": "d3871fe6-e26e-4ab4-bd81-7e3c7b8135c1",
+  "oracleId": "ce36a450-68a6-4519-a9f0-0e3b772054eb",
+  "set": "blb",
+  "collectorNumber": "123",
+  "rarity": "common",
+  "manaCost": "{3}{R}",
+  "typeLine": "Creature — Otter Wizard",
+  "oracleText": "When this creature enters, exile the top card of your library. Until the end of your next turn, you may play that card.",
+  "power": "4",
+  "toughness": "2",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/3/d3871fe6-e26e-4ab4-bd81-7e3c7b8135c1.jpg?1783910825",
+   "normal": "https://cards.scryfall.io/normal/front/d/3/d3871fe6-e26e-4ab4-bd81-7e3c7b8135c1.jpg?1783910825",
+   "large": "https://cards.scryfall.io/large/front/d/3/d3871fe6-e26e-4ab4-bd81-7e3c7b8135c1.jpg?1783910825",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/3/d3871fe6-e26e-4ab4-bd81-7e3c7b8135c1.jpg?1783910825"
+  }
+ },
+ {
+  "name": "Eddymurk Crab",
+  "scryfallId": "e6d45abe-4962-47d9-a54e-7e623ea8647c",
+  "oracleId": "3c345e24-1726-45ac-91ca-e348d1e7acfe",
+  "set": "blb",
+  "collectorNumber": "48",
+  "rarity": "uncommon",
+  "manaCost": "{5}{U}{U}",
+  "typeLine": "Creature — Elemental Crab",
+  "oracleText": "Flash\nThis spell costs {1} less to cast for each instant and sorcery card in your graveyard.\nThis creature enters tapped if it's not your turn.\nWhen this creature enters, tap up to two target creatures.",
+  "power": "5",
+  "toughness": "5",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Flash"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/6/e6d45abe-4962-47d9-a54e-7e623ea8647c.jpg?1783910850",
+   "normal": "https://cards.scryfall.io/normal/front/e/6/e6d45abe-4962-47d9-a54e-7e623ea8647c.jpg?1783910850",
+   "large": "https://cards.scryfall.io/large/front/e/6/e6d45abe-4962-47d9-a54e-7e623ea8647c.jpg?1783910850",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/6/e6d45abe-4962-47d9-a54e-7e623ea8647c.jpg?1783910850"
+  }
+ },
+ {
+  "name": "Pearl of Wisdom",
+  "scryfallId": "13cb9575-1138-4f99-8e90-0eaf00bdf4a1",
+  "oracleId": "91ddd2bd-2dec-4670-8edb-e89c009b2187",
+  "set": "blb",
+  "collectorNumber": "64",
+  "rarity": "common",
+  "manaCost": "{2}{U}",
+  "typeLine": "Sorcery",
+  "oracleText": "This spell costs {1} less to cast if you control an Otter.\nDraw two cards.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/3/13cb9575-1138-4f99-8e90-0eaf00bdf4a1.jpg?1783910846",
+   "normal": "https://cards.scryfall.io/normal/front/1/3/13cb9575-1138-4f99-8e90-0eaf00bdf4a1.jpg?1783910846",
+   "large": "https://cards.scryfall.io/large/front/1/3/13cb9575-1138-4f99-8e90-0eaf00bdf4a1.jpg?1783910846",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/3/13cb9575-1138-4f99-8e90-0eaf00bdf4a1.jpg?1783910846"
+  }
+ },
+ {
+  "name": "Otterball Antics",
+  "scryfallId": "3ff83ff7-e428-4ccc-8341-f223dab76bd1",
+  "oracleId": "43a6de3e-152e-4af1-acec-53405742425c",
+  "set": "blb",
+  "collectorNumber": "63",
+  "rarity": "uncommon",
+  "manaCost": "{1}{U}",
+  "typeLine": "Sorcery",
+  "oracleText": "Create a 1/1 blue and red Otter creature token with prowess. If this spell was cast from anywhere other than your hand, put a +1/+1 counter on that creature. (Whenever you cast a noncreature spell, a creature with prowess gets +1/+1 until end of turn.)\nFlashback {3}{U} (You may cast this card from your graveyard for its flashback cost. Then exile it.)",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Flashback"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/f/3ff83ff7-e428-4ccc-8341-f223dab76bd1.jpg?1783910845",
+   "normal": "https://cards.scryfall.io/normal/front/3/f/3ff83ff7-e428-4ccc-8341-f223dab76bd1.jpg?1783910845",
+   "large": "https://cards.scryfall.io/large/front/3/f/3ff83ff7-e428-4ccc-8341-f223dab76bd1.jpg?1783910845",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/f/3ff83ff7-e428-4ccc-8341-f223dab76bd1.jpg?1783910845"
+  }
+ },
+ {
+  "name": "Dazzling Denial",
+  "scryfallId": "8739f1ac-2e57-4b52-a7ff-cc8df5936aad",
+  "oracleId": "6d56bd32-f47a-4e54-a88e-b69d16283ea4",
+  "set": "blb",
+  "collectorNumber": "45",
+  "rarity": "common",
+  "manaCost": "{1}{U}",
+  "typeLine": "Instant",
+  "oracleText": "Counter target spell unless its controller pays {2}. If you control a Bird, counter that spell unless its controller pays {4} instead.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/7/8739f1ac-2e57-4b52-a7ff-cc8df5936aad.jpg?1783910851",
+   "normal": "https://cards.scryfall.io/normal/front/8/7/8739f1ac-2e57-4b52-a7ff-cc8df5936aad.jpg?1783910851",
+   "large": "https://cards.scryfall.io/large/front/8/7/8739f1ac-2e57-4b52-a7ff-cc8df5936aad.jpg?1783910851",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/7/8739f1ac-2e57-4b52-a7ff-cc8df5936aad.jpg?1783910851"
+  }
+ },
+ {
+  "name": "Shore Up",
+  "scryfallId": "4dc3b49e-3674-494c-bdea-4374cefd10f4",
+  "oracleId": "c9d8c983-2845-42e6-b6b8-bf7cf2729b23",
+  "set": "blb",
+  "collectorNumber": "69",
+  "rarity": "common",
+  "manaCost": "{U}",
+  "typeLine": "Instant",
+  "oracleText": "Target creature you control gets +1/+1 and gains hexproof until end of turn. Untap it. (It can't be the target of spells or abilities your opponents control.)",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/d/4dc3b49e-3674-494c-bdea-4374cefd10f4.jpg?1783910845",
+   "normal": "https://cards.scryfall.io/normal/front/4/d/4dc3b49e-3674-494c-bdea-4374cefd10f4.jpg?1783910845",
+   "large": "https://cards.scryfall.io/large/front/4/d/4dc3b49e-3674-494c-bdea-4374cefd10f4.jpg?1783910845",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/d/4dc3b49e-3674-494c-bdea-4374cefd10f4.jpg?1783910845"
+  }
+ },
+ {
+  "name": "Sazacap's Brew",
+  "scryfallId": "6d963080-b3ec-467d-82f7-39db6ecd6bbc",
+  "oracleId": "ac7d1986-8388-4e4c-973e-d90382b12acf",
+  "set": "blb",
+  "collectorNumber": "151",
+  "rarity": "common",
+  "manaCost": "{1}{R}",
+  "typeLine": "Instant",
+  "oracleText": "Gift a tapped Fish (You may promise an opponent a gift as you cast this spell. If you do, they create a tapped 1/1 blue Fish creature token before its other effects.)\nAs an additional cost to cast this spell, discard a card.\nTarget player draws two cards. If the gift was promised, target creature you control gets +2/+0 until end of turn.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Gift"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/d/6d963080-b3ec-467d-82f7-39db6ecd6bbc.jpg?1783910815",
+   "normal": "https://cards.scryfall.io/normal/front/6/d/6d963080-b3ec-467d-82f7-39db6ecd6bbc.jpg?1783910815",
+   "large": "https://cards.scryfall.io/large/front/6/d/6d963080-b3ec-467d-82f7-39db6ecd6bbc.jpg?1783910815",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/d/6d963080-b3ec-467d-82f7-39db6ecd6bbc.jpg?1783910815"
+  }
+ },
+ {
+  "name": "Take Out the Trash",
+  "scryfallId": "7a1c6f00-af4c-4d35-b682-6c0e759df9a5",
+  "oracleId": "e07700e7-218a-45a3-9ee4-de2cc25cdc02",
+  "set": "blb",
+  "collectorNumber": "156",
+  "rarity": "common",
+  "manaCost": "{1}{R}",
+  "typeLine": "Instant",
+  "oracleText": "Take Out the Trash deals 3 damage to target creature or planeswalker. If you control a Raccoon, you may discard a card. If you do, draw a card.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/a/7a1c6f00-af4c-4d35-b682-6c0e759df9a5.jpg?1783910815",
+   "normal": "https://cards.scryfall.io/normal/front/7/a/7a1c6f00-af4c-4d35-b682-6c0e759df9a5.jpg?1783910815",
+   "large": "https://cards.scryfall.io/large/front/7/a/7a1c6f00-af4c-4d35-b682-6c0e759df9a5.jpg?1783910815",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/a/7a1c6f00-af4c-4d35-b682-6c0e759df9a5.jpg?1783910815"
+  }
+ },
+ {
+  "name": "Quaketusk Boar",
+  "scryfallId": "2f2b7fd3-a139-49ea-8a89-b64261e868ef",
+  "oracleId": "6fbaa853-48d4-4a3b-b22d-27415cc266d7",
+  "set": "blb",
+  "collectorNumber": "146",
+  "rarity": "uncommon",
+  "manaCost": "{3}{R}{R}",
+  "typeLine": "Creature — Elemental Boar",
+  "oracleText": "Reach, trample, haste",
+  "power": "5",
+  "toughness": "5",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Reach",
+   "Haste",
+   "Trample"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/f/2f2b7fd3-a139-49ea-8a89-b64261e868ef.jpg?1783910819",
+   "normal": "https://cards.scryfall.io/normal/front/2/f/2f2b7fd3-a139-49ea-8a89-b64261e868ef.jpg?1783910819",
+   "large": "https://cards.scryfall.io/large/front/2/f/2f2b7fd3-a139-49ea-8a89-b64261e868ef.jpg?1783910819",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/f/2f2b7fd3-a139-49ea-8a89-b64261e868ef.jpg?1783910819"
+  }
+ },
+ {
+  "name": "Calamitous Tide",
+  "scryfallId": "178bc8b2-ffa0-4549-aead-aacb3db3cf19",
+  "oracleId": "d605d9d1-c01a-4ef6-89f9-06fae8cd57e6",
+  "set": "blb",
+  "collectorNumber": "43",
+  "rarity": "uncommon",
+  "manaCost": "{4}{U}{U}",
+  "typeLine": "Sorcery",
+  "oracleText": "Return up to two target creatures to their owners' hands. Draw two cards, then discard a card.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/7/178bc8b2-ffa0-4549-aead-aacb3db3cf19.jpg?1783910852",
+   "normal": "https://cards.scryfall.io/normal/front/1/7/178bc8b2-ffa0-4549-aead-aacb3db3cf19.jpg?1783910852",
+   "large": "https://cards.scryfall.io/large/front/1/7/178bc8b2-ffa0-4549-aead-aacb3db3cf19.jpg?1783910852",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/7/178bc8b2-ffa0-4549-aead-aacb3db3cf19.jpg?1783910852"
+  }
+ },
+ {
+  "name": "Sunshower Druid",
+  "scryfallId": "7740abc5-54e1-478d-966e-0fa64e727995",
+  "oracleId": "7a70faf5-cc04-402b-92e3-67746788f510",
+  "set": "blb",
+  "collectorNumber": "195",
+  "rarity": "common",
+  "manaCost": "{G}",
+  "typeLine": "Creature — Frog Druid",
+  "oracleText": "When this creature enters, put a +1/+1 counter on target creature and you gain 1 life.",
+  "power": "0",
+  "toughness": "2",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/7/7740abc5-54e1-478d-966e-0fa64e727995.jpg?1783910802",
+   "normal": "https://cards.scryfall.io/normal/front/7/7/7740abc5-54e1-478d-966e-0fa64e727995.jpg?1783910802",
+   "large": "https://cards.scryfall.io/large/front/7/7/7740abc5-54e1-478d-966e-0fa64e727995.jpg?1783910802",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/7/7740abc5-54e1-478d-966e-0fa64e727995.jpg?1783910802"
+  }
+ },
+ {
+  "name": "Mistbreath Elder",
+  "scryfallId": "e5246540-5a84-41d8-9e30-8e7a6c0e84e1",
+  "oracleId": "bf9221f5-a4b2-4074-901c-0fa3c2bda80c",
+  "set": "blb",
+  "collectorNumber": "184",
+  "rarity": "rare",
+  "manaCost": "{G}",
+  "typeLine": "Creature — Frog Warrior",
+  "oracleText": "At the beginning of your upkeep, return another creature you control to its owner's hand. If you do, put a +1/+1 counter on this creature. Otherwise, you may return this creature to its owner's hand.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/5/e5246540-5a84-41d8-9e30-8e7a6c0e84e1.jpg?1783910806",
+   "normal": "https://cards.scryfall.io/normal/front/e/5/e5246540-5a84-41d8-9e30-8e7a6c0e84e1.jpg?1783910806",
+   "large": "https://cards.scryfall.io/large/front/e/5/e5246540-5a84-41d8-9e30-8e7a6c0e84e1.jpg?1783910806",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/5/e5246540-5a84-41d8-9e30-8e7a6c0e84e1.jpg?1783910806"
+  }
+ },
+ {
+  "name": "Valley Mightcaller",
+  "scryfallId": "7256451f-0122-452a-88e8-0fb0f6bea3f3",
+  "oracleId": "16e9c452-6288-4da8-813d-2eb6b7a538c3",
+  "set": "blb",
+  "collectorNumber": "202",
+  "rarity": "rare",
+  "manaCost": "{G}",
+  "typeLine": "Creature — Frog Warrior",
+  "oracleText": "Trample\nWhenever another Frog, Rabbit, Raccoon, or Squirrel you control enters, put a +1/+1 counter on this creature.",
+  "power": "1",
+  "toughness": "1",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Trample"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/2/7256451f-0122-452a-88e8-0fb0f6bea3f3.jpg?1783910800",
+   "normal": "https://cards.scryfall.io/normal/front/7/2/7256451f-0122-452a-88e8-0fb0f6bea3f3.jpg?1783910800",
+   "large": "https://cards.scryfall.io/large/front/7/2/7256451f-0122-452a-88e8-0fb0f6bea3f3.jpg?1783910800",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/2/7256451f-0122-452a-88e8-0fb0f6bea3f3.jpg?1783910800"
+  }
+ },
+ {
+  "name": "Bellowing Crier",
+  "scryfallId": "ca2215dd-6300-49cf-b9b2-3a840b786c31",
+  "oracleId": "f2f3be8a-5ea1-47c2-8104-747f4589f5e6",
+  "set": "blb",
+  "collectorNumber": "42",
+  "rarity": "common",
+  "manaCost": "{1}{U}",
+  "typeLine": "Creature — Frog Advisor",
+  "oracleText": "When this creature enters, draw a card, then discard a card.",
+  "power": "2",
+  "toughness": "1",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/a/ca2215dd-6300-49cf-b9b2-3a840b786c31.jpg?1783910852",
+   "normal": "https://cards.scryfall.io/normal/front/c/a/ca2215dd-6300-49cf-b9b2-3a840b786c31.jpg?1783910852",
+   "large": "https://cards.scryfall.io/large/front/c/a/ca2215dd-6300-49cf-b9b2-3a840b786c31.jpg?1783910852",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/a/ca2215dd-6300-49cf-b9b2-3a840b786c31.jpg?1783910852"
+  }
+ },
+ {
+  "name": "Pond Prophet",
+  "scryfallId": "fb959e74-61ea-453d-bb9f-ad0183c0e1b1",
+  "oracleId": "6eabebdf-c1a3-4789-a67f-859f0957c5df",
+  "set": "blb",
+  "collectorNumber": "229",
+  "rarity": "common",
+  "manaCost": "{G/U}{G/U}",
+  "typeLine": "Creature — Frog Advisor",
+  "oracleText": "When this creature enters, draw a card.",
+  "power": "1",
+  "toughness": "1",
+  "colors": [
+   "G",
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/b/fb959e74-61ea-453d-bb9f-ad0183c0e1b1.jpg?1783910791",
+   "normal": "https://cards.scryfall.io/normal/front/f/b/fb959e74-61ea-453d-bb9f-ad0183c0e1b1.jpg?1783910791",
+   "large": "https://cards.scryfall.io/large/front/f/b/fb959e74-61ea-453d-bb9f-ad0183c0e1b1.jpg?1783910791",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/b/fb959e74-61ea-453d-bb9f-ad0183c0e1b1.jpg?1783910791"
+  }
+ },
+ {
+  "name": "Three Tree Scribe",
+  "scryfallId": "ea2ca1b3-4c1a-4be5-b321-f57db5ff0528",
+  "oracleId": "7d2a7741-1dff-4fac-92d8-abea24f23f97",
+  "set": "blb",
+  "collectorNumber": "199",
+  "rarity": "uncommon",
+  "manaCost": "{1}{G}",
+  "typeLine": "Creature — Frog Druid",
+  "oracleText": "Whenever this creature or another creature you control leaves the battlefield without dying, put a +1/+1 counter on target creature you control.",
+  "power": "2",
+  "toughness": "3",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/a/ea2ca1b3-4c1a-4be5-b321-f57db5ff0528.jpg?1783910801",
+   "normal": "https://cards.scryfall.io/normal/front/e/a/ea2ca1b3-4c1a-4be5-b321-f57db5ff0528.jpg?1783910801",
+   "large": "https://cards.scryfall.io/large/front/e/a/ea2ca1b3-4c1a-4be5-b321-f57db5ff0528.jpg?1783910801",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/a/ea2ca1b3-4c1a-4be5-b321-f57db5ff0528.jpg?1783910801"
+  }
+ },
+ {
+  "name": "Dour Port-Mage",
+  "scryfallId": "6402133e-eed1-4a46-9667-8b7a310362c1",
+  "oracleId": "cf58e309-00e8-438e-813e-2e1c1002db23",
+  "set": "blb",
+  "collectorNumber": "47",
+  "rarity": "rare",
+  "manaCost": "{1}{U}",
+  "typeLine": "Creature — Frog Wizard",
+  "oracleText": "Whenever one or more other creatures you control leave the battlefield without dying, draw a card.\n{1}{U}, {T}: Return another target creature you control to its owner's hand.",
+  "power": "1",
+  "toughness": "3",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/4/6402133e-eed1-4a46-9667-8b7a310362c1.jpg?1783910852",
+   "normal": "https://cards.scryfall.io/normal/front/6/4/6402133e-eed1-4a46-9667-8b7a310362c1.jpg?1783910852",
+   "large": "https://cards.scryfall.io/large/front/6/4/6402133e-eed1-4a46-9667-8b7a310362c1.jpg?1783910852",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/4/6402133e-eed1-4a46-9667-8b7a310362c1.jpg?1783910852"
+  }
+ },
+ {
+  "name": "Stickytongue Sentinel",
+  "scryfallId": "b5fa9651-b217-4f93-9c46-9bdb11feedcb",
+  "oracleId": "899f0931-4e9b-4fa8-9f6d-d13a7de05334",
+  "set": "blb",
+  "collectorNumber": "193",
+  "rarity": "common",
+  "manaCost": "{2}{G}",
+  "typeLine": "Creature — Frog Warrior",
+  "oracleText": "Reach\nWhen this creature enters, return up to one other target permanent you control to its owner's hand.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Reach"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/5/b5fa9651-b217-4f93-9c46-9bdb11feedcb.jpg?1783910804",
+   "normal": "https://cards.scryfall.io/normal/front/b/5/b5fa9651-b217-4f93-9c46-9bdb11feedcb.jpg?1783910804",
+   "large": "https://cards.scryfall.io/large/front/b/5/b5fa9651-b217-4f93-9c46-9bdb11feedcb.jpg?1783910804",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/5/b5fa9651-b217-4f93-9c46-9bdb11feedcb.jpg?1783910804"
+  }
+ },
+ {
+  "name": "Long River Lurker",
+  "scryfallId": "7c267719-cd03-4003-b281-e732d5e42a1e",
+  "oracleId": "c65c4d01-29da-47e6-993c-a265cf1f198c",
+  "set": "blb",
+  "collectorNumber": "57",
+  "rarity": "uncommon",
+  "manaCost": "{2}{U}",
+  "typeLine": "Creature — Frog Scout",
+  "oracleText": "Ward {1}\nOther Frogs you control have ward {1}.\nWhen this creature enters, target creature you control can't be blocked this turn. Whenever that creature deals combat damage this turn, you may exile it. If you do, return it to the battlefield under its owner's control.",
+  "power": "2",
+  "toughness": "3",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Ward"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/c/7c267719-cd03-4003-b281-e732d5e42a1e.jpg?1783910847",
+   "normal": "https://cards.scryfall.io/normal/front/7/c/7c267719-cd03-4003-b281-e732d5e42a1e.jpg?1783910847",
+   "large": "https://cards.scryfall.io/large/front/7/c/7c267719-cd03-4003-b281-e732d5e42a1e.jpg?1783910847",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/c/7c267719-cd03-4003-b281-e732d5e42a1e.jpg?1783910847"
+  }
+ },
+ {
+  "name": "Waterspout Warden",
+  "scryfallId": "35898b39-98e2-405b-8f18-0e054bd2c29e",
+  "oracleId": "5e11386f-4667-47f7-b280-eabd927e4a46",
+  "set": "blb",
+  "collectorNumber": "80",
+  "rarity": "common",
+  "manaCost": "{2}{U}",
+  "typeLine": "Creature — Frog Soldier",
+  "oracleText": "Whenever this creature attacks, if another creature entered the battlefield under your control this turn, this creature gains flying until end of turn.",
+  "power": "3",
+  "toughness": "2",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/5/35898b39-98e2-405b-8f18-0e054bd2c29e.jpg?1783910840",
+   "normal": "https://cards.scryfall.io/normal/front/3/5/35898b39-98e2-405b-8f18-0e054bd2c29e.jpg?1783910840",
+   "large": "https://cards.scryfall.io/large/front/3/5/35898b39-98e2-405b-8f18-0e054bd2c29e.jpg?1783910840",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/5/35898b39-98e2-405b-8f18-0e054bd2c29e.jpg?1783910840"
+  }
+ },
+ {
+  "name": "Clement, the Worrywort",
+  "scryfallId": "7028130c-c91d-4bf7-b0b0-450f71107d7a",
+  "oracleId": "57ce5ebd-cfac-4bb9-b010-04d0c285be27",
+  "set": "blb",
+  "collectorNumber": "209",
+  "rarity": "rare",
+  "manaCost": "{1}{G}{U}",
+  "typeLine": "Legendary Creature — Frog Druid",
+  "oracleText": "Vigilance\nWhenever Clement or another creature you control enters, return up to one target creature you control with lesser mana value to its owner's hand.\nFrogs you control have \"{T}: Add {G} or {U}. Spend this mana only to cast a creature spell.\"",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "G",
+   "U"
+  ],
+  "keywords": [
+   "Vigilance"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/0/7028130c-c91d-4bf7-b0b0-450f71107d7a.jpg?1783910799",
+   "normal": "https://cards.scryfall.io/normal/front/7/0/7028130c-c91d-4bf7-b0b0-450f71107d7a.jpg?1783910799",
+   "large": "https://cards.scryfall.io/large/front/7/0/7028130c-c91d-4bf7-b0b0-450f71107d7a.jpg?1783910799",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/0/7028130c-c91d-4bf7-b0b0-450f71107d7a.jpg?1783910799"
+  }
+ },
+ {
+  "name": "Clifftop Lookout",
+  "scryfallId": "662d3bcc-65f3-4c69-8ea1-446870a1193d",
+  "oracleId": "446db5a4-21b0-44c1-b12b-d365313dd67a",
+  "set": "blb",
+  "collectorNumber": "168",
+  "rarity": "uncommon",
+  "manaCost": "{2}{G}",
+  "typeLine": "Creature — Frog Scout",
+  "oracleText": "Reach\nWhen this creature enters, reveal cards from the top of your library until you reveal a land card. Put that card onto the battlefield tapped and the rest on the bottom of your library in a random order.",
+  "power": "1",
+  "toughness": "2",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Reach"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/6/662d3bcc-65f3-4c69-8ea1-446870a1193d.jpg?1783910811",
+   "normal": "https://cards.scryfall.io/normal/front/6/6/662d3bcc-65f3-4c69-8ea1-446870a1193d.jpg?1783910811",
+   "large": "https://cards.scryfall.io/large/front/6/6/662d3bcc-65f3-4c69-8ea1-446870a1193d.jpg?1783910811",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/6/662d3bcc-65f3-4c69-8ea1-446870a1193d.jpg?1783910811"
+  }
+ },
+ {
+  "name": "Splash Lasher",
+  "scryfallId": "362ee125-35a0-46cd-a201-e6797d12d33a",
+  "oracleId": "0d0c4c91-683a-4563-a0b0-39f3c04f6307",
+  "set": "blb",
+  "collectorNumber": "73",
+  "rarity": "uncommon",
+  "manaCost": "{3}{U}",
+  "typeLine": "Creature — Frog Wizard",
+  "oracleText": "Offspring {1}{U} (You may pay an additional {1}{U} as you cast this spell. If you do, when this creature enters, create a 1/1 token copy of it.)\nWhen this creature enters, tap up to one target creature and put a stun counter on it. (If a permanent with a stun counter would become untapped, remove one from it instead.)",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Offspring"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/6/362ee125-35a0-46cd-a201-e6797d12d33a.jpg?1783910841",
+   "normal": "https://cards.scryfall.io/normal/front/3/6/362ee125-35a0-46cd-a201-e6797d12d33a.jpg?1783910841",
+   "large": "https://cards.scryfall.io/large/front/3/6/362ee125-35a0-46cd-a201-e6797d12d33a.jpg?1783910841",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/6/362ee125-35a0-46cd-a201-e6797d12d33a.jpg?1783910841"
+  }
+ },
+ {
+  "name": "Lilysplash Mentor",
+  "scryfallId": "64de7b1f-a03e-4407-91f1-e108a2f26735",
+  "oracleId": "20194297-f2a4-4473-95bc-7c6835e5b6b3",
+  "set": "blb",
+  "collectorNumber": "222",
+  "rarity": "uncommon",
+  "manaCost": "{2}{G}{U}",
+  "typeLine": "Creature — Frog Druid",
+  "oracleText": "Reach\n{1}{G}{U}: Exile another target creature you control, then return it to the battlefield under its owner's control with a +1/+1 counter on it. Activate only as a sorcery.",
+  "power": "4",
+  "toughness": "4",
+  "colors": [
+   "G",
+   "U"
+  ],
+  "keywords": [
+   "Reach"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/4/64de7b1f-a03e-4407-91f1-e108a2f26735.jpg?1783910795",
+   "normal": "https://cards.scryfall.io/normal/front/6/4/64de7b1f-a03e-4407-91f1-e108a2f26735.jpg?1783910795",
+   "large": "https://cards.scryfall.io/large/front/6/4/64de7b1f-a03e-4407-91f1-e108a2f26735.jpg?1783910795",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/4/64de7b1f-a03e-4407-91f1-e108a2f26735.jpg?1783910795"
+  }
+ },
+ {
+  "name": "Dreamdew Entrancer",
+  "scryfallId": "26bd6b0d-8606-4a37-8be3-a852f1a8e99c",
+  "oracleId": "b6b2d63f-5b8c-47ee-8712-58596e0e9e94",
+  "set": "blb",
+  "collectorNumber": "211",
+  "rarity": "rare",
+  "manaCost": "{2}{G}{U}",
+  "typeLine": "Creature — Frog Wizard",
+  "oracleText": "Reach\nWhen this creature enters, tap up to one target creature and put three stun counters on it. If you control that creature, draw two cards.",
+  "power": "3",
+  "toughness": "4",
+  "colors": [
+   "G",
+   "U"
+  ],
+  "keywords": [
+   "Reach"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/6/26bd6b0d-8606-4a37-8be3-a852f1a8e99c.jpg?1783910797",
+   "normal": "https://cards.scryfall.io/normal/front/2/6/26bd6b0d-8606-4a37-8be3-a852f1a8e99c.jpg?1783910797",
+   "large": "https://cards.scryfall.io/large/front/2/6/26bd6b0d-8606-4a37-8be3-a852f1a8e99c.jpg?1783910797",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/6/26bd6b0d-8606-4a37-8be3-a852f1a8e99c.jpg?1783910797"
+  }
+ },
+ {
+  "name": "Splash Portal",
+  "scryfallId": "adbaa356-28ba-487f-930a-a957d9960ab0",
+  "oracleId": "29b537f5-4d9f-40ed-b38b-e8faa2b5af7d",
+  "set": "blb",
+  "collectorNumber": "74",
+  "rarity": "uncommon",
+  "manaCost": "{U}",
+  "typeLine": "Sorcery",
+  "oracleText": "Exile target creature you control, then return it to the battlefield under its owner's control. If that creature is a Bird, Frog, Otter, or Rat, draw a card.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/d/adbaa356-28ba-487f-930a-a957d9960ab0.jpg?1783910841",
+   "normal": "https://cards.scryfall.io/normal/front/a/d/adbaa356-28ba-487f-930a-a957d9960ab0.jpg?1783910841",
+   "large": "https://cards.scryfall.io/large/front/a/d/adbaa356-28ba-487f-930a-a957d9960ab0.jpg?1783910841",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/d/adbaa356-28ba-487f-930a-a957d9960ab0.jpg?1783910841"
+  }
+ },
+ {
+  "name": "Polliwallop",
+  "scryfallId": "6bc4963c-d90b-4588-bdb7-85956e42a623",
+  "oracleId": "efd2a4ca-1bd0-4762-a997-f099326b1746",
+  "set": "blb",
+  "collectorNumber": "189",
+  "rarity": "common",
+  "manaCost": "{3}{G}",
+  "typeLine": "Instant",
+  "oracleText": "Affinity for Frogs (This spell costs {1} less to cast for each Frog you control.)\nTarget creature you control deals damage equal to twice its power to target creature you don't control.",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Affinity"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/b/6bc4963c-d90b-4588-bdb7-85956e42a623.jpg?1783910805",
+   "normal": "https://cards.scryfall.io/normal/front/6/b/6bc4963c-d90b-4588-bdb7-85956e42a623.jpg?1783910805",
+   "large": "https://cards.scryfall.io/large/front/6/b/6bc4963c-d90b-4588-bdb7-85956e42a623.jpg?1783910805",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/b/6bc4963c-d90b-4588-bdb7-85956e42a623.jpg?1783910805"
+  }
+ },
+ {
+  "name": "Galewind Moose",
+  "scryfallId": "58706bd8-558a-43b9-9f1e-c1ff0044203b",
+  "oracleId": "b0747a4f-d041-4750-aef5-a5d101696f65",
+  "set": "blb",
+  "collectorNumber": "173",
+  "rarity": "uncommon",
+  "manaCost": "{4}{G}{G}",
+  "typeLine": "Creature — Elemental Elk",
+  "oracleText": "Flash\nReach, vigilance, trample",
+  "power": "6",
+  "toughness": "6",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Reach",
+   "Vigilance",
+   "Trample",
+   "Flash"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/8/58706bd8-558a-43b9-9f1e-c1ff0044203b.jpg?1783910810",
+   "normal": "https://cards.scryfall.io/normal/front/5/8/58706bd8-558a-43b9-9f1e-c1ff0044203b.jpg?1783910810",
+   "large": "https://cards.scryfall.io/large/front/5/8/58706bd8-558a-43b9-9f1e-c1ff0044203b.jpg?1783910810",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/8/58706bd8-558a-43b9-9f1e-c1ff0044203b.jpg?1783910810"
+  }
+ },
+ {
+  "name": "Hivespine Wolverine",
+  "scryfallId": "821970a3-a291-4fe9-bb13-dfc54f9c3caf",
+  "oracleId": "312be209-dba5-4e6c-938e-1287642f67d4",
+  "set": "blb",
+  "collectorNumber": "177",
+  "rarity": "uncommon",
+  "manaCost": "{3}{G}{G}",
+  "typeLine": "Creature — Elemental Wolverine",
+  "oracleText": "When this creature enters, choose one —\n• Put a +1/+1 counter on target creature you control.\n• This creature fights target creature token.\n• Destroy target artifact or enchantment.",
+  "power": "5",
+  "toughness": "4",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Fight"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/2/821970a3-a291-4fe9-bb13-dfc54f9c3caf.jpg?1783910809",
+   "normal": "https://cards.scryfall.io/normal/front/8/2/821970a3-a291-4fe9-bb13-dfc54f9c3caf.jpg?1783910809",
+   "large": "https://cards.scryfall.io/large/front/8/2/821970a3-a291-4fe9-bb13-dfc54f9c3caf.jpg?1783910809",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/2/821970a3-a291-4fe9-bb13-dfc54f9c3caf.jpg?1783910809"
+  }
+ },
+ {
+  "name": "High Stride",
+  "scryfallId": "09c8cf4b-8e65-4a1c-b458-28b5ab56b390",
+  "oracleId": "ab0aea13-1dbc-424a-ab7e-cdb303036a56",
+  "set": "blb",
+  "collectorNumber": "176",
+  "rarity": "common",
+  "manaCost": "{G}",
+  "typeLine": "Instant",
+  "oracleText": "Target creature gets +1/+3 and gains reach until end of turn. Untap it.",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/9/09c8cf4b-8e65-4a1c-b458-28b5ab56b390.jpg?1783910809",
+   "normal": "https://cards.scryfall.io/normal/front/0/9/09c8cf4b-8e65-4a1c-b458-28b5ab56b390.jpg?1783910809",
+   "large": "https://cards.scryfall.io/large/front/0/9/09c8cf4b-8e65-4a1c-b458-28b5ab56b390.jpg?1783910809",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/9/09c8cf4b-8e65-4a1c-b458-28b5ab56b390.jpg?1783910809"
+  }
+ },
+ {
+  "name": "Pawpatch Formation",
+  "scryfallId": "b82c20ad-0f69-4822-ae76-770832cccdf7",
+  "oracleId": "fa99cf82-ebf1-4526-ab9c-b24eb2970f2a",
+  "set": "blb",
+  "collectorNumber": "186",
+  "rarity": "uncommon",
+  "manaCost": "{1}{G}",
+  "typeLine": "Instant",
+  "oracleText": "Choose one —\n• Destroy target creature with flying.\n• Destroy target enchantment.\n• Draw a card. Create a Food token. (It's an artifact with \"{2}, {T}, Sacrifice this token: You gain 3 life.\")",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Food"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/8/b82c20ad-0f69-4822-ae76-770832cccdf7.jpg?1783910805",
+   "normal": "https://cards.scryfall.io/normal/front/b/8/b82c20ad-0f69-4822-ae76-770832cccdf7.jpg?1783910805",
+   "large": "https://cards.scryfall.io/large/front/b/8/b82c20ad-0f69-4822-ae76-770832cccdf7.jpg?1783910805",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/8/b82c20ad-0f69-4822-ae76-770832cccdf7.jpg?1783910805"
+  }
  }
 ]

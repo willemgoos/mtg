@@ -25,7 +25,7 @@ import {
   untap,
 } from './context.ts';
 import { foodsOf } from './forage.ts';
-import { manaValue } from './mana.ts';
+import { canPayFrom, manaSources, manaValue } from './mana.ts';
 import { shuffleInPlace } from './rng.ts';
 import { checkCondition } from './triggers.ts';
 import type {
@@ -105,6 +105,33 @@ function damageBonus(ctx: Ctx, src: DamageSource, to: TargetChoice, combat: bool
   return n;
 }
 
+/** The spell with this id on the stack. */
+export function findSpell(ctx: Ctx, id: ObjectId) {
+  const item = ctx.s.stack.find((x) => x.kind === 'spell' && x.id === id);
+  return item?.kind === 'spell' ? item : undefined;
+}
+
+/** Counters a spell (unless it can't be countered). */
+export function counterSpell(ctx: Ctx, id: ObjectId): void {
+  const i = ctx.s.stack.findIndex((x) => x.kind === 'spell' && x.id === id);
+  const item = ctx.s.stack[i];
+  if (!item || item.kind !== 'spell') return;
+  const controller = item.controller;
+  const protectedByStatic =
+    (def(ctx, item.id).types.includes('Instant') || def(ctx, item.id).types.includes('Sorcery')) &&
+    ctx.s.battlefield.some(
+      (b) =>
+        obj(ctx, b).controller === controller &&
+        def(ctx, b).abilities.some(
+          (a) => a.kind === 'static' && a.effect.kind === 'instantsAndSorceriesUncounterable',
+        ),
+    );
+  if (def(ctx, item.id).uncounterable || protectedByStatic) return;
+  ctx.s.stack.splice(i, 1);
+  emit(ctx, { type: 'countered', id: item.id });
+  moveObject(ctx, item.id, item.flashback ? 'exile' : 'graveyard');
+}
+
 export function changeLife(ctx: Ctx, player: PlayerId, delta: number): void {
   if (delta === 0) return;
   const p = ctx.s.players[player];
@@ -175,6 +202,10 @@ export function resolveRef(ctx: Ctx, es: EffectSource, ref: Ref): TargetChoice[]
     const o = es.subject && onBattlefield(ctx, es.subject);
     return o ? [{ object: { id: o.id, zcc: o.zcc } }] : [];
   }
+  if (ref === 'chosen') {
+    const o = es.chosen && onBattlefield(ctx, es.chosen);
+    return o ? [{ object: { id: o.id, zcc: o.zcc } }] : [];
+  }
   const sourceId = es.source?.id;
   return (
     ref.each === 'permanent'
@@ -211,6 +242,7 @@ export function resolveAmount(ctx: Ctx, es: EffectSource, amount: Amount): numbe
   }
   if ('event' in amount) return es.amount ?? 0;
   if ('sacrificedPower' in amount) return Math.max(0, es.lkiPower ?? 0);
+  if ('x' in amount) return (es.x ?? 0) * (amount.times ?? 1) + (amount.plus ?? 0);
   if ('countersOn' in amount) {
     const id = objectsOf(ctx, es, amount.countersOn)[0];
     if (id) return obj(ctx, id).plusOneCounters;
@@ -271,10 +303,12 @@ export function runEffects(
       e.kind === 'destroyAll' ||
       e.kind === 'lookAndTake' ||
       e.kind === 'chooseFromOpponentHand' ||
-      e.kind === 'choose'
+      e.kind === 'choose' ||
+      e.kind === 'chooseYourPermanent' ||
+      e.kind === 'counterUnlessPays'
     ) {
       const lib = ctx.s.players[es.controller].library;
-      const { controller, source, sourceDefId, targets, lkiPower, subject, amount } = es;
+      const { controller, source, sourceDefId, targets, lkiPower, subject, amount, chosen, x } = es;
       const resume: PausedResolution = {
         controller,
         source,
@@ -283,6 +317,8 @@ export function runEffects(
         ...(lkiPower !== undefined ? { lkiPower } : {}),
         ...(subject ? { subject } : {}),
         ...(amount !== undefined ? { amount } : {}),
+        ...(chosen ? { chosen } : {}),
+        ...(x !== undefined ? { x } : {}),
         effects: list.slice(i + 1),
         item,
       };
@@ -332,6 +368,46 @@ export function runEffects(
           player: controller,
           options,
           ...(e.until ? { thisTurn: true } : {}),
+          resume,
+          thenPriority,
+        };
+      } else if (e.kind === 'chooseYourPermanent') {
+        const sourceId = es.source?.id;
+        const options = ctx.s.battlefield.filter(
+          (id) =>
+            id !== sourceId &&
+            obj(ctx, id).controller === controller &&
+            matchesFilter(ctx, id, e.filter, sourceId),
+        );
+        if (options.length === 0) {
+          list.splice(i + 1, 0, ...(e.otherwise ?? []));
+          continue;
+        }
+        ctx.s.decision = {
+          kind: 'chooseObject',
+          player: controller,
+          options,
+          then: e.then,
+          otherwise: e.otherwise ?? [],
+          resume,
+          thenPriority,
+        };
+      } else if (e.kind === 'counterUnlessPays') {
+        // A spell target: resolveRef only finds permanents.
+        const t =
+          typeof e.what === 'object' && 'target' in e.what ? es.targets[e.what.target] : null;
+        const item = t && 'object' in t ? findSpell(ctx, t.object.id) : undefined;
+        if (!item) continue;
+        // Can't pay: countered straight away.
+        if (!canPayFrom(e.cost, manaSources(ctx, item.controller))) {
+          counterSpell(ctx, item.id);
+          continue;
+        }
+        ctx.s.decision = {
+          kind: 'payOrCounter',
+          player: item.controller,
+          spell: item.id,
+          cost: e.cost,
           resume,
           thenPriority,
         };
@@ -601,6 +677,7 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
       for (let i = 0; i < n; i++) {
         const t = createObject(ctx, e.token, owner, 'battlefield', true);
         if (defOf(ctx, e.token).entersTapped || e.tapped) t.tapped = true;
+        if (e.counters) t.plusOneCounters += e.counters;
         if (e.attacking && ctx.s.combat) {
           // "Tapped and attacking": attacking the same player, never declared (no attack triggers).
           t.tapped = true;
@@ -650,25 +727,10 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
     case 'counter': {
       const t = typeof e.what === 'object' && 'target' in e.what ? es.targets[e.what.target] : null;
       if (!t || !('object' in t)) return;
-      const i = ctx.s.stack.findIndex((x) => x.kind === 'spell' && x.id === t.object.id);
-      const item = ctx.s.stack[i];
-      if (!item || item.kind !== 'spell') return;
+      const item = findSpell(ctx, t.object.id);
+      if (!item) return;
       const controller = item.controller;
-      const protectedByStatic =
-        (def(ctx, item.id).types.includes('Instant') ||
-          def(ctx, item.id).types.includes('Sorcery')) &&
-        ctx.s.battlefield.some(
-          (id) =>
-            obj(ctx, id).controller === controller &&
-            def(ctx, id).abilities.some(
-              (a) => a.kind === 'static' && a.effect.kind === 'instantsAndSorceriesUncounterable',
-            ),
-        );
-      if (!def(ctx, item.id).uncounterable && !protectedByStatic) {
-        ctx.s.stack.splice(i, 1);
-        emit(ctx, { type: 'countered', id: item.id });
-        moveObject(ctx, item.id, item.flashback ? 'exile' : 'graveyard');
-      }
+      counterSpell(ctx, item.id);
       if (e.controllerTokens)
         runEffect(ctx, { ...es, controller }, { kind: 'createToken', ...e.controllerTokens });
       return;
@@ -775,7 +837,50 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
     case 'lookAndTake':
     case 'chooseFromOpponentHand':
     case 'choose':
+    case 'chooseYourPermanent':
+    case 'counterUnlessPays':
       return; // handled by runEffects
+    case 'blink':
+      for (const id of objectsOf(ctx, es, e.what)) {
+        const owner = obj(ctx, id).owner;
+        const token = obj(ctx, id).isToken;
+        moveObject(ctx, id, 'exile');
+        // A token ceases to exist in exile.
+        if (token || !ctx.s.objects[id]) continue;
+        moveObject(ctx, id, 'battlefield', { controller: owner });
+        if (e.counters) obj(ctx, id).plusOneCounters += e.counters;
+      }
+      return;
+    case 'revealUntil': {
+      const lib = ctx.s.players[es.controller].library;
+      const i = lib.findIndex((id) => cardMatches(ctx, id, e.filter));
+      const revealed = lib.slice(0, i < 0 ? lib.length : i);
+      if (i >= 0) {
+        const found = lib[i]!;
+        if (e.to === 'hand') moveObject(ctx, found, 'hand');
+        else {
+          moveObject(ctx, found, 'battlefield', { controller: es.controller });
+          obj(ctx, found).tapped = true;
+        }
+        emit(ctx, { type: 'revealed', player: es.controller, id: found });
+      }
+      lib.splice(0, revealed.length);
+      shuffleInPlace(ctx.s.rng, revealed);
+      lib.push(...revealed);
+      return;
+    }
+    case 'blinkOnCombatDamage':
+      for (const id of objectsOf(ctx, es, e.what))
+        ctx.s.effects.push({
+          timestamp: newTimestamp(ctx),
+          affected: { id, zcc: obj(ctx, id).zcc },
+          power: 0,
+          toughness: 0,
+          keywords: [],
+          blinkOnCombatDamage: true,
+          expires: 'endOfTurn',
+        });
+      return;
     case 'putInLibrary':
       for (const id of objectsOf(ctx, es, e.what))
         moveObject(ctx, id, 'library', { position: e.position });

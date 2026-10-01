@@ -223,6 +223,10 @@ export function Board({
       if (d.foods.includes(id)) act({ type: 'forage', player: HUMAN, choice: id });
       return;
     }
+    if (d.kind === 'chooseObject') {
+      if (d.options.includes(id)) act({ type: 'chooseCard', player: HUMAN, card: id });
+      return;
+    }
     const o = view.objects[id]!;
     if (o.zone !== 'battlefield') {
       const acts = handActions(legal, id);
@@ -301,6 +305,7 @@ export function Board({
     if (options) return options.has(`obj:${id}`) ? 'option' : null;
     if (myDecision && d.kind === 'sacrifice') return d.options.includes(id) ? 'option' : null;
     if (myDecision && d.kind === 'forage') return d.foods.includes(id) ? 'option' : null;
+    if (myDecision && d.kind === 'chooseObject') return d.options.includes(id) ? 'option' : null;
     if (id === blocker) return 'selected';
     if (declaredAttackers.has(id)) return 'attacking';
     if (blocking.has(id)) return 'blocking';
@@ -410,13 +415,15 @@ export function Board({
         targeting.chosen.length === 0 &&
         (first?.type === 'castSpell' || first?.type === 'activateAbility')
           ? first.sacrifice
-            ? 'a creature'
+            ? 'a creature to sacrifice'
             : forageFood(first)
-              ? 'a Food'
-              : null
+              ? 'a Food to sacrifice'
+              : first.type === 'castSpell' && first.discard
+                ? 'a card to discard'
+                : null
           : null;
       const prompt = paying
-        ? `${targeting.label}: choose ${paying} to sacrifice`
+        ? `${targeting.label}: choose ${paying}`
         : `${targeting.label}: choose ${n > 1 ? `target ${targeting.chosen.length + 1} of ${n}` : 'a target'}`;
       if (targeting.skip) return { prompt, primary: ['Skip', () => act(targeting.skip!)] };
       if (d.kind === 'chooseTriggerTargets') return { prompt };
@@ -498,6 +505,21 @@ export function Board({
       }
       case 'chooseOption':
         return { prompt: `${nameOf(d.resume.sourceDefId)}: choose one` };
+      case 'chooseObject':
+        return { prompt: `${nameOf(d.resume.sourceDefId)}: choose one of your permanents` };
+      case 'payOrCounter': {
+        const pay = legal.find((a) => a.type === 'chooseEffect' && a.accept);
+        return {
+          prompt: `${nameOf(d.resume.sourceDefId)}: pay ${manaText(d.cost)} or your spell is countered`,
+          ...(pay
+            ? { primary: [`Pay ${manaText(d.cost)}`, () => act(pay)] as [string, () => void] }
+            : {}),
+          secondary: [
+            "Don't pay",
+            () => act({ type: 'chooseEffect', player: HUMAN, accept: false }),
+          ] as [string, () => void],
+        };
+      }
       case 'chooseFromHand':
         return { prompt: 'Choose a card from your opponent’s hand' };
       case 'forageExile':
@@ -1233,6 +1255,7 @@ function castLabel(defId: CardDefId, a: Action): string {
       ? 'Forage: exile three cards from your graveyard'
       : 'Forage: sacrifice a Food';
   if (a.type === 'activateAbility') return 'Activate';
+  if (a.x !== undefined) return `X = ${a.x}`;
   const def = cardDb.get(defId);
   if (a.mode !== undefined) return def?.modes?.[a.mode]?.label ?? `Mode ${a.mode + 1}`;
   if (def?.sacrificeOrPay)

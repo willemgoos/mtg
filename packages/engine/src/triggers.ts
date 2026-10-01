@@ -34,6 +34,11 @@ export function checkCondition(
   }
   if (c.kind === 'amountAtLeast')
     return countOf(ctx, controller, c.amount, false, self?.id) >= c.min;
+  if (c.kind === 'targetControlledByYou') {
+    const t = targets?.[c.target];
+    const o = t && 'object' in t ? ctx.s.objects[t.object.id] : undefined;
+    return !!o && o.zone === 'battlefield' && o.controller === controller;
+  }
   if (c.kind === 'lifeThisTurn') {
     const p = c.who === 'you' ? controller : other(controller);
     const gained = ctx.s.turn.lifeGains[p] > 0;
@@ -116,6 +121,12 @@ function queue(
 ): void {
   // "This ability triggers only once each turn."
   const a = defOf(ctx, o.defId).abilities[index];
+  // "Whenever one or more ...": once for events collected together.
+  if (a?.kind === 'triggered' && a.batch) {
+    const key = `${o.id}:${o.zcc}:${index}`;
+    if (ctx.batched.has(key)) return;
+    ctx.batched.add(key);
+  }
   if (a?.kind === 'triggered' && a.oncePerTurn) {
     if (o.onceTurns?.[index] === ctx.s.turn.number) return;
     o.onceTurns = { ...o.onceTurns, [index]: ctx.s.turn.number };
@@ -208,6 +219,27 @@ function detect(ctx: Ctx, ev: GameEvent): void {
             return false;
           },
           moved,
+        );
+      }
+      if (
+        ev.from === 'battlefield' &&
+        ev.to !== 'graveyard' &&
+        movedDef.types.includes('Creature')
+      ) {
+        const was = moved?.controller ?? moved?.owner;
+        // "This creature ... leaves": it looks back from where it went.
+        if (moved)
+          movedDef.abilities.forEach((a, i) => {
+            if (
+              a.kind === 'triggered' &&
+              a.trigger.on === 'leavesWithoutDying' &&
+              a.trigger.who === 'selfOrOther'
+            )
+              queue(ctx, moved, i, moved.owner);
+          });
+        forEachBattlefieldTrigger(
+          ctx,
+          (o, a) => a.trigger.on === 'leavesWithoutDying' && o.id !== ev.id && o.controller === was,
         );
       }
       if (
@@ -380,6 +412,18 @@ function detect(ctx: Ctx, ev: GameEvent): void {
       }
       const src = s.objects[ev.source];
       if (!src || src.zone !== 'battlefield') return;
+      if (
+        s.effects.some(
+          (e) => e.blinkOnCombatDamage && e.affected.id === src.id && e.affected.zcc === src.zcc,
+        )
+      )
+        s.pendingTriggers.push({
+          source: { id: src.id, zcc: src.zcc },
+          sourceDefId: src.defId,
+          abilityIndex: -1,
+          controller: src.controller,
+          inline: [{ kind: 'may', effects: [{ kind: 'blink', what: 'self' }] }],
+        });
       if (src.controller === s.turn.activePlayer)
         forEachBattlefieldTrigger(
           ctx,
@@ -477,6 +521,7 @@ function detect(ctx: Ctx, ev: GameEvent): void {
 
 /** Scans events emitted since the last call and queues any triggered abilities. */
 export function collectTriggers(ctx: Ctx): void {
+  ctx.batched.clear();
   while (ctx.triggerCursor < ctx.events.length) {
     const ev = ctx.events[ctx.triggerCursor++]!;
     detect(ctx, ev);

@@ -76,6 +76,8 @@ function passiveAction(
     case 'optionalEffect':
     case 'forage':
     case 'chooseOption':
+    case 'chooseObject':
+    case 'payOrCounter':
       return bestByEvaluation(
         engine,
         s,

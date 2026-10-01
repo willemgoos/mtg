@@ -115,6 +115,12 @@ export interface CardDefinition {
   };
   /** Costs {amount} less if its first target matches (Dire Downdraft: an attacking or tapped creature). */
   costReductionIfTarget?: { filter: CardFilter; amount: number };
+  /** What it does when cast with flashback, if different ("if this spell was cast from a graveyard"). */
+  flashbackSpell?: SpellDef;
+  /** "As an additional cost to cast this spell, discard a card" (Sazacap's Brew). */
+  discardToCast?: boolean;
+  /** It enters tapped while this holds (Eddymurk Crab: if it's not your turn). */
+  entersTappedIf?: ConditionDef;
   /** "As an additional cost to cast this spell, forage or pay this" (Feed the Cycle). */
   forageOrPay?: ManaCost;
   /** Aura: what it enchants (chosen as a target when cast). */
@@ -172,6 +178,8 @@ export type AbilityDef =
       lifeCost?: number;
       /** Triggers while the card is in its owner's graveyard (Persistent Marshstalker). */
       fromGraveyard?: boolean;
+      /** "Whenever one or more ...": triggers once for events that happen together. */
+      batch?: boolean;
     }
   | { kind: 'static'; effect: StaticDef };
 
@@ -244,6 +252,11 @@ export type TriggerDef =
   | { on: 'valiant' }
   /** Whenever you gain or lose life (Wax-Wane Witness: "during your turn"). */
   | { on: 'youGainOrLoseLife'; duringYourTurn?: boolean }
+  /**
+   * A creature leaves the battlefield without dying (exiled, bounced, put into a
+   * library): this one or another you control ('selfOrOther'), or only others.
+   */
+  | { on: 'leavesWithoutDying'; who: 'selfOrOther' | 'other' }
   /** When you sacrifice this permanent (Carrot Cake). */
   | { on: 'sacrificed' }
   /** Whenever you sacrifice a permanent matching the filter (Camellia: a Food). */
@@ -297,6 +310,8 @@ export type ConditionDef =
   | { kind: 'handSize'; min: number }
   /** Every condition holds. */
   | { kind: 'all'; of: ConditionDef[] }
+  /** A chosen target is controlled by you (Dreamdew Entrancer). */
+  | { kind: 'targetControlledByYou'; target: number }
   /** At least one condition holds. */
   | { kind: 'any'; of: ConditionDef[] }
   /** The condition doesn't hold. */
@@ -337,6 +352,8 @@ export interface CardFilter {
   inCombatBlock?: boolean;
   /** "another target creature": excludes the source. */
   other?: boolean;
+  /** Mana value less than that of the creature that caused the trigger (Clement). */
+  lesserManaValueThanSubject?: boolean;
 }
 
 export interface TargetSpec {
@@ -367,7 +384,9 @@ export type Ref =
   | 'subject'
   | { each: 'creature'; controller?: 'you' | 'opponent'; filter?: CardFilter }
   /** The controller of a chosen target (Blooming Blast: "that creature's controller"). */
-  | { controllerOf: number };
+  | { controllerOf: number }
+  /** The permanent chosen by a 'chooseYourPermanent' effect. */
+  | 'chosen';
 
 export type Amount =
   | number
@@ -396,7 +415,9 @@ export type Amount =
   /** Creatures your opponents controlled that were exiled this turn (Vren). */
   | { count: 'opponentCreaturesExiledThisTurn' }
   /** The power of the creature sacrificed to pay for this (Wick). */
-  | { sacrificedPower: true };
+  | { sacrificedPower: true }
+  /** The value chosen for X (times `times`, plus `plus`). */
+  | { x: true; times?: number; plus?: number };
 
 export type EffectDef =
   | { kind: 'may'; effects: EffectDef[]; cost?: ManaCost }
@@ -445,6 +466,28 @@ export type EffectDef =
       ownerOf?: number;
       options: { label: string; effects: EffectDef[] }[];
     }
+  /** Exile permanents, then return them under their owners' control (with +1/+1 counters). */
+  | { kind: 'blink'; what: Ref; counters?: number }
+  /**
+   * Choose a permanent you control matching the filter (other than the
+   * source): `then` happens to it (the 'chosen' ref). With none to choose,
+   * `otherwise` happens.
+   */
+  | {
+      kind: 'chooseYourPermanent';
+      filter?: CardFilter;
+      then: EffectDef[];
+      otherwise?: EffectDef[];
+    }
+  /** Counter a spell unless its controller pays this. */
+  | { kind: 'counterUnlessPays'; what: Ref; cost: ManaCost }
+  /** Reveal cards from the top until one matches; it goes to hand or onto the battlefield tapped, the rest to the bottom. */
+  | { kind: 'revealUntil'; filter: CardFilter; to: 'hand' | 'battlefieldTapped' }
+  /**
+   * Until end of turn, whenever the creature deals combat damage, its
+   * controller may exile it and return it (Long River Lurker).
+   */
+  | { kind: 'blinkOnCombatDamage'; what: Ref }
   /** Put permanents on the top or bottom of their owners' libraries. */
   | { kind: 'putInLibrary'; what: Ref; position: 'top' | 'bottom' }
   /** Gain control of permanents until end of turn (Reptilian Recruiter). */
@@ -538,6 +581,8 @@ export type EffectDef =
       tapped?: boolean;
       /** Created under an opponent's control (a gift). */
       forOpponent?: boolean;
+      /** Each enters with this many +1/+1 counters. */
+      counters?: number;
     }
   /** Return all land cards from your graveyard to the battlefield tapped (World Shaper). */
   | { kind: 'returnLandsFromGraveyard' }
@@ -560,8 +605,13 @@ export type StaticDef =
   | { kind: 'cantBlock' }
   /** This permanent doesn't untap during its controller's untap step. */
   | { kind: 'doesntUntap' }
-  /** You may cast spells as though they had flash (High Fae Trickster). */
-  | { kind: 'flashForAll' }
+  /** You may cast spells (matching the filter) as though they had flash (High Fae Trickster). */
+  | { kind: 'flashForAll'; filter?: CardFilter }
+  /**
+   * Creatures you control matching the filter have "{T}: Add one of these"
+   * (Clement: Frogs, {G} or {U}, only for creature spells).
+   */
+  | { kind: 'grantMana'; filter: CardFilter; produces: ManaType[]; onlyForCreatures?: boolean }
   /** You may play an additional land on each of your turns (Loot). */
   | { kind: 'extraLandDrop' }
   /** Prevent all combat damage dealt to and by this creature (Fog Bank). */
@@ -721,6 +771,8 @@ export type StackItem =
       kicked?: boolean;
       /** Cast with flashback: exiled instead of going anywhere else. */
       flashback?: boolean;
+      /** The value chosen for X. */
+      x?: number;
     }
   | {
       kind: 'ability';
@@ -808,6 +860,8 @@ export interface ContinuousEffect {
   returnWhenDies?: ReturnWhenDies;
   /** Loses all abilities. */
   loseAbilities?: boolean;
+  /** "Whenever it deals combat damage this turn, you may exile it, then return it." */
+  blinkOnCombatDamage?: boolean;
   /** Base power and toughness. */
   basePT?: [number, number];
   /** Control change: who controlled it before (restored when this expires). */
@@ -829,6 +883,10 @@ export interface EffectSource {
   /** What caused the trigger. */
   subject?: ObjectRef;
   amount?: number;
+  /** The permanent picked by 'chooseYourPermanent'. */
+  chosen?: ObjectRef;
+  /** The value chosen for X. */
+  x?: number;
 }
 
 /**
@@ -1011,6 +1069,25 @@ export type Decision =
       resume: PausedResolution;
       thenPriority: PlayerId;
     }
+  | {
+      /** Choose a permanent you control (or, if `optional`, none). */
+      kind: 'chooseObject';
+      player: PlayerId;
+      options: ObjectId[];
+      then: EffectDef[];
+      otherwise: EffectDef[];
+      resume: PausedResolution;
+      thenPriority: PlayerId;
+    }
+  | {
+      /** Pay `cost` or the spell is countered. */
+      kind: 'payOrCounter';
+      player: PlayerId;
+      spell: ObjectId;
+      cost: ManaCost;
+      resume: PausedResolution;
+      thenPriority: PlayerId;
+    }
   | { kind: 'gameOver' };
 
 export interface GameState {
@@ -1062,6 +1139,10 @@ export type Action =
       sacrifice?: ObjectId;
       /** Forage as an additional cost: the Food to sacrifice, or 'graveyard' to exile three cards. */
       forage?: ObjectId | 'graveyard';
+      /** The card discarded as an additional cost (Sazacap's Brew). */
+      discard?: ObjectId;
+      /** The value chosen for X. */
+      x?: number;
       /** Mana sources to tap. Omitted: the engine picks. */
       payWith?: ObjectId[];
     }

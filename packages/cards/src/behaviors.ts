@@ -2184,6 +2184,11 @@ export const TOKENS: CardDefinition[] = [
   token('bat-token', 'Bat', 'B', ['Bat'], 1, 1, ['flying']),
   token('snail-token', 'Snail', 'B', ['Snail'], 1, 1),
   {
+    ...token('otter-token', 'Otter', 'U', ['Otter'], 1, 1),
+    colors: ['U', 'R'],
+    abilities: [prowess],
+  },
+  {
     // Vren's Rats: "This token gets +1/+1 for each other Rat you control."
     ...token('vren-rat-token', 'Rat', 'B', ['Rat'], 1, 1),
     abilities: [

@@ -1,9 +1,9 @@
-import { canTapForAbility, isCreature, matchesFilter } from './characteristics.ts';
+import { canTapForAbility, cardMatches, isCreature, matchesFilter } from './characteristics.ts';
 import { blockViolations, canAttack, canBlock, defenderOf } from './combat.ts';
 import { type Ctx, def, obj } from './context.ts';
 import { forageChoices } from './forage.ts';
 import { canPayFrom, manaSources } from './mana.ts';
-import { castVariants } from './spells.ts';
+import { castVariants, spellTags } from './spells.ts';
 import {
   castCost,
   countersYouControl,
@@ -99,11 +99,22 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
   const sorcery = sorceryTiming(ctx, player);
   const sources = manaSources(ctx, player);
 
-  const flashForAll = hasStatic(ctx, player, 'flashForAll');
+  // "You may cast (noncreature) spells as though they had flash."
+  const flashFilters = s.battlefield.flatMap((id) =>
+    obj(ctx, id).controller === player
+      ? def(ctx, id).abilities.flatMap((a) =>
+          a.kind === 'static' && a.effect.kind === 'flashForAll' ? [a.effect.filter ?? {}] : [],
+        )
+      : [],
+  );
   const restricted = s.battlefield.some(
     (id) =>
       obj(ctx, id).controller === player &&
-      def(ctx, id).abilities.some((a) => a.kind === 'mana' && !!a.onlyFor),
+      def(ctx, id).abilities.some(
+        (a) =>
+          (a.kind === 'mana' && !!a.onlyFor) ||
+          (a.kind === 'static' && a.effect.kind === 'grantMana' && !!a.effect.onlyForCreatures),
+      ),
   );
   const creatures = s.battlefield.filter(
     (id) => obj(ctx, id).controller === player && isCreature(ctx, id),
@@ -123,47 +134,68 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
       continue;
     }
     if (d.castOnlyIf && !checkCondition(ctx, d.castOnlyIf, player, obj(ctx, card))) continue;
-    const instantSpeed = d.types.includes('Instant') || d.keywords.includes('flash') || flashForAll;
-    // Restricted mana (Giada: only for Angels) counts for matching spells.
-    const pool =
-      restricted && d.subtypes.length ? manaSources(ctx, player, undefined, d.subtypes) : sources;
+    const instantSpeed =
+      d.types.includes('Instant') ||
+      d.keywords.includes('flash') ||
+      flashFilters.some((f) => cardMatches(ctx, card, f));
+    // Restricted mana (Giada: only for Angels; Villages: only for creature spells).
+    const pool = restricted ? manaSources(ctx, player, undefined, spellTags(d)) : sources;
+    // {X}: every affordable value (up to 10).
+    const xs = d.manaCost.x
+      ? Array.from(
+          { length: Math.min(10, Math.floor(pool.length / d.manaCost.x)) + 1 },
+          (_, x) => x,
+        )
+      : [undefined];
+    // A card to discard as an additional cost (Sazacap's Brew).
+    const discards = d.discardToCast ? ps.hand.filter((id) => id !== card) : [undefined];
+    if (d.discardToCast && discards.length === 0) continue;
     if (!instantSpeed && !sorcery) continue;
     for (const v of castVariants(d, zone)) {
       if (v.removeCounters && countersYouControl(ctx, player) < v.removeCounters) continue;
-      const base = castCost(ctx, player, card, {
-        mode: v.mode,
-        kicked: v.kicked,
-        sacrifice: v.sacrifice ? 'x' : undefined,
-        forage: v.forage ? 'graveyard' : undefined,
-      });
-      if (!canPayFrom(base, pool) && !d.costReductionIfTarget) continue;
-      const extra = {
-        ...(v.mode !== undefined ? { mode: v.mode } : {}),
-        ...(v.kicked ? { kicked: true } : {}),
-      };
-      const specs = v.spell?.targets ?? (d.enchant ? [d.enchant] : []);
-      const forages = v.forage ? forageChoices(ctx, player) : [undefined];
-      for (const sacrifice of v.sacrifice ? creatures : [undefined]) {
-        for (const targets of combosFor(specs, card, sacrifice)) {
-          const ward = wardCost(ctx, player, targets);
-          // Dire Downdraft costs less with some targets.
-          const cost = d.costReductionIfTarget
-            ? castCost(ctx, player, card, { mode: v.mode, kicked: v.kicked }, targets)
-            : base;
-          if ((ward.generic || d.costReductionIfTarget) && !canPayFrom(addCosts(cost, ward), pool))
-            continue;
-          if (wardLife(ctx, player, targets) > s.players[player].life) continue;
-          if (!wardPayable(ctx, player, targets, zone === 'hand' ? 1 : 0)) continue;
-          for (const forage of forages)
-            out.push({
-              type: 'castSpell',
-              player,
-              card,
-              targets,
-              ...extra,
-              ...(sacrifice ? { sacrifice } : {}),
-              ...(forage ? { forage } : {}),
-            });
+      for (const x of xs) {
+        const base = castCost(ctx, player, card, {
+          mode: v.mode,
+          kicked: v.kicked,
+          sacrifice: v.sacrifice ? 'x' : undefined,
+          forage: v.forage ? 'graveyard' : undefined,
+          x,
+        });
+        if (!canPayFrom(base, pool) && !d.costReductionIfTarget) continue;
+        const extra = {
+          ...(v.mode !== undefined ? { mode: v.mode } : {}),
+          ...(v.kicked ? { kicked: true } : {}),
+          ...(x !== undefined ? { x } : {}),
+        };
+        const specs = v.spell?.targets ?? (d.enchant ? [d.enchant] : []);
+        const forages = v.forage ? forageChoices(ctx, player) : [undefined];
+        for (const sacrifice of v.sacrifice ? creatures : [undefined]) {
+          for (const targets of combosFor(specs, card, sacrifice)) {
+            const ward = wardCost(ctx, player, targets);
+            // Dire Downdraft costs less with some targets.
+            const cost = d.costReductionIfTarget
+              ? castCost(ctx, player, card, { mode: v.mode, kicked: v.kicked, x }, targets)
+              : base;
+            if (
+              (ward.generic || d.costReductionIfTarget) &&
+              !canPayFrom(addCosts(cost, ward), pool)
+            )
+              continue;
+            if (wardLife(ctx, player, targets) > s.players[player].life) continue;
+            if (!wardPayable(ctx, player, targets, zone === 'hand' ? 1 : 0)) continue;
+            for (const forage of forages)
+              for (const discard of discards)
+                out.push({
+                  type: 'castSpell',
+                  player,
+                  card,
+                  targets,
+                  ...extra,
+                  ...(sacrifice ? { sacrifice } : {}),
+                  ...(forage ? { forage } : {}),
+                  ...(discard ? { discard } : {}),
+                });
+          }
         }
       }
     }
@@ -299,6 +331,15 @@ export function getLegalActions(ctx: Ctx, player: PlayerId): Action[] {
         : [{ type: 'chooseCard', player, card: null }];
     case 'chooseOption':
       return d.options.map((_, index) => ({ type: 'chooseOption', player, index }) as const);
+    case 'chooseObject':
+      return d.options.map((card) => ({ type: 'chooseCard', player, card }) as const);
+    case 'payOrCounter':
+      return [
+        { type: 'chooseEffect', player, accept: false },
+        ...(canPayFrom(d.cost, manaSources(ctx, player))
+          ? [{ type: 'chooseEffect' as const, player, accept: true }]
+          : []),
+      ];
     case 'forageExile':
       return s.players[player].graveyard.map(
         (card) => ({ type: 'chooseCard', player, card }) as const,
@@ -324,7 +365,11 @@ export function getLegalActions(ctx: Ctx, player: PlayerId): Action[] {
     case 'chooseTriggerTargets': {
       const t = d.trigger;
       const a = triggeredAbility(ctx, t);
-      const src = { controller: player, sourceId: t.source.id };
+      const src = {
+        controller: player,
+        sourceId: t.source.id,
+        ...(t.subject ? { subjectId: t.subject.id } : {}),
+      };
       const pool = manaSources(ctx, player);
       const out: Action[] = [];
       // "You may pay" and ward: only offered if they can pay.

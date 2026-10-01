@@ -64,6 +64,8 @@ export function createHeuristicBot(db: CardDb, name = 'heuristic'): Bot {
         case 'optionalEffect':
         case 'forage':
         case 'chooseOption':
+        case 'chooseObject':
+        case 'payOrCounter':
           return bestByEvaluation(engine, view, me, legal, 'stack');
         case 'chooseFromHand':
           return chooseFromHand(engine, view, legal);

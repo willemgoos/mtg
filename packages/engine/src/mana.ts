@@ -1,4 +1,4 @@
-import { canTapForAbility, isCreature } from './characteristics.ts';
+import { canTapForAbility, isCreature, matchesFilter } from './characteristics.ts';
 import { type Ctx, def, emit, obj, sacrifice, tap } from './context.ts';
 import { manaValue, pipsOf } from './cost.ts';
 import { checkCondition } from './triggers.ts';
@@ -49,6 +49,23 @@ export function manaSources(
       out.push(src);
       // Two mana from one tap: a second unit with the same id (tapping it twice is harmless).
       if (double) out.push({ ...src });
+    }
+  }
+  // Clement: Frogs you control have "{T}: Add {G} or {U}" (for creature spells).
+  for (const src of ctx.s.battlefield) {
+    const so = obj(ctx, src);
+    if (so.controller !== player) continue;
+    for (const a of def(ctx, src).abilities) {
+      if (a.kind !== 'static' || a.effect.kind !== 'grantMana') continue;
+      const g = a.effect;
+      if (g.onlyForCreatures && !forSubtypes.includes('Creature')) continue;
+      for (const id of ctx.s.battlefield) {
+        if (id === exclude || obj(ctx, id).controller !== player || out.some((x) => x.id === id))
+          continue;
+        if (!isCreature(ctx, id) || !matchesFilter(ctx, id, g.filter)) continue;
+        if (!canTapForAbility(ctx, id)) continue;
+        out.push({ id, produces: [...g.produces], isCreature: true, sacrifice: false });
+      }
     }
   }
   // Treasure last, then creatures, then flexible sources.

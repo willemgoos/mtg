@@ -1,5 +1,6 @@
 import { cardMatches, hasKeyword, isCreature, matchesFilter } from './characteristics.ts';
-import { type Ctx, def, deref, obj, other, refOf } from './context.ts';
+import { type Ctx, def, defOf, deref, obj, other, refOf } from './context.ts';
+import { manaValue } from './cost.ts';
 import type { ObjectId, PlayerId, TargetChoice, TargetSpec } from './types.ts';
 import { PLAYERS } from './types.ts';
 
@@ -7,6 +8,8 @@ export interface TargetingSource {
   controller: PlayerId;
   /** The permanent/card the spell or ability comes from (for "another" and hexproof). */
   sourceId?: ObjectId;
+  /** What caused a trigger (Clement: "with lesser mana value"). */
+  subjectId?: ObjectId;
 }
 
 function playerOk(ctx: Ctx, spec: TargetSpec, p: PlayerId, src: TargetingSource): boolean {
@@ -28,6 +31,14 @@ function permanentOk(ctx: Ctx, spec: TargetSpec, id: ObjectId, src: TargetingSou
       hasKeyword(ctx, id, 'hexproofFromInstants') &&
       src.sourceId &&
       def(ctx, src.sourceId).types.includes('Instant')
+    )
+      return false;
+  }
+  if (spec.filter?.lesserManaValueThanSubject && src.subjectId) {
+    const subject = ctx.s.objects[src.subjectId];
+    if (
+      subject &&
+      manaValue(def(ctx, id).manaCost) >= manaValue(defOf(ctx, subject.defId).manaCost)
     )
       return false;
   }

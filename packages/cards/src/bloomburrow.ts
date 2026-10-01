@@ -1,6 +1,7 @@
 import type { Behavior } from './build.ts';
 import { BATS_MICE } from './blb/bats-mice.ts';
 import { LIZARDS_RATS } from './blb/lizards-rats.ts';
+import { OTTERS_FROGS } from './blb/otters-frogs.ts';
 import { SQUIRRELS_RABBITS } from './blb/squirrels-rabbits.ts';
 
 /**
@@ -12,4 +13,5 @@ export const BLOOMBURROW_BEHAVIORS: Record<string, Behavior> = {
   ...SQUIRRELS_RABBITS,
   ...BATS_MICE,
   ...LIZARDS_RATS,
+  ...OTTERS_FROGS,
 };

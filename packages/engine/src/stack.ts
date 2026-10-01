@@ -19,12 +19,12 @@ import {
   cardMatches,
   matchesFilter,
 } from './characteristics.ts';
-import { changeLife, gainLife } from './effects.ts';
+import { changeLife, counterSpell, gainLife } from './effects.ts';
 import { foodsOf, payForage } from './forage.ts';
 import { anyTypeCost, manaValue, payMana, planPayment } from './mana.ts';
 import { shuffleInPlace } from './rng.ts';
 import { shuffleLibrary } from './setup.ts';
-import { addCosts, spellOnStack, variantOf } from './spells.ts';
+import { addCosts, spellOnStack, spellTags, variantOf } from './spells.ts';
 import { isTargetLegal } from './targets.ts';
 import { checkCondition, triggeredAbility } from './triggers.ts';
 import { givePriority } from './turn.ts';
@@ -51,6 +51,10 @@ export interface CastChoice {
   sacrifice?: ObjectId | undefined;
   /** Forage as an additional cost: a Food, or 'graveyard'. */
   forage?: ObjectId | 'graveyard' | undefined;
+  /** The card discarded as an additional cost. */
+  discard?: ObjectId | undefined;
+  /** The value chosen for X. */
+  x?: number | undefined;
 }
 
 /** Valiant needs to know what a player's spell or ability targeted. */
@@ -185,6 +189,8 @@ export function castCost(
         if (a.kind === 'static' && a.effect.kind === 'instantsAndSorceriesCostLess')
           reduce += a.effect.amount;
     }
+  // {X}: X is chosen as the spell is cast.
+  if (cost.x) cost = { ...cost, generic: cost.generic + cost.x * (choice.x ?? 0), x: 0 };
   if (reduce) cost = { ...cost, generic: Math.max(0, cost.generic - reduce) };
   // Vizier of the Menagerie: any type of mana for creature spells.
   if (d.types.includes('Creature') && hasStatic(ctx, player, 'creaturesFromTopOfLibrary'))
@@ -209,8 +215,9 @@ export function castSpell(
     castCost(ctx, player, card, choice, targets),
     wardCost(ctx, player, targets),
   );
-  const payment = planPayment(ctx, player, cost, payWith, undefined, d.subtypes);
+  const payment = planPayment(ctx, player, cost, payWith, undefined, spellTags(d));
   moveObject(ctx, card, 'stack', { controller: player });
+  if (choice.discard) moveObject(ctx, choice.discard, 'graveyard');
   if (choice.sacrifice) sacrificePermanent(ctx, choice.sacrifice);
   if (v.removeCounters) removeCounters(ctx, player, v.removeCounters);
   changeLife(ctx, player, -wardLife(ctx, player, targets));
@@ -223,6 +230,7 @@ export function castSpell(
     ...(choice.mode !== undefined ? { mode: choice.mode } : {}),
     ...(choice.kicked ? { kicked: true } : {}),
     ...(flashback ? { flashback: true } : {}),
+    ...(choice.x ? { x: choice.x } : {}),
   });
   payMana(ctx, payment);
   const cast = (ctx.s.turn.spellsCast ??= { p1: 0, p2: 0 });
@@ -401,6 +409,7 @@ export function resolveTop(ctx: Ctx): boolean {
         source: { id: o.id, zcc: o.zcc },
         sourceDefId: o.defId,
         targets,
+        ...(item.x !== undefined ? { x: item.x } : {}),
       };
       const paused = {
         kind: 'spell' as const,
@@ -500,6 +509,24 @@ export function answerChooseFromHand(ctx: Ctx, card: ObjectId | null): void {
   const d = ctx.s.decision;
   if (d.kind !== 'chooseFromHand') throw new Error('Not choosing from a hand');
   if (card) moveObject(ctx, card, d.then === 'discard' ? 'graveyard' : 'exile');
+  resume(ctx, d.resume, d.thenPriority);
+}
+
+/** A permanent chosen for 'chooseYourPermanent' (or none: its "otherwise"). */
+export function answerChooseObject(ctx: Ctx, card: ObjectId | null): void {
+  const d = ctx.s.decision;
+  if (d.kind !== 'chooseObject') throw new Error('Not choosing a permanent');
+  if (card === null) return continueWith(ctx, d.resume, d.otherwise, d.thenPriority);
+  const chosen = { id: card, zcc: obj(ctx, card).zcc };
+  continueWith(ctx, { ...d.resume, chosen }, d.then, d.thenPriority);
+}
+
+/** "Counter it unless its controller pays": pay (true) or let it be countered. */
+export function answerPayOrCounter(ctx: Ctx, pay: boolean): void {
+  const d = ctx.s.decision;
+  if (d.kind !== 'payOrCounter') throw new Error('Not paying');
+  if (pay) payMana(ctx, planPayment(ctx, d.player, d.cost, undefined));
+  else counterSpell(ctx, d.spell);
   resume(ctx, d.resume, d.thenPriority);
 }
 
