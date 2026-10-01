@@ -5,6 +5,8 @@ import {
   type ExpeditionRun,
   keepCount,
   type Pack,
+  type PackSet,
+  packSetOf,
   pendingPacks,
   runDeck,
 } from '../game/expedition.ts';
@@ -22,17 +24,18 @@ export const COLOR_NAMES: Record<Color, string> = {
   G: 'Green',
 };
 
-export function packName(p: Pack): string {
+export function packName(p: Pack, set: PackSet = 'fdn'): string {
   if (p.kind === 'color') return `${COLOR_NAMES[p.color]} pack`;
-  return p.kind === 'rare' ? 'Rare pack' : 'Foundations booster';
+  if (p.kind === 'rare') return 'Rare pack';
+  return set === 'blb' ? 'Bloomburrow booster' : 'Foundations booster';
 }
 
-/** Art for a pack: the first Foundations rare of its colour, or a mythic. */
-export function packArt(p: Pack): string {
+/** Art for a pack: the first rare of its set and colour, or a mythic. */
+export function packArt(p: Pack, set: PackSet = 'fdn'): string {
   const card =
     p.kind === 'color'
-      ? SCRYFALL.find((c) => c.set === 'fdn' && c.rarity === 'rare' && c.colors.join() === p.color)
-      : SCRYFALL.find((c) => c.set === 'fdn' && c.rarity === 'mythic');
+      ? SCRYFALL.find((c) => c.set === set && c.rarity === 'rare' && c.colors.join() === p.color)
+      : SCRYFALL.find((c) => c.set === set && c.rarity === 'mythic');
   return card?.image?.artCrop ?? '';
 }
 
@@ -83,6 +86,7 @@ export function PackOpening({
       <OnePack
         key={index}
         pack={run.build.packs[index]!}
+        set={packSetOf(run)}
         cards={packs[index]!}
         keep={Math.min(keepCount(run), packs[index]!.length)}
         eyebrow={`Expedition · ${runDeck(run).name}${packs.length > 1 ? ` · Pack ${index + 1} of ${packs.length}` : ''}`}
@@ -103,6 +107,7 @@ export function PackOpening({
 /** A Season booster: everything in it is yours, so the reveal ends with a single Done. */
 export function BoosterReveal({
   cards,
+  set,
   eyebrow,
   note,
   extra,
@@ -110,6 +115,8 @@ export function BoosterReveal({
 }: {
   /** Card names, or `wildcardName(rarity)`. */
   cards: string[];
+  /** Which set's booster. */
+  set?: PackSet;
   eyebrow: string;
   /** Shown under the title once every card is face up. */
   note?: ReactNode;
@@ -127,6 +134,7 @@ export function BoosterReveal({
     <>
       <OnePack
         pack={{ kind: 'booster' }}
+        {...(set ? { set } : {})}
         cards={sorted}
         keep={0}
         eyebrow={eyebrow}
@@ -143,6 +151,7 @@ type Phase = 'sealed' | 'tearing' | 'open' | 'leaving';
 
 function OnePack({
   pack,
+  set = 'fdn',
   cards,
   keep,
   eyebrow,
@@ -151,6 +160,8 @@ function OnePack({
   onKeep,
 }: {
   pack: Pack;
+  /** Which set's booster (for its art and name). */
+  set?: PackSet;
   cards: string[];
   /** How many cards to keep; 0 keeps them all. */
   keep: number;
@@ -313,7 +324,7 @@ function OnePack({
       <UiSize />
       <div className="start__title">
         <span className="start__eyebrow">{eyebrow}</span>
-        <h1>{packName(pack)}</h1>
+        <h1>{packName(pack, set)}</h1>
         <p>
           {phase === 'open' || phase === 'leaving'
             ? !keep
@@ -335,19 +346,19 @@ function OnePack({
               className={`booster ${phase === 'tearing' ? 'is-tearing' : ''}`}
               style={
                 {
-                  '--art': `url("${packArt(pack)}")`,
+                  '--art': `url("${packArt(pack, set)}")`,
                   '--glow': packGlow(pack),
                 } as React.CSSProperties
               }
               onClick={tear}
-              aria-label={`Open the ${packName(pack)}`}
+              aria-label={`Open the ${packName(pack, set)}`}
             >
               <span className="booster__crimp booster__crimp--top" />
               <span className="booster__art" />
               <span className="booster__foil" />
               <span className="booster__label">
                 <span className="booster__set">Foundations</span>
-                <span className="booster__kind">{packName(pack)}</span>
+                <span className="booster__kind">{packName(pack, set)}</span>
               </span>
               <span className="booster__crimp booster__crimp--bottom" />
             </button>

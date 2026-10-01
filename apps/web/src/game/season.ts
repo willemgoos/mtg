@@ -1,5 +1,6 @@
 import {
   ARENA_DECKS,
+  BLOOMBURROW_DECKS,
   cardDb,
   deckIds,
   isPlayable,
@@ -33,14 +34,10 @@ export interface WildcardMisses {
 export type SeasonBot = 'easy' | 'heuristic' | 'search';
 export type MatchOutcome = 'win' | 'loss' | 'draw' | 'concede';
 
-/**
- * Stable rules identities, independent of artwork/Scryfall printing IDs.
- * Bloomburrow cards aren't collectible in Season mode (no Bloomburrow packs yet).
- */
-export const SEASON_CARDS = new Map(
-  SCRYFALL.filter((c) => c.set !== 'blb').map((c) => [slug(c.name), c]),
-);
-export const SEASON_STARTERS = ARENA_DECKS.filter(isPlayable);
+/** Stable rules identities, independent of artwork/Scryfall printing IDs. */
+export const SEASON_CARDS = new Map(SCRYFALL.map((c) => [slug(c.name), c]));
+/** Starter decks on sale: Arena's Foundations ones and our Bloomburrow ones. */
+export const SEASON_STARTERS = [...ARENA_DECKS, ...BLOOMBURROW_DECKS].filter(isPlayable);
 /** Decks a Season bot can play: mostly Jump In pairs, plus the starter and Color Challenge decks. */
 export const isSeasonOpponent = (id: string): boolean => OPPONENT_DECKS.some((d) => d.id === id);
 const engine = createEngine(cardDb);
@@ -52,8 +49,10 @@ export interface SeasonDeck {
 }
 export interface SeasonPack {
   id: number;
-  kind: 'foundations';
+  kind: SeasonPackKind;
 }
+export type SeasonPackKind = 'foundations' | 'bloomburrow';
+export const SEASON_PACK_KINDS: readonly SeasonPackKind[] = ['foundations', 'bloomburrow'];
 export interface SeasonMatch {
   id: number;
   seed: number;
@@ -289,12 +288,17 @@ export function buySeasonStarter(save: SeasonSave, starterId: string, now: numbe
   next.decks.push({ id, name: list.name, cards: starterCounts(starterId) });
   return next;
 }
-export function buySeasonPack(save: SeasonSave, now: number): SeasonSave {
+export function buySeasonPack(
+  save: SeasonSave,
+  now: number,
+  kind: SeasonPackKind = 'foundations',
+): SeasonSave {
   requireSeason(save.coins >= PACK_PRICE, 'Not enough coins');
+  requireSeason(SEASON_PACK_KINDS.includes(kind), 'Unknown pack');
   const next = draft(save, now);
   next.coins -= PACK_PRICE;
   natural(next.nextPackId + 1);
-  next.packs.push({ id: next.nextPackId++, kind: 'foundations' });
+  next.packs.push({ id: next.nextPackId++, kind });
   return next;
 }
 export function craftSeasonCard(save: SeasonSave, id: string, now: number): SeasonSave {

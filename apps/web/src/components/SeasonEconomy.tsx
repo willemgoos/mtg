@@ -15,9 +15,11 @@ import {
   SEASON_STARTERS,
   STARTER_PRICE,
   type Rarity,
+  type SeasonPackKind,
   type SeasonSave,
 } from '../game/season.ts';
-import { FOUNDATIONS_PACK_COUNT } from '../game/seasonPacks.ts';
+import { BLOOMBURROW_SHEETS, FOUNDATIONS_PACK_COUNT } from '../game/seasonPacks.ts';
+import type { PackSet } from '../game/expedition.ts';
 import { artFor, BLURBS } from '../game/deckArt.ts';
 import { packArt } from './PackOpening.tsx';
 
@@ -239,16 +241,33 @@ export function RewardTracks({ save, update }: Omit<Props, 'error'>) {
 
 /* -------------------------------------------------------------- the store */
 
+/** The boosters on sale: Foundations and Bloomburrow. */
+const BOOSTERS: { kind: SeasonPackKind; set: PackSet; title: string; count: number }[] = [
+  { kind: 'foundations', set: 'fdn', title: 'Foundations', count: FOUNDATIONS_PACK_COUNT },
+  {
+    kind: 'bloomburrow',
+    set: 'blb',
+    title: 'Bloomburrow',
+    count: Object.values(BLOOMBURROW_SHEETS).reduce((n, sheet) => n + sheet.length, 0),
+  },
+];
+
+/** The set of a pack kind (for its art). */
+export const packSetOfKind = (kind: SeasonPackKind): PackSet =>
+  kind === 'bloomburrow' ? 'blb' : 'fdn';
+
 export function Booster({
   onClick,
   label,
   small,
   count,
+  set = 'fdn',
 }: {
   onClick?: () => void;
   label: string;
   small?: boolean;
   count?: number;
+  set?: PackSet;
 }) {
   return (
     <div className={`sbooster ${small ? 'sbooster--small' : ''}`}>
@@ -256,7 +275,7 @@ export function Booster({
         className="booster"
         style={
           {
-            '--art': `url("${packArt({ kind: 'booster' })}")`,
+            '--art': `url("${packArt({ kind: 'booster' }, set)}")`,
             '--glow': 'var(--brass)',
           } as CSSProperties
         }
@@ -285,58 +304,60 @@ export function SeasonStore({
   onOpenPacks,
 }: Props & { onOpenPacks: () => void }) {
   const [starter, setStarter] = useState<string | null>(null);
-  const [bought, setBought] = useState(0);
+  const [bought, setBought] = useState<Record<SeasonPackKind, number>>({
+    foundations: 0,
+    bloomburrow: 0,
+  });
   const list = SEASON_STARTERS.find((d) => d.id === starter);
-  const buy = (n: number) => {
+  const buy = (n: number, kind: SeasonPackKind) => {
     let done = 0;
-    for (let i = 0; i < n; i++) if (update((s) => buySeasonPack(s, now(s)))) done++;
-    if (done) setBought((b) => b + done);
+    for (let i = 0; i < n; i++) if (update((s) => buySeasonPack(s, now(s), kind))) done++;
+    if (done) setBought((b) => ({ ...b, [kind]: b[kind] + done }));
   };
   return (
     <div className="sstore">
-      <section className="sfeature sstore__pack">
-        <div
-          className="sfeature__wash"
-          style={{ backgroundImage: `url("${packArt({ kind: 'booster' })}")` }}
-        />
-        <Booster label="Foundations booster" />
-        <div className="sstore__copy">
-          <span className="stag">Booster</span>
-          <h2>Foundations</h2>
-          <p>
-            Eight cards: five commons, two uncommons and one rare or mythic. Any slot can turn into
-            a wildcard.
-          </p>
-          <div className="sstore__buy">
-            <button
-              className="hbtn hbtn--primary hbtn--lg"
-              disabled={save.coins < PACK_PRICE}
-              onClick={() => buy(1)}
-            >
-              Buy 1 · <Price n={PACK_PRICE} />
-            </button>
-            <button
-              className="hbtn hbtn--ghost"
-              disabled={save.coins < PACK_PRICE * 3}
-              onClick={() => buy(3)}
-            >
-              Buy 3 · <Price n={PACK_PRICE * 3} />
-            </button>
-          </div>
-          {bought > 0 && (
-            <p className="sstore__bought" role="status">
-              {bought} {bought === 1 ? 'pack' : 'packs'} added.{' '}
-              <button className="slink" onClick={onOpenPacks}>
-                Open now
-              </button>
+      {BOOSTERS.map((b) => (
+        <section key={b.kind} className="sfeature sstore__pack">
+          <div
+            className="sfeature__wash"
+            style={{ backgroundImage: `url("${packArt({ kind: 'booster' }, b.set)}")` }}
+          />
+          <Booster label={`${b.title} booster`} set={b.set} />
+          <div className="sstore__copy">
+            <span className="stag">Booster</span>
+            <h2>{b.title}</h2>
+            <p>
+              Eight cards: five commons, two uncommons and one rare or mythic. Any slot can turn
+              into a wildcard.
             </p>
-          )}
-          <p className="sfine">
-            Prototype pool: {FOUNDATIONS_PACK_COUNT} regular pack cards, no Special Guests yet.
-            Wildcard odds approximate Arena.
-          </p>
-        </div>
-      </section>
+            <div className="sstore__buy">
+              <button
+                className="hbtn hbtn--primary hbtn--lg"
+                disabled={save.coins < PACK_PRICE}
+                onClick={() => buy(1, b.kind)}
+              >
+                Buy 1 · <Price n={PACK_PRICE} />
+              </button>
+              <button
+                className="hbtn hbtn--ghost"
+                disabled={save.coins < PACK_PRICE * 3}
+                onClick={() => buy(3, b.kind)}
+              >
+                Buy 3 · <Price n={PACK_PRICE * 3} />
+              </button>
+            </div>
+            {bought[b.kind] > 0 && (
+              <p className="sstore__bought" role="status">
+                {bought[b.kind]} {bought[b.kind] === 1 ? 'pack' : 'packs'} added.{' '}
+                <button className="slink" onClick={onOpenPacks}>
+                  Open now
+                </button>
+              </p>
+            )}
+            <p className="sfine">{b.count} regular pack cards. Wildcard odds approximate Arena.</p>
+          </div>
+        </section>
+      ))}
 
       <div className="ssection">
         <h2>Starter decks</h2>
@@ -477,19 +498,22 @@ export function SeasonPacks({
   onStore,
 }: Omit<Props, 'error'> & { onOpen: () => void; onViewLast: () => void; onStore: () => void }) {
   const n = save.packs.length;
+  // The next pack to open, by its set.
+  const set = packSetOfKind(save.packs[0]?.kind ?? 'foundations');
+  const title = set === 'blb' ? 'Bloomburrow booster' : 'Foundations booster';
   return (
     <div className="spacks">
       <section className="sfeature spacks__stage">
         <div
           className="sfeature__wash"
-          style={{ backgroundImage: `url("${packArt({ kind: 'booster' })}")` }}
+          style={{ backgroundImage: `url("${packArt({ kind: 'booster' }, set)}")` }}
         />
         {n ? (
           <>
-            <Booster label="Open a Foundations booster" onClick={onOpen} count={n} />
+            <Booster label={`Open a ${title}`} onClick={onOpen} count={n} set={set} />
             <div className="spacks__copy">
               <span className="stag">{n === 1 ? '1 unopened pack' : `${n} unopened packs`}</span>
-              <h2>Foundations booster</h2>
+              <h2>{title}</h2>
               <p>
                 Click the pack or the button to open it. Everything inside is saved to your
                 collection first.

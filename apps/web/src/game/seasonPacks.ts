@@ -1,4 +1,4 @@
-import { FOUNDATIONS_PACK_CANDIDATES, cardDb } from '@mtg/cards';
+import { FOUNDATIONS_PACK_CANDIDATES, SCRYFALL, cardDb, slug } from '@mtg/cards';
 import { nextInt, type RngState } from '@mtg/engine';
 import {
   copyLimit,
@@ -6,8 +6,10 @@ import {
   RARITIES,
   requireSeason,
   type Counts,
+  type PackGenerator,
   type PackReward,
   type Rarity,
+  type SeasonPackKind,
   type WildcardMisses,
 } from './season.ts';
 
@@ -24,6 +26,27 @@ export const FOUNDATIONS_PACK_COUNT = Object.values(FOUNDATIONS_SHEETS).reduce(
   (n, sheet) => n + sheet.length,
   0,
 );
+
+/** Bloomburrow's booster cards: every card in the set but the basics. */
+export const BLOOMBURROW_SHEETS = Object.fromEntries(
+  RARITIES.map((rarity) => [
+    rarity,
+    SCRYFALL.filter((c) => c.set === 'blb' && c.rarity === rarity)
+      .map((c) => slug(c.name))
+      .filter((id) => cardDb.has(id) && !isBasic(id)),
+  ]),
+) as Record<Rarity, string[]>;
+
+const SHEETS: Record<SeasonPackKind, Record<Rarity, string[]>> = {
+  foundations: FOUNDATIONS_SHEETS,
+  bloomburrow: BLOOMBURROW_SHEETS,
+};
+
+/** The pack generator for a kind of booster. */
+export const packGenerator =
+  (kind: SeasonPackKind): PackGenerator =>
+  (rng, collection, misses) =>
+    generatePack(SHEETS[kind], rng, collection, misses);
 
 /** Uniform waiting time 1..(2*mean-1): mean exactly matches the published average.
  * Conditional hit chance rises after misses. High wildcards share a mean-15 stream
@@ -44,8 +67,13 @@ export function wildcardHit(
   misses[key] = hit ? 0 : misses[key] + 1;
   return hit;
 }
-export function protectedCard(rng: RngState, rarity: Rarity, collection: Readonly<Counts>): string {
-  const sheet = FOUNDATIONS_SHEETS[rarity];
+export function protectedCard(
+  rng: RngState,
+  rarity: Rarity,
+  collection: Readonly<Counts>,
+  sheets: Record<Rarity, string[]> = FOUNDATIONS_SHEETS,
+): string {
+  const sheet = sheets[rarity];
   requireSeason(sheet.length > 0, `No supported ${rarity} pack cards`);
   const incomplete =
     rarity === 'rare' || rarity === 'mythic'
@@ -55,6 +83,15 @@ export function protectedCard(rng: RngState, rarity: Rarity, collection: Readonl
   return choices[nextInt(rng, choices.length)]!;
 }
 export function generateFoundationsPack(
+  rng: RngState,
+  collection: Readonly<Counts>,
+  misses: WildcardMisses,
+): PackReward[] {
+  return generatePack(FOUNDATIONS_SHEETS, rng, collection, misses);
+}
+
+function generatePack(
+  sheets: Record<Rarity, string[]>,
   rng: RngState,
   collection: Readonly<Counts>,
   misses: WildcardMisses,
@@ -84,7 +121,7 @@ export function generateFoundationsPack(
   const quantities = { ...collection };
   return slots.map(({ rarity, wildcard }) => {
     if (wildcard) return { kind: 'wildcard', rarity };
-    const id = protectedCard(rng, rarity, quantities);
+    const id = protectedCard(rng, rarity, quantities, sheets);
     quantities[id] = (quantities[id] ?? 0) + 1;
     return { kind: 'card', cardId: id };
   });

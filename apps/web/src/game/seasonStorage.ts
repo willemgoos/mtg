@@ -9,11 +9,13 @@ import {
   replaySeasonMatch,
   requireSeason,
   isSeasonOpponent,
+  SEASON_PACK_KINDS,
   SEASON_STARTERS,
   SEASON_VERSION,
   validateCounts,
   type Counts,
   type SeasonMatch,
+  type SeasonPackKind,
   type SeasonSave,
 } from './season.ts';
 
@@ -152,7 +154,10 @@ export function validateSeasonSave(value: unknown): SeasonSave {
   for (const value of packs) {
     const p = record(value);
     positive(p.id);
-    requireSeason(p.id < s.nextPackId && p.kind === 'foundations', 'Invalid pack');
+    requireSeason(
+      p.id < s.nextPackId && SEASON_PACK_KINDS.includes(p.kind as SeasonPackKind),
+      'Invalid pack',
+    );
   }
   unique(
     packs.map((p) => record(p).id),

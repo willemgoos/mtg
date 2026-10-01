@@ -33,6 +33,7 @@ import {
   pendingPacks,
   reachable,
   recordMatch,
+  packSetOf,
   rollPack,
   size,
   START_PACKS,
@@ -95,6 +96,16 @@ describe('expedition packs', () => {
     expect(rollPack({ kind: 'rare' }, 3).filter(isRare)).toHaveLength(2);
     expect(rollPack({ kind: 'booster' }, 3, true).filter(isRare)).toHaveLength(2);
     expect(rollPack({ kind: 'rare' }, 3, true)).toHaveLength(packSize);
+  });
+
+  it('opens Bloomburrow boosters on an expedition with a Bloomburrow deck', () => {
+    expect(packSetOf({ deck: 'blb-warren-rally' })).toBe('blb');
+    expect(packSetOf({ deck: PLAYABLE_DECKS[0]!.id })).toBe('fdn');
+    for (let seed = 0; seed < 20; seed++) {
+      const pack = rollPack({ kind: 'booster' }, seed, false, 'blb');
+      expect(new Set(pack).size).toBe(packSize);
+      for (const name of pack) expect(card.get(name)!.set).toBe('blb');
+    }
   });
 
   it('keeps only the chosen cards, up to the keep count, from each pack', () => {

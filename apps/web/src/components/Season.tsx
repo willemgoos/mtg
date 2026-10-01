@@ -12,6 +12,7 @@ import {
   renameSeasonSave,
   replaySeasonMatch,
   resolveSeasonMatch,
+  SEASON_CARDS,
   SEASON_STARTERS,
   selectSeasonDeck,
   type Counts,
@@ -25,7 +26,7 @@ import {
   resumeSeasonGame,
 } from '../game/seasonMatch.ts';
 import { createSeasonRepository, type SeasonLibrary } from '../game/seasonStorage.ts';
-import { generateFoundationsPack } from '../game/seasonPacks.ts';
+import { packGenerator } from '../game/seasonPacks.ts';
 import type { SavedGame } from '../game/saved.ts';
 import { useGame } from '../game/useGame.ts';
 import { artFor, BLURBS } from '../game/deckArt.ts';
@@ -194,8 +195,8 @@ export function Season({ onHome }: { onHome: () => void }) {
   }
   function openPack() {
     if (!save?.packs.length) return;
-    const id = save.packs[0]!.id;
-    if (update((s) => openSeasonPack(s, id, generateFoundationsPack, now(s))))
+    const { id, kind } = save.packs[0]!;
+    if (update((s) => openSeasonPack(s, id, packGenerator(kind), now(s))))
       setFlow({ kind: 'pack' });
   }
   async function importFile(selected: File) {
@@ -273,6 +274,13 @@ export function Season({ onHome }: { onHome: () => void }) {
     return (
       <BoosterReveal
         key={receipt.packId}
+        set={
+          receipt.rewards.some(
+            (r) => r.kind === 'card' && SEASON_CARDS.get(r.cardId)?.set === 'blb',
+          )
+            ? 'blb'
+            : 'fdn'
+        }
         cards={receipt.rewards.map((r) =>
           r.kind === 'card' ? cardDb.get(r.cardId)!.name : wildcardName(r.rarity),
         )}

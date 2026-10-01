@@ -1,4 +1,4 @@
-import { SCRYFALL, cardDb } from '@mtg/cards';
+import { SCRYFALL, cardDb, slug } from '@mtg/cards';
 import FOUNDATIONS_MANIFEST from '../../../packages/cards/src/generated/foundations-manifest.json';
 import { createRng } from '@mtg/engine';
 import { describe, expect, it } from 'vitest';
@@ -12,8 +12,10 @@ import {
   type WildcardMisses,
 } from '../src/game/season.ts';
 import {
+  BLOOMBURROW_SHEETS,
   FOUNDATIONS_SHEETS,
   generateFoundationsPack,
+  packGenerator,
   protectedCard,
   wildcardHit,
 } from '../src/game/seasonPacks.ts';
@@ -25,6 +27,26 @@ import {
 
 const fresh = () => createSeasonSave('a', 'Test', SEASON_STARTERS[0]!.id, 19, 0);
 const misses = (): WildcardMisses => ({ common: 0, uncommon: 0, rareMythic: 0 });
+
+describe('Season Bloomburrow packs', () => {
+  it('sells Bloomburrow boosters that open into Bloomburrow cards', () => {
+    for (const sheet of Object.values(BLOOMBURROW_SHEETS)) {
+      expect(sheet.length).toBeGreaterThan(0);
+      for (const id of sheet) expect(SCRYFALL.find((c) => slug(c.name) === id)!.set).toBe('blb');
+    }
+    let save = { ...fresh(), coins: 1000 };
+    save = buySeasonPack(save, 1, 'bloomburrow');
+    expect(save.packs[0]!.kind).toBe('bloomburrow');
+    const opened = openSeasonPack(save, save.packs[0]!.id, packGenerator('bloomburrow'), 2);
+    const cards = opened.lastPack!.rewards.flatMap((r) => (r.kind === 'card' ? [r.cardId] : []));
+    expect(cards.length).toBeGreaterThan(0);
+    for (const id of cards) expect(SCRYFALL.find((c) => slug(c.name) === id)!.set).toBe('blb');
+  });
+
+  it('offers the Bloomburrow decks as starters', () => {
+    expect(SEASON_STARTERS.some((d) => d.id === 'blb-forage-and-feast')).toBe(true);
+  });
+});
 
 describe('Season Foundations packs', () => {
   it('uses unique supported regular Arena identities, not artwork or nonbooster printings', () => {

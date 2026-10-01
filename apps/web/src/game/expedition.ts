@@ -385,7 +385,8 @@ function boonOffer(r: ExpeditionRun): BoonId[] {
 function rareOffer(r: ExpeditionRun, salt: number): string[] {
   const next = rng((r.seed ^ Math.imul(r.path.length * 31 + salt, 0x68e31da4)) >>> 0);
   const colors = deckColors(r.build).slice(0, 2);
-  const rares = [...SHEETS.rare, ...SHEETS.mythic];
+  const sheets = SHEETS[packSetOf(r)];
+  const rares = [...sheets.rare, ...sheets.mythic];
   const fits = rares.filter(
     (c) => c.colors.length > 0 && c.colors.every((x) => colors.includes(x as Color)),
   );
@@ -598,16 +599,27 @@ export function summarize(r: ExpeditionRun): RunSummary {
 // Packs
 // ---------------------------------------------------------------------------
 
-/** Foundations cards we can play, by rarity. Basic lands aren't in packs. */
-const FDN = SCRYFALL.filter((c) => c.set === 'fdn' && !c.typeLine.startsWith('Basic'));
-const byRarity = (r: string) => FDN.filter((c) => c.rarity === r);
-const SHEETS = {
-  common: byRarity('common'),
-  uncommon: byRarity('uncommon'),
-  rare: byRarity('rare'),
-  mythic: byRarity('mythic'),
-};
-type Sheet = typeof SHEETS.common;
+/** The set a booster comes from: Foundations, or Bloomburrow for a Bloomburrow deck. */
+export type PackSet = 'fdn' | 'blb';
+
+/** An expedition with a Bloomburrow deck opens Bloomburrow boosters. */
+export function packSetOf(r: Pick<ExpeditionRun, 'deck'>): PackSet {
+  return findDeck(r.deck)?.set === 'blb' ? 'blb' : 'fdn';
+}
+
+/** Cards of a set we can play, by rarity. Basic lands aren't in packs. */
+function sheetsOf(set: PackSet) {
+  const cards = SCRYFALL.filter((c) => c.set === set && !c.typeLine.startsWith('Basic'));
+  const byRarity = (r: string) => cards.filter((c) => c.rarity === r);
+  return {
+    common: byRarity('common'),
+    uncommon: byRarity('uncommon'),
+    rare: byRarity('rare'),
+    mythic: byRarity('mythic'),
+  };
+}
+const SHEETS = { fdn: sheetsOf('fdn'), blb: sheetsOf('blb') };
+type Sheet = (typeof SHEETS.fdn)['common'];
 
 export const PACK_SIZE = { rare: 1, uncommon: 3, common: 8 };
 
@@ -616,7 +628,13 @@ export const PACK_SIZE = { rare: 1, uncommon: 3, common: 8 };
  * commons, no duplicates. A colour pack draws most slots from that colour; a
  * rare pack, and every pack with Lucky Find, swaps a common for another rare.
  */
-export function rollPack(pack: Pack, seed: number, extraRare = false): string[] {
+export function rollPack(
+  pack: Pack,
+  seed: number,
+  extraRare = false,
+  set: PackSet = 'fdn',
+): string[] {
+  const sheets = SHEETS[set];
   const next = rng(seed);
   const picked = new Set<string>();
   const inColor = (sheet: Sheet) =>
@@ -628,12 +646,12 @@ export function rollPack(pack: Pack, seed: number, extraRare = false): string[] 
     const card = from[Math.floor(next() * from.length)];
     if (card) picked.add(card.name);
   };
-  const rare = (themed: boolean) => draw(next() < 1 / 8 ? SHEETS.mythic : SHEETS.rare, themed);
+  const rare = (themed: boolean) => draw(next() < 1 / 8 ? sheets.mythic : sheets.rare, themed);
   const color = pack.kind === 'color';
   const rares = 1 + (pack.kind === 'rare' ? 1 : 0) + (extraRare ? 1 : 0);
   rare(color);
-  for (let i = 0; i < PACK_SIZE.uncommon; i++) draw(SHEETS.uncommon, color && i < 2);
-  for (let i = 0; i < PACK_SIZE.common - (rares - 1); i++) draw(SHEETS.common, color && i < 5);
+  for (let i = 0; i < PACK_SIZE.uncommon; i++) draw(sheets.uncommon, color && i < 2);
+  for (let i = 0; i < PACK_SIZE.common - (rares - 1); i++) draw(sheets.common, color && i < 5);
   for (let i = 1; i < rares; i++) rare(false);
   return [...picked];
 }
@@ -643,7 +661,8 @@ const packSeed = (r: ExpeditionRun, n: number) => (r.seed ^ Math.imul(n + 1, 0x9
 /** The cards in each waiting pack. */
 export function pendingPacks(r: ExpeditionRun): string[][] {
   const lucky = r.boons.includes('lucky');
-  return r.build.packs.map((p, i) => rollPack(p, packSeed(r, r.build.opened + i), lucky));
+  const set = packSetOf(r);
+  return r.build.packs.map((p, i) => rollPack(p, packSeed(r, r.build.opened + i), lucky, set));
 }
 
 /**
