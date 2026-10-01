@@ -50,6 +50,7 @@ const KEYWORDS: Record<string, Keyword> = {
   Defender: 'defender',
   Flash: 'flash',
   Indestructible: 'indestructible',
+  Changeling: 'changeling',
 };
 
 /** Scryfall "keywords" that are really ability words or triggers we model as abilities. */

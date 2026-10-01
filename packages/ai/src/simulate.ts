@@ -101,6 +101,7 @@ function passiveAction(
     case 'choosePile':
       return choosePile(s, d.player);
     case 'chooseFromHand':
+    case 'pickCards':
       return chooseFromHand(engine, s, engine.getLegalActions(s, d.player));
     case 'forageExile':
       return chooseForageExile(engine, s, engine.getLegalActions(s, d.player));

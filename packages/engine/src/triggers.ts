@@ -34,6 +34,35 @@ export function checkCondition(
   }
   if (c.kind === 'amountAtLeast')
     return countOf(ctx, controller, c.amount, false, self?.id) >= c.min;
+  if (c.kind === 'opponentHandHas')
+    return ctx.s.players[other(controller)].hand.some((id) => cardMatches(ctx, id, c.filter));
+  if (c.kind === 'opponentHandAtMost') return ctx.s.players[other(controller)].hand.length <= c.max;
+  if (c.kind === 'opponentHasMore') {
+    const opp = other(controller);
+    const count = (p: PlayerId) => {
+      if (c.what === 'life') return ctx.s.players[p].life;
+      if (c.what === 'cards') return ctx.s.players[p].hand.length;
+      return ctx.s.battlefield.filter(
+        (id) =>
+          obj(ctx, id).controller === p &&
+          def(ctx, id).types.includes(c.what === 'lands' ? 'Land' : 'Creature'),
+      ).length;
+    };
+    return count(opp) > count(controller);
+  }
+  if (c.kind === 'graveyardLeftOrFoodSacrificed')
+    return (
+      (ctx.s.turn.leftGraveyard?.[controller] ?? 0) >= 3 ||
+      (ctx.s.turn.foodsSacrificed?.[controller] ?? 0) > 0
+    );
+  if (c.kind === 'exiledCardTypes') {
+    const types = new Set<string>();
+    for (const id of self?.exiledWith ?? []) {
+      const o = ctx.s.objects[id];
+      if (o?.zone === 'exile') for (const t of def(ctx, id).types) types.add(t);
+    }
+    return types.size >= c.min;
+  }
   if (c.kind === 'classLevel') {
     const level = self?.level ?? 1;
     return (
@@ -443,7 +472,8 @@ function detect(ctx: Ctx, ev: GameEvent): void {
           ctx,
           (o, a) =>
             a.trigger.on === 'creatureYouControlDealsCombatDamage' &&
-            o.controller === src.controller,
+            o.controller === src.controller &&
+            (!a.trigger.toPlayer || 'player' in ev.to),
           src,
           ev.amount,
         );
@@ -484,6 +514,28 @@ function detect(ctx: Ctx, ev: GameEvent): void {
       );
       return;
     }
+    case 'foraged':
+      forEachBattlefieldTrigger(
+        ctx,
+        (o, a) => a.trigger.on === 'youForage' && o.controller === ev.player,
+      );
+      return;
+    case 'giftGiven':
+      forEachBattlefieldTrigger(
+        ctx,
+        (o, a) => a.trigger.on === 'youGiveGift' && o.controller === ev.player,
+      );
+      return;
+    case 'countersAdded': {
+      const target = s.objects[ev.id];
+      if (!target || target.zone !== 'battlefield' || !def(ctx, ev.id).types.includes('Creature'))
+        return;
+      forEachBattlefieldTrigger(
+        ctx,
+        (o, a) => a.trigger.on === 'youPutCounters' && o.controller === target.controller,
+      );
+      return;
+    }
     case 'levelChanged': {
       const o = s.objects[ev.id];
       if (!o) return;
@@ -509,6 +561,17 @@ function detect(ctx: Ctx, ev: GameEvent): void {
       return;
     }
     case 'targeted': {
+      for (const id of ev.ids) {
+        const o = s.objects[id];
+        if (!o || o.zone !== 'battlefield' || o.controller === ev.player) continue;
+        if (!def(ctx, id).types.includes('Creature')) continue;
+        forEachBattlefieldTrigger(
+          ctx,
+          (src, a) =>
+            a.trigger.on === 'yourCreatureTargetedByOpponent' && src.controller === o.controller,
+          o,
+        );
+      }
       // Valiant: the first time each turn its controller's spell or ability targets it.
       for (const id of ev.ids) {
         const o = s.objects[id];
@@ -526,6 +589,13 @@ function detect(ctx: Ctx, ev: GameEvent): void {
         forEachBattlefieldTrigger(
           ctx,
           (o, a) => a.trigger.on === 'beginningOfCombat' && o.controller === ev.activePlayer,
+        );
+        return;
+      }
+      if (ev.step === 'draw') {
+        forEachBattlefieldTrigger(
+          ctx,
+          (o, a) => a.trigger.on === 'beginningOfDraw' && o.controller === ev.activePlayer,
         );
         return;
       }
@@ -559,6 +629,7 @@ function detect(ctx: Ctx, ev: GameEvent): void {
       forEachBattlefieldTrigger(ctx, (o, a) => {
         const t = a.trigger;
         if (t.on !== on) return false;
+        if (t.whose === 'opponents') return o.controller !== ev.activePlayer;
         return t.whose === 'each' || o.controller === ev.activePlayer;
       });
       return;

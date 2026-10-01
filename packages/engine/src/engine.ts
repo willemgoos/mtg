@@ -21,6 +21,7 @@ import {
 import {
   activateAbility,
   answerDiscard,
+  answerPickCards,
   answerChooseFromHand,
   answerChooseObject,
   answerPayOrCounter,
@@ -216,6 +217,7 @@ function apply(ctx: Ctx, action: Action): void {
         action.payWith,
         action.sacrifice,
         action.forage,
+        action.discard,
       );
       return paused ? undefined : givePriority(ctx, player);
     }
@@ -273,6 +275,7 @@ function apply(ctx: Ctx, action: Action): void {
       return answerChooseOption(ctx, action.index);
     case 'chooseCard':
       if (d.kind === 'chooseObject') return answerChooseObject(ctx, action.card);
+      if (d.kind === 'pickCards' && action.card) return answerPickCards(ctx, action.card);
       if (d.kind === 'chooseFromHand') return answerChooseFromHand(ctx, action.card);
       if (d.kind === 'forageExile' && action.card) return answerForageExile(ctx, action.card);
       if (d.kind === 'sacrifice' && action.card) return answerSacrifice(ctx, action.card);

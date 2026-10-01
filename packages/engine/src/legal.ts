@@ -2,13 +2,14 @@ import { canTapForAbility, cardMatches, isCreature, matchesFilter } from './char
 import { blockViolations, canAttack, canBlock, defenderOf } from './combat.ts';
 import { type Ctx, def, obj } from './context.ts';
 import { forageChoices } from './forage.ts';
-import { canPayFrom, manaSources } from './mana.ts';
+import { canPayFrom, creatureHelpers, manaSources } from './mana.ts';
 import { castVariants, spellTags } from './spells.ts';
 import {
   castCost,
   countersYouControl,
   hasStatic,
   wardCost,
+  tokensToTap,
   wardLife,
   wardPayable,
 } from './stack.ts';
@@ -217,30 +218,47 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
       if (a.cost.tapSelf && !canTapForAbility(ctx, source)) return;
       if (a.condition && !checkCondition(ctx, a.condition, player, obj(ctx, source))) return;
       if ((a.cost.life ?? 0) > ps.life) return;
-      const usable = a.cost.tapSelf ? sources.filter((x) => x.id !== source) : sources;
+      const own = a.cost.tapSelf ? sources.filter((x) => x.id !== source) : sources;
+      // Heirloom Epic: creatures can pay for generic mana.
+      const usable = a.cost.convoke
+        ? [...own, ...creatureHelpers(ctx, player, own, a.cost.tapSelf ? source : undefined)]
+        : own;
       if (!canPayFrom(a.cost.mana, usable)) return;
+      if (a.cost.tapTokens && tokensToTap(ctx, player, source).length < a.cost.tapTokens) return;
+      const discards = a.cost.discard ? ps.hand : [undefined];
+      if (discards.length === 0) return;
       const rc = a.cost.removeCounters;
       if (rc && (obj(ctx, source).counters?.[rc.name] ?? 0) < rc.count) return;
       const forages = a.cost.forage ? forageChoices(ctx, player) : [undefined];
       if (forages.length === 0) return;
-      const sacrificeable = a.cost.sacrificeFilter
-        ? creatures.filter((id) => matchesFilter(ctx, id, a.cost.sacrificeFilter, source))
-        : creatures;
-      for (const sacrifice of a.cost.sacrificeCreature ? sacrificeable : [undefined]) {
+      const sacrificeable = a.cost.sacrificePermanent
+        ? s.battlefield.filter(
+            (id) =>
+              obj(ctx, id).controller === player &&
+              matchesFilter(ctx, id, a.cost.sacrificePermanent, source),
+          )
+        : a.cost.sacrificeFilter
+          ? creatures.filter((id) => matchesFilter(ctx, id, a.cost.sacrificeFilter, source))
+          : creatures;
+      const sacrifices =
+        a.cost.sacrificeCreature || a.cost.sacrificePermanent ? sacrificeable : [undefined];
+      for (const sacrifice of sacrifices) {
         for (const targets of combosFor(a.targets, source, sacrifice)) {
           const ward = wardCost(ctx, player, targets);
           if (ward.generic && !canPayFrom(addCosts(a.cost.mana ?? NO_COST, ward), usable)) continue;
           if (!wardPayable(ctx, player, targets)) continue;
           for (const forage of forages)
-            out.push({
-              type: 'activateAbility',
-              player,
-              source,
-              abilityIndex,
-              targets,
-              ...(sacrifice ? { sacrifice } : {}),
-              ...(forage ? { forage } : {}),
-            });
+            for (const discard of discards)
+              out.push({
+                type: 'activateAbility',
+                player,
+                source,
+                abilityIndex,
+                targets,
+                ...(sacrifice ? { sacrifice } : {}),
+                ...(forage ? { forage } : {}),
+                ...(discard ? { discard } : {}),
+              });
         }
       }
     });
@@ -308,7 +326,11 @@ export function getLegalActions(ctx: Ctx, player: PlayerId): Action[] {
     case 'scry':
       return scryAnswers(d.cards).map(({ top, bottom }) => ({ type: 'scry', player, top, bottom }));
     case 'discard':
-      return s.players[player].hand.map((card) => ({ type: 'discard', player, card }) as const);
+      return s.players[player].hand
+        .filter((card) => !d.filter || cardMatches(ctx, card, d.filter))
+        .map((card) => ({ type: 'discard', player, card }) as const);
+    case 'pickCards':
+      return d.options.map((card) => ({ type: 'chooseCard', player, card }) as const);
     case 'splitPiles':
       return pileSplits(d.cards).map((faceUp) => ({ type: 'splitPiles', player, faceUp }));
     case 'choosePile':

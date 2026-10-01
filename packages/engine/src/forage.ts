@@ -1,4 +1,4 @@
-import { type Ctx, def, moveObject, obj, sacrifice } from './context.ts';
+import { type Ctx, def, emit, moveObject, obj, sacrifice } from './context.ts';
 import type { Decision, ObjectId, PlayerId } from './types.ts';
 
 /**
@@ -33,6 +33,7 @@ export function payForage(
   choice: ObjectId | 'graveyard',
   after: Omit<ForageExile, 'kind' | 'player' | 'count'>,
 ): boolean {
+  emit(ctx, { type: 'foraged', player });
   if (choice !== 'graveyard') {
     sacrifice(ctx, choice);
     return false;

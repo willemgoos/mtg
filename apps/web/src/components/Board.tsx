@@ -505,6 +505,8 @@ export function Board({
       }
       case 'chooseOption':
         return { prompt: `${nameOf(d.resume.sourceDefId)}: choose one` };
+      case 'pickCards':
+        return { prompt: `Choose ${d.count} card${d.count > 1 ? 's' : ''} to keep` };
       case 'chooseObject':
         return { prompt: `${nameOf(d.resume.sourceDefId)}: choose one of your permanents` };
       case 'payOrCounter': {
@@ -888,6 +890,32 @@ export function Board({
           onHover={setHover}
           onClose={closePile}
         />
+      )}
+
+      {d.kind === 'pickCards' && d.player === HUMAN && (
+        <div className="overlay overlay--mull">
+          <div className="mull">
+            <h2>{nameOf(d.resume.sourceDefId)}</h2>
+            <p>
+              Put {d.count} more card{d.count > 1 ? 's' : ''} into your hand. The rest go to your
+              graveyard.
+            </p>
+            <div className="mull__hand">
+              {d.options.map((id, i) => (
+                <div key={id} className="mull__card" style={{ '--i': i } as React.CSSProperties}>
+                  <Card
+                    id={id}
+                    defId={view.objects[id]!.defId}
+                    size="mull"
+                    mark="option"
+                    onClick={() => act({ type: 'chooseCard', player: HUMAN, card: id })}
+                    onHover={setHover}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
       )}
 
       {d.kind === 'forageExile' && d.player === HUMAN && (

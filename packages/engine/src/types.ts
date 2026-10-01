@@ -53,7 +53,9 @@ export type Keyword =
   /** Ward: targeting it costs an opponent `CardDefinition.wardCost` (default {2}). */
   | 'ward'
   /** Ward {1}, granted by another permanent (Long River Lurker, Innkeeper's Talent). */
-  | 'wardOne';
+  | 'wardOne'
+  /** Changeling: every creature type. */
+  | 'changeling';
 
 /** What an instant or sorcery (or one of its modes) does when it resolves. */
 export interface SpellDef {
@@ -112,6 +114,8 @@ export interface CardDefinition {
      * copy) or 'gift' (a free promise of a gift to an opponent).
      */
     as?: 'offspring' | 'gift';
+    /** A permanent's gift: given to an opponent as it resolves, if promised (Scrapshooter). */
+    gift?: EffectDef;
   };
   /** Costs {amount} less if its first target matches (Dire Downdraft: an attacking or tapped creature). */
   costReductionIfTarget?: { filter: CardFilter; amount: number };
@@ -144,6 +148,8 @@ export type AbilityDef =
       onlyFor?: string;
       /** Makes two mana instead of one while this holds (Ilysian Caryatid). */
       doubleIf?: ConditionDef;
+      /** Only if this is the color chosen for it (Uncharted Haven). */
+      ifChosen?: boolean;
     }
   | {
       kind: 'activated';
@@ -201,6 +207,14 @@ export interface CostDef {
   forage?: boolean;
   /** Pay this much life. */
   life?: number;
+  /** Discard a card (chosen when activating). */
+  discard?: boolean;
+  /** Tap this many untapped tokens you control (Baylen, Tangle Tumbler). */
+  tapTokens?: number;
+  /** Sacrifice a permanent matching this (Fountainport: a token). */
+  sacrificePermanent?: CardFilter;
+  /** Untapped creatures you control may each pay for {1} (Heirloom Epic). */
+  convoke?: boolean;
 }
 
 export type TriggerDef =
@@ -211,7 +225,7 @@ export type TriggerDef =
   /** Whenever this or another creature you control (matching the filter, as printed) dies. */
   | { on: 'creatureYouControlDies'; nontoken?: boolean; filter?: CardFilter }
   /** Whenever a creature you control deals combat damage (on your turn); "that creature", "that much". */
-  | { on: 'creatureYouControlDealsCombatDamage' }
+  | { on: 'creatureYouControlDealsCombatDamage'; toPlayer?: boolean }
   | { on: 'beginningOfCombat'; whose: 'yours' }
   | { on: 'youGainLife' }
   /** Whenever the creature this Aura is attached to dies. */
@@ -242,7 +256,7 @@ export type TriggerDef =
   /** Whenever a creature you control (matching the filter) attacks; "that creature" is the subject. */
   | { on: 'creatureYouControlAttacks'; filter?: CardFilter }
   | { on: 'landfall' }
-  | { on: 'beginningOfUpkeep'; whose: 'yours' | 'each' }
+  | { on: 'beginningOfUpkeep'; whose: 'yours' | 'each' | 'opponents' }
   | { on: 'beginningOfEndStep'; whose: 'yours' | 'each' }
   /** Whenever another permanent you control matching the filter enters (Honored Dreyleader). */
   | { on: 'otherPermanentEtb'; filter: CardFilter }
@@ -259,6 +273,16 @@ export type TriggerDef =
    * library): this one or another you control ('selfOrOther'), or only others.
    */
   | { on: 'leavesWithoutDying'; who: 'selfOrOther' | 'other' }
+  /** Whenever you forage (Corpseberry Cultivator). */
+  | { on: 'youForage' }
+  /** Whenever you give a gift (Jolly Gerbils). */
+  | { on: 'youGiveGift' }
+  /** Whenever you put +1/+1 counters on a creature you control (Stocking the Pantry). */
+  | { on: 'youPutCounters' }
+  /** At the beginning of your draw step. */
+  | { on: 'beginningOfDraw' }
+  /** Whenever a creature you control becomes the target of an opponent's spell or ability (Pawpatch Recruit). */
+  | { on: 'yourCreatureTargetedByOpponent' }
   /** When this Class becomes level N. */
   | { on: 'becomesLevel'; level: number }
   /** Whenever one or more creatures you control (matching the filter) deal combat damage to a player (Kastral). */
@@ -316,6 +340,16 @@ export type ConditionDef =
   | { kind: 'handSize'; min: number }
   /** Every condition holds. */
   | { kind: 'all'; of: ConditionDef[] }
+  /** An opponent has a card matching the filter in hand (Bandit's Talent: a nonland card). */
+  | { kind: 'opponentHandHas'; filter: CardFilter }
+  /** An opponent has at most `max` cards in hand (Bandit's Talent). */
+  | { kind: 'opponentHandAtMost'; max: number }
+  /** An opponent has more lands, life, creatures or cards in hand than you (Beza). */
+  | { kind: 'opponentHasMore'; what: 'lands' | 'life' | 'creatures' | 'cards' }
+  /** Three or more cards left your graveyard this turn, or you sacrificed a Food this turn (Bonecache Overseer). */
+  | { kind: 'graveyardLeftOrFoodSacrificed' }
+  /** Cards exiled with this permanent have at least `min` card types among them (Keen-Eyed Curator). */
+  | { kind: 'exiledCardTypes'; min: number }
   /** This Class is at least level `min` (or exactly `exactly`). */
   | { kind: 'classLevel'; min?: number; exactly?: number }
   /** A chosen target is controlled by you (Dreamdew Entrancer). */
@@ -362,6 +396,18 @@ export interface CardFilter {
   other?: boolean;
   /** Mana value less than that of the creature that caused the trigger (Clement). */
   lesserManaValueThanSubject?: boolean;
+  /** Not the creature that caused the trigger (Pawpatch Recruit). */
+  notSubject?: boolean;
+  /** Has an Equipment attached (Blacksmith's Talent). */
+  equipped?: boolean;
+  /** Was dealt damage this turn (Downwind Ambusher). */
+  damaged?: boolean;
+  /** Toughness greater than its power (Fecund Greenshell). */
+  toughnessGreaterThanPower?: boolean;
+  /** Has the creature type chosen for the source (Patchwork Banner). */
+  chosenTypeOfSource?: boolean;
+  /** Has counters on it (Innkeeper's Talent). */
+  hasCounters?: boolean;
 }
 
 export interface TargetSpec {
@@ -424,6 +470,10 @@ export type Amount =
   | { count: 'opponentCreaturesExiledThisTurn' }
   /** The power of the creature sacrificed to pay for this (Wick). */
   | { sacrificedPower: true }
+  /** Creature cards you own in exile and in your graveyard (Huskburster Swarm). */
+  | { count: 'creatureCardsInExileAndGraveyard' }
+  /** Creatures you control of the type chosen for the source (Three Tree City). */
+  | { count: 'creaturesOfChosenType' }
   /** Named counters on the source (as it last was, if it left): Hoarder's Overflow's stash counters. */
   | { namedCountersOnSource: string }
   /** The value chosen for X (times `times`, plus `plus`). */
@@ -460,7 +510,13 @@ export type EffectDef =
     }
   | { kind: 'exile'; what: Ref }
   /** Exile a card from a graveyard; extra effects if it was a creature card (Scavenging Ooze). */
-  | { kind: 'exileGraveyardCard'; what: Ref; ifCreature?: EffectDef[] }
+  | {
+      kind: 'exileGraveyardCard';
+      what: Ref;
+      ifCreature?: EffectDef[];
+      /** Remember it as exiled with the source (Keen-Eyed Curator). */
+      track?: boolean;
+    }
   /** Each opponent loses `life` unless they sacrifice a nonland permanent or discard a card. */
   | { kind: 'punisher'; life: number }
   /** Exile the top N cards; choose one you may play until the end of your next turn (or of this turn). */
@@ -474,8 +530,40 @@ export type EffectDef =
   | {
       kind: 'choose';
       ownerOf?: number;
+      /** An opponent chooses (Bandit's Talent). */
+      opponent?: boolean;
       options: { label: string; effects: EffectDef[] }[];
     }
+  /** Marks the gift as given (for "whenever you give a gift"). */
+  | { kind: 'giftGiven' }
+  /** Create token copies of permanents (with set power and toughness). */
+  | {
+      kind: 'tokenCopy';
+      of: Ref;
+      count?: Amount;
+      pt?: [number, number];
+      /** Exile the copies at the beginning of the next end step (Stormsplitter). */
+      exileAtEndStep?: boolean;
+      /** Not of legendary permanents (Coiling Rebirth). */
+      nonlegendary?: boolean;
+    }
+  /** Choose a color (or a creature type) for the source, as it enters. */
+  | { kind: 'chooseColor' }
+  | { kind: 'chooseCreatureType' }
+  /** Mill N, then you may put a card matching the filter from among them into your hand (Cache Grab). */
+  | { kind: 'millThenTake'; count: number; filter: CardFilter; squirrelFood?: boolean }
+  /** Look at the top N; put `take` of them into your hand and the rest into your graveyard (Stargaze). */
+  | { kind: 'lookTakeRestGraveyard'; count: Amount; take: Amount }
+  /** Reveal the top card and put it into your hand; lose life equal to its mana value (Darkstar Augur). */
+  | { kind: 'revealTopToHandLoseLife' }
+  /** Look at the top card; if it's a land you may put it onto the battlefield tapped, otherwise into your hand (Fecund Greenshell). */
+  | { kind: 'topCardLandOrHand' }
+  /** Deal damage to each player equal to the nonbasic lands they control (Sunspine Lynx). */
+  | { kind: 'damageEachPlayerByNonbasics' }
+  /** You (and permanents you control) gain hexproof until end of turn (Dawn's Truce). */
+  | { kind: 'playerHexproof' }
+  /** Tap two untapped tokens: this Vehicle becomes an artifact creature until end of turn. */
+  | { kind: 'becomeCreature'; what: Ref }
   /** Raise this Class's level by one. */
   | { kind: 'levelUp' }
   /**
@@ -533,17 +621,19 @@ export type EffectDef =
   | { kind: 'untap'; what: Ref }
   /** An additional combat phase after this one. */
   | { kind: 'extraCombat' }
-  /** Attach this Equipment to a creature. */
-  | { kind: 'attach'; to: Ref }
+  /** Attach this Equipment (or `what`) to a creature. */
+  | { kind: 'attach'; to: Ref; what?: Ref }
   /** Search your library for a basic land, put it into your hand, then shuffle. */
   | {
       /** Search your library (Bushwhack, Circuitous Route). Shuffles afterwards unless `shuffle` is false. */
       kind: 'searchLibrary';
       filter: 'basicLand' | 'basicLandOrGate' | CardFilter;
-      to: 'hand' | 'battlefieldTapped' | 'battlefield' | 'graveyard';
+      to: 'hand' | 'battlefieldTapped' | 'battlefield' | 'graveyard' | 'libraryTop';
       /** Unrestricted tutors cannot fail to find a card in a nonempty library. */
       required?: boolean;
       shuffle?: boolean;
+      /** Untap the land found if you then control this many lands (Fabled Passage). */
+      untapIfLands?: number;
     }
   /** Look at the top N; you may put a creature with mana value up to your land count onto the battlefield (Loot). */
   | { kind: 'lookForCreature'; count: number }
@@ -552,9 +642,17 @@ export type EffectDef =
   | { kind: 'exileGraveyard'; who: Ref }
   | { kind: 'tap'; what: Ref }
   /** The controller discards N cards of their choice. */
-  | { kind: 'discard'; count: number; who?: 'controller' | 'eachOpponent' }
+  | {
+      kind: 'discard';
+      count: number;
+      who?: 'controller' | 'eachOpponent';
+      /** Only cards matching this. */
+      filter?: CardFilter;
+      /** Exiled instead (Ruthless Negotiation: "exiles a card from their hand"). */
+      exile?: boolean;
+    }
   /** Put the top N cards of your library into your graveyard. */
-  | { kind: 'mill'; count: number }
+  | { kind: 'mill'; count: number; who?: Ref }
   /** Counter a spell on the stack (unless it can't be countered). */
   | { kind: 'counter'; what: Ref; controllerTokens?: { token: CardDefId; count: number } }
   | { kind: 'bouncePlayerPermanents'; who: Ref; nonland?: boolean }
@@ -584,13 +682,27 @@ export type EffectDef =
   /** Destroy all creatures (matching the filter). `returnOne`: then return one of yours that died (Starfall Invocation). */
   | { kind: 'destroyAll'; filter?: CardFilter; returnOne?: boolean }
   /** Look at the top N; you may take a card matching the filter into your hand; the rest go to the bottom at random. */
-  | { kind: 'lookAndTake'; count: number; filter: CardFilter }
+  | {
+      kind: 'lookAndTake';
+      count: number;
+      filter: CardFilter;
+      /** Onto the battlefield if it's your turn, otherwise into your hand (Whiskervale Forerunner). */
+      battlefieldOnYourTurn?: boolean;
+    }
   /** Exile the top N; you may play them until the end of this turn or of your next turn. */
   | { kind: 'exileTopPlayable'; count: Amount; until: 'endOfTurn' | 'endOfNextTurn' }
   /** The source card goes from its owner's graveyard back to their hand (Angelic Destiny). */
 
   /** Each opponent sacrifices a creature of their choice; optionally you gain life equal to its toughness. */
-  | { kind: 'opponentSacrifices'; gainToughness?: boolean; greatestPower?: boolean }
+  | {
+      kind: 'opponentSacrifices';
+      gainToughness?: boolean;
+      greatestPower?: boolean;
+      /** A permanent matching this instead of a creature. */
+      filter?: CardFilter;
+      /** Exiled instead of sacrificed (Early Winter). */
+      exile?: boolean;
+    }
   /**
    * Forage: exile three cards from your graveyard or sacrifice a Food. If you
    * do, `then` happens. `optional`: "you may forage".
@@ -662,6 +774,10 @@ export type StaticDef =
       /** Pacifism. */
       cantAttackOrBlock?: boolean;
       doesntUntap?: boolean;
+      /** "Loses flying" (Starforged Sword). */
+      loseKeywords?: Keyword[];
+      /** "You control enchanted creature" (Kitnap). */
+      control?: boolean;
     }
   /** All creatures able to block this creature do so (Prized Unicorn). */
   | { kind: 'lure' }
@@ -706,6 +822,16 @@ export type StaticDef =
       toOpponents?: boolean;
       condition?: ConditionDef;
     }
+  /** If you would put counters on a permanent, put twice that many instead (Innkeeper's Talent). */
+  | { kind: 'doubleCounters'; condition?: ConditionDef }
+  /** Spells you cast matching the filter cost {N} less, while the condition holds. */
+  | { kind: 'spellsCostLessIf'; filter: CardFilter; amount: number; condition?: ConditionDef }
+  /** Damage can't be prevented (Sunspine Lynx). */
+  | { kind: 'damageCantBePrevented' }
+  /** The enchanted permanent is a colorless Food artifact with no other abilities (Sugar Coat). */
+  | { kind: 'enchantedIsFood' }
+  /** Creatures your opponents control matching nothing in particular have base toughness N (Maha). */
+  | { kind: 'opponentsBaseToughness'; toughness: number }
   /** Creatures your opponents control that would die are exiled instead (Vren). */
   | { kind: 'exileOpponentCreaturesInstead' };
 
@@ -772,6 +898,15 @@ export interface GameObject {
   level?: number;
   /** Named counters it had as it last left the battlefield. */
   lastNamedCounters?: Record<string, number>;
+  /** The color or creature type chosen for it as it entered. */
+  chosenColor?: ManaType;
+  chosenType?: string;
+  /** Cards exiled with it (Keen-Eyed Curator). */
+  exiledWith?: ObjectId[];
+  /** Sugar Coat: the Aura that makes it a Food. */
+  foodBy?: ObjectId;
+  /** Kitnap: the Aura it's controlled by, and who controlled it before. */
+  controlledBy?: { aura: ObjectId; previous: PlayerId };
 }
 
 /** A reference that goes stale when the object changes zones. */
@@ -873,6 +1008,12 @@ export interface TurnState {
   spellsCast?: Record<PlayerId, number>;
   /** Creatures each player controlled that were exiled from the battlefield this turn. */
   creaturesExiled?: Record<PlayerId, number>;
+  /** Cards that left each player's graveyard this turn (Bonecache Overseer). */
+  leftGraveyard?: Record<PlayerId, number>;
+  /** Foods each player sacrificed this turn. */
+  foodsSacrificed?: Record<PlayerId, number>;
+  /** Players with hexproof until end of turn (Dawn's Truce). */
+  hexproofPlayers?: PlayerId[];
 }
 
 export interface Attacker {
@@ -903,6 +1044,8 @@ export interface ContinuousEffect {
   loseAbilities?: boolean;
   /** "Whenever it deals combat damage this turn, you may exile it, then return it." */
   blinkOnCombatDamage?: boolean;
+  /** It's an artifact creature (a crewed Vehicle). */
+  becomesCreature?: boolean;
   /** Base power and toughness. */
   basePT?: [number, number];
   /** Control change: who controlled it before (restored when this expires). */
@@ -1001,6 +1144,10 @@ export type Decision =
       kind: 'discard';
       player: PlayerId;
       count: number;
+      /** Only cards matching this. */
+      filter?: CardFilter;
+      /** Exiled instead of discarded (Ruthless Negotiation). */
+      exile?: boolean;
       resume: PausedResolution;
       thenPriority: PlayerId;
     }
@@ -1012,7 +1159,7 @@ export type Decision =
       /** Choosing from the graveyard instead of searching the library (Inspiration from Beyond). */
       fromGraveyard?: boolean;
       /** Where the card goes. Default: hand. */
-      to?: 'hand' | 'battlefieldTapped' | 'battlefield' | 'graveyard';
+      to?: 'hand' | 'battlefieldTapped' | 'battlefield' | 'graveyard' | 'libraryTop';
       required?: boolean;
       /** Only these top cards were looked at: the rest go to the bottom in a random order (no shuffle). */
       looked?: ObjectId[];
@@ -1020,6 +1167,21 @@ export type Decision =
       shuffle?: boolean;
       /** The chosen card enters with this named counter (Kastral: finality). */
       counter?: string;
+      /** Untap the land found if you then control this many lands (Fabled Passage). */
+      untapIfLands?: number;
+      /** Cache Grab: a Food if you control a Squirrel or took a Squirrel card. */
+      squirrelFood?: boolean;
+      /** Whiskervale Forerunner: onto the battlefield on your turn, else into your hand. */
+      battlefieldOnYourTurn?: boolean;
+      resume: PausedResolution;
+      thenPriority: PlayerId;
+    }
+  | {
+      /** Put `count` of these into your hand (one at a time); the rest go to your graveyard (Stargaze). */
+      kind: 'pickCards';
+      player: PlayerId;
+      options: ObjectId[];
+      count: number;
       resume: PausedResolution;
       thenPriority: PlayerId;
     }
@@ -1068,6 +1230,8 @@ export type Decision =
       options: ObjectId[];
       /** Gains life equal to the sacrificed creature's toughness. */
       gainLifeFor?: PlayerId;
+      /** Exiled instead of sacrificed (Early Winter). */
+      exile?: boolean;
       resume: PausedResolution;
       thenPriority: PlayerId;
     }
@@ -1211,6 +1375,8 @@ export type Action =
       sacrifice?: ObjectId;
       /** Forage as a cost: the Food to sacrifice, or 'graveyard' to exile three cards. */
       forage?: ObjectId | 'graveyard';
+      /** The card discarded as a cost (Flamecache Gecko). */
+      discard?: ObjectId;
       payWith?: ObjectId[];
     }
   | { type: 'addAttacker'; player: PlayerId; attacker: ObjectId; defender: PlayerId }
@@ -1259,6 +1425,12 @@ export type GameEvent =
   | { type: 'searched'; player: PlayerId; id: ObjectId }
   /** A card revealed from a library and put into its owner's hand. */
   | { type: 'revealed'; player: PlayerId; id: ObjectId }
+  /** +1/+1 counters were put on a permanent. */
+  | { type: 'countersAdded'; id: ObjectId; count: number; player: PlayerId }
+  /** `player` foraged. */
+  | { type: 'foraged'; player: PlayerId }
+  /** `player` gave a gift. */
+  | { type: 'giftGiven'; player: PlayerId }
   /** A Class gained a level. */
   | { type: 'levelChanged'; id: ObjectId; level: number }
   /** A permanent was sacrificed (just before it left the battlefield). */

@@ -2183,6 +2183,15 @@ export const TOKENS: CardDefinition[] = [
   token('fish-token', 'Fish', 'U', ['Fish'], 1, 1),
   token('bat-token', 'Bat', 'B', ['Bat'], 1, 1, ['flying']),
   token('snail-token', 'Snail', 'B', ['Snail'], 1, 1),
+  token('wall-token', 'Wall', 'W', ['Wall'], 0, 4, ['defender']),
+  {
+    // Blacksmith's Talent's Sword: "Equipped creature gets +1/+1", equip {2}.
+    ...artifactToken('sword-token', 'Sword', [
+      { kind: 'static', effect: { kind: 'attached', power: 1, toughness: 1 } },
+      equip('{2}'),
+    ]),
+    subtypes: ['Equipment'],
+  },
   {
     ...token('otter-token', 'Otter', 'U', ['Otter'], 1, 1),
     colors: ['U', 'R'],

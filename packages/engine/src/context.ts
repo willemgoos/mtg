@@ -1,6 +1,8 @@
 import { characteristics } from './characteristics.ts';
+import { checkCondition } from './triggers.ts';
 import type { EffectSource } from './effects.ts';
 import type {
+  ManaType,
   CardDb,
   CardDefinition,
   GameEvent,
@@ -38,8 +40,27 @@ export function makeCtx(
   db: CardDb,
   customEffects: Readonly<Record<string, CustomEffect>> = {},
 ): Ctx {
-  return { s, db, events: [], triggerCursor: 0, customEffects, batched: new Set() };
+  return {
+    s,
+    db,
+    events: [],
+    triggerCursor: 0,
+    customEffects: { ...BUILT_IN_EFFECTS, ...customEffects },
+    batched: new Set(),
+  };
 }
+
+/** Small one-off effects used by the engine's own effect kinds. */
+const BUILT_IN_EFFECTS: Record<string, CustomEffect> = {
+  // "As this enters, choose a color/creature type."
+  setChosen(ctx, es, params) {
+    const o = es.source && ctx.s.objects[es.source.id];
+    if (!o || o.zone !== 'battlefield') return;
+    const p = params as { color?: ManaType; type?: string };
+    if (p.color) o.chosenColor = p.color;
+    if (p.type) o.chosenType = p.type;
+  },
+};
 
 export function other(p: PlayerId): PlayerId {
   return p === 'p1' ? 'p2' : 'p1';
@@ -60,7 +81,39 @@ export function defOf(ctx: Ctx, defId: string): CardDefinition {
 export function def(ctx: Ctx, id: ObjectId): CardDefinition {
   const o = obj(ctx, id);
   const d = defOf(ctx, o.defId);
+  if (o.foodBy !== undefined) {
+    const aura = ctx.s.objects[o.foodBy];
+    if (aura && aura.zone === 'battlefield' && aura.attachedTo === id) return foodDef(d);
+  }
   return o.blank ? blankDef(d) : d;
+}
+
+const foodDefs = new WeakMap<CardDefinition, CardDefinition>();
+
+/** What Sugar Coat makes a permanent: a colorless Food artifact with only the Food ability. */
+function foodDef(d: CardDefinition): CardDefinition {
+  let f = foodDefs.get(d);
+  if (!f) {
+    const { power: _p, toughness: _t, ...rest } = d;
+    f = {
+      ...rest,
+      colors: [],
+      types: ['Artifact'],
+      supertypes: [],
+      subtypes: ['Food'],
+      keywords: [],
+      abilities: [
+        {
+          kind: 'activated',
+          cost: { mana: { generic: 2, colored: {} }, tapSelf: true, sacrificeSelf: true },
+          targets: [],
+          effects: [{ kind: 'gainLife', who: 'controller', amount: 3 }],
+        },
+      ],
+    };
+    foodDefs.set(d, f);
+  }
+  return f;
 }
 
 const blankDefs = new WeakMap<CardDefinition, CardDefinition>();
@@ -191,6 +244,13 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
   }
   delete o.counters;
   delete o.level;
+  delete o.chosenColor;
+  delete o.chosenType;
+  delete o.exiledWith;
+  delete o.foodBy;
+  delete o.controlledBy;
+  // Bonecache Overseer: cards leaving a graveyard.
+  if (from === 'graveyard') (ctx.s.turn.leftGraveyard ??= { p1: 0, p2: 0 })[o.owner]++;
   delete o.targetedByControllerTurn;
   delete o.blank;
   delete o.resolutions;
@@ -232,6 +292,33 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
     if (ctx.s.objects[back]?.zone === 'exile') moveObject(ctx, back, 'battlefield');
 }
 
+/**
+ * Puts +1/+1 counters (or named counters) on a permanent. "Twice that many"
+ * effects of its controller apply (Innkeeper's Talent).
+ */
+export function addCounters(ctx: Ctx, id: ObjectId, n: number, name?: string): void {
+  if (n <= 0) return;
+  const o = obj(ctx, id);
+  for (const src of ctx.s.battlefield) {
+    const so = obj(ctx, src);
+    if (so.controller !== o.controller) continue;
+    for (const a of def(ctx, src).abilities)
+      if (
+        a.kind === 'static' &&
+        a.effect.kind === 'doubleCounters' &&
+        checkCondition(ctx, a.effect.condition, so.controller, so)
+      )
+        n *= 2;
+  }
+  if (name) {
+    const c = (o.counters ??= {});
+    c[name] = (c[name] ?? 0) + n;
+    return;
+  }
+  o.plusOneCounters += n;
+  emit(ctx, { type: 'countersAdded', id, count: n, player: o.controller });
+}
+
 /** Vren: an opponent controls a permanent with "exile their creatures instead". */
 function exiledInsteadOfDying(ctx: Ctx, o: GameObject): boolean {
   if (!defOf(ctx, o.defId).types.includes('Creature')) return false;
@@ -249,6 +336,8 @@ function exiledInsteadOfDying(ctx: Ctx, o: GameObject): boolean {
 /** Sacrifices a permanent: its controller puts it into its owner's graveyard. */
 export function sacrifice(ctx: Ctx, id: ObjectId): void {
   const o = obj(ctx, id);
+  if (def(ctx, id).subtypes.includes('Food'))
+    (ctx.s.turn.foodsSacrificed ??= { p1: 0, p2: 0 })[o.controller]++;
   emit(ctx, { type: 'sacrificed', id, defId: o.defId, player: o.controller });
   moveObject(ctx, id, 'graveyard');
 }

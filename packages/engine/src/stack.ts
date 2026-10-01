@@ -10,18 +10,28 @@ import {
   other,
   sacrifice as sacrificePermanent,
   tap,
+  addCounters,
+  createObject,
 } from './context.ts';
 import { type EffectSource, runEffects } from './effects.ts';
 import {
   characteristics,
   countOf,
   hasKeyword,
+  hasSubtype,
   cardMatches,
   matchesFilter,
 } from './characteristics.ts';
 import { changeLife, counterSpell, gainLife } from './effects.ts';
 import { foodsOf, payForage } from './forage.ts';
-import { anyTypeCost, manaValue, payMana, planPayment } from './mana.ts';
+import {
+  anyTypeCost,
+  creatureHelpers,
+  manaSources,
+  manaValue,
+  payMana,
+  planPayment,
+} from './mana.ts';
 import { shuffleInPlace } from './rng.ts';
 import { shuffleLibrary } from './setup.ts';
 import { addCosts, spellOnStack, spellTags, variantOf } from './spells.ts';
@@ -31,6 +41,7 @@ import { givePriority } from './turn.ts';
 import type {
   AbilityDef,
   CardDefinition,
+  Decision,
   Amount,
   EffectDef,
   ManaCost,
@@ -174,13 +185,21 @@ export function castCost(
     reduce += d.costReductionIfTarget.amount;
   for (const id of ctx.s.battlefield)
     if (obj(ctx, id).controller === player)
-      for (const a of def(ctx, id).abilities)
+      for (const a of def(ctx, id).abilities) {
         if (
           a.kind === 'static' &&
           a.effect.kind === 'spellsCostLess' &&
           cardMatches(ctx, card, a.effect.filter)
         )
           reduce += a.effect.amount;
+        if (
+          a.kind === 'static' &&
+          a.effect.kind === 'spellsCostLessIf' &&
+          cardMatches(ctx, card, a.effect.filter) &&
+          checkCondition(ctx, a.effect.condition, player, obj(ctx, id))
+        )
+          reduce += a.effect.amount;
+      }
   // Archmage of Runes: instants and sorceries cost less.
   if (d.types.includes('Instant') || d.types.includes('Sorcery'))
     for (const id of ctx.s.battlefield) {
@@ -270,17 +289,24 @@ export function activateAbility(
   payWith?: ObjectId[],
   sacrifice?: ObjectId,
   forage?: ObjectId | 'graveyard',
+  discard?: ObjectId,
 ): boolean {
   const a = activatedAbility(ctx, source, index);
   const src = obj(ctx, source);
   const sourceRef = { id: source, zcc: src.zcc };
+  const exclude = a.cost.tapSelf ? source : undefined;
   const payment = planPayment(
     ctx,
     player,
     addCosts(a.cost.mana ?? { generic: 0, colored: {} }, wardCost(ctx, player, targets)),
     payWith,
-    a.cost.tapSelf ? source : undefined,
+    exclude,
+    undefined,
+    a.cost.convoke ? creatureHelpers(ctx, player, manaSources(ctx, player, exclude), exclude) : [],
   );
+  if (discard) moveObject(ctx, discard, 'graveyard');
+  if (a.cost.tapTokens)
+    for (const id of tokensToTap(ctx, player, source).slice(0, a.cost.tapTokens)) tap(ctx, id);
   const sacrificedPower = sacrifice ? power(ctx, sacrifice) : undefined;
   if (sacrifice) sacrificePermanent(ctx, sacrifice);
   changeLife(ctx, player, -wardLife(ctx, player, targets) - (a.cost.life ?? 0));
@@ -436,9 +462,22 @@ export function resolveTop(ctx: Ctx): boolean {
     moveObject(ctx, item.id, 'battlefield', { controller: item.controller });
     if (item.kicked) o.kicked = true;
     if (d.entersWithCounters && checkCondition(ctx, d.entersWithCountersIf, item.controller, o))
-      o.plusOneCounters += d.entersWithCounters;
-    if (host) o.attachedTo = host;
-    o.plusOneCounters += bonusCounters(ctx, item.controller, o.id, d.subtypes);
+      addCounters(ctx, o.id, d.entersWithCounters);
+    if (host) attachAura(ctx, o.id, host);
+    addCounters(ctx, o.id, bonusCounters(ctx, item.controller, o.id, d.subtypes));
+    // A permanent's gift (Scrapshooter): the opponent gets it as it resolves.
+    if (item.kicked && d.kicker?.as === 'gift' && d.kicker.gift)
+      runEffects(
+        ctx,
+        {
+          controller: item.controller,
+          source: { id: o.id, zcc: o.zcc },
+          sourceDefId: o.defId,
+          targets: [],
+        },
+        [d.kicker.gift, { kind: 'giftGiven' }],
+        { kind: 'ability', id: o.id },
+      );
     return false;
   }
 
@@ -466,6 +505,22 @@ export function resolveTop(ctx: Ctx): boolean {
   return false;
 }
 
+/** An Aura attaches; Sugar Coat makes its host a Food, Kitnap takes control of it. */
+function attachAura(ctx: Ctx, aura: ObjectId, host: ObjectId): void {
+  const a = obj(ctx, aura);
+  a.attachedTo = host;
+  const h = obj(ctx, host);
+  for (const ab of def(ctx, aura).abilities) {
+    if (ab.kind !== 'static') continue;
+    if (ab.effect.kind === 'enchantedIsFood') h.foodBy = aura;
+    if (ab.effect.kind === 'attached' && ab.effect.control && h.controller !== a.controller) {
+      h.controlledBy = { aura, previous: h.controller };
+      h.controller = a.controller;
+      h.summoningSick = true;
+    }
+  }
+}
+
 /** Last step of resolving (rule 608.2n): an instant or sorcery goes to the graveyard. */
 export function finishResolution(ctx: Ctx, item: PausedResolution['item']): void {
   emit(ctx, { type: 'resolved', id: item.id });
@@ -477,6 +532,23 @@ function resume(ctx: Ctx, r: PausedResolution, thenPriority: PlayerId): void {
   if (runEffects(ctx, r, r.effects, r.item)) return;
   finishResolution(ctx, r.item);
   givePriority(ctx, thenPriority);
+}
+
+/**
+ * Untapped tokens `player` could tap for a cost, least useful first:
+ * noncreature tokens, then the weakest creatures (the engine picks; a simplification).
+ */
+export function tokensToTap(ctx: Ctx, player: PlayerId, source?: ObjectId): ObjectId[] {
+  return ctx.s.battlefield
+    .filter((id) => {
+      const o = obj(ctx, id);
+      return id !== source && o.controller === player && o.isToken && !o.tapped;
+    })
+    .sort((x, y) => {
+      const cx = def(ctx, x).types.includes('Creature') ? 1 + power(ctx, x) : 0;
+      const cy = def(ctx, y).types.includes('Creature') ? 1 + power(ctx, y) : 0;
+      return cx - cy;
+    });
 }
 
 /** Carries on with a paused resolution, running `first` before the rest of it. */
@@ -601,7 +673,8 @@ export function answerSacrifice(ctx: Ctx, card: ObjectId): void {
   const d = ctx.s.decision;
   if (d.kind !== 'sacrifice') throw new Error('Not sacrificing');
   const t = Math.max(0, characteristics(ctx, card).toughness);
-  sacrificePermanent(ctx, card);
+  if (d.exile) moveObject(ctx, card, 'exile');
+  else sacrificePermanent(ctx, card);
   if (d.gainLifeFor) gainLife(ctx, d.gainLifeFor, t);
   resume(ctx, d.resume, d.thenPriority);
 }
@@ -654,15 +727,33 @@ export function answerSearch(ctx: Ctx, card: ObjectId | null): void {
         moveObject(ctx, card, 'battlefield', { controller: d.player });
         if (d.counter) (obj(ctx, card).counters ??= {})[d.counter] = 1;
       } else moveObject(ctx, card, 'hand');
+      squirrelFood(ctx, d, card);
       return resume(ctx, d.resume, d.thenPriority);
     }
-    if (!d.to || d.to === 'hand') moveObject(ctx, card, 'hand');
-    else if (d.to === 'graveyard') moveObject(ctx, card, 'graveyard');
-    else {
+    const onBattlefield =
+      d.to === 'battlefield' ||
+      d.to === 'battlefieldTapped' ||
+      (d.battlefieldOnYourTurn && ctx.s.turn.activePlayer === d.player);
+    if (d.to === 'graveyard') moveObject(ctx, card, 'graveyard');
+    else if (d.to === 'libraryTop') {
+      // Fountainport Bell: shuffle, then put it on top (done after the shuffle below).
+    } else if (onBattlefield) {
       moveObject(ctx, card, 'battlefield', { controller: d.player });
       if (d.to === 'battlefieldTapped') obj(ctx, card).tapped = true;
-    }
+      // Fabled Passage: untap it if you control enough lands.
+      if (
+        d.untapIfLands &&
+        ctx.s.battlefield.filter(
+          (id) => obj(ctx, id).controller === d.player && def(ctx, id).types.includes('Land'),
+        ).length >= d.untapIfLands
+      )
+        obj(ctx, card).tapped = false;
+    } else moveObject(ctx, card, 'hand');
     emit(ctx, { type: 'searched', player: d.player, id: card });
+  }
+  if (d.fromGraveyard) {
+    squirrelFood(ctx, d, null);
+    return resume(ctx, d.resume, d.thenPriority);
   }
   const lib = ctx.s.players[d.player].library;
   if (d.looked) {
@@ -671,17 +762,52 @@ export function answerSearch(ctx: Ctx, card: ObjectId | null): void {
     shuffleInPlace(ctx.s.rng, rest);
     lib.push(...rest);
   } else if (d.shuffle !== false) shuffleLibrary(ctx, d.player);
+  if (card !== null && d.to === 'libraryTop') {
+    lib.splice(lib.indexOf(card), 1);
+    lib.unshift(card);
+  }
   resume(ctx, d.resume, d.thenPriority);
+}
+
+/** Cache Grab: a Food if you control a Squirrel or took a Squirrel card. */
+function squirrelFood(
+  ctx: Ctx,
+  d: Extract<Decision, { kind: 'searchLibrary' }>,
+  card: ObjectId | null,
+): void {
+  if (!d.squirrelFood) return;
+  const tookSquirrel = card !== null && def(ctx, card).subtypes.includes('Squirrel');
+  const haveSquirrel = ctx.s.battlefield.some(
+    (id) => obj(ctx, id).controller === d.player && hasSubtype(ctx, id, 'Squirrel'),
+  );
+  if (!tookSquirrel && !haveSquirrel) return;
+  const food = createObject(ctx, 'food-token', d.player, 'battlefield', true);
+  ctx.s.battlefield.push(food.id);
+  emit(ctx, { type: 'objectMoved', id: food.id, defId: food.defId, from: null, to: 'battlefield' });
 }
 
 /** Discard from an effect: one card at a time, then resolution continues. */
 export function answerDiscard(ctx: Ctx, card: ObjectId): void {
   const d = ctx.s.decision;
   if (d.kind !== 'discard') throw new Error('Not discarding');
-  moveObject(ctx, card, 'graveyard');
+  moveObject(ctx, card, d.exile ? 'exile' : 'graveyard');
   d.count--;
-  if (d.count === 0 || ctx.s.players[d.player].hand.length === 0)
-    resume(ctx, d.resume, d.thenPriority);
+  const left = ctx.s.players[d.player].hand.filter(
+    (id) => !d.filter || cardMatches(ctx, id, d.filter),
+  );
+  if (d.count === 0 || left.length === 0) resume(ctx, d.resume, d.thenPriority);
+}
+
+/** Stargaze: one chosen card into your hand; once all are chosen, the rest go to the graveyard. */
+export function answerPickCards(ctx: Ctx, card: ObjectId): void {
+  const d = ctx.s.decision;
+  if (d.kind !== 'pickCards') throw new Error('Not picking cards');
+  moveObject(ctx, card, 'hand');
+  d.options = d.options.filter((id) => id !== card);
+  d.count--;
+  if (d.count > 0 && d.options.length > 0) return;
+  for (const id of d.options) moveObject(ctx, id, 'graveyard');
+  resume(ctx, d.resume, d.thenPriority);
 }
 
 /** Curator of Destinies: the owner split the cards; now an opponent picks a pile. */

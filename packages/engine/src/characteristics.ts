@@ -46,6 +46,9 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
   let cantBlock = false;
   let cantBeBlocked = false;
   let cantAttack = false;
+  const removed = new Set<Keyword>();
+  // A Vehicle that became an artifact creature this turn.
+  let crewed = false;
 
   if (o.zone === 'battlefield') {
     for (const e of ctx.s.effects) {
@@ -56,6 +59,7 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
     }
     for (const e of ctx.s.effects) {
       if (e.affected.id !== id || e.affected.zcc !== o.zcc) continue;
+      if (e.becomesCreature) crewed = true;
       power += e.power;
       toughness += e.toughness;
       if (e.cantBlock) cantBlock = true;
@@ -107,6 +111,10 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
         if (st.kind === 'attached') {
           if (src.attachedTo !== id) continue;
           if (st.cantAttackOrBlock) cantAttack = cantBlock = true;
+          if (st.loseKeywords?.length) {
+            granted ??= new Set(keywords);
+            for (const k of st.loseKeywords) removed.add(k);
+          }
           power += countOf(ctx, src.controller, st.power);
           toughness += countOf(ctx, src.controller, st.toughness);
           if (st.keywords?.length) {
@@ -122,7 +130,26 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
         if ((src.controller !== o.controller) !== opponents || !d.types.includes('Creature'))
           continue;
         if (st.affects === 'otherCreaturesYouControl' && srcId === id) continue;
-        if (st.filter?.subtype && !d.subtypes.includes(st.filter.subtype)) continue;
+        if (st.filter?.subtype && !hasSubtype(ctx, id, st.filter.subtype)) continue;
+        if (st.filter?.token && !o.isToken) continue;
+        if (
+          st.filter?.hasCounters &&
+          !o.plusOneCounters &&
+          !Object.values(o.counters ?? {}).some((n) => n > 0)
+        )
+          continue;
+        if (
+          st.filter?.equipped &&
+          !ctx.s.battlefield.some(
+            (e) => obj(ctx, e).attachedTo === id && def(ctx, e).subtypes.includes('Equipment'),
+          )
+        )
+          continue;
+        if (
+          st.filter?.chosenTypeOfSource &&
+          !(src.chosenType && hasSubtype(ctx, id, src.chosenType))
+        )
+          continue;
         // Printed keywords only (avoids recursion through other anthems).
         if (st.filter?.hasKeyword && !d.keywords.includes(st.filter.hasKeyword)) continue;
         if (
@@ -143,13 +170,16 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
       }
     }
   }
-  if (granted) keywords = granted;
+  if (granted) {
+    for (const k of removed) granted.delete(k);
+    keywords = granted;
+  }
   const subtypes = o.addedSubtypes ? [...d.subtypes, ...o.addedSubtypes] : d.subtypes;
   return {
     power,
     toughness,
     keywords,
-    types: d.types,
+    types: crewed && !d.types.includes('Creature') ? [...d.types, 'Creature'] : d.types,
     subtypes,
     cantBlock,
     cantBeBlocked,
@@ -186,6 +216,16 @@ export function countOf(
       (n, id) => Math.max(n, manaValueOfDef(def(ctx, id))),
       0,
     );
+  if (a.count === 'creatureCardsInExileAndGraveyard') {
+    const ps = ctx.s.players[player];
+    return [...ps.exile, ...ps.graveyard].filter((id) => def(ctx, id).types.includes('Creature'))
+      .length;
+  }
+  if (a.count === 'creaturesOfChosenType') {
+    const chosen = sourceId ? obj(ctx, sourceId).chosenType : undefined;
+    if (!chosen) return 0;
+    return creaturesOnBattlefield(ctx, player).filter((c) => hasSubtype(ctx, c.id, chosen)).length;
+  }
   if (a.count === 'opponentCreaturesExiledThisTurn')
     return ctx.s.turn.creaturesExiled?.[player === 'p1' ? 'p2' : 'p1'] ?? 0;
   if (a.count === 'permanentsYouControl')
@@ -208,6 +248,7 @@ export function countOf(
       return d.types.includes('Land') && (!a.subtype || d.subtypes.includes(a.subtype));
     if (!d.types.includes('Creature')) return false;
     if (!a.subtype) return true;
+    if (changeling(ctx, id, a.subtype)) return true;
     return (printed ? d.subtypes : characteristics(ctx, id).subtypes).includes(a.subtype);
   }).length;
   const n =
@@ -257,7 +298,44 @@ export function isType(ctx: Ctx, id: ObjectId, t: CardType): boolean {
 }
 
 export function isCreature(ctx: Ctx, id: ObjectId): boolean {
-  return isType(ctx, id, 'Creature');
+  if (isType(ctx, id, 'Creature')) return true;
+  const o = obj(ctx, id);
+  return (
+    o.zone === 'battlefield' &&
+    ctx.s.effects.some((e) => e.becomesCreature && e.affected.id === id && e.affected.zcc === o.zcc)
+  );
+}
+
+/** Not creature types, so a changeling doesn't have them. */
+const NON_CREATURE_SUBTYPES = new Set([
+  'Food',
+  'Equipment',
+  'Aura',
+  'Class',
+  'Vehicle',
+  'Treasure',
+  'Book',
+  'Gate',
+  'Plains',
+  'Island',
+  'Swamp',
+  'Mountain',
+  'Forest',
+]);
+
+/** Changeling: it's every creature type. */
+function changeling(ctx: Ctx, id: ObjectId, subtype: string): boolean {
+  return def(ctx, id).keywords.includes('changeling') && !NON_CREATURE_SUBTYPES.has(subtype);
+}
+
+/** Has this subtype (printed, gained, or every creature type for a changeling). */
+export function hasSubtype(ctx: Ctx, id: ObjectId, subtype: string): boolean {
+  const o = obj(ctx, id);
+  return (
+    def(ctx, id).subtypes.includes(subtype) ||
+    !!o.addedSubtypes?.includes(subtype) ||
+    changeling(ctx, id, subtype)
+  );
 }
 
 export function creaturesOnBattlefield(ctx: Ctx, controller?: PlayerId): GameObject[] {
@@ -313,8 +391,35 @@ export function matchesFilter(
   if (filter.lacksKeyword && c.keywords.has(filter.lacksKeyword)) return false;
   if (filter.tapped !== undefined && obj(ctx, id).tapped !== filter.tapped) return false;
   if (filter.attacking !== undefined && isAttacking(ctx, id) !== filter.attacking) return false;
-  if (filter.subtype && !c.subtypes.includes(filter.subtype)) return false;
+  if (
+    filter.subtype &&
+    !c.subtypes.includes(filter.subtype) &&
+    !changeling(ctx, id, filter.subtype)
+  )
+    return false;
   if (filter.minToughness !== undefined && c.toughness < filter.minToughness) return false;
+  if (
+    filter.equipped &&
+    !ctx.s.battlefield.some(
+      (e) => obj(ctx, e).attachedTo === id && def(ctx, e).subtypes.includes('Equipment'),
+    )
+  )
+    return false;
+  if (filter.damaged && obj(ctx, id).damage <= 0) return false;
+  if (
+    filter.hasCounters &&
+    !obj(ctx, id).plusOneCounters &&
+    !Object.values(obj(ctx, id).counters ?? {}).some((n) => n > 0)
+  )
+    return false;
+  if (filter.toughnessGreaterThanPower) {
+    const ch = characteristics(ctx, id);
+    if (ch.toughness <= ch.power) return false;
+  }
+  if (filter.chosenTypeOfSource) {
+    const chosen = sourceId ? obj(ctx, sourceId).chosenType : undefined;
+    if (!chosen || !hasSubtype(ctx, id, chosen)) return false;
+  }
   if (filter.nontoken && obj(ctx, id).isToken) return false;
   if (filter.token && !obj(ctx, id).isToken) return false;
   if (filter.sameNameAsSource && (!sourceId || obj(ctx, id).defId !== obj(ctx, sourceId).defId))
@@ -365,13 +470,18 @@ export function cardMatches(
     if (filter.maxPower !== undefined && (d.power ?? 0) > filter.maxPower) return false;
   }
   if (filter.types && !filter.types.some((t) => d.types.includes(t))) return false;
-  if (filter.subtypes && !filter.subtypes.some((st) => subtypes.includes(st))) return false;
+  if (
+    filter.subtypes &&
+    !filter.subtypes.some((st) => subtypes.includes(st) || changeling(ctx, id, st))
+  )
+    return false;
   if (filter.colors && !filter.colors.some((color) => d.colors.includes(color))) return false;
   if (filter.notTypes?.some((t) => d.types.includes(t))) return false;
   const mv = manaValue(d.manaCost);
   if (filter.minManaValue !== undefined && mv < filter.minManaValue) return false;
   if (filter.manaValue !== undefined && mv !== filter.manaValue) return false;
-  if (filter.subtype && !subtypes.includes(filter.subtype)) return false;
+  if (filter.subtype && !subtypes.includes(filter.subtype) && !changeling(ctx, id, filter.subtype))
+    return false;
   if (filter.nonland && d.types.includes('Land')) return false;
   if (filter.enteredThisTurn && obj(ctx, id).zoneTurn !== ctx.s.turn.number) return false;
   if (filter.notSubtype && d.subtypes.includes(filter.notSubtype)) return false;

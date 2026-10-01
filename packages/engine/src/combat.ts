@@ -173,7 +173,13 @@ export function dealCombatDamage(ctx: Ctx, firstStrikeStep: boolean): void {
   }
 
   // Fog Bank: combat damage to or from it is prevented.
+  const unpreventable = ctx.s.battlefield.some((id) =>
+    def(ctx, id).abilities.some(
+      (a) => a.kind === 'static' && a.effect.kind === 'damageCantBePrevented',
+    ),
+  );
   const prevented = (id: ObjectId) =>
+    !unpreventable &&
     def(ctx, id).abilities.some(
       (a) => a.kind === 'static' && a.effect.kind === 'preventCombatDamage',
     );

@@ -27,6 +27,8 @@ function lesserThanSubject(
 
 function playerOk(ctx: Ctx, spec: TargetSpec, p: PlayerId, src: TargetingSource): boolean {
   if (ctx.s.players[p].lost) return false;
+  // Dawn's Truce: hexproof against opponents.
+  if (p !== src.controller && ctx.s.turn.hexproofPlayers?.includes(p)) return false;
   if (spec.controller === 'you' && p !== src.controller) return false;
   if (spec.controller === 'opponent' && p !== other(src.controller)) return false;
   return true;
@@ -48,6 +50,7 @@ function permanentOk(ctx: Ctx, spec: TargetSpec, id: ObjectId, src: TargetingSou
       return false;
   }
   if (!lesserThanSubject(ctx, spec, id, src)) return false;
+  if (spec.filter?.notSubject && id === src.subjectId) return false;
   return matchesFilter(ctx, id, spec.filter, src.sourceId);
 }
 

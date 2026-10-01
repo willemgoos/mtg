@@ -37,11 +37,23 @@ export function runSBAs(ctx: Ctx): void {
       const aura = def(ctx, id).subtypes.includes('Aura');
       const host = o.attachedTo !== undefined ? ctx.s.objects[o.attachedTo] : undefined;
       if (host && host.zone === 'battlefield' && isCreature(ctx, host.id)) continue;
+      // Sugar Coat stays on the Food it made.
+      if (host && host.zone === 'battlefield' && host.foodBy === id) continue;
       if (aura) orphanedAuras.push(id);
       else delete o.attachedTo;
     }
     for (const id of orphanedAuras) moveObject(ctx, id, 'graveyard');
     if (orphanedAuras.length) changed = true;
+    // Kitnap: control ends when the Aura is no longer on it.
+    for (const id of ctx.s.battlefield) {
+      const o = obj(ctx, id);
+      if (!o.controlledBy) continue;
+      const aura = ctx.s.objects[o.controlledBy.aura];
+      if (aura && aura.zone === 'battlefield' && aura.attachedTo === id) continue;
+      o.controller = o.controlledBy.previous;
+      delete o.controlledBy;
+      changed = true;
+    }
     const legends = extraLegends(ctx);
     for (const id of legends) moveObject(ctx, id, 'graveyard');
     if (legends.length) changed = true;

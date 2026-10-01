@@ -102,7 +102,7 @@ export function gift(present: keyof typeof GIFTS, spell: SpellDef, promised: Spe
     kicker: {
       cost: { generic: 0, colored: {} },
       as: 'gift',
-      spell: { ...promised, effects: [GIFTS[present], ...promised.effects] },
+      spell: { ...promised, effects: [GIFTS[present], { kind: 'giftGiven' }, ...promised.effects] },
     },
   };
 }
@@ -181,6 +181,16 @@ export const anyColor = (): AbilityDef[] =>
     produces,
   }));
 
+/** Static abilities that take a condition (so a Class level can switch them on). */
+const CONDITIONAL_STATICS = new Set([
+  'anthem',
+  'while',
+  'damageBonus',
+  'spellsCostLessIf',
+  'doubleCounters',
+  'othersEnterWithCounter',
+]);
+
 /** Gates an ability behind a Class level (merged with its own condition). */
 function atLevel(a: AbilityDef, min: number): AbilityDef {
   const level: ConditionDef = { kind: 'classLevel', min };
@@ -192,10 +202,10 @@ function atLevel(a: AbilityDef, min: number): AbilityDef {
     return { ...a, condition: and(a.condition) };
   }
   if (a.kind === 'activated') return { ...a, condition: and(a.condition) };
-  if (a.kind === 'static' && 'condition' in a.effect)
-    return { ...a, effect: { ...a.effect, condition: and(a.effect.condition) } } as AbilityDef;
-  if (a.kind === 'static' && a.effect.kind === 'anthem')
-    return { ...a, effect: { ...a.effect, condition: level } };
+  if (a.kind === 'static' && CONDITIONAL_STATICS.has(a.effect.kind)) {
+    const own = (a.effect as { condition?: ConditionDef }).condition;
+    return { ...a, effect: { ...a.effect, condition: and(own) } } as AbilityDef;
+  }
   throw new Error(`Can't gate ${a.kind} ${a.kind === 'static' ? a.effect.kind : ''} by level`);
 }
 

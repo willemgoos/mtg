@@ -51,6 +51,7 @@ export function manaSources(
     for (const a of def(ctx, id).abilities) {
       if (a.kind !== 'mana' || !a.cost.tapSelf || a.cost.mana) continue;
       if (a.onlyFor && !forSubtypes.includes(a.onlyFor)) continue;
+      if (a.ifChosen && obj(ctx, id).chosenColor !== a.produces) continue;
       if (a.doubleIf && checkCondition(ctx, a.doubleIf, player, obj(ctx, id))) double = true;
       if (a.cost.sacrificeSelf) sacrifice = true;
       if (!produces) {
@@ -158,6 +159,30 @@ export function payMana(ctx: Ctx, sources: readonly ObjectId[]): void {
   }
 }
 
+/**
+ * Convoke-style payment (Heirloom Epic): untapped creatures `player` controls
+ * that aren't already mana sources, each paying for {1}.
+ */
+export function creatureHelpers(
+  ctx: Ctx,
+  player: PlayerId,
+  sources: readonly ManaSource[],
+  exclude?: ObjectId,
+): ManaSource[] {
+  return ctx.s.battlefield
+    .filter((id) => {
+      const o = obj(ctx, id);
+      return (
+        id !== exclude &&
+        o.controller === player &&
+        !o.tapped &&
+        isCreature(ctx, id) &&
+        !sources.some((x) => x.id === id)
+      );
+    })
+    .map((id) => ({ id, produces: ['C'], isCreature: true, sacrifice: false }));
+}
+
 /** Can `sources` pay this cost? (Precompute sources once when checking many costs.) */
 export function canPayFrom(cost: ManaCost | undefined, sources: readonly ManaSource[]): boolean {
   if (!cost || manaValue(cost) === 0) return true;
@@ -175,9 +200,10 @@ export function planPayment(
   payWith: readonly ObjectId[] | undefined,
   exclude?: ObjectId,
   forSubtypes?: readonly string[],
+  extra: readonly ManaSource[] = [],
 ): ObjectId[] {
   if (!cost || manaValue(cost) === 0) return [];
-  let sources = manaSources(ctx, player, exclude, forSubtypes);
+  let sources = [...manaSources(ctx, player, exclude, forSubtypes), ...extra];
   if (payWith) sources = sources.filter((s) => payWith.includes(s.id));
   const plan = findPayment(cost, sources);
   if (!plan) throw new Error('Cannot pay mana cost');

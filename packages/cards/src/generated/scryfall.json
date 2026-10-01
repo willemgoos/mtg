@@ -13388,5 +13388,1305 @@
    "large": "https://cards.scryfall.io/large/front/6/b/6b8bfa91-adb0-4596-8c16-d8bb64fdb26d.jpg?1783910802",
    "artCrop": "https://cards.scryfall.io/art_crop/front/6/b/6b8bfa91-adb0-4596-8c16-d8bb64fdb26d.jpg?1783910802"
   }
+ },
+ {
+  "name": "Barkform Harvester",
+  "scryfallId": "f77049a6-0f22-415b-bc89-20bcb32accf6",
+  "oracleId": "0339bd11-ad71-4998-9b5d-a32790f0e5e3",
+  "set": "blb",
+  "collectorNumber": "243",
+  "rarity": "common",
+  "manaCost": "{3}",
+  "typeLine": "Artifact Creature — Shapeshifter",
+  "oracleText": "Changeling (This card is every creature type.)\nReach\n{2}: Put target card from your graveyard on the bottom of your library.",
+  "power": "2",
+  "toughness": "3",
+  "colors": [],
+  "keywords": [
+   "Reach",
+   "Changeling"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/7/f77049a6-0f22-415b-bc89-20bcb32accf6.jpg?1783910787",
+   "normal": "https://cards.scryfall.io/normal/front/f/7/f77049a6-0f22-415b-bc89-20bcb32accf6.jpg?1783910787",
+   "large": "https://cards.scryfall.io/large/front/f/7/f77049a6-0f22-415b-bc89-20bcb32accf6.jpg?1783910787",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/7/f77049a6-0f22-415b-bc89-20bcb32accf6.jpg?1783910787"
+  }
+ },
+ {
+  "name": "Bumbleflower's Sharepot",
+  "scryfallId": "5f0affd5-5dcd-4dd1-a694-37a9aedf4084",
+  "oracleId": "6e152529-64b4-472c-8e50-99095af6af99",
+  "set": "blb",
+  "collectorNumber": "244",
+  "rarity": "common",
+  "manaCost": "{2}",
+  "typeLine": "Artifact",
+  "oracleText": "When this artifact enters, create a Food token. (It's an artifact with \"{2}, {T}, Sacrifice this token: You gain 3 life.\")\n{5}, {T}, Sacrifice this artifact: Destroy target nonland permanent. Activate only as a sorcery.",
+  "colors": [],
+  "keywords": [
+   "Food"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/f/5f0affd5-5dcd-4dd1-a694-37a9aedf4084.jpg?1783910786",
+   "normal": "https://cards.scryfall.io/normal/front/5/f/5f0affd5-5dcd-4dd1-a694-37a9aedf4084.jpg?1783910786",
+   "large": "https://cards.scryfall.io/large/front/5/f/5f0affd5-5dcd-4dd1-a694-37a9aedf4084.jpg?1783910786",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/f/5f0affd5-5dcd-4dd1-a694-37a9aedf4084.jpg?1783910786"
+  }
+ },
+ {
+  "name": "Fountainport Bell",
+  "scryfallId": "a5c94bc0-a49d-451b-8e8d-64d46b8b8603",
+  "oracleId": "ea4c5b8f-a5ff-47dd-8e47-5ae7b21926b4",
+  "set": "blb",
+  "collectorNumber": "245",
+  "rarity": "common",
+  "manaCost": "{1}",
+  "typeLine": "Artifact",
+  "oracleText": "When this artifact enters, you may search your library for a basic land card, reveal it, then shuffle and put that card on top.\n{1}, Sacrifice this artifact: Draw a card.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/5/a5c94bc0-a49d-451b-8e8d-64d46b8b8603.jpg?1783910786",
+   "normal": "https://cards.scryfall.io/normal/front/a/5/a5c94bc0-a49d-451b-8e8d-64d46b8b8603.jpg?1783910786",
+   "large": "https://cards.scryfall.io/large/front/a/5/a5c94bc0-a49d-451b-8e8d-64d46b8b8603.jpg?1783910786",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/5/a5c94bc0-a49d-451b-8e8d-64d46b8b8603.jpg?1783910786"
+  }
+ },
+ {
+  "name": "Three Tree Mascot",
+  "scryfallId": "40b8bf3a-1cb5-4ce2-ac25-9410f17130de",
+  "oracleId": "6cb9d153-4eaa-4f32-8930-bd68cd99c128",
+  "set": "fdn",
+  "collectorNumber": "682",
+  "rarity": "common",
+  "manaCost": "{2}",
+  "typeLine": "Artifact Creature — Shapeshifter",
+  "oracleText": "Changeling (This card is every creature type.)\n{1}: Add one mana of any color. Activate only once each turn.",
+  "power": "2",
+  "toughness": "1",
+  "colors": [],
+  "keywords": [
+   "Changeling"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/0/40b8bf3a-1cb5-4ce2-ac25-9410f17130de.jpg?1783908902",
+   "normal": "https://cards.scryfall.io/normal/front/4/0/40b8bf3a-1cb5-4ce2-ac25-9410f17130de.jpg?1783908902",
+   "large": "https://cards.scryfall.io/large/front/4/0/40b8bf3a-1cb5-4ce2-ac25-9410f17130de.jpg?1783908902",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/0/40b8bf3a-1cb5-4ce2-ac25-9410f17130de.jpg?1783908902"
+  }
+ },
+ {
+  "name": "Heirloom Epic",
+  "scryfallId": "7839ce48-0175-494a-ab89-9bdfb7a50cb1",
+  "oracleId": "43037ef5-09e8-4881-beff-ed38cf7574c6",
+  "set": "blb",
+  "collectorNumber": "246",
+  "rarity": "uncommon",
+  "manaCost": "{1}",
+  "typeLine": "Artifact — Book",
+  "oracleText": "{4}, {T}: Draw a card. For each mana in this ability's activation cost, you may tap an untapped creature you control rather than pay that mana. Activate only as a sorcery.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/8/7839ce48-0175-494a-ab89-9bdfb7a50cb1.jpg?1783910786",
+   "normal": "https://cards.scryfall.io/normal/front/7/8/7839ce48-0175-494a-ab89-9bdfb7a50cb1.jpg?1783910786",
+   "large": "https://cards.scryfall.io/large/front/7/8/7839ce48-0175-494a-ab89-9bdfb7a50cb1.jpg?1783910786",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/8/7839ce48-0175-494a-ab89-9bdfb7a50cb1.jpg?1783910786"
+  }
+ },
+ {
+  "name": "Patchwork Banner",
+  "scryfallId": "a8a982c8-bc08-44ba-b3ed-9e4b124615d6",
+  "oracleId": "4fb00dbe-1f82-4ba6-b18c-97e816d10d3a",
+  "set": "blb",
+  "collectorNumber": "247",
+  "rarity": "uncommon",
+  "manaCost": "{3}",
+  "typeLine": "Artifact",
+  "oracleText": "As this artifact enters, choose a creature type.\nCreatures you control of the chosen type get +1/+1.\n{T}: Add one mana of any color.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/8/a8a982c8-bc08-44ba-b3ed-9e4b124615d6.jpg?1783910786",
+   "normal": "https://cards.scryfall.io/normal/front/a/8/a8a982c8-bc08-44ba-b3ed-9e4b124615d6.jpg?1783910786",
+   "large": "https://cards.scryfall.io/large/front/a/8/a8a982c8-bc08-44ba-b3ed-9e4b124615d6.jpg?1783910786",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/8/a8a982c8-bc08-44ba-b3ed-9e4b124615d6.jpg?1783910786"
+  }
+ },
+ {
+  "name": "Short Bow",
+  "scryfallId": "51d8b72b-fa8f-48d3-bddc-d3ce9b8ba2ea",
+  "oracleId": "ce5f5ff9-13f7-41eb-ada0-7f73de42acef",
+  "set": "blb",
+  "collectorNumber": "248",
+  "rarity": "uncommon",
+  "manaCost": "{2}",
+  "typeLine": "Artifact — Equipment",
+  "oracleText": "Equipped creature gets +1/+1 and has reach and vigilance.\nEquip {1} ({1}: Attach to target creature you control. Equip only as a sorcery.)",
+  "colors": [],
+  "keywords": [
+   "Equip"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/1/51d8b72b-fa8f-48d3-bddc-d3ce9b8ba2ea.jpg?1783910786",
+   "normal": "https://cards.scryfall.io/normal/front/5/1/51d8b72b-fa8f-48d3-bddc-d3ce9b8ba2ea.jpg?1783910786",
+   "large": "https://cards.scryfall.io/large/front/5/1/51d8b72b-fa8f-48d3-bddc-d3ce9b8ba2ea.jpg?1783910786",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/1/51d8b72b-fa8f-48d3-bddc-d3ce9b8ba2ea.jpg?1783910786"
+  }
+ },
+ {
+  "name": "Starforged Sword",
+  "scryfallId": "c23d8e96-b972-4c6c-b0c4-b6627621f048",
+  "oracleId": "2cdc1d82-30dc-4f0a-af20-33dde90269b1",
+  "set": "blb",
+  "collectorNumber": "249",
+  "rarity": "uncommon",
+  "manaCost": "{4}",
+  "typeLine": "Artifact — Equipment",
+  "oracleText": "Gift a tapped Fish (You may promise an opponent a gift as you cast this spell. If you do, when it enters, they create a tapped 1/1 blue Fish creature token.)\nWhen this Equipment enters, if the gift was promised, attach this Equipment to target creature you control.\nEquipped creature gets +3/+3 and loses flying.\nEquip {3}",
+  "colors": [],
+  "keywords": [
+   "Gift",
+   "Equip"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/2/c23d8e96-b972-4c6c-b0c4-b6627621f048.jpg?1783910785",
+   "normal": "https://cards.scryfall.io/normal/front/c/2/c23d8e96-b972-4c6c-b0c4-b6627621f048.jpg?1783910785",
+   "large": "https://cards.scryfall.io/large/front/c/2/c23d8e96-b972-4c6c-b0c4-b6627621f048.jpg?1783910785",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/2/c23d8e96-b972-4c6c-b0c4-b6627621f048.jpg?1783910785"
+  }
+ },
+ {
+  "name": "Tangle Tumbler",
+  "scryfallId": "258ef349-5042-4992-bae9-9f8f54b55db0",
+  "oracleId": "0d81ea20-5e7d-4eea-b0ba-fe688f27df94",
+  "set": "blb",
+  "collectorNumber": "250",
+  "rarity": "uncommon",
+  "manaCost": "{3}",
+  "typeLine": "Artifact — Vehicle",
+  "oracleText": "Vigilance\n{3}, {T}: Put a +1/+1 counter on target creature.\nTap two untapped tokens you control: This Vehicle becomes an artifact creature until end of turn.",
+  "power": "6",
+  "toughness": "6",
+  "colors": [],
+  "keywords": [
+   "Vigilance"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/5/258ef349-5042-4992-bae9-9f8f54b55db0.jpg?1783910785",
+   "normal": "https://cards.scryfall.io/normal/front/2/5/258ef349-5042-4992-bae9-9f8f54b55db0.jpg?1783910785",
+   "large": "https://cards.scryfall.io/large/front/2/5/258ef349-5042-4992-bae9-9f8f54b55db0.jpg?1783910785",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/5/258ef349-5042-4992-bae9-9f8f54b55db0.jpg?1783910785"
+  }
+ },
+ {
+  "name": "Stocking the Pantry",
+  "scryfallId": "50e95c7b-f0b2-4276-8c5e-4191b7ba35d1",
+  "oracleId": "068b370f-a358-4244-8050-6c81680c55c7",
+  "set": "blb",
+  "collectorNumber": "194",
+  "rarity": "uncommon",
+  "manaCost": "{G}",
+  "typeLine": "Enchantment",
+  "oracleText": "Whenever you put one or more +1/+1 counters on a creature you control, put a supply counter on this enchantment.\n{2}, Remove a supply counter from this enchantment: Draw a card.",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/0/50e95c7b-f0b2-4276-8c5e-4191b7ba35d1.jpg?1783910803",
+   "normal": "https://cards.scryfall.io/normal/front/5/0/50e95c7b-f0b2-4276-8c5e-4191b7ba35d1.jpg?1783910803",
+   "large": "https://cards.scryfall.io/large/front/5/0/50e95c7b-f0b2-4276-8c5e-4191b7ba35d1.jpg?1783910803",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/0/50e95c7b-f0b2-4276-8c5e-4191b7ba35d1.jpg?1783910803"
+  }
+ },
+ {
+  "name": "Sugar Coat",
+  "scryfallId": "fcacbe71-efb0-49e1-b2d0-3ee65ec6cf8b",
+  "oracleId": "1caa8c8a-ff45-4eee-a834-6e5e1fb54721",
+  "set": "blb",
+  "collectorNumber": "76",
+  "rarity": "uncommon",
+  "manaCost": "{2}{U}",
+  "typeLine": "Enchantment — Aura",
+  "oracleText": "Flash\nEnchant creature or Food\nEnchanted permanent is a colorless Food artifact with \"{2}, {T}, Sacrifice this artifact: You gain 3 life\" and loses all other card types and abilities.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Enchant",
+   "Flash"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/c/fcacbe71-efb0-49e1-b2d0-3ee65ec6cf8b.jpg?1783910840",
+   "normal": "https://cards.scryfall.io/normal/front/f/c/fcacbe71-efb0-49e1-b2d0-3ee65ec6cf8b.jpg?1783910840",
+   "large": "https://cards.scryfall.io/large/front/f/c/fcacbe71-efb0-49e1-b2d0-3ee65ec6cf8b.jpg?1783910840",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/c/fcacbe71-efb0-49e1-b2d0-3ee65ec6cf8b.jpg?1783910840"
+  }
+ },
+ {
+  "name": "Hidden Grotto",
+  "scryfallId": "4ba8f2e7-8357-4862-97dc-1942d066023a",
+  "oracleId": "382d18a2-438e-4ae7-a83f-1658ef1f9b07",
+  "set": "blb",
+  "collectorNumber": "254",
+  "rarity": "common",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "When this land enters, surveil 1. (Look at the top card of your library. You may put it into your graveyard.)\n{T}: Add {C}.\n{1}, {T}: Add one mana of any color.",
+  "colors": [],
+  "keywords": [
+   "Surveil"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/b/4ba8f2e7-8357-4862-97dc-1942d066023a.jpg?1783910785",
+   "normal": "https://cards.scryfall.io/normal/front/4/b/4ba8f2e7-8357-4862-97dc-1942d066023a.jpg?1783910785",
+   "large": "https://cards.scryfall.io/large/front/4/b/4ba8f2e7-8357-4862-97dc-1942d066023a.jpg?1783910785",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/b/4ba8f2e7-8357-4862-97dc-1942d066023a.jpg?1783910785"
+  }
+ },
+ {
+  "name": "Uncharted Haven",
+  "scryfallId": "172cd5b7-98fc-4add-b858-a0b3dfb75c19",
+  "oracleId": "d23c3613-bc5e-4fc5-939c-62a090c53a79",
+  "set": "fdn",
+  "collectorNumber": "564",
+  "rarity": "common",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "This land enters tapped. As it enters, choose a color.\n{T}: Add one mana of the chosen color.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/7/172cd5b7-98fc-4add-b858-a0b3dfb75c19.jpg?1783908943",
+   "normal": "https://cards.scryfall.io/normal/front/1/7/172cd5b7-98fc-4add-b858-a0b3dfb75c19.jpg?1783908943",
+   "large": "https://cards.scryfall.io/large/front/1/7/172cd5b7-98fc-4add-b858-a0b3dfb75c19.jpg?1783908943",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/7/172cd5b7-98fc-4add-b858-a0b3dfb75c19.jpg?1783908943"
+  }
+ },
+ {
+  "name": "Lilypad Village",
+  "scryfallId": "7e95a7cc-ed77-4ca4-80db-61c0fc68bf50",
+  "oracleId": "5bb06e6f-e3af-4caa-b66d-77248ad46b61",
+  "set": "blb",
+  "collectorNumber": "255",
+  "rarity": "uncommon",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "{T}: Add {C}.\n{T}: Add {U}. Spend this mana only to cast a creature spell.\n{U}, {T}: Surveil 2. Activate only if a Bird, Frog, Otter, or Rat entered the battlefield under your control this turn.",
+  "colors": [],
+  "keywords": [
+   "Surveil"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/e/7e95a7cc-ed77-4ca4-80db-61c0fc68bf50.jpg?1783910783",
+   "normal": "https://cards.scryfall.io/normal/front/7/e/7e95a7cc-ed77-4ca4-80db-61c0fc68bf50.jpg?1783910783",
+   "large": "https://cards.scryfall.io/large/front/7/e/7e95a7cc-ed77-4ca4-80db-61c0fc68bf50.jpg?1783910783",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/e/7e95a7cc-ed77-4ca4-80db-61c0fc68bf50.jpg?1783910783"
+  }
+ },
+ {
+  "name": "Lupinflower Village",
+  "scryfallId": "8ab9d56f-9178-4ec9-a5f6-b934f50d8d9d",
+  "oracleId": "b6c7c708-5212-4100-b954-b77855b27915",
+  "set": "blb",
+  "collectorNumber": "256",
+  "rarity": "uncommon",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "{T}: Add {C}.\n{T}: Add {W}. Spend this mana only to cast a creature spell.\n{1}{W}, {T}, Sacrifice this land: Look at the top six cards of your library. You may reveal a Bat, Bird, Mouse, or Rabbit card from among them and put it into your hand. Put the rest on the bottom of your library in a random order.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/a/8ab9d56f-9178-4ec9-a5f6-b934f50d8d9d.jpg?1783910784",
+   "normal": "https://cards.scryfall.io/normal/front/8/a/8ab9d56f-9178-4ec9-a5f6-b934f50d8d9d.jpg?1783910784",
+   "large": "https://cards.scryfall.io/large/front/8/a/8ab9d56f-9178-4ec9-a5f6-b934f50d8d9d.jpg?1783910784",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/a/8ab9d56f-9178-4ec9-a5f6-b934f50d8d9d.jpg?1783910784"
+  }
+ },
+ {
+  "name": "Mudflat Village",
+  "scryfallId": "53ec4ad3-9cf0-4f1b-a9db-d63feee594ab",
+  "oracleId": "aeeab1df-0b8b-4bc4-a5f9-aac413449bec",
+  "set": "blb",
+  "collectorNumber": "257",
+  "rarity": "uncommon",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "{T}: Add {C}.\n{T}: Add {B}. Spend this mana only to cast a creature spell.\n{1}{B}, {T}, Sacrifice this land: Return target Bat, Lizard, Rat, or Squirrel card from your graveyard to your hand.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/3/53ec4ad3-9cf0-4f1b-a9db-d63feee594ab.jpg?1783910783",
+   "normal": "https://cards.scryfall.io/normal/front/5/3/53ec4ad3-9cf0-4f1b-a9db-d63feee594ab.jpg?1783910783",
+   "large": "https://cards.scryfall.io/large/front/5/3/53ec4ad3-9cf0-4f1b-a9db-d63feee594ab.jpg?1783910783",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/3/53ec4ad3-9cf0-4f1b-a9db-d63feee594ab.jpg?1783910783"
+  }
+ },
+ {
+  "name": "Oakhollow Village",
+  "scryfallId": "0d49b016-b02b-459f-85e9-c04f6bdcb94e",
+  "oracleId": "177b7fe4-8565-4631-b4d9-8b2b4282f3ac",
+  "set": "blb",
+  "collectorNumber": "258",
+  "rarity": "uncommon",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "{T}: Add {C}.\n{T}: Add {G}. Spend this mana only to cast a creature spell.\n{G}, {T}: Put a +1/+1 counter on each Frog, Rabbit, Raccoon, or Squirrel you control that entered the battlefield this turn.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/d/0d49b016-b02b-459f-85e9-c04f6bdcb94e.jpg?1783910782",
+   "normal": "https://cards.scryfall.io/normal/front/0/d/0d49b016-b02b-459f-85e9-c04f6bdcb94e.jpg?1783910782",
+   "large": "https://cards.scryfall.io/large/front/0/d/0d49b016-b02b-459f-85e9-c04f6bdcb94e.jpg?1783910782",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/d/0d49b016-b02b-459f-85e9-c04f6bdcb94e.jpg?1783910782"
+  }
+ },
+ {
+  "name": "Rockface Village",
+  "scryfallId": "62799d24-39a6-4e66-8ac3-7cafa99e6e6d",
+  "oracleId": "7e103748-3f76-42ce-a063-d0256b2dce2b",
+  "set": "blb",
+  "collectorNumber": "259",
+  "rarity": "uncommon",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "{T}: Add {C}.\n{T}: Add {R}. Spend this mana only to cast a creature spell.\n{R}, {T}: Target Lizard, Mouse, Otter, or Raccoon you control gets +1/+0 and gains haste until end of turn. Activate only as a sorcery.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/2/62799d24-39a6-4e66-8ac3-7cafa99e6e6d.jpg?1783910782",
+   "normal": "https://cards.scryfall.io/normal/front/6/2/62799d24-39a6-4e66-8ac3-7cafa99e6e6d.jpg?1783910782",
+   "large": "https://cards.scryfall.io/large/front/6/2/62799d24-39a6-4e66-8ac3-7cafa99e6e6d.jpg?1783910782",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/2/62799d24-39a6-4e66-8ac3-7cafa99e6e6d.jpg?1783910782"
+  }
+ },
+ {
+  "name": "Fabled Passage",
+  "scryfallId": "d313d051-7295-4884-8cbf-f2f835fd45f4",
+  "oracleId": "0c85b8f7-0bd0-4680-9ec5-d4b110460a54",
+  "set": "m21",
+  "collectorNumber": "246",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "{T}, Sacrifice this land: Search your library for a basic land card, put it onto the battlefield tapped, then shuffle. Then if you control four or more lands, untap that land.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/3/d313d051-7295-4884-8cbf-f2f835fd45f4.jpg?1783930652",
+   "normal": "https://cards.scryfall.io/normal/front/d/3/d313d051-7295-4884-8cbf-f2f835fd45f4.jpg?1783930652",
+   "large": "https://cards.scryfall.io/large/front/d/3/d313d051-7295-4884-8cbf-f2f835fd45f4.jpg?1783930652",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/3/d313d051-7295-4884-8cbf-f2f835fd45f4.jpg?1783930652"
+  }
+ },
+ {
+  "name": "Fountainport",
+  "scryfallId": "658cfcb7-81b7-48c6-9dd2-1663d06108cf",
+  "oracleId": "94e8b0a9-44a1-4dce-8d44-78681ae638a1",
+  "set": "blb",
+  "collectorNumber": "253",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "{T}: Add {C}.\n{2}, {T}, Sacrifice a token: Draw a card.\n{3}, {T}, Pay 1 life: Create a 1/1 blue Fish creature token.\n{4}, {T}: Create a Treasure token.",
+  "colors": [],
+  "keywords": [
+   "Treasure"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/5/658cfcb7-81b7-48c6-9dd2-1663d06108cf.jpg?1783910785",
+   "normal": "https://cards.scryfall.io/normal/front/6/5/658cfcb7-81b7-48c6-9dd2-1663d06108cf.jpg?1783910785",
+   "large": "https://cards.scryfall.io/large/front/6/5/658cfcb7-81b7-48c6-9dd2-1663d06108cf.jpg?1783910785",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/5/658cfcb7-81b7-48c6-9dd2-1663d06108cf.jpg?1783910785"
+  }
+ },
+ {
+  "name": "Three Tree City",
+  "scryfallId": "56f88a48-cced-4a9d-8c19-e4f105f0d8a2",
+  "oracleId": "da3b17a2-e1e1-44e9-b9b1-ae54a92037db",
+  "set": "blb",
+  "collectorNumber": "260",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Legendary Land",
+  "oracleText": "As Three Tree City enters, choose a creature type.\n{T}: Add {C}.\n{2}, {T}: Choose a color. Add an amount of mana of that color equal to the number of creatures you control of the chosen type.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/6/56f88a48-cced-4a9d-8c19-e4f105f0d8a2.jpg?1783910782",
+   "normal": "https://cards.scryfall.io/normal/front/5/6/56f88a48-cced-4a9d-8c19-e4f105f0d8a2.jpg?1783910782",
+   "large": "https://cards.scryfall.io/large/front/5/6/56f88a48-cced-4a9d-8c19-e4f105f0d8a2.jpg?1783910782",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/6/56f88a48-cced-4a9d-8c19-e4f105f0d8a2.jpg?1783910782"
+  }
+ },
+ {
+  "name": "Cache Grab",
+  "scryfallId": "dfd977dc-a7c3-4d0a-aca7-b25bd154e963",
+  "oracleId": "06ccec61-27d2-4079-80b5-29ebd3a980ee",
+  "set": "blb",
+  "collectorNumber": "167",
+  "rarity": "common",
+  "manaCost": "{1}{G}",
+  "typeLine": "Instant",
+  "oracleText": "Mill four cards. You may put a permanent card from among the cards milled this way into your hand. If you control a Squirrel or returned a Squirrel card to your hand this way, create a Food token. (To mill four cards, put the top four cards of your library into your graveyard. A Food token is an artifact with \"{2}, {T}, Sacrifice this token: You gain 3 life.\")",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Food",
+   "Mill"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/f/dfd977dc-a7c3-4d0a-aca7-b25bd154e963.jpg?1783910811",
+   "normal": "https://cards.scryfall.io/normal/front/d/f/dfd977dc-a7c3-4d0a-aca7-b25bd154e963.jpg?1783910811",
+   "large": "https://cards.scryfall.io/large/front/d/f/dfd977dc-a7c3-4d0a-aca7-b25bd154e963.jpg?1783910811",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/f/dfd977dc-a7c3-4d0a-aca7-b25bd154e963.jpg?1783910811"
+  }
+ },
+ {
+  "name": "Corpseberry Cultivator",
+  "scryfallId": "c911a759-ed7b-452b-88a3-663478357610",
+  "oracleId": "5ded56df-c7d5-4043-85df-410f47219faa",
+  "set": "blb",
+  "collectorNumber": "210",
+  "rarity": "common",
+  "manaCost": "{1}{B/G}{B/G}",
+  "typeLine": "Creature — Squirrel Warlock",
+  "oracleText": "At the beginning of combat on your turn, you may forage. (Exile three cards from your graveyard or sacrifice a Food.)\nWhenever you forage, put a +1/+1 counter on this creature.",
+  "power": "2",
+  "toughness": "3",
+  "colors": [
+   "B",
+   "G"
+  ],
+  "keywords": [
+   "Forage"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/9/c911a759-ed7b-452b-88a3-663478357610.jpg?1783910798",
+   "normal": "https://cards.scryfall.io/normal/front/c/9/c911a759-ed7b-452b-88a3-663478357610.jpg?1783910798",
+   "large": "https://cards.scryfall.io/large/front/c/9/c911a759-ed7b-452b-88a3-663478357610.jpg?1783910798",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/9/c911a759-ed7b-452b-88a3-663478357610.jpg?1783910798"
+  }
+ },
+ {
+  "name": "Early Winter",
+  "scryfallId": "5030e6ac-211d-4145-8c87-998a8351a467",
+  "oracleId": "fbf2653e-9cc4-442f-bc73-6e2ba6e067cb",
+  "set": "blb",
+  "collectorNumber": "93",
+  "rarity": "common",
+  "manaCost": "{4}{B}",
+  "typeLine": "Instant",
+  "oracleText": "Choose one —\n• Exile target creature.\n• Target opponent exiles an enchantment they control.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/0/5030e6ac-211d-4145-8c87-998a8351a467.jpg?1783910835",
+   "normal": "https://cards.scryfall.io/normal/front/5/0/5030e6ac-211d-4145-8c87-998a8351a467.jpg?1783910835",
+   "large": "https://cards.scryfall.io/large/front/5/0/5030e6ac-211d-4145-8c87-998a8351a467.jpg?1783910835",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/0/5030e6ac-211d-4145-8c87-998a8351a467.jpg?1783910835"
+  }
+ },
+ {
+  "name": "Head of the Homestead",
+  "scryfallId": "2fc20157-edd3-484d-8864-925c071c0551",
+  "oracleId": "467d6acb-9a3c-433f-836d-54e0e670b7d0",
+  "set": "blb",
+  "collectorNumber": "216",
+  "rarity": "common",
+  "manaCost": "{3}{G/W}{G/W}",
+  "typeLine": "Creature — Rabbit Citizen",
+  "oracleText": "When this creature enters, create two 1/1 white Rabbit creature tokens.",
+  "power": "3",
+  "toughness": "2",
+  "colors": [
+   "G",
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/f/2fc20157-edd3-484d-8864-925c071c0551.jpg?1783910796",
+   "normal": "https://cards.scryfall.io/normal/front/2/f/2fc20157-edd3-484d-8864-925c071c0551.jpg?1783910796",
+   "large": "https://cards.scryfall.io/large/front/2/f/2fc20157-edd3-484d-8864-925c071c0551.jpg?1783910796",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/f/2fc20157-edd3-484d-8864-925c071c0551.jpg?1783910796"
+  }
+ },
+ {
+  "name": "Bonecache Overseer",
+  "scryfallId": "82defb87-237f-4b77-9673-5bf00607148f",
+  "oracleId": "be3c7e4c-81fd-49e7-8fb5-5eb83994dafd",
+  "set": "blb",
+  "collectorNumber": "85",
+  "rarity": "uncommon",
+  "manaCost": "{B}",
+  "typeLine": "Creature — Squirrel Warlock",
+  "oracleText": "{T}, Pay 1 life: Draw a card. Activate only if three or more cards left your graveyard this turn or if you've sacrificed a Food this turn.",
+  "power": "1",
+  "toughness": "1",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/2/82defb87-237f-4b77-9673-5bf00607148f.jpg?1783910838",
+   "normal": "https://cards.scryfall.io/normal/front/8/2/82defb87-237f-4b77-9673-5bf00607148f.jpg?1783910838",
+   "large": "https://cards.scryfall.io/large/front/8/2/82defb87-237f-4b77-9673-5bf00607148f.jpg?1783910838",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/2/82defb87-237f-4b77-9673-5bf00607148f.jpg?1783910838"
+  }
+ },
+ {
+  "name": "Dewdrop Cure",
+  "scryfallId": "666aefc2-44e0-4c27-88d5-7906f245a71f",
+  "oracleId": "07634620-a83a-4ca0-8a60-2a21368a2661",
+  "set": "blb",
+  "collectorNumber": "10",
+  "rarity": "uncommon",
+  "manaCost": "{2}{W}",
+  "typeLine": "Sorcery",
+  "oracleText": "Gift a card (You may promise an opponent a gift as you cast this spell. If you do, they draw a card before its other effects.)\nReturn up to two target creature cards each with mana value 2 or less from your graveyard to the battlefield. If the gift was promised, instead return up to three target creature cards each with mana value 2 or less from your graveyard to the battlefield.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Gift"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/6/666aefc2-44e0-4c27-88d5-7906f245a71f.jpg?1783910862",
+   "normal": "https://cards.scryfall.io/normal/front/6/6/666aefc2-44e0-4c27-88d5-7906f245a71f.jpg?1783910862",
+   "large": "https://cards.scryfall.io/large/front/6/6/666aefc2-44e0-4c27-88d5-7906f245a71f.jpg?1783910862",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/6/666aefc2-44e0-4c27-88d5-7906f245a71f.jpg?1783910862"
+  }
+ },
+ {
+  "name": "Downwind Ambusher",
+  "scryfallId": "55cfd628-933a-4d3d-b2e5-70bc86960d1c",
+  "oracleId": "1e0a2709-2cd2-4954-81ca-60654ab03d7c",
+  "set": "blb",
+  "collectorNumber": "92",
+  "rarity": "uncommon",
+  "manaCost": "{3}{B}",
+  "typeLine": "Creature — Skunk Assassin",
+  "oracleText": "Flash\nWhen this creature enters, choose one —\n• Target creature an opponent controls gets -1/-1 until end of turn.\n• Destroy target creature an opponent controls that was dealt damage this turn.",
+  "power": "4",
+  "toughness": "2",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Flash"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/5/55cfd628-933a-4d3d-b2e5-70bc86960d1c.jpg?1783910835",
+   "normal": "https://cards.scryfall.io/normal/front/5/5/55cfd628-933a-4d3d-b2e5-70bc86960d1c.jpg?1783910835",
+   "large": "https://cards.scryfall.io/large/front/5/5/55cfd628-933a-4d3d-b2e5-70bc86960d1c.jpg?1783910835",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/5/55cfd628-933a-4d3d-b2e5-70bc86960d1c.jpg?1783910835"
+  }
+ },
+ {
+  "name": "Flamecache Gecko",
+  "scryfallId": "fb8e7c97-8393-41b8-bb0b-3983dcc5e7f4",
+  "oracleId": "d767463b-0fc9-43fc-a85f-e60f030f9b96",
+  "set": "blb",
+  "collectorNumber": "135",
+  "rarity": "uncommon",
+  "manaCost": "{1}{R}",
+  "typeLine": "Creature — Lizard Warlock",
+  "oracleText": "When this creature enters, if an opponent lost life this turn, add {B}{R}.\n{1}{R}, Discard a card: Draw a card.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/b/fb8e7c97-8393-41b8-bb0b-3983dcc5e7f4.jpg?1783910821",
+   "normal": "https://cards.scryfall.io/normal/front/f/b/fb8e7c97-8393-41b8-bb0b-3983dcc5e7f4.jpg?1783910821",
+   "large": "https://cards.scryfall.io/large/front/f/b/fb8e7c97-8393-41b8-bb0b-3983dcc5e7f4.jpg?1783910821",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/b/fb8e7c97-8393-41b8-bb0b-3983dcc5e7f4.jpg?1783910821"
+  }
+ },
+ {
+  "name": "Huskburster Swarm",
+  "scryfallId": "ed2f61d7-4eb0-41c5-8a34-a0793c2abc51",
+  "oracleId": "faefb352-575c-49f7-9f7a-96f2279a077b",
+  "set": "blb",
+  "collectorNumber": "98",
+  "rarity": "uncommon",
+  "manaCost": "{7}{B}",
+  "typeLine": "Creature — Elemental Insect",
+  "oracleText": "This spell costs {1} less to cast for each creature card you own in exile and in your graveyard.\nMenace, deathtouch",
+  "power": "6",
+  "toughness": "6",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Menace",
+   "Deathtouch"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/d/ed2f61d7-4eb0-41c5-8a34-a0793c2abc51.jpg?1783910834",
+   "normal": "https://cards.scryfall.io/normal/front/e/d/ed2f61d7-4eb0-41c5-8a34-a0793c2abc51.jpg?1783910834",
+   "large": "https://cards.scryfall.io/large/front/e/d/ed2f61d7-4eb0-41c5-8a34-a0793c2abc51.jpg?1783910834",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/d/ed2f61d7-4eb0-41c5-8a34-a0793c2abc51.jpg?1783910834"
+  }
+ },
+ {
+  "name": "Jolly Gerbils",
+  "scryfallId": "0eab51d6-ba17-4a8c-8834-25db363f2b6b",
+  "oracleId": "8e22bf51-1b1b-459b-af78-91188b6e3f09",
+  "set": "blb",
+  "collectorNumber": "19",
+  "rarity": "uncommon",
+  "manaCost": "{1}{W}",
+  "typeLine": "Creature — Hamster Citizen",
+  "oracleText": "Whenever you give a gift, draw a card.",
+  "power": "2",
+  "toughness": "3",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/e/0eab51d6-ba17-4a8c-8834-25db363f2b6b.jpg?1783910860",
+   "normal": "https://cards.scryfall.io/normal/front/0/e/0eab51d6-ba17-4a8c-8834-25db363f2b6b.jpg?1783910860",
+   "large": "https://cards.scryfall.io/large/front/0/e/0eab51d6-ba17-4a8c-8834-25db363f2b6b.jpg?1783910860",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/e/0eab51d6-ba17-4a8c-8834-25db363f2b6b.jpg?1783910860"
+  }
+ },
+ {
+  "name": "Peerless Recycling",
+  "scryfallId": "5f72466c-505b-4371-9366-0fde525a37e6",
+  "oracleId": "938c03fc-8adf-4c7a-8ae1-eca8401f7a83",
+  "set": "blb",
+  "collectorNumber": "188",
+  "rarity": "uncommon",
+  "manaCost": "{1}{G}",
+  "typeLine": "Instant",
+  "oracleText": "Gift a card (You may promise an opponent a gift as you cast this spell. If you do, they draw a card before its other effects.)\nReturn target permanent card from your graveyard to your hand. If the gift was promised, instead return two target permanent cards from your graveyard to your hand.",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Gift"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/f/5f72466c-505b-4371-9366-0fde525a37e6.jpg?1783910805",
+   "normal": "https://cards.scryfall.io/normal/front/5/f/5f72466c-505b-4371-9366-0fde525a37e6.jpg?1783910805",
+   "large": "https://cards.scryfall.io/large/front/5/f/5f72466c-505b-4371-9366-0fde525a37e6.jpg?1783910805",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/f/5f72466c-505b-4371-9366-0fde525a37e6.jpg?1783910805"
+  }
+ },
+ {
+  "name": "Ruthless Negotiation",
+  "scryfallId": "c7f4360c-8d68-4058-b9ec-da9948cb060d",
+  "oracleId": "a82ea8f2-e576-46cd-aa08-9c98d6029db4",
+  "set": "blb",
+  "collectorNumber": "108",
+  "rarity": "uncommon",
+  "manaCost": "{B}",
+  "typeLine": "Sorcery",
+  "oracleText": "Target opponent exiles a card from their hand. If this spell was cast from a graveyard, draw a card.\nFlashback {4}{B} (You may cast this card from your graveyard for its flashback cost. Then exile it.)",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Flashback"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/7/c7f4360c-8d68-4058-b9ec-da9948cb060d.jpg?1783910830",
+   "normal": "https://cards.scryfall.io/normal/front/c/7/c7f4360c-8d68-4058-b9ec-da9948cb060d.jpg?1783910830",
+   "large": "https://cards.scryfall.io/large/front/c/7/c7f4360c-8d68-4058-b9ec-da9948cb060d.jpg?1783910830",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/7/c7f4360c-8d68-4058-b9ec-da9948cb060d.jpg?1783910830"
+  }
+ },
+ {
+  "name": "Stargaze",
+  "scryfallId": "777fc599-8de7-44d2-8fdd-9bddf5948a0c",
+  "oracleId": "db8b4869-f898-40ad-bbad-62390a02d1b1",
+  "set": "blb",
+  "collectorNumber": "114",
+  "rarity": "uncommon",
+  "manaCost": "{X}{B}{B}",
+  "typeLine": "Sorcery",
+  "oracleText": "Look at twice X cards from the top of your library. Put X cards from among them into your hand and the rest into your graveyard. You lose X life.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/7/777fc599-8de7-44d2-8fdd-9bddf5948a0c.jpg?1783910829",
+   "normal": "https://cards.scryfall.io/normal/front/7/7/777fc599-8de7-44d2-8fdd-9bddf5948a0c.jpg?1783910829",
+   "large": "https://cards.scryfall.io/large/front/7/7/777fc599-8de7-44d2-8fdd-9bddf5948a0c.jpg?1783910829",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/7/777fc599-8de7-44d2-8fdd-9bddf5948a0c.jpg?1783910829"
+  }
+ },
+ {
+  "name": "Wear Down",
+  "scryfallId": "fded2b83-3b7d-4c8c-83c4-0624a1069628",
+  "oracleId": "27905301-333e-4cdd-90cf-188159fcf8e9",
+  "set": "blb",
+  "collectorNumber": "203",
+  "rarity": "uncommon",
+  "manaCost": "{1}{G}",
+  "typeLine": "Sorcery",
+  "oracleText": "Gift a card (You may promise an opponent a gift as you cast this spell. If you do, they draw a card before its other effects.)\nDestroy target artifact or enchantment. If the gift was promised, instead destroy two target artifacts and/or enchantments.",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Gift"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/d/fded2b83-3b7d-4c8c-83c4-0624a1069628.jpg?1783910800",
+   "normal": "https://cards.scryfall.io/normal/front/f/d/fded2b83-3b7d-4c8c-83c4-0624a1069628.jpg?1783910800",
+   "large": "https://cards.scryfall.io/large/front/f/d/fded2b83-3b7d-4c8c-83c4-0624a1069628.jpg?1783910800",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/d/fded2b83-3b7d-4c8c-83c4-0624a1069628.jpg?1783910800"
+  }
+ },
+ {
+  "name": "Wildfire Howl",
+  "scryfallId": "7392d397-9836-4df2-944d-c930c9566811",
+  "oracleId": "04fd8c1f-80e5-4b3d-b63e-7af6ccafbbaa",
+  "set": "blb",
+  "collectorNumber": "162",
+  "rarity": "uncommon",
+  "manaCost": "{1}{R}{R}",
+  "typeLine": "Sorcery",
+  "oracleText": "Gift a card (You may promise an opponent a gift as you cast this spell. If you do, they draw a card before its other effects.)\nWildfire Howl deals 2 damage to each creature. If the gift was promised, instead Wildfire Howl deals 1 damage to any target and 2 damage to each creature.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Gift"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/3/7392d397-9836-4df2-944d-c930c9566811.jpg?1783910813",
+   "normal": "https://cards.scryfall.io/normal/front/7/3/7392d397-9836-4df2-944d-c930c9566811.jpg?1783910813",
+   "large": "https://cards.scryfall.io/large/front/7/3/7392d397-9836-4df2-944d-c930c9566811.jpg?1783910813",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/3/7392d397-9836-4df2-944d-c930c9566811.jpg?1783910813"
+  }
+ },
+ {
+  "name": "Bandit's Talent",
+  "scryfallId": "485dc8d8-9e44-4a0f-9ff6-fa448e232290",
+  "oracleId": "bcbe879a-4609-4493-bd7d-47c26d27e83c",
+  "set": "blb",
+  "collectorNumber": "83",
+  "rarity": "uncommon",
+  "manaCost": "{1}{B}",
+  "typeLine": "Enchantment — Class",
+  "oracleText": "(Gain the next level as a sorcery to add its ability.)\nWhen this Class enters, each opponent discards two cards unless they discard a nonland card.\n{B}: Level 2\nAt the beginning of each opponent's upkeep, if that player has one or fewer cards in hand, they lose 2 life.\n{3}{B}: Level 3\nAt the beginning of your draw step, draw an additional card for each opponent who has one or fewer cards in hand.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/8/485dc8d8-9e44-4a0f-9ff6-fa448e232290.jpg?1783910839",
+   "normal": "https://cards.scryfall.io/normal/front/4/8/485dc8d8-9e44-4a0f-9ff6-fa448e232290.jpg?1783910839",
+   "large": "https://cards.scryfall.io/large/front/4/8/485dc8d8-9e44-4a0f-9ff6-fa448e232290.jpg?1783910839",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/8/485dc8d8-9e44-4a0f-9ff6-fa448e232290.jpg?1783910839"
+  }
+ },
+ {
+  "name": "Blacksmith's Talent",
+  "scryfallId": "4bb318fa-481d-40a7-978e-f01b49101ae0",
+  "oracleId": "9fdad42a-9db5-4d91-9e80-9d5ce19038b8",
+  "set": "blb",
+  "collectorNumber": "125",
+  "rarity": "uncommon",
+  "manaCost": "{R}",
+  "typeLine": "Enchantment — Class",
+  "oracleText": "(Gain the next level as a sorcery to add its ability.)\nWhen this Class enters, create a colorless Equipment artifact token named Sword with \"Equipped creature gets +1/+1\" and equip {2}.\n{2}{R}: Level 2\nAt the beginning of combat on your turn, attach target Equipment you control to up to one target creature you control.\n{3}{R}: Level 3\nDuring your turn, equipped creatures you control have double strike and haste.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/b/4bb318fa-481d-40a7-978e-f01b49101ae0.jpg?1783910826",
+   "normal": "https://cards.scryfall.io/normal/front/4/b/4bb318fa-481d-40a7-978e-f01b49101ae0.jpg?1783910826",
+   "large": "https://cards.scryfall.io/large/front/4/b/4bb318fa-481d-40a7-978e-f01b49101ae0.jpg?1783910826",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/b/4bb318fa-481d-40a7-978e-f01b49101ae0.jpg?1783910826"
+  }
+ },
+ {
+  "name": "Builder's Talent",
+  "scryfallId": "15fa581a-724e-4196-a9a3-ff84c54bdb7d",
+  "oracleId": "0b19082c-8f80-448b-9e1b-0f324a159409",
+  "set": "blb",
+  "collectorNumber": "5",
+  "rarity": "uncommon",
+  "manaCost": "{1}{W}",
+  "typeLine": "Enchantment — Class",
+  "oracleText": "(Gain the next level as a sorcery to add its ability.)\nWhen this Class enters, create a 0/4 white Wall creature token with defender.\n{W}: Level 2\nWhenever one or more noncreature, nonland permanents you control enter, put a +1/+1 counter on target creature you control.\n{4}{W}: Level 3\nWhen this Class becomes level 3, return target noncreature, nonland permanent card from your graveyard to the battlefield.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/5/15fa581a-724e-4196-a9a3-ff84c54bdb7d.jpg?1783910866",
+   "normal": "https://cards.scryfall.io/normal/front/1/5/15fa581a-724e-4196-a9a3-ff84c54bdb7d.jpg?1783910866",
+   "large": "https://cards.scryfall.io/large/front/1/5/15fa581a-724e-4196-a9a3-ff84c54bdb7d.jpg?1783910866",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/5/15fa581a-724e-4196-a9a3-ff84c54bdb7d.jpg?1783910866"
+  }
+ },
+ {
+  "name": "Gossip's Talent",
+  "scryfallId": "b299889a-03d6-4659-b0e1-f0830842e40f",
+  "oracleId": "96e6d220-87db-4dab-abaa-e80c9577d89a",
+  "set": "blb",
+  "collectorNumber": "51",
+  "rarity": "uncommon",
+  "manaCost": "{1}{U}",
+  "typeLine": "Enchantment — Class",
+  "oracleText": "(Gain the next level as a sorcery to add its ability.)\nWhenever a creature you control enters, surveil 1.\n{1}{U}: Level 2\nWhenever you attack, target attacking creature with power 3 or less can't be blocked this turn.\n{3}{U}: Level 3\nWhenever a creature you control deals combat damage to a player, you may exile it, then return it to the battlefield under its owner's control.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Surveil"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/2/b299889a-03d6-4659-b0e1-f0830842e40f.jpg?1783910850",
+   "normal": "https://cards.scryfall.io/normal/front/b/2/b299889a-03d6-4659-b0e1-f0830842e40f.jpg?1783910850",
+   "large": "https://cards.scryfall.io/large/front/b/2/b299889a-03d6-4659-b0e1-f0830842e40f.jpg?1783910850",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/2/b299889a-03d6-4659-b0e1-f0830842e40f.jpg?1783910850"
+  }
+ },
+ {
+  "name": "Caretaker's Talent",
+  "scryfallId": "ad5ea98a-e36e-4ab9-b4da-cc572f3777db",
+  "oracleId": "c97957a2-8310-4cff-8aad-871b7901d124",
+  "set": "blb",
+  "collectorNumber": "6",
+  "rarity": "rare",
+  "manaCost": "{2}{W}",
+  "typeLine": "Enchantment — Class",
+  "oracleText": "(Gain the next level as a sorcery to add its ability.)\nWhenever one or more tokens you control enter, draw a card. This ability triggers only once each turn.\n{W}: Level 2\nWhen this Class becomes level 2, create a token that's a copy of target token you control.\n{3}{W}: Level 3\nCreature tokens you control get +2/+2.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/d/ad5ea98a-e36e-4ab9-b4da-cc572f3777db.jpg?1783910865",
+   "normal": "https://cards.scryfall.io/normal/front/a/d/ad5ea98a-e36e-4ab9-b4da-cc572f3777db.jpg?1783910865",
+   "large": "https://cards.scryfall.io/large/front/a/d/ad5ea98a-e36e-4ab9-b4da-cc572f3777db.jpg?1783910865",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/d/ad5ea98a-e36e-4ab9-b4da-cc572f3777db.jpg?1783910865"
+  }
+ },
+ {
+  "name": "Innkeeper's Talent",
+  "scryfallId": "941b0afc-0e8f-45f2-ae7f-07595e164611",
+  "oracleId": "915b75d1-b5e3-4aca-a54c-beaccef0a2e4",
+  "set": "blb",
+  "collectorNumber": "180",
+  "rarity": "rare",
+  "manaCost": "{1}{G}",
+  "typeLine": "Enchantment — Class",
+  "oracleText": "(Gain the next level as a sorcery to add its ability.)\nAt the beginning of combat on your turn, put a +1/+1 counter on target creature you control.\n{G}: Level 2\nPermanents you control with counters on them have ward {1}.\n{3}{G}: Level 3\nIf you would put one or more counters on a permanent or player, put twice that many of each of those kinds of counters on that permanent or player instead.",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/4/941b0afc-0e8f-45f2-ae7f-07595e164611.jpg?1784634092",
+   "normal": "https://cards.scryfall.io/normal/front/9/4/941b0afc-0e8f-45f2-ae7f-07595e164611.jpg?1784634092",
+   "large": "https://cards.scryfall.io/large/front/9/4/941b0afc-0e8f-45f2-ae7f-07595e164611.jpg?1784634092",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/4/941b0afc-0e8f-45f2-ae7f-07595e164611.jpg?1784634092"
+  }
+ },
+ {
+  "name": "Artist's Talent",
+  "scryfallId": "8b9e51d9-189b-4dd6-87cb-628ea6373e81",
+  "oracleId": "ea734863-5793-49d6-b10e-109432aec0a3",
+  "set": "blb",
+  "collectorNumber": "124",
+  "rarity": "rare",
+  "manaCost": "{1}{R}",
+  "typeLine": "Enchantment — Class",
+  "oracleText": "(Gain the next level as a sorcery to add its ability.)\nWhenever you cast a noncreature spell, you may discard a card. If you do, draw a card.\n{2}{R}: Level 2\nNoncreature spells you cast cost {1} less to cast.\n{2}{R}: Level 3\nIf a source you control would deal noncombat damage to an opponent or a permanent an opponent controls, it deals that much damage plus 2 instead.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/b/8b9e51d9-189b-4dd6-87cb-628ea6373e81.jpg?1783910825",
+   "normal": "https://cards.scryfall.io/normal/front/8/b/8b9e51d9-189b-4dd6-87cb-628ea6373e81.jpg?1783910825",
+   "large": "https://cards.scryfall.io/large/front/8/b/8b9e51d9-189b-4dd6-87cb-628ea6373e81.jpg?1783910825",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/b/8b9e51d9-189b-4dd6-87cb-628ea6373e81.jpg?1783910825"
+  }
+ },
+ {
+  "name": "Stormchaser's Talent",
+  "scryfallId": "a36e682d-b43d-4e08-bf5b-70d7e924dbe5",
+  "oracleId": "00c1788d-c52f-4839-9cd8-11fb86c418b6",
+  "set": "blb",
+  "collectorNumber": "75",
+  "rarity": "rare",
+  "manaCost": "{U}",
+  "typeLine": "Enchantment — Class",
+  "oracleText": "(Gain the next level as a sorcery to add its ability.)\nWhen this Class enters, create a 1/1 blue and red Otter creature token with prowess.\n{3}{U}: Level 2\nWhen this Class becomes level 2, return target instant or sorcery card from your graveyard to your hand.\n{5}{U}: Level 3\nWhenever you cast an instant or sorcery spell, create a 1/1 blue and red Otter creature token with prowess.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/3/a36e682d-b43d-4e08-bf5b-70d7e924dbe5.jpg?1786399178",
+   "normal": "https://cards.scryfall.io/normal/front/a/3/a36e682d-b43d-4e08-bf5b-70d7e924dbe5.jpg?1786399178",
+   "large": "https://cards.scryfall.io/large/front/a/3/a36e682d-b43d-4e08-bf5b-70d7e924dbe5.jpg?1786399178",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/3/a36e682d-b43d-4e08-bf5b-70d7e924dbe5.jpg?1786399178"
+  }
+ },
+ {
+  "name": "Beza, the Bounding Spring",
+  "scryfallId": "fc310a26-b6a0-4e42-98ab-bdfd7b06cb63",
+  "oracleId": "020de6d7-f5a2-4036-ad25-451e5977b4d4",
+  "set": "blb",
+  "collectorNumber": "2",
+  "rarity": "mythic",
+  "manaCost": "{2}{W}{W}",
+  "typeLine": "Legendary Creature — Elemental Elk",
+  "oracleText": "When Beza enters, create a Treasure token if an opponent controls more lands than you. You gain 4 life if an opponent has more life than you. Create two 1/1 blue Fish creature tokens if an opponent controls more creatures than you. Draw a card if an opponent has more cards in hand than you.",
+  "power": "4",
+  "toughness": "5",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Treasure"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/c/fc310a26-b6a0-4e42-98ab-bdfd7b06cb63.jpg?1783910866",
+   "normal": "https://cards.scryfall.io/normal/front/f/c/fc310a26-b6a0-4e42-98ab-bdfd7b06cb63.jpg?1783910866",
+   "large": "https://cards.scryfall.io/large/front/f/c/fc310a26-b6a0-4e42-98ab-bdfd7b06cb63.jpg?1783910866",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/c/fc310a26-b6a0-4e42-98ab-bdfd7b06cb63.jpg?1783910866"
+  }
+ },
+ {
+  "name": "Lumra, Bellow of the Woods",
+  "scryfallId": "ae4f3aaf-3960-48cd-b34b-32e4ae5ae088",
+  "oracleId": "97a84e9d-bfc4-4ca2-b1e8-908dba56ccdb",
+  "set": "blb",
+  "collectorNumber": "183",
+  "rarity": "mythic",
+  "manaCost": "{4}{G}{G}",
+  "typeLine": "Legendary Creature — Elemental Bear",
+  "oracleText": "Reach, vigilance\nLumra's power and toughness are each equal to the number of lands you control.\nWhen Lumra enters, mill four cards. Then return all land cards from your graveyard to the battlefield tapped.",
+  "power": "*",
+  "toughness": "*",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Reach",
+   "Vigilance",
+   "Mill"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/e/ae4f3aaf-3960-48cd-b34b-32e4ae5ae088.jpg?1785161492",
+   "normal": "https://cards.scryfall.io/normal/front/a/e/ae4f3aaf-3960-48cd-b34b-32e4ae5ae088.jpg?1785161492",
+   "large": "https://cards.scryfall.io/large/front/a/e/ae4f3aaf-3960-48cd-b34b-32e4ae5ae088.jpg?1785161492",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/e/ae4f3aaf-3960-48cd-b34b-32e4ae5ae088.jpg?1785161492"
+  }
+ },
+ {
+  "name": "Valley Questcaller",
+  "scryfallId": "ba629ca8-a368-4282-8a61-9bf6a5c217f0",
+  "oracleId": "81c509b2-3164-47e9-94b3-bdba0487d2f1",
+  "set": "blb",
+  "collectorNumber": "36",
+  "rarity": "rare",
+  "manaCost": "{1}{W}",
+  "typeLine": "Creature — Rabbit Warrior",
+  "oracleText": "Whenever one or more other Rabbits, Bats, Birds, and/or Mice you control enter, scry 1.\nOther Rabbits, Bats, Birds, and Mice you control get +1/+1.",
+  "power": "2",
+  "toughness": "3",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Scry"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/a/ba629ca8-a368-4282-8a61-9bf6a5c217f0.jpg?1783910855",
+   "normal": "https://cards.scryfall.io/normal/front/b/a/ba629ca8-a368-4282-8a61-9bf6a5c217f0.jpg?1783910855",
+   "large": "https://cards.scryfall.io/large/front/b/a/ba629ca8-a368-4282-8a61-9bf6a5c217f0.jpg?1783910855",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/a/ba629ca8-a368-4282-8a61-9bf6a5c217f0.jpg?1783910855"
+  }
+ },
+ {
+  "name": "Valley Rotcaller",
+  "scryfallId": "4da80a9a-b1d5-4fc5-92f7-36946195d0c7",
+  "oracleId": "8da0599a-8f63-4dba-857f-b4e10b7191b6",
+  "set": "blb",
+  "collectorNumber": "119",
+  "rarity": "rare",
+  "manaCost": "{1}{B}",
+  "typeLine": "Creature — Squirrel Warlock",
+  "oracleText": "Menace\nWhenever this creature attacks, each opponent loses X life and you gain X life, where X is the number of other Squirrels, Bats, Lizards, and Rats you control.",
+  "power": "1",
+  "toughness": "3",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Menace"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/d/4da80a9a-b1d5-4fc5-92f7-36946195d0c7.jpg?1783910826",
+   "normal": "https://cards.scryfall.io/normal/front/4/d/4da80a9a-b1d5-4fc5-92f7-36946195d0c7.jpg?1783910826",
+   "large": "https://cards.scryfall.io/large/front/4/d/4da80a9a-b1d5-4fc5-92f7-36946195d0c7.jpg?1783910826",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/d/4da80a9a-b1d5-4fc5-92f7-36946195d0c7.jpg?1783910826"
+  }
+ },
+ {
+  "name": "Whiskervale Forerunner",
+  "scryfallId": "60a78d59-af31-4af9-95aa-2573fe553925",
+  "oracleId": "861e427f-cbb4-4ed5-8356-747ac638ac34",
+  "set": "blb",
+  "collectorNumber": "40",
+  "rarity": "rare",
+  "manaCost": "{3}{W}",
+  "typeLine": "Creature — Mouse Bard",
+  "oracleText": "Valiant — Whenever this creature becomes the target of a spell or ability you control for the first time each turn, look at the top five cards of your library. You may reveal a creature card with mana value 3 or less from among them. You may put it onto the battlefield if it's your turn. If you don't put it onto the battlefield, put it into your hand. Put the rest on the bottom of your library in a random order.",
+  "power": "3",
+  "toughness": "4",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Valiant"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/0/60a78d59-af31-4af9-95aa-2573fe553925.jpg?1783910853",
+   "normal": "https://cards.scryfall.io/normal/front/6/0/60a78d59-af31-4af9-95aa-2573fe553925.jpg?1783910853",
+   "large": "https://cards.scryfall.io/large/front/6/0/60a78d59-af31-4af9-95aa-2573fe553925.jpg?1783910853",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/0/60a78d59-af31-4af9-95aa-2573fe553925.jpg?1783910853"
+  }
+ },
+ {
+  "name": "Darkstar Augur",
+  "scryfallId": "1c603751-1e2b-4c8e-a8d2-5c0876e7254f",
+  "oracleId": "67d2a021-a042-4e5f-b6e4-39cb35514794",
+  "set": "blb",
+  "collectorNumber": "90",
+  "rarity": "rare",
+  "manaCost": "{2}{B}",
+  "typeLine": "Creature — Bat Warlock",
+  "oracleText": "Offspring {B} (You may pay an additional {B} as you cast this spell. If you do, when this creature enters, create a 1/1 token copy of it.)\nFlying\nAt the beginning of your upkeep, reveal the top card of your library and put that card into your hand. You lose life equal to its mana value.",
+  "power": "2",
+  "toughness": "3",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Flying",
+   "Offspring"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/c/1c603751-1e2b-4c8e-a8d2-5c0876e7254f.jpg?1783910836",
+   "normal": "https://cards.scryfall.io/normal/front/1/c/1c603751-1e2b-4c8e-a8d2-5c0876e7254f.jpg?1783910836",
+   "large": "https://cards.scryfall.io/large/front/1/c/1c603751-1e2b-4c8e-a8d2-5c0876e7254f.jpg?1783910836",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/c/1c603751-1e2b-4c8e-a8d2-5c0876e7254f.jpg?1783910836"
+  }
+ },
+ {
+  "name": "Dawn's Truce",
+  "scryfallId": "8f72bfa0-efef-48ce-aff8-d5818ed71ba6",
+  "oracleId": "37c06f89-db36-4937-9404-2b07cd22e1a6",
+  "set": "blb",
+  "collectorNumber": "9",
+  "rarity": "rare",
+  "manaCost": "{1}{W}",
+  "typeLine": "Instant",
+  "oracleText": "Gift a card (You may promise an opponent a gift as you cast this spell. If you do, they draw a card before its other effects.)\nYou and permanents you control gain hexproof until end of turn. If the gift was promised, permanents you control also gain indestructible until end of turn.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Gift"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/f/8f72bfa0-efef-48ce-aff8-d5818ed71ba6.jpg?1783910863",
+   "normal": "https://cards.scryfall.io/normal/front/8/f/8f72bfa0-efef-48ce-aff8-d5818ed71ba6.jpg?1783910863",
+   "large": "https://cards.scryfall.io/large/front/8/f/8f72bfa0-efef-48ce-aff8-d5818ed71ba6.jpg?1783910863",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/f/8f72bfa0-efef-48ce-aff8-d5818ed71ba6.jpg?1783910863"
+  }
+ },
+ {
+  "name": "Fecund Greenshell",
+  "scryfallId": "80b3e815-0e2e-4325-b1d5-5531b7b92da6",
+  "oracleId": "a090be5a-b0f2-4c17-8f7d-e742f9de8f6b",
+  "set": "blb",
+  "collectorNumber": "171",
+  "rarity": "rare",
+  "manaCost": "{3}{G}{G}",
+  "typeLine": "Creature — Elemental Turtle",
+  "oracleText": "Reach\nAs long as you control ten or more lands, creatures you control get +2/+2.\nWhenever this creature or another creature you control with toughness greater than its power enters, look at the top card of your library. If it's a land card, you may put it onto the battlefield tapped. Otherwise, put it into your hand.",
+  "power": "4",
+  "toughness": "6",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Reach"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/0/80b3e815-0e2e-4325-b1d5-5531b7b92da6.jpg?1783910810",
+   "normal": "https://cards.scryfall.io/normal/front/8/0/80b3e815-0e2e-4325-b1d5-5531b7b92da6.jpg?1783910810",
+   "large": "https://cards.scryfall.io/large/front/8/0/80b3e815-0e2e-4325-b1d5-5531b7b92da6.jpg?1783910810",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/0/80b3e815-0e2e-4325-b1d5-5531b7b92da6.jpg?1783910810"
+  }
+ },
+ {
+  "name": "Coiling Rebirth",
+  "scryfallId": "96d5de3e-0440-4dd1-899c-ab40c0752343",
+  "oracleId": "27a91ebd-39f4-432d-b6cc-cd86b4a3979a",
+  "set": "blb",
+  "collectorNumber": "86",
+  "rarity": "rare",
+  "manaCost": "{3}{B}{B}",
+  "typeLine": "Sorcery",
+  "oracleText": "Gift a card (You may promise an opponent a gift as you cast this spell. If you do, they draw a card before its other effects.)\nReturn target creature card from your graveyard to the battlefield. Then if the gift was promised and that creature isn't legendary, create a token that's a copy of that creature, except it's 1/1.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Gift"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/6/96d5de3e-0440-4dd1-899c-ab40c0752343.jpg?1783910837",
+   "normal": "https://cards.scryfall.io/normal/front/9/6/96d5de3e-0440-4dd1-899c-ab40c0752343.jpg?1783910837",
+   "large": "https://cards.scryfall.io/large/front/9/6/96d5de3e-0440-4dd1-899c-ab40c0752343.jpg?1783910837",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/6/96d5de3e-0440-4dd1-899c-ab40c0752343.jpg?1783910837"
+  }
+ },
+ {
+  "name": "Scrapshooter",
+  "scryfallId": "c42ab407-e72d-4c48-9a9e-2055b5e71c69",
+  "oracleId": "235e3231-c5e5-4696-a867-705b2c4158fe",
+  "set": "blb",
+  "collectorNumber": "191",
+  "rarity": "rare",
+  "manaCost": "{1}{G}{G}",
+  "typeLine": "Creature — Raccoon Archer",
+  "oracleText": "Gift a card (You may promise an opponent a gift as you cast this spell. If you do, when it enters, they draw a card.)\nReach\nWhen this creature enters, if the gift was promised, destroy target artifact or enchantment an opponent controls.",
+  "power": "4",
+  "toughness": "4",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Reach",
+   "Gift"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/4/c42ab407-e72d-4c48-9a9e-2055b5e71c69.jpg?1783910803",
+   "normal": "https://cards.scryfall.io/normal/front/c/4/c42ab407-e72d-4c48-9a9e-2055b5e71c69.jpg?1783910803",
+   "large": "https://cards.scryfall.io/large/front/c/4/c42ab407-e72d-4c48-9a9e-2055b5e71c69.jpg?1783910803",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/4/c42ab407-e72d-4c48-9a9e-2055b5e71c69.jpg?1783910803"
+  }
+ },
+ {
+  "name": "Pawpatch Recruit",
+  "scryfallId": "7d4d88ba-0ee4-4f66-995b-2e50614f50ee",
+  "oracleId": "50ab0194-c7dc-4f11-abc0-1a82393cc42e",
+  "set": "blb",
+  "collectorNumber": "187",
+  "rarity": "rare",
+  "manaCost": "{G}",
+  "typeLine": "Creature — Rabbit Warrior",
+  "oracleText": "Offspring {2} (You may pay an additional {2} as you cast this spell. If you do, when this creature enters, create a 1/1 token copy of it.)\nTrample\nWhenever a creature you control becomes the target of a spell or ability an opponent controls, put a +1/+1 counter on target creature you control other than that creature.",
+  "power": "2",
+  "toughness": "1",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Offspring",
+   "Trample"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/d/7d4d88ba-0ee4-4f66-995b-2e50614f50ee.jpg?1783910805",
+   "normal": "https://cards.scryfall.io/normal/front/7/d/7d4d88ba-0ee4-4f66-995b-2e50614f50ee.jpg?1783910805",
+   "large": "https://cards.scryfall.io/large/front/7/d/7d4d88ba-0ee4-4f66-995b-2e50614f50ee.jpg?1783910805",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/d/7d4d88ba-0ee4-4f66-995b-2e50614f50ee.jpg?1783910805"
+  }
+ },
+ {
+  "name": "Thornvault Forager",
+  "scryfallId": "8c2d6b02-a453-40f9-992a-5c5542987cfb",
+  "oracleId": "7b18cfad-a1cf-46c2-bcdd-7762c13d50e5",
+  "set": "blb",
+  "collectorNumber": "197",
+  "rarity": "rare",
+  "manaCost": "{1}{G}",
+  "typeLine": "Creature — Squirrel Ranger",
+  "oracleText": "{T}: Add {G}.\n{T}, Forage: Add two mana in any combination of colors. (To forage, exile three cards from your graveyard or sacrifice a Food.)\n{3}{G}, {T}: Search your library for a Squirrel card, reveal it, put it into your hand, then shuffle.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Forage"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/c/8c2d6b02-a453-40f9-992a-5c5542987cfb.jpg?1783910802",
+   "normal": "https://cards.scryfall.io/normal/front/8/c/8c2d6b02-a453-40f9-992a-5c5542987cfb.jpg?1783910802",
+   "large": "https://cards.scryfall.io/large/front/8/c/8c2d6b02-a453-40f9-992a-5c5542987cfb.jpg?1783910802",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/c/8c2d6b02-a453-40f9-992a-5c5542987cfb.jpg?1783910802"
+  }
+ },
+ {
+  "name": "Sunspine Lynx",
+  "scryfallId": "8995ceaf-b7e0-423c-8f3e-25212d522502",
+  "oracleId": "479adf64-f42c-4cb6-bf25-648c044bca8b",
+  "set": "blb",
+  "collectorNumber": "155",
+  "rarity": "rare",
+  "manaCost": "{2}{R}{R}",
+  "typeLine": "Creature — Elemental Cat",
+  "oracleText": "Players can't gain life.\nDamage can't be prevented.\nWhen this creature enters, it deals damage to each player equal to the number of nonbasic lands that player controls.",
+  "power": "5",
+  "toughness": "4",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/9/8995ceaf-b7e0-423c-8f3e-25212d522502.jpg?1783910815",
+   "normal": "https://cards.scryfall.io/normal/front/8/9/8995ceaf-b7e0-423c-8f3e-25212d522502.jpg?1783910815",
+   "large": "https://cards.scryfall.io/large/front/8/9/8995ceaf-b7e0-423c-8f3e-25212d522502.jpg?1783910815",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/9/8995ceaf-b7e0-423c-8f3e-25212d522502.jpg?1783910815"
+  }
+ },
+ {
+  "name": "Keen-Eyed Curator",
+  "scryfallId": "8cf33d80-0704-4dc4-8e8d-1dcbcbc35add",
+  "oracleId": "46ce3698-e4e6-44e9-8b99-2b12a703e91e",
+  "set": "blb",
+  "collectorNumber": "181",
+  "rarity": "rare",
+  "manaCost": "{G}{G}",
+  "typeLine": "Creature — Raccoon Scout",
+  "oracleText": "As long as there are four or more card types among cards exiled with this creature, it gets +4/+4 and has trample.\n{1}: Exile target card from a graveyard.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/c/8cf33d80-0704-4dc4-8e8d-1dcbcbc35add.jpg?1783910807",
+   "normal": "https://cards.scryfall.io/normal/front/8/c/8cf33d80-0704-4dc4-8e8d-1dcbcbc35add.jpg?1783910807",
+   "large": "https://cards.scryfall.io/large/front/8/c/8cf33d80-0704-4dc4-8e8d-1dcbcbc35add.jpg?1783910807",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/c/8cf33d80-0704-4dc4-8e8d-1dcbcbc35add.jpg?1783910807"
+  }
  }
 ]
