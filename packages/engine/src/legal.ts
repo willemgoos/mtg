@@ -89,6 +89,30 @@ export function castableCards(ctx: Ctx, player: PlayerId): ObjectId[] {
   return out;
 }
 
+/**
+ * Rottenmouth Viper: which permanents to sacrifice for each count (the
+ * engine picks the least useful: tokens, then the cheapest; a simplification).
+ */
+function sacrificePrefixes(
+  ctx: Ctx,
+  player: PlayerId,
+  card: ObjectId,
+  d: ReturnType<typeof def>,
+): (ObjectId[] | undefined)[] {
+  if (!d.sacrificeAnyForReduction) return [undefined];
+  const fodder = ctx.s.battlefield
+    .filter((id) => obj(ctx, id).controller === player && !def(ctx, id).types.includes('Land'))
+    .sort(
+      (a, b) =>
+        Number(obj(ctx, b).isToken) - Number(obj(ctx, a).isToken) ||
+        manaValue(def(ctx, a).manaCost) - manaValue(def(ctx, b).manaCost),
+    );
+  const out: (ObjectId[] | undefined)[] = [undefined];
+  for (let k = 1; k <= Math.min(fodder.length, d.manaCost.generic); k++)
+    out.push(fodder.slice(0, k));
+  return out.filter((x) => !x || !x.includes(card));
+}
+
 /** Other ways to cast a graveyard card: Festival of Embers, Osteomancer Adept. */
 export function graveyardVias(
   ctx: Ctx,
@@ -209,61 +233,65 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
       for (const v of castVariants(d, zone, via)) {
         if ((v.life ?? 0) > ps.life) continue;
         if (v.removeCounters && countersYouControl(ctx, player) < v.removeCounters) continue;
-        for (const x of xs) {
-          const base = castCost(ctx, player, card, {
-            via,
-            mode: v.mode,
-            paws: v.paws,
-            kicked: v.kicked,
-            sacrifice: v.sacrifice ? 'x' : undefined,
-            forage: v.forage ? 'graveyard' : undefined,
-            x,
-          });
-          if (!canPayFrom(base, pool) && !d.costReductionIfTarget) continue;
-          const extra = {
-            ...(v.mode !== undefined ? { mode: v.mode } : {}),
-            ...(v.kicked ? { kicked: true } : {}),
-            ...(x !== undefined ? { x } : {}),
-            ...(v.paws ? { paws: v.paws } : {}),
-            ...(via ? { via } : {}),
-          };
-          const specs = v.spell?.targets ?? (d.enchant ? [d.enchant] : []);
-          const forages = v.forage ? forageChoices(ctx, player) : [undefined];
-          for (const sacrifice of v.sacrifice ? creatures : [undefined]) {
-            for (const targets of combosFor(specs, card, sacrifice)) {
-              const ward = wardCost(ctx, player, targets);
-              // Dire Downdraft costs less with some targets.
-              const cost = d.costReductionIfTarget
-                ? castCost(
-                    ctx,
-                    player,
-                    card,
-                    { mode: v.mode, paws: v.paws, kicked: v.kicked, x },
-                    targets,
-                  )
-                : base;
-              if (
-                (ward.generic || d.costReductionIfTarget) &&
-                !canPayFrom(addCosts(cost, ward), pool)
-              )
-                continue;
-              if (wardLife(ctx, player, targets) > s.players[player].life) continue;
-              if (!wardPayable(ctx, player, targets, zone === 'hand' ? 1 : 0)) continue;
-              for (const forage of forages)
-                for (const discard of discards)
-                  out.push({
-                    type: 'castSpell',
-                    player,
-                    card,
-                    targets,
-                    ...extra,
-                    ...(sacrifice ? { sacrifice } : {}),
-                    ...(forage ? { forage } : {}),
-                    ...(discard ? { discard } : {}),
-                  });
+        // Rottenmouth Viper: sacrifice 0 to 5 nonland permanents (the least useful first).
+        for (const sacrificeMany of sacrificePrefixes(ctx, player, card, d))
+          for (const x of xs) {
+            const base = castCost(ctx, player, card, {
+              sacrificeMany,
+              via,
+              mode: v.mode,
+              paws: v.paws,
+              kicked: v.kicked,
+              sacrifice: v.sacrifice ? 'x' : undefined,
+              forage: v.forage ? 'graveyard' : undefined,
+              x,
+            });
+            if (!canPayFrom(base, pool) && !d.costReductionIfTarget) continue;
+            const extra = {
+              ...(v.mode !== undefined ? { mode: v.mode } : {}),
+              ...(v.kicked ? { kicked: true } : {}),
+              ...(x !== undefined ? { x } : {}),
+              ...(v.paws ? { paws: v.paws } : {}),
+              ...(via ? { via } : {}),
+              ...(sacrificeMany ? { sacrificeMany } : {}),
+            };
+            const specs = v.spell?.targets ?? (d.enchant ? [d.enchant] : []);
+            const forages = v.forage ? forageChoices(ctx, player) : [undefined];
+            for (const sacrifice of v.sacrifice ? creatures : [undefined]) {
+              for (const targets of combosFor(specs, card, sacrifice)) {
+                const ward = wardCost(ctx, player, targets);
+                // Dire Downdraft costs less with some targets.
+                const cost = d.costReductionIfTarget
+                  ? castCost(
+                      ctx,
+                      player,
+                      card,
+                      { mode: v.mode, paws: v.paws, kicked: v.kicked, x },
+                      targets,
+                    )
+                  : base;
+                if (
+                  (ward.generic || d.costReductionIfTarget) &&
+                  !canPayFrom(addCosts(cost, ward), pool)
+                )
+                  continue;
+                if (wardLife(ctx, player, targets) > s.players[player].life) continue;
+                if (!wardPayable(ctx, player, targets, zone === 'hand' ? 1 : 0)) continue;
+                for (const forage of forages)
+                  for (const discard of discards)
+                    out.push({
+                      type: 'castSpell',
+                      player,
+                      card,
+                      targets,
+                      ...extra,
+                      ...(sacrifice ? { sacrifice } : {}),
+                      ...(forage ? { forage } : {}),
+                      ...(discard ? { discard } : {}),
+                    });
+              }
             }
           }
-        }
       }
     // Mockingbird: also one action per creature it could copy (mana spent: X + its {U}).
     if (d.entersAsCopy)
@@ -430,6 +458,8 @@ export function getLegalActions(ctx: Ctx, player: PlayerId): Action[] {
         : [{ type: 'chooseCard', player, card: null }];
     case 'chooseOption':
       return d.options.map((_, index) => ({ type: 'chooseOption', player, index }) as const);
+    case 'sacrificeSeveral':
+      return d.options.map((card) => ({ type: 'chooseCard', player, card }) as const);
     case 'castFree': {
       const out: Action[] = [{ type: 'chooseEffect', player, accept: false }];
       for (const card of d.cards) {

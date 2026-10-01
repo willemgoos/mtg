@@ -22,6 +22,7 @@ import {
   activateAbility,
   answerDiscard,
   answerPickCards,
+  answerSacrificeSeveral,
   answerChooseFromHand,
   answerChooseObject,
   answerPayOrCounter,
@@ -217,6 +218,7 @@ function apply(ctx: Ctx, action: Action): void {
           paws: action.paws,
           via: action.via,
           copyOf: action.copyOf,
+          sacrificeMany: action.sacrificeMany,
         },
         action.payWith,
       );
@@ -294,6 +296,8 @@ function apply(ctx: Ctx, action: Action): void {
     case 'chooseCard':
       if (d.kind === 'chooseObject') return answerChooseObject(ctx, action.card);
       if (d.kind === 'pickCards' && action.card) return answerPickCards(ctx, action.card);
+      if (d.kind === 'sacrificeSeveral' && action.card)
+        return answerSacrificeSeveral(ctx, action.card);
       if (d.kind === 'chooseFromHand') return answerChooseFromHand(ctx, action.card);
       if (d.kind === 'forageExile' && action.card) return answerForageExile(ctx, action.card);
       if (d.kind === 'sacrifice' && action.card) return answerSacrifice(ctx, action.card);

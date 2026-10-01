@@ -318,6 +318,12 @@ export function runEffects(
   const list = effects.slice();
   for (let i = 0; i < list.length; i++) {
     const e = list[i]!;
+    if (e.kind === 'repeat') {
+      const n = resolveAmount(ctx, es, e.count);
+      list.splice(i, 1, ...Array.from({ length: n }, () => e.effects).flat());
+      i--;
+      continue;
+    }
     if (e.kind === 'eachPlayerSacrifices') {
       // You choose, then your opponent.
       list.splice(i, 1, { kind: 'opponentSacrifices', you: true }, { kind: 'opponentSacrifices' });
@@ -359,6 +365,7 @@ export function runEffects(
       e.kind === 'millThenTake' ||
       e.kind === 'lookTakeRestGraveyard' ||
       e.kind === 'castFree' ||
+      e.kind === 'sacrificeSeveral' ||
       e.kind === 'portent' ||
       e.kind === 'exileUntilNonlandCastByDiscard'
     ) {
@@ -423,6 +430,24 @@ export function runEffects(
           player: controller,
           options,
           ...(e.until ? { thisTurn: true } : {}),
+          resume,
+          thenPriority,
+        };
+      } else if (e.kind === 'sacrificeSeveral') {
+        const sourceId = es.source?.id;
+        const options = ctx.s.battlefield.filter(
+          (id) =>
+            id !== sourceId &&
+            obj(ctx, id).controller === controller &&
+            matchesFilter(ctx, id, e.filter, sourceId),
+        );
+        if (options.length < e.count) continue;
+        ctx.s.decision = {
+          kind: 'sacrificeSeveral',
+          player: controller,
+          options,
+          count: e.count,
+          then: e.then,
           resume,
           thenPriority,
         };
@@ -550,7 +575,7 @@ export function runEffects(
         };
       } else if (e.kind === 'putFromHandOrGraveyard') {
         const ps = ctx.s.players[controller];
-        const options = [...ps.hand, ...ps.graveyard].filter((id) =>
+        const options = [...(e.graveyardOnly ? [] : ps.hand), ...ps.graveyard].filter((id) =>
           cardMatches(ctx, id, e.filter),
         );
         if (options.length === 0) continue;
@@ -817,7 +842,9 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
           ...(e.exileIfDies ? { exileIfDies: true } : {}),
           ...(e.cantBeBlocked ? { cantBeBlocked: true } : {}),
           ...(e.returnWhenDies ? { returnWhenDies: e.returnWhenDies } : {}),
-          expires: 'endOfTurn',
+          ...(e.untilYourNextTurn
+            ? { expires: 'untilYourNextTurn' as const, player: es.controller }
+            : { expires: 'endOfTurn' as const }),
         });
       }
       return;
@@ -1066,6 +1093,8 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
     case 'lookTakeRestGraveyard':
       return; // handled by runEffects
     case 'eachPlayerSacrifices':
+    case 'repeat':
+    case 'sacrificeSeveral':
     case 'castFree':
     case 'portent':
     case 'exileUntilNonlandCastByDiscard':

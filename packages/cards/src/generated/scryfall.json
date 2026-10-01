@@ -15109,5 +15109,198 @@
    "large": "https://cards.scryfall.io/large/front/8/6/8659789c-6a2c-439f-a348-b9b1b06c55b8.jpg?1783910824",
    "artCrop": "https://cards.scryfall.io/art_crop/front/8/6/8659789c-6a2c-439f-a348-b9b1b06c55b8.jpg?1783910824"
   }
+ },
+ {
+  "name": "Ygra, Eater of All",
+  "scryfallId": "b9ac7673-eae8-4c4b-889e-5025213a6151",
+  "oracleId": "62511d43-8eaf-405a-9c81-7bd593d3a01e",
+  "set": "blb",
+  "collectorNumber": "241",
+  "rarity": "mythic",
+  "manaCost": "{3}{B}{G}",
+  "typeLine": "Legendary Creature — Elemental Cat",
+  "oracleText": "Ward—Sacrifice a Food.\nOther creatures are Food artifacts in addition to their other types and have \"{2}, {T}, Sacrifice this permanent: You gain 3 life.\"\nWhenever a Food is put into a graveyard from the battlefield, put two +1/+1 counters on Ygra.",
+  "power": "6",
+  "toughness": "6",
+  "colors": [
+   "B",
+   "G"
+  ],
+  "keywords": [
+   "Ward"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/9/b9ac7673-eae8-4c4b-889e-5025213a6151.jpg?1783910790",
+   "normal": "https://cards.scryfall.io/normal/front/b/9/b9ac7673-eae8-4c4b-889e-5025213a6151.jpg?1783910790",
+   "large": "https://cards.scryfall.io/large/front/b/9/b9ac7673-eae8-4c4b-889e-5025213a6151.jpg?1783910790",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/9/b9ac7673-eae8-4c4b-889e-5025213a6151.jpg?1783910790"
+  }
+ },
+ {
+  "name": "Maha, Its Feathers Night",
+  "scryfallId": "cf3320ec-c4e8-405a-982d-e009c58c9e21",
+  "oracleId": "129476ae-9dab-4e04-8e8e-f249afd56ff9",
+  "set": "blb",
+  "collectorNumber": "100",
+  "rarity": "mythic",
+  "manaCost": "{3}{B}{B}",
+  "typeLine": "Legendary Creature — Elemental Bird",
+  "oracleText": "Flying, trample\nWard—Discard a card.\nCreatures your opponents control have base toughness 1.",
+  "power": "6",
+  "toughness": "5",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Flying",
+   "Trample",
+   "Ward"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/f/cf3320ec-c4e8-405a-982d-e009c58c9e21.jpg?1783910833",
+   "normal": "https://cards.scryfall.io/normal/front/c/f/cf3320ec-c4e8-405a-982d-e009c58c9e21.jpg?1783910833",
+   "large": "https://cards.scryfall.io/large/front/c/f/cf3320ec-c4e8-405a-982d-e009c58c9e21.jpg?1783910833",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/f/cf3320ec-c4e8-405a-982d-e009c58c9e21.jpg?1783910833"
+  }
+ },
+ {
+  "name": "Rottenmouth Viper",
+  "scryfallId": "735e79b1-a3a9-4ddf-8bbc-f756c8a0452b",
+  "oracleId": "2c75623c-59f4-4449-ab43-9d1225185ad9",
+  "set": "blb",
+  "collectorNumber": "107",
+  "rarity": "mythic",
+  "manaCost": "{5}{B}",
+  "typeLine": "Creature — Elemental Snake",
+  "oracleText": "As an additional cost to cast this spell, you may sacrifice any number of nonland permanents. This spell costs {1} less to cast for each permanent sacrificed this way.\nWhenever this creature enters or attacks, put a blight counter on it. Then for each blight counter on it, each opponent loses 4 life unless that player sacrifices a nonland permanent of their choice or discards a card.",
+  "power": "6",
+  "toughness": "6",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/3/735e79b1-a3a9-4ddf-8bbc-f756c8a0452b.jpg?1783910830",
+   "normal": "https://cards.scryfall.io/normal/front/7/3/735e79b1-a3a9-4ddf-8bbc-f756c8a0452b.jpg?1783910830",
+   "large": "https://cards.scryfall.io/large/front/7/3/735e79b1-a3a9-4ddf-8bbc-f756c8a0452b.jpg?1783910830",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/3/735e79b1-a3a9-4ddf-8bbc-f756c8a0452b.jpg?1783910830"
+  }
+ },
+ {
+  "name": "Scavenger's Talent",
+  "scryfallId": "9a52b7fe-87ae-425b-85fd-b24e6e0395f1",
+  "oracleId": "aefea339-8a0d-4531-8a62-afaecc88d078",
+  "set": "blb",
+  "collectorNumber": "111",
+  "rarity": "rare",
+  "manaCost": "{B}",
+  "typeLine": "Enchantment — Class",
+  "oracleText": "(Gain the next level as a sorcery to add its ability.)\nWhenever one or more creatures you control die, create a Food token. This ability triggers only once each turn.\n{1}{B}: Level 2\nWhenever you sacrifice a permanent, target player mills two cards.\n{2}{B}: Level 3\nAt the beginning of your end step, you may sacrifice three other nonland permanents. If you do, return a creature card from your graveyard to the battlefield with a finality counter on it.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Food",
+   "Mill"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/a/9a52b7fe-87ae-425b-85fd-b24e6e0395f1.jpg?1783910829",
+   "normal": "https://cards.scryfall.io/normal/front/9/a/9a52b7fe-87ae-425b-85fd-b24e6e0395f1.jpg?1783910829",
+   "large": "https://cards.scryfall.io/large/front/9/a/9a52b7fe-87ae-425b-85fd-b24e6e0395f1.jpg?1783910829",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/a/9a52b7fe-87ae-425b-85fd-b24e6e0395f1.jpg?1783910829"
+  }
+ },
+ {
+  "name": "Baylen, the Haymaker",
+  "scryfallId": "00e93be2-e06b-4774-8ba5-ccf82a6da1d8",
+  "oracleId": "73dc28a7-37ac-4b16-aa00-967c9c44d979",
+  "set": "blb",
+  "collectorNumber": "205",
+  "rarity": "rare",
+  "manaCost": "{R}{G}{W}",
+  "typeLine": "Legendary Creature — Rabbit Warrior",
+  "oracleText": "Tap two untapped tokens you control: Add one mana of any color.\nTap three untapped tokens you control: Draw a card.\nTap four untapped tokens you control: Put three +1/+1 counters on Baylen. It gains trample until end of turn.",
+  "power": "4",
+  "toughness": "3",
+  "colors": [
+   "G",
+   "R",
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/0/00e93be2-e06b-4774-8ba5-ccf82a6da1d8.jpg?1783910800",
+   "normal": "https://cards.scryfall.io/normal/front/0/0/00e93be2-e06b-4774-8ba5-ccf82a6da1d8.jpg?1783910800",
+   "large": "https://cards.scryfall.io/large/front/0/0/00e93be2-e06b-4774-8ba5-ccf82a6da1d8.jpg?1783910800",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/0/00e93be2-e06b-4774-8ba5-ccf82a6da1d8.jpg?1783910800"
+  }
+ },
+ {
+  "name": "For the Common Good",
+  "scryfallId": "3ec72a27-b622-47d7-bdf3-970ccaef0d2a",
+  "oracleId": "de6e4aa2-23f1-46e5-a061-05522944e0c6",
+  "set": "blb",
+  "collectorNumber": "172",
+  "rarity": "rare",
+  "manaCost": "{X}{X}{G}",
+  "typeLine": "Sorcery",
+  "oracleText": "Create X tokens that are copies of target token you control. Then tokens you control gain indestructible until your next turn. You gain 1 life for each token you control.",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/e/3ec72a27-b622-47d7-bdf3-970ccaef0d2a.jpg?1783910810",
+   "normal": "https://cards.scryfall.io/normal/front/3/e/3ec72a27-b622-47d7-bdf3-970ccaef0d2a.jpg?1783910810",
+   "large": "https://cards.scryfall.io/large/front/3/e/3ec72a27-b622-47d7-bdf3-970ccaef0d2a.jpg?1783910810",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/e/3ec72a27-b622-47d7-bdf3-970ccaef0d2a.jpg?1783910810"
+  }
+ },
+ {
+  "name": "Eluge, the Shoreless Sea",
+  "scryfallId": "1f2bf6ba-cd1a-4382-9572-6dfbcf6ed0c6",
+  "oracleId": "027989e7-20c4-4773-b6b4-20337cc5fe8c",
+  "set": "blb",
+  "collectorNumber": "49",
+  "rarity": "mythic",
+  "manaCost": "{1}{U}{U}{U}",
+  "typeLine": "Legendary Creature — Elemental Fish",
+  "oracleText": "Eluge's power and toughness are each equal to the number of Islands you control.\nWhenever Eluge enters or attacks, put a flood counter on target land. It's an Island in addition to its other types for as long as it has a flood counter on it.\nThe first instant or sorcery spell you cast each turn costs {U} (or {1}) less to cast for each land you control with a flood counter on it.",
+  "power": "*",
+  "toughness": "*",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/f/1f2bf6ba-cd1a-4382-9572-6dfbcf6ed0c6.jpg?1783910850",
+   "normal": "https://cards.scryfall.io/normal/front/1/f/1f2bf6ba-cd1a-4382-9572-6dfbcf6ed0c6.jpg?1783910850",
+   "large": "https://cards.scryfall.io/large/front/1/f/1f2bf6ba-cd1a-4382-9572-6dfbcf6ed0c6.jpg?1783910850",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/f/1f2bf6ba-cd1a-4382-9572-6dfbcf6ed0c6.jpg?1783910850"
+  }
+ },
+ {
+  "name": "Kitnap",
+  "scryfallId": "085be5d1-fd85-46d1-ad39-a8aa75a06a96",
+  "oracleId": "a1bd1e83-40ac-449f-838c-ef308f275a5d",
+  "set": "blb",
+  "collectorNumber": "53",
+  "rarity": "rare",
+  "manaCost": "{2}{U}{U}",
+  "typeLine": "Enchantment — Aura",
+  "oracleText": "Gift a card (You may promise an opponent a gift as you cast this spell. If you do, when it enters, they draw a card.)\nEnchant creature\nWhen this Aura enters, tap enchanted creature. If the gift wasn't promised, put three stun counters on it.\nYou control enchanted creature.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Gift",
+   "Enchant"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/8/085be5d1-fd85-46d1-ad39-a8aa75a06a96.jpg?1783910850",
+   "normal": "https://cards.scryfall.io/normal/front/0/8/085be5d1-fd85-46d1-ad39-a8aa75a06a96.jpg?1783910850",
+   "large": "https://cards.scryfall.io/large/front/0/8/085be5d1-fd85-46d1-ad39-a8aa75a06a96.jpg?1783910850",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/8/085be5d1-fd85-46d1-ad39-a8aa75a06a96.jpg?1783910850"
+  }
  }
 ]

@@ -85,7 +85,43 @@ export function def(ctx: Ctx, id: ObjectId): CardDefinition {
     const aura = ctx.s.objects[o.foodBy];
     if (aura && aura.zone === 'battlefield' && aura.attachedTo === id) return foodDef(d);
   }
-  return o.blank ? blankDef(d) : d;
+  if (o.blank) return blankDef(d);
+  // Ygra: other creatures are Food artifacts with the Food ability.
+  if (
+    ctx.s.creaturesAreFood &&
+    o.zone === 'battlefield' &&
+    d.types.includes('Creature') &&
+    !makesFood(d)
+  )
+    return foodCreatureDef(d);
+  return d;
+}
+
+/** Recomputes whether a Ygra is on the battlefield (after setting up a position directly). */
+export function refreshCreaturesAreFood(ctx: Ctx): void {
+  ctx.s.creaturesAreFood = ctx.s.battlefield.some((b) =>
+    makesFood(defOf(ctx, ctx.s.objects[b]!.defId)),
+  );
+}
+
+const makesFood = (d: CardDefinition) =>
+  d.abilities.some((a) => a.kind === 'static' && a.effect.kind === 'creaturesAreFood');
+
+const foodCreatureDefs = new WeakMap<CardDefinition, CardDefinition>();
+
+/** A creature that's also a Food artifact (Ygra). */
+function foodCreatureDef(d: CardDefinition): CardDefinition {
+  let f = foodCreatureDefs.get(d);
+  if (!f) {
+    f = {
+      ...d,
+      types: d.types.includes('Artifact') ? d.types : [...d.types, 'Artifact'],
+      subtypes: [...d.subtypes, 'Food'],
+      abilities: [...d.abilities, ...foodDef(d).abilities],
+    };
+    foodCreatureDefs.set(d, f);
+  }
+  return f;
 }
 
 const foodDefs = new WeakMap<CardDefinition, CardDefinition>();
@@ -302,6 +338,9 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
     if (to === 'library' && opts.position !== 'bottom') dst.unshift(id);
     else dst.push(id);
   }
+  // Ygra entering or leaving changes what the other creatures are.
+  if ((from === 'battlefield' || to === 'battlefield') && makesFood(defOf(ctx, o.defId)))
+    refreshCreaturesAreFood(ctx);
   emit(ctx, { type: 'objectMoved', id, defId: o.defId, from, to });
 
   if (ceases) delete ctx.s.objects[id];

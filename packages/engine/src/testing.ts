@@ -2,7 +2,7 @@
  * Helpers for building mid-game positions and driving games in tests
  * (exported as @mtg/engine/testing). Not used by the engine itself.
  */
-import { createObject, makeCtx } from './context.ts';
+import { createObject, makeCtx, refreshCreaturesAreFood } from './context.ts';
 import type { Engine } from './engine.ts';
 import { emptyState } from './setup.ts';
 import type {
@@ -81,6 +81,7 @@ export function buildScenario(db: CardDb, spec: ScenarioSpec = {}): GameState {
     s.combat = { attackers: [], dealtFirstStrikeDamage: [] };
   }
   s.decision = { kind: 'priority', player: active };
+  refreshCreaturesAreFood(ctx);
   return s;
 }
 

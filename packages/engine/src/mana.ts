@@ -62,6 +62,8 @@ export function manaSources(
       }
       if (!produces.includes(a.produces)) produces.push(a.produces);
     }
+    // Eluge: a land with a flood counter is an Island too.
+    if (produces && obj(ctx, id).counters?.flood && !produces.includes('U')) produces.push('U');
     if (produces) {
       const src = { id, produces, isCreature: isCreature(ctx, id), sacrifice };
       out.push(src);

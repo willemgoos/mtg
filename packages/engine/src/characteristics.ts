@@ -127,6 +127,12 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
           }
           continue;
         }
+        // Maha: "Creatures your opponents control have base toughness 1."
+        if (st.kind === 'opponentsBaseToughness') {
+          if (src.controller !== o.controller && d.types.includes('Creature'))
+            toughness += st.toughness - (base ?? o.copyPT?.toughness ?? d.toughness ?? 0);
+          continue;
+        }
         if (st.kind !== 'anthem') continue;
         if (st.filter && !cardMatches(ctx, id, st.filter, srcId)) continue;
         if (st.condition && !checkCondition(ctx, st.condition, src.controller, src)) continue;
@@ -252,7 +258,13 @@ export function countOf(
     const d = def(ctx, id);
     if (a.basicOnly && !d.supertypes.includes('Basic')) return false;
     if (a.count === 'landsYouControl')
-      return d.types.includes('Land') && (!a.subtype || d.subtypes.includes(a.subtype));
+      return (
+        d.types.includes('Land') &&
+        (!a.subtype ||
+          d.subtypes.includes(a.subtype) ||
+          // Eluge's flood counters make lands Islands.
+          (a.subtype === 'Island' && !!obj(ctx, id).counters?.flood))
+      );
     if (!d.types.includes('Creature')) return false;
     if (!a.subtype) return true;
     if (changeling(ctx, id, a.subtype)) return true;
@@ -549,7 +561,10 @@ function affectingDefs(db: CardDb): ReadonlySet<CardDefId> {
         .filter((d) =>
           d.abilities.some(
             (a) =>
-              a.kind === 'static' && (a.effect.kind === 'anthem' || a.effect.kind === 'attached'),
+              a.kind === 'static' &&
+              (a.effect.kind === 'anthem' ||
+                a.effect.kind === 'attached' ||
+                a.effect.kind === 'opponentsBaseToughness'),
           ),
         )
         .map((d) => d.id),

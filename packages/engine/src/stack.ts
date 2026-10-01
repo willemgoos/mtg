@@ -74,6 +74,8 @@ export interface CastChoice {
   exileAfter?: boolean | undefined;
   /** Mockingbird: the creature to enter as a copy of. */
   copyOf?: ObjectId | undefined;
+  /** Rottenmouth Viper: permanents sacrificed to make it cheaper. */
+  sacrificeMany?: ObjectId[] | undefined;
 }
 
 /** Valiant needs to know what a player's spell or ability targeted. */
@@ -218,7 +220,18 @@ export function castCost(
     }
   // {X}: X is chosen as the spell is cast.
   if (cost.x) cost = { ...cost, generic: cost.generic + cost.x * (choice.x ?? 0), x: 0 };
+  reduce += choice.sacrificeMany?.length ?? 0;
   if (reduce) cost = { ...cost, generic: Math.max(0, cost.generic - reduce) };
+  // Eluge: the first instant or sorcery each turn costs {U} less per flooded land.
+  const flood = floodDiscount(ctx, player, d);
+  if (flood) {
+    const blue = Math.min(flood, cost.colored.U ?? 0);
+    cost = {
+      ...cost,
+      colored: { ...cost.colored, U: (cost.colored.U ?? 0) - blue },
+      generic: Math.max(0, cost.generic - (flood - blue)),
+    };
+  }
   if (o.anyMana) return anyTypeCost(cost);
   // Vizier of the Menagerie: any type of mana for creature spells.
   if (d.types.includes('Creature') && hasStatic(ctx, player, 'creaturesFromTopOfLibrary'))
@@ -246,6 +259,9 @@ export function castSpell(
   const payment = planPayment(ctx, player, cost, payWith, undefined, spellTags(d));
   moveObject(ctx, card, 'stack', { controller: player });
   if (choice.discard) moveObject(ctx, choice.discard, 'graveyard');
+  for (const id of choice.sacrificeMany ?? []) sacrificePermanent(ctx, id);
+  if (d.types.includes('Instant') || d.types.includes('Sorcery'))
+    (ctx.s.turn.instantsSorceriesCast ??= { p1: 0, p2: 0 })[player]++;
   if (choice.sacrifice) sacrificePermanent(ctx, choice.sacrifice);
   if (v.removeCounters) removeCounters(ctx, player, v.removeCounters);
   changeLife(ctx, player, -wardLife(ctx, player, targets) - (v.life ?? 0));
@@ -270,6 +286,16 @@ export function castSpell(
   return (
     choice.forage !== undefined && payForage(ctx, player, choice.forage, { thenPriority: player })
   );
+}
+
+/** Eluge: {U} off the first instant or sorcery each turn, per land with a flood counter. */
+function floodDiscount(ctx: Ctx, player: PlayerId, d: CardDefinition): number {
+  if (!d.types.includes('Instant') && !d.types.includes('Sorcery')) return 0;
+  if ((ctx.s.turn.instantsSorceriesCast?.[player] ?? 0) > 0) return 0;
+  if (!hasStatic(ctx, player, 'floodDiscount')) return 0;
+  return ctx.s.battlefield.filter(
+    (id) => obj(ctx, id).controller === player && (obj(ctx, id).counters?.flood ?? 0) > 0,
+  ).length;
 }
 
 /** A count from `player`'s point of view (for cost reduction). */
@@ -658,6 +684,17 @@ export function finishCastFree(ctx: Ctx, cast: ObjectId | null): void {
   for (const id of d.thenToHand ?? [])
     if (id !== cast && ctx.s.objects[id]?.zone === 'exile') moveObject(ctx, id, 'hand');
   resume(ctx, d.resume, d.thenPriority);
+}
+
+/** One more permanent sacrificed for 'sacrificeSeveral'; when all are, its effects follow. */
+export function answerSacrificeSeveral(ctx: Ctx, card: ObjectId): void {
+  const d = ctx.s.decision;
+  if (d.kind !== 'sacrificeSeveral') throw new Error('Not sacrificing');
+  sacrificePermanent(ctx, card);
+  d.options = d.options.filter((id) => id !== card);
+  d.count--;
+  if (d.count > 0) return;
+  continueWith(ctx, d.resume, d.then, d.thenPriority);
 }
 
 /** One of a 'chooseOption' decision's options: its effects, then the rest. */

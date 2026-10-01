@@ -128,6 +128,8 @@ export interface CardDefinition {
   costReductionIfTarget?: { filter: CardFilter; amount: number };
   /** What it does when cast with flashback, if different ("if this spell was cast from a graveyard"). */
   flashbackSpell?: SpellDef;
+  /** "You may sacrifice any number of nonland permanents. This spell costs {1} less for each" (Rottenmouth Viper). */
+  sacrificeAnyForReduction?: boolean;
   /** "As an additional cost to cast this spell, discard a card" (Sazacap's Brew). */
   discardToCast?: boolean;
   /** It enters tapped while this holds (Eddymurk Crab: if it's not your turn). */
@@ -280,6 +282,8 @@ export type TriggerDef =
    * library): this one or another you control ('selfOrOther'), or only others.
    */
   | { on: 'leavesWithoutDying'; who: 'selfOrOther' | 'other' }
+  /** Whenever a Food is put into a graveyard from the battlefield (Ygra). */
+  | { on: 'foodToGraveyard' }
   /** Whenever you forage (Corpseberry Cultivator). */
   | { on: 'youForage' }
   /** Whenever you give a gift (Jolly Gerbils). */
@@ -495,10 +499,12 @@ export type Amount =
 export type EffectDef =
   | { kind: 'may'; effects: EffectDef[]; cost?: ManaCost }
   | { kind: 'damage'; amount: Amount; to: Ref; from?: Ref }
-  /** Until end of turn. */
+  /** Until end of turn (or until your next turn). */
   | {
       kind: 'pump';
       to: Ref;
+      /** Lasts until your next turn instead (For the Common Good). */
+      untilYourNextTurn?: boolean;
       power: Amount;
       toughness: Amount;
       keywords?: Keyword[];
@@ -569,6 +575,13 @@ export type EffectDef =
   | { kind: 'dragonhawkExile'; count: Amount; damage: number }
   /** Deal `amount` to each opponent for each of these cards still in exile. */
   | { kind: 'damagePerExiled'; cards: ObjectRef[]; amount: number }
+  /** Do these effects N times (Rottenmouth Viper: once per blight counter). */
+  | { kind: 'repeat'; count: Amount; effects: EffectDef[] }
+  /**
+   * Sacrifice `count` permanents you control matching the filter (other than
+   * the source), chosen one at a time; then `then` happens. Nothing if you can't.
+   */
+  | { kind: 'sacrificeSeveral'; count: number; filter: CardFilter; then: EffectDef[] }
   /** Each player sacrifices a creature of their choice (Season of Loss). */
   | { kind: 'eachPlayerSacrifices' }
   /** Until the end of your next turn, you have this triggered ability (Season of the Bold). */
@@ -634,7 +647,13 @@ export type EffectDef =
    * Put a card matching the filter from your hand or graveyard onto the
    * battlefield (Kastral), optionally with a named counter.
    */
-  | { kind: 'putFromHandOrGraveyard'; filter: CardFilter; counter?: string }
+  | {
+      kind: 'putFromHandOrGraveyard';
+      filter: CardFilter;
+      counter?: string;
+      /** Only from the graveyard (Scavenger's Talent). */
+      graveyardOnly?: boolean;
+    }
   /** Exile permanents, then return them under their owners' control (with +1/+1 counters). */
   | { kind: 'blink'; what: Ref; counters?: number }
   /**
@@ -888,6 +907,10 @@ export type StaticDef =
   | { kind: 'castFromGraveyardForLife' }
   /** Cards and tokens that would go to your graveyard are exiled instead (Festival of Embers). */
   | { kind: 'graveyardToExile' }
+  /** Other creatures are Food artifacts with the Food ability (Ygra). */
+  | { kind: 'creaturesAreFood' }
+  /** The first instant or sorcery you cast each turn costs {U} less per land with a flood counter (Eluge). */
+  | { kind: 'floodDiscount' }
   /** Damage can't be prevented (Sunspine Lynx). */
   | { kind: 'damageCantBePrevented' }
   /** The enchanted permanent is a colorless Food artifact with no other abilities (Sugar Coat). */
@@ -1095,6 +1118,8 @@ export interface TurnState {
   leftGraveyard?: Record<PlayerId, number>;
   /** Foods each player sacrificed this turn. */
   foodsSacrificed?: Record<PlayerId, number>;
+  /** Instants and sorceries each player cast this turn (Eluge). */
+  instantsSorceriesCast?: Record<PlayerId, number>;
   /** Players who may cast creature spells from their graveyard by foraging this turn (Osteomancer Adept). */
   osteomancer?: PlayerId[];
   /** Players with hexproof until end of turn (Dawn's Truce). */
@@ -1419,6 +1444,16 @@ export type Decision =
       resume: PausedResolution;
       thenPriority: PlayerId;
     }
+  | {
+      /** Sacrifice `count` more of these, one at a time; then `then`. */
+      kind: 'sacrificeSeveral';
+      player: PlayerId;
+      options: ObjectId[];
+      count: number;
+      then: EffectDef[];
+      resume: PausedResolution;
+      thenPriority: PlayerId;
+    }
   | { kind: 'gameOver' };
 
 export interface GameState {
@@ -1436,6 +1471,8 @@ export interface GameState {
   combat: CombatState | null;
   effects: ContinuousEffect[];
   pendingTriggers: PendingTrigger[];
+  /** Ygra is on the battlefield: other creatures are Food artifacts. */
+  creaturesAreFood?: boolean;
   /** Abilities players have from emblems or effects (Season of the Bold, Ral). */
   emblems?: Emblem[];
   /** "At the beginning of the next end step, ...": fire at the first end step after `afterTurn` / this step. */
@@ -1486,6 +1523,8 @@ export type Action =
       via?: 'festival' | 'osteomancer';
       /** Mockingbird: the creature to enter as a copy of. */
       copyOf?: ObjectId;
+      /** Rottenmouth Viper: permanents sacrificed to make it cheaper. */
+      sacrificeMany?: ObjectId[];
       /** Mana sources to tap. Omitted: the engine picks. */
       payWith?: ObjectId[];
     }

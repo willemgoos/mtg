@@ -190,3 +190,92 @@ describe('copies and X', () => {
     expect(g.life('p2')).toBe(18);
   });
 });
+
+describe('the last rares', () => {
+  it('Ygra makes other creatures Foods and grows when they die', () => {
+    const g = game({
+      p1: { hand: ['fell'], battlefield: [...n('swamp', 2), 'ygra-eater-of-all', 'bear-cub'] },
+    });
+    const bear = g.id('p1', 'bear-cub');
+    const c = getCharacteristics(g.state, cardDb, bear);
+    expect(c.subtypes).toContain('Food');
+    expect(c.types).toContain('Artifact');
+    settle(cast(g, 'fell', [g.ref(bear)]));
+    expect(g.obj(g.id('p1', 'ygra-eater-of-all')).plusOneCounters).toBe(2);
+  });
+
+  it("Maha gives the opponent's creatures base toughness 1", () => {
+    const g = game({
+      p1: { battlefield: ['maha-its-feathers-night'] },
+      p2: { battlefield: ['serra-angel'] },
+    });
+    expect(pt(g, g.id('p2', 'serra-angel'))).toEqual([4, 1]);
+  });
+
+  it('Rottenmouth Viper costs {1} less per permanent sacrificed', () => {
+    const g = game({
+      p1: {
+        hand: ['rottenmouth-viper'],
+        battlefield: [...n('swamp', 3), 'carrot-cake', 'bear-cub'],
+      },
+    });
+    const casts = g.legal().filter((a) => a.type === 'castSpell');
+    // It costs six: three Swamps and two sacrifices are not enough.
+    expect(casts).toHaveLength(0);
+    const g2 = game({
+      p1: {
+        hand: ['rottenmouth-viper'],
+        battlefield: [...n('swamp', 4), 'carrot-cake', 'bear-cub'],
+      },
+    });
+    const viper = g2.legal().find((a) => a.type === 'castSpell')!;
+    expect(viper.type === 'castSpell' && viper.sacrificeMany).toHaveLength(2);
+  });
+
+  it('Eluge counts flooded lands as Islands', () => {
+    const g = game({
+      p1: { hand: ['eluge-the-shoreless-sea'], battlefield: [...n('island', 3), 'forest'] },
+    });
+    settle(cast(g, 'eluge-the-shoreless-sea'), (legal) =>
+      legal.find(
+        (a) =>
+          a.type === 'chooseTargets' &&
+          a.targets.some((t) => 'object' in t && g.obj(t.object.id).defId === 'forest'),
+      ),
+    );
+    expect(pt(g, g.id('p1', 'eluge-the-shoreless-sea'))).toEqual([4, 4]);
+  });
+
+  it('Kitnap steals a creature (stunned without the gift)', () => {
+    const g = game({
+      p1: { hand: ['kitnap'], battlefield: n('island', 4) },
+      p2: { battlefield: ['serra-angel'] },
+    });
+    const angel = g.id('p2', 'serra-angel');
+    settle(cast(g, 'kitnap', [g.ref(angel)]));
+    expect(g.obj(angel).controller).toBe('p1');
+    expect(g.obj(angel).counters?.stun).toBe(3);
+  });
+
+  it('For the Common Good copies a token X times', () => {
+    const g = game({
+      p1: {
+        hand: ['hop-to-it', 'for-the-common-good'],
+        battlefield: [...n('plains', 3), ...n('forest', 5)],
+      },
+    });
+    settle(cast(g, 'hop-to-it'));
+    const rabbit = all(g, 'rabbit-token')[0]!;
+    const x2 = g
+      .legal()
+      .find(
+        (a) =>
+          a.type === 'castSpell' &&
+          a.x === 2 &&
+          a.targets.some((t) => 'object' in t && t.object.id === rabbit),
+      )!;
+    settle(g.do(x2));
+    expect(all(g, 'rabbit-token')).toHaveLength(5);
+    expect(g.life('p1')).toBe(25);
+  });
+});

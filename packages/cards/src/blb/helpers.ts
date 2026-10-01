@@ -29,7 +29,7 @@ export const yourCreatureCard = (optional = false): TargetSpec => ({
 });
 export const yours = { each: 'creature', controller: 'you' } as const;
 export const draw = (amount: number): EffectDef => ({ kind: 'draw', who: 'controller', amount });
-export const gain = (amount: number): EffectDef => ({
+export const gain = (amount: Amount): EffectDef => ({
   kind: 'gainLife',
   who: 'controller',
   amount,

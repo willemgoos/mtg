@@ -277,6 +277,17 @@ function detect(ctx: Ctx, ev: GameEvent): void {
           (o, a) => a.trigger.on === 'leavesWithoutDying' && o.id !== ev.id && o.controller === was,
         );
       }
+      // Ygra: "Whenever a Food is put into a graveyard from the battlefield".
+      if (ev.from === 'battlefield' && ev.to === 'graveyard') {
+        const ygra = (d: CardDefinition) =>
+          d.abilities.some((a) => a.kind === 'static' && a.effect.kind === 'creaturesAreFood');
+        const wasFood =
+          movedDef.subtypes.includes('Food') ||
+          (movedDef.types.includes('Creature') &&
+            !ygra(movedDef) &&
+            s.battlefield.some((b) => ygra(defOf(ctx, s.objects[b]!.defId))));
+        if (wasFood) forEachBattlefieldTrigger(ctx, (_o, a) => a.trigger.on === 'foodToGraveyard');
+      }
       if (
         ev.from === 'battlefield' &&
         ev.to === 'graveyard' &&
