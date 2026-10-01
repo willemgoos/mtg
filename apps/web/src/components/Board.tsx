@@ -420,7 +420,9 @@ export function Board({
               ? 'a Food to sacrifice'
               : first.type === 'castSpell' && first.discard
                 ? 'a card to discard'
-                : null
+                : first.type === 'castSpell' && first.copyOf
+                  ? 'a creature to copy (or skip)'
+                  : null
           : null;
       const prompt = paying
         ? `${targeting.label}: choose ${paying}`
@@ -505,6 +507,10 @@ export function Board({
       }
       case 'chooseOption':
         return { prompt: `${nameOf(d.resume.sourceDefId)}: choose one` };
+      case 'castFree':
+        return {
+          prompt: `${nameOf(d.resume.sourceDefId)}: you may cast a card without paying its cost`,
+        };
       case 'pickCards':
         return { prompt: `Choose ${d.count} card${d.count > 1 ? 's' : ''} to keep` };
       case 'chooseObject':
@@ -890,6 +896,44 @@ export function Board({
           onHover={setHover}
           onClose={closePile}
         />
+      )}
+
+      {d.kind === 'castFree' && d.player === HUMAN && !targeting && !castMenu && (
+        <div className="overlay overlay--mull">
+          <div className="mull">
+            <h2>{nameOf(d.resume.sourceDefId)}</h2>
+            <p>
+              {d.discardInstead
+                ? 'You may cast it by discarding a card instead of paying its mana cost.'
+                : 'You may cast it without paying its mana cost.'}
+            </p>
+            <div className="mull__hand">
+              {d.cards.map((id, i) => {
+                const casts = legal.filter((a) => a.type === 'castSpell' && a.card === id);
+                return (
+                  <div key={id} className="mull__card" style={{ '--i': i } as React.CSSProperties}>
+                    <Card
+                      id={id}
+                      defId={view.objects[id]!.defId}
+                      size="mull"
+                      mark={casts.length ? 'playable' : null}
+                      {...(casts.length ? { onClick: () => startCast(id, casts) } : {})}
+                      onHover={setHover}
+                    />
+                  </div>
+                );
+              })}
+            </div>
+            <div className="mull__buttons">
+              <button
+                className="btn btn--ghost"
+                onClick={() => act({ type: 'chooseEffect', player: HUMAN, accept: false })}
+              >
+                Don't cast
+              </button>
+            </div>
+          </div>
+        </div>
       )}
 
       {d.kind === 'pickCards' && d.player === HUMAN && (
@@ -1289,6 +1333,8 @@ function castLabel(defId: CardDefId, a: Action): string {
       : 'Forage: sacrifice a Food';
   if (a.type === 'activateAbility') return 'Activate';
   if (a.x !== undefined) return `X = ${a.x}`;
+  if (a.via === 'festival') return 'From your graveyard (pay 1 life)';
+  if (a.via === 'osteomancer') return 'From your graveyard (forage)';
   if (a.paws) return pawLabel(defId, a.paws);
   const def = cardDb.get(defId);
   if (a.mode !== undefined) return def?.modes?.[a.mode]?.label ?? `Mode ${a.mode + 1}`;

@@ -34,14 +34,16 @@ export function manaSources(
   forSubtypes: readonly string[] = [],
 ): ManaSource[] {
   const out: ManaSource[] = [];
-  (ctx.s.players[player].pool ?? []).forEach((p, i) =>
-    out.push({
-      id: poolId(player, i),
-      produces: p.produces,
-      isCreature: false,
-      sacrifice: false,
-      pool: true,
-    }),
+  (ctx.s.players[player].pool ?? []).forEach(
+    (p, i) =>
+      (!p.onlyFor || forSubtypes.includes(p.onlyFor)) &&
+      out.push({
+        id: poolId(player, i),
+        produces: p.produces,
+        isCreature: false,
+        sacrifice: false,
+        pool: true,
+      }),
   );
   for (const id of ctx.s.battlefield) {
     if (id === exclude || obj(ctx, id).controller !== player) continue;

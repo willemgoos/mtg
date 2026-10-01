@@ -93,6 +93,10 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
         }
       }
     }
+    if (o.grantedKeywords?.length) {
+      granted ??= new Set(keywords);
+      for (const k of o.grantedKeywords) granted.add(k);
+    }
     // Keyword counters (a flying counter, an indestructible counter).
     if (o.counters)
       for (const k of COUNTER_KEYWORDS)
@@ -482,6 +486,11 @@ export function cardMatches(
   if (filter.notTypes?.some((t) => d.types.includes(t))) return false;
   const mv = manaValue(d.manaCost);
   if (filter.minManaValue !== undefined && mv < filter.minManaValue) return false;
+  if (filter.manaValueIsSourceCounters) {
+    const { name, plus } = filter.manaValueIsSourceCounters;
+    const counters = sourceId ? (obj(ctx, sourceId).counters?.[name] ?? 0) : 0;
+    if (mv !== counters + plus) return false;
+  }
   if (filter.manaValue !== undefined && mv !== filter.manaValue) return false;
   if (filter.subtype && !subtypes.includes(filter.subtype) && !changeling(ctx, id, filter.subtype))
     return false;

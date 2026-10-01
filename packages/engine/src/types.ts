@@ -66,6 +66,8 @@ export interface SpellDef {
 }
 
 export interface CardDefinition {
+  /** Mockingbird: may enter as a copy of a creature with mana value up to the mana spent on it. */
+  entersAsCopy?: { addSubtype: string; addKeyword: Keyword };
   id: CardDefId;
   name: string;
   /** Used by the UI to hotlink the card image. */
@@ -401,6 +403,8 @@ export interface CardFilter {
   other?: boolean;
   /** Mana value less than that of the creature that caused the trigger (Clement). */
   lesserManaValueThanSubject?: boolean;
+  /** Mana value equal to the source's named counters plus `plus` (Wishing Well). */
+  manaValueIsSourceCounters?: { name: string; plus: number };
   /** Not the creature that caused the trigger (Pawpatch Recruit). */
   notSubject?: boolean;
   /** Has an Equipment attached (Blacksmith's Talent). */
@@ -534,7 +538,13 @@ export type EffectDef =
    * Look at an opponent's hand and choose a card matching the filter; they
    * discard it (Thought-Stalker Warlock) or it's exiled.
    */
-  | { kind: 'chooseFromOpponentHand'; filter?: CardFilter; then: 'discard' | 'exile' }
+  | {
+      kind: 'chooseFromOpponentHand';
+      filter?: CardFilter;
+      then: 'discard' | 'exile';
+      /** You may cast the exiled card while it stays exiled, with any mana (Cruelclaw's Heist). */
+      castable?: boolean;
+    }
   /** A player chooses one of these (the owner of target `ownerOf`, or the controller). */
   | {
       kind: 'choose';
@@ -543,6 +553,22 @@ export type EffectDef =
       opponent?: boolean;
       options: { label: string; effects: EffectDef[] }[];
     }
+  /**
+   * You may cast a card without paying its mana cost, now (Daring Waverider,
+   * Wishing Well). `exileAfter`: if it would go to the graveyard, exile it.
+   */
+  | { kind: 'castFree'; what: Ref; exileAfter?: boolean }
+  /** Portent of Calamity: reveal the top X and exile one card of each type; four or more lets you cast one free. */
+  | { kind: 'portent' }
+  /** The Infamous Cruelclaw: exile until a nonland card; you may cast it by discarding a card instead. */
+  | { kind: 'exileUntilNonlandCastByDiscard' }
+  /**
+   * Dragonhawk: exile the top N (playable until your next end step); at your
+   * next end step, deal `damage` to each opponent per card still exiled.
+   */
+  | { kind: 'dragonhawkExile'; count: Amount; damage: number }
+  /** Deal `amount` to each opponent for each of these cards still in exile. */
+  | { kind: 'damagePerExiled'; cards: ObjectRef[]; amount: number }
   /** Each player sacrifices a creature of their choice (Season of Loss). */
   | { kind: 'eachPlayerSacrifices' }
   /** Until the end of your next turn, you have this triggered ability (Season of the Bold). */
@@ -577,6 +603,8 @@ export type EffectDef =
   | { kind: 'playerHexproof' }
   /** Tap two untapped tokens: this Vehicle becomes an artifact creature until end of turn. */
   | { kind: 'becomeCreature'; what: Ref }
+  /** Until end of turn you may cast creature spells from your graveyard by foraging (Osteomancer Adept). */
+  | { kind: 'osteomancer' }
   /** Raise this Class's level by one. */
   | { kind: 'levelUp' }
   /**
@@ -584,7 +612,14 @@ export type EffectDef =
    * repeats the single entry (Muerra: {R} or {G} per Raccoon). Unspent mana
    * empties between steps, or at end of turn with `untilEndOfTurn`.
    */
-  | { kind: 'addMana'; mana: ManaType[][]; count?: Amount; untilEndOfTurn?: boolean }
+  | {
+      kind: 'addMana';
+      mana: ManaType[][];
+      count?: Amount;
+      untilEndOfTurn?: boolean;
+      /** Spend it only on spells with this tag (Helga: 'BigCreature'). */
+      onlyFor?: string;
+    }
   /** Exile permanents; return them at the beginning of the next end step (with counters). */
   | {
       kind: 'exileUntilEndStep';
@@ -847,6 +882,12 @@ export type StaticDef =
   | { kind: 'doubleCounters'; condition?: ConditionDef }
   /** Spells you cast matching the filter cost {N} less, while the condition holds. */
   | { kind: 'spellsCostLessIf'; filter: CardFilter; amount: number; condition?: ConditionDef }
+  /** Look at the top card of your library any time; play cards matching the filter from there (Glarb). */
+  | { kind: 'playFromTop'; filter: CardFilter }
+  /** During your turn, cast instants and sorceries from your graveyard by paying 1 life more (Festival of Embers). */
+  | { kind: 'castFromGraveyardForLife' }
+  /** Cards and tokens that would go to your graveyard are exiled instead (Festival of Embers). */
+  | { kind: 'graveyardToExile' }
   /** Damage can't be prevented (Sunspine Lynx). */
   | { kind: 'damageCantBePrevented' }
   /** The enchanted permanent is a colorless Food artifact with no other abilities (Sugar Coat). */
@@ -926,6 +967,15 @@ export interface GameObject {
   exiledWith?: ObjectId[];
   /** Sugar Coat: the Aura that makes it a Food. */
   foodBy?: ObjectId;
+  /** Someone other than its owner may cast it from exile, with any mana (Cruelclaw's Heist). */
+  castableBy?: PlayerId;
+  anyMana?: boolean;
+  /** The X paid for it as a spell (Hugs). */
+  xPaid?: number;
+  /** Mockingbird: it entered as a copy; this is what it really is. */
+  originalDefId?: CardDefId;
+  /** Keywords it has for as long as it's on the battlefield (Mockingbird's flying). */
+  grantedKeywords?: Keyword[];
   /** Kitnap: the Aura it's controlled by, and who controlled it before. */
   controlledBy?: { aura: ObjectId; previous: PlayerId };
 }
@@ -955,7 +1005,7 @@ export interface PlayerState {
   /** Cards drawn for an opening hand, if not the usual seven (an expedition boon). */
   openingHand?: number;
   /** Floating mana: each entry is one mana of one of its types. */
-  pool?: { produces: ManaType[]; untilEndOfTurn?: boolean }[];
+  pool?: { produces: ManaType[]; untilEndOfTurn?: boolean; onlyFor?: string }[];
 }
 
 export type StackItem =
@@ -972,6 +1022,10 @@ export type StackItem =
       x?: number;
       /** The pawprint modes chosen (repeats allowed), in printed order. */
       paws?: number[];
+      /** It enters with a finality counter (cast with Osteomancer Adept). */
+      finality?: boolean;
+      /** Mockingbird: the creature it enters as a copy of. */
+      copyOf?: ObjectId;
     }
   | {
       kind: 'ability';
@@ -991,6 +1045,8 @@ export type StackItem =
       inline?: EffectDef[];
       /** An emblem's ability. */
       emblem?: AbilityDef;
+      /** The activated ability, as the source had it when activated. */
+      activated?: Extract<AbilityDef, { kind: 'activated' }>;
     };
 
 export type Step =
@@ -1039,6 +1095,8 @@ export interface TurnState {
   leftGraveyard?: Record<PlayerId, number>;
   /** Foods each player sacrificed this turn. */
   foodsSacrificed?: Record<PlayerId, number>;
+  /** Players who may cast creature spells from their graveyard by foraging this turn (Osteomancer Adept). */
+  osteomancer?: PlayerId[];
   /** Players with hexproof until end of turn (Dawn's Truce). */
   hexproofPlayers?: PlayerId[];
 }
@@ -1144,6 +1202,8 @@ export interface DelayedTrigger {
   effects: EffectDef[];
   /** Not before this turn's end step if created during it: the turn it may fire from. */
   fromTurn: number;
+  /** Only at this player's end step ("your next end step"). */
+  whose?: PlayerId;
 }
 
 /** What Undying Malice / Fake Your Own Death grant. */
@@ -1314,6 +1374,8 @@ export type Decision =
       from: PlayerId;
       options: ObjectId[];
       then: 'discard' | 'exile';
+      /** The chooser may cast the exiled card (Cruelclaw's Heist). */
+      castable?: boolean;
       resume: PausedResolution;
       thenPriority: PlayerId;
     }
@@ -1341,6 +1403,19 @@ export type Decision =
       player: PlayerId;
       spell: ObjectId;
       cost: ManaCost;
+      resume: PausedResolution;
+      thenPriority: PlayerId;
+    }
+  | {
+      /** Cast one of these cards for free now, or not (Daring Waverider, Portent of Calamity). */
+      kind: 'castFree';
+      player: PlayerId;
+      cards: ObjectId[];
+      exileAfter?: boolean;
+      /** Cast by discarding a card rather than paying (The Infamous Cruelclaw). */
+      discardInstead?: boolean;
+      /** Cards that go to hand once this is answered (Portent's other exiled cards). */
+      thenToHand?: ObjectId[];
       resume: PausedResolution;
       thenPriority: PlayerId;
     }
@@ -1405,6 +1480,12 @@ export type Action =
       x?: number;
       /** Pawprint modes (Seasons), in printed order, repeats allowed. */
       paws?: number[];
+      /** Cast without paying its mana cost (a 'castFree' decision). */
+      free?: boolean;
+      /** Cast from the graveyard through Festival of Embers or Osteomancer Adept. */
+      via?: 'festival' | 'osteomancer';
+      /** Mockingbird: the creature to enter as a copy of. */
+      copyOf?: ObjectId;
       /** Mana sources to tap. Omitted: the engine picks. */
       payWith?: ObjectId[];
     }

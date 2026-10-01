@@ -627,8 +627,10 @@ function detect(ctx: Ctx, ev: GameEvent): void {
       }
       if (ev.step === 'end' && s.delayed?.length) {
         // "At the beginning of the next end step": the ones due now.
-        const due = s.delayed.filter((d) => d.fromTurn <= ev.turn);
-        s.delayed = s.delayed.filter((d) => d.fromTurn > ev.turn);
+        const isDue = (d: { fromTurn: number; whose?: PlayerId }) =>
+          d.fromTurn <= ev.turn && (!d.whose || d.whose === ev.activePlayer);
+        const due = s.delayed.filter(isDue);
+        s.delayed = s.delayed.filter((d) => !isDue(d));
         for (const d of due)
           s.pendingTriggers.push({
             source: d.subject,

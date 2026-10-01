@@ -25,6 +25,7 @@ import {
   answerChooseFromHand,
   answerChooseObject,
   answerPayOrCounter,
+  finishCastFree,
   answerChooseOption,
   answerForage,
   answerForageExile,
@@ -187,6 +188,19 @@ function apply(ctx: Ctx, action: Action): void {
       s.turn.passed = [];
       return givePriority(ctx, player);
     case 'castSpell': {
+      // Cast for free in the middle of a resolution (Daring Waverider).
+      if (d.kind === 'castFree') {
+        castSpell(ctx, player, action.card, action.targets, {
+          mode: action.mode,
+          kicked: action.kicked,
+          x: action.x,
+          paws: action.paws,
+          discard: action.discard,
+          via: 'free',
+          exileAfter: d.exileAfter,
+        });
+        return finishCastFree(ctx, action.card);
+      }
       s.turn.passed = [];
       const paused = castSpell(
         ctx,
@@ -201,6 +215,8 @@ function apply(ctx: Ctx, action: Action): void {
           discard: action.discard,
           x: action.x,
           paws: action.paws,
+          via: action.via,
+          copyOf: action.copyOf,
         },
         action.payWith,
       );
@@ -244,6 +260,7 @@ function apply(ctx: Ctx, action: Action): void {
       return confirmBlockers(ctx);
     case 'chooseEffect':
       if (d.kind === 'payOrCounter') return answerPayOrCounter(ctx, action.accept);
+      if (d.kind === 'castFree') return finishCastFree(ctx, null);
       return answerOptionalEffect(ctx, action.accept);
     case 'chooseTargets': {
       if (d.kind !== 'chooseTriggerTargets') throw new IllegalActionError(action);

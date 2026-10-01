@@ -1,8 +1,18 @@
-import { addCosts } from './cost.ts';
+import { addCosts, manaValue } from './cost.ts';
 import type { CardDefinition, ManaCost, SpellDef, ZoneName } from './types.ts';
+
+/**
+ * How a card is cast, beyond its own options: for free (a 'castFree'
+ * decision), or from the graveyard through Festival of Embers or Osteomancer Adept.
+ */
+export type CastVia = 'free' | 'festival' | 'osteomancer';
 
 /** One way to cast a card: a mode, kicked or not, from hand or with flashback. */
 export interface CastVariant {
+  /** Pay this much life too (Festival of Embers). */
+  life?: number;
+  /** It enters with a finality counter (Osteomancer Adept). */
+  finality?: boolean;
   mode?: number;
   /** Pawprint modes (Seasons). */
   paws?: number[];
@@ -23,7 +33,12 @@ export { addCosts };
 
 /** What restricted mana can be spent on: the spell's subtypes and card types ("only for Angels", "only for creature spells"). */
 export function spellTags(d: CardDefinition): string[] {
-  return [...d.subtypes, ...d.types];
+  // Helga's mana: creature spells with mana value 4 or greater, or with {X}.
+  const big =
+    d.types.includes('Creature') && (manaValue(d.manaCost) >= 4 || !!d.manaCost.x)
+      ? ['BigCreature']
+      : [];
+  return [...d.subtypes, ...d.types, ...big];
 }
 
 const MAX_PAWS = 5;
@@ -79,8 +94,19 @@ export function pawSpell(d: CardDefinition, paws: readonly number[]): SpellDef {
 }
 
 /** The ways `d` can be cast from `zone` (empty if it can't be cast from there). */
-export function castVariants(d: CardDefinition, zone: ZoneName): CastVariant[] {
+export function castVariants(d: CardDefinition, zone: ZoneName, via?: CastVia): CastVariant[] {
   if (d.types.includes('Land')) return [];
+  // Cast as if from hand, then adjusted for how.
+  if (via) {
+    const free = { generic: 0, colored: {} };
+    return castVariants(d, 'hand').map((v) =>
+      via === 'free'
+        ? { ...v, cost: free }
+        : via === 'festival'
+          ? { ...v, life: 1 }
+          : { ...v, forage: true, finality: true },
+    );
+  }
   if (zone === 'graveyard' && d.castFromGraveyardRemovingCounters)
     return [
       {
@@ -92,8 +118,7 @@ export function castVariants(d: CardDefinition, zone: ZoneName): CastVariant[] {
   const flashback = zone === 'graveyard';
   if (flashback && !d.flashback) return [];
   const cost = flashback ? d.flashback! : d.manaCost;
-  if (d.pawprints)
-    return pawCombos(d).map((paws) => ({ paws, cost, spell: pawSpell(d, paws) }));
+  if (d.pawprints) return pawCombos(d).map((paws) => ({ paws, cost, spell: pawSpell(d, paws) }));
   const extra = flashback ? { flashback: true } : {};
   if (d.modes) return d.modes.map((spell, mode) => ({ mode, cost, spell, ...extra }));
   if (d.sacrificeCreatureToCast)
@@ -124,6 +149,7 @@ export function variantOf(
   d: CardDefinition,
   zone: ZoneName,
   choice: {
+    via?: CastVia | undefined;
     mode?: number | undefined;
     kicked?: boolean | undefined;
     sacrifice?: string | undefined;
@@ -131,7 +157,7 @@ export function variantOf(
     paws?: number[] | undefined;
   },
 ): CastVariant | undefined {
-  return castVariants(d, zone).find(
+  return castVariants(d, zone, choice.via).find(
     (v) =>
       (v.mode ?? -1) === (choice.mode ?? -1) &&
       (v.paws ?? []).join() === (choice.paws ?? []).join() &&

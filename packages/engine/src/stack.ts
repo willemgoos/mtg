@@ -34,7 +34,7 @@ import {
 } from './mana.ts';
 import { shuffleInPlace } from './rng.ts';
 import { shuffleLibrary } from './setup.ts';
-import { addCosts, spellOnStack, spellTags, variantOf } from './spells.ts';
+import { addCosts, type CastVia, spellOnStack, spellTags, variantOf } from './spells.ts';
 import { isTargetLegal } from './targets.ts';
 import { checkCondition, triggeredAbility } from './triggers.ts';
 import { givePriority } from './turn.ts';
@@ -68,6 +68,12 @@ export interface CastChoice {
   x?: number | undefined;
   /** Pawprint modes (Seasons). */
   paws?: number[] | undefined;
+  /** Cast for free, or from the graveyard through another card. */
+  via?: CastVia | undefined;
+  /** Exile it instead of putting it into the graveyard afterwards. */
+  exileAfter?: boolean | undefined;
+  /** Mockingbird: the creature to enter as a copy of. */
+  copyOf?: ObjectId | undefined;
 }
 
 /** Valiant needs to know what a player's spell or ability targeted. */
@@ -213,6 +219,7 @@ export function castCost(
   // {X}: X is chosen as the spell is cast.
   if (cost.x) cost = { ...cost, generic: cost.generic + cost.x * (choice.x ?? 0), x: 0 };
   if (reduce) cost = { ...cost, generic: Math.max(0, cost.generic - reduce) };
+  if (o.anyMana) return anyTypeCost(cost);
   // Vizier of the Menagerie: any type of mana for creature spells.
   if (d.types.includes('Creature') && hasStatic(ctx, player, 'creaturesFromTopOfLibrary'))
     return anyTypeCost(cost);
@@ -230,7 +237,7 @@ export function castSpell(
   const o = obj(ctx, card);
   const d = defOf(ctx, o.defId);
   const v = variantOf(d, o.zone, choice)!;
-  const flashback = o.zone === 'graveyard' && !!d.flashback;
+  const flashback = (o.zone === 'graveyard' && !choice.via && !!d.flashback) || !!choice.exileAfter;
   // Rule 601.2: move to stack, choose targets, then pay costs.
   const cost = addCosts(
     castCost(ctx, player, card, choice, targets),
@@ -241,7 +248,7 @@ export function castSpell(
   if (choice.discard) moveObject(ctx, choice.discard, 'graveyard');
   if (choice.sacrifice) sacrificePermanent(ctx, choice.sacrifice);
   if (v.removeCounters) removeCounters(ctx, player, v.removeCounters);
-  changeLife(ctx, player, -wardLife(ctx, player, targets));
+  changeLife(ctx, player, -wardLife(ctx, player, targets) - (v.life ?? 0));
   payWardExtras(ctx, player, targets);
   ctx.s.stack.push({
     kind: 'spell',
@@ -253,6 +260,8 @@ export function castSpell(
     ...(flashback ? { flashback: true } : {}),
     ...(choice.x ? { x: choice.x } : {}),
     ...(choice.paws ? { paws: choice.paws } : {}),
+    ...(v.finality ? { finality: true } : {}),
+    ...(choice.copyOf ? { copyOf: choice.copyOf } : {}),
   });
   payMana(ctx, payment);
   const cast = (ctx.s.turn.spellsCast ??= { p1: 0, p2: 0 });
@@ -278,7 +287,8 @@ export function hasStatic(ctx: Ctx, player: PlayerId, kind: StaticDef['kind']): 
 }
 
 export function activatedAbility(ctx: Ctx, source: ObjectId, index: number) {
-  const a = defOf(ctx, obj(ctx, source).defId).abilities[index];
+  // Its current abilities (a Sugar Coat Food has only the Food ability).
+  const a = def(ctx, source).abilities[index];
   if (!a || a.kind !== 'activated') throw new Error(`No activated ability ${source}#${index}`);
   return a;
 }
@@ -329,6 +339,8 @@ export function activateAbility(
     controller: player,
     targets,
     ...(sacrificedPower !== undefined ? { lkiPower: sacrificedPower } : {}),
+    // The ability itself, in case the source's abilities change (or it's gone).
+    activated: a,
   };
   if (a.cost.tapSelf) tap(ctx, source);
   if (a.oncePerTurn) src.onceTurns = { ...src.onceTurns, [-1 - index]: ctx.s.turn.number };
@@ -389,6 +401,7 @@ function abilityOf(
   item: Extract<StackItem, { kind: 'ability' }>,
 ): Exclude<AbilityDef, { kind: 'mana' | 'static' }> {
   if (item.inline || item.emblem) return triggeredAbility(ctx, item);
+  if (item.activated) return item.activated;
   const a = defOf(ctx, item.sourceDefId).abilities[item.abilityIndex];
   if (a?.kind === 'triggered') {
     // A modal trigger resolves as the chosen mode.
@@ -468,6 +481,9 @@ export function resolveTop(ctx: Ctx): boolean {
     if (d.entersWithCounters && checkCondition(ctx, d.entersWithCountersIf, item.controller, o))
       addCounters(ctx, o.id, d.entersWithCounters);
     if (host) attachAura(ctx, o.id, host);
+    if (item.finality) (o.counters ??= {}).finality = 1;
+    if (item.x) o.xPaid = item.x;
+    if (item.copyOf && d.entersAsCopy) enterAsCopy(ctx, o.id, item.copyOf, d.entersAsCopy);
     addCounters(ctx, o.id, bonusCounters(ctx, item.controller, o.id, d.subtypes));
     // A permanent's gift (Scrapshooter): the opponent gets it as it resolves.
     if (item.kicked && d.kicker?.as === 'gift' && d.kicker.gift)
@@ -507,6 +523,26 @@ export function resolveTop(ctx: Ctx): boolean {
   if (runEffects(ctx, es, effects, { kind: 'ability', id: item.id })) return true;
   finishResolution(ctx, { kind: 'ability', id: item.id });
   return false;
+}
+
+/**
+ * Mockingbird: it becomes a copy of the creature (if still there), except
+ * it's also a Bird and has flying. It turns back as it leaves the battlefield.
+ */
+function enterAsCopy(
+  ctx: Ctx,
+  id: ObjectId,
+  of: ObjectId,
+  extra: NonNullable<CardDefinition['entersAsCopy']>,
+): void {
+  const model = ctx.s.objects[of];
+  if (!model || model.zone !== 'battlefield') return;
+  const o = obj(ctx, id);
+  o.originalDefId = o.defId;
+  o.defId = model.defId;
+  if (model.copyPT) o.copyPT = { ...model.copyPT };
+  o.addedSubtypes = [...(o.addedSubtypes ?? []), extra.addSubtype];
+  o.grantedKeywords = [extra.addKeyword];
 }
 
 /** An Aura attaches; Sugar Coat makes its host a Food, Kitnap takes control of it. */
@@ -584,7 +620,13 @@ export function answerForage(ctx: Ctx, choice: ObjectId | 'graveyard' | null): v
 export function answerChooseFromHand(ctx: Ctx, card: ObjectId | null): void {
   const d = ctx.s.decision;
   if (d.kind !== 'chooseFromHand') throw new Error('Not choosing from a hand');
-  if (card) moveObject(ctx, card, d.then === 'discard' ? 'graveyard' : 'exile');
+  if (card) {
+    moveObject(ctx, card, d.then === 'discard' ? 'graveyard' : 'exile');
+    if (d.castable) {
+      obj(ctx, card).castableBy = d.player;
+      obj(ctx, card).anyMana = true;
+    }
+  }
   resume(ctx, d.resume, d.thenPriority);
 }
 
@@ -603,6 +645,18 @@ export function answerPayOrCounter(ctx: Ctx, pay: boolean): void {
   if (d.kind !== 'payOrCounter') throw new Error('Not paying');
   if (pay) payMana(ctx, planPayment(ctx, d.player, d.cost, undefined));
   else counterSpell(ctx, d.spell);
+  resume(ctx, d.resume, d.thenPriority);
+}
+
+/**
+ * A 'castFree' decision answered: the card was cast (or not). Portent's other
+ * cards go to hand; then the paused resolution carries on.
+ */
+export function finishCastFree(ctx: Ctx, cast: ObjectId | null): void {
+  const d = ctx.s.decision;
+  if (d.kind !== 'castFree') throw new Error('Not casting for free');
+  for (const id of d.thenToHand ?? [])
+    if (id !== cast && ctx.s.objects[id]?.zone === 'exile') moveObject(ctx, id, 'hand');
   resume(ctx, d.resume, d.thenPriority);
 }
 

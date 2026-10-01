@@ -14795,5 +14795,319 @@
    "large": "https://cards.scryfall.io/large/front/f/5/f5713bb4-bdd9-4253-b6b9-e590532ed773.jpg?1783910844",
    "artCrop": "https://cards.scryfall.io/art_crop/front/f/5/f5713bb4-bdd9-4253-b6b9-e590532ed773.jpg?1783910844"
   }
+ },
+ {
+  "name": "Daring Waverider",
+  "scryfallId": "19422406-0c1a-497e-bed1-708bc556491a",
+  "oracleId": "e4d52559-7624-48b2-96ba-e52ada6c507a",
+  "set": "blb",
+  "collectorNumber": "44",
+  "rarity": "uncommon",
+  "manaCost": "{4}{U}{U}",
+  "typeLine": "Creature — Otter Wizard",
+  "oracleText": "When this creature enters, you may cast target instant or sorcery card with mana value 4 or less from your graveyard without paying its mana cost. If that spell would be put into your graveyard, exile it instead.",
+  "power": "4",
+  "toughness": "4",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/9/19422406-0c1a-497e-bed1-708bc556491a.jpg?1783910852",
+   "normal": "https://cards.scryfall.io/normal/front/1/9/19422406-0c1a-497e-bed1-708bc556491a.jpg?1783910852",
+   "large": "https://cards.scryfall.io/large/front/1/9/19422406-0c1a-497e-bed1-708bc556491a.jpg?1783910852",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/9/19422406-0c1a-497e-bed1-708bc556491a.jpg?1783910852"
+  }
+ },
+ {
+  "name": "Wishing Well",
+  "scryfallId": "edeb20aa-b253-49b8-9947-c397a3a4002a",
+  "oracleId": "78dbbc15-9304-4178-b9b2-1db6c64ca11a",
+  "set": "blb",
+  "collectorNumber": "81",
+  "rarity": "rare",
+  "manaCost": "{3}{U}",
+  "typeLine": "Artifact",
+  "oracleText": "{T}: Put a coin counter on this artifact. When you do, you may cast target instant or sorcery card with mana value equal to the number of coin counters on this artifact from your graveyard without paying its mana cost. If that spell would be put into your graveyard, exile it instead. Activate only as a sorcery.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/d/edeb20aa-b253-49b8-9947-c397a3a4002a.jpg?1783910839",
+   "normal": "https://cards.scryfall.io/normal/front/e/d/edeb20aa-b253-49b8-9947-c397a3a4002a.jpg?1783910839",
+   "large": "https://cards.scryfall.io/large/front/e/d/edeb20aa-b253-49b8-9947-c397a3a4002a.jpg?1783910839",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/d/edeb20aa-b253-49b8-9947-c397a3a4002a.jpg?1783910839"
+  }
+ },
+ {
+  "name": "Portent of Calamity",
+  "scryfallId": "8599e2dd-9164-4da3-814f-adccef3b9497",
+  "oracleId": "0d49187a-1c37-4c3a-afc2-fac2bbc6b29a",
+  "set": "blb",
+  "collectorNumber": "66",
+  "rarity": "rare",
+  "manaCost": "{X}{U}",
+  "typeLine": "Sorcery",
+  "oracleText": "Reveal the top X cards of your library. For each card type, you may exile a card of that type from among them. Put the rest into your graveyard. You may cast a spell from among the exiled cards without paying its mana cost if you exiled four or more cards this way. Then put the rest of the exiled cards into your hand.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/5/8599e2dd-9164-4da3-814f-adccef3b9497.jpg?1783910845",
+   "normal": "https://cards.scryfall.io/normal/front/8/5/8599e2dd-9164-4da3-814f-adccef3b9497.jpg?1783910845",
+   "large": "https://cards.scryfall.io/large/front/8/5/8599e2dd-9164-4da3-814f-adccef3b9497.jpg?1783910845",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/5/8599e2dd-9164-4da3-814f-adccef3b9497.jpg?1783910845"
+  }
+ },
+ {
+  "name": "Festival of Embers",
+  "scryfallId": "4433ee12-2013-4fdc-979f-ae065f63a527",
+  "oracleId": "2de138b0-3159-4a0c-a474-a4e5600b2e51",
+  "set": "blb",
+  "collectorNumber": "134",
+  "rarity": "rare",
+  "manaCost": "{4}{R}",
+  "typeLine": "Enchantment",
+  "oracleText": "During your turn, you may cast instant and sorcery spells from your graveyard by paying 1 life in addition to their other costs.\nIf a card or token would be put into your graveyard from anywhere, exile it instead.\n{1}{R}: Sacrifice this enchantment.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/4/4433ee12-2013-4fdc-979f-ae065f63a527.jpg?1783910820",
+   "normal": "https://cards.scryfall.io/normal/front/4/4/4433ee12-2013-4fdc-979f-ae065f63a527.jpg?1783910820",
+   "large": "https://cards.scryfall.io/large/front/4/4/4433ee12-2013-4fdc-979f-ae065f63a527.jpg?1783910820",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/4/4433ee12-2013-4fdc-979f-ae065f63a527.jpg?1783910820"
+  }
+ },
+ {
+  "name": "Osteomancer Adept",
+  "scryfallId": "7d8238dd-858f-466c-96de-986bd66861d7",
+  "oracleId": "791cbb7c-7935-4902-b050-9ea9d030e9fa",
+  "set": "blb",
+  "collectorNumber": "103",
+  "rarity": "rare",
+  "manaCost": "{1}{B}",
+  "typeLine": "Creature — Squirrel Warlock",
+  "oracleText": "Deathtouch\n{T}: Until end of turn, you may cast creature spells from your graveyard by foraging in addition to paying their other costs. If you cast a spell this way, that creature enters with a finality counter on it. (To forage, exile three cards from your graveyard or sacrifice a Food. If a creature with a finality counter on it would die, exile it instead.)",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Deathtouch"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/d/7d8238dd-858f-466c-96de-986bd66861d7.jpg?1783910831",
+   "normal": "https://cards.scryfall.io/normal/front/7/d/7d8238dd-858f-466c-96de-986bd66861d7.jpg?1783910831",
+   "large": "https://cards.scryfall.io/large/front/7/d/7d8238dd-858f-466c-96de-986bd66861d7.jpg?1783910831",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/d/7d8238dd-858f-466c-96de-986bd66861d7.jpg?1783910831"
+  }
+ },
+ {
+  "name": "Cruelclaw's Heist",
+  "scryfallId": "cab4539a-0157-4cbe-b50f-6e2575df74e9",
+  "oracleId": "7a0bc265-6b40-48d6-a588-c9624df7d1bc",
+  "set": "blb",
+  "collectorNumber": "88",
+  "rarity": "rare",
+  "manaCost": "{B}{B}",
+  "typeLine": "Sorcery",
+  "oracleText": "Gift a card (You may promise an opponent a gift as you cast this spell. If you do, they draw a card before its other effects.)\nTarget opponent reveals their hand. You choose a nonland card from it. Exile that card. If the gift was promised, you may cast that card for as long as it remains exiled, and mana of any type can be spent to cast it.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Gift"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/a/cab4539a-0157-4cbe-b50f-6e2575df74e9.jpg?1783910836",
+   "normal": "https://cards.scryfall.io/normal/front/c/a/cab4539a-0157-4cbe-b50f-6e2575df74e9.jpg?1783910836",
+   "large": "https://cards.scryfall.io/large/front/c/a/cab4539a-0157-4cbe-b50f-6e2575df74e9.jpg?1783910836",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/a/cab4539a-0157-4cbe-b50f-6e2575df74e9.jpg?1783910836"
+  }
+ },
+ {
+  "name": "The Infamous Cruelclaw",
+  "scryfallId": "dc6c9196-6d28-4cc2-9748-60e9632a502b",
+  "oracleId": "e229d55c-9513-437d-bd67-015ac46aaa18",
+  "set": "blb",
+  "collectorNumber": "219",
+  "rarity": "mythic",
+  "manaCost": "{1}{B}{R}",
+  "typeLine": "Legendary Creature — Weasel Mercenary",
+  "oracleText": "Menace\nWhenever The Infamous Cruelclaw deals combat damage to a player, exile cards from the top of your library until you exile a nonland card. You may cast that card by discarding a card rather than paying its mana cost.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "B",
+   "R"
+  ],
+  "keywords": [
+   "Menace"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/c/dc6c9196-6d28-4cc2-9748-60e9632a502b.jpg?1783910796",
+   "normal": "https://cards.scryfall.io/normal/front/d/c/dc6c9196-6d28-4cc2-9748-60e9632a502b.jpg?1783910796",
+   "large": "https://cards.scryfall.io/large/front/d/c/dc6c9196-6d28-4cc2-9748-60e9632a502b.jpg?1783910796",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/c/dc6c9196-6d28-4cc2-9748-60e9632a502b.jpg?1783910796"
+  }
+ },
+ {
+  "name": "Glarb, Calamity's Augur",
+  "scryfallId": "ffc70b2d-5a3a-49ea-97db-175a62248302",
+  "oracleId": "df9409e6-bd6d-4b5b-b807-fcf347ee940a",
+  "set": "blb",
+  "collectorNumber": "215",
+  "rarity": "mythic",
+  "manaCost": "{B}{G}{U}",
+  "typeLine": "Legendary Creature — Frog Wizard Noble",
+  "oracleText": "Deathtouch\nYou may look at the top card of your library any time.\nYou may play lands and cast spells with mana value 4 or greater from the top of your library.\n{T}: Surveil 2.",
+  "power": "2",
+  "toughness": "4",
+  "colors": [
+   "B",
+   "G",
+   "U"
+  ],
+  "keywords": [
+   "Surveil",
+   "Deathtouch"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/f/ffc70b2d-5a3a-49ea-97db-175a62248302.jpg?1783910796",
+   "normal": "https://cards.scryfall.io/normal/front/f/f/ffc70b2d-5a3a-49ea-97db-175a62248302.jpg?1783910796",
+   "large": "https://cards.scryfall.io/large/front/f/f/ffc70b2d-5a3a-49ea-97db-175a62248302.jpg?1783910796",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/f/ffc70b2d-5a3a-49ea-97db-175a62248302.jpg?1783910796"
+  }
+ },
+ {
+  "name": "Mockingbird",
+  "scryfallId": "ade32396-8841-4ba4-8852-d11146607f21",
+  "oracleId": "b9df2cdf-397c-458d-89cf-911568737ffa",
+  "set": "blb",
+  "collectorNumber": "61",
+  "rarity": "rare",
+  "manaCost": "{X}{U}",
+  "typeLine": "Creature — Bird Bard",
+  "oracleText": "Flying\nYou may have this creature enter as a copy of any creature on the battlefield with mana value less than or equal to the amount of mana spent to cast this creature, except it's a Bird in addition to its other types and it has flying.",
+  "power": "1",
+  "toughness": "1",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/d/ade32396-8841-4ba4-8852-d11146607f21.jpg?1783910846",
+   "normal": "https://cards.scryfall.io/normal/front/a/d/ade32396-8841-4ba4-8852-d11146607f21.jpg?1783910846",
+   "large": "https://cards.scryfall.io/large/front/a/d/ade32396-8841-4ba4-8852-d11146607f21.jpg?1783910846",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/d/ade32396-8841-4ba4-8852-d11146607f21.jpg?1783910846"
+  }
+ },
+ {
+  "name": "Hugs, Grisly Guardian",
+  "scryfallId": "f09d7f4a-c947-4389-befa-1d547d0d1237",
+  "oracleId": "3c5c227a-335b-4995-9821-d4269a0a233a",
+  "set": "blb",
+  "collectorNumber": "218",
+  "rarity": "mythic",
+  "manaCost": "{X}{R}{R}{G}{G}",
+  "typeLine": "Legendary Creature — Badger Warrior",
+  "oracleText": "Trample\nWhen Hugs enters, exile the top X cards of your library. Until the end of your next turn, you may play those cards.\nYou may play an additional land on each of your turns.",
+  "power": "5",
+  "toughness": "5",
+  "colors": [
+   "G",
+   "R"
+  ],
+  "keywords": [
+   "Trample"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/0/f09d7f4a-c947-4389-befa-1d547d0d1237.jpg?1783910795",
+   "normal": "https://cards.scryfall.io/normal/front/f/0/f09d7f4a-c947-4389-befa-1d547d0d1237.jpg?1783910795",
+   "large": "https://cards.scryfall.io/large/front/f/0/f09d7f4a-c947-4389-befa-1d547d0d1237.jpg?1783910795",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/0/f09d7f4a-c947-4389-befa-1d547d0d1237.jpg?1783910795"
+  }
+ },
+ {
+  "name": "Stormsplitter",
+  "scryfallId": "56f214d3-6b93-40db-a693-55e491c8a283",
+  "oracleId": "4a9ae0d9-5ee7-4289-9333-ef0bcc3079ca",
+  "set": "blb",
+  "collectorNumber": "154",
+  "rarity": "mythic",
+  "manaCost": "{3}{R}",
+  "typeLine": "Creature — Otter Wizard",
+  "oracleText": "Haste\nWhenever you cast an instant or sorcery spell, create a token that's a copy of this creature. Exile that token at the beginning of the next end step.",
+  "power": "1",
+  "toughness": "4",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Haste"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/6/56f214d3-6b93-40db-a693-55e491c8a283.jpg?1783910816",
+   "normal": "https://cards.scryfall.io/normal/front/5/6/56f214d3-6b93-40db-a693-55e491c8a283.jpg?1783910816",
+   "large": "https://cards.scryfall.io/large/front/5/6/56f214d3-6b93-40db-a693-55e491c8a283.jpg?1783910816",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/6/56f214d3-6b93-40db-a693-55e491c8a283.jpg?1783910816"
+  }
+ },
+ {
+  "name": "Helga, Skittish Seer",
+  "scryfallId": "40339715-22d0-4f99-822b-a00d9824f27a",
+  "oracleId": "0a0d25a8-4f28-453b-9270-4d449fe0ca65",
+  "set": "blb",
+  "collectorNumber": "217",
+  "rarity": "mythic",
+  "manaCost": "{G}{W}{U}",
+  "typeLine": "Legendary Creature — Frog Druid",
+  "oracleText": "Whenever you cast a creature spell with mana value 4 or greater, you draw a card, gain 1 life, and put a +1/+1 counter on Helga.\n{T}: Add X mana of any one color, where X is Helga's power. Spend this mana only to cast creature spells with mana value 4 or greater or creature spells with {X} in their mana costs.",
+  "power": "1",
+  "toughness": "3",
+  "colors": [
+   "G",
+   "U",
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/0/40339715-22d0-4f99-822b-a00d9824f27a.jpg?1783910795",
+   "normal": "https://cards.scryfall.io/normal/front/4/0/40339715-22d0-4f99-822b-a00d9824f27a.jpg?1783910795",
+   "large": "https://cards.scryfall.io/large/front/4/0/40339715-22d0-4f99-822b-a00d9824f27a.jpg?1783910795",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/0/40339715-22d0-4f99-822b-a00d9824f27a.jpg?1783910795"
+  }
+ },
+ {
+  "name": "Dragonhawk, Fate's Tempest",
+  "scryfallId": "8659789c-6a2c-439f-a348-b9b1b06c55b8",
+  "oracleId": "f7f435bc-1716-4412-9505-a1f2f2d83d08",
+  "set": "blb",
+  "collectorNumber": "132",
+  "rarity": "mythic",
+  "manaCost": "{3}{R}{R}",
+  "typeLine": "Legendary Creature — Bird Dragon",
+  "oracleText": "Flying\nWhenever Dragonhawk enters or attacks, exile the top X cards of your library, where X is the number of creatures you control with power 4 or greater. You may play those cards until your next end step. At the beginning of your next end step, Dragonhawk deals 2 damage to each opponent for each of those cards that are still exiled.",
+  "power": "5",
+  "toughness": "5",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/6/8659789c-6a2c-439f-a348-b9b1b06c55b8.jpg?1783910824",
+   "normal": "https://cards.scryfall.io/normal/front/8/6/8659789c-6a2c-439f-a348-b9b1b06c55b8.jpg?1783910824",
+   "large": "https://cards.scryfall.io/large/front/8/6/8659789c-6a2c-439f-a348-b9b1b06c55b8.jpg?1783910824",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/6/8659789c-6a2c-439f-a348-b9b1b06c55b8.jpg?1783910824"
+  }
  }
 ]

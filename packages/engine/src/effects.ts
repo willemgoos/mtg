@@ -31,6 +31,7 @@ import { canPayFrom, manaSources, manaValue } from './mana.ts';
 import { shuffleInPlace } from './rng.ts';
 import { checkCondition } from './triggers.ts';
 import type {
+  ObjectRef,
   Amount,
   EffectSource,
   PausedResolution,
@@ -108,6 +109,16 @@ function damageBonus(ctx: Ctx, src: DamageSource, to: TargetChoice, combat: bool
 }
 
 const COLOR_NAMES = { W: 'White', U: 'Blue', B: 'Black', R: 'Red', G: 'Green' } as const;
+
+/** Card types Portent of Calamity looks for, in the order it picks. */
+const PORTENT_TYPES = [
+  'Creature',
+  'Instant',
+  'Sorcery',
+  'Artifact',
+  'Enchantment',
+  'Land',
+] as const;
 
 /** Creature types among cards `player` owns (choices for "choose a creature type"). */
 function creatureTypesOf(ctx: Ctx, player: PlayerId): string[] {
@@ -263,7 +274,10 @@ export function resolveAmount(ctx: Ctx, es: EffectSource, amount: Amount): numbe
   }
   if ('event' in amount) return es.amount ?? 0;
   if ('sacrificedPower' in amount) return Math.max(0, es.lkiPower ?? 0);
-  if ('x' in amount) return (es.x ?? 0) * (amount.times ?? 1) + (amount.plus ?? 0);
+  if ('x' in amount) {
+    const x = es.x ?? (es.source && ctx.s.objects[es.source.id]?.xPaid) ?? 0;
+    return x * (amount.times ?? 1) + (amount.plus ?? 0);
+  }
   if ('namedCountersOnSource' in amount) {
     const o = es.source && ctx.s.objects[es.source.id];
     if (!o) return 0;
@@ -343,7 +357,10 @@ export function runEffects(
       e.kind === 'chooseColor' ||
       e.kind === 'chooseCreatureType' ||
       e.kind === 'millThenTake' ||
-      e.kind === 'lookTakeRestGraveyard'
+      e.kind === 'lookTakeRestGraveyard' ||
+      e.kind === 'castFree' ||
+      e.kind === 'portent' ||
+      e.kind === 'exileUntilNonlandCastByDiscard'
     ) {
       const lib = ctx.s.players[es.controller].library;
       const { controller, source, sourceDefId, targets, lkiPower, subject, amount, chosen, x } = es;
@@ -406,6 +423,70 @@ export function runEffects(
           player: controller,
           options,
           ...(e.until ? { thisTurn: true } : {}),
+          resume,
+          thenPriority,
+        };
+      } else if (e.kind === 'castFree') {
+        // A target card in a graveyard, still there.
+        const t =
+          typeof e.what === 'object' && 'target' in e.what ? es.targets[e.what.target] : null;
+        const card = t && 'object' in t ? ctx.s.objects[t.object.id] : undefined;
+        if (
+          !card ||
+          card.zone !== 'graveyard' ||
+          !t ||
+          !('object' in t) ||
+          card.zcc !== t.object.zcc
+        )
+          continue;
+        ctx.s.decision = {
+          kind: 'castFree',
+          player: controller,
+          cards: [card.id],
+          ...(e.exileAfter ? { exileAfter: true } : {}),
+          resume,
+          thenPriority,
+        };
+      } else if (e.kind === 'portent') {
+        // One card of each type (the most expensive, a simplification), the rest to the graveyard.
+        const revealed = lib.slice(0, resolveAmount(ctx, es, { x: true }));
+        const picked: ObjectId[] = [];
+        for (const type of PORTENT_TYPES) {
+          const best = revealed
+            .filter((id) => !picked.includes(id) && def(ctx, id).types.includes(type))
+            .sort((a, b) => manaValue(def(ctx, b).manaCost) - manaValue(def(ctx, a).manaCost))[0];
+          if (best) picked.push(best);
+        }
+        for (const id of revealed) moveObject(ctx, id, picked.includes(id) ? 'exile' : 'graveyard');
+        const spells = picked.filter((id) => !def(ctx, id).types.includes('Land'));
+        if (picked.length < 4 || spells.length === 0) {
+          for (const id of picked) moveObject(ctx, id, 'hand');
+          continue;
+        }
+        ctx.s.decision = {
+          kind: 'castFree',
+          player: controller,
+          cards: spells,
+          thenToHand: picked,
+          resume,
+          thenPriority,
+        };
+      } else if (e.kind === 'exileUntilNonlandCastByDiscard') {
+        let card: ObjectId | undefined;
+        while (lib.length) {
+          const top = lib[0]!;
+          moveObject(ctx, top, 'exile');
+          if (!def(ctx, top).types.includes('Land')) {
+            card = top;
+            break;
+          }
+        }
+        if (!card || ctx.s.players[controller].hand.length === 0) continue;
+        ctx.s.decision = {
+          kind: 'castFree',
+          player: controller,
+          cards: [card],
+          discardInstead: true,
           resume,
           thenPriority,
         };
@@ -535,6 +616,7 @@ export function runEffects(
           from,
           options,
           then: e.then,
+          ...(e.castable ? { castable: true } : {}),
           resume,
           thenPriority,
         };
@@ -984,7 +1066,43 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
     case 'lookTakeRestGraveyard':
       return; // handled by runEffects
     case 'eachPlayerSacrifices':
+    case 'castFree':
+    case 'portent':
+    case 'exileUntilNonlandCastByDiscard':
       return; // handled by runEffects
+    case 'osteomancer':
+      (ctx.s.turn.osteomancer ??= []).push(es.controller);
+      return;
+    case 'dragonhawkExile': {
+      const ownTurn = ctx.s.turn.activePlayer === es.controller;
+      const n = resolveAmount(ctx, es, e.count);
+      const cards: ObjectRef[] = [];
+      for (const id of ctx.s.players[es.controller].library.slice(0, n)) {
+        moveObject(ctx, id, 'exile');
+        // "Until your next end step": this turn on your turn, else your next one.
+        obj(ctx, id).playableUntilTurn = ctx.s.turn.number + (ownTurn ? 0 : 1);
+        cards.push({ id, zcc: obj(ctx, id).zcc });
+      }
+      if (cards.length === 0) return;
+      (ctx.s.delayed ??= []).push({
+        controller: es.controller,
+        sourceDefId: es.sourceDefId,
+        subject: es.source ?? cards[0]!,
+        effects: [{ kind: 'damagePerExiled', cards, amount: e.damage }],
+        fromTurn: ctx.s.turn.number + (ownTurn && ctx.s.turn.step !== 'end' ? 0 : 1),
+        whose: es.controller,
+      });
+      return;
+    }
+    case 'damagePerExiled': {
+      const still = e.cards.filter((c) => {
+        const o = ctx.s.objects[c.id];
+        return o?.zone === 'exile' && o.zcc === c.zcc;
+      }).length;
+      const src = damageSourceFor(ctx, es.source?.id ?? 'unknown', es.controller);
+      dealDamage(ctx, src, { player: other(es.controller) }, still * e.amount, false);
+      return;
+    }
     case 'emblem': {
       const ownTurn = ctx.s.turn.activePlayer === es.controller;
       (ctx.s.emblems ??= []).push({

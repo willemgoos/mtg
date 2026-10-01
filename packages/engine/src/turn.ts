@@ -139,6 +139,7 @@ export function startTurn(ctx: Ctx, player: PlayerId): void {
   s.turn.creaturesLost = { p1: 0, p2: 0 };
   s.turn.foodsSacrificed = { p1: 0, p2: 0 };
   delete s.turn.hexproofPlayers;
+  delete s.turn.osteomancer;
   for (const q of Object.values(s.players)) q.attackedThisTurn = false;
   endEffects(ctx, (e) => e.expires === 'untilYourNextTurn' && e.player === player);
   enterStep(ctx, 'untap');

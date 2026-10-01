@@ -1,6 +1,13 @@
-import { canTapForAbility, cardMatches, isCreature, matchesFilter } from './characteristics.ts';
+import {
+  canTapForAbility,
+  cardMatches,
+  creaturesOnBattlefield,
+  isCreature,
+  matchesFilter,
+} from './characteristics.ts';
+import { manaValue } from './cost.ts';
 import { blockViolations, canAttack, canBlock, defenderOf } from './combat.ts';
-import { type Ctx, def, obj } from './context.ts';
+import { type Ctx, def, obj, other } from './context.ts';
 import { forageChoices } from './forage.ts';
 import { canPayFrom, creatureHelpers, manaSources } from './mana.ts';
 import { castVariants, spellTags } from './spells.ts';
@@ -47,8 +54,26 @@ export function castableCards(ctx: Ctx, player: PlayerId): ObjectId[] {
   for (const id of ps.graveyard) {
     const d = def(ctx, id);
     if (d.types.includes('Land')) continue;
-    if (d.flashback || d.castFromGraveyardRemovingCounters) out.push(id);
+    if (d.flashback || d.castFromGraveyardRemovingCounters || graveyardVias(ctx, player, id).length)
+      out.push(id);
   }
+  // Cruelclaw's Heist: an opponent's exiled card you may cast.
+  for (const id of ctx.s.players[other(player)].exile)
+    if (obj(ctx, id).castableBy === player) out.push(id);
+  // Glarb: lands and big spells from the top of your library.
+  const topCard = ps.library[0];
+  if (topCard && !out.includes(topCard))
+    for (const id of ctx.s.battlefield) {
+      if (obj(ctx, id).controller !== player) continue;
+      for (const a of def(ctx, id).abilities)
+        if (
+          a.kind === 'static' &&
+          a.effect.kind === 'playFromTop' &&
+          cardMatches(ctx, topCard, a.effect.filter) &&
+          !out.includes(topCard)
+        )
+          out.push(topCard);
+    }
   // Strongbox Raider: exiled cards you may play for a while.
   for (const id of ps.exile) {
     const until = obj(ctx, id).playableUntilTurn;
@@ -61,6 +86,26 @@ export function castableCards(ctx: Ctx, player: PlayerId): ObjectId[] {
     hasStatic(ctx, player, 'creaturesFromTopOfLibrary')
   )
     out.push(top);
+  return out;
+}
+
+/** Other ways to cast a graveyard card: Festival of Embers, Osteomancer Adept. */
+export function graveyardVias(
+  ctx: Ctx,
+  player: PlayerId,
+  card: ObjectId,
+): ('festival' | 'osteomancer')[] {
+  const d = def(ctx, card);
+  const out: ('festival' | 'osteomancer')[] = [];
+  const instantOrSorcery = d.types.includes('Instant') || d.types.includes('Sorcery');
+  if (
+    instantOrSorcery &&
+    ctx.s.turn.activePlayer === player &&
+    hasStatic(ctx, player, 'castFromGraveyardForLife')
+  )
+    out.push('festival');
+  if (d.types.includes('Creature') && ctx.s.turn.osteomancer?.includes(player))
+    out.push('osteomancer');
   return out;
 }
 
@@ -135,6 +180,7 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
       continue;
     }
     if (d.castOnlyIf && !checkCondition(ctx, d.castOnlyIf, player, obj(ctx, card))) continue;
+    const firstOfCard = out.length;
     const instantSpeed =
       d.types.includes('Instant') ||
       d.keywords.includes('flash') ||
@@ -152,62 +198,85 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
     const discards = d.discardToCast ? ps.hand.filter((id) => id !== card) : [undefined];
     if (d.discardToCast && discards.length === 0) continue;
     if (!instantSpeed && !sorcery) continue;
-    for (const v of castVariants(d, zone)) {
-      if (v.removeCounters && countersYouControl(ctx, player) < v.removeCounters) continue;
-      for (const x of xs) {
-        const base = castCost(ctx, player, card, {
-          mode: v.mode,
-          paws: v.paws,
-          kicked: v.kicked,
-          sacrifice: v.sacrifice ? 'x' : undefined,
-          forage: v.forage ? 'graveyard' : undefined,
-          x,
-        });
-        if (!canPayFrom(base, pool) && !d.costReductionIfTarget) continue;
-        const extra = {
-          ...(v.mode !== undefined ? { mode: v.mode } : {}),
-          ...(v.kicked ? { kicked: true } : {}),
-          ...(x !== undefined ? { x } : {}),
-          ...(v.paws ? { paws: v.paws } : {}),
-        };
-        const specs = v.spell?.targets ?? (d.enchant ? [d.enchant] : []);
-        const forages = v.forage ? forageChoices(ctx, player) : [undefined];
-        for (const sacrifice of v.sacrifice ? creatures : [undefined]) {
-          for (const targets of combosFor(specs, card, sacrifice)) {
-            const ward = wardCost(ctx, player, targets);
-            // Dire Downdraft costs less with some targets.
-            const cost = d.costReductionIfTarget
-              ? castCost(
-                  ctx,
-                  player,
-                  card,
-                  { mode: v.mode, paws: v.paws, kicked: v.kicked, x },
-                  targets,
-                )
-              : base;
-            if (
-              (ward.generic || d.costReductionIfTarget) &&
-              !canPayFrom(addCosts(cost, ward), pool)
-            )
-              continue;
-            if (wardLife(ctx, player, targets) > s.players[player].life) continue;
-            if (!wardPayable(ctx, player, targets, zone === 'hand' ? 1 : 0)) continue;
-            for (const forage of forages)
-              for (const discard of discards)
-                out.push({
-                  type: 'castSpell',
-                  player,
-                  card,
-                  targets,
-                  ...extra,
-                  ...(sacrifice ? { sacrifice } : {}),
-                  ...(forage ? { forage } : {}),
-                  ...(discard ? { discard } : {}),
-                });
+    // The usual ways, plus graveyard casts through other cards.
+    const vias: ('festival' | 'osteomancer' | undefined)[] = [
+      ...(zone !== 'graveyard' || d.flashback || d.castFromGraveyardRemovingCounters
+        ? [undefined]
+        : []),
+      ...(zone === 'graveyard' ? graveyardVias(ctx, player, card) : []),
+    ];
+    for (const via of vias)
+      for (const v of castVariants(d, zone, via)) {
+        if ((v.life ?? 0) > ps.life) continue;
+        if (v.removeCounters && countersYouControl(ctx, player) < v.removeCounters) continue;
+        for (const x of xs) {
+          const base = castCost(ctx, player, card, {
+            via,
+            mode: v.mode,
+            paws: v.paws,
+            kicked: v.kicked,
+            sacrifice: v.sacrifice ? 'x' : undefined,
+            forage: v.forage ? 'graveyard' : undefined,
+            x,
+          });
+          if (!canPayFrom(base, pool) && !d.costReductionIfTarget) continue;
+          const extra = {
+            ...(v.mode !== undefined ? { mode: v.mode } : {}),
+            ...(v.kicked ? { kicked: true } : {}),
+            ...(x !== undefined ? { x } : {}),
+            ...(v.paws ? { paws: v.paws } : {}),
+            ...(via ? { via } : {}),
+          };
+          const specs = v.spell?.targets ?? (d.enchant ? [d.enchant] : []);
+          const forages = v.forage ? forageChoices(ctx, player) : [undefined];
+          for (const sacrifice of v.sacrifice ? creatures : [undefined]) {
+            for (const targets of combosFor(specs, card, sacrifice)) {
+              const ward = wardCost(ctx, player, targets);
+              // Dire Downdraft costs less with some targets.
+              const cost = d.costReductionIfTarget
+                ? castCost(
+                    ctx,
+                    player,
+                    card,
+                    { mode: v.mode, paws: v.paws, kicked: v.kicked, x },
+                    targets,
+                  )
+                : base;
+              if (
+                (ward.generic || d.costReductionIfTarget) &&
+                !canPayFrom(addCosts(cost, ward), pool)
+              )
+                continue;
+              if (wardLife(ctx, player, targets) > s.players[player].life) continue;
+              if (!wardPayable(ctx, player, targets, zone === 'hand' ? 1 : 0)) continue;
+              for (const forage of forages)
+                for (const discard of discards)
+                  out.push({
+                    type: 'castSpell',
+                    player,
+                    card,
+                    targets,
+                    ...extra,
+                    ...(sacrifice ? { sacrifice } : {}),
+                    ...(forage ? { forage } : {}),
+                    ...(discard ? { discard } : {}),
+                  });
+            }
           }
         }
       }
-    }
+    // Mockingbird: also one action per creature it could copy (mana spent: X + its {U}).
+    if (d.entersAsCopy)
+      for (const a of out.splice(firstOfCard))
+        if (a.type === 'castSpell')
+          out.push(
+            a,
+            ...creaturesOnBattlefield(ctx)
+              .filter(
+                (c) => manaValue(def(ctx, c.id).manaCost) <= (a.x ?? 0) + manaValue(d.manaCost),
+              )
+              .map((c) => ({ ...a, copyOf: c.id })),
+          );
   }
 
   const abilitySources = [
@@ -361,6 +430,31 @@ export function getLegalActions(ctx: Ctx, player: PlayerId): Action[] {
         : [{ type: 'chooseCard', player, card: null }];
     case 'chooseOption':
       return d.options.map((_, index) => ({ type: 'chooseOption', player, index }) as const);
+    case 'castFree': {
+      const out: Action[] = [{ type: 'chooseEffect', player, accept: false }];
+      for (const card of d.cards) {
+        const cd = def(ctx, card);
+        if (cd.types.includes('Land')) continue;
+        const discards = d.discardInstead ? s.players[player].hand : [undefined];
+        for (const v of castVariants(cd, obj(ctx, card).zone, 'free')) {
+          const specs = v.spell?.targets ?? (cd.enchant ? [cd.enchant] : []);
+          for (const targets of targetCombos(ctx, specs, { controller: player, sourceId: card }))
+            for (const discard of discards)
+              out.push({
+                type: 'castSpell',
+                player,
+                card,
+                targets,
+                free: true,
+                ...(v.mode !== undefined ? { mode: v.mode } : {}),
+                ...(v.kicked ? { kicked: true } : {}),
+                ...(v.paws ? { paws: v.paws } : {}),
+                ...(discard ? { discard } : {}),
+              });
+        }
+      }
+      return out;
+    }
     case 'chooseObject':
       return d.options.map((card) => ({ type: 'chooseCard', player, card }) as const);
     case 'payOrCounter':

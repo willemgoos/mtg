@@ -78,6 +78,7 @@ function passiveAction(
     case 'chooseOption':
     case 'chooseObject':
     case 'payOrCounter':
+    case 'castFree':
       return bestByEvaluation(
         engine,
         s,

@@ -4,6 +4,7 @@ import { LIZARDS_RATS } from './blb/lizards-rats.ts';
 import { BIRDS_RACCOONS } from './blb/birds-raccoons.ts';
 import { OTTERS_FROGS } from './blb/otters-frogs.ts';
 import { OTHERS } from './blb/others.ts';
+import { MYTHICS } from './blb/mythics.ts';
 import { SEASONS } from './blb/seasons.ts';
 import { SQUIRRELS_RABBITS } from './blb/squirrels-rabbits.ts';
 
@@ -20,4 +21,5 @@ export const BLOOMBURROW_BEHAVIORS: Record<string, Behavior> = {
   ...BIRDS_RACCOONS,
   ...OTHERS,
   ...SEASONS,
+  ...MYTHICS,
 };

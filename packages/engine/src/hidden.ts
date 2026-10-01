@@ -67,6 +67,13 @@ function knownLibraryCards(s: GameState, viewer: PlayerId, db: CardDb | undefine
       ?.get(s.objects[id]!.defId)
       ?.abilities.some((a) => a.kind === 'static' && a.effect.kind === 'creaturesFromTopOfLibrary');
   if (top && s.battlefield.some(vizier)) out.push(top);
+  // Glarb: "You may look at the top card of your library any time."
+  const glarb = (id: ObjectId) =>
+    s.objects[id]!.controller === viewer &&
+    !!db
+      ?.get(s.objects[id]!.defId)
+      ?.abilities.some((a) => a.kind === 'static' && a.effect.kind === 'playFromTop');
+  if (top && !out.includes(top) && s.battlefield.some(glarb)) out.push(top);
   return out;
 }
 

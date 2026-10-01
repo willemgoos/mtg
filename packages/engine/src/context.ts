@@ -214,6 +214,8 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
   )
     to = 'exile';
   if (from === 'battlefield' && to === 'graveyard' && exiledInsteadOfDying(ctx, o)) to = 'exile';
+  // Festival of Embers: "If a card or token would be put into your graveyard from anywhere, exile it instead."
+  if (to === 'graveyard' && graveyardExiles(ctx, o.owner)) to = 'exile';
   if (from === 'battlefield' && to === 'exile' && def(ctx, id).types.includes('Creature'))
     (ctx.s.turn.creaturesExiled ??= { p1: 0, p2: 0 })[o.controller]++;
   // Equipment and Auras attached to it are dealt with by state-based actions.
@@ -252,6 +254,19 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
   delete o.exiledWith;
   delete o.foodBy;
   delete o.controlledBy;
+  delete o.xPaid;
+  delete o.grantedKeywords;
+  // Mockingbird turns back into itself.
+  if (o.originalDefId) {
+    o.defId = o.originalDefId;
+    delete o.originalDefId;
+    delete o.copyPT;
+  }
+  // A stolen card's permission ends when it leaves exile.
+  if (from === 'exile') {
+    delete o.castableBy;
+    delete o.anyMana;
+  }
   // Bonecache Overseer: cards leaving a graveyard.
   if (from === 'graveyard') (ctx.s.turn.leftGraveyard ??= { p1: 0, p2: 0 })[o.owner]++;
   delete o.targetedByControllerTurn;
@@ -320,6 +335,17 @@ export function addCounters(ctx: Ctx, id: ObjectId, n: number, name?: string): v
   }
   o.plusOneCounters += n;
   emit(ctx, { type: 'countersAdded', id, count: n, player: o.controller });
+}
+
+/** Festival of Embers: `player` controls a permanent that exiles cards headed for their graveyard. */
+function graveyardExiles(ctx: Ctx, player: PlayerId): boolean {
+  return ctx.s.battlefield.some(
+    (id) =>
+      ctx.s.objects[id]!.controller === player &&
+      def(ctx, id).abilities.some(
+        (a) => a.kind === 'static' && a.effect.kind === 'graveyardToExile',
+      ),
+  );
 }
 
 /** Vren: an opponent controls a permanent with "exile their creatures instead". */
