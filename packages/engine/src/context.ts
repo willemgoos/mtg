@@ -222,7 +222,10 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
     const c = characteristics(ctx, id);
     o.lastPower = c.power;
     o.lastCounters = o.plusOneCounters;
-    if (to === 'graveyard' && c.types.includes('Creature')) ctx.s.turn.creaturesDied++;
+    if (to === 'graveyard' && c.types.includes('Creature')) {
+      ctx.s.turn.creaturesDied++;
+      (ctx.s.turn.creaturesLost ??= { p1: 0, p2: 0 })[o.controller]++;
+    }
     if (o.addedSubtypes) o.lastAddedSubtypes = o.addedSubtypes;
     else delete o.lastAddedSubtypes;
     delete o.addedSubtypes;

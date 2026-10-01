@@ -103,6 +103,11 @@ export interface CardDefinition {
   /** "Choose one —": replaces `spell`; the caster picks a mode. */
   modes?: SpellDef[];
   /**
+   * Bloomburrow's Seasons: "choose up to five {P} worth of modes; you may
+   * choose the same mode more than once". Each mode costs `paws`.
+   */
+  pawprints?: { paws: number; spell: SpellDef }[];
+  /**
    * Kicker: pay this too. An instant or sorcery then does `spell` instead; a
    * permanent remembers it was kicked (see the `wasKicked` condition).
    */
@@ -470,6 +475,10 @@ export type Amount =
   | { count: 'opponentCreaturesExiledThisTurn' }
   /** The power of the creature sacrificed to pay for this (Wick). */
   | { sacrificedPower: true }
+  /** Creatures that died under your control this turn (Season of Loss). */
+  | { count: 'creaturesYouLostThisTurn' }
+  /** The greatest power among creatures you control (Season of Gathering). */
+  | { count: 'greatestPowerYouControl' }
   /** Creature cards you own in exile and in your graveyard (Huskburster Swarm). */
   | { count: 'creatureCardsInExileAndGraveyard' }
   /** Creatures you control of the type chosen for the source (Three Tree City). */
@@ -534,6 +543,10 @@ export type EffectDef =
       opponent?: boolean;
       options: { label: string; effects: EffectDef[] }[];
     }
+  /** Each player sacrifices a creature of their choice (Season of Loss). */
+  | { kind: 'eachPlayerSacrifices' }
+  /** Until the end of your next turn, you have this triggered ability (Season of the Bold). */
+  | { kind: 'emblem'; ability: AbilityDef; until: 'endOfYourNextTurn' | 'permanent' }
   /** Marks the gift as given (for "whenever you give a gift"). */
   | { kind: 'giftGiven' }
   /** Create token copies of permanents (with set power and toughness). */
@@ -680,7 +693,13 @@ export type EffectDef =
   /** Put a card from a graveyard onto the battlefield under your control (with a named counter: finality). */
   | { kind: 'returnToBattlefield'; what: Ref; counter?: string }
   /** Destroy all creatures (matching the filter). `returnOne`: then return one of yours that died (Starfall Invocation). */
-  | { kind: 'destroyAll'; filter?: CardFilter; returnOne?: boolean }
+  | {
+      kind: 'destroyAll';
+      filter?: CardFilter;
+      returnOne?: boolean;
+      /** Permanents of any type, not just creatures (Season of Gathering). */
+      permanents?: boolean;
+    }
   /** Look at the top N; you may take a card matching the filter into your hand; the rest go to the bottom at random. */
   | {
       kind: 'lookAndTake';
@@ -702,6 +721,8 @@ export type EffectDef =
       filter?: CardFilter;
       /** Exiled instead of sacrificed (Early Winter). */
       exile?: boolean;
+      /** You sacrifice instead of an opponent (Season of Loss: each player). */
+      you?: boolean;
     }
   /**
    * Forage: exile three cards from your graveyard or sacrifice a Food. If you
@@ -949,6 +970,8 @@ export type StackItem =
       flashback?: boolean;
       /** The value chosen for X. */
       x?: number;
+      /** The pawprint modes chosen (repeats allowed), in printed order. */
+      paws?: number[];
     }
   | {
       kind: 'ability';
@@ -966,6 +989,8 @@ export type StackItem =
       mode?: number;
       /** A granted trigger (Undying Malice): these effects instead of the card's ability. */
       inline?: EffectDef[];
+      /** An emblem's ability. */
+      emblem?: AbilityDef;
     };
 
 export type Step =
@@ -1008,6 +1033,8 @@ export interface TurnState {
   spellsCast?: Record<PlayerId, number>;
   /** Creatures each player controlled that were exiled from the battlefield this turn. */
   creaturesExiled?: Record<PlayerId, number>;
+  /** Creatures that died under each player's control this turn. */
+  creaturesLost?: Record<PlayerId, number>;
   /** Cards that left each player's graveyard this turn (Bonecache Overseer). */
   leftGraveyard?: Record<PlayerId, number>;
   /** Foods each player sacrificed this turn. */
@@ -1095,6 +1122,18 @@ export interface PendingTrigger {
   amount?: number;
   /** A granted trigger: these effects instead of the card's ability. */
   inline?: EffectDef[];
+  /** An emblem's ability (Season of the Bold). */
+  emblem?: AbilityDef;
+}
+
+export interface Emblem {
+  controller: PlayerId;
+  /** The card that made it (deals its damage, names it). */
+  source: ObjectRef;
+  sourceDefId: CardDefId;
+  ability: AbilityDef;
+  /** It ends at the cleanup step of this turn (undefined: never). */
+  untilTurn?: number;
 }
 
 export interface DelayedTrigger {
@@ -1322,6 +1361,8 @@ export interface GameState {
   combat: CombatState | null;
   effects: ContinuousEffect[];
   pendingTriggers: PendingTrigger[];
+  /** Abilities players have from emblems or effects (Season of the Bold, Ral). */
+  emblems?: Emblem[];
   /** "At the beginning of the next end step, ...": fire at the first end step after `afterTurn` / this step. */
   delayed?: DelayedTrigger[];
   /** Exactly one player is always being asked something (or the game is over). */
@@ -1362,6 +1403,8 @@ export type Action =
       discard?: ObjectId;
       /** The value chosen for X. */
       x?: number;
+      /** Pawprint modes (Seasons), in printed order, repeats allowed. */
+      paws?: number[];
       /** Mana sources to tap. Omitted: the engine picks. */
       payWith?: ObjectId[];
     }

@@ -200,6 +200,7 @@ function apply(ctx: Ctx, action: Action): void {
           forage: action.forage,
           discard: action.discard,
           x: action.x,
+          paws: action.paws,
         },
         action.payWith,
       );

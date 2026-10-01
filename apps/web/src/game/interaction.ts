@@ -109,7 +109,7 @@ export function castGroups(casts: readonly Action[]): Action[][] {
     const forage = a.forage ? (a.forage === 'graveyard' ? 'g' : 'f') : '';
     const key =
       a.type === 'castSpell'
-        ? `${a.mode ?? ''}:${a.kicked ? 'k' : ''}:${a.sacrifice ? 's' : ''}:${forage}:${a.x ?? ''}`
+        ? `${a.mode ?? ''}:${a.kicked ? 'k' : ''}:${a.sacrifice ? 's' : ''}:${forage}:${a.x ?? ''}:${a.paws?.join() ?? ''}`
         : forage;
     groups.set(key, [...(groups.get(key) ?? []), a]);
   }

@@ -14688,5 +14688,112 @@
    "large": "https://cards.scryfall.io/large/front/8/c/8cf33d80-0704-4dc4-8e8d-1dcbcbc35add.jpg?1783910807",
    "artCrop": "https://cards.scryfall.io/art_crop/front/8/c/8cf33d80-0704-4dc4-8e8d-1dcbcbc35add.jpg?1783910807"
   }
+ },
+ {
+  "name": "Season of the Burrow",
+  "scryfallId": "33bf9c60-4e58-48a4-8e53-abef7ab3b671",
+  "oracleId": "8e013e51-1684-4f58-8fe1-3588b6fbb5b5",
+  "set": "blb",
+  "collectorNumber": "29",
+  "rarity": "mythic",
+  "manaCost": "{3}{W}{W}",
+  "typeLine": "Sorcery",
+  "oracleText": "Choose up to five {P} worth of modes. You may choose the same mode more than once.\n{P} — Create a 1/1 white Rabbit creature token.\n{P}{P} — Exile target nonland permanent. Its controller draws a card.\n{P}{P}{P} — Return target permanent card with mana value 3 or less from your graveyard to the battlefield with an indestructible counter on it.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/3/33bf9c60-4e58-48a4-8e53-abef7ab3b671.jpg?1783910856",
+   "normal": "https://cards.scryfall.io/normal/front/3/3/33bf9c60-4e58-48a4-8e53-abef7ab3b671.jpg?1783910856",
+   "large": "https://cards.scryfall.io/large/front/3/3/33bf9c60-4e58-48a4-8e53-abef7ab3b671.jpg?1783910856",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/3/33bf9c60-4e58-48a4-8e53-abef7ab3b671.jpg?1783910856"
+  }
+ },
+ {
+  "name": "Season of Loss",
+  "scryfallId": "cc540652-916b-45c5-ae5a-0a0bc557cee1",
+  "oracleId": "31b5d0ad-3a4d-4f43-b0a9-c9f7a362680f",
+  "set": "blb",
+  "collectorNumber": "112",
+  "rarity": "mythic",
+  "manaCost": "{3}{B}{B}",
+  "typeLine": "Sorcery",
+  "oracleText": "Choose up to five {P} worth of modes. You may choose the same mode more than once.\n{P} — Each player sacrifices a creature of their choice.\n{P}{P} — Draw a card for each creature that died under your control this turn.\n{P}{P}{P} — Each opponent loses X life, where X is the number of creature cards in your graveyard.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/c/cc540652-916b-45c5-ae5a-0a0bc557cee1.jpg?1783910829",
+   "normal": "https://cards.scryfall.io/normal/front/c/c/cc540652-916b-45c5-ae5a-0a0bc557cee1.jpg?1783910829",
+   "large": "https://cards.scryfall.io/large/front/c/c/cc540652-916b-45c5-ae5a-0a0bc557cee1.jpg?1783910829",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/c/cc540652-916b-45c5-ae5a-0a0bc557cee1.jpg?1783910829"
+  }
+ },
+ {
+  "name": "Season of Gathering",
+  "scryfallId": "71dd3c27-e0d5-434e-a0f3-4a95245e21c2",
+  "oracleId": "3ea060d8-449c-4a5e-8883-b45bd7707b5b",
+  "set": "blb",
+  "collectorNumber": "192",
+  "rarity": "mythic",
+  "manaCost": "{4}{G}{G}",
+  "typeLine": "Sorcery",
+  "oracleText": "Choose up to five {P} worth of modes. You may choose the same mode more than once.\n{P} — Put a +1/+1 counter on a creature you control. It gains vigilance and trample until end of turn.\n{P}{P} — Choose artifact or enchantment. Destroy all permanents of the chosen type.\n{P}{P}{P} — Draw cards equal to the greatest power among creatures you control.",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/1/71dd3c27-e0d5-434e-a0f3-4a95245e21c2.jpg?1783910804",
+   "normal": "https://cards.scryfall.io/normal/front/7/1/71dd3c27-e0d5-434e-a0f3-4a95245e21c2.jpg?1783910804",
+   "large": "https://cards.scryfall.io/large/front/7/1/71dd3c27-e0d5-434e-a0f3-4a95245e21c2.jpg?1783910804",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/1/71dd3c27-e0d5-434e-a0f3-4a95245e21c2.jpg?1783910804"
+  }
+ },
+ {
+  "name": "Season of the Bold",
+  "scryfallId": "84352565-558b-4f9b-a411-532147806a78",
+  "oracleId": "5fe29c25-a7ad-4c79-a5a5-da1bbc832141",
+  "set": "blb",
+  "collectorNumber": "152",
+  "rarity": "mythic",
+  "manaCost": "{3}{R}{R}",
+  "typeLine": "Sorcery",
+  "oracleText": "Choose up to five {P} worth of modes. You may choose the same mode more than once.\n{P} — Create a tapped Treasure token.\n{P}{P} — Exile the top two cards of your library. Until the end of your next turn, you may play them.\n{P}{P}{P} — Until the end of your next turn, whenever you cast a spell, Season of the Bold deals 2 damage to up to one target creature.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Treasure"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/4/84352565-558b-4f9b-a411-532147806a78.jpg?1783910816",
+   "normal": "https://cards.scryfall.io/normal/front/8/4/84352565-558b-4f9b-a411-532147806a78.jpg?1783910816",
+   "large": "https://cards.scryfall.io/large/front/8/4/84352565-558b-4f9b-a411-532147806a78.jpg?1783910816",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/4/84352565-558b-4f9b-a411-532147806a78.jpg?1783910816"
+  }
+ },
+ {
+  "name": "Season of Weaving",
+  "scryfallId": "f5713bb4-bdd9-4253-b6b9-e590532ed773",
+  "oracleId": "4b473a42-a0c5-43d5-93f9-c599e963a06b",
+  "set": "blb",
+  "collectorNumber": "68",
+  "rarity": "mythic",
+  "manaCost": "{4}{U}{U}",
+  "typeLine": "Sorcery",
+  "oracleText": "Choose up to five {P} worth of modes. You may choose the same mode more than once.\n{P} — Draw a card.\n{P}{P} — Choose an artifact or creature you control. Create a token that's a copy of it.\n{P}{P}{P} — Return each nonland, nontoken permanent to its owner's hand.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/5/f5713bb4-bdd9-4253-b6b9-e590532ed773.jpg?1783910844",
+   "normal": "https://cards.scryfall.io/normal/front/f/5/f5713bb4-bdd9-4253-b6b9-e590532ed773.jpg?1783910844",
+   "large": "https://cards.scryfall.io/large/front/f/5/f5713bb4-bdd9-4253-b6b9-e590532ed773.jpg?1783910844",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/5/f5713bb4-bdd9-4253-b6b9-e590532ed773.jpg?1783910844"
+  }
  }
 ]

@@ -157,6 +157,7 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
       for (const x of xs) {
         const base = castCost(ctx, player, card, {
           mode: v.mode,
+          paws: v.paws,
           kicked: v.kicked,
           sacrifice: v.sacrifice ? 'x' : undefined,
           forage: v.forage ? 'graveyard' : undefined,
@@ -167,6 +168,7 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
           ...(v.mode !== undefined ? { mode: v.mode } : {}),
           ...(v.kicked ? { kicked: true } : {}),
           ...(x !== undefined ? { x } : {}),
+          ...(v.paws ? { paws: v.paws } : {}),
         };
         const specs = v.spell?.targets ?? (d.enchant ? [d.enchant] : []);
         const forages = v.forage ? forageChoices(ctx, player) : [undefined];
@@ -175,7 +177,13 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
             const ward = wardCost(ctx, player, targets);
             // Dire Downdraft costs less with some targets.
             const cost = d.costReductionIfTarget
-              ? castCost(ctx, player, card, { mode: v.mode, kicked: v.kicked, x }, targets)
+              ? castCost(
+                  ctx,
+                  player,
+                  card,
+                  { mode: v.mode, paws: v.paws, kicked: v.kicked, x },
+                  targets,
+                )
               : base;
             if (
               (ward.generic || d.costReductionIfTarget) &&

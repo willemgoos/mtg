@@ -66,6 +66,8 @@ export interface CastChoice {
   discard?: ObjectId | undefined;
   /** The value chosen for X. */
   x?: number | undefined;
+  /** Pawprint modes (Seasons). */
+  paws?: number[] | undefined;
 }
 
 /** Valiant needs to know what a player's spell or ability targeted. */
@@ -250,6 +252,7 @@ export function castSpell(
     ...(choice.kicked ? { kicked: true } : {}),
     ...(flashback ? { flashback: true } : {}),
     ...(choice.x ? { x: choice.x } : {}),
+    ...(choice.paws ? { paws: choice.paws } : {}),
   });
   payMana(ctx, payment);
   const cast = (ctx.s.turn.spellsCast ??= { p1: 0, p2: 0 });
@@ -374,6 +377,7 @@ export function pushTrigger(
     ...(t.subject ? { subject: t.subject } : {}),
     ...(t.amount !== undefined ? { amount: t.amount } : {}),
     ...(t.inline ? { inline: t.inline } : {}),
+    ...(t.emblem ? { emblem: t.emblem } : {}),
     ...(mode !== undefined ? { mode } : {}),
   });
   emit(ctx, { type: 'triggerStacked', id, source: t.source.id, player: t.controller });
@@ -384,7 +388,7 @@ function abilityOf(
   ctx: Ctx,
   item: Extract<StackItem, { kind: 'ability' }>,
 ): Exclude<AbilityDef, { kind: 'mana' | 'static' }> {
-  if (item.inline) return triggeredAbility(ctx, item);
+  if (item.inline || item.emblem) return triggeredAbility(ctx, item);
   const a = defOf(ctx, item.sourceDefId).abilities[item.abilityIndex];
   if (a?.kind === 'triggered') {
     // A modal trigger resolves as the chosen mode.

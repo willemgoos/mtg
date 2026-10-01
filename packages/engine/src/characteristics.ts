@@ -216,6 +216,9 @@ export function countOf(
       (n, id) => Math.max(n, manaValueOfDef(def(ctx, id))),
       0,
     );
+  if (a.count === 'creaturesYouLostThisTurn') return ctx.s.turn.creaturesLost?.[player] ?? 0;
+  if (a.count === 'greatestPowerYouControl')
+    return creaturesOnBattlefield(ctx, player).reduce((n, c) => Math.max(n, power(ctx, c.id)), 0);
   if (a.count === 'creatureCardsInExileAndGraveyard') {
     const ps = ctx.s.players[player];
     return [...ps.exile, ...ps.graveyard].filter((id) => def(ctx, id).types.includes('Creature'))

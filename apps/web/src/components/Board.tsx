@@ -1289,6 +1289,7 @@ function castLabel(defId: CardDefId, a: Action): string {
       : 'Forage: sacrifice a Food';
   if (a.type === 'activateAbility') return 'Activate';
   if (a.x !== undefined) return `X = ${a.x}`;
+  if (a.paws) return pawLabel(defId, a.paws);
   const def = cardDb.get(defId);
   if (a.mode !== undefined) return def?.modes?.[a.mode]?.label ?? `Mode ${a.mode + 1}`;
   if (def?.sacrificeOrPay)
@@ -1300,6 +1301,16 @@ function castLabel(defId: CardDefId, a: Action): string {
   if (def.kicker.as === 'offspring')
     return a.kicked ? `With offspring (+${manaText(def.kicker.cost)})` : 'Without offspring';
   return a.kicked ? `Kicked (+${manaText(def.kicker.cost)})` : 'Not kicked';
+}
+
+/** A Season's chosen modes: "Rabbit ×3, Exile, they draw". */
+function pawLabel(defId: CardDefId, paws: readonly number[]): string {
+  const modes = cardDb.get(defId)?.pawprints ?? [];
+  const counts = new Map<number, number>();
+  for (const m of paws) counts.set(m, (counts.get(m) ?? 0) + 1);
+  return [...counts]
+    .map(([m, n]) => `${modes[m]?.spell.label ?? `Mode ${m + 1}`}${n > 1 ? ` ×${n}` : ''}`)
+    .join(', ');
 }
 
 /** What a gift spell promises: "a card", "a Food", "a tapped Fish". */

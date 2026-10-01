@@ -304,6 +304,12 @@ export function runEffects(
   const list = effects.slice();
   for (let i = 0; i < list.length; i++) {
     const e = list[i]!;
+    if (e.kind === 'eachPlayerSacrifices') {
+      // You choose, then your opponent.
+      list.splice(i, 1, { kind: 'opponentSacrifices', you: true }, { kind: 'opponentSacrifices' });
+      i--;
+      continue;
+    }
     if (e.kind === 'if') {
       // Replace it with the chosen branch (which may itself pause).
       const self = es.source ? ctx.s.objects[es.source.id] : undefined;
@@ -545,7 +551,10 @@ export function runEffects(
         };
       } else if (e.kind === 'destroyAll') {
         const died: ObjectId[] = [];
-        for (const c of creaturesOnBattlefield(ctx)) {
+        const doomed = e.permanents
+          ? ctx.s.battlefield.map((id) => obj(ctx, id))
+          : creaturesOnBattlefield(ctx);
+        for (const c of doomed) {
           if (!matchesFilter(ctx, c.id, e.filter) || hasKeyword(ctx, c.id, 'indestructible'))
             continue;
           moveObject(ctx, c.id, 'graveyard');
@@ -595,7 +604,7 @@ export function runEffects(
           thenPriority,
         };
       } else if (e.kind === 'opponentSacrifices') {
-        const opp = other(controller);
+        const opp = e.you ? controller : other(controller);
         let options = e.filter
           ? ctx.s.battlefield.filter(
               (id) => obj(ctx, id).controller === opp && matchesFilter(ctx, id, e.filter),
@@ -974,6 +983,21 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
     case 'millThenTake':
     case 'lookTakeRestGraveyard':
       return; // handled by runEffects
+    case 'eachPlayerSacrifices':
+      return; // handled by runEffects
+    case 'emblem': {
+      const ownTurn = ctx.s.turn.activePlayer === es.controller;
+      (ctx.s.emblems ??= []).push({
+        controller: es.controller,
+        source: es.source ?? { id: 'emblem', zcc: 0 },
+        sourceDefId: es.sourceDefId,
+        ability: e.ability,
+        ...(e.until === 'endOfYourNextTurn'
+          ? { untilTurn: ctx.s.turn.number + (ownTurn ? 2 : 1) }
+          : {}),
+      });
+      return;
+    }
     case 'giftGiven':
       emit(ctx, { type: 'giftGiven', player: es.controller });
       return;

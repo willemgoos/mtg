@@ -395,6 +395,21 @@ function detect(ctx: Ctx, ev: GameEvent): void {
       );
       if (ev.nth === 2)
         forEachBattlefieldTrigger(ctx, (_o, a) => a.trigger.on === 'anyPlayerSecondSpell');
+      // Emblems: "whenever you cast a spell" (Season of the Bold, Ral).
+      for (const e of s.emblems ?? []) {
+        const a = e.ability;
+        if (a.kind !== 'triggered' || a.trigger.on !== 'castSpell' || e.controller !== ev.player)
+          continue;
+        if (!spellMatches(ctx, a.trigger, spell, item, spellObj)) continue;
+        s.pendingTriggers.push({
+          source: e.source,
+          sourceDefId: e.sourceDefId,
+          abilityIndex: -1,
+          controller: e.controller,
+          emblem: a,
+          subject: { id: spellObj.id, zcc: spellObj.zcc },
+        });
+      }
       return;
     }
     case 'attackersDeclared': {
@@ -672,8 +687,14 @@ function manaValueOf(d: CardDefinition): number {
 /** The ability a pending trigger or stack item refers to (granted ones carry their effects). */
 export function triggeredAbility(
   ctx: Ctx,
-  t: { sourceDefId: string; abilityIndex: number; inline?: EffectDef[] | undefined },
+  t: {
+    sourceDefId: string;
+    abilityIndex: number;
+    inline?: EffectDef[] | undefined;
+    emblem?: AbilityDef | undefined;
+  },
 ): Triggered {
+  if (t.emblem?.kind === 'triggered') return t.emblem;
   if (t.inline)
     return { kind: 'triggered', trigger: { on: 'dies' }, targets: [], effects: t.inline };
   const a = defOf(ctx, t.sourceDefId).abilities[t.abilityIndex];

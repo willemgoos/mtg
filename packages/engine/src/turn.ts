@@ -136,6 +136,7 @@ export function startTurn(ctx: Ctx, player: PlayerId): void {
   s.turn.spellsCast = { p1: 0, p2: 0 };
   s.turn.creaturesExiled = { p1: 0, p2: 0 };
   s.turn.leftGraveyard = { p1: 0, p2: 0 };
+  s.turn.creaturesLost = { p1: 0, p2: 0 };
   s.turn.foodsSacrificed = { p1: 0, p2: 0 };
   delete s.turn.hexproofPlayers;
   for (const q of Object.values(s.players)) q.attackedThisTurn = false;
@@ -291,6 +292,8 @@ export function finishCleanup(ctx: Ctx): void {
     o.damagedByDeathtouch = false;
   }
   endEffects(ctx, (e) => e.expires === 'endOfTurn');
+  if (s.emblems?.length)
+    s.emblems = s.emblems.filter((e) => e.untilTurn === undefined || e.untilTurn > s.turn.number);
   advanceStep(ctx);
 }
 

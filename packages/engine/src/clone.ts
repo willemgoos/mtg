@@ -44,6 +44,8 @@ export function cloneState(s: GameState): GameState {
       ...(s.turn.spellsCast ? { spellsCast: { ...s.turn.spellsCast } } : {}),
       ...(s.turn.creaturesExiled ? { creaturesExiled: { ...s.turn.creaturesExiled } } : {}),
       ...(s.turn.leftGraveyard ? { leftGraveyard: { ...s.turn.leftGraveyard } } : {}),
+      ...(s.turn.creaturesLost ? { creaturesLost: { ...s.turn.creaturesLost } } : {}),
+      ...(s.turn.creaturesLost ? { creaturesLost: { ...s.turn.creaturesLost } } : {}),
       ...(s.turn.foodsSacrificed ? { foodsSacrificed: { ...s.turn.foodsSacrificed } } : {}),
       ...(s.turn.hexproofPlayers ? { hexproofPlayers: s.turn.hexproofPlayers.slice() } : {}),
     },
@@ -54,6 +56,7 @@ export function cloneState(s: GameState): GameState {
     effects: s.effects.slice(),
     pendingTriggers: s.pendingTriggers.slice(),
     ...(s.delayed ? { delayed: s.delayed.slice() } : {}),
+    ...(s.emblems ? { emblems: s.emblems.slice() } : {}),
     decision: cloneDecision(s.decision),
   };
 }
