@@ -12,9 +12,15 @@ import {
   tap,
 } from './context.ts';
 import { type EffectSource, runEffects } from './effects.ts';
-import { characteristics, countOf, hasKeyword, cardMatches } from './characteristics.ts';
+import {
+  characteristics,
+  countOf,
+  hasKeyword,
+  cardMatches,
+  matchesFilter,
+} from './characteristics.ts';
 import { changeLife, gainLife } from './effects.ts';
-import { payForage } from './forage.ts';
+import { foodsOf, payForage } from './forage.ts';
 import { anyTypeCost, manaValue, payMana, planPayment } from './mana.ts';
 import { shuffleInPlace } from './rng.ts';
 import { shuffleLibrary } from './setup.ts';
@@ -24,6 +30,7 @@ import { checkCondition, triggeredAbility } from './triggers.ts';
 import { givePriority } from './turn.ts';
 import type {
   AbilityDef,
+  CardDefinition,
   Amount,
   EffectDef,
   ManaCost,
@@ -52,27 +59,69 @@ function noteTargets(ctx: Ctx, player: PlayerId, targets: readonly TargetChoice[
   if (ids.length) emit(ctx, { type: 'targeted', player, ids });
 }
 
-/** Ward {2}: an opponent targeting it pays {2} more (we charge it up front). */
-function wardedTargets(ctx: Ctx, player: PlayerId, targets: readonly TargetChoice[]) {
+type WardCost = NonNullable<CardDefinition['wardCost']>;
+
+/**
+ * Ward: an opponent targeting it pays more (we charge it up front). The cost
+ * is the card's own (default {2}), or {1} for granted "ward {1}".
+ */
+function wardedTargets(ctx: Ctx, player: PlayerId, targets: readonly TargetChoice[]): WardCost[] {
   return targets.flatMap((t) => {
     if (!('object' in t)) return [];
     const o = ctx.s.objects[t.object.id];
-    return o && o.zone === 'battlefield' && o.controller !== player && hasKeyword(ctx, o.id, 'ward')
-      ? [def(ctx, o.id)]
-      : [];
+    if (!o || o.zone !== 'battlefield' || o.controller === player) return [];
+    if (hasKeyword(ctx, o.id, 'ward'))
+      return [def(ctx, o.id).wardCost ?? { mana: { generic: 2, colored: {} } }];
+    if (hasKeyword(ctx, o.id, 'wardOne')) return [{ mana: { generic: 1, colored: {} } }];
+    return [];
   });
 }
 
 export function wardCost(ctx: Ctx, player: PlayerId, targets: readonly TargetChoice[]): ManaCost {
   let cost: ManaCost = { generic: 0, colored: {} };
-  for (const d of wardedTargets(ctx, player, targets))
-    cost = addCosts(cost, d.wardCost?.mana ?? { generic: 2, colored: {} });
+  for (const w of wardedTargets(ctx, player, targets)) cost = addCosts(cost, w.mana);
   return cost;
 }
 
 /** Life an opponent pays for ward (Ovika: 3). */
 export function wardLife(ctx: Ctx, player: PlayerId, targets: readonly TargetChoice[]): number {
-  return wardedTargets(ctx, player, targets).reduce((n, d) => n + (d.wardCost?.life ?? 0), 0);
+  return wardedTargets(ctx, player, targets).reduce((n, w) => n + (w.life ?? 0), 0);
+}
+
+/** Can `player` pay ward's discard and sacrifice costs? `inHand`: the card being cast is still in hand. */
+export function wardPayable(
+  ctx: Ctx,
+  player: PlayerId,
+  targets: readonly TargetChoice[],
+  inHand = 0,
+): boolean {
+  const w = wardedTargets(ctx, player, targets);
+  const discards = w.filter((x) => x.discard).length;
+  const foods = w.filter((x) => x.sacrificeFood).length;
+  return (
+    ctx.s.players[player].hand.length - inHand >= discards && foodsOf(ctx, player).length >= foods
+  );
+}
+
+/**
+ * Pays ward's discard and sacrifice costs. The card discarded is the one with
+ * the lowest mana value, the Food the first one (a simplification: the player
+ * doesn't choose).
+ */
+function payWardExtras(ctx: Ctx, player: PlayerId, targets: readonly TargetChoice[]): void {
+  for (const w of wardedTargets(ctx, player, targets)) {
+    if (w.discard) {
+      const hand = ctx.s.players[player].hand;
+      const card = [...hand].sort(
+        (a, b) => manaValue(def(ctx, a).manaCost) - manaValue(def(ctx, b).manaCost),
+      )[0];
+      if (card) moveObject(ctx, card, 'graveyard');
+    }
+    if (w.sacrificeFood) {
+      const food = foodsOf(ctx, player)[0];
+      if (food) sacrificePermanent(ctx, food);
+    }
+  }
 }
 
 /** +1/+1 counters on creatures `player` controls (for Quilled Greatwurm). */
@@ -98,13 +147,27 @@ function removeCounters(ctx: Ctx, player: PlayerId, n: number): void {
 }
 
 /** The cost to pay for casting `card` this way, from where it is now. */
-export function castCost(ctx: Ctx, player: PlayerId, card: ObjectId, choice: CastChoice): ManaCost {
+export function castCost(
+  ctx: Ctx,
+  player: PlayerId,
+  card: ObjectId,
+  choice: CastChoice,
+  targets?: readonly TargetChoice[],
+): ManaCost {
   const o = obj(ctx, card);
   const d = defOf(ctx, o.defId);
   const v = variantOf(d, o.zone, choice);
   if (!v) throw new Error(`${o.defId} can't be cast that way`);
   let cost = v.cost;
   let reduce = d.costReduction !== undefined ? amountFor(ctx, player, d.costReduction) : 0;
+  const first = targets?.[0];
+  if (
+    d.costReductionIfTarget &&
+    first &&
+    'object' in first &&
+    matchesFilter(ctx, first.object.id, d.costReductionIfTarget.filter)
+  )
+    reduce += d.costReductionIfTarget.amount;
   for (const id of ctx.s.battlefield)
     if (obj(ctx, id).controller === player)
       for (const a of def(ctx, id).abilities)
@@ -142,12 +205,16 @@ export function castSpell(
   const v = variantOf(d, o.zone, choice)!;
   const flashback = o.zone === 'graveyard' && !!d.flashback;
   // Rule 601.2: move to stack, choose targets, then pay costs.
-  const cost = addCosts(castCost(ctx, player, card, choice), wardCost(ctx, player, targets));
+  const cost = addCosts(
+    castCost(ctx, player, card, choice, targets),
+    wardCost(ctx, player, targets),
+  );
   const payment = planPayment(ctx, player, cost, payWith, undefined, d.subtypes);
   moveObject(ctx, card, 'stack', { controller: player });
   if (choice.sacrifice) sacrificePermanent(ctx, choice.sacrifice);
   if (v.removeCounters) removeCounters(ctx, player, v.removeCounters);
   changeLife(ctx, player, -wardLife(ctx, player, targets));
+  payWardExtras(ctx, player, targets);
   ctx.s.stack.push({
     kind: 'spell',
     id: card,
@@ -158,7 +225,8 @@ export function castSpell(
     ...(flashback ? { flashback: true } : {}),
   });
   payMana(ctx, payment);
-  emit(ctx, { type: 'spellCast', id: card, player });
+  const cast = (ctx.s.turn.spellsCast ??= { p1: 0, p2: 0 });
+  emit(ctx, { type: 'spellCast', id: card, player, nth: ++cast[player] });
   noteTargets(ctx, player, targets);
   return (
     choice.forage !== undefined && payForage(ctx, player, choice.forage, { thenPriority: player })
@@ -205,8 +273,10 @@ export function activateAbility(
     payWith,
     a.cost.tapSelf ? source : undefined,
   );
+  const sacrificedPower = sacrifice ? power(ctx, sacrifice) : undefined;
   if (sacrifice) sacrificePermanent(ctx, sacrifice);
   changeLife(ctx, player, -wardLife(ctx, player, targets) - (a.cost.life ?? 0));
+  payWardExtras(ctx, player, targets);
   if (a.cost.removeCounters) {
     const c = (src.counters ??= {});
     c[a.cost.removeCounters.name] =
@@ -221,8 +291,10 @@ export function activateAbility(
     abilityIndex: index,
     controller: player,
     targets,
+    ...(sacrificedPower !== undefined ? { lkiPower: sacrificedPower } : {}),
   };
   if (a.cost.tapSelf) tap(ctx, source);
+  if (a.oncePerTurn) src.onceTurns = { ...src.onceTurns, [-1 - index]: ctx.s.turn.number };
   payMana(ctx, payment);
   if (a.once) (src.usedAbilities ??= []).push(index);
   if (a.cost.sacrificeSelf) {
@@ -254,6 +326,7 @@ export function pushTrigger(
   const ability = triggeredAbility(ctx, t);
   const life = ability.targets.length && ability.lifeCost ? ability.lifeCost : 0;
   changeLife(ctx, t.controller, -wardLife(ctx, t.controller, targets) - life);
+  payWardExtras(ctx, t.controller, targets);
   const id = newId(ctx);
   ctx.s.stack.push({
     kind: 'ability',
@@ -422,6 +495,21 @@ export function answerForage(ctx: Ctx, choice: ObjectId | 'graveyard' | null): v
   if (!paused) continueWith(ctx, d.resume, d.then, d.thenPriority);
 }
 
+/** A card chosen from an opponent's hand is discarded or exiled. */
+export function answerChooseFromHand(ctx: Ctx, card: ObjectId | null): void {
+  const d = ctx.s.decision;
+  if (d.kind !== 'chooseFromHand') throw new Error('Not choosing from a hand');
+  if (card) moveObject(ctx, card, d.then === 'discard' ? 'graveyard' : 'exile');
+  resume(ctx, d.resume, d.thenPriority);
+}
+
+/** One of a 'chooseOption' decision's options: its effects, then the rest. */
+export function answerChooseOption(ctx: Ctx, index: number): void {
+  const d = ctx.s.decision;
+  if (d.kind !== 'chooseOption') throw new Error('Not choosing an option');
+  continueWith(ctx, d.resume, d.options[index]!.effects, d.thenPriority);
+}
+
 /** Foraging from the graveyard: one card exiled at a time. */
 export function answerForageExile(ctx: Ctx, card: ObjectId): void {
   const d = ctx.s.decision;
@@ -475,7 +563,9 @@ export function answerPickExiled(ctx: Ctx, card: ObjectId): void {
   const d = ctx.s.decision;
   if (d.kind !== 'pickExiled') throw new Error('Not choosing');
   const ownTurn = ctx.s.turn.activePlayer === d.player;
-  obj(ctx, card).playableUntilTurn = ctx.s.turn.number + (ownTurn ? 2 : 1);
+  obj(ctx, card).playableUntilTurn = d.thisTurn
+    ? ctx.s.turn.number
+    : ctx.s.turn.number + (ownTurn ? 2 : 1);
   resume(ctx, d.resume, d.thenPriority);
 }
 
@@ -503,6 +593,13 @@ function bonusCounters(
   for (const id of ctx.s.battlefield) {
     if (id === entering || obj(ctx, id).controller !== player) continue;
     for (const a of def(ctx, id).abilities) {
+      if (
+        a.kind === 'static' &&
+        a.effect.kind === 'othersEnterWithCounter' &&
+        defOf(ctx, obj(ctx, entering).defId).types.includes('Creature') &&
+        checkCondition(ctx, a.effect.condition, player, obj(ctx, id))
+      )
+        n++;
       if (a.kind !== 'static' || a.effect.kind !== 'entersWithCountersPerSubtype') continue;
       const sub = a.effect.subtype;
       if (!subtypes.includes(sub)) continue;

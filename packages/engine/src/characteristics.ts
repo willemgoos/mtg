@@ -49,6 +49,12 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
 
   if (o.zone === 'battlefield') {
     for (const e of ctx.s.effects) {
+      if (e.basePT && e.affected.id === id && e.affected.zcc === o.zcc) {
+        power += e.basePT[0] - (basePower ?? base ?? o.copyPT?.power ?? d.power ?? 0);
+        toughness += e.basePT[1] - (base ?? o.copyPT?.toughness ?? d.toughness ?? 0);
+      }
+    }
+    for (const e of ctx.s.effects) {
       if (e.affected.id !== id || e.affected.zcc !== o.zcc) continue;
       power += e.power;
       toughness += e.toughness;
@@ -59,35 +65,45 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
         for (const k of e.keywords) granted.add(k);
       }
     }
-    const withStatics = staticDefs(ctx.db);
+    // Its own static abilities that only affect itself.
+    for (const a of d.abilities) {
+      if (a.kind !== 'static') continue;
+      const st = a.effect;
+      if (st.kind === 'cantBlock') cantBlock = true;
+      else if (st.kind === 'cantBeBlocked') cantBeBlocked = true;
+      else if (st.kind === 'boost') {
+        power += countOf(ctx, o.controller, st.power, true, id);
+        toughness += countOf(ctx, o.controller, st.toughness, true, id);
+      } else if (st.kind === 'while' || st.kind === 'whileLife') {
+        const on =
+          st.kind === 'while'
+            ? checkCondition(ctx, st.condition, o.controller, o)
+            : ctx.s.players[o.controller].life >= st.minLife;
+        if (!on) continue;
+        power += st.power;
+        toughness += st.toughness;
+        if (st.kind === 'while' && st.cantBeBlocked) cantBeBlocked = true;
+        if (st.keywords?.length) {
+          granted ??= new Set(keywords);
+          for (const k of st.keywords) granted.add(k);
+        }
+      }
+    }
+    // Keyword counters (a flying counter, an indestructible counter).
+    if (o.counters)
+      for (const k of COUNTER_KEYWORDS)
+        if (o.counters[k]) {
+          granted ??= new Set(keywords);
+          granted.add(k);
+        }
+    // Static abilities of permanents that affect others: anthems, Auras, Equipment.
+    const affecting = affectingDefs(ctx.db);
     for (const srcId of ctx.s.battlefield) {
       const src = obj(ctx, srcId);
-      if (!withStatics.has(src.defId)) continue;
-      for (const a of defOf(ctx, src.defId).abilities) {
+      if (!affecting.has(src.defId)) continue;
+      for (const a of def(ctx, srcId).abilities) {
         if (a.kind !== 'static') continue;
         const st = a.effect;
-        if (st.kind === 'cantBlock' && srcId === id) cantBlock = true;
-        if (st.kind === 'while') {
-          if (srcId !== id || !checkCondition(ctx, st.condition, o.controller, o)) continue;
-          power += st.power;
-          toughness += st.toughness;
-          if (st.cantBeBlocked) cantBeBlocked = true;
-          if (st.keywords?.length) {
-            granted ??= new Set(keywords);
-            for (const k of st.keywords) granted.add(k);
-          }
-          continue;
-        }
-        if (st.kind === 'whileLife') {
-          if (srcId !== id || ctx.s.players[o.controller].life < st.minLife) continue;
-          power += st.power;
-          toughness += st.toughness;
-          if (st.keywords?.length) {
-            granted ??= new Set(keywords);
-            for (const k of st.keywords) granted.add(k);
-          }
-          continue;
-        }
         if (st.kind === 'attached') {
           if (src.attachedTo !== id) continue;
           if (st.cantAttackOrBlock) cantAttack = cantBlock = true;
@@ -102,7 +118,9 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
         if (st.kind !== 'anthem') continue;
         if (st.filter && !cardMatches(ctx, id, st.filter, srcId)) continue;
         if (st.condition && !checkCondition(ctx, st.condition, src.controller, src)) continue;
-        if (src.controller !== o.controller || !d.types.includes('Creature')) continue;
+        const opponents = st.affects === 'creaturesOpponentsControl';
+        if ((src.controller !== o.controller) !== opponents || !d.types.includes('Creature'))
+          continue;
         if (st.affects === 'otherCreaturesYouControl' && srcId === id) continue;
         if (st.filter?.subtype && !d.subtypes.includes(st.filter.subtype)) continue;
         // Printed keywords only (avoids recursion through other anthems).
@@ -168,6 +186,8 @@ export function countOf(
       (n, id) => Math.max(n, manaValueOfDef(def(ctx, id))),
       0,
     );
+  if (a.count === 'opponentCreaturesExiledThisTurn')
+    return ctx.s.turn.creaturesExiled?.[player === 'p1' ? 'p2' : 'p1'] ?? 0;
   if (a.count === 'permanentsYouControl')
     return ctx.s.battlefield.filter(
       (id) =>
@@ -380,6 +400,41 @@ export function lifeGainPrevented(ctx: Ctx): boolean {
       defOf(ctx, defId).abilities.some((a) => a.kind === 'static' && a.effect.kind === 'noLifeGain')
     );
   });
+}
+
+/** Keywords a counter of the same name grants (Salvation Swan's flying counter). */
+const COUNTER_KEYWORDS: readonly Keyword[] = [
+  'flying',
+  'indestructible',
+  'reach',
+  'trample',
+  'vigilance',
+  'deathtouch',
+  'lifelink',
+  'menace',
+  'hexproof',
+  'firstStrike',
+];
+
+const affectingDefsCache = new WeakMap<CardDb, ReadonlySet<CardDefId>>();
+
+/** Card definitions with a static ability that changes other permanents (anthems, Auras, Equipment). */
+function affectingDefs(db: CardDb): ReadonlySet<CardDefId> {
+  let set = affectingDefsCache.get(db);
+  if (!set) {
+    set = new Set(
+      [...db.values()]
+        .filter((d) =>
+          d.abilities.some(
+            (a) =>
+              a.kind === 'static' && (a.effect.kind === 'anthem' || a.effect.kind === 'attached'),
+          ),
+        )
+        .map((d) => d.id),
+    );
+    affectingDefsCache.set(db, set);
+  }
+  return set;
 }
 
 const staticDefsCache = new WeakMap<CardDb, ReadonlySet<CardDefId>>();

@@ -209,3 +209,12 @@ export function chooseScry(engine: Engine, s: GameState, me: PlayerId, legal: Ac
   const key = JSON.stringify(want);
   return legal.find((a) => JSON.stringify(a) === key) ?? legal[0]!;
 }
+
+/** Choosing from an opponent's hand (Thought-Stalker Warlock): their most expensive card. */
+export function chooseFromHand(engine: Engine, s: GameState, legal: Action[]): Action {
+  const value = (a: Action) => {
+    const d = a.type === 'chooseCard' && a.card ? defOf(engine, s, a.card) : undefined;
+    return d ? manaValue(d.manaCost) : -1;
+  };
+  return legal.reduce((best, a) => (value(a) > value(best) ? a : best));
+}

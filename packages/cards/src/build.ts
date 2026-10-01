@@ -10,26 +10,22 @@ import type {
 import type { ScryfallCard } from './scryfall-types.ts';
 
 /** Behavior added on top of the printed characteristics. */
-export type Behavior = Pick<
-  Partial<CardDefinition>,
-  | 'abilities'
-  | 'spell'
-  | 'modes'
-  | 'kicker'
-  | 'forageOrPay'
-  | 'flashback'
-  | 'ptEquals'
-  | 'enchant'
-  | 'costReduction'
-  | 'entersWithCountersIf'
-  | 'sacrificeOrPay'
-  | 'castFromGraveyardRemovingCounters'
-  | 'sacrificeCreatureToCast'
-  | 'uncounterable'
-  | 'powerEquals'
-  | 'castOnlyIf'
-  | 'entersWithCounters'
-  | 'entersTapped'
+export type Behavior = Partial<
+  Omit<
+    CardDefinition,
+    | 'id'
+    | 'name'
+    | 'scryfallId'
+    | 'manaCost'
+    | 'colors'
+    | 'types'
+    | 'supertypes'
+    | 'subtypes'
+    | 'power'
+    | 'toughness'
+    | 'keywords'
+    | 'isToken'
+  >
 >;
 
 export const slug = (name: string): string =>
@@ -141,6 +137,11 @@ export function mapKeywords(scryfall: readonly string[], oracle = ''): Keyword[]
 
 /** "Ward {2}" or "Ward—{3}, Pay 3 life." */
 export function wardCostOf(oracle: string): CardDefinition['wardCost'] | undefined {
+  const none = { generic: 0, colored: {} };
+  const life = /Ward—Pay (\d+) life\./.exec(oracle);
+  if (life) return { mana: none, life: Number(life[1]) };
+  if (/Ward—Discard a card\./.test(oracle)) return { mana: none, discard: true };
+  if (/Ward—Sacrifice a Food\./.test(oracle)) return { mana: none, sacrificeFood: true };
   const m = /Ward(?: |—)\{(\d+)\}(?:, Pay (\d+) life)?/.exec(oracle);
   if (!m) return undefined;
   return {
@@ -152,7 +153,8 @@ export function wardCostOf(oracle: string): CardDefinition['wardCost'] | undefin
 /** Printed characteristics from Scryfall + hand-written behavior = engine definition. */
 export function buildCard(sc: ScryfallCard, behavior: Behavior = {}): CardDefinition {
   const { supertypes, types, subtypes } = parseTypeLine(sc.typeLine);
-  const abilities = [...(behavior.abilities ?? [])];
+  const { abilities: own = [], ...rest } = behavior;
+  const abilities = [...own];
   if (supertypes.includes('Basic') && types.includes('Land')) {
     for (const st of subtypes) {
       const produces = BASIC_MANA[st];
@@ -174,27 +176,9 @@ export function buildCard(sc: ScryfallCard, behavior: Behavior = {}): CardDefini
       : {}),
     keywords: mapKeywords(sc.keywords, sc.oracleText),
     abilities,
-    ...(behavior.spell ? { spell: behavior.spell } : {}),
-    ...(behavior.modes ? { modes: behavior.modes } : {}),
-    ...(behavior.kicker ? { kicker: behavior.kicker } : {}),
-    ...(behavior.forageOrPay ? { forageOrPay: behavior.forageOrPay } : {}),
-    ...(behavior.flashback ? { flashback: behavior.flashback } : {}),
-    ...(behavior.ptEquals !== undefined ? { ptEquals: behavior.ptEquals } : {}),
-    ...(behavior.enchant ? { enchant: behavior.enchant } : {}),
-    ...(behavior.costReduction !== undefined ? { costReduction: behavior.costReduction } : {}),
-    ...(behavior.entersWithCountersIf
-      ? { entersWithCountersIf: behavior.entersWithCountersIf }
-      : {}),
-    ...(behavior.sacrificeOrPay ? { sacrificeOrPay: behavior.sacrificeOrPay } : {}),
-    ...(behavior.sacrificeCreatureToCast ? { sacrificeCreatureToCast: true } : {}),
-    ...(behavior.powerEquals !== undefined ? { powerEquals: behavior.powerEquals } : {}),
-    ...(behavior.castOnlyIf ? { castOnlyIf: behavior.castOnlyIf } : {}),
     ...(/can't be countered/.test(sc.oracleText) ? { uncounterable: true } : {}),
     ...(wardCostOf(sc.oracleText) ? { wardCost: wardCostOf(sc.oracleText)! } : {}),
-    ...(behavior.castFromGraveyardRemovingCounters
-      ? { castFromGraveyardRemovingCounters: behavior.castFromGraveyardRemovingCounters }
-      : {}),
-    ...(behavior.entersWithCounters ? { entersWithCounters: behavior.entersWithCounters } : {}),
-    ...(behavior.entersTapped ? { entersTapped: true } : {}),
+    // Everything else the behaviour sets (spell, modes, kicker, costs, ...).
+    ...rest,
   };
 }

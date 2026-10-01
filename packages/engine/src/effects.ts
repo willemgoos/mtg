@@ -66,6 +66,7 @@ export function dealDamage(
   combat: boolean,
 ): void {
   if (amount <= 0) return;
+  amount += damageBonus(ctx, src, to, combat);
   if ('player' in to) {
     emit(ctx, { type: 'damageDealt', source: src.id, to, amount, combat });
     changeLife(ctx, to.player, -amount);
@@ -77,6 +78,31 @@ export function dealDamage(
     emit(ctx, { type: 'damageDealt', source: src.id, to, amount, combat });
   }
   if (has(src, 'lifelink')) gainLife(ctx, src.controller, amount);
+}
+
+/** Extra damage from "deals that much damage plus N instead" effects. */
+function damageBonus(ctx: Ctx, src: DamageSource, to: TargetChoice, combat: boolean): number {
+  let n = 0;
+  const source = ctx.s.objects[src.id];
+  const toOpponent =
+    'player' in to
+      ? to.player !== src.controller
+      : ctx.s.objects[to.object.id]?.controller !== src.controller;
+  for (const id of ctx.s.battlefield) {
+    const o = obj(ctx, id);
+    if (o.controller !== src.controller) continue;
+    for (const a of def(ctx, id).abilities) {
+      if (a.kind !== 'static' || a.effect.kind !== 'damageBonus') continue;
+      const b = a.effect;
+      if (b.noncombat && combat) continue;
+      if (b.toOpponents && !toOpponent) continue;
+      if (b.source && !(source?.zone === 'battlefield' && matchesFilter(ctx, src.id, b.source)))
+        continue;
+      if (b.condition && !checkCondition(ctx, b.condition, o.controller, o)) continue;
+      n += b.amount;
+    }
+  }
+  return n;
 }
 
 export function changeLife(ctx: Ctx, player: PlayerId, delta: number): void {
@@ -184,6 +210,7 @@ export function resolveAmount(ctx: Ctx, es: EffectSource, amount: Amount): numbe
     return 0;
   }
   if ('event' in amount) return es.amount ?? 0;
+  if ('sacrificedPower' in amount) return Math.max(0, es.lkiPower ?? 0);
   if ('countersOn' in amount) {
     const id = objectsOf(ctx, es, amount.countersOn)[0];
     if (id) return obj(ctx, id).plusOneCounters;
@@ -242,7 +269,9 @@ export function runEffects(
       e.kind === 'exileTopChooseOne' ||
       e.kind === 'forage' ||
       e.kind === 'destroyAll' ||
-      e.kind === 'lookAndTake'
+      e.kind === 'lookAndTake' ||
+      e.kind === 'chooseFromOpponentHand' ||
+      e.kind === 'choose'
     ) {
       const lib = ctx.s.players[es.controller].library;
       const { controller, source, sourceDefId, targets, lkiPower, subject, amount } = es;
@@ -298,7 +327,39 @@ export function runEffects(
         const options = lib.slice(0, e.count);
         if (options.length === 0) continue;
         for (const id of options) moveObject(ctx, id, 'exile');
-        ctx.s.decision = { kind: 'pickExiled', player: controller, options, resume, thenPriority };
+        ctx.s.decision = {
+          kind: 'pickExiled',
+          player: controller,
+          options,
+          ...(e.until ? { thisTurn: true } : {}),
+          resume,
+          thenPriority,
+        };
+      } else if (e.kind === 'chooseFromOpponentHand') {
+        const from = other(controller);
+        const options = ctx.s.players[from].hand.filter(
+          (id) => !e.filter || cardMatches(ctx, id, e.filter),
+        );
+        ctx.s.decision = {
+          kind: 'chooseFromHand',
+          player: controller,
+          from,
+          options,
+          then: e.then,
+          resume,
+          thenPriority,
+        };
+      } else if (e.kind === 'choose') {
+        const t = e.ownerOf !== undefined ? es.targets[e.ownerOf] : undefined;
+        const owner = t && 'object' in t ? ctx.s.objects[t.object.id]?.owner : undefined;
+        if (e.ownerOf !== undefined && !owner) continue;
+        ctx.s.decision = {
+          kind: 'chooseOption',
+          player: owner ?? controller,
+          options: e.options,
+          resume,
+          thenPriority,
+        };
       } else if (e.kind === 'destroyAll') {
         const died: ObjectId[] = [];
         for (const c of creaturesOnBattlefield(ctx)) {
@@ -712,7 +773,47 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
     }
     case 'destroyAll':
     case 'lookAndTake':
+    case 'chooseFromOpponentHand':
+    case 'choose':
       return; // handled by runEffects
+    case 'putInLibrary':
+      for (const id of objectsOf(ctx, es, e.what))
+        moveObject(ctx, id, 'library', { position: e.position });
+      return;
+    case 'gainControl':
+      for (const id of objectsOf(ctx, es, e.what)) {
+        const o = obj(ctx, id);
+        if (o.controller === es.controller) continue;
+        ctx.s.effects.push({
+          timestamp: newTimestamp(ctx),
+          affected: { id, zcc: o.zcc },
+          power: 0,
+          toughness: 0,
+          keywords: [],
+          previousController: o.controller,
+          expires: 'endOfTurn',
+        });
+        o.controller = es.controller;
+        o.summoningSick = true;
+      }
+      return;
+    case 'loseAbilities':
+      for (const id of objectsOf(ctx, es, e.what)) {
+        const o = obj(ctx, id);
+        ctx.s.effects.push({
+          timestamp: newTimestamp(ctx),
+          affected: { id, zcc: o.zcc },
+          power: 0,
+          toughness: 0,
+          keywords: [],
+          loseAbilities: true,
+          ...(e.basePT && def(ctx, id).types.includes('Creature') ? { basePT: e.basePT } : {}),
+          expires: 'untilYourNextTurn',
+          player: es.controller,
+        });
+        o.blank = true;
+      }
+      return;
     case 'returnSource': {
       // Only the same card, still in the graveyard it went to.
       const o = es.source && ctx.s.objects[es.source.id];
@@ -720,6 +821,15 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
       if (e.to === 'hand') return moveObject(ctx, o.id, 'hand');
       moveObject(ctx, o.id, 'battlefield', { controller: o.owner });
       if (e.tapped) o.tapped = true;
+      if (e.attacking && ctx.s.combat) {
+        o.tapped = true;
+        ctx.s.combat.attackers.push({
+          id: o.id,
+          defender: other(o.owner),
+          blocked: false,
+          blockers: [],
+        });
+      }
       if (e.counters) o.plusOneCounters += e.counters;
       if (e.addSubtype) o.addedSubtypes = [...(o.addedSubtypes ?? []), e.addSubtype];
       return;

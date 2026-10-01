@@ -20,6 +20,8 @@ import {
 import {
   activateAbility,
   answerDiscard,
+  answerChooseFromHand,
+  answerChooseOption,
   answerForage,
   answerForageExile,
   answerPickExiled,
@@ -257,7 +259,11 @@ function apply(ctx: Ctx, action: Action): void {
     case 'forage':
       if (d.kind !== 'forage') throw new IllegalActionError(action);
       return answerForage(ctx, action.choice);
+    case 'chooseOption':
+      if (d.kind !== 'chooseOption') throw new IllegalActionError(action);
+      return answerChooseOption(ctx, action.index);
     case 'chooseCard':
+      if (d.kind === 'chooseFromHand') return answerChooseFromHand(ctx, action.card);
       if (d.kind === 'forageExile' && action.card) return answerForageExile(ctx, action.card);
       if (d.kind === 'sacrifice' && action.card) return answerSacrifice(ctx, action.card);
       if (d.kind === 'punisher') return answerPunisher(ctx, action.card);

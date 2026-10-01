@@ -1,4 +1,4 @@
-import { countOf, creaturesOnBattlefield, matchesFilter } from './characteristics.ts';
+import { cardMatches, countOf, creaturesOnBattlefield, matchesFilter } from './characteristics.ts';
 import { type Ctx, def, defOf, obj, other } from './context.ts';
 import { manaValue } from './cost.ts';
 import type {
@@ -43,6 +43,8 @@ export function checkCondition(
   }
   if (c.kind === 'handSize') return ctx.s.players[controller].hand.length >= c.min;
   if (c.kind === 'all') return c.of.every((x) => checkCondition(ctx, x, controller, self, targets));
+  if (c.kind === 'any') return c.of.some((x) => checkCondition(ctx, x, controller, self, targets));
+  if (c.kind === 'not') return !checkCondition(ctx, c.condition, controller, self, targets);
   if (c.kind === 'resolvedThisTurn')
     return self?.resolutions?.turn === ctx.s.turn.number && self.resolutions.count === c.n;
   if (c.kind === 'controlsPermanents')
@@ -311,19 +313,34 @@ function detect(ctx: Ctx, ev: GameEvent): void {
         (o, a) =>
           a.trigger.on === 'castSpell' &&
           o.controller === ev.player &&
-          spellMatches(ctx, a.trigger, spell, item, o),
+          spellMatches(ctx, a.trigger, spell, item, o) &&
+          (!a.trigger.spell || cardMatches(ctx, ev.id, a.trigger.spell)),
         undefined,
         manaValueOf(spell),
       );
+      if (ev.nth === 2)
+        forEachBattlefieldTrigger(ctx, (_o, a) => a.trigger.on === 'anyPlayerSecondSpell');
       return;
     }
     case 'attackersDeclared': {
       const ap = s.turn.activePlayer;
+      const attackedWith = (f: CardFilter | undefined) =>
+        ev.attackers.some((id) => !!s.objects[id] && matchesFilter(ctx, id, f));
       forEachBattlefieldTrigger(ctx, (o, a) => {
         if (a.trigger.on === 'attacks') return ev.attackers.includes(o.id);
-        if (a.trigger.on === 'youAttack') return o.controller === ap && ev.attackers.length > 0;
+        if (a.trigger.on === 'youAttack')
+          return o.controller === ap && attackedWith(a.trigger.filter);
         return false;
       });
+      // From the graveyard (Persistent Marshstalker).
+      for (const id of s.players[ap].graveyard) {
+        const card = s.objects[id]!;
+        def(ctx, id).abilities.forEach((a, i) => {
+          if (a.kind !== 'triggered' || !a.fromGraveyard) return;
+          if (a.trigger.on === 'youAttack' && attackedWith(a.trigger.filter))
+            if (checkCondition(ctx, a.condition, ap, card)) queue(ctx, card, i, ap);
+        });
+      }
       // "Whenever a creature you control attacks": once per attacker.
       for (const id of ev.attackers) {
         const attacker = s.objects[id];
@@ -430,6 +447,17 @@ function detect(ctx: Ctx, ev: GameEvent): void {
         forEachBattlefieldTrigger(
           ctx,
           (o, a) => a.trigger.on === 'beginningOfCombat' && o.controller === ev.activePlayer,
+        );
+        return;
+      }
+      if (ev.step === 'main1' || ev.step === 'main2') {
+        const which = ev.step === 'main1' ? 1 : 2;
+        forEachBattlefieldTrigger(
+          ctx,
+          (o, a) =>
+            a.trigger.on === 'beginningOfMain' &&
+            a.trigger.which === which &&
+            o.controller === ev.activePlayer,
         );
         return;
       }

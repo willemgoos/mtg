@@ -4,7 +4,14 @@ import { type Ctx, def, obj } from './context.ts';
 import { forageChoices } from './forage.ts';
 import { canPayFrom, manaSources } from './mana.ts';
 import { castVariants } from './spells.ts';
-import { castCost, countersYouControl, hasStatic, wardCost, wardLife } from './stack.ts';
+import {
+  castCost,
+  countersYouControl,
+  hasStatic,
+  wardCost,
+  wardLife,
+  wardPayable,
+} from './stack.ts';
 import { addCosts } from './spells.ts';
 import { checkCondition, triggeredAbility } from './triggers.ts';
 
@@ -129,7 +136,7 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
         sacrifice: v.sacrifice ? 'x' : undefined,
         forage: v.forage ? 'graveyard' : undefined,
       });
-      if (!canPayFrom(base, pool)) continue;
+      if (!canPayFrom(base, pool) && !d.costReductionIfTarget) continue;
       const extra = {
         ...(v.mode !== undefined ? { mode: v.mode } : {}),
         ...(v.kicked ? { kicked: true } : {}),
@@ -139,8 +146,14 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
       for (const sacrifice of v.sacrifice ? creatures : [undefined]) {
         for (const targets of combosFor(specs, card, sacrifice)) {
           const ward = wardCost(ctx, player, targets);
-          if (ward.generic && !canPayFrom(addCosts(base, ward), pool)) continue;
+          // Dire Downdraft costs less with some targets.
+          const cost = d.costReductionIfTarget
+            ? castCost(ctx, player, card, { mode: v.mode, kicked: v.kicked }, targets)
+            : base;
+          if ((ward.generic || d.costReductionIfTarget) && !canPayFrom(addCosts(cost, ward), pool))
+            continue;
           if (wardLife(ctx, player, targets) > s.players[player].life) continue;
+          if (!wardPayable(ctx, player, targets, zone === 'hand' ? 1 : 0)) continue;
           for (const forage of forages)
             out.push({
               type: 'castSpell',
@@ -167,6 +180,8 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
       if (!!a.fromGraveyard !== inGraveyard) return;
       if (a.sorcerySpeed && !sorcery) return;
       if (a.once && obj(ctx, source).usedAbilities?.includes(abilityIndex)) return;
+      if (a.oncePerTurn && obj(ctx, source).onceTurns?.[-1 - abilityIndex] === s.turn.number)
+        return;
       if (a.cost.tapSelf && !canTapForAbility(ctx, source)) return;
       if (a.condition && !checkCondition(ctx, a.condition, player, obj(ctx, source))) return;
       if ((a.cost.life ?? 0) > ps.life) return;
@@ -183,6 +198,7 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
         for (const targets of combosFor(a.targets, source, sacrifice)) {
           const ward = wardCost(ctx, player, targets);
           if (ward.generic && !canPayFrom(addCosts(a.cost.mana ?? NO_COST, ward), usable)) continue;
+          if (!wardPayable(ctx, player, targets)) continue;
           for (const forage of forages)
             out.push({
               type: 'activateAbility',
@@ -277,6 +293,12 @@ export function getLegalActions(ctx: Ctx, player: PlayerId): Action[] {
         ...(d.graveyard ? [{ type: 'forage', player, choice: 'graveyard' } as const] : []),
         ...(d.optional ? [{ type: 'forage', player, choice: null } as const] : []),
       ];
+    case 'chooseFromHand':
+      return d.options.length
+        ? d.options.map((card) => ({ type: 'chooseCard', player, card }) as const)
+        : [{ type: 'chooseCard', player, card: null }];
+    case 'chooseOption':
+      return d.options.map((_, index) => ({ type: 'chooseOption', player, index }) as const);
     case 'forageExile':
       return s.players[player].graveyard.map(
         (card) => ({ type: 'chooseCard', player, card }) as const,
@@ -308,6 +330,7 @@ export function getLegalActions(ctx: Ctx, player: PlayerId): Action[] {
       // "You may pay" and ward: only offered if they can pay.
       const payable = (targets: TargetChoice[]) =>
         canPayFrom(addCosts(a.cost ?? NO_COST, wardCost(ctx, player, targets)), pool) &&
+        wardPayable(ctx, player, targets) &&
         (a.lifeCost ?? 0) <= s.players[player].life;
       if (a.modes) {
         a.modes.forEach((m, mode) => {

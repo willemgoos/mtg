@@ -11,6 +11,7 @@ import {
 import {
   choosePickExiled,
   chooseForageExile,
+  chooseFromHand,
   choosePile,
   chooseSplit,
   choosePunishment,
@@ -74,6 +75,7 @@ function passiveAction(
     case 'chooseTriggerTargets':
     case 'optionalEffect':
     case 'forage':
+    case 'chooseOption':
       return bestByEvaluation(
         engine,
         s,
@@ -96,6 +98,8 @@ function passiveAction(
       return chooseSplit(engine, s, d.player, engine.getLegalActions(s, d.player));
     case 'choosePile':
       return choosePile(s, d.player);
+    case 'chooseFromHand':
+      return chooseFromHand(engine, s, engine.getLegalActions(s, d.player));
     case 'forageExile':
       return chooseForageExile(engine, s, engine.getLegalActions(s, d.player));
     default:

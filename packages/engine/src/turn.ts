@@ -12,7 +12,7 @@ import { checkGameOver, runSBAs } from './sba.ts';
 import { pushTrigger, resolveTop } from './stack.ts';
 import { targetCombos } from './targets.ts';
 import { collectTriggers, nextPendingTriggerIndex, triggeredAbility } from './triggers.ts';
-import type { ObjectId, PlayerId, Step } from './types.ts';
+import type { ContinuousEffect, ObjectId, PlayerId, Step } from './types.ts';
 
 export const HAND_SIZE = 7;
 
@@ -133,7 +133,10 @@ export function startTurn(ctx: Ctx, player: PlayerId): void {
   s.turn.cardsDrawn = { p1: 0, p2: 0 };
   s.turn.manaSpent = { p1: 0, p2: 0 };
   s.turn.lifeLost = { p1: 0, p2: 0 };
+  s.turn.spellsCast = { p1: 0, p2: 0 };
+  s.turn.creaturesExiled = { p1: 0, p2: 0 };
   for (const q of Object.values(s.players)) q.attackedThisTurn = false;
+  endEffects(ctx, (e) => e.expires === 'untilYourNextTurn' && e.player === player);
   enterStep(ctx, 'untap');
 }
 
@@ -281,6 +284,23 @@ export function finishCleanup(ctx: Ctx): void {
     o.damage = 0;
     o.damagedByDeathtouch = false;
   }
-  s.effects = s.effects.filter((e) => e.expires !== 'endOfTurn');
+  endEffects(ctx, (e) => e.expires === 'endOfTurn');
   advanceStep(ctx);
+}
+
+/** Removes the matching continuous effects, undoing control changes and lost abilities. */
+function endEffects(ctx: Ctx, ending: (e: ContinuousEffect) => boolean): void {
+  const s = ctx.s;
+  const ended = s.effects.filter(ending);
+  if (ended.length === 0) return;
+  s.effects = s.effects.filter((e) => !ending(e));
+  for (const e of ended) {
+    const o = s.objects[e.affected.id];
+    if (!o || o.zone !== 'battlefield' || o.zcc !== e.affected.zcc) continue;
+    if (e.previousController) o.controller = e.previousController;
+    if (e.loseAbilities)
+      o.blank = s.effects.some(
+        (x) => x.loseAbilities && x.affected.id === o.id && x.affected.zcc === o.zcc,
+      );
+  }
 }

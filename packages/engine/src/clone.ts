@@ -39,6 +39,8 @@ export function cloneState(s: GameState): GameState {
       cardsDrawn: { ...s.turn.cardsDrawn },
       ...(s.turn.manaSpent ? { manaSpent: { ...s.turn.manaSpent } } : {}),
       ...(s.turn.lifeLost ? { lifeLost: { ...s.turn.lifeLost } } : {}),
+      ...(s.turn.spellsCast ? { spellsCast: { ...s.turn.spellsCast } } : {}),
+      ...(s.turn.creaturesExiled ? { creaturesExiled: { ...s.turn.creaturesExiled } } : {}),
     },
     combat: s.combat && {
       attackers: s.combat.attackers.map((a) => ({ ...a, blockers: a.blockers.slice() })),

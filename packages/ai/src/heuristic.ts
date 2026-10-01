@@ -13,6 +13,7 @@ import {
   chooseLandToPlay,
   choosePickExiled,
   chooseForageExile,
+  chooseFromHand,
   choosePile,
   chooseSplit,
   choosePunishment,
@@ -34,6 +35,8 @@ import { type Bot, other, viewEngine } from './view.ts';
 
 /** Minimum improvement over passing before the bot spends a card or mana. */
 const MARGIN = 0.05;
+/** A simulated outcome at least this good is a won game (see evaluate). */
+const WIN = 10000;
 
 /**
  * One-ply lookahead bot: for each legal action it simulates to the end of the
@@ -60,7 +63,10 @@ export function createHeuristicBot(db: CardDb, name = 'heuristic'): Bot {
         case 'chooseTriggerTargets':
         case 'optionalEffect':
         case 'forage':
+        case 'chooseOption':
           return bestByEvaluation(engine, view, me, legal, 'stack');
+        case 'chooseFromHand':
+          return chooseFromHand(engine, view, legal);
         case 'forageExile':
           return chooseForageExile(engine, view, legal);
         case 'scry':
@@ -195,13 +201,25 @@ export function planAttacks(
       .getLegalActions(view, me)
       .flatMap((a) => (a.type === 'addAttacker' ? [a.attacker] : [])),
   ];
+  // Attacking with everything wins the game: no need to plan.
+  const allIn = available.length ? scoreAttack(engine, view, me, available) : -Infinity;
+  if (allIn >= WIN) return available;
+  // Interchangeable attackers (same card, stats and keywords) are tried once per round.
+  const kind = (id: ObjectId) => {
+    const c = getCharacteristics(view, engine.db, id);
+    return `${view.objects[id]!.defId}|${c.power}|${c.toughness}|${[...c.keywords].sort().join()}`;
+  };
   let plan: ObjectId[] = [];
   let planScore = scoreAttack(engine, view, me, plan);
   for (;;) {
     let bestAdd: ObjectId | null = null;
     let bestScore = planScore + MARGIN;
+    const tried = new Set<string>();
     for (const id of available) {
       if (plan.includes(id)) continue;
+      const k = kind(id);
+      if (tried.has(k)) continue;
+      tried.add(k);
       const v = scoreAttack(engine, view, me, [...plan, id]);
       if (v > bestScore) {
         bestScore = v;
@@ -212,11 +230,7 @@ export function planAttacks(
     plan = [...plan, bestAdd];
     planScore = bestScore;
   }
-  if (
-    plan.length < available.length &&
-    scoreAttack(engine, view, me, available) > planScore + MARGIN
-  )
-    plan = available;
+  if (plan.length < available.length && allIn > planScore + MARGIN) plan = available;
   return plan;
 }
 

@@ -56,7 +56,21 @@ export function defOf(ctx: Ctx, defId: string): CardDefinition {
 }
 
 export function def(ctx: Ctx, id: ObjectId): CardDefinition {
-  return defOf(ctx, obj(ctx, id).defId);
+  const o = obj(ctx, id);
+  const d = defOf(ctx, o.defId);
+  return o.blank ? blankDef(d) : d;
+}
+
+const blankDefs = new WeakMap<CardDefinition, CardDefinition>();
+
+/** A definition with no abilities: what a permanent that "loses all abilities" has. */
+function blankDef(d: CardDefinition): CardDefinition {
+  let b = blankDefs.get(d);
+  if (!b) {
+    b = { ...d, abilities: [], keywords: [] };
+    blankDefs.set(d, b);
+  }
+  return b;
 }
 
 export function refOf(o: GameObject): ObjectRef {
@@ -144,6 +158,9 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
       ctx.s.effects.some((e) => e.exileIfDies && e.affected.id === id && e.affected.zcc === o.zcc))
   )
     to = 'exile';
+  if (from === 'battlefield' && to === 'graveyard' && exiledInsteadOfDying(ctx, o)) to = 'exile';
+  if (from === 'battlefield' && to === 'exile' && def(ctx, id).types.includes('Creature'))
+    (ctx.s.turn.creaturesExiled ??= { p1: 0, p2: 0 })[o.controller]++;
   // Equipment and Auras attached to it are dealt with by state-based actions.
   const returning = from === 'battlefield' ? o.exiledUntilLeaves : undefined;
   if (from === 'battlefield') {
@@ -168,6 +185,7 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
   delete o.kicked;
   delete o.counters;
   delete o.targetedByControllerTurn;
+  delete o.blank;
   delete o.resolutions;
   const src = zoneList(ctx, o, from);
   if (src) {
@@ -201,6 +219,20 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
   // "Until this leaves the battlefield": the exiled cards come back.
   for (const back of returning ?? [])
     if (ctx.s.objects[back]?.zone === 'exile') moveObject(ctx, back, 'battlefield');
+}
+
+/** Vren: an opponent controls a permanent with "exile their creatures instead". */
+function exiledInsteadOfDying(ctx: Ctx, o: GameObject): boolean {
+  if (!defOf(ctx, o.defId).types.includes('Creature')) return false;
+  return ctx.s.battlefield.some((id) => {
+    const src = ctx.s.objects[id]!;
+    return (
+      src.controller !== o.controller &&
+      def(ctx, id).abilities.some(
+        (a) => a.kind === 'static' && a.effect.kind === 'exileOpponentCreaturesInstead',
+      )
+    );
+  });
 }
 
 /** Sacrifices a permanent: its controller puts it into its owner's graveyard. */
@@ -239,6 +271,11 @@ export function tap(ctx: Ctx, id: ObjectId): void {
 export function untap(ctx: Ctx, id: ObjectId): void {
   const o = obj(ctx, id);
   if (!o.tapped) return;
+  // "If a permanent with a stun counter would become untapped, instead remove a stun counter."
+  if (o.counters?.stun) {
+    o.counters.stun--;
+    return;
+  }
   o.tapped = false;
   emit(ctx, { type: 'untapped', id });
 }

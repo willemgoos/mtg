@@ -10957,5 +10957,779 @@
    "large": "https://cards.scryfall.io/large/front/0/7/07956edf-34c1-4218-9784-ddbca13e380c.jpg?1783910820",
    "artCrop": "https://cards.scryfall.io/art_crop/front/0/7/07956edf-34c1-4218-9784-ddbca13e380c.jpg?1783910820"
   }
+ },
+ {
+  "name": "Iridescent Vinelasher",
+  "scryfallId": "b2bc854c-4e72-48e0-a098-e3451d6e511d",
+  "oracleId": "4f8c4927-46c2-4c18-b5af-c6288dbaff6d",
+  "set": "blb",
+  "collectorNumber": "99",
+  "rarity": "rare",
+  "manaCost": "{B}",
+  "typeLine": "Creature — Lizard Assassin",
+  "oracleText": "Offspring {2} (You may pay an additional {2} as you cast this spell. If you do, when this creature enters, create a 1/1 token copy of it.)\nLandfall — Whenever a land you control enters, this creature deals 1 damage to target opponent.",
+  "power": "1",
+  "toughness": "2",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Offspring",
+   "Landfall"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/2/b2bc854c-4e72-48e0-a098-e3451d6e511d.jpg?1783910833",
+   "normal": "https://cards.scryfall.io/normal/front/b/2/b2bc854c-4e72-48e0-a098-e3451d6e511d.jpg?1783910833",
+   "large": "https://cards.scryfall.io/large/front/b/2/b2bc854c-4e72-48e0-a098-e3451d6e511d.jpg?1783910833",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/2/b2bc854c-4e72-48e0-a098-e3451d6e511d.jpg?1783910833"
+  }
+ },
+ {
+  "name": "Ravine Raider",
+  "scryfallId": "874510be-7ecd-4eff-abad-b9594eb4821a",
+  "oracleId": "4c2e84dc-b4f5-4eca-af07-1c53a1caae7c",
+  "set": "blb",
+  "collectorNumber": "106",
+  "rarity": "common",
+  "manaCost": "{B}",
+  "typeLine": "Creature — Lizard Rogue",
+  "oracleText": "Menace (This creature can't be blocked except by two or more creatures.)\n{1}{B}: This creature gets +1/+1 until end of turn.",
+  "power": "1",
+  "toughness": "1",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Menace"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/7/874510be-7ecd-4eff-abad-b9594eb4821a.jpg?1783910831",
+   "normal": "https://cards.scryfall.io/normal/front/8/7/874510be-7ecd-4eff-abad-b9594eb4821a.jpg?1783910831",
+   "large": "https://cards.scryfall.io/large/front/8/7/874510be-7ecd-4eff-abad-b9594eb4821a.jpg?1783910831",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/7/874510be-7ecd-4eff-abad-b9594eb4821a.jpg?1783910831"
+  }
+ },
+ {
+  "name": "Hired Claw",
+  "scryfallId": "1ae41080-0d67-4719-adb2-49bf2a268b6c",
+  "oracleId": "031cfc7d-8bda-454b-b88a-15d3f5fe47e2",
+  "set": "blb",
+  "collectorNumber": "140",
+  "rarity": "rare",
+  "manaCost": "{R}",
+  "typeLine": "Creature — Lizard Mercenary",
+  "oracleText": "Whenever you attack with one or more Lizards, this creature deals 1 damage to target opponent.\n{1}{R}: Put a +1/+1 counter on this creature. Activate only if an opponent lost life this turn and only once each turn.",
+  "power": "1",
+  "toughness": "2",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/a/1ae41080-0d67-4719-adb2-49bf2a268b6c.jpg?1783910820",
+   "normal": "https://cards.scryfall.io/normal/front/1/a/1ae41080-0d67-4719-adb2-49bf2a268b6c.jpg?1783910820",
+   "large": "https://cards.scryfall.io/large/front/1/a/1ae41080-0d67-4719-adb2-49bf2a268b6c.jpg?1783910820",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/a/1ae41080-0d67-4719-adb2-49bf2a268b6c.jpg?1783910820"
+  }
+ },
+ {
+  "name": "Steampath Charger",
+  "scryfallId": "03bf1296-e347-4070-8c6f-5c362c2f9364",
+  "oracleId": "75237b2c-232b-479a-ab3a-e1566c8a9fe7",
+  "set": "blb",
+  "collectorNumber": "153",
+  "rarity": "common",
+  "manaCost": "{1}{R}",
+  "typeLine": "Creature — Lizard Warlock",
+  "oracleText": "Offspring {2} (You may pay an additional {2} as you cast this spell. If you do, when this creature enters, create a 1/1 token copy of it.)\nWhen this creature dies, it deals 1 damage to target player.",
+  "power": "2",
+  "toughness": "1",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Offspring"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/3/03bf1296-e347-4070-8c6f-5c362c2f9364.jpg?1783910816",
+   "normal": "https://cards.scryfall.io/normal/front/0/3/03bf1296-e347-4070-8c6f-5c362c2f9364.jpg?1783910816",
+   "large": "https://cards.scryfall.io/large/front/0/3/03bf1296-e347-4070-8c6f-5c362c2f9364.jpg?1783910816",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/3/03bf1296-e347-4070-8c6f-5c362c2f9364.jpg?1783910816"
+  }
+ },
+ {
+  "name": "Fireglass Mentor",
+  "scryfallId": "b78fbaa3-c580-4290-9c28-b74169aab2fc",
+  "oracleId": "b173245e-2009-48ff-ac42-5f28d12aec79",
+  "set": "blb",
+  "collectorNumber": "213",
+  "rarity": "uncommon",
+  "manaCost": "{B}{R}",
+  "typeLine": "Creature — Lizard Warlock",
+  "oracleText": "At the beginning of your second main phase, if an opponent lost life this turn, exile the top two cards of your library. Choose one of them. Until end of turn, you may play that card.",
+  "power": "2",
+  "toughness": "1",
+  "colors": [
+   "B",
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/7/b78fbaa3-c580-4290-9c28-b74169aab2fc.jpg?1783910796",
+   "normal": "https://cards.scryfall.io/normal/front/b/7/b78fbaa3-c580-4290-9c28-b74169aab2fc.jpg?1783910796",
+   "large": "https://cards.scryfall.io/large/front/b/7/b78fbaa3-c580-4290-9c28-b74169aab2fc.jpg?1783910796",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/7/b78fbaa3-c580-4290-9c28-b74169aab2fc.jpg?1783910796"
+  }
+ },
+ {
+  "name": "Gev, Scaled Scorch",
+  "scryfallId": "131ea976-289e-4f32-896d-27bbfd423ba9",
+  "oracleId": "77b832a8-a3af-44fe-bc67-72510d292667",
+  "set": "blb",
+  "collectorNumber": "214",
+  "rarity": "rare",
+  "manaCost": "{B}{R}",
+  "typeLine": "Legendary Creature — Lizard Mercenary",
+  "oracleText": "Ward—Pay 2 life.\nOther creatures you control enter with an additional +1/+1 counter on them for each opponent who lost life this turn.\nWhenever you cast a Lizard spell, Gev deals 1 damage to target opponent.",
+  "power": "3",
+  "toughness": "2",
+  "colors": [
+   "B",
+   "R"
+  ],
+  "keywords": [
+   "Ward"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/3/131ea976-289e-4f32-896d-27bbfd423ba9.jpg?1783910797",
+   "normal": "https://cards.scryfall.io/normal/front/1/3/131ea976-289e-4f32-896d-27bbfd423ba9.jpg?1783910797",
+   "large": "https://cards.scryfall.io/large/front/1/3/131ea976-289e-4f32-896d-27bbfd423ba9.jpg?1783910797",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/3/131ea976-289e-4f32-896d-27bbfd423ba9.jpg?1783910797"
+  }
+ },
+ {
+  "name": "Cindering Cutthroat",
+  "scryfallId": "b2ea10dd-21ea-4622-be27-79d03a802b85",
+  "oracleId": "46e8bec0-1a09-4e6e-b78a-7ba161686ca9",
+  "set": "blb",
+  "collectorNumber": "208",
+  "rarity": "common",
+  "manaCost": "{2}{B/R}",
+  "typeLine": "Creature — Lizard Assassin",
+  "oracleText": "This creature enters with a +1/+1 counter on it if an opponent lost life this turn.\n{1}{B/R}: This creature gains menace until end of turn. (It can't be blocked except by two or more creatures.)",
+  "power": "3",
+  "toughness": "2",
+  "colors": [
+   "B",
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/2/b2ea10dd-21ea-4622-be27-79d03a802b85.jpg?1783910799",
+   "normal": "https://cards.scryfall.io/normal/front/b/2/b2ea10dd-21ea-4622-be27-79d03a802b85.jpg?1783910799",
+   "large": "https://cards.scryfall.io/large/front/b/2/b2ea10dd-21ea-4622-be27-79d03a802b85.jpg?1783910799",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/2/b2ea10dd-21ea-4622-be27-79d03a802b85.jpg?1783910799"
+  }
+ },
+ {
+  "name": "Thought-Stalker Warlock",
+  "scryfallId": "42e80284-d489-493b-ae92-95b742d07cb3",
+  "oracleId": "25a63171-a1a0-4c61-ac61-49bb59fe83c1",
+  "set": "blb",
+  "collectorNumber": "118",
+  "rarity": "uncommon",
+  "manaCost": "{2}{B}",
+  "typeLine": "Creature — Lizard Warlock",
+  "oracleText": "Menace (This creature can't be blocked except by two or more creatures.)\nWhen this creature enters, choose target opponent. If they lost life this turn, they reveal their hand, you choose a nonland card from it, and they discard that card. Otherwise, they discard a card.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Menace"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/2/42e80284-d489-493b-ae92-95b742d07cb3.jpg?1783910826",
+   "normal": "https://cards.scryfall.io/normal/front/4/2/42e80284-d489-493b-ae92-95b742d07cb3.jpg?1783910826",
+   "large": "https://cards.scryfall.io/large/front/4/2/42e80284-d489-493b-ae92-95b742d07cb3.jpg?1783910826",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/2/42e80284-d489-493b-ae92-95b742d07cb3.jpg?1783910826"
+  }
+ },
+ {
+  "name": "Hearthborn Battler",
+  "scryfallId": "bef1cf5c-9738-4062-8cb1-87a372d36687",
+  "oracleId": "beb02f49-95a6-49bf-b176-4e4b2ab5b651",
+  "set": "blb",
+  "collectorNumber": "139",
+  "rarity": "rare",
+  "manaCost": "{2}{R}",
+  "typeLine": "Creature — Lizard Warlock",
+  "oracleText": "Haste\nWhenever a player casts their second spell each turn, this creature deals 2 damage to target opponent.",
+  "power": "2",
+  "toughness": "3",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Haste"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/e/bef1cf5c-9738-4062-8cb1-87a372d36687.jpg?1783910820",
+   "normal": "https://cards.scryfall.io/normal/front/b/e/bef1cf5c-9738-4062-8cb1-87a372d36687.jpg?1783910820",
+   "large": "https://cards.scryfall.io/large/front/b/e/bef1cf5c-9738-4062-8cb1-87a372d36687.jpg?1783910820",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/e/bef1cf5c-9738-4062-8cb1-87a372d36687.jpg?1783910820"
+  }
+ },
+ {
+  "name": "Valley Flamecaller",
+  "scryfallId": "a0812db4-b7d1-4cf7-aaa5-9c0e784079a1",
+  "oracleId": "60654004-7d9a-47ac-a70d-b246dd1728d3",
+  "set": "blb",
+  "collectorNumber": "158",
+  "rarity": "rare",
+  "manaCost": "{2}{R}",
+  "typeLine": "Creature — Lizard Warlock",
+  "oracleText": "If a Lizard, Mouse, Otter, or Raccoon you control would deal damage to a permanent or player, it deals that much damage plus 1 instead.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/0/a0812db4-b7d1-4cf7-aaa5-9c0e784079a1.jpg?1783910814",
+   "normal": "https://cards.scryfall.io/normal/front/a/0/a0812db4-b7d1-4cf7-aaa5-9c0e784079a1.jpg?1783910814",
+   "large": "https://cards.scryfall.io/large/front/a/0/a0812db4-b7d1-4cf7-aaa5-9c0e784079a1.jpg?1783910814",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/0/a0812db4-b7d1-4cf7-aaa5-9c0e784079a1.jpg?1783910814"
+  }
+ },
+ {
+  "name": "Frilled Sparkshooter",
+  "scryfallId": "674bbd6d-e329-42cf-963d-88d1ce8fe51e",
+  "oracleId": "69038520-7156-48d9-aae8-ba3cc76a5993",
+  "set": "blb",
+  "collectorNumber": "136",
+  "rarity": "common",
+  "manaCost": "{3}{R}",
+  "typeLine": "Creature — Lizard Archer",
+  "oracleText": "Reach, menace\nThis creature enters with a +1/+1 counter on it if an opponent lost life this turn.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Reach",
+   "Menace"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/7/674bbd6d-e329-42cf-963d-88d1ce8fe51e.jpg?1783910821",
+   "normal": "https://cards.scryfall.io/normal/front/6/7/674bbd6d-e329-42cf-963d-88d1ce8fe51e.jpg?1783910821",
+   "large": "https://cards.scryfall.io/large/front/6/7/674bbd6d-e329-42cf-963d-88d1ce8fe51e.jpg?1783910821",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/7/674bbd6d-e329-42cf-963d-88d1ce8fe51e.jpg?1783910821"
+  }
+ },
+ {
+  "name": "Reptilian Recruiter",
+  "scryfallId": "81dec453-c9d7-42cb-980a-c82f82bede76",
+  "oracleId": "a12a66b5-ea4a-4a58-b0f0-13152598b7e6",
+  "set": "blb",
+  "collectorNumber": "149",
+  "rarity": "uncommon",
+  "manaCost": "{3}{R}{R}",
+  "typeLine": "Creature — Lizard Warrior",
+  "oracleText": "Trample\nWhen this creature enters, choose target creature. If that creature's power is 2 or less or if you control another Lizard, gain control of that creature until end of turn, untap it, and it gains haste until end of turn.",
+  "power": "4",
+  "toughness": "2",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Trample"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/1/81dec453-c9d7-42cb-980a-c82f82bede76.jpg?1783910816",
+   "normal": "https://cards.scryfall.io/normal/front/8/1/81dec453-c9d7-42cb-980a-c82f82bede76.jpg?1783910816",
+   "large": "https://cards.scryfall.io/large/front/8/1/81dec453-c9d7-42cb-980a-c82f82bede76.jpg?1783910816",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/1/81dec453-c9d7-42cb-980a-c82f82bede76.jpg?1783910816"
+  }
+ },
+ {
+  "name": "Scales of Shale",
+  "scryfallId": "9ae14276-dbbd-4257-80e9-accd6c19f5b2",
+  "oracleId": "655a2b78-6a6c-4b9e-b7c0-48d3768978f5",
+  "set": "blb",
+  "collectorNumber": "110",
+  "rarity": "common",
+  "manaCost": "{2}{B}",
+  "typeLine": "Instant",
+  "oracleText": "Affinity for Lizards (This spell costs {1} less to cast for each Lizard you control.)\nTarget creature gets +2/+0 and gains lifelink and indestructible until end of turn.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Affinity"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/a/9ae14276-dbbd-4257-80e9-accd6c19f5b2.jpg?1783910830",
+   "normal": "https://cards.scryfall.io/normal/front/9/a/9ae14276-dbbd-4257-80e9-accd6c19f5b2.jpg?1783910830",
+   "large": "https://cards.scryfall.io/large/front/9/a/9ae14276-dbbd-4257-80e9-accd6c19f5b2.jpg?1783910830",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/a/9ae14276-dbbd-4257-80e9-accd6c19f5b2.jpg?1783910830"
+  }
+ },
+ {
+  "name": "Agate Assault",
+  "scryfallId": "7dd9946b-515e-4e0d-9da2-711e126e9fa6",
+  "oracleId": "7b89b7d2-c724-4d5d-9f0b-7d3302ad1168",
+  "set": "blb",
+  "collectorNumber": "122",
+  "rarity": "common",
+  "manaCost": "{2}{R}",
+  "typeLine": "Sorcery",
+  "oracleText": "Choose one —\n• Agate Assault deals 4 damage to target creature. If that creature would die this turn, exile it instead.\n• Exile target artifact.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/d/7dd9946b-515e-4e0d-9da2-711e126e9fa6.jpg?1783910826",
+   "normal": "https://cards.scryfall.io/normal/front/7/d/7dd9946b-515e-4e0d-9da2-711e126e9fa6.jpg?1783910826",
+   "large": "https://cards.scryfall.io/large/front/7/d/7dd9946b-515e-4e0d-9da2-711e126e9fa6.jpg?1783910826",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/d/7dd9946b-515e-4e0d-9da2-711e126e9fa6.jpg?1783910826"
+  }
+ },
+ {
+  "name": "Conduct Electricity",
+  "scryfallId": "2f373dd6-2412-453c-85ba-10230dfe473a",
+  "oracleId": "0369627e-3b83-4e5b-a8af-a99f944443b3",
+  "set": "blb",
+  "collectorNumber": "130",
+  "rarity": "common",
+  "manaCost": "{4}{R}",
+  "typeLine": "Instant",
+  "oracleText": "Conduct Electricity deals 6 damage to target creature and 2 damage to up to one target creature token.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/f/2f373dd6-2412-453c-85ba-10230dfe473a.jpg?1783910823",
+   "normal": "https://cards.scryfall.io/normal/front/2/f/2f373dd6-2412-453c-85ba-10230dfe473a.jpg?1783910823",
+   "large": "https://cards.scryfall.io/large/front/2/f/2f373dd6-2412-453c-85ba-10230dfe473a.jpg?1783910823",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/f/2f373dd6-2412-453c-85ba-10230dfe473a.jpg?1783910823"
+  }
+ },
+ {
+  "name": "Thought Shucker",
+  "scryfallId": "44b0d83b-cc41-4f82-892c-ef6d3293228a",
+  "oracleId": "33f4fcd5-4eea-4146-a564-da5511a8ee0a",
+  "set": "blb",
+  "collectorNumber": "77",
+  "rarity": "common",
+  "manaCost": "{1}{U}",
+  "typeLine": "Creature — Rat Rogue",
+  "oracleText": "Threshold — {1}{U}: Put a +1/+1 counter on this creature and draw a card. Activate only if there are seven or more cards in your graveyard and only once.",
+  "power": "1",
+  "toughness": "3",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Threshold"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/4/44b0d83b-cc41-4f82-892c-ef6d3293228a.jpg?1783910840",
+   "normal": "https://cards.scryfall.io/normal/front/4/4/44b0d83b-cc41-4f82-892c-ef6d3293228a.jpg?1783910840",
+   "large": "https://cards.scryfall.io/large/front/4/4/44b0d83b-cc41-4f82-892c-ef6d3293228a.jpg?1783910840",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/4/44b0d83b-cc41-4f82-892c-ef6d3293228a.jpg?1783910840"
+  }
+ },
+ {
+  "name": "Shoreline Looter",
+  "scryfallId": "d5bf8cf0-419a-4dc9-9342-aad55c1af05a",
+  "oracleId": "c15cad77-e70f-42cc-a9f5-50e1fd8c9c96",
+  "set": "blb",
+  "collectorNumber": "70",
+  "rarity": "uncommon",
+  "manaCost": "{1}{U}",
+  "typeLine": "Creature — Rat Rogue",
+  "oracleText": "This creature can't be blocked.\nThreshold — Whenever this creature deals combat damage to a player, draw a card. Then discard a card unless there are seven or more cards in your graveyard.",
+  "power": "1",
+  "toughness": "1",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Threshold"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/5/d5bf8cf0-419a-4dc9-9342-aad55c1af05a.jpg?1783910842",
+   "normal": "https://cards.scryfall.io/normal/front/d/5/d5bf8cf0-419a-4dc9-9342-aad55c1af05a.jpg?1783910842",
+   "large": "https://cards.scryfall.io/large/front/d/5/d5bf8cf0-419a-4dc9-9342-aad55c1af05a.jpg?1783910842",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/5/d5bf8cf0-419a-4dc9-9342-aad55c1af05a.jpg?1783910842"
+  }
+ },
+ {
+  "name": "Persistent Marshstalker",
+  "scryfallId": "8b900c71-713b-4b7e-b4be-ad9f4aa0c139",
+  "oracleId": "77eb76cf-a361-44e0-aeee-e8ef4b695799",
+  "set": "blb",
+  "collectorNumber": "104",
+  "rarity": "uncommon",
+  "manaCost": "{1}{B}",
+  "typeLine": "Creature — Rat Berserker",
+  "oracleText": "This creature gets +1/+0 for each other Rat you control.\nThreshold — Whenever you attack with one or more Rats, if there are seven or more cards in your graveyard, you may pay {2}{B}. If you do, return this card from your graveyard to the battlefield tapped and attacking.",
+  "power": "3",
+  "toughness": "1",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Threshold"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/b/8b900c71-713b-4b7e-b4be-ad9f4aa0c139.jpg?1783910832",
+   "normal": "https://cards.scryfall.io/normal/front/8/b/8b900c71-713b-4b7e-b4be-ad9f4aa0c139.jpg?1783910832",
+   "large": "https://cards.scryfall.io/large/front/8/b/8b900c71-713b-4b7e-b4be-ad9f4aa0c139.jpg?1783910832",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/b/8b900c71-713b-4b7e-b4be-ad9f4aa0c139.jpg?1783910832"
+  }
+ },
+ {
+  "name": "Azure Beastbinder",
+  "scryfallId": "211af1bf-910b-41a5-b928-f378188d1871",
+  "oracleId": "7bb51602-60e8-4730-b11c-2870d6b42e20",
+  "set": "blb",
+  "collectorNumber": "41",
+  "rarity": "rare",
+  "manaCost": "{1}{U}",
+  "typeLine": "Creature — Rat Rogue",
+  "oracleText": "Vigilance\nThis creature can't be blocked by creatures with power 2 or greater.\nWhenever this creature attacks, up to one target artifact, creature, or planeswalker an opponent controls loses all abilities until your next turn. If it's a creature, it also has base power and toughness 2/2 until your next turn.",
+  "power": "1",
+  "toughness": "3",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Vigilance"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/1/211af1bf-910b-41a5-b928-f378188d1871.jpg?1783910852",
+   "normal": "https://cards.scryfall.io/normal/front/2/1/211af1bf-910b-41a5-b928-f378188d1871.jpg?1783910852",
+   "large": "https://cards.scryfall.io/large/front/2/1/211af1bf-910b-41a5-b928-f378188d1871.jpg?1783910852",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/1/211af1bf-910b-41a5-b928-f378188d1871.jpg?1783910852"
+  }
+ },
+ {
+  "name": "Nightwhorl Hermit",
+  "scryfallId": "0928e04f-2568-41e8-b603-7a25cf5f94d0",
+  "oracleId": "99007c40-1eb5-4c3a-9889-6d12417d8191",
+  "set": "blb",
+  "collectorNumber": "62",
+  "rarity": "common",
+  "manaCost": "{2}{U}",
+  "typeLine": "Creature — Rat Rogue",
+  "oracleText": "Vigilance\nThreshold — As long as there are seven or more cards in your graveyard, this creature gets +1/+0 and can't be blocked.",
+  "power": "1",
+  "toughness": "4",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Vigilance",
+   "Threshold"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/9/0928e04f-2568-41e8-b603-7a25cf5f94d0.jpg?1783910846",
+   "normal": "https://cards.scryfall.io/normal/front/0/9/0928e04f-2568-41e8-b603-7a25cf5f94d0.jpg?1783910846",
+   "large": "https://cards.scryfall.io/large/front/0/9/0928e04f-2568-41e8-b603-7a25cf5f94d0.jpg?1783910846",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/9/0928e04f-2568-41e8-b603-7a25cf5f94d0.jpg?1783910846"
+  }
+ },
+ {
+  "name": "Mindwhisker",
+  "scryfallId": "aaa10f34-5bfd-4d87-8f07-58de3b0f5663",
+  "oracleId": "f823b122-94ac-42ba-b511-9e54d64db112",
+  "set": "blb",
+  "collectorNumber": "60",
+  "rarity": "uncommon",
+  "manaCost": "{2}{U}",
+  "typeLine": "Creature — Rat Wizard",
+  "oracleText": "At the beginning of your upkeep, surveil 1. (Look at the top card of your library. You may put it into your graveyard.)\nThreshold — As long as there are seven or more cards in your graveyard, creatures your opponents control get -1/-0.",
+  "power": "3",
+  "toughness": "2",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Surveil",
+   "Threshold"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/a/aaa10f34-5bfd-4d87-8f07-58de3b0f5663.jpg?1783910846",
+   "normal": "https://cards.scryfall.io/normal/front/a/a/aaa10f34-5bfd-4d87-8f07-58de3b0f5663.jpg?1783910846",
+   "large": "https://cards.scryfall.io/large/front/a/a/aaa10f34-5bfd-4d87-8f07-58de3b0f5663.jpg?1783910846",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/a/aaa10f34-5bfd-4d87-8f07-58de3b0f5663.jpg?1783910846"
+  }
+ },
+ {
+  "name": "Mind Drill Assailant",
+  "scryfallId": "507ba708-ca9b-453e-b4c2-23b6650eb5a8",
+  "oracleId": "3b10ab39-3050-475c-af8b-f293794d498c",
+  "set": "blb",
+  "collectorNumber": "225",
+  "rarity": "common",
+  "manaCost": "{2}{U/B}{U/B}",
+  "typeLine": "Creature — Rat Warlock",
+  "oracleText": "Threshold — As long as there are seven or more cards in your graveyard, this creature gets +3/+0.\n{2}{U/B}: Surveil 1. (Look at the top card of your library. You may put it into your graveyard.)",
+  "power": "2",
+  "toughness": "5",
+  "colors": [
+   "B",
+   "U"
+  ],
+  "keywords": [
+   "Surveil",
+   "Threshold"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/0/507ba708-ca9b-453e-b4c2-23b6650eb5a8.jpg?1783910793",
+   "normal": "https://cards.scryfall.io/normal/front/5/0/507ba708-ca9b-453e-b4c2-23b6650eb5a8.jpg?1783910793",
+   "large": "https://cards.scryfall.io/large/front/5/0/507ba708-ca9b-453e-b4c2-23b6650eb5a8.jpg?1783910793",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/0/507ba708-ca9b-453e-b4c2-23b6650eb5a8.jpg?1783910793"
+  }
+ },
+ {
+  "name": "Tidecaller Mentor",
+  "scryfallId": "fa10ffac-7cc2-41ef-b8a0-9431923c0542",
+  "oracleId": "e75e40a5-a9ae-4789-96c1-0e19d1ce59c5",
+  "set": "blb",
+  "collectorNumber": "236",
+  "rarity": "uncommon",
+  "manaCost": "{1}{U}{B}",
+  "typeLine": "Creature — Rat Wizard",
+  "oracleText": "Menace\nThreshold — When this creature enters, if there are seven or more cards in your graveyard, return up to one target nonland permanent to its owner's hand.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "B",
+   "U"
+  ],
+  "keywords": [
+   "Threshold",
+   "Menace"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/a/fa10ffac-7cc2-41ef-b8a0-9431923c0542.jpg?1783910789",
+   "normal": "https://cards.scryfall.io/normal/front/f/a/fa10ffac-7cc2-41ef-b8a0-9431923c0542.jpg?1783910789",
+   "large": "https://cards.scryfall.io/large/front/f/a/fa10ffac-7cc2-41ef-b8a0-9431923c0542.jpg?1783910789",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/a/fa10ffac-7cc2-41ef-b8a0-9431923c0542.jpg?1783910789"
+  }
+ },
+ {
+  "name": "Wick, the Whorled Mind",
+  "scryfallId": "29089810-d7fb-4abe-b729-bfabed6aed2b",
+  "oracleId": "5af729e8-8a40-4991-8270-612e377451de",
+  "set": "blb",
+  "collectorNumber": "120",
+  "rarity": "rare",
+  "manaCost": "{3}{B}",
+  "typeLine": "Legendary Creature — Rat Warlock",
+  "oracleText": "Whenever Wick or another Rat you control enters, create a 1/1 black Snail creature token if you don't control a Snail. Otherwise, put a +1/+1 counter on a Snail you control.\n{U}{B}{R}, Sacrifice a Snail: Wick deals damage equal to the sacrificed creature's power to each opponent. Then draw cards equal to the sacrificed creature's power.",
+  "power": "2",
+  "toughness": "4",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/9/29089810-d7fb-4abe-b729-bfabed6aed2b.jpg?1783910825",
+   "normal": "https://cards.scryfall.io/normal/front/2/9/29089810-d7fb-4abe-b729-bfabed6aed2b.jpg?1783910825",
+   "large": "https://cards.scryfall.io/large/front/2/9/29089810-d7fb-4abe-b729-bfabed6aed2b.jpg?1783910825",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/9/29089810-d7fb-4abe-b729-bfabed6aed2b.jpg?1783910825"
+  }
+ },
+ {
+  "name": "Vren, the Relentless",
+  "scryfallId": "6506277d-f031-4db5-9d16-bf2389094785",
+  "oracleId": "1216900e-93e3-41a4-b354-9c81938639c2",
+  "set": "blb",
+  "collectorNumber": "239",
+  "rarity": "rare",
+  "manaCost": "{2}{U}{B}",
+  "typeLine": "Legendary Creature — Rat Rogue",
+  "oracleText": "Ward {2}\nIf a creature an opponent controls would die, exile it instead.\nAt the beginning of each end step, create X 1/1 black Rat creature tokens with \"This token gets +1/+1 for each other Rat you control,\" where X is the number of creatures that were exiled under your opponents' control this turn.",
+  "power": "3",
+  "toughness": "4",
+  "colors": [
+   "B",
+   "U"
+  ],
+  "keywords": [
+   "Ward"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/5/6506277d-f031-4db5-9d16-bf2389094785.jpg?1783910791",
+   "normal": "https://cards.scryfall.io/normal/front/6/5/6506277d-f031-4db5-9d16-bf2389094785.jpg?1783910791",
+   "large": "https://cards.scryfall.io/large/front/6/5/6506277d-f031-4db5-9d16-bf2389094785.jpg?1783910791",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/5/6506277d-f031-4db5-9d16-bf2389094785.jpg?1783910791"
+  }
+ },
+ {
+  "name": "Psychic Whorl",
+  "scryfallId": "df900308-8432-4a0a-be21-17482026012b",
+  "oracleId": "3df4eb80-e8dd-4a9e-bd8a-b4b23fb9de6c",
+  "set": "blb",
+  "collectorNumber": "105",
+  "rarity": "common",
+  "manaCost": "{2}{B}",
+  "typeLine": "Sorcery",
+  "oracleText": "Target opponent discards two cards. Then if you control a Rat, surveil 2. (Look at the top two cards of your library, then put any number of them into your graveyard and the rest on top of your library in any order.)",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Surveil"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/f/df900308-8432-4a0a-be21-17482026012b.jpg?1783910830",
+   "normal": "https://cards.scryfall.io/normal/front/d/f/df900308-8432-4a0a-be21-17482026012b.jpg?1783910830",
+   "large": "https://cards.scryfall.io/large/front/d/f/df900308-8432-4a0a-be21-17482026012b.jpg?1783910830",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/f/df900308-8432-4a0a-be21-17482026012b.jpg?1783910830"
+  }
+ },
+ {
+  "name": "Spellgyre",
+  "scryfallId": "f6f6620a-1d40-429d-9a0c-aaeb62adaa71",
+  "oracleId": "7db31623-5dea-4165-8593-fbac568bf5b4",
+  "set": "blb",
+  "collectorNumber": "72",
+  "rarity": "uncommon",
+  "manaCost": "{2}{U}{U}",
+  "typeLine": "Instant",
+  "oracleText": "Choose one —\n• Counter target spell.\n• Surveil 2, then draw two cards. (To surveil 2, look at the top two cards of your library, then put any number of them into your graveyard and the rest on top of your library in any order.)",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Surveil"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/6/f6f6620a-1d40-429d-9a0c-aaeb62adaa71.jpg?1783910843",
+   "normal": "https://cards.scryfall.io/normal/front/f/6/f6f6620a-1d40-429d-9a0c-aaeb62adaa71.jpg?1783910843",
+   "large": "https://cards.scryfall.io/large/front/f/6/f6f6620a-1d40-429d-9a0c-aaeb62adaa71.jpg?1783910843",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/6/f6f6620a-1d40-429d-9a0c-aaeb62adaa71.jpg?1783910843"
+  }
+ },
+ {
+  "name": "Long River's Pull",
+  "scryfallId": "1c81d0fa-81a1-4f9b-a5fd-5a648fd01dea",
+  "oracleId": "f1993767-1d07-49c8-b8dc-04ec9840a999",
+  "set": "blb",
+  "collectorNumber": "58",
+  "rarity": "uncommon",
+  "manaCost": "{U}{U}",
+  "typeLine": "Instant",
+  "oracleText": "Gift a card (You may promise an opponent a gift as you cast this spell. If you do, they draw a card before its other effects.)\nCounter target creature spell. If the gift was promised, instead counter target spell.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Gift"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/c/1c81d0fa-81a1-4f9b-a5fd-5a648fd01dea.jpg?1783910847",
+   "normal": "https://cards.scryfall.io/normal/front/1/c/1c81d0fa-81a1-4f9b-a5fd-5a648fd01dea.jpg?1783910847",
+   "large": "https://cards.scryfall.io/large/front/1/c/1c81d0fa-81a1-4f9b-a5fd-5a648fd01dea.jpg?1783910847",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/c/1c81d0fa-81a1-4f9b-a5fd-5a648fd01dea.jpg?1783910847"
+  }
+ },
+ {
+  "name": "Dire Downdraft",
+  "scryfallId": "f1931f22-974c-43ad-911e-684bf3f9995d",
+  "oracleId": "a45065e9-951a-4c6d-80b6-bd86a49f7439",
+  "set": "blb",
+  "collectorNumber": "46",
+  "rarity": "common",
+  "manaCost": "{3}{U}",
+  "typeLine": "Instant",
+  "oracleText": "This spell costs {1} less to cast if it targets an attacking or tapped creature.\nTarget creature's owner puts it on their choice of the top or bottom of their library.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/1/f1931f22-974c-43ad-911e-684bf3f9995d.jpg?1783910851",
+   "normal": "https://cards.scryfall.io/normal/front/f/1/f1931f22-974c-43ad-911e-684bf3f9995d.jpg?1783910851",
+   "large": "https://cards.scryfall.io/large/front/f/1/f1931f22-974c-43ad-911e-684bf3f9995d.jpg?1783910851",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/1/f1931f22-974c-43ad-911e-684bf3f9995d.jpg?1783910851"
+  }
+ },
+ {
+  "name": "Run Away Together",
+  "scryfallId": "e598eb7b-10dc-49e6-ac60-2fefa987173e",
+  "oracleId": "290faa28-450e-4797-9a8f-642d8af3f82a",
+  "set": "fdn",
+  "collectorNumber": "162",
+  "rarity": "common",
+  "manaCost": "{1}{U}",
+  "typeLine": "Instant",
+  "oracleText": "Choose two target creatures controlled by different players. Return those creatures to their owners' hands.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/5/e598eb7b-10dc-49e6-ac60-2fefa987173e.jpg?1783909078",
+   "normal": "https://cards.scryfall.io/normal/front/e/5/e598eb7b-10dc-49e6-ac60-2fefa987173e.jpg?1783909078",
+   "large": "https://cards.scryfall.io/large/front/e/5/e598eb7b-10dc-49e6-ac60-2fefa987173e.jpg?1783909078",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/5/e598eb7b-10dc-49e6-ac60-2fefa987173e.jpg?1783909078"
+  }
+ },
+ {
+  "name": "Into the Flood Maw",
+  "scryfallId": "50b9575a-53d9-4df7-b86c-cda021107d3f",
+  "oracleId": "8cb36a67-9206-4665-a03f-64f52ba559c4",
+  "set": "blb",
+  "collectorNumber": "52",
+  "rarity": "uncommon",
+  "manaCost": "{U}",
+  "typeLine": "Instant",
+  "oracleText": "Gift a tapped Fish (You may promise an opponent a gift as you cast this spell. If you do, they create a tapped 1/1 blue Fish creature token before its other effects.)\nReturn target creature an opponent controls to its owner's hand. If the gift was promised, instead return target nonland permanent an opponent controls to its owner's hand.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Gift"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/0/50b9575a-53d9-4df7-b86c-cda021107d3f.jpg?1783910850",
+   "normal": "https://cards.scryfall.io/normal/front/5/0/50b9575a-53d9-4df7-b86c-cda021107d3f.jpg?1783910850",
+   "large": "https://cards.scryfall.io/large/front/5/0/50b9575a-53d9-4df7-b86c-cda021107d3f.jpg?1783910850",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/0/50b9575a-53d9-4df7-b86c-cda021107d3f.jpg?1783910850"
+  }
+ },
+ {
+  "name": "Mind Spiral",
+  "scryfallId": "7e24fe6a-607b-49b8-9fca-cecb1e40de7f",
+  "oracleId": "03e356ae-f1e8-4730-8d2b-b9e2f32db915",
+  "set": "blb",
+  "collectorNumber": "59",
+  "rarity": "common",
+  "manaCost": "{4}{U}",
+  "typeLine": "Sorcery",
+  "oracleText": "Gift a tapped Fish (You may promise an opponent a gift as you cast this spell. If you do, they create a tapped 1/1 blue Fish creature token before its other effects.)\nTarget player draws three cards. If the gift was promised, tap target creature an opponent controls and put a stun counter on it. (If a permanent with a stun counter would become untapped, remove one from it instead.)",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Gift"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/e/7e24fe6a-607b-49b8-9fca-cecb1e40de7f.jpg?1783910846",
+   "normal": "https://cards.scryfall.io/normal/front/7/e/7e24fe6a-607b-49b8-9fca-cecb1e40de7f.jpg?1783910846",
+   "large": "https://cards.scryfall.io/large/front/7/e/7e24fe6a-607b-49b8-9fca-cecb1e40de7f.jpg?1783910846",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/e/7e24fe6a-607b-49b8-9fca-cecb1e40de7f.jpg?1783910846"
+  }
  }
 ]

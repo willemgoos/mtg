@@ -496,6 +496,10 @@ export function Board({
             : {}),
         };
       }
+      case 'chooseOption':
+        return { prompt: `${nameOf(d.resume.sourceDefId)}: choose one` };
+      case 'chooseFromHand':
+        return { prompt: 'Choose a card from your opponent’s hand' };
       case 'forageExile':
         return {
           prompt: `Forage: exile ${d.count} more card${d.count > 1 ? 's' : ''} from your graveyard`,
@@ -933,6 +937,59 @@ export function Board({
                     {a.accept ? 'Use ability' : 'Decline'}
                   </button>
                 ),
+            )}
+          </div>
+        </div>
+      )}
+      {d.kind === 'chooseOption' && d.player === HUMAN && (
+        <div className="menu">
+          <div className="menu__box">
+            <div className="menu__title">{nameOf(d.resume.sourceDefId)}: choose one</div>
+            {d.options.map((o, index) => (
+              <button
+                key={o.label}
+                className="btn btn--ghost"
+                onClick={() => act({ type: 'chooseOption', player: HUMAN, index })}
+              >
+                {o.label}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+      {d.kind === 'chooseFromHand' && d.player === HUMAN && (
+        <div className="overlay overlay--mull">
+          <div className="mull">
+            <h2>{nameOf(d.resume.sourceDefId)}</h2>
+            <p>
+              Your opponent reveals their hand. Choose a card to{' '}
+              {d.then === 'discard' ? 'discard' : 'exile'}.
+            </p>
+            <div className="mull__hand">
+              {view.players[d.from].hand.map((id, i) => (
+                <div key={id} className="mull__card" style={{ '--i': i } as React.CSSProperties}>
+                  <Card
+                    id={id}
+                    defId={view.objects[id]!.defId}
+                    size="mull"
+                    mark={d.options.includes(id) ? 'option' : null}
+                    {...(d.options.includes(id)
+                      ? { onClick: () => act({ type: 'chooseCard', player: HUMAN, card: id }) }
+                      : {})}
+                    onHover={setHover}
+                  />
+                </div>
+              ))}
+            </div>
+            {d.options.length === 0 && (
+              <div className="mull__buttons">
+                <button
+                  className="btn btn--ghost"
+                  onClick={() => act({ type: 'chooseCard', player: HUMAN, card: null })}
+                >
+                  Nothing to choose
+                </button>
+              </div>
             )}
           </div>
         </div>

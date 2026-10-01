@@ -2182,6 +2182,21 @@ export const TOKENS: CardDefinition[] = [
   token('squirrel-token', 'Squirrel', 'G', ['Squirrel'], 1, 1),
   token('fish-token', 'Fish', 'U', ['Fish'], 1, 1),
   token('bat-token', 'Bat', 'B', ['Bat'], 1, 1, ['flying']),
+  token('snail-token', 'Snail', 'B', ['Snail'], 1, 1),
+  {
+    // Vren's Rats: "This token gets +1/+1 for each other Rat you control."
+    ...token('vren-rat-token', 'Rat', 'B', ['Rat'], 1, 1),
+    abilities: [
+      {
+        kind: 'static',
+        effect: {
+          kind: 'boost',
+          power: { count: 'creaturesYouControl', subtype: 'Rat', other: true },
+          toughness: { count: 'creaturesYouControl', subtype: 'Rat', other: true },
+        },
+      },
+    ],
+  },
   {
     ...artifactToken('cragflame-token', 'Cragflame', [
       {

@@ -61,6 +61,10 @@ const KEYWORDS: Record<Keyword, { name: string; text: string }> = {
     name: 'Ward {2}',
     text: 'Whenever this becomes the target of a spell or ability an opponent controls, counter it unless that player pays {2}.',
   },
+  wardOne: {
+    name: 'Ward {1}',
+    text: 'Whenever this becomes the target of a spell or ability an opponent controls, counter it unless that player pays {1}.',
+  },
 };
 
 const MECHANICS: Record<string, string> = {

@@ -36,7 +36,10 @@ export function redactFor(state: GameState, viewer: PlayerId, db?: CardDb): Game
         ? knownLibraryCards(state, viewer, db)
         : d.kind === 'choosePile' && d.player === viewer && d.owner === p
           ? d.faceUp
-          : [];
+          : // They reveal their hand while the viewer chooses from it.
+            d.kind === 'chooseFromHand' && d.player === viewer && d.from === p
+            ? ps.hand
+            : [];
     for (const id of hidden) if (!seen.includes(id)) s.objects[id]!.defId = HIDDEN_CARD;
   }
   s.seed = 0;

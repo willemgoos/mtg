@@ -51,7 +51,9 @@ export type Keyword =
   /** Can't be the target of instants an opponent controls (Elenda). */
   | 'hexproofFromInstants'
   /** Ward: targeting it costs an opponent `CardDefinition.wardCost` (default {2}). */
-  | 'ward';
+  | 'ward'
+  /** Ward {1}, granted by another permanent (Long River Lurker, Innkeeper's Talent). */
+  | 'wardOne';
 
 /** What an instant or sorcery (or one of its modes) does when it resolves. */
 export interface SpellDef {
@@ -85,7 +87,7 @@ export interface CardDefinition {
   /** "As an additional cost to cast this spell, sacrifice a creature" (Arbiter of Woe). */
   sacrificeCreatureToCast?: boolean;
   /** What ward costs an opponent (default {2}). Ovika: {3} and 3 life. */
-  wardCost?: { mana: ManaCost; life?: number };
+  wardCost?: { mana: ManaCost; life?: number; discard?: boolean; sacrificeFood?: boolean };
   /** "This spell can't be countered." */
   uncounterable?: boolean;
   /** "Cast this spell only if ..." (Confront the Assault). */
@@ -111,6 +113,8 @@ export interface CardDefinition {
      */
     as?: 'offspring' | 'gift';
   };
+  /** Costs {amount} less if its first target matches (Dire Downdraft: an attacking or tapped creature). */
+  costReductionIfTarget?: { filter: CardFilter; amount: number };
   /** "As an additional cost to cast this spell, forage or pay this" (Feed the Cycle). */
   forageOrPay?: ManaCost;
   /** Aura: what it enchants (chosen as a target when cast). */
@@ -144,6 +148,8 @@ export type AbilityDef =
       condition?: ConditionDef;
       /** "Activate only once." */
       once?: boolean;
+      /** "Activate only once each turn." */
+      oncePerTurn?: boolean;
       /** Activated from the graveyard (Reassembling Skeleton). */
       fromGraveyard?: boolean;
     }
@@ -164,6 +170,8 @@ export type AbilityDef =
       oncePerTurn?: boolean;
       /** "You may pay ... and N life": life paid with `cost` (Zoraline). */
       lifeCost?: number;
+      /** Triggers while the card is in its owner's graveyard (Persistent Marshstalker). */
+      fromGraveyard?: boolean;
     }
   | { kind: 'static'; effect: StaticDef };
 
@@ -201,13 +209,19 @@ export type TriggerDef =
   /** Whenever the creature this Equipment is attached to deals combat damage to a player. */
   | { on: 'equippedDealsCombatDamageToPlayer' }
   | { on: 'attacks' }
-  /** "Whenever you attack": once per combat in which you declare attackers. */
-  | { on: 'youAttack' }
+  /** "Whenever you attack" (with one or more creatures matching the filter): once per combat. */
+  | { on: 'youAttack'; filter?: CardFilter }
   | { on: 'combatDamageToPlayer' }
   | {
       on: 'castSpell';
       filter: 'any' | 'creature' | 'noncreature' | 'instantOrSorcery' | 'targetsSelf';
+      /** The spell must also match this (Gev: a Lizard spell). */
+      spell?: CardFilter;
     }
+  /** Whenever a player casts their second spell each turn (Hearthborn Battler). */
+  | { on: 'anyPlayerSecondSpell' }
+  /** At the beginning of your precombat or postcombat main phase. */
+  | { on: 'beginningOfMain'; which: 1 | 2 }
   /** Whenever you draw your second card each turn. */
   | { on: 'drawSecondCard' }
   | { on: 'drawCard'; whose: 'yours' | 'opponents' }
@@ -283,6 +297,10 @@ export type ConditionDef =
   | { kind: 'handSize'; min: number }
   /** Every condition holds. */
   | { kind: 'all'; of: ConditionDef[] }
+  /** At least one condition holds. */
+  | { kind: 'any'; of: ConditionDef[] }
+  /** The condition doesn't hold. */
+  | { kind: 'not'; condition: ConditionDef }
   | { kind: 'custom'; handler: string };
 
 export interface CardFilter {
@@ -374,7 +392,11 @@ export type Amount =
   /** Permanents you control matching the filter (Honored Dreyleader: Squirrels and Food). */
   | { count: 'permanentsYouControl'; filter: CardFilter; other?: boolean }
   /** The greatest mana value among cards in your graveyard (Wick's Patrol). */
-  | { count: 'greatestManaValueInGraveyard' };
+  | { count: 'greatestManaValueInGraveyard' }
+  /** Creatures your opponents controlled that were exiled this turn (Vren). */
+  | { count: 'opponentCreaturesExiledThisTurn' }
+  /** The power of the creature sacrificed to pay for this (Wick). */
+  | { sacrificedPower: true };
 
 export type EffectDef =
   | { kind: 'may'; effects: EffectDef[]; cost?: ManaCost }
@@ -400,6 +422,8 @@ export type EffectDef =
       kind: 'returnSource';
       to: 'hand' | 'battlefield';
       tapped?: boolean;
+      /** "Tapped and attacking" (Persistent Marshstalker). */
+      attacking?: boolean;
       counters?: number;
       addSubtype?: string;
     }
@@ -408,8 +432,28 @@ export type EffectDef =
   | { kind: 'exileGraveyardCard'; what: Ref; ifCreature?: EffectDef[] }
   /** Each opponent loses `life` unless they sacrifice a nonland permanent or discard a card. */
   | { kind: 'punisher'; life: number }
-  /** Exile the top N cards; choose one you may play until the end of your next turn. */
-  | { kind: 'exileTopChooseOne'; count: number }
+  /** Exile the top N cards; choose one you may play until the end of your next turn (or of this turn). */
+  | { kind: 'exileTopChooseOne'; count: number; until?: 'endOfTurn' }
+  /**
+   * Look at an opponent's hand and choose a card matching the filter; they
+   * discard it (Thought-Stalker Warlock) or it's exiled.
+   */
+  | { kind: 'chooseFromOpponentHand'; filter?: CardFilter; then: 'discard' | 'exile' }
+  /** A player chooses one of these (the owner of target `ownerOf`, or the controller). */
+  | {
+      kind: 'choose';
+      ownerOf?: number;
+      options: { label: string; effects: EffectDef[] }[];
+    }
+  /** Put permanents on the top or bottom of their owners' libraries. */
+  | { kind: 'putInLibrary'; what: Ref; position: 'top' | 'bottom' }
+  /** Gain control of permanents until end of turn (Reptilian Recruiter). */
+  | { kind: 'gainControl'; what: Ref }
+  /**
+   * Until your next turn, permanents lose all abilities (and have base power
+   * and toughness `basePT` if creatures): Azure Beastbinder.
+   */
+  | { kind: 'loseAbilities'; what: Ref; basePT?: [number, number] }
   | { kind: 'untap'; what: Ref }
   /** An additional combat phase after this one. */
   | { kind: 'extraCombat' }
@@ -505,7 +549,7 @@ export type EffectDef =
 export type StaticDef =
   | {
       kind: 'anthem';
-      affects: 'otherCreaturesYouControl' | 'creaturesYouControl';
+      affects: 'otherCreaturesYouControl' | 'creaturesYouControl' | 'creaturesOpponentsControl';
       filter?: CardFilter;
       condition?: ConditionDef;
       power: Amount;
@@ -556,7 +600,29 @@ export type StaticDef =
   /** You have no maximum hand size. */
   | { kind: 'noMaxHandSize' }
   /** Vizier: look at the top of your library any time; cast creatures from there with any mana. */
-  | { kind: 'creaturesFromTopOfLibrary' };
+  | { kind: 'creaturesFromTopOfLibrary' }
+  /** This creature gets +X/+Y (Persistent Marshstalker: +1/+0 for each other Rat you control). */
+  | { kind: 'boost'; power: Amount; toughness: Amount }
+  /** This creature can't be blocked. */
+  | { kind: 'cantBeBlocked' }
+  /** This creature can't be blocked by creatures matching the filter. */
+  | { kind: 'cantBeBlockedBy'; filter: CardFilter }
+  /** Other creatures you control enter with an additional +1/+1 counter while this holds (Gev). */
+  | { kind: 'othersEnterWithCounter'; condition: ConditionDef }
+  /**
+   * Damage from a source you control (matching the filter) is increased by
+   * `amount` (Valley Flamecaller). `noncombat`/`toOpponents`: only that damage.
+   */
+  | {
+      kind: 'damageBonus';
+      amount: number;
+      source?: CardFilter;
+      noncombat?: boolean;
+      toOpponents?: boolean;
+      condition?: ConditionDef;
+    }
+  /** Creatures your opponents control that would die are exiled instead (Vren). */
+  | { kind: 'exileOpponentCreaturesInstead' };
 
 export type CardDb = ReadonlyMap<CardDefId, CardDefinition>;
 
@@ -615,6 +681,8 @@ export interface GameObject {
   lastCounters?: number;
   /** "Triggers only once each turn": the turn each such ability (by index) last triggered. */
   onceTurns?: Record<number, number>;
+  /** It has lost all abilities (an effect until its controller's next turn). */
+  blank?: boolean;
 }
 
 /** A reference that goes stale when the object changes zones. */
@@ -708,6 +776,10 @@ export interface TurnState {
   manaSpent?: Record<PlayerId, number>;
   /** How many times each player lost life this turn. Missing in older saves. */
   lifeLost?: Record<PlayerId, number>;
+  /** Spells each player cast this turn. */
+  spellsCast?: Record<PlayerId, number>;
+  /** Creatures each player controlled that were exiled from the battlefield this turn. */
+  creaturesExiled?: Record<PlayerId, number>;
 }
 
 export interface Attacker {
@@ -734,7 +806,15 @@ export interface ContinuousEffect {
   exileIfDies?: boolean;
   cantBeBlocked?: boolean;
   returnWhenDies?: ReturnWhenDies;
-  expires: 'endOfTurn';
+  /** Loses all abilities. */
+  loseAbilities?: boolean;
+  /** Base power and toughness. */
+  basePT?: [number, number];
+  /** Control change: who controlled it before (restored when this expires). */
+  previousController?: PlayerId;
+  /** 'untilYourNextTurn': until `player`'s next turn begins. */
+  expires: 'endOfTurn' | 'untilYourNextTurn';
+  player?: PlayerId;
 }
 
 /** What an effect needs to know about the spell or ability producing it. */
@@ -865,6 +945,8 @@ export type Decision =
       kind: 'pickExiled';
       player: PlayerId;
       options: ObjectId[];
+      /** Playable only until the end of this turn (Fireglass Mentor). */
+      thisTurn?: boolean;
       resume: PausedResolution;
       thenPriority: PlayerId;
     }
@@ -909,6 +991,24 @@ export type Decision =
       then?: EffectDef[];
       resume?: PausedResolution;
       /** Who gets priority afterwards (after a cost, the player who paid it). */
+      thenPriority: PlayerId;
+    }
+  | {
+      /** Choose a card from `from`'s hand (they reveal it). */
+      kind: 'chooseFromHand';
+      player: PlayerId;
+      from: PlayerId;
+      options: ObjectId[];
+      then: 'discard' | 'exile';
+      resume: PausedResolution;
+      thenPriority: PlayerId;
+    }
+  | {
+      /** Choose one of these. */
+      kind: 'chooseOption';
+      player: PlayerId;
+      options: { label: string; effects: EffectDef[] }[];
+      resume: PausedResolution;
       thenPriority: PlayerId;
     }
   | { kind: 'gameOver' };
@@ -993,6 +1093,8 @@ export type Action =
   /** Curator of Destinies: which cards go in the face-up pile (the rest are face down). */
   | { type: 'splitPiles'; player: PlayerId; faceUp: ObjectId[] }
   | { type: 'choosePile'; player: PlayerId; pile: 'faceUp' | 'faceDown' }
+  /** Pick one of the options of a 'chooseOption' decision. */
+  | { type: 'chooseOption'; player: PlayerId; index: number }
   /** Answer a forage: a Food to sacrifice, 'graveyard' to exile three cards, or null not to. */
   | { type: 'forage'; player: PlayerId; choice: ObjectId | 'graveyard' | null }
   | { type: 'concede'; player: PlayerId };
@@ -1003,7 +1105,8 @@ export type GameEvent =
   | { type: 'lifeChanged'; player: PlayerId; delta: number; life: number }
   | { type: 'tapped'; id: ObjectId }
   | { type: 'untapped'; id: ObjectId }
-  | { type: 'spellCast'; id: ObjectId; player: PlayerId }
+  /** `nth`: how many spells that player has cast this turn, including this one. */
+  | { type: 'spellCast'; id: ObjectId; player: PlayerId; nth?: number }
   | { type: 'abilityActivated'; id: ObjectId; source: ObjectId; player: PlayerId }
   | { type: 'triggerStacked'; id: ObjectId; source: ObjectId; player: PlayerId }
   | { type: 'resolved'; id: ObjectId }

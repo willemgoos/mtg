@@ -2,6 +2,7 @@ import {
   characteristics,
   creaturesOnBattlefield,
   hasKeyword,
+  matchesFilter,
   power,
   toughness,
 } from './characteristics.ts';
@@ -32,6 +33,14 @@ export function canBlock(ctx: Ctx, blocker: ObjectId, attacker: ObjectId): boole
   const a = ctx.s.combat?.attackers.find((x) => x.id === attacker);
   if (!a || b.controller !== a.defender) return false;
   if (characteristics(ctx, attacker).cantBeBlocked) return false;
+  // "Can't be blocked by creatures with power 2 or less" (Rust-Shield Rampager).
+  for (const ab of def(ctx, attacker).abilities)
+    if (
+      ab.kind === 'static' &&
+      ab.effect.kind === 'cantBeBlockedBy' &&
+      matchesFilter(ctx, blocker, ab.effect.filter)
+    )
+      return false;
   if (
     hasKeyword(ctx, attacker, 'flying') &&
     !bc.keywords.has('flying') &&
