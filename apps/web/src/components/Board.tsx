@@ -649,6 +649,11 @@ export function Board({
             priority={priorityOf === HUMAN}
             onClick={() => onPlayer(HUMAN)}
           />
+          {!!view.players[HUMAN].pool?.length && (
+            <div className="floating-mana" title="Mana in your pool: spent first">
+              Floating {view.players[HUMAN].pool!.map((m) => `{${m.produces.join('/')}}`).join('')}
+            </div>
+          )}
           <Hand view={view} player={HUMAN} h={h} extras={extras} order={orderedHand} />
         </footer>
       </main>
@@ -846,7 +851,7 @@ export function Board({
             <div className="menu__title">{nameOf(view.objects[menu.source]!.defId)}</div>
             {menu.indices.map((i) => (
               <button key={i} className="btn btn--ghost" onClick={() => activate(menu.source, i)}>
-                Ability {i + 1}
+                {abilityLabel(view.objects[menu.source]!.defId, i)}
               </button>
             ))}
           </div>
@@ -1275,6 +1280,24 @@ function giftText(def: CardDefinition): string {
   if (gift?.kind === 'createToken')
     return `a ${gift.tapped ? 'tapped ' : ''}${cardDb.get(gift.token)?.name ?? 'token'}`;
   return 'a card';
+}
+
+/** A menu label for an activated ability: its own label, or its cost ("{1}{U}, {T}"). */
+function abilityLabel(defId: CardDefId, i: number): string {
+  const a = cardDb.get(defId)?.abilities[i];
+  if (!a || a.kind !== 'activated') return `Ability ${i + 1}`;
+  if (a.label) return a.label;
+  const c = a.cost;
+  const parts = [
+    c.mana ? manaText(c.mana) : '',
+    c.tapSelf ? '{T}' : '',
+    c.life ? `pay ${c.life} life` : '',
+    c.sacrificeSelf ? 'sacrifice it' : '',
+    c.sacrificeCreature ? 'sacrifice a creature' : '',
+    c.forage ? 'forage' : '',
+    c.exileSelf ? 'exile it' : '',
+  ].filter(Boolean);
+  return parts.join(', ') || `Ability ${i + 1}`;
 }
 
 function manaText(c: ManaCost): string {

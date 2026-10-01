@@ -243,6 +243,12 @@ export function resolveAmount(ctx: Ctx, es: EffectSource, amount: Amount): numbe
   if ('event' in amount) return es.amount ?? 0;
   if ('sacrificedPower' in amount) return Math.max(0, es.lkiPower ?? 0);
   if ('x' in amount) return (es.x ?? 0) * (amount.times ?? 1) + (amount.plus ?? 0);
+  if ('namedCountersOnSource' in amount) {
+    const o = es.source && ctx.s.objects[es.source.id];
+    if (!o) return 0;
+    const counters = o.zone === 'battlefield' ? o.counters : o.lastNamedCounters;
+    return counters?.[amount.namedCountersOnSource] ?? 0;
+  }
   if ('countersOn' in amount) {
     const id = objectsOf(ctx, es, amount.countersOn)[0];
     if (id) return obj(ctx, id).plusOneCounters;
@@ -305,7 +311,8 @@ export function runEffects(
       e.kind === 'chooseFromOpponentHand' ||
       e.kind === 'choose' ||
       e.kind === 'chooseYourPermanent' ||
-      e.kind === 'counterUnlessPays'
+      e.kind === 'counterUnlessPays' ||
+      e.kind === 'putFromHandOrGraveyard'
     ) {
       const lib = ctx.s.players[es.controller].library;
       const { controller, source, sourceDefId, targets, lkiPower, subject, amount, chosen, x } = es;
@@ -368,6 +375,23 @@ export function runEffects(
           player: controller,
           options,
           ...(e.until ? { thisTurn: true } : {}),
+          resume,
+          thenPriority,
+        };
+      } else if (e.kind === 'putFromHandOrGraveyard') {
+        const ps = ctx.s.players[controller];
+        const options = [...ps.hand, ...ps.graveyard].filter((id) =>
+          cardMatches(ctx, id, e.filter),
+        );
+        if (options.length === 0) continue;
+        ctx.s.decision = {
+          kind: 'searchLibrary',
+          player: controller,
+          options,
+          fromGraveyard: true,
+          to: 'battlefield',
+          shuffle: false,
+          ...(e.counter ? { counter: e.counter } : {}),
           resume,
           thenPriority,
         };
@@ -839,7 +863,57 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
     case 'choose':
     case 'chooseYourPermanent':
     case 'counterUnlessPays':
+    case 'putFromHandOrGraveyard':
       return; // handled by runEffects
+    case 'levelUp': {
+      const self = es.source && onBattlefield(ctx, es.source);
+      if (!self) return;
+      self.level = (self.level ?? 1) + 1;
+      emit(ctx, { type: 'levelChanged', id: self.id, level: self.level });
+      return;
+    }
+    case 'addMana': {
+      const pool = (ctx.s.players[es.controller].pool ??= []);
+      const n = e.count !== undefined ? resolveAmount(ctx, es, e.count) : 1;
+      for (let i = 0; i < n; i++)
+        for (const produces of e.mana)
+          pool.push({ produces, ...(e.untilEndOfTurn ? { untilEndOfTurn: true } : {}) });
+      return;
+    }
+    case 'discardHand':
+      for (const id of [...ctx.s.players[es.controller].hand]) moveObject(ctx, id, 'graveyard');
+      return;
+    case 'exileUntilEndStep': {
+      const step = ctx.s.turn.step;
+      const fromTurn = ctx.s.turn.number + (step === 'end' || step === 'cleanup' ? 1 : 0);
+      for (const id of objectsOf(ctx, es, e.what)) {
+        const token = obj(ctx, id).isToken;
+        moveObject(ctx, id, 'exile');
+        if (token) continue;
+        (ctx.s.delayed ??= []).push({
+          controller: es.controller,
+          sourceDefId: es.sourceDefId,
+          subject: { id, zcc: obj(ctx, id).zcc },
+          effects: [
+            {
+              kind: 'returnSubject',
+              ...(e.counters ? { counters: e.counters } : {}),
+              ...(e.named ? { named: e.named } : {}),
+            },
+          ],
+          fromTurn,
+        });
+      }
+      return;
+    }
+    case 'returnSubject': {
+      const o = es.subject && ctx.s.objects[es.subject.id];
+      if (!o || o.zone !== 'exile' || o.zcc !== es.subject!.zcc) return;
+      moveObject(ctx, o.id, 'battlefield', { controller: o.owner });
+      if (e.counters) o.plusOneCounters += e.counters;
+      if (e.named) (o.counters ??= {})[e.named] = 1;
+      return;
+    }
     case 'blink':
       for (const id of objectsOf(ctx, es, e.what)) {
         const owner = obj(ctx, id).owner;

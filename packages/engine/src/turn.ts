@@ -145,6 +145,9 @@ function enterStep(ctx: Ctx, step: Step): void {
   const ap = s.turn.activePlayer;
   s.turn.step = step;
   s.turn.passed = [];
+  // Unspent mana empties between steps (and all of it at the end of the turn).
+  for (const p of Object.values(s.players))
+    if (p.pool?.length) p.pool = step === 'cleanup' ? [] : p.pool.filter((m) => m.untilEndOfTurn);
   emit(ctx, { type: 'stepChanged', turn: s.turn.number, step, activePlayer: ap });
 
   switch (step) {

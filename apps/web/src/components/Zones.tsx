@@ -1,6 +1,8 @@
 import { cardDb } from '@mtg/cards';
 import {
   type CardDefId,
+  type CardDefinition,
+  type GameObject,
   type GameState,
   getCharacteristics,
   type ObjectId,
@@ -19,6 +21,15 @@ export interface ZoneHandlers {
   onHandPointerDown?: (id: ObjectId, e: React.PointerEvent) => void;
   /** The hand card currently being dragged. */
   dragging?: ObjectId | null;
+}
+
+/** Small labels on a permanent: a Class's level and named counters (stun, finality, stash). */
+function cardTags(o: GameObject, def: CardDefinition | undefined): string[] {
+  const tags: string[] = [];
+  if (def?.subtypes.includes('Class')) tags.push(`Level ${o.level ?? 1}`);
+  for (const [name, n] of Object.entries(o.counters ?? {}))
+    if (n > 0) tags.push(`${name[0]!.toUpperCase()}${name.slice(1)}${n > 1 ? ` ${n}` : ''}`);
+  return tags;
 }
 
 const isLand = (s: GameState, id: ObjectId) =>
@@ -82,12 +93,13 @@ export function Battlefield({
               ? {
                   power: c.power,
                   toughness: c.toughness,
-                  basePower: def?.power ?? 0,
-                  baseToughness: def?.toughness ?? 0,
+                  basePower: o.copyPT?.power ?? def?.power ?? 0,
+                  baseToughness: o.copyPT?.toughness ?? def?.toughness ?? 0,
                   damage: o.damage,
                   counters: o.plusOneCounters,
                 }
               : {})}
+            tags={cardTags(o, def)}
             onClick={() => h.onCard(id)}
             onHover={h.onHover}
           />

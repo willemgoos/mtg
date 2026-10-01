@@ -650,8 +650,10 @@ export function answerSearch(ctx: Ctx, card: ObjectId | null): void {
   if (d.kind !== 'searchLibrary') throw new Error('Not searching');
   if (card !== null) {
     if (d.fromGraveyard) {
-      if (d.to === 'battlefield') moveObject(ctx, card, 'battlefield', { controller: d.player });
-      else moveObject(ctx, card, 'hand');
+      if (d.to === 'battlefield') {
+        moveObject(ctx, card, 'battlefield', { controller: d.player });
+        if (d.counter) (obj(ctx, card).counters ??= {})[d.counter] = 1;
+      } else moveObject(ctx, card, 'hand');
       return resume(ctx, d.resume, d.thenPriority);
     }
     if (!d.to || d.to === 'hand') moveObject(ctx, card, 'hand');

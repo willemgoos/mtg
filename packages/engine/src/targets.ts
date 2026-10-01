@@ -12,6 +12,19 @@ export interface TargetingSource {
   subjectId?: ObjectId;
 }
 
+/** "With lesser mana value" than the creature that caused the trigger (Clement, Jackdaw Savior). */
+function lesserThanSubject(
+  ctx: Ctx,
+  spec: TargetSpec,
+  id: ObjectId,
+  src: TargetingSource,
+): boolean {
+  if (!spec.filter?.lesserManaValueThanSubject || !src.subjectId) return true;
+  const subject = ctx.s.objects[src.subjectId];
+  if (!subject) return true;
+  return manaValue(def(ctx, id).manaCost) < manaValue(defOf(ctx, subject.defId).manaCost);
+}
+
 function playerOk(ctx: Ctx, spec: TargetSpec, p: PlayerId, src: TargetingSource): boolean {
   if (ctx.s.players[p].lost) return false;
   if (spec.controller === 'you' && p !== src.controller) return false;
@@ -34,14 +47,7 @@ function permanentOk(ctx: Ctx, spec: TargetSpec, id: ObjectId, src: TargetingSou
     )
       return false;
   }
-  if (spec.filter?.lesserManaValueThanSubject && src.subjectId) {
-    const subject = ctx.s.objects[src.subjectId];
-    if (
-      subject &&
-      manaValue(def(ctx, id).manaCost) >= manaValue(defOf(ctx, subject.defId).manaCost)
-    )
-      return false;
-  }
+  if (!lesserThanSubject(ctx, spec, id, src)) return false;
   return matchesFilter(ctx, id, spec.filter, src.sourceId);
 }
 
@@ -62,6 +68,7 @@ function graveyardCardOk(ctx: Ctx, spec: TargetSpec, id: ObjectId, src: Targetin
   if (spec.controller === 'you' && o.owner !== src.controller) return false;
   if (spec.controller === 'opponent' && o.owner === src.controller) return false;
   if (spec.filter?.other && id === src.sourceId) return false;
+  if (!lesserThanSubject(ctx, spec, id, src)) return false;
   return !spec.filter || cardMatches(ctx, id, spec.filter, src.sourceId);
 }
 

@@ -185,7 +185,12 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
   delete o.usedAbilities;
   delete o.exiledUntilLeaves;
   delete o.kicked;
+  if (from === 'battlefield') {
+    if (o.counters) o.lastNamedCounters = o.counters;
+    else delete o.lastNamedCounters;
+  }
   delete o.counters;
+  delete o.level;
   delete o.targetedByControllerTurn;
   delete o.blank;
   delete o.resolutions;

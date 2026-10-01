@@ -11,7 +11,13 @@ export interface ManaSource {
   isCreature: boolean;
   /** Sacrificed when used (Treasure). */
   sacrifice: boolean;
+  /** Floating mana in the player's pool (spent first). */
+  pool?: boolean;
 }
+
+/** Pool entries are mana sources with ids like "pool:p1:0". */
+const poolId = (player: PlayerId, i: number) => `pool:${player}:${i}`;
+const isPoolId = (id: ObjectId) => id.startsWith('pool:');
 
 export { manaValue };
 
@@ -28,6 +34,15 @@ export function manaSources(
   forSubtypes: readonly string[] = [],
 ): ManaSource[] {
   const out: ManaSource[] = [];
+  (ctx.s.players[player].pool ?? []).forEach((p, i) =>
+    out.push({
+      id: poolId(player, i),
+      produces: p.produces,
+      isCreature: false,
+      sacrifice: false,
+      pool: true,
+    }),
+  );
   for (const id of ctx.s.battlefield) {
     if (id === exclude || obj(ctx, id).controller !== player) continue;
     let produces: ManaType[] | null = null;
@@ -71,6 +86,7 @@ export function manaSources(
   // Treasure last, then creatures, then flexible sources.
   return out.sort(
     (a, b) =>
+      Number(!!b.pool) - Number(!!a.pool) ||
       Number(a.sacrifice) - Number(b.sacrifice) ||
       Number(a.isCreature) - Number(b.isCreature) ||
       a.produces.length - b.produces.length,
@@ -122,12 +138,20 @@ export function anyTypeCost(cost: ManaCost): ManaCost {
  */
 export function payMana(ctx: Ctx, sources: readonly ObjectId[]): void {
   if (sources.length === 0) return;
-  const player = obj(ctx, sources[0]!).controller;
+  const first = sources[0]!;
+  const player = isPoolId(first) ? (first.split(':')[1] as PlayerId) : obj(ctx, first).controller;
   const spent = (ctx.s.turn.manaSpent ??= { p1: 0, p2: 0 });
   const before = spent[player];
   spent[player] += sources.length;
   emit(ctx, { type: 'manaSpent', player, before, after: spent[player] });
+  // Floating mana leaves the pool (highest index first, so the others keep theirs).
+  const fromPool = sources
+    .filter(isPoolId)
+    .map((id) => Number(id.split(':')[2]))
+    .sort((a, b) => b - a);
+  for (const i of fromPool) ctx.s.players[player].pool!.splice(i, 1);
   for (const id of sources) {
+    if (isPoolId(id)) continue;
     tap(ctx, id);
     if (def(ctx, id).abilities.some((a) => a.kind === 'mana' && a.cost.sacrificeSelf))
       sacrifice(ctx, id);

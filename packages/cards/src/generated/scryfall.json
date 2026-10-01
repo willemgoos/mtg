@@ -12635,5 +12635,758 @@
    "large": "https://cards.scryfall.io/large/front/b/8/b82c20ad-0f69-4822-ae76-770832cccdf7.jpg?1783910805",
    "artCrop": "https://cards.scryfall.io/art_crop/front/b/8/b82c20ad-0f69-4822-ae76-770832cccdf7.jpg?1783910805"
   }
+ },
+ {
+  "name": "Plumecreed Escort",
+  "scryfallId": "f71320ed-2f30-49ce-bcb0-19aebba3f0e8",
+  "oracleId": "04669a6f-6299-465b-a26e-6cae37cdc081",
+  "set": "blb",
+  "collectorNumber": "65",
+  "rarity": "uncommon",
+  "manaCost": "{1}{U}",
+  "typeLine": "Creature — Bird Scout",
+  "oracleText": "Flash\nFlying\nWhen this creature enters, target creature you control gains hexproof until end of turn.",
+  "power": "2",
+  "toughness": "1",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Flying",
+   "Flash"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/7/f71320ed-2f30-49ce-bcb0-19aebba3f0e8.jpg?1783910845",
+   "normal": "https://cards.scryfall.io/normal/front/f/7/f71320ed-2f30-49ce-bcb0-19aebba3f0e8.jpg?1783910845",
+   "large": "https://cards.scryfall.io/large/front/f/7/f71320ed-2f30-49ce-bcb0-19aebba3f0e8.jpg?1783910845",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/7/f71320ed-2f30-49ce-bcb0-19aebba3f0e8.jpg?1783910845"
+  }
+ },
+ {
+  "name": "Finch Formation",
+  "scryfallId": "1c671eab-d1ef-4d79-94eb-8b85f0d18699",
+  "oracleId": "76c2e0b4-d4fa-4e98-b363-0a76eb481304",
+  "set": "blb",
+  "collectorNumber": "50",
+  "rarity": "common",
+  "manaCost": "{2}{U}",
+  "typeLine": "Creature — Bird Scout",
+  "oracleText": "Offspring {3} (You may pay an additional {3} as you cast this spell. If you do, when this creature enters, create a 1/1 token copy of it.)\nFlying\nWhen this creature enters, target creature you control gains flying until end of turn.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Flying",
+   "Offspring"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/c/1c671eab-d1ef-4d79-94eb-8b85f0d18699.jpg?1783910850",
+   "normal": "https://cards.scryfall.io/normal/front/1/c/1c671eab-d1ef-4d79-94eb-8b85f0d18699.jpg?1783910850",
+   "large": "https://cards.scryfall.io/large/front/1/c/1c671eab-d1ef-4d79-94eb-8b85f0d18699.jpg?1783910850",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/c/1c671eab-d1ef-4d79-94eb-8b85f0d18699.jpg?1783910850"
+  }
+ },
+ {
+  "name": "Shrike Force",
+  "scryfallId": "306fec2c-d8b7-4f4b-8f58-10e3b9f3158f",
+  "oracleId": "d014b02f-a8b8-4b97-96e0-f588792069f0",
+  "set": "blb",
+  "collectorNumber": "31",
+  "rarity": "uncommon",
+  "manaCost": "{2}{W}",
+  "typeLine": "Creature — Bird Knight",
+  "oracleText": "Flying, double strike, vigilance",
+  "power": "1",
+  "toughness": "3",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Flying",
+   "Vigilance",
+   "Double strike"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/0/306fec2c-d8b7-4f4b-8f58-10e3b9f3158f.jpg?1783910856",
+   "normal": "https://cards.scryfall.io/normal/front/3/0/306fec2c-d8b7-4f4b-8f58-10e3b9f3158f.jpg?1783910856",
+   "large": "https://cards.scryfall.io/large/front/3/0/306fec2c-d8b7-4f4b-8f58-10e3b9f3158f.jpg?1783910856",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/0/306fec2c-d8b7-4f4b-8f58-10e3b9f3158f.jpg?1783910856"
+  }
+ },
+ {
+  "name": "Jackdaw Savior",
+  "scryfallId": "121af600-6143-450a-9f87-12ce4833f1ec",
+  "oracleId": "9e31ef54-b2f2-4f3f-9779-151b74470ce4",
+  "set": "blb",
+  "collectorNumber": "18",
+  "rarity": "rare",
+  "manaCost": "{2}{W}",
+  "typeLine": "Creature — Bird Cleric",
+  "oracleText": "Flying\nWhenever this creature or another creature you control with flying dies, return another target creature card with lesser mana value from your graveyard to the battlefield.",
+  "power": "3",
+  "toughness": "1",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/2/121af600-6143-450a-9f87-12ce4833f1ec.jpg?1783910860",
+   "normal": "https://cards.scryfall.io/normal/front/1/2/121af600-6143-450a-9f87-12ce4833f1ec.jpg?1783910860",
+   "large": "https://cards.scryfall.io/large/front/1/2/121af600-6143-450a-9f87-12ce4833f1ec.jpg?1783910860",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/2/121af600-6143-450a-9f87-12ce4833f1ec.jpg?1783910860"
+  }
+ },
+ {
+  "name": "Plumecreed Mentor",
+  "scryfallId": "b1aa988f-547e-449a-9f1a-296c01d68d96",
+  "oracleId": "0eb8983e-4e44-4bfe-81dd-ddb41007a166",
+  "set": "blb",
+  "collectorNumber": "228",
+  "rarity": "uncommon",
+  "manaCost": "{1}{W}{U}",
+  "typeLine": "Creature — Bird Scout",
+  "oracleText": "Flying\nWhenever this creature or another creature you control with flying enters, put a +1/+1 counter on target creature you control without flying.",
+  "power": "2",
+  "toughness": "3",
+  "colors": [
+   "U",
+   "W"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/1/b1aa988f-547e-449a-9f1a-296c01d68d96.jpg?1783910791",
+   "normal": "https://cards.scryfall.io/normal/front/b/1/b1aa988f-547e-449a-9f1a-296c01d68d96.jpg?1783910791",
+   "large": "https://cards.scryfall.io/large/front/b/1/b1aa988f-547e-449a-9f1a-296c01d68d96.jpg?1783910791",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/1/b1aa988f-547e-449a-9f1a-296c01d68d96.jpg?1783910791"
+  }
+ },
+ {
+  "name": "Seedpod Squire",
+  "scryfallId": "f3684577-51ce-490e-9b59-b19c733be466",
+  "oracleId": "e2f57e48-ff5b-4a42-9b7c-1bd23b0d78ed",
+  "set": "blb",
+  "collectorNumber": "232",
+  "rarity": "common",
+  "manaCost": "{3}{W/U}",
+  "typeLine": "Creature — Bird Scout",
+  "oracleText": "Flying\nWhenever this creature attacks, target creature you control without flying gets +1/+1 until end of turn.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "U",
+   "W"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/3/f3684577-51ce-490e-9b59-b19c733be466.jpg?1783910791",
+   "normal": "https://cards.scryfall.io/normal/front/f/3/f3684577-51ce-490e-9b59-b19c733be466.jpg?1783910791",
+   "large": "https://cards.scryfall.io/large/front/f/3/f3684577-51ce-490e-9b59-b19c733be466.jpg?1783910791",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/3/f3684577-51ce-490e-9b59-b19c733be466.jpg?1783910791"
+  }
+ },
+ {
+  "name": "Salvation Swan",
+  "scryfallId": "b2656160-d319-4530-a6e5-c418596c3f12",
+  "oracleId": "0f68ae67-1671-4281-8b6b-3e52fdd4915f",
+  "set": "blb",
+  "collectorNumber": "28",
+  "rarity": "rare",
+  "manaCost": "{3}{W}",
+  "typeLine": "Creature — Bird Cleric",
+  "oracleText": "Flash\nFlying\nWhenever this creature or another Bird you control enters, exile up to one target creature you control without flying. Return it to the battlefield under its owner's control with a flying counter on it at the beginning of the next end step.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Flying",
+   "Flash"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/2/b2656160-d319-4530-a6e5-c418596c3f12.jpg?1783910856",
+   "normal": "https://cards.scryfall.io/normal/front/b/2/b2656160-d319-4530-a6e5-c418596c3f12.jpg?1783910856",
+   "large": "https://cards.scryfall.io/large/front/b/2/b2656160-d319-4530-a6e5-c418596c3f12.jpg?1783910856",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/2/b2656160-d319-4530-a6e5-c418596c3f12.jpg?1783910856"
+  }
+ },
+ {
+  "name": "Pileated Provisioner",
+  "scryfallId": "ae442cd6-c4df-4aad-9b1d-ccd936c5ec96",
+  "oracleId": "0534e20d-8352-4d9f-a617-378070602673",
+  "set": "blb",
+  "collectorNumber": "25",
+  "rarity": "common",
+  "manaCost": "{4}{W}",
+  "typeLine": "Creature — Bird Scout",
+  "oracleText": "Flying\nWhen this creature enters, put a +1/+1 counter on target creature you control without flying.",
+  "power": "3",
+  "toughness": "4",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/e/ae442cd6-c4df-4aad-9b1d-ccd936c5ec96.jpg?1783910857",
+   "normal": "https://cards.scryfall.io/normal/front/a/e/ae442cd6-c4df-4aad-9b1d-ccd936c5ec96.jpg?1783910857",
+   "large": "https://cards.scryfall.io/large/front/a/e/ae442cd6-c4df-4aad-9b1d-ccd936c5ec96.jpg?1783910857",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/e/ae442cd6-c4df-4aad-9b1d-ccd936c5ec96.jpg?1783910857"
+  }
+ },
+ {
+  "name": "Skyskipper Duo",
+  "scryfallId": "d6844bad-ffbe-4c6e-b438-08562eccea52",
+  "oracleId": "a50db36c-948b-4132-a5e5-84aab1f42612",
+  "set": "blb",
+  "collectorNumber": "71",
+  "rarity": "common",
+  "manaCost": "{4}{U}",
+  "typeLine": "Creature — Bird Frog",
+  "oracleText": "Flying\nWhen this creature enters, exile up to one other target creature you control. Return it to the battlefield under its owner's control at the beginning of the next end step.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/6/d6844bad-ffbe-4c6e-b438-08562eccea52.jpg?1783910842",
+   "normal": "https://cards.scryfall.io/normal/front/d/6/d6844bad-ffbe-4c6e-b438-08562eccea52.jpg?1783910842",
+   "large": "https://cards.scryfall.io/large/front/d/6/d6844bad-ffbe-4c6e-b438-08562eccea52.jpg?1783910842",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/6/d6844bad-ffbe-4c6e-b438-08562eccea52.jpg?1783910842"
+  }
+ },
+ {
+  "name": "Knightfisher",
+  "scryfallId": "c7fb7f4f-2153-4527-8f11-adbf508d3533",
+  "oracleId": "cb2d222c-df42-41a7-a517-0a41e47a4280",
+  "set": "blb",
+  "collectorNumber": "55",
+  "rarity": "uncommon",
+  "manaCost": "{3}{U}{U}",
+  "typeLine": "Creature — Bird Knight",
+  "oracleText": "Flying\nWhenever another nontoken Bird you control enters, create a 1/1 blue Fish creature token.",
+  "power": "4",
+  "toughness": "5",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/7/c7fb7f4f-2153-4527-8f11-adbf508d3533.jpg?1783910849",
+   "normal": "https://cards.scryfall.io/normal/front/c/7/c7fb7f4f-2153-4527-8f11-adbf508d3533.jpg?1783910849",
+   "large": "https://cards.scryfall.io/large/front/c/7/c7fb7f4f-2153-4527-8f11-adbf508d3533.jpg?1783910849",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/7/c7fb7f4f-2153-4527-8f11-adbf508d3533.jpg?1783910849"
+  }
+ },
+ {
+  "name": "Kastral, the Windcrested",
+  "scryfallId": "ebf68793-22a2-4a59-9d37-6791584edca1",
+  "oracleId": "ced5fe9a-4237-4c89-9dd6-b133b966ebcc",
+  "set": "blb",
+  "collectorNumber": "221",
+  "rarity": "rare",
+  "manaCost": "{3}{W}{U}",
+  "typeLine": "Legendary Creature — Bird Scout",
+  "oracleText": "Flying\nWhenever one or more Birds you control deal combat damage to a player, choose one —\n• You may put a Bird creature card from your hand or graveyard onto the battlefield with a finality counter on it.\n• Put a +1/+1 counter on each Bird you control.\n• Draw a card.",
+  "power": "4",
+  "toughness": "5",
+  "colors": [
+   "U",
+   "W"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/b/ebf68793-22a2-4a59-9d37-6791584edca1.jpg?1783910795",
+   "normal": "https://cards.scryfall.io/normal/front/e/b/ebf68793-22a2-4a59-9d37-6791584edca1.jpg?1783910795",
+   "large": "https://cards.scryfall.io/large/front/e/b/ebf68793-22a2-4a59-9d37-6791584edca1.jpg?1783910795",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/b/ebf68793-22a2-4a59-9d37-6791584edca1.jpg?1783910795"
+  }
+ },
+ {
+  "name": "Feather of Flight",
+  "scryfallId": "9fb41503-8632-4bf1-9bfe-6d9b9993c337",
+  "oracleId": "c61b05b8-00f1-4371-9856-c65852b4ca02",
+  "set": "blb",
+  "collectorNumber": "13",
+  "rarity": "uncommon",
+  "manaCost": "{1}{W}",
+  "typeLine": "Enchantment — Aura",
+  "oracleText": "Flash\nEnchant creature\nWhen this Aura enters, draw a card.\nEnchanted creature gets +1/+0 and has flying.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Enchant",
+   "Flash"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/f/9fb41503-8632-4bf1-9bfe-6d9b9993c337.jpg?1783910862",
+   "normal": "https://cards.scryfall.io/normal/front/9/f/9fb41503-8632-4bf1-9bfe-6d9b9993c337.jpg?1783910862",
+   "large": "https://cards.scryfall.io/large/front/9/f/9fb41503-8632-4bf1-9bfe-6d9b9993c337.jpg?1783910862",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/f/9fb41503-8632-4bf1-9bfe-6d9b9993c337.jpg?1783910862"
+  }
+ },
+ {
+  "name": "Parting Gust",
+  "scryfallId": "1086e826-94b8-4398-8a38-d8eacca56a43",
+  "oracleId": "367bb252-41e1-4f98-9d22-442dd332cccf",
+  "set": "blb",
+  "collectorNumber": "24",
+  "rarity": "uncommon",
+  "manaCost": "{W}{W}",
+  "typeLine": "Instant",
+  "oracleText": "Gift a tapped Fish (You may promise an opponent a gift as you cast this spell. If you do, they create a tapped 1/1 blue Fish creature token before its other effects.)\nExile target nontoken creature. If the gift wasn't promised, return that card to the battlefield under its owner's control with a +1/+1 counter on it at the beginning of the next end step.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Gift"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/0/1086e826-94b8-4398-8a38-d8eacca56a43.jpg?1783910858",
+   "normal": "https://cards.scryfall.io/normal/front/1/0/1086e826-94b8-4398-8a38-d8eacca56a43.jpg?1783910858",
+   "large": "https://cards.scryfall.io/large/front/1/0/1086e826-94b8-4398-8a38-d8eacca56a43.jpg?1783910858",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/0/1086e826-94b8-4398-8a38-d8eacca56a43.jpg?1783910858"
+  }
+ },
+ {
+  "name": "Driftgloom Coyote",
+  "scryfallId": "d7ab2de3-3aea-461a-a74f-fb742cf8a198",
+  "oracleId": "f76a86f3-568a-40b3-8e2c-f84db4141293",
+  "set": "blb",
+  "collectorNumber": "11",
+  "rarity": "uncommon",
+  "manaCost": "{3}{W}{W}",
+  "typeLine": "Creature — Elemental Coyote",
+  "oracleText": "When this creature enters, exile target creature an opponent controls until this creature leaves the battlefield. If that creature had power 2 or less, put a +1/+1 counter on this creature.",
+  "power": "3",
+  "toughness": "4",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/7/d7ab2de3-3aea-461a-a74f-fb742cf8a198.jpg?1783910861",
+   "normal": "https://cards.scryfall.io/normal/front/d/7/d7ab2de3-3aea-461a-a74f-fb742cf8a198.jpg?1783910861",
+   "large": "https://cards.scryfall.io/large/front/d/7/d7ab2de3-3aea-461a-a74f-fb742cf8a198.jpg?1783910861",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/7/d7ab2de3-3aea-461a-a74f-fb742cf8a198.jpg?1783910861"
+  }
+ },
+ {
+  "name": "Three Tree Rootweaver",
+  "scryfallId": "d1ab6e14-26e0-4174-b5c6-bc0f5c26b177",
+  "oracleId": "d17d4003-e1c9-42be-ac76-3b5500fad485",
+  "set": "blb",
+  "collectorNumber": "198",
+  "rarity": "common",
+  "manaCost": "{1}{G}",
+  "typeLine": "Creature — Mole Druid",
+  "oracleText": "{T}: Add one mana of any color.",
+  "power": "1",
+  "toughness": "3",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/1/d1ab6e14-26e0-4174-b5c6-bc0f5c26b177.jpg?1783910801",
+   "normal": "https://cards.scryfall.io/normal/front/d/1/d1ab6e14-26e0-4174-b5c6-bc0f5c26b177.jpg?1783910801",
+   "large": "https://cards.scryfall.io/large/front/d/1/d1ab6e14-26e0-4174-b5c6-bc0f5c26b177.jpg?1783910801",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/1/d1ab6e14-26e0-4174-b5c6-bc0f5c26b177.jpg?1783910801"
+  }
+ },
+ {
+  "name": "Bark-Knuckle Boxer",
+  "scryfallId": "582637a9-6aa0-4824-bed7-d5fc91bda35e",
+  "oracleId": "08e173e3-4c28-49d2-bb57-ccf533f20daf",
+  "set": "blb",
+  "collectorNumber": "164",
+  "rarity": "uncommon",
+  "manaCost": "{1}{G}",
+  "typeLine": "Creature — Raccoon Berserker",
+  "oracleText": "Whenever you expend 4, this creature gains indestructible until end of turn. (You expend 4 as you spend your fourth total mana to cast spells during a turn.)",
+  "power": "3",
+  "toughness": "2",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/8/582637a9-6aa0-4824-bed7-d5fc91bda35e.jpg?1783910812",
+   "normal": "https://cards.scryfall.io/normal/front/5/8/582637a9-6aa0-4824-bed7-d5fc91bda35e.jpg?1783910812",
+   "large": "https://cards.scryfall.io/large/front/5/8/582637a9-6aa0-4824-bed7-d5fc91bda35e.jpg?1783910812",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/8/582637a9-6aa0-4824-bed7-d5fc91bda35e.jpg?1783910812"
+  }
+ },
+ {
+  "name": "Wandertale Mentor",
+  "scryfallId": "8c399a55-d02e-41ed-b827-8784b738c118",
+  "oracleId": "9d14c7bd-7802-401c-b02b-c7f3c51b007f",
+  "set": "blb",
+  "collectorNumber": "240",
+  "rarity": "uncommon",
+  "manaCost": "{R}{G}",
+  "typeLine": "Creature — Raccoon Bard",
+  "oracleText": "Whenever you expend 4, put a +1/+1 counter on this creature. (You expend 4 as you spend your fourth total mana to cast spells during a turn.)\n{T}: Add {R} or {G}.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "G",
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/c/8c399a55-d02e-41ed-b827-8784b738c118.jpg?1783910788",
+   "normal": "https://cards.scryfall.io/normal/front/8/c/8c399a55-d02e-41ed-b827-8784b738c118.jpg?1783910788",
+   "large": "https://cards.scryfall.io/large/front/8/c/8c399a55-d02e-41ed-b827-8784b738c118.jpg?1783910788",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/c/8c399a55-d02e-41ed-b827-8784b738c118.jpg?1783910788"
+  }
+ },
+ {
+  "name": "Brazen Collector",
+  "scryfallId": "78b55a58-c669-4dc6-aa63-5d9dff52e613",
+  "oracleId": "f93dc9cc-3dd2-4e2b-b972-217ab9d89dfe",
+  "set": "blb",
+  "collectorNumber": "128",
+  "rarity": "uncommon",
+  "manaCost": "{1}{R}",
+  "typeLine": "Creature — Raccoon Rogue",
+  "oracleText": "First strike\nWhenever this creature attacks, add {R}. Until end of turn, you don't lose this mana as steps and phases end.",
+  "power": "2",
+  "toughness": "1",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "First strike"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/8/78b55a58-c669-4dc6-aa63-5d9dff52e613.jpg?1783910824",
+   "normal": "https://cards.scryfall.io/normal/front/7/8/78b55a58-c669-4dc6-aa63-5d9dff52e613.jpg?1783910824",
+   "large": "https://cards.scryfall.io/large/front/7/8/78b55a58-c669-4dc6-aa63-5d9dff52e613.jpg?1783910824",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/8/78b55a58-c669-4dc6-aa63-5d9dff52e613.jpg?1783910824"
+  }
+ },
+ {
+  "name": "Raccoon Rallier",
+  "scryfallId": "b5b5180f-5a1c-4df8-9019-195e65a50ce3",
+  "oracleId": "50c038a4-6546-4a15-a117-176849edaa3d",
+  "set": "blb",
+  "collectorNumber": "148",
+  "rarity": "common",
+  "manaCost": "{1}{R}",
+  "typeLine": "Creature — Raccoon Bard",
+  "oracleText": "{T}: Target creature you control gains haste until end of turn. Activate only as a sorcery.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/5/b5b5180f-5a1c-4df8-9019-195e65a50ce3.jpg?1783910818",
+   "normal": "https://cards.scryfall.io/normal/front/b/5/b5b5180f-5a1c-4df8-9019-195e65a50ce3.jpg?1783910818",
+   "large": "https://cards.scryfall.io/large/front/b/5/b5b5180f-5a1c-4df8-9019-195e65a50ce3.jpg?1783910818",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/5/b5b5180f-5a1c-4df8-9019-195e65a50ce3.jpg?1783910818"
+  }
+ },
+ {
+  "name": "Brambleguard Veteran",
+  "scryfallId": "bac9f6f8-6797-4580-9fc4-9a825872e017",
+  "oracleId": "bc9c7e1a-5155-431a-be21-fcbd18718980",
+  "set": "blb",
+  "collectorNumber": "165",
+  "rarity": "uncommon",
+  "manaCost": "{1}{G}{G}",
+  "typeLine": "Creature — Raccoon Warrior",
+  "oracleText": "Whenever you expend 4, Raccoons you control get +1/+1 and gain vigilance until end of turn. (You expend 4 as you spend your fourth total mana to cast spells during a turn.)",
+  "power": "3",
+  "toughness": "4",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/a/bac9f6f8-6797-4580-9fc4-9a825872e017.jpg?1783910811",
+   "normal": "https://cards.scryfall.io/normal/front/b/a/bac9f6f8-6797-4580-9fc4-9a825872e017.jpg?1783910811",
+   "large": "https://cards.scryfall.io/large/front/b/a/bac9f6f8-6797-4580-9fc4-9a825872e017.jpg?1783910811",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/a/bac9f6f8-6797-4580-9fc4-9a825872e017.jpg?1783910811"
+  }
+ },
+ {
+  "name": "Roughshod Duo",
+  "scryfallId": "78cdcfb9-a247-4c2d-a098-5b57570f8cd5",
+  "oracleId": "0cc89c15-5a48-4998-b6df-21791b6ed9a3",
+  "set": "blb",
+  "collectorNumber": "150",
+  "rarity": "common",
+  "manaCost": "{2}{R}",
+  "typeLine": "Creature — Mouse Raccoon",
+  "oracleText": "Trample\nWhenever you expend 4, target creature you control gets +1/+1 and gains trample until end of turn. (You expend 4 as you spend your fourth total mana to cast spells during a turn.)",
+  "power": "3",
+  "toughness": "2",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Trample"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/8/78cdcfb9-a247-4c2d-a098-5b57570f8cd5.jpg?1783910816",
+   "normal": "https://cards.scryfall.io/normal/front/7/8/78cdcfb9-a247-4c2d-a098-5b57570f8cd5.jpg?1783910816",
+   "large": "https://cards.scryfall.io/large/front/7/8/78cdcfb9-a247-4c2d-a098-5b57570f8cd5.jpg?1783910816",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/8/78cdcfb9-a247-4c2d-a098-5b57570f8cd5.jpg?1783910816"
+  }
+ },
+ {
+  "name": "Byway Barterer",
+  "scryfallId": "f41fc718-641b-4f32-a8c1-3e5591a05bf8",
+  "oracleId": "a864b032-6e1a-4211-ad6e-54a5a5c7321b",
+  "set": "blb",
+  "collectorNumber": "129",
+  "rarity": "rare",
+  "manaCost": "{2}{R}",
+  "typeLine": "Creature — Raccoon Rogue",
+  "oracleText": "Menace\nWhenever you expend 4, you may discard your hand. If you do, draw two cards. (You expend 4 as you spend your fourth total mana to cast spells during a turn.)",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Menace"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/4/f41fc718-641b-4f32-a8c1-3e5591a05bf8.jpg?1783910824",
+   "normal": "https://cards.scryfall.io/normal/front/f/4/f41fc718-641b-4f32-a8c1-3e5591a05bf8.jpg?1783910824",
+   "large": "https://cards.scryfall.io/large/front/f/4/f41fc718-641b-4f32-a8c1-3e5591a05bf8.jpg?1783910824",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/4/f41fc718-641b-4f32-a8c1-3e5591a05bf8.jpg?1783910824"
+  }
+ },
+ {
+  "name": "Muerra, Trash Tactician",
+  "scryfallId": "b40e4658-fd68-46d0-9a89-25570a023d19",
+  "oracleId": "c115159c-6991-4812-b3b6-6ed80221cab4",
+  "set": "blb",
+  "collectorNumber": "227",
+  "rarity": "rare",
+  "manaCost": "{1}{R}{G}",
+  "typeLine": "Legendary Creature — Raccoon Warrior",
+  "oracleText": "At the beginning of your first main phase, add {R} or {G} for each Raccoon you control.\nWhenever you expend 4, you gain 3 life. (You expend 4 as you spend your fourth total mana to cast spells during a turn.)\nWhenever you expend 8, exile the top two cards of your library. Until the end of your next turn, you may play those cards.",
+  "power": "2",
+  "toughness": "4",
+  "colors": [
+   "G",
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/4/b40e4658-fd68-46d0-9a89-25570a023d19.jpg?1783910792",
+   "normal": "https://cards.scryfall.io/normal/front/b/4/b40e4658-fd68-46d0-9a89-25570a023d19.jpg?1783910792",
+   "large": "https://cards.scryfall.io/large/front/b/4/b40e4658-fd68-46d0-9a89-25570a023d19.jpg?1783910792",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/4/b40e4658-fd68-46d0-9a89-25570a023d19.jpg?1783910792"
+  }
+ },
+ {
+  "name": "Rust-Shield Rampager",
+  "scryfallId": "c96b01f5-83de-4237-a68d-f946c53e31a6",
+  "oracleId": "23878990-dcbd-4a2a-b4f7-ee7edb396c71",
+  "set": "blb",
+  "collectorNumber": "190",
+  "rarity": "common",
+  "manaCost": "{3}{G}",
+  "typeLine": "Creature — Raccoon Warrior",
+  "oracleText": "Offspring {2} (You may pay an additional {2} as you cast this spell. If you do, when this creature enters, create a 1/1 token copy of it.)\nThis creature can't be blocked by creatures with power 2 or less.",
+  "power": "4",
+  "toughness": "4",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Offspring"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/9/c96b01f5-83de-4237-a68d-f946c53e31a6.jpg?1783910806",
+   "normal": "https://cards.scryfall.io/normal/front/c/9/c96b01f5-83de-4237-a68d-f946c53e31a6.jpg?1783910806",
+   "large": "https://cards.scryfall.io/large/front/c/9/c96b01f5-83de-4237-a68d-f946c53e31a6.jpg?1783910806",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/9/c96b01f5-83de-4237-a68d-f946c53e31a6.jpg?1783910806"
+  }
+ },
+ {
+  "name": "Teapot Slinger",
+  "scryfallId": "30506844-349f-4b68-8cc1-d028c1611cc7",
+  "oracleId": "5ba19dbe-9dbb-4cc9-81a3-18c26f27bd0f",
+  "set": "blb",
+  "collectorNumber": "157",
+  "rarity": "uncommon",
+  "manaCost": "{3}{R}",
+  "typeLine": "Creature — Raccoon Warrior",
+  "oracleText": "Menace\nWhenever you expend 4, this creature deals 2 damage to each opponent. (You expend 4 as you spend your fourth total mana to cast spells during a turn.)",
+  "power": "3",
+  "toughness": "4",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Menace"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/0/30506844-349f-4b68-8cc1-d028c1611cc7.jpg?1783910815",
+   "normal": "https://cards.scryfall.io/normal/front/3/0/30506844-349f-4b68-8cc1-d028c1611cc7.jpg?1783910815",
+   "large": "https://cards.scryfall.io/large/front/3/0/30506844-349f-4b68-8cc1-d028c1611cc7.jpg?1783910815",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/0/30506844-349f-4b68-8cc1-d028c1611cc7.jpg?1783910815"
+  }
+ },
+ {
+  "name": "Junkblade Bruiser",
+  "scryfallId": "918fd89b-5ab7-4ae2-920c-faca5e9da7b9",
+  "oracleId": "0a2fbdd3-4940-4bbf-ae19-f6d00d7ff294",
+  "set": "blb",
+  "collectorNumber": "220",
+  "rarity": "common",
+  "manaCost": "{3}{R/G}{R/G}",
+  "typeLine": "Creature — Raccoon Berserker",
+  "oracleText": "Trample\nWhenever you expend 4, this creature gets +2/+1 until end of turn. (You expend 4 as you spend your fourth total mana to cast spells during a turn.)",
+  "power": "4",
+  "toughness": "5",
+  "colors": [
+   "G",
+   "R"
+  ],
+  "keywords": [
+   "Trample"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/1/918fd89b-5ab7-4ae2-920c-faca5e9da7b9.jpg?1783910794",
+   "normal": "https://cards.scryfall.io/normal/front/9/1/918fd89b-5ab7-4ae2-920c-faca5e9da7b9.jpg?1783910794",
+   "large": "https://cards.scryfall.io/large/front/9/1/918fd89b-5ab7-4ae2-920c-faca5e9da7b9.jpg?1783910794",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/1/918fd89b-5ab7-4ae2-920c-faca5e9da7b9.jpg?1783910794"
+  }
+ },
+ {
+  "name": "Overprotect",
+  "scryfallId": "079e979f-b618-4625-989c-e0ea5b61ed8a",
+  "oracleId": "c8c3a293-ae6d-4c52-be2d-2d4b6a8edb66",
+  "set": "blb",
+  "collectorNumber": "185",
+  "rarity": "uncommon",
+  "manaCost": "{1}{G}",
+  "typeLine": "Instant",
+  "oracleText": "Target creature you control gets +3/+3 and gains trample, hexproof, and indestructible until end of turn.",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/7/079e979f-b618-4625-989c-e0ea5b61ed8a.jpg?1783910806",
+   "normal": "https://cards.scryfall.io/normal/front/0/7/079e979f-b618-4625-989c-e0ea5b61ed8a.jpg?1783910806",
+   "large": "https://cards.scryfall.io/large/front/0/7/079e979f-b618-4625-989c-e0ea5b61ed8a.jpg?1783910806",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/7/079e979f-b618-4625-989c-e0ea5b61ed8a.jpg?1783910806"
+  }
+ },
+ {
+  "name": "Hunter's Talent",
+  "scryfallId": "e9a31863-9649-4a4f-99e4-c93729938bd7",
+  "oracleId": "a8a9b103-0cb8-4810-a2d7-42f6a10f80bd",
+  "set": "blb",
+  "collectorNumber": "179",
+  "rarity": "uncommon",
+  "manaCost": "{1}{G}",
+  "typeLine": "Enchantment — Class",
+  "oracleText": "(Gain the next level as a sorcery to add its ability.)\nWhen this Class enters, target creature you control deals damage equal to its power to target creature you don't control.\n{1}{G}: Level 2\nWhenever you attack, target attacking creature gets +1/+0 and gains trample until end of turn.\n{3}{G}: Level 3\nAt the beginning of your end step, if you control a creature with power 4 or greater, draw a card.",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/9/e9a31863-9649-4a4f-99e4-c93729938bd7.jpg?1783910808",
+   "normal": "https://cards.scryfall.io/normal/front/e/9/e9a31863-9649-4a4f-99e4-c93729938bd7.jpg?1783910808",
+   "large": "https://cards.scryfall.io/large/front/e/9/e9a31863-9649-4a4f-99e4-c93729938bd7.jpg?1783910808",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/9/e9a31863-9649-4a4f-99e4-c93729938bd7.jpg?1783910808"
+  }
+ },
+ {
+  "name": "Hoarder's Overflow",
+  "scryfallId": "c2ed5079-07b4-4575-a2c8-5f0cbff888c3",
+  "oracleId": "75f7d9c7-5d52-4bfe-a730-62fef187b8b8",
+  "set": "blb",
+  "collectorNumber": "141",
+  "rarity": "uncommon",
+  "manaCost": "{1}{R}",
+  "typeLine": "Enchantment",
+  "oracleText": "When this enchantment enters and whenever you expend 4, put a stash counter on it. (You expend 4 as you spend your fourth total mana to cast spells during a turn.)\n{1}{R}, Sacrifice this enchantment: Discard your hand, then draw cards equal to the number of stash counters on this enchantment.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/2/c2ed5079-07b4-4575-a2c8-5f0cbff888c3.jpg?1783910820",
+   "normal": "https://cards.scryfall.io/normal/front/c/2/c2ed5079-07b4-4575-a2c8-5f0cbff888c3.jpg?1783910820",
+   "large": "https://cards.scryfall.io/large/front/c/2/c2ed5079-07b4-4575-a2c8-5f0cbff888c3.jpg?1783910820",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/2/c2ed5079-07b4-4575-a2c8-5f0cbff888c3.jpg?1783910820"
+  }
+ },
+ {
+  "name": "Heaped Harvest",
+  "scryfallId": "3b5349db-0e0a-4b15-886e-0db403ef49cb",
+  "oracleId": "bbfc5011-a9b7-442d-a443-974a5a64de46",
+  "set": "blb",
+  "collectorNumber": "175",
+  "rarity": "common",
+  "manaCost": "{2}{G}",
+  "typeLine": "Artifact — Food",
+  "oracleText": "When this artifact enters and when you sacrifice it, you may search your library for a basic land card, put it onto the battlefield tapped, then shuffle.\n{2}, {T}, Sacrifice this artifact: You gain 3 life.",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/b/3b5349db-0e0a-4b15-886e-0db403ef49cb.jpg?1783910809",
+   "normal": "https://cards.scryfall.io/normal/front/3/b/3b5349db-0e0a-4b15-886e-0db403ef49cb.jpg?1783910809",
+   "large": "https://cards.scryfall.io/large/front/3/b/3b5349db-0e0a-4b15-886e-0db403ef49cb.jpg?1783910809",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/b/3b5349db-0e0a-4b15-886e-0db403ef49cb.jpg?1783910809"
+  }
+ },
+ {
+  "name": "Tender Wildguide",
+  "scryfallId": "6b8bfa91-adb0-4596-8c16-d8bb64fdb26d",
+  "oracleId": "74868bc0-6081-4f46-a2c6-9521cd5465aa",
+  "set": "blb",
+  "collectorNumber": "196",
+  "rarity": "rare",
+  "manaCost": "{1}{G}",
+  "typeLine": "Creature — Possum Druid",
+  "oracleText": "Offspring {2} (You may pay an additional {2} as you cast this spell. If you do, when this creature enters, create a 1/1 token copy of it.)\n{T}: Add one mana of any color.\n{T}: Put a +1/+1 counter on this creature.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Offspring"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/b/6b8bfa91-adb0-4596-8c16-d8bb64fdb26d.jpg?1783910802",
+   "normal": "https://cards.scryfall.io/normal/front/6/b/6b8bfa91-adb0-4596-8c16-d8bb64fdb26d.jpg?1783910802",
+   "large": "https://cards.scryfall.io/large/front/6/b/6b8bfa91-adb0-4596-8c16-d8bb64fdb26d.jpg?1783910802",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/b/6b8bfa91-adb0-4596-8c16-d8bb64fdb26d.jpg?1783910802"
+  }
  }
 ]

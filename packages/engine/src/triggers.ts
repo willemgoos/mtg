@@ -34,6 +34,12 @@ export function checkCondition(
   }
   if (c.kind === 'amountAtLeast')
     return countOf(ctx, controller, c.amount, false, self?.id) >= c.min;
+  if (c.kind === 'classLevel') {
+    const level = self?.level ?? 1;
+    return (
+      (c.min === undefined || level >= c.min) && (c.exactly === undefined || level === c.exactly)
+    );
+  }
   if (c.kind === 'targetControlledByYou') {
     const t = targets?.[c.target];
     const o = t && 'object' in t ? ctx.s.objects[t.object.id] : undefined;
@@ -254,9 +260,11 @@ function detect(ctx: Ctx, ev: GameEvent): void {
           const t = a.trigger;
           if (t.on !== 'dies' && t.on !== 'creatureYouControlDies') return;
           if (t.on === 'creatureYouControlDies' && t.nontoken && (!card || card.isToken)) return;
+          if (t.on === 'creatureYouControlDies' && t.filter && !defMatches(movedDef, t.filter))
+            return;
           const controller = card?.owner ?? 'p1';
           if (card && checkCondition(ctx, a.condition, controller, card))
-            queue(ctx, card, i, controller);
+            queue(ctx, card, i, controller, card);
         });
         // Granted "when this dies, return it" (Undying Malice, Fake Your Own Death).
         if (moved) {
@@ -297,18 +305,24 @@ function detect(ctx: Ctx, ev: GameEvent): void {
             }
           }
         }
-        forEachBattlefieldTrigger(ctx, (o, a) => {
-          const t = a.trigger;
-          if (t.on === 'attachedDies') return o.attachedTo === ev.id;
-          if (t.on !== 'otherCreatureDies' && t.on !== 'creatureYouControlDies') return false;
-          if (o.id === ev.id) return false;
-          if (t.nontoken && wasToken) return false;
-          if (diedUnder === undefined) return true;
-          if (t.on === 'otherCreatureDies' && t.controller === 'any') return true;
-          if (t.on === 'otherCreatureDies' && t.controller === 'opponent')
-            return o.controller !== diedUnder;
-          return o.controller === diedUnder;
-        });
+        forEachBattlefieldTrigger(
+          ctx,
+          (o, a) => {
+            const t = a.trigger;
+            if (t.on === 'attachedDies') return o.attachedTo === ev.id;
+            if (t.on !== 'otherCreatureDies' && t.on !== 'creatureYouControlDies') return false;
+            if (o.id === ev.id) return false;
+            if (t.nontoken && wasToken) return false;
+            if (t.on === 'creatureYouControlDies' && t.filter && !defMatches(movedDef, t.filter))
+              return false;
+            if (diedUnder === undefined) return true;
+            if (t.on === 'otherCreatureDies' && t.controller === 'any') return true;
+            if (t.on === 'otherCreatureDies' && t.controller === 'opponent')
+              return o.controller !== diedUnder;
+            return o.controller === diedUnder;
+          },
+          moved,
+        );
       }
       return;
     }
@@ -434,6 +448,14 @@ function detect(ctx: Ctx, ev: GameEvent): void {
           ev.amount,
         );
       if (!('player' in ev.to)) return;
+      // "Whenever one or more Birds you control deal combat damage to a player" (batched).
+      forEachBattlefieldTrigger(
+        ctx,
+        (o, a) =>
+          a.trigger.on === 'creaturesYouControlDealCombatDamageToPlayer' &&
+          o.controller === src.controller &&
+          matchesFilter(ctx, src.id, a.trigger.filter),
+      );
       def(ctx, src.id).abilities.forEach((a, i) => {
         if (a.kind === 'triggered' && a.trigger.on === 'combatDamageToPlayer')
           queue(ctx, src, i, src.controller, undefined, ev.amount);
@@ -460,6 +482,19 @@ function detect(ctx: Ctx, ev: GameEvent): void {
           o.controller === ev.player &&
           defMatches(d, a.trigger.filter),
       );
+      return;
+    }
+    case 'levelChanged': {
+      const o = s.objects[ev.id];
+      if (!o) return;
+      def(ctx, o.id).abilities.forEach((a, i) => {
+        if (
+          a.kind === 'triggered' &&
+          a.trigger.on === 'becomesLevel' &&
+          a.trigger.level === ev.level
+        )
+          queue(ctx, o, i, o.controller);
+      });
       return;
     }
     case 'manaSpent': {
@@ -505,6 +540,20 @@ function detect(ctx: Ctx, ev: GameEvent): void {
         );
         return;
       }
+      if (ev.step === 'end' && s.delayed?.length) {
+        // "At the beginning of the next end step": the ones due now.
+        const due = s.delayed.filter((d) => d.fromTurn <= ev.turn);
+        s.delayed = s.delayed.filter((d) => d.fromTurn > ev.turn);
+        for (const d of due)
+          s.pendingTriggers.push({
+            source: d.subject,
+            sourceDefId: d.sourceDefId,
+            abilityIndex: -1,
+            controller: d.controller,
+            subject: d.subject,
+            inline: d.effects,
+          });
+      }
       if (ev.step !== 'upkeep' && ev.step !== 'end') return;
       const on = ev.step === 'upkeep' ? 'beginningOfUpkeep' : 'beginningOfEndStep';
       forEachBattlefieldTrigger(ctx, (o, a) => {
@@ -539,6 +588,7 @@ export function nextPendingTriggerIndex(ctx: Ctx): number {
 /** Type and subtype checks against a card definition (for a permanent that has already left). */
 function defMatches(d: CardDefinition, f: CardFilter): boolean {
   if (f.types && !f.types.some((t) => d.types.includes(t))) return false;
+  if (f.hasKeyword && !d.keywords.includes(f.hasKeyword)) return false;
   if (f.subtype && !d.subtypes.includes(f.subtype)) return false;
   if (f.subtypes && !f.subtypes.some((st) => d.subtypes.includes(st))) return false;
   return true;

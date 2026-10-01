@@ -4615,3 +4615,44 @@ button {
   margin: 0 auto 1rem;
   text-align: center;
 }
+
+/* Class levels and named counters (stun, finality, stash) on a permanent. */
+.card__tags {
+  position: absolute;
+  left: 4%;
+  top: 14%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.125rem;
+  pointer-events: none;
+}
+
+.card__tags span {
+  padding: 0 0.3125rem;
+  border-radius: 0.25rem;
+  font-family: var(--hud-num);
+  font-size: calc(var(--w) * 0.09);
+  font-weight: 700;
+  line-height: 1.5;
+  color: #f4eedf;
+  background: rgba(18, 22, 27, 0.88);
+  box-shadow: 0 0 0 0.0625rem rgba(255, 255, 255, 0.2);
+}
+
+/* Unspent mana in your pool (Brazen Collector, Muerra). */
+.floating-mana {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 0.5rem);
+  translate: -50% 0;
+  padding: 0.125rem 0.625rem;
+  border-radius: 999px;
+  font-family: var(--hud-num);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: #f4eedf;
+  background: rgba(18, 22, 27, 0.9);
+  box-shadow: 0 0 0 0.0625rem rgba(232, 160, 60, 0.6);
+  pointer-events: none;
+}

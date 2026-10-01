@@ -156,6 +156,8 @@ export type AbilityDef =
       once?: boolean;
       /** "Activate only once each turn." */
       oncePerTurn?: boolean;
+      /** Shown in menus (Class level-ups: "Level 2"). */
+      label?: string;
       /** Activated from the graveyard (Reassembling Skeleton). */
       fromGraveyard?: boolean;
     }
@@ -206,8 +208,8 @@ export type TriggerDef =
   | { on: 'otherCreatureEtb'; controller: 'you' | 'any'; filter?: CardFilter }
   | { on: 'dies' }
   | { on: 'otherCreatureDies'; controller: 'you' | 'opponent' | 'any'; nontoken?: boolean }
-  /** Whenever this or another creature you control dies. */
-  | { on: 'creatureYouControlDies'; nontoken?: boolean }
+  /** Whenever this or another creature you control (matching the filter, as printed) dies. */
+  | { on: 'creatureYouControlDies'; nontoken?: boolean; filter?: CardFilter }
   /** Whenever a creature you control deals combat damage (on your turn); "that creature", "that much". */
   | { on: 'creatureYouControlDealsCombatDamage' }
   | { on: 'beginningOfCombat'; whose: 'yours' }
@@ -257,6 +259,10 @@ export type TriggerDef =
    * library): this one or another you control ('selfOrOther'), or only others.
    */
   | { on: 'leavesWithoutDying'; who: 'selfOrOther' | 'other' }
+  /** When this Class becomes level N. */
+  | { on: 'becomesLevel'; level: number }
+  /** Whenever one or more creatures you control (matching the filter) deal combat damage to a player (Kastral). */
+  | { on: 'creaturesYouControlDealCombatDamageToPlayer'; filter?: CardFilter }
   /** When you sacrifice this permanent (Carrot Cake). */
   | { on: 'sacrificed' }
   /** Whenever you sacrifice a permanent matching the filter (Camellia: a Food). */
@@ -310,6 +316,8 @@ export type ConditionDef =
   | { kind: 'handSize'; min: number }
   /** Every condition holds. */
   | { kind: 'all'; of: ConditionDef[] }
+  /** This Class is at least level `min` (or exactly `exactly`). */
+  | { kind: 'classLevel'; min?: number; exactly?: number }
   /** A chosen target is controlled by you (Dreamdew Entrancer). */
   | { kind: 'targetControlledByYou'; target: number }
   /** At least one condition holds. */
@@ -416,6 +424,8 @@ export type Amount =
   | { count: 'opponentCreaturesExiledThisTurn' }
   /** The power of the creature sacrificed to pay for this (Wick). */
   | { sacrificedPower: true }
+  /** Named counters on the source (as it last was, if it left): Hoarder's Overflow's stash counters. */
+  | { namedCountersOnSource: string }
   /** The value chosen for X (times `times`, plus `plus`). */
   | { x: true; times?: number; plus?: number };
 
@@ -466,6 +476,29 @@ export type EffectDef =
       ownerOf?: number;
       options: { label: string; effects: EffectDef[] }[];
     }
+  /** Raise this Class's level by one. */
+  | { kind: 'levelUp' }
+  /**
+   * Add mana to your pool: one per entry, each of one of its types. `count`
+   * repeats the single entry (Muerra: {R} or {G} per Raccoon). Unspent mana
+   * empties between steps, or at end of turn with `untilEndOfTurn`.
+   */
+  | { kind: 'addMana'; mana: ManaType[][]; count?: Amount; untilEndOfTurn?: boolean }
+  /** Exile permanents; return them at the beginning of the next end step (with counters). */
+  | {
+      kind: 'exileUntilEndStep';
+      what: Ref;
+      counters?: number;
+      /** A named counter it returns with (Salvation Swan: flying). */
+      named?: string;
+    }
+  /** Discard your whole hand. */
+  | { kind: 'discardHand' }
+  /**
+   * Put a card matching the filter from your hand or graveyard onto the
+   * battlefield (Kastral), optionally with a named counter.
+   */
+  | { kind: 'putFromHandOrGraveyard'; filter: CardFilter; counter?: string }
   /** Exile permanents, then return them under their owners' control (with +1/+1 counters). */
   | { kind: 'blink'; what: Ref; counters?: number }
   /**
@@ -544,6 +577,8 @@ export type EffectDef =
   | { kind: 'surveil'; amount: number }
   /** Exile a permanent until the source leaves the battlefield (Banishing Light). */
   | { kind: 'exileUntilSourceLeaves'; what: Ref }
+  /** Return the subject (an exiled card) to the battlefield under its owner's control. */
+  | { kind: 'returnSubject'; counters?: number; named?: string }
   /** Put a card from a graveyard onto the battlefield under your control (with a named counter: finality). */
   | { kind: 'returnToBattlefield'; what: Ref; counter?: string }
   /** Destroy all creatures (matching the filter). `returnOne`: then return one of yours that died (Starfall Invocation). */
@@ -733,6 +768,10 @@ export interface GameObject {
   onceTurns?: Record<number, number>;
   /** It has lost all abilities (an effect until its controller's next turn). */
   blank?: boolean;
+  /** A Class's level (1 if unset). */
+  level?: number;
+  /** Named counters it had as it last left the battlefield. */
+  lastNamedCounters?: Record<string, number>;
 }
 
 /** A reference that goes stale when the object changes zones. */
@@ -759,6 +798,8 @@ export interface PlayerState {
   lost: boolean;
   /** Cards drawn for an opening hand, if not the usual seven (an expedition boon). */
   openingHand?: number;
+  /** Floating mana: each entry is one mana of one of its types. */
+  pool?: { produces: ManaType[]; untilEndOfTurn?: boolean }[];
 }
 
 export type StackItem =
@@ -913,6 +954,16 @@ export interface PendingTrigger {
   inline?: EffectDef[];
 }
 
+export interface DelayedTrigger {
+  controller: PlayerId;
+  sourceDefId: CardDefId;
+  /** The object it refers to ("it"): e.g. the exiled card to return. */
+  subject: ObjectRef;
+  effects: EffectDef[];
+  /** Not before this turn's end step if created during it: the turn it may fire from. */
+  fromTurn: number;
+}
+
 /** What Undying Malice / Fake Your Own Death grant. */
 export interface ReturnWhenDies {
   counters: number;
@@ -967,6 +1018,8 @@ export type Decision =
       looked?: ObjectId[];
       /** Shuffle afterwards (default true unless `looked`). */
       shuffle?: boolean;
+      /** The chosen card enters with this named counter (Kastral: finality). */
+      counter?: string;
       resume: PausedResolution;
       thenPriority: PlayerId;
     }
@@ -1105,6 +1158,8 @@ export interface GameState {
   combat: CombatState | null;
   effects: ContinuousEffect[];
   pendingTriggers: PendingTrigger[];
+  /** "At the beginning of the next end step, ...": fire at the first end step after `afterTurn` / this step. */
+  delayed?: DelayedTrigger[];
   /** Exactly one player is always being asked something (or the game is over). */
   decision: Decision;
   winner: PlayerId | 'draw' | null;
@@ -1204,6 +1259,8 @@ export type GameEvent =
   | { type: 'searched'; player: PlayerId; id: ObjectId }
   /** A card revealed from a library and put into its owner's hand. */
   | { type: 'revealed'; player: PlayerId; id: ObjectId }
+  /** A Class gained a level. */
+  | { type: 'levelChanged'; id: ObjectId; level: number }
   /** A permanent was sacrificed (just before it left the battlefield). */
   | { type: 'sacrificed'; id: ObjectId; defId: CardDefId; player: PlayerId }
   /** `player` spent mana: their total this turn went from `before` to `after`. */

@@ -37,6 +37,8 @@ export interface CardProps {
   sick?: boolean;
   /** An Equipment attached to the creature before it. */
   attached?: boolean;
+  /** Small labels: a Class's level, named counters (stun, finality). */
+  tags?: string[];
   onClick?: (e: MouseEvent) => void;
   onHover?: HoverFn;
   style?: React.CSSProperties;
@@ -100,6 +102,13 @@ export function Card(p: CardProps) {
           </span>
         )}
         {!!p.counters && <span className="card__counters">+{p.counters}</span>}
+        {!!p.tags?.length && (
+          <div className="card__tags">
+            {p.tags.map((t) => (
+              <span key={t}>{t}</span>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

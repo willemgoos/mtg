@@ -172,3 +172,58 @@ export const yourCreaturesOf = (...subtypes: string[]): Ref => ({
   controller: 'you',
   filter: subtypes.length === 1 ? { subtype: subtypes[0]! } : { subtypes },
 });
+
+/** "{T}: Add one mana of any color." */
+export const anyColor = (): AbilityDef[] =>
+  (['W', 'U', 'B', 'R', 'G'] as const).map((produces) => ({
+    kind: 'mana',
+    cost: { tapSelf: true },
+    produces,
+  }));
+
+/** Gates an ability behind a Class level (merged with its own condition). */
+function atLevel(a: AbilityDef, min: number): AbilityDef {
+  const level: ConditionDef = { kind: 'classLevel', min };
+  const and = (c: ConditionDef | undefined): ConditionDef =>
+    c ? { kind: 'all', of: [c, level] } : level;
+  if (a.kind === 'triggered') {
+    // "When this Class becomes level N" only fires as it does.
+    if (a.trigger.on === 'becomesLevel') return a;
+    return { ...a, condition: and(a.condition) };
+  }
+  if (a.kind === 'activated') return { ...a, condition: and(a.condition) };
+  if (a.kind === 'static' && 'condition' in a.effect)
+    return { ...a, effect: { ...a.effect, condition: and(a.effect.condition) } } as AbilityDef;
+  if (a.kind === 'static' && a.effect.kind === 'anthem')
+    return { ...a, effect: { ...a.effect, condition: level } };
+  throw new Error(`Can't gate ${a.kind} ${a.kind === 'static' ? a.effect.kind : ''} by level`);
+}
+
+/**
+ * A Class: its level 1 abilities, then levels 2 and 3, each with the cost to
+ * gain it (as a sorcery) and the abilities it adds.
+ */
+export function classCard(
+  level1: AbilityDef[],
+  level2: { cost: string; abilities: AbilityDef[] },
+  level3: { cost: string; abilities: AbilityDef[] },
+): Behavior {
+  const levelUp = (to: number, cost: string): AbilityDef => ({
+    kind: 'activated',
+    cost: { mana: mana(cost) },
+    sorcerySpeed: true,
+    condition: { kind: 'classLevel', exactly: to - 1 },
+    targets: [],
+    effects: [{ kind: 'levelUp' }],
+    label: `Level ${to}`,
+  });
+  return {
+    abilities: [
+      ...level1,
+      levelUp(2, level2.cost),
+      ...level2.abilities.map((a) => atLevel(a, 2)),
+      levelUp(3, level3.cost),
+      ...level3.abilities.map((a) => atLevel(a, 3)),
+    ],
+  };
+}

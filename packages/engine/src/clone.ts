@@ -23,6 +23,7 @@ export function cloneState(s: GameState): GameState {
     hand: p.hand.slice(),
     graveyard: p.graveyard.slice(),
     exile: p.exile.slice(),
+    ...(p.pool ? { pool: p.pool.slice() } : {}),
   });
   return {
     ...s,
@@ -48,6 +49,7 @@ export function cloneState(s: GameState): GameState {
     },
     effects: s.effects.slice(),
     pendingTriggers: s.pendingTriggers.slice(),
+    ...(s.delayed ? { delayed: s.delayed.slice() } : {}),
     decision: cloneDecision(s.decision),
   };
 }
