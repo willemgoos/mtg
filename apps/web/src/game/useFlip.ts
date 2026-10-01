@@ -115,7 +115,6 @@ function flipIn(el: HTMLElement): void {
   if (!body) return;
   const back = document.createElement('div');
   back.className = 'back flip-back';
-  back.innerHTML = '<div class="back__sigil"></div>';
   body.appendChild(back);
   body.animate([{ rotate: 'y 180deg' }, { rotate: 'y 0deg' }], {
     duration: FLIGHT_MS,

@@ -29,6 +29,17 @@
   --display: 'Marcellus', 'Palatino Linotype', serif;
   --caps: 'Marcellus SC', 'Palatino Linotype', serif;
   --body: 'Alegreya Sans', 'Segoe UI', sans-serif;
+  /* The in-match HUD, after MTG Arena: a clean sans and Arena's orange. */
+  --hud: 'Barlow', 'Segoe UI', sans-serif;
+  --hud-num: 'Barlow Condensed', 'Segoe UI', sans-serif;
+  --arena-orange-hi: #ffc061;
+  --arena-orange: #f2841f;
+  --arena-orange-lo: #a9440d;
+  --arena-slate-hi: #303a47;
+  --arena-slate: #1c232c;
+  --arena-rim: #c9a35b;
+  /* How far the resting hand sinks below the screen edge, in card heights. */
+  --hand-sink: 0.55;
 
   /* Playmat cloth: a deep tint per mana colour. */
   --mat-W: #3b3524;
@@ -221,21 +232,23 @@ button {
 
 .side--opp .opp-hand {
   position: absolute;
-  left: calc(50% + 11rem);
+  left: calc(50% + 14rem);
   top: 0;
   width: 0;
 }
 
-/* You: avatar bottom-left of the hand, the hand centred. */
+/* You: avatar at the left edge, with the remaining band reserved for cards. */
 .side--me {
   align-items: flex-end;
   padding-bottom: 0.875rem;
 }
 
+/* Just above the resting hand; a raised card still passes in front of it. */
 .side--me .badge {
   position: absolute;
-  left: max(0rem, calc(50% - 33rem));
-  bottom: 1rem;
+  left: 50%;
+  bottom: calc(var(--hh) * (1 - var(--hand-sink)) + 1.5rem);
+  translate: -50% 0;
   z-index: 3;
 }
 
@@ -630,26 +643,12 @@ button {
   --h: calc(var(--fw) * 0.6 * 1.3968);
 }
 
+/* The classic Magic card back (Scryfall scan, 672 × 936). */
 .back {
   width: 100%;
   height: 100%;
-  background:
-    radial-gradient(circle at 50% 50%, rgba(217, 180, 106, 0.35), transparent 42%),
-    repeating-radial-gradient(circle at 50% 50%, #2a1c12 0 0.1875rem, #1f140c 0.1875rem 0.375rem);
-  border: 0.1875rem solid #0d0906;
+  background: #1b130c url('/cards/back.jpg') center / 100% 100% no-repeat;
   border-radius: inherit;
-  display: grid;
-  place-items: center;
-}
-
-.back__sigil {
-  width: 44%;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  border: 0.125rem solid rgba(217, 180, 106, 0.7);
-  box-shadow:
-    0 0 0 0.25rem rgba(217, 180, 106, 0.18),
-    inset 0 0 0.75rem rgba(217, 180, 106, 0.4);
 }
 
 /* ==========================================================================
@@ -657,10 +656,12 @@ button {
    ========================================================================== */
 
 .hand {
-  /* The fan stays within 34rem, clear of your avatar, however many cards you hold. */
-  --spread: clamp(1.9rem, calc((34rem - var(--hw)) / max(var(--n) - 1, 1)), calc(var(--hw) * 0.74));
+  /* Use the available band, leaving room at either edge for hover movement. */
+  --extra-width: calc(var(--extras, 0) * (var(--hw) + 0.75rem));
+  container-type: inline-size;
   position: relative;
   flex: 1;
+  min-width: 0;
   height: 100%;
 }
 
@@ -668,7 +669,7 @@ button {
 .hand-extra {
   position: absolute;
   right: 0;
-  bottom: calc(var(--hh) * -0.3);
+  bottom: calc(var(--hh) * var(--hand-sink) * -1);
   display: flex;
   gap: 0.75rem;
   z-index: 5;
@@ -680,7 +681,7 @@ button {
 }
 
 .hand-extra__slot:hover {
-  transform: translateY(calc(var(--hh) * -0.3)) scale(1.12);
+  transform: translateY(calc(var(--hh) * var(--hand-sink) * -1)) scale(1.12);
   z-index: 50;
 }
 
@@ -704,9 +705,13 @@ button {
 }
 
 .hand__slot {
+  --spread: min(
+    calc(var(--hw) * 0.82),
+    max(0rem, calc((100cqw - var(--extra-width) - var(--hw) * 1.6) / max(var(--n) - 1, 1)))
+  );
   position: absolute;
-  left: 50%;
-  bottom: calc(var(--hh) * -0.3);
+  left: calc(50% - var(--extra-width) / 2);
+  bottom: calc(var(--hh) * var(--hand-sink) * -1);
   transform: translateX(calc(-50% + var(--o) * var(--spread)))
     translateY(calc(var(--abs) * var(--abs) * 0.1563rem)) rotate(calc(var(--o) * 2.6deg));
   transform-origin: 50% 120%;
@@ -718,13 +723,13 @@ button {
 
 .hand__slot:hover {
   z-index: 50;
-  transform: translateX(calc(-50% + var(--o) * var(--spread))) translateY(calc(var(--hh) * -0.3))
-    scale(1.12);
+  transform: translateX(calc(-50% + var(--o) * var(--spread)))
+    translateY(calc(var(--hh) * var(--hand-sink) * -1)) scale(1.04);
 }
 
-/* Neighbours ease aside to make room for the hovered card. */
+/* Expose both neighbours even when a large hand needs a tight fan. */
 .hand__slot:hover + .hand__slot {
-  translate: calc(var(--spread) * 0.45) 0;
+  translate: max(calc(var(--spread) * 0.45), calc(var(--hw) * 0.75 - var(--spread))) 0;
 }
 
 .hand__slot:hover + .hand__slot + .hand__slot {
@@ -732,7 +737,7 @@ button {
 }
 
 .hand__slot:has(+ .hand__slot:hover) {
-  translate: calc(var(--spread) * -0.45) 0;
+  translate: calc(-1 * max(var(--spread) * 0.45, var(--hw) * 0.75 - var(--spread))) 0;
 }
 
 .hand__slot:has(+ .hand__slot + .hand__slot:hover) {
@@ -793,7 +798,7 @@ button {
 .badge {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 1.25rem;
   flex: none;
   cursor: var(--cursor, default);
 }
@@ -806,8 +811,8 @@ button {
   border-radius: 50%;
   background: var(--felt-lo) center / cover no-repeat;
   box-shadow:
-    0 0 0 0.125rem var(--brass-dim),
-    0 0 0 0.3125rem rgba(0, 0, 0, 0.55),
+    0 0 0 0.1875rem #101317,
+    0 0 0 0.3125rem var(--arena-rim),
     0 0.5rem 1.5rem rgba(0, 0, 0, 0.6);
   transition: box-shadow 0.3s;
 }
@@ -819,9 +824,9 @@ button {
 
 .badge--active .badge__portrait {
   box-shadow:
-    0 0 0 0.125rem var(--brass),
-    0 0 0 0.3125rem rgba(0, 0, 0, 0.55),
-    0 0 1.75rem rgba(217, 180, 106, 0.45);
+    0 0 0 0.1875rem #101317,
+    0 0 0 0.3125rem var(--arena-orange-hi),
+    0 0 1.75rem rgba(242, 132, 31, 0.6);
 }
 
 .badge--target {
@@ -841,14 +846,16 @@ button {
   transform: translateX(-50%);
   border-radius: 999px;
   text-align: center;
-  font-family: var(--body);
+  font-family: var(--hud-num);
   font-weight: 700;
-  font-size: 1.375rem;
-  line-height: 1.5;
+  font-size: 1.625rem;
+  line-height: 2rem;
   font-variant-numeric: tabular-nums;
-  color: var(--parchment);
-  background: var(--ink);
-  box-shadow: 0 0 0 0.0625rem var(--brass);
+  color: #f4eedf;
+  background: linear-gradient(180deg, #2b323c, #12161b);
+  box-shadow:
+    0 0 0 0.09375rem var(--arena-rim),
+    0 0.375rem 1rem rgba(0, 0, 0, 0.55);
   transition: color 0.4s ease;
 }
 
@@ -1008,112 +1015,137 @@ button {
   }
 }
 
-.badge__meta {
-  padding-top: 0.5rem;
-}
-
-.badge__name {
-  font-family: var(--caps);
-  font-size: 0.9375rem;
-  letter-spacing: 0.06em;
-  color: var(--parchment);
-}
-
-.badge__zones {
-  display: flex;
-  gap: 0.75rem;
-  margin-top: 0.1875rem;
-  font-size: 0.8125rem;
-  color: var(--muted);
-}
-
-.badge__zones span {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.25rem;
-}
-
-.ico {
-  display: inline-block;
-  width: 0.5625rem;
-  height: 0.75rem;
-  border-radius: 0.125rem;
-  border: 0.0938rem solid currentColor;
-}
-
-.ico--hand {
-  transform: rotate(-12deg);
-}
-
-.ico--grave {
-  border-radius: 0.3125rem 0.3125rem 0.0625rem 0.0625rem;
-}
-
 /* ==========================================================================
    Phases and stack
    ========================================================================== */
 
-.phases {
+/* A seat's phase strip: three phases each side of the portrait, the live one lit orange. */
+.strip {
   display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 0.375rem;
-}
-
-.phases__turn {
-  display: flex;
-  align-items: baseline;
   gap: 0.5rem;
-  line-height: 1.1;
-}
-
-.phases__num {
-  font-size: 0.75rem;
-  color: var(--muted);
-}
-
-.phases__who {
-  font-family: var(--caps);
-  font-size: 0.9375rem;
-  letter-spacing: 0.08em;
-  color: var(--brass);
-}
-
-.phases--opp .phases__who {
-  color: var(--ember);
-}
-
-.phases__list {
-  display: flex;
-  gap: 0.1875rem;
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-.phases__list li {
-  padding: 0.125rem 0.4375rem;
-  border-radius: 0.1875rem;
-  font-family: var(--caps);
-  font-size: 0.75rem;
-  color: var(--muted);
-  background: rgba(0, 0, 0, 0.4);
-  box-shadow: inset 0 0 0 0.0625rem var(--line);
+.strip__phase {
+  display: grid;
+  place-items: center;
+  width: 2.125rem;
+  height: 2.125rem;
+  border-radius: 50%;
+  color: rgba(236, 228, 210, 0.45);
+  background: rgba(10, 12, 14, 0.62);
+  box-shadow: inset 0 0 0 0.0625rem rgba(255, 255, 255, 0.12);
   transition:
     color 0.3s,
-    background 0.3s;
+    background 0.3s,
+    box-shadow 0.3s;
 }
 
-.phases__list li.is-on {
-  color: #1a140a;
-  background: linear-gradient(var(--brass-hi), var(--brass));
-  box-shadow: 0 0 0.75rem rgba(217, 180, 106, 0.35);
+.strip__phase svg {
+  width: 1.125rem;
+  height: 1.125rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
-.phases--opp .phases__list li.is-on {
-  color: #fff;
-  background: linear-gradient(#ff8a5f, var(--ember-dim));
-  box-shadow: 0 0 0.75rem rgba(255, 107, 61, 0.35);
+.badge--active .strip__phase {
+  color: rgba(236, 228, 210, 0.8);
+}
+
+.strip__phase.is-on {
+  color: #2a1300;
+  background: radial-gradient(circle at 50% 35%, var(--arena-orange-hi), var(--arena-orange) 70%);
+  box-shadow:
+    0 0 0 0.125rem rgba(255, 192, 97, 0.35),
+    0 0.25rem 1rem rgba(242, 132, 31, 0.65);
+}
+
+.side--opp .strip__phase {
+  width: 1.75rem;
+  height: 1.75rem;
+}
+
+.side--opp .strip__phase svg {
+  width: 0.9375rem;
+  height: 0.9375rem;
+}
+
+/* Library and graveyard: small piles at the right edge, either side of the midline. */
+.piles {
+  position: absolute;
+  right: 1.75rem;
+  z-index: 4;
+  display: flex;
+  gap: 0.75rem;
+}
+
+.piles--opp {
+  bottom: calc(50% + 1.25rem);
+}
+
+.piles--me {
+  top: calc(50% + 1.25rem);
+}
+
+.pile {
+  position: relative;
+  padding: 0;
+  border: 0;
+  font: inherit;
+  width: 3.625rem;
+  aspect-ratio: 63 / 88;
+  border-radius: 0.3125rem;
+  background: center / cover no-repeat;
+  box-shadow: 0 0.375rem 1rem rgba(0, 0, 0, 0.55);
+}
+
+.pile--grave.is-empty {
+  background: rgba(0, 0, 0, 0.35);
+  box-shadow: inset 0 0 0 0.0625rem rgba(255, 255, 255, 0.12);
+}
+
+.pile--library {
+  background: #1b130c url('/cards/back.jpg') center / 100% 100% no-repeat;
+  box-shadow:
+    0.125rem 0.125rem 0 #0d0906,
+    0.25rem 0.25rem 0 #0d0906,
+    0 0.375rem 1rem rgba(0, 0, 0, 0.55);
+}
+
+.pile.is-clickable {
+  cursor: pointer;
+  transition:
+    translate 0.15s var(--ease),
+    filter 0.15s;
+}
+
+.pile.is-clickable:hover {
+  translate: 0 -0.1875rem;
+  filter: brightness(1.12);
+}
+
+.pile b {
+  position: absolute;
+  left: 50%;
+  bottom: -0.625rem;
+  z-index: 1;
+  min-width: 1.625rem;
+  padding: 0 0.375rem;
+  translate: -50% 0;
+  border-radius: 999px;
+  font-family: var(--hud-num);
+  font-size: 0.875rem;
+  font-weight: 700;
+  line-height: 1.25rem;
+  text-align: center;
+  color: #f4eedf;
+  background: #12161b;
+  box-shadow: 0 0 0 0.0625rem rgba(255, 255, 255, 0.18);
 }
 
 /* In the middle of the board, where the eye already is. */
@@ -1232,49 +1264,199 @@ button {
   flex-direction: column;
   align-items: flex-end;
   gap: 0.5rem;
-  max-width: 21rem;
+  max-width: 24rem;
+  font-family: var(--hud);
+}
+
+.action__row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.abtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  font-family: var(--hud);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  cursor: var(--cursor-hover, pointer);
+  transition:
+    filter 0.15s,
+    transform 0.12s,
+    box-shadow 0.2s;
+}
+
+.abtn:active:not(:disabled) {
+  transform: translateY(0.0625rem);
+}
+
+.abtn--main {
+  min-width: 13.75rem;
+  height: 3.875rem;
+  padding: 0 2.5rem;
+  font-size: 1.375rem;
+  color: #fff;
+  text-shadow: 0 0.0625rem 0.125rem rgba(80, 30, 0, 0.7);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.35), transparent 45%),
+    linear-gradient(180deg, var(--arena-orange-hi), var(--arena-orange) 50%, var(--arena-orange-lo));
+  box-shadow:
+    0 0 0 0.125rem #3a1a04,
+    0 0 0 0.1875rem rgba(255, 192, 97, 0.5),
+    0 0.5rem 1.375rem rgba(0, 0, 0, 0.55),
+    0 0 1.875rem rgba(242, 132, 31, 0.35);
+}
+
+.abtn--main:hover:not(:disabled) {
+  filter: brightness(1.08);
+}
+
+/* Nothing left to play: the button breathes so the next move is obvious. */
+.abtn--nudge {
+  animation: abtn-nudge 1.6s ease-in-out infinite;
+}
+
+@keyframes abtn-nudge {
+  50% {
+    box-shadow:
+      0 0 0 0.125rem #3a1a04,
+      0 0 0 0.25rem rgba(255, 192, 97, 0.8),
+      0 0.5rem 1.375rem rgba(0, 0, 0, 0.55),
+      0 0 3rem rgba(242, 132, 31, 0.7);
+  }
+}
+
+.abtn--wait {
+  font-size: 1.25rem;
+  color: rgba(236, 228, 210, 0.55);
+  text-shadow: none;
+  background: linear-gradient(180deg, var(--arena-slate-hi), var(--arena-slate));
+  box-shadow:
+    0 0 0 0.125rem #0b0e12,
+    0 0 0 0.1875rem rgba(255, 255, 255, 0.12),
+    0 0.5rem 1.375rem rgba(0, 0, 0, 0.55);
+  cursor: var(--cursor, default);
+}
+
+.abtn--wait.is-thinking {
+  animation: abtn-think 1.4s ease-in-out infinite;
+}
+
+@keyframes abtn-think {
+  50% {
+    color: rgba(236, 228, 210, 0.85);
+  }
+}
+
+.abtn--second {
+  min-width: 9.375rem;
+  height: 2.5rem;
+  padding: 0 1.5rem;
+  font-size: 1rem;
+  color: #f4eedf;
+  background: linear-gradient(180deg, var(--arena-slate-hi), var(--arena-slate));
+  box-shadow:
+    0 0 0 0.09375rem rgba(255, 192, 97, 0.45),
+    0 0.375rem 0.875rem rgba(0, 0, 0, 0.5);
+}
+
+.abtn--second:hover {
+  filter: brightness(1.15);
+}
+
+.abtn--icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  color: #f4eedf;
+  background: rgba(10, 12, 14, 0.7);
+  box-shadow: inset 0 0 0 0.0625rem rgba(255, 255, 255, 0.16);
+}
+
+.abtn--icon:hover:not(:disabled) {
+  box-shadow: inset 0 0 0 0.0625rem rgba(255, 192, 97, 0.6);
+}
+
+.abtn--icon.is-on {
+  color: var(--arena-orange-hi);
+  box-shadow: inset 0 0 0 0.09375rem var(--arena-orange);
+}
+
+.abtn--icon:disabled {
+  opacity: 0.4;
+  cursor: var(--cursor, default);
+}
+
+.hud-ico {
+  width: 1.125rem;
+  height: 1.125rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Arena has no running log: the opponent's latest spell rests at the left edge. */
+.lastplay {
+  position: absolute;
+  left: 1.75rem;
+  top: 50%;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0;
+  border: 0;
+  translate: 0 -50%;
+  font-family: var(--hud);
+  text-align: left;
+  color: var(--text);
+  background: none;
+  cursor: var(--cursor-hover, pointer);
+  animation: lastplay-in 0.45s var(--ease) both;
+}
+
+.lastplay .card {
+  box-shadow:
+    0 0 0 0.125rem rgba(255, 90, 54, 0.6),
+    0 1rem 2rem rgba(0, 0, 0, 0.6);
+}
+
+.lastplay span {
+  max-width: 8rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.25;
+  text-shadow: 0 0.125rem 0.75rem rgba(0, 0, 0, 0.85);
+}
+
+@keyframes lastplay-in {
+  from {
+    opacity: 0;
+    translate: -1.5rem -50%;
+  }
 }
 
 .action__prompt {
   min-height: 1.3em;
   text-align: right;
-  font-size: 0.9375rem;
-  color: var(--parchment);
-  text-shadow: 0 0.0625rem 0.25rem #000;
+  font-family: var(--hud);
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #f4eedf;
+  text-shadow: 0 0.125rem 0.75rem rgba(0, 0, 0, 0.85);
 }
 
 /* Fades out only after a pause, so the short gaps between the opponent's
    actions don't make it blink. */
-.action__prompt--wait {
-  color: var(--muted);
-  opacity: 0;
-  transition: opacity 0.3s 0.6s;
-}
-
-.action__prompt--wait.is-on {
-  opacity: 1;
-  transition-delay: 0s;
-}
-
-.action__buttons {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.action__keys {
-  font-size: 0.6875rem;
-  color: var(--muted);
-}
-
-.action__keys kbd {
-  padding: 0 0.3125rem;
-  border-radius: 0.1875rem;
-  font-family: var(--body);
-  color: var(--text);
-  background: rgba(255, 255, 255, 0.07);
-  box-shadow: inset 0 0 0 0.0625rem var(--line);
-}
 
 .corner {
   position: absolute;
@@ -1288,41 +1470,26 @@ button {
 .icon-btn {
   display: grid;
   place-items: center;
-  width: 2.25rem;
-  height: 2.25rem;
+  width: 2.5rem;
+  height: 2.5rem;
   padding: 0;
   border: 0;
   border-radius: 50%;
   cursor: var(--cursor-hover, pointer);
-  color: var(--muted);
-  background: rgba(0, 0, 0, 0.5);
-  box-shadow: inset 0 0 0 0.0625rem var(--line);
+  color: #f4eedf;
+  background: rgba(10, 12, 14, 0.7);
+  box-shadow: inset 0 0 0 0.0625rem rgba(255, 255, 255, 0.16);
 }
 
 .icon-btn:hover,
 .icon-btn.is-on {
-  color: var(--brass-hi);
-  box-shadow: inset 0 0 0 0.0625rem var(--brass-dim);
+  color: var(--arena-orange-hi);
+  box-shadow: inset 0 0 0 0.09375rem var(--arena-orange);
 }
 
 /* Three lines. */
-.ico-log {
-  width: 0.875rem;
-  height: 0.125rem;
-  background: currentColor;
-  box-shadow:
-    0 -0.25rem 0 currentColor,
-    0 0.25rem 0 currentColor;
-}
 
 /* A cog: a ring with notches. */
-.ico-gear {
-  width: 0.875rem;
-  height: 0.875rem;
-  border-radius: 50%;
-  border: 0.1875rem dotted currentColor;
-  box-shadow: inset 0 0 0 0.125rem currentColor;
-}
 
 .drawer {
   position: absolute;
@@ -1405,32 +1572,6 @@ button {
 }
 
 /* The last events, faint at the left of the seam; click to open the log. */
-.recent {
-  position: absolute;
-  left: 1rem;
-  top: 50%;
-  z-index: 3;
-  width: 15rem;
-  transform: translateY(-50%);
-  padding: 0.375rem 0.75rem;
-  border-left: 0.125rem solid var(--brass-dim);
-  background: linear-gradient(90deg, rgba(0, 0, 0, 0.5), transparent);
-  font-size: 0.75rem;
-  line-height: 1.4;
-  cursor: var(--cursor-hover, pointer);
-}
-
-.recent__line {
-  color: var(--muted);
-}
-
-.recent__line:last-child {
-  color: var(--text);
-}
-
-.recent__line--opp:last-child {
-  color: #f0b39c;
-}
 
 .btn {
   flex: 1;
@@ -1490,12 +1631,6 @@ button {
     inset 0 0.0625rem 0 rgba(255, 255, 255, 0.6),
     0 0 0 0.125rem #5d4a26,
     0 0 2.5rem rgba(246, 195, 91, 0.6);
-}
-
-.action .btn--ghost {
-  border-radius: 999px;
-  padding: 0.5rem 1rem;
-  background: rgba(0, 0, 0, 0.5);
 }
 
 .btn--ghost {
@@ -1740,6 +1875,65 @@ button {
 .mull__card:hover {
   transform: translateY(-0.625rem);
   transition: transform 0.2s var(--ease);
+}
+
+/* Browsing a graveyard or your library: a scrolling grid of cards. */
+.pileview {
+  display: flex;
+  flex-direction: column;
+  width: min(68rem, 92vw);
+  max-height: 88vh;
+  text-align: center;
+}
+
+.pileview h2 {
+  margin: 0;
+  font-family: var(--display);
+  font-size: 2.125rem;
+  font-weight: 400;
+  color: var(--parchment);
+}
+
+.pileview p {
+  margin: 0.375rem 0 1.25rem;
+  color: var(--muted);
+}
+
+.pileview__grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem 0.75rem;
+  min-height: 0;
+  padding: 0.5rem 0.75rem 0.75rem;
+  overflow-y: auto;
+}
+
+.pileview__card {
+  position: relative;
+  animation: fade-in 0.25s ease-out both;
+}
+
+.pileview__card .card--mull {
+  --w: 9.5rem;
+}
+
+.pileview__count {
+  position: absolute;
+  right: -0.375rem;
+  top: -0.375rem;
+  min-width: 2rem;
+  padding: 0 0.5rem;
+  border-radius: 999px;
+  font-family: var(--hud-num);
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.75rem;
+  color: #f4eedf;
+  background: #12161b;
+  box-shadow:
+    0 0 0 0.0625rem rgba(255, 255, 255, 0.25),
+    0 0.25rem 0.625rem rgba(0, 0, 0, 0.6);
 }
 
 @keyframes deal {
@@ -2247,6 +2441,17 @@ button {
 
 .hand__slot.is-dragging {
   opacity: 0.25;
+}
+
+/* Keep the insertion positions steady while the dragged card follows the pointer. */
+.hand:has(.is-dragging) .hand__slot {
+  translate: none;
+}
+
+.hand:has(.is-dragging) .hand__slot:hover {
+  z-index: auto;
+  transform: translateX(calc(-50% + var(--o) * var(--spread)))
+    translateY(calc(var(--abs) * var(--abs) * 0.1563rem)) rotate(calc(var(--o) * 2.6deg));
 }
 
 .drag-ghost {
@@ -3277,440 +3482,6 @@ button {
   }
 }
 
-/* ---------------------------------------------------------- deck builder */
-
-/* Arena's deck builder: collection on top, deck stacks below, a band between. */
-.dbk {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  background:
-    linear-gradient(180deg, rgba(8, 17, 14, 0.7), rgba(8, 17, 14, 0.88)),
-    var(--art) center 30% / cover;
-}
-
-.dbk__bar {
-  flex: none;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  padding: 0.875rem 1.5rem 0.25rem;
-}
-
-.dbk__search {
-  position: relative;
-  display: flex;
-  align-items: center;
-  width: min(16rem, 30vw);
-}
-
-.dbk__search input {
-  width: 100%;
-  padding: 0.5rem 2rem 0.5rem 1rem;
-  border: 0.0625rem solid var(--line);
-  border-radius: 999px;
-  font: inherit;
-  color: var(--parchment);
-  background: rgba(0, 0, 0, 0.7);
-  outline: none;
-}
-
-.dbk__search input:focus {
-  border-color: var(--brass-dim);
-}
-
-.dbk__search input::-webkit-search-cancel-button {
-  display: none;
-}
-
-.dbk__search button {
-  position: absolute;
-  right: 0.5rem;
-  width: 1.25rem;
-  height: 1.25rem;
-  padding: 0;
-  border: 0;
-  border-radius: 50%;
-  font-size: 0.875rem;
-  line-height: 1;
-  color: #111;
-  background: var(--text);
-  cursor: var(--cursor-hover, pointer);
-}
-
-.dbk__filters {
-  display: flex;
-  gap: 0.375rem;
-}
-
-/* Round mana-coloured toggles: dim when off, ringed and lit when on. */
-.dbk__filter {
-  --c: #b9b3a3;
-  width: 2rem;
-  height: 2rem;
-  border: 0;
-  border-radius: 50%;
-  background: radial-gradient(circle at 35% 30%, #fff8 0, transparent 45%), var(--c);
-  box-shadow:
-    inset 0 0 0 0.125rem rgba(0, 0, 0, 0.55),
-    0 0.125rem 0.375rem rgba(0, 0, 0, 0.6);
-  opacity: 0.45;
-  cursor: var(--cursor-hover, pointer);
-  transition:
-    opacity 0.15s,
-    box-shadow 0.15s;
-}
-
-.dbk__filter:hover {
-  opacity: 0.75;
-}
-
-.dbk__filter.is-on {
-  opacity: 1;
-  box-shadow:
-    inset 0 0 0 0.125rem rgba(0, 0, 0, 0.55),
-    0 0 0 0.125rem var(--brass-hi),
-    0 0 0.75rem var(--brass);
-}
-
-.dbk__filter--W {
-  --c: var(--mana-W);
-}
-
-.dbk__filter--U {
-  --c: var(--mana-U);
-}
-
-.dbk__filter--B {
-  --c: var(--mana-B);
-}
-
-.dbk__filter--R {
-  --c: var(--mana-R);
-}
-
-.dbk__filter--G {
-  --c: var(--mana-G);
-}
-
-/* Lands: a small mountain peak on a dark coin. */
-.dbk__filter--L {
-  background:
-    linear-gradient(135deg, transparent 47%, var(--text) 47% 55%, transparent 55%) 30% 60% /
-      0.625rem 0.625rem no-repeat,
-    linear-gradient(225deg, transparent 47%, var(--text) 47% 55%, transparent 55%) 70% 60% /
-      0.625rem 0.625rem no-repeat,
-    #3a342a;
-}
-
-.dbk__tools {
-  margin-left: auto;
-  display: flex;
-  gap: 0.5rem;
-}
-
-/* Two rows of full cards that scroll sideways; the mouse wheel scrolls them too. */
-.dbk__pool {
-  flex: 1;
-  min-height: 14rem;
-  container-type: size;
-  overflow: auto hidden;
-  scrollbar-color: var(--brass-dim) transparent;
-}
-
-/* Card width follows the pool's height: two rows, each a copies line over a card. */
-.dbk__grid {
-  --row: calc((100cqh - 1.25rem - 0.75rem) / 2);
-  display: grid;
-  grid-auto-flow: column;
-  grid-template-rows: repeat(2, var(--row));
-  grid-auto-columns: calc((var(--row) - 1rem) * 63 / 88);
-  gap: 0.75rem 0.875rem;
-  width: max-content;
-  padding: 0.5rem 1.5rem 0.75rem;
-}
-
-.dbk-card {
-  min-height: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.25rem;
-}
-
-/* Arena's copy diamonds: lit for copies you can still add, dark for ones in the deck. */
-.dbk-card__copies {
-  flex: none;
-  display: flex;
-  gap: 0.25rem;
-  height: 0.75rem;
-  font-size: 0.875rem;
-  line-height: 0.75rem;
-  color: var(--brass-hi);
-}
-
-.dbk-card__copies i {
-  width: 0.3125rem;
-  height: 0.3125rem;
-  margin-top: 0.25rem;
-  transform: rotate(45deg);
-  background: rgba(255, 255, 255, 0.2);
-}
-
-.dbk-card__copies i.is-free {
-  background: var(--parchment);
-  box-shadow: 0 0 0.25rem rgba(255, 255, 255, 0.5);
-}
-
-.dbk-card__face {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 63 / 88;
-  border-radius: 4.6% / 3.3%;
-  overflow: hidden;
-  background: #111;
-  box-shadow:
-    0 0 0 0.0625rem rgba(0, 0, 0, 0.8),
-    0 0.375rem 1rem rgba(0, 0, 0, 0.6);
-  cursor: var(--cursor-hover, pointer);
-  transition:
-    transform 0.12s,
-    filter 0.12s;
-}
-
-.dbk-card__face:hover {
-  transform: translateY(-0.25rem);
-  filter: brightness(1.1);
-}
-
-.dbk-card__face.is-new {
-  box-shadow:
-    0 0 0 0.125rem #ffb347,
-    0 0 1rem #ff8c1a,
-    0 0.375rem 1rem rgba(0, 0, 0, 0.6);
-}
-
-.dbk-card.is-out .dbk-card__face {
-  filter: grayscale(0.85) brightness(0.45);
-  cursor: var(--cursor, default);
-  transform: none;
-}
-
-.dbk-card__face img {
-  display: block;
-  width: 100%;
-  height: 100%;
-}
-
-.dbk-card__new {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  translate: -50% 0;
-  padding: 0 0.5rem 0.0625rem;
-  border-radius: 0 0 0.375rem 0.375rem;
-  font-family: var(--caps);
-  font-size: 0.6875rem;
-  letter-spacing: 0.06em;
-  color: #2a1400;
-  background: linear-gradient(180deg, #ffd27a, #ff9a2e);
-}
-
-.dbk__empty {
-  align-self: center;
-  margin: 1rem 0;
-  color: var(--muted);
-}
-
-/* The band between collection and deck: name plate, count, curve and deck box. */
-.dbk__band {
-  flex: none;
-  display: flex;
-  align-items: center;
-  gap: 1.25rem;
-  height: 4.5rem;
-  padding-right: 1.5rem;
-  border-top: 0.125rem solid var(--brass-dim);
-  background: linear-gradient(180deg, #1d1a14, #0d0c09);
-  box-shadow: 0 -0.5rem 1.5rem rgba(0, 0, 0, 0.5);
-}
-
-.dbk__plate {
-  align-self: stretch;
-  display: grid;
-  grid-template-columns: auto 1fr;
-  align-content: center;
-  column-gap: 0.625rem;
-  min-width: 16rem;
-  padding: 0 2.5rem 0 1.5rem;
-  background: linear-gradient(90deg, #4a2a18, #2e1a10 80%, transparent);
-}
-
-.dbk__plate .deck__pips {
-  grid-row: span 2;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.dbk__plate h1 {
-  margin: 0;
-  font-family: var(--display);
-  font-weight: 400;
-  font-size: 1.625rem;
-  line-height: 1.1;
-  color: var(--parchment);
-}
-
-.dbk__count {
-  font-family: var(--caps);
-  font-size: 0.9375rem;
-  color: var(--text);
-}
-
-.dbk__count.is-short {
-  color: #ff5a4a;
-}
-
-/* Bars for 0–1 to 6+; the lighter top part is creatures. */
-.dbk__curve {
-  display: flex;
-  align-items: flex-end;
-  gap: 0.1875rem;
-  height: 2.5rem;
-  padding: 0.25rem;
-  border-radius: 0.25rem;
-  background: rgba(0, 0, 0, 0.5);
-}
-
-.dbk__curve > span {
-  display: flex;
-  flex-direction: column-reverse;
-  justify-content: flex-end;
-  width: 0.4375rem;
-  min-height: 0.125rem;
-  background: #f09a2a;
-  transition: height 0.2s;
-}
-
-.dbk__curve > span > span {
-  background: #ffd27a;
-}
-
-/* The deck box, standing on the band like Arena's. */
-.dbk__box {
-  align-self: flex-end;
-  flex: none;
-  width: 6.5rem;
-  height: 5.5rem;
-  margin-bottom: 0.5rem;
-  border-radius: 0.375rem;
-  background:
-    linear-gradient(90deg, transparent 80%, rgba(0, 0, 0, 0.45) 80%),
-    var(--art) center 30% / cover;
-  box-shadow:
-    0 0 0 0.125rem var(--brass-dim),
-    0 0 1.25rem color-mix(in srgb, var(--glow) 60%, transparent),
-    0 0.5rem 1rem rgba(0, 0, 0, 0.7);
-  transform: perspective(20rem) rotateY(-14deg);
-}
-
-.dbk__tips {
-  flex: 1;
-  min-width: 0;
-  max-height: 100%;
-  margin: 0;
-  padding: 0.25rem 0 0.25rem 1rem;
-  overflow: auto;
-  font-size: 0.8125rem;
-  color: var(--text);
-}
-
-.dbk__tips li::marker {
-  color: var(--brass);
-}
-
-/* The deck: columns by mana value, each a stack of title bars with the last card whole. */
-.dbk__deck {
-  --cw: clamp(7rem, 11vw, 11rem);
-  flex: none;
-  display: flex;
-  align-items: flex-start;
-  gap: 1rem;
-  height: clamp(13rem, 40vh, 26rem);
-  padding: 1rem 13rem 1rem 1.5rem;
-  overflow: auto;
-  background: var(--felt-lo);
-}
-
-.dbk-col {
-  flex: none;
-  display: flex;
-  flex-direction: column;
-  width: var(--cw);
-}
-
-.dbk-stack {
-  position: relative;
-  flex: none;
-  width: var(--cw);
-  aspect-ratio: 63 / 88;
-  border-radius: 4.6% / 3.3%;
-  overflow: hidden;
-  background: #111;
-  box-shadow:
-    0 0 0 0.0625rem rgba(0, 0, 0, 0.8),
-    0 -0.25rem 0.75rem rgba(0, 0, 0, 0.45);
-  cursor: var(--cursor-hover, pointer);
-  transition: filter 0.15s;
-}
-
-.dbk-stack + .dbk-stack {
-  margin-top: calc(var(--cw) * 88 / 63 * -0.78);
-}
-
-.dbk-stack:hover {
-  filter: brightness(1.15);
-}
-
-.dbk-stack img {
-  display: block;
-  width: 100%;
-  height: 100%;
-}
-
-.dbk-stack__qty {
-  position: absolute;
-  top: calc(var(--cw) * 0.16);
-  right: 0.375rem;
-  font-family: var(--display);
-  font-size: calc(var(--cw) * 0.125);
-  line-height: 1;
-  color: #fff;
-  text-shadow:
-    0 0 0.25rem #000,
-    0 0 0.5rem #000,
-    0 0.0625rem 0.125rem #000;
-}
-
-/* Arena's big orange Done in the bottom-right corner. */
-.dbk__done {
-  position: absolute;
-  right: 1.5rem;
-  bottom: 1.25rem;
-  z-index: 2;
-  min-width: 11rem;
-  padding-block: 0.75rem;
-  font-size: 1.25rem;
-  color: #2a1000;
-  background: linear-gradient(180deg, #ffc46b, #ff8a1f 55%, #d8600c);
-}
-
-.dbk__done:disabled {
-  cursor: var(--cursor, default);
-  filter: grayscale(1) brightness(0.6);
-}
-
 /* ---------------------------------------------------------- pack opening */
 
 .opening {
@@ -3948,7 +3719,7 @@ button {
 /* The cards: dealt out from the middle, face down, then flipped. */
 .pack-cards {
   display: grid;
-  grid-template-columns: repeat(6, var(--ow));
+  grid-template-columns: repeat(var(--cols, 6), var(--ow));
   gap: var(--gap);
   perspective: 80rem;
 }
@@ -3972,7 +3743,7 @@ button {
 @keyframes pcard-deal {
   from {
     transform: translate(
-        calc((2.5 - var(--col)) * (var(--ow) + var(--gap))),
+        calc(((var(--cols, 6) - 1) / 2 - var(--col)) * (var(--ow) + var(--gap))),
         calc(((var(--rows) - 1) / 2 - var(--row)) * (var(--oh) + var(--gap)))
       )
       rotate(var(--spin)) scale(0.35);
@@ -4175,9 +3946,8 @@ button {
   }
 }
 
-/* ------------------------------------------------------------ home and nav */
+/* ------------------------------------------------------------ decks page */
 
-.home,
 .decks-page {
   position: relative;
   display: flex;
@@ -4193,511 +3963,6 @@ button {
   min-height: 0;
   height: auto;
   background: none;
-}
-
-.nav {
-  position: relative;
-  z-index: 3;
-  flex: none;
-  display: flex;
-  align-items: center;
-  gap: 2.5rem;
-  height: 5.25rem;
-  padding: 0 2rem;
-  border-bottom: 0.0625rem solid var(--line);
-  background: linear-gradient(180deg, var(--ink), rgba(0, 0, 0, 0.55));
-}
-
-.nav__brand {
-  font-family: var(--display);
-  font-size: 1.875rem;
-  line-height: 1;
-  color: var(--brass-hi);
-}
-
-.nav__brand small {
-  display: block;
-  font-family: var(--caps);
-  font-size: 0.6875rem;
-  letter-spacing: 0.22em;
-  color: var(--brass);
-}
-
-.nav__tabs {
-  display: flex;
-  align-self: stretch;
-  gap: 0.25rem;
-}
-
-.nav__tab {
-  padding: 0 1.25rem;
-  border: 0;
-  border-bottom: 0.1875rem solid transparent;
-  font-family: var(--caps);
-  font-size: 1.125rem;
-  letter-spacing: 0.12em;
-  color: var(--muted);
-  background: none;
-  cursor: var(--cursor-hover, pointer);
-  transition: color 0.15s;
-}
-
-.nav__tab:hover {
-  color: var(--parchment);
-}
-
-.nav__tab.is-on {
-  color: var(--brass-hi);
-  border-bottom-color: var(--brass);
-  background: linear-gradient(0deg, rgba(217, 180, 106, 0.12), transparent);
-}
-
-.nav__end {
-  margin-left: auto;
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-}
-
-.nav__stat {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.3rem 0.875rem;
-  border-radius: 999px;
-  font-size: 0.9375rem;
-  color: var(--parchment);
-  background: rgba(0, 0, 0, 0.35);
-  box-shadow: inset 0 0 0 0.0625rem var(--line);
-}
-
-.nav__stat svg {
-  width: 1rem;
-  height: 1rem;
-  color: var(--brass);
-}
-
-.home__main {
-  flex: 1;
-  min-height: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 1.75rem;
-  padding: 2rem;
-}
-
-/* The featured banner. Art stays at or below its native 626px: a blurred copy fills the rest. */
-.hero {
-  position: relative;
-  flex: 1;
-  min-height: 22rem;
-  overflow: hidden;
-  isolation: isolate;
-  border-radius: 1.25rem;
-  background: var(--ink);
-  box-shadow:
-    0 1.5rem 3rem rgba(0, 0, 0, 0.55),
-    0 0 0 0.0625rem var(--line);
-}
-
-.hero__slide {
-  position: absolute;
-  inset: 0;
-  animation: hero-in 0.8s var(--ease) both;
-}
-
-.hero__slide::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(0deg, rgba(0, 0, 0, 0.6), transparent 55%),
-    linear-gradient(90deg, rgba(0, 0, 0, 0.5), transparent 55%);
-  pointer-events: none;
-}
-
-.hero__wash {
-  position: absolute;
-  inset: -3rem;
-  background: center / cover no-repeat;
-  filter: blur(2rem) brightness(0.45) saturate(1.3);
-}
-
-.hero__art {
-  position: absolute;
-  right: 0;
-  top: 50%;
-  width: min(626px, 58%);
-  height: min(457px, 100%);
-  background: center / cover no-repeat;
-  transform: translateY(-50%);
-  mask-image:
-    linear-gradient(90deg, transparent, #000 40%),
-    linear-gradient(180deg, transparent, #000 12%, #000 88%, transparent);
-  mask-composite: intersect;
-  animation: hero-drift 9s ease-out both;
-}
-
-.hero__copy {
-  position: absolute;
-  left: 3.5rem;
-  bottom: 3.25rem;
-  z-index: 1;
-  width: min(42rem, 52%);
-  display: flex;
-  flex-direction: column;
-  gap: 0.875rem;
-  animation: hero-rise 0.7s 0.1s var(--ease) both;
-}
-
-.hero__badge {
-  align-self: flex-start;
-  padding: 0.25rem 0.875rem;
-  border-radius: 999px;
-  font-family: var(--caps);
-  font-size: 0.8125rem;
-  letter-spacing: 0.2em;
-  color: #1d150a;
-  background: linear-gradient(180deg, var(--brass-hi), var(--brass));
-  box-shadow: 0 0 1.25rem rgba(246, 195, 91, 0.45);
-}
-
-.hero__title {
-  margin: 0;
-  font-family: var(--display);
-  font-weight: 400;
-  font-size: 5.75rem;
-  line-height: 1;
-  color: var(--parchment);
-  text-shadow: 0 0.125rem 1rem rgba(0, 0, 0, 0.8);
-}
-
-.hero__text {
-  margin: 0;
-  max-width: 36rem;
-  font-size: 1.375rem;
-  line-height: 1.4;
-  color: var(--text);
-}
-
-.hero__actions {
-  display: flex;
-  gap: 0.75rem;
-  margin-top: 0.5rem;
-}
-
-.hero__cards {
-  position: absolute;
-  right: 4rem;
-  bottom: 3rem;
-  z-index: 1;
-  display: flex;
-  animation: hero-rise 0.8s 0.2s var(--ease) both;
-}
-
-.hero__cards img {
-  width: 9.5rem;
-  border-radius: 4.6% / 3.3%;
-  box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.6);
-}
-
-.hero__cards img + img {
-  margin-left: -3.25rem;
-}
-
-.hero__cards img:nth-child(1) {
-  rotate: -10deg;
-  translate: 0 1rem;
-}
-
-.hero__cards img:nth-child(2) {
-  translate: 0 -0.5rem;
-  box-shadow:
-    0 1rem 2rem rgba(0, 0, 0, 0.6),
-    0 0 1.5rem rgba(246, 195, 91, 0.5);
-}
-
-.hero__cards img:nth-child(2):last-child {
-  rotate: 8deg;
-  translate: 0 0.5rem;
-}
-
-.hero__cards img:nth-child(3) {
-  rotate: 10deg;
-  translate: 0 1rem;
-}
-
-.hero__dots {
-  position: absolute;
-  left: 3.5rem;
-  top: 2.25rem;
-  z-index: 2;
-  display: flex;
-  gap: 0.5rem;
-}
-
-.hero__dot {
-  width: 0.875rem;
-  height: 0.3rem;
-  padding: 0;
-  border: 0;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.28);
-  cursor: var(--cursor-hover, pointer);
-  transition:
-    width 0.3s var(--ease),
-    background 0.3s;
-}
-
-.hero__dot.is-on {
-  width: 3rem;
-  background: var(--brass-hi);
-}
-
-@keyframes hero-in {
-  from {
-    opacity: 0;
-  }
-}
-
-@keyframes hero-rise {
-  from {
-    opacity: 0;
-    translate: 0 1.25rem;
-  }
-}
-
-@keyframes hero-drift {
-  from {
-    transform: translate(1.5rem, -50%);
-  }
-}
-
-/* Mode tiles and the Play button. */
-.home__row {
-  flex: none;
-  display: flex;
-  gap: 1.75rem;
-  height: 17rem;
-}
-
-.modes {
-  flex: 1;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem;
-}
-
-.mode {
-  position: relative;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  align-items: flex-start;
-  gap: 0.25rem;
-  padding: 1.5rem;
-  border: 0;
-  border-radius: 1rem;
-  text-align: left;
-  color: inherit;
-  background: #111;
-  cursor: var(--cursor-hover, pointer);
-  box-shadow:
-    0 0.75rem 1.5rem rgba(0, 0, 0, 0.5),
-    0 0 0 0.0625rem var(--line);
-  transition:
-    box-shadow 0.2s,
-    translate 0.2s var(--ease);
-}
-
-.mode:hover {
-  translate: 0 -0.25rem;
-}
-
-.mode.is-on {
-  box-shadow:
-    0 0.75rem 1.5rem rgba(0, 0, 0, 0.5),
-    0 0 0 0.1875rem var(--brass),
-    0 0 2rem rgba(246, 195, 91, 0.4);
-}
-
-.mode__art {
-  position: absolute;
-  inset: 0;
-  background: var(--art) center 30% / cover;
-  transition: scale 0.4s var(--ease);
-}
-
-.mode:hover .mode__art {
-  scale: 1.04;
-}
-
-.mode::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  background: linear-gradient(0deg, rgba(0, 0, 0, 0.92) 12%, transparent 75%);
-}
-
-.mode > :not(.mode__art) {
-  position: relative;
-  z-index: 2;
-}
-
-.mode > .mode__tag {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  padding: 0.125rem 0.5rem;
-  border-radius: 0.25rem;
-  font-family: var(--caps);
-  font-size: 0.75rem;
-  letter-spacing: 0.15em;
-  color: var(--brass-hi);
-  background: rgba(0, 0, 0, 0.6);
-  box-shadow: inset 0 0 0 0.0625rem var(--brass-dim);
-}
-
-.mode__name {
-  font-family: var(--display);
-  font-size: 2.125rem;
-  line-height: 1.1;
-  color: var(--parchment);
-}
-
-.mode__meta {
-  font-size: 1rem;
-  color: var(--text);
-  opacity: 0.8;
-}
-
-.mode__lives {
-  display: flex;
-  gap: 0.25rem;
-  color: var(--ember);
-}
-
-.mode__lives svg {
-  width: 1.125rem;
-  height: 1.125rem;
-}
-
-.mode__lives .is-lost {
-  color: rgba(255, 255, 255, 0.2);
-}
-
-.mode__ladder {
-  align-self: stretch;
-  display: flex;
-  gap: 0.25rem;
-  margin-top: 0.25rem;
-}
-
-.mode__ladder i {
-  flex: 1;
-  height: 0.3rem;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.18);
-}
-
-.mode__ladder i.is-won {
-  background: var(--brass-hi);
-}
-
-.play {
-  flex: none;
-  width: 30rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  gap: 0.875rem;
-}
-
-.play__deck {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 0.75rem 1rem;
-  border: 0;
-  border-radius: 0.75rem;
-  text-align: left;
-  color: inherit;
-  background: rgba(0, 0, 0, 0.35);
-  box-shadow: inset 0 0 0 0.0625rem var(--line);
-  cursor: var(--cursor-hover, pointer);
-}
-
-.play__deck:hover {
-  box-shadow: inset 0 0 0 0.0625rem var(--brass-dim);
-}
-
-.play__label {
-  flex: 1;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  font-size: 1.0625rem;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  color: var(--parchment);
-}
-
-.play__label small {
-  font-family: var(--caps);
-  font-size: 0.75rem;
-  letter-spacing: 0.18em;
-  color: var(--muted);
-}
-
-.play__change {
-  font-family: var(--caps);
-  font-size: 0.8125rem;
-  letter-spacing: 0.12em;
-  color: var(--brass);
-}
-
-.play__button {
-  height: 9rem;
-  border: 0;
-  border-radius: 1rem;
-  font-family: var(--display);
-  font-size: 4.25rem;
-  letter-spacing: 0.08em;
-  color: #2a1a08;
-  text-shadow: 0 0.0625rem 0 rgba(255, 255, 255, 0.5);
-  background: linear-gradient(180deg, var(--brass-hi) 0%, var(--brass) 55%, var(--ember) 140%);
-  cursor: var(--cursor-hover, pointer);
-  box-shadow:
-    inset 0 0.125rem 0 var(--parchment),
-    inset 0 -0.25rem 0.75rem var(--ember-dim),
-    0 0 0 0.125rem var(--brass-dim),
-    0 0.75rem 2.5rem rgba(156, 58, 31, 0.6),
-    0 0 2rem rgba(246, 195, 91, 0.35);
-  transition:
-    filter 0.15s,
-    translate 0.15s;
-}
-
-.play__button:hover {
-  filter: brightness(1.08);
-  translate: 0 -0.125rem;
-}
-
-.play__button:active {
-  filter: brightness(0.95);
-  translate: 0 0.125rem;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .hero__slide,
-  .hero__art,
-  .hero__copy,
-  .hero__cards {
-    animation: none;
-  }
 }
 
 /* ------------------------------------------------------------ expedition map */
@@ -5297,28 +4562,6 @@ button {
 }
 
 /* ------------------------------------------------------------------ hints */
-
-.hint {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 0.5rem;
-  margin-bottom: 0.5rem;
-}
-
-.hint__btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.375rem;
-  padding: 0.25rem 0.75rem;
-  font-size: 0.875rem;
-}
-
-.hint__btn svg {
-  width: 1rem;
-  height: 1rem;
-  color: #9fdcff;
-}
 
 .hint__bubble {
   position: relative;

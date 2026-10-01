@@ -1,17 +1,21 @@
-import { cardDb, type Decklist, scryfallById, slug } from '@mtg/cards';
+import { cardDb, type Decklist, findDeck, scryfallById, slug } from '@mtg/cards';
 import { type Action, type Color } from '@mtg/engine';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { type CSSProperties, useEffect, useMemo, useRef, useState } from 'react';
 import {
   copyLimit,
   deckErrors,
   isBasic,
+  openSeasonPack,
+  PACK_PRICE,
   putSeasonDeck,
+  RARITIES,
   renameSeasonSave,
   replaySeasonMatch,
   resolveSeasonMatch,
   SEASON_STARTERS,
   selectSeasonDeck,
   type Counts,
+  type SeasonDeck,
   type SeasonSave,
 } from '../game/season.ts';
 import {
@@ -21,22 +25,53 @@ import {
   resumeSeasonGame,
 } from '../game/seasonMatch.ts';
 import { createSeasonRepository, type SeasonLibrary } from '../game/seasonStorage.ts';
+import { generateFoundationsPack } from '../game/seasonPacks.ts';
 import type { SavedGame } from '../game/saved.ts';
 import { useGame } from '../game/useGame.ts';
-import { artFor } from '../game/deckArt.ts';
+import { artFor, BLURBS } from '../game/deckArt.ts';
 import { Board } from './Board.tsx';
 import { DeckBuilder } from './DeckBuilder.tsx';
 import { ErrorBoundary } from './ErrorBoundary.tsx';
+import { BoosterReveal, wildcardName } from './PackOpening.tsx';
 import { UiSize } from './UiSize.tsx';
-import { SeasonEconomy, SeasonCrafting } from './SeasonEconomy.tsx';
+import {
+  Booster,
+  CollectionProgress,
+  Currencies,
+  DeckTile,
+  fmt,
+  Modal,
+  Price,
+  RewardTracks,
+  SeasonCollection,
+  SeasonCrafting,
+  SeasonPacks,
+  SeasonStore,
+} from './SeasonEconomy.tsx';
+import './home.css';
 import './season.css';
 
 const now = (save: SeasonSave) => Math.max(Date.now(), save.updatedAt);
 const errorMessage = (e: unknown) => (e instanceof Error ? e.message : String(e));
 const namedCounts = (cards: Counts) =>
   Object.fromEntries(Object.entries(cards).map(([id, n]) => [cardDb.get(id)!.name, n]));
+/** Engine messages name cards by slug; show their printed names. */
+const readable = (message: string) =>
+  message.replace(/\b[a-z0-9]+(?:-[a-z0-9]+)+\b/g, (id) => cardDb.get(id)?.name ?? id);
+const size = (cards: Counts) => Object.values(cards).reduce((n, c) => n + c, 0);
+const seed = () => Math.floor(Math.random() * 0x80000000);
+
 type Repository = ReturnType<typeof createSeasonRepository>;
-type Form = 'create' | 'rename' | 'reset' | 'deck';
+type View = 'play' | 'decks' | 'collection' | 'packs' | 'store';
+const VIEWS: [View, string][] = [
+  ['play', 'Overview'],
+  ['decks', 'Decks'],
+  ['collection', 'Collection'],
+  ['packs', 'Packs'],
+  ['store', 'Store'],
+];
+/** Full-screen flows that replace the hub. */
+type Flow = { kind: 'new' } | { kind: 'reset' } | { kind: 'pack' } | null;
 interface Session {
   saveId: string;
   matchId: number;
@@ -88,11 +123,15 @@ export function Season({ onHome }: { onHome: () => void }) {
       return { library: null, error: errorMessage(e) };
     }
   });
-  const [form, setForm] = useState<Form | null>(null);
+  const [view, setView] = useState<View>('play');
+  const [flow, setFlow] = useState<Flow>(null);
+  const [renaming, setRenaming] = useState(false);
+  const [abandoning, setAbandoning] = useState(false);
   const [editing, setEditing] = useState<string | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const file = useRef<HTMLInputElement>(null);
   const save = data.library?.saves.find((s) => s.id === data.library!.activeSaveId);
+  const error = data.error && readable(data.error);
 
   function transact(operation: (repo: Repository) => SeasonLibrary): SeasonLibrary | null {
     try {
@@ -115,16 +154,13 @@ export function Season({ onHome }: { onHome: () => void }) {
     if (next?.match) setSession(sessionFor(next));
   }
   function abandon() {
-    if (!save?.match) return;
-    const coins = replaySeasonMatch(save.match).playerTurnsBegun >= 5 ? 50 : 0;
-    if (window.confirm(`Abandon this match? You will receive ${coins} coins.`)) {
-      update((s) => {
-        const settled = finishSeasonMatch(s, now(s));
-        return settled.match
-          ? resolveSeasonMatch(settled, settled.match.id, 'concede', now(settled))
-          : settled;
-      });
-    }
+    setAbandoning(false);
+    update((s) => {
+      const settled = finishSeasonMatch(s, now(s));
+      return settled.match
+        ? resolveSeasonMatch(settled, settled.match.id, 'concede', now(settled))
+        : settled;
+    });
   }
   function persistAction(action: Action) {
     if (!session) throw new Error('No active Season session');
@@ -139,45 +175,28 @@ export function Season({ onHome }: { onHome: () => void }) {
     if (current?.match) setSession(sessionFor(current, (session?.attempt ?? 0) + 1));
     else if (library) setSession(null);
   }
-  function submit(name: string, starter: string) {
+  function start(name: string, starter: string) {
     const done =
-      form === 'create'
-        ? transact((repo) =>
-            repo.create(
-              crypto.randomUUID(),
-              name,
-              starter,
-              Math.floor(Math.random() * 0x80000000),
-              Date.now(),
-            ),
-          )
-        : form === 'rename' && save
-          ? update((s) => renameSeasonSave(s, name, now(s)))
-          : form === 'reset' && save
-            ? transact((repo) =>
-                repo.reset(
-                  save.id,
-                  starter,
-                  Math.floor(Math.random() * 0x80000000),
-                  now(save),
-                  true,
-                ),
-              )
-            : form === 'deck' && save
-              ? update((s) => {
-                  const id = crypto.randomUUID();
-                  return selectSeasonDeck(
-                    putSeasonDeck(s, { id, name, cards: {} }, now(s)),
-                    id,
-                    now(s),
-                  );
-                })
-              : null;
+      flow?.kind === 'reset' && save
+        ? transact((repo) => repo.reset(save.id, starter, seed(), now(save), true))
+        : transact((repo) => repo.create(crypto.randomUUID(), name, starter, seed(), Date.now()));
     if (done) {
-      const active = done.saves.find((s) => s.id === done.activeSaveId)!;
-      setEditing(form === 'deck' ? active.selectedDeckId : null);
-      setForm(null);
+      setFlow(null);
+      setEditing(null);
+      setView('play');
     }
+  }
+  function newDeck() {
+    const id = crypto.randomUUID();
+    const n = (save?.decks.length ?? 0) + 1;
+    if (update((s) => putSeasonDeck(s, { id, name: `Deck ${n}`, cards: {} }, now(s))))
+      setEditing(id);
+  }
+  function openPack() {
+    if (!save?.packs.length) return;
+    const id = save.packs[0]!.id;
+    if (update((s) => openSeasonPack(s, id, generateFoundationsPack, now(s))))
+      setFlow({ kind: 'pack' });
   }
   async function importFile(selected: File) {
     try {
@@ -187,7 +206,10 @@ export function Season({ onHome }: { onHome: () => void }) {
         typeof backup?.save?.name === 'string'
           ? `${backup.save.name.slice(0, 109)} (imported)`
           : undefined;
-      if (transact((repo) => repo.importSave(raw, crypto.randomUUID(), name))) setEditing(null);
+      if (transact((repo) => repo.importSave(raw, crypto.randomUUID(), name))) {
+        setEditing(null);
+        setFlow(null);
+      }
     } catch (e) {
       setData((s) => ({ ...s, error: errorMessage(e) }));
     }
@@ -206,6 +228,19 @@ export function Season({ onHome }: { onHome: () => void }) {
       setData((s) => ({ ...s, error: errorMessage(e) }));
     }
   }
+  const importInput = (
+    <input
+      hidden
+      ref={file}
+      type="file"
+      accept=".json,application/json"
+      onChange={(e) => {
+        const selected = e.target.files?.[0];
+        e.target.value = '';
+        if (selected) void importFile(selected);
+      }}
+    />
+  );
 
   if (session) {
     const current = data.library!.saves.find((s) => s.id === session.saveId)!;
@@ -225,325 +260,707 @@ export function Season({ onHome }: { onHome: () => void }) {
       </ErrorBoundary>
     );
   }
+  if (save && flow?.kind === 'pack' && save.lastPack) {
+    const receipt = save.lastPack;
+    const bonus = receipt.bonus;
+    const extras = [
+      bonus?.coins ? `+${bonus.coins} coins` : '',
+      bonus?.vaultPoints ? `+${bonus.vaultPoints} Vault points` : '',
+      ...RARITIES.filter((r) => (bonus?.tracks[r] ?? 0) > 0).map(
+        (r) => `+1 ${r} wildcard from the track`,
+      ),
+    ].filter(Boolean);
+    return (
+      <BoosterReveal
+        key={receipt.packId}
+        cards={receipt.rewards.map((r) =>
+          r.kind === 'card' ? cardDb.get(r.cardId)!.name : wildcardName(r.rarity),
+        )}
+        eyebrow={`Season · Pack ${receipt.packId}${save.packs.length ? ` · ${save.packs.length} left` : ''}`}
+        note={`Added to your collection.${extras.length ? ` ${extras.join(' · ')}.` : ''}`}
+        extra={
+          save.packs.length > 0 && (
+            <button className="hbtn hbtn--ghost" onClick={openPack}>
+              Open next ({save.packs.length})
+            </button>
+          )
+        }
+        onDone={() => setFlow(null)}
+      />
+    );
+  }
   const deck = save?.decks.find((d) => d.id === editing);
   if (save && deck)
     return (
       <SeasonEditor
         save={save}
         deckId={deck.id}
-        error={data.error}
+        error={error}
         update={update}
         onBack={() => setEditing(null)}
       />
     );
+  if (data.library && (!save || flow?.kind === 'new' || flow?.kind === 'reset'))
+    return (
+      <>
+        <SeasonWelcome
+          mode={flow?.kind === 'reset' ? 'reset' : save ? 'new' : 'first'}
+          save={save}
+          error={error}
+          onStart={start}
+          onImport={() => file.current?.click()}
+          onCancel={save ? () => setFlow(null) : onHome}
+        />
+        {importInput}
+      </>
+    );
 
   return (
-    <div className="season-page">
-      <header className="season-bar">
-        <button className="btn btn--ghost" onClick={onHome}>
+    <div className="season">
+      <header className="nav sbar">
+        <button className="sbar__back" onClick={onHome}>
+          <svg viewBox="0 0 16 16" aria-hidden>
+            <path d="M10 3 5 8l5 5" fill="none" stroke="currentColor" strokeWidth="1.8" />
+          </svg>
           Home
         </button>
-        <h1>Season</h1>
-        <UiSize />
+        <button className="nav__brand sbar__brand" onClick={() => setView('play')}>
+          <svg viewBox="0 0 20 20" aria-hidden>
+            <path d="M10 1.5 18.5 10 10 18.5 1.5 10z" />
+            <path d="M10 6 14 10 10 14 6 10z" />
+          </svg>
+          Season
+        </button>
+        {save && (
+          <nav className="nav__tabs" aria-label="Season">
+            {VIEWS.map(([v, name]) => (
+              <button
+                key={v}
+                className={`nav__tab ${view === v ? 'is-on' : ''}`}
+                aria-current={view === v ? 'page' : undefined}
+                onClick={() => setView(v)}
+              >
+                {name}
+                {v === 'packs' && save.packs.length > 0 && (
+                  <span className="sbar__count">{save.packs.length}</span>
+                )}
+              </button>
+            ))}
+          </nav>
+        )}
+        <div className="nav__end">
+          {save && <Currencies save={save} />}
+          {save && data.library && (
+            <SaveMenu
+              library={data.library}
+              save={save}
+              onSwitch={(id) => transact((repo) => repo.switchSave(id))}
+              onNew={() => setFlow({ kind: 'new' })}
+              onRename={() => setRenaming(true)}
+              onExport={exportFile}
+              onImport={() => file.current?.click()}
+              onReset={() => setFlow({ kind: 'reset' })}
+            />
+          )}
+          <UiSize />
+        </div>
       </header>
-      <main className="season-main">
-        {data.error && (
-          <div className="season-error" role="alert">
-            {data.error}
-            <button className="btn btn--ghost" onClick={() => transact((repo) => repo.load())}>
-              Retry loading saves
+      {importInput}
+      <main className={`smain smain--${view}`}>
+        {error && (
+          <div className="serror" role="alert">
+            <span>{error}</span>
+            <button className="slink" onClick={() => transact((repo) => repo.load())}>
+              Reload saves
+            </button>
+            <button className="slink" onClick={() => setData((s) => ({ ...s, error: null }))}>
+              Dismiss
             </button>
           </div>
         )}
-        {data.library && (
-          <>
-            <section className="season-saves" aria-label="Save management">
-              {save && (
-                <label>
-                  Save
-                  <select
-                    aria-label="Current save"
-                    value={save.id}
-                    onChange={(e) => transact((repo) => repo.switchSave(e.target.value))}
-                  >
-                    {data.library.saves.map((s) => (
-                      <option key={s.id} value={s.id}>
-                        {s.name}
-                      </option>
-                    ))}
-                  </select>
-                </label>
-              )}
-              <button className="btn btn--ghost" onClick={() => setForm('create')}>
-                New save
-              </button>
-              {save && (
-                <>
-                  <button className="btn btn--ghost" onClick={() => setForm('rename')}>
-                    Rename save
-                  </button>
-                  <button className="btn btn--ghost" onClick={exportFile}>
-                    Export backup
-                  </button>
-                </>
-              )}
-              <button className="btn btn--ghost" onClick={() => file.current?.click()}>
-                Import backup
-              </button>
-              {save && (
-                <button className="btn btn--ghost" onClick={() => setForm('reset')}>
-                  Reset save
-                </button>
-              )}
-              <input
-                hidden
-                ref={file}
-                type="file"
-                accept=".json,application/json"
-                onChange={(e) => {
-                  const selected = e.target.files?.[0];
-                  e.target.value = '';
-                  if (selected) void importFile(selected);
-                }}
-              />
-            </section>
-            {!save ? (
-              <section className="season-panel">
-                <h2>Start a Season</h2>
-                <p>Choose a starter deck. Your save begins with its cards and 400 coins.</p>
-                <button className="btn btn--primary" onClick={() => setForm('create')}>
-                  Choose starter
-                </button>
-              </section>
-            ) : (
-              <>
-                <section className="season-panel season-play">
-                  <div>
-                    <h2>{save.name}</h2>
-                    <p>
-                      <strong>{save.coins}</strong> coins ·{' '}
-                      {Object.values(save.collection).reduce((n, c) => n + c, 0)} collected cards
-                    </p>
-                    {save.lastResult && !save.match && (
-                      <p role="status">
-                        {save.lastResult.outcome === 'win'
-                          ? 'Victory'
-                          : save.lastResult.outcome === 'draw'
-                            ? 'Draw'
-                            : save.lastResult.outcome === 'concede'
-                              ? 'Conceded'
-                              : 'Defeat'}{' '}
-                        · +{save.lastResult.coins} coins
-                      </p>
-                    )}
-                    {save.match && (
-                      <p>
-                        Match saved ·{' '}
-                        {SEASON_STARTERS.find((d) => d.id === save.match!.opponentDeckId)!.name}
-                      </p>
-                    )}
-                  </div>
-                  <div className="season-actions">
-                    <button
-                      className="btn btn--primary"
-                      disabled={
-                        !save.match &&
-                        deckErrors(
-                          save,
-                          save.decks.find((d) => d.id === save.selectedDeckId)!,
-                        ).length > 0
-                      }
-                      onClick={play}
-                    >
-                      {save.match ? 'Resume match' : 'Play'}
-                    </button>
-                    {save.match && (
-                      <button className="btn btn--ghost" onClick={abandon}>
-                        Abandon match
-                      </button>
-                    )}
-                  </div>
-                </section>
-                <div className="season-section">
-                  <h2>Your decks</h2>
-                  <button className="btn btn--ghost" onClick={() => setForm('deck')}>
-                    New deck
-                  </button>
-                </div>
-                <section className="season-decks" aria-label="Your decks">
-                  {save.decks.map((d) => {
-                    const display = displayDeck(d.id, d.name, d.cards);
-                    const issues = deckErrors(save, d);
-                    return (
-                      <article
-                        className={`season-deck ${d.id === save.selectedDeckId ? 'is-selected' : ''}`}
-                        key={d.id}
-                      >
-                        <img src={artFor(display)} alt="" />
-                        <div>
-                          <h3>{d.name}</h3>
-                          <p>
-                            {Object.values(d.cards).reduce((n, c) => n + c, 0)} cards
-                            {d.id === save.selectedDeckId ? ' · Selected' : ''}
-                          </p>
-                          {issues.length > 0 && (
-                            <p className="season-warning">{issues.join('. ')}</p>
-                          )}
-                          <div className="season-actions">
-                            <button
-                              className="btn btn--ghost"
-                              aria-pressed={d.id === save.selectedDeckId}
-                              onClick={() => update((s) => selectSeasonDeck(s, d.id, now(s)))}
-                            >
-                              Select
-                            </button>
-                            <button className="btn btn--ghost" onClick={() => setEditing(d.id)}>
-                              Edit
-                            </button>
-                            <button
-                              className="btn btn--ghost"
-                              onClick={() =>
-                                update((s) =>
-                                  putSeasonDeck(
-                                    s,
-                                    {
-                                      ...d,
-                                      id: crypto.randomUUID(),
-                                      name: `${d.name.slice(0, 110)} copy`,
-                                    },
-                                    now(s),
-                                  ),
-                                )
-                              }
-                            >
-                              Copy
-                            </button>
-                          </div>
-                        </div>
-                      </article>
-                    );
-                  })}
-                </section>
-                <SeasonEconomy key={save.id} save={save} update={update} error={data.error} />
-              </>
-            )}
-          </>
+        {!data.library && (
+          <section className="sempty">
+            <h2>Your Season saves could not be loaded</h2>
+            <p>Reload to try again, or import a backup.</p>
+            <button className="hbtn hbtn--primary" onClick={() => file.current?.click()}>
+              Import backup
+            </button>
+          </section>
+        )}
+        {save && view === 'play' && (
+          <SeasonPlay
+            save={save}
+            update={update}
+            onPlay={play}
+            onAbandon={() => setAbandoning(true)}
+            onDecks={() => setView('decks')}
+            onEdit={() => setEditing(save.selectedDeckId)}
+            onPacks={() => setView(save.packs.length ? 'packs' : 'store')}
+            onOpenPack={openPack}
+            onCollection={() => setView('collection')}
+          />
+        )}
+        {save && view === 'decks' && (
+          <SeasonDecks
+            save={save}
+            update={update}
+            onEdit={setEditing}
+            onNew={newDeck}
+            onPlay={() => setView('play')}
+          />
+        )}
+        {save && view === 'collection' && (
+          <SeasonCollection key={save.id} save={save} update={update} error={error} />
+        )}
+        {save && view === 'packs' && (
+          <SeasonPacks
+            save={save}
+            update={update}
+            onOpen={openPack}
+            onViewLast={() => setFlow({ kind: 'pack' })}
+            onStore={() => setView('store')}
+          />
+        )}
+        {save && view === 'store' && (
+          <SeasonStore
+            key={save.id}
+            save={save}
+            update={update}
+            error={error}
+            onOpenPacks={() => setView('packs')}
+          />
         )}
       </main>
-      {form && (
-        <SeasonForm
-          key={form}
-          form={form}
-          save={save}
-          error={data.error}
-          onCancel={() => setForm(null)}
-          onSubmit={submit}
+      {renaming && save && (
+        <RenameDialog
+          name={save.name}
+          error={error}
+          onCancel={() => setRenaming(false)}
+          onSave={(name) => {
+            if (update((s) => renameSeasonSave(s, name, now(s)))) setRenaming(false);
+          }}
         />
+      )}
+      {abandoning && save?.match && (
+        <Modal title="Abandon this match?" onClose={() => setAbandoning(false)}>
+          <p>
+            It counts as a concession.{' '}
+            {replaySeasonMatch(save.match).playerTurnsBegun >= 5
+              ? 'You still receive the 50 coin loss reward.'
+              : 'Concessions before your fifth turn earn no coins.'}
+          </p>
+          <div className="smodal__actions">
+            <button className="hbtn hbtn--ghost" onClick={() => setAbandoning(false)}>
+              Keep playing
+            </button>
+            <button className="hbtn hbtn--primary hbtn--danger" onClick={abandon}>
+              Abandon match
+            </button>
+          </div>
+        </Modal>
       )}
     </div>
   );
 }
 
-function SeasonForm({
-  form,
+/* ------------------------------------------------------------------ menu */
+
+function SaveMenu({
+  library,
   save,
+  onSwitch,
+  onNew,
+  onRename,
+  onExport,
+  onImport,
+  onReset,
+}: {
+  library: SeasonLibrary;
+  save: SeasonSave;
+  onSwitch: (id: string) => void;
+  onNew: () => void;
+  onRename: () => void;
+  onExport: () => void;
+  onImport: () => void;
+  onReset: () => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const root = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!open) return;
+    const close = (e: Event) => {
+      if (
+        e instanceof KeyboardEvent ? e.key === 'Escape' : !root.current?.contains(e.target as Node)
+      )
+        setOpen(false);
+    };
+    document.addEventListener('pointerdown', close);
+    document.addEventListener('keydown', close);
+    return () => {
+      document.removeEventListener('pointerdown', close);
+      document.removeEventListener('keydown', close);
+    };
+  }, [open]);
+  const run = (f: () => void) => () => {
+    setOpen(false);
+    f();
+  };
+  return (
+    <div className="smenu" ref={root}>
+      <button
+        className="smenu__button"
+        aria-haspopup="menu"
+        aria-expanded={open}
+        onClick={() => setOpen(!open)}
+      >
+        <span className="smenu__label-sm">Save</span>
+        <span className="smenu__name">{save.name}</span>
+        <svg viewBox="0 0 16 16" aria-hidden>
+          <path d="m4 6 4 4 4-4" fill="none" stroke="currentColor" strokeWidth="1.8" />
+        </svg>
+      </button>
+      {open && (
+        <div className="smenu__pop" role="menu">
+          {library.saves.length > 1 && (
+            <>
+              <span className="smenu__label">Switch save</span>
+              {library.saves.map((s) => (
+                <button
+                  key={s.id}
+                  role="menuitemradio"
+                  aria-checked={s.id === save.id}
+                  className="smenu__item"
+                  onClick={run(() => s.id !== save.id && onSwitch(s.id))}
+                >
+                  <span className="smenu__check">{s.id === save.id ? '✓' : ''}</span>
+                  <span className="smenu__grow">{s.name}</span>
+                  <span className="smenu__meta">{fmt(s.coins)}c</span>
+                </button>
+              ))}
+              <hr />
+            </>
+          )}
+          <button role="menuitem" className="smenu__item" onClick={run(onNew)}>
+            New save
+          </button>
+          <button role="menuitem" className="smenu__item" onClick={run(onRename)}>
+            Rename save
+          </button>
+          <hr />
+          <button role="menuitem" className="smenu__item" onClick={run(onExport)}>
+            Export backup
+          </button>
+          <button role="menuitem" className="smenu__item" onClick={run(onImport)}>
+            Import backup
+          </button>
+          <hr />
+          <button
+            role="menuitem"
+            className="smenu__item smenu__item--danger"
+            onClick={run(onReset)}
+          >
+            Reset save…
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function RenameDialog({
+  name: initial,
   error,
   onCancel,
-  onSubmit,
+  onSave,
 }: {
-  form: Form;
-  save?: SeasonSave;
+  name: string;
   error: string | null;
   onCancel: () => void;
-  onSubmit: (name: string, starter: string) => void;
+  onSave: (name: string) => void;
 }) {
-  const dialog = useRef<HTMLDialogElement>(null);
-  const [name, setName] = useState(form === 'rename' || form === 'reset' ? save!.name : '');
-  const [starter, setStarter] = useState(SEASON_STARTERS[0]!.id);
-  useEffect(() => {
-    dialog.current?.showModal();
-  }, []);
-  const choosing = form === 'create' || form === 'reset';
-  const title =
-    form === 'create'
-      ? 'New Season'
-      : form === 'reset'
-        ? `Reset ${save!.name}?`
-        : form === 'rename'
-          ? 'Rename save'
-          : 'New deck';
+  const [name, setName] = useState(initial);
   return (
-    <dialog
-      ref={dialog}
-      className="season-dialog"
-      onCancel={onCancel}
-      aria-labelledby="season-form-title"
-    >
+    <Modal title="Rename save" onClose={onCancel}>
       <form
+        className="sform"
         onSubmit={(e) => {
           e.preventDefault();
-          onSubmit(name, starter);
+          onSave(name);
         }}
       >
-        <h2 id="season-form-title">{title}</h2>
-        {form === 'reset' ? (
-          <p>
-            This removes this save’s collection, coins, decks, and unfinished match. Start again
-            with a free starter and 400 coins. Other saves are kept.
+        <input
+          className="sinput"
+          aria-label="Name"
+          autoFocus
+          required
+          maxLength={120}
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+        {error && (
+          <p role="alert" className="swarn">
+            {error}
           </p>
-        ) : (
-          <label>
-            Name
+        )}
+        <div className="smodal__actions">
+          <button type="button" className="hbtn hbtn--ghost" onClick={onCancel}>
+            Cancel
+          </button>
+          <button className="hbtn hbtn--primary" disabled={!name.trim()}>
+            Save
+          </button>
+        </div>
+      </form>
+    </Modal>
+  );
+}
+
+/* ---------------------------------------------------------------- welcome */
+
+function SeasonWelcome({
+  mode,
+  save,
+  error,
+  onStart,
+  onImport,
+  onCancel,
+}: {
+  /** first: no saves yet; new: another save; reset: start this save over. */
+  mode: 'first' | 'new' | 'reset';
+  save?: SeasonSave;
+  error: string | null;
+  onStart: (name: string, starter: string) => void;
+  onImport: () => void;
+  onCancel: () => void;
+}) {
+  const [starter, setStarter] = useState(SEASON_STARTERS[0]!.id);
+  const [name, setName] = useState(
+    mode === 'reset' ? save!.name : mode === 'first' ? 'My Season' : '',
+  );
+  const [viewing, setViewing] = useState(false);
+  const deck = SEASON_STARTERS.find((d) => d.id === starter)!;
+  return (
+    <div className="swelcome">
+      <div className="swelcome__wash" style={{ backgroundImage: `url("${artFor(deck)}")` }} />
+      <header className="swelcome__top">
+        <button className="hbtn hbtn--ghost" onClick={onCancel}>
+          {mode === 'first' ? 'Home' : 'Cancel'}
+        </button>
+        <UiSize />
+      </header>
+      <div className="swelcome__title">
+        <span className="stag">{mode === 'reset' ? 'Reset save' : 'Season'}</span>
+        <h1>{mode === 'reset' ? `Start ${save!.name} over` : 'Choose your first deck'}</h1>
+        <p>
+          {mode === 'reset'
+            ? 'This save’s collection, coins, decks and unfinished match are erased. Other saves are kept.'
+            : 'Its 60 cards start your collection, with 400 coins to spend on packs. Win matches to earn more, and build your own decks as your collection grows.'}
+        </p>
+      </div>
+      <div className="swelcome__decks" role="radiogroup" aria-label="Starter deck">
+        {SEASON_STARTERS.map((d, i) => (
+          <DeckTile
+            key={d.id}
+            deck={d}
+            index={i}
+            sub={BLURBS[d.id] ?? ''}
+            selected={d.id === starter}
+            onClick={() => setStarter(d.id)}
+          />
+        ))}
+      </div>
+      <form
+        className="swelcome__bar"
+        onSubmit={(e) => {
+          e.preventDefault();
+          onStart(name, starter);
+        }}
+      >
+        <div className="swelcome__pick">
+          <span className="spip-row">
+            {deck.colors.map((c) => (
+              <span key={c} className={`pip pip--${c}`} />
+            ))}
+          </span>
+          <strong>{deck.name}</strong>
+          <button type="button" className="slink" onClick={() => setViewing(true)}>
+            View decklist
+          </button>
+        </div>
+        {mode !== 'reset' && (
+          <label className="swelcome__name">
+            <span>Save name</span>
             <input
-              autoFocus
+              className="sinput"
               required
               maxLength={120}
               value={name}
+              placeholder="Name this save"
               onChange={(e) => setName(e.target.value)}
             />
           </label>
         )}
-        {choosing && (
-          <label>
-            Starter deck
-            <select value={starter} onChange={(e) => setStarter(e.target.value)}>
-              {SEASON_STARTERS.map((d) => (
-                <option key={d.id} value={d.id}>
-                  {d.name}
-                </option>
-              ))}
-            </select>
-          </label>
-        )}
-        {choosing && (
-          <details>
-            <summary>View starter contents</summary>
-            <ul>
-              {SEASON_STARTERS.find((d) => d.id === starter)!.cards.map(([name, count]) => (
-                <li key={name}>
-                  {count} × {name}
-                </li>
-              ))}
-            </ul>
-          </details>
-        )}
         {error && (
-          <p role="alert" className="season-warning">
+          <p role="alert" className="swarn">
             {error}
           </p>
         )}
-        <div className="season-actions">
-          <button className="btn btn--primary" disabled={!name.trim()}>
-            {form === 'reset' ? 'Reset this save' : form === 'create' ? 'Start Season' : 'Save'}
+        {mode === 'first' && (
+          <button type="button" className="slink" onClick={onImport}>
+            Import backup
           </button>
-          <button type="button" className="btn btn--ghost" onClick={onCancel}>
-            Cancel
-          </button>
-        </div>
+        )}
+        <button
+          className={`hbtn hbtn--primary hbtn--lg ${mode === 'reset' ? 'hbtn--danger' : ''}`}
+          disabled={!name.trim()}
+        >
+          {mode === 'reset' ? 'Erase and start over' : 'Start Season'}
+        </button>
       </form>
-    </dialog>
+      {viewing && (
+        <Modal title={deck.name} onClose={() => setViewing(false)}>
+          <ul className="slist">
+            {deck.cards.map(([card, n]) => (
+              <li key={card}>
+                <span className="slist__n">{n}</span>
+                <span className="slist__name">{card}</span>
+              </li>
+            ))}
+          </ul>
+        </Modal>
+      )}
+    </div>
   );
 }
+
+/* ------------------------------------------------------------------- play */
+
+const OUTCOME = { win: 'Victory', loss: 'Defeat', draw: 'Draw', concede: 'Conceded' } as const;
+
+function SeasonPlay({
+  save,
+  update,
+  onPlay,
+  onAbandon,
+  onDecks,
+  onEdit,
+  onPacks,
+  onOpenPack,
+  onCollection,
+}: {
+  save: SeasonSave;
+  update: (change: (s: SeasonSave) => SeasonSave) => unknown;
+  onPlay: () => void;
+  onAbandon: () => void;
+  onDecks: () => void;
+  onEdit: () => void;
+  onPacks: () => void;
+  onOpenPack: () => void;
+  onCollection: () => void;
+}) {
+  const match = save.match;
+  const selected = save.decks.find((d) => d.id === save.selectedDeckId)!;
+  const deck = match
+    ? displayDeck('season-match', match.playerDeckName ?? 'Season deck', countIds(match.decks.p1))
+    : displayDeck(selected.id, selected.name, selected.cards);
+  const issues = match
+    ? []
+    : deckErrors(save, selected).map((e) =>
+        e.includes('at least 60') ? `${size(selected.cards)} of 60 cards` : readable(e),
+      );
+  const opponent = match ? findDeck(match.opponentDeckId) : undefined;
+  const turns = match ? replaySeasonMatch(match).playerTurnsBegun : 0;
+  const result = !match && save.lastResult;
+  return (
+    <div className="splay">
+      <section className="sfeature splay__hero">
+        <div className="sfeature__wash" style={{ backgroundImage: `url("${artFor(deck)}")` }} />
+        <div className="sfeature__art" style={{ backgroundImage: `url("${artFor(deck)}")` }} />
+        {opponent && (
+          <div className="splay__versus" aria-hidden>
+            <span>vs</span>
+            <img src={artFor(opponent)} alt="" />
+          </div>
+        )}
+        <div className="sfeature__copy">
+          <span className="stag">{match ? 'Match in progress' : 'Your deck'}</span>
+          <span className="spip-row">
+            {deck.colors.map((c) => (
+              <span key={c} className={`pip pip--${c}`} />
+            ))}
+          </span>
+          <h1>{deck.name}</h1>
+          {match ? (
+            <p>
+              Against <strong>{opponent?.name ?? 'a starter deck'}</strong>
+              {turns > 0 ? ` · your turn ${turns}` : ''}. Your progress is saved after every action.
+            </p>
+          ) : issues.length ? (
+            <p className="splay__issue">
+              <span className="sbadge sbadge--warn">Not ready</span>
+              {issues.join('. ')}.
+            </p>
+          ) : (
+            <p>
+              {size(selected.cards)} cards · Face a random starter deck. Win <Price n={100} />, lose{' '}
+              <Price n={50} />.
+            </p>
+          )}
+          <div className="splay__actions">
+            <button
+              className="hbtn hbtn--primary hbtn--lg splay__go"
+              disabled={issues.length > 0}
+              onClick={onPlay}
+            >
+              {match ? 'Resume' : 'Play'}
+            </button>
+            {match ? (
+              <button className="hbtn hbtn--ghost" onClick={onAbandon}>
+                Abandon
+              </button>
+            ) : (
+              <>
+                <button className="hbtn hbtn--ghost" onClick={issues.length ? onEdit : onDecks}>
+                  {issues.length ? 'Fix deck' : 'Change deck'}
+                </button>
+                {!issues.length && (
+                  <button className="slink" onClick={onEdit}>
+                    Edit
+                  </button>
+                )}
+              </>
+            )}
+          </div>
+        </div>
+      </section>
+      <aside className="splay__side">
+        {result && (
+          <section className={`spanel sresult sresult--${result.outcome}`} role="status">
+            <span className="spanel__title">Last match</span>
+            <strong className="sresult__outcome">{OUTCOME[result.outcome]}</strong>
+            <span className="sresult__coins">
+              +<Price n={result.coins} />
+            </span>
+          </section>
+        )}
+        <section className="spanel spacks-mini">
+          <Booster
+            small
+            label="Packs"
+            onClick={save.packs.length ? onOpenPack : undefined}
+            count={save.packs.length}
+          />
+          <div>
+            <span className="spanel__title">Packs</span>
+            <p>
+              {save.packs.length
+                ? `${save.packs.length} ready to open`
+                : save.coins >= PACK_PRICE
+                  ? `You can afford ${Math.floor(save.coins / PACK_PRICE)}`
+                  : `${PACK_PRICE - save.coins} more coins for a pack`}
+            </p>
+            <button
+              className="hbtn hbtn--primary"
+              onClick={save.packs.length ? onOpenPack : onPacks}
+            >
+              {save.packs.length ? 'Open pack' : 'Visit store'}
+            </button>
+          </div>
+        </section>
+        <RewardTracks save={save} update={update} />
+        <CollectionProgress save={save} onOpen={onCollection} />
+      </aside>
+    </div>
+  );
+}
+
+function countIds(ids: readonly string[]): Counts {
+  const cards: Counts = {};
+  for (const id of ids) cards[id] = (cards[id] ?? 0) + 1;
+  return cards;
+}
+
+/* ------------------------------------------------------------------ decks */
+
+function SeasonDecks({
+  save,
+  update,
+  onEdit,
+  onNew,
+  onPlay,
+}: {
+  save: SeasonSave;
+  update: (change: (s: SeasonSave) => SeasonSave) => unknown;
+  onEdit: (id: string) => void;
+  onNew: () => void;
+  onPlay: () => void;
+}) {
+  const copy = (d: SeasonDeck) =>
+    update((s) =>
+      putSeasonDeck(
+        s,
+        { ...d, id: crypto.randomUUID(), name: `${d.name.slice(0, 110)} copy` },
+        now(s),
+      ),
+    );
+  return (
+    <div className="sdecks-view">
+      <div className="ssection">
+        <h2>Your decks</h2>
+        <span className="ssection__aside">Click a deck to make it your active deck for Play.</span>
+      </div>
+      <div className="sdecks">
+        {save.decks.map((d, i) => {
+          const display = displayDeck(d.id, d.name, d.cards);
+          const n = size(d.cards);
+          const ok = deckErrors(save, d).length === 0;
+          const active = d.id === save.selectedDeckId;
+          return (
+            <div className="sdeck-slot" key={d.id}>
+              <DeckTile
+                deck={display}
+                index={i}
+                selected={active}
+                sub={`${n} cards`}
+                badge={
+                  !ok ? (
+                    <span className="sbadge sbadge--warn">
+                      {active ? 'Active · ' : ''}
+                      {n < 60 ? `${n}/60` : 'Invalid'}
+                    </span>
+                  ) : active ? (
+                    <span className="sbadge sbadge--active">Active</span>
+                  ) : undefined
+                }
+                onClick={() =>
+                  active ? onPlay() : update((s) => selectSeasonDeck(s, d.id, now(s)))
+                }
+              />
+              <div className="sdeck-slot__actions">
+                <button className="hbtn hbtn--ghost" onClick={() => onEdit(d.id)}>
+                  Edit
+                </button>
+                <button className="hbtn hbtn--ghost" onClick={() => copy(d)}>
+                  Copy
+                </button>
+              </div>
+            </div>
+          );
+        })}
+        <button
+          className="snewdeck"
+          onClick={onNew}
+          style={{ '--i': save.decks.length } as CSSProperties}
+        >
+          <span className="snewdeck__plus">+</span>
+          New deck
+        </button>
+      </div>
+    </div>
+  );
+}
+
+/* ----------------------------------------------------------------- editor */
 
 function SeasonEditor({
   save,
@@ -580,6 +997,8 @@ function SeasonEditor({
       return putSeasonDeck(s, { ...current, cards }, now(s));
     });
   }
+  const rename = () =>
+    name.trim() && name !== deck.name && update((s) => putSeasonDeck(s, { ...deck, name }, now(s)));
   return (
     <DeckBuilder
       name={deck.name}
@@ -591,24 +1010,24 @@ function SeasonEditor({
       min={60}
       tools={
         <>
-          <button className="btn btn--ghost" onClick={onBack}>
+          <button className="hbtn hbtn--ghost" onClick={onBack}>
             Back to Season
           </button>
-          <SeasonCrafting save={save} update={update} error={error} />
           <input
+            className="sinput sinput--inline"
             aria-label="Deck name"
             maxLength={120}
             value={name}
             onChange={(e) => setName(e.target.value)}
+            onBlur={rename}
+            onKeyDown={(e) => e.key === 'Enter' && rename()}
           />
-          <button
-            className="btn btn--ghost"
-            disabled={!name.trim()}
-            onClick={() => update((s) => putSeasonDeck(s, { ...deck, name }, now(s)))}
-          >
-            Rename
-          </button>
-          {error && <span role="alert">{error}</span>}
+          <SeasonCrafting save={save} update={update} error={error} />
+          {error && (
+            <span role="alert" className="swarn">
+              {error}
+            </span>
+          )}
         </>
       }
       onAdd={(card) => move(card, 1)}
@@ -617,6 +1036,8 @@ function SeasonEditor({
     />
   );
 }
+
+/* ------------------------------------------------------------------- game */
 
 function SeasonGame({
   session,
@@ -638,7 +1059,7 @@ function SeasonGame({
       game={game}
       decks={{
         you: session.yours,
-        them: SEASON_STARTERS.find((d) => d.id === resume.choice.them)!,
+        them: findDeck(resume.choice.them)!,
       }}
       gauntlet="Season"
       resultText={reward === null ? undefined : `+${reward} coins · ${save.coins} coins total`}

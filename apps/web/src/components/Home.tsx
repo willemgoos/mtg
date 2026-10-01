@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { artFor } from '../game/deckArt.ts';
 import { ROUNDS, type RunSummary } from '../game/gauntlet.ts';
 import { UiSize } from './UiSize.tsx';
+import './home.css';
 
 export type Event = 'gauntlet' | 'expedition';
 export type Mode = 'quick' | Event;
@@ -11,18 +12,23 @@ export type Tab = 'home' | 'decks';
 const art = (card: string) => scryfallById.get(slug(card))?.image?.artCrop ?? '';
 const image = (card: string) => scryfallById.get(slug(card))?.image?.normal ?? '';
 
-/** Arena's top bar: brand, tabs, clears and the UI size. */
+/** The top bar: wordmark, tabs, clears and the UI size. */
 export function Nav({ tab, onTab, clears }: { tab: Tab; onTab: (t: Tab) => void; clears: number }) {
   return (
     <header className="nav">
       <div className="nav__brand">
-        <small>A duel of</small>Foundations
+        <svg viewBox="0 0 20 20" aria-hidden>
+          <path d="M10 1.5 18.5 10 10 18.5 1.5 10z" />
+          <path d="M10 6 14 10 10 14 6 10z" />
+        </svg>
+        Foundations
       </div>
       <nav className="nav__tabs">
         {(['home', 'decks'] as const).map((t) => (
           <button
             key={t}
             className={`nav__tab ${tab === t ? 'is-on' : ''}`}
+            aria-current={tab === t ? 'page' : undefined}
             onClick={() => onTab(t)}
           >
             {t === 'home' ? 'Home' : 'Decks'}
@@ -32,8 +38,8 @@ export function Nav({ tab, onTab, clears }: { tab: Tab; onTab: (t: Tab) => void;
       <div className="nav__end">
         {clears > 0 && (
           <span className="nav__stat" title="Gauntlets and expeditions cleared">
-            <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden>
-              <path d="m8 1 2.2 4.5 4.8.7-3.5 3.4.8 4.9L8 12.2l-4.3 2.3.8-4.9L1 6.2l4.8-.7z" />
+            <svg viewBox="0 0 16 16" aria-hidden>
+              <path d="m8 1.8 1.9 3.9 4.3.6-3.1 3 .7 4.3L8 11.6l-3.8 2 .7-4.3-3.1-3 4.3-.6z" />
             </svg>
             {clears} {clears === 1 ? 'clear' : 'clears'}
           </span>
@@ -93,7 +99,7 @@ export function Home({
       id: 'expedition',
       badge: 'New mode',
       title: 'Expedition',
-      text: 'Choose your path across seven floors. Win packs, keep the best cards, collect boons.',
+      text: 'Choose your path across ten floors. Win packs, keep the best cards, collect boons.',
       cta: runs.expedition ? 'Continue' : 'Set out',
       art: art('Shivan Dragon'),
       cards: ['Burst Lightning', 'Shivan Dragon', 'Giant Growth'],
@@ -131,61 +137,57 @@ export function Home({
   const s = slides[slide]!;
   const run = mode === 'quick' ? null : runs[mode];
 
+  const modeName =
+    mode === 'quick' ? 'Quick match' : mode === 'gauntlet' ? 'Gauntlet' : 'Expedition';
+
   return (
     <div className="home">
       <Nav tab="home" onTab={onTab} clears={clears} />
-      <main className="home__main home__main--season">
+      <main className="home__main">
         <section
-          className="hero"
+          className="feature"
           onMouseEnter={() => setPaused(true)}
           onMouseLeave={() => setPaused(false)}
         >
-          <div key={s.id} className="hero__slide">
-            <div className="hero__wash" style={{ backgroundImage: `url("${s.art}")` }} />
-            <div className="hero__art" style={{ backgroundImage: `url("${s.art}")` }} />
-            <div className="hero__copy">
-              <span className="hero__badge">{s.badge}</span>
-              <h1 className="hero__title">{s.title}</h1>
-              <p className="hero__text">{s.text}</p>
-              <div className="hero__actions">
-                <button className="btn btn--primary btn--big" onClick={s.go}>
-                  {s.cta}
-                </button>
-              </div>
+          <div key={s.id} className="feature__slide">
+            <div className="feature__glow" style={{ backgroundImage: `url("${s.art}")` }} />
+            <div className="feature__art" style={{ backgroundImage: `url("${s.art}")` }} />
+            <div className="feature__copy">
+              <span className="feature__tag">{s.badge}</span>
+              <h1 className="feature__title">{s.title}</h1>
+              <p className="feature__text">{s.text}</p>
+              <button className="hbtn hbtn--primary hbtn--lg" onClick={s.go}>
+                {s.cta}
+                <Arrow />
+              </button>
             </div>
             {s.cards.length > 0 && (
-              <div className="hero__cards">
+              <div className="feature__cards">
                 {s.cards.map((c) => (
                   <img key={c} src={image(c)} alt={c} draggable={false} />
                 ))}
               </div>
             )}
           </div>
-          <div className="hero__dots" role="tablist" aria-label="Featured">
+          <div className="feature__pager" role="tablist" aria-label="Featured">
             {slides.map((x, i) => (
               <button
                 key={x.id}
                 role="tab"
                 aria-selected={i === slide}
-                aria-label={x.title}
-                className={`hero__dot ${i === slide ? 'is-on' : ''}`}
+                className={`feature__seg ${i === slide ? 'is-on' : ''} ${paused ? 'is-paused' : ''}`}
+                style={{ '--ms': `${SLIDE_MS}ms` } as React.CSSProperties}
                 onClick={() => setSlide(i)}
-              />
+              >
+                <span>{x.title}</span>
+                <i />
+              </button>
             ))}
           </div>
         </section>
 
-        <section className="season-entry">
-          <div>
-            <h2>Season</h2>
-            <p>Build your collection and earn coins against bot opponents.</p>
-          </div>
-          <button className="btn btn--primary" onClick={onSeason}>
-            Open Season
-          </button>
-        </section>
-        <section className="home__row">
-          <div className="modes" role="radiogroup" aria-label="Mode">
+        <section className="home__grid">
+          <div className="tiles" role="radiogroup" aria-label="Mode">
             <ModeTile
               name="Expedition"
               art={
@@ -201,7 +203,7 @@ export function Home({
               art={
                 runs.gauntlet ? artFor(deckById(runs.gauntlet.deck)) : art('Arahbo, the First Fang')
               }
-              blurb={`${ROUNDS.length} opponents, each tougher`}
+              blurb={`${ROUNDS.length} opponents, each tougher than the last`}
               run={runs.gauntlet}
               on={mode === 'gauntlet'}
               onClick={() => onMode('gauntlet')}
@@ -216,31 +218,46 @@ export function Home({
             />
           </div>
 
-          <div className="play">
-            <button className="play__deck" onClick={() => onDecks(mode)}>
-              <span className="play__label">
-                <small>
-                  {mode === 'quick'
-                    ? 'Quick match'
-                    : mode === 'gauntlet'
-                      ? 'Gauntlet'
-                      : 'Expedition'}
-                </small>
-                {run
-                  ? deckById(run.deck).name
-                  : mode === 'quick' && quick
-                    ? `${quick.deck.name} · vs ${quick.opponent}`
-                    : 'Choose a deck'}
+          <aside className="launch">
+            <div className="launch__panel">
+              <span className="launch__mode">{modeName}</span>
+              <button className="launch__deck" onClick={() => onDecks(mode)}>
+                <span className="launch__name">
+                  {run
+                    ? deckById(run.deck).name
+                    : mode === 'quick' && quick
+                      ? `${quick.deck.name} vs ${quick.opponent}`
+                      : 'Choose a deck'}
+                </span>
+                <span className="launch__change">{run ? 'Decks' : 'Change'}</span>
+              </button>
+              <button className="hbtn hbtn--primary launch__play" onClick={() => onPlay(mode)}>
+                {run ? (run.status === 'playing' ? 'Continue' : 'Results') : 'Play'}
+              </button>
+            </div>
+            <button className="launch__season" onClick={onSeason}>
+              <span
+                className="launch__thumb"
+                style={{ backgroundImage: `url("${art('Ghalta, Primal Hunger')}")` }}
+              />
+              <span className="launch__copy">
+                <strong>Season</strong>
+                <small>Open packs, craft and build your own decks</small>
               </span>
-              <span className="play__change">{run ? 'Decks' : 'Change'}</span>
+              <Arrow />
             </button>
-            <button className="play__button" onClick={() => onPlay(mode)}>
-              {run ? (run.status === 'playing' ? 'Continue' : 'Results') : 'Play'}
-            </button>
-          </div>
+          </aside>
         </section>
       </main>
     </div>
+  );
+}
+
+function Arrow() {
+  return (
+    <svg className="hico" viewBox="0 0 16 16" aria-hidden>
+      <path d="M3 8h10M9 4l4 4-4 4" />
+    </svg>
   );
 }
 
@@ -260,47 +277,46 @@ function ModeTile({
   onClick: () => void;
 }) {
   const status = run?.status;
+  const playing = run && status === 'playing';
   return (
     <button
       role="radio"
       aria-checked={on}
-      className={`mode ${on ? 'is-on' : ''}`}
-      style={{ '--art': `url("${art}")` } as React.CSSProperties}
+      className={`tile ${on ? 'is-on' : ''}`}
       onClick={onClick}
     >
-      <span className="mode__art" />
-      {status && (
-        <span className="mode__tag">
-          {status === 'playing' ? 'In progress' : status === 'cleared' ? 'Cleared!' : 'Run over'}
-        </span>
-      )}
-      <span className="mode__name">{name}</span>
-      <span className="mode__meta">
-        {run && status === 'playing'
-          ? `${run.unit} ${run.step} of ${run.steps} · ${deckById(run.deck).name}`
-          : blurb}
+      <span className="tile__media" style={{ backgroundImage: `url("${art}")` }}>
+        {status && (
+          <span className={`tile__status tile__status--${status}`}>
+            {status === 'playing' ? 'In progress' : status === 'cleared' ? 'Cleared' : 'Run over'}
+          </span>
+        )}
       </span>
-      {run && status === 'playing' && (
-        <>
-          <span className="mode__lives" aria-label={`${run.livesLeft} of ${run.lives} lives left`}>
-            {Array.from({ length: run.lives }, (_, i) => (
-              <svg
-                key={i}
-                viewBox="0 0 16 16"
-                fill="currentColor"
-                className={i < run.livesLeft ? '' : 'is-lost'}
-              >
-                <path d="M8 14 2 8a3.5 3.5 0 0 1 6-4 3.5 3.5 0 0 1 6 4z" />
-              </svg>
-            ))}
+      <span className="tile__body">
+        <span className="tile__name">{name}</span>
+        <span className="tile__meta">
+          {playing ? `${run.unit} ${run.step} of ${run.steps} · ${deckById(run.deck).name}` : blurb}
+        </span>
+        {playing && (
+          <span className="tile__progress">
+            <span className="tile__steps">
+              {Array.from({ length: run.steps }, (_, i) => (
+                <i key={i} className={i < run.done ? 'is-won' : ''} />
+              ))}
+            </span>
+            <span
+              className="tile__lives"
+              aria-label={`${run.livesLeft} of ${run.lives} lives left`}
+            >
+              {Array.from({ length: run.lives }, (_, i) => (
+                <svg key={i} viewBox="0 0 16 16" className={i < run.livesLeft ? '' : 'is-lost'}>
+                  <path d="M8 14 2 8a3.5 3.5 0 0 1 6-4 3.5 3.5 0 0 1 6 4z" />
+                </svg>
+              ))}
+            </span>
           </span>
-          <span className="mode__ladder">
-            {Array.from({ length: run.steps }, (_, i) => (
-              <i key={i} className={i < run.done ? 'is-won' : ''} />
-            ))}
-          </span>
-        </>
-      )}
+        )}
+      </span>
     </button>
   );
 }

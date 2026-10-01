@@ -17,6 +17,7 @@ import { cardNotes } from '../game/notes.ts';
 import { artFor } from '../game/deckArt.ts';
 import { useFlip } from '../game/useFlip.ts';
 import { useHandDrag } from '../game/useHandDrag.ts';
+import { reconcileHandOrder } from '../game/handOrder.ts';
 import { Card, type CardMark, type HoverFn } from './Card.tsx';
 import { FxLayer } from './FxLayer.tsx';
 import { type ArrowSpec, Arrows, Floaters, TurnBanner, winnerText } from './Effects.tsx';
@@ -24,9 +25,11 @@ import {
   Battlefield,
   Hand,
   OpponentHand,
-  PhaseTrack,
   PlayerBadge,
   StackView,
+  type PileZone,
+  PileViewer,
+  ZonePiles,
   type ZoneHandlers,
 } from './Zones.tsx';
 import { ArenaBackdrop } from './ArenaBackdrop.tsx';
@@ -77,6 +80,11 @@ export function Board({
   const [targeting, setTargeting] = useState<Targeting | null>(null);
   const [blocker, setBlocker] = useState<ObjectId | null>(null);
   const [hover, setHoverState] = useState<HoverState | null>(null);
+  const [pile, setPile] = useState<{ player: PlayerId; zone: PileZone } | null>(null);
+  const closePile = useCallback(() => {
+    setPile(null);
+    setHoverState(null);
+  }, []);
   const setHover: HoverFn = useCallback((defId, anchor) => {
     if (defId) playHover(anchor);
     setHoverState(defId ? { defId, anchor: anchor ?? null } : null);
@@ -172,17 +180,25 @@ export function Board({
     setTargeting(picked ?? t);
   };
 
+  const [handOrder, setHandOrder] = useState<ObjectId[]>([]);
+  const orderedHand = useMemo(
+    () => reconcileHandOrder(view.players[HUMAN].hand, handOrder),
+    [view.players[HUMAN].hand, handOrder],
+  );
   const drag = useHandDrag({
-    canDrag: (id) => myDecision && !targeting && playable(id).length > 0,
+    hand: orderedHand,
+    canReorder: () => !targeting && d.kind !== 'gameOver',
+    onReorder: setHandOrder,
+    canPlay: (id) => myDecision && !targeting && playable(id).length > 0,
     onDrop: dropCard,
   });
 
   /** While dragging a targeted spell, its possible first targets light up. */
   const dragTargets = useMemo(() => {
-    if (!drag.dragging) return null;
+    if (!drag.dragging || !drag.overBattlefield) return null;
     const casts = playable(drag.dragging).filter((a) => targetsOf(a).length > 0);
     return casts.length ? targetOptions(startTargeting(drag.dragging, '', casts)) : null;
-  }, [drag.dragging, legal]);
+  }, [drag.dragging, drag.overBattlefield, legal]);
 
   // ------------------------------------------------------------------ clicks
 
@@ -350,31 +366,20 @@ export function Board({
     !targeting &&
     d.kind === 'priority' &&
     !legal.some((a) => a.type === 'playLand' || a.type === 'castSpell');
-  const buttons =
-    bar.primary || bar.secondary ? (
-      <>
-        <div className="action__buttons">
-          {bar.secondary && (
-            <button className="btn btn--ghost" onClick={bar.secondary[1]}>
-              {bar.secondary[0]}
-            </button>
-          )}
-          {bar.primary && (
-            <button
-              className={`btn btn--primary btn--big ${idle ? 'btn--nudge' : ''}`}
-              onClick={bar.primary[1]}
-            >
-              {bar.primary[0]}
-            </button>
-          )}
-        </div>
-        {bar.primary && (
-          <div className="action__keys">
-            <kbd>Space</kbd> {bar.primary[0].toLowerCase()} · <kbd>Esc</kbd> cancel
-          </div>
-        )}
-      </>
-    ) : null;
+  const secondary = bar.secondary && (
+    <button className="abtn abtn--second" onClick={bar.secondary[1]}>
+      {bar.secondary[0]}
+    </button>
+  );
+  const primary = bar.primary && (
+    <button
+      className={`abtn abtn--main ${idle ? 'abtn--nudge' : ''}`}
+      title={`${bar.primary[0]} (Space)`}
+      onClick={bar.primary[1]}
+    >
+      {bar.primary[0]}
+    </button>
+  );
   function actionBar(): {
     prompt: string;
     primary?: [string, () => void];
@@ -517,7 +522,13 @@ export function Board({
     const el = logRef.current;
     if (el) el.scrollTop = el.scrollHeight;
   }, [log, panel]);
-  const recent = log.slice(-2);
+  const [lastPlay, setLastPlay] = useState<{ key: number; defId: CardDefId } | null>(null);
+  const topSpell = view.stack[view.stack.length - 1];
+  const oppSpell = topSpell?.kind === 'spell' && topSpell.controller === BOT ? topSpell.id : null;
+  useEffect(() => {
+    if (oppSpell !== null)
+      setLastPlay((p) => ({ key: (p?.key ?? 0) + 1, defId: view.objects[oppSpell]!.defId }));
+  }, [oppSpell]);
 
   const priorityOf = d.kind === 'priority' ? d.player : null;
   useFlip(view, BOT);
@@ -547,7 +558,6 @@ export function Board({
             active={state.turn.activePlayer === BOT}
             priority={priorityOf === BOT}
             onClick={() => onPlayer(BOT)}
-            onHover={setHover}
           />
           <OpponentHand count={view.players[BOT].hand.length} />
         </header>
@@ -568,66 +578,101 @@ export function Board({
             active={state.turn.activePlayer === HUMAN}
             priority={priorityOf === HUMAN}
             onClick={() => onPlayer(HUMAN)}
-            onHover={setHover}
           />
-          <Hand view={view} player={HUMAN} h={h} extras={extras} />
+          <Hand view={view} player={HUMAN} h={h} extras={extras} order={orderedHand} />
         </footer>
       </main>
+
+      <ZonePiles
+        view={view}
+        player={BOT}
+        me={HUMAN}
+        onHover={setHover}
+        onOpen={(zone) => setPile({ player: BOT, zone })}
+      />
+      <ZonePiles
+        view={view}
+        player={HUMAN}
+        me={HUMAN}
+        onHover={setHover}
+        onOpen={(zone) => setPile({ player: HUMAN, zone })}
+      />
 
       <StackView view={view} onHover={setHover} markOf={markOf} onCard={onCard} aside={!!targeting}>
         {respond && (
           <div className="stack__respond">
             <div className="action__prompt">{bar.prompt}</div>
-            {buttons}
+            <div className="action__row">
+              {secondary}
+              {primary}
+            </div>
           </div>
         )}
       </StackView>
 
-      {panel !== 'log' && recent.length > 0 && (
-        <div className="recent" onClick={() => setPanel('log')}>
-          {recent.map((l) => (
-            <div
-              key={l.id}
-              className={`recent__line ${l.who ? `recent__line--${l.who === HUMAN ? 'me' : 'opp'}` : ''}`}
-            >
-              {l.text}
-            </div>
-          ))}
-        </div>
+      {lastPlay && panel !== 'log' && (
+        <button
+          key={lastPlay.key}
+          className="lastplay"
+          title="Open the game log"
+          onClick={() => setPanel('log')}
+          onMouseEnter={(e) => setHover(lastPlay.defId, e.currentTarget)}
+          onMouseLeave={() => setHover(null)}
+        >
+          <Card defId={lastPlay.defId} size="stack" />
+          <span>Opponent cast {nameOf(lastPlay.defId)}</span>
+        </button>
       )}
 
-      <div className={`action ${myDecision ? 'action--live' : ''}`}>
-        {myDecision && (
-          <div className="hint">
-            {hint && (
-              <div className="hint__bubble" role="status">
-                {hint.text}
-              </div>
-            )}
+      {d.kind !== 'gameOver' && (
+        <div className={`action ${myDecision ? 'action--live' : ''}`}>
+          {hint && myDecision && (
+            <div className="hint__bubble" role="status">
+              {hint.text}
+            </div>
+          )}
+          {!respond && (myDecision || targeting) && (
+            <>
+              <div className="action__prompt">{bar.prompt}</div>
+              {secondary && <div className="action__row">{secondary}</div>}
+            </>
+          )}
+          <div className="action__row">
             <button
-              className="btn btn--ghost hint__btn"
+              className={`abtn abtn--icon ${hint ? 'is-on' : ''}`}
               title="What would a good player do? (H)"
+              aria-label="Hint"
+              disabled={!myDecision}
               onClick={askHint}
             >
-              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden>
-                <path d="M12 2a7 7 0 0 1 4 12.7V17a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1v-2.3A7 7 0 0 1 12 2zm-3 17h6v1a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2v-1z" />
+              <svg className="hud-ico" viewBox="0 0 18 18" aria-hidden>
+                <path d="M7 14h4M7.5 16h3M9 2a5 5 0 0 0-2.9 9.1c.5.3.7.8.7 1.3v.1h4.4v-.1c0-.5.2-1 .7-1.3A5 5 0 0 0 9 2z" />
               </svg>
-              Hint
             </button>
+            <button
+              className={`abtn abtn--icon ${settings.fullControl ? 'is-on' : ''}`}
+              title={`Full control: stop at every priority (${settings.fullControl ? 'on' : 'off'})`}
+              aria-label="Full control"
+              aria-pressed={settings.fullControl}
+              onClick={() => setSettings((s) => ({ ...s, fullControl: !s.fullControl }))}
+            >
+              <svg className="hud-ico" viewBox="0 0 18 18" aria-hidden>
+                <path d="M5.5 3h7A2.5 2.5 0 0 1 15 5.5v7a2.5 2.5 0 0 1-2.5 2.5h-7A2.5 2.5 0 0 1 3 12.5v-7A2.5 2.5 0 0 1 5.5 3zM7 6.5v5M11 6.5v5" />
+              </svg>
+            </button>
+            {respond ? null : myDecision || targeting ? (
+              primary
+            ) : (
+              <button
+                className={`abtn abtn--main abtn--wait ${game.thinking ? 'is-thinking' : ''}`}
+                disabled
+              >
+                {state.turn.activePlayer === BOT ? "Opponent's turn" : 'Waiting for opponent'}
+              </button>
+            )}
           </div>
-        )}
-        <PhaseTrack view={view} me={HUMAN} />
-        {respond ? null : myDecision || targeting ? (
-          <>
-            <div className="action__prompt">{bar.prompt}</div>
-            {buttons}
-          </>
-        ) : (
-          <div className={`action__prompt action__prompt--wait ${game.thinking ? 'is-on' : ''}`}>
-            Opponent is thinking…
-          </div>
-        )}
-      </div>
+        </div>
+      )}
 
       <div className="corner">
         <button
@@ -635,14 +680,18 @@ export function Board({
           title="Game log"
           onClick={() => togglePanel('log')}
         >
-          <i className="ico-log" />
+          <svg className="hud-ico" viewBox="0 0 18 18" aria-hidden>
+            <path d="M5 2.5h8a1.5 1.5 0 0 1 1.5 1.5v10a1.5 1.5 0 0 1-1.5 1.5H5A1.5 1.5 0 0 1 3.5 14V4A1.5 1.5 0 0 1 5 2.5zM6.5 6.5h5M6.5 9h5M6.5 11.5h3" />
+          </svg>
         </button>
         <button
           className={`icon-btn ${panel === 'settings' ? 'is-on' : ''}`}
           title="Settings"
           onClick={() => togglePanel('settings')}
         >
-          <i className="ico-gear" />
+          <svg className="hud-ico" viewBox="0 0 18 18" aria-hidden>
+            <path d="M9 6.6a2.4 2.4 0 1 1 0 4.8 2.4 2.4 0 0 1 0-4.8zM7.8 1.9h2.4l.4 1.8 1.3.6 1.6-1 1.7 1.7-1 1.6.6 1.3 1.8.4v2.4l-1.8.4-.6 1.3 1 1.6-1.7 1.7-1.6-1-1.3.6-.4 1.8H7.8l-.4-1.8-1.3-.6-1.6 1-1.7-1.7 1-1.6-.6-1.3-1.8-.4V7.8l1.8-.4.6-1.3-1-1.6 1.7-1.7 1.6 1 1.3-.6z" />
+          </svg>
         </button>
       </div>
 
@@ -752,6 +801,18 @@ export function Board({
             ))}
           </div>
         </div>
+      )}
+
+      {pile && (
+        <PileViewer
+          view={view}
+          player={pile.player}
+          zone={pile.zone}
+          me={HUMAN}
+          library={state.players[pile.player].library.map((id) => state.objects[id]!.defId)}
+          onHover={setHover}
+          onClose={closePile}
+        />
       )}
 
       {targeting && graveyardOptions.length > 0 && (
@@ -1219,7 +1280,7 @@ function MulliganOverlay({
         )}
         {!bottoming && (
           <div className="mull__buttons">
-            <button className="btn btn--ghost hint__btn" onClick={onHint}>
+            <button className="btn btn--ghost" onClick={onHint}>
               Hint
             </button>
             {legal.some((a) => a.type === 'mulligan') && (

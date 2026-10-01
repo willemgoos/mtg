@@ -1,0 +1,573 @@
+/* ==========================================================================
+   Deck builder, after Arena: collection grid on the left, the deck as a list
+   on the right. Same app shell as Home and Season (tokens in home.css).
+   ========================================================================== */
+
+.dbk {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 20rem;
+  grid-template-rows: auto minmax(0, 1fr);
+  height: 100vh;
+  background: var(--h-bg);
+}
+
+.dbk ::selection {
+  color: var(--h-bg);
+  background: var(--h-accent);
+}
+
+.dbk :focus-visible {
+  outline: 0.125rem solid var(--h-accent);
+  outline-offset: 0.125rem;
+}
+
+/* ------------------------------------------------------------- top bar */
+
+.dbk__bar {
+  grid-column: 1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.625rem 1rem;
+  min-height: 3.5rem;
+  padding: 0.5rem 1rem;
+  border-bottom: 0.0625rem solid var(--h-line);
+}
+
+.dbk__tools {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.dbk__tools .hbtn,
+.dbk__tools .btn {
+  height: 2.125rem;
+  padding: 0 0.75rem;
+  font-size: 0.875rem;
+}
+
+/* Modes may pass the older game-style buttons; give them the same look. */
+.dbk__tools .btn {
+  flex: none;
+  border: 0;
+  border-radius: 0.5rem;
+  font-family: var(--h-font);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--h-text);
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow: inset 0 0 0 0.0625rem var(--h-line);
+}
+
+.dbk__tools .btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.dbk__tools .sinput {
+  height: 2.125rem;
+  width: 12rem;
+  font-size: 0.875rem;
+}
+
+.dbk__search {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 15rem;
+  height: 2.125rem;
+  padding: 0 0.75rem;
+  border-radius: 0.5rem;
+  color: var(--h-dim);
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: inset 0 0 0 0.0625rem var(--h-line);
+}
+
+.dbk__search:focus-within {
+  box-shadow: inset 0 0 0 0.0625rem var(--h-line-hi);
+}
+
+.dbk__search svg {
+  flex: none;
+  width: 0.875rem;
+  height: 0.875rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+}
+
+.dbk__search input {
+  flex: 1;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  font-family: var(--h-font);
+  font-size: 0.875rem;
+  color: var(--h-text);
+  background: none;
+}
+
+.dbk__search input::placeholder {
+  color: var(--h-dim);
+}
+
+.dbk__filters {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.dbk__filter {
+  --c: #a9a9b0;
+  width: 1.375rem;
+  height: 1.375rem;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--c);
+  opacity: 0.3;
+  cursor: var(--cursor-hover, pointer);
+  transition:
+    opacity 0.15s,
+    box-shadow 0.15s;
+}
+
+.dbk__filter:hover {
+  opacity: 0.65;
+}
+
+.dbk__filter.is-on {
+  opacity: 1;
+  box-shadow:
+    0 0 0 0.125rem var(--h-bg),
+    0 0 0 0.25rem var(--c);
+}
+
+.dbk__filter--W {
+  --c: var(--mana-W);
+}
+.dbk__filter--U {
+  --c: var(--mana-U);
+}
+.dbk__filter--B {
+  --c: var(--mana-B);
+}
+.dbk__filter--R {
+  --c: var(--mana-R);
+}
+.dbk__filter--G {
+  --c: var(--mana-G);
+}
+/* Lands: a split dot so it reads differently from colourless. */
+.dbk__filter--L {
+  --c: #8a7a5a;
+  background: linear-gradient(135deg, #b6a37a 50%, #6b5c40 50%);
+}
+
+.dbk__shown {
+  margin-left: auto;
+  font-size: 0.8125rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--h-dim);
+}
+
+/* ---------------------------------------------------------- collection */
+
+.dbk__pool {
+  grid-column: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 1rem;
+}
+
+.dbk__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(8.75rem, 1fr));
+  gap: 1rem 0.75rem;
+}
+
+.dbk-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+.dbk-card__face {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 63 / 88;
+  border-radius: 4.6% / 3.3%;
+  cursor: var(--cursor-hover, pointer);
+  transition: transform 0.18s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.dbk-card__face img,
+.dbk-card__face .dcard__blank {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  box-shadow: 0 0.375rem 1rem rgba(0, 0, 0, 0.5);
+  transition:
+    box-shadow 0.18s,
+    filter 0.18s;
+}
+
+.dbk-card__face:hover {
+  transform: translateY(-0.25rem);
+}
+
+.dbk-card__face:hover img {
+  box-shadow:
+    0 0 0 0.125rem var(--h-text),
+    0 0.75rem 1.5rem rgba(0, 0, 0, 0.6);
+}
+
+.dbk-card.is-out .dbk-card__face {
+  cursor: var(--cursor, default);
+  transform: none;
+}
+
+.dbk-card.is-out img {
+  filter: grayscale(0.7) brightness(0.6);
+  box-shadow: 0 0.375rem 1rem rgba(0, 0, 0, 0.5);
+}
+
+.dbk-card__face.is-new img {
+  box-shadow:
+    0 0 0 0.125rem var(--h-accent),
+    0 0.375rem 1rem rgba(0, 0, 0, 0.5);
+}
+
+.dbk-card__new,
+.dbk-card__in {
+  position: absolute;
+  top: 0.375rem;
+  padding: 0.0625rem 0.4375rem;
+  border-radius: 999px;
+  font-family: var(--h-font);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  pointer-events: none;
+}
+
+.dbk-card__new {
+  left: 0.375rem;
+  color: var(--h-bg);
+  background: var(--h-accent);
+}
+
+/* Copies already in the deck. */
+.dbk-card__in {
+  right: 0.375rem;
+  color: var(--h-bg);
+  background: var(--h-text);
+  box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.5);
+}
+
+.dbk-card__copies {
+  display: flex;
+  gap: 0.1875rem;
+  min-height: 0.25rem;
+  font-family: var(--h-font);
+  font-size: 0.75rem;
+  line-height: 0.25rem;
+  color: var(--h-muted);
+}
+
+.dbk-card__copies i {
+  width: 0.75rem;
+  height: 0.25rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.dbk-card__copies i.is-free {
+  background: var(--h-text);
+}
+
+.dbk__empty {
+  margin: 2rem 0;
+  font-family: var(--h-font);
+  font-size: 0.875rem;
+  text-align: center;
+  color: var(--h-muted);
+}
+
+/* ----------------------------------------------------------- deck list */
+
+.dbk__side {
+  grid-column: 2;
+  grid-row: 1 / 3;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  border-left: 0.0625rem solid var(--h-line);
+  background: var(--h-surface);
+}
+
+.dbk__head {
+  position: relative;
+  flex: none;
+  display: flex;
+  align-items: flex-end;
+  height: 6.5rem;
+  padding: 0.875rem 1rem;
+  background: center 30% / cover no-repeat;
+}
+
+.dbk__head::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(19, 20, 23, 0.1), var(--h-surface));
+}
+
+.dbk__title {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  min-width: 0;
+}
+
+.dbk__pips {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.dbk__pips .pip {
+  width: 0.625rem;
+  height: 0.625rem;
+}
+
+.dbk__title h1 {
+  margin: 0;
+  overflow: hidden;
+  font-family: var(--h-font);
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: #fff;
+}
+
+.dbk__stats {
+  flex: none;
+  display: flex;
+  align-items: flex-end;
+  gap: 1rem;
+  padding: 0.5rem 1rem 0.875rem;
+  border-bottom: 0.0625rem solid var(--h-line);
+}
+
+.dbk__count {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-size: 0.8125rem;
+  color: var(--h-muted);
+}
+
+.dbk__count strong {
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  color: var(--h-text);
+}
+
+.dbk__count strong.is-short {
+  color: var(--h-accent);
+}
+
+.dbk__meter {
+  display: block;
+  height: 0.25rem;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.dbk__meter i {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--h-text);
+  transition: width 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.dbk__curve {
+  flex: none;
+  display: flex;
+  align-items: flex-end;
+  gap: 0.25rem;
+}
+
+.dbk__curve-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.25rem;
+  height: 3rem;
+}
+
+.dbk__curve-bar {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  width: 0.75rem;
+  min-height: 0.125rem;
+  overflow: hidden;
+  border-radius: 0.1875rem;
+  background: rgba(255, 255, 255, 0.35);
+  transition: height 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* Creatures, the lower part of the bar. */
+.dbk__curve-bar > span {
+  display: block;
+  background: var(--h-text);
+}
+
+.dbk__curve-col small {
+  font-size: 0.625rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--h-dim);
+}
+
+.dbk__list {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 0.25rem 0.5rem 0.75rem;
+}
+
+.dbk__section h2 {
+  display: flex;
+  justify-content: space-between;
+  margin: 0;
+  padding: 0.75rem 0.5rem 0.375rem;
+  font-family: var(--h-font);
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--h-muted);
+}
+
+.dbk__section h2 span {
+  font-variant-numeric: tabular-nums;
+  color: var(--h-dim);
+}
+
+/* One row per card: count, name, cost, with a sliver of art behind. */
+.dbk-row {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1.5rem minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  height: 2rem;
+  margin-bottom: 0.125rem;
+  padding: 0 0.5rem;
+  overflow: hidden;
+  isolation: isolate;
+  border: 0;
+  border-radius: 0.375rem;
+  text-align: left;
+  font-family: var(--h-font);
+  color: var(--h-text);
+  background: rgba(255, 255, 255, 0.03);
+  cursor: var(--cursor-hover, pointer);
+  transition: background 0.12s;
+}
+
+.dbk-row::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 0 40%;
+  z-index: -1;
+  background: var(--art, none) center 30% / cover no-repeat;
+  mask-image: linear-gradient(90deg, transparent, #000 70%);
+  opacity: 0.35;
+  transition: opacity 0.12s;
+}
+
+.dbk-row:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.dbk-row:hover::before {
+  opacity: 0.55;
+}
+
+.dbk-row__qty {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--h-muted);
+}
+
+.dbk-row__name {
+  overflow: hidden;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  text-shadow: 0 0.0625rem 0.25rem rgba(0, 0, 0, 0.8);
+}
+
+.dbk-row__cost {
+  display: flex;
+  gap: 0.0625rem;
+}
+
+.dbk-row__cost img {
+  width: 0.875rem;
+  height: 0.875rem;
+}
+
+.dbk__tips {
+  margin: 0.75rem 0.5rem 0;
+  padding: 0.75rem 0.75rem 0.75rem 1.75rem;
+  border-radius: 0.5rem;
+  font-family: var(--h-font);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--h-muted);
+  background: rgba(244, 177, 62, 0.06);
+  box-shadow: inset 0 0 0 0.0625rem rgba(244, 177, 62, 0.2);
+}
+
+.dbk__tips li + li {
+  margin-top: 0.375rem;
+}
+
+.dbk__tips li::marker {
+  color: var(--h-accent);
+}
+
+.dbk__foot {
+  flex: none;
+  padding: 0.75rem 1rem 1rem;
+  border-top: 0.0625rem solid var(--h-line);
+}
+
+.dbk__done {
+  width: 100%;
+  height: 2.75rem;
+  font-weight: 600;
+}
+
+@media (max-width: 900px) {
+  .dbk {
+    grid-template-columns: minmax(0, 1fr) 16rem;
+  }
+}

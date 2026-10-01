@@ -151,9 +151,7 @@ export function CardBack({ style }: { style?: React.CSSProperties }) {
   return (
     <div className="card card--back" style={style}>
       <div className="card__body">
-        <div className="back">
-          <div className="back__sigil" />
-        </div>
+        <div className="back" />
       </div>
     </div>
   );

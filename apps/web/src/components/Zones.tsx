@@ -7,7 +7,8 @@ import {
   type PlayerId,
   type Step,
 } from '@mtg/engine';
-import { Card, CardBack, type CardMark, type HoverFn } from './Card.tsx';
+import { useEffect } from 'react';
+import { Card, CardBack, type CardMark, cardImage, type HoverFn } from './Card.tsx';
 import { LifeCounter } from './LifeCounter.tsx';
 
 export interface ZoneHandlers {
@@ -181,17 +182,19 @@ export function Hand({
   player,
   h,
   extras = [],
+  order,
 }: {
   view: GameState;
   player: PlayerId;
   h: ZoneHandlers;
   /** Castable cards from elsewhere (flashback, top of library), shown beside the hand. */
   extras?: { id: ObjectId; label: string }[];
+  order?: ObjectId[];
 }) {
-  const hand = view.players[player].hand;
+  const hand = order ?? view.players[player].hand;
   const n = hand.length;
   return (
-    <div className="hand" style={{ '--n': n } as React.CSSProperties}>
+    <div className="hand" style={{ '--n': n, '--extras': extras.length } as React.CSSProperties}>
       {extras.length > 0 && (
         <div className="hand-extra">
           {extras.map(({ id, label }) => (
@@ -222,6 +225,12 @@ export function Hand({
             onPointerDown={(e) => h.onHandPointerDown?.(id, e)}
             onPointerMove={tilt}
             onPointerLeave={untilt}
+            onAnimationEnd={(e) => {
+              // Moving this keyed node during reordering can replay its CSS
+              // entrance animation. Arrival is a one-time effect for this slot.
+              if (e.target === e.currentTarget && e.animationName === 'draw')
+                e.currentTarget.style.animation = 'none';
+            }}
             style={{ '--o': offset, '--abs': Math.abs(offset) } as React.CSSProperties}
           >
             <Card
@@ -258,6 +267,11 @@ export function OpponentHand({ count }: { count: number }) {
 // Players
 // ---------------------------------------------------------------------------
 
+/**
+ * A player's seat, after Arena: the portrait sits in the middle of their phase
+ * strip (beginning, draw, main on the left; combat, main, end on the right), with
+ * the life total just under it. The strip lights up on the active player's turn.
+ */
 export function PlayerBadge({
   view,
   player,
@@ -267,7 +281,6 @@ export function PlayerBadge({
   active,
   priority,
   onClick,
-  onHover,
 }: {
   view: GameState;
   player: PlayerId;
@@ -278,56 +291,197 @@ export function PlayerBadge({
   active: boolean;
   priority: boolean;
   onClick: () => void;
-  onHover: HoverFn;
 }) {
   const ps = view.players[player];
-  const top = ps.graveyard[ps.graveyard.length - 1];
+  const step = active ? view.turn.step : null;
   return (
     <div
       className={`badge ${targetable ? 'badge--target' : ''} ${active ? 'badge--active' : ''} ${
         priority ? 'badge--priority' : ''
       }`}
-      data-player={player}
-      onClick={onClick}
     >
-      <div className="badge__portrait" style={{ backgroundImage: `url("${art}")` }}>
+      <PhaseStrip phases={PHASES.slice(0, 3)} step={step} />
+      <div
+        className="badge__portrait"
+        style={{ backgroundImage: `url("${art}")` }}
+        data-player={player}
+        title={`${name} · ${ps.life} life · ${ps.hand.length} in hand`}
+        onClick={onClick}
+      >
         <LifeCounter life={ps.life} />
       </div>
-      <div className="badge__meta">
-        <div className="badge__name">{name}</div>
-        <div className="badge__zones">
-          <span title="Library">
-            <i className="ico ico--lib" />
-            {ps.library.length}
-          </span>
-          <span title="Hand">
-            <i className="ico ico--hand" />
-            {ps.hand.length}
-          </span>
-          <span
-            title="Graveyard"
-            onMouseEnter={(e) => top && onHover(view.objects[top]!.defId, e.currentTarget)}
-            onMouseLeave={() => onHover(null)}
+      <PhaseStrip phases={PHASES.slice(3)} step={step} />
+    </div>
+  );
+}
+
+function PhaseStrip({ phases, step }: { phases: Phase[]; step: Step | null }) {
+  return (
+    <ol className="strip">
+      {phases.map((p) => {
+        const on = !!step && p.steps.includes(step);
+        const label = on && step && STEP_LABEL[step] ? `${p.label}: ${STEP_LABEL[step]}` : p.label;
+        return (
+          <li
+            key={p.icon}
+            className={`strip__phase ${on ? 'is-on' : ''}`}
+            title={label}
+            aria-label={label}
           >
-            <i className="ico ico--grave" />
-            {ps.graveyard.length}
-          </span>
+            <svg viewBox="0 0 18 18" aria-hidden>
+              <path d={PHASE_ICON[p.icon]} />
+            </svg>
+          </li>
+        );
+      })}
+    </ol>
+  );
+}
+
+export type PileZone = 'graveyard' | 'library';
+
+/** Library and graveyard as small piles at the edge of each side, like Arena. */
+export function ZonePiles({
+  view,
+  player,
+  me,
+  onHover,
+  onOpen,
+}: {
+  view: GameState;
+  player: PlayerId;
+  me: PlayerId;
+  onHover: HoverFn;
+  /** Opens a pile for browsing. Only your own library can be looked through. */
+  onOpen: (zone: PileZone) => void;
+}) {
+  const ps = view.players[player];
+  const top = ps.graveyard[ps.graveyard.length - 1];
+  const topDef = top ? view.objects[top]!.defId : null;
+  const img = topDef ? cardImage(topDef) : null;
+  const canBrowseLibrary = player === me && ps.library.length > 0;
+  return (
+    <div className={`piles piles--${player === 'p1' ? 'me' : 'opp'}`}>
+      <button
+        type="button"
+        className={`pile pile--grave ${top ? 'is-clickable' : 'is-empty'}`}
+        title="Graveyard"
+        disabled={!top}
+        style={img ? { backgroundImage: `url("${img}")` } : undefined}
+        onClick={() => onOpen('graveyard')}
+        onMouseEnter={(e) => topDef && onHover(topDef, e.currentTarget)}
+        onMouseLeave={() => onHover(null)}
+      >
+        <b>{ps.graveyard.length}</b>
+      </button>
+      <button
+        type="button"
+        className={`pile pile--library ${canBrowseLibrary ? 'is-clickable' : ''}`}
+        title={canBrowseLibrary ? 'Library: click to see the cards left' : 'Library'}
+        disabled={!canBrowseLibrary}
+        onClick={() => onOpen('library')}
+      >
+        <b>{ps.library.length}</b>
+      </button>
+    </div>
+  );
+}
+
+/**
+ * Browse a graveyard (newest first) or the cards left in your library. The
+ * library is grouped by card and sorted, so it never gives away the order.
+ */
+export function PileViewer({
+  view,
+  player,
+  zone,
+  me,
+  library,
+  onHover,
+  onClose,
+}: {
+  view: GameState;
+  player: PlayerId;
+  zone: PileZone;
+  me: PlayerId;
+  /** The cards in the library, in any order: the view hides them. */
+  library: CardDefId[];
+  onHover: HoverFn;
+  onClose: () => void;
+}) {
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && onClose();
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [onClose]);
+  const ids = view.players[player][zone];
+  const entries =
+    zone === 'graveyard'
+      ? [...ids].reverse().map((id) => ({ key: id, defId: view.objects[id]!.defId, count: 1 }))
+      : libraryGroups(library);
+  return (
+    <div className="overlay overlay--pile" onClick={onClose}>
+      <div className="pileview" onClick={(e) => e.stopPropagation()}>
+        <h2>
+          {player === me ? 'Your' : "Opponent's"} {zone}
+        </h2>
+        <p>
+          {ids.length} {ids.length === 1 ? 'card' : 'cards'}
+          {zone === 'library' ? ' left, sorted by name' : ', newest first'}
+        </p>
+        <div className="pileview__grid">
+          {entries.map((e) => (
+            <div key={e.key} className="pileview__card">
+              <Card defId={e.defId} size="mull" onHover={onHover} />
+              {e.count > 1 && <span className="pileview__count">×{e.count}</span>}
+            </div>
+          ))}
+        </div>
+        <div className="mull__buttons">
+          <button className="btn btn--ghost" onClick={onClose}>
+            Close
+          </button>
         </div>
       </div>
     </div>
   );
 }
 
+/** Library cards counted by name: spells first, then lands, each alphabetical. */
+function libraryGroups(library: CardDefId[]) {
+  const counts = new Map<CardDefId, number>();
+  for (const defId of library) counts.set(defId, (counts.get(defId) ?? 0) + 1);
+  const rank = (defId: CardDefId) => {
+    const def = cardDb.get(defId);
+    return { land: def?.types.includes('Land') ? 1 : 0, name: def?.name ?? defId };
+  };
+  return [...counts]
+    .sort(([a], [b]) => {
+      const ra = rank(a);
+      const rb = rank(b);
+      return ra.land - rb.land || ra.name.localeCompare(rb.name);
+    })
+    .map(([defId, count]) => ({ key: defId, defId, count }));
+}
+
 // ---------------------------------------------------------------------------
 // Turn structure and stack
 // ---------------------------------------------------------------------------
 
-const PHASES: { label: string; steps: Step[] }[] = [
-  { label: 'Upkeep', steps: ['untap', 'upkeep'] },
-  { label: 'Draw', steps: ['draw'] },
-  { label: 'Main', steps: ['main1'] },
+type PhaseIcon = 'untap' | 'draw' | 'main' | 'combat' | 'main2' | 'end';
+interface Phase {
+  label: string;
+  icon: PhaseIcon;
+  steps: Step[];
+}
+
+const PHASES: Phase[] = [
+  { label: 'Beginning', icon: 'untap', steps: ['untap', 'upkeep'] },
+  { label: 'Draw', icon: 'draw', steps: ['draw'] },
+  { label: 'Main', icon: 'main', steps: ['main1'] },
   {
     label: 'Combat',
+    icon: 'combat',
     steps: [
       'beginCombat',
       'declareAttackers',
@@ -337,41 +491,31 @@ const PHASES: { label: string; steps: Step[] }[] = [
       'endCombat',
     ],
   },
-  { label: 'Main', steps: ['main2'] },
-  { label: 'End', steps: ['end', 'cleanup'] },
+  { label: 'Second main', icon: 'main2', steps: ['main2'] },
+  { label: 'End', icon: 'end', steps: ['end', 'cleanup'] },
 ];
 
+/** 18×18 line icons, one per phase. */
+const PHASE_ICON: Record<PhaseIcon, string> = {
+  untap: 'M14.5 6.5A6 6 0 0 0 3.6 6M3.5 11.5A6 6 0 0 0 14.4 12M3.5 2.8V6h3.2M14.5 15.2V12h-3.2',
+  draw: 'M6.3 2.5h6a1.3 1.3 0 0 1 1.3 1.3v9.4a1.3 1.3 0 0 1-1.3 1.3h-6A1.3 1.3 0 0 1 5 13.2V3.8a1.3 1.3 0 0 1 1.3-1.3zM9.3 6v5M6.9 8.5h4.8',
+  main: 'M9 2.5 14.5 9 9 15.5 3.5 9zM9 7.4a1.6 1.6 0 1 1 0 3.2 1.6 1.6 0 0 1 0-3.2z',
+  combat: 'M3 3l8.5 8.5M15 3l-8.5 8.5M10 13l2.5-2.5M8 13l-2.5-2.5M12.8 12.8l2 2M5.2 12.8l-2 2',
+  main2: 'M9 2.5 14.5 9 9 15.5 3.5 9zM7.5 7.5h3v3h-3z',
+  end: 'M13.8 11.2A5.8 5.8 0 0 1 6.8 4.2a5.8 5.8 0 1 0 7 7z',
+};
+
 const STEP_LABEL: Partial<Record<Step, string>> = {
+  untap: 'Untap',
+  upkeep: 'Upkeep',
   beginCombat: 'Beginning of combat',
   declareAttackers: 'Attackers',
   declareBlockers: 'Blockers',
   firstStrikeDamage: 'First strike',
   combatDamage: 'Damage',
   endCombat: 'End of combat',
+  cleanup: 'Cleanup',
 };
-
-export function PhaseTrack({ view, me }: { view: GameState; me: PlayerId }) {
-  const step = view.turn.step;
-  const mine = view.turn.activePlayer === me;
-  return (
-    <div className={`phases ${mine ? 'phases--me' : 'phases--opp'}`}>
-      <div className="phases__turn">
-        <span className="phases__who">{mine ? 'Your turn' : "Opponent's turn"}</span>
-        <span className="phases__num">
-          Turn {view.turn.number}
-          {STEP_LABEL[step] && ` · ${STEP_LABEL[step]}`}
-        </span>
-      </div>
-      <ol className="phases__list">
-        {PHASES.map((p, i) => (
-          <li key={i} className={p.steps.includes(step) ? 'is-on' : ''}>
-            {p.label}
-          </li>
-        ))}
-      </ol>
-    </div>
-  );
-}
 
 export function StackView({
   view,

@@ -1,6 +1,6 @@
 import { SCRYFALL, scryfallById, slug } from '@mtg/cards';
 import type { Color } from '@mtg/engine';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { type ReactNode, useEffect, useMemo, useRef, useState } from 'react';
 import {
   type ExpeditionRun,
   keepCount,
@@ -40,7 +40,13 @@ const packGlow = (p: Pack) => (p.kind === 'color' ? `var(--mana-${p.color})` : '
 
 type Rarity = 'common' | 'uncommon' | 'rare' | 'mythic';
 const RANK: Record<Rarity, number> = { common: 0, uncommon: 1, rare: 2, mythic: 3 };
-const rarityOf = (name: string) => (scryfallById.get(slug(name))?.rarity ?? 'common') as Rarity;
+/** Season packs can hold wildcards: they travel through the reveal as `Wildcard: <rarity>`. */
+const WILDCARD = 'Wildcard: ';
+export const wildcardName = (rarity: Rarity) => `${WILDCARD}${rarity}`;
+const rarityOf = (name: string) =>
+  (name.startsWith(WILDCARD)
+    ? name.slice(WILDCARD.length)
+    : (scryfallById.get(slug(name))?.rarity ?? 'common')) as Rarity;
 const COLS = 6;
 const GOLD = '#f3dca4';
 const EMBER = '#ff8a4c';
@@ -94,6 +100,45 @@ export function PackOpening({
   );
 }
 
+/** A Season booster: everything in it is yours, so the reveal ends with a single Done. */
+export function BoosterReveal({
+  cards,
+  eyebrow,
+  note,
+  extra,
+  onDone,
+}: {
+  /** Card names, or `wildcardName(rarity)`. */
+  cards: string[];
+  eyebrow: string;
+  /** Shown under the title once every card is face up. */
+  note?: ReactNode;
+  /** More actions beside Done, once every card is face up. */
+  extra?: ReactNode;
+  onDone: () => void;
+}) {
+  const sorted = useMemo(
+    () => [...cards].sort((a, b) => RANK[rarityOf(a)] - RANK[rarityOf(b)]),
+    [cards],
+  );
+  const canvas = useRef<HTMLCanvasElement>(null);
+  useEffect(() => mountFx(canvas.current!), []);
+  return (
+    <>
+      <OnePack
+        pack={{ kind: 'booster' }}
+        cards={sorted}
+        keep={0}
+        eyebrow={eyebrow}
+        note={note}
+        extra={extra}
+        onKeep={onDone}
+      />
+      <canvas ref={canvas} className="fx-layer" aria-hidden />
+    </>
+  );
+}
+
 type Phase = 'sealed' | 'tearing' | 'open' | 'leaving';
 
 function OnePack({
@@ -101,13 +146,17 @@ function OnePack({
   cards,
   keep,
   eyebrow,
+  note,
+  extra,
   onKeep,
 }: {
   pack: Pack;
   cards: string[];
-  /** How many cards to keep. */
+  /** How many cards to keep; 0 keeps them all. */
   keep: number;
   eyebrow: string;
+  note?: ReactNode;
+  extra?: ReactNode;
   onKeep: (names: string[]) => void;
 }) {
   const [phase, setPhase] = useState<Phase>('sealed');
@@ -256,7 +305,9 @@ function OnePack({
     });
   };
 
-  const rows = Math.ceil(cards.length / COLS);
+  // A Season booster (eight cards) deals as two rows of four.
+  const cols = cards.length === 8 ? 4 : COLS;
+  const rows = Math.ceil(cards.length / cols);
   return (
     <div ref={root} className={`start opening opening--${phase}`}>
       <UiSize />
@@ -265,9 +316,13 @@ function OnePack({
         <h1>{packName(pack)}</h1>
         <p>
           {phase === 'open' || phase === 'leaving'
-            ? done
-              ? `Choose ${keep} to keep. The rest go back.`
-              : `Flip the cards, then choose ${keep} to keep.`
+            ? !keep
+              ? done
+                ? (note ?? 'Everything here is now in your collection.')
+                : 'Flip the cards. Everything in the pack is yours.'
+              : done
+                ? `Choose ${keep} to keep. The rest go back.`
+                : `Flip the cards, then choose ${keep} to keep.`
             : 'Click the pack to tear it open.'}
         </p>
       </div>
@@ -299,14 +354,18 @@ function OnePack({
             <span className="booster__hint">Click to open</span>
           </div>
         ) : (
-          <div className="pack-cards" style={{ '--rows': rows } as React.CSSProperties}>
+          <div
+            className="pack-cards"
+            style={{ '--rows': rows, '--cols': cols } as React.CSSProperties}
+          >
             {cards.map((name, i) => {
               const defId = slug(name);
-              const img = scryfallById.get(defId)?.image?.normal;
+              const wild = name.startsWith(WILDCARD);
+              const img = wild ? undefined : scryfallById.get(defId)?.image?.normal;
               const isUp = up.has(i);
               return (
                 <div
-                  key={name}
+                  key={i}
                   ref={(el) => {
                     els.current[i] = el;
                   }}
@@ -314,8 +373,8 @@ function OnePack({
                   style={
                     {
                       '--i': i,
-                      '--col': i % COLS,
-                      '--row': Math.floor(i / COLS),
+                      '--col': i % cols,
+                      '--row': Math.floor(i / cols),
                       '--spin': `${((i * 37) % 30) - 15}deg`,
                     } as React.CSSProperties
                   }
@@ -325,17 +384,29 @@ function OnePack({
                   aria-pressed={isUp ? chosen.includes(i) : undefined}
                   onClick={() => (isUp ? choose(i) : flip(i))}
                   onKeyDown={(e) => e.key === 'Enter' && (isUp ? choose(i) : flip(i))}
-                  onMouseEnter={(e) => isUp && setHover({ defId, anchor: e.currentTarget })}
+                  onMouseEnter={(e) =>
+                    isUp && !wild && setHover({ defId, anchor: e.currentTarget })
+                  }
                   onMouseLeave={() => setHover(null)}
                 >
                   <div className="pcard__inner">
                     <div className="pcard__back">
-                      <div className="back">
-                        <div className="back__sigil" />
-                      </div>
+                      <div className="back" />
                     </div>
                     <div className="pcard__face">
-                      {img ? <img src={img} alt={name} draggable={false} /> : name}
+                      {wild ? (
+                        <span className={`wildcard wildcard--${rarityOf(name)}`}>
+                          <span className="wildcard__gem" />
+                          <span className="wildcard__label">
+                            {rarityOf(name)}
+                            <small>Wildcard</small>
+                          </span>
+                        </span>
+                      ) : img ? (
+                        <img src={img} alt={name} draggable={false} />
+                      ) : (
+                        name
+                      )}
                     </div>
                   </div>
                 </div>
@@ -348,13 +419,20 @@ function OnePack({
       <div className="gauntlet__actions opening__actions">
         {phase === 'open' &&
           (done ? (
-            <button
-              className={`btn btn--primary btn--big ${chosen.length === keep ? 'btn--nudge' : ''}`}
-              disabled={chosen.length < keep}
-              onClick={confirm}
-            >
-              {chosen.length < keep ? `Choose ${keep - chosen.length} more` : 'Keep these'}
-            </button>
+            <>
+              {extra}
+              <button
+                className={`btn btn--primary btn--big ${chosen.length === keep ? 'btn--nudge' : ''}`}
+                disabled={chosen.length < keep}
+                onClick={confirm}
+              >
+                {!keep
+                  ? 'Done'
+                  : chosen.length < keep
+                    ? `Choose ${keep - chosen.length} more`
+                    : 'Keep these'}
+              </button>
+            </>
           ) : (
             <button className="btn btn--ghost" onClick={revealAll}>
               Reveal all

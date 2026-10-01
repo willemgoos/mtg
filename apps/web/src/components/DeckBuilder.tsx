@@ -3,15 +3,19 @@ import type { Color } from '@mtg/engine';
 import { type ReactNode, useMemo, useState } from 'react';
 import {
   cardEntries,
+  costSymbols,
   type DeckEntry,
-  deckColumns,
+  deckSections,
   isCreature,
   isLand,
+  symbolUrl,
   total,
 } from '../game/deckView.ts';
 import { ruleNotes } from '../game/notes.ts';
 import { play } from '../game/sound.ts';
 import { HoverPreview, type HoverState } from './Preview.tsx';
+import './home.css';
+import './deckbuilder.css';
 
 /** Card name -> copies. */
 type Counts = Readonly<Record<string, number>>;
@@ -68,10 +72,9 @@ function collectionRank(e: DeckEntry): number {
 }
 
 /**
- * Arena's deck builder. The collection fills the top in two rows of full
- * cards (click to add) under a search box and colour filters; the deck sits
- * below as stacks by mana value (click to take a card out), with the deck's
- * name, card count and curve on the band between them.
+ * Arena's deck builder: the collection as a scrolling grid of cards (click to
+ * add) under a search box and colour filters, and the deck as a list on the
+ * right (click a row to take one out), with the count and curve above it.
  *
  * It works on plain name -> copies counts, so any mode can use it: `pool` is
  * what you own but haven't put in, `deck` what's in. With `basics` the five
@@ -153,30 +156,25 @@ export function DeckBuilder({
       return next;
     });
 
+  const sections = deckSections(main);
+  const short = n < min;
   return (
-    <div
-      className="dbk"
-      style={
-        {
-          '--art': `url("${art}")`,
-          '--glow': `var(--mana-${colors[0] ?? 'W'})`,
-        } as React.CSSProperties
-      }
-    >
+    <div className="dbk">
       <header className="dbk__bar">
+        <div className="dbk__tools">{tools}</div>
         <label className="dbk__search">
+          <svg viewBox="0 0 16 16" aria-hidden>
+            <circle cx="7" cy="7" r="4.5" />
+            <path d="m10.5 10.5 3 3" />
+          </svg>
           <input
             type="search"
-            placeholder="Search…"
+            placeholder="Search cards"
+            aria-label="Search cards"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={(e) => e.key === 'Escape' && setQuery('')}
           />
-          {query && (
-            <button aria-label="Clear search" onClick={() => setQuery('')}>
-              ×
-            </button>
-          )}
         </label>
         <div className="dbk__filters" role="group" aria-label="Filter by colour">
           {FILTERS.map((f) => (
@@ -189,37 +187,28 @@ export function DeckBuilder({
             />
           ))}
         </div>
-        <div className="dbk__tools">{tools}</div>
+        <span className="dbk__shown">
+          {shown.length} {shown.length === 1 ? 'card' : 'cards'}
+        </span>
       </header>
 
-      <main
-        className="dbk__pool"
-        onWheel={(e) => {
-          if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) e.currentTarget.scrollLeft += e.deltaY;
-        }}
-      >
+      <main className="dbk__pool">
+        {shown.length === 0 && (
+          <p className="dbk__empty">{owned.length ? 'No cards match.' : 'No cards yet.'}</p>
+        )}
         <div className="dbk__grid">
-          {shown.length === 0 && (
-            <p className="dbk__empty">{owned.length ? 'No cards match.' : 'No cards yet.'}</p>
-          )}
           {shown.map((e) => {
             const free = isFree(e);
             const inDeck = deck[e.name] ?? 0;
             const out = !free && !e.count;
             return (
               <div key={e.name} className={`dbk-card ${out ? 'is-out' : ''}`}>
-                <span className="dbk-card__copies" aria-label={free ? 'Unlimited' : undefined}>
-                  {free
-                    ? '∞'
-                    : Array.from({ length: Math.min(e.count + inDeck, 8) }, (_, i) => (
-                        <i key={i} className={i < e.count ? 'is-free' : ''} />
-                      ))}
-                </span>
                 <div
                   className={`dbk-card__face ${fresh?.has(e.name) ? 'is-new' : ''}`}
                   role="button"
                   tabIndex={out ? -1 : 0}
                   aria-disabled={out}
+                  aria-label={`${e.name}${free ? '' : `, ${e.count} left`}`}
                   title={out ? 'All copies are in your deck' : 'Add to the deck'}
                   onMouseEnter={(ev) => setHover(e, ev.currentTarget)}
                   onMouseLeave={() => setHover(null)}
@@ -227,78 +216,102 @@ export function DeckBuilder({
                   onKeyDown={(ev) => ev.key === 'Enter' && add(e)}
                 >
                   {e.image ? (
-                    <img src={e.image} alt={e.name} draggable={false} />
+                    <img src={e.image} alt="" draggable={false} loading="lazy" />
                   ) : (
                     <div className="dcard__blank">{e.name}</div>
                   )}
                   {fresh?.has(e.name) && <span className="dbk-card__new">New</span>}
+                  {inDeck > 0 && <span className="dbk-card__in">{inDeck}</span>}
                 </div>
+                <span className="dbk-card__copies" aria-hidden>
+                  {free
+                    ? '∞'
+                    : Array.from({ length: Math.min(e.count + inDeck, 8) }, (_, i) => (
+                        <i key={i} className={i < e.count ? 'is-free' : ''} />
+                      ))}
+                </span>
               </div>
             );
           })}
         </div>
       </main>
 
-      <div className="dbk__band">
-        <div className="dbk__plate">
-          <span className="deck__pips">
-            {colors.map((c) => (
-              <span key={c} className={`pip pip--${c}`} />
-            ))}
-          </span>
-          <h1>{name}</h1>
-          <span className={`dbk__count ${n < min ? 'is-short' : ''}`}>
-            {n}/{min} Cards
-          </span>
-        </div>
-        <MiniCurve entries={main} />
-        <div className="dbk__box" aria-hidden />
-        {tips.length > 0 && (
-          <ul className="dbk__tips" aria-label="Deck tips">
-            {tips.map((t) => (
-              <li key={t}>{t}</li>
-            ))}
-          </ul>
-        )}
-      </div>
-
-      <section className="dbk__deck" aria-label="Your deck">
-        {main.length === 0 && <p className="dbk__empty">Click cards above to add them.</p>}
-        {deckColumns(main).map((col) => (
-          <div key={col.label} className="dbk-col" aria-label={`${col.label}: ${total(col.cards)}`}>
-            {col.cards.map((e) => (
-              <div
-                key={e.name}
-                className="dbk-stack"
-                role="button"
-                tabIndex={0}
-                title="Take one out of the deck"
-                onMouseEnter={(ev) => setHover(e, ev.currentTarget)}
-                onMouseLeave={() => setHover(null)}
-                onClick={() => remove(e)}
-                onKeyDown={(ev) => ev.key === 'Enter' && remove(e)}
-              >
-                {e.image ? (
-                  <img src={e.image} alt={e.name} draggable={false} />
-                ) : (
-                  <div className="dcard__blank">{e.name}</div>
-                )}
-                <span className="dbk-stack__qty">x{e.count}</span>
-              </div>
-            ))}
+      <aside className="dbk__side" aria-label="Your deck">
+        <div className="dbk__head" style={{ backgroundImage: `url("${art}")` }}>
+          <div className="dbk__title">
+            <span className="dbk__pips">
+              {colors.map((c) => (
+                <span key={c} className={`pip pip--${c}`} />
+              ))}
+            </span>
+            <h1>{name}</h1>
           </div>
-        ))}
-      </section>
-      <button className="btn btn--primary dbk__done" disabled={n < min} onClick={onDone}>
-        {n < min ? `${min - n} more to go` : 'Done'}
-      </button>
+        </div>
+        <div className="dbk__stats">
+          <div className="dbk__count">
+            <span>
+              <strong className={short ? 'is-short' : ''}>{n}</strong> / {min} cards
+            </span>
+            <span className="dbk__meter">
+              <i style={{ width: `${Math.min(1, n / min) * 100}%` }} />
+            </span>
+          </div>
+          <MiniCurve entries={main} />
+        </div>
+
+        <div className="dbk__list">
+          {main.length === 0 && <p className="dbk__empty">Click cards on the left to add them.</p>}
+          {sections.map((s) => (
+            <section key={s.title} className="dbk__section">
+              <h2>
+                {s.title}
+                <span>{total(s.cards)}</span>
+              </h2>
+              {s.cards.map((e) => (
+                <button
+                  key={e.name}
+                  className="dbk-row"
+                  title="Take one out of the deck"
+                  style={
+                    e.art ? ({ '--art': `url("${e.art}")` } as React.CSSProperties) : undefined
+                  }
+                  onMouseEnter={(ev) => setHover(e, ev.currentTarget)}
+                  onMouseLeave={() => setHover(null)}
+                  onClick={() => remove(e)}
+                >
+                  <span className="dbk-row__qty">{e.count}</span>
+                  <span className="dbk-row__name">{e.name}</span>
+                  <span className="dbk-row__cost">
+                    {costSymbols(e.manaCost).map((sym, i) => (
+                      <img key={i} src={symbolUrl(sym)} alt={sym} />
+                    ))}
+                  </span>
+                </button>
+              ))}
+            </section>
+          ))}
+          {tips.length > 0 && (
+            <ul className="dbk__tips" aria-label="Deck tips">
+              {tips.map((t) => (
+                <li key={t}>{t}</li>
+              ))}
+            </ul>
+          )}
+        </div>
+
+        <div className="dbk__foot">
+          <button className="hbtn hbtn--primary dbk__done" disabled={short} onClick={onDone}>
+            {short ? `${min - n} more to go` : 'Done'}
+          </button>
+        </div>
+      </aside>
 
       <HoverPreview hover={hover} notes={hover ? ruleNotes(hover.defId) : []} />
     </div>
   );
 }
 
-/** The little curve next to the deck name: nonland cards by mana value, 0–1 to 6+. */
+/** Nonland cards by mana value, 0–1 to 6+, creatures as the lighter part of each bar. */
 function MiniCurve({ entries }: { entries: DeckEntry[] }) {
   const spells = entries.filter((e) => !isLand(e));
   const bars = [0, 1, 2, 3, 4, 5].map((i) => {
@@ -312,9 +325,12 @@ function MiniCurve({ entries }: { entries: DeckEntry[] }) {
       title={`Mana curve: ${bars.map((b) => b.all).join(' / ')} (0–1 to 6+)`}
     >
       {bars.map((b, i) => (
-        <span key={i} style={{ height: `${(b.all / peak) * 100}%` }}>
-          <span style={{ height: b.all ? `${(b.creatures / b.all) * 100}%` : 0 }} />
-        </span>
+        <div key={i} className="dbk__curve-col">
+          <span className="dbk__curve-bar" style={{ height: `${(b.all / peak) * 100}%` }}>
+            <span style={{ height: b.all ? `${(b.creatures / b.all) * 100}%` : 0 }} />
+          </span>
+          <small>{i === 0 ? '1' : i === 5 ? '6+' : i + 1}</small>
+        </div>
       ))}
     </div>
   );

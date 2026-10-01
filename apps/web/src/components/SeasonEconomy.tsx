@@ -1,5 +1,6 @@
-import { slug } from '@mtg/cards';
-import { useEffect, useRef, useState, type ReactNode } from 'react';
+import { type Decklist, slug } from '@mtg/cards';
+import type { Color } from '@mtg/engine';
+import { type CSSProperties, type ReactNode, useEffect, useMemo, useRef, useState } from 'react';
 import {
   buySeasonPack,
   buySeasonStarter,
@@ -8,7 +9,6 @@ import {
   copyLimit,
   craftSeasonCard,
   isBasic,
-  openSeasonPack,
   PACK_PRICE,
   RARITIES,
   SEASON_CARDS,
@@ -17,22 +17,33 @@ import {
   type Rarity,
   type SeasonSave,
 } from '../game/season.ts';
-import { FOUNDATIONS_PACK_COUNT, generateFoundationsPack } from '../game/seasonPacks.ts';
+import { FOUNDATIONS_PACK_COUNT } from '../game/seasonPacks.ts';
+import { artFor, BLURBS } from '../game/deckArt.ts';
+import { packArt } from './PackOpening.tsx';
 
-type Update = (change: (s: SeasonSave) => SeasonSave) => unknown;
+export type Update = (change: (s: SeasonSave) => SeasonSave) => unknown;
 const now = (s: SeasonSave) => Math.max(Date.now(), s.updatedAt);
-interface Props {
+export interface Props {
   save: SeasonSave;
   update: Update;
   error: string | null;
 }
 
-function Modal({
+export const fmt = (n: number) => n.toLocaleString('en-US');
+export const glowOf = (colors: readonly Color[]) =>
+  colors.length ? `var(--mana-${colors[0]})` : 'var(--brass)';
+const VAULT = 1000;
+
+/* ------------------------------------------------------------- primitives */
+
+export function Modal({
   title,
+  wide,
   onClose,
   children,
 }: {
   title: string;
+  wide?: boolean;
   onClose: () => void;
   children: ReactNode;
 }) {
@@ -43,362 +54,753 @@ function Modal({
   return (
     <dialog
       ref={ref}
-      className="season-dialog season-economy-dialog"
+      className={`smodal ${wide ? 'smodal--wide' : ''}`}
       aria-label={title}
-      onCancel={onClose}
+      onCancel={(e) => {
+        e.preventDefault();
+        onClose();
+      }}
+      onClick={(e) => e.target === e.currentTarget && onClose()}
     >
-      <div className="season-section">
-        <h2>{title}</h2>
-        <button className="btn btn--ghost" onClick={onClose}>
-          Close
-        </button>
+      <div className="smodal__body">
+        <header className="smodal__head">
+          <h2>{title}</h2>
+          <button className="smodal__x" aria-label="Close" onClick={onClose}>
+            ×
+          </button>
+        </header>
+        {children}
       </div>
-      {children}
     </dialog>
   );
 }
 
-function Balances({ save, update }: Props) {
+export function CoinIcon() {
   return (
-    <section className="season-panel" aria-label="Wildcards and Vault">
-      <div className="season-balances">
+    <svg className="coin" viewBox="0 0 20 20" aria-hidden>
+      <circle cx="10" cy="10" r="9" fill="url(#coin-g)" stroke="#6b4f1d" strokeWidth="1" />
+      <circle cx="10" cy="10" r="6" fill="none" stroke="#7a5a20" strokeWidth="1" opacity="0.6" />
+      <path d="M10 6.2 11.2 9 14 10l-2.8 1-1.2 2.8L8.8 11 6 10l2.8-1z" fill="#7a5a20" />
+      <defs>
+        <radialGradient id="coin-g" cx="35%" cy="30%" r="75%">
+          <stop offset="0" stopColor="#fff1c4" />
+          <stop offset="0.5" stopColor="#f0c35e" />
+          <stop offset="1" stopColor="#a8741f" />
+        </radialGradient>
+      </defs>
+    </svg>
+  );
+}
+
+export function Price({ n }: { n: number }) {
+  return (
+    <span className="price">
+      <CoinIcon />
+      {fmt(n)}
+    </span>
+  );
+}
+
+export function WildcardIcon({ rarity }: { rarity: Rarity }) {
+  return <span className={`wcicon wcicon--${rarity}`} aria-hidden />;
+}
+
+/** The currencies strip in the Season bar: coins, four wildcards, Vault. */
+export function Currencies({ save }: { save: SeasonSave }) {
+  return (
+    <div className="scur" aria-label="Currencies">
+      <span className="scur__item scur__item--coins" title="Coins">
+        <CoinIcon />
+        <strong>{fmt(save.coins)}</strong>
+      </span>
+      <span className="scur__wild">
         {RARITIES.map((r) => (
-          <span key={r} className={`season-rarity season-rarity--${r}`}>
-            <strong>{save.wildcards[r]}</strong> {r} wildcards
+          <span key={r} className="scur__item" title={`${r} wildcards`}>
+            <WildcardIcon rarity={r} />
+            <strong>{save.wildcards[r]}</strong>
+            <span className="sr-only"> {r} wildcards</span>
           </span>
         ))}
-      </div>
-      <div className="season-tracks">
-        <label>
-          Uncommon wildcard · {save.tracks.uncommon}/6{' '}
-          <progress value={save.tracks.uncommon} max={6} />
-        </label>
-        <label>
-          {save.tracks.rareRewards === 4 ? 'Mythic' : 'Rare'} wildcard · {save.tracks.rareMythic}/6{' '}
-          <progress value={save.tracks.rareMythic} max={6} />
-        </label>
-        <div>
-          Vault · {save.vaultPoints}/1,000 points{' '}
-          <button
-            className="btn btn--ghost"
-            disabled={save.vaultPoints < 1000}
-            onClick={() => update((s) => claimSeasonVault(s, now(s)))}
-          >
-            Claim Vault
-          </button>
+      </span>
+      <span
+        className="scur__item scur__item--vault"
+        title={`Vault: ${fmt(save.vaultPoints)} of 1,000`}
+      >
+        <span
+          className="vaultring"
+          style={{ '--p': Math.min(1, save.vaultPoints / VAULT) } as CSSProperties}
+        />
+        <strong>{Math.floor(Math.min(1, save.vaultPoints / VAULT) * 100)}%</strong>
+      </span>
+    </div>
+  );
+}
+
+/* ---------------------------------------------------------------- rewards */
+
+function Track({
+  icon,
+  label,
+  value,
+  max,
+  hint,
+  action,
+}: {
+  icon: ReactNode;
+  label: string;
+  value: number;
+  max: number;
+  hint: string;
+  action?: ReactNode;
+}) {
+  return (
+    <div className="strack">
+      {icon}
+      <div className="strack__main">
+        <div className="strack__row">
+          <span className="strack__label">{label}</span>
+          <span className="strack__value">
+            {fmt(value)}/{fmt(max)}
+          </span>
         </div>
+        <div
+          className="strack__bar"
+          role="progressbar"
+          aria-label={label}
+          aria-valuenow={value}
+          aria-valuemax={max}
+        >
+          <span style={{ width: `${Math.min(100, (value / max) * 100)}%` }} />
+        </div>
+        <span className="strack__hint">{hint}</span>
       </div>
-      <details>
+      {action}
+    </div>
+  );
+}
+
+/** Wildcard tracks and the Vault: the things packs build toward. */
+export function RewardTracks({ save, update }: Omit<Props, 'error'>) {
+  const mythic = save.tracks.rareRewards === 4;
+  const left = (n: number) => `${6 - n} more ${6 - n === 1 ? 'pack' : 'packs'}`;
+  return (
+    <section className="spanel" aria-label="Wildcards and Vault">
+      <h3 className="spanel__title">Pack rewards</h3>
+      <Track
+        icon={<WildcardIcon rarity="uncommon" />}
+        label="Uncommon wildcard"
+        value={save.tracks.uncommon}
+        max={6}
+        hint={left(save.tracks.uncommon)}
+      />
+      <Track
+        icon={<WildcardIcon rarity={mythic ? 'mythic' : 'rare'} />}
+        label={`${mythic ? 'Mythic' : 'Rare'} wildcard`}
+        value={save.tracks.rareMythic}
+        max={6}
+        hint={`${left(save.tracks.rareMythic)}${mythic ? '' : ` · mythic in ${4 - save.tracks.rareRewards} more`}`}
+      />
+      <Track
+        icon={
+          <span
+            className="vaultring"
+            style={{ '--p': Math.min(1, save.vaultPoints / VAULT) } as CSSProperties}
+          />
+        }
+        label="Vault"
+        value={save.vaultPoints}
+        max={VAULT}
+        hint="Duplicate commons +1, uncommons +3"
+        action={
+          save.vaultPoints >= VAULT && (
+            <button
+              className="hbtn hbtn--primary strack__claim"
+              onClick={() => update((s) => claimSeasonVault(s, now(s)))}
+            >
+              Claim Vault
+            </button>
+          )
+        }
+      />
+      <details className="shelp">
         <summary>How wildcards work</summary>
         <p>
-          Packs can contain wildcards. Every six opened packs earns an uncommon wildcard and a rare
-          or mythic wildcard from the tracks. The high-rarity track awards four rares, then one
-          mythic. One matching wildcard crafts one card.
+          One wildcard crafts one card of its rarity. Packs can contain wildcards, and every six
+          packs you open earns an uncommon and a rare wildcard (every fifth of those is mythic).
         </p>
         <p>
-          Extra commons and uncommons become 1 and 3 Vault points. Claim 1,000 points for 3
-          uncommon, 2 rare, and 1 mythic wildcards. Overflow stays in your Vault.
+          Extra copies beyond four fill the Vault. At 1,000 points it opens for 3 uncommon, 2 rare
+          and 1 mythic wildcard. Extra rares and mythics pay 20 and 40 coins.
         </p>
       </details>
     </section>
   );
 }
 
-export function SeasonEconomy(props: Props) {
-  const { save, update, error } = props;
-  const [tab, setTab] = useState('shop');
-  const [starter, setStarter] = useState<string | null>(null);
-  const [reveal, setReveal] = useState(false);
-  const list = SEASON_STARTERS.find((d) => d.id === starter);
+/* -------------------------------------------------------------- the store */
+
+export function Booster({
+  onClick,
+  label,
+  small,
+  count,
+}: {
+  onClick?: () => void;
+  label: string;
+  small?: boolean;
+  count?: number;
+}) {
   return (
-    <section className="season-economy" aria-label="Season economy">
-      <div className="season-section">
-        <h2>Collection & shop</h2>
-        <div className="season-actions" role="group" aria-label="Economy view">
-          {['shop', 'packs', 'collection'].map((t) => (
+    <div className={`sbooster ${small ? 'sbooster--small' : ''}`}>
+      <button
+        className="booster"
+        style={
+          {
+            '--art': `url("${packArt({ kind: 'booster' })}")`,
+            '--glow': 'var(--brass)',
+          } as CSSProperties
+        }
+        onClick={onClick}
+        disabled={!onClick}
+        aria-label={label}
+      >
+        <span className="booster__crimp booster__crimp--top" />
+        <span className="booster__art" />
+        <span className="booster__foil" />
+        <span className="booster__label">
+          <span className="booster__set">Foundations</span>
+          <span className="booster__kind">Booster</span>
+        </span>
+        <span className="booster__crimp booster__crimp--bottom" />
+      </button>
+      {count !== undefined && count > 0 && <span className="sbooster__count">×{count}</span>}
+    </div>
+  );
+}
+
+export function SeasonStore({
+  save,
+  update,
+  error,
+  onOpenPacks,
+}: Props & { onOpenPacks: () => void }) {
+  const [starter, setStarter] = useState<string | null>(null);
+  const [bought, setBought] = useState(0);
+  const list = SEASON_STARTERS.find((d) => d.id === starter);
+  const buy = (n: number) => {
+    let done = 0;
+    for (let i = 0; i < n; i++) if (update((s) => buySeasonPack(s, now(s)))) done++;
+    if (done) setBought((b) => b + done);
+  };
+  return (
+    <div className="sstore">
+      <section className="sfeature sstore__pack">
+        <div
+          className="sfeature__wash"
+          style={{ backgroundImage: `url("${packArt({ kind: 'booster' })}")` }}
+        />
+        <Booster label="Foundations booster" />
+        <div className="sstore__copy">
+          <span className="stag">Booster</span>
+          <h2>Foundations</h2>
+          <p>
+            Eight cards: five commons, two uncommons and one rare or mythic. Any slot can turn into
+            a wildcard.
+          </p>
+          <div className="sstore__buy">
             <button
-              className="btn btn--ghost"
-              key={t}
-              aria-pressed={tab === t}
-              onClick={() => setTab(t)}
-            >
-              {t === 'packs'
-                ? `Packs (${save.packs.length})`
-                : t === 'shop'
-                  ? 'Shop'
-                  : 'Collection'}
-            </button>
-          ))}
-        </div>
-      </div>
-      <Balances {...props} />
-      {tab === 'shop' && (
-        <>
-          <article className="season-panel season-shop-pack">
-            <div>
-              <h3>Foundations booster</h3>
-              <p>
-                Eight rewards: five common, two uncommon, one rare or mythic. Wildcards can replace
-                cards.
-              </p>
-              <p className="season-warning">
-                Prototype pool · {FOUNDATIONS_PACK_COUNT} supported regular pack cards. Special
-                Guests are not included yet. Wildcard odds approximate Arena.
-              </p>
-            </div>
-            <button
-              className="btn btn--primary"
+              className="hbtn hbtn--primary hbtn--lg"
               disabled={save.coins < PACK_PRICE}
-              onClick={() => update((s) => buySeasonPack(s, now(s)))}
+              onClick={() => buy(1)}
             >
-              Buy pack · {PACK_PRICE} coins
+              Buy 1 · <Price n={PACK_PRICE} />
             </button>
-          </article>
-          <h3>Starter decks</h3>
-          <div className="season-starter-shop">
-            {SEASON_STARTERS.map((d) => (
-              <article className="season-panel" key={d.id}>
-                <h3>{d.name}</h3>
-                <p>
-                  {save.purchasedStarters.includes(d.id)
-                    ? 'Owned'
-                    : `${STARTER_PRICE.toLocaleString()} coins · one purchase per save`}
-                </p>
-                <button className="btn btn--ghost" onClick={() => setStarter(d.id)}>
-                  View {d.name}
-                </button>
-              </article>
-            ))}
-          </div>
-        </>
-      )}
-      {tab === 'packs' && (
-        <section className="season-panel">
-          <h3>Your packs</h3>
-          <p>{save.packs.length} unopened Foundations boosters</p>
-          <div className="season-actions">
             <button
-              className="btn btn--primary"
-              disabled={!save.packs.length}
-              onClick={() => {
-                const id = save.packs[0]!.id;
-                if (update((s) => openSeasonPack(s, id, generateFoundationsPack, now(s))))
-                  setReveal(true);
-              }}
+              className="hbtn hbtn--ghost"
+              disabled={save.coins < PACK_PRICE * 3}
+              onClick={() => buy(3)}
             >
-              Open next pack
+              Buy 3 · <Price n={PACK_PRICE * 3} />
             </button>
-            {save.lastPack && (
-              <button className="btn btn--ghost" onClick={() => setReveal(true)}>
-                View last pack
-              </button>
-            )}
           </div>
-          <p>All eight rewards are yours. Opening saves them before the reveal.</p>
-        </section>
-      )}
-      {tab === 'collection' && <SeasonCollection {...props} />}
+          {bought > 0 && (
+            <p className="sstore__bought" role="status">
+              {bought} {bought === 1 ? 'pack' : 'packs'} added.{' '}
+              <button className="slink" onClick={onOpenPacks}>
+                Open now
+              </button>
+            </p>
+          )}
+          <p className="sfine">
+            Prototype pool: {FOUNDATIONS_PACK_COUNT} regular pack cards, no Special Guests yet.
+            Wildcard odds approximate Arena.
+          </p>
+        </div>
+      </section>
+
+      <div className="ssection">
+        <h2>Starter decks</h2>
+        <span className="ssection__aside">
+          Complete 60-card decks · <Price n={STARTER_PRICE} /> each, once per season
+        </span>
+      </div>
+      <div className="sdecks">
+        {SEASON_STARTERS.map((d, i) => {
+          const owned = save.purchasedStarters.includes(d.id);
+          return (
+            <DeckTile
+              key={d.id}
+              deck={d}
+              index={i}
+              sub={BLURBS[d.id] ?? ''}
+              badge={
+                owned ? (
+                  <span className="sbadge sbadge--owned">Owned</span>
+                ) : (
+                  <span className="sbadge">
+                    <Price n={STARTER_PRICE} />
+                  </span>
+                )
+              }
+              onClick={() => setStarter(d.id)}
+              label={`View ${d.name}`}
+            />
+          );
+        })}
+      </div>
       {list && (
-        <Modal title={list.name} onClose={() => setStarter(null)}>
-          <p>
-            Full deck · {STARTER_PRICE.toLocaleString()} coins. Cards are shared across your decks.
-          </p>
-          <ul>
-            {list.cards.map(([name, n]) => (
-              <li key={name}>
-                {n} × {name}{' '}
-                {isBasic(slug(name))
-                  ? '(unlimited)'
-                  : `· ${save.collection[slug(name)] ?? 0} owned`}
-              </li>
-            ))}
+        <Modal title={list.name} wide onClose={() => setStarter(null)}>
+          <div className="sstarter">
+            <img className="sstarter__art" src={artFor(list)} alt="" />
+            <div>
+              <p>{BLURBS[list.id]}</p>
+              <p className="sfine">
+                Adds every card to your collection and the deck to your decks. Copies beyond four
+                become Vault points, or 20 and 40 coins for rares and mythics.
+              </p>
+              {error && (
+                <p role="alert" className="swarn">
+                  {error}
+                </p>
+              )}
+              <button
+                className="hbtn hbtn--primary hbtn--lg"
+                disabled={save.purchasedStarters.includes(list.id) || save.coins < STARTER_PRICE}
+                onClick={() => {
+                  if (update((s) => buySeasonStarter(s, list.id, now(s)))) setStarter(null);
+                }}
+              >
+                {save.purchasedStarters.includes(list.id) ? (
+                  'Already owned'
+                ) : (
+                  <>
+                    Buy deck · <Price n={STARTER_PRICE} />
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+          <ul className="slist">
+            {list.cards.map(([name, n]) => {
+              const id = slug(name);
+              const have = save.collection[id] ?? 0;
+              return (
+                <li key={name}>
+                  <span className="slist__n">{n}</span>
+                  <span className="slist__name">{name}</span>
+                  <span
+                    className={`slist__own ${!isBasic(id) && have >= Math.min(4, copyLimit(id)) ? 'is-full' : ''}`}
+                  >
+                    {isBasic(id) ? 'basic' : `${have} owned`}
+                  </span>
+                </li>
+              );
+            })}
           </ul>
-          <p>
-            Extra copies convert to Vault points or 20/40 coins for rares/mythics. Starter contents
-            are fixed and have no duplicate protection.
-          </p>
-          {error && <p role="alert">{error}</p>}
-          <button
-            className="btn btn--primary"
-            disabled={save.purchasedStarters.includes(list.id) || save.coins < STARTER_PRICE}
-            onClick={() => {
-              if (update((s) => buySeasonStarter(s, list.id, now(s)))) setStarter(null);
-            }}
-          >
-            {save.purchasedStarters.includes(list.id)
-              ? 'Already owned'
-              : `Buy ${list.name} · ${STARTER_PRICE.toLocaleString()} coins`}
-          </button>
         </Modal>
       )}
-      {reveal && save.lastPack && (
-        <PackReveal key={save.lastPack.packId} save={save} onClose={() => setReveal(false)} />
+    </div>
+  );
+}
+
+export function DeckTile({
+  deck,
+  index,
+  sub,
+  badge,
+  selected,
+  label,
+  onClick,
+}: {
+  deck: Decklist;
+  index: number;
+  sub: ReactNode;
+  badge?: ReactNode;
+  selected?: boolean;
+  label?: string;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      className={`stile ${selected ? 'is-selected' : ''}`}
+      style={
+        {
+          '--art': `url("${artFor(deck)}")`,
+          '--glow': glowOf(deck.colors),
+          '--i': index,
+        } as CSSProperties
+      }
+      aria-pressed={selected}
+      aria-label={label}
+      onClick={onClick}
+    >
+      <span className="stile__art" />
+      {badge && <span className="stile__badge">{badge}</span>}
+      <span className="spip-row">
+        {deck.colors.map((c) => (
+          <span key={c} className={`pip pip--${c}`} />
+        ))}
+      </span>
+      <span className="stile__name">{deck.name}</span>
+      <span className="stile__sub">{sub}</span>
+    </button>
+  );
+}
+
+/* --------------------------------------------------------------- packs */
+
+export function SeasonPacks({
+  save,
+  update,
+  onOpen,
+  onViewLast,
+  onStore,
+}: Omit<Props, 'error'> & { onOpen: () => void; onViewLast: () => void; onStore: () => void }) {
+  const n = save.packs.length;
+  return (
+    <div className="spacks">
+      <section className="sfeature spacks__stage">
+        <div
+          className="sfeature__wash"
+          style={{ backgroundImage: `url("${packArt({ kind: 'booster' })}")` }}
+        />
+        {n ? (
+          <>
+            <Booster label="Open a Foundations booster" onClick={onOpen} count={n} />
+            <div className="spacks__copy">
+              <span className="stag">{n === 1 ? '1 unopened pack' : `${n} unopened packs`}</span>
+              <h2>Foundations booster</h2>
+              <p>
+                Click the pack or the button to open it. Everything inside is saved to your
+                collection first.
+              </p>
+              <div className="sstore__buy">
+                <button className="hbtn hbtn--primary hbtn--lg" onClick={onOpen}>
+                  Open pack
+                </button>
+                {save.lastPack && (
+                  <button className="hbtn hbtn--ghost" onClick={onViewLast}>
+                    View last pack
+                  </button>
+                )}
+              </div>
+            </div>
+          </>
+        ) : (
+          <div className="sempty">
+            <Booster label="No packs" small />
+            <h2>No packs to open</h2>
+            <p>Packs cost {PACK_PRICE} coins in the store. Win matches to earn coins.</p>
+            <div className="sstore__buy">
+              <button className="hbtn hbtn--primary" onClick={onStore}>
+                Go to store
+              </button>
+              {save.lastPack && (
+                <button className="hbtn hbtn--ghost" onClick={onViewLast}>
+                  View last pack
+                </button>
+              )}
+            </div>
+          </div>
+        )}
+      </section>
+      <RewardTracks save={save} update={update} />
+      {save.lastPack && (
+        <section className="slast">
+          <div className="ssection">
+            <h2>Last pack</h2>
+            <button className="slink" onClick={onViewLast}>
+              Replay the reveal
+            </button>
+          </div>
+          <div className="slast__cards">
+            {save.lastPack.rewards.map((r, i) => {
+              const c = r.kind === 'card' ? collectible(r.cardId) : null;
+              return c?.image ? (
+                <img key={i} src={c.image.normal} alt={c.name} loading="lazy" />
+              ) : (
+                <span
+                  key={i}
+                  className={`wildcard wildcard--${r.kind === 'wildcard' ? r.rarity : 'common'}`}
+                >
+                  <span className="wildcard__gem" />
+                  <span className="wildcard__label">
+                    {r.kind === 'wildcard' ? r.rarity : c?.name}
+                    <small>Wildcard</small>
+                  </span>
+                </span>
+              );
+            })}
+          </div>
+        </section>
       )}
+    </div>
+  );
+}
+
+/** Owned cards out of the whole pool, per rarity. */
+export function CollectionProgress({ save, onOpen }: { save: SeasonSave; onOpen: () => void }) {
+  const rows = RARITIES.map((r) => {
+    const ids = [...SEASON_CARDS].filter(([id, c]) => c.rarity === r && !isBasic(id));
+    return {
+      r,
+      total: ids.length,
+      owned: ids.filter(([id]) => (save.collection[id] ?? 0) > 0).length,
+    };
+  });
+  const owned = rows.reduce((n, x) => n + x.owned, 0);
+  const total = rows.reduce((n, x) => n + x.total, 0);
+  return (
+    <section className="spanel scolprog">
+      <div className="scolprog__head">
+        <span className="spanel__title">Collection</span>
+        <button className="slink" onClick={onOpen}>
+          View
+        </button>
+      </div>
+      <strong className="scolprog__big">
+        {owned}
+        <small>/{total} cards</small>
+      </strong>
+      {rows.map(({ r, owned, total }) => (
+        <div key={r} className="scolprog__row">
+          <WildcardIcon rarity={r} />
+          <span className="scolprog__name">{r}</span>
+          <span className="strack__bar">
+            <span style={{ width: `${total ? (owned / total) * 100 : 0}%` }} />
+          </span>
+          <span className="strack__value">
+            {owned}/{total}
+          </span>
+        </div>
+      ))}
     </section>
   );
 }
+
+/* ------------------------------------------------------------ collection */
+
+const COLORS: [string, string][] = [
+  ['W', 'White'],
+  ['U', 'Blue'],
+  ['B', 'Black'],
+  ['R', 'Red'],
+  ['G', 'Green'],
+  ['C', 'Colorless'],
+];
+const ORDER = 'WUBRG';
+/** Arena's collection order: mono colours, then gold, colourless, lands; then mana value. */
+const group = (c: { colors: string[]; typeLine: string }) =>
+  c.typeLine.includes('Land')
+    ? 8
+    : c.colors.length > 1
+      ? 6
+      : c.colors.length
+        ? ORDER.indexOf(c.colors[0]!)
+        : 7;
+const manaValue = (cost: string) =>
+  [...cost.matchAll(/{([^}]+)}/g)].reduce(
+    (n, [, sym]) => n + (/^d+$/.test(sym!) ? Number(sym) : sym === 'X' ? 0 : 1),
+    0,
+  );
+const toggle = <T,>(set: ReadonlySet<T>, v: T) => {
+  const next = new Set(set);
+  if (!next.delete(v)) next.add(v);
+  return next;
+};
 
 export function SeasonCrafting(props: Props) {
   const [open, setOpen] = useState(false);
   return (
     <>
-      <button className="btn btn--ghost" onClick={() => setOpen(true)}>
+      <button className="hbtn hbtn--ghost" onClick={() => setOpen(true)}>
         Craft cards
       </button>
       {open && (
-        <Modal title="Craft cards" onClose={() => setOpen(false)}>
-          <SeasonCollection {...props} />
+        <Modal title="Craft cards" wide onClose={() => setOpen(false)}>
+          <SeasonCollection {...props} compact />
         </Modal>
       )}
     </>
   );
 }
 
-function SeasonCollection({ save, update, error }: Props) {
+function OwnedPips({ id, count }: { id: string; count: number }) {
+  const limit = copyLimit(id);
+  if (!Number.isFinite(limit)) return <span className="spips spips--inf">{count} owned</span>;
+  return (
+    <span className="spips" aria-label={`${count} of ${limit} owned`}>
+      {Array.from({ length: limit }, (_, i) => (
+        <span key={i} className={i < count ? 'is-on' : ''} />
+      ))}
+    </span>
+  );
+}
+
+export function SeasonCollection({ save, update, error, compact }: Props & { compact?: boolean }) {
+  const start = compact ? 'all' : 'owned';
   const [query, setQuery] = useState('');
-  const [ownership, setOwnership] = useState('all');
-  const [rarity, setRarity] = useState('all');
-  const [color, setColor] = useState('all');
-  const [page, setPage] = useState(0);
+  const [ownership, setOwnership] = useState<'all' | 'owned' | 'missing'>(start);
+  const [rarities, setRarities] = useState<ReadonlySet<string>>(new Set());
+  const [colors, setColors] = useState<ReadonlySet<string>>(new Set());
   const [chosen, setChosen] = useState<string | null>(null);
   const [notice, setNotice] = useState('');
-  const cards = [...SEASON_CARDS]
-    .filter(
-      ([id, c]) =>
-        !isBasic(id) &&
-        (rarity === 'all' || c.rarity === rarity) &&
-        (color === 'all' || (color === 'C' ? !c.colors.length : c.colors.includes(color))) &&
-        (ownership === 'all' ||
-          (ownership === 'owned' ? (save.collection[id] ?? 0) > 0 : !(save.collection[id] ?? 0))) &&
-        `${c.name} ${c.typeLine} ${c.oracleText}`.toLowerCase().includes(query.toLowerCase()),
-    )
-    .sort((a, b) => a[1].name.localeCompare(b[1].name));
-  const currentPage = Math.min(page, Math.max(0, Math.ceil(cards.length / 24) - 1));
+  const all = useMemo(
+    () =>
+      [...SEASON_CARDS]
+        .filter(([id]) => !isBasic(id))
+        .sort(
+          ([, a], [, b]) =>
+            group(a) - group(b) ||
+            manaValue(a.manaCost) - manaValue(b.manaCost) ||
+            a.name.localeCompare(b.name),
+        ),
+    [],
+  );
+  const q = query.trim().toLowerCase();
+  const cards = all.filter(
+    ([id, c]) =>
+      (!rarities.size || rarities.has(c.rarity)) &&
+      (!colors.size || (c.colors.length ? c.colors.some((x) => colors.has(x)) : colors.has('C'))) &&
+      (ownership === 'all' || (ownership === 'owned') === (save.collection[id] ?? 0) > 0) &&
+      (!q || `${c.name} ${c.typeLine} ${c.oracleText}`.toLowerCase().includes(q)),
+  );
+  const owned = all.filter(([id]) => (save.collection[id] ?? 0) > 0).length;
   const card = chosen ? collectible(chosen) : null;
   const count = chosen ? (save.collection[chosen] ?? 0) : 0;
+  const filtered = q || rarities.size || colors.size || ownership !== start;
   return (
-    <section aria-label="Collection cards">
-      <div className="season-filters">
-        <label>
-          Search cards
-          <input
-            value={query}
-            onChange={(e) => {
-              setQuery(e.target.value);
-              setPage(0);
-            }}
-          />
-        </label>
-        <label>
-          Ownership
-          <select
-            value={ownership}
-            onChange={(e) => {
-              setOwnership(e.target.value);
-              setPage(0);
-            }}
-          >
-            <option value="all">All cards</option>
-            <option value="owned">Owned</option>
-            <option value="unowned">Unowned</option>
-          </select>
-        </label>
-        <label>
-          Rarity
-          <select
-            value={rarity}
-            onChange={(e) => {
-              setRarity(e.target.value);
-              setPage(0);
-            }}
-          >
-            <option value="all">All rarities</option>
-            {RARITIES.map((r) => (
-              <option key={r}>{r}</option>
-            ))}
-          </select>
-        </label>
-        <label>
-          Color
-          <select
-            value={color}
-            onChange={(e) => {
-              setColor(e.target.value);
-              setPage(0);
-            }}
-          >
-            <option value="all">All colors</option>
-            {[
-              ['W', 'White'],
-              ['U', 'Blue'],
-              ['B', 'Black'],
-              ['R', 'Red'],
-              ['G', 'Green'],
-              ['C', 'Colorless'],
-            ].map(([id, name]) => (
-              <option key={id} value={id}>
-                {name}
-              </option>
-            ))}
-          </select>
-        </label>
-      </div>
-      <p>{cards.length} supported collectible cards · Basic lands are unlimited.</p>
-      {notice && <p role="status">{notice}</p>}
-      <div className="season-collection-grid">
-        {cards.slice(currentPage * 24, currentPage * 24 + 24).map(([id, c]) => (
+    <section className={`scoll ${compact ? 'scoll--compact' : ''}`} aria-label="Collection cards">
+      <div className="sfilters">
+        <input
+          className="sfilters__search"
+          type="search"
+          aria-label="Search cards"
+          placeholder="Search name, type or text"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+        />
+        <div className="sfilters__group" role="group" aria-label="Colors">
+          {COLORS.map(([id, name]) => (
+            <button
+              key={id}
+              className={`mana-toggle mana-toggle--${id}`}
+              aria-pressed={colors.has(id)}
+              aria-label={name}
+              title={name}
+              onClick={() => setColors((s) => toggle(s, id))}
+            />
+          ))}
+        </div>
+        <div className="sfilters__group" role="group" aria-label="Rarity">
+          {RARITIES.map((r) => (
+            <button
+              key={r}
+              className={`chip chip--${r}`}
+              aria-pressed={rarities.has(r)}
+              onClick={() => setRarities((s) => toggle(s, r))}
+            >
+              <WildcardIcon rarity={r} />
+              {r}
+            </button>
+          ))}
+        </div>
+        <div className="seg" role="group" aria-label="Ownership">
+          {(['all', 'owned', 'missing'] as const).map((o) => (
+            <button key={o} aria-pressed={ownership === o} onClick={() => setOwnership(o)}>
+              {o === 'all' ? 'All' : o === 'owned' ? 'Owned' : 'Missing'}
+            </button>
+          ))}
+        </div>
+        {filtered && (
           <button
-            key={id}
-            className={`season-collection-card season-rarity--${c.rarity}`}
+            className="slink"
             onClick={() => {
-              setChosen(id);
-              setNotice('');
+              setQuery('');
+              setRarities(new Set());
+              setColors(new Set());
+              setOwnership(start);
             }}
           >
-            {c.image && <img loading="lazy" src={c.image.normal} alt="" />}
-            <strong>{c.name}</strong>
-            <span>
-              {c.rarity} · {save.collection[id] ?? 0}/
-              {Number.isFinite(copyLimit(id)) ? copyLimit(id) : '∞'} owned
-            </span>
+            Clear
           </button>
-        ))}
-      </div>
-      {!cards.length && <p>No cards match these filters.</p>}
-      <div className="season-actions season-pagination">
-        <button
-          className="btn btn--ghost"
-          disabled={currentPage === 0}
-          onClick={() => setPage(currentPage - 1)}
-        >
-          Previous
-        </button>
-        <span>
-          Page {currentPage + 1} of {Math.max(1, Math.ceil(cards.length / 24))}
+        )}
+        <span className="sfilters__count">
+          {filtered ? `${cards.length} shown · ` : ''}
+          {owned}/{all.length} collected
         </span>
-        <button
-          className="btn btn--ghost"
-          disabled={(currentPage + 1) * 24 >= cards.length}
-          onClick={() => setPage(currentPage + 1)}
-        >
-          Next
-        </button>
       </div>
+      {notice && (
+        <p className="stoast" role="status">
+          {notice}
+        </p>
+      )}
+      <div className="sgrid">
+        {cards.map(([id, c]) => {
+          const n = save.collection[id] ?? 0;
+          return (
+            <button
+              key={id}
+              className={`scard ${n ? '' : 'is-missing'}`}
+              aria-label={`${c.name}, ${c.rarity}, ${n} owned`}
+              onClick={() => {
+                setChosen(id);
+                setNotice('');
+              }}
+            >
+              {c.image ? (
+                <img loading="lazy" src={c.image.normal} alt="" draggable={false} />
+              ) : (
+                <span className="scard__name">{c.name}</span>
+              )}
+              <OwnedPips id={id} count={n} />
+            </button>
+          );
+        })}
+      </div>
+      {!cards.length && <p className="sempty-line">No cards match these filters.</p>}
       {card && chosen && (
         <Modal title={card.name} onClose={() => setChosen(null)}>
-          <div className="season-craft-card">
+          <div className="scraft">
             {card.image && <img src={card.image.normal} alt={card.name} />}
-            <div>
-              <p>{card.typeLine}</p>
-              <p className="season-oracle">{card.oracleText}</p>
-              <p>
-                {count} owned · {save.wildcards[card.rarity as Rarity]} {card.rarity} wildcards
-                available
-              </p>
-              <p>Cost: 1 {card.rarity} wildcard for 1 copy.</p>
-              {error && <p role="alert">{error}</p>}
+            <div className="scraft__info">
+              <span className={`scraft__rarity scraft__rarity--${card.rarity}`}>
+                <WildcardIcon rarity={card.rarity as Rarity} />
+                {card.rarity}
+              </span>
+              <p className="scraft__type">{card.typeLine}</p>
+              <p className="scraft__oracle">{card.oracleText}</p>
+              <div className="scraft__own">
+                <OwnedPips id={chosen} count={count} />
+                <span>{count} owned</span>
+              </div>
+              {error && (
+                <p role="alert" className="swarn">
+                  {error}
+                </p>
+              )}
               <button
-                className="btn btn--primary"
+                className="hbtn hbtn--primary hbtn--lg"
                 disabled={count >= copyLimit(chosen) || save.wildcards[card.rarity as Rarity] < 1}
                 onClick={() => {
                   const id = chosen;
@@ -408,78 +810,21 @@ function SeasonCollection({ save, update, error }: Props) {
                   }
                 }}
               >
-                {count >= copyLimit(chosen) ? 'Maximum copies owned' : `Craft ${card.name}`}
+                {count >= copyLimit(chosen) ? 'All copies owned' : 'Craft'}
+                {count < copyLimit(chosen) && (
+                  <span className="scraft__cost">
+                    <WildcardIcon rarity={card.rarity as Rarity} />1
+                  </span>
+                )}
               </button>
+              <span className="sfine">
+                You have {save.wildcards[card.rarity as Rarity]} {card.rarity}{' '}
+                {save.wildcards[card.rarity as Rarity] === 1 ? 'wildcard' : 'wildcards'}.
+              </span>
             </div>
           </div>
         </Modal>
       )}
     </section>
-  );
-}
-
-function PackReveal({ save, onClose }: { save: SeasonSave; onClose: () => void }) {
-  const receipt = save.lastPack!;
-  const [flipped, setFlipped] = useState<number[]>([]);
-  return (
-    <Modal title={`Foundations pack #${receipt.packId}`} onClose={onClose}>
-      <p>All rewards have been added to your collection. Flip each card or reveal all.</p>
-      <button
-        className="btn btn--ghost"
-        onClick={() => setFlipped(receipt.rewards.map((_, i) => i))}
-      >
-        Reveal all
-      </button>
-      <div className="season-rewards">
-        {receipt.rewards.map((r, i) => {
-          const up = flipped.includes(i);
-          const c = r.kind === 'card' ? collectible(r.cardId) : null;
-          const rarity = c?.rarity ?? (r.kind === 'wildcard' ? r.rarity : 'common');
-          const name = c?.name ?? `${rarity} wildcard`;
-          return (
-            <button
-              key={i}
-              className={`season-reward season-rarity--${rarity} ${up ? 'is-revealed' : ''}`}
-              aria-label={up ? name : `Reveal reward ${i + 1}`}
-              onClick={() => setFlipped((s) => (s.includes(i) ? s : [...s, i]))}
-            >
-              {up ? (
-                <>
-                  {c?.image ? (
-                    <img src={c.image.normal} alt="" />
-                  ) : (
-                    <span className="season-wildcard">
-                      ✦<br />
-                      {rarity}
-                      <br />
-                      wildcard
-                    </span>
-                  )}
-                  <strong>{name}</strong>
-                </>
-              ) : (
-                <span className="season-card-back">
-                  ✦<br />
-                  Reveal
-                </span>
-              )}
-            </button>
-          );
-        })}
-      </div>
-      {receipt.bonus && (
-        <div role="status">
-          <p>
-            Duplicate conversions: +{receipt.bonus.coins} coins · +{receipt.bonus.vaultPoints} Vault
-            points
-          </p>
-          {RARITIES.filter((r) => receipt.bonus!.tracks[r] > 0).map((r) => (
-            <p key={r}>
-              Track reward: +{receipt.bonus!.tracks[r]} {r} wildcard
-            </p>
-          ))}
-        </div>
-      )}
-    </Modal>
   );
 }

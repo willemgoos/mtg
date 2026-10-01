@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>HUD — V1 Forged</title>
+  <meta name="frame" content="1440x810">
+  <link rel="stylesheet" href="../system/tokens.css">
+  <link rel="stylesheet" href="../system/base.css">
+  <link rel="stylesheet" href="../system/components.css">
+  <style>
+    /* V1 Forged: closest to Arena. Same brass-and-stone world, but the controls become
+       struck metal plates with real weight, numerals get a confident modern serif,
+       and small-caps-with-tracking is gone from everything except nothing. */
+
+    /* ---------- shared scene ---------- */
+    .arena { position: absolute; inset: 0; background: url("../assets/stone-chamber.png") center / cover; }
+    .arena::after { content: ""; position: absolute; inset: 0; background: radial-gradient(ellipse 70% 60% at 50% 50%, transparent 40%, rgba(0, 0, 0, 0.55)); }
+    .field { position: absolute; left: 50%; display: flex; gap: var(--space-4); transform: translateX(-50%); }
+    .field .c-mtg { --w: 96px; }
+    .field--lands .c-mtg { --w: 62px; }
+    .field--opp-lands { top: 128px; gap: var(--space-7); }
+    .field--opp { top: 218px; }
+    .field--me { top: 452px; }
+    .field--me-lands { top: 598px; gap: var(--space-7); }
+    .stackpile { position: relative; }
+    .stackpile .c-count { position: absolute; top: -8px; right: -10px; }
+    .hand { position: absolute; left: 50%; bottom: -96px; display: flex; transform: translateX(-50%); }
+    .hand .c-mtg { --w: 132px; margin-left: -30px; }
+    .hand .c-mtg:nth-child(1) { transform: rotate(-7deg) translateY(10px); }
+    .hand .c-mtg:nth-child(3) { transform: rotate(7deg) translateY(10px); }
+    .icons { position: absolute; width: 0; height: 0; }
+    .ico { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+
+    /* ---------- Forged HUD ---------- */
+    .hud { font-family: var(--font-forged); color: var(--color-parchment); }
+
+    /* A struck plate: chamfered corners, a lit top edge, a real drop shadow. */
+    .plate {
+      --cut: 10px;
+      position: relative;
+      display: inline-flex; align-items: center; gap: var(--space-3);
+      border: 0;
+      clip-path: polygon(var(--cut) 0, calc(100% - var(--cut)) 0, 100% var(--cut), 100% calc(100% - var(--cut)), calc(100% - var(--cut)) 100%, var(--cut) 100%, 0 calc(100% - var(--cut)), 0 var(--cut));
+      filter: drop-shadow(0 8px 14px rgba(0, 0, 0, 0.55));
+    }
+    .plate--iron {
+      padding: 0 var(--space-5);
+      height: 48px;
+      background:
+        linear-gradient(180deg, var(--color-iron-hi), var(--color-iron)) padding-box;
+      color: var(--color-brass-hi);
+      font-size: var(--text-lg); font-weight: 600;
+    }
+    /* the brass rim, drawn inside the chamfer */
+    .plate--iron::before {
+      content: ""; position: absolute; inset: 0;
+      clip-path: inherit;
+      background: linear-gradient(180deg, var(--color-brass), var(--color-brass-dim));
+      -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor; mask-composite: exclude;
+      padding: 1px;
+      pointer-events: none;
+    }
+    .plate--forge {
+      --cut: 14px;
+      height: 64px;
+      padding: 0 var(--space-3) 0 var(--space-6);
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.45), transparent 2px),
+        linear-gradient(180deg, var(--color-forge-hi), var(--color-forge) 55%, var(--color-forge-lo));
+      color: var(--color-text-inverse);
+      font-size: var(--text-2xl); font-weight: 800; letter-spacing: -0.01em;
+    }
+    .plate--forge .ico { width: 22px; height: 22px; stroke-width: 2.2; }
+    .plate__key {
+      margin-left: var(--space-2);
+      padding: 2px 8px;
+      border-radius: var(--radius-sm);
+      background: rgba(26, 18, 6, 0.16);
+      font-family: var(--font-sans); font-size: var(--text-xs); font-weight: var(--weight-bold);
+      color: rgba(26, 18, 6, 0.7);
+    }
+    .plate--sq { width: 40px; height: 40px; padding: 0; justify-content: center; --cut: 8px; }
+    .plate--sq .ico { width: 18px; height: 18px; }
+
+    /* Turn controls, bottom right */
+    .turn { position: absolute; right: 32px; bottom: 28px; display: flex; flex-direction: column; align-items: flex-end; gap: var(--space-4); }
+    .turn__head { display: flex; align-items: baseline; gap: var(--space-3); }
+    .turn__who { font-size: var(--text-3xl); font-weight: 800; font-style: italic; letter-spacing: -0.02em; color: var(--color-forge-hi); text-shadow: var(--shadow-text); }
+    .turn__num { font-family: var(--font-sans); font-size: var(--text-sm); color: var(--color-text); font-variant-numeric: tabular-nums; text-shadow: var(--shadow-text); }
+    .turn__actions { display: flex; align-items: center; gap: var(--space-3); }
+
+    /* Phase track: diamonds on a rail; the live one is bigger and lit */
+    .phases { position: relative; display: flex; gap: 30px; padding: 0 6px 22px; }
+    .phases::before { content: ""; position: absolute; left: 10px; right: 10px; top: 7px; height: 2px; background: linear-gradient(90deg, var(--color-forge) 38%, rgba(239, 229, 207, 0.25) 38%); }
+    .phase { position: relative; width: 16px; height: 16px; }
+    .phase i { position: absolute; inset: 2px; rotate: 45deg; border-radius: 2px; background: var(--color-iron); box-shadow: inset 0 0 0 1.5px rgba(239, 229, 207, 0.4); }
+    .phase.is-done i { background: var(--color-forge); box-shadow: none; }
+    .phase.is-on i { inset: -4px; background: linear-gradient(135deg, var(--color-forge-hi), var(--color-forge)); box-shadow: 0 0 0 3px rgba(232, 169, 58, 0.3), 0 0 18px rgba(232, 169, 58, 0.7); }
+    .phase span { position: absolute; top: 24px; left: 50%; translate: -50% 0; font-family: var(--font-sans); font-size: var(--text-xs); color: var(--color-text-muted); white-space: nowrap; text-shadow: var(--shadow-text); }
+    .phase.is-on span { color: var(--color-forge-hi); font-weight: var(--weight-bold); }
+
+    /* Player crest: portrait coin + shield with the life total */
+    .crest { position: absolute; display: flex; align-items: center; }
+    .crest__face { position: relative; z-index: 1; width: 72px; height: 72px; border-radius: 50%; background: center / cover; box-shadow: 0 0 0 3px var(--color-iron), 0 0 0 4px var(--color-brass), var(--shadow-plate); }
+    .crest__shield {
+      position: relative; z-index: 2;
+      display: grid; place-items: center;
+      width: 58px; height: 66px; margin-left: -18px; padding-bottom: 6px;
+      clip-path: polygon(0 0, 100% 0, 100% 62%, 50% 100%, 0 62%);
+      background: linear-gradient(180deg, var(--color-iron-hi), var(--color-iron));
+      font-size: var(--text-3xl); font-weight: 900; font-variant-numeric: tabular-nums; letter-spacing: -0.03em;
+      color: var(--color-parchment);
+    }
+    .crest__shield::before { content: ""; position: absolute; inset: 0; clip-path: inherit; background: linear-gradient(180deg, var(--color-brass-hi), var(--color-brass-dim)); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; padding: 2px; }
+    .crest--active .crest__face { box-shadow: 0 0 0 3px var(--color-iron), 0 0 0 4px var(--color-forge-hi), 0 0 28px rgba(232, 169, 58, 0.6); }
+    .crest__meta { margin-left: var(--space-3); text-shadow: var(--shadow-text); }
+    .crest__name { font-size: var(--text-xl); font-weight: 600; line-height: 1.1; }
+    .crest__zones { display: flex; gap: var(--space-3); margin-top: var(--space-1); font-family: var(--font-sans); font-size: var(--text-sm); color: var(--color-text); font-variant-numeric: tabular-nums; }
+    .crest__zones span { display: inline-flex; align-items: center; gap: 4px; }
+    .crest__zones .ico { width: 14px; height: 14px; color: var(--color-brass); }
+    .crest--opp { top: 18px; left: 50%; translate: -50% 0; }
+    .crest--me { left: 32px; bottom: 28px; }
+
+    /* Log: a brass-ticked list, card names set in the display serif */
+    .log { position: absolute; left: 32px; top: 50%; translate: 0 -50%; width: 250px; display: flex; flex-direction: column; gap: var(--space-2); }
+    .log li { position: relative; padding-left: var(--space-4); font-family: var(--font-sans); font-size: var(--text-sm); line-height: var(--leading-snug); color: var(--color-text); text-shadow: var(--shadow-text); }
+    .log li::before { content: ""; position: absolute; left: 0; top: 7px; width: 6px; height: 6px; rotate: 45deg; background: var(--color-brass-dim); }
+    .log li.is-new { color: var(--color-text-strong); }
+    .log li.is-new::before { background: var(--color-forge); }
+    .log b { font-family: var(--font-forged); font-weight: 600; color: var(--color-forge-hi); }
+
+    .menu { position: absolute; top: 20px; right: 24px; display: flex; gap: var(--space-2); }
+
+    .hint { color: var(--color-brass-hi); }
+  </style>
+</head>
+<body>
+<div class="frame" data-name="Table">
+  <svg class="icons" aria-hidden="true">
+    <symbol id="i-library" viewBox="0 0 16 16"><rect x="3.5" y="2.5" width="9" height="11" rx="1.2"/><path d="M5.5 1h7a1.5 1.5 0 0 1 1.5 1.5V12"/></symbol>
+    <symbol id="i-hand" viewBox="0 0 16 16"><rect x="2" y="4" width="6" height="9" rx="1" transform="rotate(-12 5 8.5)"/><rect x="8" y="3" width="6" height="9" rx="1" transform="rotate(10 11 7.5)"/></symbol>
+    <symbol id="i-grave" viewBox="0 0 16 16"><path d="M4 14V6.5a4 4 0 0 1 8 0V14"/><path d="M2.5 14h11M8 6v4M6.5 7.5h3"/></symbol>
+    <symbol id="i-menu" viewBox="0 0 16 16"><path d="M3 4.5h10M3 8h10M3 11.5h10"/></symbol>
+    <symbol id="i-gear" viewBox="0 0 16 16"><circle cx="8" cy="8" r="2.2"/><path d="M8 1.8v2M8 12.2v2M1.8 8h2M12.2 8h2M3.6 3.6l1.4 1.4M11 11l1.4 1.4M3.6 12.4 5 11M11 5l1.4-1.4"/></symbol>
+    <symbol id="i-bulb" viewBox="0 0 16 16"><path d="M6 12.5h4M6.5 14.5h3M8 1.5a4.5 4.5 0 0 0-2.6 8.2c.4.3.6.8.6 1.3V11h4v-.0c0-.5.2-1 .6-1.3A4.5 4.5 0 0 0 8 1.5z"/></symbol>
+    <symbol id="i-sword" viewBox="0 0 16 16"><path d="M13.5 2.5 6 10M13.5 2.5H10.5M13.5 2.5V5.5M4 8.5l3.5 3.5M5.5 10.5 2.5 13.5"/></symbol>
+  </svg>
+
+  <div class="arena" data-name="Arena"></div>
+
+  <section class="field field--lands field--opp-lands" data-name="Opponent Lands">
+    <div class="stackpile"><div class="c-mtg c-mtg--tapped" data-component="MTG Card"><img src="../assets/mountain.jpg" alt=""></div><span class="c-count" data-component="Count">3</span></div>
+    <div class="stackpile"><div class="c-mtg" data-component="MTG Card"><img src="../assets/mountain.jpg" alt=""></div><span class="c-count" data-component="Count">2</span></div>
+  </section>
+  <section class="field field--opp" data-name="Opponent Creatures">
+    <div class="c-mtg" data-component="MTG Card"><img src="../assets/heartfire-immolator.jpg" alt=""><span class="c-pt" data-component="PT">2/2</span></div>
+    <div class="c-mtg" data-component="MTG Card"><img src="../assets/fanatical-firebrand.jpg" alt=""><span class="c-pt" data-component="PT">1/1</span></div>
+    <div class="c-mtg" data-component="MTG Card"><img src="../assets/brazen-scourge.jpg" alt=""><span class="c-pt" data-component="PT">3/3</span></div>
+  </section>
+  <section class="field field--me" data-name="My Creatures">
+    <div class="c-mtg" data-component="MTG Card"><img src="../assets/gnarlback-rhino.jpg" alt=""><span class="c-pt" data-component="PT">4/4</span></div>
+    <div class="c-mtg" data-component="MTG Card"><img src="../assets/druid-of-the-cowl.jpg" alt=""><span class="c-pt" data-component="PT">1/3</span></div>
+    <div class="c-mtg" data-component="MTG Card"><img src="../assets/thornweald-archer.jpg" alt=""><span class="c-pt" data-component="PT">2/1</span></div>
+  </section>
+  <section class="field field--lands field--me-lands" data-name="My Lands">
+    <div class="stackpile"><div class="c-mtg" data-component="MTG Card"><img src="../assets/forest.jpg" alt=""></div><span class="c-count" data-component="Count">4</span></div>
+  </section>
+  <section class="hand" data-name="Hand">
+    <div class="c-mtg c-mtg--playable" data-component="MTG Card"><img src="../assets/giant-growth.jpg" alt=""></div>
+    <div class="c-mtg c-mtg--playable" data-component="MTG Card"><img src="../assets/magnigoth-sentry.jpg" alt=""></div>
+    <div class="c-mtg" data-component="MTG Card"><img src="../assets/overrun.jpg" alt=""></div>
+  </section>
+
+  <div class="hud" data-name="HUD">
+    <div class="crest crest--opp" data-name="Opponent Badge">
+      <div class="crest__face" style="background-image: url('../assets/deck-elenda.jpg')"></div>
+      <div class="crest__shield">21</div>
+      <div class="crest__meta">
+        <div class="crest__name">Opponent</div>
+        <div class="crest__zones"><span><svg class="ico"><use href="#i-library"/></svg>48</span><span><svg class="ico"><use href="#i-hand"/></svg>3</span><span><svg class="ico"><use href="#i-grave"/></svg>2</span></div>
+      </div>
+    </div>
+
+    <ol class="log" data-name="Game Log">
+      <li>Opponent attacks with <b>Fanatical Firebrand</b></li>
+      <li>You block with <b>Druid of the Cowl</b></li>
+      <li class="is-new">You cast <b>Thornweald Archer</b></li>
+    </ol>
+
+    <div class="menu" data-name="Top Menu">
+      <button class="plate plate--iron plate--sq" aria-label="Menu"><svg class="ico"><use href="#i-menu"/></svg></button>
+      <button class="plate plate--iron plate--sq" aria-label="Settings"><svg class="ico"><use href="#i-gear"/></svg></button>
+    </div>
+
+    <div class="crest crest--me crest--active" data-name="My Badge">
+      <div class="crest__face" style="background-image: url('../assets/deck-arahbo.jpg')"></div>
+      <div class="crest__shield">19</div>
+      <div class="crest__meta">
+        <div class="crest__name">You</div>
+        <div class="crest__zones"><span><svg class="ico"><use href="#i-library"/></svg>29</span><span><svg class="ico"><use href="#i-hand"/></svg>3</span><span><svg class="ico"><use href="#i-grave"/></svg>4</span></div>
+      </div>
+    </div>
+
+    <div class="turn" data-name="Turn Controls">
+      <div class="turn__head" data-name="Turn Label"><span class="turn__num">Turn 12</span><span class="turn__who">Your main phase</span></div>
+      <ol class="phases" data-name="Phase Track">
+        <li class="phase is-done"><i></i><span>Upkeep</span></li>
+        <li class="phase is-done"><i></i><span>Draw</span></li>
+        <li class="phase is-on"><i></i><span>Main</span></li>
+        <li class="phase"><i></i><span>Combat</span></li>
+        <li class="phase"><i></i><span>Main</span></li>
+        <li class="phase"><i></i><span>End</span></li>
+      </ol>
+      <div class="turn__actions">
+        <button class="plate plate--iron plate--sq hint" aria-label="Hint" data-name="Hint"><svg class="ico"><use href="#i-bulb"/></svg></button>
+        <button class="plate plate--iron" data-name="End Turn">End turn</button>
+        <button class="plate plate--forge" data-name="Primary Action"><svg class="ico"><use href="#i-sword"/></svg>To combat<span class="plate__key">Space</span></button>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

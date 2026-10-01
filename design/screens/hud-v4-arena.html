@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>HUD — V4 Arena, Your Main Phase</title>
+  <meta name="frame" content="1440x810">
+  <link rel="stylesheet" href="../system/tokens.css">
+  <link rel="stylesheet" href="../system/base.css">
+  <link rel="stylesheet" href="../system/components.css">
+  <style>
+    /* V4 Arena: MTG Arena's in-match HUD, followed closely.
+       - Each player's avatar sits in the middle of a phase strip: phase icons left
+         (beginning, draw, main) and right (combat, main, end), the live one lit orange.
+       - Life total in a plate just under the avatar.
+       - No side panels and no log: the battlefield is the whole screen.
+       - Bottom right: the big orange action button, a smaller secondary above it,
+         the timeout pips and the prompt. A gear for options top right.
+       - Library and graveyard as small piles at the right edge of each side. */
+
+    /* ---------- scene ---------- */
+    .arena { position: absolute; inset: 0; background: url("../assets/stone-chamber.png") center / cover; }
+    .arena::after { content: ""; position: absolute; inset: 0; background: radial-gradient(ellipse 70% 62% at 50% 50%, transparent 45%, rgba(0, 0, 0, 0.5)); }
+    .field { position: absolute; left: 50%; display: flex; gap: var(--space-4); transform: translateX(-50%); }
+    .field .c-mtg { --w: 92px; }
+    .field--lands .c-mtg { --w: 60px; }
+    .field--opp-lands { top: 122px; gap: var(--space-7); }
+    .field--opp { top: 214px; }
+    .field--me { top: 400px; }
+    .field--me-lands { top: 540px; gap: var(--space-7); }
+    .pile { position: relative; }
+    .pile .c-count { position: absolute; top: -8px; right: -10px; }
+    .hand { position: absolute; left: 50%; bottom: -150px; display: flex; transform: translateX(-50%); }
+    .hand .c-mtg { --w: 128px; margin-left: -34px; }
+    .hand .c-mtg:nth-child(1) { transform: rotate(-8deg) translateY(16px); }
+    .hand .c-mtg:nth-child(2) { transform: rotate(-3deg) translateY(2px); }
+    .hand .c-mtg:nth-child(3) { transform: rotate(3deg) translateY(2px); }
+    .hand .c-mtg:nth-child(4) { transform: rotate(8deg) translateY(16px); }
+    .opp-hand { position: absolute; top: -70px; left: calc(50% + 120px); display: flex; }
+    .opp-hand .c-mtg { --w: 64px; margin-left: -26px; }
+    .icons { position: absolute; width: 0; height: 0; }
+    .ico { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+
+    /* ---------- HUD ---------- */
+    .hud { font-family: var(--font-arena); color: var(--color-text-strong); }
+
+    /* Phase strip with the avatar in the middle */
+    .seat { position: absolute; left: 50%; translate: -50% 0; display: flex; align-items: center; gap: var(--space-5); }
+    .seat--opp { top: 10px; }
+    .seat--me { bottom: 64px; }
+    .phases { display: flex; gap: var(--space-2); }
+    .phase {
+      display: grid; place-items: center;
+      width: 34px; height: 34px; border-radius: 50%;
+      background: rgba(10, 12, 14, 0.62);
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+      color: rgba(236, 228, 210, 0.5);
+    }
+    .phase.is-stop { color: rgba(236, 228, 210, 0.85); box-shadow: inset 0 0 0 1.5px rgba(242, 132, 31, 0.55); }
+    .phase.is-on {
+      color: #2a1300;
+      background: radial-gradient(circle at 50% 35%, var(--color-arena-orange-hi), var(--color-arena-orange) 70%);
+      box-shadow: 0 0 0 2px rgba(255, 192, 97, 0.35), 0 4px 16px rgba(242, 132, 31, 0.65);
+    }
+    .seat--opp .phase { width: 28px; height: 28px; }
+    .seat--opp .phase .ico { width: 15px; height: 15px; }
+
+    .avatar { position: relative; width: 92px; height: 92px; }
+    .seat--opp .avatar { width: 76px; height: 76px; }
+    .avatar__face { position: absolute; inset: 0; border-radius: 50%; background: center / cover; box-shadow: 0 0 0 3px #101317, 0 0 0 5px var(--color-arena-rim), var(--shadow-md); }
+    .avatar--turn .avatar__face { box-shadow: 0 0 0 3px #101317, 0 0 0 5px var(--color-arena-orange-hi), 0 0 26px rgba(242, 132, 31, 0.7); }
+    .avatar__life {
+      position: absolute; left: 50%; bottom: -14px; translate: -50% 0;
+      min-width: 54px; padding: 0 10px;
+      border-radius: var(--radius-full);
+      background: linear-gradient(180deg, #2b323c, #12161b);
+      box-shadow: 0 0 0 1.5px var(--color-arena-rim), var(--shadow-md);
+      font-family: var(--font-arena-num); font-size: 26px; font-weight: 700; line-height: 32px; text-align: center;
+      font-variant-numeric: tabular-nums;
+    }
+    .seat--opp .avatar__life { font-size: 22px; line-height: 28px; min-width: 46px; bottom: -12px; }
+    .avatar__name { position: absolute; top: 50%; translate: 0 -50%; white-space: nowrap; font-size: var(--text-md); font-weight: 600; text-shadow: var(--shadow-text); }
+
+    /* Library and graveyard: small piles at the right edge of each side */
+    .zones { position: absolute; right: 36px; display: flex; gap: var(--space-3); }
+    .zones--opp { top: 148px; }
+    .zones--me { top: 452px; }
+    .zone { position: relative; width: 58px; height: 81px; border-radius: 5px; }
+    .zone--library { background: linear-gradient(135deg, #3b2a1c, #1b130c); box-shadow: 2px 2px 0 #0d0906, 4px 4px 0 #0d0906, var(--shadow-md); }
+    .zone--library::after { content: ""; position: absolute; inset: 6px; border-radius: 3px; border: 1px solid rgba(201, 163, 91, 0.45); }
+    .zone--grave { background: center / cover; filter: grayscale(0.4) brightness(0.85); box-shadow: var(--shadow-md); }
+    .zone b { position: absolute; left: 50%; bottom: -10px; translate: -50% 0; z-index: 1; min-width: 26px; padding: 0 6px; border-radius: var(--radius-full); background: #12161b; box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.18); font-family: var(--font-arena-num); font-size: var(--text-sm); font-weight: 700; line-height: 20px; text-align: center; color: var(--color-text-strong); }
+
+    /* Action corner */
+    .action { position: absolute; right: 28px; bottom: 26px; display: flex; flex-direction: column; align-items: flex-end; gap: var(--space-2); }
+    .action__prompt { margin-bottom: var(--space-1); font-size: var(--text-lg); font-weight: 600; text-shadow: var(--shadow-text); }
+    .action__row { display: flex; align-items: center; gap: var(--space-2); }
+    .timeouts { display: flex; align-items: center; gap: 6px; margin-right: var(--space-2); color: rgba(236, 228, 210, 0.7); }
+    .timeouts i { width: 7px; height: 7px; border-radius: 50%; background: var(--color-arena-orange-hi); }
+    .timeouts .ico { width: 15px; height: 15px; }
+
+    .abtn {
+      display: inline-flex; align-items: center; justify-content: center;
+      border: 0; border-radius: var(--radius-full);
+      font-family: var(--font-arena); font-weight: 700; letter-spacing: 0.01em;
+      cursor: pointer;
+    }
+    .abtn--main {
+      min-width: 220px; height: 62px; padding: 0 var(--space-7);
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.35), transparent 45%),
+        linear-gradient(180deg, var(--color-arena-orange-hi), var(--color-arena-orange) 50%, var(--color-arena-orange-lo));
+      box-shadow: 0 0 0 2px #3a1a04, 0 0 0 3px rgba(255, 192, 97, 0.5), 0 8px 22px rgba(0, 0, 0, 0.55), 0 0 30px rgba(242, 132, 31, 0.35);
+      font-size: var(--text-xl); color: #fff;
+      text-shadow: var(--shadow-arena-label);
+    }
+    .abtn--wait { background: linear-gradient(180deg, var(--color-arena-slate-hi), var(--color-arena-slate)); box-shadow: 0 0 0 2px #0b0e12, 0 0 0 3px rgba(255, 255, 255, 0.12), 0 8px 22px rgba(0, 0, 0, 0.55); color: rgba(236, 228, 210, 0.6); text-shadow: none; }
+    .abtn--second {
+      min-width: 150px; height: 40px; padding: 0 var(--space-5);
+      background: linear-gradient(180deg, var(--color-arena-slate-hi), var(--color-arena-slate));
+      box-shadow: 0 0 0 1.5px rgba(255, 192, 97, 0.45), 0 6px 14px rgba(0, 0, 0, 0.5);
+      font-size: var(--text-md); color: var(--color-text-strong);
+    }
+    .abtn--icon { width: 40px; height: 40px; background: rgba(10, 12, 14, 0.7); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.16); color: var(--color-text-strong); }
+    .abtn--icon.is-on { color: var(--color-arena-orange-hi); box-shadow: inset 0 0 0 1.5px var(--color-arena-orange); }
+
+    .corner { position: absolute; top: 18px; right: 22px; display: flex; gap: var(--space-2); }
+
+    /* Last play: Arena flashes the opponent's latest card at the left edge instead of a log */
+    .lastplay { position: absolute; left: 28px; top: 50%; translate: 0 -50%; display: flex; align-items: center; gap: var(--space-3); }
+    .lastplay .c-mtg { --w: 112px; box-shadow: 0 0 0 2px rgba(255, 90, 54, 0.6), var(--shadow-lg); }
+    .lastplay span { max-width: 120px; font-size: var(--text-sm); font-weight: 600; line-height: 1.25; color: var(--color-text); text-shadow: var(--shadow-text); }
+  </style>
+</head>
+<body>
+<div class="frame" data-name="Table">
+  <svg class="icons" aria-hidden="true">
+    <symbol id="p-untap" viewBox="0 0 18 18"><path d="M14.5 6.5A6 6 0 0 0 3.6 6M3.5 11.5A6 6 0 0 0 14.4 12"/><path d="M3.5 2.8V6h3.2M14.5 15.2V12h-3.2"/></symbol>
+    <symbol id="p-draw" viewBox="0 0 18 18"><rect x="5" y="2.5" width="8.5" height="12" rx="1.3"/><path d="M9.2 6v5M6.8 8.5h4.8"/></symbol>
+    <symbol id="p-main" viewBox="0 0 18 18"><path d="M9 2.5 14.5 9 9 15.5 3.5 9z"/><circle cx="9" cy="9" r="1.6"/></symbol>
+    <symbol id="p-combat" viewBox="0 0 18 18"><path d="M3 3l8.5 8.5M15 3l-8.5 8.5M10 13l2.5-2.5M8 13l-2.5-2.5M12.8 12.8l2 2M5.2 12.8l-2 2"/></symbol>
+    <symbol id="p-main2" viewBox="0 0 18 18"><path d="M9 2.5 14.5 9 9 15.5 3.5 9z"/><path d="M7.5 7.5h3v3h-3z"/></symbol>
+    <symbol id="p-end" viewBox="0 0 18 18"><path d="M13.8 11.2A5.8 5.8 0 0 1 6.8 4.2a5.8 5.8 0 1 0 7 7z"/></symbol>
+    <symbol id="i-gear" viewBox="0 0 18 18"><circle cx="9" cy="9" r="2.4"/><path d="M7.8 1.9h2.4l.4 1.8 1.3.6 1.6-1 1.7 1.7-1 1.6.6 1.3 1.8.4v2.4l-1.8.4-.6 1.3 1 1.6-1.7 1.7-1.6-1-1.3.6-.4 1.8H7.8l-.4-1.8-1.3-.6-1.6 1-1.7-1.7 1-1.6-.6-1.3-1.8-.4V7.8l1.8-.4.6-1.3-1-1.6 1.7-1.7 1.6 1 1.3-.6z"/></symbol>
+    <symbol id="i-bulb" viewBox="0 0 18 18"><path d="M7 14h4M7.5 16h3M9 2a5 5 0 0 0-2.9 9.1c.5.3.7.8.7 1.3V12.5h4.4V12.4c0-.5.2-1 .7-1.3A5 5 0 0 0 9 2z"/></symbol>
+    <symbol id="i-hourglass" viewBox="0 0 18 18"><path d="M5 2.5h8M5 15.5h8M6 2.5c0 3.5 6 4 6 6.5s-6 3-6 6.5M12 2.5c0 3.5-6 4-6 6.5s6 3 6 6.5"/></symbol>
+    <symbol id="i-control" viewBox="0 0 18 18"><rect x="3" y="3" width="12" height="12" rx="2.5"/><path d="M7 6.5v5M11 6.5v5"/></symbol>
+  </svg>
+
+  <div class="arena" data-name="Arena"></div>
+
+  <section class="field field--lands field--opp-lands" data-name="Opponent Lands">
+    <div class="pile"><div class="c-mtg c-mtg--tapped" data-component="MTG Card"><img src="../assets/mountain.jpg" alt=""></div><span class="c-count" data-component="Count">3</span></div>
+    <div class="pile"><div class="c-mtg" data-component="MTG Card"><img src="../assets/mountain.jpg" alt=""></div><span class="c-count" data-component="Count">2</span></div>
+  </section>
+  <section class="field field--opp" data-name="Opponent Creatures">
+    <div class="c-mtg" data-component="MTG Card"><img src="../assets/heartfire-immolator.jpg" alt=""><span class="c-pt" data-component="PT">2/2</span></div>
+    <div class="c-mtg" data-component="MTG Card"><img src="../assets/fanatical-firebrand.jpg" alt=""><span class="c-pt" data-component="PT">1/1</span></div>
+    <div class="c-mtg" data-component="MTG Card"><img src="../assets/brazen-scourge.jpg" alt=""><span class="c-pt" data-component="PT">3/3</span></div>
+  </section>
+  <section class="field field--me" data-name="My Creatures">
+    <div class="c-mtg" data-component="MTG Card"><img src="../assets/gnarlback-rhino.jpg" alt=""><span class="c-pt" data-component="PT">4/4</span></div>
+    <div class="c-mtg" data-component="MTG Card"><img src="../assets/druid-of-the-cowl.jpg" alt=""><span class="c-pt" data-component="PT">1/3</span></div>
+    <div class="c-mtg" data-component="MTG Card"><img src="../assets/thornweald-archer.jpg" alt=""><span class="c-pt" data-component="PT">2/1</span></div>
+  </section>
+  <section class="field field--lands field--me-lands" data-name="My Lands">
+    <div class="pile"><div class="c-mtg" data-component="MTG Card"><img src="../assets/forest.jpg" alt=""></div><span class="c-count" data-component="Count">4</span></div>
+  </section>
+  <section class="hand" data-name="Hand">
+    <div class="c-mtg c-mtg--playable" data-component="MTG Card"><img src="../assets/giant-growth.jpg" alt=""></div>
+    <div class="c-mtg c-mtg--playable" data-component="MTG Card"><img src="../assets/magnigoth-sentry.jpg" alt=""></div>
+    <div class="c-mtg" data-component="MTG Card"><img src="../assets/overrun.jpg" alt=""></div>
+    <div class="c-mtg" data-component="MTG Card"><img src="../assets/forest.jpg" alt=""></div>
+  </section>
+  <section class="opp-hand" data-name="Opponent Hand">
+    <div class="c-mtg c-mtg--back" data-component="MTG Card"></div><div class="c-mtg c-mtg--back" data-component="MTG Card"></div><div class="c-mtg c-mtg--back" data-component="MTG Card"></div>
+  </section>
+
+  <div class="hud" data-name="HUD">
+    <div class="seat seat--opp" data-name="Opponent Badge">
+      <ol class="phases" data-name="Phase Track">
+        <li class="phase"><svg class="ico"><use href="#p-untap"/></svg></li>
+        <li class="phase"><svg class="ico"><use href="#p-draw"/></svg></li>
+        <li class="phase"><svg class="ico"><use href="#p-main"/></svg></li>
+      </ol>
+      <div class="avatar" data-name="Avatar">
+        <div class="avatar__face" style="background-image: url('../assets/deck-elenda.jpg')"></div>
+        <div class="avatar__life" data-name="Life">21</div>
+      </div>
+      <ol class="phases" data-name="Phase Track #2">
+        <li class="phase"><svg class="ico"><use href="#p-combat"/></svg></li>
+        <li class="phase"><svg class="ico"><use href="#p-main2"/></svg></li>
+        <li class="phase"><svg class="ico"><use href="#p-end"/></svg></li>
+      </ol>
+    </div>
+
+    <div class="zones zones--opp" data-name="Opponent Zones">
+      <div class="zone zone--grave" style="background-image: url('../assets/lightning-strike.jpg')"><b>2</b></div>
+      <div class="zone zone--library"><b>48</b></div>
+    </div>
+
+    <div class="lastplay" data-name="Last Play">
+      <div class="c-mtg" data-component="MTG Card"><img src="../assets/fanatical-firebrand.jpg" alt=""></div>
+      <span>Opponent attacked with Fanatical Firebrand</span>
+    </div>
+
+    <div class="corner" data-name="Corner Buttons">
+      <button class="abtn abtn--icon" aria-label="Options"><svg class="ico"><use href="#i-gear"/></svg></button>
+    </div>
+
+    <div class="zones zones--me" data-name="My Zones">
+      <div class="zone zone--grave" style="background-image: url('../assets/giant-growth.jpg')"><b>4</b></div>
+      <div class="zone zone--library"><b>29</b></div>
+    </div>
+
+    <div class="seat seat--me" data-name="My Badge">
+      <ol class="phases" data-name="Phase Track">
+        <li class="phase is-stop"><svg class="ico"><use href="#p-untap"/></svg></li>
+        <li class="phase is-stop"><svg class="ico"><use href="#p-draw"/></svg></li>
+        <li class="phase is-on"><svg class="ico"><use href="#p-main"/></svg></li>
+      </ol>
+      <div class="avatar avatar--turn" data-name="Avatar">
+        <div class="avatar__face" style="background-image: url('../assets/deck-arahbo.jpg')"></div>
+        <div class="avatar__life" data-name="Life">19</div>
+      </div>
+      <ol class="phases" data-name="Phase Track #2">
+        <li class="phase is-stop"><svg class="ico"><use href="#p-combat"/></svg></li>
+        <li class="phase is-stop"><svg class="ico"><use href="#p-main2"/></svg></li>
+        <li class="phase"><svg class="ico"><use href="#p-end"/></svg></li>
+      </ol>
+    </div>
+
+    <div class="action" data-name="Action">
+      <div class="action__prompt" data-name="Prompt">Your main phase</div>
+      <div class="action__row">
+        <span class="timeouts" title="Timeouts"><i></i><i></i><i></i><svg class="ico"><use href="#i-hourglass"/></svg></span>
+        <button class="abtn abtn--second" data-name="Secondary Button">End turn</button>
+      </div>
+      <div class="action__row">
+        <button class="abtn abtn--icon" aria-label="Hint" data-name="Hint"><svg class="ico"><use href="#i-bulb"/></svg></button>
+        <button class="abtn abtn--icon" aria-label="Full control" data-name="Full Control"><svg class="ico"><use href="#i-control"/></svg></button>
+        <button class="abtn abtn--main" data-name="Primary Button">To combat</button>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
