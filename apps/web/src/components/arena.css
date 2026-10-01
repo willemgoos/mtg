@@ -20,3 +20,30 @@
   pointer-events: none;
   background: #24262a url('/arena/stone-chamber.png') center / cover no-repeat;
 }
+
+/* A separate ground shadow preserves the body's selection and combat glows. */
+.table--arena .battlefield .card::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: var(--w);
+  height: var(--h);
+  border-radius: calc(var(--w) * 0.048);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  box-shadow:
+    0 calc(var(--w) * 0.025) calc(var(--w) * 0.035) rgb(0 0 0 / 65%),
+    calc(var(--w) * 0.035) calc(var(--w) * 0.085) calc(var(--w) * 0.13) calc(var(--w) * -0.015)
+      rgb(0 0 0 / 65%);
+}
+
+.table--arena .battlefield .card.is-tapped::before {
+  width: var(--h);
+  height: var(--w);
+}
+
+.table--arena .battlefield .card--land.is-tapped::before {
+  width: calc(var(--h) * 0.82);
+  height: calc(var(--w) * 0.82);
+}
