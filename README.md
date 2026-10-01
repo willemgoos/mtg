@@ -26,22 +26,15 @@ corepack pnpm arena -- 40     # bot-vs-bot win rates; `-- --log 3` shows one gam
 
 TypeScript is pinned to 6.x because typescript-eslint doesn't support TS 7 yet.
 
-## Sandstone arena
+## Arena backdrop
 
-Matches use the authored Blender sandstone ruin behind the card UI. Open
-Settings ? Arena detail to choose Balanced (default), Low, or Static; the choice
-persists locally. Reduced-motion preferences stop ambient motion and arena
-reactions. Unavailable or lost WebGL contexts fall back to a matching bundled still.
+Matches use the supplied stone chamber image behind the existing card UI:
+`apps/web/public/arena/stone-chamber.png`. It fills the viewport without stretching
+and crops at the edges on different aspect ratios. Its lighting and vignette are
+part of the artwork; the runtime adds no extra shading or WebGL canvas.
 
-The damaged masonry scene is in `art/arena/sandstone-arena-damaged.blend`.
-`art/arena/export_arena.py` bakes the procedural materials and lighting into two
-unlit meshes (a 2048px floor texture and a 4096px scenery atlas), then exports
-`apps/web/public/arena/sandstone-arena.glb`. Run it with Blender in background
-mode, for example: `blender --background --python art/arena/export_arena.py`.
-The runtime loads it lazily, keeps the still visible while loading, and avoids
-real-time shadow passes. Balanced and Low vary pixel density and ambient effects.
-`arenaScene.ts` owns rendering and cleanup; `arena.ts` maps existing visual cues
-to bounded spell and combat reactions without changing game state.
+The earlier Blender scenes and rendering code remain available for future use,
+but are not loaded by the game. Card, spell, and combat UI effects remain active.
 
 ## Engine design
 

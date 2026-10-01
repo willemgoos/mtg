@@ -30,7 +30,6 @@ import {
   type ZoneHandlers,
 } from './Zones.tsx';
 import { ArenaBackdrop } from './ArenaBackdrop.tsx';
-import { ARENA_KEY, loadArenaDetail, type ArenaDetail } from '../game/arena.ts';
 import { HoverPreview, type HoverState } from './Preview.tsx';
 import { UiSize } from './UiSize.tsx';
 import { SoundControl } from './SoundControl.tsx';
@@ -507,15 +506,6 @@ export function Board({
   }, [d.kind]);
 
   const [panel, setPanel] = useState<'log' | 'settings' | null>(null);
-  const [arenaDetail, setArenaDetail] = useState<ArenaDetail>(loadArenaDetail);
-  const changeArenaDetail = (detail: ArenaDetail) => {
-    setArenaDetail(detail);
-    try {
-      localStorage.setItem(ARENA_KEY, detail);
-    } catch {
-      /* Session preference still applies. */
-    }
-  };
   // Mid-match rematch/menu from the settings drawer asks for confirmation first.
   const [leaving, setLeaving] = useState<'rematch' | 'menu' | null>(null);
   const togglePanel = (p: 'log' | 'settings') => {
@@ -543,7 +533,7 @@ export function Board({
     <div
       className={`table table--arena ${targeting ? 'is-targeting' : ''} ${lethal ? 'is-lethal' : ''}`}
     >
-      <ArenaBackdrop detail={arenaDetail} batch={batch} view={view} me={HUMAN} />
+      <ArenaBackdrop />
       <FxLayer batch={batch} view={view} me={HUMAN} />
 
       <main className="board">
@@ -689,18 +679,6 @@ export function Board({
           </label>
           <UiSize />
           <SoundControl />
-          <label className="arena-detail">
-            Arena detail
-            <select
-              aria-label="Arena detail"
-              value={arenaDetail}
-              onChange={(e) => changeArenaDetail(e.target.value as ArenaDetail)}
-            >
-              <option value="balanced">Balanced</option>
-              <option value="low">Low</option>
-              <option value="static">Static</option>
-            </select>
-          </label>
           <div className="drawer__actions">
             {leaving ? (
               <>
