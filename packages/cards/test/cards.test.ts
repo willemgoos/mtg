@@ -67,7 +67,7 @@ describe('card data', () => {
   it('spells have effects; permanents are typed correctly', () => {
     for (const c of CARDS) {
       if (c.types.includes('Instant') || c.types.includes('Sorcery'))
-        expect(c.spell ?? c.modes, c.name).toBeDefined();
+        expect(c.spell ?? c.modes ?? c.pawprints, c.name).toBeDefined();
       if (c.types.includes('Creature')) expect(c.power, c.name).toBeTypeOf('number');
     }
   });
