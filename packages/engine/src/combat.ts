@@ -109,7 +109,12 @@ function assignAttackerDamage(
   amount: number,
   src: DamageSource,
 ): Assignment[] {
-  const player: TargetChoice = { player: a.defender };
+  // Attacking a planeswalker: its damage goes there (if it's still around).
+  const walker = a.planeswalker !== undefined ? ctx.s.objects[a.planeswalker] : undefined;
+  if (a.planeswalker !== undefined && walker?.zone !== 'battlefield') return [];
+  const player: TargetChoice = walker
+    ? { object: { id: walker.id, zcc: walker.zcc } }
+    : { player: a.defender };
   if (!a.blocked) return [{ src, to: player, amount }];
   const trample = hasKeyword(ctx, a.id, 'trample');
   if (a.blockers.length === 0) return trample ? [{ src, to: player, amount }] : [];

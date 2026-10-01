@@ -239,7 +239,17 @@ export function Board({
     }
     const acts = permanentActions(legal, id);
     if (d.kind === 'declareAttackers') {
-      const a = acts.find((x) => x.type === 'addAttacker' || x.type === 'removeAttacker');
+      // An opponent's planeswalker: the last attacker declared goes after it instead.
+      const last = d.declared[d.declared.length - 1];
+      const atWalker =
+        last &&
+        legal.find(
+          (x) => x.type === 'addAttacker' && x.attacker === last.id && x.planeswalker === id,
+        );
+      if (atWalker) return act(atWalker);
+      const a = acts.find(
+        (x) => (x.type === 'addAttacker' && !x.planeswalker) || x.type === 'removeAttacker',
+      );
       if (a) act(a);
       return;
     }
@@ -437,9 +447,11 @@ export function Board({
     switch (d.kind) {
       case 'declareAttackers': {
         const n = d.declared.length;
-        const adds = legal.filter((a) => a.type === 'addAttacker');
+        const adds = legal.filter((a) => a.type === 'addAttacker' && !a.planeswalker);
         return {
-          prompt: 'Declare attackers: click creatures to attack',
+          prompt: legal.some((a) => a.type === 'addAttacker' && a.planeswalker)
+            ? 'Declare attackers: click creatures, then a planeswalker to attack it instead'
+            : 'Declare attackers: click creatures to attack',
           primary: [
             n ? `Attack ×${n}` : 'Skip',
             () => act({ type: 'confirmAttackers', player: HUMAN }),

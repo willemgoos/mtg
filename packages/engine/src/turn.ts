@@ -141,6 +141,7 @@ export function startTurn(ctx: Ctx, player: PlayerId): void {
   delete s.turn.hexproofPlayers;
   delete s.turn.osteomancer;
   delete s.turn.instantsSorceriesCast;
+  delete s.turn.castDefs;
   for (const q of Object.values(s.players)) q.attackedThisTurn = false;
   endEffects(ctx, (e) => e.expires === 'untilYourNextTurn' && e.player === player);
   enterStep(ctx, 'untap');
@@ -234,6 +235,7 @@ export function confirmAttackers(ctx: Ctx): void {
   s.combat.attackers = decl.map((d) => ({
     id: d.id,
     defender: d.defender,
+    ...(d.planeswalker ? { planeswalker: d.planeswalker } : {}),
     blocked: false,
     blockers: [],
   }));

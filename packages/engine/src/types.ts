@@ -30,7 +30,8 @@ export interface ManaCost {
 // Card definitions (static data; referenced from state by CardDefId)
 // ---------------------------------------------------------------------------
 
-export type CardType = 'Creature' | 'Instant' | 'Sorcery' | 'Land' | 'Enchantment' | 'Artifact';
+export type CardType =
+  'Creature' | 'Instant' | 'Sorcery' | 'Land' | 'Enchantment' | 'Artifact' | 'Planeswalker';
 export type Supertype = 'Basic' | 'Legendary';
 
 export type Keyword =
@@ -82,6 +83,8 @@ export interface CardDefinition {
   keywords: Keyword[];
   /** "This creature enters with N +1/+1 counters on it." */
   entersWithCounters?: number;
+  /** A planeswalker's starting loyalty. */
+  loyalty?: number;
   /** Only put the counters on if this holds (raid: "if you attacked this turn"). */
   entersWithCountersIf?: ConditionDef;
   /** "As an additional cost, sacrifice a creature or pay this" (Eaten Alive). */
@@ -224,6 +227,8 @@ export interface CostDef {
   sacrificePermanent?: CardFilter;
   /** Untapped creatures you control may each pay for {1} (Heirloom Epic). */
   convoke?: boolean;
+  /** A loyalty ability: add (or remove) this many loyalty counters. */
+  loyalty?: number;
 }
 
 export type TriggerDef =
@@ -247,7 +252,14 @@ export type TriggerDef =
   | { on: 'combatDamageToPlayer' }
   | {
       on: 'castSpell';
-      filter: 'any' | 'creature' | 'noncreature' | 'instantOrSorcery' | 'targetsSelf';
+      filter:
+        | 'any'
+        | 'creature'
+        | 'noncreature'
+        | 'instantOrSorcery'
+        | 'targetsSelf'
+        /** Alania: the first instant, first sorcery, or first other Otter spell you cast this turn. */
+        | 'firstOfItsKind';
       /** The spell must also match this (Gev: a Lizard spell). */
       spell?: CardFilter;
     }
@@ -363,6 +375,8 @@ export type ConditionDef =
   | { kind: 'exiledCardTypes'; min: number }
   /** This Class is at least level `min` (or exactly `exactly`). */
   | { kind: 'classLevel'; min?: number; exactly?: number }
+  /** The source's power is at least `min` (Kitsa). */
+  | { kind: 'sourcePowerAtLeast'; min: number }
   /** A chosen target is controlled by you (Dreamdew Entrancer). */
   | { kind: 'targetControlledByYou'; target: number }
   /** At least one condition holds. */
@@ -582,6 +596,8 @@ export type EffectDef =
    * the source), chosen one at a time; then `then` happens. Nothing if you can't.
    */
   | { kind: 'sacrificeSeveral'; count: number; filter: CardFilter; then: EffectDef[] }
+  /** Copy a spell on the stack (`count` times): a target spell, or the spell that triggered this. */
+  | { kind: 'copySpell'; what: Ref; count?: Amount }
   /** Each player sacrifices a creature of their choice (Season of Loss). */
   | { kind: 'eachPlayerSacrifices' }
   /** Until the end of your next turn, you have this triggered ability (Season of the Bold). */
@@ -1045,6 +1061,8 @@ export type StackItem =
       x?: number;
       /** The pawprint modes chosen (repeats allowed), in printed order. */
       paws?: number[];
+      /** A copy of a spell (not cast; it ceases to exist as it leaves the stack). */
+      copy?: boolean;
       /** It enters with a finality counter (cast with Osteomancer Adept). */
       finality?: boolean;
       /** Mockingbird: the creature it enters as a copy of. */
@@ -1118,6 +1136,8 @@ export interface TurnState {
   leftGraveyard?: Record<PlayerId, number>;
   /** Foods each player sacrificed this turn. */
   foodsSacrificed?: Record<PlayerId, number>;
+  /** Card definitions of the spells each player cast this turn, in order (Alania). */
+  castDefs?: Record<PlayerId, CardDefId[]>;
   /** Instants and sorceries each player cast this turn (Eluge). */
   instantsSorceriesCast?: Record<PlayerId, number>;
   /** Players who may cast creature spells from their graveyard by foraging this turn (Osteomancer Adept). */
@@ -1129,6 +1149,8 @@ export interface TurnState {
 export interface Attacker {
   id: ObjectId;
   defender: PlayerId;
+  /** Attacking this planeswalker (controlled by `defender`) instead of the player. */
+  planeswalker?: ObjectId;
   /** Stays true even if all blockers are removed (rule 509.1h). */
   blocked: boolean;
   blockers: ObjectId[];
@@ -1249,7 +1271,11 @@ export type Decision =
   | { kind: 'mulligan'; player: PlayerId }
   | { kind: 'bottomCards'; player: PlayerId; count: number }
   | { kind: 'priority'; player: PlayerId }
-  | { kind: 'declareAttackers'; player: PlayerId; declared: { id: ObjectId; defender: PlayerId }[] }
+  | {
+      kind: 'declareAttackers';
+      player: PlayerId;
+      declared: { id: ObjectId; defender: PlayerId; planeswalker?: ObjectId }[];
+    }
   | {
       kind: 'declareBlockers';
       player: PlayerId;
@@ -1542,7 +1568,14 @@ export type Action =
       discard?: ObjectId;
       payWith?: ObjectId[];
     }
-  | { type: 'addAttacker'; player: PlayerId; attacker: ObjectId; defender: PlayerId }
+  | {
+      type: 'addAttacker';
+      player: PlayerId;
+      attacker: ObjectId;
+      defender: PlayerId;
+      /** Attack this planeswalker instead of the player (re-declares an attacker). */
+      planeswalker?: ObjectId;
+    }
   | { type: 'removeAttacker'; player: PlayerId; attacker: ObjectId }
   | { type: 'confirmAttackers'; player: PlayerId }
   | { type: 'addBlock'; player: PlayerId; blocker: ObjectId; attacker: ObjectId }

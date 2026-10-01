@@ -1,4 +1,10 @@
-import { cardMatches, countOf, creaturesOnBattlefield, matchesFilter } from './characteristics.ts';
+import {
+  cardMatches,
+  characteristics,
+  countOf,
+  creaturesOnBattlefield,
+  matchesFilter,
+} from './characteristics.ts';
 import { type Ctx, def, defOf, obj, other } from './context.ts';
 import { manaValue } from './cost.ts';
 import type {
@@ -69,6 +75,8 @@ export function checkCondition(
       (c.min === undefined || level >= c.min) && (c.exactly === undefined || level === c.exactly)
     );
   }
+  if (c.kind === 'sourcePowerAtLeast')
+    return !!self && characteristics(ctx, self.id).power >= c.min;
   if (c.kind === 'targetControlledByYou') {
     const t = targets?.[c.target];
     const o = t && 'object' in t ? ctx.s.objects[t.object.id] : undefined;
@@ -213,6 +221,17 @@ function spellMatches(
       return !!item?.targets.some(
         (x) => 'object' in x && x.object.id === self.id && x.object.zcc === self.zcc,
       );
+    case 'firstOfItsKind': {
+      // Alania: the first instant, the first sorcery, or the first Otter spell other than itself.
+      const cast = (ctx.s.turn.castDefs?.[self.controller] ?? []).map((id) => defOf(ctx, id));
+      const count = (test: (d: CardDefinition) => boolean) => cast.filter(test).length;
+      const otter = (d: CardDefinition) => d.subtypes.includes('Otter') && d.id !== self.defId;
+      return (
+        (spell.types.includes('Instant') && count((d) => d.types.includes('Instant')) === 1) ||
+        (spell.types.includes('Sorcery') && count((d) => d.types.includes('Sorcery')) === 1) ||
+        (otter(spell) && count(otter) === 1)
+      );
+    }
   }
 }
 
@@ -401,7 +420,7 @@ function detect(ctx: Ctx, ev: GameEvent): void {
           o.controller === ev.player &&
           spellMatches(ctx, a.trigger, spell, item, o) &&
           (!a.trigger.spell || cardMatches(ctx, ev.id, a.trigger.spell)),
-        undefined,
+        spellObj,
         manaValueOf(spell),
       );
       if (ev.nth === 2)
@@ -419,6 +438,8 @@ function detect(ctx: Ctx, ev: GameEvent): void {
           controller: e.controller,
           emblem: a,
           subject: { id: spellObj.id, zcc: spellObj.zcc },
+          // Storm: the spells cast before it this turn.
+          amount: (ev.nth ?? 1) - 1,
         });
       }
       return;

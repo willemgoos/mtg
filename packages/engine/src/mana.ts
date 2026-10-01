@@ -205,9 +205,12 @@ export function planPayment(
   exclude?: ObjectId,
   forSubtypes?: readonly string[],
   extra: readonly ManaSource[] = [],
+  /** Permanents leaving as part of the same cost (sacrificed): not used for mana. */
+  avoid: readonly (ObjectId | undefined)[] = [],
 ): ObjectId[] {
   if (!cost || manaValue(cost) === 0) return [];
   let sources = [...manaSources(ctx, player, exclude, forSubtypes), ...extra];
+  if (avoid.length) sources = sources.filter((s) => !avoid.includes(s.id));
   if (payWith) sources = sources.filter((s) => payWith.includes(s.id));
   const plan = findPayment(cost, sources);
   if (!plan) throw new Error('Cannot pay mana cost');

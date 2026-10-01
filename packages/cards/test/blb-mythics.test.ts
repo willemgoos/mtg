@@ -279,3 +279,90 @@ describe('the last rares', () => {
     expect(g.life('p1')).toBe(25);
   });
 });
+
+describe('planeswalkers and copies', () => {
+  it('Ral enters with loyalty, uses one loyalty ability a turn, and can be attacked', () => {
+    const g = game({
+      p1: { hand: ['ral-crackling-wit'], battlefield: [...n('island', 2), ...n('mountain', 2)] },
+      p2: { battlefield: ['bear-cub'] },
+    });
+    settle(cast(g, 'ral-crackling-wit'));
+    const ral = g.id('p1', 'ral-crackling-wit');
+    expect(g.obj(ral).counters?.loyalty).toBe(4);
+    settle(
+      g.do({ type: 'activateAbility', player: 'p1', source: ral, abilityIndex: 1, targets: [] }),
+    );
+    expect(g.obj(ral).counters?.loyalty).toBe(5);
+    expect(all(g, 'otter-token')).toHaveLength(1);
+    expect(g.legal().some((a) => a.type === 'activateAbility' && a.source === ral)).toBe(false);
+    // The opponent's Bear attacks Ral.
+    g.passUntilStep('upkeep').passUntilStep('beginCombat').passBoth();
+    const bear = g.id('p2', 'bear-cub');
+    g.do({ type: 'addAttacker', player: 'p2', attacker: bear, defender: 'p1', planeswalker: ral });
+    g.do({ type: 'confirmAttackers', player: 'p2' });
+    for (
+      let i = 0;
+      i < 20 && g.state.turn.step !== 'endCombat' && g.state.turn.step !== 'main2';
+      i++
+    ) {
+      if (g.decision.kind === 'declareBlockers') g.do({ type: 'confirmBlockers', player: 'p1' });
+      else g.pass();
+    }
+    expect(g.obj(ral).counters?.loyalty).toBe(3);
+    expect(g.life('p1')).toBe(20);
+  });
+
+  it('Shock can target Ral, and Ral dies at zero loyalty', () => {
+    const g = game({
+      p1: { hand: ['ral-crackling-wit'], battlefield: [...n('island', 2), ...n('mountain', 2)] },
+      p2: { hand: ['lightning-strike', 'lightning-strike'], battlefield: n('mountain', 4) },
+    });
+    settle(cast(g, 'ral-crackling-wit'));
+    const ral = g.id('p1', 'ral-crackling-wit');
+    g.pass();
+    settle(cast(g, 'lightning-strike', [g.ref(ral)]));
+    expect(g.obj(ral).counters?.loyalty).toBe(1);
+    g.pass();
+    settle(cast(g, 'lightning-strike', [g.ref(ral)]));
+    expect(g.zoneOf(ral)).toBe('graveyard');
+  });
+
+  it('Alania copies the first instant you cast this turn', () => {
+    const g = game({
+      p1: {
+        hand: ['playful-shove', 'playful-shove'],
+        battlefield: [...n('mountain', 4), 'alania-divergent-storm'],
+      },
+    });
+    const shove = g
+      .legal()
+      .find(
+        (a) => a.type === 'castSpell' && 'player' in a.targets[0]! && a.targets[0].player === 'p2',
+      )!;
+    g.do(shove);
+    settle(g, (legal) => legal.find((a) => a.type === 'chooseTargets' && a.targets.length === 1));
+    // The copy and the original each deal 1.
+    expect(g.life('p2')).toBe(18);
+    expect(handSize(g, 'p2')).toBe(1); // Alania's draw for the opponent
+  });
+
+  it('Kitsa copies your instant once its power is 3', () => {
+    const g = game({
+      p1: { hand: ['playful-shove'], battlefield: [...n('mountain', 4), 'kitsa-otterball-elite'] },
+    });
+    const kitsa = g.id('p1', 'kitsa-otterball-elite');
+    g.state.objects[kitsa]!.plusOneCounters = 2;
+    const shove = g
+      .legal()
+      .find(
+        (a) => a.type === 'castSpell' && 'player' in a.targets[0]! && a.targets[0].player === 'p2',
+      )!;
+    g.do(shove);
+    const copy = g
+      .legal()
+      .find((a) => a.type === 'activateAbility' && a.source === kitsa && a.targets.length === 1)!;
+    g.do(copy);
+    settle(g);
+    expect(g.life('p2')).toBe(18);
+  });
+});

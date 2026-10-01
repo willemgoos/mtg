@@ -39,6 +39,7 @@ interface RawCard {
   type_line: string;
   oracle_text?: string;
   power?: string;
+  loyalty?: string;
   toughness?: string;
   colors?: string[];
   keywords: string[];
@@ -121,6 +122,7 @@ async function main(): Promise<void> {
       typeLine: c.type_line,
       oracleText: c.oracle_text ?? '',
       ...(c.power !== undefined ? { power: c.power, toughness: c.toughness! } : {}),
+      ...(c.loyalty !== undefined ? { loyalty: c.loyalty } : {}),
       colors: c.colors ?? [],
       keywords: c.keywords,
       image: c.image_uris

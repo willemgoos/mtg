@@ -27,6 +27,9 @@ export function runSBAs(ctx: Ctx): void {
       )
         dying.push(c.id);
     }
+    for (const id of ctx.s.battlefield)
+      if (def(ctx, id).types.includes('Planeswalker') && (obj(ctx, id).counters?.loyalty ?? 0) <= 0)
+        dying.push(id);
     for (const id of dying) moveObject(ctx, id, 'graveyard');
     if (dying.length) changed = true;
     // Equipment attached to something that is no longer a creature on the battlefield

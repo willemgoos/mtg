@@ -76,6 +76,14 @@ export function dealDamage(
   } else {
     const o = onBattlefield(ctx, to.object);
     if (!o) return;
+    // Damage to a planeswalker removes loyalty counters.
+    if (def(ctx, o.id).types.includes('Planeswalker')) {
+      const c = (o.counters ??= {});
+      c.loyalty = (c.loyalty ?? 0) - amount;
+      emit(ctx, { type: 'damageDealt', source: src.id, to, amount, combat });
+      if (has(src, 'lifelink')) gainLife(ctx, src.controller, amount);
+      return;
+    }
     o.damage += amount;
     if (has(src, 'deathtouch')) o.damagedByDeathtouch = true;
     emit(ctx, { type: 'damageDealt', source: src.id, to, amount, combat });
@@ -1092,6 +1100,38 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
     case 'millThenTake':
     case 'lookTakeRestGraveyard':
       return; // handled by runEffects
+    case 'copySpell': {
+      // The triggering spell, or a target spell.
+      const ref =
+        e.what === 'subject'
+          ? es.subject
+          : typeof e.what === 'object' && 'target' in e.what
+            ? (() => {
+                const t = es.targets[e.what.target];
+                return t && 'object' in t ? t.object : undefined;
+              })()
+            : undefined;
+      const item = ref ? findSpell(ctx, ref.id) : undefined;
+      if (!item) return;
+      const n = e.count !== undefined ? resolveAmount(ctx, es, e.count) : 1;
+      for (let i = 0; i < n; i++) {
+        // A copy is a token-like object on the stack: it ceases to exist as it leaves.
+        const copy = createObject(ctx, obj(ctx, item.id).defId, es.controller, 'stack', true);
+        copy.controller = es.controller;
+        ctx.s.stack.push({
+          kind: 'spell',
+          id: copy.id,
+          controller: es.controller,
+          targets: item.targets,
+          ...(item.mode !== undefined ? { mode: item.mode } : {}),
+          ...(item.kicked ? { kicked: true } : {}),
+          ...(item.x ? { x: item.x } : {}),
+          ...(item.paws ? { paws: item.paws } : {}),
+          copy: true,
+        });
+      }
+      return;
+    }
     case 'eachPlayerSacrifices':
     case 'repeat':
     case 'sacrificeSeveral':

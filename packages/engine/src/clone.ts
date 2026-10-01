@@ -49,6 +49,9 @@ export function cloneState(s: GameState): GameState {
       ...(s.turn.foodsSacrificed ? { foodsSacrificed: { ...s.turn.foodsSacrificed } } : {}),
       ...(s.turn.hexproofPlayers ? { hexproofPlayers: s.turn.hexproofPlayers.slice() } : {}),
       ...(s.turn.osteomancer ? { osteomancer: s.turn.osteomancer.slice() } : {}),
+      ...(s.turn.castDefs
+        ? { castDefs: { p1: s.turn.castDefs.p1.slice(), p2: s.turn.castDefs.p2.slice() } }
+        : {}),
       ...(s.turn.instantsSorceriesCast
         ? { instantsSorceriesCast: { ...s.turn.instantsSorceriesCast } }
         : {}),

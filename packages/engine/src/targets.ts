@@ -37,7 +37,8 @@ function playerOk(ctx: Ctx, spec: TargetSpec, p: PlayerId, src: TargetingSource)
 function permanentOk(ctx: Ctx, spec: TargetSpec, id: ObjectId, src: TargetingSource): boolean {
   const o = ctx.s.objects[id];
   if (!o || o.zone !== 'battlefield') return false;
-  if (spec.what !== 'permanent' && !isCreature(ctx, id)) return false;
+  const walker = spec.what === 'any' && def(ctx, id).types.includes('Planeswalker');
+  if (spec.what !== 'permanent' && !isCreature(ctx, id) && !walker) return false;
   if (spec.controller === 'you' && o.controller !== src.controller) return false;
   if (spec.controller === 'opponent' && o.controller === src.controller) return false;
   if (o.controller !== src.controller) {

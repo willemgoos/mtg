@@ -9,6 +9,7 @@ import {
   gift,
   mana,
   onEnter,
+  prowess,
   t0,
   when,
 } from './helpers.ts';
@@ -322,6 +323,85 @@ export const MYTHICS: Record<string, Behavior> = {
         },
       ),
       { kind: 'static', effect: { kind: 'attached', power: 0, toughness: 0, control: true } },
+    ],
+  },
+
+  // ------------------------------------------------------------------ Izzet spell-slingers
+  'Ral, Crackling Wit': {
+    abilities: [
+      when({ on: 'castSpell', filter: 'noncreature' }, [], {
+        kind: 'namedCounters',
+        name: 'loyalty',
+        amount: 1,
+      }),
+      {
+        kind: 'activated',
+        cost: { loyalty: 1 },
+        targets: [],
+        effects: [{ kind: 'createToken', token: 'otter-token', count: 1 }],
+        label: '+1: Otter',
+      },
+      {
+        kind: 'activated',
+        cost: { loyalty: -3 },
+        targets: [],
+        effects: [draw(3), { kind: 'discard', count: 2 }],
+        label: '−3: draw three, discard two',
+      },
+      {
+        kind: 'activated',
+        cost: { loyalty: -10 },
+        targets: [],
+        effects: [
+          draw(3),
+          {
+            kind: 'emblem',
+            until: 'permanent',
+            // "Instant and sorcery spells you cast have storm."
+            ability: {
+              kind: 'triggered',
+              trigger: { on: 'castSpell', filter: 'instantOrSorcery' },
+              targets: [],
+              effects: [{ kind: 'copySpell', what: 'subject', count: { event: 'amount' } }],
+            },
+          },
+        ],
+        label: '−10: draw three, storm emblem',
+      },
+    ],
+  },
+  'Kitsa, Otterball Elite': {
+    abilities: [
+      prowess,
+      {
+        kind: 'activated',
+        cost: { tapSelf: true },
+        targets: [],
+        effects: [draw(1), { kind: 'discard', count: 1 }],
+        label: '{T}: draw, then discard',
+      },
+      {
+        kind: 'activated',
+        cost: { mana: mana('{2}'), tapSelf: true },
+        condition: { kind: 'sourcePowerAtLeast', min: 3 },
+        targets: [{ what: 'spell', controller: 'you', filter: { types: ['Instant', 'Sorcery'] } }],
+        effects: [{ kind: 'copySpell', what: t0 }],
+        label: '{2}, {T}: copy your instant or sorcery',
+      },
+    ],
+  },
+  'Alania, Divergent Storm': {
+    abilities: [
+      {
+        kind: 'triggered',
+        trigger: { on: 'castSpell', filter: 'firstOfItsKind' },
+        optional: true,
+        targets: [{ what: 'player', controller: 'opponent' }],
+        effects: [
+          { kind: 'draw', who: t0, amount: 1 },
+          { kind: 'copySpell', what: 'subject' },
+        ],
+      },
     ],
   },
 };

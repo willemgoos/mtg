@@ -16,6 +16,7 @@ import {
   countersYouControl,
   hasStatic,
   wardCost,
+  LOYALTY_KEY,
   tokensToTap,
   wardLife,
   wardPayable,
@@ -236,7 +237,7 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
         // Rottenmouth Viper: sacrifice 0 to 5 nonland permanents (the least useful first).
         for (const sacrificeMany of sacrificePrefixes(ctx, player, card, d))
           for (const x of xs) {
-            const base = castCost(ctx, player, card, {
+            const choice = {
               sacrificeMany,
               via,
               mode: v.mode,
@@ -245,7 +246,8 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
               sacrifice: v.sacrifice ? 'x' : undefined,
               forage: v.forage ? 'graveyard' : undefined,
               x,
-            });
+            };
+            const base = castCost(ctx, player, card, choice);
             if (!canPayFrom(base, pool) && !d.costReductionIfTarget) continue;
             const extra = {
               ...(v.mode !== undefined ? { mode: v.mode } : {}),
@@ -262,13 +264,7 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
                 const ward = wardCost(ctx, player, targets);
                 // Dire Downdraft costs less with some targets.
                 const cost = d.costReductionIfTarget
-                  ? castCost(
-                      ctx,
-                      player,
-                      card,
-                      { mode: v.mode, paws: v.paws, kicked: v.kicked, x },
-                      targets,
-                    )
+                  ? castCost(ctx, player, card, choice, targets)
                   : base;
                 if (
                   (ward.generic || d.costReductionIfTarget) &&
@@ -278,7 +274,17 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
                 if (wardLife(ctx, player, targets) > s.players[player].life) continue;
                 if (!wardPayable(ctx, player, targets, zone === 'hand' ? 1 : 0)) continue;
                 for (const forage of forages)
-                  for (const discard of discards)
+                  for (const discard of discards) {
+                    // Paying without what this cast sacrifices.
+                    const spent = [
+                      sacrifice,
+                      ...(sacrificeMany ?? []),
+                      forage === 'graveyard' ? undefined : forage,
+                    ];
+                    if (spent.some((id) => id && pool.some((p) => p.id === id))) {
+                      const rest = pool.filter((p) => !spent.includes(p.id));
+                      if (!canPayFrom(addCosts(cost, ward), rest)) continue;
+                    }
                     out.push({
                       type: 'castSpell',
                       player,
@@ -289,6 +295,7 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
                       ...(forage ? { forage } : {}),
                       ...(discard ? { discard } : {}),
                     });
+                  }
               }
             }
           }
@@ -323,6 +330,12 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
       if (a.cost.tapSelf && !canTapForAbility(ctx, source)) return;
       if (a.condition && !checkCondition(ctx, a.condition, player, obj(ctx, source))) return;
       if ((a.cost.life ?? 0) > ps.life) return;
+      // Loyalty abilities: sorcery speed, once per turn, enough loyalty to pay.
+      if (a.cost.loyalty !== undefined) {
+        const o = obj(ctx, source);
+        if (!sorcery || o.onceTurns?.[LOYALTY_KEY] === s.turn.number) return;
+        if ((o.counters?.loyalty ?? 0) + a.cost.loyalty < 0) return;
+      }
       const own = a.cost.tapSelf ? sources.filter((x) => x.id !== source) : sources;
       // Heirloom Epic: creatures can pay for generic mana.
       const usable = a.cost.convoke
@@ -353,7 +366,12 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
           if (ward.generic && !canPayFrom(addCosts(a.cost.mana ?? NO_COST, ward), usable)) continue;
           if (!wardPayable(ctx, player, targets)) continue;
           for (const forage of forages)
-            for (const discard of discards)
+            for (const discard of discards) {
+              const spent = [sacrifice, forage === 'graveyard' ? undefined : forage];
+              if (a.cost.mana && spent.some((id) => id && usable.some((p) => p.id === id))) {
+                const rest = usable.filter((p) => !spent.includes(p.id));
+                if (!canPayFrom(addCosts(a.cost.mana, ward), rest)) continue;
+              }
               out.push({
                 type: 'activateAbility',
                 player,
@@ -364,6 +382,7 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
                 ...(forage ? { forage } : {}),
                 ...(discard ? { discard } : {}),
               });
+            }
         }
       }
     });
@@ -395,11 +414,20 @@ export function getLegalActions(ctx: Ctx, player: PlayerId): Action[] {
       return priorityActions(ctx, player);
     case 'declareAttackers': {
       const out: Action[] = [{ type: 'confirmAttackers', player }];
-      const declared = new Set(d.declared.map((x) => x.id));
+      const defender = defenderOf(ctx);
+      // Planeswalkers the defending player controls can be attacked too.
+      const walkers = s.battlefield.filter(
+        (id) => obj(ctx, id).controller === defender && def(ctx, id).types.includes('Planeswalker'),
+      );
       for (const id of s.battlefield) {
-        if (declared.has(id)) out.push({ type: 'removeAttacker', player, attacker: id });
+        const at = d.declared.find((x) => x.id === id);
+        if (at) out.push({ type: 'removeAttacker', player, attacker: id });
         else if (isCreature(ctx, id) && canAttack(ctx, id))
-          out.push({ type: 'addAttacker', player, attacker: id, defender: defenderOf(ctx) });
+          out.push({ type: 'addAttacker', player, attacker: id, defender });
+        if (at || (isCreature(ctx, id) && canAttack(ctx, id)))
+          for (const pw of walkers)
+            if (at?.planeswalker !== pw)
+              out.push({ type: 'addAttacker', player, attacker: id, defender, planeswalker: pw });
       }
       return out;
     }

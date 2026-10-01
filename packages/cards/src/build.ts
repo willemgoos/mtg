@@ -176,6 +176,7 @@ export function buildCard(sc: ScryfallCard, behavior: Behavior = {}): CardDefini
       ? { power: Number(sc.power) || 0, toughness: Number(sc.toughness) || 0 }
       : {}),
     keywords: mapKeywords(sc.keywords, sc.oracleText),
+    ...(sc.loyalty !== undefined ? { loyalty: Number(sc.loyalty) } : {}),
     abilities,
     ...(/can't be countered/.test(sc.oracleText) ? { uncounterable: true } : {}),
     ...(wardCostOf(sc.oracleText) ? { wardCost: wardCostOf(sc.oracleText)! } : {}),

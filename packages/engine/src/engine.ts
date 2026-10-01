@@ -242,7 +242,13 @@ function apply(ctx: Ctx, action: Action): void {
     }
     case 'addAttacker':
       if (d.kind !== 'declareAttackers') throw new IllegalActionError(action);
-      d.declared.push({ id: action.attacker, defender: action.defender });
+      // Re-declaring an attacker (at a planeswalker) replaces its declaration.
+      d.declared = d.declared.filter((x) => x.id !== action.attacker);
+      d.declared.push({
+        id: action.attacker,
+        defender: action.defender,
+        ...(action.planeswalker ? { planeswalker: action.planeswalker } : {}),
+      });
       return;
     case 'removeAttacker':
       if (d.kind !== 'declareAttackers') throw new IllegalActionError(action);

@@ -10,6 +10,8 @@ export interface ScryfallCard {
   typeLine: string;
   oracleText: string;
   power?: string;
+  /** A planeswalker's starting loyalty. */
+  loyalty?: string;
   toughness?: string;
   colors: string[];
   keywords: string[];

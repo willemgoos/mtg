@@ -29,6 +29,8 @@ export const LAND_ON_BATTLEFIELD = 0.4;
 export const SPENDABLE_TOKEN = 0.8;
 /** Other noncreature permanents (Equipment, enchantments); an attached Equipment also shows in its creature's stats. */
 export const OTHER_PERMANENT = 1.5;
+/** Each loyalty counter on a planeswalker. */
+export const LOYALTY = 0.4;
 
 /** Life is worth more the lower it gets. */
 export function lifeValue(life: number): number {
@@ -68,6 +70,9 @@ export function evaluate(s: GameState, db: CardDb, me: PlayerId): number {
       const sign = o.controller === me ? 1 : -1;
       if (def?.types.includes('Creature')) v += sign * creatureValue(s, db, id);
       else if (def?.types.includes('Land')) v += sign * LAND_ON_BATTLEFIELD;
+      // A planeswalker is worth more the more loyalty it has.
+      else if (def?.types.includes('Planeswalker'))
+        v += sign * (OTHER_PERMANENT + LOYALTY * (o.counters?.loyalty ?? 0));
       else v += sign * (o.isToken ? SPENDABLE_TOKEN : OTHER_PERMANENT);
     }
   } finally {

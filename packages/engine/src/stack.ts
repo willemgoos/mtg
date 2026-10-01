@@ -256,7 +256,20 @@ export function castSpell(
     castCost(ctx, player, card, choice, targets),
     wardCost(ctx, player, targets),
   );
-  const payment = planPayment(ctx, player, cost, payWith, undefined, spellTags(d));
+  const payment = planPayment(
+    ctx,
+    player,
+    cost,
+    payWith,
+    undefined,
+    spellTags(d),
+    [],
+    [
+      choice.sacrifice,
+      ...(choice.sacrificeMany ?? []),
+      choice.forage !== 'graveyard' ? choice.forage : undefined,
+    ],
+  );
   moveObject(ctx, card, 'stack', { controller: player });
   if (choice.discard) moveObject(ctx, choice.discard, 'graveyard');
   for (const id of choice.sacrificeMany ?? []) sacrificePermanent(ctx, id);
@@ -280,6 +293,7 @@ export function castSpell(
     ...(choice.copyOf ? { copyOf: choice.copyOf } : {}),
   });
   payMana(ctx, payment);
+  ((ctx.s.turn.castDefs ??= { p1: [], p2: [] })[player] ??= []).push(o.defId);
   const cast = (ctx.s.turn.spellsCast ??= { p1: 0, p2: 0 });
   emit(ctx, { type: 'spellCast', id: card, player, nth: ++cast[player] });
   noteTargets(ctx, player, targets);
@@ -312,6 +326,9 @@ export function hasStatic(ctx: Ctx, player: PlayerId, kind: StaticDef['kind']): 
   );
 }
 
+/** The onceTurns key marking a planeswalker's loyalty ability this turn. */
+export const LOYALTY_KEY = -500;
+
 export function activatedAbility(ctx: Ctx, source: ObjectId, index: number) {
   // Its current abilities (a Sugar Coat Food has only the Food ability).
   const a = def(ctx, source).abilities[index];
@@ -342,6 +359,7 @@ export function activateAbility(
     exclude,
     undefined,
     a.cost.convoke ? creatureHelpers(ctx, player, manaSources(ctx, player, exclude), exclude) : [],
+    [sacrifice, forage !== 'graveyard' ? forage : undefined],
   );
   if (discard) moveObject(ctx, discard, 'graveyard');
   if (a.cost.tapTokens)
@@ -370,6 +388,12 @@ export function activateAbility(
   };
   if (a.cost.tapSelf) tap(ctx, source);
   if (a.oncePerTurn) src.onceTurns = { ...src.onceTurns, [-1 - index]: ctx.s.turn.number };
+  // Loyalty abilities: one per planeswalker per turn; the cost changes its loyalty.
+  if (a.cost.loyalty !== undefined) {
+    src.onceTurns = { ...src.onceTurns, [LOYALTY_KEY]: ctx.s.turn.number };
+    if (a.cost.loyalty > 0) addCounters(ctx, source, a.cost.loyalty, 'loyalty');
+    else (src.counters ??= {}).loyalty = (src.counters?.loyalty ?? 0) + a.cost.loyalty;
+  }
   payMana(ctx, payment);
   if (a.once) (src.usedAbilities ??= []).push(index);
   if (a.cost.sacrificeSelf) {
@@ -508,6 +532,7 @@ export function resolveTop(ctx: Ctx): boolean {
       addCounters(ctx, o.id, d.entersWithCounters);
     if (host) attachAura(ctx, o.id, host);
     if (item.finality) (o.counters ??= {}).finality = 1;
+    if (d.loyalty !== undefined) (o.counters ??= {}).loyalty = d.loyalty;
     if (item.x) o.xPaid = item.x;
     if (item.copyOf && d.entersAsCopy) enterAsCopy(ctx, o.id, item.copyOf, d.entersAsCopy);
     addCounters(ctx, o.id, bonusCounters(ctx, item.controller, o.id, d.subtypes));

@@ -199,11 +199,14 @@ export function planAttacks(
   me: PlayerId,
   declared: ObjectId[],
 ): ObjectId[] {
+  // Bots attack the player (planeswalker attacks list each attacker again).
   const available = [
-    ...declared,
-    ...engine
-      .getLegalActions(view, me)
-      .flatMap((a) => (a.type === 'addAttacker' ? [a.attacker] : [])),
+    ...new Set([
+      ...declared,
+      ...engine
+        .getLegalActions(view, me)
+        .flatMap((a) => (a.type === 'addAttacker' && !a.planeswalker ? [a.attacker] : [])),
+    ]),
   ];
   // Attacking with everything wins the game: no need to plan.
   const allIn = available.length ? scoreAttack(engine, view, me, available) : -Infinity;

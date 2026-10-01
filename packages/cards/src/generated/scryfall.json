@@ -15302,5 +15302,78 @@
    "large": "https://cards.scryfall.io/large/front/0/8/085be5d1-fd85-46d1-ad39-a8aa75a06a96.jpg?1783910850",
    "artCrop": "https://cards.scryfall.io/art_crop/front/0/8/085be5d1-fd85-46d1-ad39-a8aa75a06a96.jpg?1783910850"
   }
+ },
+ {
+  "name": "Ral, Crackling Wit",
+  "scryfallId": "acfde780-899a-4c5b-a39b-f4a3ff129103",
+  "oracleId": "3c970f43-17da-4187-a084-efd53b579067",
+  "set": "blb",
+  "collectorNumber": "230",
+  "rarity": "mythic",
+  "manaCost": "{2}{U}{R}",
+  "typeLine": "Legendary Planeswalker — Ral",
+  "oracleText": "Whenever you cast a noncreature spell, put a loyalty counter on Ral.\n+1: Create a 1/1 blue and red Otter creature token with prowess.\n−3: Draw three cards, then discard two cards.\n−10: Draw three cards. You get an emblem with \"Instant and sorcery spells you cast have storm.\" (Whenever you cast an instant or sorcery spell, copy it for each spell cast before it this turn.)",
+  "loyalty": "4",
+  "colors": [
+   "R",
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/c/acfde780-899a-4c5b-a39b-f4a3ff129103.jpg?1783910791",
+   "normal": "https://cards.scryfall.io/normal/front/a/c/acfde780-899a-4c5b-a39b-f4a3ff129103.jpg?1783910791",
+   "large": "https://cards.scryfall.io/large/front/a/c/acfde780-899a-4c5b-a39b-f4a3ff129103.jpg?1783910791",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/c/acfde780-899a-4c5b-a39b-f4a3ff129103.jpg?1783910791"
+  }
+ },
+ {
+  "name": "Kitsa, Otterball Elite",
+  "scryfallId": "c8ff751a-ec64-41d5-b22c-2a483ad9a9b2",
+  "oracleId": "16414460-11ce-481d-ab54-6f0e0ea7d83d",
+  "set": "blb",
+  "collectorNumber": "54",
+  "rarity": "mythic",
+  "manaCost": "{1}{U}",
+  "typeLine": "Legendary Creature — Otter Wizard",
+  "oracleText": "Vigilance\nProwess (Whenever you cast a noncreature spell, this creature gets +1/+1 until end of turn.)\n{T}: Draw a card, then discard a card.\n{2}, {T}: Copy target instant or sorcery spell you control. You may choose new targets for the copy. Activate only if Kitsa's power is 3 or greater.",
+  "power": "1",
+  "toughness": "3",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Prowess",
+   "Vigilance"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/8/c8ff751a-ec64-41d5-b22c-2a483ad9a9b2.jpg?1783910847",
+   "normal": "https://cards.scryfall.io/normal/front/c/8/c8ff751a-ec64-41d5-b22c-2a483ad9a9b2.jpg?1783910847",
+   "large": "https://cards.scryfall.io/large/front/c/8/c8ff751a-ec64-41d5-b22c-2a483ad9a9b2.jpg?1783910847",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/8/c8ff751a-ec64-41d5-b22c-2a483ad9a9b2.jpg?1783910847"
+  }
+ },
+ {
+  "name": "Alania, Divergent Storm",
+  "scryfallId": "436d6a84-4cea-4ca7-94aa-9d08280652af",
+  "oracleId": "63d50d5e-56de-44c4-b906-b2a21a56e3f3",
+  "set": "blb",
+  "collectorNumber": "204",
+  "rarity": "rare",
+  "manaCost": "{3}{U}{R}",
+  "typeLine": "Legendary Creature — Otter Wizard",
+  "oracleText": "Whenever you cast a spell, if it's the first instant spell, the first sorcery spell, or the first Otter spell other than Alania you've cast this turn, you may have target opponent draw a card. If you do, copy that spell. You may choose new targets for the copy.",
+  "power": "3",
+  "toughness": "5",
+  "colors": [
+   "R",
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/3/436d6a84-4cea-4ca7-94aa-9d08280652af.jpg?1783910801",
+   "normal": "https://cards.scryfall.io/normal/front/4/3/436d6a84-4cea-4ca7-94aa-9d08280652af.jpg?1783910801",
+   "large": "https://cards.scryfall.io/large/front/4/3/436d6a84-4cea-4ca7-94aa-9d08280652af.jpg?1783910801",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/3/436d6a84-4cea-4ca7-94aa-9d08280652af.jpg?1783910801"
+  }
  }
 ]
