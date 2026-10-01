@@ -1,4 +1,13 @@
-import { deckById, type Decklist, findDeck, PLAYABLE_DECKS, SCRYFALL, slug } from '@mtg/cards';
+import {
+  deckById,
+  type Decklist,
+  findDeck,
+  pickOpponent,
+  registerDeck,
+  SCRYFALL,
+  scryfallById,
+  slug,
+} from '@mtg/cards';
 import type { CardDefId, Color, NewGameOptions } from '@mtg/engine';
 import type { BotKind, LevelBot } from './bot.worker.ts';
 import { manaValue } from './deckView.ts';
@@ -6,10 +15,12 @@ import { type DeckRecord, rng, type RunSummary } from './gauntlet.ts';
 
 /*
  * Expedition: a roguelike run. You set out with a deck and two boosters, then
- * travel a map of seven floors, choosing one node per floor: duels (each with
+ * travel a map of ten floors, choosing one node per floor: duels (each with
  * the pack it pays out), optional elite fights, camps and shrines, and a final
  * battle at the end. From every pack you keep only a few cards, and boons
- * collected along the way bend the rules in your favour.
+ * collected along the way bend the rules in your favour. Clear the final
+ * battle and you can set out on a new map with the deck and collection you
+ * built; lives and boons start over, and the fights are no tougher.
  *
  * The deck follows Limited rules: at least 40 cards, any number of copies of
  * what you own, and basic lands for free. The map and every pack are rolled
@@ -88,11 +99,14 @@ export interface MapNode {
 /** What each floor offers (shuffled into lanes per run). The last floor is the final battle. */
 const FLOOR_KINDS: NodeKind[][] = [
   ['duel', 'duel', 'duel'],
-  ['duel', 'mystery', 'shrine'],
+  ['duel', 'mystery', 'treasure'],
+  ['duel', 'elite', 'shrine'],
+  ['duel', 'camp', 'mystery'],
+  ['duel', 'merchant', 'elite'],
+  ['duel', 'mystery', 'treasure'],
   ['duel', 'elite', 'camp'],
   ['duel', 'merchant', 'mystery'],
-  ['duel', 'elite', 'treasure'],
-  ['duel', 'camp', 'mystery'],
+  ['duel', 'camp', 'shrine'],
   ['boss'],
 ];
 export const FLOORS = FLOOR_KINDS.length;
@@ -101,17 +115,20 @@ export const FLOORS = FLOOR_KINDS.length;
 export const MAX_DIFFICULTY = 7;
 
 /**
- * How hard a fight is, from 1 to 7. Duels climb one step per floor, elite
- * fights are two steps above their floor, and the final battle is the top.
+ * How hard a fight is, from 1 to 7. Duels climb from 1 on the first floor to
+ * 6 on the floor before the final battle, elite fights are two steps above
+ * their floor, and the final battle is the top. `floors` is the map's length
+ * (maps saved before the map grew are shorter).
  */
-export function difficultyOf(floor: number, node: MapNode): number {
+export function difficultyOf(floor: number, node: MapNode, floors = FLOORS): number {
   if (node.kind === 'boss') return MAX_DIFFICULTY;
-  return Math.min(MAX_DIFFICULTY, floor + 1 + (node.kind === 'elite' ? 2 : 0));
+  const duel = 1 + Math.floor((floor * 5) / Math.max(1, floors - 2));
+  return Math.min(MAX_DIFFICULTY, duel + (node.kind === 'elite' ? 2 : 0));
 }
 
 /** The bot for a difficulty: the easy bot's levels, then the heuristic bot. */
-export function botFor(floor: number, node: MapNode): BotKind {
-  const d = difficultyOf(floor, node);
+export function botFor(floor: number, node: MapNode, floors = FLOORS): BotKind {
+  const d = difficultyOf(floor, node, floors);
   return d >= MAX_DIFFICULTY ? 'heuristic' : (`level${d}` as LevelBot);
 }
 
@@ -123,18 +140,25 @@ export function makeMap(deck: string, seed: number): MapNode[][] {
   const next = rng((seed ^ 0x5eed_0f) >>> 0);
   const pick = <T>(xs: readonly T[]) => xs[Math.floor(next() * xs.length)]!;
   const own = deckById(deck).colors;
-  const foes = PLAYABLE_DECKS.filter((d) => d.series === 'starter' && d.id !== deck).map(
-    (d) => d.id,
-  );
+  // Opponents are mostly Jump In pairs, and none comes back on the same map while others are left.
+  const met: string[] = [];
+  const foe = () => {
+    const id = pickOpponent((n) => Math.floor(next() * n), deck, met);
+    met.push(id);
+    return id;
+  };
   const reward = (): Pack => {
     const r = next();
     if (r < 0.4) return { kind: 'color', color: pick(own.length ? own : COLORS) };
     if (r < 0.7) return { kind: 'color', color: pick(COLORS.filter((c) => !own.includes(c))) };
     return { kind: 'booster' };
   };
-  // Mystery events don't repeat within a run.
-  const events = [...EVENT_IDS];
-  const event = () => events.splice(Math.floor(next() * events.length), 1)[0] ?? 'spring';
+  // Mystery events don't repeat until every one has come up.
+  const events: EventId[] = [];
+  const event = () => {
+    if (!events.length) events.push(...EVENT_IDS);
+    return events.splice(Math.floor(next() * events.length), 1)[0]!;
+  };
   return FLOOR_KINDS.map((kinds) => {
     const lanes = [...kinds];
     for (let i = lanes.length - 1; i > 0; i--) {
@@ -142,8 +166,8 @@ export function makeMap(deck: string, seed: number): MapNode[][] {
       [lanes[i], lanes[j]] = [lanes[j]!, lanes[i]!];
     }
     return lanes.map((kind): MapNode => {
-      if (kind === 'duel') return { kind, opponent: pick(foes), reward: reward() };
-      if (kind === 'elite' || kind === 'boss') return { kind, opponent: pick(foes) };
+      if (kind === 'duel') return { kind, opponent: foe(), reward: reward() };
+      if (kind === 'elite' || kind === 'boss') return { kind, opponent: foe() };
       if (kind === 'mystery') return { kind, event: event() };
       return { kind };
     });
@@ -239,6 +263,10 @@ export interface ExpeditionRun {
   /** A choice waiting at the current node. */
   pending: Pending | null;
   build: Build;
+  /** Expeditions cleared with this deck before the current map (absent on the first). */
+  loop?: number;
+  /** The starting deck, when it isn't one of ours (a Season deck). */
+  custom?: Decklist;
 }
 
 export interface ExpeditionState {
@@ -249,8 +277,11 @@ export interface ExpeditionState {
 export const maxLives = (r: ExpeditionRun) => LIVES + (r.boons.includes('stout') ? 1 : 0);
 export const keepCount = (r: ExpeditionRun) => KEEP + (r.boons.includes('collector') ? 1 : 0);
 
+/** Floors on the run's map (shorter on maps saved before it grew). */
+export const floorsOf = (r: ExpeditionRun) => r.map.length;
+
 export function statusOf(r: ExpeditionRun): 'playing' | 'cleared' | 'out' {
-  if (r.outcomes[FLOORS - 1] === 'win') return 'cleared';
+  if (r.outcomes[floorsOf(r) - 1] === 'win') return 'cleared';
   if (r.livesLost >= maxLives(r)) return 'out';
   return 'playing';
 }
@@ -268,7 +299,7 @@ export function currentNode(
 /** Lanes you can travel to on the next floor. */
 export function reachable(r: ExpeditionRun): number[] {
   const floor = r.path.length;
-  if (currentNode(r) || statusOf(r) !== 'playing' || floor >= FLOORS) return [];
+  if (currentNode(r) || statusOf(r) !== 'playing' || floor >= floorsOf(r)) return [];
   const nodes = r.map[floor]!;
   if (floor === 0 || nodes.length === 1) return nodes.map((_, i) => i);
   const from = r.path[floor - 1]!;
@@ -285,7 +316,10 @@ export function newBuild(deck: Decklist): Build {
   };
 }
 
+/** Sets out with a deck. The run keeps a copy of a Season deck, which can change or go. */
 export function startExpedition(s: ExpeditionState, deck: string, seed: number): ExpeditionState {
+  const list = deckById(deck);
+  const custom = list.series === 'season' ? list : undefined;
   const rec = s.records[deck] ?? { runs: 0, clears: 0, best: 0 };
   return {
     records: { ...s.records, [deck]: { ...rec, runs: rec.runs + 1 } },
@@ -299,7 +333,33 @@ export function startExpedition(s: ExpeditionState, deck: string, seed: number):
       match: null,
       boons: [],
       pending: null,
-      build: newBuild(deckById(deck)),
+      build: newBuild(list),
+      ...(custom && { custom }),
+    },
+  };
+}
+
+/**
+ * After clearing an expedition: a new map with the same deck and collection.
+ * Lives and boons start over, and the fights climb from the bottom again.
+ */
+export function continueExpedition(s: ExpeditionState, seed: number): ExpeditionState {
+  const r = s.run;
+  if (!r || statusOf(r) !== 'cleared') return s;
+  return {
+    ...s,
+    run: {
+      ...r,
+      seed,
+      map: makeMap(r.deck, seed),
+      path: [],
+      outcomes: [],
+      livesLost: 0,
+      match: null,
+      boons: [],
+      pending: null,
+      build: { ...r.build, fresh: [] },
+      loop: (r.loop ?? 0) + 1,
     },
   };
 }
@@ -526,8 +586,8 @@ export function summarize(r: ExpeditionRun): RunSummary {
     deck: r.deck,
     status: statusOf(r),
     unit: 'Floor',
-    step: Math.min(r.outcomes.length + 1, FLOORS),
-    steps: FLOORS,
+    step: Math.min(r.outcomes.length + 1, floorsOf(r)),
+    steps: floorsOf(r),
     done: wins,
     livesLeft: maxLives(r) - r.livesLost,
     lives: maxLives(r),
@@ -649,6 +709,40 @@ export function deckColors(b: Build): Color[] {
     for (const col of c.colors as Color[]) n[col] = (n[col] ?? 0) + k;
   }
   return COLORS.filter((c) => n[c]).sort((a, b) => n[b]! - n[a]!);
+}
+
+/**
+ * A Season deck as a decklist to set out with. Season decks count cards by
+ * id; any we don't know are left out. The deck box shows its best creature.
+ */
+export function seasonDecklist(
+  saveId: string,
+  deck: { id: string; name: string; cards: Counts },
+): Decklist {
+  const cards = Object.entries(deck.cards).flatMap(([id, n]): [string, number][] => {
+    const name = scryfallById.get(id)?.name;
+    return name && n > 0 ? [[name, n]] : [];
+  });
+  const spells = cards.map(([n]) => byName.get(n)!).filter((c) => !c.typeLine.includes('Land'));
+  const rank = (c: (typeof spells)[number]) =>
+    (c.typeLine.includes('Creature') ? 10 : 0) + (RARITY_SCORE[c.rarity] ?? 0) + mv(c.name) / 10;
+  const face = [...spells].sort((a, b) => rank(b) - rank(a))[0]?.name ?? cards[0]?.[0] ?? 'Plains';
+  const colors = deckColors({
+    main: Object.fromEntries(cards),
+    side: {},
+    opened: 0,
+    packs: [],
+    fresh: [],
+  });
+  return {
+    id: `season:${saveId}:${deck.id}`,
+    name: deck.name,
+    colors: colors.length ? colors.slice(0, 2) : ['W'],
+    face,
+    source: 'custom',
+    series: 'season',
+    cards,
+  };
 }
 
 /** The run's deck as a decklist, for the board and the deck view. */
@@ -829,6 +923,7 @@ export function loadExpedition(): ExpeditionState {
     const known = (name: string) => byName.has(name);
     const deck = (id: string) => !!findDeck(id);
     const r = g.run;
+    if (r?.custom) registerDeck(r.custom);
     const ok =
       r &&
       deck(r.deck) &&

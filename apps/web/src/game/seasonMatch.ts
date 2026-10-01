@@ -1,4 +1,4 @@
-import { cardDb, describeEvent } from '@mtg/cards';
+import { cardDb, describeEvent, pickOpponent } from '@mtg/cards';
 import { nextInt, redactEvents, redactFor, type Action } from '@mtg/engine';
 import type { SavedGame } from './saved.ts';
 import type { LogLine } from './useGame.ts';
@@ -8,20 +8,19 @@ import {
   replaySeasonMatch,
   requireSeason,
   resolveSeasonMatch,
-  SEASON_STARTERS,
   type SeasonSave,
 } from './season.ts';
 
-/** Persist both independent selections; the initial roster consists of starter decks. */
+/** Persist both independent selections; opponents are mostly Jump In pairs (see pickOpponent). */
 export function queueSeasonMatch(save: SeasonSave, now: number): SeasonSave {
   requireSeason(!save.match, 'Resume or abandon the current match first');
   const next = structuredClone(save);
-  const opponent = SEASON_STARTERS[nextInt(next.rng, SEASON_STARTERS.length)]!;
+  const opponent = pickOpponent((n) => nextInt(next.rng, n));
   const skill = nextInt(next.rng, 100);
   const bot = skill < 25 ? 'easy' : skill < 75 ? 'heuristic' : 'search';
   const seed = nextInt(next.rng, 0x80000000);
   const startingPlayer = nextInt(next.rng, 2) === 0 ? 'p1' : 'p2';
-  return beginSeasonMatch(next, opponent.id, bot, seed, startingPlayer, now);
+  return beginSeasonMatch(next, opponent, bot, seed, startingPlayer, now);
 }
 
 /** Called once per validated board action, before the UI advances. */

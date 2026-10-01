@@ -1,4 +1,12 @@
-import { ARENA_DECKS, cardDb, deckIds, isPlayable, SCRYFALL, slug } from '@mtg/cards';
+import {
+  ARENA_DECKS,
+  cardDb,
+  deckIds,
+  isPlayable,
+  OPPONENT_DECKS,
+  SCRYFALL,
+  slug,
+} from '@mtg/cards';
 import {
   createEngine,
   createRng,
@@ -28,6 +36,8 @@ export type MatchOutcome = 'win' | 'loss' | 'draw' | 'concede';
 /** Stable rules identities, independent of artwork/Scryfall printing IDs. */
 export const SEASON_CARDS = new Map(SCRYFALL.map((c) => [slug(c.name), c]));
 export const SEASON_STARTERS = ARENA_DECKS.filter(isPlayable);
+/** Decks a Season bot can play: mostly Jump In pairs, plus the starter and Color Challenge decks. */
+export const isSeasonOpponent = (id: string): boolean => OPPONENT_DECKS.some((d) => d.id === id);
 const engine = createEngine(cardDb);
 
 export interface SeasonDeck {
@@ -384,7 +394,8 @@ export function beginSeasonMatch(
   const own = save.decks.find((d) => d.id === save.selectedDeckId)!;
   requireSeason(own, 'Unknown selected deck');
   requireSeason(deckErrors(save, own).length === 0, deckErrors(save, own).join('; '));
-  const opponent = starter(opponentDeckId);
+  const opponent = OPPONENT_DECKS.find((d) => d.id === opponentDeckId);
+  requireSeason(opponent, 'Unknown opponent deck');
   const next = draft(save, now);
   natural(next.nextMatchId + 1);
   next.match = {

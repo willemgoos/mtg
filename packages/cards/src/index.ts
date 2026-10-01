@@ -78,13 +78,58 @@ function jumpInDeck(id: string): Decklist | undefined {
   };
 }
 
-/** A deck by id: one of DECKS, or a Jump In pair. */
+/** Decks that live outside this package (a Season deck taken on an expedition), by id. */
+const custom = new Map<string, Decklist>();
+
+/** Makes a deck from elsewhere findable by id, like the built-in ones. */
+export function registerDeck(list: Decklist): void {
+  custom.set(list.id, list);
+}
+
+/** A deck by id: one of DECKS, a Jump In pair, or a registered deck. */
 export function findDeck(id: string): Decklist | undefined {
-  return DECKS.find((x) => x.id === id) ?? jumpInDeck(id);
+  return DECKS.find((x) => x.id === id) ?? jumpInDeck(id) ?? custom.get(id);
 }
 
 export function deckById(id: string): Decklist {
   const d = findDeck(id);
   if (!d) throw new Error(`Unknown deck "${id}"`);
   return d;
+}
+
+/** Every pair of different Jump In packets we can play, one deck per pair. */
+export const JUMP_IN_DECKS: readonly Decklist[] = PACKETS.flatMap((a, i) =>
+  PACKETS.slice(i + 1).map((b) => jumpInDeck(jumpInId(a.id, b.id))!),
+).filter(isPlayable);
+
+/**
+ * Who bots play, in tenths: Jump In pairs most of the time, so opponents vary
+ * a lot, with the starter and Color Challenge decks mixed in.
+ */
+const OPPONENT_GROUPS: [tenths: number, decks: readonly Decklist[]][] = [
+  [7, JUMP_IN_DECKS],
+  [2, PLAYABLE_DECKS.filter((d) => d.series === 'starter')],
+  [1, PLAYABLE_DECKS.filter((d) => d.series === 'colorChallenge')],
+];
+
+/** Every deck a bot can play. */
+export const OPPONENT_DECKS: readonly Decklist[] = OPPONENT_GROUPS.flatMap(([, d]) => d);
+
+/**
+ * A bot's deck id, never the same as `you`. `int(n)` is the caller's random
+ * integer below n, so picks follow the caller's seed. Decks already `met`
+ * don't come back while any deck is left unmet: when the rolled group has run
+ * out, the pick comes from the rest of the pool.
+ */
+export function pickOpponent(
+  int: (n: number) => number,
+  you?: string,
+  met: readonly string[] = [],
+): string {
+  let roll = int(10);
+  const group = OPPONENT_GROUPS.find(([tenths]) => (roll -= tenths) < 0)![1];
+  const others = (ds: readonly Decklist[]) => ds.filter((d) => d.id !== you);
+  const unmet = (ds: readonly Decklist[]) => others(ds).filter((d) => !met.includes(d.id));
+  const from = [unmet(group), unmet(OPPONENT_DECKS), others(group)].find((ds) => ds.length)!;
+  return from[int(from.length)]!.id;
 }

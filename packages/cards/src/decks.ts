@@ -11,9 +11,10 @@ export interface Decklist {
   source: 'arena' | 'custom';
   /**
    * 'starter': two-colour Starter Deck Duel decks; 'colorChallenge': the
-   * mono-colour decks Sparky plays; 'jumpIn': two Jump In packets together.
+   * mono-colour decks Sparky plays; 'jumpIn': two Jump In packets together;
+   * 'season': a deck built in Season mode, taken on an expedition.
    */
-  series: 'starter' | 'colorChallenge' | 'jumpIn';
+  series: 'starter' | 'colorChallenge' | 'jumpIn' | 'season';
   cards: [name: string, count: number][];
 }
 

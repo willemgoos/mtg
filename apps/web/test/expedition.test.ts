@@ -1,10 +1,12 @@
-import { cardDb, PLAYABLE_DECKS, SCRYFALL, slug } from '@mtg/cards';
+import { cardDb, findDeck, PLAYABLE_DECKS, registerDeck, SCRYFALL, slug } from '@mtg/cards';
 import { describe, expect, it } from 'vitest';
 import {
   applySuggestion,
   camp,
   canChoose,
   chooseRare,
+  continueExpedition,
+  seasonDecklist,
   deckAdvice,
   type EventId,
   EVENTS,
@@ -109,14 +111,30 @@ describe('expedition packs', () => {
 });
 
 describe('expedition map', () => {
-  it('has seven floors of three lanes, then a final battle, fixed by the seed', () => {
+  it('has ten floors of three lanes, then a final battle, fixed by the seed', () => {
     const map = makeMap(deck, 9);
     expect(map).toHaveLength(FLOORS);
+    expect(FLOORS).toBe(10);
     expect(map.slice(0, -1).every((f) => f.length === 3)).toBe(true);
     expect(map.at(-1)).toEqual([expect.objectContaining({ kind: 'boss' })]);
     expect(map[0]!.every((n) => n.kind === 'duel' && n.reward && n.opponent)).toBe(true);
     expect(makeMap(deck, 9)).toEqual(map);
     for (const f of map) for (const n of f) if (n.opponent) expect(n.opponent).not.toBe(deck);
+  });
+
+  it('meets mostly Jump In pairs, all different, never your own deck', () => {
+    let jumpIns = 0;
+    let fights = 0;
+    for (let seed = 0; seed < 40; seed++) {
+      const foes = makeMap(deck, seed).flatMap((f) => f.flatMap((n) => n.opponent ?? []));
+      expect(new Set(foes).size).toBe(foes.length);
+      expect(foes).not.toContain(deck);
+      for (const id of foes) expect(findDeck(id)!.cards.length).toBeGreaterThan(0);
+      jumpIns += foes.filter((id) => findDeck(id)!.series === 'jumpIn').length;
+      fights += foes.length;
+    }
+    expect(jumpIns / fights).toBeGreaterThan(0.6);
+    expect(jumpIns / fights).toBeLessThan(0.8);
   });
 
   it('moves one floor at a time to neighbouring lanes', () => {
@@ -132,20 +150,22 @@ describe('expedition map', () => {
 });
 
 describe('expedition difficulty', () => {
-  it('climbs a step per floor, with elites two steps up and the final battle at the top', () => {
+  it('climbs from 1 to 6 over the floors, with elites two steps up and the final battle at the top', () => {
     const duel: MapNode = { kind: 'duel' };
-    expect([0, 1, 2, 3, 4, 5].map((f) => difficultyOf(f, duel))).toEqual([1, 2, 3, 4, 5, 6]);
-    expect([0, 1, 2, 3, 4, 5].map((f) => botFor(f, duel))).toEqual([
-      'level1',
-      'level2',
-      'level3',
-      'level4',
-      'level5',
-      'level6',
-    ]);
-    expect(botFor(2, { kind: 'elite' })).toBe('level5');
-    expect(botFor(4, { kind: 'elite' })).toBe('heuristic');
+    const floors = Array.from({ length: FLOORS - 1 }, (_, f) => f);
+    expect(floors.map((f) => difficultyOf(f, duel))).toEqual([1, 1, 2, 2, 3, 4, 4, 5, 6]);
+    expect(floors.map((f) => botFor(f, duel))).toEqual(
+      [1, 1, 2, 2, 3, 4, 4, 5, 6].map((d) => `level${d}`),
+    );
+    expect(botFor(2, { kind: 'elite' })).toBe('level4');
+    expect(botFor(7, { kind: 'elite' })).toBe('heuristic');
     expect(botFor(FLOORS - 1, { kind: 'boss' })).toBe('heuristic');
+  });
+
+  it('keeps the old curve on seven-floor maps saved before the map grew', () => {
+    const duel: MapNode = { kind: 'duel' };
+    expect([0, 1, 2, 3, 4, 5].map((f) => difficultyOf(f, duel, 7))).toEqual([1, 2, 3, 4, 5, 6]);
+    expect(botFor(4, { kind: 'elite' }, 7)).toBe('heuristic');
   });
 });
 
@@ -291,6 +311,43 @@ describe('expedition run', () => {
     s = fight(s, 'win');
     expect(statusOf(s.run!)).toBe('cleared');
     expect(s.records[deck]).toEqual({ runs: 1, clears: 1, best: FLOORS });
+  });
+
+  it('sets out again after a clear with the same deck and collection, but fresh lives and boons', () => {
+    let s = onMap(['duel', 'duel', 'duel']);
+    expect(continueExpedition(s, 11)).toBe(s);
+    for (let f = 0; f < FLOORS - 1; f++) s = openAll(fight(enterNode(s, 1), 'win'));
+    s = fight(fight(enterNode(s, 0), 'loss'), 'win');
+    s = { ...s, run: { ...s.run!, boons: ['hardy'] } };
+    const next = continueExpedition(s, 11);
+    const r = next.run!;
+    expect(r.map).toEqual(makeMap(deck, 11));
+    expect(r).toMatchObject({ path: [], outcomes: [], livesLost: 0, boons: [], loop: 1, seed: 11 });
+    expect(r.build.main).toEqual(s.run!.build.main);
+    expect(r.build.side).toEqual(s.run!.build.side);
+    expect(statusOf(r)).toBe('playing');
+    expect(next.records).toEqual(s.records);
+    // The fights start from the bottom again.
+    expect(botFor(0, r.map[0]![0]!, r.map.length)).toBe('level1');
+  });
+
+  it('sets out with a Season deck, keeping a copy of it', () => {
+    const starter = PLAYABLE_DECKS.find((d) => d.id === deck)!;
+    const cards = Object.fromEntries(starter.cards.map(([n, k]) => [slug(n), k]));
+    const list = seasonDecklist('save-1', { id: 'starter:1', name: 'My deck', cards });
+    expect(list).toMatchObject({
+      id: 'season:save-1:starter:1',
+      series: 'season',
+      name: 'My deck',
+    });
+    expect(list.cards).toEqual(starter.cards);
+    expect(list.colors).toEqual(expect.arrayContaining(starter.colors));
+    registerDeck(list);
+    const s = startExpedition(empty, list.id, 5);
+    expect(s.run!.custom).toEqual(list);
+    expect(s.run!.build.main).toEqual(Object.fromEntries(starter.cards));
+    for (const f of s.run!.map)
+      for (const n of f) if (n.opponent) expect(findDeck(n.opponent)!.series).not.toBe('season');
   });
 
   it('ends when the lives run out', () => {

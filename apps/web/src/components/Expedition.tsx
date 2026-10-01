@@ -21,7 +21,7 @@ import {
   enterNode,
   type ExpeditionRun,
   type ExpeditionState,
-  FLOORS,
+  floorsOf,
   keepCount,
   type MapNode,
   maxLives,
@@ -57,6 +57,7 @@ export function Expedition({
   onPlay,
   onAbandon,
   onAgain,
+  onContinue,
   onMenu,
 }: {
   state: ExpeditionState;
@@ -65,6 +66,8 @@ export function Expedition({
   onPlay: () => void;
   onAbandon: () => void;
   onAgain: () => void;
+  /** After a clear: a new map with the deck and collection you've built. */
+  onContinue: () => void;
   onMenu: () => void;
 }) {
   const run = state.run!;
@@ -144,6 +147,7 @@ export function Expedition({
       onDeck={() => setBuilding(true)}
       onAbandon={onAbandon}
       onAgain={onAgain}
+      onContinue={onContinue}
       onMenu={onMenu}
     />
   );
@@ -193,24 +197,28 @@ const ICONS: Record<NodeKind, React.ReactNode> = {
 const HEART = <path d="M8 14 2 8a3.5 3.5 0 0 1 6-4 3.5 3.5 0 0 1 6 4z" />;
 
 /** "Easy opponent (3/7) playing Cat Attack". */
-function foe(floor: number, node: MapNode, deck: string): string {
-  const d = difficultyOf(floor, node);
+function foe(floor: number, node: MapNode, floors: number, deck: string): string {
+  const d = difficultyOf(floor, node, floors);
   return `${difficultyName(d)} opponent (${d}/${MAX_DIFFICULTY}) playing ${deck}`;
 }
 
-function nodeInfo(floor: number, node: MapNode): { title: string; lines: string[] } {
+function nodeInfo(
+  floor: number,
+  node: MapNode,
+  floors: number,
+): { title: string; lines: string[] } {
   const title = KIND_NAMES[node.kind];
-  const opp = node.opponent ? deckById(node.opponent).name : '';
+  const opp = node.opponent ? foe(floor, node, floors, deckById(node.opponent).name) : '';
   switch (node.kind) {
     case 'duel':
       return {
         title,
-        lines: [`${foe(floor, node, opp)}`, `Win: ${packName(node.reward!)}`],
+        lines: [opp, `Win: ${packName(node.reward!)}`],
       };
     case 'elite':
       return {
         title,
-        lines: [`${foe(floor, node, opp)}`, 'Win: choose a rare, then a boon'],
+        lines: [opp, 'Win: choose a rare, then a boon'],
       };
     case 'camp':
       return { title, lines: ['Rest to win back a life, or open a booster'] };
@@ -225,13 +233,12 @@ function nodeInfo(floor: number, node: MapNode): { title: string; lines: string[
     case 'boss':
       return {
         title,
-        lines: [`${foe(floor, node, opp)}`, 'Win to clear the expedition'],
+        lines: [opp, 'Win to clear the expedition'],
       };
   }
 }
 
 const laneY = (lanes: number, lane: number) => (lanes === 1 ? 50 : ((lane + 0.5) / lanes) * 100);
-const floorX = (floor: number) => ((floor + 0.5) / FLOORS) * 100;
 
 function ExpeditionMap({
   run,
@@ -242,6 +249,7 @@ function ExpeditionMap({
   onDeck,
   onAbandon,
   onAgain,
+  onContinue,
   onMenu,
 }: {
   run: ExpeditionRun;
@@ -252,6 +260,7 @@ function ExpeditionMap({
   onDeck: () => void;
   onAbandon: () => void;
   onAgain: () => void;
+  onContinue: () => void;
   onMenu: () => void;
 }) {
   const [confirming, setConfirming] = useState(false);
@@ -262,9 +271,11 @@ function ExpeditionMap({
   const deck = runDeck(run);
   const lives = maxLives(run);
   const left = lives - run.livesLost;
-  const floorNow = Math.min(run.outcomes.length + 1, FLOORS);
+  const floors = floorsOf(run);
+  const floorX = (floor: number) => ((floor + 0.5) / floors) * 100;
+  const floorNow = Math.min(run.outcomes.length + 1, floors);
   const shown = hover ?? (here && { floor: here.floor, lane: here.lane });
-  const info = shown && nodeInfo(shown.floor, run.map[shown.floor]![shown.lane]!);
+  const info = shown && nodeInfo(shown.floor, run.map[shown.floor]![shown.lane]!, floors);
   const fight = !!here?.node.opponent;
   // The travelling token: at your last node (or the start), or on its way to a new one.
   const [moving, setMoving] = useState<number | null>(null);
@@ -276,7 +287,7 @@ function ExpeditionMap({
             x: floorX(run.path.length - 1),
             y: laneY(run.map[run.path.length - 1]!.length, run.path.at(-1)!),
           }
-        : { x: floorX(0) - 45 / FLOORS, y: 50 };
+        : { x: floorX(0) - 45 / floors, y: 50 };
   const travel = (lane: number) => {
     if (moving !== null) return;
     const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -296,18 +307,22 @@ function ExpeditionMap({
       ? 'Expedition cleared!'
       : status === 'out'
         ? 'Out of lives'
-        : `Floor ${floorNow} of ${FLOORS}`;
+        : `Floor ${floorNow} of ${floors}`;
   const sub =
     status === 'playing'
       ? fight
         ? 'Your next fight is ready.'
         : 'Choose where to go next.'
-      : `Floors cleared: ${run.outcomes.length} of ${FLOORS} · best with this deck: ${best}`;
+      : status === 'cleared'
+        ? 'Set out again with the deck and cards you’ve built. Lives and boons start over.'
+        : `Floors cleared: ${run.outcomes.length} of ${floors} · best with this deck: ${best}`;
+  // Expeditions cleared with this deck before this map, counting from the first.
+  const number = (run.loop ?? 0) + 1;
 
   // Edges between every pair of connected nodes; the path taken is drawn in gold.
   const edges: { key: string; x1: number; y1: number; x2: number; y2: number; state: string }[] =
     [];
-  for (let f = 0; f < FLOORS - 1; f++) {
+  for (let f = 0; f < floors - 1; f++) {
     const a = run.map[f]!;
     const b = run.map[f + 1]!;
     a.forEach((_, i) =>
@@ -331,7 +346,9 @@ function ExpeditionMap({
     <div className={`start xmap xmap--${status}`}>
       <UiSize />
       <div className="start__title">
-        <span className="start__eyebrow">Expedition · {deck.name}</span>
+        <span className="start__eyebrow">
+          Expedition{number > 1 && ` ${number}`} · {deck.name}
+        </span>
         <h1>{headline}</h1>
         <p>{sub}</p>
       </div>
@@ -401,7 +418,7 @@ function ExpeditionMap({
                   } as React.CSSProperties
                 }
                 aria-disabled={!canGo}
-                aria-label={`${nodeInfo(f, node).title}, floor ${f + 1}`}
+                aria-label={`${nodeInfo(f, node, floors).title}, floor ${f + 1}`}
                 onClick={() => canGo && travel(lane)}
                 onMouseEnter={() => setHover({ floor: f, lane })}
                 onMouseLeave={() => setHover(null)}
@@ -485,8 +502,16 @@ function ExpeditionMap({
             )
           ) : (
             <>
-              <button className="btn btn--primary btn--big" onClick={onAgain}>
-                New expedition
+              {status === 'cleared' && (
+                <button className="btn btn--primary btn--big" onClick={onContinue}>
+                  Set out again with this deck
+                </button>
+              )}
+              <button
+                className={`btn ${status === 'cleared' ? 'btn--ghost' : 'btn--primary btn--big'}`}
+                onClick={onAgain}
+              >
+                {status === 'cleared' ? 'Start over' : 'New expedition'}
               </button>
               <button className="btn btn--ghost" onClick={onMenu}>
                 Main menu

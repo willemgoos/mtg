@@ -24,7 +24,11 @@ describe('Season playable match integration', () => {
     expect(tally.heuristic).toBeLessThan(240);
     expect(tally.search).toBeGreaterThan(70);
     expect(tally.search).toBeLessThan(130);
-    expect(new Set(samples.map((s) => s.match!.opponentDeckId)).size).toBe(10);
+    const opponents = samples.map((s) => s.match!.opponentDeckId);
+    expect(new Set(opponents).size).toBeGreaterThan(45);
+    const jumpIns = opponents.filter((id) => id.startsWith('jump-in:')).length;
+    expect(jumpIns).toBeGreaterThan(240);
+    expect(jumpIns).toBeLessThan(320);
     expect(queueSeasonMatch(fresh(), 101)).toEqual(queueSeasonMatch(fresh(), 101));
     expect(queueSeasonMatch(fresh(), 101).rng).not.toEqual(fresh().rng);
   });

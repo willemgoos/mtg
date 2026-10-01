@@ -4,6 +4,7 @@ import {
   type Decklist,
   isJumpIn,
   isPlayable,
+  registerDeck,
   scryfallById,
   slug,
 } from '@mtg/cards';
@@ -33,6 +34,7 @@ import {
   summarize,
 } from './game/gauntlet.ts';
 import { clearGame, loadGame, type SavedGame } from './game/saved.ts';
+import { createSeasonRepository } from './game/seasonStorage.ts';
 import { type DeckChoice, HUMAN, useGame } from './game/useGame.ts';
 
 // Playable decks first; the rest show as "coming soon".
@@ -53,6 +55,23 @@ const SECTIONS: { title: string; blurb: string; decks: Decklist[] }[] = [
   return { ...s, decks: [...decks.filter(isPlayable), ...decks.filter((d) => !isPlayable(d))] };
 });
 const PLAYABLE = DECKS.filter(isPlayable);
+
+/**
+ * Decks built in Season mode (every save) that are big enough to set out with,
+ * registered so they can be viewed and played by id like our own.
+ */
+function seasonDecks(): Decklist[] {
+  try {
+    const decks = createSeasonRepository(localStorage)
+      .load()
+      .saves.flatMap((save) => save.decks.map((d) => X.seasonDecklist(save.id, d)))
+      .filter((d) => d.cards.reduce((n, [, k]) => n + k, 0) >= X.MIN_DECK);
+    decks.forEach(registerDeck);
+    return decks;
+  } catch {
+    return [];
+  }
+}
 
 interface Match {
   choice: DeckChoice;
@@ -175,7 +194,7 @@ export function App() {
         cards: X.deckCards(r.build),
         options: X.gameOptions(r),
       },
-      X.botFor(at.floor, at.node),
+      X.botFor(at.floor, at.node, X.floorsOf(r)),
     );
   };
   // Leaving a run's match keeps it saved, so the round can be resumed rather than restarted.
@@ -207,7 +226,7 @@ export function App() {
   if (!match && viewing)
     return (
       <DeckView
-        deck={DECKS.find((d) => d.id === viewing)!}
+        deck={deckById(viewing)}
         onBack={back}
         onPlay={() => {
           setViewing(null);
@@ -239,10 +258,12 @@ export function App() {
         onAbandon={() => endRun('expedition')}
         onAgain={() => {
           // A Jump In run starts over from the packet pick, not the same pair.
-          if (!isJumpIn(expedition.run!.deck)) return beginRun('expedition', expedition.run!.deck);
+          const r = expedition.run!;
+          if (!isJumpIn(r.deck)) return beginRun('expedition', r.deck);
           endRun('expedition');
           setJumping(true);
         }}
+        onContinue={() => updateExpedition((s) => X.continueExpedition(s, newSeed()))}
         onMenu={() => {
           setHub(null);
           setTab('home');
@@ -476,6 +497,17 @@ function Start({
 }) {
   const running = run?.status === 'playing';
   const name = mode === 'quick' ? '' : EVENT_NAMES[mode];
+  const [season] = useState(seasonDecks);
+  // Expeditions can also set out with a deck built in Season mode.
+  const sections =
+    mode === 'expedition' && season.length
+      ? [
+          SECTIONS[0]!,
+          { title: 'Your Season decks', blurb: 'Decks you built in Season mode', decks: season },
+          ...SECTIONS.slice(1),
+        ]
+      : SECTIONS;
+  const steps = mode === 'expedition' ? X.FLOORS : ROUNDS.length;
   return (
     <div className="decks-page">
       <Nav tab="decks" onTab={onTab} clears={clears} />
@@ -489,7 +521,7 @@ function Start({
                 ? 'Your run is waiting.'
                 : mode === 'gauntlet'
                   ? 'Choose a deck to take through the gauntlet.'
-                  : 'Choose a starter deck to set out with.'}
+                  : 'Choose a deck to set out with.'}
           </p>
         </div>
         <div className="start__opponent start__mode" role="radiogroup" aria-label="Mode">
@@ -548,7 +580,7 @@ function Start({
         {mode === 'expedition' && (
           <JumpInSection records={records} locked={running} onJumpIn={onJumpIn} />
         )}
-        {SECTIONS.map((section, si) => (
+        {sections.map((section, si) => (
           <section key={section.title} className="start__section">
             <h2 className="start__section-title">
               {section.title}
@@ -578,7 +610,7 @@ function Start({
                         <span className={`deck__record ${record.clears ? 'is-cleared' : ''}`}>
                           {record.clears
                             ? `★ Cleared${record.clears > 1 ? ` ×${record.clears}` : ''}`
-                            : `Best ${record.best}/${ROUNDS.length}`}
+                            : `Best ${record.best}/${steps}`}
                         </span>
                       )}
                       <span className="deck__pips">
@@ -587,7 +619,12 @@ function Start({
                         ))}
                       </span>
                       <span className="deck__name">{d.name}</span>
-                      <span className="deck__blurb">{locked ? 'Coming soon' : BLURBS[d.id]}</span>
+                      <span className="deck__blurb">
+                        {locked
+                          ? 'Coming soon'
+                          : (BLURBS[d.id] ??
+                            `${d.cards.reduce((n, [, k]) => n + k, 0)} cards from Season`)}
+                      </span>
                     </button>
                     <button
                       className="deck-slot__view"
@@ -647,7 +684,7 @@ function JumpInSection({
               <span className={`deck__record ${clears ? 'is-cleared' : ''}`}>
                 {clears
                   ? `★ Cleared${clears > 1 ? ` ×${clears}` : ''}`
-                  : `Best ${best}/${ROUNDS.length}`}
+                  : `Best ${best}/${X.FLOORS}`}
               </span>
             )}
             <span className="deck__pips">

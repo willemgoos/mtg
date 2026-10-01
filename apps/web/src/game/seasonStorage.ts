@@ -8,6 +8,7 @@ import {
   renameSeasonSave,
   replaySeasonMatch,
   requireSeason,
+  isSeasonOpponent,
   SEASON_STARTERS,
   SEASON_VERSION,
   validateCounts,
@@ -62,14 +63,12 @@ function match(value: unknown, save: SeasonSave): void {
   requireSeason(['easy', 'heuristic', 'search'].includes(m.bot as string), 'Invalid bot');
   label(m.opponentDeckId);
   if (m.playerDeckName !== undefined) label(m.playerDeckName);
-  requireSeason(
-    SEASON_STARTERS.some((d) => d.id === m.opponentDeckId),
-    'Unknown opponent deck',
-  );
+  requireSeason(isSeasonOpponent(m.opponentDeckId), 'Unknown opponent deck');
   const decks = record(m.decks);
   for (const player of ['p1', 'p2']) {
     const cards = array(decks[player]);
-    requireSeason(cards.length >= 60, 'Invalid match deck size');
+    // Your deck follows Season's 60-card rule; a bot's Jump In pair has 40.
+    requireSeason(cards.length >= (player === 'p1' ? 60 : 40), 'Invalid match deck size');
     const quantities: Counts = {};
     for (const id of cards) {
       requireSeason(typeof id === 'string', 'Invalid match card ID');
