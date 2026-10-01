@@ -20,6 +20,8 @@ import {
 import {
   activateAbility,
   answerDiscard,
+  answerForage,
+  answerForageExile,
   answerPickExiled,
   answerPile,
   answerPunisher,
@@ -175,19 +177,27 @@ function apply(ctx: Ctx, action: Action): void {
       ps.landsPlayedThisTurn++;
       s.turn.passed = [];
       return givePriority(ctx, player);
-    case 'castSpell':
-      castSpell(
+    case 'castSpell': {
+      s.turn.passed = [];
+      const paused = castSpell(
         ctx,
         player,
         action.card,
         action.targets,
-        { mode: action.mode, kicked: action.kicked, sacrifice: action.sacrifice },
+        {
+          mode: action.mode,
+          kicked: action.kicked,
+          sacrifice: action.sacrifice,
+          forage: action.forage,
+        },
         action.payWith,
       );
+      // Foraging from a big graveyard asks which cards first.
+      return paused ? undefined : givePriority(ctx, player);
+    }
+    case 'activateAbility': {
       s.turn.passed = [];
-      return givePriority(ctx, player);
-    case 'activateAbility':
-      activateAbility(
+      const paused = activateAbility(
         ctx,
         player,
         action.source,
@@ -195,9 +205,10 @@ function apply(ctx: Ctx, action: Action): void {
         action.targets,
         action.payWith,
         action.sacrifice,
+        action.forage,
       );
-      s.turn.passed = [];
-      return givePriority(ctx, player);
+      return paused ? undefined : givePriority(ctx, player);
+    }
     case 'addAttacker':
       if (d.kind !== 'declareAttackers') throw new IllegalActionError(action);
       d.declared.push({ id: action.attacker, defender: action.defender });
@@ -243,7 +254,11 @@ function apply(ctx: Ctx, action: Action): void {
     case 'choosePile':
       if (d.kind !== 'choosePile') throw new IllegalActionError(action);
       return answerPile(ctx, action.pile);
+    case 'forage':
+      if (d.kind !== 'forage') throw new IllegalActionError(action);
+      return answerForage(ctx, action.choice);
     case 'chooseCard':
+      if (d.kind === 'forageExile' && action.card) return answerForageExile(ctx, action.card);
       if (d.kind === 'sacrifice' && action.card) return answerSacrifice(ctx, action.card);
       if (d.kind === 'punisher') return answerPunisher(ctx, action.card);
       if (d.kind === 'pickExiled' && action.card) return answerPickExiled(ctx, action.card);

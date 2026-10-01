@@ -37,8 +37,8 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
   const base = d.ptEquals !== undefined && onField ? countFor(ctx, o, d) : null;
   const basePower =
     d.powerEquals !== undefined && onField ? countOf(ctx, o.controller, d.powerEquals, true) : null;
-  let power = (basePower ?? base ?? d.power ?? 0) + o.plusOneCounters;
-  let toughness = (base ?? d.toughness ?? 0) + o.plusOneCounters;
+  let power = (basePower ?? base ?? o.copyPT?.power ?? d.power ?? 0) + o.plusOneCounters;
+  let toughness = (base ?? o.copyPT?.toughness ?? d.toughness ?? 0) + o.plusOneCounters;
   // Copy-on-write: most creatures have no granted keywords, so share the printed set.
   let keywords = printedKeywords(d);
   let granted: Set<Keyword> | null = null;
@@ -162,6 +162,18 @@ export function countOf(
           (!a.types || a.types.some((t: CardType) => def(ctx, id).types.includes(t))),
       ).length
     );
+  if (a.count === 'greatestManaValueInGraveyard')
+    return ctx.s.players[player].graveyard.reduce(
+      (n, id) => Math.max(n, manaValueOfDef(def(ctx, id))),
+      0,
+    );
+  if (a.count === 'permanentsYouControl')
+    return ctx.s.battlefield.filter(
+      (id) =>
+        obj(ctx, id).controller === player &&
+        !(a.other && id === sourceId) &&
+        matchesFilter(ctx, id, a.filter, sourceId),
+    ).length;
   const matching = ctx.s.battlefield.filter((id) => {
     if (obj(ctx, id).controller !== player) return false;
     if (a.named && obj(ctx, id).defId !== a.named) return false;
@@ -186,6 +198,12 @@ export function countOf(
           .reduce((n, id) => n + Math.max(0, power(ctx, id)), 0)
       : matching;
   return a.max !== undefined ? Math.min(a.max, n) : n;
+}
+
+function manaValueOfDef(d: CardDefinition): number {
+  let n = d.manaCost.generic;
+  for (const v of Object.values(d.manaCost.colored)) n += v ?? 0;
+  return n;
 }
 
 function countFor(ctx: Ctx, o: GameObject, d: CardDefinition): number {
@@ -279,6 +297,7 @@ export function matchesFilter(
   if (filter.subtype && !c.subtypes.includes(filter.subtype)) return false;
   if (filter.minToughness !== undefined && c.toughness < filter.minToughness) return false;
   if (filter.nontoken && obj(ctx, id).isToken) return false;
+  if (filter.token && !obj(ctx, id).isToken) return false;
   if (filter.sameNameAsSource && (!sourceId || obj(ctx, id).defId !== obj(ctx, sourceId).defId))
     return false;
   if (filter.inCombatBlock) {

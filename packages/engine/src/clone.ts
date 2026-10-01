@@ -36,6 +36,7 @@ export function cloneState(s: GameState): GameState {
       attackers: s.turn.attackers.slice(),
       lifeGains: { ...s.turn.lifeGains },
       cardsDrawn: { ...s.turn.cardsDrawn },
+      ...(s.turn.manaSpent ? { manaSpent: { ...s.turn.manaSpent } } : {}),
     },
     combat: s.combat && {
       attackers: s.combat.attackers.map((a) => ({ ...a, blockers: a.blockers.slice() })),

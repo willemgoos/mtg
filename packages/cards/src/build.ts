@@ -16,6 +16,7 @@ export type Behavior = Pick<
   | 'spell'
   | 'modes'
   | 'kicker'
+  | 'forageOrPay'
   | 'flashback'
   | 'ptEquals'
   | 'enchant'
@@ -74,6 +75,12 @@ export const KEYWORDS_AS_ABILITIES = new Set([
   'Morbid',
   'Threshold',
   'Mill',
+  // Bloomburrow.
+  'Offspring',
+  'Forage',
+  'Gift',
+  'Expend',
+  'Valiant',
 ]);
 
 const BASIC_MANA: Record<string, ManaType> = {
@@ -167,6 +174,7 @@ export function buildCard(sc: ScryfallCard, behavior: Behavior = {}): CardDefini
     ...(behavior.spell ? { spell: behavior.spell } : {}),
     ...(behavior.modes ? { modes: behavior.modes } : {}),
     ...(behavior.kicker ? { kicker: behavior.kicker } : {}),
+    ...(behavior.forageOrPay ? { forageOrPay: behavior.forageOrPay } : {}),
     ...(behavior.flashback ? { flashback: behavior.flashback } : {}),
     ...(behavior.ptEquals !== undefined ? { ptEquals: behavior.ptEquals } : {}),
     ...(behavior.enchant ? { enchant: behavior.enchant } : {}),

@@ -7,8 +7,10 @@ import type {
   ConditionDef,
   GameEvent,
   GameObject,
+  CardFilter,
   PlayerId,
   StackItem,
+  TargetChoice,
   TriggerDef,
 } from './types.ts';
 
@@ -19,8 +21,20 @@ export function checkCondition(
   c: ConditionDef | undefined,
   controller: PlayerId,
   self: GameObject | undefined,
+  /** Chosen targets, for conditions about them (resolution-time "if"). */
+  targets?: readonly (TargetChoice | null)[],
 ): boolean {
   if (!c) return true;
+  if (c.kind === 'targetMatches') {
+    const t = targets?.[c.target];
+    if (!t || !('object' in t)) return false;
+    const o = ctx.s.objects[t.object.id];
+    return !!o && o.zcc === t.object.zcc && matchesFilter(ctx, o.id, c.filter);
+  }
+  if (c.kind === 'amountAtLeast')
+    return countOf(ctx, controller, c.amount, false, self?.id) >= c.min;
+  if (c.kind === 'resolvedThisTurn')
+    return self?.resolutions?.turn === ctx.s.turn.number && self.resolutions.count === c.n;
   if (c.kind === 'controlsPermanents')
     return (
       ctx.s.battlefield.filter(
@@ -160,6 +174,19 @@ function detect(ctx: Ctx, ev: GameEvent): void {
                 matchesFilter(ctx, moved.id, t.filter)
               );
             if (t.on === 'landfall') return isLand && o.controller === moved.controller;
+            if (t.on === 'otherPermanentEtb')
+              return (
+                o.id !== moved.id &&
+                o.controller === moved.controller &&
+                matchesFilter(ctx, moved.id, t.filter)
+              );
+            if (t.on === 'selfOrCreatureEtb')
+              return (
+                o.id === moved.id ||
+                (isCreature &&
+                  o.controller === moved.controller &&
+                  matchesFilter(ctx, moved.id, t.filter))
+              );
             return false;
           },
           moved,
@@ -337,6 +364,48 @@ function detect(ctx: Ctx, ev: GameEvent): void {
       );
       return;
     }
+    case 'sacrificed': {
+      // "When you sacrifice this": looks back from wherever the card went.
+      const card = s.objects[ev.id];
+      const d = defOf(ctx, ev.defId);
+      if (card)
+        d.abilities.forEach((a, i) => {
+          if (a.kind === 'triggered' && a.trigger.on === 'sacrificed')
+            queue(ctx, card, i, ev.player);
+        });
+      forEachBattlefieldTrigger(
+        ctx,
+        (o, a) =>
+          a.trigger.on === 'youSacrifice' &&
+          o.controller === ev.player &&
+          defMatches(d, a.trigger.filter),
+      );
+      return;
+    }
+    case 'manaSpent': {
+      forEachBattlefieldTrigger(
+        ctx,
+        (o, a) =>
+          a.trigger.on === 'expend' &&
+          o.controller === ev.player &&
+          ev.before < a.trigger.amount &&
+          ev.after >= a.trigger.amount,
+      );
+      return;
+    }
+    case 'targeted': {
+      // Valiant: the first time each turn its controller's spell or ability targets it.
+      for (const id of ev.ids) {
+        const o = s.objects[id];
+        if (!o || o.zone !== 'battlefield' || o.controller !== ev.player) continue;
+        if (o.targetedByControllerTurn === s.turn.number) continue;
+        o.targetedByControllerTurn = s.turn.number;
+        def(ctx, id).abilities.forEach((a, i) => {
+          if (a.kind === 'triggered' && a.trigger.on === 'valiant') queue(ctx, o, i, o.controller);
+        });
+      }
+      return;
+    }
     case 'stepChanged': {
       if (ev.step === 'beginCombat') {
         forEachBattlefieldTrigger(
@@ -373,6 +442,14 @@ export function nextPendingTriggerIndex(ctx: Ctx): number {
   const i = ctx.s.pendingTriggers.findIndex((t) => t.controller === ap);
   if (i >= 0) return i;
   return ctx.s.pendingTriggers.findIndex((t) => t.controller === other(ap));
+}
+
+/** Type and subtype checks against a card definition (for a permanent that has already left). */
+function defMatches(d: CardDefinition, f: CardFilter): boolean {
+  if (f.types && !f.types.some((t) => d.types.includes(t))) return false;
+  if (f.subtype && !d.subtypes.includes(f.subtype)) return false;
+  if (f.subtypes && !f.subtypes.some((st) => d.subtypes.includes(st))) return false;
+  return true;
 }
 
 function manaValueOf(d: CardDefinition): number {

@@ -15,6 +15,8 @@ export interface Decklist {
    * 'season': a deck built in Season mode, taken on an expedition.
    */
   series: 'starter' | 'colorChallenge' | 'jumpIn' | 'season';
+  /** A deck from another set than Foundations (shown in its own section). */
+  set?: 'blb';
   cards: [name: string, count: number][];
 }
 
@@ -499,4 +501,80 @@ export const COLOR_CHALLENGE_DECKS: Decklist[] = [
   },
 ];
 
-export const DECKS: Decklist[] = [...ARENA_DECKS, ...COLOR_CHALLENGE_DECKS];
+/**
+ * Our Bloomburrow decks, built like the Foundations starter decks (two
+ * colours, 36 spells and 24 lands) so they play against them.
+ */
+export const BLOOMBURROW_DECKS: Decklist[] = [
+  {
+    id: 'blb-forage-and-feast',
+    name: 'Forage and Feast',
+    colors: ['B', 'G'],
+    face: 'Camellia, the Seedmiser',
+    source: 'custom',
+    series: 'starter',
+    set: 'blb',
+    cards: [
+      ['Agate-Blade Assassin', 2],
+      ['Bakersbane Duo', 3],
+      ['Vinereap Mentor', 3],
+      ['Bonebind Orator', 2],
+      ['Bushy Bodyguard', 2],
+      ['Daggerfang Duo', 3],
+      ['Curious Forager', 2],
+      ['Honored Dreyleader', 2],
+      ['Camellia, the Seedmiser', 1],
+      ['Treetop Sentries', 2],
+      ['Thornplate Intimidator', 2],
+      ["Wick's Patrol", 1],
+      ['Feed the Cycle', 2],
+      ['Savor', 3],
+      ['Nocturnal Hunger', 2],
+      ['Longstalk Brawl', 2],
+      ['Consumed by Greed', 1],
+      ["Hazel's Nocturne", 1],
+      ['Forest', 8],
+      ['Swamp', 7],
+      ['Golgari Guildgate', 4],
+      ['Jungle Hollow', 4],
+      ['Temple of Malady', 1],
+    ],
+  },
+  {
+    id: 'blb-warren-rally',
+    name: 'Warren Rally',
+    colors: ['G', 'W'],
+    face: 'Warren Warleader',
+    source: 'custom',
+    series: 'starter',
+    set: 'blb',
+    cards: [
+      ['Seasoned Warrenguard', 3],
+      ['Brave-Kin Duo', 2],
+      ['Nettle Guard', 2],
+      ['Warren Elder', 2],
+      ['Burrowguard Mentor', 2],
+      ['Finneas, Ace Archer', 1],
+      ['Intrepid Rabbit', 3],
+      ['Harvestrite Host', 2],
+      ['Druid of the Spade', 2],
+      ['Hazardroot Herbalist', 2],
+      ['Warren Warleader', 1],
+      ['Treeguard Duo', 2],
+      ['Carrot Cake', 2],
+      ['Hop to It', 2],
+      ['Crumb and Get It', 2],
+      ["Mabel's Mettle", 2],
+      ['Rabbit Response', 1],
+      ['Repel Calamity', 2],
+      ['Banishing Light', 1],
+      ['Plains', 8],
+      ['Forest', 7],
+      ['Selesnya Guildgate', 4],
+      ['Blossoming Sands', 4],
+      ['Temple of Plenty', 1],
+    ],
+  },
+];
+
+export const DECKS: Decklist[] = [...ARENA_DECKS, ...COLOR_CHALLENGE_DECKS, ...BLOOMBURROW_DECKS];

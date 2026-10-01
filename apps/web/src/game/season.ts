@@ -33,8 +33,13 @@ export interface WildcardMisses {
 export type SeasonBot = 'easy' | 'heuristic' | 'search';
 export type MatchOutcome = 'win' | 'loss' | 'draw' | 'concede';
 
-/** Stable rules identities, independent of artwork/Scryfall printing IDs. */
-export const SEASON_CARDS = new Map(SCRYFALL.map((c) => [slug(c.name), c]));
+/**
+ * Stable rules identities, independent of artwork/Scryfall printing IDs.
+ * Bloomburrow cards aren't collectible in Season mode (no Bloomburrow packs yet).
+ */
+export const SEASON_CARDS = new Map(
+  SCRYFALL.filter((c) => c.set !== 'blb').map((c) => [slug(c.name), c]),
+);
 export const SEASON_STARTERS = ARENA_DECKS.filter(isPlayable);
 /** Decks a Season bot can play: mostly Jump In pairs, plus the starter and Color Challenge decks. */
 export const isSeasonOpponent = (id: string): boolean => OPPONENT_DECKS.some((d) => d.id === id);

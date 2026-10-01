@@ -132,6 +132,18 @@ Simplifications: Ilysian Caryatid's two mana may be of different colours; lure i
 
 **7b: Aerial Domination (U), Cold-Blooded Killers (B): to do.**
 
+## Phase 8: Bloomburrow (BLB), a second set
+
+Our own two-colour decks built like the starter decks (36 spells, 24 lands), shown in their own deck section but matched against the Foundations starter decks. Card behaviour lives in `packages/cards/src/bloomburrow.ts`.
+
+**8a: mechanics + Forage and Feast (B/G Squirrels) and Warren Rally (G/W Rabbits): done.** Added: offspring (kicker that makes a 1/1 token copy), gift (a free kicker; the opponent gets a card, Food or tapped Fish first), forage (as a cost or "you may forage", choosing which three graveyard cards to exile), expend (mana spent per turn), valiant, "when you sacrifice" triggers, and a few counts and conditions. Bot-vs-bot: about 55% and 49% against the ten Foundations starter decks.
+
+Simplifications: Wick's Patrol picks its target before milling; Curious Forager's return isn't targeted; Valley-style "one or more enter" batching isn't modelled (no such card yet).
+
+**8b: the other eight animal decks (the rest of the commons and uncommons): to do.**
+
+**8c: rares and mythics (including the Season cycle's pawprint modes), then Bloomburrow packs for Expedition and Season: to do.** Until then Bloomburrow cards aren't collectible in Season mode.
+
 ## Notes
 
 - Some cards will turn out to be one-offs. Put them in `custom` handlers instead of growing the engine vocabulary for a single card.

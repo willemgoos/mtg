@@ -61,6 +61,19 @@ export function chooseLandToPlay(
   return landPlays.reduce((best, a) => (score(a) > score(best) ? a : best));
 }
 
+/**
+ * Forage, exiling from the graveyard: lands first, then other spells, and
+ * creature cards last (cheapest first), since those can come back.
+ */
+export function chooseForageExile(engine: Engine, s: GameState, legal: Action[]): Action {
+  const keep = (a: Action) => {
+    const d = a.type === 'chooseCard' && a.card ? defOf(engine, s, a.card) : undefined;
+    if (!d || d.types.includes('Land')) return 0;
+    return d.types.includes('Creature') ? 10 + manaValue(d.manaCost) : 1 + manaValue(d.manaCost);
+  };
+  return legal.reduce((best, a) => (keep(a) < keep(best) ? a : best));
+}
+
 /** Sacrifice: the creature we value least. */
 export function chooseSacrifice(engine: Engine, s: GameState, legal: Action[]): Action {
   const value = (a: Action) =>

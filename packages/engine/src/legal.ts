@@ -1,6 +1,7 @@
 import { canTapForAbility, isCreature, matchesFilter } from './characteristics.ts';
 import { blockViolations, canAttack, canBlock, defenderOf } from './combat.ts';
 import { type Ctx, def, obj } from './context.ts';
+import { forageChoices } from './forage.ts';
 import { canPayFrom, manaSources } from './mana.ts';
 import { castVariants } from './spells.ts';
 import { castCost, countersYouControl, hasStatic, wardCost, wardLife } from './stack.ts';
@@ -126,6 +127,7 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
         mode: v.mode,
         kicked: v.kicked,
         sacrifice: v.sacrifice ? 'x' : undefined,
+        forage: v.forage ? 'graveyard' : undefined,
       });
       if (!canPayFrom(base, pool)) continue;
       const extra = {
@@ -133,19 +135,22 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
         ...(v.kicked ? { kicked: true } : {}),
       };
       const specs = v.spell?.targets ?? (d.enchant ? [d.enchant] : []);
+      const forages = v.forage ? forageChoices(ctx, player) : [undefined];
       for (const sacrifice of v.sacrifice ? creatures : [undefined]) {
         for (const targets of combosFor(specs, card, sacrifice)) {
           const ward = wardCost(ctx, player, targets);
           if (ward.generic && !canPayFrom(addCosts(base, ward), pool)) continue;
           if (wardLife(ctx, player, targets) > s.players[player].life) continue;
-          out.push({
-            type: 'castSpell',
-            player,
-            card,
-            targets,
-            ...extra,
-            ...(sacrifice ? { sacrifice } : {}),
-          });
+          for (const forage of forages)
+            out.push({
+              type: 'castSpell',
+              player,
+              card,
+              targets,
+              ...extra,
+              ...(sacrifice ? { sacrifice } : {}),
+              ...(forage ? { forage } : {}),
+            });
         }
       }
     }
@@ -168,6 +173,8 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
       if (!canPayFrom(a.cost.mana, usable)) return;
       const rc = a.cost.removeCounters;
       if (rc && (obj(ctx, source).counters?.[rc.name] ?? 0) < rc.count) return;
+      const forages = a.cost.forage ? forageChoices(ctx, player) : [undefined];
+      if (forages.length === 0) return;
       const sacrificeable = a.cost.sacrificeFilter
         ? creatures.filter((id) => matchesFilter(ctx, id, a.cost.sacrificeFilter, source))
         : creatures;
@@ -175,14 +182,16 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
         for (const targets of combosFor(a.targets, source, sacrifice)) {
           const ward = wardCost(ctx, player, targets);
           if (ward.generic && !canPayFrom(addCosts(a.cost.mana ?? NO_COST, ward), usable)) continue;
-          out.push({
-            type: 'activateAbility',
-            player,
-            source,
-            abilityIndex,
-            targets,
-            ...(sacrifice ? { sacrifice } : {}),
-          });
+          for (const forage of forages)
+            out.push({
+              type: 'activateAbility',
+              player,
+              source,
+              abilityIndex,
+              targets,
+              ...(sacrifice ? { sacrifice } : {}),
+              ...(forage ? { forage } : {}),
+            });
         }
       }
     });
@@ -261,6 +270,16 @@ export function getLegalActions(ctx: Ctx, player: PlayerId): Action[] {
     case 'sacrifice':
     case 'pickExiled':
       return d.options.map((card) => ({ type: 'chooseCard', player, card }) as const);
+    case 'forage':
+      return [
+        ...d.foods.map((choice) => ({ type: 'forage', player, choice }) as const),
+        ...(d.graveyard ? [{ type: 'forage', player, choice: 'graveyard' } as const] : []),
+        ...(d.optional ? [{ type: 'forage', player, choice: null } as const] : []),
+      ];
+    case 'forageExile':
+      return s.players[player].graveyard.map(
+        (card) => ({ type: 'chooseCard', player, card }) as const,
+      );
     case 'punisher':
       return [
         ...d.options.map((card) => ({ type: 'chooseCard', player, card }) as const),

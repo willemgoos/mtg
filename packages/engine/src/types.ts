@@ -98,7 +98,17 @@ export interface CardDefinition {
    * Kicker: pay this too. An instant or sorcery then does `spell` instead; a
    * permanent remembers it was kicked (see the `wasKicked` condition).
    */
-  kicker?: { cost: ManaCost; spell?: SpellDef };
+  kicker?: {
+    cost: ManaCost;
+    spell?: SpellDef;
+    /**
+     * Kicker under another name: 'offspring' (a creature also makes a 1/1 token
+     * copy) or 'gift' (a free promise of a gift to an opponent).
+     */
+    as?: 'offspring' | 'gift';
+  };
+  /** "As an additional cost to cast this spell, forage or pay this" (Feed the Cycle). */
+  forageOrPay?: ManaCost;
   /** Aura: what it enchants (chosen as a target when cast). */
   enchant?: TargetSpec;
   /** Costs {1} less for each matching permanent you control (affinity). */
@@ -159,6 +169,10 @@ export interface CostDef {
   sacrificeFilter?: CardFilter;
   /** Remove this many named counters from the source (Drake Hatcher's incubation counters). */
   removeCounters?: { name: string; count: number };
+  /** Exile this card from your graveyard (Bonebind Orator). */
+  exileSelf?: boolean;
+  /** Forage: exile three cards from your graveyard or sacrifice a Food (Camellia). */
+  forage?: boolean;
 }
 
 export type TriggerDef =
@@ -195,7 +209,19 @@ export type TriggerDef =
   | { on: 'creatureYouControlAttacks'; filter?: CardFilter }
   | { on: 'landfall' }
   | { on: 'beginningOfUpkeep'; whose: 'yours' | 'each' }
-  | { on: 'beginningOfEndStep'; whose: 'yours' | 'each' };
+  | { on: 'beginningOfEndStep'; whose: 'yours' | 'each' }
+  /** Whenever another permanent you control matching the filter enters (Honored Dreyleader). */
+  | { on: 'otherPermanentEtb'; filter: CardFilter }
+  /** Whenever this creature or another creature you control matching the filter enters (Harvestrite Host). */
+  | { on: 'selfOrCreatureEtb'; filter: CardFilter }
+  /** Expend N: whenever you spend your Nth total mana this turn. */
+  | { on: 'expend'; amount: number }
+  /** Valiant: this creature becomes the target of your spell or ability for the first time this turn. */
+  | { on: 'valiant' }
+  /** When you sacrifice this permanent (Carrot Cake). */
+  | { on: 'sacrificed' }
+  /** Whenever you sacrifice a permanent matching the filter (Camellia: a Food). */
+  | { on: 'youSacrifice'; filter: CardFilter };
 
 export type ConditionDef =
   | { kind: 'controlsPermanents'; filter: CardFilter; min: number }
@@ -224,6 +250,12 @@ export type ConditionDef =
   | { kind: 'graveyardCount'; min: number; types?: CardType[] }
   /** It's your turn and this is the first time you gained life this turn. */
   | { kind: 'firstLifeGainThisTurn'; anyTurn?: boolean }
+  /** A chosen target matches the filter (Hazardroot Herbalist: "if that creature is a token"). */
+  | { kind: 'targetMatches'; target: number; filter: CardFilter }
+  /** A count reaches `min` (Finneas: total power 10 or greater). */
+  | { kind: 'amountAtLeast'; amount: Amount; min: number }
+  /** This ability has resolved exactly `n` times this turn, counting this one (Harvestrite Host). */
+  | { kind: 'resolvedThisTurn'; n: number }
   | { kind: 'custom'; handler: string };
 
 export interface CardFilter {
@@ -238,6 +270,8 @@ export interface CardFilter {
   subtype?: string;
   minToughness?: number;
   nontoken?: boolean;
+  /** Only tokens. */
+  token?: boolean;
   /** Has at least one of these card types. */
   types?: CardType[];
   nonland?: boolean;
@@ -307,7 +341,11 @@ export type Amount =
   /** Cards in your graveyard (of these types). */
   | { count: 'cardsInGraveyard'; types?: CardType[]; named?: CardDefId; plus?: number }
   /** The amount from the trigger event ("that much damage"). */
-  | { event: 'amount' };
+  | { event: 'amount' }
+  /** Permanents you control matching the filter (Honored Dreyleader: Squirrels and Food). */
+  | { count: 'permanentsYouControl'; filter: CardFilter; other?: boolean }
+  /** The greatest mana value among cards in your graveyard (Wick's Patrol). */
+  | { count: 'greatestManaValueInGraveyard' };
 
 export type EffectDef =
   | { kind: 'may'; effects: EffectDef[]; cost?: ManaCost }
@@ -395,7 +433,16 @@ export type EffectDef =
   /** The source card goes from its owner's graveyard back to their hand (Angelic Destiny). */
 
   /** Each opponent sacrifices a creature of their choice; optionally you gain life equal to its toughness. */
-  | { kind: 'opponentSacrifices'; gainToughness?: boolean }
+  | { kind: 'opponentSacrifices'; gainToughness?: boolean; greatestPower?: boolean }
+  /**
+   * Forage: exile three cards from your graveyard or sacrifice a Food. If you
+   * do, `then` happens. `optional`: "you may forage".
+   */
+  | { kind: 'forage'; then: EffectDef[]; optional?: boolean }
+  /** Offspring: a token copy of the source that's 1/1 (uses last known information). */
+  | { kind: 'offspringCopy' }
+  /** Counts a resolution of this ability this turn (see the `resolvedThisTurn` condition). */
+  | { kind: 'noteResolution' }
   | { kind: 'counters'; to: Ref; amount: Amount }
   | { kind: 'fight'; a: Ref; b: Ref }
   | { kind: 'destroy'; what: Ref }
@@ -410,6 +457,8 @@ export type EffectDef =
       /** "Tapped and attacking" (Leonin Warleader). */
       attacking?: boolean;
       tapped?: boolean;
+      /** Created under an opponent's control (a gift). */
+      forOpponent?: boolean;
     }
   /** Return all land cards from your graveyard to the battlefield tapped (World Shaper). */
   | { kind: 'returnLandsFromGraveyard' }
@@ -521,6 +570,12 @@ export interface GameObject {
   zoneTurn?: number;
   /** Named counters (e.g. incubation). */
   counters?: Record<string, number>;
+  /** A copy's printed power and toughness (offspring tokens are 1/1). */
+  copyPT?: { power: number; toughness: number };
+  /** The turn it last became the target of its controller's spell or ability (valiant). */
+  targetedByControllerTurn?: number;
+  /** Resolutions of its triggered ability this turn (Harvestrite Host). */
+  resolutions?: { turn: number; count: number };
 }
 
 /** A reference that goes stale when the object changes zones. */
@@ -610,6 +665,8 @@ export interface TurnState {
   creaturesDied: number;
   /** Cards each player drew this turn. */
   cardsDrawn: Record<PlayerId, number>;
+  /** Total mana each player spent this turn (expend). Missing in older saves. */
+  manaSpent?: Record<PlayerId, number>;
 }
 
 export interface Attacker {
@@ -790,6 +847,29 @@ export type Decision =
       resume: PausedResolution;
       thenPriority: PlayerId;
     }
+  | {
+      /** Forage: sacrifice one of these Foods, exile three graveyard cards, or (if optional) don't. */
+      kind: 'forage';
+      player: PlayerId;
+      foods: ObjectId[];
+      graveyard: boolean;
+      optional: boolean;
+      /** Effects that happen if they forage. */
+      then: EffectDef[];
+      resume: PausedResolution;
+      thenPriority: PlayerId;
+    }
+  | {
+      /** Forage by exiling cards from the graveyard, one at a time. */
+      kind: 'forageExile';
+      player: PlayerId;
+      count: number;
+      /** A resolution-time forage: these effects, then the rest of the resolution. */
+      then?: EffectDef[];
+      resume?: PausedResolution;
+      /** Who gets priority afterwards (after a cost, the player who paid it). */
+      thenPriority: PlayerId;
+    }
   | { kind: 'gameOver' };
 
 export interface GameState {
@@ -839,6 +919,8 @@ export type Action =
       kicked?: boolean;
       /** The creature sacrificed as an additional cost (Eaten Alive). */
       sacrifice?: ObjectId;
+      /** Forage as an additional cost: the Food to sacrifice, or 'graveyard' to exile three cards. */
+      forage?: ObjectId | 'graveyard';
       /** Mana sources to tap. Omitted: the engine picks. */
       payWith?: ObjectId[];
     }
@@ -850,6 +932,8 @@ export type Action =
       targets: TargetChoice[];
       /** The creature sacrificed as a cost (Vampiric Rites). */
       sacrifice?: ObjectId;
+      /** Forage as a cost: the Food to sacrifice, or 'graveyard' to exile three cards. */
+      forage?: ObjectId | 'graveyard';
       payWith?: ObjectId[];
     }
   | { type: 'addAttacker'; player: PlayerId; attacker: ObjectId; defender: PlayerId }
@@ -868,6 +952,8 @@ export type Action =
   /** Curator of Destinies: which cards go in the face-up pile (the rest are face down). */
   | { type: 'splitPiles'; player: PlayerId; faceUp: ObjectId[] }
   | { type: 'choosePile'; player: PlayerId; pile: 'faceUp' | 'faceDown' }
+  /** Answer a forage: a Food to sacrifice, 'graveyard' to exile three cards, or null not to. */
+  | { type: 'forage'; player: PlayerId; choice: ObjectId | 'graveyard' | null }
   | { type: 'concede'; player: PlayerId };
 
 export type GameEvent =
@@ -893,6 +979,12 @@ export type GameEvent =
   | { type: 'searched'; player: PlayerId; id: ObjectId }
   /** A card revealed from a library and put into its owner's hand. */
   | { type: 'revealed'; player: PlayerId; id: ObjectId }
+  /** A permanent was sacrificed (just before it left the battlefield). */
+  | { type: 'sacrificed'; id: ObjectId; defId: CardDefId; player: PlayerId }
+  /** `player` spent mana: their total this turn went from `before` to `after`. */
+  | { type: 'manaSpent'; player: PlayerId; before: number; after: number }
+  /** `player`'s spell or ability targeted these objects. */
+  | { type: 'targeted'; player: PlayerId; ids: ObjectId[] }
   | { type: 'gameOver'; winner: PlayerId | 'draw' };
 
 export interface ApplyResult {

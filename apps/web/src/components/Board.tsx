@@ -1,8 +1,17 @@
 import { cardDb, type Decklist } from '@mtg/cards';
-import type { Action, CardDefId, ManaCost, ObjectId, PendingTrigger, PlayerId } from '@mtg/engine';
+import type {
+  Action,
+  CardDefId,
+  CardDefinition,
+  ManaCost,
+  ObjectId,
+  PendingTrigger,
+  PlayerId,
+} from '@mtg/engine';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   castGroups,
+  forageFood,
   handActions,
   isTargeting,
   permanentActions,
@@ -210,6 +219,10 @@ export function Board({
       if (d.options.includes(id)) act({ type: 'chooseCard', player: HUMAN, card: id });
       return;
     }
+    if (d.kind === 'forage') {
+      if (d.foods.includes(id)) act({ type: 'forage', player: HUMAN, choice: id });
+      return;
+    }
     const o = view.objects[id]!;
     if (o.zone !== 'battlefield') {
       const acts = handActions(legal, id);
@@ -252,6 +265,9 @@ export function Board({
     const acts = legal.filter(
       (a) => a.type === 'activateAbility' && a.source === source && a.abilityIndex === index,
     );
+    // Forage as a cost: a Food or the graveyard, chosen from a menu first.
+    const groups = castGroups(acts);
+    if (groups.length > 1) return setCastMenu({ source, groups });
     beginOrApply(source, `${nameOf(view.objects[source]!.defId)} ability`, acts);
   };
 
@@ -284,6 +300,7 @@ export function Board({
     if (dragTargets) return dragTargets.has(`obj:${id}`) ? 'option' : null;
     if (options) return options.has(`obj:${id}`) ? 'option' : null;
     if (myDecision && d.kind === 'sacrifice') return d.options.includes(id) ? 'option' : null;
+    if (myDecision && d.kind === 'forage') return d.foods.includes(id) ? 'option' : null;
     if (id === blocker) return 'selected';
     if (declaredAttackers.has(id)) return 'attacking';
     if (blocking.has(id)) return 'blocking';
@@ -389,12 +406,17 @@ export function Board({
     if (targeting) {
       const first = targeting.candidates[0];
       const n = first ? targetsOf(first).length : 1;
-      const sacrificing =
+      const paying =
         targeting.chosen.length === 0 &&
-        (first?.type === 'castSpell' || first?.type === 'activateAbility') &&
-        !!first.sacrifice;
-      const prompt = sacrificing
-        ? `${targeting.label}: choose a creature to sacrifice`
+        (first?.type === 'castSpell' || first?.type === 'activateAbility')
+          ? first.sacrifice
+            ? 'a creature'
+            : forageFood(first)
+              ? 'a Food'
+              : null
+          : null;
+      const prompt = paying
+        ? `${targeting.label}: choose ${paying} to sacrifice`
         : `${targeting.label}: choose ${n > 1 ? `target ${targeting.chosen.length + 1} of ${n}` : 'a target'}`;
       if (targeting.skip) return { prompt, primary: ['Skip', () => act(targeting.skip!)] };
       if (d.kind === 'chooseTriggerTargets') return { prompt };
@@ -456,6 +478,28 @@ export function Board({
         return { prompt: `Sacrifice, discard, or lose ${d.life} life` };
       case 'pickExiled':
         return { prompt: 'Choose a card to play' };
+      case 'forage': {
+        const name = nameOf(d.resume.sourceDefId);
+        const how = [
+          d.foods.length ? 'click a Food to sacrifice' : '',
+          d.graveyard ? 'exile three cards from your graveyard' : '',
+        ].filter(Boolean);
+        const forage = (choice: ObjectId | 'graveyard' | null) => () =>
+          act({ type: 'forage', player: HUMAN, choice });
+        return {
+          prompt: `${name}: forage — ${how.join(', or ')}`,
+          ...(d.graveyard
+            ? { primary: ['Exile from graveyard', forage('graveyard')] as [string, () => void] }
+            : {}),
+          ...(d.optional
+            ? { secondary: ["Don't forage", forage(null)] as [string, () => void] }
+            : {}),
+        };
+      }
+      case 'forageExile':
+        return {
+          prompt: `Forage: exile ${d.count} more card${d.count > 1 ? 's' : ''} from your graveyard`,
+        };
       case 'priority': {
         const top = view.stack[view.stack.length - 1];
         if (top) {
@@ -815,6 +859,39 @@ export function Board({
         />
       )}
 
+      {d.kind === 'forageExile' && d.player === HUMAN && (
+        <div className="overlay overlay--mull">
+          <div className="mull">
+            <h2>Forage</h2>
+            <p>
+              Exile {d.count} more card{d.count > 1 ? 's' : ''} from your graveyard.
+            </p>
+            <div className="mull__hand">
+              {legal.flatMap((a, i) =>
+                a.type === 'chooseCard' && a.card ? (
+                  <div
+                    key={a.card}
+                    className="mull__card"
+                    style={{ '--i': i } as React.CSSProperties}
+                  >
+                    <Card
+                      id={a.card}
+                      defId={view.objects[a.card]!.defId}
+                      size="mull"
+                      mark="option"
+                      onClick={() => act(a)}
+                      onHover={setHover}
+                    />
+                  </div>
+                ) : (
+                  []
+                ),
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
       {targeting && graveyardOptions.length > 0 && (
         <div className="overlay overlay--mull">
           <div className="mull">
@@ -1093,13 +1170,31 @@ function ChooseCardOverlay({ game, onHover }: { game: GameSession; onHover: Hove
 
 /** "Choose one" mode name, or kicked / not kicked. */
 function castLabel(defId: CardDefId, a: Action): string {
-  if (a.type !== 'castSpell') return '';
+  if (a.type !== 'castSpell' && a.type !== 'activateAbility') return '';
+  if (a.forage)
+    return a.forage === 'graveyard'
+      ? 'Forage: exile three cards from your graveyard'
+      : 'Forage: sacrifice a Food';
+  if (a.type === 'activateAbility') return 'Activate';
   const def = cardDb.get(defId);
   if (a.mode !== undefined) return def?.modes?.[a.mode]?.label ?? `Mode ${a.mode + 1}`;
   if (def?.sacrificeOrPay)
     return a.sacrifice ? 'Sacrifice a creature' : `Pay ${manaText(def.sacrificeOrPay)}`;
+  if (def?.forageOrPay) return `Pay ${manaText(def.forageOrPay)}`;
   if (!def?.kicker) return 'Cast';
+  if (def.kicker.as === 'gift')
+    return a.kicked ? `Promise ${giftText(def)} to your opponent` : 'No gift';
+  if (def.kicker.as === 'offspring')
+    return a.kicked ? `With offspring (+${manaText(def.kicker.cost)})` : 'Without offspring';
   return a.kicked ? `Kicked (+${manaText(def.kicker.cost)})` : 'Not kicked';
+}
+
+/** What a gift spell promises: "a card", "a Food", "a tapped Fish". */
+function giftText(def: CardDefinition): string {
+  const gift = def.kicker?.spell?.effects[0];
+  if (gift?.kind === 'createToken')
+    return `a ${gift.tapped ? 'tapped ' : ''}${cardDb.get(gift.token)?.name ?? 'token'}`;
+  return 'a card';
 }
 
 function manaText(c: ManaCost): string {

@@ -131,6 +131,7 @@ export function startTurn(ctx: Ctx, player: PlayerId): void {
   s.turn.lifeGains = { p1: 0, p2: 0 };
   s.turn.creaturesDied = 0;
   s.turn.cardsDrawn = { p1: 0, p2: 0 };
+  s.turn.manaSpent = { p1: 0, p2: 0 };
   for (const q of Object.values(s.players)) q.attackedThisTurn = false;
   enterStep(ctx, 'untap');
 }

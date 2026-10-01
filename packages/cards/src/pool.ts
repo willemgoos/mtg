@@ -1,4 +1,7 @@
-/** Allowed sets, most preferred first: Foundations, then older core sets. */
+/**
+ * Allowed sets, most preferred first: Foundations, then older core sets, then
+ * Bloomburrow (late, so cards reprinted there keep their core-set printing).
+ */
 export const SET_PREFERENCE = [
   'fdn',
   'm21',
@@ -18,6 +21,7 @@ export const SET_PREFERENCE = [
   '6ed',
   '5ed',
   '4ed',
+  'blb',
   // Arena Beginner Set: Arena-only cards (last resort).
   'anb',
 ];
@@ -380,6 +384,46 @@ export const BLACK_POOL = [
   'Zombify',
 ] as const;
 
+/** Bloomburrow cards for the Golgari Squirrels and Selesnya Rabbits decks. */
+export const BLOOMBURROW_POOL = [
+  'Agate-Blade Assassin',
+  'Bakersbane Duo',
+  'Vinereap Mentor',
+  'Bonebind Orator',
+  'Bushy Bodyguard',
+  'Daggerfang Duo',
+  'Curious Forager',
+  'Honored Dreyleader',
+  'Treetop Sentries',
+  'Thornplate Intimidator',
+  "Wick's Patrol",
+  'Camellia, the Seedmiser',
+  'Feed the Cycle',
+  'Savor',
+  'Nocturnal Hunger',
+  'Longstalk Brawl',
+  'Consumed by Greed',
+  "Hazel's Nocturne",
+  'Seasoned Warrenguard',
+  'Brave-Kin Duo',
+  'Nettle Guard',
+  'Intrepid Rabbit',
+  'Warren Elder',
+  'Burrowguard Mentor',
+  'Harvestrite Host',
+  'Druid of the Spade',
+  'Hazardroot Herbalist',
+  'Finneas, Ace Archer',
+  'Warren Warleader',
+  'Treeguard Duo',
+  'Carrot Cake',
+  'Hop to It',
+  'Crumb and Get It',
+  "Mabel's Mettle",
+  'Rabbit Response',
+  'Repel Calamity',
+];
+
 /** Multicoloured and colourless cards. */
 export const OTHER_POOL = [
   "Pirate's Cutlass",
@@ -475,6 +519,7 @@ export const POOL: { name: string }[] = [
   ...BLACK_POOL,
   ...OTHER_POOL,
   ...LAND_POOL,
+  ...BLOOMBURROW_POOL,
 ].map((name) => ({
   name,
 }));

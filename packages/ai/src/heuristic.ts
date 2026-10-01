@@ -11,6 +11,7 @@ import {
 import {
   chooseLandToPlay,
   choosePickExiled,
+  chooseForageExile,
   choosePile,
   chooseSplit,
   choosePunishment,
@@ -57,7 +58,10 @@ export function createHeuristicBot(db: CardDb, name = 'heuristic'): Bot {
           return pickCardToLose(engine, view, me, legal);
         case 'chooseTriggerTargets':
         case 'optionalEffect':
+        case 'forage':
           return bestByEvaluation(engine, view, me, legal, 'stack');
+        case 'forageExile':
+          return chooseForageExile(engine, view, legal);
         case 'scry':
           return chooseScry(engine, view, me, legal);
         case 'searchLibrary':

@@ -7,6 +7,8 @@ export interface CastVariant {
   flashback?: boolean;
   /** Needs a creature sacrificed as an additional cost (Eaten Alive). */
   sacrifice?: boolean;
+  /** Needs a forage as an additional cost (Feed the Cycle). */
+  forage?: boolean;
   /** Cast from the graveyard by removing this many +1/+1 counters (Quilled Greatwurm). */
   removeCounters?: number;
   cost: ManaCost;
@@ -39,6 +41,11 @@ export function castVariants(d: CardDefinition, zone: ZoneName): CastVariant[] {
   if (d.modes) return d.modes.map((spell, mode) => ({ mode, cost, spell, ...extra }));
   if (d.sacrificeCreatureToCast)
     return [{ cost, spell: d.spell ?? null, sacrifice: true, ...extra }];
+  if (d.forageOrPay)
+    return [
+      { cost, spell: d.spell ?? null, forage: true, ...extra },
+      { cost: addCosts(cost, d.forageOrPay), spell: d.spell ?? null, ...extra },
+    ];
   if (d.sacrificeOrPay)
     return [
       { cost, spell: d.spell ?? null, sacrifice: true, ...extra },
@@ -63,13 +70,15 @@ export function variantOf(
     mode?: number | undefined;
     kicked?: boolean | undefined;
     sacrifice?: string | undefined;
+    forage?: string | undefined;
   },
 ): CastVariant | undefined {
   return castVariants(d, zone).find(
     (v) =>
       (v.mode ?? -1) === (choice.mode ?? -1) &&
       !!v.kicked === !!choice.kicked &&
-      !!v.sacrifice === !!choice.sacrifice,
+      !!v.sacrifice === !!choice.sacrifice &&
+      !!v.forage === !!choice.forage,
   );
 }
 

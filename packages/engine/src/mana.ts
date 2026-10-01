@@ -1,5 +1,5 @@
 import { canTapForAbility, isCreature } from './characteristics.ts';
-import { type Ctx, def, moveObject, obj, tap } from './context.ts';
+import { type Ctx, def, emit, obj, sacrifice, tap } from './context.ts';
 import { checkCondition } from './triggers.ts';
 import type { ManaCost, ManaType, ObjectId, PlayerId } from './types.ts';
 
@@ -103,12 +103,21 @@ export function anyTypeCost(cost: ManaCost): ManaCost {
   return { generic: manaValue(cost), colored: {} };
 }
 
-/** Taps the chosen sources, sacrificing those that are used up (Treasure). */
+/**
+ * Taps the chosen sources, sacrificing those that are used up (Treasure).
+ * Each entry is one mana; the total spent this turn feeds expend triggers.
+ */
 export function payMana(ctx: Ctx, sources: readonly ObjectId[]): void {
+  if (sources.length === 0) return;
+  const player = obj(ctx, sources[0]!).controller;
+  const spent = (ctx.s.turn.manaSpent ??= { p1: 0, p2: 0 });
+  const before = spent[player];
+  spent[player] += sources.length;
+  emit(ctx, { type: 'manaSpent', player, before, after: spent[player] });
   for (const id of sources) {
     tap(ctx, id);
     if (def(ctx, id).abilities.some((a) => a.kind === 'mana' && a.cost.sacrificeSelf))
-      moveObject(ctx, id, 'graveyard');
+      sacrifice(ctx, id);
   }
 }
 

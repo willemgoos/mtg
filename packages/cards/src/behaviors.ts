@@ -1,5 +1,6 @@
 import type { AbilityDef, CardDefinition, EffectDef, ManaType, TargetSpec } from '@mtg/engine';
 import { type Behavior, parseManaCost } from './build.ts';
+import { BLOOMBURROW_BEHAVIORS } from './bloomburrow.ts';
 import { FOUNDATIONS_BATCH_BEHAVIORS } from './foundations-batch.ts';
 
 // Helpers for the common shapes.
@@ -126,6 +127,7 @@ const dualLandBehaviors = (): Record<string, Behavior> =>
  */
 export const BEHAVIORS: Record<string, Behavior> = {
   ...FOUNDATIONS_BATCH_BEHAVIORS,
+  ...BLOOMBURROW_BEHAVIORS,
   // ---------------------------------------------------------------- red
   Shock: burn(2),
   'Lightning Strike': burn(3),
@@ -2177,6 +2179,8 @@ export const TOKENS: CardDefinition[] = [
   token('drake-token', 'Drake', 'U', ['Drake'], 2, 2, ['flying']),
   token('spirit-flying-token', 'Spirit', 'W', ['Spirit'], 1, 1, ['flying']),
   token('phyrexian-goblin-token', 'Phyrexian Goblin', 'R', ['Phyrexian', 'Goblin'], 1, 1),
+  token('squirrel-token', 'Squirrel', 'G', ['Squirrel'], 1, 1),
+  token('fish-token', 'Fish', 'U', ['Fish'], 1, 1),
   {
     ...token('scion-of-the-deep-token', 'Scion of the Deep', 'U', ['Octopus'], 8, 8),
     supertypes: ['Legendary'],

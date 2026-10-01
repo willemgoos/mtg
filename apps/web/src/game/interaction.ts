@@ -5,14 +5,26 @@ export type TargetKey = string;
 export const targetKey = (t: TargetChoice): TargetKey =>
   'player' in t ? `player:${t.player}` : `obj:${t.object.id}`;
 
+/** The Food an action sacrifices to forage, if it forages that way. */
+export function forageFood(a: Action): ObjectId | null {
+  return (a.type === 'castSpell' || a.type === 'activateAbility') &&
+    a.forage &&
+    a.forage !== 'graveyard'
+    ? a.forage
+    : null;
+}
+
 /**
  * What the player picks on the board for an action, in order. A creature
- * sacrificed as a cost (Eaten Alive, Vampiric Rites) is picked first, like a target.
+ * sacrificed as a cost (Eaten Alive, Vampiric Rites) or a Food sacrificed to
+ * forage is picked first, like a target.
  */
 export function targetsOf(a: Action): TargetChoice[] {
   if (a.type === 'castSpell' || a.type === 'activateAbility') {
-    const sac: TargetChoice[] = a.sacrifice ? [{ object: { id: a.sacrifice, zcc: -1 } }] : [];
-    return [...sac, ...a.targets];
+    const costs: TargetChoice[] = [a.sacrifice, forageFood(a)].flatMap((id) =>
+      id ? [{ object: { id, zcc: -1 } }] : [],
+    );
+    return [...costs, ...a.targets];
   }
   return a.type === 'chooseTargets' ? a.targets : [];
 }
@@ -85,12 +97,19 @@ export function handActions(legal: readonly Action[], card: ObjectId): Action[] 
   );
 }
 
-/** Cast actions grouped by how the spell is cast (mode, kicker), in legal-action order. */
+/**
+ * Cast (or activate) actions grouped by how the cost is paid: mode, kicker,
+ * sacrifice, forage (any Food, or the graveyard). In legal-action order.
+ */
 export function castGroups(casts: readonly Action[]): Action[][] {
   const groups = new Map<string, Action[]>();
   for (const a of casts) {
-    if (a.type !== 'castSpell') continue;
-    const key = `${a.mode ?? ''}:${a.kicked ? 'k' : ''}:${a.sacrifice ? 's' : ''}`;
+    if (a.type !== 'castSpell' && a.type !== 'activateAbility') continue;
+    const forage = a.forage ? (a.forage === 'graveyard' ? 'g' : 'f') : '';
+    const key =
+      a.type === 'castSpell'
+        ? `${a.mode ?? ''}:${a.kicked ? 'k' : ''}:${a.sacrifice ? 's' : ''}:${forage}`
+        : forage;
     groups.set(key, [...(groups.get(key) ?? []), a]);
   }
   return [...groups.values()];

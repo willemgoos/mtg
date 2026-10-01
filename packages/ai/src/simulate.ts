@@ -10,6 +10,7 @@ import {
 } from '@mtg/engine';
 import {
   choosePickExiled,
+  chooseForageExile,
   choosePile,
   chooseSplit,
   choosePunishment,
@@ -72,6 +73,7 @@ function passiveAction(
     }
     case 'chooseTriggerTargets':
     case 'optionalEffect':
+    case 'forage':
       return bestByEvaluation(
         engine,
         s,
@@ -94,6 +96,8 @@ function passiveAction(
       return chooseSplit(engine, s, d.player, engine.getLegalActions(s, d.player));
     case 'choosePile':
       return choosePile(s, d.player);
+    case 'forageExile':
+      return chooseForageExile(engine, s, engine.getLegalActions(s, d.player));
     default:
       return engine.getLegalActions(s, d.player)[0]!;
   }

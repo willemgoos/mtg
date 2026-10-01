@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   BEHAVIORS,
   BLACK_POOL,
+  BLOOMBURROW_POOL,
   BLUE_POOL,
   CARDS,
   cardDb,
@@ -41,6 +42,7 @@ describe('card data', () => {
         ...BLACK_POOL,
         ...OTHER_POOL,
         ...LAND_POOL,
+        ...BLOOMBURROW_POOL,
       ].sort(),
     );
     for (const c of SCRYFALL) expect(c.image?.normal).toMatch(/^https:\/\/cards\.scryfall\.io\//);
@@ -118,6 +120,8 @@ describe('card data', () => {
         'keep-the-peace',
         'goblins-everywhere',
         'large-and-in-charge',
+        'blb-forage-and-feast',
+        'blb-warren-rally',
       ].sort(),
     );
     for (const d of PLAYABLE_DECKS)

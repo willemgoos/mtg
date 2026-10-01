@@ -20,9 +20,11 @@ import {
   obj,
   onBattlefield,
   other,
+  sacrifice,
   tap,
   untap,
 } from './context.ts';
+import { foodsOf } from './forage.ts';
 import { manaValue } from './mana.ts';
 import { shuffleInPlace } from './rng.ts';
 import { checkCondition } from './triggers.ts';
@@ -207,7 +209,7 @@ export function runEffects(
     if (e.kind === 'if') {
       // Replace it with the chosen branch (which may itself pause).
       const self = es.source ? ctx.s.objects[es.source.id] : undefined;
-      const branch = checkCondition(ctx, e.condition, es.controller, self)
+      const branch = checkCondition(ctx, e.condition, es.controller, self, es.targets)
         ? e.then
         : (e.else ?? []);
       list.splice(i, 1, ...branch);
@@ -225,7 +227,8 @@ export function runEffects(
       e.kind === 'piles' ||
       e.kind === 'opponentSacrifices' ||
       e.kind === 'punisher' ||
-      e.kind === 'exileTopChooseOne'
+      e.kind === 'exileTopChooseOne' ||
+      e.kind === 'forage'
     ) {
       const lib = ctx.s.players[es.controller].library;
       const { controller, source, sourceDefId, targets, lkiPower, subject, amount } = es;
@@ -282,9 +285,29 @@ export function runEffects(
         if (options.length === 0) continue;
         for (const id of options) moveObject(ctx, id, 'exile');
         ctx.s.decision = { kind: 'pickExiled', player: controller, options, resume, thenPriority };
+      } else if (e.kind === 'forage') {
+        const foods = foodsOf(ctx, controller);
+        const graveyard = ctx.s.players[controller].graveyard.length >= 3;
+        // Can't forage: "if you do" doesn't happen.
+        if (!foods.length && !graveyard) continue;
+        ctx.s.decision = {
+          kind: 'forage',
+          player: controller,
+          foods,
+          graveyard,
+          optional: !!e.optional,
+          then: e.then,
+          resume,
+          thenPriority,
+        };
       } else if (e.kind === 'opponentSacrifices') {
         const opp = other(controller);
-        const options = creaturesOnBattlefield(ctx, opp).map((c) => c.id);
+        let options = creaturesOnBattlefield(ctx, opp).map((c) => c.id);
+        // "The creature with the greatest power": they choose among those tied.
+        if (e.greatestPower) {
+          const most = Math.max(...options.map((id) => power(ctx, id)));
+          options = options.filter((id) => power(ctx, id) === most);
+        }
         if (options.length === 0) continue;
         ctx.s.decision = {
           kind: 'sacrifice',
@@ -445,7 +468,7 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
         if (!hasKeyword(ctx, id, 'indestructible')) moveObject(ctx, id, 'graveyard');
       return;
     case 'sacrifice':
-      for (const id of objectsOf(ctx, es, e.what)) moveObject(ctx, id, 'graveyard');
+      for (const id of objectsOf(ctx, es, e.what)) sacrifice(ctx, id);
       return;
     case 'gainLife': {
       const n = resolveAmount(ctx, es, e.amount);
@@ -464,15 +487,16 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
     }
     case 'createToken': {
       const n = resolveAmount(ctx, es, e.count);
+      const owner = e.forOpponent ? other(es.controller) : es.controller;
       for (let i = 0; i < n; i++) {
-        const t = createObject(ctx, e.token, es.controller, 'battlefield', true);
+        const t = createObject(ctx, e.token, owner, 'battlefield', true);
         if (defOf(ctx, e.token).entersTapped || e.tapped) t.tapped = true;
         if (e.attacking && ctx.s.combat) {
           // "Tapped and attacking": attacking the same player, never declared (no attack triggers).
           t.tapped = true;
           ctx.s.combat.attackers.push({
             id: t.id,
-            defender: other(es.controller),
+            defender: other(owner),
             blocked: false,
             blockers: [],
           });
@@ -646,10 +670,29 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
       if (wasCreature && e.ifCreature) for (const x of e.ifCreature) runEffect(ctx, es, x);
       return;
     }
+    case 'offspringCopy': {
+      // A 1/1 token copy, even if the creature has already left the battlefield.
+      const t = createObject(ctx, es.sourceDefId, es.controller, 'battlefield', true);
+      t.copyPT = { power: 1, toughness: 1 };
+      ctx.s.battlefield.push(t.id);
+      emit(ctx, { type: 'objectMoved', id: t.id, defId: t.defId, from: null, to: 'battlefield' });
+      return;
+    }
+    case 'noteResolution': {
+      const o = es.source && ctx.s.objects[es.source.id];
+      if (!o) return;
+      const turn = ctx.s.turn.number;
+      o.resolutions =
+        o.resolutions?.turn === turn
+          ? { turn, count: o.resolutions.count + 1 }
+          : { turn, count: 1 };
+      return;
+    }
     case 'if':
     case 'may':
     case 'punisher':
     case 'exileTopChooseOne':
+    case 'forage':
       return; // handled by runEffects
     case 'custom': {
       const fn = ctx.customEffects[e.handler];

@@ -59,6 +59,7 @@ export function emptyState(seed: number): GameState {
       lifeGains: { p1: 0, p2: 0 },
       creaturesDied: 0,
       cardsDrawn: { p1: 0, p2: 0 },
+      manaSpent: { p1: 0, p2: 0 },
     },
     combat: null,
     effects: [],

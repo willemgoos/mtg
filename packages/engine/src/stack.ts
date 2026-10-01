@@ -1,8 +1,20 @@
 import { power } from './characteristics.ts';
-import { type Ctx, def, defOf, emit, moveObject, newId, obj, other, tap } from './context.ts';
+import {
+  type Ctx,
+  def,
+  defOf,
+  emit,
+  moveObject,
+  newId,
+  obj,
+  other,
+  sacrifice as sacrificePermanent,
+  tap,
+} from './context.ts';
 import { type EffectSource, runEffects } from './effects.ts';
 import { characteristics, countOf, hasKeyword, cardMatches } from './characteristics.ts';
 import { changeLife, gainLife } from './effects.ts';
+import { payForage } from './forage.ts';
 import { anyTypeCost, manaValue, payMana, planPayment } from './mana.ts';
 import { shuffleInPlace } from './rng.ts';
 import { shuffleLibrary } from './setup.ts';
@@ -30,6 +42,14 @@ export interface CastChoice {
   kicked?: boolean | undefined;
   /** The creature sacrificed as an additional cost. */
   sacrifice?: ObjectId | undefined;
+  /** Forage as an additional cost: a Food, or 'graveyard'. */
+  forage?: ObjectId | 'graveyard' | undefined;
+}
+
+/** Valiant needs to know what a player's spell or ability targeted. */
+function noteTargets(ctx: Ctx, player: PlayerId, targets: readonly TargetChoice[]): void {
+  const ids = targets.flatMap((t) => ('object' in t ? [t.object.id] : []));
+  if (ids.length) emit(ctx, { type: 'targeted', player, ids });
 }
 
 /** Ward {2}: an opponent targeting it pays {2} more (we charge it up front). */
@@ -116,7 +136,7 @@ export function castSpell(
   targets: TargetChoice[],
   choice: CastChoice,
   payWith?: ObjectId[],
-): void {
+): boolean {
   const o = obj(ctx, card);
   const d = defOf(ctx, o.defId);
   const v = variantOf(d, o.zone, choice)!;
@@ -125,7 +145,7 @@ export function castSpell(
   const cost = addCosts(castCost(ctx, player, card, choice), wardCost(ctx, player, targets));
   const payment = planPayment(ctx, player, cost, payWith, undefined, d.subtypes);
   moveObject(ctx, card, 'stack', { controller: player });
-  if (choice.sacrifice) moveObject(ctx, choice.sacrifice, 'graveyard');
+  if (choice.sacrifice) sacrificePermanent(ctx, choice.sacrifice);
   if (v.removeCounters) removeCounters(ctx, player, v.removeCounters);
   changeLife(ctx, player, -wardLife(ctx, player, targets));
   ctx.s.stack.push({
@@ -139,6 +159,10 @@ export function castSpell(
   });
   payMana(ctx, payment);
   emit(ctx, { type: 'spellCast', id: card, player });
+  noteTargets(ctx, player, targets);
+  return (
+    choice.forage !== undefined && payForage(ctx, player, choice.forage, { thenPriority: player })
+  );
 }
 
 /** A count from `player`'s point of view (for cost reduction). */
@@ -169,7 +193,8 @@ export function activateAbility(
   targets: TargetChoice[],
   payWith?: ObjectId[],
   sacrifice?: ObjectId,
-): void {
+  forage?: ObjectId | 'graveyard',
+): boolean {
   const a = activatedAbility(ctx, source, index);
   const src = obj(ctx, source);
   const sourceRef = { id: source, zcc: src.zcc };
@@ -180,7 +205,7 @@ export function activateAbility(
     payWith,
     a.cost.tapSelf ? source : undefined,
   );
-  if (sacrifice) moveObject(ctx, sacrifice, 'graveyard');
+  if (sacrifice) sacrificePermanent(ctx, sacrifice);
   changeLife(ctx, player, -wardLife(ctx, player, targets));
   if (a.cost.removeCounters) {
     const c = (src.counters ??= {});
@@ -202,10 +227,13 @@ export function activateAbility(
   if (a.once) (src.usedAbilities ??= []).push(index);
   if (a.cost.sacrificeSelf) {
     item.lkiPower = power(ctx, source);
-    moveObject(ctx, source, 'graveyard');
+    sacrificePermanent(ctx, source);
   }
+  if (a.cost.exileSelf) moveObject(ctx, source, 'exile');
   ctx.s.stack.push(item);
   emit(ctx, { type: 'abilityActivated', id, source, player });
+  noteTargets(ctx, player, targets);
+  return forage !== undefined && payForage(ctx, player, forage, { thenPriority: player });
 }
 
 export function pushTrigger(
@@ -240,6 +268,7 @@ export function pushTrigger(
     ...(mode !== undefined ? { mode } : {}),
   });
   emit(ctx, { type: 'triggerStacked', id, source: t.source.id, player: t.controller });
+  noteTargets(ctx, t.controller, targets);
 }
 
 function abilityOf(
@@ -366,6 +395,42 @@ function resume(ctx: Ctx, r: PausedResolution, thenPriority: PlayerId): void {
   givePriority(ctx, thenPriority);
 }
 
+/** Carries on with a paused resolution, running `first` before the rest of it. */
+function continueWith(
+  ctx: Ctx,
+  r: PausedResolution,
+  first: readonly EffectDef[],
+  thenPriority: PlayerId,
+): void {
+  if (runEffects(ctx, r, [...first, ...r.effects], r.item)) return;
+  finishResolution(ctx, r.item);
+  givePriority(ctx, thenPriority);
+}
+
+/** "You may forage. If you do, ...": a Food, the graveyard, or (null) not foraging. */
+export function answerForage(ctx: Ctx, choice: ObjectId | 'graveyard' | null): void {
+  const d = ctx.s.decision;
+  if (d.kind !== 'forage') throw new Error('Not foraging');
+  if (choice === null) return resume(ctx, d.resume, d.thenPriority);
+  const paused = payForage(ctx, d.player, choice, {
+    then: d.then,
+    resume: d.resume,
+    thenPriority: d.thenPriority,
+  });
+  if (!paused) continueWith(ctx, d.resume, d.then, d.thenPriority);
+}
+
+/** Foraging from the graveyard: one card exiled at a time. */
+export function answerForageExile(ctx: Ctx, card: ObjectId): void {
+  const d = ctx.s.decision;
+  if (d.kind !== 'forageExile') throw new Error('Not foraging');
+  moveObject(ctx, card, 'exile');
+  d.count--;
+  if (d.count > 0 && ctx.s.players[d.player].graveyard.length > 0) return;
+  if (d.resume) continueWith(ctx, d.resume, d.then ?? [], d.thenPriority);
+  else givePriority(ctx, d.thenPriority);
+}
+
 export function answerOptionalEffect(ctx: Ctx, accept: boolean): void {
   const d = ctx.s.decision;
   if (d.kind !== 'optionalEffect') throw Error('Not choosing an optional effect');
@@ -398,6 +463,7 @@ export function answerPunisher(ctx: Ctx, card: ObjectId | null): void {
   const d = ctx.s.decision;
   if (d.kind !== 'punisher') throw new Error('Not choosing');
   if (card === null) changeLife(ctx, d.player, -d.life);
+  else if (obj(ctx, card).zone === 'battlefield') sacrificePermanent(ctx, card);
   else moveObject(ctx, card, 'graveyard');
   resume(ctx, d.resume, d.thenPriority);
 }
@@ -416,7 +482,7 @@ export function answerSacrifice(ctx: Ctx, card: ObjectId): void {
   const d = ctx.s.decision;
   if (d.kind !== 'sacrifice') throw new Error('Not sacrificing');
   const t = Math.max(0, characteristics(ctx, card).toughness);
-  moveObject(ctx, card, 'graveyard');
+  sacrificePermanent(ctx, card);
   if (d.gainLifeFor) gainLife(ctx, d.gainLifeFor, t);
   resume(ctx, d.resume, d.thenPriority);
 }

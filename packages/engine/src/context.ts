@@ -165,6 +165,8 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
   delete o.exiledUntilLeaves;
   delete o.kicked;
   delete o.counters;
+  delete o.targetedByControllerTurn;
+  delete o.resolutions;
   const src = zoneList(ctx, o, from);
   if (src) {
     const i = src.indexOf(id);
@@ -197,6 +199,13 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
   // "Until this leaves the battlefield": the exiled cards come back.
   for (const back of returning ?? [])
     if (ctx.s.objects[back]?.zone === 'exile') moveObject(ctx, back, 'battlefield');
+}
+
+/** Sacrifices a permanent: its controller puts it into its owner's graveyard. */
+export function sacrifice(ctx: Ctx, id: ObjectId): void {
+  const o = obj(ctx, id);
+  emit(ctx, { type: 'sacrificed', id, defId: o.defId, player: o.controller });
+  moveObject(ctx, id, 'graveyard');
 }
 
 function removeFromCombat(ctx: Ctx, id: ObjectId): void {
