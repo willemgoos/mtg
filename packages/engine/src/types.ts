@@ -251,11 +251,18 @@ export type TriggerDef =
   | { on: 'creatureYouControlDealsCombatDamage'; toPlayer?: boolean }
   | { on: 'beginningOfCombat'; whose: 'yours' }
   | { on: 'youGainLife' }
+  // Enrage (Marvel Super Heroes)
+  /** Whenever this creature is dealt damage. */
+  | { on: 'dealtDamage' }
   /** Whenever the creature this Aura is attached to dies. */
   | { on: 'attachedDies' }
   /** Whenever the creature this Equipment is attached to deals combat damage to a player. */
   | { on: 'equippedDealsCombatDamageToPlayer' }
-  | { on: 'attacks' }
+  | {
+      on: 'attacks';
+      // Marvel Super Heroes: "attacks alone" (Luke Cage).
+      alone?: boolean;
+    }
   /** "Whenever you attack" (with one or more creatures matching the filter): once per combat. */
   | { on: 'youAttack'; filter?: CardFilter }
   | { on: 'combatDamageToPlayer' }
@@ -284,7 +291,12 @@ export type TriggerDef =
   /** Whenever this creature becomes blocked. */
   | { on: 'becomesBlocked' }
   /** Whenever a creature you control (matching the filter) attacks; "that creature" is the subject. */
-  | { on: 'creatureYouControlAttacks'; filter?: CardFilter }
+  | {
+      on: 'creatureYouControlAttacks';
+      filter?: CardFilter;
+      // Marvel Super Heroes: "attacks alone" (it is the only attacker).
+      alone?: boolean;
+    }
   | { on: 'landfall' }
   | { on: 'beginningOfUpkeep'; whose: 'yours' | 'each' | 'opponents' }
   | { on: 'beginningOfEndStep'; whose: 'yours' | 'each' }
@@ -310,7 +322,11 @@ export type TriggerDef =
   /** Whenever you give a gift (Jolly Gerbils). */
   | { on: 'youGiveGift' }
   /** Whenever you put +1/+1 counters on a creature you control (Stocking the Pantry). */
-  | { on: 'youPutCounters' }
+  | {
+      on: 'youPutCounters';
+      // Marvel Super Heroes: "on another creature" (Knight of Wundagore).
+      other?: boolean;
+    }
   /** At the beginning of your draw step. */
   | { on: 'beginningOfDraw' }
   /** Whenever a creature you control becomes the target of an opponent's spell or ability (Pawpatch Recruit). */
@@ -913,6 +929,9 @@ export type StaticDef =
   | { kind: 'creaturesFromTopOfLibrary' }
   /** This creature gets +X/+Y (Persistent Marshstalker: +1/+0 for each other Rat you control). */
   | { kind: 'boost'; power: Amount; toughness: Amount }
+  // Power-up (Marvel Super Heroes)
+  /** Power-up abilities of other creatures you control cost {amount} less (Hulk, Gamma Goliath). */
+  | { kind: 'powerUpCostsLess'; amount: number }
   /** This creature can't be blocked. */
   | { kind: 'cantBeBlocked' }
   /** This creature can't be blocked by creatures matching the filter. */

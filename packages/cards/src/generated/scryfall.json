@@ -16568,6 +16568,602 @@
   }
  },
  {
+  "name": "Serpent Specialist",
+  "scryfallId": "72727c2a-08a9-47bc-a5eb-cda52e21684b",
+  "oracleId": "556f127f-6131-4171-b1ed-11420c21d345",
+  "set": "msh",
+  "collectorNumber": "186",
+  "rarity": "common",
+  "manaCost": "{G}",
+  "typeLine": "Creature — Human Snake Villain",
+  "oracleText": "Deathtouch\nPower-up — {3}{G}: Put two +1/+1 counters on this creature. (Activate each power-up ability only once. Reduce the cost by its mana cost if it entered this turn.)",
+  "power": "1",
+  "toughness": "1",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Power-up",
+   "Deathtouch"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/2/72727c2a-08a9-47bc-a5eb-cda52e21684b.jpg?1783902912",
+   "normal": "https://cards.scryfall.io/normal/front/7/2/72727c2a-08a9-47bc-a5eb-cda52e21684b.jpg?1783902912",
+   "large": "https://cards.scryfall.io/large/front/7/2/72727c2a-08a9-47bc-a5eb-cda52e21684b.jpg?1783902912",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/2/72727c2a-08a9-47bc-a5eb-cda52e21684b.jpg?1783902912"
+  }
+ },
+ {
+  "name": "Knight of Wundagore",
+  "scryfallId": "f3003766-9383-44e0-8b51-35ccbed137ed",
+  "oracleId": "39145960-a212-46b4-addb-4b187f6bf6fd",
+  "set": "msh",
+  "collectorNumber": "175",
+  "rarity": "common",
+  "manaCost": "{1}{G}",
+  "typeLine": "Creature — Cat Knight Villain",
+  "oracleText": "Trample\nWhenever you put a +1/+1 counter on another creature, put a +1/+1 counter on this creature. This ability triggers only once each turn.",
+  "power": "2",
+  "toughness": "1",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Trample"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/3/f3003766-9383-44e0-8b51-35ccbed137ed.jpg?1783902917",
+   "normal": "https://cards.scryfall.io/normal/front/f/3/f3003766-9383-44e0-8b51-35ccbed137ed.jpg?1783902917",
+   "large": "https://cards.scryfall.io/large/front/f/3/f3003766-9383-44e0-8b51-35ccbed137ed.jpg?1783902917",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/3/f3003766-9383-44e0-8b51-35ccbed137ed.jpg?1783902917"
+  }
+ },
+ {
+  "name": "Ant-Man's Army",
+  "scryfallId": "61a89566-06c1-404f-8217-e5276e2dc5a2",
+  "oracleId": "34c0f75d-10a9-428d-b202-3defb3949090",
+  "set": "msh",
+  "collectorNumber": "161",
+  "rarity": "common",
+  "manaCost": "{2}{G}",
+  "typeLine": "Creature — Insect",
+  "oracleText": "When this creature enters, create a Food token or a Treasure token. (A Food token is an artifact with \"{2}, {T}, Sacrifice this token: You gain 3 life.\" A Treasure token is an artifact with \"{T}, Sacrifice this token: Add one mana of any color.\")",
+  "power": "3",
+  "toughness": "2",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Treasure",
+   "Food"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/1/61a89566-06c1-404f-8217-e5276e2dc5a2.jpg?1783902921",
+   "normal": "https://cards.scryfall.io/normal/front/6/1/61a89566-06c1-404f-8217-e5276e2dc5a2.jpg?1783902921",
+   "large": "https://cards.scryfall.io/large/front/6/1/61a89566-06c1-404f-8217-e5276e2dc5a2.jpg?1783902921",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/1/61a89566-06c1-404f-8217-e5276e2dc5a2.jpg?1783902921"
+  }
+ },
+ {
+  "name": "Pet Avengers",
+  "scryfallId": "108a0b92-2134-4776-a2f7-da92050f1b21",
+  "oracleId": "bbee7921-19c9-4c70-8462-f16e7e9c25db",
+  "set": "msh",
+  "collectorNumber": "178",
+  "rarity": "common",
+  "manaCost": "{3}{G}",
+  "typeLine": "Creature — Dragon Cat Dog Bird Frog Hero",
+  "oracleText": "Reach\nPower-up — {6}{G}: Put a +1/+1 counter on this creature and create a 3/2 white Hero creature token with vigilance. (Activate each power-up ability only once. Reduce the cost by its mana cost if it entered this turn.)",
+  "power": "4",
+  "toughness": "4",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Power-up",
+   "Reach"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/0/108a0b92-2134-4776-a2f7-da92050f1b21.jpg?1783902915",
+   "normal": "https://cards.scryfall.io/normal/front/1/0/108a0b92-2134-4776-a2f7-da92050f1b21.jpg?1783902915",
+   "large": "https://cards.scryfall.io/large/front/1/0/108a0b92-2134-4776-a2f7-da92050f1b21.jpg?1783902915",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/0/108a0b92-2134-4776-a2f7-da92050f1b21.jpg?1783902915"
+  }
+ },
+ {
+  "name": "Guerrilla Gorilla",
+  "scryfallId": "af6bc9d2-5783-489a-8963-af65f54f4f17",
+  "oracleId": "6cb65b68-91b2-45ba-867b-3b31d6dd5643",
+  "set": "msh",
+  "collectorNumber": "169",
+  "rarity": "common",
+  "manaCost": "{1}{G}",
+  "typeLine": "Creature — Ape Soldier Hero",
+  "oracleText": "Reach\nSacrifice this creature: Destroy target noncreature artifact or noncreature enchantment. Activate only as a sorcery.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Reach"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/f/af6bc9d2-5783-489a-8963-af65f54f4f17.jpg?1783902918",
+   "normal": "https://cards.scryfall.io/normal/front/a/f/af6bc9d2-5783-489a-8963-af65f54f4f17.jpg?1783902918",
+   "large": "https://cards.scryfall.io/large/front/a/f/af6bc9d2-5783-489a-8963-af65f54f4f17.jpg?1783902918",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/f/af6bc9d2-5783-489a-8963-af65f54f4f17.jpg?1783902918"
+  }
+ },
+ {
+  "name": "Undercover Skrull",
+  "scryfallId": "90b9a3c0-3fd6-403e-9d6c-201342fea0ad",
+  "oracleId": "33b1379f-b329-42cd-92ed-4811d44ed8dd",
+  "set": "msh",
+  "collectorNumber": "194",
+  "rarity": "common",
+  "manaCost": "{1}{G}",
+  "typeLine": "Creature — Skrull Shapeshifter Villain",
+  "oracleText": "As long as there are two or more creature cards in your graveyard, this creature gets +2/+2 and is all creature types.\n{T}: Add one mana of any color.",
+  "power": "1",
+  "toughness": "1",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/0/90b9a3c0-3fd6-403e-9d6c-201342fea0ad.jpg?1783902909",
+   "normal": "https://cards.scryfall.io/normal/front/9/0/90b9a3c0-3fd6-403e-9d6c-201342fea0ad.jpg?1783902909",
+   "large": "https://cards.scryfall.io/large/front/9/0/90b9a3c0-3fd6-403e-9d6c-201342fea0ad.jpg?1783902909",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/0/90b9a3c0-3fd6-403e-9d6c-201342fea0ad.jpg?1783902909"
+  }
+ },
+ {
+  "name": "Hercules, Prince of Power",
+  "scryfallId": "d610d9fe-f8ae-473f-9325-e2f28f7e8a69",
+  "oracleId": "c3a8cc79-3771-484d-84dd-1a97f8bd12c2",
+  "set": "msh",
+  "collectorNumber": "171",
+  "rarity": "uncommon",
+  "manaCost": "{2}{G}",
+  "typeLine": "Legendary Creature — Demigod Warrior Hero",
+  "oracleText": "Power-up — {4}{G}: Put a +1/+1 counter on Hercules. He gains vigilance, indestructible, and haste until end of turn. (Activate each power-up ability only once. Reduce the cost by his mana cost if he entered this turn.)",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Power-up"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/6/d610d9fe-f8ae-473f-9325-e2f28f7e8a69.jpg?1783902916",
+   "normal": "https://cards.scryfall.io/normal/front/d/6/d610d9fe-f8ae-473f-9325-e2f28f7e8a69.jpg?1783902916",
+   "large": "https://cards.scryfall.io/large/front/d/6/d610d9fe-f8ae-473f-9325-e2f28f7e8a69.jpg?1783902916",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/6/d610d9fe-f8ae-473f-9325-e2f28f7e8a69.jpg?1783902916"
+  }
+ },
+ {
+  "name": "Abomination, Terrifying Titan",
+  "scryfallId": "2c6ab9bb-dba2-4b5b-a4d9-54735f65ac21",
+  "oracleId": "72101185-4336-480a-b4d7-f8ceb0007a51",
+  "set": "msh",
+  "collectorNumber": "198",
+  "rarity": "uncommon",
+  "manaCost": "{3}{R/G}",
+  "typeLine": "Legendary Creature — Gamma Villain",
+  "oracleText": "Trample\nPower-up — {5}{R/G}{R/G}: Put a +1/+1 counter on Abomination. He fights up to one target creature an opponent controls. (Activate each power-up ability only once. Reduce the cost by his mana cost if he entered this turn.)",
+  "power": "4",
+  "toughness": "4",
+  "colors": [
+   "G",
+   "R"
+  ],
+  "keywords": [
+   "Power-up",
+   "Trample",
+   "Fight"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/c/2c6ab9bb-dba2-4b5b-a4d9-54735f65ac21.jpg?1783902908",
+   "normal": "https://cards.scryfall.io/normal/front/2/c/2c6ab9bb-dba2-4b5b-a4d9-54735f65ac21.jpg?1783902908",
+   "large": "https://cards.scryfall.io/large/front/2/c/2c6ab9bb-dba2-4b5b-a4d9-54735f65ac21.jpg?1783902908",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/c/2c6ab9bb-dba2-4b5b-a4d9-54735f65ac21.jpg?1783902908"
+  }
+ },
+ {
+  "name": "Hulk, Gamma Goliath",
+  "scryfallId": "682b9f91-18bb-4113-9d5c-a381c191def9",
+  "oracleId": "3508fd7d-ca02-47f9-8b0a-525f7bde4f57",
+  "set": "msh",
+  "collectorNumber": "215",
+  "rarity": "uncommon",
+  "manaCost": "{3}{R}{G}",
+  "typeLine": "Legendary Creature — Gamma Berserker Hero",
+  "oracleText": "Reach, trample\nPower-up abilities of other creatures you control cost {3} less to activate.\nPower-up — {6}{R}{G}: Put five +1/+1 counters on Hulk. (Activate each power-up ability only once. Reduce the cost by his mana cost if he entered this turn.)",
+  "power": "6",
+  "toughness": "5",
+  "colors": [
+   "G",
+   "R"
+  ],
+  "keywords": [
+   "Power-up",
+   "Reach",
+   "Trample"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/8/682b9f91-18bb-4113-9d5c-a381c191def9.jpg?1783902902",
+   "normal": "https://cards.scryfall.io/normal/front/6/8/682b9f91-18bb-4113-9d5c-a381c191def9.jpg?1783902902",
+   "large": "https://cards.scryfall.io/large/front/6/8/682b9f91-18bb-4113-9d5c-a381c191def9.jpg?1783902902",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/8/682b9f91-18bb-4113-9d5c-a381c191def9.jpg?1783902902"
+  }
+ },
+ {
+  "name": "She-Hulk, Jade Defender",
+  "scryfallId": "d22a8d02-023c-4f71-a771-16b5aa2a05d7",
+  "oracleId": "bbd0a2a4-f81b-4a6b-bc4d-d7e53dc51333",
+  "set": "msh",
+  "collectorNumber": "188",
+  "rarity": "uncommon",
+  "manaCost": "{3}{G}",
+  "typeLine": "Legendary Creature — Gamma Hero",
+  "oracleText": "Reach, trample\nPower-up — {4}{G}{G}: Destroy up to one target artifact or enchantment. Put a +1/+1 counter on She-Hulk. (Activate each power-up ability only once. Reduce the cost by her mana cost if she entered this turn.)",
+  "power": "4",
+  "toughness": "4",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Power-up",
+   "Reach",
+   "Trample"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/2/d22a8d02-023c-4f71-a771-16b5aa2a05d7.jpg?1783902911",
+   "normal": "https://cards.scryfall.io/normal/front/d/2/d22a8d02-023c-4f71-a771-16b5aa2a05d7.jpg?1783902911",
+   "large": "https://cards.scryfall.io/large/front/d/2/d22a8d02-023c-4f71-a771-16b5aa2a05d7.jpg?1783902911",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/2/d22a8d02-023c-4f71-a771-16b5aa2a05d7.jpg?1783902911"
+  }
+ },
+ {
+  "name": "Red Hulk",
+  "scryfallId": "e25468e2-17c6-47b2-8eb6-fcb8ae6f4c17",
+  "oracleId": "a14a838a-49f4-45e3-9ec0-3c803af45a68",
+  "set": "msh",
+  "collectorNumber": "149",
+  "rarity": "uncommon",
+  "manaCost": "{4}{R}{R}",
+  "typeLine": "Legendary Creature — Gamma Berserker Villain",
+  "oracleText": "Reach, trample\nEnrage — Whenever Red Hulk is dealt damage, put a +1/+1 counter on him. When you do, he deals damage equal to the number of +1/+1 counters on him to any other target.",
+  "power": "6",
+  "toughness": "7",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Reach",
+   "Enrage",
+   "Trample"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/2/e25468e2-17c6-47b2-8eb6-fcb8ae6f4c17.jpg?1783902924",
+   "normal": "https://cards.scryfall.io/normal/front/e/2/e25468e2-17c6-47b2-8eb6-fcb8ae6f4c17.jpg?1783902924",
+   "large": "https://cards.scryfall.io/large/front/e/2/e25468e2-17c6-47b2-8eb6-fcb8ae6f4c17.jpg?1783902924",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/2/e25468e2-17c6-47b2-8eb6-fcb8ae6f4c17.jpg?1783902924"
+  }
+ },
+ {
+  "name": "The Thing, Ben Grimm",
+  "scryfallId": "3f1933a8-046f-471a-afcf-cfb08ca0d239",
+  "oracleId": "d566d5f1-5abd-405b-8553-d267ecbe72ab",
+  "set": "msh",
+  "collectorNumber": "190",
+  "rarity": "uncommon",
+  "manaCost": "{5}{G}",
+  "typeLine": "Legendary Creature — Human Hero",
+  "oracleText": "Trample\nWhenever one or more Heroes you control deal damage to a player, put two +1/+1 counters on The Thing.",
+  "power": "7",
+  "toughness": "7",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Trample"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/f/3f1933a8-046f-471a-afcf-cfb08ca0d239.jpg?1783902911",
+   "normal": "https://cards.scryfall.io/normal/front/3/f/3f1933a8-046f-471a-afcf-cfb08ca0d239.jpg?1783902911",
+   "large": "https://cards.scryfall.io/large/front/3/f/3f1933a8-046f-471a-afcf-cfb08ca0d239.jpg?1783902911",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/f/3f1933a8-046f-471a-afcf-cfb08ca0d239.jpg?1783902911"
+  }
+ },
+ {
+  "name": "Giant Growth",
+  "scryfallId": "bd0bf74e-14c1-4428-88d8-2181a080b5d0",
+  "oracleId": "5748ebf1-24e3-499d-ab7c-c2cebd462a24",
+  "set": "fdn",
+  "collectorNumber": "223",
+  "rarity": "common",
+  "manaCost": "{G}",
+  "typeLine": "Instant",
+  "oracleText": "Target creature gets +3/+3 until end of turn.",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/d/bd0bf74e-14c1-4428-88d8-2181a080b5d0.jpg?1783909057",
+   "normal": "https://cards.scryfall.io/normal/front/b/d/bd0bf74e-14c1-4428-88d8-2181a080b5d0.jpg?1783909057",
+   "large": "https://cards.scryfall.io/large/front/b/d/bd0bf74e-14c1-4428-88d8-2181a080b5d0.jpg?1783909057",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/d/bd0bf74e-14c1-4428-88d8-2181a080b5d0.jpg?1783909057"
+  }
+ },
+ {
+  "name": "Go Nuts!",
+  "scryfallId": "152a7b5b-2d95-45d3-8fd9-0ca1d5a79f8b",
+  "oracleId": "0efe1357-bfbb-42c0-9cc9-6a919d686c66",
+  "set": "msh",
+  "collectorNumber": "168",
+  "rarity": "common",
+  "manaCost": "{G}",
+  "typeLine": "Sorcery",
+  "oracleText": "Teamwork 3 (As an additional cost to cast this spell, you may tap any number of creatures you control with total power 3 or more.)\nChoose one. If this spell was cast using teamwork, choose both instead.\n• Put a +1/+1 counter on target creature.\n• Target creature you control fights target creature an opponent controls.",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Fight",
+   "Teamwork"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/5/152a7b5b-2d95-45d3-8fd9-0ca1d5a79f8b.jpg?1783902918",
+   "normal": "https://cards.scryfall.io/normal/front/1/5/152a7b5b-2d95-45d3-8fd9-0ca1d5a79f8b.jpg?1783902918",
+   "large": "https://cards.scryfall.io/large/front/1/5/152a7b5b-2d95-45d3-8fd9-0ca1d5a79f8b.jpg?1783902918",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/5/152a7b5b-2d95-45d3-8fd9-0ca1d5a79f8b.jpg?1783902918"
+  }
+ },
+ {
+  "name": "Blazing Crescendo",
+  "scryfallId": "8447c3d6-8c65-4d3c-81c4-609801602d06",
+  "oracleId": "6344c96a-efa5-4125-8219-d333228391cf",
+  "set": "msh",
+  "collectorNumber": "125",
+  "rarity": "common",
+  "manaCost": "{1}{R}",
+  "typeLine": "Instant",
+  "oracleText": "Target creature gets +3/+1 until end of turn.\nExile the top card of your library. Until the end of your next turn, you may play that card.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/4/8447c3d6-8c65-4d3c-81c4-609801602d06.jpg?1783902932",
+   "normal": "https://cards.scryfall.io/normal/front/8/4/8447c3d6-8c65-4d3c-81c4-609801602d06.jpg?1783902932",
+   "large": "https://cards.scryfall.io/large/front/8/4/8447c3d6-8c65-4d3c-81c4-609801602d06.jpg?1783902932",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/4/8447c3d6-8c65-4d3c-81c4-609801602d06.jpg?1783902932"
+  }
+ },
+ {
+  "name": "Restorative Technique",
+  "scryfallId": "dbe9102d-b92b-4c32-93f6-5b6dc0fa08e6",
+  "oracleId": "f7b2606c-42b8-46d6-bcaa-8d4506b348eb",
+  "set": "msh",
+  "collectorNumber": "183",
+  "rarity": "common",
+  "manaCost": "{2}{G}",
+  "typeLine": "Sorcery",
+  "oracleText": "Target player gains 2 life, then searches their library for a basic land card, puts it onto the battlefield tapped, then shuffles. Put a +1/+1 counter on up to one target creature.",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/b/dbe9102d-b92b-4c32-93f6-5b6dc0fa08e6.jpg?1783902913",
+   "normal": "https://cards.scryfall.io/normal/front/d/b/dbe9102d-b92b-4c32-93f6-5b6dc0fa08e6.jpg?1783902913",
+   "large": "https://cards.scryfall.io/large/front/d/b/dbe9102d-b92b-4c32-93f6-5b6dc0fa08e6.jpg?1783902913",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/b/dbe9102d-b92b-4c32-93f6-5b6dc0fa08e6.jpg?1783902913"
+  }
+ },
+ {
+  "name": "Wakandan Royal Guard",
+  "scryfallId": "9bf0b1e9-32b5-4591-8dd2-6b5f9768c72d",
+  "oracleId": "4ae15bd1-e0ea-4c1a-a311-dae421381ebc",
+  "set": "msh",
+  "collectorNumber": "195",
+  "rarity": "common",
+  "manaCost": "{4}{G}",
+  "typeLine": "Creature — Human Soldier Hero",
+  "oracleText": "Vigilance\nWhen this creature enters, put a +1/+1 counter on target creature. If that creature is another Hero, put two +1/+1 counters on it instead.",
+  "power": "4",
+  "toughness": "4",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Vigilance"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/b/9bf0b1e9-32b5-4591-8dd2-6b5f9768c72d.jpg?1783902908",
+   "normal": "https://cards.scryfall.io/normal/front/9/b/9bf0b1e9-32b5-4591-8dd2-6b5f9768c72d.jpg?1783902908",
+   "large": "https://cards.scryfall.io/large/front/9/b/9bf0b1e9-32b5-4591-8dd2-6b5f9768c72d.jpg?1783902908",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/b/9bf0b1e9-32b5-4591-8dd2-6b5f9768c72d.jpg?1783902908"
+  }
+ },
+ {
+  "name": "Black Panther, Vanguard",
+  "scryfallId": "9e308f77-206b-4c9d-bfba-f4c476ea574a",
+  "oracleId": "b0bf1964-c543-4c53-9f09-0dd7c608d5c5",
+  "set": "msh",
+  "collectorNumber": "207",
+  "rarity": "uncommon",
+  "manaCost": "{2}{G}{W}",
+  "typeLine": "Legendary Creature — Human Warrior Hero",
+  "oracleText": "Whenever another nontoken Hero you control enters, choose one —\n• Create a 1/1 white Soldier creature token.\n• Creatures you control get +1/+1 until end of turn.",
+  "power": "4",
+  "toughness": "4",
+  "colors": [
+   "G",
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/e/9e308f77-206b-4c9d-bfba-f4c476ea574a.jpg?1783902905",
+   "normal": "https://cards.scryfall.io/normal/front/9/e/9e308f77-206b-4c9d-bfba-f4c476ea574a.jpg?1783902905",
+   "large": "https://cards.scryfall.io/large/front/9/e/9e308f77-206b-4c9d-bfba-f4c476ea574a.jpg?1783902905",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/e/9e308f77-206b-4c9d-bfba-f4c476ea574a.jpg?1783902905"
+  }
+ },
+ {
+  "name": "Spider-Man, To the Rescue",
+  "scryfallId": "e5db6968-1ca3-46bd-8cf9-e2c411ab29c1",
+  "oracleId": "85dec6cf-6f27-4eb0-834b-5f6fbbe25fc8",
+  "set": "msh",
+  "collectorNumber": "228",
+  "rarity": "uncommon",
+  "manaCost": "{2}{G/W}",
+  "typeLine": "Legendary Creature — Spider Human Hero",
+  "oracleText": "Flash\nReach, vigilance\nNo One Dies! — When Spider-Man enters, you may tap him. When you do, another target nonattacking creature you control gains indestructible until end of turn. (Damage and effects that say \"destroy\" don't destroy it.)",
+  "power": "3",
+  "toughness": "2",
+  "colors": [
+   "G",
+   "W"
+  ],
+  "keywords": [
+   "Reach",
+   "Vigilance",
+   "Flash",
+   "No One Dies!"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/5/e5db6968-1ca3-46bd-8cf9-e2c411ab29c1.jpg?1783902898",
+   "normal": "https://cards.scryfall.io/normal/front/e/5/e5db6968-1ca3-46bd-8cf9-e2c411ab29c1.jpg?1783902898",
+   "large": "https://cards.scryfall.io/large/front/e/5/e5db6968-1ca3-46bd-8cf9-e2c411ab29c1.jpg?1783902898",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/5/e5db6968-1ca3-46bd-8cf9-e2c411ab29c1.jpg?1783902898"
+  }
+ },
+ {
+  "name": "White Tiger, Ava Ayala",
+  "scryfallId": "c1589e2e-32a8-48b8-93eb-a9af344e7084",
+  "oracleId": "e2084d73-5a4c-4b17-942a-93c1a1f7ac2a",
+  "set": "msh",
+  "collectorNumber": "196",
+  "rarity": "uncommon",
+  "manaCost": "{1}{G}",
+  "typeLine": "Legendary Creature — Human Hero",
+  "oracleText": "Power-up — {5}{G}: Put a +1/+1 counter on White Tiger and create The Tiger God, a legendary 4/4 green Cat God creature token with \"The Tiger God can't be blocked by more than one creature.\" (Activate each power-up ability only once. Reduce the cost by her mana cost if she entered this turn.)",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Power-up"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/1/c1589e2e-32a8-48b8-93eb-a9af344e7084.jpg?1783902908",
+   "normal": "https://cards.scryfall.io/normal/front/c/1/c1589e2e-32a8-48b8-93eb-a9af344e7084.jpg?1783902908",
+   "large": "https://cards.scryfall.io/large/front/c/1/c1589e2e-32a8-48b8-93eb-a9af344e7084.jpg?1783902908",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/1/c1589e2e-32a8-48b8-93eb-a9af344e7084.jpg?1783902908"
+  }
+ },
+ {
+  "name": "Tigra, Feline Fury",
+  "scryfallId": "73c11aea-4fa4-438d-b886-2fafa60c82f9",
+  "oracleId": "39d993be-30ad-4756-a494-fd8808d474c9",
+  "set": "msh",
+  "collectorNumber": "191",
+  "rarity": "uncommon",
+  "manaCost": "{1}{G}",
+  "typeLine": "Legendary Creature — Cat Human Hero",
+  "oracleText": "Flash\nTrample\nWhenever you gain life, put a +1/+1 counter on Tigra.",
+  "power": "2",
+  "toughness": "1",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Trample",
+   "Flash"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/3/73c11aea-4fa4-438d-b886-2fafa60c82f9.jpg?1783902911",
+   "normal": "https://cards.scryfall.io/normal/front/7/3/73c11aea-4fa4-438d-b886-2fafa60c82f9.jpg?1783902911",
+   "large": "https://cards.scryfall.io/large/front/7/3/73c11aea-4fa4-438d-b886-2fafa60c82f9.jpg?1783902911",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/3/73c11aea-4fa4-438d-b886-2fafa60c82f9.jpg?1783902911"
+  }
+ },
+ {
+  "name": "Training Regimen",
+  "scryfallId": "a27aee6d-1fc3-4307-bb16-b964d723fe2f",
+  "oracleId": "f44bde8b-43e9-4719-ac60-b8f0cee8df9b",
+  "set": "msh",
+  "collectorNumber": "192",
+  "rarity": "uncommon",
+  "manaCost": "{3}{G}",
+  "typeLine": "Enchantment",
+  "oracleText": "Creatures you control with +1/+1 counters on them have trample.\nAt the beginning of combat on your turn, put a +1/+1 counter on target creature you control.",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/2/a27aee6d-1fc3-4307-bb16-b964d723fe2f.jpg?1783902910",
+   "normal": "https://cards.scryfall.io/normal/front/a/2/a27aee6d-1fc3-4307-bb16-b964d723fe2f.jpg?1783902910",
+   "large": "https://cards.scryfall.io/large/front/a/2/a27aee6d-1fc3-4307-bb16-b964d723fe2f.jpg?1783902910",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/2/a27aee6d-1fc3-4307-bb16-b964d723fe2f.jpg?1783902910"
+  }
+ },
+ {
+  "name": "Panther Pounce",
+  "scryfallId": "4122ae40-800d-4b6b-93c9-aa503c33f1a9",
+  "oracleId": "ead0820e-fc6b-4ab2-9110-048d6d53985d",
+  "set": "msh",
+  "collectorNumber": "29",
+  "rarity": "common",
+  "manaCost": "{W}",
+  "typeLine": "Instant",
+  "oracleText": "Target player investigates. Target creature gets +1/+0 and gains flying until end of turn. Untap it. (To investigate, create a Clue token. It's an artifact with \"{2}, Sacrifice this token: Draw a card.\")",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Investigate"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/1/4122ae40-800d-4b6b-93c9-aa503c33f1a9.jpg?1783902969",
+   "normal": "https://cards.scryfall.io/normal/front/4/1/4122ae40-800d-4b6b-93c9-aa503c33f1a9.jpg?1783902969",
+   "large": "https://cards.scryfall.io/large/front/4/1/4122ae40-800d-4b6b-93c9-aa503c33f1a9.jpg?1783902969",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/1/4122ae40-800d-4b6b-93c9-aa503c33f1a9.jpg?1783902969"
+  }
+ },
+ {
+  "name": "Agent 13, Sharon Carter",
+  "scryfallId": "107cb521-9806-47dc-92d8-b43112b63caa",
+  "oracleId": "ddf7201a-6672-416d-be6b-202dafbeccab",
+  "set": "msh",
+  "collectorNumber": "1",
+  "rarity": "uncommon",
+  "manaCost": "{2}{W}",
+  "typeLine": "Legendary Creature — Human Spy Hero",
+  "oracleText": "Whenever a creature you control attacks alone, investigate. (Create a Clue token. It's an artifact with \"{2}, Sacrifice this token: Draw a card.\")",
+  "power": "3",
+  "toughness": "2",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Investigate"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/0/107cb521-9806-47dc-92d8-b43112b63caa.jpg?1783902979",
+   "normal": "https://cards.scryfall.io/normal/front/1/0/107cb521-9806-47dc-92d8-b43112b63caa.jpg?1783902979",
+   "large": "https://cards.scryfall.io/large/front/1/0/107cb521-9806-47dc-92d8-b43112b63caa.jpg?1783902979",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/0/107cb521-9806-47dc-92d8-b43112b63caa.jpg?1783902979"
+  }
+ },
+ {
   "name": "Avengers Hangar",
   "scryfallId": "c5d03ebb-1ce9-4a6b-b13e-a72f0b075ae8",
   "oracleId": "10fc2009-4212-47c6-8a97-ab0f45c1f91b",

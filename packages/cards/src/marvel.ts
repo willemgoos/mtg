@@ -1,5 +1,6 @@
 import type { Behavior } from './build.ts';
 import { HEROES_VILLAINS, HEROES_VILLAINS_BACKS } from './msh/heroes-villains.ts';
+import { GAMMA_WAKANDA } from './msh/gamma-wakanda.ts';
 import { MARVEL_LANDS } from './msh/lands.ts';
 
 export { MARVEL_TOKENS } from './msh/helpers.ts';
@@ -11,6 +12,7 @@ export { MARVEL_TOKENS } from './msh/helpers.ts';
  */
 export const MARVEL_BEHAVIORS: Record<string, Behavior> = {
   ...HEROES_VILLAINS,
+  ...GAMMA_WAKANDA,
   ...MARVEL_LANDS,
 };
 

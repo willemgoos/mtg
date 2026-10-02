@@ -376,8 +376,16 @@ export function abilityManaCost(
   a: ReturnType<typeof activatedAbility>,
 ): ManaCost | undefined {
   const o = obj(ctx, source);
-  if (!a.powerUp || !a.cost.mana || o.zoneTurn !== ctx.s.turn.number) return a.cost.mana;
-  return reduceCost(a.cost.mana, def(ctx, source).manaCost);
+  if (!a.powerUp || !a.cost.mana) return a.cost.mana;
+  let cost = a.cost.mana;
+  if (o.zoneTurn === ctx.s.turn.number) cost = reduceCost(cost, def(ctx, source).manaCost);
+  for (const id of ctx.s.battlefield) {
+    if (id === source || obj(ctx, id).controller !== o.controller) continue;
+    for (const s of def(ctx, id).abilities)
+      if (s.kind === 'static' && s.effect.kind === 'powerUpCostsLess')
+        cost = reduceCost(cost, { generic: s.effect.amount, colored: {} });
+  }
+  return cost;
 }
 
 export function activateAbility(

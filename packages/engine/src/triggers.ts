@@ -449,7 +449,8 @@ function detect(ctx: Ctx, ev: GameEvent): void {
       const attackedWith = (f: CardFilter | undefined) =>
         ev.attackers.some((id) => !!s.objects[id] && matchesFilter(ctx, id, f));
       forEachBattlefieldTrigger(ctx, (o, a) => {
-        if (a.trigger.on === 'attacks') return ev.attackers.includes(o.id);
+        if (a.trigger.on === 'attacks')
+          return ev.attackers.includes(o.id) && (!a.trigger.alone || ev.attackers.length === 1);
         if (a.trigger.on === 'youAttack')
           return o.controller === ap && attackedWith(a.trigger.filter);
         return false;
@@ -472,6 +473,7 @@ function detect(ctx: Ctx, ev: GameEvent): void {
           (o, a) =>
             a.trigger.on === 'creatureYouControlAttacks' &&
             o.controller === attacker.controller &&
+            (!a.trigger.alone || ev.attackers.length === 1) &&
             matchesFilter(ctx, id, a.trigger.filter),
           attacker,
         );
@@ -487,6 +489,14 @@ function detect(ctx: Ctx, ev: GameEvent): void {
       return;
     }
     case 'damageDealt': {
+      // Enrage (Marvel Super Heroes): "whenever this creature is dealt damage".
+      const hurt = 'object' in ev.to ? s.objects[ev.to.object.id] : undefined;
+      if (hurt && hurt.zone === 'battlefield' && ev.amount > 0)
+        def(ctx, hurt.id).abilities.forEach((a, i) => {
+          if (a.kind === 'triggered' && a.trigger.on === 'dealtDamage')
+            if (checkCondition(ctx, a.condition, hurt.controller, hurt))
+              queue(ctx, hurt, i, hurt.controller, undefined, ev.amount);
+        });
       if (!ev.combat) {
         // Niv-Mizzet: noncombat damage to an opponent from a source you control.
         const src = s.objects[ev.source];
@@ -579,7 +589,10 @@ function detect(ctx: Ctx, ev: GameEvent): void {
         return;
       forEachBattlefieldTrigger(
         ctx,
-        (o, a) => a.trigger.on === 'youPutCounters' && o.controller === target.controller,
+        (o, a) =>
+          a.trigger.on === 'youPutCounters' &&
+          o.controller === target.controller &&
+          !(a.trigger.other && o.id === ev.id),
       );
       return;
     }

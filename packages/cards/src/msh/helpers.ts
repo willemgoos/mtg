@@ -117,4 +117,31 @@ const token = (
 
 export const MARVEL_TOKENS: CardDefinition[] = [
   token('villain-token', 'Villain', 'B', ['Villain'], 2, 1, ['menace']),
+  token('hero-token', 'Hero', 'W', ['Hero'], 3, 2, ['vigilance']),
+  {
+    ...token('tiger-god-token', 'The Tiger God', 'G', ['Cat', 'God'], 4, 4),
+    supertypes: ['Legendary'],
+  },
+  {
+    id: 'clue-token',
+    name: 'Clue',
+    manaCost: { generic: 0, colored: {} },
+    colors: [],
+    types: ['Artifact'],
+    supertypes: [],
+    subtypes: ['Clue'],
+    keywords: [],
+    abilities: [
+      {
+        kind: 'activated',
+        cost: { mana: mana('{2}'), sacrificeSelf: true },
+        targets: [],
+        effects: [{ kind: 'draw', who: 'controller', amount: 1 }],
+      },
+    ],
+    isToken: true,
+  },
 ];
+
+/** Investigate: create a Clue ("{2}, Sacrifice this artifact: Draw a card"). */
+export const investigate: EffectDef = { kind: 'createToken', token: 'clue-token', count: 1 };
