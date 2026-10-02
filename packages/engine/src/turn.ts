@@ -2,6 +2,7 @@ import { commanderToOffer } from './brawl.ts';
 import { hasKeyword } from './characteristics.ts';
 import {
   anyFirstStrike,
+  canAttack,
   canBlock,
   dealCombatDamage,
   defenderOf,
@@ -251,7 +252,17 @@ function enterStep(ctx: Ctx, step: Step): void {
 /** Turn-based actions of the declare attackers step, after the declaration. */
 export function confirmAttackers(ctx: Ctx): void {
   const s = ctx.s;
-  const decl = s.decision.kind === 'declareAttackers' ? s.decision.declared : [];
+  const decl = s.decision.kind === 'declareAttackers' ? [...s.decision.declared] : [];
+  // Marvel Super Heroes: "attacks each combat if able" (Ares, The Void) joins the attack.
+  for (const id of s.battlefield)
+    if (
+      !decl.some((d) => d.id === id) &&
+      def(ctx, id).abilities.some(
+        (a) => a.kind === 'static' && a.effect.kind === 'attacksEachCombat',
+      ) &&
+      canAttack(ctx, id)
+    )
+      decl.push({ id, defender: other(s.turn.activePlayer) });
   s.combat ??= { attackers: [], dealtFirstStrikeDamage: [] };
   s.combat.attackers = decl.map((d) => ({
     id: d.id,

@@ -120,6 +120,30 @@ export const MARVEL_TOKENS: CardDefinition[] = [
   token('hero-token', 'Hero', 'W', ['Hero'], 3, 2, ['vigilance']),
   token('insect-token', 'Insect', 'G', ['Insect'], 1, 1),
   {
+    ...token('doombot-token', 'Doombot', 'W', ['Robot', 'Villain'], 3, 3),
+    colors: [],
+    types: ['Artifact', 'Creature'],
+  },
+  {
+    ...token('moloid-token', 'Moloid', 'G', ['Minion'], 1, 1),
+    abilities: [
+      {
+        kind: 'triggered',
+        trigger: { on: 'attacks' },
+        targets: [],
+        effects: [{ kind: 'may', effects: [{ kind: 'mill', count: 1 }] }],
+      },
+    ],
+  },
+  {
+    ...token('the-void-token', 'The Void', 'B', ['Horror', 'Villain'], 5, 5, [
+      'flying',
+      'indestructible',
+    ]),
+    supertypes: ['Legendary'],
+    abilities: [{ kind: 'static', effect: { kind: 'attacksEachCombat' } }],
+  },
+  {
     ...token('robot-villain-token', 'Robot Villain', 'W', ['Robot', 'Villain'], 2, 2),
     colors: [],
     types: ['Artifact', 'Creature'],
@@ -163,3 +187,12 @@ export const MARVEL_TOKENS: CardDefinition[] = [
 
 /** Investigate: create a Clue ("{2}, Sacrifice this artifact: Draw a card"). */
 export const investigate: EffectDef = { kind: 'createToken', token: 'clue-token', count: 1 };
+
+/** "Crew N" (Stream A's crew cost): this Vehicle becomes an artifact creature until end of turn. */
+export const crew = (n: number): AbilityDef => ({
+  kind: 'activated',
+  cost: { crew: n },
+  targets: [],
+  effects: [{ kind: 'becomeCreature', what: 'self' }],
+  label: `Crew ${n}`,
+});

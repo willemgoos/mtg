@@ -356,6 +356,10 @@ function playersOf(ctx: Ctx, es: EffectSource, ref: Ref): PlayerId[] {
 export function resolveAmount(ctx: Ctx, es: EffectSource, amount: Amount): number {
   if (typeof amount === 'number') return amount;
   if ('multiply' in amount) return amount.multiply * resolveAmount(ctx, es, amount.amount);
+  if ('toughnessOf' in amount) {
+    const id = objectsOf(ctx, es, amount.toughnessOf)[0];
+    return id ? Math.max(0, characteristics(ctx, id).toughness) : 0;
+  }
   if ('if' in amount) {
     const self = es.source ? ctx.s.objects[es.source.id] : undefined;
     return checkCondition(ctx, amount.if, es.controller, self, es.targets)
@@ -1493,6 +1497,8 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
           const pt = e.pt ?? (o.copyPT ? [o.copyPT.power, o.copyPT.toughness] : undefined);
           if (pt) t.copyPT = { power: pt[0], toughness: pt[1] };
           // Helm of the Host: "except the token isn't legendary. That token gains haste."
+          // Marvel Super Heroes: "except it isn't legendary" (Multiversal Incursion).
+          if (e.notLegendary) t.nonlegendary = true;
           if (e.notLegendaryWithHaste) {
             t.nonlegendary = true;
             t.grantedKeywords = ['haste'];
@@ -1626,6 +1632,7 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
         // A token ceases to exist in exile.
         if (token || !ctx.s.objects[id]) continue;
         moveObject(ctx, id, 'battlefield', { controller: owner });
+        if (e.tapped) obj(ctx, id).tapped = true;
         if (e.counters) addCounters(ctx, id, e.counters);
       }
       return;

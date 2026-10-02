@@ -191,6 +191,9 @@ export type AbilityDef =
       pain?: boolean;
       /** Path of Ancestry: scry 1 when spent on a creature spell sharing a type with your commander. */
       scryIfCommanderType?: boolean;
+      // Marvel Super Heroes
+      /** "Activate only if ..." (Dark Fortress: it entered this turn or you control a basic land). */
+      condition?: ConditionDef;
     }
   | {
       kind: 'activated';
@@ -484,6 +487,11 @@ export type ConditionDef =
   // Brawl staples.
   /** You have a card matching this in your hand (snarls reveal one). */
   | { kind: 'handHas'; filter: CardFilter }
+  // Marvel Super Heroes
+  /** The source entered the battlefield this turn. */
+  | { kind: 'sourceEnteredThisTurn' }
+  /** You control a basic land. */
+  | { kind: 'controlsBasicLand' }
   | { kind: 'custom'; handler: string };
 
 export interface CardFilter {
@@ -600,6 +608,8 @@ export type Amount =
       basicOnly?: boolean;
     }
   | { multiply: number; amount: Amount }
+  // Marvel Super Heroes: "where X is Captain America's toughness".
+  | { toughnessOf: Ref }
   // Marvel Super Heroes: "costs {2} less if ..." (Punishing Punch).
   | { if: ConditionDef; then: number; else?: number }
   /** Cards in your graveyard (of these types). */
@@ -755,6 +765,9 @@ export type EffectDef =
       nonlegendary?: boolean;
       /** "Except the token isn't legendary", and it gains haste (Helm of the Host). */
       notLegendaryWithHaste?: boolean;
+      // Marvel Super Heroes
+      /** "Except it isn't legendary" (Multiversal Incursion). */
+      notLegendary?: boolean;
     }
   /** Choose a color (or a creature type) for the source, as it enters. */
   | { kind: 'chooseColor' }
@@ -817,7 +830,13 @@ export type EffectDef =
       handOnly?: boolean;
     }
   /** Exile permanents, then return them under their owners' control (with +1/+1 counters). */
-  | { kind: 'blink'; what: Ref; counters?: number }
+  | {
+      kind: 'blink';
+      what: Ref;
+      counters?: number;
+      // Marvel Super Heroes: "return it tapped" (The Mighty Thor, Jane Foster).
+      tapped?: boolean;
+    }
   /**
    * Choose a permanent you control matching the filter (other than the
    * source): `then` happens to it (the 'chosen' ref). With none to choose,
@@ -1112,6 +1131,9 @@ export type StaticDef =
   | { kind: 'creaturesFromTopOfLibrary' }
   /** This creature gets +X/+Y (Persistent Marshstalker: +1/+0 for each other Rat you control). */
   | { kind: 'boost'; power: Amount; toughness: Amount }
+  // Marvel Super Heroes
+  /** "This creature attacks each combat if able" (added when attackers are confirmed). */
+  | { kind: 'attacksEachCombat' }
   // Power-up (Marvel Super Heroes)
   /** Power-up abilities of other creatures you control cost {amount} less (Hulk, Gamma Goliath). */
   | { kind: 'powerUpCostsLess'; amount: number }

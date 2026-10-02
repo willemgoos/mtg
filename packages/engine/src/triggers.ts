@@ -127,6 +127,15 @@ export function checkCondition(
   if (c.kind === 'creatureDiedThisTurn') return ctx.s.turn.creaturesDied > 0;
   if (c.kind === 'opponentsTurn') return ctx.s.turn.activePlayer !== controller;
   if (c.kind === 'yourTurn') return ctx.s.turn.activePlayer === controller;
+  // Marvel Super Heroes.
+  if (c.kind === 'sourceEnteredThisTurn') return !!self && self.zoneTurn === ctx.s.turn.number;
+  if (c.kind === 'controlsBasicLand')
+    return ctx.s.battlefield.some(
+      (id) =>
+        ctx.s.objects[id]!.controller === controller &&
+        def(ctx, id).supertypes.includes('Basic') &&
+        def(ctx, id).types.includes('Land'),
+    );
   if (c.kind === 'sourceCounters') return !!self && self.plusOneCounters >= c.min;
   if (c.kind === 'sourceAttacking')
     return !!self && !!ctx.s.combat?.attackers.some((a) => a.id === self.id);

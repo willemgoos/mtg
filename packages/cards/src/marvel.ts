@@ -5,6 +5,9 @@ import { GAMMA_WAKANDA } from './msh/gamma-wakanda.ts';
 import { GROWTH_GRAVEYARD } from './msh/growth-graveyard.ts';
 import { TECH_SKIES } from './msh/tech-skies.ts';
 import { MARVEL_LANDS } from './msh/lands.ts';
+import { MSH_MYTHICS } from './msh/mythics.ts';
+import { MSH_OTHERS } from './msh/others.ts';
+import { MSH_RARES } from './msh/rares.ts';
 
 export { MARVEL_TOKENS } from './msh/helpers.ts';
 
@@ -19,6 +22,9 @@ export const MARVEL_BEHAVIORS: Record<string, Behavior> = {
   ...AGENTS_HYDRA,
   ...TECH_SKIES,
   ...GROWTH_GRAVEYARD,
+  ...MSH_OTHERS,
+  ...MSH_RARES,
+  ...MSH_MYTHICS,
   ...MARVEL_LANDS,
 };
 

@@ -66,6 +66,8 @@ export function manaSources(
       if (a.onlyFor === 'chosenType' && !forSubtypes.includes('Creature')) continue;
       if (only && !forSubtypes.includes(only)) continue;
       if (a.ifChosen && obj(ctx, id).chosenColor !== a.produces) continue;
+      // Marvel Super Heroes lands: "Activate only if this land entered this turn or ...".
+      if (a.condition && !checkCondition(ctx, a.condition, player, obj(ctx, id))) continue;
       // Brawl staples: Command Tower, Exotic Orchard, Sol Ring, Talismans.
       if (
         a.colorFrom === 'commander' &&

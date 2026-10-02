@@ -17776,6 +17776,616 @@
   }
  },
  {
+  "name": "Savage Land Dinosaur",
+  "scryfallId": "562bd376-3fba-4de0-b9fc-183004b03732",
+  "oracleId": "6e21ebdf-b97c-494e-a1d5-19db1b7d3016",
+  "set": "msh",
+  "collectorNumber": "185",
+  "rarity": "common",
+  "manaCost": "{4}{G}{G}",
+  "typeLine": "Creature — Dinosaur",
+  "oracleText": "Trample\nBasic landcycling {2} ({2}, Discard this card: Search your library for a basic land card, reveal it, put it into your hand, then shuffle.)",
+  "power": "7",
+  "toughness": "6",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Landcycling",
+   "Trample",
+   "Basic landcycling",
+   "Typecycling",
+   "Cycling"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/6/562bd376-3fba-4de0-b9fc-183004b03732.jpg?1783902912",
+   "normal": "https://cards.scryfall.io/normal/front/5/6/562bd376-3fba-4de0-b9fc-183004b03732.jpg?1783902912",
+   "large": "https://cards.scryfall.io/large/front/5/6/562bd376-3fba-4de0-b9fc-183004b03732.jpg?1783902912",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/6/562bd376-3fba-4de0-b9fc-183004b03732.jpg?1783902912"
+  }
+ },
+ {
+  "name": "Kree Sentinel",
+  "scryfallId": "ba5e441d-d036-4080-9571-6cf76df7b452",
+  "oracleId": "3c2b9bb2-8201-47e8-84d5-f3518cac03cb",
+  "set": "msh",
+  "collectorNumber": "141",
+  "rarity": "common",
+  "manaCost": "{4}{R}",
+  "typeLine": "Artifact Creature — Kree Robot Villain",
+  "oracleText": "Reach\nBasic landcycling {2} ({2}, Discard this card: Search your library for a basic land card, reveal it, put it into your hand, then shuffle.)",
+  "power": "5",
+  "toughness": "5",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Reach",
+   "Landcycling",
+   "Basic landcycling",
+   "Typecycling",
+   "Cycling"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/a/ba5e441d-d036-4080-9571-6cf76df7b452.jpg?1783902928",
+   "normal": "https://cards.scryfall.io/normal/front/b/a/ba5e441d-d036-4080-9571-6cf76df7b452.jpg?1783902928",
+   "large": "https://cards.scryfall.io/large/front/b/a/ba5e441d-d036-4080-9571-6cf76df7b452.jpg?1783902928",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/a/ba5e441d-d036-4080-9571-6cf76df7b452.jpg?1783902928"
+  }
+ },
+ {
+  "name": "A.I.M. Scientists",
+  "scryfallId": "ab96b656-100e-491a-a8c9-94dbb9482c4d",
+  "oracleId": "fa732888-5b7d-4087-a6e5-1db1c98fbd4c",
+  "set": "msh",
+  "collectorNumber": "44",
+  "rarity": "common",
+  "manaCost": "{3}{U}",
+  "typeLine": "Creature — Human Scientist Villain",
+  "oracleText": "When this creature enters, it connives. (Draw a card, then discard a card. If you discarded a nonland card, put a +1/+1 counter on this creature.)\nBasic landcycling {2} ({2}, Discard this card: Search your library for a basic land card, reveal it, put it into your hand, then shuffle.)",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Landcycling",
+   "Basic landcycling",
+   "Typecycling",
+   "Cycling",
+   "Connive"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/b/ab96b656-100e-491a-a8c9-94dbb9482c4d.jpg?1783902962",
+   "normal": "https://cards.scryfall.io/normal/front/a/b/ab96b656-100e-491a-a8c9-94dbb9482c4d.jpg?1783902962",
+   "large": "https://cards.scryfall.io/large/front/a/b/ab96b656-100e-491a-a8c9-94dbb9482c4d.jpg?1783902962",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/b/ab96b656-100e-491a-a8c9-94dbb9482c4d.jpg?1783902962"
+  }
+ },
+ {
+  "name": "Roxxon Brutes",
+  "scryfallId": "66550490-74e1-4bf1-8741-1266dfab3a03",
+  "oracleId": "b92c2da9-eaa4-404b-8114-5527eec6390e",
+  "set": "msh",
+  "collectorNumber": "113",
+  "rarity": "common",
+  "manaCost": "{4}{B}",
+  "typeLine": "Creature — Human Berserker Villain",
+  "oracleText": "Menace (This creature can't be blocked except by two or more creatures.)\nWhenever you draw your second card each turn, put a +1/+1 counter on target creature.\nBasic landcycling {2} ({2}, Discard this card: Search your library for a basic land card, reveal it, put it into your hand, then shuffle.)",
+  "power": "4",
+  "toughness": "4",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Landcycling",
+   "Menace",
+   "Basic landcycling",
+   "Typecycling",
+   "Cycling"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/6/66550490-74e1-4bf1-8741-1266dfab3a03.jpg?1783902938",
+   "normal": "https://cards.scryfall.io/normal/front/6/6/66550490-74e1-4bf1-8741-1266dfab3a03.jpg?1783902938",
+   "large": "https://cards.scryfall.io/large/front/6/6/66550490-74e1-4bf1-8741-1266dfab3a03.jpg?1783902938",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/6/66550490-74e1-4bf1-8741-1266dfab3a03.jpg?1783902938"
+  }
+ },
+ {
+  "name": "Borough Backup",
+  "scryfallId": "bb753ac8-67e1-44b0-b404-37f04c2b7438",
+  "oracleId": "6effbf59-3933-4a77-9a6a-fd3bedf45c26",
+  "set": "msh",
+  "collectorNumber": "7",
+  "rarity": "common",
+  "manaCost": "{4}{W}",
+  "typeLine": "Sorcery",
+  "oracleText": "Create two 3/2 white Hero creature tokens with vigilance.\nBasic landcycling {2} ({2}, Discard this card: Search your library for a basic land card, reveal it, put it into your hand, then shuffle.)",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Landcycling",
+   "Basic landcycling",
+   "Typecycling",
+   "Cycling"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/b/bb753ac8-67e1-44b0-b404-37f04c2b7438.jpg?1783902978",
+   "normal": "https://cards.scryfall.io/normal/front/b/b/bb753ac8-67e1-44b0-b404-37f04c2b7438.jpg?1783902978",
+   "large": "https://cards.scryfall.io/large/front/b/b/bb753ac8-67e1-44b0-b404-37f04c2b7438.jpg?1783902978",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/b/bb753ac8-67e1-44b0-b404-37f04c2b7438.jpg?1783902978"
+  }
+ },
+ {
+  "name": "Dark Fortress",
+  "scryfallId": "c16fd43c-7c47-4c1b-860f-91146532e89d",
+  "oracleId": "40760bfa-a423-487c-ba29-043b2d00c736",
+  "set": "msh",
+  "collectorNumber": "264",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "{T}: Add {C}.\n{T}: Add {B} or {R}. Activate only if this land entered this turn or if you control a basic land.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/1/c16fd43c-7c47-4c1b-860f-91146532e89d.jpg?1783902885",
+   "normal": "https://cards.scryfall.io/normal/front/c/1/c16fd43c-7c47-4c1b-860f-91146532e89d.jpg?1783902885",
+   "large": "https://cards.scryfall.io/large/front/c/1/c16fd43c-7c47-4c1b-860f-91146532e89d.jpg?1783902885",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/1/c16fd43c-7c47-4c1b-860f-91146532e89d.jpg?1783902885"
+  }
+ },
+ {
+  "name": "Gathering Place",
+  "scryfallId": "081cdbd0-5081-4a9e-90ba-f5baf4ac137e",
+  "oracleId": "36b58705-c5a5-4547-8d8b-a7c35e1f69ae",
+  "set": "msh",
+  "collectorNumber": "266",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "{T}: Add {C}.\n{T}: Add {G} or {W}. Activate only if this land entered this turn or if you control a basic land.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/8/081cdbd0-5081-4a9e-90ba-f5baf4ac137e.jpg?1783902886",
+   "normal": "https://cards.scryfall.io/normal/front/0/8/081cdbd0-5081-4a9e-90ba-f5baf4ac137e.jpg?1783902886",
+   "large": "https://cards.scryfall.io/large/front/0/8/081cdbd0-5081-4a9e-90ba-f5baf4ac137e.jpg?1783902886",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/8/081cdbd0-5081-4a9e-90ba-f5baf4ac137e.jpg?1783902886"
+  }
+ },
+ {
+  "name": "Gleaming Bastion",
+  "scryfallId": "c9131bf5-17e3-4aa6-97ed-ed6426b247d0",
+  "oracleId": "7785ffd4-f169-475d-9558-ce4877b3378a",
+  "set": "msh",
+  "collectorNumber": "267",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "{T}: Add {C}.\n{T}: Add {W} or {U}. Activate only if this land entered this turn or if you control a basic land.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/9/c9131bf5-17e3-4aa6-97ed-ed6426b247d0.jpg?1783902884",
+   "normal": "https://cards.scryfall.io/normal/front/c/9/c9131bf5-17e3-4aa6-97ed-ed6426b247d0.jpg?1783902884",
+   "large": "https://cards.scryfall.io/large/front/c/9/c9131bf5-17e3-4aa6-97ed-ed6426b247d0.jpg?1783902884",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/9/c9131bf5-17e3-4aa6-97ed-ed6426b247d0.jpg?1783902884"
+  }
+ },
+ {
+  "name": "Hidden Lair",
+  "scryfallId": "0742ddb6-71ed-444e-91ad-84f876725a4a",
+  "oracleId": "7069d241-4e66-40bf-afd1-551a4a5457f0",
+  "set": "msh",
+  "collectorNumber": "269",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "{T}: Add {C}.\n{T}: Add {U} or {B}. Activate only if this land entered this turn or if you control a basic land.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/7/0742ddb6-71ed-444e-91ad-84f876725a4a.jpg?1783902883",
+   "normal": "https://cards.scryfall.io/normal/front/0/7/0742ddb6-71ed-444e-91ad-84f876725a4a.jpg?1783902883",
+   "large": "https://cards.scryfall.io/large/front/0/7/0742ddb6-71ed-444e-91ad-84f876725a4a.jpg?1783902883",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/7/0742ddb6-71ed-444e-91ad-84f876725a4a.jpg?1783902883"
+  }
+ },
+ {
+  "name": "Training Compound",
+  "scryfallId": "c91e28db-307f-462a-88aa-581d10e77f10",
+  "oracleId": "99c70f4e-de8a-426d-99aa-17b2f87625ba",
+  "set": "msh",
+  "collectorNumber": "275",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "{T}: Add {C}.\n{T}: Add {R} or {G}. Activate only if this land entered this turn or if you control a basic land.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/9/c91e28db-307f-462a-88aa-581d10e77f10.jpg?1783902882",
+   "normal": "https://cards.scryfall.io/normal/front/c/9/c91e28db-307f-462a-88aa-581d10e77f10.jpg?1783902882",
+   "large": "https://cards.scryfall.io/large/front/c/9/c91e28db-307f-462a-88aa-581d10e77f10.jpg?1783902882",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/9/c91e28db-307f-462a-88aa-581d10e77f10.jpg?1783902882"
+  }
+ },
+ {
+  "name": "Castle Doom",
+  "scryfallId": "6b39d7a6-ca2d-4376-a18e-efd0138e83bc",
+  "oracleId": "9bd013df-ad75-4099-940b-1765c58faf26",
+  "set": "msh",
+  "collectorNumber": "263",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "{T}: Add {C}.\n{T}: Add one mana of any color. Spend this mana only to cast an artifact spell.\n{3}, {T}, Sacrifice an artifact: Create a 3/3 colorless Robot Villain artifact creature token named Doombot. Activate only as a sorcery.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/b/6b39d7a6-ca2d-4376-a18e-efd0138e83bc.jpg?1783902886",
+   "normal": "https://cards.scryfall.io/normal/front/6/b/6b39d7a6-ca2d-4376-a18e-efd0138e83bc.jpg?1783902886",
+   "large": "https://cards.scryfall.io/large/front/6/b/6b39d7a6-ca2d-4376-a18e-efd0138e83bc.jpg?1783902886",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/b/6b39d7a6-ca2d-4376-a18e-efd0138e83bc.jpg?1783902886"
+  }
+ },
+ {
+  "name": "Agent Phil Coulson",
+  "scryfallId": "1383e587-df58-4b45-9067-b9399e90b9ed",
+  "oracleId": "dae20bcd-dc24-4f9d-9400-a6f013b49f14",
+  "set": "msh",
+  "collectorNumber": "4",
+  "rarity": "rare",
+  "manaCost": "{1}{W}",
+  "typeLine": "Legendary Creature — Human Spy Hero",
+  "oracleText": "Vigilance\n{T}: Put a +1/+1 counter on each other Hero you control.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Vigilance"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/3/1383e587-df58-4b45-9067-b9399e90b9ed.jpg?1783902979",
+   "normal": "https://cards.scryfall.io/normal/front/1/3/1383e587-df58-4b45-9067-b9399e90b9ed.jpg?1783902979",
+   "large": "https://cards.scryfall.io/large/front/1/3/1383e587-df58-4b45-9067-b9399e90b9ed.jpg?1783902979",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/3/1383e587-df58-4b45-9067-b9399e90b9ed.jpg?1783902979"
+  }
+ },
+ {
+  "name": "Captain America, Wings of Freedom",
+  "scryfallId": "c87ca9ce-5034-4137-99cc-c2b28f298912",
+  "oracleId": "942ac2ac-7528-4768-8398-8520a8ee15e5",
+  "set": "msh",
+  "collectorNumber": "10",
+  "rarity": "rare",
+  "manaCost": "{2}{W}",
+  "typeLine": "Legendary Creature — Human Soldier Hero",
+  "oracleText": "Flying, first strike, ward {1}\nWhenever Captain America attacks, each other Hero you control gets +X/+X until end of turn, where X is Captain America's toughness.",
+  "power": "3",
+  "toughness": "1",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Flying",
+   "First strike",
+   "Ward"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/8/c87ca9ce-5034-4137-99cc-c2b28f298912.jpg?1783902978",
+   "normal": "https://cards.scryfall.io/normal/front/c/8/c87ca9ce-5034-4137-99cc-c2b28f298912.jpg?1783902978",
+   "large": "https://cards.scryfall.io/large/front/c/8/c87ca9ce-5034-4137-99cc-c2b28f298912.jpg?1783902978",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/8/c87ca9ce-5034-4137-99cc-c2b28f298912.jpg?1783902978"
+  }
+ },
+ {
+  "name": "Mole Man, Moloid Master",
+  "scryfallId": "1b406cc5-75c9-430a-83a2-de0f2a8aeae6",
+  "oracleId": "34994475-b914-44f6-8ca1-c2747b6d5956",
+  "set": "msh",
+  "collectorNumber": "177",
+  "rarity": "rare",
+  "manaCost": "{2}{G}",
+  "typeLine": "Legendary Creature — Human Villain",
+  "oracleText": "You may play lands from your graveyard.\nLandfall — Whenever a land you control enters, create a 1/1 green Minion creature token named Moloid with \"Whenever this token attacks, you may mill a card.\"",
+  "power": "1",
+  "toughness": "1",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Mill",
+   "Landfall"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/b/1b406cc5-75c9-430a-83a2-de0f2a8aeae6.jpg?1783902919",
+   "normal": "https://cards.scryfall.io/normal/front/1/b/1b406cc5-75c9-430a-83a2-de0f2a8aeae6.jpg?1783902919",
+   "large": "https://cards.scryfall.io/large/front/1/b/1b406cc5-75c9-430a-83a2-de0f2a8aeae6.jpg?1783902919",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/b/1b406cc5-75c9-430a-83a2-de0f2a8aeae6.jpg?1783902919"
+  }
+ },
+ {
+  "name": "Moon Girl and Devil Dinosaur",
+  "scryfallId": "8c6a6d11-45cb-4def-a04b-51b91e1747db",
+  "oracleId": "bfe0818b-ae13-4174-85c8-24b895d28df0",
+  "set": "msh",
+  "collectorNumber": "223",
+  "rarity": "rare",
+  "manaCost": "{1}{G}{U}",
+  "typeLine": "Legendary Creature — Human Dinosaur Hero",
+  "oracleText": "Whenever you draw your second card each turn, until end of turn, Moon Girl and Devil Dinosaur's base power and toughness become 6/6 and they gain trample.\nWhenever an artifact you control enters, draw a card. This ability triggers only once each turn.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "G",
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/c/8c6a6d11-45cb-4def-a04b-51b91e1747db.jpg?1783902900",
+   "normal": "https://cards.scryfall.io/normal/front/8/c/8c6a6d11-45cb-4def-a04b-51b91e1747db.jpg?1783902900",
+   "large": "https://cards.scryfall.io/large/front/8/c/8c6a6d11-45cb-4def-a04b-51b91e1747db.jpg?1783902900",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/c/8c6a6d11-45cb-4def-a04b-51b91e1747db.jpg?1783902900"
+  }
+ },
+ {
+  "name": "Super-Skrull",
+  "scryfallId": "11fc8221-756a-4919-9272-38793e9c1ad9",
+  "oracleId": "4644013f-c96a-450e-a7bc-ddfa7a563050",
+  "set": "msh",
+  "collectorNumber": "115",
+  "rarity": "rare",
+  "manaCost": "{1}{B}{B}{B}",
+  "typeLine": "Legendary Creature — Skrull Shapeshifter Villain",
+  "oracleText": "Flying\n{2}{W}: Create a 0/4 colorless Wall creature token with defender.\n{3}{G}: Super-Skrull gets +4/+4 until end of turn.\n{4}{R}: Super-Skrull deals 4 damage to target creature.\n{5}{U}: Target player draws four cards.",
+  "power": "4",
+  "toughness": "5",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/1/11fc8221-756a-4919-9272-38793e9c1ad9.jpg?1783902936",
+   "normal": "https://cards.scryfall.io/normal/front/1/1/11fc8221-756a-4919-9272-38793e9c1ad9.jpg?1783902936",
+   "large": "https://cards.scryfall.io/large/front/1/1/11fc8221-756a-4919-9272-38793e9c1ad9.jpg?1783902936",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/1/11fc8221-756a-4919-9272-38793e9c1ad9.jpg?1783902936"
+  }
+ },
+ {
+  "name": "The Mighty Thor, Jane Foster",
+  "scryfallId": "082cc8cc-bbea-4ca7-a0e8-da1f865d6626",
+  "oracleId": "57d02dc8-e22e-4874-9f02-490a2528a28f",
+  "set": "msh",
+  "collectorNumber": "222",
+  "rarity": "rare",
+  "manaCost": "{1}{W}{U}",
+  "typeLine": "Legendary Creature — Human God Hero",
+  "oracleText": "Flying\nWhenever The Mighty Thor attacks, exile up to one target nontoken artifact or creature, then return that card to the battlefield tapped under its owner's control.\nWhenever an Equipment you control enters, draw a card.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "U",
+   "W"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/8/082cc8cc-bbea-4ca7-a0e8-da1f865d6626.jpg?1783902900",
+   "normal": "https://cards.scryfall.io/normal/front/0/8/082cc8cc-bbea-4ca7-a0e8-da1f865d6626.jpg?1783902900",
+   "large": "https://cards.scryfall.io/large/front/0/8/082cc8cc-bbea-4ca7-a0e8-da1f865d6626.jpg?1783902900",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/8/082cc8cc-bbea-4ca7-a0e8-da1f865d6626.jpg?1783902900"
+  }
+ },
+ {
+  "name": "The Unbeatable Squirrel Girl",
+  "scryfallId": "d8b94ebb-0b3a-4e68-8c0c-3a61ac32f3ef",
+  "oracleId": "80312910-5d53-44f1-9982-e46dc7532abb",
+  "set": "msh",
+  "collectorNumber": "193",
+  "rarity": "rare",
+  "manaCost": "{1}{G}{G}{G}",
+  "typeLine": "Legendary Creature — Squirrel Human Hero",
+  "oracleText": "Do You Like Squirrels? — Whenever The Unbeatable Squirrel Girl enters or attacks, create a 1/1 green Squirrel creature token.\nI LOVE Squirrels! — {1}{G}{G}{G}: Create X 1/1 green Squirrel creature tokens, where X is the number of Squirrels you control.",
+  "power": "4",
+  "toughness": "4",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "I LOVE Squirrels!"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/8/d8b94ebb-0b3a-4e68-8c0c-3a61ac32f3ef.jpg?1783902911",
+   "normal": "https://cards.scryfall.io/normal/front/d/8/d8b94ebb-0b3a-4e68-8c0c-3a61ac32f3ef.jpg?1783902911",
+   "large": "https://cards.scryfall.io/large/front/d/8/d8b94ebb-0b3a-4e68-8c0c-3a61ac32f3ef.jpg?1783902911",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/8/d8b94ebb-0b3a-4e68-8c0c-3a61ac32f3ef.jpg?1783902911"
+  }
+ },
+ {
+  "name": "S.H.I.E.L.D. Flying Car",
+  "scryfallId": "8e651410-b829-4468-b866-a9dd15f909ad",
+  "oracleId": "12d51534-a98d-487b-9ba9-c10861dff992",
+  "set": "msh",
+  "collectorNumber": "74",
+  "rarity": "rare",
+  "manaCost": "{2}{U}",
+  "typeLine": "Artifact — Vehicle",
+  "oracleText": "Flash\nFlying\nWhen this Vehicle enters, exile up to one target creature you control. Return that card to the battlefield under its owner's control at the beginning of the next end step.\nCrew 1",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Flying",
+   "Crew",
+   "Flash"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/e/8e651410-b829-4468-b866-a9dd15f909ad.jpg?1783902952",
+   "normal": "https://cards.scryfall.io/normal/front/8/e/8e651410-b829-4468-b866-a9dd15f909ad.jpg?1783902952",
+   "large": "https://cards.scryfall.io/large/front/8/e/8e651410-b829-4468-b866-a9dd15f909ad.jpg?1783902952",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/e/8e651410-b829-4468-b866-a9dd15f909ad.jpg?1783902952"
+  }
+ },
+ {
+  "name": "Avengers Disassembled",
+  "scryfallId": "72d3e750-870b-497d-80d7-e3df097db554",
+  "oracleId": "34493cf5-7586-48ef-806d-57273b2ab034",
+  "set": "msh",
+  "collectorNumber": "124",
+  "rarity": "rare",
+  "manaCost": "{1}{R}{R}",
+  "typeLine": "Sorcery",
+  "oracleText": "Choose one or both —\n• Avengers Disassembled deals 3 damage to each creature.\n• Destroy target land. Its controller may search their library for a basic land card, put it onto the battlefield tapped, then shuffle.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/2/72d3e750-870b-497d-80d7-e3df097db554.jpg?1783902933",
+   "normal": "https://cards.scryfall.io/normal/front/7/2/72d3e750-870b-497d-80d7-e3df097db554.jpg?1783902933",
+   "large": "https://cards.scryfall.io/large/front/7/2/72d3e750-870b-497d-80d7-e3df097db554.jpg?1783902933",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/2/72d3e750-870b-497d-80d7-e3df097db554.jpg?1783902933"
+  }
+ },
+ {
+  "name": "The Sentry, Golden Guardian",
+  "scryfallId": "3f56c0e7-5b07-48e3-b0ca-5d09ddc8de9a",
+  "oracleId": "1fe549c3-79be-40ef-b57c-de59f24df5ab",
+  "set": "msh",
+  "collectorNumber": "35",
+  "rarity": "rare",
+  "manaCost": "{3}{W}",
+  "typeLine": "Legendary Creature — Human Hero",
+  "oracleText": "Flying, vigilance, indestructible\nWhen The Sentry enters, target opponent creates The Void, a legendary 5/5 black Horror Villain creature token with flying, indestructible, and \"The Void attacks each combat if able.\"",
+  "power": "5",
+  "toughness": "5",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Flying",
+   "Indestructible",
+   "Vigilance"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/f/3f56c0e7-5b07-48e3-b0ca-5d09ddc8de9a.jpg?1783902966",
+   "normal": "https://cards.scryfall.io/normal/front/3/f/3f56c0e7-5b07-48e3-b0ca-5d09ddc8de9a.jpg?1783902966",
+   "large": "https://cards.scryfall.io/large/front/3/f/3f56c0e7-5b07-48e3-b0ca-5d09ddc8de9a.jpg?1783902966",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/f/3f56c0e7-5b07-48e3-b0ca-5d09ddc8de9a.jpg?1783902966"
+  }
+ },
+ {
+  "name": "Captain Marvel, Earth's Protector",
+  "scryfallId": "eb098550-22e6-4079-8c59-ed9ec2f764e3",
+  "oracleId": "2e665a03-bece-43df-bd15-b4496e233f2e",
+  "set": "msh",
+  "collectorNumber": "11",
+  "rarity": "mythic",
+  "manaCost": "{3}{W}{W}",
+  "typeLine": "Legendary Creature — Human Kree Hero",
+  "oracleText": "Flash\nFlying, lifelink\nPower-up — {5}{W}{W}: Put a +1/+1 counter and an indestructible counter on Captain Marvel. (Activate each power-up ability only once. Reduce the cost by her mana cost if she entered this turn.)",
+  "power": "5",
+  "toughness": "4",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Flying",
+   "Power-up",
+   "Lifelink",
+   "Flash"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/b/eb098550-22e6-4079-8c59-ed9ec2f764e3.jpg?1783902976",
+   "normal": "https://cards.scryfall.io/normal/front/e/b/eb098550-22e6-4079-8c59-ed9ec2f764e3.jpg?1783902976",
+   "large": "https://cards.scryfall.io/large/front/e/b/eb098550-22e6-4079-8c59-ed9ec2f764e3.jpg?1783902976",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/b/eb098550-22e6-4079-8c59-ed9ec2f764e3.jpg?1783902976"
+  }
+ },
+ {
+  "name": "Doctor Doom",
+  "scryfallId": "9b1f213a-e1d4-4a0f-954b-c83915698d98",
+  "oracleId": "9e4fa592-71f8-4c71-8c91-78e6326cd736",
+  "set": "msh",
+  "collectorNumber": "95",
+  "rarity": "mythic",
+  "manaCost": "{4}{B}{B}",
+  "typeLine": "Legendary Creature — Human Scientist Villain",
+  "oracleText": "When Doctor Doom enters, create two 3/3 colorless Robot Villain artifact creature tokens named Doombot.\nAs long as you control an artifact creature or a Plan, Doctor Doom has indestructible.\nAt the beginning of your end step, you draw a card and lose 1 life.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/b/9b1f213a-e1d4-4a0f-954b-c83915698d98.jpg?1783902944",
+   "normal": "https://cards.scryfall.io/normal/front/9/b/9b1f213a-e1d4-4a0f-954b-c83915698d98.jpg?1783902944",
+   "large": "https://cards.scryfall.io/large/front/9/b/9b1f213a-e1d4-4a0f-954b-c83915698d98.jpg?1783902944",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/b/9b1f213a-e1d4-4a0f-954b-c83915698d98.jpg?1783902944"
+  }
+ },
+ {
+  "name": "M.O.D.O.K.",
+  "scryfallId": "38e87542-50f7-4812-9338-84e4b9b7bb44",
+  "oracleId": "fe7cc414-42d0-4dad-8516-7a0be0860a67",
+  "set": "msh",
+  "collectorNumber": "106",
+  "rarity": "mythic",
+  "manaCost": "{3}{B}{B}",
+  "typeLine": "Legendary Artifact Creature — Villain",
+  "oracleText": "Flying, lifelink\nMental Organism — Pay 3 life: M.O.D.O.K. connives. Activate only during your turn. (Draw a card, then discard a card. If you discarded a nonland card, put a +1/+1 counter on this creature.)\nDesigned Only for Killing — Creatures your opponents control get -1/-1.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Mental Organism",
+   "Flying",
+   "Lifelink",
+   "Designed Only for Killing",
+   "Connive"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/8/38e87542-50f7-4812-9338-84e4b9b7bb44.jpg?1783902940",
+   "normal": "https://cards.scryfall.io/normal/front/3/8/38e87542-50f7-4812-9338-84e4b9b7bb44.jpg?1783902940",
+   "large": "https://cards.scryfall.io/large/front/3/8/38e87542-50f7-4812-9338-84e4b9b7bb44.jpg?1783902940",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/8/38e87542-50f7-4812-9338-84e4b9b7bb44.jpg?1783902940"
+  }
+ },
+ {
+  "name": "Multiversal Incursion",
+  "scryfallId": "8a505f6f-933c-4644-838f-897f5e4133b0",
+  "oracleId": "d3678fce-6897-4f2c-bf50-243facb6581b",
+  "set": "msh",
+  "collectorNumber": "68",
+  "rarity": "mythic",
+  "manaCost": "{5}{U}{U}",
+  "typeLine": "Sorcery",
+  "oracleText": "For each nontoken creature you control, create a token that's a copy of that creature, except it isn't legendary.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/a/8a505f6f-933c-4644-838f-897f5e4133b0.jpg?1783902956",
+   "normal": "https://cards.scryfall.io/normal/front/8/a/8a505f6f-933c-4644-838f-897f5e4133b0.jpg?1783902956",
+   "large": "https://cards.scryfall.io/large/front/8/a/8a505f6f-933c-4644-838f-897f5e4133b0.jpg?1783902956",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/a/8a505f6f-933c-4644-838f-897f5e4133b0.jpg?1783902956"
+  }
+ },
+ {
   "name": "Avengers Hangar",
   "scryfallId": "c5d03ebb-1ce9-4a6b-b13e-a72f0b075ae8",
   "oracleId": "10fc2009-4212-47c6-8a97-ab0f45c1f91b",
