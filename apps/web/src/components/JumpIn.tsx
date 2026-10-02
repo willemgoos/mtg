@@ -5,9 +5,18 @@ import { play } from '../game/sound.ts';
 import { HoverPreview, type HoverState } from './Preview.tsx';
 import { UiSize } from './UiSize.tsx';
 
-/** Three packets at random, leaving out one already taken. */
-function offer(taken?: Packet): Packet[] {
-  const pool = PACKETS.filter((p) => p !== taken);
+type PacketSet = Packet['set'];
+
+/** The sets with Jump In packets, in the order shown. */
+const SETS: { set: PacketSet; name: string }[] = [
+  { set: undefined, name: 'Foundations' },
+  { set: 'blb', name: 'Bloomburrow' },
+  { set: 'msh', name: 'Marvel Super Heroes' },
+];
+
+/** Three packets of a set at random, leaving out one already taken. */
+function offer(set: PacketSet, taken?: Packet): Packet[] {
+  const pool = PACKETS.filter((p) => p !== taken && p.set === set);
   for (let i = pool.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [pool[i], pool[j]] = [pool[j]!, pool[i]!];
@@ -30,16 +39,22 @@ export function JumpIn({
   onPick: (deckId: string) => void;
   onBack: () => void;
 }) {
+  const [set, setSet] = useState<PacketSet>(undefined);
   const [first, setFirst] = useState<Packet | null>(null);
-  const [options, setOptions] = useState(() => offer());
+  const [options, setOptions] = useState(() => offer(undefined));
   const [hover, setHover] = useState<HoverState | null>(null);
   const choose = (p: Packet) => {
     play('place');
     setHover(null);
     if (!first) {
       setFirst(p);
-      setOptions(offer(p));
+      setOptions(offer(p.set, p));
     } else onPick(jumpInId(first.id, p.id));
+  };
+  // Packets pair within their set: pick the set before the first half.
+  const pickSet = (s: PacketSet) => {
+    setSet(s);
+    setOptions(offer(s));
   };
 
   return (
@@ -54,7 +69,22 @@ export function JumpIn({
             : 'Two themed half-decks shuffle together into your 40-card deck.'}
         </p>
       </div>
-      <div key={first?.id ?? 'first'} className="jumpin__packets">
+      {!first && (
+        <div className="start__opponent start__mode" role="radiogroup" aria-label="Set">
+          {SETS.map((s) => (
+            <button
+              key={s.name}
+              role="radio"
+              aria-checked={set === s.set}
+              className={`opp ${set === s.set ? 'is-on' : ''}`}
+              onClick={() => pickSet(s.set)}
+            >
+              <span className="opp__name">{s.name}</span>
+            </button>
+          ))}
+        </div>
+      )}
+      <div key={`${first?.id ?? 'first'}-${set ?? 'fdn'}`} className="jumpin__packets">
         {options.map((p, i) => (
           <div key={p.id} className="jumpin__packet">
             <button

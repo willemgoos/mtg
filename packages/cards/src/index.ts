@@ -115,7 +115,8 @@ function jumpInDeck(id: string): Decklist | undefined {
   const m = /^jump-in:([\w-]+)\+([\w-]+)$/.exec(id);
   const a = PACKETS.find((p) => p.id === m?.[1]);
   const b = PACKETS.find((p) => p.id === m?.[2]);
-  if (!a || !b) return undefined;
+  // Packets pair within their set (Foundations, Bloomburrow, Marvel Super Heroes).
+  if (!a || !b || a.set !== b.set) return undefined;
   const counts = new Map<string, number>();
   for (const [name, n] of [...packetCards(a), ...packetCards(b)])
     counts.set(name, (counts.get(name) ?? 0) + n);
@@ -126,6 +127,8 @@ function jumpInDeck(id: string): Decklist | undefined {
     face: a.face,
     source: 'custom',
     series: 'jumpIn',
+    // An expedition with it opens that set's boosters.
+    ...(a.set ? { set: a.set } : {}),
     cards: [...counts],
   };
 }
@@ -149,9 +152,11 @@ export function deckById(id: string): Decklist {
   return d;
 }
 
-/** Every pair of different Jump In packets we can play, one deck per pair. */
+/** Every pair of different Jump In packets of the same set, one deck per pair. */
 export const JUMP_IN_DECKS: readonly Decklist[] = PACKETS.flatMap((a, i) =>
-  PACKETS.slice(i + 1).map((b) => jumpInDeck(jumpInId(a.id, b.id))!),
+  PACKETS.slice(i + 1)
+    .filter((b) => b.set === a.set)
+    .map((b) => jumpInDeck(jumpInId(a.id, b.id))!),
 ).filter(isPlayable);
 
 /**

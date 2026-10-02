@@ -5,6 +5,7 @@ import {
   deckIds,
   findDeck,
   jumpInId,
+  JUMP_IN_DECKS,
   PACKETS,
   packetCards,
   SCRYFALL,
@@ -36,9 +37,27 @@ describe('Jump In packets', () => {
     }
   });
 
-  it('has two packets per colour', () => {
-    for (const c of ['W', 'U', 'B', 'R', 'G'])
-      expect(PACKETS.filter((p) => p.color === c)).toHaveLength(2);
+  it('has two packets per colour in each set', () => {
+    for (const set of [undefined, 'blb', 'msh'])
+      for (const c of ['W', 'U', 'B', 'R', 'G'])
+        expect(
+          PACKETS.filter((p) => p.set === set && p.color === c),
+          `${set ?? 'fdn'} ${c}`,
+        ).toHaveLength(2);
+  });
+
+  it('uses cards of its own set', () => {
+    for (const p of PACKETS.filter((x) => x.set))
+      for (const [name] of p.spells) expect(card.get(name)!.set, `${p.name}: ${name}`).toBe(p.set);
+  });
+
+  it('pairs packets only within a set, and a Marvel or Bloomburrow pair is of that set', () => {
+    expect(findDeck(jumpInId('goblins', 'blb-lizards'))).toBeUndefined();
+    const d = deckById(jumpInId('msh-hydra', 'msh-robots'));
+    expect(d.set).toBe('msh');
+    expect(deckIds(d)).toHaveLength(40);
+    expect(deckById(jumpInId('blb-bats', 'blb-rats')).set).toBe('blb');
+    expect(JUMP_IN_DECKS).toHaveLength(3 * 45);
   });
 
   it('pairs two packets into a 40-card deck', () => {

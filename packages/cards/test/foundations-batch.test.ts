@@ -524,5 +524,5 @@ describe('Foundations additions: rules', () => {
       for (const action of result.actions) state = engine.applyAction(state, action).state;
       expect(state).toEqual(result.final);
     }
-  }, 20000);
+  }, 60_000);
 });

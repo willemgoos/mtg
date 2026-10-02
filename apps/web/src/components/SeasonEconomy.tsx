@@ -293,7 +293,7 @@ export function Booster({
         <span className="booster__art" />
         <span className="booster__foil" />
         <span className="booster__label">
-          <span className="booster__set">Foundations</span>
+          <span className="booster__set">{PACK_SET_NAMES[set]}</span>
           <span className="booster__kind">Booster</span>
         </span>
         <span className="booster__crimp booster__crimp--bottom" />

@@ -36,6 +36,8 @@ import {
   difficultyName,
   difficultyOf,
   MAX_DIFFICULTY,
+  PACK_SET_NAMES,
+  packSetOf,
 } from '../game/expedition.ts';
 import { ruleNotes } from '../game/notes.ts';
 import { play } from '../game/sound.ts';
@@ -206,6 +208,8 @@ function nodeInfo(
   floor: number,
   node: MapNode,
   floors: number,
+  /** The run's booster set ("A free Marvel Super Heroes booster"). */
+  boosters = 'Foundations',
 ): { title: string; lines: string[] } {
   const title = KIND_NAMES[node.kind];
   const opp = node.opponent ? foe(floor, node, floors, deckById(node.opponent).name) : '';
@@ -225,7 +229,7 @@ function nodeInfo(
     case 'shrine':
       return { title, lines: ['Choose one of three boons'] };
     case 'treasure':
-      return { title, lines: ['A free Foundations booster, no fight'] };
+      return { title, lines: [`A free ${boosters} booster, no fight`] };
     case 'merchant':
       return { title, lines: ['Trade two of your cards for one of three rares'] };
     case 'mystery':
@@ -275,7 +279,14 @@ function ExpeditionMap({
   const floorX = (floor: number) => ((floor + 0.5) / floors) * 100;
   const floorNow = Math.min(run.outcomes.length + 1, floors);
   const shown = hover ?? (here && { floor: here.floor, lane: here.lane });
-  const info = shown && nodeInfo(shown.floor, run.map[shown.floor]![shown.lane]!, floors);
+  const info =
+    shown &&
+    nodeInfo(
+      shown.floor,
+      run.map[shown.floor]![shown.lane]!,
+      floors,
+      PACK_SET_NAMES[packSetOf(run)],
+    );
   const fight = !!here?.node.opponent;
   // The travelling token: at your last node (or the start), or on its way to a new one.
   const [moving, setMoving] = useState<number | null>(null);
@@ -609,7 +620,7 @@ function Camp({ run, onChoose }: { run: ExpeditionRun; onChoose: (c: 'rest' | 'f
           </span>
           <span className="choice__name">Forage</span>
           <span className="choice__text">
-            Open a Foundations booster and keep {keepCount(run)}.
+            Open a {PACK_SET_NAMES[packSetOf(run)]} booster and keep {keepCount(run)}.
           </span>
         </button>
       </div>

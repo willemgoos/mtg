@@ -358,7 +358,7 @@ function OnePack({
               <span className="booster__art" />
               <span className="booster__foil" />
               <span className="booster__label">
-                <span className="booster__set">Foundations</span>
+                <span className="booster__set">{PACK_SET_NAMES[set]}</span>
                 <span className="booster__kind">{packName(pack, set)}</span>
               </span>
               <span className="booster__crimp booster__crimp--bottom" />
