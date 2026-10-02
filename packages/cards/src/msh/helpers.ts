@@ -119,6 +119,23 @@ export const MARVEL_TOKENS: CardDefinition[] = [
   token('villain-token', 'Villain', 'B', ['Villain'], 2, 1, ['menace']),
   token('hero-token', 'Hero', 'W', ['Hero'], 3, 2, ['vigilance']),
   {
+    ...token('robot-villain-token', 'Robot Villain', 'W', ['Robot', 'Villain'], 2, 2),
+    colors: [],
+    types: ['Artifact', 'Creature'],
+  },
+  {
+    ...token('redwing-token', 'Redwing', 'U', ['Bird', 'Scout'], 1, 1, ['flying']),
+    supertypes: ['Legendary'],
+    abilities: [
+      {
+        kind: 'triggered',
+        trigger: { on: 'attacks' },
+        targets: [],
+        effects: [{ kind: 'surveil', amount: 1 }],
+      },
+    ],
+  },
+  {
     ...token('tiger-god-token', 'The Tiger God', 'G', ['Cat', 'God'], 4, 4),
     supertypes: ['Legendary'],
   },
