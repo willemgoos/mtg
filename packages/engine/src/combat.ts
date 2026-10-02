@@ -53,6 +53,18 @@ export function canBlock(ctx: Ctx, blocker: ObjectId, attacker: ObjectId): boole
   const a = ctx.s.combat?.attackers.find((x) => x.id === attacker);
   if (!a || b.controller !== a.defender) return false;
   if (characteristics(ctx, attacker).cantBeBlocked) return false;
+  // Storm, Windrider: "Creatures with flying can't block creatures you control."
+  if (
+    bc.keywords.has('flying') &&
+    ctx.s.battlefield.some(
+      (id) =>
+        obj(ctx, id).controller === obj(ctx, attacker).controller &&
+        def(ctx, id).abilities.some(
+          (x) => x.kind === 'static' && x.effect.kind === 'flyersCantBlockYours',
+        ),
+    )
+  )
+    return false;
   // "Can't be blocked by creatures with power 2 or less" (Rust-Shield Rampager).
   for (const ab of def(ctx, attacker).abilities)
     if (

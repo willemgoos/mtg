@@ -320,7 +320,11 @@ export type TriggerDef =
         | 'instantOrSorcery'
         | 'targetsSelf'
         /** Alania: the first instant, first sorcery, or first other Otter spell you cast this turn. */
-        | 'firstOfItsKind';
+        | 'firstOfItsKind'
+        /** Marvel Super Heroes: a spell that targets a creature you control (Ms. Marvel). */
+        | 'targetsYourCreature'
+        /** Marvel Super Heroes: an instant or sorcery that targets an artifact or land (Fin Fang Foom). */
+        | 'instantOrSorceryTargetingArtifactOrLand';
       /** The spell must also match this (Gev: a Lizard spell). */
       spell?: CardFilter;
       /** Any player's spell, cast when it isn't their turn (Vision). */
@@ -335,6 +339,8 @@ export type TriggerDef =
   // Marvel Super Heroes
   /** Whenever a creature you control is dealt damage ("that much": the event amount). */
   | { on: 'yourCreatureDealtDamage' }
+  /** Equipment: whenever the equipped creature attacks (Captain America's Shield). */
+  | { on: 'equippedAttacks' }
   | { on: 'drawCard'; whose: 'yours' | 'opponents' }
   /** Whenever a source you control deals noncombat damage to an opponent ("that many"). */
   | { on: 'yourNoncombatDamageToOpponent' }
@@ -506,6 +512,8 @@ export type ConditionDef =
   | { kind: 'controlsBasicLand' }
   /** The source has a counter of this kind (a shield counter). */
   | { kind: 'sourceHasCounter'; name: string }
+  /** You attacked with a Hero this turn, or a Hero entered under your control (Avengers Assemble!). */
+  | { kind: 'heroAttackedOrEnteredThisTurn' }
   | { kind: 'custom'; handler: string };
 
 export interface CardFilter {
@@ -561,6 +569,10 @@ export interface CardFilter {
   // Marvel Super Heroes
   /** It was attacking as it left the battlefield ("an attacking creature you control dies"). */
   leftAttacking?: boolean;
+  /** Attached to the source (Winter Soldier: "for each Equipment attached to him"). */
+  attachedToSource?: boolean;
+  /** Its mana value is odd or even (Thanos). */
+  manaValueParity?: 'odd' | 'even';
   // Brawl.
   /** Is its controller's commander ("your commander"). */
   commander?: boolean;
@@ -627,6 +639,12 @@ export type Amount =
   | { multiply: number; amount: Amount }
   // Marvel Super Heroes: "where X is Captain America's toughness".
   | { toughnessOf: Ref }
+  /** The mana value of the triggering spell (Thor, God of Thunder). */
+  | { manaValueOfSubject: true }
+  /** Blue mana symbols in the triggering spell's mana cost (Namor). */
+  | { bluePipsOfSubject: true }
+  /** "Draw cards equal to the difference" up to this hand size (The Ten Rings). */
+  | { handSizeUpTo: number }
   // Marvel Super Heroes: "costs {2} less if ..." (Punishing Punch).
   | { if: ConditionDef; then: number; else?: number }
   /** Cards in your graveyard (of these types). */
@@ -695,6 +713,8 @@ export type EffectDef =
       attacking?: boolean;
       counters?: number;
       addSubtype?: string;
+      // Marvel Super Heroes: 'with a finality counter on him' (Winter Soldier).
+      named?: string;
     }
   | { kind: 'exile'; what: Ref }
   /** Exile a card from a graveyard; extra effects if it was a creature card (Scavenging Ooze). */
@@ -882,7 +902,13 @@ export type EffectDef =
    * Until your next turn, permanents lose all abilities (and have base power
    * and toughness `basePT` if creatures): Azure Beastbinder.
    */
-  | { kind: 'loseAbilities'; what: Ref; basePT?: [number, number] }
+  | {
+      kind: 'loseAbilities';
+      what: Ref;
+      basePT?: [number, number];
+      // Marvel Super Heroes: "for as long as the source remains on the battlefield" (The Wondrous Wasp).
+      whileSource?: boolean;
+    }
   | { kind: 'untap'; what: Ref }
   /** An additional combat phase after this one. */
   | { kind: 'extraCombat' }
@@ -924,6 +950,8 @@ export type EffectDef =
   // Transform (Marvel Super Heroes)
   /** Turn a double-faced permanent to its other face. */
   | { kind: 'transform'; what: Ref }
+  /** Remove all +1/+1 counters from it (The Astonishing Ant-Man, after counting them). */
+  | { kind: 'removePlusOneCounters'; from: Ref }
   /** Take an extra turn after this one (Kang the Conqueror). */
   | { kind: 'extraTurn'; noPowerUp?: boolean }
   /** Until end of turn, your creatures with toughness greater than power assign damage by toughness. */
@@ -1023,8 +1051,8 @@ export type EffectDef =
       tapped?: boolean;
       /** Created under an opponent's control (a gift). */
       forOpponent?: boolean;
-      /** Each enters with this many +1/+1 counters. */
-      counters?: number;
+      /** Each enters with this many +1/+1 counters (Marvel Super Heroes: any amount, Alien Invasion). */
+      counters?: Amount;
       /** Created under the controller of this target instead (Beast Within: "its controller"). */
       forControllerOf?: number;
     }
@@ -1120,6 +1148,8 @@ export type StaticDef =
       loseKeywords?: Keyword[];
       /** "You control enchanted creature" (Kitnap). */
       control?: boolean;
+      /** Marvel Super Heroes: "Double all damage equipped creature would deal" (Mjölnir). */
+      doubleDamage?: boolean;
       /** Base power and toughness (Hulkbuster Armor: 9/9). */
       basePT?: [number, number];
       /** Can't be blocked (Whispersilk Cloak). */
@@ -1146,7 +1176,7 @@ export type StaticDef =
     }
   /** Instant and sorcery spells you cast cost {N} less (Archmage of Runes). */
   | { kind: 'instantsAndSorceriesCostLess'; amount: number }
-  | { kind: 'spellsCostLess'; filter: CardFilter; amount: number }
+  | { kind: 'spellsCostLess'; filter: CardFilter; amount: Amount }
   | { kind: 'instantsAndSorceriesUncounterable' }
   /** You have no maximum hand size. */
   | { kind: 'noMaxHandSize' }
@@ -1157,6 +1187,12 @@ export type StaticDef =
   // Marvel Super Heroes
   /** "This creature attacks each combat if able" (added when attackers are confirmed). */
   | { kind: 'attacksEachCombat' }
+  /** Damage to it replaces damage already marked: it never accumulates (Wolverine, Fierce Fighter). */
+  | { kind: 'damageDoesntAccumulate' }
+  /** "You may activate abilities of creatures you control as though those creatures had haste" (Shang-Chi). */
+  | { kind: 'abilitiesAsThoughHaste' }
+  /** "Creatures with flying can't block creatures you control" (Storm, Windrider). */
+  | { kind: 'flyersCantBlockYours' }
   /** "Prevent all damage that would be dealt to this creature" (Black Panther, Hope Enduring). */
   | { kind: 'preventDamageToSelf' }
   /** "If a creature you control would connive, instead you draw a card, then it connives" (Leader). */
@@ -1522,7 +1558,9 @@ export interface ContinuousEffect {
   /** Control change: who controlled it before (restored when this expires). */
   previousController?: PlayerId;
   /** 'untilYourNextTurn': until `player`'s next turn begins. */
-  expires: 'endOfTurn' | 'untilYourNextTurn';
+  expires: 'endOfTurn' | 'untilYourNextTurn' | 'whileSource';
+  /** Marvel Super Heroes: for 'whileSource', the permanent it lasts for. */
+  whileSourceId?: ObjectId;
   player?: PlayerId;
   // Avengers Assemble (9b).
   cantBeBlockedExcept?: Keyword;

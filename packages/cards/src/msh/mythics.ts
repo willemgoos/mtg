@@ -1,3 +1,4 @@
+import type { AbilityDef, EffectDef } from '@mtg/engine';
 import type { Behavior } from '../build.ts';
 import { connive, draw, mana, onEnter, powerUp, t0, transformAbility } from './helpers.ts';
 
@@ -10,6 +11,229 @@ const heroes = { subtype: 'Hero' };
 const hasShield = { kind: 'sourceHasCounter', name: 'shield' } as const;
 
 export const MSH_MYTHICS: Record<string, Behavior> = {
+  'Avengers Assemble!': {
+    abilities: [
+      {
+        kind: 'static',
+        effect: {
+          kind: 'anthem',
+          affects: 'creaturesYouControl',
+          filter: heroes,
+          power: 2,
+          toughness: 2,
+        },
+      },
+      {
+        kind: 'triggered',
+        trigger: { on: 'beginningOfEndStep', whose: 'each' },
+        condition: { kind: 'heroAttackedOrEnteredThisTurn' },
+        targets: [],
+        effects: [draw(1)],
+      },
+    ],
+  },
+  'Namor the Sub-Mariner': {
+    powerEquals: { count: 'creaturesYouControl', subtype: 'Merfolk' },
+    abilities: [
+      {
+        kind: 'triggered',
+        trigger: { on: 'castSpell', filter: 'noncreature' },
+        targets: [],
+        effects: [
+          { kind: 'createToken', token: 'merfolk-token', count: { bluePipsOfSubject: true } },
+        ],
+      },
+    ],
+  },
+  'Shang-Chi, Master of Kung Fu': {
+    abilities: [
+      { kind: 'static', effect: { kind: 'abilitiesAsThoughHaste' } },
+      ...(['W', 'U', 'B', 'R', 'G'] as const).map((produces): AbilityDef => ({
+        kind: 'mana',
+        cost: { tapSelf: true },
+        produces,
+        amount: 2,
+        onlyFor: 'CreatureAbility',
+      })),
+    ],
+  },
+  'The Mind Stone': {
+    abilities: [
+      { kind: 'mana', cost: { tapSelf: true }, produces: 'W' },
+      {
+        kind: 'activated',
+        once: true,
+        cost: { mana: mana('{5}{W}'), tapSelf: true },
+        targets: [],
+        effects: [{ kind: 'namedCounters', name: 'harnessed', amount: 1, to: 'self' }],
+        label: 'Harness The Mind Stone',
+      },
+      {
+        kind: 'triggered',
+        trigger: { on: 'beginningOfEndStep', whose: 'yours' },
+        condition: { kind: 'sourceHasCounter', name: 'harnessed' },
+        targets: [
+          {
+            what: 'permanent',
+            controller: 'you',
+            filter: { nonland: true, other: true },
+            optional: true,
+          },
+        ],
+        effects: [{ kind: 'blink', what: t0 }],
+      },
+    ],
+  },
+  // "Your maximum hand size is ten": no maximum.
+  'The Ten Rings': {
+    abilities: [
+      { kind: 'static', effect: { kind: 'noMaxHandSize' } },
+      {
+        kind: 'triggered',
+        trigger: { on: 'beginningOfEndStep', whose: 'yours' },
+        targets: [],
+        effects: [{ kind: 'draw', who: 'controller', amount: { handSizeUpTo: 10 } }],
+      },
+    ],
+  },
+  // The exiled card goes to your hand instead of being playable until your next turn ends.
+  'Thor, God of Thunder': {
+    abilities: [
+      {
+        kind: 'triggered',
+        trigger: { on: 'etb' },
+        targets: [
+          {
+            what: 'graveyardCard',
+            controller: 'you',
+            filter: { anyOf: [{ subtype: 'Equipment' }, { types: ['Instant', 'Sorcery'] }] },
+          },
+        ],
+        effects: [{ kind: 'returnToHand', what: t0 }],
+      },
+      {
+        kind: 'triggered',
+        trigger: { on: 'castSpell', filter: 'noncreature' },
+        targets: [{ what: 'any' }],
+        effects: [{ kind: 'damage', amount: { manaValueOfSubject: true }, to: t0 }],
+      },
+    ],
+  },
+  // Transforming a double-faced card it puts onto the battlefield is not offered.
+  'Nick Fury, Agent of S.H.I.E.L.D.': {
+    abilities: [
+      powerUp(
+        '{W}{U}{B}{R}{G}',
+        { kind: 'counters', to: 'self', amount: 2 },
+        {
+          kind: 'lookAndTake',
+          count: 7,
+          filter: {
+            anyOf: [{ subtype: 'Hero' }, { subtype: 'Equipment' }, { subtype: 'Vehicle' }],
+          },
+          battlefieldOnYourTurn: true,
+        },
+      ),
+    ],
+  },
+  'Thanos, the Mad Titan': {
+    abilities: [
+      powerUp(
+        '{C}{W}{U}{B}{R}{G}',
+        { kind: 'counters', to: 'self', amount: 2 },
+        {
+          kind: 'choose',
+          options: ['odd', 'even'].map((parity) => ({
+            label: `Destroy each other creature with ${parity} mana value`,
+            effects: [
+              {
+                kind: 'destroyAll',
+                filter: { other: true, manaValueParity: parity as 'odd' | 'even' },
+              } as EffectDef,
+            ],
+          })),
+        },
+      ),
+    ],
+  },
+  'Mjölnir, Hammer of Thor': {
+    abilities: [
+      {
+        kind: 'triggered',
+        trigger: { on: 'etb' },
+        targets: [{ what: 'creature', optional: true }],
+        effects: [{ kind: 'damage', amount: 4, to: t0 }],
+      },
+      {
+        kind: 'static',
+        effect: { kind: 'attached', power: 0, toughness: 0, doubleDamage: true },
+      },
+      // Equip worthy: only to a legendary creature.
+      {
+        kind: 'activated',
+        cost: { mana: mana('{1}') },
+        sorcerySpeed: true,
+        targets: [{ what: 'creature', controller: 'you', filter: { supertypes: ['Legendary'] } }],
+        effects: [{ kind: 'attach', to: t0 }],
+        label: 'Equip worthy {1}',
+      },
+      {
+        kind: 'activated',
+        fromHand: true,
+        cost: { mana: mana('{2}{R}'), discardSelf: true },
+        targets: [],
+        effects: [{ kind: 'damage', amount: 2, to: { each: 'creature' } }],
+        label: '{2}{R}, discard: 2 damage to each creature',
+      },
+    ],
+  },
+  // Its {2} "becomes a 0/0 Construct Hero artifact creature" ability is not modelled.
+  'Iron Man Armor': {
+    abilities: [
+      {
+        kind: 'triggered',
+        trigger: { on: 'etb' },
+        targets: [{ what: 'creature', controller: 'you' }],
+        effects: [{ kind: 'attach', to: t0 }],
+      },
+      {
+        kind: 'static',
+        effect: { kind: 'attached', power: 2, toughness: 1, keywords: ['flying'] },
+      },
+      {
+        kind: 'activated',
+        cost: { mana: mana('{2}') },
+        sorcerySpeed: true,
+        targets: [{ what: 'creature', controller: 'you' }],
+        effects: [{ kind: 'attach', to: t0 }],
+        label: 'Equip {2}',
+      },
+    ],
+  },
+  // A noncreature copy doesn't become a 2/2 Robot Villain creature.
+  'Ultron, Artificial Malevolence': {
+    abilities: [
+      {
+        kind: 'triggered',
+        trigger: { on: 'otherPermanentEtb', filter: { types: ['Artifact'], nontoken: true } },
+        optional: true,
+        cost: mana('{2}'),
+        targets: [],
+        effects: [{ kind: 'tokenCopy', of: 'subject' }],
+      },
+    ],
+  },
+  // "Exile until a nonland card; you may cast it" is not modelled: always the +1/+1 counter.
+  'Black Widow, Super Spy': {
+    abilities: [
+      {
+        kind: 'triggered',
+        trigger: { on: 'combatDamageToPlayer' },
+        targets: [],
+        effects: [{ kind: 'counters', to: 'self', amount: 1 }],
+      },
+    ],
+  },
   'Captain America, Super-Soldier': {
     entersWithNamedCounters: { shield: 1 },
     abilities: [

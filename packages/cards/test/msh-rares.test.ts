@@ -186,3 +186,107 @@ describe('batch 2 engine pieces', () => {
     expect(handSize(g, 'p1')).toBe(2);
   });
 });
+
+describe('batch 3', () => {
+  it("Captain America's Shield taps a creature when the equipped creature attacks", () => {
+    const g = game({
+      step: 'beginCombat',
+      p1: { battlefield: ['agent-of-atlas', 'captain-americas-shield'] },
+      p2: { battlefield: ['serra-angel'] },
+    });
+    const atlas = g.id('p1', 'agent-of-atlas');
+    g.obj(g.id('p1', 'captain-americas-shield')).attachedTo = atlas;
+    expect(pt(g, atlas)).toEqual([2, 10]);
+    g.passBoth().attack(atlas);
+    settle(g);
+    expect(g.obj(g.id('p2', 'serra-angel')).tapped).toBe(true);
+  });
+
+  it('Wolverine heals the damage already dealt to him', () => {
+    const g = game({
+      p1: { hand: ['lightning-strike', 'lightning-strike'], battlefield: n('mountain', 4) },
+      p2: { battlefield: ['wolverine-fierce-fighter'] },
+    });
+    const w = g.id('p2', 'wolverine-fierce-fighter');
+    settle(cast(g, 'lightning-strike', [g.ref(w)]));
+    settle(cast(g, 'lightning-strike', [g.ref(w)]));
+    expect(g.zoneOf(w)).toBe('battlefield');
+    expect(g.obj(w).damage).toBe(3);
+  });
+
+  it('Mjölnir doubles the damage its creature deals', () => {
+    const g = game({
+      step: 'beginCombat',
+      p1: { battlefield: ['thor-odinson', 'mj-lnir-hammer-of-thor'] },
+    });
+    const thor = g.id('p1', 'thor-odinson');
+    g.obj(g.id('p1', 'mj-lnir-hammer-of-thor')).attachedTo = thor;
+    g.passBoth().attack(thor);
+    g.passUntilStep('main2');
+    expect(g.life('p2')).toBe(12);
+  });
+
+  it('Thanos destroys each other creature of the chosen parity', () => {
+    const g = game({
+      p1: {
+        battlefield: [
+          'thanos-the-mad-titan',
+          'agent-of-atlas',
+          'castle-doom',
+          'plains',
+          'island',
+          'swamp',
+          'mountain',
+          'forest',
+        ],
+      },
+      p2: { battlefield: ['serra-angel', 'red-room-recruit'] },
+    });
+    const thanos = g.id('p1', 'thanos-the-mad-titan');
+    g.obj(thanos).zoneTurn = 0;
+    g.do({ type: 'activateAbility', player: 'p1', source: thanos, abilityIndex: 0, targets: [] });
+    g.passBoth();
+    expect(g.decision.kind).toBe('chooseOption');
+    g.do(g.legal()[1]!); // even: Agent of Atlas (2) and Red Room Recruit (2); Serra Angel is 5
+    settle(g);
+    expect(g.zoneOf(thanos)).toBe('battlefield');
+    expect(g.zoneOf(g.id('p2', 'serra-angel'))).toBe('battlefield');
+    expect(all(g, 'agent-of-atlas')).toHaveLength(0);
+    expect(all(g, 'red-room-recruit')).toHaveLength(0);
+  });
+
+  it('The Wondrous Wasp: the tapped creature loses its abilities while the Wasp stays', () => {
+    const g = game({
+      p1: { hand: ['the-wondrous-wasp'], battlefield: n('island', 2) },
+      p2: { battlefield: ['serra-angel'] },
+    });
+    const angel = g.id('p2', 'serra-angel');
+    settle(cast(g, 'the-wondrous-wasp'), (legal) =>
+      legal.find(
+        (a) =>
+          a.type === 'chooseTargets' &&
+          (a.targets[0] as { object?: { id: string } } | undefined)?.object?.id === angel,
+      ),
+    );
+    expect(getCharacteristics(g.state, cardDb, angel).keywords.has('flying')).toBe(false);
+    g.state.battlefield = g.state.battlefield.filter(
+      (id) => id !== g.id('p1', 'the-wondrous-wasp'),
+    );
+  });
+
+  it('The Ten Rings draws up to ten at your end step', () => {
+    const g = game({ p1: { battlefield: ['the-ten-rings'], library: n('plains', 12) } });
+    g.passUntilStep('end');
+    settle(g);
+    expect(handSize(g, 'p1')).toBe(10);
+  });
+
+  it('Alien Invasion makes bigger Aliens each combat', () => {
+    const g = game({ p1: { battlefield: ['alien-invasion'] } });
+    g.passBoth();
+    settle(g);
+    const alien = g.state.battlefield.find((id) => g.obj(id).defId === 'alien-token')!;
+    expect(g.obj(alien).plusOneCounters).toBe(0);
+    expect(g.obj(g.id('p1', 'alien-invasion')).counters?.invasion).toBe(1);
+  });
+});

@@ -77,6 +77,17 @@ export function dealDamage(
   if (amount <= 0) return;
   to = redirected(ctx, to);
   amount += damageBonus(ctx, src, to, combat);
+  // Marvel Super Heroes (Mjölnir): "Double all damage equipped creature would deal."
+  if (
+    ctx.s.battlefield.some(
+      (id) =>
+        obj(ctx, id).attachedTo === src.id &&
+        def(ctx, id).abilities.some(
+          (a) => a.kind === 'static' && a.effect.kind === 'attached' && a.effect.doubleDamage,
+        ),
+    )
+  )
+    amount *= 2;
   amount = prevented(ctx, src, to, amount);
   if (amount <= 0) return;
   // The monarch: combat damage to them makes the attacker's controller the monarch.
@@ -96,7 +107,8 @@ export function dealDamage(
       if (has(src, 'lifelink')) gainLife(ctx, src.controller, amount);
       return;
     }
-    o.damage += amount;
+    // Wolverine: "that damage is dealt, but all other damage already dealt to him is healed".
+    o.damage = hasStaticKind(ctx, o.id, 'damageDoesntAccumulate') ? amount : o.damage + amount;
     if (has(src, 'deathtouch')) o.damagedByDeathtouch = true;
     // Hawkeye: "if Hawkeye dealt damage to it this turn".
     if (!o.damagedBy?.includes(src.id)) o.damagedBy = [...(o.damagedBy ?? []), src.id];
@@ -360,6 +372,18 @@ function playersOf(ctx: Ctx, es: EffectSource, ref: Ref): PlayerId[] {
 export function resolveAmount(ctx: Ctx, es: EffectSource, amount: Amount): number {
   if (typeof amount === 'number') return amount;
   if ('multiply' in amount) return amount.multiply * resolveAmount(ctx, es, amount.amount);
+  if ('manaValueOfSubject' in amount) {
+    const o = es.subject && ctx.s.objects[es.subject.id];
+    return o ? manaValue(def(ctx, o.id).manaCost) : 0;
+  }
+  if ('bluePipsOfSubject' in amount) {
+    const o = es.subject && ctx.s.objects[es.subject.id];
+    if (!o) return 0;
+    const c = def(ctx, o.id).manaCost;
+    return (c.colored.U ?? 0) + (c.hybrid ?? []).filter((h) => h.includes('U')).length;
+  }
+  if ('handSizeUpTo' in amount)
+    return Math.max(0, amount.handSizeUpTo - ctx.s.players[es.controller].hand.length);
   if ('toughnessOf' in amount) {
     const id = objectsOf(ctx, es, amount.toughnessOf)[0];
     return id ? Math.max(0, characteristics(ctx, id).toughness) : 0;
@@ -814,7 +838,10 @@ export function runEffects(
           ? ctx.s.battlefield.map((id) => obj(ctx, id))
           : creaturesOnBattlefield(ctx);
         for (const c of doomed) {
-          if (!matchesFilter(ctx, c.id, e.filter) || hasKeyword(ctx, c.id, 'indestructible'))
+          if (
+            !matchesFilter(ctx, c.id, e.filter, es.source?.id) ||
+            hasKeyword(ctx, c.id, 'indestructible')
+          )
             continue;
           if (useShield(ctx, c.id)) continue;
           moveObject(ctx, c.id, 'graveyard');
@@ -1110,7 +1137,7 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
         // "Then attach this Equipment to it" (Midnight Angel Armor): the token is "it".
         es.chosen = { id: t.id, zcc: t.zcc };
         if (defOf(ctx, e.token).entersTapped || e.tapped) t.tapped = true;
-        if (e.counters) addCounters(ctx, t.id, e.counters);
+        if (e.counters) addCounters(ctx, t.id, resolveAmount(ctx, es, e.counters));
         if (e.attacking && ctx.s.combat) {
           // "Tapped and attacking": attacking the same player, never declared (no attack triggers).
           t.tapped = true;
@@ -1152,6 +1179,9 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
         moveObject(ctx, id, 'battlefield', { controller: es.controller });
         obj(ctx, id).tapped = true;
       }
+      return;
+    case 'removePlusOneCounters':
+      for (const id of objectsOf(ctx, es, e.from)) obj(ctx, id).plusOneCounters = 0;
       return;
     case 'assignToughness':
       ctx.s.turn.toughnessDamage = [...(ctx.s.turn.toughnessDamage ?? []), es.controller];
@@ -1733,7 +1763,9 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
           keywords: [],
           loseAbilities: true,
           ...(e.basePT && def(ctx, id).types.includes('Creature') ? { basePT: e.basePT } : {}),
-          expires: 'untilYourNextTurn',
+          ...(e.whileSource && es.source
+            ? { expires: 'whileSource' as const, whileSourceId: es.source.id }
+            : { expires: 'untilYourNextTurn' as const }),
           player: es.controller,
         });
         o.blank = true;
@@ -1757,6 +1789,7 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
       }
       if (e.counters) addCounters(ctx, o.id, e.counters);
       if (e.addSubtype) o.addedSubtypes = [...(o.addedSubtypes ?? []), e.addSubtype];
+      if (e.named) (o.counters ??= {})[e.named] = 1;
       return;
     }
     case 'exile':

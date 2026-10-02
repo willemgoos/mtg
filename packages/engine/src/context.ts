@@ -326,6 +326,9 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
     const i = src.indexOf(id);
     if (i >= 0) src.splice(i, 1);
   }
+  // Marvel Super Heroes: effects lasting "for as long as" it stays end as it leaves.
+  if (from === 'battlefield' && ctx.s.effects.some((e) => e.whileSourceId === id))
+    ctx.s.effects = ctx.s.effects.filter((e) => e.whileSourceId !== id);
   // Marvel Super Heroes (Ares): whether it was attacking as it left.
   if (from === 'battlefield' && ctx.s.combat?.attackers.some((a) => a.id === id))
     o.leftAttacking = true;

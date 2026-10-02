@@ -1,6 +1,21 @@
-import type { AbilityDef, ManaType } from '@mtg/engine';
+import type { AbilityDef, EffectDef, ManaType } from '@mtg/engine';
 import type { Behavior } from '../build.ts';
-import { crew, draw, drain, mana, onEnter, powerUp, t0, yourCreature } from './helpers.ts';
+import {
+  connive,
+  creature,
+  crew,
+  draw,
+  drain,
+  mana,
+  onEnter,
+  powerUp,
+  t0,
+  t1,
+  t2,
+  theirCreature,
+  villain,
+  yourCreature,
+} from './helpers.ts';
 
 /**
  * Marvel Super Heroes (MSH) rares not in our decks. Printed characteristics
@@ -8,6 +23,25 @@ import { crew, draw, drain, mana, onEnter, powerUp, t0, yourCreature } from './h
  */
 
 const hero = { subtype: 'Hero' };
+
+const equip = (cost: string, filter?: { supertypes: ['Legendary'] }): AbilityDef => ({
+  kind: 'activated',
+  cost: { mana: mana(cost) },
+  sorcerySpeed: true,
+  targets: [{ ...yourCreature, ...(filter ? { filter } : {}) }],
+  effects: [{ kind: 'attach', to: t0 }],
+  label: `Equip ${cost}`,
+});
+
+/** Plans: a plan counter each time; at `n`, sacrifice it and do the rest. */
+const planCounter = (n: number, ...payoff: EffectDef[]): EffectDef[] => [
+  { kind: 'namedCounters', name: 'plan', amount: 1, to: 'self' },
+  {
+    kind: 'if',
+    condition: { kind: 'amountAtLeast', amount: { namedCountersOnSource: 'plan' }, min: n },
+    then: [{ kind: 'sacrifice', what: 'self' }, ...payoff],
+  },
+];
 
 /** "{T}: Add {C}. {T}: Add {a} or {b}. Activate only if this land entered this turn or if you control a basic land." */
 const fastLand = (a: ManaType, b: ManaType): Behavior => ({
@@ -319,6 +353,275 @@ export const MSH_RARES: Record<string, Behavior> = {
   'The Sentry, Golden Guardian': {
     abilities: [
       onEnter({ kind: 'createToken', token: 'the-void-token', count: 1, forOpponent: true }),
+    ],
+  },
+  'Alien Invasion': {
+    abilities: [
+      {
+        kind: 'triggered',
+        trigger: { on: 'beginningOfCombat', whose: 'yours' },
+        targets: [],
+        effects: [
+          {
+            kind: 'createToken',
+            token: 'alien-token',
+            count: 1,
+            counters: { namedCountersOnSource: 'invasion' },
+          },
+          { kind: 'namedCounters', name: 'invasion', amount: 1, to: 'self' },
+        ],
+      },
+    ],
+  },
+  "Captain America's Shield": {
+    abilities: [
+      {
+        kind: 'static',
+        effect: { kind: 'attached', power: 0, toughness: 8, keywords: ['vigilance'] },
+      },
+      {
+        kind: 'triggered',
+        trigger: { on: 'equippedAttacks' },
+        targets: [theirCreature],
+        effects: [{ kind: 'tap', what: t0 }],
+      },
+      equip('{2}'),
+    ],
+  },
+  'Epic Fight': {
+    modes: [
+      {
+        targets: [creature],
+        effects: [{ kind: 'pump', to: t0, power: { powerOf: t0 }, toughness: { toughnessOf: t0 } }],
+        label: "Double target creature's power and toughness",
+      },
+      {
+        targets: [yourCreature, theirCreature],
+        effects: [{ kind: 'fight', a: t0, b: t1 }],
+        label: 'Your creature fights their creature',
+      },
+      {
+        targets: [creature, yourCreature, theirCreature],
+        effects: [
+          { kind: 'pump', to: t0, power: { powerOf: t0 }, toughness: { toughnessOf: t0 } },
+          { kind: 'fight', a: t1, b: t2 },
+        ],
+        label: 'Both',
+      },
+    ],
+  },
+  // "Choose up to that many target creatures": one target creature each time.
+  'Heroic Feast': {
+    abilities: [
+      onEnter({ kind: 'createToken', token: 'food-token', count: 1 }),
+      {
+        kind: 'triggered',
+        trigger: { on: 'youGainLife' },
+        targets: [yourCreature],
+        effects: [{ kind: 'counters', to: t0, amount: 1 }],
+      },
+    ],
+  },
+  // "Remove any number of +1/+1 counters": all of them.
+  'The Astonishing Ant-Man': {
+    abilities: [
+      {
+        kind: 'triggered',
+        trigger: { on: 'drawCard', whose: 'yours' },
+        targets: [],
+        effects: [{ kind: 'counters', to: 'self', amount: 1 }],
+      },
+      {
+        kind: 'activated',
+        cost: { mana: mana('{2}{G}'), tapSelf: true },
+        targets: [],
+        effects: [
+          { kind: 'createToken', token: 'insect-token', count: { countersOn: 'self' } },
+          { kind: 'removePlusOneCounters', from: 'self' },
+        ],
+      },
+    ],
+  },
+  'The Scarlet Witch': {
+    abilities: [
+      {
+        kind: 'static',
+        effect: {
+          kind: 'spellsCostLess',
+          filter: { types: ['Instant', 'Sorcery'], minManaValue: 4 },
+          amount: { powerOf: 'self' },
+        },
+      },
+    ],
+  },
+  // "Choose one that hasn't been chosen this turn": any mode each time.
+  'The Vision': {
+    abilities: [
+      {
+        kind: 'triggered',
+        trigger: { on: 'castSpell', filter: 'noncreature' },
+        targets: [],
+        effects: [],
+        modes: [
+          {
+            targets: [],
+            effects: [
+              { kind: 'pump', to: 'self', power: 0, toughness: 0, keywords: ['doubleStrike'] },
+            ],
+            label: 'Solar Beam: double strike',
+          },
+          {
+            targets: [],
+            effects: [
+              { kind: 'pump', to: 'self', power: 0, toughness: 0, keywords: ['indestructible'] },
+            ],
+            label: 'Density Control: indestructible',
+          },
+          { targets: [], effects: [draw(1)], label: 'Technopathy: draw a card' },
+        ],
+      },
+    ],
+  },
+  'The Wondrous Wasp': {
+    abilities: [
+      {
+        kind: 'triggered',
+        trigger: { on: 'etb' },
+        targets: [{ ...creature, optional: true }],
+        effects: [
+          { kind: 'tap', what: t0 },
+          { kind: 'loseAbilities', what: t0, whileSource: true },
+        ],
+      },
+    ],
+  },
+  // "Then you may attach an Equipment you control to him" is not modelled.
+  'Winter Soldier, Icy Assassin': {
+    abilities: [
+      {
+        kind: 'static',
+        effect: {
+          kind: 'boost',
+          power: {
+            multiply: 2,
+            amount: {
+              count: 'permanentsYouControl',
+              filter: { subtype: 'Equipment', attachedToSource: true },
+            },
+          },
+          toughness: 0,
+        },
+      },
+      {
+        kind: 'activated',
+        fromGraveyard: true,
+        cost: { mana: mana('{3}{W}{B}') },
+        targets: [],
+        effects: [{ kind: 'returnSource', to: 'battlefield', named: 'finality' }],
+      },
+    ],
+  },
+  'Wolverine, Fierce Fighter': {
+    abilities: [
+      { kind: 'static', effect: { kind: 'damageDoesntAccumulate' } },
+      {
+        kind: 'triggered',
+        trigger: { on: 'etb' },
+        targets: [{ what: 'creature', filter: { other: true }, optional: true }],
+        effects: [{ kind: 'fight', a: 'self', b: t0 }],
+      },
+    ],
+  },
+  // Her base power becoming the number of cards in your hand is not modelled.
+  'Ms. Marvel, Kamala Khan': {
+    abilities: [
+      { kind: 'static', effect: { kind: 'noMaxHandSize' } },
+      {
+        kind: 'triggered',
+        trigger: { on: 'castSpell', filter: 'targetsYourCreature' },
+        targets: [],
+        effects: [draw(1)],
+      },
+    ],
+  },
+  // Trick Arrows: only Explosive, once, when he attacks.
+  'Hawkeye, Master Marksman': {
+    abilities: [
+      {
+        kind: 'triggered',
+        trigger: { on: 'attacks' },
+        optional: true,
+        cost: mana('{1}'),
+        targets: [{ what: 'player', controller: 'opponent' }],
+        effects: [{ kind: 'damage', amount: 2, to: t0 }],
+      },
+    ],
+  },
+  'Fin Fang Foom': {
+    abilities: [
+      {
+        kind: 'triggered',
+        trigger: { on: 'castSpell', filter: 'instantOrSorceryTargetingArtifactOrLand' },
+        targets: [],
+        effects: [
+          { kind: 'copySpell', what: 'subject' },
+          { kind: 'counters', to: 'self', amount: 2 },
+        ],
+      },
+    ],
+  },
+  // Being a legendary Soldier and attaching Equipment as it attacks or blocks are not modelled.
+  'Super-Soldier Serum': {
+    abilities: [
+      {
+        kind: 'static',
+        effect: {
+          kind: 'attached',
+          power: 2,
+          toughness: 2,
+          keywords: ['firstStrike', 'vigilance'],
+        },
+      },
+    ],
+  },
+  // Giving flying to creatures your spells target is not modelled.
+  'Storm, Windrider': {
+    abilities: [
+      { kind: 'static', effect: { kind: 'flyersCantBlockYours' } },
+      { kind: 'static', effect: { kind: 'cantAttackYou', filter: { hasKeyword: 'flying' } } },
+    ],
+  },
+  // Its ward ("get five poison counters") is not modelled.
+  'The Serpent Society': {
+    abilities: [
+      {
+        kind: 'triggered',
+        trigger: { on: 'creatureYouControlDies', filter: { hasKeyword: 'deathtouch' } },
+        targets: [],
+        effects: [{ kind: 'opponentSacrifices', filter: { nontoken: true } }],
+      },
+    ],
+  },
+  // "You control target opponent during their next turn": you take an extra turn instead.
+  'Construct a Cosmic Cube': {
+    abilities: [
+      {
+        kind: 'triggered',
+        trigger: { on: 'drawSecondCard' },
+        targets: [],
+        effects: [villain(), ...planCounter(7, { kind: 'extraTurn' })],
+      },
+    ],
+  },
+  // Boast is not modelled.
+  'Baron Helmut Zemo': {
+    abilities: [
+      {
+        kind: 'triggered',
+        trigger: { on: 'castSpell', filter: 'any', spell: { colors: ['B'] } },
+        targets: [],
+        effects: [connive],
+      },
     ],
   },
 };

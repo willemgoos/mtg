@@ -130,6 +130,18 @@ export function checkCondition(
   // Marvel Super Heroes.
   if (c.kind === 'sourceEnteredThisTurn') return !!self && self.zoneTurn === ctx.s.turn.number;
   if (c.kind === 'sourceHasCounter') return (self?.counters?.[c.name] ?? 0) > 0;
+  if (c.kind === 'heroAttackedOrEnteredThisTurn') {
+    const hero = (id: ObjectId) => !!ctx.s.objects[id] && def(ctx, id).subtypes.includes('Hero');
+    return (
+      (ctx.s.turn.activePlayer === controller && (ctx.s.turn.attackers ?? []).some(hero)) ||
+      ctx.s.battlefield.some(
+        (id) =>
+          ctx.s.objects[id]!.controller === controller &&
+          ctx.s.objects[id]!.zoneTurn === ctx.s.turn.number &&
+          hero(id),
+      )
+    );
+  }
   if (c.kind === 'controlsBasicLand')
     return ctx.s.battlefield.some(
       (id) =>
@@ -252,6 +264,28 @@ function spellMatches(
     case 'targetsSelf':
       return !!item?.targets.some(
         (x) => 'object' in x && x.object.id === self.id && x.object.zcc === self.zcc,
+      );
+    case 'targetsYourCreature':
+      return !!item?.targets.some((x) => {
+        const o = 'object' in x ? ctx.s.objects[x.object.id] : undefined;
+        return (
+          !!o &&
+          o.zone === 'battlefield' &&
+          o.controller === self.controller &&
+          def(ctx, o.id).types.includes('Creature')
+        );
+      });
+    case 'instantOrSorceryTargetingArtifactOrLand':
+      return (
+        (spell.types.includes('Instant') || spell.types.includes('Sorcery')) &&
+        !!item?.targets.some((x) => {
+          const o = 'object' in x ? ctx.s.objects[x.object.id] : undefined;
+          return (
+            !!o &&
+            o.zone === 'battlefield' &&
+            (def(ctx, o.id).types.includes('Artifact') || def(ctx, o.id).types.includes('Land'))
+          );
+        })
       );
     case 'firstOfItsKind': {
       // Alania: the first instant, the first sorcery, or the first Otter spell other than itself.
@@ -543,6 +577,16 @@ function detect(ctx: Ctx, ev: GameEvent): void {
             if (checkCondition(ctx, a.condition, ap, card)) queue(ctx, card, i, ap);
         });
       }
+      // Marvel Super Heroes: "Whenever equipped creature attacks" (Captain America's Shield).
+      for (const id of ev.attackers)
+        for (const eq of s.battlefield) {
+          const e = s.objects[eq]!;
+          if (e.attachedTo !== id) continue;
+          def(ctx, eq).abilities.forEach((a, i) => {
+            if (a.kind === 'triggered' && a.trigger.on === 'equippedAttacks')
+              queue(ctx, e, i, e.controller, s.objects[id]);
+          });
+        }
       // "Whenever a creature you control attacks": once per attacker.
       for (const id of ev.attackers) {
         const attacker = s.objects[id];

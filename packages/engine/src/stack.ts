@@ -237,7 +237,7 @@ export function castCost(
           a.effect.kind === 'spellsCostLess' &&
           cardMatches(ctx, card, a.effect.filter, id)
         )
-          reduce += a.effect.amount;
+          reduce += countOf(ctx, player, a.effect.amount, false, id);
         if (
           a.kind === 'static' &&
           a.effect.kind === 'spellsCostLessIf' &&
@@ -481,7 +481,8 @@ export function activateAbility(
     ),
     payWith,
     exclude,
-    undefined,
+    // Shang-Chi's mana can pay for abilities of creature sources.
+    isCreature(ctx, source) ? ['CreatureAbility'] : undefined,
     a.cost.convoke ? creatureHelpers(ctx, player, manaSources(ctx, player, exclude), exclude) : [],
     [sacrifice, forage !== 'graveyard' ? forage : undefined],
   );

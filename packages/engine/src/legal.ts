@@ -398,7 +398,10 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
         if (!sorcery || o.onceTurns?.[LOYALTY_KEY] === s.turn.number) return;
         if ((o.counters?.loyalty ?? 0) + a.cost.loyalty < 0) return;
       }
-      const own = a.cost.tapSelf ? sources.filter((x) => x.id !== source) : sources;
+      const tagged = isCreature(ctx, source)
+        ? manaSources(ctx, player, undefined, ['CreatureAbility'])
+        : sources;
+      const own = a.cost.tapSelf ? tagged.filter((x) => x.id !== source) : tagged;
       // Heirloom Epic: creatures can pay for generic mana.
       const usable = a.cost.convoke
         ? [...own, ...creatureHelpers(ctx, player, own, a.cost.tapSelf ? source : undefined)]

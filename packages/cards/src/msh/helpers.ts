@@ -119,6 +119,11 @@ export const MARVEL_TOKENS: CardDefinition[] = [
   token('villain-token', 'Villain', 'B', ['Villain'], 2, 1, ['menace']),
   token('hero-token', 'Hero', 'W', ['Hero'], 3, 2, ['vigilance']),
   token('insect-token', 'Insect', 'G', ['Insect'], 1, 1),
+  token('merfolk-token', 'Merfolk', 'U', ['Merfolk'], 1, 1),
+  {
+    ...token('alien-token', 'Alien', 'R', ['Alien'], 1, 1, ['haste']),
+    abilities: [{ kind: 'static', effect: { kind: 'attacksEachCombat' } }],
+  },
   {
     ...token('doombot-token', 'Doombot', 'W', ['Robot', 'Villain'], 3, 3),
     colors: [],
@@ -196,3 +201,5 @@ export const crew = (n: number): AbilityDef => ({
   effects: [{ kind: 'becomeCreature', what: 'self' }],
   label: `Crew ${n}`,
 });
+
+export const t2 = { target: 2 } as const;
