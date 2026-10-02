@@ -152,6 +152,11 @@ More simplifications: Portent of Calamity takes one card per type; ward costs th
 
 The four Commander precons as Brawl decks (9a to 9e), then the MSH main set like Bloomburrow (10). See `docs/marvel-plan.md`.
 
+**Phase 9 done:** Brawl with its own mode and deck picker, and all four Marvel Super Heroes Commander precons (Avengers
+Assemble, Wakanda Forever, The Fantastic Four, Doom Prevails) played as printed, plus our test deck Mabel's Militia. Bot
+win rates between the precons are within 35–65% except The Fantastic Four's two hardest matchups (33% and 30%); details
+and simplifications in `docs/marvel-plan.md`.
+
 ## Notes
 
 - Some cards will turn out to be one-offs. Put them in `custom` handlers instead of growing the engine vocabulary for a single card.
