@@ -169,6 +169,8 @@ export interface MapNode {
   event?: EventId;
   /** An elite's edge. */
   twist?: TwistId;
+  /** Its lane on the map's grid, from the top (maps saved before the grid spread nodes evenly). */
+  row?: number;
   /**
    * Lanes on the next floor this node leads to. Maps saved before paths
    * branched freely don't have it: there every node leads to its neighbours.
@@ -178,8 +180,21 @@ export interface MapNode {
 
 /** Floors on a map, the final battle included. */
 export const FLOORS = 10;
-/** The most lanes a floor can have. */
-export const MAX_LANES = 4;
+/** Lanes on the map's grid; a floor has nodes only where a path passes. */
+export const MAX_LANES = 5;
+/** Paths walked from the first floor to the last, three to each corridor. */
+const PATHS = 9;
+/**
+ * The corridors paths keep to: top, middle and bottom. Neighbours share a
+ * lane, where routes can meet and cross over, but mostly they run apart.
+ */
+const CORRIDORS: [number, number][] = [
+  [0, 1],
+  [1, 3],
+  [3, 4],
+];
+/** How often a path goes straight on rather than picking any open step. */
+const STRAIGHT = 0.3;
 
 /** The top difficulty: the heuristic bot (the Apprentice), met at the final battle. */
 export const MAX_DIFFICULTY = 7;
@@ -238,60 +253,84 @@ const KIND_COUNTS: Partial<Record<NodeKind, { least: number; most: number }>> = 
 };
 
 /**
- * Paths from one floor to the next: a staircase from the top lanes to the
- * bottom ones. Every node leads somewhere and is reached from somewhere, and
- * no two paths cross. Steps that move along only one floor make a node fork
- * (or paths merge); steps that move along both run side by side. A node
- * usually gets a second way on before the next one gets its first, so most
- * nodes offer a choice.
+ * The map's shape, after Slay the Spire: separate paths walk from the first
+ * floor to the one before the final battle across a grid of lanes, each
+ * keeping to its corridor. Each step moves at most one lane and never crosses
+ * another path's step. Nodes are only where a path passes, so paths split and
+ * rejoin inside a corridor (a choice of stops) while the corridors run apart
+ * for floors at a time (a choice of route that rules others out). A floor
+ * squeezed down to one node is walked again.
+ *
+ * Returns each floor's grid lanes (top to bottom) and, for each node, the
+ * nodes it leads to on the next floor, by their index on that floor.
  */
-function connect(from: number, to: number, next: () => number): number[][] {
-  const out: number[][] = Array.from({ length: from }, () => []);
-  let i = 0;
-  let j = 0;
-  out[0]!.push(0);
-  while (i < from - 1 || j < to - 1) {
-    const r = next();
-    const ways = out[i]!.length;
-    // A node forks at most three ways, unless it's the last on its floor.
-    const forkOdds = j === to - 1 || ways >= 3 ? 0 : ways < 2 ? 0.75 : 0.2;
-    if (i === from - 1 || r < forkOdds) j++;
-    else if (j === to - 1 || r < 0.95) i++;
-    else {
-      i++;
-      j++;
+function walkPaths(next: () => number): { rows: number[][]; paths: number[][][] } {
+  const random = (n: number) => Math.floor(next() * n);
+  for (let attempt = 0; ; attempt++) {
+    const steps: [number, number][][] = Array.from({ length: FLOORS - 2 }, () => []);
+    const crosses = (f: number, a: number, b: number) =>
+      steps[f]!.some(([c, d]) => (a < c && b > d) || (a > c && b < d));
+    const starts: number[] = [];
+    for (let p = 0; p < PATHS; p++) {
+      const [lo, hi] = CORRIDORS[p % CORRIDORS.length]!;
+      let lane = lo + random(hi - lo + 1);
+      starts.push(lane);
+      for (let f = 0; f < FLOORS - 2; f++) {
+        // Going straight never crosses anything, so there's always a way on.
+        const options = [lane - 1, lane, lane + 1].filter(
+          (l) => l >= lo && l <= hi && !crosses(f, lane, l),
+        );
+        const to = next() < STRAIGHT ? lane : options[random(options.length)]!;
+        if (!steps[f]!.some(([a, b]) => a === lane && b === to)) steps[f]!.push([lane, to]);
+        lane = to;
+      }
     }
-    out[i]!.push(j);
+    const lanes = (xs: number[]) => [...new Set(xs)].sort((a, b) => a - b);
+    const rows = [lanes(starts), ...steps.map((st) => lanes(st.map(([, b]) => b))), [2]];
+    if (attempt < 30 && rows.slice(0, -1).some((r) => r.length < 2)) continue;
+    const paths = rows.map((r, f) =>
+      r.map((lane) =>
+        f === FLOORS - 1
+          ? []
+          : f === FLOORS - 2
+            ? [0]
+            : lanes(steps[f]!.filter(([a]) => a === lane).map(([, b]) => rows[f + 1]!.indexOf(b))),
+      ),
+    );
+    return { rows, paths };
   }
-  return out;
 }
 
 /**
- * A map of ten floors that the run's seed lays out. Floors are two to four
- * lanes wide, and paths fork and merge between them. The first floor is all
- * duels, the last before the final battle always has a camp, and the middle
- * floors are drawn from weighted kinds with a few rules: no elite, camp or
- * merchant on the first two floors, never the same kind of stop twice in a
- * row (duels and mysteries aside), and at least two elites and one each of
- * camp, shrine and merchant somewhere.
+ * Each grid lane leans one way, so a corridor of the map has some character:
+ * riskier (more elites), safer (more camps and mysteries) or richer (more
+ * treasure, merchants and surveyors). Weights are multiplied by these.
+ */
+const LEANS: Partial<Record<NodeKind, number>>[] = [
+  {},
+  { elite: 2, duel: 1.15, camp: 0.5 },
+  { camp: 1.7, mystery: 1.4, elite: 0.5 },
+  { treasure: 1.8, merchant: 1.6, surveyor: 1.5, elite: 0.8 },
+];
+
+/**
+ * A map of ten floors that the run's seed lays out: separate paths across a
+ * grid of five lanes (see walkPaths), then the final battle. The first floor
+ * is all duels, the last before the final battle always has a camp, and the
+ * middle floors are drawn from weighted kinds, leaning by lane, with a few
+ * rules: no elite, camp or merchant on the first two floors, never the same
+ * kind of stop twice in a row (duels and mysteries aside), and at least two
+ * elites and one each of camp, shrine, merchant and surveyor somewhere.
  */
 export function makeMap(deck: string, seed: number): MapNode[][] {
   const next = rng((seed ^ 0x5eed_0f) >>> 0);
   const pick = <T>(xs: readonly T[]) => xs[Math.floor(next() * xs.length)]!;
   const own = deckById(deck).colors;
 
-  // The shape: lanes per floor, then the paths between them.
-  // Each floor is a lane wider or narrower than the one before, or the same,
-  // since a floor much narrower than the last leaves few paths to choose from.
-  const widths = [3];
-  for (let f = 1; f < FLOORS - 1; f++) {
-    const w = widths[f - 1]! + pick([-1, 0, 1, 1]);
-    widths.push(Math.max(2, Math.min(f === FLOORS - 2 ? 3 : MAX_LANES, w)));
-  }
-  widths.push(1);
-  const paths = widths.map((w, f) =>
-    f < FLOORS - 1 ? connect(w, widths[f + 1]!, next) : Array.from({ length: w }, () => []),
-  );
+  // The shape: separate paths across the grid, and how each lane leans.
+  const { rows, paths } = walkPaths(next);
+  const widths = rows.map((r) => r.length);
+  const leans = Array.from({ length: MAX_LANES }, () => pick(LEANS));
   /** The lanes on the floor before that lead to a node. */
   const from = (f: number, lane: number) =>
     f === 0 ? [] : paths[f - 1]!.flatMap((to, i) => (to.includes(lane) ? [i] : []));
@@ -320,9 +359,10 @@ export function makeMap(deck: string, seed: number): MapNode[][] {
     const lanes = kinds[f]!;
     for (let lane = 0; lane < lanes.length; lane++) {
       if (f === FLOORS - 2 && lane === campAt) continue;
+      const lean = leans[rows[f]![lane]!]!;
       const options = KIND_WEIGHTS.filter(
         ([k]) => (f < FLOORS - 2 || k !== 'camp') && allowed(k, f, lane),
-      );
+      ).map(([k, w]): [NodeKind, number] => [k, w * (lean[k] ?? 1)]);
       let r = next() * options.reduce((n, [, w]) => n + w, 0);
       lanes[lane] = options.find(([, w]) => (r -= w) < 0)?.[0] ?? 'duel';
     }
@@ -368,7 +408,7 @@ export function makeMap(deck: string, seed: number): MapNode[][] {
   };
   return kinds.map((lanes, f) =>
     lanes.map((kind, lane): MapNode => {
-      const to = f < FLOORS - 1 ? { next: paths[f]![lane]! } : {};
+      const to = f < FLOORS - 1 ? { row: rows[f]![lane]!, next: paths[f]![lane]! } : {};
       if (kind === 'duel') return { kind, opponent: foe(), reward: reward(), ...to };
       // About half the elites start with a twist.
       if (kind === 'elite') {

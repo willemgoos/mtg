@@ -48,6 +48,7 @@ import {
   statusOf,
   difficultyName,
   MAX_DIFFICULTY,
+  MAX_LANES,
   PACK_SET_NAMES,
   packSetOf,
 } from '../game/expedition.ts';
@@ -419,12 +420,15 @@ function nodeAt(run: ExpeditionRun, floor: number, lane: number): { x: number; y
   const floors = floorsOf(run);
   const nodes = run.map[floor]!;
   const x = ((floor + 0.5) / floors) * 100;
-  const y = laneY(nodes.length, lane);
+  // On the grid, a node sits in its own lane's row; older maps spread their nodes evenly.
+  const row = nodes[lane]?.row;
+  const rows = row === undefined ? nodes.length : MAX_LANES;
+  const y = row === undefined ? laneY(nodes.length, lane) : laneY(MAX_LANES, row);
   if (!nodes[lane]?.next || floor === floors - 1) return { x, y };
   // A fixed wobble from the seed, floor and lane: -0.5 to 0.5 on each axis.
   const wobble = (salt: number) =>
     (Math.imul(run.seed ^ (floor * 97 + lane * 13 + salt), 0x9e3779b1) >>> 0) / 2 ** 32 - 0.5;
-  return { x: x + wobble(1) * (40 / floors), y: y + wobble(2) * (24 / nodes.length) };
+  return { x: x + wobble(1) * (40 / floors), y: y + wobble(2) * (24 / rows) };
 }
 
 function ExpeditionMap({

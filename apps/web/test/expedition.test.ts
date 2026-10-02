@@ -156,14 +156,18 @@ describe('expedition packs', () => {
 });
 
 describe('expedition map', () => {
-  it('has ten floors of two to four lanes, then a final battle, fixed by the seed', () => {
+  it('has ten floors on a grid of five lanes, then a final battle, fixed by the seed', () => {
     const map = makeMap(deck, 9);
     expect(map).toHaveLength(FLOORS);
     expect(FLOORS).toBe(10);
-    expect(map[0]).toHaveLength(3);
-    for (const f of map.slice(1, -1)) {
+    expect(MAX_LANES).toBe(5);
+    for (const f of map.slice(0, -1)) {
       expect(f.length).toBeGreaterThanOrEqual(2);
       expect(f.length).toBeLessThanOrEqual(MAX_LANES);
+      // Nodes sit in distinct grid lanes, top to bottom.
+      const rows = f.map((n) => n.row!);
+      expect(rows).toEqual([...new Set(rows)].sort((a, b) => a - b));
+      for (const r of rows) expect(r).toBeLessThan(MAX_LANES);
     }
     expect(map.at(-1)).toEqual([expect.objectContaining({ kind: 'boss' })]);
     expect(map[0]!.every((n) => n.kind === 'duel' && n.reward && n.opponent)).toBe(true);
@@ -227,8 +231,36 @@ describe('expedition map', () => {
           if (links(map, f, i).length > 1) forks++;
         }
     }
-    // Most nodes give a choice of where to go next.
-    expect(forks / nodes).toBeGreaterThan(0.5);
+    // About a third of nodes give a choice of where to go next.
+    expect(forks / nodes).toBeGreaterThan(0.3);
+  });
+
+  it('keeps routes apart, so a choice now rules out stops a few floors on', () => {
+    let shares = 0;
+    let open = 0;
+    let n = 0;
+    for (let seed = 0; seed < 200; seed++) {
+      const map = makeMap(deck, seed);
+      for (let f = 0; f + 4 < FLOORS - 1; f++)
+        for (let lane = 0; lane < map[f]!.length; lane++) {
+          let at = new Set([lane]);
+          for (let k = 1; k <= 4; k++)
+            at = new Set([...at].flatMap((l) => links(map, f + k - 1, l)));
+          shares += at.size / map[f + 4]!.length;
+          if (at.size === map[f + 4]!.length) open++;
+          n++;
+        }
+      // Each step moves at most one lane on the grid.
+      map.slice(0, -2).forEach((floor, f) =>
+        floor.forEach((node, i) => {
+          for (const j of links(map, f, i))
+            expect(Math.abs(map[f + 1]![j]!.row! - node.row!)).toBeLessThanOrEqual(1);
+        }),
+      );
+    }
+    // Four floors on, a node reaches well under the whole floor, and rarely all of it.
+    expect(shares / n).toBeLessThan(0.66);
+    expect(open / n).toBeLessThan(0.2);
   });
 
   it('leads to neighbouring lanes on maps saved before paths branched freely', () => {

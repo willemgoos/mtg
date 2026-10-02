@@ -223,7 +223,9 @@
 
 /* ------------------------------------------------------------------ map */
 
+/* Five lanes of nodes need a little more height than the old three. */
 .shell .xmap__board {
+  height: 30rem;
   border-radius: 1.125rem;
   background:
     radial-gradient(circle, rgba(255, 255, 255, 0.05) 0.0625rem, transparent 0.0625rem) 0 0 / 1.5rem
