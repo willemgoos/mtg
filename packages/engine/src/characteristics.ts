@@ -544,6 +544,7 @@ export function cardMatches(
     return false;
   if (filter.nonland && d.types.includes('Land')) return false;
   if (filter.enteredThisTurn && obj(ctx, id).zoneTurn !== ctx.s.turn.number) return false;
+  if (filter.leftAttacking && !obj(ctx, id).leftAttacking) return false;
   if (filter.notSubtype && d.subtypes.includes(filter.notSubtype)) return false;
   if (filter.maxManaValue !== undefined) {
     const max =

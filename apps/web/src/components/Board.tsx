@@ -459,7 +459,9 @@ export function Board({
                 ? 'a card to discard'
                 : first.type === 'castSpell' && first.copyOf
                   ? 'a creature to copy (or skip)'
-                  : null
+                  : first.type === 'castSpell' && first.sneak
+                    ? 'an unblocked attacker to return'
+                    : null
           : null;
       const prompt = paying
         ? `${targeting.label}: choose ${paying}`
@@ -1405,12 +1407,13 @@ function castLabel(defId: CardDefId, a: Action): string {
     return a.forage === 'graveyard'
       ? 'Forage: exile three cards from your graveyard'
       : 'Forage: sacrifice a Food';
-  if (a.type === 'activateAbility') return 'Activate';
   if (a.x !== undefined) return `X = ${a.x}`;
+  if (a.type === 'activateAbility') return 'Activate';
   if (a.via === 'festival') return 'From your graveyard (pay 1 life)';
   if (a.via === 'osteomancer') return 'From your graveyard (forage)';
   if (a.paws) return pawLabel(defId, a.paws);
   const def = cardDb.get(defId);
+  if (a.type === 'castSpell' && a.sneak && def?.sneak) return `Sneak (${manaText(def.sneak)})`;
   // A modal double-faced card: cast either face.
   if (def?.back) {
     const face = a.back ? cardDb.get(def.back) : def;

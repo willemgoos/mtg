@@ -29,7 +29,9 @@ import { changeLife, counterSpell, gainLife } from './effects.ts';
 import { foodsOf, payForage } from './forage.ts';
 import {
   anyTypeCost,
+  artifactHelpers,
   creatureHelpers,
+  hasImprovise,
   manaSources,
   manaValue,
   payMana,
@@ -83,6 +85,8 @@ export interface CastChoice {
   sacrificeMany?: ObjectId[] | undefined;
   /** Cast as its back face (a modal double-faced card). */
   back?: boolean | undefined;
+  /** Sneak: the unblocked attacker returned to hand. */
+  sneak?: ObjectId | undefined;
   /** Teamwork: the creatures to tap. Omitted: the engine picks. */
   teamwork?: ObjectId[] | undefined;
 }
@@ -287,11 +291,16 @@ export function castSpell(
     o.defId = back;
   }
   const d = defOf(ctx, o.defId);
-  const v = variantOf(d, o.zone, choice)!;
+  const v = choice.sneak
+    ? { cost: d.sneak!, spell: d.spell ?? null }
+    : variantOf(d, o.zone, choice)!;
+  const sneakFrom = choice.sneak
+    ? ctx.s.combat?.attackers.find((a) => a.id === choice.sneak)?.defender
+    : undefined;
   const flashback = (o.zone === 'graveyard' && !choice.via && !!d.flashback) || !!choice.exileAfter;
   // Rule 601.2: move to stack, choose targets, then pay costs.
   const cost = addCosts(
-    castCost(ctx, player, card, choice, targets),
+    choice.sneak ? d.sneak! : castCost(ctx, player, card, choice, targets),
     wardCost(ctx, player, targets),
   );
   const teamwork = teamworkFor(ctx, player, card, choice);
@@ -302,17 +311,21 @@ export function castSpell(
     payWith,
     undefined,
     spellTags(d),
-    [],
+    hasImprovise(ctx, player, card)
+      ? artifactHelpers(ctx, player, manaSources(ctx, player, undefined, spellTags(d)), card)
+      : [],
     [
       choice.sacrifice,
       ...(choice.sacrificeMany ?? []),
       choice.forage !== 'graveyard' ? choice.forage : undefined,
       ...(teamwork ?? []),
+      choice.sneak,
     ],
   );
   if (o.zone === 'command')
     ctx.s.players[player].commanderCasts = (ctx.s.players[player].commanderCasts ?? 0) + 1;
   moveObject(ctx, card, 'stack', { controller: player });
+  if (choice.sneak) moveObject(ctx, choice.sneak, 'hand');
   if (choice.discard) moveObject(ctx, choice.discard, 'graveyard');
   for (const id of choice.sacrificeMany ?? []) sacrificePermanent(ctx, id);
   if (d.types.includes('Instant') || d.types.includes('Sorcery'))
@@ -333,6 +346,7 @@ export function castSpell(
     ...(choice.paws ? { paws: choice.paws } : {}),
     ...(v.finality ? { finality: true } : {}),
     ...(choice.copyOf ? { copyOf: choice.copyOf } : {}),
+    ...(sneakFrom ? { sneak: sneakFrom } : {}),
   });
   payMana(ctx, payment);
   if (teamwork) payTeamwork(ctx, teamwork);
@@ -449,16 +463,20 @@ export function activateAbility(
   sacrifice?: ObjectId,
   forage?: ObjectId | 'graveyard',
   discard?: ObjectId,
+  x?: number,
 ): boolean {
   const a = activatedAbility(ctx, source, index);
   const src = obj(ctx, source);
+  const mana = abilityManaCost(ctx, source, a);
   const sourceRef = { id: source, zcc: src.zcc };
   const exclude = a.cost.tapSelf ? source : undefined;
   const payment = planPayment(
     ctx,
     player,
     addCosts(
-      abilityManaCost(ctx, source, a) ?? { generic: 0, colored: {} },
+      mana
+        ? { ...mana, generic: mana.generic + (x ?? 0) * (mana.x ?? 0) }
+        : { generic: 0, colored: {} },
       wardCost(ctx, player, targets),
     ),
     payWith,
@@ -497,6 +515,7 @@ export function activateAbility(
     ...(sacrificedPower !== undefined ? { lkiPower: sacrificedPower } : {}),
     // The ability itself, in case the source's abilities change (or it's gone).
     activated: a,
+    ...(x !== undefined ? { x } : {}),
   };
   if (a.cost.tapSelf) tap(ctx, source);
   if (a.oncePerTurn) src.onceTurns = { ...src.onceTurns, [-1 - index]: ctx.s.turn.number };
@@ -644,12 +663,20 @@ export function resolveTop(ctx: Ctx): boolean {
     emit(ctx, { type: 'resolved', id: item.id });
     moveObject(ctx, item.id, 'battlefield', { controller: item.controller });
     if (item.kicked) o.kicked = true;
+    // Sneak: it enters tapped and attacking (it was never declared as an attacker).
+    if (item.sneak && ctx.s.combat) {
+      o.tapped = true;
+      ctx.s.combat.attackers.push({ id: o.id, defender: item.sneak, blocked: false, blockers: [] });
+    }
     // Royal Talon Fighter Jet: "enters with X +1/+1 counters".
     if (d.entersWithXCounters && item.x) addCounters(ctx, o.id, item.x);
     if (d.entersWithCounters && checkCondition(ctx, d.entersWithCountersIf, item.controller, o))
       addCounters(ctx, o.id, d.entersWithCounters);
     if (host) attachAura(ctx, o.id, host);
     if (item.finality) (o.counters ??= {}).finality = 1;
+    // Marvel Super Heroes: "enters with a shield counter".
+    for (const [k, v] of Object.entries(d.entersWithNamedCounters ?? {}))
+      (o.counters ??= {})[k] = (o.counters[k] ?? 0) + v;
     if (d.loyalty !== undefined) (o.counters ??= {}).loyalty = d.loyalty;
     if (item.x) o.xPaid = item.x;
     if (item.copyOf && d.entersAsCopy) enterAsCopy(ctx, o.id, item.copyOf, d.entersAsCopy);
@@ -682,6 +709,7 @@ export function resolveTop(ctx: Ctx): boolean {
     sourceDefId: item.sourceDefId,
     targets,
     ...(item.lkiPower !== undefined ? { lkiPower: item.lkiPower } : {}),
+    ...(item.x !== undefined ? { x: item.x } : {}),
     ...(item.subject ? { subject: item.subject } : {}),
     ...(item.amount !== undefined ? { amount: item.amount } : {}),
   };

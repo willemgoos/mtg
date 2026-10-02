@@ -129,6 +129,7 @@ export function checkCondition(
   if (c.kind === 'yourTurn') return ctx.s.turn.activePlayer === controller;
   // Marvel Super Heroes.
   if (c.kind === 'sourceEnteredThisTurn') return !!self && self.zoneTurn === ctx.s.turn.number;
+  if (c.kind === 'sourceHasCounter') return (self?.counters?.[c.name] ?? 0) > 0;
   if (c.kind === 'controlsBasicLand')
     return ctx.s.battlefield.some(
       (id) =>
@@ -418,6 +419,13 @@ function detect(ctx: Ctx, ev: GameEvent): void {
             if (t.nontoken && wasToken) return false;
             if (t.on === 'creatureYouControlDies' && t.filter && !defMatches(movedDef, t.filter))
               return false;
+            // Marvel Super Heroes (Ares): "an attacking creature you control".
+            if (
+              t.on === 'creatureYouControlDies' &&
+              t.filter?.leftAttacking &&
+              !moved?.leftAttacking
+            )
+              return false;
             if (diedUnder === undefined) return true;
             if (t.on === 'otherCreatureDies' && t.controller === 'any') return true;
             if (t.on === 'otherCreatureDies' && t.controller === 'opponent')
@@ -435,9 +443,10 @@ function detect(ctx: Ctx, ev: GameEvent): void {
         (o, a) =>
           (a.trigger.on === 'drawSecondCard' &&
             ev.nth === 2 &&
-            (a.trigger.whose === 'opponents'
-              ? o.controller !== ev.player
-              : o.controller === ev.player)) ||
+            (a.trigger.whose === 'any' ||
+              (a.trigger.whose === 'opponents'
+                ? o.controller !== ev.player
+                : o.controller === ev.player))) ||
           (a.trigger.on === 'drawCard' &&
             (a.trigger.whose === 'yours'
               ? o.controller === ev.player
@@ -605,6 +614,15 @@ function detect(ctx: Ctx, ev: GameEvent): void {
             if (a.kind === 'triggered' && a.trigger.on === 'dealtDamage')
               queue(ctx, hurt, i, hurt.controller, undefined, ev.amount);
           });
+        // Marvel Super Heroes (The Sensational She-Hulk): "a creature you control is dealt damage".
+        if (hurt?.zone === 'battlefield' && def(ctx, hurt.id).types.includes('Creature'))
+          forEachBattlefieldTrigger(
+            ctx,
+            (o, a) =>
+              a.trigger.on === 'yourCreatureDealtDamage' && o.controller === hurt.controller,
+            hurt,
+            ev.amount,
+          );
       }
       if (!ev.combat) {
         // Niv-Mizzet: noncombat damage to an opponent from a source you control.

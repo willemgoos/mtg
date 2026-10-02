@@ -9,7 +9,7 @@ import { manaValue } from './cost.ts';
 import { blockViolations, canAttack, canBlock, defenderOf } from './combat.ts';
 import { type Ctx, def, obj, other, withBackFace } from './context.ts';
 import { forageChoices } from './forage.ts';
-import { canPayFrom, creatureHelpers, manaSources } from './mana.ts';
+import { artifactHelpers, canPayFrom, creatureHelpers, hasImprovise, manaSources } from './mana.ts';
 import { castVariants, spellTags } from './spells.ts';
 import {
   abilityManaCost,
@@ -235,7 +235,9 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
       d.keywords.includes('flash') ||
       flashFilters.some((f) => cardMatches(ctx, card, f));
     // Restricted mana (Giada: only for Angels; Villages: only for creature spells).
-    const pool = restricted ? manaSources(ctx, player, undefined, spellTags(d)) : sources;
+    let pool = restricted ? manaSources(ctx, player, undefined, spellTags(d)) : sources;
+    if (hasImprovise(ctx, player, card))
+      pool = [...pool, ...artifactHelpers(ctx, player, pool, card)];
     // {X}: every affordable value (up to 10).
     const xs = d.manaCost.x
       ? Array.from(
@@ -341,7 +343,11 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
               .map((c) => ({ ...a, copyOf: c.id })),
           );
   };
-  for (const card of castableCards(ctx, player)) {
+  // Marvel Super Heroes (Jennifer Walters): "Your opponents can't cast spells during your turn."
+  const silenced =
+    s.turn.activePlayer !== player &&
+    hasStatic(ctx, s.turn.activePlayer, 'opponentsCantCastDuringYourTurn');
+  for (const card of silenced ? [] : castableCards(ctx, player)) {
     castsOf(card);
     // Modal double-faced cards: the back face can be cast from hand too.
     if (def(ctx, card).back && obj(ctx, card).zone === 'hand') {
@@ -350,6 +356,23 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
       for (const a of out.slice(from)) if (a.type === 'castSpell') a.back = true;
     }
   }
+  // Sneak (Marvel Super Heroes): during your declare blockers step, return an unblocked attacker.
+  const unblocked =
+    s.turn.activePlayer === player && s.turn.step === 'declareBlockers' && s.combat
+      ? s.combat.attackers.filter((a) => !a.blocked && a.blockers.length === 0).map((a) => a.id)
+      : [];
+  if (unblocked.length)
+    for (const card of ps.hand) {
+      const d = def(ctx, card);
+      if (!d.sneak) continue;
+      const cost = addCosts(d.sneak, NO_COST);
+      for (const attacker of unblocked) {
+        const rest = sources.filter((p) => p.id !== attacker);
+        if (!canPayFrom(cost, rest)) continue;
+        for (const targets of combosFor(d.spell?.targets ?? [], card))
+          out.push({ type: 'castSpell', player, card, targets, sneak: attacker });
+      }
+    }
 
   const abilitySources = [
     ...s.battlefield.filter((id) => obj(ctx, id).controller === player),
@@ -363,6 +386,7 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
       if ((a.fromGraveyard ? 'graveyard' : a.fromHand ? 'hand' : 'battlefield') !== zone) return;
       if (a.sorcerySpeed && !sorcery) return;
       if ((a.once || a.powerUp) && obj(ctx, source).usedAbilities?.includes(abilityIndex)) return;
+      if (a.powerUp && s.turn.noPowerUp) return;
       if (a.oncePerTurn && obj(ctx, source).onceTurns?.[-1 - abilityIndex] === s.turn.number)
         return;
       if (a.cost.tapSelf && !canTapForAbility(ctx, source)) return;
@@ -405,6 +429,7 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
           : creatures;
       const sacrifices =
         a.cost.sacrificeCreature || a.cost.sacrificePermanent ? sacrificeable : [undefined];
+      const firstOfAbility = out.length;
       for (const sacrifice of sacrifices) {
         for (const targets of combosFor(a.targets, source, sacrifice)) {
           const ward = wardCost(ctx, player, targets);
@@ -430,6 +455,13 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
             }
         }
       }
+      // Marvel Super Heroes: {X} in an ability's cost (Bruce Banner): every affordable X up to 10.
+      if (mana?.x)
+        for (const base of out.slice(firstOfAbility))
+          for (let x = 1; x <= 10; x++) {
+            if (!canPayFrom({ ...mana, generic: mana.generic + x * mana.x }, usable)) break;
+            out.push({ ...base, x } as Action);
+          }
     });
   }
   return out;

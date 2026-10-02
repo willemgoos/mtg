@@ -326,6 +326,10 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
     const i = src.indexOf(id);
     if (i >= 0) src.splice(i, 1);
   }
+  // Marvel Super Heroes (Ares): whether it was attacking as it left.
+  if (from === 'battlefield' && ctx.s.combat?.attackers.some((a) => a.id === id))
+    o.leftAttacking = true;
+  else delete o.leftAttacking;
   if (from === 'battlefield') removeFromCombat(ctx, id);
   // A double-faced card shows its front again anywhere but the stack and the battlefield.
   if (o.front && to !== 'stack' && !(from === 'stack' && to === 'battlefield')) {

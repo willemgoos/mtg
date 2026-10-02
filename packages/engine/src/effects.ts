@@ -127,6 +127,8 @@ function redirected(ctx: Ctx, to: TargetChoice): TargetChoice {
  * Returns what's left.
  */
 function prevented(ctx: Ctx, src: DamageSource, to: TargetChoice, amount: number): number {
+  // Marvel Super Heroes: a shield counter is removed instead (even if damage can't be prevented).
+  if ('object' in to && useShield(ctx, to.object.id)) return 0;
   if (ctx.s.battlefield.some((id) => hasStaticKind(ctx, id, 'damageCantBePrevented')))
     return amount;
   if ('player' in to) {
@@ -140,6 +142,8 @@ function prevented(ctx: Ctx, src: DamageSource, to: TargetChoice, amount: number
     return amount;
   }
   const host = to.object.id;
+  // Marvel Super Heroes: "Prevent all damage that would be dealt to Black Panther."
+  if (hasStaticKind(ctx, host, 'preventDamageToSelf')) return 0;
   const habit = ctx.s.battlefield.some(
     (id) =>
       obj(ctx, id).attachedTo === host &&
@@ -812,6 +816,7 @@ export function runEffects(
         for (const c of doomed) {
           if (!matchesFilter(ctx, c.id, e.filter) || hasKeyword(ctx, c.id, 'indestructible'))
             continue;
+          if (useShield(ctx, c.id)) continue;
           moveObject(ctx, c.id, 'graveyard');
           died.push(c.id);
         }
@@ -905,6 +910,11 @@ export function runEffects(
         if (!id || !ctx.s.objects[id]) continue;
         const o = obj(ctx, id);
         const who = o.zone === 'battlefield' ? o.controller : controller;
+        // Leader, Super-Genius: "instead you draw a card, then that creature connives" (each Leader).
+        for (const id of ctx.s.battlefield)
+          if (obj(ctx, id).controller === who)
+            for (const a of def(ctx, id).abilities)
+              if (a.kind === 'static' && a.effect.kind === 'conniveDrawsFirst') drawCard(ctx, who);
         drawCard(ctx, who);
         if (ctx.s.players[who].hand.length === 0) continue;
         ctx.s.decision = {
@@ -1065,7 +1075,8 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
     }
     case 'destroy':
       for (const id of objectsOf(ctx, es, e.what))
-        if (!hasKeyword(ctx, id, 'indestructible')) moveObject(ctx, id, 'graveyard');
+        if (!hasKeyword(ctx, id, 'indestructible') && !useShield(ctx, id))
+          moveObject(ctx, id, 'graveyard');
       return;
     case 'sacrifice':
       for (const id of objectsOf(ctx, es, e.what)) sacrifice(ctx, id);
@@ -1141,6 +1152,15 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
         moveObject(ctx, id, 'battlefield', { controller: es.controller });
         obj(ctx, id).tapped = true;
       }
+      return;
+    case 'assignToughness':
+      ctx.s.turn.toughnessDamage = [...(ctx.s.turn.toughnessDamage ?? []), es.controller];
+      return;
+    case 'extraTurn':
+      ctx.s.extraTurns = [
+        { player: es.controller, ...(e.noPowerUp ? { noPowerUp: true } : {}) },
+        ...(ctx.s.extraTurns ?? []),
+      ];
       return;
     case 'transform':
       for (const id of objectsOf(ctx, es, e.what))
@@ -1240,12 +1260,19 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
       return;
     }
     case 'returnToBattlefield': {
-      const t = typeof e.what === 'object' && 'target' in e.what ? es.targets[e.what.target] : null;
+      // A target card, or (Marvel Super Heroes) the card that triggered it ("return it").
+      const t =
+        typeof e.what === 'object' && 'target' in e.what
+          ? es.targets[e.what.target]
+          : e.what === 'subject' && es.subject
+            ? { object: es.subject }
+            : null;
       if (!t || !('object' in t)) return;
       const o = ctx.s.objects[t.object.id];
       if (!o || o.zone !== 'graveyard' || o.zcc !== t.object.zcc) return;
       moveObject(ctx, o.id, 'battlefield', { controller: es.controller });
       if (e.counter) (o.counters ??= {})[e.counter] = 1;
+      if (e.addSubtype) o.addedSubtypes = [...(o.addedSubtypes ?? []), e.addSubtype];
       // Heroic Return, Winter Soldier: "if a Hero enters this way, it enters with counters".
       if (e.countersIf && cardMatches(ctx, o.id, e.countersIf.filter))
         addCounters(ctx, o.id, e.countersIf.count);
@@ -1780,4 +1807,14 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
       return;
     }
   }
+}
+
+// Shield counters (Marvel Super Heroes)
+
+/** "If it would be dealt damage or destroyed, instead remove a shield counter from it." */
+export function useShield(ctx: Ctx, id: ObjectId): boolean {
+  const o = ctx.s.objects[id];
+  if (!o || o.zone !== 'battlefield' || !o.counters?.shield) return false;
+  o.counters.shield--;
+  return true;
 }

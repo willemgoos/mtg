@@ -182,7 +182,13 @@ function afterMulliganDecision(ctx: Ctx, player: PlayerId): void {
   const s = ctx.s;
   const next = other(player);
   if (!s.players[next].keptHand) s.decision = { kind: 'mulligan', player: next };
-  else startTurn(ctx, s.turn.activePlayer);
+  else {
+    // Marvel Super Heroes (Quicksilver): "you may begin the game with him on the battlefield". Always done.
+    for (const p of [s.turn.activePlayer, next])
+      for (const id of [...s.players[p].hand])
+        if (def(ctx, id).beginsOnBattlefield) moveObject(ctx, id, 'battlefield', { controller: p });
+    startTurn(ctx, s.turn.activePlayer);
+  }
 }
 
 function apply(ctx: Ctx, action: Action): void {
@@ -257,6 +263,7 @@ function apply(ctx: Ctx, action: Action): void {
           sacrificeMany: action.sacrificeMany,
           teamwork: action.teamwork,
           back: action.back,
+          sneak: action.sneak,
         },
         action.payWith,
       );
@@ -275,6 +282,7 @@ function apply(ctx: Ctx, action: Action): void {
         action.sacrifice,
         action.forage,
         action.discard,
+        action.x,
       );
       return paused ? undefined : givePriority(ctx, player);
     }

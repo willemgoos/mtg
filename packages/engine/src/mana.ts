@@ -257,3 +257,40 @@ export function planPayment(
   });
   return plan;
 }
+
+// Improvise (Marvel Super Heroes)
+
+/** Whether this spell has improvise: its own, or "noncreature spells you cast have improvise" (Ironheart). */
+export function hasImprovise(ctx: Ctx, player: PlayerId, card: ObjectId): boolean {
+  const d = def(ctx, card);
+  if (d.improvise) return true;
+  if (d.types.includes('Creature')) return false;
+  return ctx.s.battlefield.some(
+    (id) =>
+      obj(ctx, id).controller === player &&
+      def(ctx, id).abilities.some(
+        (a) => a.kind === 'static' && a.effect.kind === 'noncreatureSpellsHaveImprovise',
+      ),
+  );
+}
+
+/** Improvise: each untapped artifact you control can be tapped for {1} of the generic cost. */
+export function artifactHelpers(
+  ctx: Ctx,
+  player: PlayerId,
+  sources: readonly ManaSource[],
+  exclude?: ObjectId,
+): ManaSource[] {
+  return ctx.s.battlefield
+    .filter((id) => {
+      const o = obj(ctx, id);
+      return (
+        id !== exclude &&
+        o.controller === player &&
+        !o.tapped &&
+        def(ctx, id).types.includes('Artifact') &&
+        !sources.some((x) => x.id === id)
+      );
+    })
+    .map((id) => ({ id, produces: ['C'], isCreature: false, sacrifice: false }));
+}

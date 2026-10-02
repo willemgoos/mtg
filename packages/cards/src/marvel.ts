@@ -5,7 +5,7 @@ import { GAMMA_WAKANDA } from './msh/gamma-wakanda.ts';
 import { GROWTH_GRAVEYARD } from './msh/growth-graveyard.ts';
 import { TECH_SKIES } from './msh/tech-skies.ts';
 import { MARVEL_LANDS } from './msh/lands.ts';
-import { MSH_MYTHICS } from './msh/mythics.ts';
+import { MSH_MYTHIC_BACKS, MSH_MYTHICS } from './msh/mythics.ts';
 import { MSH_OTHERS } from './msh/others.ts';
 import { MSH_RARES } from './msh/rares.ts';
 
@@ -31,4 +31,5 @@ export const MARVEL_BEHAVIORS: Record<string, Behavior> = {
 /** Back faces of double-faced cards: not cards of their own, so not in the pool. */
 export const MARVEL_BACK_FACES: Record<string, Behavior> = {
   ...HEROES_VILLAINS_BACKS,
+  ...MSH_MYTHIC_BACKS,
 };

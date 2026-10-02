@@ -1,6 +1,6 @@
 import type { AbilityDef, ManaType } from '@mtg/engine';
 import type { Behavior } from '../build.ts';
-import { crew, draw, mana, onEnter, t0, yourCreature } from './helpers.ts';
+import { crew, draw, drain, mana, onEnter, powerUp, t0, yourCreature } from './helpers.ts';
 
 /**
  * Marvel Super Heroes (MSH) rares not in our decks. Printed characteristics
@@ -26,6 +26,93 @@ const fastLand = (a: ManaType, b: ManaType): Behavior => ({
 });
 
 export const MSH_RARES: Record<string, Behavior> = {
+  'Elektra, Daughter of the Hand': {
+    sneak: mana('{1}{B}{B}'),
+    abilities: [
+      {
+        kind: 'triggered',
+        trigger: { on: 'etb' },
+        targets: [{ what: 'creature', controller: 'opponent', filter: { maxPower: 3 } }],
+        effects: [{ kind: 'destroy', what: t0 }],
+      },
+    ],
+  },
+  // "You may begin the game with him on the battlefield": always.
+  'Quicksilver, Brash Blur': {
+    beginsOnBattlefield: true,
+    abilities: [
+      powerUp(
+        '{4}{R}',
+        { kind: 'counters', to: 'self', amount: 1 },
+        { kind: 'namedCounters', name: 'doubleStrike', amount: 1, to: 'self' },
+      ),
+    ],
+  },
+  'Ares, God of War': {
+    abilities: [
+      { kind: 'static', effect: { kind: 'attacksEachCombat' } },
+      {
+        kind: 'triggered',
+        trigger: { on: 'creatureYouControlDies', filter: { leftAttacking: true } },
+        targets: [],
+        effects: [{ kind: 'returnToHand', what: 'subject' }],
+      },
+    ],
+  },
+  'Thunderbolts Conspiracy': {
+    abilities: [
+      {
+        kind: 'triggered',
+        trigger: { on: 'creatureYouControlDies', filter: { subtype: 'Villain' } },
+        targets: [],
+        effects: [
+          { kind: 'returnToBattlefield', what: 'subject', counter: 'finality', addSubtype: 'Hero' },
+        ],
+      },
+    ],
+  },
+  'Arc Reactor': {
+    improvise: true,
+    entersTapped: true,
+    abilities: [{ kind: 'mana', cost: { tapSelf: true }, produces: 'C', amount: 3 }],
+  },
+  'Ironheart, Clever Champion': {
+    improvise: true,
+    abilities: [{ kind: 'static', effect: { kind: 'noncreatureSpellsHaveImprovise' } }],
+  },
+  'The Kingpin of Crime': {
+    abilities: [
+      // Extort.
+      {
+        kind: 'triggered',
+        trigger: { on: 'castSpell', filter: 'any' },
+        optional: true,
+        cost: mana('{W/B}'),
+        targets: [],
+        effects: drain(1),
+      },
+      {
+        kind: 'triggered',
+        trigger: { on: 'youAttack' },
+        optional: true,
+        lifeCost: 2,
+        cost: mana(''),
+        targets: [],
+        effects: [{ kind: 'assignToughness' }],
+      },
+    ],
+  },
+  'Leader, Super-Genius': {
+    abilities: [
+      { kind: 'static', effect: { kind: 'conniveDrawsFirst' } },
+      {
+        kind: 'triggered',
+        trigger: { on: 'beginningOfCombat', whose: 'yours' },
+        targets: [yourCreature],
+        effects: [{ kind: 'connive', what: t0 }],
+      },
+    ],
+  },
   'Dark Fortress': fastLand('B', 'R'),
   'Gathering Place': fastLand('G', 'W'),
   'Gleaming Bastion': fastLand('W', 'U'),

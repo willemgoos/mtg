@@ -17918,6 +17918,202 @@
   }
  },
  {
+  "name": "Elektra, Daughter of the Hand",
+  "scryfallId": "ac3e586c-d654-4631-beda-a5e29cf04717",
+  "oracleId": "b46647a1-0c91-451b-8c0b-be8fe02faee2",
+  "set": "msh",
+  "collectorNumber": "97",
+  "rarity": "rare",
+  "manaCost": "{2}{B}{B}",
+  "typeLine": "Legendary Creature — Human Ninja Villain",
+  "oracleText": "Sneak {1}{B}{B} (You may cast this spell for {1}{B}{B} if you also return an unblocked attacker you control to hand during the declare blockers step. She enters tapped and attacking.)\nWhen Elektra enters, destroy target creature an opponent controls with power 3 or less.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Sneak"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/c/ac3e586c-d654-4631-beda-a5e29cf04717.jpg?1783902943",
+   "normal": "https://cards.scryfall.io/normal/front/a/c/ac3e586c-d654-4631-beda-a5e29cf04717.jpg?1783902943",
+   "large": "https://cards.scryfall.io/large/front/a/c/ac3e586c-d654-4631-beda-a5e29cf04717.jpg?1783902943",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/c/ac3e586c-d654-4631-beda-a5e29cf04717.jpg?1783902943"
+  }
+ },
+ {
+  "name": "Quicksilver, Brash Blur",
+  "scryfallId": "2d5819ca-165d-4f4c-9500-3ac206994880",
+  "oracleId": "b76ce131-e51a-445e-8216-00df5904ab93",
+  "set": "msh",
+  "collectorNumber": "148",
+  "rarity": "rare",
+  "manaCost": "{R}",
+  "typeLine": "Legendary Creature — Mutant Hero",
+  "oracleText": "If Quicksilver, Brash Blur is in your opening hand, you may begin the game with him on the battlefield.\nHaste\nPower-up — {4}{R}: Put a +1/+1 counter and a double strike counter on Quicksilver. (Activate each power-up ability only once. Reduce the cost by his mana cost if he entered this turn.)",
+  "power": "1",
+  "toughness": "1",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Power-up",
+   "Haste"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/d/2d5819ca-165d-4f4c-9500-3ac206994880.jpg?1783902925",
+   "normal": "https://cards.scryfall.io/normal/front/2/d/2d5819ca-165d-4f4c-9500-3ac206994880.jpg?1783902925",
+   "large": "https://cards.scryfall.io/large/front/2/d/2d5819ca-165d-4f4c-9500-3ac206994880.jpg?1783902925",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/d/2d5819ca-165d-4f4c-9500-3ac206994880.jpg?1783902925"
+  }
+ },
+ {
+  "name": "Ares, God of War",
+  "scryfallId": "3e121d65-d341-40b9-bebc-1e7d1b83905c",
+  "oracleId": "8a09d4a2-4796-4a15-ab75-a3a0b717f62d",
+  "set": "msh",
+  "collectorNumber": "202",
+  "rarity": "rare",
+  "manaCost": "{1}{B}{R}",
+  "typeLine": "Legendary Creature — God Warrior Villain",
+  "oracleText": "Ares attacks each combat if able.\nWhenever an attacking creature you control dies, return that card to its owner's hand.",
+  "power": "4",
+  "toughness": "3",
+  "colors": [
+   "B",
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/e/3e121d65-d341-40b9-bebc-1e7d1b83905c.jpg?1783902906",
+   "normal": "https://cards.scryfall.io/normal/front/3/e/3e121d65-d341-40b9-bebc-1e7d1b83905c.jpg?1783902906",
+   "large": "https://cards.scryfall.io/large/front/3/e/3e121d65-d341-40b9-bebc-1e7d1b83905c.jpg?1783902906",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/e/3e121d65-d341-40b9-bebc-1e7d1b83905c.jpg?1783902906"
+  }
+ },
+ {
+  "name": "Thunderbolts Conspiracy",
+  "scryfallId": "f498c1a4-54d2-4e87-952f-8cf7e408930c",
+  "oracleId": "d90a5213-3363-4cd1-97d6-4fc057f78b2a",
+  "set": "msh",
+  "collectorNumber": "117",
+  "rarity": "rare",
+  "manaCost": "{3}{B}",
+  "typeLine": "Enchantment",
+  "oracleText": "Flash\nWhenever a Villain you control dies, return it to the battlefield under its owner's control with a finality counter on it. That creature is a Hero in addition to its other types. (If a creature with a finality counter on it would die, exile it instead.)",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Flash"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/4/f498c1a4-54d2-4e87-952f-8cf7e408930c.jpg?1783902936",
+   "normal": "https://cards.scryfall.io/normal/front/f/4/f498c1a4-54d2-4e87-952f-8cf7e408930c.jpg?1783902936",
+   "large": "https://cards.scryfall.io/large/front/f/4/f498c1a4-54d2-4e87-952f-8cf7e408930c.jpg?1783902936",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/4/f498c1a4-54d2-4e87-952f-8cf7e408930c.jpg?1783902936"
+  }
+ },
+ {
+  "name": "Arc Reactor",
+  "scryfallId": "339acb17-4b8e-4836-9cc5-8a0a946ebc73",
+  "oracleId": "55f7b005-31ea-4865-a8f3-460d15bed795",
+  "set": "msh",
+  "collectorNumber": "243",
+  "rarity": "rare",
+  "manaCost": "{5}",
+  "typeLine": "Artifact",
+  "oracleText": "Improvise (Your artifacts can help cast this spell. Each artifact you tap after you're done activating mana abilities pays for {1}.)\nThis artifact enters tapped.\n{T}: Add {C}{C}{C}.",
+  "colors": [],
+  "keywords": [
+   "Improvise"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/3/339acb17-4b8e-4836-9cc5-8a0a946ebc73.jpg?1783902892",
+   "normal": "https://cards.scryfall.io/normal/front/3/3/339acb17-4b8e-4836-9cc5-8a0a946ebc73.jpg?1783902892",
+   "large": "https://cards.scryfall.io/large/front/3/3/339acb17-4b8e-4836-9cc5-8a0a946ebc73.jpg?1783902892",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/3/339acb17-4b8e-4836-9cc5-8a0a946ebc73.jpg?1783902892"
+  }
+ },
+ {
+  "name": "Ironheart, Clever Champion",
+  "scryfallId": "395e477a-861f-4661-b329-6c1ad5343ed5",
+  "oracleId": "df3d5b86-7b75-4df9-8985-7159cde12261",
+  "set": "msh",
+  "collectorNumber": "60",
+  "rarity": "rare",
+  "manaCost": "{4}{U}",
+  "typeLine": "Legendary Artifact Creature — Human Hero",
+  "oracleText": "Improvise (Your artifacts can help cast this spell. Each artifact you tap after you're done activating mana abilities pays for {1}.)\nFlying\nNoncreature spells you cast have improvise.",
+  "power": "3",
+  "toughness": "4",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Flying",
+   "Improvise"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/9/395e477a-861f-4661-b329-6c1ad5343ed5.jpg?1783902957",
+   "normal": "https://cards.scryfall.io/normal/front/3/9/395e477a-861f-4661-b329-6c1ad5343ed5.jpg?1783902957",
+   "large": "https://cards.scryfall.io/large/front/3/9/395e477a-861f-4661-b329-6c1ad5343ed5.jpg?1783902957",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/9/395e477a-861f-4661-b329-6c1ad5343ed5.jpg?1783902957"
+  }
+ },
+ {
+  "name": "The Kingpin of Crime",
+  "scryfallId": "495c08ea-5502-4bfe-aa15-fa85556755ae",
+  "oracleId": "3eeeb159-aa45-4a9b-9618-8542604b9830",
+  "set": "msh",
+  "collectorNumber": "220",
+  "rarity": "rare",
+  "manaCost": "{1}{W}{B}",
+  "typeLine": "Legendary Creature — Human Villain",
+  "oracleText": "Extort (Whenever you cast a spell, you may pay {W/B}. If you do, each opponent loses 1 life and you gain that much life.)\nWhenever you attack, you may pay 2 life. If you do, until end of turn, creatures you control with toughness greater than their power assign combat damage equal to their toughness rather than their power.",
+  "power": "1",
+  "toughness": "5",
+  "colors": [
+   "B",
+   "W"
+  ],
+  "keywords": [
+   "Extort"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/9/495c08ea-5502-4bfe-aa15-fa85556755ae.jpg?1783902900",
+   "normal": "https://cards.scryfall.io/normal/front/4/9/495c08ea-5502-4bfe-aa15-fa85556755ae.jpg?1783902900",
+   "large": "https://cards.scryfall.io/large/front/4/9/495c08ea-5502-4bfe-aa15-fa85556755ae.jpg?1783902900",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/9/495c08ea-5502-4bfe-aa15-fa85556755ae.jpg?1783902900"
+  }
+ },
+ {
+  "name": "Leader, Super-Genius",
+  "scryfallId": "2c8aab8d-2dfe-49c8-9aa8-536b0587b467",
+  "oracleId": "bec686dd-a9ea-4db5-bc20-8e40420b9a9b",
+  "set": "msh",
+  "collectorNumber": "64",
+  "rarity": "rare",
+  "manaCost": "{2}{U}{U}",
+  "typeLine": "Legendary Creature — Gamma Scientist Villain",
+  "oracleText": "If a creature you control would connive, instead you draw a card, then that creature connives.\nAt the beginning of combat on your turn, target creature you control connives. (Draw a card, then discard a card. If you discarded a nonland card, put a +1/+1 counter on that creature.)",
+  "power": "1",
+  "toughness": "3",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Connive"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/c/2c8aab8d-2dfe-49c8-9aa8-536b0587b467.jpg?1783902955",
+   "normal": "https://cards.scryfall.io/normal/front/2/c/2c8aab8d-2dfe-49c8-9aa8-536b0587b467.jpg?1783902955",
+   "large": "https://cards.scryfall.io/large/front/2/c/2c8aab8d-2dfe-49c8-9aa8-536b0587b467.jpg?1783902955",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/c/2c8aab8d-2dfe-49c8-9aa8-536b0587b467.jpg?1783902955"
+  }
+ },
+ {
   "name": "Dark Fortress",
   "scryfallId": "c16fd43c-7c47-4c1b-860f-91146532e89d",
   "oracleId": "40760bfa-a423-487c-ba29-043b2d00c736",
@@ -18282,6 +18478,276 @@
    "normal": "https://cards.scryfall.io/normal/front/3/f/3f56c0e7-5b07-48e3-b0ca-5d09ddc8de9a.jpg?1783902966",
    "large": "https://cards.scryfall.io/large/front/3/f/3f56c0e7-5b07-48e3-b0ca-5d09ddc8de9a.jpg?1783902966",
    "artCrop": "https://cards.scryfall.io/art_crop/front/3/f/3f56c0e7-5b07-48e3-b0ca-5d09ddc8de9a.jpg?1783902966"
+  }
+ },
+ {
+  "name": "Captain America, Super-Soldier",
+  "scryfallId": "33631d6c-c584-42ff-afe5-2647b5fb321f",
+  "oracleId": "ac1b6ffc-12a9-4d9c-a9fc-68a839a40738",
+  "set": "msh",
+  "collectorNumber": "9",
+  "rarity": "mythic",
+  "manaCost": "{1}{W}{W}",
+  "typeLine": "Legendary Creature — Human Soldier Hero",
+  "oracleText": "First strike\nCaptain America enters with a shield counter on him. (If he would be dealt damage or destroyed, remove a shield counter from him instead.)\nAs long as Captain America has a shield counter on him, you and other Heroes you control have hexproof.",
+  "power": "3",
+  "toughness": "2",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "First strike"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/3/33631d6c-c584-42ff-afe5-2647b5fb321f.jpg?1783902981",
+   "normal": "https://cards.scryfall.io/normal/front/3/3/33631d6c-c584-42ff-afe5-2647b5fb321f.jpg?1783902981",
+   "large": "https://cards.scryfall.io/large/front/3/3/33631d6c-c584-42ff-afe5-2647b5fb321f.jpg?1783902981",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/3/33631d6c-c584-42ff-afe5-2647b5fb321f.jpg?1783902981"
+  }
+ },
+ {
+  "name": "Kang the Conqueror",
+  "scryfallId": "79747b45-fd7b-4023-9a9c-4d9dab2429fe",
+  "oracleId": "da6e24a4-8adc-41a1-b5eb-3e31dc1250c9",
+  "set": "msh",
+  "collectorNumber": "62",
+  "rarity": "mythic",
+  "manaCost": "{2}{U}{U}",
+  "typeLine": "Legendary Creature — Human Villain",
+  "oracleText": "Flying\nPower-up — {5}{U}{U}{U}: Put a +1/+1 counter on Kang. Take an extra turn after this one. During that turn, power-up abilities can't be activated. (Activate each power-up ability only once. Reduce the cost by his mana cost if he entered this turn.)",
+  "power": "4",
+  "toughness": "5",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Flying",
+   "Power-up"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/9/79747b45-fd7b-4023-9a9c-4d9dab2429fe.jpg?1783902956",
+   "normal": "https://cards.scryfall.io/normal/front/7/9/79747b45-fd7b-4023-9a9c-4d9dab2429fe.jpg?1783902956",
+   "large": "https://cards.scryfall.io/large/front/7/9/79747b45-fd7b-4023-9a9c-4d9dab2429fe.jpg?1783902956",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/9/79747b45-fd7b-4023-9a9c-4d9dab2429fe.jpg?1783902956"
+  }
+ },
+ {
+  "name": "Bruce Banner",
+  "scryfallId": "e0dbbdcf-84e1-494f-8b8c-0a094f603fa9",
+  "oracleId": "b6c0ee14-2028-4e8b-9acd-ff78821bca9b",
+  "set": "msh",
+  "collectorNumber": "49",
+  "rarity": "mythic",
+  "manaCost": "{U}",
+  "typeLine": "Legendary Creature — Human Scientist Hero",
+  "oracleText": "{X}{X}, {T}: Draw X cards. Activate only as a sorcery.\n{2}{R}{R}{G}{G}: Transform Bruce Banner. Activate only as a sorcery.",
+  "power": "1",
+  "toughness": "1",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Transform"
+  ],
+  "back": "The Incredible Hulk",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/0/e0dbbdcf-84e1-494f-8b8c-0a094f603fa9.jpg?1783902972",
+   "normal": "https://cards.scryfall.io/normal/front/e/0/e0dbbdcf-84e1-494f-8b8c-0a094f603fa9.jpg?1783902972",
+   "large": "https://cards.scryfall.io/large/front/e/0/e0dbbdcf-84e1-494f-8b8c-0a094f603fa9.jpg?1783902972",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/0/e0dbbdcf-84e1-494f-8b8c-0a094f603fa9.jpg?1783902972"
+  }
+ },
+ {
+  "name": "The Incredible Hulk",
+  "scryfallId": "e0dbbdcf-84e1-494f-8b8c-0a094f603fa9",
+  "oracleId": "b6c0ee14-2028-4e8b-9acd-ff78821bca9b",
+  "set": "msh",
+  "collectorNumber": "49",
+  "rarity": "mythic",
+  "manaCost": "{2}{R}{R}{G}{G}",
+  "typeLine": "Legendary Creature — Gamma Berserker Hero",
+  "oracleText": "Reach, trample\nEnrage — Whenever The Incredible Hulk is dealt damage, put a +1/+1 counter on him. If he's attacking, untap him and there is an additional combat phase after this phase.",
+  "power": "8",
+  "toughness": "8",
+  "colors": [
+   "G",
+   "R"
+  ],
+  "keywords": [
+   "Reach",
+   "Enrage",
+   "Trample"
+  ],
+  "front": "Bruce Banner",
+  "image": {
+   "small": "https://cards.scryfall.io/small/back/e/0/e0dbbdcf-84e1-494f-8b8c-0a094f603fa9.jpg?1783902972",
+   "normal": "https://cards.scryfall.io/normal/back/e/0/e0dbbdcf-84e1-494f-8b8c-0a094f603fa9.jpg?1783902972",
+   "large": "https://cards.scryfall.io/large/back/e/0/e0dbbdcf-84e1-494f-8b8c-0a094f603fa9.jpg?1783902972",
+   "artCrop": "https://cards.scryfall.io/art_crop/back/e/0/e0dbbdcf-84e1-494f-8b8c-0a094f603fa9.jpg?1783902972"
+  }
+ },
+ {
+  "name": "Jennifer Walters",
+  "scryfallId": "61237530-ad49-469c-a952-67c92315708e",
+  "oracleId": "c867a778-97ef-4872-b890-b088b96a1281",
+  "set": "msh",
+  "collectorNumber": "18",
+  "rarity": "mythic",
+  "manaCost": "{1}{W}",
+  "typeLine": "Legendary Creature — Human Advisor Hero",
+  "oracleText": "Your opponents can't cast spells during your turn.\n{3}{G}{W}{W}: Transform Jennifer Walters. Activate only as a sorcery.",
+  "power": "2",
+  "toughness": "3",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Transform"
+  ],
+  "back": "The Sensational She-Hulk",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/1/61237530-ad49-469c-a952-67c92315708e.jpg?1783902978",
+   "normal": "https://cards.scryfall.io/normal/front/6/1/61237530-ad49-469c-a952-67c92315708e.jpg?1783902978",
+   "large": "https://cards.scryfall.io/large/front/6/1/61237530-ad49-469c-a952-67c92315708e.jpg?1783902978",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/1/61237530-ad49-469c-a952-67c92315708e.jpg?1783902978"
+  }
+ },
+ {
+  "name": "The Sensational She-Hulk",
+  "scryfallId": "61237530-ad49-469c-a952-67c92315708e",
+  "oracleId": "c867a778-97ef-4872-b890-b088b96a1281",
+  "set": "msh",
+  "collectorNumber": "18",
+  "rarity": "mythic",
+  "manaCost": "{3}{G}{W}{W}",
+  "typeLine": "Legendary Creature — Gamma Hero",
+  "oracleText": "Reach, trample\nYour opponents can't cast spells during your turn.\nWhenever a creature you control is dealt damage, you may have The Sensational She-Hulk deal that much damage to any target. Do this only once each turn.",
+  "power": "6",
+  "toughness": "6",
+  "colors": [
+   "G",
+   "W"
+  ],
+  "keywords": [
+   "Reach",
+   "Trample"
+  ],
+  "front": "Jennifer Walters",
+  "image": {
+   "small": "https://cards.scryfall.io/small/back/6/1/61237530-ad49-469c-a952-67c92315708e.jpg?1783902978",
+   "normal": "https://cards.scryfall.io/normal/back/6/1/61237530-ad49-469c-a952-67c92315708e.jpg?1783902978",
+   "large": "https://cards.scryfall.io/large/back/6/1/61237530-ad49-469c-a952-67c92315708e.jpg?1783902978",
+   "artCrop": "https://cards.scryfall.io/art_crop/back/6/1/61237530-ad49-469c-a952-67c92315708e.jpg?1783902978"
+  }
+ },
+ {
+  "name": "King T'Challa",
+  "scryfallId": "add7d3ce-aa58-4da0-8c2a-cfd01c3a8975",
+  "oracleId": "fe00278d-4385-4e3f-919c-12a794fd86f5",
+  "set": "msh",
+  "collectorNumber": "219",
+  "rarity": "mythic",
+  "manaCost": "{1}{W}{U}",
+  "typeLine": "Legendary Creature — Human Noble Hero",
+  "oracleText": "Flash\nWhenever a player draws their second card each turn, you draw a card.\n{4}{W}{U}: Transform King T'Challa. Activate only as a sorcery.",
+  "power": "3",
+  "toughness": "2",
+  "colors": [
+   "U",
+   "W"
+  ],
+  "keywords": [
+   "Transform",
+   "Flash"
+  ],
+  "back": "Black Panther, Hope Enduring",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/d/add7d3ce-aa58-4da0-8c2a-cfd01c3a8975.jpg?1783902911",
+   "normal": "https://cards.scryfall.io/normal/front/a/d/add7d3ce-aa58-4da0-8c2a-cfd01c3a8975.jpg?1783902911",
+   "large": "https://cards.scryfall.io/large/front/a/d/add7d3ce-aa58-4da0-8c2a-cfd01c3a8975.jpg?1783902911",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/d/add7d3ce-aa58-4da0-8c2a-cfd01c3a8975.jpg?1783902911"
+  }
+ },
+ {
+  "name": "Black Panther, Hope Enduring",
+  "scryfallId": "add7d3ce-aa58-4da0-8c2a-cfd01c3a8975",
+  "oracleId": "fe00278d-4385-4e3f-919c-12a794fd86f5",
+  "set": "msh",
+  "collectorNumber": "219",
+  "rarity": "mythic",
+  "manaCost": "{4}{W}{U}",
+  "typeLine": "Legendary Creature — Human Warrior Hero",
+  "oracleText": "Flash\nDouble strike\nPrevent all damage that would be dealt to Black Panther.\nWhenever Black Panther deals combat damage to a player, draw a card.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "U",
+   "W"
+  ],
+  "keywords": [
+   "Double strike",
+   "Flash"
+  ],
+  "front": "King T'Challa",
+  "image": {
+   "small": "https://cards.scryfall.io/small/back/a/d/add7d3ce-aa58-4da0-8c2a-cfd01c3a8975.jpg?1783902911",
+   "normal": "https://cards.scryfall.io/normal/back/a/d/add7d3ce-aa58-4da0-8c2a-cfd01c3a8975.jpg?1783902911",
+   "large": "https://cards.scryfall.io/large/back/a/d/add7d3ce-aa58-4da0-8c2a-cfd01c3a8975.jpg?1783902911",
+   "artCrop": "https://cards.scryfall.io/art_crop/back/a/d/add7d3ce-aa58-4da0-8c2a-cfd01c3a8975.jpg?1783902911"
+  }
+ },
+ {
+  "name": "Tony Stark",
+  "scryfallId": "4cea42fd-035e-4b8f-8b1d-ff363b694f14",
+  "oracleId": "4a46ea59-6c5d-4bed-9951-b5590f9a1bdb",
+  "set": "msh",
+  "collectorNumber": "80",
+  "rarity": "mythic",
+  "manaCost": "{1}{U}",
+  "typeLine": "Legendary Creature — Human Artificer Hero",
+  "oracleText": "{1}, {T}: Look at the top four cards of your library. You may reveal an artifact card from among them and put it into your hand. Put the rest on the bottom of your library in a random order.\n{4}{U}{R}: Transform Tony Stark. Activate only as a sorcery.",
+  "power": "1",
+  "toughness": "3",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Transform"
+  ],
+  "back": "The Invincible Iron Man",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/c/4cea42fd-035e-4b8f-8b1d-ff363b694f14.jpg?1783902955",
+   "normal": "https://cards.scryfall.io/normal/front/4/c/4cea42fd-035e-4b8f-8b1d-ff363b694f14.jpg?1783902955",
+   "large": "https://cards.scryfall.io/large/front/4/c/4cea42fd-035e-4b8f-8b1d-ff363b694f14.jpg?1783902955",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/c/4cea42fd-035e-4b8f-8b1d-ff363b694f14.jpg?1783902955"
+  }
+ },
+ {
+  "name": "The Invincible Iron Man",
+  "scryfallId": "4cea42fd-035e-4b8f-8b1d-ff363b694f14",
+  "oracleId": "4a46ea59-6c5d-4bed-9951-b5590f9a1bdb",
+  "set": "msh",
+  "collectorNumber": "80",
+  "rarity": "mythic",
+  "manaCost": "{4}{U}{R}",
+  "typeLine": "Legendary Artifact Creature — Human Hero",
+  "oracleText": "Flying, haste\nAt the beginning of combat on your turn, you may put an artifact card from your hand onto the battlefield. If it's an Equipment, attach it to The Invincible Iron Man.",
+  "power": "5",
+  "toughness": "5",
+  "colors": [
+   "R",
+   "U"
+  ],
+  "keywords": [
+   "Flying",
+   "Haste"
+  ],
+  "front": "Tony Stark",
+  "image": {
+   "small": "https://cards.scryfall.io/small/back/4/c/4cea42fd-035e-4b8f-8b1d-ff363b694f14.jpg?1783902955",
+   "normal": "https://cards.scryfall.io/normal/back/4/c/4cea42fd-035e-4b8f-8b1d-ff363b694f14.jpg?1783902955",
+   "large": "https://cards.scryfall.io/large/back/4/c/4cea42fd-035e-4b8f-8b1d-ff363b694f14.jpg?1783902955",
+   "artCrop": "https://cards.scryfall.io/art_crop/back/4/c/4cea42fd-035e-4b8f-8b1d-ff363b694f14.jpg?1783902955"
   }
  },
  {

@@ -85,6 +85,15 @@ export interface CardDefinition {
   keywords: Keyword[];
   /** "This creature enters with N +1/+1 counters on it." */
   entersWithCounters?: number;
+  // Marvel Super Heroes
+  /** Enters with these named counters (Captain America, Super-Soldier: a shield counter). */
+  entersWithNamedCounters?: Record<string, number>;
+  /** Improvise: your artifacts can be tapped to pay its generic cost. */
+  improvise?: boolean;
+  /** "If this is in your opening hand, you may begin the game with it on the battlefield" (Quicksilver). */
+  beginsOnBattlefield?: boolean;
+  /** Sneak: cast during your declare blockers step for this, returning an unblocked attacker to hand. */
+  sneak?: ManaCost;
   /** A planeswalker's starting loyalty. */
   loyalty?: number;
   /** Only put the counters on if this holds (raid: "if you attacked this turn"). */
@@ -322,7 +331,10 @@ export type TriggerDef =
   /** At the beginning of your precombat or postcombat main phase. */
   | { on: 'beginningOfMain'; which: 1 | 2 }
   /** Whenever you (or, with 'opponents', an opponent: Black Widow) draw your second card each turn. */
-  | { on: 'drawSecondCard'; whose?: 'opponents' }
+  | { on: 'drawSecondCard'; whose?: 'opponents' | 'any' }
+  // Marvel Super Heroes
+  /** Whenever a creature you control is dealt damage ("that much": the event amount). */
+  | { on: 'yourCreatureDealtDamage' }
   | { on: 'drawCard'; whose: 'yours' | 'opponents' }
   /** Whenever a source you control deals noncombat damage to an opponent ("that many"). */
   | { on: 'yourNoncombatDamageToOpponent' }
@@ -492,6 +504,8 @@ export type ConditionDef =
   | { kind: 'sourceEnteredThisTurn' }
   /** You control a basic land. */
   | { kind: 'controlsBasicLand' }
+  /** The source has a counter of this kind (a shield counter). */
+  | { kind: 'sourceHasCounter'; name: string }
   | { kind: 'custom'; handler: string };
 
 export interface CardFilter {
@@ -544,6 +558,9 @@ export interface CardFilter {
   chosenTypeOfSource?: boolean;
   /** Has counters on it (Innkeeper's Talent). */
   hasCounters?: boolean;
+  // Marvel Super Heroes
+  /** It was attacking as it left the battlefield ("an attacking creature you control dies"). */
+  leftAttacking?: boolean;
   // Brawl.
   /** Is its controller's commander ("your commander"). */
   commander?: boolean;
@@ -907,6 +924,10 @@ export type EffectDef =
   // Transform (Marvel Super Heroes)
   /** Turn a double-faced permanent to its other face. */
   | { kind: 'transform'; what: Ref }
+  /** Take an extra turn after this one (Kang the Conqueror). */
+  | { kind: 'extraTurn'; noPowerUp?: boolean }
+  /** Until end of turn, your creatures with toughness greater than power assign damage by toughness. */
+  | { kind: 'assignToughness' }
   /** Counter a spell on the stack (unless it can't be countered). */
   | { kind: 'counter'; what: Ref; controllerTokens?: { token: CardDefId; count: number } }
   | { kind: 'bouncePlayerPermanents'; who: Ref; nonland?: boolean }
@@ -938,6 +959,8 @@ export type EffectDef =
       counter?: string;
       /** It enters with +1/+1 counters if it matches the filter (Heroic Return: a Hero gets two). */
       countersIf?: { filter: CardFilter; count: number };
+      // Marvel Super Heroes: "is a Hero in addition to its other types" (Thunderbolts Conspiracy).
+      addSubtype?: string;
     }
   /** Destroy all creatures (matching the filter). `returnOne`: then return one of yours that died (Starfall Invocation). */
   | {
@@ -1134,6 +1157,16 @@ export type StaticDef =
   // Marvel Super Heroes
   /** "This creature attacks each combat if able" (added when attackers are confirmed). */
   | { kind: 'attacksEachCombat' }
+  /** "Prevent all damage that would be dealt to this creature" (Black Panther, Hope Enduring). */
+  | { kind: 'preventDamageToSelf' }
+  /** "If a creature you control would connive, instead you draw a card, then it connives" (Leader). */
+  | { kind: 'conniveDrawsFirst' }
+  /** "Noncreature spells you cast have improvise" (Ironheart). */
+  | { kind: 'noncreatureSpellsHaveImprovise' }
+  /** "Your opponents can't cast spells during your turn" (Jennifer Walters). */
+  | { kind: 'opponentsCantCastDuringYourTurn' }
+  /** "You have hexproof", while the condition holds (Captain America, Super-Soldier). */
+  | { kind: 'youHaveHexproof'; condition?: ConditionDef }
   // Power-up (Marvel Super Heroes)
   /** Power-up abilities of other creatures you control cost {amount} less (Hulk, Gamma Goliath). */
   | { kind: 'powerUpCostsLess'; amount: number }
@@ -1226,6 +1259,8 @@ export interface GameObject {
   plusOneCounters: number;
   isToken: boolean;
   // Transform (Marvel Super Heroes)
+  /** It was attacking as it last left the battlefield (Ares, God of War). */
+  leftAttacking?: boolean;
   /** Showing its back face (transformed, or cast as the back face): the front's id, restored when it leaves. */
   front?: CardDefId;
   /** Equipment: the creature it is attached to. */
@@ -1360,6 +1395,8 @@ export type StackItem =
       finality?: boolean;
       /** Mockingbird: the creature it enters as a copy of. */
       copyOf?: ObjectId;
+      /** Marvel Super Heroes: cast for its sneak cost; it enters tapped and attacking this player. */
+      sneak?: PlayerId;
     }
   | {
       kind: 'ability';
@@ -1377,6 +1414,8 @@ export type StackItem =
       mode?: number;
       /** A granted trigger (Undying Malice): these effects instead of the card's ability. */
       inline?: EffectDef[];
+      /** Marvel Super Heroes: the X paid for an activated ability. */
+      x?: number;
       /** An emblem's ability. */
       emblem?: AbilityDef;
       /** The activated ability, as the source had it when activated. */
@@ -1399,6 +1438,11 @@ export type Step =
   | 'cleanup';
 
 export interface TurnState {
+  // Marvel Super Heroes
+  /** Power-up abilities can't be activated this turn (Kang the Conqueror's extra turn). */
+  noPowerUp?: boolean;
+  /** Creatures these players control assign combat damage by toughness if greater (The Kingpin of Crime). Replaced, never mutated. */
+  toughnessDamage?: PlayerId[];
   /** 0 during the mulligan phase. */
   number: number;
   activePlayer: PlayerId;
@@ -1794,6 +1838,9 @@ export type Decision =
 
 export interface GameState {
   schemaVersion: 1;
+  // Marvel Super Heroes
+  /** Extra turns to come, next first (Kang the Conqueror). Replaced, never mutated. */
+  extraTurns?: { player: PlayerId; noPowerUp?: boolean }[];
   seed: number;
   rng: RngState;
   nextObjectId: number;
@@ -1865,6 +1912,9 @@ export type Action =
       // Transform (Marvel Super Heroes)
       /** Cast a modal double-faced card's back face. */
       back?: boolean;
+      // Sneak (Marvel Super Heroes)
+      /** Cast for its sneak cost by returning this unblocked attacker to its owner's hand. */
+      sneak?: ObjectId;
       via?: 'festival' | 'osteomancer' | 'conduit';
       /** Mockingbird: the creature to enter as a copy of. */
       copyOf?: ObjectId;
@@ -1889,6 +1939,9 @@ export type Action =
       /** The card discarded as a cost (Flamecache Gecko). */
       discard?: ObjectId;
       payWith?: ObjectId[];
+      // Marvel Super Heroes
+      /** The value chosen for {X} in the ability's cost (Bruce Banner). */
+      x?: number;
     }
   | {
       type: 'addAttacker';

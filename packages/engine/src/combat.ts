@@ -188,7 +188,7 @@ export function dealCombatDamage(ctx: Ctx, firstStrikeStep: boolean): void {
 
   for (const a of combat.attackers) {
     if (!dealsDamageThisStep(ctx, a.id, firstStrikeStep)) continue;
-    const p = power(ctx, a.id);
+    const p = combatPower(ctx, a.id);
     dealt.push(a.id);
     if (p <= 0) continue;
     const src = damageSourceFor(ctx, a.id, obj(ctx, a.id).controller);
@@ -198,7 +198,7 @@ export function dealCombatDamage(ctx: Ctx, firstStrikeStep: boolean): void {
     for (const b of a.blockers) {
       if (!dealsDamageThisStep(ctx, b, firstStrikeStep)) continue;
       dealt.push(b);
-      const p = power(ctx, b);
+      const p = combatPower(ctx, b);
       if (p <= 0) continue;
       const src = damageSourceFor(ctx, b, obj(ctx, b).controller);
       assignments.push({ src, to: { object: { id: a.id, zcc: obj(ctx, a.id).zcc } }, amount: p });
@@ -226,4 +226,14 @@ export function dealCombatDamage(ctx: Ctx, firstStrikeStep: boolean): void {
 
 export function defenderOf(ctx: Ctx): PlayerId {
   return other(ctx.s.turn.activePlayer);
+}
+
+/**
+ * The combat damage a creature assigns: its power, or (The Kingpin of Crime)
+ * its toughness when that's greater and its controller paid for it this turn.
+ */
+function combatPower(ctx: Ctx, id: ObjectId): number {
+  const p = power(ctx, id);
+  if (!ctx.s.turn.toughnessDamage?.includes(obj(ctx, id).controller)) return p;
+  return Math.max(p, characteristics(ctx, id).toughness);
 }
