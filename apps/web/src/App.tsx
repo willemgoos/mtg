@@ -52,14 +52,31 @@ const SECTIONS: { title: string; blurb: string; decks: Decklist[] }[] = [
     set: 'blb' as const,
   },
   {
+    title: 'Marvel Super Heroes',
+    blurb: 'Our two-colour decks from Marvel Super Heroes, built to face the starter decks',
+    series: 'starter' as const,
+    set: 'msh' as const,
+  },
+  {
     title: 'Color Challenge',
     blurb: 'The mono-colour decks Sparky plays against new players',
     series: 'colorChallenge' as const,
   },
-].map(({ series, set, ...s }: { title: string; blurb: string; series: string; set?: 'blb' }) => {
-  const decks = DECKS.filter((d) => d.series === series && d.set === set);
-  return { ...s, decks: [...decks.filter(isPlayable), ...decks.filter((d) => !isPlayable(d))] };
-});
+].map(
+  ({
+    series,
+    set,
+    ...s
+  }: {
+    title: string;
+    blurb: string;
+    series: string;
+    set?: 'blb' | 'msh';
+  }) => {
+    const decks = DECKS.filter((d) => d.series === series && d.set === set);
+    return { ...s, decks: [...decks.filter(isPlayable), ...decks.filter((d) => !isPlayable(d))] };
+  },
+);
 const PLAYABLE = DECKS.filter(isPlayable);
 
 /**

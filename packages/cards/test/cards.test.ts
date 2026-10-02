@@ -4,6 +4,8 @@ import {
   BLACK_POOL,
   BLOOMBURROW_DECKS,
   BLOOMBURROW_POOL,
+  MARVEL_DECKS,
+  MARVEL_POOL,
   BLUE_POOL,
   CARDS,
   cardDb,
@@ -44,6 +46,9 @@ describe('card data', () => {
         ...OTHER_POOL,
         ...LAND_POOL,
         ...BLOOMBURROW_POOL,
+        ...MARVEL_POOL,
+        // Back faces of double-faced cards come with their fronts.
+        ...SCRYFALL.filter((c) => c.front).map((c) => c.name),
       ].sort(),
     );
     for (const c of SCRYFALL) expect(c.image?.normal).toMatch(/^https:\/\/cards\.scryfall\.io\//);
@@ -122,6 +127,7 @@ describe('card data', () => {
         'goblins-everywhere',
         'large-and-in-charge',
         ...BLOOMBURROW_DECKS.map((d) => d.id),
+        ...MARVEL_DECKS.map((d) => d.id),
       ].sort(),
     );
     for (const d of PLAYABLE_DECKS)

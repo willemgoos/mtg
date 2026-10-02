@@ -120,7 +120,18 @@ export function castVariants(d: CardDefinition, zone: ZoneName, via?: CastVia): 
   const cost = flashback ? d.flashback! : d.manaCost;
   if (d.pawprints) return pawCombos(d).map((paws) => ({ paws, cost, spell: pawSpell(d, paws) }));
   const extra = flashback ? { flashback: true } : {};
-  if (d.modes) return d.modes.map((spell, mode) => ({ mode, cost, spell, ...extra }));
+  if (d.modes) {
+    const modes: CastVariant[] = d.modes.map((spell, mode) => ({ mode, cost, spell, ...extra }));
+    // Teamwork's "choose both instead": the kicked spell is every mode at once.
+    if (d.kicker?.spell)
+      modes.push({
+        kicked: true,
+        cost: addCosts(cost, d.kicker.cost),
+        spell: d.kicker.spell,
+        ...extra,
+      });
+    return modes;
+  }
   if (d.sacrificeCreatureToCast)
     return [{ cost, spell: d.spell ?? null, sacrifice: true, ...extra }];
   if (d.forageOrPay)
@@ -178,8 +189,22 @@ export function spellOnStack(
   },
 ): SpellDef | null {
   if (d.pawprints && item.paws) return pawSpell(d, item.paws);
+  if (item.kicked && d.modes && d.kicker?.spell) return d.kicker.spell;
   if (d.modes) return d.modes[item.mode ?? 0] ?? null;
   if (item.flashback && d.flashbackSpell) return d.flashbackSpell;
   if (item.kicked && d.kicker?.spell) return d.kicker.spell;
   return d.spell ?? null;
+}
+
+// Teamwork (Marvel Super Heroes)
+
+/** Several modes as one spell ("choose both"): their targets in order, effects renumbered. */
+export function combineSpells(spells: readonly SpellDef[]): SpellDef {
+  const targets: SpellDef['targets'] = [];
+  const effects: SpellDef['effects'] = [];
+  for (const mode of spells) {
+    effects.push(...shiftTargets(mode.effects, targets.length));
+    targets.push(...mode.targets);
+  }
+  return { targets, effects };
 }

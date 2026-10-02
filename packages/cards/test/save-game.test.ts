@@ -22,5 +22,5 @@ describe('saved games', () => {
       });
       expect(JSON.stringify(state), `seed ${seed}`).toBe(JSON.stringify(r.final));
     }
-  });
+  }, 30_000); // one game per playable deck
 });

@@ -1,6 +1,7 @@
 import type { AbilityDef, CardDefinition, EffectDef, ManaType, TargetSpec } from '@mtg/engine';
 import { type Behavior, parseManaCost } from './build.ts';
 import { BLOOMBURROW_BEHAVIORS } from './bloomburrow.ts';
+import { MARVEL_BACK_FACES, MARVEL_BEHAVIORS, MARVEL_TOKENS } from './marvel.ts';
 import { FOUNDATIONS_BATCH_BEHAVIORS } from './foundations-batch.ts';
 
 // Helpers for the common shapes.
@@ -128,6 +129,8 @@ const dualLandBehaviors = (): Record<string, Behavior> =>
 export const BEHAVIORS: Record<string, Behavior> = {
   ...FOUNDATIONS_BATCH_BEHAVIORS,
   ...BLOOMBURROW_BEHAVIORS,
+  ...MARVEL_BEHAVIORS,
+  ...MARVEL_BACK_FACES,
   // ---------------------------------------------------------------- red
   Shock: burn(2),
   'Lightning Strike': burn(3),
@@ -2159,6 +2162,7 @@ const artifactToken = (id: string, name: string, abilities: AbilityDef[]): CardD
 });
 
 export const TOKENS: CardDefinition[] = [
+  ...MARVEL_TOKENS,
   token('zombie-token', 'Zombie', 'B', ['Zombie'], 2, 2),
   token('cat-beast-token', 'Cat Beast', 'W', ['Cat', 'Beast'], 2, 2),
   token('raccoon-token', 'Raccoon', 'G', ['Raccoon'], 3, 3),

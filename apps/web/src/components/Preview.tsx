@@ -12,6 +12,20 @@ export interface HoverState {
 }
 
 const ASPECT = 63 / 88;
+/** The other face of a double-faced card is shown smaller, beside it. */
+const OTHER_FACE = 0.62;
+
+/** Back faces by their front, and fronts by their back. */
+const otherFaces = new Map<CardDefId, CardDefId>(
+  [...cardDb.values()].flatMap((d) =>
+    d.back
+      ? [
+          [d.id, d.back],
+          [d.back, d.id],
+        ]
+      : [],
+  ) as [CardDefId, CardDefId][],
+);
 /** Width of the notes column, in rem. */
 const NOTES_W = 17;
 
@@ -31,7 +45,9 @@ export function HoverPreview({ hover, notes }: { hover: HoverState | null; notes
   );
   const w = h * ASPECT;
   const gap = rem;
-  const notesW = notes.length ? NOTES_W * rem + gap : 0;
+  const other = otherFaces.get(hover.defId);
+  const notesW =
+    (notes.length ? NOTES_W * rem + gap : 0) + (other ? h * OTHER_FACE * ASPECT + gap : 0);
   const total = w + notesW;
   const clamp = (v: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, v));
 
@@ -77,6 +93,18 @@ export function HoverPreview({ hover, notes }: { hover: HoverState | null; notes
           <Card defId={hover.defId} size="preview" />
         )}
       </div>
+      {other && (
+        <div
+          className="hover-preview hover-preview--other"
+          style={{ width: height * OTHER_FACE * ASPECT, height: height * OTHER_FACE }}
+        >
+          {cardImage(other) ? (
+            <img src={cardImage(other)!} alt={cardDb.get(other)?.name ?? ''} />
+          ) : (
+            <Card defId={other} size="preview" />
+          )}
+        </div>
+      )}
       {notes.length > 0 && (
         <div className="notes" style={{ width: NOTES_W * rem }}>
           {notes.map((n) => (

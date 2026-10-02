@@ -4656,3 +4656,17 @@ button {
   box-shadow: 0 0 0 0.0625rem rgba(232, 160, 60, 0.6);
   pointer-events: none;
 }
+
+/* Transform: a double-faced permanent turns over to its other face. */
+.card__body.is-flipping {
+  animation: card-flip 0.5s ease-in-out;
+}
+
+@keyframes card-flip {
+  0% {
+    transform: perspective(40rem) rotateY(-180deg);
+  }
+  100% {
+    transform: perspective(40rem) rotateY(0deg);
+  }
+}

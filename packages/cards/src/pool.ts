@@ -1,4 +1,5 @@
 import { BLOOMBURROW_BEHAVIORS } from './bloomburrow.ts';
+import { MARVEL_BEHAVIORS } from './marvel.ts';
 
 /**
  * Allowed sets, most preferred first: Foundations, then older core sets, then
@@ -24,6 +25,7 @@ export const SET_PREFERENCE = [
   '5ed',
   '4ed',
   'blb',
+  'msh',
   // Arena Beginner Set: Arena-only cards (last resort).
   'anb',
 ];
@@ -476,6 +478,9 @@ export const LAND_POOL = [
   'Temple of Mystery',
 ];
 
+/** Marvel Super Heroes cards (fronts only: a double-faced card's back comes with it). */
+export const MARVEL_POOL = Object.keys(MARVEL_BEHAVIORS);
+
 export const POOL: { name: string }[] = [
   ...RED_POOL,
   ...GREEN_POOL,
@@ -485,6 +490,7 @@ export const POOL: { name: string }[] = [
   ...OTHER_POOL,
   ...LAND_POOL,
   ...BLOOMBURROW_POOL,
+  ...MARVEL_POOL,
 ].map((name) => ({
   name,
 }));

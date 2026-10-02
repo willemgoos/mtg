@@ -24,6 +24,7 @@ import {
   addCounters,
   sacrifice,
   tap,
+  transform,
   untap,
 } from './context.ts';
 import { foodsOf } from './forage.ts';
@@ -989,6 +990,10 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
         moveObject(ctx, id, 'battlefield', { controller: es.controller });
         obj(ctx, id).tapped = true;
       }
+      return;
+    case 'transform':
+      for (const id of objectsOf(ctx, es, e.what))
+        if (obj(ctx, id).zone === 'battlefield') transform(ctx, id);
       return;
     case 'mill': {
       const players = e.who ? playersOf(ctx, es, e.who) : [es.controller];

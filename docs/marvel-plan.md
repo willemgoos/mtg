@@ -180,7 +180,13 @@ Most keywords exist already: flying, flash, vigilance, reach, trample, lifelink,
 indestructible, hexproof, ward, equip, crew, Treasure, Food, scry, surveil, mill, fight, prowess, landfall, flashback, convoke.
 Named abilities such as "Radar Sense" or "Street Justice" are just labels with no rules of their own.
 
-### 10a: the set mechanics and the first two decks
+### 10a: the set mechanics and the first two decks: done
+
+Done: connive, power-up, teamwork (with a board prompt to pick the creatures to tap), double-faced cards (the five Marvel ones are
+modal: either face can be cast, and the front transforms; hover shows the other face, a permanent flips as it transforms), the
+set's gain-lands, and two decks: **Heroes Unite** (R/W teamwork and power-up, with Monica Rambeau) and **Villainous Schemes** (U/B
+connive villains). Bot vs bot over 160 games against the ten Foundations starter decks: Heroes Unite 50%, Villainous Schemes 47%.
+
 
 - **Power-up** (24 cards): an activated ability usable once per card. Its cost is reduced by the card's mana cost if it entered
   this turn. (E.g. Abomination: "Power-up {5}{R/G}{R/G}: put a +1/+1 counter on him; he fights up to one target creature".)
@@ -213,4 +219,15 @@ Named abilities such as "Radar Sense" or "Street Justice" are just labels with n
 
 ### Stream B
 
-(Filled in as sub-phases ship.)
+10a:
+
+- Teamwork: bots (and free casts) let the engine pick the creatures to tap: ones that want tapping (Agent Maria Hill), then
+  summoning-sick ones, then the biggest; mana creatures are spared when possible. The heuristic bot never pays teamwork on its own
+  turn before combat, since its evaluation can't see the lost attack.
+- Power-up: the cost shown in the ability menu is the printed one, not the reduced one. Wonder Man's extra activation, Hulk's
+  {3} discount and Kang's "power-up abilities can't be activated" are not built yet (10c).
+- Transform: after a permanent transforms, "activate only once" bookkeeping is by ability index, so it isn't reset or remapped
+  between faces (no current card cares).
+- K'un-Lun Warrior (not in a deck now) offers only the discard, not "sacrifice an artifact".
+- Baron Strucker's "you may have it connive. Do this only once each turn" triggers once each turn even if you decline.
+- Leader, Super-Genius's connive replacement is not built (10c).

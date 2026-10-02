@@ -230,7 +230,8 @@ function zoneList(ctx: Ctx, o: GameObject, zone: ZoneName): ObjectId[] | null {
 
 export interface MoveOptions {
   /** Library position; default top. */
-  position?: 'top' | 'bottom';
+  // 'second': second from the top (Trickster's Stratagem, Marvel Super Heroes).
+  position?: 'top' | 'bottom' | 'second';
   controller?: PlayerId;
 }
 
@@ -314,6 +315,11 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
     if (i >= 0) src.splice(i, 1);
   }
   if (from === 'battlefield') removeFromCombat(ctx, id);
+  // A double-faced card shows its front again anywhere but the stack and the battlefield.
+  if (o.front && to !== 'stack' && !(from === 'stack' && to === 'battlefield')) {
+    o.defId = o.front;
+    delete o.front;
+  }
 
   o.zone = to;
   o.zcc++;
@@ -335,7 +341,8 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
   const ceases = o.isToken && to !== 'battlefield';
   const dst = ceases ? null : zoneList(ctx, o, to);
   if (dst) {
-    if (to === 'library' && opts.position !== 'bottom') dst.unshift(id);
+    if (to === 'library' && opts.position === 'second') dst.splice(1, 0, id);
+    else if (to === 'library' && opts.position !== 'bottom') dst.unshift(id);
     else dst.push(id);
   }
   // Ygra entering or leaving changes what the other creatures are.
@@ -446,4 +453,33 @@ export function untap(ctx: Ctx, id: ObjectId): void {
   }
   o.tapped = false;
   emit(ctx, { type: 'untapped', id });
+}
+
+// Transform (Marvel Super Heroes)
+
+/** Turns a double-faced permanent to its other face. It stays the same object (rule 712). */
+export function transform(ctx: Ctx, id: ObjectId): void {
+  const o = obj(ctx, id);
+  if (o.front) {
+    o.defId = o.front;
+    delete o.front;
+  } else {
+    const back = defOf(ctx, o.defId).back;
+    if (!back) return;
+    o.front = o.defId;
+    o.defId = back;
+  }
+  emit(ctx, { type: 'transformed', id, defId: o.defId });
+}
+
+/** Runs `fn` with the card showing its back face (to list the back face's casts). */
+export function withBackFace<T>(ctx: Ctx, id: ObjectId, fn: () => T): T {
+  const o = obj(ctx, id);
+  const front = o.defId;
+  o.defId = defOf(ctx, front).back!;
+  try {
+    return fn();
+  } finally {
+    o.defId = front;
+  }
 }

@@ -119,7 +119,20 @@ function choosePriorityAction(
   if (lands.length > 0) return chooseLandToPlay(engine, view, me, lands);
 
   const pass = legal.find((a) => a.type === 'passPriority')!;
-  const candidates = legal.filter((a) => a.type === 'castSpell' || a.type === 'activateAbility');
+  // Teamwork taps our creatures: never before our own attack (the evaluation can't see the lost attack).
+  const beforeOurAttack =
+    view.turn.activePlayer === me &&
+    (view.turn.step === 'main1' || view.turn.step === 'beginCombat');
+  const candidates = legal.filter(
+    (a) =>
+      (a.type === 'castSpell' &&
+        !(
+          beforeOurAttack &&
+          a.kicked &&
+          engine.db.get(view.objects[a.card]!.defId)?.kicker?.teamwork !== undefined
+        )) ||
+      a.type === 'activateAbility',
+  );
   if (candidates.length === 0) return pass;
 
   const horizon = inCombat(view) ? 'combat' : 'stack';

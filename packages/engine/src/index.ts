@@ -18,3 +18,4 @@ export function getCharacteristics(state: GameState, db: CardDb, id: ObjectId) {
 export { playRandomGame } from './random-play.ts';
 export type { RandomGameResult } from './random-play.ts';
 export { HIDDEN_CARD, redactFor, redactEvents, determinize } from './hidden.ts';
+export { combineSpells } from './spells.ts';

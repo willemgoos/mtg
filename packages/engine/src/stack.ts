@@ -32,6 +32,8 @@ import {
   payMana,
   planPayment,
 } from './mana.ts';
+import { reduceCost } from './cost.ts';
+import { defaultTeamwork, payTeamwork } from './teamwork.ts';
 import { shuffleInPlace } from './rng.ts';
 import { shuffleLibrary } from './setup.ts';
 import { addCosts, type CastVia, spellOnStack, spellTags, variantOf } from './spells.ts';
@@ -76,6 +78,28 @@ export interface CastChoice {
   copyOf?: ObjectId | undefined;
   /** Rottenmouth Viper: permanents sacrificed to make it cheaper. */
   sacrificeMany?: ObjectId[] | undefined;
+  /** Cast as its back face (a modal double-faced card). */
+  back?: boolean | undefined;
+  /** Teamwork: the creatures to tap. Omitted: the engine picks. */
+  teamwork?: ObjectId[] | undefined;
+}
+
+/** The creatures a kicked teamwork cast taps: the chosen ones, or the engine's pick (sparing mana sources if it can). */
+export function teamworkFor(
+  ctx: Ctx,
+  player: PlayerId,
+  card: ObjectId,
+  choice: CastChoice,
+): ObjectId[] | undefined {
+  const n = defOf(ctx, obj(ctx, card).defId).kicker?.teamwork;
+  if (!choice.kicked || n === undefined) return undefined;
+  if (choice.teamwork) return choice.teamwork;
+  const mana = manaSources(ctx, player).map((s) => s.id);
+  return (
+    defaultTeamwork(ctx, player, n, [...mana, card]) ??
+    defaultTeamwork(ctx, player, n, [card]) ??
+    undefined
+  );
 }
 
 /** Valiant needs to know what a player's spell or ability targeted. */
@@ -248,6 +272,12 @@ export function castSpell(
   payWith?: ObjectId[],
 ): boolean {
   const o = obj(ctx, card);
+  // A modal double-faced card cast as its back face is that face on the stack and battlefield.
+  const back = choice.back ? defOf(ctx, o.defId).back : undefined;
+  if (back) {
+    o.front = o.defId;
+    o.defId = back;
+  }
   const d = defOf(ctx, o.defId);
   const v = variantOf(d, o.zone, choice)!;
   const flashback = (o.zone === 'graveyard' && !choice.via && !!d.flashback) || !!choice.exileAfter;
@@ -256,6 +286,7 @@ export function castSpell(
     castCost(ctx, player, card, choice, targets),
     wardCost(ctx, player, targets),
   );
+  const teamwork = teamworkFor(ctx, player, card, choice);
   const payment = planPayment(
     ctx,
     player,
@@ -268,6 +299,7 @@ export function castSpell(
       choice.sacrifice,
       ...(choice.sacrificeMany ?? []),
       choice.forage !== 'graveyard' ? choice.forage : undefined,
+      ...(teamwork ?? []),
     ],
   );
   moveObject(ctx, card, 'stack', { controller: player });
@@ -293,6 +325,7 @@ export function castSpell(
     ...(choice.copyOf ? { copyOf: choice.copyOf } : {}),
   });
   payMana(ctx, payment);
+  if (teamwork) payTeamwork(ctx, teamwork);
   ((ctx.s.turn.castDefs ??= { p1: [], p2: [] })[player] ??= []).push(o.defId);
   const cast = (ctx.s.turn.spellsCast ??= { p1: 0, p2: 0 });
   emit(ctx, { type: 'spellCast', id: card, player, nth: ++cast[player] });
@@ -336,6 +369,17 @@ export function activatedAbility(ctx: Ctx, source: ObjectId, index: number) {
   return a;
 }
 
+/** The mana an activated ability costs right now (power-up is cheaper the turn it entered). */
+export function abilityManaCost(
+  ctx: Ctx,
+  source: ObjectId,
+  a: ReturnType<typeof activatedAbility>,
+): ManaCost | undefined {
+  const o = obj(ctx, source);
+  if (!a.powerUp || !a.cost.mana || o.zoneTurn !== ctx.s.turn.number) return a.cost.mana;
+  return reduceCost(a.cost.mana, def(ctx, source).manaCost);
+}
+
 export function activateAbility(
   ctx: Ctx,
   player: PlayerId,
@@ -354,7 +398,10 @@ export function activateAbility(
   const payment = planPayment(
     ctx,
     player,
-    addCosts(a.cost.mana ?? { generic: 0, colored: {} }, wardCost(ctx, player, targets)),
+    addCosts(
+      abilityManaCost(ctx, source, a) ?? { generic: 0, colored: {} },
+      wardCost(ctx, player, targets),
+    ),
     payWith,
     exclude,
     undefined,
@@ -395,7 +442,7 @@ export function activateAbility(
     else (src.counters ??= {}).loyalty = (src.counters?.loyalty ?? 0) + a.cost.loyalty;
   }
   payMana(ctx, payment);
-  if (a.once) (src.usedAbilities ??= []).push(index);
+  if (a.once || a.powerUp) (src.usedAbilities ??= []).push(index);
   if (a.cost.sacrificeSelf) {
     item.lkiPower = power(ctx, source);
     sacrificePermanent(ctx, source);

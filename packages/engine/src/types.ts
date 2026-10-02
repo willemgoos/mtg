@@ -126,6 +126,9 @@ export interface CardDefinition {
     as?: 'offspring' | 'gift';
     /** A permanent's gift: given to an opponent as it resolves, if promised (Scrapshooter). */
     gift?: EffectDef;
+    // Teamwork (Marvel Super Heroes)
+    /** Teamwork N: the kicker is tapping your creatures with total power N or more (`cost` is {0}). */
+    teamwork?: number;
   };
   /** Costs {amount} less if its first target matches (Dire Downdraft: an attacking or tapped creature). */
   costReductionIfTarget?: { filter: CardFilter; amount: number };
@@ -141,6 +144,9 @@ export interface CardDefinition {
   forageOrPay?: ManaCost;
   /** Aura: what it enchants (chosen as a target when cast). */
   enchant?: TargetSpec;
+  // Transform (Marvel Super Heroes)
+  /** A double-faced card's back face (its own definition). */
+  back?: CardDefId;
   /** Costs {1} less for each matching permanent you control (affinity). */
   costReduction?: Amount;
   /** Flashback: may be cast from the graveyard for this cost, then exiled. */
@@ -178,6 +184,9 @@ export type AbilityDef =
       label?: string;
       /** Activated from the graveyard (Reassembling Skeleton). */
       fromGraveyard?: boolean;
+      // Power-up (Marvel Super Heroes)
+      /** Power-up: once only, and it costs the card's mana cost less if it entered this turn. */
+      powerUp?: boolean;
     }
   | {
       kind: 'triggered';
@@ -308,6 +317,9 @@ export type TriggerDef =
   | { on: 'yourCreatureTargetedByOpponent' }
   /** When this Class becomes level N. */
   | { on: 'becomesLevel'; level: number }
+  // Teamwork (Marvel Super Heroes)
+  /** Whenever this becomes tapped to pay a teamwork cost (Agent Maria Hill). */
+  | { on: 'tappedForTeamwork' }
   /** Whenever one or more creatures you control (matching the filter) deal combat damage to a player (Kastral). */
   | { on: 'creaturesYouControlDealCombatDamageToPlayer'; filter?: CardFilter }
   /** When you sacrifice this permanent (Carrot Cake). */
@@ -693,7 +705,7 @@ export type EffectDef =
    */
   | { kind: 'blinkOnCombatDamage'; what: Ref }
   /** Put permanents on the top or bottom of their owners' libraries. */
-  | { kind: 'putInLibrary'; what: Ref; position: 'top' | 'bottom' }
+  | { kind: 'putInLibrary'; what: Ref; position: 'top' | 'bottom' | 'second' }
   /** Gain control of permanents until end of turn (Reptilian Recruiter). */
   | { kind: 'gainControl'; what: Ref }
   /**
@@ -739,6 +751,9 @@ export type EffectDef =
   // Connive (Marvel Super Heroes)
   /** It connives: its controller draws, then discards; a nonland discard puts a +1/+1 counter on it. */
   | { kind: 'connive'; what: Ref }
+  // Transform (Marvel Super Heroes)
+  /** Turn a double-faced permanent to its other face. */
+  | { kind: 'transform'; what: Ref }
   /** Counter a spell on the stack (unless it can't be countered). */
   | { kind: 'counter'; what: Ref; controllerTokens?: { token: CardDefId; count: number } }
   | { kind: 'bouncePlayerPermanents'; who: Ref; nonland?: boolean }
@@ -964,6 +979,9 @@ export interface GameObject {
   damagedByDeathtouch: boolean;
   plusOneCounters: number;
   isToken: boolean;
+  // Transform (Marvel Super Heroes)
+  /** Showing its back face (transformed, or cast as the back face): the front's id, restored when it leaves. */
+  front?: CardDefId;
   /** Equipment: the creature it is attached to. */
   attachedTo?: ObjectId;
   /** Indices of "activate only once" abilities already used. */
@@ -1552,10 +1570,16 @@ export type Action =
       free?: boolean;
       /** Cast from the graveyard through Festival of Embers or Osteomancer Adept. */
       via?: 'festival' | 'osteomancer';
+      // Transform (Marvel Super Heroes)
+      /** Cast a modal double-faced card's back face. */
+      back?: boolean;
       /** Mockingbird: the creature to enter as a copy of. */
       copyOf?: ObjectId;
       /** Rottenmouth Viper: permanents sacrificed to make it cheaper. */
       sacrificeMany?: ObjectId[];
+      // Teamwork (Marvel Super Heroes)
+      /** The creatures tapped to pay teamwork (a kicked teamwork spell). Omitted: the engine picks. */
+      teamwork?: ObjectId[];
       /** Mana sources to tap. Omitted: the engine picks. */
       payWith?: ObjectId[];
     }
@@ -1634,6 +1658,10 @@ export type GameEvent =
   | { type: 'giftGiven'; player: PlayerId }
   /** A Class gained a level. */
   | { type: 'levelChanged'; id: ObjectId; level: number }
+  // Teamwork (Marvel Super Heroes)
+  | { type: 'tappedForTeamwork'; id: ObjectId }
+  // Transform (Marvel Super Heroes)
+  | { type: 'transformed'; id: ObjectId; defId: CardDefId }
   /** A permanent was sacrificed (just before it left the battlefield). */
   | { type: 'sacrificed'; id: ObjectId; defId: CardDefId; player: PlayerId }
   /** `player` spent mana: their total this turn went from `before` to `after`. */

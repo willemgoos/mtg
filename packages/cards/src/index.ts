@@ -12,6 +12,7 @@ export { buildCard, slug, parseManaCost, parseTypeLine } from './build.ts';
 export {
   BLACK_POOL,
   BLOOMBURROW_POOL,
+  MARVEL_POOL,
   BLUE_POOL,
   GREEN_POOL,
   LAND_POOL,
@@ -20,7 +21,13 @@ export {
   WHITE_POOL,
 } from './pool.ts';
 export { describeEvent } from './log.ts';
-export { ARENA_DECKS, BLOOMBURROW_DECKS, COLOR_CHALLENGE_DECKS, DECKS } from './decks.ts';
+export {
+  ARENA_DECKS,
+  BLOOMBURROW_DECKS,
+  COLOR_CHALLENGE_DECKS,
+  DECKS,
+  MARVEL_DECKS,
+} from './decks.ts';
 export type { Decklist } from './decks.ts';
 export { PACKET_LANDS, PACKETS, packetCards } from './jumpin.ts';
 export type { Packet } from './jumpin.ts';

@@ -31,6 +31,8 @@ export function describeEvent(e: GameEvent, s: GameState): string | null {
       return `  ${e.player} searches their library for ${name(e.id)}`;
     case 'revealed':
       return `  ${e.player} reveals ${name(e.id)} and puts it into their hand`;
+    case 'transformed':
+      return `  transforms into ${cardDb.get(e.defId)?.name}`;
     case 'gameOver':
       return `\nWinner: ${e.winner}`;
     default:

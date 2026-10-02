@@ -45,7 +45,24 @@ interface RawCard {
   keywords: string[];
   rarity: string;
   image_uris?: { small: string; normal: string; large: string; art_crop: string };
+  /** Double-faced cards (Marvel's modal_dfc / transform): one entry per face. */
+  card_faces?: RawFace[];
 }
+
+type RawFace = Pick<
+  RawCard,
+  | 'name'
+  | 'mana_cost'
+  | 'type_line'
+  | 'oracle_text'
+  | 'power'
+  | 'toughness'
+  | 'colors'
+  | 'image_uris'
+>;
+
+/** Double-faced layouts: each face becomes its own record, linked to the other. */
+const DOUBLE_FACED = ['modal_dfc', 'transform'];
 
 async function download(): Promise<void> {
   const meta = (await (await fetch('https://api.scryfall.com/bulk-data', { headers })).json()) as {
@@ -95,10 +112,13 @@ async function main(): Promise<void> {
 
   const wanted = new Set(POOL.map((p) => p.name));
   const best = new Map<string, RawCard>();
-  for await (const c of readBulk()) {
+  for await (const raw of readBulk()) {
+    // A double-faced card is listed in the pool under its front face's name.
+    const front = DOUBLE_FACED.includes(raw.layout) ? raw.card_faces?.[0]?.name : undefined;
+    const c = front ? { ...raw, name: front } : raw;
     if (!wanted.has(c.name) || c.lang !== 'en') continue;
     // Classes (Bloomburrow's Talents) print their levels on one face.
-    if (c.layout !== 'normal' && c.layout !== 'class') continue;
+    if (c.layout !== 'normal' && c.layout !== 'class' && !front) continue;
     // Digital printings only from the Arena Beginner Set (Arena-only cards of the Color Challenge decks).
     if (c.digital && c.set !== 'anb') continue;
     if (!SET_PREFERENCE.includes(c.set)) continue;
@@ -109,8 +129,9 @@ async function main(): Promise<void> {
   const missing = [...wanted].filter((n) => !best.has(n));
   if (missing.length) throw new Error(`Not found in any allowed set: ${missing.join(', ')}`);
 
-  const out: ScryfallCard[] = POOL.map(({ name }) => {
+  const out: ScryfallCard[] = POOL.flatMap(({ name }) => {
     const c = best.get(name)!;
+    if (c.card_faces && DOUBLE_FACED.includes(c.layout)) return faceRecords(c, c.card_faces);
     return {
       name: c.name,
       scryfallId: c.id,
@@ -138,6 +159,39 @@ async function main(): Promise<void> {
   mkdirSync(dirname(outFile), { recursive: true });
   writeFileSync(outFile, JSON.stringify(out, null, 1) + '\n');
   console.log(`Wrote ${out.length} cards to ${outFile}`);
+}
+
+/** A double-faced card as two records: the front (naming its back) and the back. */
+function faceRecords(c: RawCard, faces: RawFace[]): ScryfallCard[] {
+  const [front, back] = faces as [RawFace, RawFace];
+  return faces.slice(0, 2).map((f, i) => {
+    const text = f.oracle_text ?? '';
+    const img = f.image_uris ?? c.image_uris;
+    return {
+      name: f.name,
+      scryfallId: c.id,
+      oracleId: c.oracle_id,
+      set: c.set,
+      collectorNumber: c.collector_number,
+      rarity: c.rarity,
+      manaCost: f.mana_cost ?? '',
+      typeLine: f.type_line,
+      oracleText: text,
+      ...(f.power !== undefined ? { power: f.power, toughness: f.toughness! } : {}),
+      colors: f.colors ?? [],
+      // The card lists both faces' keywords; keep this face's own.
+      keywords: c.keywords.filter((k) => text.toLowerCase().includes(k.toLowerCase())),
+      ...(i === 0 ? { back: back.name } : { front: front.name }),
+      image: img
+        ? {
+            small: img.small,
+            normal: img.normal,
+            large: img.large,
+            artCrop: img.art_crop,
+          }
+        : null,
+    };
+  });
 }
 
 if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {

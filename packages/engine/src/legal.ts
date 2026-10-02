@@ -7,12 +7,14 @@ import {
 } from './characteristics.ts';
 import { manaValue } from './cost.ts';
 import { blockViolations, canAttack, canBlock, defenderOf } from './combat.ts';
-import { type Ctx, def, obj, other } from './context.ts';
+import { type Ctx, def, obj, other, withBackFace } from './context.ts';
 import { forageChoices } from './forage.ts';
 import { canPayFrom, creatureHelpers, manaSources } from './mana.ts';
 import { castVariants, spellTags } from './spells.ts';
 import {
+  abilityManaCost,
   castCost,
+  teamworkFor,
   countersYouControl,
   hasStatic,
   wardCost,
@@ -196,15 +198,15 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
       (ts) => !sacrifice || !ts.some((t) => 'object' in t && t.object.id === sacrifice),
     );
 
-  for (const card of castableCards(ctx, player)) {
+  const castsOf = (card: ObjectId): void => {
     const d = def(ctx, card);
     const zone = obj(ctx, card).zone;
     if (d.types.includes('Land')) {
       if (sorcery && ps.landsPlayedThisTurn < landDrops(ctx, player) && zone !== 'graveyard')
         out.push({ type: 'playLand', player, card });
-      continue;
+      return;
     }
-    if (d.castOnlyIf && !checkCondition(ctx, d.castOnlyIf, player, obj(ctx, card))) continue;
+    if (d.castOnlyIf && !checkCondition(ctx, d.castOnlyIf, player, obj(ctx, card))) return;
     const firstOfCard = out.length;
     const instantSpeed =
       d.types.includes('Instant') ||
@@ -221,8 +223,8 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
       : [undefined];
     // A card to discard as an additional cost (Sazacap's Brew).
     const discards = d.discardToCast ? ps.hand.filter((id) => id !== card) : [undefined];
-    if (d.discardToCast && discards.length === 0) continue;
-    if (!instantSpeed && !sorcery) continue;
+    if (d.discardToCast && discards.length === 0) return;
+    if (!instantSpeed && !sorcery) return;
     // The usual ways, plus graveyard casts through other cards.
     const vias: ('festival' | 'osteomancer' | undefined)[] = [
       ...(zone !== 'graveyard' || d.flashback || d.castFromGraveyardRemovingCounters
@@ -247,6 +249,9 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
               forage: v.forage ? 'graveyard' : undefined,
               x,
             };
+            // Teamwork: kicked only if there are creatures to tap.
+            const teamwork = teamworkFor(ctx, player, card, { kicked: v.kicked });
+            if (v.kicked && d.kicker?.teamwork !== undefined && !teamwork) continue;
             const base = castCost(ctx, player, card, choice);
             if (!canPayFrom(base, pool) && !d.costReductionIfTarget) continue;
             const extra = {
@@ -280,6 +285,7 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
                       sacrifice,
                       ...(sacrificeMany ?? []),
                       forage === 'graveyard' ? undefined : forage,
+                      ...(teamwork ?? []),
                     ];
                     if (spent.some((id) => id && pool.some((p) => p.id === id))) {
                       const rest = pool.filter((p) => !spent.includes(p.id));
@@ -312,6 +318,15 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
               )
               .map((c) => ({ ...a, copyOf: c.id })),
           );
+  };
+  for (const card of castableCards(ctx, player)) {
+    castsOf(card);
+    // Modal double-faced cards: the back face can be cast from hand too.
+    if (def(ctx, card).back && obj(ctx, card).zone === 'hand') {
+      const from = out.length;
+      withBackFace(ctx, card, () => castsOf(card));
+      for (const a of out.slice(from)) if (a.type === 'castSpell') a.back = true;
+    }
   }
 
   const abilitySources = [
@@ -324,7 +339,7 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
       if (a.kind !== 'activated') return;
       if (!!a.fromGraveyard !== inGraveyard) return;
       if (a.sorcerySpeed && !sorcery) return;
-      if (a.once && obj(ctx, source).usedAbilities?.includes(abilityIndex)) return;
+      if ((a.once || a.powerUp) && obj(ctx, source).usedAbilities?.includes(abilityIndex)) return;
       if (a.oncePerTurn && obj(ctx, source).onceTurns?.[-1 - abilityIndex] === s.turn.number)
         return;
       if (a.cost.tapSelf && !canTapForAbility(ctx, source)) return;
@@ -341,7 +356,8 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
       const usable = a.cost.convoke
         ? [...own, ...creatureHelpers(ctx, player, own, a.cost.tapSelf ? source : undefined)]
         : own;
-      if (!canPayFrom(a.cost.mana, usable)) return;
+      const mana = abilityManaCost(ctx, source, a);
+      if (!canPayFrom(mana, usable)) return;
       if (a.cost.tapTokens && tokensToTap(ctx, player, source).length < a.cost.tapTokens) return;
       const discards = a.cost.discard ? ps.hand : [undefined];
       if (discards.length === 0) return;
@@ -363,14 +379,14 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
       for (const sacrifice of sacrifices) {
         for (const targets of combosFor(a.targets, source, sacrifice)) {
           const ward = wardCost(ctx, player, targets);
-          if (ward.generic && !canPayFrom(addCosts(a.cost.mana ?? NO_COST, ward), usable)) continue;
+          if (ward.generic && !canPayFrom(addCosts(mana ?? NO_COST, ward), usable)) continue;
           if (!wardPayable(ctx, player, targets)) continue;
           for (const forage of forages)
             for (const discard of discards) {
               const spent = [sacrifice, forage === 'graveyard' ? undefined : forage];
-              if (a.cost.mana && spent.some((id) => id && usable.some((p) => p.id === id))) {
+              if (mana && spent.some((id) => id && usable.some((p) => p.id === id))) {
                 const rest = usable.filter((p) => !spent.includes(p.id));
-                if (!canPayFrom(addCosts(a.cost.mana, ward), rest)) continue;
+                if (!canPayFrom(addCosts(mana, ward), rest)) continue;
               }
               out.push({
                 type: 'activateAbility',

@@ -307,6 +307,61 @@ export const FIXTURES: CardDefinition[] = [
       },
     ],
   }),
+  creature('powerer', 1, 1, [], {
+    manaCost: cost(1, { G: 1 }),
+    abilities: [
+      {
+        kind: 'activated',
+        powerUp: true,
+        cost: { mana: cost(3, { G: 1 }) },
+        targets: [],
+        effects: [{ kind: 'counters', to: 'self', amount: 2 }],
+      },
+    ],
+  }),
+  card({
+    id: 'team-bolt',
+    types: ['Instant'],
+    manaCost: cost(0, { R: 1 }),
+    spell: {
+      targets: [{ what: 'creature' }],
+      effects: [{ kind: 'damage', amount: 2, to: { target: 0 } }],
+    },
+    kicker: {
+      cost: cost(0),
+      teamwork: 3,
+      spell: {
+        targets: [{ what: 'creature' }],
+        effects: [{ kind: 'damage', amount: 4, to: { target: 0 } }],
+      },
+    },
+  }),
+  creature('maria', 2, 1, [], {
+    abilities: [
+      {
+        kind: 'triggered',
+        trigger: { on: 'tappedForTeamwork' },
+        targets: [],
+        effects: [
+          { kind: 'counters', to: 'self', amount: 1 },
+          { kind: 'draw', who: 'controller', amount: 1 },
+        ],
+      },
+    ],
+  }),
+  creature('banner', 1, 1, [], {
+    back: 'hulk',
+    abilities: [
+      {
+        kind: 'activated',
+        sorcerySpeed: true,
+        cost: { mana: cost(2) },
+        targets: [],
+        effects: [{ kind: 'transform', what: 'self' }],
+      },
+    ],
+  }),
+  creature('hulk', 8, 8, ['trample'], { manaCost: cost(3) }),
   card({
     id: 'scheme',
     types: ['Sorcery'],

@@ -596,6 +596,15 @@ function detect(ctx: Ctx, ev: GameEvent): void {
       });
       return;
     }
+    case 'tappedForTeamwork': {
+      const o = s.objects[ev.id];
+      if (!o) return;
+      def(ctx, o.id).abilities.forEach((a, i) => {
+        if (a.kind === 'triggered' && a.trigger.on === 'tappedForTeamwork')
+          queue(ctx, o, i, o.controller);
+      });
+      return;
+    }
     case 'manaSpent': {
       forEachBattlefieldTrigger(
         ctx,

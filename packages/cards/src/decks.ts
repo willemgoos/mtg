@@ -16,7 +16,7 @@ export interface Decklist {
    */
   series: 'starter' | 'colorChallenge' | 'jumpIn' | 'season';
   /** A deck from another set than Foundations (shown in its own section). */
-  set?: 'blb';
+  set?: 'blb' | 'msh';
   cards: [name: string, count: number][];
 }
 
@@ -863,4 +863,89 @@ export const BLOOMBURROW_DECKS: Decklist[] = [
   },
 ];
 
-export const DECKS: Decklist[] = [...ARENA_DECKS, ...COLOR_CHALLENGE_DECKS, ...BLOOMBURROW_DECKS];
+/**
+ * Our own Marvel Super Heroes (MSH) decks, built like the starter decks (36
+ * spells, 24 lands) and played against them.
+ */
+export const MARVEL_DECKS: Decklist[] = [
+  {
+    id: 'msh-heroes-unite',
+    name: 'Heroes Unite',
+    colors: ['R', 'W'],
+    face: 'Thor Odinson',
+    source: 'custom',
+    series: 'starter',
+    set: 'msh',
+    cards: [
+      ['Agent Maria Hill', 1],
+      ['Agent of Atlas', 3],
+      ['Kree Commandos', 2],
+      ['Brave Brawler', 3],
+      ['Hero in Training', 2],
+      ['Crimson Operative', 2],
+      ['Volcanic Villain', 2],
+      ['Wakandan Drone Flock', 2],
+      ['Okoye, Dora Milaje Leader', 1],
+      ['Human Torch, Johnny Storm', 1],
+      ['War Machine, Legacy of Iron', 1],
+      ['Thor Odinson', 1],
+      ['Monica Rambeau', 1],
+      ['Helicarrier Strike', 2],
+      ['HULK SMASH!', 2],
+      ['Repulsor Blast', 2],
+      ['Lightning Strike', 3],
+      ['Team Tactics', 1],
+      ['Web Up', 2],
+      ['Super Villain Lockup', 2],
+      ['Plains', 8],
+      ['Mountain', 8],
+      ['Asgardian Citadel', 4],
+      ['Boros Guildgate', 3],
+      ['Temple of Triumph', 1],
+    ],
+  },
+  {
+    id: 'msh-villainous-schemes',
+    name: 'Villainous Schemes',
+    colors: ['U', 'B'],
+    face: 'Kang, Temporal Tyrant',
+    source: 'custom',
+    series: 'starter',
+    set: 'msh',
+    cards: [
+      ['Red Room Recruit', 3],
+      ['Agents of HYDRA', 2],
+      ['HYDRA Troopers', 2],
+      ['Ninja of the Hand', 2],
+      ['Giant-Sized Flying Ant', 2],
+      ["Kingpin's Enforcers", 2],
+      ['Unliving Legionnaire', 2],
+      ['Madame Masque', 1],
+      ['Kang, Temporal Tyrant', 1],
+      ['Baron Strucker, HYDRA Overlord', 1],
+      ['Ghost, Spectral Saboteur', 1],
+      ['Crossbones, Malicious Mercenary', 1],
+      ['Yellowjacket, Heartless Marauder', 1],
+      ["Trickster's Stratagem", 1],
+      ['Visions of Villainy', 2],
+      ['Dark Deed', 2],
+      ['Hour of Defeat', 2],
+      ['Depower', 2],
+      ["Widow's Bite", 2],
+      ['Cruel Alliance', 2],
+      ['Futurist Forge', 1],
+      ['We Say Thee Nay!', 1],
+      ['Island', 8],
+      ['Swamp', 8],
+      ['A.I.M. Labs', 4],
+      ['Dimir Guildgate', 3],
+      ['Temple of Deceit', 1],
+    ],
+  },
+];
+export const DECKS: Decklist[] = [
+  ...ARENA_DECKS,
+  ...COLOR_CHALLENGE_DECKS,
+  ...BLOOMBURROW_DECKS,
+  ...MARVEL_DECKS,
+];

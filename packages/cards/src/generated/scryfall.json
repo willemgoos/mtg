@@ -15375,5 +15375,1386 @@
    "large": "https://cards.scryfall.io/large/front/4/3/436d6a84-4cea-4ca7-94aa-9d08280652af.jpg?1783910801",
    "artCrop": "https://cards.scryfall.io/art_crop/front/4/3/436d6a84-4cea-4ca7-94aa-9d08280652af.jpg?1783910801"
   }
+ },
+ {
+  "name": "Agent Maria Hill",
+  "scryfallId": "9e327c67-1cf1-4d82-903c-b41c8e7cf747",
+  "oracleId": "a2d90efe-80f2-4069-b135-a8bd00ccd2b0",
+  "set": "msh",
+  "collectorNumber": "2",
+  "rarity": "uncommon",
+  "manaCost": "{W}",
+  "typeLine": "Legendary Creature — Human Spy Hero",
+  "oracleText": "Whenever Agent Maria Hill becomes tapped to pay a teamwork cost, put a +1/+1 counter on her and draw a card.",
+  "power": "2",
+  "toughness": "1",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/e/9e327c67-1cf1-4d82-903c-b41c8e7cf747.jpg?1783902980",
+   "normal": "https://cards.scryfall.io/normal/front/9/e/9e327c67-1cf1-4d82-903c-b41c8e7cf747.jpg?1783902980",
+   "large": "https://cards.scryfall.io/large/front/9/e/9e327c67-1cf1-4d82-903c-b41c8e7cf747.jpg?1783902980",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/e/9e327c67-1cf1-4d82-903c-b41c8e7cf747.jpg?1783902980"
+  }
+ },
+ {
+  "name": "Agent of Atlas",
+  "scryfallId": "a9db550e-ed1f-4973-a7f5-ec2e6adb8e6b",
+  "oracleId": "cd403866-bef1-413a-85e2-c86e295b3589",
+  "set": "msh",
+  "collectorNumber": "3",
+  "rarity": "common",
+  "manaCost": "{1}{W}",
+  "typeLine": "Creature — Human Spy Hero",
+  "oracleText": "Prowess (Whenever you cast a noncreature spell, this creature gets +1/+1 until end of turn.)",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Prowess"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/9/a9db550e-ed1f-4973-a7f5-ec2e6adb8e6b.jpg?1783902979",
+   "normal": "https://cards.scryfall.io/normal/front/a/9/a9db550e-ed1f-4973-a7f5-ec2e6adb8e6b.jpg?1783902979",
+   "large": "https://cards.scryfall.io/large/front/a/9/a9db550e-ed1f-4973-a7f5-ec2e6adb8e6b.jpg?1783902979",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/9/a9db550e-ed1f-4973-a7f5-ec2e6adb8e6b.jpg?1783902979"
+  }
+ },
+ {
+  "name": "Kree Commandos",
+  "scryfallId": "401f9ccf-f30c-4777-9a5b-4c340e724fff",
+  "oracleId": "09eb988a-e2eb-42e1-a786-01be63d2263f",
+  "set": "msh",
+  "collectorNumber": "19",
+  "rarity": "common",
+  "manaCost": "{2}{W}",
+  "typeLine": "Creature — Kree Soldier Villain",
+  "oracleText": "Flying, vigilance\nProwess (Whenever you cast a noncreature spell, this creature gets +1/+1 until end of turn.)",
+  "power": "2",
+  "toughness": "1",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Flying",
+   "Prowess",
+   "Vigilance"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/0/401f9ccf-f30c-4777-9a5b-4c340e724fff.jpg?1783902972",
+   "normal": "https://cards.scryfall.io/normal/front/4/0/401f9ccf-f30c-4777-9a5b-4c340e724fff.jpg?1783902972",
+   "large": "https://cards.scryfall.io/large/front/4/0/401f9ccf-f30c-4777-9a5b-4c340e724fff.jpg?1783902972",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/0/401f9ccf-f30c-4777-9a5b-4c340e724fff.jpg?1783902972"
+  }
+ },
+ {
+  "name": "Crimson Operative",
+  "scryfallId": "c4bc077c-f220-47a5-aaf4-5324ca23d0c5",
+  "oracleId": "d8863742-6c1c-415a-ad27-7def6d119c6a",
+  "set": "msh",
+  "collectorNumber": "126",
+  "rarity": "common",
+  "manaCost": "{3}{R}",
+  "typeLine": "Artifact Creature — Human Villain",
+  "oracleText": "Prowess (Whenever you cast a noncreature spell, this creature gets +1/+1 until end of turn.)\nWhen this creature enters, exile the top card of your library. Until the end of your next turn, you may play that card.",
+  "power": "3",
+  "toughness": "2",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Prowess"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/4/c4bc077c-f220-47a5-aaf4-5324ca23d0c5.jpg?1783902933",
+   "normal": "https://cards.scryfall.io/normal/front/c/4/c4bc077c-f220-47a5-aaf4-5324ca23d0c5.jpg?1783902933",
+   "large": "https://cards.scryfall.io/large/front/c/4/c4bc077c-f220-47a5-aaf4-5324ca23d0c5.jpg?1783902933",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/4/c4bc077c-f220-47a5-aaf4-5324ca23d0c5.jpg?1783902933"
+  }
+ },
+ {
+  "name": "Web Up",
+  "scryfallId": "9a1b057b-229c-4f65-ba4e-12dd342238de",
+  "oracleId": "9b9b086c-d201-4574-a1e9-0d6f8de53d7d",
+  "set": "msh",
+  "collectorNumber": "41",
+  "rarity": "common",
+  "manaCost": "{2}{W}",
+  "typeLine": "Enchantment",
+  "oracleText": "When this enchantment enters, exile target nonland permanent an opponent controls until this enchantment leaves the battlefield.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/a/9a1b057b-229c-4f65-ba4e-12dd342238de.jpg?1783902964",
+   "normal": "https://cards.scryfall.io/normal/front/9/a/9a1b057b-229c-4f65-ba4e-12dd342238de.jpg?1783902964",
+   "large": "https://cards.scryfall.io/large/front/9/a/9a1b057b-229c-4f65-ba4e-12dd342238de.jpg?1783902964",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/a/9a1b057b-229c-4f65-ba4e-12dd342238de.jpg?1783902964"
+  }
+ },
+ {
+  "name": "Brave Brawler",
+  "scryfallId": "2242b5c3-42ef-4be0-a61f-65c93e56fcab",
+  "oracleId": "a1a791be-71e6-4c1f-8717-08ca62d40de2",
+  "set": "msh",
+  "collectorNumber": "8",
+  "rarity": "common",
+  "manaCost": "{1}{W}",
+  "typeLine": "Creature — Human Warrior Hero",
+  "oracleText": "Lifelink\nPower-up — {4}{W}: Put two +1/+1 counters on this creature. (Activate each power-up ability only once. Reduce the cost by its mana cost if it entered this turn.)",
+  "power": "2",
+  "toughness": "1",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Power-up",
+   "Lifelink"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/2/2242b5c3-42ef-4be0-a61f-65c93e56fcab.jpg?1783902978",
+   "normal": "https://cards.scryfall.io/normal/front/2/2/2242b5c3-42ef-4be0-a61f-65c93e56fcab.jpg?1783902978",
+   "large": "https://cards.scryfall.io/large/front/2/2/2242b5c3-42ef-4be0-a61f-65c93e56fcab.jpg?1783902978",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/2/2242b5c3-42ef-4be0-a61f-65c93e56fcab.jpg?1783902978"
+  }
+ },
+ {
+  "name": "Hero in Training",
+  "scryfallId": "105a937b-289c-47b5-96a4-654c697bbb7d",
+  "oracleId": "87f1a840-021c-4699-a2c4-f2926daf98eb",
+  "set": "msh",
+  "collectorNumber": "16",
+  "rarity": "common",
+  "manaCost": "{2}{W}",
+  "typeLine": "Creature — Human Hero",
+  "oracleText": "When this creature enters, draw a card. If you control another Hero, you gain 2 life.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/0/105a937b-289c-47b5-96a4-654c697bbb7d.jpg?1783902973",
+   "normal": "https://cards.scryfall.io/normal/front/1/0/105a937b-289c-47b5-96a4-654c697bbb7d.jpg?1783902973",
+   "large": "https://cards.scryfall.io/large/front/1/0/105a937b-289c-47b5-96a4-654c697bbb7d.jpg?1783902973",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/0/105a937b-289c-47b5-96a4-654c697bbb7d.jpg?1783902973"
+  }
+ },
+ {
+  "name": "K'un-Lun Warrior",
+  "scryfallId": "e6e8359d-12be-49be-8cbe-6a3b8506a9e6",
+  "oracleId": "0618a217-2a6e-4fa1-bfe6-89c6612a594d",
+  "set": "msh",
+  "collectorNumber": "140",
+  "rarity": "common",
+  "manaCost": "{1}{R}",
+  "typeLine": "Creature — Human Warrior Hero",
+  "oracleText": "When this creature enters, you may sacrifice an artifact or discard a card. If you do, draw a card.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/6/e6e8359d-12be-49be-8cbe-6a3b8506a9e6.jpg?1783902928",
+   "normal": "https://cards.scryfall.io/normal/front/e/6/e6e8359d-12be-49be-8cbe-6a3b8506a9e6.jpg?1783902928",
+   "large": "https://cards.scryfall.io/large/front/e/6/e6e8359d-12be-49be-8cbe-6a3b8506a9e6.jpg?1783902928",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/6/e6e8359d-12be-49be-8cbe-6a3b8506a9e6.jpg?1783902928"
+  }
+ },
+ {
+  "name": "Volcanic Villain",
+  "scryfallId": "4f48ba40-9934-40fd-a251-e15a68e772d2",
+  "oracleId": "a257426d-70c9-4d58-bd8b-97ec38f6e133",
+  "set": "msh",
+  "collectorNumber": "159",
+  "rarity": "common",
+  "manaCost": "{2}{R}",
+  "typeLine": "Creature — Elemental Villain",
+  "oracleText": "Haste\nPower-up — {5}{R}: Put two +1/+1 counters on this creature. (Activate each power-up ability only once. Reduce the cost by its mana cost if it entered this turn.)",
+  "power": "3",
+  "toughness": "2",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Power-up",
+   "Haste"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/f/4f48ba40-9934-40fd-a251-e15a68e772d2.jpg?1783902922",
+   "normal": "https://cards.scryfall.io/normal/front/4/f/4f48ba40-9934-40fd-a251-e15a68e772d2.jpg?1783902922",
+   "large": "https://cards.scryfall.io/large/front/4/f/4f48ba40-9934-40fd-a251-e15a68e772d2.jpg?1783902922",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/f/4f48ba40-9934-40fd-a251-e15a68e772d2.jpg?1783902922"
+  }
+ },
+ {
+  "name": "Wakandan Drone Flock",
+  "scryfallId": "4b12dc1f-2218-4c71-aafa-ea6a26eeb0aa",
+  "oracleId": "282d6e61-3240-4f1e-9c2d-8ddb59b03af4",
+  "set": "msh",
+  "collectorNumber": "40",
+  "rarity": "common",
+  "manaCost": "{3}{W}",
+  "typeLine": "Artifact Creature — Robot",
+  "oracleText": "Flying\nWhen this creature enters, scry 2. (Look at the top two cards of your library, then put any number of them on the bottom and the rest on top in any order.)",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Scry",
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/b/4b12dc1f-2218-4c71-aafa-ea6a26eeb0aa.jpg?1783902964",
+   "normal": "https://cards.scryfall.io/normal/front/4/b/4b12dc1f-2218-4c71-aafa-ea6a26eeb0aa.jpg?1783902964",
+   "large": "https://cards.scryfall.io/large/front/4/b/4b12dc1f-2218-4c71-aafa-ea6a26eeb0aa.jpg?1783902964",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/b/4b12dc1f-2218-4c71-aafa-ea6a26eeb0aa.jpg?1783902964"
+  }
+ },
+ {
+  "name": "Okoye, Dora Milaje Leader",
+  "scryfallId": "2c89acf5-20f0-4441-b96f-2c5cacd685fb",
+  "oracleId": "6d397d26-7e52-47b2-9880-2c10e90cfba4",
+  "set": "msh",
+  "collectorNumber": "27",
+  "rarity": "uncommon",
+  "manaCost": "{3}{W}",
+  "typeLine": "Legendary Creature — Human Warrior Hero",
+  "oracleText": "When Okoye enters, create two 1/1 white Soldier creature tokens.\nAttacking creature tokens you control have first strike.",
+  "power": "3",
+  "toughness": "2",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/c/2c89acf5-20f0-4441-b96f-2c5cacd685fb.jpg?1783902970",
+   "normal": "https://cards.scryfall.io/normal/front/2/c/2c89acf5-20f0-4441-b96f-2c5cacd685fb.jpg?1783902970",
+   "large": "https://cards.scryfall.io/large/front/2/c/2c89acf5-20f0-4441-b96f-2c5cacd685fb.jpg?1783902970",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/c/2c89acf5-20f0-4441-b96f-2c5cacd685fb.jpg?1783902970"
+  }
+ },
+ {
+  "name": "Human Torch, Johnny Storm",
+  "scryfallId": "8f8659f6-a793-4edc-8401-d9126840c1c2",
+  "oracleId": "5b6f2770-e774-4a77-801f-a3fda093c3dd",
+  "set": "msh",
+  "collectorNumber": "136",
+  "rarity": "uncommon",
+  "manaCost": "{2}{R}",
+  "typeLine": "Legendary Creature — Human Hero",
+  "oracleText": "Flying\nWhenever you draw a card, if you control another Hero, Human Torch deals 1 damage to target opponent.\nPower-up — {6}{R}: Put three +1/+1 counters on Human Torch. (Activate each power-up ability only once. Reduce the cost by his mana cost if he entered this turn.)",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Flying",
+   "Power-up"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/f/8f8659f6-a793-4edc-8401-d9126840c1c2.jpg?1783902929",
+   "normal": "https://cards.scryfall.io/normal/front/8/f/8f8659f6-a793-4edc-8401-d9126840c1c2.jpg?1783902929",
+   "large": "https://cards.scryfall.io/large/front/8/f/8f8659f6-a793-4edc-8401-d9126840c1c2.jpg?1783902929",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/f/8f8659f6-a793-4edc-8401-d9126840c1c2.jpg?1783902929"
+  }
+ },
+ {
+  "name": "War Machine, Legacy of Iron",
+  "scryfallId": "433a7d97-9c0b-4f5c-85ad-b55342c02d22",
+  "oracleId": "ae6d1aa3-4ceb-4fc1-a3a6-033afd4b3bce",
+  "set": "msh",
+  "collectorNumber": "238",
+  "rarity": "uncommon",
+  "manaCost": "{2}{R/W}",
+  "typeLine": "Legendary Artifact Creature — Human Hero",
+  "oracleText": "Flying\nAt the beginning of combat on your turn, another target creature you control gets +X/+0 until end of turn, where X is War Machine's power.",
+  "power": "1",
+  "toughness": "3",
+  "colors": [
+   "R",
+   "W"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/3/433a7d97-9c0b-4f5c-85ad-b55342c02d22.jpg?1783902894",
+   "normal": "https://cards.scryfall.io/normal/front/4/3/433a7d97-9c0b-4f5c-85ad-b55342c02d22.jpg?1783902894",
+   "large": "https://cards.scryfall.io/large/front/4/3/433a7d97-9c0b-4f5c-85ad-b55342c02d22.jpg?1783902894",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/3/433a7d97-9c0b-4f5c-85ad-b55342c02d22.jpg?1783902894"
+  }
+ },
+ {
+  "name": "Thor Odinson",
+  "scryfallId": "0e06f730-ae30-4ef2-88b1-073e02afdb25",
+  "oracleId": "ec9b74d0-e4fe-4764-b628-992a62f2a1cf",
+  "set": "msh",
+  "collectorNumber": "234",
+  "rarity": "uncommon",
+  "manaCost": "{3}{R}{W}",
+  "typeLine": "Legendary Creature — God Warrior Hero",
+  "oracleText": "Flying, vigilance, prowess, prowess (Whenever you cast a noncreature spell, this creature gets +1/+1 until end of turn twice.)",
+  "power": "4",
+  "toughness": "4",
+  "colors": [
+   "R",
+   "W"
+  ],
+  "keywords": [
+   "Flying",
+   "Prowess",
+   "Vigilance"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/e/0e06f730-ae30-4ef2-88b1-073e02afdb25.jpg?1783902895",
+   "normal": "https://cards.scryfall.io/normal/front/0/e/0e06f730-ae30-4ef2-88b1-073e02afdb25.jpg?1783902895",
+   "large": "https://cards.scryfall.io/large/front/0/e/0e06f730-ae30-4ef2-88b1-073e02afdb25.jpg?1783902895",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/e/0e06f730-ae30-4ef2-88b1-073e02afdb25.jpg?1783902895"
+  }
+ },
+ {
+  "name": "Monica Rambeau",
+  "scryfallId": "3f995518-b12a-4623-9ab3-b79a5cef3cba",
+  "oracleId": "8dd929cb-0fe1-4cb3-bc8d-96ca37f194f3",
+  "set": "msh",
+  "collectorNumber": "23",
+  "rarity": "mythic",
+  "manaCost": "{2}{W}",
+  "typeLine": "Legendary Creature — Human Hero",
+  "oracleText": "Flying, prowess (Whenever you cast a noncreature spell, this creature gets +1/+1 until end of turn.)\n{2}{R}{W}{W}: Transform Monica Rambeau. Activate only as a sorcery.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Flying",
+   "Prowess",
+   "Transform"
+  ],
+  "back": "Photon, Living Light",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/f/3f995518-b12a-4623-9ab3-b79a5cef3cba.jpg?1783902975",
+   "normal": "https://cards.scryfall.io/normal/front/3/f/3f995518-b12a-4623-9ab3-b79a5cef3cba.jpg?1783902975",
+   "large": "https://cards.scryfall.io/large/front/3/f/3f995518-b12a-4623-9ab3-b79a5cef3cba.jpg?1783902975",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/f/3f995518-b12a-4623-9ab3-b79a5cef3cba.jpg?1783902975"
+  }
+ },
+ {
+  "name": "Photon, Living Light",
+  "scryfallId": "3f995518-b12a-4623-9ab3-b79a5cef3cba",
+  "oracleId": "8dd929cb-0fe1-4cb3-bc8d-96ca37f194f3",
+  "set": "msh",
+  "collectorNumber": "23",
+  "rarity": "mythic",
+  "manaCost": "{2}{R}{W}{W}",
+  "typeLine": "Legendary Creature — Elemental Hero",
+  "oracleText": "Flying, hexproof, prowess\nWhenever you cast a noncreature spell, put a +1/+1 counter on each other creature you control.",
+  "power": "4",
+  "toughness": "4",
+  "colors": [
+   "R",
+   "W"
+  ],
+  "keywords": [
+   "Flying",
+   "Prowess",
+   "Hexproof"
+  ],
+  "front": "Monica Rambeau",
+  "image": {
+   "small": "https://cards.scryfall.io/small/back/3/f/3f995518-b12a-4623-9ab3-b79a5cef3cba.jpg?1783902975",
+   "normal": "https://cards.scryfall.io/normal/back/3/f/3f995518-b12a-4623-9ab3-b79a5cef3cba.jpg?1783902975",
+   "large": "https://cards.scryfall.io/large/back/3/f/3f995518-b12a-4623-9ab3-b79a5cef3cba.jpg?1783902975",
+   "artCrop": "https://cards.scryfall.io/art_crop/back/3/f/3f995518-b12a-4623-9ab3-b79a5cef3cba.jpg?1783902975"
+  }
+ },
+ {
+  "name": "Helicarrier Strike",
+  "scryfallId": "6e518842-ce44-4af2-8f38-89869828294a",
+  "oracleId": "ca3cda24-0ecd-4edf-b1b3-54311ad58a51",
+  "set": "msh",
+  "collectorNumber": "15",
+  "rarity": "common",
+  "manaCost": "{W}",
+  "typeLine": "Instant",
+  "oracleText": "Teamwork 2 (As an additional cost to cast this spell, you may tap any number of creatures you control with total power 2 or more.)\nHelicarrier Strike deals 2 damage to target attacking or blocking creature. If this spell was cast using teamwork, it deals 4 damage to that creature instead.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Teamwork"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/e/6e518842-ce44-4af2-8f38-89869828294a.jpg?1783902975",
+   "normal": "https://cards.scryfall.io/normal/front/6/e/6e518842-ce44-4af2-8f38-89869828294a.jpg?1783902975",
+   "large": "https://cards.scryfall.io/large/front/6/e/6e518842-ce44-4af2-8f38-89869828294a.jpg?1783902975",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/e/6e518842-ce44-4af2-8f38-89869828294a.jpg?1783902975"
+  }
+ },
+ {
+  "name": "HULK SMASH!",
+  "scryfallId": "374ffb3e-0753-4682-936a-ae6921ace475",
+  "oracleId": "5f97d49c-d0fa-4776-9455-93c1a172cd83",
+  "set": "msh",
+  "collectorNumber": "135",
+  "rarity": "common",
+  "manaCost": "{1}{R}",
+  "typeLine": "Instant",
+  "oracleText": "Teamwork 4 (As an additional cost to cast this spell, you may tap any number of creatures you control with total power 4 or more.)\nChoose one. If this spell was cast using teamwork, choose both instead.\n• Destroy target noncreature artifact.\n• Target creature you control deals damage equal to its power to target creature an opponent controls.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Teamwork"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/7/374ffb3e-0753-4682-936a-ae6921ace475.jpg?1783902929",
+   "normal": "https://cards.scryfall.io/normal/front/3/7/374ffb3e-0753-4682-936a-ae6921ace475.jpg?1783902929",
+   "large": "https://cards.scryfall.io/large/front/3/7/374ffb3e-0753-4682-936a-ae6921ace475.jpg?1783902929",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/7/374ffb3e-0753-4682-936a-ae6921ace475.jpg?1783902929"
+  }
+ },
+ {
+  "name": "Repulsor Blast",
+  "scryfallId": "837265b0-fc15-4d96-9d6b-fd1c78534262",
+  "oracleId": "150f920c-c942-4feb-824f-79dd9b531687",
+  "set": "msh",
+  "collectorNumber": "150",
+  "rarity": "common",
+  "manaCost": "{3}{R}",
+  "typeLine": "Sorcery",
+  "oracleText": "Teamwork 2 (As an additional cost to cast this spell, you may tap any number of creatures you control with total power 2 or more.)\nRepulsor Blast deals 5 damage to target creature. If this spell was cast using teamwork, it also deals 2 damage to that creature's controller.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Teamwork"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/3/837265b0-fc15-4d96-9d6b-fd1c78534262.jpg?1783902925",
+   "normal": "https://cards.scryfall.io/normal/front/8/3/837265b0-fc15-4d96-9d6b-fd1c78534262.jpg?1783902925",
+   "large": "https://cards.scryfall.io/large/front/8/3/837265b0-fc15-4d96-9d6b-fd1c78534262.jpg?1783902925",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/3/837265b0-fc15-4d96-9d6b-fd1c78534262.jpg?1783902925"
+  }
+ },
+ {
+  "name": "Team Tactics",
+  "scryfallId": "db1c7a71-3d01-4f2a-9b25-2a19bb0d1a56",
+  "oracleId": "98b99d7c-d006-471a-8583-0468743c1597",
+  "set": "msh",
+  "collectorNumber": "155",
+  "rarity": "uncommon",
+  "manaCost": "{1}{R}",
+  "typeLine": "Instant",
+  "oracleText": "Teamwork 1 (As an additional cost to cast this spell, you may tap any number of creatures you control with total power 1 or more.)\nTarget creature gains double strike until end of turn. If this spell was cast using teamwork, that creature also gains trample until end of turn.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Teamwork"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/b/db1c7a71-3d01-4f2a-9b25-2a19bb0d1a56.jpg?1783902925",
+   "normal": "https://cards.scryfall.io/normal/front/d/b/db1c7a71-3d01-4f2a-9b25-2a19bb0d1a56.jpg?1783902925",
+   "large": "https://cards.scryfall.io/large/front/d/b/db1c7a71-3d01-4f2a-9b25-2a19bb0d1a56.jpg?1783902925",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/b/db1c7a71-3d01-4f2a-9b25-2a19bb0d1a56.jpg?1783902925"
+  }
+ },
+ {
+  "name": "Take Up the Shield",
+  "scryfallId": "5199d708-8b11-461d-9e91-3e8cd70906f7",
+  "oracleId": "e8d0eafe-540a-4b2e-a989-e98ff3c31105",
+  "set": "msh",
+  "collectorNumber": "39",
+  "rarity": "common",
+  "manaCost": "{1}{W}",
+  "typeLine": "Instant",
+  "oracleText": "Put a +1/+1 counter on target creature. It gains lifelink and indestructible until end of turn. (Damage and effects that say \"destroy\" don't destroy it.)",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/1/5199d708-8b11-461d-9e91-3e8cd70906f7.jpg?1783902965",
+   "normal": "https://cards.scryfall.io/normal/front/5/1/5199d708-8b11-461d-9e91-3e8cd70906f7.jpg?1783902965",
+   "large": "https://cards.scryfall.io/large/front/5/1/5199d708-8b11-461d-9e91-3e8cd70906f7.jpg?1783902965",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/1/5199d708-8b11-461d-9e91-3e8cd70906f7.jpg?1783902965"
+  }
+ },
+ {
+  "name": "Murdock's Crusade",
+  "scryfallId": "98df64ca-39c3-47e6-8143-4106c8e9cf59",
+  "oracleId": "36330947-5ef9-4bff-b541-bfbddd9715a3",
+  "set": "msh",
+  "collectorNumber": "24",
+  "rarity": "common",
+  "manaCost": "{1}{W}",
+  "typeLine": "Sorcery",
+  "oracleText": "Teamwork 4 (As an additional cost to cast this spell, you may tap any number of creatures you control with total power 4 or more.)\nChoose one. If this spell was cast using teamwork, choose both instead.\n• Street Justice — Exile target creature with toughness 4 or greater.\n• Legal Justice — Exile target enchantment with mana value 4 or greater.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Street Justice",
+   "Legal Justice",
+   "Teamwork"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/8/98df64ca-39c3-47e6-8143-4106c8e9cf59.jpg?1783902970",
+   "normal": "https://cards.scryfall.io/normal/front/9/8/98df64ca-39c3-47e6-8143-4106c8e9cf59.jpg?1783902970",
+   "large": "https://cards.scryfall.io/large/front/9/8/98df64ca-39c3-47e6-8143-4106c8e9cf59.jpg?1783902970",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/8/98df64ca-39c3-47e6-8143-4106c8e9cf59.jpg?1783902970"
+  }
+ },
+ {
+  "name": "Super Villain Lockup",
+  "scryfallId": "1af5a1ca-3d11-45e3-ba12-c455c5a7fea1",
+  "oracleId": "192e150a-96b0-42d6-9d39-03d0bed61f41",
+  "set": "msh",
+  "collectorNumber": "37",
+  "rarity": "uncommon",
+  "manaCost": "{1}{W}",
+  "typeLine": "Enchantment",
+  "oracleText": "Flash\nWhen this enchantment enters, exile target tapped creature an opponent controls until this enchantment leaves the battlefield.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Flash"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/a/1af5a1ca-3d11-45e3-ba12-c455c5a7fea1.jpg?1783902965",
+   "normal": "https://cards.scryfall.io/normal/front/1/a/1af5a1ca-3d11-45e3-ba12-c455c5a7fea1.jpg?1783902965",
+   "large": "https://cards.scryfall.io/large/front/1/a/1af5a1ca-3d11-45e3-ba12-c455c5a7fea1.jpg?1783902965",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/a/1af5a1ca-3d11-45e3-ba12-c455c5a7fea1.jpg?1783902965"
+  }
+ },
+ {
+  "name": "Hire a Crew",
+  "scryfallId": "50a6aa80-79a3-46f3-9cc1-5bf663b64976",
+  "oracleId": "6eb7a870-b626-4326-9e4c-45193f8ce138",
+  "set": "msh",
+  "collectorNumber": "134",
+  "rarity": "common",
+  "manaCost": "{2}{R}",
+  "typeLine": "Instant",
+  "oracleText": "Create a 2/1 black Villain creature token with menace, then creatures you control get +1/+0 until end of turn. (A creature with menace can't be blocked except by two or more creatures.)",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/0/50a6aa80-79a3-46f3-9cc1-5bf663b64976.jpg?1783902933",
+   "normal": "https://cards.scryfall.io/normal/front/5/0/50a6aa80-79a3-46f3-9cc1-5bf663b64976.jpg?1783902933",
+   "large": "https://cards.scryfall.io/large/front/5/0/50a6aa80-79a3-46f3-9cc1-5bf663b64976.jpg?1783902933",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/0/50a6aa80-79a3-46f3-9cc1-5bf663b64976.jpg?1783902933"
+  }
+ },
+ {
+  "name": "Red Room Recruit",
+  "scryfallId": "f52a5ba3-a618-4f52-9d33-ba85345eb627",
+  "oracleId": "4e60c38c-cbf5-4ff7-8fff-634f7e3086cc",
+  "set": "msh",
+  "collectorNumber": "110",
+  "rarity": "common",
+  "manaCost": "{1}{B}",
+  "typeLine": "Creature — Human Spy Villain",
+  "oracleText": "When this creature enters, it connives. (Draw a card, then discard a card. If you discarded a nonland card, put a +1/+1 counter on this creature.)",
+  "power": "1",
+  "toughness": "2",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Connive"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/5/f52a5ba3-a618-4f52-9d33-ba85345eb627.jpg?1783902938",
+   "normal": "https://cards.scryfall.io/normal/front/f/5/f52a5ba3-a618-4f52-9d33-ba85345eb627.jpg?1783902938",
+   "large": "https://cards.scryfall.io/large/front/f/5/f52a5ba3-a618-4f52-9d33-ba85345eb627.jpg?1783902938",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/5/f52a5ba3-a618-4f52-9d33-ba85345eb627.jpg?1783902938"
+  }
+ },
+ {
+  "name": "Aerial Doombot",
+  "scryfallId": "e727ec1c-dc3b-4f1a-8a62-18549f118b89",
+  "oracleId": "f24efc60-fdac-4a5d-bcbc-784ec5ae6d96",
+  "set": "msh",
+  "collectorNumber": "43",
+  "rarity": "common",
+  "manaCost": "{U}",
+  "typeLine": "Artifact Creature — Robot Villain",
+  "oracleText": "Flying\nPower-up — {5}{U}: Put three +1/+1 counters on this creature. (Activate each power-up ability only once. Reduce the cost by its mana cost if it entered this turn.)",
+  "power": "1",
+  "toughness": "1",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Flying",
+   "Power-up"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/7/e727ec1c-dc3b-4f1a-8a62-18549f118b89.jpg?1783902963",
+   "normal": "https://cards.scryfall.io/normal/front/e/7/e727ec1c-dc3b-4f1a-8a62-18549f118b89.jpg?1783902963",
+   "large": "https://cards.scryfall.io/large/front/e/7/e727ec1c-dc3b-4f1a-8a62-18549f118b89.jpg?1783902963",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/7/e727ec1c-dc3b-4f1a-8a62-18549f118b89.jpg?1783902963"
+  }
+ },
+ {
+  "name": "Bold Biochemist",
+  "scryfallId": "10644127-3da0-484e-9afc-de26d9c34390",
+  "oracleId": "45ddfa35-7b3c-4916-b231-dc721b7b56d9",
+  "set": "msh",
+  "collectorNumber": "48",
+  "rarity": "common",
+  "manaCost": "{1}{U}",
+  "typeLine": "Creature — Human Scientist",
+  "oracleText": "Power-up — {5}{U}: Put a +1/+1 counter on this creature and draw two cards. (Activate each power-up ability only once. Reduce the cost by its mana cost if it entered this turn.)",
+  "power": "1",
+  "toughness": "3",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Power-up"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/0/10644127-3da0-484e-9afc-de26d9c34390.jpg?1783902964",
+   "normal": "https://cards.scryfall.io/normal/front/1/0/10644127-3da0-484e-9afc-de26d9c34390.jpg?1783902964",
+   "large": "https://cards.scryfall.io/large/front/1/0/10644127-3da0-484e-9afc-de26d9c34390.jpg?1783902964",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/0/10644127-3da0-484e-9afc-de26d9c34390.jpg?1783902964"
+  }
+ },
+ {
+  "name": "Agents of HYDRA",
+  "scryfallId": "857fef2e-df1f-4ec6-a262-f6fa52389cf9",
+  "oracleId": "31816924-1430-4581-86e8-325e2ca16217",
+  "set": "msh",
+  "collectorNumber": "85",
+  "rarity": "common",
+  "manaCost": "{1}{B}",
+  "typeLine": "Creature — Human Spy Villain",
+  "oracleText": "When this creature dies, create a 2/1 black Villain creature token with menace. (It can't be blocked except by two or more creatures.)",
+  "power": "1",
+  "toughness": "1",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/5/857fef2e-df1f-4ec6-a262-f6fa52389cf9.jpg?1783902948",
+   "normal": "https://cards.scryfall.io/normal/front/8/5/857fef2e-df1f-4ec6-a262-f6fa52389cf9.jpg?1783902948",
+   "large": "https://cards.scryfall.io/large/front/8/5/857fef2e-df1f-4ec6-a262-f6fa52389cf9.jpg?1783902948",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/5/857fef2e-df1f-4ec6-a262-f6fa52389cf9.jpg?1783902948"
+  }
+ },
+ {
+  "name": "HYDRA Troopers",
+  "scryfallId": "40c202f1-6e0d-42f4-a41e-e0be3362d585",
+  "oracleId": "6de67fad-0d01-443d-9ae0-4126ae903069",
+  "set": "msh",
+  "collectorNumber": "101",
+  "rarity": "common",
+  "manaCost": "{2}{B}",
+  "typeLine": "Creature — Human Soldier Villain",
+  "oracleText": "When this creature enters, create a tapped 2/1 black Villain creature token with menace if there are two or more creature cards in your graveyard. Otherwise, mill two cards. (Put the top two cards of your library into your graveyard.)",
+  "power": "3",
+  "toughness": "2",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Mill"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/0/40c202f1-6e0d-42f4-a41e-e0be3362d585.jpg?1783902942",
+   "normal": "https://cards.scryfall.io/normal/front/4/0/40c202f1-6e0d-42f4-a41e-e0be3362d585.jpg?1783902942",
+   "large": "https://cards.scryfall.io/large/front/4/0/40c202f1-6e0d-42f4-a41e-e0be3362d585.jpg?1783902942",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/0/40c202f1-6e0d-42f4-a41e-e0be3362d585.jpg?1783902942"
+  }
+ },
+ {
+  "name": "Ninja of the Hand",
+  "scryfallId": "6b8116d8-2cc6-449b-a8b4-8a5166553497",
+  "oracleId": "c38f7447-e646-438d-81bd-fe2a71c8a79c",
+  "set": "msh",
+  "collectorNumber": "108",
+  "rarity": "common",
+  "manaCost": "{2}{B}",
+  "typeLine": "Creature — Human Ninja Villain",
+  "oracleText": "Deathtouch\nPower-up — {4}{B}: Each opponent discards a card. Put a +1/+1 counter on this creature. (Activate each power-up ability only once. Reduce the cost by its mana cost if it entered this turn.)",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Power-up",
+   "Deathtouch"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/b/6b8116d8-2cc6-449b-a8b4-8a5166553497.jpg?1783902939",
+   "normal": "https://cards.scryfall.io/normal/front/6/b/6b8116d8-2cc6-449b-a8b4-8a5166553497.jpg?1783902939",
+   "large": "https://cards.scryfall.io/large/front/6/b/6b8116d8-2cc6-449b-a8b4-8a5166553497.jpg?1783902939",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/b/6b8116d8-2cc6-449b-a8b4-8a5166553497.jpg?1783902939"
+  }
+ },
+ {
+  "name": "Atlantean Cavalry",
+  "scryfallId": "1319bf54-8705-4cc4-8d08-40f05fd09837",
+  "oracleId": "e929b730-9aa2-49e1-9a65-50afc0fbe3e0",
+  "set": "msh",
+  "collectorNumber": "45",
+  "rarity": "common",
+  "manaCost": "{2}{U}",
+  "typeLine": "Creature — Merfolk Soldier",
+  "oracleText": "Vigilance\nWhenever you draw your second card each turn, put a +1/+1 counter on this creature.",
+  "power": "3",
+  "toughness": "2",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Vigilance"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/3/1319bf54-8705-4cc4-8d08-40f05fd09837.jpg?1783902961",
+   "normal": "https://cards.scryfall.io/normal/front/1/3/1319bf54-8705-4cc4-8d08-40f05fd09837.jpg?1783902961",
+   "large": "https://cards.scryfall.io/large/front/1/3/1319bf54-8705-4cc4-8d08-40f05fd09837.jpg?1783902961",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/3/1319bf54-8705-4cc4-8d08-40f05fd09837.jpg?1783902961"
+  }
+ },
+ {
+  "name": "Madame Masque",
+  "scryfallId": "f54197b8-6279-43ee-9340-69bd22cf3775",
+  "oracleId": "b5b0e85f-6651-4667-829c-2253ff8b130d",
+  "set": "msh",
+  "collectorNumber": "104",
+  "rarity": "uncommon",
+  "manaCost": "{4}{B}",
+  "typeLine": "Legendary Creature — Human Villain",
+  "oracleText": "When Madame Masque enters, she connives. (Draw a card, then discard a card. If you discarded a nonland card, put a +1/+1 counter on this creature.)\nWhenever you draw your second card each turn, create a 2/1 black Villain creature token with menace. (It can't be blocked except by two or more creatures.)",
+  "power": "3",
+  "toughness": "2",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Connive"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/5/f54197b8-6279-43ee-9340-69bd22cf3775.jpg?1783902943",
+   "normal": "https://cards.scryfall.io/normal/front/f/5/f54197b8-6279-43ee-9340-69bd22cf3775.jpg?1783902943",
+   "large": "https://cards.scryfall.io/large/front/f/5/f54197b8-6279-43ee-9340-69bd22cf3775.jpg?1783902943",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/5/f54197b8-6279-43ee-9340-69bd22cf3775.jpg?1783902943"
+  }
+ },
+ {
+  "name": "Kang, Temporal Tyrant",
+  "scryfallId": "fb96ee86-5139-472a-9c4b-8a8a4280fc7e",
+  "oracleId": "b43350a8-fc4d-41ed-becd-f0277512bb5f",
+  "set": "msh",
+  "collectorNumber": "217",
+  "rarity": "uncommon",
+  "manaCost": "{2}{U}{B}",
+  "typeLine": "Legendary Creature — Human Villain",
+  "oracleText": "Whenever Kang attacks, he connives. (Draw a card, then discard a card. If you discarded a nonland card, put a +1/+1 counter on this creature.)\nWhenever you draw your second card each turn, each opponent loses 1 life and you gain 1 life.",
+  "power": "3",
+  "toughness": "4",
+  "colors": [
+   "B",
+   "U"
+  ],
+  "keywords": [
+   "Connive"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/b/fb96ee86-5139-472a-9c4b-8a8a4280fc7e.jpg?1783902901",
+   "normal": "https://cards.scryfall.io/normal/front/f/b/fb96ee86-5139-472a-9c4b-8a8a4280fc7e.jpg?1783902901",
+   "large": "https://cards.scryfall.io/large/front/f/b/fb96ee86-5139-472a-9c4b-8a8a4280fc7e.jpg?1783902901",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/b/fb96ee86-5139-472a-9c4b-8a8a4280fc7e.jpg?1783902901"
+  }
+ },
+ {
+  "name": "Baron Strucker, HYDRA Overlord",
+  "scryfallId": "eaf2251a-ffaf-4055-9474-7e3d08d89609",
+  "oracleId": "c91e64d4-e687-4ccd-a56e-796cff6e052c",
+  "set": "msh",
+  "collectorNumber": "88",
+  "rarity": "uncommon",
+  "manaCost": "{2}{B}",
+  "typeLine": "Legendary Creature — Human Villain",
+  "oracleText": "Villain spells you cast cost {1} less to cast.\nWhenever another Villain you control enters, you may have it connive. Do this only once each turn. (Draw a card, then discard a card. If you discarded a nonland card, put a +1/+1 counter on that creature.)",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Connive"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/a/eaf2251a-ffaf-4055-9474-7e3d08d89609.jpg?1783902947",
+   "normal": "https://cards.scryfall.io/normal/front/e/a/eaf2251a-ffaf-4055-9474-7e3d08d89609.jpg?1783902947",
+   "large": "https://cards.scryfall.io/large/front/e/a/eaf2251a-ffaf-4055-9474-7e3d08d89609.jpg?1783902947",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/a/eaf2251a-ffaf-4055-9474-7e3d08d89609.jpg?1783902947"
+  }
+ },
+ {
+  "name": "Crossbones, Malicious Mercenary",
+  "scryfallId": "1576148a-2371-49ba-8eef-0bc2ec3dcaf3",
+  "oracleId": "ac950d10-e373-42d3-907b-ee56e45a2084",
+  "set": "msh",
+  "collectorNumber": "91",
+  "rarity": "uncommon",
+  "manaCost": "{3}{B}",
+  "typeLine": "Legendary Creature — Human Mercenary Villain",
+  "oracleText": "Deathtouch\nWhenever another Villain you control enters, put a +1/+1 counter on Crossbones. He deals 2 damage to each opponent. This ability triggers only once each turn.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Deathtouch"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/5/1576148a-2371-49ba-8eef-0bc2ec3dcaf3.jpg?1783902946",
+   "normal": "https://cards.scryfall.io/normal/front/1/5/1576148a-2371-49ba-8eef-0bc2ec3dcaf3.jpg?1783902946",
+   "large": "https://cards.scryfall.io/large/front/1/5/1576148a-2371-49ba-8eef-0bc2ec3dcaf3.jpg?1783902946",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/5/1576148a-2371-49ba-8eef-0bc2ec3dcaf3.jpg?1783902946"
+  }
+ },
+ {
+  "name": "Yellowjacket, Heartless Marauder",
+  "scryfallId": "d8f91212-2ff5-4024-8f14-86bb5c4a9754",
+  "oracleId": "0a364879-31bd-4760-833d-165cde1e96c6",
+  "set": "msh",
+  "collectorNumber": "123",
+  "rarity": "uncommon",
+  "manaCost": "{1}{B}",
+  "typeLine": "Legendary Creature — Human Rogue Villain",
+  "oracleText": "Flying\nWhenever another Villain you control enters, Yellowjacket gets +1/+0 and gains lifelink until end of turn.",
+  "power": "1",
+  "toughness": "2",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/8/d8f91212-2ff5-4024-8f14-86bb5c4a9754.jpg?1783902936",
+   "normal": "https://cards.scryfall.io/normal/front/d/8/d8f91212-2ff5-4024-8f14-86bb5c4a9754.jpg?1783902936",
+   "large": "https://cards.scryfall.io/large/front/d/8/d8f91212-2ff5-4024-8f14-86bb5c4a9754.jpg?1783902936",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/8/d8f91212-2ff5-4024-8f14-86bb5c4a9754.jpg?1783902936"
+  }
+ },
+ {
+  "name": "Giant-Sized Flying Ant",
+  "scryfallId": "da529bb3-725b-41aa-ac34-b4117ff5d95b",
+  "oracleId": "233e3b4b-faaf-451d-8a2e-e9f5a6ced671",
+  "set": "msh",
+  "collectorNumber": "56",
+  "rarity": "common",
+  "manaCost": "{3}{U}",
+  "typeLine": "Creature — Insect",
+  "oracleText": "Flash\nFlying\nWhen this creature enters, choose one —\n• Tap target nonland permanent.\n• Untap target nonland permanent.",
+  "power": "3",
+  "toughness": "2",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Flying",
+   "Flash"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/a/da529bb3-725b-41aa-ac34-b4117ff5d95b.jpg?1783902958",
+   "normal": "https://cards.scryfall.io/normal/front/d/a/da529bb3-725b-41aa-ac34-b4117ff5d95b.jpg?1783902958",
+   "large": "https://cards.scryfall.io/large/front/d/a/da529bb3-725b-41aa-ac34-b4117ff5d95b.jpg?1783902958",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/a/da529bb3-725b-41aa-ac34-b4117ff5d95b.jpg?1783902958"
+  }
+ },
+ {
+  "name": "Kingpin's Enforcers",
+  "scryfallId": "64056edb-6de2-4694-b771-f35542c25771",
+  "oracleId": "342df67f-44d8-4b0a-b1d7-4241966d0598",
+  "set": "msh",
+  "collectorNumber": "102",
+  "rarity": "common",
+  "manaCost": "{2}{B}",
+  "typeLine": "Creature — Human Villain",
+  "oracleText": "Lifelink\n{2}{B}, Sacrifice an artifact or creature: Draw a card.",
+  "power": "2",
+  "toughness": "3",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Lifelink"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/4/64056edb-6de2-4694-b771-f35542c25771.jpg?1783902942",
+   "normal": "https://cards.scryfall.io/normal/front/6/4/64056edb-6de2-4694-b771-f35542c25771.jpg?1783902942",
+   "large": "https://cards.scryfall.io/large/front/6/4/64056edb-6de2-4694-b771-f35542c25771.jpg?1783902942",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/4/64056edb-6de2-4694-b771-f35542c25771.jpg?1783902942"
+  }
+ },
+ {
+  "name": "Unliving Legionnaire",
+  "scryfallId": "ce08f4bb-7da3-4199-8b90-fcdb29e84e98",
+  "oracleId": "0edaf433-4ded-4841-bc86-136780c0767f",
+  "set": "msh",
+  "collectorNumber": "119",
+  "rarity": "common",
+  "manaCost": "{3}{B}",
+  "typeLine": "Creature — Vampire Villain",
+  "oracleText": "Flying\nPower-up — {5}{B}{B}: Return up to one target creature card from your graveyard to your hand. Put two +1/+1 counters on this creature. (Activate each power-up ability only once. Reduce the cost by its mana cost if it entered this turn.)",
+  "power": "3",
+  "toughness": "2",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Flying",
+   "Power-up"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/e/ce08f4bb-7da3-4199-8b90-fcdb29e84e98.jpg?1783902935",
+   "normal": "https://cards.scryfall.io/normal/front/c/e/ce08f4bb-7da3-4199-8b90-fcdb29e84e98.jpg?1783902935",
+   "large": "https://cards.scryfall.io/large/front/c/e/ce08f4bb-7da3-4199-8b90-fcdb29e84e98.jpg?1783902935",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/e/ce08f4bb-7da3-4199-8b90-fcdb29e84e98.jpg?1783902935"
+  }
+ },
+ {
+  "name": "Ghost, Spectral Saboteur",
+  "scryfallId": "c22bb4d5-6b6f-4c43-b005-48ae4042739d",
+  "oracleId": "88f34d15-c338-40a7-b56c-c5b650847430",
+  "set": "msh",
+  "collectorNumber": "214",
+  "rarity": "uncommon",
+  "manaCost": "{2}{U/B}",
+  "typeLine": "Legendary Creature — Human Rogue Villain",
+  "oracleText": "Flash\nIntangibility — Ghost can't be blocked.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "B",
+   "U"
+  ],
+  "keywords": [
+   "Intangibility",
+   "Flash"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/2/c22bb4d5-6b6f-4c43-b005-48ae4042739d.jpg?1783902902",
+   "normal": "https://cards.scryfall.io/normal/front/c/2/c22bb4d5-6b6f-4c43-b005-48ae4042739d.jpg?1783902902",
+   "large": "https://cards.scryfall.io/large/front/c/2/c22bb4d5-6b6f-4c43-b005-48ae4042739d.jpg?1783902902",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/2/c22bb4d5-6b6f-4c43-b005-48ae4042739d.jpg?1783902902"
+  }
+ },
+ {
+  "name": "Trickster's Stratagem",
+  "scryfallId": "620376d0-dc0c-405f-8121-eb36d9b4f4c2",
+  "oracleId": "170ee399-d3cd-40ef-a340-193c0f0f6002",
+  "set": "msh",
+  "collectorNumber": "81",
+  "rarity": "common",
+  "manaCost": "{3}{U}",
+  "typeLine": "Sorcery",
+  "oracleText": "The owner of target creature an opponent controls puts it into their library second from the top or on the bottom. Then up to one target creature you control connives. (Draw a card, then discard a card. If you discarded a nonland card, put a +1/+1 counter on that creature.)",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Connive"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/2/620376d0-dc0c-405f-8121-eb36d9b4f4c2.jpg?1783902948",
+   "normal": "https://cards.scryfall.io/normal/front/6/2/620376d0-dc0c-405f-8121-eb36d9b4f4c2.jpg?1783902948",
+   "large": "https://cards.scryfall.io/large/front/6/2/620376d0-dc0c-405f-8121-eb36d9b4f4c2.jpg?1783902948",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/2/620376d0-dc0c-405f-8121-eb36d9b4f4c2.jpg?1783902948"
+  }
+ },
+ {
+  "name": "Visions of Villainy",
+  "scryfallId": "f8f1e4f9-7415-437f-b694-ecbdd76db114",
+  "oracleId": "3b46800b-711b-4cbb-b296-26115b4f6839",
+  "set": "msh",
+  "collectorNumber": "120",
+  "rarity": "common",
+  "manaCost": "{2}{B}",
+  "typeLine": "Instant",
+  "oracleText": "This spell costs {1} less to cast if you control a Villain.\nYou draw two cards and lose 2 life.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/8/f8f1e4f9-7415-437f-b694-ecbdd76db114.jpg?1783902935",
+   "normal": "https://cards.scryfall.io/normal/front/f/8/f8f1e4f9-7415-437f-b694-ecbdd76db114.jpg?1783902935",
+   "large": "https://cards.scryfall.io/large/front/f/8/f8f1e4f9-7415-437f-b694-ecbdd76db114.jpg?1783902935",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/8/f8f1e4f9-7415-437f-b694-ecbdd76db114.jpg?1783902935"
+  }
+ },
+ {
+  "name": "Dark Deed",
+  "scryfallId": "49e36cac-3999-40b3-91b3-85af4fded679",
+  "oracleId": "e98cd00c-b812-4c6a-81d4-e3f94b64fc58",
+  "set": "msh",
+  "collectorNumber": "93",
+  "rarity": "uncommon",
+  "manaCost": "{1}{B}",
+  "typeLine": "Instant",
+  "oracleText": "Target creature gets -4/-4 until end of turn.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/9/49e36cac-3999-40b3-91b3-85af4fded679.jpg?1783902948",
+   "normal": "https://cards.scryfall.io/normal/front/4/9/49e36cac-3999-40b3-91b3-85af4fded679.jpg?1783902948",
+   "large": "https://cards.scryfall.io/large/front/4/9/49e36cac-3999-40b3-91b3-85af4fded679.jpg?1783902948",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/9/49e36cac-3999-40b3-91b3-85af4fded679.jpg?1783902948"
+  }
+ },
+ {
+  "name": "Hour of Defeat",
+  "scryfallId": "9e0034dd-396e-46af-b931-0daa25da4406",
+  "oracleId": "2774fcb7-8988-4a18-b5ec-7534dd8b2e05",
+  "set": "msh",
+  "collectorNumber": "99",
+  "rarity": "common",
+  "manaCost": "{3}{B}",
+  "typeLine": "Instant",
+  "oracleText": "Destroy target creature. Surveil 1. (Look at the top card of your library. You may put it into your graveyard.)",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Surveil"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/e/9e0034dd-396e-46af-b931-0daa25da4406.jpg?1783902942",
+   "normal": "https://cards.scryfall.io/normal/front/9/e/9e0034dd-396e-46af-b931-0daa25da4406.jpg?1783902942",
+   "large": "https://cards.scryfall.io/large/front/9/e/9e0034dd-396e-46af-b931-0daa25da4406.jpg?1783902942",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/e/9e0034dd-396e-46af-b931-0daa25da4406.jpg?1783902942"
+  }
+ },
+ {
+  "name": "Depower",
+  "scryfallId": "36e9a6e9-1f9d-4860-97ee-f01e66f8eb4d",
+  "oracleId": "33f89437-885b-4850-88b7-239f5dfcc8b1",
+  "set": "msh",
+  "collectorNumber": "50",
+  "rarity": "common",
+  "manaCost": "{2}{U}",
+  "typeLine": "Instant",
+  "oracleText": "This spell costs {2} less to cast if it targets an attacking creature.\nTarget creature gets -4/-0 until end of turn.\nDraw a card.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/6/36e9a6e9-1f9d-4860-97ee-f01e66f8eb4d.jpg?1783902960",
+   "normal": "https://cards.scryfall.io/normal/front/3/6/36e9a6e9-1f9d-4860-97ee-f01e66f8eb4d.jpg?1783902960",
+   "large": "https://cards.scryfall.io/large/front/3/6/36e9a6e9-1f9d-4860-97ee-f01e66f8eb4d.jpg?1783902960",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/6/36e9a6e9-1f9d-4860-97ee-f01e66f8eb4d.jpg?1783902960"
+  }
+ },
+ {
+  "name": "Widow's Bite",
+  "scryfallId": "dbee18af-9ade-4251-81a1-f6e7ffbf480f",
+  "oracleId": "39f2a632-30d2-4b35-9e7f-fef27713a4f7",
+  "set": "msh",
+  "collectorNumber": "122",
+  "rarity": "common",
+  "manaCost": "{1}{B}",
+  "typeLine": "Instant",
+  "oracleText": "Teamwork 3 (As an additional cost to cast this spell, you may tap any number of creatures you control with total power 3 or more.)\nChoose one. If this spell was cast using teamwork, choose both instead.\n• Target creature gains deathtouch until end of turn.\n• Target creature gets -2/-2 until end of turn.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Teamwork"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/b/dbee18af-9ade-4251-81a1-f6e7ffbf480f.jpg?1783902935",
+   "normal": "https://cards.scryfall.io/normal/front/d/b/dbee18af-9ade-4251-81a1-f6e7ffbf480f.jpg?1783902935",
+   "large": "https://cards.scryfall.io/large/front/d/b/dbee18af-9ade-4251-81a1-f6e7ffbf480f.jpg?1783902935",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/b/dbee18af-9ade-4251-81a1-f6e7ffbf480f.jpg?1783902935"
+  }
+ },
+ {
+  "name": "Cruel Alliance",
+  "scryfallId": "d895d5a1-d382-438b-8551-e142bb5142af",
+  "oracleId": "6897f9e0-f654-4c0a-9fda-2ad4e264bf9a",
+  "set": "msh",
+  "collectorNumber": "92",
+  "rarity": "common",
+  "manaCost": "{2}{B}",
+  "typeLine": "Sorcery",
+  "oracleText": "Teamwork 2 (As an additional cost to cast this spell, you may tap any number of creatures you control with total power 2 or more.)\nExile target creature with mana value 3 or less. If this spell was cast using teamwork, instead exile target creature and you gain 3 life.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Teamwork"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/8/d895d5a1-d382-438b-8551-e142bb5142af.jpg?1783902948",
+   "normal": "https://cards.scryfall.io/normal/front/d/8/d895d5a1-d382-438b-8551-e142bb5142af.jpg?1783902948",
+   "large": "https://cards.scryfall.io/large/front/d/8/d895d5a1-d382-438b-8551-e142bb5142af.jpg?1783902948",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/8/d895d5a1-d382-438b-8551-e142bb5142af.jpg?1783902948"
+  }
+ },
+ {
+  "name": "Futurist Forge",
+  "scryfallId": "a50feebf-c660-43f1-9fae-75294703b346",
+  "oracleId": "0e5f97b5-bb8c-4688-a141-5db4d4eeccf0",
+  "set": "msh",
+  "collectorNumber": "55",
+  "rarity": "common",
+  "manaCost": "{1}{U}",
+  "typeLine": "Artifact",
+  "oracleText": "When this artifact enters, draw a card.\n{3}{U}, Sacrifice this artifact: Draw two cards.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/5/a50feebf-c660-43f1-9fae-75294703b346.jpg?1783902959",
+   "normal": "https://cards.scryfall.io/normal/front/a/5/a50feebf-c660-43f1-9fae-75294703b346.jpg?1783902959",
+   "large": "https://cards.scryfall.io/large/front/a/5/a50feebf-c660-43f1-9fae-75294703b346.jpg?1783902959",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/5/a50feebf-c660-43f1-9fae-75294703b346.jpg?1783902959"
+  }
+ },
+ {
+  "name": "We Say Thee Nay!",
+  "scryfallId": "13b70321-75bd-4d44-b9f6-5f062a5dda0f",
+  "oracleId": "1abe8246-d2f9-407b-8c16-83da0a6b7de3",
+  "set": "msh",
+  "collectorNumber": "82",
+  "rarity": "common",
+  "manaCost": "{1}{U}",
+  "typeLine": "Instant — Arcane",
+  "oracleText": "Teamwork 2 (As an additional cost to cast this spell, you may tap any number of creatures you control with total power 2 or more.)\nCounter target spell unless its controller pays {2}. Counter that spell unless its controller pays {4} instead if this spell was cast using teamwork.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Teamwork"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/3/13b70321-75bd-4d44-b9f6-5f062a5dda0f.jpg?1783902948",
+   "normal": "https://cards.scryfall.io/normal/front/1/3/13b70321-75bd-4d44-b9f6-5f062a5dda0f.jpg?1783902948",
+   "large": "https://cards.scryfall.io/large/front/1/3/13b70321-75bd-4d44-b9f6-5f062a5dda0f.jpg?1783902948",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/3/13b70321-75bd-4d44-b9f6-5f062a5dda0f.jpg?1783902948"
+  }
+ },
+ {
+  "name": "Avengers Hangar",
+  "scryfallId": "c5d03ebb-1ce9-4a6b-b13e-a72f0b075ae8",
+  "oracleId": "10fc2009-4212-47c6-8a97-ab0f45c1f91b",
+  "set": "msh",
+  "collectorNumber": "259",
+  "rarity": "common",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "This land enters tapped.\nWhen this land enters, you gain 1 life.\n{T}: Add {W} or {U}.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/5/c5d03ebb-1ce9-4a6b-b13e-a72f0b075ae8.jpg?1783902886",
+   "normal": "https://cards.scryfall.io/normal/front/c/5/c5d03ebb-1ce9-4a6b-b13e-a72f0b075ae8.jpg?1783902886",
+   "large": "https://cards.scryfall.io/large/front/c/5/c5d03ebb-1ce9-4a6b-b13e-a72f0b075ae8.jpg?1783902886",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/5/c5d03ebb-1ce9-4a6b-b13e-a72f0b075ae8.jpg?1783902886"
+  }
+ },
+ {
+  "name": "A.I.M. Labs",
+  "scryfallId": "ca24cd9f-fd9f-4ea0-8b9c-ecf98db219a6",
+  "oracleId": "8417f2d5-93c9-474a-a143-5c4e17097a88",
+  "set": "msh",
+  "collectorNumber": "257",
+  "rarity": "common",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "This land enters tapped.\nWhen this land enters, you gain 1 life.\n{T}: Add {U} or {B}.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/a/ca24cd9f-fd9f-4ea0-8b9c-ecf98db219a6.jpg?1783902887",
+   "normal": "https://cards.scryfall.io/normal/front/c/a/ca24cd9f-fd9f-4ea0-8b9c-ecf98db219a6.jpg?1783902887",
+   "large": "https://cards.scryfall.io/large/front/c/a/ca24cd9f-fd9f-4ea0-8b9c-ecf98db219a6.jpg?1783902887",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/a/ca24cd9f-fd9f-4ea0-8b9c-ecf98db219a6.jpg?1783902887"
+  }
+ },
+ {
+  "name": "Hell's Kitchen",
+  "scryfallId": "6137c34e-cc4c-4342-a8e4-cfa9c767c67b",
+  "oracleId": "1337d89e-a883-4568-a14f-9ca3305cc3df",
+  "set": "msh",
+  "collectorNumber": "268",
+  "rarity": "common",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "This land enters tapped.\nWhen this land enters, you gain 1 life.\n{T}: Add {B} or {R}.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/1/6137c34e-cc4c-4342-a8e4-cfa9c767c67b.jpg?1783902883",
+   "normal": "https://cards.scryfall.io/normal/front/6/1/6137c34e-cc4c-4342-a8e4-cfa9c767c67b.jpg?1783902883",
+   "large": "https://cards.scryfall.io/large/front/6/1/6137c34e-cc4c-4342-a8e4-cfa9c767c67b.jpg?1783902883",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/1/6137c34e-cc4c-4342-a8e4-cfa9c767c67b.jpg?1783902883"
+  }
+ },
+ {
+  "name": "Los Diablos Missile Base",
+  "scryfallId": "2123fcb5-8181-47ab-9a2d-7ede5b5118e8",
+  "oracleId": "4b17048f-8c7f-4e29-8f56-16db4c2106e6",
+  "set": "msh",
+  "collectorNumber": "270",
+  "rarity": "common",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "This land enters tapped.\nWhen this land enters, you gain 1 life.\n{T}: Add {R} or {G}.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/1/2123fcb5-8181-47ab-9a2d-7ede5b5118e8.jpg?1783902883",
+   "normal": "https://cards.scryfall.io/normal/front/2/1/2123fcb5-8181-47ab-9a2d-7ede5b5118e8.jpg?1783902883",
+   "large": "https://cards.scryfall.io/large/front/2/1/2123fcb5-8181-47ab-9a2d-7ede5b5118e8.jpg?1783902883",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/1/2123fcb5-8181-47ab-9a2d-7ede5b5118e8.jpg?1783902883"
+  }
+ },
+ {
+  "name": "Birnin Zana Plaza",
+  "scryfallId": "41463827-46de-40c4-ac2b-1fdf6aa36f65",
+  "oracleId": "c3172c5d-c745-4422-b651-cd414c8da11b",
+  "set": "msh",
+  "collectorNumber": "262",
+  "rarity": "common",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "This land enters tapped.\nWhen this land enters, you gain 1 life.\n{T}: Add {G} or {W}.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/1/41463827-46de-40c4-ac2b-1fdf6aa36f65.jpg?1783902886",
+   "normal": "https://cards.scryfall.io/normal/front/4/1/41463827-46de-40c4-ac2b-1fdf6aa36f65.jpg?1783902886",
+   "large": "https://cards.scryfall.io/large/front/4/1/41463827-46de-40c4-ac2b-1fdf6aa36f65.jpg?1783902886",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/1/41463827-46de-40c4-ac2b-1fdf6aa36f65.jpg?1783902886"
+  }
+ },
+ {
+  "name": "Fisk Tower",
+  "scryfallId": "7690e624-93c1-46f4-8f33-e28d881787d3",
+  "oracleId": "5554db95-9676-4c24-b82a-8173513d7927",
+  "set": "msh",
+  "collectorNumber": "265",
+  "rarity": "common",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "This land enters tapped.\nWhen this land enters, you gain 1 life.\n{T}: Add {W} or {B}.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/6/7690e624-93c1-46f4-8f33-e28d881787d3.jpg?1783902884",
+   "normal": "https://cards.scryfall.io/normal/front/7/6/7690e624-93c1-46f4-8f33-e28d881787d3.jpg?1783902884",
+   "large": "https://cards.scryfall.io/large/front/7/6/7690e624-93c1-46f4-8f33-e28d881787d3.jpg?1783902884",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/6/7690e624-93c1-46f4-8f33-e28d881787d3.jpg?1783902884"
+  }
+ },
+ {
+  "name": "Stark Industries",
+  "scryfallId": "fe3609d8-71a2-49d9-a3fa-25e0906a1a0e",
+  "oracleId": "52401cb4-1bce-4191-9220-0d93ea4108b8",
+  "set": "msh",
+  "collectorNumber": "272",
+  "rarity": "common",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "This land enters tapped.\nWhen this land enters, you gain 1 life.\n{T}: Add {U} or {R}.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/e/fe3609d8-71a2-49d9-a3fa-25e0906a1a0e.jpg?1783902882",
+   "normal": "https://cards.scryfall.io/normal/front/f/e/fe3609d8-71a2-49d9-a3fa-25e0906a1a0e.jpg?1783902882",
+   "large": "https://cards.scryfall.io/large/front/f/e/fe3609d8-71a2-49d9-a3fa-25e0906a1a0e.jpg?1783902882",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/e/fe3609d8-71a2-49d9-a3fa-25e0906a1a0e.jpg?1783902882"
+  }
+ },
+ {
+  "name": "Subterranean Cavern",
+  "scryfallId": "038bf500-e23a-4d38-9312-db1909e20353",
+  "oracleId": "d49a7525-eca5-48e1-b94b-d618a706fd02",
+  "set": "msh",
+  "collectorNumber": "273",
+  "rarity": "common",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "This land enters tapped.\nWhen this land enters, you gain 1 life.\n{T}: Add {B} or {G}.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/3/038bf500-e23a-4d38-9312-db1909e20353.jpg?1783902881",
+   "normal": "https://cards.scryfall.io/normal/front/0/3/038bf500-e23a-4d38-9312-db1909e20353.jpg?1783902881",
+   "large": "https://cards.scryfall.io/large/front/0/3/038bf500-e23a-4d38-9312-db1909e20353.jpg?1783902881",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/3/038bf500-e23a-4d38-9312-db1909e20353.jpg?1783902881"
+  }
+ },
+ {
+  "name": "Asgardian Citadel",
+  "scryfallId": "d5f88c3d-b17b-46aa-a573-449350f95d46",
+  "oracleId": "e3614df6-ce84-4180-ade1-a1751e8e3c9a",
+  "set": "msh",
+  "collectorNumber": "258",
+  "rarity": "common",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "This land enters tapped.\nWhen this land enters, you gain 1 life.\n{T}: Add {R} or {W}.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/5/d5f88c3d-b17b-46aa-a573-449350f95d46.jpg?1783902886",
+   "normal": "https://cards.scryfall.io/normal/front/d/5/d5f88c3d-b17b-46aa-a573-449350f95d46.jpg?1783902886",
+   "large": "https://cards.scryfall.io/large/front/d/5/d5f88c3d-b17b-46aa-a573-449350f95d46.jpg?1783902886",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/5/d5f88c3d-b17b-46aa-a573-449350f95d46.jpg?1783902886"
+  }
+ },
+ {
+  "name": "Pym Technologies",
+  "scryfallId": "1de583ce-e805-45f1-907f-198bc82fd3b5",
+  "oracleId": "5a8977fc-0732-4807-b876-01819aedd70b",
+  "set": "msh",
+  "collectorNumber": "271",
+  "rarity": "common",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "This land enters tapped.\nWhen this land enters, you gain 1 life.\n{T}: Add {G} or {U}.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/d/1de583ce-e805-45f1-907f-198bc82fd3b5.jpg?1783902882",
+   "normal": "https://cards.scryfall.io/normal/front/1/d/1de583ce-e805-45f1-907f-198bc82fd3b5.jpg?1783902882",
+   "large": "https://cards.scryfall.io/large/front/1/d/1de583ce-e805-45f1-907f-198bc82fd3b5.jpg?1783902882",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/d/1de583ce-e805-45f1-907f-198bc82fd3b5.jpg?1783902882"
+  }
  }
 ]

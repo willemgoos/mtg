@@ -67,6 +67,9 @@ export function Card(p: CardProps) {
       dir: gain >= 0 ? 'up' : 'down',
     };
   }
+  // A double-faced permanent that transforms flips over to its other face (as on Arena).
+  const face = useRef({ defId: p.defId, n: 0 });
+  if (face.current.defId !== p.defId) face.current = { defId: p.defId, n: face.current.n + 1 };
   const cls = [
     'card',
     `card--${p.size}`,
@@ -87,7 +90,7 @@ export function Card(p: CardProps) {
       onMouseEnter={(e) => p.onHover?.(p.defId, e.currentTarget)}
       onMouseLeave={() => p.onHover?.(null)}
     >
-      <div className="card__body">
+      <div key={face.current.n} className={`card__body ${face.current.n ? 'is-flipping' : ''}`}>
         {img ? (
           <img src={img} alt={def?.name ?? ''} draggable={false} />
         ) : (
