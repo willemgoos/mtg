@@ -536,8 +536,21 @@ function detect(ctx: Ctx, ev: GameEvent): void {
       if (!card) return;
       forEachBattlefieldTrigger(
         ctx,
-        (o, a) => a.trigger.on === 'youDiscard' && o.controller === ev.player,
+        (o, a) =>
+          a.trigger.on === 'youDiscard' &&
+          o.controller === ev.player &&
+          (!a.trigger.filter || cardMatches(ctx, card.id, a.trigger.filter, o.id)),
         card,
+      );
+      return;
+    }
+    case 'connived': {
+      const who = s.objects[ev.id];
+      if (!who || who.zone !== 'battlefield') return;
+      forEachBattlefieldTrigger(
+        ctx,
+        (o, a) => a.trigger.on === 'creatureYouControlConnives' && o.controller === who.controller,
+        who,
       );
       return;
     }

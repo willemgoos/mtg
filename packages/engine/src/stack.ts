@@ -318,6 +318,12 @@ export function castSpell(
     wardCost(ctx, player, targets),
   );
   const teamwork = teamworkFor(ctx, player, card, choice);
+  // Convoke: remembered for "each creature that convoked this spell" (Lethal Scheme).
+  const convokers = d.convoke
+    ? creatureHelpers(ctx, player, manaSources(ctx, player, undefined, spellTags(d))).map(
+        (h) => h.id,
+      )
+    : [];
   const payment = planPayment(
     ctx,
     player,
@@ -375,6 +381,7 @@ export function castSpell(
   });
   payMana(ctx, payment);
   if (teamwork) payTeamwork(ctx, teamwork);
+  if (convokers.length) o.convokedBy = payment.filter((id) => convokers.includes(id));
   if (d.types.includes('Creature')) scryForAncestry(ctx, player, d, payment);
   // Escalate: tap a creature for each mode beyond the first.
   if (v.spell?.escalate)
@@ -1180,6 +1187,9 @@ export function answerDiscard(ctx: Ctx, card: ObjectId): void {
   const c = d.connive && ctx.s.objects[d.connive.id];
   if (c && nonland && c.zone === 'battlefield' && c.zcc === d.connive!.zcc)
     addCounters(ctx, c.id, 1);
+  // "Whenever a creature you control connives" (Glorious Purpose, Iron Monger, Ultron).
+  if (c && c.zone === 'battlefield' && c.zcc === d.connive!.zcc)
+    emit(ctx, { type: 'connived', id: c.id, player: c.controller });
   const left = ctx.s.players[d.player].hand.filter(
     (id) => !d.filter || cardMatches(ctx, id, d.filter),
   );

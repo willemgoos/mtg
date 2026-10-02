@@ -488,6 +488,7 @@ export function runEffects(
       e.kind === 'lookForCreature' ||
       e.kind === 'discard' ||
       e.kind === 'connive' ||
+      e.kind === 'conniveConvokers' ||
       e.kind === 'returnFromGraveyard' ||
       e.kind === 'piles' ||
       e.kind === 'opponentSacrifices' ||
@@ -1034,6 +1035,21 @@ export function runEffects(
           resume,
           thenPriority,
         };
+      } else if (e.kind === 'conniveConvokers') {
+        // Lethal Scheme: each creature that helped cast it connives, one after another.
+        const spell = es.source && ctx.s.objects[es.source.id];
+        const convokers = (spell?.convokedBy ?? []).filter(
+          (id) => ctx.s.objects[id]?.zone === 'battlefield',
+        );
+        list.splice(
+          i + 1,
+          0,
+          ...convokers.flatMap((id): EffectDef[] => [
+            { kind: 'focus', on: { id, zcc: obj(ctx, id).zcc } },
+            { kind: 'connive', what: 'chosen' },
+          ]),
+        );
+        continue;
       } else if (e.kind === 'connive') {
         // Rule 701.50: draw, then discard. A creature that has left still connives (no counter).
         const id = objectsOf(ctx, es, e.what)[0] ?? (e.what === 'self' ? es.source?.id : undefined);
@@ -1046,7 +1062,10 @@ export function runEffects(
             for (const a of def(ctx, id).abilities)
               if (a.kind === 'static' && a.effect.kind === 'conniveDrawsFirst') drawCard(ctx, who);
         drawCard(ctx, who);
-        if (ctx.s.players[who].hand.length === 0) continue;
+        if (ctx.s.players[who].hand.length === 0) {
+          if (o.zone === 'battlefield') emit(ctx, { type: 'connived', id, player: who });
+          continue;
+        }
         ctx.s.decision = {
           kind: 'discard',
           player: who,
@@ -1635,11 +1654,26 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
       });
       return;
     }
+    case 'focus':
+      es.chosen = e.on;
+      return;
+    case 'exiledWithSourceToHand': {
+      const self = es.source && ctx.s.objects[es.source.id];
+      for (const id of self?.exiledWith ?? [])
+        if (ctx.s.objects[id]?.zone === 'exile') moveObject(ctx, id, 'hand');
+      return;
+    }
+    case 'conniveConvokers':
+      return; // handled by runEffects
     case 'exileDiscarded': {
       const card = es.subject && ctx.s.objects[es.subject.id];
       if (!card || card.zone !== 'graveyard' || card.zcc !== es.subject!.zcc) return;
       moveObject(ctx, card.id, 'exile');
-      if (e.playable) card.playableUntilTurn = ctx.s.turn.number;
+      // Moonstone: until the end of your next turn.
+      if (e.playable === 'untilEndOfNextTurn')
+        card.playableUntilTurn =
+          ctx.s.turn.number + (ctx.s.turn.activePlayer === es.controller ? 2 : 1);
+      else if (e.playable) card.playableUntilTurn = ctx.s.turn.number;
       const self = e.track && es.source ? onBattlefield(ctx, es.source) : undefined;
       if (self) self.exiledWith = [...(self.exiledWith ?? []), card.id];
       return;

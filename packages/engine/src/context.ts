@@ -321,6 +321,7 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
   delete o.monstrous;
   delete o.usedModes;
   delete o.discardedTurn;
+  if (from === 'stack') delete o.convokedBy;
   delete o.kickCount;
   if (from === 'exile') {
     delete o.suspended;

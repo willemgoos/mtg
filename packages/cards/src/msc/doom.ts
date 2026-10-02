@@ -43,7 +43,111 @@ const enterOrAttack = (...effects: EffectDef[]): AbilityDef[] => [
 const chapter = (chapters: number[], targets: TargetSpec[], ...effects: EffectDef[]): AbilityDef =>
   when({ on: 'chapter', chapters }, targets, ...effects);
 
+const connive = (what: Ref): EffectDef => ({ kind: 'connive', what });
+
 export const DOOM: Record<string, Behavior> = {
+  // ------------------------------------------------------------ commander
+  'Doctor Doom, King of Latveria': {
+    abilities: [
+      {
+        ...when({ on: 'youDiscard', filter: { types: ['Land'] } }, [], {
+          kind: 'loseLife',
+          who: 'eachOpponent',
+          amount: 2,
+        }),
+        // "Whenever you discard one or more land cards": once per batch.
+        batch: true,
+      } as AbilityDef,
+      when(
+        { on: 'beginningOfCombat', whose: 'yours' },
+        [{ what: 'creature', controller: 'you', filter: villain }],
+        pump(t0, 0, 0, ['menace']),
+        connive(t0),
+      ),
+    ],
+  },
+  // ------------------------------------------------------------ connive
+  'Prowler, Clawed Thief': {
+    abilities: [
+      when({ on: 'otherCreatureEtb', controller: 'you', filter: villain }, [], connive(self)),
+    ],
+  },
+  'Iron Monger, Sadistic Tycoon': {
+    abilities: [
+      when(
+        { on: 'creatureYouControlConnives' },
+        [],
+        counters({ each: 'creature', controller: 'you', filter: villain }),
+      ),
+    ],
+  },
+  'Ultron, Unlimited': {
+    abilities: [
+      when({ on: 'attacks' }, [], connive(self)),
+      when({ on: 'creatureYouControlConnives' }, [], {
+        kind: 'may',
+        cost: mana('{1}'),
+        effects: [token('robot-villain-token')],
+      }),
+    ],
+  },
+  'Glorious Purpose': {
+    abilities: [
+      when(
+        { on: 'creatureYouControlConnives' },
+        [],
+        counters('subject'),
+        {
+          kind: 'namedCounters',
+          name: 'plan',
+          amount: 1,
+        },
+        {
+          // "When the sixth plan counter is put on this enchantment": checked as each arrives.
+          kind: 'if',
+          condition: { kind: 'amountAtLeast', amount: { namedCountersOnSource: 'plan' }, min: 6 },
+          then: [
+            { kind: 'sacrifice', what: self },
+            { kind: 'exileTopWithSource', count: 4 },
+            ...[0, 1, 2, 3].map((): EffectDef => ({
+              kind: 'castFree',
+              what: self,
+              from: 'exiledWithSource',
+            })),
+            { kind: 'exiledWithSourceToHand' },
+          ],
+        },
+      ),
+    ],
+  },
+  'Lethal Scheme': {
+    convoke: true,
+    spell: {
+      targets: [permanent({ types: ['Creature', 'Planeswalker'] })],
+      effects: [destroy, { kind: 'conniveConvokers' }],
+    },
+  },
+  'Moonstone, Harsh Mistress': {
+    abilities: [
+      when({ on: 'youDiscard' }, [], {
+        kind: 'may',
+        effects: [{ kind: 'exileDiscarded', playable: 'untilEndOfNextTurn' }],
+      }),
+    ],
+  },
+  'Villainous Hideout': {
+    abilities: [
+      tapFor('C'),
+      ...COLORS.map((c) => tapFor(c, { onlyFor: 'Villain' })),
+      {
+        kind: 'activated',
+        cost: { mana: mana('{3}'), tapSelf: true },
+        sorcerySpeed: true,
+        targets: [{ what: 'creature', controller: 'you', filter: villain }],
+        effects: [connive(t0)],
+      },
+    ],
+  },
   // ------------------------------------------------------------ creatures
   'The Squadron Sinister': {
     mayhem: mana('{3}{U}{R}'),

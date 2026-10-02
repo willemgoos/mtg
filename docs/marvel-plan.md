@@ -301,9 +301,9 @@ Secret Invasion need "becomes a copy".
 
 9e (Doom Prevails), part 1 (everything but connive):
 
-- Not done yet, waiting for Stream B: the connive cards (Doctor Doom, Lethal Scheme, Prowler, Glorious Purpose, Iron
-  Monger, Ultron, Villainous Hideout) and Moonstone. Baron Strucker, Madame Hydra and Kang, Temporal Tyrant are MSH
-  cards Stream B already uses in its decks: they come from there. The decklist goes in once all of them exist.
+- The connive cards came after Stream B's merge (Doctor Doom, Lethal Scheme, Prowler, Glorious Purpose, Iron Monger,
+  Ultron, Villainous Hideout, Moonstone). Baron Strucker, Madame Hydra and Kang, Temporal Tyrant are Stream B's.
+- Glorious Purpose's sixth plan counter offers four free casts from the exiled cards one at a time; the rest go to hand.
 - Overload is modelled as kicker (Vandalblast: {R} plus {4}, labelled "Overload").
 - Multikicker is offered up to three times; Batroc deals its damage to up to two targets.
 - Melee: each attacking creature you control gets +1/+1 (one opponent).

@@ -263,3 +263,97 @@ describe('Doom Prevails', () => {
     expect(castable(g, 'bear-cub')).toBe(true);
   });
 });
+
+describe('Doom Prevails: connive', () => {
+  /** Answers a connive discard with the first card of this kind in hand. */
+  const discard = (g: ReturnType<typeof game>, defId: string) => {
+    const d = g.decision;
+    if (d.kind !== 'discard') throw new Error(`expected a discard, got ${d.kind}`);
+    g.do({ type: 'discard', player: d.player, card: g.id(d.player, defId, 'hand') });
+    return settle(g);
+  };
+
+  it('Doctor Doom: a Villain gets menace and connives at combat; discarding a land drains 2', () => {
+    const g = game({
+      p1: {
+        battlefield: ['doctor-doom-king-of-latveria'],
+        hand: ['island'],
+        library: n('swamp', 5),
+      },
+    });
+    passUntil(g, 'discard');
+    discard(g, 'island');
+    const doom = g.id('p1', 'doctor-doom-king-of-latveria');
+    // A land discard: no counter, but the opponent loses 2.
+    expect(g.obj(doom).plusOneCounters).toBe(0);
+    expect(g.life('p2')).toBe(18);
+    expect(getCharacteristics(g.state, cardDb, doom).keywords.has('menace')).toBe(true);
+  });
+
+  it('Iron Monger and Ultron react to a creature conniving', () => {
+    const g = game({
+      p1: {
+        battlefield: [
+          'iron-monger-sadistic-tycoon',
+          'ultron-unlimited',
+          'villainous-hideout',
+          ...n('swamp', 4),
+        ],
+        hand: ['savannah-lions'],
+        library: n('swamp', 5),
+      },
+    });
+    const ultron = g.id('p1', 'ultron-unlimited');
+    const hideout = g.id('p1', 'villainous-hideout');
+    g.do(
+      g
+        .legal()
+        .find(
+          (a) =>
+            a.type === 'activateAbility' &&
+            a.source === hideout &&
+            a.targets.some((t) => 'object' in t && t.object.id === ultron),
+        )!,
+    );
+    g.passBoth();
+    discard(g, 'savannah-lions');
+    for (let i = 0; i < 4 && g.decision.kind === 'optionalEffect'; i++) {
+      g.do({ type: 'chooseEffect', player: 'p1', accept: true });
+      settle(g);
+    }
+    // Ultron: +1 for the nonland discard, +1 from Iron Monger; a Robot from his own trigger.
+    expect(g.obj(ultron).plusOneCounters).toBe(2);
+    expect(all(g, 'robot-villain-token')).toHaveLength(1);
+  });
+
+  it('Lethal Scheme: the creatures that convoked it connive', () => {
+    const g = game({
+      p1: {
+        hand: ['lethal-scheme', 'savannah-lions'],
+        battlefield: ['bear-cub', ...n('swamp', 3)],
+        library: n('swamp', 5),
+      },
+      p2: { battlefield: ['rumbling-baloth'] },
+    });
+    cast(g, 'lethal-scheme', [g.ref(g.id('p2', 'rumbling-baloth'))]);
+    g.passBoth();
+    discard(g, 'savannah-lions');
+    expect(all(g, 'rumbling-baloth')).toHaveLength(0);
+    expect(g.obj(g.id('p1', 'bear-cub')).plusOneCounters).toBe(1);
+  });
+
+  it('Prowler connives when another Villain enters', () => {
+    const g = game({
+      p1: {
+        battlefield: ['prowler-clawed-thief', ...n('swamp', 3)],
+        hand: ['tombstone-career-criminal', 'savannah-lions'],
+        library: n('swamp', 5),
+      },
+    });
+    cast(g, 'tombstone-career-criminal');
+    g.passBoth();
+    passUntil(g, 'discard');
+    discard(g, 'savannah-lions');
+    expect(g.obj(g.id('p1', 'prowler-clawed-thief')).plusOneCounters).toBe(1);
+  });
+});

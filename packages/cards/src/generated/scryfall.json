@@ -25088,6 +25088,206 @@
   }
  },
  {
+  "name": "Doctor Doom, King of Latveria",
+  "scryfallId": "099ed408-9178-4403-8b2d-479ca3cbda9b",
+  "oracleId": "9c9cd0fd-bfe9-409c-a9a9-146f5f4a2ef4",
+  "set": "msc",
+  "collectorNumber": "6",
+  "rarity": "mythic",
+  "manaCost": "{1}{U}{B}{R}",
+  "typeLine": "Legendary Creature — Human Noble Villain",
+  "oracleText": "Whenever you discard one or more land cards, each opponent loses 2 life.\nAt the beginning of combat on your turn, target Villain you control gains menace until end of turn. It connives. (Draw a card, then discard a card. If you discarded a nonland card, put a +1/+1 counter on that creature.)",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "B",
+   "R",
+   "U"
+  ],
+  "keywords": [
+   "Connive"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/9/099ed408-9178-4403-8b2d-479ca3cbda9b.jpg?1783903303",
+   "normal": "https://cards.scryfall.io/normal/front/0/9/099ed408-9178-4403-8b2d-479ca3cbda9b.jpg?1783903303",
+   "large": "https://cards.scryfall.io/large/front/0/9/099ed408-9178-4403-8b2d-479ca3cbda9b.jpg?1783903303",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/9/099ed408-9178-4403-8b2d-479ca3cbda9b.jpg?1783903303"
+  }
+ },
+ {
+  "name": "Prowler, Clawed Thief",
+  "scryfallId": "08d18fce-e250-4bcb-9acf-08a8a6e4f1e2",
+  "oracleId": "76742bfc-ae99-4b06-b29d-e0e41d92ae14",
+  "set": "msc",
+  "collectorNumber": "186",
+  "rarity": "uncommon",
+  "manaCost": "{1}{U}{B}",
+  "typeLine": "Legendary Creature — Human Rogue Villain",
+  "oracleText": "Menace (This creature can't be blocked except by two or more creatures.)\nWhenever another Villain you control enters, Prowler connives. (Draw a card, then discard a card. If you discarded a nonland card, put a +1/+1 counter on this creature.)",
+  "power": "2",
+  "toughness": "3",
+  "colors": [
+   "B",
+   "U"
+  ],
+  "keywords": [
+   "Menace",
+   "Connive"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/8/08d18fce-e250-4bcb-9acf-08a8a6e4f1e2.jpg?1783903224",
+   "normal": "https://cards.scryfall.io/normal/front/0/8/08d18fce-e250-4bcb-9acf-08a8a6e4f1e2.jpg?1783903224",
+   "large": "https://cards.scryfall.io/large/front/0/8/08d18fce-e250-4bcb-9acf-08a8a6e4f1e2.jpg?1783903224",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/8/08d18fce-e250-4bcb-9acf-08a8a6e4f1e2.jpg?1783903224"
+  }
+ },
+ {
+  "name": "Iron Monger, Sadistic Tycoon",
+  "scryfallId": "799554d1-d1fb-4206-af9a-80d3582bedc0",
+  "oracleId": "7324d8c0-3a30-452b-b05d-ec7b6a98666c",
+  "set": "msc",
+  "collectorNumber": "45",
+  "rarity": "rare",
+  "manaCost": "{2}{B}",
+  "typeLine": "Legendary Artifact Creature — Human Villain",
+  "oracleText": "Flying\nWhenever a creature you control connives, put a +1/+1 counter on each Villain you control.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Flying",
+   "Connive"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/9/799554d1-d1fb-4206-af9a-80d3582bedc0.jpg?1783903288",
+   "normal": "https://cards.scryfall.io/normal/front/7/9/799554d1-d1fb-4206-af9a-80d3582bedc0.jpg?1783903288",
+   "large": "https://cards.scryfall.io/large/front/7/9/799554d1-d1fb-4206-af9a-80d3582bedc0.jpg?1783903288",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/9/799554d1-d1fb-4206-af9a-80d3582bedc0.jpg?1783903288"
+  }
+ },
+ {
+  "name": "Ultron, Unlimited",
+  "scryfallId": "bf5b410f-d6cb-4a74-a975-372975cf21f6",
+  "oracleId": "436501ca-0998-43fc-975f-87c2d34caab3",
+  "set": "msc",
+  "collectorNumber": "100",
+  "rarity": "rare",
+  "manaCost": "{1}{U}{B}",
+  "typeLine": "Legendary Artifact Creature — Robot Villain",
+  "oracleText": "Flying\nWhenever Ultron attacks, he connives. (Draw a card, then discard a card. If you discarded a nonland card, put a +1/+1 counter on this creature.)\nWhenever a creature you control connives, you may pay {1}. If you do, create a 2/2 colorless Robot Villain artifact creature token.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "B",
+   "U"
+  ],
+  "keywords": [
+   "Flying",
+   "Connive"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/f/bf5b410f-d6cb-4a74-a975-372975cf21f6.jpg?1783903261",
+   "normal": "https://cards.scryfall.io/normal/front/b/f/bf5b410f-d6cb-4a74-a975-372975cf21f6.jpg?1783903261",
+   "large": "https://cards.scryfall.io/large/front/b/f/bf5b410f-d6cb-4a74-a975-372975cf21f6.jpg?1783903261",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/f/bf5b410f-d6cb-4a74-a975-372975cf21f6.jpg?1783903261"
+  }
+ },
+ {
+  "name": "Glorious Purpose",
+  "scryfallId": "d78f2105-030f-4951-aa02-0d4db3d34f59",
+  "oracleId": "182baad0-ec6e-4e93-9dfc-7c80b37005de",
+  "set": "msc",
+  "collectorNumber": "31",
+  "rarity": "rare",
+  "manaCost": "{1}{U}",
+  "typeLine": "Enchantment — Plan",
+  "oracleText": "Whenever a creature you control connives, put a +1/+1 counter on that creature and a plan counter on this enchantment.\nWhen the sixth plan counter is put on this enchantment, sacrifice it. If you do, exile the top four cards of your library. You may cast any number of spells from among them without paying their mana costs. Put the rest into your hand.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Connive"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/7/d78f2105-030f-4951-aa02-0d4db3d34f59.jpg?1783903293",
+   "normal": "https://cards.scryfall.io/normal/front/d/7/d78f2105-030f-4951-aa02-0d4db3d34f59.jpg?1783903293",
+   "large": "https://cards.scryfall.io/large/front/d/7/d78f2105-030f-4951-aa02-0d4db3d34f59.jpg?1783903293",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/7/d78f2105-030f-4951-aa02-0d4db3d34f59.jpg?1783903293"
+  }
+ },
+ {
+  "name": "Lethal Scheme",
+  "scryfallId": "b2d9c467-6e56-401c-ade1-95dad7e4e766",
+  "oracleId": "c4660b3c-a234-4a3e-83e7-e2fa9d556685",
+  "set": "msc",
+  "collectorNumber": "157",
+  "rarity": "rare",
+  "manaCost": "{2}{B}{B}",
+  "typeLine": "Instant",
+  "oracleText": "Convoke (Your creatures can help cast this spell. Each creature you tap while casting this spell pays for {1} or one mana of that creature's color.)\nDestroy target creature or planeswalker. Each creature that convoked this spell connives. (Draw a card, then discard a card. If you discarded a nonland card, put a +1/+1 counter on that creature.)",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Connive",
+   "Convoke"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/2/b2d9c467-6e56-401c-ade1-95dad7e4e766.jpg?1783903236",
+   "normal": "https://cards.scryfall.io/normal/front/b/2/b2d9c467-6e56-401c-ade1-95dad7e4e766.jpg?1783903236",
+   "large": "https://cards.scryfall.io/large/front/b/2/b2d9c467-6e56-401c-ade1-95dad7e4e766.jpg?1783903236",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/2/b2d9c467-6e56-401c-ade1-95dad7e4e766.jpg?1783903236"
+  }
+ },
+ {
+  "name": "Moonstone, Harsh Mistress",
+  "scryfallId": "1a1b2bd0-e17d-4b34-a8ee-7c913a6bc945",
+  "oracleId": "aeeb50f2-8e02-4d40-a1dd-28b1c5c85c7e",
+  "set": "msh",
+  "collectorNumber": "107",
+  "rarity": "uncommon",
+  "manaCost": "{3}{B}",
+  "typeLine": "Legendary Creature — Human Doctor Villain",
+  "oracleText": "Flying\nWhenever you discard a card, you may exile that card from your graveyard. If you do, until the end of your next turn, you may play that card.",
+  "power": "2",
+  "toughness": "4",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/a/1a1b2bd0-e17d-4b34-a8ee-7c913a6bc945.jpg?1783902940",
+   "normal": "https://cards.scryfall.io/normal/front/1/a/1a1b2bd0-e17d-4b34-a8ee-7c913a6bc945.jpg?1783902940",
+   "large": "https://cards.scryfall.io/large/front/1/a/1a1b2bd0-e17d-4b34-a8ee-7c913a6bc945.jpg?1783902940",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/a/1a1b2bd0-e17d-4b34-a8ee-7c913a6bc945.jpg?1783902940"
+  }
+ },
+ {
+  "name": "Villainous Hideout",
+  "scryfallId": "822b0249-e1df-453d-8b60-75a5196ed818",
+  "oracleId": "cd2888aa-71f3-47ee-ba33-7bb95d5bc836",
+  "set": "msh",
+  "collectorNumber": "276",
+  "rarity": "uncommon",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "{T}: Add {C}.\n{T}: Add one mana of any color. Spend this mana only to cast a Villain spell or to activate an ability of a Villain source.\n{3}, {T}: Target Villain you control connives. Activate only as a sorcery. (Draw a card, then discard a card. If you discarded a nonland card, put a +1/+1 counter on that creature.)",
+  "colors": [],
+  "keywords": [
+   "Connive"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/2/822b0249-e1df-453d-8b60-75a5196ed818.jpg?1783902881",
+   "normal": "https://cards.scryfall.io/normal/front/8/2/822b0249-e1df-453d-8b60-75a5196ed818.jpg?1783902881",
+   "large": "https://cards.scryfall.io/large/front/8/2/822b0249-e1df-453d-8b60-75a5196ed818.jpg?1783902881",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/2/822b0249-e1df-453d-8b60-75a5196ed818.jpg?1783902881"
+  }
+ },
+ {
   "name": "The Squadron Sinister",
   "scryfallId": "96714d95-baef-45e3-a2b0-00a8bdb3a76d",
   "oracleId": "3b7352e6-6508-491c-9935-426a6eebb429",

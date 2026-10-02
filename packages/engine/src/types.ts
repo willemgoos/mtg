@@ -446,8 +446,10 @@ export type TriggerDef =
   /** Whenever you sacrifice a permanent matching the filter (Camellia: a Food). */
   | { on: 'youSacrifice'; filter: CardFilter }
   // Doom Prevails (9e).
-  /** Whenever you discard a card ("that card" is the subject). */
-  | { on: 'youDiscard' }
+  /** Whenever you discard a card ("that card" is the subject); Doctor Doom: one or more lands, once per batch. */
+  | { on: 'youDiscard'; filter?: CardFilter }
+  /** Whenever a creature you control connives ("that creature" is the subject). */
+  | { on: 'creatureYouControlConnives' }
   /** A Saga's chapter abilities (triggered as lore counters are added). */
   | { on: 'chapter'; chapters: number[] }
   // The Fantastic Four (9d).
@@ -1203,7 +1205,13 @@ export type EffectDef =
    * Exile the card that caused the trigger from your graveyard (a discarded card):
    * playable this turn (Containment Construct), or tracked by the source (Currency Converter).
    */
-  | { kind: 'exileDiscarded'; playable?: boolean; track?: boolean }
+  | { kind: 'exileDiscarded'; playable?: boolean | 'untilEndOfNextTurn'; track?: boolean }
+  /** Each creature that convoked this spell connives (Lethal Scheme). */
+  | { kind: 'conniveConvokers' }
+  /** Internal: "that creature" for the effects after it. */
+  | { kind: 'focus'; on: ObjectRef }
+  /** Glorious Purpose: the cards exiled with the source that weren't cast go to your hand. */
+  | { kind: 'exiledWithSourceToHand' }
   // The Fantastic Four (9d).
   /** You may cast this exiled card without paying its mana cost (rebound, Power Pack); also a card in hand (miracle). */
   | { kind: 'castFreeCard'; card: ObjectRef; exileAfter?: boolean }
@@ -1562,6 +1570,8 @@ export interface GameObject {
   // Doom Prevails (9e).
   /** The turn it was discarded (mayhem). */
   discardedTurn?: number;
+  /** The creatures that convoked it, as a spell (Lethal Scheme). */
+  convokedBy?: ObjectId[];
   /** In exile with suspend (time counters in `counters.time`). */
   suspended?: boolean;
   /** Times it was kicked (multikicker). */
@@ -2267,6 +2277,8 @@ export type GameEvent =
   | { type: 'tapped'; id: ObjectId; first?: boolean }
   /** A card went from its owner's hand to their graveyard (Doom Prevails). */
   | { type: 'discarded'; id: ObjectId; player: PlayerId }
+  /** A creature connived (Doom Prevails). */
+  | { type: 'connived'; id: ObjectId; player: PlayerId }
   /** Wakanda Forever: a new monarch. */
   | { type: 'monarchChanged'; player: PlayerId }
   /** Vision: a permanent phased out or back in. */
