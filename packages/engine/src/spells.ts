@@ -38,7 +38,8 @@ export function spellTags(d: CardDefinition): string[] {
     d.types.includes('Creature') && (manaValue(d.manaCost) >= 4 || !!d.manaCost.x)
       ? ['BigCreature']
       : [];
-  return [...d.subtypes, ...d.types, ...big];
+  // Plaza of Heroes: "only to cast a legendary spell".
+  return [...d.subtypes, ...d.types, ...d.supertypes, ...big];
 }
 
 const MAX_PAWS = 5;

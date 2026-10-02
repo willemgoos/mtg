@@ -1,4 +1,4 @@
-import { commanderColors, opponentLandColors } from './brawl.ts';
+import { commanderColors, legendaryColors, opponentLandColors } from './brawl.ts';
 import { damageSourceFor, dealDamage } from './effects.ts';
 import { canTapForAbility, isCreature, matchesFilter } from './characteristics.ts';
 import { type Ctx, def, emit, obj, sacrifice, tap } from './context.ts';
@@ -73,6 +73,8 @@ export function manaSources(
       )
         continue;
       if (a.colorFrom === 'opponentLands' && !opponentLandColors(ctx, player).includes(a.produces))
+        continue;
+      if (a.colorFrom === 'legendaries' && !legendaryColors(ctx, player).includes(a.produces))
         continue;
       if (a.amount) units = Math.max(units, a.amount);
       if (a.pain) (pain ??= []).push(a.produces);

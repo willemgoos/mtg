@@ -13,6 +13,7 @@ import { canPayFrom, creatureHelpers, manaSources } from './mana.ts';
 import { castVariants, spellTags } from './spells.ts';
 import {
   castCost,
+  crewFor,
   countersYouControl,
   hasStatic,
   wardCost,
@@ -175,7 +176,12 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
   const flashFilters = s.battlefield.flatMap((id) =>
     obj(ctx, id).controller === player
       ? def(ctx, id).abilities.flatMap((a) =>
-          a.kind === 'static' && a.effect.kind === 'flashForAll' ? [a.effect.filter ?? {}] : [],
+          a.kind === 'static' &&
+          a.effect.kind === 'flashForAll' &&
+          // Captain Mar-Vell, Quicksilver: only while their condition holds.
+          checkCondition(ctx, a.effect.condition, player, obj(ctx, id))
+            ? [a.effect.filter ?? {}]
+            : [],
         )
       : [],
   );
@@ -345,6 +351,7 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
         : own;
       if (!canPayFrom(a.cost.mana, usable)) return;
       if (a.cost.tapTokens && tokensToTap(ctx, player, source).length < a.cost.tapTokens) return;
+      if (a.cost.crew && !crewFor(ctx, player, source, a.cost.crew)) return;
       const discards = a.cost.discard ? ps.hand : [undefined];
       if (discards.length === 0) return;
       const rc = a.cost.removeCounters;

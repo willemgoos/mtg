@@ -79,3 +79,14 @@ export function answerCommandZone(ctx: Ctx, card: ObjectId, accept: boolean): vo
   // Moving bumps zcc; remember the answer for the zone it ends up in.
   o.commandOffered = o.zcc;
 }
+
+/** Plaza of Heroes: the colours of legendary permanents `player` controls. */
+export function legendaryColors(ctx: Ctx, player: PlayerId): ManaType[] {
+  const out = new Set<ManaType>();
+  for (const id of ctx.s.battlefield) {
+    if (obj(ctx, id).controller !== player) continue;
+    const d = def(ctx, id);
+    if (d.supertypes.includes('Legendary')) for (const c of d.colors) out.add(c);
+  }
+  return [...out];
+}

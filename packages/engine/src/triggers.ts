@@ -14,6 +14,7 @@ import type {
   ConditionDef,
   GameEvent,
   GameObject,
+  ObjectId,
   CardFilter,
   PlayerId,
   StackItem,
@@ -30,8 +31,17 @@ export function checkCondition(
   self: GameObject | undefined,
   /** Chosen targets, for conditions about them (resolution-time "if"). */
   targets?: readonly (TargetChoice | null)[],
+  /** What caused the trigger, for intervening "if"s about it (Hawkeye). */
+  subject?: GameObject,
 ): boolean {
   if (!c) return true;
+  // Avengers Assemble (9b).
+  if (c.kind === 'opponentCastSpellThisTurn')
+    return (ctx.s.turn.spellsCast?.[other(controller)] ?? 0) > 0;
+  if (c.kind === 'sourceTapped') return !!self?.tapped;
+  if (c.kind === 'opponentAttackedLastTurn')
+    return ctx.s.players[other(controller)].attackedLastTurn === true;
+  if (c.kind === 'sourceDamagedSubject') return !!self && !!subject?.damagedBy?.includes(self.id);
   if (c.kind === 'targetMatches') {
     const t = targets?.[c.target];
     if (!t || !('object' in t)) return false;
@@ -198,7 +208,7 @@ function forEachBattlefieldTrigger(
     const o = obj(ctx, id);
     def(ctx, id).abilities.forEach((a, i) => {
       if (a.kind !== 'triggered') return;
-      if (fn(o, a, i) && checkCondition(ctx, a.condition, o.controller, o))
+      if (fn(o, a, i) && checkCondition(ctx, a.condition, o.controller, o, undefined, subject))
         queue(ctx, o, i, o.controller, subject, amount);
     });
   }
@@ -257,7 +267,7 @@ function detect(ctx: Ctx, ev: GameEvent): void {
                 isCreature &&
                 o.id !== moved.id &&
                 (t.controller === 'any' || o.controller === moved.controller) &&
-                matchesFilter(ctx, moved.id, t.filter)
+                matchesFilter(ctx, moved.id, t.filter, o.id)
               );
             if (t.on === 'landfall') return isLand && o.controller === moved.controller;
             if (t.on === 'otherPermanentEtb')
@@ -328,6 +338,19 @@ function detect(ctx: Ctx, ev: GameEvent): void {
           if (card && checkCondition(ctx, a.condition, controller, card))
             queue(ctx, card, i, controller, card);
         });
+        // Heroic Sacrifice: "When that creature dies this turn, ...".
+        if (moved)
+          for (const e of s.effects) {
+            if (!e.onDies || e.affected.id !== ev.id || e.affected.zcc !== moved.zcc - 1) continue;
+            s.pendingTriggers.push({
+              source: { id: moved.id, zcc: moved.zcc },
+              sourceDefId: e.onDies.sourceDefId,
+              abilityIndex: -1,
+              controller: e.onDies.controller,
+              subject: { id: moved.id, zcc: moved.zcc },
+              inline: e.onDies.effects,
+            });
+          }
         // Granted "when this dies, return it" (Undying Malice, Fake Your Own Death).
         if (moved) {
           for (const e of s.effects) {
@@ -392,7 +415,11 @@ function detect(ctx: Ctx, ev: GameEvent): void {
       forEachBattlefieldTrigger(
         ctx,
         (o, a) =>
-          (a.trigger.on === 'drawSecondCard' && ev.nth === 2 && o.controller === ev.player) ||
+          (a.trigger.on === 'drawSecondCard' &&
+            ev.nth === 2 &&
+            (a.trigger.whose === 'opponents'
+              ? o.controller !== ev.player
+              : o.controller === ev.player)) ||
           (a.trigger.on === 'drawCard' &&
             (a.trigger.whose === 'yours'
               ? o.controller === ev.player
@@ -420,9 +447,11 @@ function detect(ctx: Ctx, ev: GameEvent): void {
         ctx,
         (o, a) =>
           a.trigger.on === 'castSpell' &&
-          o.controller === ev.player &&
+          (a.trigger.anyPlayerOffTurn
+            ? s.turn.activePlayer !== ev.player
+            : o.controller === ev.player) &&
           spellMatches(ctx, a.trigger, spell, item, o) &&
-          (!a.trigger.spell || cardMatches(ctx, ev.id, a.trigger.spell)),
+          (!a.trigger.spell || cardMatches(ctx, ev.id, a.trigger.spell, o.id)),
         spellObj,
         manaValueOf(spell),
       );
@@ -449,12 +478,12 @@ function detect(ctx: Ctx, ev: GameEvent): void {
     }
     case 'attackersDeclared': {
       const ap = s.turn.activePlayer;
-      const attackedWith = (f: CardFilter | undefined) =>
-        ev.attackers.some((id) => !!s.objects[id] && matchesFilter(ctx, id, f));
+      const attackedWith = (f: CardFilter | undefined, source?: ObjectId) =>
+        ev.attackers.some((id) => !!s.objects[id] && matchesFilter(ctx, id, f, source));
       forEachBattlefieldTrigger(ctx, (o, a) => {
         if (a.trigger.on === 'attacks') return ev.attackers.includes(o.id);
         if (a.trigger.on === 'youAttack')
-          return o.controller === ap && attackedWith(a.trigger.filter);
+          return o.controller === ap && attackedWith(a.trigger.filter, o.id);
         return false;
       });
       // From the graveyard (Persistent Marshstalker).
@@ -475,7 +504,7 @@ function detect(ctx: Ctx, ev: GameEvent): void {
           (o, a) =>
             a.trigger.on === 'creatureYouControlAttacks' &&
             o.controller === attacker.controller &&
-            matchesFilter(ctx, id, a.trigger.filter),
+            matchesFilter(ctx, id, a.trigger.filter, o.id),
           attacker,
         );
       }
@@ -487,9 +516,46 @@ function detect(ctx: Ctx, ev: GameEvent): void {
         ctx,
         (o, a) => a.trigger.on === 'becomesBlocked' && blocked.has(o.id),
       );
+      // She-Hulk: "whenever a Hero you control becomes blocked" (amount: its blockers).
+      for (const id of blocked) {
+        const attacker = s.objects[id];
+        if (!attacker) continue;
+        forEachBattlefieldTrigger(
+          ctx,
+          (o, a) =>
+            a.trigger.on === 'creatureYouControlBecomesBlocked' &&
+            o.controller === attacker.controller &&
+            matchesFilter(ctx, id, a.trigger.filter, o.id),
+          attacker,
+          ev.blocks.filter((b) => b.attacker === id).length,
+        );
+      }
+      return;
+    }
+    case 'tapped': {
+      // Captain America, Living Legend: the first time a creature you control becomes tapped during your turn.
+      const tapped = s.objects[ev.id];
+      if (!ev.first || !tapped || tapped.controller !== s.turn.activePlayer) return;
+      if (!def(ctx, ev.id).types.includes('Creature')) return;
+      forEachBattlefieldTrigger(
+        ctx,
+        (o, a) =>
+          a.trigger.on === 'creatureYouControlFirstTappedOnYourTurn' &&
+          o.controller === tapped.controller,
+        tapped,
+      );
       return;
     }
     case 'damageDealt': {
+      // Hercules: "whenever this creature is dealt damage".
+      if ('object' in ev.to) {
+        const hurt = s.objects[ev.to.object.id];
+        if (hurt?.zone === 'battlefield')
+          def(ctx, hurt.id).abilities.forEach((a, i) => {
+            if (a.kind === 'triggered' && a.trigger.on === 'dealtDamage')
+              queue(ctx, hurt, i, hurt.controller, undefined, ev.amount);
+          });
+      }
       if (!ev.combat) {
         // Niv-Mizzet: noncombat damage to an opponent from a source you control.
         const src = s.objects[ev.source];
@@ -523,11 +589,25 @@ function detect(ctx: Ctx, ev: GameEvent): void {
           (o, a) =>
             a.trigger.on === 'creatureYouControlDealsCombatDamage' &&
             o.controller === src.controller &&
-            (!a.trigger.toPlayer || 'player' in ev.to),
+            (!a.trigger.toPlayer || 'player' in ev.to) &&
+            matchesFilter(ctx, src.id, a.trigger.filter, o.id),
           src,
           ev.amount,
         );
       if (!('player' in ev.to)) return;
+      // Love on the Battlefield: "put a +1/+1 counter on it".
+      if (
+        s.effects.some(
+          (e) => e.counterOnCombatDamage && e.affected.id === src.id && e.affected.zcc === src.zcc,
+        )
+      )
+        s.pendingTriggers.push({
+          source: { id: src.id, zcc: src.zcc },
+          sourceDefId: src.defId,
+          abilityIndex: -1,
+          controller: src.controller,
+          inline: [{ kind: 'counters', to: 'self', amount: 1 }],
+        });
       // "Whenever one or more Birds you control deal combat damage to a player" (batched).
       forEachBattlefieldTrigger(
         ctx,
@@ -582,7 +662,13 @@ function detect(ctx: Ctx, ev: GameEvent): void {
         return;
       forEachBattlefieldTrigger(
         ctx,
-        (o, a) => a.trigger.on === 'youPutCounters' && o.controller === target.controller,
+        (o, a) =>
+          a.trigger.on === 'youPutCounters' &&
+          o.controller === target.controller &&
+          !(a.trigger.other && o.id === target.id) &&
+          matchesFilter(ctx, target.id, a.trigger.filter, o.id),
+        target,
+        ev.count,
       );
       return;
     }
@@ -660,10 +746,12 @@ function detect(ctx: Ctx, ev: GameEvent): void {
         );
         return;
       }
-      if (ev.step === 'end' && s.delayed?.length) {
-        // "At the beginning of the next end step": the ones due now.
-        const isDue = (d: { fromTurn: number; whose?: PlayerId }) =>
-          d.fromTurn <= ev.turn && (!d.whose || d.whose === ev.activePlayer);
+      if ((ev.step === 'end' || ev.step === 'upkeep') && s.delayed?.length) {
+        // "At the beginning of the next end step" (or upkeep): the ones due now.
+        const isDue = (d: { fromTurn: number; whose?: PlayerId; at?: 'upkeep' }) =>
+          (d.at === 'upkeep') === (ev.step === 'upkeep') &&
+          d.fromTurn <= ev.turn &&
+          (!d.whose || d.whose === ev.activePlayer);
         const due = s.delayed.filter(isDue);
         s.delayed = s.delayed.filter((d) => !isDue(d));
         for (const d of due)

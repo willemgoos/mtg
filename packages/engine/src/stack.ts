@@ -20,6 +20,7 @@ import {
   characteristics,
   countOf,
   hasKeyword,
+  isCreature,
   hasSubtype,
   cardMatches,
   matchesFilter,
@@ -189,6 +190,9 @@ export function castCost(
   // Brawl: commander tax.
   if (o.zone === 'command') cost = { ...cost, generic: cost.generic + commanderTax(ctx, player) };
   let reduce = d.costReduction !== undefined ? amountFor(ctx, player, d.costReduction) : 0;
+  // Heroic Return, Avenge: "costs {2} less if ...".
+  if (d.costReductionIf && checkCondition(ctx, d.costReductionIf.condition, player, o))
+    reduce += d.costReductionIf.amount;
   const first = targets?.[0];
   if (
     d.costReductionIfTarget &&
@@ -203,7 +207,7 @@ export function castCost(
         if (
           a.kind === 'static' &&
           a.effect.kind === 'spellsCostLess' &&
-          cardMatches(ctx, card, a.effect.filter)
+          cardMatches(ctx, card, a.effect.filter, id)
         )
           reduce += a.effect.amount;
         if (
@@ -399,6 +403,7 @@ export function activateAbility(
   if (a.cost.discardSelf) moveObject(ctx, source, 'graveyard');
   if (a.cost.tapTokens)
     for (const id of tokensToTap(ctx, player, source).slice(0, a.cost.tapTokens)) tap(ctx, id);
+  if (a.cost.crew) for (const id of crewFor(ctx, player, source, a.cost.crew) ?? []) tap(ctx, id);
   const sacrificedPower = sacrifice ? power(ctx, sacrifice) : undefined;
   if (sacrifice) sacrificePermanent(ctx, sacrifice);
   changeLife(ctx, player, -wardLife(ctx, player, targets) - (a.cost.life ?? 0));
@@ -664,6 +669,38 @@ function resume(ctx: Ctx, r: PausedResolution, thenPriority: PlayerId): void {
  * Untapped tokens `player` could tap for a cost, least useful first:
  * noncreature tokens, then the weakest creatures (the engine picks; a simplification).
  */
+/**
+ * Crew N: untapped creatures `player` controls (not the Vehicle) with total
+ * power N or more. The engine picks: the smallest creatures that reach N
+ * (a simplification). Null if they can't.
+ */
+export function crewFor(
+  ctx: Ctx,
+  player: PlayerId,
+  vehicle: ObjectId,
+  n: number,
+): ObjectId[] | null {
+  const crew = ctx.s.battlefield
+    .filter((id) => {
+      const o = obj(ctx, id);
+      return id !== vehicle && o.controller === player && !o.tapped && isCreature(ctx, id);
+    })
+    .map((id) => ({ id, power: power(ctx, id) }))
+    .filter((c) => c.power > 0)
+    .sort((a, b) => a.power - b.power);
+  // One creature big enough, else the smallest ones adding up.
+  const one = crew.find((c) => c.power >= n);
+  if (one) return [one.id];
+  const out: ObjectId[] = [];
+  let total = 0;
+  for (const c of [...crew].reverse()) {
+    if (total >= n) break;
+    out.push(c.id);
+    total += c.power;
+  }
+  return total >= n ? out : null;
+}
+
 export function tokensToTap(ctx: Ctx, player: PlayerId, source?: ObjectId): ObjectId[] {
   return ctx.s.battlefield
     .filter((id) => {
@@ -852,7 +889,9 @@ function bonusCounters(
         a.kind === 'static' &&
         a.effect.kind === 'othersEnterWithCounter' &&
         defOf(ctx, obj(ctx, entering).defId).types.includes('Creature') &&
-        checkCondition(ctx, a.effect.condition, player, obj(ctx, id))
+        checkCondition(ctx, a.effect.condition, player, obj(ctx, id)) &&
+        // Metallic Mimic: of the chosen type.
+        (!a.effect.filter || cardMatches(ctx, entering, a.effect.filter, id))
       )
         n++;
       if (a.kind !== 'static' || a.effect.kind !== 'entersWithCountersPerSubtype') continue;
@@ -911,7 +950,9 @@ export function answerSearch(ctx: Ctx, card: ObjectId | null): void {
     return resume(ctx, d.resume, d.thenPriority);
   }
   const lib = ctx.s.players[d.player].library;
-  if (d.looked) {
+  if (d.looked && d.restOnTop) {
+    // Herald's Horn: what wasn't taken stays where it was.
+  } else if (d.looked) {
     const rest = d.looked.filter((id) => id !== card);
     for (const id of rest) lib.splice(lib.indexOf(id), 1);
     shuffleInPlace(ctx.s.rng, rest);

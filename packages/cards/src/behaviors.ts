@@ -1,7 +1,7 @@
 import type { AbilityDef, CardDefinition, EffectDef, ManaType, TargetSpec } from '@mtg/engine';
 import { type Behavior, parseManaCost } from './build.ts';
 import { BLOOMBURROW_BEHAVIORS } from './bloomburrow.ts';
-import { MARVEL_BRAWL_BEHAVIORS } from './marvel-brawl.ts';
+import { MARVEL_BRAWL_BEHAVIORS, MARVEL_BRAWL_TOKENS } from './marvel-brawl.ts';
 import { FOUNDATIONS_BATCH_BEHAVIORS } from './foundations-batch.ts';
 
 // Helpers for the common shapes.
@@ -2161,6 +2161,7 @@ const artifactToken = (id: string, name: string, abilities: AbilityDef[]): CardD
 });
 
 export const TOKENS: CardDefinition[] = [
+  ...MARVEL_BRAWL_TOKENS,
   token('zombie-token', 'Zombie', 'B', ['Zombie'], 2, 2),
   token('cat-beast-token', 'Cat Beast', 'W', ['Cat', 'Beast'], 2, 2),
   token('raccoon-token', 'Raccoon', 'G', ['Raccoon'], 3, 3),

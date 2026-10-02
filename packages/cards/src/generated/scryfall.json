@@ -16378,5 +16378,1300 @@
    "large": "https://cards.scryfall.io/large/front/9/f/9fbe68ba-ffe5-4fe0-ac0a-0b3221e4f395.jpg?1783903197",
    "artCrop": "https://cards.scryfall.io/art_crop/front/9/f/9fbe68ba-ffe5-4fe0-ac0a-0b3221e4f395.jpg?1783903197"
   }
+ },
+ {
+  "name": "Captain America, Team Leader",
+  "scryfallId": "61a51b67-d941-4e07-9c12-ffe583cb65d4",
+  "oracleId": "916cf34a-fd2c-47fe-bebb-f7b52b3dabed",
+  "set": "msc",
+  "collectorNumber": "5",
+  "rarity": "mythic",
+  "manaCost": "{R}{W}{U}",
+  "typeLine": "Legendary Creature — Human Soldier Hero",
+  "oracleText": "Whenever another Hero you control enters, it gains vigilance and haste until end of turn. Put a +1/+1 counter on that Hero and a +1/+1 counter on Captain America.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "R",
+   "U",
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/1/61a51b67-d941-4e07-9c12-ffe583cb65d4.jpg?1783903303",
+   "normal": "https://cards.scryfall.io/normal/front/6/1/61a51b67-d941-4e07-9c12-ffe583cb65d4.jpg?1783903303",
+   "large": "https://cards.scryfall.io/large/front/6/1/61a51b67-d941-4e07-9c12-ffe583cb65d4.jpg?1783903303",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/1/61a51b67-d941-4e07-9c12-ffe583cb65d4.jpg?1783903303"
+  }
+ },
+ {
+  "name": "Falcon and Redwing",
+  "scryfallId": "e565fb47-acca-4348-87bb-afdadbf55e8a",
+  "oracleId": "0f7c7035-e395-4da5-8536-9f192d03e3ba",
+  "set": "msc",
+  "collectorNumber": "14",
+  "rarity": "rare",
+  "manaCost": "{2}{W}",
+  "typeLine": "Legendary Creature — Human Bird Hero",
+  "oracleText": "Flying\nWhenever Falcon and Redwing deal combat damage to a player, create that many 1/1 white Bird creature tokens with flying, then put a +1/+1 counter on Falcon and Redwing.",
+  "power": "1",
+  "toughness": "2",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/5/e565fb47-acca-4348-87bb-afdadbf55e8a.jpg?1783903300",
+   "normal": "https://cards.scryfall.io/normal/front/e/5/e565fb47-acca-4348-87bb-afdadbf55e8a.jpg?1783903300",
+   "large": "https://cards.scryfall.io/large/front/e/5/e565fb47-acca-4348-87bb-afdadbf55e8a.jpg?1783903300",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/5/e565fb47-acca-4348-87bb-afdadbf55e8a.jpg?1783903300"
+  }
+ },
+ {
+  "name": "Hercules, Olympian Hero",
+  "scryfallId": "77be0e26-90db-41a5-97c2-43cf6ef87ab0",
+  "oracleId": "ee3dfdb2-07ef-4ce2-9806-0a5b7f19aa67",
+  "set": "msc",
+  "collectorNumber": "16",
+  "rarity": "rare",
+  "manaCost": "{3}{W}{W}",
+  "typeLine": "Legendary Creature — Demigod Warrior Hero",
+  "oracleText": "Whenever Hercules attacks, put a +1/+1 counter on him. He gains indestructible until end of turn.\nWhenever Hercules is dealt damage for the first time each turn, put that many +1/+1 counters on him. (He must survive the damage to get the counters.)",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/7/77be0e26-90db-41a5-97c2-43cf6ef87ab0.jpg?1783903299",
+   "normal": "https://cards.scryfall.io/normal/front/7/7/77be0e26-90db-41a5-97c2-43cf6ef87ab0.jpg?1783903299",
+   "large": "https://cards.scryfall.io/large/front/7/7/77be0e26-90db-41a5-97c2-43cf6ef87ab0.jpg?1783903299",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/7/77be0e26-90db-41a5-97c2-43cf6ef87ab0.jpg?1783903299"
+  }
+ },
+ {
+  "name": "Winter Soldier, Reborn Avenger",
+  "scryfallId": "de13b219-a99c-47ef-8b68-d57463cf5de8",
+  "oracleId": "df81ecf2-b49e-4be2-8757-ee2050784c9e",
+  "set": "msc",
+  "collectorNumber": "27",
+  "rarity": "rare",
+  "manaCost": "{4}{W}",
+  "typeLine": "Legendary Creature — Human Soldier Hero",
+  "oracleText": "Whenever Winter Soldier attacks, return target creature card with mana value less than or equal to Winter Soldier's power from your graveyard to the battlefield. If a Hero enters this way, it enters with an additional +1/+1 counter on it.",
+  "power": "3",
+  "toughness": "5",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/e/de13b219-a99c-47ef-8b68-d57463cf5de8.jpg?1783903293",
+   "normal": "https://cards.scryfall.io/normal/front/d/e/de13b219-a99c-47ef-8b68-d57463cf5de8.jpg?1783903293",
+   "large": "https://cards.scryfall.io/large/front/d/e/de13b219-a99c-47ef-8b68-d57463cf5de8.jpg?1783903293",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/e/de13b219-a99c-47ef-8b68-d57463cf5de8.jpg?1783903293"
+  }
+ },
+ {
+  "name": "Iron Man, Armored Avenger",
+  "scryfallId": "94af0633-59c6-4893-ab44-232d37573dde",
+  "oracleId": "c81195d4-19c6-4cac-b312-7f5c33dff962",
+  "set": "msc",
+  "collectorNumber": "33",
+  "rarity": "rare",
+  "manaCost": "{3}{U}",
+  "typeLine": "Legendary Artifact Creature — Human Hero",
+  "oracleText": "Flying\nWhenever you draw a card, put a +1/+1 counter on target creature.\nWhenever Iron Man attacks, other attacking modified creatures gain flying until end of turn. (Equipment, Auras you control, and counters are modifications.)",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/4/94af0633-59c6-4893-ab44-232d37573dde.jpg?1783903295",
+   "normal": "https://cards.scryfall.io/normal/front/9/4/94af0633-59c6-4893-ab44-232d37573dde.jpg?1783903295",
+   "large": "https://cards.scryfall.io/large/front/9/4/94af0633-59c6-4893-ab44-232d37573dde.jpg?1783903295",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/4/94af0633-59c6-4893-ab44-232d37573dde.jpg?1783903295"
+  }
+ },
+ {
+  "name": "Jarvis, Earth's Mightiest Butler",
+  "scryfallId": "62c31cd8-0c30-4cfb-89d6-2e4dac19f6ea",
+  "oracleId": "63e17cbd-6dae-42d2-a074-7924db1477bf",
+  "set": "msc",
+  "collectorNumber": "34",
+  "rarity": "rare",
+  "manaCost": "{2}{U}",
+  "typeLine": "Legendary Creature — Human Advisor",
+  "oracleText": "Whenever you cast a Hero spell, draw a card.",
+  "power": "1",
+  "toughness": "4",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/2/62c31cd8-0c30-4cfb-89d6-2e4dac19f6ea.jpg?1783903292",
+   "normal": "https://cards.scryfall.io/normal/front/6/2/62c31cd8-0c30-4cfb-89d6-2e4dac19f6ea.jpg?1783903292",
+   "large": "https://cards.scryfall.io/large/front/6/2/62c31cd8-0c30-4cfb-89d6-2e4dac19f6ea.jpg?1783903292",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/2/62c31cd8-0c30-4cfb-89d6-2e4dac19f6ea.jpg?1783903292"
+  }
+ },
+ {
+  "name": "Professor Hulk",
+  "scryfallId": "1b03fa4e-b3a1-4c23-8341-e9ce89aa872f",
+  "oracleId": "b8a627a1-d6d7-45d1-aeea-ff7b834cbb29",
+  "set": "msc",
+  "collectorNumber": "37",
+  "rarity": "rare",
+  "manaCost": "{4}{U}{U}",
+  "typeLine": "Legendary Creature — Gamma Scientist Hero",
+  "oracleText": "Trample\nWhenever Professor Hulk deals combat damage to a player, draw that many cards.",
+  "power": "6",
+  "toughness": "6",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Trample"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/b/1b03fa4e-b3a1-4c23-8341-e9ce89aa872f.jpg?1783903291",
+   "normal": "https://cards.scryfall.io/normal/front/1/b/1b03fa4e-b3a1-4c23-8341-e9ce89aa872f.jpg?1783903291",
+   "large": "https://cards.scryfall.io/large/front/1/b/1b03fa4e-b3a1-4c23-8341-e9ce89aa872f.jpg?1783903291",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/b/1b03fa4e-b3a1-4c23-8341-e9ce89aa872f.jpg?1783903291"
+  }
+ },
+ {
+  "name": "The Wasp, Winsome Avenger",
+  "scryfallId": "ce5fb436-fcc6-426f-a33b-a8ba904df0ff",
+  "oracleId": "4b706959-ea38-4808-870a-7c35d83f7ab2",
+  "set": "msc",
+  "collectorNumber": "39",
+  "rarity": "rare",
+  "manaCost": "{1}{U}",
+  "typeLine": "Legendary Creature — Human Hero",
+  "oracleText": "Flash\nFlying\nWhen The Wasp enters, target Hero gains hexproof until end of turn.\nWhenever The Wasp attacks, tap target creature defending player controls.",
+  "power": "2",
+  "toughness": "1",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Flying",
+   "Flash"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/e/ce5fb436-fcc6-426f-a33b-a8ba904df0ff.jpg?1783903288",
+   "normal": "https://cards.scryfall.io/normal/front/c/e/ce5fb436-fcc6-426f-a33b-a8ba904df0ff.jpg?1783903288",
+   "large": "https://cards.scryfall.io/large/front/c/e/ce5fb436-fcc6-426f-a33b-a8ba904df0ff.jpg?1783903288",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/e/ce5fb436-fcc6-426f-a33b-a8ba904df0ff.jpg?1783903288"
+  }
+ },
+ {
+  "name": "Firebird, Blazing Ranger",
+  "scryfallId": "11dc3b30-b130-4558-ab37-9c32792641ea",
+  "oracleId": "3d917331-9f49-4d0c-bb2d-4853e3ff6ca1",
+  "set": "msc",
+  "collectorNumber": "50",
+  "rarity": "rare",
+  "manaCost": "{2}{R}",
+  "typeLine": "Legendary Creature — Human Ranger Hero",
+  "oracleText": "Flying\nWhenever Firebird attacks, other attacking creatures get +X/+0 until end of turn, where X is Firebird's power.",
+  "power": "1",
+  "toughness": "3",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/1/11dc3b30-b130-4558-ab37-9c32792641ea.jpg?1783903285",
+   "normal": "https://cards.scryfall.io/normal/front/1/1/11dc3b30-b130-4558-ab37-9c32792641ea.jpg?1783903285",
+   "large": "https://cards.scryfall.io/large/front/1/1/11dc3b30-b130-4558-ab37-9c32792641ea.jpg?1783903285",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/1/11dc3b30-b130-4558-ab37-9c32792641ea.jpg?1783903285"
+  }
+ },
+ {
+  "name": "Photon, Mighty Marvel",
+  "scryfallId": "2b164aca-2bda-49a6-81ce-16ef4721ec63",
+  "oracleId": "c46d6f42-5e50-4c0d-8908-360337285f83",
+  "set": "msc",
+  "collectorNumber": "58",
+  "rarity": "rare",
+  "manaCost": "{3}{R}",
+  "typeLine": "Legendary Creature — Human Hero",
+  "oracleText": "Flying\nWhenever Photon deals combat damage to a player, add that much mana of any one color. Until end of turn, you don't lose this mana as steps and phases end.",
+  "power": "2",
+  "toughness": "4",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/b/2b164aca-2bda-49a6-81ce-16ef4721ec63.jpg?1783903281",
+   "normal": "https://cards.scryfall.io/normal/front/2/b/2b164aca-2bda-49a6-81ce-16ef4721ec63.jpg?1783903281",
+   "large": "https://cards.scryfall.io/large/front/2/b/2b164aca-2bda-49a6-81ce-16ef4721ec63.jpg?1783903281",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/b/2b164aca-2bda-49a6-81ce-16ef4721ec63.jpg?1783903281"
+  }
+ },
+ {
+  "name": "She-Hulk, Wallbreaker",
+  "scryfallId": "8c57fb16-f4a3-437c-be27-d1c00a2be01e",
+  "oracleId": "c8d74a25-78a9-46ad-ab24-97f6221fd8dd",
+  "set": "msc",
+  "collectorNumber": "60",
+  "rarity": "rare",
+  "manaCost": "{5}{R}",
+  "typeLine": "Legendary Creature — Gamma Hero",
+  "oracleText": "Trample\nOther Heroes you control have trample.\nWhenever a Hero you control becomes blocked, put a +1/+1 counter on that Hero for each creature blocking it.",
+  "power": "5",
+  "toughness": "5",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Trample"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/c/8c57fb16-f4a3-437c-be27-d1c00a2be01e.jpg?1783903280",
+   "normal": "https://cards.scryfall.io/normal/front/8/c/8c57fb16-f4a3-437c-be27-d1c00a2be01e.jpg?1783903280",
+   "large": "https://cards.scryfall.io/large/front/8/c/8c57fb16-f4a3-437c-be27-d1c00a2be01e.jpg?1783903280",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/c/8c57fb16-f4a3-437c-be27-d1c00a2be01e.jpg?1783903280"
+  }
+ },
+ {
+  "name": "War Machine, Avenging Arsenal",
+  "scryfallId": "8c62621f-20b2-4950-a74a-7c2e4fc02e54",
+  "oracleId": "b4f35cdd-3857-4a7d-8ef6-df5424dd40e7",
+  "set": "msc",
+  "collectorNumber": "63",
+  "rarity": "rare",
+  "manaCost": "{4}{R}",
+  "typeLine": "Legendary Artifact Creature — Human Hero",
+  "oracleText": "Flying\nWhenever War Machine attacks, attacking modified creatures you control gain double strike until end of turn. (Equipment, Auras you control, and counters are modifications.)",
+  "power": "3",
+  "toughness": "5",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/c/8c62621f-20b2-4950-a74a-7c2e4fc02e54.jpg?1783903278",
+   "normal": "https://cards.scryfall.io/normal/front/8/c/8c62621f-20b2-4950-a74a-7c2e4fc02e54.jpg?1783903278",
+   "large": "https://cards.scryfall.io/large/front/8/c/8c62621f-20b2-4950-a74a-7c2e4fc02e54.jpg?1783903278",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/c/8c62621f-20b2-4950-a74a-7c2e4fc02e54.jpg?1783903278"
+  }
+ },
+ {
+  "name": "Ant-Man, Elusive Avenger",
+  "scryfallId": "18e2b0a4-0ed3-48e6-8334-198a19e54bff",
+  "oracleId": "f334087a-deda-4e9e-ab58-68f7e226d7ce",
+  "set": "msc",
+  "collectorNumber": "73",
+  "rarity": "rare",
+  "manaCost": "{1}{U}{R}",
+  "typeLine": "Legendary Creature — Human Rogue Hero",
+  "oracleText": "Ant-Man can't be blocked by creatures with greater power.\nWhenever Ant-Man deals combat damage to a player, create that many Treasure tokens.",
+  "power": "1",
+  "toughness": "2",
+  "colors": [
+   "R",
+   "U"
+  ],
+  "keywords": [
+   "Treasure"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/8/18e2b0a4-0ed3-48e6-8334-198a19e54bff.jpg?1783903274",
+   "normal": "https://cards.scryfall.io/normal/front/1/8/18e2b0a4-0ed3-48e6-8334-198a19e54bff.jpg?1783903274",
+   "large": "https://cards.scryfall.io/large/front/1/8/18e2b0a4-0ed3-48e6-8334-198a19e54bff.jpg?1783903274",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/8/18e2b0a4-0ed3-48e6-8334-198a19e54bff.jpg?1783903274"
+  }
+ },
+ {
+  "name": "Black Widow, Agile Avenger",
+  "scryfallId": "8c2bf77c-9acf-4e2c-9cad-e74546f26070",
+  "oracleId": "df7abfb0-21df-4359-be81-0f3c09e1425e",
+  "set": "msc",
+  "collectorNumber": "77",
+  "rarity": "rare",
+  "manaCost": "{1}{R}{W}",
+  "typeLine": "Legendary Creature — Human Spy Hero",
+  "oracleText": "Menace\nWhenever an opponent draws their second card each turn, put a +1/+1 counter on Black Widow and you draw a card.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "R",
+   "W"
+  ],
+  "keywords": [
+   "Menace"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/c/8c2bf77c-9acf-4e2c-9cad-e74546f26070.jpg?1783903270",
+   "normal": "https://cards.scryfall.io/normal/front/8/c/8c2bf77c-9acf-4e2c-9cad-e74546f26070.jpg?1783903270",
+   "large": "https://cards.scryfall.io/large/front/8/c/8c2bf77c-9acf-4e2c-9cad-e74546f26070.jpg?1783903270",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/c/8c2bf77c-9acf-4e2c-9cad-e74546f26070.jpg?1783903270"
+  }
+ },
+ {
+  "name": "Captain Marvel, Apex Avenger",
+  "scryfallId": "516e14ce-9cc8-4be3-aacb-ba801f26a6bc",
+  "oracleId": "6d86d783-7116-4426-8c0f-718c2d904887",
+  "set": "msc",
+  "collectorNumber": "78",
+  "rarity": "rare",
+  "manaCost": "{5}{R}{W}",
+  "typeLine": "Legendary Creature — Human Kree Hero",
+  "oracleText": "Flying, double strike, indestructible\nWhenever you put one or more counters on another creature, if it's not a Kree, you may put the same number and kind of counters on Captain Marvel.",
+  "power": "4",
+  "toughness": "4",
+  "colors": [
+   "R",
+   "W"
+  ],
+  "keywords": [
+   "Flying",
+   "Indestructible",
+   "Double strike"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/1/516e14ce-9cc8-4be3-aacb-ba801f26a6bc.jpg?1783903271",
+   "normal": "https://cards.scryfall.io/normal/front/5/1/516e14ce-9cc8-4be3-aacb-ba801f26a6bc.jpg?1783903271",
+   "large": "https://cards.scryfall.io/large/front/5/1/516e14ce-9cc8-4be3-aacb-ba801f26a6bc.jpg?1783903271",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/1/516e14ce-9cc8-4be3-aacb-ba801f26a6bc.jpg?1783903271"
+  }
+ },
+ {
+  "name": "Director Nick Fury",
+  "scryfallId": "9a19d4ec-399a-4371-acc3-0956dd4dcb84",
+  "oracleId": "04b907bf-c80c-4e92-9fea-26dc3d1aaf2a",
+  "set": "msc",
+  "collectorNumber": "81",
+  "rarity": "mythic",
+  "manaCost": "{U}{R}{W}",
+  "typeLine": "Legendary Creature — Human Spy Hero",
+  "oracleText": "Hero spells you cast cost {1} less to cast.\nWhenever you attack, look at the top four cards of your library. You may reveal a Hero card from among them and put that card into your hand. Put the rest on the bottom of your library in a random order.",
+  "power": "2",
+  "toughness": "4",
+  "colors": [
+   "R",
+   "U",
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/a/9a19d4ec-399a-4371-acc3-0956dd4dcb84.jpg?1783903269",
+   "normal": "https://cards.scryfall.io/normal/front/9/a/9a19d4ec-399a-4371-acc3-0956dd4dcb84.jpg?1783903269",
+   "large": "https://cards.scryfall.io/large/front/9/a/9a19d4ec-399a-4371-acc3-0956dd4dcb84.jpg?1783903269",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/a/9a19d4ec-399a-4371-acc3-0956dd4dcb84.jpg?1783903269"
+  }
+ },
+ {
+  "name": "Hawkeye, Avenging Archer",
+  "scryfallId": "1f394a6f-3649-4464-939b-c183b2b01768",
+  "oracleId": "e90d6903-5415-4ddf-88c0-15ddd8614bde",
+  "set": "msc",
+  "collectorNumber": "84",
+  "rarity": "rare",
+  "manaCost": "{2}{U}{R}",
+  "typeLine": "Legendary Creature — Human Archer Hero",
+  "oracleText": "Reach\nWhenever a creature an opponent controls dies, if Hawkeye dealt damage to it this turn, draw a card.\n{T}: Hawkeye deals 1 damage to any target.",
+  "power": "3",
+  "toughness": "4",
+  "colors": [
+   "R",
+   "U"
+  ],
+  "keywords": [
+   "Reach"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/f/1f394a6f-3649-4464-939b-c183b2b01768.jpg?1783903269",
+   "normal": "https://cards.scryfall.io/normal/front/1/f/1f394a6f-3649-4464-939b-c183b2b01768.jpg?1783903269",
+   "large": "https://cards.scryfall.io/large/front/1/f/1f394a6f-3649-4464-939b-c183b2b01768.jpg?1783903269",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/f/1f394a6f-3649-4464-939b-c183b2b01768.jpg?1783903269"
+  }
+ },
+ {
+  "name": "Thor, Asgard's Avenger",
+  "scryfallId": "3513c041-7147-467d-845d-3d1c83fb3328",
+  "oracleId": "44c2fefb-5de3-4406-955a-3fabc46357d0",
+  "set": "msc",
+  "collectorNumber": "756",
+  "rarity": "rare",
+  "manaCost": "{2}{R}{R}",
+  "typeLine": "Legendary Creature — God Warrior Hero",
+  "oracleText": "Flying\nIf another source you control would deal damage to an opponent or a permanent an opponent controls, it deals that much damage plus 1 instead.",
+  "power": "4",
+  "toughness": "4",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/5/3513c041-7147-467d-845d-3d1c83fb3328.jpg?1783903026",
+   "normal": "https://cards.scryfall.io/normal/front/3/5/3513c041-7147-467d-845d-3d1c83fb3328.jpg?1783903026",
+   "large": "https://cards.scryfall.io/large/front/3/5/3513c041-7147-467d-845d-3d1c83fb3328.jpg?1783903026",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/5/3513c041-7147-467d-845d-3d1c83fb3328.jpg?1783903026"
+  }
+ },
+ {
+  "name": "Quicksilver, Speedster",
+  "scryfallId": "5a454bad-c137-4d7c-9fcc-928c0c1798f4",
+  "oracleId": "cc20f910-03e9-4019-a62a-2e713ddb3c06",
+  "set": "msc",
+  "collectorNumber": "91",
+  "rarity": "rare",
+  "manaCost": "{3}{U}{R}",
+  "typeLine": "Legendary Creature — Mutant Hero",
+  "oracleText": "Flash\nDouble strike, haste\nAs long as Quicksilver is tapped, you may cast spells as though they had flash.",
+  "power": "3",
+  "toughness": "4",
+  "colors": [
+   "R",
+   "U"
+  ],
+  "keywords": [
+   "Haste",
+   "Double strike",
+   "Flash"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/a/5a454bad-c137-4d7c-9fcc-928c0c1798f4.jpg?1783903265",
+   "normal": "https://cards.scryfall.io/normal/front/5/a/5a454bad-c137-4d7c-9fcc-928c0c1798f4.jpg?1783903265",
+   "large": "https://cards.scryfall.io/large/front/5/a/5a454bad-c137-4d7c-9fcc-928c0c1798f4.jpg?1783903265",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/a/5a454bad-c137-4d7c-9fcc-928c0c1798f4.jpg?1783903265"
+  }
+ },
+ {
+  "name": "Scarlet Witch, Chaotic Avenger",
+  "scryfallId": "2308c274-40d8-490f-955e-67a57b89525a",
+  "oracleId": "8c72d54e-97a6-408e-ae77-18d3c96b3bd8",
+  "set": "msc",
+  "collectorNumber": "93",
+  "rarity": "rare",
+  "manaCost": "{2}{U}{R}",
+  "typeLine": "Legendary Creature — Mutant Warlock Hero",
+  "oracleText": "Flying\nWhenever Scarlet Witch deals combat damage to a player, look at the top two cards of your library, then exile them face down. Then you may cast a Hero or noncreature spell from among cards exiled with Scarlet Witch without paying its mana cost.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "R",
+   "U"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/3/2308c274-40d8-490f-955e-67a57b89525a.jpg?1783903265",
+   "normal": "https://cards.scryfall.io/normal/front/2/3/2308c274-40d8-490f-955e-67a57b89525a.jpg?1783903265",
+   "large": "https://cards.scryfall.io/large/front/2/3/2308c274-40d8-490f-955e-67a57b89525a.jpg?1783903265",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/3/2308c274-40d8-490f-955e-67a57b89525a.jpg?1783903265"
+  }
+ },
+ {
+  "name": "Shang-Chi and the Ten Rings",
+  "scryfallId": "8d6288b7-c959-437b-9a3f-eb85c306c9f2",
+  "oracleId": "5063703b-ddb3-4680-8b16-4cd342dc7d0c",
+  "set": "msc",
+  "collectorNumber": "94",
+  "rarity": "rare",
+  "manaCost": "{1}{W}{U}",
+  "typeLine": "Legendary Creature — Human Warrior Hero",
+  "oracleText": "First strike\nWhenever you draw a card, put a +1/+1 counter on Shang-Chi.\nWhen the tenth +1/+1 counter is put on Shang-Chi, you draw five cards and gain 5 life.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "U",
+   "W"
+  ],
+  "keywords": [
+   "First strike"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/d/8d6288b7-c959-437b-9a3f-eb85c306c9f2.jpg?1783903264",
+   "normal": "https://cards.scryfall.io/normal/front/8/d/8d6288b7-c959-437b-9a3f-eb85c306c9f2.jpg?1783903264",
+   "large": "https://cards.scryfall.io/large/front/8/d/8d6288b7-c959-437b-9a3f-eb85c306c9f2.jpg?1783903264",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/d/8d6288b7-c959-437b-9a3f-eb85c306c9f2.jpg?1783903264"
+  }
+ },
+ {
+  "name": "Jocasta, Automaton Avenger",
+  "scryfallId": "f666e211-0d80-4f01-b206-dac19bcbcfa7",
+  "oracleId": "787e6a7b-64f9-48ba-bccd-68dda3489b0f",
+  "set": "msc",
+  "collectorNumber": "108",
+  "rarity": "rare",
+  "manaCost": "{3}",
+  "typeLine": "Legendary Artifact Creature — Robot Hero",
+  "oracleText": "Flying\nWhenever your commander deals combat damage to a player, put a +1/+1 counter on Jocasta.\nWhenever you attack with your commander, if this card is in your graveyard, you may return it to the battlefield tapped and attacking.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/6/f666e211-0d80-4f01-b206-dac19bcbcfa7.jpg?1783903267",
+   "normal": "https://cards.scryfall.io/normal/front/f/6/f666e211-0d80-4f01-b206-dac19bcbcfa7.jpg?1783903267",
+   "large": "https://cards.scryfall.io/large/front/f/6/f666e211-0d80-4f01-b206-dac19bcbcfa7.jpg?1783903267",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/6/f666e211-0d80-4f01-b206-dac19bcbcfa7.jpg?1783903267"
+  }
+ },
+ {
+  "name": "Vision, Synthezoid Avenger",
+  "scryfallId": "f7007b77-84ec-4391-b279-8c188dd569d0",
+  "oracleId": "2f4360f6-9ac7-499f-b0a5-769550ea15ba",
+  "set": "msc",
+  "collectorNumber": "119",
+  "rarity": "rare",
+  "manaCost": "{4}",
+  "typeLine": "Legendary Artifact Creature — Robot Hero",
+  "oracleText": "Flying\nWhenever a player casts a spell, if it isn't that player's turn, choose one —\n• Put a +1/+1 counter on Vision.\n• Vision phases out. (Treat him and anything attached to him as though they don't exist until your next turn.)",
+  "power": "3",
+  "toughness": "3",
+  "colors": [],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/7/f7007b77-84ec-4391-b279-8c188dd569d0.jpg?1783903252",
+   "normal": "https://cards.scryfall.io/normal/front/f/7/f7007b77-84ec-4391-b279-8c188dd569d0.jpg?1783903252",
+   "large": "https://cards.scryfall.io/large/front/f/7/f7007b77-84ec-4391-b279-8c188dd569d0.jpg?1783903252",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/7/f7007b77-84ec-4391-b279-8c188dd569d0.jpg?1783903252"
+  }
+ },
+ {
+  "name": "Bastion Protector",
+  "scryfallId": "1582488a-ad15-487e-9271-6d9330b46fb4",
+  "oracleId": "858f53ef-3fec-4aa0-867d-b7f040614b3c",
+  "set": "msc",
+  "collectorNumber": "122",
+  "rarity": "rare",
+  "manaCost": "{2}{W}",
+  "typeLine": "Creature — Human Soldier",
+  "oracleText": "Commander creatures you control get +2/+2 and have indestructible.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/5/1582488a-ad15-487e-9271-6d9330b46fb4.jpg?1783903254",
+   "normal": "https://cards.scryfall.io/normal/front/1/5/1582488a-ad15-487e-9271-6d9330b46fb4.jpg?1783903254",
+   "large": "https://cards.scryfall.io/large/front/1/5/1582488a-ad15-487e-9271-6d9330b46fb4.jpg?1783903254",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/5/1582488a-ad15-487e-9271-6d9330b46fb4.jpg?1783903254"
+  }
+ },
+ {
+  "name": "Metallic Mimic",
+  "scryfallId": "2623640e-51bb-4aba-a31f-1b6d170f58f6",
+  "oracleId": "1f91297a-ec2b-4ea8-9198-aa1daac20ff8",
+  "set": "msc",
+  "collectorNumber": "203",
+  "rarity": "rare",
+  "manaCost": "{2}",
+  "typeLine": "Artifact Creature — Shapeshifter",
+  "oracleText": "As this creature enters, choose a creature type.\nThis creature is the chosen type in addition to its other types.\nEach other creature you control of the chosen type enters with an additional +1/+1 counter on it.",
+  "power": "2",
+  "toughness": "1",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/6/2623640e-51bb-4aba-a31f-1b6d170f58f6.jpg?1783903217",
+   "normal": "https://cards.scryfall.io/normal/front/2/6/2623640e-51bb-4aba-a31f-1b6d170f58f6.jpg?1783903217",
+   "large": "https://cards.scryfall.io/large/front/2/6/2623640e-51bb-4aba-a31f-1b6d170f58f6.jpg?1783903217",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/6/2623640e-51bb-4aba-a31f-1b6d170f58f6.jpg?1783903217"
+  }
+ },
+ {
+  "name": "Captain Mar-Vell, Space-Born",
+  "scryfallId": "27924c2f-756c-42af-9830-18a5a2735137",
+  "oracleId": "b74c072d-77ac-460d-9d9c-75b25874f58b",
+  "set": "msh",
+  "collectorNumber": "12",
+  "rarity": "uncommon",
+  "manaCost": "{4}{W}",
+  "typeLine": "Legendary Creature — Kree Soldier Hero",
+  "oracleText": "Flying, vigilance\nCosmic Awareness — As long as an opponent has cast a spell this turn, you may cast spells as though they had flash.",
+  "power": "4",
+  "toughness": "4",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Flying",
+   "Vigilance",
+   "Cosmic Awareness"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/7/27924c2f-756c-42af-9830-18a5a2735137.jpg?1783902977",
+   "normal": "https://cards.scryfall.io/normal/front/2/7/27924c2f-756c-42af-9830-18a5a2735137.jpg?1783902977",
+   "large": "https://cards.scryfall.io/large/front/2/7/27924c2f-756c-42af-9830-18a5a2735137.jpg?1783902977",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/7/27924c2f-756c-42af-9830-18a5a2735137.jpg?1783902977"
+  }
+ },
+ {
+  "name": "Patriot, Shield Wielder",
+  "scryfallId": "1467d7c9-00d8-43f1-b4e7-a279d2b10503",
+  "oracleId": "1df7a09f-fbc8-4c2a-a903-bab9e680eda7",
+  "set": "msh",
+  "collectorNumber": "30",
+  "rarity": "uncommon",
+  "manaCost": "{1}{W}",
+  "typeLine": "Legendary Creature — Human Hero",
+  "oracleText": "{2}, {T}: Another target creature you control gets +2/+0 and gains hexproof until end of turn. (It can't be the target of spells or abilities your opponents control.)",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/4/1467d7c9-00d8-43f1-b4e7-a279d2b10503.jpg?1783902968",
+   "normal": "https://cards.scryfall.io/normal/front/1/4/1467d7c9-00d8-43f1-b4e7-a279d2b10503.jpg?1783902968",
+   "large": "https://cards.scryfall.io/large/front/1/4/1467d7c9-00d8-43f1-b4e7-a279d2b10503.jpg?1783902968",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/4/1467d7c9-00d8-43f1-b4e7-a279d2b10503.jpg?1783902968"
+  }
+ },
+ {
+  "name": "Speed, Young Avenger",
+  "scryfallId": "d15d187b-dc5d-482d-a79a-b9b98193ad7a",
+  "oracleId": "2fb0f2d2-ed1f-4181-91f2-684a71c34998",
+  "set": "msh",
+  "collectorNumber": "152",
+  "rarity": "uncommon",
+  "manaCost": "{1}{R}",
+  "typeLine": "Legendary Creature — Mutant Hero",
+  "oracleText": "Haste\nWhenever you cast a noncreature spell, you may pay {1}. When you do, target creature with haste can't be blocked this turn except by creatures with haste.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Haste"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/1/d15d187b-dc5d-482d-a79a-b9b98193ad7a.jpg?1783902923",
+   "normal": "https://cards.scryfall.io/normal/front/d/1/d15d187b-dc5d-482d-a79a-b9b98193ad7a.jpg?1783902923",
+   "large": "https://cards.scryfall.io/large/front/d/1/d15d187b-dc5d-482d-a79a-b9b98193ad7a.jpg?1783902923",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/1/d15d187b-dc5d-482d-a79a-b9b98193ad7a.jpg?1783902923"
+  }
+ },
+ {
+  "name": "Captain America, Living Legend",
+  "scryfallId": "6516f292-469d-4092-b099-97c698f373cd",
+  "oracleId": "67aa946d-e694-494e-ba0c-44880d5bc03e",
+  "set": "msh",
+  "collectorNumber": "210",
+  "rarity": "uncommon",
+  "manaCost": "{1}{W}{U}",
+  "typeLine": "Legendary Creature — Human Soldier Hero",
+  "oracleText": "Vigilance\nWhenever a creature you control becomes tapped during your turn, if it's the first time that creature has become tapped this turn, untap it.",
+  "power": "3",
+  "toughness": "4",
+  "colors": [
+   "U",
+   "W"
+  ],
+  "keywords": [
+   "Vigilance"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/5/6516f292-469d-4092-b099-97c698f373cd.jpg?1783902903",
+   "normal": "https://cards.scryfall.io/normal/front/6/5/6516f292-469d-4092-b099-97c698f373cd.jpg?1783902903",
+   "large": "https://cards.scryfall.io/large/front/6/5/6516f292-469d-4092-b099-97c698f373cd.jpg?1783902903",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/5/6516f292-469d-4092-b099-97c698f373cd.jpg?1783902903"
+  }
+ },
+ {
+  "name": "Rescue, Pepper Potts",
+  "scryfallId": "476f75a4-a4e0-4d09-9756-f1001ebabc84",
+  "oracleId": "54917578-9493-499e-b200-51d5cf7978ff",
+  "set": "msc",
+  "collectorNumber": "755",
+  "rarity": "uncommon",
+  "manaCost": "{1}{U}",
+  "typeLine": "Legendary Artifact Creature — Human Hero",
+  "oracleText": "Flash\nFlying\nWhen Rescue enters, return up to one other target artifact or creature you control to its owner's hand. If it was an artifact, put a +1/+1 counter on Rescue.",
+  "power": "2",
+  "toughness": "1",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Flying",
+   "Flash"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/7/476f75a4-a4e0-4d09-9756-f1001ebabc84.jpg?1783903026",
+   "normal": "https://cards.scryfall.io/normal/front/4/7/476f75a4-a4e0-4d09-9756-f1001ebabc84.jpg?1783903026",
+   "large": "https://cards.scryfall.io/large/front/4/7/476f75a4-a4e0-4d09-9756-f1001ebabc84.jpg?1783903026",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/7/476f75a4-a4e0-4d09-9756-f1001ebabc84.jpg?1783903026"
+  }
+ },
+ {
+  "name": "Avengers Quinjet",
+  "scryfallId": "c090d4b3-b108-4596-9d6d-738eb5e2249c",
+  "oracleId": "905e4bd1-f5f2-4691-b13f-ce2628d26a38",
+  "set": "msc",
+  "collectorNumber": "102",
+  "rarity": "rare",
+  "manaCost": "{5}",
+  "typeLine": "Artifact — Vehicle",
+  "oracleText": "Flying\nWhenever this Vehicle enters or attacks, choose one —\n• You may put a Hero creature card from your hand onto the battlefield.\n• Return target Hero creature card from your graveyard to your hand.\nCrew 3",
+  "power": "4",
+  "toughness": "4",
+  "colors": [],
+  "keywords": [
+   "Flying",
+   "Crew"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/0/c090d4b3-b108-4596-9d6d-738eb5e2249c.jpg?1783903263",
+   "normal": "https://cards.scryfall.io/normal/front/c/0/c090d4b3-b108-4596-9d6d-738eb5e2249c.jpg?1783903263",
+   "large": "https://cards.scryfall.io/large/front/c/0/c090d4b3-b108-4596-9d6d-738eb5e2249c.jpg?1783903263",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/0/c090d4b3-b108-4596-9d6d-738eb5e2249c.jpg?1783903263"
+  }
+ },
+ {
+  "name": "Hulkbuster Armor",
+  "scryfallId": "0cd857a3-ad93-4d74-80e0-c99d0a04a60a",
+  "oracleId": "abc3f55e-5fc6-44b3-a2f5-b8f49d93249f",
+  "set": "msc",
+  "collectorNumber": "107",
+  "rarity": "rare",
+  "manaCost": "{4}",
+  "typeLine": "Legendary Artifact — Equipment",
+  "oracleText": "Equipped creature has base power and toughness 9/9 and has flying.\nEquip Hero {3}\nEquip {6}",
+  "colors": [],
+  "keywords": [
+   "Equip"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/c/0cd857a3-ad93-4d74-80e0-c99d0a04a60a.jpg?1783903258",
+   "normal": "https://cards.scryfall.io/normal/front/0/c/0cd857a3-ad93-4d74-80e0-c99d0a04a60a.jpg?1783903258",
+   "large": "https://cards.scryfall.io/large/front/0/c/0cd857a3-ad93-4d74-80e0-c99d0a04a60a.jpg?1783903258",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/c/0cd857a3-ad93-4d74-80e0-c99d0a04a60a.jpg?1783903258"
+  }
+ },
+ {
+  "name": "Hero's Blade",
+  "scryfallId": "6f2fa911-5735-4ee2-828f-59dea6927b20",
+  "oracleId": "e6bcd25d-39b6-4619-8a27-9f3d87f4a17b",
+  "set": "msc",
+  "collectorNumber": "201",
+  "rarity": "uncommon",
+  "manaCost": "{2}",
+  "typeLine": "Artifact — Equipment",
+  "oracleText": "Equipped creature gets +3/+2.\nWhenever a legendary creature you control enters, you may attach this Equipment to it.\nEquip {4} ({4}: Attach to target creature you control. Equip only as a sorcery.)",
+  "colors": [],
+  "keywords": [
+   "Equip"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/f/6f2fa911-5735-4ee2-828f-59dea6927b20.jpg?1783903219",
+   "normal": "https://cards.scryfall.io/normal/front/6/f/6f2fa911-5735-4ee2-828f-59dea6927b20.jpg?1783903219",
+   "large": "https://cards.scryfall.io/large/front/6/f/6f2fa911-5735-4ee2-828f-59dea6927b20.jpg?1783903219",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/f/6f2fa911-5735-4ee2-828f-59dea6927b20.jpg?1783903219"
+  }
+ },
+ {
+  "name": "Tome of Legends",
+  "scryfallId": "84546bb2-6c82-4e3e-8f64-cb7aa865ee60",
+  "oracleId": "cada2a1c-5db2-4702-9a57-cbe7da1bf208",
+  "set": "msc",
+  "collectorNumber": "223",
+  "rarity": "rare",
+  "manaCost": "{2}",
+  "typeLine": "Artifact — Book",
+  "oracleText": "This artifact enters with a page counter on it.\nWhenever your commander enters or attacks, put a page counter on this artifact.\n{1}, {T}, Remove a page counter from this artifact: Draw a card.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/4/84546bb2-6c82-4e3e-8f64-cb7aa865ee60.jpg?1783903209",
+   "normal": "https://cards.scryfall.io/normal/front/8/4/84546bb2-6c82-4e3e-8f64-cb7aa865ee60.jpg?1783903209",
+   "large": "https://cards.scryfall.io/large/front/8/4/84546bb2-6c82-4e3e-8f64-cb7aa865ee60.jpg?1783903209",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/4/84546bb2-6c82-4e3e-8f64-cb7aa865ee60.jpg?1783903209"
+  }
+ },
+ {
+  "name": "Herald's Horn",
+  "scryfallId": "1c2e4ff2-5c14-488e-8548-eb89ffd18e41",
+  "oracleId": "c02c5547-b9c9-4b2d-9d12-e87bfba8f2d2",
+  "set": "msc",
+  "collectorNumber": "287",
+  "rarity": "uncommon",
+  "manaCost": "{3}",
+  "typeLine": "Artifact",
+  "oracleText": "As this artifact enters, choose a creature type.\nCreature spells you cast of the chosen type cost {1} less to cast.\nAt the beginning of your upkeep, look at the top card of your library. If it's a creature card of the chosen type, you may reveal it and put it into your hand.",
+  "colors": [],
+  "keywords": [],
+  "flavorName": "Avengers Monitoring Station",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/c/1c2e4ff2-5c14-488e-8548-eb89ffd18e41.jpg?1783903185",
+   "normal": "https://cards.scryfall.io/normal/front/1/c/1c2e4ff2-5c14-488e-8548-eb89ffd18e41.jpg?1783903185",
+   "large": "https://cards.scryfall.io/large/front/1/c/1c2e4ff2-5c14-488e-8548-eb89ffd18e41.jpg?1783903185",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/c/1c2e4ff2-5c14-488e-8548-eb89ffd18e41.jpg?1783903185"
+  }
+ },
+ {
+  "name": "Door of Destinies",
+  "scryfallId": "68a6bf1a-7152-496f-a4c7-e720ef4294d8",
+  "oracleId": "9b6d3dcf-aa5a-4516-bd48-a0723e86bfd1",
+  "set": "m14",
+  "collectorNumber": "208",
+  "rarity": "rare",
+  "manaCost": "{4}",
+  "typeLine": "Artifact",
+  "oracleText": "As this artifact enters, choose a creature type.\nWhenever you cast a spell of the chosen type, put a charge counter on this artifact.\nCreatures you control of the chosen type get +1/+1 for each charge counter on this artifact.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/8/68a6bf1a-7152-496f-a4c7-e720ef4294d8.jpg?1783939896",
+   "normal": "https://cards.scryfall.io/normal/front/6/8/68a6bf1a-7152-496f-a4c7-e720ef4294d8.jpg?1783939896",
+   "large": "https://cards.scryfall.io/large/front/6/8/68a6bf1a-7152-496f-a4c7-e720ef4294d8.jpg?1783939896",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/8/68a6bf1a-7152-496f-a4c7-e720ef4294d8.jpg?1783939896"
+  }
+ },
+ {
+  "name": "Kindred Discovery",
+  "scryfallId": "19bdedb2-768b-4adf-8193-917a10c8f729",
+  "oracleId": "005ee549-1bf5-478f-bc3f-3e791bd7eecf",
+  "set": "msc",
+  "collectorNumber": "150",
+  "rarity": "rare",
+  "manaCost": "{3}{U}{U}",
+  "typeLine": "Enchantment",
+  "oracleText": "As this enchantment enters, choose a creature type.\nWhenever a creature you control of the chosen type enters or attacks, draw a card.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/9/19bdedb2-768b-4adf-8193-917a10c8f729.jpg?1783903239",
+   "normal": "https://cards.scryfall.io/normal/front/1/9/19bdedb2-768b-4adf-8193-917a10c8f729.jpg?1783903239",
+   "large": "https://cards.scryfall.io/large/front/1/9/19bdedb2-768b-4adf-8193-917a10c8f729.jpg?1783903239",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/9/19bdedb2-768b-4adf-8193-917a10c8f729.jpg?1783903239"
+  }
+ },
+ {
+  "name": "Relic of Legends",
+  "scryfallId": "89691cda-e38b-4f53-bee6-4c234186e6ad",
+  "oracleId": "4d9554de-c005-41ab-a941-39328ebff9de",
+  "set": "msc",
+  "collectorNumber": "209",
+  "rarity": "uncommon",
+  "manaCost": "{3}",
+  "typeLine": "Artifact",
+  "oracleText": "{T}: Add one mana of any color.\nTap an untapped legendary creature you control: Add one mana of any color.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/9/89691cda-e38b-4f53-bee6-4c234186e6ad.jpg?1783903214",
+   "normal": "https://cards.scryfall.io/normal/front/8/9/89691cda-e38b-4f53-bee6-4c234186e6ad.jpg?1783903214",
+   "large": "https://cards.scryfall.io/large/front/8/9/89691cda-e38b-4f53-bee6-4c234186e6ad.jpg?1783903214",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/9/89691cda-e38b-4f53-bee6-4c234186e6ad.jpg?1783903214"
+  }
+ },
+ {
+  "name": "Reconnaissance Mission",
+  "scryfallId": "9fdd83d4-b473-498f-b45e-174f025e1259",
+  "oracleId": "11bf211c-95a3-4e7f-bd08-13f979d54e73",
+  "set": "msc",
+  "collectorNumber": "153",
+  "rarity": "uncommon",
+  "manaCost": "{2}{U}{U}",
+  "typeLine": "Enchantment",
+  "oracleText": "Whenever a creature you control deals combat damage to a player, you may draw a card.\nCycling {2} ({2}, Discard this card: Draw a card.)",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Cycling"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/f/9fdd83d4-b473-498f-b45e-174f025e1259.jpg?1783903238",
+   "normal": "https://cards.scryfall.io/normal/front/9/f/9fdd83d4-b473-498f-b45e-174f025e1259.jpg?1783903238",
+   "large": "https://cards.scryfall.io/large/front/9/f/9fdd83d4-b473-498f-b45e-174f025e1259.jpg?1783903238",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/f/9fdd83d4-b473-498f-b45e-174f025e1259.jpg?1783903238"
+  }
+ },
+ {
+  "name": "Love on the Battlefield",
+  "scryfallId": "3f2e65ff-27ae-4dfc-bf17-66f0c4949699",
+  "oracleId": "645dbd86-fe30-4897-a3ca-633f07ec5b54",
+  "set": "msc",
+  "collectorNumber": "87",
+  "rarity": "rare",
+  "manaCost": "{1}{U}{R}",
+  "typeLine": "Enchantment",
+  "oracleText": "Whenever you attack with exactly two creatures, those creatures gain first strike until end of turn, then draw a card. Whenever either of those creatures deals combat damage to a player this combat, put a +1/+1 counter on it.",
+  "colors": [
+   "R",
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/f/3f2e65ff-27ae-4dfc-bf17-66f0c4949699.jpg?1783903268",
+   "normal": "https://cards.scryfall.io/normal/front/3/f/3f2e65ff-27ae-4dfc-bf17-66f0c4949699.jpg?1783903268",
+   "large": "https://cards.scryfall.io/large/front/3/f/3f2e65ff-27ae-4dfc-bf17-66f0c4949699.jpg?1783903268",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/f/3f2e65ff-27ae-4dfc-bf17-66f0c4949699.jpg?1783903268"
+  }
+ },
+ {
+  "name": "Gift of Immortality",
+  "scryfallId": "4ae22015-073a-4666-9e3b-15dcf61f50ce",
+  "oracleId": "2c11c72f-5b04-47d8-bdf8-8d9d197ebc1b",
+  "set": "msc",
+  "collectorNumber": "134",
+  "rarity": "rare",
+  "manaCost": "{2}{W}",
+  "typeLine": "Enchantment — Aura",
+  "oracleText": "Enchant creature\nWhen enchanted creature dies, return that card to the battlefield under its owner's control. Return this card to the battlefield attached to that creature at the beginning of the next end step.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Enchant"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/a/4ae22015-073a-4666-9e3b-15dcf61f50ce.jpg?1783903247",
+   "normal": "https://cards.scryfall.io/normal/front/4/a/4ae22015-073a-4666-9e3b-15dcf61f50ce.jpg?1783903247",
+   "large": "https://cards.scryfall.io/large/front/4/a/4ae22015-073a-4666-9e3b-15dcf61f50ce.jpg?1783903247",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/a/4ae22015-073a-4666-9e3b-15dcf61f50ce.jpg?1783903247"
+  }
+ },
+ {
+  "name": "Folk Hero",
+  "scryfallId": "85bf7c95-4534-435b-bb25-f39340ecf9be",
+  "oracleId": "c5126d6e-969c-4034-98e3-f8653163346f",
+  "set": "msc",
+  "collectorNumber": "132",
+  "rarity": "mythic",
+  "manaCost": "{1}{W}",
+  "typeLine": "Legendary Enchantment — Background",
+  "oracleText": "Commander creatures you own have \"Whenever you cast a spell that shares a creature type with this creature, draw a card. This ability triggers only once each turn.\"",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/5/85bf7c95-4534-435b-bb25-f39340ecf9be.jpg?1783903247",
+   "normal": "https://cards.scryfall.io/normal/front/8/5/85bf7c95-4534-435b-bb25-f39340ecf9be.jpg?1783903247",
+   "large": "https://cards.scryfall.io/large/front/8/5/85bf7c95-4534-435b-bb25-f39340ecf9be.jpg?1783903247",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/5/85bf7c95-4534-435b-bb25-f39340ecf9be.jpg?1783903247"
+  }
+ },
+ {
+  "name": "Avenge",
+  "scryfallId": "8b385779-bc6b-4f67-8724-d8ae136d1436",
+  "oracleId": "65a64759-3a93-4542-84fc-3af5ccb741f4",
+  "set": "msc",
+  "collectorNumber": "11",
+  "rarity": "rare",
+  "manaCost": "{4}{W}{W}",
+  "typeLine": "Sorcery",
+  "oracleText": "This spell costs {2} less to cast if a player attacked you during their last turn.\nDestroy all creatures. You gain 1 life for each creature destroyed this way.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/b/8b385779-bc6b-4f67-8724-d8ae136d1436.jpg?1783903299",
+   "normal": "https://cards.scryfall.io/normal/front/8/b/8b385779-bc6b-4f67-8724-d8ae136d1436.jpg?1783903299",
+   "large": "https://cards.scryfall.io/large/front/8/b/8b385779-bc6b-4f67-8724-d8ae136d1436.jpg?1783903299",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/b/8b385779-bc6b-4f67-8724-d8ae136d1436.jpg?1783903299"
+  }
+ },
+ {
+  "name": "Heroic Return",
+  "scryfallId": "707e0b51-701b-4eb6-b721-19c21a3c4d90",
+  "oracleId": "4b7a8c05-15cd-452e-b9fc-83800e81793d",
+  "set": "msc",
+  "collectorNumber": "17",
+  "rarity": "rare",
+  "manaCost": "{5}{W}",
+  "typeLine": "Instant",
+  "oracleText": "This spell costs {2} less to cast if a creature is attacking you.\nReturn target creature card from your graveyard to the battlefield. If a Hero enters this way, it enters with two additional +1/+1 counters on it.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/0/707e0b51-701b-4eb6-b721-19c21a3c4d90.jpg?1783903298",
+   "normal": "https://cards.scryfall.io/normal/front/7/0/707e0b51-701b-4eb6-b721-19c21a3c4d90.jpg?1783903298",
+   "large": "https://cards.scryfall.io/large/front/7/0/707e0b51-701b-4eb6-b721-19c21a3c4d90.jpg?1783903298",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/0/707e0b51-701b-4eb6-b721-19c21a3c4d90.jpg?1783903298"
+  }
+ },
+ {
+  "name": "Heroic Sacrifice",
+  "scryfallId": "ec7bd155-1dd6-4fc3-870f-e0905f8c6d42",
+  "oracleId": "03c47f1c-02a7-428c-a126-9e85325ebc71",
+  "set": "msc",
+  "collectorNumber": "18",
+  "rarity": "rare",
+  "manaCost": "{1}{W}",
+  "typeLine": "Instant",
+  "oracleText": "Choose target creature you control. Until end of turn, all damage that would be dealt to you and creatures you control is dealt to the chosen creature instead (if it's still on the battlefield). When that creature dies this turn, put its counters on up to one target creature you control and draw a card.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/c/ec7bd155-1dd6-4fc3-870f-e0905f8c6d42.jpg?1783903298",
+   "normal": "https://cards.scryfall.io/normal/front/e/c/ec7bd155-1dd6-4fc3-870f-e0905f8c6d42.jpg?1783903298",
+   "large": "https://cards.scryfall.io/large/front/e/c/ec7bd155-1dd6-4fc3-870f-e0905f8c6d42.jpg?1783903298",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/c/ec7bd155-1dd6-4fc3-870f-e0905f8c6d42.jpg?1783903298"
+  }
+ },
+ {
+  "name": "Methods of the Mighty",
+  "scryfallId": "f3699f46-6173-47e1-97b2-a7632224fb6c",
+  "oracleId": "45f91d6a-eaab-4179-ac1f-5dc9e647a3da",
+  "set": "msc",
+  "collectorNumber": "21",
+  "rarity": "rare",
+  "manaCost": "{3}{W}",
+  "typeLine": "Instant",
+  "oracleText": "Choose one or more —\n• Destroy target artifact.\n• Destroy target tapped creature.\n• Put a +1/+1 counter on each creature you control.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/3/f3699f46-6173-47e1-97b2-a7632224fb6c.jpg?1783903298",
+   "normal": "https://cards.scryfall.io/normal/front/f/3/f3699f46-6173-47e1-97b2-a7632224fb6c.jpg?1783903298",
+   "large": "https://cards.scryfall.io/large/front/f/3/f3699f46-6173-47e1-97b2-a7632224fb6c.jpg?1783903298",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/3/f3699f46-6173-47e1-97b2-a7632224fb6c.jpg?1783903298"
+  }
+ },
+ {
+  "name": "West Coast Expansion",
+  "scryfallId": "41533f78-4a4e-424a-9612-a8bdb2a14b4b",
+  "oracleId": "2e1bf860-22b6-4d08-9b9f-88038cd1dd3f",
+  "set": "msc",
+  "collectorNumber": "40",
+  "rarity": "rare",
+  "manaCost": "{X}{U}{U}",
+  "typeLine": "Sorcery",
+  "oracleText": "Draw X cards. If X is 5 or more, you may cast a Hero spell from your hand without paying its mana cost.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/1/41533f78-4a4e-424a-9612-a8bdb2a14b4b.jpg?1783903287",
+   "normal": "https://cards.scryfall.io/normal/front/4/1/41533f78-4a4e-424a-9612-a8bdb2a14b4b.jpg?1783903287",
+   "large": "https://cards.scryfall.io/large/front/4/1/41533f78-4a4e-424a-9612-a8bdb2a14b4b.jpg?1783903287",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/1/41533f78-4a4e-424a-9612-a8bdb2a14b4b.jpg?1783903287"
+  }
+ },
+ {
+  "name": "Austere Command",
+  "scryfallId": "a8bc7912-e201-468a-b251-140205cb741c",
+  "oracleId": "09cc8709-fe10-472a-b05c-e89f3523018d",
+  "set": "msc",
+  "collectorNumber": "121",
+  "rarity": "rare",
+  "manaCost": "{4}{W}{W}",
+  "typeLine": "Sorcery",
+  "oracleText": "Choose two —\n• Destroy all artifacts.\n• Destroy all enchantments.\n• Destroy all creatures with mana value 3 or less.\n• Destroy all creatures with mana value 4 or greater.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/8/a8bc7912-e201-468a-b251-140205cb741c.jpg?1783903253",
+   "normal": "https://cards.scryfall.io/normal/front/a/8/a8bc7912-e201-468a-b251-140205cb741c.jpg?1783903253",
+   "large": "https://cards.scryfall.io/large/front/a/8/a8bc7912-e201-468a-b251-140205cb741c.jpg?1783903253",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/8/a8bc7912-e201-468a-b251-140205cb741c.jpg?1783903253"
+  }
+ },
+ {
+  "name": "Dismantling Wave",
+  "scryfallId": "39e7bb05-96df-4e76-90a6-3f3625b7965a",
+  "oracleId": "25012c1f-c069-43d7-b930-a3a5a7eb1389",
+  "set": "msc",
+  "collectorNumber": "129",
+  "rarity": "rare",
+  "manaCost": "{2}{W}",
+  "typeLine": "Sorcery",
+  "oracleText": "For each opponent, destroy up to one target artifact or enchantment that player controls.\nCycling {6}{W}{W} ({6}{W}{W}, Discard this card: Draw a card.)\nWhen you cycle this card, destroy all artifacts and enchantments.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Cycling"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/9/39e7bb05-96df-4e76-90a6-3f3625b7965a.jpg?1783903248",
+   "normal": "https://cards.scryfall.io/normal/front/3/9/39e7bb05-96df-4e76-90a6-3f3625b7965a.jpg?1783903248",
+   "large": "https://cards.scryfall.io/large/front/3/9/39e7bb05-96df-4e76-90a6-3f3625b7965a.jpg?1783903248",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/9/39e7bb05-96df-4e76-90a6-3f3625b7965a.jpg?1783903248"
+  }
+ },
+ {
+  "name": "Raise the Palisade",
+  "scryfallId": "ce9347e8-962f-4fc1-808f-b59ac751de13",
+  "oracleId": "f55a3781-fe33-4301-9bb5-6a54b9c13c4f",
+  "set": "msc",
+  "collectorNumber": "278",
+  "rarity": "rare",
+  "manaCost": "{4}{U}",
+  "typeLine": "Sorcery",
+  "oracleText": "Choose a creature type. Return all creatures that aren't of the chosen type to their owners' hands.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "flavorName": "Raise Repulsor Shields",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/e/ce9347e8-962f-4fc1-808f-b59ac751de13.jpg?1783903190",
+   "normal": "https://cards.scryfall.io/normal/front/c/e/ce9347e8-962f-4fc1-808f-b59ac751de13.jpg?1783903190",
+   "large": "https://cards.scryfall.io/large/front/c/e/ce9347e8-962f-4fc1-808f-b59ac751de13.jpg?1783903190",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/e/ce9347e8-962f-4fc1-808f-b59ac751de13.jpg?1783903190"
+  }
+ },
+ {
+  "name": "Swords to Plowshares",
+  "scryfallId": "8bd501ae-5814-4336-a45b-2b88cb85d29e",
+  "oracleId": "b1544f21-7e98-461b-aed5-e748b0168c52",
+  "set": "4ed",
+  "collectorNumber": "52",
+  "rarity": "uncommon",
+  "manaCost": "{W}",
+  "typeLine": "Instant",
+  "oracleText": "Exile target creature. Its controller gains life equal to its power.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/b/8bd501ae-5814-4336-a45b-2b88cb85d29e.jpg?1783947864",
+   "normal": "https://cards.scryfall.io/normal/front/8/b/8bd501ae-5814-4336-a45b-2b88cb85d29e.jpg?1783947864",
+   "large": "https://cards.scryfall.io/large/front/8/b/8bd501ae-5814-4336-a45b-2b88cb85d29e.jpg?1783947864",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/b/8bd501ae-5814-4336-a45b-2b88cb85d29e.jpg?1783947864"
+  }
+ },
+ {
+  "name": "Rip Apart",
+  "scryfallId": "b4964c78-b9ca-43c2-bcaa-bf75d92b9065",
+  "oracleId": "cbdbf18f-0180-4ade-a79e-1e644dd42d6f",
+  "set": "msc",
+  "collectorNumber": "187",
+  "rarity": "uncommon",
+  "manaCost": "{R}{W}",
+  "typeLine": "Sorcery",
+  "oracleText": "Choose one —\n• Rip Apart deals 3 damage to target creature or planeswalker.\n• Destroy target artifact or enchantment.",
+  "colors": [
+   "R",
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/4/b4964c78-b9ca-43c2-bcaa-bf75d92b9065.jpg?1783903231",
+   "normal": "https://cards.scryfall.io/normal/front/b/4/b4964c78-b9ca-43c2-bcaa-bf75d92b9065.jpg?1783903231",
+   "large": "https://cards.scryfall.io/large/front/b/4/b4964c78-b9ca-43c2-bcaa-bf75d92b9065.jpg?1783903231",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/4/b4964c78-b9ca-43c2-bcaa-bf75d92b9065.jpg?1783903231"
+  }
+ },
+ {
+  "name": "Destroy Evil",
+  "scryfallId": "af2498a2-3763-408a-9bd2-279034869285",
+  "oracleId": "b75e667a-1ceb-445a-acf4-ae1fd2dae9e7",
+  "set": "msc",
+  "collectorNumber": "128",
+  "rarity": "common",
+  "manaCost": "{1}{W}",
+  "typeLine": "Instant",
+  "oracleText": "Choose one —\n• Destroy target creature with toughness 4 or greater.\n• Destroy target enchantment.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/f/af2498a2-3763-408a-9bd2-279034869285.jpg?1783903257",
+   "normal": "https://cards.scryfall.io/normal/front/a/f/af2498a2-3763-408a-9bd2-279034869285.jpg?1783903257",
+   "large": "https://cards.scryfall.io/large/front/a/f/af2498a2-3763-408a-9bd2-279034869285.jpg?1783903257",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/f/af2498a2-3763-408a-9bd2-279034869285.jpg?1783903257"
+  }
+ },
+ {
+  "name": "Arcane Denial",
+  "scryfallId": "5eb843ef-b223-40d0-a461-54b16d188d0e",
+  "oracleId": "ab1cc360-b9de-48d9-9983-4dfe4a7d2a37",
+  "set": "msc",
+  "collectorNumber": "147",
+  "rarity": "common",
+  "manaCost": "{1}{U}",
+  "typeLine": "Instant",
+  "oracleText": "Counter target spell. Its controller may draw up to two cards at the beginning of the next turn's upkeep.\nYou draw a card at the beginning of the next turn's upkeep.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/e/5eb843ef-b223-40d0-a461-54b16d188d0e.jpg?1783903242",
+   "normal": "https://cards.scryfall.io/normal/front/5/e/5eb843ef-b223-40d0-a461-54b16d188d0e.jpg?1783903242",
+   "large": "https://cards.scryfall.io/large/front/5/e/5eb843ef-b223-40d0-a461-54b16d188d0e.jpg?1783903242",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/e/5eb843ef-b223-40d0-a461-54b16d188d0e.jpg?1783903242"
+  }
+ },
+ {
+  "name": "Avengers Tower",
+  "scryfallId": "88f0d9c9-8a1f-4b5a-b6f9-821ddd658d27",
+  "oracleId": "c5fc8e7c-a87e-4586-a13c-d30e0a3aafbf",
+  "set": "msh",
+  "collectorNumber": "260",
+  "rarity": "uncommon",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "{T}: Add {C}.\n{T}: Add one mana of any color. Spend this mana only to cast a Hero spell or to activate an ability of a Hero source.\n{4}, {T}: Look at the top three cards of your library. You may reveal a Hero card from among them and put it into your hand. Put the rest on the bottom of your library in any order.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/8/88f0d9c9-8a1f-4b5a-b6f9-821ddd658d27.jpg?1783902887",
+   "normal": "https://cards.scryfall.io/normal/front/8/8/88f0d9c9-8a1f-4b5a-b6f9-821ddd658d27.jpg?1783902887",
+   "large": "https://cards.scryfall.io/large/front/8/8/88f0d9c9-8a1f-4b5a-b6f9-821ddd658d27.jpg?1783902887",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/8/88f0d9c9-8a1f-4b5a-b6f9-821ddd658d27.jpg?1783902887"
+  }
+ },
+ {
+  "name": "Plaza of Heroes",
+  "scryfallId": "96fe4b9b-d766-463b-a6df-345ebebfc17c",
+  "oracleId": "9c58d241-4d9f-4b46-b8ee-f4587f9acfd6",
+  "set": "msc",
+  "collectorNumber": "255",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "{T}: Add {C}.\n{T}: Add one mana of any color. Spend this mana only to cast a legendary spell.\n{T}: Add one mana of any color among legendary permanents you control.\n{3}, {T}, Exile this land: Target legendary creature gains hexproof and indestructible until end of turn.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/6/96fe4b9b-d766-463b-a6df-345ebebfc17c.jpg?1783903197",
+   "normal": "https://cards.scryfall.io/normal/front/9/6/96fe4b9b-d766-463b-a6df-345ebebfc17c.jpg?1783903197",
+   "large": "https://cards.scryfall.io/large/front/9/6/96fe4b9b-d766-463b-a6df-345ebebfc17c.jpg?1783903197",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/6/96fe4b9b-d766-463b-a6df-345ebebfc17c.jpg?1783903197"
+  }
  }
 ]

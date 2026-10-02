@@ -231,7 +231,7 @@ export function Home({
               art={
                 quick?.deck.series === 'brawl'
                   ? artFor(quick.deck)
-                  : art('Mabel, Heir to Cragflame')
+                  : art('Captain America, Team Leader')
               }
               blurb="100-card decks led by a commander"
               run={null}

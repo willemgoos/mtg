@@ -222,6 +222,21 @@ Named abilities such as "Radar Sense" or "Street Justice" are just labels with n
 - Test-only deck: Mabel's Militia (Mabel, Heir to Cragflame, R/W), our own list from Foundations and Bloomburrow
   cards plus the staples. It stays as a Brawl opponent once the precons land.
 
+9b (Avengers Assemble):
+
+- Four of the deck's cards are printed in the MSH main set (Captain Mar-Vell, Patriot, Speed, Captain America, Living
+  Legend), and Avengers Tower in a promo set. They are implemented in `msc/avengers.ts`; Stream B should not define
+  them again. 9b also adds `msh` and `pmei` to `SET_PREFERENCE` (the same `msh` line as Stream B's).
+- Crew N is a real cost now (`cost.crew`); the engine picks which creatures to tap (one big enough, else the largest).
+- Phasing: phased-out permanents leave the battlefield list but keep their zone; nothing shows them on the board.
+- Heroic Sacrifice: the counters go to a creature you choose when it dies (not targeted).
+- Photon's mana can be of mixed colours; Arcane Denial's opponent always draws two.
+- Scarlet Witch's exiled cards are face up to the opponent.
+- "As this enters, choose a creature type" (Herald's Horn, Metallic Mimic, Door of Destinies, Kindred Discovery) is
+  an enters trigger, as for the earlier cards that choose.
+- Captain Marvel copies +1/+1 counters only.
+- Avengers Tower's and Plaza of Heroes' restricted mana can't pay for abilities.
+
 ### Stream B
 
 (Filled in as sub-phases ship.)

@@ -59,7 +59,7 @@ describe('Brawl decks', () => {
 });
 
 describe('Brawl format', () => {
-  const deck = MARVEL_BRAWL_DECKS[0]!;
+  const deck = MARVEL_BRAWL_DECKS.find((d) => d.id === 'brawl-mabels-militia')!;
   const opts = (seed: number) => ({ ...deckGameOptions(deck, deck), seed });
 
   it('starts at 25 life with each commander in the command zone', () => {
@@ -140,8 +140,13 @@ describe('Brawl format', () => {
   });
 
   it('plays random Brawl games to the end, and they survive a save', () => {
-    for (let seed = 1; seed <= 6; seed++) {
-      const initial = engine.newGame(opts(seed));
+    // Every pairing of the playable Brawl decks, mirrors included.
+    const pairs = PLAYABLE_BRAWL_DECKS.flatMap((a, i) =>
+      PLAYABLE_BRAWL_DECKS.slice(i).map((b) => [a, b] as const),
+    );
+    for (let seed = 1; seed <= Math.max(6, pairs.length * 3); seed++) {
+      const [a, b] = pairs[seed % pairs.length]!;
+      const initial = engine.newGame({ ...deckGameOptions(a, b), seed });
       const r = playRandomGame(engine, initial, seed * 7919);
       expect(r.truncated, `seed ${seed}`).toBe(false);
       expect(r.final.decision.kind).toBe('gameOver');

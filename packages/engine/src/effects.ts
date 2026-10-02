@@ -26,6 +26,7 @@ import {
   tap,
   untap,
 } from './context.ts';
+import { phaseOut } from './phasing.ts';
 import { foodsOf } from './forage.ts';
 import { canPayFrom, manaSources, manaValue } from './mana.ts';
 import { shuffleInPlace } from './rng.ts';
@@ -69,6 +70,7 @@ export function dealDamage(
   combat: boolean,
 ): void {
   if (amount <= 0) return;
+  to = redirected(ctx, to);
   amount += damageBonus(ctx, src, to, combat);
   if ('player' in to) {
     emit(ctx, { type: 'damageDealt', source: src.id, to, amount, combat });
@@ -86,9 +88,27 @@ export function dealDamage(
     }
     o.damage += amount;
     if (has(src, 'deathtouch')) o.damagedByDeathtouch = true;
+    // Hawkeye: "if Hawkeye dealt damage to it this turn".
+    if (!o.damagedBy?.includes(src.id)) o.damagedBy = [...(o.damagedBy ?? []), src.id];
     emit(ctx, { type: 'damageDealt', source: src.id, to, amount, combat });
   }
   if (has(src, 'lifelink')) gainLife(ctx, src.controller, amount);
+}
+
+/**
+ * Heroic Sacrifice: damage that would be dealt to a player or a creature they
+ * control is dealt to the chosen creature instead, while it's on the battlefield.
+ */
+function redirected(ctx: Ctx, to: TargetChoice): TargetChoice {
+  const owner = 'player' in to ? to.player : (onBattlefield(ctx, to.object)?.controller ?? null);
+  if (!owner) return to;
+  for (const e of ctx.s.effects) {
+    if (e.redirectFor !== owner) continue;
+    const host = onBattlefield(ctx, e.affected);
+    if (!host || ('object' in to && to.object.id === host.id)) continue;
+    return { object: { id: host.id, zcc: host.zcc } };
+  }
+  return to;
 }
 
 /** Extra damage from "deals that much damage plus N instead" effects. */
@@ -107,6 +127,7 @@ function damageBonus(ctx: Ctx, src: DamageSource, to: TargetChoice, combat: bool
       const b = a.effect;
       if (b.noncombat && combat) continue;
       if (b.toOpponents && !toOpponent) continue;
+      if (b.otherSources && src.id === id) continue;
       if (b.source && !(source?.zone === 'battlefield' && matchesFilter(ctx, src.id, b.source)))
         continue;
       if (b.condition && !checkCondition(ctx, b.condition, o.controller, o)) continue;
@@ -341,9 +362,12 @@ export function runEffects(
     if (e.kind === 'if') {
       // Replace it with the chosen branch (which may itself pause).
       const self = es.source ? ctx.s.objects[es.source.id] : undefined;
-      const branch = checkCondition(ctx, e.condition, es.controller, self, es.targets)
-        ? e.then
-        : (e.else ?? []);
+      // Amounts at resolution know X and "that much" (West Coast Expansion: X is 5 or more).
+      const holds =
+        e.condition.kind === 'amountAtLeast'
+          ? resolveAmount(ctx, es, e.condition.amount) >= e.condition.min
+          : checkCondition(ctx, e.condition, es.controller, self, es.targets);
+      const branch = holds ? e.then : (e.else ?? []);
       list.splice(i, 1, ...branch);
       i--;
       continue;
@@ -459,6 +483,18 @@ export function runEffects(
           resume,
           thenPriority,
         };
+      } else if (e.kind === 'castFree' && e.from) {
+        // West Coast Expansion (from your hand), Scarlet Witch (cards exiled with her).
+        const self = es.source && ctx.s.objects[es.source.id];
+        const pool =
+          e.from === 'hand'
+            ? ctx.s.players[controller].hand
+            : (self?.exiledWith ?? []).filter((id) => ctx.s.objects[id]?.zone === 'exile');
+        const cards = pool.filter(
+          (id) => !def(ctx, id).types.includes('Land') && cardMatches(ctx, id, e.filter ?? {}),
+        );
+        if (cards.length === 0) continue;
+        ctx.s.decision = { kind: 'castFree', player: controller, cards, resume, thenPriority };
       } else if (e.kind === 'castFree') {
         // A target card in a graveyard, still there.
         const t =
@@ -583,9 +619,10 @@ export function runEffects(
         };
       } else if (e.kind === 'putFromHandOrGraveyard') {
         const ps = ctx.s.players[controller];
-        const options = [...(e.graveyardOnly ? [] : ps.hand), ...ps.graveyard].filter((id) =>
-          cardMatches(ctx, id, e.filter),
-        );
+        const options = [
+          ...(e.graveyardOnly ? [] : ps.hand),
+          ...(e.handOnly ? [] : ps.graveyard),
+        ].filter((id) => cardMatches(ctx, id, e.filter));
         if (options.length === 0) continue;
         ctx.s.decision = {
           kind: 'searchLibrary',
@@ -675,6 +712,8 @@ export function runEffects(
           moveObject(ctx, c.id, 'graveyard');
           died.push(c.id);
         }
+        // Avenge: "You gain 1 life for each creature destroyed this way."
+        if (e.gainPerDestroyed) gainLife(ctx, controller, e.gainPerDestroyed * died.length);
         // "Return a creature card put into your graveyard this way."
         const options = died.filter((id) => {
           const o = ctx.s.objects[id];
@@ -697,9 +736,10 @@ export function runEffects(
         ctx.s.decision = {
           kind: 'searchLibrary',
           player: controller,
-          options: looked.filter((id) => cardMatches(ctx, id, e.filter)),
+          options: looked.filter((id) => cardMatches(ctx, id, e.filter, es.source?.id)),
           looked,
           ...(e.battlefieldOnYourTurn ? { battlefieldOnYourTurn: true } : {}),
+          ...(e.restOnTop ? { restOnTop: true } : {}),
           resume,
           thenPriority,
         };
@@ -850,6 +890,8 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
           ...(e.exileIfDies ? { exileIfDies: true } : {}),
           ...(e.cantBeBlocked ? { cantBeBlocked: true } : {}),
           ...(e.returnWhenDies ? { returnWhenDies: e.returnWhenDies } : {}),
+          ...(e.cantBeBlockedExcept ? { cantBeBlockedExcept: e.cantBeBlockedExcept } : {}),
+          ...(e.counterOnCombatDamage ? { counterOnCombatDamage: true } : {}),
           ...(e.untilYourNextTurn
             ? { expires: 'untilYourNextTurn' as const, player: es.controller }
             : { expires: 'endOfTurn' as const }),
@@ -1072,10 +1114,80 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
       if (!o || o.zone !== 'graveyard' || o.zcc !== t.object.zcc) return;
       moveObject(ctx, o.id, 'battlefield', { controller: es.controller });
       if (e.counter) (o.counters ??= {})[e.counter] = 1;
+      // Heroic Return, Winter Soldier: "if a Hero enters this way, it enters with counters".
+      if (e.countersIf && cardMatches(ctx, o.id, e.countersIf.filter))
+        addCounters(ctx, o.id, e.countersIf.count);
       // "That creature" for the effects after it (Coiling Rebirth).
       es.chosen = { id: o.id, zcc: o.zcc };
       return;
     }
+    // Avengers Assemble (9b).
+    case 'exileTopWithSource': {
+      const self = es.source && ctx.s.objects[es.source.id];
+      for (const id of ctx.s.players[es.controller].library.slice(0, e.count)) {
+        moveObject(ctx, id, 'exile');
+        if (self) self.exiledWith = [...(self.exiledWith ?? []), id];
+      }
+      return;
+    }
+    case 'redirectDamage':
+      for (const id of objectsOf(ctx, es, e.to))
+        ctx.s.effects.push({
+          timestamp: newTimestamp(ctx),
+          affected: { id, zcc: obj(ctx, id).zcc },
+          power: 0,
+          toughness: 0,
+          keywords: [],
+          redirectFor: es.controller,
+          ...(e.onDies
+            ? {
+                onDies: {
+                  effects: e.onDies,
+                  controller: es.controller,
+                  sourceDefId: es.sourceDefId,
+                },
+              }
+            : {}),
+          expires: 'endOfTurn',
+        });
+      return;
+    case 'phaseOut':
+      phaseOut(ctx, objectsOf(ctx, es, e.what));
+      return;
+    case 'returnEnchantedThenAura': {
+      // Gift of Immortality: the creature it was on comes back, then the Aura follows at the next end step.
+      const aura = es.source && ctx.s.objects[es.source.id];
+      const was = aura?.lastAttachedTo;
+      const card = was && ctx.s.objects[was.id];
+      if (!aura || !card || card.zone !== 'graveyard' || card.zcc !== was.zcc + 1) return;
+      moveObject(ctx, card.id, 'battlefield');
+      (ctx.s.delayed ??= []).push({
+        controller: es.controller,
+        sourceDefId: es.sourceDefId,
+        subject: { id: card.id, zcc: card.zcc },
+        effects: [{ kind: 'returnAuraTo', aura: { id: aura.id, zcc: aura.zcc } }],
+        fromTurn: ctx.s.turn.number,
+      });
+      return;
+    }
+    case 'returnAuraTo': {
+      const aura = ctx.s.objects[e.aura.id];
+      const host = es.subject && onBattlefield(ctx, es.subject);
+      if (!aura || aura.zone !== 'graveyard' || aura.zcc !== e.aura.zcc || !host) return;
+      moveObject(ctx, aura.id, 'battlefield', { controller: aura.owner });
+      aura.attachedTo = host.id;
+      return;
+    }
+    case 'atNextUpkeep':
+      (ctx.s.delayed ??= []).push({
+        controller: es.controller,
+        sourceDefId: es.sourceDefId,
+        subject: es.source ?? { id: '', zcc: 0 },
+        effects: e.effects,
+        fromTurn: ctx.s.turn.number + 1,
+        at: 'upkeep',
+      });
+      return;
     case 'exileTopPlayable': {
       const lib = ctx.s.players[es.controller].library;
       const ownTurn = ctx.s.turn.activePlayer === es.controller;

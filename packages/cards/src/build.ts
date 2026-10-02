@@ -80,6 +80,8 @@ export const KEYWORDS_AS_ABILITIES = new Set([
   'Valiant',
   // Marvel Super Heroes Commander.
   'Cycling',
+  'Crew',
+  'Cosmic Awareness',
 ]);
 
 const BASIC_MANA: Record<string, ManaType> = {

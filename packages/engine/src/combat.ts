@@ -38,7 +38,15 @@ export function canBlock(ctx: Ctx, blocker: ObjectId, attacker: ObjectId): boole
     if (
       ab.kind === 'static' &&
       ab.effect.kind === 'cantBeBlockedBy' &&
-      matchesFilter(ctx, blocker, ab.effect.filter)
+      matchesFilter(ctx, blocker, ab.effect.filter, attacker)
+    )
+      return false;
+  // Speed: "can't be blocked this turn except by creatures with haste".
+  for (const e of ctx.s.effects)
+    if (
+      e.cantBeBlockedExcept &&
+      e.affected.id === attacker &&
+      !bc.keywords.has(e.cantBeBlockedExcept)
     )
       return false;
   if (

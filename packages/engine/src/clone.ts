@@ -16,6 +16,7 @@ export function cloneState(s: GameState): GameState {
     if (o.counters) c.counters = { ...o.counters };
     if (o.onceTurns) c.onceTurns = { ...o.onceTurns };
     if (o.exiledWith) c.exiledWith = o.exiledWith.slice();
+    if (o.damagedBy) c.damagedBy = o.damagedBy.slice();
     objects[id] = c;
   }
   const player = (p: GameState['players']['p1']) => ({
@@ -27,12 +28,14 @@ export function cloneState(s: GameState): GameState {
     command: p.command.slice(),
     ...(p.pool ? { pool: p.pool.slice() } : {}),
   });
+  const phased = s.phasedOut ? { phasedOut: s.phasedOut.slice() } : {};
   return {
     ...s,
     rng: { s: [s.rng.s[0], s.rng.s[1], s.rng.s[2], s.rng.s[3]] },
     players: { p1: player(s.players.p1), p2: player(s.players.p2) },
     objects,
     battlefield: s.battlefield.slice(),
+    ...phased,
     stack: s.stack.map((x) => ({ ...x })),
     turn: {
       ...s.turn,

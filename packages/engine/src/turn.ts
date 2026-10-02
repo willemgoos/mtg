@@ -8,7 +8,8 @@ import {
   possibleAttackers,
   possibleBlockers,
 } from './combat.ts';
-import { type Ctx, def, drawCard, emit, obj, other, untap } from './context.ts';
+import { type Ctx, def, drawCard, emit, obj, other, tap, untap } from './context.ts';
+import { phaseIn } from './phasing.ts';
 import { checkGameOver, runSBAs } from './sba.ts';
 import { pushTrigger, resolveTop } from './stack.ts';
 import { targetCombos } from './targets.ts';
@@ -129,6 +130,11 @@ export function advanceStep(ctx: Ctx): void {
 
 export function startTurn(ctx: Ctx, player: PlayerId): void {
   const s = ctx.s;
+  // Avenge: whether the player whose turn just ended attacked during it.
+  if (s.turn.number > 0) {
+    const prev = s.players[s.turn.activePlayer];
+    prev.attackedLastTurn = prev.attackedThisTurn;
+  }
   s.turn.number++;
   s.turn.activePlayer = player;
   const p = s.players[player];
@@ -166,6 +172,8 @@ function enterStep(ctx: Ctx, step: Step): void {
 
   switch (step) {
     case 'untap':
+      // Vision: phased-out permanents come back first (rule 502.1).
+      phaseIn(ctx, ap);
       for (const id of s.battlefield) {
         const o = obj(ctx, id);
         if (o.controller !== ap) continue;
@@ -247,11 +255,7 @@ export function confirmAttackers(ctx: Ctx): void {
     blockers: [],
   }));
   for (const d of decl) {
-    const o = obj(ctx, d.id);
-    if (!hasKeyword(ctx, d.id, 'vigilance')) {
-      o.tapped = true;
-      emit(ctx, { type: 'tapped', id: d.id });
-    }
+    if (!hasKeyword(ctx, d.id, 'vigilance')) tap(ctx, d.id);
   }
   if (decl.length > 0) s.players[s.turn.activePlayer].attackedThisTurn = true;
   for (const d of decl) s.turn.attackers.push(d.id);
@@ -301,6 +305,7 @@ export function finishCleanup(ctx: Ctx): void {
     const o = obj(ctx, id);
     o.damage = 0;
     o.damagedByDeathtouch = false;
+    delete o.damagedBy;
   }
   endEffects(ctx, (e) => e.expires === 'endOfTurn');
   if (s.emblems?.length)

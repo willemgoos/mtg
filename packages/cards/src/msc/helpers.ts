@@ -66,3 +66,13 @@ export const unlessReveal = (...colors: ManaType[]): ConditionDef => ({
   kind: 'not',
   condition: { kind: 'handHas', filter: landTypes(colors) },
 });
+
+/** "Equip {cost}" (or "Equip Hero {cost}": only onto a creature matching the filter). */
+export const equip = (cost: string, filter?: CardFilter, label?: string): AbilityDef => ({
+  kind: 'activated',
+  cost: { mana: parseManaCost(cost) },
+  sorcerySpeed: true,
+  targets: [{ what: 'creature', controller: 'you', ...(filter ? { filter } : {}) }],
+  effects: [{ kind: 'attach', to: { target: 0 } }],
+  ...(label ? { label } : {}),
+});

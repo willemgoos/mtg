@@ -1,4 +1,4 @@
-import { isCommander } from './brawl.ts';
+import { commanderTypes, isCommander } from './brawl.ts';
 import { type Ctx, def, defOf, obj } from './context.ts';
 import { manaValue } from './cost.ts';
 import { checkCondition } from './triggers.ts';
@@ -120,6 +120,11 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
             granted ??= new Set(keywords);
             for (const k of st.loseKeywords) removed.add(k);
           }
+          // Hulkbuster Armor: base 9/9.
+          if (st.basePT) {
+            power += st.basePT[0] - (basePower ?? base ?? o.copyPT?.power ?? d.power ?? 0);
+            toughness += st.basePT[1] - (base ?? o.copyPT?.toughness ?? d.toughness ?? 0);
+          }
           power += countOf(ctx, src.controller, st.power);
           toughness += countOf(ctx, src.controller, st.toughness);
           if (st.keywords?.length) {
@@ -172,8 +177,8 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
           continue;
         if (st.filter?.colors && !st.filter.colors.some((color) => d.colors.includes(color)))
           continue;
-        power += countOf(ctx, src.controller, st.power);
-        toughness += countOf(ctx, src.controller, st.toughness);
+        power += countOf(ctx, src.controller, st.power, false, srcId);
+        toughness += countOf(ctx, src.controller, st.toughness, false, srcId);
         if (st.keywords?.length) {
           granted ??= new Set(keywords);
           for (const k of st.keywords) granted.add(k);
@@ -212,6 +217,11 @@ export function countOf(
 ): number {
   if (typeof a === 'number') return a;
   if ('multiply' in a) return a.multiply * countOf(ctx, player, a.amount, printed, sourceId);
+  // Door of Destinies: its charge counters.
+  if ('namedCountersOnSource' in a) {
+    const src = sourceId ? ctx.s.objects[sourceId] : undefined;
+    return src?.counters?.[a.namedCountersOnSource] ?? 0;
+  }
   if (!('count' in a)) return 0;
   if (a.count === 'cardsInGraveyard')
     return (
@@ -527,6 +537,39 @@ export function cardMatches(
     if (mv > max) return false;
   }
   if (filter.other && id === sourceId) return false;
+  if (!avengersFilter(ctx, id, filter, sourceId)) return false;
+  return true;
+}
+
+/** Avengers Assemble (9b) filter parts: chosen types, modified, power, the commander's types. */
+function avengersFilter(
+  ctx: Ctx,
+  id: ObjectId,
+  filter: CardFilter,
+  sourceId: ObjectId | undefined,
+): boolean {
+  const chosen = sourceId ? ctx.s.objects[sourceId]?.chosenType : undefined;
+  if (filter.chosenTypeOfSource && !(chosen && hasSubtype(ctx, id, chosen))) return false;
+  if (filter.notChosenTypeOfSource && chosen && hasSubtype(ctx, id, chosen)) return false;
+  const o = obj(ctx, id);
+  if (filter.modified) {
+    const counters = o.plusOneCounters > 0 || Object.values(o.counters ?? {}).some((n) => n > 0);
+    const attached = ctx.s.battlefield.some((a) => {
+      const att = obj(ctx, a);
+      if (att.attachedTo !== id) return false;
+      const sub = def(ctx, a).subtypes;
+      return sub.includes('Equipment') || (sub.includes('Aura') && att.controller === o.controller);
+    });
+    if (!counters && !attached) return false;
+  }
+  if (filter.greaterPowerThanSource) {
+    if (!sourceId || o.zone !== 'battlefield') return false;
+    if (characteristics(ctx, id).power <= characteristics(ctx, sourceId).power) return false;
+  }
+  if (filter.sharesTypeWithCommander) {
+    const types = commanderTypes(ctx, o.controller);
+    if (!def(ctx, id).subtypes.some((t) => types.includes(t))) return false;
+  }
   return true;
 }
 

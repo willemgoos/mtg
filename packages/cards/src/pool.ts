@@ -25,8 +25,10 @@ export const SET_PREFERENCE = [
   '5ed',
   '4ed',
   'blb',
-  // Marvel Super Heroes Commander: the Brawl precons.
+  'msh',
+  // Marvel Super Heroes Commander: the Brawl precons (a few of their cards are only in msh or promos).
   'msc',
+  'pmei',
   // Arena Beginner Set: Arena-only cards (last resort).
   'anb',
 ];

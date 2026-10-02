@@ -52,13 +52,19 @@ export function makeCtx(
 
 /** Small one-off effects used by the engine's own effect kinds. */
 const BUILT_IN_EFFECTS: Record<string, CustomEffect> = {
-  // "As this enters, choose a color/creature type."
+  // "As this enters, choose a color/creature type" (or, for a spell, as it resolves: Raise the Palisade).
   setChosen(ctx, es, params) {
     const o = es.source && ctx.s.objects[es.source.id];
-    if (!o || o.zone !== 'battlefield') return;
+    if (!o || (o.zone !== 'battlefield' && o.zone !== 'stack')) return;
     const p = params as { color?: ManaType; type?: string };
     if (p.color) o.chosenColor = p.color;
     if (p.type) o.chosenType = p.type;
+  },
+  // Metallic Mimic: "This creature is the chosen type in addition to its other types."
+  addChosenSubtype(ctx, es) {
+    const o = es.source && ctx.s.objects[es.source.id];
+    if (!o || o.zone !== 'battlefield' || !o.chosenType) return;
+    o.addedSubtypes = [...(o.addedSubtypes ?? []), o.chosenType];
   },
 };
 
@@ -306,6 +312,9 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
   // Bonecache Overseer: cards leaving a graveyard.
   if (from === 'graveyard') (ctx.s.turn.leftGraveyard ??= { p1: 0, p2: 0 })[o.owner]++;
   delete o.targetedByControllerTurn;
+  delete o.firstTappedTurn;
+  // Damage sources are remembered as it dies (Hawkeye), forgotten as it enters.
+  if (to === 'battlefield') delete o.damagedBy;
   delete o.blank;
   delete o.resolutions;
   const src = zoneList(ctx, o, from);
@@ -409,7 +418,7 @@ export function sacrifice(ctx: Ctx, id: ObjectId): void {
   moveObject(ctx, id, 'graveyard');
 }
 
-function removeFromCombat(ctx: Ctx, id: ObjectId): void {
+export function removeFromCombat(ctx: Ctx, id: ObjectId): void {
   const c = ctx.s.combat;
   if (!c) return;
   c.attackers = c.attackers.filter((a) => a.id !== id);
@@ -432,7 +441,10 @@ export function tap(ctx: Ctx, id: ObjectId): void {
   const o = obj(ctx, id);
   if (o.tapped) return;
   o.tapped = true;
-  emit(ctx, { type: 'tapped', id });
+  // Captain America, Living Legend cares about the first time each turn.
+  const first = o.firstTappedTurn !== ctx.s.turn.number;
+  o.firstTappedTurn = ctx.s.turn.number;
+  emit(ctx, { type: 'tapped', id, ...(first ? { first } : {}) });
 }
 
 export function untap(ctx: Ctx, id: ObjectId): void {

@@ -131,6 +131,8 @@ export interface CardDefinition {
   costReductionIfTarget?: { filter: CardFilter; amount: number };
   /** What it does when cast with flashback, if different ("if this spell was cast from a graveyard"). */
   flashbackSpell?: SpellDef;
+  /** Costs {amount} less while the condition holds (Heroic Return, Avenge). */
+  costReductionIf?: { condition: ConditionDef; amount: number };
   /** "You may sacrifice any number of nonland permanents. This spell costs {1} less for each" (Rottenmouth Viper). */
   sacrificeAnyForReduction?: boolean;
   /** "As an additional cost to cast this spell, discard a card" (Sazacap's Brew). */
@@ -174,7 +176,7 @@ export type AbilityDef =
        * Only if the colour is in your commander's colour identity (Command
        * Tower), or a land an opponent controls could make it (Exotic Orchard).
        */
-      colorFrom?: 'commander' | 'opponentLands';
+      colorFrom?: 'commander' | 'opponentLands' | 'legendaries';
       /** Deals 1 damage to you when spent as this colour (Talismans). */
       pain?: boolean;
       /** Path of Ancestry: scry 1 when spent on a creature spell sharing a type with your commander. */
@@ -251,6 +253,9 @@ export interface CostDef {
   // Cycling.
   /** Discard this card from your hand. */
   discardSelf?: boolean;
+  // Avengers Assemble (9b).
+  /** Crew N: tap untapped creatures you control with total power N or more (the engine picks them). */
+  crew?: number;
 }
 
 export type TriggerDef =
@@ -261,7 +266,7 @@ export type TriggerDef =
   /** Whenever this or another creature you control (matching the filter, as printed) dies. */
   | { on: 'creatureYouControlDies'; nontoken?: boolean; filter?: CardFilter }
   /** Whenever a creature you control deals combat damage (on your turn); "that creature", "that much". */
-  | { on: 'creatureYouControlDealsCombatDamage'; toPlayer?: boolean }
+  | { on: 'creatureYouControlDealsCombatDamage'; toPlayer?: boolean; filter?: CardFilter }
   | { on: 'beginningOfCombat'; whose: 'yours' }
   | { on: 'youGainLife' }
   /** Whenever the creature this Aura is attached to dies. */
@@ -284,13 +289,15 @@ export type TriggerDef =
         | 'firstOfItsKind';
       /** The spell must also match this (Gev: a Lizard spell). */
       spell?: CardFilter;
+      /** Any player's spell, cast when it isn't their turn (Vision). */
+      anyPlayerOffTurn?: boolean;
     }
   /** Whenever a player casts their second spell each turn (Hearthborn Battler). */
   | { on: 'anyPlayerSecondSpell' }
   /** At the beginning of your precombat or postcombat main phase. */
   | { on: 'beginningOfMain'; which: 1 | 2 }
-  /** Whenever you draw your second card each turn. */
-  | { on: 'drawSecondCard' }
+  /** Whenever you (or, with 'opponents', an opponent: Black Widow) draw your second card each turn. */
+  | { on: 'drawSecondCard'; whose?: 'opponents' }
   | { on: 'drawCard'; whose: 'yours' | 'opponents' }
   /** Whenever a source you control deals noncombat damage to an opponent ("that many"). */
   | { on: 'yourNoncombatDamageToOpponent' }
@@ -322,8 +329,11 @@ export type TriggerDef =
   | { on: 'youForage' }
   /** Whenever you give a gift (Jolly Gerbils). */
   | { on: 'youGiveGift' }
-  /** Whenever you put +1/+1 counters on a creature you control (Stocking the Pantry). */
-  | { on: 'youPutCounters' }
+  /**
+   * Whenever you put +1/+1 counters on a creature you control (Stocking the
+   * Pantry); "that creature", "that many". Captain Marvel: another one, matching the filter.
+   */
+  | { on: 'youPutCounters'; other?: boolean; filter?: CardFilter }
   /** At the beginning of your draw step. */
   | { on: 'beginningOfDraw' }
   /** Whenever a creature you control becomes the target of an opponent's spell or ability (Pawpatch Recruit). */
@@ -335,7 +345,14 @@ export type TriggerDef =
   /** When you sacrifice this permanent (Carrot Cake). */
   | { on: 'sacrificed' }
   /** Whenever you sacrifice a permanent matching the filter (Camellia: a Food). */
-  | { on: 'youSacrifice'; filter: CardFilter };
+  | { on: 'youSacrifice'; filter: CardFilter }
+  // Avengers Assemble (9b).
+  /** Whenever this creature is dealt damage ("that much"): Hercules. */
+  | { on: 'dealtDamage' }
+  /** Whenever a creature you control (matching the filter) becomes blocked; amount: its blockers (She-Hulk). */
+  | { on: 'creatureYouControlBecomesBlocked'; filter?: CardFilter }
+  /** Whenever a creature you control becomes tapped for the first time this turn, during your turn. */
+  | { on: 'creatureYouControlFirstTappedOnYourTurn' };
 
 export type ConditionDef =
   | { kind: 'controlsPermanents'; filter: CardFilter; min: number }
@@ -405,6 +422,15 @@ export type ConditionDef =
   | { kind: 'any'; of: ConditionDef[] }
   /** The condition doesn't hold. */
   | { kind: 'not'; condition: ConditionDef }
+  // Avengers Assemble (9b).
+  /** An opponent has cast a spell this turn (Captain Mar-Vell). */
+  | { kind: 'opponentCastSpellThisTurn' }
+  /** The source is tapped (Quicksilver). */
+  | { kind: 'sourceTapped' }
+  /** An opponent attacked during their last turn (Avenge). */
+  | { kind: 'opponentAttackedLastTurn' }
+  /** The source dealt damage this turn to the creature that caused the trigger (Hawkeye). */
+  | { kind: 'sourceDamagedSubject' }
   // Brawl staples.
   /** You have a card matching this in your hand (snarls reveal one). */
   | { kind: 'handHas'; filter: CardFilter }
@@ -465,6 +491,15 @@ export interface CardFilter {
   commander?: boolean;
   /** Has one of these supertypes (battle lands count basic lands). */
   supertypes?: Supertype[];
+  // Avengers Assemble (9b).
+  /** Modified: has counters, an Equipment, or an Aura its controller controls (War Machine). */
+  modified?: boolean;
+  /** Greater power than the source (Ant-Man: "can't be blocked by creatures with greater power"). */
+  greaterPowerThanSource?: boolean;
+  /** Not of the creature type chosen for the source (Raise the Palisade). */
+  notChosenTypeOfSource?: boolean;
+  /** Shares a creature type with its controller's commander (Folk Hero). */
+  sharesTypeWithCommander?: boolean;
 }
 
 export interface TargetSpec {
@@ -558,6 +593,10 @@ export type EffectDef =
       cantBeBlocked?: boolean;
       /** Gains "When this creature dies, return it to the battlefield tapped ..." */
       returnWhenDies?: ReturnWhenDies;
+      /** Can't be blocked except by creatures with this keyword (Speed: haste). */
+      cantBeBlockedExcept?: Keyword;
+      /** "Whenever it deals combat damage to a player this turn, put a +1/+1 counter on it" (Love on the Battlefield). */
+      counterOnCombatDamage?: boolean;
     }
   /** Resolution-time "if": Morbid-style choices between two effects. */
   | { kind: 'if'; condition: ConditionDef; then: EffectDef[]; else?: EffectDef[] }
@@ -607,7 +646,17 @@ export type EffectDef =
    * You may cast a card without paying its mana cost, now (Daring Waverider,
    * Wishing Well). `exileAfter`: if it would go to the graveyard, exile it.
    */
-  | { kind: 'castFree'; what: Ref; exileAfter?: boolean }
+  | {
+      kind: 'castFree';
+      what: Ref;
+      exileAfter?: boolean;
+      /**
+       * Instead of a target: a card from your hand (West Coast Expansion) or
+       * among the cards exiled with the source (Scarlet Witch), matching the filter.
+       */
+      from?: 'hand' | 'exiledWithSource';
+      filter?: CardFilter;
+    }
   /** Portent of Calamity: reveal the top X and exile one card of each type; four or more lets you cast one free. */
   | { kind: 'portent' }
   /** The Infamous Cruelclaw: exile until a nonland card; you may cast it by discarding a card instead. */
@@ -699,6 +748,8 @@ export type EffectDef =
       counter?: string;
       /** Only from the graveyard (Scavenger's Talent). */
       graveyardOnly?: boolean;
+      /** Only from your hand (Avengers Quinjet). */
+      handOnly?: boolean;
     }
   /** Exile permanents, then return them under their owners' control (with +1/+1 counters). */
   | { kind: 'blink'; what: Ref; counters?: number }
@@ -791,7 +842,13 @@ export type EffectDef =
   /** Return the subject (an exiled card) to the battlefield under its owner's control. */
   | { kind: 'returnSubject'; counters?: number; named?: string }
   /** Put a card from a graveyard onto the battlefield under your control (with a named counter: finality). */
-  | { kind: 'returnToBattlefield'; what: Ref; counter?: string }
+  | {
+      kind: 'returnToBattlefield';
+      what: Ref;
+      counter?: string;
+      /** It enters with +1/+1 counters if it matches the filter (Heroic Return: a Hero gets two). */
+      countersIf?: { filter: CardFilter; count: number };
+    }
   /** Destroy all creatures (matching the filter). `returnOne`: then return one of yours that died (Starfall Invocation). */
   | {
       kind: 'destroyAll';
@@ -799,6 +856,8 @@ export type EffectDef =
       returnOne?: boolean;
       /** Permanents of any type, not just creatures (Season of Gathering). */
       permanents?: boolean;
+      /** Gain this much life for each one destroyed (Avenge). */
+      gainPerDestroyed?: number;
     }
   /** Look at the top N; you may take a card matching the filter into your hand; the rest go to the bottom at random. */
   | {
@@ -807,6 +866,8 @@ export type EffectDef =
       filter: CardFilter;
       /** Onto the battlefield if it's your turn, otherwise into your hand (Whiskervale Forerunner). */
       battlefieldOnYourTurn?: boolean;
+      /** A card not taken stays on top (Herald's Horn looks at one card). */
+      restOnTop?: boolean;
     }
   /** Exile the top N; you may play them until the end of this turn or of your next turn. */
   | { kind: 'exileTopPlayable'; count: Amount; until: 'endOfTurn' | 'endOfNextTurn' }
@@ -857,7 +918,26 @@ export type EffectDef =
   | { kind: 'sacrifice'; what: Ref }
   /** The controller scries N (asks them to order the top cards). */
   | { kind: 'scry'; amount: number }
-  | { kind: 'custom'; handler: string; params?: Record<string, unknown> };
+  | { kind: 'custom'; handler: string; params?: Record<string, unknown> }
+  // Avengers Assemble (9b).
+  /** Exile the top N cards of your library face down, remembered as exiled with the source (Scarlet Witch). */
+  | { kind: 'exileTopWithSource'; count: number }
+  /**
+   * Until end of turn, all damage that would be dealt to you and creatures you
+   * control is dealt to this creature instead (Heroic Sacrifice); `onDies`
+   * happens if it dies this turn.
+   */
+  | { kind: 'redirectDamage'; to: Ref; onDies?: EffectDef[] }
+  /** These permanents phase out until their controller's next untap step (Vision). */
+  | { kind: 'phaseOut'; what: Ref }
+  /** At the beginning of the next turn's upkeep, these happen (Arcane Denial). */
+  | { kind: 'atNextUpkeep'; effects: EffectDef[] }
+  /**
+   * Gift of Immortality: return the creature this Aura was attached to; at the
+   * beginning of the next end step the Aura returns attached to it (`returnAuraTo`).
+   */
+  | { kind: 'returnEnchantedThenAura' }
+  | { kind: 'returnAuraTo'; aura: ObjectRef };
 
 export type StaticDef =
   | {
@@ -873,8 +953,8 @@ export type StaticDef =
   | { kind: 'cantBlock' }
   /** This permanent doesn't untap during its controller's untap step. */
   | { kind: 'doesntUntap' }
-  /** You may cast spells (matching the filter) as though they had flash (High Fae Trickster). */
-  | { kind: 'flashForAll'; filter?: CardFilter }
+  /** You may cast spells (matching the filter) as though they had flash (High Fae Trickster), while the condition holds. */
+  | { kind: 'flashForAll'; filter?: CardFilter; condition?: ConditionDef }
   /**
    * Creatures you control matching the filter have "{T}: Add one of these"
    * (Clement: Frogs, {G} or {U}, only for creature spells).
@@ -899,6 +979,8 @@ export type StaticDef =
       loseKeywords?: Keyword[];
       /** "You control enchanted creature" (Kitnap). */
       control?: boolean;
+      /** Base power and toughness (Hulkbuster Armor: 9/9). */
+      basePT?: [number, number];
     }
   /** All creatures able to block this creature do so (Prized Unicorn). */
   | { kind: 'lure' }
@@ -929,8 +1011,11 @@ export type StaticDef =
   | { kind: 'cantBeBlocked' }
   /** This creature can't be blocked by creatures matching the filter. */
   | { kind: 'cantBeBlockedBy'; filter: CardFilter }
-  /** Other creatures you control enter with an additional +1/+1 counter while this holds (Gev). */
-  | { kind: 'othersEnterWithCounter'; condition: ConditionDef }
+  /**
+   * Other creatures you control enter with an additional +1/+1 counter while this
+   * holds (Gev), or if they match the filter (Metallic Mimic: the chosen type).
+   */
+  | { kind: 'othersEnterWithCounter'; condition?: ConditionDef; filter?: CardFilter }
   /**
    * Damage from a source you control (matching the filter) is increased by
    * `amount` (Valley Flamecaller). `noncombat`/`toOpponents`: only that damage.
@@ -942,6 +1027,8 @@ export type StaticDef =
       noncombat?: boolean;
       toOpponents?: boolean;
       condition?: ConditionDef;
+      /** Only from other sources than this permanent (Thor). */
+      otherSources?: boolean;
     }
   /** If you would put counters on a permanent, put twice that many instead (Innkeeper's Talent). */
   | { kind: 'doubleCounters'; condition?: ConditionDef }
@@ -1058,6 +1145,11 @@ export interface GameObject {
   // Brawl.
   /** A commander: the zone change (zcc) at which its owner was last asked to move it to the command zone. */
   commandOffered?: number;
+  // Avengers Assemble (9b).
+  /** The turn it first became tapped (Captain America, Living Legend). */
+  firstTappedTurn?: number;
+  /** Sources that dealt damage to it this turn (Hawkeye); kept as it leaves. */
+  damagedBy?: ObjectId[];
 }
 
 /** A reference that goes stale when the object changes zones. */
@@ -1086,6 +1178,8 @@ export interface PlayerState {
   openingHand?: number;
   /** Floating mana: each entry is one mana of one of its types. */
   pool?: { produces: ManaType[]; untilEndOfTurn?: boolean; onlyFor?: string }[];
+  /** They attacked during their most recent turn before the current one (Avenge). */
+  attackedLastTurn?: boolean;
   // Brawl.
   /** The command zone. */
   command: ObjectId[];
@@ -1233,6 +1327,13 @@ export interface ContinuousEffect {
   /** 'untilYourNextTurn': until `player`'s next turn begins. */
   expires: 'endOfTurn' | 'untilYourNextTurn';
   player?: PlayerId;
+  // Avengers Assemble (9b).
+  cantBeBlockedExcept?: Keyword;
+  counterOnCombatDamage?: boolean;
+  /** Damage to this player and their creatures goes to the affected creature instead (Heroic Sacrifice). */
+  redirectFor?: PlayerId;
+  /** What happens if the affected creature dies while this lasts. */
+  onDies?: { effects: EffectDef[]; controller: PlayerId; sourceDefId: CardDefId };
 }
 
 /** What an effect needs to know about the spell or ability producing it. */
@@ -1299,6 +1400,8 @@ export interface DelayedTrigger {
   fromTurn: number;
   /** Only at this player's end step ("your next end step"). */
   whose?: PlayerId;
+  /** At the beginning of an upkeep instead of an end step (Arcane Denial). */
+  at?: 'upkeep';
 }
 
 /** What Undying Malice / Fake Your Own Death grant. */
@@ -1373,6 +1476,8 @@ export type Decision =
       squirrelFood?: boolean;
       /** Whiskervale Forerunner: onto the battlefield on your turn, else into your hand. */
       battlefieldOnYourTurn?: boolean;
+      /** The looked-at cards not taken stay on top (Herald's Horn). */
+      restOnTop?: boolean;
       resume: PausedResolution;
       thenPriority: PlayerId;
     }
@@ -1555,6 +1660,8 @@ export interface GameState {
   delayed?: DelayedTrigger[];
   /** Brawl: 25 life, a commander each, the first mulligan free. */
   format?: 'brawl';
+  /** Phased-out permanents (treated as though they don't exist), and whose untap step brings them back. */
+  phasedOut?: { id: ObjectId; player: PlayerId }[];
   /** Exactly one player is always being asked something (or the game is over). */
   decision: Decision;
   winner: PlayerId | 'draw' | null;
@@ -1653,7 +1760,9 @@ export type GameEvent =
   | { type: 'objectMoved'; id: ObjectId; defId: CardDefId; from: ZoneName | null; to: ZoneName }
   | { type: 'damageDealt'; source: ObjectId; to: TargetChoice; amount: number; combat: boolean }
   | { type: 'lifeChanged'; player: PlayerId; delta: number; life: number }
-  | { type: 'tapped'; id: ObjectId }
+  | { type: 'tapped'; id: ObjectId; first?: boolean }
+  /** Vision: a permanent phased out or back in. */
+  | { type: 'phased'; id: ObjectId; in: boolean }
   | { type: 'untapped'; id: ObjectId }
   /** `nth`: how many spells that player has cast this turn, including this one. */
   | { type: 'spellCast'; id: ObjectId; player: PlayerId; nth?: number }
