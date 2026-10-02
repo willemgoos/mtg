@@ -513,6 +513,8 @@ export type Amount =
       basicOnly?: boolean;
     }
   | { multiply: number; amount: Amount }
+  // Marvel Super Heroes: "costs {2} less if ..." (Punishing Punch).
+  | { if: ConditionDef; then: number; else?: number }
   /** Cards in your graveyard (of these types). */
   | { count: 'cardsInGraveyard'; types?: CardType[]; named?: CardDefId; plus?: number }
   /** The amount from the trigger event ("that much damage"). */

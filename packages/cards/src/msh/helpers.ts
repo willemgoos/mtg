@@ -118,6 +118,7 @@ const token = (
 export const MARVEL_TOKENS: CardDefinition[] = [
   token('villain-token', 'Villain', 'B', ['Villain'], 2, 1, ['menace']),
   token('hero-token', 'Hero', 'W', ['Hero'], 3, 2, ['vigilance']),
+  token('insect-token', 'Insect', 'G', ['Insect'], 1, 1),
   {
     ...token('robot-villain-token', 'Robot Villain', 'W', ['Robot', 'Villain'], 2, 2),
     colors: [],

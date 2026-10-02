@@ -211,6 +211,10 @@ export function countOf(
 ): number {
   if (typeof a === 'number') return a;
   if ('multiply' in a) return a.multiply * countOf(ctx, player, a.amount, printed, sourceId);
+  if ('if' in a) {
+    const self = sourceId ? ctx.s.objects[sourceId] : undefined;
+    return checkCondition(ctx, a.if, player, self) ? a.then : (a.else ?? 0);
+  }
   if (!('count' in a)) return 0;
   if (a.count === 'cardsInGraveyard')
     return (

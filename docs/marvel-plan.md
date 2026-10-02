@@ -197,7 +197,19 @@ connive villains). Bot vs bot over 160 games against the ten Foundations starter
 - **Transform** (6 cards): double-faced cards in the engine, the Scryfall import (`transform` layout) and the card UI (show the other face, flip animation as on Arena).
 - Two decks whose themes use these mechanics, e.g. Heroes/teamwork and villains/connive.
 
-### 10b: the rest of the decks
+### 10b: the rest of the decks: done
+
+Done: eight more decks, so one per colour pair: **Gamma Smash** (R/G power-up and big creatures), **Heroes of Wakanda** (G/W
++1/+1 counters and Heroes), **Lone Agents** (W/B creatures attacking alone), **HYDRA Rising** (B/R Villains), **Stark Tech** (U/R
+artifacts), **Sky Patrol** (W/U fliers), **Growing Pains** (G/U counters, Ant-Man) and **Savage Uprising** (B/G creature cards in
+the graveyard). Added: enrage ("whenever this is dealt damage"), "attacks alone", investigate and Clues, the power-up discount
+static (Hulk, Gamma Goliath), conditional amounts ("costs {2} less if ..."). Sneak, improvise, boast and extort are only on
+rares, so they move to 10c; landcycling and typecycling wait for Stream A's cycling.
+
+Bot vs bot against the ten Foundations starter decks (160 games, 320 for the last two): Heroes Unite 50%, Villainous Schemes 47%,
+Gamma Smash 46%, Heroes of Wakanda 48%, Lone Agents 46%, HYDRA Rising 46%, Sky Patrol 48%, Growing Pains 52%, Stark Tech 48%,
+Savage Uprising 49%.
+
 
 - About ten decks in total, one per colour pair, built around the set's themes, as Bloomburrow did with its animal decks.
 - New along the way: sneak (cast for its sneak cost by returning an unblocked attacker to hand; it enters tapped and attacking),
@@ -231,3 +243,17 @@ connive villains). Bot vs bot over 160 games against the ten Foundations starter
 - K'un-Lun Warrior (not in a deck now) offers only the discard, not "sacrifice an artifact".
 - Baron Strucker's "you may have it connive. Do this only once each turn" triggers once each turn even if you decline.
 - Leader, Super-Genius's connive replacement is not built (10c).
+
+10b:
+
+- "Target player" on Restorative Technique and Panther Pounce is always you.
+- Red Hulk's and Bullseye's "when you do" targets are chosen as the trigger goes on the stack. Bullseye offers only the discard
+  (not "sacrifice an artifact"), and its activated ability may discard a land.
+- Spider-Man, To the Rescue: the target is chosen up front, and "nonattacking" isn't checked.
+- The Thing counts combat damage only. The Tiger God's "can't be blocked by more than one creature" is not modelled.
+- H.E.R.B.I.E. Scout Unit doesn't offer to put a land from your hand onto the battlefield; Vision of Love offers only the discard.
+- Raft Security Officer's "costs {1} less if it targets power 3 or less" is two abilities ({1} for small creatures, {2} for any).
+- Knight of Wundagore and Ant-Man count any +1/+1 counter put on a creature you control, not only ones you put there.
+- Left out of the decks for now (each needs a new engine piece): U.S.Agent's attached Sturdy Shield, S.H.I.E.L.D. Spy Kit,
+  Spider-Woman, Captain America (Living Legend), Justice, Hellcat, Grim Reaper, Titania, Beast, Kid Loki, Frozen in Ice,
+  the Vehicles (Crew N), Hulkling and Thirst for Knowledge. They come with 10c where they are rares, or when a deck needs them.

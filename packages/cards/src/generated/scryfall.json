@@ -17638,6 +17638,144 @@
   }
  },
  {
+  "name": "Ant-Man, Colony Commander",
+  "scryfallId": "26faf2db-ad86-462f-b61f-c1893c9aebbf",
+  "oracleId": "b0ed9fbe-324d-467a-a326-c6f85a4c688a",
+  "set": "msh",
+  "collectorNumber": "201",
+  "rarity": "uncommon",
+  "manaCost": "{1}{G}{U}",
+  "typeLine": "Legendary Creature — Human Rogue Hero",
+  "oracleText": "Whenever Ant-Man attacks, you may pay {1}. When you do, put a +1/+1 counter on target creature.\nWhenever you put a +1/+1 counter on a creature, create a 1/1 green Insect creature token. This ability triggers only once each turn.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "G",
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/6/26faf2db-ad86-462f-b61f-c1893c9aebbf.jpg?1783902906",
+   "normal": "https://cards.scryfall.io/normal/front/2/6/26faf2db-ad86-462f-b61f-c1893c9aebbf.jpg?1783902906",
+   "large": "https://cards.scryfall.io/large/front/2/6/26faf2db-ad86-462f-b61f-c1893c9aebbf.jpg?1783902906",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/6/26faf2db-ad86-462f-b61f-c1893c9aebbf.jpg?1783902906"
+  }
+ },
+ {
+  "name": "Killmonger, Scourge of Wakanda",
+  "scryfallId": "5060aa13-4b33-4b3a-8bdb-dd81308fa3e3",
+  "oracleId": "1c3ba54a-a8ef-4838-b3aa-cb6df827a619",
+  "set": "msh",
+  "collectorNumber": "218",
+  "rarity": "uncommon",
+  "manaCost": "{2}{B}{G}",
+  "typeLine": "Legendary Creature — Human Mercenary Villain",
+  "oracleText": "When Killmonger enters, you may sacrifice another creature. When you do, destroy target nonland permanent an opponent controls.\nAs long as there are two or more creature cards in your graveyard, Killmonger gets +2/+1.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "B",
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/0/5060aa13-4b33-4b3a-8bdb-dd81308fa3e3.jpg?1783902900",
+   "normal": "https://cards.scryfall.io/normal/front/5/0/5060aa13-4b33-4b3a-8bdb-dd81308fa3e3.jpg?1783902900",
+   "large": "https://cards.scryfall.io/large/front/5/0/5060aa13-4b33-4b3a-8bdb-dd81308fa3e3.jpg?1783902900",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/0/5060aa13-4b33-4b3a-8bdb-dd81308fa3e3.jpg?1783902900"
+  }
+ },
+ {
+  "name": "Arnim Zola, Bio-Fanatic",
+  "scryfallId": "07c70df6-b064-424a-852e-201b312a5b54",
+  "oracleId": "95161e23-e4c4-411f-bce5-58a02abc0958",
+  "set": "msh",
+  "collectorNumber": "86",
+  "rarity": "uncommon",
+  "manaCost": "{2}{B}",
+  "typeLine": "Legendary Artifact Creature — Scientist Villain",
+  "oracleText": "{3}, {T}: Create a tapped 2/1 black Villain creature token with menace. Activate only if there are two or more creature cards in your graveyard. (It can't be blocked except by two or more creatures.)",
+  "power": "2",
+  "toughness": "3",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/7/07c70df6-b064-424a-852e-201b312a5b54.jpg?1783902948",
+   "normal": "https://cards.scryfall.io/normal/front/0/7/07c70df6-b064-424a-852e-201b312a5b54.jpg?1783902948",
+   "large": "https://cards.scryfall.io/large/front/0/7/07c70df6-b064-424a-852e-201b312a5b54.jpg?1783902948",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/7/07c70df6-b064-424a-852e-201b312a5b54.jpg?1783902948"
+  }
+ },
+ {
+  "name": "Rapid Rescue",
+  "scryfallId": "d739e636-681e-4423-84e3-91efd02b2c94",
+  "oracleId": "de1ad369-5aa3-4c54-8fb1-30b7f1d4d542",
+  "set": "msh",
+  "collectorNumber": "181",
+  "rarity": "common",
+  "manaCost": "{G}",
+  "typeLine": "Instant",
+  "oracleText": "Mill two cards. You may put a permanent card from among the milled cards into your hand. You gain 2 life. (To mill two cards, put the top two cards of your library into your graveyard.)",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Mill"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/7/d739e636-681e-4423-84e3-91efd02b2c94.jpg?1783902914",
+   "normal": "https://cards.scryfall.io/normal/front/d/7/d739e636-681e-4423-84e3-91efd02b2c94.jpg?1783902914",
+   "large": "https://cards.scryfall.io/large/front/d/7/d739e636-681e-4423-84e3-91efd02b2c94.jpg?1783902914",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/7/d739e636-681e-4423-84e3-91efd02b2c94.jpg?1783902914"
+  }
+ },
+ {
+  "name": "Punishing Punch",
+  "scryfallId": "a33a4cb4-1b57-47ca-8e5e-58ff46a6e0ce",
+  "oracleId": "454c4e8b-e417-4381-a931-6a11356ef64e",
+  "set": "msh",
+  "collectorNumber": "180",
+  "rarity": "uncommon",
+  "manaCost": "{2}{G}",
+  "typeLine": "Instant",
+  "oracleText": "This spell costs {2} less to cast if there are two or more creature cards in your graveyard.\nTarget creature you control deals damage equal to twice its power to target creature an opponent controls.",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/3/a33a4cb4-1b57-47ca-8e5e-58ff46a6e0ce.jpg?1783902913",
+   "normal": "https://cards.scryfall.io/normal/front/a/3/a33a4cb4-1b57-47ca-8e5e-58ff46a6e0ce.jpg?1783902913",
+   "large": "https://cards.scryfall.io/large/front/a/3/a33a4cb4-1b57-47ca-8e5e-58ff46a6e0ce.jpg?1783902913",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/3/a33a4cb4-1b57-47ca-8e5e-58ff46a6e0ce.jpg?1783902913"
+  }
+ },
+ {
+  "name": "Too Evil to Stay Dead",
+  "scryfallId": "f471e9ce-73bb-4090-98f2-f591c7cf4efe",
+  "oracleId": "e50fecff-8872-42f5-8882-41ad13d9d1ae",
+  "set": "msh",
+  "collectorNumber": "118",
+  "rarity": "uncommon",
+  "manaCost": "{2}{B}",
+  "typeLine": "Sorcery",
+  "oracleText": "Teamwork 4 (As an additional cost to cast this spell, you may tap any number of creatures you control with total power 4 or more.)\nChoose target creature card in your graveyard with mana value 4 or less. If this spell was cast using teamwork, instead choose target creature card in your graveyard. Return the chosen card to the battlefield.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Teamwork"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/4/f471e9ce-73bb-4090-98f2-f591c7cf4efe.jpg?1783902936",
+   "normal": "https://cards.scryfall.io/normal/front/f/4/f471e9ce-73bb-4090-98f2-f591c7cf4efe.jpg?1783902936",
+   "large": "https://cards.scryfall.io/large/front/f/4/f471e9ce-73bb-4090-98f2-f591c7cf4efe.jpg?1783902936",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/4/f471e9ce-73bb-4090-98f2-f591c7cf4efe.jpg?1783902936"
+  }
+ },
+ {
   "name": "Avengers Hangar",
   "scryfallId": "c5d03ebb-1ce9-4a6b-b13e-a72f0b075ae8",
   "oracleId": "10fc2009-4212-47c6-8a97-ab0f45c1f91b",

@@ -2,6 +2,7 @@ import type { Behavior } from './build.ts';
 import { HEROES_VILLAINS, HEROES_VILLAINS_BACKS } from './msh/heroes-villains.ts';
 import { AGENTS_HYDRA } from './msh/agents-hydra.ts';
 import { GAMMA_WAKANDA } from './msh/gamma-wakanda.ts';
+import { GROWTH_GRAVEYARD } from './msh/growth-graveyard.ts';
 import { TECH_SKIES } from './msh/tech-skies.ts';
 import { MARVEL_LANDS } from './msh/lands.ts';
 
@@ -17,6 +18,7 @@ export const MARVEL_BEHAVIORS: Record<string, Behavior> = {
   ...GAMMA_WAKANDA,
   ...AGENTS_HYDRA,
   ...TECH_SKIES,
+  ...GROWTH_GRAVEYARD,
   ...MARVEL_LANDS,
 };
 

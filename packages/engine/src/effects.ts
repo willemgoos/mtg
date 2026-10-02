@@ -272,6 +272,12 @@ function playersOf(ctx: Ctx, es: EffectSource, ref: Ref): PlayerId[] {
 export function resolveAmount(ctx: Ctx, es: EffectSource, amount: Amount): number {
   if (typeof amount === 'number') return amount;
   if ('multiply' in amount) return amount.multiply * resolveAmount(ctx, es, amount.amount);
+  if ('if' in amount) {
+    const self = es.source ? ctx.s.objects[es.source.id] : undefined;
+    return checkCondition(ctx, amount.if, es.controller, self, es.targets)
+      ? amount.then
+      : (amount.else ?? 0);
+  }
   if ('powerOf' in amount) {
     const ids = objectsOf(ctx, es, amount.powerOf);
     if (ids[0]) return Math.max(0, power(ctx, ids[0]));
