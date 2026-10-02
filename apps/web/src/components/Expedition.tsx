@@ -285,7 +285,7 @@ function ExpeditionMap({
       shown.floor,
       run.map[shown.floor]![shown.lane]!,
       floors,
-      PACK_SET_NAMES[packSetOf(run)],
+      PACK_SET_NAMES[packSetOf(run, run.build.opened)],
     );
   const fight = !!here?.node.opponent;
   // The travelling token: at your last node (or the start), or on its way to a new one.
@@ -620,7 +620,7 @@ function Camp({ run, onChoose }: { run: ExpeditionRun; onChoose: (c: 'rest' | 'f
           </span>
           <span className="choice__name">Forage</span>
           <span className="choice__text">
-            Open a {PACK_SET_NAMES[packSetOf(run)]} booster and keep {keepCount(run)}.
+            Open a {PACK_SET_NAMES[packSetOf(run, run.build.opened)]} booster and keep {keepCount(run)}.
           </span>
         </button>
       </div>

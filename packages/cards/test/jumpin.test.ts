@@ -5,6 +5,7 @@ import {
   deckIds,
   findDeck,
   jumpInId,
+  jumpInPackets,
   JUMP_IN_DECKS,
   PACKETS,
   packetCards,
@@ -51,13 +52,16 @@ describe('Jump In packets', () => {
       for (const [name] of p.spells) expect(card.get(name)!.set, `${p.name}: ${name}`).toBe(p.set);
   });
 
-  it('pairs packets only within a set, and a Marvel or Bloomburrow pair is of that set', () => {
-    expect(findDeck(jumpInId('goblins', 'blb-lizards'))).toBeUndefined();
+  it('pairs packets across sets; a pair from one set is of that set', () => {
+    const mixed = deckById(jumpInId('goblins', 'blb-lizards'));
+    expect(deckIds(mixed)).toHaveLength(40);
+    expect(mixed.set).toBeUndefined();
+    expect(jumpInPackets(mixed.id)?.map((p) => p.set)).toEqual([undefined, 'blb']);
     const d = deckById(jumpInId('msh-hydra', 'msh-robots'));
     expect(d.set).toBe('msh');
     expect(deckIds(d)).toHaveLength(40);
-    expect(deckById(jumpInId('blb-bats', 'blb-rats')).set).toBe('blb');
-    expect(JUMP_IN_DECKS).toHaveLength(3 * 45);
+    expect(deckById(jumpInId('blb-bats', 'msh-robots')).set).toBeUndefined();
+    expect(JUMP_IN_DECKS).toHaveLength((30 * 29) / 2);
   });
 
   it('pairs two packets into a 40-card deck', () => {

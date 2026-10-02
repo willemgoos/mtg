@@ -2,7 +2,7 @@ import type { CardDb, CardDefId, CardDefinition, NewGameOptions, PlayerId } from
 import { BEHAVIORS, TOKENS } from './behaviors.ts';
 import { buildCard, slug } from './build.ts';
 import { DECKS, type Decklist } from './decks.ts';
-import { PACKETS, packetCards } from './jumpin.ts';
+import { type Packet, PACKETS, packetCards } from './jumpin.ts';
 import scryfall from './generated/scryfall.json' with { type: 'json' };
 import foundations from './generated/foundations-pack-candidates.json' with { type: 'json' };
 import type { ScryfallCard } from './scryfall-types.ts';
@@ -110,13 +110,19 @@ export const PLAYABLE_BRAWL_DECKS: readonly Decklist[] = DECKS.filter(
 export const jumpInId = (a: string, b: string): string => `jump-in:${a}+${b}`;
 export const isJumpIn = (id: string): boolean => id.startsWith('jump-in:');
 
-/** Two packets shuffled together: 40 cards named after both themes, with the first one's face. */
-function jumpInDeck(id: string): Decklist | undefined {
+/** The two packets of a Jump In deck id, if it is one. */
+export function jumpInPackets(id: string): [Packet, Packet] | undefined {
   const m = /^jump-in:([\w-]+)\+([\w-]+)$/.exec(id);
   const a = PACKETS.find((p) => p.id === m?.[1]);
   const b = PACKETS.find((p) => p.id === m?.[2]);
-  // Packets pair within their set (Foundations, Bloomburrow, Marvel Super Heroes).
-  if (!a || !b || a.set !== b.set) return undefined;
+  return a && b ? [a, b] : undefined;
+}
+
+/** Two packets shuffled together: 40 cards named after both themes, with the first one's face. */
+function jumpInDeck(id: string): Decklist | undefined {
+  const pair = jumpInPackets(id);
+  if (!pair) return undefined;
+  const [a, b] = pair;
   const counts = new Map<string, number>();
   for (const [name, n] of [...packetCards(a), ...packetCards(b)])
     counts.set(name, (counts.get(name) ?? 0) + n);
@@ -127,8 +133,8 @@ function jumpInDeck(id: string): Decklist | undefined {
     face: a.face,
     source: 'custom',
     series: 'jumpIn',
-    // An expedition with it opens that set's boosters.
-    ...(a.set ? { set: a.set } : {}),
+    // Both halves from one set: the deck is of that set. Mixed pairs aren't.
+    ...(a.set && a.set === b.set ? { set: a.set } : {}),
     cards: [...counts],
   };
 }
@@ -152,11 +158,9 @@ export function deckById(id: string): Decklist {
   return d;
 }
 
-/** Every pair of different Jump In packets of the same set, one deck per pair. */
+/** Every pair of different Jump In packets, one deck per pair; sets mix freely. */
 export const JUMP_IN_DECKS: readonly Decklist[] = PACKETS.flatMap((a, i) =>
-  PACKETS.slice(i + 1)
-    .filter((b) => b.set === a.set)
-    .map((b) => jumpInDeck(jumpInId(a.id, b.id))!),
+  PACKETS.slice(i + 1).map((b) => jumpInDeck(jumpInId(a.id, b.id))!),
 ).filter(isPlayable);
 
 /**

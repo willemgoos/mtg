@@ -14,7 +14,7 @@ export interface Packet {
   /** Card shown on the packet. */
   face: string;
   blurb: string;
-  /** Bloomburrow or Marvel Super Heroes (default Foundations): packets pair within their set. */
+  /** Bloomburrow or Marvel Super Heroes (default Foundations). Packets of different sets pair freely. */
   set?: 'blb' | 'msh';
   /** The twelve spells; the basic lands are added by `packetCards`. */
   spells: [name: string, count: number][];

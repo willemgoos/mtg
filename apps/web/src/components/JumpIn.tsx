@@ -14,9 +14,9 @@ const SETS: { set: PacketSet; name: string }[] = [
   { set: 'msh', name: 'Marvel Super Heroes' },
 ];
 
-/** Three packets of a set at random, leaving out one already taken. */
-function offer(set: PacketSet, taken?: Packet): Packet[] {
-  const pool = PACKETS.filter((p) => p !== taken && p.set === set);
+/** Three packets at random, of one set or (`'any'`) all, leaving out one already taken. */
+function offer(set: PacketSet | 'any', taken?: Packet): Packet[] {
+  const pool = PACKETS.filter((p) => p !== taken && (set === 'any' || p.set === set));
   for (let i = pool.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [pool[i], pool[j]] = [pool[j]!, pool[i]!];
@@ -48,10 +48,10 @@ export function JumpIn({
     setHover(null);
     if (!first) {
       setFirst(p);
-      setOptions(offer(p.set, p));
+      setOptions(offer('any', p));
     } else onPick(jumpInId(first.id, p.id));
   };
-  // Packets pair within their set: pick the set before the first half.
+  // The set picks where the first half comes from; the second can be from any set.
   const pickSet = (s: PacketSet) => {
     setSet(s);
     setOptions(offer(s));
@@ -103,7 +103,10 @@ export function JumpIn({
                 <span className={`pip pip--${p.color}`} />
               </span>
               <span className="deck__name">{p.name}</span>
-              <span className="deck__blurb">{p.blurb}</span>
+              <span className="deck__blurb">
+                {first ? `${SETS.find((s) => s.set === p.set)!.name} · ` : ''}
+                {p.blurb}
+              </span>
             </button>
             <ul className="jumpin__list" style={{ '--i': i } as React.CSSProperties}>
               {p.spells.map(([name, n]) => (

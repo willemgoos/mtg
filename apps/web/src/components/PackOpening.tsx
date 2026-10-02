@@ -87,7 +87,7 @@ export function PackOpening({
       <OnePack
         key={index}
         pack={run.build.packs[index]!}
-        set={packSetOf(run)}
+        set={packSetOf(run, run.build.opened + index)}
         cards={packs[index]!}
         keep={Math.min(keepCount(run), packs[index]!.length)}
         eyebrow={`Expedition · ${runDeck(run).name}${packs.length > 1 ? ` · Pack ${index + 1} of ${packs.length}` : ''}`}

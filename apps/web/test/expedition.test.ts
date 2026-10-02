@@ -101,6 +101,10 @@ describe('expedition packs', () => {
   it('opens Bloomburrow boosters on an expedition with a Bloomburrow deck', () => {
     expect(packSetOf({ deck: 'blb-warren-rally' })).toBe('blb');
     expect(packSetOf({ deck: PLAYABLE_DECKS[0]!.id })).toBe('fdn');
+    // A Jump In deck mixing two sets alternates their boosters.
+    const mixed = { deck: 'jump-in:blb-bats+msh-robots' };
+    expect([0, 1, 2].map((n) => packSetOf(mixed, n))).toEqual(['blb', 'msh', 'blb']);
+    expect(packSetOf({ deck: 'jump-in:goblins+msh-robots' }, 0)).toBe('fdn');
     for (let seed = 0; seed < 20; seed++) {
       const pack = rollPack({ kind: 'booster' }, seed, false, 'blb');
       expect(new Set(pack).size).toBe(packSize);

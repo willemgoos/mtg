@@ -2,6 +2,7 @@ import {
   deckById,
   type Decklist,
   findDeck,
+  jumpInPackets,
   pickOpponent,
   registerDeck,
   SCRYFALL,
@@ -385,7 +386,7 @@ function boonOffer(r: ExpeditionRun): BoonId[] {
 function rareOffer(r: ExpeditionRun, salt: number): string[] {
   const next = rng((r.seed ^ Math.imul(r.path.length * 31 + salt, 0x68e31da4)) >>> 0);
   const colors = deckColors(r.build).slice(0, 2);
-  const sheets = SHEETS[packSetOf(r)];
+  const sheets = SHEETS[packSetOf(r, r.path.length + salt)];
   const rares = [...sheets.rare, ...sheets.mythic];
   const fits = rares.filter(
     (c) => c.colors.length > 0 && c.colors.every((x) => colors.includes(x as Color)),
@@ -609,10 +610,17 @@ export const PACK_SET_NAMES: Record<PackSet, string> = {
   msh: 'Marvel Super Heroes',
 };
 
-/** An expedition with a Bloomburrow or Marvel deck opens that set's boosters. */
-export function packSetOf(r: Pick<ExpeditionRun, 'deck'>): PackSet {
-  const set = findDeck(r.deck)?.set;
-  return set === 'blb' || set === 'msh' ? set : 'fdn';
+const asPackSet = (set: string | undefined): PackSet =>
+  set === 'blb' || set === 'msh' ? set : 'fdn';
+
+/**
+ * The set of the run's `n`th booster: a Bloomburrow or Marvel deck opens that
+ * set's boosters, and a Jump In deck mixing two sets alternates between them.
+ */
+export function packSetOf(r: Pick<ExpeditionRun, 'deck'>, n = 0): PackSet {
+  const pair = jumpInPackets(r.deck);
+  if (pair) return asPackSet(pair[n % 2]!.set);
+  return asPackSet(findDeck(r.deck)?.set);
 }
 
 /** Cards of a set we can play, by rarity. Basic lands aren't in packs. */
@@ -672,8 +680,10 @@ const packSeed = (r: ExpeditionRun, n: number) => (r.seed ^ Math.imul(n + 1, 0x9
 /** The cards in each waiting pack. */
 export function pendingPacks(r: ExpeditionRun): string[][] {
   const lucky = r.boons.includes('lucky');
-  const set = packSetOf(r);
-  return r.build.packs.map((p, i) => rollPack(p, packSeed(r, r.build.opened + i), lucky, set));
+  return r.build.packs.map((p, i) => {
+    const n = r.build.opened + i;
+    return rollPack(p, packSeed(r, n), lucky, packSetOf(r, n));
+  });
 }
 
 /**
