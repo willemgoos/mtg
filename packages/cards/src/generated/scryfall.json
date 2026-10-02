@@ -17164,6 +17164,217 @@
   }
  },
  {
+  "name": "Agents of S.H.I.E.L.D.",
+  "scryfallId": "d9b5e156-0764-44e0-b0c7-de2561ea9e04",
+  "oracleId": "203b72d2-a273-49cc-bd10-2fbc07ed2fc8",
+  "set": "msh",
+  "collectorNumber": "5",
+  "rarity": "common",
+  "manaCost": "{2}{W}",
+  "typeLine": "Creature — Human Spy Hero",
+  "oracleText": "Whenever a creature you control attacks alone, that creature gets +1/+1 until end of turn.",
+  "power": "2",
+  "toughness": "4",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/9/d9b5e156-0764-44e0-b0c7-de2561ea9e04.jpg?1783902978",
+   "normal": "https://cards.scryfall.io/normal/front/d/9/d9b5e156-0764-44e0-b0c7-de2561ea9e04.jpg?1783902978",
+   "large": "https://cards.scryfall.io/large/front/d/9/d9b5e156-0764-44e0-b0c7-de2561ea9e04.jpg?1783902978",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/9/d9b5e156-0764-44e0-b0c7-de2561ea9e04.jpg?1783902978"
+  }
+ },
+ {
+  "name": "Black Widow, Double Agent",
+  "scryfallId": "aa8dbbb9-36a5-48e0-9e30-aeed0fb5d522",
+  "oracleId": "e6c181f1-f4f7-4a96-b50c-717cf2a02098",
+  "set": "msh",
+  "collectorNumber": "208",
+  "rarity": "uncommon",
+  "manaCost": "{1}{W}{B}",
+  "typeLine": "Legendary Creature — Human Hero Villain",
+  "oracleText": "Deathtouch\nWhenever a creature you control attacks alone, it gains first strike and menace until end of turn. (It can't be blocked except by two or more creatures.)",
+  "power": "3",
+  "toughness": "2",
+  "colors": [
+   "B",
+   "W"
+  ],
+  "keywords": [
+   "Deathtouch"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/a/aa8dbbb9-36a5-48e0-9e30-aeed0fb5d522.jpg?1783902905",
+   "normal": "https://cards.scryfall.io/normal/front/a/a/aa8dbbb9-36a5-48e0-9e30-aeed0fb5d522.jpg?1783902905",
+   "large": "https://cards.scryfall.io/large/front/a/a/aa8dbbb9-36a5-48e0-9e30-aeed0fb5d522.jpg?1783902905",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/a/aa8dbbb9-36a5-48e0-9e30-aeed0fb5d522.jpg?1783902905"
+  }
+ },
+ {
+  "name": "Luke Cage, Power Man",
+  "scryfallId": "3b72c9e9-1cb2-4374-873a-53af293d86d0",
+  "oracleId": "c95d1558-09a4-4dbc-b08a-fe21b47bc5d2",
+  "set": "msh",
+  "collectorNumber": "20",
+  "rarity": "uncommon",
+  "manaCost": "{3}{W}",
+  "typeLine": "Legendary Creature — Human Hero",
+  "oracleText": "Unbreakable Skin — Whenever Luke Cage attacks alone, he gets +2/+0 and gains indestructible until end of turn. (Damage and effects that say \"destroy\" don't destroy him.)",
+  "power": "2",
+  "toughness": "5",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Unbreakable Skin"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/b/3b72c9e9-1cb2-4374-873a-53af293d86d0.jpg?1783902972",
+   "normal": "https://cards.scryfall.io/normal/front/3/b/3b72c9e9-1cb2-4374-873a-53af293d86d0.jpg?1783902972",
+   "large": "https://cards.scryfall.io/large/front/3/b/3b72c9e9-1cb2-4374-873a-53af293d86d0.jpg?1783902972",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/b/3b72c9e9-1cb2-4374-873a-53af293d86d0.jpg?1783902972"
+  }
+ },
+ {
+  "name": "HYDRA Infiltration",
+  "scryfallId": "c2e446e1-e384-4d5f-8099-544f78c08510",
+  "oracleId": "27692079-a517-4d38-b452-7409980b5912",
+  "set": "msh",
+  "collectorNumber": "100",
+  "rarity": "common",
+  "manaCost": "{3}{B}",
+  "typeLine": "Enchantment",
+  "oracleText": "When this enchantment enters, target opponent discards two cards.\nWhenever a creature you control attacks alone, target opponent loses 1 life and you gain 1 life.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/2/c2e446e1-e384-4d5f-8099-544f78c08510.jpg?1783902941",
+   "normal": "https://cards.scryfall.io/normal/front/c/2/c2e446e1-e384-4d5f-8099-544f78c08510.jpg?1783902941",
+   "large": "https://cards.scryfall.io/large/front/c/2/c2e446e1-e384-4d5f-8099-544f78c08510.jpg?1783902941",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/2/c2e446e1-e384-4d5f-8099-544f78c08510.jpg?1783902941"
+  }
+ },
+ {
+  "name": "Stolen Stark Tech",
+  "scryfallId": "db4557ad-4141-4dae-870e-a587506f4914",
+  "oracleId": "51023277-5434-4913-b9dc-df2a3fde1652",
+  "set": "msh",
+  "collectorNumber": "114",
+  "rarity": "common",
+  "manaCost": "{1}{B}",
+  "typeLine": "Artifact — Equipment",
+  "oracleText": "Flash\nWhen this Equipment enters, attach it to target creature you control. That creature gains indestructible until end of turn. (Damage and effects that say \"destroy\" don't destroy it.)\nEquipped creature gets +1/+0.\nEquip {1} ({1}: Attach to target creature you control. Equip only as a sorcery.)",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Equip",
+   "Flash"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/b/db4557ad-4141-4dae-870e-a587506f4914.jpg?1783902937",
+   "normal": "https://cards.scryfall.io/normal/front/d/b/db4557ad-4141-4dae-870e-a587506f4914.jpg?1783902937",
+   "large": "https://cards.scryfall.io/large/front/d/b/db4557ad-4141-4dae-870e-a587506f4914.jpg?1783902937",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/b/db4557ad-4141-4dae-870e-a587506f4914.jpg?1783902937"
+  }
+ },
+ {
+  "name": "HYDRA Assault Robot",
+  "scryfallId": "e3b23fff-7d3b-4341-b556-82136f8c113b",
+  "oracleId": "a2558476-5506-4a09-93fc-b8ab33c98985",
+  "set": "msh",
+  "collectorNumber": "137",
+  "rarity": "common",
+  "manaCost": "{1}{R}",
+  "typeLine": "Artifact Creature — Robot Villain",
+  "oracleText": "Whenever another Villain and/or artifact you control enters, this creature deals 1 damage to target opponent.",
+  "power": "1",
+  "toughness": "3",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/3/e3b23fff-7d3b-4341-b556-82136f8c113b.jpg?1783902930",
+   "normal": "https://cards.scryfall.io/normal/front/e/3/e3b23fff-7d3b-4341-b556-82136f8c113b.jpg?1783902930",
+   "large": "https://cards.scryfall.io/large/front/e/3/e3b23fff-7d3b-4341-b556-82136f8c113b.jpg?1783902930",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/3/e3b23fff-7d3b-4341-b556-82136f8c113b.jpg?1783902930"
+  }
+ },
+ {
+  "name": "Madame Hydra",
+  "scryfallId": "e94ccedb-1d27-4098-8823-d8d99b30387c",
+  "oracleId": "d812c8e3-a475-4ad2-a93f-7208ad873676",
+  "set": "msh",
+  "collectorNumber": "221",
+  "rarity": "uncommon",
+  "manaCost": "{2}{B}{R}",
+  "typeLine": "Legendary Creature — Human Villain",
+  "oracleText": "Whenever you cast a Villain spell, create a 2/1 black Villain creature token with menace. (It can't be blocked except by two or more creatures.)",
+  "power": "2",
+  "toughness": "3",
+  "colors": [
+   "B",
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/9/e94ccedb-1d27-4098-8823-d8d99b30387c.jpg?1783902899",
+   "normal": "https://cards.scryfall.io/normal/front/e/9/e94ccedb-1d27-4098-8823-d8d99b30387c.jpg?1783902899",
+   "large": "https://cards.scryfall.io/large/front/e/9/e94ccedb-1d27-4098-8823-d8d99b30387c.jpg?1783902899",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/9/e94ccedb-1d27-4098-8823-d8d99b30387c.jpg?1783902899"
+  }
+ },
+ {
+  "name": "Bullseye, Death Dealer",
+  "scryfallId": "fd1f0b5f-5e0e-4da1-ab54-a62db5af3591",
+  "oracleId": "10db57b4-f895-4514-b610-2252ba676353",
+  "set": "msh",
+  "collectorNumber": "209",
+  "rarity": "uncommon",
+  "manaCost": "{2}{B/R}",
+  "typeLine": "Legendary Creature — Human Assassin Villain",
+  "oracleText": "When Bullseye enters, you may sacrifice an artifact or discard a nonland card. When you do, Bullseye deals 2 damage to any target.\n{3}, {T}, Sacrifice an artifact or discard a nonland card: Bullseye deals 2 damage to any target.",
+  "power": "2",
+  "toughness": "3",
+  "colors": [
+   "B",
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/d/fd1f0b5f-5e0e-4da1-ab54-a62db5af3591.jpg?1783902903",
+   "normal": "https://cards.scryfall.io/normal/front/f/d/fd1f0b5f-5e0e-4da1-ab54-a62db5af3591.jpg?1783902903",
+   "large": "https://cards.scryfall.io/large/front/f/d/fd1f0b5f-5e0e-4da1-ab54-a62db5af3591.jpg?1783902903",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/d/fd1f0b5f-5e0e-4da1-ab54-a62db5af3591.jpg?1783902903"
+  }
+ },
+ {
+  "name": "Vision of Love",
+  "scryfallId": "5604cee1-a2ea-48ed-88f4-6878bd053fc8",
+  "oracleId": "70c96b50-ac2b-493d-bd15-fc66eb767111",
+  "set": "msh",
+  "collectorNumber": "158",
+  "rarity": "common",
+  "manaCost": "{1}{R}",
+  "typeLine": "Instant",
+  "oracleText": "You may sacrifice an artifact or discard a card. If you do, draw two cards.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/6/5604cee1-a2ea-48ed-88f4-6878bd053fc8.jpg?1783902922",
+   "normal": "https://cards.scryfall.io/normal/front/5/6/5604cee1-a2ea-48ed-88f4-6878bd053fc8.jpg?1783902922",
+   "large": "https://cards.scryfall.io/large/front/5/6/5604cee1-a2ea-48ed-88f4-6878bd053fc8.jpg?1783902922",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/6/5604cee1-a2ea-48ed-88f4-6878bd053fc8.jpg?1783902922"
+  }
+ },
+ {
   "name": "Avengers Hangar",
   "scryfallId": "c5d03ebb-1ce9-4a6b-b13e-a72f0b075ae8",
   "oracleId": "10fc2009-4212-47c6-8a97-ab0f45c1f91b",
