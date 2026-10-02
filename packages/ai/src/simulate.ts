@@ -63,6 +63,8 @@ function passiveAction(
   switch (d.kind) {
     case 'priority':
       return { type: 'passPriority', player: d.player };
+    case 'commandZone':
+      return { type: 'chooseEffect', player: d.player, accept: true };
     case 'declareAttackers':
       return { type: 'confirmAttackers', player: d.player };
     case 'declareBlockers': {

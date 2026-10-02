@@ -56,6 +56,9 @@ export function createHeuristicBot(db: CardDb, name = 'heuristic'): Bot {
       switch (d.kind) {
         case 'mulligan':
           return keepOrMulligan(engine, view, me, legal);
+        // Brawl: always send the commander back.
+        case 'commandZone':
+          return { type: 'chooseEffect', player: me, accept: true };
         case 'bottomCards':
         case 'discardToHandSize':
         case 'discard':

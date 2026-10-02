@@ -15,6 +15,8 @@ import {
   abilityManaCost,
   castCost,
   teamworkFor,
+  crewFor,
+  artifactsToSacrifice,
   countersYouControl,
   hasStatic,
   wardCost,
@@ -53,10 +55,16 @@ function scryAnswers(cards: readonly ObjectId[]): { top: ObjectId[]; bottom: Obj
  */
 export function castableCards(ctx: Ctx, player: PlayerId): ObjectId[] {
   const ps = ctx.s.players[player];
-  const out = [...ps.hand];
+  // Brawl: your commander from the command zone.
+  const out = [...ps.hand, ...ps.command];
+  const landsFromGraveyard = hasStatic(ctx, player, 'playLandsFromGraveyard');
   for (const id of ps.graveyard) {
     const d = def(ctx, id);
-    if (d.types.includes('Land')) continue;
+    // Conduit of Worlds: "You may play lands from your graveyard."
+    if (d.types.includes('Land')) {
+      if (landsFromGraveyard) out.push(id);
+      continue;
+    }
     if (d.flashback || d.castFromGraveyardRemovingCounters || graveyardVias(ctx, player, id).length)
       out.push(id);
   }
@@ -89,6 +97,9 @@ export function castableCards(ctx: Ctx, player: PlayerId): ObjectId[] {
     hasStatic(ctx, player, 'creaturesFromTopOfLibrary')
   )
     out.push(top);
+  // Conduit of Worlds: after casting its card, no more spells this turn.
+  if (ctx.s.turn.spellLock?.includes(player))
+    return out.filter((id) => def(ctx, id).types.includes('Land'));
   return out;
 }
 
@@ -121,9 +132,9 @@ export function graveyardVias(
   ctx: Ctx,
   player: PlayerId,
   card: ObjectId,
-): ('festival' | 'osteomancer')[] {
+): ('festival' | 'osteomancer' | 'conduit')[] {
   const d = def(ctx, card);
-  const out: ('festival' | 'osteomancer')[] = [];
+  const out: ('festival' | 'osteomancer' | 'conduit')[] = [];
   const instantOrSorcery = d.types.includes('Instant') || d.types.includes('Sorcery');
   if (
     instantOrSorcery &&
@@ -133,6 +144,8 @@ export function graveyardVias(
     out.push('festival');
   if (d.types.includes('Creature') && ctx.s.turn.osteomancer?.includes(player))
     out.push('osteomancer');
+  // Conduit of Worlds: the card it chose, this turn.
+  if (obj(ctx, card).playableUntilTurn === ctx.s.turn.number) out.push('conduit');
   return out;
 }
 
@@ -176,7 +189,12 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
   const flashFilters = s.battlefield.flatMap((id) =>
     obj(ctx, id).controller === player
       ? def(ctx, id).abilities.flatMap((a) =>
-          a.kind === 'static' && a.effect.kind === 'flashForAll' ? [a.effect.filter ?? {}] : [],
+          a.kind === 'static' &&
+          a.effect.kind === 'flashForAll' &&
+          // Captain Mar-Vell, Quicksilver: only while their condition holds.
+          checkCondition(ctx, a.effect.condition, player, obj(ctx, id))
+            ? [a.effect.filter ?? {}]
+            : [],
         )
       : [],
   );
@@ -202,7 +220,11 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
     const d = def(ctx, card);
     const zone = obj(ctx, card).zone;
     if (d.types.includes('Land')) {
-      if (sorcery && ps.landsPlayedThisTurn < landDrops(ctx, player) && zone !== 'graveyard')
+      if (
+        sorcery &&
+        ps.landsPlayedThisTurn < landDrops(ctx, player) &&
+        (zone !== 'graveyard' || hasStatic(ctx, player, 'playLandsFromGraveyard'))
+      )
         out.push({ type: 'playLand', player, card });
       return;
     }
@@ -226,7 +248,7 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
     if (d.discardToCast && discards.length === 0) return;
     if (!instantSpeed && !sorcery) return;
     // The usual ways, plus graveyard casts through other cards.
-    const vias: ('festival' | 'osteomancer' | undefined)[] = [
+    const vias: ('festival' | 'osteomancer' | 'conduit' | undefined)[] = [
       ...(zone !== 'graveyard' || d.flashback || d.castFromGraveyardRemovingCounters
         ? [undefined]
         : []),
@@ -332,12 +354,13 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
   const abilitySources = [
     ...s.battlefield.filter((id) => obj(ctx, id).controller === player),
     ...ps.graveyard,
+    ...ps.hand,
   ];
   for (const source of abilitySources) {
-    const inGraveyard = obj(ctx, source).zone === 'graveyard';
+    const zone = obj(ctx, source).zone;
     def(ctx, source).abilities.forEach((a, abilityIndex) => {
       if (a.kind !== 'activated') return;
-      if (!!a.fromGraveyard !== inGraveyard) return;
+      if ((a.fromGraveyard ? 'graveyard' : a.fromHand ? 'hand' : 'battlefield') !== zone) return;
       if (a.sorcerySpeed && !sorcery) return;
       if ((a.once || a.powerUp) && obj(ctx, source).usedAbilities?.includes(abilityIndex)) return;
       if (a.oncePerTurn && obj(ctx, source).onceTurns?.[-1 - abilityIndex] === s.turn.number)
@@ -359,6 +382,12 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
       const mana = abilityManaCost(ctx, source, a);
       if (!canPayFrom(mana, usable)) return;
       if (a.cost.tapTokens && tokensToTap(ctx, player, source).length < a.cost.tapTokens) return;
+      if (a.cost.crew && !crewFor(ctx, player, source, a.cost.crew)) return;
+      if (
+        a.cost.sacrificeArtifacts &&
+        !artifactsToSacrifice(ctx, player, a.cost.sacrificeArtifacts)
+      )
+        return;
       const discards = a.cost.discard ? ps.hand : [undefined];
       if (discards.length === 0) return;
       const rc = a.cost.removeCounters;
@@ -424,6 +453,11 @@ export function getLegalActions(ctx: Ctx, player: PlayerId): Action[] {
     }
     case 'bottomCards':
       return s.players[player].hand.map((card) => ({ type: 'bottomCard', player, card }) as const);
+    case 'commandZone':
+      return [
+        { type: 'chooseEffect', player, accept: true },
+        { type: 'chooseEffect', player, accept: false },
+      ];
     case 'discardToHandSize':
       return s.players[player].hand.map((card) => ({ type: 'discard', player, card }) as const);
     case 'priority':
@@ -576,7 +610,10 @@ export function getLegalActions(ctx: Ctx, player: PlayerId): Action[] {
         wardPayable(ctx, player, targets) &&
         (a.lifeCost ?? 0) <= s.players[player].life;
       if (a.modes) {
+        // Kimoyo Beads: "choose one that hasn't been chosen".
+        const used = a.modesOnce ? (s.objects[d.trigger.source.id]?.usedModes ?? []) : [];
         a.modes.forEach((m, mode) => {
+          if (used.includes(mode)) return;
           for (const targets of targetCombos(ctx, m.targets, src))
             if (payable(targets)) out.push({ type: 'chooseTargets', player, targets, mode });
         });

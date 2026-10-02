@@ -1,9 +1,10 @@
 import { type Ctx, createObject, def, drawCard, emit, moveObject } from './context.ts';
 import { createRng, nextInt, shuffleInPlace } from './rng.ts';
-import type { CardDefId, GameState, PlayerId, PlayerState } from './types.ts';
+import type { CardDefId, GameState, ObjectId, PlayerId, PlayerState } from './types.ts';
 import { PLAYERS } from './types.ts';
 
 export const STARTING_LIFE = 20;
+export const BRAWL_LIFE = 25;
 export const OPENING_HAND = 7;
 
 export interface NewGameOptions {
@@ -16,6 +17,10 @@ export interface NewGameOptions {
   extraCards?: Partial<Record<PlayerId, number>>;
   /** Players who start with a basic land from their library on the battlefield. */
   landInPlay?: readonly PlayerId[];
+  /** Brawl: 25 life, the first mulligan free, and each player's commander in the command zone. */
+  format?: 'brawl';
+  /** Brawl: each player's commander (not part of `decks`). */
+  commanders?: Partial<Record<PlayerId, CardDefId>>;
 }
 
 /** Cards a player draws for an opening hand. */
@@ -29,6 +34,7 @@ function emptyPlayer(id: PlayerId): PlayerState {
     hand: [],
     graveyard: [],
     exile: [],
+    command: [],
     landsPlayedThisTurn: 0,
     attackedThisTurn: false,
     drewFromEmptyLibrary: false,
@@ -85,8 +91,12 @@ export function setupGame(ctx: Ctx, opts: NewGameOptions): void {
     for (const defId of deck) s.players[p].library.push(createObject(ctx, defId, p, 'library').id);
     emit(ctx, { type: 'shuffled', player: p });
   }
+  if (opts.format) s.format = opts.format;
   for (const p of PLAYERS) {
     const ps = s.players[p];
+    if (opts.format === 'brawl') ps.life = BRAWL_LIFE;
+    const commander = opts.commanders?.[p];
+    if (commander) ps.commander = putInCommandZone(ctx, commander, p);
     if (opts.life?.[p] !== undefined) ps.life = opts.life[p]!;
     if (opts.extraCards?.[p]) ps.openingHand = OPENING_HAND + opts.extraCards[p]!;
     if (opts.landInPlay?.includes(p)) {
@@ -98,4 +108,11 @@ export function setupGame(ctx: Ctx, opts: NewGameOptions): void {
   s.turn.activePlayer = first;
   for (const p of PLAYERS) for (let i = 0; i < openingHand(s.players[p]); i++) drawCard(ctx, p);
   s.decision = { kind: 'mulligan', player: first };
+}
+
+/** Brawl: creates a player's commander in their command zone. */
+export function putInCommandZone(ctx: Ctx, defId: CardDefId, player: PlayerId): ObjectId {
+  const o = createObject(ctx, defId, player, 'command');
+  ctx.s.players[player].command.push(o.id);
+  return o.id;
 }

@@ -13,6 +13,7 @@ import {
   deckIds,
   GREEN_POOL,
   LAND_POOL,
+  MARVEL_BRAWL_POOL,
   OTHER_POOL,
   PLAYABLE_DECKS,
   parseManaCost,
@@ -49,6 +50,7 @@ describe('card data', () => {
         ...MARVEL_POOL,
         // Back faces of double-faced cards come with their fronts.
         ...SCRYFALL.filter((c) => c.front).map((c) => c.name),
+        ...MARVEL_BRAWL_POOL,
       ].sort(),
     );
     for (const c of SCRYFALL) expect(c.image?.normal).toMatch(/^https:\/\/cards\.scryfall\.io\//);
@@ -98,7 +100,7 @@ describe('card data', () => {
 
   it('decks are 60 cards and legal (max 4 non-basic copies), with unique ids', () => {
     const basics = ['Plains', 'Island', 'Swamp', 'Mountain', 'Forest'];
-    for (const d of DECKS) {
+    for (const d of DECKS.filter((x) => x.series !== 'brawl')) {
       expect(deckIds(d), d.name).toHaveLength(60);
       expect(
         d.cards.map(([name]) => name),

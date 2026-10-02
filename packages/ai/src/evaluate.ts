@@ -60,6 +60,8 @@ export function evaluate(s: GameState, db: CardDb, me: PlayerId): number {
   const opp = other(me);
   let v = lifeValue(s.players[me].life) - lifeValue(s.players[opp].life);
   v += CARD_IN_HAND * (s.players[me].hand.length - s.players[opp].hand.length);
+  // Brawl: a commander waiting in the command zone is a card in hand that costs more each time.
+  v += CARD_IN_HAND * (s.players[me].command.length - s.players[opp].command.length);
 
   const effects = s.effects;
   s.effects = [];

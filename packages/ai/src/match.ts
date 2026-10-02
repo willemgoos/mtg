@@ -6,6 +6,7 @@ import {
   type Engine,
   type GameEvent,
   type GameState,
+  type NewGameOptions,
   nextInt,
   type PlayerId,
   redactFor,
@@ -46,11 +47,14 @@ export function playMatch(
     maxActions?: number;
     startingPlayer?: PlayerId;
     onEvents?: (events: GameEvent[], state: GameState, action: Action) => void;
+    /** Brawl: the format and each player's commander. */
+    brawl?: Pick<NewGameOptions, 'format' | 'commanders'>;
   } = {},
 ): MatchResult {
   let state = engine.newGame({
     decks,
     seed,
+    ...opts.brawl,
     ...(opts.startingPlayer ? { startingPlayer: opts.startingPlayer } : {}),
   });
   const actions: Action[] = [];

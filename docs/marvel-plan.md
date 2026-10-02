@@ -227,7 +227,50 @@ Savage Uprising 49%.
 
 ### Stream A
 
-(Filled in as sub-phases ship.)
+9a (Brawl format and staples):
+
+- "Move to the command zone?" is asked when a player would next get priority, for every zone (graveyard, exile, hand,
+  library). For hand and library the rules make it a replacement; nothing in the pool can tell the difference yet.
+- A commander's identity is never hidden from the opponent, even in a library (it simplifies the bots' guessing).
+- Snarls always reveal when they can.
+- Exotic Orchard and Fellwar Stone look only at the opponent's lands' fixed mana abilities (not at another Orchard).
+- Path of Ancestry's scry checks the commander's printed creature types; any mana from it counts.
+- Sungrass Prairie and the like make floating mana through an activated ability, so bots rarely use them.
+- Bots always send the commander back, and value it like a card in hand while it waits.
+- Test-only deck: Mabel's Militia (Mabel, Heir to Cragflame, R/W), our own list from Foundations and Bloomburrow
+  cards plus the staples. It stays as a Brawl opponent once the precons land.
+
+9b (Avengers Assemble):
+
+- Four of the deck's cards are printed in the MSH main set (Captain Mar-Vell, Patriot, Speed, Captain America, Living
+  Legend), and Avengers Tower in a promo set. They are implemented in `msc/avengers.ts`; Stream B should not define
+  them again. 9b also adds `msh` and `pmei` to `SET_PREFERENCE` (the same `msh` line as Stream B's).
+- Crew N is a real cost now (`cost.crew`); the engine picks which creatures to tap (one big enough, else the largest).
+- Phasing: phased-out permanents leave the battlefield list but keep their zone; nothing shows them on the board.
+- Heroic Sacrifice: the counters go to a creature you choose when it dies (not targeted).
+- Photon's mana can be of mixed colours; Arcane Denial's opponent always draws two.
+- Scarlet Witch's exiled cards are face up to the opponent.
+- "As this enters, choose a creature type" (Herald's Horn, Metallic Mimic, Door of Destinies, Kindred Discovery) is
+  an enters trigger, as for the earlier cards that choose.
+- Captain Marvel copies +1/+1 counters only.
+- Avengers Tower's and Plaza of Heroes' restricted mana can't pay for abilities.
+
+9c (Wakanda Forever):
+
+- The monarch is new (not in the original plan): the end-step draw and taking it with combat damage happen
+  directly, not as triggers on the stack. A crown marks the monarch's portrait.
+- Okoye's double strike and trample apply from the beginning of combat when an opponent is the monarch, rather than
+  when the creature attacks the monarch.
+- Vibranium mana can't pay for abilities either (only artifact spells).
+- Gilded Lotus and Coveted Jewel make three mana that may be of different colours.
+- Heart-Shaped Herb returns the creature by blinking it (no "dies" triggers).
+- Wakanda Forever! puts the six revealed cards into the graveyard first, then picks from there.
+- Ancestral Communion's copy takes another legal target automatically.
+- King Solomon's Frogs' "if you cast it" isn't checked.
+- Divine Visitation only replaces tokens from token-making effects, not token copies.
+- Conduit of Worlds can only make permanent cards castable (as printed), and its "no more spells" lasts the turn.
+- Bot win rates: Wakanda Forever is behind (6–14 against Avengers, 8–12 against Mabel's Militia over 20 games); to
+  revisit with the 9e arena tuning.
 
 ### Stream B
 

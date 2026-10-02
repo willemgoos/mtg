@@ -19,6 +19,8 @@ export interface ScryfallCard {
   back?: string;
   /** A double-faced card's back face: the name of its front. */
   front?: string;
+  /** The Marvel name printed on a reprint in the Marvel Commander decks. */
+  flavorName?: string;
   /** Hotlinked, never bundled. */
   image: { small: string; normal: string; large: string; artCrop: string } | null;
 }

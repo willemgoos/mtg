@@ -47,6 +47,7 @@ interface RawCard {
   image_uris?: { small: string; normal: string; large: string; art_crop: string };
   /** Double-faced cards (Marvel's modal_dfc / transform): one entry per face. */
   card_faces?: RawFace[];
+  flavor_name?: string;
 }
 
 type RawFace = Pick<
@@ -92,6 +93,8 @@ export async function* readBulk(file = cacheFile): AsyncGenerator<RawCard> {
 function printingRank(c: RawCard): number[] {
   const setRank = SET_PREFERENCE.indexOf(c.set);
   return [
+    // A Marvel Commander reprint under a Marvel name shows that name (and its art).
+    c.set === 'msc' && c.flavor_name ? 0 : 1,
     setRank < 0 ? 999 : setRank,
     c.promo || c.full_art ? 1 : 0,
     c.border_color === 'black' ? 0 : 1,
@@ -118,7 +121,7 @@ async function main(): Promise<void> {
     const c = front ? { ...raw, name: front } : raw;
     if (!wanted.has(c.name) || c.lang !== 'en') continue;
     // Classes (Bloomburrow's Talents) print their levels on one face.
-    if (c.layout !== 'normal' && c.layout !== 'class' && !front) continue;
+    if (c.layout !== 'normal' && c.layout !== 'class' && c.layout !== 'saga' && !front) continue;
     // Digital printings only from the Arena Beginner Set (Arena-only cards of the Color Challenge decks).
     if (c.digital && c.set !== 'anb') continue;
     if (!SET_PREFERENCE.includes(c.set)) continue;
@@ -146,6 +149,7 @@ async function main(): Promise<void> {
       ...(c.loyalty !== undefined ? { loyalty: c.loyalty } : {}),
       colors: c.colors ?? [],
       keywords: c.keywords,
+      ...(c.set === 'msc' && c.flavor_name ? { flavorName: c.flavor_name } : {}),
       image: c.image_uris
         ? {
             small: c.image_uris.small,

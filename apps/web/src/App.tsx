@@ -2,6 +2,7 @@ import {
   DECKS,
   deckById,
   type Decklist,
+  isBrawl,
   isJumpIn,
   isPlayable,
   registerDeck,
@@ -14,7 +15,7 @@ import { DeckView } from './components/DeckView.tsx';
 import { ErrorBoundary } from './components/ErrorBoundary.tsx';
 import { Expedition } from './components/Expedition.tsx';
 import { Gauntlet } from './components/Gauntlet.tsx';
-import { type Event, Home, type Mode, Nav, type Tab } from './components/Home.tsx';
+import { type Event, Home, isEvent, type Mode, Nav, type Tab } from './components/Home.tsx';
 import { JumpIn } from './components/JumpIn.tsx';
 import { Season } from './components/Season.tsx';
 import type { BotKind } from './game/bot.worker.ts';
@@ -77,6 +78,17 @@ const SECTIONS: { title: string; blurb: string; decks: Decklist[] }[] = [
     return { ...s, decks: [...decks.filter(isPlayable), ...decks.filter((d) => !isPlayable(d))] };
   },
 );
+/** Brawl's own deck grid: commander decks only play each other. */
+const BRAWL_SECTIONS: { title: string; blurb: string; decks: Decklist[] }[] = [
+  {
+    title: 'Brawl',
+    blurb: '100-card singleton decks led by a legendary commander, 25 life',
+    decks: [
+      ...DECKS.filter((d) => isBrawl(d) && isPlayable(d)),
+      ...DECKS.filter((d) => isBrawl(d) && !isPlayable(d)),
+    ],
+  },
+];
 const PLAYABLE = DECKS.filter(isPlayable);
 
 /**
@@ -147,7 +159,9 @@ export function App() {
   const [lastQuick, setLastQuick] = useState(loadLastQuick);
   const pick = (you: string, bot = opponent) => {
     const seed = newSeed();
-    const them = theirDeck ?? randomOther(you, seed);
+    // A chosen opponent deck from the other kind (Brawl or 60 cards) doesn't apply.
+    const chosen = theirDeck && isBrawl(deckById(theirDeck)) === isBrawl(deckById(you));
+    const them = chosen ? theirDeck : randomOther(you, seed);
     setLastQuick(saveLastQuick({ deck: you, opponent: bot }));
     setMatch({
       choice: { you, them },
@@ -234,8 +248,11 @@ export function App() {
   /** Home's Play button: carry on a run, replay the last quick match, or go pick a deck. */
   const playHome = (m: Mode) => {
     setMode(m);
-    if (m !== 'quick' && summaries[m]) return setHub(m);
-    if (m === 'quick' && lastQuick) return pick(lastQuick.deck, lastQuick.opponent);
+    if (isEvent(m) && summaries[m]) return setHub(m);
+    // Replay the last single game if it was in this mode (Brawl decks only play Brawl).
+    const brawlDeck = lastQuick && isBrawl(deckById(lastQuick.deck));
+    if (!isEvent(m) && lastQuick && brawlDeck === (m === 'brawl'))
+      return pick(lastQuick.deck, lastQuick.opponent);
     setTab('decks');
   };
   const onEnd = (outcome: 'win' | 'loss' | 'draw') => {
@@ -330,12 +347,10 @@ export function App() {
         clears={clearsOf(gauntlet) + clearsOf(expedition)}
         mode={mode}
         onMode={setMode}
-        run={mode === 'quick' ? null : summaries[mode]}
-        records={
-          mode === 'quick' ? {} : mode === 'gauntlet' ? gauntlet.records : expedition.records
-        }
-        onContinue={() => mode !== 'quick' && setHub(mode)}
-        onRun={(deck) => mode !== 'quick' && beginRun(mode, deck)}
+        run={isEvent(mode) ? summaries[mode] : null}
+        records={!isEvent(mode) ? {} : mode === 'gauntlet' ? gauntlet.records : expedition.records}
+        onContinue={() => isEvent(mode) && setHub(mode)}
+        onRun={(deck) => isEvent(mode) && beginRun(mode, deck)}
         onJumpIn={() => setJumping(true)}
         opponent={opponent}
         onOpponent={setOpponent}
@@ -416,7 +431,8 @@ function randomOther(you: string, seed: number): string {
   // Same series as the player's deck (Color Challenge decks meet each other, like on Arena).
   const series = DECKS.find((d) => d.id === you)?.series;
   const others = PLAYABLE.filter((d) => d.id !== you && d.series === series);
-  const pool = others.length ? others : PLAYABLE;
+  // Brawl decks only meet Brawl decks (a mirror match if there is no other).
+  const pool = others.length ? others : PLAYABLE.filter((d) => isBrawl(d) === (series === 'brawl'));
   return pool[seed % pool.length]!.id;
 }
 
@@ -472,6 +488,7 @@ const OPPONENTS: { id: BotKind; name: string; blurb: string }[] = [
 
 const MODES: { id: Mode; name: string; blurb: string }[] = [
   { id: 'quick', name: 'Quick match', blurb: 'One game, any deck against any opponent' },
+  { id: 'brawl', name: 'Brawl', blurb: '1v1 Commander: 100-card decks, 25 life' },
   {
     id: 'gauntlet',
     name: 'Gauntlet',
@@ -519,26 +536,29 @@ function Start({
   onTheirDeck: (id: string | null) => void;
 }) {
   const running = run?.status === 'playing';
-  const name = mode === 'quick' ? '' : EVENT_NAMES[mode];
+  const name = isEvent(mode) ? EVENT_NAMES[mode] : '';
+  const single = !isEvent(mode);
   const [season] = useState(seasonDecks);
   // Expeditions can also set out with a deck built in Season mode.
   const sections =
-    mode === 'expedition' && season.length
-      ? [
-          SECTIONS[0]!,
-          { title: 'Your Season decks', blurb: 'Decks you built in Season mode', decks: season },
-          ...SECTIONS.slice(1),
-        ]
-      : SECTIONS;
+    mode === 'brawl'
+      ? BRAWL_SECTIONS
+      : mode === 'expedition' && season.length
+        ? [
+            SECTIONS[0]!,
+            { title: 'Your Season decks', blurb: 'Decks you built in Season mode', decks: season },
+            ...SECTIONS.slice(1),
+          ]
+        : SECTIONS;
   const steps = mode === 'expedition' ? X.FLOORS : ROUNDS.length;
   return (
     <div className="decks-page">
       <Nav tab="decks" onTab={onTab} clears={clears} />
       <div className="start">
         <div className="start__title">
-          <h1>{mode === 'quick' ? 'Quick match' : name}</h1>
+          <h1>{mode === 'quick' ? 'Quick match' : mode === 'brawl' ? 'Brawl' : name}</h1>
           <p>
-            {mode === 'quick'
+            {single
               ? 'Choose your opponent, then your deck.'
               : running
                 ? 'Your run is waiting.'
@@ -561,7 +581,7 @@ function Start({
             </button>
           ))}
         </div>
-        {mode === 'quick' ? (
+        {single ? (
           <>
             <div className="start__opponent" role="radiogroup" aria-label="Opponent">
               {OPPONENTS.map((o) => (
@@ -585,7 +605,7 @@ function Start({
                 onChange={(e) => onTheirDeck(e.target.value || null)}
               >
                 <option value="">Random</option>
-                {SECTIONS.map((s) => (
+                {sections.map((s) => (
                   <optgroup key={s.title} label={s.title}>
                     {s.decks.filter(isPlayable).map((d) => (
                       <option key={d.id} value={d.id}>
@@ -613,7 +633,7 @@ function Start({
               {section.decks.map((d, j) => {
                 const i = si * 10 + j;
                 const locked = !isPlayable(d);
-                const record = mode === 'quick' ? undefined : records[d.id];
+                const record = single ? undefined : records[d.id];
                 return (
                   <div key={d.id} className="deck-slot">
                     <button
@@ -626,7 +646,7 @@ function Start({
                         } as React.CSSProperties
                       }
                       disabled={locked || running}
-                      onClick={() => (mode === 'quick' ? onPick(d.id) : onRun(d.id))}
+                      onClick={() => (single ? onPick(d.id) : onRun(d.id))}
                     >
                       <span className="deck__art" />
                       {record && record.runs > 0 && (

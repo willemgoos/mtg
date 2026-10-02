@@ -1,4 +1,4 @@
-import type { CardDb, CardDefId, CardDefinition } from '@mtg/engine';
+import type { CardDb, CardDefId, CardDefinition, NewGameOptions, PlayerId } from '@mtg/engine';
 import { BEHAVIORS, TOKENS } from './behaviors.ts';
 import { buildCard, slug } from './build.ts';
 import { DECKS, type Decklist } from './decks.ts';
@@ -16,6 +16,7 @@ export {
   BLUE_POOL,
   GREEN_POOL,
   LAND_POOL,
+  MARVEL_BRAWL_POOL,
   OTHER_POOL,
   RED_POOL,
   WHITE_POOL,
@@ -27,6 +28,7 @@ export {
   COLOR_CHALLENGE_DECKS,
   DECKS,
   MARVEL_DECKS,
+  MARVEL_BRAWL_DECKS,
 } from './decks.ts';
 export type { Decklist } from './decks.ts';
 export { PACKET_LANDS, PACKETS, packetCards } from './jumpin.ts';
@@ -48,6 +50,9 @@ export const scryfallById: ReadonlyMap<CardDefId, ScryfallCard> = new Map(
   SCRYFALL.map((sc) => [slug(sc.name), sc]),
 );
 
+/** The name to show: the Marvel name on a Marvel reprint, else the card's name. */
+export const displayName = (d: CardDefinition): string => d.flavorName ?? d.name;
+
 /** Expands a decklist to card ids. */
 export function deckIds(list: Decklist): CardDefId[] {
   return list.cards.flatMap(([name, n]) => Array<CardDefId>(n).fill(slug(name)));
@@ -55,12 +60,51 @@ export function deckIds(list: Decklist): CardDefId[] {
 
 /** Cards in the list we haven't implemented yet (empty = playable). */
 export function missingCards(list: Decklist): string[] {
-  return list.cards.map(([name]) => name).filter((name) => !cardDb.has(slug(name)));
+  return [...list.cards.map(([name]) => name), ...(list.commander ? [list.commander] : [])].filter(
+    (name) => !cardDb.has(slug(name)),
+  );
 }
+
+/** A Brawl deck's commander as a card id (undefined for other decks). */
+export const commanderId = (list: Decklist): CardDefId | undefined =>
+  list.commander ? slug(list.commander) : undefined;
+
+/**
+ * Engine options for a game between two decks: Brawl decks bring their
+ * commanders and the Brawl format.
+ */
+export function deckGameOptions(
+  p1: Decklist,
+  p2: Decklist,
+): Pick<NewGameOptions, 'format' | 'commanders'> & { decks: Record<PlayerId, CardDefId[]> } {
+  const brawl = p1.series === 'brawl' || p2.series === 'brawl';
+  const c1 = commanderId(p1);
+  const c2 = commanderId(p2);
+  return {
+    decks: { p1: deckIds(p1), p2: deckIds(p2) },
+    ...(brawl
+      ? {
+          format: 'brawl' as const,
+          commanders: { ...(c1 ? { p1: c1 } : {}), ...(c2 ? { p2: c2 } : {}) },
+        }
+      : {}),
+  };
+}
+
+/** Is this a Brawl deck (plays only against other Brawl decks)? */
+export const isBrawl = (list: Decklist): boolean => list.series === 'brawl';
 
 export const isPlayable = (list: Decklist): boolean => missingCards(list).length === 0;
 
-export const PLAYABLE_DECKS: readonly Decklist[] = DECKS.filter(isPlayable);
+/** Playable 60-card decks (Brawl decks are separate: they only play each other). */
+export const PLAYABLE_DECKS: readonly Decklist[] = DECKS.filter(
+  (d) => isPlayable(d) && !isBrawl(d),
+);
+
+/** Playable Brawl decks. */
+export const PLAYABLE_BRAWL_DECKS: readonly Decklist[] = DECKS.filter(
+  (d) => isPlayable(d) && isBrawl(d),
+);
 
 /** Id of the deck made from two Jump In packets. */
 export const jumpInId = (a: string, b: string): string => `jump-in:${a}+${b}`;

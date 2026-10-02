@@ -4,7 +4,7 @@
  */
 import { createObject, makeCtx, refreshCreaturesAreFood } from './context.ts';
 import type { Engine } from './engine.ts';
-import { emptyState } from './setup.ts';
+import { emptyState, putInCommandZone } from './setup.ts';
 import type {
   Action,
   CardDb,
@@ -28,6 +28,8 @@ export interface PlayerSpec {
   battlefield?: PermSpec[];
   library?: string[];
   graveyard?: string[];
+  /** Brawl: their commander, in the command zone. */
+  commander?: string;
 }
 
 export interface ScenarioSpec {
@@ -56,6 +58,10 @@ export function buildScenario(db: CardDb, spec: ScenarioSpec = {}): GameState {
     put('library', pl.library, ps.library ?? Array(10).fill('forest'));
     put('hand', pl.hand, ps.hand ?? []);
     put('graveyard', pl.graveyard, ps.graveyard ?? []);
+    if (ps.commander) {
+      s.format = 'brawl';
+      pl.commander = putInCommandZone(ctx, ps.commander, p);
+    }
     for (const b of ps.battlefield ?? []) {
       const bs = typeof b === 'string' ? { card: b } : b;
       const o = createObject(ctx, bs.card, p, 'battlefield');

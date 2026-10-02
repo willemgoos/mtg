@@ -41,6 +41,8 @@ function permanentOk(ctx: Ctx, spec: TargetSpec, id: ObjectId, src: TargetingSou
   if (spec.what !== 'permanent' && !isCreature(ctx, id) && !walker) return false;
   if (spec.controller === 'you' && o.controller !== src.controller) return false;
   if (spec.controller === 'opponent' && o.controller === src.controller) return false;
+  // Whispersilk Cloak: nobody can target it.
+  if (hasKeyword(ctx, id, 'shroud')) return false;
   if (o.controller !== src.controller) {
     if (hasKeyword(ctx, id, 'hexproof')) return false;
     if (

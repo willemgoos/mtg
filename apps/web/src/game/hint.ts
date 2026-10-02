@@ -1,5 +1,5 @@
 import { createHeuristicBot, planAttacks, planBlocks, viewEngine } from '@mtg/ai';
-import { cardDb } from '@mtg/cards';
+import { cardDb, displayName } from '@mtg/cards';
 import type { Action, GameState, ObjectId, PlayerId } from '@mtg/engine';
 
 /** What a good player would do now, in words, and the cards to point at. */
@@ -11,8 +11,10 @@ export interface Hint {
 const engine = viewEngine(cardDb);
 const bot = createHeuristicBot(cardDb, 'hint');
 
-const nameOf = (view: GameState, id: ObjectId) =>
-  cardDb.get(view.objects[id]?.defId ?? '')?.name ?? 'that card';
+const nameOf = (view: GameState, id: ObjectId) => {
+  const d = cardDb.get(view.objects[id]?.defId ?? '');
+  return d ? displayName(d) : 'that card';
+};
 
 const list = (names: string[]) =>
   names.length <= 1 ? (names[0] ?? '') : `${names.slice(0, -1).join(', ')} and ${names.at(-1)}`;

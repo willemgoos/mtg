@@ -1,3 +1,4 @@
+import { commanderTypes, isCommander } from './brawl.ts';
 import { type Ctx, def, defOf, obj } from './context.ts';
 import { manaValue } from './cost.ts';
 import { checkCondition } from './triggers.ts';
@@ -75,7 +76,15 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
       const st = a.effect;
       if (st.kind === 'cantBlock') cantBlock = true;
       else if (st.kind === 'cantBeBlocked') cantBeBlocked = true;
-      else if (st.kind === 'boost') {
+      // Bast: "can't attack or block unless you control three or more creatures".
+      else if (
+        st.kind === 'while' &&
+        st.cantAttackOrBlock &&
+        checkCondition(ctx, st.condition, o.controller, o)
+      ) {
+        cantAttack = cantBlock = true;
+        continue;
+      } else if (st.kind === 'boost') {
         power += countOf(ctx, o.controller, st.power, true, id);
         toughness += countOf(ctx, o.controller, st.toughness, true, id);
       } else if (st.kind === 'while' || st.kind === 'whileLife') {
@@ -115,9 +124,15 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
         if (st.kind === 'attached') {
           if (src.attachedTo !== id) continue;
           if (st.cantAttackOrBlock) cantAttack = cantBlock = true;
+          if (st.cantBeBlocked) cantBeBlocked = true;
           if (st.loseKeywords?.length) {
             granted ??= new Set(keywords);
             for (const k of st.loseKeywords) removed.add(k);
+          }
+          // Hulkbuster Armor: base 9/9.
+          if (st.basePT) {
+            power += st.basePT[0] - (basePower ?? base ?? o.copyPT?.power ?? d.power ?? 0);
+            toughness += st.basePT[1] - (base ?? o.copyPT?.toughness ?? d.toughness ?? 0);
           }
           power += countOf(ctx, src.controller, st.power);
           toughness += countOf(ctx, src.controller, st.toughness);
@@ -171,8 +186,8 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
           continue;
         if (st.filter?.colors && !st.filter.colors.some((color) => d.colors.includes(color)))
           continue;
-        power += countOf(ctx, src.controller, st.power);
-        toughness += countOf(ctx, src.controller, st.toughness);
+        power += countOf(ctx, src.controller, st.power, false, srcId);
+        toughness += countOf(ctx, src.controller, st.toughness, false, srcId);
         if (st.keywords?.length) {
           granted ??= new Set(keywords);
           for (const k of st.keywords) granted.add(k);
@@ -215,6 +230,11 @@ export function countOf(
     const self = sourceId ? ctx.s.objects[sourceId] : undefined;
     return checkCondition(ctx, a.if, player, self) ? a.then : (a.else ?? 0);
   }
+  // Door of Destinies: its charge counters.
+  if ('namedCountersOnSource' in a) {
+    const src = sourceId ? ctx.s.objects[sourceId] : undefined;
+    return src?.counters?.[a.namedCountersOnSource] ?? 0;
+  }
   if (!('count' in a)) return 0;
   if (a.count === 'cardsInGraveyard')
     return (
@@ -245,6 +265,13 @@ export function countOf(
   }
   if (a.count === 'opponentCreaturesExiledThisTurn')
     return ctx.s.turn.creaturesExiled?.[player === 'p1' ? 'p2' : 'p1'] ?? 0;
+  // Wakanda Forever (9c).
+  if (a.count === 'creaturesOnBattlefield') return creaturesOnBattlefield(ctx).length;
+  if (a.count === 'totalManaValue')
+    return ctx.s.battlefield
+      .filter((id) => obj(ctx, id).controller === player && matchesFilter(ctx, id, a.filter))
+      .reduce((n, id) => n + manaValue(def(ctx, id).manaCost), 0);
+  if (a.count === 'commanderCasts') return ctx.s.players[player].commanderCasts ?? 0;
   if (a.count === 'permanentsYouControl')
     return ctx.s.battlefield.filter(
       (id) =>
@@ -435,6 +462,9 @@ export function matchesFilter(
     !Object.values(obj(ctx, id).counters ?? {}).some((n) => n > 0)
   )
     return false;
+  if (filter.commander && !isCommander(ctx, id)) return false;
+  if (filter.supertypes && !filter.supertypes.some((t) => def(ctx, id).supertypes.includes(t)))
+    return false;
   if (filter.toughnessGreaterThanPower) {
     const ch = characteristics(ctx, id);
     if (ch.toughness <= ch.power) return false;
@@ -500,6 +530,8 @@ export function cardMatches(
     return false;
   if (filter.colors && !filter.colors.some((color) => d.colors.includes(color))) return false;
   if (filter.notTypes?.some((t) => d.types.includes(t))) return false;
+  if (filter.commander && !isCommander(ctx, id)) return false;
+  if (filter.supertypes && !filter.supertypes.some((t) => d.supertypes.includes(t))) return false;
   const mv = manaValue(d.manaCost);
   if (filter.minManaValue !== undefined && mv < filter.minManaValue) return false;
   if (filter.manaValueIsSourceCounters) {
@@ -525,6 +557,39 @@ export function cardMatches(
     if (mv > max) return false;
   }
   if (filter.other && id === sourceId) return false;
+  if (!avengersFilter(ctx, id, filter, sourceId)) return false;
+  return true;
+}
+
+/** Avengers Assemble (9b) filter parts: chosen types, modified, power, the commander's types. */
+function avengersFilter(
+  ctx: Ctx,
+  id: ObjectId,
+  filter: CardFilter,
+  sourceId: ObjectId | undefined,
+): boolean {
+  const chosen = sourceId ? ctx.s.objects[sourceId]?.chosenType : undefined;
+  if (filter.chosenTypeOfSource && !(chosen && hasSubtype(ctx, id, chosen))) return false;
+  if (filter.notChosenTypeOfSource && chosen && hasSubtype(ctx, id, chosen)) return false;
+  const o = obj(ctx, id);
+  if (filter.modified) {
+    const counters = o.plusOneCounters > 0 || Object.values(o.counters ?? {}).some((n) => n > 0);
+    const attached = ctx.s.battlefield.some((a) => {
+      const att = obj(ctx, a);
+      if (att.attachedTo !== id) return false;
+      const sub = def(ctx, a).subtypes;
+      return sub.includes('Equipment') || (sub.includes('Aura') && att.controller === o.controller);
+    });
+    if (!counters && !attached) return false;
+  }
+  if (filter.greaterPowerThanSource) {
+    if (!sourceId || o.zone !== 'battlefield') return false;
+    if (characteristics(ctx, id).power <= characteristics(ctx, sourceId).power) return false;
+  }
+  if (filter.sharesTypeWithCommander) {
+    const types = commanderTypes(ctx, o.controller);
+    if (!def(ctx, id).subtypes.some((t) => types.includes(t))) return false;
+  }
   return true;
 }
 

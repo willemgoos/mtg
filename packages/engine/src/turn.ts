@@ -1,3 +1,4 @@
+import { commanderToOffer } from './brawl.ts';
 import { hasKeyword } from './characteristics.ts';
 import {
   anyFirstStrike,
@@ -7,7 +8,8 @@ import {
   possibleAttackers,
   possibleBlockers,
 } from './combat.ts';
-import { type Ctx, def, drawCard, emit, obj, other, untap } from './context.ts';
+import { type Ctx, def, drawCard, emit, obj, other, tap, untap } from './context.ts';
+import { phaseIn } from './phasing.ts';
 import { checkGameOver, runSBAs } from './sba.ts';
 import { pushTrigger, resolveTop } from './stack.ts';
 import { targetCombos } from './targets.ts';
@@ -28,6 +30,12 @@ export function givePriority(ctx: Ctx, player: PlayerId): void {
     runSBAs(ctx);
     collectTriggers(ctx);
     if (checkGameOver(ctx)) return;
+    // Brawl: a commander that left for another zone may go to the command zone.
+    const offer = commanderToOffer(ctx);
+    if (offer) {
+      s.decision = { kind: 'commandZone', ...offer, thenPriority: player };
+      return;
+    }
 
     const i = nextPendingTriggerIndex(ctx);
     if (i < 0) break;
@@ -122,6 +130,11 @@ export function advanceStep(ctx: Ctx): void {
 
 export function startTurn(ctx: Ctx, player: PlayerId): void {
   const s = ctx.s;
+  // Avenge: whether the player whose turn just ended attacked during it.
+  if (s.turn.number > 0) {
+    const prev = s.players[s.turn.activePlayer];
+    prev.attackedLastTurn = prev.attackedThisTurn;
+  }
   s.turn.number++;
   s.turn.activePlayer = player;
   const p = s.players[player];
@@ -140,6 +153,7 @@ export function startTurn(ctx: Ctx, player: PlayerId): void {
   s.turn.foodsSacrificed = { p1: 0, p2: 0 };
   delete s.turn.hexproofPlayers;
   delete s.turn.osteomancer;
+  delete s.turn.spellLock;
   delete s.turn.instantsSorceriesCast;
   delete s.turn.castDefs;
   for (const q of Object.values(s.players)) q.attackedThisTurn = false;
@@ -159,6 +173,8 @@ function enterStep(ctx: Ctx, step: Step): void {
 
   switch (step) {
     case 'untap':
+      // Vision: phased-out permanents come back first (rule 502.1).
+      phaseIn(ctx, ap);
       for (const id of s.battlefield) {
         const o = obj(ctx, id);
         if (o.controller !== ap) continue;
@@ -206,6 +222,11 @@ function enterStep(ctx: Ctx, step: Step): void {
       dealCombatDamage(ctx, false);
       return givePriority(ctx, ap);
 
+    case 'end':
+      // The monarch draws a card at the beginning of their end step (drawn here, not on the stack).
+      if (s.monarch === ap) drawCard(ctx, ap);
+      return givePriority(ctx, ap);
+
     case 'cleanup': {
       const noMax = s.battlefield.some(
         (id) =>
@@ -240,11 +261,7 @@ export function confirmAttackers(ctx: Ctx): void {
     blockers: [],
   }));
   for (const d of decl) {
-    const o = obj(ctx, d.id);
-    if (!hasKeyword(ctx, d.id, 'vigilance')) {
-      o.tapped = true;
-      emit(ctx, { type: 'tapped', id: d.id });
-    }
+    if (!hasKeyword(ctx, d.id, 'vigilance')) tap(ctx, d.id);
   }
   if (decl.length > 0) s.players[s.turn.activePlayer].attackedThisTurn = true;
   for (const d of decl) s.turn.attackers.push(d.id);
@@ -294,6 +311,7 @@ export function finishCleanup(ctx: Ctx): void {
     const o = obj(ctx, id);
     o.damage = 0;
     o.damagedByDeathtouch = false;
+    delete o.damagedBy;
   }
   endEffects(ctx, (e) => e.expires === 'endOfTurn');
   if (s.emblems?.length)

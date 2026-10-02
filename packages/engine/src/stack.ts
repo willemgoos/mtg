@@ -12,12 +12,15 @@ import {
   tap,
   addCounters,
   createObject,
+  refOf,
 } from './context.ts';
+import { commanderTax, commanderTypes } from './brawl.ts';
 import { type EffectSource, runEffects } from './effects.ts';
 import {
   characteristics,
   countOf,
   hasKeyword,
+  isCreature,
   hasSubtype,
   cardMatches,
   matchesFilter,
@@ -208,7 +211,12 @@ export function castCost(
   const v = variantOf(d, o.zone, choice);
   if (!v) throw new Error(`${o.defId} can't be cast that way`);
   let cost = v.cost;
+  // Brawl: commander tax.
+  if (o.zone === 'command') cost = { ...cost, generic: cost.generic + commanderTax(ctx, player) };
   let reduce = d.costReduction !== undefined ? amountFor(ctx, player, d.costReduction) : 0;
+  // Heroic Return, Avenge: "costs {2} less if ...".
+  if (d.costReductionIf && checkCondition(ctx, d.costReductionIf.condition, player, o))
+    reduce += d.costReductionIf.amount;
   const first = targets?.[0];
   if (
     d.costReductionIfTarget &&
@@ -223,7 +231,7 @@ export function castCost(
         if (
           a.kind === 'static' &&
           a.effect.kind === 'spellsCostLess' &&
-          cardMatches(ctx, card, a.effect.filter)
+          cardMatches(ctx, card, a.effect.filter, id)
         )
           reduce += a.effect.amount;
         if (
@@ -302,6 +310,8 @@ export function castSpell(
       ...(teamwork ?? []),
     ],
   );
+  if (o.zone === 'command')
+    ctx.s.players[player].commanderCasts = (ctx.s.players[player].commanderCasts ?? 0) + 1;
   moveObject(ctx, card, 'stack', { controller: player });
   if (choice.discard) moveObject(ctx, choice.discard, 'graveyard');
   for (const id of choice.sacrificeMany ?? []) sacrificePermanent(ctx, id);
@@ -326,13 +336,54 @@ export function castSpell(
   });
   payMana(ctx, payment);
   if (teamwork) payTeamwork(ctx, teamwork);
+  if (d.types.includes('Creature')) scryForAncestry(ctx, player, d, payment);
   ((ctx.s.turn.castDefs ??= { p1: [], p2: [] })[player] ??= []).push(o.defId);
+  // "When you cast this spell" (Ancestral Communion, Hatut Zeraze Strike Force).
+  d.abilities.forEach((a, i) => {
+    if (a.kind !== 'triggered' || a.trigger.on !== 'castSelf') return;
+    if (!checkCondition(ctx, a.condition, player, o)) return;
+    ctx.s.pendingTriggers.push({
+      source: { id: o.id, zcc: o.zcc },
+      sourceDefId: o.defId,
+      abilityIndex: i,
+      controller: player,
+      subject: { id: o.id, zcc: o.zcc },
+    });
+  });
+  // Conduit of Worlds: a card cast this way stops further spells this turn.
+  if (choice.via === 'conduit') (ctx.s.turn.spellLock ??= []).push(player);
   const cast = (ctx.s.turn.spellsCast ??= { p1: 0, p2: 0 });
   emit(ctx, { type: 'spellCast', id: card, player, nth: ++cast[player] });
   noteTargets(ctx, player, targets);
   return (
     choice.forage !== undefined && payForage(ctx, player, choice.forage, { thenPriority: player })
   );
+}
+
+/**
+ * Path of Ancestry: its mana spent on a creature spell that shares a creature
+ * type with your commander triggers "scry 1".
+ */
+function scryForAncestry(
+  ctx: Ctx,
+  player: PlayerId,
+  d: CardDefinition,
+  payment: readonly ObjectId[],
+): void {
+  const types = commanderTypes(ctx, player);
+  if (!d.subtypes.some((t) => types.includes(t))) return;
+  for (const id of new Set(payment)) {
+    const o = ctx.s.objects[id];
+    if (!o || !def(ctx, id).abilities.some((a) => a.kind === 'mana' && a.scryIfCommanderType))
+      continue;
+    ctx.s.pendingTriggers.push({
+      source: refOf(o),
+      sourceDefId: o.defId,
+      abilityIndex: -1,
+      controller: player,
+      inline: [{ kind: 'scry', amount: 1 }],
+    });
+  }
 }
 
 /** Eluge: {U} off the first instant or sorcery each turn, per land with a flood counter. */
@@ -417,8 +468,14 @@ export function activateAbility(
     [sacrifice, forage !== 'graveyard' ? forage : undefined],
   );
   if (discard) moveObject(ctx, discard, 'graveyard');
+  // Cycling.
+  if (a.cost.discardSelf) moveObject(ctx, source, 'graveyard');
   if (a.cost.tapTokens)
     for (const id of tokensToTap(ctx, player, source).slice(0, a.cost.tapTokens)) tap(ctx, id);
+  if (a.cost.crew) for (const id of crewFor(ctx, player, source, a.cost.crew) ?? []) tap(ctx, id);
+  if (a.cost.sacrificeArtifacts)
+    for (const id of artifactsToSacrifice(ctx, player, a.cost.sacrificeArtifacts) ?? [])
+      sacrificePermanent(ctx, id);
   const sacrificedPower = sacrifice ? power(ctx, sacrifice) : undefined;
   if (sacrifice) sacrificePermanent(ctx, sacrifice);
   changeLife(ctx, player, -wardLife(ctx, player, targets) - (a.cost.life ?? 0));
@@ -478,6 +535,10 @@ export function pushTrigger(
   );
   if (manaValue(cost) > 0) payMana(ctx, planPayment(ctx, t.controller, cost, undefined));
   const ability = triggeredAbility(ctx, t);
+  if (mode !== undefined && ability.modesOnce) {
+    const src = ctx.s.objects[t.source.id];
+    if (src) src.usedModes = [...(src.usedModes ?? []), mode];
+  }
   const life = ability.targets.length && ability.lifeCost ? ability.lifeCost : 0;
   changeLife(ctx, t.controller, -wardLife(ctx, t.controller, targets) - life);
   payWardExtras(ctx, t.controller, targets);
@@ -583,6 +644,8 @@ export function resolveTop(ctx: Ctx): boolean {
     emit(ctx, { type: 'resolved', id: item.id });
     moveObject(ctx, item.id, 'battlefield', { controller: item.controller });
     if (item.kicked) o.kicked = true;
+    // Royal Talon Fighter Jet: "enters with X +1/+1 counters".
+    if (d.entersWithXCounters && item.x) addCounters(ctx, o.id, item.x);
     if (d.entersWithCounters && checkCondition(ctx, d.entersWithCountersIf, item.controller, o))
       addCounters(ctx, o.id, d.entersWithCounters);
     if (host) attachAura(ctx, o.id, host);
@@ -684,6 +747,50 @@ function resume(ctx: Ctx, r: PausedResolution, thenPriority: PlayerId): void {
  * Untapped tokens `player` could tap for a cost, least useful first:
  * noncreature tokens, then the weakest creatures (the engine picks; a simplification).
  */
+/**
+ * Crew N: untapped creatures `player` controls (not the Vehicle) with total
+ * power N or more. The engine picks: the smallest creatures that reach N
+ * (a simplification). Null if they can't.
+ */
+export function crewFor(
+  ctx: Ctx,
+  player: PlayerId,
+  vehicle: ObjectId,
+  n: number,
+): ObjectId[] | null {
+  const crew = ctx.s.battlefield
+    .filter((id) => {
+      const o = obj(ctx, id);
+      return id !== vehicle && o.controller === player && !o.tapped && isCreature(ctx, id);
+    })
+    .map((id) => ({ id, power: power(ctx, id) }))
+    .filter((c) => c.power > 0)
+    .sort((a, b) => a.power - b.power);
+  // One creature big enough, else the smallest ones adding up.
+  const one = crew.find((c) => c.power >= n);
+  if (one) return [one.id];
+  const out: ObjectId[] = [];
+  let total = 0;
+  for (const c of [...crew].reverse()) {
+    if (total >= n) break;
+    out.push(c.id);
+    total += c.power;
+  }
+  return total >= n ? out : null;
+}
+
+/** Metalwork Colossus: the N least useful artifacts `player` controls (tokens, then the cheapest), or null. */
+export function artifactsToSacrifice(ctx: Ctx, player: PlayerId, n: number): ObjectId[] | null {
+  const artifacts = ctx.s.battlefield
+    .filter((id) => obj(ctx, id).controller === player && def(ctx, id).types.includes('Artifact'))
+    .sort(
+      (a, b) =>
+        Number(obj(ctx, b).isToken) - Number(obj(ctx, a).isToken) ||
+        manaValue(def(ctx, a).manaCost) - manaValue(def(ctx, b).manaCost),
+    );
+  return artifacts.length >= n ? artifacts.slice(0, n) : null;
+}
+
 export function tokensToTap(ctx: Ctx, player: PlayerId, source?: ObjectId): ObjectId[] {
   return ctx.s.battlefield
     .filter((id) => {
@@ -872,7 +979,9 @@ function bonusCounters(
         a.kind === 'static' &&
         a.effect.kind === 'othersEnterWithCounter' &&
         defOf(ctx, obj(ctx, entering).defId).types.includes('Creature') &&
-        checkCondition(ctx, a.effect.condition, player, obj(ctx, id))
+        checkCondition(ctx, a.effect.condition, player, obj(ctx, id)) &&
+        // Metallic Mimic: of the chosen type.
+        (!a.effect.filter || cardMatches(ctx, entering, a.effect.filter, id))
       )
         n++;
       if (a.kind !== 'static' || a.effect.kind !== 'entersWithCountersPerSubtype') continue;
@@ -931,7 +1040,9 @@ export function answerSearch(ctx: Ctx, card: ObjectId | null): void {
     return resume(ctx, d.resume, d.thenPriority);
   }
   const lib = ctx.s.players[d.player].library;
-  if (d.looked) {
+  if (d.looked && d.restOnTop) {
+    // Herald's Horn: what wasn't taken stays where it was.
+  } else if (d.looked) {
     const rest = d.looked.filter((id) => id !== card);
     for (const id of rest) lib.splice(lib.indexOf(id), 1);
     shuffleInPlace(ctx.s.rng, rest);

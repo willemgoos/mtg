@@ -1,9 +1,9 @@
 import { createEngine, playRandomGame } from '@mtg/engine';
 import { describe, expect, it } from 'vitest';
-import { cardDb, DECKS, deckIds, isPlayable } from '../src/index.ts';
+import { cardDb, deckIds, PLAYABLE_DECKS } from '../src/index.ts';
 
 const engine = createEngine(cardDb);
-const playable = DECKS.filter(isPlayable);
+const playable = PLAYABLE_DECKS;
 
 // The web app saves the game to localStorage as JSON and resumes from it.
 describe('saved games', () => {
@@ -22,5 +22,5 @@ describe('saved games', () => {
       });
       expect(JSON.stringify(state), `seed ${seed}`).toBe(JSON.stringify(r.final));
     }
-  }, 30_000); // one game per playable deck
+  }, 30_000);
 });

@@ -284,6 +284,51 @@ export function OpponentHand({ count }: { count: number }) {
  * strip (beginning, draw, main on the left; combat, main, end on the right), with
  * the life total just under it. The strip lights up on the active player's turn.
  */
+/**
+ * Brawl: the command zone beside a player's portrait, as on Arena. It shows
+ * the commander while it waits there (click to cast it) and the commander
+ * tax its next cast from there will cost.
+ */
+export function CommandSlot({
+  view,
+  player,
+  h,
+}: {
+  view: GameState;
+  player: PlayerId;
+  h: ZoneHandlers;
+}) {
+  const ps = view.players[player];
+  const id = ps.commander;
+  if (id === undefined) return null;
+  const home = ps.command.includes(id);
+  const tax = 2 * (ps.commanderCasts ?? 0);
+  return (
+    <div
+      className={`command ${home ? '' : 'is-away'}`}
+      title={home ? 'Command zone' : 'Your commander is away from the command zone'}
+    >
+      {home ? (
+        <Card
+          id={id}
+          defId={view.objects[id]!.defId}
+          size="stack"
+          mark={h.markOf(id)}
+          onClick={() => h.onCard(id)}
+          onHover={h.onHover}
+        />
+      ) : (
+        <span className="command__empty">Commander</span>
+      )}
+      {tax > 0 && (
+        <span className="command__tax" title={`Commander tax: {${tax}} more to cast`}>
+          +{tax}
+        </span>
+      )}
+    </div>
+  );
+}
+
 export function PlayerBadge({
   view,
   player,
@@ -293,6 +338,7 @@ export function PlayerBadge({
   active,
   priority,
   onClick,
+  command,
 }: {
   view: GameState;
   player: PlayerId;
@@ -303,6 +349,8 @@ export function PlayerBadge({
   active: boolean;
   priority: boolean;
   onClick: () => void;
+  /** Brawl: the command zone, beside the portrait. */
+  command?: React.ReactNode;
 }) {
   const ps = view.players[player];
   const step = active ? view.turn.step : null;
@@ -321,8 +369,16 @@ export function PlayerBadge({
         onClick={onClick}
       >
         <LifeCounter life={ps.life} />
+        {view.monarch === player && (
+          <span className="badge__crown" title="The monarch: draws a card at their end step">
+            <svg viewBox="0 0 24 16" aria-hidden>
+              <path d="M2 14 L4 4 L9 9 L12 2 L15 9 L20 4 L22 14 Z" />
+            </svg>
+          </span>
+        )}
       </div>
       <PhaseStrip phases={PHASES.slice(3)} step={step} />
+      {command}
     </div>
   );
 }

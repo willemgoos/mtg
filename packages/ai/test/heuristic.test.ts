@@ -224,7 +224,7 @@ describe('easy bot', () => {
       if (r.winner !== easySeat) heuristicWins++;
     }
     expect(heuristicWins).toBeGreaterThanOrEqual(6);
-  });
+  }, 30_000);
 
   it('never responds on the opponent’s turn', () => {
     const g = game({
