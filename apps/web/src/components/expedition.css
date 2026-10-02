@@ -941,3 +941,90 @@
     0 0 0 0.5rem rgba(244, 177, 62, 0.18),
     0 1.25rem 2.5rem rgba(0, 0, 0, 0.55);
 }
+
+/* --------------------------------------------- paying with your cards */
+
+/* Spare copies first, then cards only in your deck, each under its own heading. */
+.shell .merchant__pay {
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: stretch;
+  gap: 1.25rem;
+}
+
+.shell .merchant__group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.shell .merchant__heading {
+  margin: 0;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--h-text);
+}
+
+.shell .merchant__heading span {
+  margin-left: 0.5rem;
+  font-size: 0.8125rem;
+  font-weight: 400;
+  color: var(--h-muted);
+}
+
+.shell .merchant__cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.625rem;
+}
+
+/* Where a card's copies are, as a small label along its bottom. */
+.shell .merchant__where,
+.shell .merchant__give {
+  position: absolute;
+  bottom: 0.375rem;
+  left: 50%;
+  translate: -50% 0;
+  padding: 0.0625rem 0.5rem;
+  border-radius: 999px;
+  font-family: var(--h-font);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.shell .merchant__where {
+  color: var(--h-text);
+  background: rgba(11, 12, 14, 0.85);
+  backdrop-filter: blur(0.25rem);
+}
+
+.shell .merchant__card.is-on {
+  box-shadow:
+    0 0 0 0.1875rem var(--h-text),
+    0 0.5rem 1rem rgba(0, 0, 0, 0.5);
+}
+
+.shell .merchant__card.is-on .merchant__give {
+  color: var(--h-bg);
+  background: var(--h-text);
+}
+
+/* A copy that would come out of your deck is red. */
+.shell .merchant__card.is-from-deck {
+  box-shadow:
+    0 0 0 0.1875rem #e5484d,
+    0 0.5rem 1rem rgba(0, 0, 0, 0.5);
+}
+
+.shell .merchant__card.is-from-deck .merchant__give {
+  color: #fff;
+  background: #e5484d;
+}
+
+.shell .merchant__note {
+  margin: -0.5rem 0 0;
+  font-size: 0.875rem;
+  color: #f2a0a3;
+}

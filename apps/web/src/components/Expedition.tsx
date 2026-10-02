@@ -32,6 +32,7 @@ import {
   chooseBoon,
   currentNode,
   enterNode,
+  type Build,
   type ExpeditionRun,
   type ExpeditionState,
   floorsOf,
@@ -964,6 +965,91 @@ function CardChoice({
   );
 }
 
+/**
+ * Your cards to pay with or pick from, in two groups: spare copies in your
+ * collection first (giving one costs your deck nothing), then cards that are
+ * only in your deck. Each says how many copies are where, and a picked copy
+ * that would come out of your deck says so. `takes` is false when picking
+ * doesn't cost the card (the mirror).
+ */
+function YourCards({
+  build,
+  cards,
+  picked,
+  takes,
+  onPick,
+  onHover,
+}: {
+  build: Build;
+  cards: string[];
+  /** Copies chosen so far (a name twice for two copies). */
+  picked: string[];
+  takes: boolean;
+  onPick: (name: string, el: HTMLElement) => void;
+  onHover: (h: HoverState | null) => void;
+}) {
+  const spare = cards.filter((n) => (build.side[n] ?? 0) > 0);
+  const deckOnly = cards.filter((n) => !(build.side[n] ?? 0));
+  const tile = (name: string) => {
+    const inDeck = build.main[name] ?? 0;
+    const spares = build.side[name] ?? 0;
+    const n = picked.filter((g) => g === name).length;
+    const out = takes ? Math.max(0, n - spares) : 0;
+    const where = [spares && `${spares} spare`, inDeck && `${inDeck} in deck`]
+      .filter(Boolean)
+      .join(' · ');
+    return (
+      <button
+        key={name}
+        className={`merchant__card ${n ? 'is-on' : ''} ${out ? 'is-from-deck' : ''}`}
+        onClick={(e) => onPick(name, e.currentTarget)}
+        onMouseEnter={(e) => onHover({ defId: slug(name), anchor: e.currentTarget })}
+        onMouseLeave={() => onHover(null)}
+      >
+        <img src={imageOf(name)} alt={name} draggable={false} />
+        {n > 0 ? (
+          <span className="merchant__give">
+            Give{n > 1 ? ` ×${n}` : ''}
+            {out > 0 && ' · from deck'}
+          </span>
+        ) : (
+          <span className="merchant__where">{where}</span>
+        )}
+      </button>
+    );
+  };
+  return (
+    <div className="merchant__pay">
+      {spare.length > 0 && (
+        <section className="merchant__group">
+          <h2 className="merchant__heading">
+            Your collection <span>Not in your deck. Giving these costs your deck nothing.</span>
+          </h2>
+          <div className="merchant__cards">{spare.map(tile)}</div>
+        </section>
+      )}
+      {deckOnly.length > 0 && (
+        <section className="merchant__group">
+          <h2 className="merchant__heading">
+            In your deck{' '}
+            <span>
+              {takes ? 'Giving one of these takes it out of your deck.' : 'Only in your deck.'}
+            </span>
+          </h2>
+          <div className="merchant__cards">{deckOnly.map(tile)}</div>
+        </section>
+      )}
+    </div>
+  );
+}
+
+/** How many of the chosen copies would come out of the deck (spares go first). */
+const fromDeck = (b: Build, picked: string[]) =>
+  [...new Set(picked)].reduce(
+    (k, n) => k + Math.max(0, picked.filter((g) => g === n).length - (b.side[n] ?? 0)),
+    0,
+  );
+
 /** The wishing well and the mirror: choose one of your cards. */
 function CardPick({
   run,
@@ -991,20 +1077,14 @@ function CardPick({
             : 'The copy goes into your collection.'}
         </p>
       </div>
-      <div className="merchant__pay">
-        {cards.map((name) => (
-          <button
-            key={name}
-            className="merchant__card"
-            onClick={(e) => choose(e.currentTarget, mode, () => onPick(name))}
-            onMouseEnter={(e) => setHover({ defId: slug(name), anchor: e.currentTarget })}
-            onMouseLeave={() => setHover(null)}
-          >
-            <img src={imageOf(name)} alt={name} draggable={false} />
-            {owned(b, name) > 1 && <span className="dcard__qty">×{owned(b, name)}</span>}
-          </button>
-        ))}
-      </div>
+      <YourCards
+        build={b}
+        cards={cards}
+        picked={[]}
+        takes={mode === 'well'}
+        onPick={(name, el) => choose(el, mode, () => onPick(name))}
+        onHover={setHover}
+      />
       <div className="gauntlet__actions">
         <button className="btn btn--ghost" onClick={() => onPick(null)}>
           Walk away
@@ -1156,6 +1236,7 @@ function Merchant({
     if (give.length < price && taken < owned(b, name)) setGive([...give, name]);
     else if (i >= 0) setGive(give.filter((_, j) => j !== i));
   };
+  const losing = fromDeck(b, give);
   const hoverProps = (name: string) => ({
     onMouseEnter: (e: React.MouseEvent) => setHover({ defId: slug(name), anchor: e.currentTarget }),
     onMouseLeave: () => setHover(null),
@@ -1190,23 +1271,19 @@ function Merchant({
         ))}
       </div>
       {buy && (
-        <div className="merchant__pay">
-          {yours.map((name) => {
-            const n = give.filter((g) => g === name).length;
-            return (
-              <button
-                key={name}
-                className={`merchant__card ${n ? 'is-on' : ''}`}
-                onClick={() => toggle(name)}
-                {...hoverProps(name)}
-              >
-                <img src={imageOf(name)} alt={name} draggable={false} />
-                {owned(b, name) > 1 && <span className="dcard__qty">×{owned(b, name)}</span>}
-                {n > 0 && <span className="merchant__give">Give{n > 1 ? ` ×${n}` : ''}</span>}
-              </button>
-            );
-          })}
-        </div>
+        <YourCards
+          build={b}
+          cards={yours}
+          picked={give}
+          takes
+          onPick={(name) => toggle(name)}
+          onHover={setHover}
+        />
+      )}
+      {buy && losing > 0 && (
+        <p className="merchant__note">
+          {losing === 1 ? 'One card' : `${losing} cards`} will come out of your deck.
+        </p>
       )}
       <div className="gauntlet__actions">
         {buy && (

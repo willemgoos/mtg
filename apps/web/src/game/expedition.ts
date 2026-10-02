@@ -201,13 +201,16 @@ export const MAX_DIFFICULTY = 7;
 
 /**
  * How hard a fight is, from 1 to 7. Duels climb from 1 on the first floor to
- * 6 on the floor before the final battle, elite fights are two steps above
- * their floor, and the final battle is the top. `floors` is the map's length
- * (maps saved before the map grew are shorter).
+ * 4 on the floor before the final battle, elite fights are two steps above
+ * their floor, and the final battle is the top. Levels 5 and 6 play nearly as
+ * well as the top bot, so only elites reach them and duels stay the easier
+ * road. `floors` is the map's length: maps saved before the map grew (seven
+ * floors) keep their old, steeper curve.
  */
 export function difficultyOf(floor: number, node: MapNode, floors = FLOORS): number {
   if (node.kind === 'boss') return MAX_DIFFICULTY;
-  const duel = 1 + Math.floor((floor * 5) / Math.max(1, floors - 2));
+  const span = floors >= FLOORS ? 3 : 5;
+  const duel = 1 + Math.floor((floor * span) / Math.max(1, floors - 2));
   return Math.min(MAX_DIFFICULTY, duel + (node.kind === 'elite' ? 2 : 0));
 }
 
@@ -1158,8 +1161,11 @@ export function fightOf(r: ExpeditionRun): Fight | null {
   const at = currentNode(r);
   if (!at || r.pending || statusOf(r) !== 'playing') return null;
   if (r.fight) {
-    const as: MapNode = { kind: r.fight.kind === 'duelist' ? 'elite' : 'duel' };
-    const d = difficultyIn(r, at.floor, as);
+    // A duelist fights like an elite; an ambush is a step easier than a duel.
+    const d =
+      r.fight.kind === 'duelist'
+        ? difficultyIn(r, at.floor, { kind: 'elite' })
+        : Math.max(1, difficultyIn(r, at.floor, { kind: 'duel' }) - 1);
     return { opponent: r.fight.opponent, bot: botAt(d), difficulty: d, kind: r.fight.kind };
   }
   if (!at.node.opponent) return null;

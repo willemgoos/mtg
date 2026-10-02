@@ -300,15 +300,16 @@ describe('expedition map', () => {
 });
 
 describe('expedition difficulty', () => {
-  it('climbs from 1 to 6 over the floors, with elites two steps up and the final battle at the top', () => {
+  it('climbs from 1 to 4 for duels, with elites two steps up and the final battle at the top', () => {
     const duel: MapNode = { kind: 'duel' };
     const floors = Array.from({ length: FLOORS - 1 }, (_, f) => f);
-    expect(floors.map((f) => difficultyOf(f, duel))).toEqual([1, 1, 2, 2, 3, 4, 4, 5, 6]);
+    expect(floors.map((f) => difficultyOf(f, duel))).toEqual([1, 1, 1, 2, 2, 2, 3, 3, 4]);
     expect(floors.map((f) => botFor(f, duel))).toEqual(
-      [1, 1, 2, 2, 3, 4, 4, 5, 6].map((d) => `level${d}`),
+      [1, 1, 1, 2, 2, 2, 3, 3, 4].map((d) => `level${d}`),
     );
-    expect(botFor(2, { kind: 'elite' })).toBe('level4');
-    expect(botFor(7, { kind: 'elite' })).toBe('heuristic');
+    expect(botFor(2, { kind: 'elite' })).toBe('level3');
+    expect(botFor(7, { kind: 'elite' })).toBe('level5');
+    expect(botFor(8, { kind: 'elite' })).toBe('level6');
     expect(botFor(FLOORS - 1, { kind: 'boss' })).toBe('heuristic');
   });
 
@@ -749,6 +750,8 @@ describe('expedition events', () => {
     expect(s.run!.pending).toBeNull();
     const f = fightOf(s.run!)!;
     expect(f.kind).toBe('ambush');
+    // A step easier than a duel on its floor, but never below the easiest.
+    expect(f.difficulty).toBe(Math.max(1, difficultyOf(0, { kind: 'duel' }) - 1));
     expect(f.opponent).not.toBe(deck);
     const lost = fight(s, 'loss').run!;
     expect(lost.livesLost).toBe(0);
