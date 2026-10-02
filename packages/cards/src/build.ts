@@ -82,6 +82,12 @@ export const KEYWORDS_AS_ABILITIES = new Set([
   'Cycling',
   'Crew',
   'Cosmic Awareness',
+  'Metalcraft',
+  'Monstrosity',
+  'Lieutenant',
+  'AV Bead',
+  'Communication Bead',
+  'Prime Bead',
 ]);
 
 const BASIC_MANA: Record<string, ManaType> = {

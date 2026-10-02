@@ -305,6 +305,20 @@ export function castSpell(
   payMana(ctx, payment);
   if (d.types.includes('Creature')) scryForAncestry(ctx, player, d, payment);
   ((ctx.s.turn.castDefs ??= { p1: [], p2: [] })[player] ??= []).push(o.defId);
+  // "When you cast this spell" (Ancestral Communion, Hatut Zeraze Strike Force).
+  d.abilities.forEach((a, i) => {
+    if (a.kind !== 'triggered' || a.trigger.on !== 'castSelf') return;
+    if (!checkCondition(ctx, a.condition, player, o)) return;
+    ctx.s.pendingTriggers.push({
+      source: { id: o.id, zcc: o.zcc },
+      sourceDefId: o.defId,
+      abilityIndex: i,
+      controller: player,
+      subject: { id: o.id, zcc: o.zcc },
+    });
+  });
+  // Conduit of Worlds: a card cast this way stops further spells this turn.
+  if (choice.via === 'conduit') (ctx.s.turn.spellLock ??= []).push(player);
   const cast = (ctx.s.turn.spellsCast ??= { p1: 0, p2: 0 });
   emit(ctx, { type: 'spellCast', id: card, player, nth: ++cast[player] });
   noteTargets(ctx, player, targets);
@@ -404,6 +418,9 @@ export function activateAbility(
   if (a.cost.tapTokens)
     for (const id of tokensToTap(ctx, player, source).slice(0, a.cost.tapTokens)) tap(ctx, id);
   if (a.cost.crew) for (const id of crewFor(ctx, player, source, a.cost.crew) ?? []) tap(ctx, id);
+  if (a.cost.sacrificeArtifacts)
+    for (const id of artifactsToSacrifice(ctx, player, a.cost.sacrificeArtifacts) ?? [])
+      sacrificePermanent(ctx, id);
   const sacrificedPower = sacrifice ? power(ctx, sacrifice) : undefined;
   if (sacrifice) sacrificePermanent(ctx, sacrifice);
   changeLife(ctx, player, -wardLife(ctx, player, targets) - (a.cost.life ?? 0));
@@ -463,6 +480,10 @@ export function pushTrigger(
   );
   if (manaValue(cost) > 0) payMana(ctx, planPayment(ctx, t.controller, cost, undefined));
   const ability = triggeredAbility(ctx, t);
+  if (mode !== undefined && ability.modesOnce) {
+    const src = ctx.s.objects[t.source.id];
+    if (src) src.usedModes = [...(src.usedModes ?? []), mode];
+  }
   const life = ability.targets.length && ability.lifeCost ? ability.lifeCost : 0;
   changeLife(ctx, t.controller, -wardLife(ctx, t.controller, targets) - life);
   payWardExtras(ctx, t.controller, targets);
@@ -568,6 +589,8 @@ export function resolveTop(ctx: Ctx): boolean {
     emit(ctx, { type: 'resolved', id: item.id });
     moveObject(ctx, item.id, 'battlefield', { controller: item.controller });
     if (item.kicked) o.kicked = true;
+    // Royal Talon Fighter Jet: "enters with X +1/+1 counters".
+    if (d.entersWithXCounters && item.x) addCounters(ctx, o.id, item.x);
     if (d.entersWithCounters && checkCondition(ctx, d.entersWithCountersIf, item.controller, o))
       addCounters(ctx, o.id, d.entersWithCounters);
     if (host) attachAura(ctx, o.id, host);
@@ -699,6 +722,18 @@ export function crewFor(
     total += c.power;
   }
   return total >= n ? out : null;
+}
+
+/** Metalwork Colossus: the N least useful artifacts `player` controls (tokens, then the cheapest), or null. */
+export function artifactsToSacrifice(ctx: Ctx, player: PlayerId, n: number): ObjectId[] | null {
+  const artifacts = ctx.s.battlefield
+    .filter((id) => obj(ctx, id).controller === player && def(ctx, id).types.includes('Artifact'))
+    .sort(
+      (a, b) =>
+        Number(obj(ctx, b).isToken) - Number(obj(ctx, a).isToken) ||
+        manaValue(def(ctx, a).manaCost) - manaValue(def(ctx, b).manaCost),
+    );
+  return artifacts.length >= n ? artifacts.slice(0, n) : null;
 }
 
 export function tokensToTap(ctx: Ctx, player: PlayerId, source?: ObjectId): ObjectId[] {

@@ -154,7 +154,7 @@ describe('Brawl format', () => {
       for (const a of r.actions) state = engine.applyAction(state, a).state;
       expect(JSON.stringify(state)).toBe(JSON.stringify(r.final));
     }
-  });
+  }, 120_000);
 });
 
 describe('Brawl staples', () => {

@@ -153,6 +153,7 @@ export function startTurn(ctx: Ctx, player: PlayerId): void {
   s.turn.foodsSacrificed = { p1: 0, p2: 0 };
   delete s.turn.hexproofPlayers;
   delete s.turn.osteomancer;
+  delete s.turn.spellLock;
   delete s.turn.instantsSorceriesCast;
   delete s.turn.castDefs;
   for (const q of Object.values(s.players)) q.attackedThisTurn = false;
@@ -219,6 +220,11 @@ function enterStep(ctx: Ctx, step: Step): void {
 
     case 'combatDamage':
       dealCombatDamage(ctx, false);
+      return givePriority(ctx, ap);
+
+    case 'end':
+      // The monarch draws a card at the beginning of their end step (drawn here, not on the stack).
+      if (s.monarch === ap) drawCard(ctx, ap);
       return givePriority(ctx, ap);
 
     case 'cleanup': {

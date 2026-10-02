@@ -4706,3 +4706,21 @@ button {
   top: 0;
   translate: 0 0;
 }
+
+/* The monarch's crown, on top of the portrait. */
+.badge__crown {
+  position: absolute;
+  top: -0.875rem;
+  left: 50%;
+  translate: -50% 0;
+  width: 1.75rem;
+  filter: drop-shadow(0 0.125rem 0.25rem rgba(0, 0, 0, 0.7));
+}
+
+.badge__crown svg {
+  display: block;
+  width: 100%;
+  fill: #e2b53a;
+  stroke: #6b4c0c;
+  stroke-width: 1;
+}

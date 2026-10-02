@@ -76,7 +76,15 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
       const st = a.effect;
       if (st.kind === 'cantBlock') cantBlock = true;
       else if (st.kind === 'cantBeBlocked') cantBeBlocked = true;
-      else if (st.kind === 'boost') {
+      // Bast: "can't attack or block unless you control three or more creatures".
+      else if (
+        st.kind === 'while' &&
+        st.cantAttackOrBlock &&
+        checkCondition(ctx, st.condition, o.controller, o)
+      ) {
+        cantAttack = cantBlock = true;
+        continue;
+      } else if (st.kind === 'boost') {
         power += countOf(ctx, o.controller, st.power, true, id);
         toughness += countOf(ctx, o.controller, st.toughness, true, id);
       } else if (st.kind === 'while' || st.kind === 'whileLife') {
@@ -116,6 +124,7 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
         if (st.kind === 'attached') {
           if (src.attachedTo !== id) continue;
           if (st.cantAttackOrBlock) cantAttack = cantBlock = true;
+          if (st.cantBeBlocked) cantBeBlocked = true;
           if (st.loseKeywords?.length) {
             granted ??= new Set(keywords);
             for (const k of st.loseKeywords) removed.add(k);
@@ -252,6 +261,13 @@ export function countOf(
   }
   if (a.count === 'opponentCreaturesExiledThisTurn')
     return ctx.s.turn.creaturesExiled?.[player === 'p1' ? 'p2' : 'p1'] ?? 0;
+  // Wakanda Forever (9c).
+  if (a.count === 'creaturesOnBattlefield') return creaturesOnBattlefield(ctx).length;
+  if (a.count === 'totalManaValue')
+    return ctx.s.battlefield
+      .filter((id) => obj(ctx, id).controller === player && matchesFilter(ctx, id, a.filter))
+      .reduce((n, id) => n + manaValue(def(ctx, id).manaCost), 0);
+  if (a.count === 'commanderCasts') return ctx.s.players[player].commanderCasts ?? 0;
   if (a.count === 'permanentsYouControl')
     return ctx.s.battlefield.filter(
       (id) =>

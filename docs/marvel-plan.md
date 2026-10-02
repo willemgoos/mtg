@@ -237,6 +237,23 @@ Named abilities such as "Radar Sense" or "Street Justice" are just labels with n
 - Captain Marvel copies +1/+1 counters only.
 - Avengers Tower's and Plaza of Heroes' restricted mana can't pay for abilities.
 
+9c (Wakanda Forever):
+
+- The monarch is new (not in the original plan): the end-step draw and taking it with combat damage happen
+  directly, not as triggers on the stack. A crown marks the monarch's portrait.
+- Okoye's double strike and trample apply from the beginning of combat when an opponent is the monarch, rather than
+  when the creature attacks the monarch.
+- Vibranium mana can't pay for abilities either (only artifact spells).
+- Gilded Lotus and Coveted Jewel make three mana that may be of different colours.
+- Heart-Shaped Herb returns the creature by blinking it (no "dies" triggers).
+- Wakanda Forever! puts the six revealed cards into the graveyard first, then picks from there.
+- Ancestral Communion's copy takes another legal target automatically.
+- King Solomon's Frogs' "if you cast it" isn't checked.
+- Divine Visitation only replaces tokens from token-making effects, not token copies.
+- Conduit of Worlds can only make permanent cards castable (as printed), and its "no more spells" lasts the turn.
+- Bot win rates: Wakanda Forever is behind (6–14 against Avengers, 8–12 against Mabel's Militia over 20 games); to
+  revisit with the 9e arena tuning.
+
 ### Stream B
 
 (Filled in as sub-phases ship.)

@@ -369,6 +369,13 @@ export function PlayerBadge({
         onClick={onClick}
       >
         <LifeCounter life={ps.life} />
+        {view.monarch === player && (
+          <span className="badge__crown" title="The monarch: draws a card at their end step">
+            <svg viewBox="0 0 24 16" aria-hidden>
+              <path d="M2 14 L4 4 L9 9 L12 2 L15 9 L20 4 L22 14 Z" />
+            </svg>
+          </span>
+        )}
       </div>
       <PhaseStrip phases={PHASES.slice(3)} step={step} />
       {command}

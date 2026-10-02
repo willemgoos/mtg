@@ -55,6 +55,8 @@ export type Keyword =
   | 'ward'
   /** Ward {1}, granted by another permanent (Long River Lurker, Innkeeper's Talent). */
   | 'wardOne'
+  /** Can't be the target of spells or abilities (Whispersilk Cloak). */
+  | 'shroud'
   /** Changeling: every creature type. */
   | 'changeling';
 
@@ -131,6 +133,8 @@ export interface CardDefinition {
   costReductionIfTarget?: { filter: CardFilter; amount: number };
   /** What it does when cast with flashback, if different ("if this spell was cast from a graveyard"). */
   flashbackSpell?: SpellDef;
+  /** It enters with X +1/+1 counters (Royal Talon Fighter Jet). */
+  entersWithXCounters?: boolean;
   /** Costs {amount} less while the condition holds (Heroic Return, Avenge). */
   costReductionIf?: { condition: ConditionDef; amount: number };
   /** "You may sacrifice any number of nonland permanents. This spell costs {1} less for each" (Rottenmouth Viper). */
@@ -215,6 +219,8 @@ export type AbilityDef =
       modes?: SpellDef[];
       /** "This ability triggers only once each turn." */
       oncePerTurn?: boolean;
+      /** "Choose one that hasn't been chosen" (Kimoyo Beads). */
+      modesOnce?: boolean;
       /** "You may pay ... and N life": life paid with `cost` (Zoraline). */
       lifeCost?: number;
       /** Triggers while the card is in its owner's graveyard (Persistent Marshstalker). */
@@ -253,6 +259,9 @@ export interface CostDef {
   // Cycling.
   /** Discard this card from your hand. */
   discardSelf?: boolean;
+  // Wakanda Forever (9c).
+  /** Sacrifice this many artifacts (the engine picks the least useful): Metalwork Colossus. */
+  sacrificeArtifacts?: number;
   // Avengers Assemble (9b).
   /** Crew N: tap untapped creatures you control with total power N or more (the engine picks them). */
   crew?: number;
@@ -346,6 +355,17 @@ export type TriggerDef =
   | { on: 'sacrificed' }
   /** Whenever you sacrifice a permanent matching the filter (Camellia: a Food). */
   | { on: 'youSacrifice'; filter: CardFilter }
+  // Wakanda Forever (9c).
+  /** Whenever the creature this Equipment is attached to attacks. */
+  | { on: 'equippedAttacks' }
+  /** Whenever a creature an opponent controls (matching the filter) attacks you ("that creature"): Storm. */
+  | { on: 'opponentCreatureAttacks'; filter?: CardFilter }
+  /** Whenever an opponent attacks you with `min` or more creatures (Everett K. Ross). */
+  | { on: 'opponentAttacks'; min: number }
+  /** Whenever one or more creatures an opponent controls attack you and aren't blocked (Coveted Jewel). */
+  | { on: 'opponentAttackersUnblocked' }
+  /** "When you cast this spell": triggers from the stack (Ancestral Communion, Hatut Zeraze Strike Force). */
+  | { on: 'castSelf' }
   // Avengers Assemble (9b).
   /** Whenever this creature is dealt damage ("that much"): Hercules. */
   | { on: 'dealtDamage' }
@@ -422,6 +442,15 @@ export type ConditionDef =
   | { kind: 'any'; of: ConditionDef[] }
   /** The condition doesn't hold. */
   | { kind: 'not'; condition: ConditionDef }
+  // Wakanda Forever (9c).
+  /** You are the monarch; or there is no monarch; or an opponent is (the creature attacks the monarch). */
+  | { kind: 'monarch'; who: 'you' | 'none' | 'opponent' }
+  /** This permanent is monstrous (Fleecemane Lion). */
+  | { kind: 'monstrous' }
+  /** It's your turn, in one of these steps (Scourglass: upkeep; Loyal Retainers: before attackers). */
+  | { kind: 'yourStep'; steps: Step[] }
+  /** You've cast a spell this turn (Conduit of Worlds, negated). */
+  | { kind: 'youCastSpellThisTurn' }
   // Avengers Assemble (9b).
   /** An opponent has cast a spell this turn (Captain Mar-Vell). */
   | { kind: 'opponentCastSpellThisTurn' }
@@ -573,7 +602,14 @@ export type Amount =
   /** Named counters on the source (as it last was, if it left): Hoarder's Overflow's stash counters. */
   | { namedCountersOnSource: string }
   /** The value chosen for X (times `times`, plus `plus`). */
-  | { x: true; times?: number; plus?: number };
+  | { x: true; times?: number; plus?: number }
+  // Wakanda Forever (9c).
+  /** Creatures on the battlefield (Vanquish the Horde). */
+  | { count: 'creaturesOnBattlefield' }
+  /** Total mana value of permanents you control matching the filter (Metalwork Colossus). */
+  | { count: 'totalManaValue'; filter: CardFilter }
+  /** Times you've cast your commander from the command zone (Hatut Zeraze Strike Force). */
+  | { count: 'commanderCasts' };
 
 export type EffectDef =
   | { kind: 'may'; effects: EffectDef[]; cost?: ManaCost }
@@ -676,7 +712,8 @@ export type EffectDef =
    */
   | { kind: 'sacrificeSeveral'; count: number; filter: CardFilter; then: EffectDef[] }
   /** Copy a spell on the stack (`count` times): a target spell, or the spell that triggered this. */
-  | { kind: 'copySpell'; what: Ref; count?: Amount }
+  /** `retarget`: each copy gets another legal target if there is one (Ancestral Communion). */
+  | { kind: 'copySpell'; what: Ref; count?: Amount; retarget?: boolean }
   /** Each player sacrifices a creature of their choice (Season of Loss). */
   | { kind: 'eachPlayerSacrifices' }
   /** Until the end of your next turn, you have this triggered ability (Season of the Bold). */
@@ -693,6 +730,8 @@ export type EffectDef =
       exileAtEndStep?: boolean;
       /** Not of legendary permanents (Coiling Rebirth). */
       nonlegendary?: boolean;
+      /** "Except the token isn't legendary", and it gains haste (Helm of the Host). */
+      notLegendaryWithHaste?: boolean;
     }
   /** Choose a color (or a creature type) for the source, as it enters. */
   | { kind: 'chooseColor' }
@@ -703,8 +742,11 @@ export type EffectDef =
   | { kind: 'lookTakeRestGraveyard'; count: Amount; take: Amount }
   /** Reveal the top card and put it into your hand; lose life equal to its mana value (Darkstar Augur). */
   | { kind: 'revealTopToHandLoseLife' }
-  /** Look at the top card; if it's a land you may put it onto the battlefield tapped, otherwise into your hand (Fecund Greenshell). */
-  | { kind: 'topCardLandOrHand' }
+  /**
+   * Look at the top card; if it's a land you may put it onto the battlefield tapped, otherwise into your
+   * hand (Fecund Greenshell). `permanent`: any permanent card, untapped (N'Yami-Class Mother Ship).
+   */
+  | { kind: 'topCardLandOrHand'; permanent?: boolean }
   /** Deal damage to each player equal to the nonbasic lands they control (Sunspine Lynx). */
   | { kind: 'damageEachPlayerByNonbasics' }
   /** You (and permanents you control) gain hexproof until end of turn (Dawn's Truce). */
@@ -912,6 +954,8 @@ export type EffectDef =
       forOpponent?: boolean;
       /** Each enters with this many +1/+1 counters. */
       counters?: number;
+      /** Created under the controller of this target instead (Beast Within: "its controller"). */
+      forControllerOf?: number;
     }
   /** Return all land cards from your graveyard to the battlefield tapped (World Shaper). */
   | { kind: 'returnLandsFromGraveyard' }
@@ -919,6 +963,32 @@ export type EffectDef =
   /** The controller scries N (asks them to order the top cards). */
   | { kind: 'scry'; amount: number }
   | { kind: 'custom'; handler: string; params?: Record<string, unknown> }
+  // Wakanda Forever (9c).
+  /** `who` becomes the monarch (draws at their end step; combat damage to them takes it). */
+  | { kind: 'becomeMonarch'; who: 'controller' | 'eachOpponent' }
+  /** Exile it until an opponent of the source's controller becomes the monarch (Palace Jailer). */
+  | { kind: 'exileUntilOpponentMonarch'; what: Ref }
+  /** Monstrosity N: if the source isn't monstrous, N +1/+1 counters and it becomes monstrous. */
+  | { kind: 'monstrosity'; amount: number }
+  /** If it dies this turn, these happen (Fight for the Throne). */
+  | { kind: 'whenDiesThisTurn'; what: Ref; effects: EffectDef[] }
+  /**
+   * Reveal the top N: you may put a permanent card onto the battlefield (with a
+   * named counter), then one into your hand; the rest go to the graveyard (Wakanda Forever!).
+   */
+  | { kind: 'revealPutAndTake'; count: number; filter: CardFilter; counter?: string }
+  /** Choose among these cards (still in the graveyard) one to put somewhere (follows revealPutAndTake). */
+  | {
+      kind: 'pickFromCards';
+      cards: ObjectId[];
+      filter: CardFilter;
+      to: 'hand' | 'battlefield';
+      counter?: string;
+    }
+  /** Its controller gains control of it for good, and untaps it (Coveted Jewel). */
+  | { kind: 'giveControl'; what: Ref; to: 'eachOpponent' }
+  /** Until end of turn you may cast a target permanent card from your graveyard, then no more spells (Conduit of Worlds). */
+  | { kind: 'castFromGraveyardThisTurn'; what: Ref }
   // Avengers Assemble (9b).
   /** Exile the top N cards of your library face down, remembered as exiled with the source (Scarlet Witch). */
   | { kind: 'exileTopWithSource'; count: number }
@@ -981,6 +1051,10 @@ export type StaticDef =
       control?: boolean;
       /** Base power and toughness (Hulkbuster Armor: 9/9). */
       basePT?: [number, number];
+      /** Can't be blocked (Whispersilk Cloak). */
+      cantBeBlocked?: boolean;
+      /** Damage to it is prevented and becomes +1/+1 counters (Panther Habit). */
+      damageToCounters?: boolean;
     }
   /** All creatures able to block this creature do so (Prized Unicorn). */
   | { kind: 'lure' }
@@ -996,6 +1070,8 @@ export type StaticDef =
       toughness: number;
       keywords?: Keyword[];
       cantBeBlocked?: boolean;
+      /** Can't attack or block while the condition holds (Bast). */
+      cantAttackOrBlock?: boolean;
     }
   /** Instant and sorcery spells you cast cost {N} less (Archmage of Runes). */
   | { kind: 'instantsAndSorceriesCostLess'; amount: number }
@@ -1051,7 +1127,16 @@ export type StaticDef =
   /** Creatures your opponents control matching nothing in particular have base toughness N (Maha). */
   | { kind: 'opponentsBaseToughness'; toughness: number }
   /** Creatures your opponents control that would die are exiled instead (Vren). */
-  | { kind: 'exileOpponentCreaturesInstead' };
+  | { kind: 'exileOpponentCreaturesInstead' }
+  // Wakanda Forever (9c).
+  /** Prevent N of the damage sources your opponents control would deal to you (Heart-Shaped Herb). */
+  | { kind: 'preventDamageToYou'; amount: number }
+  /** Creature tokens you would create are this token instead (Divine Visitation: 4/4 Angels). */
+  | { kind: 'creatureTokensBecome'; token: CardDefId }
+  /** You may play lands from your graveyard (Conduit of Worlds). */
+  | { kind: 'playLandsFromGraveyard' }
+  /** Creatures matching the filter can't attack you while the condition holds (Queen Mother Ramonda). */
+  | { kind: 'cantAttackYou'; filter: CardFilter; condition?: ConditionDef };
 
 export type CardDb = ReadonlyMap<CardDefId, CardDefinition>;
 
@@ -1145,6 +1230,15 @@ export interface GameObject {
   // Brawl.
   /** A commander: the zone change (zcc) at which its owner was last asked to move it to the command zone. */
   commandOffered?: number;
+  // Wakanda Forever (9c).
+  /** It's monstrous (Fleecemane Lion). */
+  monstrous?: boolean;
+  /** A token copy that isn't legendary (Helm of the Host). */
+  nonlegendary?: boolean;
+  /** Exiled until an opponent of this player becomes the monarch (Palace Jailer). */
+  jailedBy?: PlayerId;
+  /** Kimoyo Beads: the modes of its triggered ability already chosen. */
+  usedModes?: number[];
   // Avengers Assemble (9b).
   /** The turn it first became tapped (Captain America, Living Legend). */
   firstTappedTurn?: number;
@@ -1284,6 +1378,8 @@ export interface TurnState {
   instantsSorceriesCast?: Record<PlayerId, number>;
   /** Players who may cast creature spells from their graveyard by foraging this turn (Osteomancer Adept). */
   osteomancer?: PlayerId[];
+  /** Players who can't cast more spells this turn (Conduit of Worlds). */
+  spellLock?: PlayerId[];
   /** Players with hexproof until end of turn (Dawn's Truce). */
   hexproofPlayers?: PlayerId[];
 }
@@ -1660,6 +1756,8 @@ export interface GameState {
   delayed?: DelayedTrigger[];
   /** Brawl: 25 life, a commander each, the first mulligan free. */
   format?: 'brawl';
+  /** The monarch (Wakanda Forever). */
+  monarch?: PlayerId;
   /** Phased-out permanents (treated as though they don't exist), and whose untap step brings them back. */
   phasedOut?: { id: ObjectId; player: PlayerId }[];
   /** Exactly one player is always being asked something (or the game is over). */
@@ -1705,7 +1803,7 @@ export type Action =
       /** Cast without paying its mana cost (a 'castFree' decision). */
       free?: boolean;
       /** Cast from the graveyard through Festival of Embers or Osteomancer Adept. */
-      via?: 'festival' | 'osteomancer';
+      via?: 'festival' | 'osteomancer' | 'conduit';
       /** Mockingbird: the creature to enter as a copy of. */
       copyOf?: ObjectId;
       /** Rottenmouth Viper: permanents sacrificed to make it cheaper. */
@@ -1761,6 +1859,8 @@ export type GameEvent =
   | { type: 'damageDealt'; source: ObjectId; to: TargetChoice; amount: number; combat: boolean }
   | { type: 'lifeChanged'; player: PlayerId; delta: number; life: number }
   | { type: 'tapped'; id: ObjectId; first?: boolean }
+  /** Wakanda Forever: a new monarch. */
+  | { type: 'monarchChanged'; player: PlayerId }
   /** Vision: a permanent phased out or back in. */
   | { type: 'phased'; id: ObjectId; in: boolean }
   | { type: 'untapped'; id: ObjectId }

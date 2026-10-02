@@ -72,7 +72,8 @@ function extraLegends(ctx: Ctx): ObjectId[] {
   const newest = new Map<string, ObjectId>();
   const out: ObjectId[] = [];
   for (const id of ctx.s.battlefield) {
-    if (!def(ctx, id).supertypes.includes('Legendary')) continue;
+    // Helm of the Host's copies aren't legendary.
+    if (!def(ctx, id).supertypes.includes('Legendary') || obj(ctx, id).nonlegendary) continue;
     const o = obj(ctx, id);
     const key = `${o.controller}:${o.defId}`;
     const prev = newest.get(key);

@@ -313,6 +313,9 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
   if (from === 'graveyard') (ctx.s.turn.leftGraveyard ??= { p1: 0, p2: 0 })[o.owner]++;
   delete o.targetedByControllerTurn;
   delete o.firstTappedTurn;
+  delete o.monstrous;
+  delete o.usedModes;
+  if (from === 'exile') delete o.jailedBy;
   // Damage sources are remembered as it dies (Hawkeye), forgotten as it enters.
   if (to === 'battlefield') delete o.damagedBy;
   delete o.blank;

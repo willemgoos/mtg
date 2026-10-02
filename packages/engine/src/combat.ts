@@ -8,6 +8,7 @@ import {
 } from './characteristics.ts';
 import { type Ctx, def, obj, other } from './context.ts';
 import { damageSourceFor, dealDamage, type DamageSource } from './effects.ts';
+import { checkCondition } from './triggers.ts';
 import type { Attacker, ObjectId, PlayerId, TargetChoice } from './types.ts';
 
 export function canAttack(ctx: Ctx, id: ObjectId): boolean {
@@ -16,7 +17,26 @@ export function canAttack(ctx: Ctx, id: ObjectId): boolean {
     return false;
   const c = characteristics(ctx, id);
   if (!c.types.includes('Creature') || c.keywords.has('defender') || c.cantAttack) return false;
+  if (cantAttackDefender(ctx, id)) return false;
   return !o.summoningSick || c.keywords.has('haste');
+}
+
+/** Queen Mother Ramonda: "creatures with power 2 or less can't attack you" while you're the monarch. */
+function cantAttackDefender(ctx: Ctx, id: ObjectId): boolean {
+  const defender = obj(ctx, id).controller === 'p1' ? 'p2' : 'p1';
+  for (const src of ctx.s.battlefield) {
+    const so = obj(ctx, src);
+    if (so.controller !== defender) continue;
+    for (const a of def(ctx, src).abilities)
+      if (
+        a.kind === 'static' &&
+        a.effect.kind === 'cantAttackYou' &&
+        checkCondition(ctx, a.effect.condition, defender, so) &&
+        matchesFilter(ctx, id, a.effect.filter, src)
+      )
+        return true;
+  }
+  return false;
 }
 
 export function possibleAttackers(ctx: Ctx): ObjectId[] {

@@ -26,12 +26,16 @@ import {
   tap,
   untap,
 } from './context.ts';
+import { setMonarch } from './monarch.ts';
+import { spellOnStack } from './spells.ts';
+import { targetCombos } from './targets.ts';
 import { phaseOut } from './phasing.ts';
 import { foodsOf } from './forage.ts';
 import { canPayFrom, manaSources, manaValue } from './mana.ts';
 import { shuffleInPlace } from './rng.ts';
 import { checkCondition } from './triggers.ts';
 import type {
+  CardDefId,
   ObjectRef,
   Amount,
   EffectSource,
@@ -72,6 +76,11 @@ export function dealDamage(
   if (amount <= 0) return;
   to = redirected(ctx, to);
   amount += damageBonus(ctx, src, to, combat);
+  amount = prevented(ctx, src, to, amount);
+  if (amount <= 0) return;
+  // The monarch: combat damage to them makes the attacker's controller the monarch.
+  if (combat && 'player' in to && ctx.s.monarch === to.player && src.controller !== to.player)
+    setMonarch(ctx, src.controller);
   if ('player' in to) {
     emit(ctx, { type: 'damageDealt', source: src.id, to, amount, combat });
     changeLife(ctx, to.player, -amount);
@@ -109,6 +118,60 @@ function redirected(ctx: Ctx, to: TargetChoice): TargetChoice {
     return { object: { id: host.id, zcc: host.zcc } };
   }
   return to;
+}
+
+/**
+ * Prevention (Wakanda Forever): Heart-Shaped Herb prevents 1 of each opponent's
+ * damage to you; Panther Habit turns damage to its creature into counters.
+ * Returns what's left.
+ */
+function prevented(ctx: Ctx, src: DamageSource, to: TargetChoice, amount: number): number {
+  if (ctx.s.battlefield.some((id) => hasStaticKind(ctx, id, 'damageCantBePrevented')))
+    return amount;
+  if ('player' in to) {
+    if (src.controller === to.player) return amount;
+    for (const id of ctx.s.battlefield) {
+      if (obj(ctx, id).controller !== to.player) continue;
+      for (const a of def(ctx, id).abilities)
+        if (a.kind === 'static' && a.effect.kind === 'preventDamageToYou')
+          amount -= a.effect.amount;
+    }
+    return amount;
+  }
+  const host = to.object.id;
+  const habit = ctx.s.battlefield.some(
+    (id) =>
+      obj(ctx, id).attachedTo === host &&
+      def(ctx, id).abilities.some(
+        (a) => a.kind === 'static' && a.effect.kind === 'attached' && a.effect.damageToCounters,
+      ),
+  );
+  if (!habit) return amount;
+  addCounters(ctx, host, amount);
+  return 0;
+}
+
+const hasStaticKind = (ctx: Ctx, id: ObjectId, kind: string) =>
+  def(ctx, id).abilities.some((a) => a.kind === 'static' && a.effect.kind === kind);
+
+const PERMANENT_TYPES: readonly string[] = [
+  'Artifact',
+  'Creature',
+  'Enchantment',
+  'Land',
+  'Planeswalker',
+  'Battle',
+];
+
+/** Divine Visitation: the token a player creates instead of a creature token. */
+function replacedToken(ctx: Ctx, player: PlayerId, token: CardDefId): CardDefId {
+  if (!defOf(ctx, token).types.includes('Creature')) return token;
+  for (const id of ctx.s.battlefield) {
+    if (obj(ctx, id).controller !== player) continue;
+    for (const a of def(ctx, id).abilities)
+      if (a.kind === 'static' && a.effect.kind === 'creatureTokensBecome') return a.effect.token;
+  }
+  return token;
 }
 
 /** Extra damage from "deals that much damage plus N instead" effects. */
@@ -399,7 +462,9 @@ export function runEffects(
       e.kind === 'castFree' ||
       e.kind === 'sacrificeSeveral' ||
       e.kind === 'portent' ||
-      e.kind === 'exileUntilNonlandCastByDiscard'
+      e.kind === 'exileUntilNonlandCastByDiscard' ||
+      e.kind === 'revealPutAndTake' ||
+      e.kind === 'pickFromCards'
     ) {
       const lib = ctx.s.players[es.controller].library;
       const { controller, source, sourceDefId, targets, lkiPower, subject, amount, chosen, x } = es;
@@ -481,6 +546,32 @@ export function runEffects(
           count: e.count,
           then: e.then,
           resume,
+          thenPriority,
+        };
+      } else if (e.kind === 'revealPutAndTake' || e.kind === 'pickFromCards') {
+        // Wakanda Forever!: the revealed cards go to the graveyard first; the picks come from there.
+        const cards = e.kind === 'pickFromCards' ? e.cards : lib.slice(0, e.count);
+        if (e.kind === 'revealPutAndTake') for (const id of cards) moveObject(ctx, id, 'graveyard');
+        const options = cards.filter(
+          (id) => ctx.s.objects[id]?.zone === 'graveyard' && cardMatches(ctx, id, e.filter),
+        );
+        const then: EffectDef[] =
+          e.kind === 'revealPutAndTake'
+            ? [{ kind: 'pickFromCards', cards, filter: e.filter, to: 'hand' }]
+            : [];
+        if (options.length === 0) {
+          list.splice(i + 1, 0, ...then);
+          continue;
+        }
+        ctx.s.decision = {
+          kind: 'searchLibrary',
+          player: controller,
+          options,
+          fromGraveyard: true,
+          to: e.kind === 'pickFromCards' ? e.to : 'battlefield',
+          shuffle: false,
+          ...(e.counter ? { counter: e.counter } : {}),
+          resume: { ...resume, effects: [...then, ...resume.effects] },
           thenPriority,
         };
       } else if (e.kind === 'castFree' && e.from) {
@@ -968,9 +1059,17 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
     }
     case 'createToken': {
       const n = resolveAmount(ctx, es, e.count);
-      const owner = e.forOpponent ? other(es.controller) : es.controller;
+      // Beast Within: "Its controller creates ..." (the target's controller, even once it's gone).
+      const target = e.forControllerOf !== undefined ? es.targets[e.forControllerOf] : undefined;
+      const targetOwner =
+        target && 'object' in target ? ctx.s.objects[target.object.id]?.controller : undefined;
+      const owner = targetOwner ?? (e.forOpponent ? other(es.controller) : es.controller);
+      // Divine Visitation: creature tokens are 4/4 Angels instead.
+      const token = replacedToken(ctx, owner, e.token);
       for (let i = 0; i < n; i++) {
-        const t = createObject(ctx, e.token, owner, 'battlefield', true);
+        const t = createObject(ctx, token, owner, 'battlefield', true);
+        // "Then attach this Equipment to it" (Midnight Angel Armor): the token is "it".
+        es.chosen = { id: t.id, zcc: t.zcc };
         if (defOf(ctx, e.token).entersTapped || e.tapped) t.tapped = true;
         if (e.counters) addCounters(ctx, t.id, e.counters);
         if (e.attacking && ctx.s.combat) {
@@ -1178,6 +1277,51 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
       aura.attachedTo = host.id;
       return;
     }
+    // Wakanda Forever (9c).
+    case 'becomeMonarch':
+      setMonarch(ctx, e.who === 'controller' ? es.controller : other(es.controller));
+      return;
+    case 'exileUntilOpponentMonarch':
+      for (const id of objectsOf(ctx, es, e.what)) {
+        moveObject(ctx, id, 'exile');
+        const o = ctx.s.objects[id];
+        if (o) o.jailedBy = es.controller;
+      }
+      return;
+    case 'monstrosity': {
+      const self = es.source && onBattlefield(ctx, es.source);
+      if (!self || self.monstrous) return;
+      addCounters(ctx, self.id, e.amount);
+      self.monstrous = true;
+      return;
+    }
+    case 'whenDiesThisTurn':
+      for (const id of objectsOf(ctx, es, e.what))
+        ctx.s.effects.push({
+          timestamp: newTimestamp(ctx),
+          affected: { id, zcc: obj(ctx, id).zcc },
+          power: 0,
+          toughness: 0,
+          keywords: [],
+          onDies: { effects: e.effects, controller: es.controller, sourceDefId: es.sourceDefId },
+          expires: 'endOfTurn',
+        });
+      return;
+    case 'giveControl':
+      for (const id of objectsOf(ctx, es, e.what)) {
+        const o = obj(ctx, id);
+        o.controller = other(es.controller);
+        untap(ctx, id);
+      }
+      return;
+    case 'castFromGraveyardThisTurn':
+      for (const t of es.targets) {
+        if (!t || !('object' in t)) continue;
+        const o = ctx.s.objects[t.object.id];
+        if (o?.zone === 'graveyard' && o.zcc === t.object.zcc)
+          o.playableUntilTurn = ctx.s.turn.number;
+      }
+      return;
     case 'atNextUpkeep':
       (ctx.s.delayed ??= []).push({
         controller: es.controller,
@@ -1206,6 +1350,8 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
     case 'chooseYourPermanent':
     case 'counterUnlessPays':
     case 'putFromHandOrGraveyard':
+    case 'revealPutAndTake':
+    case 'pickFromCards':
       return; // handled by runEffects
     case 'chooseColor':
     case 'chooseCreatureType':
@@ -1226,6 +1372,13 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
       const item = ref ? findSpell(ctx, ref.id) : undefined;
       if (!item) return;
       const n = e.count !== undefined ? resolveAmount(ctx, es, e.count) : 1;
+      // Ancestral Communion: the copies take other legal targets where there are any.
+      const spec = spellOnStack(defOf(ctx, obj(ctx, item.id).defId), item)?.targets ?? [];
+      const others = e.retarget
+        ? targetCombos(ctx, spec, { controller: es.controller, sourceId: item.id }).filter(
+            (c) => JSON.stringify(c) !== JSON.stringify(item.targets),
+          )
+        : [];
       for (let i = 0; i < n; i++) {
         // A copy is a token-like object on the stack: it ceases to exist as it leaves.
         const copy = createObject(ctx, obj(ctx, item.id).defId, es.controller, 'stack', true);
@@ -1234,7 +1387,7 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
           kind: 'spell',
           id: copy.id,
           controller: es.controller,
-          targets: item.targets,
+          targets: others[i] ?? item.targets,
           ...(item.mode !== undefined ? { mode: item.mode } : {}),
           ...(item.kicked ? { kicked: true } : {}),
           ...(item.x ? { x: item.x } : {}),
@@ -1310,6 +1463,11 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
           const t = createObject(ctx, o.defId, es.controller, 'battlefield', true);
           const pt = e.pt ?? (o.copyPT ? [o.copyPT.power, o.copyPT.toughness] : undefined);
           if (pt) t.copyPT = { power: pt[0], toughness: pt[1] };
+          // Helm of the Host: "except the token isn't legendary. That token gains haste."
+          if (e.notLegendaryWithHaste) {
+            t.nonlegendary = true;
+            t.grantedKeywords = ['haste'];
+          }
           ctx.s.battlefield.push(t.id);
           emit(ctx, {
             type: 'objectMoved',
@@ -1344,9 +1502,11 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
       // "You may put it onto the battlefield": we always do (a simplification).
       const top = ctx.s.players[es.controller].library[0];
       if (!top) return;
-      if (def(ctx, top).types.includes('Land')) {
+      const types = def(ctx, top).types;
+      const permanent = types.some((t) => PERMANENT_TYPES.includes(t));
+      if (e.permanent ? permanent : types.includes('Land')) {
         moveObject(ctx, top, 'battlefield', { controller: es.controller });
-        obj(ctx, top).tapped = true;
+        if (!e.permanent) obj(ctx, top).tapped = true;
       } else moveObject(ctx, top, 'hand');
       return;
     }

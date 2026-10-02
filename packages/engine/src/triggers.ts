@@ -35,6 +35,15 @@ export function checkCondition(
   subject?: GameObject,
 ): boolean {
   if (!c) return true;
+  // Wakanda Forever (9c).
+  if (c.kind === 'monarch') {
+    const m = ctx.s.monarch;
+    return c.who === 'none' ? !m : c.who === 'you' ? m === controller : !!m && m !== controller;
+  }
+  if (c.kind === 'monstrous') return !!self?.monstrous;
+  if (c.kind === 'youCastSpellThisTurn') return (ctx.s.turn.spellsCast?.[controller] ?? 0) > 0;
+  if (c.kind === 'yourStep')
+    return ctx.s.turn.activePlayer === controller && c.steps.includes(ctx.s.turn.step);
   // Avengers Assemble (9b).
   if (c.kind === 'opponentCastSpellThisTurn')
     return (ctx.s.turn.spellsCast?.[other(controller)] ?? 0) > 0;
@@ -486,6 +495,26 @@ function detect(ctx: Ctx, ev: GameEvent): void {
           return o.controller === ap && attackedWith(a.trigger.filter, o.id);
         return false;
       });
+      // Wakanda Forever (9c): Equipment on an attacker; the defending player's "attacks you" triggers.
+      forEachBattlefieldTrigger(ctx, (o, a) => {
+        const t = a.trigger;
+        if (t.on === 'equippedAttacks')
+          return o.attachedTo !== undefined && ev.attackers.includes(o.attachedTo);
+        if (t.on === 'opponentAttacks') return o.controller !== ap && ev.attackers.length >= t.min;
+        return false;
+      });
+      for (const id of ev.attackers) {
+        const attacker = s.objects[id];
+        if (!attacker) continue;
+        forEachBattlefieldTrigger(
+          ctx,
+          (o, a) =>
+            a.trigger.on === 'opponentCreatureAttacks' &&
+            o.controller !== attacker.controller &&
+            matchesFilter(ctx, id, a.trigger.filter, o.id),
+          attacker,
+        );
+      }
       // From the graveyard (Persistent Marshstalker).
       for (const id of s.players[ap].graveyard) {
         const card = s.objects[id]!;
@@ -516,6 +545,16 @@ function detect(ctx: Ctx, ev: GameEvent): void {
         ctx,
         (o, a) => a.trigger.on === 'becomesBlocked' && blocked.has(o.id),
       );
+      // Coveted Jewel: attackers that weren't blocked.
+      const unblocked = (s.combat?.attackers ?? []).filter((a) => !blocked.has(a.id));
+      if (unblocked.length)
+        forEachBattlefieldTrigger(
+          ctx,
+          (o, a) =>
+            a.trigger.on === 'opponentAttackersUnblocked' &&
+            o.controller !== s.turn.activePlayer &&
+            unblocked.some((u) => u.defender === o.controller),
+        );
       // She-Hulk: "whenever a Hero you control becomes blocked" (amount: its blockers).
       for (const id of blocked) {
         const attacker = s.objects[id];
