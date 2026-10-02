@@ -1,4 +1,5 @@
 import { BLOOMBURROW_BEHAVIORS } from './bloomburrow.ts';
+import { MARVEL_BEHAVIORS } from './marvel.ts';
 import { MARVEL_BRAWL_BEHAVIORS } from './marvel-brawl.ts';
 
 /**
@@ -485,6 +486,9 @@ export const LAND_POOL = [
   'Temple of Mystery',
 ];
 
+/** Marvel Super Heroes cards (fronts only: a double-faced card's back comes with it). */
+export const MARVEL_POOL = Object.keys(MARVEL_BEHAVIORS);
+
 export const POOL: { name: string }[] = [
   ...RED_POOL,
   ...GREEN_POOL,
@@ -494,6 +498,7 @@ export const POOL: { name: string }[] = [
   ...OTHER_POOL,
   ...LAND_POOL,
   ...BLOOMBURROW_POOL,
+  ...MARVEL_POOL,
   ...MARVEL_BRAWL_POOL,
 ].map((name) => ({
   name,

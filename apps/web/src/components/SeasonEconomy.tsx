@@ -18,8 +18,8 @@ import {
   type SeasonPackKind,
   type SeasonSave,
 } from '../game/season.ts';
-import { BLOOMBURROW_SHEETS, FOUNDATIONS_PACK_COUNT } from '../game/seasonPacks.ts';
-import type { PackSet } from '../game/expedition.ts';
+import { BLOOMBURROW_SHEETS, FOUNDATIONS_PACK_COUNT, MARVEL_SHEETS } from '../game/seasonPacks.ts';
+import { PACK_SET_NAMES, type PackSet } from '../game/expedition.ts';
 import { artFor, BLURBS } from '../game/deckArt.ts';
 import { packArt } from './PackOpening.tsx';
 
@@ -241,7 +241,7 @@ export function RewardTracks({ save, update }: Omit<Props, 'error'>) {
 
 /* -------------------------------------------------------------- the store */
 
-/** The boosters on sale: Foundations and Bloomburrow. */
+/** The boosters on sale: Foundations, Bloomburrow and Marvel Super Heroes. */
 const BOOSTERS: { kind: SeasonPackKind; set: PackSet; title: string; count: number }[] = [
   { kind: 'foundations', set: 'fdn', title: 'Foundations', count: FOUNDATIONS_PACK_COUNT },
   {
@@ -250,11 +250,17 @@ const BOOSTERS: { kind: SeasonPackKind; set: PackSet; title: string; count: numb
     title: 'Bloomburrow',
     count: Object.values(BLOOMBURROW_SHEETS).reduce((n, sheet) => n + sheet.length, 0),
   },
+  {
+    kind: 'marvel',
+    set: 'msh',
+    title: 'Marvel Super Heroes',
+    count: Object.values(MARVEL_SHEETS).reduce((n, sheet) => n + sheet.length, 0),
+  },
 ];
 
 /** The set of a pack kind (for its art). */
 export const packSetOfKind = (kind: SeasonPackKind): PackSet =>
-  kind === 'bloomburrow' ? 'blb' : 'fdn';
+  kind === 'bloomburrow' ? 'blb' : kind === 'marvel' ? 'msh' : 'fdn';
 
 export function Booster({
   onClick,
@@ -307,6 +313,7 @@ export function SeasonStore({
   const [bought, setBought] = useState<Record<SeasonPackKind, number>>({
     foundations: 0,
     bloomburrow: 0,
+    marvel: 0,
   });
   const list = SEASON_STARTERS.find((d) => d.id === starter);
   const buy = (n: number, kind: SeasonPackKind) => {
@@ -500,7 +507,7 @@ export function SeasonPacks({
   const n = save.packs.length;
   // The next pack to open, by its set.
   const set = packSetOfKind(save.packs[0]?.kind ?? 'foundations');
-  const title = set === 'blb' ? 'Bloomburrow booster' : 'Foundations booster';
+  const title = `${PACK_SET_NAMES[set]} booster`;
   return (
     <div className="spacks">
       <section className="sfeature spacks__stage">

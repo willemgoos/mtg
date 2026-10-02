@@ -137,6 +137,28 @@ export function checkCondition(
   if (c.kind === 'creatureDiedThisTurn') return ctx.s.turn.creaturesDied > 0;
   if (c.kind === 'opponentsTurn') return ctx.s.turn.activePlayer !== controller;
   if (c.kind === 'yourTurn') return ctx.s.turn.activePlayer === controller;
+  // Marvel Super Heroes.
+  if (c.kind === 'sourceEnteredThisTurn') return !!self && self.zoneTurn === ctx.s.turn.number;
+  if (c.kind === 'sourceHasCounter') return (self?.counters?.[c.name] ?? 0) > 0;
+  if (c.kind === 'heroAttackedOrEnteredThisTurn') {
+    const hero = (id: ObjectId) => !!ctx.s.objects[id] && def(ctx, id).subtypes.includes('Hero');
+    return (
+      (ctx.s.turn.activePlayer === controller && (ctx.s.turn.attackers ?? []).some(hero)) ||
+      ctx.s.battlefield.some(
+        (id) =>
+          ctx.s.objects[id]!.controller === controller &&
+          ctx.s.objects[id]!.zoneTurn === ctx.s.turn.number &&
+          hero(id),
+      )
+    );
+  }
+  if (c.kind === 'controlsBasicLand')
+    return ctx.s.battlefield.some(
+      (id) =>
+        ctx.s.objects[id]!.controller === controller &&
+        def(ctx, id).supertypes.includes('Basic') &&
+        def(ctx, id).types.includes('Land'),
+    );
   if (c.kind === 'sourceCounters') return !!self && self.plusOneCounters >= c.min;
   if (c.kind === 'sourceAttacking')
     return !!self && !!ctx.s.combat?.attackers.some((a) => a.id === self.id);
@@ -288,6 +310,28 @@ function spellMatches(
       const n = cast.filter((id) => !defOf(ctx, id).types.includes('Creature')).length;
       return n === (t.filter === 'firstNoncreature' ? 1 : 4);
     }
+    case 'targetsYourCreature':
+      return !!item?.targets.some((x) => {
+        const o = 'object' in x ? ctx.s.objects[x.object.id] : undefined;
+        return (
+          !!o &&
+          o.zone === 'battlefield' &&
+          o.controller === self.controller &&
+          def(ctx, o.id).types.includes('Creature')
+        );
+      });
+    case 'instantOrSorceryTargetingArtifactOrLand':
+      return (
+        (spell.types.includes('Instant') || spell.types.includes('Sorcery')) &&
+        !!item?.targets.some((x) => {
+          const o = 'object' in x ? ctx.s.objects[x.object.id] : undefined;
+          return (
+            !!o &&
+            o.zone === 'battlefield' &&
+            (def(ctx, o.id).types.includes('Artifact') || def(ctx, o.id).types.includes('Land'))
+          );
+        })
+      );
     case 'firstOfItsKind': {
       // Alania: the first instant, the first sorcery, or the first Otter spell other than itself.
       const cast = (ctx.s.turn.castDefs?.[self.controller] ?? []).map((id) => defOf(ctx, id));
@@ -468,6 +512,13 @@ function detect(ctx: Ctx, ev: GameEvent): void {
             if (t.nontoken && wasToken) return false;
             if (t.on === 'creatureYouControlDies' && t.filter && !defMatches(movedDef, t.filter))
               return false;
+            // Marvel Super Heroes (Ares): "an attacking creature you control".
+            if (
+              t.on === 'creatureYouControlDies' &&
+              t.filter?.leftAttacking &&
+              !moved?.leftAttacking
+            )
+              return false;
             if (diedUnder === undefined) return true;
             if (t.on === 'otherCreatureDies' && t.controller === 'any') return true;
             if (t.on === 'otherCreatureDies' && t.controller === 'opponent')
@@ -517,9 +568,10 @@ function detect(ctx: Ctx, ev: GameEvent): void {
         (o, a) =>
           (a.trigger.on === 'drawSecondCard' &&
             ev.nth === 2 &&
-            (a.trigger.whose === 'opponents'
-              ? o.controller !== ev.player
-              : o.controller === ev.player)) ||
+            (a.trigger.whose === 'any' ||
+              (a.trigger.whose === 'opponents'
+                ? o.controller !== ev.player
+                : o.controller === ev.player))) ||
           (a.trigger.on === 'drawCard' &&
             (a.trigger.whose === 'yours'
               ? o.controller === ev.player
@@ -593,7 +645,8 @@ function detect(ctx: Ctx, ev: GameEvent): void {
       const attackedWith = (f: CardFilter | undefined, source?: ObjectId) =>
         ev.attackers.some((id) => !!s.objects[id] && matchesFilter(ctx, id, f, source));
       forEachBattlefieldTrigger(ctx, (o, a) => {
-        if (a.trigger.on === 'attacks') return ev.attackers.includes(o.id);
+        if (a.trigger.on === 'attacks')
+          return ev.attackers.includes(o.id) && (!a.trigger.alone || ev.attackers.length === 1);
         if (a.trigger.on === 'youAttack')
           return o.controller === ap && attackedWith(a.trigger.filter, o.id);
         return false;
@@ -627,6 +680,16 @@ function detect(ctx: Ctx, ev: GameEvent): void {
             if (checkCondition(ctx, a.condition, ap, card)) queue(ctx, card, i, ap);
         });
       }
+      // Marvel Super Heroes: "Whenever equipped creature attacks" (Captain America's Shield).
+      for (const id of ev.attackers)
+        for (const eq of s.battlefield) {
+          const e = s.objects[eq]!;
+          if (e.attachedTo !== id) continue;
+          def(ctx, eq).abilities.forEach((a, i) => {
+            if (a.kind === 'triggered' && a.trigger.on === 'equippedAttacks')
+              queue(ctx, e, i, e.controller, s.objects[id]);
+          });
+        }
       // "Whenever a creature you control attacks": once per attacker.
       for (const id of ev.attackers) {
         const attacker = s.objects[id];
@@ -636,6 +699,7 @@ function detect(ctx: Ctx, ev: GameEvent): void {
           (o, a) =>
             a.trigger.on === 'creatureYouControlAttacks' &&
             o.controller === attacker.controller &&
+            (!a.trigger.alone || ev.attackers.length === 1) &&
             matchesFilter(ctx, id, a.trigger.filter, o.id),
           attacker,
         );
@@ -697,6 +761,15 @@ function detect(ctx: Ctx, ev: GameEvent): void {
             if (a.kind === 'triggered' && a.trigger.on === 'dealtDamage')
               queue(ctx, hurt, i, hurt.controller, undefined, ev.amount);
           });
+        // Marvel Super Heroes (The Sensational She-Hulk): "a creature you control is dealt damage".
+        if (hurt?.zone === 'battlefield' && def(ctx, hurt.id).types.includes('Creature'))
+          forEachBattlefieldTrigger(
+            ctx,
+            (o, a) =>
+              a.trigger.on === 'yourCreatureDealtDamage' && o.controller === hurt.controller,
+            hurt,
+            ev.amount,
+          );
       }
       if (!ev.combat) {
         // Niv-Mizzet: noncombat damage to an opponent from a source you control.
@@ -837,6 +910,15 @@ function detect(ctx: Ctx, ev: GameEvent): void {
       });
       return;
     }
+    case 'tappedForTeamwork': {
+      const o = s.objects[ev.id];
+      if (!o) return;
+      def(ctx, o.id).abilities.forEach((a, i) => {
+        if (a.kind === 'triggered' && a.trigger.on === 'tappedForTeamwork')
+          queue(ctx, o, i, o.controller);
+      });
+      return;
+    }
     case 'manaSpent': {
       forEachBattlefieldTrigger(
         ctx,
@@ -849,6 +931,12 @@ function detect(ctx: Ctx, ev: GameEvent): void {
       return;
     }
     case 'targeted': {
+      // Marvel Super Heroes (Loki): "the target of an ability you control".
+      if (ev.byAbility && ev.anyTarget)
+        forEachBattlefieldTrigger(
+          ctx,
+          (src, a) => a.trigger.on === 'youTargetWithAbility' && src.controller === ev.player,
+        );
       for (const id of ev.ids) {
         const o = s.objects[id];
         if (!o || o.zone !== 'battlefield' || o.controller === ev.player) continue;

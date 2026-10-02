@@ -3,6 +3,7 @@ import { cloneState } from './clone.ts';
 import {
   type Ctx,
   type CustomEffect,
+  def,
   emit,
   makeCtx,
   moveObject,
@@ -11,6 +12,9 @@ import {
 } from './context.ts';
 import { getLegalActions as legalActions } from './legal.ts';
 import { checkGameOver } from './sba.ts';
+import { canPayFrom, manaSources } from './mana.ts';
+import { addCosts, spellTags } from './spells.ts';
+import { teamworkValid } from './teamwork.ts';
 import { collectTriggers } from './triggers.ts';
 import {
   openingHand,
@@ -39,7 +43,9 @@ import {
   answerSearch,
   answerOptionalEffect,
   answerSplit,
+  castCost,
   castSpell,
+  wardCost,
   pushTrigger,
 } from './stack.ts';
 import {
@@ -83,7 +89,15 @@ export class IllegalActionError extends Error {
 
 /** Canonical key for comparing actions, ignoring key order and payment choice. */
 export function actionKey(a: Action): string {
-  const { payWith: _ignored, ...rest } = a as Action & { payWith?: unknown };
+  // Teamwork creatures are chosen like mana sources: any valid choice matches the legal action.
+  const {
+    payWith: _ignored,
+    teamwork: _chosen,
+    ...rest
+  } = a as Action & {
+    payWith?: unknown;
+    teamwork?: unknown;
+  };
   return stableStringify(rest);
 }
 
@@ -142,6 +156,25 @@ export function createEngine(db: CardDb, options: EngineOptions = {}): Engine {
     const key = actionKey(action);
     const legal = legalActions(makeCtx(state, db, custom), action.player);
     if (!legal.some((a) => actionKey(a) === key)) throw new IllegalActionError(action);
+    if (action.type === 'castSpell' && action.teamwork) {
+      const ctx = makeCtx(state, db, custom);
+      const n = def(ctx, action.card).kicker?.teamwork;
+      if (!action.kicked || n === undefined) throw new IllegalActionError(action);
+      if (!teamworkValid(ctx, action.player, n, action.teamwork))
+        throw new IllegalActionError(action);
+      // The mana must still be payable without the creatures tapped for teamwork.
+      if (state.decision.kind !== 'castFree') {
+        const { card, player, targets } = action;
+        const cost = addCosts(
+          castCost(ctx, player, card, { ...action, back: undefined }, targets),
+          wardCost(ctx, player, targets),
+        );
+        const pool = manaSources(ctx, player, undefined, spellTags(def(ctx, card))).filter(
+          (m) => !action.teamwork!.includes(m.id),
+        );
+        if (!canPayFrom(cost, pool)) throw new IllegalActionError(action);
+      }
+    }
   }
 }
 
@@ -149,7 +182,13 @@ function afterMulliganDecision(ctx: Ctx, player: PlayerId): void {
   const s = ctx.s;
   const next = other(player);
   if (!s.players[next].keptHand) s.decision = { kind: 'mulligan', player: next };
-  else startTurn(ctx, s.turn.activePlayer);
+  else {
+    // Marvel Super Heroes (Quicksilver): "you may begin the game with him on the battlefield". Always done.
+    for (const p of [s.turn.activePlayer, next])
+      for (const id of [...s.players[p].hand])
+        if (def(ctx, id).beginsOnBattlefield) moveObject(ctx, id, 'battlefield', { controller: p });
+    startTurn(ctx, s.turn.activePlayer);
+  }
 }
 
 function apply(ctx: Ctx, action: Action): void {
@@ -223,6 +262,9 @@ function apply(ctx: Ctx, action: Action): void {
           copyOf: action.copyOf,
           sacrificeMany: action.sacrificeMany,
           kickCount: action.kickCount,
+          teamwork: action.teamwork,
+          back: action.back,
+          sneak: action.sneak,
         },
         action.payWith,
       );
@@ -241,6 +283,7 @@ function apply(ctx: Ctx, action: Action): void {
         action.sacrifice,
         action.forage,
         action.discard,
+        action.x,
       );
       return paused ? undefined : givePriority(ctx, player);
     }

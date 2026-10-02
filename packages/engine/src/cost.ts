@@ -26,3 +26,33 @@ export function pipsOf(cost: ManaCost): ManaType[][] {
   for (const h of cost.hybrid ?? []) out.push(h);
   return out;
 }
+
+/**
+ * A cost reduced by another cost (power-up: "reduce the cost by its mana cost").
+ * Coloured pips take off matching pips, then generic (rule 118.7c); hybrid pips
+ * take off a matching hybrid pip, then a pip of either colour, then generic.
+ */
+export function reduceCost(cost: ManaCost, by: ManaCost): ManaCost {
+  const colored = { ...cost.colored };
+  const hybrid = [...(cost.hybrid ?? [])];
+  let generic = cost.generic - by.generic;
+  for (const [k, v] of Object.entries(by.colored) as [ManaType, number][]) {
+    const off = Math.min(v, colored[k] ?? 0);
+    if (off) colored[k] = colored[k]! - off;
+    generic -= v - off;
+  }
+  for (const [a, b] of by.hybrid ?? []) {
+    const i = hybrid.findIndex(([x, y]) => (x === a && y === b) || (x === b && y === a));
+    if (i >= 0) hybrid.splice(i, 1);
+    else if (colored[a]) colored[a]!--;
+    else if (colored[b]) colored[b]!--;
+    else generic--;
+  }
+  for (const k of Object.keys(colored) as ManaType[]) if (!colored[k]) delete colored[k];
+  return {
+    generic: Math.max(0, generic),
+    colored,
+    ...(hybrid.length ? { hybrid } : {}),
+    ...(cost.x ? { x: cost.x } : {}),
+  };
+}

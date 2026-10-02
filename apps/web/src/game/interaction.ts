@@ -23,8 +23,10 @@ export function targetsOf(a: Action): TargetChoice[] {
   if (a.type === 'castSpell' || a.type === 'activateAbility') {
     const discard = a.type === 'castSpell' ? a.discard : undefined;
     const copyOf = a.type === 'castSpell' ? a.copyOf : undefined;
-    const costs: TargetChoice[] = [a.sacrifice, forageFood(a), discard, copyOf].flatMap((id) =>
-      id ? [{ object: { id, zcc: -1 } }] : [],
+    // Sneak: the unblocked attacker to return is picked first.
+    const sneak = a.type === 'castSpell' ? a.sneak : undefined;
+    const costs: TargetChoice[] = [a.sacrifice, forageFood(a), discard, copyOf, sneak].flatMap(
+      (id) => (id ? [{ object: { id, zcc: -1 } }] : []),
     );
     return [...costs, ...a.targets];
   }
@@ -110,8 +112,8 @@ export function castGroups(casts: readonly Action[]): Action[][] {
     const forage = a.forage ? (a.forage === 'graveyard' ? 'g' : 'f') : '';
     const key =
       a.type === 'castSpell'
-        ? `${a.mode ?? ''}:${a.kicked ? 'k' : ''}:${a.sacrifice ? 's' : ''}:${forage}:${a.x ?? ''}:${a.paws?.join() ?? ''}:${a.via ?? ''}`
-        : forage;
+        ? `${a.mode ?? ''}:${a.kicked ? 'k' : ''}:${a.sacrifice ? 's' : ''}:${forage}:${a.x ?? ''}:${a.paws?.join() ?? ''}:${a.via ?? ''}:${a.back ? 'b' : ''}:${a.sneak ? 'sn' : ''}`
+        : `${forage}:${a.x ?? ''}`;
     groups.set(key, [...(groups.get(key) ?? []), a]);
   }
   return [...groups.values()];

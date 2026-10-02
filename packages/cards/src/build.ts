@@ -66,6 +66,8 @@ export const KEYWORDS_AS_ABILITIES = new Set([
   'Treasure',
   'Food',
   'Double',
+  'Crew',
+  'Heal',
   'Enchant',
   'Affinity',
   'Surveil',
@@ -78,9 +80,27 @@ export const KEYWORDS_AS_ABILITIES = new Set([
   'Gift',
   'Expend',
   'Valiant',
+  // Marvel Super Heroes.
+  'Power-up',
+  'Teamwork',
+  'Connive',
+  'Transform',
+  'Investigate',
+  'Enrage',
+  'Landcycling',
+  'Basic landcycling',
+  'Typecycling',
+  'Extort',
+  'Improvise',
+  'Sneak',
+  'Boast',
+  'Double',
+  'Crew',
+  'Heal',
   // Marvel Super Heroes Commander.
   'Cycling',
   'Crew',
+  'Heal',
   'Cosmic Awareness',
   'Metalcraft',
   'Monstrosity',
@@ -162,6 +182,8 @@ export function mapKeywords(scryfall: readonly string[], oracle = ''): Keyword[]
     }
     const mapped = KEYWORDS[k];
     if (mapped) out.push(mapped);
+    // Named abilities ("Street Justice — ...") are labels with no rules of their own.
+    else if (oracle.includes(`${k} —`)) continue;
     else if (!KEYWORDS_AS_ABILITIES.has(k)) throw new Error(`Unsupported keyword "${k}"`);
   }
   return out;
@@ -223,6 +245,7 @@ export function buildCard(sc: ScryfallCard, behavior: Behavior = {}): CardDefini
     keywords: mapKeywords(sc.keywords, sc.oracleText),
     ...(sc.loyalty !== undefined ? { loyalty: Number(sc.loyalty) } : {}),
     abilities,
+    ...(sc.back ? { back: slug(sc.back) } : {}),
     ...(/can't be countered/.test(sc.oracleText) ? { uncounterable: true } : {}),
     ...(wardCostOf(sc.oracleText) ? { wardCost: wardCostOf(sc.oracleText)! } : {}),
     colorIdentity: colorIdentityOf(sc),

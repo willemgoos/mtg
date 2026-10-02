@@ -1,6 +1,7 @@
 import { cardMatches, hasKeyword, isCreature, matchesFilter } from './characteristics.ts';
 import { type Ctx, def, defOf, deref, obj, other, refOf } from './context.ts';
 import { manaValue } from './cost.ts';
+import { checkCondition } from './triggers.ts';
 import type { ObjectId, PlayerId, TargetChoice, TargetSpec } from './types.ts';
 import { PLAYERS } from './types.ts';
 
@@ -29,6 +30,8 @@ function playerOk(ctx: Ctx, spec: TargetSpec, p: PlayerId, src: TargetingSource)
   if (ctx.s.players[p].lost) return false;
   // Dawn's Truce: hexproof against opponents.
   if (p !== src.controller && ctx.s.turn.hexproofPlayers?.includes(p)) return false;
+  // Marvel Super Heroes: "you have hexproof" (Captain America, Super-Soldier).
+  if (p !== src.controller && youHaveHexproof(ctx, p)) return false;
   if (spec.controller === 'you' && p !== src.controller) return false;
   if (spec.controller === 'opponent' && p !== other(src.controller)) return false;
   return true;
@@ -140,4 +143,18 @@ export function isTargetLegal(
   return spec.what === 'graveyardCard'
     ? graveyardCardOk(ctx, spec, o.id, src)
     : permanentOk(ctx, spec, o.id, src);
+}
+
+/** Marvel Super Heroes: a permanent of theirs says "you have hexproof" (and its condition holds). */
+export function youHaveHexproof(ctx: Ctx, p: PlayerId): boolean {
+  return ctx.s.battlefield.some((id) => {
+    const o = ctx.s.objects[id]!;
+    if (o.controller !== p) return false;
+    return def(ctx, id).abilities.some(
+      (a) =>
+        a.kind === 'static' &&
+        a.effect.kind === 'youHaveHexproof' &&
+        checkCondition(ctx, a.effect.condition, p, o),
+    );
+  });
 }

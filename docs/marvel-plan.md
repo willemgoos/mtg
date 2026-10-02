@@ -180,7 +180,13 @@ Most keywords exist already: flying, flash, vigilance, reach, trample, lifelink,
 indestructible, hexproof, ward, equip, crew, Treasure, Food, scry, surveil, mill, fight, prowess, landfall, flashback, convoke.
 Named abilities such as "Radar Sense" or "Street Justice" are just labels with no rules of their own.
 
-### 10a: the set mechanics and the first two decks
+### 10a: the set mechanics and the first two decks: done
+
+Done: connive, power-up, teamwork (with a board prompt to pick the creatures to tap), double-faced cards (the five Marvel ones are
+modal: either face can be cast, and the front transforms; hover shows the other face, a permanent flips as it transforms), the
+set's gain-lands, and two decks: **Heroes Unite** (R/W teamwork and power-up, with Monica Rambeau) and **Villainous Schemes** (U/B
+connive villains). Bot vs bot over 160 games against the ten Foundations starter decks: Heroes Unite 50%, Villainous Schemes 47%.
+
 
 - **Power-up** (24 cards): an activated ability usable once per card. Its cost is reduced by the card's mana cost if it entered
   this turn. (E.g. Abomination: "Power-up {5}{R/G}{R/G}: put a +1/+1 counter on him; he fights up to one target creature".)
@@ -191,14 +197,37 @@ Named abilities such as "Radar Sense" or "Street Justice" are just labels with n
 - **Transform** (6 cards): double-faced cards in the engine, the Scryfall import (`transform` layout) and the card UI (show the other face, flip animation as on Arena).
 - Two decks whose themes use these mechanics, e.g. Heroes/teamwork and villains/connive.
 
-### 10b: the rest of the decks
+### 10b: the rest of the decks: done
+
+Done: eight more decks, so one per colour pair: **Gamma Smash** (R/G power-up and big creatures), **Heroes of Wakanda** (G/W
++1/+1 counters and Heroes), **Lone Agents** (W/B creatures attacking alone), **HYDRA Rising** (B/R Villains), **Stark Tech** (U/R
+artifacts), **Sky Patrol** (W/U fliers), **Growing Pains** (G/U counters, Ant-Man) and **Savage Uprising** (B/G creature cards in
+the graveyard). Added: enrage ("whenever this is dealt damage"), "attacks alone", investigate and Clues, the power-up discount
+static (Hulk, Gamma Goliath), conditional amounts ("costs {2} less if ..."). Sneak, improvise, boast and extort are only on
+rares, so they move to 10c; landcycling and typecycling wait for Stream A's cycling.
+
+Bot vs bot against the ten Foundations starter decks (160 games, 320 for the last two): Heroes Unite 50%, Villainous Schemes 47%,
+Gamma Smash 46%, Heroes of Wakanda 48%, Lone Agents 46%, HYDRA Rising 46%, Sky Patrol 48%, Growing Pains 52%, Stark Tech 48%,
+Savage Uprising 49%.
+
 
 - About ten decks in total, one per colour pair, built around the set's themes, as Bloomburrow did with its animal decks.
 - New along the way: sneak (cast for its sneak cost by returning an unblocked attacker to hand; it enters tapped and attacking),
   landcycling and typecycling (extending Stream A's cycling), investigate/Clue, improvise, enrage, boast, extort.
 - Bot vs bot across the Foundations starter decks: aim for 45 to 65% per deck, as in phase 8.
 
-### 10c: every rare and mythic, then boosters
+### 10c: every rare and mythic, then boosters: done except nine cards waiting on Stream A
+
+Done: 51 of 60 rares and 24 of 25 mythics, the five basic-landcycling commons (on Stream A's cycling), and MSH boosters in
+Expedition (with a Marvel deck) and Season (with the ten Marvel decks as starters). New along the way: sneak, improvise,
+extort (as a trigger), shield counters, extra turns, X in activated abilities, "you have hexproof", "opponents can't cast spells
+during your turn", starting the game with a card in play, damage that doesn't accumulate, equipment doubling damage, casting a
+spell for free from the top of a library, and custom effects for the true one-offs (`packages/engine/src/msh-effects.ts`).
+
+Waiting on Stream A (built on `marvel-brawl`, not yet on `marvel`): the six Sagas (The Coming of Galactus, Armor Wars, Avengers:
+Under Siege, Origin of the Avengers, The Super Hero Civil War, World War Hulk) need Sagas, and Absorbing Man, Taskmaster and
+Secret Invasion need "becomes a copy".
+
 
 - All 60 rares and 25 mythics, including those not in any of our decks.
 - MSH boosters in Expedition and Season, as was done for Bloomburrow.
@@ -291,4 +320,48 @@ Named abilities such as "Radar Sense" or "Street Justice" are just labels with n
 
 ### Stream B
 
-(Filled in as sub-phases ship.)
+10a:
+
+- Teamwork: bots (and free casts) let the engine pick the creatures to tap: ones that want tapping (Agent Maria Hill), then
+  summoning-sick ones, then the biggest; mana creatures are spared when possible. The heuristic bot never pays teamwork on its own
+  turn before combat, since its evaluation can't see the lost attack.
+- Power-up: the cost shown in the ability menu is the printed one, not the reduced one. Wonder Man's extra activation, Hulk's
+  {3} discount and Kang's "power-up abilities can't be activated" are not built yet (10c).
+- Transform: after a permanent transforms, "activate only once" bookkeeping is by ability index, so it isn't reset or remapped
+  between faces (no current card cares).
+- K'un-Lun Warrior (not in a deck now) offers only the discard, not "sacrifice an artifact".
+- Baron Strucker's "you may have it connive. Do this only once each turn" triggers once each turn even if you decline.
+- Leader, Super-Genius's connive replacement is not built (10c).
+
+10b:
+
+- "Target player" on Restorative Technique and Panther Pounce is always you.
+- Red Hulk's and Bullseye's "when you do" targets are chosen as the trigger goes on the stack. Bullseye offers only the discard
+  (not "sacrifice an artifact"), and its activated ability may discard a land.
+- Spider-Man, To the Rescue: the target is chosen up front, and "nonattacking" isn't checked.
+- The Thing counts combat damage only. The Tiger God's "can't be blocked by more than one creature" is not modelled.
+- H.E.R.B.I.E. Scout Unit doesn't offer to put a land from your hand onto the battlefield; Vision of Love offers only the discard.
+- Raft Security Officer's "costs {1} less if it targets power 3 or less" is two abilities ({1} for small creatures, {2} for any).
+- Knight of Wundagore and Ant-Man count any +1/+1 counter put on a creature you control, not only ones you put there.
+- Left out of the decks for now (each needs a new engine piece): U.S.Agent's attached Sturdy Shield, S.H.I.E.L.D. Spy Kit,
+  Spider-Woman, Captain America (Living Legend), Justice, Hellcat, Grim Reaper, Titania, Beast, Kid Loki, Frozen in Ice,
+  the Vehicles (Crew N), Hulkling and Thirst for Knowledge. They come with 10c where they are rares, or when a deck needs them.
+
+10c:
+
+- Quicksilver always begins the game on the battlefield; Construct a Cosmic Cube's "control target opponent during their next
+  turn" is an extra turn for you; Baron Helmut Zemo has no boast.
+- Engine picks instead of the player: Vision Quest (the biggest artifact creature), Worlds Within Worlds (every creature card
+  from every hand), Earth's Mightiest Heroes with teamwork (every creature card), The Astonishing Ant-Man (removes all its
+  counters), Scientist Supreme (copies the topmost ability of your artifacts, no target).
+- Doom Reigns Supreme casts one spell, not up to two; The Ruinous Wrecking Crew picks one mode, and "destroy target token" isn't
+  offered; Heroic Feast puts one counter per life-gain event; The Vision may pick the same mode twice in a turn.
+- Cosmic Cube counts the greatest power among all your creatures, not only attackers.
+- Thor, God of Thunder returns the exiled card to your hand; The Ten Rings gives no maximum hand size instead of ten; Moon Girl
+  gets +4/+4 instead of base 6/6; Ms. Marvel's base power isn't set.
+- Not modelled: Black Widow, Super Spy's exile-and-cast (always the counter), Iron Man Armor's {2} becomes-a-creature ability,
+  Ultron's noncreature copies becoming 2/2 creatures, Tony Stark's Equipment attaching, Nick Fury transforming what he finds,
+  Winter Soldier attaching Equipment as he returns, Super-Soldier Serum's legendary Soldier and Equipment attaching, Storm giving
+  flying to targeted creatures, The Serpent Society's poison ward, Avengers Disassembled's replacement basic land,
+  Daredevil's Radar Sense, Hawkeye's Net and Boomerang arrows (only Explosive, when he attacks), Cloak and Dagger's hand card
+  coming back (it stays exiled), Worlds Within Worlds exiling itself.

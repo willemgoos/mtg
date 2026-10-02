@@ -69,6 +69,18 @@ export function canBlock(ctx: Ctx, blocker: ObjectId, attacker: ObjectId): boole
   const a = ctx.s.combat?.attackers.find((x) => x.id === attacker);
   if (!a || b.controller !== a.defender) return false;
   if (characteristics(ctx, attacker).cantBeBlocked) return false;
+  // Storm, Windrider: "Creatures with flying can't block creatures you control."
+  if (
+    bc.keywords.has('flying') &&
+    ctx.s.battlefield.some(
+      (id) =>
+        obj(ctx, id).controller === obj(ctx, attacker).controller &&
+        def(ctx, id).abilities.some(
+          (x) => x.kind === 'static' && x.effect.kind === 'flyersCantBlockYours',
+        ),
+    )
+  )
+    return false;
   // "Can't be blocked by creatures with power 2 or less" (Rust-Shield Rampager).
   for (const ab of def(ctx, attacker).abilities)
     if (
@@ -204,7 +216,7 @@ export function dealCombatDamage(ctx: Ctx, firstStrikeStep: boolean): void {
 
   for (const a of combat.attackers) {
     if (!dealsDamageThisStep(ctx, a.id, firstStrikeStep)) continue;
-    const p = power(ctx, a.id);
+    const p = combatPower(ctx, a.id);
     dealt.push(a.id);
     if (p <= 0) continue;
     const src = damageSourceFor(ctx, a.id, obj(ctx, a.id).controller);
@@ -214,7 +226,7 @@ export function dealCombatDamage(ctx: Ctx, firstStrikeStep: boolean): void {
     for (const b of a.blockers) {
       if (!dealsDamageThisStep(ctx, b, firstStrikeStep)) continue;
       dealt.push(b);
-      const p = power(ctx, b);
+      const p = combatPower(ctx, b);
       if (p <= 0) continue;
       const src = damageSourceFor(ctx, b, obj(ctx, b).controller);
       assignments.push({ src, to: { object: { id: a.id, zcc: obj(ctx, a.id).zcc } }, amount: p });
@@ -259,4 +271,14 @@ export function attackTax(ctx: Ctx, player: PlayerId): number {
 export function affordableAttackers(ctx: Ctx, player: PlayerId): number {
   const tax = attackTax(ctx, player);
   return tax === 0 ? Infinity : Math.floor(manaSources(ctx, player).length / tax);
+}
+
+/**
+ * The combat damage a creature assigns: its power, or (The Kingpin of Crime)
+ * its toughness when that's greater and its controller paid for it this turn.
+ */
+function combatPower(ctx: Ctx, id: ObjectId): number {
+  const p = power(ctx, id);
+  if (!ctx.s.turn.toughnessDamage?.includes(obj(ctx, id).controller)) return p;
+  return Math.max(p, characteristics(ctx, id).toughness);
 }

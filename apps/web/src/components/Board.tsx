@@ -48,6 +48,7 @@ import { UiSize } from './UiSize.tsx';
 import { SoundControl } from './SoundControl.tsx';
 import { heartbeat, playEvents, playHover } from '../game/sound.ts';
 import { isLethal } from '../game/lethal.ts';
+import { startTeamPick, type TeamPick, teamOptions, teamPower } from '../game/teamwork.ts';
 import { type Hint, hintFor } from '../game/hint.ts';
 
 const nameOf = (defId: CardDefId) => {
@@ -115,6 +116,8 @@ export function Board({
   const [menu, setMenu] = useState<{ source: ObjectId; indices: number[] } | null>(null);
   /** A spell with several ways to cast it (modes, kicker): pick one first. */
   const [castMenu, setCastMenu] = useState<{ source: ObjectId; groups: Action[][] } | null>(null);
+  /** Teamwork: after the targets, the creatures to tap are picked on the board. */
+  const [teamPick, setTeamPick] = useState<TeamPick | null>(null);
 
   // Any new decision resets half-finished UI interactions.
   const decisionKey = `${state.turn.number}:${state.turn.step}:${d.kind}:${state.stack.length}`;
@@ -123,6 +126,7 @@ export function Board({
     setBlocker(null);
     setMenu(null);
     setCastMenu(null);
+    setTeamPick(null);
   }, [decisionKey]);
 
   // Triggered abilities that need targets open targeting straight away.
@@ -139,9 +143,12 @@ export function Board({
       setBlocker(null);
       setMenu(null);
       setCastMenu(null);
+      setTeamPick(null);
+      const team = startTeamPick(view, a);
+      if (team) return setTeamPick(team);
       apply(a);
     },
-    [apply],
+    [apply, view],
   );
 
   const beginOrApply = useCallback(
@@ -218,6 +225,13 @@ export function Board({
   const onCard = (id: ObjectId) => {
     if (drag.wasDrag()) return;
     if (targeting) return choose(`obj:${id}`);
+    if (teamPick) {
+      if (!teamOptions(view, HUMAN, teamPick).includes(id)) return;
+      const chosen = teamPick.chosen.includes(id)
+        ? teamPick.chosen.filter((c) => c !== id)
+        : [...teamPick.chosen, id];
+      return setTeamPick({ ...teamPick, chosen });
+    }
     if (!myDecision) return;
     if (d.kind === 'sacrifice') {
       if (d.options.includes(id)) act({ type: 'chooseCard', player: HUMAN, card: id });
@@ -317,6 +331,12 @@ export function Board({
     if (hint?.cards.includes(id)) return 'hint';
     if (dragTargets) return dragTargets.has(`obj:${id}`) ? 'option' : null;
     if (options) return options.has(`obj:${id}`) ? 'option' : null;
+    if (teamPick)
+      return teamPick.chosen.includes(id)
+        ? 'selected'
+        : teamOptions(view, HUMAN, teamPick).includes(id)
+          ? 'option'
+          : null;
     if (myDecision && d.kind === 'sacrifice') return d.options.includes(id) ? 'option' : null;
     if (myDecision && d.kind === 'forage') return d.foods.includes(id) ? 'option' : null;
     if (myDecision && d.kind === 'chooseObject') return d.options.includes(id) ? 'option' : null;
@@ -439,7 +459,9 @@ export function Board({
                 ? 'a card to discard'
                 : first.type === 'castSpell' && first.copyOf
                   ? 'a creature to copy (or skip)'
-                  : null
+                  : first.type === 'castSpell' && first.sneak
+                    ? 'an unblocked attacker to return'
+                    : null
           : null;
       const prompt = paying
         ? `${targeting.label}: choose ${paying}`
@@ -447,6 +469,25 @@ export function Board({
       if (targeting.skip) return { prompt, primary: ['Skip', () => act(targeting.skip!)] };
       if (d.kind === 'chooseTriggerTargets') return { prompt };
       return { prompt, secondary: ['Cancel', () => setTargeting(null)] };
+    }
+    if (teamPick) {
+      const power = teamPower(view, teamPick.chosen);
+      const name = nameOf(view.objects[teamPick.action.card]!.defId);
+      return {
+        prompt: `${name}: tap creatures with total power ${teamPick.need} or more (${power}/${teamPick.need})`,
+        ...(power >= teamPick.need
+          ? {
+              primary: [
+                'Done',
+                () => {
+                  setTeamPick(null);
+                  apply({ ...teamPick.action, teamwork: teamPick.chosen });
+                },
+              ] as [string, () => void],
+            }
+          : {}),
+        secondary: ['Cancel', () => setTeamPick(null)],
+      };
     }
     if (!myDecision) return { prompt: '' };
     const pass: Action = { type: 'passPriority', player: HUMAN };
@@ -1366,12 +1407,18 @@ function castLabel(defId: CardDefId, a: Action): string {
     return a.forage === 'graveyard'
       ? 'Forage: exile three cards from your graveyard'
       : 'Forage: sacrifice a Food';
-  if (a.type === 'activateAbility') return 'Activate';
   if (a.x !== undefined) return `X = ${a.x}`;
+  if (a.type === 'activateAbility') return 'Activate';
   if (a.via === 'festival') return 'From your graveyard (pay 1 life)';
   if (a.via === 'osteomancer') return 'From your graveyard (forage)';
   if (a.paws) return pawLabel(defId, a.paws);
   const def = cardDb.get(defId);
+  if (a.type === 'castSpell' && a.sneak && def?.sneak) return `Sneak (${manaText(def.sneak)})`;
+  // A modal double-faced card: cast either face.
+  if (def?.back) {
+    const face = a.back ? cardDb.get(def.back) : def;
+    return `Cast ${face?.name ?? ''} (${face ? manaText(face.manaCost) : ''})`;
+  }
   if (a.mode !== undefined) return def?.modes?.[a.mode]?.label ?? `Mode ${a.mode + 1}`;
   if (def?.sacrificeOrPay)
     return a.sacrifice ? 'Sacrifice a creature' : `Pay ${manaText(def.sacrificeOrPay)}`;
@@ -1387,6 +1434,8 @@ function castLabel(defId: CardDefId, a: Action): string {
     return a.kicked ? `Promise ${giftText(def)} to your opponent` : 'No gift';
   if (def.kicker.as === 'offspring')
     return a.kicked ? `With offspring (+${manaText(def.kicker.cost)})` : 'Without offspring';
+  if (def.kicker.teamwork !== undefined)
+    return a.kicked ? `Teamwork (tap power ${def.kicker.teamwork})` : 'Without teamwork';
   return a.kicked ? `Kicked (+${manaText(def.kicker.cost)})` : 'Not kicked';
 }
 
@@ -1423,6 +1472,7 @@ function abilityLabel(defId: CardDefId, i: number): string {
     c.forage ? 'forage' : '',
     c.exileSelf ? 'exile it' : '',
   ].filter(Boolean);
+  if (a.powerUp) return `Power-up ${parts.join(', ')}`;
   return parts.join(', ') || `Ability ${i + 1}`;
 }
 

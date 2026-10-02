@@ -12,6 +12,7 @@ export { buildCard, slug, parseManaCost, parseTypeLine } from './build.ts';
 export {
   BLACK_POOL,
   BLOOMBURROW_POOL,
+  MARVEL_POOL,
   BLUE_POOL,
   GREEN_POOL,
   LAND_POOL,
@@ -26,6 +27,7 @@ export {
   BLOOMBURROW_DECKS,
   COLOR_CHALLENGE_DECKS,
   DECKS,
+  MARVEL_DECKS,
   MARVEL_BRAWL_DECKS,
 } from './decks.ts';
 export type { Decklist } from './decks.ts';

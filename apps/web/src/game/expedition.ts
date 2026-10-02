@@ -599,17 +599,28 @@ export function summarize(r: ExpeditionRun): RunSummary {
 // Packs
 // ---------------------------------------------------------------------------
 
-/** The set a booster comes from: Foundations, or Bloomburrow for a Bloomburrow deck. */
-export type PackSet = 'fdn' | 'blb';
+/** The set a booster comes from: Foundations, or the set of a Bloomburrow or Marvel deck. */
+export type PackSet = 'fdn' | 'blb' | 'msh';
 
-/** An expedition with a Bloomburrow deck opens Bloomburrow boosters. */
+/** Booster names, by set. */
+export const PACK_SET_NAMES: Record<PackSet, string> = {
+  fdn: 'Foundations',
+  blb: 'Bloomburrow',
+  msh: 'Marvel Super Heroes',
+};
+
+/** An expedition with a Bloomburrow or Marvel deck opens that set's boosters. */
 export function packSetOf(r: Pick<ExpeditionRun, 'deck'>): PackSet {
-  return findDeck(r.deck)?.set === 'blb' ? 'blb' : 'fdn';
+  const set = findDeck(r.deck)?.set;
+  return set === 'blb' || set === 'msh' ? set : 'fdn';
 }
 
 /** Cards of a set we can play, by rarity. Basic lands aren't in packs. */
 function sheetsOf(set: PackSet) {
-  const cards = SCRYFALL.filter((c) => c.set === set && !c.typeLine.startsWith('Basic'));
+  // A double-faced card's back face comes with its front.
+  const cards = SCRYFALL.filter(
+    (c) => c.set === set && !c.typeLine.startsWith('Basic') && !c.front,
+  );
   const byRarity = (r: string) => cards.filter((c) => c.rarity === r);
   return {
     common: byRarity('common'),
@@ -618,7 +629,7 @@ function sheetsOf(set: PackSet) {
     mythic: byRarity('mythic'),
   };
 }
-const SHEETS = { fdn: sheetsOf('fdn'), blb: sheetsOf('blb') };
+const SHEETS = { fdn: sheetsOf('fdn'), blb: sheetsOf('blb'), msh: sheetsOf('msh') };
 type Sheet = (typeof SHEETS.fdn)['common'];
 
 export const PACK_SIZE = { rare: 1, uncommon: 3, common: 8 };

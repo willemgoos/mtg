@@ -1,6 +1,7 @@
 import {
   ARENA_DECKS,
   BLOOMBURROW_DECKS,
+  MARVEL_DECKS,
   cardDb,
   deckIds,
   isPlayable,
@@ -36,8 +37,10 @@ export type MatchOutcome = 'win' | 'loss' | 'draw' | 'concede';
 
 /** Stable rules identities, independent of artwork/Scryfall printing IDs. */
 export const SEASON_CARDS = new Map(SCRYFALL.map((c) => [slug(c.name), c]));
-/** Starter decks on sale: Arena's Foundations ones and our Bloomburrow ones. */
-export const SEASON_STARTERS = [...ARENA_DECKS, ...BLOOMBURROW_DECKS].filter(isPlayable);
+/** Starter decks on sale: Arena's Foundations ones and our Bloomburrow and Marvel ones. */
+export const SEASON_STARTERS = [...ARENA_DECKS, ...BLOOMBURROW_DECKS, ...MARVEL_DECKS].filter(
+  isPlayable,
+);
 /** Decks a Season bot can play: mostly Jump In pairs, plus the starter and Color Challenge decks. */
 export const isSeasonOpponent = (id: string): boolean => OPPONENT_DECKS.some((d) => d.id === id);
 const engine = createEngine(cardDb);
@@ -51,8 +54,12 @@ export interface SeasonPack {
   id: number;
   kind: SeasonPackKind;
 }
-export type SeasonPackKind = 'foundations' | 'bloomburrow';
-export const SEASON_PACK_KINDS: readonly SeasonPackKind[] = ['foundations', 'bloomburrow'];
+export type SeasonPackKind = 'foundations' | 'bloomburrow' | 'marvel';
+export const SEASON_PACK_KINDS: readonly SeasonPackKind[] = [
+  'foundations',
+  'bloomburrow',
+  'marvel',
+];
 export interface SeasonMatch {
   id: number;
   seed: number;

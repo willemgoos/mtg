@@ -226,6 +226,13 @@ export function countOf(
 ): number {
   if (typeof a === 'number') return a;
   if ('multiply' in a) return a.multiply * countOf(ctx, player, a.amount, printed, sourceId);
+  if ('if' in a) {
+    const self = sourceId ? ctx.s.objects[sourceId] : undefined;
+    return checkCondition(ctx, a.if, player, self) ? a.then : (a.else ?? 0);
+  }
+  // Marvel Super Heroes (The Scarlet Witch): 'where X is her power'.
+  if ('powerOf' in a)
+    return a.powerOf === 'self' && sourceId ? Math.max(0, power(ctx, sourceId)) : 0;
   // Door of Destinies: its charge counters.
   if ('namedCountersOnSource' in a) {
     const src = sourceId ? ctx.s.objects[sourceId] : undefined;
@@ -429,7 +436,15 @@ export function isAttacking(ctx: Ctx, id: ObjectId): boolean {
 export function canTapForAbility(ctx: Ctx, id: ObjectId): boolean {
   const o = obj(ctx, id);
   if (o.tapped) return false;
-  return !isCreature(ctx, id) || !o.summoningSick || hasKeyword(ctx, id, 'haste');
+  if (!isCreature(ctx, id) || !o.summoningSick || hasKeyword(ctx, id, 'haste')) return true;
+  // Shang-Chi: "as though those creatures had haste".
+  return ctx.s.battlefield.some(
+    (s) =>
+      obj(ctx, s).controller === o.controller &&
+      def(ctx, s).abilities.some(
+        (a) => a.kind === 'static' && a.effect.kind === 'abilitiesAsThoughHaste',
+      ),
+  );
 }
 
 export function matchesFilter(
@@ -568,6 +583,12 @@ export function cardMatches(
     return false;
   if (filter.nonland && d.types.includes('Land')) return false;
   if (filter.enteredThisTurn && obj(ctx, id).zoneTurn !== ctx.s.turn.number) return false;
+  if (filter.leftAttacking && !obj(ctx, id).leftAttacking) return false;
+  if (filter.attachedToSource && (!sourceId || obj(ctx, id).attachedTo !== sourceId)) return false;
+  if (filter.manaValueParity) {
+    const mv = manaValue(def(ctx, id).manaCost);
+    if ((mv % 2 === 1 ? 'odd' : 'even') !== filter.manaValueParity) return false;
+  }
   if (filter.notSubtype && d.subtypes.includes(filter.notSubtype)) return false;
   if (filter.maxManaValue !== undefined) {
     const max =

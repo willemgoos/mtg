@@ -4657,6 +4657,20 @@ button {
   pointer-events: none;
 }
 
+/* Transform: a double-faced permanent turns over to its other face. */
+.card__body.is-flipping {
+  animation: card-flip 0.5s ease-in-out;
+}
+
+@keyframes card-flip {
+  0% {
+    transform: perspective(40rem) rotateY(-180deg);
+  }
+  100% {
+    transform: perspective(40rem) rotateY(0deg);
+  }
+}
+
 /* Brawl: the command zone sits left of the portrait, as on Arena. */
 .side--opp .badge {
   position: relative;

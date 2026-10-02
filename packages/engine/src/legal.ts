@@ -14,12 +14,14 @@ import {
   defenderOf,
   mustAttack,
 } from './combat.ts';
-import { type Ctx, def, obj, other } from './context.ts';
+import { type Ctx, def, obj, other, withBackFace } from './context.ts';
 import { forageChoices } from './forage.ts';
-import { canPayFrom, creatureHelpers, manaSources } from './mana.ts';
+import { artifactHelpers, canPayFrom, creatureHelpers, hasImprovise, manaSources } from './mana.ts';
 import { castVariants, spellTags } from './spells.ts';
 import {
+  abilityManaCost,
   castCost,
+  teamworkFor,
   crewFor,
   escalateCrew,
   artifactsToSacrifice,
@@ -237,7 +239,7 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
       (ts) => !sacrifice || !ts.some((t) => 'object' in t && t.object.id === sacrifice),
     );
 
-  for (const card of castableCards(ctx, player)) {
+  const castsOf = (card: ObjectId): void => {
     const d = def(ctx, card);
     const zone = obj(ctx, card).zone;
     if (d.types.includes('Land')) {
@@ -247,9 +249,9 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
         (zone !== 'graveyard' || hasStatic(ctx, player, 'playLandsFromGraveyard'))
       )
         out.push({ type: 'playLand', player, card });
-      continue;
+      return;
     }
-    if (d.castOnlyIf && !checkCondition(ctx, d.castOnlyIf, player, obj(ctx, card))) continue;
+    if (d.castOnlyIf && !checkCondition(ctx, d.castOnlyIf, player, obj(ctx, card))) return;
     const firstOfCard = out.length;
     const instantSpeed =
       d.types.includes('Instant') ||
@@ -260,7 +262,9 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
     // Restricted mana (Giada: only for Angels; Villages: only for creature spells).
     const base = restricted ? manaSources(ctx, player, undefined, spellTags(d)) : sources;
     // Convoke: untapped creatures can pay for {1} each.
-    const pool = d.convoke ? [...base, ...creatureHelpers(ctx, player, base)] : base;
+    let pool = d.convoke ? [...base, ...creatureHelpers(ctx, player, base)] : base;
+    if (hasImprovise(ctx, player, card))
+      pool = [...pool, ...artifactHelpers(ctx, player, pool, card)];
     // {X}: every affordable value (up to 10).
     const xs = d.manaCost.x
       ? Array.from(
@@ -276,8 +280,8 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
     const discardToCast =
       d.discardToCast || (zone === 'graveyard' && d.castFromGraveyardWithDiscard);
     const discards = discardToCast ? ps.hand.filter((id) => id !== card) : [undefined];
-    if (d.discardToCast && discards.length === 0) continue;
-    if (!instantSpeed && !sorcery) continue;
+    if (d.discardToCast && discards.length === 0) return;
+    if (!instantSpeed && !sorcery) return;
     // The usual ways, plus graveyard casts through other cards.
     // Extract Power: exiled cards played for free.
     const free = zone === 'exile' && obj(ctx, card).playFreeBy === player;
@@ -313,6 +317,9 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
               forage: v.forage ? 'graveyard' : undefined,
               x,
             };
+            // Teamwork: kicked only if there are creatures to tap.
+            const teamwork = teamworkFor(ctx, player, card, { kicked: v.kicked });
+            if (v.kicked && d.kicker?.teamwork !== undefined && !teamwork) continue;
             const base = castCost(ctx, player, card, choice);
             if (!canPayFrom(base, pool) && !d.costReductionIfTarget) continue;
             const extra = {
@@ -351,6 +358,7 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
                       sacrifice,
                       ...(sacrificeMany ?? []),
                       forage === 'graveyard' ? undefined : forage,
+                      ...(teamwork ?? []),
                     ];
                     if (spent.some((id) => id && pool.some((p) => p.id === id))) {
                       const rest = pool.filter((p) => !spent.includes(p.id));
@@ -386,7 +394,37 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
               )
               .map((c) => ({ ...a, copyOf: c.id })),
           );
+  };
+  // Marvel Super Heroes (Jennifer Walters): "Your opponents can't cast spells during your turn."
+  const silenced =
+    s.turn.activePlayer !== player &&
+    hasStatic(ctx, s.turn.activePlayer, 'opponentsCantCastDuringYourTurn');
+  for (const card of silenced ? [] : castableCards(ctx, player)) {
+    castsOf(card);
+    // Modal double-faced cards: the back face can be cast from hand too.
+    if (def(ctx, card).back && obj(ctx, card).zone === 'hand') {
+      const from = out.length;
+      withBackFace(ctx, card, () => castsOf(card));
+      for (const a of out.slice(from)) if (a.type === 'castSpell') a.back = true;
+    }
   }
+  // Sneak (Marvel Super Heroes): during your declare blockers step, return an unblocked attacker.
+  const unblocked =
+    s.turn.activePlayer === player && s.turn.step === 'declareBlockers' && s.combat
+      ? s.combat.attackers.filter((a) => !a.blocked && a.blockers.length === 0).map((a) => a.id)
+      : [];
+  if (unblocked.length)
+    for (const card of ps.hand) {
+      const d = def(ctx, card);
+      if (!d.sneak) continue;
+      const cost = addCosts(d.sneak, NO_COST);
+      for (const attacker of unblocked) {
+        const rest = sources.filter((p) => p.id !== attacker);
+        if (!canPayFrom(cost, rest)) continue;
+        for (const targets of combosFor(d.spell?.targets ?? [], card))
+          out.push({ type: 'castSpell', player, card, targets, sneak: attacker });
+      }
+    }
 
   const abilitySources = [
     ...s.battlefield.filter((id) => obj(ctx, id).controller === player),
@@ -399,7 +437,8 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
       if (a.kind !== 'activated') return;
       if ((a.fromGraveyard ? 'graveyard' : a.fromHand ? 'hand' : 'battlefield') !== zone) return;
       if (a.sorcerySpeed && !sorcery) return;
-      if (a.once && obj(ctx, source).usedAbilities?.includes(abilityIndex)) return;
+      if ((a.once || a.powerUp) && obj(ctx, source).usedAbilities?.includes(abilityIndex)) return;
+      if (a.powerUp && s.turn.noPowerUp) return;
       if (a.oncePerTurn && obj(ctx, source).onceTurns?.[-1 - abilityIndex] === s.turn.number)
         return;
       if (a.cost.tapSelf && !canTapForAbility(ctx, source)) return;
@@ -411,12 +450,16 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
         if (!sorcery || o.onceTurns?.[LOYALTY_KEY] === s.turn.number) return;
         if ((o.counters?.loyalty ?? 0) + a.cost.loyalty < 0) return;
       }
-      const own = a.cost.tapSelf ? sources.filter((x) => x.id !== source) : sources;
+      const tagged = isCreature(ctx, source)
+        ? manaSources(ctx, player, undefined, ['CreatureAbility'])
+        : sources;
+      const own = a.cost.tapSelf ? tagged.filter((x) => x.id !== source) : tagged;
       // Heirloom Epic: creatures can pay for generic mana.
       const usable = a.cost.convoke
         ? [...own, ...creatureHelpers(ctx, player, own, a.cost.tapSelf ? source : undefined)]
         : own;
-      if (!canPayFrom(a.cost.mana, usable)) return;
+      const mana = abilityManaCost(ctx, source, a);
+      if (!canPayFrom(mana, usable)) return;
       if (a.cost.tapTokens && tokensToTap(ctx, player, source).length < a.cost.tapTokens) return;
       if (a.cost.crew && !crewFor(ctx, player, source, a.cost.crew)) return;
       if (
@@ -441,17 +484,18 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
           : creatures;
       const sacrifices =
         a.cost.sacrificeCreature || a.cost.sacrificePermanent ? sacrificeable : [undefined];
+      const firstOfAbility = out.length;
       for (const sacrifice of sacrifices) {
         for (const targets of combosFor(a.targets, source, sacrifice)) {
           const ward = wardCost(ctx, player, targets);
-          if (ward.generic && !canPayFrom(addCosts(a.cost.mana ?? NO_COST, ward), usable)) continue;
+          if (ward.generic && !canPayFrom(addCosts(mana ?? NO_COST, ward), usable)) continue;
           if (!wardPayable(ctx, player, targets)) continue;
           for (const forage of forages)
             for (const discard of discards) {
               const spent = [sacrifice, forage === 'graveyard' ? undefined : forage];
-              if (a.cost.mana && spent.some((id) => id && usable.some((p) => p.id === id))) {
+              if (mana && spent.some((id) => id && usable.some((p) => p.id === id))) {
                 const rest = usable.filter((p) => !spent.includes(p.id));
-                if (!canPayFrom(addCosts(a.cost.mana, ward), rest)) continue;
+                if (!canPayFrom(addCosts(mana, ward), rest)) continue;
               }
               out.push({
                 type: 'activateAbility',
@@ -466,6 +510,13 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
             }
         }
       }
+      // Marvel Super Heroes: {X} in an ability's cost (Bruce Banner): every affordable X up to 10.
+      if (mana?.x)
+        for (const base of out.slice(firstOfAbility))
+          for (let x = 1; x <= 10; x++) {
+            if (!canPayFrom({ ...mana, generic: mana.generic + x * mana.x }, usable)) break;
+            out.push({ ...base, x } as Action);
+          }
     });
   }
   return out;

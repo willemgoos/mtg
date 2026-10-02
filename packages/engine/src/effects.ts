@@ -25,6 +25,7 @@ import {
   addCounters,
   sacrifice,
   tap,
+  transform,
   untap,
 } from './context.ts';
 import { setMonarch } from './monarch.ts';
@@ -77,6 +78,17 @@ export function dealDamage(
   if (amount <= 0) return;
   to = redirected(ctx, to);
   amount += damageBonus(ctx, src, to, combat);
+  // Marvel Super Heroes (Mjölnir): "Double all damage equipped creature would deal."
+  if (
+    ctx.s.battlefield.some(
+      (id) =>
+        obj(ctx, id).attachedTo === src.id &&
+        def(ctx, id).abilities.some(
+          (a) => a.kind === 'static' && a.effect.kind === 'attached' && a.effect.doubleDamage,
+        ),
+    )
+  )
+    amount *= 2;
   amount = prevented(ctx, src, to, amount);
   if (amount <= 0) return;
   // The monarch: combat damage to them makes the attacker's controller the monarch.
@@ -96,7 +108,8 @@ export function dealDamage(
       if (has(src, 'lifelink')) gainLife(ctx, src.controller, amount);
       return;
     }
-    o.damage += amount;
+    // Wolverine: "that damage is dealt, but all other damage already dealt to him is healed".
+    o.damage = hasStaticKind(ctx, o.id, 'damageDoesntAccumulate') ? amount : o.damage + amount;
     if (has(src, 'deathtouch')) o.damagedByDeathtouch = true;
     // Hawkeye: "if Hawkeye dealt damage to it this turn".
     if (!o.damagedBy?.includes(src.id)) o.damagedBy = [...(o.damagedBy ?? []), src.id];
@@ -127,6 +140,8 @@ function redirected(ctx: Ctx, to: TargetChoice): TargetChoice {
  * Returns what's left.
  */
 function prevented(ctx: Ctx, src: DamageSource, to: TargetChoice, amount: number): number {
+  // Marvel Super Heroes: a shield counter is removed instead (even if damage can't be prevented).
+  if ('object' in to && useShield(ctx, to.object.id)) return 0;
   if (ctx.s.battlefield.some((id) => hasStaticKind(ctx, id, 'damageCantBePrevented')))
     return amount;
   if ('player' in to) {
@@ -140,6 +155,8 @@ function prevented(ctx: Ctx, src: DamageSource, to: TargetChoice, amount: number
     return amount;
   }
   const host = to.object.id;
+  // Marvel Super Heroes: "Prevent all damage that would be dealt to Black Panther."
+  if (hasStaticKind(ctx, host, 'preventDamageToSelf')) return 0;
   const habit = ctx.s.battlefield.some(
     (id) =>
       obj(ctx, id).attachedTo === host &&
@@ -356,6 +373,28 @@ function playersOf(ctx: Ctx, es: EffectSource, ref: Ref): PlayerId[] {
 export function resolveAmount(ctx: Ctx, es: EffectSource, amount: Amount): number {
   if (typeof amount === 'number') return amount;
   if ('multiply' in amount) return amount.multiply * resolveAmount(ctx, es, amount.amount);
+  if ('manaValueOfSubject' in amount) {
+    const o = es.subject && ctx.s.objects[es.subject.id];
+    return o ? manaValue(def(ctx, o.id).manaCost) : 0;
+  }
+  if ('bluePipsOfSubject' in amount) {
+    const o = es.subject && ctx.s.objects[es.subject.id];
+    if (!o) return 0;
+    const c = def(ctx, o.id).manaCost;
+    return (c.colored.U ?? 0) + (c.hybrid ?? []).filter((h) => h.includes('U')).length;
+  }
+  if ('handSizeUpTo' in amount)
+    return Math.max(0, amount.handSizeUpTo - ctx.s.players[es.controller].hand.length);
+  if ('toughnessOf' in amount) {
+    const id = objectsOf(ctx, es, amount.toughnessOf)[0];
+    return id ? Math.max(0, characteristics(ctx, id).toughness) : 0;
+  }
+  if ('if' in amount) {
+    const self = es.source ? ctx.s.objects[es.source.id] : undefined;
+    return checkCondition(ctx, amount.if, es.controller, self, es.targets)
+      ? amount.then
+      : (amount.else ?? 0);
+  }
   if ('powerOf' in amount) {
     const ids = objectsOf(ctx, es, amount.powerOf);
     if (ids[0]) return Math.max(0, power(ctx, ids[0]));
@@ -448,6 +487,7 @@ export function runEffects(
       e.kind === 'searchLibrary' ||
       e.kind === 'lookForCreature' ||
       e.kind === 'discard' ||
+      e.kind === 'connive' ||
       e.kind === 'returnFromGraveyard' ||
       e.kind === 'piles' ||
       e.kind === 'opponentSacrifices' ||
@@ -473,7 +513,8 @@ export function runEffects(
       e.kind === 'pickFromCards' ||
       e.kind === 'castFreeCard' ||
       e.kind === 'revealUntilCastable' ||
-      e.kind === 'expressiveIteration'
+      e.kind === 'expressiveIteration' ||
+      e.kind === 'castFreeFromTop'
     ) {
       const lib = ctx.s.players[es.controller].library;
       const { controller, source, sourceDefId, targets, lkiPower, subject, amount, chosen, x } = es;
@@ -663,6 +704,30 @@ export function runEffects(
         );
         if (cards.length === 0) continue;
         ctx.s.decision = { kind: 'castFree', player: controller, cards, resume, thenPriority };
+      } else if (e.kind === 'castFreeFromTop') {
+        // Marvel Super Heroes (Cosmic Cube, Doom Reigns Supreme).
+        const who = e.from === 'yours' ? controller : other(controller);
+        const top = ctx.s.players[who].library.slice(0, e.count);
+        if (top.length === 0) continue;
+        for (const id of top) moveObject(ctx, id, 'exile');
+        const max = e.maxManaValue !== undefined ? resolveAmount(ctx, es, e.maxManaValue) : 99;
+        const cards = top.filter(
+          (id) => !def(ctx, id).types.includes('Land') && manaValue(def(ctx, id).manaCost) <= max,
+        );
+        const rest = e.rest === 'bottom' ? { thenToBottom: top } : {};
+        if (cards.length === 0) {
+          for (const id of rest.thenToBottom ?? [])
+            moveObject(ctx, id, 'library', { position: 'bottom' });
+          continue;
+        }
+        ctx.s.decision = {
+          kind: 'castFree',
+          player: controller,
+          cards,
+          ...rest,
+          resume,
+          thenPriority,
+        };
       } else if (e.kind === 'castFree') {
         // A target card in a graveyard, still there.
         const t =
@@ -880,6 +945,7 @@ export function runEffects(
             hasKeyword(ctx, c.id, 'indestructible')
           )
             continue;
+          if (useShield(ctx, c.id)) continue;
           moveObject(ctx, c.id, 'graveyard');
           died.push(c.id);
         }
@@ -911,6 +977,7 @@ export function runEffects(
           looked,
           ...(e.battlefieldOnYourTurn ? { battlefieldOnYourTurn: true } : {}),
           ...(e.restOnTop ? { restOnTop: true } : {}),
+          ...(e.restToGraveyard ? { restToGraveyard: true } : {}),
           resume,
           thenPriority,
         };
@@ -964,6 +1031,27 @@ export function runEffects(
           count,
           ...(e.filter ? { filter: e.filter } : {}),
           ...(e.exile ? { exile: true } : {}),
+          resume,
+          thenPriority,
+        };
+      } else if (e.kind === 'connive') {
+        // Rule 701.50: draw, then discard. A creature that has left still connives (no counter).
+        const id = objectsOf(ctx, es, e.what)[0] ?? (e.what === 'self' ? es.source?.id : undefined);
+        if (!id || !ctx.s.objects[id]) continue;
+        const o = obj(ctx, id);
+        const who = o.zone === 'battlefield' ? o.controller : controller;
+        // Leader, Super-Genius: "instead you draw a card, then that creature connives" (each Leader).
+        for (const id of ctx.s.battlefield)
+          if (obj(ctx, id).controller === who)
+            for (const a of def(ctx, id).abilities)
+              if (a.kind === 'static' && a.effect.kind === 'conniveDrawsFirst') drawCard(ctx, who);
+        drawCard(ctx, who);
+        if (ctx.s.players[who].hand.length === 0) continue;
+        ctx.s.decision = {
+          kind: 'discard',
+          player: who,
+          count: 1,
+          connive: { id, zcc: o.zcc },
           resume,
           thenPriority,
         };
@@ -1126,7 +1214,8 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
     }
     case 'destroy':
       for (const id of objectsOf(ctx, es, e.what))
-        if (!hasKeyword(ctx, id, 'indestructible')) moveObject(ctx, id, 'graveyard');
+        if (!hasKeyword(ctx, id, 'indestructible') && !useShield(ctx, id))
+          moveObject(ctx, id, 'graveyard');
       return;
     case 'sacrifice':
       for (const id of objectsOf(ctx, es, e.what)) sacrifice(ctx, id);
@@ -1160,7 +1249,7 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
         // "Then attach this Equipment to it" (Midnight Angel Armor): the token is "it".
         es.chosen = { id: t.id, zcc: t.zcc };
         if (defOf(ctx, e.token).entersTapped || e.tapped) t.tapped = true;
-        if (e.counters) addCounters(ctx, t.id, e.counters);
+        if (e.counters) addCounters(ctx, t.id, resolveAmount(ctx, es, e.counters));
         if (e.attacking && ctx.s.combat) {
           // "Tapped and attacking": attacking the same player, never declared (no attack triggers).
           t.tapped = true;
@@ -1190,6 +1279,7 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
     case 'searchLibrary':
     case 'lookForCreature':
     case 'discard':
+    case 'connive':
     case 'piles':
     case 'opponentSacrifices':
       return; // handled by runEffects: they pause resolution
@@ -1201,6 +1291,44 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
         moveObject(ctx, id, 'battlefield', { controller: es.controller });
         obj(ctx, id).tapped = true;
       }
+      return;
+    case 'copyArtifactAbility': {
+      // The topmost ability on the stack you control from an artifact source.
+      for (let i = ctx.s.stack.length - 1; i >= 0; i--) {
+        const item = ctx.s.stack[i]!;
+        if (item.kind !== 'ability' || item.controller !== es.controller) continue;
+        if (!defOf(ctx, item.sourceDefId).types.includes('Artifact')) continue;
+        ctx.s.stack.push({ ...item, id: newId(ctx) });
+        return;
+      }
+      return;
+    }
+    case 'keywordCountersFrom': {
+      const self = es.source && onBattlefield(ctx, es.source);
+      const from = objectsOf(ctx, es, e.what)[0];
+      if (!self || !from) return;
+      for (const k of SUPER_ADAPTOID_KEYWORDS)
+        if (hasKeyword(ctx, from, k) && !hasKeyword(ctx, self.id, k))
+          (self.counters ??= {})[k] = (self.counters[k] ?? 0) + 1;
+      return;
+    }
+    case 'castFreeFromTop':
+      return; // handled by runEffects
+    case 'removePlusOneCounters':
+      for (const id of objectsOf(ctx, es, e.from)) obj(ctx, id).plusOneCounters = 0;
+      return;
+    case 'assignToughness':
+      ctx.s.turn.toughnessDamage = [...(ctx.s.turn.toughnessDamage ?? []), es.controller];
+      return;
+    case 'extraTurn':
+      ctx.s.extraTurns = [
+        { player: es.controller, ...(e.noPowerUp ? { noPowerUp: true } : {}) },
+        ...(ctx.s.extraTurns ?? []),
+      ];
+      return;
+    case 'transform':
+      for (const id of objectsOf(ctx, es, e.what))
+        if (obj(ctx, id).zone === 'battlefield') transform(ctx, id);
       return;
     case 'mill': {
       const players = e.who ? playersOf(ctx, es, e.who) : [es.controller];
@@ -1296,12 +1424,19 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
       return;
     }
     case 'returnToBattlefield': {
-      const t = typeof e.what === 'object' && 'target' in e.what ? es.targets[e.what.target] : null;
+      // A target card, or (Marvel Super Heroes) the card that triggered it ("return it").
+      const t =
+        typeof e.what === 'object' && 'target' in e.what
+          ? es.targets[e.what.target]
+          : e.what === 'subject' && es.subject
+            ? { object: es.subject }
+            : null;
       if (!t || !('object' in t)) return;
       const o = ctx.s.objects[t.object.id];
       if (!o || o.zone !== 'graveyard' || o.zcc !== t.object.zcc) return;
       moveObject(ctx, o.id, 'battlefield', { controller: es.controller });
       if (e.counter) (o.counters ??= {})[e.counter] = 1;
+      if (e.addSubtype) o.addedSubtypes = [...(o.addedSubtypes ?? []), e.addSubtype];
       // Heroic Return, Winter Soldier: "if a Hero enters this way, it enters with counters".
       if (e.countersIf && cardMatches(ctx, o.id, e.countersIf.filter))
         addCounters(ctx, o.id, e.countersIf.count);
@@ -1717,6 +1852,8 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
       for (const id of lib.slice(0, resolveAmount(ctx, es, e.count))) {
         moveObject(ctx, id, 'exile');
         obj(ctx, id).playableUntilTurn = until;
+        if (e.ifExiled && cardMatches(ctx, id, e.ifExiled.filter))
+          for (const then of e.ifExiled.then) runEffect(ctx, es, then);
       }
       return;
     }
@@ -1985,6 +2122,7 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
         // A token ceases to exist in exile.
         if (token || !ctx.s.objects[id]) continue;
         moveObject(ctx, id, 'battlefield', { controller: owner });
+        if (e.tapped) obj(ctx, id).tapped = true;
         if (e.counters) addCounters(ctx, id, e.counters);
       }
       return;
@@ -2060,7 +2198,9 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
           keywords: [],
           loseAbilities: true,
           ...(e.basePT && def(ctx, id).types.includes('Creature') ? { basePT: e.basePT } : {}),
-          expires: 'untilYourNextTurn',
+          ...(e.whileSource && es.source
+            ? { expires: 'whileSource' as const, whileSourceId: es.source.id }
+            : { expires: 'untilYourNextTurn' as const }),
           player: es.controller,
         });
         o.blank = true;
@@ -2084,6 +2224,7 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
       }
       if (e.counters) addCounters(ctx, o.id, e.counters);
       if (e.addSubtype) o.addedSubtypes = [...(o.addedSubtypes ?? []), e.addSubtype];
+      if (e.named) (o.counters ??= {})[e.named] = 1;
       return;
     }
     case 'exile':
@@ -2135,3 +2276,28 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
     }
   }
 }
+
+// Shield counters (Marvel Super Heroes)
+
+/** "If it would be dealt damage or destroyed, instead remove a shield counter from it." */
+export function useShield(ctx: Ctx, id: ObjectId): boolean {
+  const o = ctx.s.objects[id];
+  if (!o || o.zone !== 'battlefield' || !o.counters?.shield) return false;
+  o.counters.shield--;
+  return true;
+}
+
+/** The keywords Super-Adaptoid copies as counters. */
+const SUPER_ADAPTOID_KEYWORDS = [
+  'haste',
+  'flying',
+  'firstStrike',
+  'doubleStrike',
+  'deathtouch',
+  'indestructible',
+  'lifelink',
+  'menace',
+  'reach',
+  'trample',
+  'vigilance',
+] as const;

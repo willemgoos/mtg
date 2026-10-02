@@ -275,11 +275,11 @@ export function Season({ onHome }: { onHome: () => void }) {
       <BoosterReveal
         key={receipt.packId}
         set={
-          receipt.rewards.some(
-            (r) => r.kind === 'card' && SEASON_CARDS.get(r.cardId)?.set === 'blb',
-          )
-            ? 'blb'
-            : 'fdn'
+          (['blb', 'msh'] as const).find((set) =>
+            receipt.rewards.some(
+              (r) => r.kind === 'card' && SEASON_CARDS.get(r.cardId)?.set === set,
+            ),
+          ) ?? 'fdn'
         }
         cards={receipt.rewards.map((r) =>
           r.kind === 'card' ? cardDb.get(r.cardId)!.name : wildcardName(r.rarity),

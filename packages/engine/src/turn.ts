@@ -130,12 +130,20 @@ function nextStep(ctx: Ctx, step: Step): Step | 'nextTurn' {
 export function advanceStep(ctx: Ctx): void {
   const next = nextStep(ctx, ctx.s.turn.step);
   if (ctx.s.turn.step === 'endCombat') ctx.s.combat = null;
-  if (next === 'nextTurn') startTurn(ctx, other(ctx.s.turn.activePlayer));
-  else enterStep(ctx, next);
+  if (next !== 'nextTurn') return enterStep(ctx, next);
+  // Marvel Super Heroes: extra turns come first, the last one added first (never mutated in place).
+  const [extra, ...rest] = ctx.s.extraTurns ?? [];
+  if (!extra) return startTurn(ctx, other(ctx.s.turn.activePlayer));
+  ctx.s.extraTurns = rest;
+  startTurn(ctx, extra.player, extra.noPowerUp);
 }
 
-export function startTurn(ctx: Ctx, player: PlayerId): void {
+export function startTurn(ctx: Ctx, player: PlayerId, noPowerUp = false): void {
   const s = ctx.s;
+  // Kang the Conqueror: "During that turn, power-up abilities can't be activated."
+  if (noPowerUp) s.turn.noPowerUp = true;
+  else delete s.turn.noPowerUp;
+  delete s.turn.toughnessDamage;
   // Avenge: whether the player whose turn just ended attacked during it.
   if (s.turn.number > 0) {
     const prev = s.players[s.turn.activePlayer];

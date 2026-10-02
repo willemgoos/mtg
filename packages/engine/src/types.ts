@@ -96,6 +96,15 @@ export interface CardDefinition {
   keywords: Keyword[];
   /** "This creature enters with N +1/+1 counters on it." */
   entersWithCounters?: number;
+  // Marvel Super Heroes
+  /** Enters with these named counters (Captain America, Super-Soldier: a shield counter). */
+  entersWithNamedCounters?: Record<string, number>;
+  /** Improvise: your artifacts can be tapped to pay its generic cost. */
+  improvise?: boolean;
+  /** "If this is in your opening hand, you may begin the game with it on the battlefield" (Quicksilver). */
+  beginsOnBattlefield?: boolean;
+  /** Sneak: cast during your declare blockers step for this, returning an unblocked attacker to hand. */
+  sneak?: ManaCost;
   /** A planeswalker's starting loyalty. */
   loyalty?: number;
   /** Only put the counters on if this holds (raid: "if you attacked this turn"). */
@@ -139,6 +148,9 @@ export interface CardDefinition {
     as?: 'offspring' | 'gift' | 'overload';
     /** A permanent's gift: given to an opponent as it resolves, if promised (Scrapshooter). */
     gift?: EffectDef;
+    // Teamwork (Marvel Super Heroes)
+    /** Teamwork N: the kicker is tapping your creatures with total power N or more (`cost` is {0}). */
+    teamwork?: number;
   };
   /** Costs {amount} less if its first target matches (Dire Downdraft: an attacking or tapped creature). */
   costReductionIfTarget?: { filter: CardFilter; amount: number };
@@ -182,6 +194,9 @@ export interface CardDefinition {
   forageOrPay?: ManaCost;
   /** Aura: what it enchants (chosen as a target when cast). */
   enchant?: TargetSpec;
+  // Transform (Marvel Super Heroes)
+  /** A double-faced card's back face (its own definition). */
+  back?: CardDefId;
   /** Costs {1} less for each matching permanent you control (affinity). */
   costReduction?: Amount;
   /** Flashback: may be cast from the graveyard for this cost, then exiled. */
@@ -220,6 +235,9 @@ export type AbilityDef =
       pain?: boolean;
       /** Path of Ancestry: scry 1 when spent on a creature spell sharing a type with your commander. */
       scryIfCommanderType?: boolean;
+      // Marvel Super Heroes
+      /** "Activate only if ..." (Dark Fortress: it entered this turn or you control a basic land). */
+      condition?: ConditionDef;
     }
   | {
       kind: 'activated';
@@ -236,6 +254,9 @@ export type AbilityDef =
       label?: string;
       /** Activated from the graveyard (Reassembling Skeleton). */
       fromGraveyard?: boolean;
+      // Power-up (Marvel Super Heroes)
+      /** Power-up: once only, and it costs the card's mana cost less if it entered this turn. */
+      powerUp?: boolean;
       /** Activated from your hand (cycling). */
       fromHand?: boolean;
     }
@@ -317,7 +338,11 @@ export type TriggerDef =
   | { on: 'attachedDies' }
   /** Whenever the creature this Equipment is attached to deals combat damage to a player. */
   | { on: 'equippedDealsCombatDamageToPlayer' }
-  | { on: 'attacks' }
+  | {
+      on: 'attacks';
+      // Marvel Super Heroes: "attacks alone" (Luke Cage).
+      alone?: boolean;
+    }
   /** "Whenever you attack" (with one or more creatures matching the filter): once per combat. */
   | { on: 'youAttack'; filter?: CardFilter }
   | { on: 'combatDamageToPlayer' }
@@ -337,7 +362,11 @@ export type TriggerDef =
         | 'firstNoncreature'
         | 'fourthNoncreature'
         /** Lady Loki: the caster's first instant, sorcery or Villain spell this turn. */
-        | 'firstInstantSorceryOrVillain';
+        | 'firstInstantSorceryOrVillain'
+        /** Marvel Super Heroes: a spell that targets a creature you control (Ms. Marvel). */
+        | 'targetsYourCreature'
+        /** Marvel Super Heroes: an instant or sorcery that targets an artifact or land (Fin Fang Foom). */
+        | 'instantOrSorceryTargetingArtifactOrLand';
       /** The spell must also match this (Gev: a Lizard spell). */
       spell?: CardFilter;
       /** Any player's spell, cast when it isn't their turn (Vision). */
@@ -352,14 +381,26 @@ export type TriggerDef =
   /** At the beginning of your precombat or postcombat main phase. */
   | { on: 'beginningOfMain'; which: 1 | 2 }
   /** Whenever you (or, with 'opponents', an opponent: Black Widow) draw your second card each turn. */
-  | { on: 'drawSecondCard'; whose?: 'opponents' }
+  | { on: 'drawSecondCard'; whose?: 'opponents' | 'any' }
+  // Marvel Super Heroes
+  /** Whenever a creature you control is dealt damage ("that much": the event amount). */
+  | { on: 'yourCreatureDealtDamage' }
+  /** Equipment: whenever the equipped creature attacks (Captain America's Shield). */
+  | { on: 'equippedAttacks' }
+  /** Whenever a player or permanent becomes the target of an ability you control (Loki, God of Mischief). */
+  | { on: 'youTargetWithAbility' }
   | { on: 'drawCard'; whose: 'yours' | 'opponents' }
   /** Whenever a source you control deals noncombat damage to an opponent ("that many"). */
   | { on: 'yourNoncombatDamageToOpponent' }
   /** Whenever this creature becomes blocked. */
   | { on: 'becomesBlocked' }
   /** Whenever a creature you control (matching the filter) attacks; "that creature" is the subject. */
-  | { on: 'creatureYouControlAttacks'; filter?: CardFilter }
+  | {
+      on: 'creatureYouControlAttacks';
+      filter?: CardFilter;
+      // Marvel Super Heroes: "attacks alone" (it is the only attacker).
+      alone?: boolean;
+    }
   | { on: 'landfall' }
   | { on: 'beginningOfUpkeep'; whose: 'yours' | 'each' | 'opponents' }
   | { on: 'beginningOfEndStep'; whose: 'yours' | 'each' }
@@ -395,6 +436,9 @@ export type TriggerDef =
   | { on: 'yourCreatureTargetedByOpponent' }
   /** When this Class becomes level N. */
   | { on: 'becomesLevel'; level: number }
+  // Teamwork (Marvel Super Heroes)
+  /** Whenever this becomes tapped to pay a teamwork cost (Agent Maria Hill). */
+  | { on: 'tappedForTeamwork' }
   /** Whenever one or more creatures you control (matching the filter) deal combat damage to a player (Kastral). */
   | { on: 'creaturesYouControlDealCombatDamageToPlayer'; filter?: CardFilter }
   /** When you sacrifice this permanent (Carrot Cake). */
@@ -525,6 +569,15 @@ export type ConditionDef =
   // Brawl staples.
   /** You have a card matching this in your hand (snarls reveal one). */
   | { kind: 'handHas'; filter: CardFilter }
+  // Marvel Super Heroes
+  /** The source entered the battlefield this turn. */
+  | { kind: 'sourceEnteredThisTurn' }
+  /** You control a basic land. */
+  | { kind: 'controlsBasicLand' }
+  /** The source has a counter of this kind (a shield counter). */
+  | { kind: 'sourceHasCounter'; name: string }
+  /** You attacked with a Hero this turn, or a Hero entered under your control (Avengers Assemble!). */
+  | { kind: 'heroAttackedOrEnteredThisTurn' }
   | { kind: 'custom'; handler: string };
 
 export interface CardFilter {
@@ -580,6 +633,13 @@ export interface CardFilter {
   // The Fantastic Four (9d).
   /** A card with this id ("a creature named Silver Surfer"). */
   named?: CardDefId;
+  // Marvel Super Heroes
+  /** It was attacking as it left the battlefield ("an attacking creature you control dies"). */
+  leftAttacking?: boolean;
+  /** Attached to the source (Winter Soldier: "for each Equipment attached to him"). */
+  attachedToSource?: boolean;
+  /** Its mana value is odd or even (Thanos). */
+  manaValueParity?: 'odd' | 'even';
   // Brawl.
   /** Is its controller's commander ("your commander"). */
   commander?: boolean;
@@ -644,6 +704,16 @@ export type Amount =
       basicOnly?: boolean;
     }
   | { multiply: number; amount: Amount }
+  // Marvel Super Heroes: "where X is Captain America's toughness".
+  | { toughnessOf: Ref }
+  /** The mana value of the triggering spell (Thor, God of Thunder). */
+  | { manaValueOfSubject: true }
+  /** Blue mana symbols in the triggering spell's mana cost (Namor). */
+  | { bluePipsOfSubject: true }
+  /** "Draw cards equal to the difference" up to this hand size (The Ten Rings). */
+  | { handSizeUpTo: number }
+  // Marvel Super Heroes: "costs {2} less if ..." (Punishing Punch).
+  | { if: ConditionDef; then: number; else?: number }
   /** Cards in your graveyard (of these types). */
   | { count: 'cardsInGraveyard'; types?: CardType[]; named?: CardDefId; plus?: number }
   /** The amount from the trigger event ("that much damage"). */
@@ -727,6 +797,8 @@ export type EffectDef =
       attacking?: boolean;
       counters?: number;
       addSubtype?: string;
+      // Marvel Super Heroes: 'with a finality counter on him' (Winter Soldier).
+      named?: string;
     }
   | { kind: 'exile'; what: Ref }
   /** Exile a card from a graveyard; extra effects if it was a creature card (Scavenging Ooze). */
@@ -819,7 +891,7 @@ export type EffectDef =
       exileAtEndStep?: boolean;
       /** Not of legendary permanents (Coiling Rebirth). */
       nonlegendary?: boolean;
-      /** "Except the token isn't legendary" (Quantum Misalignment, Helm of the Host). */
+      /** "Except the token isn't legendary" (Quantum Misalignment, Helm of the Host, Multiversal Incursion). */
       notLegendary?: boolean;
       /** "That token gains haste" (Helm of the Host). */
       haste?: boolean;
@@ -889,7 +961,13 @@ export type EffectDef =
       handOnly?: boolean;
     }
   /** Exile permanents, then return them under their owners' control (with +1/+1 counters). */
-  | { kind: 'blink'; what: Ref; counters?: number }
+  | {
+      kind: 'blink';
+      what: Ref;
+      counters?: number;
+      // Marvel Super Heroes: "return it tapped" (The Mighty Thor, Jane Foster).
+      tapped?: boolean;
+    }
   /**
    * Choose a permanent you control matching the filter (other than the
    * source): `then` happens to it (the 'chosen' ref). With none to choose,
@@ -911,14 +989,20 @@ export type EffectDef =
    */
   | { kind: 'blinkOnCombatDamage'; what: Ref }
   /** Put permanents on the top or bottom of their owners' libraries. */
-  | { kind: 'putInLibrary'; what: Ref; position: 'top' | 'bottom' }
+  | { kind: 'putInLibrary'; what: Ref; position: 'top' | 'bottom' | 'second' }
   /** Gain control of permanents until end of turn (Reptilian Recruiter), or until your next turn (Stilt-Man). */
   | { kind: 'gainControl'; what: Ref; untilYourNextTurn?: boolean }
   /**
    * Until your next turn, permanents lose all abilities (and have base power
    * and toughness `basePT` if creatures): Azure Beastbinder.
    */
-  | { kind: 'loseAbilities'; what: Ref; basePT?: [number, number] }
+  | {
+      kind: 'loseAbilities';
+      what: Ref;
+      basePT?: [number, number];
+      // Marvel Super Heroes: "for as long as the source remains on the battlefield" (The Wondrous Wasp).
+      whileSource?: boolean;
+    }
   | { kind: 'untap'; what: Ref }
   /** An additional combat phase after this one. */
   | { kind: 'extraCombat' }
@@ -956,6 +1040,34 @@ export type EffectDef =
     }
   /** Put the top N cards of your library into your graveyard. */
   | { kind: 'mill'; count: number; who?: Ref }
+  // Connive (Marvel Super Heroes)
+  /** It connives: its controller draws, then discards; a nonland discard puts a +1/+1 counter on it. */
+  | { kind: 'connive'; what: Ref }
+  // Transform (Marvel Super Heroes)
+  /** Turn a double-faced permanent to its other face. */
+  | { kind: 'transform'; what: Ref }
+  /**
+   * Exile the top N of your (or the opponent's) library; you may cast a spell
+   * from among them (mana value at most `maxManaValue`) without paying its mana
+   * cost. The rest go to the bottom, or stay exiled (Cosmic Cube, Doom Reigns Supreme).
+   */
+  | {
+      kind: 'castFreeFromTop';
+      count: number;
+      from: 'yours' | 'opponents';
+      maxManaValue?: Amount;
+      rest: 'bottom' | 'exile';
+    }
+  /** Copy the topmost ability you control on the stack from an artifact source (Scientist Supreme). */
+  | { kind: 'copyArtifactAbility' }
+  /** For each keyword the target has and the source lacks, a keyword counter on the source (Super-Adaptoid). */
+  | { kind: 'keywordCountersFrom'; what: Ref }
+  /** Remove all +1/+1 counters from it (The Astonishing Ant-Man, after counting them). */
+  | { kind: 'removePlusOneCounters'; from: Ref }
+  /** Take an extra turn after this one (Kang the Conqueror). */
+  | { kind: 'extraTurn'; noPowerUp?: boolean }
+  /** Until end of turn, your creatures with toughness greater than power assign damage by toughness. */
+  | { kind: 'assignToughness' }
   /** Counter a spell on the stack (unless it can't be countered). */
   | { kind: 'counter'; what: Ref; controllerTokens?: { token: CardDefId; count: number } }
   | { kind: 'bouncePlayerPermanents'; who: Ref; nonland?: boolean }
@@ -987,6 +1099,8 @@ export type EffectDef =
       counter?: string;
       /** It enters with +1/+1 counters if it matches the filter (Heroic Return: a Hero gets two). */
       countersIf?: { filter: CardFilter; count: number };
+      // Marvel Super Heroes: "is a Hero in addition to its other types" (Thunderbolts Conspiracy).
+      addSubtype?: string;
     }
   /** Destroy all creatures (matching the filter). `returnOne`: then return one of yours that died (Starfall Invocation). */
   | {
@@ -1007,9 +1121,17 @@ export type EffectDef =
       battlefieldOnYourTurn?: boolean;
       /** A card not taken stays on top (Herald's Horn looks at one card). */
       restOnTop?: boolean;
+      /** Marvel Super Heroes: the rest go to the graveyard (Earth's Mightiest Heroes). */
+      restToGraveyard?: boolean;
     }
   /** Exile the top N; you may play them until the end of this turn or of your next turn. */
-  | { kind: 'exileTopPlayable'; count: Amount; until: 'endOfTurn' | 'endOfNextTurn' }
+  | {
+      kind: 'exileTopPlayable';
+      count: Amount;
+      until: 'endOfTurn' | 'endOfNextTurn';
+      // Marvel Super Heroes (Daredevil): "If that card is a Hero card, ...".
+      ifExiled?: { filter: CardFilter; then: EffectDef[] };
+    }
   /** The source card goes from its owner's graveyard back to their hand (Angelic Destiny). */
 
   /** Each opponent sacrifices a creature of their choice; optionally you gain life equal to its toughness. */
@@ -1049,8 +1171,8 @@ export type EffectDef =
       tapped?: boolean;
       /** Created under an opponent's control (a gift). */
       forOpponent?: boolean;
-      /** Each enters with this many +1/+1 counters. */
-      counters?: number;
+      /** Each enters with this many +1/+1 counters (Marvel Super Heroes: any amount, Alien Invasion). */
+      counters?: Amount;
       /** Created under the controller of this target instead (Beast Within: "its controller"). */
       forControllerOf?: number;
     }
@@ -1215,6 +1337,8 @@ export type StaticDef =
       loseKeywords?: Keyword[];
       /** "You control enchanted creature" (Kitnap). */
       control?: boolean;
+      /** Marvel Super Heroes: "Double all damage equipped creature would deal" (Mjölnir). */
+      doubleDamage?: boolean;
       /** Base power and toughness (Hulkbuster Armor: 9/9). */
       basePT?: [number, number];
       /** Can't be blocked (Whispersilk Cloak). */
@@ -1241,7 +1365,7 @@ export type StaticDef =
     }
   /** Instant and sorcery spells you cast cost {N} less (Archmage of Runes). */
   | { kind: 'instantsAndSorceriesCostLess'; amount: number }
-  | { kind: 'spellsCostLess'; filter: CardFilter; amount: number }
+  | { kind: 'spellsCostLess'; filter: CardFilter; amount: Amount }
   | { kind: 'instantsAndSorceriesUncounterable' }
   /** You have no maximum hand size. */
   | { kind: 'noMaxHandSize' }
@@ -1249,6 +1373,26 @@ export type StaticDef =
   | { kind: 'creaturesFromTopOfLibrary' }
   /** This creature gets +X/+Y (Persistent Marshstalker: +1/+0 for each other Rat you control). */
   | { kind: 'boost'; power: Amount; toughness: Amount }
+  // Marvel Super Heroes
+  /** Damage to it replaces damage already marked: it never accumulates (Wolverine, Fierce Fighter). */
+  | { kind: 'damageDoesntAccumulate' }
+  /** "You may activate abilities of creatures you control as though those creatures had haste" (Shang-Chi). */
+  | { kind: 'abilitiesAsThoughHaste' }
+  /** "Creatures with flying can't block creatures you control" (Storm, Windrider). */
+  | { kind: 'flyersCantBlockYours' }
+  /** "Prevent all damage that would be dealt to this creature" (Black Panther, Hope Enduring). */
+  | { kind: 'preventDamageToSelf' }
+  /** "If a creature you control would connive, instead you draw a card, then it connives" (Leader). */
+  | { kind: 'conniveDrawsFirst' }
+  /** "Noncreature spells you cast have improvise" (Ironheart). */
+  | { kind: 'noncreatureSpellsHaveImprovise' }
+  /** "Your opponents can't cast spells during your turn" (Jennifer Walters). */
+  | { kind: 'opponentsCantCastDuringYourTurn' }
+  /** "You have hexproof", while the condition holds (Captain America, Super-Soldier). */
+  | { kind: 'youHaveHexproof'; condition?: ConditionDef }
+  // Power-up (Marvel Super Heroes)
+  /** Power-up abilities of other creatures you control cost {amount} less (Hulk, Gamma Goliath). */
+  | { kind: 'powerUpCostsLess'; amount: number }
   /** This creature can't be blocked. */
   | { kind: 'cantBeBlocked' }
   /** This creature can't be blocked by creatures matching the filter. */
@@ -1351,6 +1495,11 @@ export interface GameObject {
   damagedByDeathtouch: boolean;
   plusOneCounters: number;
   isToken: boolean;
+  // Transform (Marvel Super Heroes)
+  /** It was attacking as it last left the battlefield (Ares, God of War). */
+  leftAttacking?: boolean;
+  /** Showing its back face (transformed, or cast as the back face): the front's id, restored when it leaves. */
+  front?: CardDefId;
   /** Equipment: the creature it is attached to. */
   attachedTo?: ObjectId;
   /** Indices of "activate only once" abilities already used. */
@@ -1505,6 +1654,8 @@ export type StackItem =
       kickCount?: number;
       /** Cast from exile (Klaw). */
       fromExile?: boolean;
+      /** Marvel Super Heroes: cast for its sneak cost; it enters tapped and attacking this player. */
+      sneak?: PlayerId;
     }
   | {
       kind: 'ability';
@@ -1522,6 +1673,8 @@ export type StackItem =
       mode?: number;
       /** A granted trigger (Undying Malice): these effects instead of the card's ability. */
       inline?: EffectDef[];
+      /** Marvel Super Heroes: the X paid for an activated ability. */
+      x?: number;
       /** An emblem's ability. */
       emblem?: AbilityDef;
       /** The activated ability, as the source had it when activated. */
@@ -1544,6 +1697,11 @@ export type Step =
   | 'cleanup';
 
 export interface TurnState {
+  // Marvel Super Heroes
+  /** Power-up abilities can't be activated this turn (Kang the Conqueror's extra turn). */
+  noPowerUp?: boolean;
+  /** Creatures these players control assign combat damage by toughness if greater (The Kingpin of Crime). Replaced, never mutated. */
+  toughnessDamage?: PlayerId[];
   /** 0 during the mulligan phase. */
   number: number;
   activePlayer: PlayerId;
@@ -1627,7 +1785,9 @@ export interface ContinuousEffect {
   /** Control change: who controlled it before (restored when this expires). */
   previousController?: PlayerId;
   /** 'untilYourNextTurn': until `player`'s next turn begins. */
-  expires: 'endOfTurn' | 'untilYourNextTurn';
+  expires: 'endOfTurn' | 'untilYourNextTurn' | 'whileSource';
+  /** Marvel Super Heroes: for 'whileSource', the permanent it lasts for. */
+  whileSourceId?: ObjectId;
   player?: PlayerId;
   // Doom Prevails (9e).
   /** Kang Dynasty: whenever it deals combat damage to a player, this player draws. */
@@ -1770,6 +1930,8 @@ export type Decision =
       filter?: CardFilter;
       /** Exiled instead of discarded (Ruthless Negotiation). */
       exile?: boolean;
+      /** Connive: the creature that gets a +1/+1 counter if a nonland card is discarded. */
+      connive?: ObjectRef;
       resume: PausedResolution;
       thenPriority: PlayerId;
     }
@@ -1797,6 +1959,8 @@ export type Decision =
       battlefieldOnYourTurn?: boolean;
       /** The looked-at cards not taken stay on top (Herald's Horn). */
       restOnTop?: boolean;
+      /** Marvel Super Heroes: the cards not taken go to the graveyard. */
+      restToGraveyard?: boolean;
       resume: PausedResolution;
       thenPriority: PlayerId;
     }
@@ -1941,6 +2105,8 @@ export type Decision =
       discardInstead?: boolean;
       /** Cards that go to hand once this is answered (Portent's other exiled cards). */
       thenToHand?: ObjectId[];
+      /** Marvel Super Heroes: cards not cast go to the bottom of their owner's library. */
+      thenToBottom?: ObjectId[];
       resume: PausedResolution;
       thenPriority: PlayerId;
     }
@@ -1958,6 +2124,9 @@ export type Decision =
 
 export interface GameState {
   schemaVersion: 1;
+  // Marvel Super Heroes
+  /** Extra turns to come, next first (Kang the Conqueror). Replaced, never mutated. */
+  extraTurns?: { player: PlayerId; noPowerUp?: boolean }[];
   seed: number;
   rng: RngState;
   nextObjectId: number;
@@ -2026,6 +2195,12 @@ export type Action =
       /** Cast without paying its mana cost (a 'castFree' decision). */
       free?: boolean;
       /** Cast from the graveyard through Festival of Embers or Osteomancer Adept. */
+      // Transform (Marvel Super Heroes)
+      /** Cast a modal double-faced card's back face. */
+      back?: boolean;
+      // Sneak (Marvel Super Heroes)
+      /** Cast for its sneak cost by returning this unblocked attacker to its owner's hand. */
+      sneak?: ObjectId;
       via?: 'festival' | 'osteomancer' | 'conduit' | 'free';
       /** Mockingbird: the creature to enter as a copy of. */
       copyOf?: ObjectId;
@@ -2033,6 +2208,9 @@ export type Action =
       sacrificeMany?: ObjectId[];
       /** Times multikicker is paid (Batroc). */
       kickCount?: number;
+      // Teamwork (Marvel Super Heroes)
+      /** The creatures tapped to pay teamwork (a kicked teamwork spell). Omitted: the engine picks. */
+      teamwork?: ObjectId[];
       /** Mana sources to tap. Omitted: the engine picks. */
       payWith?: ObjectId[];
     }
@@ -2049,6 +2227,9 @@ export type Action =
       /** The card discarded as a cost (Flamecache Gecko). */
       discard?: ObjectId;
       payWith?: ObjectId[];
+      // Marvel Super Heroes
+      /** The value chosen for {X} in the ability's cost (Bruce Banner). */
+      x?: number;
     }
   | {
       type: 'addAttacker';
@@ -2117,12 +2298,23 @@ export type GameEvent =
   | { type: 'giftGiven'; player: PlayerId }
   /** A Class gained a level. */
   | { type: 'levelChanged'; id: ObjectId; level: number }
+  // Teamwork (Marvel Super Heroes)
+  | { type: 'tappedForTeamwork'; id: ObjectId }
+  // Transform (Marvel Super Heroes)
+  | { type: 'transformed'; id: ObjectId; defId: CardDefId }
   /** A permanent was sacrificed (just before it left the battlefield). */
   | { type: 'sacrificed'; id: ObjectId; defId: CardDefId; player: PlayerId }
   /** `player` spent mana: their total this turn went from `before` to `after`. */
   | { type: 'manaSpent'; player: PlayerId; before: number; after: number }
   /** `player`'s spell or ability targeted these objects. */
-  | { type: 'targeted'; player: PlayerId; ids: ObjectId[] }
+  | {
+      type: 'targeted';
+      player: PlayerId;
+      ids: ObjectId[];
+      /** Marvel Super Heroes (Loki): by an ability rather than a spell, and whether players were targeted. */
+      byAbility?: boolean;
+      anyTarget?: boolean;
+    }
   | { type: 'gameOver'; winner: PlayerId | 'draw' };
 
 export interface ApplyResult {
