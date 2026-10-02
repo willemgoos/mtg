@@ -297,6 +297,24 @@ export const FIXTURES: CardDefinition[] = [
   creature('gruul-bear', 3, 3, [], { manaCost: cost(0, { R: 1, G: 1 }) }),
   creature('big-gruul', 5, 5, [], { manaCost: cost(1, { R: 2, G: 1 }) }),
   creature('legend', 2, 2, [], { supertypes: ['Legendary'] }),
+  creature('conniver', 1, 2, [], {
+    abilities: [
+      {
+        kind: 'triggered',
+        trigger: { on: 'etb' },
+        targets: [],
+        effects: [{ kind: 'connive', what: 'self' }],
+      },
+    ],
+  }),
+  card({
+    id: 'scheme',
+    types: ['Sorcery'],
+    spell: {
+      targets: [{ what: 'creature', controller: 'you' }],
+      effects: [{ kind: 'connive', what: { target: 0 } }],
+    },
+  }),
 ];
 
 export const DB = new Map(FIXTURES.map((c) => [c.id, c]));

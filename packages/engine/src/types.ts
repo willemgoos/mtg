@@ -736,6 +736,9 @@ export type EffectDef =
     }
   /** Put the top N cards of your library into your graveyard. */
   | { kind: 'mill'; count: number; who?: Ref }
+  // Connive (Marvel Super Heroes)
+  /** It connives: its controller draws, then discards; a nonland discard puts a +1/+1 counter on it. */
+  | { kind: 'connive'; what: Ref }
   /** Counter a spell on the stack (unless it can't be countered). */
   | { kind: 'counter'; what: Ref; controllerTokens?: { token: CardDefId; count: number } }
   | { kind: 'bouncePlayerPermanents'; who: Ref; nonland?: boolean }
@@ -1298,6 +1301,8 @@ export type Decision =
       filter?: CardFilter;
       /** Exiled instead of discarded (Ruthless Negotiation). */
       exile?: boolean;
+      /** Connive: the creature that gets a +1/+1 counter if a nonland card is discarded. */
+      connive?: ObjectRef;
       resume: PausedResolution;
       thenPriority: PlayerId;
     }

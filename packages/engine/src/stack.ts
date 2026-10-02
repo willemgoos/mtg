@@ -910,8 +910,12 @@ function squirrelFood(
 export function answerDiscard(ctx: Ctx, card: ObjectId): void {
   const d = ctx.s.decision;
   if (d.kind !== 'discard') throw new Error('Not discarding');
+  const nonland = !def(ctx, card).types.includes('Land');
   moveObject(ctx, card, d.exile ? 'exile' : 'graveyard');
   d.count--;
+  const c = d.connive && ctx.s.objects[d.connive.id];
+  if (c && nonland && c.zone === 'battlefield' && c.zcc === d.connive!.zcc)
+    addCounters(ctx, c.id, 1);
   const left = ctx.s.players[d.player].hand.filter(
     (id) => !d.filter || cardMatches(ctx, id, d.filter),
   );

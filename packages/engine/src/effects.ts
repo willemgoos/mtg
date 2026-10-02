@@ -355,6 +355,7 @@ export function runEffects(
       e.kind === 'searchLibrary' ||
       e.kind === 'lookForCreature' ||
       e.kind === 'discard' ||
+      e.kind === 'connive' ||
       e.kind === 'returnFromGraveyard' ||
       e.kind === 'piles' ||
       e.kind === 'opponentSacrifices' ||
@@ -756,6 +757,22 @@ export function runEffects(
           resume,
           thenPriority,
         };
+      } else if (e.kind === 'connive') {
+        // Rule 701.50: draw, then discard. A creature that has left still connives (no counter).
+        const id = objectsOf(ctx, es, e.what)[0] ?? (e.what === 'self' ? es.source?.id : undefined);
+        if (!id || !ctx.s.objects[id]) continue;
+        const o = obj(ctx, id);
+        const who = o.zone === 'battlefield' ? o.controller : controller;
+        drawCard(ctx, who);
+        if (ctx.s.players[who].hand.length === 0) continue;
+        ctx.s.decision = {
+          kind: 'discard',
+          player: who,
+          count: 1,
+          connive: { id, zcc: o.zcc },
+          resume,
+          thenPriority,
+        };
       } else if (e.kind === 'returnFromGraveyard') {
         const options = ctx.s.players[controller].graveyard.filter((id) =>
           e.types.some((t) => def(ctx, id).types.includes(t)),
@@ -960,6 +977,7 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
     case 'searchLibrary':
     case 'lookForCreature':
     case 'discard':
+    case 'connive':
     case 'piles':
     case 'opponentSacrifices':
       return; // handled by runEffects: they pause resolution
