@@ -108,6 +108,18 @@ describe('expedition packs', () => {
     }
   });
 
+  it('opens Marvel Super Heroes boosters with a Marvel deck, never a back face alone', () => {
+    expect(packSetOf({ deck: 'msh-heroes-unite' })).toBe('msh');
+    for (let seed = 0; seed < 20; seed++) {
+      const pack = rollPack({ kind: 'booster' }, seed, false, 'msh');
+      expect(new Set(pack).size).toBe(packSize);
+      for (const name of pack) {
+        expect(card.get(name)!.set).toBe('msh');
+        expect(card.get(name)!.front).toBeUndefined();
+      }
+    }
+  });
+
   it('keeps only the chosen cards, up to the keep count, from each pack', () => {
     const s = startExpedition(empty, deck, 5);
     expect(s.run!.build.packs).toHaveLength(START_PACKS);

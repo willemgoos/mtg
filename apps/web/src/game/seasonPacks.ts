@@ -37,9 +37,20 @@ export const BLOOMBURROW_SHEETS = Object.fromEntries(
   ]),
 ) as Record<Rarity, string[]>;
 
+/** Marvel Super Heroes' booster cards: every card in the set we play, but the basics (fronts only). */
+export const MARVEL_SHEETS = Object.fromEntries(
+  RARITIES.map((rarity) => [
+    rarity,
+    SCRYFALL.filter((c) => c.set === 'msh' && c.rarity === rarity && !c.front)
+      .map((c) => slug(c.name))
+      .filter((id) => cardDb.has(id) && !isBasic(id)),
+  ]),
+) as Record<Rarity, string[]>;
+
 const SHEETS: Record<SeasonPackKind, Record<Rarity, string[]>> = {
   foundations: FOUNDATIONS_SHEETS,
   bloomburrow: BLOOMBURROW_SHEETS,
+  marvel: MARVEL_SHEETS,
 };
 
 /** The pack generator for a kind of booster. */

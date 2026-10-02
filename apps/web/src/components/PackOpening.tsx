@@ -5,6 +5,7 @@ import {
   type ExpeditionRun,
   keepCount,
   type Pack,
+  PACK_SET_NAMES,
   type PackSet,
   packSetOf,
   pendingPacks,
@@ -27,7 +28,7 @@ export const COLOR_NAMES: Record<Color, string> = {
 export function packName(p: Pack, set: PackSet = 'fdn'): string {
   if (p.kind === 'color') return `${COLOR_NAMES[p.color]} pack`;
   if (p.kind === 'rare') return 'Rare pack';
-  return set === 'blb' ? 'Bloomburrow booster' : 'Foundations booster';
+  return `${PACK_SET_NAMES[set]} booster`;
 }
 
 /** Art for a pack: the first rare of its set and colour, or a mythic. */

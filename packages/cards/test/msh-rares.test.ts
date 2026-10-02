@@ -1,7 +1,11 @@
 import { getCharacteristics } from '@mtg/engine';
 import { describe, expect, it } from 'vitest';
-import { cardDb } from '../src/index.ts';
-import { all, cast, game, handSize, n, pt, settle } from './blb-helpers.ts';
+import { playRandomGame } from '@mtg/engine';
+import { cardDb, slug } from '../src/index.ts';
+import { MSH_MYTHICS } from '../src/msh/mythics.ts';
+import { MSH_OTHERS } from '../src/msh/others.ts';
+import { MSH_RARES } from '../src/msh/rares.ts';
+import { all, cast, engine, game, handSize, n, pt, settle } from './blb-helpers.ts';
 
 // Marvel Super Heroes 10c: rares and mythics.
 
@@ -374,4 +378,32 @@ describe('batch 4', () => {
     expect(all(g, 'agent-of-atlas')).toHaveLength(2);
     expect(g.state.players.p1.graveyard.length).toBeGreaterThanOrEqual(2);
   });
+});
+
+describe('all the rares and mythics', () => {
+  it('play legal, replayable seeded games in batches', () => {
+    const ids = [
+      ...Object.keys(MSH_RARES),
+      ...Object.keys(MSH_MYTHICS),
+      ...Object.keys(MSH_OTHERS),
+    ].map(slug);
+    for (let start = 0; start < ids.length; start += 6) {
+      const deck = [
+        ...ids.slice(start, start + 6).flatMap((id) => Array<string>(4).fill(id)),
+        ...['plains', 'island', 'swamp', 'mountain', 'forest'].flatMap((id) =>
+          Array<string>(8).fill(id),
+        ),
+      ];
+      for (const seed of [1, 2]) {
+        const initial = engine.newGame({ decks: { p1: deck, p2: deck }, seed: 100 + start + seed });
+        const result = playRandomGame(engine, initial, 900 + start * 7 + seed, {
+          maxActions: 8000,
+        });
+        expect(result.truncated, `batch ${start}`).toBe(false);
+        let state = initial;
+        for (const action of result.actions) state = engine.applyAction(state, action).state;
+        expect(state, `batch ${start}`).toEqual(result.final);
+      }
+    }
+  }, 60_000);
 });
