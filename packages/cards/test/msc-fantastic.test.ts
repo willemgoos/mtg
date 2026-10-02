@@ -1,4 +1,4 @@
-import { getCharacteristics } from '@mtg/engine';
+import { determinize, getCharacteristics, redactFor } from '@mtg/engine';
 import { describe, expect, it } from 'vitest';
 import { cardDb } from '../src/index.ts';
 import { all, cast, game, handSize, n, pt, settle } from './blb-helpers.ts';
@@ -265,5 +265,36 @@ describe('The Fantastic Four', () => {
     g.do(fromGy!);
     settle(g);
     expect(pt(g, dm)[0]).toBe(7);
+  });
+});
+
+describe('hidden information', () => {
+  it('the search bot’s guesses survive Mirage Mirror copying an opposing card', () => {
+    const g = game({
+      p1: { battlefield: ['mirage-mirror', ...n('plains', 2)] },
+      p2: { battlefield: ['rumbling-baloth'] },
+    });
+    const mirror = g.id('p1', 'mirage-mirror');
+    const baloth = g.id('p2', 'rumbling-baloth');
+    g.do(
+      g
+        .legal()
+        .find(
+          (a) =>
+            a.type === 'activateAbility' &&
+            a.targets.some((t) => 'object' in t && t.object.id === baloth),
+        )!,
+    );
+    settle(g);
+    const decks = {
+      p1: Object.values(g.state.objects)
+        .filter((o) => o.owner === 'p1')
+        .map((o) => o.originalDefId ?? o.defId),
+      p2: Object.values(g.state.objects)
+        .filter((o) => o.owner === 'p2')
+        .map((o) => o.defId),
+    };
+    expect(g.obj(mirror).defId).toBe('rumbling-baloth');
+    expect(() => determinize(redactFor(g.state, 'p2', cardDb), decks, 1)).not.toThrow();
   });
 });

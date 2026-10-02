@@ -117,8 +117,10 @@ export function determinize(
         hidden.push(id);
         continue;
       }
-      const i = remaining.indexOf(o.defId);
-      if (i < 0) throw new Error(`${o.defId} (${id}) is not in ${p}'s decklist`);
+      // A permanent copying another card (Mirage Mirror, Mockingbird) is still its own card in the list.
+      const card = o.originalDefId ?? o.defId;
+      const i = remaining.indexOf(card);
+      if (i < 0) throw new Error(`${card} (${id}) is not in ${p}'s decklist`);
       remaining.splice(i, 1);
     }
     if (remaining.length !== hidden.length)
