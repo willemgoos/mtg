@@ -216,17 +216,16 @@ Savage Uprising 49%.
   landcycling and typecycling (extending Stream A's cycling), investigate/Clue, improvise, enrage, boast, extort.
 - Bot vs bot across the Foundations starter decks: aim for 45 to 65% per deck, as in phase 8.
 
-### 10c: every rare and mythic, then boosters: done except nine cards waiting on Stream A
+### 10c: every rare and mythic, then boosters: done
 
-Done: 51 of 60 rares and 24 of 25 mythics, the five basic-landcycling commons (on Stream A's cycling), and MSH boosters in
+Done: all 60 rares and 25 mythics, the five basic-landcycling commons (on Stream A's cycling), and MSH boosters in
 Expedition (with a Marvel deck) and Season (with the ten Marvel decks as starters). New along the way: sneak, improvise,
 extort (as a trigger), shield counters, extra turns, X in activated abilities, "you have hexproof", "opponents can't cast spells
 during your turn", starting the game with a card in play, damage that doesn't accumulate, equipment doubling damage, casting a
 spell for free from the top of a library, and custom effects for the true one-offs (`packages/engine/src/msh-effects.ts`).
 
-Waiting on Stream A (built on `marvel-brawl`, not yet on `marvel`): the six Sagas (The Coming of Galactus, Armor Wars, Avengers:
-Under Siege, Origin of the Avengers, The Super Hero Civil War, World War Hulk) need Sagas, and Absorbing Man, Taskmaster and
-Secret Invasion need "becomes a copy".
+The six Sagas use Stream A's Sagas, and Absorbing Man, Taskmaster and Secret Invasion extend Stream A's "becomes a copy" (until
+your next turn, while the source stays, the enchanted creature copying, and staying a 4/4 creature).
 
 
 - All 60 rares and 25 mythics, including those not in any of our decks.
@@ -373,3 +372,8 @@ The 60-card decks against the Foundations starters barely move with the new weig
   flying to targeted creatures, The Serpent Society's poison ward, Avengers Disassembled's replacement basic land,
   Daredevil's Radar Sense, Hawkeye's Net and Boomerang arrows (only Explosive, when he attacks), Cloak and Dagger's hand card
   coming back (it stays exiled), Worlds Within Worlds exiling itself.
+- Armor Wars chapter II (artifact spells cost {1} less this turn) is not modelled; World War Hulk chapter I puts a red or green
+  creature card from your hand onto the battlefield instead of making the next one free; The Super Hero Civil War checks mana
+  value 3 or less per creature rather than 6 total.
+- Absorbing Man and Taskmaster keep the copied name and legendary status; Taskmaster can't copy a creature card in a graveyard;
+  Secret Invasion's ward {2} is not modelled.

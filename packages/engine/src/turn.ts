@@ -13,6 +13,7 @@ import {
 } from './combat.ts';
 import { type Ctx, def, drawCard, emit, obj, other, tap, untap } from './context.ts';
 import { payMana, planPayment } from './mana.ts';
+import { endCopy } from './effects.ts';
 import { phaseIn } from './phasing.ts';
 import { addLoreForTurn } from './sagas.ts';
 import { tickSuspend } from './suspend.ts';
@@ -143,6 +144,9 @@ export function startTurn(ctx: Ctx, player: PlayerId, noPowerUp = false): void {
   // Kang the Conqueror: "During that turn, power-up abilities can't be activated."
   if (noPowerUp) s.turn.noPowerUp = true;
   else delete s.turn.noPowerUp;
+  // Absorbing Man, Taskmaster: their copies last until their controller's next turn.
+  for (const id of s.battlefield)
+    if (s.objects[id]!.copyUntilTurnOf === player) endCopy(ctx, s.objects[id]!);
   delete s.turn.toughnessDamage;
   // Avenge: whether the player whose turn just ended attacked during it.
   if (s.turn.number > 0) {

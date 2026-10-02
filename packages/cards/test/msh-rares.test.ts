@@ -407,3 +407,73 @@ describe('all the rares and mythics', () => {
     }
   }, 60_000);
 });
+
+describe('Sagas and copies (on Stream A)', () => {
+  it('Avengers: Under Siege makes two Villains at chapter I', () => {
+    const g = game({
+      p1: { hand: ['avengers-under-siege'], battlefield: [...n('swamp', 2), ...n('mountain', 2)] },
+    });
+    settle(cast(g, 'avengers-under-siege'));
+    expect(all(g, 'villain-token')).toHaveLength(2);
+  });
+
+  it('The Super Hero Civil War takes a creature at chapter I', () => {
+    const g = game({
+      p1: {
+        hand: ['the-super-hero-civil-war'],
+        battlefield: [...n('mountain', 3), ...n('plains', 2)],
+      },
+      p2: { battlefield: ['agent-of-atlas'] },
+    });
+    const atlas = g.id('p2', 'agent-of-atlas');
+    cast(g, 'the-super-hero-civil-war');
+    settle(g, (legal) => legal.find((a) => a.type === 'chooseTargets' && a.targets.length > 0));
+    expect(g.obj(atlas).controller).toBe('p1');
+  });
+
+  it('Absorbing Man copies an artifact but stays a 4/4 creature, until your next turn', () => {
+    const g = game({
+      step: 'upkeep',
+      p1: { battlefield: ['absorbing-man', 'arc-reactor'] },
+    });
+    const man = g.id('p1', 'absorbing-man');
+    for (let i = 0; i < 10 && g.decision.kind === 'priority'; i++) g.pass();
+    settle(g, (legal) => legal.find((a) => a.type === 'chooseTargets' && a.targets.length > 0));
+    expect(g.obj(man).defId).toBe('arc-reactor');
+    const c = getCharacteristics(g.state, cardDb, man);
+    expect(c.types).toContain('Creature');
+    expect([c.power, c.toughness]).toEqual([4, 4]);
+    expect(c.keywords.has('vigilance')).toBe(true);
+  });
+
+  it('Taskmaster becomes a copy of a creature', () => {
+    const g = game({
+      step: 'upkeep',
+      p1: { battlefield: ['taskmaster-mercenary-mimic'] },
+      p2: { battlefield: ['serra-angel'] },
+    });
+    const t = g.id('p1', 'taskmaster-mercenary-mimic');
+    for (let i = 0; i < 10 && g.decision.kind === 'priority'; i++) g.pass();
+    settle(g, (legal) => legal.find((a) => a.type === 'chooseTargets' && a.targets.length > 0));
+    expect(g.obj(t).defId).toBe('serra-angel');
+  });
+
+  it('Secret Invasion: the enchanted creature copies the exiled one while the Aura stays', () => {
+    const g = game({
+      p1: { hand: ['secret-invasion'], battlefield: [...n('island', 3), 'agent-of-atlas'] },
+      p2: { battlefield: ['serra-angel'] },
+    });
+    const atlas = g.id('p1', 'agent-of-atlas');
+    const angel = g.id('p2', 'serra-angel');
+    cast(g, 'secret-invasion', [g.ref(atlas)]);
+    settle(g, (legal) =>
+      legal.find(
+        (a) =>
+          a.type === 'chooseTargets' &&
+          (a.targets[0] as { object?: { id: string } } | undefined)?.object?.id === angel,
+      ),
+    );
+    expect(g.obj(atlas).defId).toBe('serra-angel');
+    expect(g.zoneOf(angel)).toBe('exile');
+  });
+});
