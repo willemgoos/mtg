@@ -162,6 +162,11 @@ export function createSearchBot(
       ...declared,
       ...legal.flatMap((a) => (a.type === 'addAttacker' ? [a.attacker] : [])),
     ];
+    // Attackers that can't be taken back (goaded) stay in every option.
+    const removable = new Set(
+      legal.flatMap((a) => (a.type === 'removeAttacker' ? [a.attacker] : [])),
+    );
+    const fixed = declared.filter((id) => !removable.has(id));
     const planned = planAttacks(view, v, me, declared);
     const options: ObjectId[][] = [planned, [], available];
     for (const id of available) options.push([id]);
@@ -170,6 +175,7 @@ export function createSearchBot(
     }
     const seen = new Set<string>();
     return options
+      .map((ids) => [...fixed.filter((id) => !ids.includes(id)), ...ids])
       .filter((ids) => {
         const k = [...ids].sort().join(',');
         if (seen.has(k)) return false;

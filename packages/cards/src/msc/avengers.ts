@@ -1,4 +1,4 @@
-import type { AbilityDef, CardFilter, EffectDef, Ref, SpellDef, TargetSpec } from '@mtg/engine';
+import type { AbilityDef, CardFilter, EffectDef, Ref, TargetSpec } from '@mtg/engine';
 import type { Behavior } from '../build.ts';
 import {
   creature,
@@ -11,7 +11,7 @@ import {
   yourCreature,
   yourCreatureCard,
 } from '../blb/helpers.ts';
-import { COLORS, cycling, equip, tapFor } from './helpers.ts';
+import { COLORS, combos, cycling, equip, tapFor } from './helpers.ts';
 
 /**
  * Avengers Assemble (W/U/R), the Marvel Commander precon led by Captain
@@ -30,30 +30,6 @@ const permanent = (filter: CardFilter, extra: Partial<TargetSpec> = {}): TargetS
 });
 const anyColorFor = (onlyFor: string): AbilityDef[] => COLORS.map((c) => tapFor(c, { onlyFor }));
 const chooseType: AbilityDef = onEnter({ kind: 'chooseCreatureType' });
-/** Every combination of the modes, in printed order ("choose two", "choose one or more"). */
-const combos = (modes: SpellDef[], sizes: number[]): SpellDef[] => {
-  const out: SpellDef[] = [];
-  for (let mask = 1; mask < 1 << modes.length; mask++) {
-    const picked = modes.filter((_, i) => mask & (1 << i));
-    if (!sizes.includes(picked.length)) continue;
-    const targets: TargetSpec[] = [];
-    const effects: EffectDef[] = [];
-    for (const m of picked) {
-      // Shift each mode's target references past the targets before it.
-      const shift = targets.length;
-      targets.push(...m.targets);
-      effects.push(
-        ...m.effects.map((e) =>
-          JSON.parse(
-            JSON.stringify(e).replace(/"target":(\d+)/g, (_, n) => `"target":${Number(n) + shift}`),
-          ),
-        ),
-      );
-    }
-    out.push({ label: picked.map((m) => m.label).join(' + '), targets, effects });
-  }
-  return out;
-};
 const destroyAll = (filter: CardFilter, permanents = false): EffectDef => ({
   kind: 'destroyAll',
   filter,

@@ -1,6 +1,7 @@
 import type { CardDefinition, Color, Keyword } from '@mtg/engine';
 import type { Behavior } from './build.ts';
 import { AVENGERS } from './msc/avengers.ts';
+import { FANTASTIC } from './msc/fantastic.ts';
 import { WAKANDA } from './msc/wakanda.ts';
 import { STAPLES } from './msc/staples.ts';
 
@@ -13,6 +14,7 @@ export const MARVEL_BRAWL_BEHAVIORS: Record<string, Behavior> = {
   ...STAPLES,
   ...AVENGERS,
   ...WAKANDA,
+  ...FANTASTIC,
 };
 
 const creatureToken = (
@@ -46,6 +48,20 @@ export const MARVEL_BRAWL_TOKENS: CardDefinition[] = [
   creatureToken('beast-3-token', 'Beast', 'G', ['Beast'], 3, 3),
   creatureToken('rhino-token', 'Rhino', 'G', ['Rhino'], 4, 4, ['trample']),
   creatureToken('angel-4-4-token', 'Angel', 'W', ['Angel'], 4, 4, ['flying', 'vigilance']),
+  creatureToken('merfolk-token', 'Merfolk', 'U', ['Merfolk'], 1, 1),
+  creatureToken('ox-token', 'Ox', 'W', ['Ox'], 2, 2),
+  {
+    ...creatureToken('wall-0-3-token', 'Wall', 'W', ['Wall'], 0, 3, ['defender', 'reach']),
+    colors: [],
+  },
+  {
+    ...creatureToken('construct-4-4-token', 'Construct', 'W', ['Construct'], 4, 4, [
+      'flying',
+      'haste',
+    ]),
+    colors: [],
+    types: ['Artifact', 'Creature'],
+  },
   {
     // "An artifact with indestructible and '{T}: Add {C}. This mana can't be spent to cast a nonartifact spell.'"
     id: 'vibranium-token',

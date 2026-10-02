@@ -436,7 +436,8 @@ export const WAKANDA: Record<string, Behavior> = {
       when({ on: 'beginningOfCombat', whose: 'yours' }, [], {
         kind: 'tokenCopy',
         of: 'attached',
-        notLegendaryWithHaste: true,
+        notLegendary: true,
+        haste: true,
       }),
       equip('{5}'),
     ],

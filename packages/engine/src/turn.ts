@@ -5,6 +5,7 @@ import {
   canBlock,
   dealCombatDamage,
   defenderOf,
+  mustAttack,
   possibleAttackers,
   possibleBlockers,
 } from './combat.ts';
@@ -202,10 +203,15 @@ function enterStep(ctx: Ctx, step: Step): void {
       s.combat = { attackers: [], dealtFirstStrikeDamage: [] };
       return givePriority(ctx, ap);
 
-    case 'declareAttackers':
-      if (possibleAttackers(ctx).length === 0) return confirmAttackers(ctx);
-      s.decision = { kind: 'declareAttackers', player: ap, declared: [] };
+    case 'declareAttackers': {
+      const able = possibleAttackers(ctx);
+      if (able.length === 0) return confirmAttackers(ctx);
+      // Creatures that attack each combat if able are declared already.
+      const defender = defenderOf(ctx);
+      const declared = able.filter((id) => mustAttack(ctx, id)).map((id) => ({ id, defender }));
+      s.decision = { kind: 'declareAttackers', player: ap, declared };
       return;
+    }
 
     case 'declareBlockers': {
       const defender = defenderOf(ctx);
@@ -312,6 +318,12 @@ export function finishCleanup(ctx: Ctx): void {
     o.damage = 0;
     o.damagedByDeathtouch = false;
     delete o.damagedBy;
+    // Mirage Mirror: back to itself.
+    if (o.copyingUntilTurn !== undefined && o.originalDefId) {
+      o.defId = o.originalDefId;
+      delete o.originalDefId;
+      delete o.copyingUntilTurn;
+    }
   }
   endEffects(ctx, (e) => e.expires === 'endOfTurn');
   if (s.emblems?.length)

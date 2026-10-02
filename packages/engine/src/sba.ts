@@ -1,6 +1,6 @@
 import { creaturesOnBattlefield, hasKeyword, isCreature, toughness } from './characteristics.ts';
 import { type Ctx, def, emit, moveObject, obj } from './context.ts';
-import type { ObjectId } from './types.ts';
+import type { ObjectId, PlayerId } from './types.ts';
 import { PLAYERS } from './types.ts';
 
 /**
@@ -75,6 +75,8 @@ function extraLegends(ctx: Ctx): ObjectId[] {
     // Helm of the Host's copies aren't legendary.
     if (!def(ctx, id).supertypes.includes('Legendary') || obj(ctx, id).nonlegendary) continue;
     const o = obj(ctx, id);
+    // Council of Reeds: "The legend rule doesn't apply to creatures you control."
+    if (def(ctx, id).types.includes('Creature') && legendRuleOff(ctx, o.controller)) continue;
     const key = `${o.controller}:${o.defId}`;
     const prev = newest.get(key);
     if (prev === undefined) newest.set(key, id);
@@ -84,6 +86,14 @@ function extraLegends(ctx: Ctx): ObjectId[] {
     } else out.push(id);
   }
   return out;
+}
+
+function legendRuleOff(ctx: Ctx, player: PlayerId): boolean {
+  return ctx.s.battlefield.some(
+    (id) =>
+      obj(ctx, id).controller === player &&
+      def(ctx, id).abilities.some((a) => a.kind === 'static' && a.effect.kind === 'noLegendRule'),
+  );
 }
 
 /** Ends the game if a player has lost. Returns true if the game is over. */

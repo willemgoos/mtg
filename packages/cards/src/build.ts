@@ -88,6 +88,16 @@ export const KEYWORDS_AS_ABILITIES = new Set([
   'AV Bead',
   'Communication Bead',
   'Prime Bead',
+  'Cascade',
+  'Convoke',
+  'Discover',
+  'Escalate',
+  'Explore',
+  'Goad',
+  'Rebound',
+  'Insatiable Hunger',
+  'Lethal Voice',
+  'Sense the Good',
 ]);
 
 const BASIC_MANA: Record<string, ManaType> = {

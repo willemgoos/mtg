@@ -17,6 +17,7 @@ import {
   drawCard,
   emit,
   moveObject,
+  newId,
   newTimestamp,
   obj,
   onBattlefield,
@@ -32,7 +33,7 @@ import { targetCombos } from './targets.ts';
 import { phaseOut } from './phasing.ts';
 import { foodsOf } from './forage.ts';
 import { canPayFrom, manaSources, manaValue } from './mana.ts';
-import { shuffleInPlace } from './rng.ts';
+import { nextInt, shuffleInPlace } from './rng.ts';
 import { checkCondition } from './triggers.ts';
 import type {
   CardDefId,
@@ -365,6 +366,11 @@ export function resolveAmount(ctx: Ctx, es: EffectSource, amount: Amount): numbe
     return 0;
   }
   if ('event' in amount) return es.amount ?? 0;
+  // Crystal: "the number of colors that spell is".
+  if ('count' in amount && amount.count === 'subjectColors') {
+    const o = es.subject && ctx.s.objects[es.subject.id];
+    return o ? def(ctx, o.id).colors.length : 0;
+  }
   if ('sacrificedPower' in amount) return Math.max(0, es.lkiPower ?? 0);
   if ('x' in amount) {
     const x = es.x ?? (es.source && ctx.s.objects[es.source.id]?.xPaid) ?? 0;
@@ -464,7 +470,10 @@ export function runEffects(
       e.kind === 'portent' ||
       e.kind === 'exileUntilNonlandCastByDiscard' ||
       e.kind === 'revealPutAndTake' ||
-      e.kind === 'pickFromCards'
+      e.kind === 'pickFromCards' ||
+      e.kind === 'castFreeCard' ||
+      e.kind === 'revealUntilCastable' ||
+      e.kind === 'expressiveIteration'
     ) {
       const lib = ctx.s.players[es.controller].library;
       const { controller, source, sourceDefId, targets, lkiPower, subject, amount, chosen, x } = es;
@@ -574,13 +583,79 @@ export function runEffects(
           resume: { ...resume, effects: [...then, ...resume.effects] },
           thenPriority,
         };
+      } else if (e.kind === 'castFreeCard') {
+        // Rebound, Power Pack: the card must still be where it was exiled.
+        const card = ctx.s.objects[e.card.id];
+        if (!card || card.zone !== 'exile' || card.zcc !== e.card.zcc) continue;
+        if (def(ctx, card.id).types.includes('Land')) continue;
+        ctx.s.decision = {
+          kind: 'castFree',
+          player: controller,
+          cards: [card.id],
+          ...(e.exileAfter ? { exileAfter: true } : {}),
+          resume,
+          thenPriority,
+        };
+      } else if (e.kind === 'revealUntilCastable') {
+        // Cascade and discover: exile until a cheap enough nonland card.
+        const self = es.source && ctx.s.objects[es.source.id];
+        const max =
+          e.max === 'belowSource'
+            ? manaValue(defOf(ctx, self?.defId ?? sourceDefId).manaCost) - 1
+            : resolveAmount(ctx, es, e.max);
+        const exiled: ObjectId[] = [];
+        let hit: ObjectId | undefined;
+        for (const id of [...lib]) {
+          moveObject(ctx, id, 'exile');
+          const d = def(ctx, id);
+          if (!d.types.includes('Land') && manaValue(d.manaCost) <= max) {
+            hit = id;
+            break;
+          }
+          exiled.push(id);
+        }
+        // The misses go to the bottom in a random order.
+        shuffleInPlace(ctx.s.rng, exiled);
+        for (const id of exiled) moveObject(ctx, id, 'library', { position: 'bottom' });
+        if (!hit) continue;
+        const after: EffectDef = {
+          kind: 'afterReveal',
+          card: { id: hit, zcc: obj(ctx, hit).zcc },
+          to: e.orHand ? 'hand' : 'libraryBottom',
+        };
+        ctx.s.decision = {
+          kind: 'castFree',
+          player: controller,
+          cards: [hit],
+          resume: { ...resume, effects: [after, ...resume.effects] },
+          thenPriority,
+        };
+      } else if (e.kind === 'expressiveIteration') {
+        // One of the top three to your hand; the other two settle afterwards.
+        const looked = lib.slice(0, 3);
+        if (looked.length === 0) continue;
+        ctx.s.decision = {
+          kind: 'searchLibrary',
+          player: controller,
+          options: looked,
+          looked,
+          restOnTop: true,
+          resume: {
+            ...resume,
+            effects: [{ kind: 'afterExpressive', cards: looked }, ...resume.effects],
+          },
+          thenPriority,
+        };
       } else if (e.kind === 'castFree' && e.from) {
         // West Coast Expansion (from your hand), Scarlet Witch (cards exiled with her).
         const self = es.source && ctx.s.objects[es.source.id];
+        const exiled = (self?.exiledWith ?? []).filter((id) => ctx.s.objects[id]?.zone === 'exile');
         const pool =
           e.from === 'hand'
             ? ctx.s.players[controller].hand
-            : (self?.exiledWith ?? []).filter((id) => ctx.s.objects[id]?.zone === 'exile');
+            : e.from === 'lastExiledWithSource'
+              ? exiled.slice(-1)
+              : exiled;
         const cards = pool.filter(
           (id) => !def(ctx, id).types.includes('Land') && cardMatches(ctx, id, e.filter ?? {}),
         );
@@ -925,7 +1000,12 @@ export function runEffects(
           thenPriority,
         };
       } else {
-        const options = lib.filter((id) => {
+        // Path to Exile: the exiled creature's controller searches their own library.
+        const t = e.forControllerOf !== undefined ? es.targets[e.forControllerOf] : undefined;
+        const searcher =
+          (t && 'object' in t ? ctx.s.objects[t.object.id]?.controller : undefined) ?? controller;
+        if (e.forControllerOf !== undefined && !t) continue;
+        const options = ctx.s.players[searcher].library.filter((id) => {
           if (typeof e.filter === 'object') return cardMatches(ctx, id, e.filter);
           const d = defOf(ctx, obj(ctx, id).defId);
           const basic = d.supertypes.includes('Basic') && d.types.includes('Land');
@@ -933,7 +1013,7 @@ export function runEffects(
         });
         ctx.s.decision = {
           kind: 'searchLibrary',
-          player: controller,
+          player: searcher,
           options,
           ...(e.required ? { required: true } : {}),
           ...(e.to !== 'hand' ? { to: e.to } : {}),
@@ -963,7 +1043,11 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
         const id = es.source?.id ?? 'unknown';
         src = damageSourceFor(ctx, id, es.controller);
       }
-      for (const t of resolveRef(ctx, es, e.to)) dealDamage(ctx, src, t, amount, false);
+      for (const t of resolveRef(ctx, es, e.to)) {
+        // Nova Flame: "each other creature".
+        if (e.exceptFrom && 'object' in t && t.object.id === src.id) continue;
+        dealDamage(ctx, src, t, amount, false);
+      }
       return;
     }
     case 'pump': {
@@ -1223,7 +1307,8 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
     // Avengers Assemble (9b).
     case 'exileTopWithSource': {
       const self = es.source && ctx.s.objects[es.source.id];
-      for (const id of ctx.s.players[es.controller].library.slice(0, e.count)) {
+      const from = e.who === 'eachOpponent' ? other(es.controller) : es.controller;
+      for (const id of ctx.s.players[from].library.slice(0, e.count)) {
         moveObject(ctx, id, 'exile');
         if (self) self.exiledWith = [...(self.exiledWith ?? []), id];
       }
@@ -1277,6 +1362,144 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
       aura.attachedTo = host.id;
       return;
     }
+    // The Fantastic Four (9d).
+    case 'afterReveal': {
+      // Cascade declined: to the bottom. Discover declined: into your hand.
+      const o = ctx.s.objects[e.card.id];
+      if (!o || o.zone !== 'exile' || o.zcc !== e.card.zcc) return;
+      if (e.to === 'hand') moveObject(ctx, o.id, 'hand');
+      else moveObject(ctx, o.id, 'library', { position: 'bottom' });
+      return;
+    }
+    case 'afterExpressive': {
+      // Of the two left on top: the first is exiled (playable this turn), the other goes to the bottom.
+      const lib = ctx.s.players[es.controller].library;
+      const rest = e.cards.filter((id) => lib.includes(id));
+      if (rest[0]) {
+        moveObject(ctx, rest[0], 'exile');
+        obj(ctx, rest[0]).playableUntilTurn = ctx.s.turn.number;
+      }
+      if (rest[1]) moveObject(ctx, rest[1], 'library', { position: 'bottom' });
+      return;
+    }
+    case 'mustAttack':
+      for (const id of objectsOf(ctx, es, e.what))
+        ctx.s.effects.push({
+          timestamp: newTimestamp(ctx),
+          affected: { id, zcc: obj(ctx, id).zcc },
+          power: 0,
+          toughness: 0,
+          keywords: [],
+          mustAttack: true,
+          ...(e.cantBlock ? { cantBlock: true } : {}),
+          expires: 'untilYourNextTurn',
+          player: es.controller,
+        });
+      return;
+    case 'explore':
+      for (const id of objectsOf(ctx, es, e.what)) {
+        const top = ctx.s.players[es.controller].library[0];
+        if (!top) continue;
+        emit(ctx, { type: 'revealed', player: es.controller, id: top });
+        // A nonland card stays on top (a simplification: never into the graveyard).
+        if (def(ctx, top).types.includes('Land')) moveObject(ctx, top, 'hand');
+        else addCounters(ctx, id, 1);
+      }
+      return;
+    case 'copyTopTrigger': {
+      const top = [...ctx.s.stack]
+        .reverse()
+        .find((x) => x.kind === 'ability' && x.controller === es.controller && !x.activated);
+      if (!top) return;
+      for (let i = 0; i < e.count; i++) ctx.s.stack.push({ ...top, id: newId(ctx) });
+      return;
+    }
+    case 'becomeCopy': {
+      const self = es.source && onBattlefield(ctx, es.source);
+      const of = objectsOf(ctx, es, e.of)[0];
+      if (!self || !of) return;
+      self.originalDefId ??= self.defId;
+      self.defId = obj(ctx, of).defId;
+      self.copyingUntilTurn = ctx.s.turn.number;
+      return;
+    }
+    case 'keepOneOfEachType':
+      for (const p of ['p1', 'p2'] as const) {
+        const theirs = ctx.s.battlefield.filter(
+          (id) => obj(ctx, id).controller === p && !def(ctx, id).types.includes('Land'),
+        );
+        // The caster keeps their best of each type, and leaves the opponent their worst.
+        const byValue = [...theirs].sort(
+          (a, b) => manaValue(def(ctx, b).manaCost) - manaValue(def(ctx, a).manaCost),
+        );
+        if (p !== es.controller) byValue.reverse();
+        const keep = new Set<ObjectId>();
+        for (const type of ['Artifact', 'Creature', 'Enchantment', 'Planeswalker'] as const) {
+          const pick = byValue.find((id) => !keep.has(id) && def(ctx, id).types.includes(type));
+          if (pick) keep.add(pick);
+        }
+        for (const id of theirs) if (!keep.has(id)) sacrifice(ctx, id);
+      }
+      return;
+    case 'promiseOfLoyalty':
+      for (const p of ['p1', 'p2'] as const) {
+        const theirs = creaturesOnBattlefield(ctx, p).map((c) => c.id);
+        const best = [...theirs].sort((a, b) => power(ctx, b) - power(ctx, a))[0];
+        for (const id of theirs) if (id !== best) sacrifice(ctx, id);
+        if (best) {
+          const o = obj(ctx, best);
+          o.vowedTo = es.controller;
+          o.counters = { ...o.counters, vow: 1 };
+        }
+      }
+      return;
+    case 'exileRandomToCastNextUpkeep': {
+      const gy = ctx.s.players[es.controller].graveyard.filter((id) =>
+        cardMatches(ctx, id, e.filter),
+      );
+      if (gy.length === 0) return;
+      const id = gy[nextInt(ctx.s.rng, gy.length)]!;
+      moveObject(ctx, id, 'exile');
+      const o = obj(ctx, id);
+      (ctx.s.delayed ??= []).push({
+        controller: es.controller,
+        sourceDefId: es.sourceDefId,
+        subject: { id, zcc: o.zcc },
+        effects: [{ kind: 'castFreeCard', card: { id, zcc: o.zcc }, exileAfter: true }],
+        fromTurn: ctx.s.turn.number + 1,
+        whose: es.controller,
+        at: 'upkeep',
+      });
+      return;
+    }
+    case 'ownersRegainControl':
+      for (const id of ctx.s.battlefield) {
+        const o = obj(ctx, id);
+        if (o.controller !== o.owner && def(ctx, id).types.includes('Creature')) {
+          o.controller = o.owner;
+          delete o.controlledBy;
+        }
+      }
+      return;
+    case 'negativeZoneFlip': {
+      const self = es.source && onBattlefield(ctx, es.source);
+      if (!self) return;
+      const exiled = (self.exiledWith ?? []).filter((id) => ctx.s.objects[id]?.zone === 'exile');
+      const creatures = exiled.filter((id) => def(ctx, id).types.includes('Creature'));
+      if (creatures.length < 4 || nextInt(ctx.s.rng, 2) === 0) return;
+      sacrifice(ctx, self.id);
+      const back = exiled[nextInt(ctx.s.rng, exiled.length)];
+      if (back) moveObject(ctx, back, 'hand');
+      return;
+    }
+    case 'lookPutPermanents':
+      // Genesis Ultimatum: every permanent card onto the battlefield (they're all worth it).
+      for (const id of ctx.s.players[es.controller].library.slice(0, e.count)) {
+        const d = def(ctx, id);
+        const permanent = d.types.some((t) => PERMANENT_TYPES.includes(t));
+        moveObject(ctx, id, permanent ? 'battlefield' : 'hand', { controller: es.controller });
+      }
+      return;
     // Wakanda Forever (9c).
     case 'becomeMonarch':
       setMonarch(ctx, e.who === 'controller' ? es.controller : other(es.controller));
@@ -1447,6 +1670,8 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
         ...(e.until === 'endOfYourNextTurn'
           ? { untilTurn: ctx.s.turn.number + (ownTurn ? 2 : 1) }
           : {}),
+        // Galvanic Iteration: "when you next cast an instant or sorcery spell this turn".
+        ...(e.until === 'nextSpellThisTurn' ? { untilTurn: ctx.s.turn.number, once: true } : {}),
       });
       return;
     }
@@ -1463,11 +1688,9 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
           const t = createObject(ctx, o.defId, es.controller, 'battlefield', true);
           const pt = e.pt ?? (o.copyPT ? [o.copyPT.power, o.copyPT.toughness] : undefined);
           if (pt) t.copyPT = { power: pt[0], toughness: pt[1] };
-          // Helm of the Host: "except the token isn't legendary. That token gains haste."
-          if (e.notLegendaryWithHaste) {
-            t.nonlegendary = true;
-            t.grantedKeywords = ['haste'];
-          }
+          // "Except the token isn't legendary" (Quantum Misalignment); "that token gains haste" (Helm of the Host).
+          if (e.notLegendary) t.nonlegendary = true;
+          if (e.haste) t.grantedKeywords = ['haste'];
           ctx.s.battlefield.push(t.id);
           emit(ctx, {
             type: 'objectMoved',

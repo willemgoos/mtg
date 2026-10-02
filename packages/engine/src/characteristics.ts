@@ -1,5 +1,5 @@
 import { commanderTypes, isCommander } from './brawl.ts';
-import { type Ctx, def, defOf, obj } from './context.ts';
+import { type Ctx, def, defOf, obj, other } from './context.ts';
 import { manaValue } from './cost.ts';
 import { checkCondition } from './triggers.ts';
 import type {
@@ -268,6 +268,25 @@ export function countOf(
       .filter((id) => obj(ctx, id).controller === player && matchesFilter(ctx, id, a.filter))
       .reduce((n, id) => n + manaValue(def(ctx, id).manaCost), 0);
   if (a.count === 'commanderCasts') return ctx.s.players[player].commanderCasts ?? 0;
+  // The Fantastic Four (9d).
+  if (a.count === 'colorsAmongPermanentsAndSpells') {
+    const colors = new Set<string>();
+    for (const id of ctx.s.battlefield)
+      if (obj(ctx, id).controller === player) for (const c of def(ctx, id).colors) colors.add(c);
+    for (const id of ctx.s.turn.castDefs?.[player] ?? [])
+      for (const c of defOf(ctx, id).colors) colors.add(c);
+    return colors.size;
+  }
+  if (a.count === 'subjectColors') return 0; // resolved with the trigger (see resolveAmount)
+  if (a.count === 'opponentHandSize') return ctx.s.players[other(player)].hand.length;
+  if (a.count === 'greatestNoncreatureManaValue') {
+    const noncreature = (id: ObjectId) => !def(ctx, id).types.includes('Creature');
+    const ids = [
+      ...ctx.s.battlefield.filter((id) => obj(ctx, id).controller === player),
+      ...ctx.s.players[player].graveyard,
+    ].filter(noncreature);
+    return Math.max(0, ...ids.map((id) => manaValue(def(ctx, id).manaCost)));
+  }
   if (a.count === 'permanentsYouControl')
     return ctx.s.battlefield.filter(
       (id) =>
@@ -564,6 +583,7 @@ function avengersFilter(
   filter: CardFilter,
   sourceId: ObjectId | undefined,
 ): boolean {
+  if (filter.named && obj(ctx, id).defId !== filter.named) return false;
   const chosen = sourceId ? ctx.s.objects[sourceId]?.chosenType : undefined;
   if (filter.chosenTypeOfSource && !(chosen && hasSubtype(ctx, id, chosen))) return false;
   if (filter.notChosenTypeOfSource && chosen && hasSubtype(ctx, id, chosen)) return false;

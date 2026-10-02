@@ -18,7 +18,22 @@ export function canAttack(ctx: Ctx, id: ObjectId): boolean {
   const c = characteristics(ctx, id);
   if (!c.types.includes('Creature') || c.keywords.has('defender') || c.cantAttack) return false;
   if (cantAttackDefender(ctx, id)) return false;
+  // Promise of Loyalty: it can't attack the player it made its vow to.
+  if (o.vowedTo && o.vowedTo !== o.controller) return false;
   return !o.summoningSick || c.keywords.has('haste');
+}
+
+/** Goaded, or "attacks each combat if able" (Galactus while there's no Silver Surfer). */
+export function mustAttack(ctx: Ctx, id: ObjectId): boolean {
+  const o = obj(ctx, id);
+  if (ctx.s.effects.some((e) => e.mustAttack && e.affected.id === id && e.affected.zcc === o.zcc))
+    return true;
+  return def(ctx, id).abilities.some(
+    (a) =>
+      a.kind === 'static' &&
+      a.effect.kind === 'attacksEachCombat' &&
+      checkCondition(ctx, a.effect.condition, o.controller, o),
+  );
 }
 
 /** Queen Mother Ramonda: "creatures with power 2 or less can't attack you" while you're the monarch. */

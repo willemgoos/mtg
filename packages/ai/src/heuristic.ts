@@ -268,7 +268,11 @@ function nextAttackAction(
   declared: ObjectId[],
 ): Action {
   const plan = memo(attackPlans, view.decision, () => planAttacks(engine, view, me, declared));
-  const wrong = declared.find((id) => !plan.includes(id));
+  // Goaded attackers can't be taken back.
+  const removable = engine
+    .getLegalActions(view, me)
+    .flatMap((a) => (a.type === 'removeAttacker' ? [a.attacker] : []));
+  const wrong = declared.find((id) => !plan.includes(id) && removable.includes(id));
   if (wrong) return { type: 'removeAttacker', player: me, attacker: wrong };
   const next = plan.find((id) => !declared.includes(id));
   if (next) return { type: 'addAttacker', player: me, attacker: next, defender: other(me) };

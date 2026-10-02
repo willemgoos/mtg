@@ -6,7 +6,7 @@ import {
   matchesFilter,
 } from './characteristics.ts';
 import { manaValue } from './cost.ts';
-import { blockViolations, canAttack, canBlock, defenderOf } from './combat.ts';
+import { blockViolations, canAttack, canBlock, defenderOf, mustAttack } from './combat.ts';
 import { type Ctx, def, obj, other } from './context.ts';
 import { forageChoices } from './forage.ts';
 import { canPayFrom, creatureHelpers, manaSources } from './mana.ts';
@@ -14,6 +14,7 @@ import { castVariants, spellTags } from './spells.ts';
 import {
   castCost,
   crewFor,
+  escalateCrew,
   artifactsToSacrifice,
   countersYouControl,
   hasStatic,
@@ -63,7 +64,12 @@ export function castableCards(ctx: Ctx, player: PlayerId): ObjectId[] {
       if (landsFromGraveyard) out.push(id);
       continue;
     }
-    if (d.flashback || d.castFromGraveyardRemovingCounters || graveyardVias(ctx, player, id).length)
+    if (
+      d.flashback ||
+      d.castFromGraveyardRemovingCounters ||
+      d.castFromGraveyardWithDiscard ||
+      graveyardVias(ctx, player, id).length
+    )
       out.push(id);
   }
   // Cruelclaw's Heist: an opponent's exiled card you may cast.
@@ -233,7 +239,9 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
       d.keywords.includes('flash') ||
       flashFilters.some((f) => cardMatches(ctx, card, f));
     // Restricted mana (Giada: only for Angels; Villages: only for creature spells).
-    const pool = restricted ? manaSources(ctx, player, undefined, spellTags(d)) : sources;
+    const base = restricted ? manaSources(ctx, player, undefined, spellTags(d)) : sources;
+    // Convoke: untapped creatures can pay for {1} each.
+    const pool = d.convoke ? [...base, ...creatureHelpers(ctx, player, base)] : base;
     // {X}: every affordable value (up to 10).
     const xs = d.manaCost.x
       ? Array.from(
@@ -242,12 +250,18 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
         )
       : [undefined];
     // A card to discard as an additional cost (Sazacap's Brew).
-    const discards = d.discardToCast ? ps.hand.filter((id) => id !== card) : [undefined];
+    // Dragon Man: from the graveyard, discarding a card as well.
+    const discardToCast =
+      d.discardToCast || (zone === 'graveyard' && d.castFromGraveyardWithDiscard);
+    const discards = discardToCast ? ps.hand.filter((id) => id !== card) : [undefined];
     if (d.discardToCast && discards.length === 0) continue;
     if (!instantSpeed && !sorcery) continue;
     // The usual ways, plus graveyard casts through other cards.
     const vias: ('festival' | 'osteomancer' | 'conduit' | undefined)[] = [
-      ...(zone !== 'graveyard' || d.flashback || d.castFromGraveyardRemovingCounters
+      ...(zone !== 'graveyard' ||
+      d.flashback ||
+      d.castFromGraveyardRemovingCounters ||
+      d.castFromGraveyardWithDiscard
         ? [undefined]
         : []),
       ...(zone === 'graveyard' ? graveyardVias(ctx, player, card) : []),
@@ -256,6 +270,8 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
       for (const v of castVariants(d, zone, via)) {
         if ((v.life ?? 0) > ps.life) continue;
         if (v.removeCounters && countersYouControl(ctx, player) < v.removeCounters) continue;
+        // Escalate: enough untapped creatures to tap.
+        if (v.spell?.escalate && escalateCrew(ctx, player, v.spell.escalate) === null) continue;
         // Rottenmouth Viper: sacrifice 0 to 5 nonland permanents (the least useful first).
         for (const sacrificeMany of sacrificePrefixes(ctx, player, card, d))
           for (const x of xs) {
@@ -281,7 +297,11 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
             };
             const specs = v.spell?.targets ?? (d.enchant ? [d.enchant] : []);
             const forages = v.forage ? forageChoices(ctx, player) : [undefined];
-            for (const sacrifice of v.sacrifice ? creatures : [undefined]) {
+            // Ultimate Nullification: only a legendary creature.
+            const sacrificeable = d.sacrificeToCastFilter
+              ? creatures.filter((id) => matchesFilter(ctx, id, d.sacrificeToCastFilter))
+              : creatures;
+            for (const sacrifice of v.sacrifice ? sacrificeable : [undefined]) {
               for (const targets of combosFor(specs, card, sacrifice)) {
                 const ward = wardCost(ctx, player, targets);
                 // Dire Downdraft costs less with some targets.
@@ -455,7 +475,8 @@ export function getLegalActions(ctx: Ctx, player: PlayerId): Action[] {
       );
       for (const id of s.battlefield) {
         const at = d.declared.find((x) => x.id === id);
-        if (at) out.push({ type: 'removeAttacker', player, attacker: id });
+        // Goaded creatures (and Galactus) attack each combat if able: they can't be taken back.
+        if (at && !mustAttack(ctx, id)) out.push({ type: 'removeAttacker', player, attacker: id });
         else if (isCreature(ctx, id) && canAttack(ctx, id))
           out.push({ type: 'addAttacker', player, attacker: id, defender });
         if (at || (isCreature(ctx, id) && canAttack(ctx, id)))
@@ -529,6 +550,8 @@ export function getLegalActions(ctx: Ctx, player: PlayerId): Action[] {
         if (cd.types.includes('Land')) continue;
         const discards = d.discardInstead ? s.players[player].hand : [undefined];
         for (const v of castVariants(cd, obj(ctx, card).zone, 'free')) {
+          // Additional sacrifice or forage costs aren't offered on free casts (a simplification).
+          if (v.sacrifice || v.forage) continue;
           const specs = v.spell?.targets ?? (cd.enchant ? [cd.enchant] : []);
           for (const targets of targetCombos(ctx, specs, { controller: player, sourceId: card }))
             for (const discard of discards)

@@ -254,6 +254,24 @@ Named abilities such as "Radar Sense" or "Street Justice" are just labels with n
 - Bot win rates: Wakanda Forever is behind (6–14 against Avengers, 8–12 against Mabel's Militia over 20 games); to
   revisit with the 9e arena tuning.
 
+9d (The Fantastic Four):
+
+- Goad and "attacks each combat if able" (Galactus, Silver Surfer) are built here, not in 9e: such creatures are
+  declared as attackers already and can't be taken back. Goad lasts until the goader's next turn.
+- Invisible Force Field gives every creature you control indestructible, untargeted (four optional targets among a
+  dozen permanents are thousands of combinations for the bots). Clever Concealment phases out all your nonland
+  permanents. Collective Effort's counters go on your own creatures.
+- Free casts (cascade, discover, rebound, Mind's Dilation) don't offer additional sacrifice or forage costs.
+- Explore never puts the card into the graveyard. Expressive Iteration exiles the first of the other two and bottoms
+  the second. Genesis Ultimatum puts every permanent card onto the battlefield.
+- Tragic Arrogance and Promise of Loyalty pick what each player keeps (the caster's best, the opponent's worst; each
+  player's strongest creature).
+- The Thing doubles only its own counters; Mister Fantastic copies the top triggered ability you control (not a
+  chosen one); Willie Lumpkin's opponent never takes the optional draw; Human Torch's paid ability does nothing in 1v1.
+- Convoke creatures pay generic mana only.
+- Bot win rates: The Fantastic Four is behind (5–15 against Avengers, 2–18 against Mabel's Militia, 10–10 against
+  Wakanda Forever over 20 games); to revisit with the 9e arena tuning.
+
 ### Stream B
 
 (Filled in as sub-phases ship.)

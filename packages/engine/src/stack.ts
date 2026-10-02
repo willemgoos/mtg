@@ -259,6 +259,7 @@ export function castSpell(
   const d = defOf(ctx, o.defId);
   const v = variantOf(d, o.zone, choice)!;
   const flashback = (o.zone === 'graveyard' && !choice.via && !!d.flashback) || !!choice.exileAfter;
+  const fromHand = o.zone === 'hand';
   // Rule 601.2: move to stack, choose targets, then pay costs.
   const cost = addCosts(
     castCost(ctx, player, card, choice, targets),
@@ -271,7 +272,10 @@ export function castSpell(
     payWith,
     undefined,
     spellTags(d),
-    [],
+    // Convoke: creatures pay for generic mana.
+    d.convoke
+      ? creatureHelpers(ctx, player, manaSources(ctx, player, undefined, spellTags(d)))
+      : [],
     [
       choice.sacrifice,
       ...(choice.sacrificeMany ?? []),
@@ -294,6 +298,7 @@ export function castSpell(
     id: card,
     controller: player,
     targets,
+    ...(fromHand ? { fromHand: true } : {}),
     ...(choice.mode !== undefined ? { mode: choice.mode } : {}),
     ...(choice.kicked ? { kicked: true } : {}),
     ...(flashback ? { flashback: true } : {}),
@@ -304,6 +309,9 @@ export function castSpell(
   });
   payMana(ctx, payment);
   if (d.types.includes('Creature')) scryForAncestry(ctx, player, d, payment);
+  // Escalate: tap a creature for each mode beyond the first.
+  if (v.spell?.escalate)
+    for (const id of escalateCrew(ctx, player, v.spell.escalate) ?? []) tap(ctx, id);
   ((ctx.s.turn.castDefs ??= { p1: [], p2: [] })[player] ??= []).push(o.defId);
   // "When you cast this spell" (Ancestral Communion, Hatut Zeraze Strike Force).
   d.abilities.forEach((a, i) => {
@@ -568,7 +576,10 @@ export function resolveTop(ctx: Ctx): boolean {
       const paused = {
         kind: 'spell' as const,
         id: item.id,
-        ...(item.flashback ? { exile: true } : {}),
+        ...(item.flashback || d.afterResolving === 'exile' ? { exile: true } : {}),
+        ...(d.afterResolving === 'libraryBottom' ? { libraryBottom: true } : {}),
+        // Rebound: cast from your hand, it's exiled and cast again at your next upkeep.
+        ...(d.rebound && item.fromHand && !item.flashback ? { rebound: item.controller } : {}),
       };
       if (runEffects(ctx, es, spell.effects, paused)) return true;
       finishResolution(ctx, paused);
@@ -678,7 +689,20 @@ function attachAura(ctx: Ctx, aura: ObjectId, host: ObjectId): void {
 /** Last step of resolving (rule 608.2n): an instant or sorcery goes to the graveyard. */
 export function finishResolution(ctx: Ctx, item: PausedResolution['item']): void {
   emit(ctx, { type: 'resolved', id: item.id });
-  if (item.kind === 'spell') moveObject(ctx, item.id, item.exile ? 'exile' : 'graveyard');
+  if (item.kind !== 'spell') return;
+  if (item.libraryBottom) return moveObject(ctx, item.id, 'library', { position: 'bottom' });
+  moveObject(ctx, item.id, item.exile || item.rebound ? 'exile' : 'graveyard');
+  const o = ctx.s.objects[item.id];
+  if (item.rebound && o?.zone === 'exile')
+    (ctx.s.delayed ??= []).push({
+      controller: item.rebound,
+      sourceDefId: o.defId,
+      subject: { id: o.id, zcc: o.zcc },
+      effects: [{ kind: 'castFreeCard', card: { id: o.id, zcc: o.zcc } }],
+      fromTurn: ctx.s.turn.number + 1,
+      whose: item.rebound,
+      at: 'upkeep',
+    });
 }
 
 /** Carries on with a resolution that paused to ask a question. */
@@ -722,6 +746,16 @@ export function crewFor(
     total += c.power;
   }
   return total >= n ? out : null;
+}
+
+/** Escalate (Collective Effort): the N smallest untapped creatures `player` controls, or null. */
+export function escalateCrew(ctx: Ctx, player: PlayerId, n: number): ObjectId[] | null {
+  const ready = ctx.s.battlefield
+    .filter(
+      (id) => obj(ctx, id).controller === player && !obj(ctx, id).tapped && isCreature(ctx, id),
+    )
+    .sort((a, b) => power(ctx, a) - power(ctx, b));
+  return ready.length >= n ? ready.slice(0, n) : null;
 }
 
 /** Metalwork Colossus: the N least useful artifacts `player` controls (tokens, then the cheapest), or null. */

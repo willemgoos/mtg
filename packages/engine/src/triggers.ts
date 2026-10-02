@@ -35,6 +35,11 @@ export function checkCondition(
   subject?: GameObject,
 ): boolean {
   if (!c) return true;
+  // The Fantastic Four (9d).
+  if (c.kind === 'castNoncreatureThisTurn')
+    return (ctx.s.turn.castDefs?.[controller] ?? []).some(
+      (id) => !defOf(ctx, id).types.includes('Creature'),
+    );
   // Wakanda Forever (9c).
   if (c.kind === 'monarch') {
     const m = ctx.s.monarch;
@@ -196,14 +201,30 @@ function queue(
     if (o.onceTurns?.[index] === ctx.s.turn.number) return;
     o.onceTurns = { ...o.onceTurns, [index]: ctx.s.turn.number };
   }
-  ctx.s.pendingTriggers.push({
+  const pending = {
     source: { id: o.id, zcc: o.zcc },
     sourceDefId: o.defId,
     abilityIndex: index,
     controller,
     ...(subject ? { subject: { id: subject.id, zcc: subject.zcc } } : {}),
     ...(amount !== undefined ? { amount } : {}),
-  });
+  };
+  ctx.s.pendingTriggers.push(pending);
+  // Annie Joins Up: a legendary creature's triggered ability triggers an additional time.
+  const d = defOf(ctx, o.defId);
+  if (
+    o.zone === 'battlefield' &&
+    d.supertypes.includes('Legendary') &&
+    d.types.includes('Creature') &&
+    ctx.s.battlefield.some(
+      (id) =>
+        obj(ctx, id).controller === controller &&
+        def(ctx, id).abilities.some(
+          (x) => x.kind === 'static' && x.effect.kind === 'legendaryTriggersTwice',
+        ),
+    )
+  )
+    ctx.s.pendingTriggers.push({ ...pending });
 }
 
 /** Calls `fn` for each triggered ability on each permanent on the battlefield. */
@@ -243,6 +264,16 @@ function spellMatches(
       return !!item?.targets.some(
         (x) => 'object' in x && x.object.id === self.id && x.object.zcc === self.zcc,
       );
+    // The Fantastic Four (9d): counted among the caster's spells this turn, this one included.
+    case 'first':
+      return (ctx.s.turn.castDefs?.[spellCaster(ctx, item, self)] ?? []).length === 1;
+    case 'firstNoncreature':
+    case 'fourthNoncreature': {
+      if (spell.types.includes('Creature')) return false;
+      const cast = ctx.s.turn.castDefs?.[spellCaster(ctx, item, self)] ?? [];
+      const n = cast.filter((id) => !defOf(ctx, id).types.includes('Creature')).length;
+      return n === (t.filter === 'firstNoncreature' ? 1 : 4);
+    }
     case 'firstOfItsKind': {
       // Alania: the first instant, the first sorcery, or the first Otter spell other than itself.
       const cast = (ctx.s.turn.castDefs?.[self.controller] ?? []).map((id) => defOf(ctx, id));
@@ -458,20 +489,31 @@ function detect(ctx: Ctx, ev: GameEvent): void {
           a.trigger.on === 'castSpell' &&
           (a.trigger.anyPlayerOffTurn
             ? s.turn.activePlayer !== ev.player
-            : o.controller === ev.player) &&
+            : a.trigger.caster === 'any'
+              ? true
+              : a.trigger.caster === 'opponent'
+                ? o.controller !== ev.player
+                : o.controller === ev.player) &&
           spellMatches(ctx, a.trigger, spell, item, o) &&
           (!a.trigger.spell || cardMatches(ctx, ev.id, a.trigger.spell, o.id)),
         spellObj,
         manaValueOf(spell),
       );
       if (ev.nth === 2)
-        forEachBattlefieldTrigger(ctx, (_o, a) => a.trigger.on === 'anyPlayerSecondSpell');
+        forEachBattlefieldTrigger(
+          ctx,
+          (o, a) =>
+            a.trigger.on === 'anyPlayerSecondSpell' &&
+            (!a.trigger.opponentOnly || o.controller !== ev.player),
+        );
       // Emblems: "whenever you cast a spell" (Season of the Bold, Ral).
       for (const e of s.emblems ?? []) {
         const a = e.ability;
         if (a.kind !== 'triggered' || a.trigger.on !== 'castSpell' || e.controller !== ev.player)
           continue;
         if (!spellMatches(ctx, a.trigger, spell, item, spellObj)) continue;
+        // Galvanic Iteration: only the next one.
+        if (e.once) s.emblems = s.emblems!.filter((x) => x !== e);
         s.pendingTriggers.push({
           source: e.source,
           sourceDefId: e.sourceDefId,
@@ -747,6 +789,15 @@ function detect(ctx: Ctx, ev: GameEvent): void {
           o,
         );
       }
+      // Black Bolt: "whenever this becomes the target of a spell or ability an opponent controls".
+      for (const id of ev.ids) {
+        const o = s.objects[id];
+        if (!o || o.zone !== 'battlefield' || o.controller === ev.player) continue;
+        def(ctx, id).abilities.forEach((a, i) => {
+          if (a.kind === 'triggered' && a.trigger.on === 'targetedByOpponent')
+            queue(ctx, o, i, o.controller);
+        });
+      }
       // Valiant: the first time each turn its controller's spell or ability targets it.
       for (const id of ev.ids) {
         const o = s.objects[id];
@@ -865,4 +916,9 @@ export function triggeredAbility(
   if (!a || a.kind !== 'triggered')
     throw new Error(`No triggered ability ${t.sourceDefId}#${t.abilityIndex}`);
   return a;
+}
+
+/** Who cast the spell a castSpell trigger looks at (the stack item's controller). */
+function spellCaster(ctx: Ctx, item: StackItem | undefined, self: GameObject): PlayerId {
+  return item?.controller ?? self.controller;
 }

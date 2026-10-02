@@ -19,6 +19,16 @@ export interface ManaSource {
   pain?: ManaType[];
 }
 
+function lanternFor(ctx: Ctx, player: PlayerId): boolean {
+  return ctx.s.battlefield.some(
+    (id) =>
+      obj(ctx, id).controller === player &&
+      def(ctx, id).abilities.some(
+        (a) => a.kind === 'static' && a.effect.kind === 'landsTapForAnyColor',
+      ),
+  );
+}
+
 /** Sources to tap; `pain` lists those that hurt (one entry per pip they pay). */
 export type Payment = ObjectId[] & { pain?: ObjectId[] };
 
@@ -88,6 +98,10 @@ export function manaSources(
     }
     // Eluge: a land with a flood counter is an Island too.
     if (produces && obj(ctx, id).counters?.flood && !produces.includes('U')) produces.push('U');
+    // Chromatic Lantern: lands tap for any colour.
+    if (produces && def(ctx, id).types.includes('Land') && lanternFor(ctx, player))
+      for (const c of ['W', 'U', 'B', 'R', 'G'] as const)
+        if (!produces.includes(c)) produces.push(c);
     if (produces) {
       const src = {
         id,

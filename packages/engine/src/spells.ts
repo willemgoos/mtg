@@ -110,6 +110,8 @@ export function castVariants(d: CardDefinition, zone: ZoneName, via?: CastVia): 
             : { ...v, forage: true, finality: true },
     );
   }
+  // Dragon Man: cast from the graveyard as from the hand (plus a discard, see legal.ts).
+  if (zone === 'graveyard' && d.castFromGraveyardWithDiscard) return castVariants(d, 'hand');
   if (zone === 'graveyard' && d.castFromGraveyardRemovingCounters)
     return [
       {
@@ -121,8 +123,10 @@ export function castVariants(d: CardDefinition, zone: ZoneName, via?: CastVia): 
   const flashback = zone === 'graveyard';
   if (flashback && !d.flashback) return [];
   const cost = flashback ? d.flashback! : d.manaCost;
+  // Deep Analysis: "Flashback—{1}{U}, Pay 3 life."
+  const life = flashback && d.flashbackLife ? { life: d.flashbackLife } : {};
   if (d.pawprints) return pawCombos(d).map((paws) => ({ paws, cost, spell: pawSpell(d, paws) }));
-  const extra = flashback ? { flashback: true } : {};
+  const extra = flashback ? { flashback: true, ...life } : {};
   if (d.modes) return d.modes.map((spell, mode) => ({ mode, cost, spell, ...extra }));
   if (d.sacrificeCreatureToCast)
     return [{ cost, spell: d.spell ?? null, sacrifice: true, ...extra }];

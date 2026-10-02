@@ -27,6 +27,8 @@ export const BLURBS: Record<string, string> = {
   'large-and-in-charge': 'Big green creatures, bigger with every land.',
   'brawl-mabels-militia': 'Mabel leads a hundred mice, soldiers and sparks into battle.',
   'msc-wakanda-forever': 'T’Challa builds a Vibranium arsenal and rules as the monarch.',
+  'msc-the-fantastic-four':
+    'Invisible Woman leads the family: every spell you cast powers up the team.',
   'msc-avengers-assemble':
     'Captain America rallies the Avengers: every Hero that arrives makes the team stronger.',
   'blb-forage-and-feast': 'Squirrels stash Food and forage their graveyard for value.',

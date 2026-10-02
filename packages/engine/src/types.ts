@@ -66,6 +66,8 @@ export interface SpellDef {
   effects: EffectDef[];
   /** Shown when choosing a mode. */
   label?: string;
+  /** Escalate: tap this many untapped creatures you control as an extra cost (the engine picks them). */
+  escalate?: number;
 }
 
 export interface CardDefinition {
@@ -133,6 +135,19 @@ export interface CardDefinition {
   costReductionIfTarget?: { filter: CardFilter; amount: number };
   /** What it does when cast with flashback, if different ("if this spell was cast from a graveyard"). */
   flashbackSpell?: SpellDef;
+  // The Fantastic Four (9d).
+  /** Rebound: cast from your hand, it's exiled as it resolves; at your next upkeep you may cast it free. */
+  rebound?: boolean;
+  /** Convoke: your untapped creatures can each pay for {1} (Clever Concealment). */
+  convoke?: boolean;
+  /** Life paid in addition to the flashback cost (Deep Analysis). */
+  flashbackLife?: number;
+  /** As it resolves it's exiled (Genesis Ultimatum) or put on the bottom of its owner's library (Ultimate Nullification). */
+  afterResolving?: 'exile' | 'libraryBottom';
+  /** Only creatures matching this may be sacrificed for `sacrificeCreatureToCast` (Ultimate Nullification: legendary). */
+  sacrificeToCastFilter?: CardFilter;
+  /** It may be cast from your graveyard by discarding a card as well (Dragon Man). */
+  castFromGraveyardWithDiscard?: boolean;
   /** It enters with X +1/+1 counters (Royal Talon Fighter Jet). */
   entersWithXCounters?: boolean;
   /** Costs {amount} less while the condition holds (Heroic Return, Avenge). */
@@ -295,14 +310,21 @@ export type TriggerDef =
         | 'instantOrSorcery'
         | 'targetsSelf'
         /** Alania: the first instant, first sorcery, or first other Otter spell you cast this turn. */
-        | 'firstOfItsKind';
+        | 'firstOfItsKind'
+        /** The caster's first spell this turn (Mind's Dilation). */
+        | 'first'
+        /** The caster's first (Valeria) or fourth (The Fantasticar) noncreature spell this turn. */
+        | 'firstNoncreature'
+        | 'fourthNoncreature';
       /** The spell must also match this (Gev: a Lizard spell). */
       spell?: CardFilter;
       /** Any player's spell, cast when it isn't their turn (Vision). */
       anyPlayerOffTurn?: boolean;
+      /** Whose spells: yours (default), any player's (Medusa) or an opponent's (Mind's Dilation). */
+      caster?: 'any' | 'opponent';
     }
-  /** Whenever a player casts their second spell each turn (Hearthborn Battler). */
-  | { on: 'anyPlayerSecondSpell' }
+  /** Whenever a player (an opponent: Monologue Tax) casts their second spell each turn (Hearthborn Battler). */
+  | { on: 'anyPlayerSecondSpell'; opponentOnly?: boolean }
   /** At the beginning of your precombat or postcombat main phase. */
   | { on: 'beginningOfMain'; which: 1 | 2 }
   /** Whenever you (or, with 'opponents', an opponent: Black Widow) draw your second card each turn. */
@@ -355,6 +377,9 @@ export type TriggerDef =
   | { on: 'sacrificed' }
   /** Whenever you sacrifice a permanent matching the filter (Camellia: a Food). */
   | { on: 'youSacrifice'; filter: CardFilter }
+  // The Fantastic Four (9d).
+  /** Whenever this becomes the target of a spell or ability an opponent controls (Black Bolt). */
+  | { on: 'targetedByOpponent' }
   // Wakanda Forever (9c).
   /** Whenever the creature this Equipment is attached to attacks. */
   | { on: 'equippedAttacks' }
@@ -442,6 +467,9 @@ export type ConditionDef =
   | { kind: 'any'; of: ConditionDef[] }
   /** The condition doesn't hold. */
   | { kind: 'not'; condition: ConditionDef }
+  // The Fantastic Four (9d).
+  /** You've cast a noncreature spell this turn. */
+  | { kind: 'castNoncreatureThisTurn' }
   // Wakanda Forever (9c).
   /** You are the monarch; or there is no monarch; or an opponent is (the creature attacks the monarch). */
   | { kind: 'monarch'; who: 'you' | 'none' | 'opponent' }
@@ -515,6 +543,9 @@ export interface CardFilter {
   chosenTypeOfSource?: boolean;
   /** Has counters on it (Innkeeper's Talent). */
   hasCounters?: boolean;
+  // The Fantastic Four (9d).
+  /** A card with this id ("a creature named Silver Surfer"). */
+  named?: CardDefId;
   // Brawl.
   /** Is its controller's commander ("your commander"). */
   commander?: boolean;
@@ -603,6 +634,15 @@ export type Amount =
   | { namedCountersOnSource: string }
   /** The value chosen for X (times `times`, plus `plus`). */
   | { x: true; times?: number; plus?: number }
+  // The Fantastic Four (9d).
+  /** Colours among permanents you control and spells you've cast this turn (First Family). */
+  | { count: 'colorsAmongPermanentsAndSpells' }
+  /** The colours of the spell that caused the trigger (Crystal). */
+  | { count: 'subjectColors' }
+  /** Cards in an opponent's hand (Recurring Insight). */
+  | { count: 'opponentHandSize' }
+  /** Greatest mana value among noncreature permanents you control and noncreature cards in your graveyard (Dragon Man). */
+  | { count: 'greatestNoncreatureManaValue' }
   // Wakanda Forever (9c).
   /** Creatures on the battlefield (Vanquish the Horde). */
   | { count: 'creaturesOnBattlefield' }
@@ -613,7 +653,8 @@ export type Amount =
 
 export type EffectDef =
   | { kind: 'may'; effects: EffectDef[]; cost?: ManaCost }
-  | { kind: 'damage'; amount: Amount; to: Ref; from?: Ref }
+  /** `exceptFrom`: not to the creature dealing it (Nova Flame: "each other creature"). */
+  | { kind: 'damage'; amount: Amount; to: Ref; from?: Ref; exceptFrom?: boolean }
   /** Until end of turn (or until your next turn). */
   | {
       kind: 'pump';
@@ -690,7 +731,7 @@ export type EffectDef =
        * Instead of a target: a card from your hand (West Coast Expansion) or
        * among the cards exiled with the source (Scarlet Witch), matching the filter.
        */
-      from?: 'hand' | 'exiledWithSource';
+      from?: 'hand' | 'exiledWithSource' | 'lastExiledWithSource';
       filter?: CardFilter;
     }
   /** Portent of Calamity: reveal the top X and exile one card of each type; four or more lets you cast one free. */
@@ -716,8 +757,15 @@ export type EffectDef =
   | { kind: 'copySpell'; what: Ref; count?: Amount; retarget?: boolean }
   /** Each player sacrifices a creature of their choice (Season of Loss). */
   | { kind: 'eachPlayerSacrifices' }
-  /** Until the end of your next turn, you have this triggered ability (Season of the Bold). */
-  | { kind: 'emblem'; ability: AbilityDef; until: 'endOfYourNextTurn' | 'permanent' }
+  /**
+   * Until the end of your next turn, you have this triggered ability (Season of
+   * the Bold); 'nextSpellThisTurn': once, this turn (Galvanic Iteration).
+   */
+  | {
+      kind: 'emblem';
+      ability: AbilityDef;
+      until: 'endOfYourNextTurn' | 'permanent' | 'nextSpellThisTurn';
+    }
   /** Marks the gift as given (for "whenever you give a gift"). */
   | { kind: 'giftGiven' }
   /** Create token copies of permanents (with set power and toughness). */
@@ -730,8 +778,10 @@ export type EffectDef =
       exileAtEndStep?: boolean;
       /** Not of legendary permanents (Coiling Rebirth). */
       nonlegendary?: boolean;
-      /** "Except the token isn't legendary", and it gains haste (Helm of the Host). */
-      notLegendaryWithHaste?: boolean;
+      /** "Except the token isn't legendary" (Quantum Misalignment, Helm of the Host). */
+      notLegendary?: boolean;
+      /** "That token gains haste" (Helm of the Host). */
+      haste?: boolean;
     }
   /** Choose a color (or a creature type) for the source, as it enters. */
   | { kind: 'chooseColor' }
@@ -840,6 +890,8 @@ export type EffectDef =
       shuffle?: boolean;
       /** Untap the land found if you then control this many lands (Fabled Passage). */
       untapIfLands?: number;
+      /** The controller of this target searches instead (Path to Exile). */
+      forControllerOf?: number;
     }
   /** Look at the top N; you may put a creature with mana value up to your land count onto the battlefield (Loot). */
   | { kind: 'lookForCreature'; count: number }
@@ -963,6 +1015,37 @@ export type EffectDef =
   /** The controller scries N (asks them to order the top cards). */
   | { kind: 'scry'; amount: number }
   | { kind: 'custom'; handler: string; params?: Record<string, unknown> }
+  // The Fantastic Four (9d).
+  /** You may cast this exiled card without paying its mana cost (rebound, Power Pack). */
+  | { kind: 'castFreeCard'; card: ObjectRef; exileAfter?: boolean }
+  /**
+   * Exile cards from the top until a nonland card with mana value at most `max`
+   * (cascade: less than the source's). You may cast it free (discover: or put
+   * it into your hand); the rest go to the bottom in a random order.
+   */
+  | { kind: 'revealUntilCastable'; max: Amount | 'belowSource'; orHand?: boolean }
+  /** Goad (or "attacks each combat if able"): until your next turn they attack each combat if able. */
+  | { kind: 'mustAttack'; what: Ref; cantBlock?: boolean }
+  /** Explore: reveal the top card; a land goes to hand, otherwise a +1/+1 counter (the card stays on top). */
+  | { kind: 'explore'; what: Ref }
+  /** Copy the top triggered ability you control on the stack (Mister Fantastic). */
+  | { kind: 'copyTopTrigger'; count: number }
+  /** The source becomes a copy of the target until end of turn (Mirage Mirror). */
+  | { kind: 'becomeCopy'; of: Ref }
+  /** Tragic Arrogance: each player keeps one artifact, creature, enchantment and planeswalker (picked for them). */
+  | { kind: 'keepOneOfEachType' }
+  /** Promise of Loyalty: each player keeps one creature with a vow counter (picked for them). */
+  | { kind: 'promiseOfLoyalty' }
+  /** Exile a random card matching the filter from your graveyard; at your next upkeep you may cast it free (Power Pack). */
+  | { kind: 'exileRandomToCastNextUpkeep'; filter: CardFilter }
+  /** Each player gains control of all creatures they own (Alicia Masters). */
+  | { kind: 'ownersRegainControl' }
+  /** Negative Zone Portal's upkeep coin flip: on a loss, sacrifice it and return a random exiled card. */
+  | { kind: 'negativeZoneFlip' }
+  /** Look at the top N: put any number of permanent cards onto the battlefield, the rest into your hand (Genesis Ultimatum). */
+  | { kind: 'lookPutPermanents'; count: number }
+  /** Expressive Iteration: one of the top three to hand, one to the bottom, one exiled and playable this turn. */
+  | { kind: 'expressiveIteration' }
   // Wakanda Forever (9c).
   /** `who` becomes the monarch (draws at their end step; combat damage to them takes it). */
   | { kind: 'becomeMonarch'; who: 'controller' | 'eachOpponent' }
@@ -990,8 +1073,11 @@ export type EffectDef =
   /** Until end of turn you may cast a target permanent card from your graveyard, then no more spells (Conduit of Worlds). */
   | { kind: 'castFromGraveyardThisTurn'; what: Ref }
   // Avengers Assemble (9b).
-  /** Exile the top N cards of your library face down, remembered as exiled with the source (Scarlet Witch). */
-  | { kind: 'exileTopWithSource'; count: number }
+  /**
+   * Exile the top N cards of your library face down, remembered as exiled with
+   * the source (Scarlet Witch); `who`: an opponent's library (Mind's Dilation).
+   */
+  | { kind: 'exileTopWithSource'; count: number; who?: 'eachOpponent' }
   /**
    * Until end of turn, all damage that would be dealt to you and creatures you
    * control is dealt to this creature instead (Heroic Sacrifice); `onDies`
@@ -1002,6 +1088,10 @@ export type EffectDef =
   | { kind: 'phaseOut'; what: Ref }
   /** At the beginning of the next turn's upkeep, these happen (Arcane Denial). */
   | { kind: 'atNextUpkeep'; effects: EffectDef[] }
+  /** Internal: a cascade or discover card not cast goes to the bottom (or into the hand). */
+  | { kind: 'afterReveal'; card: ObjectRef; to: 'hand' | 'libraryBottom' }
+  /** Internal: Expressive Iteration's other two cards. */
+  | { kind: 'afterExpressive'; cards: ObjectId[] }
   /**
    * Gift of Immortality: return the creature this Aura was attached to; at the
    * beginning of the next end step the Aura returns attached to it (`returnAuraTo`).
@@ -1128,6 +1218,15 @@ export type StaticDef =
   | { kind: 'opponentsBaseToughness'; toughness: number }
   /** Creatures your opponents control that would die are exiled instead (Vren). */
   | { kind: 'exileOpponentCreaturesInstead' }
+  // The Fantastic Four (9d).
+  /** This creature attacks each combat if able, while the condition holds (Galactus). */
+  | { kind: 'attacksEachCombat'; condition?: ConditionDef }
+  /** The legend rule doesn't apply to creatures you control (Council of Reeds). */
+  | { kind: 'noLegendRule' }
+  /** Triggered abilities of legendary creatures you control trigger an additional time (Annie Joins Up). */
+  | { kind: 'legendaryTriggersTwice' }
+  /** Lands you control have "{T}: Add one mana of any color" (Chromatic Lantern). */
+  | { kind: 'landsTapForAnyColor' }
   // Wakanda Forever (9c).
   /** Prevent N of the damage sources your opponents control would deal to you (Heart-Shaped Herb). */
   | { kind: 'preventDamageToYou'; amount: number }
@@ -1230,6 +1329,11 @@ export interface GameObject {
   // Brawl.
   /** A commander: the zone change (zcc) at which its owner was last asked to move it to the command zone. */
   commandOffered?: number;
+  // The Fantastic Four (9d).
+  /** Promise of Loyalty: it can't attack this player. */
+  vowedTo?: PlayerId;
+  /** The defId it is until end of turn, copying another (Mirage Mirror). */
+  copyingUntilTurn?: number;
   // Wakanda Forever (9c).
   /** It's monstrous (Fleecemane Lion). */
   monstrous?: boolean;
@@ -1303,6 +1407,8 @@ export type StackItem =
       finality?: boolean;
       /** Mockingbird: the creature it enters as a copy of. */
       copyOf?: ObjectId;
+      /** Cast from its owner's hand (rebound cares). */
+      fromHand?: boolean;
     }
   | {
       kind: 'ability';
@@ -1423,6 +1529,9 @@ export interface ContinuousEffect {
   /** 'untilYourNextTurn': until `player`'s next turn begins. */
   expires: 'endOfTurn' | 'untilYourNextTurn';
   player?: PlayerId;
+  // The Fantastic Four (9d).
+  /** Goad: it attacks each combat if able. */
+  mustAttack?: boolean;
   // Avengers Assemble (9b).
   cantBeBlockedExcept?: Keyword;
   counterOnCombatDamage?: boolean;
@@ -1456,8 +1565,17 @@ export interface EffectSource {
  */
 export interface PausedResolution extends EffectSource {
   effects: EffectDef[];
-  /** The stack item being resolved; a spell goes to the graveyard when done. */
-  item: { kind: 'spell' | 'ability'; id: ObjectId; exile?: boolean };
+  /**
+   * The stack item being resolved; a spell goes to the graveyard when done
+   * (exiled with rebound for `rebound`'s next upkeep, or to the library bottom).
+   */
+  item: {
+    kind: 'spell' | 'ability';
+    id: ObjectId;
+    exile?: boolean;
+    rebound?: PlayerId;
+    libraryBottom?: boolean;
+  };
 }
 
 export interface PendingTrigger {
@@ -1484,6 +1602,8 @@ export interface Emblem {
   ability: AbilityDef;
   /** It ends at the cleanup step of this turn (undefined: never). */
   untilTurn?: number;
+  /** It goes away once it has triggered (Galvanic Iteration). */
+  once?: boolean;
 }
 
 export interface DelayedTrigger {
