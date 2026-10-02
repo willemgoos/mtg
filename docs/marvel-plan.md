@@ -216,7 +216,18 @@ Savage Uprising 49%.
   landcycling and typecycling (extending Stream A's cycling), investigate/Clue, improvise, enrage, boast, extort.
 - Bot vs bot across the Foundations starter decks: aim for 45 to 65% per deck, as in phase 8.
 
-### 10c: every rare and mythic, then boosters
+### 10c: every rare and mythic, then boosters: done except nine cards waiting on Stream A
+
+Done: 51 of 60 rares and 24 of 25 mythics, the five basic-landcycling commons (on Stream A's cycling), and MSH boosters in
+Expedition (with a Marvel deck) and Season (with the ten Marvel decks as starters). New along the way: sneak, improvise,
+extort (as a trigger), shield counters, extra turns, X in activated abilities, "you have hexproof", "opponents can't cast spells
+during your turn", starting the game with a card in play, damage that doesn't accumulate, equipment doubling damage, casting a
+spell for free from the top of a library, and custom effects for the true one-offs (`packages/engine/src/msh-effects.ts`).
+
+Waiting on Stream A (built on `marvel-brawl`, not yet on `marvel`): the six Sagas (The Coming of Galactus, Armor Wars, Avengers:
+Under Siege, Origin of the Avengers, The Super Hero Civil War, World War Hulk) need Sagas, and Absorbing Man, Taskmaster and
+Secret Invasion need "becomes a copy".
+
 
 - All 60 rares and 25 mythics, including those not in any of our decks.
 - MSH boosters in Expedition and Season, as was done for Bloomburrow.
@@ -300,3 +311,22 @@ Savage Uprising 49%.
 - Left out of the decks for now (each needs a new engine piece): U.S.Agent's attached Sturdy Shield, S.H.I.E.L.D. Spy Kit,
   Spider-Woman, Captain America (Living Legend), Justice, Hellcat, Grim Reaper, Titania, Beast, Kid Loki, Frozen in Ice,
   the Vehicles (Crew N), Hulkling and Thirst for Knowledge. They come with 10c where they are rares, or when a deck needs them.
+
+10c:
+
+- Quicksilver always begins the game on the battlefield; Construct a Cosmic Cube's "control target opponent during their next
+  turn" is an extra turn for you; Baron Helmut Zemo has no boast.
+- Engine picks instead of the player: Vision Quest (the biggest artifact creature), Worlds Within Worlds (every creature card
+  from every hand), Earth's Mightiest Heroes with teamwork (every creature card), The Astonishing Ant-Man (removes all its
+  counters), Scientist Supreme (copies the topmost ability of your artifacts, no target).
+- Doom Reigns Supreme casts one spell, not up to two; The Ruinous Wrecking Crew picks one mode, and "destroy target token" isn't
+  offered; Heroic Feast puts one counter per life-gain event; The Vision may pick the same mode twice in a turn.
+- Cosmic Cube counts the greatest power among all your creatures, not only attackers.
+- Thor, God of Thunder returns the exiled card to your hand; The Ten Rings gives no maximum hand size instead of ten; Moon Girl
+  gets +4/+4 instead of base 6/6; Ms. Marvel's base power isn't set.
+- Not modelled: Black Widow, Super Spy's exile-and-cast (always the counter), Iron Man Armor's {2} becomes-a-creature ability,
+  Ultron's noncreature copies becoming 2/2 creatures, Tony Stark's Equipment attaching, Nick Fury transforming what he finds,
+  Winter Soldier attaching Equipment as he returns, Super-Soldier Serum's legendary Soldier and Equipment attaching, Storm giving
+  flying to targeted creatures, The Serpent Society's poison ward, Avengers Disassembled's replacement basic land,
+  Daredevil's Radar Sense, Hawkeye's Net and Boomerang arrows (only Explosive, when he attacks), Cloak and Dagger's hand card
+  coming back (it stays exiled), Worlds Within Worlds exiling itself.
