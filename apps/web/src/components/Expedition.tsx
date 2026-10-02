@@ -1,5 +1,5 @@
 import { deckById, scryfallById, slug } from '@mtg/cards';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { artFor } from '../game/deckArt.ts';
 import {
   BASICS,
@@ -8,8 +8,21 @@ import {
   applySuggestion,
   camp,
   canChoose,
+  chooseLand,
   chooseRare,
+  landUpgrade,
+  choosePact,
   deckAdvice,
+  dismissGift,
+  difficultyIn,
+  fightOf,
+  merchantPrice,
+  type PactId,
+  PACTS,
+  pickable,
+  pickCard,
+  TWISTS,
+  twistOf,
   type EventId,
   EVENTS,
   leaveMerchant,
@@ -23,7 +36,7 @@ import {
   type ExpeditionState,
   floorsOf,
   keepCount,
-  type MapNode,
+  links,
   maxLives,
   MIN_DECK,
   moveCard,
@@ -34,25 +47,39 @@ import {
   size,
   statusOf,
   difficultyName,
-  difficultyOf,
   MAX_DIFFICULTY,
   PACK_SET_NAMES,
   packSetOf,
 } from '../game/expedition.ts';
+import { burst, flash, fxOn, later, mountFx, ring } from '../game/fx.ts';
 import { ruleNotes } from '../game/notes.ts';
 import { play } from '../game/sound.ts';
 import { DeckBuilder } from './DeckBuilder.tsx';
+import './home.css';
+import './expedition.css';
 import { PackOpening, packName } from './PackOpening.tsx';
 import { HoverPreview, type HoverState } from './Preview.tsx';
 import { UiSize } from './UiSize.tsx';
 
 type Update = (f: (s: ExpeditionState) => ExpeditionState) => void;
 
+type Props = Parameters<typeof Screens>[0];
+
 /**
  * Everything between expedition matches: opening packs, boon and camp
- * choices, the deck builder, and the map itself.
+ * choices, the deck builder, and the map itself. Choices are drawn over by
+ * an effects layer (pack opening brings its own).
  */
-export function Expedition({
+export function Expedition(props: Props) {
+  return (
+    <>
+      <Screens {...props} />
+      {!props.state.run!.build.packs.length && <FxLayer />}
+    </>
+  );
+}
+
+function Screens({
   state,
   update,
   resumable,
@@ -90,9 +117,13 @@ export function Expedition({
       <BoonChoice
         run={run}
         options={run.pending.options}
+        pact={run.pending.pact}
+        picks={run.pending.picks ?? 1}
         onChoose={(boon) => {
-          play('chime');
           update((s) => chooseBoon(s, boon));
+        }}
+        onPact={(pact) => {
+          update((s) => choosePact(s, pact));
         }}
       />
     );
@@ -104,7 +135,6 @@ export function Expedition({
         run={run}
         event={run.pending.event}
         onChoose={(i) => {
-          play('chime');
           update((s) => resolveEvent(s, i));
         }}
       />
@@ -112,15 +142,43 @@ export function Expedition({
   if (run.pending?.kind === 'rareDraft')
     return (
       <CardChoice
-        eyebrow="Expedition · Elite defeated"
-        title="Claim a rare"
-        text="Take one for your collection. A boon comes next."
+        eyebrow={run.pending.mythic ? 'Expedition · Mythic Pact' : 'Expedition · Elite defeated'}
+        title={run.pending.mythic ? 'Claim a mythic' : 'Claim a rare'}
+        text={
+          run.pending.mythic
+            ? 'Take one for your collection.'
+            : 'Take one for your collection. A boon comes next.'
+        }
         cards={run.pending.options}
+        fx={run.pending.mythic ? 'mythic' : 'rare'}
         onChoose={(name) => {
-          play('win', { gain: 0.6 });
           update((s) => chooseRare(s, name));
         }}
       />
+    );
+  if (run.pending?.kind === 'cardPick')
+    return (
+      <CardPick
+        run={run}
+        mode={run.pending.mode}
+        onPick={(name) => {
+          update((s) => pickCard(s, name));
+        }}
+      />
+    );
+  if (run.pending?.kind === 'lands')
+    return (
+      <LandChoice
+        run={run}
+        offers={run.pending.offers}
+        onChoose={(land) => {
+          update((s) => chooseLand(s, land));
+        }}
+      />
+    );
+  if (run.pending?.kind === 'gift')
+    return (
+      <Gift card={run.pending.card} note={run.pending.note} onDone={() => update(dismissGift)} />
     );
   if (run.pending?.kind === 'merchant')
     return (
@@ -128,7 +186,6 @@ export function Expedition({
         run={run}
         offers={run.pending.offers}
         onTrade={(buy, give) => {
-          play('chime');
           update((s) => trade(s, buy, give));
         }}
         onLeave={() => update(leaveMerchant)}
@@ -156,6 +213,92 @@ export function Expedition({
 }
 
 // ---------------------------------------------------------------------------
+// Choice effects: a burst and a sound on what you picked, a beat before it takes effect
+// ---------------------------------------------------------------------------
+
+/** Particle colours by rarity, for gifts. */
+const RARITY_FX: Record<string, string> = {
+  common: '#c9cad1',
+  uncommon: '#9fd0ee',
+  rare: '#f4b13e',
+  mythic: '#ff7a3d',
+};
+
+type ChoiceFx =
+  'choice' | 'boon' | 'rest' | 'pact' | 'rare' | 'mythic' | 'land' | 'well' | 'mirror';
+
+const CHOICE_FX: Record<ChoiceFx, { color: string; big?: boolean; sound: () => void }> = {
+  choice: { color: '#ececee', sound: () => play('chime') },
+  boon: { color: '#f4b13e', sound: () => play('chime') },
+  rest: { color: '#f06b6b', sound: () => play('gain') },
+  pact: {
+    color: '#f2555a',
+    big: true,
+    sound: () => {
+      play('win', { gain: 0.6 });
+      play('hit', { gain: 0.35 });
+    },
+  },
+  rare: { color: '#f4b13e', big: true, sound: () => play('win', { gain: 0.6 }) },
+  mythic: {
+    color: '#ff7a3d',
+    big: true,
+    sound: () => {
+      play('win', { gain: 0.7 });
+      play('gain', { gain: 0.5, delay: 0.12 });
+    },
+  },
+  land: {
+    color: '#5fd3c6',
+    sound: () => {
+      play('place');
+      play('gain', { gain: 0.45, delay: 0.1 });
+    },
+  },
+  well: { color: '#7cc4ff', sound: () => play('pluck') },
+  mirror: { color: '#ffffff', sound: () => play('flip') },
+};
+
+/**
+ * Celebrates a choice: the picked option pops while the others fade, with a
+ * burst and a sound, and the choice takes effect a beat later. A second
+ * click while that plays does nothing.
+ */
+function choose(el: HTMLElement, kind: ChoiceFx, then: () => void): void {
+  const row = el.parentElement;
+  if (row?.classList.contains('is-choosing')) return;
+  row?.classList.add('is-choosing');
+  el.classList.add('is-chosen');
+  const fx = CHOICE_FX[kind];
+  fx.sound();
+  const r = el.getBoundingClientRect();
+  const x = r.left + r.width / 2;
+  const y = r.top + r.height / 2;
+  burst(x, y, fx.color, {
+    n: fx.big ? 64 : 32,
+    speed: [1.5, fx.big ? 9 : 6],
+    life: [24, 52],
+    size: [2, 6],
+    drag: 0.95,
+    box: { w: r.width, h: r.height, mode: 'edge' },
+  });
+  ring(x, y, fx.color, { r0: 24, r1: fx.big ? 280 : 170, life: 26, width: fx.big ? 4 : 2.5 });
+  if (fx.big) flash(fx.color, 0.18, 480);
+  later(fxOn() ? 420 : 0, () => {
+    row?.classList.remove('is-choosing');
+    el.classList.remove('is-chosen');
+    then();
+  });
+}
+
+/** The canvas the choice effects draw on. */
+function FxLayer() {
+  const canvas = useRef<HTMLCanvasElement>(null);
+  useEffect(() => mountFx(canvas.current!), []);
+  return <canvas ref={canvas} className="fx-layer" aria-hidden />;
+}
+
+// ---------------------------------------------------------------------------
 // The map
 // ---------------------------------------------------------------------------
 
@@ -167,6 +310,7 @@ const KIND_NAMES: Record<NodeKind, string> = {
   treasure: 'Treasure',
   merchant: 'Merchant',
   mystery: 'Mystery',
+  surveyor: 'Surveyor',
   boss: 'Final battle',
 };
 
@@ -193,56 +337,95 @@ const ICONS: Record<NodeKind, React.ReactNode> = {
   mystery: (
     <path d="M12 2a6 6 0 0 1 6 6c0 2.6-1.7 3.8-3 4.7-.9.6-1.5 1.1-1.5 2.3v.5h-3V15c0-2.4 1.5-3.5 2.6-4.3 1-.7 1.9-1.3 1.9-2.7a3 3 0 0 0-6 0H6a6 6 0 0 1 6-6zm-1.5 16h3v3h-3v-3z" />
   ),
+  // A compass.
+  surveyor: (
+    <path d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20zm0 2a8 8 0 1 0 0 16 8 8 0 0 0 0-16zm4.2 3.8-2.7 6.2-6.2 2.7 2.7-6.2 6.2-2.7zM12 10.6a1.4 1.4 0 1 0 0 2.8 1.4 1.4 0 0 0 0-2.8z" />
+  ),
   boss: <path d="M3 7l4.5 4L12 4l4.5 7L21 7l-2 12H5L3 7zm2.5 13.5h13V22h-13v-1.5z" />,
 };
 
 const HEART = <path d="M8 14 2 8a3.5 3.5 0 0 1 6-4 3.5 3.5 0 0 1 6 4z" />;
 
 /** "Easy opponent (3/7) playing Cat Attack". */
-function foe(floor: number, node: MapNode, floors: number, deck: string): string {
-  const d = difficultyOf(floor, node, floors);
+function foe(d: number, deck: string): string {
   return `${difficultyName(d)} opponent (${d}/${MAX_DIFFICULTY}) playing ${deck}`;
 }
 
+/** What the map's info panel says about a node: what waits there and what it pays. */
 function nodeInfo(
+  run: ExpeditionRun,
   floor: number,
-  node: MapNode,
-  floors: number,
-  /** The run's booster set ("A free Marvel Super Heroes booster"). */
-  boosters = 'Foundations',
+  lane: number,
 ): { title: string; lines: string[] } {
+  const node = run.map[floor]![lane]!;
+  const boosters = PACK_SET_NAMES[packSetOf(run, run.build.opened)];
+  const here = currentNode(run);
+  // A fight a mystery event started here.
+  if (run.fight && here?.floor === floor && here.lane === lane) {
+    const f = fightOf(run);
+    const opp = f ? foe(f.difficulty, deckById(f.opponent).name) : '';
+    return run.fight.kind === 'ambush'
+      ? { title: 'Ambush', lines: [opp, 'Win: a rare pack. Lose: nothing'] }
+      : { title: 'Wandering duelist', lines: [opp, 'Win: choose a boon. Lose: a life'] };
+  }
   const title = KIND_NAMES[node.kind];
-  const opp = node.opponent ? foe(floor, node, floors, deckById(node.opponent).name) : '';
+  const opp = node.opponent
+    ? foe(difficultyIn(run, floor, node), deckById(node.opponent).name)
+    : '';
   switch (node.kind) {
     case 'duel':
-      return {
-        title,
-        lines: [opp, `Win: ${packName(node.reward!)}`],
-      };
-    case 'elite':
-      return {
-        title,
-        lines: [opp, 'Win: choose a rare, then a boon'],
-      };
+      return { title, lines: [opp, `Win: ${packName(node.reward!)}`] };
+    case 'elite': {
+      const twist = twistOf(run, floor, lane);
+      return twist
+        ? {
+            title: `${title} · ${TWISTS[twist].name}`,
+            lines: [`${opp}. ${TWISTS[twist].text}`, 'Win: choose a rare, a boon, and a booster'],
+          }
+        : { title, lines: [opp, 'Win: choose a rare, then a boon'] };
+    }
     case 'camp':
       return { title, lines: ['Rest to win back a life, or open a booster'] };
     case 'shrine':
-      return { title, lines: ['Choose one of three boons'] };
+      return { title, lines: ['Choose one of three boons, or make a pact'] };
     case 'treasure':
       return { title, lines: [`A free ${boosters} booster, no fight`] };
-    case 'merchant':
-      return { title, lines: ['Trade two of your cards for one of three rares'] };
+    case 'merchant': {
+      const price = merchantPrice(run) === 1 ? 'one of your cards' : 'two of your cards';
+      return { title, lines: [`Trade ${price} for one of three rares`] };
+    }
     case 'mystery':
+      // Keen Eye shows what the event is and what it offers.
+      if (run.boons.includes('keenEye') && node.event) {
+        const e = EVENTS[node.event];
+        return { title: e.title, lines: e.choices.map((c) => `${c.label}: ${c.text}`) };
+      }
       return { title, lines: ['Something unexpected waits here'] };
+    case 'surveyor':
+      return { title, lines: ['Swap some basic lands for special lands that suit your deck'] };
     case 'boss':
-      return {
-        title,
-        lines: [opp, 'Win to clear the expedition'],
-      };
+      return { title, lines: [opp, 'Win to clear the expedition'] };
   }
 }
 
 const laneY = (lanes: number, lane: number) => (lanes === 1 ? 50 : ((lane + 0.5) / lanes) * 100);
+
+/**
+ * Where a node sits on the board, in percent: its floor's column and its
+ * lane's row, nudged a little by the run's seed so the map doesn't look like
+ * a grid. Maps saved before paths branched freely keep their straight rows.
+ */
+function nodeAt(run: ExpeditionRun, floor: number, lane: number): { x: number; y: number } {
+  const floors = floorsOf(run);
+  const nodes = run.map[floor]!;
+  const x = ((floor + 0.5) / floors) * 100;
+  const y = laneY(nodes.length, lane);
+  if (!nodes[lane]?.next || floor === floors - 1) return { x, y };
+  // A fixed wobble from the seed, floor and lane: -0.5 to 0.5 on each axis.
+  const wobble = (salt: number) =>
+    (Math.imul(run.seed ^ (floor * 97 + lane * 13 + salt), 0x9e3779b1) >>> 0) / 2 ** 32 - 0.5;
+  return { x: x + wobble(1) * (40 / floors), y: y + wobble(2) * (24 / nodes.length) };
+}
 
 function ExpeditionMap({
   run,
@@ -279,25 +462,16 @@ function ExpeditionMap({
   const floorX = (floor: number) => ((floor + 0.5) / floors) * 100;
   const floorNow = Math.min(run.outcomes.length + 1, floors);
   const shown = hover ?? (here && { floor: here.floor, lane: here.lane });
-  const info =
-    shown &&
-    nodeInfo(
-      shown.floor,
-      run.map[shown.floor]![shown.lane]!,
-      floors,
-      PACK_SET_NAMES[packSetOf(run, run.build.opened)],
-    );
-  const fight = !!here?.node.opponent;
+  const info = shown && nodeInfo(run, shown.floor, shown.lane);
+  const fight = !!fightOf(run);
   // The travelling token: at your last node (or the start), or on its way to a new one.
   const [moving, setMoving] = useState<number | null>(null);
+  const at = (floor: number, lane: number) => nodeAt(run, floor, lane);
   const tokenAt =
     moving !== null
-      ? { x: floorX(run.path.length), y: laneY(run.map[run.path.length]!.length, moving) }
+      ? at(run.path.length, moving)
       : run.path.length
-        ? {
-            x: floorX(run.path.length - 1),
-            y: laneY(run.map[run.path.length - 1]!.length, run.path.at(-1)!),
-          }
+        ? at(run.path.length - 1, run.path.at(-1)!)
         : { x: floorX(0) - 45 / floors, y: 50 };
   const travel = (lane: number) => {
     if (moving !== null) return;
@@ -333,28 +507,31 @@ function ExpeditionMap({
   // Edges between every pair of connected nodes; the path taken is drawn in gold.
   const edges: { key: string; x1: number; y1: number; x2: number; y2: number; state: string }[] =
     [];
-  for (let f = 0; f < floors - 1; f++) {
-    const a = run.map[f]!;
-    const b = run.map[f + 1]!;
-    a.forEach((_, i) =>
-      b.forEach((__, j) => {
-        if (b.length > 1 && Math.abs(i - j) > 1) return;
+  // From where you stand, Mapmaker's extra lanes are drawn as paths too.
+  const outs = (f: number, i: number) =>
+    f === run.path.length - 1 && run.path[f] === i
+      ? [...new Set([...links(run.map, f, i), ...open])]
+      : links(run.map, f, i);
+  for (let f = 0; f < floors - 1; f++)
+    run.map[f]!.forEach((_, i) =>
+      outs(f, i).forEach((j) => {
         const taken = run.path[f] === i && run.path[f + 1] === j;
         const next = run.path.length === f + 1 && run.path[f] === i && open.includes(j);
+        const a = at(f, i);
+        const b = at(f + 1, j);
         edges.push({
           key: `${f}-${i}-${j}`,
-          x1: floorX(f),
-          y1: laneY(a.length, i),
-          x2: floorX(f + 1),
-          y2: laneY(b.length, j),
+          x1: a.x,
+          y1: a.y,
+          x2: b.x,
+          y2: b.y,
           state: taken ? 'taken' : next ? 'next' : '',
         });
       }),
     );
-  }
 
   return (
-    <div className={`start xmap xmap--${status}`}>
+    <div className={`start shell xmap xmap--${status}`}>
       <UiSize />
       <div className="start__title">
         <span className="start__eyebrow">
@@ -378,13 +555,29 @@ function ExpeditionMap({
           </span>
           {size(run.build.main)} cards
         </span>
-        {run.boons.length > 0 && (
+        {run.boons.length + (run.pacts?.length ?? 0) > 0 && (
           <span className="xmap__boons">
-            {run.boons.map((b) => (
-              <span key={b} className="boon-chip" title={BOONS[b].text}>
-                {BOONS[b].name}
+            {(run.pacts ?? []).map((p) => (
+              <span
+                key={p}
+                className="boon-chip boon-chip--pact"
+                title={`${PACTS[p].reward} ${PACTS[p].cost}`}
+              >
+                {PACTS[p].name}
               </span>
             ))}
+            {run.boons.map((b) => {
+              const spent = b === 'secondWind' && run.windUsed;
+              return (
+                <span
+                  key={b}
+                  className={`boon-chip ${spent ? 'is-spent' : ''}`}
+                  title={spent ? `${BOONS[b].text} (used)` : BOONS[b].text}
+                >
+                  {BOONS[b].name}
+                </span>
+              );
+            })}
           </span>
         )}
       </div>
@@ -424,12 +617,12 @@ function ExpeditionMap({
                 className={`xnode xnode--${node.kind} is-${state}`}
                 style={
                   {
-                    left: `${floorX(f)}%`,
-                    top: `${laneY(nodes.length, lane)}%`,
+                    left: `${at(f, lane).x}%`,
+                    top: `${at(f, lane).y}%`,
                   } as React.CSSProperties
                 }
                 aria-disabled={!canGo}
-                aria-label={`${nodeInfo(f, node, floors).title}, floor ${f + 1}`}
+                aria-label={`${nodeInfo(run, f, lane).title}, floor ${f + 1}`}
                 onClick={() => canGo && travel(lane)}
                 onMouseEnter={() => setHover({ floor: f, lane })}
                 onMouseLeave={() => setHover(null)}
@@ -440,12 +633,18 @@ function ExpeditionMap({
                 {outcome === 'loss' && <span className="xnode__mark">✕</span>}
                 {!onPath && node.reward && (
                   <span
-                    className={`xnode__reward ${node.reward.kind === 'color' ? `pip--${node.reward.color}` : 'is-booster'}`}
+                    className={`xnode__reward ${node.reward.kind === 'color' ? `pip--${node.reward.color}` : `is-${node.reward.kind}`}`}
                     title={packName(node.reward)}
                   />
                 )}
                 {!onPath && node.kind === 'elite' && (
                   <span className="xnode__reward is-rare" title="A rare of your choice" />
+                )}
+                {!onPath && twistOf(run, f, lane) && (
+                  <span
+                    className="xnode__twist"
+                    title={`${TWISTS[twistOf(run, f, lane)!].name}: ${TWISTS[twistOf(run, f, lane)!].text}`}
+                  />
                 )}
               </button>
             );
@@ -539,25 +738,49 @@ function ExpeditionMap({
 // Shrines and camps
 // ---------------------------------------------------------------------------
 
+/** A pact's seal: a scroll tied with a cord. */
+const PACT_ICON = (
+  <path d="M6 3h11a3 3 0 0 1 3 3v1h-3v11a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3v-2h3V6a3 3 0 0 1 1-3zm2 4v2h7V7H8zm0 4v2h7v-2H8zm6.5 4.5a2 2 0 1 0 0 .01z" />
+);
+
 function BoonChoice({
   run,
   options,
+  pact,
+  picks,
   onChoose,
+  onPact,
 }: {
   run: ExpeditionRun;
   options: BoonId[];
+  pact?: PactId;
+  /** Boons still to pick (Twin Blessing asks for two). */
+  picks: number;
   onChoose: (b: BoonId) => void;
+  onPact: (p: PactId) => void;
 }) {
-  const atShrine = currentNode(run)?.node.kind === 'shrine';
+  const kind = currentNode(run)?.node.kind;
+  const where =
+    kind === 'shrine'
+      ? (run.pacts ?? []).includes('twin') && picks > 0 && !pact
+        ? 'Twin Blessing'
+        : 'Shrine'
+      : kind === 'mystery'
+        ? 'Mystery'
+        : 'Elite defeated';
   return (
-    <div className="start choice">
+    <div className="start shell choice">
       <UiSize />
       <div className="start__title">
-        <span className="start__eyebrow">
-          Expedition · {atShrine ? 'Shrine' : 'Elite defeated'}
-        </span>
-        <h1>Choose a boon</h1>
-        <p>It lasts for the rest of the run.</p>
+        <span className="start__eyebrow">Expedition · {where}</span>
+        <h1>{picks > 1 ? 'Choose two boons' : 'Choose a boon'}</h1>
+        <p>
+          {pact
+            ? 'It lasts for the rest of the run. Or make a pact: a bigger reward, for tougher fights.'
+            : picks > 1
+              ? 'Both last for the rest of the run.'
+              : 'It lasts for the rest of the run.'}
+        </p>
       </div>
       <div className="choice__options">
         {options.map((b, i) => (
@@ -565,7 +788,7 @@ function BoonChoice({
             key={b}
             className="choice__option"
             style={{ '--i': i } as React.CSSProperties}
-            onClick={() => onChoose(b)}
+            onClick={(e) => choose(e.currentTarget, 'boon', () => onChoose(b))}
           >
             <span className="choice__glyph">
               <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden>
@@ -576,6 +799,23 @@ function BoonChoice({
             <span className="choice__text">{BOONS[b].text}</span>
           </button>
         ))}
+        {pact && (
+          <button
+            className="choice__option choice__option--pact"
+            style={{ '--i': options.length } as React.CSSProperties}
+            onClick={(e) => choose(e.currentTarget, 'pact', () => onPact(pact))}
+          >
+            <span className="choice__tag">Pact</span>
+            <span className="choice__glyph">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+                {PACT_ICON}
+              </svg>
+            </span>
+            <span className="choice__name">{PACTS[pact].name}</span>
+            <span className="choice__text">{PACTS[pact].reward}</span>
+            <span className="choice__cost">{PACTS[pact].cost}</span>
+          </button>
+        )}
       </div>
     </div>
   );
@@ -584,7 +824,7 @@ function BoonChoice({
 function Camp({ run, onChoose }: { run: ExpeditionRun; onChoose: (c: 'rest' | 'forage') => void }) {
   const hurt = run.livesLost > 0;
   return (
-    <div className="start choice">
+    <div className="start shell choice">
       <UiSize />
       <div className="start__title">
         <span className="start__eyebrow">Expedition · Camp</span>
@@ -596,7 +836,7 @@ function Camp({ run, onChoose }: { run: ExpeditionRun; onChoose: (c: 'rest' | 'f
           className="choice__option"
           style={{ '--i': 0 } as React.CSSProperties}
           disabled={!hurt}
-          onClick={() => onChoose('rest')}
+          onClick={(e) => choose(e.currentTarget, 'rest', () => onChoose('rest'))}
         >
           <span className="choice__glyph choice__glyph--heart">
             <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden>
@@ -611,7 +851,7 @@ function Camp({ run, onChoose }: { run: ExpeditionRun; onChoose: (c: 'rest' | 'f
         <button
           className="choice__option"
           style={{ '--i': 1 } as React.CSSProperties}
-          onClick={() => onChoose('forage')}
+          onClick={(e) => choose(e.currentTarget, 'choice', () => onChoose('forage'))}
         >
           <span className="choice__glyph">
             <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden>
@@ -620,7 +860,8 @@ function Camp({ run, onChoose }: { run: ExpeditionRun; onChoose: (c: 'rest' | 'f
           </span>
           <span className="choice__name">Forage</span>
           <span className="choice__text">
-            Open a {PACK_SET_NAMES[packSetOf(run, run.build.opened)]} booster and keep {keepCount(run)}.
+            Open a {PACK_SET_NAMES[packSetOf(run, run.build.opened)]} booster and keep{' '}
+            {keepCount(run)}.
           </span>
         </button>
       </div>
@@ -639,7 +880,7 @@ function MysteryEvent({
 }) {
   const e = EVENTS[event];
   return (
-    <div className="start choice">
+    <div className="start shell choice">
       <UiSize />
       <div className="start__title">
         <span className="start__eyebrow">Expedition · Mystery</span>
@@ -655,7 +896,7 @@ function MysteryEvent({
               className="choice__option"
               style={{ '--i': i } as React.CSSProperties}
               disabled={!ok}
-              onClick={() => onChoose(i)}
+              onClick={(e) => choose(e.currentTarget, 'choice', () => onChoose(i))}
             >
               <span className="choice__glyph">
                 <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden>
@@ -680,17 +921,20 @@ function CardChoice({
   title,
   text,
   cards,
+  fx,
   onChoose,
 }: {
   eyebrow: string;
   title: string;
   text: string;
   cards: string[];
+  /** How picking one looks and sounds. */
+  fx: 'rare' | 'mythic';
   onChoose: (name: string) => void;
 }) {
   const [hover, setHover] = useState<HoverState | null>(null);
   return (
-    <div className="start choice">
+    <div className="start shell choice">
       <UiSize />
       <div className="start__title">
         <span className="start__eyebrow">{eyebrow}</span>
@@ -703,7 +947,7 @@ function CardChoice({
             key={name}
             className="card-choice"
             style={{ '--i': i } as React.CSSProperties}
-            onClick={() => onChoose(name)}
+            onClick={(e) => choose(e.currentTarget, fx, () => onChoose(name))}
             onMouseEnter={(e) => setHover({ defId: slug(name), anchor: e.currentTarget })}
             onMouseLeave={() => setHover(null)}
           >
@@ -716,7 +960,168 @@ function CardChoice({
   );
 }
 
-/** The merchant: pick a rare, then two of your cards to pay with. */
+/** The wishing well and the mirror: choose one of your cards. */
+function CardPick({
+  run,
+  mode,
+  onPick,
+}: {
+  run: ExpeditionRun;
+  mode: 'well' | 'mirror';
+  onPick: (name: string | null) => void;
+}) {
+  const [hover, setHover] = useState<HoverState | null>(null);
+  const cards = useMemo(() => pickable(run, mode), [run, mode]);
+  const b = run.build;
+  return (
+    <div className="start shell choice merchant">
+      <UiSize />
+      <div className="start__title">
+        <span className="start__eyebrow">
+          Expedition · {mode === 'well' ? 'Wishing well' : 'Mirror'}
+        </span>
+        <h1>{mode === 'well' ? 'Throw in a card' : 'Choose a card to copy'}</h1>
+        <p>
+          {mode === 'well'
+            ? 'You get a random card a rarity higher from the same set.'
+            : 'The copy goes into your collection.'}
+        </p>
+      </div>
+      <div className="merchant__pay">
+        {cards.map((name) => (
+          <button
+            key={name}
+            className="merchant__card"
+            onClick={(e) => choose(e.currentTarget, mode, () => onPick(name))}
+            onMouseEnter={(e) => setHover({ defId: slug(name), anchor: e.currentTarget })}
+            onMouseLeave={() => setHover(null)}
+          >
+            <img src={imageOf(name)} alt={name} draggable={false} />
+            {owned(b, name) > 1 && <span className="dcard__qty">×{owned(b, name)}</span>}
+          </button>
+        ))}
+      </div>
+      <div className="gauntlet__actions">
+        <button className="btn btn--ghost" onClick={() => onPick(null)}>
+          Walk away
+        </button>
+      </div>
+      <HoverPreview hover={hover} notes={hover ? ruleNotes(hover.defId) : []} />
+    </div>
+  );
+}
+
+/** The surveyor: three special lands, each replacing some of your basics. */
+function LandChoice({
+  run,
+  offers,
+  onChoose,
+}: {
+  run: ExpeditionRun;
+  offers: string[];
+  onChoose: (land: string | null) => void;
+}) {
+  const [hover, setHover] = useState<HoverState | null>(null);
+  const atEvent = currentNode(run)?.node.kind === 'mystery';
+  return (
+    <div className="start shell choice">
+      <UiSize />
+      <div className="start__title">
+        <span className="start__eyebrow">
+          Expedition · {atEvent ? 'A Lost Surveyor' : 'Surveyor'}
+        </span>
+        <h1>Upgrade your lands</h1>
+        <p>Choose one. Its copies go into your deck in place of basics, and stay for the run.</p>
+      </div>
+      <div className="choice__options">
+        {offers.map((land, i) => {
+          const { copies, replaces } = landUpgrade(run.build, land);
+          const swapped = [...new Set(replaces)]
+            .map((b) => `${replaces.filter((x) => x === b).length} ${b}`)
+            .join(', ');
+          return (
+            <button
+              key={land}
+              className="land-choice"
+              style={{ '--i': i } as React.CSSProperties}
+              onClick={(e) => choose(e.currentTarget, 'land', () => onChoose(land))}
+              onMouseEnter={(e) => setHover({ defId: slug(land), anchor: e.currentTarget })}
+              onMouseLeave={() => setHover(null)}
+            >
+              <span className="card-choice">
+                <img src={imageOf(land)} alt={land} draggable={false} />
+              </span>
+              <span className="land-choice__copies">
+                {copies} {copies > 1 ? 'copies' : 'copy'}
+              </span>
+              {swapped && <span className="land-choice__swap">Replaces {swapped}</span>}
+            </button>
+          );
+        })}
+      </div>
+      <div className="gauntlet__actions">
+        <button className="btn btn--ghost" onClick={() => onChoose(null)}>
+          Keep my basics
+        </button>
+      </div>
+      <HoverPreview hover={hover} notes={hover ? ruleNotes(hover.defId) : []} />
+    </div>
+  );
+}
+
+/** A card you were just given: it flips in, with sparkles in its rarity's colour. */
+function Gift({ card, note, onDone }: { card: string; note: string; onDone: () => void }) {
+  const shown = useRef<HTMLDivElement>(null);
+  const rarity = scryfallById.get(slug(card))?.rarity ?? 'common';
+  useEffect(() => {
+    play('flip');
+    later(fxOn() ? 380 : 0, () => {
+      const el = shown.current;
+      if (!el) return;
+      const r = el.getBoundingClientRect();
+      const color = RARITY_FX[rarity] ?? RARITY_FX.common!;
+      const big = rarity === 'rare' || rarity === 'mythic';
+      play(big ? 'win' : 'chime', { gain: big ? 0.6 : 0.5 });
+      burst(r.left + r.width / 2, r.top + r.height / 2, color, {
+        n: big ? 70 : 34,
+        speed: [1.5, big ? 8 : 5],
+        life: [30, 64],
+        size: [2, 6],
+        drag: 0.95,
+        box: { w: r.width, h: r.height, mode: 'edge' },
+      });
+      if (big)
+        ring(r.left + r.width / 2, r.top + r.height / 2, color, {
+          r0: 40,
+          r1: 280,
+          life: 30,
+          width: 4,
+        });
+    });
+  }, [card, rarity]);
+  return (
+    <div className="start shell choice">
+      <UiSize />
+      <div className="start__title">
+        <span className="start__eyebrow">Expedition · New card</span>
+        <h1>{card}</h1>
+        <p>{note}</p>
+      </div>
+      <div className="choice__options gift">
+        <div ref={shown} className={`card-choice card-choice--gift is-${rarity}`}>
+          <img src={imageOf(card)} alt={card} draggable={false} />
+        </div>
+      </div>
+      <div className="gauntlet__actions">
+        <button className="btn btn--primary btn--big" onClick={onDone}>
+          Continue
+        </button>
+      </div>
+    </div>
+  );
+}
+
+/** The merchant: pick a rare, then two of your cards to pay with (one with Haggler). */
 function Merchant({
   run,
   offers,
@@ -725,11 +1130,13 @@ function Merchant({
 }: {
   run: ExpeditionRun;
   offers: string[];
-  onTrade: (buy: string, give: [string, string]) => void;
+  onTrade: (buy: string, give: string[]) => void;
   onLeave: () => void;
 }) {
   const [buy, setBuy] = useState<string | null>(null);
   const [give, setGive] = useState<string[]>([]);
+  const price = merchantPrice(run);
+  const priceWords = price === 1 ? 'one card' : 'two cards';
   const [hover, setHover] = useState<HoverState | null>(null);
   const b = run.build;
   const yours = useMemo(
@@ -742,7 +1149,7 @@ function Merchant({
   const toggle = (name: string) => {
     const i = give.indexOf(name);
     const taken = give.filter((g) => g === name).length;
-    if (give.length < 2 && taken < owned(b, name)) setGive([...give, name]);
+    if (give.length < price && taken < owned(b, name)) setGive([...give, name]);
     else if (i >= 0) setGive(give.filter((_, j) => j !== i));
   };
   const hoverProps = (name: string) => ({
@@ -751,15 +1158,15 @@ function Merchant({
   });
 
   return (
-    <div className="start choice merchant">
+    <div className="start shell choice merchant">
       <UiSize />
       <div className="start__title">
         <span className="start__eyebrow">Expedition · Merchant</span>
-        <h1>{buy ? 'Pay with two cards' : 'A travelling merchant'}</h1>
+        <h1>{buy ? `Pay with ${priceWords}` : 'A travelling merchant'}</h1>
         <p>
           {buy
-            ? 'Choose two cards from your deck or collection to trade away.'
-            : '"Rare wares, friend. Any one of these for two of yours."'}
+            ? `Choose ${priceWords} from your deck or collection to trade away.`
+            : `"Rare wares, friend. Any one of these for ${price === 1 ? 'one' : 'two'} of yours."`}
         </p>
       </div>
       <div className="choice__options">
@@ -801,10 +1208,14 @@ function Merchant({
         {buy && (
           <button
             className="btn btn--primary btn--big"
-            disabled={give.length < 2}
-            onClick={() => onTrade(buy, give as [string, string])}
+            disabled={give.length < price}
+            onClick={() => {
+              const card = document.querySelector('.merchant .card-choice.is-on');
+              if (card) choose(card as HTMLElement, 'rare', () => onTrade(buy, give));
+              else onTrade(buy, give);
+            }}
           >
-            {give.length < 2 ? `Choose ${2 - give.length} more` : 'Trade'}
+            {give.length < price ? `Choose ${price - give.length} more` : 'Trade'}
           </button>
         )}
         <button className="btn btn--ghost" onClick={onLeave}>

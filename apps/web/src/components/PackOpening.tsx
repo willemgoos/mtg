@@ -3,7 +3,7 @@ import type { Color } from '@mtg/engine';
 import { type ReactNode, useEffect, useMemo, useRef, useState } from 'react';
 import {
   type ExpeditionRun,
-  keepCount,
+  packKeeps,
   type Pack,
   PACK_SET_NAMES,
   type PackSet,
@@ -16,6 +16,8 @@ import { ruleNotes } from '../game/notes.ts';
 import { play } from '../game/sound.ts';
 import { HoverPreview, type HoverState } from './Preview.tsx';
 import { UiSize } from './UiSize.tsx';
+import './home.css';
+import './expedition.css';
 
 export const COLOR_NAMES: Record<Color, string> = {
   W: 'White',
@@ -89,7 +91,7 @@ export function PackOpening({
         pack={run.build.packs[index]!}
         set={packSetOf(run, run.build.opened + index)}
         cards={packs[index]!}
-        keep={Math.min(keepCount(run), packs[index]!.length)}
+        keep={Math.min(packKeeps(run)[index]!, packs[index]!.length)}
         eyebrow={`Expedition · ${runDeck(run).name}${packs.length > 1 ? ` · Pack ${index + 1} of ${packs.length}` : ''}`}
         onKeep={(names) => {
           const all = [...kept, names];
@@ -321,7 +323,7 @@ function OnePack({
   const cols = cards.length === 8 ? 4 : COLS;
   const rows = Math.ceil(cards.length / cols);
   return (
-    <div ref={root} className={`start opening opening--${phase}`}>
+    <div ref={root} className={`start shell opening opening--${phase}`}>
       <UiSize />
       <div className="start__title">
         <span className="start__eyebrow">{eyebrow}</span>

@@ -2166,11 +2166,12 @@ button {
   color: var(--muted);
 }
 
+/* Screen titles keep their size: the UI size setting is for cards and controls. */
 .start h1 {
   margin: 0.25rem 0 0.5rem;
   font-family: var(--display);
   font-weight: 400;
-  font-size: 8rem;
+  font-size: calc(8rem / var(--ui-scale));
   letter-spacing: 0.06em;
   line-height: 1;
   background: linear-gradient(180deg, var(--brass-hi), var(--brass) 55%, #7d6035);

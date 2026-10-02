@@ -221,17 +221,17 @@ export function App() {
       return start({ you: r.deck, them: r.opponents[round]! }, ROUNDS[round]!.bot);
     }
     const r = expedition.run;
-    const at = r && X.currentNode(r);
-    if (!r || !at?.node.opponent) return;
+    const fight = r && X.fightOf(r);
+    if (!r || !fight) return;
     if (!resume) updateExpedition((s) => X.startMatch(s, seed));
     start(
       {
         you: r.deck,
-        them: at.node.opponent,
+        them: fight.opponent,
         cards: X.deckCards(r.build),
         options: X.gameOptions(r),
       },
-      X.botFor(at.floor, at.node, X.floorsOf(r)),
+      fight.bot,
     );
   };
   // Leaving a run's match keeps it saved, so the round can be resumed rather than restarted.
