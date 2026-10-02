@@ -38,6 +38,7 @@ import { nextInt, shuffleInPlace } from './rng.ts';
 import { checkCondition } from './triggers.ts';
 import type {
   CardDefId,
+  GameObject,
   ObjectRef,
   Amount,
   EffectSource,
@@ -383,6 +384,17 @@ export function resolveAmount(ctx: Ctx, es: EffectSource, amount: Amount): numbe
     const c = def(ctx, o.id).manaCost;
     return (c.colored.U ?? 0) + (c.hybrid ?? []).filter((h) => h.includes('U')).length;
   }
+  if ('greatestManaValueYouControl' in amount)
+    return Math.max(
+      0,
+      ...ctx.s.battlefield
+        .filter(
+          (id) =>
+            obj(ctx, id).controller === es.controller &&
+            matchesFilter(ctx, id, amount.greatestManaValueYouControl),
+        )
+        .map((id) => manaValue(def(ctx, id).manaCost)),
+    );
   if ('handSizeUpTo' in amount)
     return Math.max(0, amount.handSizeUpTo - ctx.s.players[es.controller].hand.length);
   if ('toughnessOf' in amount) {
@@ -1738,12 +1750,25 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
       return;
     }
     case 'becomeCopy': {
-      const self = es.source && onBattlefield(ctx, es.source);
+      const source = es.source && onBattlefield(ctx, es.source);
+      const self = e.what ? ctx.s.objects[objectsOf(ctx, es, e.what)[0] ?? ''] : source;
       const of = objectsOf(ctx, es, e.of)[0];
-      if (!self || !of) return;
+      if (!self || self.zone !== 'battlefield' || !of) return;
+      endCopy(ctx, self);
       self.originalDefId ??= self.defId;
       self.defId = obj(ctx, of).defId;
-      self.copyingUntilTurn = ctx.s.turn.number;
+      if (obj(ctx, of).copyPT) self.copyPT = { ...obj(ctx, of).copyPT! };
+      // Marvel Super Heroes: longer copies, and copies that stay creatures.
+      if (e.until === 'yourNextTurn') self.copyUntilTurnOf = es.controller;
+      else if (e.until === 'whileSource' && source) self.copyWhileSource = source.id;
+      else self.copyingUntilTurn = ctx.s.turn.number;
+      if (e.asCreature) {
+        self.copyAsCreature = true;
+        self.copyPT = { power: e.asCreature.power, toughness: e.asCreature.toughness };
+        self.grantedKeywords = [...(self.grantedKeywords ?? []), ...e.asCreature.keywords];
+        self.copyAddedSubtypes = e.asCreature.subtypes;
+        self.addedSubtypes = [...(self.addedSubtypes ?? []), ...e.asCreature.subtypes];
+      }
       return;
     }
     case 'keepOneOfEachType':
@@ -2213,9 +2238,11 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
           toughness: 0,
           keywords: [],
           previousController: o.controller,
-          ...(e.untilYourNextTurn
-            ? { expires: 'untilYourNextTurn' as const, player: es.controller }
-            : { expires: 'endOfTurn' as const }),
+          ...(e.whileSource && es.source
+            ? { expires: 'whileSource' as const, whileSourceId: es.source.id }
+            : e.untilYourNextTurn
+              ? { expires: 'untilYourNextTurn' as const, player: es.controller }
+              : { expires: 'endOfTurn' as const }),
         });
         o.controller = es.controller;
         o.summoningSick = true;
@@ -2335,3 +2362,24 @@ const SUPER_ADAPTOID_KEYWORDS = [
   'trample',
   'vigilance',
 ] as const;
+
+// Copies (Marvel Super Heroes)
+
+/** Ends a "becomes a copy" effect: it's itself again. */
+export function endCopy(ctx: Ctx, o: GameObject): void {
+  if (!o.originalDefId) return;
+  o.defId = o.originalDefId;
+  delete o.originalDefId;
+  delete o.copyPT;
+  delete o.copyingUntilTurn;
+  delete o.copyUntilTurnOf;
+  delete o.copyWhileSource;
+  if (o.copyAsCreature) delete o.grantedKeywords;
+  delete o.copyAsCreature;
+  if (o.copyAddedSubtypes) {
+    const added = [...(o.addedSubtypes ?? [])];
+    for (const st of o.copyAddedSubtypes) added.splice(added.indexOf(st), 1);
+    o.addedSubtypes = added;
+    delete o.copyAddedSubtypes;
+  }
+}

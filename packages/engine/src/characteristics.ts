@@ -204,7 +204,10 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
     power,
     toughness,
     keywords,
-    types: crewed && !d.types.includes('Creature') ? [...d.types, 'Creature'] : d.types,
+    types:
+      (crewed || o.copyAsCreature) && !d.types.includes('Creature')
+        ? [...d.types, 'Creature']
+        : d.types,
     subtypes,
     cantBlock,
     cantBeBlocked,
@@ -585,6 +588,7 @@ export function cardMatches(
   if (filter.enteredThisTurn && obj(ctx, id).zoneTurn !== ctx.s.turn.number) return false;
   if (filter.leftAttacking && !obj(ctx, id).leftAttacking) return false;
   if (filter.attachedToSource && (!sourceId || obj(ctx, id).attachedTo !== sourceId)) return false;
+  if (filter.notAttachedHost && sourceId && obj(ctx, sourceId).attachedTo === id) return false;
   if (filter.manaValueParity) {
     const mv = manaValue(def(ctx, id).manaCost);
     if ((mv % 2 === 1 ? 'odd' : 'even') !== filter.manaValueParity) return false;

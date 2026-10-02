@@ -8,6 +8,7 @@ import { MARVEL_LANDS } from './msh/lands.ts';
 import { MSH_MYTHIC_BACKS, MSH_MYTHICS } from './msh/mythics.ts';
 import { MSH_OTHERS } from './msh/others.ts';
 import { MSH_RARES } from './msh/rares.ts';
+import { MSH_SAGAS } from './msh/sagas.ts';
 
 export { MARVEL_TOKENS } from './msh/helpers.ts';
 
@@ -25,6 +26,7 @@ export const MARVEL_BEHAVIORS: Record<string, Behavior> = {
   ...MSH_OTHERS,
   ...MSH_RARES,
   ...MSH_MYTHICS,
+  ...MSH_SAGAS,
   ...MARVEL_LANDS,
 };
 

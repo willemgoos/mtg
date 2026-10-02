@@ -306,7 +306,22 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
     o.defId = o.originalDefId;
     delete o.originalDefId;
     delete o.copyPT;
+    delete o.copyUntilTurnOf;
+    delete o.copyWhileSource;
+    delete o.copyAsCreature;
+    delete o.copyAddedSubtypes;
   }
+  // Marvel Super Heroes (Secret Invasion): a copy lasting while this stays ends as it leaves.
+  if (from === 'battlefield')
+    for (const other of ctx.s.battlefield) {
+      const c = ctx.s.objects[other]!;
+      if (c.copyWhileSource === id && c.originalDefId) {
+        c.defId = c.originalDefId;
+        delete c.originalDefId;
+        delete c.copyPT;
+        delete c.copyWhileSource;
+      }
+    }
   // A stolen card's permission ends when it leaves exile.
   if (from === 'exile') {
     delete o.castableBy;
@@ -343,8 +358,13 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
     if (i >= 0) src.splice(i, 1);
   }
   // Marvel Super Heroes: effects lasting "for as long as" it stays end as it leaves.
-  if (from === 'battlefield' && ctx.s.effects.some((e) => e.whileSourceId === id))
+  if (from === 'battlefield' && ctx.s.effects.some((e) => e.whileSourceId === id)) {
+    for (const e of ctx.s.effects) {
+      const a = e.whileSourceId === id ? ctx.s.objects[e.affected.id] : undefined;
+      if (a && e.previousController && a.zcc === e.affected.zcc) a.controller = e.previousController;
+    }
     ctx.s.effects = ctx.s.effects.filter((e) => e.whileSourceId !== id);
+  }
   // Marvel Super Heroes (Ares): whether it was attacking as it left.
   if (from === 'battlefield' && ctx.s.combat?.attackers.some((a) => a.id === id))
     o.leftAttacking = true;

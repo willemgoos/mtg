@@ -640,6 +640,8 @@ export interface CardFilter {
   leftAttacking?: boolean;
   /** Attached to the source (Winter Soldier: "for each Equipment attached to him"). */
   attachedToSource?: boolean;
+  /** Not the permanent the source is attached to (Secret Invasion: "other than enchanted creature"). */
+  notAttachedHost?: boolean;
   /** Its mana value is odd or even (Thanos). */
   manaValueParity?: 'odd' | 'even';
   // Brawl.
@@ -714,6 +716,8 @@ export type Amount =
   | { bluePipsOfSubject: true }
   /** "Draw cards equal to the difference" up to this hand size (The Ten Rings). */
   | { handSizeUpTo: number }
+  /** The greatest mana value among your permanents matching the filter (Armor Wars: artifacts). */
+  | { greatestManaValueYouControl: CardFilter }
   // Marvel Super Heroes: "costs {2} less if ..." (Punishing Punch).
   | { if: ConditionDef; then: number; else?: number }
   /** Cards in your graveyard (of these types). */
@@ -993,7 +997,13 @@ export type EffectDef =
   /** Put permanents on the top or bottom of their owners' libraries. */
   | { kind: 'putInLibrary'; what: Ref; position: 'top' | 'bottom' | 'second' }
   /** Gain control of permanents until end of turn (Reptilian Recruiter), or until your next turn (Stilt-Man). */
-  | { kind: 'gainControl'; what: Ref; untilYourNextTurn?: boolean }
+  | {
+      kind: 'gainControl';
+      what: Ref;
+      untilYourNextTurn?: boolean;
+      // Marvel Super Heroes: 'for as long as this Saga remains on the battlefield'.
+      whileSource?: boolean;
+    }
   /**
    * Until your next turn, permanents lose all abilities (and have base power
    * and toughness `basePT` if creatures): Azure Beastbinder.
@@ -1231,7 +1241,17 @@ export type EffectDef =
   /** Copy the top triggered ability you control on the stack (Mister Fantastic). */
   | { kind: 'copyTopTrigger'; count: number }
   /** The source becomes a copy of the target until end of turn (Mirage Mirror). */
-  | { kind: 'becomeCopy'; of: Ref }
+  | {
+      kind: 'becomeCopy';
+      of: Ref;
+      // Marvel Super Heroes (Absorbing Man, Taskmaster, Secret Invasion).
+      /** What becomes the copy (default: the source), e.g. the enchanted creature. */
+      what?: Ref;
+      /** How long: until its controller's next turn, or while the source stays on the battlefield. */
+      until?: 'yourNextTurn' | 'whileSource';
+      /** "Except he's a 4/4 Human Villain creature with vigilance" (Absorbing Man). */
+      asCreature?: { power: number; toughness: number; subtypes: string[]; keywords: Keyword[] };
+    }
   /** Tragic Arrogance: each player keeps one artifact, creature, enchantment and planeswalker (picked for them). */
   | { kind: 'keepOneOfEachType' }
   /** Promise of Loyalty: each player keeps one creature with a vow counter (picked for them). */
@@ -1585,6 +1605,14 @@ export interface GameObject {
   vowedTo?: PlayerId;
   /** The defId it is until end of turn, copying another (Mirage Mirror). */
   copyingUntilTurn?: number;
+  // Marvel Super Heroes: longer copies.
+  /** A copy that ends as this player's next turn begins (Absorbing Man, Taskmaster). */
+  copyUntilTurnOf?: PlayerId;
+  /** A copy that ends when this permanent leaves the battlefield (Secret Invasion). */
+  copyWhileSource?: ObjectId;
+  /** While copying, it's still a creature with copyPT (Absorbing Man), and these subtypes were added. */
+  copyAsCreature?: boolean;
+  copyAddedSubtypes?: string[];
   // Wakanda Forever (9c).
   /** It's monstrous (Fleecemane Lion). */
   monstrous?: boolean;

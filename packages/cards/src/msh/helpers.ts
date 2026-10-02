@@ -121,6 +121,18 @@ export const MARVEL_TOKENS: CardDefinition[] = [
   token('insect-token', 'Insect', 'G', ['Insect'], 1, 1),
   token('merfolk-token', 'Merfolk', 'U', ['Merfolk'], 1, 1),
   {
+    ...token('galactus-token', 'Galactus', 'B', ['Elder', 'Alien'], 16, 16, ['flying', 'trample']),
+    supertypes: ['Legendary'],
+    abilities: [
+      {
+        kind: 'triggered',
+        trigger: { on: 'attacks' },
+        targets: [{ what: 'permanent', filter: { types: ['Land'] } }],
+        effects: [{ kind: 'destroy', what: { target: 0 } }],
+      },
+    ],
+  },
+  {
     ...token('alien-token', 'Alien', 'R', ['Alien'], 1, 1, ['haste']),
     abilities: [{ kind: 'static', effect: { kind: 'attacksEachCombat' } }],
   },

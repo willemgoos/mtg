@@ -773,4 +773,65 @@ export const MSH_RARES: Record<string, Behavior> = {
   'Worlds Within Worlds': {
     spell: { targets: [], effects: [{ kind: 'custom', handler: 'worldsWithinWorlds' }] },
   },
+  // Copies (Stream A's "becomes a copy"). His name and legendary status aren't kept.
+  'Absorbing Man': {
+    abilities: [
+      {
+        kind: 'triggered',
+        trigger: { on: 'beginningOfMain', which: 1 },
+        targets: [
+          {
+            what: 'permanent',
+            filter: {
+              anyOf: [
+                { types: ['Artifact'] },
+                { types: ['Enchantment'], notSubtype: 'Aura' },
+                { types: ['Land'] },
+              ],
+            },
+            optional: true,
+          },
+        ],
+        effects: [
+          {
+            kind: 'becomeCopy',
+            of: t0,
+            until: 'yourNextTurn',
+            asCreature: {
+              power: 4,
+              toughness: 4,
+              subtypes: ['Human', 'Villain'],
+              keywords: ['vigilance'],
+            },
+          },
+        ],
+      },
+    ],
+  },
+  // A creature card in a graveyard can't be chosen; his name and types aren't kept.
+  'Taskmaster, Mercenary Mimic': {
+    abilities: [
+      {
+        kind: 'triggered',
+        trigger: { on: 'beginningOfMain', which: 1 },
+        targets: [{ what: 'creature', filter: { other: true }, optional: true }],
+        effects: [{ kind: 'becomeCopy', of: t0, until: 'yourNextTurn' }],
+      },
+    ],
+  },
+  // The enchanted creature's ward {2} is not modelled.
+  'Secret Invasion': {
+    enchant: { what: 'creature', controller: 'you' },
+    abilities: [
+      {
+        kind: 'triggered',
+        trigger: { on: 'etb' },
+        targets: [{ what: 'creature', filter: { notAttachedHost: true }, optional: true }],
+        effects: [
+          { kind: 'becomeCopy', what: 'attached', of: t0, until: 'whileSource' },
+          { kind: 'exileUntilSourceLeaves', what: t0 },
+        ],
+      },
+    ],
+  },
 };
