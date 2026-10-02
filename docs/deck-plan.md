@@ -148,6 +148,10 @@ Bot-vs-bot over 160 games against the ten Foundations starter decks: Forage and 
 
 More simplifications: Portent of Calamity takes one card per type; ward costs that discard or sacrifice Food pick automatically; copies keep their targets; bots don't attack planeswalkers; Rottenmouth Viper's sacrifices and tapped tokens are picked automatically; Fecund Greenshell always puts the land onto the battlefield; Helga's mana can mix colours.
 
+## Phases 9 and 10: Marvel Super Heroes
+
+The four Commander precons as Brawl decks (9a to 9e), then the MSH main set like Bloomburrow (10). See `docs/marvel-plan.md`.
+
 ## Notes
 
 - Some cards will turn out to be one-offs. Put them in `custom` handlers instead of growing the engine vocabulary for a single card.
