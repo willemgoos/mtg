@@ -341,6 +341,8 @@ export type TriggerDef =
   | { on: 'yourCreatureDealtDamage' }
   /** Equipment: whenever the equipped creature attacks (Captain America's Shield). */
   | { on: 'equippedAttacks' }
+  /** Whenever a player or permanent becomes the target of an ability you control (Loki, God of Mischief). */
+  | { on: 'youTargetWithAbility' }
   | { on: 'drawCard'; whose: 'yours' | 'opponents' }
   /** Whenever a source you control deals noncombat damage to an opponent ("that many"). */
   | { on: 'yourNoncombatDamageToOpponent' }
@@ -950,6 +952,22 @@ export type EffectDef =
   // Transform (Marvel Super Heroes)
   /** Turn a double-faced permanent to its other face. */
   | { kind: 'transform'; what: Ref }
+  /**
+   * Exile the top N of your (or the opponent's) library; you may cast a spell
+   * from among them (mana value at most `maxManaValue`) without paying its mana
+   * cost. The rest go to the bottom, or stay exiled (Cosmic Cube, Doom Reigns Supreme).
+   */
+  | {
+      kind: 'castFreeFromTop';
+      count: number;
+      from: 'yours' | 'opponents';
+      maxManaValue?: Amount;
+      rest: 'bottom' | 'exile';
+    }
+  /** Copy the topmost ability you control on the stack from an artifact source (Scientist Supreme). */
+  | { kind: 'copyArtifactAbility' }
+  /** For each keyword the target has and the source lacks, a keyword counter on the source (Super-Adaptoid). */
+  | { kind: 'keywordCountersFrom'; what: Ref }
   /** Remove all +1/+1 counters from it (The Astonishing Ant-Man, after counting them). */
   | { kind: 'removePlusOneCounters'; from: Ref }
   /** Take an extra turn after this one (Kang the Conqueror). */
@@ -1009,9 +1027,17 @@ export type EffectDef =
       battlefieldOnYourTurn?: boolean;
       /** A card not taken stays on top (Herald's Horn looks at one card). */
       restOnTop?: boolean;
+      /** Marvel Super Heroes: the rest go to the graveyard (Earth's Mightiest Heroes). */
+      restToGraveyard?: boolean;
     }
   /** Exile the top N; you may play them until the end of this turn or of your next turn. */
-  | { kind: 'exileTopPlayable'; count: Amount; until: 'endOfTurn' | 'endOfNextTurn' }
+  | {
+      kind: 'exileTopPlayable';
+      count: Amount;
+      until: 'endOfTurn' | 'endOfNextTurn';
+      // Marvel Super Heroes (Daredevil): "If that card is a Hero card, ...".
+      ifExiled?: { filter: CardFilter; then: EffectDef[] };
+    }
   /** The source card goes from its owner's graveyard back to their hand (Angelic Destiny). */
 
   /** Each opponent sacrifices a creature of their choice; optionally you gain life equal to its toughness. */
@@ -1715,6 +1741,8 @@ export type Decision =
       battlefieldOnYourTurn?: boolean;
       /** The looked-at cards not taken stay on top (Herald's Horn). */
       restOnTop?: boolean;
+      /** Marvel Super Heroes: the cards not taken go to the graveyard. */
+      restToGraveyard?: boolean;
       resume: PausedResolution;
       thenPriority: PlayerId;
     }
@@ -1859,6 +1887,8 @@ export type Decision =
       discardInstead?: boolean;
       /** Cards that go to hand once this is answered (Portent's other exiled cards). */
       thenToHand?: ObjectId[];
+      /** Marvel Super Heroes: cards not cast go to the bottom of their owner's library. */
+      thenToBottom?: ObjectId[];
       resume: PausedResolution;
       thenPriority: PlayerId;
     }
@@ -2055,7 +2085,14 @@ export type GameEvent =
   /** `player` spent mana: their total this turn went from `before` to `after`. */
   | { type: 'manaSpent'; player: PlayerId; before: number; after: number }
   /** `player`'s spell or ability targeted these objects. */
-  | { type: 'targeted'; player: PlayerId; ids: ObjectId[] }
+  | {
+      type: 'targeted';
+      player: PlayerId;
+      ids: ObjectId[];
+      /** Marvel Super Heroes (Loki): by an ability rather than a spell, and whether players were targeted. */
+      byAbility?: boolean;
+      anyTarget?: boolean;
+    }
   | { type: 'gameOver'; winner: PlayerId | 'draw' };
 
 export interface ApplyResult {

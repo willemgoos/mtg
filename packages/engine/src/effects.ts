@@ -17,6 +17,7 @@ import {
   drawCard,
   emit,
   moveObject,
+  newId,
   newTimestamp,
   obj,
   onBattlefield,
@@ -504,7 +505,8 @@ export function runEffects(
       e.kind === 'portent' ||
       e.kind === 'exileUntilNonlandCastByDiscard' ||
       e.kind === 'revealPutAndTake' ||
-      e.kind === 'pickFromCards'
+      e.kind === 'pickFromCards' ||
+      e.kind === 'castFreeFromTop'
     ) {
       const lib = ctx.s.players[es.controller].library;
       const { controller, source, sourceDefId, targets, lkiPower, subject, amount, chosen, x } = es;
@@ -626,6 +628,30 @@ export function runEffects(
         );
         if (cards.length === 0) continue;
         ctx.s.decision = { kind: 'castFree', player: controller, cards, resume, thenPriority };
+      } else if (e.kind === 'castFreeFromTop') {
+        // Marvel Super Heroes (Cosmic Cube, Doom Reigns Supreme).
+        const who = e.from === 'yours' ? controller : other(controller);
+        const top = ctx.s.players[who].library.slice(0, e.count);
+        if (top.length === 0) continue;
+        for (const id of top) moveObject(ctx, id, 'exile');
+        const max = e.maxManaValue !== undefined ? resolveAmount(ctx, es, e.maxManaValue) : 99;
+        const cards = top.filter(
+          (id) => !def(ctx, id).types.includes('Land') && manaValue(def(ctx, id).manaCost) <= max,
+        );
+        const rest = e.rest === 'bottom' ? { thenToBottom: top } : {};
+        if (cards.length === 0) {
+          for (const id of rest.thenToBottom ?? [])
+            moveObject(ctx, id, 'library', { position: 'bottom' });
+          continue;
+        }
+        ctx.s.decision = {
+          kind: 'castFree',
+          player: controller,
+          cards,
+          ...rest,
+          resume,
+          thenPriority,
+        };
       } else if (e.kind === 'castFree') {
         // A target card in a graveyard, still there.
         const t =
@@ -875,6 +901,7 @@ export function runEffects(
           looked,
           ...(e.battlefieldOnYourTurn ? { battlefieldOnYourTurn: true } : {}),
           ...(e.restOnTop ? { restOnTop: true } : {}),
+          ...(e.restToGraveyard ? { restToGraveyard: true } : {}),
           resume,
           thenPriority,
         };
@@ -1180,6 +1207,28 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
         obj(ctx, id).tapped = true;
       }
       return;
+    case 'copyArtifactAbility': {
+      // The topmost ability on the stack you control from an artifact source.
+      for (let i = ctx.s.stack.length - 1; i >= 0; i--) {
+        const item = ctx.s.stack[i]!;
+        if (item.kind !== 'ability' || item.controller !== es.controller) continue;
+        if (!defOf(ctx, item.sourceDefId).types.includes('Artifact')) continue;
+        ctx.s.stack.push({ ...item, id: newId(ctx) });
+        return;
+      }
+      return;
+    }
+    case 'keywordCountersFrom': {
+      const self = es.source && onBattlefield(ctx, es.source);
+      const from = objectsOf(ctx, es, e.what)[0];
+      if (!self || !from) return;
+      for (const k of SUPER_ADAPTOID_KEYWORDS)
+        if (hasKeyword(ctx, from, k) && !hasKeyword(ctx, self.id, k))
+          (self.counters ??= {})[k] = (self.counters[k] ?? 0) + 1;
+      return;
+    }
+    case 'castFreeFromTop':
+      return; // handled by runEffects
     case 'removePlusOneCounters':
       for (const id of objectsOf(ctx, es, e.from)) obj(ctx, id).plusOneCounters = 0;
       return;
@@ -1430,6 +1479,8 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
       for (const id of lib.slice(0, resolveAmount(ctx, es, e.count))) {
         moveObject(ctx, id, 'exile');
         obj(ctx, id).playableUntilTurn = until;
+        if (e.ifExiled && cardMatches(ctx, id, e.ifExiled.filter))
+          for (const then of e.ifExiled.then) runEffect(ctx, es, then);
       }
       return;
     }
@@ -1851,3 +1902,18 @@ export function useShield(ctx: Ctx, id: ObjectId): boolean {
   o.counters.shield--;
   return true;
 }
+
+/** The keywords Super-Adaptoid copies as counters. */
+const SUPER_ADAPTOID_KEYWORDS = [
+  'haste',
+  'flying',
+  'firstStrike',
+  'doubleStrike',
+  'deathtouch',
+  'indestructible',
+  'lifelink',
+  'menace',
+  'reach',
+  'trample',
+  'vigilance',
+] as const;

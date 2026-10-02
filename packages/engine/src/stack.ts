@@ -110,9 +110,20 @@ export function teamworkFor(
 }
 
 /** Valiant needs to know what a player's spell or ability targeted. */
-function noteTargets(ctx: Ctx, player: PlayerId, targets: readonly TargetChoice[]): void {
+function noteTargets(
+  ctx: Ctx,
+  player: PlayerId,
+  targets: readonly TargetChoice[],
+  byAbility = false,
+): void {
   const ids = targets.flatMap((t) => ('object' in t ? [t.object.id] : []));
-  if (ids.length) emit(ctx, { type: 'targeted', player, ids });
+  if (ids.length || (byAbility && targets.length))
+    emit(ctx, {
+      type: 'targeted',
+      player,
+      ids,
+      ...(byAbility ? { byAbility: true, anyTarget: targets.length > 0 } : {}),
+    });
 }
 
 type WardCost = NonNullable<CardDefinition['wardCost']>;
@@ -535,7 +546,7 @@ export function activateAbility(
   if (a.cost.exileSelf) moveObject(ctx, source, 'exile');
   ctx.s.stack.push(item);
   emit(ctx, { type: 'abilityActivated', id, source, player });
-  noteTargets(ctx, player, targets);
+  noteTargets(ctx, player, targets, true);
   return forage !== undefined && payForage(ctx, player, forage, { thenPriority: player });
 }
 
@@ -579,7 +590,7 @@ export function pushTrigger(
     ...(mode !== undefined ? { mode } : {}),
   });
   emit(ctx, { type: 'triggerStacked', id, source: t.source.id, player: t.controller });
-  noteTargets(ctx, t.controller, targets);
+  noteTargets(ctx, t.controller, targets, true);
 }
 
 function abilityOf(
@@ -899,6 +910,9 @@ export function finishCastFree(ctx: Ctx, cast: ObjectId | null): void {
   if (d.kind !== 'castFree') throw new Error('Not casting for free');
   for (const id of d.thenToHand ?? [])
     if (id !== cast && ctx.s.objects[id]?.zone === 'exile') moveObject(ctx, id, 'hand');
+  for (const id of d.thenToBottom ?? [])
+    if (id !== cast && ctx.s.objects[id]?.zone === 'exile')
+      moveObject(ctx, id, 'library', { position: 'bottom' });
   resume(ctx, d.resume, d.thenPriority);
 }
 
@@ -1071,6 +1085,10 @@ export function answerSearch(ctx: Ctx, card: ObjectId | null): void {
   const lib = ctx.s.players[d.player].library;
   if (d.looked && d.restOnTop) {
     // Herald's Horn: what wasn't taken stays where it was.
+  } else if (d.looked && d.restToGraveyard) {
+    // Earth's Mightiest Heroes: the rest go to the graveyard.
+    for (const id of d.looked)
+      if (id !== card && obj(ctx, id).zone === 'library') moveObject(ctx, id, 'graveyard');
   } else if (d.looked) {
     const rest = d.looked.filter((id) => id !== card);
     for (const id of rest) lib.splice(lib.indexOf(id), 1);

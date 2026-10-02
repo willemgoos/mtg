@@ -818,6 +818,12 @@ function detect(ctx: Ctx, ev: GameEvent): void {
       return;
     }
     case 'targeted': {
+      // Marvel Super Heroes (Loki): "the target of an ability you control".
+      if (ev.byAbility && ev.anyTarget)
+        forEachBattlefieldTrigger(
+          ctx,
+          (src, a) => a.trigger.on === 'youTargetWithAbility' && src.controller === ev.player,
+        );
       for (const id of ev.ids) {
         const o = s.objects[id];
         if (!o || o.zone !== 'battlefield' || o.controller === ev.player) continue;

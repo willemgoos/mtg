@@ -1,4 +1,5 @@
 import { characteristics } from './characteristics.ts';
+import { MSH_EFFECTS } from './msh-effects.ts';
 import { checkCondition } from './triggers.ts';
 import type { EffectSource } from './effects.ts';
 import type {
@@ -52,6 +53,7 @@ export function makeCtx(
 
 /** Small one-off effects used by the engine's own effect kinds. */
 const BUILT_IN_EFFECTS: Record<string, CustomEffect> = {
+  ...MSH_EFFECTS,
   // "As this enters, choose a color/creature type" (or, for a spell, as it resolves: Raise the Palisade).
   setChosen(ctx, es, params) {
     const o = es.source && ctx.s.objects[es.source.id];

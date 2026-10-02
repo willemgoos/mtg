@@ -1,6 +1,15 @@
 import type { AbilityDef, EffectDef } from '@mtg/engine';
 import type { Behavior } from '../build.ts';
-import { connive, draw, mana, onEnter, powerUp, t0, transformAbility } from './helpers.ts';
+import {
+  connive,
+  draw,
+  mana,
+  onEnter,
+  powerUp,
+  t0,
+  teamwork,
+  transformAbility,
+} from './helpers.ts';
 
 /**
  * Marvel Super Heroes (MSH) mythics. Printed characteristics come from
@@ -11,6 +20,45 @@ const heroes = { subtype: 'Hero' };
 const hasShield = { kind: 'sourceHasCounter', name: 'shield' } as const;
 
 export const MSH_MYTHICS: Record<string, Behavior> = {
+  // "Greatest power among attacking creatures you control": among all your creatures.
+  'Cosmic Cube': {
+    abilities: [
+      {
+        kind: 'triggered',
+        trigger: { on: 'youAttack' },
+        targets: [],
+        effects: [
+          {
+            kind: 'castFreeFromTop',
+            count: 6,
+            from: 'yours',
+            maxManaValue: { count: 'greatestPowerYouControl' },
+            rest: 'bottom',
+          },
+        ],
+      },
+    ],
+  },
+  // With teamwork, every creature card among them goes onto the battlefield.
+  "Earth's Mightiest Heroes": teamwork(
+    5,
+    {
+      targets: [],
+      effects: [
+        {
+          kind: 'lookAndTake',
+          count: 8,
+          filter: { types: ['Creature'] },
+          battlefieldOnYourTurn: true,
+          restToGraveyard: true,
+        },
+      ],
+    },
+    {
+      targets: [],
+      effects: [{ kind: 'custom', handler: 'putAllCreaturesFromTop', params: { count: 8 } }],
+    },
+  ),
   'Avengers Assemble!': {
     abilities: [
       {

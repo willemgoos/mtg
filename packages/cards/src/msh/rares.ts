@@ -624,4 +624,153 @@ export const MSH_RARES: Record<string, Behavior> = {
       },
     ],
   },
+  // A card exiled from their hand stays exiled (not only until Cloak and Dagger leave).
+  'Cloak and Dagger, Entwined': {
+    abilities: [
+      {
+        kind: 'triggered',
+        trigger: { on: 'etb' },
+        targets: [
+          { what: 'player', controller: 'opponent' },
+          { what: 'creature', controller: 'opponent', optional: true },
+        ],
+        effects: [
+          {
+            kind: 'choose',
+            options: [
+              {
+                label: 'Exile the chosen creature until Cloak and Dagger leave',
+                effects: [{ kind: 'exileUntilSourceLeaves', what: t1 }],
+              },
+              {
+                label: 'Exile a nonland card from their hand',
+                effects: [
+                  { kind: 'chooseFromOpponentHand', filter: { nonland: true }, then: 'exile' },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+  // Radar Sense (looking at the top card any time) is not shown.
+  'Daredevil, Man Without Fear': {
+    abilities: [
+      {
+        kind: 'triggered',
+        trigger: { on: 'youAttack' },
+        targets: [],
+        effects: [
+          {
+            kind: 'may',
+            effects: [
+              {
+                kind: 'exileTopPlayable',
+                count: 1,
+                until: 'endOfTurn',
+                ifExiled: {
+                  filter: { subtype: 'Hero' },
+                  then: [{ kind: 'pump', to: 'self', power: 2, toughness: 1 }],
+                },
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+  // "Cast up to two spells": one.
+  'Doom Reigns Supreme': {
+    abilities: [
+      {
+        kind: 'triggered',
+        trigger: { on: 'otherCreatureEtb', controller: 'you', filter: { subtype: 'Villain' } },
+        targets: [],
+        effects: [
+          ...drain(1),
+          ...planCounter(5, {
+            kind: 'castFreeFromTop',
+            count: 5,
+            from: 'opponents',
+            rest: 'exile',
+          }),
+        ],
+      },
+    ],
+  },
+  'Loki, God of Mischief': {
+    abilities: [
+      {
+        kind: 'triggered',
+        trigger: { on: 'youTargetWithAbility' },
+        oncePerTurn: true,
+        targets: [],
+        effects: [draw(1)],
+      },
+    ],
+  },
+  // It copies the topmost such ability rather than a target one.
+  'Scientist Supreme of A.I.M.': {
+    abilities: [
+      {
+        kind: 'activated',
+        cost: { life: 2 },
+        condition: { kind: 'yourTurn' },
+        oncePerTurn: true,
+        targets: [],
+        effects: [{ kind: 'copyArtifactAbility' }],
+        label: 'Pay 2 life: copy an ability of your artifact',
+      },
+    ],
+  },
+  'Super-Adaptoid': {
+    powerEquals: {
+      count: 'permanentsYouControl',
+      filter: { types: ['Creature'], supertypes: ['Legendary'] },
+    },
+    abilities: [
+      {
+        kind: 'triggered',
+        trigger: { on: 'etb' },
+        targets: [{ what: 'creature', filter: { other: true } }],
+        effects: [{ kind: 'keywordCountersFrom', what: t0 }],
+      },
+      {
+        kind: 'triggered',
+        trigger: { on: 'attacks' },
+        targets: [{ what: 'creature', filter: { other: true } }],
+        effects: [{ kind: 'keywordCountersFrom', what: t0 }],
+      },
+    ],
+  },
+  // "Choose up to X": one mode; "destroy target token" is not offered.
+  'The Ruinous Wrecking Crew': {
+    entersWithXCounters: true,
+    abilities: [
+      onEnter({
+        kind: 'choose',
+        options: [
+          {
+            label: 'Discard a card, then draw a card',
+            effects: [{ kind: 'discard', count: 1 }, draw(1)],
+          },
+          {
+            label: 'Each opponent loses 2 life',
+            effects: [{ kind: 'loseLife', who: 'eachOpponent', amount: 2 }],
+          },
+          {
+            label: 'Each player sacrifices a creature',
+            effects: [{ kind: 'eachPlayerSacrifices' }],
+          },
+        ],
+      }),
+    ],
+  },
+  'Vision Quest': {
+    spell: { targets: [], effects: [{ kind: 'custom', handler: 'visionQuest' }] },
+  },
+  'Worlds Within Worlds': {
+    spell: { targets: [], effects: [{ kind: 'custom', handler: 'worldsWithinWorlds' }] },
+  },
 };

@@ -290,3 +290,88 @@ describe('batch 3', () => {
     expect(g.obj(g.id('p1', 'alien-invasion')).counters?.invasion).toBe(1);
   });
 });
+
+describe('batch 4', () => {
+  it('Cosmic Cube offers a free spell from the top six when you attack', () => {
+    const g = game({
+      step: 'beginCombat',
+      p1: {
+        battlefield: ['cosmic-cube', 'thor-odinson'],
+        library: ['lightning-strike', ...n('plains', 6)],
+      },
+    });
+    g.passBoth().attack(g.id('p1', 'thor-odinson'));
+    settle(g);
+    expect(g.decision.kind).toBe('castFree');
+    const cast = g.legal().find((a) => a.type === 'castSpell');
+    expect(cast).toBeDefined();
+  });
+
+  it('Daredevil gets +2/+1 when the exiled card is a Hero', () => {
+    const g = game({
+      step: 'beginCombat',
+      p1: { battlefield: ['daredevil-man-without-fear'], library: ['agent-of-atlas'] },
+    });
+    const dd = g.id('p1', 'daredevil-man-without-fear');
+    g.passBoth().attack(dd);
+    settle(g, (legal) => legal.find((a) => a.type === 'chooseEffect' && a.accept));
+    if (g.decision.kind === 'optionalEffect')
+      g.do({ type: 'chooseEffect', player: 'p1', accept: true });
+    settle(g);
+    expect(pt(g, dd)).toEqual([5, 5]);
+  });
+
+  it('Super-Adaptoid copies keywords as counters', () => {
+    const g = game({
+      p1: { hand: ['super-adaptoid'], battlefield: [...n('plains', 2), 'serra-angel'] },
+    });
+    settle(cast(g, 'super-adaptoid'));
+    const sa = g.id('p1', 'super-adaptoid');
+    expect(g.obj(sa).counters?.flying).toBe(1);
+    expect(g.obj(sa).counters?.vigilance).toBe(1);
+  });
+
+  it('Worlds Within Worlds swaps the board for the hands', () => {
+    const g = game({
+      p1: {
+        hand: ['worlds-within-worlds', 'agent-of-atlas'],
+        battlefield: [...n('forest', 4), ...n('island', 3), 'thor-odinson'],
+      },
+      p2: { hand: ['serra-angel'], battlefield: ['red-room-recruit'] },
+    });
+    settle(cast(g, 'worlds-within-worlds'));
+    expect(g.zoneOf(g.id('p1', 'agent-of-atlas'))).toBe('battlefield');
+    expect(g.zoneOf(g.id('p2', 'serra-angel'))).toBe('battlefield');
+    expect(g.zoneOf(g.id('p1', 'thor-odinson', 'hand'))).toBe('hand');
+  });
+
+  it('Vision Quest finds an artifact creature with X counters', () => {
+    const g = game({
+      p1: {
+        hand: ['vision-quest'],
+        battlefield: [...n('island', 3), ...n('mountain', 2)],
+        library: ['ultron-drone', ...n('plains', 3)],
+      },
+    });
+    const vq = g.legal().find((a) => a.type === 'castSpell' && a.x === 3);
+    expect(vq).toBeDefined();
+    settle(g.do(vq!));
+    const drone = g.id('p1', 'ultron-drone');
+    expect(g.obj(drone).plusOneCounters).toBe(3);
+  });
+
+  it("Earth's Mightiest Heroes with teamwork puts every creature among the top eight", () => {
+    const g = game({
+      p1: {
+        hand: ['earths-mightiest-heroes'],
+        battlefield: [...n('forest', 6), 'thor-odinson', 'agent-of-atlas'],
+        library: ['serra-angel', 'plains', 'agent-of-atlas', 'plains'],
+      },
+    });
+    cast(g, 'earths-mightiest-heroes', [], { kicked: true });
+    settle(g);
+    expect(all(g, 'serra-angel')).toHaveLength(1);
+    expect(all(g, 'agent-of-atlas')).toHaveLength(2);
+    expect(g.state.players.p1.graveyard.length).toBeGreaterThanOrEqual(2);
+  });
+});

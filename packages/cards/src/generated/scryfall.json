@@ -18933,6 +18933,262 @@
   }
  },
  {
+  "name": "Cloak and Dagger, Entwined",
+  "scryfallId": "fa01d35f-1064-4a7c-9475-4504566df850",
+  "oracleId": "64132f93-66ac-4794-8c07-a88f9ed0e22b",
+  "set": "msh",
+  "collectorNumber": "211",
+  "rarity": "rare",
+  "manaCost": "{1}{W}{B}",
+  "typeLine": "Legendary Creature — Human Hero",
+  "oracleText": "Deathtouch, lifelink\nWhen Cloak and Dagger enter, choose target opponent and up to one target creature they control. They reveal their hand. You may exile a nonland card from their hand or the chosen creature until Cloak and Dagger leave the battlefield.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "B",
+   "W"
+  ],
+  "keywords": [
+   "Lifelink",
+   "Deathtouch"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/a/fa01d35f-1064-4a7c-9475-4504566df850.jpg?1783902902",
+   "normal": "https://cards.scryfall.io/normal/front/f/a/fa01d35f-1064-4a7c-9475-4504566df850.jpg?1783902902",
+   "large": "https://cards.scryfall.io/large/front/f/a/fa01d35f-1064-4a7c-9475-4504566df850.jpg?1783902902",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/a/fa01d35f-1064-4a7c-9475-4504566df850.jpg?1783902902"
+  }
+ },
+ {
+  "name": "Daredevil, Man Without Fear",
+  "scryfallId": "14e821bb-55cc-474e-9b63-0ceecc2666c1",
+  "oracleId": "88aadf60-91f9-4932-a2bc-63365a139d36",
+  "set": "msh",
+  "collectorNumber": "213",
+  "rarity": "rare",
+  "manaCost": "{2}{R}{W}",
+  "typeLine": "Legendary Creature — Human Hero",
+  "oracleText": "Vigilance, haste\nRadar Sense — You may look at the top card of your library any time.\nWhenever you attack, you may exile the top card of your library. If that card is a Hero card, Daredevil gets +2/+1 until end of turn. You may play that card this turn.",
+  "power": "3",
+  "toughness": "4",
+  "colors": [
+   "R",
+   "W"
+  ],
+  "keywords": [
+   "Radar Sense",
+   "Vigilance",
+   "Haste"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/4/14e821bb-55cc-474e-9b63-0ceecc2666c1.jpg?1783902902",
+   "normal": "https://cards.scryfall.io/normal/front/1/4/14e821bb-55cc-474e-9b63-0ceecc2666c1.jpg?1783902902",
+   "large": "https://cards.scryfall.io/large/front/1/4/14e821bb-55cc-474e-9b63-0ceecc2666c1.jpg?1783902902",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/4/14e821bb-55cc-474e-9b63-0ceecc2666c1.jpg?1783902902"
+  }
+ },
+ {
+  "name": "Doom Reigns Supreme",
+  "scryfallId": "9b99894b-c774-45c2-9ee9-4d6a8e7522f5",
+  "oracleId": "f398a742-22c1-4da9-9d49-fdce2eb93d01",
+  "set": "msh",
+  "collectorNumber": "96",
+  "rarity": "rare",
+  "manaCost": "{1}{B}",
+  "typeLine": "Enchantment — Plan",
+  "oracleText": "Whenever a Villain you control enters, each opponent loses 1 life and you gain 1 life. Put a plan counter on this enchantment.\nWhen the fifth plan counter is put on this enchantment, sacrifice it. When you do, target opponent exiles the top five cards of their library. You may cast up to two spells from among the exiled cards without paying their mana costs.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/b/9b99894b-c774-45c2-9ee9-4d6a8e7522f5.jpg?1783902944",
+   "normal": "https://cards.scryfall.io/normal/front/9/b/9b99894b-c774-45c2-9ee9-4d6a8e7522f5.jpg?1783902944",
+   "large": "https://cards.scryfall.io/large/front/9/b/9b99894b-c774-45c2-9ee9-4d6a8e7522f5.jpg?1783902944",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/b/9b99894b-c774-45c2-9ee9-4d6a8e7522f5.jpg?1783902944"
+  }
+ },
+ {
+  "name": "Loki, God of Mischief",
+  "scryfallId": "236c437f-ee9d-4145-a4db-b665908089cf",
+  "oracleId": "c112852f-61d5-4b94-b864-c7d0b5333b29",
+  "set": "msh",
+  "collectorNumber": "65",
+  "rarity": "rare",
+  "manaCost": "{1}{U}",
+  "typeLine": "Legendary Creature — God Sorcerer Villain",
+  "oracleText": "Whenever a player or permanent becomes the target of an ability you control, draw a card. This ability triggers only once each turn.",
+  "power": "2",
+  "toughness": "1",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/3/236c437f-ee9d-4145-a4db-b665908089cf.jpg?1783902955",
+   "normal": "https://cards.scryfall.io/normal/front/2/3/236c437f-ee9d-4145-a4db-b665908089cf.jpg?1783902955",
+   "large": "https://cards.scryfall.io/large/front/2/3/236c437f-ee9d-4145-a4db-b665908089cf.jpg?1783902955",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/3/236c437f-ee9d-4145-a4db-b665908089cf.jpg?1783902955"
+  }
+ },
+ {
+  "name": "Scientist Supreme of A.I.M.",
+  "scryfallId": "0473a990-88c4-4921-a492-377d9171318a",
+  "oracleId": "c09c424b-6aba-4190-9f55-f0307d746386",
+  "set": "msh",
+  "collectorNumber": "225",
+  "rarity": "rare",
+  "manaCost": "{U}{B}",
+  "typeLine": "Legendary Creature — Human Scientist Villain",
+  "oracleText": "Pay 2 life: Copy target activated or triggered ability you control from an artifact source. You may choose new targets for the copy. Activate only during your turn and only once each turn. (Mana abilities can't be targeted.)",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "B",
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/4/0473a990-88c4-4921-a492-377d9171318a.jpg?1783902899",
+   "normal": "https://cards.scryfall.io/normal/front/0/4/0473a990-88c4-4921-a492-377d9171318a.jpg?1783902899",
+   "large": "https://cards.scryfall.io/large/front/0/4/0473a990-88c4-4921-a492-377d9171318a.jpg?1783902899",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/4/0473a990-88c4-4921-a492-377d9171318a.jpg?1783902899"
+  }
+ },
+ {
+  "name": "Super-Adaptoid",
+  "scryfallId": "fbbd8609-5a00-4188-96fe-77251579b88d",
+  "oracleId": "f93fa6ec-1f13-4109-aa60-11e148f7ba88",
+  "set": "msh",
+  "collectorNumber": "250",
+  "rarity": "rare",
+  "manaCost": "{2}",
+  "typeLine": "Legendary Artifact Creature — Robot Villain",
+  "oracleText": "Super-Adaptoid's power is equal to the number of legendary creatures you control.\nWhenever Super-Adaptoid enters or attacks, choose another target creature. If that creature has haste and Super-Adaptoid doesn't, put a haste counter on Super-Adaptoid. Do the same for flying, first strike, double strike, deathtouch, indestructible, lifelink, menace, reach, trample, and vigilance.",
+  "power": "*",
+  "toughness": "2",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/b/fbbd8609-5a00-4188-96fe-77251579b88d.jpg?1783902890",
+   "normal": "https://cards.scryfall.io/normal/front/f/b/fbbd8609-5a00-4188-96fe-77251579b88d.jpg?1783902890",
+   "large": "https://cards.scryfall.io/large/front/f/b/fbbd8609-5a00-4188-96fe-77251579b88d.jpg?1783902890",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/b/fbbd8609-5a00-4188-96fe-77251579b88d.jpg?1783902890"
+  }
+ },
+ {
+  "name": "The Ruinous Wrecking Crew",
+  "scryfallId": "4d8c8ceb-84cd-46d2-9230-ab6ca4569334",
+  "oracleId": "0ff9c0cc-4fb3-4117-9a8e-5b51f62306c4",
+  "set": "msh",
+  "collectorNumber": "224",
+  "rarity": "rare",
+  "manaCost": "{X}{B}{R}",
+  "typeLine": "Legendary Creature — Human Villain",
+  "oracleText": "The Ruinous Wrecking Crew enters with X +1/+1 counters on it.\nWhen The Ruinous Wrecking Crew enters, choose up to X —\n• Discard a card, then draw a card.\n• Target opponent loses 2 life.\n• Destroy target token.\n• Each player sacrifices a creature of their choice.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "B",
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/d/4d8c8ceb-84cd-46d2-9230-ab6ca4569334.jpg?1783902898",
+   "normal": "https://cards.scryfall.io/normal/front/4/d/4d8c8ceb-84cd-46d2-9230-ab6ca4569334.jpg?1783902898",
+   "large": "https://cards.scryfall.io/large/front/4/d/4d8c8ceb-84cd-46d2-9230-ab6ca4569334.jpg?1783902898",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/d/4d8c8ceb-84cd-46d2-9230-ab6ca4569334.jpg?1783902898"
+  }
+ },
+ {
+  "name": "Vision Quest",
+  "scryfallId": "c01afea6-645d-4d4f-bdaa-90794a628bcd",
+  "oracleId": "240410a0-3288-4336-b1ad-34936e64ccf2",
+  "set": "msh",
+  "collectorNumber": "237",
+  "rarity": "rare",
+  "manaCost": "{X}{U}{R}",
+  "typeLine": "Sorcery",
+  "oracleText": "Search your library and/or graveyard for an artifact creature card with mana value X or less and put it onto the battlefield with X additional +1/+1 counters on it. If X is 4 or greater, it gains haste until end of turn. If you search your library this way, shuffle.",
+  "colors": [
+   "R",
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/0/c01afea6-645d-4d4f-bdaa-90794a628bcd.jpg?1783902895",
+   "normal": "https://cards.scryfall.io/normal/front/c/0/c01afea6-645d-4d4f-bdaa-90794a628bcd.jpg?1783902895",
+   "large": "https://cards.scryfall.io/large/front/c/0/c01afea6-645d-4d4f-bdaa-90794a628bcd.jpg?1783902895",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/0/c01afea6-645d-4d4f-bdaa-90794a628bcd.jpg?1783902895"
+  }
+ },
+ {
+  "name": "Worlds Within Worlds",
+  "scryfallId": "4765e39c-cbf2-4605-9bf1-3baad7d92cfb",
+  "oracleId": "e25062ba-7176-4d59-ac3e-26d19b26f02a",
+  "set": "msh",
+  "collectorNumber": "241",
+  "rarity": "rare",
+  "manaCost": "{5}{G}{U}",
+  "typeLine": "Sorcery",
+  "oracleText": "Exile all creatures. Each player may put any number of creature cards from their hand onto the battlefield. Then put all cards exiled this way into their owners' hands. Exile Worlds Within Worlds.",
+  "colors": [
+   "G",
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/7/4765e39c-cbf2-4605-9bf1-3baad7d92cfb.jpg?1783902892",
+   "normal": "https://cards.scryfall.io/normal/front/4/7/4765e39c-cbf2-4605-9bf1-3baad7d92cfb.jpg?1783902892",
+   "large": "https://cards.scryfall.io/large/front/4/7/4765e39c-cbf2-4605-9bf1-3baad7d92cfb.jpg?1783902892",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/7/4765e39c-cbf2-4605-9bf1-3baad7d92cfb.jpg?1783902892"
+  }
+ },
+ {
+  "name": "Cosmic Cube",
+  "scryfallId": "d1cf1ead-fe91-4328-89ab-6d0bc9ff6cbe",
+  "oracleId": "0866a630-d962-4aa9-a15f-08b2947540ef",
+  "set": "msh",
+  "collectorNumber": "245",
+  "rarity": "mythic",
+  "manaCost": "{5}",
+  "typeLine": "Artifact",
+  "oracleText": "Ward {2}\nWhenever you attack, look at the top six cards of your library. You may cast a spell from among them with mana value less than or equal to the greatest power among attacking creatures you control without paying its mana cost. Put the rest on the bottom of your library in a random order.",
+  "colors": [],
+  "keywords": [
+   "Ward"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/1/d1cf1ead-fe91-4328-89ab-6d0bc9ff6cbe.jpg?1783902891",
+   "normal": "https://cards.scryfall.io/normal/front/d/1/d1cf1ead-fe91-4328-89ab-6d0bc9ff6cbe.jpg?1783902891",
+   "large": "https://cards.scryfall.io/large/front/d/1/d1cf1ead-fe91-4328-89ab-6d0bc9ff6cbe.jpg?1783902891",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/1/d1cf1ead-fe91-4328-89ab-6d0bc9ff6cbe.jpg?1783902891"
+  }
+ },
+ {
+  "name": "Earth's Mightiest Heroes",
+  "scryfallId": "b38b9bd6-1dd7-4bbc-8a82-ce391c1172e1",
+  "oracleId": "2b87bcac-ec64-4012-9e75-f459d3640eb3",
+  "set": "msh",
+  "collectorNumber": "165",
+  "rarity": "mythic",
+  "manaCost": "{4}{G}{G}",
+  "typeLine": "Sorcery",
+  "oracleText": "Teamwork 5 (As an additional cost to cast this spell, you may tap any number of creatures you control with total power 5 or more.)\nReveal the top eight cards of your library. You may put a creature card from among them onto the battlefield. If this spell was cast using teamwork, put any number of creature cards from among them onto the battlefield instead. Put the rest into your graveyard.",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Teamwork"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/3/b38b9bd6-1dd7-4bbc-8a82-ce391c1172e1.jpg?1783902919",
+   "normal": "https://cards.scryfall.io/normal/front/b/3/b38b9bd6-1dd7-4bbc-8a82-ce391c1172e1.jpg?1783902919",
+   "large": "https://cards.scryfall.io/large/front/b/3/b38b9bd6-1dd7-4bbc-8a82-ce391c1172e1.jpg?1783902919",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/3/b38b9bd6-1dd7-4bbc-8a82-ce391c1172e1.jpg?1783902919"
+  }
+ },
+ {
   "name": "Avengers Assemble!",
   "scryfallId": "bf736399-af74-4f52-9159-67ea67d0cf83",
   "oracleId": "3477e1cc-46af-46f4-9ea2-bdf0bf1f880e",
