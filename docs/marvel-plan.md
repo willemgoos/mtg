@@ -304,6 +304,14 @@ Secret Invasion need "becomes a copy".
 - The connive cards came after Stream B's merge (Doctor Doom, Lethal Scheme, Prowler, Glorious Purpose, Iron Monger,
   Ultron, Villainous Hideout, Moonstone). Baron Strucker, Madame Hydra and Kang, Temporal Tyrant are Stream B's.
 - Glorious Purpose's sixth plan counter offers four free casts from the exiled cards one at a time; the rest go to hand.
+
+Arena (9e): every Brawl matchup runs without errors. The bots' evaluation now values being the monarch, noncreature
+permanents by mana value, cards still to come (rebound, suspend, castable in exile) and, before combat, The Fantastic
+Four's "if you've cast a noncreature spell" payoffs (`WEIGHTS` in `packages/ai/src/evaluate.ts`). Over 20 games per
+precon matchup: Avengers 65% vs Wakanda Forever, 70% vs The Fantastic Four, 60% vs Doom Prevails; Wakanda Forever 55%
+vs The Fantastic Four, 40% vs Doom Prevails; The Fantastic Four 40% vs Doom Prevails. Only Avengers vs The Fantastic
+Four is outside 35–65%, by 5 points (within the noise of 20 games); the search bot plays The Fantastic Four much better.
+The 60-card decks against the Foundations starters barely move with the new weights (one deck by 8 points of 36 games).
 - Overload is modelled as kicker (Vandalblast: {R} plus {4}, labelled "Overload").
 - Multikicker is offered up to three times; Batroc deals its damage to up to two targets.
 - Melee: each attacking creature you control gets +1/+1 (one opponent).

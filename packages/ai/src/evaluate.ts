@@ -2,6 +2,7 @@ import {
   type CardDb,
   type GameState,
   getCharacteristics,
+  manaValue,
   type Keyword,
   type ObjectId,
   type PlayerId,
@@ -29,8 +30,65 @@ export const LAND_ON_BATTLEFIELD = 0.4;
 export const SPENDABLE_TOKEN = 0.8;
 /** Other noncreature permanents (Equipment, enchantments); an attached Equipment also shows in its creature's stats. */
 export const OTHER_PERMANENT = 1.5;
+/**
+ * Weights for what the evaluation added for the Marvel decks (exported so
+ * experiments can switch them off).
+ */
+export const WEIGHTS = {
+  /** Each mana value point above 2 of a noncreature permanent (engines such as Whirlwind of Thought). */
+  permanentPerMana: 0.25,
+  permanentCap: 3,
+  /** Being the monarch: about a card and a half (a card every turn while it lasts). */
+  monarch: 3,
+  /** Each "if you've cast a noncreature spell this turn" combat payoff switched on before combat. */
+  combatPayoff: 1.5,
+  /** Cards still to come (rebound, suspend, castable in exile), relative to a card in hand. */
+  laterCard: 1,
+};
 /** Each loyalty counter on a planeswalker. */
 export const LOYALTY = 0.4;
+
+/**
+ * Before combat on `me`'s turn: permanents with a beginning-of-combat trigger
+ * that needs a noncreature spell cast this turn, now that one has been.
+ */
+function precombatPayoffs(s: GameState, db: CardDb, me: PlayerId): number {
+  if (s.turn.activePlayer !== me || !['upkeep', 'draw', 'main1'].includes(s.turn.step)) return 0;
+  const cast = s.turn.castDefs?.[me] ?? [];
+  if (!cast.some((id) => !db.get(id)?.types.includes('Creature'))) return 0;
+  return s.battlefield.filter((id) => {
+    const o = s.objects[id]!;
+    return (
+      o.controller === me &&
+      !!db
+        .get(o.defId)
+        ?.abilities.some(
+          (a) =>
+            a.kind === 'triggered' &&
+            a.trigger.on === 'beginningOfCombat' &&
+            a.condition?.kind === 'castNoncreatureThisTurn',
+        )
+    );
+  }).length;
+}
+
+/** Cards `p` will get to cast later: suspended, rebound, or exiled and castable by them. */
+function laterCards(s: GameState, p: PlayerId): number {
+  let n = 0;
+  for (const q of ['p1', 'p2'] as const)
+    for (const id of s.players[q].exile) {
+      const o = s.objects[id]!;
+      if (
+        (q === p && (o.suspended || (o.playableUntilTurn ?? -1) >= s.turn.number)) ||
+        o.castableBy === p ||
+        o.playFreeBy === p
+      )
+        n++;
+    }
+  for (const d of s.delayed ?? [])
+    if (d.controller === p && d.effects.some((e) => e.kind === 'castFreeCard')) n++;
+  return n;
+}
 
 /** Life is worth more the lower it gets. */
 export function lifeValue(life: number): number {
@@ -62,6 +120,11 @@ export function evaluate(s: GameState, db: CardDb, me: PlayerId): number {
   v += CARD_IN_HAND * (s.players[me].hand.length - s.players[opp].hand.length);
   // Brawl: a commander waiting in the command zone is a card in hand that costs more each time.
   v += CARD_IN_HAND * (s.players[me].command.length - s.players[opp].command.length);
+  if (s.monarch) v += s.monarch === me ? WEIGHTS.monarch : -WEIGHTS.monarch;
+  // The Fantastic Four: before combat, a noncreature spell switches on "at the beginning of combat" payoffs.
+  v += WEIGHTS.combatPayoff * precombatPayoffs(s, db, me);
+  // Cards still to come: rebound and suspend, free or stolen cards in exile.
+  v += WEIGHTS.laterCard * CARD_IN_HAND * (laterCards(s, me) - laterCards(s, opp));
 
   const effects = s.effects;
   s.effects = [];
@@ -75,7 +138,16 @@ export function evaluate(s: GameState, db: CardDb, me: PlayerId): number {
       // A planeswalker is worth more the more loyalty it has.
       else if (def?.types.includes('Planeswalker'))
         v += sign * (OTHER_PERMANENT + LOYALTY * (o.counters?.loyalty ?? 0));
-      else v += sign * (o.isToken ? SPENDABLE_TOKEN : OTHER_PERMANENT);
+      else if (o.isToken) v += sign * SPENDABLE_TOKEN;
+      else {
+        const mv = def ? manaValue(def.manaCost) : 0;
+        v +=
+          sign *
+          Math.min(
+            WEIGHTS.permanentCap,
+            OTHER_PERMANENT + WEIGHTS.permanentPerMana * Math.max(0, mv - 2),
+          );
+      }
     }
   } finally {
     s.effects = effects;
