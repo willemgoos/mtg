@@ -6,7 +6,14 @@ import {
   matchesFilter,
 } from './characteristics.ts';
 import { manaValue } from './cost.ts';
-import { blockViolations, canAttack, canBlock, defenderOf, mustAttack } from './combat.ts';
+import {
+  affordableAttackers,
+  blockViolations,
+  canAttack,
+  canBlock,
+  defenderOf,
+  mustAttack,
+} from './combat.ts';
 import { type Ctx, def, obj, other } from './context.ts';
 import { forageChoices } from './forage.ts';
 import { canPayFrom, creatureHelpers, manaSources } from './mana.ts';
@@ -68,6 +75,7 @@ export function castableCards(ctx: Ctx, player: PlayerId): ObjectId[] {
       d.flashback ||
       d.castFromGraveyardRemovingCounters ||
       d.castFromGraveyardWithDiscard ||
+      mayhemReady(ctx, id) ||
       graveyardVias(ctx, player, id).length
     )
       out.push(id);
@@ -94,6 +102,10 @@ export function castableCards(ctx: Ctx, player: PlayerId): ObjectId[] {
     const until = obj(ctx, id).playableUntilTurn;
     if (until !== undefined && until >= ctx.s.turn.number) out.push(id);
   }
+  // Extract Power: either player's exiled cards you may play for free.
+  for (const p of ['p1', 'p2'] as const)
+    for (const id of ctx.s.players[p].exile)
+      if (obj(ctx, id).playFreeBy === player && !out.includes(id)) out.push(id);
   const top = ps.library[0];
   if (
     top &&
@@ -129,6 +141,11 @@ function sacrificePrefixes(
   for (let k = 1; k <= Math.min(fodder.length, d.manaCost.generic); k++)
     out.push(fodder.slice(0, k));
   return out.filter((x) => !x || !x.includes(card));
+}
+
+/** Mayhem: a card with mayhem discarded this turn, still in the graveyard. */
+function mayhemReady(ctx: Ctx, card: ObjectId): boolean {
+  return !!def(ctx, card).mayhem && obj(ctx, card).discardedTurn === ctx.s.turn.number;
 }
 
 /** Other ways to cast a graveyard card: Festival of Embers, Osteomancer Adept. */
@@ -237,7 +254,9 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
     const instantSpeed =
       d.types.includes('Instant') ||
       d.keywords.includes('flash') ||
-      flashFilters.some((f) => cardMatches(ctx, card, f));
+      flashFilters.some((f) => cardMatches(ctx, card, f)) ||
+      // Progenitor's Icon: spells of the chosen type have flash this turn.
+      !!s.turn.flashTypes?.some((f) => f.player === player && d.subtypes.includes(f.type));
     // Restricted mana (Giada: only for Angels; Villages: only for creature spells).
     const base = restricted ? manaSources(ctx, player, undefined, spellTags(d)) : sources;
     // Convoke: untapped creatures can pay for {1} each.
@@ -248,7 +267,10 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
           { length: Math.min(10, Math.floor(pool.length / d.manaCost.x)) + 1 },
           (_, x) => x,
         )
-      : [undefined];
+      : // Toxic Deluge: X life, up to one less than you have.
+        d.payXLife
+        ? Array.from({ length: Math.min(13, ps.life - 1) + 1 }, (_, x) => x)
+        : [undefined];
     // A card to discard as an additional cost (Sazacap's Brew).
     // Dragon Man: from the graveyard, discarding a card as well.
     const discardToCast =
@@ -257,15 +279,20 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
     if (d.discardToCast && discards.length === 0) continue;
     if (!instantSpeed && !sorcery) continue;
     // The usual ways, plus graveyard casts through other cards.
-    const vias: ('festival' | 'osteomancer' | 'conduit' | undefined)[] = [
-      ...(zone !== 'graveyard' ||
-      d.flashback ||
-      d.castFromGraveyardRemovingCounters ||
-      d.castFromGraveyardWithDiscard
-        ? [undefined]
-        : []),
-      ...(zone === 'graveyard' ? graveyardVias(ctx, player, card) : []),
-    ];
+    // Extract Power: exiled cards played for free.
+    const free = zone === 'exile' && obj(ctx, card).playFreeBy === player;
+    const vias: ('festival' | 'osteomancer' | 'conduit' | 'free' | undefined)[] = free
+      ? ['free']
+      : [
+          ...(zone !== 'graveyard' ||
+          d.flashback ||
+          d.castFromGraveyardRemovingCounters ||
+          d.castFromGraveyardWithDiscard ||
+          mayhemReady(ctx, card)
+            ? [undefined]
+            : []),
+          ...(zone === 'graveyard' ? graveyardVias(ctx, player, card) : []),
+        ];
     for (const via of vias)
       for (const v of castVariants(d, zone, via)) {
         if ((v.life ?? 0) > ps.life) continue;
@@ -281,6 +308,7 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
               mode: v.mode,
               paws: v.paws,
               kicked: v.kicked,
+              kickCount: v.kickCount,
               sacrifice: v.sacrifice ? 'x' : undefined,
               forage: v.forage ? 'graveyard' : undefined,
               x,
@@ -290,6 +318,7 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
             const extra = {
               ...(v.mode !== undefined ? { mode: v.mode } : {}),
               ...(v.kicked ? { kicked: true } : {}),
+              ...(v.kickCount ? { kickCount: v.kickCount } : {}),
               ...(x !== undefined ? { x } : {}),
               ...(v.paws ? { paws: v.paws } : {}),
               ...(via ? { via } : {}),
@@ -343,14 +372,17 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
           }
       }
     // Mockingbird: also one action per creature it could copy (mana spent: X + its {U}).
+    // Spark Double, Chameleon: one per creature you control, any mana value.
     if (d.entersAsCopy)
       for (const a of out.splice(firstOfCard))
         if (a.type === 'castSpell')
           out.push(
             a,
-            ...creaturesOnBattlefield(ctx)
+            ...creaturesOnBattlefield(ctx, d.entersAsCopy.yours ? player : undefined)
               .filter(
-                (c) => manaValue(def(ctx, c.id).manaCost) <= (a.x ?? 0) + manaValue(d.manaCost),
+                (c) =>
+                  d.entersAsCopy!.yours ||
+                  manaValue(def(ctx, c.id).manaCost) <= (a.x ?? 0) + manaValue(d.manaCost),
               )
               .map((c) => ({ ...a, copyOf: c.id })),
           );
@@ -477,7 +509,12 @@ export function getLegalActions(ctx: Ctx, player: PlayerId): Action[] {
         const at = d.declared.find((x) => x.id === id);
         // Goaded creatures (and Galactus) attack each combat if able: they can't be taken back.
         if (at && !mustAttack(ctx, id)) out.push({ type: 'removeAttacker', player, attacker: id });
-        else if (isCreature(ctx, id) && canAttack(ctx, id))
+        // Propaganda: only as many attackers as they can pay for.
+        else if (
+          isCreature(ctx, id) &&
+          canAttack(ctx, id) &&
+          d.declared.length < affordableAttackers(ctx, player)
+        )
           out.push({ type: 'addAttacker', player, attacker: id, defender });
         if (at || (isCreature(ctx, id) && canAttack(ctx, id)))
           for (const pw of walkers)

@@ -268,13 +268,13 @@ function nextAttackAction(
   declared: ObjectId[],
 ): Action {
   const plan = memo(attackPlans, view.decision, () => planAttacks(engine, view, me, declared));
-  // Goaded attackers can't be taken back.
-  const removable = engine
-    .getLegalActions(view, me)
-    .flatMap((a) => (a.type === 'removeAttacker' ? [a.attacker] : []));
+  // Goaded attackers can't be taken back; Propaganda may cap how many attack.
+  const legal = engine.getLegalActions(view, me);
+  const removable = legal.flatMap((a) => (a.type === 'removeAttacker' ? [a.attacker] : []));
+  const addable = legal.flatMap((a) => (a.type === 'addAttacker' ? [a.attacker] : []));
   const wrong = declared.find((id) => !plan.includes(id) && removable.includes(id));
   if (wrong) return { type: 'removeAttacker', player: me, attacker: wrong };
-  const next = plan.find((id) => !declared.includes(id));
+  const next = plan.find((id) => !declared.includes(id) && addable.includes(id));
   if (next) return { type: 'addAttacker', player: me, attacker: next, defender: other(me) };
   return { type: 'confirmAttackers', player: me };
 }

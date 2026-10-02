@@ -1,7 +1,9 @@
 import { commanderToOffer } from './brawl.ts';
 import { hasKeyword } from './characteristics.ts';
 import {
+  affordableAttackers,
   anyFirstStrike,
+  attackTax,
   canBlock,
   dealCombatDamage,
   defenderOf,
@@ -10,7 +12,10 @@ import {
   possibleBlockers,
 } from './combat.ts';
 import { type Ctx, def, drawCard, emit, obj, other, tap, untap } from './context.ts';
+import { payMana, planPayment } from './mana.ts';
 import { phaseIn } from './phasing.ts';
+import { addLoreForTurn } from './sagas.ts';
+import { tickSuspend } from './suspend.ts';
 import { checkGameOver, runSBAs } from './sba.ts';
 import { pushTrigger, resolveTop } from './stack.ts';
 import { targetCombos } from './targets.ts';
@@ -155,6 +160,8 @@ export function startTurn(ctx: Ctx, player: PlayerId): void {
   delete s.turn.hexproofPlayers;
   delete s.turn.osteomancer;
   delete s.turn.spellLock;
+  delete s.turn.discards;
+  delete s.turn.flashTypes;
   delete s.turn.instantsSorceriesCast;
   delete s.turn.castDefs;
   for (const q of Object.values(s.players)) q.attackedThisTurn = false;
@@ -249,6 +256,15 @@ function enterStep(ctx: Ctx, step: Step): void {
       return finishCleanup(ctx);
     }
 
+    case 'upkeep':
+      tickSuspend(ctx, ap);
+      return givePriority(ctx, ap);
+
+    case 'main1':
+      // Sagas: a lore counter at the precombat main phase.
+      addLoreForTurn(ctx, ap);
+      return givePriority(ctx, ap);
+
     default:
       return givePriority(ctx, ap);
   }
@@ -257,7 +273,14 @@ function enterStep(ctx: Ctx, step: Step): void {
 /** Turn-based actions of the declare attackers step, after the declaration. */
 export function confirmAttackers(ctx: Ctx): void {
   const s = ctx.s;
-  const decl = s.decision.kind === 'declareAttackers' ? s.decision.declared : [];
+  let decl = s.decision.kind === 'declareAttackers' ? s.decision.declared : [];
+  // Propaganda: pay for each attacker; ones that can't be paid for stay home.
+  const tax = attackTax(ctx, s.turn.activePlayer);
+  if (tax > 0 && decl.length > 0) {
+    decl = decl.slice(0, affordableAttackers(ctx, s.turn.activePlayer));
+    const cost = { generic: tax * decl.length, colored: {} };
+    if (decl.length) payMana(ctx, planPayment(ctx, s.turn.activePlayer, cost, undefined));
+  }
   s.combat ??= { attackers: [], dealtFirstStrikeDamage: [] };
   s.combat.attackers = decl.map((d) => ({
     id: d.id,

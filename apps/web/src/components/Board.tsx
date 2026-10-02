@@ -1376,7 +1376,13 @@ function castLabel(defId: CardDefId, a: Action): string {
   if (def?.sacrificeOrPay)
     return a.sacrifice ? 'Sacrifice a creature' : `Pay ${manaText(def.sacrificeOrPay)}`;
   if (def?.forageOrPay) return `Pay ${manaText(def.forageOrPay)}`;
+  // Multikicker (Batroc), overload (Vandalblast), Toxic Deluge's X life.
+  if (a.kickCount) return `Kicked ×${a.kickCount}`;
+  if (def?.payXLife && a.x !== undefined) return `Pay ${a.x} life`;
+  if (def?.multikicker) return 'Not kicked';
   if (!def?.kicker) return 'Cast';
+  if (def.kicker.as === 'overload')
+    return a.kicked ? `Overload (each, ${manaText(def.kicker.cost)} more)` : 'One target';
   if (def.kicker.as === 'gift')
     return a.kicked ? `Promise ${giftText(def)} to your opponent` : 'No gift';
   if (def.kicker.as === 'offspring')

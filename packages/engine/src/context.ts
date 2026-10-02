@@ -311,10 +311,23 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
   }
   // Bonecache Overseer: cards leaving a graveyard.
   if (from === 'graveyard') (ctx.s.turn.leftGraveyard ??= { p1: 0, p2: 0 })[o.owner]++;
+  // From hand to graveyard is a discard (mayhem, "whenever you discard").
+  const discarded = from === 'hand' && to === 'graveyard';
   delete o.targetedByControllerTurn;
   delete o.firstTappedTurn;
   delete o.monstrous;
   delete o.usedModes;
+  delete o.discardedTurn;
+  delete o.kickCount;
+  if (from === 'exile') {
+    delete o.suspended;
+    delete o.playFreeBy;
+  }
+  // Cast through suspend: haste as it enters.
+  if (to === 'battlefield' && o.hasteOnEntry) {
+    delete o.hasteOnEntry;
+    o.grantedKeywords = ['haste'];
+  }
   if (from === 'exile') delete o.jailedBy;
   // Damage sources are remembered as it dies (Hawkeye), forgotten as it enters.
   if (to === 'battlefield') delete o.damagedBy;
@@ -353,6 +366,11 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
   if ((from === 'battlefield' || to === 'battlefield') && makesFood(defOf(ctx, o.defId)))
     refreshCreaturesAreFood(ctx);
   emit(ctx, { type: 'objectMoved', id, defId: o.defId, from, to });
+  if (discarded && o.zone === 'graveyard') {
+    o.discardedTurn = ctx.s.turn.number;
+    (ctx.s.turn.discards ??= { p1: 0, p2: 0 })[o.owner]++;
+    emit(ctx, { type: 'discarded', id, player: o.owner });
+  }
 
   if (ceases) delete ctx.s.objects[id];
   // "Until this leaves the battlefield": the exiled cards come back.

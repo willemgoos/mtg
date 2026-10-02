@@ -24,6 +24,8 @@ export interface CastVariant {
   forage?: boolean;
   /** Cast from the graveyard by removing this many +1/+1 counters (Quilled Greatwurm). */
   removeCounters?: number;
+  /** Times multikicker was paid (Batroc). */
+  kickCount?: number;
   cost: ManaCost;
   /** What it does on resolution; null for a permanent spell. */
   spell: SpellDef | null;
@@ -112,6 +114,8 @@ export function castVariants(d: CardDefinition, zone: ZoneName, via?: CastVia): 
   }
   // Dragon Man: cast from the graveyard as from the hand (plus a discard, see legal.ts).
   if (zone === 'graveyard' && d.castFromGraveyardWithDiscard) return castVariants(d, 'hand');
+  // Mayhem: from the graveyard for its mayhem cost (legal.ts checks it was discarded this turn).
+  if (zone === 'graveyard' && d.mayhem) return [{ cost: d.mayhem, spell: d.spell ?? null }];
   if (zone === 'graveyard' && d.castFromGraveyardRemovingCounters)
     return [
       {
@@ -141,6 +145,13 @@ export function castVariants(d: CardDefinition, zone: ZoneName, via?: CastVia): 
       { cost: addCosts(cost, d.sacrificeOrPay), spell: d.spell ?? null, ...extra },
     ];
   const out: CastVariant[] = [{ cost, spell: d.spell ?? null, ...extra }];
+  // Multikicker: paid once, twice or three times (more is rarely worth offering).
+  if (d.multikicker)
+    for (let k = 1; k <= 3; k++) {
+      let c = cost;
+      for (let i = 0; i < k; i++) c = addCosts(c, d.multikicker);
+      out.push({ cost: c, spell: d.spell ?? null, kickCount: k, ...extra });
+    }
   if (d.kicker)
     out.push({
       kicked: true,
@@ -162,11 +173,13 @@ export function variantOf(
     sacrifice?: string | undefined;
     forage?: string | undefined;
     paws?: number[] | undefined;
+    kickCount?: number | undefined;
   },
 ): CastVariant | undefined {
   return castVariants(d, zone, choice.via).find(
     (v) =>
       (v.mode ?? -1) === (choice.mode ?? -1) &&
+      (v.kickCount ?? 0) === (choice.kickCount ?? 0) &&
       (v.paws ?? []).join() === (choice.paws ?? []).join() &&
       !!v.kicked === !!choice.kicked &&
       !!v.sacrifice === !!choice.sacrifice &&

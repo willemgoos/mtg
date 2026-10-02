@@ -269,6 +269,23 @@ Named abilities such as "Radar Sense" or "Street Justice" are just labels with n
 - The Thing doubles only its own counters; Mister Fantastic copies the top triggered ability you control (not a
   chosen one); Willie Lumpkin's opponent never takes the optional draw; Human Torch's paid ability does nothing in 1v1.
 - Convoke creatures pay generic mana only.
+
+9e (Doom Prevails), part 1 (everything but connive):
+
+- Not done yet, waiting for Stream B: the connive cards (Doctor Doom, Lethal Scheme, Prowler, Glorious Purpose, Iron
+  Monger, Ultron, Villainous Hideout) and Moonstone. Baron Strucker, Madame Hydra and Kang, Temporal Tyrant are MSH
+  cards Stream B already uses in its decks: they come from there. The decklist goes in once all of them exist.
+- Overload is modelled as kicker (Vandalblast: {R} plus {4}, labelled "Overload").
+- Multikicker is offered up to three times; Batroc deals its damage to up to two targets.
+- Melee: each attacking creature you control gets +1/+1 (one opponent).
+- Typhoid Mary: you always choose the mode (not at random).
+- Helmut Zemo casts the instant or sorcery for free, and gets its counter either way.
+- Archnemesis isn't attached to a player: it acts on the one opponent.
+- Puppet Master's Treasure ability never triggers in 1v1; its goaded creature also can't block until your next turn.
+- Propaganda: attackers that can't be paid for stay home; the engine pays with any mana.
+- Stilt-Man's control lasts until your next turn begins, and the permanent can still be sacrificed.
+- Miracle (Molecule Man) and suspend casts go through the usual "cast for free" prompt.
+- Spark Double and Chameleon copies aren't legendary (Chameleon keeps its own name in the rules).
 - Bot win rates: The Fantastic Four is behind (5–15 against Avengers, 2–18 against Mabel's Militia, 10–10 against
   Wakanda Forever over 20 games); to revisit with the 9e arena tuning.
 

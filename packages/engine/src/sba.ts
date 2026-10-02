@@ -1,5 +1,6 @@
 import { creaturesOnBattlefield, hasKeyword, isCreature, toughness } from './characteristics.ts';
-import { type Ctx, def, emit, moveObject, obj } from './context.ts';
+import { type Ctx, def, emit, moveObject, obj, sacrifice } from './context.ts';
+import { sagasToSacrifice } from './sagas.ts';
 import type { ObjectId, PlayerId } from './types.ts';
 import { PLAYERS } from './types.ts';
 
@@ -42,8 +43,14 @@ export function runSBAs(ctx: Ctx): void {
       if (host && host.zone === 'battlefield' && isCreature(ctx, host.id)) continue;
       // Sugar Coat stays on the Food it made.
       if (host && host.zone === 'battlefield' && host.foodBy === id) continue;
+      // Archnemesis enchants a player.
+      if (aura && def(ctx, id).enchantPlayer) continue;
       if (aura) orphanedAuras.push(id);
-      else delete o.attachedTo;
+      else {
+        // An Equipment falls off, remembering its creature (Skullclamp's "whenever equipped creature dies").
+        if (host) o.lastAttachedTo = { id: host.id, zcc: host.zcc - 1 };
+        delete o.attachedTo;
+      }
     }
     for (const id of orphanedAuras) moveObject(ctx, id, 'graveyard');
     if (orphanedAuras.length) changed = true;
@@ -57,6 +64,10 @@ export function runSBAs(ctx: Ctx): void {
       delete o.controlledBy;
       changed = true;
     }
+    // Sagas past their last chapter are sacrificed.
+    const sagas = sagasToSacrifice(ctx);
+    for (const id of sagas) sacrifice(ctx, id);
+    if (sagas.length) changed = true;
     const legends = extraLegends(ctx);
     for (const id of legends) moveObject(ctx, id, 'graveyard');
     if (legends.length) changed = true;

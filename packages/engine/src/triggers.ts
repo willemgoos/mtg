@@ -7,6 +7,7 @@ import {
 } from './characteristics.ts';
 import { type Ctx, def, defOf, obj, other } from './context.ts';
 import { manaValue } from './cost.ts';
+import { addLore } from './sagas.ts';
 import type {
   AbilityDef,
   EffectDef,
@@ -35,6 +36,10 @@ export function checkCondition(
   subject?: GameObject,
 ): boolean {
   if (!c) return true;
+  // Doom Prevails (9e).
+  if (c.kind === 'kickedAtLeast') return (self?.kickCount ?? 0) >= c.n;
+  if (c.kind === 'sourceHasExiled')
+    return !!self?.exiledWith?.some((id) => ctx.s.objects[id]?.zone === 'exile');
   // The Fantastic Four (9d).
   if (c.kind === 'castNoncreatureThisTurn')
     return (ctx.s.turn.castDefs?.[controller] ?? []).some(
@@ -267,6 +272,15 @@ function spellMatches(
     // The Fantastic Four (9d): counted among the caster's spells this turn, this one included.
     case 'first':
       return (ctx.s.turn.castDefs?.[spellCaster(ctx, item, self)] ?? []).length === 1;
+    case 'firstInstantSorceryOrVillain': {
+      const fits = (d: CardDefinition) =>
+        d.types.includes('Instant') ||
+        d.types.includes('Sorcery') ||
+        d.subtypes.includes('Villain');
+      if (!fits(spell)) return false;
+      const cast = ctx.s.turn.castDefs?.[spellCaster(ctx, item, self)] ?? [];
+      return cast.filter((id) => fits(defOf(ctx, id))).length === 1;
+    }
     case 'firstNoncreature':
     case 'fourthNoncreature': {
       if (spell.types.includes('Creature')) return false;
@@ -295,6 +309,8 @@ function detect(ctx: Ctx, ev: GameEvent): void {
       const moved = s.objects[ev.id];
       const movedDef = defOf(ctx, ev.defId);
       if (ev.to === 'battlefield' && moved && moved.zone === 'battlefield') {
+        // A Saga enters with its first lore counter.
+        if (movedDef.saga) addLore(ctx, moved.id);
         const isCreature = movedDef.types.includes('Creature');
         const isLand = movedDef.types.includes('Land');
         forEachBattlefieldTrigger(
@@ -327,6 +343,16 @@ function detect(ctx: Ctx, ev: GameEvent): void {
           },
           moved,
         );
+        // From the graveyard: "whenever your commander enters" (Endless Ranks of HYDRA).
+        for (const id of s.players[moved.controller].graveyard) {
+          const card = s.objects[id]!;
+          def(ctx, id).abilities.forEach((a, i) => {
+            if (a.kind !== 'triggered' || !a.fromGraveyard || a.trigger.on !== 'otherCreatureEtb')
+              return;
+            if (isCreature && matchesFilter(ctx, moved.id, a.trigger.filter, id))
+              queue(ctx, card, i, moved.controller, moved);
+          });
+        }
       }
       if (
         ev.from === 'battlefield' &&
@@ -434,7 +460,9 @@ function detect(ctx: Ctx, ev: GameEvent): void {
           ctx,
           (o, a) => {
             const t = a.trigger;
-            if (t.on === 'attachedDies') return o.attachedTo === ev.id;
+            // Skullclamp: an Equipment already fell off (state-based actions) but remembers.
+            if (t.on === 'attachedDies')
+              return o.attachedTo === ev.id || o.lastAttachedTo?.id === ev.id;
             if (t.on !== 'otherCreatureDies' && t.on !== 'creatureYouControlDies') return false;
             if (o.id === ev.id) return false;
             if (t.nontoken && wasToken) return false;
@@ -451,7 +479,39 @@ function detect(ctx: Ctx, ev: GameEvent): void {
       }
       return;
     }
+    // Doom Prevails (9e).
+    case 'discarded': {
+      const card = s.objects[ev.id];
+      if (!card) return;
+      forEachBattlefieldTrigger(
+        ctx,
+        (o, a) => a.trigger.on === 'youDiscard' && o.controller === ev.player,
+        card,
+      );
+      return;
+    }
     case 'cardDrawn': {
+      // Molecule Man: miracle {0} for the first card each turn.
+      const drawn = s.objects[ev.id];
+      if (
+        drawn &&
+        ev.nth === 1 &&
+        !defOf(ctx, drawn.defId).types.includes('Land') &&
+        s.battlefield.some(
+          (id) =>
+            obj(ctx, id).controller === ev.player &&
+            def(ctx, id).abilities.some(
+              (a) => a.kind === 'static' && a.effect.kind === 'miracleZero',
+            ),
+        )
+      )
+        s.pendingTriggers.push({
+          source: { id: drawn.id, zcc: drawn.zcc },
+          sourceDefId: drawn.defId,
+          abilityIndex: -1,
+          controller: ev.player,
+          inline: [{ kind: 'castFreeCard', card: { id: drawn.id, zcc: drawn.zcc } }],
+        });
       forEachBattlefieldTrigger(
         ctx,
         (o, a) =>
@@ -495,6 +555,7 @@ function detect(ctx: Ctx, ev: GameEvent): void {
                 ? o.controller !== ev.player
                 : o.controller === ev.player) &&
           spellMatches(ctx, a.trigger, spell, item, o) &&
+          (!a.trigger.fromExile || (item?.kind === 'spell' && !!item.fromExile)) &&
           (!a.trigger.spell || cardMatches(ctx, ev.id, a.trigger.spell, o.id)),
         spellObj,
         manaValueOf(spell),
@@ -676,6 +737,16 @@ function detect(ctx: Ctx, ev: GameEvent): void {
           ev.amount,
         );
       if (!('player' in ev.to)) return;
+      // Kang Dynasty: "whenever any of those creatures deals combat damage to a player, draw a card".
+      for (const e of s.effects)
+        if (e.drawsFor && e.affected.id === src.id && e.affected.zcc === src.zcc)
+          s.pendingTriggers.push({
+            source: { id: src.id, zcc: src.zcc },
+            sourceDefId: src.defId,
+            abilityIndex: -1,
+            controller: e.drawsFor,
+            inline: [{ kind: 'draw', who: 'controller', amount: 1 }],
+          });
       // Love on the Battlefield: "put a +1/+1 counter on it".
       if (
         s.effects.some(

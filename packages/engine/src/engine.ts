@@ -222,6 +222,7 @@ function apply(ctx: Ctx, action: Action): void {
           via: action.via,
           copyOf: action.copyOf,
           sacrificeMany: action.sacrificeMany,
+          kickCount: action.kickCount,
         },
         action.payWith,
       );

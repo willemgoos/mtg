@@ -586,7 +586,9 @@ export function runEffects(
       } else if (e.kind === 'castFreeCard') {
         // Rebound, Power Pack: the card must still be where it was exiled.
         const card = ctx.s.objects[e.card.id];
-        if (!card || card.zone !== 'exile' || card.zcc !== e.card.zcc) continue;
+        // In exile (rebound, suspend), or just drawn (miracle).
+        if (!card || (card.zone !== 'exile' && card.zone !== 'hand') || card.zcc !== e.card.zcc)
+          continue;
         if (def(ctx, card.id).types.includes('Land')) continue;
         ctx.s.decision = {
           kind: 'castFree',
@@ -873,7 +875,10 @@ export function runEffects(
           ? ctx.s.battlefield.map((id) => obj(ctx, id))
           : creaturesOnBattlefield(ctx);
         for (const c of doomed) {
-          if (!matchesFilter(ctx, c.id, e.filter) || hasKeyword(ctx, c.id, 'indestructible'))
+          if (
+            !matchesFilter(ctx, c.id, e.filter, es.source?.id) ||
+            hasKeyword(ctx, c.id, 'indestructible')
+          )
             continue;
           moveObject(ctx, c.id, 'graveyard');
           died.push(c.id);
@@ -1311,6 +1316,10 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
       for (const id of ctx.s.players[from].library.slice(0, e.count)) {
         moveObject(ctx, id, 'exile');
         if (self) self.exiledWith = [...(self.exiledWith ?? []), id];
+        if (e.castable) {
+          obj(ctx, id).castableBy = es.controller;
+          obj(ctx, id).anyMana = true;
+        }
       }
       return;
     }
@@ -1362,6 +1371,150 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
       aura.attachedTo = host.id;
       return;
     }
+    // Doom Prevails (9e).
+    case 'chaosWarp':
+      for (const id of objectsOf(ctx, es, e.what)) {
+        const owner = obj(ctx, id).owner;
+        moveObject(ctx, id, 'library');
+        shuffleInPlace(ctx.s.rng, ctx.s.players[owner].library);
+        const top = ctx.s.players[owner].library[0];
+        if (!top) continue;
+        emit(ctx, { type: 'revealed', player: owner, id: top });
+        if (def(ctx, top).types.some((t) => PERMANENT_TYPES.includes(t)))
+          moveObject(ctx, top, 'battlefield', { controller: owner });
+      }
+      return;
+    case 'exileTopsPlayableFree':
+      for (const p of ['p1', 'p2'] as const) {
+        const top = ctx.s.players[p].library[0];
+        if (!top) continue;
+        moveObject(ctx, top, 'exile');
+        obj(ctx, top).playFreeBy = es.controller;
+      }
+      return;
+    case 'exileTopPlayableUntilNext': {
+      // Superior Foes: the card exiled before stops being playable.
+      const self = es.source && onBattlefield(ctx, es.source);
+      const top = ctx.s.players[es.controller].library[0];
+      if (!self || !top) return;
+      for (const id of self.exiledWith ?? []) {
+        const o = ctx.s.objects[id];
+        if (o?.zone === 'exile') delete o.playableUntilTurn;
+      }
+      moveObject(ctx, top, 'exile');
+      obj(ctx, top).playableUntilTurn = Number.MAX_SAFE_INTEGER;
+      self.exiledWith = [top];
+      return;
+    }
+    case 'suspend': {
+      let card: ObjectId | undefined;
+      if (e.what === 'nextNonlandFromLibrary') {
+        // Kang Prime: exile until a nonland card; the lands stay in exile.
+        for (const id of [...ctx.s.players[es.controller].library]) {
+          moveObject(ctx, id, 'exile');
+          if (!def(ctx, id).types.includes('Land')) {
+            card = id;
+            break;
+          }
+        }
+      } else {
+        card = (() => {
+          const t =
+            typeof e.what === 'object' && 'target' in e.what ? es.targets[e.what.target] : null;
+          const o = t && 'object' in t ? ctx.s.objects[t.object.id] : undefined;
+          return o?.zone === 'graveyard' ? o.id : undefined;
+        })();
+        if (card) moveObject(ctx, card, 'exile');
+      }
+      if (!card) return;
+      const o = obj(ctx, card);
+      o.suspended = true;
+      o.counters = { ...o.counters, time: e.time };
+      return;
+    }
+    case 'unearth': {
+      // The source returns with haste; it's exiled at the next end step, or instead of dying.
+      const card = es.source && ctx.s.objects[es.source.id];
+      if (!card || card.zone !== 'graveyard') return;
+      moveObject(ctx, card.id, 'battlefield', { controller: es.controller });
+      card.grantedKeywords = ['haste'];
+      ctx.s.effects.push({
+        timestamp: newTimestamp(ctx),
+        affected: { id: card.id, zcc: card.zcc },
+        power: 0,
+        toughness: 0,
+        keywords: [],
+        exileIfDies: true,
+        expires: 'untilYourNextTurn',
+        player: es.controller,
+      });
+      (ctx.s.delayed ??= []).push({
+        controller: es.controller,
+        sourceDefId: es.sourceDefId,
+        subject: { id: card.id, zcc: card.zcc },
+        effects: [{ kind: 'exile', what: 'subject' }],
+        fromTurn: ctx.s.turn.number,
+      });
+      return;
+    }
+    case 'converterReturn': {
+      // Currency Converter: the oldest card exiled with it.
+      const self = es.source && onBattlefield(ctx, es.source);
+      const card = (self?.exiledWith ?? []).find((id) => ctx.s.objects[id]?.zone === 'exile');
+      if (!self || !card) return;
+      self.exiledWith = self.exiledWith!.filter((id) => id !== card);
+      const land = def(ctx, card).types.includes('Land');
+      moveObject(ctx, card, 'graveyard');
+      runEffect(ctx, es, {
+        kind: 'createToken',
+        token: land ? 'treasure-token' : 'rogue-2-2-token',
+        count: 1,
+      });
+      return;
+    }
+    case 'ladyLoki': {
+      // The spell that triggered it is exiled; then cascade-like: the next nonland card.
+      const spell = es.subject && ctx.s.objects[es.subject.id];
+      if (!spell || spell.zone !== 'stack') return;
+      const mv = manaValue(def(ctx, spell.id).manaCost);
+      const i = ctx.s.stack.findIndex((x) => x.id === spell.id);
+      if (i >= 0) ctx.s.stack.splice(i, 1);
+      moveObject(ctx, spell.id, 'exile');
+      let hit: ObjectId | undefined;
+      for (const id of [...ctx.s.players[es.controller].library]) {
+        moveObject(ctx, id, 'exile');
+        if (!def(ctx, id).types.includes('Land')) {
+          hit = id;
+          break;
+        }
+      }
+      if (!hit) return;
+      const diff = Math.abs(mv - manaValue(def(ctx, hit).manaCost));
+      runEffect(ctx, es, { kind: 'damage', amount: diff, to: 'eachOpponent' });
+      ctx.s.pendingTriggers.push({
+        source: es.source ?? { id: hit, zcc: obj(ctx, hit).zcc },
+        sourceDefId: es.sourceDefId,
+        abilityIndex: -1,
+        controller: es.controller,
+        inline: [{ kind: 'castFreeCard', card: { id: hit, zcc: obj(ctx, hit).zcc } }],
+      });
+      return;
+    }
+    case 'exileDiscarded': {
+      const card = es.subject && ctx.s.objects[es.subject.id];
+      if (!card || card.zone !== 'graveyard' || card.zcc !== es.subject!.zcc) return;
+      moveObject(ctx, card.id, 'exile');
+      if (e.playable) card.playableUntilTurn = ctx.s.turn.number;
+      const self = e.track && es.source ? onBattlefield(ctx, es.source) : undefined;
+      if (self) self.exiledWith = [...(self.exiledWith ?? []), card.id];
+      return;
+    }
+    case 'flashForChosenType': {
+      const self = es.source && onBattlefield(ctx, es.source);
+      if (self?.chosenType)
+        (ctx.s.turn.flashTypes ??= []).push({ player: es.controller, type: self.chosenType });
+      return;
+    }
     // The Fantastic Four (9d).
     case 'afterReveal': {
       // Cascade declined: to the bottom. Discover declined: into your hand.
@@ -1392,6 +1545,7 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
           keywords: [],
           mustAttack: true,
           ...(e.cantBlock ? { cantBlock: true } : {}),
+          ...(e.draws ? { drawsFor: es.controller } : {}),
           expires: 'untilYourNextTurn',
           player: es.controller,
         });
@@ -1691,6 +1845,17 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
           // "Except the token isn't legendary" (Quantum Misalignment); "that token gains haste" (Helm of the Host).
           if (e.notLegendary) t.nonlegendary = true;
           if (e.haste) t.grantedKeywords = ['haste'];
+          if (e.addSubtype) t.addedSubtypes = [e.addSubtype];
+          // Living Laser, Loki: "tapped and attacking".
+          if (e.attacking && ctx.s.combat) {
+            t.tapped = true;
+            ctx.s.combat.attackers.push({
+              id: t.id,
+              defender: other(es.controller),
+              blocked: false,
+              blockers: [],
+            });
+          }
           ctx.s.battlefield.push(t.id);
           emit(ctx, {
             type: 'objectMoved',
@@ -1876,7 +2041,9 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
           toughness: 0,
           keywords: [],
           previousController: o.controller,
-          expires: 'endOfTurn',
+          ...(e.untilYourNextTurn
+            ? { expires: 'untilYourNextTurn' as const, player: es.controller }
+            : { expires: 'endOfTurn' as const }),
         });
         o.controller = es.controller;
         o.summoningSick = true;

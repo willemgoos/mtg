@@ -1,6 +1,7 @@
 import type { CardDefinition, Color, Keyword } from '@mtg/engine';
 import type { Behavior } from './build.ts';
 import { AVENGERS } from './msc/avengers.ts';
+import { DOOM } from './msc/doom.ts';
 import { FANTASTIC } from './msc/fantastic.ts';
 import { WAKANDA } from './msc/wakanda.ts';
 import { STAPLES } from './msc/staples.ts';
@@ -15,6 +16,7 @@ export const MARVEL_BRAWL_BEHAVIORS: Record<string, Behavior> = {
   ...AVENGERS,
   ...WAKANDA,
   ...FANTASTIC,
+  ...DOOM,
 };
 
 const creatureToken = (
@@ -49,6 +51,20 @@ export const MARVEL_BRAWL_TOKENS: CardDefinition[] = [
   creatureToken('rhino-token', 'Rhino', 'G', ['Rhino'], 4, 4, ['trample']),
   creatureToken('angel-4-4-token', 'Angel', 'W', ['Angel'], 4, 4, ['flying', 'vigilance']),
   creatureToken('merfolk-token', 'Merfolk', 'U', ['Merfolk'], 1, 1),
+  creatureToken('villain-2-1-token', 'Villain', 'B', ['Villain'], 2, 1, ['menace']),
+  creatureToken('ape-villain-token', 'Ape Villain', 'R', ['Ape', 'Villain'], 3, 3, ['haste']),
+  creatureToken('rogue-2-2-token', 'Rogue', 'B', ['Rogue'], 2, 2),
+  {
+    ...creatureToken('shapeshifter-3-2-token', 'Shapeshifter', 'W', ['Shapeshifter'], 3, 2, [
+      'changeling',
+    ]),
+    colors: [],
+  },
+  {
+    ...creatureToken('robot-villain-token', 'Robot Villain', 'W', ['Robot', 'Villain'], 2, 2),
+    colors: [],
+    types: ['Artifact', 'Creature'],
+  },
   creatureToken('ox-token', 'Ox', 'W', ['Ox'], 2, 2),
   {
     ...creatureToken('wall-0-3-token', 'Wall', 'W', ['Wall'], 0, 3, ['defender', 'reach']),

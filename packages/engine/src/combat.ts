@@ -9,6 +9,7 @@ import {
 import { type Ctx, def, obj, other } from './context.ts';
 import { damageSourceFor, dealDamage, type DamageSource } from './effects.ts';
 import { checkCondition } from './triggers.ts';
+import { manaSources } from './mana.ts';
 import type { Attacker, ObjectId, PlayerId, TargetChoice } from './types.ts';
 
 export function canAttack(ctx: Ctx, id: ObjectId): boolean {
@@ -241,4 +242,21 @@ export function dealCombatDamage(ctx: Ctx, firstStrikeStep: boolean): void {
 
 export function defenderOf(ctx: Ctx): PlayerId {
   return other(ctx.s.turn.activePlayer);
+}
+
+/** Propaganda: what each attacker costs `player` (0 if nothing taxes them). */
+export function attackTax(ctx: Ctx, player: PlayerId): number {
+  let tax = 0;
+  for (const id of ctx.s.battlefield) {
+    if (obj(ctx, id).controller === player) continue;
+    for (const a of def(ctx, id).abilities)
+      if (a.kind === 'static' && a.effect.kind === 'attackTax') tax += a.effect.amount;
+  }
+  return tax;
+}
+
+/** How many creatures `player` can attack with, given the attack tax and their mana. */
+export function affordableAttackers(ctx: Ctx, player: PlayerId): number {
+  const tax = attackTax(ctx, player);
+  return tax === 0 ? Infinity : Math.floor(manaSources(ctx, player).length / tax);
 }

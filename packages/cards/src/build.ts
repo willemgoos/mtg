@@ -98,6 +98,17 @@ export const KEYWORDS_AS_ABILITIES = new Set([
   'Insatiable Hunger',
   'Lethal Voice',
   'Sense the Good',
+  'Mayhem',
+  'Melee',
+  'Multikicker',
+  'Overload',
+  'Unearth',
+  'Mary',
+  'Typhoid Mary',
+  'Bloody Mary',
+  'Sell Contraband',
+  'Buy Information',
+  'Hire a Mercenary',
 ]);
 
 const BASIC_MANA: Record<string, ManaType> = {

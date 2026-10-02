@@ -72,7 +72,16 @@ export interface SpellDef {
 
 export interface CardDefinition {
   /** Mockingbird: may enter as a copy of a creature with mana value up to the mana spent on it. */
-  entersAsCopy?: { addSubtype: string; addKeyword: Keyword };
+  entersAsCopy?: {
+    addSubtype?: string;
+    addKeyword?: Keyword;
+    /** Only of a creature you control, any mana value (Spark Double, Chameleon). */
+    yours?: boolean;
+    /** An additional +1/+1 counter on it (Spark Double). */
+    counter?: boolean;
+    /** It isn't legendary (Spark Double; Chameleon keeps its own name). */
+    notLegendary?: boolean;
+  };
   id: CardDefId;
   name: string;
   /** Used by the UI to hotlink the card image. */
@@ -127,7 +136,7 @@ export interface CardDefinition {
      * Kicker under another name: 'offspring' (a creature also makes a 1/1 token
      * copy) or 'gift' (a free promise of a gift to an opponent).
      */
-    as?: 'offspring' | 'gift';
+    as?: 'offspring' | 'gift' | 'overload';
     /** A permanent's gift: given to an opponent as it resolves, if promised (Scrapshooter). */
     gift?: EffectDef;
   };
@@ -135,6 +144,17 @@ export interface CardDefinition {
   costReductionIfTarget?: { filter: CardFilter; amount: number };
   /** What it does when cast with flashback, if different ("if this spell was cast from a graveyard"). */
   flashbackSpell?: SpellDef;
+  // Doom Prevails (9e).
+  /** An Aura that enchants a player: it stays without a host (Archnemesis). */
+  enchantPlayer?: boolean;
+  /** Mayhem: may be cast from your graveyard for this cost if you discarded it this turn. */
+  mayhem?: ManaCost;
+  /** Multikicker: pay this any number of times (offered up to three); see `kickedAtLeast`. */
+  multikicker?: ManaCost;
+  /** "As an additional cost to cast this spell, pay X life" (Toxic Deluge). */
+  payXLife?: boolean;
+  /** A Saga with this many chapters: lore counters as it enters and at your precombat main phase. */
+  saga?: number;
   // The Fantastic Four (9d).
   /** Rebound: cast from your hand, it's exiled as it resolves; at your next upkeep you may cast it free. */
   rebound?: boolean;
@@ -315,13 +335,17 @@ export type TriggerDef =
         | 'first'
         /** The caster's first (Valeria) or fourth (The Fantasticar) noncreature spell this turn. */
         | 'firstNoncreature'
-        | 'fourthNoncreature';
+        | 'fourthNoncreature'
+        /** Lady Loki: the caster's first instant, sorcery or Villain spell this turn. */
+        | 'firstInstantSorceryOrVillain';
       /** The spell must also match this (Gev: a Lizard spell). */
       spell?: CardFilter;
       /** Any player's spell, cast when it isn't their turn (Vision). */
       anyPlayerOffTurn?: boolean;
       /** Whose spells: yours (default), any player's (Medusa) or an opponent's (Mind's Dilation). */
       caster?: 'any' | 'opponent';
+      /** Only spells cast from exile (Klaw). */
+      fromExile?: boolean;
     }
   /** Whenever a player (an opponent: Monologue Tax) casts their second spell each turn (Hearthborn Battler). */
   | { on: 'anyPlayerSecondSpell'; opponentOnly?: boolean }
@@ -377,6 +401,11 @@ export type TriggerDef =
   | { on: 'sacrificed' }
   /** Whenever you sacrifice a permanent matching the filter (Camellia: a Food). */
   | { on: 'youSacrifice'; filter: CardFilter }
+  // Doom Prevails (9e).
+  /** Whenever you discard a card ("that card" is the subject). */
+  | { on: 'youDiscard' }
+  /** A Saga's chapter abilities (triggered as lore counters are added). */
+  | { on: 'chapter'; chapters: number[] }
   // The Fantastic Four (9d).
   /** Whenever this becomes the target of a spell or ability an opponent controls (Black Bolt). */
   | { on: 'targetedByOpponent' }
@@ -467,6 +496,11 @@ export type ConditionDef =
   | { kind: 'any'; of: ConditionDef[] }
   /** The condition doesn't hold. */
   | { kind: 'not'; condition: ConditionDef }
+  // Doom Prevails (9e).
+  /** Cards exiled with the source are still in exile (Currency Converter). */
+  | { kind: 'sourceHasExiled' }
+  /** The source was kicked at least N times (multikicker: Batroc). */
+  | { kind: 'kickedAtLeast'; n: number }
   // The Fantastic Four (9d).
   /** You've cast a noncreature spell this turn. */
   | { kind: 'castNoncreatureThisTurn' }
@@ -629,11 +663,18 @@ export type Amount =
   /** Creature cards you own in exile and in your graveyard (Huskburster Swarm). */
   | { count: 'creatureCardsInExileAndGraveyard' }
   /** Creatures you control of the type chosen for the source (Three Tree City). */
-  | { count: 'creaturesOfChosenType' }
+  | { count: 'creaturesOfChosenType'; other?: boolean }
   /** Named counters on the source (as it last was, if it left): Hoarder's Overflow's stash counters. */
   | { namedCountersOnSource: string }
   /** The value chosen for X (times `times`, plus `plus`). */
   | { x: true; times?: number; plus?: number }
+  // Doom Prevails (9e).
+  /** Cards you've discarded this turn (Living Laser). */
+  | { count: 'cardsDiscardedThisTurn' }
+  /** Permanents an opponent controls matching the filter (Killmonger: artifacts). */
+  | { count: 'permanentsOpponentsControl'; filter: CardFilter }
+  /** Cards in your hand (Kang Dynasty). */
+  | { count: 'cardsInHand' }
   // The Fantastic Four (9d).
   /** Colours among permanents you control and spells you've cast this turn (First Family). */
   | { count: 'colorsAmongPermanentsAndSpells' }
@@ -782,6 +823,10 @@ export type EffectDef =
       notLegendary?: boolean;
       /** "That token gains haste" (Helm of the Host). */
       haste?: boolean;
+      /** The tokens enter tapped and attacking (Living Laser, Loki). */
+      attacking?: boolean;
+      /** A creature type it has in addition (Loki: Illusion). */
+      addSubtype?: string;
     }
   /** Choose a color (or a creature type) for the source, as it enters. */
   | { kind: 'chooseColor' }
@@ -867,8 +912,8 @@ export type EffectDef =
   | { kind: 'blinkOnCombatDamage'; what: Ref }
   /** Put permanents on the top or bottom of their owners' libraries. */
   | { kind: 'putInLibrary'; what: Ref; position: 'top' | 'bottom' }
-  /** Gain control of permanents until end of turn (Reptilian Recruiter). */
-  | { kind: 'gainControl'; what: Ref }
+  /** Gain control of permanents until end of turn (Reptilian Recruiter), or until your next turn (Stilt-Man). */
+  | { kind: 'gainControl'; what: Ref; untilYourNextTurn?: boolean }
   /**
    * Until your next turn, permanents lose all abilities (and have base power
    * and toughness `basePT` if creatures): Azure Beastbinder.
@@ -1015,8 +1060,30 @@ export type EffectDef =
   /** The controller scries N (asks them to order the top cards). */
   | { kind: 'scry'; amount: number }
   | { kind: 'custom'; handler: string; params?: Record<string, unknown> }
+  // Doom Prevails (9e).
+  /** The owner shuffles it into their library, then reveals the top card: a permanent card enters (Chaos Warp). */
+  | { kind: 'chaosWarp'; what: Ref }
+  /** Exile the top card of each player's library; you may play them free while they stay exiled (Extract Power). */
+  | { kind: 'exileTopsPlayableFree' }
+  /** Exile the top card; you may play it until you exile another with this source (Superior Foes). */
+  | { kind: 'exileTopPlayableUntilNext' }
+  /** Exile a card with N time counters; it gains suspend (Kang Prime: the next nonland card from the top). */
+  | { kind: 'suspend'; what: Ref | 'nextNonlandFromLibrary'; time: number }
+  /** Unearth: the source returns from your graveyard with haste; it's exiled at the next end step or if it would die. */
+  | { kind: 'unearth' }
+  /** Currency Converter: a card exiled with it goes to its owner's graveyard; you get a Treasure or a 2/2 Rogue. */
+  | { kind: 'converterReturn' }
+  /** Lady Loki: exile the spell, exile until a nonland card, damage by the difference, cast that card free. */
+  | { kind: 'ladyLoki' }
+  /** Until end of turn, spells of the type chosen for the source have flash (Progenitor's Icon). */
+  | { kind: 'flashForChosenType' }
+  /**
+   * Exile the card that caused the trigger from your graveyard (a discarded card):
+   * playable this turn (Containment Construct), or tracked by the source (Currency Converter).
+   */
+  | { kind: 'exileDiscarded'; playable?: boolean; track?: boolean }
   // The Fantastic Four (9d).
-  /** You may cast this exiled card without paying its mana cost (rebound, Power Pack). */
+  /** You may cast this exiled card without paying its mana cost (rebound, Power Pack); also a card in hand (miracle). */
   | { kind: 'castFreeCard'; card: ObjectRef; exileAfter?: boolean }
   /**
    * Exile cards from the top until a nonland card with mana value at most `max`
@@ -1024,8 +1091,11 @@ export type EffectDef =
    * it into your hand); the rest go to the bottom in a random order.
    */
   | { kind: 'revealUntilCastable'; max: Amount | 'belowSource'; orHand?: boolean }
-  /** Goad (or "attacks each combat if able"): until your next turn they attack each combat if able. */
-  | { kind: 'mustAttack'; what: Ref; cantBlock?: boolean }
+  /**
+   * Goad (or "attacks each combat if able"): until your next turn they attack
+   * each combat if able. `draws`: whenever one deals combat damage to a player, you draw (Kang Dynasty).
+   */
+  | { kind: 'mustAttack'; what: Ref; cantBlock?: boolean; draws?: boolean }
   /** Explore: reveal the top card; a land goes to hand, otherwise a +1/+1 counter (the card stays on top). */
   | { kind: 'explore'; what: Ref }
   /** Copy the top triggered ability you control on the stack (Mister Fantastic). */
@@ -1077,7 +1147,13 @@ export type EffectDef =
    * Exile the top N cards of your library face down, remembered as exiled with
    * the source (Scarlet Witch); `who`: an opponent's library (Mind's Dilation).
    */
-  | { kind: 'exileTopWithSource'; count: number; who?: 'eachOpponent' }
+  | {
+      kind: 'exileTopWithSource';
+      count: number;
+      who?: 'eachOpponent';
+      /** You may play it while it stays exiled, with any mana (Klaw). */
+      castable?: boolean;
+    }
   /**
    * Until end of turn, all damage that would be dealt to you and creatures you
    * control is dealt to this creature instead (Heroic Sacrifice); `onDies`
@@ -1218,6 +1294,11 @@ export type StaticDef =
   | { kind: 'opponentsBaseToughness'; toughness: number }
   /** Creatures your opponents control that would die are exiled instead (Vren). */
   | { kind: 'exileOpponentCreaturesInstead' }
+  // Doom Prevails (9e).
+  /** Creatures can't attack you unless their controller pays this for each (Propaganda). */
+  | { kind: 'attackTax'; amount: number }
+  /** Nonland cards in your hand have miracle {0}: the first card you draw each turn may be cast free (Molecule Man). */
+  | { kind: 'miracleZero' }
   // The Fantastic Four (9d).
   /** This creature attacks each combat if able, while the condition holds (Galactus). */
   | { kind: 'attacksEachCombat'; condition?: ConditionDef }
@@ -1329,6 +1410,17 @@ export interface GameObject {
   // Brawl.
   /** A commander: the zone change (zcc) at which its owner was last asked to move it to the command zone. */
   commandOffered?: number;
+  // Doom Prevails (9e).
+  /** The turn it was discarded (mayhem). */
+  discardedTurn?: number;
+  /** In exile with suspend (time counters in `counters.time`). */
+  suspended?: boolean;
+  /** Times it was kicked (multikicker). */
+  kickCount?: number;
+  /** It gains haste as it enters (cast through suspend). */
+  hasteOnEntry?: boolean;
+  /** Extract Power: it may be played for free while exiled, by this player. */
+  playFreeBy?: PlayerId;
   // The Fantastic Four (9d).
   /** Promise of Loyalty: it can't attack this player. */
   vowedTo?: PlayerId;
@@ -1409,6 +1501,10 @@ export type StackItem =
       copyOf?: ObjectId;
       /** Cast from its owner's hand (rebound cares). */
       fromHand?: boolean;
+      /** Times it was kicked (multikicker). */
+      kickCount?: number;
+      /** Cast from exile (Klaw). */
+      fromExile?: boolean;
     }
   | {
       kind: 'ability';
@@ -1486,6 +1582,10 @@ export interface TurnState {
   osteomancer?: PlayerId[];
   /** Players who can't cast more spells this turn (Conduit of Worlds). */
   spellLock?: PlayerId[];
+  /** Cards each player discarded this turn (Living Laser, Typhoid Mary). */
+  discards?: Record<PlayerId, number>;
+  /** Creature types whose spells have flash this turn, per player (Progenitor's Icon). */
+  flashTypes?: { player: PlayerId; type: string }[];
   /** Players with hexproof until end of turn (Dawn's Truce). */
   hexproofPlayers?: PlayerId[];
 }
@@ -1529,6 +1629,9 @@ export interface ContinuousEffect {
   /** 'untilYourNextTurn': until `player`'s next turn begins. */
   expires: 'endOfTurn' | 'untilYourNextTurn';
   player?: PlayerId;
+  // Doom Prevails (9e).
+  /** Kang Dynasty: whenever it deals combat damage to a player, this player draws. */
+  drawsFor?: PlayerId;
   // The Fantastic Four (9d).
   /** Goad: it attacks each combat if able. */
   mustAttack?: boolean;
@@ -1923,11 +2026,13 @@ export type Action =
       /** Cast without paying its mana cost (a 'castFree' decision). */
       free?: boolean;
       /** Cast from the graveyard through Festival of Embers or Osteomancer Adept. */
-      via?: 'festival' | 'osteomancer' | 'conduit';
+      via?: 'festival' | 'osteomancer' | 'conduit' | 'free';
       /** Mockingbird: the creature to enter as a copy of. */
       copyOf?: ObjectId;
       /** Rottenmouth Viper: permanents sacrificed to make it cheaper. */
       sacrificeMany?: ObjectId[];
+      /** Times multikicker is paid (Batroc). */
+      kickCount?: number;
       /** Mana sources to tap. Omitted: the engine picks. */
       payWith?: ObjectId[];
     }
@@ -1979,6 +2084,8 @@ export type GameEvent =
   | { type: 'damageDealt'; source: ObjectId; to: TargetChoice; amount: number; combat: boolean }
   | { type: 'lifeChanged'; player: PlayerId; delta: number; life: number }
   | { type: 'tapped'; id: ObjectId; first?: boolean }
+  /** A card went from its owner's hand to their graveyard (Doom Prevails). */
+  | { type: 'discarded'; id: ObjectId; player: PlayerId }
   /** Wakanda Forever: a new monarch. */
   | { type: 'monarchChanged'; player: PlayerId }
   /** Vision: a permanent phased out or back in. */

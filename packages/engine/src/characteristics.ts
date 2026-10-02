@@ -257,7 +257,9 @@ export function countOf(
   if (a.count === 'creaturesOfChosenType') {
     const chosen = sourceId ? obj(ctx, sourceId).chosenType : undefined;
     if (!chosen) return 0;
-    return creaturesOnBattlefield(ctx, player).filter((c) => hasSubtype(ctx, c.id, chosen)).length;
+    return creaturesOnBattlefield(ctx, player).filter(
+      (c) => hasSubtype(ctx, c.id, chosen) && !(a.other && c.id === sourceId),
+    ).length;
   }
   if (a.count === 'opponentCreaturesExiledThisTurn')
     return ctx.s.turn.creaturesExiled?.[player === 'p1' ? 'p2' : 'p1'] ?? 0;
@@ -268,6 +270,13 @@ export function countOf(
       .filter((id) => obj(ctx, id).controller === player && matchesFilter(ctx, id, a.filter))
       .reduce((n, id) => n + manaValue(def(ctx, id).manaCost), 0);
   if (a.count === 'commanderCasts') return ctx.s.players[player].commanderCasts ?? 0;
+  // Doom Prevails (9e).
+  if (a.count === 'cardsDiscardedThisTurn') return ctx.s.turn.discards?.[player] ?? 0;
+  if (a.count === 'permanentsOpponentsControl')
+    return ctx.s.battlefield.filter(
+      (id) => obj(ctx, id).controller !== player && matchesFilter(ctx, id, a.filter),
+    ).length;
+  if (a.count === 'cardsInHand') return ctx.s.players[player].hand.length;
   // The Fantastic Four (9d).
   if (a.count === 'colorsAmongPermanentsAndSpells') {
     const colors = new Set<string>();

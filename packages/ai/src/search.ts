@@ -174,15 +174,19 @@ export function createSearchBot(
       options.push(planned.includes(id) ? planned.filter((x) => x !== id) : [...planned, id]);
     }
     const seen = new Set<string>();
-    return options
-      .map((ids) => [...fixed.filter((id) => !ids.includes(id)), ...ids])
-      .filter((ids) => {
-        const k = [...ids].sort().join(',');
-        if (seen.has(k)) return false;
-        seen.add(k);
-        return true;
-      })
-      .map((ids) => attackArm(me, declared, ids));
+    return (
+      options
+        .map((ids) => [...fixed.filter((id) => !ids.includes(id)), ...ids])
+        // Only creatures that may still be declared (Propaganda caps them).
+        .map((ids) => ids.filter((id) => available.includes(id)))
+        .filter((ids) => {
+          const k = [...ids].sort().join(',');
+          if (seen.has(k)) return false;
+          seen.add(k);
+          return true;
+        })
+        .map((ids) => attackArm(me, declared, ids))
+    );
   }
 
   function attackArm(me: PlayerId, declared: ObjectId[], ids: ObjectId[]): Arm {

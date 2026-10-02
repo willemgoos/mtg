@@ -79,6 +79,8 @@ export interface CastChoice {
   copyOf?: ObjectId | undefined;
   /** Rottenmouth Viper: permanents sacrificed to make it cheaper. */
   sacrificeMany?: ObjectId[] | undefined;
+  /** Times multikicker is paid (Batroc). */
+  kickCount?: number | undefined;
 }
 
 /** Valiant needs to know what a player's spell or ability targeted. */
@@ -292,6 +294,8 @@ export function castSpell(
   if (choice.sacrifice) sacrificePermanent(ctx, choice.sacrifice);
   if (v.removeCounters) removeCounters(ctx, player, v.removeCounters);
   changeLife(ctx, player, -wardLife(ctx, player, targets) - (v.life ?? 0));
+  // Toxic Deluge: "As an additional cost to cast this spell, pay X life."
+  if (d.payXLife && choice.x) changeLife(ctx, player, -choice.x);
   payWardExtras(ctx, player, targets);
   ctx.s.stack.push({
     kind: 'spell',
@@ -299,6 +303,8 @@ export function castSpell(
     controller: player,
     targets,
     ...(fromHand ? { fromHand: true } : {}),
+    ...(o.zone === 'exile' ? { fromExile: true } : {}),
+    ...(choice.kickCount ? { kickCount: choice.kickCount } : {}),
     ...(choice.mode !== undefined ? { mode: choice.mode } : {}),
     ...(choice.kicked ? { kicked: true } : {}),
     ...(flashback ? { flashback: true } : {}),
@@ -600,6 +606,11 @@ export function resolveTop(ctx: Ctx): boolean {
     emit(ctx, { type: 'resolved', id: item.id });
     moveObject(ctx, item.id, 'battlefield', { controller: item.controller });
     if (item.kicked) o.kicked = true;
+    // Multikicker: "enters with a +1/+1 counter for each time he was kicked".
+    if (item.kickCount) {
+      o.kickCount = item.kickCount;
+      if (d.multikicker) addCounters(ctx, o.id, item.kickCount);
+    }
     // Royal Talon Fighter Jet: "enters with X +1/+1 counters".
     if (d.entersWithXCounters && item.x) addCounters(ctx, o.id, item.x);
     if (d.entersWithCounters && checkCondition(ctx, d.entersWithCountersIf, item.controller, o))
@@ -666,8 +677,11 @@ function enterAsCopy(
   o.originalDefId = o.defId;
   o.defId = model.defId;
   if (model.copyPT) o.copyPT = { ...model.copyPT };
-  o.addedSubtypes = [...(o.addedSubtypes ?? []), extra.addSubtype];
-  o.grantedKeywords = [extra.addKeyword];
+  if (extra.addSubtype) o.addedSubtypes = [...(o.addedSubtypes ?? []), extra.addSubtype];
+  if (extra.addKeyword) o.grantedKeywords = [extra.addKeyword];
+  // Spark Double: an additional +1/+1 counter, and it isn't legendary.
+  if (extra.notLegendary) o.nonlegendary = true;
+  if (extra.counter) addCounters(ctx, id, 1);
 }
 
 /** An Aura attaches; Sugar Coat makes its host a Food, Kitnap takes control of it. */
