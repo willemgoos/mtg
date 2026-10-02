@@ -232,6 +232,11 @@ spell for free from the top of a library, and custom effects for the true one-of
 The six Sagas use Stream A's Sagas, and Absorbing Man, Taskmaster and Secret Invasion extend Stream A's "becomes a copy" (until
 your next turn, while the source stays, the enchanted creature copying, and staying a 4/4 creature).
 
+Final balance, after Stream A's bot changes (160 games against the ten Foundations starter decks; 240 for the retuned three):
+Heroes Unite 50%, Villainous Schemes 46%, Gamma Smash 46%, Heroes of Wakanda 48%, Lone Agents 46%, HYDRA Rising 52%, Stark Tech 49%,
+Sky Patrol 48%, Growing Pains 52%, Savage Uprising 55%. HYDRA Rising, Stark Tech and Savage Uprising now play a few rares (Elektra,
+Avengers: Under Siege, Thor,
+God of Thunder, Tony Stark, Fin Fang Foom, The Serpent Society, The Coming of Galactus), as the Bloomburrow decks do.
 
 - All 60 rares and 25 mythics, including those not in any of our decks.
 - MSH boosters in Expedition and Season, as was done for Bloomburrow.
