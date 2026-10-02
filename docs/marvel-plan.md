@@ -65,7 +65,12 @@ At the end of each sub-phase, record any simplifications in that stream's **Simp
 
 ---
 
-## Stream A: Brawl and the four precons (`marvel-brawl`)
+## Stream A: Brawl and the four precons (`marvel-brawl`): done
+
+Done and merged into `marvel`: Brawl (command zone, commander tax, colour identity, 25 life, free first mulligan, a Brawl
+mode on Home with its own deck picker, a command-zone slot by each portrait, a 100-card deck view), the shared staples, and
+all four precons as printed, plus a test deck of our own (Mabel's Militia). Each sub-phase lists its simplifications at the
+bottom of this file.
 
 ### Brawl rules (as on Arena)
 
@@ -94,7 +99,7 @@ Palisade). Store the Oracle name and show the Marvel name, as the printed card d
 
 The collector's editions have the same lists as the regular decks and are skipped.
 
-### 9a: Brawl format and the shared staples
+### 9a: Brawl format and the shared staples: done
 
 Engine (`packages/engine`):
 
@@ -124,7 +129,7 @@ Web (`apps/web`):
 Bots (`packages/ai`): cast the commander from the command zone like a normal spell, with the tax included in its cost. Always send
 it back to the command zone. Use 25 life in evaluation.
 
-### 9b: Avengers Assemble (W/U/R)
+### 9b: Avengers Assemble (W/U/R): done
 
 - Damage replacement: Thor (+1 damage to opponents and their permanents) and Heroic Sacrifice (all your damage redirected to one creature).
 - "Cast spells as though they had flash": Quicksilver while tapped, Captain Mar-Vell's Cosmic Awareness.
@@ -136,19 +141,19 @@ it back to the command zone. Use 25 life in evaluation.
 
 After 9b, Avengers Assemble plays the test deck from 9a.
 
-### 9c: Wakanda Forever (G/W)
+### 9c: Wakanda Forever (G/W): done (with the monarch, which the plan didn't list)
 
 - 24 artifacts, 6 with equip, 3 vehicles. Crew already exists, so the work is mainly equip variants and auto-attach.
 - Metalcraft, affinity for artifacts.
 - The Bead cards (AV / Prime / Communication Bead) and the vibranium cards as `custom` handlers.
 
-### 9d: The Fantastic Four (W/U/R/G)
+### 9d: The Fantastic Four (W/U/R/G): done (goad and "attacks each combat" built here)
 
 - 23 sorceries: rebound (exile it, cast it again at your next upkeep), cascade, discover, escalate.
 - Flashback already exists; check it covers this deck.
 - The first four-colour deck: tests colour identity and the bots' mana with four colours.
 
-### 9e: Doom Prevails (U/B/R)
+### 9e: Doom Prevails (U/B/R): done
 
 Last, because it needs connive from Stream B (10a).
 
@@ -307,11 +312,22 @@ Secret Invasion need "becomes a copy".
 
 Arena (9e): every Brawl matchup runs without errors. The bots' evaluation now values being the monarch, noncreature
 permanents by mana value, cards still to come (rebound, suspend, castable in exile) and, before combat, The Fantastic
-Four's "if you've cast a noncreature spell" payoffs (`WEIGHTS` in `packages/ai/src/evaluate.ts`). Over 20 games per
-precon matchup: Avengers 65% vs Wakanda Forever, 70% vs The Fantastic Four, 60% vs Doom Prevails; Wakanda Forever 55%
-vs The Fantastic Four, 40% vs Doom Prevails; The Fantastic Four 40% vs Doom Prevails. Only Avengers vs The Fantastic
-Four is outside 35–65%, by 5 points (within the noise of 20 games); the search bot plays The Fantastic Four much better.
-The 60-card decks against the Foundations starters barely move with the new weights (one deck by 8 points of 36 games).
+Four's "if you've cast a noncreature spell" payoffs (`WEIGHTS` in `packages/ai/src/evaluate.ts`). The 60-card decks
+against the Foundations starters barely move with the new weights (one deck by 8 points of 36 games).
+
+Precon matchups, heuristic bot against heuristic bot (60 games; 100 for the three with The Fantastic Four):
+
+| | Wakanda Forever | The Fantastic Four | Doom Prevails |
+|---|---|---|---|
+| Avengers Assemble | 58% | 67% | 50% |
+| Wakanda Forever | | 53% | 40% |
+| The Fantastic Four | | | 30% |
+
+Two are just outside 35–65%, both against The Fantastic Four: Avengers at 67% and Doom Prevails at 70%. Raising the
+precombat-payoff weight (to 3) didn't move them. With the search bot (12 games), The Fantastic Four wins 58% against Doom
+Prevails (the control, Doom Prevails with the search bot, wins 83%): the deck needs a bot that plans ahead more than a
+different weight, and Doom Prevails also hoses it (The Frightful Four taxes every first noncreature spell). To revisit
+with smarter bots, not with deck changes (the precons are played as printed).
 - Overload is modelled as kicker (Vandalblast: {R} plus {4}, labelled "Overload").
 - Multikicker is offered up to three times; Batroc deals its damage to up to two targets.
 - Melee: each attacking creature you control gets +1/+1 (one opponent).
