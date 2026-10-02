@@ -24,6 +24,8 @@ export function loadGame(): SavedGame | null {
     const known = (id: string) => !!findDeck(id);
     if (!known(g.choice.you) || !known(g.choice.them)) return null;
     if (g.state.decision.kind === 'gameOver') return null;
+    // Saved before Brawl: no command zones yet.
+    for (const ps of Object.values(g.state.players)) ps.command ??= [];
     return g;
   } catch {
     return null;

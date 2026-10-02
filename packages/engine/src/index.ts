@@ -2,6 +2,8 @@ export * from './types.ts';
 export { createEngine, actionKey, IllegalActionError } from './engine.ts';
 export type { Engine, EngineOptions, ApplyOptions } from './engine.ts';
 export type { NewGameOptions } from './setup.ts';
+export { BRAWL_LIFE, STARTING_LIFE } from './setup.ts';
+export { colorIdentity } from './brawl.ts';
 export type { CustomEffect } from './context.ts';
 export { createRng, nextInt } from './rng.ts';
 export { cloneState } from './clone.ts';

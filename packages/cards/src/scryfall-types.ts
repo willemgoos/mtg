@@ -15,6 +15,8 @@ export interface ScryfallCard {
   toughness?: string;
   colors: string[];
   keywords: string[];
+  /** The Marvel name printed on a reprint in the Marvel Commander decks. */
+  flavorName?: string;
   /** Hotlinked, never bundled. */
   image: { small: string; normal: string; large: string; artCrop: string } | null;
 }

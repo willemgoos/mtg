@@ -1,4 +1,4 @@
-import { cardDb, DECKS, deckIds, describeEvent } from '@mtg/cards';
+import { cardDb, DECKS, deckGameOptions, describeEvent } from '@mtg/cards';
 import {
   type Action,
   type CardDefId,
@@ -86,17 +86,19 @@ export function useGame(
     };
   }, []);
   const [thinking, setThinking] = useState(false);
-  const decks = useMemo(() => {
+  const setup = useMemo(() => {
     const list = (id: string) => {
       const d = DECKS.find((x) => x.id === id);
       if (!d) throw new Error(`Unknown deck "${id}"`);
-      return deckIds(d);
+      return d;
     };
-    return { p1: choice.cards ?? list(choice.you), p2: list(choice.them) };
+    // Brawl decks bring their commanders and the Brawl format.
+    const opts = deckGameOptions(list(choice.you), list(choice.them));
+    return { ...opts, decks: { ...opts.decks, p1: choice.cards ?? opts.decks.p1 } };
   }, [choice.you, choice.them, choice.cards]);
 
   const [state, setState] = useState<GameState>(
-    () => resume?.state ?? engine.newGame({ ...choice.options, decks, seed }),
+    () => resume?.state ?? engine.newGame({ ...choice.options, ...setup, seed }),
   );
   const stateRef = useRef(state);
   const [log, setLog] = useState<LogLine[]>(() => resume?.log ?? []);
@@ -150,7 +152,7 @@ export function useGame(
       const request: BotRequest = {
         id,
         kind: opponent,
-        decks,
+        decks: setup.decks,
         seed,
         view: redactFor(state, BOT, cardDb),
         player: BOT,
@@ -181,7 +183,7 @@ export function useGame(
       const t = setTimeout(() => apply({ type: 'passPriority', player: HUMAN }), 110);
       return () => clearTimeout(t);
     }
-  }, [state, autoPassing, apply, worker, opponent, decks, seed]);
+  }, [state, autoPassing, apply, worker, opponent, setup.decks, seed]);
 
   useEffect(() => {
     if (!persistAction) saveGame({ choice, seed, opponent, state, log });

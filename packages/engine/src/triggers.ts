@@ -43,6 +43,9 @@ export function checkCondition(
   if (c.kind === 'opponentHandHas')
     return ctx.s.players[other(controller)].hand.some((id) => cardMatches(ctx, id, c.filter));
   if (c.kind === 'opponentHandAtMost') return ctx.s.players[other(controller)].hand.length <= c.max;
+  // Snarls: "you may reveal a Plains or Island card from your hand".
+  if (c.kind === 'handHas')
+    return ctx.s.players[controller].hand.some((id) => cardMatches(ctx, id, c.filter));
   if (c.kind === 'opponentHasMore') {
     const opp = other(controller);
     const count = (p: PlayerId) => {

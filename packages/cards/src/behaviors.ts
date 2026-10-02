@@ -1,6 +1,7 @@
 import type { AbilityDef, CardDefinition, EffectDef, ManaType, TargetSpec } from '@mtg/engine';
 import { type Behavior, parseManaCost } from './build.ts';
 import { BLOOMBURROW_BEHAVIORS } from './bloomburrow.ts';
+import { MARVEL_BRAWL_BEHAVIORS } from './marvel-brawl.ts';
 import { FOUNDATIONS_BATCH_BEHAVIORS } from './foundations-batch.ts';
 
 // Helpers for the common shapes.
@@ -128,6 +129,7 @@ const dualLandBehaviors = (): Record<string, Behavior> =>
 export const BEHAVIORS: Record<string, Behavior> = {
   ...FOUNDATIONS_BATCH_BEHAVIORS,
   ...BLOOMBURROW_BEHAVIORS,
+  ...MARVEL_BRAWL_BEHAVIORS,
   // ---------------------------------------------------------------- red
   Shock: burn(2),
   'Lightning Strike': burn(3),

@@ -78,6 +78,8 @@ export const KEYWORDS_AS_ABILITIES = new Set([
   'Gift',
   'Expend',
   'Valiant',
+  // Marvel Super Heroes Commander.
+  'Cycling',
 ]);
 
 const BASIC_MANA: Record<string, ManaType> = {
@@ -151,6 +153,20 @@ export function wardCostOf(oracle: string): CardDefinition['wardCost'] | undefin
   };
 }
 
+/**
+ * Colour identity (rule 903.4): the colours of the mana symbols in its cost and
+ * rules text (not reminder text), its colour indicator, and its basic land types.
+ */
+export function colorIdentityOf(sc: ScryfallCard): Color[] {
+  const found = new Set<string>(sc.colors);
+  const text = sc.manaCost + sc.oracleText.replace(/\([^)]*\)/g, '');
+  for (const [, sym] of text.matchAll(/\{([^}]+)\}/g))
+    for (const c of sym!.split('/')) if (/^[WUBRG]$/.test(c)) found.add(c);
+  const { subtypes } = parseTypeLine(sc.typeLine);
+  for (const st of subtypes) if (BASIC_MANA[st]) found.add(BASIC_MANA[st]);
+  return (['W', 'U', 'B', 'R', 'G'] as const).filter((c) => found.has(c));
+}
+
 /** Printed characteristics from Scryfall + hand-written behavior = engine definition. */
 export function buildCard(sc: ScryfallCard, behavior: Behavior = {}): CardDefinition {
   const { supertypes, types, subtypes } = parseTypeLine(sc.typeLine);
@@ -180,6 +196,8 @@ export function buildCard(sc: ScryfallCard, behavior: Behavior = {}): CardDefini
     abilities,
     ...(/can't be countered/.test(sc.oracleText) ? { uncounterable: true } : {}),
     ...(wardCostOf(sc.oracleText) ? { wardCost: wardCostOf(sc.oracleText)! } : {}),
+    colorIdentity: colorIdentityOf(sc),
+    ...(sc.flavorName ? { flavorName: sc.flavorName } : {}),
     // Everything else the behaviour sets (spell, modes, kicker, costs, ...).
     ...rest,
   };

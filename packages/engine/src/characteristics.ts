@@ -1,3 +1,4 @@
+import { isCommander } from './brawl.ts';
 import { type Ctx, def, defOf, obj } from './context.ts';
 import { manaValue } from './cost.ts';
 import { checkCondition } from './triggers.ts';
@@ -431,6 +432,9 @@ export function matchesFilter(
     !Object.values(obj(ctx, id).counters ?? {}).some((n) => n > 0)
   )
     return false;
+  if (filter.commander && !isCommander(ctx, id)) return false;
+  if (filter.supertypes && !filter.supertypes.some((t) => def(ctx, id).supertypes.includes(t)))
+    return false;
   if (filter.toughnessGreaterThanPower) {
     const ch = characteristics(ctx, id);
     if (ch.toughness <= ch.power) return false;
@@ -496,6 +500,8 @@ export function cardMatches(
     return false;
   if (filter.colors && !filter.colors.some((color) => d.colors.includes(color))) return false;
   if (filter.notTypes?.some((t) => d.types.includes(t))) return false;
+  if (filter.commander && !isCommander(ctx, id)) return false;
+  if (filter.supertypes && !filter.supertypes.some((t) => d.supertypes.includes(t))) return false;
   const mv = manaValue(d.manaCost);
   if (filter.minManaValue !== undefined && mv < filter.minManaValue) return false;
   if (filter.manaValueIsSourceCounters) {

@@ -15375,5 +15375,1008 @@
    "large": "https://cards.scryfall.io/large/front/4/3/436d6a84-4cea-4ca7-94aa-9d08280652af.jpg?1783910801",
    "artCrop": "https://cards.scryfall.io/art_crop/front/4/3/436d6a84-4cea-4ca7-94aa-9d08280652af.jpg?1783910801"
   }
+ },
+ {
+  "name": "Sol Ring",
+  "scryfallId": "91fdb56b-54d5-4272-8319-505ff987fe9b",
+  "oracleId": "6ad8011d-3471-4369-9d68-b264cc027487",
+  "set": "msc",
+  "collectorNumber": "211",
+  "rarity": "uncommon",
+  "manaCost": "{1}",
+  "typeLine": "Artifact",
+  "oracleText": "{T}: Add {C}{C}.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/1/91fdb56b-54d5-4272-8319-505ff987fe9b.jpg?1783903215",
+   "normal": "https://cards.scryfall.io/normal/front/9/1/91fdb56b-54d5-4272-8319-505ff987fe9b.jpg?1783903215",
+   "large": "https://cards.scryfall.io/large/front/9/1/91fdb56b-54d5-4272-8319-505ff987fe9b.jpg?1783903215",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/1/91fdb56b-54d5-4272-8319-505ff987fe9b.jpg?1783903215"
+  }
+ },
+ {
+  "name": "Arcane Signet",
+  "scryfallId": "1cad1bd2-7c56-4ce0-99a6-b2a49c1288dd",
+  "oracleId": "0bc7f093-bef0-4f1a-852c-4b75ebf54838",
+  "set": "msc",
+  "collectorNumber": "191",
+  "rarity": "uncommon",
+  "manaCost": "{2}",
+  "typeLine": "Artifact",
+  "oracleText": "{T}: Add one mana of any color in your commander's color identity.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/c/1cad1bd2-7c56-4ce0-99a6-b2a49c1288dd.jpg?1783903222",
+   "normal": "https://cards.scryfall.io/normal/front/1/c/1cad1bd2-7c56-4ce0-99a6-b2a49c1288dd.jpg?1783903222",
+   "large": "https://cards.scryfall.io/large/front/1/c/1cad1bd2-7c56-4ce0-99a6-b2a49c1288dd.jpg?1783903222",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/c/1cad1bd2-7c56-4ce0-99a6-b2a49c1288dd.jpg?1783903222"
+  }
+ },
+ {
+  "name": "Fellwar Stone",
+  "scryfallId": "1e24e2bc-b239-4f9a-85c0-5f272f58ed43",
+  "oracleId": "95560508-7ac9-4be9-8a3f-3c7d5b52807b",
+  "set": "msc",
+  "collectorNumber": "285",
+  "rarity": "uncommon",
+  "manaCost": "{2}",
+  "typeLine": "Artifact",
+  "oracleText": "{T}: Add one mana of any color that a land an opponent controls could produce.",
+  "colors": [],
+  "keywords": [],
+  "flavorName": "S.H.I.E.L.D. Spy Satellite",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/e/1e24e2bc-b239-4f9a-85c0-5f272f58ed43.jpg?1783903186",
+   "normal": "https://cards.scryfall.io/normal/front/1/e/1e24e2bc-b239-4f9a-85c0-5f272f58ed43.jpg?1783903186",
+   "large": "https://cards.scryfall.io/large/front/1/e/1e24e2bc-b239-4f9a-85c0-5f272f58ed43.jpg?1783903186",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/e/1e24e2bc-b239-4f9a-85c0-5f272f58ed43.jpg?1783903186"
+  }
+ },
+ {
+  "name": "Thought Vessel",
+  "scryfallId": "6ec6a910-f6d0-4225-8b55-d329dc788c64",
+  "oracleId": "9965d9c5-2ebf-4a6c-930e-55c5890979be",
+  "set": "msc",
+  "collectorNumber": "222",
+  "rarity": "uncommon",
+  "manaCost": "{2}",
+  "typeLine": "Artifact",
+  "oracleText": "You have no maximum hand size.\n{T}: Add {C}.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/e/6ec6a910-f6d0-4225-8b55-d329dc788c64.jpg?1783903209",
+   "normal": "https://cards.scryfall.io/normal/front/6/e/6ec6a910-f6d0-4225-8b55-d329dc788c64.jpg?1783903209",
+   "large": "https://cards.scryfall.io/large/front/6/e/6ec6a910-f6d0-4225-8b55-d329dc788c64.jpg?1783903209",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/e/6ec6a910-f6d0-4225-8b55-d329dc788c64.jpg?1783903209"
+  }
+ },
+ {
+  "name": "Talisman of Progress",
+  "scryfallId": "b356ee36-1c62-4097-87d7-fef6a6dad067",
+  "oracleId": "00e35322-1a9a-41e3-9ce1-359c8eaa3bc7",
+  "set": "msc",
+  "collectorNumber": "221",
+  "rarity": "uncommon",
+  "manaCost": "{2}",
+  "typeLine": "Artifact",
+  "oracleText": "{T}: Add {C}.\n{T}: Add {W} or {U}. This artifact deals 1 damage to you.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/3/b356ee36-1c62-4097-87d7-fef6a6dad067.jpg?1783903217",
+   "normal": "https://cards.scryfall.io/normal/front/b/3/b356ee36-1c62-4097-87d7-fef6a6dad067.jpg?1783903217",
+   "large": "https://cards.scryfall.io/large/front/b/3/b356ee36-1c62-4097-87d7-fef6a6dad067.jpg?1783903217",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/3/b356ee36-1c62-4097-87d7-fef6a6dad067.jpg?1783903217"
+  }
+ },
+ {
+  "name": "Talisman of Indulgence",
+  "scryfallId": "ccacf88d-407d-465d-958a-1389b7d700e6",
+  "oracleId": "1d9aeaaa-66f6-41cb-9bac-162d6fd8662c",
+  "set": "msc",
+  "collectorNumber": "220",
+  "rarity": "uncommon",
+  "manaCost": "{2}",
+  "typeLine": "Artifact",
+  "oracleText": "{T}: Add {C}.\n{T}: Add {B} or {R}. This artifact deals 1 damage to you.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/c/ccacf88d-407d-465d-958a-1389b7d700e6.jpg?1783903211",
+   "normal": "https://cards.scryfall.io/normal/front/c/c/ccacf88d-407d-465d-958a-1389b7d700e6.jpg?1783903211",
+   "large": "https://cards.scryfall.io/large/front/c/c/ccacf88d-407d-465d-958a-1389b7d700e6.jpg?1783903211",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/c/ccacf88d-407d-465d-958a-1389b7d700e6.jpg?1783903211"
+  }
+ },
+ {
+  "name": "Talisman of Dominance",
+  "scryfallId": "00d4a1d4-b86a-4c05-9ecc-130e011e0486",
+  "oracleId": "4c0a0448-b9d6-43a0-8549-64066dac63f0",
+  "set": "msc",
+  "collectorNumber": "219",
+  "rarity": "uncommon",
+  "manaCost": "{2}",
+  "typeLine": "Artifact",
+  "oracleText": "{T}: Add {C}.\n{T}: Add {U} or {B}. This artifact deals 1 damage to you.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/0/00d4a1d4-b86a-4c05-9ecc-130e011e0486.jpg?1783903217",
+   "normal": "https://cards.scryfall.io/normal/front/0/0/00d4a1d4-b86a-4c05-9ecc-130e011e0486.jpg?1783903217",
+   "large": "https://cards.scryfall.io/large/front/0/0/00d4a1d4-b86a-4c05-9ecc-130e011e0486.jpg?1783903217",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/0/00d4a1d4-b86a-4c05-9ecc-130e011e0486.jpg?1783903217"
+  }
+ },
+ {
+  "name": "Talisman of Creativity",
+  "scryfallId": "3ed13229-bbbb-41a7-933e-8975a6b64226",
+  "oracleId": "14d2979d-5728-42d7-a027-0eb1f754655d",
+  "set": "msc",
+  "collectorNumber": "218",
+  "rarity": "uncommon",
+  "manaCost": "{2}",
+  "typeLine": "Artifact",
+  "oracleText": "{T}: Add {C}.\n{T}: Add {U} or {R}. This artifact deals 1 damage to you.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/e/3ed13229-bbbb-41a7-933e-8975a6b64226.jpg?1783903211",
+   "normal": "https://cards.scryfall.io/normal/front/3/e/3ed13229-bbbb-41a7-933e-8975a6b64226.jpg?1783903211",
+   "large": "https://cards.scryfall.io/large/front/3/e/3ed13229-bbbb-41a7-933e-8975a6b64226.jpg?1783903211",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/e/3ed13229-bbbb-41a7-933e-8975a6b64226.jpg?1783903211"
+  }
+ },
+ {
+  "name": "Talisman of Conviction",
+  "scryfallId": "a365885c-f7d9-4ea1-9125-5265055e5570",
+  "oracleId": "6c326439-5620-4ec6-a56a-fe9c3d5d2a46",
+  "set": "msc",
+  "collectorNumber": "217",
+  "rarity": "uncommon",
+  "manaCost": "{2}",
+  "typeLine": "Artifact",
+  "oracleText": "{T}: Add {C}.\n{T}: Add {R} or {W}. This artifact deals 1 damage to you.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/3/a365885c-f7d9-4ea1-9125-5265055e5570.jpg?1783903211",
+   "normal": "https://cards.scryfall.io/normal/front/a/3/a365885c-f7d9-4ea1-9125-5265055e5570.jpg?1783903211",
+   "large": "https://cards.scryfall.io/large/front/a/3/a365885c-f7d9-4ea1-9125-5265055e5570.jpg?1783903211",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/3/a365885c-f7d9-4ea1-9125-5265055e5570.jpg?1783903211"
+  }
+ },
+ {
+  "name": "Command Tower",
+  "scryfallId": "0548fb60-c843-4f8f-a029-6f10efc63a41",
+  "oracleId": "0895c9b7-ae7d-4bb3-af17-3b75deb50a25",
+  "set": "msc",
+  "collectorNumber": "233",
+  "rarity": "common",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "{T}: Add one mana of any color in your commander's color identity.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/5/0548fb60-c843-4f8f-a029-6f10efc63a41.jpg?1783903206",
+   "normal": "https://cards.scryfall.io/normal/front/0/5/0548fb60-c843-4f8f-a029-6f10efc63a41.jpg?1783903206",
+   "large": "https://cards.scryfall.io/large/front/0/5/0548fb60-c843-4f8f-a029-6f10efc63a41.jpg?1783903206",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/5/0548fb60-c843-4f8f-a029-6f10efc63a41.jpg?1783903206"
+  }
+ },
+ {
+  "name": "Path of Ancestry",
+  "scryfallId": "836b8f52-10d2-4716-9f7b-38fb23bc68de",
+  "oracleId": "b473e293-59e3-4e04-acf2-622604aeb25f",
+  "set": "msc",
+  "collectorNumber": "254",
+  "rarity": "common",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "This land enters tapped.\n{T}: Add one mana of any color in your commander's color identity. When that mana is spent to cast a creature spell that shares a creature type with your commander, scry 1. (Look at the top card of your library. You may put that card on the bottom.)",
+  "colors": [],
+  "keywords": [
+   "Scry"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/3/836b8f52-10d2-4716-9f7b-38fb23bc68de.jpg?1783903197",
+   "normal": "https://cards.scryfall.io/normal/front/8/3/836b8f52-10d2-4716-9f7b-38fb23bc68de.jpg?1783903197",
+   "large": "https://cards.scryfall.io/large/front/8/3/836b8f52-10d2-4716-9f7b-38fb23bc68de.jpg?1783903197",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/3/836b8f52-10d2-4716-9f7b-38fb23bc68de.jpg?1783903197"
+  }
+ },
+ {
+  "name": "Exotic Orchard",
+  "scryfallId": "8853ff94-bf44-4cfd-9d3a-0743c361fb0d",
+  "oracleId": "27b047e3-0d41-45e2-98e9-9391d7923a1e",
+  "set": "msc",
+  "collectorNumber": "241",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "{T}: Add one mana of any color that a land an opponent controls could produce.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/8/8853ff94-bf44-4cfd-9d3a-0743c361fb0d.jpg?1783903204",
+   "normal": "https://cards.scryfall.io/normal/front/8/8/8853ff94-bf44-4cfd-9d3a-0743c361fb0d.jpg?1783903204",
+   "large": "https://cards.scryfall.io/large/front/8/8/8853ff94-bf44-4cfd-9d3a-0743c361fb0d.jpg?1783903204",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/8/8853ff94-bf44-4cfd-9d3a-0743c361fb0d.jpg?1783903204"
+  }
+ },
+ {
+  "name": "Unclaimed Territory",
+  "scryfallId": "d3782952-3839-4a94-95bc-716611d3ece6",
+  "oracleId": "584b15f2-6ae9-413a-8b8d-9244dbea4878",
+  "set": "msc",
+  "collectorNumber": "275",
+  "rarity": "uncommon",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "As this land enters, choose a creature type.\n{T}: Add {C}.\n{T}: Add one mana of any color. Spend this mana only to cast a creature spell of the chosen type.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/3/d3782952-3839-4a94-95bc-716611d3ece6.jpg?1783903190",
+   "normal": "https://cards.scryfall.io/normal/front/d/3/d3782952-3839-4a94-95bc-716611d3ece6.jpg?1783903190",
+   "large": "https://cards.scryfall.io/large/front/d/3/d3782952-3839-4a94-95bc-716611d3ece6.jpg?1783903190",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/3/d3782952-3839-4a94-95bc-716611d3ece6.jpg?1783903190"
+  }
+ },
+ {
+  "name": "Secluded Courtyard",
+  "scryfallId": "d13373d2-139b-48c7-a8c9-828cefc4f150",
+  "oracleId": "79ba18fd-f184-43c1-86df-56ee18ce806c",
+  "set": "fdn",
+  "collectorNumber": "267",
+  "rarity": "uncommon",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "As this land enters, choose a creature type.\n{T}: Add {C}.\n{T}: Add one mana of any color. Spend this mana only to cast a creature spell of the chosen type or activate an ability of a creature source of the chosen type.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/1/d13373d2-139b-48c7-a8c9-828cefc4f150.jpg?1783909044",
+   "normal": "https://cards.scryfall.io/normal/front/d/1/d13373d2-139b-48c7-a8c9-828cefc4f150.jpg?1783909044",
+   "large": "https://cards.scryfall.io/large/front/d/1/d13373d2-139b-48c7-a8c9-828cefc4f150.jpg?1783909044",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/1/d13373d2-139b-48c7-a8c9-828cefc4f150.jpg?1783909044"
+  }
+ },
+ {
+  "name": "Terramorphic Expanse",
+  "scryfallId": "8b98de91-7fa3-4a9c-805b-5f573009c2b0",
+  "oracleId": "1bd3e453-aa21-4ee6-95c2-d6d920ee8e7a",
+  "set": "m11",
+  "collectorNumber": "229",
+  "rarity": "common",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "{T}, Sacrifice this land: Search your library for a basic land card, put it onto the battlefield tapped, then shuffle.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/b/8b98de91-7fa3-4a9c-805b-5f573009c2b0.jpg?1783941784",
+   "normal": "https://cards.scryfall.io/normal/front/8/b/8b98de91-7fa3-4a9c-805b-5f573009c2b0.jpg?1783941784",
+   "large": "https://cards.scryfall.io/large/front/8/b/8b98de91-7fa3-4a9c-805b-5f573009c2b0.jpg?1783941784",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/b/8b98de91-7fa3-4a9c-805b-5f573009c2b0.jpg?1783941784"
+  }
+ },
+ {
+  "name": "Sulfur Falls",
+  "scryfallId": "c762f475-7e58-4477-839b-b3c55434b88f",
+  "oracleId": "6a6c5e17-6465-4a1f-9d63-8a3ce2edc522",
+  "set": "msc",
+  "collectorNumber": "269",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "This land enters tapped unless you control an Island or a Mountain.\n{T}: Add {U} or {R}.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/7/c762f475-7e58-4477-839b-b3c55434b88f.jpg?1783903193",
+   "normal": "https://cards.scryfall.io/normal/front/c/7/c762f475-7e58-4477-839b-b3c55434b88f.jpg?1783903193",
+   "large": "https://cards.scryfall.io/large/front/c/7/c762f475-7e58-4477-839b-b3c55434b88f.jpg?1783903193",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/7/c762f475-7e58-4477-839b-b3c55434b88f.jpg?1783903193"
+  }
+ },
+ {
+  "name": "Sunpetal Grove",
+  "scryfallId": "15663129-9deb-4c34-84a0-f94cf1a723f0",
+  "oracleId": "402ec768-76fb-474e-ae74-babc90d833c4",
+  "set": "m13",
+  "collectorNumber": "229",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "This land enters tapped unless you control a Forest or a Plains.\n{T}: Add {G} or {W}.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/5/15663129-9deb-4c34-84a0-f94cf1a723f0.jpg?1783940453",
+   "normal": "https://cards.scryfall.io/normal/front/1/5/15663129-9deb-4c34-84a0-f94cf1a723f0.jpg?1783940453",
+   "large": "https://cards.scryfall.io/large/front/1/5/15663129-9deb-4c34-84a0-f94cf1a723f0.jpg?1783940453",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/5/15663129-9deb-4c34-84a0-f94cf1a723f0.jpg?1783940453"
+  }
+ },
+ {
+  "name": "Glacial Fortress",
+  "scryfallId": "bc9d29ee-1a21-4c3e-99c1-f815d40e8f19",
+  "oracleId": "027dd013-baa7-4111-b3c9-f4d1414e9c45",
+  "set": "m13",
+  "collectorNumber": "225",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "This land enters tapped unless you control a Plains or an Island.\n{T}: Add {W} or {U}.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/c/bc9d29ee-1a21-4c3e-99c1-f815d40e8f19.jpg?1783940458",
+   "normal": "https://cards.scryfall.io/normal/front/b/c/bc9d29ee-1a21-4c3e-99c1-f815d40e8f19.jpg?1783940458",
+   "large": "https://cards.scryfall.io/large/front/b/c/bc9d29ee-1a21-4c3e-99c1-f815d40e8f19.jpg?1783940458",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/c/bc9d29ee-1a21-4c3e-99c1-f815d40e8f19.jpg?1783940458"
+  }
+ },
+ {
+  "name": "Clifftop Retreat",
+  "scryfallId": "4a7f7767-1959-4812-8654-0a22634096b1",
+  "oracleId": "d7faa3c8-46cf-46b2-bfa4-89000307cf18",
+  "set": "msc",
+  "collectorNumber": "231",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "This land enters tapped unless you control a Mountain or a Plains.\n{T}: Add {R} or {W}.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/a/4a7f7767-1959-4812-8654-0a22634096b1.jpg?1783903206",
+   "normal": "https://cards.scryfall.io/normal/front/4/a/4a7f7767-1959-4812-8654-0a22634096b1.jpg?1783903206",
+   "large": "https://cards.scryfall.io/large/front/4/a/4a7f7767-1959-4812-8654-0a22634096b1.jpg?1783903206",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/a/4a7f7767-1959-4812-8654-0a22634096b1.jpg?1783903206"
+  }
+ },
+ {
+  "name": "Rootbound Crag",
+  "scryfallId": "76364643-bfcb-4c50-9224-bf9e35648ddf",
+  "oracleId": "9516c4c1-d72d-434f-97e1-6a862434a169",
+  "set": "m13",
+  "collectorNumber": "228",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "This land enters tapped unless you control a Mountain or a Forest.\n{T}: Add {R} or {G}.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/6/76364643-bfcb-4c50-9224-bf9e35648ddf.jpg?1783940459",
+   "normal": "https://cards.scryfall.io/normal/front/7/6/76364643-bfcb-4c50-9224-bf9e35648ddf.jpg?1783940459",
+   "large": "https://cards.scryfall.io/large/front/7/6/76364643-bfcb-4c50-9224-bf9e35648ddf.jpg?1783940459",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/6/76364643-bfcb-4c50-9224-bf9e35648ddf.jpg?1783940459"
+  }
+ },
+ {
+  "name": "Hinterland Harbor",
+  "scryfallId": "892451a1-5527-4857-84f8-62028d147489",
+  "oracleId": "fb5a3403-7f0b-406c-8c4f-d693be010ca6",
+  "set": "msc",
+  "collectorNumber": "250",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "This land enters tapped unless you control a Forest or an Island.\n{T}: Add {G} or {U}.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/9/892451a1-5527-4857-84f8-62028d147489.jpg?1783903199",
+   "normal": "https://cards.scryfall.io/normal/front/8/9/892451a1-5527-4857-84f8-62028d147489.jpg?1783903199",
+   "large": "https://cards.scryfall.io/large/front/8/9/892451a1-5527-4857-84f8-62028d147489.jpg?1783903199",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/9/892451a1-5527-4857-84f8-62028d147489.jpg?1783903199"
+  }
+ },
+ {
+  "name": "Drowned Catacomb",
+  "scryfallId": "8b41b86b-58e1-4601-b8ed-0ad31f03a78d",
+  "oracleId": "819fc966-434e-470f-91e9-a38df974ad17",
+  "set": "m13",
+  "collectorNumber": "223",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "This land enters tapped unless you control an Island or a Swamp.\n{T}: Add {U} or {B}.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/b/8b41b86b-58e1-4601-b8ed-0ad31f03a78d.jpg?1783940455",
+   "normal": "https://cards.scryfall.io/normal/front/8/b/8b41b86b-58e1-4601-b8ed-0ad31f03a78d.jpg?1783940455",
+   "large": "https://cards.scryfall.io/large/front/8/b/8b41b86b-58e1-4601-b8ed-0ad31f03a78d.jpg?1783940455",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/b/8b41b86b-58e1-4601-b8ed-0ad31f03a78d.jpg?1783940455"
+  }
+ },
+ {
+  "name": "Dragonskull Summit",
+  "scryfallId": "5e49c561-570c-43dd-a369-48bc7ad7edac",
+  "oracleId": "63398c02-6fb1-481d-9d9f-81063532fbc0",
+  "set": "m13",
+  "collectorNumber": "222",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "This land enters tapped unless you control a Swamp or a Mountain.\n{T}: Add {B} or {R}.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/e/5e49c561-570c-43dd-a369-48bc7ad7edac.jpg?1783940454",
+   "normal": "https://cards.scryfall.io/normal/front/5/e/5e49c561-570c-43dd-a369-48bc7ad7edac.jpg?1783940454",
+   "large": "https://cards.scryfall.io/large/front/5/e/5e49c561-570c-43dd-a369-48bc7ad7edac.jpg?1783940454",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/e/5e49c561-570c-43dd-a369-48bc7ad7edac.jpg?1783940454"
+  }
+ },
+ {
+  "name": "Scorched Geyser",
+  "scryfallId": "43abdfba-0a55-4b8a-858e-3372ee40a579",
+  "oracleId": "f808b510-907a-4c3c-aea1-efb825c8e13e",
+  "set": "msc",
+  "collectorNumber": "264",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Land — Island Mountain",
+  "oracleText": "({T}: Add {U} or {R}.)\nThis land enters tapped unless you control two or more basic lands.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/3/43abdfba-0a55-4b8a-858e-3372ee40a579.jpg?1783903193",
+   "normal": "https://cards.scryfall.io/normal/front/4/3/43abdfba-0a55-4b8a-858e-3372ee40a579.jpg?1783903193",
+   "large": "https://cards.scryfall.io/large/front/4/3/43abdfba-0a55-4b8a-858e-3372ee40a579.jpg?1783903193",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/3/43abdfba-0a55-4b8a-858e-3372ee40a579.jpg?1783903193"
+  }
+ },
+ {
+  "name": "Radiant Summit",
+  "scryfallId": "81b619cc-900c-4d65-83da-8b9dcb370984",
+  "oracleId": "5dd0cc44-4647-4857-ad3b-22494099d08a",
+  "set": "msc",
+  "collectorNumber": "258",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Land — Mountain Plains",
+  "oracleText": "({T}: Add {R} or {W}.)\nThis land enters tapped unless you control two or more basic lands.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/1/81b619cc-900c-4d65-83da-8b9dcb370984.jpg?1783903196",
+   "normal": "https://cards.scryfall.io/normal/front/8/1/81b619cc-900c-4d65-83da-8b9dcb370984.jpg?1783903196",
+   "large": "https://cards.scryfall.io/large/front/8/1/81b619cc-900c-4d65-83da-8b9dcb370984.jpg?1783903196",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/1/81b619cc-900c-4d65-83da-8b9dcb370984.jpg?1783903196"
+  }
+ },
+ {
+  "name": "Prairie Stream",
+  "scryfallId": "b2e133b4-2263-4ac2-8d16-7bf307d5e104",
+  "oracleId": "5330e24a-8568-446e-840a-594cd08bd1bc",
+  "set": "msc",
+  "collectorNumber": "257",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Land — Plains Island",
+  "oracleText": "({T}: Add {W} or {U}.)\nThis land enters tapped unless you control two or more basic lands.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/2/b2e133b4-2263-4ac2-8d16-7bf307d5e104.jpg?1783903196",
+   "normal": "https://cards.scryfall.io/normal/front/b/2/b2e133b4-2263-4ac2-8d16-7bf307d5e104.jpg?1783903196",
+   "large": "https://cards.scryfall.io/large/front/b/2/b2e133b4-2263-4ac2-8d16-7bf307d5e104.jpg?1783903196",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/2/b2e133b4-2263-4ac2-8d16-7bf307d5e104.jpg?1783903196"
+  }
+ },
+ {
+  "name": "Canopy Vista",
+  "scryfallId": "369e6485-fbc7-45f9-ac9d-2e26dd94f2d5",
+  "oracleId": "dcb7e046-f01b-497c-88e5-57794eb30ce5",
+  "set": "msc",
+  "collectorNumber": "227",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Land — Forest Plains",
+  "oracleText": "({T}: Add {G} or {W}.)\nThis land enters tapped unless you control two or more basic lands.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/6/369e6485-fbc7-45f9-ac9d-2e26dd94f2d5.jpg?1783903209",
+   "normal": "https://cards.scryfall.io/normal/front/3/6/369e6485-fbc7-45f9-ac9d-2e26dd94f2d5.jpg?1783903209",
+   "large": "https://cards.scryfall.io/large/front/3/6/369e6485-fbc7-45f9-ac9d-2e26dd94f2d5.jpg?1783903209",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/6/369e6485-fbc7-45f9-ac9d-2e26dd94f2d5.jpg?1783903209"
+  }
+ },
+ {
+  "name": "Sunken Hollow",
+  "scryfallId": "3a8eef9b-9b03-42cd-a27a-07021bf0b33f",
+  "oracleId": "cd2c90ac-2b04-461c-92f3-939871b6b6a3",
+  "set": "msc",
+  "collectorNumber": "271",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Land — Island Swamp",
+  "oracleText": "({T}: Add {U} or {B}.)\nThis land enters tapped unless you control two or more basic lands.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/a/3a8eef9b-9b03-42cd-a27a-07021bf0b33f.jpg?1783903191",
+   "normal": "https://cards.scryfall.io/normal/front/3/a/3a8eef9b-9b03-42cd-a27a-07021bf0b33f.jpg?1783903191",
+   "large": "https://cards.scryfall.io/large/front/3/a/3a8eef9b-9b03-42cd-a27a-07021bf0b33f.jpg?1783903191",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/a/3a8eef9b-9b03-42cd-a27a-07021bf0b33f.jpg?1783903191"
+  }
+ },
+ {
+  "name": "Sodden Verdure",
+  "scryfallId": "0a451ab5-6244-48a0-a638-07da72b156b5",
+  "oracleId": "0070db93-142b-4d04-afd3-836792dc134b",
+  "set": "msc",
+  "collectorNumber": "267",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Land — Forest Island",
+  "oracleText": "({T}: Add {G} or {U}.)\nThis land enters tapped unless you control two or more basic lands.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/a/0a451ab5-6244-48a0-a638-07da72b156b5.jpg?1783903194",
+   "normal": "https://cards.scryfall.io/normal/front/0/a/0a451ab5-6244-48a0-a638-07da72b156b5.jpg?1783903194",
+   "large": "https://cards.scryfall.io/large/front/0/a/0a451ab5-6244-48a0-a638-07da72b156b5.jpg?1783903194",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/a/0a451ab5-6244-48a0-a638-07da72b156b5.jpg?1783903194"
+  }
+ },
+ {
+  "name": "Smoldering Marsh",
+  "scryfallId": "d707c477-440f-417c-970a-0e7426a58045",
+  "oracleId": "390f1b56-264e-4336-83be-dc1fe79bfdcf",
+  "set": "msc",
+  "collectorNumber": "266",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Land — Swamp Mountain",
+  "oracleText": "({T}: Add {B} or {R}.)\nThis land enters tapped unless you control two or more basic lands.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/7/d707c477-440f-417c-970a-0e7426a58045.jpg?1783903193",
+   "normal": "https://cards.scryfall.io/normal/front/d/7/d707c477-440f-417c-970a-0e7426a58045.jpg?1783903193",
+   "large": "https://cards.scryfall.io/large/front/d/7/d707c477-440f-417c-970a-0e7426a58045.jpg?1783903193",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/7/d707c477-440f-417c-970a-0e7426a58045.jpg?1783903193"
+  }
+ },
+ {
+  "name": "Cinder Glade",
+  "scryfallId": "ec93087a-5728-40e8-8625-a1d175d5252c",
+  "oracleId": "dfac0258-e148-4d7d-8ded-fc2466d9caa6",
+  "set": "msc",
+  "collectorNumber": "230",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Land — Mountain Forest",
+  "oracleText": "({T}: Add {R} or {G}.)\nThis land enters tapped unless you control two or more basic lands.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/c/ec93087a-5728-40e8-8625-a1d175d5252c.jpg?1783903207",
+   "normal": "https://cards.scryfall.io/normal/front/e/c/ec93087a-5728-40e8-8625-a1d175d5252c.jpg?1783903207",
+   "large": "https://cards.scryfall.io/large/front/e/c/ec93087a-5728-40e8-8625-a1d175d5252c.jpg?1783903207",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/c/ec93087a-5728-40e8-8625-a1d175d5252c.jpg?1783903207"
+  }
+ },
+ {
+  "name": "Frostboil Snarl",
+  "scryfallId": "ae705a26-5371-4236-904c-fe3e58b4721d",
+  "oracleId": "7137aae6-260d-41de-8b4e-42a8cf752697",
+  "set": "msc",
+  "collectorNumber": "246",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "As this land enters, you may reveal an Island or Mountain card from your hand. If you don't, this land enters tapped.\n{T}: Add {U} or {R}.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/e/ae705a26-5371-4236-904c-fe3e58b4721d.jpg?1783903201",
+   "normal": "https://cards.scryfall.io/normal/front/a/e/ae705a26-5371-4236-904c-fe3e58b4721d.jpg?1783903201",
+   "large": "https://cards.scryfall.io/large/front/a/e/ae705a26-5371-4236-904c-fe3e58b4721d.jpg?1783903201",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/e/ae705a26-5371-4236-904c-fe3e58b4721d.jpg?1783903201"
+  }
+ },
+ {
+  "name": "Furycalm Snarl",
+  "scryfallId": "afc12892-4978-4442-ace5-c4dea5c0ee00",
+  "oracleId": "651dea9c-2375-4e44-8e65-ba8e40f0c0ef",
+  "set": "msc",
+  "collectorNumber": "247",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "As this land enters, you may reveal a Mountain or Plains card from your hand. If you don't, this land enters tapped.\n{T}: Add {R} or {W}.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/f/afc12892-4978-4442-ace5-c4dea5c0ee00.jpg?1783903200",
+   "normal": "https://cards.scryfall.io/normal/front/a/f/afc12892-4978-4442-ace5-c4dea5c0ee00.jpg?1783903200",
+   "large": "https://cards.scryfall.io/large/front/a/f/afc12892-4978-4442-ace5-c4dea5c0ee00.jpg?1783903200",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/f/afc12892-4978-4442-ace5-c4dea5c0ee00.jpg?1783903200"
+  }
+ },
+ {
+  "name": "Fortified Village",
+  "scryfallId": "15f81ac6-a550-4782-a3a9-22d7fef1c206",
+  "oracleId": "56f1a16a-9f41-41fb-b580-c200bca27cd6",
+  "set": "msc",
+  "collectorNumber": "245",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "As this land enters, you may reveal a Forest or Plains card from your hand. If you don't, this land enters tapped.\n{T}: Add {G} or {W}.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/5/15f81ac6-a550-4782-a3a9-22d7fef1c206.jpg?1783903201",
+   "normal": "https://cards.scryfall.io/normal/front/1/5/15f81ac6-a550-4782-a3a9-22d7fef1c206.jpg?1783903201",
+   "large": "https://cards.scryfall.io/large/front/1/5/15f81ac6-a550-4782-a3a9-22d7fef1c206.jpg?1783903201",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/5/15f81ac6-a550-4782-a3a9-22d7fef1c206.jpg?1783903201"
+  }
+ },
+ {
+  "name": "Port Town",
+  "scryfallId": "3f962cab-c058-41f5-b7e1-5b063f374eb0",
+  "oracleId": "458d2b12-f578-4392-98d3-c3bc83f316c4",
+  "set": "msc",
+  "collectorNumber": "256",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "As this land enters, you may reveal a Plains or Island card from your hand. If you don't, this land enters tapped.\n{T}: Add {W} or {U}.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/f/3f962cab-c058-41f5-b7e1-5b063f374eb0.jpg?1783903197",
+   "normal": "https://cards.scryfall.io/normal/front/3/f/3f962cab-c058-41f5-b7e1-5b063f374eb0.jpg?1783903197",
+   "large": "https://cards.scryfall.io/large/front/3/f/3f962cab-c058-41f5-b7e1-5b063f374eb0.jpg?1783903197",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/f/3f962cab-c058-41f5-b7e1-5b063f374eb0.jpg?1783903197"
+  }
+ },
+ {
+  "name": "Foreboding Ruins",
+  "scryfallId": "76fdf6be-e13b-49ee-9d50-8625edb49951",
+  "oracleId": "5c87e2fa-77f1-4978-b25f-f14d227301d1",
+  "set": "msc",
+  "collectorNumber": "244",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "As this land enters, you may reveal a Swamp or Mountain card from your hand. If you don't, this land enters tapped.\n{T}: Add {B} or {R}.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/6/76fdf6be-e13b-49ee-9d50-8625edb49951.jpg?1783903200",
+   "normal": "https://cards.scryfall.io/normal/front/7/6/76fdf6be-e13b-49ee-9d50-8625edb49951.jpg?1783903200",
+   "large": "https://cards.scryfall.io/large/front/7/6/76fdf6be-e13b-49ee-9d50-8625edb49951.jpg?1783903200",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/6/76fdf6be-e13b-49ee-9d50-8625edb49951.jpg?1783903200"
+  }
+ },
+ {
+  "name": "Choked Estuary",
+  "scryfallId": "0c37e84e-e7e0-4dfe-bf17-daeb2e434861",
+  "oracleId": "d473b507-8c33-4118-bc10-b0a268776074",
+  "set": "msc",
+  "collectorNumber": "229",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "As this land enters, you may reveal an Island or Swamp card from your hand. If you don't, this land enters tapped.\n{T}: Add {U} or {B}.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/c/0c37e84e-e7e0-4dfe-bf17-daeb2e434861.jpg?1783903208",
+   "normal": "https://cards.scryfall.io/normal/front/0/c/0c37e84e-e7e0-4dfe-bf17-daeb2e434861.jpg?1783903208",
+   "large": "https://cards.scryfall.io/large/front/0/c/0c37e84e-e7e0-4dfe-bf17-daeb2e434861.jpg?1783903208",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/c/0c37e84e-e7e0-4dfe-bf17-daeb2e434861.jpg?1783903208"
+  }
+ },
+ {
+  "name": "Coastal Peak",
+  "scryfallId": "d2a70a9d-2d9f-4afd-9393-8d6518936ee2",
+  "oracleId": "0e25faa2-efb0-4ca5-b280-18c38faa860c",
+  "set": "msc",
+  "collectorNumber": "232",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Land — Island Mountain",
+  "oracleText": "({T}: Add {U} or {R}.)\nThis land enters tapped.\nCycling {2} ({2}, Discard this card: Draw a card.)",
+  "colors": [],
+  "keywords": [
+   "Cycling"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/2/d2a70a9d-2d9f-4afd-9393-8d6518936ee2.jpg?1783903205",
+   "normal": "https://cards.scryfall.io/normal/front/d/2/d2a70a9d-2d9f-4afd-9393-8d6518936ee2.jpg?1783903205",
+   "large": "https://cards.scryfall.io/large/front/d/2/d2a70a9d-2d9f-4afd-9393-8d6518936ee2.jpg?1783903205",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/2/d2a70a9d-2d9f-4afd-9393-8d6518936ee2.jpg?1783903205"
+  }
+ },
+ {
+  "name": "Scattered Groves",
+  "scryfallId": "6bd38442-854d-43b1-a80c-9d841c3a304d",
+  "oracleId": "3c87ea85-ca29-45a7-b5b2-758c62898b0a",
+  "set": "msc",
+  "collectorNumber": "262",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Land — Forest Plains",
+  "oracleText": "({T}: Add {G} or {W}.)\nThis land enters tapped.\nCycling {2} ({2}, Discard this card: Draw a card.)",
+  "colors": [],
+  "keywords": [
+   "Cycling"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/b/6bd38442-854d-43b1-a80c-9d841c3a304d.jpg?1783903194",
+   "normal": "https://cards.scryfall.io/normal/front/6/b/6bd38442-854d-43b1-a80c-9d841c3a304d.jpg?1783903194",
+   "large": "https://cards.scryfall.io/large/front/6/b/6bd38442-854d-43b1-a80c-9d841c3a304d.jpg?1783903194",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/b/6bd38442-854d-43b1-a80c-9d841c3a304d.jpg?1783903194"
+  }
+ },
+ {
+  "name": "Irrigated Farmland",
+  "scryfallId": "996b4484-a701-409a-822c-aa19be89a2c6",
+  "oracleId": "406eabe2-df62-49e2-bb39-c0227509d875",
+  "set": "msc",
+  "collectorNumber": "251",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Land — Plains Island",
+  "oracleText": "({T}: Add {W} or {U}.)\nThis land enters tapped.\nCycling {2} ({2}, Discard this card: Draw a card.)",
+  "colors": [],
+  "keywords": [
+   "Cycling"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/9/996b4484-a701-409a-822c-aa19be89a2c6.jpg?1783903199",
+   "normal": "https://cards.scryfall.io/normal/front/9/9/996b4484-a701-409a-822c-aa19be89a2c6.jpg?1783903199",
+   "large": "https://cards.scryfall.io/large/front/9/9/996b4484-a701-409a-822c-aa19be89a2c6.jpg?1783903199",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/9/996b4484-a701-409a-822c-aa19be89a2c6.jpg?1783903199"
+  }
+ },
+ {
+  "name": "Glittering Massif",
+  "scryfallId": "a01274c2-a8f4-43b5-bd91-c4905b8cee7e",
+  "oracleId": "23732d20-aba6-46cc-89d0-0542629bc6b5",
+  "set": "msc",
+  "collectorNumber": "249",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Land — Mountain Plains",
+  "oracleText": "({T}: Add {R} or {W}.)\nThis land enters tapped.\nCycling {2} ({2}, Discard this card: Draw a card.)",
+  "colors": [],
+  "keywords": [
+   "Cycling"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/0/a01274c2-a8f4-43b5-bd91-c4905b8cee7e.jpg?1783903200",
+   "normal": "https://cards.scryfall.io/normal/front/a/0/a01274c2-a8f4-43b5-bd91-c4905b8cee7e.jpg?1783903200",
+   "large": "https://cards.scryfall.io/large/front/a/0/a01274c2-a8f4-43b5-bd91-c4905b8cee7e.jpg?1783903200",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/0/a01274c2-a8f4-43b5-bd91-c4905b8cee7e.jpg?1783903200"
+  }
+ },
+ {
+  "name": "Fetid Pools",
+  "scryfallId": "5fa4556f-2fdc-42e6-98cb-291cee2ca3ac",
+  "oracleId": "32b03b48-06da-4a74-a7ac-e5ae39a4f428",
+  "set": "msc",
+  "collectorNumber": "243",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Land — Island Swamp",
+  "oracleText": "({T}: Add {U} or {B}.)\nThis land enters tapped.\nCycling {2} ({2}, Discard this card: Draw a card.)",
+  "colors": [],
+  "keywords": [
+   "Cycling"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/f/5fa4556f-2fdc-42e6-98cb-291cee2ca3ac.jpg?1783903202",
+   "normal": "https://cards.scryfall.io/normal/front/5/f/5fa4556f-2fdc-42e6-98cb-291cee2ca3ac.jpg?1783903202",
+   "large": "https://cards.scryfall.io/large/front/5/f/5fa4556f-2fdc-42e6-98cb-291cee2ca3ac.jpg?1783903202",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/f/5fa4556f-2fdc-42e6-98cb-291cee2ca3ac.jpg?1783903202"
+  }
+ },
+ {
+  "name": "Canyon Slough",
+  "scryfallId": "587cc3ba-75c2-46a0-bd44-6f953fe1eb01",
+  "oracleId": "2031b17c-0536-446f-a9aa-b46fe79b7ea7",
+  "set": "msc",
+  "collectorNumber": "228",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Land — Swamp Mountain",
+  "oracleText": "({T}: Add {B} or {R}.)\nThis land enters tapped.\nCycling {2} ({2}, Discard this card: Draw a card.)",
+  "colors": [],
+  "keywords": [
+   "Cycling"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/8/587cc3ba-75c2-46a0-bd44-6f953fe1eb01.jpg?1783903208",
+   "normal": "https://cards.scryfall.io/normal/front/5/8/587cc3ba-75c2-46a0-bd44-6f953fe1eb01.jpg?1783903208",
+   "large": "https://cards.scryfall.io/large/front/5/8/587cc3ba-75c2-46a0-bd44-6f953fe1eb01.jpg?1783903208",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/8/587cc3ba-75c2-46a0-bd44-6f953fe1eb01.jpg?1783903208"
+  }
+ },
+ {
+  "name": "Spectator Seating",
+  "scryfallId": "4c62dcfc-4bc8-4551-b3c7-9eec26be3362",
+  "oracleId": "cf6d10ed-85c3-48f2-8ba0-2960e03b408b",
+  "set": "msc",
+  "collectorNumber": "268",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "This land enters tapped unless you have two or more opponents.\n{T}: Add {R} or {W}.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/c/4c62dcfc-4bc8-4551-b3c7-9eec26be3362.jpg?1783903192",
+   "normal": "https://cards.scryfall.io/normal/front/4/c/4c62dcfc-4bc8-4551-b3c7-9eec26be3362.jpg?1783903192",
+   "large": "https://cards.scryfall.io/large/front/4/c/4c62dcfc-4bc8-4551-b3c7-9eec26be3362.jpg?1783903192",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/c/4c62dcfc-4bc8-4551-b3c7-9eec26be3362.jpg?1783903192"
+  }
+ },
+ {
+  "name": "Rejuvenating Springs",
+  "scryfallId": "c4565a7b-a0ed-4a7f-ad48-7745c56d141b",
+  "oracleId": "d1620449-930a-4895-a143-fd2a0a3c8b17",
+  "set": "msc",
+  "collectorNumber": "260",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "This land enters tapped unless you have two or more opponents.\n{T}: Add {G} or {U}.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/4/c4565a7b-a0ed-4a7f-ad48-7745c56d141b.jpg?1783903196",
+   "normal": "https://cards.scryfall.io/normal/front/c/4/c4565a7b-a0ed-4a7f-ad48-7745c56d141b.jpg?1783903196",
+   "large": "https://cards.scryfall.io/large/front/c/4/c4565a7b-a0ed-4a7f-ad48-7745c56d141b.jpg?1783903196",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/4/c4565a7b-a0ed-4a7f-ad48-7745c56d141b.jpg?1783903196"
+  }
+ },
+ {
+  "name": "Luxury Suite",
+  "scryfallId": "3c409d1e-f634-44a2-8fcf-dcdcb0babc3f",
+  "oracleId": "819e1765-8325-4e6f-89c1-63ea86de369f",
+  "set": "msc",
+  "collectorNumber": "252",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "This land enters tapped unless you have two or more opponents.\n{T}: Add {B} or {R}.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/c/3c409d1e-f634-44a2-8fcf-dcdcb0babc3f.jpg?1783903199",
+   "normal": "https://cards.scryfall.io/normal/front/3/c/3c409d1e-f634-44a2-8fcf-dcdcb0babc3f.jpg?1783903199",
+   "large": "https://cards.scryfall.io/large/front/3/c/3c409d1e-f634-44a2-8fcf-dcdcb0babc3f.jpg?1783903199",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/c/3c409d1e-f634-44a2-8fcf-dcdcb0babc3f.jpg?1783903199"
+  }
+ },
+ {
+  "name": "Bountiful Promenade",
+  "scryfallId": "f0b11ba3-68ba-4067-af40-2a55e31b395e",
+  "oracleId": "761cb262-f83b-4a99-9345-b773182a7671",
+  "set": "msc",
+  "collectorNumber": "226",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "This land enters tapped unless you have two or more opponents.\n{T}: Add {G} or {W}.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/0/f0b11ba3-68ba-4067-af40-2a55e31b395e.jpg?1783903209",
+   "normal": "https://cards.scryfall.io/normal/front/f/0/f0b11ba3-68ba-4067-af40-2a55e31b395e.jpg?1783903209",
+   "large": "https://cards.scryfall.io/large/front/f/0/f0b11ba3-68ba-4067-af40-2a55e31b395e.jpg?1783903209",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/0/f0b11ba3-68ba-4067-af40-2a55e31b395e.jpg?1783903209"
+  }
+ },
+ {
+  "name": "Mystic Monastery",
+  "scryfallId": "bc23343a-3a01-4975-8430-17bf15fa639d",
+  "oracleId": "834b8f71-9a45-42ae-9e99-e749fa6fb45e",
+  "set": "msc",
+  "collectorNumber": "253",
+  "rarity": "uncommon",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "This land enters tapped.\n{T}: Add {U}, {R}, or {W}.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/c/bc23343a-3a01-4975-8430-17bf15fa639d.jpg?1783903198",
+   "normal": "https://cards.scryfall.io/normal/front/b/c/bc23343a-3a01-4975-8430-17bf15fa639d.jpg?1783903198",
+   "large": "https://cards.scryfall.io/large/front/b/c/bc23343a-3a01-4975-8430-17bf15fa639d.jpg?1783903198",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/c/bc23343a-3a01-4975-8430-17bf15fa639d.jpg?1783903198"
+  }
+ },
+ {
+  "name": "Crumbling Necropolis",
+  "scryfallId": "d28542af-936f-44e5-a4e3-119f23c9f0d6",
+  "oracleId": "7190debf-708b-4f41-9714-0d0a5bd5a74e",
+  "set": "msc",
+  "collectorNumber": "237",
+  "rarity": "uncommon",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "This land enters tapped.\n{T}: Add {U}, {B}, or {R}.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/2/d28542af-936f-44e5-a4e3-119f23c9f0d6.jpg?1783903203",
+   "normal": "https://cards.scryfall.io/normal/front/d/2/d28542af-936f-44e5-a4e3-119f23c9f0d6.jpg?1783903203",
+   "large": "https://cards.scryfall.io/large/front/d/2/d28542af-936f-44e5-a4e3-119f23c9f0d6.jpg?1783903203",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/2/d28542af-936f-44e5-a4e3-119f23c9f0d6.jpg?1783903203"
+  }
+ },
+ {
+  "name": "Razorverge Thicket",
+  "scryfallId": "df1233de-4449-4c32-944b-e19bed666324",
+  "oracleId": "94f6c407-e665-4032-be13-a01e40c1f306",
+  "set": "msc",
+  "collectorNumber": "259",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "This land enters tapped unless you control two or fewer other lands.\n{T}: Add {G} or {W}.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/f/df1233de-4449-4c32-944b-e19bed666324.jpg?1783903196",
+   "normal": "https://cards.scryfall.io/normal/front/d/f/df1233de-4449-4c32-944b-e19bed666324.jpg?1783903196",
+   "large": "https://cards.scryfall.io/large/front/d/f/df1233de-4449-4c32-944b-e19bed666324.jpg?1783903196",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/f/df1233de-4449-4c32-944b-e19bed666324.jpg?1783903196"
+  }
+ },
+ {
+  "name": "Sungrass Prairie",
+  "scryfallId": "841f369e-6532-469c-8565-78094b33a3d9",
+  "oracleId": "0a28dff0-2bd6-4105-b73a-b6c4735833fd",
+  "set": "msc",
+  "collectorNumber": "270",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "{1}, {T}: Add {G}{W}.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/4/841f369e-6532-469c-8565-78094b33a3d9.jpg?1783903191",
+   "normal": "https://cards.scryfall.io/normal/front/8/4/841f369e-6532-469c-8565-78094b33a3d9.jpg?1783903191",
+   "large": "https://cards.scryfall.io/large/front/8/4/841f369e-6532-469c-8565-78094b33a3d9.jpg?1783903191",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/4/841f369e-6532-469c-8565-78094b33a3d9.jpg?1783903191"
+  }
+ },
+ {
+  "name": "Scavenger Grounds",
+  "scryfallId": "9fbe68ba-ffe5-4fe0-ac0a-0b3221e4f395",
+  "oracleId": "5ece7d03-9ee7-4953-a06e-9d8e41874903",
+  "set": "msc",
+  "collectorNumber": "263",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Land — Desert",
+  "oracleText": "{T}: Add {C}.\n{2}, {T}, Sacrifice a Desert: Exile all graveyards.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/f/9fbe68ba-ffe5-4fe0-ac0a-0b3221e4f395.jpg?1783903197",
+   "normal": "https://cards.scryfall.io/normal/front/9/f/9fbe68ba-ffe5-4fe0-ac0a-0b3221e4f395.jpg?1783903197",
+   "large": "https://cards.scryfall.io/large/front/9/f/9fbe68ba-ffe5-4fe0-ac0a-0b3221e4f395.jpg?1783903197",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/f/9fbe68ba-ffe5-4fe0-ac0a-0b3221e4f395.jpg?1783903197"
+  }
  }
 ]

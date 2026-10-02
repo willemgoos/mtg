@@ -6,15 +6,18 @@
  *   pnpm arena -- --log 3   # play-by-play of one heuristic mirror game (seed 3)
  *   pnpm arena -- 20 --search --rollouts=96   # search bot vs heuristic bot
  *
- * Plays every pairing of the playable decks.
+ * Plays every pairing of the playable decks, then the Brawl decks among
+ * themselves (`--brawl`: only those).
  */
 import { createEngine } from '@mtg/engine';
 import {
   cardDb,
   type Decklist,
+  deckGameOptions,
   deckIds,
   describeEvent,
   deckById,
+  PLAYABLE_BRAWL_DECKS,
   PLAYABLE_DECKS,
 } from '@mtg/cards';
 import {
@@ -38,7 +41,13 @@ const random: Maker = (seed) => createRandomBot(cardDb, seed);
 const rollouts = Number(process.argv.find((x) => x.startsWith('--rollouts='))?.split('=')[1] ?? 96);
 const search: Maker = (seed, decks) => createSearchBot(cardDb, decks, { seed, rollouts });
 
-function run(label: string, p1: Maker, p2: Maker, decks: Decks) {
+function run(
+  label: string,
+  p1: Maker,
+  p2: Maker,
+  decks: Decks,
+  brawl?: ReturnType<typeof deckGameOptions>,
+) {
   let w1 = 0;
   let w2 = 0;
   let turns = 0;
@@ -48,6 +57,7 @@ function run(label: string, p1: Maker, p2: Maker, decks: Decks) {
   for (let seed = 1; seed <= n; seed++) {
     const r = playMatch(engine, decks, { p1: p1(seed, decks), p2: p2(seed + 1000, decks) }, seed, {
       startingPlayer: seed % 2 ? 'p1' : 'p2',
+      ...(brawl?.format ? { brawl: { format: brawl.format, commanders: brawl.commanders } } : {}),
     });
     if (r.winner === 'p1') w1++;
     else if (r.winner === 'p2') w2++;
@@ -81,10 +91,29 @@ if (process.argv.includes('--log')) {
   process.exit(0);
 }
 
-const lists: readonly Decklist[] = PLAYABLE_DECKS;
-const pairs = lists.flatMap((a, i) => lists.slice(i + 1).map((b) => [a, b] as const));
 const label = (a: string, x: Decklist, b: string, y: Decklist) =>
   `${a} ${x.name}`.padEnd(30) + ` vs ${b} ${y.name}`;
+
+// Brawl decks play each other (mirrors included: there may be only a few).
+const brawlRuns = () => {
+  const b = PLAYABLE_BRAWL_DECKS;
+  for (const x of b) {
+    const g = deckGameOptions(x, x);
+    run(label('heuristic', x, 'random', x), heuristic, random, g.decks, g);
+  }
+  for (const [i, x] of b.entries())
+    for (const y of b.slice(i)) {
+      const g = deckGameOptions(x, y);
+      run(label('heuristic', x, 'heuristic', y), heuristic, heuristic, g.decks, g);
+    }
+};
+if (process.argv.includes('--brawl')) {
+  brawlRuns();
+  process.exit(0);
+}
+
+const lists: readonly Decklist[] = PLAYABLE_DECKS;
+const pairs = lists.flatMap((a, i) => lists.slice(i + 1).map((b) => [a, b] as const));
 const decksOf = (x: Decklist, y: Decklist) => ({ p1: deckIds(x), p2: deckIds(y) });
 
 if (process.argv.includes('--search')) {
@@ -100,3 +129,4 @@ for (const [x, y] of pairs) {
   run(label('heuristic', x, 'heuristic', y), heuristic, heuristic, decksOf(x, y));
   run(label('heuristic', y, 'heuristic', x), heuristic, heuristic, decksOf(y, x));
 }
+brawlRuns();

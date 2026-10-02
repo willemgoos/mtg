@@ -1,3 +1,4 @@
+import { commanderToOffer } from './brawl.ts';
 import { hasKeyword } from './characteristics.ts';
 import {
   anyFirstStrike,
@@ -28,6 +29,12 @@ export function givePriority(ctx: Ctx, player: PlayerId): void {
     runSBAs(ctx);
     collectTriggers(ctx);
     if (checkGameOver(ctx)) return;
+    // Brawl: a commander that left for another zone may go to the command zone.
+    const offer = commanderToOffer(ctx);
+    if (offer) {
+      s.decision = { kind: 'commandZone', ...offer, thenPriority: player };
+      return;
+    }
 
     const i = nextPendingTriggerIndex(ctx);
     if (i < 0) break;

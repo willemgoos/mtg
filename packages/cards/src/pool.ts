@@ -1,4 +1,5 @@
 import { BLOOMBURROW_BEHAVIORS } from './bloomburrow.ts';
+import { MARVEL_BRAWL_BEHAVIORS } from './marvel-brawl.ts';
 
 /**
  * Allowed sets, most preferred first: Foundations, then older core sets, then
@@ -24,6 +25,8 @@ export const SET_PREFERENCE = [
   '5ed',
   '4ed',
   'blb',
+  // Marvel Super Heroes Commander: the Brawl precons.
+  'msc',
   // Arena Beginner Set: Arena-only cards (last resort).
   'anb',
 ];
@@ -388,6 +391,8 @@ export const BLACK_POOL = [
 
 /** Bloomburrow cards: every card with Bloomburrow behaviour (vanilla ones have an empty entry). */
 export const BLOOMBURROW_POOL = Object.keys(BLOOMBURROW_BEHAVIORS);
+/** The Marvel Brawl precons' cards (not already in the pool above). */
+export const MARVEL_BRAWL_POOL = Object.keys(MARVEL_BRAWL_BEHAVIORS);
 
 /** Multicoloured and colourless cards. */
 export const OTHER_POOL = [
@@ -485,6 +490,7 @@ export const POOL: { name: string }[] = [
   ...OTHER_POOL,
   ...LAND_POOL,
   ...BLOOMBURROW_POOL,
+  ...MARVEL_BRAWL_POOL,
 ].map((name) => ({
   name,
 }));

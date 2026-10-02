@@ -6,7 +6,15 @@ import { UiSize } from './UiSize.tsx';
 import './home.css';
 
 export type Event = 'gauntlet' | 'expedition';
-export type Mode = 'quick' | Event;
+/** Quick matches and Brawl are single games; the events are runs. */
+export type Mode = 'quick' | 'brawl' | Event;
+export const isEvent = (m: Mode): m is Event => m === 'gauntlet' || m === 'expedition';
+const MODE_NAMES: Record<Mode, string> = {
+  quick: 'Quick match',
+  brawl: 'Brawl',
+  gauntlet: 'Gauntlet',
+  expedition: 'Expedition',
+};
 export type Tab = 'home' | 'decks';
 
 const art = (card: string) => scryfallById.get(slug(card))?.image?.artCrop ?? '';
@@ -135,10 +143,10 @@ export function Home({
   }, [slide, paused, slides.length]);
 
   const s = slides[slide]!;
-  const run = mode === 'quick' ? null : runs[mode];
-
-  const modeName =
-    mode === 'quick' ? 'Quick match' : mode === 'gauntlet' ? 'Gauntlet' : 'Expedition';
+  const run = isEvent(mode) ? runs[mode] : null;
+  const modeName = MODE_NAMES[mode];
+  // The last single game, if it was in this mode (Brawl decks only play Brawl).
+  const last = quick && (mode === 'brawl') === (quick.deck.series === 'brawl') ? quick : null;
 
   return (
     <div className="home">
@@ -210,11 +218,25 @@ export function Home({
             />
             <ModeTile
               name="Quick match"
-              art={quick ? artFor(quick.deck) : art('Gigantosaurus')}
+              art={
+                quick && quick.deck.series !== 'brawl' ? artFor(quick.deck) : art('Gigantosaurus')
+              }
               blurb="Any deck against any opponent"
               run={null}
               on={mode === 'quick'}
               onClick={() => onMode('quick')}
+            />
+            <ModeTile
+              name="Brawl"
+              art={
+                quick?.deck.series === 'brawl'
+                  ? artFor(quick.deck)
+                  : art('Mabel, Heir to Cragflame')
+              }
+              blurb="100-card decks led by a commander"
+              run={null}
+              on={mode === 'brawl'}
+              onClick={() => onMode('brawl')}
             />
           </div>
 
@@ -225,8 +247,8 @@ export function Home({
                 <span className="launch__name">
                   {run
                     ? deckById(run.deck).name
-                    : mode === 'quick' && quick
-                      ? `${quick.deck.name} vs ${quick.opponent}`
+                    : !isEvent(mode) && last
+                      ? `${last.deck.name} vs ${last.opponent}`
                       : 'Choose a deck'}
                 </span>
                 <span className="launch__change">{run ? 'Decks' : 'Change'}</span>

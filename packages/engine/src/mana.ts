@@ -1,3 +1,5 @@
+import { commanderColors, opponentLandColors } from './brawl.ts';
+import { damageSourceFor, dealDamage } from './effects.ts';
 import { canTapForAbility, isCreature, matchesFilter } from './characteristics.ts';
 import { type Ctx, def, emit, obj, sacrifice, tap } from './context.ts';
 import { manaValue, pipsOf } from './cost.ts';
@@ -13,7 +15,12 @@ export interface ManaSource {
   sacrifice: boolean;
   /** Floating mana in the player's pool (spent first). */
   pool?: boolean;
+  /** Types that deal 1 damage to its controller when it pays a coloured pip with them (Talismans). */
+  pain?: ManaType[];
 }
+
+/** Sources to tap; `pain` lists those that hurt (one entry per pip they pay). */
+export type Payment = ObjectId[] & { pain?: ObjectId[] };
 
 /** Pool entries are mana sources with ids like "pool:p1:0". */
 const poolId = (player: PlayerId, i: number) => `pool:${player}:${i}`;
@@ -50,10 +57,25 @@ export function manaSources(
     let produces: ManaType[] | null = null;
     let sacrifice = false;
     let double = false;
+    let units = 1;
+    let pain: ManaType[] | undefined;
     for (const a of def(ctx, id).abilities) {
       if (a.kind !== 'mana' || !a.cost.tapSelf || a.cost.mana) continue;
-      if (a.onlyFor && !forSubtypes.includes(a.onlyFor)) continue;
+      // Unclaimed Territory: only for creature spells of the type chosen for it.
+      const only = a.onlyFor === 'chosenType' ? (obj(ctx, id).chosenType ?? '?') : a.onlyFor;
+      if (a.onlyFor === 'chosenType' && !forSubtypes.includes('Creature')) continue;
+      if (only && !forSubtypes.includes(only)) continue;
       if (a.ifChosen && obj(ctx, id).chosenColor !== a.produces) continue;
+      // Brawl staples: Command Tower, Exotic Orchard, Sol Ring, Talismans.
+      if (
+        a.colorFrom === 'commander' &&
+        !(commanderColors(ctx, player) as ManaType[]).includes(a.produces)
+      )
+        continue;
+      if (a.colorFrom === 'opponentLands' && !opponentLandColors(ctx, player).includes(a.produces))
+        continue;
+      if (a.amount) units = Math.max(units, a.amount);
+      if (a.pain) (pain ??= []).push(a.produces);
       if (a.doubleIf && checkCondition(ctx, a.doubleIf, player, obj(ctx, id))) double = true;
       if (a.cost.sacrificeSelf) sacrifice = true;
       if (!produces) {
@@ -65,10 +87,17 @@ export function manaSources(
     // Eluge: a land with a flood counter is an Island too.
     if (produces && obj(ctx, id).counters?.flood && !produces.includes('U')) produces.push('U');
     if (produces) {
-      const src = { id, produces, isCreature: isCreature(ctx, id), sacrifice };
+      const src = {
+        id,
+        produces,
+        isCreature: isCreature(ctx, id),
+        sacrifice,
+        ...(pain ? { pain } : {}),
+      };
       out.push(src);
       // Two mana from one tap: a second unit with the same id (tapping it twice is harmless).
-      if (double) out.push({ ...src });
+      if (double) units = Math.max(units, 2);
+      for (let i = 1; i < units; i++) out.push({ ...src });
     }
   }
   // Clement: Frogs you control have "{T}: Add {G} or {U}" (for creature spells).
@@ -141,7 +170,7 @@ export function anyTypeCost(cost: ManaCost): ManaCost {
  * Taps the chosen sources, sacrificing those that are used up (Treasure).
  * Each entry is one mana; the total spent this turn feeds expend triggers.
  */
-export function payMana(ctx: Ctx, sources: readonly ObjectId[]): void {
+export function payMana(ctx: Ctx, sources: Readonly<Payment>): void {
   if (sources.length === 0) return;
   const first = sources[0]!;
   const player = isPoolId(first) ? (first.split(':')[1] as PlayerId) : obj(ctx, first).controller;
@@ -161,6 +190,8 @@ export function payMana(ctx: Ctx, sources: readonly ObjectId[]): void {
     if (def(ctx, id).abilities.some((a) => a.kind === 'mana' && a.cost.sacrificeSelf))
       sacrifice(ctx, id);
   }
+  for (const id of sources.pain ?? [])
+    dealDamage(ctx, damageSourceFor(ctx, id, player), { player }, 1, false);
 }
 
 /**
@@ -207,12 +238,18 @@ export function planPayment(
   extra: readonly ManaSource[] = [],
   /** Permanents leaving as part of the same cost (sacrificed): not used for mana. */
   avoid: readonly (ObjectId | undefined)[] = [],
-): ObjectId[] {
+): Payment {
   if (!cost || manaValue(cost) === 0) return [];
   let sources = [...manaSources(ctx, player, exclude, forSubtypes), ...extra];
   if (avoid.length) sources = sources.filter((s) => !avoid.includes(s.id));
   if (payWith) sources = sources.filter((s) => payWith.includes(s.id));
-  const plan = findPayment(cost, sources);
+  const plan: Payment | null = findPayment(cost, sources);
   if (!plan) throw new Error('Cannot pay mana cost');
+  // The first entries pay the coloured pips: a painful colour there hurts.
+  pipsOf(cost).forEach((pip, i) => {
+    const src = sources.find((s) => s.id === plan[i]);
+    if (src?.pain && pip.every((t) => !src.produces.includes(t) || src.pain!.includes(t)))
+      (plan.pain ??= []).push(src.id);
+  });
   return plan;
 }

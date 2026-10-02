@@ -209,7 +209,18 @@ Named abilities such as "Radar Sense" or "Street Justice" are just labels with n
 
 ### Stream A
 
-(Filled in as sub-phases ship.)
+9a (Brawl format and staples):
+
+- "Move to the command zone?" is asked when a player would next get priority, for every zone (graveyard, exile, hand,
+  library). For hand and library the rules make it a replacement; nothing in the pool can tell the difference yet.
+- A commander's identity is never hidden from the opponent, even in a library (it simplifies the bots' guessing).
+- Snarls always reveal when they can.
+- Exotic Orchard and Fellwar Stone look only at the opponent's lands' fixed mana abilities (not at another Orchard).
+- Path of Ancestry's scry checks the commander's printed creature types; any mana from it counts.
+- Sungrass Prairie and the like make floating mana through an activated ability, so bots rarely use them.
+- Bots always send the commander back, and value it like a card in hand while it waits.
+- Test-only deck: Mabel's Militia (Mabel, Heir to Cragflame, R/W), our own list from Foundations and Bloomburrow
+  cards plus the staples. It stays as a Brawl opponent once the precons land.
 
 ### Stream B
 

@@ -25,6 +25,7 @@ export const BLURBS: Record<string, string> = {
   'cold-blooded-killers': 'Removal and deathtouch. Nothing of theirs survives for long.',
   'goblins-everywhere': 'Swarm the board with Goblins and burn the rest.',
   'large-and-in-charge': 'Big green creatures, bigger with every land.',
+  'brawl-mabels-militia': 'Mabel leads a hundred mice, soldiers and sparks into battle.',
   'blb-forage-and-feast': 'Squirrels stash Food and forage their graveyard for value.',
   'blb-warren-rally': 'Rabbits multiply, then the whole warren charges in.',
 };

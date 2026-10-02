@@ -24,6 +24,7 @@ export function cloneState(s: GameState): GameState {
     hand: p.hand.slice(),
     graveyard: p.graveyard.slice(),
     exile: p.exile.slice(),
+    command: p.command.slice(),
     ...(p.pool ? { pool: p.pool.slice() } : {}),
   });
   return {

@@ -149,6 +149,11 @@ export interface CardDefinition {
   ptEquals?: Amount;
   abilities: AbilityDef[];
   isToken?: boolean;
+  // Brawl.
+  /** Colours of the mana symbols in its cost and rules text (rule 903.4). Default: its colours. */
+  colorIdentity?: Color[];
+  /** The name printed on a Marvel reprint (Fellwar Stone is "S.H.I.E.L.D. Spy Satellite"). */
+  flavorName?: string;
 }
 
 export type AbilityDef =
@@ -156,12 +161,24 @@ export type AbilityDef =
       kind: 'mana';
       cost: CostDef;
       produces: ManaType;
-      /** "Spend this mana only to cast a spell of this subtype" (Giada: 'Angel'). */
+      /** "Spend this mana only to cast a spell of this subtype" (Giada: 'Angel'; 'chosenType': a creature spell of the type chosen for it). */
       onlyFor?: string;
       /** Makes two mana instead of one while this holds (Ilysian Caryatid). */
       doubleIf?: ConditionDef;
       /** Only if this is the color chosen for it (Uncharted Haven). */
       ifChosen?: boolean;
+      // Brawl staples.
+      /** Mana per tap, if more than one (Sol Ring). */
+      amount?: number;
+      /**
+       * Only if the colour is in your commander's colour identity (Command
+       * Tower), or a land an opponent controls could make it (Exotic Orchard).
+       */
+      colorFrom?: 'commander' | 'opponentLands';
+      /** Deals 1 damage to you when spent as this colour (Talismans). */
+      pain?: boolean;
+      /** Path of Ancestry: scry 1 when spent on a creature spell sharing a type with your commander. */
+      scryIfCommanderType?: boolean;
     }
   | {
       kind: 'activated';
@@ -178,6 +195,8 @@ export type AbilityDef =
       label?: string;
       /** Activated from the graveyard (Reassembling Skeleton). */
       fromGraveyard?: boolean;
+      /** Activated from your hand (cycling). */
+      fromHand?: boolean;
     }
   | {
       kind: 'triggered';
@@ -229,6 +248,9 @@ export interface CostDef {
   convoke?: boolean;
   /** A loyalty ability: add (or remove) this many loyalty counters. */
   loyalty?: number;
+  // Cycling.
+  /** Discard this card from your hand. */
+  discardSelf?: boolean;
 }
 
 export type TriggerDef =
@@ -383,6 +405,9 @@ export type ConditionDef =
   | { kind: 'any'; of: ConditionDef[] }
   /** The condition doesn't hold. */
   | { kind: 'not'; condition: ConditionDef }
+  // Brawl staples.
+  /** You have a card matching this in your hand (snarls reveal one). */
+  | { kind: 'handHas'; filter: CardFilter }
   | { kind: 'custom'; handler: string };
 
 export interface CardFilter {
@@ -435,6 +460,11 @@ export interface CardFilter {
   chosenTypeOfSource?: boolean;
   /** Has counters on it (Innkeeper's Talent). */
   hasCounters?: boolean;
+  // Brawl.
+  /** Is its controller's commander ("your commander"). */
+  commander?: boolean;
+  /** Has one of these supertypes (battle lands count basic lands). */
+  supertypes?: Supertype[];
 }
 
 export interface TargetSpec {
@@ -942,7 +972,15 @@ export type CardDb = ReadonlyMap<CardDefId, CardDefinition>;
 // Game state (plain serializable data)
 // ---------------------------------------------------------------------------
 
-export type ZoneName = 'library' | 'hand' | 'battlefield' | 'graveyard' | 'exile' | 'stack';
+export type ZoneName =
+  | 'library'
+  | 'hand'
+  | 'battlefield'
+  | 'graveyard'
+  | 'exile'
+  | 'stack'
+  // Brawl: where a commander starts and returns to.
+  | 'command';
 
 export interface GameObject {
   id: ObjectId;
@@ -1017,6 +1055,9 @@ export interface GameObject {
   grantedKeywords?: Keyword[];
   /** Kitnap: the Aura it's controlled by, and who controlled it before. */
   controlledBy?: { aura: ObjectId; previous: PlayerId };
+  // Brawl.
+  /** A commander: the zone change (zcc) at which its owner was last asked to move it to the command zone. */
+  commandOffered?: number;
 }
 
 /** A reference that goes stale when the object changes zones. */
@@ -1045,6 +1086,13 @@ export interface PlayerState {
   openingHand?: number;
   /** Floating mana: each entry is one mana of one of its types. */
   pool?: { produces: ManaType[]; untilEndOfTurn?: boolean; onlyFor?: string }[];
+  // Brawl.
+  /** The command zone. */
+  command: ObjectId[];
+  /** Their commander (the object keeps its id in every zone). */
+  commander?: ObjectId;
+  /** Times they have cast it from the command zone (commander tax: {2} each). */
+  commanderCasts?: number;
 }
 
 export type StackItem =
@@ -1269,6 +1317,8 @@ export type Decision =
       thenPriority: PlayerId;
     }
   | { kind: 'mulligan'; player: PlayerId }
+  /** Brawl: move your commander from its zone to the command zone? (answered with chooseEffect) */
+  | { kind: 'commandZone'; player: PlayerId; card: ObjectId; thenPriority: PlayerId }
   | { kind: 'bottomCards'; player: PlayerId; count: number }
   | { kind: 'priority'; player: PlayerId }
   | {
@@ -1503,6 +1553,8 @@ export interface GameState {
   emblems?: Emblem[];
   /** "At the beginning of the next end step, ...": fire at the first end step after `afterTurn` / this step. */
   delayed?: DelayedTrigger[];
+  /** Brawl: 25 life, a commander each, the first mulligan free. */
+  format?: 'brawl';
   /** Exactly one player is always being asked something (or the game is over). */
   decision: Decision;
   winner: PlayerId | 'draw' | null;

@@ -12,7 +12,9 @@ import {
   tap,
   addCounters,
   createObject,
+  refOf,
 } from './context.ts';
+import { commanderTax, commanderTypes } from './brawl.ts';
 import { type EffectSource, runEffects } from './effects.ts';
 import {
   characteristics,
@@ -184,6 +186,8 @@ export function castCost(
   const v = variantOf(d, o.zone, choice);
   if (!v) throw new Error(`${o.defId} can't be cast that way`);
   let cost = v.cost;
+  // Brawl: commander tax.
+  if (o.zone === 'command') cost = { ...cost, generic: cost.generic + commanderTax(ctx, player) };
   let reduce = d.costReduction !== undefined ? amountFor(ctx, player, d.costReduction) : 0;
   const first = targets?.[0];
   if (
@@ -270,6 +274,8 @@ export function castSpell(
       choice.forage !== 'graveyard' ? choice.forage : undefined,
     ],
   );
+  if (o.zone === 'command')
+    ctx.s.players[player].commanderCasts = (ctx.s.players[player].commanderCasts ?? 0) + 1;
   moveObject(ctx, card, 'stack', { controller: player });
   if (choice.discard) moveObject(ctx, choice.discard, 'graveyard');
   for (const id of choice.sacrificeMany ?? []) sacrificePermanent(ctx, id);
@@ -293,6 +299,7 @@ export function castSpell(
     ...(choice.copyOf ? { copyOf: choice.copyOf } : {}),
   });
   payMana(ctx, payment);
+  if (d.types.includes('Creature')) scryForAncestry(ctx, player, d, payment);
   ((ctx.s.turn.castDefs ??= { p1: [], p2: [] })[player] ??= []).push(o.defId);
   const cast = (ctx.s.turn.spellsCast ??= { p1: 0, p2: 0 });
   emit(ctx, { type: 'spellCast', id: card, player, nth: ++cast[player] });
@@ -300,6 +307,32 @@ export function castSpell(
   return (
     choice.forage !== undefined && payForage(ctx, player, choice.forage, { thenPriority: player })
   );
+}
+
+/**
+ * Path of Ancestry: its mana spent on a creature spell that shares a creature
+ * type with your commander triggers "scry 1".
+ */
+function scryForAncestry(
+  ctx: Ctx,
+  player: PlayerId,
+  d: CardDefinition,
+  payment: readonly ObjectId[],
+): void {
+  const types = commanderTypes(ctx, player);
+  if (!d.subtypes.some((t) => types.includes(t))) return;
+  for (const id of new Set(payment)) {
+    const o = ctx.s.objects[id];
+    if (!o || !def(ctx, id).abilities.some((a) => a.kind === 'mana' && a.scryIfCommanderType))
+      continue;
+    ctx.s.pendingTriggers.push({
+      source: refOf(o),
+      sourceDefId: o.defId,
+      abilityIndex: -1,
+      controller: player,
+      inline: [{ kind: 'scry', amount: 1 }],
+    });
+  }
 }
 
 /** Eluge: {U} off the first instant or sorcery each turn, per land with a flood counter. */
@@ -362,6 +395,8 @@ export function activateAbility(
     [sacrifice, forage !== 'graveyard' ? forage : undefined],
   );
   if (discard) moveObject(ctx, discard, 'graveyard');
+  // Cycling.
+  if (a.cost.discardSelf) moveObject(ctx, source, 'graveyard');
   if (a.cost.tapTokens)
     for (const id of tokensToTap(ctx, player, source).slice(0, a.cost.tapTokens)) tap(ctx, id);
   const sacrificedPower = sacrifice ? power(ctx, sacrifice) : undefined;

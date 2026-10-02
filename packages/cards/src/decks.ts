@@ -14,10 +14,12 @@ export interface Decklist {
    * mono-colour decks Sparky plays; 'jumpIn': two Jump In packets together;
    * 'season': a deck built in Season mode, taken on an expedition.
    */
-  series: 'starter' | 'colorChallenge' | 'jumpIn' | 'season';
+  series: 'starter' | 'colorChallenge' | 'jumpIn' | 'season' | 'brawl';
   /** A deck from another set than Foundations (shown in its own section). */
-  set?: 'blb';
+  set?: 'blb' | 'msc';
   cards: [name: string, count: number][];
+  /** Brawl: the commander (not in `cards`, which hold the other 99). */
+  commander?: string;
 }
 
 /**
@@ -863,4 +865,115 @@ export const BLOOMBURROW_DECKS: Decklist[] = [
   },
 ];
 
-export const DECKS: Decklist[] = [...ARENA_DECKS, ...COLOR_CHALLENGE_DECKS, ...BLOOMBURROW_DECKS];
+/**
+ * Brawl decks (Arena's 1v1 Commander): the four Marvel Super Heroes Commander
+ * precons as printed (from https://mtg.wtf/deck/msc/<slug>), plus a test deck
+ * of our own built from Foundations and Bloomburrow cards and the precons'
+ * shared staples. 100 cards, singleton, within the commander's colours.
+ */
+export const MARVEL_BRAWL_DECKS: Decklist[] = [
+  {
+    id: 'brawl-mabels-militia',
+    name: "Mabel's Militia",
+    colors: ['W', 'R'],
+    face: 'Mabel, Heir to Cragflame',
+    commander: 'Mabel, Heir to Cragflame',
+    source: 'custom',
+    series: 'brawl',
+    cards: [
+      // Creatures.
+      ...[
+        'Heartfire Hero',
+        'Flowerfoot Swordmaster',
+        'Manifold Mouse',
+        'Emberheart Challenger',
+        'Whiskerquill Scribe',
+        'Nettle Guard',
+        'Mouse Trapper',
+        'Thistledown Players',
+        'Brambleguard Captain',
+        'Whiskervale Forerunner',
+        'Seedglaive Mentor',
+        'Veteran Guardmouse',
+        'Roughshod Duo',
+        'Brave-Kin Duo',
+        'Swiftblade Vindicator',
+        'Leonin Vanguard',
+        'Dawnwing Marshal',
+        'Cathar Commando',
+        'Fencing Ace',
+        'Resolute Reinforcements',
+        'Moorland Inquisitor',
+        'Crusader of Odric',
+        'Dauntless Veteran',
+        'Mentor of the Meek',
+        'Leonin Warleader',
+        'Inspiring Commander',
+        'Ballyrush Banneret',
+        'Brightblade Stoat',
+        'Intrepid Rabbit',
+        'Shrike Force',
+        'Twinblade Paladin',
+        'Vanguard Seraph',
+        'Serra Angel',
+        'Inspiring Overseer',
+        'Youthful Valkyrie',
+        'Steampath Charger',
+        'Hired Claw',
+        'Axgard Cavalry',
+        // Spells.
+        'Shock',
+        'Burst Lightning',
+        'Lightning Strike',
+        'Abrade',
+        'Fiery Annihilation',
+        'Valorous Stance',
+        'Banishing Light',
+        'Pacifism',
+        'Stasis Snare',
+        "Mabel's Mettle",
+        'Might of the Meek',
+        'Rabbit Response',
+        'Valley Rally',
+        'Heroic Reinforcements',
+        'Release the Dogs',
+        // Artifacts.
+        'Sol Ring',
+        'Arcane Signet',
+        'Talisman of Conviction',
+        'Fellwar Stone',
+        'Thought Vessel',
+        'Adventuring Gear',
+        'Swiftfoot Boots',
+        'Short Bow',
+        // Lands.
+        'Command Tower',
+        'Path of Ancestry',
+        'Exotic Orchard',
+        'Clifftop Retreat',
+        'Radiant Summit',
+        'Furycalm Snarl',
+        'Glittering Massif',
+        'Spectator Seating',
+        'Boros Guildgate',
+        'Wind-Scarred Crag',
+        'Temple of Triumph',
+        'Evolving Wilds',
+        'Terramorphic Expanse',
+        'Fabled Passage',
+        'Unclaimed Territory',
+        'Secluded Courtyard',
+        'Scavenger Grounds',
+      ].map((name): [string, number] => [name, 1]),
+      ['Plains', 10],
+      ['Mountain', 11],
+    ],
+  },
+];
+
+export const DECKS: Decklist[] = [
+  ...ARENA_DECKS,
+  ...COLOR_CHALLENGE_DECKS,
+  ...BLOOMBURROW_DECKS,
+  ...MARVEL_BRAWL_DECKS,
+];

@@ -1,4 +1,4 @@
-import { cardDb, type Decklist } from '@mtg/cards';
+import { cardDb, type Decklist, displayName } from '@mtg/cards';
 import type {
   Action,
   CardDefId,
@@ -34,6 +34,7 @@ import {
   Battlefield,
   Hand,
   OpponentHand,
+  CommandSlot,
   PlayerBadge,
   StackView,
   type PileZone,
@@ -49,7 +50,10 @@ import { heartbeat, playEvents, playHover } from '../game/sound.ts';
 import { isLethal } from '../game/lethal.ts';
 import { type Hint, hintFor } from '../game/hint.ts';
 
-const nameOf = (defId: CardDefId) => cardDb.get(defId)?.name ?? 'Card';
+const nameOf = (defId: CardDefId) => {
+  const d = cardDb.get(defId);
+  return d ? displayName(d) : 'Card';
+};
 
 export function Board({
   game,
@@ -355,7 +359,10 @@ export function Board({
               ? a.source
               : null;
         const zone = id ? view.objects[id]?.zone : undefined;
-        return id && zone && zone !== 'hand' && zone !== 'battlefield' ? [id] : [];
+        // The commander is cast from its slot by the portrait.
+        return id && zone && zone !== 'hand' && zone !== 'battlefield' && zone !== 'command'
+          ? [id]
+          : [];
       }),
     ),
   ].map((id) => ({ id, label: extraLabel(view.objects[id]!.zone, view.objects[id]!.defId) }));
@@ -540,6 +547,20 @@ export function Board({
           ] as [string, () => void],
         };
       }
+      case 'commandZone': {
+        const zone = view.objects[d.card]!.zone;
+        return {
+          prompt: `Move ${nameOf(view.objects[d.card]!.defId)} to the command zone?`,
+          primary: [
+            'Command zone',
+            () => act({ type: 'chooseEffect', player: HUMAN, accept: true }),
+          ] as [string, () => void],
+          secondary: [
+            `Leave in ${zone === 'library' ? 'library' : zone}`,
+            () => act({ type: 'chooseEffect', player: HUMAN, accept: false }),
+          ] as [string, () => void],
+        };
+      }
       case 'chooseFromHand':
         return { prompt: 'Choose a card from your opponent’s hand' };
       case 'forageExile':
@@ -648,6 +669,7 @@ export function Board({
             active={state.turn.activePlayer === BOT}
             priority={priorityOf === BOT}
             onClick={() => onPlayer(BOT)}
+            command={<CommandSlot view={view} player={BOT} h={h} />}
           />
           <OpponentHand count={view.players[BOT].hand.length} />
         </header>
@@ -668,6 +690,7 @@ export function Board({
             active={state.turn.activePlayer === HUMAN}
             priority={priorityOf === HUMAN}
             onClick={() => onPlayer(HUMAN)}
+            command={<CommandSlot view={view} player={HUMAN} h={h} />}
           />
           {!!view.players[HUMAN].pool?.length && (
             <div className="floating-mana" title="Mana in your pool: spent first">

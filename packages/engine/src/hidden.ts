@@ -40,7 +40,9 @@ export function redactFor(state: GameState, viewer: PlayerId, db?: CardDb): Game
             d.kind === 'chooseFromHand' && d.player === viewer && d.from === p
             ? ps.hand
             : [];
-    for (const id of hidden) if (!seen.includes(id)) s.objects[id]!.defId = HIDDEN_CARD;
+    // Brawl: everyone knows which card a commander is, wherever it went (a simplification in a library).
+    for (const id of hidden)
+      if (!seen.includes(id) && id !== ps.commander) s.objects[id]!.defId = HIDDEN_CARD;
   }
   s.seed = 0;
   s.rng = { s: [0, 0, 0, 0] };
@@ -109,7 +111,8 @@ export function determinize(
     const hidden: ObjectId[] = [];
     for (const id in s.objects) {
       const o = s.objects[id]!;
-      if (o.owner !== p || o.isToken) continue;
+      // A commander isn't in the decklist (and is never hidden).
+      if (o.owner !== p || o.isToken || id === s.players[p].commander) continue;
       if (o.defId === HIDDEN_CARD) {
         hidden.push(id);
         continue;

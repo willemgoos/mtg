@@ -1,9 +1,11 @@
 import type { GameEvent, GameState } from '@mtg/engine';
-import { cardDb } from './index.ts';
+import { cardDb, displayName } from './index.ts';
 
 /** One line of human-readable log for an event, or null if not worth showing. */
 export function describeEvent(e: GameEvent, s: GameState): string | null {
-  const name = (id: string) => cardDb.get(s.objects[id]?.defId ?? '')?.name ?? id;
+  const def = (defId: string) => cardDb.get(defId);
+  const shown = (defId: string) => (def(defId) ? displayName(def(defId)!) : undefined);
+  const name = (id: string) => shown(s.objects[id]?.defId ?? '') ?? id;
   switch (e.type) {
     case 'stepChanged':
       return e.step === 'upkeep' ? `\n== Turn ${e.turn} (${e.activePlayer}) ==` : null;
@@ -12,8 +14,7 @@ export function describeEvent(e: GameEvent, s: GameState): string | null {
     case 'abilityActivated':
       return `${e.player} activates ${name(e.source)}`;
     case 'objectMoved':
-      if (e.to === 'battlefield' || e.to === 'graveyard')
-        return `  ${cardDb.get(e.defId)?.name} → ${e.to}`;
+      if (e.to === 'battlefield' || e.to === 'graveyard') return `  ${shown(e.defId)} → ${e.to}`;
       return null;
     case 'damageDealt': {
       const to = 'player' in e.to ? e.to.player : name(e.to.object.id);

@@ -51,7 +51,8 @@ function scryAnswers(cards: readonly ObjectId[]): { top: ObjectId[]; bottom: Obj
  */
 export function castableCards(ctx: Ctx, player: PlayerId): ObjectId[] {
   const ps = ctx.s.players[player];
-  const out = [...ps.hand];
+  // Brawl: your commander from the command zone.
+  const out = [...ps.hand, ...ps.command];
   for (const id of ps.graveyard) {
     const d = def(ctx, id);
     if (d.types.includes('Land')) continue;
@@ -317,12 +318,13 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
   const abilitySources = [
     ...s.battlefield.filter((id) => obj(ctx, id).controller === player),
     ...ps.graveyard,
+    ...ps.hand,
   ];
   for (const source of abilitySources) {
-    const inGraveyard = obj(ctx, source).zone === 'graveyard';
+    const zone = obj(ctx, source).zone;
     def(ctx, source).abilities.forEach((a, abilityIndex) => {
       if (a.kind !== 'activated') return;
-      if (!!a.fromGraveyard !== inGraveyard) return;
+      if ((a.fromGraveyard ? 'graveyard' : a.fromHand ? 'hand' : 'battlefield') !== zone) return;
       if (a.sorcerySpeed && !sorcery) return;
       if (a.once && obj(ctx, source).usedAbilities?.includes(abilityIndex)) return;
       if (a.oncePerTurn && obj(ctx, source).onceTurns?.[-1 - abilityIndex] === s.turn.number)
@@ -408,6 +410,11 @@ export function getLegalActions(ctx: Ctx, player: PlayerId): Action[] {
     }
     case 'bottomCards':
       return s.players[player].hand.map((card) => ({ type: 'bottomCard', player, card }) as const);
+    case 'commandZone':
+      return [
+        { type: 'chooseEffect', player, accept: true },
+        { type: 'chooseEffect', player, accept: false },
+      ];
     case 'discardToHandSize':
       return s.players[player].hand.map((card) => ({ type: 'discard', player, card }) as const);
     case 'priority':

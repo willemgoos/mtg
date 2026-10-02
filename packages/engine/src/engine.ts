@@ -1,3 +1,4 @@
+import { answerCommandZone } from './brawl.ts';
 import { cloneState } from './clone.ts';
 import {
   type Ctx,
@@ -160,7 +161,9 @@ function apply(ctx: Ctx, action: Action): void {
   switch (action.type) {
     case 'keepHand': {
       ps.keptHand = true;
-      const count = Math.min(ps.mulligans, ps.hand.length);
+      // Brawl: the first mulligan is free.
+      const free = s.format === 'brawl' && ps.mulligans > 0 ? 1 : 0;
+      const count = Math.min(ps.mulligans - free, ps.hand.length);
       if (count > 0) s.decision = { kind: 'bottomCards', player, count };
       else afterMulliganDecision(ctx, player);
       return;
@@ -269,6 +272,10 @@ function apply(ctx: Ctx, action: Action): void {
     case 'chooseEffect':
       if (d.kind === 'payOrCounter') return answerPayOrCounter(ctx, action.accept);
       if (d.kind === 'castFree') return finishCastFree(ctx, null);
+      if (d.kind === 'commandZone') {
+        answerCommandZone(ctx, d.card, action.accept);
+        return givePriority(ctx, d.thenPriority);
+      }
       return answerOptionalEffect(ctx, action.accept);
     case 'chooseTargets': {
       if (d.kind !== 'chooseTriggerTargets') throw new IllegalActionError(action);

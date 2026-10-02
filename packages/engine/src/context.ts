@@ -327,9 +327,8 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
   o.controller = to === 'battlefield' || to === 'stack' ? (opts.controller ?? o.owner) : o.owner;
   if (to === 'battlefield' && defOf(ctx, o.defId).entersTapped) o.tapped = true;
   const tappedIf = to === 'battlefield' ? defOf(ctx, o.defId).entersTappedIf : undefined;
-  // Eddymurk Crab: "enters tapped if it's not your turn".
-  if (tappedIf?.kind === 'opponentsTurn' && ctx.s.turn.activePlayer !== o.controller)
-    o.tapped = true;
+  // Eddymurk Crab: "enters tapped if it's not your turn"; check lands and the like.
+  if (tappedIf && checkCondition(ctx, tappedIf, o.controller, o)) o.tapped = true;
 
   // Tokens cease to exist once they leave the battlefield (rule 111.7).
   const ceases = o.isToken && to !== 'battlefield';

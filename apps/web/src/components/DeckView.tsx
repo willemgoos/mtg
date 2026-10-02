@@ -6,6 +6,7 @@ import {
   type DeckEntry,
   deckColumns,
   deckSections,
+  deckTypeColumns,
   isCreature,
   isLand,
   symbolUrl,
@@ -72,31 +73,33 @@ export function DeckView({
       </header>
       <div className="deckview__body">
         <main className="deckview__cols">
-          {deckColumns(entries).map((col) => (
-            <section key={col.label} className="dcol">
-              <div className="dcol__label">
-                {col.label}
-                <span>{total(col.cards)}</span>
-              </div>
-              <div className="dcol__stack">
-                {col.cards.map((e) => (
-                  <div
-                    key={e.name}
-                    className="dcard"
-                    onMouseEnter={(ev) => setHover(e, ev.currentTarget)}
-                    onMouseLeave={() => setHover(null)}
-                  >
-                    {e.image ? (
-                      <img src={e.image} alt={e.name} draggable={false} />
-                    ) : (
-                      <div className="dcard__blank">{e.name}</div>
-                    )}
-                    {e.count > 1 && <span className="dcard__qty">×{e.count}</span>}
-                  </div>
-                ))}
-              </div>
-            </section>
-          ))}
+          {(deck.series === 'brawl' ? deckTypeColumns(entries) : deckColumns(entries)).map(
+            (col) => (
+              <section key={col.label} className="dcol">
+                <div className="dcol__label">
+                  {col.label}
+                  <span>{total(col.cards)}</span>
+                </div>
+                <div className="dcol__stack">
+                  {col.cards.map((e) => (
+                    <div
+                      key={e.name}
+                      className="dcard"
+                      onMouseEnter={(ev) => setHover(e, ev.currentTarget)}
+                      onMouseLeave={() => setHover(null)}
+                    >
+                      {e.image ? (
+                        <img src={e.image} alt={e.label} draggable={false} />
+                      ) : (
+                        <div className="dcard__blank">{e.label}</div>
+                      )}
+                      {e.count > 1 && <span className="dcard__qty">×{e.count}</span>}
+                    </div>
+                  ))}
+                </div>
+              </section>
+            ),
+          )}
         </main>
         <DeckList entries={entries} onHover={setHover} />
       </div>
@@ -154,7 +157,7 @@ export function DeckList({ entries, onHover }: { entries: DeckEntry[]; onHover: 
               onMouseLeave={() => onHover(null)}
             >
               <span className="dl-row__qty">{e.count}</span>
-              <span className="dl-row__name">{e.name}</span>
+              <span className="dl-row__name">{e.label}</span>
               <span className="dl-row__cost">
                 {costSymbols(e.manaCost).map((sym, i) => (
                   <img key={i} src={symbolUrl(sym)} alt={`{${sym}}`} />

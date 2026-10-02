@@ -13,14 +13,18 @@ export interface DeckEntry {
   typeLine: string;
   image: string | null;
   art: string | null;
+  /** The name to show (the Marvel name of a Marvel reprint). */
+  label: string;
+  /** A Brawl deck's commander. */
+  commander?: boolean;
 }
 
-export type Section = 'Creatures' | 'Spells' | 'Lands';
+export type Section = 'Commander' | 'Creatures' | 'Spells' | 'Lands';
 
 export const isLand = (e: DeckEntry) => /\bLand\b/.test(e.typeLine);
 export const isCreature = (e: DeckEntry) => /\bCreature\b/.test(e.typeLine);
 export const sectionOf = (e: DeckEntry): Section =>
-  isLand(e) ? 'Lands' : isCreature(e) ? 'Creatures' : 'Spells';
+  e.commander ? 'Commander' : isLand(e) ? 'Lands' : isCreature(e) ? 'Creatures' : 'Spells';
 
 /** Mana value of a Scryfall cost like "{2}{W}{W}" (X counts as 0). */
 export function manaValue(cost: string): number {
@@ -40,7 +44,10 @@ export const costSymbols = (cost: string) => [...cost.matchAll(/\{([^}]+)\}/g)].
 
 /** Entries from bundled data; cards we haven't implemented come back with no cost or type. */
 export function deckEntries(deck: Decklist): DeckEntry[] {
-  return cardEntries(deck.cards);
+  const commander = deck.commander
+    ? cardEntries([[deck.commander, 1]]).map((e) => ({ ...e, commander: true }))
+    : [];
+  return [...commander, ...cardEntries(deck.cards)];
 }
 
 export function cardEntries(
@@ -57,8 +64,33 @@ export function cardEntries(
       typeLine: sc?.typeLine ?? '',
       image: sc?.image?.normal ?? null,
       art: sc?.image?.artCrop ?? null,
+      label: sc?.flavorName ?? name,
     };
   });
+}
+
+/** Card types for a 100-card deck's columns, in Arena's order. */
+const TYPE_COLUMNS: [label: string, test: (e: DeckEntry) => boolean][] = [
+  ['Commander', (e) => !!e.commander],
+  ['Creatures', isCreature],
+  ['Planeswalkers', (e) => /\bPlaneswalker\b/.test(e.typeLine)],
+  ['Instants & Sorceries', (e) => /\b(Instant|Sorcery)\b/.test(e.typeLine)],
+  ['Artifacts', (e) => /\bArtifact\b/.test(e.typeLine) && !isLand(e)],
+  ['Enchantments', (e) => /\bEnchantment\b/.test(e.typeLine)],
+  ['Lands', isLand],
+  ['Other', () => true],
+];
+
+/**
+ * A Brawl deck's columns: grouped by card type with the commander first
+ * (by mana value there are too many cards per column).
+ */
+export function deckTypeColumns(entries: DeckEntry[]): { label: string; cards: DeckEntry[] }[] {
+  const cols = TYPE_COLUMNS.map(([label]) => ({ label, cards: [] as DeckEntry[] }));
+  for (const e of entries) cols[TYPE_COLUMNS.findIndex(([, test]) => test(e))]!.cards.push(e);
+  for (const c of cols)
+    c.cards.sort((a, b) => a.manaValue - b.manaValue || a.name.localeCompare(b.name));
+  return cols.filter((c) => c.cards.length);
 }
 
 /**
@@ -88,7 +120,7 @@ export function deckColumns(entries: DeckEntry[]): { label: string; cards: DeckE
 
 /** Deck list sections in Arena's order, sorted by mana value then name. */
 export function deckSections(entries: DeckEntry[]): { title: Section; cards: DeckEntry[] }[] {
-  return (['Creatures', 'Spells', 'Lands'] as const)
+  return (['Commander', 'Creatures', 'Spells', 'Lands'] as const)
     .map((title) => ({
       title,
       cards: entries
