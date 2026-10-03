@@ -11,6 +11,7 @@ import { MARVEL_BRAWL_BEHAVIORS, MARVEL_BRAWL_TOKENS } from './marvel-brawl.ts';
 import { MSH_JUMPSTART_INCREDIBLE_TOKENS } from './msh/jumpstart-incredible.ts';
 import { MSH_JUMPSTART_PYM_TOKENS } from './msh/jumpstart-pym.ts';
 import { MSH_JUMPSTART_THOR_TOKENS } from './msh/jumpstart-thor.ts';
+import { MSH_JUMPSTART_WAKANDA_TOKENS } from './msh/jumpstart-wakanda.ts';
 import { MSH_JUMPSTART_WILD_TOKENS } from './msh/jumpstart-wild.ts';
 import {
   FINAL_FANTASY_BRAWL_BACK_FACES,
@@ -2191,6 +2192,7 @@ export const TOKENS: CardDefinition[] = [
   ...MSH_JUMPSTART_PYM_TOKENS,
   ...MSH_JUMPSTART_INCREDIBLE_TOKENS,
   ...MSH_JUMPSTART_THOR_TOKENS,
+  ...MSH_JUMPSTART_WAKANDA_TOKENS,
   ...MSH_JUMPSTART_WILD_TOKENS,
   ...MARVEL_BRAWL_TOKENS,
   ...FINAL_FANTASY_TOKENS,

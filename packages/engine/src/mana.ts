@@ -1,6 +1,6 @@
 import { commanderColors, legendaryColors, opponentLandColors } from './brawl.ts';
 import { damageSourceFor, dealDamage } from './effects.ts';
-import { canTapForAbility, isCreature, matchesFilter } from './characteristics.ts';
+import { abilitiesLocked, canTapForAbility, isCreature, matchesFilter } from './characteristics.ts';
 import { type Ctx, def, emit, obj, sacrifice, tap } from './context.ts';
 import { manaValue, pipsOf } from './cost.ts';
 import { checkCondition } from './triggers.ts';
@@ -75,6 +75,8 @@ export function manaSources(
   );
   for (const id of ctx.s.battlefield) {
     if (id === exclude || obj(ctx, id).controller !== player) continue;
+    // Marvel Super Heroes Jumpstart (Wakanda): Secure Detention.
+    if (abilitiesLocked(ctx, id)) continue;
     let produces: ManaType[] | null = null;
     let sacrifice = false;
     let double = false;
