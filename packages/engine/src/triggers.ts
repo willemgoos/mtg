@@ -769,7 +769,9 @@ function detect(ctx: Ctx, ev: GameEvent): void {
           ctx,
           (o, a) =>
             a.trigger.on === 'anyPlayerSecondSpell' &&
-            (!a.trigger.opponentOnly || o.controller !== ev.player),
+            (!a.trigger.opponentOnly || o.controller !== ev.player) &&
+            // Marvel Super Heroes Jumpstart (Scarlet): Wanda's Vision.
+            (!a.trigger.yoursOnly || o.controller === ev.player),
         );
       // Emblems: "whenever you cast a spell" (Season of the Bold, Ral).
       for (const e of s.emblems ?? []) {

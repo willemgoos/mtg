@@ -1,5 +1,13 @@
 import { isCreature } from './characteristics.ts';
-import { addCounters, type Ctx, type CustomEffect, def, moveObject, obj } from './context.ts';
+import {
+  addCounters,
+  type Ctx,
+  type CustomEffect,
+  def,
+  drawCard,
+  moveObject,
+  obj,
+} from './context.ts';
 import { manaValue } from './cost.ts';
 import { shuffleLibrary } from './setup.ts';
 import type { ObjectId } from './types.ts';
@@ -20,6 +28,21 @@ export const MSH_EFFECTS: Record<string, CustomEffect> = {
       if (o.controller !== es.controller || !isCreature(ctx, id) || !o.plusOneCounters) continue;
       addCounters(ctx, id, o.plusOneCounters);
     }
+  },
+
+  // Marvel Super Heroes Jumpstart (Scarlet)
+  /**
+   * Hex Magic: exile all the cards from your hand, then draw that many; until
+   * the end of your next turn, you may play the exiled cards.
+   */
+  exileHandDrawPlayable(ctx, es) {
+    const hand = [...ctx.s.players[es.controller].hand];
+    const ownTurn = ctx.s.turn.activePlayer === es.controller;
+    for (const id of hand) {
+      moveObject(ctx, id, 'exile');
+      obj(ctx, id).playableUntilTurn = ctx.s.turn.number + (ownTurn ? 2 : 1);
+    }
+    for (let i = 0; i < hand.length; i++) drawCard(ctx, es.controller);
   },
 
   /** Earth's Mightiest Heroes with teamwork: every creature card among the top N onto the battlefield, the rest into the graveyard. */

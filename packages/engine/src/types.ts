@@ -423,7 +423,13 @@ export type TriggerDef =
       minManaSpent?: number;
     }
   /** Whenever a player (an opponent: Monologue Tax) casts their second spell each turn (Hearthborn Battler). */
-  | { on: 'anyPlayerSecondSpell'; opponentOnly?: boolean }
+  | {
+      on: 'anyPlayerSecondSpell';
+      opponentOnly?: boolean;
+      // Marvel Super Heroes Jumpstart (Scarlet)
+      /** Only your own second spell each turn (Wanda's Vision). */
+      yoursOnly?: boolean;
+    }
   /** At the beginning of your precombat or postcombat main phase. */
   | { on: 'beginningOfMain'; which: 1 | 2 }
   /** Whenever you (or, with 'opponents', an opponent: Black Widow) draw your second card each turn. */
@@ -1378,7 +1384,8 @@ export type EffectDef =
   | {
       kind: 'exileTopPlayable';
       count: Amount;
-      until: 'endOfTurn' | 'endOfNextTurn';
+      // Marvel Super Heroes Jumpstart (Scarlet): 'yourNextEndStep' (Wiccan, Young Avenger).
+      until: 'endOfTurn' | 'endOfNextTurn' | 'yourNextEndStep';
       // Marvel Super Heroes (Daredevil): "If that card is a Hero card, ...".
       ifExiled?: { filter: CardFilter; then: EffectDef[] };
     }
@@ -1468,7 +1475,14 @@ export type EffectDef =
    * (cascade: less than the source's). You may cast it free (discover: or put
    * it into your hand); the rest go to the bottom in a random order.
    */
-  | { kind: 'revealUntilCastable'; max: Amount | 'belowSource'; orHand?: boolean }
+  | {
+      kind: 'revealUntilCastable';
+      max: Amount | 'belowSource';
+      orHand?: boolean;
+      // Marvel Super Heroes Jumpstart (Scarlet)
+      /** The exiled cards (and the hit, if not cast) stay in exile (Wanda's Vision). */
+      stayExiled?: boolean;
+    }
   /**
    * Goad (or "attacks each combat if able"): until your next turn they attack
    * each combat if able. `draws`: whenever one deals combat damage to a player, you draw (Kang Dynasty).

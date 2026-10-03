@@ -23057,6 +23057,119 @@
   }
  },
  {
+  "name": "Wiccan, Young Avenger",
+  "scryfallId": "6f210b47-e265-43ed-a336-538170c722af",
+  "oracleId": "a317d5f4-a998-4f72-b080-5345bc7cc668",
+  "set": "msc",
+  "collectorNumber": "557",
+  "rarity": "uncommon",
+  "manaCost": "{3}{R}",
+  "typeLine": "Legendary Creature — Mutant Warlock Hero",
+  "oracleText": "Whenever you cast a noncreature spell, exile the top card of your library. Until your next end step, you may play that card.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/f/6f210b47-e265-43ed-a336-538170c722af.jpg?1783903098",
+   "normal": "https://cards.scryfall.io/normal/front/6/f/6f210b47-e265-43ed-a336-538170c722af.jpg?1783903098",
+   "large": "https://cards.scryfall.io/large/front/6/f/6f210b47-e265-43ed-a336-538170c722af.jpg?1783903098",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/f/6f210b47-e265-43ed-a336-538170c722af.jpg?1783903098"
+  }
+ },
+ {
+  "name": "The Vision and Scarlet Witch",
+  "scryfallId": "930afb5f-54b7-4cca-8c28-3e48938f3a43",
+  "oracleId": "33219792-f0a7-4849-bfca-70ee2d410b9e",
+  "set": "msc",
+  "collectorNumber": "707",
+  "rarity": "mythic",
+  "manaCost": "{2}{R}{R}",
+  "typeLine": "Legendary Artifact Creature — Mutant Hero",
+  "oracleText": "Flying\nWhenever you cast a spell, add {R} and put a +1/+1 counter on The Vision and Scarlet Witch.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/3/930afb5f-54b7-4cca-8c28-3e48938f3a43.jpg?1783903042",
+   "normal": "https://cards.scryfall.io/normal/front/9/3/930afb5f-54b7-4cca-8c28-3e48938f3a43.jpg?1783903042",
+   "large": "https://cards.scryfall.io/large/front/9/3/930afb5f-54b7-4cca-8c28-3e48938f3a43.jpg?1783903042",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/3/930afb5f-54b7-4cca-8c28-3e48938f3a43.jpg?1783903042"
+  }
+ },
+ {
+  "name": "Grapeshot",
+  "scryfallId": "e3e2d90a-3557-49d5-9986-cb50fd31f396",
+  "oracleId": "ebd2d760-5ad8-4027-b124-171822f3edfe",
+  "set": "msc",
+  "collectorNumber": "803",
+  "rarity": "common",
+  "manaCost": "{1}{R}",
+  "typeLine": "Sorcery",
+  "oracleText": "Grapeshot deals 1 damage to any target.\nStorm (When you cast this spell, copy it for each spell cast before it this turn. You may choose new targets for the copies.)",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Storm"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/3/e3e2d90a-3557-49d5-9986-cb50fd31f396.jpg?1783903011",
+   "normal": "https://cards.scryfall.io/normal/front/e/3/e3e2d90a-3557-49d5-9986-cb50fd31f396.jpg?1783903011",
+   "large": "https://cards.scryfall.io/large/front/e/3/e3e2d90a-3557-49d5-9986-cb50fd31f396.jpg?1783903011",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/3/e3e2d90a-3557-49d5-9986-cb50fd31f396.jpg?1783903011"
+  }
+ },
+ {
+  "name": "Hex Magic",
+  "scryfallId": "259bed47-1950-43ae-8efd-3009537529a8",
+  "oracleId": "2283729c-11db-471c-9f63-46092c97bd00",
+  "set": "msh",
+  "collectorNumber": "133",
+  "rarity": "uncommon",
+  "manaCost": "{2}{R}",
+  "typeLine": "Sorcery — Arcane",
+  "oracleText": "Exile all the cards from your hand, then draw that many cards. Until the end of your next turn, you may play cards exiled this way.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/5/259bed47-1950-43ae-8efd-3009537529a8.jpg?1783902932",
+   "normal": "https://cards.scryfall.io/normal/front/2/5/259bed47-1950-43ae-8efd-3009537529a8.jpg?1783902932",
+   "large": "https://cards.scryfall.io/large/front/2/5/259bed47-1950-43ae-8efd-3009537529a8.jpg?1783902932",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/5/259bed47-1950-43ae-8efd-3009537529a8.jpg?1783902932"
+  }
+ },
+ {
+  "name": "Wanda's Vision",
+  "scryfallId": "43cf33cc-c1ac-4196-aa82-b27083694f64",
+  "oracleId": "1448eadb-e8b1-4e8f-9697-3bb919085dab",
+  "set": "msc",
+  "collectorNumber": "708",
+  "rarity": "rare",
+  "manaCost": "{3}{R}{R}",
+  "typeLine": "Enchantment",
+  "oracleText": "Whenever you cast your second spell each turn, exile cards from the top of your library until you exile a nonland card. You may cast that card without paying its mana cost.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/3/43cf33cc-c1ac-4196-aa82-b27083694f64.jpg?1783903042",
+   "normal": "https://cards.scryfall.io/normal/front/4/3/43cf33cc-c1ac-4196-aa82-b27083694f64.jpg?1783903042",
+   "large": "https://cards.scryfall.io/large/front/4/3/43cf33cc-c1ac-4196-aa82-b27083694f64.jpg?1783903042",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/3/43cf33cc-c1ac-4196-aa82-b27083694f64.jpg?1783903042"
+  }
+ },
+ {
   "name": "Peggy Carter, Secret Agent",
   "scryfallId": "1f98293e-9d94-4185-8546-8beaf281dfa3",
   "oracleId": "2f3c6b8e-df89-4f0c-97bb-fbfcda5232b4",
