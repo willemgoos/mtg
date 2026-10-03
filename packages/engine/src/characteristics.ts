@@ -359,6 +359,9 @@ export function countOf(
   }
   if (a.count === 'subjectColors') return 0; // resolved with the trigger (see resolveAmount)
   if (a.count === 'opponentHandSize') return ctx.s.players[other(player)].hand.length;
+  // Marvel Super Heroes Jumpstart (Masters of Evil)
+  if (a.count === 'opponentLifeHalf')
+    return Math.max(0, Math.ceil(ctx.s.players[other(player)].life / 2));
   if (a.count === 'greatestNoncreatureManaValue') {
     const noncreature = (id: ObjectId) => !def(ctx, id).types.includes('Creature');
     const ids = [

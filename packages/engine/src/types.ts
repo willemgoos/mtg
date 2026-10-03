@@ -343,6 +343,9 @@ export interface CostDef {
   discard?: boolean;
   /** Tap this many untapped tokens you control (Baylen, Tangle Tumbler). */
   tapTokens?: number;
+  // Marvel Super Heroes Jumpstart (Masters of Evil)
+  /** Tap an untapped creature you control matching this (the engine picks the weakest): Villainous Syndication. */
+  tapCreature?: CardFilter;
   /** Sacrifice a permanent matching this (Fountainport: a token). */
   sacrificePermanent?: CardFilter;
   /** Untapped creatures you control may each pay for {1} (Heirloom Epic). */
@@ -887,6 +890,9 @@ export type Amount =
   | { count: 'subjectColors' }
   /** Cards in an opponent's hand (Recurring Insight). */
   | { count: 'opponentHandSize' }
+  // Marvel Super Heroes Jumpstart (Masters of Evil)
+  /** Half the opponent's life total, rounded up (Radioactive Man). */
+  | { count: 'opponentLifeHalf' }
   /** Greatest mana value among noncreature permanents you control and noncreature cards in your graveyard (Dragon Man). */
   | { count: 'greatestNoncreatureManaValue' }
   // Wakanda Forever (9c).
