@@ -12,6 +12,7 @@ import {
 } from './fin/equipment-summons.ts';
 import { FINAL_FANTASY_TOKENS as BASE_TOKENS } from './fin/helpers.ts';
 import { FIN_ADVENTURES, FIN_TOWNS } from './fin/lands.ts';
+import { RARES_2, RARES_2_BACKS, RARES_2_TOKENS } from './fin/rares-2.ts';
 import { SHARED_A, SHARED_A_BACKS, SHARED_A_TOKENS } from './fin/shared-a.ts';
 import {
   BLACK_MAGES_WALTZ,
@@ -19,7 +20,7 @@ import {
   CHOCOBO_STAMPEDE,
 } from './fin/spells-landfall.ts';
 
-export const FINAL_FANTASY_TOKENS = [...BASE_TOKENS, ...SHARED_A_TOKENS];
+export const FINAL_FANTASY_TOKENS = [...BASE_TOKENS, ...SHARED_A_TOKENS, ...RARES_2_TOKENS];
 
 /**
  * Final Fantasy (FIN) card behaviour, one file per pair of decks in fin/
@@ -37,6 +38,8 @@ export const FINAL_FANTASY_BEHAVIORS: Record<string, Behavior> = {
   ...TIME_COMPRESSION,
   ...BLACK_MAGES_WALTZ,
   ...CHOCOBO_STAMPEDE,
+  // 11c (group 2)
+  ...RARES_2,
 };
 
 /** Back faces of double-faced cards (and Adventures): not cards of their own, so not in the pool. */
@@ -48,4 +51,6 @@ export const FINAL_FANTASY_BACK_FACES: Record<string, Behavior> = {
   ...SHARED_A_BACKS,
   ...TIME_COMPRESSION_BACKS,
   ...BLACK_MAGES_WALTZ_BACKS,
+  // 11c (group 2)
+  ...RARES_2_BACKS,
 };

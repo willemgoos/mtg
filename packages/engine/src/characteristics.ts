@@ -256,6 +256,16 @@ export function countOf(
     return src?.counters?.[a.namedCountersOnSource] ?? 0;
   }
   if (!('count' in a)) return 0;
+  // Final Fantasy (11c): devotion and life gained.
+  if (a.count === 'devotion') {
+    const color = a.color;
+    return ctx.s.battlefield.reduce((n, id) => {
+      if (obj(ctx, id).controller !== player) return n;
+      const c = def(ctx, id).manaCost;
+      return n + (c.colored[color] ?? 0) + (c.hybrid ?? []).filter((h) => h.includes(color)).length;
+    }, 0);
+  }
+  if (a.count === 'lifeGainedThisTurn') return ctx.s.turn.lifeGained?.[player] ?? 0;
   if (a.count === 'cardsInGraveyard')
     return (
       (a.plus ?? 0) +
@@ -524,6 +534,8 @@ export function matchesFilter(
   if (filter.commander && !isCommander(ctx, id)) return false;
   if (filter.supertypes && !filter.supertypes.some((t) => def(ctx, id).supertypes.includes(t)))
     return false;
+  // Final Fantasy (11c): nonlegendary.
+  if (filter.notSupertypes?.some((t) => def(ctx, id).supertypes.includes(t))) return false;
   if (filter.toughnessGreaterThanPower) {
     const ch = characteristics(ctx, id);
     if (ch.toughness <= ch.power) return false;
@@ -591,6 +603,8 @@ export function cardMatches(
   if (filter.notTypes?.some((t) => d.types.includes(t))) return false;
   if (filter.commander && !isCommander(ctx, id)) return false;
   if (filter.supertypes && !filter.supertypes.some((t) => d.supertypes.includes(t))) return false;
+  // Final Fantasy (11c): nonlegendary.
+  if (filter.notSupertypes?.some((t) => d.supertypes.includes(t))) return false;
   const mv = manaValue(d.manaCost);
   if (filter.minManaValue !== undefined && mv < filter.minManaValue) return false;
   if (filter.manaValueIsSourceCounters) {

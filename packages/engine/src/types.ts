@@ -116,7 +116,15 @@ export interface CardDefinition {
   /** "As an additional cost to cast this spell, sacrifice a creature" (Arbiter of Woe). */
   sacrificeCreatureToCast?: boolean;
   /** What ward costs an opponent (default {2}). Ovika: {3} and 3 life. */
-  wardCost?: { mana: ManaCost; life?: number; discard?: boolean; sacrificeFood?: boolean };
+  wardCost?: {
+    mana: ManaCost;
+    life?: number;
+    discard?: boolean;
+    sacrificeFood?: boolean;
+    // Final Fantasy (11c): ward paid in life
+    /** "Ward—Pay life equal to its power" (Raubahn). */
+    lifeEqualsPower?: boolean;
+  };
   /** "This spell can't be countered." */
   uncounterable?: boolean;
   /** "Cast this spell only if ..." (Confront the Assault). */
@@ -272,6 +280,9 @@ export type AbilityDef =
       powerUp?: boolean;
       /** Activated from your hand (cycling). */
       fromHand?: boolean;
+      // Final Fantasy (11c): activated cost reduction
+      /** "This ability costs {1} less to activate for each ..." (Balamb Garden). */
+      costReduction?: Amount;
     }
   | {
       kind: 'triggered';
@@ -388,6 +399,9 @@ export type TriggerDef =
       caster?: 'any' | 'opponent';
       /** Only spells cast from exile (Klaw). */
       fromExile?: boolean;
+      // Final Fantasy (11c): spells you don't own
+      /** Only spells the caster doesn't own (Vaan, Street Thief). */
+      notOwned?: boolean;
     }
   /** Whenever a player (an opponent: Monologue Tax) casts their second spell each turn (Hearthborn Battler). */
   | { on: 'anyPlayerSecondSpell'; opponentOnly?: boolean }
@@ -485,7 +499,12 @@ export type TriggerDef =
   /** Whenever a creature you control (matching the filter) becomes blocked; amount: its blockers (She-Hulk). */
   | { on: 'creatureYouControlBecomesBlocked'; filter?: CardFilter }
   /** Whenever a creature you control becomes tapped for the first time this turn, during your turn. */
-  | { on: 'creatureYouControlFirstTappedOnYourTurn' };
+  | { on: 'creatureYouControlFirstTappedOnYourTurn' }
+  // Final Fantasy (11c): life loss and graveyard triggers
+  /** Whenever an opponent loses life ("that many"), during your turn if `duringYourTurn` (Kefka, Ruler of Ruin). */
+  | { on: 'opponentLosesLife'; duringYourTurn?: boolean }
+  /** Whenever one or more cards leave your graveyard (Fang, Fearless l'Cie). */
+  | { on: 'cardsLeaveYourGraveyard' };
 
 export type ConditionDef =
   | { kind: 'controlsPermanents'; filter: CardFilter; min: number }
@@ -593,6 +612,15 @@ export type ConditionDef =
   | { kind: 'sourceHasCounter'; name: string }
   /** You attacked with a Hero this turn, or a Hero entered under your control (Avengers Assemble!). */
   | { kind: 'heroAttackedOrEnteredThisTurn' }
+  // Final Fantasy (11c): turn conditions
+  /** You haven't cast a spell matching the filter this turn (Serah Farron: the first legendary creature spell). */
+  | { kind: 'noneCastThisTurn'; filter: CardFilter }
+  /** It's your turn, and one of your first `max` turns of the game (Starting Town). */
+  | { kind: 'yourEarlyTurn'; max: number }
+  /** This is the first combat phase of the turn (Balthier and Fran). */
+  | { kind: 'firstCombatPhase' }
+  /** The creature that caused the trigger was crewed by the source this turn (Balthier and Fran). */
+  | { kind: 'subjectCrewedBySource' }
   | { kind: 'custom'; handler: string };
 
 export interface CardFilter {
@@ -671,6 +699,9 @@ export interface CardFilter {
   notChosenTypeOfSource?: boolean;
   /** Shares a creature type with its controller's commander (Folk Hero). */
   sharesTypeWithCommander?: boolean;
+  // Final Fantasy (11c): nonlegendary
+  /** Has none of these supertypes (Ragnarok: a nonlegendary permanent card). */
+  notSupertypes?: Supertype[];
 }
 
 export interface TargetSpec {
@@ -790,7 +821,12 @@ export type Amount =
   | { count: 'commanderCasts' }
   // Final Fantasy (11a)
   /** The amounts added up (Slash of Light: creatures plus Equipment you control). */
-  | { sum: Amount[] };
+  | { sum: Amount[] }
+  // Final Fantasy (11c): devotion and life gained
+  /** Devotion: the mana symbols of this colour in the mana costs of permanents you control (Clive). */
+  | { count: 'devotion'; color: Color }
+  /** The life you gained this turn (Hope Estheim). */
+  | { count: 'lifeGainedThisTurn' };
 
 export type EffectDef =
   | { kind: 'may'; effects: EffectDef[]; cost?: ManaCost }
@@ -931,6 +967,13 @@ export type EffectDef =
       attacking?: boolean;
       /** A creature type it has in addition (Loki: Illusion). */
       addSubtype?: string;
+      // Final Fantasy (11c): temporary token copies
+      /** Sacrifice the copies at the beginning of the next end step, your next end step, or the next upkeep. */
+      sacrificeAt?: 'nextEndStep' | 'yourNextEndStep' | 'nextUpkeep';
+      /** "If it's a Saga, put up to N lore counters on it" (Esper Terra). */
+      lore?: number;
+      /** "Its equip abilities cost {N} less to activate" (Firion). */
+      equipDiscount?: number;
     }
   /** Choose a color (or a creature type) for the source, as it enters. */
   | { kind: 'chooseColor' }
@@ -991,6 +1034,9 @@ export type EffectDef =
       graveyardOnly?: boolean;
       /** Only from your hand (Avengers Quinjet). */
       handOnly?: boolean;
+      // Final Fantasy (11c): onto the battlefield attacking
+      /** A card matching this enters tapped and attacking (Summoner's Grimoire: an enchantment card). */
+      attackingIf?: CardFilter;
     }
   /** Exile permanents, then return them under their owners' control (with +1/+1 counters). */
   | {
@@ -1371,7 +1417,13 @@ export type EffectDef =
    * "You may remove a lore counter from each of any number of Sagas you control"
    * (Garnet): asks for one Saga at a time, or none to stop; `then` happens for each.
    */
-  | { kind: 'removeLoreFromAny'; then: EffectDef[] };
+  | { kind: 'removeLoreFromAny'; then: EffectDef[] }
+  // Final Fantasy (11c): hideaway
+  /**
+   * Hideaway N: look at the top N cards, exile one face down (remembered as
+   * exiled with the source), the rest on the bottom in a random order.
+   */
+  | { kind: 'hideaway'; count: number };
 
 export type StaticDef =
   | {
@@ -1393,7 +1445,15 @@ export type StaticDef =
    * Creatures you control matching the filter have "{T}: Add one of these"
    * (Clement: Frogs, {G} or {U}, only for creature spells).
    */
-  | { kind: 'grantMana'; filter: CardFilter; produces: ManaType[]; onlyForCreatures?: boolean }
+  | {
+      kind: 'grantMana';
+      filter: CardFilter;
+      produces: ManaType[];
+      onlyForCreatures?: boolean;
+      // Final Fantasy (11c): mana from every permanent
+      /** Other permanents you control of any type, not just creatures (A Realm Reborn). */
+      otherPermanents?: boolean;
+    }
   /** You may play an additional land on each of your turns (Loot). */
   | { kind: 'extraLandDrop' }
   /** Prevent all combat damage dealt to and by this creature (Fog Bank). */
@@ -1498,7 +1558,12 @@ export type StaticDef =
       otherSources?: boolean;
     }
   /** If you would put counters on a permanent, put twice that many instead (Innkeeper's Talent). */
-  | { kind: 'doubleCounters'; condition?: ConditionDef }
+  | {
+      kind: 'doubleCounters';
+      condition?: ConditionDef;
+      // Final Fantasy (11c): only +1/+1 counters on creatures (The Earth Crystal).
+      plusOneOnCreatures?: boolean;
+    }
   /** Spells you cast matching the filter cost {N} less, while the condition holds. */
   | { kind: 'spellsCostLessIf'; filter: CardFilter; amount: number; condition?: ConditionDef }
   /** Look at the top card of your library any time; play cards matching the filter from there (Glarb). */
@@ -1541,7 +1606,25 @@ export type StaticDef =
   /** You may play lands from your graveyard (Conduit of Worlds). */
   | { kind: 'playLandsFromGraveyard' }
   /** Creatures matching the filter can't attack you while the condition holds (Queen Mother Ramonda). */
-  | { kind: 'cantAttackYou'; filter: CardFilter; condition?: ConditionDef };
+  | { kind: 'cantAttackYou'; filter: CardFilter; condition?: ConditionDef }
+  // Final Fantasy (11c): damage doubling
+  /** Damage from sources you control matching the filter is doubled (Trance Kuja: Wizards). */
+  | { kind: 'doubleDamage'; source: CardFilter }
+  // Final Fantasy (11c): damage absorbing
+  /** All damage to you and other permanents you control is dealt to this creature instead (Ancient Adamantoise). */
+  | { kind: 'absorbDamage' }
+  /** Damage isn't removed from this creature during cleanup steps. */
+  | { kind: 'damageStays' }
+  // Final Fantasy (11c): entering permanents
+  /** A permanent matching the filter entering under your control triggers your abilities twice (Traveling Chocobo). */
+  | { kind: 'etbTriggersTwice'; filter: CardFilter }
+  /** Lands you control enter untapped (The Wandering Minstrel). */
+  | { kind: 'landsEnterUntapped' }
+  // Final Fantasy (11c): playing from the graveyard
+  /** You may play cards from your graveyard while the condition holds (Hades: during your turn). */
+  | { kind: 'playFromGraveyard'; condition?: ConditionDef }
+  /** You may cast artifact spells from your graveyard for `life` more; they enter with a finality counter (Noctis). */
+  | { kind: 'castArtifactsFromGraveyard'; life: number };
 
 export type CardDb = ReadonlyMap<CardDefId, CardDefinition>;
 
@@ -1688,6 +1771,15 @@ export interface GameObject {
   loreRemovedTurn?: number;
   /** It enters with this many more +1/+1 counters (Summon: Fenrir's next creature spell). */
   bonusCounters?: number;
+  // Final Fantasy (11c): meld
+  /** A melded permanent: the other card it's made of (in exile meanwhile); it follows this one as it leaves. */
+  meldedWith?: ObjectId;
+  // Final Fantasy (11c): temporary token copies
+  /** Its equip abilities cost this much less (Firion's copies). */
+  equipDiscount?: number;
+  // Final Fantasy (11c): turn conditions
+  /** A Vehicle: the creatures that crewed it this turn (Balthier and Fran). */
+  crewedBy?: { turn: number; ids: ObjectId[] };
 }
 
 /** A reference that goes stale when the object changes zones. */
@@ -1848,6 +1940,12 @@ export interface TurnState {
   // Final Fantasy (11a): saga creatures
   /** Players whose creatures are dealt no damage this turn (Summon: Alexander). */
   creaturesShielded?: PlayerId[];
+  // Final Fantasy (11c): devotion and life gained
+  /** Life each player gained this turn (Hope Estheim). */
+  lifeGained?: Record<PlayerId, number>;
+  // Final Fantasy (11c): turn conditions
+  /** Combat phases begun this turn (Balthier and Fran). */
+  combats?: number;
 }
 
 export interface Attacker {
@@ -2048,7 +2146,8 @@ export type Decision =
       /** Choosing from the graveyard instead of searching the library (Inspiration from Beyond). */
       fromGraveyard?: boolean;
       /** Where the card goes. Default: hand. */
-      to?: 'hand' | 'battlefieldTapped' | 'battlefield' | 'graveyard' | 'libraryTop';
+      // Final Fantasy (11c): hideaway ('hideaway': exiled face down with the source).
+      to?: 'hand' | 'battlefieldTapped' | 'battlefield' | 'graveyard' | 'libraryTop' | 'hideaway';
       required?: boolean;
       /** Only these top cards were looked at: the rest go to the bottom in a random order (no shuffle). */
       looked?: ObjectId[];
@@ -2066,6 +2165,9 @@ export type Decision =
       restOnTop?: boolean;
       /** Marvel Super Heroes: the cards not taken go to the graveyard. */
       restToGraveyard?: boolean;
+      // Final Fantasy (11c): onto the battlefield attacking
+      /** The chosen card enters tapped and attacking if it matches this. */
+      attackingIf?: CardFilter;
       resume: PausedResolution;
       thenPriority: PlayerId;
     }
@@ -2260,6 +2362,9 @@ export interface GameState {
   monarch?: PlayerId;
   /** Phased-out permanents (treated as though they don't exist), and whose untap step brings them back. */
   phasedOut?: { id: ObjectId; player: PlayerId }[];
+  // Final Fantasy (11c): damage doubling
+  /** Lightning's Stagger: damage to `player` and their permanents is doubled until `by`'s next turn. */
+  staggered?: { player: PlayerId; by: PlayerId }[];
   /** Exactly one player is always being asked something (or the game is over). */
   decision: Decision;
   winner: PlayerId | 'draw' | null;
@@ -2309,7 +2414,8 @@ export type Action =
       // Sneak (Marvel Super Heroes)
       /** Cast for its sneak cost by returning this unblocked attacker to its owner's hand. */
       sneak?: ObjectId;
-      via?: 'festival' | 'osteomancer' | 'conduit' | 'free';
+      // Final Fantasy (11c): playing from the graveyard ('noctis', 'hades').
+      via?: 'festival' | 'osteomancer' | 'conduit' | 'free' | 'noctis' | 'hades';
       /** Mockingbird: the creature to enter as a copy of. */
       copyOf?: ObjectId;
       /** Rottenmouth Viper: permanents sacrificed to make it cheaper. */

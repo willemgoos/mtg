@@ -552,6 +552,8 @@ export function Board({
       case 'scry':
         return { prompt: `Scry ${d.cards.length}` };
       case 'searchLibrary':
+        // Final Fantasy (11c): hideaway.
+        if (d.to === 'hideaway') return { prompt: 'Hideaway: exile a card face down' };
         return { prompt: 'Search your library' };
       case 'sacrifice':
         return { prompt: 'Choose a creature to sacrifice' };
@@ -1443,6 +1445,9 @@ function castLabel(defId: CardDefId, a: Action): string {
   if (a.type === 'activateAbility') return 'Activate';
   if (a.via === 'festival') return 'From your graveyard (pay 1 life)';
   if (a.via === 'osteomancer') return 'From your graveyard (forage)';
+  // Final Fantasy (11c): playing from the graveyard.
+  if (a.via === 'noctis') return 'From your graveyard (pay 3 life)';
+  if (a.via === 'hades') return 'From your graveyard';
   if (a.paws) return pawLabel(defId, a.paws);
   const def = cardDb.get(defId);
   if (a.type === 'castSpell' && a.sneak && def?.sneak) return `Sneak (${manaText(def.sneak)})`;
@@ -1543,16 +1548,23 @@ function SearchOverlay({ game, onHover }: { game: GameSession; onHover: HoverFn 
     <div className="overlay overlay--mull">
       <div className="mull">
         <h2>
-          {d.kind === 'searchLibrary' && d.fromGraveyard
-            ? 'Choose from your graveyard'
-            : d.kind === 'searchLibrary' && d.looked
-              ? 'Top of your library'
-              : 'Search your library'}
+          {/* Final Fantasy (11c): a creature card from your hand (Summoner's Grimoire). */}
+          {d.kind === 'searchLibrary' &&
+          d.fromGraveyard &&
+          picks.every((a) => view.objects[a.card!]?.zone === 'hand')
+            ? 'Choose from your hand'
+            : d.kind === 'searchLibrary' && d.fromGraveyard
+              ? 'Choose from your graveyard'
+              : d.kind === 'searchLibrary' && d.looked
+                ? 'Top of your library'
+                : 'Search your library'}
         </h2>
         <p>
-          {d.kind === 'searchLibrary' && d.to && d.to !== 'hand'
-            ? 'Choose a card to put onto the battlefield.'
-            : 'Choose a card to put into your hand.'}{' '}
+          {d.kind === 'searchLibrary' && d.to === 'hideaway'
+            ? 'Choose a card to exile face down.'
+            : d.kind === 'searchLibrary' && d.to && d.to !== 'hand'
+              ? 'Choose a card to put onto the battlefield.'
+              : 'Choose a card to put into your hand.'}{' '}
           {d.kind === 'searchLibrary' && d.fromGraveyard
             ? ''
             : d.kind === 'searchLibrary' && d.looked
@@ -1573,14 +1585,17 @@ function SearchOverlay({ game, onHover }: { game: GameSession; onHover: HoverFn 
             </div>
           ))}
         </div>
-        <div className="mull__buttons">
-          <button
-            className="btn btn--ghost"
-            onClick={() => apply({ type: 'chooseCard', player: HUMAN, card: null })}
-          >
-            Find nothing
-          </button>
-        </div>
+        {/* Final Fantasy (11c): hideaway must exile a card. */}
+        {!(d.kind === 'searchLibrary' && d.to === 'hideaway') && (
+          <div className="mull__buttons">
+            <button
+              className="btn btn--ghost"
+              onClick={() => apply({ type: 'chooseCard', player: HUMAN, card: null })}
+            >
+              Find nothing
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
