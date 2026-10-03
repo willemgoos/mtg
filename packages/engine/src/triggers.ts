@@ -390,6 +390,27 @@ function detect(ctx: Ctx, ev: GameEvent): void {
           },
           moved,
         );
+        // Strixhaven (13c): Lukka's emblem, "whenever a creature you control enters".
+        if (isCreature)
+          for (const e of s.emblems ?? []) {
+            const a = e.ability;
+            if (
+              a.kind !== 'triggered' ||
+              a.trigger.on !== 'otherCreatureEtb' ||
+              e.controller !== moved.controller ||
+              (a.trigger.controller === 'you' && e.controller !== moved.controller) ||
+              !matchesFilter(ctx, moved.id, a.trigger.filter)
+            )
+              continue;
+            s.pendingTriggers.push({
+              source: e.source,
+              sourceDefId: e.sourceDefId,
+              abilityIndex: -1,
+              controller: e.controller,
+              emblem: a,
+              subject: { id: moved.id, zcc: moved.zcc },
+            });
+          }
         // From the graveyard: "whenever your commander enters" (Endless Ranks of HYDRA).
         for (const id of s.players[moved.controller].graveyard) {
           const card = s.objects[id]!;
@@ -438,6 +459,7 @@ function detect(ctx: Ctx, ev: GameEvent): void {
           movedDef.abilities.forEach((a, i) => {
             if (a.kind !== 'triggered' || a.trigger.on !== 'permanentYouControlDies') return;
             if (a.trigger.other || !defMatches(movedDef, a.trigger.filter)) return;
+            if ((moved.lastCounters ?? 0) < (a.trigger.filter.minPlusOneCounters ?? 0)) return;
             if (checkCondition(ctx, a.condition, moved.owner, moved))
               queue(ctx, moved, i, moved.owner, moved);
           });
@@ -447,10 +469,19 @@ function detect(ctx: Ctx, ev: GameEvent): void {
             a.trigger.on === 'permanentYouControlDies' &&
             o.id !== ev.id &&
             o.controller === diedUnder &&
-            defMatches(movedDef, a.trigger.filter),
+            defMatches(movedDef, a.trigger.filter) &&
+            // Strixhaven (13c): Embrose, "a creature you control with a +1/+1 counter on it".
+            (moved?.lastCounters ?? 0) >= (a.trigger.filter.minPlusOneCounters ?? 0),
           moved,
         );
       }
+      // Strixhaven (13c): "whenever one or more cards are put into exile during your turn" (Stonebinder's Familiar).
+      if (ev.to === 'exile' && ev.from !== null && !movedDef.isToken)
+        forEachBattlefieldTrigger(
+          ctx,
+          (o, a) => a.trigger.on === 'cardsExiledYourTurn' && o.controller === s.turn.activePlayer,
+          moved,
+        );
       // Strixhaven (13a): "whenever one or more cards leave your graveyard" (Quintorius, Field Historian).
       if (ev.from === 'graveyard' && ev.to !== 'graveyard' && moved && !moved.isToken)
         forEachBattlefieldTrigger(
@@ -751,6 +782,16 @@ function detect(ctx: Ctx, ev: GameEvent): void {
         if (t.on === 'equippedAttacks')
           return o.attachedTo !== undefined && ev.attackers.includes(o.attachedTo);
         if (t.on === 'opponentAttacks') return o.controller !== ap && ev.attackers.length >= t.min;
+        // Strixhaven (13c): Mila, Crafty Companion.
+        if (t.on === 'opponentAttacksPlaneswalker')
+          return (
+            o.controller !== ap &&
+            !!s.combat?.attackers.some(
+              (x) =>
+                x.planeswalker !== undefined &&
+                s.objects[x.planeswalker]?.controller === o.controller,
+            )
+          );
         return false;
       });
       for (const id of ev.attackers) {
@@ -1027,7 +1068,25 @@ function detect(ctx: Ctx, ev: GameEvent): void {
       );
       return;
     }
+    // Strixhaven (13c): Flamescroll Celebrant.
+    case 'abilityActivated':
+      forEachBattlefieldTrigger(
+        ctx,
+        (o, a) => a.trigger.on === 'opponentActivatesAbility' && o.controller !== ev.player,
+      );
+      return;
     case 'targeted': {
+      // Strixhaven (13c): Mila, Crafty Companion (any permanent, not just creatures).
+      for (const id of ev.ids) {
+        const o = s.objects[id];
+        if (!o || o.zone !== 'battlefield' || o.controller === ev.player) continue;
+        forEachBattlefieldTrigger(
+          ctx,
+          (src, a) =>
+            a.trigger.on === 'permanentTargetedByOpponent' && src.controller === o.controller,
+          o,
+        );
+      }
       // Marvel Super Heroes (Loki): "the target of an ability you control".
       if (ev.byAbility && ev.anyTarget)
         forEachBattlefieldTrigger(

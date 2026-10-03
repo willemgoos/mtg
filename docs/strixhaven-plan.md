@@ -140,6 +140,16 @@ parallel agents don't build the same card twice.
 ### 13c: every rare and mythic, Jump In, boosters
 
 - All 69 rares and 21 mythics (walkers included, with the MDFC faces), and the remaining commons and uncommons.
+- Group A (white, blue, Silverquill, Lorehold; `stx/rares-a.ts`, tests `stx-13c-a.test.ts`) done: 30 of 30 (Rip Apart and
+  Furycalm Snarl were already in msc/). Engine: `chooseCustom` (handler-built option prompt, `CHOOSERS` in
+  `stx-13c-a-effects.ts`), `castBans` (name bans), `cantAttack`/`noActivate` continuous effects, loyalty-ability lock,
+  triggers `opponentActivatesAbility`, `opponentAttacksPlaneswalker`, `permanentTargetedByOpponent`, `cardsExiledYourTurn`,
+  emblem `otherCreatureEtb`, `gainControl.permanent`, `instantsSorceriesLifelink`, filters `nonlegendary`/`chosenNameOfSource`,
+  planeswalker back-face loyalty in the fetch script. Simplifications: card names are chosen from a searchable list of every
+  nonland card (Silencer chooses on entering, not as it enters); Academic Probation's name mode and Secret Rendezvous always
+  affect the opponent; Semester's End takes up to three targets; Mercurial Transformation sets base power/toughness and loses
+  abilities but not colour or creature type; Hofri's token returns the exiled card at once; Devastating Mastery's opponent
+  is asked twice (with "Done"); Augusta's "tap any number" is one prompt per creature and the bot taps none.
 - Ten STX Jump In packets in `jumpin.ts`.
 - STX boosters in Expedition (with an STX deck) and Season (the ten STX decks as starters).
 

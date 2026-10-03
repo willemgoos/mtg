@@ -29,6 +29,7 @@ export function cloneState(s: GameState): GameState {
     ...(p.pool ? { pool: p.pool.slice() } : {}),
     // Strixhaven (13a): Learn takes cards out of the sideboard, so a copy needs its own.
     ...(p.sideboard ? { sideboard: p.sideboard.slice() } : {}),
+    ...(p.castBans ? { castBans: p.castBans.slice() } : {}),
   });
   const phased = s.phasedOut ? { phasedOut: s.phasedOut.slice() } : {};
   return {

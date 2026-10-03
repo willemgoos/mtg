@@ -178,6 +178,12 @@ export function startTurn(ctx: Ctx, player: PlayerId, noPowerUp = false): void {
   delete s.turn.castDefs;
   // Final Fantasy (11a): saga creatures (Summon: Alexander).
   delete s.turn.creaturesShielded;
+  // Strixhaven (13c): Revel in Silence; Academic Probation's name bans end as their caster's turn begins.
+  delete s.turn.noLoyalty;
+  for (const q of Object.values(s.players)) {
+    if (q.castBans?.some((b) => b.until === player))
+      q.castBans = q.castBans.filter((b) => b.until !== player);
+  }
   for (const q of Object.values(s.players)) q.attackedThisTurn = false;
   endEffects(ctx, (e) => e.expires === 'untilYourNextTurn' && e.player === player);
   enterStep(ctx, 'untap');

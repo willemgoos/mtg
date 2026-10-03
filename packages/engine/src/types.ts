@@ -513,7 +513,18 @@ export type TriggerDef =
   | { on: 'permanentYouControlDies'; filter: CardFilter; other?: boolean }
   // Strixhaven (13a): Quintorius, Field Historian
   /** "Whenever one or more cards leave your graveyard" (use with `batch`). */
-  | { on: 'cardsLeaveYourGraveyard' };
+  | { on: 'cardsLeaveYourGraveyard' }
+  // Strixhaven (13c): Flamescroll Celebrant
+  /** Whenever an opponent activates an ability that isn't a mana ability. */
+  | { on: 'opponentActivatesAbility' }
+  // Strixhaven (13c): Mila, Crafty Companion
+  /** Whenever an opponent attacks one or more planeswalkers you control. */
+  | { on: 'opponentAttacksPlaneswalker' }
+  /** Whenever a permanent you control becomes the target of a spell or ability an opponent controls. */
+  | { on: 'permanentTargetedByOpponent' }
+  // Strixhaven (13c): Stonebinder's Familiar
+  /** Whenever one or more cards are put into exile during your turn (use with `oncePerTurn`). */
+  | { on: 'cardsExiledYourTurn' };
 
 export type ConditionDef =
   | { kind: 'controlsPermanents'; filter: CardFilter; min: number }
@@ -703,6 +714,11 @@ export interface CardFilter {
   greaterPowerThanSource?: boolean;
   /** Not of the creature type chosen for the source (Raise the Palisade). */
   notChosenTypeOfSource?: boolean;
+  // Strixhaven (13c): Silverquill Silencer, Plargg
+  /** Has the card name chosen for the source. */
+  chosenNameOfSource?: boolean;
+  /** Not legendary. */
+  nonlegendary?: boolean;
   /** Shares a creature type with its controller's commander (Folk Hero). */
   sharesTypeWithCommander?: boolean;
 }
@@ -796,6 +812,9 @@ export type Amount =
   | { count: 'greatestPowerYouControl' }
   /** Creature cards you own in exile and in your graveyard (Huskburster Swarm). */
   | { count: 'creatureCardsInExileAndGraveyard' }
+  // Strixhaven (13c): Show of Confidence
+  /** Instant and sorcery spells you've cast this turn, not counting the spell that triggered this. */
+  | { count: 'otherInstantsSorceriesCastThisTurn' }
   // Strixhaven (13a): Serpentine Curve
   /** Instant and sorcery cards you own in exile and in your graveyard. */
   | { count: 'instantsSorceriesInExileAndGraveyard' }
@@ -1039,6 +1058,8 @@ export type EffectDef =
       kind: 'exileUntilEndStep';
       what: Ref;
       counters?: number;
+      // Strixhaven (13c): Semester's End
+      loyaltyToo?: boolean;
       /** A named counter it returns with (Salvation Swan: flying). */
       named?: string;
     }
@@ -1113,6 +1134,8 @@ export type EffectDef =
       kind: 'gainControl';
       what: Ref;
       untilYourNextTurn?: boolean;
+      // Strixhaven (13c): Tempted by the Oriq, "gain control of" with no duration.
+      permanent?: boolean;
       // Marvel Super Heroes: 'for as long as this Saga remains on the battlefield'.
       whileSource?: boolean;
     }
@@ -1181,6 +1204,8 @@ export type EffectDef =
       from: 'yours' | 'opponents';
       maxManaValue?: Amount;
       rest: 'bottom' | 'exile';
+      // Strixhaven (13c): Velomachus Lorehold (an instant or sorcery)
+      filter?: CardFilter;
     }
   /** Copy the topmost ability you control on the stack from an artifact source (Scientist Supreme). */
   | { kind: 'copyArtifactAbility' }
@@ -1215,7 +1240,8 @@ export type EffectDef =
   /** Exile a permanent until the source leaves the battlefield (Banishing Light). */
   | { kind: 'exileUntilSourceLeaves'; what: Ref }
   /** Return the subject (an exiled card) to the battlefield under its owner's control. */
-  | { kind: 'returnSubject'; counters?: number; named?: string }
+  // Strixhaven (13c): Semester's End (a planeswalker gets a loyalty counter instead)
+  | { kind: 'returnSubject'; counters?: number; named?: string; loyaltyToo?: boolean }
   /** Put a card from a graveyard onto the battlefield under your control (with a named counter: finality). */
   | {
       kind: 'returnToBattlefield';
@@ -1349,7 +1375,13 @@ export type EffectDef =
    * (cascade: less than the source's). You may cast it free (discover: or put
    * it into your hand); the rest go to the bottom in a random order.
    */
-  | { kind: 'revealUntilCastable'; max: Amount | 'belowSource'; orHand?: boolean }
+  | {
+      kind: 'revealUntilCastable';
+      max: Amount | 'belowSource';
+      orHand?: boolean;
+      // Strixhaven (13c): Plargg, Dean of Chaos (nonlegendary)
+      filter?: CardFilter;
+    }
   /**
    * Goad (or "attacks each combat if able"): until your next turn they attack
    * each combat if able. `draws`: whenever one deals combat damage to a player, you draw (Kang Dynasty).
@@ -1455,7 +1487,13 @@ export type EffectDef =
    * "You may remove a lore counter from each of any number of Sagas you control"
    * (Garnet): asks for one Saga at a time, or none to stop; `then` happens for each.
    */
-  | { kind: 'removeLoreFromAny'; then: EffectDef[] };
+  | { kind: 'removeLoreFromAny'; then: EffectDef[] }
+  // Strixhaven (13c): a choice whose options a handler builds (Silverquill Silencer's card name, Deadly Vanity).
+  /**
+   * A player chooses one option made by `CHOOSERS[handler]` (stx-13c-a-effects.ts); the chosen option's
+   * effects (usually `custom` handlers with params) then happen. Nothing happens if the handler returns null.
+   */
+  | { kind: 'chooseCustom'; handler: string; params?: Record<string, unknown> };
 
 export type StaticDef =
   | {
@@ -1468,6 +1506,9 @@ export type StaticDef =
       keywords?: Keyword[];
     }
   | { kind: 'noLifeGain' }
+  // Strixhaven (13c): Radiant Scrollwielder
+  /** Instant and sorcery spells you control have lifelink. */
+  | { kind: 'instantsSorceriesLifelink' }
   | { kind: 'cantBlock' }
   /** This permanent doesn't untap during its controller's untap step. */
   | { kind: 'doesntUntap' }
@@ -1716,6 +1757,15 @@ export interface GameObject {
   lastNamedCounters?: Record<string, number>;
   /** The color or creature type chosen for it as it entered. */
   chosenColor?: ManaType;
+  // Strixhaven (13c): Silverquill Silencer
+  /** The card name chosen for it as it entered. */
+  chosenName?: CardDefId;
+  // Strixhaven (13c): Hofri Ghostforge
+  /** A token copy: the exiled card that returns to its owner's graveyard when this leaves the battlefield. */
+  hofriExiled?: ObjectRef;
+  // Strixhaven (13c): Radiant Scrollwielder
+  /** Cast from exile this turn: if it would be put into a graveyard from the stack, it's exiled instead. */
+  exileInstead?: boolean;
   chosenType?: string;
   /** Cards exiled with it (Keen-Eyed Curator). */
   exiledWith?: ObjectId[];
@@ -1829,6 +1879,9 @@ export interface PlayerState {
   commander?: ObjectId;
   /** Times they have cast it from the command zone (commander tax: {2} each). */
   commanderCasts?: number;
+  // Strixhaven (13c): Academic Probation
+  /** Cards they can't cast by name until the start of `until`'s next turn. */
+  castBans?: { defId: CardDefId; until: PlayerId }[];
 }
 
 export type StackItem =
@@ -1955,6 +2008,9 @@ export interface TurnState {
   // Final Fantasy (11a): saga creatures
   /** Players whose creatures are dealt no damage this turn (Summon: Alexander). */
   creaturesShielded?: PlayerId[];
+  // Strixhaven (13c): Revel in Silence
+  /** Players who can't activate planeswalkers' loyalty abilities this turn. */
+  noLoyalty?: PlayerId[];
 }
 
 export interface Attacker {
@@ -2015,6 +2071,11 @@ export interface ContinuousEffect {
   // Strixhaven (13b): Prismari Pledgemage
   /** It can attack as though it didn't have defender. */
   ignoreDefender?: boolean;
+  // Strixhaven (13c): Academic Probation
+  /** It can't attack. */
+  cantAttack?: boolean;
+  /** Its activated abilities can't be activated. */
+  noActivate?: boolean;
   /** What happens if the affected creature dies while this lasts. */
   onDies?: { effects: EffectDef[]; controller: PlayerId; sourceDefId: CardDefId };
 }
