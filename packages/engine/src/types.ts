@@ -1307,7 +1307,11 @@ export type EffectDef =
   | { kind: 'returnLandsFromGraveyard' }
   | { kind: 'sacrifice'; what: Ref }
   /** The controller scries N (asks them to order the top cards). */
-  | { kind: 'scry'; amount: number }
+  | {
+      kind: 'scry';
+      amount: number;
+      /** Strixhaven (13b): the opponent scries (Ingenious Mastery). */ forOpponent?: boolean;
+    }
   | { kind: 'custom'; handler: string; params?: Record<string, unknown> }
   // Doom Prevails (9e).
   /** The owner shuffles it into their library, then reveals the top card: a permanent card enters (Chaos Warp). */
