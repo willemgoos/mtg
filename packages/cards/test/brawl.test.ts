@@ -32,7 +32,11 @@ describe('Brawl decks', () => {
         if (!BASICS.includes(name)) expect(count, `${d.name}: ${name}`).toBe(1);
       const commander = cardDb.get(commanderId(d)!)!;
       expect(commander.supertypes, d.name).toContain('Legendary');
-      expect(commander.types, d.name).toContain('Creature');
+      // Any legendary creature or planeswalker can be the commander (Quintorius, History Chaser).
+      expect(
+        commander.types.some((t) => t === 'Creature' || t === 'Planeswalker'),
+        d.name,
+      ).toBe(true);
       const identity = colorIdentity(commander);
       expect([...identity].sort(), d.name).toEqual([...d.colors].sort());
       for (const id of deckIds(d))

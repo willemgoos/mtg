@@ -45999,5 +45999,198 @@
    "large": "https://cards.scryfall.io/large/front/b/b/bb7a56c4-5f20-4fd0-8f95-44061dec1df8.jpg?1783931170",
    "artCrop": "https://cards.scryfall.io/art_crop/front/b/b/bb7a56c4-5f20-4fd0-8f95-44061dec1df8.jpg?1783931170"
   }
+ },
+ {
+  "name": "Quintorius, History Chaser",
+  "scryfallId": "0742f19d-179c-43c4-ab95-4160c56b4384",
+  "oracleId": "5c40a8d4-6969-4d71-aba5-5c7e4109b7d5",
+  "set": "soc",
+  "collectorNumber": "7",
+  "rarity": "mythic",
+  "manaCost": "{2}{R}{W}",
+  "typeLine": "Legendary Planeswalker — Quintorius",
+  "oracleText": "Whenever one or more cards leave your graveyard, create a 3/2 red and white Spirit creature token.\n+1: You may discard a card. If you do, draw two cards, then mill a card.\n−4: Spirits you control gain double strike and vigilance until end of turn.\nQuintorius, History Chaser can be your commander.",
+  "loyalty": "5",
+  "colors": [
+   "R",
+   "W"
+  ],
+  "keywords": [
+   "Mill"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/7/0742f19d-179c-43c4-ab95-4160c56b4384.jpg?1783903867",
+   "normal": "https://cards.scryfall.io/normal/front/0/7/0742f19d-179c-43c4-ab95-4160c56b4384.jpg?1783903867",
+   "large": "https://cards.scryfall.io/large/front/0/7/0742f19d-179c-43c4-ab95-4160c56b4384.jpg?1783903867",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/7/0742f19d-179c-43c4-ab95-4160c56b4384.jpg?1783903867"
+  }
+ },
+ {
+  "name": "Excava, the Risen Past",
+  "scryfallId": "d47ebf19-b3fa-48a2-851a-254d32b0305a",
+  "oracleId": "77216636-f76d-4c5e-b1ac-ab1844753f05",
+  "set": "soc",
+  "collectorNumber": "2",
+  "rarity": "mythic",
+  "manaCost": "{2}{R}{W}",
+  "typeLine": "Legendary Creature — Spirit Horse",
+  "oracleText": "Flying, haste\nWhenever Excava attacks, return up to one target artifact, creature, or non-Aura enchantment card with mana value 3 or less from your graveyard to the battlefield with a finality counter on it. It's a 1/1 Spirit creature with flying in addition to its other types. (If a creature with a finality counter on it would die, exile it instead.)",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "R",
+   "W"
+  ],
+  "keywords": [
+   "Flying",
+   "Haste"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/4/d47ebf19-b3fa-48a2-851a-254d32b0305a.jpg?1783903867",
+   "normal": "https://cards.scryfall.io/normal/front/d/4/d47ebf19-b3fa-48a2-851a-254d32b0305a.jpg?1783903867",
+   "large": "https://cards.scryfall.io/large/front/d/4/d47ebf19-b3fa-48a2-851a-254d32b0305a.jpg?1783903867",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/4/d47ebf19-b3fa-48a2-851a-254d32b0305a.jpg?1783903867"
+  }
+ },
+ {
+  "name": "Lightning Helix",
+  "scryfallId": "4101e3fe-b0e7-4f0f-b9ac-9b61a4d628b3",
+  "oracleId": "800c258a-cfc4-4a54-a667-065ea8dea69e",
+  "set": "mkm",
+  "collectorNumber": "218",
+  "rarity": "uncommon",
+  "manaCost": "{R}{W}",
+  "typeLine": "Instant",
+  "oracleText": "Lightning Helix deals 3 damage to any target and you gain 3 life.",
+  "colors": [
+   "R",
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/1/4101e3fe-b0e7-4f0f-b9ac-9b61a4d628b3.jpg?1783912843",
+   "normal": "https://cards.scryfall.io/normal/front/4/1/4101e3fe-b0e7-4f0f-b9ac-9b61a4d628b3.jpg?1783912843",
+   "large": "https://cards.scryfall.io/large/front/4/1/4101e3fe-b0e7-4f0f-b9ac-9b61a4d628b3.jpg?1783912843",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/1/4101e3fe-b0e7-4f0f-b9ac-9b61a4d628b3.jpg?1783912843"
+  }
+ },
+ {
+  "name": "Boros Signet",
+  "scryfallId": "10d4532d-f948-4eb3-b855-592080e171e5",
+  "oracleId": "41c84665-1f99-40ab-aaca-1188649eb263",
+  "set": "sld",
+  "collectorNumber": "291",
+  "rarity": "rare",
+  "manaCost": "{2}",
+  "typeLine": "Artifact",
+  "oracleText": "{1}, {T}: Add {R}{W}.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/0/10d4532d-f948-4eb3-b855-592080e171e5.jpg?1783926553",
+   "normal": "https://cards.scryfall.io/normal/front/1/0/10d4532d-f948-4eb3-b855-592080e171e5.jpg?1783926553",
+   "large": "https://cards.scryfall.io/large/front/1/0/10d4532d-f948-4eb3-b855-592080e171e5.jpg?1783926553",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/0/10d4532d-f948-4eb3-b855-592080e171e5.jpg?1783926553"
+  }
+ },
+ {
+  "name": "Warleader's Call",
+  "scryfallId": "b3e8f8bd-1c8b-4a7c-96c4-57a247ce9ccc",
+  "oracleId": "a751c07b-fc21-4854-96e7-f71abf4e86c9",
+  "set": "mkm",
+  "collectorNumber": "242",
+  "rarity": "rare",
+  "manaCost": "{1}{R}{W}",
+  "typeLine": "Enchantment",
+  "oracleText": "Creatures you control get +1/+1.\nWhenever a creature you control enters, this enchantment deals 1 damage to each opponent.",
+  "colors": [
+   "R",
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/3/b3e8f8bd-1c8b-4a7c-96c4-57a247ce9ccc.jpg?1783912831",
+   "normal": "https://cards.scryfall.io/normal/front/b/3/b3e8f8bd-1c8b-4a7c-96c4-57a247ce9ccc.jpg?1783912831",
+   "large": "https://cards.scryfall.io/large/front/b/3/b3e8f8bd-1c8b-4a7c-96c4-57a247ce9ccc.jpg?1783912831",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/3/b3e8f8bd-1c8b-4a7c-96c4-57a247ce9ccc.jpg?1783912831"
+  }
+ },
+ {
+  "name": "Battlefield Forge",
+  "scryfallId": "034c5944-aad3-4bf2-b79d-8da61ab1bd52",
+  "oracleId": "6b75b94e-83b7-457e-ac41-7ca90b5a59aa",
+  "set": "ori",
+  "collectorNumber": "244",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "{T}: Add {C}.\n{T}: Add {R} or {W}. This land deals 1 damage to you.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/3/034c5944-aad3-4bf2-b79d-8da61ab1bd52.jpg?1783938306",
+   "normal": "https://cards.scryfall.io/normal/front/0/3/034c5944-aad3-4bf2-b79d-8da61ab1bd52.jpg?1783938306",
+   "large": "https://cards.scryfall.io/large/front/0/3/034c5944-aad3-4bf2-b79d-8da61ab1bd52.jpg?1783938306",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/3/034c5944-aad3-4bf2-b79d-8da61ab1bd52.jpg?1783938306"
+  }
+ },
+ {
+  "name": "Elegant Parlor",
+  "scryfallId": "72c6d541-e2cb-4d6e-acac-90a8f53b7006",
+  "oracleId": "9ea747cf-5d04-4aa7-bdc3-8145860cd1ba",
+  "set": "mkm",
+  "collectorNumber": "260",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Land — Mountain Plains",
+  "oracleText": "({T}: Add {R} or {W}.)\nThis land enters tapped.\nWhen this land enters, surveil 1. (Look at the top card of your library. You may put it into your graveyard.)",
+  "colors": [],
+  "keywords": [
+   "Surveil"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/2/72c6d541-e2cb-4d6e-acac-90a8f53b7006.jpg?1783912824",
+   "normal": "https://cards.scryfall.io/normal/front/7/2/72c6d541-e2cb-4d6e-acac-90a8f53b7006.jpg?1783912824",
+   "large": "https://cards.scryfall.io/large/front/7/2/72c6d541-e2cb-4d6e-acac-90a8f53b7006.jpg?1783912824",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/2/72c6d541-e2cb-4d6e-acac-90a8f53b7006.jpg?1783912824"
+  }
+ },
+ {
+  "name": "Inspiring Vantage",
+  "scryfallId": "00b1139d-e87c-415d-be20-d4d31480ebdc",
+  "oracleId": "3f17c60e-923a-4392-9da8-87d9ded009b7",
+  "set": "sld",
+  "collectorNumber": "1375",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "This land enters tapped unless you control two or fewer other lands.\n{T}: Add {R} or {W}.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/0/00b1139d-e87c-415d-be20-d4d31480ebdc.jpg?1783914752",
+   "normal": "https://cards.scryfall.io/normal/front/0/0/00b1139d-e87c-415d-be20-d4d31480ebdc.jpg?1783914752",
+   "large": "https://cards.scryfall.io/large/front/0/0/00b1139d-e87c-415d-be20-d4d31480ebdc.jpg?1783914752",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/0/00b1139d-e87c-415d-be20-d4d31480ebdc.jpg?1783914752"
+  }
+ },
+ {
+  "name": "Sacred Foundry",
+  "scryfallId": "52e55b85-92c1-4b83-9a9d-4afb8e938e4f",
+  "oracleId": "45181cb8-2090-4471-ba90-e5a8f04d525f",
+  "set": "sld",
+  "collectorNumber": "131",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Land — Mountain Plains",
+  "oracleText": "({T}: Add {R} or {W}.)\nAs this land enters, you may pay 2 life. If you don't, it enters tapped.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/2/52e55b85-92c1-4b83-9a9d-4afb8e938e4f.jpg?1783927081",
+   "normal": "https://cards.scryfall.io/normal/front/5/2/52e55b85-92c1-4b83-9a9d-4afb8e938e4f.jpg?1783927081",
+   "large": "https://cards.scryfall.io/large/front/5/2/52e55b85-92c1-4b83-9a9d-4afb8e938e4f.jpg?1783927081",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/2/52e55b85-92c1-4b83-9a9d-4afb8e938e4f.jpg?1783927081"
+  }
  }
 ]
