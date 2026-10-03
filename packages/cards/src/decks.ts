@@ -16,7 +16,7 @@ export interface Decklist {
    */
   series: 'starter' | 'colorChallenge' | 'jumpIn' | 'season' | 'brawl';
   /** A deck from another set than Foundations (shown in its own section). */
-  set?: 'blb' | 'msh' | 'msc' | 'fin' | 'stx';
+  set?: 'blb' | 'msh' | 'msc' | 'fin' | 'stx' | 'sos';
   cards: [name: string, count: number][];
   /** Brawl: the commander (not in `cards`, which hold the other 99). */
   commander?: string;
@@ -2563,6 +2563,53 @@ export const STRIXHAVEN_DECKS: Decklist[] = [
   },
 ];
 
+/** Secrets of Strixhaven (14a): our own decks (docs/strixhaven-14a-decks.md). */
+export const SECRETS_OF_STRIXHAVEN_DECKS: Decklist[] = [
+  {
+    id: 'sos-silverquill-debate-club',
+    name: 'Silverquill Debate Club',
+    colors: ['W', 'B'],
+    face: 'Stirring Hopesinger',
+    source: 'custom',
+    series: 'starter',
+    set: 'sos',
+    cards: [
+      ['Elite Interceptor', 2],
+      ['Honorbound Page', 1],
+      ['Eager Glyphmage', 1],
+      ['Owlin Historian', 1],
+      ['Rehearsed Debater', 2],
+      ['Inkshape Demonstrator', 1],
+      ['Quill-Blade Laureate', 1],
+      ['Imperious Inkmage', 1],
+      ['Inkling Mascot', 2],
+      ['Scolding Administrator', 2],
+      ['Snooping Page', 1],
+      ['Melancholic Poet', 2],
+      ['Sneering Shadewriter', 1],
+      ["Conciliator's Duelist", 1],
+      ['Stirring Hopesinger', 1],
+      ['Silverquill Charm', 2],
+      ['Harsh Annotation', 1],
+      ['Last Gasp', 2],
+      ['Foolish Fate', 1],
+      ['Stand Up for Yourself', 1],
+      ['Wander Off', 1],
+      ['Interjection', 2],
+      ['Rapier Wit', 1],
+      ["Killian's Confidence", 1],
+      ['Render Speechless', 1],
+      ['Dissection Practice', 1],
+      ['Graduation Day', 1],
+      ["Ajani's Response", 1],
+      ['Forum of Amity', 1],
+      ['Shattered Sanctum', 1],
+      ['Plains', 11],
+      ['Swamp', 11],
+    ],
+  },
+];
+
 export const DECKS: Decklist[] = [
   ...ARENA_DECKS,
   ...COLOR_CHALLENGE_DECKS,
@@ -2571,4 +2618,5 @@ export const DECKS: Decklist[] = [
   ...MARVEL_BRAWL_DECKS,
   ...FINAL_FANTASY_DECKS,
   ...STRIXHAVEN_DECKS,
+  ...SECRETS_OF_STRIXHAVEN_DECKS,
 ];

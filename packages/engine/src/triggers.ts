@@ -1021,6 +1021,20 @@ function detect(ctx: Ctx, ev: GameEvent): void {
           o.controller === src.controller &&
           matchesFilter(ctx, src.id, a.trigger.filter),
       );
+      // Secrets of Strixhaven (14a): Killian's Confidence triggers from your graveyard.
+      for (const gid of s.players[src.controller].graveyard) {
+        const card = s.objects[gid]!;
+        def(ctx, gid).abilities.forEach((a, i) => {
+          if (
+            a.kind === 'triggered' &&
+            a.fromGraveyard &&
+            a.trigger.on === 'creaturesYouControlDealCombatDamageToPlayer' &&
+            matchesFilter(ctx, src.id, a.trigger.filter) &&
+            checkCondition(ctx, a.condition, src.controller, card)
+          )
+            queue(ctx, card, i, src.controller);
+        });
+      }
       def(ctx, src.id).abilities.forEach((a, i) => {
         if (a.kind === 'triggered' && a.trigger.on === 'combatDamageToPlayer')
           queue(ctx, src, i, src.controller, undefined, ev.amount);

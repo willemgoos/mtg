@@ -3,6 +3,7 @@ import {
   BLOOMBURROW_DECKS,
   MARVEL_DECKS,
   STRIXHAVEN_DECKS,
+  SECRETS_OF_STRIXHAVEN_DECKS,
   cardDb,
   deckIds,
   isPlayable,
@@ -44,6 +45,7 @@ export const SEASON_STARTERS = [
   ...BLOOMBURROW_DECKS,
   ...MARVEL_DECKS,
   ...STRIXHAVEN_DECKS,
+  ...SECRETS_OF_STRIXHAVEN_DECKS,
 ].filter(isPlayable);
 /** Decks a Season bot can play: mostly Jump In pairs, plus the starter and Color Challenge decks. */
 export const isSeasonOpponent = (id: string): boolean => OPPONENT_DECKS.some((d) => d.id === id);

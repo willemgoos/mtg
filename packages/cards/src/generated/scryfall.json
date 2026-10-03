@@ -37896,5 +37896,808 @@
    "large": "https://cards.scryfall.io/large/front/b/8/b87e2474-98c1-4c1a-91ed-340b72d31653.jpg?1783903663",
    "artCrop": "https://cards.scryfall.io/art_crop/front/b/8/b87e2474-98c1-4c1a-91ed-340b72d31653.jpg?1783903663"
   }
+ },
+ {
+  "name": "Elite Interceptor",
+  "scryfallId": "2970683e-e69c-42cb-a067-34abd56fb42b",
+  "oracleId": "d97de156-5a6d-4dc6-953e-d4bad63cbad2",
+  "set": "sos",
+  "collectorNumber": "12",
+  "rarity": "common",
+  "manaCost": "{W}",
+  "typeLine": "Creature — Human Wizard",
+  "oracleText": "This creature enters prepared. (While it's prepared, you may cast a copy of its spell. Doing so unprepares it.)",
+  "power": "1",
+  "toughness": "2",
+  "colors": [
+   "W"
+  ],
+  "colorIdentity": [
+   "W"
+  ],
+  "keywords": [
+   "Prepared"
+  ],
+  "back": "Rejoinder (Elite Interceptor)",
+  "prepare": true,
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/9/2970683e-e69c-42cb-a067-34abd56fb42b.jpg?1783903706",
+   "normal": "https://cards.scryfall.io/normal/front/2/9/2970683e-e69c-42cb-a067-34abd56fb42b.jpg?1783903706",
+   "large": "https://cards.scryfall.io/large/front/2/9/2970683e-e69c-42cb-a067-34abd56fb42b.jpg?1783903706",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/9/2970683e-e69c-42cb-a067-34abd56fb42b.jpg?1783903706"
+  }
+ },
+ {
+  "name": "Rejoinder (Elite Interceptor)",
+  "flavorName": "Rejoinder",
+  "scryfallId": "2970683e-e69c-42cb-a067-34abd56fb42b",
+  "oracleId": "d97de156-5a6d-4dc6-953e-d4bad63cbad2",
+  "set": "sos",
+  "collectorNumber": "12",
+  "rarity": "common",
+  "manaCost": "{1}{W}",
+  "typeLine": "Sorcery",
+  "oracleText": "You may tap or untap target creature.\nDraw a card.",
+  "colors": [
+   "W"
+  ],
+  "colorIdentity": [
+   "W"
+  ],
+  "keywords": [],
+  "front": "Elite Interceptor",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/9/2970683e-e69c-42cb-a067-34abd56fb42b.jpg?1783903706",
+   "normal": "https://cards.scryfall.io/normal/front/2/9/2970683e-e69c-42cb-a067-34abd56fb42b.jpg?1783903706",
+   "large": "https://cards.scryfall.io/large/front/2/9/2970683e-e69c-42cb-a067-34abd56fb42b.jpg?1783903706",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/9/2970683e-e69c-42cb-a067-34abd56fb42b.jpg?1783903706"
+  }
+ },
+ {
+  "name": "Honorbound Page",
+  "scryfallId": "79a70863-860f-4a7b-9cb2-d3546b689d44",
+  "oracleId": "66ee56b9-aca8-4efa-b9b5-50717e0784a7",
+  "set": "sos",
+  "collectorNumber": "19",
+  "rarity": "common",
+  "manaCost": "{3}{W}",
+  "typeLine": "Creature — Cat Cleric",
+  "oracleText": "First strike\nThis creature enters prepared. (While it's prepared, you may cast a copy of its spell. Doing so unprepares it.)",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "W"
+  ],
+  "colorIdentity": [
+   "W"
+  ],
+  "keywords": [
+   "First strike",
+   "Prepared"
+  ],
+  "back": "Forum's Favor (Honorbound Page)",
+  "prepare": true,
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/9/79a70863-860f-4a7b-9cb2-d3546b689d44.jpg?1783903704",
+   "normal": "https://cards.scryfall.io/normal/front/7/9/79a70863-860f-4a7b-9cb2-d3546b689d44.jpg?1783903704",
+   "large": "https://cards.scryfall.io/large/front/7/9/79a70863-860f-4a7b-9cb2-d3546b689d44.jpg?1783903704",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/9/79a70863-860f-4a7b-9cb2-d3546b689d44.jpg?1783903704"
+  }
+ },
+ {
+  "name": "Forum's Favor (Honorbound Page)",
+  "flavorName": "Forum's Favor",
+  "scryfallId": "79a70863-860f-4a7b-9cb2-d3546b689d44",
+  "oracleId": "66ee56b9-aca8-4efa-b9b5-50717e0784a7",
+  "set": "sos",
+  "collectorNumber": "19",
+  "rarity": "common",
+  "manaCost": "{W}",
+  "typeLine": "Sorcery",
+  "oracleText": "Target creature gets +1/+0 and gains flying until end of turn.",
+  "colors": [
+   "W"
+  ],
+  "colorIdentity": [
+   "W"
+  ],
+  "keywords": [],
+  "front": "Honorbound Page",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/9/79a70863-860f-4a7b-9cb2-d3546b689d44.jpg?1783903704",
+   "normal": "https://cards.scryfall.io/normal/front/7/9/79a70863-860f-4a7b-9cb2-d3546b689d44.jpg?1783903704",
+   "large": "https://cards.scryfall.io/large/front/7/9/79a70863-860f-4a7b-9cb2-d3546b689d44.jpg?1783903704",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/9/79a70863-860f-4a7b-9cb2-d3546b689d44.jpg?1783903704"
+  }
+ },
+ {
+  "name": "Eager Glyphmage",
+  "scryfallId": "bf736de9-9bc4-49df-ae60-672ed4f83f32",
+  "oracleId": "070aa6c7-4741-47de-b68a-629aa4201ac0",
+  "set": "sos",
+  "collectorNumber": "11",
+  "rarity": "common",
+  "manaCost": "{3}{W}",
+  "typeLine": "Creature — Cat Cleric",
+  "oracleText": "When this creature enters, create a 1/1 white and black Inkling creature token with flying.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/f/bf736de9-9bc4-49df-ae60-672ed4f83f32.jpg?1783903705",
+   "normal": "https://cards.scryfall.io/normal/front/b/f/bf736de9-9bc4-49df-ae60-672ed4f83f32.jpg?1783903705",
+   "large": "https://cards.scryfall.io/large/front/b/f/bf736de9-9bc4-49df-ae60-672ed4f83f32.jpg?1783903705",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/f/bf736de9-9bc4-49df-ae60-672ed4f83f32.jpg?1783903705"
+  }
+ },
+ {
+  "name": "Owlin Historian",
+  "scryfallId": "5fe99be0-e1ec-485e-82f8-02eba7b82441",
+  "oracleId": "e1ebb60e-fbf3-4f8f-a76f-d637ec59ffb0",
+  "set": "sos",
+  "collectorNumber": "24",
+  "rarity": "common",
+  "manaCost": "{2}{W}",
+  "typeLine": "Creature — Bird Cleric",
+  "oracleText": "Flying\nWhen this creature enters, surveil 1. (Look at the top card of your library. You may put it into your graveyard.)\nWhenever one or more cards leave your graveyard, this creature gets +1/+1 until end of turn.",
+  "power": "2",
+  "toughness": "3",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Flying",
+   "Surveil"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/f/5fe99be0-e1ec-485e-82f8-02eba7b82441.jpg?1783903704",
+   "normal": "https://cards.scryfall.io/normal/front/5/f/5fe99be0-e1ec-485e-82f8-02eba7b82441.jpg?1783903704",
+   "large": "https://cards.scryfall.io/large/front/5/f/5fe99be0-e1ec-485e-82f8-02eba7b82441.jpg?1783903704",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/f/5fe99be0-e1ec-485e-82f8-02eba7b82441.jpg?1783903704"
+  }
+ },
+ {
+  "name": "Rehearsed Debater",
+  "scryfallId": "fc6a1425-6733-42a2-94d9-605966398092",
+  "oracleId": "e30ccf07-0969-4e81-ba43-c50a2ff9c040",
+  "set": "sos",
+  "collectorNumber": "29",
+  "rarity": "common",
+  "manaCost": "{2}{W}",
+  "typeLine": "Creature — Djinn Bard",
+  "oracleText": "Vigilance\nRepartee — Whenever you cast an instant or sorcery spell that targets a creature, this creature gets +1/+1 until end of turn.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Vigilance",
+   "Repartee"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/c/fc6a1425-6733-42a2-94d9-605966398092.jpg?1783903700",
+   "normal": "https://cards.scryfall.io/normal/front/f/c/fc6a1425-6733-42a2-94d9-605966398092.jpg?1783903700",
+   "large": "https://cards.scryfall.io/large/front/f/c/fc6a1425-6733-42a2-94d9-605966398092.jpg?1783903700",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/c/fc6a1425-6733-42a2-94d9-605966398092.jpg?1783903700"
+  }
+ },
+ {
+  "name": "Inkshape Demonstrator",
+  "scryfallId": "bcfac992-9984-4529-b9ff-a42d58832b34",
+  "oracleId": "4993651f-f161-4007-b485-a0c66a02f91b",
+  "set": "sos",
+  "collectorNumber": "21",
+  "rarity": "uncommon",
+  "manaCost": "{3}{W}",
+  "typeLine": "Creature — Elephant Cleric",
+  "oracleText": "Ward {2} (Whenever this creature becomes the target of a spell or ability an opponent controls, counter it unless that player pays {2}.)\nRepartee — Whenever you cast an instant or sorcery spell that targets a creature, this creature gets +1/+0 and gains lifelink until end of turn.",
+  "power": "3",
+  "toughness": "4",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Ward",
+   "Repartee"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/c/bcfac992-9984-4529-b9ff-a42d58832b34.jpg?1783903702",
+   "normal": "https://cards.scryfall.io/normal/front/b/c/bcfac992-9984-4529-b9ff-a42d58832b34.jpg?1783903702",
+   "large": "https://cards.scryfall.io/large/front/b/c/bcfac992-9984-4529-b9ff-a42d58832b34.jpg?1783903702",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/c/bcfac992-9984-4529-b9ff-a42d58832b34.jpg?1783903702"
+  }
+ },
+ {
+  "name": "Quill-Blade Laureate",
+  "scryfallId": "62a47835-5719-48c4-a740-a0c5f00dce11",
+  "oracleId": "bd9d3a70-faed-4bc6-97d8-1601b36cdb21",
+  "set": "sos",
+  "collectorNumber": "27",
+  "rarity": "uncommon",
+  "manaCost": "{1}{W}",
+  "typeLine": "Creature — Human Cleric",
+  "oracleText": "Double strike\nThis creature enters prepared. (While it's prepared, you may cast a copy of its spell. Doing so unprepares it.)",
+  "power": "1",
+  "toughness": "1",
+  "colors": [
+   "W"
+  ],
+  "colorIdentity": [
+   "W"
+  ],
+  "keywords": [
+   "Prepared",
+   "Double strike"
+  ],
+  "back": "Twofold Intent (Quill-Blade Laureate)",
+  "prepare": true,
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/2/62a47835-5719-48c4-a740-a0c5f00dce11.jpg?1783903700",
+   "normal": "https://cards.scryfall.io/normal/front/6/2/62a47835-5719-48c4-a740-a0c5f00dce11.jpg?1783903700",
+   "large": "https://cards.scryfall.io/large/front/6/2/62a47835-5719-48c4-a740-a0c5f00dce11.jpg?1783903700",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/2/62a47835-5719-48c4-a740-a0c5f00dce11.jpg?1783903700"
+  }
+ },
+ {
+  "name": "Twofold Intent (Quill-Blade Laureate)",
+  "flavorName": "Twofold Intent",
+  "scryfallId": "62a47835-5719-48c4-a740-a0c5f00dce11",
+  "oracleId": "bd9d3a70-faed-4bc6-97d8-1601b36cdb21",
+  "set": "sos",
+  "collectorNumber": "27",
+  "rarity": "uncommon",
+  "manaCost": "{1}{W}",
+  "typeLine": "Sorcery",
+  "oracleText": "Target creature gets +1/+0 and gains double strike until end of turn.",
+  "colors": [
+   "W"
+  ],
+  "colorIdentity": [
+   "W"
+  ],
+  "keywords": [
+   "Double strike"
+  ],
+  "front": "Quill-Blade Laureate",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/2/62a47835-5719-48c4-a740-a0c5f00dce11.jpg?1783903700",
+   "normal": "https://cards.scryfall.io/normal/front/6/2/62a47835-5719-48c4-a740-a0c5f00dce11.jpg?1783903700",
+   "large": "https://cards.scryfall.io/large/front/6/2/62a47835-5719-48c4-a740-a0c5f00dce11.jpg?1783903700",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/2/62a47835-5719-48c4-a740-a0c5f00dce11.jpg?1783903700"
+  }
+ },
+ {
+  "name": "Imperious Inkmage",
+  "scryfallId": "d5df1c3f-2536-4476-b8cd-34b026c38366",
+  "oracleId": "fcd31653-4964-46a6-820c-f17e8cbaa1fa",
+  "set": "sos",
+  "collectorNumber": "195",
+  "rarity": "common",
+  "manaCost": "{1}{W}{B}",
+  "typeLine": "Creature — Orc Warlock",
+  "oracleText": "Vigilance\nWhen this creature enters, surveil 2. (Look at the top two cards of your library, then put any number of them into your graveyard and the rest on top of your library in any order.)",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "B",
+   "W"
+  ],
+  "keywords": [
+   "Surveil",
+   "Vigilance"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/5/d5df1c3f-2536-4476-b8cd-34b026c38366.jpg?1783903642",
+   "normal": "https://cards.scryfall.io/normal/front/d/5/d5df1c3f-2536-4476-b8cd-34b026c38366.jpg?1783903642",
+   "large": "https://cards.scryfall.io/large/front/d/5/d5df1c3f-2536-4476-b8cd-34b026c38366.jpg?1783903642",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/5/d5df1c3f-2536-4476-b8cd-34b026c38366.jpg?1783903642"
+  }
+ },
+ {
+  "name": "Inkling Mascot",
+  "scryfallId": "6d4a2f39-0e1e-4076-815a-2676a09a1aab",
+  "oracleId": "0f0959ff-4464-4738-9d79-5b06f368f144",
+  "set": "sos",
+  "collectorNumber": "196",
+  "rarity": "common",
+  "manaCost": "{W}{B}",
+  "typeLine": "Creature — Inkling Cat",
+  "oracleText": "Repartee — Whenever you cast an instant or sorcery spell that targets a creature, this creature gains flying until end of turn. Surveil 1. (Look at the top card of your library. You may put it into your graveyard.)",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "B",
+   "W"
+  ],
+  "keywords": [
+   "Surveil",
+   "Repartee"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/d/6d4a2f39-0e1e-4076-815a-2676a09a1aab.jpg?1783903642",
+   "normal": "https://cards.scryfall.io/normal/front/6/d/6d4a2f39-0e1e-4076-815a-2676a09a1aab.jpg?1783903642",
+   "large": "https://cards.scryfall.io/large/front/6/d/6d4a2f39-0e1e-4076-815a-2676a09a1aab.jpg?1783903642",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/d/6d4a2f39-0e1e-4076-815a-2676a09a1aab.jpg?1783903642"
+  }
+ },
+ {
+  "name": "Scolding Administrator",
+  "scryfallId": "69757177-aefa-44a6-81db-5ae9b5d2f117",
+  "oracleId": "3b8240ad-71d3-4117-8531-6c8e79bffdb9",
+  "set": "sos",
+  "collectorNumber": "224",
+  "rarity": "uncommon",
+  "manaCost": "{W}{B}",
+  "typeLine": "Creature — Dwarf Cleric",
+  "oracleText": "Menace (This creature can't be blocked except by two or more creatures.)\nRepartee — Whenever you cast an instant or sorcery spell that targets a creature, put a +1/+1 counter on this creature.\nWhen this creature dies, if it had counters on it, put those counters on up to one target creature.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "B",
+   "W"
+  ],
+  "keywords": [
+   "Menace",
+   "Repartee"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/9/69757177-aefa-44a6-81db-5ae9b5d2f117.jpg?1783903631",
+   "normal": "https://cards.scryfall.io/normal/front/6/9/69757177-aefa-44a6-81db-5ae9b5d2f117.jpg?1783903631",
+   "large": "https://cards.scryfall.io/large/front/6/9/69757177-aefa-44a6-81db-5ae9b5d2f117.jpg?1783903631",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/9/69757177-aefa-44a6-81db-5ae9b5d2f117.jpg?1783903631"
+  }
+ },
+ {
+  "name": "Snooping Page",
+  "scryfallId": "73d06987-8686-461b-b260-9a4fee6a3b32",
+  "oracleId": "f07c07d7-00f1-44a5-b51f-0a22cc51fd2b",
+  "set": "sos",
+  "collectorNumber": "227",
+  "rarity": "uncommon",
+  "manaCost": "{1}{W}{B}",
+  "typeLine": "Creature — Human Cleric",
+  "oracleText": "Repartee — Whenever you cast an instant or sorcery spell that targets a creature, this creature can't be blocked this turn.\nWhenever this creature deals combat damage to a player, you draw a card and lose 1 life.",
+  "power": "2",
+  "toughness": "3",
+  "colors": [
+   "B",
+   "W"
+  ],
+  "keywords": [
+   "Repartee"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/3/73d06987-8686-461b-b260-9a4fee6a3b32.jpg?1783903631",
+   "normal": "https://cards.scryfall.io/normal/front/7/3/73d06987-8686-461b-b260-9a4fee6a3b32.jpg?1783903631",
+   "large": "https://cards.scryfall.io/large/front/7/3/73d06987-8686-461b-b260-9a4fee6a3b32.jpg?1783903631",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/3/73d06987-8686-461b-b260-9a4fee6a3b32.jpg?1783903631"
+  }
+ },
+ {
+  "name": "Melancholic Poet",
+  "scryfallId": "d8309815-7035-47a5-acf2-2b2ac1e65037",
+  "oracleId": "37731c49-1238-4e0e-8993-204e36c1f4ee",
+  "set": "sos",
+  "collectorNumber": "90",
+  "rarity": "common",
+  "manaCost": "{1}{B}",
+  "typeLine": "Creature — Elf Bard",
+  "oracleText": "Repartee — Whenever you cast an instant or sorcery spell that targets a creature, each opponent loses 1 life and you gain 1 life.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Repartee"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/8/d8309815-7035-47a5-acf2-2b2ac1e65037.jpg?1783903678",
+   "normal": "https://cards.scryfall.io/normal/front/d/8/d8309815-7035-47a5-acf2-2b2ac1e65037.jpg?1783903678",
+   "large": "https://cards.scryfall.io/large/front/d/8/d8309815-7035-47a5-acf2-2b2ac1e65037.jpg?1783903678",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/8/d8309815-7035-47a5-acf2-2b2ac1e65037.jpg?1783903678"
+  }
+ },
+ {
+  "name": "Conciliator's Duelist",
+  "scryfallId": "e225929b-6197-4550-969e-3c4a97206a68",
+  "oracleId": "d6ea0e58-7b14-425b-9135-57e149c0e47e",
+  "set": "sos",
+  "collectorNumber": "182",
+  "rarity": "rare",
+  "manaCost": "{W}{W}{B}{B}",
+  "typeLine": "Creature — Kor Warlock",
+  "oracleText": "When this creature enters, draw a card. Each player loses 1 life.\nRepartee — Whenever you cast an instant or sorcery spell that targets a creature, exile up to one target creature. Return that card to the battlefield under its owner's control at the beginning of the next end step.",
+  "power": "4",
+  "toughness": "3",
+  "colors": [
+   "B",
+   "W"
+  ],
+  "keywords": [
+   "Repartee"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/2/e225929b-6197-4550-969e-3c4a97206a68.jpg?1783903647",
+   "normal": "https://cards.scryfall.io/normal/front/e/2/e225929b-6197-4550-969e-3c4a97206a68.jpg?1783903647",
+   "large": "https://cards.scryfall.io/large/front/e/2/e225929b-6197-4550-969e-3c4a97206a68.jpg?1783903647",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/2/e225929b-6197-4550-969e-3c4a97206a68.jpg?1783903647"
+  }
+ },
+ {
+  "name": "Stirring Hopesinger",
+  "scryfallId": "21375667-b318-47f8-a482-9c8c2b5b14c0",
+  "oracleId": "7244d04a-bb9c-4fbe-a346-4a3f45709da7",
+  "set": "sos",
+  "collectorNumber": "35",
+  "rarity": "rare",
+  "manaCost": "{2}{W}",
+  "typeLine": "Creature — Bird Bard",
+  "oracleText": "Flying, lifelink\nRepartee — Whenever you cast an instant or sorcery spell that targets a creature, put a +1/+1 counter on each creature you control.",
+  "power": "1",
+  "toughness": "3",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Flying",
+   "Lifelink",
+   "Repartee"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/1/21375667-b318-47f8-a482-9c8c2b5b14c0.jpg?1783903698",
+   "normal": "https://cards.scryfall.io/normal/front/2/1/21375667-b318-47f8-a482-9c8c2b5b14c0.jpg?1783903698",
+   "large": "https://cards.scryfall.io/large/front/2/1/21375667-b318-47f8-a482-9c8c2b5b14c0.jpg?1783903698",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/1/21375667-b318-47f8-a482-9c8c2b5b14c0.jpg?1783903698"
+  }
+ },
+ {
+  "name": "Silverquill Charm",
+  "scryfallId": "3eb73579-f1c6-4762-81d2-9568ab501fac",
+  "oracleId": "d985b12e-2731-4ccf-9f51-90218b20b42a",
+  "set": "sos",
+  "collectorNumber": "225",
+  "rarity": "uncommon",
+  "manaCost": "{W}{B}",
+  "typeLine": "Instant",
+  "oracleText": "Choose one —\n• Put two +1/+1 counters on target creature.\n• Exile target creature with power 2 or less.\n• Each opponent loses 3 life and you gain 3 life.",
+  "colors": [
+   "B",
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/e/3eb73579-f1c6-4762-81d2-9568ab501fac.jpg?1783903631",
+   "normal": "https://cards.scryfall.io/normal/front/3/e/3eb73579-f1c6-4762-81d2-9568ab501fac.jpg?1783903631",
+   "large": "https://cards.scryfall.io/large/front/3/e/3eb73579-f1c6-4762-81d2-9568ab501fac.jpg?1783903631",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/e/3eb73579-f1c6-4762-81d2-9568ab501fac.jpg?1783903631"
+  }
+ },
+ {
+  "name": "Harsh Annotation",
+  "scryfallId": "e07a8fc7-c11c-4469-a31d-0abf40e57bbf",
+  "oracleId": "1657be64-b38f-4074-a743-bf558dc57901",
+  "set": "sos",
+  "collectorNumber": "18",
+  "rarity": "uncommon",
+  "manaCost": "{1}{W}",
+  "typeLine": "Instant",
+  "oracleText": "Destroy target creature. Its controller creates a 1/1 white and black Inkling creature token with flying.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/0/e07a8fc7-c11c-4469-a31d-0abf40e57bbf.jpg?1783903704",
+   "normal": "https://cards.scryfall.io/normal/front/e/0/e07a8fc7-c11c-4469-a31d-0abf40e57bbf.jpg?1783903704",
+   "large": "https://cards.scryfall.io/large/front/e/0/e07a8fc7-c11c-4469-a31d-0abf40e57bbf.jpg?1783903704",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/0/e07a8fc7-c11c-4469-a31d-0abf40e57bbf.jpg?1783903704"
+  }
+ },
+ {
+  "name": "Stand Up for Yourself",
+  "scryfallId": "b756ca13-b904-4510-9bbb-5bc2864abfbd",
+  "oracleId": "00e94b75-ad31-4e1f-b3be-eed7cd3e4d76",
+  "set": "sos",
+  "collectorNumber": "34",
+  "rarity": "uncommon",
+  "manaCost": "{2}{W}",
+  "typeLine": "Instant",
+  "oracleText": "Destroy target creature with power 3 or greater.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/7/b756ca13-b904-4510-9bbb-5bc2864abfbd.jpg?1783903698",
+   "normal": "https://cards.scryfall.io/normal/front/b/7/b756ca13-b904-4510-9bbb-5bc2864abfbd.jpg?1783903698",
+   "large": "https://cards.scryfall.io/large/front/b/7/b756ca13-b904-4510-9bbb-5bc2864abfbd.jpg?1783903698",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/7/b756ca13-b904-4510-9bbb-5bc2864abfbd.jpg?1783903698"
+  }
+ },
+ {
+  "name": "Interjection",
+  "scryfallId": "0534cff6-299c-4155-b318-eb7581989e8a",
+  "oracleId": "47bbadcf-11c6-4a4d-9575-1eb8284a174c",
+  "set": "sos",
+  "collectorNumber": "22",
+  "rarity": "common",
+  "manaCost": "{W}",
+  "typeLine": "Instant",
+  "oracleText": "Target creature gets +2/+2 and gains first strike until end of turn.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/5/0534cff6-299c-4155-b318-eb7581989e8a.jpg?1783903704",
+   "normal": "https://cards.scryfall.io/normal/front/0/5/0534cff6-299c-4155-b318-eb7581989e8a.jpg?1783903704",
+   "large": "https://cards.scryfall.io/large/front/0/5/0534cff6-299c-4155-b318-eb7581989e8a.jpg?1783903704",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/5/0534cff6-299c-4155-b318-eb7581989e8a.jpg?1783903704"
+  }
+ },
+ {
+  "name": "Rapier Wit",
+  "scryfallId": "97b50521-5a0f-4dbd-8e15-f0f0d059c258",
+  "oracleId": "cf43518b-bfec-443d-a6c0-f2d848dc5fa8",
+  "set": "sos",
+  "collectorNumber": "28",
+  "rarity": "common",
+  "manaCost": "{1}{W}",
+  "typeLine": "Instant",
+  "oracleText": "Tap target creature. If it's your turn, put a stun counter on it. (If a permanent with a stun counter would become untapped, remove one from it instead.)\nDraw a card.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/7/97b50521-5a0f-4dbd-8e15-f0f0d059c258.jpg?1783903700",
+   "normal": "https://cards.scryfall.io/normal/front/9/7/97b50521-5a0f-4dbd-8e15-f0f0d059c258.jpg?1783903700",
+   "large": "https://cards.scryfall.io/large/front/9/7/97b50521-5a0f-4dbd-8e15-f0f0d059c258.jpg?1783903700",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/7/97b50521-5a0f-4dbd-8e15-f0f0d059c258.jpg?1783903700"
+  }
+ },
+ {
+  "name": "Killian's Confidence",
+  "scryfallId": "55ff776a-fc3b-4338-8864-d57a85b3f123",
+  "oracleId": "c17f0e65-e5a3-4113-b782-0b192ab52046",
+  "set": "sos",
+  "collectorNumber": "197",
+  "rarity": "uncommon",
+  "manaCost": "{W}{B}",
+  "typeLine": "Sorcery",
+  "oracleText": "Target creature gets +1/+1 until end of turn. Draw a card.\nWhenever one or more creatures you control deal combat damage to a player, you may pay {W/B}. If you do, return this card from your graveyard to your hand.",
+  "colors": [
+   "B",
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/5/55ff776a-fc3b-4338-8864-d57a85b3f123.jpg?1783903640",
+   "normal": "https://cards.scryfall.io/normal/front/5/5/55ff776a-fc3b-4338-8864-d57a85b3f123.jpg?1783903640",
+   "large": "https://cards.scryfall.io/large/front/5/5/55ff776a-fc3b-4338-8864-d57a85b3f123.jpg?1783903640",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/5/55ff776a-fc3b-4338-8864-d57a85b3f123.jpg?1783903640"
+  }
+ },
+ {
+  "name": "Render Speechless",
+  "scryfallId": "25bbb1c7-14e8-444f-ab98-e95f50927460",
+  "oracleId": "6fdddab4-fcc9-4622-9c17-c69f9d4bca08",
+  "set": "sos",
+  "collectorNumber": "220",
+  "rarity": "common",
+  "manaCost": "{2}{W}{B}",
+  "typeLine": "Sorcery",
+  "oracleText": "Target opponent reveals their hand. You choose a nonland card from it. That player discards that card.\nPut two +1/+1 counters on up to one target creature.",
+  "colors": [
+   "B",
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/5/25bbb1c7-14e8-444f-ab98-e95f50927460.jpg?1783903633",
+   "normal": "https://cards.scryfall.io/normal/front/2/5/25bbb1c7-14e8-444f-ab98-e95f50927460.jpg?1783903633",
+   "large": "https://cards.scryfall.io/large/front/2/5/25bbb1c7-14e8-444f-ab98-e95f50927460.jpg?1783903633",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/5/25bbb1c7-14e8-444f-ab98-e95f50927460.jpg?1783903633"
+  }
+ },
+ {
+  "name": "Graduation Day",
+  "scryfallId": "db1cea01-123e-4b23-8b98-f94cabce3912",
+  "oracleId": "40e0665d-57b8-4c19-9fb8-b3155d7bbb94",
+  "set": "sos",
+  "collectorNumber": "16",
+  "rarity": "uncommon",
+  "manaCost": "{W}",
+  "typeLine": "Enchantment",
+  "oracleText": "Repartee — Whenever you cast an instant or sorcery spell that targets a creature, put a +1/+1 counter on target creature you control.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Repartee"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/b/db1cea01-123e-4b23-8b98-f94cabce3912.jpg?1783903705",
+   "normal": "https://cards.scryfall.io/normal/front/d/b/db1cea01-123e-4b23-8b98-f94cabce3912.jpg?1783903705",
+   "large": "https://cards.scryfall.io/large/front/d/b/db1cea01-123e-4b23-8b98-f94cabce3912.jpg?1783903705",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/b/db1cea01-123e-4b23-8b98-f94cabce3912.jpg?1783903705"
+  }
+ },
+ {
+  "name": "Ajani's Response",
+  "scryfallId": "9cd1417a-badc-4abd-a8ca-5b31f85c1072",
+  "oracleId": "bf7ec320-64bb-46ca-aac0-ca3d4224b69e",
+  "set": "sos",
+  "collectorNumber": "6",
+  "rarity": "common",
+  "manaCost": "{4}{W}",
+  "typeLine": "Instant",
+  "oracleText": "This spell costs {3} less to cast if it targets a tapped creature.\nDestroy target creature.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/c/9cd1417a-badc-4abd-a8ca-5b31f85c1072.jpg?1783903709",
+   "normal": "https://cards.scryfall.io/normal/front/9/c/9cd1417a-badc-4abd-a8ca-5b31f85c1072.jpg?1783903709",
+   "large": "https://cards.scryfall.io/large/front/9/c/9cd1417a-badc-4abd-a8ca-5b31f85c1072.jpg?1783903709",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/c/9cd1417a-badc-4abd-a8ca-5b31f85c1072.jpg?1783903709"
+  }
+ },
+ {
+  "name": "Forum of Amity",
+  "scryfallId": "1de6c6cc-0c55-4997-8623-d7f796bd9ab8",
+  "oracleId": "349ea6c7-6b3e-417f-b082-b712e2b1635b",
+  "set": "sos",
+  "collectorNumber": "256",
+  "rarity": "common",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "This land enters tapped.\n{T}: Add {W} or {B}.\n{2}{W}{B}, {T}: Surveil 1. (Look at the top card of your library. You may put it into your graveyard.)",
+  "colors": [],
+  "keywords": [
+   "Surveil"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/d/1de6c6cc-0c55-4997-8623-d7f796bd9ab8.jpg?1783903623",
+   "normal": "https://cards.scryfall.io/normal/front/1/d/1de6c6cc-0c55-4997-8623-d7f796bd9ab8.jpg?1783903623",
+   "large": "https://cards.scryfall.io/large/front/1/d/1de6c6cc-0c55-4997-8623-d7f796bd9ab8.jpg?1783903623",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/d/1de6c6cc-0c55-4997-8623-d7f796bd9ab8.jpg?1783903623"
+  }
+ },
+ {
+  "name": "Shattered Sanctum",
+  "scryfallId": "5aa0c810-3b7d-4661-979e-e84fb327742d",
+  "oracleId": "c854ecb0-cc60-4c48-a9aa-7f2348a7a8c6",
+  "set": "sos",
+  "collectorNumber": "260",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "This land enters tapped unless you control two or more other lands.\n{T}: Add {W} or {B}.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/a/5aa0c810-3b7d-4661-979e-e84fb327742d.jpg?1783903618",
+   "normal": "https://cards.scryfall.io/normal/front/5/a/5aa0c810-3b7d-4661-979e-e84fb327742d.jpg?1783903618",
+   "large": "https://cards.scryfall.io/large/front/5/a/5aa0c810-3b7d-4661-979e-e84fb327742d.jpg?1783903618",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/a/5aa0c810-3b7d-4661-979e-e84fb327742d.jpg?1783903618"
+  }
+ },
+ {
+  "name": "Sneering Shadewriter",
+  "scryfallId": "4b4c120e-abe9-4f11-a7e4-bc3f723da4b2",
+  "oracleId": "21a094d6-de3d-48d4-a35d-b99617da55db",
+  "set": "sos",
+  "collectorNumber": "101",
+  "rarity": "common",
+  "manaCost": "{4}{B}",
+  "typeLine": "Creature — Vampire Warlock",
+  "oracleText": "Flying\nWhen this creature enters, each opponent loses 2 life and you gain 2 life.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/b/4b4c120e-abe9-4f11-a7e4-bc3f723da4b2.jpg?1783903674",
+   "normal": "https://cards.scryfall.io/normal/front/4/b/4b4c120e-abe9-4f11-a7e4-bc3f723da4b2.jpg?1783903674",
+   "large": "https://cards.scryfall.io/large/front/4/b/4b4c120e-abe9-4f11-a7e4-bc3f723da4b2.jpg?1783903674",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/b/4b4c120e-abe9-4f11-a7e4-bc3f723da4b2.jpg?1783903674"
+  }
+ },
+ {
+  "name": "Last Gasp",
+  "scryfallId": "da5f3729-6ec7-4482-90cb-83b973edeae4",
+  "oracleId": "a82c3860-4dd6-4ffd-aa8f-ab8df687db6c",
+  "set": "sos",
+  "collectorNumber": "86",
+  "rarity": "common",
+  "manaCost": "{1}{B}",
+  "typeLine": "Instant",
+  "oracleText": "Target creature gets -3/-3 until end of turn.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/a/da5f3729-6ec7-4482-90cb-83b973edeae4.jpg?1783903679",
+   "normal": "https://cards.scryfall.io/normal/front/d/a/da5f3729-6ec7-4482-90cb-83b973edeae4.jpg?1783903679",
+   "large": "https://cards.scryfall.io/large/front/d/a/da5f3729-6ec7-4482-90cb-83b973edeae4.jpg?1783903679",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/a/da5f3729-6ec7-4482-90cb-83b973edeae4.jpg?1783903679"
+  }
+ },
+ {
+  "name": "Foolish Fate",
+  "scryfallId": "d278f4c9-d20b-4a76-8c5c-4d3e985948b9",
+  "oracleId": "9c51893f-9118-4d95-b88a-e264f4cbd7a8",
+  "set": "sos",
+  "collectorNumber": "83",
+  "rarity": "uncommon",
+  "manaCost": "{2}{B}",
+  "typeLine": "Instant",
+  "oracleText": "Destroy target creature.\nInfusion — If you gained life this turn, that creature's controller loses 3 life.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Infusion"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/2/d278f4c9-d20b-4a76-8c5c-4d3e985948b9.jpg?1783903680",
+   "normal": "https://cards.scryfall.io/normal/front/d/2/d278f4c9-d20b-4a76-8c5c-4d3e985948b9.jpg?1783903680",
+   "large": "https://cards.scryfall.io/large/front/d/2/d278f4c9-d20b-4a76-8c5c-4d3e985948b9.jpg?1783903680",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/2/d278f4c9-d20b-4a76-8c5c-4d3e985948b9.jpg?1783903680"
+  }
+ },
+ {
+  "name": "Wander Off",
+  "scryfallId": "3d409512-50b9-4a38-91b0-19ba25227992",
+  "oracleId": "b14d3226-adc2-4bdd-9e69-fefdc946ac04",
+  "set": "sos",
+  "collectorNumber": "104",
+  "rarity": "common",
+  "manaCost": "{3}{B}",
+  "typeLine": "Instant",
+  "oracleText": "Exile target creature.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/d/3d409512-50b9-4a38-91b0-19ba25227992.jpg?1783903675",
+   "normal": "https://cards.scryfall.io/normal/front/3/d/3d409512-50b9-4a38-91b0-19ba25227992.jpg?1783903675",
+   "large": "https://cards.scryfall.io/large/front/3/d/3d409512-50b9-4a38-91b0-19ba25227992.jpg?1783903675",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/d/3d409512-50b9-4a38-91b0-19ba25227992.jpg?1783903675"
+  }
+ },
+ {
+  "name": "Dissection Practice",
+  "scryfallId": "ddbf1242-6832-475e-9a77-65dd9b4bb32a",
+  "oracleId": "73905f94-9665-4d82-8927-725d2c4fc4bd",
+  "set": "sos",
+  "collectorNumber": "79",
+  "rarity": "uncommon",
+  "manaCost": "{B}",
+  "typeLine": "Instant",
+  "oracleText": "Target opponent loses 1 life and you gain 1 life.\nUp to one target creature gets +1/+1 until end of turn.\nUp to one target creature gets -1/-1 until end of turn.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/d/ddbf1242-6832-475e-9a77-65dd9b4bb32a.jpg?1783903682",
+   "normal": "https://cards.scryfall.io/normal/front/d/d/ddbf1242-6832-475e-9a77-65dd9b4bb32a.jpg?1783903682",
+   "large": "https://cards.scryfall.io/large/front/d/d/ddbf1242-6832-475e-9a77-65dd9b4bb32a.jpg?1783903682",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/d/ddbf1242-6832-475e-9a77-65dd9b4bb32a.jpg?1783903682"
+  }
  }
 ]
