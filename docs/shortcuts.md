@@ -86,3 +86,9 @@ from) when it's fixed. Older phases keep their own "Simplifications" lists in `d
 - [ ] Rhino's Rampage: the noncreature artifact is chosen as the spell is cast, not by a reflexive trigger on excess damage.
 - [ ] Powerful Broker: can only target a permanent (players have no counters in this engine).
 - [ ] Voracious Brood: its entering counters only apply when it's cast.
+- [ ] Ms. Marvel, Elastic Ally: base power ignores static "has base power X" abilities (e.g. Hulkbuster Armor).
+- [ ] Quantum Entanglement: the exile target is chosen when the {1}{W} is paid, not by a separate reflexive trigger.
+- [ ] Captain Marvel, Shooting Star: "enters or attacks" is two triggers; she doesn't see creatures exiled at the same moment
+      as her.
+- [ ] Beast, Erudite Aerialist: flying turns on for any +1/+1 counter put on him this turn, even an opponent's.
+- [ ] Reed Richards, Smartest Man: the replacement still makes four draws when the library has fewer cards.
