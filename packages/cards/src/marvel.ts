@@ -7,6 +7,7 @@ import { TECH_SKIES } from './msh/tech-skies.ts';
 import { MARVEL_LANDS } from './msh/lands.ts';
 import { MSH_MYTHIC_BACKS, MSH_MYTHICS } from './msh/mythics.ts';
 import { MSH_DRAFT } from './msh/draft.ts';
+import { MSH_JUMPSTART } from './msh/jumpstart.ts';
 import { MSH_OTHERS } from './msh/others.ts';
 import { MSH_RARES } from './msh/rares.ts';
 import { MSH_SAGAS } from './msh/sagas.ts';
@@ -30,6 +31,7 @@ export const MARVEL_BEHAVIORS: Record<string, Behavior> = {
   ...MSH_SAGAS,
   ...MARVEL_LANDS,
   ...MSH_DRAFT,
+  ...MSH_JUMPSTART,
 };
 
 /** Back faces of double-faced cards: not cards of their own, so not in the pool. */
