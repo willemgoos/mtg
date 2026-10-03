@@ -266,7 +266,7 @@ export function findSpell(ctx: Ctx, id: ObjectId) {
 }
 
 /** Counters a spell (unless it can't be countered). */
-export function counterSpell(ctx: Ctx, id: ObjectId): void {
+export function counterSpell(ctx: Ctx, id: ObjectId, exile = false): void {
   const i = ctx.s.stack.findIndex((x) => x.kind === 'spell' && x.id === id);
   const item = ctx.s.stack[i];
   if (!item || item.kind !== 'spell') return;
@@ -283,7 +283,7 @@ export function counterSpell(ctx: Ctx, id: ObjectId): void {
   if (def(ctx, item.id).uncounterable || protectedByStatic) return;
   ctx.s.stack.splice(i, 1);
   emit(ctx, { type: 'countered', id: item.id });
-  moveObject(ctx, item.id, item.flashback ? 'exile' : 'graveyard');
+  moveObject(ctx, item.id, item.flashback || exile ? 'exile' : 'graveyard');
 }
 
 export function changeLife(ctx: Ctx, player: PlayerId, delta: number): void {
@@ -925,7 +925,7 @@ export function runEffects(
           player: controller,
           options,
           fromGraveyard: true,
-          to: 'battlefield',
+          to: e.tapped ? 'battlefieldTapped' : 'battlefield',
           shuffle: false,
           ...(e.counter ? { counter: e.counter } : {}),
           resume,
@@ -960,7 +960,7 @@ export function runEffects(
         if (!item) continue;
         // Can't pay: countered straight away.
         if (!canPayFrom(e.cost, manaSources(ctx, item.controller))) {
-          counterSpell(ctx, item.id);
+          counterSpell(ctx, item.id, e.exile);
           continue;
         }
         ctx.s.decision = {
@@ -968,6 +968,7 @@ export function runEffects(
           player: item.controller,
           spell: item.id,
           cost: e.cost,
+          ...(e.exile ? { exile: true } : {}),
           resume,
           thenPriority,
         };
@@ -1451,6 +1452,16 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
       counterSpell(ctx, item.id);
       if (e.controllerTokens)
         runEffect(ctx, { ...es, controller }, { kind: 'createToken', ...e.controllerTokens });
+      return;
+    }
+    // Strixhaven (13a): Divide by Zero
+    case 'returnSpellToHand': {
+      const t = typeof e.what === 'object' && 'target' in e.what ? es.targets[e.what.target] : null;
+      if (!t || !('object' in t)) return;
+      const i = ctx.s.stack.findIndex((x) => x.kind === 'spell' && x.id === t.object.id);
+      if (i < 0) return;
+      ctx.s.stack.splice(i, 1);
+      moveObject(ctx, t.object.id, 'hand');
       return;
     }
     case 'bouncePlayerPermanents':

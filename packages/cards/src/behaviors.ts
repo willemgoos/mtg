@@ -8,7 +8,7 @@ import {
   FINAL_FANTASY_TOKENS,
 } from './final-fantasy.ts';
 import { MARVEL_BRAWL_BEHAVIORS, MARVEL_BRAWL_TOKENS } from './marvel-brawl.ts';
-import { STRIXHAVEN_BACK_FACES, STRIXHAVEN_BEHAVIORS } from './strixhaven.ts';
+import { STRIXHAVEN_BACK_FACES, STRIXHAVEN_BEHAVIORS, STRIXHAVEN_TOKENS } from './strixhaven.ts';
 import {
   SECRETS_OF_STRIXHAVEN_BACK_FACES,
   SECRETS_OF_STRIXHAVEN_BEHAVIORS,
@@ -2185,6 +2185,7 @@ export const TOKENS: CardDefinition[] = [
   ...MARVEL_TOKENS,
   ...MARVEL_BRAWL_TOKENS,
   ...FINAL_FANTASY_TOKENS,
+  ...STRIXHAVEN_TOKENS,
   token('zombie-token', 'Zombie', 'B', ['Zombie'], 2, 2),
   token('cat-beast-token', 'Cat Beast', 'W', ['Cat', 'Beast'], 2, 2),
   token('raccoon-token', 'Raccoon', 'G', ['Raccoon'], 3, 3),

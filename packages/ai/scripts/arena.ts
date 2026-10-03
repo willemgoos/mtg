@@ -58,6 +58,7 @@ function run(
     const r = playMatch(engine, decks, { p1: p1(seed, decks), p2: p2(seed + 1000, decks) }, seed, {
       startingPlayer: seed % 2 ? 'p1' : 'p2',
       ...(brawl?.format ? { brawl: { format: brawl.format, commanders: brawl.commanders } } : {}),
+      ...(brawl?.sideboards ? { sideboards: brawl.sideboards } : {}),
     });
     if (r.winner === 'p1') w1++;
     else if (r.winner === 'p2') w2++;
@@ -115,6 +116,8 @@ if (process.argv.includes('--brawl')) {
 const lists: readonly Decklist[] = PLAYABLE_DECKS;
 const pairs = lists.flatMap((a, i) => lists.slice(i + 1).map((b) => [a, b] as const));
 const decksOf = (x: Decklist, y: Decklist) => ({ p1: deckIds(x), p2: deckIds(y) });
+// Decks with a sideboard (Strixhaven's Lessons) play with it.
+const gameOf = (x: Decklist, y: Decklist) => deckGameOptions(x, y);
 
 if (process.argv.includes('--search')) {
   for (const [x, y] of pairs) {
@@ -124,9 +127,10 @@ if (process.argv.includes('--search')) {
   process.exit(0);
 }
 
-for (const x of lists) run(label('heuristic', x, 'random', x), heuristic, random, decksOf(x, x));
+for (const x of lists)
+  run(label('heuristic', x, 'random', x), heuristic, random, decksOf(x, x), gameOf(x, x));
 for (const [x, y] of pairs) {
-  run(label('heuristic', x, 'heuristic', y), heuristic, heuristic, decksOf(x, y));
-  run(label('heuristic', y, 'heuristic', x), heuristic, heuristic, decksOf(y, x));
+  run(label('heuristic', x, 'heuristic', y), heuristic, heuristic, decksOf(x, y), gameOf(x, y));
+  run(label('heuristic', y, 'heuristic', x), heuristic, heuristic, decksOf(y, x), gameOf(y, x));
 }
 brawlRuns();

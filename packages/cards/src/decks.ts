@@ -16,7 +16,7 @@ export interface Decklist {
    */
   series: 'starter' | 'colorChallenge' | 'jumpIn' | 'season' | 'brawl';
   /** A deck from another set than Foundations (shown in its own section). */
-  set?: 'blb' | 'msh' | 'msc' | 'fin';
+  set?: 'blb' | 'msh' | 'msc' | 'fin' | 'stx';
   cards: [name: string, count: number][];
   /** Brawl: the commander (not in `cards`, which hold the other 99). */
   commander?: string;
@@ -2125,6 +2125,52 @@ export const FINAL_FANTASY_DECKS: Decklist[] = [
   },
 ];
 
+/**
+ * Our own Strixhaven (STX) decks, built like the starter decks and played
+ * against them (docs/strixhaven-plan.md, phase 13). Lessons sit in the
+ * sideboard, where Learn fetches them.
+ */
+export const STRIXHAVEN_QUANDRIX_DECKS: Decklist[] = [
+  {
+    id: 'stx-quandrix-equation',
+    name: 'Quandrix Equation',
+    colors: ['G', 'U'],
+    face: 'Biomathematician',
+    source: 'custom',
+    series: 'starter',
+    set: 'stx',
+    cards: [
+      ['Biomathematician', 3],
+      ['Quandrix Pledgemage', 3],
+      ['Needlethorn Drake', 2],
+      ['Frost Trickster', 2],
+      ['Quandrix Cultivator', 1],
+      ['Professor of Zoomancy', 2],
+      ['Gnarlback Rhino', 4],
+      ['Thrashing Brontodon', 4],
+      ['Scrapshooter', 2],
+      ['Knightfisher', 1],
+      ['Lilysplash Mentor', 1],
+      ['Dreamdew Entrancer', 1],
+      ['Serpentine Curve', 1],
+      ['Leyline Invocation', 1],
+      ['Field Trip', 1],
+      ['Mage Duel', 2],
+      ['Devouring Tendrils', 2],
+      ['Bite Down', 3],
+      ['Quandrix Campus', 4],
+      ['Forest', 10],
+      ['Island', 10],
+    ],
+    sideboard: [
+      ['Fractal Summoning', 1],
+      ['Introduction to Prophecy', 1],
+      ['Expanded Anatomy', 1],
+      ['Environmental Sciences', 1],
+    ],
+  },
+];
+
 export const DECKS: Decklist[] = [
   ...ARENA_DECKS,
   ...COLOR_CHALLENGE_DECKS,
@@ -2132,4 +2178,5 @@ export const DECKS: Decklist[] = [
   ...MARVEL_DECKS,
   ...MARVEL_BRAWL_DECKS,
   ...FINAL_FANTASY_DECKS,
+  ...STRIXHAVEN_QUANDRIX_DECKS,
 ];

@@ -117,3 +117,16 @@ plus 4 Lessons; 0 implemented. Shared Lessons (Introduction to Prophecy, Expande
 Lorehold (Lorehold Apprentice, Quintorius). Rares: Lorehold Command, Quandrix Command, Archmage Emeritus. Risks: Quandrix is
 Learn-heavy (Pop Quiz, Field Trip, Divide by Zero, Arcane Subtraction, Overgrown Arch), so it depends on the sideboard prompt;
 Quandrix Apprentice needs a reorder-to-bottom prompt; conditional cost reduction (Mage Duel, Bury in Books) may be new.
+
+## Quandrix Equation: as built
+
+Card behaviour in `packages/cards/src/stx/quandrix.ts` (all 30 listed cards and the four Lessons). The shipped list differs from
+the draft above: the draft (17 lands, 43 spells) won 14% against the ten Foundations starter decks (bot vs bot) and a pure
+Quandrix list with 24 lands 15%, so the deck is built like the starter decks (24 lands, 36 spells) with Foundations and
+Bloomburrow bodies and removal (Gnarlback Rhino 4, Thrashing Brontodon 4, Scrapshooter 2, Knightfisher, Lilysplash Mentor,
+Dreamdew Entrancer, Bite Down 3) around Biomathematician, Quandrix Pledgemage, Frost Trickster, Needlethorn Drake, Professor of
+Zoomancy, Cultivator, Serpentine Curve, Leyline Invocation, Field Trip, Mage Duel 2 and Devouring Tendrils 2. 45% over 400 games.
+Implemented but not in the main deck: Apprentice, Zimone, Karok Wrangler, Overgrown Arch, Archmage Emeritus, Pop Quiz, Big Play,
+Quandrix Command, Eureka Moment, Decisive Denial, Divide by Zero, Resculpt, Arcane Subtraction, Curate, Bury in Books, Reject,
+Springmane Cervin, Waterfall Aerialist, and the Lessons Fractal Summoning, Introduction to Prophecy, Expanded Anatomy and
+Environmental Sciences (the sideboard, fetched by Learn).

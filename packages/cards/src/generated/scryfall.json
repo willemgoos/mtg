@@ -31121,5 +31121,784 @@
    "large": "https://cards.scryfall.io/large/front/7/7/77bc419d-ff69-4e7c-afe6-faca383a5ed7.jpg?1783906560",
    "artCrop": "https://cards.scryfall.io/art_crop/front/7/7/77bc419d-ff69-4e7c-afe6-faca383a5ed7.jpg?1783906560"
   }
+ },
+ {
+  "name": "Biomathematician",
+  "scryfallId": "b41a35ef-dae1-4534-a12a-d3951b285273",
+  "oracleId": "70868667-a843-4954-863f-990854188c53",
+  "set": "stx",
+  "collectorNumber": "164",
+  "rarity": "common",
+  "manaCost": "{1}{G}{U}",
+  "typeLine": "Creature — Human Wizard",
+  "oracleText": "When this creature enters, create a 0/0 green and blue Fractal creature token. Put a +1/+1 counter on each Fractal you control.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "G",
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/4/b41a35ef-dae1-4534-a12a-d3951b285273.jpg?1783927324",
+   "normal": "https://cards.scryfall.io/normal/front/b/4/b41a35ef-dae1-4534-a12a-d3951b285273.jpg?1783927324",
+   "large": "https://cards.scryfall.io/large/front/b/4/b41a35ef-dae1-4534-a12a-d3951b285273.jpg?1783927324",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/4/b41a35ef-dae1-4534-a12a-d3951b285273.jpg?1783927324"
+  }
+ },
+ {
+  "name": "Quandrix Pledgemage",
+  "scryfallId": "07633b7f-4150-458b-89c3-d05dc0e3c4bd",
+  "oracleId": "8a39809e-219e-4f59-a233-ea28d05c30ef",
+  "set": "stx",
+  "collectorNumber": "219",
+  "rarity": "common",
+  "manaCost": "{1}{G/U}{G/U}",
+  "typeLine": "Creature — Merfolk Druid",
+  "oracleText": "Magecraft — Whenever you cast or copy an instant or sorcery spell, put a +1/+1 counter on this creature.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "G",
+   "U"
+  ],
+  "keywords": [
+   "Magecraft"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/7/07633b7f-4150-458b-89c3-d05dc0e3c4bd.jpg?1783927300",
+   "normal": "https://cards.scryfall.io/normal/front/0/7/07633b7f-4150-458b-89c3-d05dc0e3c4bd.jpg?1783927300",
+   "large": "https://cards.scryfall.io/large/front/0/7/07633b7f-4150-458b-89c3-d05dc0e3c4bd.jpg?1783927300",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/7/07633b7f-4150-458b-89c3-d05dc0e3c4bd.jpg?1783927300"
+  }
+ },
+ {
+  "name": "Quandrix Apprentice",
+  "scryfallId": "0291c909-bb87-47cb-9b06-5e409e654f15",
+  "oracleId": "92116bbd-c7ad-4033-8d98-3ea09fea8ae7",
+  "set": "stx",
+  "collectorNumber": "216",
+  "rarity": "uncommon",
+  "manaCost": "{G}{U}",
+  "typeLine": "Creature — Human Wizard",
+  "oracleText": "Magecraft — Whenever you cast or copy an instant or sorcery spell, look at the top three cards of your library. You may reveal a land card from among them and put that card into your hand. Put the rest on the bottom of your library in any order.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "G",
+   "U"
+  ],
+  "keywords": [
+   "Magecraft"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/2/0291c909-bb87-47cb-9b06-5e409e654f15.jpg?1783927303",
+   "normal": "https://cards.scryfall.io/normal/front/0/2/0291c909-bb87-47cb-9b06-5e409e654f15.jpg?1783927303",
+   "large": "https://cards.scryfall.io/large/front/0/2/0291c909-bb87-47cb-9b06-5e409e654f15.jpg?1783927303",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/2/0291c909-bb87-47cb-9b06-5e409e654f15.jpg?1783927303"
+  }
+ },
+ {
+  "name": "Needlethorn Drake",
+  "scryfallId": "9c0cf2c4-723e-46c4-b2aa-4c957177209a",
+  "oracleId": "6edacc06-9523-4ccf-a4c2-2ac4af386b8a",
+  "set": "stx",
+  "collectorNumber": "208",
+  "rarity": "common",
+  "manaCost": "{G}{U}",
+  "typeLine": "Creature — Drake",
+  "oracleText": "Flying, deathtouch",
+  "power": "1",
+  "toughness": "1",
+  "colors": [
+   "G",
+   "U"
+  ],
+  "keywords": [
+   "Deathtouch",
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/c/9c0cf2c4-723e-46c4-b2aa-4c957177209a.jpg?1783927304",
+   "normal": "https://cards.scryfall.io/normal/front/9/c/9c0cf2c4-723e-46c4-b2aa-4c957177209a.jpg?1783927304",
+   "large": "https://cards.scryfall.io/large/front/9/c/9c0cf2c4-723e-46c4-b2aa-4c957177209a.jpg?1783927304",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/c/9c0cf2c4-723e-46c4-b2aa-4c957177209a.jpg?1783927304"
+  }
+ },
+ {
+  "name": "Frost Trickster",
+  "scryfallId": "fd79c9cc-0a8c-4d88-96e2-cb177134a18d",
+  "oracleId": "1663d54f-4f39-4a03-aac2-e2923cbb7de8",
+  "set": "stx",
+  "collectorNumber": "43",
+  "rarity": "common",
+  "manaCost": "{2}{U}",
+  "typeLine": "Creature — Bird Wizard",
+  "oracleText": "Flying\nWhen this creature enters, tap target creature an opponent controls. That creature doesn't untap during its controller's next untap step.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/d/fd79c9cc-0a8c-4d88-96e2-cb177134a18d.jpg?1783927380",
+   "normal": "https://cards.scryfall.io/normal/front/f/d/fd79c9cc-0a8c-4d88-96e2-cb177134a18d.jpg?1783927380",
+   "large": "https://cards.scryfall.io/large/front/f/d/fd79c9cc-0a8c-4d88-96e2-cb177134a18d.jpg?1783927380",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/d/fd79c9cc-0a8c-4d88-96e2-cb177134a18d.jpg?1783927380"
+  }
+ },
+ {
+  "name": "Waterfall Aerialist",
+  "scryfallId": "7bc6966c-18d9-4675-9594-6f0b2d11c405",
+  "oracleId": "736026b2-84d4-4452-ae0d-5d1b0af0a400",
+  "set": "stx",
+  "collectorNumber": "61",
+  "rarity": "common",
+  "manaCost": "{3}{U}",
+  "typeLine": "Creature — Djinn Wizard",
+  "oracleText": "Flying\nWard {2} (Whenever this creature becomes the target of a spell or ability an opponent controls, counter it unless that player pays {2}.)",
+  "power": "3",
+  "toughness": "1",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Flying",
+   "Ward"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/b/7bc6966c-18d9-4675-9594-6f0b2d11c405.jpg?1783927372",
+   "normal": "https://cards.scryfall.io/normal/front/7/b/7bc6966c-18d9-4675-9594-6f0b2d11c405.jpg?1783927372",
+   "large": "https://cards.scryfall.io/large/front/7/b/7bc6966c-18d9-4675-9594-6f0b2d11c405.jpg?1783927372",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/b/7bc6966c-18d9-4675-9594-6f0b2d11c405.jpg?1783927372"
+  }
+ },
+ {
+  "name": "Karok Wrangler",
+  "scryfallId": "74729320-f6ee-4176-9463-397d6e477d7a",
+  "oracleId": "031f629f-7a9a-4143-9f5d-434ed1c23b7f",
+  "set": "stx",
+  "collectorNumber": "135",
+  "rarity": "uncommon",
+  "manaCost": "{4}{G}",
+  "typeLine": "Creature — Elf Druid",
+  "oracleText": "Magecraft — Whenever you cast or copy an instant or sorcery spell, put a +1/+1 counter on target creature you control.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Magecraft"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/4/74729320-f6ee-4176-9463-397d6e477d7a.jpg?1783927342",
+   "normal": "https://cards.scryfall.io/normal/front/7/4/74729320-f6ee-4176-9463-397d6e477d7a.jpg?1783927342",
+   "large": "https://cards.scryfall.io/large/front/7/4/74729320-f6ee-4176-9463-397d6e477d7a.jpg?1783927342",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/4/74729320-f6ee-4176-9463-397d6e477d7a.jpg?1783927342"
+  }
+ },
+ {
+  "name": "Quandrix Cultivator",
+  "scryfallId": "e3ca9ff7-0dcf-4ecc-879c-957d290ad7f5",
+  "oracleId": "73a63c92-6dce-4804-bcd4-3fcc942cf270",
+  "set": "stx",
+  "collectorNumber": "218",
+  "rarity": "uncommon",
+  "manaCost": "{1}{G}{G/U}{U}",
+  "typeLine": "Creature — Turtle Druid",
+  "oracleText": "When this creature enters, you may search your library for a basic Forest or Island card, put it onto the battlefield, then shuffle.",
+  "power": "3",
+  "toughness": "4",
+  "colors": [
+   "G",
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/3/e3ca9ff7-0dcf-4ecc-879c-957d290ad7f5.jpg?1783927300",
+   "normal": "https://cards.scryfall.io/normal/front/e/3/e3ca9ff7-0dcf-4ecc-879c-957d290ad7f5.jpg?1783927300",
+   "large": "https://cards.scryfall.io/large/front/e/3/e3ca9ff7-0dcf-4ecc-879c-957d290ad7f5.jpg?1783927300",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/3/e3ca9ff7-0dcf-4ecc-879c-957d290ad7f5.jpg?1783927300"
+  }
+ },
+ {
+  "name": "Zimone, Quandrix Prodigy",
+  "scryfallId": "0ca14c17-dc72-4f68-92f2-14a6c4019f4e",
+  "oracleId": "ee2ef1e0-6803-4eb5-8664-605438c67505",
+  "set": "stx",
+  "collectorNumber": "250",
+  "rarity": "uncommon",
+  "manaCost": "{G}{U}",
+  "typeLine": "Legendary Creature — Human Wizard",
+  "oracleText": "{1}, {T}: You may put a land card from your hand onto the battlefield tapped.\n{4}, {T}: Draw a card. If you control eight or more lands, draw two cards instead.",
+  "power": "1",
+  "toughness": "2",
+  "colors": [
+   "G",
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/c/0ca14c17-dc72-4f68-92f2-14a6c4019f4e.jpg?1783927283",
+   "normal": "https://cards.scryfall.io/normal/front/0/c/0ca14c17-dc72-4f68-92f2-14a6c4019f4e.jpg?1783927283",
+   "large": "https://cards.scryfall.io/large/front/0/c/0ca14c17-dc72-4f68-92f2-14a6c4019f4e.jpg?1783927283",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/c/0ca14c17-dc72-4f68-92f2-14a6c4019f4e.jpg?1783927283"
+  }
+ },
+ {
+  "name": "Professor of Zoomancy",
+  "scryfallId": "8347f2e8-ef70-4879-860a-12f7cab25902",
+  "oracleId": "a22b8220-b41d-4b58-aa68-2c65ce37c517",
+  "set": "stx",
+  "collectorNumber": "140",
+  "rarity": "common",
+  "manaCost": "{3}{G}",
+  "typeLine": "Creature — Bear Druid",
+  "oracleText": "When this creature enters, create a 1/1 black and green Pest creature token with \"When this token dies, you gain 1 life.\"",
+  "power": "4",
+  "toughness": "3",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/3/8347f2e8-ef70-4879-860a-12f7cab25902.jpg?1783927340",
+   "normal": "https://cards.scryfall.io/normal/front/8/3/8347f2e8-ef70-4879-860a-12f7cab25902.jpg?1783927340",
+   "large": "https://cards.scryfall.io/large/front/8/3/8347f2e8-ef70-4879-860a-12f7cab25902.jpg?1783927340",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/3/8347f2e8-ef70-4879-860a-12f7cab25902.jpg?1783927340"
+  }
+ },
+ {
+  "name": "Springmane Cervin",
+  "scryfallId": "f5b0eac4-0262-4eed-97d4-0f2e6f06c8e1",
+  "oracleId": "4e964f31-c764-4af5-8c27-a46fd721fab4",
+  "set": "stx",
+  "collectorNumber": "144",
+  "rarity": "common",
+  "manaCost": "{2}{G}",
+  "typeLine": "Creature — Elk",
+  "oracleText": "When this creature enters, you gain 2 life.",
+  "power": "3",
+  "toughness": "2",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/5/f5b0eac4-0262-4eed-97d4-0f2e6f06c8e1.jpg?1783927337",
+   "normal": "https://cards.scryfall.io/normal/front/f/5/f5b0eac4-0262-4eed-97d4-0f2e6f06c8e1.jpg?1783927337",
+   "large": "https://cards.scryfall.io/large/front/f/5/f5b0eac4-0262-4eed-97d4-0f2e6f06c8e1.jpg?1783927337",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/5/f5b0eac4-0262-4eed-97d4-0f2e6f06c8e1.jpg?1783927337"
+  }
+ },
+ {
+  "name": "Overgrown Arch",
+  "scryfallId": "a71dddf5-8f72-4018-9cc8-5f63a17f1ee5",
+  "oracleId": "802f8bcd-9219-48cd-a4c5-d9ea9ef60c9e",
+  "set": "stx",
+  "collectorNumber": "139",
+  "rarity": "uncommon",
+  "manaCost": "{1}{G}",
+  "typeLine": "Creature — Plant Wall",
+  "oracleText": "Defender\n{T}: You gain 1 life.\n{2}, Sacrifice this creature: Learn. (You may reveal a Lesson card you own from outside the game and put it into your hand, or discard a card to draw a card.)",
+  "power": "0",
+  "toughness": "4",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Learn",
+   "Defender"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/7/a71dddf5-8f72-4018-9cc8-5f63a17f1ee5.jpg?1783927339",
+   "normal": "https://cards.scryfall.io/normal/front/a/7/a71dddf5-8f72-4018-9cc8-5f63a17f1ee5.jpg?1783927339",
+   "large": "https://cards.scryfall.io/large/front/a/7/a71dddf5-8f72-4018-9cc8-5f63a17f1ee5.jpg?1783927339",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/7/a71dddf5-8f72-4018-9cc8-5f63a17f1ee5.jpg?1783927339"
+  }
+ },
+ {
+  "name": "Archmage Emeritus",
+  "scryfallId": "e85c555a-f034-4c79-92d8-610527d16529",
+  "oracleId": "8305d576-21d8-4ce7-8eda-a7cd9793aca5",
+  "set": "fic",
+  "collectorNumber": "261",
+  "rarity": "rare",
+  "manaCost": "{2}{U}{U}",
+  "typeLine": "Creature — Human Wizard",
+  "oracleText": "Magecraft — Whenever you cast or copy an instant or sorcery spell, draw a card.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Magecraft"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/8/e85c555a-f034-4c79-92d8-610527d16529.jpg?1783906279",
+   "normal": "https://cards.scryfall.io/normal/front/e/8/e85c555a-f034-4c79-92d8-610527d16529.jpg?1783906279",
+   "large": "https://cards.scryfall.io/large/front/e/8/e85c555a-f034-4c79-92d8-610527d16529.jpg?1783906279",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/8/e85c555a-f034-4c79-92d8-610527d16529.jpg?1783906279"
+  }
+ },
+ {
+  "name": "Leyline Invocation",
+  "scryfallId": "4edfbed0-0c0d-4aa5-bfe0-5268aff0f958",
+  "oracleId": "9f2e713f-c7d5-4c91-9934-9e36888244fd",
+  "set": "stx",
+  "collectorNumber": "136",
+  "rarity": "common",
+  "manaCost": "{5}{G}",
+  "typeLine": "Sorcery",
+  "oracleText": "Create a 0/0 green and blue Fractal creature token. Put X +1/+1 counters on it, where X is the number of lands you control.",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/e/4edfbed0-0c0d-4aa5-bfe0-5268aff0f958.jpg?1783927341",
+   "normal": "https://cards.scryfall.io/normal/front/4/e/4edfbed0-0c0d-4aa5-bfe0-5268aff0f958.jpg?1783927341",
+   "large": "https://cards.scryfall.io/large/front/4/e/4edfbed0-0c0d-4aa5-bfe0-5268aff0f958.jpg?1783927341",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/e/4edfbed0-0c0d-4aa5-bfe0-5268aff0f958.jpg?1783927341"
+  }
+ },
+ {
+  "name": "Serpentine Curve",
+  "scryfallId": "d651b9e9-d723-4340-a010-d71b2a697e73",
+  "oracleId": "e07ed462-17b8-46ec-8a3f-3f5c89f4bf78",
+  "set": "stx",
+  "collectorNumber": "52",
+  "rarity": "common",
+  "manaCost": "{3}{U}",
+  "typeLine": "Sorcery",
+  "oracleText": "Create a 0/0 green and blue Fractal creature token. Put X +1/+1 counters on it, where X is one plus the total number of instant and sorcery cards you own in exile and in your graveyard.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/6/d651b9e9-d723-4340-a010-d71b2a697e73.jpg?1783927375",
+   "normal": "https://cards.scryfall.io/normal/front/d/6/d651b9e9-d723-4340-a010-d71b2a697e73.jpg?1783927375",
+   "large": "https://cards.scryfall.io/large/front/d/6/d651b9e9-d723-4340-a010-d71b2a697e73.jpg?1783927375",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/6/d651b9e9-d723-4340-a010-d71b2a697e73.jpg?1783927375"
+  }
+ },
+ {
+  "name": "Field Trip",
+  "scryfallId": "f235060a-eb49-4a73-bb5f-01228c3c4070",
+  "oracleId": "29423b70-7cb7-4617-898c-78a38eb233ad",
+  "set": "stx",
+  "collectorNumber": "131",
+  "rarity": "common",
+  "manaCost": "{2}{G}",
+  "typeLine": "Sorcery",
+  "oracleText": "Search your library for a basic Forest card, put that card onto the battlefield tapped, then shuffle.\nLearn. (You may reveal a Lesson card you own from outside the game and put it into your hand, or discard a card to draw a card.)",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Learn"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/2/f235060a-eb49-4a73-bb5f-01228c3c4070.jpg?1783927343",
+   "normal": "https://cards.scryfall.io/normal/front/f/2/f235060a-eb49-4a73-bb5f-01228c3c4070.jpg?1783927343",
+   "large": "https://cards.scryfall.io/large/front/f/2/f235060a-eb49-4a73-bb5f-01228c3c4070.jpg?1783927343",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/2/f235060a-eb49-4a73-bb5f-01228c3c4070.jpg?1783927343"
+  }
+ },
+ {
+  "name": "Pop Quiz",
+  "scryfallId": "d16892d8-9d10-45de-ab79-0e645c4b5588",
+  "oracleId": "dda9ac6c-1ab2-4f77-b499-f03d587163d8",
+  "set": "stx",
+  "collectorNumber": "49",
+  "rarity": "common",
+  "manaCost": "{2}{U}",
+  "typeLine": "Instant",
+  "oracleText": "Draw a card.\nLearn. (You may reveal a Lesson card you own from outside the game and put it into your hand, or discard a card to draw a card.)",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Learn"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/1/d16892d8-9d10-45de-ab79-0e645c4b5588.jpg?1783927376",
+   "normal": "https://cards.scryfall.io/normal/front/d/1/d16892d8-9d10-45de-ab79-0e645c4b5588.jpg?1783927376",
+   "large": "https://cards.scryfall.io/large/front/d/1/d16892d8-9d10-45de-ab79-0e645c4b5588.jpg?1783927376",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/1/d16892d8-9d10-45de-ab79-0e645c4b5588.jpg?1783927376"
+  }
+ },
+ {
+  "name": "Big Play",
+  "scryfallId": "9016d667-50a9-4093-9a99-b34dcdafe60b",
+  "oracleId": "607425ac-9e90-4c9e-88bf-72f8a76cce97",
+  "set": "stx",
+  "collectorNumber": "122",
+  "rarity": "common",
+  "manaCost": "{1}{G}",
+  "typeLine": "Instant",
+  "oracleText": "Target creature gets +2/+2 and gains reach until end of turn. Put a +1/+1 counter on it. (A creature with reach can block creatures with flying.)",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/0/9016d667-50a9-4093-9a99-b34dcdafe60b.jpg?1783927347",
+   "normal": "https://cards.scryfall.io/normal/front/9/0/9016d667-50a9-4093-9a99-b34dcdafe60b.jpg?1783927347",
+   "large": "https://cards.scryfall.io/large/front/9/0/9016d667-50a9-4093-9a99-b34dcdafe60b.jpg?1783927347",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/0/9016d667-50a9-4093-9a99-b34dcdafe60b.jpg?1783927347"
+  }
+ },
+ {
+  "name": "Quandrix Command",
+  "scryfallId": "021b62d8-d160-47f5-bc51-0474f160d13f",
+  "oracleId": "9c0f7cdc-9095-40ae-bf83-75a5ffda72b9",
+  "set": "stx",
+  "collectorNumber": "217",
+  "rarity": "rare",
+  "manaCost": "{1}{G}{U}",
+  "typeLine": "Instant",
+  "oracleText": "Choose two —\n• Return target creature or planeswalker to its owner's hand.\n• Counter target artifact or enchantment spell.\n• Put two +1/+1 counters on target creature.\n• Target player shuffles up to three target cards from their graveyard into their library.",
+  "colors": [
+   "G",
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/2/021b62d8-d160-47f5-bc51-0474f160d13f.jpg?1783927299",
+   "normal": "https://cards.scryfall.io/normal/front/0/2/021b62d8-d160-47f5-bc51-0474f160d13f.jpg?1783927299",
+   "large": "https://cards.scryfall.io/large/front/0/2/021b62d8-d160-47f5-bc51-0474f160d13f.jpg?1783927299",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/2/021b62d8-d160-47f5-bc51-0474f160d13f.jpg?1783927299"
+  }
+ },
+ {
+  "name": "Eureka Moment",
+  "scryfallId": "e400c9b7-c789-49dd-9f72-b9d1df03fcca",
+  "oracleId": "0e2c11b2-d95f-4402-9a4a-afd3f7ffb8be",
+  "set": "stx",
+  "collectorNumber": "184",
+  "rarity": "common",
+  "manaCost": "{2}{G}{U}",
+  "typeLine": "Instant",
+  "oracleText": "Draw two cards. You may put a land card from your hand onto the battlefield.",
+  "colors": [
+   "G",
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/4/e400c9b7-c789-49dd-9f72-b9d1df03fcca.jpg?1783927314",
+   "normal": "https://cards.scryfall.io/normal/front/e/4/e400c9b7-c789-49dd-9f72-b9d1df03fcca.jpg?1783927314",
+   "large": "https://cards.scryfall.io/large/front/e/4/e400c9b7-c789-49dd-9f72-b9d1df03fcca.jpg?1783927314",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/4/e400c9b7-c789-49dd-9f72-b9d1df03fcca.jpg?1783927314"
+  }
+ },
+ {
+  "name": "Mage Duel",
+  "scryfallId": "92325638-0321-4409-8910-2287c64c182e",
+  "oracleId": "763882f9-a7ad-4fb1-bdf4-c9a158d4b68e",
+  "set": "stx",
+  "collectorNumber": "137",
+  "rarity": "common",
+  "manaCost": "{2}{G}",
+  "typeLine": "Sorcery",
+  "oracleText": "This spell costs {2} less to cast if you've cast another instant or sorcery spell this turn.\nTarget creature you control gets +1/+2 until end of turn. Then it fights target creature you don't control. (Each deals damage equal to its power to the other.)",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Fight"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/2/92325638-0321-4409-8910-2287c64c182e.jpg?1783927342",
+   "normal": "https://cards.scryfall.io/normal/front/9/2/92325638-0321-4409-8910-2287c64c182e.jpg?1783927342",
+   "large": "https://cards.scryfall.io/large/front/9/2/92325638-0321-4409-8910-2287c64c182e.jpg?1783927342",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/2/92325638-0321-4409-8910-2287c64c182e.jpg?1783927342"
+  }
+ },
+ {
+  "name": "Decisive Denial",
+  "scryfallId": "b2e9d132-95f7-4ee7-9c91-be19e4ad7a5d",
+  "oracleId": "2d0bd780-b754-44a3-894c-a9c8aa711f05",
+  "set": "stx",
+  "collectorNumber": "177",
+  "rarity": "uncommon",
+  "manaCost": "{G}{U}",
+  "typeLine": "Instant",
+  "oracleText": "Choose one —\n• Target creature you control fights target creature you don't control. (Each deals damage equal to its power to the other.)\n• Counter target noncreature spell unless its controller pays {3}.",
+  "colors": [
+   "G",
+   "U"
+  ],
+  "keywords": [
+   "Fight"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/2/b2e9d132-95f7-4ee7-9c91-be19e4ad7a5d.jpg?1783927318",
+   "normal": "https://cards.scryfall.io/normal/front/b/2/b2e9d132-95f7-4ee7-9c91-be19e4ad7a5d.jpg?1783927318",
+   "large": "https://cards.scryfall.io/large/front/b/2/b2e9d132-95f7-4ee7-9c91-be19e4ad7a5d.jpg?1783927318",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/2/b2e9d132-95f7-4ee7-9c91-be19e4ad7a5d.jpg?1783927318"
+  }
+ },
+ {
+  "name": "Devouring Tendrils",
+  "scryfallId": "f7444555-da19-4d2d-ad81-233c54fbb78e",
+  "oracleId": "c0112586-3826-452e-9e44-7e6edd197f78",
+  "set": "stx",
+  "collectorNumber": "126",
+  "rarity": "uncommon",
+  "manaCost": "{1}{G}",
+  "typeLine": "Sorcery",
+  "oracleText": "Target creature you control deals damage equal to its power to target creature or planeswalker you don't control. When the permanent you don't control dies this turn, you gain 2 life.",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/7/f7444555-da19-4d2d-ad81-233c54fbb78e.jpg?1783927344",
+   "normal": "https://cards.scryfall.io/normal/front/f/7/f7444555-da19-4d2d-ad81-233c54fbb78e.jpg?1783927344",
+   "large": "https://cards.scryfall.io/large/front/f/7/f7444555-da19-4d2d-ad81-233c54fbb78e.jpg?1783927344",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/7/f7444555-da19-4d2d-ad81-233c54fbb78e.jpg?1783927344"
+  }
+ },
+ {
+  "name": "Divide by Zero",
+  "scryfallId": "1958d96e-ec44-48ab-80b1-5b01a24ac7b8",
+  "oracleId": "7b1c1a0c-f443-4eb5-a430-9eea886361ca",
+  "set": "stx",
+  "collectorNumber": "41",
+  "rarity": "uncommon",
+  "manaCost": "{2}{U}",
+  "typeLine": "Instant",
+  "oracleText": "Return target spell or permanent with mana value 1 or greater to its owner's hand.\nLearn. (You may reveal a Lesson card you own from outside the game and put it into your hand, or discard a card to draw a card.)",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Learn"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/9/1958d96e-ec44-48ab-80b1-5b01a24ac7b8.jpg?1783927380",
+   "normal": "https://cards.scryfall.io/normal/front/1/9/1958d96e-ec44-48ab-80b1-5b01a24ac7b8.jpg?1783927380",
+   "large": "https://cards.scryfall.io/large/front/1/9/1958d96e-ec44-48ab-80b1-5b01a24ac7b8.jpg?1783927380",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/9/1958d96e-ec44-48ab-80b1-5b01a24ac7b8.jpg?1783927380"
+  }
+ },
+ {
+  "name": "Resculpt",
+  "scryfallId": "1bfb1fcb-a411-4c1c-b8fc-496242ae3a9b",
+  "oracleId": "814e321d-16fd-4f7b-a8d8-2b089be76f2c",
+  "set": "stx",
+  "collectorNumber": "51",
+  "rarity": "common",
+  "manaCost": "{1}{U}",
+  "typeLine": "Instant",
+  "oracleText": "Exile target artifact or creature. Its controller creates a 4/4 blue and red Elemental creature token.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/b/1bfb1fcb-a411-4c1c-b8fc-496242ae3a9b.jpg?1783927375",
+   "normal": "https://cards.scryfall.io/normal/front/1/b/1bfb1fcb-a411-4c1c-b8fc-496242ae3a9b.jpg?1783927375",
+   "large": "https://cards.scryfall.io/large/front/1/b/1bfb1fcb-a411-4c1c-b8fc-496242ae3a9b.jpg?1783927375",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/b/1bfb1fcb-a411-4c1c-b8fc-496242ae3a9b.jpg?1783927375"
+  }
+ },
+ {
+  "name": "Arcane Subtraction",
+  "scryfallId": "68cdb00c-ea86-4b72-8f62-570820edfa1b",
+  "oracleId": "4b5806fa-430f-4b78-b874-63d01a8a9de5",
+  "set": "stx",
+  "collectorNumber": "36",
+  "rarity": "common",
+  "manaCost": "{1}{U}",
+  "typeLine": "Instant",
+  "oracleText": "Target creature gets -4/-0 until end of turn.\nLearn. (You may reveal a Lesson card you own from outside the game and put it into your hand, or discard a card to draw a card.)",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Learn"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/8/68cdb00c-ea86-4b72-8f62-570820edfa1b.jpg?1783927381",
+   "normal": "https://cards.scryfall.io/normal/front/6/8/68cdb00c-ea86-4b72-8f62-570820edfa1b.jpg?1783927381",
+   "large": "https://cards.scryfall.io/large/front/6/8/68cdb00c-ea86-4b72-8f62-570820edfa1b.jpg?1783927381",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/8/68cdb00c-ea86-4b72-8f62-570820edfa1b.jpg?1783927381"
+  }
+ },
+ {
+  "name": "Curate",
+  "scryfallId": "f2a0e716-22b7-4a5e-9b7a-d4a806ee7427",
+  "oracleId": "75e8907d-f726-4a63-ba8b-c0fd4936734e",
+  "set": "stx",
+  "collectorNumber": "40",
+  "rarity": "common",
+  "manaCost": "{1}{U}",
+  "typeLine": "Instant",
+  "oracleText": "Surveil 2. (Look at the top two cards of your library, then put any number of them into your graveyard and the rest on top of your library in any order.)\nDraw a card.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Surveil"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/2/f2a0e716-22b7-4a5e-9b7a-d4a806ee7427.jpg?1783927381",
+   "normal": "https://cards.scryfall.io/normal/front/f/2/f2a0e716-22b7-4a5e-9b7a-d4a806ee7427.jpg?1783927381",
+   "large": "https://cards.scryfall.io/large/front/f/2/f2a0e716-22b7-4a5e-9b7a-d4a806ee7427.jpg?1783927381",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/2/f2a0e716-22b7-4a5e-9b7a-d4a806ee7427.jpg?1783927381"
+  }
+ },
+ {
+  "name": "Bury in Books",
+  "scryfallId": "ac2a2cf5-80cf-4c06-8b04-bc04a5460de5",
+  "oracleId": "d5e67016-1740-42f8-8be2-9eb9d4adb142",
+  "set": "stx",
+  "collectorNumber": "39",
+  "rarity": "common",
+  "manaCost": "{4}{U}",
+  "typeLine": "Instant",
+  "oracleText": "This spell costs {2} less to cast if it targets an attacking creature.\nPut target creature into its owner's library second from the top.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/c/ac2a2cf5-80cf-4c06-8b04-bc04a5460de5.jpg?1783927380",
+   "normal": "https://cards.scryfall.io/normal/front/a/c/ac2a2cf5-80cf-4c06-8b04-bc04a5460de5.jpg?1783927380",
+   "large": "https://cards.scryfall.io/large/front/a/c/ac2a2cf5-80cf-4c06-8b04-bc04a5460de5.jpg?1783927380",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/c/ac2a2cf5-80cf-4c06-8b04-bc04a5460de5.jpg?1783927380"
+  }
+ },
+ {
+  "name": "Reject",
+  "scryfallId": "d77f0731-fb40-4dc2-8530-afcb5ce1f27f",
+  "oracleId": "198fed4c-297e-41c0-a172-e471c7401fbb",
+  "set": "stx",
+  "collectorNumber": "50",
+  "rarity": "common",
+  "manaCost": "{1}{U}",
+  "typeLine": "Instant",
+  "oracleText": "Counter target creature or planeswalker spell unless its controller pays {3}. If that spell is countered this way, exile it instead of putting it into its owner's graveyard.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/7/d77f0731-fb40-4dc2-8530-afcb5ce1f27f.jpg?1783927375",
+   "normal": "https://cards.scryfall.io/normal/front/d/7/d77f0731-fb40-4dc2-8530-afcb5ce1f27f.jpg?1783927375",
+   "large": "https://cards.scryfall.io/large/front/d/7/d77f0731-fb40-4dc2-8530-afcb5ce1f27f.jpg?1783927375",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/7/d77f0731-fb40-4dc2-8530-afcb5ce1f27f.jpg?1783927375"
+  }
+ },
+ {
+  "name": "Quandrix Campus",
+  "scryfallId": "f788da28-481b-41fa-a70c-b53db6b0f068",
+  "oracleId": "172f86b6-9580-4eb2-b7dc-2a44277d978b",
+  "set": "stx",
+  "collectorNumber": "271",
+  "rarity": "common",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "This land enters tapped.\n{T}: Add {G} or {U}.\n{4}, {T}: Scry 1. (Look at the top card of your library. You may put that card on the bottom.)",
+  "colors": [],
+  "keywords": [
+   "Scry"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/7/f788da28-481b-41fa-a70c-b53db6b0f068.jpg?1783927273",
+   "normal": "https://cards.scryfall.io/normal/front/f/7/f788da28-481b-41fa-a70c-b53db6b0f068.jpg?1783927273",
+   "large": "https://cards.scryfall.io/large/front/f/7/f788da28-481b-41fa-a70c-b53db6b0f068.jpg?1783927273",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/7/f788da28-481b-41fa-a70c-b53db6b0f068.jpg?1783927273"
+  }
+ },
+ {
+  "name": "Fractal Summoning",
+  "scryfallId": "cc3f1f7e-eb19-49c1-a1ee-93b85ac8815c",
+  "oracleId": "ce690421-db1d-4177-a2db-338f29aab623",
+  "set": "stx",
+  "collectorNumber": "187",
+  "rarity": "common",
+  "manaCost": "{X}{G/U}{G/U}",
+  "typeLine": "Sorcery — Lesson",
+  "oracleText": "Create a 0/0 green and blue Fractal creature token. Put X +1/+1 counters on it.",
+  "colors": [
+   "G",
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/c/cc3f1f7e-eb19-49c1-a1ee-93b85ac8815c.jpg?1783927314",
+   "normal": "https://cards.scryfall.io/normal/front/c/c/cc3f1f7e-eb19-49c1-a1ee-93b85ac8815c.jpg?1783927314",
+   "large": "https://cards.scryfall.io/large/front/c/c/cc3f1f7e-eb19-49c1-a1ee-93b85ac8815c.jpg?1783927314",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/c/cc3f1f7e-eb19-49c1-a1ee-93b85ac8815c.jpg?1783927314"
+  }
+ },
+ {
+  "name": "Introduction to Prophecy",
+  "scryfallId": "7820923e-bad2-4d6a-92b3-97b9737d2ca9",
+  "oracleId": "9ae1fded-2e77-498a-98e7-4a4908447175",
+  "set": "stx",
+  "collectorNumber": "4",
+  "rarity": "common",
+  "manaCost": "{3}",
+  "typeLine": "Sorcery — Lesson",
+  "oracleText": "Scry 2, then draw a card.",
+  "colors": [],
+  "keywords": [
+   "Scry"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/8/7820923e-bad2-4d6a-92b3-97b9737d2ca9.jpg?1783927395",
+   "normal": "https://cards.scryfall.io/normal/front/7/8/7820923e-bad2-4d6a-92b3-97b9737d2ca9.jpg?1783927395",
+   "large": "https://cards.scryfall.io/large/front/7/8/7820923e-bad2-4d6a-92b3-97b9737d2ca9.jpg?1783927395",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/8/7820923e-bad2-4d6a-92b3-97b9737d2ca9.jpg?1783927395"
+  }
+ },
+ {
+  "name": "Expanded Anatomy",
+  "scryfallId": "c5642b9d-0daa-4e6b-ad48-f88dd37d6574",
+  "oracleId": "6bc5dfbb-98ec-4ff1-8ba2-e2594c53e6d9",
+  "set": "stx",
+  "collectorNumber": "2",
+  "rarity": "common",
+  "manaCost": "{3}",
+  "typeLine": "Sorcery — Lesson",
+  "oracleText": "Put two +1/+1 counters on target creature. It gains vigilance until end of turn.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/5/c5642b9d-0daa-4e6b-ad48-f88dd37d6574.jpg?1783927396",
+   "normal": "https://cards.scryfall.io/normal/front/c/5/c5642b9d-0daa-4e6b-ad48-f88dd37d6574.jpg?1783927396",
+   "large": "https://cards.scryfall.io/large/front/c/5/c5642b9d-0daa-4e6b-ad48-f88dd37d6574.jpg?1783927396",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/5/c5642b9d-0daa-4e6b-ad48-f88dd37d6574.jpg?1783927396"
+  }
+ },
+ {
+  "name": "Environmental Sciences",
+  "scryfallId": "46b394fc-a99c-44e7-9226-da0699167541",
+  "oracleId": "2f889671-a1d6-4034-881b-58c93897d707",
+  "set": "stx",
+  "collectorNumber": "1",
+  "rarity": "common",
+  "manaCost": "{2}",
+  "typeLine": "Sorcery — Lesson",
+  "oracleText": "Search your library for a basic land card, reveal it, put it into your hand, then shuffle. You gain 2 life.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/6/46b394fc-a99c-44e7-9226-da0699167541.jpg?1783927397",
+   "normal": "https://cards.scryfall.io/normal/front/4/6/46b394fc-a99c-44e7-9226-da0699167541.jpg?1783927397",
+   "large": "https://cards.scryfall.io/large/front/4/6/46b394fc-a99c-44e7-9226-da0699167541.jpg?1783927397",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/6/46b394fc-a99c-44e7-9226-da0699167541.jpg?1783927397"
+  }
  }
 ]

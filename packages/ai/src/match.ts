@@ -49,12 +49,15 @@ export function playMatch(
     onEvents?: (events: GameEvent[], state: GameState, action: Action) => void;
     /** Brawl: the format and each player's commander. */
     brawl?: Pick<NewGameOptions, 'format' | 'commanders'>;
+    /** Strixhaven (13a): each player's Lessons outside the game, for Learn. */
+    sideboards?: NewGameOptions['sideboards'];
   } = {},
 ): MatchResult {
   let state = engine.newGame({
     decks,
     seed,
     ...opts.brawl,
+    ...(opts.sideboards ? { sideboards: opts.sideboards } : {}),
     ...(opts.startingPlayer ? { startingPlayer: opts.startingPlayer } : {}),
   });
   const actions: Action[] = [];

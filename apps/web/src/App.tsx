@@ -65,6 +65,12 @@ const SECTIONS: { title: string; blurb: string; decks: Decklist[] }[] = [
     set: 'fin' as const,
   },
   {
+    title: 'Strixhaven',
+    blurb: 'Our two-colour decks from Strixhaven, built to face the starter decks',
+    series: 'starter' as const,
+    set: 'stx' as const,
+  },
+  {
     title: 'Color Challenge',
     blurb: 'The mono-colour decks Sparky plays against new players',
     series: 'colorChallenge' as const,
@@ -78,7 +84,7 @@ const SECTIONS: { title: string; blurb: string; decks: Decklist[] }[] = [
     title: string;
     blurb: string;
     series: string;
-    set?: 'blb' | 'msh' | 'fin';
+    set?: 'blb' | 'msh' | 'fin' | 'stx';
   }) => {
     const decks = DECKS.filter((d) => d.series === series && d.set === set);
     return { ...s, decks: [...decks.filter(isPlayable), ...decks.filter((d) => !isPlayable(d))] };

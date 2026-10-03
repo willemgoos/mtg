@@ -74,6 +74,9 @@ export const KEYWORDS_AS_ABILITIES = new Set([
   'Morbid',
   'Threshold',
   'Mill',
+  // Strixhaven (13a).
+  'Learn',
+  'Magecraft',
   // Bloomburrow.
   'Offspring',
   'Forage',
