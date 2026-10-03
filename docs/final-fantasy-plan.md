@@ -171,6 +171,23 @@ Void 52%, Road Trip 52%.
 - Ten FIN Jump In packets in `jumpin.ts` (our own, like the other sets; `'fin'` in the Packet `set` union).
 - FIN boosters in Expedition (with a FIN deck) and Season (with the ten FIN decks as starters).
 
+Jump In and boosters done. Ten packets (`fin-*` in `jumpin.ts`), two per colour, each twelve booster cards with one
+rare or mythic plus eight basics: **Knights** (W, Dion: job-select Equipment and Heroes), **White Magic** (W, Aerith:
+lifelink, moogles, Phoenix Down), **Summons** (U, Summon: Leviathan, with Shiva and the ice spells), **Airships** (U, The
+Lunar Whale, The Prima Vista and machina), **Black Mages** (B, Dark Confidant: Wizard tokens and noncreature spells),
+**Dark Knights** (B, Cecil: Dark Knight's Greatsword, Tonberry, Demon Wall), **Warriors** (R, Firion: Equipment and
+Katana/Sword/Rapier), **Red Mages** (R, Clive: Ifrit, Ramuh, Fire and Thunder Magic), **Chocobos** (G, Bartz and Boko:
+Birds and landfall), **Monsters** (G, Jumbo Cactuar: Cactuar, Behemoth, T-Rexaur). They pair freely with the other sets'
+packets (40 packets, 780 pairs); the picker has a Final Fantasy set button. Boosters: `PackSet` `'fin'` in
+`expedition.ts` (an expedition with a FIN deck or an all-FIN Jump In pair opens FIN boosters; mixed pairs alternate) and
+`SeasonPackKind` `'finalFantasy'` (`FINAL_FANTASY_SHEETS` in `seasonPacks.ts`, sold in the store, the ten FIN
+`series: 'starter'` decks as starters). Sheets: FIN cards in the pool with collector number up to 309 (no Starter Kit
+exclusives, no basics, fronts only), so cards the pool gains later join them. The FIN booster wrapper shows Cloud,
+Midgar Mercenary. Balance: 1600 heuristic-bot games between random Jump In pairs drawn from all 40 packets (FIN with FIN
+and with the other sets), no errors. Packet win rates (about 160 games each): Knights 52%, White Magic 42%, Summons 45%,
+Airships 52%, Black Mages 41%, Dark Knights 55%, Warriors 64%, Red Mages 52%, Chocobos 50%, Monsters 47%; the FIN set as a
+whole 50% (Foundations 50%, Bloomburrow 48%, Marvel 52%; the other sets' packets range 20–70%), so no retuning.
+
 ### 11d: the Starter Kit (Cloud vs Sephiroth)
 
 The two Starter Kit decks with their 12 exclusive cards, as they play on Arena. Exact lists from mtg.wiki (the MediaWiki API)
@@ -381,6 +398,19 @@ Both groups:
 - The Earth Crystal and The Fire Crystal reduce generic mana only (as all cost reductions here).
 - A Realm Reborn's granted ability is used only when paying costs (it isn't listed as an ability of each permanent).
 - Fixed in passing: `all` / `any` / `not` conditions now pass the trigger's subject to the conditions inside them.
+
+11c (Jump In and boosters):
+
+- The Jump In packets are our own (Arena's FIN Jump In packets use cards we don't have); twelve booster cards and eight
+  basics each, no Town lands.
+- Booster sheets are the FIN cards in the pool with collector number up to 309 (the Starter Kit exclusives Beatrix,
+  Rosa, Xande, Sephiroth, Planet's Heir, Ultima Weapon and Deadly Embrace are numbered past it). Like Bloomburrow and
+  Marvel, the packs are Play Booster-like (one rare or mythic, three uncommons, eight commons in Expedition; Season's
+  generator with wildcards), without FIN's special slots (borderless, showcase, Through the Ages).
+- A Season pack's reveal picks its set from the cards inside: a FIN pack holding only reprints that another set also
+  prints (unlikely) would show the Foundations wrapper.
+- The FIN booster wrapper's art is Cloud, Midgar Mercenary (named in `PackOpening.tsx`); colour packs use the colour's
+  first booster rare, as for the other sets.
 
 ### Phase 12
 

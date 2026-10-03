@@ -39,7 +39,7 @@ describe('Jump In packets', () => {
   });
 
   it('has two packets per colour in each set', () => {
-    for (const set of [undefined, 'blb', 'msh'])
+    for (const set of [undefined, 'blb', 'msh', 'fin'])
       for (const c of ['W', 'U', 'B', 'R', 'G'])
         expect(
           PACKETS.filter((p) => p.set === set && p.color === c),
@@ -52,6 +52,14 @@ describe('Jump In packets', () => {
       for (const [name] of p.spells) expect(card.get(name)!.set, `${p.name}: ${name}`).toBe(p.set);
   });
 
+  it('builds Final Fantasy packets from booster cards, not the Starter Kit exclusives', () => {
+    const fin = PACKETS.filter((p) => p.set === 'fin');
+    expect(fin).toHaveLength(10);
+    for (const p of fin)
+      for (const [name] of p.spells)
+        expect(+card.get(name)!.collectorNumber, `${p.name}: ${name}`).toBeLessThanOrEqual(309);
+  });
+
   it('pairs packets across sets; a pair from one set is of that set', () => {
     const mixed = deckById(jumpInId('goblins', 'blb-lizards'));
     expect(deckIds(mixed)).toHaveLength(40);
@@ -61,7 +69,9 @@ describe('Jump In packets', () => {
     expect(d.set).toBe('msh');
     expect(deckIds(d)).toHaveLength(40);
     expect(deckById(jumpInId('blb-bats', 'msh-robots')).set).toBeUndefined();
-    expect(JUMP_IN_DECKS).toHaveLength((30 * 29) / 2);
+    expect(deckById(jumpInId('fin-chocobos', 'fin-monsters')).set).toBe('fin');
+    expect(deckById(jumpInId('fin-knights', 'angels')).set).toBeUndefined();
+    expect(JUMP_IN_DECKS).toHaveLength((40 * 39) / 2);
   });
 
   it('pairs two packets into a 40-card deck', () => {
