@@ -735,6 +735,9 @@ export interface CardFilter {
   notAttachedHost?: boolean;
   /** Its mana value is odd or even (Thanos). */
   manaValueParity?: 'odd' | 'even';
+  // Marvel Super Heroes Jumpstart (HYDRA)
+  /** "Creature that's attacking alone": the only attacking creature (Viper, Cruel Conspirator). */
+  attackingAlone?: boolean;
   // Brawl.
   /** Is its controller's commander ("your commander"). */
   commander?: boolean;

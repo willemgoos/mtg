@@ -539,6 +539,12 @@ export function matchesFilter(
   if (filter.lacksKeyword && c.keywords.has(filter.lacksKeyword)) return false;
   if (filter.tapped !== undefined && obj(ctx, id).tapped !== filter.tapped) return false;
   if (filter.attacking !== undefined && isAttacking(ctx, id) !== filter.attacking) return false;
+  // Marvel Super Heroes Jumpstart (HYDRA): "attacking alone".
+  if (
+    filter.attackingAlone &&
+    !(ctx.s.combat?.attackers.length === 1 && ctx.s.combat.attackers[0]!.id === id)
+  )
+    return false;
   if (
     filter.subtype &&
     !c.subtypes.includes(filter.subtype) &&

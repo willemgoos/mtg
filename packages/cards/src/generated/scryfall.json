@@ -22184,6 +22184,101 @@
   }
  },
  {
+  "name": "Bob, Reluctant HYDRA Agent",
+  "scryfallId": "423c5752-b634-44a9-82b3-2dd1045e4d90",
+  "oracleId": "9caa490e-dc28-4069-9ffb-4b1afd8fdd54",
+  "set": "msc",
+  "collectorNumber": "649",
+  "rarity": "uncommon",
+  "manaCost": "{1}{B}",
+  "typeLine": "Legendary Creature — Human Coward Villain",
+  "oracleText": "Whenever Bob attacks alone, return him to his owner's hand. If you do, each opponent loses 2 life and you gain 2 life.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/2/423c5752-b634-44a9-82b3-2dd1045e4d90.jpg?1783903064",
+   "normal": "https://cards.scryfall.io/normal/front/4/2/423c5752-b634-44a9-82b3-2dd1045e4d90.jpg?1783903064",
+   "large": "https://cards.scryfall.io/large/front/4/2/423c5752-b634-44a9-82b3-2dd1045e4d90.jpg?1783903064",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/2/423c5752-b634-44a9-82b3-2dd1045e4d90.jpg?1783903064"
+  }
+ },
+ {
+  "name": "Viper, Cruel Conspirator",
+  "scryfallId": "3a57b64f-2b57-44f3-8d4d-2ff5c5615601",
+  "oracleId": "6824a6ed-37d0-4db5-b2d4-9c737d0c49f9",
+  "set": "msc",
+  "collectorNumber": "673",
+  "rarity": "rare",
+  "manaCost": "{1}{B}",
+  "typeLine": "Legendary Creature — Human Assassin Villain",
+  "oracleText": "{B}: Target creature that's attacking alone gets +1/+1 until end of turn.\n{B}: Target creature that's attacking alone gains your choice of deathtouch or lifelink until end of turn.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/a/3a57b64f-2b57-44f3-8d4d-2ff5c5615601.jpg?1783903056",
+   "normal": "https://cards.scryfall.io/normal/front/3/a/3a57b64f-2b57-44f3-8d4d-2ff5c5615601.jpg?1783903056",
+   "large": "https://cards.scryfall.io/large/front/3/a/3a57b64f-2b57-44f3-8d4d-2ff5c5615601.jpg?1783903056",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/a/3a57b64f-2b57-44f3-8d4d-2ff5c5615601.jpg?1783903056"
+  }
+ },
+ {
+  "name": "HYDRA Disintegrator",
+  "scryfallId": "932cb77d-3d01-4212-b6ab-bbe66acd2563",
+  "oracleId": "cf16702d-9a0e-4e4c-82cb-d9b0b1e23f15",
+  "set": "msc",
+  "collectorNumber": "660",
+  "rarity": "uncommon",
+  "manaCost": "{4}{B}",
+  "typeLine": "Artifact — Equipment",
+  "oracleText": "When this Equipment enters, create a 2/1 black Villain creature token with menace, then attach this Equipment to it. (A creature with menace can't be blocked except by two or more creatures.)\nEquipped creature gets +3/+3.\nEquip {4} ({4}: Attach to target creature you control. Equip only as a sorcery.)",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Equip"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/3/932cb77d-3d01-4212-b6ab-bbe66acd2563.jpg?1783903060",
+   "normal": "https://cards.scryfall.io/normal/front/9/3/932cb77d-3d01-4212-b6ab-bbe66acd2563.jpg?1783903060",
+   "large": "https://cards.scryfall.io/large/front/9/3/932cb77d-3d01-4212-b6ab-bbe66acd2563.jpg?1783903060",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/3/932cb77d-3d01-4212-b6ab-bbe66acd2563.jpg?1783903060"
+  }
+ },
+ {
+  "name": "Infernal Rebirth",
+  "scryfallId": "a09895d1-b41f-4dc6-aefa-774795d28e56",
+  "oracleId": "05a1e1ee-67f0-4158-a012-01612bc9cc70",
+  "set": "msc",
+  "collectorNumber": "537",
+  "rarity": "common",
+  "manaCost": "{3}{B}",
+  "typeLine": "Instant",
+  "oracleText": "Return one or two target creature cards from your graveyard to your hand.\nBasic landcycling {2} ({2}, Discard this card: Search your library for a basic land card, reveal it, put it into your hand, then shuffle.)",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Landcycling",
+   "Basic landcycling",
+   "Typecycling",
+   "Cycling"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/0/a09895d1-b41f-4dc6-aefa-774795d28e56.jpg?1783903101",
+   "normal": "https://cards.scryfall.io/normal/front/a/0/a09895d1-b41f-4dc6-aefa-774795d28e56.jpg?1783903101",
+   "large": "https://cards.scryfall.io/large/front/a/0/a09895d1-b41f-4dc6-aefa-774795d28e56.jpg?1783903101",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/0/a09895d1-b41f-4dc6-aefa-774795d28e56.jpg?1783903101"
+  }
+ },
+ {
   "name": "Sol Ring",
   "scryfallId": "91fdb56b-54d5-4272-8319-505ff987fe9b",
   "oracleId": "6ad8011d-3471-4369-9d68-b264cc027487",
