@@ -19,6 +19,7 @@ import { type Event, Home, isEvent, type Mode, Nav, type Tab } from './component
 import { JumpIn } from './components/JumpIn.tsx';
 import { Season } from './components/Season.tsx';
 import type { BotKind } from './game/bot.worker.ts';
+import './components/decks.css';
 import { artFor, BLURBS } from './game/deckArt.ts';
 import * as X from './game/expedition.ts';
 import {
@@ -514,6 +515,8 @@ const MODES: { id: Mode; name: string; blurb: string }[] = [
   },
 ];
 
+const cardCount = (d: Decklist) => d.cards.reduce((n, [, k]) => n + k, 0) + (d.commander ? 1 : 0);
+
 function Start({
   onTab,
   clears,
@@ -552,6 +555,8 @@ function Start({
   const name = isEvent(mode) ? EVENT_NAMES[mode] : '';
   const single = !isEvent(mode);
   const [season] = useState(seasonDecks);
+  /** The one section shown, or every section. */
+  const [filter, setFilter] = useState<string | null>(null);
   // Expeditions can also set out with a deck built in Season mode.
   const sections =
     mode === 'brawl'
@@ -563,139 +568,214 @@ function Start({
             ...SECTIONS.slice(1),
           ]
         : SECTIONS;
+  const shown = sections.filter((s) => !filter || s.title === filter);
   const steps = mode === 'expedition' ? X.FLOORS : ROUNDS.length;
+  const playable = (s: { decks: Decklist[] }) => s.decks.filter(isPlayable).length;
+  const status = (d: Decklist): TileStatus | undefined => {
+    if (!isPlayable(d)) return { text: 'Coming soon' };
+    const record = single ? undefined : records[d.id];
+    if (!record || record.runs === 0) return undefined;
+    return record.clears
+      ? { text: `Cleared${record.clears > 1 ? ` ×${record.clears}` : ''}`, cleared: true }
+      : { text: `Best ${record.best}/${steps}` };
+  };
   return (
-    <div className="decks-page">
+    <div className="dpick">
       <Nav tab="decks" onTab={onTab} clears={clears} />
-      <div className="start">
-        <div className="start__title">
-          <h1>{mode === 'quick' ? 'Quick match' : mode === 'brawl' ? 'Brawl' : name}</h1>
-          <p>
-            {single
-              ? 'Choose your opponent, then your deck.'
-              : running
-                ? 'Your run is waiting.'
-                : mode === 'gauntlet'
-                  ? 'Choose a deck to take through the gauntlet.'
-                  : 'Choose a deck to set out with.'}
-          </p>
-        </div>
-        <div className="start__opponent start__mode" role="radiogroup" aria-label="Mode">
-          {MODES.map((m) => (
-            <button
-              key={m.id}
-              role="radio"
-              aria-checked={mode === m.id}
-              className={`opp ${mode === m.id ? 'is-on' : ''}`}
-              onClick={() => onMode(m.id)}
-            >
-              <span className="opp__name">{m.name}</span>
-              <span className="opp__blurb">{m.blurb}</span>
-            </button>
-          ))}
-        </div>
-        {single ? (
-          <>
-            <div className="start__opponent" role="radiogroup" aria-label="Opponent">
-              {OPPONENTS.map((o) => (
-                <button
-                  key={o.id}
-                  role="radio"
-                  aria-checked={opponent === o.id}
-                  className={`opp ${opponent === o.id ? 'is-on' : ''}`}
-                  onClick={() => onOpponent(o.id)}
-                >
-                  <span className="opp__name">{o.name}</span>
-                  <span className="opp__blurb">{o.blurb}</span>
-                </button>
-              ))}
-            </div>
-            <label className="start__their-deck">
-              <span className="start__label">Opponent's deck</span>
-              <select
-                className="chip is-on"
-                value={theirDeck ?? ''}
-                onChange={(e) => onTheirDeck(e.target.value || null)}
+      <main className="dpick__main">
+        <header className="dpick__head">
+          <div className="dpick__title">
+            <h1>{mode === 'quick' ? 'Quick match' : mode === 'brawl' ? 'Brawl' : name}</h1>
+            <p>
+              {single
+                ? 'Choose your opponent, then pick a deck to play.'
+                : running
+                  ? 'Your run is waiting. Finish it to start another.'
+                  : mode === 'gauntlet'
+                    ? 'Choose a deck to take through the gauntlet.'
+                    : 'Choose a deck to set out with.'}
+            </p>
+          </div>
+          <div className="dseg" role="radiogroup" aria-label="Mode">
+            {MODES.map((m) => (
+              <button
+                key={m.id}
+                role="radio"
+                aria-checked={mode === m.id}
+                title={m.blurb}
+                className={`dseg__opt ${mode === m.id ? 'is-on' : ''}`}
+                onClick={() => {
+                  setFilter(null);
+                  onMode(m.id);
+                }}
               >
-                <option value="">Random</option>
-                {sections.map((s) => (
-                  <optgroup key={s.title} label={s.title}>
-                    {s.decks.filter(isPlayable).map((d) => (
-                      <option key={d.id} value={d.id}>
-                        {d.name}
-                      </option>
-                    ))}
-                  </optgroup>
+                {m.name}
+              </button>
+            ))}
+          </div>
+        </header>
+
+        {single ? (
+          <div className="dsetup">
+            <div className="dsetup__field">
+              <span className="dsetup__label">Opponent</span>
+              <div className="dseg dseg--sm" role="radiogroup" aria-label="Opponent">
+                {OPPONENTS.map((o) => (
+                  <button
+                    key={o.id}
+                    role="radio"
+                    aria-checked={opponent === o.id}
+                    className={`dseg__opt ${opponent === o.id ? 'is-on' : ''}`}
+                    onClick={() => onOpponent(o.id)}
+                  >
+                    {o.name}
+                  </button>
                 ))}
-              </select>
+              </div>
+              <span className="dsetup__hint">
+                {OPPONENTS.find((o) => o.id === opponent)?.blurb}
+              </span>
+            </div>
+            <label className="dsetup__field">
+              <span className="dsetup__label">Their deck</span>
+              <span className="dselect">
+                <select
+                  value={theirDeck ?? ''}
+                  onChange={(e) => onTheirDeck(e.target.value || null)}
+                >
+                  <option value="">Random</option>
+                  {sections.map((s) => (
+                    <optgroup key={s.title} label={s.title}>
+                      {s.decks.filter(isPlayable).map((d) => (
+                        <option key={d.id} value={d.id}>
+                          {d.name}
+                        </option>
+                      ))}
+                    </optgroup>
+                  ))}
+                </select>
+                <svg className="hico" viewBox="0 0 16 16" aria-hidden>
+                  <path d="m4 6 4 4 4-4" />
+                </svg>
+              </span>
+              <span className="dsetup__hint">
+                {theirDeck ? 'Always this deck' : 'A different deck from the same series'}
+              </span>
             </label>
-          </>
+          </div>
         ) : (
           run && <RunBanner name={name} run={run} onContinue={onContinue} />
         )}
-        {mode === 'expedition' && (
+
+        <div className="dfilter" role="toolbar" aria-label="Deck series">
+          <button
+            aria-pressed={!filter}
+            className={`dfilter__chip ${!filter ? 'is-on' : ''}`}
+            onClick={() => setFilter(null)}
+          >
+            All <span>{sections.reduce((n, s) => n + playable(s), 0)}</span>
+          </button>
+          {sections.map((s) => (
+            <button
+              key={s.title}
+              aria-pressed={filter === s.title}
+              className={`dfilter__chip ${filter === s.title ? 'is-on' : ''}`}
+              onClick={() => setFilter(filter === s.title ? null : s.title)}
+            >
+              {s.title} <span>{playable(s)}</span>
+            </button>
+          ))}
+        </div>
+
+        {mode === 'expedition' && !filter && (
           <JumpInSection records={records} locked={running} onJumpIn={onJumpIn} />
         )}
-        {sections.map((section, si) => (
-          <section key={section.title} className="start__section">
-            <h2 className="start__section-title">
-              {section.title}
-              <span>{section.blurb}</span>
-            </h2>
-            <div className={`start__decks ${running ? 'is-waiting' : ''}`}>
-              {section.decks.map((d, j) => {
-                const i = si * 10 + j;
-                const locked = !isPlayable(d);
-                const record = single ? undefined : records[d.id];
-                return (
-                  <div key={d.id} className="deck-slot">
-                    <button
-                      className={`deck ${locked ? 'is-locked' : ''}`}
-                      style={
-                        {
-                          '--art': `url("${artFor(d)}")`,
-                          '--glow': `var(--mana-${d.colors[0]})`,
-                          '--i': i,
-                        } as React.CSSProperties
-                      }
-                      disabled={locked || running}
-                      onClick={() => (single ? onPick(d.id) : onRun(d.id))}
-                    >
-                      <span className="deck__art" />
-                      {record && record.runs > 0 && (
-                        <span className={`deck__record ${record.clears ? 'is-cleared' : ''}`}>
-                          {record.clears
-                            ? `★ Cleared${record.clears > 1 ? ` ×${record.clears}` : ''}`
-                            : `Best ${record.best}/${steps}`}
-                        </span>
-                      )}
-                      <span className="deck__pips">
-                        {d.colors.map((c) => (
-                          <span key={c} className={`pip pip--${c}`} />
-                        ))}
-                      </span>
-                      <span className="deck__name">{d.name}</span>
-                      <span className="deck__blurb">
-                        {locked
-                          ? 'Coming soon'
-                          : (BLURBS[d.id] ??
-                            `${d.cards.reduce((n, [, k]) => n + k, 0)} cards from Season`)}
-                      </span>
-                    </button>
-                    <button
-                      className="deck-slot__view"
-                      style={{ '--i': i } as React.CSSProperties}
-                      onClick={() => onView(d.id)}
-                    >
-                      View deck
-                    </button>
-                  </div>
-                );
-              })}
+        {shown.map((section) => (
+          <section key={section.title} className="dsection">
+            <div className="dsection__head">
+              <h2>{section.title}</h2>
+              <p>{section.blurb}</p>
+            </div>
+            <div className={`dgrid ${running ? 'is-waiting' : ''}`}>
+              {section.decks.map((d, i) => (
+                <DeckTile
+                  key={d.id}
+                  deck={d}
+                  art={artFor(d)}
+                  i={i}
+                  disabled={!isPlayable(d) || running}
+                  status={status(d)}
+                  meta={
+                    BLURBS[d.id] ??
+                    `${cardCount(d)} cards${d.series === 'season' ? ' from Season' : ''}`
+                  }
+                  onPick={() => (single ? onPick(d.id) : onRun(d.id))}
+                  onView={() => onView(d.id)}
+                />
+              ))}
             </div>
           </section>
         ))}
-      </div>
+      </main>
+    </div>
+  );
+}
+
+interface TileStatus {
+  text: string;
+  cleared?: boolean;
+}
+
+/** A deck in the picker: art, name and colours; View opens the list. */
+function DeckTile({
+  deck,
+  art,
+  i,
+  disabled,
+  status,
+  meta,
+  onPick,
+  onView,
+}: {
+  deck: Pick<Decklist, 'name' | 'colors'>;
+  art: string;
+  i: number;
+  disabled: boolean;
+  status?: TileStatus;
+  meta: string;
+  onPick: () => void;
+  onView?: () => void;
+}) {
+  return (
+    <div
+      className={`dtile ${disabled ? 'is-off' : ''}`}
+      style={{ '--i': Math.min(i, 12) } as React.CSSProperties}
+    >
+      <button className="dtile__main" disabled={disabled} onClick={onPick}>
+        <span className="dtile__media" style={{ backgroundImage: `url("${art}")` }}>
+          {status && (
+            <span className={`tile__status ${status.cleared ? 'tile__status--cleared' : ''}`}>
+              {status.text}
+            </span>
+          )}
+        </span>
+        <span className="dtile__body">
+          <span className="dtile__row">
+            <span className="dtile__name">{deck.name}</span>
+            <span className="dpips" aria-label={deck.colors.join('')}>
+              {deck.colors.map((c) => (
+                <i key={c} style={{ background: `var(--mana-${c})` }} />
+              ))}
+            </span>
+          </span>
+          <span className="dtile__meta">{meta}</span>
+        </span>
+      </button>
+      {onView && (
+        <button className="dtile__view" onClick={onView} aria-label={`View ${deck.name}`}>
+          View deck
+        </button>
+      )}
     </div>
   );
 }
@@ -716,42 +796,27 @@ function JumpInSection({
   const clears = mine.reduce((n, r) => n + r.clears, 0);
   const best = Math.max(0, ...mine.map((r) => r.best));
   return (
-    <section className="start__section">
-      <h2 className="start__section-title">
-        Jump In!
-        <span>Pick two themed half-decks and shuffle them together</span>
-      </h2>
-      <div className={`start__decks ${locked ? 'is-waiting' : ''}`}>
-        <div className="deck-slot">
-          <button
-            className="deck"
-            style={
-              {
-                '--art': `url("${scryfallById.get(slug(JUMP_IN_FACE))?.image?.artCrop ?? ''}")`,
-                '--glow': 'var(--mana-R)',
-                '--i': 0,
-              } as React.CSSProperties
-            }
-            disabled={locked}
-            onClick={onJumpIn}
-          >
-            <span className="deck__art" />
-            {mine.length > 0 && (
-              <span className={`deck__record ${clears ? 'is-cleared' : ''}`}>
-                {clears
-                  ? `★ Cleared${clears > 1 ? ` ×${clears}` : ''}`
-                  : `Best ${best}/${X.FLOORS}`}
-              </span>
-            )}
-            <span className="deck__pips">
-              {(['W', 'U', 'B', 'R', 'G'] as const).map((c) => (
-                <span key={c} className={`pip pip--${c}`} />
-              ))}
-            </span>
-            <span className="deck__name">Jump In!</span>
-            <span className="deck__blurb">A new 40-card deck every run</span>
-          </button>
-        </div>
+    <section className="dsection">
+      <div className="dsection__head">
+        <h2>Jump In!</h2>
+        <p>Pick two themed half-decks and shuffle them together</p>
+      </div>
+      <div className={`dgrid ${locked ? 'is-waiting' : ''}`}>
+        <DeckTile
+          deck={{ name: 'Jump In!', colors: ['W', 'U', 'B', 'R', 'G'] }}
+          art={scryfallById.get(slug(JUMP_IN_FACE))?.image?.artCrop ?? ''}
+          i={0}
+          disabled={locked}
+          status={
+            mine.length > 0
+              ? clears
+                ? { text: `Cleared${clears > 1 ? ` ×${clears}` : ''}`, cleared: true }
+                : { text: `Best ${best}/${X.FLOORS}` }
+              : undefined
+          }
+          meta="A new 40-card deck every run"
+          onPick={onJumpIn}
+        />
       </div>
     </section>
   );
@@ -772,27 +837,19 @@ function RunBanner({
   const deck = deckById(run.deck);
   const status = run.status;
   return (
-    <div
-      className="run-banner"
-      style={
-        {
-          '--art': `url("${artFor(deck)}")`,
-          '--glow': `var(--mana-${deck.colors[0]})`,
-        } as React.CSSProperties
-      }
-    >
-      <span className="run-banner__art" />
-      <div className="run-banner__text">
-        <span className="run-banner__deck">{deck.name}</span>
-        <span className="run-banner__state">
+    <div className="drun">
+      <span className="drun__art" style={{ backgroundImage: `url("${artFor(deck)}")` }} />
+      <div className="drun__text">
+        <span className={`drun__state ${status === 'playing' ? 'is-live' : ''}`}>
           {status === 'playing'
             ? `${run.unit} ${run.step} of ${run.steps} · ${run.livesLeft} ${run.livesLeft === 1 ? 'life' : 'lives'} left`
             : status === 'cleared'
               ? `${name} cleared!`
               : 'Run over'}
         </span>
+        <span className="drun__deck">{deck.name}</span>
       </div>
-      <button className="btn btn--primary" onClick={onContinue}>
+      <button className="hbtn hbtn--primary" onClick={onContinue}>
         {status === 'playing' ? 'Continue run' : 'See result'}
       </button>
     </div>

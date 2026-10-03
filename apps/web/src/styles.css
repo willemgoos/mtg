@@ -3947,25 +3947,6 @@ button {
   }
 }
 
-/* ------------------------------------------------------------ decks page */
-
-.decks-page {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  background:
-    radial-gradient(ellipse 60% 48% at 42% 40%, rgba(217, 180, 106, 0.07), transparent 70%),
-    radial-gradient(ellipse at 42% 40%, var(--felt-hi) 0%, var(--felt) 45%, var(--felt-lo) 100%);
-}
-
-.decks-page > .start {
-  flex: 1;
-  min-height: 0;
-  height: auto;
-  background: none;
-}
-
 /* ------------------------------------------------------------ expedition map */
 
 .xmap__status {

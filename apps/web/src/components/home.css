@@ -10,7 +10,8 @@
 .season,
 .swelcome,
 .smodal,
-.dbk {
+.dbk,
+.dpick {
   --h-bg: #0b0c0e;
   --h-surface: #131417;
   --h-raised: #1a1b1f;
