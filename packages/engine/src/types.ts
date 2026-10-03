@@ -883,6 +883,9 @@ export type Amount =
   | { count: 'permanentsOpponentsControl'; filter: CardFilter }
   /** Cards in your hand (Kang Dynasty). */
   | { count: 'cardsInHand' }
+  // Marvel Super Heroes Jumpstart (Lethal)
+  /** Creature cards in the opponent's graveyard (Origin of Black Widow). */
+  | { count: 'opponentCreatureCardsInGraveyard' }
   // The Fantastic Four (9d).
   /** Colours among permanents you control and spells you've cast this turn (First Family). */
   | { count: 'colorsAmongPermanentsAndSpells' }

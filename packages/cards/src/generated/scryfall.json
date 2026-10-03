@@ -22647,6 +22647,151 @@
   }
  },
  {
+  "name": "White Widow, Yelena Belova",
+  "scryfallId": "7dd6db74-1dba-4b66-8e54-9f876f16357c",
+  "oracleId": "7aff7cb6-aa56-47ae-8813-75d850917320",
+  "set": "msc",
+  "collectorNumber": "676",
+  "rarity": "uncommon",
+  "manaCost": "{1}{B}",
+  "typeLine": "Legendary Creature — Human Assassin Villain",
+  "oracleText": "Deathtouch\nWhenever a creature you control with deathtouch deals combat damage to a player, put a +1/+1 counter on it.",
+  "power": "1",
+  "toughness": "2",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Deathtouch"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/d/7dd6db74-1dba-4b66-8e54-9f876f16357c.jpg?1783903055",
+   "normal": "https://cards.scryfall.io/normal/front/7/d/7dd6db74-1dba-4b66-8e54-9f876f16357c.jpg?1783903055",
+   "large": "https://cards.scryfall.io/large/front/7/d/7dd6db74-1dba-4b66-8e54-9f876f16357c.jpg?1783903055",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/d/7dd6db74-1dba-4b66-8e54-9f876f16357c.jpg?1783903055"
+  }
+ },
+ {
+  "name": "Venomized Cat",
+  "scryfallId": "149cbb84-c0d0-4636-a440-2b2898f95ec7",
+  "oracleId": "eb54d807-624b-471e-8c44-07322003903e",
+  "set": "msc",
+  "collectorNumber": "801",
+  "rarity": "common",
+  "manaCost": "{2}{B}",
+  "typeLine": "Creature — Symbiote Cat Villain",
+  "oracleText": "Deathtouch\nWhen this creature enters, mill two cards. (Put the top two cards of your library into your graveyard.)",
+  "power": "2",
+  "toughness": "3",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Mill",
+   "Deathtouch"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/4/149cbb84-c0d0-4636-a440-2b2898f95ec7.jpg?1783903011",
+   "normal": "https://cards.scryfall.io/normal/front/1/4/149cbb84-c0d0-4636-a440-2b2898f95ec7.jpg?1783903011",
+   "large": "https://cards.scryfall.io/large/front/1/4/149cbb84-c0d0-4636-a440-2b2898f95ec7.jpg?1783903011",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/4/149cbb84-c0d0-4636-a440-2b2898f95ec7.jpg?1783903011"
+  }
+ },
+ {
+  "name": "Black Widow, Deadly Hunter",
+  "scryfallId": "c51a2ec4-2a8b-451b-b0b4-a778b9377948",
+  "oracleId": "12a7bf3c-5194-48ad-be0b-553b8ad67671",
+  "set": "msc",
+  "collectorNumber": "648",
+  "rarity": "rare",
+  "manaCost": "{2}{B}",
+  "typeLine": "Legendary Creature — Human Assassin Hero",
+  "oracleText": "Deathtouch\nWhenever a creature you control with deathtouch deals combat damage to a player, you draw a card and lose 1 life.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Deathtouch"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/5/c51a2ec4-2a8b-451b-b0b4-a778b9377948.jpg?1783903065",
+   "normal": "https://cards.scryfall.io/normal/front/c/5/c51a2ec4-2a8b-451b-b0b4-a778b9377948.jpg?1783903065",
+   "large": "https://cards.scryfall.io/large/front/c/5/c51a2ec4-2a8b-451b-b0b4-a778b9377948.jpg?1783903065",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/5/c51a2ec4-2a8b-451b-b0b4-a778b9377948.jpg?1783903065"
+  }
+ },
+ {
+  "name": "Titanium Man",
+  "scryfallId": "2efb18be-250b-4f38-a0c3-9d674ea0225a",
+  "oracleId": "84544d35-7acf-4643-965d-66af90fae51b",
+  "set": "msc",
+  "collectorNumber": "667",
+  "rarity": "uncommon",
+  "manaCost": "{2}{B}{B}",
+  "typeLine": "Legendary Artifact Creature — Human Villain",
+  "oracleText": "Whenever Titanium Man attacks, choose one —\n• Titanium Man gains flying until end of turn.\n• Titanium Man deals 1 damage to any target.",
+  "power": "3",
+  "toughness": "4",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/e/2efb18be-250b-4f38-a0c3-9d674ea0225a.jpg?1783903057",
+   "normal": "https://cards.scryfall.io/normal/front/2/e/2efb18be-250b-4f38-a0c3-9d674ea0225a.jpg?1783903057",
+   "large": "https://cards.scryfall.io/large/front/2/e/2efb18be-250b-4f38-a0c3-9d674ea0225a.jpg?1783903057",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/e/2efb18be-250b-4f38-a0c3-9d674ea0225a.jpg?1783903057"
+  }
+ },
+ {
+  "name": "Venom, Evil Unleashed",
+  "scryfallId": "78fcfdd0-7744-4fed-83dc-6b9a3235ab6f",
+  "oracleId": "6731d861-cc52-4a2e-8c33-154681fd50e4",
+  "set": "msc",
+  "collectorNumber": "800",
+  "rarity": "common",
+  "manaCost": "{4}{B}",
+  "typeLine": "Legendary Creature — Symbiote Villain",
+  "oracleText": "Deathtouch\n{2}{B}, Exile this card from your graveyard: Put two +1/+1 counters on target creature. It gains deathtouch until end of turn. Activate only as a sorcery.",
+  "power": "4",
+  "toughness": "5",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Deathtouch"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/8/78fcfdd0-7744-4fed-83dc-6b9a3235ab6f.jpg?1783903011",
+   "normal": "https://cards.scryfall.io/normal/front/7/8/78fcfdd0-7744-4fed-83dc-6b9a3235ab6f.jpg?1783903011",
+   "large": "https://cards.scryfall.io/large/front/7/8/78fcfdd0-7744-4fed-83dc-6b9a3235ab6f.jpg?1783903011",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/8/78fcfdd0-7744-4fed-83dc-6b9a3235ab6f.jpg?1783903011"
+  }
+ },
+ {
+  "name": "Origin of Black Widow",
+  "scryfallId": "78e4cbed-41e0-46f8-89e4-88f24f026070",
+  "oracleId": "3bc0479f-0f45-4b36-9963-f8eb5973cf47",
+  "set": "msc",
+  "collectorNumber": "664",
+  "rarity": "uncommon",
+  "manaCost": "{2}{B}",
+  "typeLine": "Enchantment — Saga",
+  "oracleText": "(As this Saga enters and after your draw step, add a lore counter. Sacrifice after III.)\nI — Each opponent sacrifices a creature of their choice.\nII — Creatures you control gain deathtouch until end of turn.\nIII — Each opponent loses 1 life for each creature card in their graveyard.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/8/78e4cbed-41e0-46f8-89e4-88f24f026070.jpg?1784182910",
+   "normal": "https://cards.scryfall.io/normal/front/7/8/78e4cbed-41e0-46f8-89e4-88f24f026070.jpg?1784182910",
+   "large": "https://cards.scryfall.io/large/front/7/8/78e4cbed-41e0-46f8-89e4-88f24f026070.jpg?1784182910",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/8/78e4cbed-41e0-46f8-89e4-88f24f026070.jpg?1784182910"
+  }
+ },
+ {
   "name": "Boomerang, Blade Flinger",
   "scryfallId": "6b9f9d5d-a1b6-4e3a-8b65-69eba94ee990",
   "oracleId": "bbd84035-3efd-4301-9778-913898efd57a",
