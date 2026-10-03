@@ -258,7 +258,14 @@ four decks. Three more FIC Brawl decks followed (9 December 2025, "Arena Store d
   first combat phase, life gained this turn, Hades and Noctis, base P/T from an amount, "with mana value up to that
   damage", hideaway, The Wind Crystal); phase 12 keeps its own (creatures entering from a graveyard, becoming
   untapped, equip cost reductions, legendary-only keywords, Hardened Scales, delve, forced blocks, extra land plays).
-  Win rates after this merge: MERGED11C.
+  The AI now values an Equipment at a little more than a card while you have a creature to carry it
+  (`packages/ai/src/evaluate.ts`), which fixed Limit Break (the bot never cast or equipped its Equipment). Win rates
+  after this merge and that change: the ten FIN decks (160 games each against the Foundations starter decks) Heroes' Arsenal
+  53%, Eidolons' Call 53%, Highwind Workshop 47%, Time Compression 53%, Black Mages' Waltz 53%, Chocobo Stampede 48%,
+  Turks' Contract 53%, Forbidden Magicks 45%, Into the Void 52%, Road Trip 51%; Brawl (20 games a pairing) Revival
+  Trance 56%, Limit Break 40%, Counter Blitz 49%, Scions & Spellcraft 39%, Brawl Aerith 64%, Brawl Emet-Selch 46%,
+  Brawl Locke 50%, Avengers Assemble 58%, Wakanda Forever 42%, The Fantastic Four 32% (low on `main` too), Doom
+  Prevails 60%, Mabel's Militia 64%.
 - **Final win rates** (all 12 Brawl decks, 12 games a pairing in both seats, after every fix above): Revival
   Trance 55%, Limit Break 48%, Counter Blitz 51%, Scions & Spellcraft 51%, Brawl Aerith 64%, Brawl Emet-Selch 41%,
   Brawl Locke 53%.
