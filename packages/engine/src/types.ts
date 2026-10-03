@@ -870,7 +870,8 @@ export type EffectDef =
   /** The source card returns from its owner's graveyard. */
   | {
       kind: 'returnSource';
-      to: 'hand' | 'battlefield';
+      // Strixhaven (13b): Bookwurm, "put this card from your graveyard into your library third from the top".
+      to: 'hand' | 'battlefield' | 'libraryThird';
       tapped?: boolean;
       /** "Tapped and attacking" (Persistent Marshstalker). */
       attacking?: boolean;

@@ -10,6 +10,7 @@ import { PRISMARI_LESSONS } from './stx/lessons-prismari.ts';
 import { AZORIUS, AZORIUS_TOKENS } from './stx/azorius.ts';
 import { LESSONS_AZORIUS } from './stx/lessons-azorius.ts';
 import { RAKDOS, RAKDOS_TOKENS } from './stx/rakdos.ts';
+import { SELESNYA, SELESNYA_TOKENS } from './stx/selesnya.ts';
 
 /**
  * Strixhaven (STX) card behaviour, one file per group of decks in stx/,
@@ -28,6 +29,7 @@ export const STRIXHAVEN_BEHAVIORS: Record<string, Behavior> = {
   ...AZORIUS,
   ...LESSONS_AZORIUS,
   ...RAKDOS,
+  ...SELESNYA,
 };
 
 /** Strixhaven tokens (the Lorehold Spirit, the Quandrix Fractal). */
@@ -38,6 +40,7 @@ export const STRIXHAVEN_TOKENS: CardDefinition[] = [
   ...WITHERBLOOM_TOKENS,
   ...AZORIUS_TOKENS,
   ...RAKDOS_TOKENS,
+  ...SELESNYA_TOKENS,
 ];
 
 /** Back faces of double-faced cards: not cards of their own, so not in the pool. */

@@ -2404,6 +2404,16 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
       const o = es.source && ctx.s.objects[es.source.id];
       if (!o || o.zone !== 'graveyard' || o.zcc !== es.source!.zcc) return;
       if (e.to === 'hand') return moveObject(ctx, o.id, 'hand');
+      // Strixhaven (13b): Bookwurm.
+      if (e.to === 'libraryThird') {
+        moveObject(ctx, o.id, 'library');
+        const lib = ctx.s.players[o.owner].library;
+        if (lib.length > 3 && lib[0] === o.id) {
+          lib.shift();
+          lib.splice(2, 0, o.id);
+        }
+        return;
+      }
       // Final Fantasy (11b): returned transformed (Garland).
       moveObject(ctx, o.id, 'battlefield', {
         controller: o.owner,
