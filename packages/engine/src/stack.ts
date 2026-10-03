@@ -510,6 +510,19 @@ export function abilityManaCost(
   if (less && a.cost.mana && !a.powerUp)
     return reduceCost(a.cost.mana, { generic: Math.min(less, a.cost.mana.generic), colored: {} });
   if (!a.powerUp || !a.cost.mana) return a.cost.mana;
+  // Marvel Super Heroes Jumpstart (Trained): Advancing the Spirit, the first power-up on your turn costs {0}.
+  if (
+    ctx.s.turn.activePlayer === o.controller &&
+    !ctx.s.turn.powerUpActivated &&
+    ctx.s.battlefield.some(
+      (id) =>
+        obj(ctx, id).controller === o.controller &&
+        def(ctx, id).abilities.some(
+          (s) => s.kind === 'static' && s.effect.kind === 'firstPowerUpFree',
+        ),
+    )
+  )
+    return { generic: 0, colored: {} };
   let cost = a.cost.mana;
   if (o.zoneTurn === ctx.s.turn.number) cost = reduceCost(cost, def(ctx, source).manaCost);
   for (const id of ctx.s.battlefield) {
@@ -639,6 +652,8 @@ export function activateAbility(
   }
   payMana(ctx, payment);
   if (a.once || a.powerUp) (src.usedAbilities ??= []).push(index);
+  // Marvel Super Heroes Jumpstart (Trained): Advancing the Spirit frees only the first power-up each turn.
+  if (a.powerUp && player === ctx.s.turn.activePlayer) ctx.s.turn.powerUpActivated = true;
   if (a.cost.sacrificeSelf) {
     item.lkiPower = power(ctx, source);
     sacrificePermanent(ctx, source);
