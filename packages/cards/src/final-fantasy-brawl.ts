@@ -4,6 +4,7 @@ import { FIN_SHARED, FIN_SHARED_BACK_FACES } from './fic/fin-shared.ts';
 import { FIC_SHARED, FIC_SHARED_BACK_FACES } from './fic/shared.ts';
 import { AERITH } from './fic/aerith.ts';
 import { CLOUD } from './fic/cloud.ts';
+import { EMET_SELCH } from './fic/emet-selch.ts';
 import { TERRA } from './fic/terra.ts';
 import { TIDUS } from './fic/tidus.ts';
 import { YSHTOLA, YSHTOLA_BACK_FACES } from './fic/yshtola.ts';
@@ -22,6 +23,7 @@ export const FINAL_FANTASY_BRAWL_BEHAVIORS: Record<string, Behavior> = {
   ...TIDUS,
   ...YSHTOLA,
   ...AERITH,
+  ...EMET_SELCH,
 };
 
 /** Back faces of double-faced cards: not cards of their own, so not in the pool. */
@@ -70,6 +72,11 @@ export const FINAL_FANTASY_BRAWL_TOKENS: CardDefinition[] = [
   },
   creatureToken('wolf-2-2-token', 'Wolf', ['G'], ['Wolf'], 2, 2),
   creatureToken('frog-token', 'Frog', ['G'], ['Frog'], 1, 1),
+  creatureToken('horror-token', 'Horror', ['B'], ['Horror'], 2, 2),
+  {
+    ...creatureToken('robot-warrior-token', 'Robot Warrior', ['U'], ['Robot', 'Warrior'], 3, 3),
+    types: ['Artifact', 'Creature'],
+  },
   creatureToken('moogle-token', 'Moogle', ['W'], ['Moogle'], 1, 2, ['lifelink']),
   {
     // Black Mage Wizard: "Whenever you cast a noncreature spell, this token deals 1 damage to each opponent."

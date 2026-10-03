@@ -235,6 +235,13 @@ export function castCost(
   let reduce = d.costReduction !== undefined ? amountFor(ctx, player, d.costReduction) : 0;
   // Final Fantasy Commander (12d): delve.
   if (d.delve && !choice.via) reduce += delveCount(ctx, player, d);
+  // Final Fantasy Commander (12f): spells cast from your graveyard cost less (Emet-Selch of the Third Seat).
+  if (o.zone === 'graveyard' || o.fromGraveyardCast)
+    for (const id of ctx.s.battlefield)
+      if (obj(ctx, id).controller === player)
+        for (const a of def(ctx, id).abilities)
+          if (a.kind === 'static' && a.effect.kind === 'graveyardSpellsCostLess')
+            reduce += a.effect.amount;
   // Heroic Return, Avenge: "costs {2} less if ...".
   if (d.costReductionIf && checkCondition(ctx, d.costReductionIf.condition, player, o))
     reduce += d.costReductionIf.amount;

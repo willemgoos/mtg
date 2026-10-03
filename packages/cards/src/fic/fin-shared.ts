@@ -1079,6 +1079,187 @@ export const FIN_SHARED: Record<string, Behavior> = {
     pump(yours(), 0, 0, ['indestructible']),
   ),
 
+  // ============================================================ Brawl Emet-Selch (12f)
+  'Jidoor, Aristocratic Capital': { entersTapped: true, abilities: [tapFor('U')] },
+  // ------------------------------------------------------------ creatures
+  'Demon Wall': {
+    abilities: [
+      staticAbility({ kind: 'attacksWithCounterDespiteDefender' }),
+      activated('{5}{B}', {}, [], [counters(self, 2)]),
+    ],
+  },
+  "Dragoon's Wyvern": { abilities: [onEnter([], token('hero-1-1-token'))] },
+  'Gogo, Master of Mimicry': {
+    // "Copy target activated or triggered ability you control X times": the top triggered one (abilities aren't targets).
+    abilities: [
+      activated(
+        '{X}{X}',
+        { tapSelf: true },
+        [],
+        [{ kind: 'repeat', count: { x: true }, effects: [{ kind: 'copyTopTrigger', count: 1 }] }],
+      ),
+    ],
+  },
+  Hecteyes: { abilities: [onEnter([], { kind: 'discard', count: 1, who: 'eachOpponent' })] },
+  'Ice Flan': {
+    abilities: [
+      onEnter(
+        [permanent({ types: ['Artifact', 'Creature'] }, { controller: 'opponent' })],
+        { kind: 'tap', what: t0 },
+        { kind: 'namedCounters', name: 'stun', amount: 1, to: t0 },
+      ),
+      landcycling('{2}', 'Island'),
+    ],
+  },
+  'Jecht, Reluctant Guardian': {
+    abilities: [when({ on: 'combatDamageToPlayer' }, [], may(custom('blinkTransformed')))],
+  },
+  Malboro: {
+    abilities: [
+      onEnter(
+        [],
+        { kind: 'discard', count: 1, who: 'eachOpponent' },
+        { kind: 'loseLife', who: 'eachOpponent', amount: 2 },
+        custom('exileTopOfOpponent', { n: 3 }),
+      ),
+      landcycling('{2}', 'Swamp'),
+    ],
+  },
+  Sahagin: {
+    // "At least four mana spent": mana value 4 or more (a simplification).
+    abilities: [
+      when(
+        { on: 'castSpell', filter: 'noncreature', spell: { minManaValue: 4 } },
+        [],
+        counters(self),
+        pump(self, 0, 0, [], { cantBeBlocked: true }),
+      ),
+    ],
+  },
+  'Scorpion Sentinel': {
+    abilities: [
+      staticAbility({
+        kind: 'while',
+        condition: { kind: 'controlsPermanents', filter: { types: ['Land'] }, min: 7 },
+        power: 3,
+        toughness: 0,
+      }),
+    ],
+  },
+  "Sephiroth, Planet's Heir": {
+    abilities: [
+      onEnter([], pump({ each: 'creature', controller: 'opponent' }, -2, -2)),
+      when({ on: 'otherCreatureDies', controller: 'opponent' }, [], counters(self)),
+    ],
+  },
+  "Y'shtola Rhul": {
+    // The additional end step isn't built (a simplification).
+    abilities: [
+      when({ on: 'beginningOfEndStep', whose: 'yours' }, [yourCreature], {
+        kind: 'blink',
+        what: t0,
+      }),
+    ],
+  },
+  'Zenos yae Galvus': {
+    abilities: [
+      onEnter([theirCreature], custom('zenos')),
+      when({ on: 'chosenLeaves' }, [], { kind: 'transform', what: self }),
+    ],
+  },
+  // ------------------------------------------------------------ other permanents
+  "Black Mage's Rod": {
+    abilities: [
+      jobSelect,
+      equipped(1, 0),
+      when({ on: 'castSpell', filter: 'noncreature' }, [], {
+        kind: 'damage',
+        amount: 1,
+        to: 'eachOpponent',
+        from: 'attached',
+      }),
+      equip('{3}'),
+    ],
+  },
+  'Sidequest: Card Collection': {
+    abilities: [
+      onEnter([], draw(3), { kind: 'discard', count: 2 }),
+      {
+        ...when({ on: 'beginningOfEndStep', whose: 'yours' }, [], {
+          kind: 'transform',
+          what: self,
+        }),
+        condition: { kind: 'graveyardCount', min: 8 },
+      },
+    ],
+  },
+  'Sidequest: Hunt the Mark': {
+    abilities: [
+      onEnter([{ what: 'creature', optional: true }], destroy(t0)),
+      {
+        ...when({ on: 'beginningOfEndStep', whose: 'yours' }, [], treasure(), {
+          kind: 'if',
+          condition: { kind: 'controlsPermanents', filter: { subtype: 'Treasure' }, min: 3 },
+          then: [{ kind: 'transform', what: self }],
+        }),
+        condition: condition('opponentCreatureDied'),
+      },
+    ],
+  },
+  'The Prima Vista': {
+    abilities: [
+      when({ on: 'castSpell', filter: 'noncreature', spell: { minManaValue: 4 } }, [], {
+        kind: 'becomeCreature',
+        what: self,
+      }),
+      activated(null, { crew: 2 }, [], [{ kind: 'becomeCreature', what: self }], {
+        label: 'Crew 2',
+      }),
+    ],
+  },
+  // ------------------------------------------------------------ spells
+  'Deadly Embrace': spell([theirCreature], destroy(t0), custom('drawPerCreatureDied')),
+  'Fight On!': spell(
+    [creatureCard({}, { optional: true }), creatureCard({}, { optional: true })],
+    { kind: 'returnToHand', what: t0 },
+    { kind: 'returnToHand', what: t1 },
+  ),
+  'Magic Damper': spell([yourCreature], pump(t0, 1, 1, ['hexproof']), { kind: 'untap', what: t0 }),
+  'Retrieve the Esper': {
+    flashback: mana('{5}{U}'),
+    ...spell([], token('robot-warrior-token')),
+    flashbackSpell: { targets: [], effects: [token('robot-warrior-token', 1, { counters: 2 })] },
+  },
+  "Sephiroth's Intervention": spell([creature], destroy(t0), gain(2)),
+  'The Final Days': {
+    flashback: mana('{4}{B}{B}'),
+    ...spell([], token('horror-token', 2, { tapped: true })),
+    flashbackSpell: {
+      targets: [],
+      effects: [
+        token('horror-token', { count: 'cardsInGraveyard', types: ['Creature'] }, { tapped: true }),
+      ],
+    },
+  },
+  "Vayne's Treachery": {
+    ...spell([creature], pump(t0, -2, -2)),
+    // Kicker—sacrifice an artifact or creature: sacrificed as the spell resolves here.
+    kicker: {
+      cost: { generic: 0, colored: {} },
+      spell: {
+        targets: [creature],
+        effects: [
+          {
+            kind: 'chooseYourPermanent',
+            filter: { types: ['Artifact', 'Creature'] },
+            then: [{ kind: 'sacrifice', what: 'chosen' }],
+          },
+          pump(t0, -6, -6),
+        ],
+      },
+    },
+  },
+
   // ============================================================ Scions & Spellcraft (12d)
   'Treno, Dark City': town('U', 'B'),
   // ------------------------------------------------------------ creatures
@@ -1365,6 +1546,32 @@ export const FIN_SHARED_BACK_FACES: Record<string, Behavior> = {
     chapter([2], [], { kind: 'addMana', mana: [['G'], ['G']] }),
     chapter([3], [], pump(yours({ other: true }), 2, 2, ['trample'])),
   ),
+  "Braska's Final Aeon": summon(
+    3,
+    chapter([1, 2], [], { kind: 'discard', count: 1, who: 'eachOpponent' }, draw(1)),
+    chapter([3], [], { kind: 'opponentSacrifices' }, { kind: 'opponentSacrifices' }),
+  ),
+  // Jidoor's Adventure.
+  Overture: spell([], custom('millHalf')),
+  'Magicked Card': {
+    abilities: [
+      activated(null, { crew: 1 }, [], [{ kind: 'becomeCreature', what: self }], {
+        label: 'Crew 1',
+      }),
+    ],
+  },
+  'Yiazmat, Ultimate Mark': {
+    abilities: [
+      activated(
+        '{1}{B}',
+        { sacrificePermanent: { types: ['Artifact', 'Creature'], other: true } },
+        [],
+        [pump(self, 0, 0, ['indestructible']), { kind: 'tap', what: self }],
+      ),
+    ],
+  },
+  // "When the chosen player loses the game, you win the game": always so in a duel.
+  'Shinryu, Transcendent Rival': {},
   'Crystallized Serah': {
     abilities: [
       staticAbility({

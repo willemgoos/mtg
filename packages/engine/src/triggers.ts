@@ -1119,6 +1119,14 @@ function detectFic(ctx: Ctx, ev: GameEvent): void {
     });
     return;
   }
+  // 12f: Emet-Selch of the Third Seat.
+  if (ev.type === 'lifeChanged' && ev.delta < 0) {
+    forEachBattlefieldTrigger(
+      ctx,
+      (o, a) => a.trigger.on === 'opponentLosesLife' && o.controller !== ev.player,
+    );
+    return;
+  }
   // 12d: Matoya.
   if (ev.type === 'scried') {
     forEachBattlefieldTrigger(
@@ -1130,6 +1138,12 @@ function detectFic(ctx: Ctx, ev: GameEvent): void {
   if (ev.type !== 'objectMoved') return;
   const moved = s.objects[ev.id];
   const movedDef = defOf(ctx, ev.defId);
+  // 12f: Zenos yae Galvus, "when the chosen creature leaves the battlefield".
+  if (ev.from === 'battlefield')
+    forEachBattlefieldTrigger(
+      ctx,
+      (o, a) => a.trigger.on === 'chosenLeaves' && o.chosenCreature?.id === ev.id,
+    );
   if (ev.from === 'battlefield' && ev.to === 'graveyard') {
     const was = ev.controller ?? moved?.owner;
     // "This or another creature or artifact you control dies": its own ability looks back.

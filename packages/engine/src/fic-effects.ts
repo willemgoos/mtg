@@ -9,6 +9,7 @@ import {
   drawCard,
   emit,
   moveObject,
+  newTimestamp,
   obj,
   other,
   transform,
@@ -608,6 +609,57 @@ export const FIC_EFFECTS: Record<string, CustomEffect> = {
       );
   },
 
+  // ---------------------------------------------------------------- 12f
+  /** Deadly Embrace: draw a card for each creature that died this turn. */
+  drawPerCreatureDied(ctx, es) {
+    for (let i = 0; i < ctx.s.turn.creaturesDied; i++) drawCard(ctx, es.controller);
+  },
+
+  /**
+   * Emet-Selch of the Third Seat: the target instant or sorcery card in your
+   * graveyard may be cast this turn (it waits in exile, still "from a graveyard").
+   */
+  castLaterFromGraveyard(ctx, es) {
+    const card = targetObj(ctx, es);
+    if (!card || card.zone !== 'graveyard') return;
+    moveObject(ctx, card.id, 'exile');
+    card.playableUntilTurn = ctx.s.turn.number;
+    card.fromGraveyardCast = true;
+  },
+
+  /** Overture: the opponent mills half their library, rounded down. */
+  millHalf(ctx, es) {
+    const p = other(es.controller);
+    const lib = ctx.s.players[p].library;
+    for (const id of lib.slice(0, Math.floor(lib.length / 2))) moveObject(ctx, id, 'graveyard');
+  },
+
+  /** Malboro: the opponent exiles the top N cards of their library. */
+  exileTopOfOpponent(ctx, es, params) {
+    const p = other(es.controller);
+    for (const id of ctx.s.players[p].library.slice(0, (params as { n: number }).n))
+      moveObject(ctx, id, 'exile');
+  },
+
+  /** Zenos yae Galvus: remember the chosen creature; other creatures get -2/-2 until end of turn. */
+  zenos(ctx, es) {
+    const self = sourceObj(ctx, es);
+    const chosen = targetObj(ctx, es);
+    if (self && chosen) self.chosenCreature = { id: chosen.id, zcc: chosen.zcc };
+    for (const id of ctx.s.battlefield) {
+      if (id === self?.id || id === chosen?.id) continue;
+      if (!characteristics(ctx, id).types.includes('Creature')) continue;
+      ctx.s.effects.push({
+        timestamp: newTimestamp(ctx),
+        affected: { id, zcc: obj(ctx, id).zcc },
+        power: -2,
+        toughness: -2,
+        keywords: [],
+        expires: 'endOfTurn',
+      });
+    }
+  },
+
   // ---------------------------------------------------------------- 12e
   /**
    * Sidequest: Catch a Fish: an artifact or creature card on top goes to your
@@ -645,6 +697,8 @@ export const FIC_CONDITIONS: Record<
   startingPlayer: (ctx, p) => (ctx.s.turn.number % 2 === 1) === (ctx.s.turn.activePlayer === p),
   /** "If it's the first combat phase of the turn" (Genji Glove, Tifa). */
   firstCombat: (ctx) => !ctx.s.turn.laterCombat,
+  /** A creature died under an opponent's control this turn (Sidequest: Hunt the Mark). */
+  opponentCreatureDied: (ctx, p) => (ctx.s.turn.creaturesLost?.[other(p)] ?? 0) > 0,
   /** You gained 7 or more life this turn (Aerith, Last Ancient). */
   gainedSeven: (ctx, p) => (ctx.s.turn.lifeGainedTotal?.[p] ?? 0) >= 7,
   /** You haven't cast a legendary creature spell this turn (Serah Farron). */

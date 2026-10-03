@@ -187,6 +187,10 @@ four decks. Three more FIC Brawl decks followed (9 December 2025, "Arena Store d
   Crystal), Quina's extra Frog token, Excalibur II's charge counters counted from the Equipment, "first legendary
   creature spell each turn costs less" (Serah Farron), Sidequests that transform. Win rate over 20 games a pairing:
   67% (55–90% per opponent), a little over the 65% aim with Arena's list unchanged.
+- **12f Done:** Brawl Emet-Selch of the Third Seat. New: an Adventure land (Jidoor: Overture, then the land from
+  exile), "whenever one or more opponents lose life", spells cast from your graveyard costing less, Demon Wall
+  attacking with a counter, Zenos's chosen creature leaving. Win rate over 20 games a pairing: 41% (25–65% per
+  opponent).
 
 ### Lists: Arena against paper
 
@@ -262,3 +266,7 @@ only, for the merge with phase 11.
   it, not only combat damage. Tataru Taru's opponent always draws. Catch a Fish always takes the card. Chocobo Kick's
   kicker returns the land as the spell resolves. Quina's Frog comes with tokens made by token effects, not with Hero
   tokens from job select.
+- **12f:** Emet-Selch's graveyard spell can be cast for the rest of the turn (from exile, still counted as from the
+  graveyard) and isn't exiled afterwards. Gogo copies the top triggered ability X times (abilities aren't targets).
+  Y'shtola Rhul's additional end step isn't built. Chocobo-style kickers that sacrifice (Vayne's Treachery) are paid
+  as the spell resolves. Sahagin and The Prima Vista count mana value, not mana spent.

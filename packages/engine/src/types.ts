@@ -494,7 +494,11 @@ export type TriggerDef =
   /** Whenever this permanent becomes untapped (Key to the City). */
   | { on: 'becomesUntapped' }
   /** Whenever you scry or surveil (Matoya). */
-  | { on: 'youScryOrSurveil' };
+  | { on: 'youScryOrSurveil' }
+  /** Whenever one or more opponents lose life (Emet-Selch of the Third Seat). Use with `batch`. */
+  | { on: 'opponentLosesLife' }
+  /** When the creature chosen for this one leaves the battlefield (Zenos yae Galvus). */
+  | { on: 'chosenLeaves' };
 
 export type ConditionDef =
   | { kind: 'controlsPermanents'; filter: CardFilter; min: number }
@@ -1551,7 +1555,12 @@ export type StaticDef =
   /** If you would gain life, you gain twice that much instead (The Wind Crystal). */
   | { kind: 'doubleLifeGain' }
   /** Tokens you create come with a 1/1 green Frog (Quina; once per effect, not for the Frogs). */
-  | { kind: 'plusFrogToken' };
+  | { kind: 'plusFrogToken' }
+  // Final Fantasy Commander (12f).
+  /** It can attack as though it didn't have defender while it has a counter (Demon Wall). */
+  | { kind: 'attacksWithCounterDespiteDefender' }
+  /** Spells you cast from your graveyard cost {amount} less (Emet-Selch of the Third Seat). */
+  | { kind: 'graveyardSpellsCostLess'; amount: number };
 
 export type CardDb = ReadonlyMap<CardDefId, CardDefinition>;
 
@@ -1710,6 +1719,11 @@ export interface GameObject {
   // Final Fantasy Commander (12d).
   /** In exile "on an adventure": its owner may cast the creature (or play the land) from there. */
   onAdventure?: boolean;
+  // Final Fantasy Commander (12f).
+  /** Exiled from a graveyard to be cast this turn: it counts as cast from a graveyard (Emet-Selch). */
+  fromGraveyardCast?: boolean;
+  /** The creature chosen for it as it entered (Zenos yae Galvus). */
+  chosenCreature?: ObjectRef;
 }
 
 /** A reference that goes stale when the object changes zones. */
