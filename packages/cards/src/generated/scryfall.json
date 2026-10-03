@@ -34566,5 +34566,139 @@
    "large": "https://cards.scryfall.io/large/front/9/6/967148b1-2bb6-4bc0-95e6-c45fcf99afd2.jpg?1783927373",
    "artCrop": "https://cards.scryfall.io/art_crop/front/9/6/967148b1-2bb6-4bc0-95e6-c45fcf99afd2.jpg?1783927373"
   }
+ },
+ {
+  "name": "Promising Duskmage",
+  "scryfallId": "2ea0dff9-71c3-4d56-aa7b-e0fb9938529a",
+  "oracleId": "44958014-7e30-4e70-9aef-b148843f9c45",
+  "set": "stx",
+  "collectorNumber": "85",
+  "rarity": "common",
+  "manaCost": "{2}{B}",
+  "typeLine": "Creature — Human Warlock",
+  "oracleText": "When this creature dies, if it had a +1/+1 counter on it, draw a card.",
+  "power": "2",
+  "toughness": "3",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/e/2ea0dff9-71c3-4d56-aa7b-e0fb9938529a.jpg?1783927362",
+   "normal": "https://cards.scryfall.io/normal/front/2/e/2ea0dff9-71c3-4d56-aa7b-e0fb9938529a.jpg?1783927362",
+   "large": "https://cards.scryfall.io/large/front/2/e/2ea0dff9-71c3-4d56-aa7b-e0fb9938529a.jpg?1783927362",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/e/2ea0dff9-71c3-4d56-aa7b-e0fb9938529a.jpg?1783927362"
+  }
+ },
+ {
+  "name": "Campus Guide",
+  "scryfallId": "43c59814-3167-4b05-bb85-6c736f3956a4",
+  "oracleId": "5b8e0913-47e9-4d56-971d-abd91b0f7587",
+  "set": "fdn",
+  "collectorNumber": "251",
+  "rarity": "common",
+  "manaCost": "{2}",
+  "typeLine": "Artifact Creature — Golem",
+  "oracleText": "When this creature enters, you may search your library for a basic land card, reveal it, then shuffle and put that card on top.",
+  "power": "2",
+  "toughness": "1",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/3/43c59814-3167-4b05-bb85-6c736f3956a4.jpg?1783909049",
+   "normal": "https://cards.scryfall.io/normal/front/4/3/43c59814-3167-4b05-bb85-6c736f3956a4.jpg?1783909049",
+   "large": "https://cards.scryfall.io/large/front/4/3/43c59814-3167-4b05-bb85-6c736f3956a4.jpg?1783909049",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/3/43c59814-3167-4b05-bb85-6c736f3956a4.jpg?1783909049"
+  }
+ },
+ {
+  "name": "Go Blank",
+  "scryfallId": "846e8657-7435-44c6-a997-b8b156d0cd2c",
+  "oracleId": "60186579-285b-4034-a782-431f79df5b07",
+  "set": "stx",
+  "collectorNumber": "72",
+  "rarity": "uncommon",
+  "manaCost": "{2}{B}",
+  "typeLine": "Sorcery",
+  "oracleText": "Target player discards two cards. Then exile that player's graveyard.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/4/846e8657-7435-44c6-a997-b8b156d0cd2c.jpg?1783927368",
+   "normal": "https://cards.scryfall.io/normal/front/8/4/846e8657-7435-44c6-a997-b8b156d0cd2c.jpg?1783927368",
+   "large": "https://cards.scryfall.io/large/front/8/4/846e8657-7435-44c6-a997-b8b156d0cd2c.jpg?1783927368",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/4/846e8657-7435-44c6-a997-b8b156d0cd2c.jpg?1783927368"
+  }
+ },
+ {
+  "name": "Snow Day",
+  "scryfallId": "a6b6f17d-45ba-4d60-a963-5eee026f2219",
+  "oracleId": "057729d0-f7ed-465b-91aa-fb2c6d6612b2",
+  "set": "stx",
+  "collectorNumber": "53",
+  "rarity": "uncommon",
+  "manaCost": "{4}{U}{U}",
+  "typeLine": "Instant",
+  "oracleText": "Tap up to two target creatures. Those creatures don't untap during their controller's next untap step.\nDraw two cards, then discard a card.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/6/a6b6f17d-45ba-4d60-a963-5eee026f2219.jpg?1783927374",
+   "normal": "https://cards.scryfall.io/normal/front/a/6/a6b6f17d-45ba-4d60-a963-5eee026f2219.jpg?1783927374",
+   "large": "https://cards.scryfall.io/large/front/a/6/a6b6f17d-45ba-4d60-a963-5eee026f2219.jpg?1783927374",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/6/a6b6f17d-45ba-4d60-a963-5eee026f2219.jpg?1783927374"
+  }
+ },
+ {
+  "name": "Ingenious Mastery",
+  "scryfallId": "2386d020-a9ae-4d54-b5e4-f2cb5a7298cc",
+  "oracleId": "dad43a2d-5b30-45f2-a34d-9e68d1fbb716",
+  "set": "stx",
+  "collectorNumber": "44",
+  "rarity": "rare",
+  "manaCost": "{X}{2}{U}",
+  "typeLine": "Sorcery",
+  "oracleText": "You may pay {2}{U} rather than pay this spell's mana cost.\nIf the {2}{U} cost was paid, you draw three cards, then an opponent creates two Treasure tokens and they scry 2. If that cost wasn't paid, you draw X cards.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Treasure",
+   "Scry"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/3/2386d020-a9ae-4d54-b5e4-f2cb5a7298cc.jpg?1783927380",
+   "normal": "https://cards.scryfall.io/normal/front/2/3/2386d020-a9ae-4d54-b5e4-f2cb5a7298cc.jpg?1783927380",
+   "large": "https://cards.scryfall.io/large/front/2/3/2386d020-a9ae-4d54-b5e4-f2cb5a7298cc.jpg?1783927380",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/3/2386d020-a9ae-4d54-b5e4-f2cb5a7298cc.jpg?1783927380"
+  }
+ },
+ {
+  "name": "Poet's Quill",
+  "scryfallId": "e7006f43-0b10-4693-b06f-e7cf86ab4129",
+  "oracleId": "f474d421-5fd0-4d76-95cb-4824a2381a29",
+  "set": "stx",
+  "collectorNumber": "82",
+  "rarity": "rare",
+  "manaCost": "{1}{B}",
+  "typeLine": "Artifact — Equipment",
+  "oracleText": "When this Equipment enters, learn. (You may reveal a Lesson card you own from outside the game and put it into your hand, or discard a card to draw a card.)\nEquipped creature gets +1/+1 and has lifelink.\nEquip {1}{B}",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Equip",
+   "Learn"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/7/e7006f43-0b10-4693-b06f-e7cf86ab4129.jpg?1783927363",
+   "normal": "https://cards.scryfall.io/normal/front/e/7/e7006f43-0b10-4693-b06f-e7cf86ab4129.jpg?1783927363",
+   "large": "https://cards.scryfall.io/large/front/e/7/e7006f43-0b10-4693-b06f-e7cf86ab4129.jpg?1783927363",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/7/e7006f43-0b10-4693-b06f-e7cf86ab4129.jpg?1783927363"
+  }
  }
 ]

@@ -577,11 +577,15 @@ export function runEffects(
           thenPriority,
         };
       } else if (e.kind === 'scry' || e.kind === 'surveil') {
-        const cards = lib.slice(0, e.amount);
+        // Strixhaven (13b): Ingenious Mastery (the opponent scries)
+        const scryer = e.kind === 'scry' && e.forOpponent ? other(controller) : controller;
+        const cards = (
+          e.kind === 'scry' && e.forOpponent ? ctx.s.players[scryer].library : lib
+        ).slice(0, e.amount);
         if (cards.length === 0) continue;
         ctx.s.decision = {
           kind: 'scry',
-          player: controller,
+          player: scryer,
           ...(e.kind === 'surveil' ? { surveil: true } : {}),
           cards,
           resume,
