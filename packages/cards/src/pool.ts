@@ -2,6 +2,7 @@ import { BLOOMBURROW_BEHAVIORS } from './bloomburrow.ts';
 import { MARVEL_BEHAVIORS } from './marvel.ts';
 import { MARVEL_BRAWL_BEHAVIORS } from './marvel-brawl.ts';
 import { FINAL_FANTASY_BEHAVIORS } from './final-fantasy.ts';
+import { FINAL_FANTASY_BRAWL_BEHAVIORS } from './final-fantasy-brawl.ts';
 
 /**
  * Allowed sets, most preferred first: Foundations, then older core sets, then
@@ -38,6 +39,24 @@ export const SET_PREFERENCE = [
   'sld',
   // Arena Beginner Set: Arena-only cards (last resort).
   'anb',
+  // Final Fantasy Commander (phase 12): the Arena Store Brawl decks swap in cards from other sets
+  // (last, so no earlier card changes printing). Arena-only Alchemy cards come from ymid and ywoe.
+  'znr',
+  'khm',
+  'mid',
+  'vow',
+  'afr',
+  'mkm',
+  'dsk',
+  'dft',
+  'mom',
+  'otj',
+  'ktk',
+  'som',
+  'big',
+  'j25',
+  'ymid',
+  'ywoe',
 ];
 
 export const RED_POOL = [
@@ -496,6 +515,9 @@ export const MARVEL_POOL = Object.keys(MARVEL_BEHAVIORS);
 /** Final Fantasy cards (fronts only). */
 export const FINAL_FANTASY_POOL = Object.keys(FINAL_FANTASY_BEHAVIORS);
 
+/** The Final Fantasy Commander Brawl decks' cards (not already in the pool above). */
+export const FINAL_FANTASY_BRAWL_POOL = Object.keys(FINAL_FANTASY_BRAWL_BEHAVIORS);
+
 export const POOL: { name: string }[] = [
   ...RED_POOL,
   ...GREEN_POOL,
@@ -508,6 +530,7 @@ export const POOL: { name: string }[] = [
   ...MARVEL_POOL,
   ...MARVEL_BRAWL_POOL,
   ...FINAL_FANTASY_POOL,
+  ...FINAL_FANTASY_BRAWL_POOL,
 ].map((name) => ({
   name,
 }));

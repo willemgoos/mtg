@@ -1,0 +1,267 @@
+import { characteristics } from './characteristics.ts';
+import {
+  type Ctx,
+  type CustomEffect,
+  addCounters,
+  createObject,
+  def,
+  defOf,
+  drawCard,
+  emit,
+  moveObject,
+  obj,
+  other,
+  transform,
+} from './context.ts';
+import { manaValue } from './cost.ts';
+import { changeLife, dealDamage, damageSourceFor } from './effects.ts';
+import { addLore } from './sagas.ts';
+import { shuffleLibrary } from './setup.ts';
+import type { GameObject, ObjectId, PlayerId } from './types.ts';
+
+/**
+ * Final Fantasy Commander (12): one-offs of the FIC Brawl decks, as custom
+ * effects and conditions. They run without asking: where the card offers a
+ * choice, the engine makes it (noted on each, and in docs/final-fantasy-plan.md).
+ */
+
+const mv = (ctx: Ctx, id: ObjectId) => manaValue(def(ctx, id).manaCost);
+const isLand = (ctx: Ctx, id: ObjectId) => def(ctx, id).types.includes('Land');
+const landsOf = (ctx: Ctx, p: PlayerId) =>
+  ctx.s.battlefield.filter((id) => obj(ctx, id).controller === p && isLand(ctx, id)).length;
+
+/**
+ * The cards the engine discards for "discard up to N" rummaging: spare lands
+ * once you have five or more, then cards you can't cast for a long while.
+ */
+export function rummagePicks(ctx: Ctx, p: PlayerId, max: number): ObjectId[] {
+  const hand = ctx.s.players[p].hand;
+  const lands = landsOf(ctx, p);
+  const spareLands = hand.filter((id) => isLand(ctx, id)).slice(lands >= 5 ? 0 : 1);
+  const picks = lands >= 4 ? spareLands : [];
+  for (const id of hand)
+    if (!isLand(ctx, id) && mv(ctx, id) > lands + 3 && !picks.includes(id)) picks.push(id);
+  return picks.slice(0, max);
+}
+
+const discard = (ctx: Ctx, ids: readonly ObjectId[]) => {
+  for (const id of ids) moveObject(ctx, id, 'graveyard');
+};
+
+const sourceObj = (ctx: Ctx, es: Parameters<CustomEffect>[1]): GameObject | undefined => {
+  const o = es.source && ctx.s.objects[es.source.id];
+  return o && o.zcc === es.source!.zcc ? o : undefined;
+};
+
+const targetObj = (ctx: Ctx, es: Parameters<CustomEffect>[1], i = 0): GameObject | undefined => {
+  const t = es.targets[i];
+  if (!t || !('object' in t)) return undefined;
+  const o = ctx.s.objects[t.object.id];
+  return o && o.zcc === t.object.zcc ? o : undefined;
+};
+
+/** Puts a token copy of a card onto the battlefield under `p`'s control. */
+function tokenCopyOfCard(ctx: Ctx, defId: string, p: PlayerId): GameObject {
+  const t = createObject(ctx, defId, p, 'battlefield', true);
+  ctx.s.battlefield.push(t.id);
+  emit(ctx, { type: 'objectMoved', id: t.id, defId, from: null, to: 'battlefield' });
+  return t;
+}
+
+export const FIC_EFFECTS: Record<string, CustomEffect> = {
+  /** Celes: "discard any number of cards, then draw that many cards plus one" (the engine picks). */
+  celesRummage(ctx, es) {
+    const picks = rummagePicks(ctx, es.controller, 7);
+    discard(ctx, picks);
+    for (let i = 0; i <= picks.length; i++) drawCard(ctx, es.controller);
+  },
+
+  /** Joshua: "discard up to N cards, then draw that many cards" (the engine picks). */
+  rummageUpTo(ctx, es, params) {
+    const picks = rummagePicks(ctx, es.controller, (params as { max: number }).max);
+    discard(ctx, picks);
+    for (let i = 0; i < picks.length; i++) drawCard(ctx, es.controller);
+  },
+
+  /** Combustible Gearhulk: mill three, then damage to the opponent equal to their total mana value. */
+  gearhulkMill(ctx, es) {
+    const lib = ctx.s.players[es.controller].library.slice(0, 3);
+    let total = 0;
+    for (const id of lib) {
+      total += mv(ctx, id);
+      moveObject(ctx, id, 'graveyard');
+    }
+    if (es.source)
+      dealDamage(
+        ctx,
+        damageSourceFor(ctx, es.source.id, es.controller),
+        { player: other(es.controller) },
+        total,
+        false,
+      );
+  },
+
+  /** Legions to Ashes: exile the target and all tokens its controller controls with the same name. */
+  legionsToAshes(ctx, es) {
+    const o = targetObj(ctx, es);
+    if (!o || o.zone !== 'battlefield') return;
+    const { name } = def(ctx, o.id);
+    const who = o.controller;
+    const same = ctx.s.battlefield.filter((id) => {
+      const x = obj(ctx, id);
+      return id !== o.id && x.isToken && x.controller === who && def(ctx, id).name === name;
+    });
+    moveObject(ctx, o.id, 'exile');
+    for (const id of same) moveObject(ctx, id, 'exile');
+  },
+
+  /** Reanimate: lose life equal to the mana value of the card just returned. */
+  loseLifeChosenManaValue(ctx, es) {
+    const o = es.chosen && ctx.s.objects[es.chosen.id];
+    if (o) changeLife(ctx, es.controller, -mv(ctx, o.id));
+  },
+
+  /** Ardyn's Starscourge: exile the target creature card; a token copy that's a 5/5 Demon. */
+  ardynStarscourge(ctx, es) {
+    const card = targetObj(ctx, es);
+    if (!card || card.zone !== 'graveyard') return;
+    moveObject(ctx, card.id, 'exile');
+    const t = tokenCopyOfCard(ctx, card.defId, es.controller);
+    // "Except it's a 5/5 black Demon": it keeps its colours (a simplification).
+    t.copyPT = { power: 5, toughness: 5 };
+    t.addedSubtypes = ['Demon'];
+  },
+
+  /**
+   * Random Encounter: shuffle, mill four, the creature cards milled enter with
+   * haste and return to their owner's hand at the next end step.
+   */
+  randomEncounter(ctx, es) {
+    const p = es.controller;
+    shuffleLibrary(ctx, p);
+    const milled = ctx.s.players[p].library.slice(0, 4);
+    for (const id of milled) moveObject(ctx, id, 'graveyard');
+    const step = ctx.s.turn.step;
+    for (const id of milled) {
+      if (!def(ctx, id).types.includes('Creature') || obj(ctx, id).zone !== 'graveyard') continue;
+      moveObject(ctx, id, 'battlefield', { controller: p });
+      const o = obj(ctx, id);
+      o.grantedKeywords = [...(o.grantedKeywords ?? []), 'haste'];
+      (ctx.s.delayed ??= []).push({
+        controller: p,
+        sourceDefId: es.sourceDefId,
+        subject: { id: o.id, zcc: o.zcc },
+        effects: [{ kind: 'bounce', what: 'subject' }],
+        fromTurn: ctx.s.turn.number + (step === 'end' || step === 'cleanup' ? 1 : 0),
+      });
+    }
+  },
+
+  /** Garland: "return this card from your graveyard to the battlefield transformed". */
+  returnTransformed(ctx, es) {
+    const o = sourceObj(ctx, es);
+    if (!o || o.zone !== 'graveyard') return;
+    moveObject(ctx, o.id, 'battlefield', { controller: es.controller });
+    transform(ctx, o.id);
+    if (def(ctx, o.id).saga) addLore(ctx, o.id);
+  },
+
+  /** Joshua: "exile it, then return it to the battlefield transformed under its owner's control". */
+  blinkTransformed(ctx, es) {
+    const o = sourceObj(ctx, es);
+    if (!o || o.zone !== 'battlefield') return;
+    moveObject(ctx, o.id, 'exile');
+    moveObject(ctx, o.id, 'battlefield');
+    transform(ctx, o.id);
+    // A Saga back face gets its first lore counter as it enters.
+    if (def(ctx, o.id).saga) addLore(ctx, o.id);
+  },
+
+  /**
+   * Phoenix, Warden of Fire III: creature cards with total mana value 6 or less
+   * from your graveyard (the engine picks, biggest first), then the Saga
+   * returns front face up.
+   */
+  phoenixRebirth(ctx, es) {
+    const p = es.controller;
+    let budget = 6;
+    const cards = ctx.s.players[p].graveyard
+      .filter((id) => def(ctx, id).types.includes('Creature'))
+      .sort((a, b) => mv(ctx, b) - mv(ctx, a));
+    for (const id of cards)
+      if (mv(ctx, id) <= budget) {
+        budget -= mv(ctx, id);
+        moveObject(ctx, id, 'battlefield', { controller: p });
+      }
+    const o = sourceObj(ctx, es);
+    if (!o || o.zone !== 'battlefield') return;
+    moveObject(ctx, o.id, 'exile');
+    moveObject(ctx, o.id, 'battlefield');
+  },
+
+  /** Chaos, the Endless: "put it on the bottom of its owner's library". */
+  sourceToLibraryBottom(ctx, es) {
+    const o = es.source && ctx.s.objects[es.source.id];
+    if (o && o.zone === 'graveyard') moveObject(ctx, o.id, 'library', { position: 'bottom' });
+  },
+
+  /** "It gains haste" for the creature spell that caused the trigger (Summon: Brynhildr). */
+  subjectHasteOnEntry(ctx, es) {
+    const o = es.subject && ctx.s.objects[es.subject.id];
+    if (o && o.zone === 'stack') o.hasteOnEntry = true;
+  },
+
+  /** "That player loses the game" (Summon: Primal Odin). */
+  opponentLosesGame(ctx, es) {
+    ctx.s.players[other(es.controller)].life = 0;
+  },
+
+  /** Nesting Grounds: move a counter from the first target onto the second (+1/+1 first). */
+  moveCounter(ctx, es) {
+    const from = targetObj(ctx, es, 0);
+    const to = targetObj(ctx, es, 1);
+    if (!from || !to || from.zone !== 'battlefield' || to.zone !== 'battlefield') return;
+    if (from.plusOneCounters > 0) {
+      from.plusOneCounters--;
+      addCounters(ctx, to.id, 1);
+      return;
+    }
+    const name = Object.keys(from.counters ?? {}).find((k) => (from.counters![k] ?? 0) > 0);
+    if (!name) return;
+    from.counters![name]!--;
+    addCounters(ctx, to.id, 1, name);
+  },
+
+  /** Put +1/+1 counters on the source equal to the power of what caused the trigger, as it last was. */
+  countersBySubjectPower(ctx, es) {
+    const self = sourceObj(ctx, es);
+    const subj = es.subject && ctx.s.objects[es.subject.id];
+    if (!self || self.zone !== 'battlefield' || !subj) return;
+    const power =
+      subj.zone === 'battlefield' ? characteristics(ctx, subj.id).power : subj.lastPower;
+    addCounters(ctx, self.id, Math.max(0, power ?? defOf(ctx, subj.defId).power ?? 0));
+  },
+};
+
+export const FIC_CONDITIONS: Record<
+  string,
+  (ctx: Ctx, controller: PlayerId, self: GameObject | undefined) => boolean
+> = {
+  /** Starting Town: "your first, second, or third turn of the game". */
+  firstThreeTurns: (ctx) => ctx.s.turn.number <= 6,
+  /** You were the starting player (turn 1 was yours: your turns are the odd ones). */
+  startingPlayer: (ctx, p) => (ctx.s.turn.number % 2 === 1) === (ctx.s.turn.activePlayer === p),
+  /** A Saga creature's later chapters (Summon: Primal Odin II). */
+  loreTwo: (_ctx, _p, self) => (self?.counters?.lore ?? 0) >= 2,
+  /**
+   * Blitzball: "an opponent was dealt combat damage by a legendary creature
+   * this turn" — read as: a legendary creature of yours attacked this turn and
+   * the opponent lost life (a simplification).
+   */
+  legendHitOpponent: (ctx, p) =>
+    (ctx.s.turn.lifeLost?.[other(p)] ?? 0) > 0 &&
+    ctx.s.turn.attackers.some((id) => {
+      const o = ctx.s.objects[id];
+      return !!o && o.controller === p && defOf(ctx, o.defId).supertypes.includes('Legendary');
+    }),
+};

@@ -132,7 +132,13 @@ export function castVariants(d: CardDefinition, zone: ZoneName, via?: CastVia): 
   if (d.pawprints) return pawCombos(d).map((paws) => ({ paws, cost, spell: pawSpell(d, paws) }));
   const extra = flashback ? { flashback: true, ...life } : {};
   if (d.modes) {
-    const modes: CastVariant[] = d.modes.map((spell, mode) => ({ mode, cost, spell, ...extra }));
+    const modes: CastVariant[] = d.modes.map((spell, mode) => ({
+      mode,
+      // Final Fantasy Commander (12): tiered, each mode with its own additional cost.
+      cost: spell.extraCost ? addCosts(cost, spell.extraCost) : cost,
+      spell,
+      ...extra,
+    }));
     // Teamwork's "choose both instead": the kicked spell is every mode at once.
     if (d.kicker?.spell)
       modes.push({

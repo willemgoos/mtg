@@ -62,6 +62,12 @@ type RawFace = Pick<
   | 'image_uris'
 >;
 
+/**
+ * Digital-only sets allowed: the Arena Beginner Set; Final Fantasy Commander
+ * (phase 12): Alchemy cards in the Arena Store Brawl decks.
+ */
+const DIGITAL_SETS = ['anb', 'ymid', 'ywoe'];
+
 /** Double-faced layouts: each face becomes its own record, linked to the other. */
 const DOUBLE_FACED = ['modal_dfc', 'transform'];
 
@@ -121,9 +127,17 @@ async function main(): Promise<void> {
     const c = front ? { ...raw, name: front } : raw;
     if (!wanted.has(c.name) || c.lang !== 'en') continue;
     // Classes (Bloomburrow's Talents) print their levels on one face.
-    if (c.layout !== 'normal' && c.layout !== 'class' && c.layout !== 'saga' && !front) continue;
+    if (
+      c.layout !== 'normal' &&
+      c.layout !== 'class' &&
+      c.layout !== 'saga' &&
+      // Final Fantasy Commander (12): a meld half (Fang) as a normal card; the melded back isn't built.
+      c.layout !== 'meld' &&
+      !front
+    )
+      continue;
     // Digital printings only from the Arena Beginner Set (Arena-only cards of the Color Challenge decks).
-    if (c.digital && c.set !== 'anb') continue;
+    if (c.digital && !DIGITAL_SETS.includes(c.set)) continue;
     if (!SET_PREFERENCE.includes(c.set)) continue;
     const cur = best.get(c.name);
     if (!cur || better(c, cur)) best.set(c.name, c);

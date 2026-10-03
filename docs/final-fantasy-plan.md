@@ -138,7 +138,7 @@ four decks. Three more FIC Brawl decks followed (9 December 2025, "Arena Store d
 
 | Sub-phase | Deck | Commander | Colours |
 |---|---|---|---|
-| 12a | Revival Trance | Terra, Herald of Hope | R/W/B |
+| 12a | Revival Trance (done) | Terra, Herald of Hope | R/W/B |
 | 12b | Limit Break | Cloud, Ex-SOLDIER | R/G/W |
 | 12c | Counter Blitz | Tidus, Yuna's Guardian | G/W/U |
 | 12d | Scions & Spellcraft | Y'shtola, Night's Blessed | W/U/B |
@@ -155,6 +155,37 @@ four decks. Three more FIC Brawl decks followed (9 December 2025, "Arena Store d
 - Stream A's Brawl rules apply unchanged.
 - 12e–12g are optional, after the four precons.
 
+### Progress
+
+- **12a Done:** Revival Trance (Terra). New: tiered, "creature or artifact you control dies", "cards leave your
+  graveyard", "creatures enter from a graveyard", back-face death triggers (Galian Beast, Chaos), "becomes untapped",
+  Pathways, the shared FIC lands of all seven decks, Saga creatures (Summons) on the generic Saga rules. Brawl arena
+  (10 games a pairing): 29–21 (58%) against the four Marvel decks and Mabel's Militia, 35–65% against each.
+
+### Lists: Arena against paper
+
+The four mtg.wiki lists (and the three of 12e–12g) each add up to 100 (commander included), so they went in as
+they are (`FINAL_FANTASY_BRAWL_DECKS` in `decks.ts`, generated from the wiki text). The Arena Store decks are not the
+paper precons with a few swaps: they are "Foundation" tier decks rebuilt around the same commander, mostly from FIN
+booster cards. Against the mtg.wtf paper lists, about half of each deck differs:
+
+- **Revival Trance** (Terra): 48 cards differ. Arena drops the FF VI cast (Celes stays; Cyan, Gau, Sabin, Setzer,
+  Kefka, Locke, the Esper summons), Sol Ring, the Talismans and the commander lands; it adds FIN legends (Ardyn,
+  Squall, Rufus Shinra, Gabranth, Vincent, Kain, Garland, Joshua, Fang), six Summons, Fire Magic, Ultima, Swords to
+  Plowshares, Path to Exile, Village Rites, Pathways, slow lands and Towns.
+- **Limit Break** (Cloud): 55 differ. Arena keeps the Equipment theme with FIN Equipment (Buster Sword, Genji Glove,
+  Ultima Weapon, the job-select weapons), Sword of Forge and Frontier, Lost Jitte, Fighter Class; it drops the FF VII
+  cast, Skullclamp, Sol Ring and Lightning Greaves.
+- **Counter Blitz** (Tidus): 48 differ. Arena drops the FF X cast and Walking Ballista; it adds the FIN Summons
+  (Bahamut, Shiva, Leviathan, Titan, Fenrir, Choco/Mog, Fat Chocobo), Garnet, Rosa, Dion, Jill, Sword of Body and
+  Mind and Ranger Class.
+- **Scions & Spellcraft** (Y'shtola): 47 differ. Arena drops the FF XIV Scions and the Talismans; it adds the tiered
+  spells (Ice Magic, Restoration Magic), Emet-Selch, Ultimecia, Xande, Locke Cole and The Lunar Whale.
+
+Arena-only Alchemy cards appear (Arms Scavenger, Captivating Crossroads, Forsaken Crossroads): `fetch-scryfall.ts`
+now allows the digital sets `ymid` and `ywoe`, and `pool.ts` lists the other sets the Arena lists borrow from
+(Pathways, slow lands, Verges, fetch and shock lands), after every earlier set so no card changes printing.
+
 ## Simplifications to revisit
 
 ### Phase 11
@@ -163,4 +194,22 @@ four decks. Three more FIC Brawl decks followed (9 December 2025, "Arena Store d
 
 ### Phase 12
 
-(none yet)
+Engine additions are in blocks marked `Final Fantasy Commander (12)` (`types.ts`, `triggers.ts`, `context.ts`,
+`characteristics.ts`, `spells.ts`, `engine.ts`); one-offs are custom effects and conditions in
+`packages/engine/src/fic-effects.ts`. FIN booster cards the decks use are in `packages/cards/src/fic/fin-shared.ts`
+only, for the merge with phase 11.
+
+- **Tiered** (built minimally here, 11a builds it too): a mode's `extraCost` on `SpellDef`, added to the cost of that
+  mode; the mode prompt shows "Fira — {2}".
+- **Pathways:** Arena asks which face to play; here the face is chosen as the land enters (a `choose` prompt), and it
+  taps for that colour only. Back faces are cards of their own with no rules.
+- **Shock lands:** enter tapped with a "may pay 2 life: untap it" as they enter. **Starting Town:** "Pay 1 life" is a
+  pain land's 1 damage. **Forsaken Crossroads:** always scries (never "untap instead").
+- **Meld:** Fang is a normal card (`meld` layout fetched as one face); Vanille isn't in any deck.
+- **Ultima** doesn't end the turn. **Phoenix Down** exiles itself as the ability resolves, not as a cost.
+- **Ardyn's** Demon token copy keeps its colours. **Celes** counts creatures entering from a graveyard, not ones cast
+  from it. **Celes / Joshua** rummaging: the engine picks the discards (spare lands, uncastable cards).
+- **Blitzball:** "dealt combat damage by a legendary creature" is read as "a legendary creature of yours attacked and
+  the opponent lost life this turn". **Summon: Brynhildr I:** the exiled card is playable this turn and the next.
+- **Summon: Primal Odin II:** its "loses the game" trigger is printed on it and works from chapter II on.
+- **Combustible Gearhulk:** the opponent's choice is a `choose` prompt for them.

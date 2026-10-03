@@ -8,6 +8,7 @@ import {
 import { type Ctx, def, defOf, obj, other } from './context.ts';
 import { manaValue } from './cost.ts';
 import { addLore } from './sagas.ts';
+import { FIC_CONDITIONS } from './fic-effects.ts';
 import type {
   AbilityDef,
   EffectDef,
@@ -203,8 +204,12 @@ export function checkCondition(
       );
     case 'firstAttackThisTurn':
       return ctx.s.turn.attackers.filter((id) => id === self.id).length === 1;
-    case 'custom':
+    case 'custom': {
+      // Final Fantasy Commander (12): one-off conditions.
+      const fn = FIC_CONDITIONS[c.handler];
+      if (fn) return fn(ctx, controller, self);
       throw new Error(`Custom condition "${c.handler}" not registered`);
+    }
   }
 }
 
@@ -348,6 +353,7 @@ function spellMatches(
 
 function detect(ctx: Ctx, ev: GameEvent): void {
   const s = ctx.s;
+  detectFic(ctx, ev);
   switch (ev.type) {
     case 'objectMoved': {
       const moved = s.objects[ev.id];
@@ -1093,4 +1099,77 @@ export function triggeredAbility(
 /** Who cast the spell a castSpell trigger looks at (the stack item's controller). */
 function spellCaster(ctx: Ctx, item: StackItem | undefined, self: GameObject): PlayerId {
   return item?.controller ?? self.controller;
+}
+
+// ---------------------------------------------------------------------------
+// Final Fantasy Commander (12): triggers of the FIC Brawl decks.
+
+function detectFic(ctx: Ctx, ev: GameEvent): void {
+  const s = ctx.s;
+  if (ev.type === 'untapped') {
+    const o = s.objects[ev.id];
+    if (!o || o.zone !== 'battlefield') return;
+    def(ctx, o.id).abilities.forEach((a, i) => {
+      if (a.kind === 'triggered' && a.trigger.on === 'becomesUntapped')
+        queue(ctx, o, i, o.controller);
+    });
+    return;
+  }
+  if (ev.type !== 'objectMoved') return;
+  const moved = s.objects[ev.id];
+  const movedDef = defOf(ctx, ev.defId);
+  if (ev.from === 'battlefield' && ev.to === 'graveyard') {
+    const was = ev.controller ?? moved?.owner;
+    // "This or another creature or artifact you control dies": its own ability looks back.
+    if (moved)
+      movedDef.abilities.forEach((a, i) => {
+        if (
+          a.kind === 'triggered' &&
+          a.trigger.on === 'permanentYouControlDies' &&
+          a.trigger.self &&
+          defMatches(movedDef, a.trigger.filter)
+        )
+          queue(ctx, moved, i, was ?? moved.owner, moved);
+      });
+    forEachBattlefieldTrigger(
+      ctx,
+      (o, a) =>
+        a.trigger.on === 'permanentYouControlDies' &&
+        o.id !== ev.id &&
+        o.controller === was &&
+        defMatches(movedDef, a.trigger.filter),
+      moved,
+    );
+    // A double-faced card that died showing its back face: that face's "when this dies" triggers.
+    const face = moved?.leftAsFace;
+    if (moved && face)
+      defOf(ctx, face).abilities.forEach((a, i) => {
+        if (a.kind === 'triggered' && a.trigger.on === 'dies')
+          s.pendingTriggers.push({
+            source: { id: moved.id, zcc: moved.zcc },
+            sourceDefId: face,
+            abilityIndex: i,
+            controller: moved.owner,
+          });
+      });
+  }
+  if (ev.from === 'graveyard' && moved) {
+    forEachBattlefieldTrigger(
+      ctx,
+      (o, a) => a.trigger.on === 'cardsLeaveYourGraveyard' && o.controller === moved.owner,
+    );
+    if (
+      ev.to === 'battlefield' &&
+      moved.zone === 'battlefield' &&
+      movedDef.types.includes('Creature')
+    )
+      forEachBattlefieldTrigger(
+        ctx,
+        (o, a) =>
+          a.trigger.on === 'creaturesEnterFromGraveyard' &&
+          o.id !== moved.id &&
+          o.controller === moved.controller,
+        moved,
+      );
+  }
 }

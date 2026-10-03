@@ -265,6 +265,10 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
     (ctx.s.turn.creaturesExiled ??= { p1: 0, p2: 0 })[o.controller]++;
   // Equipment and Auras attached to it are dealt with by state-based actions.
   const returning = from === 'battlefield' ? o.exiledUntilLeaves : undefined;
+  // Final Fantasy Commander (12): who controlled it and which face it showed, as it leaves.
+  const leftController = from === 'battlefield' ? o.controller : undefined;
+  if (from === 'battlefield' && o.front) o.leftAsFace = o.defId;
+  else if (from === 'battlefield') delete o.leftAsFace;
   if (from === 'battlefield') {
     const c = characteristics(ctx, id);
     o.lastPower = c.power;
@@ -361,7 +365,8 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
   if (from === 'battlefield' && ctx.s.effects.some((e) => e.whileSourceId === id)) {
     for (const e of ctx.s.effects) {
       const a = e.whileSourceId === id ? ctx.s.objects[e.affected.id] : undefined;
-      if (a && e.previousController && a.zcc === e.affected.zcc) a.controller = e.previousController;
+      if (a && e.previousController && a.zcc === e.affected.zcc)
+        a.controller = e.previousController;
     }
     ctx.s.effects = ctx.s.effects.filter((e) => e.whileSourceId !== id);
   }
@@ -402,7 +407,14 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
   // Ygra entering or leaving changes what the other creatures are.
   if ((from === 'battlefield' || to === 'battlefield') && makesFood(defOf(ctx, o.defId)))
     refreshCreaturesAreFood(ctx);
-  emit(ctx, { type: 'objectMoved', id, defId: o.defId, from, to });
+  emit(ctx, {
+    type: 'objectMoved',
+    id,
+    defId: o.defId,
+    from,
+    to,
+    ...(leftController ? { controller: leftController } : {}),
+  });
   if (discarded && o.zone === 'graveyard') {
     o.discardedTurn = ctx.s.turn.number;
     (ctx.s.turn.discards ??= { p1: 0, p2: 0 })[o.owner]++;

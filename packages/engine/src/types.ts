@@ -68,6 +68,9 @@ export interface SpellDef {
   label?: string;
   /** Escalate: tap this many untapped creatures you control as an extra cost (the engine picks them). */
   escalate?: number;
+  // Final Fantasy Commander (12): tiered.
+  /** Tiered: this mode's additional cost (Fire Magic's Fira: {2}). */
+  extraCost?: ManaCost;
 }
 
 export interface CardDefinition {
@@ -472,7 +475,19 @@ export type TriggerDef =
   /** Whenever a creature you control (matching the filter) becomes blocked; amount: its blockers (She-Hulk). */
   | { on: 'creatureYouControlBecomesBlocked'; filter?: CardFilter }
   /** Whenever a creature you control becomes tapped for the first time this turn, during your turn. */
-  | { on: 'creatureYouControlFirstTappedOnYourTurn' };
+  | { on: 'creatureYouControlFirstTappedOnYourTurn' }
+  // Final Fantasy Commander (12): triggers of the FIC Brawl decks.
+  /**
+   * Whenever a permanent you control matching the filter dies (put into a graveyard from the
+   * battlefield): artifacts too ("a creature or artifact you control"). `self`: this one counts.
+   */
+  | { on: 'permanentYouControlDies'; filter: CardFilter; self?: boolean }
+  /** Whenever one or more cards leave your graveyard (Fang). Use with `batch`. */
+  | { on: 'cardsLeaveYourGraveyard' }
+  /** Whenever one or more other creatures you control enter from a graveyard (Celes). Use with `batch`. */
+  | { on: 'creaturesEnterFromGraveyard' }
+  /** Whenever this permanent becomes untapped (Key to the City). */
+  | { on: 'becomesUntapped' };
 
 export type ConditionDef =
   | { kind: 'controlsPermanents'; filter: CardFilter; min: number }
@@ -658,6 +673,9 @@ export interface CardFilter {
   notChosenTypeOfSource?: boolean;
   /** Shares a creature type with its controller's commander (Folk Hero). */
   sharesTypeWithCommander?: boolean;
+  // Final Fantasy Commander (12).
+  /** Has none of these supertypes ("nonbasic land", "nonlegendary"). */
+  notSupertypes?: Supertype[];
 }
 
 export interface TargetSpec {
@@ -1627,6 +1645,9 @@ export interface GameObject {
   firstTappedTurn?: number;
   /** Sources that dealt damage to it this turn (Hawkeye); kept as it leaves. */
   damagedBy?: ObjectId[];
+  // Final Fantasy Commander (12).
+  /** The back face it showed as it last left the battlefield (its "when this dies" triggers still run). */
+  leftAsFace?: CardDefId;
 }
 
 /** A reference that goes stale when the object changes zones. */
@@ -2299,7 +2320,15 @@ export type Action =
   | { type: 'concede'; player: PlayerId };
 
 export type GameEvent =
-  | { type: 'objectMoved'; id: ObjectId; defId: CardDefId; from: ZoneName | null; to: ZoneName }
+  | {
+      type: 'objectMoved';
+      id: ObjectId;
+      defId: CardDefId;
+      from: ZoneName | null;
+      to: ZoneName;
+      /** Final Fantasy Commander (12): who controlled it, as it left the battlefield (tokens vanish). */
+      controller?: PlayerId;
+    }
   | { type: 'damageDealt'; source: ObjectId; to: TargetChoice; amount: number; combat: boolean }
   | { type: 'lifeChanged'; player: PlayerId; delta: number; life: number }
   | { type: 'tapped'; id: ObjectId; first?: boolean }

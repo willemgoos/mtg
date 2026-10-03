@@ -129,6 +129,15 @@ export const KEYWORDS_AS_ABILITIES = new Set([
   'Sell Contraband',
   'Buy Information',
   'Hire a Mercenary',
+  // Final Fantasy Commander (12).
+  'Tiered',
+  'Plainscycling',
+  'Islandcycling',
+  'Swampcycling',
+  'Mountaincycling',
+  'Forestcycling',
+  'Job select',
+  'Meld',
 ]);
 
 const BASIC_MANA: Record<string, ManaType> = {

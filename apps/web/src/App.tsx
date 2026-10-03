@@ -79,14 +79,20 @@ const SECTIONS: { title: string; blurb: string; decks: Decklist[] }[] = [
   },
 );
 /** Brawl's own deck grid: commander decks only play each other. */
+const brawlDecks = (inSet: (d: Decklist) => boolean) => [
+  ...DECKS.filter((d) => isBrawl(d) && inSet(d) && isPlayable(d)),
+  ...DECKS.filter((d) => isBrawl(d) && inSet(d) && !isPlayable(d)),
+];
 const BRAWL_SECTIONS: { title: string; blurb: string; decks: Decklist[] }[] = [
   {
     title: 'Brawl',
     blurb: '100-card singleton decks led by a legendary commander, 25 life',
-    decks: [
-      ...DECKS.filter((d) => isBrawl(d) && isPlayable(d)),
-      ...DECKS.filter((d) => isBrawl(d) && !isPlayable(d)),
-    ],
+    decks: brawlDecks((d) => d.set !== 'fic'),
+  },
+  {
+    title: 'Final Fantasy',
+    blurb: 'Arena’s Final Fantasy Brawl decks, led by heroes of the series',
+    decks: brawlDecks((d) => d.set === 'fic'),
   },
 ];
 const PLAYABLE = DECKS.filter(isPlayable);
