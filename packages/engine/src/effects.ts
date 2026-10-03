@@ -766,8 +766,11 @@ export function runEffects(
           exiled.push(id);
         }
         // The misses go to the bottom in a random order.
-        shuffleInPlace(ctx.s.rng, exiled);
-        for (const id of exiled) moveObject(ctx, id, 'library', { position: 'bottom' });
+        // Marvel Super Heroes Jumpstart (Scarlet): or stay in exile (Wanda's Vision).
+        if (!e.stayExiled) {
+          shuffleInPlace(ctx.s.rng, exiled);
+          for (const id of exiled) moveObject(ctx, id, 'library', { position: 'bottom' });
+        }
         if (!hit) continue;
         const after: EffectDef = {
           kind: 'afterReveal',
@@ -778,7 +781,7 @@ export function runEffects(
           kind: 'castFree',
           player: controller,
           cards: [hit],
-          resume: { ...resume, effects: [after, ...resume.effects] },
+          resume: { ...resume, effects: [...(e.stayExiled ? [] : [after]), ...resume.effects] },
           thenPriority,
         };
       } else if (e.kind === 'expressiveIteration') {
@@ -2192,7 +2195,13 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
       const lib = ctx.s.players[es.controller].library;
       const ownTurn = ctx.s.turn.activePlayer === es.controller;
       const until =
-        e.until === 'endOfTurn' ? ctx.s.turn.number : ctx.s.turn.number + (ownTurn ? 2 : 1);
+        e.until === 'endOfTurn'
+          ? ctx.s.turn.number
+          : // Marvel Super Heroes Jumpstart (Scarlet): until your next end step (this turn's if it's still ahead).
+            e.until === 'yourNextEndStep'
+            ? ctx.s.turn.number +
+              (ownTurn ? (ctx.s.turn.step === 'end' || ctx.s.turn.step === 'cleanup' ? 2 : 0) : 1)
+            : ctx.s.turn.number + (ownTurn ? 2 : 1);
       for (const id of lib.slice(0, resolveAmount(ctx, es, e.count))) {
         moveObject(ctx, id, 'exile');
         obj(ctx, id).playableUntilTurn = until;

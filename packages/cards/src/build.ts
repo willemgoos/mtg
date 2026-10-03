@@ -92,6 +92,8 @@ export const KEYWORDS_AS_ABILITIES = new Set([
   'Landcycling',
   'Basic landcycling',
   'Typecycling',
+  // Marvel Super Heroes Jumpstart (Scarlet): Grapeshot.
+  'Storm',
   'Extort',
   'Improvise',
   'Sneak',

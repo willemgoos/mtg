@@ -420,6 +420,8 @@ export function castSpell(
       abilityIndex: i,
       controller: player,
       subject: { id: o.id, zcc: o.zcc },
+      // Marvel Super Heroes Jumpstart (Scarlet): storm counts the spells cast before it (Grapeshot).
+      amount: ctx.s.turn.spellsCast?.[player] ?? 0,
     });
   });
   // Conduit of Worlds: a card cast this way stops further spells this turn.
