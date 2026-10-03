@@ -585,6 +585,9 @@ export type ConditionDef =
   // The Fantastic Four (9d).
   /** You've cast a noncreature spell this turn. */
   | { kind: 'castNoncreatureThisTurn' }
+  // Strixhaven (13a): Mage Duel
+  /** You've cast an instant or sorcery spell this turn. */
+  | { kind: 'castInstantOrSorceryThisTurn' }
   // Wakanda Forever (9c).
   /** You are the monarch; or there is no monarch; or an opponent is (the creature attacks the monarch). */
   | { kind: 'monarch'; who: 'you' | 'none' | 'opponent' }
@@ -781,6 +784,9 @@ export type Amount =
   | { count: 'greatestPowerYouControl' }
   /** Creature cards you own in exile and in your graveyard (Huskburster Swarm). */
   | { count: 'creatureCardsInExileAndGraveyard' }
+  // Strixhaven (13a): Serpentine Curve
+  /** Instant and sorcery cards you own in exile and in your graveyard. */
+  | { count: 'instantsSorceriesInExileAndGraveyard' }
   /** Creatures you control of the type chosen for the source (Three Tree City). */
   | { count: 'creaturesOfChosenType'; other?: boolean }
   /** Named counters on the source (as it last was, if it left): Hoarder's Overflow's stash counters. */
@@ -1024,6 +1030,9 @@ export type EffectDef =
       graveyardOnly?: boolean;
       /** Only from your hand (Avengers Quinjet). */
       handOnly?: boolean;
+      // Strixhaven (13a): Zimone, Quandrix Prodigy
+      /** It enters tapped. */
+      tapped?: boolean;
     }
   /** Exile permanents, then return them under their owners' control (with +1/+1 counters). */
   | {
@@ -1048,7 +1057,16 @@ export type EffectDef =
       otherwise?: EffectDef[];
     }
   /** Counter a spell unless its controller pays this. */
-  | { kind: 'counterUnlessPays'; what: Ref; cost: ManaCost }
+  | {
+      kind: 'counterUnlessPays';
+      what: Ref;
+      cost: ManaCost;
+      // Strixhaven (13a): Reject, "exile it instead of putting it into its owner's graveyard".
+      exile?: boolean;
+    }
+  // Strixhaven (13a): Divide by Zero
+  /** Return a target spell on the stack to its owner's hand. */
+  | { kind: 'returnSpellToHand'; what: Ref }
   /** Reveal cards from the top until one matches; it goes to hand or onto the battlefield tapped, the rest to the bottom. */
   | { kind: 'revealUntil'; filter: CardFilter; to: 'hand' | 'battlefieldTapped' }
   /**
@@ -2255,6 +2273,8 @@ export type Decision =
       player: PlayerId;
       spell: ObjectId;
       cost: ManaCost;
+      /** Exiled instead of put into the graveyard when countered (Reject). */
+      exile?: boolean;
       resume: PausedResolution;
       thenPriority: PlayerId;
     }

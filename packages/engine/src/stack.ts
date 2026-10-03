@@ -1012,7 +1012,7 @@ export function answerPayOrCounter(ctx: Ctx, pay: boolean): void {
   const d = ctx.s.decision;
   if (d.kind !== 'payOrCounter') throw new Error('Not paying');
   if (pay) payMana(ctx, planPayment(ctx, d.player, d.cost, undefined));
-  else counterSpell(ctx, d.spell);
+  else counterSpell(ctx, d.spell, d.exile);
   resume(ctx, d.resume, d.thenPriority);
 }
 
@@ -1165,8 +1165,10 @@ export function answerSearch(ctx: Ctx, card: ObjectId | null): void {
   if (d.kind !== 'searchLibrary') throw new Error('Not searching');
   if (card !== null) {
     if (d.fromGraveyard) {
-      if (d.to === 'battlefield') {
+      if (d.to === 'battlefield' || d.to === 'battlefieldTapped') {
         moveObject(ctx, card, 'battlefield', { controller: d.player });
+        // Strixhaven (13a): Zimone puts a land onto the battlefield tapped.
+        if (d.to === 'battlefieldTapped') obj(ctx, card).tapped = true;
         if (d.counter) (obj(ctx, card).counters ??= {})[d.counter] = 1;
       } else moveObject(ctx, card, 'hand');
       squirrelFood(ctx, d, card);

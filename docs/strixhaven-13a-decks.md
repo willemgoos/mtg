@@ -121,3 +121,15 @@ Quandrix Apprentice needs a reorder-to-bottom prompt; conditional cost reduction
 ## Lorehold as built (13a)
 
 Arena starter decks run 24 lands and 36 spells, so the 17-land draft above played far below 45% (about 25%). Final list: 24 lands (Campus 4, Plains 10, Mountain 10), 26 creatures and 10 spells. Added for strength: Venerable Warsinger 2, Stonebound Mentor 2, Fuming Effigy 2, Relic Sloth 2, Blade Historian 1 (all STX), and from Foundations Serra Angel 2, Inspiring Paladin 2, Angel of Finality 1. Cut: Twinscroll Shaman, Study Break, Academic Dispute, Illustrious Historian, Tome Shredder, Pillardrop Warden, the pump and Learn spells (all still implemented). Bot vs bot over 320 games against the ten Foundations starter decks: 45%.
+## Quandrix Equation: as built
+
+Card behaviour in `packages/cards/src/stx/quandrix.ts` (all 30 listed cards and the four Lessons). The shipped list differs from
+the draft above: the draft (17 lands, 43 spells) won 14% against the ten Foundations starter decks (bot vs bot) and a pure
+Quandrix list with 24 lands 15%, so the deck is built like the starter decks (24 lands, 36 spells) with Foundations and
+Bloomburrow bodies and removal (Gnarlback Rhino 4, Thrashing Brontodon 4, Scrapshooter 2, Knightfisher, Lilysplash Mentor,
+Dreamdew Entrancer, Bite Down 3) around Biomathematician, Quandrix Pledgemage, Frost Trickster, Needlethorn Drake, Professor of
+Zoomancy, Cultivator, Serpentine Curve, Leyline Invocation, Field Trip, Mage Duel 2 and Devouring Tendrils 2. 45% over 400 games.
+Implemented but not in the main deck: Apprentice, Zimone, Karok Wrangler, Overgrown Arch, Archmage Emeritus, Pop Quiz, Big Play,
+Quandrix Command, Eureka Moment, Decisive Denial, Divide by Zero, Resculpt, Arcane Subtraction, Curate, Bury in Books, Reject,
+Springmane Cervin, Waterfall Aerialist, and the Lessons Fractal Summoning, Introduction to Prophecy, Expanded Anatomy and
+Environmental Sciences (the sideboard, fetched by Learn).

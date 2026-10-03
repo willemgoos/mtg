@@ -281,6 +281,14 @@ export function countOf(
     return [...ps.exile, ...ps.graveyard].filter((id) => def(ctx, id).types.includes('Creature'))
       .length;
   }
+  // Strixhaven (13a): Serpentine Curve
+  if (a.count === 'instantsSorceriesInExileAndGraveyard') {
+    const ps = ctx.s.players[player];
+    return [...ps.exile, ...ps.graveyard].filter((id) => {
+      const t = def(ctx, id).types;
+      return t.includes('Instant') || t.includes('Sorcery');
+    }).length;
+  }
   if (a.count === 'creaturesOfChosenType') {
     const chosen = sourceId ? obj(ctx, sourceId).chosenType : undefined;
     if (!chosen) return 0;

@@ -45,6 +45,9 @@ export function checkCondition(
     return (ctx.s.turn.castDefs?.[controller] ?? []).some(
       (id) => !defOf(ctx, id).types.includes('Creature'),
     );
+  // Strixhaven (13a): Mage Duel
+  if (c.kind === 'castInstantOrSorceryThisTurn')
+    return (ctx.s.turn.instantsSorceriesCast?.[controller] ?? 0) > 0;
   // Wakanda Forever (9c).
   if (c.kind === 'monarch') {
     const m = ctx.s.monarch;
@@ -461,7 +464,24 @@ function detect(ctx: Ctx, ev: GameEvent): void {
         movedDef.types.includes('Creature')
       ) {
         // "Dies" triggers look back in time: the ability triggers from the graveyard card.
-        const card = moved ?? null;
+        // Strixhaven (13a): a token that died has already ceased to exist, but its own dies trigger
+        // still happens (Pest: "When this token dies, you gain 1 life"). A stand-in carries the trigger.
+        const ghost: GameObject | null =
+          !moved && movedDef.isToken && ev.controller
+            ? ({
+                id: ev.id,
+                defId: ev.defId,
+                owner: ev.controller,
+                controller: ev.controller,
+                zone: 'graveyard',
+                zcc: 0,
+                timestamp: 0,
+                tapped: false,
+                summoningSick: false,
+                isToken: true,
+              } as GameObject)
+            : null;
+        const card = moved ?? ghost;
         // Final Fantasy (11b): a back face that dies (Chaos) triggers its own abilities.
         const diedAs = ev.leftAs ? defOf(ctx, ev.leftAs) : movedDef;
         diedAs.abilities.forEach((a, i) => {
