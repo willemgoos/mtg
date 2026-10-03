@@ -28,6 +28,7 @@ import { useFlip } from '../game/useFlip.ts';
 import { useHandDrag } from '../game/useHandDrag.ts';
 import { reconcileHandOrder } from '../game/handOrder.ts';
 import { Card, type CardMark, type HoverFn } from './Card.tsx';
+import { OptionMenu } from './OptionMenu.tsx';
 import { FxLayer } from './FxLayer.tsx';
 import { type ArrowSpec, Arrows, Floaters, TurnBanner, winnerText } from './Effects.tsx';
 import {
@@ -1142,22 +1143,11 @@ export function Board({
         </div>
       )}
       {d.kind === 'chooseOption' && d.player === HUMAN && (
-        <div className="menu">
-          <div className="menu__box">
-            <div className="menu__title">
-              {nameOf(d.resume.sourceDefId)}: {d.title ?? 'choose one'}
-            </div>
-            {d.options.map((o, index) => (
-              <button
-                key={o.label}
-                className="btn btn--ghost"
-                onClick={() => act({ type: 'chooseOption', player: HUMAN, index })}
-              >
-                {o.label}
-              </button>
-            ))}
-          </div>
-        </div>
+        <OptionMenu
+          title={`${nameOf(d.resume.sourceDefId)}: ${d.title ?? 'choose one'}`}
+          options={d.options}
+          onPick={(index) => act({ type: 'chooseOption', player: HUMAN, index })}
+        />
       )}
       {d.kind === 'chooseFromHand' && d.player === HUMAN && (
         <div className="overlay overlay--mull">

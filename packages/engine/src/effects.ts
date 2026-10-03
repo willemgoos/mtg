@@ -37,6 +37,7 @@ import { canPayFrom, manaSources, manaValue } from './mana.ts';
 import { nextInt, shuffleInPlace } from './rng.ts';
 import { checkCondition } from './triggers.ts';
 import { addLore } from './sagas.ts';
+import { CHOOSERS } from './stx-13c-a-effects.ts';
 import type {
   CardDefId,
   GameObject,
@@ -316,7 +317,21 @@ export function damageSourceFor(ctx: Ctx, id: ObjectId, controller: PlayerId): D
     return { id, controller: o.controller, keywords };
   }
   const defId = o?.defId;
-  return { id, controller, keywords: defId ? defOf(ctx, defId).keywords : [] };
+  const printed = defId ? defOf(ctx, defId).keywords : [];
+  // Strixhaven (13c): Radiant Scrollwielder, "instant and sorcery spells you control have lifelink".
+  if (
+    defId &&
+    (defOf(ctx, defId).types.includes('Instant') || defOf(ctx, defId).types.includes('Sorcery')) &&
+    ctx.s.battlefield.some(
+      (b) =>
+        obj(ctx, b).controller === controller &&
+        def(ctx, b).abilities.some(
+          (a) => a.kind === 'static' && a.effect.kind === 'instantsSorceriesLifelink',
+        ),
+    )
+  )
+    return { id, controller, keywords: [...printed, 'lifelink'] };
+  return { id, controller, keywords: printed };
 }
 
 // ---------------------------------------------------------------------------
@@ -554,7 +569,9 @@ export function runEffects(
       // Final Fantasy (11a): saga creatures
       e.kind === 'removeLoreFromAny' ||
       // Strixhaven (13a)
-      e.kind === 'learn'
+      e.kind === 'learn' ||
+      // Strixhaven (13c)
+      e.kind === 'chooseCustom'
     ) {
       const lib = ctx.s.players[es.controller].library;
       const { controller, source, sourceDefId, targets, lkiPower, subject, amount, chosen, x } = es;
@@ -695,7 +712,11 @@ export function runEffects(
         for (const id of [...lib]) {
           moveObject(ctx, id, 'exile');
           const d = def(ctx, id);
-          if (!d.types.includes('Land') && manaValue(d.manaCost) <= max) {
+          if (
+            !d.types.includes('Land') &&
+            manaValue(d.manaCost) <= max &&
+            (!e.filter || cardMatches(ctx, id, e.filter)) // Strixhaven (13c): Plargg
+          ) {
             hit = id;
             break;
           }
@@ -756,7 +777,10 @@ export function runEffects(
         for (const id of top) moveObject(ctx, id, 'exile');
         const max = e.maxManaValue !== undefined ? resolveAmount(ctx, es, e.maxManaValue) : 99;
         const cards = top.filter(
-          (id) => !def(ctx, id).types.includes('Land') && manaValue(def(ctx, id).manaCost) <= max,
+          (id) =>
+            !def(ctx, id).types.includes('Land') &&
+            manaValue(def(ctx, id).manaCost) <= max &&
+            (!e.filter || cardMatches(ctx, id, e.filter)), // Strixhaven (13c): Velomachus Lorehold
         );
         const rest = e.rest === 'bottom' ? { thenToBottom: top } : {};
         if (cards.length === 0) {
@@ -844,6 +868,18 @@ export function runEffects(
             label: COLOR_NAMES[color],
             effects: [{ kind: 'custom', handler: 'setChosen', params: { color } }],
           })),
+          resume,
+          thenPriority,
+        };
+      } else if (e.kind === 'chooseCustom') {
+        // Strixhaven (13c): a handler builds the options (and says who chooses).
+        const made = CHOOSERS[e.handler]?.(ctx, es, e.params);
+        if (!made || made.options.length === 0) continue;
+        ctx.s.decision = {
+          kind: 'chooseOption',
+          player: made.player ?? controller,
+          ...(made.title ? { title: made.title } : {}),
+          options: made.options,
           resume,
           thenPriority,
         };
@@ -2286,6 +2322,7 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
               kind: 'returnSubject',
               ...(e.counters ? { counters: e.counters } : {}),
               ...(e.named ? { named: e.named } : {}),
+              ...(e.loyaltyToo ? { loyaltyToo: true } : {}),
             },
           ],
           fromTurn,
@@ -2297,7 +2334,10 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
       const o = es.subject && ctx.s.objects[es.subject.id];
       if (!o || o.zone !== 'exile' || o.zcc !== es.subject!.zcc) return;
       moveObject(ctx, o.id, 'battlefield', { controller: o.owner });
-      if (e.counters) addCounters(ctx, o.id, e.counters);
+      // Strixhaven (13c): Semester's End, a planeswalker gets a loyalty counter instead of a +1/+1 counter.
+      if (e.loyaltyToo && def(ctx, o.id).types.includes('Planeswalker'))
+        addCounters(ctx, o.id, 1, 'loyalty');
+      else if (e.counters) addCounters(ctx, o.id, e.counters);
       if (e.named) (o.counters ??= {})[e.named] = 1;
       return;
     }
@@ -2367,6 +2407,12 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
       for (const id of objectsOf(ctx, es, e.what)) {
         const o = obj(ctx, id);
         if (o.controller === es.controller) continue;
+        // Strixhaven (13c): Tempted by the Oriq, control for good.
+        if (e.permanent) {
+          o.controller = es.controller;
+          o.summoningSick = true;
+          continue;
+        }
         ctx.s.effects.push({
           timestamp: newTimestamp(ctx),
           affected: { id, zcc: o.zcc },
@@ -2503,6 +2549,7 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
       for (const id of objectsOf(ctx, es, e.what)) addLore(ctx, id);
       return;
     case 'removeLoreFromAny':
+    case 'chooseCustom': // Strixhaven (13c)
       return; // handled by runEffects
     case 'custom': {
       const fn = ctx.customEffects[e.handler];

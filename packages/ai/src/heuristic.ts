@@ -74,6 +74,11 @@ export function createHeuristicBot(db: CardDb, name = 'heuristic'): Bot {
           // Strixhaven (13a): Learn takes a Lesson if there is one (the first option), else the best by evaluation.
           if (d.title === 'Learn' && d.options[0]!.label.startsWith('Reveal'))
             return { type: 'chooseOption', player: me, index: 0 };
+          // Strixhaven (13c): a card name (thousands of options): the first is a card the opponent has shown.
+          if (d.title === 'Choose a nonland card name')
+            return { type: 'chooseOption', player: me, index: 0 };
+          // Strixhaven (13c): Augusta's "tap any number of creatures": the bot taps none ("Done" is first).
+          if (d.title?.startsWith('Augusta')) return { type: 'chooseOption', player: me, index: 0 };
           return bestByEvaluation(engine, view, me, legal, 'stack');
         }
         case 'chooseFromHand':

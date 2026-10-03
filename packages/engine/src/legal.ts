@@ -412,7 +412,12 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
   const silenced =
     s.turn.activePlayer !== player &&
     hasStatic(ctx, s.turn.activePlayer, 'opponentsCantCastDuringYourTurn');
-  for (const card of silenced ? [] : castableCards(ctx, player)) {
+  // Strixhaven (13c): Academic Probation, "can't cast spells with the chosen name".
+  const banned = ps.castBans ?? [];
+  const castable = silenced ? [] : castableCards(ctx, player);
+  for (const card of banned.length
+    ? castable.filter((c) => !banned.some((b) => b.defId === obj(ctx, c).defId))
+    : castable) {
     castsOf(card);
     // Modal double-faced cards: the back face can be cast from hand too.
     if (def(ctx, card).back && obj(ctx, card).zone === 'hand') {
@@ -450,6 +455,15 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
       if (a.kind !== 'activated') return;
       if ((a.fromGraveyard ? 'graveyard' : a.fromHand ? 'hand' : 'battlefield') !== zone) return;
       if (a.sorcerySpeed && !sorcery) return;
+      // Strixhaven (13c): Academic Probation (no activated abilities), Revel in Silence (no loyalty abilities).
+      if (
+        s.effects.some(
+          (e) =>
+            e.noActivate && e.affected.id === source && e.affected.zcc === obj(ctx, source).zcc,
+        )
+      )
+        return;
+      if (a.cost.loyalty !== undefined && s.turn.noLoyalty?.includes(player)) return;
       if ((a.once || a.powerUp) && obj(ctx, source).usedAbilities?.includes(abilityIndex)) return;
       if (a.powerUp && s.turn.noPowerUp) return;
       if (a.oncePerTurn && obj(ctx, source).onceTurns?.[-1 - abilityIndex] === s.turn.number)

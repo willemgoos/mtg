@@ -2,6 +2,7 @@ import { characteristics } from './characteristics.ts';
 import { MSH_EFFECTS } from './msh-effects.ts';
 import { FIN_EFFECTS } from './fin-effects.ts';
 import { LOREHOLD_EFFECTS } from './stx-lorehold-effects.ts';
+import { STX_13C_A_EFFECTS } from './stx-13c-a-effects.ts';
 import { checkCondition } from './triggers.ts';
 import type { EffectSource } from './effects.ts';
 import type {
@@ -60,6 +61,8 @@ const BUILT_IN_EFFECTS: Record<string, CustomEffect> = {
   ...FIN_EFFECTS,
   // Strixhaven (13a).
   ...LOREHOLD_EFFECTS,
+  // Strixhaven (13c, group A).
+  ...STX_13C_A_EFFECTS,
   // Strixhaven (13a): Learn: put the chosen Lesson from outside the game into your hand.
   learnFetch(ctx, es, params) {
     const ps = ctx.s.players[es.controller];
@@ -281,12 +284,26 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
   )
     to = 'exile';
   if (from === 'battlefield' && to === 'graveyard' && exiledInsteadOfDying(ctx, o)) to = 'exile';
+  // Strixhaven (13c): Radiant Scrollwielder, "if a spell cast this way would be put into your graveyard, exile it instead".
+  if (o.exileInstead) {
+    if (from === 'stack') {
+      if (to === 'graveyard') to = 'exile';
+      delete o.exileInstead;
+    } else if (to !== 'stack') delete o.exileInstead;
+  }
   // Festival of Embers: "If a card or token would be put into your graveyard from anywhere, exile it instead."
   if (to === 'graveyard' && graveyardExiles(ctx, o.owner)) to = 'exile';
   if (from === 'battlefield' && to === 'exile' && def(ctx, id).types.includes('Creature'))
     (ctx.s.turn.creaturesExiled ??= { p1: 0, p2: 0 })[o.controller]++;
   // Equipment and Auras attached to it are dealt with by state-based actions.
   const returning = from === 'battlefield' ? o.exiledUntilLeaves : undefined;
+  // Strixhaven (13c): Hofri Ghostforge's token: "When this token leaves the battlefield, return the exiled card to its owner's graveyard."
+  if (from === 'battlefield' && o.hofriExiled) {
+    const ref = o.hofriExiled;
+    delete o.hofriExiled;
+    const x = ctx.s.objects[ref.id];
+    if (x && x.zone === 'exile' && x.zcc === ref.zcc) moveObject(ctx, x.id, 'graveyard');
+  }
   if (from === 'battlefield') {
     const c = characteristics(ctx, id);
     o.lastPower = c.power;

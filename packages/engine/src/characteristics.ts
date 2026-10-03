@@ -66,6 +66,7 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
       power += e.power;
       toughness += e.toughness;
       if (e.cantBlock) cantBlock = true;
+      if (e.cantAttack) cantAttack = true; // Strixhaven (13c): Academic Probation
       if (e.cantBeBlocked) cantBeBlocked = true;
       if (e.keywords.length) {
         granted ??= new Set(keywords);
@@ -192,6 +193,8 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
           continue;
         if (st.filter?.attacking !== undefined && isAttacking(ctx, id) !== st.filter.attacking)
           continue;
+        // Strixhaven (13c): Augusta, Dean of Order (tapped and untapped creatures).
+        if (st.filter?.tapped !== undefined && o.tapped !== st.filter.tapped) continue;
         if (st.filter?.colors && !st.filter.colors.some((color) => d.colors.includes(color)))
           continue;
         power += countOf(ctx, src.controller, st.power, false, srcId);
@@ -289,6 +292,9 @@ export function countOf(
       return t.includes('Instant') || t.includes('Sorcery');
     }).length;
   }
+  // Strixhaven (13c): Show of Confidence
+  if (a.count === 'otherInstantsSorceriesCastThisTurn')
+    return Math.max(0, (ctx.s.turn.instantsSorceriesCast?.[player] ?? 0) - 1);
   if (a.count === 'creaturesOfChosenType') {
     const chosen = sourceId ? obj(ctx, sourceId).chosenType : undefined;
     if (!chosen) return 0;
@@ -534,6 +540,8 @@ export function matchesFilter(
   if (filter.commander && !isCommander(ctx, id)) return false;
   if (filter.supertypes && !filter.supertypes.some((t) => def(ctx, id).supertypes.includes(t)))
     return false;
+  // Strixhaven (13c): Hofri's Spirits etc. use nonlegendary too.
+  if (filter.nonlegendary && def(ctx, id).supertypes.includes('Legendary')) return false;
   if (filter.toughnessGreaterThanPower) {
     const ch = characteristics(ctx, id);
     if (ch.toughness <= ch.power) return false;
@@ -603,6 +611,12 @@ export function cardMatches(
   if (filter.monocolored && d.colors.length !== 1) return false;
   if (filter.commander && !isCommander(ctx, id)) return false;
   if (filter.supertypes && !filter.supertypes.some((t) => d.supertypes.includes(t))) return false;
+  // Strixhaven (13c): Plargg (nonlegendary), Silverquill Silencer (the chosen name).
+  if (filter.nonlegendary && d.supertypes.includes('Legendary')) return false;
+  if (filter.chosenNameOfSource) {
+    const name = sourceId ? ctx.s.objects[sourceId]?.chosenName : undefined;
+    if (!name || obj(ctx, id).defId !== name) return false;
+  }
   const mv = manaValue(d.manaCost);
   if (filter.minManaValue !== undefined && mv < filter.minManaValue) return false;
   if (filter.manaValueIsSourceCounters) {
