@@ -596,6 +596,8 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
 export function addCounters(ctx: Ctx, id: ObjectId, n: number, name?: string): void {
   if (n <= 0) return;
   const o = obj(ctx, id);
+  // Secrets of Strixhaven (14b): Fractal Tender.
+  o.countersTurn = ctx.s.turn.number;
   for (const src of ctx.s.battlefield) {
     const so = obj(ctx, src);
     if (so.controller !== o.controller) continue;

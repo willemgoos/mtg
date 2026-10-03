@@ -253,6 +253,9 @@ export interface CardDefinition {
   entersWithCountersPerColorSpent?: boolean;
   /** Paradigm: resolved, it's exiled; at each of your first main phases you may cast a copy for free. */
   paradigm?: boolean;
+  // Secrets of Strixhaven (14b): Slumbering Trudge
+  /** Enters with this many stun counters minus X (not below 0), and tapped if X is below this. */
+  stunCountersMinusX?: number;
   // Strixhaven (13c): Draconic Intervention
   /** "As an additional cost, exile a card matching this from your graveyard"; its mana value is X. */
   exileFromGraveyardToCast?: CardFilter;
@@ -296,6 +299,9 @@ export type AbilityDef =
       condition?: ConditionDef;
       /** Strixhaven (13c): Accomplished Alchemist: adds as much mana as the life you gained this turn (at least one). */
       perLifeGained?: boolean;
+      // Secrets of Strixhaven (14b): Topiary Lecturer
+      /** Adds as much mana as this permanent's power. */
+      perPower?: boolean;
       // Strixhaven (13c): Strixhaven Stadium
       /** Puts a named counter on this permanent each time it's tapped for this mana. */
       addCounter?: string;
@@ -462,6 +468,9 @@ export type TriggerDef =
       caster?: 'any' | 'opponent';
       /** Only spells cast from exile (Klaw). */
       fromExile?: boolean;
+      // Secrets of Strixhaven (14b): Quandrix, the Proof
+      /** Only spells cast from your hand. */
+      fromHand?: boolean;
       // Final Fantasy (11b): mana spent
       /** "If at least N mana was spent to cast it" (Sahagin, Ultros). */
       minManaSpent?: number;
@@ -682,6 +691,13 @@ export type ConditionDef =
   | { kind: 'any'; of: ConditionDef[] }
   /** The condition doesn't hold. */
   | { kind: 'not'; condition: ConditionDef }
+  // Secrets of Strixhaven (14b)
+  /** The source has at least `min` of this named counter (Comforting Counsel: growth). */
+  | { kind: 'sourceNamedCounters'; name: string; min: number }
+  /** The source has (or, if it left the battlefield, had) +1/+1 counters on it (Ambitious Augmenter). */
+  | { kind: 'sourceHadCounters' }
+  /** A counter was put on the source this turn (Fractal Tender). */
+  | { kind: 'sourceCounteredThisTurn' }
   // Doom Prevails (9e).
   /** Cards exiled with the source are still in exile (Currency Converter). */
   | { kind: 'sourceHasExiled' }
@@ -994,7 +1010,11 @@ export type Amount =
   /** Total toughness of the creatures you control (Orysa, Tide Choreographer). */
   | { count: 'totalToughnessOfCreaturesYouControl' }
   /** Cards you've drawn this turn (Fractal Anomaly). */
-  | { count: 'cardsDrawnThisTurn' };
+  | { count: 'cardsDrawnThisTurn' }
+  /** The value of X of the spell that caused the trigger (Geometer's Arthropod). */
+  | { xOfSubject: true }
+  /** Lands with different names you control (Emil, Vastlands Roamer). */
+  | { count: 'differentlyNamedLands' };
 
 export type EffectDef =
   | { kind: 'may'; effects: EffectDef[]; cost?: ManaCost }
@@ -1170,6 +1190,9 @@ export type EffectDef =
       // Secrets of Strixhaven (14b): Echocasting Symposium
       /** The token is created under the control of this player target. */
       underTarget?: number;
+      // Secrets of Strixhaven (14b): Applied Geometry
+      /** It's a 0/0 Fractal creature in addition to its other types, with this many +1/+1 counters. */
+      asFractal?: number;
     }
   /** Choose a color (or a creature type) for the source, as it enters. */
   | { kind: 'chooseColor' }
@@ -1202,7 +1225,15 @@ export type EffectDef =
   /** The creature blocks this turn if able (Academic Dispute). */
   | { kind: 'mustBlock'; what: Ref }
   /** Mill N, then you may put a card matching the filter from among them into your hand (Cache Grab). */
-  | { kind: 'millThenTake'; count: number; filter: CardFilter; squirrelFood?: boolean }
+  | {
+      kind: 'millThenTake';
+      count: number;
+      filter: CardFilter;
+      squirrelFood?: boolean;
+      // Secrets of Strixhaven (14b): Vastlands Scavenger (Bind to Life)
+      /** The card goes onto the battlefield instead of into your hand. */
+      to?: 'battlefield';
+    }
   /** Look at the top N; put `take` of them into your hand and the rest into your graveyard (Stargaze). */
   | {
       kind: 'lookTakeRestGraveyard';
@@ -1273,6 +1304,9 @@ export type EffectDef =
       // Strixhaven (13c): Journey to the Oracle
       /** Every matching card from your hand, without asking ("any number": the best choice). */
       all?: boolean;
+      // Secrets of Strixhaven (14b): Mind into Matter
+      /** Mana value X or less (the value chosen for X). */
+      maxManaValueX?: boolean;
     }
   // Strixhaven (13c)
   /** The resolving spell returns to its owner's hand rather than the graveyard (Journey to the Oracle). */
@@ -1490,7 +1524,7 @@ export type EffectDef =
   /** Look at the top N; you may take a card matching the filter into your hand; the rest go to the bottom at random. */
   | {
       kind: 'lookAndTake';
-      count: number;
+      count: number | Amount;
       filter: CardFilter;
       /** Onto the battlefield if it's your turn, otherwise into your hand (Whiskervale Forerunner). */
       battlefieldOnYourTurn?: boolean;
@@ -1506,6 +1540,9 @@ export type EffectDef =
       to?: 'battlefieldTapped';
       // Secrets of Strixhaven (14a): Follow the Lumarets. After the first pick, choose another card matching this from the rest.
       followUp?: CardFilter;
+      // Secrets of Strixhaven (14b): Zimone's Experiment
+      /** Lands taken go onto the battlefield tapped, other cards into your hand; one more pick follows the first. */
+      landsTapped?: boolean;
     }
   /** Exile the top N; you may play them until the end of this turn or of your next turn. */
   | {
@@ -1749,6 +1786,9 @@ export type EffectDef =
   | { kind: 'exileUntilTotalCastFree'; total: number };
 
 export type StaticDef =
+  // Secrets of Strixhaven (14b): Wildgrowth Archaic
+  /** Creatures you cast enter with an additional +1/+1 counter for each colour of mana spent to cast them. */
+  | { kind: 'entersWithColorsSpentCounters' }
   | {
       kind: 'anthem';
       affects: 'otherCreaturesYouControl' | 'creaturesYouControl' | 'creaturesOpponentsControl';
@@ -2022,6 +2062,9 @@ export interface GameObject {
   resolutions?: { turn: number; count: number };
   /** +1/+1 counters it had as it last left the battlefield (Essence Channeler). */
   lastCounters?: number;
+  // Secrets of Strixhaven (14b): Fractal Tender
+  /** The turn a counter was last put on it. */
+  countersTurn?: number;
   /** "Triggers only once each turn": the turn each such ability (by index) last triggered. */
   onceTurns?: Record<number, number>;
   // Strixhaven (13a): abilities granted until end of turn (Lorehold Apprentice)
@@ -2558,6 +2601,9 @@ export type Decision =
       canBin?: boolean;
       /** Explore the Vastlands: after this answer, choose a card matching this from the rest of the cards looked at. */
       followUp?: CardFilter;
+      // Secrets of Strixhaven (14b): Zimone's Experiment
+      /** A land taken goes onto the battlefield tapped, anything else into the hand; one more pick follows the first. */
+      landsTapped?: boolean;
       required?: boolean;
       /** Only these top cards were looked at: the rest go to the bottom in a random order (no shuffle). */
       looked?: ObjectId[];

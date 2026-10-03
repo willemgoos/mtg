@@ -277,6 +277,13 @@ export function countOf(
       0,
     );
   if (a.count === 'creaturesYouLostThisTurn') return ctx.s.turn.creaturesLost?.[player] ?? 0;
+  // Secrets of Strixhaven (14b): Emil, Vastlands Roamer.
+  if (a.count === 'differentlyNamedLands')
+    return new Set(
+      ctx.s.battlefield
+        .filter((id) => obj(ctx, id).controller === player && def(ctx, id).types.includes('Land'))
+        .map((id) => def(ctx, id).name),
+    ).size;
   // Strixhaven (13c): life gained this turn.
   if (a.count === 'lifeGainedThisTurn') return ctx.s.turn.lifeGained?.[player] ?? 0;
   // Secrets of Strixhaven (14b): Orysa, Fractal Anomaly

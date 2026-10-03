@@ -1,6 +1,6 @@
 import { commanderColors, legendaryColors, opponentLandColors } from './brawl.ts';
 import { damageSourceFor, dealDamage } from './effects.ts';
-import { canTapForAbility, isCreature, matchesFilter } from './characteristics.ts';
+import { canTapForAbility, isCreature, matchesFilter, power } from './characteristics.ts';
 import { type Ctx, addCounters, def, emit, obj, sacrifice, tap } from './context.ts';
 import { manaValue, pipsOf } from './cost.ts';
 import { hamletColorless } from './sos-14b-c-effects.ts';
@@ -98,6 +98,8 @@ export function manaSources(
       if (a.amount) units = Math.max(units, a.amount);
       // Strixhaven (13c): Accomplished Alchemist.
       if (a.perLifeGained) units = Math.max(units, ctx.s.turn.lifeGained?.[player] ?? 0);
+      // Secrets of Strixhaven (14b): Topiary Lecturer.
+      if (a.perPower) units = Math.max(units, power(ctx, id));
       if (a.pain) (pain ??= []).push(a.produces);
       if (a.doubleIf && checkCondition(ctx, a.doubleIf, player, obj(ctx, id))) double = true;
       if (a.cost.sacrificeSelf) sacrifice = true;
