@@ -358,13 +358,8 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
               for (const targets of combosFor(specs, card, sacrifice)) {
                 const ward = wardCost(ctx, player, targets);
                 // Dire Downdraft costs less with some targets.
-                const cost = targetDiscount
-                  ? castCost(ctx, player, card, choice, targets)
-                  : base;
-                if (
-                  (ward.generic || targetDiscount) &&
-                  !canPayFrom(addCosts(cost, ward), pool)
-                )
+                const cost = targetDiscount ? castCost(ctx, player, card, choice, targets) : base;
+                if ((ward.generic || targetDiscount) && !canPayFrom(addCosts(cost, ward), pool))
                   continue;
                 if (wardLife(ctx, player, targets) > s.players[player].life) continue;
                 if (!wardPayable(ctx, player, targets, zone === 'hand' ? 1 : 0)) continue;
@@ -664,7 +659,13 @@ export function getLegalActions(ctx: Ctx, player: PlayerId): Action[] {
           // Additional sacrifice or forage costs aren't offered on free casts (a simplification).
           if (v.sacrifice || v.forage) continue;
           const specs = v.spell?.targets ?? (cd.enchant ? [cd.enchant] : []);
-          for (const targets of targetCombos(ctx, specs, { controller: player, sourceId: card }))
+          for (const targets of targetCombos(ctx, specs, { controller: player, sourceId: card })) {
+            // Strixhaven (13b): a free cast still pays ward.
+            if (
+              !wardPayable(ctx, player, targets) ||
+              !canPayFrom(wardCost(ctx, player, targets), manaSources(ctx, player))
+            )
+              continue;
             for (const discard of discards)
               out.push({
                 type: 'castSpell',
@@ -677,6 +678,7 @@ export function getLegalActions(ctx: Ctx, player: PlayerId): Action[] {
                 ...(v.paws ? { paws: v.paws } : {}),
                 ...(discard ? { discard } : {}),
               });
+          }
         }
       }
       return out;

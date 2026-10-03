@@ -415,6 +415,11 @@ export function resolveAmount(ctx: Ctx, es: EffectSource, amount: Amount): numbe
     );
   if ('handSizeUpTo' in amount)
     return Math.max(0, amount.handSizeUpTo - ctx.s.players[es.controller].hand.length);
+  // Strixhaven (13b): Flunk
+  if ('handGapOfControllerOf' in amount) {
+    const id = objectsOf(ctx, es, amount.handGapOfControllerOf)[0];
+    return id ? Math.max(0, amount.size - ctx.s.players[obj(ctx, id).controller].hand.length) : 0;
+  }
   if ('toughnessOf' in amount) {
     const id = objectsOf(ctx, es, amount.toughnessOf)[0];
     return id ? Math.max(0, characteristics(ctx, id).toughness) : 0;
@@ -619,7 +624,7 @@ export function runEffects(
         const sourceId = es.source?.id;
         const options = ctx.s.battlefield.filter(
           (id) =>
-            id !== sourceId &&
+            (id !== sourceId || e.includeSource) && // Strixhaven (13b): Daemogoth Titan
             obj(ctx, id).controller === controller &&
             matchesFilter(ctx, id, e.filter, sourceId),
         );
