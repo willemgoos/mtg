@@ -149,7 +149,7 @@ describe('expedition packs', () => {
     expect([0, 1].map((n) => packSetOf(mixed, n))).toEqual(['fin', 'blb']);
     const fin = SCRYFALL.filter((c) => c.set === 'fin');
     for (let seed = 0; seed < 20; seed++) {
-      const pack = rollPack({ kind: 'booster' }, seed, false, 'fin');
+      const pack = rollPack({ kind: 'booster' }, seed, 0, 'fin');
       expect(new Set(pack).size).toBe(packSize);
       const printings = pack.map((name) => fin.find((c) => c.name === name)!);
       for (const c of printings) {
