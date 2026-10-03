@@ -19,6 +19,7 @@ import { MSH_JUMPSTART_TRAINED } from './jumpstart-trained.ts';
 import { MSH_JUMPSTART_TRICKSTERS } from './jumpstart-tricksters.ts';
 import { MSH_JUMPSTART_WAKANDA } from './jumpstart-wakanda.ts';
 import { MSH_JUMPSTART_WILD } from './jumpstart-wild.ts';
+import { MSH_JUMPSTART_YOUNG_AVENGERS } from './jumpstart-young-avengers.ts';
 
 // Marvel Super Heroes Jumpstart packets (docs/marvel-jumpstart.md): the cards
 // they share. Packet-specific cards live in their own msh/jumpstart-*.ts files.
@@ -67,4 +68,5 @@ export const MSH_JUMPSTART: Record<string, Behavior> = {
   ...MSH_JUMPSTART_TRICKSTERS,
   ...MSH_JUMPSTART_WAKANDA,
   ...MSH_JUMPSTART_WILD,
+  ...MSH_JUMPSTART_YOUNG_AVENGERS,
 };

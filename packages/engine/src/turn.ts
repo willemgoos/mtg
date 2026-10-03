@@ -425,6 +425,8 @@ export function finishCleanup(ctx: Ctx): void {
     if (!stays) o.damage = 0;
     o.damagedByDeathtouch = false;
     delete o.damagedBy;
+    // Marvel Super Heroes Jumpstart (Young Avengers): Hulkling's copy ends in full.
+    if (o.copyingUntilTurn !== undefined && o.copyKeptAbilities) endCopy(ctx, o);
     // Mirage Mirror: back to itself.
     if (o.copyingUntilTurn !== undefined && o.originalDefId) {
       o.defId = o.originalDefId;

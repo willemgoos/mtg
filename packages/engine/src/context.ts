@@ -101,6 +101,9 @@ export function def(ctx: Ctx, id: ObjectId): CardDefinition {
   // Final Fantasy (11c): a land with a blight counter (Ultima, Origin of Oblivion).
   if (o.counters?.blight && o.zone === 'battlefield' && d.types.includes('Land'))
     return blightDef(d);
+  // Marvel Super Heroes Jumpstart (Young Avengers): a copy that keeps some of its own abilities.
+  if (o.copyKeptAbilities && o.originalDefId)
+    return keptAbilitiesDef(d, defOf(ctx, o.originalDefId), o.copyKeptAbilities);
   // Ygra: other creatures are Food artifacts with the Food ability.
   if (
     ctx.s.creaturesAreFood &&
@@ -110,6 +113,30 @@ export function def(ctx: Ctx, id: ObjectId): CardDefinition {
   )
     return foodCreatureDef(d);
   return d;
+}
+
+// Marvel Super Heroes Jumpstart (Young Avengers)
+
+const keptAbilitiesDefs = new WeakMap<CardDefinition, WeakMap<CardDefinition, CardDefinition>>();
+
+/**
+ * A copy that keeps its own name and some of its own abilities (Hulkling, Young Avenger: "except
+ * his name is Hulkling, ... and he has this ability"). The kept abilities come after the copied
+ * ones, so the copied abilities keep their indices; triggers map the kept ones back (queue).
+ */
+function keptAbilitiesDef(d: CardDefinition, own: CardDefinition, kept: number[]): CardDefinition {
+  let byOwn = keptAbilitiesDefs.get(d);
+  if (!byOwn) keptAbilitiesDefs.set(d, (byOwn = new WeakMap()));
+  let f = byOwn.get(own);
+  if (!f) {
+    f = {
+      ...d,
+      name: own.name,
+      abilities: [...d.abilities, ...kept.flatMap((i) => own.abilities[i] ?? [])],
+    };
+    byOwn.set(own, f);
+  }
+  return f;
 }
 
 /** Recomputes whether a Ygra is on the battlefield (after setting up a position directly). */
@@ -367,6 +394,8 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
     // Marvel Super Heroes Jumpstart (Tricksters).
     delete o.copyNotLegendary;
     delete o.copyKeepsName;
+    // Marvel Super Heroes Jumpstart (Young Avengers).
+    delete o.copyKeptAbilities;
   }
   // Marvel Super Heroes (Secret Invasion): a copy lasting while this stays ends as it leaves.
   if (from === 'battlefield')

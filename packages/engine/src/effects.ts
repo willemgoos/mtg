@@ -2055,6 +2055,8 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
       // Marvel Super Heroes Jumpstart (Tricksters): not legendary; keeps its name (Impossible Man).
       if (e.notLegendary) self.copyNotLegendary = true;
       if (e.keepName) self.copyKeepsName = true;
+      // Marvel Super Heroes Jumpstart (Young Avengers): "and he has this ability" (Hulkling).
+      if (e.keepAbilities) self.copyKeptAbilities = e.keepAbilities;
       if (e.asCreature) {
         self.copyAsCreature = true;
         self.copyPT = { power: e.asCreature.power, toughness: e.asCreature.toughness };
@@ -2765,6 +2767,8 @@ export function endCopy(ctx: Ctx, o: GameObject): void {
   delete o.copyWhileSource;
   delete o.copyNotLegendary;
   delete o.copyKeepsName;
+  // Marvel Super Heroes Jumpstart (Young Avengers).
+  delete o.copyKeptAbilities;
   if (o.copyAsCreature) delete o.grantedKeywords;
   delete o.copyAsCreature;
   if (o.copyAddedSubtypes) {
