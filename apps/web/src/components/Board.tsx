@@ -1476,17 +1476,17 @@ function castLabel(defId: CardDefId, a: Action): string {
   if (!def?.kicker) return 'Cast';
   if (def.kicker.as === 'overload')
     return a.kicked ? `Overload (each, ${manaText(def.kicker.cost)} more)` : 'One target';
-  // Strixhaven (13b): "you may pay {1}{B} rather than pay this spell's mana cost" (Baleful Mastery).
-  if (def.kicker.as === 'alternative')
-    return a.kicked
-      ? `Pay ${manaText({ ...def.manaCost, generic: def.manaCost.generic + def.kicker.cost.generic })} instead (an opponent draws a card)`
-      : `Pay ${manaText(def.manaCost)}`;
   if (def.kicker.as === 'gift')
     return a.kicked ? `Promise ${giftText(def)} to your opponent` : 'No gift';
   if (def.kicker.as === 'offspring')
     return a.kicked ? `With offspring (+${manaText(def.kicker.cost)})` : 'Without offspring';
   if (def.kicker.teamwork !== undefined)
     return a.kicked ? `Teamwork (tap power ${def.kicker.teamwork})` : 'Without teamwork';
+  // Strixhaven (13b): an alternative cost (Baleful Mastery).
+  if (def.kicker.replacesCost)
+    return a.kicked
+      ? `Alternative cost (${manaText(def.kicker.cost)}): an opponent draws a card`
+      : 'Full cost';
   // Final Fantasy (11b): a kicker paid with a permanent.
   if (def.kicker.returnLand) return a.kicked ? 'Kicked (return a land)' : 'Not kicked';
   if (def.kicker.sacrifice)

@@ -10,8 +10,6 @@ import type { Behavior } from '../build.ts';
 import {
   combos,
   creature,
-  draw,
-  gain,
   mana,
   mode,
   spell,
@@ -78,14 +76,6 @@ const pumpSelf = (power: number, toughness: number, keywords: Keyword[] = []): E
   ...(keywords.length ? { keywords } : {}),
 });
 
-/** Drain: each opponent loses N, you gain N. */
-const drain = (n: number): EffectDef[] => [opponentLoses(n), gain(n)];
-
-const creatureOrWalker: TargetSpec = {
-  what: 'permanent',
-  filter: { types: ['Creature', 'Planeswalker'] },
-};
-
 /** "When this dies, put its counters on target creature you control." */
 const dyingCounters: AbilityDef = {
   kind: 'triggered',
@@ -101,26 +91,8 @@ const shadrixOpponent: EffectDef[] = [
 ];
 
 export const SILVERQUILL: Record<string, Behavior> = {
-  // ---------------------------------------------------------------- creatures
-  Eyetwitch: {
-    abilities: [{ kind: 'triggered', trigger: { on: 'dies' }, targets: [], effects: [learn] }],
-  },
   'Silverquill Apprentice': {
     abilities: [magecraft([creature], { kind: 'pump', to: t0, power: 1, toughness: 0 })],
-  },
-  'Leech Fanatic': {
-    abilities: [
-      {
-        kind: 'static',
-        effect: {
-          kind: 'while',
-          condition: { kind: 'yourTurn' },
-          power: 0,
-          toughness: 0,
-          keywords: ['lifelink'],
-        },
-      },
-    ],
   },
   // Lifelink and menace are keywords; spells that target a creature cost {2} less.
   'Killian, Ink Duelist': {
@@ -142,29 +114,6 @@ export const SILVERQUILL: Record<string, Behavior> = {
       }),
     ],
   },
-  'Sedgemoor Witch': { abilities: [magecraft([], pest)] },
-  'Callous Bloodmage': {
-    abilities: [
-      {
-        kind: 'triggered',
-        trigger: { on: 'etb' },
-        targets: [],
-        effects: [],
-        modes: [
-          mode('Create a 1/1 Pest creature token', [], pest),
-          mode('You draw a card and you lose 1 life', [], draw(1), {
-            kind: 'loseLife',
-            who: 'controller',
-            amount: 1,
-          }),
-          mode('Exile target player’s graveyard', [{ what: 'player' }], {
-            kind: 'exileGraveyard',
-            who: t0,
-          }),
-        ],
-      },
-    ],
-  },
   'Shadewing Laureate': {
     abilities: [
       {
@@ -179,44 +128,8 @@ export const SILVERQUILL: Record<string, Behavior> = {
       },
     ],
   },
-  'Mage Hunter': {
-    abilities: [
-      {
-        kind: 'triggered',
-        trigger: { on: 'castSpell', filter: 'instantOrSorcery', caster: 'opponent' },
-        targets: [],
-        effects: [opponentLoses(1)],
-      },
-    ],
-  },
-  'Specter of the Fens': {
-    abilities: [
-      {
-        kind: 'activated',
-        cost: { mana: mana('{5}{B}') },
-        targets: [],
-        effects: drain(2),
-      },
-    ],
-  },
   'Spiteful Squad': { entersWithCounters: 2, abilities: [dyingCounters] },
   'Owlin Shieldmage': {},
-  'Tenured Inkcaster': {
-    abilities: [
-      {
-        kind: 'triggered',
-        trigger: { on: 'etb' },
-        targets: [creature],
-        effects: [{ kind: 'counters', to: t0, amount: 1 }],
-      },
-      {
-        kind: 'triggered',
-        trigger: { on: 'creatureYouControlAttacks', filter: { minPlusOneCounters: 1 } },
-        targets: [],
-        effects: drain(1),
-      },
-    ],
-  },
   // Simplified: you choose which of the two pairs; an opponent always gets the draw mode.
   'Shadrix Silverquill': {
     abilities: [
@@ -248,23 +161,6 @@ export const SILVERQUILL: Record<string, Behavior> = {
     kind: 'exile',
     what: t0,
   }),
-  // "You may pay {1}{B} rather than pay this spell's mana cost; then an opponent draws a card."
-  'Baleful Mastery': {
-    spell: { targets: [creatureOrWalker], effects: [{ kind: 'exile', what: t0 }] },
-    kicker: {
-      cost: { generic: -2, colored: {} },
-      as: 'alternative',
-      spell: {
-        targets: [creatureOrWalker],
-        effects: [
-          { kind: 'exile', what: t0 },
-          { kind: 'draw', who: 'eachOpponent', amount: 1 },
-        ],
-      },
-    },
-  },
-  // Simplified: the "whenever a creature blocks" rider is left out.
-  "Mage Hunters' Onslaught": spell([creatureOrWalker], { kind: 'destroy', what: t0 }),
   'Closing Statement': {
     costReductionIf: { condition: { kind: 'yourStep', steps: ['end'] }, amount: 2 },
     spell: {

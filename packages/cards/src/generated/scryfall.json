@@ -32732,32 +32732,6 @@
   }
  },
  {
-  "name": "Eyetwitch",
-  "scryfallId": "1f4d1bb6-cb8f-4d01-9879-0b3a0585cbf4",
-  "oracleId": "6a7a5e93-fea8-4aa0-a2b1-73d466220cfb",
-  "set": "stx",
-  "collectorNumber": "70",
-  "rarity": "uncommon",
-  "manaCost": "{B}",
-  "typeLine": "Creature — Eye Bat",
-  "oracleText": "Flying\nWhen this creature dies, learn. (You may reveal a Lesson card you own from outside the game and put it into your hand, or discard a card to draw a card.)",
-  "power": "1",
-  "toughness": "1",
-  "colors": [
-   "B"
-  ],
-  "keywords": [
-   "Flying",
-   "Learn"
-  ],
-  "image": {
-   "small": "https://cards.scryfall.io/small/front/1/f/1f4d1bb6-cb8f-4d01-9879-0b3a0585cbf4.jpg?1783927368",
-   "normal": "https://cards.scryfall.io/normal/front/1/f/1f4d1bb6-cb8f-4d01-9879-0b3a0585cbf4.jpg?1783927368",
-   "large": "https://cards.scryfall.io/large/front/1/f/1f4d1bb6-cb8f-4d01-9879-0b3a0585cbf4.jpg?1783927368",
-   "artCrop": "https://cards.scryfall.io/art_crop/front/1/f/1f4d1bb6-cb8f-4d01-9879-0b3a0585cbf4.jpg?1783927368"
-  }
- },
- {
   "name": "Silverquill Apprentice",
   "scryfallId": "42d0770e-9084-4aa7-b543-2b6ba18378dc",
   "oracleId": "5ab91144-5eb3-491b-a8be-7e1139d0d6c8",
@@ -32781,29 +32755,6 @@
    "normal": "https://cards.scryfall.io/normal/front/4/2/42d0770e-9084-4aa7-b543-2b6ba18378dc.jpg?1783927292",
    "large": "https://cards.scryfall.io/large/front/4/2/42d0770e-9084-4aa7-b543-2b6ba18378dc.jpg?1783927292",
    "artCrop": "https://cards.scryfall.io/art_crop/front/4/2/42d0770e-9084-4aa7-b543-2b6ba18378dc.jpg?1783927292"
-  }
- },
- {
-  "name": "Leech Fanatic",
-  "scryfallId": "307f9fe7-241b-4eb6-a059-be5384b4a1b6",
-  "oracleId": "17bcd92b-1826-4a36-9048-49e5e65a12fd",
-  "set": "stx",
-  "collectorNumber": "75",
-  "rarity": "common",
-  "manaCost": "{1}{B}",
-  "typeLine": "Creature — Human Warlock",
-  "oracleText": "During your turn, this creature has lifelink.",
-  "power": "2",
-  "toughness": "2",
-  "colors": [
-   "B"
-  ],
-  "keywords": [],
-  "image": {
-   "small": "https://cards.scryfall.io/small/front/3/0/307f9fe7-241b-4eb6-a059-be5384b4a1b6.jpg?1783927366",
-   "normal": "https://cards.scryfall.io/normal/front/3/0/307f9fe7-241b-4eb6-a059-be5384b4a1b6.jpg?1783927366",
-   "large": "https://cards.scryfall.io/large/front/3/0/307f9fe7-241b-4eb6-a059-be5384b4a1b6.jpg?1783927366",
-   "artCrop": "https://cards.scryfall.io/art_crop/front/3/0/307f9fe7-241b-4eb6-a059-be5384b4a1b6.jpg?1783927366"
   }
  },
  {
@@ -32860,56 +32811,6 @@
   }
  },
  {
-  "name": "Sedgemoor Witch",
-  "scryfallId": "e900c1eb-968b-4046-b824-c167a7a5b682",
-  "oracleId": "25dce517-ac0a-4577-89ed-04296c7c4069",
-  "set": "stx",
-  "collectorNumber": "86",
-  "rarity": "rare",
-  "manaCost": "{2}{B}",
-  "typeLine": "Creature — Human Warlock",
-  "oracleText": "Menace\nWard—Pay 3 life. (Whenever this creature becomes the target of a spell or ability an opponent controls, counter it unless that player pays 3 life.)\nMagecraft — Whenever you cast or copy an instant or sorcery spell, create a 1/1 black and green Pest creature token with \"When this token dies, you gain 1 life.\"",
-  "power": "3",
-  "toughness": "2",
-  "colors": [
-   "B"
-  ],
-  "keywords": [
-   "Magecraft",
-   "Menace",
-   "Ward"
-  ],
-  "image": {
-   "small": "https://cards.scryfall.io/small/front/e/9/e900c1eb-968b-4046-b824-c167a7a5b682.jpg?1783927362",
-   "normal": "https://cards.scryfall.io/normal/front/e/9/e900c1eb-968b-4046-b824-c167a7a5b682.jpg?1783927362",
-   "large": "https://cards.scryfall.io/large/front/e/9/e900c1eb-968b-4046-b824-c167a7a5b682.jpg?1783927362",
-   "artCrop": "https://cards.scryfall.io/art_crop/front/e/9/e900c1eb-968b-4046-b824-c167a7a5b682.jpg?1783927362"
-  }
- },
- {
-  "name": "Callous Bloodmage",
-  "scryfallId": "81358736-65cf-44d8-819e-d0268d14cc76",
-  "oracleId": "96c12c12-140a-462d-bff0-0554d192b1f4",
-  "set": "stx",
-  "collectorNumber": "66",
-  "rarity": "rare",
-  "manaCost": "{2}{B}",
-  "typeLine": "Creature — Vampire Warlock",
-  "oracleText": "When this creature enters, choose one —\n• Create a 1/1 black and green Pest creature token with \"When this token dies, you gain 1 life.\"\n• You draw a card and you lose 1 life.\n• Exile target player's graveyard.",
-  "power": "2",
-  "toughness": "1",
-  "colors": [
-   "B"
-  ],
-  "keywords": [],
-  "image": {
-   "small": "https://cards.scryfall.io/small/front/8/1/81358736-65cf-44d8-819e-d0268d14cc76.jpg?1783927369",
-   "normal": "https://cards.scryfall.io/normal/front/8/1/81358736-65cf-44d8-819e-d0268d14cc76.jpg?1783927369",
-   "large": "https://cards.scryfall.io/large/front/8/1/81358736-65cf-44d8-819e-d0268d14cc76.jpg?1783927369",
-   "artCrop": "https://cards.scryfall.io/art_crop/front/8/1/81358736-65cf-44d8-819e-d0268d14cc76.jpg?1783927369"
-  }
- },
- {
   "name": "Shadewing Laureate",
   "scryfallId": "64795a8b-8cf2-436e-8f95-9e8bb40c0d7d",
   "oracleId": "53a17d4f-cdbc-4669-a30e-5d5a334cc3c0",
@@ -32933,54 +32834,6 @@
    "normal": "https://cards.scryfall.io/normal/front/6/4/64795a8b-8cf2-436e-8f95-9e8bb40c0d7d.jpg?1783927294",
    "large": "https://cards.scryfall.io/large/front/6/4/64795a8b-8cf2-436e-8f95-9e8bb40c0d7d.jpg?1783927294",
    "artCrop": "https://cards.scryfall.io/art_crop/front/6/4/64795a8b-8cf2-436e-8f95-9e8bb40c0d7d.jpg?1783927294"
-  }
- },
- {
-  "name": "Mage Hunter",
-  "scryfallId": "56fcbe4a-2d98-4fa9-a6c3-e28255171a4d",
-  "oracleId": "e3d2df4d-8c79-4391-bc4e-69325958a5be",
-  "set": "stx",
-  "collectorNumber": "76",
-  "rarity": "uncommon",
-  "manaCost": "{3}{B}",
-  "typeLine": "Creature — Horror",
-  "oracleText": "Whenever an opponent casts or copies an instant or sorcery spell, they lose 1 life.",
-  "power": "3",
-  "toughness": "4",
-  "colors": [
-   "B"
-  ],
-  "keywords": [],
-  "image": {
-   "small": "https://cards.scryfall.io/small/front/5/6/56fcbe4a-2d98-4fa9-a6c3-e28255171a4d.jpg?1783927367",
-   "normal": "https://cards.scryfall.io/normal/front/5/6/56fcbe4a-2d98-4fa9-a6c3-e28255171a4d.jpg?1783927367",
-   "large": "https://cards.scryfall.io/large/front/5/6/56fcbe4a-2d98-4fa9-a6c3-e28255171a4d.jpg?1783927367",
-   "artCrop": "https://cards.scryfall.io/art_crop/front/5/6/56fcbe4a-2d98-4fa9-a6c3-e28255171a4d.jpg?1783927367"
-  }
- },
- {
-  "name": "Specter of the Fens",
-  "scryfallId": "73e3cfbc-7177-4bbc-89c4-560c9c2f97db",
-  "oracleId": "048925e1-3bd6-4caa-90b9-e75e890032a5",
-  "set": "stx",
-  "collectorNumber": "87",
-  "rarity": "common",
-  "manaCost": "{3}{B}",
-  "typeLine": "Creature — Specter",
-  "oracleText": "Flying\n{5}{B}: Target opponent loses 2 life and you gain 2 life.",
-  "power": "2",
-  "toughness": "3",
-  "colors": [
-   "B"
-  ],
-  "keywords": [
-   "Flying"
-  ],
-  "image": {
-   "small": "https://cards.scryfall.io/small/front/7/3/73e3cfbc-7177-4bbc-89c4-560c9c2f97db.jpg?1783927361",
-   "normal": "https://cards.scryfall.io/normal/front/7/3/73e3cfbc-7177-4bbc-89c4-560c9c2f97db.jpg?1783927361",
-   "large": "https://cards.scryfall.io/large/front/7/3/73e3cfbc-7177-4bbc-89c4-560c9c2f97db.jpg?1783927361",
-   "artCrop": "https://cards.scryfall.io/art_crop/front/7/3/73e3cfbc-7177-4bbc-89c4-560c9c2f97db.jpg?1783927361"
   }
  },
  {
@@ -33037,29 +32890,6 @@
   }
  },
  {
-  "name": "Tenured Inkcaster",
-  "scryfallId": "92eba33e-efea-4e58-a832-1c6049fb211f",
-  "oracleId": "780536da-2923-48e7-916a-61c701382d28",
-  "set": "stx",
-  "collectorNumber": "88",
-  "rarity": "uncommon",
-  "manaCost": "{4}{B}",
-  "typeLine": "Creature — Vampire Warlock",
-  "oracleText": "When this creature enters, put a +1/+1 counter on target creature.\nWhenever a creature you control with a +1/+1 counter on it attacks, each opponent loses 1 life and you gain 1 life.",
-  "power": "2",
-  "toughness": "2",
-  "colors": [
-   "B"
-  ],
-  "keywords": [],
-  "image": {
-   "small": "https://cards.scryfall.io/small/front/9/2/92eba33e-efea-4e58-a832-1c6049fb211f.jpg?1783927361",
-   "normal": "https://cards.scryfall.io/normal/front/9/2/92eba33e-efea-4e58-a832-1c6049fb211f.jpg?1783927361",
-   "large": "https://cards.scryfall.io/large/front/9/2/92eba33e-efea-4e58-a832-1c6049fb211f.jpg?1783927361",
-   "artCrop": "https://cards.scryfall.io/art_crop/front/9/2/92eba33e-efea-4e58-a832-1c6049fb211f.jpg?1783927361"
-  }
- },
- {
   "name": "Shadrix Silverquill",
   "scryfallId": "ab701909-83d6-4d39-9a84-e6a9b2cb38d6",
   "oracleId": "2143f413-7baa-4fd6-a7ca-32f52bfa553f",
@@ -33106,48 +32936,6 @@
    "normal": "https://cards.scryfall.io/normal/front/e/1/e12573fe-aee3-49db-93e2-d00972cbb3b1.jpg?1783927288",
    "large": "https://cards.scryfall.io/large/front/e/1/e12573fe-aee3-49db-93e2-d00972cbb3b1.jpg?1783927288",
    "artCrop": "https://cards.scryfall.io/art_crop/front/e/1/e12573fe-aee3-49db-93e2-d00972cbb3b1.jpg?1783927288"
-  }
- },
- {
-  "name": "Baleful Mastery",
-  "scryfallId": "35f1a6ba-e46f-44fb-93f4-fb883d677b36",
-  "oracleId": "adfcdadd-ddda-477b-8e72-0cae2430fb63",
-  "set": "stx",
-  "collectorNumber": "64",
-  "rarity": "rare",
-  "manaCost": "{3}{B}",
-  "typeLine": "Instant",
-  "oracleText": "You may pay {1}{B} rather than pay this spell's mana cost.\nIf the {1}{B} cost was paid, an opponent draws a card.\nExile target creature or planeswalker.",
-  "colors": [
-   "B"
-  ],
-  "keywords": [],
-  "image": {
-   "small": "https://cards.scryfall.io/small/front/3/5/35f1a6ba-e46f-44fb-93f4-fb883d677b36.jpg?1783927370",
-   "normal": "https://cards.scryfall.io/normal/front/3/5/35f1a6ba-e46f-44fb-93f4-fb883d677b36.jpg?1783927370",
-   "large": "https://cards.scryfall.io/large/front/3/5/35f1a6ba-e46f-44fb-93f4-fb883d677b36.jpg?1783927370",
-   "artCrop": "https://cards.scryfall.io/art_crop/front/3/5/35f1a6ba-e46f-44fb-93f4-fb883d677b36.jpg?1783927370"
-  }
- },
- {
-  "name": "Mage Hunters' Onslaught",
-  "scryfallId": "ed85140f-f0e0-4ac1-a67f-26d17ff95e31",
-  "oracleId": "22195e0e-a426-48d6-b100-480c7e2bd5cc",
-  "set": "stx",
-  "collectorNumber": "77",
-  "rarity": "common",
-  "manaCost": "{2}{B}{B}",
-  "typeLine": "Sorcery",
-  "oracleText": "Destroy target creature or planeswalker.\nWhenever a creature blocks this turn, its controller loses 1 life.",
-  "colors": [
-   "B"
-  ],
-  "keywords": [],
-  "image": {
-   "small": "https://cards.scryfall.io/small/front/e/d/ed85140f-f0e0-4ac1-a67f-26d17ff95e31.jpg?1783927365",
-   "normal": "https://cards.scryfall.io/normal/front/e/d/ed85140f-f0e0-4ac1-a67f-26d17ff95e31.jpg?1783927365",
-   "large": "https://cards.scryfall.io/large/front/e/d/ed85140f-f0e0-4ac1-a67f-26d17ff95e31.jpg?1783927365",
-   "artCrop": "https://cards.scryfall.io/art_crop/front/e/d/ed85140f-f0e0-4ac1-a67f-26d17ff95e31.jpg?1783927365"
   }
  },
  {
@@ -33370,6 +33158,427 @@
   }
  },
  {
+  "name": "Eyetwitch",
+  "scryfallId": "1f4d1bb6-cb8f-4d01-9879-0b3a0585cbf4",
+  "oracleId": "6a7a5e93-fea8-4aa0-a2b1-73d466220cfb",
+  "set": "stx",
+  "collectorNumber": "70",
+  "rarity": "uncommon",
+  "manaCost": "{B}",
+  "typeLine": "Creature — Eye Bat",
+  "oracleText": "Flying\nWhen this creature dies, learn. (You may reveal a Lesson card you own from outside the game and put it into your hand, or discard a card to draw a card.)",
+  "power": "1",
+  "toughness": "1",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Flying",
+   "Learn"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/f/1f4d1bb6-cb8f-4d01-9879-0b3a0585cbf4.jpg?1783927368",
+   "normal": "https://cards.scryfall.io/normal/front/1/f/1f4d1bb6-cb8f-4d01-9879-0b3a0585cbf4.jpg?1783927368",
+   "large": "https://cards.scryfall.io/large/front/1/f/1f4d1bb6-cb8f-4d01-9879-0b3a0585cbf4.jpg?1783927368",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/f/1f4d1bb6-cb8f-4d01-9879-0b3a0585cbf4.jpg?1783927368"
+  }
+ },
+ {
+  "name": "Leech Fanatic",
+  "scryfallId": "307f9fe7-241b-4eb6-a059-be5384b4a1b6",
+  "oracleId": "17bcd92b-1826-4a36-9048-49e5e65a12fd",
+  "set": "stx",
+  "collectorNumber": "75",
+  "rarity": "common",
+  "manaCost": "{1}{B}",
+  "typeLine": "Creature — Human Warlock",
+  "oracleText": "During your turn, this creature has lifelink.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/0/307f9fe7-241b-4eb6-a059-be5384b4a1b6.jpg?1783927366",
+   "normal": "https://cards.scryfall.io/normal/front/3/0/307f9fe7-241b-4eb6-a059-be5384b4a1b6.jpg?1783927366",
+   "large": "https://cards.scryfall.io/large/front/3/0/307f9fe7-241b-4eb6-a059-be5384b4a1b6.jpg?1783927366",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/0/307f9fe7-241b-4eb6-a059-be5384b4a1b6.jpg?1783927366"
+  }
+ },
+ {
+  "name": "Witherbloom Apprentice",
+  "scryfallId": "7f80a11b-188b-464c-b00d-c9d1cfb8ddee",
+  "oracleId": "696f554d-0485-48a5-9273-3f6fb7d16a5d",
+  "set": "stx",
+  "collectorNumber": "247",
+  "rarity": "uncommon",
+  "manaCost": "{B}{G}",
+  "typeLine": "Creature — Human Druid",
+  "oracleText": "Magecraft — Whenever you cast or copy an instant or sorcery spell, each opponent loses 1 life and you gain 1 life.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "B",
+   "G"
+  ],
+  "keywords": [
+   "Magecraft"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/f/7f80a11b-188b-464c-b00d-c9d1cfb8ddee.jpg?1783927284",
+   "normal": "https://cards.scryfall.io/normal/front/7/f/7f80a11b-188b-464c-b00d-c9d1cfb8ddee.jpg?1783927284",
+   "large": "https://cards.scryfall.io/large/front/7/f/7f80a11b-188b-464c-b00d-c9d1cfb8ddee.jpg?1783927284",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/f/7f80a11b-188b-464c-b00d-c9d1cfb8ddee.jpg?1783927284"
+  }
+ },
+ {
+  "name": "Blood Researcher",
+  "scryfallId": "3e35e9ba-a10e-4926-a7a6-3a65efc2a730",
+  "oracleId": "a465ba74-615a-4261-b4a0-fcb0819f10b3",
+  "set": "stx",
+  "collectorNumber": "166",
+  "rarity": "common",
+  "manaCost": "{1}{B}{G}",
+  "typeLine": "Creature — Vampire Druid",
+  "oracleText": "Menace (This creature can't be blocked except by two or more creatures.)\nWhenever you gain life, put a +1/+1 counter on this creature.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "B",
+   "G"
+  ],
+  "keywords": [
+   "Menace"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/e/3e35e9ba-a10e-4926-a7a6-3a65efc2a730.jpg?1783927323",
+   "normal": "https://cards.scryfall.io/normal/front/3/e/3e35e9ba-a10e-4926-a7a6-3a65efc2a730.jpg?1783927323",
+   "large": "https://cards.scryfall.io/large/front/3/e/3e35e9ba-a10e-4926-a7a6-3a65efc2a730.jpg?1783927323",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/e/3e35e9ba-a10e-4926-a7a6-3a65efc2a730.jpg?1783927323"
+  }
+ },
+ {
+  "name": "Dina, Soul Steeper",
+  "scryfallId": "9cd2b567-0cf7-4441-b3ce-e31141dd91c8",
+  "oracleId": "2121bcb4-f5fe-447f-9112-c7e5b5c45baf",
+  "set": "stx",
+  "collectorNumber": "178",
+  "rarity": "uncommon",
+  "manaCost": "{B}{G}",
+  "typeLine": "Legendary Creature — Dryad Druid",
+  "oracleText": "Whenever you gain life, each opponent loses 1 life.\n{1}, Sacrifice another creature: Dina gets +X/+0 until end of turn, where X is the sacrificed creature's power.",
+  "power": "1",
+  "toughness": "3",
+  "colors": [
+   "B",
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/c/9cd2b567-0cf7-4441-b3ce-e31141dd91c8.jpg?1783927318",
+   "normal": "https://cards.scryfall.io/normal/front/9/c/9cd2b567-0cf7-4441-b3ce-e31141dd91c8.jpg?1783927318",
+   "large": "https://cards.scryfall.io/large/front/9/c/9cd2b567-0cf7-4441-b3ce-e31141dd91c8.jpg?1783927318",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/c/9cd2b567-0cf7-4441-b3ce-e31141dd91c8.jpg?1783927318"
+  }
+ },
+ {
+  "name": "Callous Bloodmage",
+  "scryfallId": "81358736-65cf-44d8-819e-d0268d14cc76",
+  "oracleId": "96c12c12-140a-462d-bff0-0554d192b1f4",
+  "set": "stx",
+  "collectorNumber": "66",
+  "rarity": "rare",
+  "manaCost": "{2}{B}",
+  "typeLine": "Creature — Vampire Warlock",
+  "oracleText": "When this creature enters, choose one —\n• Create a 1/1 black and green Pest creature token with \"When this token dies, you gain 1 life.\"\n• You draw a card and you lose 1 life.\n• Exile target player's graveyard.",
+  "power": "2",
+  "toughness": "1",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/1/81358736-65cf-44d8-819e-d0268d14cc76.jpg?1783927369",
+   "normal": "https://cards.scryfall.io/normal/front/8/1/81358736-65cf-44d8-819e-d0268d14cc76.jpg?1783927369",
+   "large": "https://cards.scryfall.io/large/front/8/1/81358736-65cf-44d8-819e-d0268d14cc76.jpg?1783927369",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/1/81358736-65cf-44d8-819e-d0268d14cc76.jpg?1783927369"
+  }
+ },
+ {
+  "name": "Honor Troll",
+  "scryfallId": "a9c6a6b9-f00c-46a5-8dab-796483e3a262",
+  "oracleId": "98c059ed-d749-4f66-bda1-6352976198f0",
+  "set": "stx",
+  "collectorNumber": "134",
+  "rarity": "uncommon",
+  "manaCost": "{2}{G}",
+  "typeLine": "Creature — Troll Druid",
+  "oracleText": "Vigilance\nIf you would gain life, you gain that much life plus 1 instead.\nThis creature gets +2/+1 as long as you have 25 or more life.",
+  "power": "2",
+  "toughness": "3",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Vigilance"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/9/a9c6a6b9-f00c-46a5-8dab-796483e3a262.jpg?1783927343",
+   "normal": "https://cards.scryfall.io/normal/front/a/9/a9c6a6b9-f00c-46a5-8dab-796483e3a262.jpg?1783927343",
+   "large": "https://cards.scryfall.io/large/front/a/9/a9c6a6b9-f00c-46a5-8dab-796483e3a262.jpg?1783927343",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/9/a9c6a6b9-f00c-46a5-8dab-796483e3a262.jpg?1783927343"
+  }
+ },
+ {
+  "name": "Moldering Karok",
+  "scryfallId": "70c2ef30-0db5-4ef5-999c-7ffa48769421",
+  "oracleId": "5d95db27-53bb-4a20-9fb8-24998b03e767",
+  "set": "stx",
+  "collectorNumber": "206",
+  "rarity": "common",
+  "manaCost": "{2}{B}{G}",
+  "typeLine": "Creature — Zombie Crocodile",
+  "oracleText": "Trample, lifelink",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "B",
+   "G"
+  ],
+  "keywords": [
+   "Lifelink",
+   "Trample"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/0/70c2ef30-0db5-4ef5-999c-7ffa48769421.jpg?1783927305",
+   "normal": "https://cards.scryfall.io/normal/front/7/0/70c2ef30-0db5-4ef5-999c-7ffa48769421.jpg?1783927305",
+   "large": "https://cards.scryfall.io/large/front/7/0/70c2ef30-0db5-4ef5-999c-7ffa48769421.jpg?1783927305",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/0/70c2ef30-0db5-4ef5-999c-7ffa48769421.jpg?1783927305"
+  }
+ },
+ {
+  "name": "Master Symmetrist",
+  "scryfallId": "255cdc39-6ad8-4831-9718-6712cb17654c",
+  "oracleId": "ffce416c-90c6-43ed-9019-e5a32accad6d",
+  "set": "stx",
+  "collectorNumber": "138",
+  "rarity": "uncommon",
+  "manaCost": "{2}{G}{G}",
+  "typeLine": "Creature — Rhino Druid",
+  "oracleText": "Reach\nWhenever a creature you control with power equal to its toughness attacks, it gains trample until end of turn.",
+  "power": "4",
+  "toughness": "4",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Reach"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/5/255cdc39-6ad8-4831-9718-6712cb17654c.jpg?1783927343",
+   "normal": "https://cards.scryfall.io/normal/front/2/5/255cdc39-6ad8-4831-9718-6712cb17654c.jpg?1783927343",
+   "large": "https://cards.scryfall.io/large/front/2/5/255cdc39-6ad8-4831-9718-6712cb17654c.jpg?1783927343",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/5/255cdc39-6ad8-4831-9718-6712cb17654c.jpg?1783927343"
+  }
+ },
+ {
+  "name": "Specter of the Fens",
+  "scryfallId": "73e3cfbc-7177-4bbc-89c4-560c9c2f97db",
+  "oracleId": "048925e1-3bd6-4caa-90b9-e75e890032a5",
+  "set": "stx",
+  "collectorNumber": "87",
+  "rarity": "common",
+  "manaCost": "{3}{B}",
+  "typeLine": "Creature — Specter",
+  "oracleText": "Flying\n{5}{B}: Target opponent loses 2 life and you gain 2 life.",
+  "power": "2",
+  "toughness": "3",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/3/73e3cfbc-7177-4bbc-89c4-560c9c2f97db.jpg?1783927361",
+   "normal": "https://cards.scryfall.io/normal/front/7/3/73e3cfbc-7177-4bbc-89c4-560c9c2f97db.jpg?1783927361",
+   "large": "https://cards.scryfall.io/large/front/7/3/73e3cfbc-7177-4bbc-89c4-560c9c2f97db.jpg?1783927361",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/3/73e3cfbc-7177-4bbc-89c4-560c9c2f97db.jpg?1783927361"
+  }
+ },
+ {
+  "name": "Sedgemoor Witch",
+  "scryfallId": "e900c1eb-968b-4046-b824-c167a7a5b682",
+  "oracleId": "25dce517-ac0a-4577-89ed-04296c7c4069",
+  "set": "stx",
+  "collectorNumber": "86",
+  "rarity": "rare",
+  "manaCost": "{2}{B}",
+  "typeLine": "Creature — Human Warlock",
+  "oracleText": "Menace\nWard—Pay 3 life. (Whenever this creature becomes the target of a spell or ability an opponent controls, counter it unless that player pays 3 life.)\nMagecraft — Whenever you cast or copy an instant or sorcery spell, create a 1/1 black and green Pest creature token with \"When this token dies, you gain 1 life.\"",
+  "power": "3",
+  "toughness": "2",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Magecraft",
+   "Menace",
+   "Ward"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/9/e900c1eb-968b-4046-b824-c167a7a5b682.jpg?1783927362",
+   "normal": "https://cards.scryfall.io/normal/front/e/9/e900c1eb-968b-4046-b824-c167a7a5b682.jpg?1783927362",
+   "large": "https://cards.scryfall.io/large/front/e/9/e900c1eb-968b-4046-b824-c167a7a5b682.jpg?1783927362",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/9/e900c1eb-968b-4046-b824-c167a7a5b682.jpg?1783927362"
+  }
+ },
+ {
+  "name": "Mage Hunter",
+  "scryfallId": "56fcbe4a-2d98-4fa9-a6c3-e28255171a4d",
+  "oracleId": "e3d2df4d-8c79-4391-bc4e-69325958a5be",
+  "set": "stx",
+  "collectorNumber": "76",
+  "rarity": "uncommon",
+  "manaCost": "{3}{B}",
+  "typeLine": "Creature — Horror",
+  "oracleText": "Whenever an opponent casts or copies an instant or sorcery spell, they lose 1 life.",
+  "power": "3",
+  "toughness": "4",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/6/56fcbe4a-2d98-4fa9-a6c3-e28255171a4d.jpg?1783927367",
+   "normal": "https://cards.scryfall.io/normal/front/5/6/56fcbe4a-2d98-4fa9-a6c3-e28255171a4d.jpg?1783927367",
+   "large": "https://cards.scryfall.io/large/front/5/6/56fcbe4a-2d98-4fa9-a6c3-e28255171a4d.jpg?1783927367",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/6/56fcbe4a-2d98-4fa9-a6c3-e28255171a4d.jpg?1783927367"
+  }
+ },
+ {
+  "name": "Gnarled Professor",
+  "scryfallId": "a32338e8-1f6a-49b9-bd93-26578adab6b3",
+  "oracleId": "e66083f0-62a9-4ff7-8bb0-3eafc6d2e95d",
+  "set": "stx",
+  "collectorNumber": "133",
+  "rarity": "rare",
+  "manaCost": "{2}{G}{G}",
+  "typeLine": "Creature — Treefolk Druid",
+  "oracleText": "Trample\nWhen this creature enters, learn. (You may reveal a Lesson card you own from outside the game and put it into your hand, or discard a card to draw a card.)",
+  "power": "5",
+  "toughness": "4",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Trample",
+   "Learn"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/3/a32338e8-1f6a-49b9-bd93-26578adab6b3.jpg?1783927342",
+   "normal": "https://cards.scryfall.io/normal/front/a/3/a32338e8-1f6a-49b9-bd93-26578adab6b3.jpg?1783927342",
+   "large": "https://cards.scryfall.io/large/front/a/3/a32338e8-1f6a-49b9-bd93-26578adab6b3.jpg?1783927342",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/3/a32338e8-1f6a-49b9-bd93-26578adab6b3.jpg?1783927342"
+  }
+ },
+ {
+  "name": "Witherbloom Pledgemage",
+  "scryfallId": "a6cc6914-2dcb-411d-90a5-01853ff2d5b8",
+  "oracleId": "f10039ae-2695-4b0a-82b2-82ee79a992c7",
+  "set": "stx",
+  "collectorNumber": "249",
+  "rarity": "common",
+  "manaCost": "{3}{B/G}{B/G}",
+  "typeLine": "Creature — Treefolk Warlock",
+  "oracleText": "Magecraft — Whenever you cast or copy an instant or sorcery spell, you gain 1 life.",
+  "power": "5",
+  "toughness": "5",
+  "colors": [
+   "B",
+   "G"
+  ],
+  "keywords": [
+   "Magecraft"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/6/a6cc6914-2dcb-411d-90a5-01853ff2d5b8.jpg?1783927288",
+   "normal": "https://cards.scryfall.io/normal/front/a/6/a6cc6914-2dcb-411d-90a5-01853ff2d5b8.jpg?1783927288",
+   "large": "https://cards.scryfall.io/large/front/a/6/a6cc6914-2dcb-411d-90a5-01853ff2d5b8.jpg?1783927288",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/6/a6cc6914-2dcb-411d-90a5-01853ff2d5b8.jpg?1783927288"
+  }
+ },
+ {
+  "name": "Tenured Inkcaster",
+  "scryfallId": "92eba33e-efea-4e58-a832-1c6049fb211f",
+  "oracleId": "780536da-2923-48e7-916a-61c701382d28",
+  "set": "stx",
+  "collectorNumber": "88",
+  "rarity": "uncommon",
+  "manaCost": "{4}{B}",
+  "typeLine": "Creature — Vampire Warlock",
+  "oracleText": "When this creature enters, put a +1/+1 counter on target creature.\nWhenever a creature you control with a +1/+1 counter on it attacks, each opponent loses 1 life and you gain 1 life.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/2/92eba33e-efea-4e58-a832-1c6049fb211f.jpg?1783927361",
+   "normal": "https://cards.scryfall.io/normal/front/9/2/92eba33e-efea-4e58-a832-1c6049fb211f.jpg?1783927361",
+   "large": "https://cards.scryfall.io/large/front/9/2/92eba33e-efea-4e58-a832-1c6049fb211f.jpg?1783927361",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/2/92eba33e-efea-4e58-a832-1c6049fb211f.jpg?1783927361"
+  }
+ },
+ {
+  "name": "Bayou Groff",
+  "scryfallId": "4a82b032-b1ba-456c-abab-c0f7430b0587",
+  "oracleId": "e83b2790-3cec-429c-a65d-6f4c7d025d37",
+  "set": "stx",
+  "collectorNumber": "121",
+  "rarity": "common",
+  "manaCost": "{1}{G}",
+  "typeLine": "Creature — Plant Dog",
+  "oracleText": "As an additional cost to cast this spell, sacrifice a creature or pay {3}.",
+  "power": "5",
+  "toughness": "4",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/a/4a82b032-b1ba-456c-abab-c0f7430b0587.jpg?1783927348",
+   "normal": "https://cards.scryfall.io/normal/front/4/a/4a82b032-b1ba-456c-abab-c0f7430b0587.jpg?1783927348",
+   "large": "https://cards.scryfall.io/large/front/4/a/4a82b032-b1ba-456c-abab-c0f7430b0587.jpg?1783927348",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/a/4a82b032-b1ba-456c-abab-c0f7430b0587.jpg?1783927348"
+  }
+ },
+ {
+  "name": "Brackish Trudge",
+  "scryfallId": "90ba37ee-159f-421f-8d37-a7b5f1b562f0",
+  "oracleId": "c775d3ef-2184-4425-8c8e-2bbc49687f76",
+  "set": "stx",
+  "collectorNumber": "65",
+  "rarity": "uncommon",
+  "manaCost": "{2}{B}",
+  "typeLine": "Creature — Fungus Beast",
+  "oracleText": "This creature enters tapped.\n{1}{B}: Return this card from your graveyard to your hand. Activate only if you gained life this turn.",
+  "power": "4",
+  "toughness": "2",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/0/90ba37ee-159f-421f-8d37-a7b5f1b562f0.jpg?1783927369",
+   "normal": "https://cards.scryfall.io/normal/front/9/0/90ba37ee-159f-421f-8d37-a7b5f1b562f0.jpg?1783927369",
+   "large": "https://cards.scryfall.io/large/front/9/0/90ba37ee-159f-421f-8d37-a7b5f1b562f0.jpg?1783927369",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/0/90ba37ee-159f-421f-8d37-a7b5f1b562f0.jpg?1783927369"
+  }
+ },
+ {
   "name": "Hunt for Specimens",
   "scryfallId": "8ff0f47f-75cb-42b0-ba4d-78522cad9861",
   "oracleId": "53f1bcff-55fb-4d38-b108-dcbed623f488",
@@ -33390,6 +33599,201 @@
    "normal": "https://cards.scryfall.io/normal/front/8/f/8ff0f47f-75cb-42b0-ba4d-78522cad9861.jpg?1783927367",
    "large": "https://cards.scryfall.io/large/front/8/f/8ff0f47f-75cb-42b0-ba4d-78522cad9861.jpg?1783927367",
    "artCrop": "https://cards.scryfall.io/art_crop/front/8/f/8ff0f47f-75cb-42b0-ba4d-78522cad9861.jpg?1783927367"
+  }
+ },
+ {
+  "name": "Cram Session",
+  "scryfallId": "c59a249f-35ed-447a-845b-32ba5a53124e",
+  "oracleId": "6e5b8bb2-9dd8-4986-9d0a-659114be5a2a",
+  "set": "stx",
+  "collectorNumber": "170",
+  "rarity": "common",
+  "manaCost": "{1}{B/G}",
+  "typeLine": "Sorcery",
+  "oracleText": "You gain 4 life.\nLearn. (You may reveal a Lesson card you own from outside the game and put it into your hand, or discard a card to draw a card.)",
+  "colors": [
+   "B",
+   "G"
+  ],
+  "keywords": [
+   "Learn"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/5/c59a249f-35ed-447a-845b-32ba5a53124e.jpg?1783927323",
+   "normal": "https://cards.scryfall.io/normal/front/c/5/c59a249f-35ed-447a-845b-32ba5a53124e.jpg?1783927323",
+   "large": "https://cards.scryfall.io/large/front/c/5/c59a249f-35ed-447a-845b-32ba5a53124e.jpg?1783927323",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/5/c59a249f-35ed-447a-845b-32ba5a53124e.jpg?1783927323"
+  }
+ },
+ {
+  "name": "Mortality Spear",
+  "scryfallId": "f1f39fe7-dc12-49c9-80ac-4135dc1f8f08",
+  "oracleId": "544acde0-850d-4c4f-8389-e22930d87345",
+  "set": "stx",
+  "collectorNumber": "207",
+  "rarity": "uncommon",
+  "manaCost": "{2}{B}{G}",
+  "typeLine": "Instant",
+  "oracleText": "This spell costs {2} less to cast if you gained life this turn.\nDestroy target nonland permanent.",
+  "colors": [
+   "B",
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/1/f1f39fe7-dc12-49c9-80ac-4135dc1f8f08.jpg?1783927305",
+   "normal": "https://cards.scryfall.io/normal/front/f/1/f1f39fe7-dc12-49c9-80ac-4135dc1f8f08.jpg?1783927305",
+   "large": "https://cards.scryfall.io/large/front/f/1/f1f39fe7-dc12-49c9-80ac-4135dc1f8f08.jpg?1783927305",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/1/f1f39fe7-dc12-49c9-80ac-4135dc1f8f08.jpg?1783927305"
+  }
+ },
+ {
+  "name": "Baleful Mastery",
+  "scryfallId": "35f1a6ba-e46f-44fb-93f4-fb883d677b36",
+  "oracleId": "adfcdadd-ddda-477b-8e72-0cae2430fb63",
+  "set": "stx",
+  "collectorNumber": "64",
+  "rarity": "rare",
+  "manaCost": "{3}{B}",
+  "typeLine": "Instant",
+  "oracleText": "You may pay {1}{B} rather than pay this spell's mana cost.\nIf the {1}{B} cost was paid, an opponent draws a card.\nExile target creature or planeswalker.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/5/35f1a6ba-e46f-44fb-93f4-fb883d677b36.jpg?1783927370",
+   "normal": "https://cards.scryfall.io/normal/front/3/5/35f1a6ba-e46f-44fb-93f4-fb883d677b36.jpg?1783927370",
+   "large": "https://cards.scryfall.io/large/front/3/5/35f1a6ba-e46f-44fb-93f4-fb883d677b36.jpg?1783927370",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/5/35f1a6ba-e46f-44fb-93f4-fb883d677b36.jpg?1783927370"
+  }
+ },
+ {
+  "name": "Mage Hunters' Onslaught",
+  "scryfallId": "ed85140f-f0e0-4ac1-a67f-26d17ff95e31",
+  "oracleId": "22195e0e-a426-48d6-b100-480c7e2bd5cc",
+  "set": "stx",
+  "collectorNumber": "77",
+  "rarity": "common",
+  "manaCost": "{2}{B}{B}",
+  "typeLine": "Sorcery",
+  "oracleText": "Destroy target creature or planeswalker.\nWhenever a creature blocks this turn, its controller loses 1 life.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/d/ed85140f-f0e0-4ac1-a67f-26d17ff95e31.jpg?1783927365",
+   "normal": "https://cards.scryfall.io/normal/front/e/d/ed85140f-f0e0-4ac1-a67f-26d17ff95e31.jpg?1783927365",
+   "large": "https://cards.scryfall.io/large/front/e/d/ed85140f-f0e0-4ac1-a67f-26d17ff95e31.jpg?1783927365",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/d/ed85140f-f0e0-4ac1-a67f-26d17ff95e31.jpg?1783927365"
+  }
+ },
+ {
+  "name": "Tend the Pests",
+  "scryfallId": "8f43ed93-008d-44db-8204-ef2cc3b7cf8a",
+  "oracleId": "9ffce1d5-e29c-4dab-8b97-6b32655785d4",
+  "set": "stx",
+  "collectorNumber": "242",
+  "rarity": "uncommon",
+  "manaCost": "{B}{G}",
+  "typeLine": "Instant",
+  "oracleText": "As an additional cost to cast this spell, sacrifice a creature.\nCreate X 1/1 black and green Pest creature tokens with \"When this token dies, you gain 1 life,\" where X is the sacrificed creature's power.",
+  "colors": [
+   "B",
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/f/8f43ed93-008d-44db-8204-ef2cc3b7cf8a.jpg?1783927287",
+   "normal": "https://cards.scryfall.io/normal/front/8/f/8f43ed93-008d-44db-8204-ef2cc3b7cf8a.jpg?1783927287",
+   "large": "https://cards.scryfall.io/large/front/8/f/8f43ed93-008d-44db-8204-ef2cc3b7cf8a.jpg?1783927287",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/f/8f43ed93-008d-44db-8204-ef2cc3b7cf8a.jpg?1783927287"
+  }
+ },
+ {
+  "name": "Witherbloom Campus",
+  "scryfallId": "7346fb2e-754e-47de-b33d-eb089b357ee4",
+  "oracleId": "6cd58a88-6434-4c55-bf93-a739b5ed9bc1",
+  "set": "stx",
+  "collectorNumber": "275",
+  "rarity": "common",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "This land enters tapped.\n{T}: Add {B} or {G}.\n{4}, {T}: Scry 1. (Look at the top card of your library. You may put that card on the bottom.)",
+  "colors": [],
+  "keywords": [
+   "Scry"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/3/7346fb2e-754e-47de-b33d-eb089b357ee4.jpg?1783927269",
+   "normal": "https://cards.scryfall.io/normal/front/7/3/7346fb2e-754e-47de-b33d-eb089b357ee4.jpg?1783927269",
+   "large": "https://cards.scryfall.io/large/front/7/3/7346fb2e-754e-47de-b33d-eb089b357ee4.jpg?1783927269",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/3/7346fb2e-754e-47de-b33d-eb089b357ee4.jpg?1783927269"
+  }
+ },
+ {
+  "name": "Pest Summoning",
+  "scryfallId": "6267e19a-a777-4767-8433-86b6624362b6",
+  "oracleId": "f6e0cb77-4115-4948-8e1e-fdb774b1b254",
+  "set": "stx",
+  "collectorNumber": "211",
+  "rarity": "common",
+  "manaCost": "{1}{B/G}{B/G}",
+  "typeLine": "Sorcery — Lesson",
+  "oracleText": "Create two 1/1 black and green Pest creature tokens with \"When this token dies, you gain 1 life.\"",
+  "colors": [
+   "B",
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/2/6267e19a-a777-4767-8433-86b6624362b6.jpg?1783927303",
+   "normal": "https://cards.scryfall.io/normal/front/6/2/6267e19a-a777-4767-8433-86b6624362b6.jpg?1783927303",
+   "large": "https://cards.scryfall.io/large/front/6/2/6267e19a-a777-4767-8433-86b6624362b6.jpg?1783927303",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/2/6267e19a-a777-4767-8433-86b6624362b6.jpg?1783927303"
+  }
+ },
+ {
+  "name": "Basic Conjuration",
+  "scryfallId": "8be52d88-f430-4437-a0d3-590c2947c838",
+  "oracleId": "547ab16c-b8d1-4357-9219-7cabde80f5ba",
+  "set": "stx",
+  "collectorNumber": "120",
+  "rarity": "rare",
+  "manaCost": "{1}{G}{G}",
+  "typeLine": "Sorcery — Lesson",
+  "oracleText": "Look at the top six cards of your library. You may reveal a creature card from among them and put it into your hand. Put the rest on the bottom of your library in a random order. You gain 3 life.",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/b/8be52d88-f430-4437-a0d3-590c2947c838.jpg?1783927348",
+   "normal": "https://cards.scryfall.io/normal/front/8/b/8be52d88-f430-4437-a0d3-590c2947c838.jpg?1783927348",
+   "large": "https://cards.scryfall.io/large/front/8/b/8be52d88-f430-4437-a0d3-590c2947c838.jpg?1783927348",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/b/8be52d88-f430-4437-a0d3-590c2947c838.jpg?1783927348"
+  }
+ },
+ {
+  "name": "Containment Breach",
+  "scryfallId": "0dcca120-b72e-4007-98e1-cb22e7b9a705",
+  "oracleId": "043dd2e5-21e4-49b9-90b2-831e587b2238",
+  "set": "stx",
+  "collectorNumber": "125",
+  "rarity": "uncommon",
+  "manaCost": "{2}{G}",
+  "typeLine": "Sorcery — Lesson",
+  "oracleText": "Destroy target artifact or enchantment. If its mana value is 2 or less, create a 1/1 black and green Pest creature token with \"When this token dies, you gain 1 life.\"",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/d/0dcca120-b72e-4007-98e1-cb22e7b9a705.jpg?1783927344",
+   "normal": "https://cards.scryfall.io/normal/front/0/d/0dcca120-b72e-4007-98e1-cb22e7b9a705.jpg?1783927344",
+   "large": "https://cards.scryfall.io/large/front/0/d/0dcca120-b72e-4007-98e1-cb22e7b9a705.jpg?1783927344",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/d/0dcca120-b72e-4007-98e1-cb22e7b9a705.jpg?1783927344"
   }
  }
 ]

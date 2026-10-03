@@ -176,7 +176,8 @@ export function castVariants(d: CardDefinition, zone: ZoneName, via?: CastVia): 
   if (d.kicker)
     out.push({
       kicked: true,
-      cost: addCosts(cost, d.kicker.cost),
+      // Strixhaven (13b): an alternative cost replaces the mana cost.
+      cost: d.kicker.replacesCost ? d.kicker.cost : addCosts(cost, d.kicker.cost),
       spell: d.kicker.spell ?? d.spell ?? null,
       // Final Fantasy (11b): a kicker paid with a permanent (chosen like a sacrifice).
       ...(d.kicker.sacrifice || d.kicker.returnLand ? { sacrifice: true } : {}),

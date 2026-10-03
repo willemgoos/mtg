@@ -1,6 +1,6 @@
 import type { Behavior } from '../build.ts';
 import { creature, spell, t0 } from '../fin/helpers.ts';
-import { inkling, learn, pest } from './silverquill.ts';
+import { inkling, learn } from './silverquill.ts';
 
 /** Strixhaven (13b): the Silverquill deck's Lessons (its sideboard, fetched by Learn). */
 export const SILVERQUILL_LESSONS: Record<string, Behavior> = {
@@ -14,5 +14,4 @@ export const SILVERQUILL_LESSONS: Record<string, Behavior> = {
     { kind: 'exileGraveyardCard', what: { target: 1 } },
     learn,
   ),
-  'Hunt for Specimens': spell([], pest, learn),
 };

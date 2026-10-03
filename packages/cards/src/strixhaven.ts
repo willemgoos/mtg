@@ -1,6 +1,7 @@
 import type { CardDefinition } from '@mtg/engine';
 import type { Behavior } from './build.ts';
 import { LOREHOLD, LOREHOLD_TOKENS } from './stx/lorehold.ts';
+import { WITHERBLOOM, WITHERBLOOM_TOKENS } from './stx/witherbloom.ts';
 import { QUANDRIX, QUANDRIX_TOKENS } from './stx/quandrix.ts';
 import { SILVERQUILL, SILVERQUILL_TOKENS } from './stx/silverquill.ts';
 import { SILVERQUILL_LESSONS } from './stx/lessons-silverquill.ts';
@@ -16,6 +17,7 @@ export const STRIXHAVEN_BEHAVIORS: Record<string, Behavior> = {
   ...QUANDRIX,
   ...SILVERQUILL,
   ...SILVERQUILL_LESSONS,
+  ...WITHERBLOOM,
 };
 
 /** Strixhaven tokens (the Lorehold Spirit, the Quandrix Fractal). */
@@ -23,6 +25,7 @@ export const STRIXHAVEN_TOKENS: CardDefinition[] = [
   ...LOREHOLD_TOKENS,
   ...QUANDRIX_TOKENS,
   ...SILVERQUILL_TOKENS,
+  ...WITHERBLOOM_TOKENS,
 ];
 
 /** Back faces of double-faced cards: not cards of their own, so not in the pool. */
