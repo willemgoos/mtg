@@ -243,7 +243,11 @@ function queue(
   amount?: number,
 ): void {
   // "This ability triggers only once each turn."
-  const a = defOf(ctx, o.defId).abilities[index];
+  const printed = defOf(ctx, o.defId).abilities[index];
+  // An ability granted until end of turn (Root Manipulation on a Pest) sits after the printed ones
+  // and has no printed counterpart to look up later, so the pending trigger carries it itself.
+  const granted = printed ? undefined : def(ctx, o.id).abilities[index];
+  const a = printed ?? granted;
   // "Whenever one or more ...": once for events collected together.
   if (a?.kind === 'triggered' && a.batch) {
     const key = `${o.id}:${o.zcc}:${index}`;
@@ -259,6 +263,7 @@ function queue(
     sourceDefId: o.defId,
     abilityIndex: index,
     controller,
+    ...(granted?.kind === 'triggered' ? { emblem: granted } : {}),
     ...(subject ? { subject: { id: subject.id, zcc: subject.zcc } } : {}),
     ...(amount !== undefined ? { amount } : {}),
   };

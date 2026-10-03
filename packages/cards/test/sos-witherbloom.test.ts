@@ -336,6 +336,21 @@ describe('spells', () => {
     expect(chars(g, bears).keywords).toContain('menace');
   });
 
+  it('Root Manipulation on a Pest: the granted attack trigger (ability index past the printed one) resolves', () => {
+    const g = game({
+      p1: { hand: ['root-manipulation'], battlefield: [PEST, ...n('forest', 3), ...n('swamp', 2)] },
+    });
+    cast(g, 'root-manipulation');
+    done(g);
+    const life = g.state.players.p1.life;
+    for (let i = 0; i < 10 && g.decision.kind !== 'declareAttackers'; i++) g.pass();
+    g.attack(g.id('p1', PEST));
+    for (let i = 0; i < 10 && g.state.stack.length === 0; i++) g.pass();
+    expect(() => settle(g)).not.toThrow();
+    // Printed trigger plus the granted copy: two life gains.
+    expect(g.state.players.p1.life).toBe(life + 2);
+  });
+
   it('Send in the Pest makes the opponent discard and gives you a Pest', () => {
     const g = game({
       p1: { hand: ['send-in-the-pest'], battlefield: n('swamp', 2) },
