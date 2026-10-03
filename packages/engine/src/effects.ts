@@ -1467,8 +1467,13 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
       const pb = power(ctx, b);
       const sa = damageSourceFor(ctx, a, es.controller);
       const sb = damageSourceFor(ctx, b, obj(ctx, b).controller);
+      // Marvel Super Heroes Jumpstart (Tenacious/Rampaging): excess damage to b (Rhino's Rampage).
+      const beforeB = obj(ctx, b).damage;
+      const lethalB = Math.max(0, characteristics(ctx, b).toughness - beforeB);
       dealDamage(ctx, sa, { object: { id: b, zcc: obj(ctx, b).zcc } }, pa, false);
       dealDamage(ctx, sb, { object: { id: a, zcc: obj(ctx, a).zcc } }, pb, false);
+      if (e.ifExcess && obj(ctx, b).damage - beforeB > lethalB)
+        for (const x of e.ifExcess) runEffect(ctx, es, x);
       return;
     }
     case 'destroy':

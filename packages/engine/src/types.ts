@@ -208,6 +208,9 @@ export interface CardDefinition {
   castFromGraveyardWithDiscard?: boolean;
   /** It enters with X +1/+1 counters (Royal Talon Fighter Jet). */
   entersWithXCounters?: boolean;
+  // Marvel Super Heroes Jumpstart (Tenacious/Rampaging)
+  /** It enters with this many +1/+1 counters (Voracious Brood: one per creature card in your graveyard). */
+  entersWithCountersAmount?: Amount;
   /** Costs {amount} less while the condition holds (Heroic Return, Avenge). */
   costReductionIf?: { condition: ConditionDef; amount: number };
   /** "You may sacrifice any number of nonland permanents. This spell costs {1} less for each" (Rottenmouth Viper). */
@@ -505,6 +508,14 @@ export type TriggerDef =
   // Marvel Super Heroes Jumpstart (Animal).
   /** Whenever this permanent becomes tapped (Wakandan Tusker). */
   | { on: 'becomesTapped' }
+  // Marvel Super Heroes Jumpstart (Tenacious/Rampaging)
+  /** Whenever this creature blocks (Atlas, Sizable Stooge). */
+  | { on: 'blocks' }
+  /**
+   * Whenever one or more creature cards are put into your graveyard from anywhere ("that many"
+   * is the event amount; once per batch of events): Voracious Brood.
+   */
+  | { on: 'creatureCardsToYourGraveyard' }
   /** Whenever one or more creatures you control (matching the filter) deal combat damage to a player (Kastral). */
   | { on: 'creaturesYouControlDealCombatDamageToPlayer'; filter?: CardFilter }
   /** When you sacrifice this permanent (Carrot Cake). */
@@ -1419,7 +1430,14 @@ export type EffectDef =
   /** Counts a resolution of this ability this turn (see the `resolvedThisTurn` condition). */
   | { kind: 'noteResolution' }
   | { kind: 'counters'; to: Ref; amount: Amount }
-  | { kind: 'fight'; a: Ref; b: Ref }
+  | {
+      kind: 'fight';
+      a: Ref;
+      b: Ref;
+      // Marvel Super Heroes Jumpstart (Tenacious/Rampaging)
+      /** Then these, if `a` dealt excess damage to `b` (Rhino's Rampage). */
+      ifExcess?: EffectDef[];
+    }
   | { kind: 'destroy'; what: Ref }
   | { kind: 'gainLife'; who: Ref; amount: Amount }
   | { kind: 'loseLife'; who: Ref; amount: Amount }

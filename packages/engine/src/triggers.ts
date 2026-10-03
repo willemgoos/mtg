@@ -400,6 +400,10 @@ function detect(ctx: Ctx, ev: GameEvent): void {
           ctx,
           (o, a) => a.trigger.on === 'cardsLeaveYourGraveyard' && o.controller === moved.owner,
         );
+      // Marvel Super Heroes Jumpstart (Tenacious/Rampaging): creature cards put into your
+      // graveyard from anywhere, counted per batch ("that many": Voracious Brood).
+      if (ev.to === 'graveyard' && moved && !moved.isToken && movedDef.types.includes('Creature'))
+        creatureCardToGraveyard(ctx, moved.owner);
       if (ev.to === 'battlefield' && moved && moved.zone === 'battlefield') {
         // A Saga enters with its first lore counter.
         if (movedDef.saga) addLore(ctx, moved.id);
@@ -889,6 +893,9 @@ function detect(ctx: Ctx, ev: GameEvent): void {
     }
     case 'blockersDeclared': {
       const blocked = new Set(ev.blocks.map((b) => b.attacker));
+      // Marvel Super Heroes Jumpstart (Tenacious/Rampaging): "whenever this creature blocks" (Atlas).
+      const blockers = new Set(ev.blocks.map((b) => b.blocker));
+      forEachBattlefieldTrigger(ctx, (o, a) => a.trigger.on === 'blocks' && blockers.has(o.id));
       forEachBattlefieldTrigger(
         ctx,
         (o, a) => a.trigger.on === 'becomesBlocked' && blocked.has(o.id),
@@ -1320,6 +1327,28 @@ function spellCaster(ctx: Ctx, item: StackItem | undefined, self: GameObject): P
 
 // ---------------------------------------------------------------------------
 // Marvel Super Heroes Jumpstart (Animal): "whenever this becomes tapped" (Wakandan Tusker).
+
+// Marvel Super Heroes Jumpstart (Tenacious/Rampaging)
+/** Voracious Brood: one trigger per batch, its amount the creature cards put into the graveyard. */
+function creatureCardToGraveyard(ctx: Ctx, owner: PlayerId): void {
+  for (const id of ctx.s.battlefield) {
+    const o = obj(ctx, id);
+    if (o.controller !== owner) continue;
+    def(ctx, id).abilities.forEach((a, i) => {
+      if (a.kind !== 'triggered' || a.trigger.on !== 'creatureCardsToYourGraveyard') return;
+      const queued = ctx.batched.has(`${o.id}:${o.zcc}:${i}`)
+        ? ctx.s.pendingTriggers.find(
+            (t) => t.source.id === o.id && t.source.zcc === o.zcc && t.abilityIndex === i,
+          )
+        : undefined;
+      if (queued) queued.amount = (queued.amount ?? 0) + 1;
+      else {
+        ctx.batched.add(`${o.id}:${o.zcc}:${i}`);
+        queue(ctx, o, i, o.controller, undefined, 1);
+      }
+    });
+  }
+}
 
 function detectAnimal(ctx: Ctx, ev: GameEvent): void {
   if (ev.type !== 'tapped') return;
