@@ -34566,5 +34566,99 @@
    "large": "https://cards.scryfall.io/large/front/9/6/967148b1-2bb6-4bc0-95e6-c45fcf99afd2.jpg?1783927373",
    "artCrop": "https://cards.scryfall.io/art_crop/front/9/6/967148b1-2bb6-4bc0-95e6-c45fcf99afd2.jpg?1783927373"
   }
+ },
+ {
+  "name": "Star Pupil",
+  "scryfallId": "99e9318f-2e17-4b6e-895f-c17cd5d0d282",
+  "oracleId": "37fd3a9d-74fe-4180-805a-b865e7228a77",
+  "set": "stx",
+  "collectorNumber": "30",
+  "rarity": "common",
+  "manaCost": "{W}",
+  "typeLine": "Creature — Human Wizard",
+  "oracleText": "This creature enters with a +1/+1 counter on it.\nWhen this creature dies, put its counters on target creature you control.",
+  "power": "0",
+  "toughness": "0",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/9/99e9318f-2e17-4b6e-895f-c17cd5d0d282.jpg?1783927385",
+   "normal": "https://cards.scryfall.io/normal/front/9/9/99e9318f-2e17-4b6e-895f-c17cd5d0d282.jpg?1783927385",
+   "large": "https://cards.scryfall.io/large/front/9/9/99e9318f-2e17-4b6e-895f-c17cd5d0d282.jpg?1783927385",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/9/99e9318f-2e17-4b6e-895f-c17cd5d0d282.jpg?1783927385"
+  }
+ },
+ {
+  "name": "Pilgrim of the Ages",
+  "scryfallId": "c86714f5-e909-413f-8eb6-99dbea4d1897",
+  "oracleId": "f67084bb-07f8-420a-ad6e-9ab9842d3ee6",
+  "set": "stx",
+  "collectorNumber": "22",
+  "rarity": "common",
+  "manaCost": "{2}{W}",
+  "typeLine": "Creature — Spirit",
+  "oracleText": "When this creature enters, you may search your library for a basic Plains card, reveal it, put it into your hand, then shuffle.\n{6}: Return this card from your graveyard to your hand.",
+  "power": "2",
+  "toughness": "1",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/8/c86714f5-e909-413f-8eb6-99dbea4d1897.jpg?1783927388",
+   "normal": "https://cards.scryfall.io/normal/front/c/8/c86714f5-e909-413f-8eb6-99dbea4d1897.jpg?1783927388",
+   "large": "https://cards.scryfall.io/large/front/c/8/c86714f5-e909-413f-8eb6-99dbea4d1897.jpg?1783927388",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/8/c86714f5-e909-413f-8eb6-99dbea4d1897.jpg?1783927388"
+  }
+ },
+ {
+  "name": "Spined Karok",
+  "scryfallId": "c37ae6b5-225a-410e-ab22-13e923bdfb65",
+  "oracleId": "7341a04a-b6d6-4106-b1c3-3483f9d37663",
+  "set": "stx",
+  "collectorNumber": "143",
+  "rarity": "common",
+  "manaCost": "{2}{G}",
+  "typeLine": "Creature — Crocodile",
+  "oracleText": "",
+  "power": "2",
+  "toughness": "4",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/3/c37ae6b5-225a-410e-ab22-13e923bdfb65.jpg?1783927338",
+   "normal": "https://cards.scryfall.io/normal/front/c/3/c37ae6b5-225a-410e-ab22-13e923bdfb65.jpg?1783927338",
+   "large": "https://cards.scryfall.io/large/front/c/3/c37ae6b5-225a-410e-ab22-13e923bdfb65.jpg?1783927338",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/3/c37ae6b5-225a-410e-ab22-13e923bdfb65.jpg?1783927338"
+  }
+ },
+ {
+  "name": "Bookwurm",
+  "scryfallId": "57d230fc-d382-40b4-bdbd-5fe880fa16bf",
+  "oracleId": "ce77fff1-32f8-4a55-9124-b1dafe95840d",
+  "set": "stx",
+  "collectorNumber": "123",
+  "rarity": "uncommon",
+  "manaCost": "{7}{G}",
+  "typeLine": "Creature — Wurm",
+  "oracleText": "Trample\nWhen this creature enters, you gain 3 life and draw a card.\n{2}{G}: Put this card from your graveyard into your library third from the top.",
+  "power": "7",
+  "toughness": "7",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Trample"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/7/57d230fc-d382-40b4-bdbd-5fe880fa16bf.jpg?1783927347",
+   "normal": "https://cards.scryfall.io/normal/front/5/7/57d230fc-d382-40b4-bdbd-5fe880fa16bf.jpg?1783927347",
+   "large": "https://cards.scryfall.io/large/front/5/7/57d230fc-d382-40b4-bdbd-5fe880fa16bf.jpg?1783927347",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/7/57d230fc-d382-40b4-bdbd-5fe880fa16bf.jpg?1783927347"
+  }
  }
 ]
