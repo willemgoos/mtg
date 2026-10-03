@@ -34566,5 +34566,97 @@
    "large": "https://cards.scryfall.io/large/front/9/6/967148b1-2bb6-4bc0-95e6-c45fcf99afd2.jpg?1783927373",
    "artCrop": "https://cards.scryfall.io/art_crop/front/9/6/967148b1-2bb6-4bc0-95e6-c45fcf99afd2.jpg?1783927373"
   }
+ },
+ {
+  "name": "Hall Monitor",
+  "scryfallId": "02fdc551-0b22-49f4-8765-143ad82f16a3",
+  "oracleId": "937a04c2-41be-4ff3-8992-6628a9ee9792",
+  "set": "stx",
+  "collectorNumber": "105",
+  "rarity": "uncommon",
+  "manaCost": "{R}",
+  "typeLine": "Creature — Lizard Shaman",
+  "oracleText": "Haste\n{1}{R}, {T}: Target creature can't block this turn.",
+  "power": "1",
+  "toughness": "1",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Haste"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/2/02fdc551-0b22-49f4-8765-143ad82f16a3.jpg?1783927354",
+   "normal": "https://cards.scryfall.io/normal/front/0/2/02fdc551-0b22-49f4-8765-143ad82f16a3.jpg?1783927354",
+   "large": "https://cards.scryfall.io/large/front/0/2/02fdc551-0b22-49f4-8765-143ad82f16a3.jpg?1783927354",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/2/02fdc551-0b22-49f4-8765-143ad82f16a3.jpg?1783927354"
+  }
+ },
+ {
+  "name": "Reckless Amplimancer",
+  "scryfallId": "bc8072b1-6080-45cd-b1c7-353b54a55931",
+  "oracleId": "1c264f6e-caa7-44cb-8719-86212292679c",
+  "set": "stx",
+  "collectorNumber": "141",
+  "rarity": "common",
+  "manaCost": "{1}{G}",
+  "typeLine": "Creature — Elf Druid",
+  "oracleText": "{4}{G}: Double this creature's power and toughness until end of turn.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Double"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/c/bc8072b1-6080-45cd-b1c7-353b54a55931.jpg?1783927338",
+   "normal": "https://cards.scryfall.io/normal/front/b/c/bc8072b1-6080-45cd-b1c7-353b54a55931.jpg?1783927338",
+   "large": "https://cards.scryfall.io/large/front/b/c/bc8072b1-6080-45cd-b1c7-353b54a55931.jpg?1783927338",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/c/bc8072b1-6080-45cd-b1c7-353b54a55931.jpg?1783927338"
+  }
+ },
+ {
+  "name": "Mascot Interception",
+  "scryfallId": "8f0ea66f-1756-4b0d-8ccc-3b3a7370b531",
+  "oracleId": "ae3da0be-2a3f-498a-8854-73d0a5526ec2",
+  "set": "stx",
+  "collectorNumber": "110",
+  "rarity": "uncommon",
+  "manaCost": "{3}{R}",
+  "typeLine": "Sorcery",
+  "oracleText": "This spell costs {3} less to cast if it targets a creature token.\nGain control of target creature until end of turn. Untap that creature. It gets +2/+0 and gains haste until end of turn.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/f/8f0ea66f-1756-4b0d-8ccc-3b3a7370b531.jpg?1783927351",
+   "normal": "https://cards.scryfall.io/normal/front/8/f/8f0ea66f-1756-4b0d-8ccc-3b3a7370b531.jpg?1783927351",
+   "large": "https://cards.scryfall.io/large/front/8/f/8f0ea66f-1756-4b0d-8ccc-3b3a7370b531.jpg?1783927351",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/f/8f0ea66f-1756-4b0d-8ccc-3b3a7370b531.jpg?1783927351"
+  }
+ },
+ {
+  "name": "Team Pennant",
+  "scryfallId": "be294c4e-712b-459c-a36c-e26ed5c27edb",
+  "oracleId": "0fa51915-7c0b-4018-802a-90fd431f0036",
+  "set": "stx",
+  "collectorNumber": "260",
+  "rarity": "uncommon",
+  "manaCost": "{1}",
+  "typeLine": "Artifact — Equipment",
+  "oracleText": "Equipped creature gets +1/+1 and has vigilance and trample.\nEquip creature token {1}\nEquip {3}",
+  "colors": [],
+  "keywords": [
+   "Equip"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/e/be294c4e-712b-459c-a36c-e26ed5c27edb.jpg?1783927279",
+   "normal": "https://cards.scryfall.io/normal/front/b/e/be294c4e-712b-459c-a36c-e26ed5c27edb.jpg?1783927279",
+   "large": "https://cards.scryfall.io/large/front/b/e/be294c4e-712b-459c-a36c-e26ed5c27edb.jpg?1783927279",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/e/be294c4e-712b-459c-a36c-e26ed5c27edb.jpg?1783927279"
+  }
  }
 ]
