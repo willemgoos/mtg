@@ -10,6 +10,7 @@ import {
 import { MARVEL_BRAWL_BEHAVIORS, MARVEL_BRAWL_TOKENS } from './marvel-brawl.ts';
 import { MSH_JUMPSTART_PYM_TOKENS } from './msh/jumpstart-pym.ts';
 import { MSH_JUMPSTART_THOR_TOKENS } from './msh/jumpstart-thor.ts';
+import { MSH_JUMPSTART_WILD_TOKENS } from './msh/jumpstart-wild.ts';
 import {
   FINAL_FANTASY_BRAWL_BACK_FACES,
   FINAL_FANTASY_BRAWL_BEHAVIORS,
@@ -2188,6 +2189,7 @@ export const TOKENS: CardDefinition[] = [
   ...MARVEL_TOKENS,
   ...MSH_JUMPSTART_PYM_TOKENS,
   ...MSH_JUMPSTART_THOR_TOKENS,
+  ...MSH_JUMPSTART_WILD_TOKENS,
   ...MARVEL_BRAWL_TOKENS,
   ...FINAL_FANTASY_TOKENS,
   ...FINAL_FANTASY_BRAWL_TOKENS,

@@ -23648,6 +23648,156 @@
   }
  },
  {
+  "name": "White Tiger, Amulet Keeper",
+  "scryfallId": "babf0f59-0199-4dba-a149-f62261115f5e",
+  "oracleId": "0fa01155-638d-44ed-8963-46b202b0e720",
+  "set": "msc",
+  "collectorNumber": "736",
+  "rarity": "uncommon",
+  "manaCost": "{1}{G}",
+  "typeLine": "Legendary Creature — Human Hero",
+  "oracleText": "{3}{G}, Exile this card from your graveyard: Draw a card. You may put a land card from your hand onto the battlefield.",
+  "power": "3",
+  "toughness": "1",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/a/babf0f59-0199-4dba-a149-f62261115f5e.jpg?1783903033",
+   "normal": "https://cards.scryfall.io/normal/front/b/a/babf0f59-0199-4dba-a149-f62261115f5e.jpg?1783903033",
+   "large": "https://cards.scryfall.io/large/front/b/a/babf0f59-0199-4dba-a149-f62261115f5e.jpg?1783903033",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/a/babf0f59-0199-4dba-a149-f62261115f5e.jpg?1783903033"
+  }
+ },
+ {
+  "name": "The Fabulous Frog-Man",
+  "scryfallId": "9307100e-2d7e-42a9-9951-24af01ab9ded",
+  "oracleId": "b0c2938d-8370-4786-8ddd-126c61538bdd",
+  "set": "msc",
+  "collectorNumber": "559",
+  "rarity": "common",
+  "manaCost": "{2}{G}",
+  "typeLine": "Legendary Creature — Human Hero",
+  "oracleText": "Reach (This creature can block creatures with flying.)",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Reach"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/3/9307100e-2d7e-42a9-9951-24af01ab9ded.jpg?1783903096",
+   "normal": "https://cards.scryfall.io/normal/front/9/3/9307100e-2d7e-42a9-9951-24af01ab9ded.jpg?1783903096",
+   "large": "https://cards.scryfall.io/large/front/9/3/9307100e-2d7e-42a9-9951-24af01ab9ded.jpg?1783903096",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/3/9307100e-2d7e-42a9-9951-24af01ab9ded.jpg?1783903096"
+  }
+ },
+ {
+  "name": "Gert and Old Lace, Runaways",
+  "scryfallId": "7e4030ce-1574-4d1d-969a-6aa8ce6b89c3",
+  "oracleId": "aaded61e-32c2-4e02-8557-3f8cd927a64e",
+  "set": "msc",
+  "collectorNumber": "568",
+  "rarity": "uncommon",
+  "manaCost": "{2}{R/G}",
+  "typeLine": "Legendary Creature — Human Dinosaur Hero",
+  "oracleText": "Trample (This creature can deal excess combat damage to the player they're attacking.)\nWhen Gert and Old Lace enter, you may discard a card. If you do, search your library for a basic land card, reveal it, put it into your hand, then shuffle.",
+  "power": "4",
+  "toughness": "3",
+  "colors": [
+   "G",
+   "R"
+  ],
+  "keywords": [
+   "Trample"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/e/7e4030ce-1574-4d1d-969a-6aa8ce6b89c3.jpg?1783903094",
+   "normal": "https://cards.scryfall.io/normal/front/7/e/7e4030ce-1574-4d1d-969a-6aa8ce6b89c3.jpg?1783903094",
+   "large": "https://cards.scryfall.io/large/front/7/e/7e4030ce-1574-4d1d-969a-6aa8ce6b89c3.jpg?1783903094",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/e/7e4030ce-1574-4d1d-969a-6aa8ce6b89c3.jpg?1783903094"
+  }
+ },
+ {
+  "name": "Hit-Monkey",
+  "scryfallId": "7a253dc9-1593-4914-90ca-309aa3aed53d",
+  "oracleId": "e27d1993-8d83-449d-8a64-8b66086db995",
+  "set": "msc",
+  "collectorNumber": "723",
+  "rarity": "rare",
+  "manaCost": "{3}{G}",
+  "typeLine": "Legendary Creature — Monkey Assassin",
+  "oracleText": "This spell can't be countered.\nReach, vigilance, deathtouch, hexproof, haste",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Reach",
+   "Vigilance",
+   "Hexproof",
+   "Haste",
+   "Deathtouch"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/a/7a253dc9-1593-4914-90ca-309aa3aed53d.jpg?1783903038",
+   "normal": "https://cards.scryfall.io/normal/front/7/a/7a253dc9-1593-4914-90ca-309aa3aed53d.jpg?1783903038",
+   "large": "https://cards.scryfall.io/large/front/7/a/7a253dc9-1593-4914-90ca-309aa3aed53d.jpg?1783903038",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/a/7a253dc9-1593-4914-90ca-309aa3aed53d.jpg?1783903038"
+  }
+ },
+ {
+  "name": "Ka-Zar of the Savage Land",
+  "scryfallId": "caf70fc5-87a0-4b4d-bedd-74dd09569bed",
+  "oracleId": "88eeb519-5782-4732-bd34-81d1ee6dbc8f",
+  "set": "msh",
+  "collectorNumber": "174",
+  "rarity": "uncommon",
+  "manaCost": "{4}{G}",
+  "typeLine": "Legendary Creature — Human Barbarian Hero",
+  "oracleText": "You may look at the top card of your library any time.\nYou may play lands from the top of your library.\nWhen Ka-Zar enters, create Zabu, a legendary 2/2 green Cat creature token with \"Landfall — Whenever a land you control enters, put a +1/+1 counter on Zabu.\"",
+  "power": "3",
+  "toughness": "2",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/a/caf70fc5-87a0-4b4d-bedd-74dd09569bed.jpg?1783902916",
+   "normal": "https://cards.scryfall.io/normal/front/c/a/caf70fc5-87a0-4b4d-bedd-74dd09569bed.jpg?1783902916",
+   "large": "https://cards.scryfall.io/large/front/c/a/caf70fc5-87a0-4b4d-bedd-74dd09569bed.jpg?1783902916",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/a/caf70fc5-87a0-4b4d-bedd-74dd09569bed.jpg?1783902916"
+  }
+ },
+ {
+  "name": "Accelerated Evolution",
+  "scryfallId": "2b13c4de-241c-4c34-a140-0b599c61226d",
+  "oracleId": "6401d0ae-4635-497d-91ef-ce2eabefb893",
+  "set": "msc",
+  "collectorNumber": "711",
+  "rarity": "common",
+  "manaCost": "{2}{G}",
+  "typeLine": "Enchantment — Aura",
+  "oracleText": "Flash\nEnchant creature you control\nWhen this Aura enters, enchanted creature gains hexproof until end of turn. (It can't be the target of spells or abilities your opponents control.)\nEnchanted creature gets +2/+2.",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Enchant",
+   "Flash"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/b/2b13c4de-241c-4c34-a140-0b599c61226d.jpg?1783903042",
+   "normal": "https://cards.scryfall.io/normal/front/2/b/2b13c4de-241c-4c34-a140-0b599c61226d.jpg?1783903042",
+   "large": "https://cards.scryfall.io/large/front/2/b/2b13c4de-241c-4c34-a140-0b599c61226d.jpg?1783903042",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/b/2b13c4de-241c-4c34-a140-0b599c61226d.jpg?1783903042"
+  }
+ },
+ {
   "name": "Sol Ring",
   "scryfallId": "91fdb56b-54d5-4272-8319-505ff987fe9b",
   "oracleId": "6ad8011d-3471-4369-9d68-b264cc027487",
