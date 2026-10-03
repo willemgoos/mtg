@@ -221,6 +221,26 @@ Lorehold Spirit, Quandrix Unlimited, on mtg.wtf `/deck/soc/...`) differ; note th
   14 (or at least after 13a and 14a).
 - `series: 'brawl'`, `set: 'soc'` (the three 2021 decks `set: 'stx'`). Stream A's Brawl rules apply unchanged.
 
+**15a done: Brawl Quintorius, History Chaser** (`brawl-quintorius-history-chaser`, in `STRIXHAVEN_BRAWL_DECKS`). Its 49
+missing cards in `soc/cards-15a-{w,r,rw}.ts`. Planeswalker commanders needed no engine change (only the Brawl test and the
+rules line). 24 of 50 games won against the other Brawl decks, no errors; checked in the browser (command zone, 25 life).
+
+**Where 15b stands (paused 3 October 2026):**
+
+- 354 cards still missing for the other seven decks, split into seven disjoint colour groups in `docs/strixhaven-15b/`
+  (`brawl-g-{w,b,u,g,r,pair,multi}.txt`, 44–57 cards each; `brawl-missing.json` is the source).
+- Done already: every set those cards need is in `SET_PREFERENCE` (one "Strixhaven Brawl (15b)" block, 43 sets), and
+  `fetch-scryfall.ts` allows digital printings from the Alchemy sets the lists use (`DIGITAL_SETS_ALLOWED`). Bulk data
+  refreshed; no existing card changed printing.
+- Arena-only cards: the four "A-" rebalanced cards (A-Maelstrom Muse, A-Iridescent Hornbeetle, A-Ochre Jelly, A-Haywire
+  Mite) aren't in Scryfall's bulk data, so use the paper versions (record as a simplification). Aggro Amalgam is in `tmc`
+  (needs the refreshed bulk; add `tmc` to SET_PREFERENCE if the fetch can't find it).
+- Rootha's list is one card short on the wiki (99): find the missing card before building that deck.
+- Next: seven card agents (one per group file, worktrees, as in 14b), one merge, then the seven decks (they touch only
+  `decks.ts`; rebuild `STRIXHAVEN_BRAWL_DECKS` from each branch's entries rather than line-union merging).
+- Scryfall rate-limited us after heavy API use: agents should read card data from the bulk cache
+  (`packages/cards/.cache/default-cards.jsonl.gz`) or `generated/scryfall.json`, not the API.
+
 ## Phase 16: Mystical Archive
 
 - STA and SOA instants and sorceries as the bonus slot of STX and SOS boosters (one card per pack on Arena; check the

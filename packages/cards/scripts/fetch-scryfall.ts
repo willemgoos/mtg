@@ -18,6 +18,18 @@ import type { ScryfallCard } from '../src/scryfall-types.ts';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const cacheFile = join(root, '.cache', 'default-cards.jsonl.gz');
+const DIGITAL_SETS_ALLOWED = new Set([
+  'anb',
+  'hbg',
+  'ybro',
+  'ymid',
+  'ydft',
+  'yecl',
+  'ytdm',
+  'yneo',
+  'ydsk',
+  'ydmu',
+]);
 const outFile = join(root, 'src', 'generated', 'scryfall.json');
 const headers = { 'User-Agent': 'mtg-personal-client/0.1', Accept: 'application/json' };
 
@@ -139,7 +151,8 @@ async function main(): Promise<void> {
     if (c.layout !== 'normal' && c.layout !== 'class' && c.layout !== 'saga' && !front) continue;
     // Digital printings only from the Arena Beginner Set (Arena-only cards of the Color Challenge decks).
     // Strixhaven Brawl: two Alchemy-only staples (Gate to the Citadel, Patchplate Resolute).
-    if (c.digital && c.set !== 'anb' && c.set !== 'hbg' && c.set !== 'ybro') continue;
+    // Digital-only printings allowed: Arena-only sets whose cards the decks use (Alchemy 'y' sets for the Brawl decks).
+    if (c.digital && !DIGITAL_SETS_ALLOWED.has(c.set)) continue;
     if (!SET_PREFERENCE.includes(c.set)) continue;
     const cur = best.get(c.name);
     if (!cur || better(c, cur)) best.set(c.name, c);
