@@ -600,6 +600,8 @@ export function matchesFilter(
     const ch = characteristics(ctx, id);
     if (ch.toughness <= ch.power) return false;
   }
+  // Marvel Super Heroes Jumpstart (Marvelous): Ms. Marvel, Elastic Ally.
+  if (filter.powerAboveBase && characteristics(ctx, id).power <= basePowerOf(ctx, id)) return false;
   if (filter.chosenTypeOfSource) {
     const chosen = sourceId ? obj(ctx, sourceId).chosenType : undefined;
     if (!chosen || !hasSubtype(ctx, id, chosen)) return false;
@@ -702,6 +704,24 @@ export function cardMatches(
   if (filter.other && id === sourceId) return false;
   if (!avengersFilter(ctx, id, filter, sourceId)) return false;
   return true;
+}
+
+/**
+ * Base power: printed, copied, characteristic-defining or set by an effect ("base power
+ * 3"); static "base power" abilities aren't counted. Marvel Super Heroes Jumpstart (Marvelous).
+ */
+function basePowerOf(ctx: Ctx, id: ObjectId): number {
+  const o = obj(ctx, id);
+  const d = def(ctx, id);
+  let base =
+    d.powerEquals !== undefined
+      ? countOf(ctx, o.controller, d.powerEquals, true)
+      : d.ptEquals !== undefined
+        ? countFor(ctx, o, d)
+        : (o.copyPT?.power ?? d.power ?? 0);
+  for (const e of ctx.s.effects)
+    if (e.basePT && e.affected.id === id && e.affected.zcc === o.zcc) base = e.basePT[0];
+  return base;
 }
 
 /** Avengers Assemble (9b) filter parts: chosen types, modified, power, the commander's types. */

@@ -511,6 +511,11 @@ export type TriggerDef =
   // Marvel Super Heroes Jumpstart (Tenacious/Rampaging)
   /** Whenever this creature blocks (Atlas, Sizable Stooge). */
   | { on: 'blocks' }
+  // Marvel Super Heroes Jumpstart (Marvelous)
+  /** Whenever you activate a power-up ability (Marvel Boy, Noh-Varr). */
+  | { on: 'youActivatePowerUp' }
+  /** Whenever another creature is exiled from the battlefield; "that much" is its power (Captain Marvel, Shooting Star). */
+  | { on: 'otherCreatureExiled' }
   /**
    * Whenever one or more creature cards are put into your graveyard from anywhere ("that many"
    * is the event amount; once per batch of events): Voracious Brood.
@@ -754,6 +759,9 @@ export interface CardFilter {
   damaged?: boolean;
   /** Toughness greater than its power (Fecund Greenshell). */
   toughnessGreaterThanPower?: boolean;
+  // Marvel Super Heroes Jumpstart (Marvelous)
+  /** Power greater than its base power (Ms. Marvel, Elastic Ally). */
+  powerAboveBase?: boolean;
   /** Has the creature type chosen for the source (Patchwork Banner). */
   chosenTypeOfSource?: boolean;
   /** Has counters on it (Innkeeper's Talent). */
