@@ -54,6 +54,12 @@ function permanentOk(ctx: Ctx, spec: TargetSpec, id: ObjectId, src: TargetingSou
       def(ctx, src.sourceId).types.includes('Instant')
     )
       return false;
+    if (
+      hasKeyword(ctx, id, 'hexproofFromWhite') &&
+      src.sourceId &&
+      def(ctx, src.sourceId).colors.includes('W')
+    )
+      return false;
   }
   if (!lesserThanSubject(ctx, spec, id, src)) return false;
   if (spec.filter?.notSubject && id === src.subjectId) return false;

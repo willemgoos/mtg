@@ -209,7 +209,11 @@ function enterStep(ctx: Ctx, step: Step): void {
               (a) => a.kind === 'static' && a.effect.kind === 'attached' && a.effect.doesntUntap,
             ),
         );
-        if (!stays && !auraStays) untap(ctx, id);
+        // Spider-Woman: "can't become untapped for as long as you control" her.
+        const held = s.effects.some(
+          (e) => e.doesntUntap && e.affected.id === id && e.affected.zcc === o.zcc,
+        );
+        if (!stays && !auraStays && !held) untap(ctx, id);
       }
       return advanceStep(ctx); // no priority in untap (rule 502.4)
 

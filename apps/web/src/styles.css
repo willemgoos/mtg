@@ -3195,6 +3195,40 @@ button {
   box-shadow: 0 0 0 0.0625rem var(--line);
 }
 
+/* Decks and packets made by people (Wizards' lists, players' trophy decks): a small head badge. */
+.human-badge {
+  position: absolute;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  color: var(--parchment);
+  background: rgba(0, 0, 0, 0.6);
+  box-shadow: 0 0 0 0.0625rem var(--line);
+}
+
+.human-badge svg {
+  width: 0.875rem;
+  height: 0.875rem;
+  fill: currentColor;
+}
+
+.human-badge--inline {
+  position: static;
+  width: 1.125rem;
+  height: 1.125rem;
+  margin-left: 0.25rem;
+}
+
+.human-badge--inline svg {
+  width: 0.6875rem;
+  height: 0.6875rem;
+}
+
 .deck__record.is-cleared {
   color: #1d150a;
   background: linear-gradient(180deg, var(--brass-hi), var(--brass));

@@ -4,6 +4,8 @@ import { BLOOMBURROW_BEHAVIORS } from './bloomburrow.ts';
 import { MARVEL_BACK_FACES, MARVEL_BEHAVIORS, MARVEL_TOKENS } from './marvel.ts';
 import { MARVEL_BRAWL_BEHAVIORS, MARVEL_BRAWL_TOKENS } from './marvel-brawl.ts';
 import { FOUNDATIONS_BATCH_BEHAVIORS } from './foundations-batch.ts';
+import { FOUNDATIONS_DRAFT_BEHAVIORS } from './foundations-draft.ts';
+import { FOUNDATIONS_JUMP_IN_BEHAVIORS } from './foundations-jumpin.ts';
 
 // Helpers for the common shapes.
 const t0 = { target: 0 } as const;
@@ -129,6 +131,8 @@ const dualLandBehaviors = (): Record<string, Behavior> =>
  */
 export const BEHAVIORS: Record<string, Behavior> = {
   ...FOUNDATIONS_BATCH_BEHAVIORS,
+  ...FOUNDATIONS_JUMP_IN_BEHAVIORS,
+  ...FOUNDATIONS_DRAFT_BEHAVIORS,
   ...BLOOMBURROW_BEHAVIORS,
   ...MARVEL_BEHAVIORS,
   ...MARVEL_BACK_FACES,
@@ -2167,6 +2171,7 @@ export const TOKENS: CardDefinition[] = [
   ...MARVEL_TOKENS,
   ...MARVEL_BRAWL_TOKENS,
   token('zombie-token', 'Zombie', 'B', ['Zombie'], 2, 2),
+  token('komas-coil-token', "Koma's Coil", 'U', ['Serpent'], 3, 3),
   token('cat-beast-token', 'Cat Beast', 'W', ['Cat', 'Beast'], 2, 2),
   token('raccoon-token', 'Raccoon', 'G', ['Raccoon'], 3, 3),
   token('dragon-5-token', 'Dragon', 'R', ['Dragon'], 5, 5, ['flying']),

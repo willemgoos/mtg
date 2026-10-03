@@ -361,7 +361,8 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
   if (from === 'battlefield' && ctx.s.effects.some((e) => e.whileSourceId === id)) {
     for (const e of ctx.s.effects) {
       const a = e.whileSourceId === id ? ctx.s.objects[e.affected.id] : undefined;
-      if (a && e.previousController && a.zcc === e.affected.zcc) a.controller = e.previousController;
+      if (a && e.previousController && a.zcc === e.affected.zcc)
+        a.controller = e.previousController;
     }
     ctx.s.effects = ctx.s.effects.filter((e) => e.whileSourceId !== id);
   }
@@ -432,6 +433,12 @@ export function addCounters(ctx: Ctx, id: ObjectId, n: number, name?: string): v
         checkCondition(ctx, a.effect.condition, so.controller, so)
       )
         n *= 2;
+  }
+  // Doc Samson: "that many plus one" on permanents you control.
+  for (const src of ctx.s.battlefield) {
+    if (obj(ctx, src).controller !== o.controller) continue;
+    for (const a of def(ctx, src).abilities)
+      if (a.kind === 'static' && a.effect.kind === 'extraCounters') n += a.effect.amount;
   }
   if (name) {
     const c = (o.counters ??= {});

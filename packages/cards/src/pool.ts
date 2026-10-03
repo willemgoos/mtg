@@ -1,4 +1,6 @@
 import { BLOOMBURROW_BEHAVIORS } from './bloomburrow.ts';
+import { FOUNDATIONS_DRAFT_BEHAVIORS } from './foundations-draft.ts';
+import { FOUNDATIONS_JUMP_IN_BEHAVIORS } from './foundations-jumpin.ts';
 import { MARVEL_BEHAVIORS } from './marvel.ts';
 import { MARVEL_BRAWL_BEHAVIORS } from './marvel-brawl.ts';
 
@@ -29,6 +31,8 @@ export const SET_PREFERENCE = [
   'msh',
   // Marvel Super Heroes Commander: the Brawl precons (a few of their cards are only in msh or promos).
   'msc',
+  // Outlaws of Thunder Junction: Sterling Hound, in Arena's Bloomburrow Threshold packet.
+  'otj',
   'pmei',
   'pw26',
   'sld',
@@ -486,6 +490,11 @@ export const LAND_POOL = [
   'Temple of Mystery',
 ];
 
+/** Foundations cards from Arena's Foundations Jump In packets. */
+export const FOUNDATIONS_JUMP_IN_POOL = Object.keys(FOUNDATIONS_JUMP_IN_BEHAVIORS);
+/** Foundations cards for the draft trophy decks and the rest of Arena's Jump In packets. */
+export const FOUNDATIONS_DRAFT_POOL = Object.keys(FOUNDATIONS_DRAFT_BEHAVIORS);
+
 /** Marvel Super Heroes cards (fronts only: a double-faced card's back comes with it). */
 export const MARVEL_POOL = Object.keys(MARVEL_BEHAVIORS);
 
@@ -496,6 +505,8 @@ export const POOL: { name: string }[] = [
   ...BLUE_POOL,
   ...BLACK_POOL,
   ...OTHER_POOL,
+  ...FOUNDATIONS_JUMP_IN_POOL,
+  ...FOUNDATIONS_DRAFT_POOL,
   ...LAND_POOL,
   ...BLOOMBURROW_POOL,
   ...MARVEL_POOL,

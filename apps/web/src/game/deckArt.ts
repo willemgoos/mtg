@@ -35,4 +35,6 @@ export const BLURBS: Record<string, string> = {
     'Captain America rallies the Avengers: every Hero that arrives makes the team stronger.',
   'blb-forage-and-feast': 'Squirrels stash Food and forage their graveyard for value.',
   'blb-warren-rally': 'Rabbits multiply, then the whole warren charges in.',
+  'blb-hare-raising': 'The Starter Kit’s Rabbits: counters and tokens that grow the team.',
+  'blb-otter-limits': 'The Starter Kit’s Otters: cheap spells that power up the board.',
 };

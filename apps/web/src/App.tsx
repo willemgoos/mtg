@@ -1,10 +1,13 @@
 import {
   DECKS,
   deckById,
+  findDeck,
   type Decklist,
   isBrawl,
   isJumpIn,
   isPlayable,
+  JUMP_IN_DECKS,
+  jumpInPackets,
   registerDeck,
   scryfallById,
   slug,
@@ -20,6 +23,7 @@ import { JumpIn } from './components/JumpIn.tsx';
 import { Season } from './components/Season.tsx';
 import type { BotKind } from './game/bot.worker.ts';
 import { artFor, BLURBS } from './game/deckArt.ts';
+import { HumanMade } from './components/HumanMade.tsx';
 import * as X from './game/expedition.ts';
 import {
   type DeckRecord,
@@ -47,15 +51,32 @@ const SECTIONS: { title: string; blurb: string; decks: Decklist[] }[] = [
     series: 'starter' as const,
   },
   {
+    title: 'Foundations draft decks',
+    blurb: '40-card decks that went 7–0 in Arena’s Premier Draft; they play each other',
+    series: 'trophy' as const,
+  },
+  {
     title: 'Bloomburrow',
-    blurb: 'Our two-colour decks from Bloomburrow, built to face the starter decks',
+    blurb: 'Two-colour Bloomburrow decks to face the starter decks: ours and the Starter Kit’s',
     series: 'starter' as const,
+    set: 'blb' as const,
+  },
+  {
+    title: 'Bloomburrow draft decks',
+    blurb: '40-card decks that went 7–0 to 7–2 in Arena’s Premier Draft; they play each other',
+    series: 'trophy' as const,
     set: 'blb' as const,
   },
   {
     title: 'Marvel Super Heroes',
     blurb: 'Our two-colour decks from Marvel Super Heroes, built to face the starter decks',
     series: 'starter' as const,
+    set: 'msh' as const,
+  },
+  {
+    title: 'Marvel Super Heroes draft decks',
+    blurb: '40-card decks that went 7–0 in Arena’s Premier Draft; they play each other',
+    series: 'trophy' as const,
     set: 'msh' as const,
   },
   {
@@ -147,8 +168,8 @@ export function App() {
     () => match?.event ?? (expedition.run ? 'expedition' : gauntlet.run ? 'gauntlet' : 'quick'),
   );
   const [hub, setHub] = useState<Event | null>(null);
-  /** Picking Jump In packets for a new expedition. */
-  const [jumping, setJumping] = useState(false);
+  /** Picking Jump In packets: for a new expedition, or for a single game against a Jump In bot. */
+  const [jumping, setJumping] = useState<'expedition' | 'versus' | null>(null);
   const [opponent, setOpponent] = useState<BotKind>(
     saved && !match?.event ? saved.opponent : 'easy',
   );
@@ -160,7 +181,9 @@ export function App() {
   const pick = (you: string, bot = opponent) => {
     const seed = newSeed();
     // A chosen opponent deck from the other kind (Brawl or 60 cards) doesn't apply.
-    const chosen = theirDeck && isBrawl(deckById(theirDeck)) === isBrawl(deckById(you));
+    // A Jump In deck always meets another Jump In deck.
+    const chosen =
+      theirDeck && !isJumpIn(you) && isBrawl(deckById(theirDeck)) === isBrawl(deckById(you));
     const them = chosen ? theirDeck : randomOther(you, seed);
     setLastQuick(saveLastQuick({ deck: you, opponent: bot }));
     setMatch({
@@ -301,7 +324,7 @@ export function App() {
           const r = expedition.run!;
           if (!isJumpIn(r.deck)) return beginRun('expedition', r.deck);
           endRun('expedition');
-          setJumping(true);
+          setJumping('expedition');
         }}
         onContinue={() => updateExpedition((s) => X.continueExpedition(s, newSeed()))}
         onMenu={() => {
@@ -313,11 +336,13 @@ export function App() {
   if (!match && jumping)
     return (
       <JumpIn
+        versus={jumping === 'versus'}
         onPick={(deck) => {
-          setJumping(false);
-          beginRun('expedition', deck);
+          setJumping(null);
+          if (jumping === 'versus') pick(deck);
+          else beginRun('expedition', deck);
         }}
-        onBack={() => setJumping(false)}
+        onBack={() => setJumping(null)}
       />
     );
   if (!match && tab === 'home')
@@ -335,7 +360,8 @@ export function App() {
         }
         onPlay={playHome}
         onDecks={openDecks}
-        onJumpIn={() => setJumping(true)}
+        onJumpIn={() => setJumping('expedition')}
+        onJumpInVersus={() => setJumping('versus')}
         onTab={setTab}
         onSeason={() => setSeasonOpen(true)}
       />
@@ -351,7 +377,8 @@ export function App() {
         records={!isEvent(mode) ? {} : mode === 'gauntlet' ? gauntlet.records : expedition.records}
         onContinue={() => isEvent(mode) && setHub(mode)}
         onRun={(deck) => isEvent(mode) && beginRun(mode, deck)}
-        onJumpIn={() => setJumping(true)}
+        onJumpIn={() => setJumping('expedition')}
+        onJumpInVersus={() => setJumping('versus')}
         opponent={opponent}
         onOpponent={setOpponent}
         theirDeck={theirDeck}
@@ -406,7 +433,8 @@ const LAST_QUICK = 'mtg.lastQuick';
 function loadLastQuick(): LastQuick | null {
   try {
     const q = JSON.parse(localStorage.getItem(LAST_QUICK) ?? 'null') as LastQuick | null;
-    const known = q && DECKS.some((d) => d.id === q.deck && isPlayable(d));
+    const deck = q && findDeck(q.deck);
+    const known = deck && isPlayable(deck);
     return known && OPPONENTS.some((o) => o.id === q.opponent) ? q : null;
   } catch {
     return null;
@@ -428,6 +456,12 @@ function newSeed(): number {
 
 /** A random playable deck for the bot, other than the player's when possible. */
 function randomOther(you: string, seed: number): string {
+  // A Jump In player meets a Jump In bot whose halves are both different from theirs.
+  const mine = jumpInPackets(you);
+  if (mine) {
+    const pool = JUMP_IN_DECKS.filter((d) => !jumpInPackets(d.id)!.some((p) => mine.includes(p)));
+    return pool[seed % pool.length]!.id;
+  }
   // Same series as the player's deck (Color Challenge decks meet each other, like on Arena).
   const series = DECKS.find((d) => d.id === you)?.series;
   const others = PLAYABLE.filter((d) => d.id !== you && d.series === series);
@@ -511,6 +545,7 @@ function Start({
   onContinue,
   onRun,
   onJumpIn,
+  onJumpInVersus,
   onPick,
   onView,
   opponent,
@@ -528,6 +563,7 @@ function Start({
   onContinue: () => void;
   onRun: (deckId: string) => void;
   onJumpIn: () => void;
+  onJumpInVersus: () => void;
   onPick: (deckId: string) => void;
   onView: (deckId: string) => void;
   opponent: BotKind;
@@ -623,6 +659,15 @@ function Start({
         {mode === 'expedition' && (
           <JumpInSection records={records} locked={running} onJumpIn={onJumpIn} />
         )}
+        {mode === 'quick' && (
+          <JumpInSection
+            blurb="You and the bot each shuffle two themed half-decks together"
+            deckBlurb="Both sides get a new 40-card deck"
+            records={{}}
+            locked={false}
+            onJumpIn={onJumpInVersus}
+          />
+        )}
         {sections.map((section, si) => (
           <section key={section.title} className="start__section">
             <h2 className="start__section-title">
@@ -649,6 +694,7 @@ function Start({
                       onClick={() => (single ? onPick(d.id) : onRun(d.id))}
                     >
                       <span className="deck__art" />
+                      <HumanMade of={d} />
                       {record && record.runs > 0 && (
                         <span className={`deck__record ${record.clears ? 'is-cleared' : ''}`}>
                           {record.clears
@@ -666,6 +712,7 @@ function Start({
                         {locked
                           ? 'Coming soon'
                           : (BLURBS[d.id] ??
+                            d.credit ??
                             `${d.cards.reduce((n, [, k]) => n + k, 0)} cards from Season`)}
                       </span>
                     </button>
@@ -689,10 +736,14 @@ function Start({
 
 /** The Jump In! entry for expeditions, with the best record over every pair of packets. */
 function JumpInSection({
+  blurb = 'Pick two themed half-decks and shuffle them together',
+  deckBlurb = 'A new 40-card deck every run',
   records,
   locked,
   onJumpIn,
 }: {
+  blurb?: string;
+  deckBlurb?: string;
   records: Record<string, DeckRecord>;
   locked: boolean;
   onJumpIn: () => void;
@@ -706,7 +757,7 @@ function JumpInSection({
     <section className="start__section">
       <h2 className="start__section-title">
         Jump In!
-        <span>Pick two themed half-decks and shuffle them together</span>
+        <span>{blurb}</span>
       </h2>
       <div className={`start__decks ${locked ? 'is-waiting' : ''}`}>
         <div className="deck-slot">
@@ -736,7 +787,7 @@ function JumpInSection({
               ))}
             </span>
             <span className="deck__name">Jump In!</span>
-            <span className="deck__blurb">A new 40-card deck every run</span>
+            <span className="deck__blurb">{deckBlurb}</span>
           </button>
         </div>
       </div>

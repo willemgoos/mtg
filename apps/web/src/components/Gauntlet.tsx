@@ -10,6 +10,7 @@ import {
   statusOf,
   wins,
 } from '../game/gauntlet.ts';
+import { HumanMade } from './HumanMade.tsx';
 import { UiSize } from './UiSize.tsx';
 import './home.css';
 import './expedition.css';
@@ -110,6 +111,7 @@ export function Gauntlet({
                 {opp.colors.map((c) => (
                   <span key={c} className={`pip pip--${c}`} />
                 ))}
+                <HumanMade of={opp} inline />
               </span>
               {state === 'won' && <span className="rung__mark rung__mark--won" />}
               {state === 'fell' && <span className="rung__mark rung__mark--fell" />}

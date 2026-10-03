@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
+  ARENA_BLB_PACKETS,
+  ARENA_FDN_PACKETS,
   cardDb,
   deckById,
   deckIds,
@@ -16,7 +18,7 @@ import {
 const card = new Map(SCRYFALL.map((c) => [c.name, c]));
 
 describe('Jump In packets', () => {
-  it('are 20 implemented cards of one colour with exactly one rare', () => {
+  it('are 20 implemented cards of their colours with exactly one rare', () => {
     expect(new Set(PACKETS.map((p) => p.id)).size).toBe(PACKETS.length);
     for (const p of PACKETS) {
       const cards = packetCards(p);
@@ -27,7 +29,7 @@ describe('Jump In packets', () => {
       for (const [name] of cards) {
         expect(cardDb.has(slug(name)), name).toBe(true);
         const colors = card.get(name)!.colors;
-        if (colors.length) expect(colors, name).toEqual([p.color]);
+        for (const c of colors) expect(p.colors, name).toContain(c);
       }
       const rares = p.spells.filter(([n]) => ['rare', 'mythic'].includes(card.get(n)!.rarity));
       expect(rares, p.name).toHaveLength(1);
@@ -42,13 +44,14 @@ describe('Jump In packets', () => {
     for (const set of [undefined, 'blb', 'msh'])
       for (const c of ['W', 'U', 'B', 'R', 'G'])
         expect(
-          PACKETS.filter((p) => p.set === set && p.color === c),
+          PACKETS.filter((p) => p.set === set && !p.source && p.colors.join() === c),
           `${set ?? 'fdn'} ${c}`,
         ).toHaveLength(2);
   });
 
   it('uses cards of its own set', () => {
-    for (const p of PACKETS.filter((x) => x.set))
+    // Arena's packets borrow a few cards from other sets.
+    for (const p of PACKETS.filter((x) => x.set && !x.source))
       for (const [name] of p.spells) expect(card.get(name)!.set, `${p.name}: ${name}`).toBe(p.set);
   });
 
@@ -61,7 +64,7 @@ describe('Jump In packets', () => {
     expect(d.set).toBe('msh');
     expect(deckIds(d)).toHaveLength(40);
     expect(deckById(jumpInId('blb-bats', 'msh-robots')).set).toBeUndefined();
-    expect(JUMP_IN_DECKS).toHaveLength((30 * 29) / 2);
+    expect(JUMP_IN_DECKS).toHaveLength((PACKETS.length * (PACKETS.length - 1)) / 2);
   });
 
   it('pairs two packets into a 40-card deck', () => {
@@ -71,5 +74,35 @@ describe('Jump In packets', () => {
     expect(deckIds(d)).toHaveLength(40);
     expect(deckById(jumpInId('elves', 'stompers')).colors).toEqual(['G']);
     expect(findDeck(jumpInId('elves', 'nope'))).toBeUndefined();
+  });
+
+  it("has Arena's ten Bloomburrow packets; two-colour ones bring both colours of land", () => {
+    expect(ARENA_BLB_PACKETS).toHaveLength(10);
+    const d = deckById(jumpInId('blb-arena-bats', 'blb-arena-rats'));
+    expect(d.colors).toEqual(['W', 'B']);
+    expect(d.set).toBe('blb');
+    expect(deckIds(d)).toHaveLength(40);
+    expect(d.cards).toEqual(
+      expect.arrayContaining([
+        ['Scoured Barrens', 1],
+        ['Plains', 4],
+        ['Swamp', 11],
+      ]),
+    );
+  });
+
+  it("has Arena's eleven Foundations packets, each with its own land", () => {
+    expect(ARENA_FDN_PACKETS).toHaveLength(11);
+    const d = deckById(jumpInId('fdn-arena-flyers', 'fdn-arena-hares'));
+    expect(d.set).toBeUndefined();
+    expect(deckIds(d)).toHaveLength(40);
+    expect(d.cards).toEqual(
+      expect.arrayContaining([
+        ['Hare Apparent', 7],
+        ['Azorius Guildgate', 1],
+        ['Plains', 11],
+        ['Island', 4],
+      ]),
+    );
   });
 });

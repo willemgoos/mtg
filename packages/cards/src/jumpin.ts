@@ -2,31 +2,37 @@ import type { Color } from '@mtg/engine';
 
 /**
  * Themed half-decks for Jump In!, Arena's mode where you pick two 20-card
- * packets and shuffle them together. Arena's packets use cards we haven't
- * implemented, so these are our own, ten per set (Foundations, Bloomburrow,
- * Marvel Super Heroes): twelve spells around a theme, one rare, plus eight
- * basic lands of the packet's colour.
+ * packets and shuffle them together. Most are our own, ten per set
+ * (Foundations, Bloomburrow, Marvel Super Heroes): twelve spells around a
+ * theme, one rare, plus eight basic lands of the packet's colour. Arena's own
+ * ten Bloomburrow packets are here too (`ARENA_BLB_PACKETS`).
  */
 export interface Packet {
   id: string;
   name: string;
-  color: Color;
+  /** One colour, or two for some of Arena's packets. */
+  colors: Color[];
   /** Card shown on the packet. */
   face: string;
   blurb: string;
   /** Bloomburrow or Marvel Super Heroes (default Foundations). Packets of different sets pair freely. */
   set?: 'blb' | 'msh';
+  /** Arena's own packet (default: ours). */
+  source?: 'arena';
   /** The twelve spells; the basic lands are added by `packetCards`. */
   spells: [name: string, count: number][];
+  /** Two-colour packets: their eight lands (default: eight basics of the colour). */
+  lands?: [name: string, count: number][];
 }
 
 export const PACKET_LANDS = 8;
 
-export const PACKETS: Packet[] = [
+/** Our own packets, ten per set. */
+const OWN_PACKETS: Packet[] = [
   {
     id: 'angels',
     name: 'Angels',
-    color: 'W',
+    colors: ['W'],
     face: 'Giada, Font of Hope',
     blurb: 'Flyers that gain life and grow each other',
     spells: [
@@ -45,7 +51,7 @@ export const PACKETS: Packet[] = [
   {
     id: 'cats',
     name: 'Cats',
-    color: 'W',
+    colors: ['W'],
     face: 'Arahbo, the First Fang',
     blurb: 'Cheap cats that pounce early and pile on',
     spells: [
@@ -65,7 +71,7 @@ export const PACKETS: Packet[] = [
   {
     id: 'wizards',
     name: 'Wizards',
-    color: 'U',
+    colors: ['U'],
     face: 'Drake Hatcher',
     blurb: 'Cast spells, draw cards, counter theirs',
     spells: [
@@ -84,7 +90,7 @@ export const PACKETS: Packet[] = [
   {
     id: 'pirates',
     name: 'Pirates',
-    color: 'U',
+    colors: ['U'],
     face: 'Kiora, the Rising Tide',
     blurb: 'Slippery raiders that dig for the right card',
     spells: [
@@ -102,7 +108,7 @@ export const PACKETS: Packet[] = [
   {
     id: 'vampires',
     name: 'Vampires',
-    color: 'B',
+    colors: ['B'],
     face: 'High-Society Hunter',
     blurb: 'Drain life and pick off their creatures',
     spells: [
@@ -122,7 +128,7 @@ export const PACKETS: Packet[] = [
   {
     id: 'undead',
     name: 'Undead',
-    color: 'B',
+    colors: ['B'],
     face: 'Midnight Reaper',
     blurb: 'Creatures that keep coming back',
     spells: [
@@ -141,7 +147,7 @@ export const PACKETS: Packet[] = [
   {
     id: 'goblins',
     name: 'Goblins',
-    color: 'R',
+    colors: ['R'],
     face: 'Krenko, Mob Boss',
     blurb: 'A swarm of goblins, and a boss who makes more',
     spells: [
@@ -162,7 +168,7 @@ export const PACKETS: Packet[] = [
   {
     id: 'dragonfire',
     name: 'Dragonfire',
-    color: 'R',
+    colors: ['R'],
     face: 'Shivan Dragon',
     blurb: 'Burn a path for a dragon',
     spells: [
@@ -183,7 +189,7 @@ export const PACKETS: Packet[] = [
   {
     id: 'elves',
     name: 'Elves',
-    color: 'G',
+    colors: ['G'],
     face: 'Imperious Perfect',
     blurb: 'Mana elves into a big elf army',
     spells: [
@@ -203,7 +209,7 @@ export const PACKETS: Packet[] = [
   {
     id: 'stompers',
     name: 'Stompers',
-    color: 'G',
+    colors: ['G'],
     face: 'Rampaging Baloths',
     blurb: 'Huge beasts and the mana to cast them',
     spells: [
@@ -225,7 +231,7 @@ export const PACKETS: Packet[] = [
   {
     id: 'blb-rabbits',
     name: 'Rabbits',
-    color: 'W',
+    colors: ['W'],
     face: 'Valley Questcaller',
     blurb: 'A warren that keeps growing and goes wide',
     set: 'blb',
@@ -246,7 +252,7 @@ export const PACKETS: Packet[] = [
   {
     id: 'blb-mice',
     name: 'Mice',
-    color: 'W',
+    colors: ['W'],
     face: 'Whiskervale Forerunner',
     blurb: 'Valiant soldiers that grow when you target them',
     set: 'blb',
@@ -267,7 +273,7 @@ export const PACKETS: Packet[] = [
   {
     id: 'blb-otters',
     name: 'Otters',
-    color: 'U',
+    colors: ['U'],
     face: 'Thundertrap Trainer',
     blurb: 'Spellslingers that fill the air with tricks',
     set: 'blb',
@@ -288,7 +294,7 @@ export const PACKETS: Packet[] = [
   {
     id: 'blb-frogs',
     name: 'Frogs',
-    color: 'U',
+    colors: ['U'],
     face: 'Dour Port-Mage',
     blurb: 'Frogs and birds that bounce and come back',
     set: 'blb',
@@ -309,7 +315,7 @@ export const PACKETS: Packet[] = [
   {
     id: 'blb-bats',
     name: 'Bats',
-    color: 'B',
+    colors: ['B'],
     face: 'Darkstar Augur',
     blurb: 'Fliers that drain life every time it changes',
     set: 'blb',
@@ -329,7 +335,7 @@ export const PACKETS: Packet[] = [
   {
     id: 'blb-rats',
     name: 'Rats',
-    color: 'B',
+    colors: ['B'],
     face: 'Valley Rotcaller',
     blurb: 'Rats and squirrels that grind out the long game',
     set: 'blb',
@@ -350,7 +356,7 @@ export const PACKETS: Packet[] = [
   {
     id: 'blb-hero-mice',
     name: 'Hero Mice',
-    color: 'R',
+    colors: ['R'],
     face: 'Manifold Mouse',
     blurb: 'Fast heroes pumped by every trick you cast',
     set: 'blb',
@@ -369,7 +375,7 @@ export const PACKETS: Packet[] = [
   {
     id: 'blb-lizards',
     name: 'Lizards',
-    color: 'R',
+    colors: ['R'],
     face: 'Valley Flamecaller',
     blurb: 'Lizards that burn the opponent as they fight',
     set: 'blb',
@@ -390,7 +396,7 @@ export const PACKETS: Packet[] = [
   {
     id: 'blb-squirrels',
     name: 'Squirrels',
-    color: 'G',
+    colors: ['G'],
     face: 'Thornvault Forager',
     blurb: 'Squirrels that stash Food and forage for value',
     set: 'blb',
@@ -411,7 +417,7 @@ export const PACKETS: Packet[] = [
   {
     id: 'blb-woodland',
     name: 'Woodland',
-    color: 'G',
+    colors: ['G'],
     face: 'Mistbreath Elder',
     blurb: 'Frogs, raccoons and big beasts of the wood',
     set: 'blb',
@@ -434,7 +440,7 @@ export const PACKETS: Packet[] = [
   {
     id: 'msh-shield',
     name: 'S.H.I.E.L.D.',
-    color: 'W',
+    colors: ['W'],
     face: 'Agent Phil Coulson',
     blurb: 'Agents and spies who back each other up',
     set: 'msh',
@@ -454,7 +460,7 @@ export const PACKETS: Packet[] = [
   {
     id: 'msh-avengers',
     name: 'Avengers',
-    color: 'W',
+    colors: ['W'],
     face: 'Captain America, Wings of Freedom',
     blurb: 'Heroes who assemble and fight as a team',
     set: 'msh',
@@ -474,7 +480,7 @@ export const PACKETS: Packet[] = [
   {
     id: 'msh-scientists',
     name: 'Scientists',
-    color: 'U',
+    colors: ['U'],
     face: 'Leader, Super-Genius',
     blurb: 'Geniuses with gadgets and clever answers',
     set: 'msh',
@@ -495,7 +501,7 @@ export const PACKETS: Packet[] = [
   {
     id: 'msh-sky-and-sea',
     name: 'Sky and Sea',
-    color: 'U',
+    colors: ['U'],
     face: 'The Wondrous Wasp',
     blurb: 'Fliers and Atlanteans that strike from above',
     set: 'msh',
@@ -516,7 +522,7 @@ export const PACKETS: Packet[] = [
   {
     id: 'msh-hydra',
     name: 'HYDRA',
-    color: 'B',
+    colors: ['B'],
     face: 'Baron Helmut Zemo',
     blurb: 'Cut off one head, two more take its place',
     set: 'msh',
@@ -536,7 +542,7 @@ export const PACKETS: Packet[] = [
   {
     id: 'msh-villains',
     name: 'Villains',
-    color: 'B',
+    colors: ['B'],
     face: 'Elektra, Daughter of the Hand',
     blurb: 'Ninjas, enforcers and villains who won’t stay dead',
     set: 'msh',
@@ -557,7 +563,7 @@ export const PACKETS: Packet[] = [
   {
     id: 'msh-firepower',
     name: 'Firepower',
-    color: 'R',
+    colors: ['R'],
     face: 'Hawkeye, Master Marksman',
     blurb: 'Fast heroes and big hits',
     set: 'msh',
@@ -577,7 +583,7 @@ export const PACKETS: Packet[] = [
   {
     id: 'msh-robots',
     name: 'Robots',
-    color: 'R',
+    colors: ['R'],
     face: 'Fin Fang Foom',
     blurb: 'Killer robots and villains on a rampage',
     set: 'msh',
@@ -597,7 +603,7 @@ export const PACKETS: Packet[] = [
   {
     id: 'msh-might',
     name: 'Might',
-    color: 'G',
+    colors: ['G'],
     face: 'The Unbeatable Squirrel Girl',
     blurb: 'Strong heroes who punch their way through',
     set: 'msh',
@@ -618,7 +624,7 @@ export const PACKETS: Packet[] = [
   {
     id: 'msh-wild-things',
     name: 'Wild Things',
-    color: 'G',
+    colors: ['G'],
     face: 'Mole Man, Moloid Master',
     blurb: 'Ants, dinosaurs and things from below',
     set: 'msh',
@@ -638,6 +644,554 @@ export const PACKETS: Packet[] = [
   },
 ];
 
+/**
+ * MTG Arena's ten Bloomburrow packets (July 2024), from
+ * https://magic.wizards.com/en/news/mtg-arena/jump-in-packets-update-for-bloomburrow.
+ * Arena swaps a few cards for alternates at random; these are the listed
+ * packets. Arena also picks the lands; two-colour packets get a gain-land and
+ * basics split by their mana symbols.
+ */
+export const ARENA_BLB_PACKETS: Packet[] = [
+  {
+    id: 'blb-arena-bats',
+    name: 'Bats',
+    colors: ['W', 'B'],
+    face: 'Zoraline, Cosmos Caller',
+    blurb: 'Lifelinking Bats that bring back the fallen',
+    set: 'blb',
+    source: 'arena',
+    spells: [
+      ['Zoraline, Cosmos Caller', 1],
+      ['Starseer Mentor', 1],
+      ['Moonrise Cleric', 1],
+      ['Lifecreed Duo', 1],
+      ['Star Charter', 1],
+      ['Sonar Strike', 1],
+      ['Starlit Soothsayer', 1],
+      ['Sinister Monolith', 1],
+      ['Nocturnal Hunger', 1],
+      ['Wax-Wane Witness', 1],
+      ['Moonstone Harbinger', 1],
+      ['Three Tree Mascot', 1],
+    ],
+    lands: [
+      ['Scoured Barrens', 1],
+      ['Plains', 4],
+      ['Swamp', 3],
+    ],
+  },
+  {
+    id: 'blb-arena-otters',
+    name: 'Otters',
+    colors: ['U', 'R'],
+    face: 'Alania, Divergent Storm',
+    blurb: 'Noncreature spells that power up Otters',
+    set: 'blb',
+    source: 'arena',
+    spells: [
+      ['Alania, Divergent Storm', 1],
+      ['Stormcatch Mentor', 1],
+      ['Agate Assault', 1],
+      ['Otterball Antics', 1],
+      ['Daring Waverider', 1],
+      ['Wildfire Howl', 1],
+      ['Kindlespark Duo', 1],
+      ['Coruscation Mage', 1],
+      ['Harnesser of Storms', 1],
+      ['Conduct Electricity', 1],
+      ['Valley Rally', 1],
+      ['Three Tree Mascot', 1],
+    ],
+    lands: [
+      ['Swiftwater Cliffs', 1],
+      ['Island', 2],
+      ['Mountain', 5],
+    ],
+  },
+  {
+    id: 'blb-arena-squirrels',
+    name: 'Squirrels',
+    colors: ['B', 'G'],
+    face: 'Camellia, the Seedmiser',
+    blurb: 'Forage, Food and a well-stocked graveyard',
+    set: 'blb',
+    source: 'arena',
+    spells: [
+      ['Camellia, the Seedmiser', 1],
+      ['Vinereap Mentor', 1],
+      ['Corpseberry Cultivator', 1],
+      ['Bonebind Orator', 1],
+      ['Bonecache Overseer', 1],
+      ["Wick's Patrol", 1],
+      ['Treetop Sentries', 1],
+      ['Cache Grab', 1],
+      ['Bushy Bodyguard', 1],
+      ['Feed the Cycle', 1],
+      ['Honored Dreyleader', 1],
+      ['Three Tree Mascot', 1],
+    ],
+    lands: [
+      ['Jungle Hollow', 1],
+      ['Swamp', 4],
+      ['Forest', 3],
+    ],
+  },
+  {
+    id: 'blb-arena-mice',
+    name: 'Mice',
+    colors: ['R', 'W'],
+    face: 'Mabel, Heir to Cragflame',
+    blurb: 'Valiant Mice that hit hard',
+    set: 'blb',
+    source: 'arena',
+    spells: [
+      ['Mabel, Heir to Cragflame', 1],
+      ['Seedglaive Mentor', 1],
+      ['Veteran Guardmouse', 1],
+      ['Brave-Kin Duo', 1],
+      ['Brambleguard Captain', 1],
+      ['Flowerfoot Swordmaster', 1],
+      ["Mabel's Mettle", 1],
+      ['Whiskerquill Scribe', 1],
+      ['War Squeak', 1],
+      ['Short Bow', 1],
+      ['Heartfire Hero', 1],
+      ['Three Tree Mascot', 1],
+    ],
+    lands: [
+      ['Wind-Scarred Crag', 1],
+      ['Mountain', 4],
+      ['Plains', 3],
+    ],
+  },
+  {
+    id: 'blb-arena-frogs',
+    name: 'Frogs',
+    colors: ['G', 'U'],
+    face: 'Clement, the Worrywort',
+    blurb: 'Frogs that bounce and replay each other',
+    set: 'blb',
+    source: 'arena',
+    spells: [
+      ['Clement, the Worrywort', 1],
+      ['Lilysplash Mentor', 1],
+      ['Pond Prophet', 1],
+      ['Bellowing Crier', 1],
+      ['Splash Lasher', 1],
+      ['Skyskipper Duo', 1],
+      ['Long River Lurker', 1],
+      ['Three Tree Scribe', 1],
+      ['High Stride', 1],
+      ['Sunshower Druid', 1],
+      ['Stickytongue Sentinel', 1],
+      ['Polliwallop', 1],
+    ],
+    lands: [
+      ['Thornwood Falls', 1],
+      ['Forest', 4],
+      ['Island', 3],
+    ],
+  },
+  {
+    id: 'blb-arena-rabbits',
+    name: 'Rabbits',
+    colors: ['W'],
+    face: 'Valley Questcaller',
+    blurb: 'A warren of tokens that goes wide',
+    set: 'blb',
+    source: 'arena',
+    spells: [
+      ['Valley Questcaller', 1],
+      ['Harvestrite Host', 1],
+      ['Hop to It', 1],
+      ['Seasoned Warrenguard', 1],
+      ["Builder's Talent", 1],
+      ['Rabbit Response', 1],
+      ['Warren Elder', 1],
+      ['Intrepid Rabbit', 1],
+      ['Banishing Light', 1],
+      ['Driftgloom Coyote', 1],
+      ['Carrot Cake', 1],
+      ['Patchwork Banner', 1],
+    ],
+  },
+  {
+    id: 'blb-arena-rats',
+    name: 'Rats',
+    colors: ['B'],
+    face: "Cruelclaw's Heist",
+    blurb: 'Thieving Rats with threshold',
+    set: 'blb',
+    source: 'arena',
+    spells: [
+      ["Cruelclaw's Heist", 1],
+      ['Fell', 1],
+      ["Bandit's Talent", 1],
+      ['Thought-Stalker Warlock', 1],
+      ['Thornplate Intimidator', 1],
+      ['Agate-Blade Assassin', 1],
+      ['Ravine Raider', 1],
+      ['Ruthless Negotiation', 1],
+      ['Consumed by Greed', 1],
+      ['Huskburster Swarm', 1],
+      ['Scales of Shale', 1],
+      ['Psychic Whorl', 1],
+    ],
+  },
+  {
+    id: 'blb-arena-lizards',
+    name: 'Lizards',
+    colors: ['R'],
+    face: 'Hearthborn Battler',
+    blurb: 'Lizards that burn the opponent',
+    set: 'blb',
+    source: 'arena',
+    spells: [
+      ['Hearthborn Battler', 1],
+      ['Quaketusk Boar', 1],
+      ['Reptilian Recruiter', 1],
+      ["Alania's Pathmaker", 1],
+      ['Raccoon Rallier', 1],
+      ['Roughshod Duo', 1],
+      ['Flamecache Gecko', 1],
+      ['Frilled Sparkshooter', 1],
+      ['Blooming Blast', 1],
+      ['Rabid Gnaw', 1],
+      ["Sazacap's Brew", 1],
+      ["Hoarder's Overflow", 1],
+    ],
+  },
+  {
+    id: 'blb-arena-threshold',
+    name: 'Threshold',
+    colors: ['U'],
+    face: 'Portent of Calamity',
+    blurb: 'Fill the graveyard, then cash in',
+    set: 'blb',
+    source: 'arena',
+    spells: [
+      ['Spellgyre', 1],
+      ['Sugar Coat', 1],
+      ['Portent of Calamity', 1],
+      ['Dire Downdraft', 1],
+      ['Mindwhisker', 1],
+      ['Nightwhorl Hermit', 1],
+      ['Bellowing Crier', 1],
+      ['Thought Shucker', 1],
+      ['Lightshell Duo', 1],
+      ['Shoreline Looter', 1],
+      ['Sterling Hound', 1],
+      ['Shore Up', 1],
+    ],
+  },
+  {
+    id: 'blb-arena-exploring',
+    name: 'Exploring',
+    colors: ['G'],
+    face: 'Tender Wildguide',
+    blurb: 'Big creatures and lands from the graveyard',
+    set: 'blb',
+    source: 'arena',
+    spells: [
+      ['Tender Wildguide', 1],
+      ['Galewind Moose', 1],
+      ['Hivespine Wolverine', 1],
+      ['Bark-Knuckle Boxer', 1],
+      ["Hunter's Talent", 1],
+      ['Clifftop Lookout', 1],
+      ['Three Tree Rootweaver', 1],
+      ['Stickytongue Sentinel', 1],
+      ['Rust-Shield Rampager', 1],
+      ['Heaped Harvest', 1],
+      ['Pawpatch Formation', 1],
+      ['Peerless Recycling', 1],
+    ],
+  },
+];
+
+/**
+ * MTG Arena's eleven Foundations packets (November 2024), from
+ * https://magic.wizards.com/en/news/mtg-arena/jump-in-packets-update-for-foundations.
+ * Like the Bloomburrow ones, these are the listed packets. Arena adds the
+ * lands: the packet's own (a guildgate or Evolving Wilds), then basics split
+ * by mana symbols.
+ */
+export const ARENA_FDN_PACKETS: Packet[] = [
+  {
+    id: 'fdn-arena-flyers',
+    name: 'Flyers',
+    colors: ['W', 'U'],
+    face: 'High Fae Trickster',
+    blurb: 'Flyers, and tricks at instant speed',
+    source: 'arena',
+    spells: [
+      ['High Fae Trickster', 1],
+      ['Empyrean Eagle', 1],
+      ['Cloudblazer', 1],
+      ['Leonin Skyhunter', 1],
+      ['Faebloom Trick', 1],
+      ['Kitesail Corsair', 1],
+      ['Inspiring Overseer', 1],
+      ['Skyship Buccaneer', 1],
+      ['Spectral Sailor', 1],
+      ['Luminous Rebuke', 1],
+      ['Fleeting Flight', 1],
+    ],
+    lands: [
+      ['Azorius Guildgate', 1],
+      ['Plains', 4],
+      ['Island', 4],
+    ],
+  },
+  {
+    id: 'fdn-arena-threshold',
+    name: 'Threshold',
+    colors: ['U', 'B'],
+    face: 'Kiora, the Rising Tide',
+    blurb: 'Fill the graveyard; seven cards turns it on',
+    source: 'arena',
+    spells: [
+      ['Kiora, the Rising Tide', 1],
+      ['Dreadwing Scavenger', 1],
+      ['Cephalid Inkmage', 1],
+      ['Billowing Shriekmass', 1],
+      ['Rune-Sealed Wall', 1],
+      ['Chart a Course', 1],
+      ['Eaten by Piranhas', 1],
+      ['Uncharted Voyage', 1],
+      ['Quick Study', 1],
+      ['Strix Lookout', 1],
+      ['Refute', 1],
+    ],
+    lands: [
+      ['Dimir Guildgate', 1],
+      ['Island', 6],
+      ['Swamp', 2],
+    ],
+  },
+  {
+    id: 'fdn-arena-raiders',
+    name: 'Raiders',
+    colors: ['B', 'R'],
+    face: 'Alesha, Who Laughs at Fate',
+    blurb: 'Attackers that make every death hurt',
+    source: 'arena',
+    spells: [
+      ['Alesha, Who Laughs at Fate', 1],
+      ['Perforating Artist', 1],
+      ['Garna, Bloodfist of Keld', 1],
+      ['Sower of Chaos', 1],
+      ['Strongbox Raider', 1],
+      ['Frenzied Goblin', 1],
+      ['Sanguine Syphoner', 1],
+      ['Goblin Smuggler', 1],
+      ['Burst Lightning', 1],
+      ['Feed the Swarm', 1],
+      ['Vengeful Bloodwitch', 1],
+    ],
+    lands: [
+      ['Rakdos Guildgate', 1],
+      ['Mountain', 5],
+      ['Swamp', 3],
+    ],
+  },
+  {
+    id: 'fdn-arena-growth',
+    name: 'Growth',
+    colors: ['R', 'G'],
+    face: 'Ruby, Daring Tracker',
+    blurb: 'Big creatures and the burn to clear the way',
+    source: 'arena',
+    spells: [
+      ['Sylvan Scavenging', 1],
+      ['Ruby, Daring Tracker', 1],
+      ['Elvish Regrower', 1],
+      ['Nessian Hornbeetle', 1],
+      ['Bolt Bend', 1],
+      ['Courageous Goblin', 1],
+      ['Battle-Rattle Shaman', 1],
+      ['Treetop Snarespinner', 1],
+      ['Gnarlid Colony', 1],
+      ['Sure Strike', 1],
+      ['Obliterating Bolt', 1],
+    ],
+    lands: [
+      ['Gruul Guildgate', 1],
+      ['Forest', 5],
+      ['Mountain', 3],
+    ],
+  },
+  {
+    id: 'fdn-arena-strong',
+    name: 'Strong',
+    colors: ['G', 'W'],
+    face: 'Mossborn Hydra',
+    blurb: '+1/+1 counters that keep growing',
+    source: 'arena',
+    spells: [
+      ['Mossborn Hydra', 1],
+      ['Inspiring Call', 1],
+      ['Good-Fortune Unicorn', 1],
+      ['Ordeal of Nylea', 1],
+      ['Wildwood Scourge', 1],
+      ['Mild-Mannered Librarian', 1],
+      ['Bite Down', 1],
+      ['Treetop Snarespinner', 1],
+      ['Gnarlid Colony', 1],
+      ['Bushwhack', 1],
+      ['Felidar Savior', 1],
+    ],
+    lands: [
+      ['Selesnya Guildgate', 1],
+      ['Forest', 6],
+      ['Plains', 2],
+    ],
+  },
+  {
+    id: 'fdn-arena-cats',
+    name: 'Cats',
+    colors: ['W'],
+    face: 'Arahbo, the First Fang',
+    blurb: 'Cats that pounce together',
+    source: 'arena',
+    spells: [
+      ['Arahbo, the First Fang', 1],
+      ['Ingenious Leonin', 1],
+      ['Prideful Parent', 1],
+      ['Dawnwing Marshal', 1],
+      ['Felidar Savior', 1],
+      ['Savannah Lions', 1],
+      ['Helpful Hunter', 1],
+      ["Ajani's Pridemate", 1],
+      ['Prayer of Binding', 1],
+      ['Joust Through', 1],
+      ['Claws Out', 1],
+    ],
+    lands: [
+      ['Evolving Wilds', 1],
+      ['Plains', 8],
+    ],
+  },
+  {
+    id: 'fdn-arena-drawing',
+    name: 'Drawing',
+    colors: ['U'],
+    face: 'Homunculus Horde',
+    blurb: 'Draw two a turn and cash in',
+    source: 'arena',
+    spells: [
+      ['Homunculus Horde', 1],
+      ['Erudite Wizard', 1],
+      ['Refute', 1],
+      ['Spectral Sailor', 1],
+      ['Arcane Epiphany', 1],
+      ['Mischievous Mystic', 1],
+      ['Clinquant Skymage', 1],
+      ['Storm Fleet Spy', 1],
+      ['Eaten by Piranhas', 1],
+      ['Strix Lookout', 1],
+      ['Think Twice', 1],
+    ],
+    lands: [
+      ['Evolving Wilds', 1],
+      ['Island', 8],
+    ],
+  },
+  {
+    id: 'fdn-arena-zombies',
+    name: 'Zombie',
+    colors: ['B'],
+    face: 'Zul Ashur, Lich Lord',
+    blurb: 'Zombies and deathtouch that drain',
+    source: 'arena',
+    spells: [
+      ['Zul Ashur, Lich Lord', 1],
+      ['Maalfeld Twins', 1],
+      ['Soul-Shackled Zombie', 1],
+      ['Crow of Dark Tidings', 1],
+      ['Hungry Ghoul', 1],
+      ['Deadly Plot', 1],
+      ['Moment of Craving', 1],
+      ['Vampiric Rites', 1],
+      ['Diregraf Ghoul', 1],
+      ['Knight of Malice', 1],
+      ['Vampire Gourmand', 1],
+    ],
+    lands: [
+      ['Evolving Wilds', 1],
+      ['Swamp', 8],
+    ],
+  },
+  {
+    id: 'fdn-arena-goblins',
+    name: 'Goblins',
+    colors: ['R'],
+    face: 'Dropkick Bomber',
+    blurb: 'A goblin horde and Impact Tremors',
+    source: 'arena',
+    spells: [
+      ['Dropkick Bomber', 1],
+      ['Dragon Fodder', 1],
+      ['Goblin Surprise', 1],
+      ['Impact Tremors', 1],
+      ['Goblin Negotiation', 1],
+      ['Goblin Oriflamme', 1],
+      ['Goblin Smuggler', 1],
+      ['Volley Veteran', 1],
+      ['Sure Strike', 1],
+      ['Fiery Annihilation', 1],
+      ['Obliterating Bolt', 1],
+    ],
+    lands: [
+      ['Evolving Wilds', 1],
+      ['Mountain', 8],
+    ],
+  },
+  {
+    id: 'fdn-arena-hares',
+    name: 'Hares',
+    colors: ['W'],
+    face: 'Skyknight Squire',
+    blurb: 'Seven Hare Apparents',
+    source: 'arena',
+    spells: [
+      ['Hare Apparent', 7],
+      ['Crusader of Odric', 1],
+      ["Syr Alin, the Lion's Claw", 1],
+      ['Make a Stand', 1],
+      ['Make Your Move', 1],
+      ['Dauntless Veteran', 1],
+      ['Skyknight Squire', 1],
+    ],
+    lands: [['Plains', 7]],
+  },
+  {
+    id: 'fdn-arena-elves',
+    name: 'Elves',
+    colors: ['G'],
+    face: 'Dwynen, Gilt-Leaf Daen',
+    blurb: 'An elf lord and elves that fight',
+    source: 'arena',
+    spells: [
+      ['Elvish Archdruid', 1],
+      ['Dwynen, Gilt-Leaf Daen', 1],
+      ['Reclamation Sage', 1],
+      ["Dwynen's Elite", 1],
+      ['Llanowar Elves', 1],
+      ['Beast-Kin Ranger', 1],
+      ['Elfsworn Giant', 1],
+      ['Druid of the Cowl', 1],
+      ['Felling Blow', 1],
+      ['Bite Down', 1],
+      ['Snakeskin Veil', 1],
+      ['Thornweald Archer', 1],
+    ],
+  },
+];
+
+/** Every packet: ours and Arena's. */
+export const PACKETS: Packet[] = [...OWN_PACKETS, ...ARENA_BLB_PACKETS, ...ARENA_FDN_PACKETS];
+
 const BASICS: Record<Color, string> = {
   W: 'Plains',
   U: 'Island',
@@ -648,5 +1202,5 @@ const BASICS: Record<Color, string> = {
 
 /** A packet's full 20 cards: its spells and its basic lands. */
 export function packetCards(p: Packet): [string, number][] {
-  return [...p.spells, [BASICS[p.color], PACKET_LANDS]];
+  return [...p.spells, ...(p.lands ?? [[BASICS[p.colors[0]!], PACKET_LANDS]])];
 }

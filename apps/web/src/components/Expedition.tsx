@@ -672,9 +672,13 @@ function ExpeditionMap({
         <div className="xmap__info">
           {info ? (
             <>
-              <span className="xmap__info-title">{info.title}</span>
+              <span className="xmap__info-title" title={info.title}>
+                {info.title}
+              </span>
               {info.lines.map((l) => (
-                <span key={l}>{l}</span>
+                <span key={l} title={l}>
+                  {l}
+                </span>
               ))}
             </>
           ) : (

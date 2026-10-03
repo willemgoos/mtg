@@ -204,6 +204,36 @@ describe('heuristic bot: counterspells', () => {
   });
 });
 
+describe('casting for free', () => {
+  it("doesn't offer a free cast at a ward creature when the ward can't be paid", () => {
+    // Regression: the bot picked Into the Flood Maw at Tolarian Terror with every land tapped.
+    const g = game({
+      p1: {
+        hand: ['daring-waverider'],
+        battlefield: lands('island', 6),
+        graveyard: ['into-the-flood-maw'],
+      },
+      p2: { battlefield: ['tolarian-terror', 'thornweald-archer'] },
+    });
+    g.do(g.legal().find((a) => a.type === 'castSpell')!);
+    for (let i = 0; i < 20 && g.state.decision.kind !== 'castFree'; i++)
+      g.do(
+        g.state.decision.kind === 'chooseTriggerTargets'
+          ? g.legal().find((a) => a.type === 'chooseTargets' && a.targets.length > 0)!
+          : { type: 'passPriority', player: g.actor },
+      );
+    expect(g.state.decision.kind).toBe('castFree');
+    const casts = g.legal().filter((a) => a.type === 'castSpell');
+    const targets = casts.flatMap((a) => (a.type === 'castSpell' ? a.targets : []));
+    expect(targets.length).toBeGreaterThan(0);
+    expect(targets.map((t) => 'object' in t && name(g, t.object.id))).not.toContain(
+      'tolarian-terror',
+    );
+    // And the bot's choice (with its lookahead) goes through.
+    g.do(choose(g));
+  });
+});
+
 describe('easy bot', () => {
   it('plays legal games to completion and loses to the heuristic bot most of the time', () => {
     const decks = {

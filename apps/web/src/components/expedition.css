@@ -390,10 +390,17 @@
     0 0.5rem 1rem rgba(0, 0, 0, 0.6);
 }
 
-/* What waits at the hovered node, as a small panel beside the buttons. */
+/*
+ * What waits at the hovered node, as a small panel beside the buttons. It
+ * keeps one size (a title and two lines, each cut short rather than wrapped),
+ * so hovering never changes the screen's height and moves the map.
+ */
 .shell .xmap__info {
-  min-width: 24rem;
-  min-height: 4.5rem;
+  flex: 0 1 34rem;
+  min-width: 0;
+  height: 5.75rem;
+  min-height: 0;
+  overflow: hidden;
   padding: 0.75rem 1rem;
   border-radius: var(--h-radius);
   font-size: 0.875rem;
@@ -1027,4 +1034,10 @@
   margin: -0.5rem 0 0;
   font-size: 0.875rem;
   color: #f2a0a3;
+}
+
+.shell .xmap__info > * {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }

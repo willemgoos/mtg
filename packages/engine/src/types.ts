@@ -51,6 +51,8 @@ export type Keyword =
   | 'indestructible'
   /** Can't be the target of instants an opponent controls (Elenda). */
   | 'hexproofFromInstants'
+  /** Can't be the target of white spells or abilities an opponent controls (Knight of Malice). */
+  | 'hexproofFromWhite'
   /** Ward: targeting it costs an opponent `CardDefinition.wardCost` (default {2}). */
   | 'ward'
   /** Ward {1}, granted by another permanent (Long River Lurker, Innkeeper's Talent). */
@@ -386,7 +388,7 @@ export type TriggerDef =
   /** Whenever a creature you control is dealt damage ("that much": the event amount). */
   | { on: 'yourCreatureDealtDamage' }
   /** Equipment: whenever the equipped creature attacks (Captain America's Shield). */
-  | { on: 'equippedAttacks' }
+  | { on: 'equippedAttacks'; alone?: boolean }
   /** Whenever a player or permanent becomes the target of an ability you control (Loki, God of Mischief). */
   | { on: 'youTargetWithAbility' }
   | { on: 'drawCard'; whose: 'yours' | 'opponents' }
@@ -429,7 +431,12 @@ export type TriggerDef =
    * Whenever you put +1/+1 counters on a creature you control (Stocking the
    * Pantry); "that creature", "that many". Captain Marvel: another one, matching the filter.
    */
-  | { on: 'youPutCounters'; other?: boolean; filter?: CardFilter }
+  | {
+      on: 'youPutCounters';
+      other?: boolean;
+      filter?: CardFilter;
+      /** Only this creature (Exemplar of Light). */ self?: boolean;
+    }
   /** At the beginning of your draw step. */
   | { on: 'beginningOfDraw' }
   /** Whenever a creature you control becomes the target of an opponent's spell or ability (Pawpatch Recruit). */
@@ -457,7 +464,7 @@ export type TriggerDef =
   | { on: 'targetedByOpponent' }
   // Wakanda Forever (9c).
   /** Whenever the creature this Equipment is attached to attacks. */
-  | { on: 'equippedAttacks' }
+  | { on: 'equippedAttacks'; alone?: boolean }
   /** Whenever a creature an opponent controls (matching the filter) attacks you ("that creature"): Storm. */
   | { on: 'opponentCreatureAttacks'; filter?: CardFilter }
   /** Whenever an opponent attacks you with `min` or more creatures (Everett K. Ross). */
@@ -580,6 +587,8 @@ export type ConditionDef =
   | { kind: 'sourceHasCounter'; name: string }
   /** You attacked with a Hero this turn, or a Hero entered under your control (Avengers Assemble!). */
   | { kind: 'heroAttackedOrEnteredThisTurn' }
+  /** Any player controls a permanent matching the filter (Knight of Malice: a white one). */
+  | { kind: 'anyPlayerControls'; filter: CardFilter }
   | { kind: 'custom'; handler: string };
 
 export interface CardFilter {
@@ -636,7 +645,10 @@ export interface CardFilter {
   /** A card with this id ("a creature named Silver Surfer"). */
   named?: CardDefId;
   // Marvel Super Heroes
-  /** It was attacking as it left the battlefield ("an attacking creature you control dies"). */
+  /**
+   * It was attacking as it left the battlefield ("an attacking creature you control dies");
+   * false: it wasn't (Garna, Bloodfist of Keld's "otherwise").
+   */
   leftAttacking?: boolean;
   /** Attached to the source (Winter Soldier: "for each Equipment attached to him"). */
   attachedToSource?: boolean;
@@ -712,6 +724,8 @@ export type Amount =
   | { toughnessOf: Ref }
   /** The mana value of the triggering spell (Thor, God of Thunder). */
   | { manaValueOfSubject: true }
+  /** The mana value of a permanent (Feed the Swarm: "equal to that permanent's mana value"). */
+  | { manaValueOf: Ref }
   /** Blue mana symbols in the triggering spell's mana cost (Namor). */
   | { bluePipsOfSubject: true }
   /** "Draw cards equal to the difference" up to this hand size (The Ten Rings). */
@@ -771,7 +785,15 @@ export type Amount =
 export type EffectDef =
   | { kind: 'may'; effects: EffectDef[]; cost?: ManaCost }
   /** `exceptFrom`: not to the creature dealing it (Nova Flame: "each other creature"). */
-  | { kind: 'damage'; amount: Amount; to: Ref; from?: Ref; exceptFrom?: boolean }
+  | {
+      kind: 'damage';
+      amount: Amount;
+      to: Ref;
+      from?: Ref;
+      exceptFrom?: boolean;
+      /** Create one of these tokens per point of excess damage dealt to a creature (Goblin Negotiation). */
+      excessTokens?: CardDefId;
+    }
   /** Until end of turn (or until your next turn). */
   | {
       kind: 'pump';
@@ -791,6 +813,14 @@ export type EffectDef =
       cantBeBlockedExcept?: Keyword;
       /** "Whenever it deals combat damage to a player this turn, put a +1/+1 counter on it" (Love on the Battlefield). */
       counterOnCombatDamage?: boolean;
+      /** "When this creature deals combat damage, sacrifice it" (Dropkick Bomber). */
+      sacrificeOnCombatDamage?: boolean;
+      /** Base power and toughness until end of turn (Reptil, I Am Iron Man). */
+      basePT?: [number, number];
+      /** It becomes an artifact creature until end of turn (I Am Iron Man). */
+      becomesCreature?: boolean;
+      /** Prevent all combat damage that would be dealt to it this turn (Fleeting Flight). */
+      preventCombatDamage?: boolean;
     }
   /** Resolution-time "if": Morbid-style choices between two effects. */
   | { kind: 'if'; condition: ConditionDef; then: EffectDef[]; else?: EffectDef[] }
@@ -1040,6 +1070,12 @@ export type EffectDef =
   | { kind: 'returnToHand'; what: Ref }
   | { kind: 'exileGraveyard'; who: Ref }
   | { kind: 'tap'; what: Ref }
+  /** It can't become untapped for as long as you control the source (Spider-Woman, Secret Agent). */
+  | { kind: 'doesntUntapWhileSource'; what: Ref }
+  /** Change the target of a target spell with a single target to another legal one, best for you (Bolt Bend). */
+  | { kind: 'changeTarget'; what: Ref }
+  /** Time Stop, simplified: exile every other spell, drop every ability on the stack, and end combat. */
+  | { kind: 'endTheTurn' }
   /** The controller discards N cards of their choice. */
   | {
       kind: 'discard';
@@ -1109,6 +1145,8 @@ export type EffectDef =
       kind: 'returnToBattlefield';
       what: Ref;
       counter?: string;
+      /** It enters tapped (Deadly Plot, Grim Reaper). */
+      tapped?: boolean;
       /** It enters with +1/+1 counters if it matches the filter (Heroic Return: a Hero gets two). */
       countersIf?: { filter: CardFilter; count: number };
       // Marvel Super Heroes: "is a Hero in addition to its other types" (Thunderbolts Conspiracy).
@@ -1436,7 +1474,8 @@ export type StaticDef =
    */
   | {
       kind: 'damageBonus';
-      amount: number;
+      /** 'sourcePower': this permanent's power (Hawkeye, Young Avenger). */
+      amount: number | 'sourcePower';
       source?: CardFilter;
       noncombat?: boolean;
       toOpponents?: boolean;
@@ -1446,6 +1485,8 @@ export type StaticDef =
     }
   /** If you would put counters on a permanent, put twice that many instead (Innkeeper's Talent). */
   | { kind: 'doubleCounters'; condition?: ConditionDef }
+  /** If you would put counters on a permanent you control, put that many plus N instead (Doc Samson). */
+  | { kind: 'extraCounters'; amount: number }
   /** Spells you cast matching the filter cost {N} less, while the condition holds. */
   | { kind: 'spellsCostLessIf'; filter: CardFilter; amount: number; condition?: ConditionDef }
   /** Look at the top card of your library any time; play cards matching the filter from there (Glarb). */
@@ -1814,10 +1855,16 @@ export interface ContinuousEffect {
   returnWhenDies?: ReturnWhenDies;
   /** Loses all abilities. */
   loseAbilities?: boolean;
+  /** Sacrificed when it deals combat damage (Dropkick Bomber). */
+  sacrificeOnCombatDamage?: boolean;
+  /** Doesn't untap during its controller's untap step (Spider-Woman, Secret Agent). */
+  doesntUntap?: boolean;
   /** "Whenever it deals combat damage this turn, you may exile it, then return it." */
   blinkOnCombatDamage?: boolean;
   /** It's an artifact creature (a crewed Vehicle). */
   becomesCreature?: boolean;
+  /** Combat damage that would be dealt to it is prevented (Fleeting Flight). */
+  preventCombatDamage?: boolean;
   /** Base power and toughness. */
   basePT?: [number, number];
   /** Control change: who controlled it before (restored when this expires). */

@@ -398,3 +398,25 @@ with smarter bots, not with deck changes (the precons are played as printed).
   value 3 or less per creature rather than 6 total.
 - Absorbing Man and Taskmaster keep the copied name and legendary status; Taskmaster can't copy a creature card in a graveyard;
   Secret Invasion's ward {2} is not modelled.
+
+## 10d: draft trophy decks (done)
+
+Ten 40-card Marvel Super Heroes decks that went 7–0 in Arena's Premier Draft, one per colour pair, from
+[untapped.gg](https://mtga.untapped.gg/limited/draft/marvel-super-heroes/trophy-decks) (`MARVEL_TROPHY_DECKS`, series `trophy`,
+credited to their players). They have their own section in the deck grid and join the Bloomburrow ones as Expedition elites and
+bosses. Bot-vs-bot (small samples) against our Jump In pairs: about 65% on average (35–100%).
+
+34 new commons and uncommons in `packages/cards/src/msh/draft.ts`, and these engine pieces:
+
+- Plans: a named `plan` counter per step; at the fourth the enchantment is sacrificed and the payoff happens.
+- "Whenever equipped creature attacks alone"; this also fixes equipped-attack triggers firing twice (Captain America's Shield).
+- Damage bonus equal to the source's power (Hawkeye, Young Avenger); "that many plus one" counters (Doc Samson).
+- Base power and toughness, and becoming an artifact creature, until end of turn (Reptil, I Am Iron Man).
+- "Can't become untapped for as long as you control" the source (Spider-Woman); negative counter amounts remove +1/+1 counters.
+
+Simplifications: Shuri's copy ability, Kid Loki's hexproof and Hellcat losing her abilities aren't modelled; Loki copies
+spells of mana value 2 or less (his printed power); Misty Knight draws one card; Iron Fist deals his damage when the trigger
+resolves (tapping him) instead of gaining a tap ability; Justice only counts creatures returned to hand; Klaw lets you see the
+whole hand; Titania always costs a discard; Atlantis Attacks always gives you the Leviathan; Call Damage Control doesn't make the
+two cards differ in type; Death to Our Enemies picks its 7-damage target each time it triggers and doesn't divide; Doc Samson
+makes green mana only; Claim the Kingdom puts the indestructible counter on the creature that got the last +1/+1 counter.

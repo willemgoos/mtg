@@ -57,6 +57,10 @@ const KEYWORDS: Record<Keyword, { name: string; text: string }> = {
     name: 'Hexproof from instants',
     text: 'This can’t be the target of instants your opponents control.',
   },
+  hexproofFromWhite: {
+    name: 'Hexproof from white',
+    text: 'This can’t be the target of white spells or abilities your opponents control.',
+  },
   ward: {
     name: 'Ward {2}',
     text: 'Whenever this becomes the target of a spell or ability an opponent controls, counter it unless that player pays {2}.',

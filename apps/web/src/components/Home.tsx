@@ -85,6 +85,7 @@ export function Home({
   onPlay,
   onDecks,
   onJumpIn,
+  onJumpInVersus,
   onTab,
   onSeason,
 }: {
@@ -99,6 +100,7 @@ export function Home({
   /** Opens the deck picker for a mode. */
   onDecks: (m: Mode) => void;
   onJumpIn: () => void;
+  onJumpInVersus: () => void;
   onTab: (t: Tab) => void;
   onSeason: () => void;
 }) {
@@ -122,6 +124,16 @@ export function Home({
       art: art('Krenko, Mob Boss'),
       cards: ['Krenko, Mob Boss', 'Giada, Font of Hope'],
       go: onJumpIn,
+    },
+    {
+      id: 'jump-in-versus',
+      badge: 'Quick match',
+      title: 'Jump In! Versus',
+      text: 'Shuffle two half-decks together and face a bot that did the same. A new matchup every game.',
+      cta: 'Pick your halves',
+      art: art('Ghalta, Primal Hunger'),
+      cards: ['Ghalta, Primal Hunger', 'Llanowar Elves'],
+      go: onJumpInVersus,
     },
     {
       id: 'gauntlet',

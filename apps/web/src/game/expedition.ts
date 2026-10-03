@@ -4,6 +4,7 @@ import {
   findDeck,
   jumpInPackets,
   pickOpponent,
+  pickTrophyOpponent,
   registerDeck,
   SCRYFALL,
   scryfallById,
@@ -391,9 +392,11 @@ export function makeMap(deck: string, seed: number): MapNode[][] {
   }
 
   // Opponents are mostly Jump In pairs, and none comes back on the same map while others are left.
+  // Elites and the boss play draft decks that won on Arena.
   const met: string[] = [];
-  const foe = () => {
-    const id = pickOpponent((n) => Math.floor(next() * n), deck, met);
+  const foe = (tough = false) => {
+    const int = (n: number) => Math.floor(next() * n);
+    const id = tough ? pickTrophyOpponent(int, deck, met) : pickOpponent(int, deck, met);
     met.push(id);
     return id;
   };
@@ -415,10 +418,10 @@ export function makeMap(deck: string, seed: number): MapNode[][] {
       if (kind === 'duel') return { kind, opponent: foe(), reward: reward(), ...to };
       // About half the elites start with a twist.
       if (kind === 'elite') {
-        const opponent = foe();
+        const opponent = foe(true);
         return { kind, opponent, ...(next() < 0.5 && { twist: pick(TWIST_IDS) }), ...to };
       }
-      if (kind === 'boss') return { kind, opponent: foe(), ...to };
+      if (kind === 'boss') return { kind, opponent: foe(true), ...to };
       if (kind === 'mystery') return { kind, event: event(), ...to };
       return { kind, ...to };
     }),

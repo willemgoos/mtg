@@ -170,8 +170,9 @@ export function mapKeywords(scryfall: readonly string[], oracle = ''): Keyword[]
   const out: Keyword[] = [];
   // "Hexproof from instants" shows up as both "Hexproof from" and "Hexproof".
   if (scryfall.includes('Hexproof from')) {
-    if (!/hexproof from instants/i.test(oracle)) throw new Error('Unsupported "Hexproof from"');
-    out.push('hexproofFromInstants');
+    if (/hexproof from instants/i.test(oracle)) out.push('hexproofFromInstants');
+    else if (/hexproof from white/i.test(oracle)) out.push('hexproofFromWhite');
+    else throw new Error('Unsupported "Hexproof from"');
     scryfall = scryfall.filter((k) => k !== 'Hexproof from' && k !== 'Hexproof');
   }
   for (const k of scryfall) {

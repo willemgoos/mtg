@@ -3,6 +3,9 @@ import {
   BEHAVIORS,
   BLACK_POOL,
   BLOOMBURROW_DECKS,
+  BLOOMBURROW_TROPHY_DECKS,
+  FOUNDATIONS_TROPHY_DECKS,
+  MARVEL_TROPHY_DECKS,
   BLOOMBURROW_POOL,
   MARVEL_DECKS,
   MARVEL_POOL,
@@ -11,6 +14,8 @@ import {
   cardDb,
   DECKS,
   deckIds,
+  FOUNDATIONS_DRAFT_POOL,
+  FOUNDATIONS_JUMP_IN_POOL,
   GREEN_POOL,
   LAND_POOL,
   MARVEL_BRAWL_POOL,
@@ -45,6 +50,8 @@ describe('card data', () => {
         ...BLUE_POOL,
         ...BLACK_POOL,
         ...OTHER_POOL,
+        ...FOUNDATIONS_JUMP_IN_POOL,
+        ...FOUNDATIONS_DRAFT_POOL,
         ...LAND_POOL,
         ...BLOOMBURROW_POOL,
         ...MARVEL_POOL,
@@ -98,10 +105,10 @@ describe('card data', () => {
     });
   });
 
-  it('decks are 60 cards and legal (max 4 non-basic copies), with unique ids', () => {
+  it('decks are 60 cards (draft decks 40) and legal (max 4 non-basic copies), with unique ids', () => {
     const basics = ['Plains', 'Island', 'Swamp', 'Mountain', 'Forest'];
     for (const d of DECKS.filter((x) => x.series !== 'brawl')) {
-      expect(deckIds(d), d.name).toHaveLength(60);
+      expect(deckIds(d), d.name).toHaveLength(d.series === 'trophy' ? 40 : 60);
       expect(
         d.cards.map(([name]) => name),
         d.name,
@@ -129,6 +136,9 @@ describe('card data', () => {
         'goblins-everywhere',
         'large-and-in-charge',
         ...BLOOMBURROW_DECKS.map((d) => d.id),
+        ...FOUNDATIONS_TROPHY_DECKS.map((d) => d.id),
+        ...BLOOMBURROW_TROPHY_DECKS.map((d) => d.id),
+        ...MARVEL_TROPHY_DECKS.map((d) => d.id),
         ...MARVEL_DECKS.map((d) => d.id),
       ].sort(),
     );

@@ -633,15 +633,21 @@ export function getLegalActions(ctx: Ctx, player: PlayerId): Action[] {
       return d.options.map((card) => ({ type: 'chooseCard', player, card }) as const);
     case 'castFree': {
       const out: Action[] = [{ type: 'chooseEffect', player, accept: false }];
+      const pool = manaSources(ctx, player);
       for (const card of d.cards) {
         const cd = def(ctx, card);
         if (cd.types.includes('Land')) continue;
+        const zone = obj(ctx, card).zone;
         const discards = d.discardInstead ? s.players[player].hand : [undefined];
-        for (const v of castVariants(cd, obj(ctx, card).zone, 'free')) {
+        for (const v of castVariants(cd, zone, 'free')) {
           // Additional sacrifice or forage costs aren't offered on free casts (a simplification).
           if (v.sacrifice || v.forage) continue;
           const specs = v.spell?.targets ?? (cd.enchant ? [cd.enchant] : []);
-          for (const targets of targetCombos(ctx, specs, { controller: player, sourceId: card }))
+          for (const targets of targetCombos(ctx, specs, { controller: player, sourceId: card })) {
+            // Free casts still pay ward.
+            if (!canPayFrom(wardCost(ctx, player, targets), pool)) continue;
+            if (wardLife(ctx, player, targets) > s.players[player].life) continue;
+            if (!wardPayable(ctx, player, targets, zone === 'hand' ? 1 : 0)) continue;
             for (const discard of discards)
               out.push({
                 type: 'castSpell',
@@ -654,6 +660,7 @@ export function getLegalActions(ctx: Ctx, player: PlayerId): Action[] {
                 ...(v.paws ? { paws: v.paws } : {}),
                 ...(discard ? { discard } : {}),
               });
+          }
         }
       }
       return out;

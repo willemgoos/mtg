@@ -13,6 +13,7 @@ import {
   mayForage,
   offspring,
   onEnter,
+  prowess,
   pump,
   rabbit,
   t0,
@@ -945,4 +946,94 @@ export const OTHERS: Record<string, Behavior> = {
       },
     ],
   },
+
+  // Starter Kit reprints (Hare Raising and Otter Limits), numbered in Bloomburrow.
+  'Serra Redeemer': {
+    abilities: [
+      {
+        kind: 'triggered',
+        trigger: { on: 'otherCreatureEtb', controller: 'you', filter: { maxPower: 2 } },
+        targets: [],
+        effects: [{ kind: 'counters', to: 'subject', amount: 2 }],
+      },
+    ],
+  },
+  Colossification: {
+    enchant: creature,
+    abilities: [
+      onEnter({ kind: 'tap', what: 'attached' }),
+      { kind: 'static', effect: { kind: 'attached', power: 20, toughness: 20 } },
+    ],
+  },
+  'Charmed Sleep': {
+    enchant: creature,
+    abilities: [
+      onEnter({ kind: 'tap', what: 'attached' }),
+      { kind: 'static', effect: { kind: 'attached', power: 0, toughness: 0, doesntUntap: true } },
+    ],
+  },
+  'Mind Spring': {
+    spell: { targets: [], effects: [{ kind: 'draw', who: 'controller', amount: { x: true } }] },
+  },
+  'Flame Lash': {
+    spell: { targets: [{ what: 'any' }], effects: [{ kind: 'damage', amount: 4, to: t0 }] },
+  },
+  'Sword of Vengeance': {
+    abilities: [
+      {
+        kind: 'static',
+        effect: {
+          kind: 'attached',
+          power: 2,
+          toughness: 0,
+          keywords: ['firstStrike', 'vigilance', 'trample', 'haste'],
+        },
+      },
+      {
+        kind: 'activated',
+        cost: { mana: mana('{3}') },
+        sorcerySpeed: true,
+        targets: [yourCreature],
+        effects: [{ kind: 'attach', to: t0 }],
+      },
+    ],
+  },
+  // Starter Kit exclusives.
+  'Byrke, Long Ear of the Law': {
+    abilities: [
+      when(
+        { on: 'etb' },
+        [upTo(creature), upTo(creature)],
+        { kind: 'counters', to: t0, amount: 1 },
+        { kind: 'counters', to: t1, amount: 1 },
+      ),
+      when({ on: 'creatureYouControlAttacks', filter: { minPlusOneCounters: 1 } }, [], {
+        kind: 'counters',
+        to: 'subject',
+        amount: { countersOn: 'subject' },
+      }),
+    ],
+  },
+  'Bria, Riptide Rogue': {
+    // "Other creatures you control have prowess" is one trigger on Bria that pumps them all.
+    abilities: [
+      prowess,
+      when(
+        { on: 'castSpell', filter: 'noncreature' },
+        [],
+        pump({ each: 'creature', controller: 'you', filter: { other: true } }, 1, 1),
+      ),
+      when({ on: 'castSpell', filter: 'noncreature' }, [yourCreature], {
+        kind: 'pump',
+        to: t0,
+        power: 0,
+        toughness: 0,
+        cantBeBlocked: true,
+      }),
+    ],
+  },
+  // Only combat damage counts; nothing in the pool makes it deal other damage to a player.
+  'Thieving Otter': { abilities: [when({ on: 'combatDamageToPlayer' }, [], draw(1))] },
+  // Arena's Threshold packet borrows this one from Outlaws of Thunder Junction.
+  'Sterling Hound': { abilities: [onEnter({ kind: 'surveil', amount: 2 })] },
 };

@@ -244,9 +244,15 @@ export function dealCombatDamage(ctx: Ctx, firstStrikeStep: boolean): void {
     def(ctx, id).abilities.some(
       (a) => a.kind === 'static' && a.effect.kind === 'preventCombatDamage',
     );
+  // Fleeting Flight: combat damage to it this turn is prevented.
+  const shielded = (id: ObjectId) =>
+    !unpreventable &&
+    ctx.s.effects.some(
+      (e) => e.preventCombatDamage && e.affected.id === id && e.affected.zcc === obj(ctx, id).zcc,
+    );
   for (const x of assignments) {
     if (prevented(x.src.id)) continue;
-    if ('object' in x.to && prevented(x.to.object.id)) continue;
+    if ('object' in x.to && (prevented(x.to.object.id) || shielded(x.to.object.id))) continue;
     dealDamage(ctx, x.src, x.to, x.amount, true);
   }
   if (firstStrikeStep) combat.dealtFirstStrikeDamage.push(...dealt);

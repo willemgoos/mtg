@@ -213,7 +213,7 @@ function damageBonus(ctx: Ctx, src: DamageSource, to: TargetChoice, combat: bool
       if (b.source && !(source?.zone === 'battlefield' && matchesFilter(ctx, src.id, b.source)))
         continue;
       if (b.condition && !checkCondition(ctx, b.condition, o.controller, o)) continue;
-      n += b.amount;
+      n += b.amount === 'sourcePower' ? Math.max(0, characteristics(ctx, id).power ?? 0) : b.amount;
     }
   }
   return n;
@@ -374,6 +374,10 @@ function playersOf(ctx: Ctx, es: EffectSource, ref: Ref): PlayerId[] {
 export function resolveAmount(ctx: Ctx, es: EffectSource, amount: Amount): number {
   if (typeof amount === 'number') return amount;
   if ('multiply' in amount) return amount.multiply * resolveAmount(ctx, es, amount.amount);
+  if ('manaValueOf' in amount) {
+    const id = objectsOf(ctx, es, amount.manaValueOf)[0];
+    return id ? manaValue(def(ctx, id).manaCost) : 0;
+  }
   if ('manaValueOfSubject' in amount) {
     const o = es.subject && ctx.s.objects[es.subject.id];
     return o ? manaValue(def(ctx, o.id).manaCost) : 0;
@@ -1170,7 +1174,14 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
       for (const t of resolveRef(ctx, es, e.to)) {
         // Nova Flame: "each other creature".
         if (e.exceptFrom && 'object' in t && t.object.id === src.id) continue;
+        const hit = e.excessTokens && 'object' in t ? onBattlefield(ctx, t.object) : undefined;
+        const before = hit?.damage ?? 0;
+        const lethal = hit ? Math.max(0, characteristics(ctx, hit.id).toughness - before) : 0;
         dealDamage(ctx, src, t, amount, false);
+        // Goblin Negotiation: the damage beyond what was lethal.
+        const excess = hit ? hit.damage - before - lethal : 0;
+        if (e.excessTokens && excess > 0)
+          runEffect(ctx, es, { kind: 'createToken', token: e.excessTokens, count: excess });
       }
       return;
     }
@@ -1191,6 +1202,10 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
           ...(e.returnWhenDies ? { returnWhenDies: e.returnWhenDies } : {}),
           ...(e.cantBeBlockedExcept ? { cantBeBlockedExcept: e.cantBeBlockedExcept } : {}),
           ...(e.counterOnCombatDamage ? { counterOnCombatDamage: true } : {}),
+          ...(e.sacrificeOnCombatDamage ? { sacrificeOnCombatDamage: true } : {}),
+          ...(e.basePT ? { basePT: e.basePT } : {}),
+          ...(e.becomesCreature ? { becomesCreature: true } : {}),
+          ...(e.preventCombatDamage ? { preventCombatDamage: true } : {}),
           ...(e.untilYourNextTurn
             ? { expires: 'untilYourNextTurn' as const, player: es.controller }
             : { expires: 'endOfTurn' as const }),
@@ -1215,6 +1230,50 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
     case 'untap':
       for (const id of objectsOf(ctx, es, e.what)) untap(ctx, id);
       return;
+    case 'changeTarget': {
+      const t = typeof e.what === 'object' && 'target' in e.what ? es.targets[e.what.target] : null;
+      const item = t && 'object' in t ? findSpell(ctx, t.object.id) : undefined;
+      if (!item || item.targets.length !== 1) return;
+      const spec = spellOnStack(defOf(ctx, obj(ctx, item.id).defId), item)?.targets ?? [];
+      const combos = targetCombos(ctx, spec, {
+        controller: item.controller,
+        sourceId: item.id,
+      }).filter((c) => c.length === 1 && JSON.stringify(c) !== JSON.stringify(item.targets));
+      // Best for us: aim it at an opponent or their permanent if it was aimed at ours, and the
+      // other way round; otherwise anything else.
+      const mine = (c: TargetChoice) =>
+        'player' in c
+          ? c.player === es.controller
+          : ctx.s.objects[c.object.id]?.controller === es.controller;
+      const wasMine = mine(item.targets[0]!);
+      const pick = combos.find((c) => mine(c[0]!) !== wasMine) ?? combos[0];
+      if (pick) item.targets = pick;
+      return;
+    }
+    case 'endTheTurn': {
+      const self = es.source?.id;
+      for (const x of [...ctx.s.stack]) {
+        if (x.kind === 'spell' && x.id === self) continue;
+        ctx.s.stack.splice(ctx.s.stack.indexOf(x), 1);
+        if (x.kind === 'spell') moveObject(ctx, x.id, 'exile');
+      }
+      if (ctx.s.combat) ctx.s.combat.attackers = [];
+      return;
+    }
+    case 'doesntUntapWhileSource':
+      if (!es.source || !onBattlefield(ctx, es.source)) return;
+      for (const id of objectsOf(ctx, es, e.what))
+        ctx.s.effects.push({
+          timestamp: newTimestamp(ctx),
+          affected: { id, zcc: obj(ctx, id).zcc },
+          power: 0,
+          toughness: 0,
+          keywords: [],
+          doesntUntap: true,
+          expires: 'whileSource',
+          whileSourceId: es.source.id,
+        });
+      return;
     case 'extraCombat':
       ctx.s.turn.extraCombats++;
       return;
@@ -1228,7 +1287,10 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
     }
     case 'counters': {
       const n = resolveAmount(ctx, es, e.amount);
-      for (const id of objectsOf(ctx, es, e.to)) addCounters(ctx, id, n);
+      for (const id of objectsOf(ctx, es, e.to))
+        // A negative amount removes +1/+1 counters (Mister Hyde).
+        if (n < 0) obj(ctx, id).plusOneCounters = Math.max(0, obj(ctx, id).plusOneCounters + n);
+        else addCounters(ctx, id, n);
       return;
     }
     case 'fight': {
@@ -1466,6 +1528,7 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
       const o = ctx.s.objects[t.object.id];
       if (!o || o.zone !== 'graveyard' || o.zcc !== t.object.zcc) return;
       moveObject(ctx, o.id, 'battlefield', { controller: es.controller });
+      if (e.tapped) o.tapped = true;
       if (e.counter) (o.counters ??= {})[e.counter] = 1;
       if (e.addSubtype) o.addedSubtypes = [...(o.addedSubtypes ?? []), e.addSubtype];
       // Heroic Return, Winter Soldier: "if a Hero enters this way, it enters with counters".

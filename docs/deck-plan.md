@@ -148,6 +148,54 @@ Bot-vs-bot over 160 games against the ten Foundations starter decks: Forage and 
 
 More simplifications: Portent of Calamity takes one card per type; ward costs that discard or sacrifice Food pick automatically; copies keep their targets; bots don't attack planeswalkers; Rottenmouth Viper's sacrifices and tapped tokens are picked automatically; Fecund Greenshell always puts the land onto the battlefield; Helga's mana can mix colours.
 
+**8d: the Bloomburrow Starter Kit: done.** Wizards' two official decks, Hare Raising (G/W) and Otter Limits (U/R), from
+the [decklists](https://magic.wizards.com/en/news/announcements/bloomburrow-starter-kit-decklists). Nine new cards (the
+kit's reprints and exclusives, all numbered in Bloomburrow). Bot-vs-bot over 160 games against the ten Foundations
+starter decks: Hare Raising 61%, Otter Limits 33% (a spells-matter deck the bots don't plan for).
+
+Simplifications: Bria's "other creatures you control have prowess" is one trigger on Bria that pumps them; Thieving
+Otter only draws on combat damage.
+
+**8e: Arena's Jump In packets and draft trophy decks: done.**
+
+- Arena's ten Bloomburrow Jump In packets (`ARENA_BLB_PACKETS`), a "Bloomburrow · Arena" group next to ours. Five are
+  two-colour, so packets now have `colors`; those get a gain-land and basics split by mana symbols. Sterling Hound (OTJ)
+  is the one card from outside the set. Arena swaps four slots per packet at random; we use the listed packets.
+- Ten 40-card Bloomburrow draft decks that went 7–0 to 7–2 in Arena's Premier Draft, one per colour pair, from
+  [untapped.gg](https://mtga.untapped.gg/limited/draft/bloomburrow/trophy-decks) (series `trophy`, credited to their
+  players). They have their own section in the deck grid, and Expedition elites and bosses play them.
+- Bot-vs-bot (small samples) against our Jump In pairs: trophy decks about 56% on average (35–75%), Arena packet pairs
+  about 52%.
+- Arena's eleven Foundations Jump In packets (`ARENA_FDN_PACKETS`, from the
+  [Foundations update](https://magic.wizards.com/en/news/mtg-arena/jump-in-packets-update-for-foundations)), a
+  "Foundations · Arena" group. Twelve new Foundations cards for them (`foundations-jumpin.ts`): Eaten by Piranhas, Feed
+  the Swarm, Fleeting Flight, Garna, Goblin Negotiation, Ingenious Leonin, Knight of Malice, Obliterating Bolt,
+  Soul-Shackled Zombie, Skyknight Squire, Uncharted Voyage, Wildwood Scourge. The other eight listed cards (Luminous
+  Rebuke, Bolt Bend, Ordeal of Nylea, Homunculus Horde, Zul Ashur, Deadly Plot, Dropkick Bomber, Elvish Archdruid) came
+  with 8f, so every packet is now Arena's listed one. Lands: the packet's guildgate or Evolving Wilds, then basics.
+  Bot-vs-bot over about 220 games, an Arena pair against a pair of ours: about 34% (Cats, Hares and Elves best).
+- Simplifications: Eaten by Piranhas keeps the creature's colour and types; Soul-Shackled Zombie may take its two cards
+  from different graveyards; Skyknight Squire doesn't become a Knight; Goblin Negotiation ignores deathtouch for
+  excess damage.
+- Other official packets checked and too far off (7+ missing cards each): Foundations Jumpstart (J25), Arena's
+  Foundations Jumpstart event, other sets' Arena packets. The closest Marvel ones (Jump Into MTG – Marvel Super Heroes:
+  Agents of S.H.I.E.L.D., HYDRA, Trained) need five cards each, Thriving lands included.
+
+**8f: Foundations draft trophy decks: done.** Ten 40-card Foundations decks that went 7–0 in Arena's Premier Draft, one
+per colour pair, from [untapped.gg](https://mtga.untapped.gg/limited/draft/foundations/trophy-decks)
+(`FOUNDATIONS_TROPHY_DECKS`), with their own section and in the Expedition elite and boss pool. 21 new cards in
+`packages/cards/src/foundations-draft.ts` (the decks' 13 plus the eight Jump In ones above). Bot-vs-bot (small samples)
+against our Jump In pairs: about 65% (30–85%).
+
+New engine pieces: changing a spell's target (Bolt Bend), "end the turn" (Time Stop), "sacrifice it when it deals combat
+damage" (Dropkick Bomber), returning a card tapped, and "whenever you put counters on this creature".
+
+Simplifications: Time Stop exiles the other spells, drops abilities on the stack and ends combat, but the turn goes on;
+Bolt Bend only changes spells' targets, picking the new one itself; Blasphemous Edict sacrifices every creature and its
+{B} cost isn't offered; Gutless Plunderer surveils 3; Elvish Archdruid's mana is an activated ability; Vivien Reid's
+emblem gives its bonus from the start of each of your combats; Dropkick Bomber's Goblin is sacrificed after combat
+damage to a player.
+
 ## Phases 9 and 10: Marvel Super Heroes
 
 The four Commander precons as Brawl decks (9a to 9e), then the MSH main set like Bloomburrow (10). See `docs/marvel-plan.md`.

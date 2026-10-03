@@ -272,16 +272,21 @@ describe('expedition map', () => {
     expect(links(wide, 2, 0)).toEqual([]);
   });
 
-  it('meets mostly Jump In pairs, all different, never your own deck', () => {
+  it('meets mostly Jump In pairs in duels and draft trophy decks in elites and the boss', () => {
     let jumpIns = 0;
     let fights = 0;
     for (let seed = 0; seed < 40; seed++) {
-      const foes = makeMap(deck, seed).flatMap((f) => f.flatMap((n) => n.opponent ?? []));
+      const nodes = makeMap(deck, seed).flat();
+      const foes = nodes.flatMap((n) => n.opponent ?? []);
       expect(new Set(foes).size).toBe(foes.length);
       expect(foes).not.toContain(deck);
       for (const id of foes) expect(findDeck(id)!.cards.length).toBeGreaterThan(0);
-      jumpIns += foes.filter((id) => findDeck(id)!.series === 'jumpIn').length;
-      fights += foes.length;
+      for (const n of nodes)
+        if (n.kind === 'elite' || n.kind === 'boss')
+          expect(findDeck(n.opponent!)!.series, n.kind).toBe('trophy');
+      const duels = nodes.flatMap((n) => (n.kind === 'duel' ? [n.opponent!] : []));
+      jumpIns += duels.filter((id) => findDeck(id)!.series === 'jumpIn').length;
+      fights += duels.length;
     }
     expect(jumpIns / fights).toBeGreaterThan(0.6);
     expect(jumpIns / fights).toBeLessThan(0.8);

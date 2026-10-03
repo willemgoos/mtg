@@ -49,8 +49,48 @@ function colorsOf(name: string): Color[] {
   return COLORS.filter((c) => cs.includes(c));
 }
 
-function matches(e: DeckEntry, filters: ReadonlySet<Filter>, query: string): boolean {
+/** Mana value filters: 1 (or less) to 6 and up. Lands have no mana value to filter by. */
+const COSTS = [1, 2, 3, 4, 5, 6] as const;
+const costBucket = (e: DeckEntry) => Math.min(Math.max(e.manaValue, 1), 6);
+
+/** Card type filters. */
+type Kind = 'creature' | 'spell';
+const KINDS: { id: Kind; label: string }[] = [
+  { id: 'creature', label: 'Creatures' },
+  { id: 'spell', label: 'Spells' },
+];
+
+/** The "Hide used" toggle is remembered between visits (when storage is available). */
+const HIDE_KEY = 'mtg.deckBuilder.hideUsed';
+function loadHideUsed(): boolean {
+  try {
+    return localStorage.getItem(HIDE_KEY) === '1';
+  } catch {
+    return false;
+  }
+}
+function saveHideUsed(on: boolean): void {
+  try {
+    localStorage.setItem(HIDE_KEY, on ? '1' : '0');
+  } catch {
+    // Storage unavailable (private mode): the toggle lasts for this visit.
+  }
+}
+
+interface Narrowing {
+  colors: ReadonlySet<Filter>;
+  costs: ReadonlySet<number>;
+  kinds: ReadonlySet<Kind>;
+  query: string;
+}
+
+function matches(e: DeckEntry, { colors: filters, costs, kinds, query }: Narrowing): boolean {
   const cs = colorsOf(e.name);
+  if (costs.size && (isLand(e) || !costs.has(costBucket(e)))) return false;
+  if (kinds.size) {
+    const kind: Kind | null = isLand(e) ? null : isCreature(e) ? 'creature' : 'spell';
+    if (!kind || !kinds.has(kind)) return false;
+  }
   if (filters.size) {
     const land = isLand(e);
     const hit =
@@ -115,6 +155,10 @@ export function DeckBuilder({
 }) {
   const [query, setQuery] = useState('');
   const [filters, setFilters] = useState<ReadonlySet<Filter>>(new Set());
+  const [costs, setCosts] = useState<ReadonlySet<number>>(new Set());
+  const [kinds, setKinds] = useState<ReadonlySet<Kind>>(new Set());
+  const [newOnly, setNewOnly] = useState(false);
+  const [hideUsed, setHideUsed] = useState(loadHideUsed);
   const [hover, setHoverState] = useState<HoverState | null>(null);
   const setHover = (e: DeckEntry | null, anchor?: Element) =>
     setHoverState(
@@ -134,10 +178,25 @@ export function DeckBuilder({
     );
   }, [pool, deck, basics]);
   const q = query.trim().toLowerCase();
-  const shown = owned.filter((e) => matches(e, filters, q));
+  const isFreeBasic = (e: DeckEntry) => basics && basicColor.has(e.name);
+  const shown = owned.filter(
+    (e) =>
+      matches(e, { colors: filters, costs, kinds, query: q }) &&
+      (!newOnly || !!fresh?.has(e.name)) &&
+      // Used up: every copy you own is already in the deck.
+      (!hideUsed || isFreeBasic(e) || e.count > 0),
+  );
+  const narrowed = filters.size + costs.size + kinds.size > 0 || newOnly || !!q;
+  const clear = () => {
+    setFilters(new Set());
+    setCosts(new Set());
+    setKinds(new Set());
+    setNewOnly(false);
+    setQuery('');
+  };
 
   const n = total(main);
-  const isFree = (e: DeckEntry) => basics && basicColor.has(e.name);
+  const isFree = isFreeBasic;
   const add = (e: DeckEntry) => {
     if (!isFree(e) && !e.count) return;
     onAdd(e.name);
@@ -149,12 +208,18 @@ export function DeckBuilder({
     play('place', { gain: 0.6 });
     if (e.count === 1) setHover(null);
   };
-  const toggle = (f: Filter) =>
-    setFilters((s) => {
-      const next = new Set(s);
-      if (!next.delete(f)) next.add(f);
-      return next;
-    });
+  /** Turns one value of a filter set on or off. */
+  const flip =
+    <T,>(set: (f: (s: ReadonlySet<T>) => ReadonlySet<T>) => void) =>
+    (v: T) =>
+      set((s) => {
+        const next = new Set(s);
+        if (!next.delete(v)) next.add(v);
+        return next;
+      });
+  const toggle = flip(setFilters);
+  const toggleCost = flip(setCosts);
+  const toggleKind = flip(setKinds);
 
   const sections = deckSections(main);
   const short = n < min;
@@ -187,14 +252,72 @@ export function DeckBuilder({
             />
           ))}
         </div>
+        <div className="dbk__chips" role="group" aria-label="Filter by mana value">
+          {COSTS.map((c) => (
+            <button
+              key={c}
+              className={`dbk__chip dbk__chip--cost ${costs.has(c) ? 'is-on' : ''}`}
+              aria-pressed={costs.has(c)}
+              title={c === 6 ? 'Mana value 6 or more' : `Mana value ${c}`}
+              onClick={() => toggleCost(c)}
+            >
+              {c === 6 ? '6+' : c}
+            </button>
+          ))}
+        </div>
+        <div className="dbk__chips" role="group" aria-label="Filter by type">
+          {KINDS.map((k) => (
+            <button
+              key={k.id}
+              className={`dbk__chip ${kinds.has(k.id) ? 'is-on' : ''}`}
+              aria-pressed={kinds.has(k.id)}
+              onClick={() => toggleKind(k.id)}
+            >
+              {k.label}
+            </button>
+          ))}
+          {fresh && fresh.size > 0 && (
+            <button
+              className={`dbk__chip ${newOnly ? 'is-on' : ''}`}
+              aria-pressed={newOnly}
+              title="Only the cards you just got"
+              onClick={() => setNewOnly(!newOnly)}
+            >
+              New
+            </button>
+          )}
+        </div>
+        <label className="dbk__toggle" title="Hide cards whose every copy is already in your deck">
+          <input
+            type="checkbox"
+            checked={hideUsed}
+            onChange={(e) => {
+              setHideUsed(e.target.checked);
+              saveHideUsed(e.target.checked);
+            }}
+          />
+          <span className="dbk__switch" aria-hidden />
+          Hide used
+        </label>
         <span className="dbk__shown">
           {shown.length} {shown.length === 1 ? 'card' : 'cards'}
+          {narrowed && (
+            <button className="dbk__clear" onClick={clear}>
+              Clear filters
+            </button>
+          )}
         </span>
       </header>
 
       <main className="dbk__pool">
         {shown.length === 0 && (
-          <p className="dbk__empty">{owned.length ? 'No cards match.' : 'No cards yet.'}</p>
+          <p className="dbk__empty">
+            {!owned.length
+              ? 'No cards yet.'
+              : hideUsed && !narrowed
+                ? 'Every card you own is in your deck.'
+                : 'No cards match.'}
+          </p>
         )}
         <div className="dbk__grid">
           {shown.map((e) => {

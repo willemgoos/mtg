@@ -204,8 +204,14 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
     power,
     toughness,
     keywords,
-    types:
-      (crewed || o.copyAsCreature) && !d.types.includes('Creature')
+    // A crewed Vehicle, or anything that "becomes an artifact creature" (I Am Iron Man).
+    types: crewed
+      ? [
+          ...(d.types.includes('Artifact') ? [] : (['Artifact'] as const)),
+          ...d.types,
+          ...(d.types.includes('Creature') ? [] : (['Creature'] as const)),
+        ]
+      : o.copyAsCreature && !d.types.includes('Creature')
         ? [...d.types, 'Creature']
         : d.types,
     subtypes,

@@ -140,6 +140,8 @@ export function checkCondition(
   // Marvel Super Heroes.
   if (c.kind === 'sourceEnteredThisTurn') return !!self && self.zoneTurn === ctx.s.turn.number;
   if (c.kind === 'sourceHasCounter') return (self?.counters?.[c.name] ?? 0) > 0;
+  if (c.kind === 'anyPlayerControls')
+    return ctx.s.battlefield.some((id) => matchesFilter(ctx, id, c.filter, self?.id));
   if (c.kind === 'heroAttackedOrEnteredThisTurn') {
     const hero = (id: ObjectId) => !!ctx.s.objects[id] && def(ctx, id).subtypes.includes('Hero');
     return (
@@ -515,8 +517,8 @@ function detect(ctx: Ctx, ev: GameEvent): void {
             // Marvel Super Heroes (Ares): "an attacking creature you control".
             if (
               t.on === 'creatureYouControlDies' &&
-              t.filter?.leftAttacking &&
-              !moved?.leftAttacking
+              t.filter?.leftAttacking !== undefined &&
+              t.filter.leftAttacking !== !!moved?.leftAttacking
             )
               return false;
             if (diedUnder === undefined) return true;
@@ -664,11 +666,9 @@ function detect(ctx: Ctx, ev: GameEvent): void {
           return o.controller === ap && attackedWith(a.trigger.filter, o.id);
         return false;
       });
-      // Wakanda Forever (9c): Equipment on an attacker; the defending player's "attacks you" triggers.
+      // Wakanda Forever (9c): the defending player's "attacks you" triggers.
       forEachBattlefieldTrigger(ctx, (o, a) => {
         const t = a.trigger;
-        if (t.on === 'equippedAttacks')
-          return o.attachedTo !== undefined && ev.attackers.includes(o.attachedTo);
         if (t.on === 'opponentAttacks') return o.controller !== ap && ev.attackers.length >= t.min;
         return false;
       });
@@ -699,7 +699,11 @@ function detect(ctx: Ctx, ev: GameEvent): void {
           const e = s.objects[eq]!;
           if (e.attachedTo !== id) continue;
           def(ctx, eq).abilities.forEach((a, i) => {
-            if (a.kind === 'triggered' && a.trigger.on === 'equippedAttacks')
+            if (
+              a.kind === 'triggered' &&
+              a.trigger.on === 'equippedAttacks' &&
+              (!a.trigger.alone || ev.attackers.length === 1)
+            )
               queue(ctx, e, i, e.controller, s.objects[id]);
           });
         }
@@ -846,6 +850,20 @@ function detect(ctx: Ctx, ev: GameEvent): void {
           controller: src.controller,
           inline: [{ kind: 'counters', to: 'self', amount: 1 }],
         });
+      // Dropkick Bomber: "When this creature deals combat damage, sacrifice it."
+      if (
+        s.effects.some(
+          (e) =>
+            e.sacrificeOnCombatDamage && e.affected.id === src.id && e.affected.zcc === src.zcc,
+        )
+      )
+        s.pendingTriggers.push({
+          source: { id: src.id, zcc: src.zcc },
+          sourceDefId: src.defId,
+          abilityIndex: -1,
+          controller: src.controller,
+          inline: [{ kind: 'sacrifice', what: 'self' }],
+        });
       // "Whenever one or more Birds you control deal combat damage to a player" (batched).
       forEachBattlefieldTrigger(
         ctx,
@@ -904,6 +922,7 @@ function detect(ctx: Ctx, ev: GameEvent): void {
           a.trigger.on === 'youPutCounters' &&
           o.controller === target.controller &&
           !(a.trigger.other && o.id === target.id) &&
+          (!a.trigger.self || o.id === target.id) &&
           matchesFilter(ctx, target.id, a.trigger.filter, o.id),
         target,
         ev.count,
