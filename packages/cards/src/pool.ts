@@ -110,6 +110,9 @@ export const SET_PREFERENCE = [
   'ogw',
   'csp',
   'ydmu',
+  // Strixhaven Brawl (15b, multi): Siege Rhino (conjured by Call the Crash), Ochre Jelly.
+  'ktk',
+  'afr',
 ];
 
 export const RED_POOL = [

@@ -25,7 +25,11 @@ function lanternFor(ctx: Ctx, player: PlayerId): boolean {
     (id) =>
       obj(ctx, id).controller === player &&
       def(ctx, id).abilities.some(
-        (a) => a.kind === 'static' && a.effect.kind === 'landsTapForAnyColor',
+        (a) =>
+          a.kind === 'static' &&
+          a.effect.kind === 'landsTapForAnyColor' &&
+          // Strixhaven Brawl (15b, multi): The World Tree, "as long as you control six or more lands".
+          checkCondition(ctx, a.effect.condition, player, obj(ctx, id)),
       ),
   );
 }

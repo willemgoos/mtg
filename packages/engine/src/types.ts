@@ -419,6 +419,9 @@ export interface CostDef {
   // Secrets of Strixhaven (14b): Page, Loose Leaf
   /** Discard another card with the same name as the source (with `discard`). */
   discardSameName?: boolean;
+  // Strixhaven Brawl (15b, multi): Call the Crash
+  /** Suspend N: exile this card from your hand with N time counters on it. */
+  suspendSelf?: number;
 }
 
 export type TriggerDef =
@@ -630,7 +633,10 @@ export type TriggerDef =
   | { on: 'opponentCreatureExiledInstead' }
   // Strixhaven (13c): Strixhaven Stadium
   /** Whenever a creature (any controller's) deals combat damage to you. */
-  | { on: 'combatDamageToYou' };
+  | { on: 'combatDamageToYou' }
+  // Strixhaven Brawl (15b, multi): Mayhem Devil
+  /** Whenever a player (any player) sacrifices a permanent. */
+  | { on: 'playerSacrifices' };
 
 export type ConditionDef =
   | { kind: 'controlsPermanents'; filter: CardFilter; min: number }
@@ -959,6 +965,8 @@ export type Amount =
   | { sacrificedPower: true }
   /** Creatures that died under your control this turn (Season of Loss). */
   | { count: 'creaturesYouLostThisTurn' }
+  /** Strixhaven Brawl (15b, multi): +1/+1 counters you put on creatures you control this turn (Iridescent Hornbeetle). */
+  | { count: 'countersPutThisTurn' }
   /** The greatest power among creatures you control (Season of Gathering). */
   | { count: 'greatestPowerYouControl' }
   /** Creature cards you own in exile and in your graveyard (Huskburster Swarm). */
@@ -2002,7 +2010,10 @@ export type StaticDef =
   /** Triggered abilities of legendary creatures you control trigger an additional time (Annie Joins Up). */
   | { kind: 'legendaryTriggersTwice' }
   /** Lands you control have "{T}: Add one mana of any color" (Chromatic Lantern). */
-  | { kind: 'landsTapForAnyColor' }
+  | { kind: 'landsTapForAnyColor'; condition?: ConditionDef /* Strixhaven Brawl (15b, multi): The World Tree */ }
+  // Strixhaven Brawl (15b, multi): Gorma, the Gullet
+  /** Nontoken creatures you control enter with an additional +1/+1 counter for each creature that died under your control this turn. */
+  | { kind: 'nontokenEnterWithDiedCounters' }
   // Wakanda Forever (9c).
   /** Prevent N of the damage sources your opponents control would deal to you (Heart-Shaped Herb). */
   | { kind: 'preventDamageToYou'; amount: number }
@@ -2392,6 +2403,8 @@ export interface TurnState {
   creaturesExiled?: Record<PlayerId, number>;
   /** Creatures that died under each player's control this turn. */
   creaturesLost?: Record<PlayerId, number>;
+  /** Strixhaven Brawl (15b, multi): +1/+1 counters each player put on creatures they control this turn (Iridescent Hornbeetle). */
+  countersPut?: Record<PlayerId, number>;
   /** Secrets of Strixhaven (14b): cards (not tokens) put into exile this turn (Ennis, Debate Moderator). */
   exiledCards?: number;
   /** Cards that left each player's graveyard this turn (Bonecache Overseer). */

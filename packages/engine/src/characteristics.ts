@@ -279,6 +279,8 @@ export function countOf(
       0,
     );
   if (a.count === 'creaturesYouLostThisTurn') return ctx.s.turn.creaturesLost?.[player] ?? 0;
+  // Strixhaven Brawl (15b, multi): Iridescent Hornbeetle.
+  if (a.count === 'countersPutThisTurn') return ctx.s.turn.countersPut?.[player] ?? 0;
   // Secrets of Strixhaven (14b): Emil, Vastlands Roamer.
   if (a.count === 'differentlyNamedLands')
     return new Set(

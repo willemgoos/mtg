@@ -46192,5 +46192,1099 @@
    "large": "https://cards.scryfall.io/large/front/5/2/52e55b85-92c1-4b83-9a9d-4afb8e938e4f.jpg?1783927081",
    "artCrop": "https://cards.scryfall.io/art_crop/front/5/2/52e55b85-92c1-4b83-9a9d-4afb8e938e4f.jpg?1783927081"
   }
+ },
+ {
+  "name": "Dina, Essence Brewer",
+  "scryfallId": "9fe237b8-c02c-41ea-9fc4-b771b91d2157",
+  "oracleId": "f61c1dc4-2f09-4b50-957f-ee656c659072",
+  "set": "soc",
+  "collectorNumber": "1",
+  "rarity": "mythic",
+  "manaCost": "{1}{B}{G}",
+  "typeLine": "Legendary Creature — Dryad Druid",
+  "oracleText": "Whenever you sacrifice a creature, draw a card. This ability triggers only once each turn.\n{2}, {T}, Sacrifice another creature: You gain X life and put X +1/+1 counters on target creature you control, where X is the sacrificed creature's power.",
+  "power": "2",
+  "toughness": "3",
+  "colors": [
+   "B",
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/f/9fe237b8-c02c-41ea-9fc4-b771b91d2157.jpg?1783903869",
+   "normal": "https://cards.scryfall.io/normal/front/9/f/9fe237b8-c02c-41ea-9fc4-b771b91d2157.jpg?1783903869",
+   "large": "https://cards.scryfall.io/large/front/9/f/9fe237b8-c02c-41ea-9fc4-b771b91d2157.jpg?1783903869",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/f/9fe237b8-c02c-41ea-9fc4-b771b91d2157.jpg?1783903869"
+  }
+ },
+ {
+  "name": "Gorma, the Gullet",
+  "scryfallId": "86f97dd8-8647-4938-aee0-690bb715f88b",
+  "oracleId": "ae5f30cc-a22e-4fbb-9510-e9429de3623c",
+  "set": "soc",
+  "collectorNumber": "3",
+  "rarity": "mythic",
+  "manaCost": "{1}{B}{G}",
+  "typeLine": "Legendary Creature — Pest Frog",
+  "oracleText": "Lifelink\nWhenever another creature you control dies, put a +1/+1 counter on Gorma.\nNontoken creatures you control enter with an additional +1/+1 counter on them for each creature that died under your control this turn.",
+  "power": "1",
+  "toughness": "1",
+  "colors": [
+   "B",
+   "G"
+  ],
+  "keywords": [
+   "Lifelink"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/6/86f97dd8-8647-4938-aee0-690bb715f88b.jpg?1783903868",
+   "normal": "https://cards.scryfall.io/normal/front/8/6/86f97dd8-8647-4938-aee0-690bb715f88b.jpg?1783903868",
+   "large": "https://cards.scryfall.io/large/front/8/6/86f97dd8-8647-4938-aee0-690bb715f88b.jpg?1783903868",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/6/86f97dd8-8647-4938-aee0-690bb715f88b.jpg?1783903868"
+  }
+ },
+ {
+  "name": "Siege Rhino",
+  "scryfallId": "9011126a-20bd-4c86-a63b-1691f79ac247",
+  "oracleId": "e1087ce2-e3c2-4ab1-bd08-1dc9ab70f12f",
+  "set": "ktk",
+  "collectorNumber": "200",
+  "rarity": "rare",
+  "manaCost": "{1}{W}{B}{G}",
+  "typeLine": "Creature — Rhino",
+  "oracleText": "Trample\nWhen this creature enters, each opponent loses 3 life and you gain 3 life.",
+  "power": "4",
+  "toughness": "5",
+  "colors": [
+   "B",
+   "G",
+   "W"
+  ],
+  "keywords": [
+   "Trample"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/0/9011126a-20bd-4c86-a63b-1691f79ac247.jpg?1783939053",
+   "normal": "https://cards.scryfall.io/normal/front/9/0/9011126a-20bd-4c86-a63b-1691f79ac247.jpg?1783939053",
+   "large": "https://cards.scryfall.io/large/front/9/0/9011126a-20bd-4c86-a63b-1691f79ac247.jpg?1783939053",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/0/9011126a-20bd-4c86-a63b-1691f79ac247.jpg?1783939053"
+  }
+ },
+ {
+  "name": "Lagomos, Hand of Hatred",
+  "scryfallId": "1a6bb0c2-1e3c-48cd-8f10-49f047e0514c",
+  "oracleId": "12c98c1e-7e02-473d-b494-ad8a0731fe82",
+  "set": "dmu",
+  "collectorNumber": "205",
+  "rarity": "uncommon",
+  "manaCost": "{1}{B}{R}",
+  "typeLine": "Legendary Creature — Human Shaman",
+  "oracleText": "At the beginning of combat on your turn, create a 2/1 red Elemental creature token with trample and haste. Sacrifice it at the beginning of the next end step.\n{T}: Search your library for a card, put it into your hand, then shuffle. Activate only if five or more creatures died this turn.",
+  "power": "1",
+  "toughness": "3",
+  "colors": [
+   "B",
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/a/1a6bb0c2-1e3c-48cd-8f10-49f047e0514c.jpg?1783921281",
+   "normal": "https://cards.scryfall.io/normal/front/1/a/1a6bb0c2-1e3c-48cd-8f10-49f047e0514c.jpg?1783921281",
+   "large": "https://cards.scryfall.io/large/front/1/a/1a6bb0c2-1e3c-48cd-8f10-49f047e0514c.jpg?1783921281",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/a/1a6bb0c2-1e3c-48cd-8f10-49f047e0514c.jpg?1783921281"
+  }
+ },
+ {
+  "name": "Mayhem Devil",
+  "scryfallId": "92e5c8cb-ef19-499e-b428-00dfb5e75b4f",
+  "oracleId": "4709f11c-aef8-45ac-b2bf-e640c568dfac",
+  "set": "sld",
+  "collectorNumber": "1715",
+  "rarity": "rare",
+  "manaCost": "{1}{B}{R}",
+  "typeLine": "Creature — Devil",
+  "oracleText": "Whenever a player sacrifices a permanent, this creature deals 1 damage to any target.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "B",
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/2/92e5c8cb-ef19-499e-b428-00dfb5e75b4f.jpg?1783911036",
+   "normal": "https://cards.scryfall.io/normal/front/9/2/92e5c8cb-ef19-499e-b428-00dfb5e75b4f.jpg?1783911036",
+   "large": "https://cards.scryfall.io/large/front/9/2/92e5c8cb-ef19-499e-b428-00dfb5e75b4f.jpg?1783911036",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/2/92e5c8cb-ef19-499e-b428-00dfb5e75b4f.jpg?1783911036"
+  }
+ },
+ {
+  "name": "Iridescent Hornbeetle",
+  "scryfallId": "214ef641-b08c-42d0-94a5-3054fa7fcebc",
+  "oracleId": "3270265f-fa9f-4ef0-a1a3-a68fc2349bf1",
+  "set": "znr",
+  "collectorNumber": "187",
+  "rarity": "uncommon",
+  "manaCost": "{4}{G}",
+  "typeLine": "Creature — Insect",
+  "oracleText": "At the beginning of your end step, create a 1/1 green Insect creature token for each +1/+1 counter you've put on creatures under your control this turn.",
+  "power": "3",
+  "toughness": "4",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/1/214ef641-b08c-42d0-94a5-3054fa7fcebc.jpg?1783929341",
+   "normal": "https://cards.scryfall.io/normal/front/2/1/214ef641-b08c-42d0-94a5-3054fa7fcebc.jpg?1783929341",
+   "large": "https://cards.scryfall.io/large/front/2/1/214ef641-b08c-42d0-94a5-3054fa7fcebc.jpg?1783929341",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/1/214ef641-b08c-42d0-94a5-3054fa7fcebc.jpg?1783929341"
+  }
+ },
+ {
+  "name": "Ochre Jelly",
+  "scryfallId": "9f23cfb7-c6b6-4f04-abba-5b2a6117ea12",
+  "oracleId": "2b757d32-09a3-49cd-ada4-84b5335178ce",
+  "set": "afr",
+  "collectorNumber": "196",
+  "rarity": "rare",
+  "manaCost": "{X}{G}",
+  "typeLine": "Creature — Ooze",
+  "oracleText": "Trample\nThis creature enters with X +1/+1 counters on it.\nSplit — When this creature dies, if it had two or more +1/+1 counters on it, create a token that's a copy of it at the beginning of the next end step. The token enters with half that many +1/+1 counters on it, rounded down.",
+  "power": "0",
+  "toughness": "0",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Trample"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/f/9f23cfb7-c6b6-4f04-abba-5b2a6117ea12.jpg?1783926458",
+   "normal": "https://cards.scryfall.io/normal/front/9/f/9f23cfb7-c6b6-4f04-abba-5b2a6117ea12.jpg?1783926458",
+   "large": "https://cards.scryfall.io/large/front/9/f/9f23cfb7-c6b6-4f04-abba-5b2a6117ea12.jpg?1783926458",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/f/9f23cfb7-c6b6-4f04-abba-5b2a6117ea12.jpg?1783926458"
+  }
+ },
+ {
+  "name": "Haywire Mite",
+  "scryfallId": "6f813bc3-6d81-4555-8e4b-6ecd9a6757b7",
+  "oracleId": "749d2994-44e7-40d3-8630-7bebed239e9e",
+  "set": "soc",
+  "collectorNumber": "349",
+  "rarity": "uncommon",
+  "manaCost": "{1}",
+  "typeLine": "Artifact Creature — Insect",
+  "oracleText": "When this creature dies, you gain 2 life.\n{G}, Sacrifice this creature: Exile target noncreature artifact or noncreature enchantment.",
+  "power": "1",
+  "toughness": "1",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/f/6f813bc3-6d81-4555-8e4b-6ecd9a6757b7.jpg?1783903739",
+   "normal": "https://cards.scryfall.io/normal/front/6/f/6f813bc3-6d81-4555-8e4b-6ecd9a6757b7.jpg?1783903739",
+   "large": "https://cards.scryfall.io/large/front/6/f/6f813bc3-6d81-4555-8e4b-6ecd9a6757b7.jpg?1783903739",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/f/6f813bc3-6d81-4555-8e4b-6ecd9a6757b7.jpg?1783903739"
+  }
+ },
+ {
+  "name": "Voracious Hydra",
+  "scryfallId": "74bbe44f-864a-446c-bfc9-5f5188e663b8",
+  "oracleId": "ff8f5a4b-112a-425e-b489-7ee26d1d9fb3",
+  "set": "m20",
+  "collectorNumber": "200",
+  "rarity": "rare",
+  "manaCost": "{X}{G}{G}",
+  "typeLine": "Creature — Hydra",
+  "oracleText": "Trample\nThis creature enters with X +1/+1 counters on it.\nWhen this creature enters, choose one —\n• Double the number of +1/+1 counters on this creature.\n• This creature fights target creature you don't control.",
+  "power": "0",
+  "toughness": "1",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Trample",
+   "Fight",
+   "Double"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/4/74bbe44f-864a-446c-bfc9-5f5188e663b8.jpg?1783932954",
+   "normal": "https://cards.scryfall.io/normal/front/7/4/74bbe44f-864a-446c-bfc9-5f5188e663b8.jpg?1783932954",
+   "large": "https://cards.scryfall.io/large/front/7/4/74bbe44f-864a-446c-bfc9-5f5188e663b8.jpg?1783932954",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/4/74bbe44f-864a-446c-bfc9-5f5188e663b8.jpg?1783932954"
+  }
+ },
+ {
+  "name": "Revitalizing Repast",
+  "scryfallId": "03522b6b-31ec-4126-8885-5dbb2248688b",
+  "oracleId": "8dd6d060-d023-48a6-85cb-7a5521b6257b",
+  "set": "mh3",
+  "collectorNumber": "256",
+  "rarity": "uncommon",
+  "manaCost": "{B/G}",
+  "typeLine": "Instant",
+  "oracleText": "Put a +1/+1 counter on target creature. It gains indestructible until end of turn.",
+  "colors": [
+   "B",
+   "G"
+  ],
+  "keywords": [],
+  "back": "Old-Growth Grove",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/3/03522b6b-31ec-4126-8885-5dbb2248688b.jpg?1783911227",
+   "normal": "https://cards.scryfall.io/normal/front/0/3/03522b6b-31ec-4126-8885-5dbb2248688b.jpg?1783911227",
+   "large": "https://cards.scryfall.io/large/front/0/3/03522b6b-31ec-4126-8885-5dbb2248688b.jpg?1783911227",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/3/03522b6b-31ec-4126-8885-5dbb2248688b.jpg?1783911227"
+  }
+ },
+ {
+  "name": "Old-Growth Grove",
+  "scryfallId": "03522b6b-31ec-4126-8885-5dbb2248688b",
+  "oracleId": "8dd6d060-d023-48a6-85cb-7a5521b6257b",
+  "set": "mh3",
+  "collectorNumber": "256",
+  "rarity": "uncommon",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "This land enters tapped.\n{T}: Add {B} or {G}.",
+  "colors": [],
+  "keywords": [],
+  "front": "Revitalizing Repast",
+  "image": {
+   "small": "https://cards.scryfall.io/small/back/0/3/03522b6b-31ec-4126-8885-5dbb2248688b.jpg?1783911227",
+   "normal": "https://cards.scryfall.io/normal/back/0/3/03522b6b-31ec-4126-8885-5dbb2248688b.jpg?1783911227",
+   "large": "https://cards.scryfall.io/large/back/0/3/03522b6b-31ec-4126-8885-5dbb2248688b.jpg?1783911227",
+   "artCrop": "https://cards.scryfall.io/art_crop/back/0/3/03522b6b-31ec-4126-8885-5dbb2248688b.jpg?1783911227"
+  }
+ },
+ {
+  "name": "Assassin's Trophy",
+  "scryfallId": "aaf258fc-3ba4-4b83-bdbf-10a07e0b6c03",
+  "oracleId": "ac10d218-f9a6-4058-9cda-a15ca1b0b7b5",
+  "set": "soc",
+  "collectorNumber": "294",
+  "rarity": "rare",
+  "manaCost": "{B}{G}",
+  "typeLine": "Instant",
+  "oracleText": "Destroy target permanent an opponent controls. Its controller may search their library for a basic land card, put it onto the battlefield, then shuffle.",
+  "colors": [
+   "B",
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/a/aaf258fc-3ba4-4b83-bdbf-10a07e0b6c03.jpg?1783903757",
+   "normal": "https://cards.scryfall.io/normal/front/a/a/aaf258fc-3ba4-4b83-bdbf-10a07e0b6c03.jpg?1783903757",
+   "large": "https://cards.scryfall.io/large/front/a/a/aaf258fc-3ba4-4b83-bdbf-10a07e0b6c03.jpg?1783903757",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/a/aaf258fc-3ba4-4b83-bdbf-10a07e0b6c03.jpg?1783903757"
+  }
+ },
+ {
+  "name": "Casualties of War",
+  "scryfallId": "2467f50a-bf45-4046-9086-1bfcf3438af4",
+  "oracleId": "5c6c8fe7-3520-423b-a224-1c0af516871a",
+  "set": "soc",
+  "collectorNumber": "300",
+  "rarity": "rare",
+  "manaCost": "{2}{B}{B}{G}{G}",
+  "typeLine": "Sorcery",
+  "oracleText": "Choose one or more —\n• Destroy target artifact.\n• Destroy target creature.\n• Destroy target enchantment.\n• Destroy target land.\n• Destroy target planeswalker.",
+  "colors": [
+   "B",
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/4/2467f50a-bf45-4046-9086-1bfcf3438af4.jpg?1783903757",
+   "normal": "https://cards.scryfall.io/normal/front/2/4/2467f50a-bf45-4046-9086-1bfcf3438af4.jpg?1783903757",
+   "large": "https://cards.scryfall.io/large/front/2/4/2467f50a-bf45-4046-9086-1bfcf3438af4.jpg?1783903757",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/4/2467f50a-bf45-4046-9086-1bfcf3438af4.jpg?1783903757"
+  }
+ },
+ {
+  "name": "Kin-Tree Severance",
+  "scryfallId": "b577e246-3377-42aa-856e-b9fa89f3603a",
+  "oracleId": "211d1c59-0111-48dd-9ff6-d03e7ff2ad5c",
+  "set": "tdm",
+  "collectorNumber": "200",
+  "rarity": "uncommon",
+  "manaCost": "{2/W}{2/B}{2/G}",
+  "typeLine": "Instant",
+  "oracleText": "Exile target permanent with mana value 3 or greater.",
+  "colors": [
+   "B",
+   "G",
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/5/b577e246-3377-42aa-856e-b9fa89f3603a.jpg?1783907311",
+   "normal": "https://cards.scryfall.io/normal/front/b/5/b577e246-3377-42aa-856e-b9fa89f3603a.jpg?1783907311",
+   "large": "https://cards.scryfall.io/large/front/b/5/b577e246-3377-42aa-856e-b9fa89f3603a.jpg?1783907311",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/5/b577e246-3377-42aa-856e-b9fa89f3603a.jpg?1783907311"
+  }
+ },
+ {
+  "name": "Call the Crash",
+  "scryfallId": "d0fd49a5-ce30-4f87-8643-bd8670ed8eb1",
+  "oracleId": "a20b7e63-4699-49d4-9589-777c28b94e67",
+  "set": "ytdm",
+  "collectorNumber": "19",
+  "rarity": "rare",
+  "manaCost": "{3}{W}{B}{G}",
+  "typeLine": "Sorcery",
+  "oracleText": "Suspend 2—{1}{W}{B}{G}\nConjure two cards named Siege Rhino onto the battlefield.",
+  "colors": [
+   "B",
+   "G",
+   "W"
+  ],
+  "keywords": [
+   "Suspend",
+   "Conjure"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/0/d0fd49a5-ce30-4f87-8643-bd8670ed8eb1.jpg?1783906735",
+   "normal": "https://cards.scryfall.io/normal/front/d/0/d0fd49a5-ce30-4f87-8643-bd8670ed8eb1.jpg?1783906735",
+   "large": "https://cards.scryfall.io/large/front/d/0/d0fd49a5-ce30-4f87-8643-bd8670ed8eb1.jpg?1783906735",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/0/d0fd49a5-ce30-4f87-8643-bd8670ed8eb1.jpg?1783906735"
+  }
+ },
+ {
+  "name": "Duneblast",
+  "scryfallId": "9623959c-c20d-409b-b172-fe00e68e8c55",
+  "oracleId": "14104a52-c4e8-4755-8196-7fa5c5a35f36",
+  "set": "c20",
+  "collectorNumber": "211",
+  "rarity": "rare",
+  "manaCost": "{4}{W}{B}{G}",
+  "typeLine": "Sorcery",
+  "oracleText": "Choose up to one creature. Destroy the rest.",
+  "colors": [
+   "B",
+   "G",
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/6/9623959c-c20d-409b-b172-fe00e68e8c55.jpg?1783931149",
+   "normal": "https://cards.scryfall.io/normal/front/9/6/9623959c-c20d-409b-b172-fe00e68e8c55.jpg?1783931149",
+   "large": "https://cards.scryfall.io/large/front/9/6/9623959c-c20d-409b-b172-fe00e68e8c55.jpg?1783931149",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/6/9623959c-c20d-409b-b172-fe00e68e8c55.jpg?1783931149"
+  }
+ },
+ {
+  "name": "Vesuvan Mist",
+  "scryfallId": "f06c8847-f11f-40ad-aecf-36ca709b5ca0",
+  "oracleId": "994342ec-9e03-4b67-aa62-ef67d08b12ce",
+  "set": "ydmu",
+  "collectorNumber": "7",
+  "rarity": "uncommon",
+  "manaCost": "{1}{U}",
+  "typeLine": "Instant",
+  "oracleText": "Kicker {1}{B}\nReturn target nontoken, nonland permanent to its owner's hand. If this spell was kicked, conjure a duplicate of that card into your hand. It perpetually gains \"You may spend mana as though it were mana of any color to cast this spell.\"",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Conjure",
+   "Kicker"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/0/f06c8847-f11f-40ad-aecf-36ca709b5ca0.jpg?1783920999",
+   "normal": "https://cards.scryfall.io/normal/front/f/0/f06c8847-f11f-40ad-aecf-36ca709b5ca0.jpg?1783920999",
+   "large": "https://cards.scryfall.io/large/front/f/0/f06c8847-f11f-40ad-aecf-36ca709b5ca0.jpg?1783920999",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/0/f06c8847-f11f-40ad-aecf-36ca709b5ca0.jpg?1783920999"
+  }
+ },
+ {
+  "name": "Waterlogged Teachings",
+  "scryfallId": "060f9675-4921-4cbb-bae2-54c85c679fd4",
+  "oracleId": "e6ad1be9-f13d-4590-b3db-e2d0fff46f03",
+  "set": "mh3",
+  "collectorNumber": "261",
+  "rarity": "uncommon",
+  "manaCost": "{3}{U/B}",
+  "typeLine": "Instant",
+  "oracleText": "Search your library for an instant card or a card with flash, reveal it, put it into your hand, then shuffle.",
+  "colors": [
+   "B",
+   "U"
+  ],
+  "keywords": [],
+  "back": "Inundated Archive",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/6/060f9675-4921-4cbb-bae2-54c85c679fd4.jpg?1783911223",
+   "normal": "https://cards.scryfall.io/normal/front/0/6/060f9675-4921-4cbb-bae2-54c85c679fd4.jpg?1783911223",
+   "large": "https://cards.scryfall.io/large/front/0/6/060f9675-4921-4cbb-bae2-54c85c679fd4.jpg?1783911223",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/6/060f9675-4921-4cbb-bae2-54c85c679fd4.jpg?1783911223"
+  }
+ },
+ {
+  "name": "Inundated Archive",
+  "scryfallId": "060f9675-4921-4cbb-bae2-54c85c679fd4",
+  "oracleId": "e6ad1be9-f13d-4590-b3db-e2d0fff46f03",
+  "set": "mh3",
+  "collectorNumber": "261",
+  "rarity": "uncommon",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "This land enters tapped.\n{T}: Add {U} or {B}.",
+  "colors": [],
+  "keywords": [],
+  "front": "Waterlogged Teachings",
+  "image": {
+   "small": "https://cards.scryfall.io/small/back/0/6/060f9675-4921-4cbb-bae2-54c85c679fd4.jpg?1783911223",
+   "normal": "https://cards.scryfall.io/normal/back/0/6/060f9675-4921-4cbb-bae2-54c85c679fd4.jpg?1783911223",
+   "large": "https://cards.scryfall.io/large/back/0/6/060f9675-4921-4cbb-bae2-54c85c679fd4.jpg?1783911223",
+   "artCrop": "https://cards.scryfall.io/art_crop/back/0/6/060f9675-4921-4cbb-bae2-54c85c679fd4.jpg?1783911223"
+  }
+ },
+ {
+  "name": "Discovery",
+  "scryfallId": "ace631d1-897a-417e-8628-0170713f03d3",
+  "oracleId": "8f1c1bd6-8420-4de2-81f4-5faa419da301",
+  "set": "grn",
+  "collectorNumber": "223",
+  "rarity": "uncommon",
+  "manaCost": "{1}{U/B}",
+  "typeLine": "Sorcery",
+  "oracleText": "Surveil 2, then draw a card. (To surveil 2, look at the top two cards of your library, then put any number of them into your graveyard and the rest on top of your library in any order.)",
+  "colors": [],
+  "keywords": [
+   "Surveil"
+  ],
+  "back": "Dispersal",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/c/ace631d1-897a-417e-8628-0170713f03d3.jpg?1783934113",
+   "normal": "https://cards.scryfall.io/normal/front/a/c/ace631d1-897a-417e-8628-0170713f03d3.jpg?1783934113",
+   "large": "https://cards.scryfall.io/large/front/a/c/ace631d1-897a-417e-8628-0170713f03d3.jpg?1783934113",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/c/ace631d1-897a-417e-8628-0170713f03d3.jpg?1783934113"
+  }
+ },
+ {
+  "name": "Dispersal",
+  "scryfallId": "ace631d1-897a-417e-8628-0170713f03d3",
+  "oracleId": "8f1c1bd6-8420-4de2-81f4-5faa419da301",
+  "set": "grn",
+  "collectorNumber": "223",
+  "rarity": "uncommon",
+  "manaCost": "{3}{U}{B}",
+  "typeLine": "Instant",
+  "oracleText": "Each opponent returns a nonland permanent they control with the greatest mana value among permanents they control to its owner's hand, then discards a card.",
+  "colors": [],
+  "keywords": [],
+  "front": "Discovery",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/c/ace631d1-897a-417e-8628-0170713f03d3.jpg?1783934113",
+   "normal": "https://cards.scryfall.io/normal/front/a/c/ace631d1-897a-417e-8628-0170713f03d3.jpg?1783934113",
+   "large": "https://cards.scryfall.io/large/front/a/c/ace631d1-897a-417e-8628-0170713f03d3.jpg?1783934113",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/c/ace631d1-897a-417e-8628-0170713f03d3.jpg?1783934113"
+  }
+ },
+ {
+  "name": "Escape to the Wilds",
+  "scryfallId": "e9359896-2c8f-4841-8bbb-3231e5a47221",
+  "oracleId": "45a8c126-5396-4736-a37e-460a50706a98",
+  "set": "sld",
+  "collectorNumber": "1916",
+  "rarity": "rare",
+  "manaCost": "{3}{R}{G}",
+  "typeLine": "Sorcery",
+  "oracleText": "Exile the top five cards of your library. You may play cards exiled this way until the end of your next turn.\nYou may play an additional land this turn.",
+  "colors": [
+   "G",
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/9/e9359896-2c8f-4841-8bbb-3231e5a47221.jpg?1783907481",
+   "normal": "https://cards.scryfall.io/normal/front/e/9/e9359896-2c8f-4841-8bbb-3231e5a47221.jpg?1783907481",
+   "large": "https://cards.scryfall.io/large/front/e/9/e9359896-2c8f-4841-8bbb-3231e5a47221.jpg?1783907481",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/9/e9359896-2c8f-4841-8bbb-3231e5a47221.jpg?1783907481"
+  }
+ },
+ {
+  "name": "Fractured Identity",
+  "scryfallId": "8db735ea-f9cf-4e3c-9200-4f180df55baa",
+  "oracleId": "1515b0c2-1b55-4cd4-ad81-fb6b1f3e8188",
+  "set": "sld",
+  "collectorNumber": "272",
+  "rarity": "rare",
+  "manaCost": "{3}{W}{U}",
+  "typeLine": "Sorcery",
+  "oracleText": "Exile target nonland permanent. Each player other than its controller creates a token that's a copy of it.",
+  "colors": [
+   "U",
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/d/8db735ea-f9cf-4e3c-9200-4f180df55baa.jpg?1787982278",
+   "normal": "https://cards.scryfall.io/normal/front/8/d/8db735ea-f9cf-4e3c-9200-4f180df55baa.jpg?1787982278",
+   "large": "https://cards.scryfall.io/large/front/8/d/8db735ea-f9cf-4e3c-9200-4f180df55baa.jpg?1787982278",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/d/8db735ea-f9cf-4e3c-9200-4f180df55baa.jpg?1787982278"
+  }
+ },
+ {
+  "name": "Time Wipe",
+  "scryfallId": "62c59475-6f15-48d2-b105-f49901f20d44",
+  "oracleId": "36c78a5f-0148-4596-a346-f8e35037b694",
+  "set": "war",
+  "collectorNumber": "223",
+  "rarity": "rare",
+  "manaCost": "{2}{W}{W}{U}",
+  "typeLine": "Sorcery",
+  "oracleText": "Return a creature you control to its owner's hand, then destroy all creatures.",
+  "colors": [
+   "U",
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/2/62c59475-6f15-48d2-b105-f49901f20d44.jpg?1783933383",
+   "normal": "https://cards.scryfall.io/normal/front/6/2/62c59475-6f15-48d2-b105-f49901f20d44.jpg?1783933383",
+   "large": "https://cards.scryfall.io/large/front/6/2/62c59475-6f15-48d2-b105-f49901f20d44.jpg?1783933383",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/2/62c59475-6f15-48d2-b105-f49901f20d44.jpg?1783933383"
+  }
+ },
+ {
+  "name": "Ruinous Ultimatum",
+  "scryfallId": "930bc0f5-758a-49a7-ab23-5b74802bcddb",
+  "oracleId": "a6f38908-aa4f-4f99-a28e-85d11dab52e4",
+  "set": "fic",
+  "collectorNumber": "329",
+  "rarity": "rare",
+  "manaCost": "{R}{R}{W}{W}{W}{B}{B}",
+  "typeLine": "Sorcery",
+  "oracleText": "Destroy all nonland permanents your opponents control.",
+  "colors": [
+   "B",
+   "R",
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/3/930bc0f5-758a-49a7-ab23-5b74802bcddb.jpg?1783906247",
+   "normal": "https://cards.scryfall.io/normal/front/9/3/930bc0f5-758a-49a7-ab23-5b74802bcddb.jpg?1783906247",
+   "large": "https://cards.scryfall.io/large/front/9/3/930bc0f5-758a-49a7-ab23-5b74802bcddb.jpg?1783906247",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/3/930bc0f5-758a-49a7-ab23-5b74802bcddb.jpg?1783906247"
+  }
+ },
+ {
+  "name": "Talisman of Resilience",
+  "scryfallId": "b37ba764-8dae-4be1-9939-969067d215af",
+  "oracleId": "42b8aa14-10bc-4bd6-88d9-4bb287eadd19",
+  "set": "soc",
+  "collectorNumber": "432",
+  "rarity": "mythic",
+  "manaCost": "{2}",
+  "typeLine": "Artifact",
+  "oracleText": "{T}: Add {C}.\n{T}: Add {B} or {G}. This artifact deals 1 damage to you.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/3/b37ba764-8dae-4be1-9939-969067d215af.jpg?1783903710",
+   "normal": "https://cards.scryfall.io/normal/front/b/3/b37ba764-8dae-4be1-9939-969067d215af.jpg?1783903710",
+   "large": "https://cards.scryfall.io/large/front/b/3/b37ba764-8dae-4be1-9939-969067d215af.jpg?1783903710",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/3/b37ba764-8dae-4be1-9939-969067d215af.jpg?1783903710"
+  }
+ },
+ {
+  "name": "Rakdos Signet",
+  "scryfallId": "086f1ee3-d83b-410b-b51f-ad4be841ac59",
+  "oracleId": "3adb7681-977f-4a32-9ec8-51481b958268",
+  "set": "sld",
+  "collectorNumber": "289",
+  "rarity": "rare",
+  "manaCost": "{2}",
+  "typeLine": "Artifact",
+  "oracleText": "{1}, {T}: Add {B}{R}.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/8/086f1ee3-d83b-410b-b51f-ad4be841ac59.jpg?1783926555",
+   "normal": "https://cards.scryfall.io/normal/front/0/8/086f1ee3-d83b-410b-b51f-ad4be841ac59.jpg?1783926555",
+   "large": "https://cards.scryfall.io/large/front/0/8/086f1ee3-d83b-410b-b51f-ad4be841ac59.jpg?1783926555",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/8/086f1ee3-d83b-410b-b51f-ad4be841ac59.jpg?1783926555"
+  }
+ },
+ {
+  "name": "Blooming Marsh",
+  "scryfallId": "056f1559-cca9-4aae-810b-a7db56c214e9",
+  "oracleId": "66fa2326-1b5d-41fb-b919-83bf9f383577",
+  "set": "sld",
+  "collectorNumber": "1374",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "This land enters tapped unless you control two or fewer other lands.\n{T}: Add {B} or {G}.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/5/056f1559-cca9-4aae-810b-a7db56c214e9.jpg?1783914753",
+   "normal": "https://cards.scryfall.io/normal/front/0/5/056f1559-cca9-4aae-810b-a7db56c214e9.jpg?1783914753",
+   "large": "https://cards.scryfall.io/large/front/0/5/056f1559-cca9-4aae-810b-a7db56c214e9.jpg?1783914753",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/5/056f1559-cca9-4aae-810b-a7db56c214e9.jpg?1783914753"
+  }
+ },
+ {
+  "name": "Llanowar Wastes",
+  "scryfallId": "924d4025-a6f7-4ab0-8f0d-f4ba9ed0a232",
+  "oracleId": "32116127-cf96-4a1b-8896-a1ebc087b597",
+  "set": "ori",
+  "collectorNumber": "248",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "{T}: Add {C}.\n{T}: Add {B} or {G}. This land deals 1 damage to you.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/2/924d4025-a6f7-4ab0-8f0d-f4ba9ed0a232.jpg?1783938306",
+   "normal": "https://cards.scryfall.io/normal/front/9/2/924d4025-a6f7-4ab0-8f0d-f4ba9ed0a232.jpg?1783938306",
+   "large": "https://cards.scryfall.io/large/front/9/2/924d4025-a6f7-4ab0-8f0d-f4ba9ed0a232.jpg?1783938306",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/2/924d4025-a6f7-4ab0-8f0d-f4ba9ed0a232.jpg?1783938306"
+  }
+ },
+ {
+  "name": "Overgrown Tomb",
+  "scryfallId": "4fc75949-0bd1-4cd9-9e66-6624dcd41872",
+  "oracleId": "975ec9a3-6f20-4177-8211-82526e092538",
+  "set": "sld",
+  "collectorNumber": "130",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Land — Swamp Forest",
+  "oracleText": "({T}: Add {B} or {G}.)\nAs this land enters, you may pay 2 life. If you don't, it enters tapped.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/f/4fc75949-0bd1-4cd9-9e66-6624dcd41872.jpg?1783927083",
+   "normal": "https://cards.scryfall.io/normal/front/4/f/4fc75949-0bd1-4cd9-9e66-6624dcd41872.jpg?1783927083",
+   "large": "https://cards.scryfall.io/large/front/4/f/4fc75949-0bd1-4cd9-9e66-6624dcd41872.jpg?1783927083",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/f/4fc75949-0bd1-4cd9-9e66-6624dcd41872.jpg?1783927083"
+  }
+ },
+ {
+  "name": "Blood Crypt",
+  "scryfallId": "1716b4dd-9045-462b-b053-72de450a8cde",
+  "oracleId": "43985bbc-a0f6-4812-984e-392bc8562633",
+  "set": "sld",
+  "collectorNumber": "125",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Land — Swamp Mountain",
+  "oracleText": "({T}: Add {B} or {R}.)\nAs this land enters, you may pay 2 life. If you don't, it enters tapped.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/7/1716b4dd-9045-462b-b053-72de450a8cde.jpg?1783927084",
+   "normal": "https://cards.scryfall.io/normal/front/1/7/1716b4dd-9045-462b-b053-72de450a8cde.jpg?1783927084",
+   "large": "https://cards.scryfall.io/large/front/1/7/1716b4dd-9045-462b-b053-72de450a8cde.jpg?1783927084",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/7/1716b4dd-9045-462b-b053-72de450a8cde.jpg?1783927084"
+  }
+ },
+ {
+  "name": "Stomping Ground",
+  "scryfallId": "4acf970d-d2d7-413d-aba7-587ee53d8d5c",
+  "oracleId": "16052b52-ade1-406f-a06b-ce7ea607fb63",
+  "set": "sld",
+  "collectorNumber": "126",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Land — Mountain Forest",
+  "oracleText": "({T}: Add {R} or {G}.)\nAs this land enters, you may pay 2 life. If you don't, it enters tapped.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/a/4acf970d-d2d7-413d-aba7-587ee53d8d5c.jpg?1783927084",
+   "normal": "https://cards.scryfall.io/normal/front/4/a/4acf970d-d2d7-413d-aba7-587ee53d8d5c.jpg?1783927084",
+   "large": "https://cards.scryfall.io/large/front/4/a/4acf970d-d2d7-413d-aba7-587ee53d8d5c.jpg?1783927084",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/a/4acf970d-d2d7-413d-aba7-587ee53d8d5c.jpg?1783927084"
+  }
+ },
+ {
+  "name": "Temple Garden",
+  "scryfallId": "34a3039d-46cd-4a51-b726-6eb0b485c9c5",
+  "oracleId": "f413a83d-a40d-434c-b20a-4c707c0527fa",
+  "set": "sld",
+  "collectorNumber": "127",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Land — Forest Plains",
+  "oracleText": "({T}: Add {G} or {W}.)\nAs this land enters, you may pay 2 life. If you don't, it enters tapped.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/4/34a3039d-46cd-4a51-b726-6eb0b485c9c5.jpg?1783927082",
+   "normal": "https://cards.scryfall.io/normal/front/3/4/34a3039d-46cd-4a51-b726-6eb0b485c9c5.jpg?1783927082",
+   "large": "https://cards.scryfall.io/large/front/3/4/34a3039d-46cd-4a51-b726-6eb0b485c9c5.jpg?1783927082",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/4/34a3039d-46cd-4a51-b726-6eb0b485c9c5.jpg?1783927082"
+  }
+ },
+ {
+  "name": "Underground Mortuary",
+  "scryfallId": "f6ca59cd-8779-4a84-a54b-e863b79c61f0",
+  "oracleId": "840119bf-e60f-4ff7-9c9b-d420d09df545",
+  "set": "mkm",
+  "collectorNumber": "271",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Land — Swamp Forest",
+  "oracleText": "({T}: Add {B} or {G}.)\nThis land enters tapped.\nWhen this land enters, surveil 1. (Look at the top card of your library. You may put it into your graveyard.)",
+  "colors": [],
+  "keywords": [
+   "Surveil"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/6/f6ca59cd-8779-4a84-a54b-e863b79c61f0.jpg?1783912822",
+   "normal": "https://cards.scryfall.io/normal/front/f/6/f6ca59cd-8779-4a84-a54b-e863b79c61f0.jpg?1783912822",
+   "large": "https://cards.scryfall.io/large/front/f/6/f6ca59cd-8779-4a84-a54b-e863b79c61f0.jpg?1783912822",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/6/f6ca59cd-8779-4a84-a54b-e863b79c61f0.jpg?1783912822"
+  }
+ },
+ {
+  "name": "Raucous Theater",
+  "scryfallId": "b598c93e-dae1-4d71-a9e4-917abf76d2d0",
+  "oracleId": "04e5e84f-8fd4-43ab-8f9d-5b24646f7ae5",
+  "set": "mkm",
+  "collectorNumber": "266",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Land — Swamp Mountain",
+  "oracleText": "({T}: Add {B} or {R}.)\nThis land enters tapped.\nWhen this land enters, surveil 1. (Look at the top card of your library. You may put it into your graveyard.)",
+  "colors": [],
+  "keywords": [
+   "Surveil"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/5/b598c93e-dae1-4d71-a9e4-917abf76d2d0.jpg?1783912823",
+   "normal": "https://cards.scryfall.io/normal/front/b/5/b598c93e-dae1-4d71-a9e4-917abf76d2d0.jpg?1783912823",
+   "large": "https://cards.scryfall.io/large/front/b/5/b598c93e-dae1-4d71-a9e4-917abf76d2d0.jpg?1783912823",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/5/b598c93e-dae1-4d71-a9e4-917abf76d2d0.jpg?1783912823"
+  }
+ },
+ {
+  "name": "Woodland Cemetery",
+  "scryfallId": "4d6f6c96-f813-4864-b4e1-b2a0aa8be1e8",
+  "oracleId": "c9fe1383-1331-4a58-a45a-3320250221a9",
+  "set": "soc",
+  "collectorNumber": "424",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "This land enters tapped unless you control a Swamp or a Forest.\n{T}: Add {B} or {G}.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/d/4d6f6c96-f813-4864-b4e1-b2a0aa8be1e8.jpg?1783903713",
+   "normal": "https://cards.scryfall.io/normal/front/4/d/4d6f6c96-f813-4864-b4e1-b2a0aa8be1e8.jpg?1783903713",
+   "large": "https://cards.scryfall.io/large/front/4/d/4d6f6c96-f813-4864-b4e1-b2a0aa8be1e8.jpg?1783903713",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/d/4d6f6c96-f813-4864-b4e1-b2a0aa8be1e8.jpg?1783903713"
+  }
+ },
+ {
+  "name": "Sacred Peaks",
+  "scryfallId": "eb18e293-a58b-4a49-b601-88a30ffa9b99",
+  "oracleId": "fb69bc57-f05a-41c2-9b7b-9a9761ef0cd3",
+  "set": "fic",
+  "collectorNumber": "418",
+  "rarity": "common",
+  "manaCost": "",
+  "typeLine": "Land — Mountain Plains",
+  "oracleText": "({T}: Add {R} or {W}.)\nThis land enters tapped.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/b/eb18e293-a58b-4a49-b601-88a30ffa9b99.jpg?1783906211",
+   "normal": "https://cards.scryfall.io/normal/front/e/b/eb18e293-a58b-4a49-b601-88a30ffa9b99.jpg?1783906211",
+   "large": "https://cards.scryfall.io/large/front/e/b/eb18e293-a58b-4a49-b601-88a30ffa9b99.jpg?1783906211",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/b/eb18e293-a58b-4a49-b601-88a30ffa9b99.jpg?1783906211"
+  }
+ },
+ {
+  "name": "Ice Tunnel",
+  "scryfallId": "8cff3ef0-4dfb-472e-aa1e-77613dd0f6d8",
+  "oracleId": "40c5d6fe-854a-436d-9f80-13eb5f1f8f68",
+  "set": "khm",
+  "collectorNumber": "262",
+  "rarity": "common",
+  "manaCost": "",
+  "typeLine": "Snow Land — Island Swamp",
+  "oracleText": "({T}: Add {U} or {B}.)\nThis land enters tapped.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/c/8cff3ef0-4dfb-472e-aa1e-77613dd0f6d8.jpg?1783928174",
+   "normal": "https://cards.scryfall.io/normal/front/8/c/8cff3ef0-4dfb-472e-aa1e-77613dd0f6d8.jpg?1783928174",
+   "large": "https://cards.scryfall.io/large/front/8/c/8cff3ef0-4dfb-472e-aa1e-77613dd0f6d8.jpg?1783928174",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/c/8cff3ef0-4dfb-472e-aa1e-77613dd0f6d8.jpg?1783928174"
+  }
+ },
+ {
+  "name": "Highland Forest",
+  "scryfallId": "682eee5f-7986-45d3-910f-407303fdbcc4",
+  "oracleId": "35137378-6754-4bb1-a38e-5940890ccab1",
+  "set": "khm",
+  "collectorNumber": "261",
+  "rarity": "common",
+  "manaCost": "",
+  "typeLine": "Snow Land — Mountain Forest",
+  "oracleText": "({T}: Add {R} or {G}.)\nThis land enters tapped.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/8/682eee5f-7986-45d3-910f-407303fdbcc4.jpg?1783928176",
+   "normal": "https://cards.scryfall.io/normal/front/6/8/682eee5f-7986-45d3-910f-407303fdbcc4.jpg?1783928176",
+   "large": "https://cards.scryfall.io/large/front/6/8/682eee5f-7986-45d3-910f-407303fdbcc4.jpg?1783928176",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/8/682eee5f-7986-45d3-910f-407303fdbcc4.jpg?1783928176"
+  }
+ },
+ {
+  "name": "Nomad Outpost",
+  "scryfallId": "790d5244-5042-4b84-b16d-be0f87d11fad",
+  "oracleId": "4619de7e-3d6e-4c6b-8e6e-e24db324839d",
+  "set": "fic",
+  "collectorNumber": "409",
+  "rarity": "uncommon",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "This land enters tapped.\n{T}: Add {R}, {W}, or {B}.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/9/790d5244-5042-4b84-b16d-be0f87d11fad.jpg?1783906215",
+   "normal": "https://cards.scryfall.io/normal/front/7/9/790d5244-5042-4b84-b16d-be0f87d11fad.jpg?1783906215",
+   "large": "https://cards.scryfall.io/large/front/7/9/790d5244-5042-4b84-b16d-be0f87d11fad.jpg?1783906215",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/9/790d5244-5042-4b84-b16d-be0f87d11fad.jpg?1783906215"
+  }
+ },
+ {
+  "name": "Frontier Bivouac",
+  "scryfallId": "679fff07-4796-4d91-8dd6-4e294383ce88",
+  "oracleId": "e4cf6c2f-0f1e-4980-9ef9-e4eabcae42a9",
+  "set": "tdm",
+  "collectorNumber": "256",
+  "rarity": "uncommon",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "This land enters tapped.\n{T}: Add {G}, {U}, or {R}.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/7/679fff07-4796-4d91-8dd6-4e294383ce88.jpg?1783907280",
+   "normal": "https://cards.scryfall.io/normal/front/6/7/679fff07-4796-4d91-8dd6-4e294383ce88.jpg?1783907280",
+   "large": "https://cards.scryfall.io/large/front/6/7/679fff07-4796-4d91-8dd6-4e294383ce88.jpg?1783907280",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/7/679fff07-4796-4d91-8dd6-4e294383ce88.jpg?1783907280"
+  }
+ },
+ {
+  "name": "Indatha Triome",
+  "scryfallId": "2b74bb81-fb9a-40e5-a941-e517430b52f5",
+  "oracleId": "ec2b3779-55f7-4169-aa66-6312fb52721f",
+  "set": "iko",
+  "collectorNumber": "248",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Land — Plains Swamp Forest",
+  "oracleText": "({T}: Add {W}, {B}, or {G}.)\nThis land enters tapped.\nCycling {3} ({3}, Discard this card: Draw a card.)",
+  "colors": [],
+  "keywords": [
+   "Cycling"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/b/2b74bb81-fb9a-40e5-a941-e517430b52f5.jpg?1783931001",
+   "normal": "https://cards.scryfall.io/normal/front/2/b/2b74bb81-fb9a-40e5-a941-e517430b52f5.jpg?1783931001",
+   "large": "https://cards.scryfall.io/large/front/2/b/2b74bb81-fb9a-40e5-a941-e517430b52f5.jpg?1783931001",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/b/2b74bb81-fb9a-40e5-a941-e517430b52f5.jpg?1783931001"
+  }
+ },
+ {
+  "name": "Savai Triome",
+  "scryfallId": "748e6a61-9c1f-4225-9f04-e54002f63ac3",
+  "oracleId": "00625242-9348-4ef4-b975-f2ac82fee21d",
+  "set": "iko",
+  "collectorNumber": "253",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Land — Mountain Plains Swamp",
+  "oracleText": "({T}: Add {R}, {W}, or {B}.)\nThis land enters tapped.\nCycling {3} ({3}, Discard this card: Draw a card.)",
+  "colors": [],
+  "keywords": [
+   "Cycling"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/4/748e6a61-9c1f-4225-9f04-e54002f63ac3.jpg?1783931000",
+   "normal": "https://cards.scryfall.io/normal/front/7/4/748e6a61-9c1f-4225-9f04-e54002f63ac3.jpg?1783931000",
+   "large": "https://cards.scryfall.io/large/front/7/4/748e6a61-9c1f-4225-9f04-e54002f63ac3.jpg?1783931000",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/4/748e6a61-9c1f-4225-9f04-e54002f63ac3.jpg?1783931000"
+  }
+ },
+ {
+  "name": "Ketria Triome",
+  "scryfallId": "a249b1f4-2b22-4b67-a207-e0c4ae95d2e1",
+  "oracleId": "6bae00e8-06cf-4ac4-a1cc-757e454109fe",
+  "set": "iko",
+  "collectorNumber": "250",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Land — Forest Island Mountain",
+  "oracleText": "({T}: Add {G}, {U}, or {R}.)\nThis land enters tapped.\nCycling {3} ({3}, Discard this card: Draw a card.)",
+  "colors": [],
+  "keywords": [
+   "Cycling"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/2/a249b1f4-2b22-4b67-a207-e0c4ae95d2e1.jpg?1783931001",
+   "normal": "https://cards.scryfall.io/normal/front/a/2/a249b1f4-2b22-4b67-a207-e0c4ae95d2e1.jpg?1783931001",
+   "large": "https://cards.scryfall.io/large/front/a/2/a249b1f4-2b22-4b67-a207-e0c4ae95d2e1.jpg?1783931001",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/2/a249b1f4-2b22-4b67-a207-e0c4ae95d2e1.jpg?1783931001"
+  }
+ },
+ {
+  "name": "Spara's Headquarters",
+  "scryfallId": "7363f1fb-9af3-4212-921f-d59533faf0e5",
+  "oracleId": "3123ec89-8e95-4761-ba17-747ec667509f",
+  "set": "snc",
+  "collectorNumber": "257",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Land — Forest Plains Island",
+  "oracleText": "({T}: Add {G}, {W}, or {U}.)\nThis land enters tapped.\nCycling {3} ({3}, Discard this card: Draw a card.)",
+  "colors": [],
+  "keywords": [
+   "Cycling"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/3/7363f1fb-9af3-4212-921f-d59533faf0e5.jpg?1783923052",
+   "normal": "https://cards.scryfall.io/normal/front/7/3/7363f1fb-9af3-4212-921f-d59533faf0e5.jpg?1783923052",
+   "large": "https://cards.scryfall.io/large/front/7/3/7363f1fb-9af3-4212-921f-d59533faf0e5.jpg?1783923052",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/3/7363f1fb-9af3-4212-921f-d59533faf0e5.jpg?1783923052"
+  }
+ },
+ {
+  "name": "Xander's Lounge",
+  "scryfallId": "54f449ff-4025-465e-9ec5-a5cf42c4c9d3",
+  "oracleId": "8291543f-d086-48aa-b2b7-5481ca8c9198",
+  "set": "snc",
+  "collectorNumber": "260",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Land — Island Swamp Mountain",
+  "oracleText": "({T}: Add {U}, {B}, or {R}.)\nThis land enters tapped.\nCycling {3} ({3}, Discard this card: Draw a card.)",
+  "colors": [],
+  "keywords": [
+   "Cycling"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/4/54f449ff-4025-465e-9ec5-a5cf42c4c9d3.jpg?1783923052",
+   "normal": "https://cards.scryfall.io/normal/front/5/4/54f449ff-4025-465e-9ec5-a5cf42c4c9d3.jpg?1783923052",
+   "large": "https://cards.scryfall.io/large/front/5/4/54f449ff-4025-465e-9ec5-a5cf42c4c9d3.jpg?1783923052",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/4/54f449ff-4025-465e-9ec5-a5cf42c4c9d3.jpg?1783923052"
+  }
+ },
+ {
+  "name": "Zagoth Triome",
+  "scryfallId": "cc520518-2063-4b57-a0d4-10cf62a7175e",
+  "oracleId": "fdd46004-eaba-4024-8687-39b23dc6a58c",
+  "set": "iko",
+  "collectorNumber": "259",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Land — Swamp Forest Island",
+  "oracleText": "({T}: Add {B}, {G}, or {U}.)\nThis land enters tapped.\nCycling {3} ({3}, Discard this card: Draw a card.)",
+  "colors": [],
+  "keywords": [
+   "Cycling"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/c/cc520518-2063-4b57-a0d4-10cf62a7175e.jpg?1783930997",
+   "normal": "https://cards.scryfall.io/normal/front/c/c/cc520518-2063-4b57-a0d4-10cf62a7175e.jpg?1783930997",
+   "large": "https://cards.scryfall.io/large/front/c/c/cc520518-2063-4b57-a0d4-10cf62a7175e.jpg?1783930997",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/c/cc520518-2063-4b57-a0d4-10cf62a7175e.jpg?1783930997"
+  }
+ },
+ {
+  "name": "Ziatora's Proving Ground",
+  "scryfallId": "75fdce80-e338-4a50-bdc6-786511feaeef",
+  "oracleId": "f7e7b78c-c769-4720-8585-1874773eb342",
+  "set": "snc",
+  "collectorNumber": "261",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Land — Swamp Mountain Forest",
+  "oracleText": "({T}: Add {B}, {R}, or {G}.)\nThis land enters tapped.\nCycling {3} ({3}, Discard this card: Draw a card.)",
+  "colors": [],
+  "keywords": [
+   "Cycling"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/5/75fdce80-e338-4a50-bdc6-786511feaeef.jpg?1783923052",
+   "normal": "https://cards.scryfall.io/normal/front/7/5/75fdce80-e338-4a50-bdc6-786511feaeef.jpg?1783923052",
+   "large": "https://cards.scryfall.io/large/front/7/5/75fdce80-e338-4a50-bdc6-786511feaeef.jpg?1783923052",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/5/75fdce80-e338-4a50-bdc6-786511feaeef.jpg?1783923052"
+  }
+ },
+ {
+  "name": "Shattered Landscape",
+  "scryfallId": "b3da28c7-6e92-439d-a163-91682d4f11dc",
+  "oracleId": "7fbad3f2-66f6-4e3a-b9e0-1ddbcd94d42a",
+  "set": "mh3",
+  "collectorNumber": "226",
+  "rarity": "common",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "{T}: Add {C}.\n{T}, Sacrifice this land: Search your library for a basic Mountain, Plains, or Swamp card, put it onto the battlefield tapped, then shuffle.\nCycling {R}{W}{B} ({R}{W}{B}, Discard this card: Draw a card.)",
+  "colors": [],
+  "keywords": [
+   "Cycling"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/3/b3da28c7-6e92-439d-a163-91682d4f11dc.jpg?1783911237",
+   "normal": "https://cards.scryfall.io/normal/front/b/3/b3da28c7-6e92-439d-a163-91682d4f11dc.jpg?1783911237",
+   "large": "https://cards.scryfall.io/large/front/b/3/b3da28c7-6e92-439d-a163-91682d4f11dc.jpg?1783911237",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/3/b3da28c7-6e92-439d-a163-91682d4f11dc.jpg?1783911237"
+  }
+ },
+ {
+  "name": "Restless Cottage",
+  "scryfallId": "787eadf3-5005-4ae5-820f-4012a4d4e1a5",
+  "oracleId": "7e16595f-bdeb-422e-b99a-bfc0ed52e9f8",
+  "set": "woe",
+  "collectorNumber": "258",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "This land enters tapped.\n{T}: Add {B} or {G}.\n{2}{B}{G}: This land becomes a 4/4 black and green Horror creature until end of turn. It's still a land.\nWhenever this land attacks, create a Food token and exile up to one target card from a graveyard.",
+  "colors": [],
+  "keywords": [
+   "Food"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/8/787eadf3-5005-4ae5-820f-4012a4d4e1a5.jpg?1783915056",
+   "normal": "https://cards.scryfall.io/normal/front/7/8/787eadf3-5005-4ae5-820f-4012a4d4e1a5.jpg?1783915056",
+   "large": "https://cards.scryfall.io/large/front/7/8/787eadf3-5005-4ae5-820f-4012a4d4e1a5.jpg?1783915056",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/8/787eadf3-5005-4ae5-820f-4012a4d4e1a5.jpg?1783915056"
+  }
+ },
+ {
+  "name": "The World Tree",
+  "scryfallId": "3cb15155-9bd8-4062-aa81-de275748faf2",
+  "oracleId": "3437d504-bf62-4c27-b15f-f6330182ff7e",
+  "set": "sld",
+  "collectorNumber": "1266",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "This land enters tapped.\n{T}: Add {G}.\nAs long as you control six or more lands, lands you control have \"{T}: Add one mana of any color.\"\n{W}{W}{U}{U}{B}{B}{R}{R}{G}{G}, {T}, Sacrifice this land: Search your library for any number of God cards, put them onto the battlefield, then shuffle.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/c/3cb15155-9bd8-4062-aa81-de275748faf2.jpg?1783916627",
+   "normal": "https://cards.scryfall.io/normal/front/3/c/3cb15155-9bd8-4062-aa81-de275748faf2.jpg?1783916627",
+   "large": "https://cards.scryfall.io/large/front/3/c/3cb15155-9bd8-4062-aa81-de275748faf2.jpg?1783916627",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/c/3cb15155-9bd8-4062-aa81-de275748faf2.jpg?1783916627"
+  }
  }
 ]

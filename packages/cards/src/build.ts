@@ -163,6 +163,8 @@ export const KEYWORDS_AS_ABILITIES = new Set([
   'Learn',
   // Strixhaven Brawl (15a): Alchemy conjure.
   'Conjure',
+  // Strixhaven Brawl (15b, multi): Call the Crash.
+  'Suspend',
   // Final Fantasy (11a).
   'Job select',
   'Tiered',

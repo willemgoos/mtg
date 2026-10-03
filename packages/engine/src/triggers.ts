@@ -1155,6 +1155,8 @@ function detect(ctx: Ctx, ev: GameEvent): void {
           o.controller === ev.player &&
           defMatches(d, a.trigger.filter),
       );
+      // Strixhaven Brawl (15b, multi): Mayhem Devil, "whenever a player sacrifices a permanent".
+      forEachBattlefieldTrigger(ctx, (_o, a) => a.trigger.on === 'playerSacrifices');
       return;
     }
     case 'foraged':
