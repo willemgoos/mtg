@@ -16,6 +16,7 @@ import { FINAL_FANTASY_TOKENS as BASE_TOKENS } from './fin/helpers.ts';
 import { FROM_BRAWL, FROM_BRAWL_BACKS } from './fin/from-brawl.ts';
 import { FIN_ADVENTURES, FIN_TOWNS } from './fin/lands.ts';
 import { OTHERS } from './fin/others.ts';
+import { STARTER_KIT } from './fin/starter-kit.ts';
 import {
   FORBIDDEN_MAGICKS,
   FORBIDDEN_MAGICKS_BACKS,
@@ -68,6 +69,8 @@ export const FINAL_FANTASY_BEHAVIORS: Record<string, Behavior> = {
   ...FROM_BRAWL,
   // 11c (leftovers): the last booster cards.
   ...OTHERS,
+  // 11d: the Starter Kit exclusives.
+  ...STARTER_KIT,
 };
 
 /** Back faces of double-faced cards (and Adventures): not cards of their own, so not in the pool. */

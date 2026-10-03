@@ -2124,6 +2124,84 @@ export const FINAL_FANTASY_DECKS: Decklist[] = [
 ];
 
 /**
+ * The Final Fantasy Starter Kit (Cloud vs Sephiroth, June 2025): its two
+ * 60-card decks, also unlocked on Arena by the kit's redemption codes. Lists
+ * from https://mtg.wiki/page/Final_Fantasy/Starter_Kit (13 Plains as in the
+ * Wizards announcement; the wiki's 12 adds up to 59). Shown with the FIN decks.
+ */
+export const FINAL_FANTASY_STARTER_KIT_DECKS: Decklist[] = [
+  {
+    id: 'fin-starter-cloud',
+    name: 'Cloud',
+    colors: ['R', 'W'],
+    face: "Cloud, Planet's Champion",
+    source: 'arena',
+    series: 'starter',
+    set: 'fin',
+    cards: [
+      ['Adelbert Steiner', 1],
+      ['Barret Wallace', 1],
+      ['Beatrix, Loyal General', 1],
+      ["Cloud, Planet's Champion", 1],
+      ['Cloudbound Moogle', 2],
+      ['Coeurl', 2],
+      ['Dwarven Castle Guard', 4],
+      ['Freya Crescent', 1],
+      ["G'raha Tia", 1],
+      ['Item Shopkeep', 3],
+      ['Lightning, Security Sergeant', 1],
+      ['Rosa, Resolute White Mage', 1],
+      ['Slash of Light', 2],
+      ['Fate of the Sun-Cryst', 2],
+      ['Judgment Bolt', 1],
+      ["The Crystal's Chosen", 1],
+      ['Suplex', 1],
+      ["Dragoon's Lance", 1],
+      ["Samurai's Katana", 2],
+      ['Ultima Weapon', 1],
+      ["Warrior's Sword", 2],
+      ['White Auracite', 2],
+      ["White Mage's Staff", 1],
+      ['Mountain', 8],
+      ['Plains', 13],
+      ['Rabanastre, Royal City', 4],
+    ],
+  },
+  {
+    id: 'fin-starter-sephiroth',
+    name: 'Sephiroth',
+    colors: ['U', 'B'],
+    face: "Sephiroth, Planet's Heir",
+    source: 'arena',
+    series: 'starter',
+    set: 'fin',
+    cards: [
+      ['Al Bhed Salvagers', 3],
+      ['Il Mheg Pixie', 3],
+      ['Sahagin', 1],
+      ["Sephiroth, Planet's Heir", 1],
+      ['Seymour Flux', 1],
+      ["Shambling Cie'th", 3],
+      ['Shinra Reinforcements', 3],
+      ['Ultimecia, Temporal Threat', 1],
+      ['Undercity Dire Rat', 4],
+      ['Xande, Dark Mage', 1],
+      ['Dreams of Laguna', 2],
+      ['Overkill', 2],
+      ["Sephiroth's Intervention", 3],
+      ['Deadly Embrace', 1],
+      ['Evil Reawakened', 2],
+      ['Retrieve the Esper', 2],
+      ["Relm's Sketching", 1],
+      ['Magitek Scythe', 1],
+      ['Island', 9],
+      ['Swamp', 12],
+      ['Treno, Dark City', 4],
+    ],
+  },
+];
+
+/**
  * The Final Fantasy Commander decks as Arena sells them: Arena Store Brawl
  * decks (mtg.wiki, "Arena Store decks (Final Fantasy)" and "(Final Fantasy
  * Commander)"), led by the four FIC face commanders, then three more. Arena's
@@ -2812,5 +2890,6 @@ export const DECKS: Decklist[] = [
   ...MARVEL_DECKS,
   ...MARVEL_BRAWL_DECKS,
   ...FINAL_FANTASY_DECKS,
+  ...FINAL_FANTASY_STARTER_KIT_DECKS,
   ...FINAL_FANTASY_BRAWL_DECKS,
 ];

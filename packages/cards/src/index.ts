@@ -32,6 +32,7 @@ export {
   MARVEL_DECKS,
   MARVEL_BRAWL_DECKS,
   FINAL_FANTASY_DECKS,
+  FINAL_FANTASY_STARTER_KIT_DECKS,
   FINAL_FANTASY_BRAWL_DECKS,
 } from './decks.ts';
 export type { Decklist } from './decks.ts';

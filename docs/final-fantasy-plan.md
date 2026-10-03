@@ -171,10 +171,20 @@ Void 52%, Road Trip 52%.
 - Ten FIN Jump In packets in `jumpin.ts` (our own, like the other sets; `'fin'` in the Packet `set` union).
 - FIN boosters in Expedition (with a FIN deck) and Season (with the ten FIN decks as starters).
 
-### 11d: the Starter Kit (Cloud vs Sephiroth)
+### 11d: the Starter Kit (Cloud vs Sephiroth): done
 
 The two Starter Kit decks with their 12 exclusive cards, as they play on Arena. Exact lists from mtg.wiki (the MediaWiki API)
 before starting; shown with the other FIN decks.
+
+Done: `FINAL_FANTASY_STARTER_KIT_DECKS` in `decks.ts` (`fin-starter-cloud`, R/W Equipment; `fin-starter-sephiroth`, U/B
+control), `source: 'arena'` (each kit deck has an Arena redemption code that unlocks it on Arena), `series: 'starter'`,
+`set: 'fin'`, so they show in the Final Fantasy section. Lists from mtg.wiki's `Final_Fantasy/Starter_Kit`; the wiki gives
+Cloud 12 Plains (59 cards), Wizards' decklist announcement 13, which we use. Six exclusives were already in from phase 12
+(Beatrix, Rosa, Ultima Weapon, Sephiroth, Xande, Deadly Embrace); the other six are in `fin/starter-kit.ts`. The fetch script
+needed no change: the exclusives' only printings are the `starterdeck` promos (set `fin`, numbers 426-563), and booster cards
+keep their main printing (promos rank lower). New rules: an equip discount only for equip abilities that target the
+creature (`equipCostsLess.targetSelf`, priced per target) and a "while equipped" custom condition (`sourceEquipped`). Bot vs
+bot: Cloud 61% and Sephiroth 57% over 160 games against the ten Foundations starter decks; Cloud beats Sephiroth 21 of 40.
 
 ## Phase 12: Final Fantasy Commander decks as Brawl (like Marvel Stream A)
 
@@ -393,6 +403,12 @@ Both groups:
 - Sandworm: the land's controller always searches, and the engine takes the first basic land in their library.
 - Elixir is exiled as its ability resolves (not as a cost).
 - Relentless X-ATM092: the bot never blocks it (it would need three blockers).
+
+11d (the Starter Kit exclusives; `fin/starter-kit.ts`):
+
+- Lightning, Security Sergeant: the exiled card stays playable while it stays exiled, not only while you control Lightning.
+- Seymour Flux's "pay 1 life" is losing 1 life (a "you may" prompt).
+- Magitek Scythe's "must be blocked this turn if able" lasts the turn; the engine adds a blocker if the defender declares none.
 
 ### Phase 12
 

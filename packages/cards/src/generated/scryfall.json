@@ -34546,6 +34546,144 @@
   }
  },
  {
+  "name": "Cloud, Planet's Champion",
+  "scryfallId": "75180e47-064e-4dd6-adcf-d4fb497a445b",
+  "oracleId": "8512bd08-ecba-4e0e-b65c-8209764a65e5",
+  "set": "fin",
+  "collectorNumber": "482",
+  "rarity": "mythic",
+  "manaCost": "{3}{R}{W}",
+  "typeLine": "Legendary Creature — Human Soldier Mercenary",
+  "oracleText": "During your turn, as long as Cloud is equipped, it has double strike and indestructible. (This creature deals both first-strike and regular combat damage. Damage and effects that say \"destroy\" don't destroy this creature.)\nEquip abilities you activate that target Cloud cost {2} less to activate.",
+  "power": "4",
+  "toughness": "4",
+  "colors": [
+   "R",
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/5/75180e47-064e-4dd6-adcf-d4fb497a445b.jpg?1783906469",
+   "normal": "https://cards.scryfall.io/normal/front/7/5/75180e47-064e-4dd6-adcf-d4fb497a445b.jpg?1783906469",
+   "large": "https://cards.scryfall.io/large/front/7/5/75180e47-064e-4dd6-adcf-d4fb497a445b.jpg?1783906469",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/5/75180e47-064e-4dd6-adcf-d4fb497a445b.jpg?1783906469"
+  }
+ },
+ {
+  "name": "Judgment Bolt",
+  "scryfallId": "05b04b06-9271-4a28-a60e-287df0d1a4d1",
+  "oracleId": "aad9f9f2-4c6b-48d0-80bd-77b73a9ea5f1",
+  "set": "fin",
+  "collectorNumber": "559",
+  "rarity": "rare",
+  "manaCost": "{3}{R}",
+  "typeLine": "Instant",
+  "oracleText": "Judgment Bolt deals 5 damage to target creature and X damage to that creature's controller, where X is the number of Equipment you control.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/5/05b04b06-9271-4a28-a60e-287df0d1a4d1.jpg?1783906432",
+   "normal": "https://cards.scryfall.io/normal/front/0/5/05b04b06-9271-4a28-a60e-287df0d1a4d1.jpg?1783906432",
+   "large": "https://cards.scryfall.io/large/front/0/5/05b04b06-9271-4a28-a60e-287df0d1a4d1.jpg?1783906432",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/5/05b04b06-9271-4a28-a60e-287df0d1a4d1.jpg?1783906432"
+  }
+ },
+ {
+  "name": "Lightning, Security Sergeant",
+  "scryfallId": "40cce7b4-1d5d-4d91-90c5-71b79b5be1ac",
+  "oracleId": "e1626880-0fa3-441a-9978-b293fc87c418",
+  "set": "fin",
+  "collectorNumber": "462",
+  "rarity": "rare",
+  "manaCost": "{2}{R}",
+  "typeLine": "Legendary Creature — Human Soldier",
+  "oracleText": "Menace (This creature can't be blocked except by two or more creatures.)\nWhenever Lightning deals combat damage to a player, exile the top card of your library. You may play that card for as long as you control Lightning.",
+  "power": "2",
+  "toughness": "3",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Menace"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/0/40cce7b4-1d5d-4d91-90c5-71b79b5be1ac.jpg?1783906476",
+   "normal": "https://cards.scryfall.io/normal/front/4/0/40cce7b4-1d5d-4d91-90c5-71b79b5be1ac.jpg?1783906476",
+   "large": "https://cards.scryfall.io/large/front/4/0/40cce7b4-1d5d-4d91-90c5-71b79b5be1ac.jpg?1783906476",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/0/40cce7b4-1d5d-4d91-90c5-71b79b5be1ac.jpg?1783906476"
+  }
+ },
+ {
+  "name": "Magitek Scythe",
+  "scryfallId": "8b691d42-3498-4d47-9a46-f7c376df8886",
+  "oracleId": "0d5bbde7-6f33-4708-b3ab-34d4528af649",
+  "set": "fin",
+  "collectorNumber": "562",
+  "rarity": "rare",
+  "manaCost": "{4}",
+  "typeLine": "Artifact — Equipment",
+  "oracleText": "A Test of Your Reflexes! — When this Equipment enters, you may attach it to target creature you control. If you do, that creature gains first strike until end of turn and must be blocked this turn if able.\nEquipped creature gets +2/+1.\nEquip {2}",
+  "colors": [],
+  "keywords": [
+   "Equip",
+   "A Test of Your Reflexes!"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/b/8b691d42-3498-4d47-9a46-f7c376df8886.jpg?1783906432",
+   "normal": "https://cards.scryfall.io/normal/front/8/b/8b691d42-3498-4d47-9a46-f7c376df8886.jpg?1783906432",
+   "large": "https://cards.scryfall.io/large/front/8/b/8b691d42-3498-4d47-9a46-f7c376df8886.jpg?1783906432",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/b/8b691d42-3498-4d47-9a46-f7c376df8886.jpg?1783906432"
+  }
+ },
+ {
+  "name": "Seymour Flux",
+  "scryfallId": "8fc42c17-a12b-42db-bb01-3e444ac2a376",
+  "oracleId": "7312efc2-8a02-47cd-874b-c3338241435e",
+  "set": "fin",
+  "collectorNumber": "452",
+  "rarity": "rare",
+  "manaCost": "{4}{B}",
+  "typeLine": "Legendary Creature — Spirit Avatar",
+  "oracleText": "At the beginning of your upkeep, you may pay 1 life. If you do, draw a card and put a +1/+1 counter on Seymour Flux.",
+  "power": "5",
+  "toughness": "5",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/f/8fc42c17-a12b-42db-bb01-3e444ac2a376.jpg?1783906480",
+   "normal": "https://cards.scryfall.io/normal/front/8/f/8fc42c17-a12b-42db-bb01-3e444ac2a376.jpg?1783906480",
+   "large": "https://cards.scryfall.io/large/front/8/f/8fc42c17-a12b-42db-bb01-3e444ac2a376.jpg?1783906480",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/f/8fc42c17-a12b-42db-bb01-3e444ac2a376.jpg?1783906480"
+  }
+ },
+ {
+  "name": "Ultimecia, Temporal Threat",
+  "scryfallId": "f988af75-acf4-41bb-b4c5-58492fd1f6a0",
+  "oracleId": "5a8e7e35-e9ea-4808-8aa7-7580a23b9d9d",
+  "set": "fin",
+  "collectorNumber": "441",
+  "rarity": "rare",
+  "manaCost": "{4}{U}{U}",
+  "typeLine": "Legendary Creature — Human Warlock",
+  "oracleText": "When Ultimecia enters, tap all creatures your opponents control.\nWhenever a creature you control deals combat damage to a player, draw a card.",
+  "power": "4",
+  "toughness": "4",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/9/f988af75-acf4-41bb-b4c5-58492fd1f6a0.jpg?1783906485",
+   "normal": "https://cards.scryfall.io/normal/front/f/9/f988af75-acf4-41bb-b4c5-58492fd1f6a0.jpg?1783906485",
+   "large": "https://cards.scryfall.io/large/front/f/9/f988af75-acf4-41bb-b4c5-58492fd1f6a0.jpg?1783906485",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/9/f988af75-acf4-41bb-b4c5-58492fd1f6a0.jpg?1783906485"
+  }
+ },
+ {
   "name": "Ash Barrens",
   "scryfallId": "77df073b-49dc-4743-82a3-d595bc938761",
   "oracleId": "58257464-278e-45fa-8e0b-bcd9a7500bc1",

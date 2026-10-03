@@ -60,7 +60,8 @@ const SECTIONS: { title: string; blurb: string; decks: Decklist[] }[] = [
   },
   {
     title: 'Final Fantasy',
-    blurb: 'Our two-colour decks from Final Fantasy, built to face the starter decks',
+    blurb:
+      'Our two-colour decks from Final Fantasy, built to face the starter decks, and the Starter Kit’s Cloud and Sephiroth',
     series: 'starter' as const,
     set: 'fin' as const,
   },

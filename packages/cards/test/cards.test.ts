@@ -12,6 +12,7 @@ import {
   DECKS,
   deckIds,
   FINAL_FANTASY_DECKS,
+  FINAL_FANTASY_STARTER_KIT_DECKS,
   FINAL_FANTASY_POOL,
   GREEN_POOL,
   LAND_POOL,
@@ -136,6 +137,7 @@ describe('card data', () => {
         ...BLOOMBURROW_DECKS.map((d) => d.id),
         ...MARVEL_DECKS.map((d) => d.id),
         ...FINAL_FANTASY_DECKS.map((d) => d.id),
+        ...FINAL_FANTASY_STARTER_KIT_DECKS.map((d) => d.id),
       ].sort(),
     );
     for (const d of PLAYABLE_DECKS)
