@@ -174,7 +174,8 @@ export function graveyardVias(
 
 /** Land plays allowed per turn: one, plus one for each "additional land" effect (Loot). */
 function landDrops(ctx: Ctx, player: PlayerId): number {
-  let n = 1;
+  // Final Fantasy Commander (12b): "you may play an additional land this turn".
+  let n = 1 + (ctx.s.turn.extraLands?.[player] ?? 0);
   for (const id of ctx.s.battlefield) {
     if (obj(ctx, id).controller !== player) continue;
     for (const a of def(ctx, id).abilities)
@@ -641,7 +642,12 @@ export function getLegalActions(ctx: Ctx, player: PlayerId): Action[] {
           // Additional sacrifice or forage costs aren't offered on free casts (a simplification).
           if (v.sacrifice || v.forage) continue;
           const specs = v.spell?.targets ?? (cd.enchant ? [cd.enchant] : []);
-          for (const targets of targetCombos(ctx, specs, { controller: player, sourceId: card }))
+          for (const targets of targetCombos(ctx, specs, { controller: player, sourceId: card })) {
+            // Final Fantasy Commander (12b): ward is still paid on a free cast (a Hero with ward {1}).
+            const ward = wardCost(ctx, player, targets);
+            if (ward.generic && !canPayFrom(ward, manaSources(ctx, player))) continue;
+            if (wardLife(ctx, player, targets) > s.players[player].life) continue;
+            if (!wardPayable(ctx, player, targets)) continue;
             for (const discard of discards)
               out.push({
                 type: 'castSpell',
@@ -654,6 +660,7 @@ export function getLegalActions(ctx: Ctx, player: PlayerId): Action[] {
                 ...(v.paws ? { paws: v.paws } : {}),
                 ...(discard ? { discard } : {}),
               });
+          }
         }
       }
       return out;

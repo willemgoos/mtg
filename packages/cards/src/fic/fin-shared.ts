@@ -1,11 +1,12 @@
 import type { Behavior } from '../build.ts';
-import { COLORS, tapFor, tapForEither } from '../msc/helpers.ts';
+import { COLORS, cycling, tapFor, tapForEither } from '../msc/helpers.ts';
 import {
   activated,
   atCombat,
   batch,
   chapter,
   condition,
+  counters,
   creatureCard,
   creatureOrArtifact,
   custom,
@@ -13,7 +14,14 @@ import {
   destroy,
   drain,
   draw,
+  equip,
+  equipment,
+  equipped,
   exile,
+  jobSelect,
+  optional,
+  t1,
+  yourEquipment,
   gain,
   graveyardCard,
   lose,
@@ -390,6 +398,264 @@ export const FIN_SHARED: Record<string, Behavior> = {
     filter: { types: ['Artifact', 'Creature'] },
     permanents: true,
   }),
+
+  // ============================================================ Limit Break (12b)
+  'Gongaga, Reactor Town': town('R', 'G'),
+  'Windurst, Federation Center': town('G', 'W'),
+  // ------------------------------------------------------------ creatures
+  'Adelbert Steiner': {
+    abilities: [
+      staticAbility({
+        kind: 'boost',
+        power: { count: 'permanentsYouControl', filter: equipment },
+        toughness: { count: 'permanentsYouControl', filter: equipment },
+      }),
+    ],
+  },
+  'Aerith Gainsborough': {
+    abilities: [
+      when({ on: 'youGainLife' }, [], counters(self)),
+      when({ on: 'dies' }, [], custom('countersOnLegendsBySourceCounters')),
+    ],
+  },
+  'Ambrosia Whiteheart': {
+    abilities: [
+      onEnter([permanent({ other: true }, { controller: 'you', optional: true })], {
+        kind: 'bounce',
+        what: t0,
+      }),
+      when({ on: 'landfall' }, [], pump(self, 1, 0)),
+    ],
+  },
+  'Ashe, Princess of Dalmasca': {
+    abilities: [
+      when({ on: 'attacks' }, [], {
+        kind: 'lookAndTake',
+        count: 5,
+        filter: { types: ['Artifact'] },
+      }),
+    ],
+  },
+  'Barret Wallace': {
+    abilities: [
+      when({ on: 'attacks' }, [], {
+        kind: 'damage',
+        amount: { count: 'permanentsYouControl', filter: { types: ['Creature'], equipped: true } },
+        to: 'eachOpponent',
+      }),
+    ],
+  },
+  'Beatrix, Loyal General': {
+    abilities: [
+      optional(atCombat([{ ...yourCreature, optional: true }], custom('attachEquipmentToTarget'))),
+    ],
+  },
+  'Delivery Moogle': {
+    // Library only: the graveyard isn't searched (a simplification).
+    abilities: [
+      onEnter([], {
+        kind: 'searchLibrary',
+        filter: { types: ['Artifact'], maxManaValue: 2 },
+        to: 'hand',
+      }),
+    ],
+  },
+  'Firion, Wild Rose Warrior': {
+    abilities: [
+      staticAbility({
+        kind: 'anthem',
+        affects: 'creaturesYouControl',
+        filter: { equipped: true },
+        power: 0,
+        toughness: 0,
+        keywords: ['haste'],
+      }),
+      when(
+        { on: 'otherPermanentEtb', filter: { subtype: 'Equipment', nontoken: true } },
+        [],
+        custom('firionCopy'),
+      ),
+    ],
+  },
+  'Freya Crescent': {
+    abilities: [
+      staticAbility({
+        kind: 'while',
+        condition: { kind: 'yourTurn' },
+        power: 0,
+        toughness: 0,
+        keywords: ['flying'],
+      }),
+      tapFor('R', { onlyFor: 'Equipment' }),
+    ],
+  },
+  'Gilgamesh, Master-at-Arms': {
+    abilities: [
+      when({ on: 'etb' }, [], custom('gilgamesh')),
+      when({ on: 'attacks' }, [], custom('gilgamesh')),
+    ],
+  },
+  'Item Shopkeep': {
+    abilities: [
+      when(
+        { on: 'youAttack' },
+        [{ what: 'creature', controller: 'you', filter: { attacking: true, equipped: true } }],
+        pump(t0, 0, 0, ['menace']),
+      ),
+    ],
+  },
+  'Raubahn, Bull of Ala Mhigo': {
+    // "Ward—Pay life equal to Raubahn's power": his printed 2 (a simplification).
+    wardCost: { mana: { generic: 0, colored: {} }, life: 2 },
+    abilities: [
+      when(
+        { on: 'attacks' },
+        [
+          yourEquipment({ optional: true }),
+          { what: 'creature', controller: 'you', filter: { attacking: true } },
+        ],
+        { kind: 'attach', to: t1, what: t0 },
+      ),
+    ],
+  },
+  'Rinoa Heartilly': {
+    abilities: [
+      onEnter([], token('angelo-token')),
+      when(
+        { on: 'attacks' },
+        [{ ...yourCreature, filter: { other: true } }],
+        pump(t0, { count: 'creaturesYouControl' }, { count: 'creaturesYouControl' }),
+      ),
+    ],
+  },
+  'Weapons Vendor': {
+    abilities: [
+      onEnter([], draw(1)),
+      {
+        ...atCombat([yourEquipment(), yourCreature], { kind: 'attach', to: t1, what: t0 }),
+        cost: { generic: 1, colored: {} },
+        condition: { kind: 'controlsPermanents', filter: equipment, min: 1 },
+      },
+    ],
+  },
+  'Zack Fair': {
+    entersWithCounters: 1,
+    abilities: [
+      activated(
+        '{1}',
+        { sacrificeSelf: true },
+        [yourCreature],
+        [pump(t0, 0, 0, ['indestructible']), custom('zackFair')],
+      ),
+    ],
+  },
+  // ------------------------------------------------------------ Equipment
+  'Aettir and Priwen': {
+    abilities: [equipped(0, 0, [], { basePTLife: true }), equip('{5}')],
+  },
+  "Bard's Bow": { abilities: [jobSelect, equipped(2, 2, ['reach']), equip('{6}')] },
+  'Buster Sword': {
+    abilities: [
+      equipped(3, 2),
+      when({ on: 'equippedDealsCombatDamageToPlayer' }, [], draw(1), {
+        kind: 'castFree',
+        what: self,
+        from: 'hand',
+        maxManaValueAmount: { event: 'amount' },
+      }),
+      equip('{2}'),
+    ],
+  },
+  'Crystal Fragments': {
+    abilities: [
+      equipped(1, 1),
+      activated('{5}{W}{W}', {}, [], [custom('blinkTransformed')], {
+        sorcerySpeed: true,
+        label: 'Transform',
+      }),
+      equip('{1}'),
+    ],
+  },
+  "Dragoon's Lance": {
+    // "During your turn, equipped creature has flying": always (a simplification).
+    abilities: [jobSelect, equipped(1, 0, ['flying']), equip('{4}')],
+  },
+  'Genji Glove': {
+    abilities: [
+      equipped(0, 0, ['doubleStrike']),
+      {
+        ...when(
+          { on: 'equippedAttacks' },
+          [],
+          { kind: 'untap', what: 'attached' },
+          { kind: 'extraCombat' },
+        ),
+        condition: condition('firstCombat'),
+      },
+      equip('{3}'),
+    ],
+  },
+  "Machinist's Arsenal": {
+    abilities: [
+      jobSelect,
+      equipped(
+        { multiply: 2, amount: { count: 'permanentsYouControl', filter: { types: ['Artifact'] } } },
+        { multiply: 2, amount: { count: 'permanentsYouControl', filter: { types: ['Artifact'] } } },
+      ),
+      equip('{4}'),
+    ],
+  },
+  "Paladin's Arms": { abilities: [jobSelect, equipped(2, 1, ['wardOne']), equip('{4}')] },
+  "Samurai's Katana": {
+    abilities: [jobSelect, equipped(2, 2, ['trample', 'haste']), equip('{5}')],
+  },
+  "Summoner's Grimoire": {
+    // An enchantment creature card put in this way doesn't enter attacking (a simplification).
+    abilities: [
+      jobSelect,
+      when(
+        { on: 'equippedAttacks' },
+        [],
+        may({ kind: 'putFromHandOrGraveyard', filter: { types: ['Creature'] }, handOnly: true }),
+      ),
+      equip('{3}'),
+    ],
+  },
+  'Ultima Weapon': {
+    abilities: [
+      when({ on: 'equippedAttacks' }, [theirCreature], destroy(t0)),
+      equipped(7, 7),
+      equip('{7}'),
+    ],
+  },
+  "White Mage's Staff": {
+    abilities: [
+      jobSelect,
+      equipped(1, 1),
+      when({ on: 'equippedAttacks' }, [], gain(1)),
+      equip('{3}'),
+    ],
+  },
+  // ------------------------------------------------------------ spells
+  'Airship Crash': {
+    abilities: [cycling('{2}')],
+    ...spell(
+      [
+        permanent({
+          anyOf: [
+            { types: ['Artifact', 'Enchantment'] },
+            { types: ['Creature'], hasKeyword: 'flying' },
+          ],
+        }),
+      ],
+      destroy(t0),
+    ),
+  },
+  'Commune with Beavers': spell([], {
+    kind: 'lookAndTake',
+    count: 3,
+    filter: { types: ['Artifact', 'Creature', 'Land'] },
+  }),
 };
 
 /** Back faces of the FIN double-faced cards above. */
@@ -405,4 +671,10 @@ export const FIN_SHARED_BACK_FACES: Record<string, Behavior> = {
       when({ on: 'dies' }, [], { kind: 'returnSource', to: 'battlefield', tapped: true }),
     ],
   },
+  // "Prevent all damage to creatures you control this turn": indestructible this turn (a simplification).
+  'Summon: Alexander': summon(
+    3,
+    chapter([1, 2], [], pump(yours(), 0, 0, ['indestructible'])),
+    chapter([3], [], { kind: 'tap', what: { each: 'creature', controller: 'opponent' } }),
+  ),
 };

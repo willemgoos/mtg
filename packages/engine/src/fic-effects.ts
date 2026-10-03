@@ -15,6 +15,7 @@ import {
 } from './context.ts';
 import { manaValue } from './cost.ts';
 import { changeLife, dealDamage, damageSourceFor } from './effects.ts';
+import { nextInt } from './rng.ts';
 import { addLore } from './sagas.ts';
 import { shuffleLibrary } from './setup.ts';
 import type { GameObject, ObjectId, PlayerId } from './types.ts';
@@ -232,6 +233,138 @@ export const FIC_EFFECTS: Record<string, CustomEffect> = {
     addCounters(ctx, to.id, 1, name);
   },
 
+  // ---------------------------------------------------------------- 12b: Equipment
+  /**
+   * Job select (built minimally here; phase 11a builds it too): create a 1/1
+   * colourless Hero creature token, then attach this Equipment to it.
+   */
+  jobSelect(ctx, es) {
+    const hero = tokenCopyOfCard(ctx, 'hero-1-1-token', es.controller);
+    const self = sourceObj(ctx, es);
+    if (self && self.zone === 'battlefield') self.attachedTo = hero.id;
+  },
+
+  /** "You may play an additional land this turn." */
+  extraLandThisTurn(ctx, es) {
+    const x = (ctx.s.turn.extraLands ??= { p1: 0, p2: 0 });
+    x[es.controller]++;
+  },
+
+  /** Aerith Gainsborough dies: X +1/+1 counters on each legendary creature you control (X: her counters). */
+  countersOnLegendsBySourceCounters(ctx, es) {
+    const self = es.source && ctx.s.objects[es.source.id];
+    const x = self?.lastCounters ?? 0;
+    if (x <= 0) return;
+    for (const id of ctx.s.battlefield) {
+      const o = obj(ctx, id);
+      if (o.controller !== es.controller) continue;
+      const c = characteristics(ctx, id);
+      if (c.types.includes('Creature') && def(ctx, id).supertypes.includes('Legendary'))
+        addCounters(ctx, id, x);
+    }
+  },
+
+  /** Beatrix: attach Equipment you control to the target creature (the engine attaches every unattached one). */
+  attachEquipmentToTarget(ctx, es) {
+    const to = targetObj(ctx, es);
+    if (!to || to.zone !== 'battlefield') return;
+    for (const id of ctx.s.battlefield) {
+      const e = obj(ctx, id);
+      if (e.controller !== es.controller || !def(ctx, id).subtypes.includes('Equipment')) continue;
+      const host = e.attachedTo !== undefined ? ctx.s.objects[e.attachedTo] : undefined;
+      if (!host || host.zone !== 'battlefield') e.attachedTo = to.id;
+    }
+  },
+
+  /**
+   * Gilgamesh: every Equipment card among the top six onto the battlefield, the
+   * rest to the bottom at random; the biggest one is attached to Gilgamesh (or
+   * another Samurai you control).
+   */
+  gilgamesh(ctx, es) {
+    const p = es.controller;
+    const top = ctx.s.players[p].library.slice(0, 6);
+    const equipment = top.filter((id) => def(ctx, id).subtypes.includes('Equipment'));
+    for (const id of equipment) moveObject(ctx, id, 'battlefield', { controller: p });
+    for (const id of top.filter((x) => !equipment.includes(x)))
+      moveObject(ctx, id, 'library', { position: 'bottom' });
+    const self = sourceObj(ctx, es);
+    const samurai =
+      self && self.zone === 'battlefield'
+        ? self.id
+        : ctx.s.battlefield.find(
+            (id) =>
+              obj(ctx, id).controller === p &&
+              characteristics(ctx, id).subtypes.includes('Samurai'),
+          );
+    const best = equipment
+      .filter((id) => obj(ctx, id).zone === 'battlefield')
+      .sort((a, b) => mv(ctx, b) - mv(ctx, a))[0];
+    if (best && samurai) obj(ctx, best).attachedTo = samurai;
+  },
+
+  /**
+   * Firion: a token copy of the Equipment that entered whose equip abilities
+   * cost {2} less; it's sacrificed at the beginning of the next upkeep.
+   */
+  firionCopy(ctx, es) {
+    const card = es.subject && ctx.s.objects[es.subject.id];
+    if (!card || card.zone !== 'battlefield') return;
+    const t = tokenCopyOfCard(ctx, card.defId, es.controller);
+    t.equipDiscount = 2;
+    (ctx.s.delayed ??= []).push({
+      controller: es.controller,
+      sourceDefId: es.sourceDefId,
+      subject: { id: t.id, zcc: t.zcc },
+      effects: [{ kind: 'sacrifice', what: 'subject' }],
+      fromTurn: ctx.s.turn.number + 1,
+      at: 'upkeep',
+    });
+  },
+
+  /**
+   * Arms Scavenger (Alchemy): "draft a card from this creature's spellbook, then
+   * exile it; you may play it this turn". The spellbook here: the Equipment in
+   * `params.book`, one at random.
+   */
+  draftToExile(ctx, es, params) {
+    const book = (params as { book: string[] }).book.filter((id) => ctx.db.has(id));
+    if (book.length === 0) return;
+    const pick = book[nextInt(ctx.s.rng, book.length)]!;
+    const card = createObject(ctx, pick, es.controller, 'exile');
+    ctx.s.players[es.controller].exile.push(card.id);
+    card.playableUntilTurn = ctx.s.turn.number;
+  },
+
+  /**
+   * Zack Fair: the target gains indestructible, gets Zack's +1/+1 counters, and
+   * an unattached Equipment you control is attached to it (Zack's own falls off
+   * as he's sacrificed).
+   */
+  zackFair(ctx, es) {
+    const to = targetObj(ctx, es);
+    const self = es.source && ctx.s.objects[es.source.id];
+    if (!to || to.zone !== 'battlefield') return;
+    if (self?.lastCounters) addCounters(ctx, to.id, self.lastCounters);
+    const loose = ctx.s.battlefield.find((id) => {
+      const e = obj(ctx, id);
+      const host = e.attachedTo !== undefined ? ctx.s.objects[e.attachedTo] : undefined;
+      return (
+        e.controller === es.controller &&
+        def(ctx, id).subtypes.includes('Equipment') &&
+        (!host || host.zone !== 'battlefield')
+      );
+    });
+    if (loose) obj(ctx, loose).attachedTo = to.id;
+  },
+
+  /** Fighter Class: the target blocks the attacking creature that caused the trigger this combat if able. */
+  mustBlockSubject(ctx, es) {
+    const blocker = targetObj(ctx, es);
+    const attacker = es.subject && ctx.s.objects[es.subject.id];
+    if (blocker && attacker) blocker.mustBlock = { id: attacker.id, zcc: attacker.zcc };
+  },
+
   /** Put +1/+1 counters on the source equal to the power of what caused the trigger, as it last was. */
   countersBySubjectPower(ctx, es) {
     const self = sourceObj(ctx, es);
@@ -251,6 +384,8 @@ export const FIC_CONDITIONS: Record<
   firstThreeTurns: (ctx) => ctx.s.turn.number <= 6,
   /** You were the starting player (turn 1 was yours: your turns are the odd ones). */
   startingPlayer: (ctx, p) => (ctx.s.turn.number % 2 === 1) === (ctx.s.turn.activePlayer === p),
+  /** "If it's the first combat phase of the turn" (Genji Glove, Tifa). */
+  firstCombat: (ctx) => !ctx.s.turn.laterCombat,
   /** A Saga creature's later chapters (Summon: Primal Odin II). */
   loreTwo: (_ctx, _p, self) => (self?.counters?.lore ?? 0) >= 2,
   /**

@@ -134,6 +134,16 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
             power += st.basePT[0] - (basePower ?? base ?? o.copyPT?.power ?? d.power ?? 0);
             toughness += st.basePT[1] - (base ?? o.copyPT?.toughness ?? d.toughness ?? 0);
           }
+          // Final Fantasy Commander (12b): Aettir and Priwen (base X/X, X = life), Hero's Heirloom.
+          if (st.basePTLife) {
+            const life = ctx.s.players[src.controller].life;
+            power += life - (basePower ?? base ?? o.copyPT?.power ?? d.power ?? 0);
+            toughness += life - (base ?? o.copyPT?.toughness ?? d.toughness ?? 0);
+          }
+          if (st.legendaryKeywords?.length && d.supertypes.includes('Legendary')) {
+            granted ??= new Set(keywords);
+            for (const k of st.legendaryKeywords) granted.add(k);
+          }
           power += countOf(ctx, src.controller, st.power);
           toughness += countOf(ctx, src.controller, st.toughness);
           if (st.keywords?.length) {

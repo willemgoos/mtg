@@ -273,6 +273,34 @@ export const unearth = (cost: string): AbilityDef => ({
   label: `Unearth ${cost}`,
 });
 
+// ------------------------------------------------------------------ Equipment
+
+export { equip } from '../msc/helpers.ts';
+type Attached = Extract<Extract<AbilityDef, { kind: 'static' }>['effect'], { kind: 'attached' }>;
+/** "Equipped creature gets +P/+T (and has ...)". */
+export const equipped = (
+  power: Amount,
+  toughness: Amount,
+  keywords: Attached['keywords'] = [],
+  extra: Partial<Attached> = {},
+): AbilityDef =>
+  staticAbility({
+    kind: 'attached',
+    power,
+    toughness,
+    ...(keywords?.length ? { keywords } : {}),
+    ...extra,
+  });
+/** Job select: "When this Equipment enters, create a 1/1 colorless Hero creature token, then attach this to it." */
+export const jobSelect: AbilityDef = onEnter([], custom('jobSelect'));
+export const equipment: CardFilter = { subtype: 'Equipment' };
+export const yourEquipment = (extra: Partial<TargetSpec> = {}): TargetSpec => ({
+  what: 'permanent',
+  controller: 'you',
+  filter: equipment,
+  ...extra,
+});
+
 /** A Saga creature ("Summon: X"): lore counters, chapter abilities, sacrificed after the last. */
 export const summon = (chapters: number, ...abilities: AbilityDef[]): Behavior => ({
   saga: chapters,

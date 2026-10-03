@@ -2,6 +2,7 @@ import type { CardDefinition, Color, Keyword } from '@mtg/engine';
 import type { Behavior } from './build.ts';
 import { FIN_SHARED, FIN_SHARED_BACK_FACES } from './fic/fin-shared.ts';
 import { FIC_SHARED, FIC_SHARED_BACK_FACES } from './fic/shared.ts';
+import { CLOUD } from './fic/cloud.ts';
 import { TERRA } from './fic/terra.ts';
 
 /**
@@ -14,6 +15,7 @@ export const FINAL_FANTASY_BRAWL_BEHAVIORS: Record<string, Behavior> = {
   ...FIC_SHARED,
   ...FIN_SHARED,
   ...TERRA,
+  ...CLOUD,
 };
 
 /** Back faces of double-faced cards: not cards of their own, so not in the pool. */
@@ -53,6 +55,10 @@ export const FINAL_FANTASY_BRAWL_TOKENS: CardDefinition[] = [
   creatureToken('knight-2-2-token', 'Knight', ['W'], ['Knight'], 2, 2),
   {
     ...creatureToken('darkstar-token', 'Darkstar', ['W', 'B'], ['Dog'], 2, 2),
+    supertypes: ['Legendary'],
+  },
+  {
+    ...creatureToken('angelo-token', 'Angelo', ['G', 'W'], ['Dog'], 1, 1),
     supertypes: ['Legendary'],
   },
 ];

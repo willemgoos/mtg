@@ -28783,6 +28783,760 @@
   }
  },
  {
+  "name": "Gongaga, Reactor Town",
+  "scryfallId": "7beccfa6-3e4b-4460-954e-870cb39e462d",
+  "oracleId": "ac4e1818-4873-4143-9b99-46f205d006d9",
+  "set": "fin",
+  "collectorNumber": "280",
+  "rarity": "common",
+  "manaCost": "",
+  "typeLine": "Land — Town",
+  "oracleText": "This land enters tapped.\n{T}: Add {R} or {G}.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/b/7beccfa6-3e4b-4460-954e-870cb39e462d.jpg?1783906549",
+   "normal": "https://cards.scryfall.io/normal/front/7/b/7beccfa6-3e4b-4460-954e-870cb39e462d.jpg?1783906549",
+   "large": "https://cards.scryfall.io/large/front/7/b/7beccfa6-3e4b-4460-954e-870cb39e462d.jpg?1783906549",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/b/7beccfa6-3e4b-4460-954e-870cb39e462d.jpg?1783906549"
+  }
+ },
+ {
+  "name": "Windurst, Federation Center",
+  "scryfallId": "c74024bd-b383-468d-9cf5-d112a29f6457",
+  "oracleId": "e198126a-f280-47f7-8bd0-3dc9f5ff05a0",
+  "set": "fin",
+  "collectorNumber": "292",
+  "rarity": "common",
+  "manaCost": "",
+  "typeLine": "Land — Town",
+  "oracleText": "This land enters tapped.\n{T}: Add {G} or {W}.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/7/c74024bd-b383-468d-9cf5-d112a29f6457.jpg?1783906545",
+   "normal": "https://cards.scryfall.io/normal/front/c/7/c74024bd-b383-468d-9cf5-d112a29f6457.jpg?1783906545",
+   "large": "https://cards.scryfall.io/large/front/c/7/c74024bd-b383-468d-9cf5-d112a29f6457.jpg?1783906545",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/7/c74024bd-b383-468d-9cf5-d112a29f6457.jpg?1783906545"
+  }
+ },
+ {
+  "name": "Adelbert Steiner",
+  "scryfallId": "1a67a991-1e52-4676-a2e3-2bc7aa943ab3",
+  "oracleId": "657a4500-4b47-4c78-945b-a7791af7d10e",
+  "set": "fin",
+  "collectorNumber": "3",
+  "rarity": "uncommon",
+  "manaCost": "{1}{W}",
+  "typeLine": "Legendary Creature — Human Knight",
+  "oracleText": "Lifelink\nAdelbert Steiner gets +1/+1 for each Equipment you control.",
+  "power": "2",
+  "toughness": "1",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Lifelink"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/a/1a67a991-1e52-4676-a2e3-2bc7aa943ab3.jpg?1783906656",
+   "normal": "https://cards.scryfall.io/normal/front/1/a/1a67a991-1e52-4676-a2e3-2bc7aa943ab3.jpg?1783906656",
+   "large": "https://cards.scryfall.io/large/front/1/a/1a67a991-1e52-4676-a2e3-2bc7aa943ab3.jpg?1783906656",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/a/1a67a991-1e52-4676-a2e3-2bc7aa943ab3.jpg?1783906656"
+  }
+ },
+ {
+  "name": "Aerith Gainsborough",
+  "scryfallId": "e86328b6-ded2-41df-8b6e-4a770e7b171e",
+  "oracleId": "dd9a6f6b-f9b7-4292-bc80-b7da326de032",
+  "set": "fin",
+  "collectorNumber": "4",
+  "rarity": "rare",
+  "manaCost": "{2}{W}",
+  "typeLine": "Legendary Creature — Human Cleric",
+  "oracleText": "Lifelink\nWhenever you gain life, put a +1/+1 counter on Aerith Gainsborough.\nWhen Aerith Gainsborough dies, put X +1/+1 counters on each legendary creature you control, where X is the number of +1/+1 counters on Aerith Gainsborough.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Lifelink"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/8/e86328b6-ded2-41df-8b6e-4a770e7b171e.jpg?1783906655",
+   "normal": "https://cards.scryfall.io/normal/front/e/8/e86328b6-ded2-41df-8b6e-4a770e7b171e.jpg?1783906655",
+   "large": "https://cards.scryfall.io/large/front/e/8/e86328b6-ded2-41df-8b6e-4a770e7b171e.jpg?1783906655",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/8/e86328b6-ded2-41df-8b6e-4a770e7b171e.jpg?1783906655"
+  }
+ },
+ {
+  "name": "Ambrosia Whiteheart",
+  "scryfallId": "f2596767-7d19-4110-86ed-3cfc93ac7483",
+  "oracleId": "2bcc9f11-5b12-433e-9680-0f4b18aa521c",
+  "set": "fin",
+  "collectorNumber": "6",
+  "rarity": "uncommon",
+  "manaCost": "{1}{W}",
+  "typeLine": "Legendary Creature — Bird",
+  "oracleText": "Flash\nWhen Ambrosia Whiteheart enters, you may return another permanent you control to its owner's hand.\nLandfall — Whenever a land you control enters, Ambrosia Whiteheart gets +1/+0 until end of turn.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Flash",
+   "Landfall"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/2/f2596767-7d19-4110-86ed-3cfc93ac7483.jpg?1783906654",
+   "normal": "https://cards.scryfall.io/normal/front/f/2/f2596767-7d19-4110-86ed-3cfc93ac7483.jpg?1783906654",
+   "large": "https://cards.scryfall.io/large/front/f/2/f2596767-7d19-4110-86ed-3cfc93ac7483.jpg?1783906654",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/2/f2596767-7d19-4110-86ed-3cfc93ac7483.jpg?1783906654"
+  }
+ },
+ {
+  "name": "Ashe, Princess of Dalmasca",
+  "scryfallId": "ffe0596f-ef99-4862-9386-0fe455259995",
+  "oracleId": "db75577d-1001-4088-999f-40684218a07f",
+  "set": "fin",
+  "collectorNumber": "7",
+  "rarity": "uncommon",
+  "manaCost": "{2}{W}",
+  "typeLine": "Legendary Creature — Human Rebel Noble",
+  "oracleText": "Whenever Ashe attacks, look at the top five cards of your library. You may reveal an artifact card from among them and put it into your hand. Put the rest on the bottom of your library in a random order.",
+  "power": "3",
+  "toughness": "2",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/f/ffe0596f-ef99-4862-9386-0fe455259995.jpg?1783906653",
+   "normal": "https://cards.scryfall.io/normal/front/f/f/ffe0596f-ef99-4862-9386-0fe455259995.jpg?1783906653",
+   "large": "https://cards.scryfall.io/large/front/f/f/ffe0596f-ef99-4862-9386-0fe455259995.jpg?1783906653",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/f/ffe0596f-ef99-4862-9386-0fe455259995.jpg?1783906653"
+  }
+ },
+ {
+  "name": "Barret Wallace",
+  "scryfallId": "1a504dff-5857-4a61-ab99-616d5df7cf5a",
+  "oracleId": "913672bc-cc88-4964-a331-7dbce40f2bda",
+  "set": "fin",
+  "collectorNumber": "129",
+  "rarity": "uncommon",
+  "manaCost": "{3}{R}",
+  "typeLine": "Legendary Creature — Human Rebel",
+  "oracleText": "Reach\nWhenever Barret Wallace attacks, it deals damage equal to the number of equipped creatures you control to defending player.",
+  "power": "4",
+  "toughness": "4",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Reach"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/a/1a504dff-5857-4a61-ab99-616d5df7cf5a.jpg?1783906607",
+   "normal": "https://cards.scryfall.io/normal/front/1/a/1a504dff-5857-4a61-ab99-616d5df7cf5a.jpg?1783906607",
+   "large": "https://cards.scryfall.io/large/front/1/a/1a504dff-5857-4a61-ab99-616d5df7cf5a.jpg?1783906607",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/a/1a504dff-5857-4a61-ab99-616d5df7cf5a.jpg?1783906607"
+  }
+ },
+ {
+  "name": "Beatrix, Loyal General",
+  "scryfallId": "ab1b24dd-ab23-41b0-a074-e77e8d9c5564",
+  "oracleId": "2f24637d-8d8e-49de-b229-4cdb97595ed7",
+  "set": "fin",
+  "collectorNumber": "426",
+  "rarity": "rare",
+  "manaCost": "{4}{W}{W}",
+  "typeLine": "Legendary Creature — Human Soldier",
+  "oracleText": "Vigilance (Attacking doesn't cause this creature to tap.)\nAt the beginning of combat on your turn, you may attach any number of Equipment you control to target creature you control.",
+  "power": "4",
+  "toughness": "4",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Vigilance"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/b/ab1b24dd-ab23-41b0-a074-e77e8d9c5564.jpg?1783906491",
+   "normal": "https://cards.scryfall.io/normal/front/a/b/ab1b24dd-ab23-41b0-a074-e77e8d9c5564.jpg?1783906491",
+   "large": "https://cards.scryfall.io/large/front/a/b/ab1b24dd-ab23-41b0-a074-e77e8d9c5564.jpg?1783906491",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/b/ab1b24dd-ab23-41b0-a074-e77e8d9c5564.jpg?1783906491"
+  }
+ },
+ {
+  "name": "Delivery Moogle",
+  "scryfallId": "f58840dc-c641-4092-8b67-9c0d449af715",
+  "oracleId": "60043b87-6008-4cfa-9d8f-6ee6e3f70766",
+  "set": "fin",
+  "collectorNumber": "15",
+  "rarity": "uncommon",
+  "manaCost": "{3}{W}",
+  "typeLine": "Creature — Moogle",
+  "oracleText": "Flying\nWhen this creature enters, search your library and/or graveyard for an artifact card with mana value 2 or less, reveal it, and put it into your hand. If you search your library this way, shuffle.",
+  "power": "3",
+  "toughness": "2",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/5/f58840dc-c641-4092-8b67-9c0d449af715.jpg?1783906652",
+   "normal": "https://cards.scryfall.io/normal/front/f/5/f58840dc-c641-4092-8b67-9c0d449af715.jpg?1783906652",
+   "large": "https://cards.scryfall.io/large/front/f/5/f58840dc-c641-4092-8b67-9c0d449af715.jpg?1783906652",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/5/f58840dc-c641-4092-8b67-9c0d449af715.jpg?1783906652"
+  }
+ },
+ {
+  "name": "Firion, Wild Rose Warrior",
+  "scryfallId": "98366937-d15b-4a66-b9f6-878d50b63871",
+  "oracleId": "df42c768-34ca-4ebf-8f66-eaccf7261f70",
+  "set": "fin",
+  "collectorNumber": "137",
+  "rarity": "rare",
+  "manaCost": "{2}{R}",
+  "typeLine": "Legendary Creature — Human Rebel Warrior",
+  "oracleText": "Equipped creatures you control have haste.\nWhenever a nontoken Equipment you control enters, create a token that's a copy of it, except it has \"This Equipment's equip abilities cost {2} less to activate.\" Sacrifice that token at the beginning of the next upkeep.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/8/98366937-d15b-4a66-b9f6-878d50b63871.jpg?1783906604",
+   "normal": "https://cards.scryfall.io/normal/front/9/8/98366937-d15b-4a66-b9f6-878d50b63871.jpg?1783906604",
+   "large": "https://cards.scryfall.io/large/front/9/8/98366937-d15b-4a66-b9f6-878d50b63871.jpg?1783906604",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/8/98366937-d15b-4a66-b9f6-878d50b63871.jpg?1783906604"
+  }
+ },
+ {
+  "name": "Freya Crescent",
+  "scryfallId": "9921f646-e893-44db-ac89-0633c1009788",
+  "oracleId": "7e3085d8-9d46-41e0-ad9d-54c44d9ef267",
+  "set": "fin",
+  "collectorNumber": "138",
+  "rarity": "uncommon",
+  "manaCost": "{R}",
+  "typeLine": "Legendary Creature — Rat Knight",
+  "oracleText": "Jump — During your turn, Freya Crescent has flying.\n{T}: Add {R}. Spend this mana only to cast an Equipment spell or activate an equip ability.",
+  "power": "1",
+  "toughness": "1",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Jump"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/9/9921f646-e893-44db-ac89-0633c1009788.jpg?1783906604",
+   "normal": "https://cards.scryfall.io/normal/front/9/9/9921f646-e893-44db-ac89-0633c1009788.jpg?1783906604",
+   "large": "https://cards.scryfall.io/large/front/9/9/9921f646-e893-44db-ac89-0633c1009788.jpg?1783906604",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/9/9921f646-e893-44db-ac89-0633c1009788.jpg?1783906604"
+  }
+ },
+ {
+  "name": "Gilgamesh, Master-at-Arms",
+  "scryfallId": "1eb81329-fb7a-4347-b96c-9960a5c48e87",
+  "oracleId": "c9432e87-38f6-4889-8f07-ae7cd045e532",
+  "set": "fin",
+  "collectorNumber": "139",
+  "rarity": "rare",
+  "manaCost": "{4}{R}{R}",
+  "typeLine": "Legendary Creature — Human Samurai",
+  "oracleText": "Whenever Gilgamesh enters or attacks, look at the top six cards of your library. You may put any number of Equipment cards from among them onto the battlefield. Put the rest on the bottom of your library in a random order. When you put one or more Equipment onto the battlefield this way, you may attach one of them to a Samurai you control.",
+  "power": "6",
+  "toughness": "6",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/e/1eb81329-fb7a-4347-b96c-9960a5c48e87.jpg?1783906605",
+   "normal": "https://cards.scryfall.io/normal/front/1/e/1eb81329-fb7a-4347-b96c-9960a5c48e87.jpg?1783906605",
+   "large": "https://cards.scryfall.io/large/front/1/e/1eb81329-fb7a-4347-b96c-9960a5c48e87.jpg?1783906605",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/e/1eb81329-fb7a-4347-b96c-9960a5c48e87.jpg?1783906605"
+  }
+ },
+ {
+  "name": "Item Shopkeep",
+  "scryfallId": "bd2db3f5-fd0d-4817-af90-6bea1f07e16b",
+  "oracleId": "7532f0ea-9d13-43ca-9b7d-2d22f2a66017",
+  "set": "fin",
+  "collectorNumber": "142",
+  "rarity": "common",
+  "manaCost": "{1}{R}",
+  "typeLine": "Creature — Human Citizen",
+  "oracleText": "Whenever you attack, target attacking equipped creature gains menace until end of turn. (It can't be blocked except by two or more creatures.)",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/d/bd2db3f5-fd0d-4817-af90-6bea1f07e16b.jpg?1783906603",
+   "normal": "https://cards.scryfall.io/normal/front/b/d/bd2db3f5-fd0d-4817-af90-6bea1f07e16b.jpg?1783906603",
+   "large": "https://cards.scryfall.io/large/front/b/d/bd2db3f5-fd0d-4817-af90-6bea1f07e16b.jpg?1783906603",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/d/bd2db3f5-fd0d-4817-af90-6bea1f07e16b.jpg?1783906603"
+  }
+ },
+ {
+  "name": "Raubahn, Bull of Ala Mhigo",
+  "scryfallId": "7035d11b-525f-4120-8dcb-610095196681",
+  "oracleId": "d81d5749-ab4d-42c5-8903-0b400f10fe33",
+  "set": "fin",
+  "collectorNumber": "151",
+  "rarity": "rare",
+  "manaCost": "{1}{R}",
+  "typeLine": "Legendary Creature — Human Warrior",
+  "oracleText": "Ward—Pay life equal to Raubahn's power.\nWhenever Raubahn attacks, attach up to one target Equipment you control to target attacking creature.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Ward"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/0/7035d11b-525f-4120-8dcb-610095196681.jpg?1783906599",
+   "normal": "https://cards.scryfall.io/normal/front/7/0/7035d11b-525f-4120-8dcb-610095196681.jpg?1783906599",
+   "large": "https://cards.scryfall.io/large/front/7/0/7035d11b-525f-4120-8dcb-610095196681.jpg?1783906599",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/0/7035d11b-525f-4120-8dcb-610095196681.jpg?1783906599"
+  }
+ },
+ {
+  "name": "Rinoa Heartilly",
+  "scryfallId": "ba79d293-bf42-48b6-a868-5249f4beeb76",
+  "oracleId": "8896c74b-d466-4c25-94cf-82b5e2b1fdef",
+  "set": "fin",
+  "collectorNumber": "237",
+  "rarity": "uncommon",
+  "manaCost": "{3}{G}{W}",
+  "typeLine": "Legendary Creature — Human Rebel Warlock",
+  "oracleText": "When Rinoa Heartilly enters, create Angelo, a legendary 1/1 green and white Dog creature token.\nAngelo Cannon — Whenever Rinoa Heartilly attacks, another target creature you control gets +1/+1 until end of turn for each creature you control.",
+  "power": "4",
+  "toughness": "4",
+  "colors": [
+   "G",
+   "W"
+  ],
+  "keywords": [
+   "Angelo Cannon"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/a/ba79d293-bf42-48b6-a868-5249f4beeb76.jpg?1783906565",
+   "normal": "https://cards.scryfall.io/normal/front/b/a/ba79d293-bf42-48b6-a868-5249f4beeb76.jpg?1783906565",
+   "large": "https://cards.scryfall.io/large/front/b/a/ba79d293-bf42-48b6-a868-5249f4beeb76.jpg?1783906565",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/a/ba79d293-bf42-48b6-a868-5249f4beeb76.jpg?1783906565"
+  }
+ },
+ {
+  "name": "Weapons Vendor",
+  "scryfallId": "c9e6b374-3e44-4df7-b0a3-4ef98dc08267",
+  "oracleId": "bd0a7a86-a567-4145-b1d8-e0b72091db84",
+  "set": "fin",
+  "collectorNumber": "40",
+  "rarity": "common",
+  "manaCost": "{3}{W}",
+  "typeLine": "Creature — Human Artificer",
+  "oracleText": "When this creature enters, draw a card.\nAt the beginning of combat on your turn, if you control an Equipment, you may pay {1}. When you do, attach target Equipment you control to target creature you control.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/9/c9e6b374-3e44-4df7-b0a3-4ef98dc08267.jpg?1783906642",
+   "normal": "https://cards.scryfall.io/normal/front/c/9/c9e6b374-3e44-4df7-b0a3-4ef98dc08267.jpg?1783906642",
+   "large": "https://cards.scryfall.io/large/front/c/9/c9e6b374-3e44-4df7-b0a3-4ef98dc08267.jpg?1783906642",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/9/c9e6b374-3e44-4df7-b0a3-4ef98dc08267.jpg?1783906642"
+  }
+ },
+ {
+  "name": "Zack Fair",
+  "scryfallId": "f21f9161-5945-40da-8da0-446f6a4a1c23",
+  "oracleId": "e84d146a-1c67-49df-b062-622794e45c42",
+  "set": "fin",
+  "collectorNumber": "45",
+  "rarity": "uncommon",
+  "manaCost": "{W}",
+  "typeLine": "Legendary Creature — Human Soldier",
+  "oracleText": "Zack Fair enters with a +1/+1 counter on it.\n{1}, Sacrifice Zack Fair: Target creature you control gains indestructible until end of turn. Put Zack Fair's counters on that creature and attach an Equipment that was attached to Zack Fair to that creature.",
+  "power": "0",
+  "toughness": "1",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/2/f21f9161-5945-40da-8da0-446f6a4a1c23.jpg?1783906640",
+   "normal": "https://cards.scryfall.io/normal/front/f/2/f21f9161-5945-40da-8da0-446f6a4a1c23.jpg?1783906640",
+   "large": "https://cards.scryfall.io/large/front/f/2/f21f9161-5945-40da-8da0-446f6a4a1c23.jpg?1783906640",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/2/f21f9161-5945-40da-8da0-446f6a4a1c23.jpg?1783906640"
+  }
+ },
+ {
+  "name": "Aettir and Priwen",
+  "scryfallId": "038710ca-c756-4e66-a9de-278e676c9f5b",
+  "oracleId": "19d8937e-23fb-4758-a306-0e7af9bb44c4",
+  "set": "fin",
+  "collectorNumber": "253",
+  "rarity": "mythic",
+  "manaCost": "{6}",
+  "typeLine": "Legendary Artifact — Equipment",
+  "oracleText": "Equipped creature has base power and toughness X/X, where X is your life total.\nEquip {5}",
+  "colors": [],
+  "keywords": [
+   "Equip"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/3/038710ca-c756-4e66-a9de-278e676c9f5b.jpg?1783906559",
+   "normal": "https://cards.scryfall.io/normal/front/0/3/038710ca-c756-4e66-a9de-278e676c9f5b.jpg?1783906559",
+   "large": "https://cards.scryfall.io/large/front/0/3/038710ca-c756-4e66-a9de-278e676c9f5b.jpg?1783906559",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/3/038710ca-c756-4e66-a9de-278e676c9f5b.jpg?1783906559"
+  }
+ },
+ {
+  "name": "Bard's Bow",
+  "scryfallId": "2ac03e90-1e16-453f-88e4-a0448db73403",
+  "oracleId": "4aceb786-960d-4719-9de8-79dffd491a51",
+  "set": "fin",
+  "collectorNumber": "174",
+  "rarity": "common",
+  "manaCost": "{2}{G}",
+  "typeLine": "Artifact — Equipment",
+  "oracleText": "Job select (When this Equipment enters, create a 1/1 colorless Hero creature token, then attach this to it.)\nEquipped creature gets +2/+2, has reach, and is a Bard in addition to its other types.\nPerseus's Bow — Equip {6} ({6}: Attach to target creature you control. Equip only as a sorcery.)",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Job select",
+   "Equip"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/a/2ac03e90-1e16-453f-88e4-a0448db73403.jpg?1783906591",
+   "normal": "https://cards.scryfall.io/normal/front/2/a/2ac03e90-1e16-453f-88e4-a0448db73403.jpg?1783906591",
+   "large": "https://cards.scryfall.io/large/front/2/a/2ac03e90-1e16-453f-88e4-a0448db73403.jpg?1783906591",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/a/2ac03e90-1e16-453f-88e4-a0448db73403.jpg?1783906591"
+  }
+ },
+ {
+  "name": "Buster Sword",
+  "scryfallId": "374d7383-a1a7-4eea-91f7-290180e14cc9",
+  "oracleId": "5e060d58-4d6e-425c-b7d4-727669fcce5b",
+  "set": "fin",
+  "collectorNumber": "255",
+  "rarity": "mythic",
+  "manaCost": "{3}",
+  "typeLine": "Artifact — Equipment",
+  "oracleText": "Equipped creature gets +3/+2.\nWhenever equipped creature deals combat damage to a player, draw a card, then you may cast a spell from your hand with mana value less than or equal to that damage without paying its mana cost.\nEquip {2}",
+  "colors": [],
+  "keywords": [
+   "Equip"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/7/374d7383-a1a7-4eea-91f7-290180e14cc9.jpg?1783906560",
+   "normal": "https://cards.scryfall.io/normal/front/3/7/374d7383-a1a7-4eea-91f7-290180e14cc9.jpg?1783906560",
+   "large": "https://cards.scryfall.io/large/front/3/7/374d7383-a1a7-4eea-91f7-290180e14cc9.jpg?1783906560",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/7/374d7383-a1a7-4eea-91f7-290180e14cc9.jpg?1783906560"
+  }
+ },
+ {
+  "name": "Crystal Fragments",
+  "scryfallId": "5f51c853-949d-44e9-a3a2-02e1ce69a147",
+  "oracleId": "b291d046-7649-4a05-98c4-224ecaece912",
+  "set": "fin",
+  "collectorNumber": "13",
+  "rarity": "uncommon",
+  "manaCost": "{W}",
+  "typeLine": "Artifact — Equipment",
+  "oracleText": "Equipped creature gets +1/+1.\n{5}{W}{W}: Exile this Equipment, then return it to the battlefield transformed under its owner's control. Activate only as a sorcery.\nEquip {1}",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Transform",
+   "Equip"
+  ],
+  "back": "Summon: Alexander",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/f/5f51c853-949d-44e9-a3a2-02e1ce69a147.jpg?1783906657",
+   "normal": "https://cards.scryfall.io/normal/front/5/f/5f51c853-949d-44e9-a3a2-02e1ce69a147.jpg?1783906657",
+   "large": "https://cards.scryfall.io/large/front/5/f/5f51c853-949d-44e9-a3a2-02e1ce69a147.jpg?1783906657",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/f/5f51c853-949d-44e9-a3a2-02e1ce69a147.jpg?1783906657"
+  }
+ },
+ {
+  "name": "Summon: Alexander",
+  "scryfallId": "5f51c853-949d-44e9-a3a2-02e1ce69a147",
+  "oracleId": "b291d046-7649-4a05-98c4-224ecaece912",
+  "set": "fin",
+  "collectorNumber": "13",
+  "rarity": "uncommon",
+  "manaCost": "",
+  "typeLine": "Enchantment Creature — Saga Construct",
+  "oracleText": "(As this Saga enters and after your draw step, add a lore counter. Sacrifice after III.)\nI, II — Prevent all damage that would be dealt to creatures you control this turn.\nIII — Tap all creatures your opponents control.\nFlying",
+  "power": "4",
+  "toughness": "3",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "front": "Crystal Fragments",
+  "image": {
+   "small": "https://cards.scryfall.io/small/back/5/f/5f51c853-949d-44e9-a3a2-02e1ce69a147.jpg?1783906657",
+   "normal": "https://cards.scryfall.io/normal/back/5/f/5f51c853-949d-44e9-a3a2-02e1ce69a147.jpg?1783906657",
+   "large": "https://cards.scryfall.io/large/back/5/f/5f51c853-949d-44e9-a3a2-02e1ce69a147.jpg?1783906657",
+   "artCrop": "https://cards.scryfall.io/art_crop/back/5/f/5f51c853-949d-44e9-a3a2-02e1ce69a147.jpg?1783906657"
+  }
+ },
+ {
+  "name": "Dragoon's Lance",
+  "scryfallId": "96630531-8eb7-4e3e-8d63-60c562a5571b",
+  "oracleId": "a66c35fc-d5db-4cfd-9b85-d70b001d83d3",
+  "set": "fin",
+  "collectorNumber": "17",
+  "rarity": "uncommon",
+  "manaCost": "{1}{W}",
+  "typeLine": "Artifact — Equipment",
+  "oracleText": "Job select (When this Equipment enters, create a 1/1 colorless Hero creature token, then attach this to it.)\nEquipped creature gets +1/+0 and is a Knight in addition to its other types.\nDuring your turn, equipped creature has flying.\nGae Bolg — Equip {4}",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Gae Bolg",
+   "Job select",
+   "Equip"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/6/96630531-8eb7-4e3e-8d63-60c562a5571b.jpg?1783906651",
+   "normal": "https://cards.scryfall.io/normal/front/9/6/96630531-8eb7-4e3e-8d63-60c562a5571b.jpg?1783906651",
+   "large": "https://cards.scryfall.io/large/front/9/6/96630531-8eb7-4e3e-8d63-60c562a5571b.jpg?1783906651",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/6/96630531-8eb7-4e3e-8d63-60c562a5571b.jpg?1783906651"
+  }
+ },
+ {
+  "name": "Genji Glove",
+  "scryfallId": "f724dde1-84b0-4e3b-a9b8-44cd22bb9f79",
+  "oracleId": "8242cd78-6675-43b5-8924-0a88c3aa6f76",
+  "set": "fin",
+  "collectorNumber": "258",
+  "rarity": "rare",
+  "manaCost": "{5}",
+  "typeLine": "Artifact — Equipment",
+  "oracleText": "Equipped creature has double strike.\nWhenever equipped creature attacks, if it's the first combat phase of the turn, untap it. After this phase, there is an additional combat phase.\nEquip {3}",
+  "colors": [],
+  "keywords": [
+   "Equip"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/7/f724dde1-84b0-4e3b-a9b8-44cd22bb9f79.jpg?1783906558",
+   "normal": "https://cards.scryfall.io/normal/front/f/7/f724dde1-84b0-4e3b-a9b8-44cd22bb9f79.jpg?1783906558",
+   "large": "https://cards.scryfall.io/large/front/f/7/f724dde1-84b0-4e3b-a9b8-44cd22bb9f79.jpg?1783906558",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/7/f724dde1-84b0-4e3b-a9b8-44cd22bb9f79.jpg?1783906558"
+  }
+ },
+ {
+  "name": "Machinist's Arsenal",
+  "scryfallId": "ff976428-2145-4630-aab1-08870b90b2f0",
+  "oracleId": "e7fff34e-9b80-4a67-a917-fd9efddb5a1f",
+  "set": "fin",
+  "collectorNumber": "23",
+  "rarity": "rare",
+  "manaCost": "{4}{W}",
+  "typeLine": "Artifact — Equipment",
+  "oracleText": "Job select (When this Equipment enters, create a 1/1 colorless Hero creature token, then attach this to it.)\nEquipped creature gets +2/+2 for each artifact you control and is an Artificer in addition to its other types.\nMachina — Equip {4} ({4}: Attach to target creature you control. Equip only as a sorcery.)",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Machina",
+   "Job select",
+   "Equip"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/f/ff976428-2145-4630-aab1-08870b90b2f0.jpg?1783906647",
+   "normal": "https://cards.scryfall.io/normal/front/f/f/ff976428-2145-4630-aab1-08870b90b2f0.jpg?1783906647",
+   "large": "https://cards.scryfall.io/large/front/f/f/ff976428-2145-4630-aab1-08870b90b2f0.jpg?1783906647",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/f/ff976428-2145-4630-aab1-08870b90b2f0.jpg?1783906647"
+  }
+ },
+ {
+  "name": "Paladin's Arms",
+  "scryfallId": "446506c5-5e1d-4b42-aef3-ea247d7881ef",
+  "oracleId": "22076484-e9d5-4f33-8cf3-b9b427436b05",
+  "set": "fin",
+  "collectorNumber": "28",
+  "rarity": "common",
+  "manaCost": "{2}{W}",
+  "typeLine": "Artifact — Equipment",
+  "oracleText": "Job select (When this Equipment enters, create a 1/1 colorless Hero creature token, then attach this to it.)\nEquipped creature gets +2/+1, has ward {1}, and is a Knight in addition to its other types.\nLightbringer and Hero's Shield — Equip {4} ({4}: Attach to target creature you control. Equip only as a sorcery.)",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Job select",
+   "Equip"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/4/446506c5-5e1d-4b42-aef3-ea247d7881ef.jpg?1783906646",
+   "normal": "https://cards.scryfall.io/normal/front/4/4/446506c5-5e1d-4b42-aef3-ea247d7881ef.jpg?1783906646",
+   "large": "https://cards.scryfall.io/large/front/4/4/446506c5-5e1d-4b42-aef3-ea247d7881ef.jpg?1783906646",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/4/446506c5-5e1d-4b42-aef3-ea247d7881ef.jpg?1783906646"
+  }
+ },
+ {
+  "name": "Samurai's Katana",
+  "scryfallId": "11f1d378-c78c-402a-ac46-2d32598c23e7",
+  "oracleId": "9b8b5812-73bd-453e-bdff-aad1fafa9226",
+  "set": "fin",
+  "collectorNumber": "154",
+  "rarity": "uncommon",
+  "manaCost": "{2}{R}",
+  "typeLine": "Artifact — Equipment",
+  "oracleText": "Job select (When this Equipment enters, create a 1/1 colorless Hero creature token, then attach this to it.)\nEquipped creature gets +2/+2, has trample and haste, and is a Samurai in addition to its other types.\nMurasame — Equip {5}",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Murasame",
+   "Job select",
+   "Equip"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/1/11f1d378-c78c-402a-ac46-2d32598c23e7.jpg?1783906598",
+   "normal": "https://cards.scryfall.io/normal/front/1/1/11f1d378-c78c-402a-ac46-2d32598c23e7.jpg?1783906598",
+   "large": "https://cards.scryfall.io/large/front/1/1/11f1d378-c78c-402a-ac46-2d32598c23e7.jpg?1783906598",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/1/11f1d378-c78c-402a-ac46-2d32598c23e7.jpg?1783906598"
+  }
+ },
+ {
+  "name": "Summoner's Grimoire",
+  "scryfallId": "d9fda3fc-569d-49f8-a2ed-e0b1d6668426",
+  "oracleId": "d4453b3e-733e-4038-81da-135a6a03079c",
+  "set": "fin",
+  "collectorNumber": "205",
+  "rarity": "rare",
+  "manaCost": "{3}{G}",
+  "typeLine": "Artifact — Book Equipment",
+  "oracleText": "Job select\nEquipped creature is a Shaman in addition to its other types and has \"Whenever this creature attacks, you may put a creature card from your hand onto the battlefield. If that card is an enchantment card, it enters tapped and attacking.\"\nAbraxas — Equip {3}",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Job select",
+   "Equip",
+   "Abraxas"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/9/d9fda3fc-569d-49f8-a2ed-e0b1d6668426.jpg?1783906580",
+   "normal": "https://cards.scryfall.io/normal/front/d/9/d9fda3fc-569d-49f8-a2ed-e0b1d6668426.jpg?1783906580",
+   "large": "https://cards.scryfall.io/large/front/d/9/d9fda3fc-569d-49f8-a2ed-e0b1d6668426.jpg?1783906580",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/9/d9fda3fc-569d-49f8-a2ed-e0b1d6668426.jpg?1783906580"
+  }
+ },
+ {
+  "name": "Ultima Weapon",
+  "scryfallId": "b9162d08-a6ba-4e6e-b82c-9b092bd781dd",
+  "oracleId": "0dc4bf39-67d6-44e5-8993-dd18b20cfdee",
+  "set": "fin",
+  "collectorNumber": "563",
+  "rarity": "rare",
+  "manaCost": "{7}",
+  "typeLine": "Legendary Artifact — Equipment",
+  "oracleText": "Whenever equipped creature attacks, destroy target creature an opponent controls.\nEquipped creature gets +7/+7.\nEquip {7}",
+  "colors": [],
+  "keywords": [
+   "Equip"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/9/b9162d08-a6ba-4e6e-b82c-9b092bd781dd.jpg?1783906432",
+   "normal": "https://cards.scryfall.io/normal/front/b/9/b9162d08-a6ba-4e6e-b82c-9b092bd781dd.jpg?1783906432",
+   "large": "https://cards.scryfall.io/large/front/b/9/b9162d08-a6ba-4e6e-b82c-9b092bd781dd.jpg?1783906432",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/9/b9162d08-a6ba-4e6e-b82c-9b092bd781dd.jpg?1783906432"
+  }
+ },
+ {
+  "name": "White Mage's Staff",
+  "scryfallId": "30db372e-0b4c-4e16-9667-bf3fda666f72",
+  "oracleId": "af1acf07-39e2-441e-a1e0-1db535535e2e",
+  "set": "fin",
+  "collectorNumber": "42",
+  "rarity": "common",
+  "manaCost": "{1}{W}",
+  "typeLine": "Artifact — Equipment",
+  "oracleText": "Job select (When this Equipment enters, create a 1/1 colorless Hero creature token, then attach this to it.)\nEquipped creature gets +1/+1, has \"Whenever this creature attacks, you gain 1 life,\" and is a Cleric in addition to its other types.\nEquip {3} ({3}: Attach to target creature you control. Equip only as a sorcery.)",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Job select",
+   "Equip"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/0/30db372e-0b4c-4e16-9667-bf3fda666f72.jpg?1783906642",
+   "normal": "https://cards.scryfall.io/normal/front/3/0/30db372e-0b4c-4e16-9667-bf3fda666f72.jpg?1783906642",
+   "large": "https://cards.scryfall.io/large/front/3/0/30db372e-0b4c-4e16-9667-bf3fda666f72.jpg?1783906642",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/0/30db372e-0b4c-4e16-9667-bf3fda666f72.jpg?1783906642"
+  }
+ },
+ {
+  "name": "Airship Crash",
+  "scryfallId": "ec91c4e4-711f-464d-bc83-e6813f4fdcdb",
+  "oracleId": "72a0e0f1-e8be-441a-bcaf-029fb1bd1fd2",
+  "set": "fin",
+  "collectorNumber": "171",
+  "rarity": "common",
+  "manaCost": "{2}{G}",
+  "typeLine": "Instant",
+  "oracleText": "Destroy target artifact, enchantment, or creature with flying.\nCycling {2} ({2}, Discard this card: Draw a card.)",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Cycling"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/c/ec91c4e4-711f-464d-bc83-e6813f4fdcdb.jpg?1783906592",
+   "normal": "https://cards.scryfall.io/normal/front/e/c/ec91c4e4-711f-464d-bc83-e6813f4fdcdb.jpg?1783906592",
+   "large": "https://cards.scryfall.io/large/front/e/c/ec91c4e4-711f-464d-bc83-e6813f4fdcdb.jpg?1783906592",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/c/ec91c4e4-711f-464d-bc83-e6813f4fdcdb.jpg?1783906592"
+  }
+ },
+ {
+  "name": "Commune with Beavers",
+  "scryfallId": "784287c2-43c5-4210-93ae-cdd33b9acb1b",
+  "oracleId": "9108fffb-90f4-444e-8d3e-46a3d4ff3681",
+  "set": "fin",
+  "collectorNumber": "182",
+  "rarity": "common",
+  "manaCost": "{G}",
+  "typeLine": "Sorcery",
+  "oracleText": "Look at the top three cards of your library. You may reveal an artifact, creature, or land card from among them and put it into your hand. Put the rest on the bottom of your library in any order.",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/8/784287c2-43c5-4210-93ae-cdd33b9acb1b.jpg?1783906588",
+   "normal": "https://cards.scryfall.io/normal/front/7/8/784287c2-43c5-4210-93ae-cdd33b9acb1b.jpg?1783906588",
+   "large": "https://cards.scryfall.io/large/front/7/8/784287c2-43c5-4210-93ae-cdd33b9acb1b.jpg?1783906588",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/8/784287c2-43c5-4210-93ae-cdd33b9acb1b.jpg?1783906588"
+  }
+ },
+ {
   "name": "Terra, Herald of Hope",
   "scryfallId": "5aa1a2d7-6133-41a9-9662-9008d1309935",
   "oracleId": "25d40d28-1b46-4055-959a-45719040ed30",
@@ -29160,6 +29914,409 @@
    "normal": "https://cards.scryfall.io/normal/front/9/c/9c0f60a6-b5c8-4704-8b61-94e8fc463e5d.jpg?1783930699",
    "large": "https://cards.scryfall.io/large/front/9/c/9c0f60a6-b5c8-4704-8b61-94e8fc463e5d.jpg?1783930699",
    "artCrop": "https://cards.scryfall.io/art_crop/front/9/c/9c0f60a6-b5c8-4704-8b61-94e8fc463e5d.jpg?1783930699"
+  }
+ },
+ {
+  "name": "Cloud, Ex-SOLDIER",
+  "scryfallId": "07b4e4f8-6a31-4533-be51-668ce3ddc84f",
+  "oracleId": "653f0452-5802-4639-86c2-1500c3964fcb",
+  "set": "fic",
+  "collectorNumber": "2",
+  "rarity": "mythic",
+  "manaCost": "{2}{R}{G}{W}",
+  "typeLine": "Legendary Creature — Human Soldier Mercenary",
+  "oracleText": "Haste\nWhen Cloud enters, attach up to one target Equipment you control to it.\nWhenever Cloud attacks, draw a card for each equipped attacking creature you control. Then if Cloud has power 7 or greater, create two Treasure tokens.",
+  "power": "4",
+  "toughness": "4",
+  "colors": [
+   "G",
+   "R",
+   "W"
+  ],
+  "keywords": [
+   "Treasure",
+   "Haste"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/7/07b4e4f8-6a31-4533-be51-668ce3ddc84f.jpg?1783906375",
+   "normal": "https://cards.scryfall.io/normal/front/0/7/07b4e4f8-6a31-4533-be51-668ce3ddc84f.jpg?1783906375",
+   "large": "https://cards.scryfall.io/large/front/0/7/07b4e4f8-6a31-4533-be51-668ce3ddc84f.jpg?1783906375",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/7/07b4e4f8-6a31-4533-be51-668ce3ddc84f.jpg?1783906375"
+  }
+ },
+ {
+  "name": "Arms Scavenger",
+  "scryfallId": "01fdeddb-b6f8-4c6c-bf97-65d7766fcca9",
+  "oracleId": "9a884415-caa2-40bc-b935-b00e5ab6779e",
+  "set": "ymid",
+  "collectorNumber": "35",
+  "rarity": "rare",
+  "manaCost": "{1}{R}",
+  "typeLine": "Creature — Human Warrior",
+  "oracleText": "At the beginning of your upkeep, draft a card from this creature's spellbook, then exile it. Until end of turn, you may play that card.\nEquip abilities you activate cost {1} less to activate.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Draft from a spellbook"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/1/01fdeddb-b6f8-4c6c-bf97-65d7766fcca9.jpg?1783924545",
+   "normal": "https://cards.scryfall.io/normal/front/0/1/01fdeddb-b6f8-4c6c-bf97-65d7766fcca9.jpg?1783924545",
+   "large": "https://cards.scryfall.io/large/front/0/1/01fdeddb-b6f8-4c6c-bf97-65d7766fcca9.jpg?1783924545",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/1/01fdeddb-b6f8-4c6c-bf97-65d7766fcca9.jpg?1783924545"
+  }
+ },
+ {
+  "name": "Professional Face-Breaker",
+  "scryfallId": "d5a53791-d4e9-49e9-9daf-c8b378925afe",
+  "oracleId": "04152e7a-969c-4858-841b-0a569a9fc1bf",
+  "set": "fic",
+  "collectorNumber": "296",
+  "rarity": "rare",
+  "manaCost": "{2}{R}",
+  "typeLine": "Creature — Human Warrior",
+  "oracleText": "Menace\nWhenever one or more creatures you control deal combat damage to a player, create a Treasure token.\nSacrifice a Treasure: Exile the top card of your library. You may play that card this turn.",
+  "power": "2",
+  "toughness": "3",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Treasure",
+   "Menace"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/5/d5a53791-d4e9-49e9-9daf-c8b378925afe.jpg?1783906267",
+   "normal": "https://cards.scryfall.io/normal/front/d/5/d5a53791-d4e9-49e9-9daf-c8b378925afe.jpg?1783906267",
+   "large": "https://cards.scryfall.io/large/front/d/5/d5a53791-d4e9-49e9-9daf-c8b378925afe.jpg?1783906267",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/5/d5a53791-d4e9-49e9-9daf-c8b378925afe.jpg?1783906267"
+  }
+ },
+ {
+  "name": "Tifa, Martial Artist",
+  "scryfallId": "31513afc-329c-4913-8fcd-945c39ec82b2",
+  "oracleId": "0836c8d1-c453-4a3a-a52a-eb66839b8542",
+  "set": "fic",
+  "collectorNumber": "6",
+  "rarity": "mythic",
+  "manaCost": "{1}{R}{G}{W}",
+  "typeLine": "Legendary Creature — Human Monk",
+  "oracleText": "Melee (Whenever this creature attacks, it gets +1/+1 until end of turn for each opponent you attacked this combat.)\nWhenever one or more creatures you control with power 7 or greater deal combat damage to a player, untap all creatures you control. If it's the first combat phase of your turn, there is an additional combat phase after this phase.",
+  "power": "4",
+  "toughness": "4",
+  "colors": [
+   "G",
+   "R",
+   "W"
+  ],
+  "keywords": [
+   "Melee"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/1/31513afc-329c-4913-8fcd-945c39ec82b2.jpg?1783906372",
+   "normal": "https://cards.scryfall.io/normal/front/3/1/31513afc-329c-4913-8fcd-945c39ec82b2.jpg?1783906372",
+   "large": "https://cards.scryfall.io/large/front/3/1/31513afc-329c-4913-8fcd-945c39ec82b2.jpg?1783906372",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/1/31513afc-329c-4913-8fcd-945c39ec82b2.jpg?1783906372"
+  }
+ },
+ {
+  "name": "Colossus Hammer",
+  "scryfallId": "fa35b2b5-3e91-4a6c-90b1-8581b4ecaf8b",
+  "oracleId": "8ec03b88-8d3a-4a32-8b7c-7da59b0c03d0",
+  "set": "m20",
+  "collectorNumber": "223",
+  "rarity": "uncommon",
+  "manaCost": "{1}",
+  "typeLine": "Artifact — Equipment",
+  "oracleText": "Equipped creature gets +10/+10 and loses flying.\nEquip {8} ({8}: Attach to target creature you control. Equip only as a sorcery.)",
+  "colors": [],
+  "keywords": [
+   "Equip"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/a/fa35b2b5-3e91-4a6c-90b1-8581b4ecaf8b.jpg?1783932945",
+   "normal": "https://cards.scryfall.io/normal/front/f/a/fa35b2b5-3e91-4a6c-90b1-8581b4ecaf8b.jpg?1783932945",
+   "large": "https://cards.scryfall.io/large/front/f/a/fa35b2b5-3e91-4a6c-90b1-8581b4ecaf8b.jpg?1783932945",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/a/fa35b2b5-3e91-4a6c-90b1-8581b4ecaf8b.jpg?1783932945"
+  }
+ },
+ {
+  "name": "Darksteel Plate",
+  "scryfallId": "49277723-84df-4842-a8e5-cdf1c1aa8161",
+  "oracleId": "b5b4cf54-ed5e-42d0-9d98-5fec76b0b0b8",
+  "set": "fic",
+  "collectorNumber": "342",
+  "rarity": "rare",
+  "manaCost": "{3}",
+  "typeLine": "Artifact — Equipment",
+  "oracleText": "Indestructible\nEquipped creature has indestructible.\nEquip {2}",
+  "colors": [],
+  "keywords": [
+   "Indestructible",
+   "Equip"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/9/49277723-84df-4842-a8e5-cdf1c1aa8161.jpg?1785650614",
+   "normal": "https://cards.scryfall.io/normal/front/4/9/49277723-84df-4842-a8e5-cdf1c1aa8161.jpg?1785650614",
+   "large": "https://cards.scryfall.io/large/front/4/9/49277723-84df-4842-a8e5-cdf1c1aa8161.jpg?1785650614",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/9/49277723-84df-4842-a8e5-cdf1c1aa8161.jpg?1785650614"
+  }
+ },
+ {
+  "name": "Hero's Heirloom",
+  "scryfallId": "08866f84-406d-4372-9893-ba22690a48ef",
+  "oracleId": "f707dfb5-dfa9-471b-ac29-5435c30069cc",
+  "set": "fic",
+  "collectorNumber": "346",
+  "rarity": "uncommon",
+  "manaCost": "{2}",
+  "typeLine": "Artifact — Equipment",
+  "oracleText": "Equipped creature gets +2/+1.\nAs long as equipped creature is legendary, it has trample and haste.\nEquip {2}",
+  "colors": [],
+  "keywords": [
+   "Equip"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/8/08866f84-406d-4372-9893-ba22690a48ef.jpg?1783906240",
+   "normal": "https://cards.scryfall.io/normal/front/0/8/08866f84-406d-4372-9893-ba22690a48ef.jpg?1783906240",
+   "large": "https://cards.scryfall.io/large/front/0/8/08866f84-406d-4372-9893-ba22690a48ef.jpg?1783906240",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/8/08866f84-406d-4372-9893-ba22690a48ef.jpg?1783906240"
+  }
+ },
+ {
+  "name": "Lost Jitte",
+  "scryfallId": "c936504c-4e90-408f-ba98-0fb8c0378471",
+  "oracleId": "a9d72f78-2ab5-4e2e-ab7b-ef875e0a0609",
+  "set": "big",
+  "collectorNumber": "23",
+  "rarity": "mythic",
+  "manaCost": "{1}",
+  "typeLine": "Legendary Artifact — Equipment",
+  "oracleText": "Whenever equipped creature deals combat damage, put a charge counter on Lost Jitte.\nRemove a charge counter from Lost Jitte: Choose one —\n• Untap target land.\n• Target creature can't block this turn.\n• Put a +1/+1 counter on equipped creature.\nEquip {1}",
+  "colors": [],
+  "keywords": [
+   "Equip"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/9/c936504c-4e90-408f-ba98-0fb8c0378471.jpg?1783911996",
+   "normal": "https://cards.scryfall.io/normal/front/c/9/c936504c-4e90-408f-ba98-0fb8c0378471.jpg?1783911996",
+   "large": "https://cards.scryfall.io/large/front/c/9/c936504c-4e90-408f-ba98-0fb8c0378471.jpg?1783911996",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/9/c936504c-4e90-408f-ba98-0fb8c0378471.jpg?1783911996"
+  }
+ },
+ {
+  "name": "Sword of Forge and Frontier",
+  "scryfallId": "b65ac389-e4d1-4b02-8da7-790bf3be6943",
+  "oracleId": "c6331ce3-21f7-4784-80fe-df1f541a4c46",
+  "set": "sld",
+  "collectorNumber": "2817",
+  "rarity": "mythic",
+  "manaCost": "{3}",
+  "typeLine": "Artifact — Equipment",
+  "oracleText": "Equipped creature gets +2/+2 and has protection from red and from green.\nWhenever equipped creature deals combat damage to a player, exile the top two cards of your library. You may play those cards this turn. You may play an additional land this turn.\nEquip {2}",
+  "colors": [],
+  "keywords": [
+   "Equip"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/6/b65ac389-e4d1-4b02-8da7-790bf3be6943.jpg?1784278873",
+   "normal": "https://cards.scryfall.io/normal/front/b/6/b65ac389-e4d1-4b02-8da7-790bf3be6943.jpg?1784278873",
+   "large": "https://cards.scryfall.io/large/front/b/6/b65ac389-e4d1-4b02-8da7-790bf3be6943.jpg?1784278873",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/6/b65ac389-e4d1-4b02-8da7-790bf3be6943.jpg?1784278873"
+  }
+ },
+ {
+  "name": "Sword of Vengeance",
+  "scryfallId": "96fc0138-46fc-493c-8a28-8630c4759193",
+  "oracleId": "e366afb3-c447-4bde-b358-41c8568142d5",
+  "set": "m11",
+  "collectorNumber": "216",
+  "rarity": "rare",
+  "manaCost": "{3}",
+  "typeLine": "Artifact — Equipment",
+  "oracleText": "Equipped creature gets +2/+0 and has first strike, vigilance, trample, and haste.\nEquip {3}",
+  "colors": [],
+  "keywords": [
+   "Equip"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/6/96fc0138-46fc-493c-8a28-8630c4759193.jpg?1783941788",
+   "normal": "https://cards.scryfall.io/normal/front/9/6/96fc0138-46fc-493c-8a28-8630c4759193.jpg?1783941788",
+   "large": "https://cards.scryfall.io/large/front/9/6/96fc0138-46fc-493c-8a28-8630c4759193.jpg?1783941788",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/6/96fc0138-46fc-493c-8a28-8630c4759193.jpg?1783941788"
+  }
+ },
+ {
+  "name": "Fighter Class",
+  "scryfallId": "d54a8329-b940-42c9-8ace-1d74407d14cb",
+  "oracleId": "8a280ba8-6b7b-46dd-9c2b-6d0027cfff30",
+  "set": "afr",
+  "collectorNumber": "222",
+  "rarity": "rare",
+  "manaCost": "{R}{W}",
+  "typeLine": "Enchantment — Class",
+  "oracleText": "(Gain the next level as a sorcery to add its ability.)\nWhen this Class enters, search your library for an Equipment card, reveal it, put it into your hand, then shuffle.\n{1}{R}{W}: Level 2\nEquip abilities you activate cost {2} less to activate.\n{3}{R}{W}: Level 3\nWhenever a creature you control attacks, up to one target creature blocks it this combat if able.",
+  "colors": [
+   "R",
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/5/d54a8329-b940-42c9-8ace-1d74407d14cb.jpg?1783926448",
+   "normal": "https://cards.scryfall.io/normal/front/d/5/d54a8329-b940-42c9-8ace-1d74407d14cb.jpg?1783926448",
+   "large": "https://cards.scryfall.io/large/front/d/5/d54a8329-b940-42c9-8ace-1d74407d14cb.jpg?1783926448",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/5/d54a8329-b940-42c9-8ace-1d74407d14cb.jpg?1783926448"
+  }
+ },
+ {
+  "name": "Furious Rise",
+  "scryfallId": "2ae12125-73a3-488b-98b8-9f982addac56",
+  "oracleId": "52b3a979-3b93-4441-9237-0c8a754e5523",
+  "set": "m21",
+  "collectorNumber": "144",
+  "rarity": "uncommon",
+  "manaCost": "{2}{R}",
+  "typeLine": "Enchantment",
+  "oracleText": "At the beginning of your end step, if you control a creature with power 4 or greater, exile the top card of your library. You may play that card until you exile another card with this enchantment.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/a/2ae12125-73a3-488b-98b8-9f982addac56.jpg?1783930690",
+   "normal": "https://cards.scryfall.io/normal/front/2/a/2ae12125-73a3-488b-98b8-9f982addac56.jpg?1783930690",
+   "large": "https://cards.scryfall.io/large/front/2/a/2ae12125-73a3-488b-98b8-9f982addac56.jpg?1783930690",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/a/2ae12125-73a3-488b-98b8-9f982addac56.jpg?1783930690"
+  }
+ },
+ {
+  "name": "Inspiring Statuary",
+  "scryfallId": "6c28687d-b96a-4d3c-a6cb-99fbae6a384b",
+  "oracleId": "78b2b68d-6e27-49f3-8373-6e19faf6f679",
+  "set": "fic",
+  "collectorNumber": "347",
+  "rarity": "rare",
+  "manaCost": "{3}",
+  "typeLine": "Artifact",
+  "oracleText": "Nonartifact spells you cast have improvise. (Your artifacts can help cast those spells. Each artifact you tap after you're done activating mana abilities pays for {1}.)",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/c/6c28687d-b96a-4d3c-a6cb-99fbae6a384b.jpg?1783906244",
+   "normal": "https://cards.scryfall.io/normal/front/6/c/6c28687d-b96a-4d3c-a6cb-99fbae6a384b.jpg?1783906244",
+   "large": "https://cards.scryfall.io/large/front/6/c/6c28687d-b96a-4d3c-a6cb-99fbae6a384b.jpg?1783906244",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/c/6c28687d-b96a-4d3c-a6cb-99fbae6a384b.jpg?1783906244"
+  }
+ },
+ {
+  "name": "Decimate",
+  "scryfallId": "dae88c31-77a5-40aa-84be-d74b4545a6ee",
+  "oracleId": "a4e5693f-12a0-451e-818d-d6efc7b4ed25",
+  "set": "fic",
+  "collectorNumber": "323",
+  "rarity": "rare",
+  "manaCost": "{2}{R}{G}",
+  "typeLine": "Sorcery",
+  "oracleText": "Destroy target artifact, target creature, target enchantment, and target land. (You can't cast this spell unless you have legal choices for all its targets.)",
+  "colors": [
+   "G",
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/a/dae88c31-77a5-40aa-84be-d74b4545a6ee.jpg?1783906251",
+   "normal": "https://cards.scryfall.io/normal/front/d/a/dae88c31-77a5-40aa-84be-d74b4545a6ee.jpg?1783906251",
+   "large": "https://cards.scryfall.io/large/front/d/a/dae88c31-77a5-40aa-84be-d74b4545a6ee.jpg?1783906251",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/a/dae88c31-77a5-40aa-84be-d74b4545a6ee.jpg?1783906251"
+  }
+ },
+ {
+  "name": "Explore",
+  "scryfallId": "098e528a-bd6c-41f3-a246-cba986c54776",
+  "oracleId": "b8f566ea-8283-4afa-9ac8-737e26419283",
+  "set": "sld",
+  "collectorNumber": "114",
+  "rarity": "rare",
+  "manaCost": "{1}{G}",
+  "typeLine": "Sorcery",
+  "oracleText": "You may play an additional land this turn.\nDraw a card.",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/9/098e528a-bd6c-41f3-a246-cba986c54776.jpg?1783929584",
+   "normal": "https://cards.scryfall.io/normal/front/0/9/098e528a-bd6c-41f3-a246-cba986c54776.jpg?1783929584",
+   "large": "https://cards.scryfall.io/large/front/0/9/098e528a-bd6c-41f3-a246-cba986c54776.jpg?1783929584",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/9/098e528a-bd6c-41f3-a246-cba986c54776.jpg?1783929584"
+  }
+ },
+ {
+  "name": "Rampant Growth",
+  "scryfallId": "fe45a787-6d8a-48d7-ad6c-fb20a9b468a4",
+  "oracleId": "8539f295-5d58-4436-a73a-b9277c4c7795",
+  "set": "m12",
+  "collectorNumber": "190",
+  "rarity": "common",
+  "manaCost": "{1}{G}",
+  "typeLine": "Sorcery",
+  "oracleText": "Search your library for a basic land card, put that card onto the battlefield tapped, then shuffle.",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/e/fe45a787-6d8a-48d7-ad6c-fb20a9b468a4.jpg?1783941055",
+   "normal": "https://cards.scryfall.io/normal/front/f/e/fe45a787-6d8a-48d7-ad6c-fb20a9b468a4.jpg?1783941055",
+   "large": "https://cards.scryfall.io/large/front/f/e/fe45a787-6d8a-48d7-ad6c-fb20a9b468a4.jpg?1783941055",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/e/fe45a787-6d8a-48d7-ad6c-fb20a9b468a4.jpg?1783941055"
+  }
+ },
+ {
+  "name": "Requisition Raid",
+  "scryfallId": "154e9ba9-0d0e-4b0e-acf2-f66a993cf3a2",
+  "oracleId": "09669283-eb14-46a2-b37a-51d7a52da891",
+  "set": "otj",
+  "collectorNumber": "26",
+  "rarity": "uncommon",
+  "manaCost": "{W}",
+  "typeLine": "Sorcery",
+  "oracleText": "Spree (Choose one or more additional costs.)\n+ {1} — Destroy target artifact.\n+ {1} — Destroy target enchantment.\n+ {1} — Put a +1/+1 counter on each creature target player controls.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Spree"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/5/154e9ba9-0d0e-4b0e-acf2-f66a993cf3a2.jpg?1783911852",
+   "normal": "https://cards.scryfall.io/normal/front/1/5/154e9ba9-0d0e-4b0e-acf2-f66a993cf3a2.jpg?1783911852",
+   "large": "https://cards.scryfall.io/large/front/1/5/154e9ba9-0d0e-4b0e-acf2-f66a993cf3a2.jpg?1783911852",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/5/154e9ba9-0d0e-4b0e-acf2-f66a993cf3a2.jpg?1783911852"
+  }
+ },
+ {
+  "name": "Secret Rendezvous",
+  "scryfallId": "3219a87c-1b92-4777-ac5d-c78f3ddf35d2",
+  "oracleId": "34b90d3e-f48c-41ff-b3e4-5cab7a9cd597",
+  "set": "fic",
+  "collectorNumber": "217",
+  "rarity": "uncommon",
+  "manaCost": "{1}{W}{W}",
+  "typeLine": "Sorcery",
+  "oracleText": "You and target opponent each draw three cards.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/2/3219a87c-1b92-4777-ac5d-c78f3ddf35d2.jpg?1783906300",
+   "normal": "https://cards.scryfall.io/normal/front/3/2/3219a87c-1b92-4777-ac5d-c78f3ddf35d2.jpg?1783906300",
+   "large": "https://cards.scryfall.io/large/front/3/2/3219a87c-1b92-4777-ac5d-c78f3ddf35d2.jpg?1783906300",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/2/3219a87c-1b92-4777-ac5d-c78f3ddf35d2.jpg?1783906300"
   }
  }
 ]

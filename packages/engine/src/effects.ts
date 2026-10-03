@@ -712,8 +712,14 @@ export function runEffects(
             : e.from === 'lastExiledWithSource'
               ? exiled.slice(-1)
               : exiled;
+        // Final Fantasy Commander (12b): "with mana value less than or equal to that damage".
+        const maxMv =
+          e.maxManaValueAmount !== undefined ? resolveAmount(ctx, es, e.maxManaValueAmount) : 99;
         const cards = pool.filter(
-          (id) => !def(ctx, id).types.includes('Land') && cardMatches(ctx, id, e.filter ?? {}),
+          (id) =>
+            !def(ctx, id).types.includes('Land') &&
+            cardMatches(ctx, id, e.filter ?? {}) &&
+            manaValue(def(ctx, id).manaCost) <= maxMv,
         );
         if (cards.length === 0) continue;
         ctx.s.decision = { kind: 'castFree', player: controller, cards, resume, thenPriority };

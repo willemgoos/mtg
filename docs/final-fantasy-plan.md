@@ -161,6 +161,13 @@ four decks. Three more FIC Brawl decks followed (9 December 2025, "Arena Store d
   graveyard", "creatures enter from a graveyard", back-face death triggers (Galian Beast, Chaos), "becomes untapped",
   Pathways, the shared FIC lands of all seven decks, Saga creatures (Summons) on the generic Saga rules. Brawl arena
   (10 games a pairing): 29–21 (58%) against the four Marvel decks and Mabel's Militia, 35–65% against each.
+  Measured again with 20 games a pairing against all other Brawl decks (both seats): 63%.
+- **12b Done:** Limit Break (Cloud). New: job select (minimal, `jobSelect` custom effect and the colourless 1/1
+  `hero-1-1-token`), "equip abilities cost less" (`equipCostsLess`, Firion's copies' own discount), "an additional
+  land this turn", first-combat checks (`laterCombat`), forced blocks (Fighter Class), Equipment with base P/T =
+  life and legendary-only keywords, improvise for nonartifact spells, spree (as modes with costs), Buster Sword's
+  "that damage" free cast. Fixes: Equipment "whenever equipped creature attacks" triggered twice; free casts didn't
+  check ward. Win rate over 20 games a pairing: 38% (15–60% per opponent).
 
 ### Lists: Arena against paper
 
@@ -213,3 +220,10 @@ only, for the merge with phase 11.
   the opponent lost life this turn". **Summon: Brynhildr I:** the exiled card is playable this turn and the next.
 - **Summon: Primal Odin II:** its "loses the game" trigger is printed on it and works from chapter II on.
 - **Combustible Gearhulk:** the opponent's choice is a `choose` prompt for them.
+- **12b:** Arms Scavenger's spellbook (Alchemy) is the Equipment of our pool, one at random, playable that turn.
+  Equipment "is a Knight/Samurai/... in addition" isn't built (Gilgamesh attaches to himself or any Samurai).
+  Dragoon's Lance gives flying on every turn. Sword of Forge and Frontier has no protection. Lost Jitte only
+  charges on combat damage to a player. Summoner's Grimoire doesn't put enchantment creatures in attacking.
+  Summon: Alexander's prevention is indestructible this turn. Delivery Moogle searches the library only. Raubahn's
+  ward is 2 life (his printed power). Zack Fair moves an unattached Equipment, not "the one on Zack". Beatrix and
+  Gilgamesh: the engine picks what to attach. Requisition Raid's counters go on your creatures.

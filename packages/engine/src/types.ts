@@ -870,6 +870,8 @@ export type EffectDef =
        */
       from?: 'hand' | 'exiledWithSource' | 'lastExiledWithSource';
       filter?: CardFilter;
+      /** Final Fantasy Commander (12b): mana value at most this ("that damage": Buster Sword). */
+      maxManaValueAmount?: Amount;
     }
   /** Portent of Calamity: reveal the top X and exile one card of each type; four or more lets you cast one free. */
   | { kind: 'portent' }
@@ -1391,6 +1393,11 @@ export type StaticDef =
       cantBeBlocked?: boolean;
       /** Damage to it is prevented and becomes +1/+1 counters (Panther Habit). */
       damageToCounters?: boolean;
+      // Final Fantasy Commander (12b).
+      /** Base power and toughness equal to its controller's life total (Aettir and Priwen). */
+      basePTLife?: boolean;
+      /** These keywords only while the equipped creature is legendary (Hero's Heirloom). */
+      legendaryKeywords?: Keyword[];
     }
   /** All creatures able to block this creature do so (Prized Unicorn). */
   | { kind: 'lure' }
@@ -1506,7 +1513,12 @@ export type StaticDef =
   /** You may play lands from your graveyard (Conduit of Worlds). */
   | { kind: 'playLandsFromGraveyard' }
   /** Creatures matching the filter can't attack you while the condition holds (Queen Mother Ramonda). */
-  | { kind: 'cantAttackYou'; filter: CardFilter; condition?: ConditionDef };
+  | { kind: 'cantAttackYou'; filter: CardFilter; condition?: ConditionDef }
+  // Final Fantasy Commander (12b): Equipment.
+  /** Equip abilities you activate cost {amount} less (Fighter Class, Arms Scavenger). */
+  | { kind: 'equipCostsLess'; amount: number; condition?: ConditionDef }
+  /** Nonartifact spells you cast have improvise (Inspiring Statuary). */
+  | { kind: 'nonartifactSpellsHaveImprovise' };
 
 export type CardDb = ReadonlyMap<CardDefId, CardDefinition>;
 
@@ -1648,6 +1660,10 @@ export interface GameObject {
   // Final Fantasy Commander (12).
   /** The back face it showed as it last left the battlefield (its "when this dies" triggers still run). */
   leftAsFace?: CardDefId;
+  /** Its equip abilities cost this much less (Firion's token copies). */
+  equipDiscount?: number;
+  /** It blocks this attacker this combat if able (Fighter Class). */
+  mustBlock?: ObjectRef;
 }
 
 /** A reference that goes stale when the object changes zones. */
@@ -1805,6 +1821,11 @@ export interface TurnState {
   flashTypes?: { player: PlayerId; type: string }[];
   /** Players with hexproof until end of turn (Dawn's Truce). */
   hexproofPlayers?: PlayerId[];
+  // Final Fantasy Commander (12b).
+  /** An additional combat phase has begun this turn (not the first combat any more). */
+  laterCombat?: boolean;
+  /** Additional land plays this turn (Explore, Sword of Forge and Frontier). */
+  extraLands?: Record<PlayerId, number>;
 }
 
 export interface Attacker {

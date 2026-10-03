@@ -673,8 +673,7 @@ function detect(ctx: Ctx, ev: GameEvent): void {
       // Wakanda Forever (9c): Equipment on an attacker; the defending player's "attacks you" triggers.
       forEachBattlefieldTrigger(ctx, (o, a) => {
         const t = a.trigger;
-        if (t.on === 'equippedAttacks')
-          return o.attachedTo !== undefined && ev.attackers.includes(o.attachedTo);
+        // Final Fantasy Commander (12b): 'equippedAttacks' is queued once, below (it triggered twice).
         if (t.on === 'opponentAttacks') return o.controller !== ap && ev.attackers.length >= t.min;
         return false;
       });
@@ -867,6 +866,9 @@ function detect(ctx: Ctx, ev: GameEvent): void {
       forEachBattlefieldTrigger(
         ctx,
         (o, a) => a.trigger.on === 'equippedDealsCombatDamageToPlayer' && o.attachedTo === src.id,
+        // Final Fantasy Commander (12b): "that damage" (Buster Sword).
+        src,
+        ev.amount,
       );
       return;
     }

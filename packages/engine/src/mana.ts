@@ -278,6 +278,18 @@ export function planPayment(
 export function hasImprovise(ctx: Ctx, player: PlayerId, card: ObjectId): boolean {
   const d = def(ctx, card);
   if (d.improvise) return true;
+  // Final Fantasy Commander (12b): Inspiring Statuary ("nonartifact spells you cast have improvise").
+  if (
+    !d.types.includes('Artifact') &&
+    ctx.s.battlefield.some(
+      (id) =>
+        obj(ctx, id).controller === player &&
+        def(ctx, id).abilities.some(
+          (a) => a.kind === 'static' && a.effect.kind === 'nonartifactSpellsHaveImprovise',
+        ),
+    )
+  )
+    return true;
   if (d.types.includes('Creature')) return false;
   return ctx.s.battlefield.some(
     (id) =>
