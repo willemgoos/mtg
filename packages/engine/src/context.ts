@@ -2,7 +2,7 @@ import { characteristics } from './characteristics.ts';
 import { MSH_EFFECTS } from './msh-effects.ts';
 import { FIN_EFFECTS } from './fin-effects.ts';
 import { checkCondition } from './triggers.ts';
-import type { EffectSource } from './effects.ts';
+import { type EffectSource, gainLife } from './effects.ts';
 import type {
   ManaType,
   CardDb,
@@ -97,6 +97,9 @@ export function def(ctx: Ctx, id: ObjectId): CardDefinition {
     if (aura && aura.zone === 'battlefield' && aura.attachedTo === id) return foodDef(d);
   }
   if (o.blank) return blankDef(d);
+  // Final Fantasy (11c): a land with a blight counter (Ultima, Origin of Oblivion).
+  if (o.counters?.blight && o.zone === 'battlefield' && d.types.includes('Land'))
+    return blightDef(d);
   // Ygra: other creatures are Food artifacts with the Food ability.
   if (
     ctx.s.creaturesAreFood &&
@@ -173,6 +176,42 @@ function blankDef(d: CardDefinition): CardDefinition {
     blankDefs.set(d, b);
   }
   return b;
+}
+
+const blightDefs = new WeakMap<CardDefinition, CardDefinition>();
+
+/**
+ * Final Fantasy (11c): "it loses all land types and abilities and has
+ * '{T}: Add {C}.'" (a land's subtypes are all land types).
+ */
+function blightDef(d: CardDefinition): CardDefinition {
+  let b = blightDefs.get(d);
+  if (!b) {
+    b = {
+      ...d,
+      subtypes: [],
+      keywords: [],
+      abilities: [{ kind: 'mana', cost: { tapSelf: true }, produces: 'C' }],
+    };
+    blightDefs.set(d, b);
+  }
+  return b;
+}
+
+/** Final Fantasy (11c): The Darkness Crystal that exiles this dying creature instead, if any. */
+function darknessCrystalFor(ctx: Ctx, o: GameObject): GameObject | undefined {
+  if (o.isToken || !defOf(ctx, o.defId).types.includes('Creature')) return undefined;
+  for (const id of ctx.s.battlefield) {
+    const src = ctx.s.objects[id]!;
+    if (src.controller === o.controller) continue;
+    if (
+      def(ctx, id).abilities.some(
+        (a) => a.kind === 'static' && a.effect.kind === 'exileOpponentNontokenCreatures',
+      )
+    )
+      return src;
+  }
+  return undefined;
 }
 
 export function refOf(o: GameObject): ObjectRef {
@@ -265,6 +304,10 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
   )
     to = 'exile';
   if (from === 'battlefield' && to === 'graveyard' && exiledInsteadOfDying(ctx, o)) to = 'exile';
+  // Final Fantasy (11c): The Darkness Crystal exiles it instead (and its controller gains life).
+  const crystal =
+    from === 'battlefield' && to === 'graveyard' ? darknessCrystalFor(ctx, o) : undefined;
+  if (crystal) to = 'exile';
   // Festival of Embers: "If a card or token would be put into your graveyard from anywhere, exile it instead."
   if (to === 'graveyard' && graveyardExiles(ctx, o.owner)) to = 'exile';
   if (from === 'battlefield' && to === 'exile' && def(ctx, id).types.includes('Creature'))
@@ -424,13 +467,28 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
   // Ygra entering or leaving changes what the other creatures are.
   if ((from === 'battlefield' || to === 'battlefield') && makesFood(defOf(ctx, o.defId)))
     refreshCreaturesAreFood(ctx);
-  emit(ctx, { type: 'objectMoved', id, defId: o.defId, from, to, ...(leftAs ? { leftAs } : {}) });
+  emit(ctx, {
+    type: 'objectMoved',
+    id,
+    defId: o.defId,
+    from,
+    to,
+    ...(leftAs ? { leftAs } : {}),
+    // Final Fantasy (11c): "that creature's power" (Vincent Valentine).
+    ...(from === 'battlefield' && o.lastPower !== undefined ? { lastPower: o.lastPower } : {}),
+  });
   if (discarded && o.zone === 'graveyard') {
     o.discardedTurn = ctx.s.turn.number;
     (ctx.s.turn.discards ??= { p1: 0, p2: 0 })[o.owner]++;
     emit(ctx, { type: 'discarded', id, player: o.owner });
   }
 
+  if (crystal && o.zone === 'exile') {
+    crystal.exiledWith = [...(crystal.exiledWith ?? []), id];
+    for (const a of def(ctx, crystal.id).abilities)
+      if (a.kind === 'static' && a.effect.kind === 'exileOpponentNontokenCreatures')
+        gainLife(ctx, crystal.controller, a.effect.life);
+  }
   if (ceases) delete ctx.s.objects[id];
   // "Until this leaves the battlefield": the exiled cards come back.
   for (const back of returning ?? [])

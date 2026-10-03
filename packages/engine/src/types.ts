@@ -485,7 +485,18 @@ export type TriggerDef =
   /** Whenever a creature you control (matching the filter) becomes blocked; amount: its blockers (She-Hulk). */
   | { on: 'creatureYouControlBecomesBlocked'; filter?: CardFilter }
   /** Whenever a creature you control becomes tapped for the first time this turn, during your turn. */
-  | { on: 'creatureYouControlFirstTappedOnYourTurn' };
+  | { on: 'creatureYouControlFirstTappedOnYourTurn' }
+  // Final Fantasy (11c): rare triggers
+  /** Whenever you scry or surveil (Matoya, Archon Elder). */
+  | { on: 'youScryOrSurveil' }
+  /** Whenever you draw your third card each turn (Astrologian's Planisphere). */
+  | { on: 'drawThirdCard' }
+  /** Whenever this deals damage, combat or not ("that much"): Cecil, Dark Knight. */
+  | { on: 'dealsDamage' }
+  /** Whenever a player sacrifices another creature (Zodiark, Umbral God). */
+  | { on: 'playerSacrificesCreature' }
+  /** When the creature chosen for this (`chosenObject`) leaves the battlefield (Zenos yae Galvus). */
+  | { on: 'chosenLeaves' };
 
 export type ConditionDef =
   | { kind: 'controlsPermanents'; filter: CardFilter; min: number }
@@ -593,7 +604,16 @@ export type ConditionDef =
   | { kind: 'sourceHasCounter'; name: string }
   /** You attacked with a Hero this turn, or a Hero entered under your control (Avengers Assemble!). */
   | { kind: 'heroAttackedOrEnteredThisTurn' }
-  | { kind: 'custom'; handler: string };
+  | { kind: 'custom'; handler: string }
+  // Final Fantasy (11c): rare conditions
+  /** Your life total is at most half your starting life total (Cecil, Dark Knight). */
+  | { kind: 'lifeAtMostHalfStarting' }
+  /** This is the first combat phase of the turn (Genji Glove). */
+  | { kind: 'firstCombatPhase' }
+  /** This is the first end step of the turn (Y'shtola Rhul). */
+  | { kind: 'firstEndStep' }
+  /** The source attacked this turn (The Lunar Whale). */
+  | { kind: 'sourceAttackedThisTurn' };
 
 export interface CardFilter {
   anyOf?: CardFilter[];
@@ -671,6 +691,9 @@ export interface CardFilter {
   notChosenTypeOfSource?: boolean;
   /** Shares a creature type with its controller's commander (Folk Hero). */
   sharesTypeWithCommander?: boolean;
+  // Final Fantasy (11c): rare filters
+  /** Has none of these subtypes ("isn't a Kraken, Leviathan, ...": Summon: Leviathan). */
+  notSubtypes?: string[];
 }
 
 export interface TargetSpec {
@@ -683,6 +706,13 @@ export interface TargetSpec {
   filter?: CardFilter;
   /** "Up to": this target and the ones after it may be left out. */
   optional?: boolean;
+  // Final Fantasy (11c): targeting abilities
+  /**
+   * With 'spell': activated and triggered abilities on the stack are targets
+   * too (Louisoix's Sacrifice); `abilitiesOnly` leaves spells out (Gogo).
+   */
+  abilities?: boolean;
+  abilitiesOnly?: boolean;
 }
 
 /**
@@ -790,7 +820,10 @@ export type Amount =
   | { count: 'commanderCasts' }
   // Final Fantasy (11a)
   /** The amounts added up (Slash of Light: creatures plus Equipment you control). */
-  | { sum: Amount[] };
+  | { sum: Amount[] }
+  // Final Fantasy (11c): rare amounts
+  /** Your life total (Aettir and Priwen). */
+  | { count: 'lifeTotal' };
 
 export type EffectDef =
   | { kind: 'may'; effects: EffectDef[]; cost?: ManaCost }
@@ -878,6 +911,8 @@ export type EffectDef =
        */
       from?: 'hand' | 'exiledWithSource' | 'lastExiledWithSource';
       filter?: CardFilter;
+      // Final Fantasy (11c): "with mana value less than or equal to that damage" (Buster Sword).
+      maxManaValue?: Amount;
     }
   /** Portent of Calamity: reveal the top X and exile one card of each type; four or more lets you cast one free. */
   | { kind: 'portent' }
@@ -909,7 +944,8 @@ export type EffectDef =
   | {
       kind: 'emblem';
       ability: AbilityDef;
-      until: 'endOfYourNextTurn' | 'permanent' | 'nextSpellThisTurn';
+      // Final Fantasy (11c): 'endOfTurn' (Summon: Leviathan's attack draws).
+      until: 'endOfYourNextTurn' | 'permanent' | 'nextSpellThisTurn' | 'endOfTurn';
     }
   /** Marks the gift as given (for "whenever you give a gift"). */
   | { kind: 'giftGiven' }
@@ -1123,7 +1159,14 @@ export type EffectDef =
   /** Put all creature cards from all graveyards onto the battlefield under your control. */
   | { kind: 'reanimateAll' }
   /** Exile the target graveyard card and create a token copy of it (Abyssal Harvester). */
-  | { kind: 'tokenCopyOf'; what: Ref; addSubtype: string; exileOtherTokensWithSubtype: boolean }
+  | {
+      kind: 'tokenCopyOf';
+      what: Ref;
+      addSubtype: string;
+      exileOtherTokensWithSubtype: boolean;
+      // Final Fantasy (11c): "except it's a 5/5 black Demon" (Ardyn, the Usurper).
+      pt?: [number, number];
+    }
   /** Put named counters on the source (Drake Hatcher), or on `to`. */
   | { kind: 'namedCounters'; name: string; amount: Amount; to?: Ref }
   /** Look at the top N, split them into two piles; an opponent picks one for your hand (Curator of Destinies). */
@@ -1371,7 +1414,15 @@ export type EffectDef =
    * "You may remove a lore counter from each of any number of Sagas you control"
    * (Garnet): asks for one Saga at a time, or none to stop; `then` happens for each.
    */
-  | { kind: 'removeLoreFromAny'; then: EffectDef[] };
+  | { kind: 'removeLoreFromAny'; then: EffectDef[] }
+  // Final Fantasy (11c): rare effects
+  /** Each player sacrifices half the creatures matching the filter they control, rounded down (Zodiark). */
+  | { kind: 'eachPlayerSacrificesHalf'; filter: CardFilter }
+  /**
+   * Choose a card exiled with the source matching the filter; it enters under
+   * your control, tapped and with +1/+1 counters if asked (The Darkness Crystal).
+   */
+  | { kind: 'putExiledWithSource'; filter: CardFilter; tapped?: boolean; counters?: number };
 
 export type StaticDef =
   | {
@@ -1426,6 +1477,15 @@ export type StaticDef =
       addSubtypes?: string[];
       /** Keywords it has only during its controller's turn (Dragoon's Lance: flying). */
       yourTurnKeywords?: Keyword[];
+      // Final Fantasy (11c): rare Equipment
+      /** Base power and toughness X/X from an amount (Aettir and Priwen: your life total). */
+      basePTAmount?: Amount;
+      /** Keywords it has while attacking (The Masamune: first strike). */
+      attackingKeywords?: Keyword[];
+      /** While attacking, it must be blocked if able (The Masamune). */
+      mustBeBlockedAttacking?: boolean;
+      /** A creature dying makes its triggered abilities (and your emblems') trigger twice (The Masamune). */
+      deathTriggersTwice?: boolean;
     }
   /** All creatures able to block this creature do so (Prized Unicorn). */
   | { kind: 'lure' }
@@ -1502,7 +1562,12 @@ export type StaticDef =
   /** Spells you cast matching the filter cost {N} less, while the condition holds. */
   | { kind: 'spellsCostLessIf'; filter: CardFilter; amount: number; condition?: ConditionDef }
   /** Look at the top card of your library any time; play cards matching the filter from there (Glarb). */
-  | { kind: 'playFromTop'; filter: CardFilter }
+  | {
+      kind: 'playFromTop';
+      filter: CardFilter;
+      // Final Fantasy (11c): "as long as The Lunar Whale attacked this turn".
+      condition?: ConditionDef;
+    }
   /** During your turn, cast instants and sorceries from your graveyard by paying 1 life more (Festival of Embers). */
   | { kind: 'castFromGraveyardForLife' }
   /** Cards and tokens that would go to your graveyard are exiled instead (Festival of Embers). */
@@ -1541,7 +1606,21 @@ export type StaticDef =
   /** You may play lands from your graveyard (Conduit of Worlds). */
   | { kind: 'playLandsFromGraveyard' }
   /** Creatures matching the filter can't attack you while the condition holds (Queen Mother Ramonda). */
-  | { kind: 'cantAttackYou'; filter: CardFilter; condition?: ConditionDef };
+  | { kind: 'cantAttackYou'; filter: CardFilter; condition?: ConditionDef }
+  // Final Fantasy (11c): rare statics
+  /** If you would gain life, you gain twice that much instead (The Wind Crystal). */
+  | { kind: 'doubleLifeGain' }
+  /** If an opponent would mill cards, they mill that many plus `amount` instead (The Water Crystal). */
+  | { kind: 'opponentsMillMore'; amount: number }
+  /**
+   * If a nontoken creature an opponent controls would die, it's exiled with
+   * this instead and you gain `life` (The Darkness Crystal).
+   */
+  | { kind: 'exileOpponentNontokenCreatures'; life: number }
+  /** While this is equipped, its triggered abilities and its Equipment's trigger twice (Cloud). */
+  | { kind: 'equippedTriggersTwice' }
+  /** Whenever you tap a land for {C}, add an additional {C} (Ultima, Origin of Oblivion). */
+  | { kind: 'extraColorlessFromLands' };
 
 export type CardDb = ReadonlyMap<CardDefId, CardDefinition>;
 
@@ -1688,6 +1767,9 @@ export interface GameObject {
   loreRemovedTurn?: number;
   /** It enters with this many more +1/+1 counters (Summon: Fenrir's next creature spell). */
   bonusCounters?: number;
+  // Final Fantasy (11c): rare triggers
+  /** The creature chosen for it as it entered (Zenos yae Galvus). */
+  chosenObject?: ObjectRef;
 }
 
 /** A reference that goes stale when the object changes zones. */
@@ -1848,6 +1930,12 @@ export interface TurnState {
   // Final Fantasy (11a): saga creatures
   /** Players whose creatures are dealt no damage this turn (Summon: Alexander). */
   creaturesShielded?: PlayerId[];
+  // Final Fantasy (11c): extra phases and steps
+  /** Combat phases begun this turn (Genji Glove: "the first combat phase"). */
+  combats?: number;
+  /** End steps begun this turn, and additional end steps to come (Y'shtola Rhul). */
+  endSteps?: number;
+  extraEndSteps?: number;
 }
 
 export interface Attacker {
@@ -2066,6 +2154,9 @@ export type Decision =
       restOnTop?: boolean;
       /** Marvel Super Heroes: the cards not taken go to the graveyard. */
       restToGraveyard?: boolean;
+      // Final Fantasy (11c): The Darkness Crystal ("tapped ... with two additional +1/+1 counters").
+      enterTapped?: boolean;
+      enterCounters?: number;
       resume: PausedResolution;
       thenPriority: PlayerId;
     }
@@ -2377,6 +2468,8 @@ export type GameEvent =
       to: ZoneName;
       // Final Fantasy (11b): the back face it showed as it left (Chaos dying shows Garland after).
       leftAs?: CardDefId;
+      // Final Fantasy (11c): its power as it left (a token's too): "that creature's power" (Vincent Valentine).
+      lastPower?: number;
     }
   | { type: 'damageDealt'; source: ObjectId; to: TargetChoice; amount: number; combat: boolean }
   | { type: 'lifeChanged'; player: PlayerId; delta: number; life: number }

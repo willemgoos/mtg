@@ -95,6 +95,8 @@ export function castableCards(ctx: Ctx, player: PlayerId): ObjectId[] {
           a.kind === 'static' &&
           a.effect.kind === 'playFromTop' &&
           cardMatches(ctx, topCard, a.effect.filter) &&
+          // Final Fantasy (11c): The Lunar Whale, as long as it attacked this turn.
+          checkCondition(ctx, a.effect.condition, player, obj(ctx, id)) &&
           !out.includes(topCard)
         )
           out.push(topCard);

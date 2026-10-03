@@ -251,6 +251,8 @@ export function Board({
       if (d.options.includes(id)) act({ type: 'chooseCard', player: HUMAN, card: id });
       return;
     }
+    // Final Fantasy (11c): an ability on the stack is only clicked as a target.
+    if (!view.objects[id]) return;
     const o = view.objects[id]!;
     if (o.zone !== 'battlefield') {
       const acts = handActions(legal, id);
@@ -359,6 +361,8 @@ export function Board({
       legal.some((a) => a.type === 'addBlock' && a.blocker === blocker && a.attacker === id)
     )
       return 'option';
+    // Final Fantasy (11c): an ability on the stack has no object.
+    if (!view.objects[id]) return null;
     const o = view.objects[id]!;
     if (o.zone !== 'battlefield')
       return handActions(legal, id).length ||
@@ -1461,7 +1465,12 @@ function castLabel(defId: CardDefId, a: Action): string {
     return `${def.modes?.[a.mode]?.label ?? `Mode ${a.mode + 1}`} — ${manaText(def.tiered[a.mode]!) || '{0}'}`;
   if (a.mode !== undefined) return def?.modes?.[a.mode]?.label ?? `Mode ${a.mode + 1}`;
   if (def?.sacrificeOrPay)
-    return a.sacrifice ? 'Sacrifice a creature' : `Pay ${manaText(def.sacrificeOrPay)}`;
+    return a.sacrifice
+      ? // Final Fantasy (11c): Louisoix's Sacrifice wants a legendary creature.
+        def.sacrificeToCastFilter?.supertypes?.includes('Legendary')
+        ? 'Sacrifice a legendary creature'
+        : 'Sacrifice a creature'
+      : `Pay ${manaText(def.sacrificeOrPay)}`;
   if (def?.forageOrPay) return `Pay ${manaText(def.forageOrPay)}`;
   // Multikicker (Batroc), overload (Vandalblast), Toxic Deluge's X life.
   if (a.kickCount) return `Kicked ×${a.kickCount}`;
@@ -1544,7 +1553,10 @@ function SearchOverlay({ game, onHover }: { game: GameSession; onHover: HoverFn 
       <div className="mull">
         <h2>
           {d.kind === 'searchLibrary' && d.fromGraveyard
-            ? 'Choose from your graveyard'
+            ? // Final Fantasy (11c): The Darkness Crystal picks among exiled cards.
+              view.objects[d.options[0] ?? '']?.zone === 'exile'
+              ? 'Choose an exiled card'
+              : 'Choose from your graveyard'
             : d.kind === 'searchLibrary' && d.looked
               ? 'Top of your library'
               : 'Search your library'}
@@ -1556,7 +1568,9 @@ function SearchOverlay({ game, onHover }: { game: GameSession; onHover: HoverFn 
           {d.kind === 'searchLibrary' && d.fromGraveyard
             ? ''
             : d.kind === 'searchLibrary' && d.looked
-              ? 'The rest go to the bottom.'
+              ? d.restOnTop
+                ? 'The rest stay on top.'
+                : 'The rest go to the bottom.'
               : 'Your library is then shuffled.'}
         </p>
         <div className="mull__hand">

@@ -8,8 +8,11 @@ import {
   drawCard,
   emit,
   moveObject,
+  newId,
   obj,
 } from './context.ts';
+import { manaValue } from './cost.ts';
+import { changeLife, millCount } from './effects.ts';
 import { nextInt } from './rng.ts';
 import type { PlayerId } from './types.ts';
 
@@ -104,5 +107,85 @@ export const FIN_EFFECTS: Record<string, CustomEffect> = {
     if (!player) return;
     const lib = ctx.s.players[player].library;
     for (const id of lib.slice(0, Math.floor(lib.length / 2))) moveObject(ctx, id, 'graveyard');
+  },
+
+  // 11c group 1
+
+  /**
+   * Ultima: "End the turn." Spells and abilities on the stack are exiled, combat
+   * ends, and the turn goes on from its end step without one (abilities that
+   * triggered meanwhile still happen there), then the cleanup step.
+   */
+  endTheTurn(ctx) {
+    for (const item of ctx.s.stack)
+      if (item.kind === 'spell' && ctx.s.objects[item.id]) moveObject(ctx, item.id, 'exile');
+    ctx.s.stack = [];
+    ctx.s.combat = null;
+    ctx.s.turn.extraCombats = 0;
+    ctx.s.turn.step = 'end';
+  },
+
+  /** Y'shtola Rhul: "there is an additional end step after this step". */
+  extraEndStep(ctx) {
+    ctx.s.turn.extraEndSteps = (ctx.s.turn.extraEndSteps ?? 0) + 1;
+  },
+
+  /** Summon: Primal Odin's Zantetsuken: "that player loses the game" (the opponent). */
+  opponentLosesGame(ctx, es) {
+    ctx.s.players[es.controller === 'p1' ? 'p2' : 'p1'].lost = true;
+  },
+
+  /** Zenos yae Galvus: remember the creature chosen (its first target) for "when the chosen creature leaves". */
+  rememberTarget(ctx, es) {
+    const self = es.source && ctx.s.objects[es.source.id];
+    const t = es.targets[0];
+    if (!self || self.zone !== 'battlefield' || !t || !('object' in t)) return;
+    self.chosenObject = t.object;
+  },
+
+  /**
+   * Gogo, Master of Mimicry: copy the target ability X times (the copies keep
+   * its targets).
+   */
+  copyTargetAbility(ctx, es) {
+    const t = es.targets[0];
+    if (!t || !('object' in t)) return;
+    const item = ctx.s.stack.find((x) => x.kind === 'ability' && x.id === t.object.id);
+    if (!item) return;
+    for (let i = 0; i < (es.x ?? 0); i++) ctx.s.stack.push({ ...item, id: newId(ctx) });
+  },
+
+  /**
+   * Memories Returning: the opponent puts one of the top `count` cards on the
+   * bottom of your library (the engine picks for them: the highest mana value).
+   */
+  opponentBottomsOne(ctx, es, params) {
+    const lib = ctx.s.players[es.controller].library;
+    const looked = lib.slice(0, (params as { count: number }).count);
+    const worst = [...looked].sort(
+      (a, b) => manaValue(def(ctx, b).manaCost) - manaValue(def(ctx, a).manaCost),
+    )[0];
+    if (worst) moveObject(ctx, worst, 'library', { position: 'bottom' });
+  },
+
+  /** Memories Returning: "Put the other into your hand." */
+  topCardToHand(ctx, es) {
+    const top = ctx.s.players[es.controller].library[0];
+    if (top) moveObject(ctx, top, 'hand');
+  },
+
+  /** The Water Crystal: "Each opponent mills cards equal to the number of cards in your hand." */
+  opponentMillsHandSize(ctx, es) {
+    const opp = es.controller === 'p1' ? 'p2' : 'p1';
+    const n = millCount(ctx, opp, ctx.s.players[es.controller].hand.length);
+    for (const id of ctx.s.players[opp].library.slice(0, n)) moveObject(ctx, id, 'graveyard');
+  },
+
+  /** Ninja's Blades: "That player loses life equal to the discarded card's mana value." */
+  loseLifeByDiscarded(ctx, es) {
+    const gy = ctx.s.players[es.controller].graveyard;
+    const card = gy[gy.length - 1];
+    if (!card || ctx.s.objects[card]!.discardedTurn !== ctx.s.turn.number) return;
+    changeLife(ctx, es.controller === 'p1' ? 'p2' : 'p1', -manaValue(def(ctx, card).manaCost));
   },
 };

@@ -219,6 +219,29 @@ four decks. Three more FIC Brawl decks followed (9 December 2025, "Arena Store d
 - Edgar's coin-flip ability isn't modelled.
 - A land returned for Chocobo Kick's kicker can tap for mana first; a sacrificed permanent for Vayne's Treachery can't.
 
+11c (group 1):
+
+- Ultima ("end the turn"): spells on the stack are exiled and abilities removed; the turn continues from an end step
+  without beginning-of-end-step triggers (abilities that triggered during Ultima still go on the stack there), then cleanup.
+- Gogo's copies keep the original's targets; X = 0 is offered and copies nothing. Louisoix's Sacrifice and Gogo target
+  stack abilities (`abilities` / `abilitiesOnly` on a 'spell' target).
+- Memories Returning: the opponent's two "put one on the bottom" picks are made by the engine (highest mana value); your
+  picks may be declined (then the count of cards shifts).
+- The Darkness Crystal: the exiled creature card to return is chosen as the ability resolves (not targeted).
+- Zenos yae Galvus chooses the creature as a target (hexproof and ward apply). Shinryu's "when the chosen player loses
+  the game, you win the game" does nothing with two players.
+- Ardyn's Demon token keeps the card's colours and creature types and adds Demon (it is a 5/5).
+- Stiltzkin: the given permanent untaps (as `giveControl` does). Kain likewise untaps as he changes control.
+- Summon: Primal Odin's Zantetsuken is a combat-damage trigger that works while it has two or more lore counters.
+- Sephiroth, One-Winged Angel: "sacrifice any number" is asked one creature at a time.
+- Cecil, Dark Knight: one trigger per damage event (combat damage to a creature and a player triggers twice).
+- The Masamune's "must be blocked if able": if no blocker is declared for it, the engine assigns one that can block it.
+- Ultima, Origin of Oblivion's extra {C} only applies to lands that tap for {C} alone.
+- Astrologian's Planisphere and Ninja's Blades keep the equipped creature's granted triggers on the Equipment.
+- Ninja's Blades reads the discarded card as the last card put into your graveyard this turn.
+- Fixed on the way: "whenever equipped creature attacks" triggered twice (two code paths) and ignored its intervening
+  "if"; now once, with the condition checked.
+
 ### Phase 12
 
 (none yet)

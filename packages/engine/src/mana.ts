@@ -29,6 +29,17 @@ function lanternFor(ctx: Ctx, player: PlayerId): boolean {
   );
 }
 
+/** Final Fantasy (11c): `player` controls Ultima, Origin of Oblivion. */
+function extraColorless(ctx: Ctx, player: PlayerId): boolean {
+  return ctx.s.battlefield.some(
+    (id) =>
+      obj(ctx, id).controller === player &&
+      def(ctx, id).abilities.some(
+        (a) => a.kind === 'static' && a.effect.kind === 'extraColorlessFromLands',
+      ),
+  );
+}
+
 /** Sources to tap; `pain` lists those that hurt (one entry per pip they pay). */
 export type Payment = ObjectId[] & { pain?: ObjectId[] };
 
@@ -113,6 +124,14 @@ export function manaSources(
         ...(pain ? { pain } : {}),
       };
       out.push(src);
+      // Final Fantasy (11c): Ultima, Origin of Oblivion ("tap a land for {C}, add an additional {C}").
+      if (
+        produces.length === 1 &&
+        produces[0] === 'C' &&
+        def(ctx, id).types.includes('Land') &&
+        extraColorless(ctx, player)
+      )
+        double = true;
       // Two mana from one tap: a second unit with the same id (tapping it twice is harmless).
       if (double) units = Math.max(units, 2);
       for (let i = 1; i < units; i++) out.push({ ...src });

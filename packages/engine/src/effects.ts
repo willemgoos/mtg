@@ -39,6 +39,7 @@ import { checkCondition } from './triggers.ts';
 import { addLore } from './sagas.ts';
 import type {
   CardDefId,
+  CardFilter,
   GameObject,
   ObjectRef,
   Amount,
@@ -294,6 +295,12 @@ export function gainLife(ctx: Ctx, player: PlayerId, amount: number): void {
     for (const a of def(ctx, id).abilities)
       if (a.kind === 'static' && a.effect.kind === 'extraLifeGain') amount += a.effect.amount;
   }
+  // Final Fantasy (11c): The Wind Crystal, "twice that much life instead".
+  for (const id of ctx.s.battlefield) {
+    if (obj(ctx, id).controller !== player) continue;
+    for (const a of def(ctx, id).abilities)
+      if (a.kind === 'static' && a.effect.kind === 'doubleLifeGain') amount *= 2;
+  }
   ctx.s.turn.lifeGains[player]++;
   changeLife(ctx, player, amount);
 }
@@ -484,6 +491,29 @@ export function runEffects(
       i--;
       continue;
     }
+    // Final Fantasy (11c): Zodiark. Counted first; you choose, then your opponent.
+    if (e.kind === 'eachPlayerSacrificesHalf') {
+      const sourceId = es.source?.id;
+      const half = (p: PlayerId) =>
+        Math.floor(
+          creaturesOnBattlefield(ctx, p).filter(
+            (c) => c.id !== sourceId && matchesFilter(ctx, c.id, e.filter, sourceId),
+          ).length / 2,
+        );
+      const mine = half(es.controller);
+      const theirs = half(other(es.controller));
+      const filter: CardFilter = { ...e.filter, types: ['Creature'] };
+      const expanded: EffectDef[] = [
+        ...(mine ? [{ kind: 'sacrificeSeveral', count: mine, filter, then: [] } as EffectDef] : []),
+        ...Array.from({ length: theirs }, (): EffectDef => ({
+          kind: 'opponentSacrifices',
+          filter,
+        })),
+      ];
+      list.splice(i, 1, ...expanded);
+      i--;
+      continue;
+    }
     if (e.kind === 'if') {
       // Replace it with the chosen branch (which may itself pause).
       const self = es.source ? ctx.s.objects[es.source.id] : undefined;
@@ -534,7 +564,9 @@ export function runEffects(
       e.kind === 'expressiveIteration' ||
       e.kind === 'castFreeFromTop' ||
       // Final Fantasy (11a): saga creatures
-      e.kind === 'removeLoreFromAny'
+      e.kind === 'removeLoreFromAny' ||
+      // Final Fantasy (11c): The Darkness Crystal
+      e.kind === 'putExiledWithSource'
     ) {
       const lib = ctx.s.players[es.controller].library;
       const { controller, source, sourceDefId, targets, lkiPower, subject, amount, chosen, x } = es;
@@ -719,8 +751,13 @@ export function runEffects(
             : e.from === 'lastExiledWithSource'
               ? exiled.slice(-1)
               : exiled;
+        // Final Fantasy (11c): "mana value less than or equal to that damage" (Buster Sword).
+        const max = e.maxManaValue !== undefined ? resolveAmount(ctx, es, e.maxManaValue) : 99;
         const cards = pool.filter(
-          (id) => !def(ctx, id).types.includes('Land') && cardMatches(ctx, id, e.filter ?? {}),
+          (id) =>
+            !def(ctx, id).types.includes('Land') &&
+            cardMatches(ctx, id, e.filter ?? {}) &&
+            manaValue(def(ctx, id).manaCost) <= max,
         );
         if (cards.length === 0) continue;
         ctx.s.decision = { kind: 'castFree', player: controller, cards, resume, thenPriority };
@@ -836,7 +873,7 @@ export function runEffects(
           thenPriority,
         };
       } else if (e.kind === 'millThenTake') {
-        const milled = lib.slice(0, e.count);
+        const milled = lib.slice(0, millCount(ctx, controller, e.count));
         for (const id of milled) moveObject(ctx, id, 'graveyard');
         const options = milled.filter((id) => cardMatches(ctx, id, e.filter));
         if (options.length === 0) {
@@ -1152,6 +1189,25 @@ export function runEffects(
           resume,
           thenPriority,
         };
+      } else if (e.kind === 'putExiledWithSource') {
+        // Final Fantasy (11c): The Darkness Crystal. A card it exiled, still in exile.
+        const self = es.source && ctx.s.objects[es.source.id];
+        const options = (self?.exiledWith ?? []).filter(
+          (id) => ctx.s.objects[id]?.zone === 'exile' && cardMatches(ctx, id, e.filter),
+        );
+        if (options.length === 0) continue;
+        ctx.s.decision = {
+          kind: 'searchLibrary',
+          player: controller,
+          options,
+          fromGraveyard: true,
+          to: 'battlefield',
+          shuffle: false,
+          ...(e.tapped ? { enterTapped: true } : {}),
+          ...(e.counters ? { enterCounters: e.counters } : {}),
+          resume,
+          thenPriority,
+        };
       } else {
         // Path to Exile: the exiled creature's controller searches their own library.
         const t = e.forControllerOf !== undefined ? es.targets[e.forControllerOf] : undefined;
@@ -1393,7 +1449,7 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
     case 'mill': {
       const players = e.who ? playersOf(ctx, es, e.who) : [es.controller];
       for (const p of players)
-        for (const id of ctx.s.players[p].library.slice(0, e.count))
+        for (const id of ctx.s.players[p].library.slice(0, millCount(ctx, p, e.count)))
           moveObject(ctx, id, 'graveyard');
       return;
     }
@@ -1401,7 +1457,15 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
       const t = typeof e.what === 'object' && 'target' in e.what ? es.targets[e.what.target] : null;
       if (!t || !('object' in t)) return;
       const item = findSpell(ctx, t.object.id);
-      if (!item) return;
+      // Final Fantasy (11c): countering an activated or triggered ability (Louisoix's Sacrifice).
+      if (!item) {
+        const i = ctx.s.stack.findIndex((x) => x.kind === 'ability' && x.id === t.object.id);
+        if (i >= 0) {
+          ctx.s.stack.splice(i, 1);
+          emit(ctx, { type: 'countered', id: t.object.id });
+        }
+        return;
+      }
       const controller = item.controller;
       counterSpell(ctx, item.id);
       if (e.controllerTokens)
@@ -1431,6 +1495,8 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
       moveObject(ctx, card.id, 'exile');
       const token = createObject(ctx, card.defId, es.controller, 'battlefield', true);
       token.addedSubtypes = [e.addSubtype];
+      // Final Fantasy (11c): "except it's a 5/5" (Ardyn).
+      if (e.pt) token.copyPT = { power: e.pt[0], toughness: e.pt[1] };
       ctx.s.battlefield.push(token.id);
       emit(ctx, {
         type: 'objectMoved',
@@ -2051,6 +2117,8 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
           : {}),
         // Galvanic Iteration: "when you next cast an instant or sorcery spell this turn".
         ...(e.until === 'nextSpellThisTurn' ? { untilTurn: ctx.s.turn.number, once: true } : {}),
+        // Final Fantasy (11c): "until end of turn" (Summon: Leviathan).
+        ...(e.until === 'endOfTurn' ? { untilTurn: ctx.s.turn.number } : {}),
       });
       return;
     }
@@ -2402,6 +2470,19 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
       return;
     }
   }
+}
+
+// Final Fantasy (11c): The Water Crystal
+
+/** How many cards `player` mills for "mill N": opponents' Water Crystals add to it. */
+export function millCount(ctx: Ctx, player: PlayerId, n: number): number {
+  if (n <= 0) return n;
+  for (const id of ctx.s.battlefield) {
+    if (obj(ctx, id).controller === player) continue;
+    for (const a of def(ctx, id).abilities)
+      if (a.kind === 'static' && a.effect.kind === 'opponentsMillMore') n += a.effect.amount;
+  }
+  return n;
 }
 
 // Shield counters (Marvel Super Heroes)

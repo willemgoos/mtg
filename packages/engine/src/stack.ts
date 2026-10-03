@@ -1126,6 +1126,9 @@ export function answerSearch(ctx: Ctx, card: ObjectId | null): void {
       if (d.to === 'battlefield') {
         moveObject(ctx, card, 'battlefield', { controller: d.player });
         if (d.counter) (obj(ctx, card).counters ??= {})[d.counter] = 1;
+        // Final Fantasy (11c): The Darkness Crystal.
+        if (d.enterTapped) obj(ctx, card).tapped = true;
+        if (d.enterCounters) addCounters(ctx, card, d.enterCounters);
       } else moveObject(ctx, card, 'hand');
       squirrelFood(ctx, d, card);
       return resume(ctx, d.resume, d.thenPriority);
