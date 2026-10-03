@@ -14,7 +14,11 @@ import {
   SECRETS_OF_STRIXHAVEN_BEHAVIORS,
   SECRETS_OF_STRIXHAVEN_TOKENS,
 } from './secrets-of-strixhaven.ts';
-import { STRIXHAVEN_BRAWL_BEHAVIORS } from './strixhaven-brawl.ts';
+import {
+  STRIXHAVEN_BRAWL_BACK_FACES,
+  STRIXHAVEN_BRAWL_BEHAVIORS,
+  STRIXHAVEN_BRAWL_TOKENS,
+} from './strixhaven-brawl.ts';
 import { FOUNDATIONS_BATCH_BEHAVIORS } from './foundations-batch.ts';
 
 // Helpers for the common shapes.
@@ -152,6 +156,7 @@ export const BEHAVIORS: Record<string, Behavior> = {
   ...SECRETS_OF_STRIXHAVEN_BEHAVIORS,
   ...SECRETS_OF_STRIXHAVEN_BACK_FACES,
   ...STRIXHAVEN_BRAWL_BEHAVIORS,
+  ...STRIXHAVEN_BRAWL_BACK_FACES,
   // ---------------------------------------------------------------- red
   Shock: burn(2),
   'Lightning Strike': burn(3),
@@ -2188,6 +2193,7 @@ export const TOKENS: CardDefinition[] = [
   ...FINAL_FANTASY_TOKENS,
   ...STRIXHAVEN_TOKENS,
   ...SECRETS_OF_STRIXHAVEN_TOKENS,
+  ...STRIXHAVEN_BRAWL_TOKENS,
   token('zombie-token', 'Zombie', 'B', ['Zombie'], 2, 2),
   token('cat-beast-token', 'Cat Beast', 'W', ['Cat', 'Beast'], 2, 2),
   token('raccoon-token', 'Raccoon', 'G', ['Raccoon'], 3, 3),

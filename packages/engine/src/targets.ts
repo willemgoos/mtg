@@ -1,3 +1,4 @@
+import { planeswalkersHexproof } from './brawl-15a-w-effects.ts';
 import { cardMatches, hasKeyword, isCreature, matchesFilter } from './characteristics.ts';
 import { type Ctx, def, defOf, deref, obj, other, refOf } from './context.ts';
 import { manaValue } from './cost.ts';
@@ -48,6 +49,9 @@ function permanentOk(ctx: Ctx, spec: TargetSpec, id: ObjectId, src: TargetingSou
   if (hasKeyword(ctx, id, 'shroud')) return false;
   if (o.controller !== src.controller) {
     if (hasKeyword(ctx, id, 'hexproof')) return false;
+    // Strixhaven Brawl (15a): Deification.
+    if (def(ctx, id).types.includes('Planeswalker') && planeswalkersHexproof(ctx, o.controller))
+      return false;
     if (
       hasKeyword(ctx, id, 'hexproofFromInstants') &&
       src.sourceId &&

@@ -45111,5 +45111,545 @@
    "large": "https://cards.scryfall.io/large/front/d/b/dbc3447e-1329-4ea1-b4ca-b321b0ffec8f.jpg?1783903620",
    "artCrop": "https://cards.scryfall.io/art_crop/front/d/b/dbc3447e-1329-4ea1-b4ca-b321b0ffec8f.jpg?1783903620"
   }
+ },
+ {
+  "name": "Witch Enchanter",
+  "scryfallId": "62061e7c-cf19-4f03-b8fa-2bdba62d6b0b",
+  "oracleId": "0355249a-8e4e-41db-9cea-1b901faffbe6",
+  "set": "mh3",
+  "collectorNumber": "239",
+  "rarity": "uncommon",
+  "manaCost": "{3}{W}",
+  "typeLine": "Creature — Human Warlock",
+  "oracleText": "When this creature enters, destroy target artifact or enchantment an opponent controls.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "back": "Witch-Blessed Meadow",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/2/62061e7c-cf19-4f03-b8fa-2bdba62d6b0b.jpg?1783911236",
+   "normal": "https://cards.scryfall.io/normal/front/6/2/62061e7c-cf19-4f03-b8fa-2bdba62d6b0b.jpg?1783911236",
+   "large": "https://cards.scryfall.io/large/front/6/2/62061e7c-cf19-4f03-b8fa-2bdba62d6b0b.jpg?1783911236",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/2/62061e7c-cf19-4f03-b8fa-2bdba62d6b0b.jpg?1783911236"
+  }
+ },
+ {
+  "name": "Witch-Blessed Meadow",
+  "scryfallId": "62061e7c-cf19-4f03-b8fa-2bdba62d6b0b",
+  "oracleId": "0355249a-8e4e-41db-9cea-1b901faffbe6",
+  "set": "mh3",
+  "collectorNumber": "239",
+  "rarity": "uncommon",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "As this land enters, you may pay 3 life. If you don't, it enters tapped.\n{T}: Add {W}.",
+  "colors": [],
+  "keywords": [],
+  "front": "Witch Enchanter",
+  "image": {
+   "small": "https://cards.scryfall.io/small/back/6/2/62061e7c-cf19-4f03-b8fa-2bdba62d6b0b.jpg?1783911236",
+   "normal": "https://cards.scryfall.io/normal/back/6/2/62061e7c-cf19-4f03-b8fa-2bdba62d6b0b.jpg?1783911236",
+   "large": "https://cards.scryfall.io/large/back/6/2/62061e7c-cf19-4f03-b8fa-2bdba62d6b0b.jpg?1783911236",
+   "artCrop": "https://cards.scryfall.io/art_crop/back/6/2/62061e7c-cf19-4f03-b8fa-2bdba62d6b0b.jpg?1783911236"
+  }
+ },
+ {
+  "name": "Sentinel's Eyes",
+  "scryfallId": "9f50278a-06fc-4b11-a1d2-d28cd213ff8f",
+  "oracleId": "0a7d6489-b239-4ce8-aea3-7b5d0e436f70",
+  "set": "soc",
+  "collectorNumber": "168",
+  "rarity": "common",
+  "manaCost": "{W}",
+  "typeLine": "Enchantment — Aura",
+  "oracleText": "Enchant creature\nEnchanted creature gets +1/+1 and has vigilance.\nEscape—{W}, Exile two other cards from your graveyard. (You may cast this card from your graveyard for its escape cost.)",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Enchant",
+   "Escape"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/f/9f50278a-06fc-4b11-a1d2-d28cd213ff8f.jpg?1783903801",
+   "normal": "https://cards.scryfall.io/normal/front/9/f/9f50278a-06fc-4b11-a1d2-d28cd213ff8f.jpg?1783903801",
+   "large": "https://cards.scryfall.io/large/front/9/f/9f50278a-06fc-4b11-a1d2-d28cd213ff8f.jpg?1783903801",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/f/9f50278a-06fc-4b11-a1d2-d28cd213ff8f.jpg?1783903801"
+  }
+ },
+ {
+  "name": "Gate to the Citadel",
+  "scryfallId": "985d1b57-42e0-41a2-a9c6-2f5427c0c1c9",
+  "oracleId": "ee6fe023-5917-4055-b379-0d3958b40ce7",
+  "set": "hbg",
+  "collectorNumber": "80",
+  "rarity": "uncommon",
+  "manaCost": "",
+  "typeLine": "Land — Plains Gate",
+  "oracleText": "({T}: Add {W}.)\nGate to the Citadel enters the battlefield tapped.\n{3}{W}, {T}: Seek a nonland card. Activate only once.",
+  "colors": [],
+  "keywords": [
+   "Seek"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/8/985d1b57-42e0-41a2-a9c6-2f5427c0c1c9.jpg?1783922091",
+   "normal": "https://cards.scryfall.io/normal/front/9/8/985d1b57-42e0-41a2-a9c6-2f5427c0c1c9.jpg?1783922091",
+   "large": "https://cards.scryfall.io/large/front/9/8/985d1b57-42e0-41a2-a9c6-2f5427c0c1c9.jpg?1783922091",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/8/985d1b57-42e0-41a2-a9c6-2f5427c0c1c9.jpg?1783922091"
+  }
+ },
+ {
+  "name": "Furious Forebear",
+  "scryfallId": "a4f247b6-8212-4e78-a452-d2d3be228d8e",
+  "oracleId": "4fb1d33f-a87d-46cf-a73e-882c3dbcb26f",
+  "set": "tdm",
+  "collectorNumber": "13",
+  "rarity": "uncommon",
+  "manaCost": "{1}{W}",
+  "typeLine": "Creature — Spirit Warrior",
+  "oracleText": "Whenever a creature you control dies while this card is in your graveyard, you may pay {1}{W}. If you do, return this card from your graveyard to your hand.",
+  "power": "3",
+  "toughness": "1",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/4/a4f247b6-8212-4e78-a452-d2d3be228d8e.jpg?1783907413",
+   "normal": "https://cards.scryfall.io/normal/front/a/4/a4f247b6-8212-4e78-a452-d2d3be228d8e.jpg?1783907413",
+   "large": "https://cards.scryfall.io/large/front/a/4/a4f247b6-8212-4e78-a452-d2d3be228d8e.jpg?1783907413",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/4/a4f247b6-8212-4e78-a452-d2d3be228d8e.jpg?1783907413"
+  }
+ },
+ {
+  "name": "Keening Apparition",
+  "scryfallId": "657b242c-46cb-44d1-86fd-fb2485144a5b",
+  "oracleId": "b9212596-3f65-41c9-9ee8-1f4cec7f0ecf",
+  "set": "rtr",
+  "collectorNumber": "12",
+  "rarity": "common",
+  "manaCost": "{1}{W}",
+  "typeLine": "Creature — Spirit",
+  "oracleText": "Sacrifice this creature: Destroy target enchantment.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/5/657b242c-46cb-44d1-86fd-fb2485144a5b.jpg?1783940375",
+   "normal": "https://cards.scryfall.io/normal/front/6/5/657b242c-46cb-44d1-86fd-fb2485144a5b.jpg?1783940375",
+   "large": "https://cards.scryfall.io/large/front/6/5/657b242c-46cb-44d1-86fd-fb2485144a5b.jpg?1783940375",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/5/657b242c-46cb-44d1-86fd-fb2485144a5b.jpg?1783940375"
+  }
+ },
+ {
+  "name": "Lunarch Veteran",
+  "scryfallId": "d2704743-2e23-40b9-a367-c73d2db45afc",
+  "oracleId": "0761a0e7-d443-4bab-bb15-307c83d4a6a1",
+  "set": "mid",
+  "collectorNumber": "27",
+  "rarity": "common",
+  "manaCost": "{W}",
+  "typeLine": "Creature — Human Cleric",
+  "oracleText": "Whenever another creature you control enters, you gain 1 life.\nDisturb {1}{W} (You may cast this card from your graveyard transformed for its disturb cost.)",
+  "power": "1",
+  "toughness": "1",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Transform",
+   "Disturb"
+  ],
+  "back": "Luminous Phantom",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/2/d2704743-2e23-40b9-a367-c73d2db45afc.jpg?1783925662",
+   "normal": "https://cards.scryfall.io/normal/front/d/2/d2704743-2e23-40b9-a367-c73d2db45afc.jpg?1783925662",
+   "large": "https://cards.scryfall.io/large/front/d/2/d2704743-2e23-40b9-a367-c73d2db45afc.jpg?1783925662",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/2/d2704743-2e23-40b9-a367-c73d2db45afc.jpg?1783925662"
+  }
+ },
+ {
+  "name": "Luminous Phantom",
+  "scryfallId": "d2704743-2e23-40b9-a367-c73d2db45afc",
+  "oracleId": "0761a0e7-d443-4bab-bb15-307c83d4a6a1",
+  "set": "mid",
+  "collectorNumber": "27",
+  "rarity": "common",
+  "manaCost": "",
+  "typeLine": "Creature — Spirit Cleric",
+  "oracleText": "Flying\nWhenever another creature you control leaves the battlefield, you gain 1 life.\nIf Luminous Phantom would be put into a graveyard from anywhere, exile it instead.",
+  "power": "1",
+  "toughness": "1",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "front": "Lunarch Veteran",
+  "image": {
+   "small": "https://cards.scryfall.io/small/back/d/2/d2704743-2e23-40b9-a367-c73d2db45afc.jpg?1783925662",
+   "normal": "https://cards.scryfall.io/normal/back/d/2/d2704743-2e23-40b9-a367-c73d2db45afc.jpg?1783925662",
+   "large": "https://cards.scryfall.io/large/back/d/2/d2704743-2e23-40b9-a367-c73d2db45afc.jpg?1783925662",
+   "artCrop": "https://cards.scryfall.io/art_crop/back/d/2/d2704743-2e23-40b9-a367-c73d2db45afc.jpg?1783925662"
+  }
+ },
+ {
+  "name": "Moonshaker Cavalry",
+  "scryfallId": "ca90d382-7e13-4637-a624-2a1b82abe56c",
+  "oracleId": "b3f16f34-d78c-4b61-821b-05fc6bd0da37",
+  "set": "soc",
+  "collectorNumber": "110",
+  "rarity": "mythic",
+  "manaCost": "{5}{W}{W}{W}",
+  "typeLine": "Creature — Spirit Knight",
+  "oracleText": "Flying\nWhen this creature enters, creatures you control gain flying and get +X/+X until end of turn, where X is the number of creatures you control.",
+  "power": "6",
+  "toughness": "6",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/a/ca90d382-7e13-4637-a624-2a1b82abe56c.jpg?1783903824",
+   "normal": "https://cards.scryfall.io/normal/front/c/a/ca90d382-7e13-4637-a624-2a1b82abe56c.jpg?1783903824",
+   "large": "https://cards.scryfall.io/large/front/c/a/ca90d382-7e13-4637-a624-2a1b82abe56c.jpg?1783903824",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/a/ca90d382-7e13-4637-a624-2a1b82abe56c.jpg?1783903824"
+  }
+ },
+ {
+  "name": "Patchplate Resolute",
+  "scryfallId": "05bbcbef-c466-4e4c-b87c-f8ab3eec2737",
+  "oracleId": "a266e841-429c-4b1d-afa3-acda187c5a0b",
+  "set": "ybro",
+  "collectorNumber": "28",
+  "rarity": "uncommon",
+  "manaCost": "{3}",
+  "typeLine": "Artifact Creature — Soldier",
+  "oracleText": "When Patchplate Resolute enters or leaves the battlefield, you get a one-time boon with \"When you cast a creature spell, that creature enters with an additional +1/+1 counter on it.\"\nUnearth {1}{W}",
+  "power": "3",
+  "toughness": "3",
+  "colors": [],
+  "keywords": [
+   "Unearth"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/5/05bbcbef-c466-4e4c-b87c-f8ab3eec2737.jpg?1783918538",
+   "normal": "https://cards.scryfall.io/normal/front/0/5/05bbcbef-c466-4e4c-b87c-f8ab3eec2737.jpg?1783918538",
+   "large": "https://cards.scryfall.io/large/front/0/5/05bbcbef-c466-4e4c-b87c-f8ab3eec2737.jpg?1783918538",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/5/05bbcbef-c466-4e4c-b87c-f8ab3eec2737.jpg?1783918538"
+  }
+ },
+ {
+  "name": "Selfless Spirit",
+  "scryfallId": "9cd16dac-3bf9-4a71-a906-0cfbf98cdca5",
+  "oracleId": "71d785a9-ddc8-472e-a778-a551b444a4bd",
+  "set": "soc",
+  "collectorNumber": "167",
+  "rarity": "rare",
+  "manaCost": "{1}{W}",
+  "typeLine": "Creature — Spirit Cleric",
+  "oracleText": "Flying\nSacrifice this creature: Creatures you control gain indestructible until end of turn.",
+  "power": "2",
+  "toughness": "1",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/c/9cd16dac-3bf9-4a71-a906-0cfbf98cdca5.jpg?1783903802",
+   "normal": "https://cards.scryfall.io/normal/front/9/c/9cd16dac-3bf9-4a71-a906-0cfbf98cdca5.jpg?1783903802",
+   "large": "https://cards.scryfall.io/large/front/9/c/9cd16dac-3bf9-4a71-a906-0cfbf98cdca5.jpg?1783903802",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/c/9cd16dac-3bf9-4a71-a906-0cfbf98cdca5.jpg?1783903802"
+  }
+ },
+ {
+  "name": "Skyclave Apparition",
+  "scryfallId": "e671de25-c47c-48a1-919b-6aa30dab142f",
+  "oracleId": "d90af00a-d322-4265-9954-7b1e80702e18",
+  "set": "soc",
+  "collectorNumber": "173",
+  "rarity": "rare",
+  "manaCost": "{1}{W}{W}",
+  "typeLine": "Creature — Kor Spirit",
+  "oracleText": "When this creature enters, exile up to one target nonland, nontoken permanent you don't control with mana value 4 or less.\nWhen this creature leaves the battlefield, the exiled card's owner creates an X/X blue Illusion creature token, where X is the mana value of the exiled card.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/6/e671de25-c47c-48a1-919b-6aa30dab142f.jpg?1783903800",
+   "normal": "https://cards.scryfall.io/normal/front/e/6/e671de25-c47c-48a1-919b-6aa30dab142f.jpg?1783903800",
+   "large": "https://cards.scryfall.io/large/front/e/6/e671de25-c47c-48a1-919b-6aa30dab142f.jpg?1783903800",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/6/e671de25-c47c-48a1-919b-6aa30dab142f.jpg?1783903800"
+  }
+ },
+ {
+  "name": "Sun Titan",
+  "scryfallId": "ea3e77ed-9015-4407-b78c-494e46b67b07",
+  "oracleId": "b2e950fb-cb7e-40a0-a311-5bbdd0477b29",
+  "set": "m12",
+  "collectorNumber": "39",
+  "rarity": "mythic",
+  "manaCost": "{4}{W}{W}",
+  "typeLine": "Creature — Giant",
+  "oracleText": "Vigilance\nWhenever this creature enters or attacks, you may return target permanent card with mana value 3 or less from your graveyard to the battlefield.",
+  "power": "6",
+  "toughness": "6",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Vigilance"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/a/ea3e77ed-9015-4407-b78c-494e46b67b07.jpg?1783941096",
+   "normal": "https://cards.scryfall.io/normal/front/e/a/ea3e77ed-9015-4407-b78c-494e46b67b07.jpg?1783941096",
+   "large": "https://cards.scryfall.io/large/front/e/a/ea3e77ed-9015-4407-b78c-494e46b67b07.jpg?1783941096",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/a/ea3e77ed-9015-4407-b78c-494e46b67b07.jpg?1783941096"
+  }
+ },
+ {
+  "name": "Battle Screech",
+  "scryfallId": "eacf7dd0-5855-4e7b-b75c-8119cc3d1460",
+  "oracleId": "e73131cd-b454-405b-9539-9d777e232b9e",
+  "set": "mh1",
+  "collectorNumber": "4",
+  "rarity": "uncommon",
+  "manaCost": "{2}{W}{W}",
+  "typeLine": "Sorcery",
+  "oracleText": "Create two 1/1 white Bird creature tokens with flying.\nFlashback—Tap three untapped white creatures you control. (You may cast this card from your graveyard for its flashback cost. Then exile it.)",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Flashback"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/a/eacf7dd0-5855-4e7b-b75c-8119cc3d1460.jpg?1783933165",
+   "normal": "https://cards.scryfall.io/normal/front/e/a/eacf7dd0-5855-4e7b-b75c-8119cc3d1460.jpg?1783933165",
+   "large": "https://cards.scryfall.io/large/front/e/a/eacf7dd0-5855-4e7b-b75c-8119cc3d1460.jpg?1783933165",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/a/eacf7dd0-5855-4e7b-b75c-8119cc3d1460.jpg?1783933165"
+  }
+ },
+ {
+  "name": "Call a Surprise Witness",
+  "scryfallId": "f5148def-cf1a-460e-8dfd-856103940892",
+  "oracleId": "9038a457-ce01-4f6d-9e2b-5220f08b4290",
+  "set": "mkm",
+  "collectorNumber": "6",
+  "rarity": "uncommon",
+  "manaCost": "{1}{W}",
+  "typeLine": "Sorcery",
+  "oracleText": "Return target creature card with mana value 3 or less from your graveyard to the battlefield. Put a flying counter on it. It's a Spirit in addition to its other types.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/5/f5148def-cf1a-460e-8dfd-856103940892.jpg?1783912928",
+   "normal": "https://cards.scryfall.io/normal/front/f/5/f5148def-cf1a-460e-8dfd-856103940892.jpg?1783912928",
+   "large": "https://cards.scryfall.io/large/front/f/5/f5148def-cf1a-460e-8dfd-856103940892.jpg?1783912928",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/5/f5148def-cf1a-460e-8dfd-856103940892.jpg?1783912928"
+  }
+ },
+ {
+  "name": "Helping Hand",
+  "scryfallId": "da5e29a8-a8fb-452b-9973-61ad613f9907",
+  "oracleId": "170a5dbc-6a43-4715-9501-178b1eb7b08c",
+  "set": "soa",
+  "collectorNumber": "5",
+  "rarity": "uncommon",
+  "manaCost": "{W}",
+  "typeLine": "Sorcery",
+  "oracleText": "Return target creature card with mana value 3 or less from your graveyard to the battlefield tapped.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/a/da5e29a8-a8fb-452b-9973-61ad613f9907.jpg?1783903933",
+   "normal": "https://cards.scryfall.io/normal/front/d/a/da5e29a8-a8fb-452b-9973-61ad613f9907.jpg?1783903933",
+   "large": "https://cards.scryfall.io/large/front/d/a/da5e29a8-a8fb-452b-9973-61ad613f9907.jpg?1783903933",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/a/da5e29a8-a8fb-452b-9973-61ad613f9907.jpg?1783903933"
+  }
+ },
+ {
+  "name": "Late to Dinner",
+  "scryfallId": "6633cab9-23f9-474e-96f1-ca7c0c67691c",
+  "oracleId": "31bf199b-dfb1-428e-96a5-eb25104e2b43",
+  "set": "mh2",
+  "collectorNumber": "19",
+  "rarity": "common",
+  "manaCost": "{3}{W}",
+  "typeLine": "Sorcery",
+  "oracleText": "Return target creature card from your graveyard to the battlefield. Create a Food token. (It's an artifact with \"{2}, {T}, Sacrifice this token: You gain 3 life.\")",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Food"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/6/6633cab9-23f9-474e-96f1-ca7c0c67691c.jpg?1783926889",
+   "normal": "https://cards.scryfall.io/normal/front/6/6/6633cab9-23f9-474e-96f1-ca7c0c67691c.jpg?1783926889",
+   "large": "https://cards.scryfall.io/large/front/6/6/6633cab9-23f9-474e-96f1-ca7c0c67691c.jpg?1783926889",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/6/6633cab9-23f9-474e-96f1-ca7c0c67691c.jpg?1783926889"
+  }
+ },
+ {
+  "name": "Sevinne's Reclamation",
+  "scryfallId": "8deab1ef-4219-4767-a3c4-b61250d0ebe0",
+  "oracleId": "1b9f9f5b-8712-4f00-90cb-1b7b9970eccc",
+  "set": "soc",
+  "collectorNumber": "170",
+  "rarity": "rare",
+  "manaCost": "{2}{W}",
+  "typeLine": "Sorcery",
+  "oracleText": "Return target permanent card with mana value 3 or less from your graveyard to the battlefield. If this spell was cast from a graveyard, you may copy this spell and may choose a new target for the copy.\nFlashback {4}{W} (You may cast this card from your graveyard for its flashback cost. Then exile it.)",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Flashback"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/d/8deab1ef-4219-4767-a3c4-b61250d0ebe0.jpg?1783903800",
+   "normal": "https://cards.scryfall.io/normal/front/8/d/8deab1ef-4219-4767-a3c4-b61250d0ebe0.jpg?1783903800",
+   "large": "https://cards.scryfall.io/large/front/8/d/8deab1ef-4219-4767-a3c4-b61250d0ebe0.jpg?1783903800",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/d/8deab1ef-4219-4767-a3c4-b61250d0ebe0.jpg?1783903800"
+  }
+ },
+ {
+  "name": "Anointed Procession",
+  "scryfallId": "9a52c265-6920-4929-ba0a-70da08df01f1",
+  "oracleId": "7246d45b-2185-4cdd-981b-5419b7d52bce",
+  "set": "akh",
+  "collectorNumber": "2",
+  "rarity": "rare",
+  "manaCost": "{3}{W}",
+  "typeLine": "Enchantment",
+  "oracleText": "If an effect would create one or more tokens under your control, it creates twice that many of those tokens instead.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/a/9a52c265-6920-4929-ba0a-70da08df01f1.jpg?1783936544",
+   "normal": "https://cards.scryfall.io/normal/front/9/a/9a52c265-6920-4929-ba0a-70da08df01f1.jpg?1783936544",
+   "large": "https://cards.scryfall.io/large/front/9/a/9a52c265-6920-4929-ba0a-70da08df01f1.jpg?1783936544",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/a/9a52c265-6920-4929-ba0a-70da08df01f1.jpg?1783936544"
+  }
+ },
+ {
+  "name": "Deification",
+  "scryfallId": "52ce799e-cb9e-4d74-8b13-a5f4559e13a9",
+  "oracleId": "8c8f93d7-d89a-401b-8764-76be71ad16e3",
+  "set": "mat",
+  "collectorNumber": "2",
+  "rarity": "rare",
+  "manaCost": "{1}{W}",
+  "typeLine": "Enchantment",
+  "oracleText": "As this enchantment enters, choose a planeswalker type.\nPlaneswalkers you control of the chosen type have hexproof.\nAs long as you control a creature, if damage dealt to a planeswalker you control of the chosen type would result in all loyalty counters on it being removed, instead all but one of those counters are removed.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/2/52ce799e-cb9e-4d74-8b13-a5f4559e13a9.jpg?1783916530",
+   "normal": "https://cards.scryfall.io/normal/front/5/2/52ce799e-cb9e-4d74-8b13-a5f4559e13a9.jpg?1783916530",
+   "large": "https://cards.scryfall.io/large/front/5/2/52ce799e-cb9e-4d74-8b13-a5f4559e13a9.jpg?1783916530",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/2/52ce799e-cb9e-4d74-8b13-a5f4559e13a9.jpg?1783916530"
+  }
+ },
+ {
+  "name": "Mind Stone",
+  "scryfallId": "52284689-f2e0-442d-80d0-9e766759e2bc",
+  "oracleId": "c97361b5-af16-4a7b-af85-a429dbaf4ad2",
+  "set": "10e",
+  "collectorNumber": "335",
+  "rarity": "uncommon",
+  "manaCost": "{2}",
+  "typeLine": "Artifact",
+  "oracleText": "{T}: Add {C}.\n{1}, {T}, Sacrifice this artifact: Draw a card.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/2/52284689-f2e0-442d-80d0-9e766759e2bc.jpg?1783942981",
+   "normal": "https://cards.scryfall.io/normal/front/5/2/52284689-f2e0-442d-80d0-9e766759e2bc.jpg?1783942981",
+   "large": "https://cards.scryfall.io/large/front/5/2/52284689-f2e0-442d-80d0-9e766759e2bc.jpg?1783942981",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/2/52284689-f2e0-442d-80d0-9e766759e2bc.jpg?1783942981"
+  }
+ },
+ {
+  "name": "Crucible of Worlds",
+  "scryfallId": "eb28b35c-28a5-4042-b21d-6d43658a16eb",
+  "oracleId": "33c722cf-b4bf-431f-aefd-ee96241a7fbf",
+  "set": "m19",
+  "collectorNumber": "229",
+  "rarity": "mythic",
+  "manaCost": "{3}",
+  "typeLine": "Artifact",
+  "oracleText": "You may play lands from your graveyard.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/b/eb28b35c-28a5-4042-b21d-6d43658a16eb.jpg?1783934519",
+   "normal": "https://cards.scryfall.io/normal/front/e/b/eb28b35c-28a5-4042-b21d-6d43658a16eb.jpg?1783934519",
+   "large": "https://cards.scryfall.io/large/front/e/b/eb28b35c-28a5-4042-b21d-6d43658a16eb.jpg?1783934519",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/b/eb28b35c-28a5-4042-b21d-6d43658a16eb.jpg?1783934519"
+  }
+ },
+ {
+  "name": "Ghost Vacuum",
+  "scryfallId": "8ac39c01-127f-4471-bc74-11a90c48e306",
+  "oracleId": "4ef583ab-e0a0-4e4b-bd65-af766038b1fd",
+  "set": "dsk",
+  "collectorNumber": "248",
+  "rarity": "rare",
+  "manaCost": "{1}",
+  "typeLine": "Artifact",
+  "oracleText": "{T}: Exile target card from a graveyard.\n{6}, {T}, Sacrifice this artifact: Put each creature card exiled with this artifact onto the battlefield under your control with a flying counter on it. Each of them is a 1/1 Spirit in addition to its other types. Activate only as a sorcery.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/a/8ac39c01-127f-4471-bc74-11a90c48e306.jpg?1783909433",
+   "normal": "https://cards.scryfall.io/normal/front/8/a/8ac39c01-127f-4471-bc74-11a90c48e306.jpg?1783909433",
+   "large": "https://cards.scryfall.io/large/front/8/a/8ac39c01-127f-4471-bc74-11a90c48e306.jpg?1783909433",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/a/8ac39c01-127f-4471-bc74-11a90c48e306.jpg?1783909433"
+  }
+ },
+ {
+  "name": "Tocasia's Dig Site",
+  "scryfallId": "23d4b90c-95b1-4828-bc08-7067da0d5364",
+  "oracleId": "a91f93fd-e428-4a36-b1b3-604b47a34287",
+  "set": "bro",
+  "collectorNumber": "266",
+  "rarity": "common",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "{T}: Add {C}.\n{3}, {T}: Surveil 1. (Look at the top card of your library. You may put it into your graveyard.)",
+  "colors": [],
+  "keywords": [
+   "Surveil"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/3/23d4b90c-95b1-4828-bc08-7067da0d5364.jpg?1783920004",
+   "normal": "https://cards.scryfall.io/normal/front/2/3/23d4b90c-95b1-4828-bc08-7067da0d5364.jpg?1783920004",
+   "large": "https://cards.scryfall.io/large/front/2/3/23d4b90c-95b1-4828-bc08-7067da0d5364.jpg?1783920004",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/3/23d4b90c-95b1-4828-bc08-7067da0d5364.jpg?1783920004"
+  }
  }
 ]

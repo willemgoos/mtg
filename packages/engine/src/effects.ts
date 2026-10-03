@@ -40,6 +40,7 @@ import { nextInt, shuffleInPlace } from './rng.ts';
 import { checkCondition } from './triggers.ts';
 import { addLore } from './sagas.ts';
 import { CHOOSERS } from './stx-13c-a-effects.ts';
+import { planeswalkersSurvive, tokenMultiplier } from './brawl-15a-w-effects.ts';
 import { SOS_14B_C_CHOOSERS } from './sos-14b-c-effects.ts';
 import type {
   CardDefId,
@@ -118,7 +119,10 @@ export function dealDamage(
     // Damage to a planeswalker removes loyalty counters.
     if (def(ctx, o.id).types.includes('Planeswalker')) {
       const c = (o.counters ??= {});
-      c.loyalty = (c.loyalty ?? 0) - amount;
+      // Strixhaven Brawl (15a): Deification leaves one loyalty counter.
+      const left = (c.loyalty ?? 0) - amount;
+      c.loyalty =
+        left < 1 && (c.loyalty ?? 0) >= 1 && planeswalkersSurvive(ctx, o.controller) ? 1 : left;
       emit(ctx, { type: 'damageDealt', source: src.id, to, amount, combat });
       if (has(src, 'lifelink')) gainLife(ctx, src.controller, amount);
       return;
@@ -1634,7 +1638,7 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
       return;
     }
     case 'createToken': {
-      const n = resolveAmount(ctx, es, e.count);
+      const baseCount = resolveAmount(ctx, es, e.count);
       // Beast Within: "Its controller creates ..." (the target's controller, even once it's gone).
       const target = e.forControllerOf !== undefined ? es.targets[e.forControllerOf] : undefined;
       // Strixhaven (13c): Will, Scholar of Frost: an "up to" target left out makes no token.
@@ -1649,6 +1653,8 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
       const owner = targetOwner ?? (e.forOpponent ? other(es.controller) : es.controller);
       // Divine Visitation: creature tokens are 4/4 Angels instead.
       const token = replacedToken(ctx, owner, e.token);
+      // Strixhaven Brawl (15a): Anointed Procession doubles the tokens.
+      const n = baseCount * tokenMultiplier(ctx, owner);
       for (let i = 0; i < n; i++) {
         const t = createObject(ctx, token, owner, 'battlefield', true);
         // "Then attach this Equipment to it" (Midnight Angel Armor): the token is "it".
@@ -1867,6 +1873,7 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
       const o = ctx.s.objects[t.object.id];
       if (!o || o.zone !== 'graveyard' || o.zcc !== t.object.zcc) return;
       moveObject(ctx, o.id, 'battlefield', { controller: es.controller });
+      if (e.tapped) o.tapped = true;
       if (e.counter) (o.counters ??= {})[e.counter] = 1;
       if (e.addSubtype) o.addedSubtypes = [...(o.addedSubtypes ?? []), e.addSubtype];
       // Heroic Return, Winter Soldier: "if a Hero enters this way, it enters with counters".

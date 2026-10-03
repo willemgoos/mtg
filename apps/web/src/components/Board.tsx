@@ -1420,6 +1420,9 @@ function extraLabel(o: GameObject): string {
   if (zone === 'exile') return 'Exiled';
   if (zone === 'library') return 'Top of library';
   const def = cardDb.get(defId);
+  // Strixhaven Brawl (15a): Escape (Sentinel's Eyes) and Disturb (Lunarch Veteran).
+  if (def?.escapeExiles) return 'Escape';
+  if (def?.disturb) return 'Disturb';
   if (def?.flashback) return 'Flashback';
   if (def?.castFromGraveyardRemovingCounters) return 'From graveyard';
   return 'Graveyard';
@@ -1504,7 +1507,12 @@ function kickPermanentPrompt(defId: CardDefId | undefined, a: Action): string | 
 /** "Choose one" mode name, or kicked / not kicked. */
 function castLabel(defId: CardDefId, a: Action): string {
   // Final Fantasy (11a): an adventure land's own option.
-  if (a.type === 'playLand') return `Play ${cardDb.get(defId)?.name ?? 'land'}`;
+  if (a.type === 'playLand') {
+    // Strixhaven Brawl (15a): a spell // land card played as its land face.
+    const front = cardDb.get(defId);
+    const face = a.back && front?.back ? cardDb.get(front.back) : front;
+    return `Play ${face?.name ?? 'land'}`;
+  }
   if (a.type !== 'castSpell' && a.type !== 'activateAbility') return '';
   if (a.forage)
     return a.forage === 'graveyard'
@@ -1527,6 +1535,9 @@ function castLabel(defId: CardDefId, a: Action): string {
   // A modal double-faced card: cast either face.
   if (def?.back) {
     const face = a.back ? cardDb.get(def.back) : def;
+    // Strixhaven Brawl (15a): a disturb face has no mana cost, only its disturb cost.
+    if (a.back && face?.noManaCost && face.flashback)
+      return `Disturb: ${face.name} (${manaText(face.flashback)})`;
     return `Cast ${face?.name ?? ''} (${face ? manaText(face.manaCost) : ''})`;
   }
   // Final Fantasy (11a): tiered: the mode with its additional cost ("Thundara — {3}").

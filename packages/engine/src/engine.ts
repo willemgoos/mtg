@@ -228,7 +228,10 @@ function apply(ctx: Ctx, action: Action): void {
     case 'passPriority':
       return passPriority(ctx, player);
     case 'playLand':
-      moveObject(ctx, action.card, 'battlefield', { controller: player });
+      moveObject(ctx, action.card, 'battlefield', {
+        controller: player,
+        ...(action.back ? { transformed: true } : {}),
+      });
       ps.landsPlayedThisTurn++;
       s.turn.passed = [];
       return givePriority(ctx, player);

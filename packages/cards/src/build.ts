@@ -77,6 +77,11 @@ export const KEYWORDS_AS_ABILITIES = new Set([
   // Strixhaven (13a).
   'Learn',
   'Magecraft',
+  // Strixhaven Brawl (15a, white): rules text lives in the behaviour.
+  'Escape',
+  'Disturb',
+  'Unearth',
+  'Seek',
   // Secrets of Strixhaven (14a): keywords that are only labels or reminder text (rules text lives in the behaviour).
   'Prepared',
   'Opus',
@@ -142,6 +147,11 @@ export const KEYWORDS_AS_ABILITIES = new Set([
   'Hire a Mercenary',
   // Strixhaven (13a).
   'Magecraft',
+  // Strixhaven Brawl (15a, white): rules text lives in the behaviour.
+  'Escape',
+  'Disturb',
+  'Unearth',
+  'Seek',
   // Secrets of Strixhaven (14a): keywords that are only labels or reminder text (rules text lives in the behaviour).
   'Prepared',
   'Opus',

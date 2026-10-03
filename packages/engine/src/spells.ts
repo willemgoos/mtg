@@ -107,7 +107,8 @@ export function pawSpell(d: CardDefinition, paws: readonly number[]): SpellDef {
 export function castVariants(d: CardDefinition, zone: ZoneName, via?: CastVia): CastVariant[] {
   if (d.types.includes('Land')) return [];
   // Final Fantasy (11a): a transforming card's back face has no mana cost and can't be cast.
-  if (d.noManaCost) return [];
+  // Strixhaven Brawl (15a): a disturb back face is cast for its disturb cost (its `flashback`).
+  if (d.noManaCost && !d.flashback) return [];
   // Cast as if from hand, then adjusted for how.
   if (via) {
     const free = { generic: 0, colored: {} };
@@ -173,7 +174,11 @@ export function castVariants(d: CardDefinition, zone: ZoneName, via?: CastVia): 
   // Secrets of Strixhaven (14b): Group Project's flashback also taps three creatures.
   const flashSpell =
     flashback && d.flashbackTapCreatures && d.spell
-      ? { ...d.spell, escalate: d.flashbackTapCreatures }
+      ? {
+          ...d.spell,
+          escalate: d.flashbackTapCreatures,
+          ...(d.flashbackTapFilter ? { escalateFilter: d.flashbackTapFilter } : {}),
+        }
       : (d.spell ?? null);
   const out: CastVariant[] = [{ cost, spell: flashSpell, ...extra }];
   // Multikicker: paid once, twice or three times (more is rarely worth offering).

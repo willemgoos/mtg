@@ -71,6 +71,8 @@ export interface SpellDef {
   label?: string;
   /** Escalate: tap this many untapped creatures you control as an extra cost (the engine picks them). */
   escalate?: number;
+  /** Strixhaven Brawl (15a): Battle Screech: the creatures tapped for `escalate` must match this (white). */
+  escalateFilter?: CardFilter;
 }
 
 export interface CardDefinition {
@@ -269,6 +271,14 @@ export interface CardDefinition {
   unkickedExilesGraveyard?: number;
   /** Group Project: flashback also taps this many untapped creatures you control. */
   flashbackTapCreatures?: number;
+  /** Strixhaven Brawl (15a): Battle Screech: the creatures tapped for flashback must match this. */
+  flashbackTapFilter?: CardFilter;
+  /** Strixhaven Brawl (15a): Escape (Sentinel's Eyes): flashback also exiles this many other cards from your graveyard, and the card isn't exiled. */
+  escapeExiles?: number;
+  /** Strixhaven Brawl (15a): Disturb: the back face (`back`, whose `flashback` is the disturb cost) may be cast from your graveyard. */
+  disturb?: boolean;
+  /** Strixhaven Brawl (15a): "If this would be put into a graveyard from anywhere, exile it instead" (Luminous Phantom). */
+  exileInsteadOfGraveyard?: boolean;
 }
 
 export type AbilityDef =
@@ -524,6 +534,9 @@ export type TriggerDef =
    * library): this one or another you control ('selfOrOther'), or only others.
    */
   | { on: 'leavesWithoutDying'; who: 'selfOrOther' | 'other' }
+  // Strixhaven Brawl (15a): Luminous Phantom
+  /** Another creature you control leaves the battlefield (dying or not). */
+  | { on: 'otherCreatureLeaves' }
   /** Whenever a Food is put into a graveyard from the battlefield (Ygra). */
   | { on: 'foodToGraveyard' }
   /** Whenever you forage (Corpseberry Cultivator). */
@@ -751,6 +764,9 @@ export type ConditionDef =
   | { kind: 'creaturesDiedAtLeast'; min: number }
   /** The source is a creature right now (Great Hall of the Biblioplex once animated). */
   | { kind: 'sourceIsCreature' }
+  // Strixhaven Brawl (15a): Sevinne's Reclamation
+  /** This spell was cast from a graveyard (flashback). */
+  | { kind: 'castFromGraveyard' }
   | { kind: 'custom'; handler: string };
 
 export interface CardFilter {
@@ -1508,6 +1524,8 @@ export type EffectDef =
       countersIf?: { filter: CardFilter; count: number };
       // Marvel Super Heroes: "is a Hero in addition to its other types" (Thunderbolts Conspiracy).
       addSubtype?: string;
+      /** Strixhaven Brawl (15a): Helping Hand, "tapped". */
+      tapped?: boolean;
     }
   /** Destroy all creatures (matching the filter). `returnOne`: then return one of yours that died (Starfall Invocation). */
   | {
@@ -1786,6 +1804,12 @@ export type EffectDef =
   | { kind: 'exileUntilTotalCastFree'; total: number };
 
 export type StaticDef =
+  // Strixhaven Brawl (15a): Anointed Procession
+  /** If an effect would create one or more tokens under your control, it creates twice that many instead. */
+  | { kind: 'doubleTokens' }
+  // Strixhaven Brawl (15a): Deification (simplified: every planeswalker type)
+  /** Planeswalkers you control have hexproof; while you control a creature, damage can't remove their last loyalty counter. */
+  | { kind: 'planeswalkerProtection' }
   // Secrets of Strixhaven (14b): Wildgrowth Archaic
   /** Creatures you cast enter with an additional +1/+1 counter for each colour of mana spent to cast them. */
   | { kind: 'entersWithColorsSpentCounters' }
@@ -2089,6 +2113,8 @@ export interface GameObject {
   chosenType?: string;
   /** Cards exiled with it (Keen-Eyed Curator). */
   exiledWith?: ObjectId[];
+  /** Strixhaven Brawl (15a): Skyclave Apparition: the owner and mana value of the card it exiled. */
+  linkedExile?: { owner: PlayerId; mv: number };
   /** Sugar Coat: the Aura that makes it a Food. */
   foodBy?: ObjectId;
   /** Someone other than its owner may cast it from exile, with any mana (Cruelclaw's Heist). */
@@ -2212,6 +2238,9 @@ export interface PlayerState {
   // Strixhaven (13b): Maelstrom Muse
   /** The next instant or sorcery spell cast on `turn` costs `amount` less. */
   nextSpellDiscount?: { turn: number; amount: number };
+  // Strixhaven Brawl (15a): Patchplate Resolute
+  /** One-time boons: the next creature spells you cast (one each) enter with an additional +1/+1 counter. */
+  creatureBoons?: number;
   landsPlayedThisTurn: number;
   attackedThisTurn: boolean;
   drewFromEmptyLibrary: boolean;
@@ -2865,7 +2894,8 @@ export type Action =
   /** London mulligan: put one card on the bottom (repeated until done). */
   | { type: 'bottomCard'; player: PlayerId; card: ObjectId }
   | { type: 'passPriority'; player: PlayerId }
-  | { type: 'playLand'; player: PlayerId; card: ObjectId }
+  // Strixhaven Brawl (15a): Witch Enchanter, a spell // land card played as its land face.
+  | { type: 'playLand'; player: PlayerId; card: ObjectId; back?: boolean }
   | {
       type: 'castSpell';
       player: PlayerId;

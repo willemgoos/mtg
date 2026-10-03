@@ -431,6 +431,17 @@ export function castSpell(
       const gone = graveyardCostCard(ctx, player, {}, card);
       if (gone) moveObject(ctx, gone, 'exile');
     }
+  // Strixhaven Brawl (15a): Patchplate Resolute's boon: that creature enters with an additional +1/+1 counter.
+  if (d.types.includes('Creature') && (ctx.s.players[player].creatureBoons ?? 0) > 0) {
+    ctx.s.players[player].creatureBoons!--;
+    o.bonusCounters = (o.bonusCounters ?? 0) + 1;
+  }
+  // Strixhaven Brawl (15a): Escape exiles other cards from your graveyard as a cost.
+  if (d.escapeExiles && flashback)
+    for (let i = 0; i < d.escapeExiles; i++) {
+      const gone = graveyardCostCard(ctx, player, {}, card);
+      if (gone) moveObject(ctx, gone, 'exile');
+    }
   // Secrets of Strixhaven (14a): prepare. Casting the copy unprepares its creature.
   const preparer = o.preparedBy !== undefined ? ctx.s.objects[o.preparedBy] : undefined;
   if (preparer && preparer.prepared === card) {
@@ -486,7 +497,8 @@ export function castSpell(
   if (d.types.includes('Creature')) scryForAncestry(ctx, player, d, payment);
   // Escalate: tap a creature for each mode beyond the first.
   if (v.spell?.escalate)
-    for (const id of escalateCrew(ctx, player, v.spell.escalate) ?? []) tap(ctx, id);
+    for (const id of escalateCrew(ctx, player, v.spell.escalate, v.spell.escalateFilter) ?? [])
+      tap(ctx, id);
   ((ctx.s.turn.castDefs ??= { p1: [], p2: [] })[player] ??= []).push(o.defId);
   // "When you cast this spell" (Ancestral Communion, Hatut Zeraze Strike Force).
   d.abilities.forEach((a, i) => {
@@ -1054,10 +1066,19 @@ export function crewFor(
 }
 
 /** Escalate (Collective Effort): the N smallest untapped creatures `player` controls, or null. */
-export function escalateCrew(ctx: Ctx, player: PlayerId, n: number): ObjectId[] | null {
+export function escalateCrew(
+  ctx: Ctx,
+  player: PlayerId,
+  n: number,
+  filter?: CardFilter,
+): ObjectId[] | null {
   const ready = ctx.s.battlefield
     .filter(
-      (id) => obj(ctx, id).controller === player && !obj(ctx, id).tapped && isCreature(ctx, id),
+      (id) =>
+        obj(ctx, id).controller === player &&
+        !obj(ctx, id).tapped &&
+        isCreature(ctx, id) &&
+        (!filter || matchesFilter(ctx, id, filter)),
     )
     .sort((a, b) => power(ctx, a) - power(ctx, b));
   return ready.length >= n ? ready.slice(0, n) : null;

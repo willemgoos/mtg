@@ -81,6 +81,7 @@ export function castableCards(ctx: Ctx, player: PlayerId): ObjectId[] {
     }
     if (
       d.flashback ||
+      d.disturb ||
       d.castFromGraveyardRemovingCounters ||
       d.castFromGraveyardWithDiscard ||
       mayhemReady(ctx, id) ||
@@ -371,7 +372,14 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
           continue;
         if (v.removeCounters && countersYouControl(ctx, player) < v.removeCounters) continue;
         // Escalate: enough untapped creatures to tap.
-        if (v.spell?.escalate && escalateCrew(ctx, player, v.spell.escalate) === null) continue;
+        if (
+          v.spell?.escalate &&
+          escalateCrew(ctx, player, v.spell.escalate, v.spell.escalateFilter) === null
+        )
+          continue;
+        // Strixhaven Brawl (15a): Escape also exiles other cards from your graveyard.
+        if (d.escapeExiles && zone === 'graveyard' && ps.graveyard.length - 1 < d.escapeExiles)
+          continue;
         // Rottenmouth Viper: sacrifice 0 to 5 nonland permanents (the least useful first).
         for (const sacrificeMany of sacrificePrefixes(ctx, player, card, d))
           for (const x of xs) {
@@ -492,12 +500,18 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
     if (!blocked(card)) castsOf(card);
     // Modal double-faced cards: the back face can be cast from hand too.
     // Secrets of Strixhaven (14a): a prepare creature's back is a spell that can't be cast from hand.
-    if (def(ctx, card).back && !def(ctx, card).prepare && obj(ctx, card).zone === 'hand') {
+    if (
+      def(ctx, card).back &&
+      !def(ctx, card).prepare &&
+      (obj(ctx, card).zone === 'hand' ||
+        // Strixhaven Brawl (15a): Disturb, from the graveyard.
+        (obj(ctx, card).zone === 'graveyard' && def(ctx, card).disturb))
+    ) {
       const from = out.length;
       withBackFace(ctx, card, () => {
         if (!blocked(card)) castsOf(card);
       });
-      for (const a of out.slice(from)) if (a.type === 'castSpell') a.back = true;
+      for (const a of out.slice(from)) if (a.type === 'castSpell' || a.type === 'playLand') a.back = true;
     }
   }
   // Sneak (Marvel Super Heroes): during your declare blockers step, return an unblocked attacker.

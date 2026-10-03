@@ -17,6 +17,7 @@ import {
   SECRETS_OF_STRIXHAVEN_DECKS,
   STRIXHAVEN_POOL,
   SECRETS_OF_STRIXHAVEN_POOL,
+  STRIXHAVEN_BRAWL_POOL,
   GREEN_POOL,
   LAND_POOL,
   MARVEL_BRAWL_POOL,
@@ -60,6 +61,7 @@ describe('card data', () => {
         ...FINAL_FANTASY_POOL,
         ...STRIXHAVEN_POOL,
         ...SECRETS_OF_STRIXHAVEN_POOL,
+        ...STRIXHAVEN_BRAWL_POOL,
       ].sort(),
     );
     for (const c of SCRYFALL) expect(c.image?.normal).toMatch(/^https:\/\/cards\.scryfall\.io\//);

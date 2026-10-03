@@ -138,7 +138,8 @@ async function main(): Promise<void> {
     // Classes (Bloomburrow's Talents) print their levels on one face.
     if (c.layout !== 'normal' && c.layout !== 'class' && c.layout !== 'saga' && !front) continue;
     // Digital printings only from the Arena Beginner Set (Arena-only cards of the Color Challenge decks).
-    if (c.digital && c.set !== 'anb') continue;
+    // Strixhaven Brawl: two Alchemy-only staples (Gate to the Citadel, Patchplate Resolute).
+    if (c.digital && c.set !== 'anb' && c.set !== 'hbg' && c.set !== 'ybro') continue;
     if (!SET_PREFERENCE.includes(c.set)) continue;
     const cur = best.get(c.name);
     if (!cur || better(c, cur)) best.set(c.name, c);

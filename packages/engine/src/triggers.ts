@@ -229,6 +229,11 @@ export function checkCondition(
       );
     case 'firstAttackThisTurn':
       return ctx.s.turn.attackers.filter((id) => id === self.id).length === 1;
+    // Strixhaven Brawl (15a): Sevinne's Reclamation, "if this spell was cast from a graveyard".
+    case 'castFromGraveyard': {
+      const item = ctx.s.stack.find((x) => x.kind === 'spell' && x.id === self.id);
+      return item?.kind === 'spell' && !!item.flashback;
+    }
     case 'custom':
       throw new Error(`Custom condition "${c.handler}" not registered`);
   }
@@ -469,6 +474,15 @@ function detect(ctx: Ctx, ev: GameEvent): void {
           });
         }
       }
+      // Strixhaven Brawl (15a): Luminous Phantom, "whenever another creature you control leaves the battlefield".
+      if (ev.from === 'battlefield' && movedDef.types.includes('Creature')) {
+        const wasUnder = ev.controller ?? moved?.controller ?? moved?.owner;
+        forEachBattlefieldTrigger(
+          ctx,
+          (o, a) =>
+            a.trigger.on === 'otherCreatureLeaves' && o.id !== ev.id && o.controller === wasUnder,
+        );
+      }
       if (
         ev.from === 'battlefield' &&
         ev.to !== 'graveyard' &&
@@ -570,7 +584,7 @@ function detect(ctx: Ctx, ev: GameEvent): void {
         // Final Fantasy (11b): a back face that dies (Chaos) triggers its own abilities.
         const diedAs = ev.leftAs ? defOf(ctx, ev.leftAs) : movedDef;
         diedAs.abilities.forEach((a, i) => {
-          if (a.kind !== 'triggered') return;
+          if (a.kind !== 'triggered' || a.fromGraveyard) return;
           const t = a.trigger;
           if (t.on !== 'dies' && t.on !== 'creatureYouControlDies') return;
           if (t.on === 'creatureYouControlDies' && t.nontoken && (!card || card.isToken)) return;
@@ -662,6 +676,19 @@ function detect(ctx: Ctx, ev: GameEvent): void {
           },
           moved,
         );
+        // Strixhaven Brawl (15a): Furious Forebear, "whenever a creature you control dies while this card is in your graveyard".
+        if (diedUnder !== undefined)
+          for (const gid of s.players[diedUnder].graveyard) {
+            if (gid === ev.id) continue;
+            const g = s.objects[gid]!;
+            def(ctx, gid).abilities.forEach((a, i) => {
+              if (a.kind !== 'triggered' || !a.fromGraveyard) return;
+              if (a.trigger.on !== 'creatureYouControlDies') return;
+              if (a.trigger.nontoken && wasToken) return;
+              if (a.trigger.filter && !defMatches(movedDef, a.trigger.filter)) return;
+              if (checkCondition(ctx, a.condition, diedUnder, g)) queue(ctx, g, i, diedUnder);
+            });
+          }
       }
       return;
     }
