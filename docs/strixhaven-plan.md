@@ -269,3 +269,10 @@ whole (SOS's `prepare` is the riskiest). The shortest path to Quintorius is 0, 1
   Theorist asks once per nonland card discarded, not once per batch. Fervent Mastery's search asks three times
   (each may find nothing). Draconic Intervention exiles the chosen card as part of casting, and its X is that card's
   mana value (stored as the spell's X).
+
+14a (Witherbloom Pest Control, `sos/witherbloom.ts`, `sos/shared-14a.ts`):
+
+- Follow the Lumarets with infusion asks for the second card even if the first was declined. Lumaret's Favor's copy
+  retargets to another creature when there is one (`retarget`). Dissection Practice's "up to one" targets are chosen in
+  order (the second creature can't be picked while skipping the first). Foolish Fate and Moseo read the life gained this
+  turn from the turn tally. The SOS Pest (`sos-pest-token`, gains 1 life on attack) is not the STX Pest.

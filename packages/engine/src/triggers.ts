@@ -123,6 +123,8 @@ export function checkCondition(
     const ch = characteristics(ctx, self.id);
     return (subject.manaSpent ?? 0) > Math.min(ch.power, ch.toughness);
   }
+  // Secrets of Strixhaven (14a): Lluwen, Exchange Student.
+  if (c.kind === 'notPrepared') return !self?.prepared;
   if (c.kind === 'lifeThisTurn') {
     const p = c.who === 'you' ? controller : other(controller);
     const gained = ctx.s.turn.lifeGains[p] > 0;

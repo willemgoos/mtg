@@ -14,6 +14,7 @@ import {
   FINAL_FANTASY_DECKS,
   FINAL_FANTASY_POOL,
   STRIXHAVEN_DECKS,
+  SECRETS_OF_STRIXHAVEN_DECKS,
   STRIXHAVEN_POOL,
   SECRETS_OF_STRIXHAVEN_POOL,
   GREEN_POOL,
@@ -140,6 +141,7 @@ describe('card data', () => {
         ...MARVEL_DECKS.map((d) => d.id),
         ...FINAL_FANTASY_DECKS.map((d) => d.id),
         ...STRIXHAVEN_DECKS.map((d) => d.id),
+        ...SECRETS_OF_STRIXHAVEN_DECKS.map((d) => d.id),
       ].sort(),
     );
     for (const d of PLAYABLE_DECKS)

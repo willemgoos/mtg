@@ -37896,5 +37896,798 @@
    "large": "https://cards.scryfall.io/large/front/b/8/b87e2474-98c1-4c1a-91ed-340b72d31653.jpg?1783903663",
    "artCrop": "https://cards.scryfall.io/art_crop/front/b/8/b87e2474-98c1-4c1a-91ed-340b72d31653.jpg?1783903663"
   }
+ },
+ {
+  "name": "Bogwater Lumaret",
+  "scryfallId": "7a42f51a-3377-47bb-b6fb-c0515bf1dcfb",
+  "oracleId": "0109432d-5a2a-456f-ad39-b75cb4c73420",
+  "set": "sos",
+  "collectorNumber": "177",
+  "rarity": "common",
+  "manaCost": "{B}{G}",
+  "typeLine": "Creature — Spirit Frog",
+  "oracleText": "Whenever this creature or another creature you control enters, you gain 1 life.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "B",
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/a/7a42f51a-3377-47bb-b6fb-c0515bf1dcfb.jpg?1783903647",
+   "normal": "https://cards.scryfall.io/normal/front/7/a/7a42f51a-3377-47bb-b6fb-c0515bf1dcfb.jpg?1783903647",
+   "large": "https://cards.scryfall.io/large/front/7/a/7a42f51a-3377-47bb-b6fb-c0515bf1dcfb.jpg?1783903647",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/a/7a42f51a-3377-47bb-b6fb-c0515bf1dcfb.jpg?1783903647"
+  }
+ },
+ {
+  "name": "Essenceknit Scholar",
+  "scryfallId": "2a3cba55-3fae-4d45-ae03-4d662ec13718",
+  "oracleId": "dd757328-0593-4fc7-a099-e82f5c0677ff",
+  "set": "sos",
+  "collectorNumber": "187",
+  "rarity": "uncommon",
+  "manaCost": "{B}{B/G}{G}",
+  "typeLine": "Creature — Dryad Warlock",
+  "oracleText": "When this creature enters, create a 1/1 black and green Pest creature token with \"Whenever this token attacks, you gain 1 life.\"\nAt the beginning of your end step, if a creature died under your control this turn, draw a card.",
+  "power": "3",
+  "toughness": "1",
+  "colors": [
+   "B",
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/a/2a3cba55-3fae-4d45-ae03-4d662ec13718.jpg?1783903645",
+   "normal": "https://cards.scryfall.io/normal/front/2/a/2a3cba55-3fae-4d45-ae03-4d662ec13718.jpg?1783903645",
+   "large": "https://cards.scryfall.io/large/front/2/a/2a3cba55-3fae-4d45-ae03-4d662ec13718.jpg?1783903645",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/a/2a3cba55-3fae-4d45-ae03-4d662ec13718.jpg?1783903645"
+  }
+ },
+ {
+  "name": "Old-Growth Educator",
+  "scryfallId": "eb7e858a-9b85-49b2-a379-ee656b64935a",
+  "oracleId": "2b7362a9-3518-4071-ab1b-40689a50e12a",
+  "set": "sos",
+  "collectorNumber": "207",
+  "rarity": "uncommon",
+  "manaCost": "{2}{B}{G}",
+  "typeLine": "Creature — Treefolk Druid",
+  "oracleText": "Reach, vigilance\nInfusion — When this creature enters, put two +1/+1 counters on it if you gained life this turn.",
+  "power": "4",
+  "toughness": "4",
+  "colors": [
+   "B",
+   "G"
+  ],
+  "keywords": [
+   "Infusion",
+   "Reach",
+   "Vigilance"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/b/eb7e858a-9b85-49b2-a379-ee656b64935a.jpg?1783903639",
+   "normal": "https://cards.scryfall.io/normal/front/e/b/eb7e858a-9b85-49b2-a379-ee656b64935a.jpg?1783903639",
+   "large": "https://cards.scryfall.io/large/front/e/b/eb7e858a-9b85-49b2-a379-ee656b64935a.jpg?1783903639",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/b/eb7e858a-9b85-49b2-a379-ee656b64935a.jpg?1783903639"
+  }
+ },
+ {
+  "name": "Pest Mascot",
+  "scryfallId": "d882beb9-6766-4818-afbb-f6fd7a2d5b70",
+  "oracleId": "b8ecddf7-ba89-40dd-9f63-5bad27dd850d",
+  "set": "sos",
+  "collectorNumber": "209",
+  "rarity": "common",
+  "manaCost": "{1}{B}{G}",
+  "typeLine": "Creature — Pest Ape",
+  "oracleText": "Trample\nWhenever you gain life, put a +1/+1 counter on this creature.",
+  "power": "2",
+  "toughness": "3",
+  "colors": [
+   "B",
+   "G"
+  ],
+  "keywords": [
+   "Trample"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/8/d882beb9-6766-4818-afbb-f6fd7a2d5b70.jpg?1783903637",
+   "normal": "https://cards.scryfall.io/normal/front/d/8/d882beb9-6766-4818-afbb-f6fd7a2d5b70.jpg?1783903637",
+   "large": "https://cards.scryfall.io/large/front/d/8/d882beb9-6766-4818-afbb-f6fd7a2d5b70.jpg?1783903637",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/8/d882beb9-6766-4818-afbb-f6fd7a2d5b70.jpg?1783903637"
+  }
+ },
+ {
+  "name": "Teacher's Pest",
+  "scryfallId": "eaa358ac-761d-4507-aa15-3d4684027207",
+  "oracleId": "12397dbf-99a9-40c3-aa7c-76d09baad008",
+  "set": "sos",
+  "collectorNumber": "238",
+  "rarity": "uncommon",
+  "manaCost": "{B}{G}",
+  "typeLine": "Creature — Skeleton Pest",
+  "oracleText": "Menace (This creature can't be blocked except by two or more creatures.)\nWhenever this creature attacks, you gain 1 life.\n{B}{G}: Return this card from your graveyard to the battlefield tapped.",
+  "power": "1",
+  "toughness": "1",
+  "colors": [
+   "B",
+   "G"
+  ],
+  "keywords": [
+   "Menace"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/a/eaa358ac-761d-4507-aa15-3d4684027207.jpg?1783903626",
+   "normal": "https://cards.scryfall.io/normal/front/e/a/eaa358ac-761d-4507-aa15-3d4684027207.jpg?1783903626",
+   "large": "https://cards.scryfall.io/large/front/e/a/eaa358ac-761d-4507-aa15-3d4684027207.jpg?1783903626",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/a/eaa358ac-761d-4507-aa15-3d4684027207.jpg?1783903626"
+  }
+ },
+ {
+  "name": "Lluwen, Exchange Student",
+  "scryfallId": "a0bcb638-c3c8-4973-9537-5c471f43f34f",
+  "oracleId": "cb125cd4-c7c2-415d-b802-bdcfc2454403",
+  "set": "sos",
+  "collectorNumber": "199",
+  "rarity": "uncommon",
+  "manaCost": "{2}{B}{G}",
+  "typeLine": "Legendary Creature — Elf Druid",
+  "oracleText": "Lluwen enters prepared. (While it's prepared, you may cast a copy of its spell. Doing so unprepares it.)\nExile a creature card from your graveyard: Lluwen becomes prepared. Activate only as a sorcery.",
+  "power": "3",
+  "toughness": "4",
+  "colors": [
+   "B",
+   "G"
+  ],
+  "colorIdentity": [
+   "B",
+   "G"
+  ],
+  "keywords": [
+   "Prepared"
+  ],
+  "back": "Pest Friend (Lluwen, Exchange Student)",
+  "prepare": true,
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/0/a0bcb638-c3c8-4973-9537-5c471f43f34f.jpg?1783903641",
+   "normal": "https://cards.scryfall.io/normal/front/a/0/a0bcb638-c3c8-4973-9537-5c471f43f34f.jpg?1783903641",
+   "large": "https://cards.scryfall.io/large/front/a/0/a0bcb638-c3c8-4973-9537-5c471f43f34f.jpg?1783903641",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/0/a0bcb638-c3c8-4973-9537-5c471f43f34f.jpg?1783903641"
+  }
+ },
+ {
+  "name": "Pest Friend (Lluwen, Exchange Student)",
+  "flavorName": "Pest Friend",
+  "scryfallId": "a0bcb638-c3c8-4973-9537-5c471f43f34f",
+  "oracleId": "cb125cd4-c7c2-415d-b802-bdcfc2454403",
+  "set": "sos",
+  "collectorNumber": "199",
+  "rarity": "uncommon",
+  "manaCost": "{B/G}",
+  "typeLine": "Sorcery",
+  "oracleText": "Create a 1/1 black and green Pest creature token with \"Whenever this token attacks, you gain 1 life.\"",
+  "colors": [
+   "B",
+   "G"
+  ],
+  "colorIdentity": [
+   "B",
+   "G"
+  ],
+  "keywords": [],
+  "front": "Lluwen, Exchange Student",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/0/a0bcb638-c3c8-4973-9537-5c471f43f34f.jpg?1783903641",
+   "normal": "https://cards.scryfall.io/normal/front/a/0/a0bcb638-c3c8-4973-9537-5c471f43f34f.jpg?1783903641",
+   "large": "https://cards.scryfall.io/large/front/a/0/a0bcb638-c3c8-4973-9537-5c471f43f34f.jpg?1783903641",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/0/a0bcb638-c3c8-4973-9537-5c471f43f34f.jpg?1783903641"
+  }
+ },
+ {
+  "name": "Pestbrood Sloth",
+  "scryfallId": "c1251ae6-2f19-4f84-ab02-6a6cc7ce6056",
+  "oracleId": "2970d09b-4bef-468e-8de5-f994c820ccc0",
+  "set": "sos",
+  "collectorNumber": "157",
+  "rarity": "uncommon",
+  "manaCost": "{3}{G}",
+  "typeLine": "Creature — Plant Sloth",
+  "oracleText": "Reach\nWhen this creature dies, create two 1/1 black and green Pest creature tokens with \"Whenever this token attacks, you gain 1 life.\"",
+  "power": "4",
+  "toughness": "4",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Reach"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/1/c1251ae6-2f19-4f84-ab02-6a6cc7ce6056.jpg?1783903655",
+   "normal": "https://cards.scryfall.io/normal/front/c/1/c1251ae6-2f19-4f84-ab02-6a6cc7ce6056.jpg?1783903655",
+   "large": "https://cards.scryfall.io/large/front/c/1/c1251ae6-2f19-4f84-ab02-6a6cc7ce6056.jpg?1783903655",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/1/c1251ae6-2f19-4f84-ab02-6a6cc7ce6056.jpg?1783903655"
+  }
+ },
+ {
+  "name": "Shopkeeper's Bane",
+  "scryfallId": "97f7fbb9-228c-4a74-975b-38d3b6cecb32",
+  "oracleId": "e7572317-6bec-4fb0-81ac-76aec04f14ad",
+  "set": "sos",
+  "collectorNumber": "159",
+  "rarity": "common",
+  "manaCost": "{2}{G}",
+  "typeLine": "Creature — Badger Pest",
+  "oracleText": "Trample\nWhenever this creature attacks, you gain 2 life.",
+  "power": "4",
+  "toughness": "2",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Trample"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/7/97f7fbb9-228c-4a74-975b-38d3b6cecb32.jpg?1783903656",
+   "normal": "https://cards.scryfall.io/normal/front/9/7/97f7fbb9-228c-4a74-975b-38d3b6cecb32.jpg?1783903656",
+   "large": "https://cards.scryfall.io/large/front/9/7/97f7fbb9-228c-4a74-975b-38d3b6cecb32.jpg?1783903656",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/7/97f7fbb9-228c-4a74-975b-38d3b6cecb32.jpg?1783903656"
+  }
+ },
+ {
+  "name": "Mindful Biomancer",
+  "scryfallId": "2c3a6eb8-ce0c-4dc8-9ed6-d2a9223eef53",
+  "oracleId": "03af9d24-2df6-4318-82f2-8abdd22206f1",
+  "set": "sos",
+  "collectorNumber": "154",
+  "rarity": "common",
+  "manaCost": "{1}{G}",
+  "typeLine": "Creature — Dryad Druid",
+  "oracleText": "When this creature enters, you gain 1 life.\n{2}{G}: This creature gets +2/+2 until end of turn. Activate only once each turn.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/c/2c3a6eb8-ce0c-4dc8-9ed6-d2a9223eef53.jpg?1783903656",
+   "normal": "https://cards.scryfall.io/normal/front/2/c/2c3a6eb8-ce0c-4dc8-9ed6-d2a9223eef53.jpg?1783903656",
+   "large": "https://cards.scryfall.io/large/front/2/c/2c3a6eb8-ce0c-4dc8-9ed6-d2a9223eef53.jpg?1783903656",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/c/2c3a6eb8-ce0c-4dc8-9ed6-d2a9223eef53.jpg?1783903656"
+  }
+ },
+ {
+  "name": "Thornfist Striker",
+  "scryfallId": "f6cb838e-a06a-46ae-a30f-e5192178c1cc",
+  "oracleId": "d0d13d5d-677d-4e1a-9e58-2f9840581f6d",
+  "set": "sos",
+  "collectorNumber": "164",
+  "rarity": "uncommon",
+  "manaCost": "{2}{G}",
+  "typeLine": "Creature — Elf Druid",
+  "oracleText": "Ward {1} (Whenever this creature becomes the target of a spell or ability an opponent controls, counter it unless that player pays {1}.)\nInfusion — Creatures you control get +1/+0 and have trample as long as you gained life this turn.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Infusion",
+   "Ward"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/6/f6cb838e-a06a-46ae-a30f-e5192178c1cc.jpg?1783903653",
+   "normal": "https://cards.scryfall.io/normal/front/f/6/f6cb838e-a06a-46ae-a30f-e5192178c1cc.jpg?1783903653",
+   "large": "https://cards.scryfall.io/large/front/f/6/f6cb838e-a06a-46ae-a30f-e5192178c1cc.jpg?1783903653",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/6/f6cb838e-a06a-46ae-a30f-e5192178c1cc.jpg?1783903653"
+  }
+ },
+ {
+  "name": "Ulna Alley Shopkeep",
+  "scryfallId": "c25e1ae5-f17c-4eee-98f1-5681981af31c",
+  "oracleId": "9da7f9ec-872a-471d-8d60-5f4213f0204f",
+  "set": "sos",
+  "collectorNumber": "103",
+  "rarity": "common",
+  "manaCost": "{2}{B}",
+  "typeLine": "Creature — Goblin Warlock",
+  "oracleText": "Menace (This creature can't be blocked except by two or more creatures.)\nInfusion — This creature gets +2/+0 as long as you gained life this turn.",
+  "power": "2",
+  "toughness": "3",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Infusion",
+   "Menace"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/2/c25e1ae5-f17c-4eee-98f1-5681981af31c.jpg?1783903673",
+   "normal": "https://cards.scryfall.io/normal/front/c/2/c25e1ae5-f17c-4eee-98f1-5681981af31c.jpg?1783903673",
+   "large": "https://cards.scryfall.io/large/front/c/2/c25e1ae5-f17c-4eee-98f1-5681981af31c.jpg?1783903673",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/2/c25e1ae5-f17c-4eee-98f1-5681981af31c.jpg?1783903673"
+  }
+ },
+ {
+  "name": "Leech Collector",
+  "scryfallId": "c715fe4c-c0e7-4342-811f-b74687851097",
+  "oracleId": "84bb960c-c34e-4979-8c0f-893c85cee27d",
+  "set": "sos",
+  "collectorNumber": "88",
+  "rarity": "uncommon",
+  "manaCost": "{1}{B}",
+  "typeLine": "Creature — Human Warlock",
+  "oracleText": "Whenever you gain life for the first time each turn, this creature becomes prepared. (While it's prepared, you may cast a copy of its spell. Doing so unprepares it.)",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "B"
+  ],
+  "colorIdentity": [
+   "B"
+  ],
+  "keywords": [
+   "Prepared"
+  ],
+  "back": "Bloodletting (Leech Collector)",
+  "prepare": true,
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/7/c715fe4c-c0e7-4342-811f-b74687851097.jpg?1783903680",
+   "normal": "https://cards.scryfall.io/normal/front/c/7/c715fe4c-c0e7-4342-811f-b74687851097.jpg?1783903680",
+   "large": "https://cards.scryfall.io/large/front/c/7/c715fe4c-c0e7-4342-811f-b74687851097.jpg?1783903680",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/7/c715fe4c-c0e7-4342-811f-b74687851097.jpg?1783903680"
+  }
+ },
+ {
+  "name": "Bloodletting (Leech Collector)",
+  "flavorName": "Bloodletting",
+  "scryfallId": "c715fe4c-c0e7-4342-811f-b74687851097",
+  "oracleId": "84bb960c-c34e-4979-8c0f-893c85cee27d",
+  "set": "sos",
+  "collectorNumber": "88",
+  "rarity": "uncommon",
+  "manaCost": "{B}",
+  "typeLine": "Sorcery",
+  "oracleText": "Each opponent loses 2 life.",
+  "colors": [
+   "B"
+  ],
+  "colorIdentity": [
+   "B"
+  ],
+  "keywords": [],
+  "front": "Leech Collector",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/7/c715fe4c-c0e7-4342-811f-b74687851097.jpg?1783903680",
+   "normal": "https://cards.scryfall.io/normal/front/c/7/c715fe4c-c0e7-4342-811f-b74687851097.jpg?1783903680",
+   "large": "https://cards.scryfall.io/large/front/c/7/c715fe4c-c0e7-4342-811f-b74687851097.jpg?1783903680",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/7/c715fe4c-c0e7-4342-811f-b74687851097.jpg?1783903680"
+  }
+ },
+ {
+  "name": "Poisoner's Apprentice",
+  "scryfallId": "3755a2e9-af55-4625-a006-2a86c7893a96",
+  "oracleId": "4b0e5626-0282-42e5-abef-a079b26a8e5f",
+  "set": "sos",
+  "collectorNumber": "92",
+  "rarity": "uncommon",
+  "manaCost": "{2}{B}",
+  "typeLine": "Creature — Orc Warlock",
+  "oracleText": "Infusion — When this creature enters, target creature an opponent controls gets -4/-4 until end of turn if you gained life this turn.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Infusion"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/7/3755a2e9-af55-4625-a006-2a86c7893a96.jpg?1783903678",
+   "normal": "https://cards.scryfall.io/normal/front/3/7/3755a2e9-af55-4625-a006-2a86c7893a96.jpg?1783903678",
+   "large": "https://cards.scryfall.io/large/front/3/7/3755a2e9-af55-4625-a006-2a86c7893a96.jpg?1783903678",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/7/3755a2e9-af55-4625-a006-2a86c7893a96.jpg?1783903678"
+  }
+ },
+ {
+  "name": "Blech, Loafing Pest",
+  "scryfallId": "f588fa50-7cc5-41ba-90df-2d252eb5c785",
+  "oracleId": "c1bdd361-c7f2-4aa2-8d07-b582775551ff",
+  "set": "sos",
+  "collectorNumber": "176",
+  "rarity": "rare",
+  "manaCost": "{1}{B}{G}",
+  "typeLine": "Legendary Creature — Pest",
+  "oracleText": "Whenever you gain life, put a +1/+1 counter on each Pest, Bat, Insect, Snake, and Spider you control.",
+  "power": "3",
+  "toughness": "4",
+  "colors": [
+   "B",
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/5/f588fa50-7cc5-41ba-90df-2d252eb5c785.jpg?1783903648",
+   "normal": "https://cards.scryfall.io/normal/front/f/5/f588fa50-7cc5-41ba-90df-2d252eb5c785.jpg?1783903648",
+   "large": "https://cards.scryfall.io/large/front/f/5/f588fa50-7cc5-41ba-90df-2d252eb5c785.jpg?1783903648",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/5/f588fa50-7cc5-41ba-90df-2d252eb5c785.jpg?1783903648"
+  }
+ },
+ {
+  "name": "Moseo, Vein's New Dean",
+  "scryfallId": "6877180c-22a1-4c4d-9178-316f4c34661b",
+  "oracleId": "c2e2f21a-0338-44d7-96a5-5a277f0ec419",
+  "set": "sos",
+  "collectorNumber": "91",
+  "rarity": "rare",
+  "manaCost": "{2}{B}",
+  "typeLine": "Legendary Creature — Bird Skeleton Warlock",
+  "oracleText": "Flying\nWhen Moseo enters, create a 1/1 black and green Pest creature token with \"Whenever this token attacks, you gain 1 life.\"\nInfusion — At the beginning of your end step, if you gained life this turn, return up to one target creature card with mana value X or less from your graveyard to the battlefield, where X is the amount of life you gained this turn.",
+  "power": "2",
+  "toughness": "1",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Infusion",
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/8/6877180c-22a1-4c4d-9178-316f4c34661b.jpg?1783903677",
+   "normal": "https://cards.scryfall.io/normal/front/6/8/6877180c-22a1-4c4d-9178-316f4c34661b.jpg?1783903677",
+   "large": "https://cards.scryfall.io/large/front/6/8/6877180c-22a1-4c4d-9178-316f4c34661b.jpg?1783903677",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/8/6877180c-22a1-4c4d-9178-316f4c34661b.jpg?1783903677"
+  }
+ },
+ {
+  "name": "Grapple with Death",
+  "scryfallId": "62842fb4-8bd3-4d80-b4f9-5bc3c5cebd3a",
+  "oracleId": "dced5cab-1438-4264-b44c-54dc37ec73d3",
+  "set": "sos",
+  "collectorNumber": "192",
+  "rarity": "common",
+  "manaCost": "{1}{B}{G}",
+  "typeLine": "Sorcery",
+  "oracleText": "Destroy target artifact or creature. You gain 1 life.",
+  "colors": [
+   "B",
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/2/62842fb4-8bd3-4d80-b4f9-5bc3c5cebd3a.jpg?1783903644",
+   "normal": "https://cards.scryfall.io/normal/front/6/2/62842fb4-8bd3-4d80-b4f9-5bc3c5cebd3a.jpg?1783903644",
+   "large": "https://cards.scryfall.io/large/front/6/2/62842fb4-8bd3-4d80-b4f9-5bc3c5cebd3a.jpg?1783903644",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/2/62842fb4-8bd3-4d80-b4f9-5bc3c5cebd3a.jpg?1783903644"
+  }
+ },
+ {
+  "name": "Witherbloom Charm",
+  "scryfallId": "254437f7-7a8a-4b11-9cea-e8e7ea23c59e",
+  "oracleId": "ee1db746-f5c1-4dce-82eb-24b273cc9507",
+  "set": "sos",
+  "collectorNumber": "244",
+  "rarity": "uncommon",
+  "manaCost": "{B}{G}",
+  "typeLine": "Instant",
+  "oracleText": "Choose one —\n• You may sacrifice a permanent. If you do, draw two cards.\n• You gain 5 life.\n• Destroy target nonland permanent with mana value 2 or less.",
+  "colors": [
+   "B",
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/5/254437f7-7a8a-4b11-9cea-e8e7ea23c59e.jpg?1783903624",
+   "normal": "https://cards.scryfall.io/normal/front/2/5/254437f7-7a8a-4b11-9cea-e8e7ea23c59e.jpg?1783903624",
+   "large": "https://cards.scryfall.io/large/front/2/5/254437f7-7a8a-4b11-9cea-e8e7ea23c59e.jpg?1783903624",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/5/254437f7-7a8a-4b11-9cea-e8e7ea23c59e.jpg?1783903624"
+  }
+ },
+ {
+  "name": "Efflorescence",
+  "scryfallId": "79b9ace7-eceb-4f97-9ee7-d5ee3e0b3515",
+  "oracleId": "181da74b-53fb-4e46-afc0-e7c990fda128",
+  "set": "sos",
+  "collectorNumber": "144",
+  "rarity": "common",
+  "manaCost": "{2}{G}",
+  "typeLine": "Instant",
+  "oracleText": "Put two +1/+1 counters on target creature.\nInfusion — If you gained life this turn, that creature also gains trample and indestructible until end of turn.",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Infusion"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/9/79b9ace7-eceb-4f97-9ee7-d5ee3e0b3515.jpg?1783903661",
+   "normal": "https://cards.scryfall.io/normal/front/7/9/79b9ace7-eceb-4f97-9ee7-d5ee3e0b3515.jpg?1783903661",
+   "large": "https://cards.scryfall.io/large/front/7/9/79b9ace7-eceb-4f97-9ee7-d5ee3e0b3515.jpg?1783903661",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/9/79b9ace7-eceb-4f97-9ee7-d5ee3e0b3515.jpg?1783903661"
+  }
+ },
+ {
+  "name": "Send in the Pest",
+  "scryfallId": "283b508b-89f0-4c23-9686-b049e402b73c",
+  "oracleId": "955bfcb8-6477-4ed0-b6e7-8940874ae5e4",
+  "set": "sos",
+  "collectorNumber": "100",
+  "rarity": "common",
+  "manaCost": "{1}{B}",
+  "typeLine": "Sorcery",
+  "oracleText": "Each opponent discards a card. You create a 1/1 black and green Pest creature token with \"Whenever this token attacks, you gain 1 life.\"",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/8/283b508b-89f0-4c23-9686-b049e402b73c.jpg?1783903674",
+   "normal": "https://cards.scryfall.io/normal/front/2/8/283b508b-89f0-4c23-9686-b049e402b73c.jpg?1783903674",
+   "large": "https://cards.scryfall.io/large/front/2/8/283b508b-89f0-4c23-9686-b049e402b73c.jpg?1783903674",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/8/283b508b-89f0-4c23-9686-b049e402b73c.jpg?1783903674"
+  }
+ },
+ {
+  "name": "Cost of Brilliance",
+  "scryfallId": "3a46816b-9f75-4c72-9ec6-cded6a4a0d01",
+  "oracleId": "b45afde2-eaaf-4174-8082-d344efa54c44",
+  "set": "sos",
+  "collectorNumber": "77",
+  "rarity": "common",
+  "manaCost": "{2}{B}",
+  "typeLine": "Sorcery",
+  "oracleText": "Target player draws two cards and loses 2 life. Put a +1/+1 counter on up to one target creature.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/a/3a46816b-9f75-4c72-9ec6-cded6a4a0d01.jpg?1783903682",
+   "normal": "https://cards.scryfall.io/normal/front/3/a/3a46816b-9f75-4c72-9ec6-cded6a4a0d01.jpg?1783903682",
+   "large": "https://cards.scryfall.io/large/front/3/a/3a46816b-9f75-4c72-9ec6-cded6a4a0d01.jpg?1783903682",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/a/3a46816b-9f75-4c72-9ec6-cded6a4a0d01.jpg?1783903682"
+  }
+ },
+ {
+  "name": "Root Manipulation",
+  "scryfallId": "5390a79c-bc4b-4edb-a845-0d3514986401",
+  "oracleId": "d870948e-721a-46fd-86b6-ecd42e3aa9bd",
+  "set": "sos",
+  "collectorNumber": "222",
+  "rarity": "uncommon",
+  "manaCost": "{3}{B}{G}",
+  "typeLine": "Sorcery",
+  "oracleText": "Until end of turn, creatures you control get +2/+2 and gain menace and \"Whenever this creature attacks, you gain 1 life.\" (A creature with menace can't be blocked except by two or more creatures.)",
+  "colors": [
+   "B",
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/3/5390a79c-bc4b-4edb-a845-0d3514986401.jpg?1783903632",
+   "normal": "https://cards.scryfall.io/normal/front/5/3/5390a79c-bc4b-4edb-a845-0d3514986401.jpg?1783903632",
+   "large": "https://cards.scryfall.io/large/front/5/3/5390a79c-bc4b-4edb-a845-0d3514986401.jpg?1783903632",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/3/5390a79c-bc4b-4edb-a845-0d3514986401.jpg?1783903632"
+  }
+ },
+ {
+  "name": "Follow the Lumarets",
+  "scryfallId": "f9488480-2b6c-40bc-a93e-29fb1292a2e4",
+  "oracleId": "5bb38d08-582e-43aa-9507-7c20759978ec",
+  "set": "sos",
+  "collectorNumber": "148",
+  "rarity": "common",
+  "manaCost": "{1}{G}",
+  "typeLine": "Sorcery",
+  "oracleText": "Infusion — Look at the top four cards of your library. You may reveal a creature or land card from among them and put it into your hand. If you gained life this turn, you may instead reveal two creature and/or land cards from among them and put them into your hand. Put the rest on the bottom of your library in a random order.",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Infusion"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/9/f9488480-2b6c-40bc-a93e-29fb1292a2e4.jpg?1783903659",
+   "normal": "https://cards.scryfall.io/normal/front/f/9/f9488480-2b6c-40bc-a93e-29fb1292a2e4.jpg?1783903659",
+   "large": "https://cards.scryfall.io/large/front/f/9/f9488480-2b6c-40bc-a93e-29fb1292a2e4.jpg?1783903659",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/9/f9488480-2b6c-40bc-a93e-29fb1292a2e4.jpg?1783903659"
+  }
+ },
+ {
+  "name": "Oracle's Restoration",
+  "scryfallId": "0863a19d-4511-4a78-98dd-d194afd1c39b",
+  "oracleId": "00e75a6b-699e-4824-86e5-66d45245cd9b",
+  "set": "sos",
+  "collectorNumber": "156",
+  "rarity": "common",
+  "manaCost": "{G}",
+  "typeLine": "Sorcery",
+  "oracleText": "Target creature you control gets +1/+1 until end of turn. You draw a card and gain 1 life.",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/8/0863a19d-4511-4a78-98dd-d194afd1c39b.jpg?1783903655",
+   "normal": "https://cards.scryfall.io/normal/front/0/8/0863a19d-4511-4a78-98dd-d194afd1c39b.jpg?1783903655",
+   "large": "https://cards.scryfall.io/large/front/0/8/0863a19d-4511-4a78-98dd-d194afd1c39b.jpg?1783903655",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/8/0863a19d-4511-4a78-98dd-d194afd1c39b.jpg?1783903655"
+  }
+ },
+ {
+  "name": "Lumaret's Favor",
+  "scryfallId": "c5e7c856-8b71-44e6-8998-0b0b3ff0ef99",
+  "oracleId": "d514704b-4055-48ed-9da3-e4397fca7576",
+  "set": "sos",
+  "collectorNumber": "153",
+  "rarity": "uncommon",
+  "manaCost": "{1}{G}",
+  "typeLine": "Instant",
+  "oracleText": "Infusion — When you cast this spell, copy it if you gained life this turn. You may choose new targets for the copy.\nTarget creature gets +2/+4 until end of turn.",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Infusion"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/5/c5e7c856-8b71-44e6-8998-0b0b3ff0ef99.jpg?1783903656",
+   "normal": "https://cards.scryfall.io/normal/front/c/5/c5e7c856-8b71-44e6-8998-0b0b3ff0ef99.jpg?1783903656",
+   "large": "https://cards.scryfall.io/large/front/c/5/c5e7c856-8b71-44e6-8998-0b0b3ff0ef99.jpg?1783903656",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/5/c5e7c856-8b71-44e6-8998-0b0b3ff0ef99.jpg?1783903656"
+  }
+ },
+ {
+  "name": "Titan's Grave",
+  "scryfallId": "a9ab41c8-3ee2-4676-9b8b-20c34d9f5f21",
+  "oracleId": "595f0eb5-f521-4174-9c48-b89e85ea907c",
+  "set": "sos",
+  "collectorNumber": "266",
+  "rarity": "common",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "This land enters tapped.\n{T}: Add {B} or {G}.\n{2}{B}{G}, {T}: Surveil 1. (Look at the top card of your library. You may put it into your graveyard.)",
+  "colors": [],
+  "keywords": [
+   "Surveil"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/9/a9ab41c8-3ee2-4676-9b8b-20c34d9f5f21.jpg?1783903615",
+   "normal": "https://cards.scryfall.io/normal/front/a/9/a9ab41c8-3ee2-4676-9b8b-20c34d9f5f21.jpg?1783903615",
+   "large": "https://cards.scryfall.io/large/front/a/9/a9ab41c8-3ee2-4676-9b8b-20c34d9f5f21.jpg?1783903615",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/9/a9ab41c8-3ee2-4676-9b8b-20c34d9f5f21.jpg?1783903615"
+  }
+ },
+ {
+  "name": "Deathcap Glade",
+  "scryfallId": "78897104-80e1-4d8a-9958-145b40f679e8",
+  "oracleId": "f6d24565-5b32-4eff-b2e0-6e2c25516ff0",
+  "set": "sos",
+  "collectorNumber": "253",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "This land enters tapped unless you control two or more other lands.\n{T}: Add {B} or {G}.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/8/78897104-80e1-4d8a-9958-145b40f679e8.jpg?1783903621",
+   "normal": "https://cards.scryfall.io/normal/front/7/8/78897104-80e1-4d8a-9958-145b40f679e8.jpg?1783903621",
+   "large": "https://cards.scryfall.io/large/front/7/8/78897104-80e1-4d8a-9958-145b40f679e8.jpg?1783903621",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/8/78897104-80e1-4d8a-9958-145b40f679e8.jpg?1783903621"
+  }
+ },
+ {
+  "name": "Sneering Shadewriter",
+  "scryfallId": "4b4c120e-abe9-4f11-a7e4-bc3f723da4b2",
+  "oracleId": "21a094d6-de3d-48d4-a35d-b99617da55db",
+  "set": "sos",
+  "collectorNumber": "101",
+  "rarity": "common",
+  "manaCost": "{4}{B}",
+  "typeLine": "Creature — Vampire Warlock",
+  "oracleText": "Flying\nWhen this creature enters, each opponent loses 2 life and you gain 2 life.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/b/4b4c120e-abe9-4f11-a7e4-bc3f723da4b2.jpg?1783903674",
+   "normal": "https://cards.scryfall.io/normal/front/4/b/4b4c120e-abe9-4f11-a7e4-bc3f723da4b2.jpg?1783903674",
+   "large": "https://cards.scryfall.io/large/front/4/b/4b4c120e-abe9-4f11-a7e4-bc3f723da4b2.jpg?1783903674",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/b/4b4c120e-abe9-4f11-a7e4-bc3f723da4b2.jpg?1783903674"
+  }
+ },
+ {
+  "name": "Last Gasp",
+  "scryfallId": "da5f3729-6ec7-4482-90cb-83b973edeae4",
+  "oracleId": "a82c3860-4dd6-4ffd-aa8f-ab8df687db6c",
+  "set": "sos",
+  "collectorNumber": "86",
+  "rarity": "common",
+  "manaCost": "{1}{B}",
+  "typeLine": "Instant",
+  "oracleText": "Target creature gets -3/-3 until end of turn.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/a/da5f3729-6ec7-4482-90cb-83b973edeae4.jpg?1783903679",
+   "normal": "https://cards.scryfall.io/normal/front/d/a/da5f3729-6ec7-4482-90cb-83b973edeae4.jpg?1783903679",
+   "large": "https://cards.scryfall.io/large/front/d/a/da5f3729-6ec7-4482-90cb-83b973edeae4.jpg?1783903679",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/a/da5f3729-6ec7-4482-90cb-83b973edeae4.jpg?1783903679"
+  }
+ },
+ {
+  "name": "Foolish Fate",
+  "scryfallId": "d278f4c9-d20b-4a76-8c5c-4d3e985948b9",
+  "oracleId": "9c51893f-9118-4d95-b88a-e264f4cbd7a8",
+  "set": "sos",
+  "collectorNumber": "83",
+  "rarity": "uncommon",
+  "manaCost": "{2}{B}",
+  "typeLine": "Instant",
+  "oracleText": "Destroy target creature.\nInfusion — If you gained life this turn, that creature's controller loses 3 life.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Infusion"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/2/d278f4c9-d20b-4a76-8c5c-4d3e985948b9.jpg?1783903680",
+   "normal": "https://cards.scryfall.io/normal/front/d/2/d278f4c9-d20b-4a76-8c5c-4d3e985948b9.jpg?1783903680",
+   "large": "https://cards.scryfall.io/large/front/d/2/d278f4c9-d20b-4a76-8c5c-4d3e985948b9.jpg?1783903680",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/2/d278f4c9-d20b-4a76-8c5c-4d3e985948b9.jpg?1783903680"
+  }
+ },
+ {
+  "name": "Wander Off",
+  "scryfallId": "3d409512-50b9-4a38-91b0-19ba25227992",
+  "oracleId": "b14d3226-adc2-4bdd-9e69-fefdc946ac04",
+  "set": "sos",
+  "collectorNumber": "104",
+  "rarity": "common",
+  "manaCost": "{3}{B}",
+  "typeLine": "Instant",
+  "oracleText": "Exile target creature.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/d/3d409512-50b9-4a38-91b0-19ba25227992.jpg?1783903675",
+   "normal": "https://cards.scryfall.io/normal/front/3/d/3d409512-50b9-4a38-91b0-19ba25227992.jpg?1783903675",
+   "large": "https://cards.scryfall.io/large/front/3/d/3d409512-50b9-4a38-91b0-19ba25227992.jpg?1783903675",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/d/3d409512-50b9-4a38-91b0-19ba25227992.jpg?1783903675"
+  }
+ },
+ {
+  "name": "Dissection Practice",
+  "scryfallId": "ddbf1242-6832-475e-9a77-65dd9b4bb32a",
+  "oracleId": "73905f94-9665-4d82-8927-725d2c4fc4bd",
+  "set": "sos",
+  "collectorNumber": "79",
+  "rarity": "uncommon",
+  "manaCost": "{B}",
+  "typeLine": "Instant",
+  "oracleText": "Target opponent loses 1 life and you gain 1 life.\nUp to one target creature gets +1/+1 until end of turn.\nUp to one target creature gets -1/-1 until end of turn.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/d/ddbf1242-6832-475e-9a77-65dd9b4bb32a.jpg?1783903682",
+   "normal": "https://cards.scryfall.io/normal/front/d/d/ddbf1242-6832-475e-9a77-65dd9b4bb32a.jpg?1783903682",
+   "large": "https://cards.scryfall.io/large/front/d/d/ddbf1242-6832-475e-9a77-65dd9b4bb32a.jpg?1783903682",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/d/ddbf1242-6832-475e-9a77-65dd9b4bb32a.jpg?1783903682"
+  }
  }
 ]

@@ -663,7 +663,12 @@ export function cardMatches(
             ? characteristics(ctx, sourceId).power
             : (obj(ctx, sourceId).lastPower ?? 0)
           : 0
-        : filter.maxManaValue;
+        : filter.maxManaValue === 'lifeGainedThisTurn'
+          ? // Secrets of Strixhaven (14a): Moseo.
+            sourceId
+            ? (ctx.s.turn.lifeGained?.[obj(ctx, sourceId).controller] ?? 0)
+            : 0
+          : filter.maxManaValue;
     if (mv > max) return false;
   }
   if (filter.other && id === sourceId) return false;

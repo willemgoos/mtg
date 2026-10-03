@@ -35,6 +35,7 @@ export {
   MARVEL_BRAWL_DECKS,
   FINAL_FANTASY_DECKS,
   STRIXHAVEN_DECKS,
+  SECRETS_OF_STRIXHAVEN_DECKS,
 } from './decks.ts';
 export type { Decklist } from './decks.ts';
 export { PACKET_LANDS, PACKETS, packetCards } from './jumpin.ts';

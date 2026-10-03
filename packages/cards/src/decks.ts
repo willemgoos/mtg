@@ -16,7 +16,7 @@ export interface Decklist {
    */
   series: 'starter' | 'colorChallenge' | 'jumpIn' | 'season' | 'brawl';
   /** A deck from another set than Foundations (shown in its own section). */
-  set?: 'blb' | 'msh' | 'msc' | 'fin' | 'stx';
+  set?: 'blb' | 'msh' | 'msc' | 'fin' | 'stx' | 'sos';
   cards: [name: string, count: number][];
   /** Brawl: the commander (not in `cards`, which hold the other 99). */
   commander?: string;
@@ -2563,6 +2563,54 @@ export const STRIXHAVEN_DECKS: Decklist[] = [
   },
 ];
 
+/** Secrets of Strixhaven (14a): our own decks (docs/strixhaven-14a-decks.md). */
+export const SECRETS_OF_STRIXHAVEN_DECKS: Decklist[] = [
+  {
+    id: 'sos-witherbloom-pest-control',
+    name: 'Witherbloom Pest Control',
+    colors: ['B', 'G'],
+    face: "Moseo, Vein's New Dean",
+    source: 'custom',
+    series: 'starter',
+    set: 'sos',
+    cards: [
+      ['Bogwater Lumaret', 2],
+      ['Essenceknit Scholar', 1],
+      ['Old-Growth Educator', 2],
+      ['Pest Mascot', 2],
+      ["Teacher's Pest", 1],
+      ['Lluwen, Exchange Student', 1],
+      ['Pestbrood Sloth', 1],
+      ["Shopkeeper's Bane", 1],
+      ['Mindful Biomancer', 2],
+      ['Thornfist Striker', 1],
+      ['Ulna Alley Shopkeep', 1],
+      ['Sneering Shadewriter', 2],
+      ['Leech Collector', 1],
+      ["Poisoner's Apprentice", 1],
+      ['Blech, Loafing Pest', 1],
+      ["Moseo, Vein's New Dean", 1],
+      ['Grapple with Death', 2],
+      ['Witherbloom Charm', 1],
+      ['Last Gasp', 1],
+      ['Foolish Fate', 1],
+      ['Wander Off', 1],
+      ['Efflorescence', 2],
+      ['Send in the Pest', 1],
+      ['Cost of Brilliance', 1],
+      ['Root Manipulation', 1],
+      ['Follow the Lumarets', 1],
+      ["Oracle's Restoration", 1],
+      ["Lumaret's Favor", 1],
+      ['Dissection Practice', 1],
+      ["Titan's Grave", 1],
+      ['Deathcap Glade', 1],
+      ['Swamp', 11],
+      ['Forest', 11],
+    ],
+  },
+];
+
 export const DECKS: Decklist[] = [
   ...ARENA_DECKS,
   ...COLOR_CHALLENGE_DECKS,
@@ -2571,4 +2619,5 @@ export const DECKS: Decklist[] = [
   ...MARVEL_BRAWL_DECKS,
   ...FINAL_FANTASY_DECKS,
   ...STRIXHAVEN_DECKS,
+  ...SECRETS_OF_STRIXHAVEN_DECKS,
 ];
