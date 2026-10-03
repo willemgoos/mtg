@@ -600,21 +600,22 @@ export function summarize(r: ExpeditionRun): RunSummary {
 // Packs
 // ---------------------------------------------------------------------------
 
-/** The set a booster comes from: Foundations, or the set of a Bloomburrow or Marvel deck. */
-export type PackSet = 'fdn' | 'blb' | 'msh';
+/** The set a booster comes from: Foundations, or the set of a Bloomburrow, Marvel or Strixhaven deck. */
+export type PackSet = 'fdn' | 'blb' | 'msh' | 'stx';
 
 /** Booster names, by set. */
 export const PACK_SET_NAMES: Record<PackSet, string> = {
   fdn: 'Foundations',
   blb: 'Bloomburrow',
   msh: 'Marvel Super Heroes',
+  stx: 'Strixhaven',
 };
 
 const asPackSet = (set: string | undefined): PackSet =>
-  set === 'blb' || set === 'msh' ? set : 'fdn';
+  set === 'blb' || set === 'msh' || set === 'stx' ? set : 'fdn';
 
 /**
- * The set of the run's `n`th booster: a Bloomburrow or Marvel deck opens that
+ * The set of the run's `n`th booster: a Bloomburrow, Marvel or Strixhaven deck opens that
  * set's boosters, and a Jump In deck mixing two sets alternates between them.
  */
 export function packSetOf(r: Pick<ExpeditionRun, 'deck'>, n = 0): PackSet {
@@ -637,7 +638,13 @@ function sheetsOf(set: PackSet) {
     mythic: byRarity('mythic'),
   };
 }
-const SHEETS = { fdn: sheetsOf('fdn'), blb: sheetsOf('blb'), msh: sheetsOf('msh') };
+const SHEETS = {
+  fdn: sheetsOf('fdn'),
+  blb: sheetsOf('blb'),
+  msh: sheetsOf('msh'),
+  // Arena's STX boosters also had a Mystical Archive slot (phase 16); not modelled yet.
+  stx: sheetsOf('stx'),
+};
 type Sheet = (typeof SHEETS.fdn)['common'];
 
 export const PACK_SIZE = { rare: 1, uncommon: 3, common: 8 };

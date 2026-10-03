@@ -124,6 +124,20 @@ describe('expedition packs', () => {
     }
   });
 
+  it('opens Strixhaven boosters with a Strixhaven deck or packet pair', () => {
+    expect(packSetOf({ deck: 'stx-lorehold-reckoning' })).toBe('stx');
+    expect(packSetOf({ deck: 'jump-in:stx-wizards+stx-beasts' })).toBe('stx');
+    expect(packSetOf({ deck: 'jump-in:goblins+stx-beasts' }, 1)).toBe('stx');
+    for (let seed = 0; seed < 20; seed++) {
+      const pack = rollPack({ kind: 'booster' }, seed, false, 'stx');
+      expect(new Set(pack).size).toBe(packSize);
+      for (const name of pack) {
+        expect(card.get(name)!.set).toBe('stx');
+        expect(card.get(name)!.front).toBeUndefined();
+      }
+    }
+  });
+
   it('keeps only the chosen cards, up to the keep count, from each pack', () => {
     const s = startExpedition(empty, deck, 5);
     expect(s.run!.build.packs).toHaveLength(START_PACKS);

@@ -14,6 +14,7 @@ import {
 import {
   BLOOMBURROW_SHEETS,
   MARVEL_SHEETS,
+  STRIXHAVEN_SHEETS,
   FOUNDATIONS_SHEETS,
   generateFoundationsPack,
   packGenerator,
@@ -55,6 +56,25 @@ describe('Season Bloomburrow packs', () => {
     const cards = opened.lastPack!.rewards.flatMap((r) => (r.kind === 'card' ? [r.cardId] : []));
     for (const id of cards) expect(SCRYFALL.find((c) => slug(c.name) === id)!.set).toBe('msh');
     expect(SEASON_STARTERS.some((d) => d.id === 'msh-heroes-unite')).toBe(true);
+  });
+
+  it('sells Strixhaven boosters too, and the Strixhaven decks as starters', () => {
+    for (const [rarity, sheet] of Object.entries(STRIXHAVEN_SHEETS)) {
+      expect(sheet.length, rarity).toBeGreaterThan(0);
+      for (const id of sheet) {
+        const c = SCRYFALL.find((x) => slug(x.name) === id)!;
+        expect(c.set).toBe('stx');
+        expect(c.rarity).toBe(rarity);
+      }
+    }
+    let save = { ...fresh(), coins: 1000 };
+    save = buySeasonPack(save, 1, 'strixhaven');
+    expect(save.packs[0]!.kind).toBe('strixhaven');
+    const opened = openSeasonPack(save, save.packs[0]!.id, packGenerator('strixhaven'), 2);
+    const cards = opened.lastPack!.rewards.flatMap((r) => (r.kind === 'card' ? [r.cardId] : []));
+    expect(cards.length).toBeGreaterThan(0);
+    for (const id of cards) expect(SCRYFALL.find((c) => slug(c.name) === id)!.set).toBe('stx');
+    expect(SEASON_STARTERS.some((d) => d.id === 'stx-lorehold-reckoning')).toBe(true);
   });
 
   it('offers the Bloomburrow decks as starters', () => {
