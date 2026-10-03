@@ -116,6 +116,15 @@ Ten two-colour decks (five college pairs first, then the other five pairs from c
 - Magecraft, Learn with a deck sideboard, modal double-faced cards, and the sideboard prompt.
 - Two college decks: **Lorehold (R/W)** and **Quandrix (G/U)**; Lorehold first, since it is the Quintorius colour pair.
 
+13a done. Engine: `spellCopied` and `castSpell.orCopy` (magecraft), the `learn` effect and the deck sideboard
+(`Decklist.sideboard` to `PlayerState.sideboard`), `cardsLeaveYourGraveyard` (Quintorius, Field Historian), `grantAbility`
+with `tempAbilities` (Lorehold Apprentice), `mustBlock`, `CostDef.exileFromGraveyard`, token "dies" triggers, and smaller
+amounts and conditions. Every deck here runs 24 lands (as the Foundations starters do); the drafts in
+`docs/strixhaven-13a-decks.md` had 17 and won 14–25%, so both decks were rebuilt with 24 lands and some Foundations
+reprints. **Lorehold Reckoning** 49% and **Quandrix Equation** 52% against the ten starters (40 games per matchup, both
+seats). All the drafted cards are implemented even where they didn't make the list. Card behaviour in `stx/lorehold.ts`,
+`stx/quandrix.ts`, `stx/lessons*.ts`.
+
 ### 13b: the rest of the decks
 
 - Groups of four (like FIN 11b): **Silverquill (W/B)**, **Prismari (U/R)**, **Witherbloom (B/G)**, then the five off-college
@@ -183,4 +192,13 @@ whole (SOS's `prepare` is the riskiest). The shortest path to Quintorius is 0, 1
 
 ## Simplifications to revisit
 
-(none yet)
+13a:
+
+- Learn: Season and Expedition decks carry no sideboard, so Learn only rummages there. The Lesson isn't revealed to the
+  opponent. The bot always takes a Lesson when it can.
+- Graveyard exile costs (Stonerise Spirit, Tome Shredder) pick the least useful card, without a prompt.
+- A creature that must block blocks the first attacker it can. Venerable Warsinger's X is its power.
+- Lorehold Apprentice's granted Spirit ability doesn't show in the card text.
+- Quandrix Apprentice puts the rest on the bottom in random order. Quandrix Command is six "choose one" modes (one per
+  pair); its shuffle mode targets only your own graveyard. Divide by Zero is two modes (spell or permanent). Frost
+  Trickster uses a stun counter.
