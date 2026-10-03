@@ -806,6 +806,9 @@ function detect(ctx: Ctx, ev: GameEvent): void {
         ctx,
         (o, a) => a.trigger.on === 'becomesBlocked' && blocked.has(o.id),
       );
+      // Strixhaven (13b): Daemogoth Titan: "whenever this creature blocks".
+      const blockers = new Set(ev.blocks.map((b) => b.blocker));
+      forEachBattlefieldTrigger(ctx, (o, a) => a.trigger.on === 'blocks' && blockers.has(o.id));
       // Coveted Jewel: attackers that weren't blocked.
       const unblocked = (s.combat?.attackers ?? []).filter((a) => !blocked.has(a.id));
       if (unblocked.length)

@@ -34566,5 +34566,251 @@
    "large": "https://cards.scryfall.io/large/front/9/6/967148b1-2bb6-4bc0-95e6-c45fcf99afd2.jpg?1783927373",
    "artCrop": "https://cards.scryfall.io/art_crop/front/9/6/967148b1-2bb6-4bc0-95e6-c45fcf99afd2.jpg?1783927373"
   }
+ },
+ {
+  "name": "Arrogant Poet",
+  "scryfallId": "556a0816-83c5-41dc-8546-213b21e2cceb",
+  "oracleId": "0b2e9571-0c28-4a8f-9ba7-0147b40290a7",
+  "set": "stx",
+  "collectorNumber": "63",
+  "rarity": "common",
+  "manaCost": "{1}{B}",
+  "typeLine": "Creature — Human Warlock",
+  "oracleText": "Whenever this creature attacks, you may pay 2 life. If you do, it gains flying until end of turn.",
+  "power": "2",
+  "toughness": "1",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/5/556a0816-83c5-41dc-8546-213b21e2cceb.jpg?1783927370",
+   "normal": "https://cards.scryfall.io/normal/front/5/5/556a0816-83c5-41dc-8546-213b21e2cceb.jpg?1783927370",
+   "large": "https://cards.scryfall.io/large/front/5/5/556a0816-83c5-41dc-8546-213b21e2cceb.jpg?1783927370",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/5/556a0816-83c5-41dc-8546-213b21e2cceb.jpg?1783927370"
+  }
+ },
+ {
+  "name": "Unwilling Ingredient",
+  "scryfallId": "30448144-639a-43c7-a408-bd6ed543c231",
+  "oracleId": "40d483fb-0dc7-413e-87f9-8d7cb7883fca",
+  "set": "stx",
+  "collectorNumber": "90",
+  "rarity": "common",
+  "manaCost": "{B}",
+  "typeLine": "Creature — Frog",
+  "oracleText": "Menace (This creature can't be blocked except by two or more creatures.)\n{2}{B}, Exile this card from your graveyard: You draw a card and you lose 1 life.",
+  "power": "1",
+  "toughness": "1",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Menace"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/0/30448144-639a-43c7-a408-bd6ed543c231.jpg?1783927360",
+   "normal": "https://cards.scryfall.io/normal/front/3/0/30448144-639a-43c7-a408-bd6ed543c231.jpg?1783927360",
+   "large": "https://cards.scryfall.io/large/front/3/0/30448144-639a-43c7-a408-bd6ed543c231.jpg?1783927360",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/0/30448144-639a-43c7-a408-bd6ed543c231.jpg?1783927360"
+  }
+ },
+ {
+  "name": "Novice Dissector",
+  "scryfallId": "4c4677bc-736b-4bf2-851e-b158718a4224",
+  "oracleId": "d5d6a41e-84bd-4b10-9734-50d91d523d2f",
+  "set": "stx",
+  "collectorNumber": "79",
+  "rarity": "common",
+  "manaCost": "{3}{B}",
+  "typeLine": "Creature — Troll Warlock",
+  "oracleText": "{1}, Sacrifice another creature: Put a +1/+1 counter on target creature. Activate only as a sorcery.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/c/4c4677bc-736b-4bf2-851e-b158718a4224.jpg?1783927363",
+   "normal": "https://cards.scryfall.io/normal/front/4/c/4c4677bc-736b-4bf2-851e-b158718a4224.jpg?1783927363",
+   "large": "https://cards.scryfall.io/large/front/4/c/4c4677bc-736b-4bf2-851e-b158718a4224.jpg?1783927363",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/c/4c4677bc-736b-4bf2-851e-b158718a4224.jpg?1783927363"
+  }
+ },
+ {
+  "name": "Daemogoth Titan",
+  "scryfallId": "c2f18828-ade7-4b99-97b2-e34bc2fdb68c",
+  "oracleId": "a52e73bb-47cb-4912-9b81-4ae40641eabb",
+  "set": "stx",
+  "collectorNumber": "174",
+  "rarity": "rare",
+  "manaCost": "{B/G}{B/G}{B/G}{B/G}",
+  "typeLine": "Creature — Demon",
+  "oracleText": "Whenever this creature attacks or blocks, sacrifice a creature.",
+  "power": "11",
+  "toughness": "10",
+  "colors": [
+   "B",
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/2/c2f18828-ade7-4b99-97b2-e34bc2fdb68c.jpg?1783927319",
+   "normal": "https://cards.scryfall.io/normal/front/c/2/c2f18828-ade7-4b99-97b2-e34bc2fdb68c.jpg?1783927319",
+   "large": "https://cards.scryfall.io/large/front/c/2/c2f18828-ade7-4b99-97b2-e34bc2fdb68c.jpg?1783927319",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/2/c2f18828-ade7-4b99-97b2-e34bc2fdb68c.jpg?1783927319"
+  }
+ },
+ {
+  "name": "Efreet Flamepainter",
+  "scryfallId": "d9f0731c-2a3d-4613-bffa-8b967e4f142e",
+  "oracleId": "fb5e8b8c-bad2-45bb-abb4-2ed454525749",
+  "set": "stx",
+  "collectorNumber": "98",
+  "rarity": "rare",
+  "manaCost": "{3}{R}",
+  "typeLine": "Creature — Efreet Shaman",
+  "oracleText": "Double strike\nWhenever this creature deals combat damage to a player, you may cast target instant or sorcery card from your graveyard without paying its mana cost. If that spell would be put into your graveyard, exile it instead.",
+  "power": "1",
+  "toughness": "4",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Double strike"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/9/d9f0731c-2a3d-4613-bffa-8b967e4f142e.jpg?1783927358",
+   "normal": "https://cards.scryfall.io/normal/front/d/9/d9f0731c-2a3d-4613-bffa-8b967e4f142e.jpg?1783927358",
+   "large": "https://cards.scryfall.io/large/front/d/9/d9f0731c-2a3d-4613-bffa-8b967e4f142e.jpg?1783927358",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/9/d9f0731c-2a3d-4613-bffa-8b967e4f142e.jpg?1783927358"
+  }
+ },
+ {
+  "name": "Lash of Malice",
+  "scryfallId": "af3da2c6-29ed-4563-8bae-d1cc05df8897",
+  "oracleId": "fc3d2a9c-08a5-4aea-9fb8-42466b9152a2",
+  "set": "stx",
+  "collectorNumber": "74",
+  "rarity": "common",
+  "manaCost": "{B}",
+  "typeLine": "Instant",
+  "oracleText": "Target creature gets +2/-2 until end of turn.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/f/af3da2c6-29ed-4563-8bae-d1cc05df8897.jpg?1783927367",
+   "normal": "https://cards.scryfall.io/normal/front/a/f/af3da2c6-29ed-4563-8bae-d1cc05df8897.jpg?1783927367",
+   "large": "https://cards.scryfall.io/large/front/a/f/af3da2c6-29ed-4563-8bae-d1cc05df8897.jpg?1783927367",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/f/af3da2c6-29ed-4563-8bae-d1cc05df8897.jpg?1783927367"
+  }
+ },
+ {
+  "name": "Necrotic Fumes",
+  "scryfallId": "5e1b68a4-fb8d-4b59-b049-73505296f775",
+  "oracleId": "784108b9-dc85-4344-8c71-d527c4f850c0",
+  "set": "stx",
+  "collectorNumber": "78",
+  "rarity": "uncommon",
+  "manaCost": "{1}{B}{B}",
+  "typeLine": "Sorcery — Lesson",
+  "oracleText": "As an additional cost to cast this spell, exile a creature you control.\nExile target creature or planeswalker.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/e/5e1b68a4-fb8d-4b59-b049-73505296f775.jpg?1783927365",
+   "normal": "https://cards.scryfall.io/normal/front/5/e/5e1b68a4-fb8d-4b59-b049-73505296f775.jpg?1783927365",
+   "large": "https://cards.scryfall.io/large/front/5/e/5e1b68a4-fb8d-4b59-b049-73505296f775.jpg?1783927365",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/e/5e1b68a4-fb8d-4b59-b049-73505296f775.jpg?1783927365"
+  }
+ },
+ {
+  "name": "Flunk",
+  "scryfallId": "f8487884-e991-4feb-823b-90d9125edf19",
+  "oracleId": "5cd99378-e8e2-43fe-80fc-13d680746a4a",
+  "set": "stx",
+  "collectorNumber": "71",
+  "rarity": "uncommon",
+  "manaCost": "{1}{B}",
+  "typeLine": "Instant",
+  "oracleText": "Target creature gets -X/-X until end of turn, where X is 7 minus the number of cards in that creature's controller's hand.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/8/f8487884-e991-4feb-823b-90d9125edf19.jpg?1783927367",
+   "normal": "https://cards.scryfall.io/normal/front/f/8/f8487884-e991-4feb-823b-90d9125edf19.jpg?1783927367",
+   "large": "https://cards.scryfall.io/large/front/f/8/f8487884-e991-4feb-823b-90d9125edf19.jpg?1783927367",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/8/f8487884-e991-4feb-823b-90d9125edf19.jpg?1783927367"
+  }
+ },
+ {
+  "name": "Crushing Disappointment",
+  "scryfallId": "7fbe8cf1-11df-4ca4-9a6b-265193c49250",
+  "oracleId": "77a1958e-ee24-4305-9dad-da8372803be8",
+  "set": "stx",
+  "collectorNumber": "68",
+  "rarity": "common",
+  "manaCost": "{3}{B}",
+  "typeLine": "Instant",
+  "oracleText": "Each player loses 2 life. You draw two cards.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/f/7fbe8cf1-11df-4ca4-9a6b-265193c49250.jpg?1783927369",
+   "normal": "https://cards.scryfall.io/normal/front/7/f/7fbe8cf1-11df-4ca4-9a6b-265193c49250.jpg?1783927369",
+   "large": "https://cards.scryfall.io/large/front/7/f/7fbe8cf1-11df-4ca4-9a6b-265193c49250.jpg?1783927369",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/f/7fbe8cf1-11df-4ca4-9a6b-265193c49250.jpg?1783927369"
+  }
+ },
+ {
+  "name": "Essence Infusion",
+  "scryfallId": "71a48d0c-1e5b-43f2-8974-e2e5bb06310d",
+  "oracleId": "60f412bb-27e9-4883-8862-96eae96dfee3",
+  "set": "stx",
+  "collectorNumber": "69",
+  "rarity": "common",
+  "manaCost": "{1}{B}",
+  "typeLine": "Sorcery",
+  "oracleText": "Put two +1/+1 counters on target creature. It gains lifelink until end of turn.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/1/71a48d0c-1e5b-43f2-8974-e2e5bb06310d.jpg?1783927368",
+   "normal": "https://cards.scryfall.io/normal/front/7/1/71a48d0c-1e5b-43f2-8974-e2e5bb06310d.jpg?1783927368",
+   "large": "https://cards.scryfall.io/large/front/7/1/71a48d0c-1e5b-43f2-8974-e2e5bb06310d.jpg?1783927368",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/1/71a48d0c-1e5b-43f2-8974-e2e5bb06310d.jpg?1783927368"
+  }
+ },
+ {
+  "name": "Professor's Warning",
+  "scryfallId": "862fded6-e474-4b20-86d8-fd9af5f25b1a",
+  "oracleId": "e3c8e552-d315-486d-a176-813b3a300174",
+  "set": "stx",
+  "collectorNumber": "84",
+  "rarity": "common",
+  "manaCost": "{B}",
+  "typeLine": "Instant",
+  "oracleText": "Choose one —\n• Put a +1/+1 counter on target creature.\n• Target creature gains indestructible until end of turn. (Damage and effects that say \"destroy\" don't destroy it.)",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/6/862fded6-e474-4b20-86d8-fd9af5f25b1a.jpg?1783927363",
+   "normal": "https://cards.scryfall.io/normal/front/8/6/862fded6-e474-4b20-86d8-fd9af5f25b1a.jpg?1783927363",
+   "large": "https://cards.scryfall.io/large/front/8/6/862fded6-e474-4b20-86d8-fd9af5f25b1a.jpg?1783927363",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/6/862fded6-e474-4b20-86d8-fd9af5f25b1a.jpg?1783927363"
+  }
  }
 ]

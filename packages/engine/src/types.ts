@@ -422,6 +422,9 @@ export type TriggerDef =
   | { on: 'yourNoncombatDamageToOpponent' }
   /** Whenever this creature becomes blocked. */
   | { on: 'becomesBlocked' }
+  // Strixhaven (13b): Daemogoth Titan
+  /** Whenever this creature blocks. */
+  | { on: 'blocks' }
   /** Whenever a creature you control (matching the filter) attacks; "that creature" is the subject. */
   | {
       on: 'creatureYouControlAttacks';
@@ -760,6 +763,9 @@ export type Amount =
   | { bluePipsOfSubject: true }
   /** "Draw cards equal to the difference" up to this hand size (The Ten Rings). */
   | { handSizeUpTo: number }
+  // Strixhaven (13b): Flunk
+  /** `size` minus the cards in the hand of the controller of the Ref'd object (at least 0). */
+  | { handGapOfControllerOf: Ref; size: number }
   /** The greatest mana value among your permanents matching the filter (Armor Wars: artifacts). */
   | { greatestManaValueYouControl: CardFilter }
   // Marvel Super Heroes: "costs {2} less if ..." (Punishing Punch).
@@ -939,7 +945,14 @@ export type EffectDef =
    * Sacrifice `count` permanents you control matching the filter (other than
    * the source), chosen one at a time; then `then` happens. Nothing if you can't.
    */
-  | { kind: 'sacrificeSeveral'; count: number; filter: CardFilter; then: EffectDef[] }
+  | {
+      kind: 'sacrificeSeveral';
+      count: number;
+      filter: CardFilter;
+      then: EffectDef[];
+      // Strixhaven (13b): Daemogoth Titan: the source itself may be sacrificed.
+      includeSource?: boolean;
+    }
   /** Copy a spell on the stack (`count` times): a target spell, or the spell that triggered this. */
   /** `retarget`: each copy gets another legal target if there is one (Ancestral Communion). */
   | { kind: 'copySpell'; what: Ref; count?: Amount; retarget?: boolean }
