@@ -169,3 +169,39 @@ describe('enchantments and planeswalkers', () => {
     expect(g.zoneOf(angel)).toBe('graveyard');
   });
 });
+
+describe('Final Fantasy trophy deck reprints', () => {
+  it('Counterspell counters a spell', () => {
+    const g = game({
+      p1: { battlefield: n('island', 2), hand: ['counterspell'] },
+      p2: { battlefield: n('mountain', 2), hand: ['lightning-strike'] },
+    });
+    g.passUntilStep('end').passUntilStep('main1');
+    cast(g, 'lightning-strike', [{ player: 'p1' }]);
+    const spell = g.state.stack[0]!;
+    g.pass();
+    cast(g, 'counterspell', [{ object: { id: spell.id, zcc: g.obj(spell.id).zcc } }]);
+    drive(g);
+    expect(g.state.players.p1.life).toBe(20);
+  });
+
+  it('Captain Lannery Storm makes a Treasure when she attacks', () => {
+    const g = game({ p1: { battlefield: ['captain-lannery-storm'] } });
+    g.passUntilStep('beginCombat').passBoth().attack(g.id('p1', 'captain-lannery-storm'));
+    drive(g);
+    expect(all(g, 'treasure-token')).toHaveLength(1);
+  });
+
+  it('Vial Smasher deals damage equal to your first spell’s mana value', () => {
+    const g = game({
+      p1: {
+        battlefield: ['vial-smasher-the-fierce', ...n('mountain', 4)],
+        hand: n('lightning-strike', 2),
+      },
+    });
+    drive(cast(g, 'lightning-strike', [{ player: 'p2' }]));
+    drive(cast(g, 'lightning-strike', [{ player: 'p2' }]));
+    // Two strikes (6) and one trigger for the first spell (2).
+    expect(g.state.players.p2.life).toBe(12);
+  });
+});

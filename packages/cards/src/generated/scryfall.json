@@ -9271,6 +9271,79 @@
   }
  },
  {
+  "name": "Counterspell",
+  "scryfallId": "8bed211e-f3ec-4e9e-b9a7-0989930dd049",
+  "oracleId": "cc187110-1148-4090-bbb8-e205694a39f5",
+  "set": "7ed",
+  "collectorNumber": "67★",
+  "rarity": "common",
+  "manaCost": "{U}{U}",
+  "typeLine": "Instant",
+  "oracleText": "Counter target spell.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/b/8bed211e-f3ec-4e9e-b9a7-0989930dd049.jpg?1783945556",
+   "normal": "https://cards.scryfall.io/normal/front/8/b/8bed211e-f3ec-4e9e-b9a7-0989930dd049.jpg?1783945556",
+   "large": "https://cards.scryfall.io/large/front/8/b/8bed211e-f3ec-4e9e-b9a7-0989930dd049.jpg?1783945556",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/b/8bed211e-f3ec-4e9e-b9a7-0989930dd049.jpg?1783945556"
+  }
+ },
+ {
+  "name": "Captain Lannery Storm",
+  "scryfallId": "7c3aeedd-d41b-44c9-9b0a-e5952202f632",
+  "oracleId": "235bf0ba-658c-463f-b112-7478ba27bd7b",
+  "set": "fca",
+  "collectorNumber": "38",
+  "rarity": "uncommon",
+  "manaCost": "{2}{R}",
+  "typeLine": "Legendary Creature — Human Pirate",
+  "oracleText": "Haste\nWhenever Captain Lannery Storm attacks, create a Treasure token. (It's an artifact with \"{T}, Sacrifice this token: Add one mana of any color.\")\nWhenever you sacrifice a Treasure, Captain Lannery Storm gets +1/+0 until end of turn.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Treasure",
+   "Haste"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/c/7c3aeedd-d41b-44c9-9b0a-e5952202f632.jpg?1783906383",
+   "normal": "https://cards.scryfall.io/normal/front/7/c/7c3aeedd-d41b-44c9-9b0a-e5952202f632.jpg?1783906383",
+   "large": "https://cards.scryfall.io/large/front/7/c/7c3aeedd-d41b-44c9-9b0a-e5952202f632.jpg?1783906383",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/c/7c3aeedd-d41b-44c9-9b0a-e5952202f632.jpg?1783906383"
+  }
+ },
+ {
+  "name": "Vial Smasher the Fierce",
+  "scryfallId": "958077e8-a226-4cb5-839f-35557051c953",
+  "oracleId": "1b355139-4891-436c-9079-0ce17ecc2d65",
+  "set": "fca",
+  "collectorNumber": "59",
+  "rarity": "mythic",
+  "manaCost": "{1}{B}{R}",
+  "typeLine": "Legendary Creature — Goblin Berserker",
+  "oracleText": "Whenever you cast your first spell each turn, choose an opponent at random. Vial Smasher deals damage equal to that spell's mana value to that player or a planeswalker that player controls.\nPartner (You can have two commanders if both have partner.)",
+  "power": "2",
+  "toughness": "3",
+  "colors": [
+   "B",
+   "R"
+  ],
+  "keywords": [
+   "Partner"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/5/958077e8-a226-4cb5-839f-35557051c953.jpg?1783906376",
+   "normal": "https://cards.scryfall.io/normal/front/9/5/958077e8-a226-4cb5-839f-35557051c953.jpg?1783906376",
+   "large": "https://cards.scryfall.io/large/front/9/5/958077e8-a226-4cb5-839f-35557051c953.jpg?1783906376",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/5/958077e8-a226-4cb5-839f-35557051c953.jpg?1783906376"
+  }
+ },
+ {
   "name": "Evolving Wilds",
   "scryfallId": "3a0b9356-5b91-4542-8802-f0f7275238e1",
   "oracleId": "a75445d3-1303-4bb5-89ad-26ea93fecd48",

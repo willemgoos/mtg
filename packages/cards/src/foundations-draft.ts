@@ -1,7 +1,7 @@
 /**
- * Foundations cards that Arena's Foundations draft trophy decks play, and the
+ * Foundations cards that Arena's Foundations draft trophy decks play, the
  * ones Arena's Foundations Jump In packets list that foundations-jumpin.ts
- * didn't cover.
+ * didn't cover, and three reprints the Final Fantasy trophy decks need.
  */
 import type { AbilityDef, EffectDef, TargetSpec, TriggerDef } from '@mtg/engine';
 import { parseManaCost, type Behavior } from './build.ts';
@@ -288,6 +288,32 @@ export const FOUNDATIONS_DRAFT_BEHAVIORS: Record<string, Behavior> = {
         effect: { kind: 'attached', power: 1, toughness: 1, keywords: ['doubleStrike', 'trample'] },
       },
       equip('{3}'),
+    ],
+  },
+
+  // Final Fantasy draft trophy decks: reprints from Through the Ages and older sets.
+  Counterspell: {
+    spell: { targets: [{ what: 'spell' }], effects: [{ kind: 'counter', what: t0 }] },
+  },
+  'Captain Lannery Storm': {
+    abilities: [
+      when({ on: 'attacks' }, [], { kind: 'createToken', token: 'treasure-token', count: 1 }),
+      when({ on: 'youSacrifice', filter: { subtype: 'Treasure' } }, [], {
+        kind: 'pump',
+        to: 'self',
+        power: 1,
+        toughness: 0,
+      }),
+    ],
+  },
+  'Vial Smasher the Fierce': {
+    // Two players: the opponent, never a planeswalker of theirs.
+    abilities: [
+      when({ on: 'castSpell', filter: 'first' }, [], {
+        kind: 'damage',
+        amount: { manaValueOfSubject: true },
+        to: 'eachOpponent',
+      }),
     ],
   },
 };

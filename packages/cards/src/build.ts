@@ -55,6 +55,8 @@ const KEYWORDS: Record<string, Keyword> = {
 
 /** Scryfall "keywords" that are really ability words or triggers we model as abilities. */
 export const KEYWORDS_AS_ABILITIES = new Set([
+  // Only matters for commanders: two partners may lead one deck (Vial Smasher).
+  'Partner',
   'Prowess',
   'Landfall',
   'Raid',

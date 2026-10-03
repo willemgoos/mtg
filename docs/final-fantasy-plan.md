@@ -203,6 +203,20 @@ keep their main printing (promos rank lower). New rules: an equip discount only 
 creature (`equipCostsLess.targetSelf`, priced per target) and a "while equipped" custom condition (`sourceEquipped`). Bot vs
 bot: Cloud 61% and Sephiroth 57% over 160 games against the ten Foundations starter decks; Cloud beats Sephiroth 21 of 40.
 
+### 11e: draft trophy decks: done
+
+Ten 40-card Final Fantasy decks that went 7–0 in Arena's Premier Draft, one per colour pair (Simic with a red splash), from
+[untapped.gg](https://mtga.untapped.gg/limited/draft/final-fantasy/trophy-decks) (`FINAL_FANTASY_TROPHY_DECKS`, series
+`trophy`, credited to their players). They have their own section in the deck grid and join the other sets' trophy decks as
+Expedition elites and bosses. Three new cards, reprints from Through the Ages and older sets (in
+`packages/cards/src/foundations-draft.ts`): Counterspell, Captain Lannery Storm and Vial Smasher the Fierce (the `fca` set
+was added to the set preferences; no existing card changed printing). Bot-vs-bot (small samples) against our Jump In
+pairs: about 70% (50–85%).
+
+Arena never made Final Fantasy Jump In packets (its last Jump In update was Foundations), so there are none to add.
+
+Simplification: Vial Smasher always hits the opponent, never one of their planeswalkers.
+
 ## Phase 12: Final Fantasy Commander decks as Brawl (like Marvel Stream A)
 
 On Arena the four FIC decks came as **Arena Store Brawl decks** (7 July 2025, mtg.wiki "Arena Store decks (Final

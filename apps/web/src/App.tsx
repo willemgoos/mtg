@@ -88,6 +88,12 @@ const SECTIONS: { title: string; blurb: string; decks: Decklist[] }[] = [
     set: 'fin' as const,
   },
   {
+    title: 'Final Fantasy draft decks',
+    blurb: '40-card decks that went 7–0 in Arena’s Premier Draft; they play each other',
+    series: 'trophy' as const,
+    set: 'fin' as const,
+  },
+  {
     title: 'Color Challenge',
     blurb: 'The mono-colour decks Sparky plays against new players',
     series: 'colorChallenge' as const,

@@ -36,6 +36,8 @@ export const SET_PREFERENCE = [
   'fin',
   // Final Fantasy Commander: the Brawl precons (phase 12).
   'fic',
+  // Final Fantasy's Through the Ages reprints (draft trophy decks: Captain Lannery Storm, Vial Smasher).
+  'fca',
   // Outlaws of Thunder Junction: Sterling Hound, in Arena's Bloomburrow Threshold packet.
   'otj',
   'pmei',
