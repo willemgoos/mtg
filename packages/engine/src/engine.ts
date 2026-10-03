@@ -352,7 +352,8 @@ function apply(ctx: Ctx, action: Action): void {
       return answerChooseOption(ctx, action.index);
     case 'chooseCard':
       if (d.kind === 'chooseObject') return answerChooseObject(ctx, action.card);
-      if (d.kind === 'pickCards' && action.card) return answerPickCards(ctx, action.card);
+      if (d.kind === 'pickCards' && (action.card || d.upTo))
+        return answerPickCards(ctx, action.card);
       if (d.kind === 'sacrificeSeveral' && action.card)
         return answerSacrificeSeveral(ctx, action.card);
       if (d.kind === 'chooseFromHand') return answerChooseFromHand(ctx, action.card);

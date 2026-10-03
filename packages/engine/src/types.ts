@@ -159,6 +159,8 @@ export interface CardDefinition {
     // Strixhaven (13b): Baleful Mastery
     /** An alternative cost: `cost` is paid rather than the mana cost (not on top of it). */
     replacesCost?: boolean;
+    /** Strixhaven (13c): what the alternative cost does, for the cast menu (Verdant Mastery). */
+    altLabel?: string;
   };
   /** Costs {amount} less if its first target matches (Dire Downdraft: an attacking or tapped creature). */
   costReductionIfTarget?: { filter: CardFilter; amount: number };
@@ -194,6 +196,8 @@ export interface CardDefinition {
   costReductionIf?: { condition: ConditionDef; amount: number };
   /** "You may sacrifice any number of nonland permanents. This spell costs {1} less for each" (Rottenmouth Viper). */
   sacrificeAnyForReduction?: boolean;
+  /** Strixhaven (13c): Plumb the Forbidden: "you may sacrifice one or more creatures; when you do, copy this spell for each". */
+  sacrificeCreaturesToCopy?: boolean;
   /** "As an additional cost to cast this spell, discard a card" (Sazacap's Brew). */
   discardToCast?: boolean;
   /** It enters tapped while this holds (Eddymurk Crab: if it's not your turn). */
@@ -254,6 +258,8 @@ export type AbilityDef =
       // Marvel Super Heroes
       /** "Activate only if ..." (Dark Fortress: it entered this turn or you control a basic land). */
       condition?: ConditionDef;
+      /** Strixhaven (13c): Accomplished Alchemist: adds as much mana as the life you gained this turn (at least one). */
+      perLifeGained?: boolean;
     }
   | {
       kind: 'activated';
@@ -496,7 +502,11 @@ export type TriggerDef =
   /** Whenever one or more creatures an opponent controls attack you and aren't blocked (Coveted Jewel). */
   | { on: 'opponentAttackersUnblocked' }
   /** "When you cast this spell": triggers from the stack (Ancestral Communion, Hatut Zeraze Strike Force). */
-  | { on: 'castSelf' }
+  | {
+      on: 'castSelf';
+      /** Strixhaven (13c): Plumb the Forbidden: only if creatures were sacrificed to cast it ("that many"). */
+      perSacrificed?: boolean;
+    }
   // Avengers Assemble (9b).
   /** Whenever this creature is dealt damage ("that much"): Hercules. */
   | { on: 'dealtDamage' }
@@ -524,7 +534,10 @@ export type TriggerDef =
   | { on: 'permanentTargetedByOpponent' }
   // Strixhaven (13c): Stonebinder's Familiar
   /** Whenever one or more cards are put into exile during your turn (use with `oncePerTurn`). */
-  | { on: 'cardsExiledYourTurn' };
+  | { on: 'cardsExiledYourTurn' }
+  // Strixhaven (13c): Valentin, Dean of the Vein
+  /** Whenever a nontoken creature an opponent controls is exiled instead of dying. */
+  | { on: 'opponentCreatureExiledInstead' };
 
 export type ConditionDef =
   | { kind: 'controlsPermanents'; filter: CardFilter; min: number }
@@ -852,7 +865,9 @@ export type Amount =
   | { sum: Amount[] }
   // Final Fantasy (11b): mana spent
   /** The mana spent to cast the triggering spell (Shantotto). */
-  | { manaSpentOnSubject: true };
+  | { manaSpentOnSubject: true }
+  // Strixhaven (13c): life you gained this turn (Fortifying Draught, Accomplished Alchemist).
+  | { count: 'lifeGainedThisTurn' };
 
 export type EffectDef =
   | { kind: 'may'; effects: EffectDef[]; cost?: ManaCost }
@@ -911,7 +926,12 @@ export type EffectDef =
       track?: boolean;
     }
   /** Each opponent loses `life` unless they sacrifice a nonland permanent or discard a card. */
-  | { kind: 'punisher'; life: number }
+  | {
+      kind: 'punisher';
+      life: number;
+      /** Strixhaven (13c): Professor Onyx: only a discard avoids it ("may discard a card, if they don't lose 3 life"). */
+      discardOnly?: boolean;
+    }
   /** Exile the top N cards; choose one you may play until the end of your next turn (or of this turn). */
   | { kind: 'exileTopChooseOne'; count: number; until?: 'endOfTurn' }
   /**
@@ -1022,7 +1042,15 @@ export type EffectDef =
   /** Mill N, then you may put a card matching the filter from among them into your hand (Cache Grab). */
   | { kind: 'millThenTake'; count: number; filter: CardFilter; squirrelFood?: boolean }
   /** Look at the top N; put `take` of them into your hand and the rest into your graveyard (Stargaze). */
-  | { kind: 'lookTakeRestGraveyard'; count: Amount; take: Amount }
+  | {
+      kind: 'lookTakeRestGraveyard';
+      count: Amount;
+      take: Amount;
+      /** Strixhaven (13c): Search for Blex: you may take any number up to `take`... */
+      upTo?: boolean;
+      /** ...losing this much life for each card put into your hand. */
+      lifePerCard?: number;
+    }
   /** Reveal the top card and put it into your hand; lose life equal to its mana value (Darkstar Augur). */
   | { kind: 'revealTopToHandLoseLife' }
   /**
@@ -1168,6 +1196,13 @@ export type EffectDef =
       untapIfLands?: number;
       /** The controller of this target searches instead (Path to Exile). */
       forControllerOf?: number;
+      // Strixhaven (13c)
+      /** The card enters under an opponent's control (Verdant Mastery). */
+      forOpponent?: boolean;
+      /** The land found becomes a 0/0 Fractal creature with a +1/+1 counter per land you had enter this turn (Emergent Sequence). */
+      fractalLand?: boolean;
+      /** If the card found has one of these types, put a +1/+1 counter on the source (Oriq Loremage). */
+      sourceCounterIfTypes?: CardType[];
     }
   /** Look at the top N; you may put a creature with mana value up to your land count onto the battlefield (Loot). */
   | { kind: 'lookForCreature'; count: number }
@@ -1186,7 +1221,7 @@ export type EffectDef =
       exile?: boolean;
     }
   /** Put the top N cards of your library into your graveyard. */
-  | { kind: 'mill'; count: number; who?: Ref }
+  | { kind: 'mill'; count: Amount; who?: Ref }
   // Connive (Marvel Super Heroes)
   /** It connives: its controller draws, then discards; a nonland discard puts a +1/+1 counter on it. */
   | { kind: 'connive'; what: Ref }
@@ -1221,7 +1256,12 @@ export type EffectDef =
   | { kind: 'counter'; what: Ref; controllerTokens?: { token: CardDefId; count: number } }
   | { kind: 'bouncePlayerPermanents'; who: Ref; nonland?: boolean }
   /** Return a card of these types from your graveyard to your hand, of your choice (not targeted). */
-  | { kind: 'returnFromGraveyard'; types: CardType[] }
+  | {
+      kind: 'returnFromGraveyard';
+      types: CardType[];
+      /** Strixhaven (13c): not the permanent chosen earlier in this resolution (Deadly Brew: "another"). */
+      exceptChosen?: boolean;
+    }
   /** Put all creature cards from all graveyards onto the battlefield under your control. */
   | { kind: 'reanimateAll' }
   /** Exile the target graveyard card and create a token copy of it (Abyssal Harvester). */
@@ -1261,6 +1301,8 @@ export type EffectDef =
       permanents?: boolean;
       /** Gain this much life for each one destroyed (Avenge). */
       gainPerDestroyed?: number;
+      /** Strixhaven (13c): Culling Ritual: add one mana of one of these colours for each permanent destroyed. */
+      manaPerDestroyed?: ManaType[];
     }
   /** Look at the top N; you may take a card matching the filter into your hand; the rest go to the bottom at random. */
   | {
@@ -1298,6 +1340,8 @@ export type EffectDef =
       exile?: boolean;
       /** You sacrifice instead of an opponent (Season of Loss: each player). */
       you?: boolean;
+      /** Strixhaven (13c): Deadly Brew: what happens once something was sacrificed ("that permanent" is the chosen one). */
+      then?: EffectDef[];
     }
   /**
    * Forage: exile three cards from your graveyard or sacrifice a Food. If you
@@ -1646,7 +1690,11 @@ export type StaticDef =
   /** Creatures your opponents control matching nothing in particular have base toughness N (Maha). */
   | { kind: 'opponentsBaseToughness'; toughness: number }
   /** Creatures your opponents control that would die are exiled instead (Vren). */
-  | { kind: 'exileOpponentCreaturesInstead' }
+  | {
+      kind: 'exileOpponentCreaturesInstead';
+      /** Strixhaven (13c): Valentin: only nontoken creatures. */
+      nontoken?: boolean;
+    }
   // Doom Prevails (9e).
   /** Creatures can't attack you unless their controller pays this for each (Propaganda). */
   | { kind: 'attackTax'; amount: number }
@@ -1973,6 +2021,8 @@ export interface TurnState {
   attackers: ObjectId[];
   /** How many times each player gained life this turn. */
   lifeGains: Record<PlayerId, number>;
+  /** Strixhaven (13c): how much life each player gained this turn. */
+  lifeGained?: Record<PlayerId, number>;
   /** Creatures that died this turn (Morbid). */
   creaturesDied: number;
   /** Cards each player drew this turn. */
@@ -2050,7 +2100,7 @@ export interface ContinuousEffect {
   /** Control change: who controlled it before (restored when this expires). */
   previousController?: PlayerId;
   /** 'untilYourNextTurn': until `player`'s next turn begins. */
-  expires: 'endOfTurn' | 'untilYourNextTurn' | 'whileSource';
+  expires: 'endOfTurn' | 'untilYourNextTurn' | 'whileSource' | 'permanent';
   /** Marvel Super Heroes: for 'whileSource', the permanent it lasts for. */
   whileSourceId?: ObjectId;
   player?: PlayerId;
@@ -2232,6 +2282,13 @@ export type Decision =
       counter?: string;
       /** Untap the land found if you then control this many lands (Fabled Passage). */
       untapIfLands?: number;
+      // Strixhaven (13c)
+      /** The card enters under an opponent's control (Verdant Mastery). */
+      forOpponent?: boolean;
+      /** The land found becomes a Fractal creature (Emergent Sequence). */
+      fractalLand?: boolean;
+      /** If the card has one of these types, the source gets a +1/+1 counter (Oriq Loremage). */
+      sourceCounterIfTypes?: CardType[];
       /** Cache Grab: a Food if you control a Squirrel or took a Squirrel card. */
       squirrelFood?: boolean;
       /** Whiskervale Forerunner: onto the battlefield on your turn, else into your hand. */
@@ -2249,6 +2306,9 @@ export type Decision =
       player: PlayerId;
       options: ObjectId[];
       count: number;
+      /** Strixhaven (13c): they may stop early (answer null); each card taken costs `lifePerCard` life. */
+      upTo?: boolean;
+      lifePerCard?: number;
       resume: PausedResolution;
       thenPriority: PlayerId;
     }
@@ -2299,6 +2359,8 @@ export type Decision =
       gainLifeFor?: PlayerId;
       /** Exiled instead of sacrificed (Early Winter). */
       exile?: boolean;
+      /** Strixhaven (13c): Deadly Brew: effects to run once it's sacrificed. */
+      then?: EffectDef[];
       resume: PausedResolution;
       thenPriority: PlayerId;
     }
@@ -2558,6 +2620,8 @@ export type GameEvent =
       controller?: PlayerId;
       // Final Fantasy (11b): the back face it showed as it left (Chaos dying shows Garland after).
       leftAs?: CardDefId;
+      /** Strixhaven (13c): a creature exiled instead of dying (Valentin). */
+      exiledInstead?: boolean;
     }
   | { type: 'damageDealt'; source: ObjectId; to: TargetChoice; amount: number; combat: boolean }
   | { type: 'lifeChanged'; player: PlayerId; delta: number; life: number }

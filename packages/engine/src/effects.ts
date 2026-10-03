@@ -304,6 +304,9 @@ export function gainLife(ctx: Ctx, player: PlayerId, amount: number): void {
       if (a.kind === 'static' && a.effect.kind === 'extraLifeGain') amount += a.effect.amount;
   }
   ctx.s.turn.lifeGains[player]++;
+  // Strixhaven (13c): the amount gained this turn.
+  const gained = (ctx.s.turn.lifeGained ??= { p1: 0, p2: 0 });
+  gained[player] += amount;
   changeLife(ctx, player, amount);
 }
 
@@ -455,6 +458,9 @@ export function resolveAmount(ctx: Ctx, es: EffectSource, amount: Amount): numbe
     return 0;
   }
   if ('event' in amount) return es.amount ?? 0;
+  // Strixhaven (13c): life gained this turn (Fortifying Draught).
+  if ('count' in amount && amount.count === 'lifeGainedThisTurn')
+    return ctx.s.turn.lifeGained?.[es.controller] ?? 0;
   // Crystal: "the number of colors that spell is".
   if ('count' in amount && amount.count === 'subjectColors') {
     const o = es.subject && ctx.s.objects[es.subject.id];
@@ -616,9 +622,12 @@ export function runEffects(
       } else if (e.kind === 'punisher') {
         const opp = other(controller);
         const options = [
-          ...ctx.s.battlefield.filter(
-            (id) => obj(ctx, id).controller === opp && !def(ctx, id).types.includes('Land'),
-          ),
+          // Strixhaven (13c): Professor Onyx: only a discard avoids the life loss.
+          ...(e.discardOnly
+            ? []
+            : ctx.s.battlefield.filter(
+                (id) => obj(ctx, id).controller === opp && !def(ctx, id).types.includes('Land'),
+              )),
           ...ctx.s.players[opp].hand,
         ];
         ctx.s.decision = {
@@ -955,6 +964,9 @@ export function runEffects(
           player: controller,
           options,
           count,
+          // Strixhaven (13c): Search for Blex: any number, each costing life.
+          ...(e.upTo ? { upTo: true } : {}),
+          ...(e.lifePerCard ? { lifePerCard: e.lifePerCard } : {}),
           resume,
           thenPriority,
         };
@@ -1060,6 +1072,10 @@ export function runEffects(
         }
         // Avenge: "You gain 1 life for each creature destroyed this way."
         if (e.gainPerDestroyed) gainLife(ctx, controller, e.gainPerDestroyed * died.length);
+        // Strixhaven (13c): Culling Ritual: one mana for each permanent destroyed.
+        if (e.manaPerDestroyed)
+          for (let k = 0; k < died.length; k++)
+            (ctx.s.players[controller].pool ??= []).push({ produces: [...e.manaPerDestroyed] });
         // "Return a creature card put into your graveyard this way."
         const options = died.filter((id) => {
           const o = ctx.s.objects[id];
@@ -1126,6 +1142,7 @@ export function runEffects(
           options,
           ...(e.gainToughness ? { gainLifeFor: controller } : {}),
           ...(e.exile ? { exile: true } : {}),
+          ...(e.then ? { then: e.then } : {}),
           resume,
           thenPriority,
         };
@@ -1185,8 +1202,11 @@ export function runEffects(
           thenPriority,
         };
       } else if (e.kind === 'returnFromGraveyard') {
-        const options = ctx.s.players[controller].graveyard.filter((id) =>
-          e.types.some((t) => def(ctx, id).types.includes(t)),
+        const options = ctx.s.players[controller].graveyard.filter(
+          (id) =>
+            e.types.some((t) => def(ctx, id).types.includes(t)) &&
+            // Strixhaven (13c): Deadly Brew: "another permanent card".
+            !(e.exceptChosen && chosen && id === chosen.id),
         );
         if (options.length === 0) continue;
         ctx.s.decision = {
@@ -1250,7 +1270,19 @@ export function runEffects(
           (t && 'object' in t ? ctx.s.objects[t.object.id]?.controller : undefined) ?? controller;
         if (e.forControllerOf !== undefined && !t) continue;
         const options = ctx.s.players[searcher].library.filter((id) => {
-          if (typeof e.filter === 'object') return cardMatches(ctx, id, e.filter);
+          if (typeof e.filter === 'object') {
+            // Strixhaven (13c): Rushed Rebirth: "a creature card with lesser mana value" than the one that died.
+            const sub =
+              e.filter.lesserManaValueThanSubject && subject
+                ? ctx.s.objects[subject.id]
+                : undefined;
+            if (
+              sub &&
+              manaValue(def(ctx, id).manaCost) >= manaValue(defOf(ctx, sub.defId).manaCost)
+            )
+              return false;
+            return cardMatches(ctx, id, e.filter);
+          }
           const d = defOf(ctx, obj(ctx, id).defId);
           const basic = d.supertypes.includes('Basic') && d.types.includes('Land');
           return basic || (e.filter === 'basicLandOrGate' && d.subtypes.includes('Gate'));
@@ -1263,6 +1295,10 @@ export function runEffects(
           ...(e.to !== 'hand' ? { to: e.to } : {}),
           ...(e.shuffle === false ? { shuffle: false } : {}),
           ...(e.untapIfLands ? { untapIfLands: e.untapIfLands } : {}),
+          // Strixhaven (13c): Verdant Mastery, Emergent Sequence, Oriq Loremage.
+          ...(e.forOpponent ? { forOpponent: true } : {}),
+          ...(e.fractalLand ? { fractalLand: true } : {}),
+          ...(e.sourceCounterIfTypes ? { sourceCounterIfTypes: e.sourceCounterIfTypes } : {}),
           resume,
           thenPriority,
         };
@@ -1485,7 +1521,7 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
     case 'mill': {
       const players = e.who ? playersOf(ctx, es, e.who) : [es.controller];
       for (const p of players)
-        for (const id of ctx.s.players[p].library.slice(0, e.count))
+        for (const id of ctx.s.players[p].library.slice(0, resolveAmount(ctx, es, e.count)))
           moveObject(ctx, id, 'graveyard');
       return;
     }

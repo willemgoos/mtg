@@ -6,6 +6,7 @@ import {
   emit,
   moveObject,
   newId,
+  newTimestamp,
   obj,
   other,
   sacrifice as sacrificePermanent,
@@ -297,7 +298,8 @@ export function castCost(
     }
   // {X}: X is chosen as the spell is cast.
   if (cost.x) cost = { ...cost, generic: cost.generic + cost.x * (choice.x ?? 0), x: 0 };
-  reduce += choice.sacrificeMany?.length ?? 0;
+  // Strixhaven (13c): Plumb the Forbidden's sacrifices make copies, not a discount.
+  if (!d.sacrificeCreaturesToCopy) reduce += choice.sacrificeMany?.length ?? 0;
   if (reduce) cost = { ...cost, generic: Math.max(0, cost.generic - reduce) };
   // Eluge: the first instant or sorcery each turn costs {U} less per flooded land.
   const flood = floodDiscount(ctx, player, d);
@@ -431,12 +433,16 @@ export function castSpell(
   d.abilities.forEach((a, i) => {
     if (a.kind !== 'triggered' || a.trigger.on !== 'castSelf') return;
     if (!checkCondition(ctx, a.condition, player, o)) return;
+    // Strixhaven (13c): Plumb the Forbidden: one copy for each creature sacrificed to cast it.
+    const sacrificed = choice.sacrificeMany?.length ?? 0;
+    if (a.trigger.perSacrificed && sacrificed === 0) return;
     ctx.s.pendingTriggers.push({
       source: { id: o.id, zcc: o.zcc },
       sourceDefId: o.defId,
       abilityIndex: i,
       controller: player,
       subject: { id: o.id, zcc: o.zcc },
+      ...(a.trigger.perSacrificed ? { amount: sacrificed } : {}),
     });
   });
   // Conduit of Worlds: a card cast this way stops further spells this turn.
@@ -1150,7 +1156,45 @@ export function answerSacrifice(ctx: Ctx, card: ObjectId): void {
   if (d.exile) moveObject(ctx, card, 'exile');
   else sacrificePermanent(ctx, card);
   if (d.gainLifeFor) gainLife(ctx, d.gainLifeFor, t);
+  // Strixhaven (13c): Deadly Brew: "if you sacrificed a permanent this way".
+  if (d.then) {
+    const left = ctx.s.objects[card];
+    const chosen = left && left.zone === 'graveyard' ? { id: card, zcc: left.zcc } : undefined;
+    return continueWith(
+      ctx,
+      { ...d.resume, ...(chosen ? { chosen } : {}) },
+      d.then,
+      d.thenPriority,
+    );
+  }
   resume(ctx, d.resume, d.thenPriority);
+}
+
+/**
+ * Strixhaven (13c): Emergent Sequence. The land becomes a 0/0 Fractal creature
+ * (it stays a land) with a +1/+1 counter for each land that entered under
+ * its controller's control this turn. Colours (green and blue) are not tracked.
+ */
+function makeFractalLand(ctx: Ctx, id: ObjectId): void {
+  const o = obj(ctx, id);
+  ctx.s.effects.push({
+    timestamp: newTimestamp(ctx),
+    affected: { id, zcc: o.zcc },
+    power: 0,
+    toughness: 0,
+    keywords: [],
+    becomesCreature: true,
+    basePT: [0, 0],
+    expires: 'permanent',
+  });
+  o.addedSubtypes = [...(o.addedSubtypes ?? []), 'Fractal'];
+  const lands = ctx.s.battlefield.filter(
+    (x) =>
+      obj(ctx, x).controller === o.controller &&
+      def(ctx, x).types.includes('Land') &&
+      obj(ctx, x).zoneTurn === ctx.s.turn.number,
+  ).length;
+  addCounters(ctx, id, lands);
 }
 
 /**
@@ -1216,8 +1260,13 @@ export function answerSearch(ctx: Ctx, card: ObjectId | null): void {
     else if (d.to === 'libraryTop') {
       // Fountainport Bell: shuffle, then put it on top (done after the shuffle below).
     } else if (onBattlefield) {
-      moveObject(ctx, card, 'battlefield', { controller: d.player });
+      // Strixhaven (13c): Verdant Mastery: it enters under an opponent's control.
+      moveObject(ctx, card, 'battlefield', {
+        controller: d.forOpponent ? other(d.player) : d.player,
+      });
       if (d.to === 'battlefieldTapped') obj(ctx, card).tapped = true;
+      // Strixhaven (13c): Emergent Sequence.
+      if (d.fractalLand) makeFractalLand(ctx, card);
       // Fabled Passage: untap it if you control enough lands.
       if (
         d.untapIfLands &&
@@ -1228,6 +1277,17 @@ export function answerSearch(ctx: Ctx, card: ObjectId | null): void {
         obj(ctx, card).tapped = false;
     } else moveObject(ctx, card, 'hand');
     emit(ctx, { type: 'searched', player: d.player, id: card });
+    // Strixhaven (13c): Oriq Loremage: a +1/+1 counter if it's an instant or sorcery card.
+    if (d.sourceCounterIfTypes && d.resume.source) {
+      const src = ctx.s.objects[d.resume.source.id];
+      if (
+        src &&
+        src.zone === 'battlefield' &&
+        src.zcc === d.resume.source.zcc &&
+        d.sourceCounterIfTypes.some((t) => def(ctx, card).types.includes(t))
+      )
+        addCounters(ctx, src.id, 1);
+    }
   }
   if (d.fromGraveyard) {
     squirrelFood(ctx, d, null);
@@ -1290,13 +1350,17 @@ export function answerDiscard(ctx: Ctx, card: ObjectId): void {
 }
 
 /** Stargaze: one chosen card into your hand; once all are chosen, the rest go to the graveyard. */
-export function answerPickCards(ctx: Ctx, card: ObjectId): void {
+export function answerPickCards(ctx: Ctx, card: ObjectId | null): void {
   const d = ctx.s.decision;
   if (d.kind !== 'pickCards') throw new Error('Not picking cards');
-  moveObject(ctx, card, 'hand');
-  d.options = d.options.filter((id) => id !== card);
-  d.count--;
-  if (d.count > 0 && d.options.length > 0) return;
+  if (card !== null) {
+    moveObject(ctx, card, 'hand');
+    // Strixhaven (13c): Search for Blex.
+    if (d.lifePerCard) changeLife(ctx, d.player, -d.lifePerCard);
+    d.options = d.options.filter((id) => id !== card);
+    d.count--;
+    if (d.count > 0 && d.options.length > 0) return;
+  }
   for (const id of d.options) moveObject(ctx, id, 'graveyard');
   resume(ctx, d.resume, d.thenPriority);
 }

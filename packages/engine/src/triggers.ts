@@ -482,6 +482,13 @@ function detect(ctx: Ctx, ev: GameEvent): void {
           (o, a) => a.trigger.on === 'cardsExiledYourTurn' && o.controller === s.turn.activePlayer,
           moved,
         );
+      // Strixhaven (13c): Valentin: a nontoken creature of an opponent's was exiled instead of dying.
+      if (ev.exiledInstead && ev.controller)
+        forEachBattlefieldTrigger(
+          ctx,
+          (o, a) =>
+            a.trigger.on === 'opponentCreatureExiledInstead' && o.controller !== ev.controller,
+        );
       // Strixhaven (13a): "whenever one or more cards leave your graveyard" (Quintorius, Field Historian).
       if (ev.from === 'graveyard' && ev.to !== 'graveyard' && moved && !moved.isToken)
         forEachBattlefieldTrigger(

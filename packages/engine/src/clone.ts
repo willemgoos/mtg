@@ -45,6 +45,7 @@ export function cloneState(s: GameState): GameState {
       passed: s.turn.passed.slice(),
       attackers: s.turn.attackers.slice(),
       lifeGains: { ...s.turn.lifeGains },
+      ...(s.turn.lifeGained ? { lifeGained: { ...s.turn.lifeGained } } : {}),
       cardsDrawn: { ...s.turn.cardsDrawn },
       ...(s.turn.manaSpent ? { manaSpent: { ...s.turn.manaSpent } } : {}),
       ...(s.turn.lifeLost ? { lifeLost: { ...s.turn.lifeLost } } : {}),
