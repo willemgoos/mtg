@@ -294,6 +294,15 @@ function spellMatches(
       return !!item?.targets.some(
         (x) => 'object' in x && x.object.id === self.id && x.object.zcc === self.zcc,
       );
+    // Strixhaven (13c): Reflective Golem
+    case 'targetsOnlySelf':
+      return (
+        !!item &&
+        item.targets.length > 0 &&
+        item.targets.every(
+          (x) => 'object' in x && x.object.id === self.id && x.object.zcc === self.zcc,
+        )
+      );
     // The Fantastic Four (9d): counted among the caster's spells this turn, this one included.
     case 'first':
       return (ctx.s.turn.castDefs?.[spellCaster(ctx, item, self)] ?? []).length === 1;
@@ -390,6 +399,26 @@ function detect(ctx: Ctx, ev: GameEvent): void {
           },
           moved,
         );
+        // Strixhaven (13c): First Day of Class: "whenever a creature you control enters this turn".
+        for (const e of s.emblems ?? []) {
+          const a = e.ability;
+          if (
+            a.kind !== 'triggered' ||
+            a.trigger.on !== 'otherCreatureEtb' ||
+            !isCreature ||
+            e.controller !== moved.controller ||
+            !matchesFilter(ctx, moved.id, a.trigger.filter, e.source.id)
+          )
+            continue;
+          s.pendingTriggers.push({
+            source: e.source,
+            sourceDefId: e.sourceDefId,
+            abilityIndex: -1,
+            controller: e.controller,
+            emblem: a,
+            subject: { id: moved.id, zcc: moved.zcc },
+          });
+        }
         // From the graveyard: "whenever your commander enters" (Endless Ranks of HYDRA).
         for (const id of s.players[moved.controller].graveyard) {
           const card = s.objects[id]!;
@@ -907,6 +936,14 @@ function detect(ctx: Ctx, ev: GameEvent): void {
           ev.amount,
         );
       if (!('player' in ev.to)) return;
+      // Strixhaven (13c): Strixhaven Stadium: "whenever a creature deals combat damage to you".
+      const damaged = ev.to.player;
+      forEachBattlefieldTrigger(
+        ctx,
+        (o, a) => a.trigger.on === 'combatDamageToYou' && o.controller === damaged,
+        src,
+        ev.amount,
+      );
       // Kang Dynasty: "whenever any of those creatures deals combat damage to a player, draw a card".
       for (const e of s.effects)
         if (e.drawsFor && e.affected.id === src.id && e.affected.zcc === src.zcc)

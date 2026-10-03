@@ -2,6 +2,7 @@ import { characteristics } from './characteristics.ts';
 import { MSH_EFFECTS } from './msh-effects.ts';
 import { FIN_EFFECTS } from './fin-effects.ts';
 import { LOREHOLD_EFFECTS } from './stx-lorehold-effects.ts';
+import { RARES_D_EFFECTS } from './stx-rares-d-effects.ts';
 import { checkCondition } from './triggers.ts';
 import type { EffectSource } from './effects.ts';
 import type {
@@ -60,6 +61,8 @@ const BUILT_IN_EFFECTS: Record<string, CustomEffect> = {
   ...FIN_EFFECTS,
   // Strixhaven (13a).
   ...LOREHOLD_EFFECTS,
+  // Strixhaven (13c).
+  ...RARES_D_EFFECTS,
   // Strixhaven (13a): Learn: put the chosen Lesson from outside the game into your hand.
   learnFetch(ctx, es, params) {
     const ps = ctx.s.players[es.controller];

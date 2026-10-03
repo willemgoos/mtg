@@ -13,6 +13,7 @@ import {
   addCounters,
   createObject,
   refOf,
+  drawCard,
 } from './context.ts';
 import { commanderTax, commanderTypes } from './brawl.ts';
 import { type EffectSource, runEffects } from './effects.ts';
@@ -25,7 +26,7 @@ import {
   cardMatches,
   matchesFilter,
 } from './characteristics.ts';
-import { changeLife, counterSpell, gainLife } from './effects.ts';
+import { changeLife, counterSpell, gainLife, sendToBottomRandom } from './effects.ts';
 import { foodsOf, payForage } from './forage.ts';
 import {
   anyTypeCost,
@@ -384,7 +385,12 @@ export function castSpell(
     ctx.s.players[player].commanderCasts = (ctx.s.players[player].commanderCasts ?? 0) + 1;
   moveObject(ctx, card, 'stack', { controller: player });
   if (choice.sneak) moveObject(ctx, choice.sneak, 'hand');
-  if (choice.discard) moveObject(ctx, choice.discard, 'graveyard');
+  // Strixhaven (13c): Draconic Intervention exiles a card from your graveyard; its mana value is X.
+  let exiledValue: number | undefined;
+  if (choice.discard && d.exileFromGraveyardToCast) {
+    exiledValue = manaValue(def(ctx, choice.discard).manaCost);
+    moveObject(ctx, choice.discard, 'exile');
+  } else if (choice.discard) moveObject(ctx, choice.discard, 'graveyard');
   for (const id of choice.sacrificeMany ?? []) sacrificePermanent(ctx, id);
   if (d.types.includes('Instant') || d.types.includes('Sorcery'))
     (ctx.s.turn.instantsSorceriesCast ??= { p1: 0, p2: 0 })[player]++;
@@ -411,6 +417,7 @@ export function castSpell(
     ...(choice.kicked ? { kicked: true } : {}),
     ...(flashback ? { flashback: true } : {}),
     ...(choice.x ? { x: choice.x } : {}),
+    ...(exiledValue ? { x: exiledValue } : {}),
     ...(sacrificedPower !== undefined ? { lkiPower: sacrificedPower } : {}),
     ...(choice.paws ? { paws: choice.paws } : {}),
     ...(v.finality ? { finality: true } : {}),
@@ -570,6 +577,8 @@ export function activateAbility(
   if (discard) moveObject(ctx, discard, 'graveyard');
   // Cycling.
   if (a.cost.discardSelf) moveObject(ctx, source, 'graveyard');
+  // Strixhaven (13c): Grinning Ignus: "Return this creature to its owner's hand".
+  if (a.cost.returnSelfToHand) moveObject(ctx, source, 'hand');
   if (a.cost.tapTokens)
     for (const id of tokensToTap(ctx, player, source).slice(0, a.cost.tapTokens)) tap(ctx, id);
   if (a.cost.crew) for (const id of crewFor(ctx, player, source, a.cost.crew) ?? []) tap(ctx, id);
@@ -865,6 +874,8 @@ export function finishResolution(ctx: Ctx, item: PausedResolution['item']): void
   if (item.kind !== 'spell') return;
   // Final Fantasy (11a): a spell that put itself onto the battlefield as it resolved (Esper Origins).
   if (ctx.s.objects[item.id]?.zone === 'battlefield') return;
+  // Strixhaven (13c): Dragon's Approach exiled itself as it resolved.
+  if (ctx.s.objects[item.id]?.zone === 'exile') return;
   // Final Fantasy (11a): adventure lands. Its owner may play the land from exile later.
   if (item.adventure) {
     moveObject(ctx, item.id, 'exile');
@@ -1046,7 +1057,9 @@ export function answerPayOrCounter(ctx: Ctx, pay: boolean): void {
   const d = ctx.s.decision;
   if (d.kind !== 'payOrCounter') throw new Error('Not paying');
   if (pay) payMana(ctx, planPayment(ctx, d.player, d.cost, undefined));
-  else counterSpell(ctx, d.spell, d.exile);
+  // Strixhaven (13c): Archway Commons, Wandering Archaic: something else happens unless they pay.
+  else if (d.otherwise) return continueWith(ctx, d.resume, d.otherwise, d.thenPriority);
+  else if (d.spell) counterSpell(ctx, d.spell, d.exile);
   resume(ctx, d.resume, d.thenPriority);
 }
 
@@ -1198,6 +1211,11 @@ export function answerSearch(ctx: Ctx, card: ObjectId | null): void {
   const d = ctx.s.decision;
   if (d.kind !== 'searchLibrary') throw new Error('Not searching');
   if (card !== null) {
+    // Strixhaven (13c): Ardent Dustspeaker puts a graveyard card on the bottom of the library.
+    if (d.fromGraveyard && d.to === 'libraryBottom') {
+      moveObject(ctx, card, 'library', { position: 'bottom' });
+      return continueWith(ctx, d.resume, d.onPick ?? [], d.thenPriority);
+    }
     if (d.fromGraveyard) {
       if (d.to === 'battlefield' || d.to === 'battlefieldTapped') {
         moveObject(ctx, card, 'battlefield', { controller: d.player });
@@ -1231,6 +1249,24 @@ export function answerSearch(ctx: Ctx, card: ObjectId | null): void {
   }
   if (d.fromGraveyard) {
     squirrelFood(ctx, d, null);
+    return resume(ctx, d.resume, d.thenPriority);
+  }
+  // Strixhaven (13c): Explore the Vastlands: now choose from what's left of the cards looked at.
+  if (d.followUp && d.looked) {
+    const left = d.looked.filter((id) => id !== card && ctx.s.objects[id]?.zone === 'library');
+    const options = left.filter((id) => cardMatches(ctx, id, d.followUp!));
+    if (options.length > 0) {
+      ctx.s.decision = {
+        kind: 'searchLibrary',
+        player: d.player,
+        options,
+        looked: left,
+        resume: d.resume,
+        thenPriority: d.thenPriority,
+      };
+      return;
+    }
+    sendToBottomRandom(ctx, d.player, left);
     return resume(ctx, d.resume, d.thenPriority);
   }
   const lib = ctx.s.players[d.player].library;
@@ -1286,7 +1322,30 @@ export function answerDiscard(ctx: Ctx, card: ObjectId): void {
   const left = ctx.s.players[d.player].hand.filter(
     (id) => !d.filter || cardMatches(ctx, id, d.filter),
   );
+  // Strixhaven (13c): "discard any number of cards, then draw that many".
+  if (d.anyNumber) {
+    d.anyNumber.discarded++;
+    if (left.length === 0) finishDiscardAny(ctx);
+    return;
+  }
   if (d.count === 0 || left.length === 0) resume(ctx, d.resume, d.thenPriority);
+}
+
+/** Strixhaven (13c): Illuminate History: the player stopped discarding; they draw that many. */
+export function finishDiscardAny(ctx: Ctx): void {
+  const d = ctx.s.decision;
+  if (d.kind !== 'discard' || !d.anyNumber) throw new Error('Not discarding any number');
+  for (let i = 0; i < d.anyNumber.discarded; i++) drawCard(ctx, d.player);
+  resume(ctx, d.resume, d.thenPriority);
+}
+
+/** Strixhaven (13c): The Biblioplex: the card looked at goes into the graveyard instead. */
+export function binLookedCard(ctx: Ctx): void {
+  const d = ctx.s.decision;
+  if (d.kind !== 'searchLibrary' || !d.canBin) throw new Error('Not looking at a card');
+  const top = d.looked?.[0];
+  if (top && ctx.s.objects[top]?.zone === 'library') moveObject(ctx, top, 'graveyard');
+  resume(ctx, d.resume, d.thenPriority);
 }
 
 /** Stargaze: one chosen card into your hand; once all are chosen, the rest go to the graveyard. */

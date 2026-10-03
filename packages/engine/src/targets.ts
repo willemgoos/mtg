@@ -112,8 +112,10 @@ export function targetCombos(
 ): TargetChoice[][] {
   let combos: TargetChoice[][] = [[]];
   const done: TargetChoice[][] = [];
+  // Strixhaven (13c): Explosive Welcome ("any other target") also covers players.
   const same = (a: TargetChoice, b: TargetChoice) =>
-    'object' in a && 'object' in b && a.object.id === b.object.id;
+    ('object' in a && 'object' in b && a.object.id === b.object.id) ||
+    ('player' in a && 'player' in b && a.player === b.player);
   for (const spec of specs) {
     // "Up to": stopping here is allowed too.
     if (spec.optional) done.push(...combos);

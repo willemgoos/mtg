@@ -468,7 +468,10 @@ export function Board({
             : forageFood(first)
               ? 'a Food to sacrifice'
               : first.type === 'castSpell' && first.discard
-                ? 'a card to discard'
+                ? // Strixhaven (13c): Draconic Intervention exiles a card from your graveyard.
+                  cardDb.get(view.objects[first.card]?.defId ?? '')?.exileFromGraveyardToCast
+                  ? 'an instant or sorcery card to exile from your graveyard'
+                  : 'a card to discard'
                 : first.type === 'castSpell' && first.copyOf
                   ? 'a creature to copy (or skip)'
                   : first.type === 'castSpell' && first.sneak
@@ -544,6 +547,15 @@ export function Board({
       }
       case 'discardToHandSize':
       case 'discard':
+        // Strixhaven (13c): "discard any number of cards, then draw that many".
+        if (d.kind === 'discard' && d.anyNumber)
+          return {
+            prompt: `${nameOf(d.resume.sourceDefId)}: discard any number of cards (${d.anyNumber.discarded} so far), then draw that many`,
+            primary: [
+              d.anyNumber.discarded ? `Done: draw ${d.anyNumber.discarded}` : 'Discard nothing',
+              () => act({ type: 'chooseEffect', player: HUMAN, accept: false }),
+            ] as [string, () => void],
+          };
         return { prompt: `Discard ${d.count} card${d.count > 1 ? 's' : ''}` };
       case 'splitPiles':
         return { prompt: 'Split the cards into two piles' };
@@ -602,6 +614,20 @@ export function Board({
         return { prompt: `${nameOf(d.resume.sourceDefId)}: choose one of your permanents` };
       case 'payOrCounter': {
         const pay = legal.find((a) => a.type === 'chooseEffect' && a.accept);
+        // Strixhaven (13c): Archway Commons (sacrifice it) and Wandering Archaic (they copy the spell).
+        if (d.otherwise)
+          return {
+            prompt: `${nameOf(d.resume.sourceDefId)}: pay ${manaText(d.cost)}, or ${
+              d.resume.controller === HUMAN ? 'sacrifice it' : 'your opponent may copy your spell'
+            }`,
+            ...(pay
+              ? { primary: [`Pay ${manaText(d.cost)}`, () => act(pay)] as [string, () => void] }
+              : {}),
+            secondary: [
+              "Don't pay",
+              () => act({ type: 'chooseEffect', player: HUMAN, accept: false }),
+            ] as [string, () => void],
+          };
         return {
           prompt: `${nameOf(d.resume.sourceDefId)}: pay ${manaText(d.cost)} or your spell is countered`,
           ...(pay
@@ -1561,9 +1587,15 @@ function SearchOverlay({ game, onHover }: { game: GameSession; onHover: HoverFn 
               : 'Search your library'}
         </h2>
         <p>
-          {d.kind === 'searchLibrary' && d.to && d.to !== 'hand'
-            ? 'Choose a card to put onto the battlefield.'
-            : 'Choose a card to put into your hand.'}{' '}
+          {d.kind === 'searchLibrary' && d.to === 'libraryBottom'
+            ? // Strixhaven (13c): Ardent Dustspeaker
+              'Choose a card to put on the bottom of your library.'
+            : d.kind === 'searchLibrary' && d.to && d.to !== 'hand'
+              ? 'Choose a card to put onto the battlefield.'
+              : d.kind === 'searchLibrary' && d.canBin
+                ? // Strixhaven (13c): The Biblioplex
+                  'An instant or sorcery card may go into your hand; otherwise you may put it into your graveyard.'
+                : 'Choose a card to put into your hand.'}{' '}
           {d.kind === 'searchLibrary' && d.fromGraveyard
             ? ''
             : d.kind === 'searchLibrary' && d.looked
@@ -1584,12 +1616,35 @@ function SearchOverlay({ game, onHover }: { game: GameSession; onHover: HoverFn 
             </div>
           ))}
         </div>
+        {d.kind === 'searchLibrary' && d.canBin && (
+          <div className="mull__hand">
+            {(d.looked ?? [])
+              .filter((id) => !picks.some((a) => a.card === id))
+              .map((id) => (
+                <div key={id} className="mull__card">
+                  <Card id={id} defId={view.objects[id]!.defId} size="mull" onHover={onHover} />
+                </div>
+              ))}
+          </div>
+        )}
         <div className="mull__buttons">
+          {d.kind === 'searchLibrary' && d.canBin && (
+            <button
+              className="btn"
+              onClick={() => apply({ type: 'chooseEffect', player: HUMAN, accept: true })}
+            >
+              Put it into your graveyard
+            </button>
+          )}
           <button
             className="btn btn--ghost"
             onClick={() => apply({ type: 'chooseCard', player: HUMAN, card: null })}
           >
-            Find nothing
+            {d.kind === 'searchLibrary' && d.canBin
+              ? 'Leave it on top'
+              : d.kind === 'searchLibrary' && d.fromGraveyard
+                ? 'Choose nothing'
+                : 'Find nothing'}
           </button>
         </div>
       </div>

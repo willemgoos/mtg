@@ -26,6 +26,8 @@ import {
 import {
   activateAbility,
   answerDiscard,
+  finishDiscardAny,
+  binLookedCard,
   answerPickCards,
   answerSacrificeSeveral,
   answerChooseFromHand,
@@ -316,6 +318,9 @@ function apply(ctx: Ctx, action: Action): void {
     case 'chooseEffect':
       if (d.kind === 'payOrCounter') return answerPayOrCounter(ctx, action.accept);
       if (d.kind === 'castFree') return finishCastFree(ctx, null);
+      // Strixhaven (13c): stop discarding (Illuminate History); bin the card looked at (The Biblioplex).
+      if (d.kind === 'discard' && d.anyNumber) return finishDiscardAny(ctx);
+      if (d.kind === 'searchLibrary' && d.canBin) return binLookedCard(ctx);
       if (d.kind === 'commandZone') {
         answerCommandZone(ctx, d.card, action.accept);
         return givePriority(ctx, d.thenPriority);

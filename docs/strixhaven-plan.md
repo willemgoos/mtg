@@ -220,3 +220,10 @@ whole (SOS's `prepare` is the riskiest). The shortest path to Quintorius is 0, 1
   Retriever Phoenix always learns on entering.
 - Symmetry Sage sets total power to 2. Dream Strix triggers only on opponents targeting it. Detention Vortex has no
   "{3}: destroy" and doesn't stop activated abilities. Teachings of the Archaics never draws three.
+
+13c (group D, red, colourless, lands):
+
+- Reflective Golem and Wandering Archaic copy a spell with the original targets (no new targets for the copy). Conspiracy
+  Theorist asks once per nonland card discarded, not once per batch. Fervent Mastery's search asks three times
+  (each may find nothing). Draconic Intervention exiles the chosen card as part of casting, and its X is that card's
+  mana value (stored as the spell's X).

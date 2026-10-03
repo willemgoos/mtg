@@ -12,6 +12,7 @@ import { LESSONS_AZORIUS } from './stx/lessons-azorius.ts';
 import { RAKDOS, RAKDOS_TOKENS } from './stx/rakdos.ts';
 import { SELESNYA, SELESNYA_TOKENS } from './stx/selesnya.ts';
 import { GRUUL, GRUUL_TOKENS } from './stx/gruul.ts';
+import { RARES_D, RARES_D_BACKS, RARES_D_TOKENS } from './stx/rares-d.ts';
 import { DIMIR, DIMIR_TOKENS } from './stx/dimir.ts';
 
 /**
@@ -34,6 +35,7 @@ export const STRIXHAVEN_BEHAVIORS: Record<string, Behavior> = {
   ...SELESNYA,
   ...GRUUL,
   ...DIMIR,
+  ...RARES_D,
 };
 
 /** Strixhaven tokens (the Lorehold Spirit, the Quandrix Fractal). */
@@ -47,7 +49,8 @@ export const STRIXHAVEN_TOKENS: CardDefinition[] = [
   ...SELESNYA_TOKENS,
   ...GRUUL_TOKENS,
   ...DIMIR_TOKENS,
+  ...RARES_D_TOKENS,
 ];
 
 /** Back faces of double-faced cards: not cards of their own, so not in the pool. */
-export const STRIXHAVEN_BACK_FACES: Record<string, Behavior> = {};
+export const STRIXHAVEN_BACK_FACES: Record<string, Behavior> = { ...RARES_D_BACKS };
