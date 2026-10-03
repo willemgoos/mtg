@@ -22308,6 +22308,149 @@
   }
  },
  {
+  "name": "Mist-Cloaked Herald",
+  "scryfallId": "574f73a7-9ff7-4ce3-9f56-002af968d35a",
+  "oracleId": "74255add-2894-4c31-81c1-d38873fa325f",
+  "set": "m19",
+  "collectorNumber": "310",
+  "rarity": "common",
+  "manaCost": "{U}",
+  "typeLine": "Creature — Merfolk Warrior",
+  "oracleText": "This creature can't be blocked.",
+  "power": "1",
+  "toughness": "1",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/7/574f73a7-9ff7-4ce3-9f56-002af968d35a.jpg?1783934477",
+   "normal": "https://cards.scryfall.io/normal/front/5/7/574f73a7-9ff7-4ce3-9f56-002af968d35a.jpg?1783934477",
+   "large": "https://cards.scryfall.io/large/front/5/7/574f73a7-9ff7-4ce3-9f56-002af968d35a.jpg?1783934477",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/7/574f73a7-9ff7-4ce3-9f56-002af968d35a.jpg?1783934477"
+  }
+ },
+ {
+  "name": "Daughter of the Deep",
+  "scryfallId": "19e0d68e-7972-4c2a-af4d-8c77c67a8f2e",
+  "oracleId": "63e0f03f-16da-4c09-ad03-8945f660942d",
+  "set": "msc",
+  "collectorNumber": "618",
+  "rarity": "uncommon",
+  "manaCost": "{1}{U}",
+  "typeLine": "Creature — Merfolk Noble",
+  "oracleText": "Whenever you draw your second card each turn, create a 1/1 blue Merfolk creature token.\n{U}, {T}: Target Merfolk can't be blocked this turn.",
+  "power": "2",
+  "toughness": "1",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/9/19e0d68e-7972-4c2a-af4d-8c77c67a8f2e.jpg?1783903076",
+   "normal": "https://cards.scryfall.io/normal/front/1/9/19e0d68e-7972-4c2a-af4d-8c77c67a8f2e.jpg?1783903076",
+   "large": "https://cards.scryfall.io/large/front/1/9/19e0d68e-7972-4c2a-af4d-8c77c67a8f2e.jpg?1783903076",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/9/19e0d68e-7972-4c2a-af4d-8c77c67a8f2e.jpg?1783903076"
+  }
+ },
+ {
+  "name": "Atlantean Skirmisher",
+  "scryfallId": "c95ad4af-bb71-4ca2-bcc0-2c27c3b9ecc3",
+  "oracleId": "8f1c21d6-bf85-4e31-a978-6423c40650d2",
+  "set": "msc",
+  "collectorNumber": "616",
+  "rarity": "uncommon",
+  "manaCost": "{1}{U}",
+  "typeLine": "Creature — Merfolk Rogue",
+  "oracleText": "Whenever this creature attacks, it connives. (Draw a card, then discard a card. If you discarded a nonland card, put a +1/+1 counter on this creature.)",
+  "power": "1",
+  "toughness": "2",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Connive"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/9/c95ad4af-bb71-4ca2-bcc0-2c27c3b9ecc3.jpg?1783903075",
+   "normal": "https://cards.scryfall.io/normal/front/c/9/c95ad4af-bb71-4ca2-bcc0-2c27c3b9ecc3.jpg?1783903075",
+   "large": "https://cards.scryfall.io/large/front/c/9/c95ad4af-bb71-4ca2-bcc0-2c27c3b9ecc3.jpg?1783903075",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/9/c95ad4af-bb71-4ca2-bcc0-2c27c3b9ecc3.jpg?1783903075"
+  }
+ },
+ {
+  "name": "Shipwreck Patrol",
+  "scryfallId": "9d9d1ed2-49fa-4974-b88f-c996c1b7de5b",
+  "oracleId": "9851f207-9f75-4ceb-8024-8f9bf21f90ad",
+  "set": "msc",
+  "collectorNumber": "638",
+  "rarity": "common",
+  "manaCost": "{3}{U}",
+  "typeLine": "Creature — Merfolk Warrior",
+  "oracleText": "When this creature enters, tap target creature an opponent controls and put a stun counter on it. (If a permanent with a stun counter would become untapped, remove one from it instead.)",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/d/9d9d1ed2-49fa-4974-b88f-c996c1b7de5b.jpg?1783903071",
+   "normal": "https://cards.scryfall.io/normal/front/9/d/9d9d1ed2-49fa-4974-b88f-c996c1b7de5b.jpg?1783903071",
+   "large": "https://cards.scryfall.io/large/front/9/d/9d9d1ed2-49fa-4974-b88f-c996c1b7de5b.jpg?1783903071",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/d/9d9d1ed2-49fa-4974-b88f-c996c1b7de5b.jpg?1783903071"
+  }
+ },
+ {
+  "name": "Namor, Scourge of the Seas",
+  "scryfallId": "ecbba25e-40fd-43f5-90c8-786ce9c27075",
+  "oracleId": "5278728e-9203-4d18-97a5-1c4f751a5acf",
+  "set": "msc",
+  "collectorNumber": "631",
+  "rarity": "rare",
+  "manaCost": "{3}{U}{U}",
+  "typeLine": "Legendary Creature — Mutant Merfolk Villain",
+  "oracleText": "Flying\nEach other Merfolk you control with a +1/+1 counter on it has flying.\nAt the beginning of combat on your turn, target creature you control connives. (Draw a card, then discard a card. If you discarded a nonland card, put a +1/+1 counter on that creature.)",
+  "power": "4",
+  "toughness": "4",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Flying",
+   "Connive"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/c/ecbba25e-40fd-43f5-90c8-786ce9c27075.jpg?1783903070",
+   "normal": "https://cards.scryfall.io/normal/front/e/c/ecbba25e-40fd-43f5-90c8-786ce9c27075.jpg?1783903070",
+   "large": "https://cards.scryfall.io/large/front/e/c/ecbba25e-40fd-43f5-90c8-786ce9c27075.jpg?1783903070",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/c/ecbba25e-40fd-43f5-90c8-786ce9c27075.jpg?1783903070"
+  }
+ },
+ {
+  "name": "Unstable Experiment",
+  "scryfallId": "4972517e-3d3f-40aa-84c5-5481c54b6f81",
+  "oracleId": "5b7bbc76-22cc-482e-8d65-34cff34c93c8",
+  "set": "msc",
+  "collectorNumber": "789",
+  "rarity": "common",
+  "manaCost": "{1}{U}",
+  "typeLine": "Instant",
+  "oracleText": "Target player draws a card, then up to one target creature you control connives. (Draw a card, then discard a card. If you discarded a nonland card, put a +1/+1 counter on that creature.)",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Connive"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/9/4972517e-3d3f-40aa-84c5-5481c54b6f81.jpg?1783903015",
+   "normal": "https://cards.scryfall.io/normal/front/4/9/4972517e-3d3f-40aa-84c5-5481c54b6f81.jpg?1783903015",
+   "large": "https://cards.scryfall.io/large/front/4/9/4972517e-3d3f-40aa-84c5-5481c54b6f81.jpg?1783903015",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/9/4972517e-3d3f-40aa-84c5-5481c54b6f81.jpg?1783903015"
+  }
+ },
+ {
   "name": "Doorman",
   "scryfallId": "e569b77e-e65b-4187-a971-41e4bfb526de",
   "oracleId": "01ea2130-e212-4532-b68b-2f940d53ef6e",
