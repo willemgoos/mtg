@@ -22551,6 +22551,149 @@
   }
  },
  {
+  "name": "Boomerang, Blade Flinger",
+  "scryfallId": "6b9f9d5d-a1b6-4e3a-8b65-69eba94ee990",
+  "oracleId": "bbd84035-3efd-4301-9778-913898efd57a",
+  "set": "msc",
+  "collectorNumber": "534",
+  "rarity": "common",
+  "manaCost": "{1}{B}",
+  "typeLine": "Legendary Creature — Human Villain",
+  "oracleText": "Whenever Boomerang attacks, he deals 1 damage to each opponent and you gain 1 life.",
+  "power": "1",
+  "toughness": "3",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/b/6b9f9d5d-a1b6-4e3a-8b65-69eba94ee990.jpg?1783903102",
+   "normal": "https://cards.scryfall.io/normal/front/6/b/6b9f9d5d-a1b6-4e3a-8b65-69eba94ee990.jpg?1783903102",
+   "large": "https://cards.scryfall.io/large/front/6/b/6b9f9d5d-a1b6-4e3a-8b65-69eba94ee990.jpg?1783903102",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/b/6b9f9d5d-a1b6-4e3a-8b65-69eba94ee990.jpg?1783903102"
+  }
+ },
+ {
+  "name": "Crimson Cowl, Master of Evil",
+  "scryfallId": "58f35061-20d7-464a-a58d-8e07ed23fa27",
+  "oracleId": "2962cfc6-6557-4aee-a95a-8ca3bb06eb29",
+  "set": "msc",
+  "collectorNumber": "653",
+  "rarity": "rare",
+  "manaCost": "{2}{B}",
+  "typeLine": "Legendary Creature — Human Villain",
+  "oracleText": "Whenever one or more nontoken Villains you control attack a player, you create a 2/1 black Villain creature token with menace. (It can't be blocked except by two or more creatures.)",
+  "power": "1",
+  "toughness": "3",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/8/58f35061-20d7-464a-a58d-8e07ed23fa27.jpg?1783903063",
+   "normal": "https://cards.scryfall.io/normal/front/5/8/58f35061-20d7-464a-a58d-8e07ed23fa27.jpg?1783903063",
+   "large": "https://cards.scryfall.io/large/front/5/8/58f35061-20d7-464a-a58d-8e07ed23fa27.jpg?1783903063",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/8/58f35061-20d7-464a-a58d-8e07ed23fa27.jpg?1783903063"
+  }
+ },
+ {
+  "name": "Tiger Shark, Abyssal Hunter",
+  "scryfallId": "1a7b5a4c-b801-446a-984f-42349b7f8bfe",
+  "oracleId": "286be139-1ddf-4b04-86b2-cf17a06c262a",
+  "set": "msc",
+  "collectorNumber": "747",
+  "rarity": "uncommon",
+  "manaCost": "{2}{U/B}{U/B}",
+  "typeLine": "Legendary Creature — Shark Human Villain",
+  "oracleText": "Whenever Tiger Shark enters or attacks, he connives. (Draw a card, then discard a card. If you discarded a nonland card, put a +1/+1 counter on this creature.)\n{4}{U/B}: Tiger Shark can't be blocked this turn.",
+  "power": "2",
+  "toughness": "3",
+  "colors": [
+   "B",
+   "U"
+  ],
+  "keywords": [
+   "Connive"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/a/1a7b5a4c-b801-446a-984f-42349b7f8bfe.jpg?1783903030",
+   "normal": "https://cards.scryfall.io/normal/front/1/a/1a7b5a4c-b801-446a-984f-42349b7f8bfe.jpg?1783903030",
+   "large": "https://cards.scryfall.io/large/front/1/a/1a7b5a4c-b801-446a-984f-42349b7f8bfe.jpg?1783903030",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/a/1a7b5a4c-b801-446a-984f-42349b7f8bfe.jpg?1783903030"
+  }
+ },
+ {
+  "name": "Radioactive Man",
+  "scryfallId": "8a195220-26ce-4254-9dd9-7ecf89569b51",
+  "oracleId": "6e901cab-fba9-4581-9f09-90473bbd8e30",
+  "set": "msc",
+  "collectorNumber": "665",
+  "rarity": "uncommon",
+  "manaCost": "{4}{B}",
+  "typeLine": "Legendary Creature — Human Scientist Villain",
+  "oracleText": "Deathtouch\nWhenever Radioactive Man deals combat damage to a player, that player loses half their life, rounded up.",
+  "power": "3",
+  "toughness": "5",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Deathtouch"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/a/8a195220-26ce-4254-9dd9-7ecf89569b51.jpg?1783903058",
+   "normal": "https://cards.scryfall.io/normal/front/8/a/8a195220-26ce-4254-9dd9-7ecf89569b51.jpg?1783903058",
+   "large": "https://cards.scryfall.io/large/front/8/a/8a195220-26ce-4254-9dd9-7ecf89569b51.jpg?1783903058",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/a/8a195220-26ce-4254-9dd9-7ecf89569b51.jpg?1783903058"
+  }
+ },
+ {
+  "name": "The Masters of Evil",
+  "scryfallId": "65ba4439-3282-4179-85b9-67a25e2e5d24",
+  "oracleId": "fcb1caea-e1ac-48f0-a67a-d4aadad490d9",
+  "set": "msh",
+  "collectorNumber": "105",
+  "rarity": "uncommon",
+  "manaCost": "{5}{B}",
+  "typeLine": "Legendary Creature — Human Villain",
+  "oracleText": "Other Villains you control get +2/+1.\n{1}{B}, Discard this card: Search your library for a Plan card, reveal it, put it into your hand, then shuffle.",
+  "power": "5",
+  "toughness": "6",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/5/65ba4439-3282-4179-85b9-67a25e2e5d24.jpg?1783902941",
+   "normal": "https://cards.scryfall.io/normal/front/6/5/65ba4439-3282-4179-85b9-67a25e2e5d24.jpg?1783902941",
+   "large": "https://cards.scryfall.io/large/front/6/5/65ba4439-3282-4179-85b9-67a25e2e5d24.jpg?1783902941",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/5/65ba4439-3282-4179-85b9-67a25e2e5d24.jpg?1783902941"
+  }
+ },
+ {
+  "name": "Villainous Syndication",
+  "scryfallId": "f6fd33b2-a784-49c8-a0f5-7246f3afcef6",
+  "oracleId": "4777fa96-12a5-42d5-840f-ddd85f4a4b68",
+  "set": "msc",
+  "collectorNumber": "672",
+  "rarity": "uncommon",
+  "manaCost": "{1}{B}",
+  "typeLine": "Enchantment — Plan",
+  "oracleText": "Tap an untapped Villain you control: Mill a card. Put a plan counter on this enchantment. Activate only as a sorcery. (To mill a card, put the top card of your library into your graveyard.)\nWhen the fourth plan counter is put on this enchantment, sacrifice it. When you do, return target creature card from your graveyard to the battlefield.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Mill"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/6/f6fd33b2-a784-49c8-a0f5-7246f3afcef6.jpg?1783903056",
+   "normal": "https://cards.scryfall.io/normal/front/f/6/f6fd33b2-a784-49c8-a0f5-7246f3afcef6.jpg?1783903056",
+   "large": "https://cards.scryfall.io/large/front/f/6/f6fd33b2-a784-49c8-a0f5-7246f3afcef6.jpg?1783903056",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/6/f6fd33b2-a784-49c8-a0f5-7246f3afcef6.jpg?1783903056"
+  }
+ },
+ {
   "name": "Ant-Man's Air Force",
   "scryfallId": "a94723d0-2137-41f6-87a1-6a33e1d50d1b",
   "oracleId": "5d7eea87-b60f-4ab9-b485-30aadda0cd79",

@@ -22,6 +22,7 @@ import {
   abilityManaCost,
   castCost,
   teamworkFor,
+  creaturesToTap,
   crewFor,
   escalateCrew,
   artifactsToSacrifice,
@@ -508,6 +509,12 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
       const mana = abilityManaCost(ctx, source, a, 'best');
       if (!canPayFrom(mana, usable)) return;
       if (a.cost.tapTokens && tokensToTap(ctx, player, source).length < a.cost.tapTokens) return;
+      // Marvel Super Heroes Jumpstart (Masters of Evil)
+      if (
+        a.cost.tapCreature &&
+        creaturesToTap(ctx, player, a.cost.tapCreature, source).length === 0
+      )
+        return;
       if (a.cost.crew && !crewFor(ctx, player, source, a.cost.crew)) return;
       if (
         a.cost.sacrificeArtifacts &&

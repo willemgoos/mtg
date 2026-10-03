@@ -48,6 +48,7 @@ import { givePriority } from './turn.ts';
 import type {
   AbilityDef,
   CardDefinition,
+  CardFilter,
   Decision,
   Amount,
   EffectDef,
@@ -608,6 +609,11 @@ export function activateAbility(
   if (a.cost.discardSelf) moveObject(ctx, source, 'graveyard');
   if (a.cost.tapTokens)
     for (const id of tokensToTap(ctx, player, source).slice(0, a.cost.tapTokens)) tap(ctx, id);
+  // Marvel Super Heroes Jumpstart (Masters of Evil)
+  if (a.cost.tapCreature) {
+    const id = creaturesToTap(ctx, player, a.cost.tapCreature, source)[0];
+    if (id) tap(ctx, id);
+  }
   if (a.cost.crew) {
     const crew = crewFor(ctx, player, source, a.cost.crew) ?? [];
     for (const id of crew) tap(ctx, id);
@@ -989,6 +995,27 @@ export function artifactsToSacrifice(ctx: Ctx, player: PlayerId, n: number): Obj
         manaValue(def(ctx, a).manaCost) - manaValue(def(ctx, b).manaCost),
     );
   return artifacts.length >= n ? artifacts.slice(0, n) : null;
+}
+
+// Marvel Super Heroes Jumpstart (Masters of Evil)
+/** Untapped creatures you control matching the filter, weakest first ("Tap an untapped Villain you control"). */
+export function creaturesToTap(
+  ctx: Ctx,
+  player: PlayerId,
+  filter: CardFilter,
+  source?: ObjectId,
+): ObjectId[] {
+  return ctx.s.battlefield
+    .filter((id) => {
+      const o = obj(ctx, id);
+      return (
+        o.controller === player &&
+        !o.tapped &&
+        isCreature(ctx, id) &&
+        matchesFilter(ctx, id, filter, source)
+      );
+    })
+    .sort((x, y) => power(ctx, x) - power(ctx, y));
 }
 
 export function tokensToTap(ctx: Ctx, player: PlayerId, source?: ObjectId): ObjectId[] {
