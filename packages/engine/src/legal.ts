@@ -72,7 +72,8 @@ export function castableCards(ctx: Ctx, player: PlayerId): ObjectId[] {
     const d = def(ctx, id);
     // Conduit of Worlds: "You may play lands from your graveyard."
     if (d.types.includes('Land')) {
-      if (landsFromGraveyard) out.push(id);
+      // Secrets of Strixhaven (14b): Ark of Hunger, a milled land you may play this turn.
+      if (landsFromGraveyard || obj(ctx, id).playableUntilTurn === ctx.s.turn.number) out.push(id);
       continue;
     }
     if (
@@ -282,7 +283,9 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
       if (
         sorcery &&
         ps.landsPlayedThisTurn < landDrops(ctx, player) &&
-        (zone !== 'graveyard' || hasStatic(ctx, player, 'playLandsFromGraveyard'))
+        (zone !== 'graveyard' ||
+          hasStatic(ctx, player, 'playLandsFromGraveyard') ||
+          obj(ctx, card).playableUntilTurn === s.turn.number)
       )
         out.push({ type: 'playLand', player, card });
       return;
@@ -302,15 +305,17 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
     if (hasImprovise(ctx, player, card))
       pool = [...pool, ...artifactHelpers(ctx, player, pool, card)];
     // {X}: every affordable value (up to 10).
-    const xs = d.manaCost.x
-      ? Array.from(
-          { length: Math.min(10, Math.floor(pool.length / d.manaCost.x)) + 1 },
-          (_, x) => x,
-        )
-      : // Toxic Deluge: X life, up to one less than you have.
-        d.payXLife
-        ? Array.from({ length: Math.min(13, ps.life - 1) + 1 }, (_, x) => x)
-        : [undefined];
+    // Secrets of Strixhaven (14b): Molten Note's flashback cost has no {X}.
+    const xs =
+      d.manaCost.x && !(zone === 'graveyard' && d.flashback)
+        ? Array.from(
+            { length: Math.min(10, Math.floor(pool.length / d.manaCost.x)) + 1 },
+            (_, x) => x,
+          )
+        : // Toxic Deluge: X life, up to one less than you have.
+          d.payXLife
+          ? Array.from({ length: Math.min(13, ps.life - 1) + 1 }, (_, x) => x)
+          : [undefined];
     // A card to discard as an additional cost (Sazacap's Brew).
     // Dragon Man: from the graveyard, discarding a card as well.
     const discardToCast =
@@ -342,6 +347,13 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
     for (const via of vias)
       for (const v of castVariants(d, zone, via)) {
         if ((v.life ?? 0) > ps.life) continue;
+        // Secrets of Strixhaven (14b): Soaring Stoneglider exiles cards unless the kicker is paid.
+        if (
+          d.unkickedExilesGraveyard &&
+          !v.kicked &&
+          ps.graveyard.length < d.unkickedExilesGraveyard
+        )
+          continue;
         if (v.removeCounters && countersYouControl(ctx, player) < v.removeCounters) continue;
         // Escalate: enough untapped creatures to tap.
         if (v.spell?.escalate && escalateCrew(ctx, player, v.spell.escalate) === null) continue;

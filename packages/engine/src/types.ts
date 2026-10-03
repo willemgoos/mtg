@@ -247,6 +247,13 @@ export interface CardDefinition {
   // Strixhaven (13c): Crackle with Power
   /** "Up to X targets": no more targets than the value chosen for X. */
   upToXTargets?: boolean;
+  // Secrets of Strixhaven (14b)
+  /** Pawprint-style modes: the most modes you may choose (default 5; Moment of Reckoning: four). */
+  pawBudget?: number;
+  /** Soaring Stoneglider: not paying the kicker means exiling this many cards from your graveyard instead. */
+  unkickedExilesGraveyard?: number;
+  /** Group Project: flashback also taps this many untapped creatures you control. */
+  flashbackTapCreatures?: number;
 }
 
 export type AbilityDef =
@@ -694,6 +701,11 @@ export type ConditionDef =
   | { kind: 'sourceHasCounter'; name: string }
   /** You attacked with a Hero this turn, or a Hero entered under your control (Avengers Assemble!). */
   | { kind: 'heroAttackedOrEnteredThisTurn' }
+  // Secrets of Strixhaven (14b)
+  /** A card left your graveyard this turn (Primary Research, Wilt in the Heat). */
+  | { kind: 'cardsLeftGraveyardThisTurn' }
+  /** One or more cards were put into exile this turn (Ennis, Debate Moderator). */
+  | { kind: 'cardsExiledThisTurn' }
   | { kind: 'custom'; handler: string };
 
 export interface CardFilter {
@@ -781,6 +793,9 @@ export interface CardFilter {
   nonlegendary?: boolean;
   /** Shares a creature type with its controller's commander (Folk Hero). */
   sharesTypeWithCommander?: boolean;
+  // Secrets of Strixhaven (14b): Nita, Forum Conciliator
+  /** Its controller doesn't own it. */
+  notOwnedByController?: boolean;
 }
 
 export interface TargetSpec {
@@ -913,6 +928,9 @@ export type Amount =
   // Final Fantasy (11b): mana spent
   /** The mana spent to cast the triggering spell (Shantotto). */
   | { manaSpentOnSubject: true }
+  // Secrets of Strixhaven (14b): Molten Note
+  /** The mana spent to cast the source spell. */
+  | { manaSpentOnSource: true }
   // Secrets of Strixhaven (14a): converge
   /** The number of colors of mana spent to cast the source spell, or the triggering spell. */
   | { colorsSpent: 'source' | 'subject' }
@@ -1107,7 +1125,12 @@ export type EffectDef =
   /** Ardent Dustspeaker: you may put a card matching the filter from your graveyard on the bottom of your library; if you do, `then`. */
   | { kind: 'graveyardCardToLibraryBottom'; filter: CardFilter; then: EffectDef[] }
   /** Illuminate History, Fervent Mastery: discard any number of cards, then draw that many. */
-  | { kind: 'discardAnyThenDraw'; who: 'controller' | 'eachOpponent' }
+  | {
+      kind: 'discardAnyThenDraw';
+      who: 'controller' | 'eachOpponent';
+      /** Secrets of Strixhaven (14b): Colossus of the Blood Age, "that many cards plus one". */
+      plus?: number;
+    }
   /** Explore the Vastlands: that player looks at the top five, may take a land and/or an instant or sorcery; the rest go to the bottom at random. */
   | { kind: 'lookTakeLandAndSpell'; who: 'controller' | 'eachOpponent' }
   /** Archway Commons, Wandering Archaic: that player pays this, or `otherwise` happens (for the controller). */
@@ -1524,6 +1547,9 @@ export type EffectDef =
       // Strixhaven (13c): Uvilda
       /** It costs this many generic mana less instead of being free. */
       costLess?: number;
+      // Secrets of Strixhaven (14b): Lorehold, the Historian (miracle {2})
+      /** It costs this instead of being free. */
+      pay?: ManaCost;
     }
   /**
    * Exile cards from the top until a nonland card with mana value at most `max`
@@ -1817,6 +1843,9 @@ export type StaticDef =
   | { kind: 'attackTax'; amount: number }
   /** Nonland cards in your hand have miracle {0}: the first card you draw each turn may be cast free (Molecule Man). */
   | { kind: 'miracleZero' }
+  // Secrets of Strixhaven (14b): Lorehold, the Historian
+  /** Instant and sorcery cards in your hand have miracle with this cost. */
+  | { kind: 'miracleCost'; cost: ManaCost }
   // The Fantastic Four (9d).
   /** This creature attacks each combat if able, while the condition holds (Galactus). */
   | { kind: 'attacksEachCombat'; condition?: ConditionDef }
@@ -2015,6 +2044,11 @@ export interface GameObject {
   prepared?: ObjectId;
   /** A prepare spell's copy in exile: the permanent that made it (it can be cast while that is prepared). */
   preparedBy?: ObjectId;
+  // Secrets of Strixhaven (14b)
+  /** Cast from exile with permission, it's exiled instead of going to the graveyard (Nita, Forum Conciliator). */
+  exileAfterCast?: boolean;
+  /** Playing it from the graveyard this turn doesn't stop other spells (Ark of Hunger). */
+  noSpellLock?: boolean;
   /** A copy of a card cast from exile (prepare, paradigm): it ceases to exist once it leaves the stack. */
   spellCopyCard?: boolean;
   /** Converge: the colours of mana spent to cast it (kept while it's on the battlefield). */
@@ -2175,6 +2209,8 @@ export interface TurnState {
   creaturesExiled?: Record<PlayerId, number>;
   /** Creatures that died under each player's control this turn. */
   creaturesLost?: Record<PlayerId, number>;
+  /** Secrets of Strixhaven (14b): cards (not tokens) put into exile this turn (Ennis, Debate Moderator). */
+  exiledCards?: number;
   /** Cards that left each player's graveyard this turn (Bonecache Overseer). */
   leftGraveyard?: Record<PlayerId, number>;
   /** Foods each player sacrificed this turn. */
@@ -2403,7 +2439,7 @@ export type Decision =
       connive?: ObjectRef;
       // Strixhaven (13c): Illuminate History
       /** "Discard any number of cards, then draw that many": `count` counts the ones discarded; chooseEffect stops. */
-      anyNumber?: { discarded: number };
+      anyNumber?: { discarded: number; plus?: number };
       resume: PausedResolution;
       thenPriority: PlayerId;
     }

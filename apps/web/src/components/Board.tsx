@@ -556,9 +556,11 @@ export function Board({
         // Strixhaven (13c): "discard any number of cards, then draw that many".
         if (d.kind === 'discard' && d.anyNumber)
           return {
-            prompt: `${nameOf(d.resume.sourceDefId)}: discard any number of cards (${d.anyNumber.discarded} so far), then draw that many`,
+            prompt: `${nameOf(d.resume.sourceDefId)}: discard any number of cards (${d.anyNumber.discarded} so far), then draw that many${d.anyNumber.plus ? ` plus ${d.anyNumber.plus}` : ''}`,
             primary: [
-              d.anyNumber.discarded ? `Done: draw ${d.anyNumber.discarded}` : 'Discard nothing',
+              d.anyNumber.discarded + (d.anyNumber.plus ?? 0)
+                ? `Done: draw ${d.anyNumber.discarded + (d.anyNumber.plus ?? 0)}`
+                : 'Discard nothing',
               () => act({ type: 'chooseEffect', player: HUMAN, accept: false }),
             ] as [string, () => void],
           };
@@ -1534,6 +1536,11 @@ function castLabel(defId: CardDefId, a: Action): string {
       ? `Sacrifice ${n} creature${n > 1 ? 's' : ''}: copy it ${n} time${n > 1 ? 's' : ''}`
       : 'No sacrifice';
   }
+  // Secrets of Strixhaven (14b): Soaring Stoneglider, exile two cards from your graveyard or pay the kicker.
+  if (def?.unkickedExilesGraveyard && def.kicker)
+    return a.kicked
+      ? `Pay ${manaText(def.kicker.cost)}`
+      : `Exile ${def.unkickedExilesGraveyard} cards from your graveyard`;
   if (!def?.kicker) return 'Cast';
   if (def.kicker.as === 'overload')
     return a.kicked ? `Overload (each, ${manaText(def.kicker.cost)} more)` : 'One target';

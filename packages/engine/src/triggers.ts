@@ -36,6 +36,10 @@ export function checkCondition(
   subject?: GameObject,
 ): boolean {
   if (!c) return true;
+  // Secrets of Strixhaven (14b)
+  if (c.kind === 'cardsLeftGraveyardThisTurn')
+    return (ctx.s.turn.leftGraveyard?.[controller] ?? 0) > 0;
+  if (c.kind === 'cardsExiledThisTurn') return (ctx.s.turn.exiledCards ?? 0) > 0;
   // Doom Prevails (9e).
   if (c.kind === 'kickedAtLeast') return (self?.kickCount ?? 0) >= c.n;
   if (c.kind === 'sourceHasExiled')
@@ -693,6 +697,32 @@ function detect(ctx: Ctx, ev: GameEvent): void {
           controller: ev.player,
           inline: [{ kind: 'castFreeCard', card: { id: drawn.id, zcc: drawn.zcc } }],
         });
+      // Secrets of Strixhaven (14b): Lorehold, the Historian: miracle {2} for instants and sorceries.
+      if (drawn && ev.nth === 1) {
+        const dd = defOf(ctx, drawn.defId);
+        if (dd.types.includes('Instant') || dd.types.includes('Sorcery'))
+          for (const id of s.battlefield) {
+            if (obj(ctx, id).controller !== ev.player) continue;
+            const st = def(ctx, id).abilities.find(
+              (a) => a.kind === 'static' && a.effect.kind === 'miracleCost',
+            );
+            if (st?.kind !== 'static' || st.effect.kind !== 'miracleCost') continue;
+            s.pendingTriggers.push({
+              source: { id: drawn.id, zcc: drawn.zcc },
+              sourceDefId: drawn.defId,
+              abilityIndex: -1,
+              controller: ev.player,
+              inline: [
+                {
+                  kind: 'castFreeCard',
+                  card: { id: drawn.id, zcc: drawn.zcc },
+                  pay: st.effect.cost,
+                },
+              ],
+            });
+            break;
+          }
+      }
       forEachBattlefieldTrigger(
         ctx,
         (o, a) =>

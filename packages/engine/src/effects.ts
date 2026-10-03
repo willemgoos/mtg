@@ -413,6 +413,11 @@ export function resolveAmount(ctx: Ctx, es: EffectSource, amount: Amount): numbe
     const o = es.subject && ctx.s.objects[es.subject.id];
     return o?.manaSpent ?? 0;
   }
+  // Secrets of Strixhaven (14b): Molten Note.
+  if ('manaSpentOnSource' in amount) {
+    const o = es.source && ctx.s.objects[es.source.id];
+    return o?.manaSpent ?? 0;
+  }
   // Secrets of Strixhaven (14a): converge.
   if ('colorsSpent' in amount) {
     const ref = amount.colorsSpent === 'source' ? es.source : es.subject;
@@ -741,6 +746,7 @@ export function runEffects(
           cards: [card.id],
           ...(e.exileAfter ? { exileAfter: true } : {}),
           ...(e.costLess ? { costLess: e.costLess } : {}),
+          ...(e.pay ? { pay: e.pay } : {}),
           resume,
           thenPriority,
         };
@@ -1227,12 +1233,16 @@ export function runEffects(
       } else if (e.kind === 'discardAnyThenDraw') {
         // Strixhaven (13c): Illuminate History, Fervent Mastery
         const who = e.who === 'eachOpponent' ? other(controller) : controller;
-        if (ctx.s.players[who].hand.length === 0) continue;
+        if (ctx.s.players[who].hand.length === 0) {
+          // Secrets of Strixhaven (14b): Colossus of the Blood Age still draws its extra card.
+          for (let n = 0; n < (e.plus ?? 0); n++) drawCard(ctx, who);
+          continue;
+        }
         ctx.s.decision = {
           kind: 'discard',
           player: who,
           count: 1,
-          anyNumber: { discarded: 0 },
+          anyNumber: { discarded: 0, ...(e.plus ? { plus: e.plus } : {}) },
           resume,
           thenPriority,
         };
@@ -1577,8 +1587,13 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
       const target = e.forControllerOf !== undefined ? es.targets[e.forControllerOf] : undefined;
       // Strixhaven (13c): Will, Scholar of Frost: an "up to" target left out makes no token.
       if (e.forControllerOf !== undefined && !target) return;
+      // Secrets of Strixhaven (14b): Emeritus of Truce, "target player creates".
       const targetOwner =
-        target && 'object' in target ? ctx.s.objects[target.object.id]?.controller : undefined;
+        target && 'object' in target
+          ? ctx.s.objects[target.object.id]?.controller
+          : target && 'player' in target
+            ? target.player
+            : undefined;
       const owner = targetOwner ?? (e.forOpponent ? other(es.controller) : es.controller);
       // Divine Visitation: creature tokens are 4/4 Angels instead.
       const token = replacedToken(ctx, owner, e.token);

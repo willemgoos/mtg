@@ -631,6 +631,8 @@ export function cardMatches(
   if (filter.supertypes && !filter.supertypes.some((t) => d.supertypes.includes(t))) return false;
   // Strixhaven (13c): Plargg (nonlegendary), Silverquill Silencer (the chosen name).
   if (filter.nonlegendary && d.supertypes.includes('Legendary')) return false;
+  // Secrets of Strixhaven (14b): Nita, Forum Conciliator ("a spell you don't own").
+  if (filter.notOwnedByController && obj(ctx, id).owner === obj(ctx, id).controller) return false;
   if (filter.chosenNameOfSource) {
     const name = sourceId ? ctx.s.objects[sourceId]?.chosenName : undefined;
     if (!name || obj(ctx, id).defId !== name) return false;

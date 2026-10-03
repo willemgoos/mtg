@@ -51,11 +51,13 @@ const MAX_PAWS = 5;
 /** Every choice of pawprint modes worth 1 to 5 {P}, repeats allowed, in printed order. */
 export function pawCombos(d: CardDefinition): number[][] {
   const modes = d.pawprints ?? [];
+  // Secrets of Strixhaven (14b): Moment of Reckoning chooses up to four.
+  const max = d.pawBudget ?? MAX_PAWS;
   const out: number[][] = [];
   const grow = (from: number, chosen: number[], paws: number) => {
     if (chosen.length) out.push(chosen);
     for (let m = from; m < modes.length; m++)
-      if (paws + modes[m]!.paws <= MAX_PAWS) grow(m, [...chosen, m], paws + modes[m]!.paws);
+      if (paws + modes[m]!.paws <= max) grow(m, [...chosen, m], paws + modes[m]!.paws);
   };
   grow(0, [], 0);
   return out;
@@ -165,7 +167,12 @@ export function castVariants(d: CardDefinition, zone: ZoneName, via?: CastVia): 
       { cost, spell: d.spell ?? null, sacrifice: true, ...extra },
       { cost: addCosts(cost, d.sacrificeOrPay), spell: d.spell ?? null, ...extra },
     ];
-  const out: CastVariant[] = [{ cost, spell: d.spell ?? null, ...extra }];
+  // Secrets of Strixhaven (14b): Group Project's flashback also taps three creatures.
+  const flashSpell =
+    flashback && d.flashbackTapCreatures && d.spell
+      ? { ...d.spell, escalate: d.flashbackTapCreatures }
+      : (d.spell ?? null);
+  const out: CastVariant[] = [{ cost, spell: flashSpell, ...extra }];
   // Multikicker: paid once, twice or three times (more is rarely worth offering).
   if (d.multikicker)
     for (let k = 1; k <= 3; k++) {

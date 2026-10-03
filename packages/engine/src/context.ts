@@ -3,6 +3,7 @@ import { MSH_EFFECTS } from './msh-effects.ts';
 import { FIN_EFFECTS } from './fin-effects.ts';
 import { LOREHOLD_EFFECTS } from './stx-lorehold-effects.ts';
 import { SOS_14A_EFFECTS } from './sos-14a-effects.ts';
+import { SOS_14B_A_EFFECTS } from './sos-14b-a-effects.ts';
 import { STX_13C_A_EFFECTS } from './stx-13c-a-effects.ts';
 import { STX_13C_B_EFFECTS } from './stx-13c-b-effects.ts';
 import { STX_13C_C_EFFECTS } from './stx-13c-c-effects.ts';
@@ -75,6 +76,8 @@ const BUILT_IN_EFFECTS: Record<string, CustomEffect> = {
   ...STX_13C_D_EFFECTS,
   // Secrets of Strixhaven (14a).
   ...SOS_14A_EFFECTS,
+  // Secrets of Strixhaven (14b), group A.
+  ...SOS_14B_A_EFFECTS,
   // Strixhaven (13a): Learn: put the chosen Lesson from outside the game into your hand.
   learnFetch(ctx, es, params) {
     const ps = ctx.s.players[es.controller];
@@ -442,6 +445,9 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
     delete o.castableUntilTurn;
     delete o.anyMana;
   }
+  // Secrets of Strixhaven (14b): Ennis, "if one or more cards were put into exile this turn".
+  if (to === 'exile' && from !== 'exile' && !o.isToken)
+    ctx.s.turn.exiledCards = (ctx.s.turn.exiledCards ?? 0) + 1;
   // Bonecache Overseer: cards leaving a graveyard.
   if (from === 'graveyard') (ctx.s.turn.leftGraveyard ??= { p1: 0, p2: 0 })[o.owner]++;
   // From hand to graveyard is a discard (mayhem, "whenever you discard").

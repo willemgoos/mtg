@@ -276,3 +276,15 @@ whole (SOS's `prepare` is the riskiest). The shortest path to Quintorius is 0, 1
   retargets to another creature when there is one (`retarget`). Dissection Practice's "up to one" targets are chosen in
   order (the second creature can't be picked while skipping the first). Foolish Fate and Moseo read the life gained this
   turn from the turn tally. The SOS Pest (`sos-pest-token`, gains 1 life on attack) is not the STX Pest.
+
+14b (group A: white, Silverquill, Lorehold; `sos/cards-a.ts`, `sos-14b-a-effects.ts`):
+
+- Silverquill, the Disputant's casualty 1 is a trigger when you cast an instant or sorcery (you may sacrifice a creature
+  with power 1 or more; if you do, copy that spell). Aziza's copy and Social Snub's copy keep the original targets.
+- Soaring Stoneglider's "exile two cards from your graveyard" picks the least useful cards without a prompt (the other
+  choice is the kicker, {1}{W} more). Group Project's flashback taps the three least powerful untapped creatures.
+- Moment of Reckoning is pawprint-style modes worth one each, up to four (`pawBudget`); with many targets the cast menu
+  can get long. Lorehold, the Historian's miracle {2} is the first instant or sorcery you draw each turn.
+- Ark of Hunger's milled card is playable this turn from the graveyard (no spell lock, unlike Conduit of Worlds).
+  Nita's exiled spell goes to exile instead of a graveyard (`exileAfterCast`). Practiced Scrollsmith and Suspend Aggression
+  use `playableUntilTurn` (the owner may cast or play from exile). Practiced Offense's target player is you or the opponent.

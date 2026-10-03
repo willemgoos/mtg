@@ -359,7 +359,10 @@ export function castSpell(
   const sneakFrom = choice.sneak
     ? ctx.s.combat?.attackers.find((a) => a.id === choice.sneak)?.defender
     : undefined;
-  const flashback = (o.zone === 'graveyard' && !choice.via && !!d.flashback) || !!choice.exileAfter;
+  const flashback =
+    (o.zone === 'graveyard' && !choice.via && !!d.flashback) ||
+    !!choice.exileAfter ||
+    !!o.exileAfterCast; // Secrets of Strixhaven (14b): Nita, Forum Conciliator
   const fromHand = o.zone === 'hand';
   // Rule 601.2: move to stack, choose targets, then pay costs.
   const cost = addCosts(
@@ -410,6 +413,12 @@ export function castSpell(
     payment.filter((id) => !convokers.includes(id)),
   );
   moveObject(ctx, card, 'stack', { controller: player });
+  // Secrets of Strixhaven (14b): Soaring Stoneglider, exile two cards from your graveyard unless kicked.
+  if (d.unkickedExilesGraveyard && !choice.kicked)
+    for (let i = 0; i < d.unkickedExilesGraveyard; i++) {
+      const gone = graveyardCostCard(ctx, player, {}, card);
+      if (gone) moveObject(ctx, gone, 'exile');
+    }
   // Secrets of Strixhaven (14a): prepare. Casting the copy unprepares its creature.
   const preparer = o.preparedBy !== undefined ? ctx.s.objects[o.preparedBy] : undefined;
   if (preparer && preparer.prepared === card) {
@@ -484,7 +493,7 @@ export function castSpell(
     });
   });
   // Conduit of Worlds: a card cast this way stops further spells this turn.
-  if (choice.via === 'conduit') (ctx.s.turn.spellLock ??= []).push(player);
+  if (choice.via === 'conduit' && !o.noSpellLock) (ctx.s.turn.spellLock ??= []).push(player);
   const cast = (ctx.s.turn.spellsCast ??= { p1: 0, p2: 0 });
   emit(ctx, { type: 'spellCast', id: card, player, nth: ++cast[player] });
   noteTargets(ctx, player, targets);
@@ -1474,7 +1483,7 @@ export function answerDiscard(ctx: Ctx, card: ObjectId): void {
 export function finishDiscardAny(ctx: Ctx): void {
   const d = ctx.s.decision;
   if (d.kind !== 'discard' || !d.anyNumber) throw new Error('Not discarding any number');
-  for (let i = 0; i < d.anyNumber.discarded; i++) drawCard(ctx, d.player);
+  for (let i = 0; i < d.anyNumber.discarded + (d.anyNumber.plus ?? 0); i++) drawCard(ctx, d.player);
   resume(ctx, d.resume, d.thenPriority);
 }
 
