@@ -432,6 +432,144 @@ export const FIXTURES: CardDefinition[] = [
     manaCost: cost(2),
     loyalty: 3,
   }),
+  // Secrets of Strixhaven (14a): prepare, opus, repartee, infusion, increment, converge, paradigm.
+  creature('prep-glass', 2, 1, [], {
+    manaCost: cost(1),
+    prepare: true,
+    entersPrepared: true,
+    back: 'prep-glass-spell',
+  }),
+  card({
+    id: 'prep-glass-spell',
+    types: ['Instant'],
+    manaCost: cost(1),
+    spell: { targets: [], effects: [{ kind: 'draw', who: 'controller', amount: 1 }] },
+  }),
+  creature('prep-trigger', 2, 2, [], {
+    prepare: true,
+    back: 'prep-trigger-spell',
+    abilities: [
+      {
+        kind: 'triggered',
+        trigger: { on: 'castSpell', filter: 'any' },
+        targets: [],
+        effects: [{ kind: 'prepare', what: 'self' }],
+      },
+    ],
+  }),
+  card({
+    id: 'prep-trigger-spell',
+    types: ['Sorcery'],
+    manaCost: cost(0),
+    spell: { targets: [], effects: [{ kind: 'gainLife', who: 'controller', amount: 3 }] },
+  }),
+  card({
+    id: 'sos-zap',
+    types: ['Instant'],
+    manaCost: cost(1),
+    spell: {
+      targets: [{ what: 'creature' }],
+      effects: [{ kind: 'pump', to: { target: 0 }, power: 1, toughness: 1 }],
+    },
+  }),
+  card({
+    id: 'sos-draw',
+    types: ['Sorcery'],
+    manaCost: cost(1),
+    spell: { targets: [], effects: [{ kind: 'draw', who: 'controller', amount: 1 }] },
+  }),
+  card({
+    id: 'sos-big-draw',
+    types: ['Sorcery'],
+    manaCost: cost(5),
+    spell: { targets: [], effects: [{ kind: 'draw', who: 'controller', amount: 1 }] },
+  }),
+  card({
+    id: 'sos-bounce',
+    types: ['Instant'],
+    manaCost: cost(0),
+    spell: { targets: [{ what: 'creature' }], effects: [{ kind: 'bounce', what: { target: 0 } }] },
+  }),
+  card({
+    id: 'sos-heal',
+    types: ['Instant'],
+    manaCost: cost(0),
+    spell: { targets: [], effects: [{ kind: 'gainLife', who: 'controller', amount: 1 }] },
+  }),
+  creature('repartee-mage', 1, 1, [], {
+    abilities: [
+      {
+        kind: 'triggered',
+        trigger: { on: 'castSpell', filter: 'instantOrSorceryTargetingCreature' },
+        targets: [],
+        effects: [{ kind: 'counters', to: 'self', amount: 1 }],
+      },
+    ],
+  }),
+  creature('opus-mage', 1, 1, [], {
+    abilities: [
+      {
+        kind: 'triggered',
+        trigger: { on: 'castSpell', filter: 'instantOrSorcery' },
+        targets: [],
+        effects: [
+          {
+            kind: 'if',
+            condition: { kind: 'amountAtLeast', amount: { manaSpentOnSubject: true }, min: 5 },
+            then: [{ kind: 'counters', to: 'self', amount: 2 }],
+            else: [{ kind: 'counters', to: 'self', amount: 1 }],
+          },
+        ],
+      },
+    ],
+  }),
+  card({
+    id: 'infusion-draw',
+    types: ['Sorcery'],
+    manaCost: cost(0),
+    spell: {
+      targets: [],
+      effects: [
+        { kind: 'draw', who: 'controller', amount: 1 },
+        {
+          kind: 'if',
+          condition: { kind: 'lifeThisTurn', who: 'you', gained: true },
+          then: [{ kind: 'draw', who: 'controller', amount: 1 }],
+        },
+      ],
+    },
+  }),
+  creature('incr-mage', 1, 1, [], {
+    abilities: [
+      {
+        kind: 'triggered',
+        trigger: { on: 'castSpell', filter: 'any' },
+        condition: { kind: 'manaSpentExceedsLowestStat' },
+        targets: [],
+        effects: [{ kind: 'counters', to: 'self', amount: 1 }],
+      },
+    ],
+  }),
+  card({
+    id: 'converge-draw',
+    types: ['Sorcery'],
+    manaCost: cost(3),
+    spell: {
+      targets: [],
+      effects: [{ kind: 'draw', who: 'controller', amount: { colorsSpent: 'source' } }],
+    },
+  }),
+  creature('converge-bear', 0, 0, [], {
+    manaCost: cost(3),
+    entersWithCountersPerColorSpent: true,
+  }),
+  card({
+    id: 'paradigm-draw',
+    types: ['Sorcery'],
+    manaCost: cost(1),
+    paradigm: true,
+    spell: { targets: [], effects: [{ kind: 'draw', who: 'controller', amount: 1 }] },
+  }),
 ];
 
 export const DB = new Map(FIXTURES.map((c) => [c.id, c]));

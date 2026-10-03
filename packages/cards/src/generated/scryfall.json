@@ -37755,5 +37755,146 @@
    "large": "https://cards.scryfall.io/large/back/1/8/18a2bdc8-b705-4eb5-b3a5-ff2e2ab8f312.jpg?1783927400",
    "artCrop": "https://cards.scryfall.io/art_crop/back/1/8/18a2bdc8-b705-4eb5-b3a5-ff2e2ab8f312.jpg?1783927400"
   }
+ },
+ {
+  "name": "Goblin Glasswright",
+  "scryfallId": "c85c5f06-dd31-4e2c-97be-2f64d65069ea",
+  "oracleId": "23c3de07-8aa2-48e9-848c-50b5a40bd133",
+  "set": "sos",
+  "collectorNumber": "117",
+  "rarity": "common",
+  "manaCost": "{1}{R}",
+  "typeLine": "Creature — Goblin Sorcerer",
+  "oracleText": "This creature enters prepared. (While it's prepared, you may cast a copy of its spell. Doing so unprepares it.)",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "R"
+  ],
+  "colorIdentity": [
+   "R"
+  ],
+  "keywords": [
+   "Prepared"
+  ],
+  "back": "Craft with Pride (Goblin Glasswright)",
+  "prepare": true,
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/8/c85c5f06-dd31-4e2c-97be-2f64d65069ea.jpg?1783903668",
+   "normal": "https://cards.scryfall.io/normal/front/c/8/c85c5f06-dd31-4e2c-97be-2f64d65069ea.jpg?1783903668",
+   "large": "https://cards.scryfall.io/large/front/c/8/c85c5f06-dd31-4e2c-97be-2f64d65069ea.jpg?1783903668",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/8/c85c5f06-dd31-4e2c-97be-2f64d65069ea.jpg?1783903668"
+  }
+ },
+ {
+  "name": "Craft with Pride (Goblin Glasswright)",
+  "flavorName": "Craft with Pride",
+  "scryfallId": "c85c5f06-dd31-4e2c-97be-2f64d65069ea",
+  "oracleId": "23c3de07-8aa2-48e9-848c-50b5a40bd133",
+  "set": "sos",
+  "collectorNumber": "117",
+  "rarity": "common",
+  "manaCost": "{R}",
+  "typeLine": "Sorcery",
+  "oracleText": "Create a Treasure token. (It's an artifact with \"{T}, Sacrifice this token: Add one mana of any color.\")",
+  "colors": [
+   "R"
+  ],
+  "colorIdentity": [
+   "R"
+  ],
+  "keywords": [
+   "Treasure"
+  ],
+  "front": "Goblin Glasswright",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/8/c85c5f06-dd31-4e2c-97be-2f64d65069ea.jpg?1783903668",
+   "normal": "https://cards.scryfall.io/normal/front/c/8/c85c5f06-dd31-4e2c-97be-2f64d65069ea.jpg?1783903668",
+   "large": "https://cards.scryfall.io/large/front/c/8/c85c5f06-dd31-4e2c-97be-2f64d65069ea.jpg?1783903668",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/8/c85c5f06-dd31-4e2c-97be-2f64d65069ea.jpg?1783903668"
+  }
+ },
+ {
+  "name": "Emeritus of Conflict",
+  "scryfallId": "f58dba4f-1abb-47a3-a684-29c32bab95c0",
+  "oracleId": "5963eef1-1022-42b1-8a0c-fc9850bfc2a3",
+  "set": "sos",
+  "collectorNumber": "113",
+  "rarity": "mythic",
+  "manaCost": "{1}{R}",
+  "typeLine": "Creature — Human Wizard",
+  "oracleText": "First strike\nWhenever you cast your third spell each turn, this creature becomes prepared. (While it's prepared, you may cast a copy of its spell. Doing so unprepares it.)",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "R"
+  ],
+  "colorIdentity": [
+   "R"
+  ],
+  "keywords": [
+   "First strike",
+   "Prepared"
+  ],
+  "back": "Lightning Bolt (Emeritus of Conflict)",
+  "prepare": true,
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/5/f58dba4f-1abb-47a3-a684-29c32bab95c0.jpg?1783903670",
+   "normal": "https://cards.scryfall.io/normal/front/f/5/f58dba4f-1abb-47a3-a684-29c32bab95c0.jpg?1783903670",
+   "large": "https://cards.scryfall.io/large/front/f/5/f58dba4f-1abb-47a3-a684-29c32bab95c0.jpg?1783903670",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/5/f58dba4f-1abb-47a3-a684-29c32bab95c0.jpg?1783903670"
+  }
+ },
+ {
+  "name": "Lightning Bolt (Emeritus of Conflict)",
+  "flavorName": "Lightning Bolt",
+  "scryfallId": "f58dba4f-1abb-47a3-a684-29c32bab95c0",
+  "oracleId": "5963eef1-1022-42b1-8a0c-fc9850bfc2a3",
+  "set": "sos",
+  "collectorNumber": "113",
+  "rarity": "mythic",
+  "manaCost": "{R}",
+  "typeLine": "Instant",
+  "oracleText": "Lightning Bolt deals 3 damage to any target.",
+  "colors": [
+   "R"
+  ],
+  "colorIdentity": [
+   "R"
+  ],
+  "keywords": [],
+  "front": "Emeritus of Conflict",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/5/f58dba4f-1abb-47a3-a684-29c32bab95c0.jpg?1783903670",
+   "normal": "https://cards.scryfall.io/normal/front/f/5/f58dba4f-1abb-47a3-a684-29c32bab95c0.jpg?1783903670",
+   "large": "https://cards.scryfall.io/large/front/f/5/f58dba4f-1abb-47a3-a684-29c32bab95c0.jpg?1783903670",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/5/f58dba4f-1abb-47a3-a684-29c32bab95c0.jpg?1783903670"
+  }
+ },
+ {
+  "name": "Tackle Artist",
+  "scryfallId": "b87e2474-98c1-4c1a-91ed-340b72d31653",
+  "oracleId": "2e80d632-cf84-4562-8c93-5850cceb5bec",
+  "set": "sos",
+  "collectorNumber": "133",
+  "rarity": "common",
+  "manaCost": "{3}{R}",
+  "typeLine": "Creature — Orc Sorcerer",
+  "oracleText": "Trample\nOpus — Whenever you cast an instant or sorcery spell, put a +1/+1 counter on this creature. If five or more mana was spent to cast that spell, put two +1/+1 counters on this creature instead.",
+  "power": "4",
+  "toughness": "3",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Trample",
+   "Opus"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/8/b87e2474-98c1-4c1a-91ed-340b72d31653.jpg?1783903663",
+   "normal": "https://cards.scryfall.io/normal/front/b/8/b87e2474-98c1-4c1a-91ed-340b72d31653.jpg?1783903663",
+   "large": "https://cards.scryfall.io/large/front/b/8/b87e2474-98c1-4c1a-91ed-340b72d31653.jpg?1783903663",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/8/b87e2474-98c1-4c1a-91ed-340b72d31653.jpg?1783903663"
+  }
  }
 ]

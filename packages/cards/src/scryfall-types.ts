@@ -24,6 +24,11 @@ export interface ScryfallCard {
   // Final Fantasy (11a): adventure lands
   /** An adventurer card's main face: its `back` is its Adventure (a sorcery or instant). */
   adventure?: boolean;
+  // Secrets of Strixhaven (14a): prepare
+  /** A prepare card's creature face: its `back` is the prepare spell (a copy is castable while prepared). */
+  prepare?: boolean;
+  /** Colour identity from the card itself (prepare faces: the spell's cost is not on the creature). */
+  colorIdentity?: string[];
   /** Hotlinked, never bundled. */
   image: { small: string; normal: string; large: string; artCrop: string } | null;
 }

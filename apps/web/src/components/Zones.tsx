@@ -27,6 +27,8 @@ export interface ZoneHandlers {
 function cardTags(o: GameObject, def: CardDefinition | undefined): string[] {
   const tags: string[] = [];
   if (def?.subtypes.includes('Class')) tags.push(`Level ${o.level ?? 1}`);
+  // Secrets of Strixhaven (14a): a prepared creature (its spell's copy can be cast from beside the hand).
+  if (o.prepared !== undefined) tags.push('Prepared');
   for (const [name, n] of Object.entries(o.counters ?? {}))
     if (n > 0) tags.push(`${name[0]!.toUpperCase()}${name.slice(1)}${n > 1 ? ` ${n}` : ''}`);
   return tags;

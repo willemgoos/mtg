@@ -11,6 +11,8 @@ export function describeEvent(e: GameEvent, s: GameState): string | null {
       return e.step === 'upkeep' ? `\n== Turn ${e.turn} (${e.activePlayer}) ==` : null;
     case 'spellCast':
       return `${e.player} casts ${name(e.id)}`;
+    case 'prepared':
+      return `  ${name(e.id)} becomes prepared`;
     case 'abilityActivated':
       return `${e.player} activates ${name(e.source)}`;
     case 'objectMoved':

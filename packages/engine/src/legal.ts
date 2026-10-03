@@ -108,6 +108,12 @@ export function castableCards(ctx: Ctx, player: PlayerId): ObjectId[] {
     }
   // Final Fantasy (11a): adventure lands. A card on an adventure: its owner may play the land.
   for (const id of ps.exile) if (obj(ctx, id).onAdventure && !out.includes(id)) out.push(id);
+  // Secrets of Strixhaven (14a): prepare. The copy of the prepare spell of each creature you control that is prepared.
+  for (const id of ctx.s.battlefield) {
+    const host = obj(ctx, id);
+    if (host.controller === player && host.prepared !== undefined && !out.includes(host.prepared))
+      out.push(host.prepared);
+  }
   // Strongbox Raider: exiled cards you may play for a while.
   for (const id of ps.exile) {
     const until = obj(ctx, id).playableUntilTurn;
@@ -458,7 +464,8 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
     : castable) {
     if (!blocked(card)) castsOf(card);
     // Modal double-faced cards: the back face can be cast from hand too.
-    if (def(ctx, card).back && obj(ctx, card).zone === 'hand') {
+    // Secrets of Strixhaven (14a): a prepare creature's back is a spell that can't be cast from hand.
+    if (def(ctx, card).back && !def(ctx, card).prepare && obj(ctx, card).zone === 'hand') {
       const from = out.length;
       withBackFace(ctx, card, () => {
         if (!blocked(card)) castsOf(card);

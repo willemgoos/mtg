@@ -27,6 +27,8 @@ import {
   tap,
   transform,
   untap,
+  prepareObject,
+  unprepareObject,
 } from './context.ts';
 import { setMonarch } from './monarch.ts';
 import { spellOnStack } from './spells.ts';
@@ -410,6 +412,11 @@ export function resolveAmount(ctx: Ctx, es: EffectSource, amount: Amount): numbe
   if ('manaSpentOnSubject' in amount) {
     const o = es.subject && ctx.s.objects[es.subject.id];
     return o?.manaSpent ?? 0;
+  }
+  // Secrets of Strixhaven (14a): converge.
+  if ('colorsSpent' in amount) {
+    const ref = amount.colorsSpent === 'source' ? es.source : es.subject;
+    return (ref && ctx.s.objects[ref.id]?.manaColors?.length) || 0;
   }
   if ('manaValueOfSubject' in amount) {
     const o = es.subject && ctx.s.objects[es.subject.id];
@@ -1759,6 +1766,13 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
       return;
     case 'tap':
       for (const id of objectsOf(ctx, es, e.what)) tap(ctx, id);
+      return;
+    // Secrets of Strixhaven (14a): prepare
+    case 'prepare':
+      for (const id of objectsOf(ctx, es, e.what)) prepareObject(ctx, id);
+      return;
+    case 'unprepare':
+      for (const id of objectsOf(ctx, es, e.what)) unprepareObject(ctx, id);
       return;
     case 'exileUntilSourceLeaves': {
       // If the source already left, nothing is exiled (rule 610.3c).

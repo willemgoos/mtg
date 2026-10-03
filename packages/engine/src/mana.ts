@@ -4,7 +4,7 @@ import { canTapForAbility, isCreature, matchesFilter } from './characteristics.t
 import { type Ctx, addCounters, def, emit, obj, sacrifice, tap } from './context.ts';
 import { manaValue, pipsOf } from './cost.ts';
 import { checkCondition } from './triggers.ts';
-import type { ManaCost, ManaType, ObjectId, PlayerId } from './types.ts';
+import type { Color, ManaCost, ManaType, ObjectId, PlayerId } from './types.ts';
 
 export interface ManaSource {
   id: ObjectId;
@@ -326,4 +326,34 @@ export function artifactHelpers(
       );
     })
     .map((id) => ({ id, produces: ['C'], isCreature: false, sacrifice: false }));
+}
+
+/**
+ * Secrets of Strixhaven (14a): converge. The colours of mana a payment spent: each mana is one of
+ * its source's types, and the payer is assumed to have chosen so as to spend the most distinct
+ * colours (a bipartite matching of colours to mana). Mana from pool entries and sources the
+ * payment can't identify (convoke helpers) count as colourless.
+ */
+export function colorsSpent(ctx: Ctx, player: PlayerId, payment: readonly ObjectId[]): Color[] {
+  const sources = manaSources(ctx, player);
+  const options: ManaType[][] = payment.map(
+    (id) => sources.find((s) => s.id === id)?.produces ?? [],
+  );
+  const colors = ['W', 'U', 'B', 'R', 'G'] as const;
+  // colour -> index of the mana assigned to it
+  const owner = new Map<Color, number>();
+  const assign = (i: number, seen: Set<Color>): boolean => {
+    for (const c of colors) {
+      if (!options[i]!.includes(c) || seen.has(c)) continue;
+      seen.add(c);
+      const cur = owner.get(c);
+      if (cur === undefined || assign(cur, seen)) {
+        owner.set(c, i);
+        return true;
+      }
+    }
+    return false;
+  };
+  for (let i = 0; i < options.length; i++) assign(i, new Set());
+  return colors.filter((c) => owner.has(c));
 }

@@ -232,6 +232,15 @@ export interface CardDefinition {
   adventure?: boolean;
   /** It has no mana cost (a transforming card's back face), so it can't be cast. */
   noManaCost?: boolean;
+  // Secrets of Strixhaven (14a): prepare, converge, paradigm
+  /** Prepare creature: its `back` is the prepare spell, not castable from hand (a copy is, while it's prepared). */
+  prepare?: boolean;
+  /** "This creature enters prepared." */
+  entersPrepared?: boolean;
+  /** Converge: "enters with a +1/+1 counter on it for each color of mana spent to cast it." */
+  entersWithCountersPerColorSpent?: boolean;
+  /** Paradigm: resolved, it's exiled; at each of your first main phases you may cast a copy for free. */
+  paradigm?: boolean;
   // Strixhaven (13c): Draconic Intervention
   /** "As an additional cost, exile a card matching this from your graveyard"; its mana value is X. */
   exileFromGraveyardToCast?: CardFilter;
@@ -415,7 +424,11 @@ export type TriggerDef =
         | 'instantOrSorceryTargetingArtifactOrLand'
         // Strixhaven (13c): Reflective Golem
         /** A spell whose only target is this permanent. */
-        | 'targetsOnlySelf';
+        | 'targetsOnlySelf'
+        // Secrets of Strixhaven (14a): repartee
+        | 'instantOrSorceryTargetingCreature'
+        /** The caster's third spell this turn (Emeritus of Conflict). */
+        | 'third';
       /** The spell must also match this (Gev: a Lizard spell). */
       spell?: CardFilter;
       /** Any player's spell, cast when it isn't their turn (Vision). */
@@ -645,6 +658,9 @@ export type ConditionDef =
   // Strixhaven (13a): Mage Duel
   /** You've cast an instant or sorcery spell this turn. */
   | { kind: 'castInstantOrSorceryThisTurn' }
+  // Secrets of Strixhaven (14a): increment
+  /** The mana spent on the triggering spell is greater than the source's power or toughness (the lesser of the two). */
+  | { kind: 'manaSpentExceedsLowestStat' }
   // Wakanda Forever (9c).
   /** You are the monarch; or there is no monarch; or an opponent is (the creature attacks the monarch). */
   | { kind: 'monarch'; who: 'you' | 'none' | 'opponent' }
@@ -893,6 +909,9 @@ export type Amount =
   // Final Fantasy (11b): mana spent
   /** The mana spent to cast the triggering spell (Shantotto). */
   | { manaSpentOnSubject: true }
+  // Secrets of Strixhaven (14a): converge
+  /** The number of colors of mana spent to cast the source spell, or the triggering spell. */
+  | { colorsSpent: 'source' | 'subject' }
   // Strixhaven (13c): life you gained this turn (Fortifying Draught, Accomplished Alchemist).
   | { count: 'lifeGainedThisTurn' }
   // Strixhaven (13c)
@@ -1278,6 +1297,11 @@ export type EffectDef =
   | { kind: 'returnToHand'; what: Ref }
   | { kind: 'exileGraveyard'; who: Ref }
   | { kind: 'tap'; what: Ref }
+  // Secrets of Strixhaven (14a): prepare
+  /** The permanent becomes prepared: its controller gets a copy of its prepare spell in exile (no-op if it already is). */
+  | { kind: 'prepare'; what: Ref }
+  /** The permanent stops being prepared (its exiled copy ceases to exist). */
+  | { kind: 'unprepare'; what: Ref }
   /** The controller discards N cards of their choice. */
   | {
       kind: 'discard';
@@ -1980,6 +2004,15 @@ export interface GameObject {
   // Final Fantasy (11b): mana spent
   /** The mana spent to cast it, the last time it was cast (Shantotto, Sahagin). */
   manaSpent?: number;
+  // Secrets of Strixhaven (14a): prepare, converge, paradigm
+  /** Prepare: it's prepared; this is its copy of the prepare spell, waiting in exile. */
+  prepared?: ObjectId;
+  /** A prepare spell's copy in exile: the permanent that made it (it can be cast while that is prepared). */
+  preparedBy?: ObjectId;
+  /** A copy of a card cast from exile (prepare, paradigm): it ceases to exist once it leaves the stack. */
+  spellCopyCard?: boolean;
+  /** Converge: the colours of mana spent to cast it (kept while it's on the battlefield). */
+  manaColors?: Color[];
 }
 
 /** A reference that goes stale when the object changes zones. */
@@ -2001,6 +2034,9 @@ export interface PlayerState {
   // Strixhaven (13a): Learn
   /** Cards outside the game (card ids, not objects): the Lessons Learn can fetch. Hidden from the opponent. */
   sideboard?: CardDefId[];
+  // Secrets of Strixhaven (14a): paradigm
+  /** Paradigm spells (card ids) this player has resolved: a free copy at each of their first main phases. */
+  paradigms?: CardDefId[];
   // Strixhaven (13b): Maelstrom Muse
   /** The next instant or sorcery spell cast on `turn` costs `amount` less. */
   nextSpellDiscount?: { turn: number; amount: number };
@@ -2762,6 +2798,9 @@ export type GameEvent =
   | { type: 'spellCast'; id: ObjectId; player: PlayerId; nth?: number }
   // Strixhaven (13a): magecraft. A copy of a spell was put on the stack (it isn't cast); `player` controls the copy.
   | { type: 'spellCopied'; id: ObjectId; player: PlayerId }
+  // Secrets of Strixhaven (14a): prepare. A permanent became prepared / stopped being prepared.
+  | { type: 'prepared'; id: ObjectId; player: PlayerId }
+  | { type: 'unprepared'; id: ObjectId; player: PlayerId }
   | { type: 'abilityActivated'; id: ObjectId; source: ObjectId; player: PlayerId }
   | { type: 'triggerStacked'; id: ObjectId; source: ObjectId; player: PlayerId }
   | { type: 'resolved'; id: ObjectId }

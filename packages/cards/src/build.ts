@@ -77,6 +77,14 @@ export const KEYWORDS_AS_ABILITIES = new Set([
   // Strixhaven (13a).
   'Learn',
   'Magecraft',
+  // Secrets of Strixhaven (14a): keywords that are only labels or reminder text (rules text lives in the behaviour).
+  'Prepared',
+  'Opus',
+  'Repartee',
+  'Infusion',
+  'Increment',
+  'Converge',
+  'Paradigm',
   // Bloomburrow.
   'Offspring',
   'Forage',
@@ -134,6 +142,14 @@ export const KEYWORDS_AS_ABILITIES = new Set([
   'Hire a Mercenary',
   // Strixhaven (13a).
   'Magecraft',
+  // Secrets of Strixhaven (14a): keywords that are only labels or reminder text (rules text lives in the behaviour).
+  'Prepared',
+  'Opus',
+  'Repartee',
+  'Infusion',
+  'Increment',
+  'Converge',
+  'Paradigm',
   'Learn',
   // Final Fantasy (11a).
   'Job select',
@@ -226,6 +242,7 @@ export function wardCostOf(oracle: string): CardDefinition['wardCost'] | undefin
  * rules text (not reminder text), its colour indicator, and its basic land types.
  */
 export function colorIdentityOf(sc: ScryfallCard): Color[] {
+  if (sc.colorIdentity) return sc.colorIdentity as Color[];
   const found = new Set<string>(sc.colors);
   const text = sc.manaCost + sc.oracleText.replace(/\([^)]*\)/g, '');
   for (const [, sym] of text.matchAll(/\{([^}]+)\}/g))
@@ -269,6 +286,8 @@ export function buildCard(sc: ScryfallCard, behavior: Behavior = {}): CardDefini
     ...(sc.flavorName ? { flavorName: sc.flavorName } : {}),
     // Final Fantasy (11a): adventure lands, and transforming back faces (no mana cost: not castable).
     ...(sc.adventure ? { adventure: true } : {}),
+    // Secrets of Strixhaven (14a): prepare creatures (their `back` is the prepare spell).
+    ...(sc.prepare ? { prepare: true } : {}),
     ...(sc.front && sc.manaCost === '' && !types.includes('Land') ? { noManaCost: true } : {}),
     // Everything else the behaviour sets (spell, modes, kicker, costs, ...).
     ...rest,

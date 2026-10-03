@@ -5,7 +5,7 @@ import {
   creaturesOnBattlefield,
   matchesFilter,
 } from './characteristics.ts';
-import { type Ctx, def, defOf, obj, other } from './context.ts';
+import { type Ctx, createObject, def, defOf, obj, other } from './context.ts';
 import { manaValue } from './cost.ts';
 import { addLore } from './sagas.ts';
 import type {
@@ -116,6 +116,12 @@ export function checkCondition(
     const t = targets?.[c.target];
     const o = t && 'object' in t ? ctx.s.objects[t.object.id] : undefined;
     return !!o && o.zone === 'battlefield' && o.controller === controller;
+  }
+  // Secrets of Strixhaven (14a): increment, "the amount of mana you spent is greater than this creature's power or toughness".
+  if (c.kind === 'manaSpentExceedsLowestStat') {
+    if (!self || !subject) return false;
+    const ch = characteristics(ctx, self.id);
+    return (subject.manaSpent ?? 0) > Math.min(ch.power, ch.toughness);
   }
   if (c.kind === 'lifeThisTurn') {
     const p = c.who === 'you' ? controller : other(controller);
@@ -346,6 +352,17 @@ function spellMatches(
           );
         })
       );
+    // Secrets of Strixhaven (14a): repartee
+    case 'instantOrSorceryTargetingCreature':
+      return (
+        (spell.types.includes('Instant') || spell.types.includes('Sorcery')) &&
+        !!item?.targets.some((x) => {
+          const o = 'object' in x ? ctx.s.objects[x.object.id] : undefined;
+          return !!o && o.zone === 'battlefield' && def(ctx, o.id).types.includes('Creature');
+        })
+      );
+    case 'third':
+      return (ctx.s.turn.castDefs?.[spellCaster(ctx, item, self)] ?? []).length === 3;
     case 'firstOfItsKind': {
       // Alania: the first instant, the first sorcery, or the first Otter spell other than itself.
       const cast = (ctx.s.turn.castDefs?.[self.controller] ?? []).map((id) => defOf(ctx, id));
@@ -1167,6 +1184,25 @@ function detect(ctx: Ctx, ev: GameEvent): void {
       }
       if (ev.step === 'main1' || ev.step === 'main2') {
         const which = ev.step === 'main1' ? 1 : 2;
+        // Secrets of Strixhaven (14a): paradigm. A free copy of each exiled paradigm spell, if you want to cast it.
+        if (which === 1)
+          for (const defId of s.players[ev.activePlayer].paradigms ?? []) {
+            const copy = createObject(ctx, defId, ev.activePlayer, 'exile');
+            copy.spellCopyCard = true;
+            s.players[ev.activePlayer].exile.push(copy.id);
+            const ref = { id: copy.id, zcc: copy.zcc };
+            s.pendingTriggers.push({
+              source: ref,
+              sourceDefId: defId,
+              abilityIndex: -1,
+              controller: ev.activePlayer,
+              subject: ref,
+              inline: [
+                { kind: 'castFreeCard', card: ref },
+                { kind: 'custom', handler: 'paradigmCleanup' },
+              ],
+            });
+          }
         forEachBattlefieldTrigger(
           ctx,
           (o, a) =>

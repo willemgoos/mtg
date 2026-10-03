@@ -39,6 +39,7 @@ import { foodsOf, payForage } from './forage.ts';
 import {
   anyTypeCost,
   artifactHelpers,
+  colorsSpent,
   creatureHelpers,
   hasImprovise,
   manaSources,
@@ -402,7 +403,19 @@ export function castSpell(
   );
   if (o.zone === 'command')
     ctx.s.players[player].commanderCasts = (ctx.s.players[player].commanderCasts ?? 0) + 1;
+  // Secrets of Strixhaven (14a): converge. The colours of mana spent (read before the sources tap).
+  const manaColors = colorsSpent(
+    ctx,
+    player,
+    payment.filter((id) => !convokers.includes(id)),
+  );
   moveObject(ctx, card, 'stack', { controller: player });
+  // Secrets of Strixhaven (14a): prepare. Casting the copy unprepares its creature.
+  const preparer = o.preparedBy !== undefined ? ctx.s.objects[o.preparedBy] : undefined;
+  if (preparer && preparer.prepared === card) {
+    delete preparer.prepared;
+    emit(ctx, { type: 'unprepared', id: preparer.id, player });
+  }
   if (choice.sneak) moveObject(ctx, choice.sneak, 'hand');
   // Strixhaven (13c): Draconic Intervention exiles a card from your graveyard; its mana value is X.
   let exiledValue: number | undefined;
@@ -446,6 +459,7 @@ export function castSpell(
   payMana(ctx, payment);
   // Final Fantasy (11b): mana spent (convoking creatures don't spend mana).
   o.manaSpent = payment.filter((id) => !convokers.includes(id)).length;
+  o.manaColors = manaColors;
   if (teamwork) payTeamwork(ctx, teamwork);
   if (convokers.length) o.convokedBy = payment.filter((id) => convokers.includes(id));
   if (d.types.includes('Creature')) scryForAncestry(ctx, player, d, payment);
@@ -807,6 +821,8 @@ export function resolveTop(ctx: Ctx): boolean {
     }
     // Royal Talon Fighter Jet: "enters with X +1/+1 counters".
     if (d.entersWithXCounters && item.x) addCounters(ctx, o.id, item.x);
+    // Secrets of Strixhaven (14a): converge, "enters with a +1/+1 counter for each color of mana spent".
+    if (d.entersWithCountersPerColorSpent) addCounters(ctx, o.id, o.manaColors?.length ?? 0);
     if (d.entersWithCounters && checkCondition(ctx, d.entersWithCountersIf, item.controller, o))
       addCounters(ctx, o.id, d.entersWithCounters);
     if (host) attachAura(ctx, o.id, host);
@@ -914,6 +930,18 @@ export function finishResolution(ctx: Ctx, item: PausedResolution['item']): void
     const o = ctx.s.objects[item.id];
     if (o?.zone === 'exile') o.onAdventure = true;
     return;
+  }
+  // Secrets of Strixhaven (14a): paradigm. The card is exiled; a copy is cast at each of your first main phases.
+  const resolved = ctx.s.objects[item.id];
+  if (
+    resolved &&
+    !resolved.isToken &&
+    !resolved.spellCopyCard &&
+    defOf(ctx, resolved.defId).paradigm
+  ) {
+    const ps = (ctx.s.players[resolved.controller].paradigms ??= []);
+    if (!ps.includes(resolved.defId)) ps.push(resolved.defId);
+    return moveObject(ctx, item.id, 'exile');
   }
   if (item.libraryBottom) return moveObject(ctx, item.id, 'library', { position: 'bottom' });
   moveObject(ctx, item.id, item.exile || item.rebound ? 'exile' : 'graveyard');

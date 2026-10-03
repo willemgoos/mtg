@@ -17,6 +17,8 @@ export function cloneState(s: GameState): GameState {
     if (o.onceTurns) c.onceTurns = { ...o.onceTurns };
     if (o.exiledWith) c.exiledWith = o.exiledWith.slice();
     if (o.damagedBy) c.damagedBy = o.damagedBy.slice();
+    // Secrets of Strixhaven (14a): converge.
+    if (o.manaColors) c.manaColors = o.manaColors.slice();
     objects[id] = c;
   }
   const player = (p: GameState['players']['p1']) => ({
@@ -30,6 +32,8 @@ export function cloneState(s: GameState): GameState {
     // Strixhaven (13a): Learn takes cards out of the sideboard, so a copy needs its own.
     ...(p.sideboard ? { sideboard: p.sideboard.slice() } : {}),
     ...(p.castBans ? { castBans: p.castBans.slice() } : {}),
+    // Secrets of Strixhaven (14a): paradigm.
+    ...(p.paradigms ? { paradigms: p.paradigms.slice() } : {}),
   });
   const phased = s.phasedOut ? { phasedOut: s.phasedOut.slice() } : {};
   return {

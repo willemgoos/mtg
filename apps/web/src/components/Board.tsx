@@ -3,6 +3,7 @@ import type {
   Action,
   CardDefId,
   CardDefinition,
+  GameObject,
   ManaCost,
   ObjectId,
   PendingTrigger,
@@ -396,7 +397,7 @@ export function Board({
           : [];
       }),
     ),
-  ].map((id) => ({ id, label: extraLabel(view.objects[id]!.zone, view.objects[id]!.defId) }));
+  ].map((id) => ({ id, label: extraLabel(view.objects[id]!) }));
 
   const targetablePlayer = (p: PlayerId) =>
     !!options?.has(`player:${p}`) || !!dragTargets?.has(`player:${p}`);
@@ -476,7 +477,7 @@ export function Board({
                     first.type === 'castSpell' &&
                       cardDb.get(view.objects[first.card]?.defId ?? '')?.exileFromGraveyardToCast
                     ? 'an instant or sorcery card to exile from your graveyard'
-                  : 'a card to discard'
+                    : 'a card to discard'
                 : first.type === 'castSpell' && first.copyOf
                   ? 'a creature to copy (or skip)'
                   : first.type === 'castSpell' && first.sneak
@@ -1406,7 +1407,11 @@ function ChoosePileOverlay({ game, onHover }: { game: GameSession; onHover: Hove
   );
 }
 
-function extraLabel(zone: string, defId: CardDefId): string {
+function extraLabel(o: GameObject): string {
+  const { zone, defId } = o;
+  // Secrets of Strixhaven (14a): the copy of a prepared creature's spell; Paradigm's free copy.
+  if (zone === 'exile' && o.preparedBy !== undefined) return 'Prepared';
+  if (zone === 'exile' && o.spellCopyCard) return 'Paradigm';
   if (zone === 'exile') return 'Exiled';
   if (zone === 'library') return 'Top of library';
   const def = cardDb.get(defId);
@@ -1624,12 +1629,12 @@ function SearchOverlay({ game, onHover }: { game: GameSession; onHover: HoverFn 
               'Choose a card to put on the bottom of your library.'
             : d.kind === 'searchLibrary' && d.to === 'castFree'
               ? 'Choose a card to exile; you may cast it without paying its mana cost.'
-            : d.kind === 'searchLibrary' && d.to && d.to !== 'hand'
-              ? 'Choose a card to put onto the battlefield.'
-              : d.kind === 'searchLibrary' && d.canBin
-                ? // Strixhaven (13c): The Biblioplex
-                  'An instant or sorcery card may go into your hand; otherwise you may put it into your graveyard.'
-                : 'Choose a card to put into your hand.'}{' '}
+              : d.kind === 'searchLibrary' && d.to && d.to !== 'hand'
+                ? 'Choose a card to put onto the battlefield.'
+                : d.kind === 'searchLibrary' && d.canBin
+                  ? // Strixhaven (13c): The Biblioplex
+                    'An instant or sorcery card may go into your hand; otherwise you may put it into your graveyard.'
+                  : 'Choose a card to put into your hand.'}{' '}
           {d.kind === 'searchLibrary' && d.fromGraveyard
             ? ''
             : d.kind === 'searchLibrary' && d.looked

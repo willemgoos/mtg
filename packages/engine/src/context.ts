@@ -2,6 +2,7 @@ import { characteristics } from './characteristics.ts';
 import { MSH_EFFECTS } from './msh-effects.ts';
 import { FIN_EFFECTS } from './fin-effects.ts';
 import { LOREHOLD_EFFECTS } from './stx-lorehold-effects.ts';
+import { SOS_14A_EFFECTS } from './sos-14a-effects.ts';
 import { STX_13C_A_EFFECTS } from './stx-13c-a-effects.ts';
 import { STX_13C_B_EFFECTS } from './stx-13c-b-effects.ts';
 import { STX_13C_C_EFFECTS } from './stx-13c-c-effects.ts';
@@ -72,6 +73,8 @@ const BUILT_IN_EFFECTS: Record<string, CustomEffect> = {
   // Strixhaven (13c).
   ...STX_13C_C_EFFECTS,
   ...STX_13C_D_EFFECTS,
+  // Secrets of Strixhaven (14a).
+  ...SOS_14A_EFFECTS,
   // Strixhaven (13a): Learn: put the chosen Lesson from outside the game into your hand.
   learnFetch(ctx, es, params) {
     const ps = ctx.s.players[es.controller];
@@ -301,6 +304,39 @@ export interface MoveOptions {
 }
 
 /**
+ * Secrets of Strixhaven (14a): prepare. A creature with a prepare spell becomes prepared: its controller
+ * gets a copy of that spell in exile, castable while it stays prepared. Returns false if it can't.
+ */
+export function prepareObject(ctx: Ctx, id: ObjectId): boolean {
+  const o = ctx.s.objects[id];
+  if (!o || o.zone !== 'battlefield' || o.prepared !== undefined) return false;
+  const d = defOf(ctx, o.defId);
+  if (!d.prepare || !d.back) return false;
+  const copy = createObject(ctx, d.back, o.controller, 'exile');
+  copy.spellCopyCard = true;
+  copy.preparedBy = id;
+  ctx.s.players[o.controller].exile.push(copy.id);
+  o.prepared = copy.id;
+  emit(ctx, { type: 'prepared', id, player: o.controller });
+  return true;
+}
+
+/** The permanent stops being prepared; its copy ceases to exist (unless it is being cast). */
+export function unprepareObject(ctx: Ctx, id: ObjectId): void {
+  const o = ctx.s.objects[id];
+  if (!o || o.prepared === undefined) return;
+  const copy = ctx.s.objects[o.prepared];
+  delete o.prepared;
+  if (copy && copy.zone === 'exile') {
+    const list = ctx.s.players[copy.owner].exile;
+    const i = list.indexOf(copy.id);
+    if (i >= 0) list.splice(i, 1);
+    delete ctx.s.objects[copy.id];
+  }
+  emit(ctx, { type: 'unprepared', id, player: o.controller });
+}
+
+/**
  * Moves an object between zones. The object keeps its id but becomes a new
  * object for rules purposes: zcc is bumped and per-zone status is reset.
  */
@@ -359,6 +395,9 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
       };
     else delete o.lastAttachedTo;
   }
+  // Secrets of Strixhaven (14a): a prepared permanent that leaves takes its copy with it; converge's colours go too.
+  if (from === 'battlefield') unprepareObject(ctx, id);
+  if (to !== 'stack' && !(from === 'stack' && to === 'battlefield')) delete o.manaColors;
   delete o.attachedTo;
   delete o.usedAbilities;
   delete o.exiledUntilLeaves;
@@ -500,13 +539,16 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
     o.tapped = false;
 
   // Tokens cease to exist once they leave the battlefield (rule 111.7).
-  const ceases = o.isToken && to !== 'battlefield';
+  // A copy of a card cast from exile (prepare, paradigm) ceases to exist once it leaves the stack (14a).
+  const ceases = (o.isToken && to !== 'battlefield') || (o.spellCopyCard && to !== 'stack');
   const dst = ceases ? null : zoneList(ctx, o, to);
   if (dst) {
     if (to === 'library' && opts.position === 'second') dst.splice(1, 0, id);
     else if (to === 'library' && opts.position !== 'bottom') dst.unshift(id);
     else dst.push(id);
   }
+  // Secrets of Strixhaven (14a): "This creature enters prepared."
+  if (to === 'battlefield' && defOf(ctx, o.defId).entersPrepared) prepareObject(ctx, id);
   // Ygra entering or leaving changes what the other creatures are.
   if ((from === 'battlefield' || to === 'battlefield') && makesFood(defOf(ctx, o.defId)))
     refreshCreaturesAreFood(ctx);

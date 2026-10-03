@@ -42,6 +42,7 @@ interface RawCard {
   loyalty?: string;
   toughness?: string;
   colors?: string[];
+  color_identity?: string[];
   keywords: string[];
   rarity: string;
   image_uris?: { small: string; normal: string; large: string; art_crop: string };
@@ -70,7 +71,14 @@ const DOUBLE_FACED = ['modal_dfc', 'transform'];
  * records, the main face naming its Adventure as its back (and marked `adventure`).
  */
 const ADVENTURE = 'adventure';
-const isFaced = (layout: string) => DOUBLE_FACED.includes(layout) || layout === ADVENTURE;
+/**
+ * Secrets of Strixhaven (14a): `prepare` cards are a creature and a spell on one card face (one image).
+ * Faces carry no colours or images of their own, so they fall back to the card's; the spell's name is
+ * often a real card (Lightning Bolt), so its record is named `Spell (Creature)` (display name: the spell).
+ */
+const PREPARE = 'prepare';
+const isFaced = (layout: string) =>
+  DOUBLE_FACED.includes(layout) || layout === ADVENTURE || layout === PREPARE;
 
 async function download(): Promise<void> {
   const meta = (await (await fetch('https://api.scryfall.com/bulk-data', { headers })).json()) as {
@@ -178,8 +186,16 @@ function faceRecords(c: RawCard, faces: RawFace[]): ScryfallCard[] {
   return faces.slice(0, 2).map((f, i) => {
     const text = f.oracle_text ?? '';
     const img = f.image_uris ?? c.image_uris;
+    const prepare = c.layout === PREPARE;
+    // A prepare spell is coloured by its own cost (else the card's colours); faces list none.
+    const spellColors = [...new Set((f.mana_cost ?? '').match(/[WUBRG]/g) ?? [])];
+    const colors =
+      prepare && i === 1 && spellColors.length
+        ? spellColors
+        : (f.colors ?? (prepare ? c.colors : undefined) ?? []);
     return {
-      name: f.name,
+      name: prepare && i === 1 ? `${f.name} (${front.name})` : f.name,
+      ...(prepare && i === 1 ? { flavorName: f.name } : {}),
       scryfallId: c.id,
       oracleId: c.oracle_id,
       set: c.set,
@@ -191,11 +207,15 @@ function faceRecords(c: RawCard, faces: RawFace[]): ScryfallCard[] {
       ...(f.power !== undefined ? { power: f.power, toughness: f.toughness! } : {}),
       // Strixhaven (13c): a planeswalker back face (Lukka, Wayward Bonder).
       ...(f.loyalty !== undefined ? { loyalty: f.loyalty } : {}),
-      colors: f.colors ?? [],
+      colors,
+      ...(prepare && c.color_identity ? { colorIdentity: c.color_identity } : {}),
       // The card lists both faces' keywords; keep this face's own.
       keywords: c.keywords.filter((k) => text.toLowerCase().includes(k.toLowerCase())),
-      ...(i === 0 ? { back: back.name } : { front: front.name }),
+      ...(i === 0
+        ? { back: prepare ? `${back.name} (${front.name})` : back.name }
+        : { front: front.name }),
       ...(i === 0 && c.layout === ADVENTURE ? { adventure: true } : {}),
+      ...(i === 0 && prepare ? { prepare: true } : {}),
       image: img
         ? {
             small: img.small,
