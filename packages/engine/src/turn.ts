@@ -430,6 +430,10 @@ export function finishCleanup(ctx: Ctx): void {
       o.defId = o.originalDefId;
       delete o.originalDefId;
       delete o.copyingUntilTurn;
+      // Marvel Super Heroes Jumpstart (Tricksters).
+      delete o.copyPT;
+      delete o.copyNotLegendary;
+      delete o.copyKeepsName;
     }
   }
   endEffects(ctx, (e) => e.expires === 'endOfTurn');

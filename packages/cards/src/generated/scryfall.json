@@ -23105,6 +23105,123 @@
   }
  },
  {
+  "name": "Living Lies of Loki",
+  "scryfallId": "07e81366-e42d-4a94-9ea2-598c4b4b63ca",
+  "oracleId": "cbbf61b0-5dd2-4643-8857-b7a10ec76ec8",
+  "set": "msc",
+  "collectorNumber": "627",
+  "rarity": "uncommon",
+  "manaCost": "{1}{U}",
+  "typeLine": "Creature — Illusion Villain",
+  "oracleText": "This creature gets +1/+0 for each other Illusion you control.\nWhen this creature dies, draw a card.",
+  "power": "1",
+  "toughness": "3",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/7/07e81366-e42d-4a94-9ea2-598c4b4b63ca.jpg?1783903071",
+   "normal": "https://cards.scryfall.io/normal/front/0/7/07e81366-e42d-4a94-9ea2-598c4b4b63ca.jpg?1783903071",
+   "large": "https://cards.scryfall.io/large/front/0/7/07e81366-e42d-4a94-9ea2-598c4b4b63ca.jpg?1783903071",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/7/07e81366-e42d-4a94-9ea2-598c4b4b63ca.jpg?1783903071"
+  }
+ },
+ {
+  "name": "Impossible Man",
+  "scryfallId": "fa305441-3fb7-4f59-8b39-984e931f9bcc",
+  "oracleId": "9be1d4b1-064d-4051-aafc-ca48def28e3b",
+  "set": "msc",
+  "collectorNumber": "625",
+  "rarity": "uncommon",
+  "manaCost": "{2}{U}",
+  "typeLine": "Legendary Creature — Alien Shapeshifter",
+  "oracleText": "Flying\n{2}{U}: Impossible Man becomes a copy of another target permanent until end of turn, except his name is Impossible Man.",
+  "power": "1",
+  "toughness": "4",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/a/fa305441-3fb7-4f59-8b39-984e931f9bcc.jpg?1783903073",
+   "normal": "https://cards.scryfall.io/normal/front/f/a/fa305441-3fb7-4f59-8b39-984e931f9bcc.jpg?1783903073",
+   "large": "https://cards.scryfall.io/large/front/f/a/fa305441-3fb7-4f59-8b39-984e931f9bcc.jpg?1783903073",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/a/fa305441-3fb7-4f59-8b39-984e931f9bcc.jpg?1783903073"
+  }
+ },
+ {
+  "name": "Loki, Lord of Misrule",
+  "scryfallId": "3636ecb1-8bb9-49aa-a40b-c0d0b3b71158",
+  "oracleId": "20ec130f-05b4-4fbf-a54f-5874ae7ef90f",
+  "set": "msc",
+  "collectorNumber": "628",
+  "rarity": "mythic",
+  "manaCost": "{3}{U}",
+  "typeLine": "Legendary Creature — God Sorcerer Villain",
+  "oracleText": "{U}, {T}: Choose target creature you control. Each creature you control other than the chosen creature becomes a copy of that creature until end of turn, except it isn't legendary. Activate only as a sorcery.",
+  "power": "3",
+  "toughness": "4",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/6/3636ecb1-8bb9-49aa-a40b-c0d0b3b71158.jpg?1783903072",
+   "normal": "https://cards.scryfall.io/normal/front/3/6/3636ecb1-8bb9-49aa-a40b-c0d0b3b71158.jpg?1783903072",
+   "large": "https://cards.scryfall.io/large/front/3/6/3636ecb1-8bb9-49aa-a40b-c0d0b3b71158.jpg?1783903072",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/6/3636ecb1-8bb9-49aa-a40b-c0d0b3b71158.jpg?1783903072"
+  }
+ },
+ {
+  "name": "Multiversal Recruitment",
+  "scryfallId": "9ecb06fa-2d75-4670-96e3-cd5d5e150528",
+  "oracleId": "8c65d5bd-5d90-4e84-8251-cfef21dd6332",
+  "set": "msc",
+  "collectorNumber": "629",
+  "rarity": "uncommon",
+  "manaCost": "{3}{U}",
+  "typeLine": "Sorcery",
+  "oracleText": "Create a token that's a copy of target creature you control, except it isn't legendary.\nFlashback {5}{U}{U} (You may cast this card from your graveyard for its flashback cost. Then exile it.)",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Flashback"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/e/9ecb06fa-2d75-4670-96e3-cd5d5e150528.jpg?1783903071",
+   "normal": "https://cards.scryfall.io/normal/front/9/e/9ecb06fa-2d75-4670-96e3-cd5d5e150528.jpg?1783903071",
+   "large": "https://cards.scryfall.io/large/front/9/e/9ecb06fa-2d75-4670-96e3-cd5d5e150528.jpg?1783903071",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/e/9ecb06fa-2d75-4670-96e3-cd5d5e150528.jpg?1783903071"
+  }
+ },
+ {
+  "name": "The Clone Saga",
+  "scryfallId": "d356ed6b-062f-47c5-a54e-a74dbc0300f4",
+  "oracleId": "0f0282c6-aceb-4879-8ec8-482d0501204a",
+  "set": "msc",
+  "collectorNumber": "782",
+  "rarity": "rare",
+  "manaCost": "{3}{U}",
+  "typeLine": "Enchantment — Saga",
+  "oracleText": "(As this Saga enters and after your draw step, add a lore counter. Sacrifice after III.)\nI — Surveil 3.\nII — When you next cast a creature spell this turn, copy it, except the copy isn't legendary.\nIII — Choose a card name. Whenever a creature with the chosen name deals combat damage to a player this turn, draw a card.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Surveil"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/3/d356ed6b-062f-47c5-a54e-a74dbc0300f4.jpg?1784182977",
+   "normal": "https://cards.scryfall.io/normal/front/d/3/d356ed6b-062f-47c5-a54e-a74dbc0300f4.jpg?1784182977",
+   "large": "https://cards.scryfall.io/large/front/d/3/d356ed6b-062f-47c5-a54e-a74dbc0300f4.jpg?1784182977",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/3/d356ed6b-062f-47c5-a54e-a74dbc0300f4.jpg?1784182977"
+  }
+ },
+ {
   "name": "Sol Ring",
   "scryfallId": "91fdb56b-54d5-4272-8319-505ff987fe9b",
   "oracleId": "6ad8011d-3471-4369-9d68-b264cc027487",

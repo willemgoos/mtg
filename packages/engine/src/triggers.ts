@@ -995,6 +995,16 @@ function detect(ctx: Ctx, ev: GameEvent): void {
           src,
           ev.amount,
         );
+      // Marvel Super Heroes Jumpstart (Tricksters): The Clone Saga's "whenever a creature with the chosen name ...".
+      emblemTriggers(
+        ctx,
+        (t, e) =>
+          t.on === 'creatureYouControlDealsCombatDamage' &&
+          e.controller === src.controller &&
+          (!t.toPlayer || 'player' in ev.to) &&
+          matchesFilter(ctx, src.id, t.filter),
+        src,
+      );
       if (!('player' in ev.to)) return;
       // Kang Dynasty: "whenever any of those creatures deals combat damage to a player, draw a card".
       for (const e of s.effects)
