@@ -16,6 +16,7 @@ import { MSH_JUMPSTART_SOARING } from './jumpstart-soaring.ts';
 import { MSH_JUMPSTART_THOR } from './jumpstart-thor.ts';
 import { MSH_JUMPSTART_TRAINED } from './jumpstart-trained.ts';
 import { MSH_JUMPSTART_TRICKSTERS } from './jumpstart-tricksters.ts';
+import { MSH_JUMPSTART_WAKANDA } from './jumpstart-wakanda.ts';
 import { MSH_JUMPSTART_WILD } from './jumpstart-wild.ts';
 
 // Marvel Super Heroes Jumpstart packets (docs/marvel-jumpstart.md): the cards
@@ -62,5 +63,6 @@ export const MSH_JUMPSTART: Record<string, Behavior> = {
   ...MSH_JUMPSTART_THOR,
   ...MSH_JUMPSTART_TRAINED,
   ...MSH_JUMPSTART_TRICKSTERS,
+  ...MSH_JUMPSTART_WAKANDA,
   ...MSH_JUMPSTART_WILD,
 };

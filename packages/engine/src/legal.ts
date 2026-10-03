@@ -1,4 +1,5 @@
 import {
+  abilitiesLocked,
   canTapForAbility,
   cardMatches,
   creaturesOnBattlefield,
@@ -504,6 +505,8 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
       )
         return;
       if (a.sorcerySpeed && !sorcery) return;
+      // Marvel Super Heroes Jumpstart (Wakanda): Secure Detention.
+      if (zone === 'battlefield' && abilitiesLocked(ctx, source)) return;
       if ((a.once || a.powerUp) && obj(ctx, source).usedAbilities?.includes(abilityIndex)) return;
       if (a.powerUp && s.turn.noPowerUp) return;
       if (a.oncePerTurn && obj(ctx, source).onceTurns?.[-1 - abilityIndex] === s.turn.number)

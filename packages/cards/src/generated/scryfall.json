@@ -24023,6 +24023,147 @@
   }
  },
  {
+  "name": "Wakandan Shield Guard",
+  "scryfallId": "47eba4f9-8276-4367-8ff5-53a066e8c729",
+  "oracleId": "a9268e61-2697-46ff-b219-4f2be646cbe4",
+  "set": "msc",
+  "collectorNumber": "613",
+  "rarity": "common",
+  "manaCost": "{1}{W}",
+  "typeLine": "Creature — Human Soldier",
+  "oracleText": "When this creature enters, create a 1/1 white Soldier creature token.",
+  "power": "1",
+  "toughness": "1",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/7/47eba4f9-8276-4367-8ff5-53a066e8c729.jpg?1783903077",
+   "normal": "https://cards.scryfall.io/normal/front/4/7/47eba4f9-8276-4367-8ff5-53a066e8c729.jpg?1783903077",
+   "large": "https://cards.scryfall.io/large/front/4/7/47eba4f9-8276-4367-8ff5-53a066e8c729.jpg?1783903077",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/7/47eba4f9-8276-4367-8ff5-53a066e8c729.jpg?1783903077"
+  }
+ },
+ {
+  "name": "Black Panther, Most Dangerous",
+  "scryfallId": "a10f1578-2b8a-49c6-ab59-dd2c5fb1d69f",
+  "oracleId": "7ba593fd-93db-452f-ad80-7f0f37afb09d",
+  "set": "msc",
+  "collectorNumber": "584",
+  "rarity": "rare",
+  "manaCost": "{2}{W}",
+  "typeLine": "Legendary Creature — Human Warrior Hero",
+  "oracleText": "Whenever Black Panther is dealt damage, he deals that much damage to any other target.\nPower-up — {5}{W}{W}: Put two +1/+1 counters on Black Panther. Other creatures you control get +2/+2 until end of turn. (Activate each power-up ability only once. Reduce the cost by his mana cost if he entered this turn.)",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Power-up"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/1/a10f1578-2b8a-49c6-ab59-dd2c5fb1d69f.jpg?1783903088",
+   "normal": "https://cards.scryfall.io/normal/front/a/1/a10f1578-2b8a-49c6-ab59-dd2c5fb1d69f.jpg?1783903088",
+   "large": "https://cards.scryfall.io/large/front/a/1/a10f1578-2b8a-49c6-ab59-dd2c5fb1d69f.jpg?1783903088",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/1/a10f1578-2b8a-49c6-ab59-dd2c5fb1d69f.jpg?1783903088"
+  }
+ },
+ {
+  "name": "Shuri, Vibranium Technologist",
+  "scryfallId": "33795ef2-2215-4a69-9127-25ef252db684",
+  "oracleId": "94b2a7a6-9e9a-437f-9cde-111b1b02a68e",
+  "set": "msc",
+  "collectorNumber": "746",
+  "rarity": "uncommon",
+  "manaCost": "{2}{W/U}",
+  "typeLine": "Legendary Creature — Human Artificer Hero",
+  "oracleText": "Vigilance\nWhen Shuri enters, choose one —\n• Create a 1/1 colorless Robot Hero artifact creature token with flying.\n• Draw a card.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "U",
+   "W"
+  ],
+  "keywords": [
+   "Vigilance"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/3/33795ef2-2215-4a69-9127-25ef252db684.jpg?1783903030",
+   "normal": "https://cards.scryfall.io/normal/front/3/3/33795ef2-2215-4a69-9127-25ef252db684.jpg?1783903030",
+   "large": "https://cards.scryfall.io/large/front/3/3/33795ef2-2215-4a69-9127-25ef252db684.jpg?1783903030",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/3/33795ef2-2215-4a69-9127-25ef252db684.jpg?1783903030"
+  }
+ },
+ {
+  "name": "Ultimate Alliance",
+  "scryfallId": "6b328224-fa09-41b0-aa55-8ebc841f8f7e",
+  "oracleId": "e59c07ab-08fd-4d5b-978e-1594604ba410",
+  "set": "msc",
+  "collectorNumber": "611",
+  "rarity": "common",
+  "manaCost": "{W}",
+  "typeLine": "Instant",
+  "oracleText": "Ultimate Alliance deals damage equal to the number of creatures you control to target creature.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/b/6b328224-fa09-41b0-aa55-8ebc841f8f7e.jpg?1783903078",
+   "normal": "https://cards.scryfall.io/normal/front/6/b/6b328224-fa09-41b0-aa55-8ebc841f8f7e.jpg?1783903078",
+   "large": "https://cards.scryfall.io/large/front/6/b/6b328224-fa09-41b0-aa55-8ebc841f8f7e.jpg?1783903078",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/b/6b328224-fa09-41b0-aa55-8ebc841f8f7e.jpg?1783903078"
+  }
+ },
+ {
+  "name": "Heroic Teamwork",
+  "scryfallId": "8705e5a4-8a62-40fa-a649-270557c382ce",
+  "oracleId": "8025313d-048d-4a43-bc01-22398939a7e7",
+  "set": "msc",
+  "collectorNumber": "597",
+  "rarity": "common",
+  "manaCost": "{2}{W}",
+  "typeLine": "Instant",
+  "oracleText": "Teamwork 3 (As an additional cost to cast this spell, you may tap any number of creatures you control with total power 3 or more.)\nOne or two target creatures each get +2/+1 until end of turn. If this spell was cast using teamwork, draw a card.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Teamwork"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/7/8705e5a4-8a62-40fa-a649-270557c382ce.jpg?1783903083",
+   "normal": "https://cards.scryfall.io/normal/front/8/7/8705e5a4-8a62-40fa-a649-270557c382ce.jpg?1783903083",
+   "large": "https://cards.scryfall.io/large/front/8/7/8705e5a4-8a62-40fa-a649-270557c382ce.jpg?1783903083",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/7/8705e5a4-8a62-40fa-a649-270557c382ce.jpg?1783903083"
+  }
+ },
+ {
+  "name": "Secure Detention",
+  "scryfallId": "ae5233b5-08fe-4b63-a0fa-6e5e07df3fa8",
+  "oracleId": "ce95e51d-4ef3-44a8-ae47-cf1bf71ebd3f",
+  "set": "msc",
+  "collectorNumber": "608",
+  "rarity": "uncommon",
+  "manaCost": "{3}{W}",
+  "typeLine": "Enchantment — Aura",
+  "oracleText": "Enchant artifact or creature\nWhen this Aura enters, create a 1/1 white Soldier creature token.\nEnchanted permanent can't attack or block, and its activated abilities can't be activated.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Enchant"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/e/ae5233b5-08fe-4b63-a0fa-6e5e07df3fa8.jpg?1783903079",
+   "normal": "https://cards.scryfall.io/normal/front/a/e/ae5233b5-08fe-4b63-a0fa-6e5e07df3fa8.jpg?1783903079",
+   "large": "https://cards.scryfall.io/large/front/a/e/ae5233b5-08fe-4b63-a0fa-6e5e07df3fa8.jpg?1783903079",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/e/ae5233b5-08fe-4b63-a0fa-6e5e07df3fa8.jpg?1783903079"
+  }
+ },
+ {
   "name": "White Tiger, Amulet Keeper",
   "scryfallId": "babf0f59-0199-4dba-a149-f62261115f5e",
   "oracleId": "0fa01155-638d-44ed-8963-46b202b0e720",

@@ -1673,6 +1673,9 @@ export type StaticDef =
       cantBeBlocked?: boolean;
       /** Damage to it is prevented and becomes +1/+1 counters (Panther Habit). */
       damageToCounters?: boolean;
+      // Marvel Super Heroes Jumpstart (Wakanda)
+      /** "Its activated abilities can't be activated" (Secure Detention), mana abilities included. */
+      cantActivate?: boolean;
       // Final Fantasy (11a): job select
       /** "Is a Knight in addition to its other types." */
       addSubtypes?: string[];

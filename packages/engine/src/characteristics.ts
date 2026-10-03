@@ -519,6 +519,18 @@ export function canTapForAbility(ctx: Ctx, id: ObjectId): boolean {
   );
 }
 
+// Marvel Super Heroes Jumpstart (Wakanda)
+/** An Aura on it says "its activated abilities can't be activated" (Secure Detention). */
+export function abilitiesLocked(ctx: Ctx, id: ObjectId): boolean {
+  return ctx.s.battlefield.some(
+    (src) =>
+      obj(ctx, src).attachedTo === id &&
+      def(ctx, src).abilities.some(
+        (a) => a.kind === 'static' && a.effect.kind === 'attached' && a.effect.cantActivate,
+      ),
+  );
+}
+
 export function matchesFilter(
   ctx: Ctx,
   id: ObjectId,
