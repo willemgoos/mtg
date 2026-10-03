@@ -6,6 +6,7 @@ import {
   pickOpponent,
   registerDeck,
   SCRYFALL,
+  secretsOfStrixhavenBoosterSheets,
   strixhavenBoosterSheets,
   scryfallById,
   slug,
@@ -602,7 +603,7 @@ export function summarize(r: ExpeditionRun): RunSummary {
 // ---------------------------------------------------------------------------
 
 /** The set a booster comes from: Foundations, or the set of a Bloomburrow, Marvel or Strixhaven deck. */
-export type PackSet = 'fdn' | 'blb' | 'msh' | 'stx';
+export type PackSet = 'fdn' | 'blb' | 'msh' | 'stx' | 'sos';
 
 /** Booster names, by set. */
 export const PACK_SET_NAMES: Record<PackSet, string> = {
@@ -610,10 +611,11 @@ export const PACK_SET_NAMES: Record<PackSet, string> = {
   blb: 'Bloomburrow',
   msh: 'Marvel Super Heroes',
   stx: 'Strixhaven',
+  sos: 'Secrets of Strixhaven',
 };
 
 const asPackSet = (set: string | undefined): PackSet =>
-  set === 'blb' || set === 'msh' || set === 'stx' ? set : 'fdn';
+  set === 'blb' || set === 'msh' || set === 'stx' || set === 'sos' ? set : 'fdn';
 
 /**
  * The set of the run's `n`th booster: a Bloomburrow, Marvel or Strixhaven deck opens that
@@ -645,6 +647,8 @@ const SHEETS = {
   msh: sheetsOf('msh'),
   // Arena's STX boosters also had a Mystical Archive slot (phase 16); not modelled yet.
   stx: strixhavenBoosterSheets(),
+  // Likewise SOS's Mystical Archive slot (phase 16).
+  sos: secretsOfStrixhavenBoosterSheets(),
 };
 type Sheet = (typeof SHEETS.fdn)['common'];
 

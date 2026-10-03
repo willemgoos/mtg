@@ -3,6 +3,7 @@ import {
   SCRYFALL,
   cardDb,
   slug,
+  secretsOfStrixhavenBoosterSheets,
   strixhavenBoosterSheets,
 } from '@mtg/cards';
 import { nextInt, type RngState } from '@mtg/engine';
@@ -62,11 +63,21 @@ export const STRIXHAVEN_SHEETS = Object.fromEntries(
   ]),
 ) as Record<Rarity, string[]>;
 
+/** Secrets of Strixhaven's booster cards: the main set's cards we play, but the basics (fronts only). The Mystical Archive slot comes with phase 16. */
+const sosCards = secretsOfStrixhavenBoosterSheets();
+export const SECRETS_SHEETS = Object.fromEntries(
+  RARITIES.map((rarity) => [
+    rarity,
+    sosCards[rarity].map((c) => slug(c.name)).filter((id) => cardDb.has(id) && !isBasic(id)),
+  ]),
+) as Record<Rarity, string[]>;
+
 const SHEETS: Record<SeasonPackKind, Record<Rarity, string[]>> = {
   foundations: FOUNDATIONS_SHEETS,
   bloomburrow: BLOOMBURROW_SHEETS,
   marvel: MARVEL_SHEETS,
   strixhaven: STRIXHAVEN_SHEETS,
+  secrets: SECRETS_SHEETS,
 };
 
 /** The pack generator for a kind of booster. */

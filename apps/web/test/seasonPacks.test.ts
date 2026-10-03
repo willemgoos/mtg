@@ -1,4 +1,5 @@
 import { SCRYFALL, cardDb, slug } from '@mtg/cards';
+import { SOS_BOOSTER_LIST } from '../../../packages/cards/src/sos/booster-list.ts';
 import { STX_BOOSTER_LIST } from '../../../packages/cards/src/stx/booster-list.ts';
 import FOUNDATIONS_MANIFEST from '../../../packages/cards/src/generated/foundations-manifest.json';
 import { createRng } from '@mtg/engine';
@@ -15,6 +16,7 @@ import {
 import {
   BLOOMBURROW_SHEETS,
   MARVEL_SHEETS,
+  SECRETS_SHEETS,
   STRIXHAVEN_SHEETS,
   FOUNDATIONS_SHEETS,
   generateFoundationsPack,
@@ -87,6 +89,28 @@ describe('Season Bloomburrow packs', () => {
     for (const id of cards)
       expect(boosterNames.has(SCRYFALL.find((c) => slug(c.name) === id)!.name)).toBe(true);
     expect(SEASON_STARTERS.some((d) => d.id === 'stx-lorehold-reckoning')).toBe(true);
+  });
+
+  it('builds the Secrets of Strixhaven sheets from the main set, basics left out', () => {
+    const tally = (r: string) => SOS_BOOSTER_LIST.filter(([, x]) => x === r).length;
+    expect(['common', 'uncommon', 'rare', 'mythic'].map(tally)).toEqual([86, 100, 60, 20]);
+    expect(Object.values(SECRETS_SHEETS).map((s) => s.length)).toEqual([86, 100, 60, 20]);
+  });
+
+  it('sells Secrets of Strixhaven boosters too, and the SOS decks as starters', () => {
+    const names = new Map(SOS_BOOSTER_LIST);
+    for (const [rarity, sheet] of Object.entries(SECRETS_SHEETS))
+      for (const id of sheet)
+        expect(names.get(SCRYFALL.find((x) => slug(x.name) === id)!.name), id).toBe(rarity);
+    let save = { ...fresh(), coins: 1000 };
+    save = buySeasonPack(save, 1, 'secrets');
+    expect(save.packs[0]!.kind).toBe('secrets');
+    const opened = openSeasonPack(save, save.packs[0]!.id, packGenerator('secrets'), 2);
+    const cards = opened.lastPack!.rewards.flatMap((r) => (r.kind === 'card' ? [r.cardId] : []));
+    expect(cards.length).toBeGreaterThan(0);
+    for (const id of cards)
+      expect(names.has(SCRYFALL.find((c) => slug(c.name) === id)!.name)).toBe(true);
+    expect(SEASON_STARTERS.some((d) => d.id === 'sos-lorehold-spirit-archive')).toBe(true);
   });
 
   it('offers the Bloomburrow decks as starters', () => {

@@ -1,4 +1,5 @@
 import { cardDb, findDeck, PLAYABLE_DECKS, registerDeck, SCRYFALL, slug } from '@mtg/cards';
+import { SOS_BOOSTER_LIST } from '../../../packages/cards/src/sos/booster-list.ts';
 import { STX_BOOSTER_LIST } from '../../../packages/cards/src/stx/booster-list.ts';
 import { describe, expect, it } from 'vitest';
 import {
@@ -47,6 +48,7 @@ const deck = PLAYABLE_DECKS.find((d) => d.series === 'starter')!.id;
 const empty: ExpeditionState = { run: null, records: {} };
 const card = new Map(SCRYFALL.map((c) => [c.name, c]));
 const boosterNames = new Set(STX_BOOSTER_LIST.map(([n]) => n));
+const sosBoosterNames = new Set(SOS_BOOSTER_LIST.map(([n]) => n));
 const packSize = PACK_SIZE.rare + PACK_SIZE.uncommon + PACK_SIZE.common;
 const isRare = (n: string) => ['rare', 'mythic'].includes(card.get(n)!.rarity);
 
@@ -135,6 +137,20 @@ describe('expedition packs', () => {
       expect(new Set(pack).size).toBe(packSize);
       for (const name of pack) {
         expect(boosterNames.has(name)).toBe(true);
+        expect(card.get(name)!.front).toBeUndefined();
+      }
+    }
+  });
+
+  it('opens Secrets of Strixhaven boosters with an SOS deck or packet pair', () => {
+    expect(packSetOf({ deck: 'sos-lorehold-spirit-archive' })).toBe('sos');
+    expect(packSetOf({ deck: 'jump-in:sos-clerics+sos-beasts' })).toBe('sos');
+    expect(packSetOf({ deck: 'jump-in:goblins+sos-beasts' }, 1)).toBe('sos');
+    for (let seed = 0; seed < 20; seed++) {
+      const pack = rollPack({ kind: 'booster' }, seed, false, 'sos');
+      expect(new Set(pack).size).toBe(packSize);
+      for (const name of pack) {
+        expect(sosBoosterNames.has(name)).toBe(true);
         expect(card.get(name)!.front).toBeUndefined();
       }
     }
