@@ -2,6 +2,9 @@ import { BLOOMBURROW_BEHAVIORS } from './bloomburrow.ts';
 import { MARVEL_BEHAVIORS } from './marvel.ts';
 import { MARVEL_BRAWL_BEHAVIORS } from './marvel-brawl.ts';
 import { FINAL_FANTASY_BEHAVIORS } from './final-fantasy.ts';
+import { STRIXHAVEN_BEHAVIORS } from './strixhaven.ts';
+import { SECRETS_OF_STRIXHAVEN_BEHAVIORS } from './secrets-of-strixhaven.ts';
+import { STRIXHAVEN_BRAWL_BEHAVIORS } from './strixhaven-brawl.ts';
 
 /**
  * Allowed sets, most preferred first: Foundations, then older core sets, then
@@ -33,6 +36,11 @@ export const SET_PREFERENCE = [
   'fin',
   // Final Fantasy Commander: the Brawl precons (phase 12).
   'fic',
+  // Strixhaven: School of Mages and Secrets of Strixhaven (phases 13 and 14).
+  'stx',
+  'sos',
+  // Secrets of Strixhaven Commander: the Brawl decks (phase 15).
+  'soc',
   'pmei',
   'pw26',
   'sld',
@@ -496,6 +504,15 @@ export const MARVEL_POOL = Object.keys(MARVEL_BEHAVIORS);
 /** Final Fantasy cards (fronts only). */
 export const FINAL_FANTASY_POOL = Object.keys(FINAL_FANTASY_BEHAVIORS);
 
+/** Strixhaven cards (fronts only). */
+export const STRIXHAVEN_POOL = Object.keys(STRIXHAVEN_BEHAVIORS);
+
+/** Secrets of Strixhaven cards (fronts only). */
+export const SECRETS_OF_STRIXHAVEN_POOL = Object.keys(SECRETS_OF_STRIXHAVEN_BEHAVIORS);
+
+/** The Strixhaven Brawl precons' cards (not already in the pool above). */
+export const STRIXHAVEN_BRAWL_POOL = Object.keys(STRIXHAVEN_BRAWL_BEHAVIORS);
+
 export const POOL: { name: string }[] = [
   ...RED_POOL,
   ...GREEN_POOL,
@@ -508,6 +525,9 @@ export const POOL: { name: string }[] = [
   ...MARVEL_POOL,
   ...MARVEL_BRAWL_POOL,
   ...FINAL_FANTASY_POOL,
+  ...STRIXHAVEN_POOL,
+  ...SECRETS_OF_STRIXHAVEN_POOL,
+  ...STRIXHAVEN_BRAWL_POOL,
 ].map((name) => ({
   name,
 }));

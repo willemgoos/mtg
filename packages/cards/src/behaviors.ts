@@ -8,6 +8,12 @@ import {
   FINAL_FANTASY_TOKENS,
 } from './final-fantasy.ts';
 import { MARVEL_BRAWL_BEHAVIORS, MARVEL_BRAWL_TOKENS } from './marvel-brawl.ts';
+import { STRIXHAVEN_BACK_FACES, STRIXHAVEN_BEHAVIORS } from './strixhaven.ts';
+import {
+  SECRETS_OF_STRIXHAVEN_BACK_FACES,
+  SECRETS_OF_STRIXHAVEN_BEHAVIORS,
+} from './secrets-of-strixhaven.ts';
+import { STRIXHAVEN_BRAWL_BEHAVIORS } from './strixhaven-brawl.ts';
 import { FOUNDATIONS_BATCH_BEHAVIORS } from './foundations-batch.ts';
 
 // Helpers for the common shapes.
@@ -140,6 +146,11 @@ export const BEHAVIORS: Record<string, Behavior> = {
   ...MARVEL_BRAWL_BEHAVIORS,
   ...FINAL_FANTASY_BEHAVIORS,
   ...FINAL_FANTASY_BACK_FACES,
+  ...STRIXHAVEN_BEHAVIORS,
+  ...STRIXHAVEN_BACK_FACES,
+  ...SECRETS_OF_STRIXHAVEN_BEHAVIORS,
+  ...SECRETS_OF_STRIXHAVEN_BACK_FACES,
+  ...STRIXHAVEN_BRAWL_BEHAVIORS,
   // ---------------------------------------------------------------- red
   Shock: burn(2),
   'Lightning Strike': burn(3),

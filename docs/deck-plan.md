@@ -163,6 +163,12 @@ The Final Fantasy (FIN) main set like Bloomburrow and MSH (11a to 11d: mechanics
 eight decks, every rare and mythic with Jump In and boosters, then the Starter Kit), then the Final Fantasy Commander
 decks as Brawl, as Arena sells them (12a to 12g). See `docs/final-fantasy-plan.md`.
 
+## Phases 13 to 16: Strixhaven
+
+Strixhaven: School of Mages (13) and Secrets of Strixhaven (14) as main sets with decks, Jump In and boosters, the eight
+Arena Store Brawl decks led by Quintorius and the other commanders (15), then the Mystical Archive bonus cards (16). See
+`docs/strixhaven-plan.md`.
+
 ## Notes
 
 - Some cards will turn out to be one-offs. Put them in `custom` handlers instead of growing the engine vocabulary for a single card.
