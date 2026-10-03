@@ -463,7 +463,16 @@ export type TriggerDef =
       alone?: boolean;
     }
   | { on: 'landfall' }
-  | { on: 'beginningOfUpkeep'; whose: 'yours' | 'each' | 'opponents' }
+  | {
+      on: 'beginningOfUpkeep';
+      whose:
+        | 'yours'
+        | 'each'
+        | 'opponents'
+        // Marvel Super Heroes Jumpstart (Geniuses)
+        /** The upkeep of the enchanted creature's controller (Super Intelligence). */
+        | 'enchantedController';
+    }
   | { on: 'beginningOfEndStep'; whose: 'yours' | 'each' }
   /** Whenever another permanent you control matching the filter enters (Honored Dreyleader). */
   | { on: 'otherPermanentEtb'; filter: CardFilter }
@@ -834,6 +843,9 @@ export type Ref =
   | { each: 'creature'; controller?: 'you' | 'opponent'; filter?: CardFilter }
   /** The controller of a chosen target (Blooming Blast: "that creature's controller"). */
   | { controllerOf: number }
+  // Marvel Super Heroes Jumpstart (Geniuses)
+  /** The controller of the permanent the source is attached to (Super Intelligence: "that player"). */
+  | 'attachedController'
   /** The permanent chosen by a 'chooseYourPermanent' effect. */
   | 'chosen';
 
@@ -1737,6 +1749,12 @@ export type StaticDef =
   | { kind: 'instantsAndSorceriesUncounterable' }
   /** You have no maximum hand size. */
   | { kind: 'noMaxHandSize' }
+  // Marvel Super Heroes Jumpstart (Geniuses)
+  /**
+   * The first time you would draw a card each turn, except the first card you draw during each of
+   * your draw steps, you draw `count` cards instead (Reed Richards, Smartest Man).
+   */
+  | { kind: 'firstExtraDrawBecomes'; count: number }
   /** Vizier: look at the top of your library any time; cast creatures from there with any mana. */
   | { kind: 'creaturesFromTopOfLibrary' }
   /** This creature gets +X/+Y (Persistent Marshstalker: +1/+0 for each other Rat you control). */
@@ -2222,6 +2240,9 @@ export interface TurnState {
   creaturesDied: number;
   /** Cards each player drew this turn. */
   cardsDrawn: Record<PlayerId, number>;
+  // Marvel Super Heroes Jumpstart (Geniuses)
+  /** Players who would already have drawn a card this turn other than their draw step's first (Reed Richards). Replaced, never mutated. */
+  extraDrawSeen?: PlayerId[];
   /** Total mana each player spent this turn (expend). Missing in older saves. */
   manaSpent?: Record<PlayerId, number>;
   /** How many times each player lost life this turn. Missing in older saves. */
