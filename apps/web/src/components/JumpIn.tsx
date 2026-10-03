@@ -9,7 +9,7 @@ import './home.css';
 import './expedition.css';
 
 /** The groups of Jump In packets, in the order shown: a set's own packets, or Arena's. */
-const GROUPS = [
+export const GROUPS = [
   { key: 'fdn', name: 'Foundations', has: (p: Packet) => !p.set && !p.source },
   {
     key: 'fdn-arena',
@@ -32,7 +32,7 @@ const GROUPS = [
 ] as const;
 
 type Group = (typeof GROUPS)[number]['key'];
-const groupOf = (p: Packet) => GROUPS.find((g) => g.has(p))!;
+export const groupOf = (p: Packet) => GROUPS.find((g) => g.has(p))!;
 
 /** Three packets at random, of one group or (`'any'`) all, leaving out one already taken. */
 function offer(group: Group | 'any', taken?: Packet): Packet[] {
@@ -50,15 +50,13 @@ const isRare = (name: string) =>
 
 /**
  * Arena's Jump In! pick: three random themed packets, take one, then three
- * more, take another. The two become a 40-card deck: for an expedition, or
- * (`versus`) for one game against a bot that jumped in too.
+ * more, take another. The two become the expedition's 40-card deck. (The
+ * Jump In mode lets you choose from every packet instead: JumpInLobby.)
  */
 export function JumpIn({
-  versus = false,
   onPick,
   onBack,
 }: {
-  versus?: boolean;
   onPick: (deckId: string) => void;
   onBack: () => void;
 }) {
@@ -84,14 +82,12 @@ export function JumpIn({
     <div className="start shell jumpin">
       <UiSize />
       <div className="start__title">
-        <span className="start__eyebrow">{versus ? 'Versus' : 'Expedition'} · Jump In!</span>
+        <span className="start__eyebrow">Expedition · Jump In!</span>
         <h1>{first ? 'Pick your second half' : 'Pick your first half'}</h1>
         <p>
           {first
             ? `${first.name} + ? Two halves make your 40-card deck.`
-            : versus
-              ? 'Two themed half-decks make your 40-card deck. The bot picks its own two.'
-              : 'Two themed half-decks shuffle together into your 40-card deck.'}
+            : 'Two themed half-decks shuffle together into your 40-card deck.'}
         </p>
       </div>
       {!first && (

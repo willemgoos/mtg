@@ -60,3 +60,11 @@ from) when it's fixed. Older phases keep their own "Simplifications" lists in `d
       special token paths (`stack.ts`, `fin-effects.ts`, `fic-effects.ts`).
 - [ ] Iron Fist, Hero for Hire: the power-up's 5 damage goes to up to two targets (5, 4/1 or 3/2) instead of up to five.
 - [ ] Contract Hero: the attack trigger always asks for a choice, even when you have no artifact and no cards in hand.
+- [ ] The Clone Saga, chapter III: "choose a card name" is choosing a creature you control (up to one); with none, the chapter
+      does nothing.
+- [ ] Impossible Man: keeping his name only matters for the legend rule; while copying, the UI shows the copied name and he
+      doesn't count as "named Impossible Man" for name filters.
+- [ ] Villainous Syndication: the fourth counter's payoff isn't a separate reflexive trigger (the returned card isn't
+      targeted, and there's no chance to respond); the engine picks which Villain to tap (lowest power).
+- [ ] Radioactive Man: "that player" is always the opponent (two-player only).
+- [ ] Crimson Cowl, Master of Evil: triggers whenever nontoken Villains attack, without checking they attacked a player.

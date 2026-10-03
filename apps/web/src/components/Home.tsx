@@ -6,12 +6,13 @@ import { UiSize } from './UiSize.tsx';
 import './home.css';
 
 export type Event = 'gauntlet' | 'expedition';
-/** Quick matches and Brawl are single games; the events are runs. */
-export type Mode = 'quick' | 'brawl' | Event;
+/** Quick matches and Brawl are single games, Jump In one game or a best of three; the events are runs. */
+export type Mode = 'quick' | 'brawl' | 'jumpIn' | Event;
 export const isEvent = (m: Mode): m is Event => m === 'gauntlet' || m === 'expedition';
 const MODE_NAMES: Record<Mode, string> = {
   quick: 'Quick match',
   brawl: 'Brawl',
+  jumpIn: 'Jump In!',
   gauntlet: 'Gauntlet',
   expedition: 'Expedition',
 };
@@ -85,7 +86,7 @@ export function Home({
   onPlay,
   onDecks,
   onJumpIn,
-  onJumpInVersus,
+  jumpIn,
   onTab,
   onSeason,
 }: {
@@ -100,7 +101,8 @@ export function Home({
   /** Opens the deck picker for a mode. */
   onDecks: (m: Mode) => void;
   onJumpIn: () => void;
-  onJumpInVersus: () => void;
+  /** The Jump In match in progress ("Best of 3 · You lead 1–0"), if any. */
+  jumpIn: string | null;
   onTab: (t: Tab) => void;
   onSeason: () => void;
 }) {
@@ -118,7 +120,7 @@ export function Home({
     {
       id: 'jump-in',
       badge: 'Expedition',
-      title: 'Jump In!',
+      title: 'Jump In! Expedition',
       text: 'Pick two themed half-decks, shuffle them together, and take your new deck on an expedition.',
       cta: 'Pick your halves',
       art: art('Krenko, Mob Boss'),
@@ -127,13 +129,13 @@ export function Home({
     },
     {
       id: 'jump-in-versus',
-      badge: 'Quick match',
-      title: 'Jump In! Versus',
-      text: 'Shuffle two half-decks together and face a bot that did the same. A new matchup every game.',
-      cta: 'Pick your halves',
+      badge: 'New mode',
+      title: 'Jump In!',
+      text: 'Pick any two half-decks from every packet, choose the bot’s or leave them to chance, and play one game or a best of three.',
+      cta: jumpIn ? 'Continue' : 'Pick your halves',
       art: art('Ghalta, Primal Hunger'),
       cards: ['Ghalta, Primal Hunger', 'Llanowar Elves'],
-      go: onJumpInVersus,
+      go: () => onDecks('jumpIn'),
     },
     {
       id: 'gauntlet',
@@ -239,6 +241,14 @@ export function Home({
               onClick={() => onMode('quick')}
             />
             <ModeTile
+              name="Jump In!"
+              art={art('Krenko, Mob Boss')}
+              blurb="Two half-decks each, best of one or three"
+              run={null}
+              on={mode === 'jumpIn'}
+              onClick={() => onMode('jumpIn')}
+            />
+            <ModeTile
               name="Brawl"
               art={
                 quick?.deck.series === 'brawl'
@@ -259,9 +269,11 @@ export function Home({
                 <span className="launch__name">
                   {run
                     ? deckById(run.deck).name
-                    : !isEvent(mode) && last
-                      ? `${last.deck.name} vs ${last.opponent}`
-                      : 'Choose a deck'}
+                    : mode === 'jumpIn'
+                      ? (jumpIn ?? 'Choose your halves')
+                      : !isEvent(mode) && last
+                        ? `${last.deck.name} vs ${last.opponent}`
+                        : 'Choose a deck'}
                 </span>
                 <span className="launch__change">{run ? 'Decks' : 'Change'}</span>
               </button>
