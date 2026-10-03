@@ -968,6 +968,16 @@ function detect(ctx: Ctx, ev: GameEvent): void {
           undefined,
           ev.amount,
         );
+        // Marvel Super Heroes Jumpstart (Thor): from the graveyard (Asgardian Inspiration).
+        for (const id of s.players[by].graveyard) {
+          const card = s.objects[id]!;
+          def(ctx, id).abilities.forEach((a, i) => {
+            if (a.kind !== 'triggered' || !a.fromGraveyard) return;
+            if (a.trigger.on !== 'yourNoncombatDamageToOpponent') return;
+            if (checkCondition(ctx, a.condition, by, card))
+              queue(ctx, card, i, by, undefined, ev.amount);
+          });
+        }
         return;
       }
       const src = s.objects[ev.source];

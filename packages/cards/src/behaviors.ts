@@ -9,6 +9,7 @@ import {
 } from './final-fantasy.ts';
 import { MARVEL_BRAWL_BEHAVIORS, MARVEL_BRAWL_TOKENS } from './marvel-brawl.ts';
 import { MSH_JUMPSTART_PYM_TOKENS } from './msh/jumpstart-pym.ts';
+import { MSH_JUMPSTART_THOR_TOKENS } from './msh/jumpstart-thor.ts';
 import {
   FINAL_FANTASY_BRAWL_BACK_FACES,
   FINAL_FANTASY_BRAWL_BEHAVIORS,
@@ -2186,6 +2187,7 @@ const artifactToken = (id: string, name: string, abilities: AbilityDef[]): CardD
 export const TOKENS: CardDefinition[] = [
   ...MARVEL_TOKENS,
   ...MSH_JUMPSTART_PYM_TOKENS,
+  ...MSH_JUMPSTART_THOR_TOKENS,
   ...MARVEL_BRAWL_TOKENS,
   ...FINAL_FANTASY_TOKENS,
   ...FINAL_FANTASY_BRAWL_TOKENS,

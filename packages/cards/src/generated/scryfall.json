@@ -23154,6 +23154,138 @@
   }
  },
  {
+  "name": "Sif's Spearmaster",
+  "scryfallId": "7fed8476-176b-47a4-a646-368ca4b52f41",
+  "oracleId": "9ae33bde-ccc9-40e2-9957-05cd9725f8cf",
+  "set": "msc",
+  "collectorNumber": "765",
+  "rarity": "common",
+  "manaCost": "{2}{R}",
+  "typeLine": "Creature — God Warrior Hero",
+  "oracleText": "{T}: This creature deals damage equal to its power to target opponent.",
+  "power": "1",
+  "toughness": "4",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/f/7fed8476-176b-47a4-a646-368ca4b52f41.jpg?1783903024",
+   "normal": "https://cards.scryfall.io/normal/front/7/f/7fed8476-176b-47a4-a646-368ca4b52f41.jpg?1783903024",
+   "large": "https://cards.scryfall.io/large/front/7/f/7fed8476-176b-47a4-a646-368ca4b52f41.jpg?1783903024",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/f/7fed8476-176b-47a4-a646-368ca4b52f41.jpg?1783903024"
+  }
+ },
+ {
+  "name": "Molten Lavamancer",
+  "scryfallId": "6b036661-a94c-46b6-aa8f-adff2ccc5b92",
+  "oracleId": "5fc60833-6e03-4bfa-833f-7d51c696db93",
+  "set": "msc",
+  "collectorNumber": "699",
+  "rarity": "uncommon",
+  "manaCost": "{2}{R}",
+  "typeLine": "Creature — Elemental Warlock Villain",
+  "oracleText": "Prowess (Whenever you cast a noncreature spell, this creature gets +1/+1 until end of turn.)\nWhenever a source you control deals noncombat damage to one or more of your opponents during your turn, you create a 1/1 red Elemental creature token. This ability triggers only once each turn.",
+  "power": "2",
+  "toughness": "3",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Prowess"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/b/6b036661-a94c-46b6-aa8f-adff2ccc5b92.jpg?1783903047",
+   "normal": "https://cards.scryfall.io/normal/front/6/b/6b036661-a94c-46b6-aa8f-adff2ccc5b92.jpg?1783903047",
+   "large": "https://cards.scryfall.io/large/front/6/b/6b036661-a94c-46b6-aa8f-adff2ccc5b92.jpg?1783903047",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/b/6b036661-a94c-46b6-aa8f-adff2ccc5b92.jpg?1783903047"
+  }
+ },
+ {
+  "name": "Asgardian Inspiration",
+  "scryfallId": "d1fe7eef-2636-484f-b476-4dc9c9dbfddd",
+  "oracleId": "1be4bb28-6ad7-4df9-98b7-fa32061e7a95",
+  "set": "msc",
+  "collectorNumber": "678",
+  "rarity": "uncommon",
+  "manaCost": "{R}",
+  "typeLine": "Sorcery",
+  "oracleText": "Exile the top card of your library. You may play it this turn.\nWhenever a source you control deals noncombat damage to an opponent, you may pay {2}. If you do, return this card from your graveyard to your hand.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/1/d1fe7eef-2636-484f-b476-4dc9c9dbfddd.jpg?1783903053",
+   "normal": "https://cards.scryfall.io/normal/front/d/1/d1fe7eef-2636-484f-b476-4dc9c9dbfddd.jpg?1783903053",
+   "large": "https://cards.scryfall.io/large/front/d/1/d1fe7eef-2636-484f-b476-4dc9c9dbfddd.jpg?1783903053",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/1/d1fe7eef-2636-484f-b476-4dc9c9dbfddd.jpg?1783903053"
+  }
+ },
+ {
+  "name": "Lightning Bolt",
+  "scryfallId": "e768c957-3a1f-42f5-853a-96942f645df5",
+  "oracleId": "4457ed35-7c10-48c8-9776-456485fdf070",
+  "set": "m11",
+  "collectorNumber": "149",
+  "rarity": "common",
+  "manaCost": "{R}",
+  "typeLine": "Instant",
+  "oracleText": "Lightning Bolt deals 3 damage to any target.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/7/e768c957-3a1f-42f5-853a-96942f645df5.jpg?1783941805",
+   "normal": "https://cards.scryfall.io/normal/front/e/7/e768c957-3a1f-42f5-853a-96942f645df5.jpg?1783941805",
+   "large": "https://cards.scryfall.io/large/front/e/7/e768c957-3a1f-42f5-853a-96942f645df5.jpg?1783941805",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/7/e768c957-3a1f-42f5-853a-96942f645df5.jpg?1783941805"
+  }
+ },
+ {
+  "name": "Origin of Thor",
+  "scryfallId": "bbe89f07-999c-437a-8b4a-d3901a1fc0ba",
+  "oracleId": "d4e4614d-8247-4fc5-8883-e37204939aa4",
+  "set": "msc",
+  "collectorNumber": "701",
+  "rarity": "uncommon",
+  "manaCost": "{2}{R}",
+  "typeLine": "Enchantment — Saga",
+  "oracleText": "(As this Saga enters and after your draw step, add a lore counter. Sacrifice after III.)\nI — You may discard a card. If you do, draw two cards.\nII — Whenever you cast a spell this turn, put a +1/+1 counter on target creature you control.\nIII — Target creature you control deals damage equal to its power to each opponent.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/b/bbe89f07-999c-437a-8b4a-d3901a1fc0ba.jpg?1784182948",
+   "normal": "https://cards.scryfall.io/normal/front/b/b/bbe89f07-999c-437a-8b4a-d3901a1fc0ba.jpg?1784182948",
+   "large": "https://cards.scryfall.io/large/front/b/b/bbe89f07-999c-437a-8b4a-d3901a1fc0ba.jpg?1784182948",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/b/bbe89f07-999c-437a-8b4a-d3901a1fc0ba.jpg?1784182948"
+  }
+ },
+ {
+  "name": "Mjölnir's Might",
+  "scryfallId": "fbf0cc78-15e3-4924-a4c2-96db5c384a89",
+  "oracleId": "8c944733-3fb5-4d1f-af1a-3fd31377eb9a",
+  "set": "msc",
+  "collectorNumber": "697",
+  "rarity": "common",
+  "manaCost": "{3}{R}",
+  "typeLine": "Sorcery",
+  "oracleText": "Mjölnir's Might deals 4 damage to target player.\nExile the top card of your library. Until the end of your next turn, you may play that card.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/b/fbf0cc78-15e3-4924-a4c2-96db5c384a89.jpg?1783903047",
+   "normal": "https://cards.scryfall.io/normal/front/f/b/fbf0cc78-15e3-4924-a4c2-96db5c384a89.jpg?1783903047",
+   "large": "https://cards.scryfall.io/large/front/f/b/fbf0cc78-15e3-4924-a4c2-96db5c384a89.jpg?1783903047",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/b/fbf0cc78-15e3-4924-a4c2-96db5c384a89.jpg?1783903047"
+  }
+ },
+ {
   "name": "She-Hulk, Attorney-at-Law",
   "scryfallId": "93a44ea5-a571-4abb-b8fa-14b8224ecaeb",
   "oracleId": "db99d52b-bbe6-4a48-8f2c-bf77912dc0a9",
