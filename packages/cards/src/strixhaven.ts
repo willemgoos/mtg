@@ -5,6 +5,8 @@ import { WITHERBLOOM, WITHERBLOOM_TOKENS } from './stx/witherbloom.ts';
 import { QUANDRIX, QUANDRIX_TOKENS } from './stx/quandrix.ts';
 import { SILVERQUILL, SILVERQUILL_TOKENS } from './stx/silverquill.ts';
 import { SILVERQUILL_LESSONS } from './stx/lessons-silverquill.ts';
+import { PRISMARI } from './stx/prismari.ts';
+import { PRISMARI_LESSONS } from './stx/lessons-prismari.ts';
 
 /**
  * Strixhaven (STX) card behaviour, one file per group of decks in stx/,
@@ -18,6 +20,8 @@ export const STRIXHAVEN_BEHAVIORS: Record<string, Behavior> = {
   ...SILVERQUILL,
   ...SILVERQUILL_LESSONS,
   ...WITHERBLOOM,
+  ...PRISMARI,
+  ...PRISMARI_LESSONS,
 };
 
 /** Strixhaven tokens (the Lorehold Spirit, the Quandrix Fractal). */

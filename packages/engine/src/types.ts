@@ -852,7 +852,13 @@ export type EffectDef =
       cantBeBlockedExcept?: Keyword;
       /** "Whenever it deals combat damage to a player this turn, put a +1/+1 counter on it" (Love on the Battlefield). */
       counterOnCombatDamage?: boolean;
+      // Strixhaven (13b): Prismari Pledgemage
+      /** "Can attack this turn as though it didn't have defender." */
+      ignoreDefender?: boolean;
     }
+  // Strixhaven (13b): Maelstrom Muse
+  /** The next instant or sorcery spell you cast this turn costs {amount} less (X is read now). */
+  | { kind: 'nextSpellCostsLess'; amount: Amount }
   /** Resolution-time "if": Morbid-style choices between two effects. */
   | { kind: 'if'; condition: ConditionDef; then: EffectDef[]; else?: EffectDef[] }
   /** The source card returns from its owner's graveyard. */
@@ -1783,6 +1789,9 @@ export interface PlayerState {
   // Strixhaven (13a): Learn
   /** Cards outside the game (card ids, not objects): the Lessons Learn can fetch. Hidden from the opponent. */
   sideboard?: CardDefId[];
+  // Strixhaven (13b): Maelstrom Muse
+  /** The next instant or sorcery spell cast on `turn` costs `amount` less. */
+  nextSpellDiscount?: { turn: number; amount: number };
   landsPlayedThisTurn: number;
   attackedThisTurn: boolean;
   drewFromEmptyLibrary: boolean;
@@ -1985,6 +1994,9 @@ export interface ContinuousEffect {
   // Strixhaven (13a): Academic Dispute
   /** It blocks this turn if able. */
   mustBlock?: boolean;
+  // Strixhaven (13b): Prismari Pledgemage
+  /** It can attack as though it didn't have defender. */
+  ignoreDefender?: boolean;
   /** What happens if the affected creature dies while this lasts. */
   onDies?: { effects: EffectDef[]; controller: PlayerId; sourceDefId: CardDefId };
 }

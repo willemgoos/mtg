@@ -1266,6 +1266,7 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
           ...(e.returnWhenDies ? { returnWhenDies: e.returnWhenDies } : {}),
           ...(e.cantBeBlockedExcept ? { cantBeBlockedExcept: e.cantBeBlockedExcept } : {}),
           ...(e.counterOnCombatDamage ? { counterOnCombatDamage: true } : {}),
+          ...(e.ignoreDefender ? { ignoreDefender: true } : {}),
           ...(e.untilYourNextTurn
             ? { expires: 'untilYourNextTurn' as const, player: es.controller }
             : { expires: 'endOfTurn' as const }),
@@ -2134,6 +2135,13 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
         // Galvanic Iteration: "when you next cast an instant or sorcery spell this turn".
         ...(e.until === 'nextSpellThisTurn' ? { untilTurn: ctx.s.turn.number, once: true } : {}),
       });
+      return;
+    }
+    // Strixhaven (13b): Maelstrom Muse
+    case 'nextSpellCostsLess': {
+      const amount = resolveAmount(ctx, es, e.amount);
+      if (amount > 0)
+        ctx.s.players[es.controller].nextSpellDiscount = { turn: ctx.s.turn.number, amount };
       return;
     }
     case 'giftGiven':
