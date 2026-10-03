@@ -414,9 +414,7 @@ bosses. Bot-vs-bot (small samples) against our Jump In pairs: about 65% on avera
 - Base power and toughness, and becoming an artifact creature, until end of turn (Reptil, I Am Iron Man).
 - "Can't become untapped for as long as you control" the source (Spider-Woman); negative counter amounts remove +1/+1 counters.
 
-Simplifications: Shuri's copy ability, Kid Loki's hexproof and Hellcat losing her abilities aren't modelled; Loki copies
-spells of mana value 2 or less (his printed power); Misty Knight draws one card; Iron Fist deals his damage when the trigger
-resolves (tapping him) instead of gaining a tap ability; Justice only counts creatures returned to hand; Klaw lets you see the
-whole hand; Titania always costs a discard; Atlantis Attacks always gives you the Leviathan; Call Damage Control doesn't make the
-two cards differ in type; Death to Our Enemies picks its 7-damage target each time it triggers and doesn't divide; Doc Samson
-makes green mana only; Claim the Kingdom puts the indestructible counter on the creature that got the last +1/+1 counter.
+Simplifications: Kid Loki also counts +1/+1 counters an opponent put on your creatures; Klaw's opponent reveals their
+cheapest cards (picked for them); Titania's ward is always {2}; the Plans' "when you do" payoffs (Death to Our Enemies,
+Claim the Kingdom) are "when sacrificed" triggers, and Death to Our Enemies gives all 7 to the first target if the second
+becomes illegal; Doc Samson's mana is an activated ability on the stack.

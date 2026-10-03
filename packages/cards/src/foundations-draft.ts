@@ -16,7 +16,11 @@ const when = (
   ...effects: EffectDef[]
 ): Extract<AbilityDef, { kind: 'triggered' }> => ({ kind: 'triggered', trigger, targets, effects });
 const draw = (amount: number): EffectDef => ({ kind: 'draw', who: 'controller', amount });
-const yours = { each: 'creature', controller: 'you' } as const;
+const vialDamage = (to: 'eachOpponent' | 'chosen'): EffectDef => ({
+  kind: 'damage',
+  amount: { manaValueOfSubject: true },
+  to,
+});
 const anthem = (subtype: string): AbilityDef => ({
   kind: 'static',
   effect: {
@@ -64,7 +68,8 @@ export const FOUNDATIONS_DRAFT_BEHAVIORS: Record<string, Behavior> = {
     flashback: mana('{3}{U}'),
   },
   'Time Stop': {
-    // Simplified: every other spell is exiled, abilities on the stack are dropped, combat ends.
+    // Exiled with everything else on the stack.
+    afterResolving: 'exile',
     spell: { targets: [], effects: [{ kind: 'endTheTurn' }] },
   },
   'Homunculus Horde': {
@@ -83,10 +88,16 @@ export const FOUNDATIONS_DRAFT_BEHAVIORS: Record<string, Behavior> = {
     spell: { targets: [], effects: [{ kind: 'sacrifice', what: { each: 'creature' } }] },
   },
   'Gutless Plunderer': {
-    // Raid: surveil 3 (any number may stay on top, not just one).
+    // Raid: one of the top three may go back on top; the rest go to the graveyard.
     abilities: [
       {
-        ...when({ on: 'etb' }, [], { kind: 'surveil', amount: 3 }),
+        ...when({ on: 'etb' }, [], {
+          kind: 'lookAndTake',
+          count: 3,
+          filter: {},
+          to: 'libraryTop',
+          restToGraveyard: true,
+        }),
         condition: { kind: 'attackedThisTurn' },
       },
     ],
@@ -147,8 +158,10 @@ export const FOUNDATIONS_DRAFT_BEHAVIORS: Record<string, Behavior> = {
       condition: { kind: 'controlsCreature', filter: { minPower: 4 } },
       amount: 3,
     },
-    // Spells only, not abilities.
-    spell: { targets: [{ what: 'spell' }], effects: [{ kind: 'changeTarget', what: t0 }] },
+    spell: {
+      targets: [{ what: 'spell', abilities: true }],
+      effects: [{ kind: 'changeTarget', what: t0 }],
+    },
   },
   'Dropkick Bomber': {
     abilities: [
@@ -214,14 +227,16 @@ export const FOUNDATIONS_DRAFT_BEHAVIORS: Record<string, Behavior> = {
           {
             kind: 'emblem',
             until: 'permanent',
-            // The emblem's anthem applies from the start of each of your combats.
-            ability: when({ on: 'beginningOfCombat', whose: 'yours' }, [], {
-              kind: 'pump',
-              to: yours,
-              power: 2,
-              toughness: 2,
-              keywords: ['vigilance', 'trample', 'indestructible'],
-            }),
+            ability: {
+              kind: 'static',
+              effect: {
+                kind: 'anthem',
+                affects: 'creaturesYouControl',
+                power: 2,
+                toughness: 2,
+                keywords: ['vigilance', 'trample', 'indestructible'],
+              },
+            },
           },
         ],
         label: '−8: emblem',
@@ -252,18 +267,11 @@ export const FOUNDATIONS_DRAFT_BEHAVIORS: Record<string, Behavior> = {
   'Elvish Archdruid': {
     abilities: [
       anthem('Elf'),
-      // An activated ability rather than a mana ability.
       {
-        kind: 'activated',
+        kind: 'mana',
         cost: { tapSelf: true },
-        targets: [],
-        effects: [
-          {
-            kind: 'addMana',
-            mana: [['G']],
-            count: { count: 'creaturesYouControl', subtype: 'Elf' },
-          },
-        ],
+        produces: 'G',
+        amountOf: { count: 'creaturesYouControl', subtype: 'Elf' },
       },
     ],
   },
@@ -307,12 +315,35 @@ export const FOUNDATIONS_DRAFT_BEHAVIORS: Record<string, Behavior> = {
     ],
   },
   'Vial Smasher the Fierce': {
-    // Two players: the opponent, never a planeswalker of theirs.
+    // Two players: the opponent, or one of their planeswalkers if they have one.
     abilities: [
       when({ on: 'castSpell', filter: 'first' }, [], {
-        kind: 'damage',
-        amount: { manaValueOfSubject: true },
-        to: 'eachOpponent',
+        kind: 'if',
+        condition: {
+          kind: 'amountAtLeast',
+          amount: { count: 'permanentsOpponentsControl', filter: { types: ['Planeswalker'] } },
+          min: 1,
+        },
+        then: [
+          {
+            kind: 'choose',
+            options: [
+              { label: 'Damage to your opponent', effects: [vialDamage('eachOpponent')] },
+              {
+                label: 'Damage to a planeswalker they control',
+                effects: [
+                  {
+                    kind: 'chooseYourPermanent',
+                    opponents: true,
+                    filter: { types: ['Planeswalker'] },
+                    then: [vialDamage('chosen')],
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+        else: [vialDamage('eachOpponent')],
       }),
     ],
   },

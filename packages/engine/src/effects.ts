@@ -35,7 +35,7 @@ import { phaseOut } from './phasing.ts';
 import { foodsOf } from './forage.ts';
 import { canPayFrom, manaSources, manaValue } from './mana.ts';
 import { nextInt, shuffleInPlace } from './rng.ts';
-import { checkCondition } from './triggers.ts';
+import { checkCondition, triggeredAbility } from './triggers.ts';
 import { addLore } from './sagas.ts';
 import type {
   AbilityDef,
@@ -51,7 +51,9 @@ import type {
   ObjectId,
   PlayerId,
   Ref,
+  StackItem,
   TargetChoice,
+  TargetSpec,
 } from './types.ts';
 
 export type { EffectSource } from './types.ts';
@@ -296,6 +298,70 @@ export function findSpell(ctx: Ctx, id: ObjectId) {
   return item?.kind === 'spell' ? item : undefined;
 }
 
+/** The targets an activated or triggered ability on the stack asks for (Bolt Bend). */
+function abilityTargetSpecs(
+  ctx: Ctx,
+  item: Extract<StackItem, { kind: 'ability' }>,
+): readonly TargetSpec[] {
+  if (item.activated) return item.activated.targets;
+  if (item.inline || item.emblem) return triggeredAbility(ctx, item).targets;
+  const a = defOf(ctx, item.sourceDefId).abilities[item.abilityIndex];
+  if (a?.kind === 'triggered')
+    return (item.mode !== undefined ? a.modes?.[item.mode]?.targets : undefined) ?? a.targets;
+  return a?.kind === 'activated' ? a.targets : [];
+}
+
+/** How a target reads in a choice for `viewer` (Bolt Bend's new targets). */
+function targetLabel(ctx: Ctx, viewer: PlayerId, t: TargetChoice): string {
+  if ('player' in t) return t.player === viewer ? 'You' : 'Your opponent';
+  const o = ctx.s.objects[t.object.id];
+  if (o) return `${defOf(ctx, o.defId).name} (${o.controller === viewer ? 'yours' : "opponent's"})`;
+  const ab = ctx.s.stack.find((x) => x.id === t.object.id);
+  return ab?.kind === 'ability' ? `${defOf(ctx, ab.sourceDefId).name}'s ability` : 'Another target';
+}
+
+/**
+ * The other legal targets for a spell or ability on the stack, as options for
+ * `es.controller`: Bolt Bend's "change the target of target spell or ability
+ * with a single target" (`single`), or a copy's "you may choose new targets".
+ * The best for the chooser come first (aimed at the other side from before).
+ */
+function newTargetOptions(
+  ctx: Ctx,
+  es: EffectSource,
+  id: ObjectId | undefined,
+  single: boolean,
+): { label: string; effects: EffectDef[] }[] {
+  const item = ctx.s.stack.find((x) => x.id === id);
+  if (!item || item.targets.length === 0 || (single && item.targets.length !== 1)) return [];
+  const spec =
+    item.kind === 'spell'
+      ? (spellOnStack(defOf(ctx, obj(ctx, item.id).defId), item)?.targets ?? [])
+      : abilityTargetSpecs(ctx, item);
+  const sourceId = item.kind === 'spell' ? item.id : item.source.id;
+  const combos = targetCombos(ctx, spec, { controller: item.controller, sourceId }).filter(
+    (c) => c.length === item.targets.length && JSON.stringify(c) !== JSON.stringify(item.targets),
+  );
+  const mine = (c: TargetChoice) =>
+    'player' in c
+      ? c.player === es.controller
+      : ctx.s.objects[c.object.id]?.controller === es.controller;
+  const wasMine = mine(item.targets[0]!);
+  const best = (c: TargetChoice[]) => Number(mine(c[0]!) === wasMine);
+  return combos
+    .sort((a, b) => best(a) - best(b))
+    .map((c) => ({
+      label: c.map((x) => targetLabel(ctx, es.controller, x)).join(', '),
+      effects: [{ kind: 'setStackTargets', id: item.id, targets: c }],
+    }));
+}
+
+/** The id of the spell or ability a target refers to (Bolt Bend). */
+function stackTargetId(es: EffectSource, what: Ref): ObjectId | undefined {
+  const t = typeof what === 'object' && 'target' in what ? es.targets[what.target] : null;
+  return t && 'object' in t ? t.object.id : undefined;
+}
+
 /** Counters a spell (unless it can't be countered). */
 export function counterSpell(ctx: Ctx, id: ObjectId): void {
   const i = ctx.s.stack.findIndex((x) => x.kind === 'spell' && x.id === id);
@@ -536,6 +602,32 @@ export function runEffects(
     if (e.kind === 'repeat') {
       const n = resolveAmount(ctx, es, e.count);
       list.splice(i, 1, ...Array.from({ length: n }, () => e.effects).flat());
+      i--;
+      continue;
+    }
+    // Bolt Bend: the caster chooses the new target among the other legal ones.
+    if (e.kind === 'changeTarget') {
+      const options = newTargetOptions(ctx, es, stackTargetId(es, e.what), true);
+      list.splice(
+        i,
+        1,
+        ...(options.length > 1 ? [{ kind: 'choose', options } as EffectDef] : []),
+        ...(options.length === 1 ? options[0]!.effects : []),
+      );
+      i--;
+      continue;
+    }
+    // Loki Laufeyson: "You may choose new targets for the copy" (the copy is 'chosen').
+    if (e.kind === 'copySpell' && e.newTargets && list[i + 1]?.kind !== 'chooseNewTargets')
+      list.splice(i + 1, 0, { kind: 'chooseNewTargets' });
+    if (e.kind === 'chooseNewTargets') {
+      const options = newTargetOptions(ctx, es, es.chosen?.id, false);
+      const keep = { label: 'Keep the same targets', effects: [] };
+      list.splice(
+        i,
+        1,
+        ...(options.length ? [{ kind: 'choose', options: [keep, ...options] } as EffectDef] : []),
+      );
       i--;
       continue;
     }
@@ -990,7 +1082,8 @@ export function runEffects(
         const options = ctx.s.battlefield.filter(
           (id) =>
             id !== sourceId &&
-            obj(ctx, id).controller === controller &&
+            // Vial Smasher: a permanent an opponent controls.
+            (obj(ctx, id).controller === controller) !== !!e.opponents &&
             matchesFilter(ctx, id, e.filter, sourceId),
         );
         if (options.length === 0) {
@@ -1032,9 +1125,14 @@ export function runEffects(
         };
       } else if (e.kind === 'chooseFromOpponentHand') {
         const from = other(controller);
-        const options = ctx.s.players[from].hand.filter(
+        let options = ctx.s.players[from].hand.filter(
           (id) => !e.filter || cardMatches(ctx, id, e.filter),
         );
+        // Klaw: they reveal only some cards (picked for them: the cheapest), and you choose among those.
+        if (e.reveal !== undefined)
+          options = [...options]
+            .sort((a, b) => manaValue(def(ctx, a).manaCost) - manaValue(def(ctx, b).manaCost))
+            .slice(0, resolveAmount(ctx, es, e.reveal));
         ctx.s.decision = {
           kind: 'chooseFromHand',
           player: controller,
@@ -1396,34 +1494,26 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
     case 'untap':
       for (const id of objectsOf(ctx, es, e.what)) untap(ctx, id);
       return;
-    case 'changeTarget': {
-      const t = typeof e.what === 'object' && 'target' in e.what ? es.targets[e.what.target] : null;
-      const item = t && 'object' in t ? findSpell(ctx, t.object.id) : undefined;
-      if (!item || item.targets.length !== 1) return;
-      const spec = spellOnStack(defOf(ctx, obj(ctx, item.id).defId), item)?.targets ?? [];
-      const combos = targetCombos(ctx, spec, {
-        controller: item.controller,
-        sourceId: item.id,
-      }).filter((c) => c.length === 1 && JSON.stringify(c) !== JSON.stringify(item.targets));
-      // Best for us: aim it at an opponent or their permanent if it was aimed at ours, and the
-      // other way round; otherwise anything else.
-      const mine = (c: TargetChoice) =>
-        'player' in c
-          ? c.player === es.controller
-          : ctx.s.objects[c.object.id]?.controller === es.controller;
-      const wasMine = mine(item.targets[0]!);
-      const pick = combos.find((c) => mine(c[0]!) !== wasMine) ?? combos[0];
-      if (pick) item.targets = pick;
+    case 'changeTarget':
+    case 'chooseNewTargets':
+      return; // handled by runEffects
+    case 'setStackTargets': {
+      const item = ctx.s.stack.find((x) => x.id === e.id);
+      if (item) item.targets = e.targets;
       return;
     }
     case 'endTheTurn': {
+      // Rule 723.1: every spell and ability on the stack is exiled (Time Stop itself as it
+      // finishes resolving), combat ends, and the turn skips to its cleanup step.
       const self = es.source?.id;
       for (const x of [...ctx.s.stack]) {
         if (x.kind === 'spell' && x.id === self) continue;
         ctx.s.stack.splice(ctx.s.stack.indexOf(x), 1);
         if (x.kind === 'spell') moveObject(ctx, x.id, 'exile');
       }
-      if (ctx.s.combat) ctx.s.combat.attackers = [];
+      ctx.s.combat = null;
+      ctx.s.pendingTriggers = [];
+      ctx.s.turn.endTheTurn = true;
       return;
     }
     case 'doesntUntapWhileSource':
@@ -1504,7 +1594,12 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
       // Beast Within: "Its controller creates ..." (the target's controller, even once it's gone).
       const target = e.forControllerOf !== undefined ? es.targets[e.forControllerOf] : undefined;
       const targetOwner =
-        target && 'object' in target ? ctx.s.objects[target.object.id]?.controller : undefined;
+        target && 'object' in target
+          ? ctx.s.objects[target.object.id]?.controller
+          : // Atlantis Attacks: "target player creates".
+            target && 'player' in target
+            ? target.player
+            : undefined;
       const owner = targetOwner ?? (e.forOpponent ? other(es.controller) : es.controller);
       // Divine Visitation: creature tokens are 4/4 Angels instead.
       const token = replacedToken(ctx, owner, e.token);
@@ -1742,6 +1837,18 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
       if (!o || o.zone !== 'graveyard' || o.zcc !== t.object.zcc) return;
       moveObject(ctx, o.id, 'battlefield', { controller: es.controller });
       if (e.tapped) o.tapped = true;
+      // Grim Reaper: "tapped and attacking" (never declared, so no attack triggers).
+      if (e.attacking && ctx.s.combat && obj(ctx, o.id).zone === 'battlefield') {
+        o.tapped = true;
+        const self = es.source && ctx.s.combat.attackers.find((a) => a.id === es.source!.id);
+        ctx.s.combat.attackers.push({
+          id: o.id,
+          defender: self?.defender ?? other(es.controller),
+          ...(self?.planeswalker ? { planeswalker: self.planeswalker } : {}),
+          blocked: false,
+          blockers: [],
+        });
+      }
       if (e.counter) (o.counters ??= {})[e.counter] = 1;
       if (e.addSubtype) o.addedSubtypes = [...(o.addedSubtypes ?? []), e.addSubtype];
       // Heroic Return, Winter Soldier: "if a Hero enters this way, it enters with counters".
@@ -2268,6 +2375,8 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
         });
         // Marvel Super Heroes Jumpstart (Tricksters): "except the copy isn't legendary".
         if (e.notLegendary) copy.nonlegendary = true;
+        // Loki Laufeyson: the copy whose targets may change next.
+        if (e.newTargets) es.chosen = { id: copy.id, zcc: copy.zcc };
       }
       return;
     }
@@ -2636,6 +2745,22 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
       if (e.counters) addCounters(ctx, o.id, e.counters);
       if (e.addSubtype) o.addedSubtypes = [...(o.addedSubtypes ?? []), e.addSubtype];
       if (e.named) (o.counters ??= {})[e.named] = 1;
+      // Hellcat: "She loses all abilities and gains haste" for as long as she stays.
+      if (e.losesAbilitiesGains && obj(ctx, o.id).zone === 'battlefield') {
+        ctx.s.effects.push({
+          timestamp: newTimestamp(ctx),
+          affected: { id: o.id, zcc: o.zcc },
+          power: 0,
+          toughness: 0,
+          keywords: [],
+          loseAbilities: true,
+          expires: 'whileSource',
+          whileSourceId: o.id,
+          player: es.controller,
+        });
+        o.blank = true;
+        o.grantedKeywords = [...(o.grantedKeywords ?? []), ...e.losesAbilitiesGains];
+      }
       return;
     }
     case 'exile':

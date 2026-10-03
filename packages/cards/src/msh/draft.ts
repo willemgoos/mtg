@@ -32,6 +32,12 @@ const graveyardCard = (filter: TargetSpec['filter'], optional = false): TargetSp
 });
 
 const treasure: EffectDef = { kind: 'createToken', token: 'treasure-token', count: 1 };
+const yourArtifact: TargetSpec = {
+  what: 'permanent',
+  controller: 'you',
+  filter: { types: ['Artifact'] },
+};
+const DAMAGE_CONTROL_TYPES = ['Artifact', 'Creature', 'Enchantment', 'Land'] as const;
 
 /**
  * A Plan: each time it advances it gets a plan counter; at the fourth, it is
@@ -126,8 +132,10 @@ export const MSH_DRAFT: Record<string, Behavior> = {
   // ------------------------------------------------------------------- blue
   'Atlantis Attacks': teamworkModes(
     4,
-    // "Target player creates" a Leviathan: always you.
-    { targets: [], effects: [{ kind: 'createToken', token: 'leviathan-token', count: 1 }] },
+    {
+      targets: [{ what: 'player' }],
+      effects: [{ kind: 'createToken', token: 'leviathan-token', count: 1, forControllerOf: 0 }],
+    },
     {
       targets: [
         { what: 'permanent', filter: { nonland: true } },
@@ -143,11 +151,18 @@ export const MSH_DRAFT: Record<string, Behavior> = {
     abilities: [{ kind: 'mana', cost: { tapSelf: true }, produces: 'U', onlyFor: 'Artifact' }],
   },
   'Shuri, Wakandan Inventor': {
-    // Her copy ability isn't modelled; artifact spells cost {1} less.
     abilities: [
       {
         kind: 'static',
         effect: { kind: 'spellsCostLess', filter: { types: ['Artifact'] }, amount: 1 },
+      },
+      {
+        kind: 'activated',
+        cost: { mana: mana('{1}'), tapSelf: true },
+        sorcerySpeed: true,
+        targets: [yourArtifact, yourArtifact],
+        effects: [{ kind: 'becomeCopy', what: t0, of: t1, notLegendary: true }],
+        label: 'Copy an artifact',
       },
     ],
   },
@@ -179,8 +194,7 @@ export const MSH_DRAFT: Record<string, Behavior> = {
         [{ what: 'permanent', filter: { nonland: true, nontoken: true }, optional: true }],
         { kind: 'bounce', what: t0 },
       ),
-      // Creatures only: "another nonland permanent you control is returned to its owner's hand".
-      when({ on: 'leavesWithoutDying', who: 'other' }, [], {
+      when({ on: 'yourPermanentReturnedToHand' }, [], {
         kind: 'counters',
         to: 'self',
         amount: 1,
@@ -203,8 +217,21 @@ export const MSH_DRAFT: Record<string, Behavior> = {
     ],
   },
   'Kid Loki': {
-    // Hexproof for creatures you put +1/+1 counters on this turn isn't modelled.
-    abilities: [when({ on: 'drawSecondCard' }, [], { kind: 'counters', to: 'self', amount: 1 })],
+    abilities: [
+      // Counters put on them this turn by anyone count, not only yours.
+      {
+        kind: 'static',
+        effect: {
+          kind: 'anthem',
+          affects: 'creaturesYouControl',
+          filter: { countersPutThisTurn: true },
+          power: 0,
+          toughness: 0,
+          keywords: ['hexproof'],
+        },
+      },
+      when({ on: 'drawSecondCard' }, [], { kind: 'counters', to: 'self', amount: 1 }),
+    ],
   },
 
   // ------------------------------------------------------------------ black
@@ -219,10 +246,11 @@ export const MSH_DRAFT: Record<string, Behavior> = {
     ],
   },
   'Klaw, Sonic Subjugator': {
-    // You see their whole hand rather than the cards they reveal.
+    // The opponent reveals the cards, picked for them (the cheapest); "target player" is always them.
     abilities: [
       when({ on: 'etb' }, [], {
         kind: 'chooseFromOpponentHand',
+        reveal: { count: 'cardsInGraveyard', types: ['Creature'], plus: 1 },
         then: 'discard',
       }),
     ],
@@ -239,14 +267,16 @@ export const MSH_DRAFT: Record<string, Behavior> = {
             kind: 'returnToBattlefield',
             what: t0,
             counter: 'finality',
+            tapped: true,
+            attacking: true,
           },
         ],
       },
     ],
   },
   'Titania, Rugged Rumbler': {
-    // The additional cost is always the discard, and ward is always {2}.
-    discardToCast: true,
+    // Ward is always {2} (never the discard).
+    discardOrPay: mana('{2}'),
   },
 
   // -------------------------------------------------------------------- red
@@ -262,10 +292,14 @@ export const MSH_DRAFT: Record<string, Behavior> = {
             until: 'nextSpellThisTurn',
             ability: {
               kind: 'triggered',
-              // Mana value up to his printed power, 2 (not raised by counters).
-              trigger: { on: 'castSpell', filter: 'instantOrSorcery', spell: { maxManaValue: 2 } },
+              // Mana value up to Loki's power as the spell is cast.
+              trigger: {
+                on: 'castSpell',
+                filter: 'instantOrSorcery',
+                spell: { maxManaValue: 'sourcePower' },
+              },
               targets: [],
-              effects: [{ kind: 'copySpell', what: 'subject', retarget: true }],
+              effects: [{ kind: 'copySpell', what: 'subject', newTargets: true }],
             },
           },
         ],
@@ -284,28 +318,32 @@ export const MSH_DRAFT: Record<string, Behavior> = {
     ],
   },
   'Misty Knight, Hero for Hire': {
-    // Draws one card: the discard paying for it (earlier discards this turn don't count).
     abilities: [
       {
         kind: 'activated',
         cost: { mana: mana('{2}'), tapSelf: true, discard: true },
         targets: [],
-        effects: [draw(1)],
+        // The discard paying for it counts.
+        effects: [{ kind: 'draw', who: 'controller', amount: { count: 'cardsDiscardedThisTurn' } }],
       },
     ],
   },
   'Iron Fist, Living Weapon': {
-    // Deals the damage straight away (tapping him) instead of granting a tap ability.
+    // The trigger marks that he has the tap ability this turn; the ability is there while it's marked.
     abilities: [
       {
         kind: 'triggered',
         trigger: { on: 'castSpell', filter: 'targetsYourCreature' },
-        condition: { kind: 'not', condition: { kind: 'sourceTapped' } },
-        targets: [{ what: 'any', filter: { other: true }, optional: true }],
-        effects: [
-          { kind: 'tap', what: 'self' },
-          { kind: 'damage', amount: { powerOf: 'self' }, to: t0 },
-        ],
+        targets: [],
+        effects: [{ kind: 'noteResolution' }],
+      },
+      {
+        kind: 'activated',
+        cost: { tapSelf: true },
+        condition: { kind: 'resolvedThisTurn', n: 1, orMore: true },
+        targets: [{ what: 'any', filter: { other: true } }],
+        effects: [{ kind: 'damage', amount: { powerOf: 'self' }, to: t0 }],
+        label: 'Deal damage equal to his power',
       },
     ],
   },
@@ -338,16 +376,34 @@ export const MSH_DRAFT: Record<string, Behavior> = {
     spell: { targets: [{ what: 'any' }], effects: [{ kind: 'damage', amount: 4, to: t0 }] },
   },
   'Death to Our Enemies': {
-    // The target for the 7 damage is chosen as each spell triggers it, and takes all 7.
+    /**
+     * "7 damage divided as you choose among one or two targets": with two, 6/1,
+     * 5/2 or 4/3 (order the targets to choose which gets more).
+     */
     abilities: [
       when(
         { on: 'castSpell', filter: 'noncreature' },
-        [{ what: 'any', optional: true }],
-        ...planStep(
-          [{ kind: 'createToken', token: 'treasure-token', count: 1, tapped: true }],
-          [{ kind: 'damage', amount: 7, to: t0 }],
-        ),
+        [],
+        ...planStep([{ kind: 'createToken', token: 'treasure-token', count: 1, tapped: true }], []),
       ),
+      // "When you do": the reflexive trigger as it's sacrificed.
+      when({ on: 'sacrificed' }, [{ what: 'any' }, { what: 'any', optional: true }], {
+        kind: 'if',
+        condition: { kind: 'targetChosen', target: 1 },
+        then: [
+          {
+            kind: 'choose',
+            options: ([6, 5, 4] as const).map((n) => ({
+              label: `${n} damage to the first target, ${7 - n} to the second`,
+              effects: [
+                { kind: 'damage', amount: n, to: t0 },
+                { kind: 'damage', amount: 7 - n, to: t1 },
+              ],
+            })),
+          },
+        ],
+        else: [{ kind: 'damage', amount: 7, to: t0 }],
+      }),
     ],
   },
 
@@ -355,35 +411,50 @@ export const MSH_DRAFT: Record<string, Behavior> = {
   'Doc Samson, Super Psychiatrist': {
     abilities: [
       { kind: 'static', effect: { kind: 'extraCounters', amount: 1 } },
-      // X mana of one colour: green only.
+      // X mana of any one colour (an activated ability rather than a mana ability).
       {
         kind: 'activated',
         cost: { tapSelf: true },
         targets: [],
-        effects: [{ kind: 'addMana', mana: [['G']], count: { powerOf: 'self' } }],
+        effects: [
+          {
+            kind: 'choose',
+            options: (['W', 'U', 'B', 'R', 'G'] as const).map((c) => ({
+              label: `Add {${c}} for each point of his power`,
+              effects: [{ kind: 'addMana', mana: [[c]], count: { powerOf: 'self' } }],
+            })),
+          },
+        ],
       },
     ],
   },
-  'Call Damage Control': spell(
-    // Up to two permanent cards; that they are of different types isn't enforced.
-    [
-      graveyardCard({ notTypes: ['Instant', 'Sorcery'] }, true),
-      graveyardCard({ notTypes: ['Instant', 'Sorcery'] }, true),
-    ],
-    { kind: 'returnToHand', what: t0 },
-    { kind: 'returnToHand', what: t1 },
-  ),
+  // "Choose up to two" of four modes: each single mode, and each pair of different modes.
+  'Call Damage Control': {
+    modes: DAMAGE_CONTROL_TYPES.flatMap((a, i) => [
+      { ...returnFromGraveyard({ types: [a] }), label: `${a} card` },
+      ...DAMAGE_CONTROL_TYPES.slice(i + 1).map((b) => ({
+        ...combineSpells([
+          returnFromGraveyard({ types: [a] }),
+          returnFromGraveyard({ types: [b] }),
+        ]),
+        label: `${a} card and ${b.toLowerCase()} card`,
+      })),
+    ]),
+  },
   'Claim the Kingdom': {
     abilities: [
       when(
         { on: 'landfall' },
         [yourCreature],
-        ...planStep(
-          [{ kind: 'counters', to: t0, amount: 1 }],
-          // The indestructible counter goes on the same creature.
-          [{ kind: 'namedCounters', name: 'indestructible', amount: 1, to: t0 }],
-        ),
+        ...planStep([{ kind: 'counters', to: t0, amount: 1 }], []),
       ),
+      // "When you do": the reflexive trigger as it's sacrificed.
+      when({ on: 'sacrificed' }, [yourCreature], {
+        kind: 'namedCounters',
+        name: 'indestructible',
+        amount: 1,
+        to: t0,
+      }),
     ],
   },
   'Reptil, Dinomorpher': {
@@ -423,8 +494,14 @@ export const MSH_DRAFT: Record<string, Behavior> = {
     ],
   },
   'Hellcat, Undying Vigilante': {
-    // She comes back with a counter and haste; losing her abilities isn't modelled.
-    abilities: [when({ on: 'dies' }, [], { kind: 'returnSource', to: 'battlefield', counters: 1 })],
+    abilities: [
+      when({ on: 'dies' }, [], {
+        kind: 'returnSource',
+        to: 'battlefield',
+        counters: 1,
+        losesAbilitiesGains: ['haste'],
+      }),
+    ],
   },
   'Mister Hyde, Monster Within': {
     abilities: [

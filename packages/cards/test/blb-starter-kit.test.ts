@@ -110,6 +110,65 @@ describe('Otter Limits', () => {
     expect(pt(g, bear)).toEqual([3, 3]);
   });
 
+  it('Bria gives each other creature its own prowess trigger', () => {
+    const g = game({
+      p1: {
+        hand: ['flame-lash'],
+        battlefield: ['bria-riptide-rogue', 'bear-cub', 'savannah-lions', ...n('mountain', 4)],
+      },
+    });
+    const bear = g.id('p1', 'bear-cub');
+    const lions = g.id('p1', 'savannah-lions');
+    cast(g, 'flame-lash', [{ player: 'p2' }]);
+    for (let i = 0; i < 5 && g.decision.kind !== 'priority'; i++) g.do(g.legal()[0]!);
+    const sources = g.state.stack.flatMap((x) => (x.kind === 'ability' ? [x.source.id] : []));
+    expect(sources.filter((id) => id === bear)).toHaveLength(1);
+    expect(sources.filter((id) => id === lions)).toHaveLength(1);
+    settle(g);
+    expect(pt(g, lions)).toEqual([3, 2]);
+  });
+
+  it('Thieving Otter draws on noncombat damage to an opponent too', () => {
+    const g = game({
+      p1: {
+        battlefield: ['thieving-otter', 'origin-of-thor'],
+        library: n('island', 3),
+      },
+    });
+    const otter = g.id('p1', 'thieving-otter');
+    // Origin of Thor's chapter III: the Otter deals damage equal to its power to each opponent.
+    g.obj(g.id('p1', 'origin-of-thor')).counters = { lore: 2 };
+    g.passUntilStep('end');
+    for (
+      let i = 0;
+      i < 200 && !(g.state.turn.activePlayer === 'p1' && g.state.turn.step === 'main1');
+      i++
+    ) {
+      if (g.decision.kind === 'priority') g.pass();
+      else if (g.decision.kind === 'chooseTriggerTargets')
+        g.do(
+          g
+            .legal()
+            .find(
+              (a) =>
+                a.type === 'chooseTargets' &&
+                a.targets.some((t) => 'object' in t && t.object.id === otter),
+            ) ?? g.legal()[0]!,
+        );
+      else g.do(g.legal()[0]!);
+    }
+    const before = handSize(g, 'p1');
+    settle(g, (legal) =>
+      legal.find(
+        (a) =>
+          a.type === 'chooseTargets' &&
+          a.targets.some((t) => 'object' in t && t.object.id === otter),
+      ),
+    );
+    expect(g.state.players.p2.life).toBe(18);
+    expect(handSize(g, 'p1')).toBe(before + 1);
+  });
+
   it('Thieving Otter draws a card when it deals combat damage to a player', () => {
     const g = game({ p1: { battlefield: ['thieving-otter'], library: n('island', 3) } });
     g.passUntilStep('beginCombat').passBoth().attack(g.id('p1', 'thieving-otter'));

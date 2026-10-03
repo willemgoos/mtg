@@ -1,17 +1,20 @@
+import { type Action, getCharacteristics } from '@mtg/engine';
 import { describe, expect, it } from 'vitest';
-import { all, cast, game, handSize, n, settle } from './blb-helpers.ts';
+import { cardDb } from '../src/index.ts';
+import { all, cast, game, handSize, n, pt, settle } from './blb-helpers.ts';
 
 // Foundations cards for the draft trophy decks and Arena's Jump In packets.
 
-/** Answers every prompt with its first option and resolves the stack (bounded). */
-function drive(g: ReturnType<typeof game>) {
+/** Answers every prompt with `pick`'s or its first option and resolves the stack (bounded). */
+function drive(g: ReturnType<typeof game>, pick?: (legal: Action[]) => Action | undefined) {
   for (let i = 0; i < 40; i++) {
     if (g.decision.kind === 'priority') {
       if (!g.state.stack.length) return g;
       g.pass();
       continue;
     }
-    g.do(g.legal()[0]!);
+    const legal = g.legal();
+    g.do(pick?.(legal) ?? legal[0]!);
   }
   return g;
 }
@@ -57,20 +60,68 @@ describe('spells', () => {
     expect(all(g, 'savannah-lions').length === 0 || g.state.players.p2.life === 17).toBe(true);
   });
 
-  it('Time Stop exiles the other spells on the stack', () => {
+  it('Time Stop exiles the other spells on the stack and ends the turn', () => {
     const g = game({
       p1: { battlefield: n('island', 6), hand: ['time-stop'] },
-      p2: { battlefield: n('mountain', 2), hand: ['lightning-strike'] },
+      p2: { battlefield: [...n('mountain', 2), 'bear-cub'], hand: ['lightning-strike'] },
     });
     g.passUntilStep('end').passUntilStep('main1');
     expect(g.state.turn.activePlayer).toBe('p2');
+    const turn = g.state.turn.number;
     const strike = g.id('p2', 'lightning-strike', 'hand');
+    const stop = g.id('p1', 'time-stop', 'hand');
     cast(g, 'lightning-strike', [{ player: 'p1' }]);
     g.pass();
     cast(g, 'time-stop');
-    drive(g);
+    g.passBoth();
     expect(g.zoneOf(strike)).toBe('exile');
+    expect(g.zoneOf(stop)).toBe('exile');
     expect(g.state.players.p1.life).toBe(20);
+    // Straight to p1's next turn: p2 never got to combat.
+    expect(g.state.turn.number).toBe(turn + 1);
+    expect(g.state.turn.activePlayer).toBe('p1');
+  });
+
+  it('Time Stop during combat stops the attack', () => {
+    const g = game({
+      p1: { battlefield: n('island', 6), hand: ['time-stop'] },
+      p2: { battlefield: ['serra-angel'] },
+    });
+    g.passUntilStep('end').passUntilStep('beginCombat');
+    g.passBoth().attack(g.id('p2', 'serra-angel'));
+    g.pass();
+    cast(g, 'time-stop');
+    g.passBoth();
+    expect(g.state.players.p1.life).toBe(20);
+    expect(g.state.turn.activePlayer).toBe('p1');
+  });
+
+  it('Bolt Bend changes the target of an ability, to the target you choose', () => {
+    const g = game({
+      p1: { battlefield: ['bear-cub', ...n('mountain', 4)], hand: ['bolt-bend'] },
+      p2: { battlefield: ['fanatical-firebrand', 'savannah-lions'] },
+    });
+    g.passUntilStep('end').passUntilStep('main1');
+    const ping = g
+      .legal()
+      .find(
+        (a) =>
+          a.type === 'activateAbility' &&
+          a.targets.length === 1 &&
+          'player' in a.targets[0]! &&
+          a.targets[0].player === 'p1',
+      )!;
+    g.do(ping).pass();
+    const ability = g.state.stack[0]!;
+    cast(g, 'bolt-bend', [{ object: { id: ability.id, zcc: 0 } }]);
+    g.passBoth();
+    const d = g.decision;
+    if (d.kind !== 'chooseOption') throw new Error(`Expected a choice, got ${d.kind}`);
+    const lions = d.options.findIndex((o) => o.label.startsWith('Savannah Lions'));
+    g.do({ type: 'chooseOption', player: 'p1', index: lions });
+    drive(g);
+    expect(g.state.players.p1.life).toBe(20);
+    expect(all(g, 'savannah-lions')).toHaveLength(0);
   });
 });
 
@@ -122,6 +173,67 @@ describe('creatures', () => {
     expect(g.zoneOf(goblin)).not.toBe('battlefield');
   });
 
+  it('Dropkick Bomber’s Goblin is sacrificed after combat damage to a creature too', () => {
+    const g = game({
+      p1: { battlefield: ['dropkick-bomber', 'goblin-token', 'mountain'] },
+      p2: { battlefield: ['serra-angel'] },
+    });
+    const goblin = g.id('p1', 'goblin-token');
+    g.obj(goblin).plusOneCounters = 10;
+    settle(
+      g.do({
+        type: 'activateAbility',
+        player: 'p1',
+        source: g.id('p1', 'dropkick-bomber'),
+        abilityIndex: 1,
+        targets: [g.ref(goblin)],
+      }),
+    );
+    g.passUntilStep('beginCombat').passBoth().attack(goblin);
+    g.passBoth().block([g.id('p2', 'serra-angel'), goblin]);
+    g.passUntilStep('main2');
+    drive(g);
+    expect(all(g, 'serra-angel')).toHaveLength(0);
+    expect(g.zoneOf(goblin)).not.toBe('battlefield');
+  });
+
+  it('Gutless Plunderer keeps one of the top three on top and mills the rest', () => {
+    const g = game({
+      p1: {
+        hand: ['gutless-plunderer'],
+        battlefield: n('swamp', 3),
+        library: ['forest', 'island', 'mountain', 'plains'],
+      },
+    });
+    g.state.players.p1.attackedThisTurn = true;
+    cast(g, 'gutless-plunderer');
+    for (let i = 0; i < 10 && g.decision.kind !== 'searchLibrary'; i++) g.pass();
+    const island = g.id('p1', 'island', 'library');
+    g.do({ type: 'chooseCard', player: 'p1', card: island });
+    drive(g);
+    const lib = g.state.players.p1.library.map((id) => g.obj(id).defId);
+    expect(lib).toEqual(['island', 'plains']);
+    expect(g.state.players.p1.graveyard.map((id) => g.obj(id).defId).sort()).toEqual([
+      'forest',
+      'mountain',
+    ]);
+  });
+
+  it('Elvish Archdruid is a mana ability making {G} for each Elf', () => {
+    const g = game({
+      p1: {
+        hand: ['elvish-archdruid'],
+        battlefield: [
+          'elvish-archdruid',
+          { card: 'llanowar-elves', tapped: true },
+          { card: 'llanowar-elves', tapped: true },
+        ],
+      },
+    });
+    settle(cast(g, 'elvish-archdruid'));
+    expect(all(g, 'elvish-archdruid')).toHaveLength(2);
+  });
+
   it('Homunculus Horde copies itself on your second draw', () => {
     const g = game({
       p1: {
@@ -168,6 +280,23 @@ describe('enchantments and planeswalkers', () => {
     );
     expect(g.zoneOf(angel)).toBe('graveyard');
   });
+
+  it('Vivien Reid’s emblem pumps your creatures all the time, from now on', () => {
+    const g = game({ p1: { battlefield: ['vivien-reid', 'bear-cub'] } });
+    const vivien = g.id('p1', 'vivien-reid');
+    const bear = g.id('p1', 'bear-cub');
+    g.obj(vivien).counters = { loyalty: 8 };
+    settle(
+      g.do({ type: 'activateAbility', player: 'p1', source: vivien, abilityIndex: 2, targets: [] }),
+    );
+    expect(pt(g, bear)).toEqual([4, 4]);
+    const keywords = getCharacteristics(g.state, cardDb, bear).keywords;
+    for (const k of ['vigilance', 'trample', 'indestructible'] as const)
+      expect(keywords.has(k)).toBe(true);
+    g.passUntilStep('end').passUntilStep('main1');
+    expect(g.state.turn.activePlayer).toBe('p2');
+    expect(pt(g, bear)).toEqual([4, 4]);
+  });
 });
 
 describe('Final Fantasy trophy deck reprints', () => {
@@ -203,5 +332,27 @@ describe('Final Fantasy trophy deck reprints', () => {
     drive(cast(g, 'lightning-strike', [{ player: 'p2' }]));
     // Two strikes (6) and one trigger for the first spell (2).
     expect(g.state.players.p2.life).toBe(12);
+  });
+
+  it('Vial Smasher may hit one of their planeswalkers instead', () => {
+    const g = game({
+      p1: {
+        battlefield: ['vial-smasher-the-fierce', ...n('mountain', 2)],
+        hand: ['lightning-strike'],
+      },
+      p2: { battlefield: ['vivien-reid'] },
+    });
+    const vivien = g.id('p2', 'vivien-reid');
+    g.obj(vivien).counters = { loyalty: 5 };
+    cast(g, 'lightning-strike', [{ player: 'p2' }]);
+    drive(g, (legal) =>
+      legal.find(
+        (a) =>
+          (a.type === 'chooseOption' && a.index === 1) ||
+          (a.type === 'chooseCard' && a.card === vivien),
+      ),
+    );
+    expect(g.obj(vivien).counters?.loyalty).toBe(3);
+    expect(g.state.players.p2.life).toBe(17);
   });
 });

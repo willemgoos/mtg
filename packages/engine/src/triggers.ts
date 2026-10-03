@@ -150,7 +150,11 @@ export function checkCondition(
   if (c.kind === 'not')
     return !checkCondition(ctx, c.condition, controller, self, targets, subject);
   if (c.kind === 'resolvedThisTurn')
-    return self?.resolutions?.turn === ctx.s.turn.number && self.resolutions.count === c.n;
+    return (
+      self?.resolutions?.turn === ctx.s.turn.number &&
+      // Iron Fist, Living Weapon: `n` or more.
+      (c.orMore ? self.resolutions.count >= c.n : self.resolutions.count === c.n)
+    );
   if (c.kind === 'controlsPermanents')
     return (
       ctx.s.battlefield.filter(
@@ -490,6 +494,17 @@ function detect(ctx: Ctx, ev: GameEvent): void {
           (o, a) => a.trigger.on === 'leavesWithoutDying' && o.id !== ev.id && o.controller === was,
         );
       }
+      // Justice, Vance Astrovik: "another nonland permanent you control is returned to its owner's hand".
+      if (ev.from === 'battlefield' && ev.to === 'hand' && !movedDef.types.includes('Land')) {
+        const was = ev.controller ?? moved?.owner;
+        forEachBattlefieldTrigger(
+          ctx,
+          (o, a) =>
+            a.trigger.on === 'yourPermanentReturnedToHand' &&
+            o.id !== ev.id &&
+            o.controller === was,
+        );
+      }
       // Ygra: "Whenever a Food is put into a graveyard from the battlefield".
       if (ev.from === 'battlefield' && ev.to === 'graveyard') {
         const ygra = (d: CardDefinition) =>
@@ -528,7 +543,8 @@ function detect(ctx: Ctx, ev: GameEvent): void {
         const card = moved ?? null;
         // Final Fantasy (11b): a back face that dies (Chaos) triggers its own abilities.
         const diedAs = ev.leftAs ? defOf(ctx, ev.leftAs) : movedDef;
-        diedAs.abilities.forEach((a, i) => {
+        // Hellcat: one that had lost all its abilities has no dies triggers.
+        (ev.leftBlank ? [] : diedAs.abilities).forEach((a, i) => {
           if (a.kind !== 'triggered') return;
           const t = a.trigger;
           if (t.on !== 'dies' && t.on !== 'creatureYouControlDies') return;
@@ -777,12 +793,32 @@ function detect(ctx: Ctx, ev: GameEvent): void {
             // Marvel Super Heroes Jumpstart (Scarlet): Wanda's Vision.
             (!a.trigger.yoursOnly || o.controller === ev.player),
         );
+      // Bria, Riptide Rogue: "Other creatures you control have prowess" (each its own trigger).
+      if (!spell.types.includes('Creature'))
+        for (const bria of s.battlefield) {
+          const b = s.objects[bria]!;
+          if (b.controller !== ev.player) continue;
+          for (const a of def(ctx, bria).abilities) {
+            if (a.kind !== 'static' || a.effect.kind !== 'othersHaveProwess') continue;
+            for (const c of creaturesOnBattlefield(ctx, ev.player))
+              if (c.id !== bria)
+                s.pendingTriggers.push({
+                  source: { id: c.id, zcc: c.zcc },
+                  sourceDefId: c.defId,
+                  abilityIndex: -1,
+                  controller: ev.player,
+                  inline: [{ kind: 'pump', to: 'self', power: 1, toughness: 1 }],
+                });
+          }
+        }
       // Emblems: "whenever you cast a spell" (Season of the Bold, Ral).
       for (const e of s.emblems ?? []) {
         const a = e.ability;
         if (a.kind !== 'triggered' || a.trigger.on !== 'castSpell' || e.controller !== ev.player)
           continue;
         if (!spellMatches(ctx, a.trigger, spell, item, spellObj)) continue;
+        // Loki Laufeyson: "with mana value less than or equal to Loki's power" (the emblem's source).
+        if (a.trigger.spell && !cardMatches(ctx, ev.id, a.trigger.spell, e.source.id)) continue;
         // Galvanic Iteration: only the next one.
         if (e.once) s.emblems = s.emblems!.filter((x) => x !== e);
         s.pendingTriggers.push({
@@ -947,6 +983,14 @@ function detect(ctx: Ctx, ev: GameEvent): void {
         def(ctx, dealer.id).abilities.forEach((a, i) => {
           if (a.kind === 'triggered' && a.trigger.on === 'dealsDamage')
             queue(ctx, dealer, i, dealer.controller, undefined, ev.amount);
+          // Thieving Otter: "whenever this creature deals damage to an opponent".
+          if (
+            a.kind === 'triggered' &&
+            a.trigger.on === 'dealsDamageToOpponent' &&
+            'player' in ev.to &&
+            ev.to.player !== dealer.controller
+          )
+            queue(ctx, dealer, i, dealer.controller, undefined, ev.amount);
         });
       // Hercules: "whenever this creature is dealt damage".
       if ('object' in ev.to) {
@@ -1024,6 +1068,20 @@ function detect(ctx: Ctx, ev: GameEvent): void {
           matchesFilter(ctx, src.id, t.filter),
         src,
       );
+      // Dropkick Bomber: "When this creature deals combat damage, sacrifice it" (to a player or a creature).
+      if (
+        s.effects.some(
+          (e) =>
+            e.sacrificeOnCombatDamage && e.affected.id === src.id && e.affected.zcc === src.zcc,
+        )
+      )
+        s.pendingTriggers.push({
+          source: { id: src.id, zcc: src.zcc },
+          sourceDefId: src.defId,
+          abilityIndex: -1,
+          controller: src.controller,
+          inline: [{ kind: 'sacrifice', what: 'self' }],
+        });
       if (!('player' in ev.to)) return;
       // Kang Dynasty: "whenever any of those creatures deals combat damage to a player, draw a card".
       for (const e of s.effects)
@@ -1047,20 +1105,6 @@ function detect(ctx: Ctx, ev: GameEvent): void {
           abilityIndex: -1,
           controller: src.controller,
           inline: [{ kind: 'counters', to: 'self', amount: 1 }],
-        });
-      // Dropkick Bomber: "When this creature deals combat damage, sacrifice it."
-      if (
-        s.effects.some(
-          (e) =>
-            e.sacrificeOnCombatDamage && e.affected.id === src.id && e.affected.zcc === src.zcc,
-        )
-      )
-        s.pendingTriggers.push({
-          source: { id: src.id, zcc: src.zcc },
-          sourceDefId: src.defId,
-          abilityIndex: -1,
-          controller: src.controller,
-          inline: [{ kind: 'sacrifice', what: 'self' }],
         });
       // "Whenever one or more Birds you control deal combat damage to a player" (batched).
       forEachBattlefieldTrigger(

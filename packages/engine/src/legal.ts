@@ -358,6 +358,7 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
               kickCount: v.kickCount,
               sacrifice: v.sacrifice ? 'x' : undefined,
               forage: v.forage ? 'graveyard' : undefined,
+              discard: v.discard ? 'x' : undefined,
               x,
             };
             // Teamwork: kicked only if there are creatures to tap.
@@ -409,7 +410,10 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
                 if (wardLife(ctx, player, targets) > s.players[player].life) continue;
                 if (!wardPayable(ctx, player, targets, zone === 'hand' ? 1 : 0)) continue;
                 for (const forage of forages)
-                  for (const discard of discards) {
+                  // Titania: the discarding variant needs another card to discard.
+                  for (const discard of v.discard
+                    ? ps.hand.filter((id) => id !== card)
+                    : discards) {
                     // Paying without what this cast sacrifices.
                     const spent = [
                       // Final Fantasy (11b): a land returned for kicker may tap for mana first.

@@ -153,9 +153,6 @@ the [decklists](https://magic.wizards.com/en/news/announcements/bloomburrow-star
 kit's reprints and exclusives, all numbered in Bloomburrow). Bot-vs-bot over 160 games against the ten Foundations
 starter decks: Hare Raising 61%, Otter Limits 33% (a spells-matter deck the bots don't plan for).
 
-Simplifications: Bria's "other creatures you control have prowess" is one trigger on Bria that pumps them; Thieving
-Otter only draws on combat damage.
-
 **8e: Arena's Jump In packets and draft trophy decks: done.**
 
 - Arena's ten Bloomburrow Jump In packets (`ARENA_BLB_PACKETS`), a "Bloomburrow · Arena" group next to ours. Five are
@@ -190,11 +187,7 @@ against our Jump In pairs: about 65% (30–85%).
 New engine pieces: changing a spell's target (Bolt Bend), "end the turn" (Time Stop), "sacrifice it when it deals combat
 damage" (Dropkick Bomber), returning a card tapped, and "whenever you put counters on this creature".
 
-Simplifications: Time Stop exiles the other spells, drops abilities on the stack and ends combat, but the turn goes on;
-Bolt Bend only changes spells' targets, picking the new one itself; Blasphemous Edict sacrifices every creature and its
-{B} cost isn't offered; Gutless Plunderer surveils 3; Elvish Archdruid's mana is an activated ability; Vivien Reid's
-emblem gives its bonus from the start of each of your combats; Dropkick Bomber's Goblin is sacrificed after combat
-damage to a player.
+Simplification: Blasphemous Edict sacrifices every creature and its {B} cost isn't offered.
 
 ## Phases 9 and 10: Marvel Super Heroes
 

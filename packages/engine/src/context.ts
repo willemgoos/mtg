@@ -407,6 +407,8 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
   if (from === 'exile') delete o.jailedBy;
   // Damage sources are remembered as it dies (Hawkeye), forgotten as it enters.
   if (to === 'battlefield') delete o.damagedBy;
+  // Hellcat: it had no abilities as it left, so none of its own trigger.
+  const leftBlank = from === 'battlefield' && !!o.blank;
   delete o.blank;
   delete o.resolutions;
   const src = zoneList(ctx, o, from);
@@ -522,6 +524,7 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
     from,
     to,
     ...(leftAs ? { leftAs } : {}),
+    ...(leftBlank ? { leftBlank } : {}),
     // Final Fantasy (11c): "that creature's power" (Vincent Valentine).
     ...(from === 'battlefield' && o.lastPower !== undefined ? { lastPower: o.lastPower } : {}),
     ...(leftController ? { controller: leftController } : {}),

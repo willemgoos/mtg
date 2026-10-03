@@ -1015,14 +1015,10 @@ export const OTHERS: Record<string, Behavior> = {
     ],
   },
   'Bria, Riptide Rogue': {
-    // "Other creatures you control have prowess" is one trigger on Bria that pumps them all.
     abilities: [
       prowess,
-      when(
-        { on: 'castSpell', filter: 'noncreature' },
-        [],
-        pump({ each: 'creature', controller: 'you', filter: { other: true } }, 1, 1),
-      ),
+      // Each other creature gets its own prowess trigger.
+      { kind: 'static', effect: { kind: 'othersHaveProwess' } },
       when({ on: 'castSpell', filter: 'noncreature' }, [yourCreature], {
         kind: 'pump',
         to: t0,
@@ -1032,8 +1028,7 @@ export const OTHERS: Record<string, Behavior> = {
       }),
     ],
   },
-  // Only combat damage counts; nothing in the pool makes it deal other damage to a player.
-  'Thieving Otter': { abilities: [when({ on: 'combatDamageToPlayer' }, [], draw(1))] },
+  'Thieving Otter': { abilities: [when({ on: 'dealsDamageToOpponent' }, [], draw(1))] },
   // Arena's Threshold packet borrows this one from Outlaws of Thunder Junction.
   'Sterling Hound': { abilities: [onEnter({ kind: 'surveil', amount: 2 })] },
 };

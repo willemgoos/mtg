@@ -33,6 +33,13 @@ export const HAND_SIZE = 7;
  */
 export function givePriority(ctx: Ctx, player: PlayerId): void {
   const s = ctx.s;
+  // Time Stop ended the turn: nobody gets priority; straight to the cleanup step (rule 723.1).
+  if (s.turn.endTheTurn) {
+    delete s.turn.endTheTurn;
+    s.pendingTriggers = [];
+    s.combat = null;
+    return enterStep(ctx, 'cleanup');
+  }
   for (;;) {
     collectTriggers(ctx);
     runSBAs(ctx);
