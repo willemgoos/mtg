@@ -21,6 +21,8 @@ export interface NewGameOptions {
   format?: 'brawl';
   /** Brawl: each player's commander (not part of `decks`). */
   commanders?: Partial<Record<PlayerId, CardDefId>>;
+  /** Strixhaven (13a): cards outside the game that Learn can fetch (the deck's Lessons). */
+  sideboards?: Partial<Record<PlayerId, readonly CardDefId[]>>;
 }
 
 /** Cards a player draws for an opening hand. */
@@ -97,6 +99,7 @@ export function setupGame(ctx: Ctx, opts: NewGameOptions): void {
     if (opts.format === 'brawl') ps.life = BRAWL_LIFE;
     const commander = opts.commanders?.[p];
     if (commander) ps.commander = putInCommandZone(ctx, commander, p);
+    if (opts.sideboards?.[p]?.length) ps.sideboard = [...opts.sideboards[p]!];
     if (opts.life?.[p] !== undefined) ps.life = opts.life[p]!;
     if (opts.extraCards?.[p]) ps.openingHand = OPENING_HAND + opts.extraCards[p]!;
     if (opts.landInPlay?.includes(p)) {

@@ -66,11 +66,16 @@ export function createHeuristicBot(db: CardDb, name = 'heuristic'): Bot {
         case 'chooseTriggerTargets':
         case 'optionalEffect':
         case 'forage':
-        case 'chooseOption':
         case 'chooseObject':
         case 'payOrCounter':
         case 'castFree':
           return bestByEvaluation(engine, view, me, legal, 'stack');
+        case 'chooseOption': {
+          // Strixhaven (13a): Learn takes a Lesson if there is one (the first option), else the best by evaluation.
+          if (d.title === 'Learn' && d.options[0]!.label.startsWith('Reveal'))
+            return { type: 'chooseOption', player: me, index: 0 };
+          return bestByEvaluation(engine, view, me, legal, 'stack');
+        }
         case 'chooseFromHand':
         case 'pickCards':
           return chooseFromHand(engine, view, legal);

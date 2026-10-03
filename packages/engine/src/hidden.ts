@@ -29,6 +29,8 @@ export function redactFor(state: GameState, viewer: PlayerId, db?: CardDb): Game
   const s = cloneState(state);
   for (const p of PLAYERS) {
     const ps = s.players[p];
+    // Strixhaven (13a): the opponent's sideboard is not known.
+    if (p !== viewer && ps.sideboard) ps.sideboard = ps.sideboard.map(() => HIDDEN_CARD);
     const hidden = p === viewer ? ps.library : [...ps.library, ...ps.hand];
     const d = state.decision;
     const seen =

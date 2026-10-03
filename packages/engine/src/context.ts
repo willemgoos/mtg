@@ -57,6 +57,17 @@ const BUILT_IN_EFFECTS: Record<string, CustomEffect> = {
   ...MSH_EFFECTS,
   // Final Fantasy (11a).
   ...FIN_EFFECTS,
+  // Strixhaven (13a): Learn: put the chosen Lesson from outside the game into your hand.
+  learnFetch(ctx, es, params) {
+    const ps = ctx.s.players[es.controller];
+    const defId = (params as { defId: string }).defId;
+    const at = ps.sideboard?.indexOf(defId) ?? -1;
+    if (at < 0) return;
+    ps.sideboard!.splice(at, 1);
+    const o = createObject(ctx, defId, es.controller, 'hand');
+    ps.hand.push(o.id);
+    emit(ctx, { type: 'objectMoved', id: o.id, defId, from: null, to: 'hand' });
+  },
   // "As this enters, choose a color/creature type" (or, for a spell, as it resolves: Raise the Palisade).
   setChosen(ctx, es, params) {
     const o = es.source && ctx.s.objects[es.source.id];

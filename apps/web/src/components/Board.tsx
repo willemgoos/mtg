@@ -578,7 +578,11 @@ export function Board({
         };
       }
       case 'chooseOption':
-        return { prompt: `${nameOf(d.resume.sourceDefId)}: choose one` };
+        return {
+          prompt: d.title
+            ? `${nameOf(d.resume.sourceDefId)}: ${d.title}`
+            : `${nameOf(d.resume.sourceDefId)}: choose one`,
+        };
       case 'castFree':
         return {
           prompt: `${nameOf(d.resume.sourceDefId)}: you may cast a card without paying its cost`,
@@ -1140,7 +1144,9 @@ export function Board({
       {d.kind === 'chooseOption' && d.player === HUMAN && (
         <div className="menu">
           <div className="menu__box">
-            <div className="menu__title">{nameOf(d.resume.sourceDefId)}: choose one</div>
+            <div className="menu__title">
+              {nameOf(d.resume.sourceDefId)}: {d.title ?? 'choose one'}
+            </div>
             {d.options.map((o, index) => (
               <button
                 key={o.label}

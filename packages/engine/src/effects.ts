@@ -547,7 +547,9 @@ export function runEffects(
       e.kind === 'expressiveIteration' ||
       e.kind === 'castFreeFromTop' ||
       // Final Fantasy (11a): saga creatures
-      e.kind === 'removeLoreFromAny'
+      e.kind === 'removeLoreFromAny' ||
+      // Strixhaven (13a)
+      e.kind === 'learn'
     ) {
       const lib = ctx.s.players[es.controller].library;
       const { controller, source, sourceDefId, targets, lkiPower, subject, amount, chosen, x } = es;
@@ -833,6 +835,34 @@ export function runEffects(
             label: COLOR_NAMES[color],
             effects: [{ kind: 'custom', handler: 'setChosen', params: { color } }],
           })),
+          resume,
+          thenPriority,
+        };
+      } else if (e.kind === 'learn') {
+        // Learn: a Lesson from outside the game, or rummage, or nothing.
+        const ps = ctx.s.players[controller];
+        const lessons = [...new Set(ps.sideboard ?? [])].filter((id) =>
+          ctx.db.get(id)?.subtypes.includes('Lesson'),
+        );
+        const options: { label: string; effects: EffectDef[] }[] = lessons.map((id) => ({
+          label: `Reveal ${ctx.db.get(id)!.name} and put it into your hand`,
+          effects: [{ kind: 'custom', handler: 'learnFetch', params: { defId: id } }],
+        }));
+        if (ps.hand.length > 0)
+          options.push({
+            label: 'Discard a card, then draw a card',
+            effects: [
+              { kind: 'discard', count: 1 },
+              { kind: 'draw', who: 'controller', amount: 1 },
+            ],
+          });
+        if (options.length === 0) continue;
+        options.push({ label: 'Do nothing', effects: [] });
+        ctx.s.decision = {
+          kind: 'chooseOption',
+          player: controller,
+          title: 'Learn',
+          options,
           resume,
           thenPriority,
         };
@@ -1972,6 +2002,7 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
       return; // handled by runEffects
     case 'chooseColor':
     case 'chooseCreatureType':
+    case 'learn':
     case 'millThenTake':
     case 'lookTakeRestGraveyard':
       return; // handled by runEffects
@@ -2011,6 +2042,8 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
           ...(item.paws ? { paws: item.paws } : {}),
           copy: true,
         });
+        // Strixhaven (13a): magecraft.
+        emit(ctx, { type: 'spellCopied', id: copy.id, player: es.controller });
       }
       return;
     }

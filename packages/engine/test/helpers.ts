@@ -370,6 +370,68 @@ export const FIXTURES: CardDefinition[] = [
       effects: [{ kind: 'connive', what: { target: 0 } }],
     },
   }),
+  // Strixhaven (13a): magecraft and Learn.
+  card({
+    id: 'study',
+    types: ['Sorcery'],
+    spell: { targets: [], effects: [{ kind: 'draw', who: 'controller', amount: 1 }] },
+  }),
+  card({
+    id: 'flash',
+    types: ['Instant'],
+    spell: { targets: [], effects: [{ kind: 'draw', who: 'controller', amount: 1 }] },
+  }),
+  creature('mage', 1, 1, [], {
+    abilities: [
+      {
+        kind: 'triggered',
+        trigger: { on: 'castSpell', filter: 'instantOrSorcery', orCopy: true },
+        targets: [],
+        effects: [{ kind: 'counters', to: 'self', amount: 1 }],
+      },
+    ],
+  }),
+  creature('caster', 1, 1, [], {
+    abilities: [
+      {
+        kind: 'triggered',
+        trigger: { on: 'castSpell', filter: 'instantOrSorcery' },
+        targets: [],
+        effects: [{ kind: 'counters', to: 'self', amount: 1 }],
+      },
+    ],
+  }),
+  creature('twin', 1, 1, [], {
+    abilities: [
+      {
+        kind: 'triggered',
+        trigger: { on: 'castSpell', filter: 'instantOrSorcery' },
+        targets: [],
+        effects: [{ kind: 'copySpell', what: 'subject' }],
+      },
+    ],
+  }),
+  card({
+    id: 'lesson',
+    types: ['Sorcery'],
+    subtypes: ['Lesson'],
+    spell: { targets: [], effects: [{ kind: 'draw', who: 'controller', amount: 1 }] },
+  }),
+  card({ id: 'learner', types: ['Sorcery'], spell: { targets: [], effects: [{ kind: 'learn' }] } }),
+  card({
+    id: 'walker-mdfc',
+    types: ['Creature'],
+    power: 1,
+    toughness: 1,
+    manaCost: cost(1),
+    back: 'walker-back',
+  }),
+  card({
+    id: 'walker-back',
+    types: ['Planeswalker'],
+    manaCost: cost(2),
+    loyalty: 3,
+  }),
 ];
 
 export const DB = new Map(FIXTURES.map((c) => [c.id, c]));

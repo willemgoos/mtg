@@ -626,6 +626,25 @@ function detect(ctx: Ctx, ev: GameEvent): void {
       );
       return;
     }
+    // Strixhaven (13a): magecraft. "Whenever you cast or copy an instant or sorcery spell" (`orCopy`).
+    case 'spellCopied': {
+      const copyObj = obj(ctx, ev.id);
+      const copyDef = defOf(ctx, copyObj.defId);
+      const copyItem = s.stack.find((x) => x.id === ev.id);
+      forEachBattlefieldTrigger(
+        ctx,
+        (o, a) =>
+          a.trigger.on === 'castSpell' &&
+          !!a.trigger.orCopy &&
+          o.controller === ev.player &&
+          spellMatches(ctx, a.trigger, copyDef, copyItem, o) &&
+          (copyObj.manaSpent ?? 0) >= (a.trigger.minManaSpent ?? 0) &&
+          !a.fromGraveyard,
+        copyObj,
+        manaValueOf(copyDef),
+      );
+      return;
+    }
     case 'spellCast': {
       const spellObj = obj(ctx, ev.id);
       const spell = defOf(ctx, spellObj.defId);

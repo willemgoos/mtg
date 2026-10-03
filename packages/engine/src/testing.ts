@@ -30,6 +30,8 @@ export interface PlayerSpec {
   graveyard?: string[];
   /** Brawl: their commander, in the command zone. */
   commander?: string;
+  /** Strixhaven (13a): cards outside the game for Learn. */
+  sideboard?: string[];
 }
 
 export interface ScenarioSpec {
@@ -58,6 +60,7 @@ export function buildScenario(db: CardDb, spec: ScenarioSpec = {}): GameState {
     put('library', pl.library, ps.library ?? Array(10).fill('forest'));
     put('hand', pl.hand, ps.hand ?? []);
     put('graveyard', pl.graveyard, ps.graveyard ?? []);
+    if (ps.sideboard) pl.sideboard = [...ps.sideboard];
     if (ps.commander) {
       s.format = 'brawl';
       pl.commander = putInCommandZone(ctx, ps.commander, p);

@@ -394,6 +394,9 @@ export type TriggerDef =
       // Final Fantasy (11b): mana spent
       /** "If at least N mana was spent to cast it" (Sahagin, Ultros). */
       minManaSpent?: number;
+      // Strixhaven (13a): magecraft
+      /** Magecraft: also when you copy a matching spell (a copy is not cast, so it has no mana spent). */
+      orCopy?: boolean;
     }
   /** Whenever a player (an opponent: Monologue Tax) casts their second spell each turn (Hearthborn Battler). */
   | { on: 'anyPlayerSecondSpell'; opponentOnly?: boolean }
@@ -951,6 +954,9 @@ export type EffectDef =
   /** Choose a color (or a creature type) for the source, as it enters. */
   | { kind: 'chooseColor' }
   | { kind: 'chooseCreatureType' }
+  // Strixhaven (13a): Learn
+  /** Learn: reveal a Lesson from your sideboard and put it into your hand, or discard a card to draw a card, or neither. */
+  | { kind: 'learn' }
   /** Mill N, then you may put a card matching the filter from among them into your hand (Cache Grab). */
   | { kind: 'millThenTake'; count: number; filter: CardFilter; squirrelFood?: boolean }
   /** Look at the top N; put `take` of them into your hand and the rest into your graveyard (Stargaze). */
@@ -1734,6 +1740,9 @@ export interface PlayerState {
   hand: ObjectId[];
   graveyard: ObjectId[];
   exile: ObjectId[];
+  // Strixhaven (13a): Learn
+  /** Cards outside the game (card ids, not objects): the Lessons Learn can fetch. Hidden from the opponent. */
+  sideboard?: CardDefId[];
   landsPlayedThisTurn: number;
   attackedThisTurn: boolean;
   drewFromEmptyLibrary: boolean;
@@ -2205,6 +2214,8 @@ export type Decision =
       /** Choose one of these. */
       kind: 'chooseOption';
       player: PlayerId;
+      /** Heading for the prompt, if not "<card>: choose one" (Learn). */
+      title?: string;
       options: { label: string; effects: EffectDef[] }[];
       resume: PausedResolution;
       thenPriority: PlayerId;
@@ -2423,6 +2434,8 @@ export type GameEvent =
   | { type: 'untapped'; id: ObjectId }
   /** `nth`: how many spells that player has cast this turn, including this one. */
   | { type: 'spellCast'; id: ObjectId; player: PlayerId; nth?: number }
+  // Strixhaven (13a): magecraft. A copy of a spell was put on the stack (it isn't cast); `player` controls the copy.
+  | { type: 'spellCopied'; id: ObjectId; player: PlayerId }
   | { type: 'abilityActivated'; id: ObjectId; source: ObjectId; player: PlayerId }
   | { type: 'triggerStacked'; id: ObjectId; source: ObjectId; player: PlayerId }
   | { type: 'resolved'; id: ObjectId }

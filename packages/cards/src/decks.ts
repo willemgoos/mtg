@@ -20,6 +20,8 @@ export interface Decklist {
   cards: [name: string, count: number][];
   /** Brawl: the commander (not in `cards`, which hold the other 99). */
   commander?: string;
+  /** Strixhaven (13a): cards outside the game that Learn can fetch (the deck's Lessons). */
+  sideboard?: [name: string, count: number][];
 }
 
 /**

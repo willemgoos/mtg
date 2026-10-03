@@ -40,10 +40,18 @@ export type { ScryfallCard } from './scryfall-types.ts';
 export const SCRYFALL: readonly ScryfallCard[] = scryfall as ScryfallCard[];
 export const FOUNDATIONS_PACK_CANDIDATES = foundations;
 
-export const CARDS: readonly CardDefinition[] = [
-  ...SCRYFALL.map((sc) => buildCard(sc, BEHAVIORS[sc.name])),
-  ...TOKENS,
-];
+const BUILT = SCRYFALL.map((sc) => buildCard(sc, BEHAVIORS[sc.name]));
+const builtById = new Map(BUILT.map((c) => [c.id, c]));
+
+/** Strixhaven (13a): a modal double-faced card's colour identity covers both faces (Brawl). */
+function withBackIdentity(c: CardDefinition): CardDefinition {
+  const back = c.back ? builtById.get(c.back) : undefined;
+  if (!back) return c;
+  const ids = new Set([...(c.colorIdentity ?? c.colors), ...(back.colorIdentity ?? back.colors)]);
+  return { ...c, colorIdentity: (['W', 'U', 'B', 'R', 'G'] as const).filter((x) => ids.has(x)) };
+}
+
+export const CARDS: readonly CardDefinition[] = [...BUILT.map(withBackIdentity), ...TOKENS];
 
 export const cardDb: CardDb = new Map(CARDS.map((c) => [c.id, c]));
 
@@ -60,9 +68,18 @@ export function deckIds(list: Decklist): CardDefId[] {
   return list.cards.flatMap(([name, n]) => Array<CardDefId>(n).fill(slug(name)));
 }
 
+/** A deck's sideboard (the Lessons Learn can fetch) as card ids. */
+export function sideboardIds(list: Decklist): CardDefId[] {
+  return (list.sideboard ?? []).flatMap(([name, n]) => Array<CardDefId>(n).fill(slug(name)));
+}
+
 /** Cards in the list we haven't implemented yet (empty = playable). */
 export function missingCards(list: Decklist): string[] {
-  return [...list.cards.map(([name]) => name), ...(list.commander ? [list.commander] : [])].filter(
+  return [
+    ...list.cards.map(([name]) => name),
+    ...(list.sideboard ?? []).map(([name]) => name),
+    ...(list.commander ? [list.commander] : []),
+  ].filter(
     (name) => !cardDb.has(slug(name)),
   );
 }
@@ -78,12 +95,17 @@ export const commanderId = (list: Decklist): CardDefId | undefined =>
 export function deckGameOptions(
   p1: Decklist,
   p2: Decklist,
-): Pick<NewGameOptions, 'format' | 'commanders'> & { decks: Record<PlayerId, CardDefId[]> } {
+): Pick<NewGameOptions, 'format' | 'commanders' | 'sideboards'> & {
+  decks: Record<PlayerId, CardDefId[]>;
+} {
   const brawl = p1.series === 'brawl' || p2.series === 'brawl';
   const c1 = commanderId(p1);
   const c2 = commanderId(p2);
   return {
     decks: { p1: deckIds(p1), p2: deckIds(p2) },
+    ...(p1.sideboard || p2.sideboard
+      ? { sideboards: { p1: sideboardIds(p1), p2: sideboardIds(p2) } }
+      : {}),
     ...(brawl
       ? {
           format: 'brawl' as const,
