@@ -53,3 +53,10 @@ from) when it's fixed. Older phases keep their own "Simplifications" lists in `d
 - [ ] Strategic Intervention: two triggers (pump, then an optional tap) instead of one.
 - [ ] Advancing the Spirit: the free power-up isn't optional; two copies still give one per turn; it doesn't check that it was
       on the battlefield when the turn's first power-up was activated.
+- [ ] Quantum Reduction: "loses all abilities" is applied by a trigger as the Aura enters (like Frozen in Ice), so there's a
+      window to respond before the creature loses them.
+- [ ] Wasp, Shrinking Savior: if her only target becomes illegal, the whole trigger fizzles, including the draw.
+- [ ] Tippy-Toe, Terrific Partner: the extra Food only comes with tokens from the normal create-token effect, not a few
+      special token paths (`stack.ts`, `fin-effects.ts`, `fic-effects.ts`).
+- [ ] Iron Fist, Hero for Hire: the power-up's 5 damage goes to up to two targets (5, 4/1 or 3/2) instead of up to five.
+- [ ] Contract Hero: the attack trigger always asks for a choice, even when you have no artifact and no cards in hand.
