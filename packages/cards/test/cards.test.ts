@@ -13,6 +13,8 @@ import {
   deckIds,
   FINAL_FANTASY_DECKS,
   FINAL_FANTASY_POOL,
+  STRIXHAVEN_DECKS,
+  STRIXHAVEN_POOL,
   GREEN_POOL,
   LAND_POOL,
   MARVEL_BRAWL_POOL,
@@ -54,6 +56,7 @@ describe('card data', () => {
         ...SCRYFALL.filter((c) => c.front).map((c) => c.name),
         ...MARVEL_BRAWL_POOL,
         ...FINAL_FANTASY_POOL,
+        ...STRIXHAVEN_POOL,
       ].sort(),
     );
     for (const c of SCRYFALL) expect(c.image?.normal).toMatch(/^https:\/\/cards\.scryfall\.io\//);
@@ -134,6 +137,7 @@ describe('card data', () => {
         ...BLOOMBURROW_DECKS.map((d) => d.id),
         ...MARVEL_DECKS.map((d) => d.id),
         ...FINAL_FANTASY_DECKS.map((d) => d.id),
+        ...STRIXHAVEN_DECKS.map((d) => d.id),
       ].sort(),
     );
     for (const d of PLAYABLE_DECKS)

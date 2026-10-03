@@ -48,6 +48,7 @@ import { givePriority } from './turn.ts';
 import type {
   AbilityDef,
   CardDefinition,
+  CardFilter,
   Decision,
   Amount,
   EffectDef,
@@ -542,6 +543,11 @@ export function activateAbility(
   if (a.cost.sacrificeArtifacts)
     for (const id of artifactsToSacrifice(ctx, player, a.cost.sacrificeArtifacts) ?? [])
       sacrificePermanent(ctx, id);
+  // Strixhaven (13a): exile a card from your graveyard as a cost.
+  if (a.cost.exileFromGraveyard) {
+    const card = graveyardCostCard(ctx, player, a.cost.exileFromGraveyard, source);
+    if (card) moveObject(ctx, card, 'exile');
+  }
   const sacrificedPower = sacrifice ? power(ctx, sacrifice) : undefined;
   if (sacrifice) sacrificePermanent(ctx, sacrifice);
   changeLife(ctx, player, -wardLife(ctx, player, targets) - (a.cost.life ?? 0));
@@ -910,6 +916,34 @@ export function artifactsToSacrifice(ctx: Ctx, player: PlayerId, n: number): Obj
         manaValue(def(ctx, a).manaCost) - manaValue(def(ctx, b).manaCost),
     );
   return artifacts.length >= n ? artifacts.slice(0, n) : null;
+}
+
+/**
+ * Strixhaven (13a): the card a "exile a card from your graveyard" cost takes
+ * (Stonerise Spirit, Tome Shredder): the engine picks the least useful match,
+ * lands first and cards you may want to return (instants, sorceries, Spirits,
+ * cheap creatures) last. Null if there is none.
+ */
+export function graveyardCostCard(
+  ctx: Ctx,
+  player: PlayerId,
+  filter: CardFilter,
+  source: ObjectId,
+): ObjectId | null {
+  const keep = (id: ObjectId) => {
+    const d = def(ctx, id);
+    if (d.types.includes('Land')) return 0;
+    if (d.types.includes('Instant') || d.types.includes('Sorcery') || d.subtypes.includes('Spirit'))
+      return 3;
+    return d.types.includes('Creature') && manaValue(d.manaCost) <= 3 ? 2 : 1;
+  };
+  const options = ctx.s.players[player].graveyard
+    .filter((id) => id !== source && matchesFilter(ctx, id, filter, source))
+    .sort(
+      (a, b) =>
+        keep(a) - keep(b) || manaValue(def(ctx, a).manaCost) - manaValue(def(ctx, b).manaCost),
+    );
+  return options[0] ?? null;
 }
 
 export function tokensToTap(ctx: Ctx, player: PlayerId, source?: ObjectId): ObjectId[] {

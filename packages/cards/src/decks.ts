@@ -16,7 +16,7 @@ export interface Decklist {
    */
   series: 'starter' | 'colorChallenge' | 'jumpIn' | 'season' | 'brawl';
   /** A deck from another set than Foundations (shown in its own section). */
-  set?: 'blb' | 'msh' | 'msc' | 'fin';
+  set?: 'blb' | 'msh' | 'msc' | 'fin' | 'stx';
   cards: [name: string, count: number][];
   /** Brawl: the commander (not in `cards`, which hold the other 99). */
   commander?: string;
@@ -2125,6 +2125,53 @@ export const FINAL_FANTASY_DECKS: Decklist[] = [
   },
 ];
 
+/** Strixhaven (13a): our own decks (docs/strixhaven-13a-decks.md). */
+export const STRIXHAVEN_DECKS: Decklist[] = [
+  {
+    id: 'stx-lorehold-reckoning',
+    name: 'Lorehold Reckoning',
+    colors: ['R', 'W'],
+    face: 'Quintorius, Field Historian',
+    source: 'custom',
+    series: 'starter',
+    set: 'stx',
+    cards: [
+      ['Eager First-Year', 1],
+      ['Serra Angel', 2],
+      ['Lorehold Pledgemage', 3],
+      ['Inspiring Paladin', 2],
+      ['Lorehold Apprentice', 2],
+      ['Combat Professor', 2],
+      ['Pillardrop Rescuer', 1],
+      ['Venerable Warsinger', 2],
+      ['Stonebound Mentor', 2],
+      ['Fuming Effigy', 2],
+      ['Relic Sloth', 2],
+      ['Returned Pastcaller', 1],
+      ['Quintorius, Field Historian', 1],
+      ['Storm-Kiln Artist', 1],
+      ['Blade Historian', 1],
+      ['Angel of Finality', 1],
+      ['Rip Apart', 2],
+      ['Igneous Inspiration', 3],
+      ['Heated Debate', 2],
+      ['Expel', 1],
+      ['Pigment Storm', 1],
+      ['Lorehold Command', 1],
+      ['Lorehold Campus', 4],
+      ['Plains', 10],
+      ['Mountain', 10],
+    ],
+    sideboard: [
+      ['Spirit Summoning', 1],
+      ['Reduce to Memory', 1],
+      ['Start from Scratch', 1],
+      ['Introduction to Prophecy', 1],
+      ['Expanded Anatomy', 1],
+    ],
+  },
+];
+
 export const DECKS: Decklist[] = [
   ...ARENA_DECKS,
   ...COLOR_CHALLENGE_DECKS,
@@ -2132,4 +2179,5 @@ export const DECKS: Decklist[] = [
   ...MARVEL_DECKS,
   ...MARVEL_BRAWL_DECKS,
   ...FINAL_FANTASY_DECKS,
+  ...STRIXHAVEN_DECKS,
 ];

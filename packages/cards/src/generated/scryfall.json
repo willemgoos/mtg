@@ -31121,5 +31121,875 @@
    "large": "https://cards.scryfall.io/large/front/7/7/77bc419d-ff69-4e7c-afe6-faca383a5ed7.jpg?1783906560",
    "artCrop": "https://cards.scryfall.io/art_crop/front/7/7/77bc419d-ff69-4e7c-afe6-faca383a5ed7.jpg?1783906560"
   }
+ },
+ {
+  "name": "Eager First-Year",
+  "scryfallId": "7a83543b-3b6f-4e28-96f9-007b814bcfd6",
+  "oracleId": "74788d52-dad7-4c10-8567-a2c86ed90a67",
+  "set": "stx",
+  "collectorNumber": "16",
+  "rarity": "common",
+  "manaCost": "{1}{W}",
+  "typeLine": "Creature — Human Wizard",
+  "oracleText": "Magecraft — Whenever you cast or copy an instant or sorcery spell, this creature gets +1/+0 until end of turn.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Magecraft"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/a/7a83543b-3b6f-4e28-96f9-007b814bcfd6.jpg?1783927392",
+   "normal": "https://cards.scryfall.io/normal/front/7/a/7a83543b-3b6f-4e28-96f9-007b814bcfd6.jpg?1783927392",
+   "large": "https://cards.scryfall.io/large/front/7/a/7a83543b-3b6f-4e28-96f9-007b814bcfd6.jpg?1783927392",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/a/7a83543b-3b6f-4e28-96f9-007b814bcfd6.jpg?1783927392"
+  }
+ },
+ {
+  "name": "Lorehold Pledgemage",
+  "scryfallId": "79b88b38-6b5a-4a89-80ca-add79c11e8b9",
+  "oracleId": "2c18d692-612c-4d43-b5dd-bd2bff37bbcb",
+  "set": "stx",
+  "collectorNumber": "201",
+  "rarity": "common",
+  "manaCost": "{1}{R/W}{R/W}",
+  "typeLine": "Creature — Kor Shaman",
+  "oracleText": "First strike\nMagecraft — Whenever you cast or copy an instant or sorcery spell, this creature gets +1/+0 until end of turn.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "R",
+   "W"
+  ],
+  "keywords": [
+   "First strike",
+   "Magecraft"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/9/79b88b38-6b5a-4a89-80ca-add79c11e8b9.jpg?1783927308",
+   "normal": "https://cards.scryfall.io/normal/front/7/9/79b88b38-6b5a-4a89-80ca-add79c11e8b9.jpg?1783927308",
+   "large": "https://cards.scryfall.io/large/front/7/9/79b88b38-6b5a-4a89-80ca-add79c11e8b9.jpg?1783927308",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/9/79b88b38-6b5a-4a89-80ca-add79c11e8b9.jpg?1783927308"
+  }
+ },
+ {
+  "name": "Professor of Symbology",
+  "scryfallId": "f427cf73-9f5e-4ef5-bc4f-29ffbfda9d57",
+  "oracleId": "1a8ae444-6237-4591-97ab-f43e181b2f4f",
+  "set": "stx",
+  "collectorNumber": "24",
+  "rarity": "uncommon",
+  "manaCost": "{1}{W}",
+  "typeLine": "Creature — Kor Cleric",
+  "oracleText": "When this creature enters, learn. (You may reveal a Lesson card you own from outside the game and put it into your hand, or discard a card to draw a card.)",
+  "power": "2",
+  "toughness": "1",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Learn"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/4/f427cf73-9f5e-4ef5-bc4f-29ffbfda9d57.jpg?1783927387",
+   "normal": "https://cards.scryfall.io/normal/front/f/4/f427cf73-9f5e-4ef5-bc4f-29ffbfda9d57.jpg?1783927387",
+   "large": "https://cards.scryfall.io/large/front/f/4/f427cf73-9f5e-4ef5-bc4f-29ffbfda9d57.jpg?1783927387",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/4/f427cf73-9f5e-4ef5-bc4f-29ffbfda9d57.jpg?1783927387"
+  }
+ },
+ {
+  "name": "Stonerise Spirit",
+  "scryfallId": "388f2e45-570f-4a35-b205-37e1345b5d06",
+  "oracleId": "9fbab5bc-c651-46dc-89b6-0bcfeadb3891",
+  "set": "stx",
+  "collectorNumber": "32",
+  "rarity": "common",
+  "manaCost": "{1}{W}",
+  "typeLine": "Creature — Spirit Bird",
+  "oracleText": "Flying\n{4}, Exile a card from your graveyard: Target creature gains flying until end of turn.",
+  "power": "1",
+  "toughness": "2",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/8/388f2e45-570f-4a35-b205-37e1345b5d06.jpg?1783927384",
+   "normal": "https://cards.scryfall.io/normal/front/3/8/388f2e45-570f-4a35-b205-37e1345b5d06.jpg?1783927384",
+   "large": "https://cards.scryfall.io/large/front/3/8/388f2e45-570f-4a35-b205-37e1345b5d06.jpg?1783927384",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/8/388f2e45-570f-4a35-b205-37e1345b5d06.jpg?1783927384"
+  }
+ },
+ {
+  "name": "Lorehold Apprentice",
+  "scryfallId": "048157c6-4626-4881-ba19-deddd13622dc",
+  "oracleId": "3858a2ff-cdc9-4e40-bc2c-42ed691aae08",
+  "set": "stx",
+  "collectorNumber": "198",
+  "rarity": "uncommon",
+  "manaCost": "{R}{W}",
+  "typeLine": "Creature — Human Cleric",
+  "oracleText": "Magecraft — Whenever you cast or copy an instant or sorcery spell, until end of turn, Spirit creatures you control gain \"{T}: This creature deals 1 damage to each opponent.\"",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "R",
+   "W"
+  ],
+  "keywords": [
+   "Magecraft"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/4/048157c6-4626-4881-ba19-deddd13622dc.jpg?1783927307",
+   "normal": "https://cards.scryfall.io/normal/front/0/4/048157c6-4626-4881-ba19-deddd13622dc.jpg?1783927307",
+   "large": "https://cards.scryfall.io/large/front/0/4/048157c6-4626-4881-ba19-deddd13622dc.jpg?1783927307",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/4/048157c6-4626-4881-ba19-deddd13622dc.jpg?1783927307"
+  }
+ },
+ {
+  "name": "Illustrious Historian",
+  "scryfallId": "56cc4e7d-3b06-4938-9023-d903912350c0",
+  "oracleId": "5a131407-c217-48fc-aa15-9e3392445768",
+  "set": "stx",
+  "collectorNumber": "109",
+  "rarity": "common",
+  "manaCost": "{1}{R}",
+  "typeLine": "Creature — Human Shaman",
+  "oracleText": "{5}, Exile this card from your graveyard: Create a tapped 3/2 red and white Spirit creature token.",
+  "power": "2",
+  "toughness": "1",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/6/56cc4e7d-3b06-4938-9023-d903912350c0.jpg?1783927351",
+   "normal": "https://cards.scryfall.io/normal/front/5/6/56cc4e7d-3b06-4938-9023-d903912350c0.jpg?1783927351",
+   "large": "https://cards.scryfall.io/large/front/5/6/56cc4e7d-3b06-4938-9023-d903912350c0.jpg?1783927351",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/6/56cc4e7d-3b06-4938-9023-d903912350c0.jpg?1783927351"
+  }
+ },
+ {
+  "name": "Combat Professor",
+  "scryfallId": "3f669ac4-98ed-4e23-91a9-281f8277ab04",
+  "oracleId": "1b59665f-23c7-4df9-8e71-f9b1a419063b",
+  "set": "stx",
+  "collectorNumber": "11",
+  "rarity": "common",
+  "manaCost": "{3}{W}",
+  "typeLine": "Creature — Bird Cleric",
+  "oracleText": "Flying\nAt the beginning of combat on your turn, target creature you control gets +1/+0 and gains vigilance until end of turn.",
+  "power": "2",
+  "toughness": "3",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/f/3f669ac4-98ed-4e23-91a9-281f8277ab04.jpg?1783927394",
+   "normal": "https://cards.scryfall.io/normal/front/3/f/3f669ac4-98ed-4e23-91a9-281f8277ab04.jpg?1783927394",
+   "large": "https://cards.scryfall.io/large/front/3/f/3f669ac4-98ed-4e23-91a9-281f8277ab04.jpg?1783927394",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/f/3f669ac4-98ed-4e23-91a9-281f8277ab04.jpg?1783927394"
+  }
+ },
+ {
+  "name": "Pillardrop Rescuer",
+  "scryfallId": "0884666e-8f9b-44b1-a1e3-c1c8941e2152",
+  "oracleId": "5cf9002d-6c04-420b-8c3b-0a17f674bb09",
+  "set": "stx",
+  "collectorNumber": "23",
+  "rarity": "common",
+  "manaCost": "{4}{W}",
+  "typeLine": "Creature — Spirit Cleric",
+  "oracleText": "Flying\nWhen this creature enters, return target creature card with mana value 3 or less from your graveyard to your hand.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/8/0884666e-8f9b-44b1-a1e3-c1c8941e2152.jpg?1783927388",
+   "normal": "https://cards.scryfall.io/normal/front/0/8/0884666e-8f9b-44b1-a1e3-c1c8941e2152.jpg?1783927388",
+   "large": "https://cards.scryfall.io/large/front/0/8/0884666e-8f9b-44b1-a1e3-c1c8941e2152.jpg?1783927388",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/8/0884666e-8f9b-44b1-a1e3-c1c8941e2152.jpg?1783927388"
+  }
+ },
+ {
+  "name": "Twinscroll Shaman",
+  "scryfallId": "87193af5-4b6b-48d0-9b75-8171bb1d6e53",
+  "oracleId": "a2f867cd-410d-4524-8660-38ad142f6b1f",
+  "set": "stx",
+  "collectorNumber": "118",
+  "rarity": "common",
+  "manaCost": "{2}{R}",
+  "typeLine": "Creature — Dwarf Shaman",
+  "oracleText": "Double strike",
+  "power": "1",
+  "toughness": "2",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Double strike"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/7/87193af5-4b6b-48d0-9b75-8171bb1d6e53.jpg?1783927350",
+   "normal": "https://cards.scryfall.io/normal/front/8/7/87193af5-4b6b-48d0-9b75-8171bb1d6e53.jpg?1783927350",
+   "large": "https://cards.scryfall.io/large/front/8/7/87193af5-4b6b-48d0-9b75-8171bb1d6e53.jpg?1783927350",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/7/87193af5-4b6b-48d0-9b75-8171bb1d6e53.jpg?1783927350"
+  }
+ },
+ {
+  "name": "Returned Pastcaller",
+  "scryfallId": "7aa0e762-0fec-4f6b-b3d7-ad8295bf557d",
+  "oracleId": "58b9f933-7b13-4335-996c-4722ab9e08b2",
+  "set": "stx",
+  "collectorNumber": "224",
+  "rarity": "uncommon",
+  "manaCost": "{3}{R}{R/W}{W}",
+  "typeLine": "Creature — Spirit Cleric",
+  "oracleText": "Flying\nWhen this creature enters, return target Spirit, instant, or sorcery card from your graveyard to your hand.",
+  "power": "4",
+  "toughness": "2",
+  "colors": [
+   "R",
+   "W"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/a/7aa0e762-0fec-4f6b-b3d7-ad8295bf557d.jpg?1783927301",
+   "normal": "https://cards.scryfall.io/normal/front/7/a/7aa0e762-0fec-4f6b-b3d7-ad8295bf557d.jpg?1783927301",
+   "large": "https://cards.scryfall.io/large/front/7/a/7aa0e762-0fec-4f6b-b3d7-ad8295bf557d.jpg?1783927301",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/a/7aa0e762-0fec-4f6b-b3d7-ad8295bf557d.jpg?1783927301"
+  }
+ },
+ {
+  "name": "Quintorius, Field Historian",
+  "scryfallId": "06c55ef1-8e62-4d43-bd4c-b2c3c5203338",
+  "oracleId": "28b64167-b7ea-4b4f-8434-061298050366",
+  "set": "stx",
+  "collectorNumber": "220",
+  "rarity": "uncommon",
+  "manaCost": "{3}{R}{W}",
+  "typeLine": "Legendary Creature — Elephant Cleric",
+  "oracleText": "Spirits you control get +1/+0.\nWhenever one or more cards leave your graveyard, create a 3/2 red and white Spirit creature token.",
+  "power": "2",
+  "toughness": "4",
+  "colors": [
+   "R",
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/6/06c55ef1-8e62-4d43-bd4c-b2c3c5203338.jpg?1783927298",
+   "normal": "https://cards.scryfall.io/normal/front/0/6/06c55ef1-8e62-4d43-bd4c-b2c3c5203338.jpg?1783927298",
+   "large": "https://cards.scryfall.io/large/front/0/6/06c55ef1-8e62-4d43-bd4c-b2c3c5203338.jpg?1783927298",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/6/06c55ef1-8e62-4d43-bd4c-b2c3c5203338.jpg?1783927298"
+  }
+ },
+ {
+  "name": "Storm-Kiln Artist",
+  "scryfallId": "fa96b8dc-233a-4884-ab84-235cbc7df0b6",
+  "oracleId": "a145ff8c-5812-4bcb-bd16-9839dc25121d",
+  "set": "stx",
+  "collectorNumber": "115",
+  "rarity": "uncommon",
+  "manaCost": "{3}{R}",
+  "typeLine": "Creature — Dwarf Shaman",
+  "oracleText": "This creature gets +1/+0 for each artifact you control.\nMagecraft — Whenever you cast or copy an instant or sorcery spell, create a Treasure token. (It's an artifact with \"{T}, Sacrifice this token: Add one mana of any color.\")",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Treasure",
+   "Magecraft"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/a/fa96b8dc-233a-4884-ab84-235cbc7df0b6.jpg?1783927352",
+   "normal": "https://cards.scryfall.io/normal/front/f/a/fa96b8dc-233a-4884-ab84-235cbc7df0b6.jpg?1783927352",
+   "large": "https://cards.scryfall.io/large/front/f/a/fa96b8dc-233a-4884-ab84-235cbc7df0b6.jpg?1783927352",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/a/fa96b8dc-233a-4884-ab84-235cbc7df0b6.jpg?1783927352"
+  }
+ },
+ {
+  "name": "Pillardrop Warden",
+  "scryfallId": "7d509f73-cd62-4116-9652-0ed801ed8b36",
+  "oracleId": "6ee2a7ba-a676-4d05-b214-7db52e41afe7",
+  "set": "stx",
+  "collectorNumber": "112",
+  "rarity": "common",
+  "manaCost": "{3}{R}",
+  "typeLine": "Creature — Spirit Dwarf",
+  "oracleText": "Reach\n{2}, {T}, Sacrifice this creature: Return target instant or sorcery card from your graveyard to your hand. Activate only as a sorcery.",
+  "power": "1",
+  "toughness": "5",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Reach"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/d/7d509f73-cd62-4116-9652-0ed801ed8b36.jpg?1783927350",
+   "normal": "https://cards.scryfall.io/normal/front/7/d/7d509f73-cd62-4116-9652-0ed801ed8b36.jpg?1783927350",
+   "large": "https://cards.scryfall.io/large/front/7/d/7d509f73-cd62-4116-9652-0ed801ed8b36.jpg?1783927350",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/d/7d509f73-cd62-4116-9652-0ed801ed8b36.jpg?1783927350"
+  }
+ },
+ {
+  "name": "Tome Shredder",
+  "scryfallId": "a7cc9ea8-db4e-4f41-800f-fb0dbcb2c345",
+  "oracleId": "b145952b-52e3-4a66-b47e-f08a489f9443",
+  "set": "stx",
+  "collectorNumber": "117",
+  "rarity": "common",
+  "manaCost": "{2}{R}",
+  "typeLine": "Creature — Wolf",
+  "oracleText": "Haste\n{T}, Exile an instant or sorcery card from your graveyard: Put a +1/+1 counter on this creature.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Haste"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/7/a7cc9ea8-db4e-4f41-800f-fb0dbcb2c345.jpg?1783927349",
+   "normal": "https://cards.scryfall.io/normal/front/a/7/a7cc9ea8-db4e-4f41-800f-fb0dbcb2c345.jpg?1783927349",
+   "large": "https://cards.scryfall.io/large/front/a/7/a7cc9ea8-db4e-4f41-800f-fb0dbcb2c345.jpg?1783927349",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/7/a7cc9ea8-db4e-4f41-800f-fb0dbcb2c345.jpg?1783927349"
+  }
+ },
+ {
+  "name": "Relic Sloth",
+  "scryfallId": "c1cb483f-c567-4cfd-9fe8-1503e7b40542",
+  "oracleId": "eb9b0655-3ca3-4d12-8665-54ef0c2c4de2",
+  "set": "stx",
+  "collectorNumber": "223",
+  "rarity": "common",
+  "manaCost": "{3}{R}{W}",
+  "typeLine": "Creature — Sloth Beast",
+  "oracleText": "Vigilance\nMenace (This creature can't be blocked except by two or more creatures.)",
+  "power": "4",
+  "toughness": "4",
+  "colors": [
+   "R",
+   "W"
+  ],
+  "keywords": [
+   "Vigilance",
+   "Menace"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/1/c1cb483f-c567-4cfd-9fe8-1503e7b40542.jpg?1783927297",
+   "normal": "https://cards.scryfall.io/normal/front/c/1/c1cb483f-c567-4cfd-9fe8-1503e7b40542.jpg?1783927297",
+   "large": "https://cards.scryfall.io/large/front/c/1/c1cb483f-c567-4cfd-9fe8-1503e7b40542.jpg?1783927297",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/1/c1cb483f-c567-4cfd-9fe8-1503e7b40542.jpg?1783927297"
+  }
+ },
+ {
+  "name": "Blade Historian",
+  "scryfallId": "a46d64ec-aca4-428e-bce6-66cd755c8cc3",
+  "oracleId": "314f0a96-5e91-42a3-9d75-3f641f22a9ee",
+  "set": "stx",
+  "collectorNumber": "165",
+  "rarity": "rare",
+  "manaCost": "{R/W}{R/W}{R/W}{R/W}",
+  "typeLine": "Creature — Human Cleric",
+  "oracleText": "Attacking creatures you control have double strike.",
+  "power": "2",
+  "toughness": "3",
+  "colors": [
+   "R",
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/4/a46d64ec-aca4-428e-bce6-66cd755c8cc3.jpg?1783927324",
+   "normal": "https://cards.scryfall.io/normal/front/a/4/a46d64ec-aca4-428e-bce6-66cd755c8cc3.jpg?1783927324",
+   "large": "https://cards.scryfall.io/large/front/a/4/a46d64ec-aca4-428e-bce6-66cd755c8cc3.jpg?1783927324",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/4/a46d64ec-aca4-428e-bce6-66cd755c8cc3.jpg?1783927324"
+  }
+ },
+ {
+  "name": "Dueling Coach",
+  "scryfallId": "45b3dbb0-0d68-4351-bfc9-a09c50454bf7",
+  "oracleId": "aae4dd38-3b35-4c92-a0d4-5d37cfd93df8",
+  "set": "stx",
+  "collectorNumber": "15",
+  "rarity": "uncommon",
+  "manaCost": "{3}{W}",
+  "typeLine": "Creature — Human Monk",
+  "oracleText": "When this creature enters, put a +1/+1 counter on target creature.\n{4}{W}, {T}: Put a +1/+1 counter on each creature you control with a +1/+1 counter on it.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/5/45b3dbb0-0d68-4351-bfc9-a09c50454bf7.jpg?1783927391",
+   "normal": "https://cards.scryfall.io/normal/front/4/5/45b3dbb0-0d68-4351-bfc9-a09c50454bf7.jpg?1783927391",
+   "large": "https://cards.scryfall.io/large/front/4/5/45b3dbb0-0d68-4351-bfc9-a09c50454bf7.jpg?1783927391",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/5/45b3dbb0-0d68-4351-bfc9-a09c50454bf7.jpg?1783927391"
+  }
+ },
+ {
+  "name": "Venerable Warsinger",
+  "scryfallId": "006313f8-cc60-4a4e-8ec6-953cdf1c16e3",
+  "oracleId": "e286d1aa-bb74-4568-98b5-a693ac7a369d",
+  "set": "stx",
+  "collectorNumber": "246",
+  "rarity": "rare",
+  "manaCost": "{1}{R}{W}",
+  "typeLine": "Creature — Spirit Cleric",
+  "oracleText": "Vigilance, trample\nWhenever this creature deals combat damage to a player, you may return target creature card with mana value X or less from your graveyard to the battlefield, where X is the amount of damage this creature dealt to that player.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "R",
+   "W"
+  ],
+  "keywords": [
+   "Vigilance",
+   "Trample"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/0/006313f8-cc60-4a4e-8ec6-953cdf1c16e3.jpg?1783927285",
+   "normal": "https://cards.scryfall.io/normal/front/0/0/006313f8-cc60-4a4e-8ec6-953cdf1c16e3.jpg?1783927285",
+   "large": "https://cards.scryfall.io/large/front/0/0/006313f8-cc60-4a4e-8ec6-953cdf1c16e3.jpg?1783927285",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/0/006313f8-cc60-4a4e-8ec6-953cdf1c16e3.jpg?1783927285"
+  }
+ },
+ {
+  "name": "Stonebound Mentor",
+  "scryfallId": "9c64e954-adfc-40a2-a3b2-85f1b4626976",
+  "oracleId": "7c4b4dd4-4a80-436a-8526-5c58c1751ccd",
+  "set": "stx",
+  "collectorNumber": "239",
+  "rarity": "common",
+  "manaCost": "{1}{R}{W}",
+  "typeLine": "Creature — Spirit Advisor",
+  "oracleText": "Whenever one or more cards leave your graveyard, scry 1.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "R",
+   "W"
+  ],
+  "keywords": [
+   "Scry"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/c/9c64e954-adfc-40a2-a3b2-85f1b4626976.jpg?1783927289",
+   "normal": "https://cards.scryfall.io/normal/front/9/c/9c64e954-adfc-40a2-a3b2-85f1b4626976.jpg?1783927289",
+   "large": "https://cards.scryfall.io/large/front/9/c/9c64e954-adfc-40a2-a3b2-85f1b4626976.jpg?1783927289",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/c/9c64e954-adfc-40a2-a3b2-85f1b4626976.jpg?1783927289"
+  }
+ },
+ {
+  "name": "Fuming Effigy",
+  "scryfallId": "7ce76a38-fc5f-4e29-ba24-4a877179a62c",
+  "oracleId": "37d48f9b-0286-4c5b-b549-baccb473aea3",
+  "set": "stx",
+  "collectorNumber": "103",
+  "rarity": "common",
+  "manaCost": "{3}{R}",
+  "typeLine": "Creature — Spirit",
+  "oracleText": "Whenever one or more cards leave your graveyard, this creature deals 1 damage to each opponent.",
+  "power": "4",
+  "toughness": "3",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/c/7ce76a38-fc5f-4e29-ba24-4a877179a62c.jpg?1783927355",
+   "normal": "https://cards.scryfall.io/normal/front/7/c/7ce76a38-fc5f-4e29-ba24-4a877179a62c.jpg?1783927355",
+   "large": "https://cards.scryfall.io/large/front/7/c/7ce76a38-fc5f-4e29-ba24-4a877179a62c.jpg?1783927355",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/c/7ce76a38-fc5f-4e29-ba24-4a877179a62c.jpg?1783927355"
+  }
+ },
+ {
+  "name": "Igneous Inspiration",
+  "scryfallId": "5781ad7b-dc1b-4cc1-9e72-6e714b9ba1de",
+  "oracleId": "2e31af8f-5e94-4888-857d-911253eac2cd",
+  "set": "stx",
+  "collectorNumber": "107",
+  "rarity": "uncommon",
+  "manaCost": "{2}{R}",
+  "typeLine": "Sorcery",
+  "oracleText": "Igneous Inspiration deals 3 damage to any target.\nLearn. (You may reveal a Lesson card you own from outside the game and put it into your hand, or discard a card to draw a card.)",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Learn"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/7/5781ad7b-dc1b-4cc1-9e72-6e714b9ba1de.jpg?1783927354",
+   "normal": "https://cards.scryfall.io/normal/front/5/7/5781ad7b-dc1b-4cc1-9e72-6e714b9ba1de.jpg?1783927354",
+   "large": "https://cards.scryfall.io/large/front/5/7/5781ad7b-dc1b-4cc1-9e72-6e714b9ba1de.jpg?1783927354",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/7/5781ad7b-dc1b-4cc1-9e72-6e714b9ba1de.jpg?1783927354"
+  }
+ },
+ {
+  "name": "Heated Debate",
+  "scryfallId": "f40c88e2-28ed-4e5b-bcb3-4397d6a15a6f",
+  "oracleId": "06c3e85c-17d8-44e1-a0f8-07ef3f1624cb",
+  "set": "stx",
+  "collectorNumber": "106",
+  "rarity": "common",
+  "manaCost": "{2}{R}",
+  "typeLine": "Instant",
+  "oracleText": "This spell can't be countered. (This includes by the ward ability.)\nHeated Debate deals 4 damage to target creature or planeswalker.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/4/f40c88e2-28ed-4e5b-bcb3-4397d6a15a6f.jpg?1783927353",
+   "normal": "https://cards.scryfall.io/normal/front/f/4/f40c88e2-28ed-4e5b-bcb3-4397d6a15a6f.jpg?1783927353",
+   "large": "https://cards.scryfall.io/large/front/f/4/f40c88e2-28ed-4e5b-bcb3-4397d6a15a6f.jpg?1783927353",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/4/f40c88e2-28ed-4e5b-bcb3-4397d6a15a6f.jpg?1783927353"
+  }
+ },
+ {
+  "name": "Expel",
+  "scryfallId": "be517a58-b7ee-4213-98a5-8c19e1b2def6",
+  "oracleId": "58776b25-794e-4a87-bc71-a77c025b9b03",
+  "set": "stx",
+  "collectorNumber": "18",
+  "rarity": "common",
+  "manaCost": "{2}{W}",
+  "typeLine": "Instant",
+  "oracleText": "Exile target tapped creature.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/e/be517a58-b7ee-4213-98a5-8c19e1b2def6.jpg?1783927392",
+   "normal": "https://cards.scryfall.io/normal/front/b/e/be517a58-b7ee-4213-98a5-8c19e1b2def6.jpg?1783927392",
+   "large": "https://cards.scryfall.io/large/front/b/e/be517a58-b7ee-4213-98a5-8c19e1b2def6.jpg?1783927392",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/e/be517a58-b7ee-4213-98a5-8c19e1b2def6.jpg?1783927392"
+  }
+ },
+ {
+  "name": "Make Your Mark",
+  "scryfallId": "7e937830-3804-44e8-b9d0-3e5f5cf39eab",
+  "oracleId": "1c7ca399-7d85-452b-97c0-5d7f6c0eeb12",
+  "set": "stx",
+  "collectorNumber": "204",
+  "rarity": "common",
+  "manaCost": "{R/W}",
+  "typeLine": "Instant",
+  "oracleText": "Target creature gets +1/+0 until end of turn. When that creature dies this turn, create a 3/2 red and white Spirit creature token.",
+  "colors": [
+   "R",
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/e/7e937830-3804-44e8-b9d0-3e5f5cf39eab.jpg?1783927305",
+   "normal": "https://cards.scryfall.io/normal/front/7/e/7e937830-3804-44e8-b9d0-3e5f5cf39eab.jpg?1783927305",
+   "large": "https://cards.scryfall.io/large/front/7/e/7e937830-3804-44e8-b9d0-3e5f5cf39eab.jpg?1783927305",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/e/7e937830-3804-44e8-b9d0-3e5f5cf39eab.jpg?1783927305"
+  }
+ },
+ {
+  "name": "Pigment Storm",
+  "scryfallId": "d285a7a1-bb7e-4a78-a49f-c2add62b829a",
+  "oracleId": "89abdf4c-ba9d-4602-ae50-cf79c68ea08d",
+  "set": "stx",
+  "collectorNumber": "111",
+  "rarity": "common",
+  "manaCost": "{3}{R}{R}",
+  "typeLine": "Sorcery",
+  "oracleText": "Pigment Storm deals 5 damage to target creature. Excess damage is dealt to that creature's controller instead.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/2/d285a7a1-bb7e-4a78-a49f-c2add62b829a.jpg?1783927350",
+   "normal": "https://cards.scryfall.io/normal/front/d/2/d285a7a1-bb7e-4a78-a49f-c2add62b829a.jpg?1783927350",
+   "large": "https://cards.scryfall.io/large/front/d/2/d285a7a1-bb7e-4a78-a49f-c2add62b829a.jpg?1783927350",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/2/d285a7a1-bb7e-4a78-a49f-c2add62b829a.jpg?1783927350"
+  }
+ },
+ {
+  "name": "Lorehold Command",
+  "scryfallId": "e4f0885f-1049-4a19-853d-f4e6d4bec29e",
+  "oracleId": "107becb1-f8a3-4777-b39f-a0456c2d580e",
+  "set": "stx",
+  "collectorNumber": "199",
+  "rarity": "rare",
+  "manaCost": "{3}{R}{W}",
+  "typeLine": "Instant",
+  "oracleText": "Choose two —\n• Create a 3/2 red and white Spirit creature token.\n• Creatures you control get +1/+0 and gain indestructible and haste until end of turn.\n• Lorehold Command deals 3 damage to any target. Target player gains 3 life.\n• Sacrifice a permanent, then draw two cards.",
+  "colors": [
+   "R",
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/4/e4f0885f-1049-4a19-853d-f4e6d4bec29e.jpg?1783927309",
+   "normal": "https://cards.scryfall.io/normal/front/e/4/e4f0885f-1049-4a19-853d-f4e6d4bec29e.jpg?1783927309",
+   "large": "https://cards.scryfall.io/large/front/e/4/e4f0885f-1049-4a19-853d-f4e6d4bec29e.jpg?1783927309",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/4/e4f0885f-1049-4a19-853d-f4e6d4bec29e.jpg?1783927309"
+  }
+ },
+ {
+  "name": "Beaming Defiance",
+  "scryfallId": "7e22411c-11c1-4770-8491-7952dd406e01",
+  "oracleId": "f88eeb04-4b8e-4c76-a8c6-90887b94d518",
+  "set": "stx",
+  "collectorNumber": "9",
+  "rarity": "common",
+  "manaCost": "{1}{W}",
+  "typeLine": "Instant",
+  "oracleText": "Target creature you control gets +2/+2 and gains hexproof until end of turn. (It can't be the target of spells or abilities your opponents control.)",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/e/7e22411c-11c1-4770-8491-7952dd406e01.jpg?1783927395",
+   "normal": "https://cards.scryfall.io/normal/front/7/e/7e22411c-11c1-4770-8491-7952dd406e01.jpg?1783927395",
+   "large": "https://cards.scryfall.io/large/front/7/e/7e22411c-11c1-4770-8491-7952dd406e01.jpg?1783927395",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/e/7e22411c-11c1-4770-8491-7952dd406e01.jpg?1783927395"
+  }
+ },
+ {
+  "name": "Study Break",
+  "scryfallId": "ef7cd813-0781-4fd7-8748-2716e1eeb4b9",
+  "oracleId": "7aae7c7b-0b31-4b48-a8d3-81c913f604cf",
+  "set": "stx",
+  "collectorNumber": "34",
+  "rarity": "common",
+  "manaCost": "{1}{W}",
+  "typeLine": "Instant",
+  "oracleText": "Tap up to two target creatures.\nLearn. (You may reveal a Lesson card you own from outside the game and put it into your hand, or discard a card to draw a card.)",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Learn"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/f/ef7cd813-0781-4fd7-8748-2716e1eeb4b9.jpg?1783927382",
+   "normal": "https://cards.scryfall.io/normal/front/e/f/ef7cd813-0781-4fd7-8748-2716e1eeb4b9.jpg?1783927382",
+   "large": "https://cards.scryfall.io/large/front/e/f/ef7cd813-0781-4fd7-8748-2716e1eeb4b9.jpg?1783927382",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/f/ef7cd813-0781-4fd7-8748-2716e1eeb4b9.jpg?1783927382"
+  }
+ },
+ {
+  "name": "Academic Dispute",
+  "scryfallId": "4620cc3b-e401-4096-b310-fed080806344",
+  "oracleId": "b22de128-6dad-4e15-a547-1c9ca08df5ff",
+  "set": "stx",
+  "collectorNumber": "91",
+  "rarity": "uncommon",
+  "manaCost": "{R}",
+  "typeLine": "Instant",
+  "oracleText": "Target creature blocks this turn if able. You may have it gain reach until end of turn.\nLearn. (You may reveal a Lesson card you own from outside the game and put it into your hand, or discard a card to draw a card.)",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Learn"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/6/4620cc3b-e401-4096-b310-fed080806344.jpg?1783927359",
+   "normal": "https://cards.scryfall.io/normal/front/4/6/4620cc3b-e401-4096-b310-fed080806344.jpg?1783927359",
+   "large": "https://cards.scryfall.io/large/front/4/6/4620cc3b-e401-4096-b310-fed080806344.jpg?1783927359",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/6/4620cc3b-e401-4096-b310-fed080806344.jpg?1783927359"
+  }
+ },
+ {
+  "name": "Enthusiastic Study",
+  "scryfallId": "543c64ff-2c51-4a63-a940-dc8645717c85",
+  "oracleId": "4233334d-bb19-41e4-a203-2b7bb0c48f52",
+  "set": "stx",
+  "collectorNumber": "99",
+  "rarity": "common",
+  "manaCost": "{2}{R}",
+  "typeLine": "Instant",
+  "oracleText": "Target creature gets +3/+1 and gains trample until end of turn.\nLearn. (You may reveal a Lesson card you own from outside the game and put it into your hand, or discard a card to draw a card.)",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Learn"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/4/543c64ff-2c51-4a63-a940-dc8645717c85.jpg?1783927356",
+   "normal": "https://cards.scryfall.io/normal/front/5/4/543c64ff-2c51-4a63-a940-dc8645717c85.jpg?1783927356",
+   "large": "https://cards.scryfall.io/large/front/5/4/543c64ff-2c51-4a63-a940-dc8645717c85.jpg?1783927356",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/4/543c64ff-2c51-4a63-a940-dc8645717c85.jpg?1783927356"
+  }
+ },
+ {
+  "name": "Guiding Voice",
+  "scryfallId": "d6fb3163-12ca-4a7f-a0c7-b8ddfc9408a0",
+  "oracleId": "5c7e7c9e-00d1-497e-bee7-278bbd82e234",
+  "set": "stx",
+  "collectorNumber": "19",
+  "rarity": "common",
+  "manaCost": "{W}",
+  "typeLine": "Sorcery",
+  "oracleText": "Put a +1/+1 counter on target creature.\nLearn. (You may reveal a Lesson card you own from outside the game and put it into your hand, or discard a card to draw a card.)",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Learn"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/6/d6fb3163-12ca-4a7f-a0c7-b8ddfc9408a0.jpg?1783927388",
+   "normal": "https://cards.scryfall.io/normal/front/d/6/d6fb3163-12ca-4a7f-a0c7-b8ddfc9408a0.jpg?1783927388",
+   "large": "https://cards.scryfall.io/large/front/d/6/d6fb3163-12ca-4a7f-a0c7-b8ddfc9408a0.jpg?1783927388",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/6/d6fb3163-12ca-4a7f-a0c7-b8ddfc9408a0.jpg?1783927388"
+  }
+ },
+ {
+  "name": "Lorehold Campus",
+  "scryfallId": "d35461cf-becf-4399-8329-64b4496b7fc2",
+  "oracleId": "45773715-3f46-4671-b633-bf087e892e26",
+  "set": "stx",
+  "collectorNumber": "268",
+  "rarity": "common",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "This land enters tapped.\n{T}: Add {R} or {W}.\n{4}, {T}: Scry 1. (Look at the top card of your library. You may put that card on the bottom.)",
+  "colors": [],
+  "keywords": [
+   "Scry"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/3/d35461cf-becf-4399-8329-64b4496b7fc2.jpg?1783927272",
+   "normal": "https://cards.scryfall.io/normal/front/d/3/d35461cf-becf-4399-8329-64b4496b7fc2.jpg?1783927272",
+   "large": "https://cards.scryfall.io/large/front/d/3/d35461cf-becf-4399-8329-64b4496b7fc2.jpg?1783927272",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/3/d35461cf-becf-4399-8329-64b4496b7fc2.jpg?1783927272"
+  }
+ },
+ {
+  "name": "Spirit Summoning",
+  "scryfallId": "74be6236-4095-419c-9927-fbd874df21f8",
+  "oracleId": "a4825093-ea29-47d9-b52c-1c7735f1909e",
+  "set": "stx",
+  "collectorNumber": "236",
+  "rarity": "common",
+  "manaCost": "{1}{R/W}{R/W}",
+  "typeLine": "Sorcery — Lesson",
+  "oracleText": "Create a 3/2 red and white Spirit creature token.",
+  "colors": [
+   "R",
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/4/74be6236-4095-419c-9927-fbd874df21f8.jpg?1783927289",
+   "normal": "https://cards.scryfall.io/normal/front/7/4/74be6236-4095-419c-9927-fbd874df21f8.jpg?1783927289",
+   "large": "https://cards.scryfall.io/large/front/7/4/74be6236-4095-419c-9927-fbd874df21f8.jpg?1783927289",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/4/74be6236-4095-419c-9927-fbd874df21f8.jpg?1783927289"
+  }
+ },
+ {
+  "name": "Reduce to Memory",
+  "scryfallId": "7bfc408e-34d6-4e94-8678-4cc229cbc6f5",
+  "oracleId": "661736eb-97d7-4b3c-ab18-708479a5fb29",
+  "set": "stx",
+  "collectorNumber": "25",
+  "rarity": "uncommon",
+  "manaCost": "{1}{W}{W}",
+  "typeLine": "Sorcery — Lesson",
+  "oracleText": "Exile target nonland permanent. Its controller creates a 3/2 red and white Spirit creature token.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/b/7bfc408e-34d6-4e94-8678-4cc229cbc6f5.jpg?1783927387",
+   "normal": "https://cards.scryfall.io/normal/front/7/b/7bfc408e-34d6-4e94-8678-4cc229cbc6f5.jpg?1783927387",
+   "large": "https://cards.scryfall.io/large/front/7/b/7bfc408e-34d6-4e94-8678-4cc229cbc6f5.jpg?1783927387",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/b/7bfc408e-34d6-4e94-8678-4cc229cbc6f5.jpg?1783927387"
+  }
+ },
+ {
+  "name": "Start from Scratch",
+  "scryfallId": "55c99486-ae64-4293-81fb-a4b02e8fcae6",
+  "oracleId": "d8e255ec-7d66-43f6-b5f0-712f5957687f",
+  "set": "stx",
+  "collectorNumber": "114",
+  "rarity": "uncommon",
+  "manaCost": "{2}{R}",
+  "typeLine": "Sorcery — Lesson",
+  "oracleText": "Choose one —\n• Start from Scratch deals 1 damage to any target.\n• Destroy target artifact.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/5/55c99486-ae64-4293-81fb-a4b02e8fcae6.jpg?1783927350",
+   "normal": "https://cards.scryfall.io/normal/front/5/5/55c99486-ae64-4293-81fb-a4b02e8fcae6.jpg?1783927350",
+   "large": "https://cards.scryfall.io/large/front/5/5/55c99486-ae64-4293-81fb-a4b02e8fcae6.jpg?1783927350",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/5/55c99486-ae64-4293-81fb-a4b02e8fcae6.jpg?1783927350"
+  }
+ },
+ {
+  "name": "Introduction to Prophecy",
+  "scryfallId": "7820923e-bad2-4d6a-92b3-97b9737d2ca9",
+  "oracleId": "9ae1fded-2e77-498a-98e7-4a4908447175",
+  "set": "stx",
+  "collectorNumber": "4",
+  "rarity": "common",
+  "manaCost": "{3}",
+  "typeLine": "Sorcery — Lesson",
+  "oracleText": "Scry 2, then draw a card.",
+  "colors": [],
+  "keywords": [
+   "Scry"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/8/7820923e-bad2-4d6a-92b3-97b9737d2ca9.jpg?1783927395",
+   "normal": "https://cards.scryfall.io/normal/front/7/8/7820923e-bad2-4d6a-92b3-97b9737d2ca9.jpg?1783927395",
+   "large": "https://cards.scryfall.io/large/front/7/8/7820923e-bad2-4d6a-92b3-97b9737d2ca9.jpg?1783927395",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/8/7820923e-bad2-4d6a-92b3-97b9737d2ca9.jpg?1783927395"
+  }
+ },
+ {
+  "name": "Expanded Anatomy",
+  "scryfallId": "c5642b9d-0daa-4e6b-ad48-f88dd37d6574",
+  "oracleId": "6bc5dfbb-98ec-4ff1-8ba2-e2594c53e6d9",
+  "set": "stx",
+  "collectorNumber": "2",
+  "rarity": "common",
+  "manaCost": "{3}",
+  "typeLine": "Sorcery — Lesson",
+  "oracleText": "Put two +1/+1 counters on target creature. It gains vigilance until end of turn.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/5/c5642b9d-0daa-4e6b-ad48-f88dd37d6574.jpg?1783927396",
+   "normal": "https://cards.scryfall.io/normal/front/c/5/c5642b9d-0daa-4e6b-ad48-f88dd37d6574.jpg?1783927396",
+   "large": "https://cards.scryfall.io/large/front/c/5/c5642b9d-0daa-4e6b-ad48-f88dd37d6574.jpg?1783927396",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/5/c5642b9d-0daa-4e6b-ad48-f88dd37d6574.jpg?1783927396"
+  }
  }
 ]

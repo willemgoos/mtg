@@ -337,6 +337,9 @@ export interface CostDef {
   // Avengers Assemble (9b).
   /** Crew N: tap untapped creatures you control with total power N or more (the engine picks them). */
   crew?: number;
+  // Strixhaven (13a): Stonerise Spirit, Tome Shredder
+  /** Exile a card matching the filter from your graveyard (the engine picks the least useful one). */
+  exileFromGraveyard?: CardFilter;
 }
 
 export type TriggerDef =
@@ -501,7 +504,10 @@ export type TriggerDef =
    * into a graveyard from the battlefield ("a creature or artifact you control
    * dies"); `other`: only other permanents (Judge Magister Gabranth).
    */
-  | { on: 'permanentYouControlDies'; filter: CardFilter; other?: boolean };
+  | { on: 'permanentYouControlDies'; filter: CardFilter; other?: boolean }
+  // Strixhaven (13a): Quintorius, Field Historian
+  /** "Whenever one or more cards leave your graveyard" (use with `batch`). */
+  | { on: 'cardsLeaveYourGraveyard' };
 
 export type ConditionDef =
   | { kind: 'controlsPermanents'; filter: CardFilter; min: number }
@@ -957,6 +963,11 @@ export type EffectDef =
   // Strixhaven (13a): Learn
   /** Learn: reveal a Lesson from your sideboard and put it into your hand, or discard a card to draw a card, or neither. */
   | { kind: 'learn' }
+  // Strixhaven (13a): Lorehold Apprentice, Academic Dispute
+  /** Until end of turn, these creatures have this ability (Lorehold Apprentice: "{T}: deals 1 damage to each opponent"). */
+  | { kind: 'grantAbility'; to: Ref; ability: AbilityDef }
+  /** The creature blocks this turn if able (Academic Dispute). */
+  | { kind: 'mustBlock'; what: Ref }
   /** Mill N, then you may put a card matching the filter from among them into your hand (Cache Grab). */
   | { kind: 'millThenTake'; count: number; filter: CardFilter; squirrelFood?: boolean }
   /** Look at the top N; put `take` of them into your hand and the rest into your graveyard (Stargaze). */
@@ -1644,6 +1655,8 @@ export interface GameObject {
   lastCounters?: number;
   /** "Triggers only once each turn": the turn each such ability (by index) last triggered. */
   onceTurns?: Record<number, number>;
+  // Strixhaven (13a): abilities granted until end of turn (Lorehold Apprentice)
+  tempAbilities?: AbilityDef[];
   /** It has lost all abilities (an effect until its controller's next turn). */
   blank?: boolean;
   /** A Class's level (1 if unset). */
@@ -1939,6 +1952,9 @@ export interface ContinuousEffect {
   counterOnCombatDamage?: boolean;
   /** Damage to this player and their creatures goes to the affected creature instead (Heroic Sacrifice). */
   redirectFor?: PlayerId;
+  // Strixhaven (13a): Academic Dispute
+  /** It blocks this turn if able. */
+  mustBlock?: boolean;
   /** What happens if the affected creature dies while this lasts. */
   onDies?: { effects: EffectDef[]; controller: PlayerId; sourceDefId: CardDefId };
 }

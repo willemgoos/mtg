@@ -314,7 +314,10 @@ export function confirmAttackers(ctx: Ctx): void {
 
 export function confirmBlockers(ctx: Ctx): void {
   const s = ctx.s;
-  const decl = enforceLure(ctx, s.decision.kind === 'declareBlockers' ? s.decision.declared : []);
+  const decl = enforceMustBlock(
+    ctx,
+    enforceLure(ctx, s.decision.kind === 'declareBlockers' ? s.decision.declared : []),
+  );
   for (const a of s.combat?.attackers ?? []) {
     a.blockers = decl.filter((d) => d.attacker === a.id).map((d) => d.blocker);
     a.blocked = a.blockers.length > 0;
@@ -348,6 +351,29 @@ function enforceLure(
   return out;
 }
 
+/**
+ * Strixhaven (13a), Academic Dispute: a creature that must block this turn
+ * blocks if able. If it wasn't declared as a blocker, it blocks the first
+ * attacker it can (the engine makes the choice).
+ */
+function enforceMustBlock(
+  ctx: Ctx,
+  declared: { blocker: ObjectId; attacker: ObjectId }[],
+): { blocker: ObjectId; attacker: ObjectId }[] {
+  const forced = ctx.s.effects.filter((e) => e.mustBlock);
+  if (forced.length === 0) return declared;
+  const out = [...declared];
+  const attackers = ctx.s.combat?.attackers ?? [];
+  for (const e of forced) {
+    const b = e.affected.id;
+    const o = ctx.s.objects[b];
+    if (!o || o.zcc !== e.affected.zcc || out.some((d) => d.blocker === b)) continue;
+    const target = attackers.find((a) => canBlock(ctx, b, a.id));
+    if (target) out.push({ blocker: b, attacker: target.id });
+  }
+  return out;
+}
+
 export function finishCleanup(ctx: Ctx): void {
   const s = ctx.s;
   for (const id of s.battlefield) {
@@ -361,6 +387,8 @@ export function finishCleanup(ctx: Ctx): void {
       delete o.originalDefId;
       delete o.copyingUntilTurn;
     }
+    // Strixhaven (13a): abilities granted until end of turn.
+    delete o.tempAbilities;
   }
   endEffects(ctx, (e) => e.expires === 'endOfTurn');
   if (s.emblems?.length)

@@ -117,3 +117,7 @@ plus 4 Lessons; 0 implemented. Shared Lessons (Introduction to Prophecy, Expande
 Lorehold (Lorehold Apprentice, Quintorius). Rares: Lorehold Command, Quandrix Command, Archmage Emeritus. Risks: Quandrix is
 Learn-heavy (Pop Quiz, Field Trip, Divide by Zero, Arcane Subtraction, Overgrown Arch), so it depends on the sideboard prompt;
 Quandrix Apprentice needs a reorder-to-bottom prompt; conditional cost reduction (Mage Duel, Bury in Books) may be new.
+
+## Lorehold as built (13a)
+
+Arena starter decks run 24 lands and 36 spells, so the 17-land draft above played far below 45% (about 25%). Final list: 24 lands (Campus 4, Plains 10, Mountain 10), 26 creatures and 10 spells. Added for strength: Venerable Warsinger 2, Stonebound Mentor 2, Fuming Effigy 2, Relic Sloth 2, Blade Historian 1 (all STX), and from Foundations Serra Angel 2, Inspiring Paladin 2, Angel of Finality 1. Cut: Twinscroll Shaman, Study Break, Academic Dispute, Illustrious Historian, Tome Shredder, Pillardrop Warden, the pump and Learn spells (all still implemented). Bot vs bot over 320 games against the ten Foundations starter decks: 45%.

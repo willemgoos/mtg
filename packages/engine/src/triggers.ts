@@ -448,6 +448,13 @@ function detect(ctx: Ctx, ev: GameEvent): void {
           moved,
         );
       }
+      // Strixhaven (13a): "whenever one or more cards leave your graveyard" (Quintorius, Field Historian).
+      if (ev.from === 'graveyard' && ev.to !== 'graveyard' && moved && !moved.isToken)
+        forEachBattlefieldTrigger(
+          ctx,
+          (o, a) => a.trigger.on === 'cardsLeaveYourGraveyard' && o.controller === moved.owner,
+          moved,
+        );
       if (
         ev.from === 'battlefield' &&
         ev.to === 'graveyard' &&

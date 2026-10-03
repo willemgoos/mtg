@@ -129,6 +129,9 @@ export const KEYWORDS_AS_ABILITIES = new Set([
   'Sell Contraband',
   'Buy Information',
   'Hire a Mercenary',
+  // Strixhaven (13a).
+  'Magecraft',
+  'Learn',
   // Final Fantasy (11a).
   'Job select',
   'Tiered',

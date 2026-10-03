@@ -58,6 +58,7 @@ function run(
     const r = playMatch(engine, decks, { p1: p1(seed, decks), p2: p2(seed + 1000, decks) }, seed, {
       startingPlayer: seed % 2 ? 'p1' : 'p2',
       ...(brawl?.format ? { brawl: { format: brawl.format, commanders: brawl.commanders } } : {}),
+      ...(brawl?.sideboards ? { sideboards: brawl.sideboards } : {}),
     });
     if (r.winner === 'p1') w1++;
     else if (r.winner === 'p2') w2++;
@@ -124,9 +125,24 @@ if (process.argv.includes('--search')) {
   process.exit(0);
 }
 
+// `--deck=<id>`: one deck against the ten Foundations starter decks, both seats, with its sideboard.
+const only = process.argv.find((x) => x.startsWith('--deck='))?.split('=')[1];
+if (only) {
+  const mine = deckById(only);
+  for (const y of lists.filter((d) => d.source === 'arena' && d.series === 'starter')) {
+    const g = deckGameOptions(mine, y);
+    run(label('heuristic', mine, 'heuristic', y), heuristic, heuristic, g.decks, g);
+    const h = deckGameOptions(y, mine);
+    run(label('heuristic', y, 'heuristic', mine), heuristic, heuristic, h.decks, h);
+  }
+  process.exit(0);
+}
+
 for (const x of lists) run(label('heuristic', x, 'random', x), heuristic, random, decksOf(x, x));
 for (const [x, y] of pairs) {
-  run(label('heuristic', x, 'heuristic', y), heuristic, heuristic, decksOf(x, y));
-  run(label('heuristic', y, 'heuristic', x), heuristic, heuristic, decksOf(y, x));
+  const g = deckGameOptions(x, y);
+  run(label('heuristic', x, 'heuristic', y), heuristic, heuristic, g.decks, g);
+  const h = deckGameOptions(y, x);
+  run(label('heuristic', y, 'heuristic', x), heuristic, heuristic, h.decks, h);
 }
 brawlRuns();

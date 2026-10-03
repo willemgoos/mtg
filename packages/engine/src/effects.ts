@@ -1790,6 +1790,29 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
       if (rest[1]) moveObject(ctx, rest[1], 'library', { position: 'bottom' });
       return;
     }
+    // Strixhaven (13a): Lorehold Apprentice
+    case 'grantAbility':
+      for (const id of objectsOf(ctx, es, e.to)) {
+        const o = obj(ctx, id);
+        if (o.zone !== 'battlefield') continue;
+        const key = JSON.stringify(e.ability);
+        if (!o.tempAbilities?.some((a) => JSON.stringify(a) === key))
+          o.tempAbilities = [...(o.tempAbilities ?? []), e.ability];
+      }
+      return;
+    // Strixhaven (13a): Academic Dispute
+    case 'mustBlock':
+      for (const id of objectsOf(ctx, es, e.what))
+        ctx.s.effects.push({
+          timestamp: newTimestamp(ctx),
+          affected: { id, zcc: obj(ctx, id).zcc },
+          power: 0,
+          toughness: 0,
+          keywords: [],
+          mustBlock: true,
+          expires: 'endOfTurn',
+        });
+      return;
     case 'mustAttack':
       for (const id of objectsOf(ctx, es, e.what))
         ctx.s.effects.push({

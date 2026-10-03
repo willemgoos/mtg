@@ -1,6 +1,7 @@
 import { characteristics } from './characteristics.ts';
 import { MSH_EFFECTS } from './msh-effects.ts';
 import { FIN_EFFECTS } from './fin-effects.ts';
+import { LOREHOLD_EFFECTS } from './stx-lorehold-effects.ts';
 import { checkCondition } from './triggers.ts';
 import type { EffectSource } from './effects.ts';
 import type {
@@ -57,6 +58,8 @@ const BUILT_IN_EFFECTS: Record<string, CustomEffect> = {
   ...MSH_EFFECTS,
   // Final Fantasy (11a).
   ...FIN_EFFECTS,
+  // Strixhaven (13a).
+  ...LOREHOLD_EFFECTS,
   // Strixhaven (13a): Learn: put the chosen Lesson from outside the game into your hand.
   learnFetch(ctx, es, params) {
     const ps = ctx.s.players[es.controller];
@@ -116,6 +119,8 @@ export function def(ctx: Ctx, id: ObjectId): CardDefinition {
     !makesFood(d)
   )
     return foodCreatureDef(d);
+  // Strixhaven (13a): Lorehold Apprentice grants abilities until end of turn.
+  if (o.tempAbilities?.length) return { ...d, abilities: [...d.abilities, ...o.tempAbilities] };
   return d;
 }
 

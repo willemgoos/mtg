@@ -25,6 +25,7 @@ import {
   crewFor,
   escalateCrew,
   artifactsToSacrifice,
+  graveyardCostCard,
   countersYouControl,
   hasStatic,
   wardCost,
@@ -479,6 +480,11 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
       if (
         a.cost.sacrificeArtifacts &&
         !artifactsToSacrifice(ctx, player, a.cost.sacrificeArtifacts)
+      )
+        return;
+      if (
+        a.cost.exileFromGraveyard &&
+        !graveyardCostCard(ctx, player, a.cost.exileFromGraveyard, source)
       )
         return;
       const discards = a.cost.discard ? ps.hand : [undefined];
