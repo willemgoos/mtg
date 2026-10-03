@@ -22,6 +22,9 @@ export interface ManaCost {
   colored: Partial<Record<ManaType, number>>;
   /** Hybrid pips, each payable with either type ({B/G}). */
   hybrid?: [ManaType, ManaType][];
+  // Secrets of Strixhaven (14b): Magmablood Archaic
+  /** Two-brid pips: each payable with one mana of this type or with two generic ({2/R}). */
+  twoHybrid?: ManaType[];
   /** How many {X} the cost has (X is chosen as the spell is cast). */
   x?: number;
 }
@@ -119,6 +122,9 @@ export interface CardDefinition {
   wardCost?: { mana: ManaCost; life?: number; discard?: boolean; sacrificeFood?: boolean };
   /** "This spell can't be countered." */
   uncounterable?: boolean;
+  // Secrets of Strixhaven (14b): Choreographed Sparks
+  /** "This spell can't be copied." */
+  cantBeCopied?: boolean;
   /** "Cast this spell only if ..." (Confront the Assault). */
   castOnlyIf?: ConditionDef;
   /** Power set by a count (toughness is printed), e.g. Enigma Drake. */
@@ -824,6 +830,9 @@ export interface CardFilter {
   // Secrets of Strixhaven (14b): Matterbending Mage
   /** Its mana cost has {X} in it. */
   hasX?: boolean;
+  // Secrets of Strixhaven (14b): Rocket Volley
+  /** Not a basic land. */
+  nonbasic?: boolean;
   /** Shares a creature type with its controller's commander (Folk Hero). */
   sharesTypeWithCommander?: boolean;
   // Secrets of Strixhaven (14b): Nita, Forum Conciliator
@@ -930,6 +939,9 @@ export type Amount =
   | { count: 'creaturesOfChosenType'; other?: boolean }
   /** Named counters on the source (as it last was, if it left): Hoarder's Overflow's stash counters. */
   | { namedCountersOnSource: string }
+  // Secrets of Strixhaven (14b): Prismari, the Inspiration (storm)
+  /** Spells cast this turn (by anyone) before the triggering spell. */
+  | { count: 'spellsCastBeforeSubject' }
   /** The value chosen for X (times `times`, plus `plus`). */
   | { x: true; times?: number; plus?: number }
   // Doom Prevails (9e).
@@ -1120,6 +1132,9 @@ export type EffectDef =
       retarget?: boolean;
       /** The copy isn't legendary (Double Major). */
       nonlegendary?: boolean;
+      // Secrets of Strixhaven (14b): Choreographed Sparks
+      /** A creature spell's copy gains haste and is sacrificed at the beginning of the end step. */
+      hasteSacrifice?: boolean;
     }
   /** Each player sacrifices a creature of their choice (Season of Loss). */
   | { kind: 'eachPlayerSacrifices' }
@@ -1728,7 +1743,10 @@ export type EffectDef =
    * A player chooses one option made by `CHOOSERS[handler]` (stx-13c-a-effects.ts); the chosen option's
    * effects (usually `custom` handlers with params) then happen. Nothing happens if the handler returns null.
    */
-  | { kind: 'chooseCustom'; handler: string; params?: Record<string, unknown> };
+  | { kind: 'chooseCustom'; handler: string; params?: Record<string, unknown> }
+  // Secrets of Strixhaven (14b): Improvisation Capstone
+  /** Exile cards from the top of your library until their total mana value is `total` or more; cast any number of them free. */
+  | { kind: 'exileUntilTotalCastFree'; total: number };
 
 export type StaticDef =
   | {
@@ -1753,7 +1771,16 @@ export type StaticDef =
    * Creatures you control matching the filter have "{T}: Add one of these"
    * (Clement: Frogs, {G} or {U}, only for creature spells).
    */
-  | { kind: 'grantMana'; filter: CardFilter; produces: ManaType[]; onlyForCreatures?: boolean }
+  | {
+      kind: 'grantMana';
+      filter: CardFilter;
+      produces: ManaType[];
+      onlyForCreatures?: boolean;
+      // Secrets of Strixhaven (14b): Resonating Lute
+      /** Lands (not creatures) tap for `amount` mana of any of these, only for spells with this tag. */
+      onlyFor?: string;
+      amount?: number;
+    }
   /** You may play an additional land on each of your turns (Loot). */
   | { kind: 'extraLandDrop' }
   /** Prevent all combat damage dealt to and by this creature (Fog Bank). */
@@ -1910,6 +1937,9 @@ export type StaticDef =
   | { kind: 'creatureTokensBecome'; token: CardDefId }
   /** You may play lands from your graveyard (Conduit of Worlds). */
   | { kind: 'playLandsFromGraveyard' }
+  // Secrets of Strixhaven (14b): Zaffai and the Tempests
+  /** Once during each of your turns, you may cast an instant or sorcery spell from your hand without paying its mana cost. */
+  | { kind: 'freeSpellOncePerTurn' }
   /** Creatures matching the filter can't attack you while the condition holds (Queen Mother Ramonda). */
   | { kind: 'cantAttackYou'; filter: CardFilter; condition?: ConditionDef }
   // Final Fantasy (11b): lands and Towns
@@ -2176,6 +2206,9 @@ export type StackItem =
       paws?: number[];
       /** A copy of a spell (not cast; it ceases to exist as it leaves the stack). */
       copy?: boolean;
+      // Secrets of Strixhaven (14b): Choreographed Sparks
+      /** A copy of a creature spell: it gains haste and is sacrificed at the next end step. */
+      hasteSacrifice?: boolean;
       /** It enters with a finality counter (cast with Osteomancer Adept). */
       finality?: boolean;
       /** Mockingbird: the creature it enters as a copy of. */
@@ -2261,6 +2294,9 @@ export interface TurnState {
   lifeLost?: Record<PlayerId, number>;
   /** Spells each player cast this turn. */
   spellsCast?: Record<PlayerId, number>;
+  // Secrets of Strixhaven (14b): Zaffai and the Tempests
+  /** Players who already cast a spell free from hand with Zaffai this turn. */
+  zaffaiUsed?: PlayerId[];
   /** Creatures each player controlled that were exiled from the battlefield this turn. */
   creaturesExiled?: Record<PlayerId, number>;
   /** Creatures that died under each player's control this turn. */
@@ -2712,6 +2748,9 @@ export type Decision =
       pay?: ManaCost;
       /** The cast costs its mana cost less this much (Uvilda: {4}). */
       costLess?: number;
+      // Secrets of Strixhaven (14b): Improvisation Capstone
+      /** Any number of these may be cast: after one is, the rest are offered again. */
+      more?: boolean;
       resume: PausedResolution;
       thenPriority: PlayerId;
     }
@@ -2806,7 +2845,7 @@ export type Action =
       // Sneak (Marvel Super Heroes)
       /** Cast for its sneak cost by returning this unblocked attacker to its owner's hand. */
       sneak?: ObjectId;
-      via?: 'festival' | 'osteomancer' | 'conduit' | 'free';
+      via?: 'festival' | 'osteomancer' | 'conduit' | 'free' | 'zaffai';
       /** Mockingbird: the creature to enter as a copy of. */
       copyOf?: ObjectId;
       /** Rottenmouth Viper: permanents sacrificed to make it cheaper. */

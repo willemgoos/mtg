@@ -1514,6 +1514,8 @@ function castLabel(defId: CardDefId, a: Action): string {
   if (a.type === 'activateAbility') return 'Activate';
   if (a.via === 'festival') return 'From your graveyard (pay 1 life)';
   if (a.via === 'osteomancer') return 'From your graveyard (forage)';
+  // Secrets of Strixhaven (14b): Zaffai and the Tempests (free, once a turn).
+  if (a.via === 'zaffai') return 'Cast free (Zaffai)';
   if (a.paws) return pawLabel(defId, a.paws);
   const def = cardDb.get(defId);
   if (a.type === 'castSpell' && a.sneak && def?.sneak) return `Sneak (${manaText(def.sneak)})`;
@@ -1612,7 +1614,8 @@ function manaText(c: ManaCost): string {
   const pips = Object.entries(c.colored).flatMap(([t, n]) => Array<string>(n ?? 0).fill(`{${t}}`));
   const hybrid = (c.hybrid ?? []).map(([a, b]) => `{${a}/${b}}`);
   const x = '{X}'.repeat(c.x ?? 0);
-  return `${x}${c.generic ? `{${c.generic}}` : ''}${pips.join('')}${hybrid.join('')}`;
+  const twoHybrid = (c.twoHybrid ?? []).map((t) => `{2/${t}}`);
+  return `${x}${c.generic ? `{${c.generic}}` : ''}${pips.join('')}${hybrid.join('')}${twoHybrid.join('')}`;
 }
 
 /** Prompt for a triggered ability, mentioning an optional cost ("you may pay"). */

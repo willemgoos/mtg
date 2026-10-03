@@ -295,3 +295,13 @@ whole (SOS's `prepare` is the riskiest). The shortest path to Quintorius is 0, 1
   Pox Plague asks one card or permanent at a time (you, then the opponent). Great Hall of the Biblioplex pays the life as
   damage when its mana is spent. Petrified Hamlet picks from a list of land names (lands in play first).
   Together as One and the other converge cards read the colours spent as recorded on the spell or permanent.
+14b (group D, red and Prismari, `sos/cards-d.ts`, `sos-14b-d-effects.ts`):
+
+- Impractical Joke has no "damage can't be prevented" clause. Steal the Show's discard-and-draw is for you (the target player is always you).
+  Choreographed Sparks and Prismari, the Inspiration keep the original targets on copies (no new-target choice); Sparks' copy of a
+  creature spell is hasty and sacrificed at the end step. Rubble Rouser's mana ability is an activated ability (it deals damage), so
+  it can't pay a cost mid-cast. Resonating Lute makes each land two mana of any colours (not necessarily the same colour) and
+  replaces the land's own mana for instants and sorceries. Tablet of Discovery's milled card is playable from the graveyard
+  this turn (`playGraveyardTurn`). Magmablood Archaic's {2/R} pips are paid with {R} where possible, else two generic
+  (`ManaCost.twoHybrid`). SOS Spirit (2/2 red and white) and Elemental (3/3 blue and red flying) tokens are this group's own
+  (`sos-spirit-rw-token`, `sos-elemental-ur-token`).

@@ -187,6 +187,7 @@ export function startTurn(ctx: Ctx, player: PlayerId, noPowerUp = false): void {
   delete s.turn.flashTypes;
   delete s.turn.instantsSorceriesCast;
   delete s.turn.castDefs;
+  delete s.turn.zaffaiUsed; // Secrets of Strixhaven (14b)
   // Final Fantasy (11a): saga creatures (Summon: Alexander).
   delete s.turn.creaturesShielded;
   // Strixhaven (13c): Revel in Silence; Academic Probation's name bans end as their caster's turn begins.

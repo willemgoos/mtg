@@ -4,6 +4,7 @@ import { SOS_BLUE_B, SOS_BLUE_B_BACKS, SOS_BLUE_B_TOKENS } from './sos/cards-b.t
 import { PREPARE_SPIKE, PREPARE_SPIKE_BACKS } from './sos/prepare-spike.ts';
 import { SOS_A, SOS_A_BACKS, SOS_A_TOKENS } from './sos/cards-a.ts';
 import { SOS_C, SOS_C_BACKS } from './sos/cards-c.ts';
+import { SOS_D, SOS_D_BACKS, SOS_D_TOKENS } from './sos/cards-d.ts';
 import { SHARED_14A } from './sos/shared-14a.ts';
 import {
   SILVERQUILL_SOS,
@@ -24,6 +25,7 @@ import {
 export const SECRETS_OF_STRIXHAVEN_BEHAVIORS: Record<string, Behavior> = {
   ...PREPARE_SPIKE,
   ...SHARED_14A,
+  ...SOS_D,
   ...SILVERQUILL_SOS,
   ...SOS_WITHERBLOOM,
   // 14b, group A (white, Silverquill, Lorehold).
@@ -35,6 +37,7 @@ export const SECRETS_OF_STRIXHAVEN_BEHAVIORS: Record<string, Behavior> = {
 /** Back faces of double-faced cards: not cards of their own, so not in the pool. */
 export const SECRETS_OF_STRIXHAVEN_BACK_FACES: Record<string, Behavior> = {
   ...PREPARE_SPIKE_BACKS,
+  ...SOS_D_BACKS,
   ...SILVERQUILL_SOS_BACKS,
   ...SOS_WITHERBLOOM_BACKS,
   ...SOS_A_BACKS,
@@ -45,6 +48,7 @@ export const SECRETS_OF_STRIXHAVEN_BACK_FACES: Record<string, Behavior> = {
 /** Secrets of Strixhaven tokens (Inkling, Pest). */
 export const SECRETS_OF_STRIXHAVEN_TOKENS: CardDefinition[] = [
   ...SILVERQUILL_SOS_TOKENS,
+  ...SOS_D_TOKENS,
   ...SOS_WITHERBLOOM_TOKENS,
   ...SOS_A_TOKENS,
   ...SOS_BLUE_B_TOKENS,

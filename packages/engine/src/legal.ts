@@ -17,7 +17,7 @@ import {
 import { type Ctx, def, obj, other, withBackFace } from './context.ts';
 import { forageChoices } from './forage.ts';
 import { artifactHelpers, canPayFrom, creatureHelpers, hasImprovise, manaSources } from './mana.ts';
-import { castVariants, spellTags } from './spells.ts';
+import { type CastVia, castVariants, spellTags } from './spells.ts';
 import {
   abilityManaCost,
   castCost,
@@ -73,6 +73,7 @@ export function castableCards(ctx: Ctx, player: PlayerId): ObjectId[] {
   for (const id of ps.graveyard) {
     const d = def(ctx, id);
     // Conduit of Worlds: "You may play lands from your graveyard."
+    // Secrets of Strixhaven (14b): Tablet of Discovery: the card milled with it, this turn.
     if (d.types.includes('Land')) {
       // Secrets of Strixhaven (14b): Ark of Hunger, a milled land you may play this turn.
       if (landsFromGraveyard || obj(ctx, id).playableUntilTurn === ctx.s.turn.number) out.push(id);
@@ -260,15 +261,20 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
         )
       : [],
   );
-  const restricted = s.battlefield.some(
-    (id) =>
-      obj(ctx, id).controller === player &&
-      def(ctx, id).abilities.some(
-        (a) =>
-          (a.kind === 'mana' && !!a.onlyFor) ||
-          (a.kind === 'static' && a.effect.kind === 'grantMana' && !!a.effect.onlyForCreatures),
-      ),
-  );
+  // Secrets of Strixhaven (14b): restricted mana floating in the pool (Abstract Paintmage).
+  const restricted =
+    !!ps.pool?.some((m) => m.onlyFor) ||
+    s.battlefield.some(
+      (id) =>
+        obj(ctx, id).controller === player &&
+        def(ctx, id).abilities.some(
+          (a) =>
+            (a.kind === 'mana' && !!a.onlyFor) ||
+            (a.kind === 'static' &&
+              a.effect.kind === 'grantMana' &&
+              (!!a.effect.onlyForCreatures || !!a.effect.onlyFor)),
+        ),
+    );
   const creatures = s.battlefield.filter(
     (id) => obj(ctx, id).controller === player && isCreature(ctx, id),
   );
@@ -334,7 +340,13 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
     // The usual ways, plus graveyard casts through other cards.
     // Extract Power: exiled cards played for free.
     const free = zone === 'exile' && obj(ctx, card).playFreeBy === player;
-    const vias: ('festival' | 'osteomancer' | 'conduit' | 'free' | undefined)[] = free
+    // Secrets of Strixhaven (14b): Zaffai and the Tempests: an instant or sorcery from your hand, free, once a turn.
+    const zaffai =
+      zone === 'hand' &&
+      (d.types.includes('Instant') || d.types.includes('Sorcery')) &&
+      !s.turn.zaffaiUsed?.includes(player) &&
+      hasStatic(ctx, player, 'freeSpellOncePerTurn');
+    const vias: (CastVia | undefined)[] = free
       ? ['free']
       : [
           ...(zone !== 'graveyard' ||
@@ -345,6 +357,7 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
             ? [undefined]
             : []),
           ...(zone === 'graveyard' ? graveyardVias(ctx, player, card) : []),
+          ...(zaffai ? (['zaffai'] as const) : []),
         ];
     for (const via of vias)
       for (const v of castVariants(d, zone, via)) {

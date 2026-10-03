@@ -608,6 +608,8 @@ export function runEffects(
       e.kind === 'takeStudyCard' ||
       e.kind === 'expressiveIteration' ||
       e.kind === 'castFreeFromTop' ||
+      // Secrets of Strixhaven (14b)
+      e.kind === 'exileUntilTotalCastFree' ||
       // Final Fantasy (11a): saga creatures
       e.kind === 'removeLoreFromAny' ||
       // Strixhaven (13a)
@@ -856,6 +858,26 @@ export function runEffects(
         );
         if (cards.length === 0) continue;
         ctx.s.decision = { kind: 'castFree', player: controller, cards, resume, thenPriority };
+      } else if (e.kind === 'exileUntilTotalCastFree') {
+        // Secrets of Strixhaven (14b): Improvisation Capstone.
+        const exiled: ObjectId[] = [];
+        let total = 0;
+        while (total < e.total && lib.length > 0) {
+          const id = lib[0]!;
+          moveObject(ctx, id, 'exile');
+          exiled.push(id);
+          total += manaValue(def(ctx, id).manaCost);
+        }
+        const cards = exiled.filter((id) => !def(ctx, id).types.includes('Land'));
+        if (cards.length === 0) continue;
+        ctx.s.decision = {
+          kind: 'castFree',
+          player: controller,
+          cards,
+          more: true,
+          resume,
+          thenPriority,
+        };
       } else if (e.kind === 'castFreeFromTop') {
         // Marvel Super Heroes (Cosmic Cube, Doom Reigns Supreme).
         const who = e.from === 'yours' ? controller : other(controller);
@@ -1690,6 +1712,7 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
       return;
     }
     case 'castFreeFromTop':
+    case 'exileUntilTotalCastFree':
       return; // handled by runEffects
     case 'removePlusOneCounters':
       for (const id of objectsOf(ctx, es, e.from)) obj(ctx, id).plusOneCounters = 0;
@@ -2344,6 +2367,8 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
             : undefined;
       const item = ref ? findSpell(ctx, ref.id) : undefined;
       if (!item) return;
+      // Secrets of Strixhaven (14b): "This spell can't be copied."
+      if (defOf(ctx, obj(ctx, item.id).defId).cantBeCopied) return;
       const n = e.count !== undefined ? resolveAmount(ctx, es, e.count) : 1;
       // Ancestral Communion: the copies take other legal targets where there are any.
       const spec = spellOnStack(defOf(ctx, obj(ctx, item.id).defId), item)?.targets ?? [];
@@ -2368,6 +2393,7 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
           ...(item.x ? { x: item.x } : {}),
           ...(item.paws ? { paws: item.paws } : {}),
           copy: true,
+          ...(e.hasteSacrifice ? { hasteSacrifice: true } : {}),
         });
         // Strixhaven (13a): magecraft.
         emit(ctx, { type: 'spellCopied', id: copy.id, player: es.controller });
@@ -2553,7 +2579,12 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
       const n = e.count !== undefined ? resolveAmount(ctx, es, e.count) : 1;
       for (let i = 0; i < n; i++)
         for (const produces of e.mana)
-          pool.push({ produces, ...(e.untilEndOfTurn ? { untilEndOfTurn: true } : {}) });
+          pool.push({
+            produces,
+            ...(e.untilEndOfTurn ? { untilEndOfTurn: true } : {}),
+            // Secrets of Strixhaven (14b): "Spend this mana only to cast instant and sorcery spells."
+            ...(e.onlyFor ? { onlyFor: e.onlyFor } : {}),
+          });
       return;
     }
     case 'discardHand':
