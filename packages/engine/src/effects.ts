@@ -1284,7 +1284,11 @@ export function runEffects(
           kind: 'discard',
           player: who,
           count: 1,
-          anyNumber: { discarded: 0, ...(e.plus ? { plus: e.plus } : {}) },
+          anyNumber: {
+            discarded: 0,
+            ...(e.plus ? { plus: e.plus } : {}),
+            ...(e.max ? { max: e.max } : {}),
+          },
           resume,
           thenPriority,
         };
@@ -1361,11 +1365,17 @@ export function runEffects(
           e.amount !== undefined ? resolveAmount(ctx, es, e.amount) : e.count,
           able.length,
         );
-        if (count === 0) continue;
+        if (count === 0) {
+          // Strixhaven Brawl (15a): Seasoned Pyromancer still draws with an empty hand.
+          for (let n = 0; n < (e.drawAfter ?? 0); n++) drawCard(ctx, who);
+          continue;
+        }
         ctx.s.decision = {
           kind: 'discard',
           player: who,
           count,
+          ...(e.drawAfter ? { drawAfter: e.drawAfter } : {}),
+          ...(e.tokenPerNonland ? { tokenPerNonland: e.tokenPerNonland } : {}),
           ...(e.filter ? { filter: e.filter } : {}),
           ...(e.exile ? { exile: true } : {}),
           ...(e.damageTo !== undefined ? { damageTo: e.damageTo } : {}),

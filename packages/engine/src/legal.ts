@@ -84,11 +84,14 @@ export function castableCards(ctx: Ctx, player: PlayerId): ObjectId[] {
       d.disturb ||
       d.castFromGraveyardRemovingCounters ||
       d.castFromGraveyardWithDiscard ||
+      d.castFromGraveyardOrExile ||
       mayhemReady(ctx, id) ||
       graveyardVias(ctx, player, id).length
     )
       out.push(id);
   }
+  // Strixhaven Brawl (15a): Squee, the Immortal, from your own exile.
+  for (const id of ps.exile) if (def(ctx, id).castFromGraveyardOrExile) out.push(id);
   // Cruelclaw's Heist: an opponent's exiled card you may cast.
   for (const id of ctx.s.players[other(player)].exile)
     if (
@@ -354,6 +357,7 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
           d.flashback ||
           d.castFromGraveyardRemovingCounters ||
           d.castFromGraveyardWithDiscard ||
+          d.castFromGraveyardOrExile ||
           mayhemReady(ctx, card)
             ? [undefined]
             : []),

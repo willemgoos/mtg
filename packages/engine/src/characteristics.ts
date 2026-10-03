@@ -221,7 +221,9 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
     types:
       (crewed || o.copyAsCreature) && !d.types.includes('Creature')
         ? [...d.types, 'Creature']
-        : d.types,
+        : o.notCreature
+          ? d.types.filter((x) => x !== 'Creature')
+          : d.types,
     subtypes,
     cantBlock,
     cantBeBlocked,
@@ -443,6 +445,8 @@ export function hasKeyword(ctx: Ctx, id: ObjectId, k: Keyword): boolean {
 }
 
 export function isType(ctx: Ctx, id: ObjectId, t: CardType): boolean {
+  // Strixhaven Brawl (15a): Enduring Courage comes back as an enchantment that isn't a creature.
+  if (t === 'Creature' && ctx.s.objects[id]?.notCreature) return false;
   return def(ctx, id).types.includes(t);
 }
 

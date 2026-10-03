@@ -41,7 +41,12 @@ export const SET_PREFERENCE = [
   'sos',
   // Secrets of Strixhaven Commander: the Brawl decks (phase 15).
   'soc',
-  // Strixhaven Brawl 15a (w): staples from other sets.
+  'pmei',
+  'pw26',
+  'sld',
+  // Arena Beginner Set: Arena-only cards (last resort).
+  'anb',
+  // Strixhaven Brawl (15a): sets for the Brawl decks' reprints.
   'mh3',
   'hbg',
   'tdm',
@@ -56,11 +61,11 @@ export const SET_PREFERENCE = [
   'mat',
   'dsk',
   'bro',
-  'pmei',
-  'pw26',
-  'sld',
-  // Arena Beginner Set: Arena-only cards (last resort).
-  'anb',
+  'j25',
+  'dom',
+  'c20',
+  'rav',
+  'grn',
 ];
 
 export const RED_POOL = [
