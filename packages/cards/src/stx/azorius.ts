@@ -40,6 +40,21 @@ export const AZORIUS: Record<string, Behavior> = {
     ],
   },
   'Ageless Guardian': {},
+  // Simplified: only the 2/3 flyer; the {0} graveyard-casting ability is omitted.
+  "Mavinda, Students' Advocate": {},
+  // Simplified: no trigger-tax ability; a 1/3 flyer.
+  'Strict Proctor': {},
+  // Simplified: the exiled card stays exiled; the opponent cannot cast it for {2} more.
+  'Elite Spellbinder': {
+    abilities: [
+      {
+        kind: 'triggered',
+        trigger: { on: 'etb' },
+        targets: [],
+        effects: [{ kind: 'chooseFromOpponentHand', filter: { nonland: true }, then: 'exile' }],
+      },
+    ],
+  },
   'Thunderous Orator': {
     abilities: [
       {

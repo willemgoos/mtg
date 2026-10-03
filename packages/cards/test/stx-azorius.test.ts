@@ -35,13 +35,13 @@ const choose = (g: GameDriver, index: number) =>
 const handSize = (g: GameDriver) => g.state.players.p1.hand.length;
 
 describe('the deck', () => {
-  it('is 60 cards with 24 lands and four Lessons in the sideboard, and playable', () => {
+  it('is 60 cards with 24 lands and five Lessons in the sideboard, and playable', () => {
     const d = deckById('stx-azorius-skies');
     expect(isPlayable(d)).toBe(true);
     const ids = deckIds(d);
     expect(ids).toHaveLength(60);
     expect(ids.filter((id) => cardDb.get(id)!.types.includes('Land'))).toHaveLength(24);
-    expect(sideboardIds(d)).toHaveLength(4);
+    expect(sideboardIds(d)).toHaveLength(5);
   });
 });
 
