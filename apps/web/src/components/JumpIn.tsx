@@ -22,7 +22,12 @@ const GROUPS = [
     name: 'Bloomburrow · Arena',
     has: (p: Packet) => p.set === 'blb' && p.source === 'arena',
   },
-  { key: 'msh', name: 'Marvel Super Heroes', has: (p: Packet) => p.set === 'msh' },
+  { key: 'msh', name: 'Marvel Super Heroes', has: (p: Packet) => p.set === 'msh' && !p.source },
+  {
+    key: 'msh-jumpstart',
+    name: 'Marvel · Jumpstart',
+    has: (p: Packet) => p.set === 'msh' && p.source === 'arena',
+  },
   { key: 'fin', name: 'Final Fantasy', has: (p: Packet) => p.set === 'fin' },
 ] as const;
 

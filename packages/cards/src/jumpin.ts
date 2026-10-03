@@ -1402,7 +1402,103 @@ export const ARENA_FDN_PACKETS: Packet[] = [
 ];
 
 /** Every packet: ours and Arena's. */
-export const PACKETS: Packet[] = [...OWN_PACKETS, ...ARENA_BLB_PACKETS, ...ARENA_FDN_PACKETS];
+
+/**
+ * The official Marvel Super Heroes Jumpstart packets (June 2026), from
+ * https://magic.wizards.com/en/news/announcements/marvel-super-heroes-jumpstart-booster-themes,
+ * as each becomes playable (docs/marvel-jumpstart.md tracks the rest). 13
+ * cards and 7 basics: a Thriving land and the basics are the packet's lands.
+ */
+export const MARVEL_JUMPSTART_PACKETS: Packet[] = [
+  {
+    id: 'msh-jumpstart-hydra',
+    name: 'HYDRA',
+    colors: ['B'],
+    face: 'Viper, Cruel Conspirator',
+    blurb: 'Villains that strike from the shadows',
+    set: 'msh',
+    source: 'arena',
+    spells: [
+      ['Bob, Reluctant HYDRA Agent', 1],
+      ['Viper, Cruel Conspirator', 1],
+      ['Agents of HYDRA', 1],
+      ['HYDRA Troopers', 1],
+      ['Baron Strucker, HYDRA Overlord', 1],
+      ['Arnim Zola, Bio-Fanatic', 1],
+      ['Crossbones, Malicious Mercenary', 1],
+      ['HYDRA Disintegrator', 1],
+      ['Dark Deed', 1],
+      ['Cruel Alliance', 1],
+      ['HYDRA Infiltration', 1],
+      ['Infernal Rebirth', 1],
+    ],
+    lands: [
+      ['Thriving Moor', 1],
+      ['Swamp', 7],
+    ],
+  },
+  {
+    id: 'msh-jumpstart-shield',
+    name: 'Agents of S.H.I.E.L.D.',
+    colors: ['W'],
+    face: 'Nick Fury, Spymaster',
+    blurb: 'Spies that win when one hero attacks alone',
+    set: 'msh',
+    source: 'arena',
+    spells: [
+      ['Agent Phil Coulson', 1],
+      ['Peggy Carter, Secret Agent', 1],
+      ['Agent 13, Sharon Carter', 1],
+      ['Agents of S.H.I.E.L.D.', 1],
+      ['Quake, Agent of S.H.I.E.L.D.', 1],
+      ['S.H.I.E.L.D. Helicarrier', 1],
+      ['Borough Backup', 1],
+      ['Nick Fury, Spymaster', 1],
+      ['S.H.I.E.L.D. Spy Kit', 1],
+      ['Helicarrier Strike', 1],
+      ['Strategic Intervention', 1],
+      ['Web Up', 1],
+    ],
+    lands: [
+      ['Thriving Heath', 1],
+      ['Plains', 7],
+    ],
+  },
+  {
+    id: 'msh-jumpstart-trained',
+    name: 'Trained',
+    colors: ['G'],
+    face: 'Shang-Chi, Martial Mentor',
+    blurb: 'Heroes that train up with +1/+1 counters',
+    set: 'msh',
+    source: 'arena',
+    spells: [
+      ['Serpent Specialist', 1],
+      ['White Tiger, Ava Ayala', 1],
+      ['Undercover Skrull', 1],
+      ['Hercules, Prince of Power', 1],
+      ['She-Hulk, Attorney-at-Law', 1],
+      ['Pet Avengers', 1],
+      ['Shang-Chi, Martial Mentor', 1],
+      ['Wakandan Royal Guard', 1],
+      ['Advancing the Spirit', 1],
+      ['Restorative Technique', 1],
+      ['Punishing Punch', 1],
+      ['Colossal Collision', 1],
+    ],
+    lands: [
+      ['Thriving Grove', 1],
+      ['Forest', 7],
+    ],
+  },
+];
+
+export const PACKETS: Packet[] = [
+  ...OWN_PACKETS,
+  ...ARENA_BLB_PACKETS,
+  ...ARENA_FDN_PACKETS,
+  ...MARVEL_JUMPSTART_PACKETS,
+];
 
 const BASICS: Record<Color, string> = {
   W: 'Plains',

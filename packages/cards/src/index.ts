@@ -44,6 +44,7 @@ export {
 export type { Decklist } from './decks.ts';
 export {
   ARENA_BLB_PACKETS,
+  MARVEL_JUMPSTART_PACKETS,
   ARENA_FDN_PACKETS,
   PACKET_LANDS,
   PACKETS,

@@ -29,10 +29,18 @@ describe('Jump In packets', () => {
       for (const [name] of cards) {
         expect(cardDb.has(slug(name)), name).toBe(true);
         const colors = card.get(name)!.colors;
-        for (const c of colors) expect(p.colors, name).toContain(c);
+        // Official packets may hold a hybrid card of another colour too (She-Hulk in Trained).
+        if (p.source && colors.length > 1)
+          expect(
+            colors.some((c) => (p.colors as string[]).includes(c)),
+            name,
+          ).toBe(true);
+        else for (const c of colors) expect(p.colors, name).toContain(c);
       }
       const rares = p.spells.filter(([n]) => ['rare', 'mythic'].includes(card.get(n)!.rarity));
-      expect(rares, p.name).toHaveLength(1);
+      // Official packets may have more (Agents of S.H.I.E.L.D. has two).
+      if (p.source) expect(rares.length, p.name).toBeGreaterThanOrEqual(1);
+      else expect(rares, p.name).toHaveLength(1);
       expect(
         p.spells.some(([n]) => n === p.face),
         p.name,
