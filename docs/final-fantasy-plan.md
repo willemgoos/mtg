@@ -215,8 +215,6 @@ pairs: about 70% (50–85%).
 
 Arena never made Final Fantasy Jump In packets (its last Jump In update was Foundations), so there are none to add.
 
-Simplification: Vial Smasher always hits the opponent, never one of their planeswalkers.
-
 ## Phase 12: Final Fantasy Commander decks as Brawl (like Marvel Stream A)
 
 On Arena the four FIC decks came as **Arena Store Brawl decks** (7 July 2025, mtg.wiki "Arena Store decks (Final

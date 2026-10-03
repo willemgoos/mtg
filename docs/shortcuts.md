@@ -12,40 +12,42 @@ from) when it's fixed. Older phases keep their own "Simplifications" lists in `d
 
 ## Bloomburrow Starter Kit (`blb/others.ts`)
 
-- [ ] Bria, Riptide Rogue: "other creatures you control have prowess" is one trigger on Bria that pumps them all.
-- [ ] Thieving Otter: only draws on combat damage to a player (any damage to an opponent should count).
+- [x] Bria, Riptide Rogue: "other creatures you control have prowess" is one trigger on Bria that pumps them all.
+- [x] Thieving Otter: only draws on combat damage to a player (any damage to an opponent should count).
 
 ## Marvel draft trophy decks (`msh/draft.ts`)
 
-- [ ] Shuri, Wakandan Inventor: her artifact-copy ability isn't modelled (only the cost reduction).
-- [ ] Kid Loki: hexproof for creatures you put +1/+1 counters on this turn isn't modelled.
-- [ ] Hellcat, Undying Vigilante: comes back with a counter and haste but doesn't lose her abilities.
-- [ ] Loki Laufeyson: copies spells of mana value 2 or less (printed power), not his current power.
-- [ ] Misty Knight: draws one card, not one per card discarded this turn.
-- [ ] Iron Fist, Living Weapon: deals his damage when the trigger resolves (tapping him) instead of gaining a tap ability.
-- [ ] Justice, Vance Astrovik: only counts creatures returned to hand, not other nonland permanents.
-- [ ] Klaw, Sonic Subjugator: you choose from the whole hand instead of from the revealed cards.
-- [ ] Titania, Rugged Rumbler: the additional cost is always a discard (never {2}); ward is always {2}.
-- [ ] Atlantis Attacks: you always get the Leviathan ("target player" isn't offered).
-- [ ] Call Damage Control: the two cards don't have to be of different types.
-- [ ] Death to Our Enemies: the target for the 7 damage is chosen each time it triggers, and the damage isn't divided.
-- [ ] Doc Samson: his mana ability makes green only.
-- [ ] Claim the Kingdom: the indestructible counter goes on the creature that got the last +1/+1 counter.
-- [ ] Grim Reaper, Lethal Legionnaire: the creature returns tapped but not attacking.
+- [x] Shuri, Wakandan Inventor: her artifact-copy ability isn't modelled (only the cost reduction).
+- [ ] Kid Loki: +1/+1 counters an opponent put on your creature this turn count too (only yours should).
+- [x] Hellcat, Undying Vigilante: comes back with a counter and haste but doesn't lose her abilities.
+- [x] Loki Laufeyson: copies spells of mana value 2 or less (printed power), not his current power.
+- [x] Misty Knight: draws one card, not one per card discarded this turn.
+- [x] Iron Fist, Living Weapon: deals his damage when the trigger resolves (tapping him) instead of gaining a tap ability.
+- [x] Justice, Vance Astrovik: only counts creatures returned to hand, not other nonland permanents.
+- [ ] Klaw, Sonic Subjugator: the opponent doesn't choose which cards to reveal (the engine reveals their cheapest), and
+      "target player" is always the opponent.
+- [ ] Titania, Rugged Rumbler: ward is always {2} (discarding a card instead isn't offered).
+- [x] Atlantis Attacks: you always get the Leviathan ("target player" isn't offered).
+- [x] Call Damage Control: the two cards don't have to be of different types.
+- [ ] Death to Our Enemies: if the second of two targets becomes illegal, the first takes all 7; the "when you do" trigger
+      is a "when sacrificed" trigger (any sacrifice sets it off).
+- [ ] Doc Samson: his mana is an activated ability on the stack (choose a colour), not a mana ability.
+- [ ] Claim the Kingdom: the "when you do" trigger is a "when sacrificed" trigger (any sacrifice sets it off).
+- [x] Grim Reaper, Lethal Legionnaire: the creature returns tapped but not attacking.
 
 ## Foundations draft trophy decks and packets (`foundations-draft.ts`)
 
-- [ ] Time Stop: exiles the other spells, drops abilities and ends combat, but the turn carries on.
-- [ ] Bolt Bend: only changes spells' targets (not abilities), and the new target is picked automatically.
+- [x] Time Stop: exiles the other spells, drops abilities and ends combat, but the turn carries on.
+- [x] Bolt Bend: only changes spells' targets (not abilities), and the new target is picked automatically.
 - [ ] Blasphemous Edict: sacrifices every creature; the {B} alternative cost isn't offered.
-- [ ] Gutless Plunderer: surveils 3 instead of "put one back on top, the rest in the graveyard".
-- [ ] Elvish Archdruid: its mana is an activated ability, not a mana ability.
-- [ ] Vivien Reid: her emblem gives its bonus from the start of each of your combats instead of all the time.
-- [ ] Dropkick Bomber: the Goblin is only sacrificed after combat damage to a player, not to a creature.
+- [x] Gutless Plunderer: surveils 3 instead of "put one back on top, the rest in the graveyard".
+- [x] Elvish Archdruid: its mana is an activated ability, not a mana ability.
+- [x] Vivien Reid: her emblem gives its bonus from the start of each of your combats instead of all the time.
+- [x] Dropkick Bomber: the Goblin is only sacrificed after combat damage to a player, not to a creature.
 
 ## Final Fantasy draft trophy decks (`foundations-draft.ts`)
 
-- [ ] Vial Smasher the Fierce: always hits the opponent, never one of their planeswalkers.
+- [x] Vial Smasher the Fierce: always hits the opponent, never one of their planeswalkers.
 
 ## Marvel Jumpstart packets (`msh/jumpstart-*.ts`)
 
