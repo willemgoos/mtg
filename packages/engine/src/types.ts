@@ -210,6 +210,14 @@ export interface CardDefinition {
   colorIdentity?: Color[];
   /** The name printed on a Marvel reprint (Fellwar Stone is "S.H.I.E.L.D. Spy Satellite"). */
   flavorName?: string;
+  // Final Fantasy (11a): tiered
+  /** Tiered ("choose one additional cost"): with `modes`, choosing mode i also costs `tiered[i]`. */
+  tiered?: ManaCost[];
+  // Final Fantasy (11a): adventure lands
+  /** Its back face (`back`) is an Adventure: cast from hand, it then goes on an adventure in exile. */
+  adventure?: boolean;
+  /** It has no mana cost (a transforming card's back face), so it can't be cast. */
+  noManaCost?: boolean;
 }
 
 export type AbilityDef =
@@ -766,7 +774,10 @@ export type Amount =
   /** Total mana value of permanents you control matching the filter (Metalwork Colossus). */
   | { count: 'totalManaValue'; filter: CardFilter }
   /** Times you've cast your commander from the command zone (Hatut Zeraze Strike Force). */
-  | { count: 'commanderCasts' };
+  | { count: 'commanderCasts' }
+  // Final Fantasy (11a)
+  /** The amounts added up (Slash of Light: creatures plus Equipment you control). */
+  | { sum: Amount[] };
 
 export type EffectDef =
   | { kind: 'may'; effects: EffectDef[]; cost?: ManaCost }
@@ -973,6 +984,9 @@ export type EffectDef =
       counters?: number;
       // Marvel Super Heroes: "return it tapped" (The Mighty Thor, Jane Foster).
       tapped?: boolean;
+      // Final Fantasy (11a): saga creatures
+      /** "Return it to the battlefield transformed" (Dion, Crystal Fragments). */
+      transformed?: boolean;
     }
   /**
    * Choose a permanent you control matching the filter (other than the
@@ -1323,7 +1337,20 @@ export type EffectDef =
    * beginning of the next end step the Aura returns attached to it (`returnAuraTo`).
    */
   | { kind: 'returnEnchantedThenAura' }
-  | { kind: 'returnAuraTo'; aura: ObjectRef };
+  | { kind: 'returnAuraTo'; aura: ObjectRef }
+  // Final Fantasy (11a): job select
+  /** Job select: create this 1/1 Hero token, then attach the source Equipment to it. */
+  | { kind: 'jobSelect'; token: CardDefId }
+  // Final Fantasy (11a): saga creatures
+  /** Remove a lore counter from these Sagas (no chapter ability triggers). */
+  | { kind: 'removeLore'; what: Ref }
+  /** Put a lore counter on these Sagas (the new chapter triggers). */
+  | { kind: 'addLore'; what: Ref }
+  /**
+   * "You may remove a lore counter from each of any number of Sagas you control"
+   * (Garnet): asks for one Saga at a time, or none to stop; `then` happens for each.
+   */
+  | { kind: 'removeLoreFromAny'; then: EffectDef[] };
 
 export type StaticDef =
   | {
@@ -1373,6 +1400,11 @@ export type StaticDef =
       cantBeBlocked?: boolean;
       /** Damage to it is prevented and becomes +1/+1 counters (Panther Habit). */
       damageToCounters?: boolean;
+      // Final Fantasy (11a): job select
+      /** "Is a Knight in addition to its other types." */
+      addSubtypes?: string[];
+      /** Keywords it has only during its controller's turn (Dragoon's Lance: flying). */
+      yourTurnKeywords?: Keyword[];
     }
   /** All creatures able to block this creature do so (Prized Unicorn). */
   | { kind: 'lure' }
@@ -1627,6 +1659,14 @@ export interface GameObject {
   firstTappedTurn?: number;
   /** Sources that dealt damage to it this turn (Hawkeye); kept as it leaves. */
   damagedBy?: ObjectId[];
+  // Final Fantasy (11a): adventure lands
+  /** In exile "on an adventure": its owner may play it (the land) from there. */
+  onAdventure?: boolean;
+  // Final Fantasy (11a): saga creatures
+  /** The turn a lore counter was last removed from it (Garnet: one counter per Saga). */
+  loreRemovedTurn?: number;
+  /** It enters with this many more +1/+1 counters (Summon: Fenrir's next creature spell). */
+  bonusCounters?: number;
 }
 
 /** A reference that goes stale when the object changes zones. */
@@ -1784,6 +1824,9 @@ export interface TurnState {
   flashTypes?: { player: PlayerId; type: string }[];
   /** Players with hexproof until end of turn (Dawn's Truce). */
   hexproofPlayers?: PlayerId[];
+  // Final Fantasy (11a): saga creatures
+  /** Players whose creatures are dealt no damage this turn (Summon: Alexander). */
+  creaturesShielded?: PlayerId[];
 }
 
 export interface Attacker {
@@ -1876,6 +1919,9 @@ export interface PausedResolution extends EffectSource {
     exile?: boolean;
     rebound?: PlayerId;
     libraryBottom?: boolean;
+    // Final Fantasy (11a): adventure lands
+    /** Cast as an Adventure: exiled "on an adventure" as it resolves. */
+    adventure?: boolean;
   };
 }
 
@@ -2119,6 +2165,9 @@ export type Decision =
       kind: 'chooseObject';
       player: PlayerId;
       options: ObjectId[];
+      // Final Fantasy (11a): saga creatures
+      /** Choosing none is allowed (Garnet: "any number of Sagas"). */
+      optional?: boolean;
       then: EffectDef[];
       otherwise: EffectDef[];
       resume: PausedResolution;

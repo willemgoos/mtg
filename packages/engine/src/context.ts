@@ -1,5 +1,6 @@
 import { characteristics } from './characteristics.ts';
 import { MSH_EFFECTS } from './msh-effects.ts';
+import { FIN_EFFECTS } from './fin-effects.ts';
 import { checkCondition } from './triggers.ts';
 import type { EffectSource } from './effects.ts';
 import type {
@@ -54,6 +55,8 @@ export function makeCtx(
 /** Small one-off effects used by the engine's own effect kinds. */
 const BUILT_IN_EFFECTS: Record<string, CustomEffect> = {
   ...MSH_EFFECTS,
+  // Final Fantasy (11a).
+  ...FIN_EFFECTS,
   // "As this enters, choose a color/creature type" (or, for a spell, as it resolves: Raise the Palisade).
   setChosen(ctx, es, params) {
     const o = es.source && ctx.s.objects[es.source.id];
@@ -241,6 +244,9 @@ export interface MoveOptions {
   // 'second': second from the top (Trickster's Stratagem, Marvel Super Heroes).
   position?: 'top' | 'bottom' | 'second';
   controller?: PlayerId;
+  // Final Fantasy (11a): saga creatures
+  /** Onto the battlefield showing its back face ("return it transformed"). */
+  transformed?: boolean;
 }
 
 /**
@@ -386,6 +392,20 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
   o.plusOneCounters = 0;
   o.summoningSick = true;
   o.controller = to === 'battlefield' || to === 'stack' ? (opts.controller ?? o.owner) : o.owner;
+  // Final Fantasy (11a): saga creatures and adventure lands.
+  if (to === 'battlefield' && opts.transformed) {
+    const back = defOf(ctx, o.defId).back;
+    if (back) {
+      o.front = o.defId;
+      o.defId = back;
+    }
+  }
+  if (from === 'exile') delete o.onAdventure;
+  delete o.loreRemovedTurn;
+  if (o.bonusCounters && to !== 'stack') {
+    if (to === 'battlefield') o.plusOneCounters += o.bonusCounters;
+    delete o.bonusCounters;
+  }
   if (to === 'battlefield' && defOf(ctx, o.defId).entersTapped) o.tapped = true;
   const tappedIf = to === 'battlefield' ? defOf(ctx, o.defId).entersTappedIf : undefined;
   // Eddymurk Crab: "enters tapped if it's not your turn"; check lands and the like.

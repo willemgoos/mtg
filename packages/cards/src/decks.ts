@@ -16,7 +16,7 @@ export interface Decklist {
    */
   series: 'starter' | 'colorChallenge' | 'jumpIn' | 'season' | 'brawl';
   /** A deck from another set than Foundations (shown in its own section). */
-  set?: 'blb' | 'msh' | 'msc';
+  set?: 'blb' | 'msh' | 'msc' | 'fin';
   cards: [name: string, count: number][];
   /** Brawl: the commander (not in `cards`, which hold the other 99). */
   commander?: string;
@@ -1730,10 +1730,96 @@ export const MARVEL_BRAWL_DECKS: Decklist[] = [
   },
 ];
 
+/**
+ * Our own Final Fantasy (FIN) decks, built like the starter decks (36 spells,
+ * 24 lands) and played against them (docs/final-fantasy-plan.md, phase 11).
+ */
+export const FINAL_FANTASY_DECKS: Decklist[] = [
+  {
+    id: 'fin-heroes-arsenal',
+    name: "Heroes' Arsenal",
+    colors: ['R', 'W'],
+    face: 'Zidane, Tantalus Thief',
+    source: 'custom',
+    series: 'starter',
+    set: 'fin',
+    cards: [
+      ['Giott, King of the Dwarves', 2],
+      ['Dwarven Castle Guard', 3],
+      ['Adelbert Steiner', 2],
+      ['Item Shopkeep', 2],
+      ['Coeurl', 1],
+      ['Weapons Vendor', 2],
+      ['Barret Wallace', 1],
+      ['Zidane, Tantalus Thief', 1],
+      ["White Mage's Staff", 2],
+      ["Red Mage's Rapier", 2],
+      ["Paladin's Arms", 2],
+      ["Dragoon's Lance", 1],
+      ["Samurai's Katana", 2],
+      ["Warrior's Sword", 1],
+      ["Machinist's Arsenal", 1],
+      ['Crystal Fragments', 1],
+      ['Thunder Magic', 3],
+      ['Fire Magic', 1],
+      ['Restoration Magic', 1],
+      ['Slash of Light', 2],
+      ["You're Not Alone", 1],
+      ['Battle Menu', 1],
+      ['Fate of the Sun-Cryst', 1],
+      ['Plains', 8],
+      ['Mountain', 8],
+      ['Rabanastre, Royal City', 4],
+      ["Adventurer's Inn", 2],
+      ['Ishgard, the Holy See', 1],
+      ['Lindblum, Industrial Regency', 1],
+    ],
+  },
+  {
+    id: 'fin-eidolons-call',
+    name: "Eidolons' Call",
+    colors: ['G', 'W'],
+    face: 'Garnet, Princess of Alexandria',
+    source: 'custom',
+    series: 'starter',
+    set: 'fin',
+    cards: [
+      ['Garnet, Princess of Alexandria', 2],
+      ['Rinoa Heartilly', 2],
+      ['Loporrit Scout', 3],
+      ['Snow Villiers', 1],
+      ['Goobbue Gardener', 2],
+      ['Town Greeter', 1],
+      ['Balamb T-Rexaur', 1],
+      ["Dion, Bahamut's Dominant", 1],
+      ['Summon: Choco/Mog', 3],
+      ['Summon: Fenrir', 2],
+      ['Summon: Primal Garuda', 2],
+      ['Summon: Fat Chocobo', 2],
+      ['Summon: Titan', 1],
+      ['Clash of the Eikons', 2],
+      ["Tifa's Limit Break", 2],
+      ['Restoration Magic', 1],
+      ['Airship Crash', 1],
+      ['Fate of the Sun-Cryst', 2],
+      ["Prishe's Wanderings", 2],
+      ['Battle Menu', 2],
+      ['Esper Origins', 1],
+      ['Forest', 8],
+      ['Plains', 8],
+      ['Windurst, Federation Center', 4],
+      ["Adventurer's Inn", 2],
+      ['Zanarkand, Ancient Metropolis', 1],
+      ['Ishgard, the Holy See', 1],
+    ],
+  },
+];
+
 export const DECKS: Decklist[] = [
   ...ARENA_DECKS,
   ...COLOR_CHALLENGE_DECKS,
   ...BLOOMBURROW_DECKS,
   ...MARVEL_DECKS,
   ...MARVEL_BRAWL_DECKS,
+  ...FINAL_FANTASY_DECKS,
 ];

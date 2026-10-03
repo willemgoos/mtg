@@ -64,6 +64,12 @@ type RawFace = Pick<
 
 /** Double-faced layouts: each face becomes its own record, linked to the other. */
 const DOUBLE_FACED = ['modal_dfc', 'transform'];
+/**
+ * Final Fantasy (11a): adventurer cards (FIN's five Town lands) also become two
+ * records, the main face naming its Adventure as its back (and marked `adventure`).
+ */
+const ADVENTURE = 'adventure';
+const isFaced = (layout: string) => DOUBLE_FACED.includes(layout) || layout === ADVENTURE;
 
 async function download(): Promise<void> {
   const meta = (await (await fetch('https://api.scryfall.com/bulk-data', { headers })).json()) as {
@@ -117,7 +123,7 @@ async function main(): Promise<void> {
   const best = new Map<string, RawCard>();
   for await (const raw of readBulk()) {
     // A double-faced card is listed in the pool under its front face's name.
-    const front = DOUBLE_FACED.includes(raw.layout) ? raw.card_faces?.[0]?.name : undefined;
+    const front = isFaced(raw.layout) ? raw.card_faces?.[0]?.name : undefined;
     const c = front ? { ...raw, name: front } : raw;
     if (!wanted.has(c.name) || c.lang !== 'en') continue;
     // Classes (Bloomburrow's Talents) print their levels on one face.
@@ -134,7 +140,7 @@ async function main(): Promise<void> {
 
   const out: ScryfallCard[] = POOL.flatMap(({ name }) => {
     const c = best.get(name)!;
-    if (c.card_faces && DOUBLE_FACED.includes(c.layout)) return faceRecords(c, c.card_faces);
+    if (c.card_faces && isFaced(c.layout)) return faceRecords(c, c.card_faces);
     return {
       name: c.name,
       scryfallId: c.id,
@@ -186,6 +192,7 @@ function faceRecords(c: RawCard, faces: RawFace[]): ScryfallCard[] {
       // The card lists both faces' keywords; keep this face's own.
       keywords: c.keywords.filter((k) => text.toLowerCase().includes(k.toLowerCase())),
       ...(i === 0 ? { back: back.name } : { front: front.name }),
+      ...(i === 0 && c.layout === ADVENTURE ? { adventure: true } : {}),
       image: img
         ? {
             small: img.small,

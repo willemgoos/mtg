@@ -101,7 +101,25 @@ against the Foundations, Bloomburrow and MSH decks. Card behaviour in `packages/
 plus `others.ts`, `rares.ts`, `mythics.ts`, `sagas.ts`, `lands.ts`, merged in `final-fantasy.ts`. Tests in
 `packages/cards/test/fin-*.test.ts`.
 
-### 11a: the set mechanics and the first two decks
+### 11a: the set mechanics and the first two decks: done
+
+Done: job select (a `jobSelect` effect: the 1/1 colourless Hero token `fin-hero-token`, then the Equipment attached; Equipment
+grant their job's creature type and Dragoon's Lance its your-turn flying), tiered (`tiered` costs beside `modes`, one cast
+option per tier; the cast menu shows "Thundara — {3}"), Saga creatures (they were already generic; new are `removeLore`,
+`addLore` and Garnet's `removeLoreFromAny` with an optional "choose a Saga" prompt and a Done button, blink `transformed`
+for Dion and Crystal Fragments, Bahamut's "exile, then return front face up", Esper Origins entering transformed with a
+finality counter), Towns (all 12 common and 3 uncommon Town lands; "basic land or Town" is a card filter, Town counts are a
+`permanentsYouControl` filter), and adventure lands (the fetch script writes the `adventure` layout as two records, the land
+naming its Adventure as its back face and marked `adventure`; the Adventure is cast from hand like a modal back face, goes
+on an adventure in exile as it resolves (`onAdventure`), and the land can then be played from exile with the land drop; the
+UI offers "Play <land>" or "Adventure: <name> (cost)" and shows the exiled land beside the hand, as Arena does). All five
+adventure lands are implemented. Transforming back faces now have `noManaCost` (they can't be cast from hand).
+
+Two decks: **Heroes' Arsenal** (R/W Equipment and job select: Giott, Zidane, Machinist's Arsenal) and **Eidolons' Call** (G/W
+Sagas and Summons: Garnet, Rinoa, Dion, Summon: Titan, Esper Origins). Bot vs bot over 160 games against the ten Foundations
+starter decks: Heroes' Arsenal 54%, Eidolons' Call 54%.
+
+Plan:
 
 - Job select, with the Hero token.
 - Tiered, with an Arena-style mode-and-cost prompt.
@@ -159,7 +177,22 @@ four decks. Three more FIC Brawl decks followed (9 December 2025, "Arena Store d
 
 ### Phase 11
 
-(none yet)
+11a:
+
+- Job select: the creature types an Equipment grants ("is a Knight") show in the creature's characteristics, but most "Knight
+  you control" checks read printed types (Dion's flying for Knights doesn't see a job-select Knight).
+- Tiered and modal bots: the heuristic bot picks among the tiers like any other cast option.
+- Garnet: a Saga gives up at most one lore counter per turn to Garnet (marked by turn, so a second Garnet or Clash of the
+  Eikons in the same turn can't take another from it).
+- Summon: Fenrir II marks the next creature spell you cast this turn; Ecliptic Growl compares the greatest power on each side.
+- Town Greeter doesn't give the 2 life for a Town. Prishe's Wanderings and Weapons Vendor choose their "when you do" targets
+  as they are cast or put on the stack.
+- Zidane's "whenever an opponent gains control of a permanent from you, create a Treasure" isn't modelled.
+- Capital City's "{1}, {T}: Add one mana of any color" is an activated ability using the stack (not a mana ability), so
+  payments don't use it automatically. Eden targets the returned card before milling.
+- Item Shopkeep's menace target must be your attacking equipped creature.
+- Adventure lands: an Adventure that fizzles or is countered goes to the graveyard (as the rules say); the exiled land
+  shows only while it can be played (beside the hand, like the other castable cards from other zones).
 
 ### Phase 12
 

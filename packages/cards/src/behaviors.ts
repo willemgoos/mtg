@@ -2,7 +2,11 @@ import type { AbilityDef, CardDefinition, EffectDef, ManaType, TargetSpec } from
 import { type Behavior, parseManaCost } from './build.ts';
 import { BLOOMBURROW_BEHAVIORS } from './bloomburrow.ts';
 import { MARVEL_BACK_FACES, MARVEL_BEHAVIORS, MARVEL_TOKENS } from './marvel.ts';
-import { FINAL_FANTASY_BACK_FACES, FINAL_FANTASY_BEHAVIORS } from './final-fantasy.ts';
+import {
+  FINAL_FANTASY_BACK_FACES,
+  FINAL_FANTASY_BEHAVIORS,
+  FINAL_FANTASY_TOKENS,
+} from './final-fantasy.ts';
 import { MARVEL_BRAWL_BEHAVIORS, MARVEL_BRAWL_TOKENS } from './marvel-brawl.ts';
 import { FOUNDATIONS_BATCH_BEHAVIORS } from './foundations-batch.ts';
 
@@ -2169,6 +2173,7 @@ const artifactToken = (id: string, name: string, abilities: AbilityDef[]): CardD
 export const TOKENS: CardDefinition[] = [
   ...MARVEL_TOKENS,
   ...MARVEL_BRAWL_TOKENS,
+  ...FINAL_FANTASY_TOKENS,
   token('zombie-token', 'Zombie', 'B', ['Zombie'], 2, 2),
   token('cat-beast-token', 'Cat Beast', 'W', ['Cat', 'Beast'], 2, 2),
   token('raccoon-token', 'Raccoon', 'G', ['Raccoon'], 3, 3),

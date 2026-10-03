@@ -36,6 +36,7 @@ import { foodsOf } from './forage.ts';
 import { canPayFrom, manaSources, manaValue } from './mana.ts';
 import { nextInt, shuffleInPlace } from './rng.ts';
 import { checkCondition } from './triggers.ts';
+import { addLore } from './sagas.ts';
 import type {
   CardDefId,
   GameObject,
@@ -158,6 +159,8 @@ function prevented(ctx: Ctx, src: DamageSource, to: TargetChoice, amount: number
   const host = to.object.id;
   // Marvel Super Heroes: "Prevent all damage that would be dealt to Black Panther."
   if (hasStaticKind(ctx, host, 'preventDamageToSelf')) return 0;
+  // Final Fantasy (11a): Summon: Alexander prevents all damage to its controller's creatures this turn.
+  if (ctx.s.turn.creaturesShielded?.includes(obj(ctx, host).controller)) return 0;
   const habit = ctx.s.battlefield.some(
     (id) =>
       obj(ctx, id).attachedTo === host &&
@@ -374,6 +377,8 @@ function playersOf(ctx: Ctx, es: EffectSource, ref: Ref): PlayerId[] {
 export function resolveAmount(ctx: Ctx, es: EffectSource, amount: Amount): number {
   if (typeof amount === 'number') return amount;
   if ('multiply' in amount) return amount.multiply * resolveAmount(ctx, es, amount.amount);
+  // Final Fantasy (11a)
+  if ('sum' in amount) return amount.sum.reduce<number>((n, a) => n + resolveAmount(ctx, es, a), 0);
   if ('manaValueOfSubject' in amount) {
     const o = es.subject && ctx.s.objects[es.subject.id];
     return o ? manaValue(def(ctx, o.id).manaCost) : 0;
@@ -527,7 +532,9 @@ export function runEffects(
       e.kind === 'castFreeCard' ||
       e.kind === 'revealUntilCastable' ||
       e.kind === 'expressiveIteration' ||
-      e.kind === 'castFreeFromTop'
+      e.kind === 'castFreeFromTop' ||
+      // Final Fantasy (11a): saga creatures
+      e.kind === 'removeLoreFromAny'
     ) {
       const lib = ctx.s.players[es.controller].library;
       const { controller, source, sourceDefId, targets, lkiPower, subject, amount, chosen, x } = es;
@@ -1120,6 +1127,28 @@ export function runEffects(
           options,
           to: 'battlefield',
           looked,
+          resume,
+          thenPriority,
+        };
+      } else if (e.kind === 'removeLoreFromAny') {
+        // Final Fantasy (11a): saga creatures. Garnet: one Saga at a time, each at most once.
+        const options = ctx.s.battlefield.filter((id) => {
+          const o = obj(ctx, id);
+          return (
+            o.controller === controller &&
+            !!def(ctx, id).saga &&
+            (o.counters?.lore ?? 0) > 0 &&
+            o.loreRemovedTurn !== ctx.s.turn.number
+          );
+        });
+        if (options.length === 0) continue;
+        ctx.s.decision = {
+          kind: 'chooseObject',
+          player: controller,
+          options,
+          optional: true,
+          then: [{ kind: 'removeLore', what: 'chosen' }, ...e.then, e],
+          otherwise: [],
           resume,
           thenPriority,
         };
@@ -2180,7 +2209,11 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
         moveObject(ctx, id, 'exile');
         // A token ceases to exist in exile.
         if (token || !ctx.s.objects[id]) continue;
-        moveObject(ctx, id, 'battlefield', { controller: owner });
+        // Final Fantasy (11a): "return it to the battlefield transformed".
+        moveObject(ctx, id, 'battlefield', {
+          controller: owner,
+          ...(e.transformed ? { transformed: true } : {}),
+        });
         if (e.tapped) obj(ctx, id).tapped = true;
         if (e.counters) addCounters(ctx, id, e.counters);
       }
@@ -2328,6 +2361,31 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
     case 'punisher':
     case 'exileTopChooseOne':
     case 'forage':
+      return; // handled by runEffects
+    // Final Fantasy (11a): job select
+    case 'jobSelect': {
+      // Create the Hero, then attach this Equipment to it (if it's still here).
+      const equipment = es.source && onBattlefield(ctx, es.source);
+      runEffect(ctx, es, { kind: 'createToken', token: e.token, count: 1 });
+      const hero = es.chosen && onBattlefield(ctx, es.chosen);
+      if (equipment && hero && equipment.controller === hero.controller)
+        equipment.attachedTo = hero.id;
+      return;
+    }
+    // Final Fantasy (11a): saga creatures
+    case 'removeLore':
+      for (const id of objectsOf(ctx, es, e.what)) {
+        const o = obj(ctx, id);
+        const lore = o.counters?.lore ?? 0;
+        if (!def(ctx, id).saga || lore === 0) continue;
+        o.counters = { ...o.counters, lore: lore - 1 };
+        o.loreRemovedTurn = ctx.s.turn.number;
+      }
+      return;
+    case 'addLore':
+      for (const id of objectsOf(ctx, es, e.what)) addLore(ctx, id);
+      return;
+    case 'removeLoreFromAny':
       return; // handled by runEffects
     case 'custom': {
       const fn = ctx.customEffects[e.handler];

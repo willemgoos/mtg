@@ -682,6 +682,8 @@ export function resolveTop(ctx: Ctx): boolean {
         ...(d.afterResolving === 'libraryBottom' ? { libraryBottom: true } : {}),
         // Rebound: cast from your hand, it's exiled and cast again at your next upkeep.
         ...(d.rebound && item.fromHand && !item.flashback ? { rebound: item.controller } : {}),
+        // Final Fantasy (11a): an Adventure goes on an adventure (exile) as it resolves.
+        ...(o.front && defOf(ctx, o.front).adventure && !item.copy ? { adventure: true } : {}),
       };
       if (runEffects(ctx, es, spell.effects, paused)) return true;
       finishResolution(ctx, paused);
@@ -809,6 +811,15 @@ function attachAura(ctx: Ctx, aura: ObjectId, host: ObjectId): void {
 export function finishResolution(ctx: Ctx, item: PausedResolution['item']): void {
   emit(ctx, { type: 'resolved', id: item.id });
   if (item.kind !== 'spell') return;
+  // Final Fantasy (11a): a spell that put itself onto the battlefield as it resolved (Esper Origins).
+  if (ctx.s.objects[item.id]?.zone === 'battlefield') return;
+  // Final Fantasy (11a): adventure lands. Its owner may play the land from exile later.
+  if (item.adventure) {
+    moveObject(ctx, item.id, 'exile');
+    const o = ctx.s.objects[item.id];
+    if (o?.zone === 'exile') o.onAdventure = true;
+    return;
+  }
   if (item.libraryBottom) return moveObject(ctx, item.id, 'library', { position: 'bottom' });
   moveObject(ctx, item.id, item.exile || item.rebound ? 'exile' : 'graveyard');
   const o = ctx.s.objects[item.id];

@@ -99,6 +99,8 @@ export function castableCards(ctx: Ctx, player: PlayerId): ObjectId[] {
         )
           out.push(topCard);
     }
+  // Final Fantasy (11a): adventure lands. A card on an adventure: its owner may play the land.
+  for (const id of ps.exile) if (obj(ctx, id).onAdventure && !out.includes(id)) out.push(id);
   // Strongbox Raider: exiled cards you may play for a while.
   for (const id of ps.exile) {
     const until = obj(ctx, id).playableUntilTurn;
@@ -659,7 +661,11 @@ export function getLegalActions(ctx: Ctx, player: PlayerId): Action[] {
       return out;
     }
     case 'chooseObject':
-      return d.options.map((card) => ({ type: 'chooseCard', player, card }) as const);
+      return [
+        ...d.options.map((card) => ({ type: 'chooseCard', player, card }) as const),
+        // Final Fantasy (11a): saga creatures (Garnet may stop choosing).
+        ...(d.optional ? [{ type: 'chooseCard', player, card: null } as const] : []),
+      ];
     case 'payOrCounter':
       return [
         { type: 'chooseEffect', player, accept: false },

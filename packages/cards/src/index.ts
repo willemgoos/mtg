@@ -17,6 +17,7 @@ export {
   GREEN_POOL,
   LAND_POOL,
   MARVEL_BRAWL_POOL,
+  FINAL_FANTASY_POOL,
   OTHER_POOL,
   RED_POOL,
   WHITE_POOL,
@@ -29,6 +30,7 @@ export {
   DECKS,
   MARVEL_DECKS,
   MARVEL_BRAWL_DECKS,
+  FINAL_FANTASY_DECKS,
 } from './decks.ts';
 export type { Decklist } from './decks.ts';
 export { PACKET_LANDS, PACKETS, packetCards } from './jumpin.ts';

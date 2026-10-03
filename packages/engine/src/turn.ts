@@ -176,6 +176,8 @@ export function startTurn(ctx: Ctx, player: PlayerId, noPowerUp = false): void {
   delete s.turn.flashTypes;
   delete s.turn.instantsSorceriesCast;
   delete s.turn.castDefs;
+  // Final Fantasy (11a): saga creatures (Summon: Alexander).
+  delete s.turn.creaturesShielded;
   for (const q of Object.values(s.players)) q.attackedThisTurn = false;
   endEffects(ctx, (e) => e.expires === 'untilYourNextTurn' && e.player === player);
   enterStep(ctx, 'untap');

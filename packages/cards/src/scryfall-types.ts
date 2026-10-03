@@ -21,6 +21,9 @@ export interface ScryfallCard {
   front?: string;
   /** The Marvel name printed on a reprint in the Marvel Commander decks. */
   flavorName?: string;
+  // Final Fantasy (11a): adventure lands
+  /** An adventurer card's main face: its `back` is its Adventure (a sorcery or instant). */
+  adventure?: boolean;
   /** Hotlinked, never bundled. */
   image: { small: string; normal: string; large: string; artCrop: string } | null;
 }

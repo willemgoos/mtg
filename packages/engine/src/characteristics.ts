@@ -48,6 +48,8 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
   let cantBeBlocked = false;
   let cantAttack = false;
   const removed = new Set<Keyword>();
+  // Final Fantasy (11a): job select ("is a Knight in addition to its other types").
+  const extraSubtypes: string[] = [];
   // A Vehicle that became an artifact creature this turn.
   let crewed = false;
 
@@ -140,6 +142,12 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
             granted ??= new Set(keywords);
             for (const k of st.keywords) granted.add(k);
           }
+          // Final Fantasy (11a): job select.
+          if (st.addSubtypes) extraSubtypes.push(...st.addSubtypes);
+          if (st.yourTurnKeywords?.length && ctx.s.turn.activePlayer === src.controller) {
+            granted ??= new Set(keywords);
+            for (const k of st.yourTurnKeywords) granted.add(k);
+          }
           continue;
         }
         // Maha: "Creatures your opponents control have base toughness 1."
@@ -199,7 +207,10 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
     for (const k of removed) granted.delete(k);
     keywords = granted;
   }
-  const subtypes = o.addedSubtypes ? [...d.subtypes, ...o.addedSubtypes] : d.subtypes;
+  let subtypes = o.addedSubtypes ? [...d.subtypes, ...o.addedSubtypes] : d.subtypes;
+  // Final Fantasy (11a): job select.
+  if (extraSubtypes.length)
+    subtypes = [...subtypes, ...extraSubtypes.filter((t) => !subtypes.includes(t))];
   return {
     power,
     toughness,
@@ -229,6 +240,9 @@ export function countOf(
 ): number {
   if (typeof a === 'number') return a;
   if ('multiply' in a) return a.multiply * countOf(ctx, player, a.amount, printed, sourceId);
+  // Final Fantasy (11a)
+  if ('sum' in a)
+    return a.sum.reduce<number>((n, x) => n + countOf(ctx, player, x, printed, sourceId), 0);
   if ('if' in a) {
     const self = sourceId ? ctx.s.objects[sourceId] : undefined;
     return checkCondition(ctx, a.if, player, self) ? a.then : (a.else ?? 0);

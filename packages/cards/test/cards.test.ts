@@ -11,6 +11,8 @@ import {
   cardDb,
   DECKS,
   deckIds,
+  FINAL_FANTASY_DECKS,
+  FINAL_FANTASY_POOL,
   GREEN_POOL,
   LAND_POOL,
   MARVEL_BRAWL_POOL,
@@ -51,6 +53,7 @@ describe('card data', () => {
         // Back faces of double-faced cards come with their fronts.
         ...SCRYFALL.filter((c) => c.front).map((c) => c.name),
         ...MARVEL_BRAWL_POOL,
+        ...FINAL_FANTASY_POOL,
       ].sort(),
     );
     for (const c of SCRYFALL) expect(c.image?.normal).toMatch(/^https:\/\/cards\.scryfall\.io\//);
@@ -130,6 +133,7 @@ describe('card data', () => {
         'large-and-in-charge',
         ...BLOOMBURROW_DECKS.map((d) => d.id),
         ...MARVEL_DECKS.map((d) => d.id),
+        ...FINAL_FANTASY_DECKS.map((d) => d.id),
       ].sort(),
     );
     for (const d of PLAYABLE_DECKS)

@@ -184,6 +184,12 @@ export function Board({
   const dropCard = (id: ObjectId, x: number, y: number) => {
     const acts = playable(id);
     const land = acts.find((a) => a.type === 'playLand');
+    // Final Fantasy (11a): an adventure land dropped on the board: the land or its Adventure.
+    if (land && acts.length > 1)
+      return setCastMenu({
+        source: id,
+        groups: [[land], ...castGroups(acts.filter((a) => a.type === 'castSpell'))],
+      });
     if (land) return act(land);
     if (acts.length === 0) return;
     if (castGroups(acts).length > 1) return startCast(id, acts);
@@ -249,6 +255,10 @@ export function Board({
     if (o.zone !== 'battlefield') {
       const acts = handActions(legal, id);
       const casts = acts.filter((a) => a.type === 'castSpell');
+      // Final Fantasy (11a): an adventure land: play the land or cast its Adventure.
+      const land = acts.find((a) => a.type === 'playLand');
+      if (land && casts.length)
+        return setCastMenu({ source: id, groups: [[land], ...castGroups(casts)] });
       if (casts.length) return startCast(id, casts);
       const ability = legal.find((a) => a.type === 'activateAbility' && a.source === id);
       if (ability?.type === 'activateAbility') return activate(id, ability.abilityIndex);
@@ -574,6 +584,15 @@ export function Board({
       case 'pickCards':
         return { prompt: `Choose ${d.count} card${d.count > 1 ? 's' : ''} to keep` };
       case 'chooseObject':
+        // Final Fantasy (11a): Garnet: any number of Sagas, one at a time.
+        if (d.optional)
+          return {
+            prompt: `${nameOf(d.resume.sourceDefId)}: choose a Saga to remove a lore counter from`,
+            secondary: ['Done', () => act({ type: 'chooseCard', player: HUMAN, card: null })] as [
+              string,
+              () => void,
+            ],
+          };
         return { prompt: `${nameOf(d.resume.sourceDefId)}: choose one of your permanents` };
       case 'payOrCounter': {
         const pay = legal.find((a) => a.type === 'chooseEffect' && a.accept);
@@ -1402,6 +1421,8 @@ function ChooseCardOverlay({ game, onHover }: { game: GameSession; onHover: Hove
 
 /** "Choose one" mode name, or kicked / not kicked. */
 function castLabel(defId: CardDefId, a: Action): string {
+  // Final Fantasy (11a): an adventure land's own option.
+  if (a.type === 'playLand') return `Play ${cardDb.get(defId)?.name ?? 'land'}`;
   if (a.type !== 'castSpell' && a.type !== 'activateAbility') return '';
   if (a.forage)
     return a.forage === 'graveyard'
@@ -1414,11 +1435,19 @@ function castLabel(defId: CardDefId, a: Action): string {
   if (a.paws) return pawLabel(defId, a.paws);
   const def = cardDb.get(defId);
   if (a.type === 'castSpell' && a.sneak && def?.sneak) return `Sneak (${manaText(def.sneak)})`;
+  // Final Fantasy (11a): an adventure land's Adventure.
+  if (def?.adventure && a.back) {
+    const face = cardDb.get(def.back!);
+    return `Adventure: ${face?.name ?? ''} (${face ? manaText(face.manaCost) : ''})`;
+  }
   // A modal double-faced card: cast either face.
   if (def?.back) {
     const face = a.back ? cardDb.get(def.back) : def;
     return `Cast ${face?.name ?? ''} (${face ? manaText(face.manaCost) : ''})`;
   }
+  // Final Fantasy (11a): tiered: the mode with its additional cost ("Thundara — {3}").
+  if (a.mode !== undefined && def?.tiered?.[a.mode])
+    return `${def.modes?.[a.mode]?.label ?? `Mode ${a.mode + 1}`} — ${manaText(def.tiered[a.mode]!) || '{0}'}`;
   if (a.mode !== undefined) return def?.modes?.[a.mode]?.label ?? `Mode ${a.mode + 1}`;
   if (def?.sacrificeOrPay)
     return a.sacrifice ? 'Sacrifice a creature' : `Pay ${manaText(def.sacrificeOrPay)}`;

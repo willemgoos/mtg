@@ -99,6 +99,8 @@ export function pawSpell(d: CardDefinition, paws: readonly number[]): SpellDef {
 /** The ways `d` can be cast from `zone` (empty if it can't be cast from there). */
 export function castVariants(d: CardDefinition, zone: ZoneName, via?: CastVia): CastVariant[] {
   if (d.types.includes('Land')) return [];
+  // Final Fantasy (11a): a transforming card's back face has no mana cost and can't be cast.
+  if (d.noManaCost) return [];
   // Cast as if from hand, then adjusted for how.
   if (via) {
     const free = { generic: 0, colored: {} };
@@ -132,7 +134,13 @@ export function castVariants(d: CardDefinition, zone: ZoneName, via?: CastVia): 
   if (d.pawprints) return pawCombos(d).map((paws) => ({ paws, cost, spell: pawSpell(d, paws) }));
   const extra = flashback ? { flashback: true, ...life } : {};
   if (d.modes) {
-    const modes: CastVariant[] = d.modes.map((spell, mode) => ({ mode, cost, spell, ...extra }));
+    const modes: CastVariant[] = d.modes.map((spell, mode) => ({
+      mode,
+      // Final Fantasy (11a): tiered: each mode adds its own cost.
+      cost: d.tiered?.[mode] ? addCosts(cost, d.tiered[mode]) : cost,
+      spell,
+      ...extra,
+    }));
     // Teamwork's "choose both instead": the kicked spell is every mode at once.
     if (d.kicker?.spell)
       modes.push({
