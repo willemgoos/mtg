@@ -1,6 +1,6 @@
 import { commanderColors, legendaryColors, opponentLandColors } from './brawl.ts';
 import { damageSourceFor, dealDamage } from './effects.ts';
-import { canTapForAbility, isCreature, matchesFilter } from './characteristics.ts';
+import { canTapForAbility, isCreature, matchesFilter, power } from './characteristics.ts';
 import { type Ctx, addCounters, def, emit, obj, sacrifice, tap } from './context.ts';
 import { manaValue, pipsOf } from './cost.ts';
 import { checkCondition } from './triggers.ts';
@@ -97,6 +97,8 @@ export function manaSources(
       if (a.amount) units = Math.max(units, a.amount);
       // Strixhaven (13c): Accomplished Alchemist.
       if (a.perLifeGained) units = Math.max(units, ctx.s.turn.lifeGained?.[player] ?? 0);
+      // Secrets of Strixhaven (14b): Topiary Lecturer.
+      if (a.perPower) units = Math.max(units, power(ctx, id));
       if (a.pain) (pain ??= []).push(a.produces);
       if (a.doubleIf && checkCondition(ctx, a.doubleIf, player, obj(ctx, id))) double = true;
       if (a.cost.sacrificeSelf) sacrifice = true;
@@ -159,6 +161,24 @@ export function manaSources(
  * left, in source order. Returns null if the cost can't be paid.
  */
 export function findPayment(cost: ManaCost, sources: readonly ManaSource[]): ObjectId[] | null {
+  // Secrets of Strixhaven (14b): {2/G} pips: as many as possible with the colour, the rest with two generic each.
+  if (cost.twoHybrid?.length) {
+    const two = cost.twoHybrid;
+    for (let generic = 0; generic <= two.length; generic++) {
+      const colored = { ...cost.colored };
+      for (const t of two.slice(generic)) colored[t] = (colored[t] ?? 0) + 1;
+      const plan = findPayment(
+        {
+          generic: cost.generic + 2 * generic,
+          colored,
+          ...(cost.hybrid ? { hybrid: cost.hybrid } : {}),
+        },
+        sources,
+      );
+      if (plan) return plan;
+    }
+    return null;
+  }
   const pips = pipsOf(cost);
   const key = pips.map((p) => p.join(''));
   const chosen: number[] = [];

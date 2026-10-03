@@ -823,6 +823,13 @@ export function resolveTop(ctx: Ctx): boolean {
     if (d.entersWithXCounters && item.x) addCounters(ctx, o.id, item.x);
     // Secrets of Strixhaven (14a): converge, "enters with a +1/+1 counter for each color of mana spent".
     if (d.entersWithCountersPerColorSpent) addCounters(ctx, o.id, o.manaColors?.length ?? 0);
+    // Secrets of Strixhaven (14b): Slumbering Trudge, "enters with 3 - X stun counters; tapped if X is 2 or less".
+    if (d.stunCountersMinusX) {
+      const x = item.x ?? 0;
+      const stun = Math.max(0, d.stunCountersMinusX - x);
+      if (stun) (o.counters ??= {}).stun = (o.counters.stun ?? 0) + stun;
+      if (x < d.stunCountersMinusX) o.tapped = true;
+    }
     if (d.entersWithCounters && checkCondition(ctx, d.entersWithCountersIf, item.controller, o))
       addCounters(ctx, o.id, d.entersWithCounters);
     if (host) attachAura(ctx, o.id, host);
@@ -1287,6 +1294,13 @@ function bonusCounters(
         (!a.effect.filter || cardMatches(ctx, entering, a.effect.filter, id))
       )
         n++;
+      // Secrets of Strixhaven (14b): Wildgrowth Archaic: creature spells you cast enter with a counter per colour spent.
+      if (
+        a.kind === 'static' &&
+        a.effect.kind === 'entersWithColorsSpentCounters' &&
+        defOf(ctx, obj(ctx, entering).defId).types.includes('Creature')
+      )
+        n += obj(ctx, entering).manaColors?.length ?? 0;
       if (a.kind !== 'static' || a.effect.kind !== 'entersWithCountersPerSubtype') continue;
       const sub = a.effect.subtype;
       if (!subtypes.includes(sub)) continue;
@@ -1327,6 +1341,8 @@ export function answerSearch(ctx: Ctx, card: ObjectId | null): void {
     const onBattlefield =
       d.to === 'battlefield' ||
       d.to === 'battlefieldTapped' ||
+      // Secrets of Strixhaven (14b): Zimone's Experiment: lands go onto the battlefield tapped.
+      (d.landsTapped && def(ctx, card).types.includes('Land')) ||
       (d.battlefieldOnYourTurn && ctx.s.turn.activePlayer === d.player);
     if (d.to === 'graveyard') moveObject(ctx, card, 'graveyard');
     else if (d.to === 'castFree') moveObject(ctx, card, 'exile');
@@ -1337,7 +1353,7 @@ export function answerSearch(ctx: Ctx, card: ObjectId | null): void {
       moveObject(ctx, card, 'battlefield', {
         controller: d.forOpponent ? other(d.player) : d.player,
       });
-      if (d.to === 'battlefieldTapped') obj(ctx, card).tapped = true;
+      if (d.to === 'battlefieldTapped' || d.landsTapped) obj(ctx, card).tapped = true;
       // Strixhaven (13c): Emergent Sequence.
       if (d.fractalLand) makeFractalLand(ctx, card);
       // Fabled Passage: untap it if you control enough lands.
@@ -1367,7 +1383,7 @@ export function answerSearch(ctx: Ctx, card: ObjectId | null): void {
     return resume(ctx, d.resume, d.thenPriority);
   }
   // Strixhaven (13c): Explore the Vastlands: now choose from what's left of the cards looked at.
-  if (d.followUp && d.looked) {
+  if (d.followUp && d.looked && !(d.landsTapped && card === null)) {
     const left = d.looked.filter((id) => id !== card && ctx.s.objects[id]?.zone === 'library');
     const options = left.filter((id) => cardMatches(ctx, id, d.followUp!));
     if (options.length > 0) {
@@ -1376,6 +1392,7 @@ export function answerSearch(ctx: Ctx, card: ObjectId | null): void {
         player: d.player,
         options,
         looked: left,
+        ...(d.landsTapped ? { landsTapped: true } : {}),
         resume: d.resume,
         thenPriority: d.thenPriority,
       };

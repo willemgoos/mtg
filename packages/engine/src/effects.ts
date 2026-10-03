@@ -413,6 +413,8 @@ export function resolveAmount(ctx: Ctx, es: EffectSource, amount: Amount): numbe
     const o = es.subject && ctx.s.objects[es.subject.id];
     return o?.manaSpent ?? 0;
   }
+  // Secrets of Strixhaven (14b): Geometer's Arthropod.
+  if ('xOfSubject' in amount) return ctx.s.stack.find((i) => i.id === es.subject?.id)?.x ?? 0;
   // Secrets of Strixhaven (14a): converge.
   if ('colorsSpent' in amount) {
     const ref = amount.colorsSpent === 'source' ? es.source : es.subject;
@@ -1018,6 +1020,8 @@ export function runEffects(
           options,
           fromGraveyard: true,
           shuffle: false,
+          // Secrets of Strixhaven (14b): Bind to Life puts it onto the battlefield.
+          ...(e.to ? { to: e.to } : {}),
           ...(e.squirrelFood ? { squirrelFood: true } : {}),
           resume,
           thenPriority,
@@ -1046,7 +1050,14 @@ export function runEffects(
         const options = [
           ...(e.graveyardOnly ? [] : ps.hand),
           ...(e.handOnly ? [] : ps.graveyard),
-        ].filter((id) => cardMatches(ctx, id, e.filter));
+        ].filter((id) =>
+          // Secrets of Strixhaven (14b): Mind into Matter.
+          cardMatches(
+            ctx,
+            id,
+            e.maxManaValueX ? { ...e.filter, maxManaValue: es.x ?? 0 } : e.filter,
+          ),
+        );
         if (options.length === 0) continue;
         // Strixhaven (13c): Journey to the Oracle puts them all onto the battlefield.
         if (e.all) {
@@ -1169,7 +1180,9 @@ export function runEffects(
           thenPriority,
         };
       } else if (e.kind === 'lookAndTake') {
-        const looked = lib.slice(0, e.count);
+        // Secrets of Strixhaven (14b): Geometer's Arthropod looks at X cards.
+        const n = typeof e.count === 'number' ? e.count : resolveAmount(ctx, es, e.count);
+        const looked = lib.slice(0, n);
         if (looked.length === 0) continue;
         ctx.s.decision = {
           kind: 'searchLibrary',
@@ -1185,6 +1198,8 @@ export function runEffects(
           ...(e.to ? { to: e.to } : {}),
           // Secrets of Strixhaven (14a): Follow the Lumarets.
           ...(e.followUp ? { followUp: e.followUp } : {}),
+          // Secrets of Strixhaven (14b): Zimone's Experiment.
+          ...(e.landsTapped ? { landsTapped: true } : {}),
           resume,
           thenPriority,
         };
@@ -2435,6 +2450,20 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
               blockers: [],
             });
           }
+          // Secrets of Strixhaven (14b): Applied Geometry: a 0/0 Fractal creature in addition, with counters.
+          if (e.asFractal !== undefined) {
+            ctx.s.effects.push({
+              timestamp: newTimestamp(ctx),
+              affected: { id: t.id, zcc: t.zcc },
+              power: 0,
+              toughness: 0,
+              keywords: [],
+              becomesCreature: true,
+              basePT: [0, 0],
+              expires: 'permanent',
+            });
+            t.addedSubtypes = [...(t.addedSubtypes ?? []), 'Fractal'];
+          }
           ctx.s.battlefield.push(t.id);
           emit(ctx, {
             type: 'objectMoved',
@@ -2443,6 +2472,7 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
             from: null,
             to: 'battlefield',
           });
+          if (e.asFractal) addCounters(ctx, t.id, e.asFractal);
           if (e.exileAtEndStep) {
             const step = ctx.s.turn.step;
             (ctx.s.delayed ??= []).push({

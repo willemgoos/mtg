@@ -125,6 +125,11 @@ export function checkCondition(
   }
   // Secrets of Strixhaven (14a): Lluwen, Exchange Student.
   if (c.kind === 'notPrepared') return !self?.prepared;
+  // Secrets of Strixhaven (14b): Comforting Counsel, Fractal Tender.
+  if (c.kind === 'sourceNamedCounters') return (self?.counters?.[c.name] ?? 0) >= c.min;
+  if (c.kind === 'sourceHadCounters')
+    return (self?.zone === 'battlefield' ? self.plusOneCounters : (self?.lastCounters ?? 0)) > 0;
+  if (c.kind === 'sourceCounteredThisTurn') return self?.countersTurn === ctx.s.turn.number;
   if (c.kind === 'lifeThisTurn') {
     const p = c.who === 'you' ? controller : other(controller);
     const gained = ctx.s.turn.lifeGains[p] > 0;
@@ -757,6 +762,8 @@ function detect(ctx: Ctx, ev: GameEvent): void {
                 : o.controller === ev.player) &&
           spellMatches(ctx, a.trigger, spell, item, o) &&
           (!a.trigger.fromExile || (item?.kind === 'spell' && !!item.fromExile)) &&
+          // Secrets of Strixhaven (14b): Quandrix, the Proof.
+          (!a.trigger.fromHand || (item?.kind === 'spell' && !!item.fromHand)) &&
           (!a.trigger.spell || cardMatches(ctx, ev.id, a.trigger.spell, o.id)) &&
           // Final Fantasy (11b): "if at least four mana was spent to cast it".
           (spellObj.manaSpent ?? 0) >= (a.trigger.minManaSpent ?? 0) &&

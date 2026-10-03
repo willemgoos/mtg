@@ -277,6 +277,13 @@ export function countOf(
       0,
     );
   if (a.count === 'creaturesYouLostThisTurn') return ctx.s.turn.creaturesLost?.[player] ?? 0;
+  // Secrets of Strixhaven (14b): Emil, Vastlands Roamer.
+  if (a.count === 'differentlyNamedLands')
+    return new Set(
+      ctx.s.battlefield
+        .filter((id) => obj(ctx, id).controller === player && def(ctx, id).types.includes('Land'))
+        .map((id) => def(ctx, id).name),
+    ).size;
   // Strixhaven (13c): life gained this turn.
   if (a.count === 'lifeGainedThisTurn') return ctx.s.turn.lifeGained?.[player] ?? 0;
   if (a.count === 'greatestPowerYouControl')
@@ -646,6 +653,8 @@ export function cardMatches(
   if (filter.subtype && !subtypes.includes(filter.subtype) && !changeling(ctx, id, filter.subtype))
     return false;
   if (filter.nonland && d.types.includes('Land')) return false;
+  // Secrets of Strixhaven (14b): Paradox Surveyor.
+  if (filter.hasX && !d.manaCost.x) return false;
   if (filter.enteredThisTurn && obj(ctx, id).zoneTurn !== ctx.s.turn.number) return false;
   if (filter.leftAttacking && !obj(ctx, id).leftAttacking) return false;
   if (filter.attachedToSource && (!sourceId || obj(ctx, id).attachedTo !== sourceId)) return false;

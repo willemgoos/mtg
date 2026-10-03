@@ -276,3 +276,7 @@ whole (SOS's `prepare` is the riskiest). The shortest path to Quintorius is 0, 1
   retargets to another creature when there is one (`retarget`). Dissection Practice's "up to one" targets are chosen in
   order (the second creature can't be picked while skipping the first). Foolish Fate and Moseo read the life gained this
   turn from the turn tally. The SOS Pest (`sos-pest-token`, gains 1 life on attack) is not the STX Pest.
+
+14b (group E: green and Quandrix, `sos/cards-e.ts`):
+
+- Planar Engineering searches four times (each may find nothing). Zimone's Experiment and Paradox Surveyor reveal nothing to the opponent. Applied Geometry's copy keeps its own colours (not green and blue). Ambitious Augmenter moves only +1/+1 counters. Fractal Tender counts any counter put on it. Quandrix, the Proof's granted cascade is a cast trigger, and Geometer's Arthropod and Bind to Life let you decline the card. Twobrid pips (`{2/G}`) are `ManaCost.twoHybrid`.

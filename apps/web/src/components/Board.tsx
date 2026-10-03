@@ -1594,7 +1594,11 @@ function abilityLabel(defId: CardDefId, i: number): string {
 
 function manaText(c: ManaCost): string {
   const pips = Object.entries(c.colored).flatMap(([t, n]) => Array<string>(n ?? 0).fill(`{${t}}`));
-  const hybrid = (c.hybrid ?? []).map(([a, b]) => `{${a}/${b}}`);
+  const hybrid = [
+    ...(c.hybrid ?? []).map(([a, b]) => `{${a}/${b}}`),
+    // Secrets of Strixhaven (14b): twobrid pips.
+    ...(c.twoHybrid ?? []).map((t) => `{2/${t}}`),
+  ];
   const x = '{X}'.repeat(c.x ?? 0);
   return `${x}${c.generic ? `{${c.generic}}` : ''}${pips.join('')}${hybrid.join('')}`;
 }
