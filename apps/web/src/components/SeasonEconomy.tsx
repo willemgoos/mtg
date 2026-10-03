@@ -22,6 +22,7 @@ import {
   BLOOMBURROW_SHEETS,
   FOUNDATIONS_PACK_COUNT,
   MARVEL_SHEETS,
+  SECRETS_SHEETS,
   STRIXHAVEN_SHEETS,
 } from '../game/seasonPacks.ts';
 import { PACK_SET_NAMES, type PackSet } from '../game/expedition.ts';
@@ -267,6 +268,12 @@ const BOOSTERS: { kind: SeasonPackKind; set: PackSet; title: string; count: numb
     title: 'Strixhaven',
     count: Object.values(STRIXHAVEN_SHEETS).reduce((n, sheet) => n + sheet.length, 0),
   },
+  {
+    kind: 'secrets',
+    set: 'sos',
+    title: 'Secrets of Strixhaven',
+    count: Object.values(SECRETS_SHEETS).reduce((n, sheet) => n + sheet.length, 0),
+  },
 ];
 
 /** The set of a pack kind (for its art). */
@@ -277,7 +284,9 @@ export const packSetOfKind = (kind: SeasonPackKind): PackSet =>
       ? 'msh'
       : kind === 'strixhaven'
         ? 'stx'
-        : 'fdn';
+        : kind === 'secrets'
+          ? 'sos'
+          : 'fdn';
 
 export function Booster({
   onClick,
@@ -332,6 +341,7 @@ export function SeasonStore({
     bloomburrow: 0,
     marvel: 0,
     strixhaven: 0,
+    secrets: 0,
   });
   const list = SEASON_STARTERS.find((d) => d.id === starter);
   const buy = (n: number, kind: SeasonPackKind) => {

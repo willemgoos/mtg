@@ -60,12 +60,13 @@ export interface SeasonPack {
   id: number;
   kind: SeasonPackKind;
 }
-export type SeasonPackKind = 'foundations' | 'bloomburrow' | 'marvel' | 'strixhaven';
+export type SeasonPackKind = 'foundations' | 'bloomburrow' | 'marvel' | 'strixhaven' | 'secrets';
 export const SEASON_PACK_KINDS: readonly SeasonPackKind[] = [
   'foundations',
   'bloomburrow',
   'marvel',
   'strixhaven',
+  'secrets',
 ];
 export interface SeasonMatch {
   id: number;

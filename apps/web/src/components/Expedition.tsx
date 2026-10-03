@@ -620,7 +620,8 @@ function Camp({ run, onChoose }: { run: ExpeditionRun; onChoose: (c: 'rest' | 'f
           </span>
           <span className="choice__name">Forage</span>
           <span className="choice__text">
-            Open a {PACK_SET_NAMES[packSetOf(run, run.build.opened)]} booster and keep {keepCount(run)}.
+            Open a {PACK_SET_NAMES[packSetOf(run, run.build.opened)]} booster and keep{' '}
+            {keepCount(run)}.
           </span>
         </button>
       </div>

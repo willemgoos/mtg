@@ -39,7 +39,7 @@ describe('Jump In packets', () => {
   });
 
   it('has two packets per colour in each set', () => {
-    for (const set of [undefined, 'blb', 'msh', 'stx'])
+    for (const set of [undefined, 'blb', 'msh', 'stx', 'sos'])
       for (const c of ['W', 'U', 'B', 'R', 'G'])
         expect(
           PACKETS.filter((p) => p.set === set && p.color === c),
@@ -61,7 +61,7 @@ describe('Jump In packets', () => {
     expect(d.set).toBe('msh');
     expect(deckIds(d)).toHaveLength(40);
     expect(deckById(jumpInId('blb-bats', 'msh-robots')).set).toBeUndefined();
-    expect(JUMP_IN_DECKS).toHaveLength((40 * 39) / 2);
+    expect(JUMP_IN_DECKS).toHaveLength((50 * 49) / 2);
   });
 
   it('pairs two packets into a 40-card deck', () => {

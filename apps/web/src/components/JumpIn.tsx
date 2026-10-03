@@ -13,6 +13,7 @@ const SETS: { set: PacketSet; name: string }[] = [
   { set: 'blb', name: 'Bloomburrow' },
   { set: 'msh', name: 'Marvel Super Heroes' },
   { set: 'stx', name: 'Strixhaven' },
+  { set: 'sos', name: 'Secrets of Strixhaven' },
 ];
 
 /** Three packets at random, of one set or (`'any'`) all, leaving out one already taken. */
