@@ -23005,6 +23005,155 @@
   }
  },
  {
+  "name": "Flying Drone",
+  "scryfallId": "3fea3eb2-9360-41fc-890e-8377e69fb9e3",
+  "oracleId": "541f7525-a9a4-493d-b724-354ae6d37de5",
+  "set": "msc",
+  "collectorNumber": "621",
+  "rarity": "common",
+  "manaCost": "{1}{U}",
+  "typeLine": "Artifact Creature — Robot Scout",
+  "oracleText": "Flying, vigilance\n{1}{U}, {T}: Draw a card, then discard a card. This ability costs {1}{U} less to activate if another creature with flying entered the battlefield under your control this turn.",
+  "power": "1",
+  "toughness": "2",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Flying",
+   "Vigilance"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/f/3fea3eb2-9360-41fc-890e-8377e69fb9e3.jpg?1783903074",
+   "normal": "https://cards.scryfall.io/normal/front/3/f/3fea3eb2-9360-41fc-890e-8377e69fb9e3.jpg?1783903074",
+   "large": "https://cards.scryfall.io/large/front/3/f/3fea3eb2-9360-41fc-890e-8377e69fb9e3.jpg?1783903074",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/f/3fea3eb2-9360-41fc-890e-8377e69fb9e3.jpg?1783903074"
+  }
+ },
+ {
+  "name": "Namora, the Sea Queen",
+  "scryfallId": "e9a469c4-2cbd-47d4-af42-6bfce60a5f0e",
+  "oracleId": "d0cd3edd-d908-47c5-bff1-2089c22ab41c",
+  "set": "msc",
+  "collectorNumber": "632",
+  "rarity": "uncommon",
+  "manaCost": "{2}{U}",
+  "typeLine": "Legendary Creature — Mutant Merfolk Hero",
+  "oracleText": "Flying\nPower-up — {5}{U}: Put a +1/+1 counter on Namora. Create two 1/1 blue Merfolk creature tokens. (Activate each power-up ability only once. Reduce the cost by her mana cost if she entered this turn.)",
+  "power": "2",
+  "toughness": "3",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Flying",
+   "Power-up"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/9/e9a469c4-2cbd-47d4-af42-6bfce60a5f0e.jpg?1783903070",
+   "normal": "https://cards.scryfall.io/normal/front/e/9/e9a469c4-2cbd-47d4-af42-6bfce60a5f0e.jpg?1783903070",
+   "large": "https://cards.scryfall.io/large/front/e/9/e9a469c4-2cbd-47d4-af42-6bfce60a5f0e.jpg?1783903070",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/9/e9a469c4-2cbd-47d4-af42-6bfce60a5f0e.jpg?1783903070"
+  }
+ },
+ {
+  "name": "Vulture, Feathered Fiend",
+  "scryfallId": "af3951cc-c3af-4064-9354-af14c3273613",
+  "oracleId": "c598d97f-fec6-4238-8eed-8051e9541d31",
+  "set": "msc",
+  "collectorNumber": "645",
+  "rarity": "rare",
+  "manaCost": "{2}{U}{U}",
+  "typeLine": "Legendary Creature — Human Artificer Villain",
+  "oracleText": "Flying\nWhenever one or more creatures you control with flying deal combat damage to a player, put a +1/+1 counter on each of those creatures and draw a card.",
+  "power": "2",
+  "toughness": "4",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/f/af3951cc-c3af-4064-9354-af14c3273613.jpg?1783903065",
+   "normal": "https://cards.scryfall.io/normal/front/a/f/af3951cc-c3af-4064-9354-af14c3273613.jpg?1783903065",
+   "large": "https://cards.scryfall.io/large/front/a/f/af3951cc-c3af-4064-9354-af14c3273613.jpg?1783903065",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/f/af3951cc-c3af-4064-9354-af14c3273613.jpg?1783903065"
+  }
+ },
+ {
+  "name": "Whoosh!",
+  "scryfallId": "7c6cf5b2-cd42-401e-bbb2-82088783e585",
+  "oracleId": "855353e2-b686-482a-b987-c6ae456f088c",
+  "set": "msc",
+  "collectorNumber": "790",
+  "rarity": "common",
+  "manaCost": "{1}{U}",
+  "typeLine": "Instant",
+  "oracleText": "Kicker {1}{U} (You may pay an additional {1}{U} as you cast this spell.)\nReturn target nonland permanent to its owner's hand. If this spell was kicked, draw a card.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Kicker"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/c/7c6cf5b2-cd42-401e-bbb2-82088783e585.jpg?1783903014",
+   "normal": "https://cards.scryfall.io/normal/front/7/c/7c6cf5b2-cd42-401e-bbb2-82088783e585.jpg?1783903014",
+   "large": "https://cards.scryfall.io/large/front/7/c/7c6cf5b2-cd42-401e-bbb2-82088783e585.jpg?1783903014",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/c/7c6cf5b2-cd42-401e-bbb2-82088783e585.jpg?1783903014"
+  }
+ },
+ {
+  "name": "Falcon's Wing Harness",
+  "scryfallId": "20e93f86-9e20-4e08-9bf7-ae6ebebf6876",
+  "oracleId": "e69db5f0-beed-48e8-bc25-768b1e8be5ea",
+  "set": "msh",
+  "collectorNumber": "53",
+  "rarity": "uncommon",
+  "manaCost": "{1}{U}",
+  "typeLine": "Artifact — Equipment",
+  "oracleText": "When this Equipment enters, attach it to target creature you control.\nEquipped creature gets +1/+1 and has flying and ward {1}. (Whenever equipped creature becomes the target of a spell or ability an opponent controls, counter it unless that player pays {1}.)\nEquip {2}{U} ({2}{U}: Attach to target creature you control. Equip only as a sorcery.)",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Equip"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/0/20e93f86-9e20-4e08-9bf7-ae6ebebf6876.jpg?1783902960",
+   "normal": "https://cards.scryfall.io/normal/front/2/0/20e93f86-9e20-4e08-9bf7-ae6ebebf6876.jpg?1783902960",
+   "large": "https://cards.scryfall.io/large/front/2/0/20e93f86-9e20-4e08-9bf7-ae6ebebf6876.jpg?1783902960",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/0/20e93f86-9e20-4e08-9bf7-ae6ebebf6876.jpg?1783902960"
+  }
+ },
+ {
+  "name": "Dismissive Denial",
+  "scryfallId": "155dcbd3-346d-4c30-91b3-95197b376ec5",
+  "oracleId": "99eff6e9-5911-4f89-bad1-0888067a7783",
+  "set": "msc",
+  "collectorNumber": "619",
+  "rarity": "common",
+  "manaCost": "{2}{U}{U}",
+  "typeLine": "Instant",
+  "oracleText": "Counter target spell.\nBasic landcycling {2} ({2}, Discard this card: Search your library for a basic land card, reveal it, put it into your hand, then shuffle.)",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Landcycling",
+   "Basic landcycling",
+   "Typecycling",
+   "Cycling"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/5/155dcbd3-346d-4c30-91b3-95197b376ec5.jpg?1783903075",
+   "normal": "https://cards.scryfall.io/normal/front/1/5/155dcbd3-346d-4c30-91b3-95197b376ec5.jpg?1783903075",
+   "large": "https://cards.scryfall.io/large/front/1/5/155dcbd3-346d-4c30-91b3-95197b376ec5.jpg?1783903075",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/5/155dcbd3-346d-4c30-91b3-95197b376ec5.jpg?1783903075"
+  }
+ },
+ {
   "name": "She-Hulk, Attorney-at-Law",
   "scryfallId": "93a44ea5-a571-4abb-b8fa-14b8224ecaeb",
   "oracleId": "db99d52b-bbe6-4a48-8f2c-bf77912dc0a9",
