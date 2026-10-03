@@ -481,6 +481,9 @@ export type TriggerDef =
   // Teamwork (Marvel Super Heroes)
   /** Whenever this becomes tapped to pay a teamwork cost (Agent Maria Hill). */
   | { on: 'tappedForTeamwork' }
+  // Marvel Super Heroes Jumpstart (Animal).
+  /** Whenever this permanent becomes tapped (Wakandan Tusker). */
+  | { on: 'becomesTapped' }
   /** Whenever one or more creatures you control (matching the filter) deal combat damage to a player (Kastral). */
   | { on: 'creaturesYouControlDealCombatDamageToPlayer'; filter?: CardFilter }
   /** When you sacrifice this permanent (Carrot Cake). */
@@ -1817,6 +1820,9 @@ export type StaticDef =
   // Final Fantasy Commander (12e).
   /** Tokens you create come with a 1/1 green Frog (Quina; once per effect, not for the Frogs). */
   | { kind: 'plusFrogToken' }
+  // Marvel Super Heroes Jumpstart (Animal).
+  /** Tokens you create come with an additional Food token (Tippy-Toe, Terrific Partner; once per effect). */
+  | { kind: 'plusFoodToken' }
   // Final Fantasy Commander (12f).
   /** It can attack as though it didn't have defender while it has a counter (Demon Wall). */
   | { kind: 'attacksWithCounterDespiteDefender' }

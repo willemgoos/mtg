@@ -387,6 +387,7 @@ function spellMatches(
 function detect(ctx: Ctx, ev: GameEvent): void {
   const s = ctx.s;
   detectFic(ctx, ev);
+  detectAnimal(ctx, ev);
   switch (ev.type) {
     case 'objectMoved': {
       const moved = s.objects[ev.id];
@@ -1291,6 +1292,18 @@ export function triggeredAbility(
 /** Who cast the spell a castSpell trigger looks at (the stack item's controller). */
 function spellCaster(ctx: Ctx, item: StackItem | undefined, self: GameObject): PlayerId {
   return item?.controller ?? self.controller;
+}
+
+// ---------------------------------------------------------------------------
+// Marvel Super Heroes Jumpstart (Animal): "whenever this becomes tapped" (Wakandan Tusker).
+
+function detectAnimal(ctx: Ctx, ev: GameEvent): void {
+  if (ev.type !== 'tapped') return;
+  const o = ctx.s.objects[ev.id];
+  if (!o || o.zone !== 'battlefield') return;
+  def(ctx, o.id).abilities.forEach((a, i) => {
+    if (a.kind === 'triggered' && a.trigger.on === 'becomesTapped') queue(ctx, o, i, o.controller);
+  });
 }
 
 // ---------------------------------------------------------------------------
