@@ -1,6 +1,7 @@
 import type { AbilityDef, ManaType } from '@mtg/engine';
 import type { Behavior } from '../build.ts';
 import { onEnter } from './helpers.ts';
+import { MSH_JUMPSTART_SHIELD } from './jumpstart-shield.ts';
 
 // Marvel Super Heroes Jumpstart packets (docs/marvel-jumpstart.md): the cards
 // they share. Packet-specific cards live in their own msh/jumpstart-*.ts files.
@@ -31,4 +32,5 @@ export const MSH_JUMPSTART: Record<string, Behavior> = {
   'Thriving Moor': thriving('B'),
   'Thriving Bluff': thriving('R'),
   'Thriving Grove': thriving('G'),
+  ...MSH_JUMPSTART_SHIELD,
 };

@@ -22184,6 +22184,99 @@
   }
  },
  {
+  "name": "Peggy Carter, Secret Agent",
+  "scryfallId": "1f98293e-9d94-4185-8546-8beaf281dfa3",
+  "oracleId": "2f3c6b8e-df89-4f0c-97bb-fbfcda5232b4",
+  "set": "msc",
+  "collectorNumber": "523",
+  "rarity": "uncommon",
+  "manaCost": "{1}{W}",
+  "typeLine": "Legendary Creature — Human Spy Hero",
+  "oracleText": "Whenever a creature you control attacks alone, it gains indestructible until end of turn. (Damage and effects that say \"destroy\" don't destroy it.)",
+  "power": "2",
+  "toughness": "1",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/f/1f98293e-9d94-4185-8546-8beaf281dfa3.jpg?1783903106",
+   "normal": "https://cards.scryfall.io/normal/front/1/f/1f98293e-9d94-4185-8546-8beaf281dfa3.jpg?1783903106",
+   "large": "https://cards.scryfall.io/large/front/1/f/1f98293e-9d94-4185-8546-8beaf281dfa3.jpg?1783903106",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/f/1f98293e-9d94-4185-8546-8beaf281dfa3.jpg?1783903106"
+  }
+ },
+ {
+  "name": "S.H.I.E.L.D. Helicarrier",
+  "scryfallId": "364dc091-3161-4cd7-838c-742b9325fc32",
+  "oracleId": "0f2335bf-6a13-4483-997a-fd19d30c4d48",
+  "set": "msh",
+  "collectorNumber": "249",
+  "rarity": "uncommon",
+  "manaCost": "{4}",
+  "typeLine": "Artifact — Vehicle",
+  "oracleText": "Flying\nWhen this Vehicle enters, create two 1/1 white Soldier creature tokens.\nCrew 6 (Tap any number of creatures you control with total power 6 or more: This Vehicle becomes an artifact creature until end of turn.)",
+  "power": "4",
+  "toughness": "5",
+  "colors": [],
+  "keywords": [
+   "Flying",
+   "Crew"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/6/364dc091-3161-4cd7-838c-742b9325fc32.jpg?1783902891",
+   "normal": "https://cards.scryfall.io/normal/front/3/6/364dc091-3161-4cd7-838c-742b9325fc32.jpg?1783902891",
+   "large": "https://cards.scryfall.io/large/front/3/6/364dc091-3161-4cd7-838c-742b9325fc32.jpg?1783902891",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/6/364dc091-3161-4cd7-838c-742b9325fc32.jpg?1783902891"
+  }
+ },
+ {
+  "name": "Nick Fury, Spymaster",
+  "scryfallId": "169b6c86-60f2-462b-877f-481354ef2d20",
+  "oracleId": "b20860da-2e71-414a-a512-1cce7ba64079",
+  "set": "msc",
+  "collectorNumber": "603",
+  "rarity": "rare",
+  "manaCost": "{4}{W}",
+  "typeLine": "Legendary Creature — Human Spy Hero",
+  "oracleText": "First strike\nWhenever a creature you control attacks alone, draw a card. Then you may put a creature card with mana value 3 or less from your hand onto the battlefield. It enters tapped and attacking and gains indestructible until end of turn.",
+  "power": "4",
+  "toughness": "4",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "First strike"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/6/169b6c86-60f2-462b-877f-481354ef2d20.jpg?1783903081",
+   "normal": "https://cards.scryfall.io/normal/front/1/6/169b6c86-60f2-462b-877f-481354ef2d20.jpg?1783903081",
+   "large": "https://cards.scryfall.io/large/front/1/6/169b6c86-60f2-462b-877f-481354ef2d20.jpg?1783903081",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/6/169b6c86-60f2-462b-877f-481354ef2d20.jpg?1783903081"
+  }
+ },
+ {
+  "name": "Strategic Intervention",
+  "scryfallId": "31bee242-ce53-4c87-8410-1cdacdc56eaf",
+  "oracleId": "b8d019fa-3893-453e-a46d-aa53fc3f2f0e",
+  "set": "msc",
+  "collectorNumber": "609",
+  "rarity": "uncommon",
+  "manaCost": "{1}{W}",
+  "typeLine": "Enchantment",
+  "oracleText": "Whenever a creature you control attacks alone, it gets +1/+1 until end of turn. Tap up to one target creature defending player controls.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/1/31bee242-ce53-4c87-8410-1cdacdc56eaf.jpg?1783903078",
+   "normal": "https://cards.scryfall.io/normal/front/3/1/31bee242-ce53-4c87-8410-1cdacdc56eaf.jpg?1783903078",
+   "large": "https://cards.scryfall.io/large/front/3/1/31bee242-ce53-4c87-8410-1cdacdc56eaf.jpg?1783903078",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/1/31bee242-ce53-4c87-8410-1cdacdc56eaf.jpg?1783903078"
+  }
+ },
+ {
   "name": "Sol Ring",
   "scryfallId": "91fdb56b-54d5-4272-8319-505ff987fe9b",
   "oracleId": "6ad8011d-3471-4369-9d68-b264cc027487",
