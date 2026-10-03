@@ -134,7 +134,16 @@ export function advanceStep(ctx: Ctx): void {
   if (next !== 'nextTurn') return enterStep(ctx, next);
   // Marvel Super Heroes: extra turns come first, the last one added first (never mutated in place).
   const [extra, ...rest] = ctx.s.extraTurns ?? [];
-  if (!extra) return startTurn(ctx, other(ctx.s.turn.activePlayer));
+  if (!extra) {
+    // Secrets of Strixhaven (14b): Ral Zarek, Guest Lecturer: a player who skips a turn is passed over.
+    const next = other(ctx.s.turn.activePlayer);
+    const skips = ctx.s.players[next].skipTurns ?? 0;
+    if (skips > 0) {
+      ctx.s.players[next].skipTurns = skips - 1;
+      return startTurn(ctx, ctx.s.turn.activePlayer);
+    }
+    return startTurn(ctx, next);
+  }
   ctx.s.extraTurns = rest;
   startTurn(ctx, extra.player, extra.noPowerUp);
 }

@@ -40,6 +40,7 @@ import { nextInt, shuffleInPlace } from './rng.ts';
 import { checkCondition } from './triggers.ts';
 import { addLore } from './sagas.ts';
 import { CHOOSERS } from './stx-13c-a-effects.ts';
+import { SOS_14B_C_CHOOSERS } from './sos-14b-c-effects.ts';
 import type {
   CardDefId,
   CardFilter,
@@ -953,7 +954,7 @@ export function runEffects(
         };
       } else if (e.kind === 'chooseCustom') {
         // Strixhaven (13c): a handler builds the options (and says who chooses).
-        const made = CHOOSERS[e.handler]?.(ctx, es, e.params);
+        const made = (CHOOSERS[e.handler] ?? SOS_14B_C_CHOOSERS[e.handler])?.(ctx, es, e.params);
         if (!made || made.options.length === 0) continue;
         ctx.s.decision = {
           kind: 'chooseOption',
@@ -1278,6 +1279,11 @@ export function runEffects(
           const most = Math.max(...options.map((id) => power(ctx, id)));
           options = options.filter((id) => power(ctx, id) === most);
         }
+        // Secrets of Strixhaven (14b): End of the Hunt.
+        if (e.greatestManaValue) {
+          const most = Math.max(...options.map((id) => manaValue(def(ctx, id).manaCost)));
+          options = options.filter((id) => manaValue(def(ctx, id).manaCost) === most);
+        }
         if (options.length === 0) continue;
         ctx.s.decision = {
           kind: 'sacrifice',
@@ -1290,11 +1296,20 @@ export function runEffects(
           thenPriority,
         };
       } else if (e.kind === 'discard') {
-        const who = e.who === 'eachOpponent' ? other(controller) : controller;
+        let who = e.who === 'eachOpponent' ? other(controller) : controller;
+        // Secrets of Strixhaven (14b): "target player discards X cards".
+        if (e.of) {
+          const t = resolveRef(ctx, es, e.of)[0];
+          if (!t || !('player' in t)) continue;
+          who = t.player;
+        }
         const able = ctx.s.players[who].hand.filter(
           (id) => !e.filter || cardMatches(ctx, id, e.filter),
         );
-        const count = Math.min(e.count, able.length);
+        const count = Math.min(
+          e.amount !== undefined ? resolveAmount(ctx, es, e.amount) : e.count,
+          able.length,
+        );
         if (count === 0) continue;
         ctx.s.decision = {
           kind: 'discard',

@@ -276,3 +276,11 @@ whole (SOS's `prepare` is the riskiest). The shortest path to Quintorius is 0, 1
   retargets to another creature when there is one (`retarget`). Dissection Practice's "up to one" targets are chosen in
   order (the second creature can't be picked while skipping the first). Foolish Fate and Moseo read the life gained this
   turn from the turn tally. The SOS Pest (`sos-pest-token`, gains 1 life on attack) is not the STX Pest.
+
+14b (group C: black, Witherbloom, colourless; `sos/cards-c.ts`):
+
+- Arnyn reads the dying creature's printed power and toughness. Rabid Attack targets up to three creatures. Dina's Guidance
+  asks hand or graveyard before the search. Mind Roots: the discarding player picks both cards, then you pick the land.
+  Pox Plague asks one card or permanent at a time (you, then the opponent). Great Hall of the Biblioplex pays the life as
+  damage when its mana is spent. Petrified Hamlet picks from a list of land names (lands in play first).
+  Together as One and the other converge cards read the colours spent as recorded on the spell or permanent.
