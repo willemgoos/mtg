@@ -71,3 +71,10 @@ from) when it's fixed. Older phases keep their own "Simplifications" lists in `d
 - [ ] Flying Drone: the discount is a second, free version of the spell, offered once another flyer entered under your control
       this turn; that flyer must still be on the battlefield (with flying) to count.
 - [ ] Vulture, Feathered Fiend: split into a counter trigger per flyer and one batched draw trigger instead of one trigger.
+- [ ] Grapeshot: storm copies keep the original's target (no new targets), like Ral's storm emblem.
+- [ ] Wiccan, Young Avenger: "until your next end step" lasts until the end of that turn (playable during the end step and
+      cleanup too).
+- [ ] Wanda's Vision: "exile until you exile a nonland card" uses mana value up to 99 as "no limit".
+- [ ] The Vision and Scarlet Witch: the {R} it adds empties between steps, like all mana in the engine.
+- [ ] Hulk's Thunderclap: the beheld creature or card isn't chosen or shown; the behold version is offered whenever a Gamma
+      creature is available, and needs a noncreature artifact or enchantment to target.
