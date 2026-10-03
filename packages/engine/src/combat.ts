@@ -120,6 +120,19 @@ export function possibleBlockers(ctx: Ctx, defender: PlayerId): ObjectId[] {
     .filter((id) => attackers.some((a) => canBlock(ctx, id, a.id)));
 }
 
+/** Final Fantasy (11c): an attacker with The Masamune must be blocked if able. */
+export function mustBeBlocked(ctx: Ctx, id: ObjectId): boolean {
+  if (!ctx.s.combat?.attackers.some((a) => a.id === id)) return false;
+  return ctx.s.battlefield.some(
+    (e) =>
+      obj(ctx, e).attachedTo === id &&
+      def(ctx, e).abilities.some(
+        (a) =>
+          a.kind === 'static' && a.effect.kind === 'attached' && !!a.effect.mustBeBlockedAttacking,
+      ),
+  );
+}
+
 /** Block declarations that violate a restriction (menace). Empty if legal. */
 export function blockViolations(
   ctx: Ctx,

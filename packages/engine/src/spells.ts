@@ -5,8 +5,8 @@ import type { CardDefinition, ManaCost, SpellDef, ZoneName } from './types.ts';
  * How a card is cast, beyond its own options: for free (a 'castFree'
  * decision), or from the graveyard through Festival of Embers or Osteomancer Adept.
  */
-// Final Fantasy Commander (12d): 'hades' (from your graveyard on your turn), 'noctis' (artifacts, 3 life, finality).
-export type CastVia = 'free' | 'festival' | 'osteomancer' | 'conduit' | 'hades' | 'noctis';
+// Final Fantasy (11c): playing from the graveyard ('noctis', 'hades').
+export type CastVia = 'free' | 'festival' | 'osteomancer' | 'conduit' | 'noctis' | 'hades';
 
 /** One way to cast a card: a mode, kicked or not, from hand or with flashback. */
 export interface CastVariant {

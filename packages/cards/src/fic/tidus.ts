@@ -244,7 +244,7 @@ export const TIDUS: Record<string, Behavior> = {
   },
   'Fight Rigging': {
     abilities: [
-      onEnter([], custom('hideaway', { count: 5 })),
+      onEnter([], { kind: 'hideaway', count: 5 }),
       atCombat([yourCreature], counters(t0), {
         kind: 'if',
         condition: { kind: 'controlsCreature', filter: { minPower: 7 } },

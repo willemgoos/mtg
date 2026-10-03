@@ -29,6 +29,17 @@ function lanternFor(ctx: Ctx, player: PlayerId): boolean {
   );
 }
 
+/** Final Fantasy (11c): `player` controls Ultima, Origin of Oblivion. */
+function extraColorless(ctx: Ctx, player: PlayerId): boolean {
+  return ctx.s.battlefield.some(
+    (id) =>
+      obj(ctx, id).controller === player &&
+      def(ctx, id).abilities.some(
+        (a) => a.kind === 'static' && a.effect.kind === 'extraColorlessFromLands',
+      ),
+  );
+}
+
 /** Sources to tap; `pain` lists those that hurt (one entry per pip they pay). */
 export type Payment = ObjectId[] & { pain?: ObjectId[] };
 
@@ -113,6 +124,14 @@ export function manaSources(
         ...(pain ? { pain } : {}),
       };
       out.push(src);
+      // Final Fantasy (11c): Ultima, Origin of Oblivion ("tap a land for {C}, add an additional {C}").
+      if (
+        produces.length === 1 &&
+        produces[0] === 'C' &&
+        def(ctx, id).types.includes('Land') &&
+        extraColorless(ctx, player)
+      )
+        double = true;
       // Two mana from one tap: a second unit with the same id (tapping it twice is harmless).
       if (double) units = Math.max(units, 2);
       for (let i = 1; i < units; i++) out.push({ ...src });
@@ -126,6 +145,25 @@ export function manaSources(
       if (a.kind !== 'static' || a.effect.kind !== 'grantMana') continue;
       const g = a.effect;
       if (g.onlyForCreatures && !forSubtypes.includes('Creature')) continue;
+      // Final Fantasy (11c): mana from every permanent. A Realm Reborn: other permanents tap for any colour.
+      if (g.otherPermanents) {
+        for (const id of ctx.s.battlefield) {
+          if (id === exclude || id === src || obj(ctx, id).controller !== player) continue;
+          const have = out.find((x) => x.id === id && !x.pool);
+          if (have) {
+            for (const c of g.produces) if (!have.produces.includes(c)) have.produces.push(c);
+            continue;
+          }
+          if (!canTapForAbility(ctx, id)) continue;
+          out.push({
+            id,
+            produces: [...g.produces],
+            isCreature: isCreature(ctx, id),
+            sacrifice: false,
+          });
+        }
+        continue;
+      }
       for (const id of ctx.s.battlefield) {
         if (id === exclude || obj(ctx, id).controller !== player || out.some((x) => x.id === id))
           continue;

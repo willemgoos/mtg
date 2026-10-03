@@ -136,19 +136,24 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
             power += st.basePT[0] - (basePower ?? base ?? o.copyPT?.power ?? d.power ?? 0);
             toughness += st.basePT[1] - (base ?? o.copyPT?.toughness ?? d.toughness ?? 0);
           }
-          // Final Fantasy Commander (12b): Aettir and Priwen (base X/X, X = life), Hero's Heirloom.
-          if (st.basePTLife) {
-            const life = ctx.s.players[src.controller].life;
-            power += life - (basePower ?? base ?? o.copyPT?.power ?? d.power ?? 0);
-            toughness += life - (base ?? o.copyPT?.toughness ?? d.toughness ?? 0);
+          // Final Fantasy (11c): amounts know their Equipment (Excalibur II's charge counters).
+          power += countOf(ctx, src.controller, st.power, false, srcId);
+          toughness += countOf(ctx, src.controller, st.toughness, false, srcId);
+          // Final Fantasy (11c): Aettir and Priwen (base X/X), The Masamune (first strike while attacking).
+          if (st.basePTAmount !== undefined) {
+            const x = countOf(ctx, src.controller, st.basePTAmount, false, srcId);
+            power += x - (basePower ?? base ?? o.copyPT?.power ?? d.power ?? 0);
+            toughness += x - (base ?? o.copyPT?.toughness ?? d.toughness ?? 0);
           }
+          // Final Fantasy Commander (12b): Hero's Heirloom, keywords only while it's legendary.
           if (st.legendaryKeywords?.length && d.supertypes.includes('Legendary')) {
             granted ??= new Set(keywords);
             for (const k of st.legendaryKeywords) granted.add(k);
           }
-          // Final Fantasy Commander (12e): counts can look at the Equipment (Excalibur II's charge counters).
-          power += countOf(ctx, src.controller, st.power, false, srcId);
-          toughness += countOf(ctx, src.controller, st.toughness, false, srcId);
+          if (st.attackingKeywords?.length && isAttacking(ctx, id)) {
+            granted ??= new Set(keywords);
+            for (const k of st.attackingKeywords) granted.add(k);
+          }
           if (st.keywords?.length) {
             granted ??= new Set(keywords);
             for (const k of st.keywords) granted.add(k);
@@ -267,6 +272,18 @@ export function countOf(
     return src?.counters?.[a.namedCountersOnSource] ?? 0;
   }
   if (!('count' in a)) return 0;
+  // Final Fantasy (11c): your life total (Aettir and Priwen).
+  if (a.count === 'lifeTotal') return ctx.s.players[player].life;
+  // Final Fantasy (11c): devotion and life gained.
+  if (a.count === 'devotion') {
+    const color = a.color;
+    return ctx.s.battlefield.reduce((n, id) => {
+      if (obj(ctx, id).controller !== player) return n;
+      const c = def(ctx, id).manaCost;
+      return n + (c.colored[color] ?? 0) + (c.hybrid ?? []).filter((h) => h.includes(color)).length;
+    }, 0);
+  }
+  if (a.count === 'lifeGainedThisTurn') return ctx.s.turn.lifeGained?.[player] ?? 0;
   if (a.count === 'cardsInGraveyard')
     return (
       (a.plus ?? 0) +
@@ -304,9 +321,14 @@ export function countOf(
   // Wakanda Forever (9c).
   if (a.count === 'creaturesOnBattlefield') return creaturesOnBattlefield(ctx).length;
   if (a.count === 'totalManaValue')
-    return ctx.s.battlefield
-      .filter((id) => obj(ctx, id).controller === player && matchesFilter(ctx, id, a.filter))
-      .reduce((n, id) => n + manaValue(def(ctx, id).manaCost), 0);
+    return (
+      ctx.s.battlefield
+        // Final Fantasy (11c): the filter knows the source ("other permanents": Summon: Bahamut).
+        .filter(
+          (id) => obj(ctx, id).controller === player && matchesFilter(ctx, id, a.filter, sourceId),
+        )
+        .reduce((n, id) => n + manaValue(def(ctx, id).manaCost), 0)
+    );
   if (a.count === 'commanderCasts') return ctx.s.players[player].commanderCasts ?? 0;
   // Doom Prevails (9e).
   if (a.count === 'cardsDiscardedThisTurn') return ctx.s.turn.discards?.[player] ?? 0;
@@ -535,6 +557,8 @@ export function matchesFilter(
   if (filter.commander && !isCommander(ctx, id)) return false;
   if (filter.supertypes && !filter.supertypes.some((t) => def(ctx, id).supertypes.includes(t)))
     return false;
+  // Final Fantasy (11c): nonlegendary.
+  if (filter.notSupertypes?.some((t) => def(ctx, id).supertypes.includes(t))) return false;
   if (filter.toughnessGreaterThanPower) {
     const ch = characteristics(ctx, id);
     if (ch.toughness <= ch.power) return false;
@@ -602,7 +626,7 @@ export function cardMatches(
   if (filter.notTypes?.some((t) => d.types.includes(t))) return false;
   if (filter.commander && !isCommander(ctx, id)) return false;
   if (filter.supertypes && !filter.supertypes.some((t) => d.supertypes.includes(t))) return false;
-  // Final Fantasy Commander (12): "nonbasic", "nonlegendary".
+  // Final Fantasy (11c): nonlegendary.
   if (filter.notSupertypes?.some((t) => d.supertypes.includes(t))) return false;
   const mv = manaValue(d.manaCost);
   if (filter.minManaValue !== undefined && mv < filter.minManaValue) return false;
@@ -624,6 +648,9 @@ export function cardMatches(
     if ((mv % 2 === 1 ? 'odd' : 'even') !== filter.manaValueParity) return false;
   }
   if (filter.notSubtype && d.subtypes.includes(filter.notSubtype)) return false;
+  // Final Fantasy (11c): "isn't a Kraken, Leviathan, Merfolk, Octopus, or Serpent".
+  if (filter.notSubtypes?.some((st) => subtypes.includes(st) || changeling(ctx, id, st)))
+    return false;
   if (filter.maxManaValue !== undefined) {
     const max =
       filter.maxManaValue === 'sourcePower'

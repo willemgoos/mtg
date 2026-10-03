@@ -67,8 +67,8 @@ export function castableCards(ctx: Ctx, player: PlayerId): ObjectId[] {
   const out = [...ps.hand, ...ps.command];
   const landsFromGraveyard =
     hasStatic(ctx, player, 'playLandsFromGraveyard') ||
-    // Final Fantasy Commander (12d): Hades, during your turn.
-    (ctx.s.turn.activePlayer === player && hasStatic(ctx, player, 'playFromGraveyardOnYourTurn'));
+    // Final Fantasy (11c): playing from the graveyard (Hades).
+    playsFromGraveyard(ctx, player);
   for (const id of ps.graveyard) {
     const d = def(ctx, id);
     // Conduit of Worlds: "You may play lands from your graveyard."
@@ -98,7 +98,7 @@ export function castableCards(ctx: Ctx, player: PlayerId): ObjectId[] {
           a.kind === 'static' &&
           a.effect.kind === 'playFromTop' &&
           cardMatches(ctx, topCard, a.effect.filter) &&
-          // Final Fantasy Commander (12c): Ranger Class level 3.
+          // Final Fantasy (11c): The Lunar Whale, as long as it attacked this turn.
           checkCondition(ctx, a.effect.condition, player, obj(ctx, id)) &&
           !out.includes(topCard)
         )
@@ -158,9 +158,13 @@ function mayhemReady(ctx: Ctx, card: ObjectId): boolean {
 }
 
 /** Other ways to cast a graveyard card: Festival of Embers, Osteomancer Adept. */
-export function graveyardVias(ctx: Ctx, player: PlayerId, card: ObjectId): CastVia[] {
+export function graveyardVias(
+  ctx: Ctx,
+  player: PlayerId,
+  card: ObjectId,
+): Exclude<CastVia, 'free'>[] {
   const d = def(ctx, card);
-  const out: CastVia[] = [];
+  const out: Exclude<CastVia, 'free'>[] = [];
   const instantOrSorcery = d.types.includes('Instant') || d.types.includes('Sorcery');
   if (
     instantOrSorcery &&
@@ -172,16 +176,25 @@ export function graveyardVias(ctx: Ctx, player: PlayerId, card: ObjectId): CastV
     out.push('osteomancer');
   // Conduit of Worlds: the card it chose, this turn.
   if (obj(ctx, card).playableUntilTurn === ctx.s.turn.number) out.push('conduit');
-  // Final Fantasy Commander (12d): Hades (your turn, any card) and Noctis (artifacts, 3 life).
-  if (
-    !d.types.includes('Land') &&
-    ctx.s.turn.activePlayer === player &&
-    hasStatic(ctx, player, 'playFromGraveyardOnYourTurn')
-  )
-    out.push('hades');
+  // Final Fantasy (11c): playing from the graveyard (Noctis: artifacts for 3 life more; Hades: during your turn).
   if (d.types.includes('Artifact') && hasStatic(ctx, player, 'castArtifactsFromGraveyard'))
     out.push('noctis');
+  if (playsFromGraveyard(ctx, player)) out.push('hades');
   return out;
+}
+
+/** Final Fantasy (11c): playing from the graveyard. Hades: "you may play cards from your graveyard". */
+export function playsFromGraveyard(ctx: Ctx, player: PlayerId): boolean {
+  return ctx.s.battlefield.some(
+    (id) =>
+      obj(ctx, id).controller === player &&
+      def(ctx, id).abilities.some(
+        (a) =>
+          a.kind === 'static' &&
+          a.effect.kind === 'playFromGraveyard' &&
+          checkCondition(ctx, a.effect.condition, player, obj(ctx, id)),
+      ),
+  );
 }
 
 /** Land plays allowed per turn: one, plus one for each "additional land" effect (Loot). */
@@ -261,8 +274,7 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
         ps.landsPlayedThisTurn < landDrops(ctx, player) &&
         (zone !== 'graveyard' ||
           hasStatic(ctx, player, 'playLandsFromGraveyard') ||
-          // Final Fantasy Commander (12d): Hades (only your turn has land plays anyway).
-          hasStatic(ctx, player, 'playFromGraveyardOnYourTurn'))
+          playsFromGraveyard(ctx, player))
       )
         out.push({ type: 'playLand', player, card });
       return;

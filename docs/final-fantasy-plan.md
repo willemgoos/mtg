@@ -252,6 +252,13 @@ four decks. Three more FIC Brawl decks followed (9 December 2025, "Arena Store d
   Limit Break 30%, Counter Blitz 50%, Scions & Spellcraft 46%, Brawl Aerith 65%, Brawl Emet-Selch 49%, Brawl Locke 52%.
   Limit Break measures the same on the fin-brawl branch itself with the one-deck check (26% both), so the merge didn't
   cause the drop from the 48% noted below; it needs retuning.
+- **Merged with 11c:** the 58 rares phase 12 had built for its decks keep 11c's versions (`fin/rares-1.ts`,
+  `fin/rares-2.ts`); `fin/from-brawl.ts` keeps the 33 FIN cards 11c doesn't have. Engine: 11c's versions of the
+  shared rules won (opponents losing life, cards leaving a graveyard, scry/surveil and chosen-creature triggers, the
+  first combat phase, life gained this turn, Hades and Noctis, base P/T from an amount, "with mana value up to that
+  damage", hideaway, The Wind Crystal); phase 12 keeps its own (creatures entering from a graveyard, becoming
+  untapped, equip cost reductions, legendary-only keywords, Hardened Scales, delve, forced blocks, extra land plays).
+  Win rates after this merge: MERGED11C.
 - **Final win rates** (all 12 Brawl decks, 12 games a pairing in both seats, after every fix above): Revival
   Trance 55%, Limit Break 48%, Counter Blitz 51%, Scions & Spellcraft 51%, Brawl Aerith 64%, Brawl Emet-Selch 41%,
   Brawl Locke 53%.
@@ -329,6 +336,52 @@ Both groups:
 - Ice Magic's Blizzara puts the creature on top (not the owner's choice of top or bottom). Reach the Horizon doesn't check
   "different names".
 
+11c (group 1):
+
+- Ultima ("end the turn"): spells on the stack are exiled and abilities removed; the turn continues from an end step
+  without beginning-of-end-step triggers (abilities that triggered during Ultima still go on the stack there), then cleanup.
+- Gogo's copies keep the original's targets; X = 0 is offered and copies nothing. Louisoix's Sacrifice and Gogo target
+  stack abilities (`abilities` / `abilitiesOnly` on a 'spell' target).
+- Memories Returning: the opponent's two "put one on the bottom" picks are made by the engine (highest mana value); your
+  picks may be declined (then the count of cards shifts).
+- The Darkness Crystal: the exiled creature card to return is chosen as the ability resolves (not targeted).
+- Zenos yae Galvus chooses the creature as a target (hexproof and ward apply). Shinryu's "when the chosen player loses
+  the game, you win the game" does nothing with two players.
+- Ardyn's Demon token keeps the card's colours and creature types and adds Demon (it is a 5/5).
+- Stiltzkin: the given permanent untaps (as `giveControl` does). Kain likewise untaps as he changes control.
+- Summon: Primal Odin's Zantetsuken is a combat-damage trigger that works while it has two or more lore counters.
+- Sephiroth, One-Winged Angel: "sacrifice any number" is asked one creature at a time.
+- Cecil, Dark Knight: one trigger per damage event (combat damage to a creature and a player triggers twice).
+- The Masamune's "must be blocked if able": if no blocker is declared for it, the engine assigns one that can block it.
+- Ultima, Origin of Oblivion's extra {C} only applies to lands that tap for {C} alone.
+- Astrologian's Planisphere and Ninja's Blades keep the equipped creature's granted triggers on the Equipment.
+- Ninja's Blades reads the discarded card as the last card put into your graveyard this turn.
+- Fixed on the way: "whenever equipped creature attacks" triggered twice (two code paths) and ignored its intervening
+  "if"; now once, with the condition checked.
+
+11c (group 2) (red, green, multicoloured and land rares and mythics, meld; `fin/rares-2.ts`):
+
+- Meld: Vanille's object becomes Ragnarok (its back face, `front` = Vanille) and remembers Fang (`meldedWith`), which waits in
+  exile and follows Ragnarok to whatever zone it goes to. Ragnarok's mana value is Vanille's alone.
+- Hideaway: the exiled card is face down only in name (exile is visible to both players). A hidden land is put onto the
+  battlefield (not played); a hidden spell is cast with the usual "cast for free" prompt.
+- Engine picks (no prompt): Gilgamesh puts every Equipment found onto the battlefield and attaches the costliest to
+  Gilgamesh (or another Samurai) after the job select triggers; Kefka's discards are each player's lowest mana value card;
+  Phoenix III picks the subset with the greatest total mana value; Choco takes the costliest nonland card and puts every land
+  onto the battlefield; Sin's card is random (as printed).
+- Vaan: a nonland card he exiles stays castable by you while exiled (paying its cost, not "now or never"); only a land makes the
+  Treasure.
+- Joshua's "discard up to two, then draw that many" is two "you may discard a card; if you do, draw" in a row.
+- Vivi's {0} mana ability uses the stack (like Capital City's). Starting Town's "{T}, Pay 1 life" is 1 damage as the mana is
+  spent (like a Talisman). Its "first, second, or third turn" is turn 6 or earlier on your turn (extra turns aside).
+- Summon: Brynhildr II/III's haste lasts as long as the creature stays (not until end of turn). G.F. Cerberus's copies keep the
+  original's targets.
+- Triple Triad's free plays end as the end step begins. Absolute Virtue's protection is hexproof plus prevention of damage from
+  opponents' sources (Auras can still enchant you).
+- The Earth Crystal and The Fire Crystal reduce generic mana only (as all cost reductions here).
+- A Realm Reborn's granted ability is used only when paying costs (it isn't listed as an ability of each permanent).
+- Fixed in passing: `all` / `any` / `not` conditions now pass the trigger's subject to the conditions inside them.
+
 ### Phase 12
 
 Engine additions are in blocks marked `Final Fantasy Commander (12)` (`types.ts`, `triggers.ts`, `context.ts`,
@@ -338,41 +391,27 @@ merge with phase 11 (below).
 
 - **Pathways:** Arena asks which face to play; here the face is chosen as the land enters (a `choose` prompt), and it
   taps for that colour only. Back faces are cards of their own with no rules.
-- **Shock lands:** enter tapped with a "may pay 2 life: untap it" as they enter. **Starting Town:** "Pay 1 life" is a
-  pain land's 1 damage. **Forsaken Crossroads:** always scries (never "untap instead").
-- **Meld:** Fang is a normal card (`meld` layout fetched as one face); Vanille isn't in any deck.
-- **Ultima** doesn't end the turn.
-- **Ardyn's** Demon token copy keeps its colours. **Celes** counts creatures entering from a graveyard, not ones cast
-  from it. **Celes / Joshua** rummaging: the engine picks the discards (spare lands, uncastable cards).
+- **Shock lands:** enter tapped with a "may pay 2 life: untap it" as they enter. **Forsaken Crossroads:** always scries (never "untap instead").
+- **Celes** counts creatures entering from a graveyard, not ones cast from it, and the engine picks her rummaging
+  discards (spare lands, uncastable cards).
 - **Blitzball:** "dealt combat damage by a legendary creature" is read as "a legendary creature of yours attacked and
-  the opponent lost life this turn". **Summon: Brynhildr I:** the exiled card is playable this turn and the next.
-- **Summon: Primal Odin II:** its "loses the game" trigger is printed on it and works from chapter II on.
+  the opponent lost life this turn".
 - **Combustible Gearhulk:** the opponent's choice is a `choose` prompt for them.
 - **12b:** Arms Scavenger's spellbook (Alchemy) is the Equipment of our pool, one at random, playable that turn.
-  Gilgamesh attaches to himself or any Samurai. Sword of Forge and Frontier has no protection. Lost Jitte only
-  charges on combat damage to a player. Summoner's Grimoire doesn't put enchantment creatures in attacking.
-  Raubahn's
-  ward is 2 life (his printed power). Zack Fair moves an unattached Equipment, not "the one on Zack". Beatrix and
-  Gilgamesh: the engine picks what to attach. Requisition Raid's counters go on your creatures.
+  Sword of Forge and Frontier has no protection. Lost Jitte only charges on combat damage to a player. Zack Fair
+  moves an unattached Equipment, not "the one on Zack". Beatrix: the engine picks what to attach. Requisition Raid's
+  counters go on your creatures.
 - **12c:** Proliferate never adds to an opponent's +1/+1 counters nor to players. Incubation Druid makes two mana
-  with a counter, not three, of any colour. Yuna's "Grand Summon" bonus goes to the first creature spell cast
-  while Yuna is tapped. Forgotten Ancient never moves its counters. Endless Detour only targets nonland permanents
+  with a counter, not three, of any colour. Forgotten Ancient never moves its counters. Endless Detour only targets nonland permanents
   (put on top). Syncopate puts the countered spell in the graveyard. Sleep Magic isn't sacrificed when the creature
   is dealt damage. The Squid tokens'
-  islandwalk and Sword of Body and Mind's protection aren't built. The Earth Crystal's distribute puts one counter on
-  each of two targets. Summon: Leviathan's II–III draw only for Leviathan itself.
-- **12d:** Abilities can't be targeted, so Louisoix's Sacrifice and Sublime Epiphany only counter spells. Magecraft
-  ignores copies. Dig Through Time's two cards and Memories Returning's split are the engine's picks. Quistis Trepe's
-  card can be cast for the rest of the turn. Astrologian's Planisphere
-  doesn't count third draws. Ninja's Blades discards the most expensive card.
-  Xande counts artifact creature cards too.
-- **12e:** Cloud, Midgar Mercenary and Traveling Chocobo don't double triggers. Tataru Taru's opponent always draws. Catch a Fish always takes the card. Quina's Frog comes with tokens made by token effects, not with Hero
+  islandwalk and Sword of Body and Mind's protection aren't built.
+- **12d:** Sublime Epiphany only counters spells. Magecraft ignores copies. Dig Through Time's two cards are the
+  engine's picks. Quistis Trepe's card can be cast for the rest of the turn. Xande counts artifact creature cards too.
+- **12e:** Tataru Taru's opponent always draws. Catch a Fish always takes the card. Quina's Frog comes with tokens made by token effects, not with Hero
   tokens from job select.
 - **12f:** Emet-Selch's graveyard spell can be cast for the rest of the turn (from exile, still counted as from the
-  graveyard) and isn't exiled afterwards. Gogo copies the top triggered ability X times (abilities aren't targets).
-  Y'shtola Rhul's additional end step isn't built.
+  graveyard) and isn't exiled afterwards.
 - **12g:** Mug's and the stolen cards are castable with any mana (Mug's for the turn, stolen ones while exiled).
-  Ninjutsu is sneak (the card is cast). Trance Kuja gives Wizards +1 damage, not double. Sephiroth, One-Winged Angel
-  sacrifices at most one creature. Sidequest: Play Blitzball checks at your end step for 6 or more life lost by the
-  opponent, and attaches to your most powerful creature. The Masamune always gives first strike and doesn't force
-  blocks or double death triggers. Vaan's "spell you don't own" trigger isn't built.
+  Ninjutsu is sneak (the card is cast). Sidequest: Play Blitzball checks at your end step for 6 or more life lost by the
+  opponent, and attaches to your most powerful creature.

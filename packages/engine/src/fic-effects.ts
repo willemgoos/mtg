@@ -9,7 +9,6 @@ import {
   drawCard,
   emit,
   moveObject,
-  newTimestamp,
   obj,
   other,
   transform,
@@ -77,13 +76,6 @@ export const FIC_EFFECTS: Record<string, CustomEffect> = {
     for (let i = 0; i <= picks.length; i++) drawCard(ctx, es.controller);
   },
 
-  /** Joshua: "discard up to N cards, then draw that many cards" (the engine picks). */
-  rummageUpTo(ctx, es, params) {
-    const picks = rummagePicks(ctx, es.controller, (params as { max: number }).max);
-    discard(ctx, picks);
-    for (let i = 0; i < picks.length; i++) drawCard(ctx, es.controller);
-  },
-
   /** Combustible Gearhulk: mill three, then damage to the opponent equal to their total mana value. */
   gearhulkMill(ctx, es) {
     const lib = ctx.s.players[es.controller].library.slice(0, 3);
@@ -122,17 +114,6 @@ export const FIC_EFFECTS: Record<string, CustomEffect> = {
     if (o) changeLife(ctx, es.controller, -mv(ctx, o.id));
   },
 
-  /** Ardyn's Starscourge: exile the target creature card; a token copy that's a 5/5 Demon. */
-  ardynStarscourge(ctx, es) {
-    const card = targetObj(ctx, es);
-    if (!card || card.zone !== 'graveyard') return;
-    moveObject(ctx, card.id, 'exile');
-    const t = tokenCopyOfCard(ctx, card.defId, es.controller);
-    // "Except it's a 5/5 black Demon": it keeps its colours (a simplification).
-    t.copyPT = { power: 5, toughness: 5 };
-    t.addedSubtypes = ['Demon'];
-  },
-
   /**
    * Random Encounter: shuffle, mill four, the creature cards milled enter with
    * haste and return to their owner's hand at the next end step.
@@ -156,36 +137,6 @@ export const FIC_EFFECTS: Record<string, CustomEffect> = {
         fromTurn: ctx.s.turn.number + (step === 'end' || step === 'cleanup' ? 1 : 0),
       });
     }
-  },
-
-  /**
-   * Phoenix, Warden of Fire III: creature cards with total mana value 6 or less
-   * from your graveyard (the engine picks, biggest first), then the Saga
-   * returns front face up.
-   */
-  phoenixRebirth(ctx, es) {
-    const p = es.controller;
-    let budget = 6;
-    const cards = ctx.s.players[p].graveyard
-      .filter((id) => def(ctx, id).types.includes('Creature'))
-      .sort((a, b) => mv(ctx, b) - mv(ctx, a));
-    for (const id of cards)
-      if (mv(ctx, id) <= budget) {
-        budget -= mv(ctx, id);
-        moveObject(ctx, id, 'battlefield', { controller: p });
-      }
-    const o = sourceObj(ctx, es);
-    if (!o || o.zone !== 'battlefield') return;
-    moveObject(ctx, o.id, 'exile');
-    // A token ceases to exist in exile.
-    if (!ctx.s.objects[o.id]) return;
-    moveObject(ctx, o.id, 'battlefield');
-  },
-
-  /** "It gains haste" for the creature spell that caused the trigger (Summon: Brynhildr). */
-  subjectHasteOnEntry(ctx, es) {
-    const o = es.subject && ctx.s.objects[es.subject.id];
-    if (o && o.zone === 'stack') o.hasteOnEntry = true;
   },
 
   /** "That player loses the game" (Summon: Primal Odin). */
@@ -215,20 +166,6 @@ export const FIC_EFFECTS: Record<string, CustomEffect> = {
     x[es.controller]++;
   },
 
-  /** Aerith Gainsborough dies: X +1/+1 counters on each legendary creature you control (X: her counters). */
-  countersOnLegendsBySourceCounters(ctx, es) {
-    const self = es.source && ctx.s.objects[es.source.id];
-    const x = self?.lastCounters ?? 0;
-    if (x <= 0) return;
-    for (const id of ctx.s.battlefield) {
-      const o = obj(ctx, id);
-      if (o.controller !== es.controller) continue;
-      const c = characteristics(ctx, id);
-      if (c.types.includes('Creature') && def(ctx, id).supertypes.includes('Legendary'))
-        addCounters(ctx, id, x);
-    }
-  },
-
   /** Beatrix: attach Equipment you control to the target creature (the engine attaches every unattached one). */
   attachEquipmentToTarget(ctx, es) {
     const to = targetObj(ctx, es);
@@ -239,52 +176,6 @@ export const FIC_EFFECTS: Record<string, CustomEffect> = {
       const host = e.attachedTo !== undefined ? ctx.s.objects[e.attachedTo] : undefined;
       if (!host || host.zone !== 'battlefield') e.attachedTo = to.id;
     }
-  },
-
-  /**
-   * Gilgamesh: every Equipment card among the top six onto the battlefield, the
-   * rest to the bottom at random; the biggest one is attached to Gilgamesh (or
-   * another Samurai you control).
-   */
-  gilgamesh(ctx, es) {
-    const p = es.controller;
-    const top = ctx.s.players[p].library.slice(0, 6);
-    const equipment = top.filter((id) => def(ctx, id).subtypes.includes('Equipment'));
-    for (const id of equipment) moveObject(ctx, id, 'battlefield', { controller: p });
-    for (const id of top.filter((x) => !equipment.includes(x)))
-      moveObject(ctx, id, 'library', { position: 'bottom' });
-    const self = sourceObj(ctx, es);
-    const samurai =
-      self && self.zone === 'battlefield'
-        ? self.id
-        : ctx.s.battlefield.find(
-            (id) =>
-              obj(ctx, id).controller === p &&
-              characteristics(ctx, id).subtypes.includes('Samurai'),
-          );
-    const best = equipment
-      .filter((id) => obj(ctx, id).zone === 'battlefield')
-      .sort((a, b) => mv(ctx, b) - mv(ctx, a))[0];
-    if (best && samurai) obj(ctx, best).attachedTo = samurai;
-  },
-
-  /**
-   * Firion: a token copy of the Equipment that entered whose equip abilities
-   * cost {2} less; it's sacrificed at the beginning of the next upkeep.
-   */
-  firionCopy(ctx, es) {
-    const card = es.subject && ctx.s.objects[es.subject.id];
-    if (!card || card.zone !== 'battlefield') return;
-    const t = tokenCopyOfCard(ctx, card.defId, es.controller);
-    t.equipDiscount = 2;
-    (ctx.s.delayed ??= []).push({
-      controller: es.controller,
-      sourceDefId: es.sourceDefId,
-      subject: { id: t.id, zcc: t.zcc },
-      effects: [{ kind: 'sacrifice', what: 'subject' }],
-      fromTurn: ctx.s.turn.number + 1,
-      at: 'upkeep',
-    });
   },
 
   /**
@@ -356,24 +247,6 @@ export const FIC_EFFECTS: Record<string, CustomEffect> = {
   },
 
   /**
-   * Hideaway N: look at the top N, exile one face down (the engine picks the
-   * most expensive nonland card), the rest to the bottom in a random order.
-   */
-  hideaway(ctx, es, params) {
-    const p = es.controller;
-    const top = ctx.s.players[p].library.slice(0, (params as { count: number }).count);
-    const pick = [...top].sort(
-      (a, b) => Number(isLand(ctx, a)) - Number(isLand(ctx, b)) || mv(ctx, b) - mv(ctx, a),
-    )[0];
-    const self = sourceObj(ctx, es);
-    if (pick) {
-      moveObject(ctx, pick, 'exile');
-      if (self) self.exiledWith = [...(self.exiledWith ?? []), pick];
-    }
-    for (const id of top) if (id !== pick) moveObject(ctx, id, 'library', { position: 'bottom' });
-  },
-
-  /**
    * The creature spell that caused the trigger enters with additional +1/+1
    * counters: `params.n`, or one per Dog and/or Wolf you control (Torgal).
    */
@@ -403,16 +276,6 @@ export const FIC_EFFECTS: Record<string, CustomEffect> = {
   removeSelfCounters(ctx, es, params) {
     const o = sourceObj(ctx, es);
     if (o) o.plusOneCounters = Math.max(0, o.plusOneCounters - (params as { n: number }).n);
-  },
-
-  /** Summon: Leviathan I: return each creature that isn't a Kraken, Leviathan, Merfolk, Octopus or Serpent. */
-  leviathanWave(ctx) {
-    const keep = ['Kraken', 'Leviathan', 'Merfolk', 'Octopus', 'Serpent'];
-    for (const id of [...ctx.s.battlefield]) {
-      const c = characteristics(ctx, id);
-      if (c.types.includes('Creature') && !c.subtypes.some((t) => keep.includes(t)))
-        moveObject(ctx, id, 'hand');
-    }
   },
 
   /** Yuna: +1/+1 counters on the target equal to the counters the permanent that died had. */
@@ -460,18 +323,6 @@ export const FIC_EFFECTS: Record<string, CustomEffect> = {
     addCounters(ctx, hero.id, x);
   },
 
-  /** Ninja's Blades: draw, then discard (the engine discards the most expensive); that player loses its mana value. */
-  ninjaLoot(ctx, es) {
-    const p = es.controller;
-    drawCard(ctx, p);
-    const hand = ctx.s.players[p].hand;
-    const pick = [...hand].sort((a, b) => mv(ctx, b) - mv(ctx, a))[0];
-    if (!pick) return;
-    const loss = mv(ctx, pick);
-    moveObject(ctx, pick, 'graveyard');
-    changeLife(ctx, other(p), -loss);
-  },
-
   /**
    * Quistis Trepe: the target instant or sorcery card may be cast this turn
    * with mana of any type (from a graveyard, put in exile to cast it).
@@ -483,30 +334,6 @@ export const FIC_EFFECTS: Record<string, CustomEffect> = {
     card.anyMana = true;
     if (card.owner === es.controller) card.playableUntilTurn = ctx.s.turn.number;
     else card.castableBy = es.controller;
-  },
-
-  /** Exile N cards from your graveyard (the oldest first): Ultimecia's cost. */
-  exileFromGraveyard(ctx, es, params) {
-    const gy = ctx.s.players[es.controller].graveyard;
-    for (const id of gy.slice(0, (params as { n: number }).n)) moveObject(ctx, id, 'exile');
-  },
-
-  /**
-   * Memories Returning: of the top five, three go to your hand and two to the
-   * bottom (the opponent's picks: the engine sends the most expensive two down).
-   */
-  memoriesReturning(ctx, es) {
-    const p = es.controller;
-    const top = ctx.s.players[p].library.slice(0, 5);
-    const ranked = [...top].sort((a, b) => mv(ctx, b) - mv(ctx, a));
-    const bottom = ranked.slice(0, Math.max(0, top.length - 3));
-    for (const id of top)
-      moveObject(
-        ctx,
-        id,
-        bottom.includes(id) ? 'library' : 'hand',
-        bottom.includes(id) ? { position: 'bottom' } : {},
-      );
   },
 
   // ---------------------------------------------------------------- 12f
@@ -525,32 +352,6 @@ export const FIC_EFFECTS: Record<string, CustomEffect> = {
     moveObject(ctx, card.id, 'exile');
     card.playableUntilTurn = ctx.s.turn.number;
     card.fromGraveyardCast = true;
-  },
-
-  /** Malboro: the opponent exiles the top N cards of their library. */
-  exileTopOfOpponent(ctx, es, params) {
-    const p = other(es.controller);
-    for (const id of ctx.s.players[p].library.slice(0, (params as { n: number }).n))
-      moveObject(ctx, id, 'exile');
-  },
-
-  /** Zenos yae Galvus: remember the chosen creature; other creatures get -2/-2 until end of turn. */
-  zenos(ctx, es) {
-    const self = sourceObj(ctx, es);
-    const chosen = targetObj(ctx, es);
-    if (self && chosen) self.chosenCreature = { id: chosen.id, zcc: chosen.zcc };
-    for (const id of ctx.s.battlefield) {
-      if (id === self?.id || id === chosen?.id) continue;
-      if (!characteristics(ctx, id).types.includes('Creature')) continue;
-      ctx.s.effects.push({
-        timestamp: newTimestamp(ctx),
-        affected: { id, zcc: obj(ctx, id).zcc },
-        power: -2,
-        toughness: -2,
-        keywords: [],
-        expires: 'endOfTurn',
-      });
-    }
   },
 
   // ---------------------------------------------------------------- 12g
@@ -578,11 +379,6 @@ export const FIC_EFFECTS: Record<string, CustomEffect> = {
     if (land) tokenCopyOfCard(ctx, 'treasure-token', es.controller);
   },
 
-  /** The Gold Saucer: flip a coin; a win makes a Treasure. */
-  coinFlipTreasure(ctx, es) {
-    if (nextInt(ctx.s.rng, 2) === 0) tokenCopyOfCard(ctx, 'treasure-token', es.controller);
-  },
-
   /**
    * Exile the top card of the opponent's library; you may cast it (any mana).
    * `params.orTreasure`: a land (not castable) makes a Treasure instead (Vaan).
@@ -599,31 +395,6 @@ export const FIC_EFFECTS: Record<string, CustomEffect> = {
     const o = obj(ctx, top);
     o.castableBy = es.controller;
     o.anyMana = true;
-  },
-
-  /** Blazing Bomb: damage equal to its power as it was sacrificed, to the target. */
-  damageByLkiPower(ctx, es) {
-    const t = targetObj(ctx, es);
-    if (!t || t.zone !== 'battlefield' || !es.source) return;
-    dealDamage(
-      ctx,
-      damageSourceFor(ctx, es.source.id, es.controller),
-      { object: { id: t.id, zcc: t.zcc } },
-      es.lkiPower ?? 0,
-      false,
-    );
-  },
-
-  /** Nibelheim Aflame: the target deals damage equal to its power to each other creature. */
-  nibelheim(ctx, es) {
-    const t = targetObj(ctx, es);
-    if (!t || t.zone !== 'battlefield') return;
-    const p = characteristics(ctx, t.id).power;
-    const src = damageSourceFor(ctx, t.id, es.controller);
-    for (const id of [...ctx.s.battlefield]) {
-      if (id === t.id || !characteristics(ctx, id).types.includes('Creature')) continue;
-      dealDamage(ctx, src, { object: { id, zcc: obj(ctx, id).zcc } }, p, false);
-    }
   },
 
   /** Sidequest: Play Blitzball: transform, then attach to your most powerful creature. */
@@ -656,16 +427,6 @@ export const FIC_EFFECTS: Record<string, CustomEffect> = {
     const self = sourceObj(ctx, es);
     if (self && self.zone === 'battlefield') transform(ctx, self.id);
   },
-
-  /** Put +1/+1 counters on the source equal to the power of what caused the trigger, as it last was. */
-  countersBySubjectPower(ctx, es) {
-    const self = sourceObj(ctx, es);
-    const subj = es.subject && ctx.s.objects[es.subject.id];
-    if (!self || self.zone !== 'battlefield' || !subj) return;
-    const power =
-      subj.zone === 'battlefield' ? characteristics(ctx, subj.id).power : subj.lastPower;
-    addCounters(ctx, self.id, Math.max(0, power ?? defOf(ctx, subj.defId).power ?? 0));
-  },
 };
 
 export const FIC_CONDITIONS: Record<
@@ -677,19 +438,13 @@ export const FIC_CONDITIONS: Record<
   /** You were the starting player (turn 1 was yours: your turns are the odd ones). */
   startingPlayer: (ctx, p) => (ctx.s.turn.number % 2 === 1) === (ctx.s.turn.activePlayer === p),
   /** "If it's the first combat phase of the turn" (Genji Glove, Tifa). */
-  firstCombat: (ctx) => !ctx.s.turn.laterCombat,
+  firstCombat: (ctx) => (ctx.s.turn.combats ?? 0) <= 1,
   /** An opponent lost 6 or more life this turn (Sidequest: Play Blitzball's "6 or more combat damage"). */
   opponentLostSix: (ctx, p) => (ctx.s.turn.lifeLostTotal?.[other(p)] ?? 0) >= 6,
   /** A creature died under an opponent's control this turn (Sidequest: Hunt the Mark). */
   opponentCreatureDied: (ctx, p) => (ctx.s.turn.creaturesLost?.[other(p)] ?? 0) > 0,
   /** You gained 7 or more life this turn (Aerith, Last Ancient). */
-  gainedSeven: (ctx, p) => (ctx.s.turn.lifeGainedTotal?.[p] ?? 0) >= 7,
-  /** You haven't cast a legendary creature spell this turn (Serah Farron). */
-  noLegendCastThisTurn: (ctx, p) =>
-    !(ctx.s.turn.castDefs?.[p] ?? []).some((id) => {
-      const d = defOf(ctx, id);
-      return d.types.includes('Creature') && d.supertypes.includes('Legendary');
-    }),
+  gainedSeven: (ctx, p) => (ctx.s.turn.lifeGained?.[p] ?? 0) >= 7,
   /** +1/+1 counters were put on the source this turn (Wakka). */
   sourceCountersThisTurn: (ctx, _p, self) => self?.countersTurn === ctx.s.turn.number,
   /** An opponent has seven or more cards in their graveyard (Into the Story). */
@@ -702,18 +457,6 @@ export const FIC_CONDITIONS: Record<
   sourceAttackedThisTurn: (ctx, _p, self) => !!self && ctx.s.turn.attackers.includes(self.id),
   /** This Mount is saddled. */
   saddled: (ctx, _p, self) => self?.saddledTurn === ctx.s.turn.number,
-  /** You control the creature with the greatest power, or tied (Summon: Fenrir III). */
-  greatestPower: (ctx, p) => {
-    let mine = -99;
-    let theirs = -99;
-    for (const id of ctx.s.battlefield) {
-      const c = characteristics(ctx, id);
-      if (!c.types.includes('Creature')) continue;
-      if (obj(ctx, id).controller === p) mine = Math.max(mine, c.power);
-      else theirs = Math.max(theirs, c.power);
-    }
-    return mine > -99 && mine >= theirs;
-  },
   /** The first time +1/+1 counters were put on what caused the trigger this turn (Botanical Brawler). */
   subjectFirstCounters: (ctx, _p, _self, subject) =>
     subject?.countersTurn === ctx.s.turn.number && subject.countersTimes === 1,
@@ -726,8 +469,6 @@ export const FIC_CONDITIONS: Record<
     !!subject &&
     ((subject.lastCounters ?? 0) > 0 ||
       Object.values(subject.lastNamedCounters ?? {}).some((n) => n > 0)),
-  /** A Saga creature's later chapters (Summon: Primal Odin II). */
-  loreTwo: (_ctx, _p, self) => (self?.counters?.lore ?? 0) >= 2,
   /**
    * Blitzball: "an opponent was dealt combat damage by a legendary creature
    * this turn" — read as: a legendary creature of yours attacked this turn and

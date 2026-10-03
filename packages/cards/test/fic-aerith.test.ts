@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { all, cast, game, n, pt, settle } from './blb-helpers.ts';
 
-// Final Fantasy Commander (12e): Brawl Aerith — life gained in total, The Wind
+// Final Fantasy Commander (12e): Brawl Aerith â€” life gained in total, The Wind
 // Crystal, Quina's Frogs, Serah's discount, Excalibur II, Sidequests.
 
 describe('Brawl Aerith (12e)', () => {
@@ -22,7 +22,7 @@ describe('Brawl Aerith (12e)', () => {
     settle(g);
     // 3 doubled.
     expect(g.life('p1')).toBe(26);
-    g.state.turn.lifeGainedTotal = { p1: 7, p2: 0 };
+    g.state.turn.lifeGained = { p1: 7, p2: 0 };
     for (let i = 0; i < 20 && g.decision.kind !== 'chooseTriggerTargets'; i++) {
       const d = g.decision;
       if (d.kind === 'declareAttackers') g.do({ type: 'confirmAttackers', player: d.player });

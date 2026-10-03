@@ -71,6 +71,13 @@ describe('Counter Blitz (12c)', () => {
     });
     cast(g, 'fight-rigging');
     settle(g);
+    // Hideaway (phase 11c's): the player picks the card to exile face down.
+    const d = g.decision;
+    if (d.kind === 'searchLibrary') {
+      const angel = d.options.find((id) => g.obj(id).defId === 'serra-angel')!;
+      g.do({ type: 'chooseCard', player: 'p1', card: angel });
+      settle(g);
+    }
     const rigging = g.id('p1', 'fight-rigging');
     const hidden = g.obj(rigging).exiledWith ?? [];
     expect(hidden.map((id) => g.obj(id).defId)).toEqual(['serra-angel']);

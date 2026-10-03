@@ -64,7 +64,6 @@ export const FINAL_FANTASY_BRAWL_TOKENS: CardDefinition[] = [
   creatureToken('human-soldier-token', 'Human Soldier', ['W'], ['Human', 'Soldier'], 1, 1),
   creatureToken('wolf-2-2-token', 'Wolf', ['G'], ['Wolf'], 2, 2),
   creatureToken('frog-token', 'Frog', ['G'], ['Frog'], 1, 1),
-  creatureToken('moogle-token', 'Moogle', ['W'], ['Moogle'], 1, 2, ['lifelink']),
   // Islandwalk isn't built.
   creatureToken('squid-token', 'Squid', ['U'], ['Squid'], 1, 1),
 ];
