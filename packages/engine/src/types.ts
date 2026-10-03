@@ -525,6 +525,9 @@ export type TriggerDef =
   // Marvel Super Heroes Jumpstart (Animal).
   /** Whenever this permanent becomes tapped (Wakandan Tusker). */
   | { on: 'becomesTapped' }
+  // Marvel Super Heroes Jumpstart (Young Avengers)
+  /** Whenever the creature this Equipment is attached to becomes tapped ("it" is the subject): Hawkeye's Bow. */
+  | { on: 'equippedBecomesTapped' }
   // Marvel Super Heroes Jumpstart (Tenacious/Rampaging)
   /** Whenever this creature blocks (Atlas, Sizable Stooge). */
   | { on: 'blocks' }
@@ -1584,6 +1587,9 @@ export type EffectDef =
       notLegendary?: boolean;
       /** "Except his name is Impossible Man": it keeps its own name (for the legend rule). */
       keepName?: boolean;
+      // Marvel Super Heroes Jumpstart (Young Avengers)
+      /** "And he has this ability": the source's own abilities (by index) it keeps (Hulkling, Young Avenger). */
+      keepAbilities?: number[];
     }
   /** Tragic Arrogance: each player keeps one artifact, creature, enchantment and planeswalker (picked for them). */
   | { kind: 'keepOneOfEachType' }
@@ -2099,6 +2105,9 @@ export interface GameObject {
   /** While copying, it isn't legendary (Loki, Lord of Misrule) or keeps its own name (Impossible Man). */
   copyNotLegendary?: boolean;
   copyKeepsName?: boolean;
+  // Marvel Super Heroes Jumpstart (Young Avengers)
+  /** While copying, it also has these abilities of its own card, by index (Hulkling, Young Avenger). */
+  copyKeptAbilities?: number[];
   // Wakanda Forever (9c).
   /** It's monstrous (Fleecemane Lion). */
   monstrous?: boolean;

@@ -24752,6 +24752,156 @@
   }
  },
  {
+  "name": "Stature, Young Avenger",
+  "scryfallId": "624fe61d-d16f-40c3-a056-a42f7b06bb38",
+  "oracleId": "b1eee67f-30cf-4afb-8080-84ac282effc4",
+  "set": "msc",
+  "collectorNumber": "571",
+  "rarity": "uncommon",
+  "manaCost": "{1}{R/G}",
+  "typeLine": "Legendary Creature — Human Hero",
+  "oracleText": "Reach (This creature can block creatures with flying.)\nWhenever you cast a noncreature spell, Stature has base power and toughness 4/4 until end of turn.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "G",
+   "R"
+  ],
+  "keywords": [
+   "Reach"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/2/624fe61d-d16f-40c3-a056-a42f7b06bb38.jpg?1783903092",
+   "normal": "https://cards.scryfall.io/normal/front/6/2/624fe61d-d16f-40c3-a056-a42f7b06bb38.jpg?1783903092",
+   "large": "https://cards.scryfall.io/large/front/6/2/624fe61d-d16f-40c3-a056-a42f7b06bb38.jpg?1783903092",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/2/624fe61d-d16f-40c3-a056-a42f7b06bb38.jpg?1783903092"
+  }
+ },
+ {
+  "name": "Patriot, Young Avenger",
+  "scryfallId": "ea0705fd-5446-4960-8afc-ba005f006727",
+  "oracleId": "6c44d62f-52de-446c-9824-6b474534a612",
+  "set": "msc",
+  "collectorNumber": "570",
+  "rarity": "uncommon",
+  "manaCost": "{2}{R/W}",
+  "typeLine": "Legendary Creature — Human Hero",
+  "oracleText": "Prowess (Whenever you cast a noncreature spell, this creature gets +1/+1 until end of turn.)\nAs long as Patriot is equipped, other creatures you control get +1/+0.",
+  "power": "3",
+  "toughness": "2",
+  "colors": [
+   "R",
+   "W"
+  ],
+  "keywords": [
+   "Prowess"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/a/ea0705fd-5446-4960-8afc-ba005f006727.jpg?1783903095",
+   "normal": "https://cards.scryfall.io/normal/front/e/a/ea0705fd-5446-4960-8afc-ba005f006727.jpg?1783903095",
+   "large": "https://cards.scryfall.io/large/front/e/a/ea0705fd-5446-4960-8afc-ba005f006727.jpg?1783903095",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/a/ea0705fd-5446-4960-8afc-ba005f006727.jpg?1783903095"
+  }
+ },
+ {
+  "name": "Iron Lad, Young Avenger",
+  "scryfallId": "bce11b29-c674-4d50-b01d-b80bf7e3a73e",
+  "oracleId": "fedcc722-ac5f-464a-bac9-c5f1d4de28d0",
+  "set": "msc",
+  "collectorNumber": "569",
+  "rarity": "uncommon",
+  "manaCost": "{2}{U/R}",
+  "typeLine": "Legendary Artifact Creature — Human Hero",
+  "oracleText": "Flying (This creature can't be blocked except by creatures with flying or reach.)\nNoncreature spells you cast cost {1} less to cast.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "R",
+   "U"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/c/bce11b29-c674-4d50-b01d-b80bf7e3a73e.jpg?1783903093",
+   "normal": "https://cards.scryfall.io/normal/front/b/c/bce11b29-c674-4d50-b01d-b80bf7e3a73e.jpg?1783903093",
+   "large": "https://cards.scryfall.io/large/front/b/c/bce11b29-c674-4d50-b01d-b80bf7e3a73e.jpg?1783903093",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/c/bce11b29-c674-4d50-b01d-b80bf7e3a73e.jpg?1783903093"
+  }
+ },
+ {
+  "name": "Hulkling, Young Avenger",
+  "scryfallId": "6358d9ec-7542-4364-8bba-ca29fe470338",
+  "oracleId": "c92f20c4-838d-43a1-8a71-dae205789d94",
+  "set": "msc",
+  "collectorNumber": "689",
+  "rarity": "rare",
+  "manaCost": "{2}{R}{R}",
+  "typeLine": "Legendary Creature — Kree Skrull Hero",
+  "oracleText": "Flying\nWhenever you cast a noncreature spell, Hulkling becomes a copy of up to one other target creature until end of turn, except his name is Hulkling, Young Avenger, he's 4/4, and he has flying and this ability.",
+  "power": "4",
+  "toughness": "4",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/3/6358d9ec-7542-4364-8bba-ca29fe470338.jpg?1783903050",
+   "normal": "https://cards.scryfall.io/normal/front/6/3/6358d9ec-7542-4364-8bba-ca29fe470338.jpg?1783903050",
+   "large": "https://cards.scryfall.io/large/front/6/3/6358d9ec-7542-4364-8bba-ca29fe470338.jpg?1783903050",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/3/6358d9ec-7542-4364-8bba-ca29fe470338.jpg?1783903050"
+  }
+ },
+ {
+  "name": "Hawkeye's Bow",
+  "scryfallId": "485be72b-d784-4886-bb3a-48cff8f781c6",
+  "oracleId": "83798eb8-b14f-4620-bce2-1a6804a24dc7",
+  "set": "msh",
+  "collectorNumber": "132",
+  "rarity": "common",
+  "manaCost": "{R}",
+  "typeLine": "Artifact — Equipment",
+  "oracleText": "Equipped creature gets +1/+0 and has reach.\nWhenever equipped creature becomes tapped, it deals 1 damage to each opponent.\nEquip {1} ({1}: Attach to target creature you control. Equip only as a sorcery.)",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Equip"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/8/485be72b-d784-4886-bb3a-48cff8f781c6.jpg?1783902931",
+   "normal": "https://cards.scryfall.io/normal/front/4/8/485be72b-d784-4886-bb3a-48cff8f781c6.jpg?1783902931",
+   "large": "https://cards.scryfall.io/large/front/4/8/485be72b-d784-4886-bb3a-48cff8f781c6.jpg?1783902931",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/8/485be72b-d784-4886-bb3a-48cff8f781c6.jpg?1783902931"
+  }
+ },
+ {
+  "name": "Crossover Collaboration",
+  "scryfallId": "1d632bef-ee93-4690-9c6d-07f70d18572a",
+  "oracleId": "150cefd2-061d-43b2-8470-c17be0144021",
+  "set": "msc",
+  "collectorNumber": "684",
+  "rarity": "common",
+  "manaCost": "{2}{R}",
+  "typeLine": "Instant",
+  "oracleText": "Teamwork 2 (As an additional cost to cast this spell, you may tap any number of creatures you control with total power 2 or more.)\nExile the top two cards of your library. Until the end of your next turn, you may play those cards. If this spell was cast using teamwork, create a Treasure token. (It's an artifact with \"{T}, Sacrifice this token: Add one mana of any color.\")",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Treasure",
+   "Teamwork"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/d/1d632bef-ee93-4690-9c6d-07f70d18572a.jpg?1783903051",
+   "normal": "https://cards.scryfall.io/normal/front/1/d/1d632bef-ee93-4690-9c6d-07f70d18572a.jpg?1783903051",
+   "large": "https://cards.scryfall.io/large/front/1/d/1d632bef-ee93-4690-9c6d-07f70d18572a.jpg?1783903051",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/d/1d632bef-ee93-4690-9c6d-07f70d18572a.jpg?1783903051"
+  }
+ },
+ {
   "name": "Sol Ring",
   "scryfallId": "91fdb56b-54d5-4272-8319-505ff987fe9b",
   "oracleId": "6ad8011d-3471-4369-9d68-b264cc027487",

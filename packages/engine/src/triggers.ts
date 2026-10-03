@@ -257,8 +257,15 @@ function queue(
   subject?: GameObject,
   amount?: number,
 ): void {
+  // Marvel Super Heroes Jumpstart (Young Avengers): an ability a copy kept is its own card's (Hulkling).
+  let defId = o.defId;
+  const copied = o.copyKeptAbilities && o.originalDefId ? defOf(ctx, o.defId).abilities.length : -1;
+  if (copied >= 0 && index >= copied) {
+    defId = o.originalDefId!;
+    index = o.copyKeptAbilities![index - copied] ?? index;
+  }
   // "This ability triggers only once each turn."
-  const a = defOf(ctx, o.defId).abilities[index];
+  const a = defOf(ctx, defId).abilities[index];
   // "Whenever one or more ...": once for events collected together.
   if (a?.kind === 'triggered' && a.batch) {
     const key = `${o.id}:${o.zcc}:${index}`;
@@ -271,7 +278,7 @@ function queue(
   }
   const pending = {
     source: { id: o.id, zcc: o.zcc },
-    sourceDefId: o.defId,
+    sourceDefId: defId,
     abilityIndex: index,
     controller,
     ...(subject ? { subject: { id: subject.id, zcc: subject.zcc } } : {}),
@@ -1424,6 +1431,15 @@ function detectAnimal(ctx: Ctx, ev: GameEvent): void {
   def(ctx, o.id).abilities.forEach((a, i) => {
     if (a.kind === 'triggered' && a.trigger.on === 'becomesTapped') queue(ctx, o, i, o.controller);
   });
+  // Marvel Super Heroes Jumpstart (Young Avengers): "Whenever equipped creature becomes tapped" (Hawkeye's Bow).
+  for (const eq of ctx.s.battlefield) {
+    const e = ctx.s.objects[eq]!;
+    if (e.attachedTo !== o.id) continue;
+    def(ctx, eq).abilities.forEach((a, i) => {
+      if (a.kind === 'triggered' && a.trigger.on === 'equippedBecomesTapped')
+        queue(ctx, e, i, e.controller, o);
+    });
+  }
 }
 
 // ---------------------------------------------------------------------------
