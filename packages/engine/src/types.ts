@@ -163,7 +163,13 @@ export interface CardDefinition {
     altLabel?: string;
   };
   /** Costs {amount} less if its first target matches (Dire Downdraft: an attacking or tapped creature). */
-  costReductionIfTarget?: { filter: CardFilter; amount: number };
+  costReductionIfTarget?: {
+    filter: CardFilter;
+    amount: number;
+    // Secrets of Strixhaven (14b): Brush Off ("costs {1}{U} less")
+    /** One pip of this colour is also taken off the cost. */
+    alsoColored?: Color;
+  };
   /** What it does when cast with flashback, if different ("if this spell was cast from a graveyard"). */
   flashbackSpell?: SpellDef;
   // Doom Prevails (9e).
@@ -383,6 +389,9 @@ export interface CostDef {
   returnSelf?: boolean;
   /** Exile an instant or sorcery card from your hand with three refine counters (Uvilda, Dean of Perfection). */
   exileRefine?: boolean;
+  // Secrets of Strixhaven (14b): Harmonized Trio
+  /** Tap this many other untapped creatures you control (the engine picks the least useful). */
+  tapOtherCreatures?: number;
 }
 
 export type TriggerDef =
@@ -507,7 +516,14 @@ export type TriggerDef =
    * Whenever you put +1/+1 counters on a creature you control (Stocking the
    * Pantry); "that creature", "that many". Captain Marvel: another one, matching the filter.
    */
-  | { on: 'youPutCounters'; other?: boolean; filter?: CardFilter }
+  | {
+      on: 'youPutCounters';
+      other?: boolean;
+      filter?: CardFilter;
+      // Secrets of Strixhaven (14b): Pensive Professor
+      /** Only counters put on the source itself. */
+      onlySelf?: boolean;
+    }
   /** At the beginning of your draw step. */
   | { on: 'beginningOfDraw' }
   /** Whenever a creature you control becomes the target of an opponent's spell or ability (Pawpatch Recruit). */
@@ -791,6 +807,9 @@ export interface CardFilter {
   chosenNameOfSource?: boolean;
   /** Not legendary. */
   nonlegendary?: boolean;
+  // Secrets of Strixhaven (14b): Matterbending Mage
+  /** Its mana cost has {X} in it. */
+  hasX?: boolean;
   /** Shares a creature type with its controller's commander (Folk Hero). */
   sharesTypeWithCommander?: boolean;
   // Secrets of Strixhaven (14b): Nita, Forum Conciliator
@@ -944,7 +963,12 @@ export type Amount =
   /** Different mana values among nonland cards you own in exile with study counters (Kianne). */
   | { count: 'differentStudyManaValues' }
   /** Half the mana value of the Ref'd card, rounded up (Torrent Sculptor). */
-  | { halfManaValueUpOf: Ref };
+  | { halfManaValueUpOf: Ref }
+  // Secrets of Strixhaven (14b)
+  /** Total toughness of the creatures you control (Orysa, Tide Choreographer). */
+  | { count: 'totalToughnessOfCreaturesYouControl' }
+  /** Cards you've drawn this turn (Fractal Anomaly). */
+  | { count: 'cardsDrawnThisTurn' };
 
 export type EffectDef =
   | { kind: 'may'; effects: EffectDef[]; cost?: ManaCost }
@@ -1114,6 +1138,9 @@ export type EffectDef =
       attacking?: boolean;
       /** A creature type it has in addition (Loki: Illusion). */
       addSubtype?: string;
+      // Secrets of Strixhaven (14b): Echocasting Symposium
+      /** The token is created under the control of this player target. */
+      underTarget?: number;
     }
   /** Choose a color (or a creature type) for the source, as it enters. */
   | { kind: 'chooseColor' }
@@ -2077,6 +2104,11 @@ export interface PlayerState {
   // Secrets of Strixhaven (14a): paradigm
   /** Paradigm spells (card ids) this player has resolved: a free copy at each of their first main phases. */
   paradigms?: CardDefId[];
+  // Secrets of Strixhaven (14b): Mana Sculpt, Wisdom of Ages
+  /** {C} to add at the beginning of this player's next main phase. */
+  pendingMainMana?: number;
+  /** "You have no maximum hand size for the rest of the game." */
+  noMaxHandSize?: boolean;
   // Strixhaven (13b): Maelstrom Muse
   /** The next instant or sorcery spell cast on `turn` costs `amount` less. */
   nextSpellDiscount?: { turn: number; amount: number };

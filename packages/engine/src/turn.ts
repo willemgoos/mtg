@@ -270,7 +270,8 @@ function enterStep(ctx: Ctx, step: Step): void {
             (a) => a.kind === 'static' && a.effect.kind === 'noMaxHandSize',
           ),
       );
-      const excess = noMax ? 0 : s.players[ap].hand.length - HAND_SIZE;
+      // Secrets of Strixhaven (14b): Wisdom of Ages.
+      const excess = noMax || s.players[ap].noMaxHandSize ? 0 : s.players[ap].hand.length - HAND_SIZE;
       if (excess > 0) {
         s.decision = { kind: 'discardToHandSize', player: ap, count: excess };
         return;

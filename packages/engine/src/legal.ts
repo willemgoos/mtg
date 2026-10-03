@@ -32,6 +32,7 @@ import {
   wardCost,
   LOYALTY_KEY,
   tokensToTap,
+  creaturesToTap,
   wardLife,
   wardPayable,
 } from './stack.ts';
@@ -547,6 +548,12 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
       const mana = abilityManaCost(ctx, source, a);
       if (!canPayFrom(mana, usable)) return;
       if (a.cost.tapTokens && tokensToTap(ctx, player, source).length < a.cost.tapTokens) return;
+      // Secrets of Strixhaven (14b): Harmonized Trio.
+      if (
+        a.cost.tapOtherCreatures &&
+        creaturesToTap(ctx, player, source).length < a.cost.tapOtherCreatures
+      )
+        return;
       if (a.cost.crew && !crewFor(ctx, player, source, a.cost.crew)) return;
       if (
         a.cost.sacrificeArtifacts &&
