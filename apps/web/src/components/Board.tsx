@@ -1476,6 +1476,11 @@ function castLabel(defId: CardDefId, a: Action): string {
   if (!def?.kicker) return 'Cast';
   if (def.kicker.as === 'overload')
     return a.kicked ? `Overload (each, ${manaText(def.kicker.cost)} more)` : 'One target';
+  // Strixhaven (13b): "you may pay {1}{B} rather than pay this spell's mana cost" (Baleful Mastery).
+  if (def.kicker.as === 'alternative')
+    return a.kicked
+      ? `Pay ${manaText({ ...def.manaCost, generic: def.manaCost.generic + def.kicker.cost.generic })} instead (an opponent draws a card)`
+      : `Pay ${manaText(def.manaCost)}`;
   if (def.kicker.as === 'gift')
     return a.kicked ? `Promise ${giftText(def)} to your opponent` : 'No gift';
   if (def.kicker.as === 'offspring')

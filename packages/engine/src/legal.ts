@@ -28,6 +28,7 @@ import {
   graveyardCostCard,
   countersYouControl,
   hasStatic,
+  hasTargetCostReduction,
   wardCost,
   LOYALTY_KEY,
   tokensToTap,
@@ -324,7 +325,9 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
             const teamwork = teamworkFor(ctx, player, card, { kicked: v.kicked });
             if (v.kicked && d.kicker?.teamwork !== undefined && !teamwork) continue;
             const base = castCost(ctx, player, card, choice);
-            if (!canPayFrom(base, pool) && !d.costReductionIfTarget) continue;
+            // Strixhaven (13b): Killian also lowers the cost by what the spell targets.
+            const targetDiscount = !!d.costReductionIfTarget || hasTargetCostReduction(ctx, player);
+            if (!canPayFrom(base, pool) && !targetDiscount) continue;
             const extra = {
               ...(v.mode !== undefined ? { mode: v.mode } : {}),
               ...(v.kicked ? { kicked: true } : {}),
@@ -355,11 +358,11 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
               for (const targets of combosFor(specs, card, sacrifice)) {
                 const ward = wardCost(ctx, player, targets);
                 // Dire Downdraft costs less with some targets.
-                const cost = d.costReductionIfTarget
+                const cost = targetDiscount
                   ? castCost(ctx, player, card, choice, targets)
                   : base;
                 if (
-                  (ward.generic || d.costReductionIfTarget) &&
+                  (ward.generic || targetDiscount) &&
                   !canPayFrom(addCosts(cost, ward), pool)
                 )
                   continue;

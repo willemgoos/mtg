@@ -529,6 +529,8 @@ export function matchesFilter(
     !Object.values(obj(ctx, id).counters ?? {}).some((n) => n > 0)
   )
     return false;
+  // Strixhaven (13b): monocolored (Vanishing Verse).
+  if (filter.monocolored && def(ctx, id).colors.length !== 1) return false;
   if (filter.commander && !isCommander(ctx, id)) return false;
   if (filter.supertypes && !filter.supertypes.some((t) => def(ctx, id).supertypes.includes(t)))
     return false;
@@ -597,6 +599,8 @@ export function cardMatches(
     return false;
   if (filter.colors && !filter.colors.some((color) => d.colors.includes(color))) return false;
   if (filter.notTypes?.some((t) => d.types.includes(t))) return false;
+  // Strixhaven (13b): monocolored.
+  if (filter.monocolored && d.colors.length !== 1) return false;
   if (filter.commander && !isCommander(ctx, id)) return false;
   if (filter.supertypes && !filter.supertypes.some((t) => d.supertypes.includes(t))) return false;
   const mv = manaValue(d.manaCost);

@@ -216,6 +216,18 @@ function removeCounters(ctx: Ctx, player: PlayerId, n: number): void {
   }
 }
 
+// Strixhaven (13b): Killian, Ink Duelist.
+/** Does `player` control a permanent that makes spells cost less by what they target? */
+export function hasTargetCostReduction(ctx: Ctx, player: PlayerId): boolean {
+  return ctx.s.battlefield.some(
+    (id) =>
+      obj(ctx, id).controller === player &&
+      def(ctx, id).abilities.some(
+        (a) => a.kind === 'static' && a.effect.kind === 'spellsCostLessTargeting',
+      ),
+  );
+}
+
 /** The cost to pay for casting `card` this way, from where it is now. */
 export function castCost(
   ctx: Ctx,
@@ -252,6 +264,14 @@ export function castCost(
           cardMatches(ctx, card, a.effect.filter, id)
         )
           reduce += countOf(ctx, player, a.effect.amount, false, id);
+        // Strixhaven (13b): Killian, Ink Duelist.
+        if (a.kind === 'static' && a.effect.kind === 'spellsCostLessTargeting') {
+          const cheaper = a.effect;
+          if (
+            targets?.some((t) => 'object' in t && matchesFilter(ctx, t.object.id, cheaper.filter))
+          )
+            reduce += cheaper.amount;
+        }
         if (
           a.kind === 'static' &&
           a.effect.kind === 'spellsCostLessIf' &&

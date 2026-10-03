@@ -145,7 +145,7 @@ export interface CardDefinition {
      * Kicker under another name: 'offspring' (a creature also makes a 1/1 token
      * copy) or 'gift' (a free promise of a gift to an opponent).
      */
-    as?: 'offspring' | 'gift' | 'overload';
+    as?: 'offspring' | 'gift' | 'overload' | 'alternative';
     /** A permanent's gift: given to an opponent as it resolves, if promised (Scrapshooter). */
     gift?: EffectDef;
     // Teamwork (Marvel Super Heroes)
@@ -670,6 +670,9 @@ export interface CardFilter {
   chosenTypeOfSource?: boolean;
   /** Has counters on it (Innkeeper's Talent). */
   hasCounters?: boolean;
+  // Strixhaven (13b): monocolored
+  /** Exactly one colour (Vanishing Verse). */
+  monocolored?: boolean;
   // The Fantastic Four (9d).
   /** A card with this id ("a creature named Silver Surfer"). */
   named?: CardDefId;
@@ -1501,6 +1504,9 @@ export type StaticDef =
   /** Instant and sorcery spells you cast cost {N} less (Archmage of Runes). */
   | { kind: 'instantsAndSorceriesCostLess'; amount: number }
   | { kind: 'spellsCostLess'; filter: CardFilter; amount: Amount }
+  // Strixhaven (13b): Killian, Ink Duelist
+  /** Spells you cast that target a permanent matching the filter cost {N} less. */
+  | { kind: 'spellsCostLessTargeting'; filter: CardFilter; amount: number }
   | { kind: 'instantsAndSorceriesUncounterable' }
   /** You have no maximum hand size. */
   | { kind: 'noMaxHandSize' }
