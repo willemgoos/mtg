@@ -78,3 +78,9 @@ from) when it's fixed. Older phases keep their own "Simplifications" lists in `d
 - [ ] The Vision and Scarlet Witch: the {R} it adds empties between steps, like all mana in the engine.
 - [ ] Hulk's Thunderclap: the beheld creature or card isn't chosen or shown; the behold version is offered whenever a Gamma
       creature is available, and needs a noncreature artifact or enchantment to target.
+- [ ] Secure Detention: mana that another permanent grants the locked one (Clement-style) is still usable.
+- [ ] Rhino, Terrible Trampler: its three counters are three separate triggers (one counter each, targets chosen per trigger)
+      plus a separate destroy trigger, instead of one trigger.
+- [ ] Rhino's Rampage: the noncreature artifact is chosen as the spell is cast, not by a reflexive trigger on excess damage.
+- [ ] Powerful Broker: can only target a permanent (players have no counters in this engine).
+- [ ] Voracious Brood: its entering counters only apply when it's cast.
