@@ -22,6 +22,8 @@ export interface CastVariant {
   sacrifice?: boolean;
   /** Needs a forage as an additional cost (Feed the Cycle). */
   forage?: boolean;
+  /** Strixhaven Brawl (15b, b): needs a card discarded (true) or explicitly not (false): Bone Shards, Bitter Triumph. */
+  discard?: boolean;
   /** Cast from the graveyard by removing this many +1/+1 counters (Quilled Greatwurm). */
   removeCounters?: number;
   /** Times multikicker was paid (Batroc). */
@@ -123,7 +125,11 @@ export function castVariants(d: CardDefinition, zone: ZoneName, via?: CastVia): 
     );
   }
   // Dragon Man: cast from the graveyard as from the hand (plus a discard, see legal.ts).
-  if (zone === 'graveyard' && d.castFromGraveyardWithDiscard) return castVariants(d, 'hand');
+  // Strixhaven Brawl (15b, b): Demonic Embrace also costs life from the graveyard.
+  if (zone === 'graveyard' && d.castFromGraveyardWithDiscard)
+    return castVariants(d, 'hand').map((v) =>
+      d.graveyardCastLife ? { ...v, life: d.graveyardCastLife } : v,
+    );
   // Strixhaven Brawl (15a): Squee, the Immortal.
   if (zone === 'graveyard' && d.castFromGraveyardOrExile) return castVariants(d, 'hand');
   // Mayhem: from the graveyard for its mayhem cost (legal.ts checks it was discarded this turn).
@@ -161,6 +167,17 @@ export function castVariants(d: CardDefinition, zone: ZoneName, via?: CastVia): 
       });
     return modes;
   }
+  // Strixhaven Brawl (15b, b): Bone Shards (sacrifice a creature or discard a card), Bitter Triumph (discard a card or pay 3 life).
+  if (d.discardOrSacrifice)
+    return [
+      { cost, spell: d.spell ?? null, sacrifice: true, discard: false, ...extra },
+      { cost, spell: d.spell ?? null, discard: true, ...extra },
+    ];
+  if (d.discardOrLife)
+    return [
+      { cost, spell: d.spell ?? null, discard: true, ...extra },
+      { cost, spell: d.spell ?? null, life: d.discardOrLife, discard: false, ...extra },
+    ];
   if (d.sacrificeCreatureToCast)
     return [{ cost, spell: d.spell ?? null, sacrifice: true, ...extra }];
   if (d.forageOrPay)
@@ -213,6 +230,7 @@ export function variantOf(
     kicked?: boolean | undefined;
     sacrifice?: string | undefined;
     forage?: string | undefined;
+    discard?: string | undefined;
     paws?: number[] | undefined;
     kickCount?: number | undefined;
   },
@@ -224,7 +242,9 @@ export function variantOf(
       (v.paws ?? []).join() === (choice.paws ?? []).join() &&
       !!v.kicked === !!choice.kicked &&
       !!v.sacrifice === !!choice.sacrifice &&
-      !!v.forage === !!choice.forage,
+      !!v.forage === !!choice.forage &&
+      // Strixhaven Brawl (15b, b): a variant that says whether a card is discarded must agree.
+      (v.discard === undefined || v.discard === !!choice.discard),
   );
 }
 

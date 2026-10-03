@@ -474,6 +474,26 @@ function detect(ctx: Ctx, ev: GameEvent): void {
           });
         }
       }
+      // Strixhaven Brawl (15b, b): Wicked Role, "When this token is put into a graveyard from the battlefield".
+      // The token has already ceased to exist, so a stand-in carries the trigger.
+      if (ev.from === 'battlefield' && ev.to === 'graveyard' && movedDef.isToken && ev.controller) {
+        const ghost = {
+          id: ev.id,
+          defId: ev.defId,
+          owner: ev.controller,
+          controller: ev.controller,
+          zone: 'graveyard',
+          zcc: 0,
+          timestamp: 0,
+          tapped: false,
+          summoningSick: false,
+          isToken: true,
+        } as GameObject;
+        movedDef.abilities.forEach((a, i) => {
+          if (a.kind === 'triggered' && a.trigger.on === 'tokenToGraveyard')
+            queue(ctx, ghost, i, ev.controller!);
+        });
+      }
       // Strixhaven Brawl (15a): Luminous Phantom, "whenever another creature you control leaves the battlefield".
       if (ev.from === 'battlefield' && movedDef.types.includes('Creature')) {
         const wasUnder = ev.controller ?? moved?.controller ?? moved?.owner;
@@ -788,6 +808,9 @@ function detect(ctx: Ctx, ev: GameEvent): void {
           o.controller === ev.player &&
           ((a.trigger.on === 'youGainLife' && ev.delta > 0) ||
             (a.trigger.on === 'youGainOrLoseLife' && (!a.trigger.duringYourTurn || yours))),
+        undefined,
+        // Strixhaven Brawl (15b, b): Enduring Tenacity, "that much".
+        ev.delta,
       );
       // Secrets of Strixhaven (14b): Professor Dellian Fel's emblem: "whenever you gain life, ... that much".
       if (ev.delta > 0)
@@ -1153,6 +1176,8 @@ function detect(ctx: Ctx, ev: GameEvent): void {
         (o, a) =>
           a.trigger.on === 'youSacrifice' &&
           o.controller === ev.player &&
+          // Strixhaven Brawl (15b, b): Gixian Infiltrator, "another permanent".
+          !(a.trigger.filter.other && o.id === ev.id) &&
           defMatches(d, a.trigger.filter),
       );
       return;

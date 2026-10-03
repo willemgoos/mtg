@@ -163,6 +163,12 @@ export const KEYWORDS_AS_ABILITIES = new Set([
   'Learn',
   // Strixhaven Brawl (15a): Alchemy conjure.
   'Conjure',
+  // Strixhaven Brawl (15b, b): rules text lives in the behaviour.
+  'Draft from a spellbook',
+  'Double team',
+  'Fabricate',
+  'Blight',
+  'Role token',
   // Final Fantasy (11a).
   'Job select',
   'Tiered',
@@ -207,6 +213,8 @@ export function parseTypeLine(line: string) {
   const types: CardType[] = [];
   for (const w of left!.trim().split(/\s+/)) {
     if (w === 'Basic' || w === 'Legendary') supertypes.push(w);
+    // Strixhaven Brawl (15b, b): the Snow supertype has no rules of its own here (Snow-Covered Swamp).
+    else if (w === 'Snow') continue;
     else types.push(w as CardType);
   }
   const subtypes = right.trim() ? right.trim().split(/\s+/) : [];
@@ -242,6 +250,8 @@ export function wardCostOf(oracle: string): CardDefinition['wardCost'] | undefin
   const life = /Ward—Pay (\d+) life\./.exec(oracle);
   if (life) return { mana: none, life: Number(life[1]) };
   if (/Ward—Discard a card\./.test(oracle)) return { mana: none, discard: true };
+  // Strixhaven Brawl (15b, b): Vein Ripper.
+  if (/Ward—Sacrifice a creature\./.test(oracle)) return { mana: none, sacrificeCreature: true };
   if (/Ward—Sacrifice a Food\./.test(oracle)) return { mana: none, sacrificeFood: true };
   const m = /Ward(?: |—)\{(\d+)\}(?:, Pay (\d+) life)?/.exec(oracle);
   if (!m) return undefined;

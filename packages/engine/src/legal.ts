@@ -395,6 +395,7 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
               kicked: v.kicked,
               kickCount: v.kickCount,
               sacrifice: v.sacrifice ? 'x' : undefined,
+              discard: v.discard ? 'x' : undefined,
               forage: v.forage ? 'graveyard' : undefined,
               x,
             };
@@ -429,7 +430,11 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
                     obj(ctx, id).controller === player && matchesFilter(ctx, id, kickPermanent),
                 )
               : d.sacrificeToCastFilter
-                ? creatures.filter((id) => matchesFilter(ctx, id, d.sacrificeToCastFilter))
+                ? // Strixhaven Brawl (15b, b): a filter naming types (Deadly Dispute: artifact or creature) may pick other permanents.
+                  (d.sacrificeToCastFilter.anyOf || d.sacrificeToCastFilter.types
+                    ? s.battlefield.filter((id) => obj(ctx, id).controller === player)
+                    : creatures
+                  ).filter((id) => matchesFilter(ctx, id, d.sacrificeToCastFilter))
                 : creatures;
             for (const sacrifice of v.sacrifice ? sacrificeable : [undefined]) {
               for (const targets of combosFor(specs, card, sacrifice)) {
@@ -442,8 +447,10 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
                   continue;
                 if (wardLife(ctx, player, targets) > s.players[player].life) continue;
                 if (!wardPayable(ctx, player, targets, zone === 'hand' ? 1 : 0)) continue;
+                // Strixhaven Brawl (15b, b): Bone Shards and Bitter Triumph: this way of casting discards a card.
+                const vDiscards = v.discard ? ps.hand.filter((id) => id !== card) : discards;
                 for (const forage of forages)
-                  for (const discard of discards) {
+                  for (const discard of vDiscards) {
                     // Paying without what this cast sacrifices.
                     const spent = [
                       // Final Fantasy (11b): a land returned for kicker may tap for mana first.

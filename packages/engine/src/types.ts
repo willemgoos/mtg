@@ -121,7 +121,14 @@ export interface CardDefinition {
   /** "As an additional cost to cast this spell, sacrifice a creature" (Arbiter of Woe). */
   sacrificeCreatureToCast?: boolean;
   /** What ward costs an opponent (default {2}). Ovika: {3} and 3 life. */
-  wardCost?: { mana: ManaCost; life?: number; discard?: boolean; sacrificeFood?: boolean };
+  wardCost?: {
+    mana: ManaCost;
+    life?: number;
+    discard?: boolean;
+    sacrificeFood?: boolean;
+    // Strixhaven Brawl (15b, b): Vein Ripper, "Ward—Sacrifice a creature."
+    sacrificeCreature?: boolean;
+  };
   /** "This spell can't be countered." */
   uncounterable?: boolean;
   // Secrets of Strixhaven (14b): Choreographed Sparks
@@ -209,7 +216,12 @@ export interface CardDefinition {
   /** It enters with X +1/+1 counters (Royal Talon Fighter Jet). */
   entersWithXCounters?: boolean;
   /** Costs {amount} less while the condition holds (Heroic Return, Avenge). */
-  costReductionIf?: { condition: ConditionDef; amount: number };
+  costReductionIf?: {
+    condition: ConditionDef;
+    amount: number;
+    // Strixhaven Brawl (15b, b): Blasphemous Edict ("pay {B} rather than {3}{B}{B}"): a pip of this colour comes off too.
+    alsoColored?: Color;
+  };
   /** "You may sacrifice any number of nonland permanents. This spell costs {1} less for each" (Rottenmouth Viper). */
   sacrificeAnyForReduction?: boolean;
   /** Strixhaven (13c): Plumb the Forbidden: "you may sacrifice one or more creatures; when you do, copy this spell for each". */
@@ -281,6 +293,13 @@ export interface CardDefinition {
   disturb?: boolean;
   /** Strixhaven Brawl (15a): "If this would be put into a graveyard from anywhere, exile it instead" (Luminous Phantom). */
   exileInsteadOfGraveyard?: boolean;
+  // Strixhaven Brawl (15b, b): additional costs with a choice
+  /** "As an additional cost, sacrifice a creature or discard a card" (Bone Shards). */
+  discardOrSacrifice?: boolean;
+  /** "As an additional cost, discard a card or pay N life" (Bitter Triumph). */
+  discardOrLife?: number;
+  /** Cast from the graveyard (with `castFromGraveyardWithDiscard`) paying this much life too (Demonic Embrace). */
+  graveyardCastLife?: number;
 }
 
 export type AbilityDef =
@@ -630,7 +649,10 @@ export type TriggerDef =
   | { on: 'opponentCreatureExiledInstead' }
   // Strixhaven (13c): Strixhaven Stadium
   /** Whenever a creature (any controller's) deals combat damage to you. */
-  | { on: 'combatDamageToYou' };
+  | { on: 'combatDamageToYou' }
+  // Strixhaven Brawl (15b, b): Wicked Role
+  /** When this token is put into a graveyard from the battlefield (it looks back from where it went). */
+  | { on: 'tokenToGraveyard' };
 
 export type ConditionDef =
   | { kind: 'controlsPermanents'; filter: CardFilter; min: number }
@@ -840,6 +862,9 @@ export interface CardFilter {
   leftAttacking?: boolean;
   /** Attached to the source (Winter Soldier: "for each Equipment attached to him"). */
   attachedToSource?: boolean;
+  // Strixhaven Brawl (15b, b): Lord Skitter's Blessing
+  /** Has an Aura attached ("an enchanted creature"). */
+  enchanted?: boolean;
   /** Not the permanent the source is attached to (Secret Invasion: "other than enchanted creature"). */
   notAttachedHost?: boolean;
   /** Its mana value is odd or even (Thanos). */
@@ -2025,7 +2050,10 @@ export type StaticDef =
   /** You can't cast permanent spells (Codie, Vociferous Codex). */
   | { kind: 'cantCastPermanentSpells' }
   /** Each other planeswalker you control has this permanent's loyalty abilities (Kasmina, Enigma Sage). */
-  | { kind: 'sharesLoyaltyAbilities' };
+  | { kind: 'sharesLoyaltyAbilities' }
+  // Strixhaven Brawl (15b, b): Nowhere to Run
+  /** Creatures your opponents control can be targeted as though they didn't have hexproof; their ward doesn't trigger. */
+  | { kind: 'ignoreHexproofWard' };
 
 export type CardDb = ReadonlyMap<CardDefId, CardDefinition>;
 
@@ -2081,6 +2109,8 @@ export interface GameObject {
   addedSubtypes?: string[];
   /** Subtypes it had gained as it last left the battlefield. */
   lastAddedSubtypes?: string[];
+  // Strixhaven Brawl (15b, b): Terrors of the Track's duplicate has lost double team.
+  noDoubleTeam?: boolean;
   // Strixhaven Brawl (15a): Enduring Courage
   /** It's not a creature (it came back as an enchantment). */
   notCreature?: boolean;

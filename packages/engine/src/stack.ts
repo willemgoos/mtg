@@ -1,4 +1,5 @@
-import { power } from './characteristics.ts';
+import { creaturesOnBattlefield, power } from './characteristics.ts';
+import { ignoresHexproofAndWard } from './brawl-15b-b-effects.ts';
 import {
   type Ctx,
   def,
@@ -153,6 +154,8 @@ function wardedTargets(ctx: Ctx, player: PlayerId, targets: readonly TargetChoic
     if (!('object' in t)) return [];
     const o = ctx.s.objects[t.object.id];
     if (!o || o.zone !== 'battlefield' || o.controller === player) return [];
+    // Strixhaven Brawl (15b, b): Nowhere to Run: their ward abilities don't trigger.
+    if (ignoresHexproofAndWard(ctx, o.controller)) return [];
     if (hasKeyword(ctx, o.id, 'ward'))
       return [def(ctx, o.id).wardCost ?? { mana: { generic: 2, colored: {} } }];
     if (hasKeyword(ctx, o.id, 'wardOne')) return [{ mana: { generic: 1, colored: {} } }];
@@ -181,8 +184,12 @@ export function wardPayable(
   const w = wardedTargets(ctx, player, targets);
   const discards = w.filter((x) => x.discard).length;
   const foods = w.filter((x) => x.sacrificeFood).length;
+  // Strixhaven Brawl (15b, b): Vein Ripper, ward—sacrifice a creature.
+  const creatures = w.filter((x) => x.sacrificeCreature).length;
   return (
-    ctx.s.players[player].hand.length - inHand >= discards && foodsOf(ctx, player).length >= foods
+    ctx.s.players[player].hand.length - inHand >= discards &&
+    foodsOf(ctx, player).length >= foods &&
+    (creatures === 0 || creaturesOnBattlefield(ctx, player).length >= creatures)
   );
 }
 
@@ -203,6 +210,13 @@ function payWardExtras(ctx: Ctx, player: PlayerId, targets: readonly TargetChoic
     if (w.sacrificeFood) {
       const food = foodsOf(ctx, player)[0];
       if (food) sacrificePermanent(ctx, food);
+    }
+    // Strixhaven Brawl (15b, b): the least useful creature (lowest power) is sacrificed.
+    if (w.sacrificeCreature) {
+      const least = creaturesOnBattlefield(ctx, player).sort(
+        (a, b) => power(ctx, a.id) - power(ctx, b.id),
+      )[0];
+      if (least) sacrificePermanent(ctx, least.id);
     }
   }
 }
@@ -281,7 +295,11 @@ export function castCost(
     'object' in first &&
     matchesFilter(ctx, first.object.id, d.costReductionIfTarget.filter)
       ? d.costReductionIfTarget.alsoColored
-      : undefined;
+      : // Strixhaven Brawl (15b, b): Blasphemous Edict.
+        d.costReductionIf?.alsoColored &&
+          checkCondition(ctx, d.costReductionIf.condition, player, o)
+        ? d.costReductionIf.alsoColored
+        : undefined;
   for (const id of ctx.s.battlefield)
     if (obj(ctx, id).controller === player)
       for (const a of def(ctx, id).abilities) {

@@ -573,6 +573,14 @@ export function matchesFilter(
     )
   )
     return false;
+  // Strixhaven Brawl (15b, b): "an enchanted creature".
+  if (
+    filter.enchanted &&
+    !ctx.s.battlefield.some(
+      (e) => obj(ctx, e).attachedTo === id && def(ctx, e).subtypes.includes('Aura'),
+    )
+  )
+    return false;
   if (filter.damaged && obj(ctx, id).damage <= 0) return false;
   if (
     filter.hasCounters &&
