@@ -7,6 +7,11 @@ import {
   SILVERQUILL_SOS_BACKS,
   SILVERQUILL_SOS_TOKENS,
 } from './sos/silverquill.ts';
+import {
+  SOS_WITHERBLOOM,
+  SOS_WITHERBLOOM_BACKS,
+  SOS_WITHERBLOOM_TOKENS,
+} from './sos/witherbloom.ts';
 
 /**
  * Secrets of Strixhaven (SOS) card behaviour, one file per group of decks in
@@ -17,13 +22,18 @@ export const SECRETS_OF_STRIXHAVEN_BEHAVIORS: Record<string, Behavior> = {
   ...PREPARE_SPIKE,
   ...SHARED_14A,
   ...SILVERQUILL_SOS,
+  ...SOS_WITHERBLOOM,
 };
 
 /** Back faces of double-faced cards: not cards of their own, so not in the pool. */
 export const SECRETS_OF_STRIXHAVEN_BACK_FACES: Record<string, Behavior> = {
   ...PREPARE_SPIKE_BACKS,
   ...SILVERQUILL_SOS_BACKS,
+  ...SOS_WITHERBLOOM_BACKS,
 };
 
-/** Secrets of Strixhaven tokens (the 1/1 Inkling). */
-export const SECRETS_OF_STRIXHAVEN_TOKENS: CardDefinition[] = [...SILVERQUILL_SOS_TOKENS];
+/** Secrets of Strixhaven tokens (Inkling, Pest). */
+export const SECRETS_OF_STRIXHAVEN_TOKENS: CardDefinition[] = [
+  ...SILVERQUILL_SOS_TOKENS,
+  ...SOS_WITHERBLOOM_TOKENS,
+];

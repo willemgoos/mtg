@@ -1183,6 +1183,8 @@ export function runEffects(
           ...(e.canBin ? { canBin: true } : {}),
           // Final Fantasy (11b): look for a land (Ignis Scientia).
           ...(e.to ? { to: e.to } : {}),
+          // Secrets of Strixhaven (14a): Follow the Lumarets.
+          ...(e.followUp ? { followUp: e.followUp } : {}),
           resume,
           thenPriority,
         };

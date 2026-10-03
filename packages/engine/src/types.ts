@@ -643,6 +643,9 @@ export type ConditionDef =
   | { kind: 'sourcePowerAtLeast'; min: number }
   /** A chosen target is controlled by you (Dreamdew Entrancer). */
   | { kind: 'targetControlledByYou'; target: number }
+  // Secrets of Strixhaven (14a): Lluwen, Exchange Student
+  /** The source isn't prepared. */
+  | { kind: 'notPrepared' }
   /** At least one condition holds. */
   | { kind: 'any'; of: ConditionDef[] }
   /** The condition doesn't hold. */
@@ -718,7 +721,8 @@ export interface CardFilter {
   manaValue?: number;
   notSubtype?: string;
   /** Mana value at most this ('sourcePower': the source's power, e.g. as it died). */
-  maxManaValue?: number | 'sourcePower';
+  // Secrets of Strixhaven (14a): Moseo, 'lifeGainedThisTurn' is the life its controller gained this turn.
+  maxManaValue?: number | 'sourcePower' | 'lifeGainedThisTurn';
   /** Put into its current zone this turn (Abyssal Harvester). */
   enteredThisTurn?: boolean;
   /** Same card as the source ("named Charmed Stray"). */
@@ -1416,6 +1420,8 @@ export type EffectDef =
       // Final Fantasy (11b): look for a land
       /** The card taken goes onto the battlefield tapped instead (Ignis Scientia: a land). */
       to?: 'battlefieldTapped';
+      // Secrets of Strixhaven (14a): Follow the Lumarets. After the first pick, choose another card matching this from the rest.
+      followUp?: CardFilter;
     }
   /** Exile the top N; you may play them until the end of this turn or of your next turn. */
   | {
