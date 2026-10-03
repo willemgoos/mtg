@@ -1,4 +1,4 @@
-import { isCreature } from './characteristics.ts';
+import { isCreature, matchesFilter } from './characteristics.ts';
 import {
   addCounters,
   type Ctx,
@@ -22,10 +22,13 @@ const isCreatureCard = (ctx: Ctx, id: ObjectId) => def(ctx, id).types.includes('
 export const MSH_EFFECTS: Record<string, CustomEffect> = {
   // Marvel Super Heroes Jumpstart (Trained)
   /** She-Hulk, Attorney-at-Law: "double the number of +1/+1 counters on each creature you control". */
-  doubleCountersOnYourCreatures(ctx, es) {
+  doubleCountersOnYourCreatures(ctx, es, params) {
+    // Marvel Super Heroes Jumpstart (Incredible): Hulk, Strongest There Is only doubles Gamma creatures.
+    const subtype = (params as { subtype?: string } | undefined)?.subtype;
     for (const id of [...ctx.s.battlefield]) {
       const o = obj(ctx, id);
       if (o.controller !== es.controller || !isCreature(ctx, id) || !o.plusOneCounters) continue;
+      if (subtype && !matchesFilter(ctx, id, { subtype })) continue;
       addCounters(ctx, id, o.plusOneCounters);
     }
   },
