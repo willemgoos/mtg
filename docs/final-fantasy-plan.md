@@ -242,6 +242,30 @@ four decks. Three more FIC Brawl decks followed (9 December 2025, "Arena Store d
 - Fixed on the way: "whenever equipped creature attacks" triggered twice (two code paths) and ignored its intervening
   "if"; now once, with the condition checked.
 
+11c (group 2) (red, green, multicoloured and land rares and mythics, meld; `fin/rares-2.ts`):
+
+- Meld: Vanille's object becomes Ragnarok (its back face, `front` = Vanille) and remembers Fang (`meldedWith`), which waits in
+  exile and follows Ragnarok to whatever zone it goes to. Ragnarok's mana value is Vanille's alone.
+- Hideaway: the exiled card is face down only in name (exile is visible to both players). A hidden land is put onto the
+  battlefield (not played); a hidden spell is cast with the usual "cast for free" prompt.
+- Engine picks (no prompt): Gilgamesh puts every Equipment found onto the battlefield and attaches the costliest to
+  Gilgamesh (or another Samurai) after the job select triggers; Kefka's discards are each player's lowest mana value card;
+  Phoenix III picks the subset with the greatest total mana value; Choco takes the costliest nonland card and puts every land
+  onto the battlefield; Sin's card is random (as printed).
+- Vaan: a nonland card he exiles stays castable by you while exiled (paying its cost, not "now or never"); only a land makes the
+  Treasure.
+- Joshua's "discard up to two, then draw that many" is two "you may discard a card; if you do, draw" in a row.
+- Tellah counts the spell's mana value, not the mana spent on it.
+- Vivi's {0} mana ability uses the stack (like Capital City's). Starting Town's "{T}, Pay 1 life" is 1 damage as the mana is
+  spent (like a Talisman). Its "first, second, or third turn" is turn 6 or earlier on your turn (extra turns aside).
+- Summon: Brynhildr II/III's haste lasts as long as the creature stays (not until end of turn). G.F. Cerberus's copies keep the
+  original's targets.
+- Triple Triad's free plays end as the end step begins. Absolute Virtue's protection is hexproof plus prevention of damage from
+  opponents' sources (Auras can still enchant you).
+- The Earth Crystal and The Fire Crystal reduce generic mana only (as all cost reductions here).
+- A Realm Reborn's granted ability is used only when paying costs (it isn't listed as an ability of each permanent).
+- Fixed in passing: `all` / `any` / `not` conditions now pass the trigger's subject to the conditions inside them.
+
 ### Phase 12
 
 (none yet)

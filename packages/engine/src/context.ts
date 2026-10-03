@@ -6,6 +6,7 @@ import { type EffectSource, gainLife } from './effects.ts';
 import type {
   ManaType,
   CardDb,
+  CardDefId,
   CardDefinition,
   GameEvent,
   GameObject,
@@ -286,6 +287,10 @@ export interface MoveOptions {
   // Final Fantasy (11a): saga creatures
   /** Onto the battlefield showing its back face ("return it transformed"). */
   transformed?: boolean;
+  // Final Fantasy (11c): meld
+  /** Onto the battlefield as this melded card, made of it and `meldedWith` (Ragnarok). */
+  meldInto?: CardDefId;
+  meldedWith?: ObjectId;
 }
 
 /**
@@ -446,6 +451,15 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
     }
   }
   if (from === 'exile') delete o.onAdventure;
+  // Final Fantasy (11c): meld. The melded card shows the result; its other half waits in exile.
+  const meldPartner = from === 'battlefield' ? o.meldedWith : undefined;
+  delete o.meldedWith;
+  delete o.equipDiscount;
+  if (to === 'battlefield' && opts.meldInto) {
+    o.front = o.defId;
+    o.defId = opts.meldInto;
+    if (opts.meldedWith) o.meldedWith = opts.meldedWith;
+  }
   delete o.loreRemovedTurn;
   if (o.bonusCounters && to !== 'stack') {
     if (to === 'battlefield') o.plusOneCounters += o.bonusCounters;
@@ -455,6 +469,20 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
   const tappedIf = to === 'battlefield' ? defOf(ctx, o.defId).entersTappedIf : undefined;
   // Eddymurk Crab: "enters tapped if it's not your turn"; check lands and the like.
   if (tappedIf && checkCondition(ctx, tappedIf, o.controller, o)) o.tapped = true;
+  // Final Fantasy (11c): entering permanents. The Wandering Minstrel: lands you control enter untapped.
+  if (
+    o.tapped &&
+    to === 'battlefield' &&
+    defOf(ctx, o.defId).types.includes('Land') &&
+    ctx.s.battlefield.some(
+      (b) =>
+        ctx.s.objects[b]!.controller === o.controller &&
+        def(ctx, b).abilities.some(
+          (a) => a.kind === 'static' && a.effect.kind === 'landsEnterUntapped',
+        ),
+    )
+  )
+    o.tapped = false;
 
   // Tokens cease to exist once they leave the battlefield (rule 111.7).
   const ceases = o.isToken && to !== 'battlefield';
@@ -490,6 +518,12 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
         gainLife(ctx, crystal.controller, a.effect.life);
   }
   if (ceases) delete ctx.s.objects[id];
+  // Final Fantasy (11c): meld. The other half goes where the melded permanent went.
+  const partner = meldPartner ? ctx.s.objects[meldPartner] : undefined;
+  if (partner && partner.zone === 'exile' && o.zone !== 'exile')
+    moveObject(ctx, partner.id, o.zone, {
+      ...(opts.position ? { position: opts.position } : {}),
+    });
   // "Until this leaves the battlefield": the exiled cards come back.
   for (const back of returning ?? [])
     if (ctx.s.objects[back]?.zone === 'exile') moveObject(ctx, back, 'battlefield');
@@ -509,7 +543,9 @@ export function addCounters(ctx: Ctx, id: ObjectId, n: number, name?: string): v
       if (
         a.kind === 'static' &&
         a.effect.kind === 'doubleCounters' &&
-        checkCondition(ctx, a.effect.condition, so.controller, so)
+        checkCondition(ctx, a.effect.condition, so.controller, so) &&
+        // Final Fantasy (11c): The Earth Crystal doubles only +1/+1 counters on creatures.
+        !(a.effect.plusOneOnCreatures && (name || !defOf(ctx, o.defId).types.includes('Creature')))
       )
         n *= 2;
   }

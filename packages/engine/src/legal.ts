@@ -17,7 +17,7 @@ import {
 import { type Ctx, def, obj, other, withBackFace } from './context.ts';
 import { forageChoices } from './forage.ts';
 import { artifactHelpers, canPayFrom, creatureHelpers, hasImprovise, manaSources } from './mana.ts';
-import { castVariants, spellTags } from './spells.ts';
+import { type CastVia, castVariants, spellTags } from './spells.ts';
 import {
   abilityManaCost,
   castCost,
@@ -65,7 +65,10 @@ export function castableCards(ctx: Ctx, player: PlayerId): ObjectId[] {
   const ps = ctx.s.players[player];
   // Brawl: your commander from the command zone.
   const out = [...ps.hand, ...ps.command];
-  const landsFromGraveyard = hasStatic(ctx, player, 'playLandsFromGraveyard');
+  const landsFromGraveyard =
+    hasStatic(ctx, player, 'playLandsFromGraveyard') ||
+    // Final Fantasy (11c): playing from the graveyard (Hades).
+    playsFromGraveyard(ctx, player);
   for (const id of ps.graveyard) {
     const d = def(ctx, id);
     // Conduit of Worlds: "You may play lands from your graveyard."
@@ -159,9 +162,9 @@ export function graveyardVias(
   ctx: Ctx,
   player: PlayerId,
   card: ObjectId,
-): ('festival' | 'osteomancer' | 'conduit')[] {
+): Exclude<CastVia, 'free'>[] {
   const d = def(ctx, card);
-  const out: ('festival' | 'osteomancer' | 'conduit')[] = [];
+  const out: Exclude<CastVia, 'free'>[] = [];
   const instantOrSorcery = d.types.includes('Instant') || d.types.includes('Sorcery');
   if (
     instantOrSorcery &&
@@ -173,7 +176,25 @@ export function graveyardVias(
     out.push('osteomancer');
   // Conduit of Worlds: the card it chose, this turn.
   if (obj(ctx, card).playableUntilTurn === ctx.s.turn.number) out.push('conduit');
+  // Final Fantasy (11c): playing from the graveyard (Noctis: artifacts for 3 life more; Hades: during your turn).
+  if (d.types.includes('Artifact') && hasStatic(ctx, player, 'castArtifactsFromGraveyard'))
+    out.push('noctis');
+  if (playsFromGraveyard(ctx, player)) out.push('hades');
   return out;
+}
+
+/** Final Fantasy (11c): playing from the graveyard. Hades: "you may play cards from your graveyard". */
+export function playsFromGraveyard(ctx: Ctx, player: PlayerId): boolean {
+  return ctx.s.battlefield.some(
+    (id) =>
+      obj(ctx, id).controller === player &&
+      def(ctx, id).abilities.some(
+        (a) =>
+          a.kind === 'static' &&
+          a.effect.kind === 'playFromGraveyard' &&
+          checkCondition(ctx, a.effect.condition, player, obj(ctx, id)),
+      ),
+  );
 }
 
 /** Land plays allowed per turn: one, plus one for each "additional land" effect (Loot). */
@@ -250,7 +271,9 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
       if (
         sorcery &&
         ps.landsPlayedThisTurn < landDrops(ctx, player) &&
-        (zone !== 'graveyard' || hasStatic(ctx, player, 'playLandsFromGraveyard'))
+        (zone !== 'graveyard' ||
+          hasStatic(ctx, player, 'playLandsFromGraveyard') ||
+          playsFromGraveyard(ctx, player))
       )
         out.push({ type: 'playLand', player, card });
       return;
@@ -289,7 +312,7 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
     // The usual ways, plus graveyard casts through other cards.
     // Extract Power: exiled cards played for free.
     const free = zone === 'exile' && obj(ctx, card).playFreeBy === player;
-    const vias: ('festival' | 'osteomancer' | 'conduit' | 'free' | undefined)[] = free
+    const vias: (CastVia | undefined)[] = free
       ? ['free']
       : [
           ...(zone !== 'graveyard' ||

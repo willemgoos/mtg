@@ -184,10 +184,13 @@ export function startTurn(ctx: Ctx, player: PlayerId, noPowerUp = false): void {
   delete s.turn.castDefs;
   // Final Fantasy (11a): saga creatures (Summon: Alexander).
   delete s.turn.creaturesShielded;
-  // Final Fantasy (11c): extra phases and steps.
+  // Final Fantasy (11c): extra phases and steps, life gained, and Lightning's Stagger (until its controller's next turn).
   delete s.turn.combats;
   delete s.turn.endSteps;
   delete s.turn.extraEndSteps;
+  delete s.turn.lifeGained;
+  if (s.staggered?.some((x) => x.by === player))
+    s.staggered = s.staggered.filter((x) => x.by !== player);
   for (const q of Object.values(s.players)) q.attackedThisTurn = false;
   endEffects(ctx, (e) => e.expires === 'untilYourNextTurn' && e.player === player);
   enterStep(ctx, 'untap');
@@ -232,7 +235,7 @@ function enterStep(ctx: Ctx, step: Step): void {
 
     case 'beginCombat':
       s.combat = { attackers: [], dealtFirstStrikeDamage: [] };
-      // Final Fantasy (11c): Genji Glove counts combat phases.
+      // Final Fantasy (11c): combat phases (Genji Glove, Balthier and Fran: the first combat phase).
       s.turn.combats = (s.turn.combats ?? 0) + 1;
       return givePriority(ctx, ap);
 
@@ -391,7 +394,11 @@ export function finishCleanup(ctx: Ctx): void {
   const s = ctx.s;
   for (const id of s.battlefield) {
     const o = obj(ctx, id);
-    o.damage = 0;
+    // Final Fantasy (11c): damage absorbing (Ancient Adamantoise keeps its damage).
+    const stays = def(ctx, id).abilities.some(
+      (a) => a.kind === 'static' && a.effect.kind === 'damageStays',
+    );
+    if (!stays) o.damage = 0;
     o.damagedByDeathtouch = false;
     delete o.damagedBy;
     // Mirage Mirror: back to itself.

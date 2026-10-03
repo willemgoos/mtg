@@ -60,6 +60,21 @@ export function checkCondition(
   if (c.kind === 'opponentCastSpellThisTurn')
     return (ctx.s.turn.spellsCast?.[other(controller)] ?? 0) > 0;
   if (c.kind === 'sourceTapped') return !!self?.tapped;
+  // Final Fantasy (11c): turn conditions.
+  if (c.kind === 'noneCastThisTurn')
+    return !(ctx.s.turn.castDefs?.[controller] ?? []).some((id) =>
+      defMatches(defOf(ctx, id), c.filter),
+    );
+  if (c.kind === 'yourEarlyTurn')
+    // Turns alternate, so each player's Nth turn comes by turn 2N (extra turns aside).
+    return ctx.s.turn.activePlayer === controller && ctx.s.turn.number <= 2 * c.max;
+  if (c.kind === 'firstCombatPhase') return (ctx.s.turn.combats ?? 0) <= 1;
+  if (c.kind === 'subjectCrewedBySource')
+    return (
+      !!self &&
+      subject?.crewedBy?.turn === ctx.s.turn.number &&
+      subject.crewedBy.ids.includes(self.id)
+    );
   if (c.kind === 'opponentAttackedLastTurn')
     return ctx.s.players[other(controller)].attackedLastTurn === true;
   if (c.kind === 'sourceDamagedSubject') return !!self && !!subject?.damagedBy?.includes(self.id);
@@ -124,9 +139,12 @@ export function checkCondition(
     return (!c.gained || gained) && (!c.lost || lost);
   }
   if (c.kind === 'handSize') return ctx.s.players[controller].hand.length >= c.min;
-  if (c.kind === 'all') return c.of.every((x) => checkCondition(ctx, x, controller, self, targets));
-  if (c.kind === 'any') return c.of.some((x) => checkCondition(ctx, x, controller, self, targets));
-  if (c.kind === 'not') return !checkCondition(ctx, c.condition, controller, self, targets);
+  if (c.kind === 'all')
+    return c.of.every((x) => checkCondition(ctx, x, controller, self, targets, subject));
+  if (c.kind === 'any')
+    return c.of.some((x) => checkCondition(ctx, x, controller, self, targets, subject));
+  if (c.kind === 'not')
+    return !checkCondition(ctx, c.condition, controller, self, targets, subject);
   if (c.kind === 'resolvedThisTurn')
     return self?.resolutions?.turn === ctx.s.turn.number && self.resolutions.count === c.n;
   if (c.kind === 'controlsPermanents')
@@ -180,7 +198,6 @@ export function checkCondition(
   // Final Fantasy (11c): rare conditions.
   if (c.kind === 'lifeAtMostHalfStarting')
     return ctx.s.players[controller].life <= Math.floor((ctx.s.format === 'brawl' ? 25 : 20) / 2);
-  if (c.kind === 'firstCombatPhase') return (ctx.s.turn.combats ?? 1) <= 1;
   if (c.kind === 'firstEndStep') return (ctx.s.turn.endSteps ?? 1) <= 1;
   if (c.kind === 'sourceAttackedThisTurn')
     return !!self && (ctx.s.turn.attackers ?? []).includes(self.id);
@@ -364,11 +381,18 @@ function detect(ctx: Ctx, ev: GameEvent): void {
     case 'objectMoved': {
       const moved = s.objects[ev.id];
       const movedDef = defOf(ctx, ev.defId);
+      // Final Fantasy (11c): graveyard triggers. "Whenever one or more cards leave your graveyard."
+      if (ev.from === 'graveyard' && moved)
+        forEachBattlefieldTrigger(
+          ctx,
+          (o, a) => a.trigger.on === 'cardsLeaveYourGraveyard' && o.controller === moved.owner,
+        );
       if (ev.to === 'battlefield' && moved && moved.zone === 'battlefield') {
         // A Saga enters with its first lore counter.
         if (movedDef.saga) addLore(ctx, moved.id);
         const isCreature = movedDef.types.includes('Creature');
         const isLand = movedDef.types.includes('Land');
+        const before = s.pendingTriggers.length;
         forEachBattlefieldTrigger(
           ctx,
           (o, a) => {
@@ -399,6 +423,24 @@ function detect(ctx: Ctx, ev: GameEvent): void {
           },
           moved,
         );
+        // Final Fantasy (11c): entering permanents. Traveling Chocobo: a land or Bird you
+        // control entering triggers your permanents' abilities an additional time.
+        const twice = s.battlefield.filter(
+          (id) =>
+            obj(ctx, id).controller === moved.controller &&
+            def(ctx, id).abilities.some(
+              (a) =>
+                a.kind === 'static' &&
+                a.effect.kind === 'etbTriggersTwice' &&
+                matchesFilter(ctx, moved.id, a.effect.filter),
+            ),
+        ).length;
+        if (twice) {
+          const caused = s.pendingTriggers
+            .slice(before)
+            .filter((t) => t.controller === moved.controller);
+          for (let k = 0; k < twice; k++) for (const t of caused) s.pendingTriggers.push({ ...t });
+        }
         // From the graveyard: "whenever your commander enters" (Endless Ranks of HYDRA).
         for (const id of s.players[moved.controller].graveyard) {
           const card = s.objects[id]!;
@@ -527,7 +569,13 @@ function detect(ctx: Ctx, ev: GameEvent): void {
             if (t.on !== 'otherCreatureDies' && t.on !== 'creatureYouControlDies') return false;
             if (o.id === ev.id) return false;
             if (t.nontoken && wasToken) return false;
-            if (t.on === 'creatureYouControlDies' && t.filter && !defMatches(movedDef, t.filter))
+            if (
+              t.on === 'creatureYouControlDies' &&
+              t.filter &&
+              !defMatches(movedDef, t.filter) &&
+              // Final Fantasy (11c): a type it gained (Jenova's Mutants).
+              !(t.filter.subtype && moved?.lastAddedSubtypes?.includes(t.filter.subtype))
+            )
               return false;
             // Marvel Super Heroes (Ares): "an attacking creature you control".
             if (
@@ -645,6 +693,17 @@ function detect(ctx: Ctx, ev: GameEvent): void {
           ((a.trigger.on === 'youGainLife' && ev.delta > 0) ||
             (a.trigger.on === 'youGainOrLoseLife' && (!a.trigger.duringYourTurn || yours))),
       );
+      // Final Fantasy (11c): life loss triggers. "Whenever an opponent loses life" ("that many").
+      if (ev.delta < 0)
+        forEachBattlefieldTrigger(
+          ctx,
+          (o, a) =>
+            a.trigger.on === 'opponentLosesLife' &&
+            o.controller !== ev.player &&
+            (!a.trigger.duringYourTurn || s.turn.activePlayer === o.controller),
+          undefined,
+          -ev.delta,
+        );
       return;
     }
     case 'spellCast': {
@@ -665,6 +724,8 @@ function detect(ctx: Ctx, ev: GameEvent): void {
                 : o.controller === ev.player) &&
           spellMatches(ctx, a.trigger, spell, item, o) &&
           (!a.trigger.fromExile || (item?.kind === 'spell' && !!item.fromExile)) &&
+          // Final Fantasy (11c): a spell you don't own (Vaan).
+          (!a.trigger.notOwned || spellObj.owner !== ev.player) &&
           (!a.trigger.spell || cardMatches(ctx, ev.id, a.trigger.spell, o.id)),
         spellObj,
         manaValueOf(spell),
@@ -1150,6 +1211,8 @@ function defMatches(d: CardDefinition, f: CardFilter): boolean {
   if (f.hasKeyword && !d.keywords.includes(f.hasKeyword)) return false;
   if (f.subtype && !d.subtypes.includes(f.subtype)) return false;
   if (f.subtypes && !f.subtypes.some((st) => d.subtypes.includes(st))) return false;
+  // Final Fantasy (11c): "legendary creature spell" (Serah Farron).
+  if (f.supertypes && !f.supertypes.some((t) => d.supertypes.includes(t))) return false;
   return true;
 }
 

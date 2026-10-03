@@ -139,8 +139,11 @@ function wardedTargets(ctx: Ctx, player: PlayerId, targets: readonly TargetChoic
     if (!('object' in t)) return [];
     const o = ctx.s.objects[t.object.id];
     if (!o || o.zone !== 'battlefield' || o.controller === player) return [];
-    if (hasKeyword(ctx, o.id, 'ward'))
-      return [def(ctx, o.id).wardCost ?? { mana: { generic: 2, colored: {} } }];
+    if (hasKeyword(ctx, o.id, 'ward')) {
+      const w = def(ctx, o.id).wardCost ?? { mana: { generic: 2, colored: {} } };
+      // Final Fantasy (11c): ward paid in life (Raubahn: life equal to his power).
+      return [w.lifeEqualsPower ? { ...w, life: Math.max(0, power(ctx, o.id)) } : w];
+    }
     if (hasKeyword(ctx, o.id, 'wardOne')) return [{ mana: { generic: 1, colored: {} } }];
     return [];
   });
@@ -480,6 +483,13 @@ export function abilityManaCost(
   a: ReturnType<typeof activatedAbility>,
 ): ManaCost | undefined {
   const o = obj(ctx, source);
+  // Final Fantasy (11c): activated cost reduction (Balamb Garden), and Firion's cheaper equip.
+  const less =
+    (a.costReduction !== undefined
+      ? countOf(ctx, o.controller, a.costReduction, false, source)
+      : 0) + (o.equipDiscount && a.effects.some((e) => e.kind === 'attach') ? o.equipDiscount : 0);
+  if (less && a.cost.mana && !a.powerUp)
+    return reduceCost(a.cost.mana, { generic: Math.min(less, a.cost.mana.generic), colored: {} });
   if (!a.powerUp || !a.cost.mana) return a.cost.mana;
   let cost = a.cost.mana;
   if (o.zoneTurn === ctx.s.turn.number) cost = reduceCost(cost, def(ctx, source).manaCost);
@@ -530,7 +540,14 @@ export function activateAbility(
   if (a.cost.discardSelf) moveObject(ctx, source, 'graveyard');
   if (a.cost.tapTokens)
     for (const id of tokensToTap(ctx, player, source).slice(0, a.cost.tapTokens)) tap(ctx, id);
-  if (a.cost.crew) for (const id of crewFor(ctx, player, source, a.cost.crew) ?? []) tap(ctx, id);
+  if (a.cost.crew) {
+    const crew = crewFor(ctx, player, source, a.cost.crew) ?? [];
+    for (const id of crew) tap(ctx, id);
+    // Final Fantasy (11c): crewed by (Balthier and Fran).
+    const v = obj(ctx, source);
+    const before = v.crewedBy?.turn === ctx.s.turn.number ? v.crewedBy.ids : [];
+    v.crewedBy = { turn: ctx.s.turn.number, ids: [...before, ...crew] };
+  }
   if (a.cost.sacrificeArtifacts)
     for (const id of artifactsToSacrifice(ctx, player, a.cost.sacrificeArtifacts) ?? [])
       sacrificePermanent(ctx, id);
@@ -1124,11 +1141,22 @@ export function answerSearch(ctx: Ctx, card: ObjectId | null): void {
   if (card !== null) {
     if (d.fromGraveyard) {
       if (d.to === 'battlefield') {
+        // Final Fantasy (11c): onto the battlefield attacking (checked as the card, before it enters).
+        const attacking = !!d.attackingIf && cardMatches(ctx, card, d.attackingIf);
         moveObject(ctx, card, 'battlefield', { controller: d.player });
         if (d.counter) (obj(ctx, card).counters ??= {})[d.counter] = 1;
         // Final Fantasy (11c): The Darkness Crystal.
         if (d.enterTapped) obj(ctx, card).tapped = true;
         if (d.enterCounters) addCounters(ctx, card, d.enterCounters);
+        if (attacking && ctx.s.combat && obj(ctx, card).zone === 'battlefield') {
+          obj(ctx, card).tapped = true;
+          ctx.s.combat.attackers.push({
+            id: card,
+            defender: other(d.player),
+            blocked: false,
+            blockers: [],
+          });
+        }
       } else moveObject(ctx, card, 'hand');
       squirrelFood(ctx, d, card);
       return resume(ctx, d.resume, d.thenPriority);
@@ -1137,7 +1165,12 @@ export function answerSearch(ctx: Ctx, card: ObjectId | null): void {
       d.to === 'battlefield' ||
       d.to === 'battlefieldTapped' ||
       (d.battlefieldOnYourTurn && ctx.s.turn.activePlayer === d.player);
-    if (d.to === 'graveyard') moveObject(ctx, card, 'graveyard');
+    if (d.to === 'hideaway') {
+      // Final Fantasy (11c): hideaway. Exiled face down, remembered by the land.
+      moveObject(ctx, card, 'exile');
+      const land = d.resume.source && ctx.s.objects[d.resume.source.id];
+      if (land && land.zone === 'battlefield') land.exiledWith = [card];
+    } else if (d.to === 'graveyard') moveObject(ctx, card, 'graveyard');
     else if (d.to === 'libraryTop') {
       // Fountainport Bell: shuffle, then put it on top (done after the shuffle below).
     } else if (onBattlefield) {
@@ -1152,7 +1185,7 @@ export function answerSearch(ctx: Ctx, card: ObjectId | null): void {
       )
         obj(ctx, card).tapped = false;
     } else moveObject(ctx, card, 'hand');
-    emit(ctx, { type: 'searched', player: d.player, id: card });
+    if (d.to !== 'hideaway') emit(ctx, { type: 'searched', player: d.player, id: card });
   }
   if (d.fromGraveyard) {
     squirrelFood(ctx, d, null);

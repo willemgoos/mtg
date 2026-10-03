@@ -92,6 +92,8 @@ export function dealDamage(
     )
   )
     amount *= 2;
+  // Final Fantasy (11c): damage doubling (Trance Kuja's Wizards, Lightning's Stagger).
+  amount *= doubling(ctx, src, to);
   amount = prevented(ctx, src, to, amount);
   if (amount <= 0) return;
   // The monarch: combat damage to them makes the attacker's controller the monarch.
@@ -134,7 +136,34 @@ function redirected(ctx: Ctx, to: TargetChoice): TargetChoice {
     if (!host || ('object' in to && to.object.id === host.id)) continue;
     return { object: { id: host.id, zcc: host.zcc } };
   }
+  // Final Fantasy (11c): damage absorbing. Ancient Adamantoise takes it for you and your other permanents.
+  for (const id of ctx.s.battlefield) {
+    if (obj(ctx, id).controller !== owner || ('object' in to && to.object.id === id)) continue;
+    if (
+      hasStaticKind(ctx, id, 'absorbDamage') &&
+      characteristics(ctx, id).types.includes('Creature')
+    )
+      return { object: { id, zcc: obj(ctx, id).zcc } };
+  }
   return to;
+}
+
+/** Final Fantasy (11c): damage doubling. The factor damage is multiplied by. */
+function doubling(ctx: Ctx, src: DamageSource, to: TargetChoice): number {
+  let factor = 1;
+  for (const id of ctx.s.battlefield) {
+    if (obj(ctx, id).controller !== src.controller || !ctx.s.objects[src.id]) continue;
+    for (const a of def(ctx, id).abilities)
+      if (
+        a.kind === 'static' &&
+        a.effect.kind === 'doubleDamage' &&
+        cardMatches(ctx, src.id, a.effect.source)
+      )
+        factor *= 2;
+  }
+  const hit = 'player' in to ? to.player : onBattlefield(ctx, to.object)?.controller;
+  for (const x of ctx.s.staggered ?? []) if (x.player === hit) factor *= 2;
+  return factor;
 }
 
 /**
@@ -302,6 +331,8 @@ export function gainLife(ctx: Ctx, player: PlayerId, amount: number): void {
       if (a.kind === 'static' && a.effect.kind === 'doubleLifeGain') amount *= 2;
   }
   ctx.s.turn.lifeGains[player]++;
+  // Final Fantasy (11c): life gained this turn (Hope Estheim).
+  (ctx.s.turn.lifeGained ??= { p1: 0, p2: 0 })[player] += amount;
   changeLife(ctx, player, amount);
 }
 
@@ -426,6 +457,9 @@ export function resolveAmount(ctx: Ctx, es: EffectSource, amount: Amount): numbe
       const last = es.lkiPower ?? (es.source && ctx.s.objects[es.source.id]?.lastPower);
       return Math.max(0, last ?? 0);
     }
+    // Final Fantasy (11c): "its power" for a creature that died (Jenova's Mutants).
+    if (amount.powerOf === 'subject' && es.subject)
+      return Math.max(0, ctx.s.objects[es.subject.id]?.lastPower ?? 0);
     return 0;
   }
   if ('event' in amount) return es.amount ?? 0;
@@ -566,7 +600,9 @@ export function runEffects(
       // Final Fantasy (11a): saga creatures
       e.kind === 'removeLoreFromAny' ||
       // Final Fantasy (11c): The Darkness Crystal
-      e.kind === 'putExiledWithSource'
+      e.kind === 'putExiledWithSource' ||
+      // Final Fantasy (11c): hideaway
+      e.kind === 'hideaway'
     ) {
       const lib = ctx.s.players[es.controller].library;
       const { controller, source, sourceDefId, targets, lkiPower, subject, amount, chosen, x } = es;
@@ -922,6 +958,7 @@ export function runEffects(
           to: 'battlefield',
           shuffle: false,
           ...(e.counter ? { counter: e.counter } : {}),
+          ...(e.attackingIf ? { attackingIf: e.attackingIf } : {}),
           resume,
           thenPriority,
         };
@@ -1205,6 +1242,20 @@ export function runEffects(
           shuffle: false,
           ...(e.tapped ? { enterTapped: true } : {}),
           ...(e.counters ? { enterCounters: e.counters } : {}),
+          resume,
+          thenPriority,
+        };
+      } else if (e.kind === 'hideaway') {
+        // Final Fantasy (11c): hideaway. One of the top N exiled face down, the rest to the bottom.
+        const looked = lib.slice(0, e.count);
+        if (looked.length === 0) continue;
+        ctx.s.decision = {
+          kind: 'searchLibrary',
+          player: controller,
+          options: looked,
+          looked,
+          to: 'hideaway',
+          required: true,
           resume,
           thenPriority,
         };
@@ -2167,6 +2218,29 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
               fromTurn: ctx.s.turn.number + (step === 'end' || step === 'cleanup' ? 1 : 0),
             });
           }
+          // Final Fantasy (11c): temporary token copies.
+          if (e.equipDiscount) t.equipDiscount = e.equipDiscount;
+          if (e.sacrificeAt) {
+            const late = ['end', 'cleanup'].includes(ctx.s.turn.step);
+            const ownTurn = ctx.s.turn.activePlayer === es.controller;
+            (ctx.s.delayed ??= []).push({
+              controller: es.controller,
+              sourceDefId: es.sourceDefId,
+              subject: { id: t.id, zcc: t.zcc },
+              effects: [{ kind: 'sacrifice', what: 'subject' }],
+              ...(e.sacrificeAt === 'nextUpkeep'
+                ? { fromTurn: ctx.s.turn.number + 1, at: 'upkeep' as const }
+                : e.sacrificeAt === 'yourNextEndStep'
+                  ? {
+                      fromTurn: ctx.s.turn.number + (ownTurn && !late ? 0 : ownTurn ? 2 : 1),
+                      whose: es.controller,
+                    }
+                  : { fromTurn: ctx.s.turn.number + (late ? 1 : 0) }),
+            });
+          }
+          const chapters = defOf(ctx, t.defId).saga;
+          if (e.lore && chapters)
+            for (let k = 0; k < Math.min(e.lore, chapters - 1); k++) addLore(ctx, t.id);
         }
       }
       return;
@@ -2462,6 +2536,7 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
       for (const id of objectsOf(ctx, es, e.what)) addLore(ctx, id);
       return;
     case 'removeLoreFromAny':
+    case 'hideaway':
       return; // handled by runEffects
     case 'custom': {
       const fn = ctx.customEffects[e.handler];

@@ -145,6 +145,25 @@ export function manaSources(
       if (a.kind !== 'static' || a.effect.kind !== 'grantMana') continue;
       const g = a.effect;
       if (g.onlyForCreatures && !forSubtypes.includes('Creature')) continue;
+      // Final Fantasy (11c): mana from every permanent. A Realm Reborn: other permanents tap for any colour.
+      if (g.otherPermanents) {
+        for (const id of ctx.s.battlefield) {
+          if (id === exclude || id === src || obj(ctx, id).controller !== player) continue;
+          const have = out.find((x) => x.id === id && !x.pool);
+          if (have) {
+            for (const c of g.produces) if (!have.produces.includes(c)) have.produces.push(c);
+            continue;
+          }
+          if (!canTapForAbility(ctx, id)) continue;
+          out.push({
+            id,
+            produces: [...g.produces],
+            isCreature: isCreature(ctx, id),
+            sacrifice: false,
+          });
+        }
+        continue;
+      }
       for (const id of ctx.s.battlefield) {
         if (id === exclude || obj(ctx, id).controller !== player || out.some((x) => x.id === id))
           continue;
