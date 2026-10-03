@@ -2,7 +2,7 @@ import js from '@eslint/js';
 import tseslint from 'typescript-eslint';
 
 export default tseslint.config(
-  { ignores: ['**/node_modules', '**/dist', '**/.cache', 'packages/cards/src/generated'] },
+  { ignores: ['**/node_modules', '**/dist', '**/.cache', 'packages/cards/src/generated', '**/.tmp', '**/.scratch', '.claude'] },
   js.configs.recommended,
   ...tseslint.configs.recommended,
   {
