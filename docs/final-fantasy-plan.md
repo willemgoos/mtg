@@ -171,6 +171,23 @@ Void 52%, Road Trip 52%.
 - Ten FIN Jump In packets in `jumpin.ts` (our own, like the other sets; `'fin'` in the Packet `set` union).
 - FIN boosters in Expedition (with a FIN deck) and Season (with the ten FIN decks as starters).
 
+Jump In and boosters done. Ten packets (`fin-*` in `jumpin.ts`), two per colour, each twelve booster cards with one
+rare or mythic plus eight basics: **Knights** (W, Dion: job-select Equipment and Heroes), **White Magic** (W, Aerith:
+lifelink, moogles, Phoenix Down), **Summons** (U, Summon: Leviathan, with Shiva and the ice spells), **Airships** (U, The
+Lunar Whale, The Prima Vista and machina), **Black Mages** (B, Dark Confidant: Wizard tokens and noncreature spells),
+**Dark Knights** (B, Cecil: Dark Knight's Greatsword, Tonberry, Demon Wall), **Warriors** (R, Firion: Equipment and
+Katana/Sword/Rapier), **Red Mages** (R, Clive: Ifrit, Ramuh, Fire and Thunder Magic), **Chocobos** (G, Bartz and Boko:
+Birds and landfall), **Monsters** (G, Jumbo Cactuar: Cactuar, Behemoth, T-Rexaur). They pair freely with the other sets'
+packets (40 packets, 780 pairs); the picker has a Final Fantasy set button. Boosters: `PackSet` `'fin'` in
+`expedition.ts` (an expedition with a FIN deck or an all-FIN Jump In pair opens FIN boosters; mixed pairs alternate) and
+`SeasonPackKind` `'finalFantasy'` (`FINAL_FANTASY_SHEETS` in `seasonPacks.ts`, sold in the store, the ten FIN
+`series: 'starter'` decks as starters). Sheets: FIN cards in the pool with collector number up to 309 (no Starter Kit
+exclusives, no basics, fronts only), so cards the pool gains later join them. The FIN booster wrapper shows Cloud,
+Midgar Mercenary. Balance: 1600 heuristic-bot games between random Jump In pairs drawn from all 40 packets (FIN with FIN
+and with the other sets), no errors. Packet win rates (about 160 games each): Knights 52%, White Magic 42%, Summons 45%,
+Airships 52%, Black Mages 41%, Dark Knights 55%, Warriors 64%, Red Mages 52%, Chocobos 50%, Monsters 47%; the FIN set as a
+whole 50% (Foundations 50%, Bloomburrow 48%, Marvel 52%; the other sets' packets range 20–70%), so no retuning.
+
 ### 11d: the Starter Kit (Cloud vs Sephiroth): done
 
 The two Starter Kit decks with their 12 exclusive cards, as they play on Arena. Exact lists from mtg.wiki (the MediaWiki API)
@@ -268,7 +285,14 @@ four decks. Three more FIC Brawl decks followed (9 December 2025, "Arena Store d
   first combat phase, life gained this turn, Hades and Noctis, base P/T from an amount, "with mana value up to that
   damage", hideaway, The Wind Crystal); phase 12 keeps its own (creatures entering from a graveyard, becoming
   untapped, equip cost reductions, legendary-only keywords, Hardened Scales, delve, forced blocks, extra land plays).
-  Win rates after this merge: MERGED11C.
+  The AI now values an Equipment at a little more than a card while you have a creature to carry it
+  (`packages/ai/src/evaluate.ts`), which fixed Limit Break (the bot never cast or equipped its Equipment). Win rates
+  after this merge and that change: the ten FIN decks (160 games each against the Foundations starter decks) Heroes' Arsenal
+  53%, Eidolons' Call 53%, Highwind Workshop 47%, Time Compression 53%, Black Mages' Waltz 53%, Chocobo Stampede 48%,
+  Turks' Contract 53%, Forbidden Magicks 45%, Into the Void 52%, Road Trip 51%; Brawl (20 games a pairing) Revival
+  Trance 56%, Limit Break 40%, Counter Blitz 49%, Scions & Spellcraft 39%, Brawl Aerith 64%, Brawl Emet-Selch 46%,
+  Brawl Locke 50%, Avengers Assemble 58%, Wakanda Forever 42%, The Fantastic Four 32% (low on `main` too), Doom
+  Prevails 60%, Mabel's Militia 64%.
 - **Final win rates** (all 12 Brawl decks, 12 games a pairing in both seats, after every fix above): Revival
   Trance 55%, Limit Break 48%, Counter Blitz 51%, Scions & Spellcraft 51%, Brawl Aerith 64%, Brawl Emet-Selch 41%,
   Brawl Locke 53%.
@@ -409,6 +433,19 @@ Both groups:
 - Lightning, Security Sergeant: the exiled card stays playable while it stays exiled, not only while you control Lightning.
 - Seymour Flux's "pay 1 life" is losing 1 life (a "you may" prompt).
 - Magitek Scythe's "must be blocked this turn if able" lasts the turn; the engine adds a blocker if the defender declares none.
+
+11c (Jump In and boosters):
+
+- The Jump In packets are our own (Arena's FIN Jump In packets use cards we don't have); twelve booster cards and eight
+  basics each, no Town lands.
+- Booster sheets are the FIN cards in the pool with collector number up to 309 (the Starter Kit exclusives Beatrix,
+  Rosa, Xande, Sephiroth, Planet's Heir, Ultima Weapon and Deadly Embrace are numbered past it). Like Bloomburrow and
+  Marvel, the packs are Play Booster-like (one rare or mythic, three uncommons, eight commons in Expedition; Season's
+  generator with wildcards), without FIN's special slots (borderless, showcase, Through the Ages).
+- A Season pack's reveal picks its set from the cards inside: a FIN pack holding only reprints that another set also
+  prints (unlikely) would show the Foundations wrapper.
+- The FIN booster wrapper's art is Cloud, Midgar Mercenary (named in `PackOpening.tsx`); colour packs use the colour's
+  first booster rare, as for the other sets.
 
 ### Phase 12
 

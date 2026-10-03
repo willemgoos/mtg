@@ -31,12 +31,19 @@ export function packName(p: Pack, set: PackSet = 'fdn'): string {
   return `${PACK_SET_NAMES[set]} booster`;
 }
 
-/** Art for a pack: the first rare of its set and colour, or a mythic. */
+/** A set's booster wrapper art, where its first mythic isn't the set's face (Cloud on Final Fantasy's). */
+const BOOSTER_FACE: Partial<Record<PackSet, string>> = { fin: 'Cloud, Midgar Mercenary' };
+
+/** Art for a pack: the first rare of its set and colour, or the set's face or first mythic. */
 export function packArt(p: Pack, set: PackSet = 'fdn'): string {
+  // Booster cards only (Final Fantasy's Starter Kit exclusives are numbered past 309).
+  const inSet = (c: (typeof SCRYFALL)[number]) =>
+    c.set === set && (set !== 'fin' || +c.collectorNumber <= 309);
   const card =
     p.kind === 'color'
-      ? SCRYFALL.find((c) => c.set === set && c.rarity === 'rare' && c.colors.join() === p.color)
-      : SCRYFALL.find((c) => c.set === set && c.rarity === 'mythic');
+      ? SCRYFALL.find((c) => inSet(c) && c.rarity === 'rare' && c.colors.join() === p.color)
+      : (SCRYFALL.find((c) => inSet(c) && c.name === BOOSTER_FACE[set]) ??
+        SCRYFALL.find((c) => inSet(c) && c.rarity === 'mythic'));
   return card?.image?.artCrop ?? '';
 }
 

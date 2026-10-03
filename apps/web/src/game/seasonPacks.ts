@@ -47,10 +47,26 @@ export const MARVEL_SHEETS = Object.fromEntries(
   ]),
 ) as Record<Rarity, string[]>;
 
+/**
+ * Final Fantasy's booster cards: the set's main cards we play (collector number up to 309, so
+ * not the Starter Kit's exclusives), fronts only, no basics.
+ */
+export const FINAL_FANTASY_SHEETS = Object.fromEntries(
+  RARITIES.map((rarity) => [
+    rarity,
+    SCRYFALL.filter(
+      (c) => c.set === 'fin' && c.rarity === rarity && !c.front && +c.collectorNumber <= 309,
+    )
+      .map((c) => slug(c.name))
+      .filter((id) => cardDb.has(id) && !isBasic(id)),
+  ]),
+) as Record<Rarity, string[]>;
+
 const SHEETS: Record<SeasonPackKind, Record<Rarity, string[]>> = {
   foundations: FOUNDATIONS_SHEETS,
   bloomburrow: BLOOMBURROW_SHEETS,
   marvel: MARVEL_SHEETS,
+  finalFantasy: FINAL_FANTASY_SHEETS,
 };
 
 /** The pack generator for a kind of booster. */
