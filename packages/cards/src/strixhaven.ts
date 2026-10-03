@@ -2,6 +2,8 @@ import type { CardDefinition } from '@mtg/engine';
 import type { Behavior } from './build.ts';
 import { LOREHOLD, LOREHOLD_TOKENS } from './stx/lorehold.ts';
 import { QUANDRIX, QUANDRIX_TOKENS } from './stx/quandrix.ts';
+import { AZORIUS, AZORIUS_TOKENS } from './stx/azorius.ts';
+import { LESSONS_AZORIUS } from './stx/lessons-azorius.ts';
 
 /**
  * Strixhaven (STX) card behaviour, one file per group of decks in stx/,
@@ -9,10 +11,19 @@ import { QUANDRIX, QUANDRIX_TOKENS } from './stx/quandrix.ts';
  * lives here. Filled in from the first Strixhaven deck phase on
  * (docs/strixhaven-plan.md).
  */
-export const STRIXHAVEN_BEHAVIORS: Record<string, Behavior> = { ...LOREHOLD, ...QUANDRIX };
+export const STRIXHAVEN_BEHAVIORS: Record<string, Behavior> = {
+  ...LOREHOLD,
+  ...QUANDRIX,
+  ...AZORIUS,
+  ...LESSONS_AZORIUS,
+};
 
 /** Strixhaven tokens (the Lorehold Spirit, the Quandrix Fractal). */
-export const STRIXHAVEN_TOKENS: CardDefinition[] = [...LOREHOLD_TOKENS, ...QUANDRIX_TOKENS];
+export const STRIXHAVEN_TOKENS: CardDefinition[] = [
+  ...LOREHOLD_TOKENS,
+  ...QUANDRIX_TOKENS,
+  ...AZORIUS_TOKENS,
+];
 
 /** Back faces of double-faced cards: not cards of their own, so not in the pool. */
 export const STRIXHAVEN_BACK_FACES: Record<string, Behavior> = {};
