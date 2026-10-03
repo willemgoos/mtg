@@ -182,6 +182,21 @@ card twice; build booster sheets from the set's own booster list, not from the p
 - 60 rares and 20 mythics (Professor Dellian Fel, Ral Zarek, Guest Lecturer), ten SOS Jump In packets, SOS boosters in
   Expedition and Season.
 
+**Phase 14 done**, in a different order from the plan, to avoid parallel agents building the same card: 14a engine
+(prepare and the six other mechanics) and the Silverquill and Witherbloom decks; then **every remaining SOS card at once**
+(203 cards in five disjoint colour groups, `sos/cards-{a..e}.ts`), then the other eight decks in parallel touching only
+`decks.ts`. All 266 non-basic SOS cards implemented. Ten SOS decks, all 36/36 SOS spells, 24 lands, against the ten
+Foundations starters (20 games per matchup per seat, tallied from `pnpm arena` output): Silverquill Debate Club 56.0%
+(retuned), Witherbloom Pest Control 51.8%, Prismari Spellslingers 54.5%, Quandrix Fractal Theorem 48.8%, Lorehold Spirit
+Archive 58.5%, Azorius Open Skies 55.5%, Night Library Sentinels (U/B) 46.8%, Rakdos Sparks and Ashes 52.3%, Gruul Stampede
+58.0%, Selesnya Grove Guardians 62.3%. 14c: ten mono-colour SOS Jump In packets; SOS boosters in Expedition and Season from
+`sos/booster-list.ts` (`scripts/fetch-booster-list.ts sos`): 86 C / 100 U / 60 R / 20 M, basics left out, prepare spell
+faces never in packs. Bug fixed on the way: a trigger granted until end of turn (Root Manipulation on a Pest, Lorehold
+Apprentice) crashed with "No triggered ability", because the engine looked it up on the printed card.
+
+Lesson: when parallel branches each append to the same array, a line-union merge fuses the entries; rebuild the array
+from each branch's own entries instead (`decks.ts` was rebuilt this way).
+
 ## Phase 15: Brawl decks
 
 The eight Arena Store decks, lists from mtg.wiki ("Arena Store decks (Secrets of Strixhaven)" and "(Strixhaven)") before
