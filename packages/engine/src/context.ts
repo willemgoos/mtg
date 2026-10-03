@@ -641,7 +641,22 @@ export function removeFromCombat(ctx: Ctx, id: ObjectId): void {
   for (const a of c.attackers) a.blockers = a.blockers.filter((b) => b !== id);
 }
 
-export function drawCard(ctx: Ctx, player: PlayerId): void {
+export function drawCard(ctx: Ctx, player: PlayerId, drawStepDraw = false): void {
+  // Marvel Super Heroes Jumpstart (Geniuses): Reed Richards, "the first time you would draw a card
+  // each turn except the first card you draw during each of your draw steps, you draw four instead".
+  if (!drawStepDraw && ctx.s.turn.number > 0 && !ctx.s.turn.extraDrawSeen?.includes(player)) {
+    ctx.s.turn.extraDrawSeen = [...(ctx.s.turn.extraDrawSeen ?? []), player];
+    let count = 0;
+    for (const id of ctx.s.battlefield)
+      if (obj(ctx, id).controller === player)
+        for (const a of def(ctx, id).abilities)
+          if (a.kind === 'static' && a.effect.kind === 'firstExtraDrawBecomes')
+            count = Math.max(count, a.effect.count);
+    if (count > 0) {
+      for (let i = 0; i < count; i++) drawCard(ctx, player);
+      return;
+    }
+  }
   const p = ctx.s.players[player];
   const top = p.library[0];
   if (top === undefined) {

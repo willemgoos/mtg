@@ -180,6 +180,8 @@ export function startTurn(ctx: Ctx, player: PlayerId, noPowerUp = false): void {
   s.turn.lifeGains = { p1: 0, p2: 0 };
   s.turn.creaturesDied = 0;
   s.turn.cardsDrawn = { p1: 0, p2: 0 };
+  // Marvel Super Heroes Jumpstart (Geniuses): Reed Richards.
+  delete s.turn.extraDrawSeen;
   s.turn.manaSpent = { p1: 0, p2: 0 };
   s.turn.lifeLost = { p1: 0, p2: 0 };
   s.turn.spellsCast = { p1: 0, p2: 0 };
@@ -246,7 +248,7 @@ function enterStep(ctx: Ctx, step: Step): void {
 
     case 'draw':
       // The player who goes first skips their first draw (rule 103.8a).
-      if (s.turn.number > 1) drawCard(ctx, ap);
+      if (s.turn.number > 1) drawCard(ctx, ap, true);
       return givePriority(ctx, ap);
 
     case 'beginCombat':

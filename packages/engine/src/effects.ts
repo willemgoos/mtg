@@ -452,6 +452,12 @@ export function resolveRef(ctx: Ctx, es: EffectSource, ref: Ref): TargetChoice[]
     const o = t && 'object' in t ? ctx.s.objects[t.object.id] : undefined;
     return o ? [{ player: o.controller }] : [];
   }
+  // Marvel Super Heroes Jumpstart (Geniuses): "that player" (Super Intelligence).
+  if (ref === 'attachedController') {
+    const host = es.source && ctx.s.objects[es.source.id]?.attachedTo;
+    const o = host && ctx.s.objects[host];
+    return o && o.zone === 'battlefield' ? [{ player: o.controller }] : [];
+  }
   if (ref === 'eachOpponent') return [{ player: other(es.controller) }];
   if (ref === 'eachPlayer') return [{ player: 'p1' }, { player: 'p2' }];
   if (ref === 'attached') {

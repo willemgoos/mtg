@@ -1320,6 +1320,11 @@ function detect(ctx: Ctx, ev: GameEvent): void {
         const t = a.trigger;
         if (t.on !== on) return false;
         if (t.whose === 'opponents') return o.controller !== ev.activePlayer;
+        // Marvel Super Heroes Jumpstart (Geniuses): Super Intelligence.
+        if (t.whose === 'enchantedController') {
+          const host = o.attachedTo ? ctx.s.objects[o.attachedTo] : undefined;
+          return host?.zone === 'battlefield' && host.controller === ev.activePlayer;
+        }
         return t.whose === 'each' || o.controller === ev.activePlayer;
       });
       return;

@@ -22451,6 +22451,125 @@
   }
  },
  {
+  "name": "Beast, Erudite Aerialist",
+  "scryfallId": "a92a95d2-9529-417a-b7d5-b4244d7fdca7",
+  "oracleId": "191ba5f0-45f4-4b7f-910d-4bd4d2d28b33",
+  "set": "msh",
+  "collectorNumber": "206",
+  "rarity": "uncommon",
+  "manaCost": "{3}{G/U}",
+  "typeLine": "Legendary Creature — Mutant Scientist Hero",
+  "oracleText": "As long as you've put one or more +1/+1 counters on Beast this turn, he has flying.\nWhenever Beast deals combat damage to a player, draw a card.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "G",
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/9/a92a95d2-9529-417a-b7d5-b4244d7fdca7.jpg?1783902905",
+   "normal": "https://cards.scryfall.io/normal/front/a/9/a92a95d2-9529-417a-b7d5-b4244d7fdca7.jpg?1783902905",
+   "large": "https://cards.scryfall.io/large/front/a/9/a92a95d2-9529-417a-b7d5-b4244d7fdca7.jpg?1783902905",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/9/a92a95d2-9529-417a-b7d5-b4244d7fdca7.jpg?1783902905"
+  }
+ },
+ {
+  "name": "Blue Marvel, Adam Brashear",
+  "scryfallId": "de5c8482-462a-49ee-ae4d-1e0e8e0a4b97",
+  "oracleId": "16f9368a-5da5-4397-a127-c96cdd115b7b",
+  "set": "msc",
+  "collectorNumber": "530",
+  "rarity": "uncommon",
+  "manaCost": "{3}{U}{U}",
+  "typeLine": "Legendary Creature — Human Scientist Hero",
+  "oracleText": "Flying (This creature can't be blocked except by creatures with flying or reach.)\nWard {2} (Whenever this creature becomes the target of a spell or ability an opponent controls, counter it unless that player pays {2}.)\nWhenever you draw your second card each turn, put a +1/+1 counter on Blue Marvel.",
+  "power": "3",
+  "toughness": "5",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Flying",
+   "Ward"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/e/de5c8482-462a-49ee-ae4d-1e0e8e0a4b97.jpg?1783903104",
+   "normal": "https://cards.scryfall.io/normal/front/d/e/de5c8482-462a-49ee-ae4d-1e0e8e0a4b97.jpg?1783903104",
+   "large": "https://cards.scryfall.io/large/front/d/e/de5c8482-462a-49ee-ae4d-1e0e8e0a4b97.jpg?1783903104",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/e/de5c8482-462a-49ee-ae4d-1e0e8e0a4b97.jpg?1783903104"
+  }
+ },
+ {
+  "name": "Reed Richards, Smartest Man",
+  "scryfallId": "040dfd14-57e1-4f28-a42b-6d8874b44fea",
+  "oracleId": "51f55021-04e0-49bf-8f1f-de2a578c95fc",
+  "set": "msc",
+  "collectorNumber": "636",
+  "rarity": "rare",
+  "manaCost": "{5}{U}",
+  "typeLine": "Legendary Creature — Human Scientist Hero",
+  "oracleText": "Reach\nYou have no maximum hand size.\nThe first time you would draw a card each turn except the first card you draw during each of your draw steps, you draw four cards instead.",
+  "power": "2",
+  "toughness": "4",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Reach"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/4/040dfd14-57e1-4f28-a42b-6d8874b44fea.jpg?1783903069",
+   "normal": "https://cards.scryfall.io/normal/front/0/4/040dfd14-57e1-4f28-a42b-6d8874b44fea.jpg?1783903069",
+   "large": "https://cards.scryfall.io/large/front/0/4/040dfd14-57e1-4f28-a42b-6d8874b44fea.jpg?1783903069",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/4/040dfd14-57e1-4f28-a42b-6d8874b44fea.jpg?1783903069"
+  }
+ },
+ {
+  "name": "Super Intelligence",
+  "scryfallId": "f26613a1-b4ad-4c7f-8dd9-8f82de995f0c",
+  "oracleId": "d82929f2-57ad-45be-a834-984437046026",
+  "set": "msh",
+  "collectorNumber": "77",
+  "rarity": "uncommon",
+  "manaCost": "{U}",
+  "typeLine": "Enchantment — Aura",
+  "oracleText": "Enchant creature\nAt the beginning of the upkeep of enchanted creature's controller, that player draws a card.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Enchant"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/2/f26613a1-b4ad-4c7f-8dd9-8f82de995f0c.jpg?1783902951",
+   "normal": "https://cards.scryfall.io/normal/front/f/2/f26613a1-b4ad-4c7f-8dd9-8f82de995f0c.jpg?1783902951",
+   "large": "https://cards.scryfall.io/large/front/f/2/f26613a1-b4ad-4c7f-8dd9-8f82de995f0c.jpg?1783902951",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/2/f26613a1-b4ad-4c7f-8dd9-8f82de995f0c.jpg?1783902951"
+  }
+ },
+ {
+  "name": "Fantastic Bounce",
+  "scryfallId": "715ccf9c-5f3b-49b7-a8c3-704cd5fb7731",
+  "oracleId": "71d09e00-e526-4899-beb3-0ee6d9b87f44",
+  "set": "msc",
+  "collectorNumber": "620",
+  "rarity": "common",
+  "manaCost": "{3}{U}",
+  "typeLine": "Sorcery",
+  "oracleText": "This spell costs {2} less to cast if it targets a tapped creature.\nReturn target nonland permanent to its owner's hand.\nDraw a card.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/1/715ccf9c-5f3b-49b7-a8c3-704cd5fb7731.jpg?1783903074",
+   "normal": "https://cards.scryfall.io/normal/front/7/1/715ccf9c-5f3b-49b7-a8c3-704cd5fb7731.jpg?1783903074",
+   "large": "https://cards.scryfall.io/large/front/7/1/715ccf9c-5f3b-49b7-a8c3-704cd5fb7731.jpg?1783903074",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/1/715ccf9c-5f3b-49b7-a8c3-704cd5fb7731.jpg?1783903074"
+  }
+ },
+ {
   "name": "Doorman",
   "scryfallId": "e569b77e-e65b-4187-a971-41e4bfb526de",
   "oracleId": "01ea2130-e212-4532-b68b-2f940d53ef6e",
