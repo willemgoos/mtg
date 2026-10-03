@@ -34292,6 +34292,81 @@
   }
  },
  {
+  "name": "Mavinda, Students' Advocate",
+  "scryfallId": "8b3d521f-31cd-4bd2-b6b6-771c79252789",
+  "oracleId": "1c248187-0be3-4a03-a817-14f68f638ae7",
+  "set": "stx",
+  "collectorNumber": "21",
+  "rarity": "mythic",
+  "manaCost": "{2}{W}",
+  "typeLine": "Legendary Creature — Bird Advisor",
+  "oracleText": "Flying\n{0}: You may cast target instant or sorcery card from your graveyard this turn. If that spell doesn't target a creature you control, it costs {8} more to cast this way. If that spell would be put into your graveyard, exile it instead. Activate only once each turn. (You still pay the spell's costs. Timing rules for the spell still apply.)",
+  "power": "2",
+  "toughness": "3",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/b/8b3d521f-31cd-4bd2-b6b6-771c79252789.jpg?1783927388",
+   "normal": "https://cards.scryfall.io/normal/front/8/b/8b3d521f-31cd-4bd2-b6b6-771c79252789.jpg?1783927388",
+   "large": "https://cards.scryfall.io/large/front/8/b/8b3d521f-31cd-4bd2-b6b6-771c79252789.jpg?1783927388",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/b/8b3d521f-31cd-4bd2-b6b6-771c79252789.jpg?1783927388"
+  }
+ },
+ {
+  "name": "Strict Proctor",
+  "scryfallId": "0826e210-2002-43fe-942d-41922dfd7bc2",
+  "oracleId": "b967870d-9773-4ad5-bf06-c3be5465dab9",
+  "set": "stx",
+  "collectorNumber": "33★",
+  "rarity": "rare",
+  "manaCost": "{1}{W}",
+  "typeLine": "Creature — Spirit Cleric",
+  "oracleText": "Flying\nWhenever a permanent entering causes a triggered ability to trigger, counter that ability unless its controller pays {2}.",
+  "power": "1",
+  "toughness": "3",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/8/0826e210-2002-43fe-942d-41922dfd7bc2.jpg?1783927383",
+   "normal": "https://cards.scryfall.io/normal/front/0/8/0826e210-2002-43fe-942d-41922dfd7bc2.jpg?1783927383",
+   "large": "https://cards.scryfall.io/large/front/0/8/0826e210-2002-43fe-942d-41922dfd7bc2.jpg?1783927383",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/8/0826e210-2002-43fe-942d-41922dfd7bc2.jpg?1783927383"
+  }
+ },
+ {
+  "name": "Elite Spellbinder",
+  "scryfallId": "9d3a7998-ccac-45ad-a4e9-3a2cb057f63b",
+  "oracleId": "8c4d7cbc-9cfc-4f0a-8844-e458ab806056",
+  "set": "stx",
+  "collectorNumber": "17",
+  "rarity": "rare",
+  "manaCost": "{2}{W}",
+  "typeLine": "Creature — Human Cleric",
+  "oracleText": "Flying\nWhen this creature enters, look at target opponent's hand. You may exile a nonland card from it. For as long as that card remains exiled, its owner may play it. A spell cast this way costs {2} more to cast.",
+  "power": "3",
+  "toughness": "1",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/d/9d3a7998-ccac-45ad-a4e9-3a2cb057f63b.jpg?1783927390",
+   "normal": "https://cards.scryfall.io/normal/front/9/d/9d3a7998-ccac-45ad-a4e9-3a2cb057f63b.jpg?1783927390",
+   "large": "https://cards.scryfall.io/large/front/9/d/9d3a7998-ccac-45ad-a4e9-3a2cb057f63b.jpg?1783927390",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/d/9d3a7998-ccac-45ad-a4e9-3a2cb057f63b.jpg?1783927390"
+  }
+ },
+ {
   "name": "Thunderous Orator",
   "scryfallId": "ef3b2961-559f-42b1-be13-ff3d03e62809",
   "oracleId": "7716ad72-9e96-4915-bc1e-e12b4d0f6f9c",
