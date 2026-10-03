@@ -86,9 +86,12 @@ function extraLegends(ctx: Ctx): ObjectId[] {
     // Helm of the Host's copies aren't legendary.
     if (!def(ctx, id).supertypes.includes('Legendary') || obj(ctx, id).nonlegendary) continue;
     const o = obj(ctx, id);
+    // Marvel Super Heroes Jumpstart (Tricksters): Loki's copies aren't legendary.
+    if (o.copyNotLegendary) continue;
     // Council of Reeds: "The legend rule doesn't apply to creatures you control."
     if (def(ctx, id).types.includes('Creature') && legendRuleOff(ctx, o.controller)) continue;
-    const key = `${o.controller}:${o.defId}`;
+    // Impossible Man keeps his own name while copying.
+    const key = `${o.controller}:${o.copyKeepsName && o.originalDefId ? o.originalDefId : o.defId}`;
     const prev = newest.get(key);
     if (prev === undefined) newest.set(key, id);
     else if (obj(ctx, prev).timestamp < o.timestamp) {

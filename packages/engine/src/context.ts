@@ -364,6 +364,9 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
     delete o.copyWhileSource;
     delete o.copyAsCreature;
     delete o.copyAddedSubtypes;
+    // Marvel Super Heroes Jumpstart (Tricksters).
+    delete o.copyNotLegendary;
+    delete o.copyKeepsName;
   }
   // Marvel Super Heroes (Secret Invasion): a copy lasting while this stays ends as it leaves.
   if (from === 'battlefield')

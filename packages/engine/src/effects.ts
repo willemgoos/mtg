@@ -38,6 +38,7 @@ import { nextInt, shuffleInPlace } from './rng.ts';
 import { checkCondition } from './triggers.ts';
 import { addLore } from './sagas.ts';
 import type {
+  AbilityDef,
   CardDefId,
   CardFilter,
   GameObject,
@@ -2017,6 +2018,20 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
       const source = es.source && onBattlefield(ctx, es.source);
       const self = e.what ? ctx.s.objects[objectsOf(ctx, es, e.what)[0] ?? ''] : source;
       const of = objectsOf(ctx, es, e.of)[0];
+      // Marvel Super Heroes Jumpstart (Tricksters): each of them, until end of turn (Loki, Lord of Misrule).
+      if (e.each && e.what && of) {
+        for (const id of objectsOf(ctx, es, e.what)) {
+          const o = ctx.s.objects[id];
+          if (id === of || !o || o.zone !== 'battlefield') continue;
+          endCopy(ctx, o);
+          o.originalDefId = o.defId;
+          o.defId = obj(ctx, of).defId;
+          if (obj(ctx, of).copyPT) o.copyPT = { ...obj(ctx, of).copyPT! };
+          o.copyingUntilTurn = ctx.s.turn.number;
+          if (e.notLegendary) o.copyNotLegendary = true;
+        }
+        return;
+      }
       if (!self || self.zone !== 'battlefield' || !of) return;
       endCopy(ctx, self);
       self.originalDefId ??= self.defId;
@@ -2026,6 +2041,9 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
       if (e.until === 'yourNextTurn') self.copyUntilTurnOf = es.controller;
       else if (e.until === 'whileSource' && source) self.copyWhileSource = source.id;
       else self.copyingUntilTurn = ctx.s.turn.number;
+      // Marvel Super Heroes Jumpstart (Tricksters): not legendary; keeps its name (Impossible Man).
+      if (e.notLegendary) self.copyNotLegendary = true;
+      if (e.keepName) self.copyKeepsName = true;
       if (e.asCreature) {
         self.copyAsCreature = true;
         self.copyPT = { power: e.asCreature.power, toughness: e.asCreature.toughness };
@@ -2231,6 +2249,8 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
           ...(item.paws ? { paws: item.paws } : {}),
           copy: true,
         });
+        // Marvel Super Heroes Jumpstart (Tricksters): "except the copy isn't legendary".
+        if (e.notLegendary) copy.nonlegendary = true;
       }
       return;
     }
@@ -2276,11 +2296,22 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
     }
     case 'emblem': {
       const ownTurn = ctx.s.turn.activePlayer === es.controller;
+      // Marvel Super Heroes Jumpstart (Tricksters): only creatures with the chosen name (The Clone Saga).
+      let ability = e.ability;
+      if (e.namedLike) {
+        const named = objectsOf(ctx, es, e.namedLike)[0];
+        const t = ability.kind === 'triggered' ? ability.trigger : undefined;
+        if (!named || t?.on !== 'creatureYouControlDealsCombatDamage') return;
+        ability = {
+          ...ability,
+          trigger: { ...t, filter: { ...t.filter, named: obj(ctx, named).defId } },
+        } as AbilityDef;
+      }
       (ctx.s.emblems ??= []).push({
         controller: es.controller,
         source: es.source ?? { id: 'emblem', zcc: 0 },
         sourceDefId: es.sourceDefId,
-        ability: e.ability,
+        ability,
         ...(e.until === 'endOfYourNextTurn'
           ? { untilTurn: ctx.s.turn.number + (ownTurn ? 2 : 1) }
           : {}),
@@ -2715,6 +2746,8 @@ export function endCopy(ctx: Ctx, o: GameObject): void {
   delete o.copyingUntilTurn;
   delete o.copyUntilTurnOf;
   delete o.copyWhileSource;
+  delete o.copyNotLegendary;
+  delete o.copyKeepsName;
   if (o.copyAsCreature) delete o.grantedKeywords;
   delete o.copyAsCreature;
   if (o.copyAddedSubtypes) {

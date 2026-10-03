@@ -1036,7 +1036,15 @@ export type EffectDef =
   | { kind: 'sacrificeSeveral'; count: number; filter: CardFilter; then: EffectDef[] }
   /** Copy a spell on the stack (`count` times): a target spell, or the spell that triggered this. */
   /** `retarget`: each copy gets another legal target if there is one (Ancestral Communion). */
-  | { kind: 'copySpell'; what: Ref; count?: Amount; retarget?: boolean }
+  | {
+      kind: 'copySpell';
+      what: Ref;
+      count?: Amount;
+      retarget?: boolean;
+      // Marvel Super Heroes Jumpstart (Tricksters)
+      /** "Except the copy isn't legendary" (The Clone Saga). */
+      notLegendary?: boolean;
+    }
   /** Each player sacrifices a creature of their choice (Season of Loss). */
   | { kind: 'eachPlayerSacrifices' }
   /**
@@ -1048,6 +1056,9 @@ export type EffectDef =
       ability: AbilityDef;
       // Final Fantasy (11c): 'endOfTurn' (Summon: Leviathan's attack draws).
       until: 'endOfYourNextTurn' | 'permanent' | 'nextSpellThisTurn' | 'endOfTurn';
+      // Marvel Super Heroes Jumpstart (Tricksters)
+      /** Its trigger's filter only matches cards with this object's name (The Clone Saga). */
+      namedLike?: Ref;
     }
   /** Marks the gift as given (for "whenever you give a gift"). */
   | { kind: 'giftGiven' }
@@ -1461,6 +1472,13 @@ export type EffectDef =
       until?: 'yourNextTurn' | 'whileSource';
       /** "Except he's a 4/4 Human Villain creature with vigilance" (Absorbing Man). */
       asCreature?: { power: number; toughness: number; subtypes: string[]; keywords: Keyword[] };
+      // Marvel Super Heroes Jumpstart (Tricksters)
+      /** Every object in `what` other than the copied one becomes a copy (Loki, Lord of Misrule). */
+      each?: boolean;
+      /** "Except it isn't legendary" (Loki, Lord of Misrule). */
+      notLegendary?: boolean;
+      /** "Except his name is Impossible Man": it keeps its own name (for the legend rule). */
+      keepName?: boolean;
     }
   /** Tragic Arrogance: each player keeps one artifact, creature, enchantment and planeswalker (picked for them). */
   | { kind: 'keepOneOfEachType' }
@@ -1961,6 +1979,10 @@ export interface GameObject {
   /** While copying, it's still a creature with copyPT (Absorbing Man), and these subtypes were added. */
   copyAsCreature?: boolean;
   copyAddedSubtypes?: string[];
+  // Marvel Super Heroes Jumpstart (Tricksters)
+  /** While copying, it isn't legendary (Loki, Lord of Misrule) or keeps its own name (Impossible Man). */
+  copyNotLegendary?: boolean;
+  copyKeepsName?: boolean;
   // Wakanda Forever (9c).
   /** It's monstrous (Fleecemane Lion). */
   monstrous?: boolean;
