@@ -52,6 +52,8 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
   const extraSubtypes: string[] = [];
   // A Vehicle that became an artifact creature this turn.
   let crewed = false;
+  // Marvel Super Heroes Jumpstart (Great Lakes Avengers): Flatman switches power and toughness.
+  let switched = false;
 
   if (o.zone === 'battlefield') {
     for (const e of ctx.s.effects) {
@@ -63,6 +65,7 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
     for (const e of ctx.s.effects) {
       if (e.affected.id !== id || e.affected.zcc !== o.zcc) continue;
       if (e.becomesCreature) crewed = true;
+      if (e.switchPT) switched = !switched;
       power += e.power;
       toughness += e.toughness;
       if (e.cantBlock) cantBlock = true;
@@ -223,6 +226,8 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
     for (const k of removed) granted.delete(k);
     keywords = granted;
   }
+  // Switching is applied after every other change to power and toughness.
+  if (switched) [power, toughness] = [toughness, power];
   let subtypes = o.addedSubtypes ? [...d.subtypes, ...o.addedSubtypes] : d.subtypes;
   // Final Fantasy (11a): job select.
   if (extraSubtypes.length)

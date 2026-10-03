@@ -1359,6 +1359,9 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
           ...(e.cantBeBlocked ? { cantBeBlocked: true } : {}),
           ...(e.returnWhenDies ? { returnWhenDies: e.returnWhenDies } : {}),
           ...(e.cantBeBlockedExcept ? { cantBeBlockedExcept: e.cantBeBlockedExcept } : {}),
+          // Marvel Super Heroes Jumpstart (Great Lakes Avengers)
+          ...(e.cantBeBlockedBy ? { cantBeBlockedBy: e.cantBeBlockedBy } : {}),
+          ...(e.switchPT ? { switchPT: true } : {}),
           ...(e.counterOnCombatDamage ? { counterOnCombatDamage: true } : {}),
           ...(e.sacrificeOnCombatDamage ? { sacrificeOnCombatDamage: true } : {}),
           ...(e.basePT ? { basePT: e.basePT } : {}),
@@ -2566,9 +2569,9 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
       }
       return;
     case 'returnSource': {
-      // Only the same card, still in the graveyard it went to.
+      // Only the same card, still in the graveyard it went to (or in exile: Mister Immortal).
       const o = es.source && ctx.s.objects[es.source.id];
-      if (!o || o.zone !== 'graveyard' || o.zcc !== es.source!.zcc) return;
+      if (!o || (o.zone !== 'graveyard' && o.zone !== 'exile') || o.zcc !== es.source!.zcc) return;
       if (e.to === 'hand') return moveObject(ctx, o.id, 'hand');
       // Final Fantasy (11b): returned transformed (Garland).
       moveObject(ctx, o.id, 'battlefield', {

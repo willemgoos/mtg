@@ -476,12 +476,19 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
     ...s.battlefield.filter((id) => obj(ctx, id).controller === player),
     ...ps.graveyard,
     ...ps.hand,
+    ...ps.exile,
   ];
   for (const source of abilitySources) {
     const zone = obj(ctx, source).zone;
     def(ctx, source).abilities.forEach((a, abilityIndex) => {
       if (a.kind !== 'activated') return;
-      if ((a.fromGraveyard ? 'graveyard' : a.fromHand ? 'hand' : 'battlefield') !== zone) return;
+      // Marvel Super Heroes Jumpstart (Great Lakes Avengers): Mister Immortal, also from exile.
+      const fromExile = a.fromExile && zone === 'exile';
+      if (
+        !fromExile &&
+        (a.fromGraveyard ? 'graveyard' : a.fromHand ? 'hand' : 'battlefield') !== zone
+      )
+        return;
       if (a.sorcerySpeed && !sorcery) return;
       if ((a.once || a.powerUp) && obj(ctx, source).usedAbilities?.includes(abilityIndex)) return;
       if (a.powerUp && s.turn.noPowerUp) return;

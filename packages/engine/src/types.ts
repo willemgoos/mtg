@@ -285,6 +285,9 @@ export type AbilityDef =
       label?: string;
       /** Activated from the graveyard (Reassembling Skeleton). */
       fromGraveyard?: boolean;
+      // Marvel Super Heroes Jumpstart (Great Lakes Avengers)
+      /** Also activated from exile, with `fromGraveyard` (Mister Immortal). */
+      fromExile?: boolean;
       // Power-up (Marvel Super Heroes)
       /** Power-up: once only, and it costs the card's mana cost less if it entered this turn. */
       powerUp?: boolean;
@@ -937,6 +940,11 @@ export type EffectDef =
       returnWhenDies?: ReturnWhenDies;
       /** Can't be blocked except by creatures with this keyword (Speed: haste). */
       cantBeBlockedExcept?: Keyword;
+      // Marvel Super Heroes Jumpstart (Great Lakes Avengers)
+      /** Can't be blocked by creatures matching this filter this turn (Doorman). */
+      cantBeBlockedBy?: CardFilter;
+      /** Switch its power and toughness until end of turn (Flatman). */
+      switchPT?: boolean;
       /** "Whenever it deals combat damage to a player this turn, put a +1/+1 counter on it" (Love on the Battlefield). */
       counterOnCombatDamage?: boolean;
       /** "When this creature deals combat damage, sacrifice it" (Dropkick Bomber). */
@@ -2244,6 +2252,11 @@ export interface ContinuousEffect {
   mustAttack?: boolean;
   // Avengers Assemble (9b).
   cantBeBlockedExcept?: Keyword;
+  // Marvel Super Heroes Jumpstart (Great Lakes Avengers)
+  /** Can't be blocked by creatures matching this filter (Doorman). */
+  cantBeBlockedBy?: CardFilter;
+  /** Its power and toughness are switched (Flatman). */
+  switchPT?: boolean;
   counterOnCombatDamage?: boolean;
   /** Damage to this player and their creatures goes to the affected creature instead (Heroic Sacrifice). */
   redirectFor?: PlayerId;

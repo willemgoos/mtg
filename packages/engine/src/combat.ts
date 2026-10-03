@@ -96,6 +96,15 @@ export function canBlock(ctx: Ctx, blocker: ObjectId, attacker: ObjectId): boole
       matchesFilter(ctx, blocker, ab.effect.filter, attacker)
     )
       return false;
+  // Marvel Super Heroes Jumpstart (Great Lakes Avengers): Doorman, until end of turn.
+  for (const e of ctx.s.effects)
+    if (
+      e.cantBeBlockedBy &&
+      e.affected.id === attacker &&
+      e.affected.zcc === obj(ctx, attacker).zcc &&
+      matchesFilter(ctx, blocker, e.cantBeBlockedBy, attacker)
+    )
+      return false;
   // Speed: "can't be blocked this turn except by creatures with haste".
   for (const e of ctx.s.effects)
     if (

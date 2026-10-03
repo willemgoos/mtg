@@ -22308,6 +22308,102 @@
   }
  },
  {
+  "name": "Doorman",
+  "scryfallId": "e569b77e-e65b-4187-a971-41e4bfb526de",
+  "oracleId": "01ea2130-e212-4532-b68b-2f940d53ef6e",
+  "set": "msc",
+  "collectorNumber": "720",
+  "rarity": "uncommon",
+  "manaCost": "{1}{G}",
+  "typeLine": "Legendary Creature — Mutant Hero",
+  "oracleText": "{T}: Until end of turn, target creature can't be blocked by creatures with power 2 or less and/or Walls.",
+  "power": "2",
+  "toughness": "3",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/5/e569b77e-e65b-4187-a971-41e4bfb526de.jpg?1783903040",
+   "normal": "https://cards.scryfall.io/normal/front/e/5/e569b77e-e65b-4187-a971-41e4bfb526de.jpg?1783903040",
+   "large": "https://cards.scryfall.io/large/front/e/5/e569b77e-e65b-4187-a971-41e4bfb526de.jpg?1783903040",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/5/e569b77e-e65b-4187-a971-41e4bfb526de.jpg?1783903040"
+  }
+ },
+ {
+  "name": "Mister Immortal",
+  "scryfallId": "ca30b59b-e475-422e-8332-44144db78177",
+  "oracleId": "f016ad56-4f73-4091-a1c2-937782642ecb",
+  "set": "msc",
+  "collectorNumber": "727",
+  "rarity": "rare",
+  "manaCost": "{1}{G}",
+  "typeLine": "Legendary Creature — Mutant Hero",
+  "oracleText": "{2}{G}: Return this card from your graveyard or from exile to the battlefield tapped.",
+  "power": "2",
+  "toughness": "1",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/a/ca30b59b-e475-422e-8332-44144db78177.jpg?1783903036",
+   "normal": "https://cards.scryfall.io/normal/front/c/a/ca30b59b-e475-422e-8332-44144db78177.jpg?1783903036",
+   "large": "https://cards.scryfall.io/large/front/c/a/ca30b59b-e475-422e-8332-44144db78177.jpg?1783903036",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/a/ca30b59b-e475-422e-8332-44144db78177.jpg?1783903036"
+  }
+ },
+ {
+  "name": "Flatman",
+  "scryfallId": "0b3e0339-f54b-41a9-ac80-8d58a61ef5b9",
+  "oracleId": "3a7e3423-4df3-4e10-9861-ac2f403bc49d",
+  "set": "msc",
+  "collectorNumber": "721",
+  "rarity": "uncommon",
+  "manaCost": "{3}{G}",
+  "typeLine": "Legendary Creature — Mutant Hero",
+  "oracleText": "Origami-Fu — {2}{G}: Switch Flatman's power and toughness until end of turn.",
+  "power": "1",
+  "toughness": "10",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Origami-Fu"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/b/0b3e0339-f54b-41a9-ac80-8d58a61ef5b9.jpg?1783903039",
+   "normal": "https://cards.scryfall.io/normal/front/0/b/0b3e0339-f54b-41a9-ac80-8d58a61ef5b9.jpg?1783903039",
+   "large": "https://cards.scryfall.io/large/front/0/b/0b3e0339-f54b-41a9-ac80-8d58a61ef5b9.jpg?1783903039",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/b/0b3e0339-f54b-41a9-ac80-8d58a61ef5b9.jpg?1783903039"
+  }
+ },
+ {
+  "name": "Big Bertha",
+  "scryfallId": "bca1d8ba-69a5-4246-bfb8-150d72206c18",
+  "oracleId": "32654ffa-b869-4f8b-a153-4242e8f9d92e",
+  "set": "msc",
+  "collectorNumber": "714",
+  "rarity": "uncommon",
+  "manaCost": "{X}{G}",
+  "typeLine": "Legendary Creature — Mutant Hero",
+  "oracleText": "Vigilance\nBig Bertha enters with X +1/+1 counters on her.\n{1}{G}, {T}: Put a +1/+1 counter on Big Bertha.",
+  "power": "1",
+  "toughness": "1",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Vigilance"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/c/bca1d8ba-69a5-4246-bfb8-150d72206c18.jpg?1783903042",
+   "normal": "https://cards.scryfall.io/normal/front/b/c/bca1d8ba-69a5-4246-bfb8-150d72206c18.jpg?1783903042",
+   "large": "https://cards.scryfall.io/large/front/b/c/bca1d8ba-69a5-4246-bfb8-150d72206c18.jpg?1783903042",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/c/bca1d8ba-69a5-4246-bfb8-150d72206c18.jpg?1783903042"
+  }
+ },
+ {
   "name": "Iron Fist, Hero for Hire",
   "scryfallId": "9f1cdf84-c034-4435-8ce7-50f6b777fb57",
   "oracleId": "58c8bf6a-1b13-4c90-9e0b-24fb687f1e13",
