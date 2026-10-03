@@ -22184,6 +22184,130 @@
   }
  },
  {
+  "name": "Lucky the Pizza Dog",
+  "scryfallId": "5fc454a5-39af-421d-a494-727ac7b6115e",
+  "oracleId": "3a429a1e-62c0-4f01-b09e-2bbf63e56a98",
+  "set": "msc",
+  "collectorNumber": "726",
+  "rarity": "rare",
+  "manaCost": "{1}{G}",
+  "typeLine": "Legendary Creature — Dog",
+  "oracleText": "Whenever you cast a Cat, Dog, or Hero spell, create a Food token. (It's an artifact with \"{2}, {T}, Sacrifice this token: You gain 3 life.\")\nAt the beginning of each end step, if you gained life this turn, put a +1/+1 counter on Lucky.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Food"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/f/5fc454a5-39af-421d-a494-727ac7b6115e.jpg?1783903037",
+   "normal": "https://cards.scryfall.io/normal/front/5/f/5fc454a5-39af-421d-a494-727ac7b6115e.jpg?1783903037",
+   "large": "https://cards.scryfall.io/large/front/5/f/5fc454a5-39af-421d-a494-727ac7b6115e.jpg?1783903037",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/f/5fc454a5-39af-421d-a494-727ac7b6115e.jpg?1783903037"
+  }
+ },
+ {
+  "name": "Wakandan Tusker",
+  "scryfallId": "5c390e05-2f69-45af-9646-eded19d45dd8",
+  "oracleId": "9e8ffb63-1a7b-4ebe-839d-d5192522db65",
+  "set": "msc",
+  "collectorNumber": "748",
+  "rarity": "uncommon",
+  "manaCost": "{1}{G/W}",
+  "typeLine": "Creature — Elephant",
+  "oracleText": "Whenever this creature becomes tapped, you gain 1 life and scry 1. (Look at the top card of your library. You may put that card on the bottom.)",
+  "power": "2",
+  "toughness": "3",
+  "colors": [
+   "G",
+   "W"
+  ],
+  "keywords": [
+   "Scry"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/c/5c390e05-2f69-45af-9646-eded19d45dd8.jpg?1783903030",
+   "normal": "https://cards.scryfall.io/normal/front/5/c/5c390e05-2f69-45af-9646-eded19d45dd8.jpg?1783903030",
+   "large": "https://cards.scryfall.io/large/front/5/c/5c390e05-2f69-45af-9646-eded19d45dd8.jpg?1783903030",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/c/5c390e05-2f69-45af-9646-eded19d45dd8.jpg?1783903030"
+  }
+ },
+ {
+  "name": "Tippy-Toe, Terrific Partner",
+  "scryfallId": "6082ab9f-290e-4230-84a0-46c7f8ed712d",
+  "oracleId": "6a1bce89-0c11-4d8d-aacb-c0a5a5effffc",
+  "set": "msc",
+  "collectorNumber": "734",
+  "rarity": "uncommon",
+  "manaCost": "{3}{G}",
+  "typeLine": "Legendary Creature — Squirrel Hero",
+  "oracleText": "If you would create one or more tokens, instead create those tokens plus an additional Food token. (It's an artifact with \"{2}, {T}, Sacrifice this token: You gain 3 life.\")\nAt the beginning of your end step, if you gained life this turn, draw a card.",
+  "power": "2",
+  "toughness": "4",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Food"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/0/6082ab9f-290e-4230-84a0-46c7f8ed712d.jpg?1783903035",
+   "normal": "https://cards.scryfall.io/normal/front/6/0/6082ab9f-290e-4230-84a0-46c7f8ed712d.jpg?1783903035",
+   "large": "https://cards.scryfall.io/large/front/6/0/6082ab9f-290e-4230-84a0-46c7f8ed712d.jpg?1783903035",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/0/6082ab9f-290e-4230-84a0-46c7f8ed712d.jpg?1783903035"
+  }
+ },
+ {
+  "name": "Scout the City",
+  "scryfallId": "3d4dfb11-1aa4-4be1-874b-19a9b02ad041",
+  "oracleId": "ecb8e283-5cdb-4e6a-bdff-546c1617363c",
+  "set": "msc",
+  "collectorNumber": "817",
+  "rarity": "common",
+  "manaCost": "{1}{G}",
+  "typeLine": "Sorcery",
+  "oracleText": "Choose one —\n• Look Around — Mill three cards. You may put a permanent card from among them into your hand. You gain 3 life. (To mill three cards, put the top three cards of your library into your graveyard.)\n• Bring Down — Destroy target creature with flying.",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Look Around",
+   "Bring Down",
+   "Mill"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/d/3d4dfb11-1aa4-4be1-874b-19a9b02ad041.jpg?1783903005",
+   "normal": "https://cards.scryfall.io/normal/front/3/d/3d4dfb11-1aa4-4be1-874b-19a9b02ad041.jpg?1783903005",
+   "large": "https://cards.scryfall.io/large/front/3/d/3d4dfb11-1aa4-4be1-874b-19a9b02ad041.jpg?1783903005",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/d/3d4dfb11-1aa4-4be1-874b-19a9b02ad041.jpg?1783903005"
+  }
+ },
+ {
+  "name": "Beast Mode",
+  "scryfallId": "39191f85-7698-487e-afad-07648a7cb695",
+  "oracleId": "a465f8a9-d5aa-4dfa-b674-7aa1798cb0bd",
+  "set": "msc",
+  "collectorNumber": "713",
+  "rarity": "common",
+  "manaCost": "{1}{G}",
+  "typeLine": "Instant",
+  "oracleText": "Teamwork 1 (As an additional cost to cast this spell, you may tap any number of creatures you control with total power 1 or more.)\nTarget creature gets +2/+2 and gains trample until end of turn. Also put a +1/+1 counter on that creature if this spell was cast using teamwork.",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Teamwork"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/9/39191f85-7698-487e-afad-07648a7cb695.jpg?1783903042",
+   "normal": "https://cards.scryfall.io/normal/front/3/9/39191f85-7698-487e-afad-07648a7cb695.jpg?1783903042",
+   "large": "https://cards.scryfall.io/large/front/3/9/39191f85-7698-487e-afad-07648a7cb695.jpg?1783903042",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/9/39191f85-7698-487e-afad-07648a7cb695.jpg?1783903042"
+  }
+ },
+ {
   "name": "Bob, Reluctant HYDRA Agent",
   "scryfallId": "423c5752-b634-44a9-82b3-2dd1045e4d90",
   "oracleId": "9caa490e-dc28-4069-9ffb-4b1afd8fdd54",

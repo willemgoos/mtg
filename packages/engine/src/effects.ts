@@ -1540,6 +1540,22 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
                   to: 'battlefield',
                 });
               }
+      // Marvel Super Heroes Jumpstart (Animal): Tippy-Toe, "those tokens plus an additional Food token".
+      if (n > 0)
+        for (const id of [...ctx.s.battlefield])
+          if (obj(ctx, id).controller === owner)
+            for (const a of def(ctx, id).abilities)
+              if (a.kind === 'static' && a.effect.kind === 'plusFoodToken') {
+                const f = createObject(ctx, 'food-token', owner, 'battlefield', true);
+                ctx.s.battlefield.push(f.id);
+                emit(ctx, {
+                  type: 'objectMoved',
+                  id: f.id,
+                  defId: f.defId,
+                  from: null,
+                  to: 'battlefield',
+                });
+              }
       return;
     }
     case 'scry':
