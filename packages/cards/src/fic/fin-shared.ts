@@ -20,6 +20,7 @@ import {
   equipped,
   exile,
   jobSelect,
+  landcycling,
   optional,
   t1,
   yourEquipment,
@@ -57,6 +58,14 @@ import {
  * Phase 11 implements the FIN set in parallel (packages/cards/src/fin/); these
  * live here only, so the merge can reconcile the two.
  */
+
+const PERMANENT_TYPES: ('Artifact' | 'Creature' | 'Enchantment' | 'Land' | 'Planeswalker')[] = [
+  'Artifact',
+  'Creature',
+  'Enchantment',
+  'Land',
+  'Planeswalker',
+];
 
 const town = (...colors: Parameters<typeof tapForEither>): Behavior => ({
   entersTapped: true,
@@ -880,6 +889,196 @@ export const FIN_SHARED: Record<string, Behavior> = {
   }),
   "The Crystal's Chosen": spell([], token('hero-1-1-token', 4), counters(yours())),
 
+  // ============================================================ Brawl Aerith (12e)
+  "Adventurer's Inn": { abilities: [onEnter([], gain(2)), tapFor('C')] },
+  'Crossroads Village': {
+    entersTapped: true,
+    abilities: [
+      onEnter([], { kind: 'chooseColor' }),
+      ...COLORS.map((c) => tapFor(c, { ifChosen: true })),
+    ],
+  },
+  // ------------------------------------------------------------ creatures
+  'Balamb T-Rexaur': { abilities: [onEnter([], gain(3)), landcycling('{2}', 'Forest')] },
+  'Cloud, Midgar Mercenary': {
+    // Its doubled triggers while equipped aren't built (a simplification).
+    abilities: [onEnter([], { kind: 'searchLibrary', filter: equipment, to: 'hand' })],
+  },
+  'Coliseum Behemoth': {
+    abilities: [
+      {
+        ...onEnter([]),
+        modes: [
+          mode(
+            'Destroy an artifact or enchantment',
+            [permanent({ types: ['Artifact', 'Enchantment'] })],
+            destroy(t0),
+          ),
+          mode('Draw a card', [], draw(1)),
+        ],
+      },
+    ],
+  },
+  'Diamond Weapon': {
+    costReduction: { count: 'cardsInGraveyard', types: PERMANENT_TYPES },
+    // "Prevent all combat damage dealt to it": all damage to it (a simplification).
+    abilities: [staticAbility({ kind: 'preventDamageToSelf' })],
+  },
+  'Gran Pulse Ochu': {
+    abilities: [
+      activated(
+        '{8}',
+        {},
+        [],
+        [
+          pump(
+            self,
+            { count: 'cardsInGraveyard', types: PERMANENT_TYPES },
+            { count: 'cardsInGraveyard', types: PERMANENT_TYPES },
+          ),
+        ],
+      ),
+    ],
+  },
+  'Minwu, White Mage': {
+    abilities: [when({ on: 'youGainLife' }, [], counters(yours({ subtype: 'Cleric' })))],
+  },
+  'Quina, Qu Gourmet': {
+    abilities: [
+      staticAbility({ kind: 'plusFrogToken' }),
+      activated('{2}', { sacrificePermanent: { subtype: 'Frog' } }, [], [counters(self)]),
+    ],
+  },
+  'Serah Farron': {
+    abilities: [
+      staticAbility({
+        kind: 'spellsCostLessIf',
+        filter: { types: ['Creature'], supertypes: ['Legendary'] },
+        amount: 2,
+        condition: condition('noLegendCastThisTurn'),
+      }),
+      {
+        ...atCombat([], may({ kind: 'transform', what: self })),
+        condition: {
+          kind: 'controlsCreature',
+          filter: { supertypes: ['Legendary'], other: true },
+          count: 2,
+        },
+      },
+    ],
+  },
+  'Snow Villiers': { powerEquals: { count: 'creaturesYouControl' } },
+  'Stiltzkin, Moogle Merchant': {
+    abilities: [
+      activated(
+        '{2}',
+        { tapSelf: true },
+        [permanent({ other: true }, { controller: 'you' })],
+        [{ kind: 'giveControl', what: t0, to: 'eachOpponent' }, draw(1)],
+      ),
+    ],
+  },
+  'Traveling Chocobo': {
+    // Its doubled land and Bird triggers aren't built (a simplification).
+    abilities: [
+      staticAbility({
+        kind: 'playFromTop',
+        filter: { anyOf: [{ types: ['Land'] }, { subtype: 'Bird' }] },
+      }),
+    ],
+  },
+  'Yuna, Hope of Spira': {
+    abilities: [
+      staticAbility({
+        kind: 'anthem',
+        affects: 'creaturesYouControl',
+        filter: { anyOf: [{ sameNameAsSource: true }, { types: ['Enchantment'] }] },
+        condition: { kind: 'yourTurn' },
+        power: 0,
+        toughness: 0,
+        keywords: ['trample', 'lifelink', 'ward'],
+      }),
+      when(
+        { on: 'beginningOfEndStep', whose: 'yours' },
+        [graveyardCard({ types: ['Enchantment'] }, { optional: true })],
+        { kind: 'returnToBattlefield', what: t0, counter: 'finality' },
+      ),
+    ],
+  },
+  // ------------------------------------------------------------ other permanents
+  'Chocobo Racetrack': { abilities: [when({ on: 'landfall' }, [], token('chocobo-bird-token'))] },
+  'Excalibur II': {
+    abilities: [
+      when({ on: 'youGainLife' }, [], { kind: 'namedCounters', name: 'charge', amount: 1 }),
+      equipped({ namedCountersOnSource: 'charge' }, { namedCountersOnSource: 'charge' }),
+      equip('{3}'),
+    ],
+  },
+  'Instant Ramen': {
+    abilities: [
+      onEnter([], draw(1)),
+      activated('{2}', { tapSelf: true, sacrificeSelf: true }, [], [gain(3)]),
+    ],
+  },
+  'Sidequest: Catch a Fish': {
+    abilities: [when({ on: 'beginningOfUpkeep', whose: 'yours' }, [], custom('catchAFish'))],
+  },
+  'Sidequest: Raise a Chocobo': {
+    abilities: [
+      onEnter([], token('chocobo-bird-token')),
+      {
+        ...when(
+          { on: 'beginningOfMain', which: 1 },
+          [],
+          { kind: 'transform', what: self },
+          // "When this permanent transforms into Black Chocobo": a land onto the battlefield tapped.
+          { kind: 'searchLibrary', filter: { types: ['Land'] }, to: 'battlefieldTapped' },
+        ),
+        condition: { kind: 'controlsPermanents', filter: { subtype: 'Bird' }, min: 4 },
+      },
+    ],
+  },
+  'The Wind Crystal': {
+    abilities: [
+      staticAbility({ kind: 'spellsCostLess', filter: { colors: ['W'] }, amount: 1 }),
+      staticAbility({ kind: 'doubleLifeGain' }),
+      activated('{4}{W}{W}', { tapSelf: true }, [], [pump(yours(), 0, 0, ['flying', 'lifelink'])]),
+    ],
+  },
+  // ------------------------------------------------------------ spells
+  'Chocobo Kick': {
+    ...spell([yourCreature, theirCreature], {
+      kind: 'damage',
+      amount: { powerOf: t0 },
+      to: t1,
+      from: t0,
+    }),
+    // Kicker—return a land you control to its owner's hand: paid as the spell resolves here.
+    kicker: {
+      cost: { generic: 0, colored: {} },
+      spell: {
+        targets: [yourCreature, theirCreature],
+        effects: [
+          {
+            kind: 'chooseYourPermanent',
+            filter: { types: ['Land'] },
+            then: [{ kind: 'bounce', what: 'chosen' }],
+          },
+          { kind: 'damage', amount: { multiply: 2, amount: { powerOf: t0 } }, to: t1, from: t0 },
+        ],
+      },
+    },
+  },
+  'Gysahl Greens': {
+    flashback: mana('{6}{G}'),
+    ...spell([], token('chocobo-bird-token')),
+  },
+  "Moogles' Valor": spell(
+    [],
+    token('moogle-token', { count: 'creaturesYouControl' }),
+    pump(yours(), 0, 0, ['indestructible']),
+  ),
+
   // ============================================================ Scions & Spellcraft (12d)
   'Treno, Dark City': town('U', 'B'),
   // ------------------------------------------------------------ creatures
@@ -1166,6 +1365,40 @@ export const FIN_SHARED_BACK_FACES: Record<string, Behavior> = {
     chapter([2], [], { kind: 'addMana', mana: [['G'], ['G']] }),
     chapter([3], [], pump(yours({ other: true }), 2, 2, ['trample'])),
   ),
+  'Crystallized Serah': {
+    abilities: [
+      staticAbility({
+        kind: 'spellsCostLessIf',
+        filter: { types: ['Creature'], supertypes: ['Legendary'] },
+        amount: 2,
+        condition: condition('noLegendCastThisTurn'),
+      }),
+      staticAbility({
+        kind: 'anthem',
+        affects: 'creaturesYouControl',
+        filter: { supertypes: ['Legendary'] },
+        power: 2,
+        toughness: 2,
+      }),
+    ],
+  },
+  'Cooking Campsite': {
+    abilities: [
+      tapFor('W'),
+      activated(
+        '{3}',
+        { tapSelf: true, sacrificePermanent: { types: ['Artifact'] } },
+        [],
+        [counters(yours())],
+        {
+          sorcerySpeed: true,
+        },
+      ),
+    ],
+  },
+  'Black Chocobo': {
+    abilities: [when({ on: 'landfall' }, [], pump(yours({ subtype: 'Bird' }), 1, 0))],
+  },
   'Hades, Sorcerer of Eld': {
     abilities: [
       staticAbility({ kind: 'playFromGraveyardOnYourTurn' }),

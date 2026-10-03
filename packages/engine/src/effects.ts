@@ -293,6 +293,12 @@ export function gainLife(ctx: Ctx, player: PlayerId, amount: number): void {
     for (const a of def(ctx, id).abilities)
       if (a.kind === 'static' && a.effect.kind === 'extraLifeGain') amount += a.effect.amount;
   }
+  // Final Fantasy Commander (12e): The Wind Crystal doubles it; the total gained this turn (Aerith).
+  for (const id of ctx.s.battlefield)
+    if (obj(ctx, id).controller === player)
+      for (const a of def(ctx, id).abilities)
+        if (a.kind === 'static' && a.effect.kind === 'doubleLifeGain') amount *= 2;
+  (ctx.s.turn.lifeGainedTotal ??= { p1: 0, p2: 0 })[player] += amount;
   ctx.s.turn.lifeGains[player]++;
   changeLife(ctx, player, amount);
 }
@@ -1316,6 +1322,22 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
         ctx.s.battlefield.push(t.id);
         emit(ctx, { type: 'objectMoved', id: t.id, defId: t.defId, from: null, to: 'battlefield' });
       }
+      // Final Fantasy Commander (12e): Quina, "those tokens plus a 1/1 green Frog".
+      if (n > 0 && e.token !== 'frog-token')
+        for (const id of ctx.s.battlefield)
+          if (obj(ctx, id).controller === owner)
+            for (const a of def(ctx, id).abilities)
+              if (a.kind === 'static' && a.effect.kind === 'plusFrogToken') {
+                const f = createObject(ctx, 'frog-token', owner, 'battlefield', true);
+                ctx.s.battlefield.push(f.id);
+                emit(ctx, {
+                  type: 'objectMoved',
+                  id: f.id,
+                  defId: f.defId,
+                  from: null,
+                  to: 'battlefield',
+                });
+              }
       return;
     }
     case 'scry':

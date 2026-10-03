@@ -144,8 +144,9 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
             granted ??= new Set(keywords);
             for (const k of st.legendaryKeywords) granted.add(k);
           }
-          power += countOf(ctx, src.controller, st.power);
-          toughness += countOf(ctx, src.controller, st.toughness);
+          // Final Fantasy Commander (12e): counts can look at the Equipment (Excalibur II's charge counters).
+          power += countOf(ctx, src.controller, st.power, false, srcId);
+          toughness += countOf(ctx, src.controller, st.toughness, false, srcId);
           if (st.keywords?.length) {
             granted ??= new Set(keywords);
             for (const k of st.keywords) granted.add(k);

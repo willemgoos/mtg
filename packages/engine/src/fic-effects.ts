@@ -608,6 +608,22 @@ export const FIC_EFFECTS: Record<string, CustomEffect> = {
       );
   },
 
+  // ---------------------------------------------------------------- 12e
+  /**
+   * Sidequest: Catch a Fish: an artifact or creature card on top goes to your
+   * hand (the engine always takes it); then a Food, and it transforms.
+   */
+  catchAFish(ctx, es) {
+    const top = ctx.s.players[es.controller].library[0];
+    if (!top) return;
+    const d = def(ctx, top);
+    if (!d.types.includes('Artifact') && !d.types.includes('Creature')) return;
+    moveObject(ctx, top, 'hand');
+    tokenCopyOfCard(ctx, 'food-token', es.controller);
+    const self = sourceObj(ctx, es);
+    if (self && self.zone === 'battlefield') transform(ctx, self.id);
+  },
+
   /** Put +1/+1 counters on the source equal to the power of what caused the trigger, as it last was. */
   countersBySubjectPower(ctx, es) {
     const self = sourceObj(ctx, es);
@@ -629,6 +645,16 @@ export const FIC_CONDITIONS: Record<
   startingPlayer: (ctx, p) => (ctx.s.turn.number % 2 === 1) === (ctx.s.turn.activePlayer === p),
   /** "If it's the first combat phase of the turn" (Genji Glove, Tifa). */
   firstCombat: (ctx) => !ctx.s.turn.laterCombat,
+  /** You gained 7 or more life this turn (Aerith, Last Ancient). */
+  gainedSeven: (ctx, p) => (ctx.s.turn.lifeGainedTotal?.[p] ?? 0) >= 7,
+  /** You haven't cast a legendary creature spell this turn (Serah Farron). */
+  noLegendCastThisTurn: (ctx, p) =>
+    !(ctx.s.turn.castDefs?.[p] ?? []).some((id) => {
+      const d = defOf(ctx, id);
+      return d.types.includes('Creature') && d.supertypes.includes('Legendary');
+    }),
+  /** +1/+1 counters were put on the source this turn (Wakka). */
+  sourceCountersThisTurn: (ctx, _p, self) => self?.countersTurn === ctx.s.turn.number,
   /** An opponent has seven or more cards in their graveyard (Into the Story). */
   opponentGraveyardSeven: (ctx, p) => ctx.s.players[other(p)].graveyard.length >= 7,
   /** A player lost 4 or more life this turn (Y'shtola). */

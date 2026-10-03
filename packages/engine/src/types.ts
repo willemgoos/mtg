@@ -1546,7 +1546,12 @@ export type StaticDef =
   /** During your turn, you may play cards from your graveyard (Hades, Sorcerer of Eld). */
   | { kind: 'playFromGraveyardOnYourTurn' }
   /** You may cast artifact spells from your graveyard for 3 more life; they enter with a finality counter (Noctis). */
-  | { kind: 'castArtifactsFromGraveyard' };
+  | { kind: 'castArtifactsFromGraveyard' }
+  // Final Fantasy Commander (12e).
+  /** If you would gain life, you gain twice that much instead (The Wind Crystal). */
+  | { kind: 'doubleLifeGain' }
+  /** Tokens you create come with a 1/1 green Frog (Quina; once per effect, not for the Frogs). */
+  | { kind: 'plusFrogToken' };
 
 export type CardDb = ReadonlyMap<CardDefId, CardDefinition>;
 
@@ -1869,6 +1874,8 @@ export interface TurnState {
   extraLands?: Record<PlayerId, number>;
   /** Final Fantasy Commander (12d): life each player lost this turn, in total (Y'shtola). */
   lifeLostTotal?: Record<PlayerId, number>;
+  /** Final Fantasy Commander (12e): life each player gained this turn, in total (Aerith, Last Ancient). */
+  lifeGainedTotal?: Record<PlayerId, number>;
 }
 
 export interface Attacker {

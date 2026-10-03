@@ -183,6 +183,10 @@ four decks. Three more FIC Brawl decks followed (9 December 2025, "Arena Store d
   (Noctis), Authority of the Consuls, "whenever you scry or surveil", life lost in total this turn. Fix: a
   transform card's back face (no mana cost) could be cast from hand for free. The Brawl fuzz test now plays each
   pairing once (it had grown past its time limit). Win rate over 20 games a pairing: 51% (30–60% per opponent).
+- **12e Done:** Brawl Aerith, Last Ancient. New: life gained in total this turn, doubled life gain (The Wind
+  Crystal), Quina's extra Frog token, Excalibur II's charge counters counted from the Equipment, "first legendary
+  creature spell each turn costs less" (Serah Farron), Sidequests that transform. Win rate over 20 games a pairing:
+  67% (55–90% per opponent), a little over the 65% aim with Arena's list unchanged.
 
 ### Lists: Arena against paper
 
@@ -254,3 +258,7 @@ only, for the merge with phase 11.
   card can be cast for the rest of the turn. Ultros counts mana value, not mana spent. Astrologian's Planisphere
   doesn't count third draws. Ninja's Blades discards the most expensive card. Ice Magic's Blizzara puts the creature
   on top. Xande counts artifact creature cards too. Ultimecia's extra turn comes with its own transform.
+- **12e:** Cloud, Midgar Mercenary and Traveling Chocobo don't double triggers. Diamond Weapon prevents all damage to
+  it, not only combat damage. Tataru Taru's opponent always draws. Catch a Fish always takes the card. Chocobo Kick's
+  kicker returns the land as the spell resolves. Quina's Frog comes with tokens made by token effects, not with Hero
+  tokens from job select.

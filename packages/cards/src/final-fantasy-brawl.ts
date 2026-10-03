@@ -2,6 +2,7 @@ import type { CardDefinition, Color, Keyword } from '@mtg/engine';
 import type { Behavior } from './build.ts';
 import { FIN_SHARED, FIN_SHARED_BACK_FACES } from './fic/fin-shared.ts';
 import { FIC_SHARED, FIC_SHARED_BACK_FACES } from './fic/shared.ts';
+import { AERITH } from './fic/aerith.ts';
 import { CLOUD } from './fic/cloud.ts';
 import { TERRA } from './fic/terra.ts';
 import { TIDUS } from './fic/tidus.ts';
@@ -20,6 +21,7 @@ export const FINAL_FANTASY_BRAWL_BEHAVIORS: Record<string, Behavior> = {
   ...CLOUD,
   ...TIDUS,
   ...YSHTOLA,
+  ...AERITH,
 };
 
 /** Back faces of double-faced cards: not cards of their own, so not in the pool. */
@@ -67,6 +69,8 @@ export const FINAL_FANTASY_BRAWL_TOKENS: CardDefinition[] = [
     supertypes: ['Legendary'],
   },
   creatureToken('wolf-2-2-token', 'Wolf', ['G'], ['Wolf'], 2, 2),
+  creatureToken('frog-token', 'Frog', ['G'], ['Frog'], 1, 1),
+  creatureToken('moogle-token', 'Moogle', ['W'], ['Moogle'], 1, 2, ['lifelink']),
   {
     // Black Mage Wizard: "Whenever you cast a noncreature spell, this token deals 1 damage to each opponent."
     ...creatureToken('wizard-ping-token', 'Wizard', ['B'], ['Wizard'], 0, 1),
