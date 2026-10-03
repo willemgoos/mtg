@@ -91,6 +91,8 @@ export const KEYWORDS_AS_ABILITIES = new Set([
   'Enrage',
   'Landcycling',
   'Basic landcycling',
+  // Marvel Super Heroes Jumpstart (Incredible): Hulk's Thunderclap.
+  'Behold',
   'Typecycling',
   'Extort',
   'Improvise',

@@ -39,7 +39,7 @@ import { checkCondition, triggeredAbility } from './triggers.ts';
 
 const NO_COST = { generic: 0, colored: {} };
 import { targetCombos } from './targets.ts';
-import type { Action, ObjectId, PlayerId, TargetChoice, TargetSpec } from './types.ts';
+import type { Action, CardFilter, ObjectId, PlayerId, TargetChoice, TargetSpec } from './types.ts';
 
 const MAX_MULLIGANS = 7;
 
@@ -210,6 +210,16 @@ function landDrops(ctx: Ctx, player: PlayerId): number {
   return n;
 }
 
+// Marvel Super Heroes Jumpstart (Incredible)
+/** Behold: a matching permanent you control, or another matching card in your hand. */
+function canBehold(ctx: Ctx, player: PlayerId, card: ObjectId, filter: CardFilter): boolean {
+  return (
+    ctx.s.battlefield.some(
+      (id) => obj(ctx, id).controller === player && matchesFilter(ctx, id, filter),
+    ) || ctx.s.players[player].hand.some((id) => id !== card && cardMatches(ctx, id, filter))
+  );
+}
+
 /** Every way to choose the face-up pile (order within a pile doesn't matter). */
 function pileSplits(cards: readonly ObjectId[]): ObjectId[][] {
   const out: ObjectId[][] = [];
@@ -352,6 +362,9 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
             // Teamwork: kicked only if there are creatures to tap.
             const teamwork = teamworkFor(ctx, player, card, { kicked: v.kicked });
             if (v.kicked && d.kicker?.teamwork !== undefined && !teamwork) continue;
+            // Marvel Super Heroes Jumpstart (Incredible): behold needs something to behold.
+            if (v.kicked && d.kicker?.behold && !canBehold(ctx, player, card, d.kicker.behold))
+              continue;
             const base = castCost(ctx, player, card, choice);
             if (!canPayFrom(base, pool) && !d.costReductionIfTarget) continue;
             const extra = {

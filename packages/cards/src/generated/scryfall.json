@@ -22647,6 +22647,125 @@
   }
  },
  {
+  "name": "Brawn, Amadeus Cho",
+  "scryfallId": "813ef553-28f2-46d5-b14b-76ebcbe061d4",
+  "oracleId": "19910a90-d334-4d99-89f2-cd81cea3c824",
+  "set": "msc",
+  "collectorNumber": "567",
+  "rarity": "uncommon",
+  "manaCost": "{1}{G/U}",
+  "typeLine": "Legendary Creature — Gamma Scientist Hero",
+  "oracleText": "When Brawn enters, draw a card.\nPower-up — {4}{G/U}: Put a +1/+1 counter on Brawn for each card in your hand. (Activate each power-up ability only once. Reduce the cost by his mana cost if he entered this turn.)",
+  "power": "1",
+  "toughness": "1",
+  "colors": [
+   "G",
+   "U"
+  ],
+  "keywords": [
+   "Power-up"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/1/813ef553-28f2-46d5-b14b-76ebcbe061d4.jpg?1783903093",
+   "normal": "https://cards.scryfall.io/normal/front/8/1/813ef553-28f2-46d5-b14b-76ebcbe061d4.jpg?1783903093",
+   "large": "https://cards.scryfall.io/large/front/8/1/813ef553-28f2-46d5-b14b-76ebcbe061d4.jpg?1783903093",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/1/813ef553-28f2-46d5-b14b-76ebcbe061d4.jpg?1783903093"
+  }
+ },
+ {
+  "name": "Hulk, Strongest There Is",
+  "scryfallId": "336a976b-c9db-4fcd-ac57-14eeb97962e8",
+  "oracleId": "35daea08-655d-4588-8430-b078769d22b6",
+  "set": "msc",
+  "collectorNumber": "724",
+  "rarity": "rare",
+  "manaCost": "{2}{G}{G}",
+  "typeLine": "Legendary Creature — Gamma Berserker Hero",
+  "oracleText": "Trample\nHulk enters with a +1/+1 counter on him.\nAt the beginning of your upkeep, double the number of +1/+1 counters on each Gamma creature you control.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Trample",
+   "Double"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/3/336a976b-c9db-4fcd-ac57-14eeb97962e8.jpg?1783903036",
+   "normal": "https://cards.scryfall.io/normal/front/3/3/336a976b-c9db-4fcd-ac57-14eeb97962e8.jpg?1783903036",
+   "large": "https://cards.scryfall.io/large/front/3/3/336a976b-c9db-4fcd-ac57-14eeb97962e8.jpg?1783903036",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/3/336a976b-c9db-4fcd-ac57-14eeb97962e8.jpg?1783903036"
+  }
+ },
+ {
+  "name": "Hulk's Thunderclap",
+  "scryfallId": "ddd8d212-dc93-4986-9907-c7d37092f68f",
+  "oracleId": "e377059d-a918-462f-920a-6b062bd5fcfd",
+  "set": "msc",
+  "collectorNumber": "725",
+  "rarity": "uncommon",
+  "manaCost": "{1}{G}",
+  "typeLine": "Sorcery",
+  "oracleText": "As an additional cost to cast this spell, you may behold a Gamma creature. (You may choose a Gamma creature you control or reveal a Gamma creature card from your hand.)\nTarget creature you control deals damage equal to its power to another target creature. If this spell's additional cost was paid, destroy target noncreature artifact or noncreature enchantment.",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Behold"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/d/ddd8d212-dc93-4986-9907-c7d37092f68f.jpg?1783903037",
+   "normal": "https://cards.scryfall.io/normal/front/d/d/ddd8d212-dc93-4986-9907-c7d37092f68f.jpg?1783903037",
+   "large": "https://cards.scryfall.io/large/front/d/d/ddd8d212-dc93-4986-9907-c7d37092f68f.jpg?1783903037",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/d/ddd8d212-dc93-4986-9907-c7d37092f68f.jpg?1783903037"
+  }
+ },
+ {
+  "name": "Origin of the Hulk",
+  "scryfallId": "8e93e473-b08a-43da-aa12-f86818e24a10",
+  "oracleId": "7398c8b2-373a-41c7-ac6c-7329f5944462",
+  "set": "msc",
+  "collectorNumber": "728",
+  "rarity": "uncommon",
+  "manaCost": "{2}{G}",
+  "typeLine": "Enchantment — Saga",
+  "oracleText": "(As this Saga enters and after your draw step, add a lore counter. Sacrifice after III.)\nI — Create a 1/1 green and white Citizen creature token.\nII — Put two +1/+1 counters on target creature you control.\nIII — Target creature you control gets +3/+3 and gains trample until end of turn.",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/e/8e93e473-b08a-43da-aa12-f86818e24a10.jpg?1784182936",
+   "normal": "https://cards.scryfall.io/normal/front/8/e/8e93e473-b08a-43da-aa12-f86818e24a10.jpg?1784182936",
+   "large": "https://cards.scryfall.io/large/front/8/e/8e93e473-b08a-43da-aa12-f86818e24a10.jpg?1784182936",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/e/8e93e473-b08a-43da-aa12-f86818e24a10.jpg?1784182936"
+  }
+ },
+ {
+  "name": "Super Strength",
+  "scryfallId": "1d24d200-63d4-44cf-8d3a-6c6ece5e16ff",
+  "oracleId": "e1b577ad-1488-43b5-83d9-e40bd60c74be",
+  "set": "msh",
+  "collectorNumber": "189",
+  "rarity": "common",
+  "manaCost": "{4}{G}",
+  "typeLine": "Enchantment — Aura",
+  "oracleText": "Enchant creature\nEnchanted creature gets +4/+4 and has trample and ward {1}. (Whenever enchanted creature becomes the target of a spell or ability an opponent controls, counter it unless that player pays {1}.)",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Enchant"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/d/1d24d200-63d4-44cf-8d3a-6c6ece5e16ff.jpg?1783902911",
+   "normal": "https://cards.scryfall.io/normal/front/1/d/1d24d200-63d4-44cf-8d3a-6c6ece5e16ff.jpg?1783902911",
+   "large": "https://cards.scryfall.io/large/front/1/d/1d24d200-63d4-44cf-8d3a-6c6ece5e16ff.jpg?1783902911",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/d/1d24d200-63d4-44cf-8d3a-6c6ece5e16ff.jpg?1783902911"
+  }
+ },
+ {
   "name": "White Widow, Yelena Belova",
   "scryfallId": "7dd6db74-1dba-4b66-8e54-9f876f16357c",
   "oracleId": "7aff7cb6-aa56-47ae-8813-75d850917320",

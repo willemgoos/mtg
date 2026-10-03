@@ -168,6 +168,12 @@ export interface CardDefinition {
     sacrifice?: CardFilter;
     /** "Kicker—Return a land you control to its owner's hand" (Chocobo Kick): `cost` is {0}. */
     returnLand?: boolean;
+    // Marvel Super Heroes Jumpstart (Incredible)
+    /**
+     * "As an additional cost, you may behold a <filter>" (Hulk's Thunderclap): `cost` is {0}; kicked
+     * only if you control a matching permanent or have another matching card in hand.
+     */
+    behold?: CardFilter;
     // Marvel Super Heroes Jumpstart (Pym Particles)
     /** "You may cast this spell as though it had flash if it's cast using teamwork" (Quantum Reduction). */
     flash?: boolean;
