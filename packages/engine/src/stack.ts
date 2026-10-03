@@ -25,7 +25,7 @@ import {
   cardMatches,
   matchesFilter,
 } from './characteristics.ts';
-import { changeLife, counterSpell, gainLife } from './effects.ts';
+import { changeLife, counterSpell, damageSourceFor, dealDamage, gainLife } from './effects.ts';
 import { foodsOf, payForage } from './forage.ts';
 import {
   anyTypeCost,
@@ -92,6 +92,9 @@ export interface CastChoice {
   sneak?: ObjectId | undefined;
   /** Teamwork: the creatures to tap. Omitted: the engine picks. */
   teamwork?: ObjectId[] | undefined;
+  // Strixhaven (13c): a 'free' cast that costs something (Jadzi: {1}, Uvilda: {4} less).
+  freePay?: ManaCost | undefined;
+  freeLess?: number | undefined;
 }
 
 /** The creatures a kicked teamwork cast taps: the chosen ones, or the engine's pick (sparing mana sources if it can). */
@@ -241,6 +244,12 @@ export function castCost(
   const v = variantOf(d, o.zone, choice);
   if (!v) throw new Error(`${o.defId} can't be cast that way`);
   let cost = v.cost;
+  // Strixhaven (13c): Jadzi (pay {1}) and Uvilda ({4} less) cast it for a price.
+  if (choice.via === 'free') {
+    if (choice.freePay) cost = choice.freePay;
+    else if (choice.freeLess)
+      cost = { ...d.manaCost, generic: Math.max(0, d.manaCost.generic - choice.freeLess) };
+  }
   // Brawl: commander tax.
   if (o.zone === 'command') cost = { ...cost, generic: cost.generic + commanderTax(ctx, player) };
   let reduce = d.costReduction !== undefined ? amountFor(ctx, player, d.costReduction) : 0;
@@ -297,7 +306,7 @@ export function castCost(
     }
   // {X}: X is chosen as the spell is cast.
   if (cost.x) cost = { ...cost, generic: cost.generic + cost.x * (choice.x ?? 0), x: 0 };
-  reduce += choice.sacrificeMany?.length ?? 0;
+  reduce += (choice.sacrificeMany?.length ?? 0) * (d.sacrificeCreaturesForReduction ?? 1);
   if (reduce) cost = { ...cost, generic: Math.max(0, cost.generic - reduce) };
   // Eluge: the first instant or sorcery each turn costs {U} less per flooded land.
   const flood = floodDiscount(ctx, player, d);
@@ -567,7 +576,12 @@ export function activateAbility(
     a.cost.convoke ? creatureHelpers(ctx, player, manaSources(ctx, player, exclude), exclude) : [],
     [sacrifice, forage !== 'graveyard' ? forage : undefined],
   );
-  if (discard) moveObject(ctx, discard, 'graveyard');
+  if (discard) {
+    // Strixhaven (13c): Uvilda exiles the card with three refine counters.
+    moveObject(ctx, discard, a.cost.exileRefine ? 'exile' : 'graveyard');
+    if (a.cost.exileRefine)
+      obj(ctx, discard).counters = { ...obj(ctx, discard).counters, refine: 3 };
+  }
   // Cycling.
   if (a.cost.discardSelf) moveObject(ctx, source, 'graveyard');
   if (a.cost.tapTokens)
@@ -610,7 +624,9 @@ export function activateAbility(
   if (a.cost.loyalty !== undefined) {
     src.onceTurns = { ...src.onceTurns, [LOYALTY_KEY]: ctx.s.turn.number };
     if (a.cost.loyalty > 0) addCounters(ctx, source, a.cost.loyalty, 'loyalty');
-    else (src.counters ??= {}).loyalty = (src.counters?.loyalty ?? 0) + a.cost.loyalty;
+    else
+      (src.counters ??= {}).loyalty =
+        (src.counters?.loyalty ?? 0) + a.cost.loyalty - (a.cost.loyaltyX ? (x ?? 0) : 0);
   }
   payMana(ctx, payment);
   if (a.once || a.powerUp) (src.usedAbilities ??= []).push(index);
@@ -619,6 +635,8 @@ export function activateAbility(
     sacrificePermanent(ctx, source);
   }
   if (a.cost.exileSelf) moveObject(ctx, source, 'exile');
+  // Strixhaven (13c): Rootha returns to hand as a cost.
+  if (a.cost.returnSelf) moveObject(ctx, source, 'hand');
   ctx.s.stack.push(item);
   emit(ctx, { type: 'abilityActivated', id, source, player });
   noteTargets(ctx, player, targets, true);
@@ -865,6 +883,8 @@ export function finishResolution(ctx: Ctx, item: PausedResolution['item']): void
   if (item.kind !== 'spell') return;
   // Final Fantasy (11a): a spell that put itself onto the battlefield as it resolved (Esper Origins).
   if (ctx.s.objects[item.id]?.zone === 'battlefield') return;
+  // Strixhaven (13c): a spell that returned itself to its owner's hand (Journey to the Oracle).
+  if (ctx.s.objects[item.id]?.zone === 'hand') return;
   // Final Fantasy (11a): adventure lands. Its owner may play the land from exile later.
   if (item.adventure) {
     moveObject(ctx, item.id, 'exile');
@@ -1213,6 +1233,7 @@ export function answerSearch(ctx: Ctx, card: ObjectId | null): void {
       d.to === 'battlefieldTapped' ||
       (d.battlefieldOnYourTurn && ctx.s.turn.activePlayer === d.player);
     if (d.to === 'graveyard') moveObject(ctx, card, 'graveyard');
+    else if (d.to === 'castFree') moveObject(ctx, card, 'exile');
     else if (d.to === 'libraryTop') {
       // Fountainport Bell: shuffle, then put it on top (done after the shuffle below).
     } else if (onBattlefield) {
@@ -1250,6 +1271,17 @@ export function answerSearch(ctx: Ctx, card: ObjectId | null): void {
     lib.splice(lib.indexOf(card), 1);
     lib.unshift(card);
   }
+  // Strixhaven (13c): Kasmina's ultimate: exile it, then you may cast it without paying its mana cost.
+  if (card !== null && d.to === 'castFree') {
+    ctx.s.decision = {
+      kind: 'castFree',
+      player: d.player,
+      cards: [card],
+      resume: d.resume,
+      thenPriority: d.thenPriority,
+    };
+    return;
+  }
   resume(ctx, d.resume, d.thenPriority);
 }
 
@@ -1276,6 +1308,19 @@ export function answerDiscard(ctx: Ctx, card: ObjectId): void {
   if (d.kind !== 'discard') throw new Error('Not discarding');
   const nonland = !def(ctx, card).types.includes('Land');
   moveObject(ctx, card, d.exile ? 'exile' : 'graveyard');
+  // Strixhaven (13c): Flamethrower Sonata.
+  const dealt = d.damageTo !== undefined ? d.resume.targets[d.damageTo] : undefined;
+  if (
+    dealt &&
+    (def(ctx, card).types.includes('Instant') || def(ctx, card).types.includes('Sorcery'))
+  )
+    dealDamage(
+      ctx,
+      damageSourceFor(ctx, d.resume.source?.id ?? 'unknown', d.player),
+      dealt,
+      manaValue(def(ctx, card).manaCost),
+      false,
+    );
   d.count--;
   const c = d.connive && ctx.s.objects[d.connive.id];
   if (c && nonland && c.zone === 'battlefield' && c.zcc === d.connive!.zcc)

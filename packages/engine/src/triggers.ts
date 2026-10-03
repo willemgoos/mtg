@@ -124,6 +124,8 @@ export function checkCondition(
     if (c.either) return gained || lost;
     return (!c.gained || gained) && (!c.lost || lost);
   }
+  // Strixhaven (13c): Rowan, Scholar of Sparks.
+  if (c.kind === 'cardsDrawnThisTurn') return (ctx.s.turn.cardsDrawn[controller] ?? 0) >= c.min;
   if (c.kind === 'handSize') return ctx.s.players[controller].hand.length >= c.min;
   if (c.kind === 'all') return c.of.every((x) => checkCondition(ctx, x, controller, self, targets));
   if (c.kind === 'any') return c.of.some((x) => checkCondition(ctx, x, controller, self, targets));

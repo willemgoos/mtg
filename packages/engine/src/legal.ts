@@ -86,7 +86,12 @@ export function castableCards(ctx: Ctx, player: PlayerId): ObjectId[] {
   }
   // Cruelclaw's Heist: an opponent's exiled card you may cast.
   for (const id of ctx.s.players[other(player)].exile)
-    if (obj(ctx, id).castableBy === player) out.push(id);
+    if (
+      obj(ctx, id).castableBy === player &&
+      // Strixhaven (13c): Nassari's cards are castable this turn only.
+      (obj(ctx, id).castableUntilTurn ?? ctx.s.turn.number) >= ctx.s.turn.number
+    )
+      out.push(id);
   // Glarb: lands and big spells from the top of your library.
   const topCard = ps.library[0];
   if (topCard && !out.includes(topCard))
@@ -135,16 +140,24 @@ function sacrificePrefixes(
   card: ObjectId,
   d: ReturnType<typeof def>,
 ): (ObjectId[] | undefined)[] {
-  if (!d.sacrificeAnyForReduction) return [undefined];
+  if (!d.sacrificeAnyForReduction && !d.sacrificeCreaturesForReduction) return [undefined];
+  // Strixhaven (13c): Awaken the Blood Avatar sacrifices creatures only, {2} less for each.
+  const creaturesOnly = !!d.sacrificeCreaturesForReduction;
+  const per = d.sacrificeCreaturesForReduction ?? 1;
   const fodder = ctx.s.battlefield
-    .filter((id) => obj(ctx, id).controller === player && !def(ctx, id).types.includes('Land'))
+    .filter(
+      (id) =>
+        obj(ctx, id).controller === player &&
+        !def(ctx, id).types.includes('Land') &&
+        (!creaturesOnly || def(ctx, id).types.includes('Creature')),
+    )
     .sort(
       (a, b) =>
         Number(obj(ctx, b).isToken) - Number(obj(ctx, a).isToken) ||
         manaValue(def(ctx, a).manaCost) - manaValue(def(ctx, b).manaCost),
     );
   const out: (ObjectId[] | undefined)[] = [undefined];
-  for (let k = 1; k <= Math.min(fodder.length, d.manaCost.generic); k++)
+  for (let k = 1; k <= Math.min(fodder.length, Math.ceil(d.manaCost.generic / per)); k++)
     out.push(fodder.slice(0, k));
   return out.filter((x) => !x || !x.includes(card));
 }
@@ -412,12 +425,18 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
   const silenced =
     s.turn.activePlayer !== player &&
     hasStatic(ctx, s.turn.activePlayer, 'opponentsCantCastDuringYourTurn');
+  // Strixhaven (13c): Codie, Vociferous Codex.
+  const noPermanents = hasStatic(ctx, player, 'cantCastPermanentSpells');
+  const blocked = (card: ObjectId) =>
+    noPermanents && !def(ctx, card).types.some((t) => t === 'Instant' || t === 'Sorcery');
   for (const card of silenced ? [] : castableCards(ctx, player)) {
-    castsOf(card);
+    if (!blocked(card)) castsOf(card);
     // Modal double-faced cards: the back face can be cast from hand too.
     if (def(ctx, card).back && obj(ctx, card).zone === 'hand') {
       const from = out.length;
-      withBackFace(ctx, card, () => castsOf(card));
+      withBackFace(ctx, card, () => {
+        if (!blocked(card)) castsOf(card);
+      });
       for (const a of out.slice(from)) if (a.type === 'castSpell') a.back = true;
     }
   }
@@ -485,7 +504,12 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
         !graveyardCostCard(ctx, player, a.cost.exileFromGraveyard, source)
       )
         return;
-      const discards = a.cost.discard ? ps.hand : [undefined];
+      // Strixhaven (13c): Uvilda exiles an instant or sorcery from hand.
+      const discards = a.cost.exileRefine
+        ? ps.hand.filter((id) => matchesFilter(ctx, id, { types: ['Instant', 'Sorcery'] }))
+        : a.cost.discard
+          ? ps.hand
+          : [undefined];
       if (discards.length === 0) return;
       const rc = a.cost.removeCounters;
       if (rc && (obj(ctx, source).counters?.[rc.name] ?? 0) < rc.count) return;
@@ -527,6 +551,13 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
               });
             }
         }
+      }
+      // Strixhaven (13c): -X loyalty abilities (Kasmina): each X from 1 to the loyalty.
+      if (a.cost.loyaltyX) {
+        const bases = out.splice(firstOfAbility);
+        const have = obj(ctx, source).counters?.loyalty ?? 0;
+        for (const base of bases)
+          for (let x = 1; x <= have; x++) out.push({ ...base, x } as Action);
       }
       // Marvel Super Heroes: {X} in an ability's cost (Bruce Banner): every affordable X up to 10.
       if (mana?.x)
@@ -655,6 +686,13 @@ export function getLegalActions(ctx: Ctx, player: PlayerId): Action[] {
         const cd = def(ctx, card);
         if (cd.types.includes('Land')) continue;
         const discards = d.discardInstead ? s.players[player].hand : [undefined];
+        // Strixhaven (13c): a cast that costs {1} (Jadzi) or is {4} cheaper (Uvilda).
+        const price =
+          d.pay ??
+          (d.costLess
+            ? { ...cd.manaCost, generic: Math.max(0, cd.manaCost.generic - d.costLess) }
+            : undefined);
+        if (price && !canPayFrom(price, manaSources(ctx, player))) continue;
         for (const v of castVariants(cd, obj(ctx, card).zone, 'free')) {
           // Additional sacrifice or forage costs aren't offered on free casts (a simplification).
           if (v.sacrifice || v.forage) continue;

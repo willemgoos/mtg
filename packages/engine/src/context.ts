@@ -2,9 +2,11 @@ import { characteristics } from './characteristics.ts';
 import { MSH_EFFECTS } from './msh-effects.ts';
 import { FIN_EFFECTS } from './fin-effects.ts';
 import { LOREHOLD_EFFECTS } from './stx-lorehold-effects.ts';
+import { STX_13C_EFFECTS } from './stx-13c-effects.ts';
 import { checkCondition } from './triggers.ts';
 import type { EffectSource } from './effects.ts';
 import type {
+  AbilityDef,
   ManaType,
   CardDb,
   CardDefinition,
@@ -60,6 +62,8 @@ const BUILT_IN_EFFECTS: Record<string, CustomEffect> = {
   ...FIN_EFFECTS,
   // Strixhaven (13a).
   ...LOREHOLD_EFFECTS,
+  // Strixhaven (13c).
+  ...STX_13C_EFFECTS,
   // Strixhaven (13a): Learn: put the chosen Lesson from outside the game into your hand.
   learnFetch(ctx, es, params) {
     const ps = ctx.s.players[es.controller];
@@ -119,9 +123,32 @@ export function def(ctx: Ctx, id: ObjectId): CardDefinition {
     !makesFood(d)
   )
     return foodCreatureDef(d);
+  // Strixhaven (13c): Kasmina, Enigma Sage shares her loyalty abilities.
+  if (o.zone === 'battlefield' && d.types.includes('Planeswalker')) {
+    const shared = sharedLoyaltyAbilities(ctx, id, d);
+    if (shared.length) return { ...d, abilities: [...d.abilities, ...shared] };
+  }
   // Strixhaven (13a): Lorehold Apprentice grants abilities until end of turn.
   if (o.tempAbilities?.length) return { ...d, abilities: [...d.abilities, ...o.tempAbilities] };
   return d;
+}
+
+/** Strixhaven (13c): the loyalty abilities of each Kasmina its controller has, for another planeswalker. */
+function sharedLoyaltyAbilities(ctx: Ctx, id: ObjectId, d: CardDefinition): AbilityDef[] {
+  const shares = (x: CardDefinition) =>
+    x.abilities.some((a) => a.kind === 'static' && a.effect.kind === 'sharesLoyaltyAbilities');
+  if (shares(d)) return [];
+  const o = ctx.s.objects[id]!;
+  const out: AbilityDef[] = [];
+  for (const srcId of ctx.s.battlefield) {
+    const src = ctx.s.objects[srcId];
+    if (!src || srcId === id || src.controller !== o.controller) continue;
+    const sd = ctx.db.get(src.defId);
+    if (!sd || !shares(sd)) continue;
+    for (const a of sd.abilities)
+      if (a.kind === 'activated' && a.cost.loyalty !== undefined) out.push(a);
+  }
+  return out;
 }
 
 /** Recomputes whether a Ygra is on the battlefield (after setting up a position directly). */
@@ -347,6 +374,7 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
   // A stolen card's permission ends when it leaves exile.
   if (from === 'exile') {
     delete o.castableBy;
+    delete o.castableUntilTurn;
     delete o.anyMana;
   }
   // Bonecache Overseer: cards leaving a graveyard.

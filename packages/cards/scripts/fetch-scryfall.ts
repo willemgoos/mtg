@@ -59,6 +59,7 @@ type RawFace = Pick<
   | 'power'
   | 'toughness'
   | 'colors'
+  | 'loyalty'
   | 'image_uris'
 >;
 
@@ -188,6 +189,8 @@ function faceRecords(c: RawCard, faces: RawFace[]): ScryfallCard[] {
       typeLine: f.type_line,
       oracleText: text,
       ...(f.power !== undefined ? { power: f.power, toughness: f.toughness! } : {}),
+      // Strixhaven (13c): planeswalker faces keep their loyalty.
+      ...(f.loyalty !== undefined ? { loyalty: f.loyalty } : {}),
       colors: f.colors ?? [],
       // The card lists both faces' keywords; keep this face's own.
       keywords: c.keywords.filter((k) => text.toLowerCase().includes(k.toLowerCase())),

@@ -23,4 +23,19 @@ export function tickSuspend(ctx: Ctx, player: PlayerId): void {
       inline: [{ kind: 'castFreeCard', card: { id: o.id, zcc: o.zcc } }],
     });
   }
+  // Strixhaven (13c): Uvilda, Dean of Perfection: refine counters; the last one lets you cast it for {4} less.
+  for (const id of [...ctx.s.players[player].exile]) {
+    const o = obj(ctx, id);
+    if ((o.counters?.refine ?? 0) <= 0) continue;
+    const left = o.counters!.refine! - 1;
+    o.counters = { ...o.counters, refine: left };
+    if (left > 0) continue;
+    ctx.s.pendingTriggers.push({
+      source: { id: o.id, zcc: o.zcc },
+      sourceDefId: o.defId,
+      abilityIndex: -1,
+      controller: player,
+      inline: [{ kind: 'castFreeCard', card: { id: o.id, zcc: o.zcc }, costLess: 4 }],
+    });
+  }
 }

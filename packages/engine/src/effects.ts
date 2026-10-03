@@ -420,6 +420,14 @@ export function resolveAmount(ctx: Ctx, es: EffectSource, amount: Amount): numbe
     const id = objectsOf(ctx, es, amount.handGapOfControllerOf)[0];
     return id ? Math.max(0, amount.size - ctx.s.players[obj(ctx, id).controller].hand.length) : 0;
   }
+  // Strixhaven (13c): Torrent Sculptor.
+  if ('halfManaValueUpOf' in amount) {
+    // A card in a graveyard: not a permanent, so read the chosen target directly.
+    const ref = amount.halfManaValueUpOf;
+    const t = typeof ref === 'object' && 'target' in ref ? es.targets[ref.target] : undefined;
+    const id = t && 'object' in t ? t.object.id : objectsOf(ctx, es, ref)[0];
+    return id ? Math.ceil(manaValue(def(ctx, id).manaCost) / 2) : 0;
+  }
   if ('toughnessOf' in amount) {
     const id = objectsOf(ctx, es, amount.toughnessOf)[0];
     return id ? Math.max(0, characteristics(ctx, id).toughness) : 0;
@@ -549,6 +557,8 @@ export function runEffects(
       e.kind === 'pickFromCards' ||
       e.kind === 'castFreeCard' ||
       e.kind === 'revealUntilCastable' ||
+      e.kind === 'revealTopCastOrPlay' ||
+      e.kind === 'takeStudyCard' ||
       e.kind === 'expressiveIteration' ||
       e.kind === 'castFreeFromTop' ||
       // Final Fantasy (11a): saga creatures
@@ -680,6 +690,7 @@ export function runEffects(
           player: controller,
           cards: [card.id],
           ...(e.exileAfter ? { exileAfter: true } : {}),
+          ...(e.costLess ? { costLess: e.costLess } : {}),
           resume,
           thenPriority,
         };
@@ -689,13 +700,20 @@ export function runEffects(
         const max =
           e.max === 'belowSource'
             ? manaValue(defOf(ctx, self?.defId ?? sourceDefId).manaCost) - 1
-            : resolveAmount(ctx, es, e.max);
+            : // Strixhaven (13c): Codie, Vociferous Codex: less than the spell that triggered it.
+              e.max === 'belowSubject'
+              ? resolveAmount(ctx, es, { manaValueOfSubject: true }) - 1
+              : resolveAmount(ctx, es, e.max);
         const exiled: ObjectId[] = [];
         let hit: ObjectId | undefined;
         for (const id of [...lib]) {
           moveObject(ctx, id, 'exile');
           const d = def(ctx, id);
-          if (!d.types.includes('Land') && manaValue(d.manaCost) <= max) {
+          if (
+            !d.types.includes('Land') &&
+            manaValue(d.manaCost) <= max &&
+            (!e.filter || cardMatches(ctx, id, e.filter))
+          ) {
             hit = id;
             break;
           }
@@ -715,6 +733,39 @@ export function runEffects(
           player: controller,
           cards: [hit],
           resume: { ...resume, effects: [after, ...resume.effects] },
+          thenPriority,
+        };
+      } else if (e.kind === 'takeStudyCard') {
+        // Strixhaven (13c): Imbraham, Dean of Theory.
+        const options = ctx.s.players[controller].exile.filter(
+          (id) => (obj(ctx, id).counters?.study ?? 0) > 0,
+        );
+        if (options.length === 0) continue;
+        ctx.s.decision = {
+          kind: 'searchLibrary',
+          player: controller,
+          options,
+          fromGraveyard: true,
+          to: 'hand',
+          shuffle: false,
+          resume,
+          thenPriority,
+        };
+      } else if (e.kind === 'revealTopCastOrPlay') {
+        // Strixhaven (13c): Jadzi, Oracle of Arcavios.
+        const top = lib[0];
+        if (top === undefined) continue;
+        emit(ctx, { type: 'revealed', player: controller, id: top });
+        if (def(ctx, top).types.includes('Land')) {
+          moveObject(ctx, top, 'battlefield', { controller });
+          continue;
+        }
+        ctx.s.decision = {
+          kind: 'castFree',
+          player: controller,
+          cards: [top],
+          pay: e.pay,
+          resume,
           thenPriority,
         };
       } else if (e.kind === 'expressiveIteration') {
@@ -929,6 +980,11 @@ export function runEffects(
           ...(e.handOnly ? [] : ps.graveyard),
         ].filter((id) => cardMatches(ctx, id, e.filter));
         if (options.length === 0) continue;
+        // Strixhaven (13c): Journey to the Oracle puts them all onto the battlefield.
+        if (e.all) {
+          for (const id of options) moveObject(ctx, id, 'battlefield', { controller });
+          continue;
+        }
         ctx.s.decision = {
           kind: 'searchLibrary',
           player: controller,
@@ -1106,6 +1162,7 @@ export function runEffects(
           count,
           ...(e.filter ? { filter: e.filter } : {}),
           ...(e.exile ? { exile: true } : {}),
+          ...(e.damageTo !== undefined ? { damageTo: e.damageTo } : {}),
           resume,
           thenPriority,
         };
@@ -1266,8 +1323,12 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
         ctx.s.effects.push({
           timestamp: newTimestamp(ctx),
           affected: { id, zcc: obj(ctx, id).zcc },
-          power: p,
-          toughness: t,
+          power: e.setBase ? 0 : p,
+          toughness: e.setBase ? 0 : t,
+          // Strixhaven (13c): Square Up (base power and toughness).
+          ...(e.setBase && def(ctx, id).types.includes('Creature')
+            ? { basePT: [p, t] as [number, number] }
+            : {}),
           keywords: e.keywords ?? [],
           ...(e.cantBlock ? { cantBlock: true } : {}),
           ...(e.exileIfDies ? { exileIfDies: true } : {}),
@@ -1355,6 +1416,8 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
       const n = resolveAmount(ctx, es, e.count);
       // Beast Within: "Its controller creates ..." (the target's controller, even once it's gone).
       const target = e.forControllerOf !== undefined ? es.targets[e.forControllerOf] : undefined;
+      // Strixhaven (13c): Will, Scholar of Frost: an "up to" target left out makes no token.
+      if (e.forControllerOf !== undefined && !target) return;
       const targetOwner =
         target && 'object' in target ? ctx.s.objects[target.object.id]?.controller : undefined;
       const owner = targetOwner ?? (e.forOpponent ? other(es.controller) : es.controller);
@@ -1394,6 +1457,15 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
     case 'surveil':
     case 'searchLibrary':
     case 'lookForCreature':
+    case 'takeStudyCard':
+    case 'revealTopCastOrPlay':
+      return; // handled by runEffects
+    case 'returnSelfFromStack': {
+      // Strixhaven (13c): Journey to the Oracle.
+      const o = es.source && ctx.s.objects[es.source.id];
+      if (o && o.zone === 'stack') moveObject(ctx, o.id, 'hand');
+      return;
+    }
     case 'discard':
     case 'connive':
     case 'piles':
@@ -1869,23 +1941,32 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
     }
     case 'becomeCopy': {
       const source = es.source && onBattlefield(ctx, es.source);
-      const self = e.what ? ctx.s.objects[objectsOf(ctx, es, e.what)[0] ?? ''] : source;
       const of = objectsOf(ctx, es, e.of)[0];
-      if (!self || self.zone !== 'battlefield' || !of) return;
-      endCopy(ctx, self);
-      self.originalDefId ??= self.defId;
-      self.defId = obj(ctx, of).defId;
-      if (obj(ctx, of).copyPT) self.copyPT = { ...obj(ctx, of).copyPT! };
-      // Marvel Super Heroes: longer copies, and copies that stay creatures.
-      if (e.until === 'yourNextTurn') self.copyUntilTurnOf = es.controller;
-      else if (e.until === 'whileSource' && source) self.copyWhileSource = source.id;
-      else self.copyingUntilTurn = ctx.s.turn.number;
-      if (e.asCreature) {
-        self.copyAsCreature = true;
-        self.copyPT = { power: e.asCreature.power, toughness: e.asCreature.toughness };
-        self.grantedKeywords = [...(self.grantedKeywords ?? []), ...e.asCreature.keywords];
-        self.copyAddedSubtypes = e.asCreature.subtypes;
-        self.addedSubtypes = [...(self.addedSubtypes ?? []), ...e.asCreature.subtypes];
+      // Strixhaven (13c): Echoing Equation: a group (without the one copied) becomes the copy.
+      const selves = (
+        e.what ? objectsOf(ctx, es, e.what).filter((id) => id !== of) : source ? [source.id] : []
+      ).map((id) => ctx.s.objects[id]);
+      for (const self of selves) {
+        if (!self || self.zone !== 'battlefield' || !of) continue;
+        endCopy(ctx, self);
+        self.originalDefId ??= self.defId;
+        self.defId = obj(ctx, of).defId;
+        if (obj(ctx, of).copyPT) self.copyPT = { ...obj(ctx, of).copyPT! };
+        // Marvel Super Heroes: longer copies, and copies that stay creatures.
+        if (e.until === 'yourNextTurn') self.copyUntilTurnOf = es.controller;
+        else if (e.until === 'whileSource' && source) self.copyWhileSource = source.id;
+        else self.copyingUntilTurn = ctx.s.turn.number;
+        if (e.nonlegendary && !self.nonlegendary) {
+          self.nonlegendary = true;
+          self.copyNonlegendary = true;
+        }
+        if (e.asCreature) {
+          self.copyAsCreature = true;
+          self.copyPT = { power: e.asCreature.power, toughness: e.asCreature.toughness };
+          self.grantedKeywords = [...(self.grantedKeywords ?? []), ...e.asCreature.keywords];
+          self.copyAddedSubtypes = e.asCreature.subtypes;
+          self.addedSubtypes = [...(self.addedSubtypes ?? []), ...e.asCreature.subtypes];
+        }
       }
       return;
     }
@@ -2075,6 +2156,8 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
         // A copy is a token-like object on the stack: it ceases to exist as it leaves.
         const copy = createObject(ctx, obj(ctx, item.id).defId, es.controller, 'stack', true);
         copy.controller = es.controller;
+        // Strixhaven (13c): Double Major.
+        if (e.nonlegendary) copy.nonlegendary = true;
         ctx.s.stack.push({
           kind: 'spell',
           id: copy.id,
@@ -2551,6 +2634,10 @@ export function endCopy(ctx: Ctx, o: GameObject): void {
   delete o.copyWhileSource;
   if (o.copyAsCreature) delete o.grantedKeywords;
   delete o.copyAsCreature;
+  if (o.copyNonlegendary) {
+    delete o.nonlegendary;
+    delete o.copyNonlegendary;
+  }
   if (o.copyAddedSubtypes) {
     const added = [...(o.addedSubtypes ?? [])];
     for (const st of o.copyAddedSubtypes) added.splice(added.indexOf(st), 1);
