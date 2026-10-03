@@ -221,6 +221,18 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
         }
       }
     }
+    // Vivien Reid's emblem: "Creatures you control get +2/+2 and have vigilance, trample, and indestructible."
+    for (const em of ctx.s.emblems ?? []) {
+      const st = em.ability.kind === 'static' ? em.ability.effect : undefined;
+      if (st?.kind !== 'anthem' || em.controller !== o.controller) continue;
+      if (!d.types.includes('Creature') && !crewed) continue;
+      power += countOf(ctx, em.controller, st.power);
+      toughness += countOf(ctx, em.controller, st.toughness);
+      if (st.keywords?.length) {
+        granted ??= new Set(keywords);
+        for (const k of st.keywords) granted.add(k);
+      }
+    }
   }
   if (granted) {
     for (const k of removed) granted.delete(k);
@@ -688,6 +700,8 @@ export function cardMatches(
     if (mv > max) return false;
   }
   if (filter.other && id === sourceId) return false;
+  // Kid Loki: "that you've put one or more +1/+1 counters on this turn".
+  if (filter.countersPutThisTurn && obj(ctx, id).countersTurn !== ctx.s.turn.number) return false;
   if (!avengersFilter(ctx, id, filter, sourceId)) return false;
   return true;
 }

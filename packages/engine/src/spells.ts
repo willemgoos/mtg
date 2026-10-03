@@ -23,6 +23,8 @@ export interface CastVariant {
   sacrifice?: boolean;
   /** Needs a forage as an additional cost (Feed the Cycle). */
   forage?: boolean;
+  /** Needs a card discarded as an additional cost (Titania, Rugged Rumbler: or pay instead). */
+  discard?: boolean;
   /** Cast from the graveyard by removing this many +1/+1 counters (Quilled Greatwurm). */
   removeCounters?: number;
   /** Times multikicker was paid (Batroc). */
@@ -168,6 +170,12 @@ export function castVariants(d: CardDefinition, zone: ZoneName, via?: CastVia): 
       { cost, spell: d.spell ?? null, sacrifice: true, ...extra },
       { cost: addCosts(cost, d.sacrificeOrPay), spell: d.spell ?? null, ...extra },
     ];
+  // Titania, Rugged Rumbler: "discard a card or pay {2}".
+  if (d.discardOrPay)
+    return [
+      { cost, spell: d.spell ?? null, discard: true, ...extra },
+      { cost: addCosts(cost, d.discardOrPay), spell: d.spell ?? null, ...extra },
+    ];
   const out: CastVariant[] = [{ cost, spell: d.spell ?? null, ...extra }];
   // Multikicker: paid once, twice or three times (more is rarely worth offering).
   if (d.multikicker)
@@ -200,6 +208,7 @@ export function variantOf(
     forage?: string | undefined;
     paws?: number[] | undefined;
     kickCount?: number | undefined;
+    discard?: string | undefined;
   },
 ): CastVariant | undefined {
   return castVariants(d, zone, choice.via).find(
@@ -209,7 +218,9 @@ export function variantOf(
       (v.paws ?? []).join() === (choice.paws ?? []).join() &&
       !!v.kicked === !!choice.kicked &&
       !!v.sacrifice === !!choice.sacrifice &&
-      !!v.forage === !!choice.forage,
+      !!v.forage === !!choice.forage &&
+      // Titania: the discard picks the variant (other discards are just extra costs).
+      (!d.discardOrPay || !!v.discard === !!choice.discard),
   );
 }
 

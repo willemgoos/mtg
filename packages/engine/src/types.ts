@@ -214,6 +214,8 @@ export interface CardDefinition {
   sacrificeAnyForReduction?: boolean;
   /** "As an additional cost to cast this spell, discard a card" (Sazacap's Brew). */
   discardToCast?: boolean;
+  /** "As an additional cost to cast this spell, discard a card or pay this" (Titania, Rugged Rumbler). */
+  discardOrPay?: ManaCost;
   /** It enters tapped while this holds (Eddymurk Crab: if it's not your turn). */
   entersTappedIf?: ConditionDef;
   /** "As an additional cost to cast this spell, forage or pay this" (Feed the Cycle). */
@@ -263,6 +265,8 @@ export type AbilityDef =
       // Brawl staples.
       /** Mana per tap, if more than one (Sol Ring). */
       amount?: number;
+      /** Mana per tap from a count (Elvish Archdruid: {G} for each Elf you control). */
+      amountOf?: Amount;
       /**
        * Only if the colour is in your commander's colour identity (Command
        * Tower), or a land an opponent controls could make it (Exotic Orchard).
@@ -452,6 +456,10 @@ export type TriggerDef =
   | { on: 'yourNoncombatDamageToOpponent' }
   /** Whenever this creature becomes blocked. */
   | { on: 'becomesBlocked' }
+  /** Whenever this deals damage, combat or not, to an opponent (Thieving Otter). */
+  | { on: 'dealsDamageToOpponent' }
+  /** Whenever another nonland permanent you control is returned to its owner's hand (Justice, Vance Astrovik). */
+  | { on: 'yourPermanentReturnedToHand' }
   /** Whenever a creature you control (matching the filter) attacks; "that creature" is the subject. */
   | {
       on: 'creatureYouControlAttacks';
@@ -600,7 +608,12 @@ export type ConditionDef =
   /** A count reaches `min` (Finneas: total power 10 or greater). */
   | { kind: 'amountAtLeast'; amount: Amount; min: number }
   /** This ability has resolved exactly `n` times this turn, counting this one (Harvestrite Host). */
-  | { kind: 'resolvedThisTurn'; n: number }
+  | {
+      kind: 'resolvedThisTurn';
+      n: number;
+      /** `n` times or more (Iron Fist, Living Weapon: it has triggered this turn). */
+      orMore?: boolean;
+    }
   /**
    * Life changes this turn for you or an opponent: `gained` and/or `lost`
    * (both must hold), or `either`.
@@ -747,6 +760,8 @@ export interface CardFilter {
   chosenTypeOfSource?: boolean;
   /** Has counters on it (Innkeeper's Talent). */
   hasCounters?: boolean;
+  /** +1/+1 counters were put on it this turn (Kid Loki). */
+  countersPutThisTurn?: boolean;
   // The Fantastic Four (9d).
   /** A card with this id ("a creature named Silver Surfer"). */
   named?: CardDefId;
@@ -995,6 +1010,8 @@ export type EffectDef =
       named?: string;
       // Final Fantasy (11b): returned transformed (Garland, Knight of Cornelia).
       transformed?: boolean;
+      /** "She loses all abilities and gains haste" (Hellcat, Undying Vigilante): for as long as she stays. */
+      losesAbilitiesGains?: Keyword[];
     }
   | { kind: 'exile'; what: Ref }
   /** Exile a card from a graveyard; extra effects if it was a creature card (Scavenging Ooze). */
@@ -1019,6 +1036,8 @@ export type EffectDef =
       then: 'discard' | 'exile';
       /** You may cast the exiled card while it stays exiled, with any mana (Cruelclaw's Heist). */
       castable?: boolean;
+      /** They reveal this many cards (picked for them: the cheapest), and you choose among those (Klaw). */
+      reveal?: Amount;
     }
   /** A player chooses one of these (the owner of target `ownerOf`, or the controller). */
   | {
@@ -1073,6 +1092,8 @@ export type EffectDef =
       // Marvel Super Heroes Jumpstart (Tricksters)
       /** "Except the copy isn't legendary" (The Clone Saga). */
       notLegendary?: boolean;
+      /** "You may choose new targets for the copy" (Loki Laufeyson): its controller chooses. */
+      newTargets?: boolean;
     }
   /** Each player sacrifices a creature of their choice (Season of Loss). */
   | { kind: 'eachPlayerSacrifices' }
@@ -1199,6 +1220,8 @@ export type EffectDef =
   | {
       kind: 'chooseYourPermanent';
       filter?: CardFilter;
+      /** A permanent an opponent controls instead (Vial Smasher: one of their planeswalkers). */
+      opponents?: boolean;
       then: EffectDef[];
       otherwise?: EffectDef[];
     }
@@ -1276,8 +1299,12 @@ export type EffectDef =
   | { kind: 'doesntUntapWhileSource'; what: Ref }
   /** Change the target of a target spell with a single target to another legal one, best for you (Bolt Bend). */
   | { kind: 'changeTarget'; what: Ref }
-  /** Time Stop, simplified: exile every other spell, drop every ability on the stack, and end combat. */
+  /** Time Stop: exile every spell and ability on the stack, then skip to the cleanup step. */
   | { kind: 'endTheTurn' }
+  /** Internal (Bolt Bend): the spell or ability on the stack with this id gets these targets. */
+  | { kind: 'setStackTargets'; id: ObjectId; targets: TargetChoice[] }
+  /** Internal (Loki Laufeyson): its controller may choose new targets for the copy just made ('chosen'). */
+  | { kind: 'chooseNewTargets' }
   /** The controller discards N cards of their choice. */
   | {
       kind: 'discard';
@@ -1356,6 +1383,8 @@ export type EffectDef =
       counter?: string;
       /** It enters tapped (Deadly Plot, Grim Reaper). */
       tapped?: boolean;
+      /** "Tapped and attacking" (Grim Reaper, Lethal Legionnaire). */
+      attacking?: boolean;
       /** It enters with +1/+1 counters if it matches the filter (Heroic Return: a Hero gets two). */
       countersIf?: { filter: CardFilter; count: number };
       // Marvel Super Heroes: "is a Hero in addition to its other types" (Thunderbolts Conspiracy).
@@ -1384,7 +1413,8 @@ export type EffectDef =
       restToGraveyard?: boolean;
       // Final Fantasy (11b): look for a land
       /** The card taken goes onto the battlefield tapped instead (Ignis Scientia: a land). */
-      to?: 'battlefieldTapped';
+      // Foundations: 'libraryTop', it goes back on top (Gutless Plunderer, with `restToGraveyard`).
+      to?: 'battlefieldTapped' | 'libraryTop';
     }
   /** Exile the top N; you may play them until the end of this turn or of your next turn. */
   | {
@@ -1745,6 +1775,8 @@ export type StaticDef =
   | { kind: 'firstPowerUpFree' }
   /** This creature can't be blocked. */
   | { kind: 'cantBeBlocked' }
+  /** "Other creatures you control have prowess" (Bria, Riptide Rogue). */
+  | { kind: 'othersHaveProwess' }
   /** This creature can't be blocked by creatures matching the filter. */
   | { kind: 'cantBeBlockedBy'; filter: CardFilter }
   /**
@@ -2229,6 +2261,8 @@ export interface TurnState {
   flashTypes?: { player: PlayerId; type: string }[];
   /** Players with hexproof until end of turn (Dawn's Truce). */
   hexproofPlayers?: PlayerId[];
+  /** Time Stop resolved: the turn skips to its cleanup step. */
+  endTheTurn?: boolean;
   // Final Fantasy (11a): saga creatures
   /** Players whose creatures are dealt no damage this turn (Summon: Alexander). */
   creaturesShielded?: PlayerId[];
@@ -2805,6 +2839,8 @@ export type GameEvent =
       controller?: PlayerId;
       // Final Fantasy (11b): the back face it showed as it left (Chaos dying shows Garland after).
       leftAs?: CardDefId;
+      /** It had lost all its abilities as it left the battlefield (Hellcat): none of its own trigger. */
+      leftBlank?: boolean;
       // Final Fantasy (11c): its power as it left (a token's too): "that creature's power" (Vincent Valentine).
       lastPower?: number;
     }

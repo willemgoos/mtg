@@ -1,6 +1,6 @@
 import { commanderColors, legendaryColors, opponentLandColors } from './brawl.ts';
 import { damageSourceFor, dealDamage } from './effects.ts';
-import { canTapForAbility, isCreature, matchesFilter } from './characteristics.ts';
+import { canTapForAbility, countOf, isCreature, matchesFilter } from './characteristics.ts';
 import { type Ctx, def, emit, obj, sacrifice, tap } from './context.ts';
 import { manaValue, pipsOf } from './cost.ts';
 import { checkCondition } from './triggers.ts';
@@ -100,6 +100,9 @@ export function manaSources(
       if (a.colorFrom === 'legendaries' && !legendaryColors(ctx, player).includes(a.produces))
         continue;
       if (a.amount) units = Math.max(units, a.amount);
+      // Elvish Archdruid: {G} for each Elf you control.
+      if (a.amountOf !== undefined)
+        units = Math.max(units, countOf(ctx, player, a.amountOf, false, id));
       if (a.pain) (pain ??= []).push(a.produces);
       if (a.doubleIf && checkCondition(ctx, a.doubleIf, player, obj(ctx, id))) double = true;
       if (a.cost.sacrificeSelf) sacrifice = true;
