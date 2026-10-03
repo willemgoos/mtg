@@ -232,6 +232,12 @@ export interface CardDefinition {
   adventure?: boolean;
   /** It has no mana cost (a transforming card's back face), so it can't be cast. */
   noManaCost?: boolean;
+  // Strixhaven (13c): Draconic Intervention
+  /** "As an additional cost, exile a card matching this from your graveyard"; its mana value is X. */
+  exileFromGraveyardToCast?: CardFilter;
+  // Strixhaven (13c): Crackle with Power
+  /** "Up to X targets": no more targets than the value chosen for X. */
+  upToXTargets?: boolean;
 }
 
 export type AbilityDef =
@@ -262,6 +268,9 @@ export type AbilityDef =
       condition?: ConditionDef;
       /** Strixhaven (13c): Accomplished Alchemist: adds as much mana as the life you gained this turn (at least one). */
       perLifeGained?: boolean;
+      // Strixhaven (13c): Strixhaven Stadium
+      /** Puts a named counter on this permanent each time it's tapped for this mana. */
+      addCounter?: string;
     }
   | {
       kind: 'activated';
@@ -403,7 +412,10 @@ export type TriggerDef =
         /** Marvel Super Heroes: a spell that targets a creature you control (Ms. Marvel). */
         | 'targetsYourCreature'
         /** Marvel Super Heroes: an instant or sorcery that targets an artifact or land (Fin Fang Foom). */
-        | 'instantOrSorceryTargetingArtifactOrLand';
+        | 'instantOrSorceryTargetingArtifactOrLand'
+        // Strixhaven (13c): Reflective Golem
+        /** A spell whose only target is this permanent. */
+        | 'targetsOnlySelf';
       /** The spell must also match this (Gev: a Lizard spell). */
       spell?: CardFilter;
       /** Any player's spell, cast when it isn't their turn (Vision). */
@@ -546,7 +558,10 @@ export type TriggerDef =
   | { on: 'cardsExiledYourTurn' }
   // Strixhaven (13c): Valentin, Dean of the Vein
   /** Whenever a nontoken creature an opponent controls is exiled instead of dying. */
-  | { on: 'opponentCreatureExiledInstead' };
+  | { on: 'opponentCreatureExiledInstead' }
+  // Strixhaven (13c): Strixhaven Stadium
+  /** Whenever a creature (any controller's) deals combat damage to you. */
+  | { on: 'combatDamageToYou' };
 
 export type ConditionDef =
   | { kind: 'controlsPermanents'; filter: CardFilter; min: number }
@@ -1036,7 +1051,7 @@ export type EffectDef =
   | {
       kind: 'emblem';
       ability: AbilityDef;
-      until: 'endOfYourNextTurn' | 'permanent' | 'nextSpellThisTurn';
+      until: 'endOfYourNextTurn' | 'permanent' | 'nextSpellThisTurn' | 'thisTurn';
     }
   /** Marks the gift as given (for "whenever you give a gift"). */
   | { kind: 'giftGiven' }
@@ -1065,6 +1080,20 @@ export type EffectDef =
   // Strixhaven (13a): Learn
   /** Learn: reveal a Lesson from your sideboard and put it into your hand, or discard a card to draw a card, or neither. */
   | { kind: 'learn' }
+  // Strixhaven (13c)
+  /** Ardent Dustspeaker: you may put a card matching the filter from your graveyard on the bottom of your library; if you do, `then`. */
+  | { kind: 'graveyardCardToLibraryBottom'; filter: CardFilter; then: EffectDef[] }
+  /** Illuminate History, Fervent Mastery: discard any number of cards, then draw that many. */
+  | { kind: 'discardAnyThenDraw'; who: 'controller' | 'eachOpponent' }
+  /** Explore the Vastlands: that player looks at the top five, may take a land and/or an instant or sorcery; the rest go to the bottom at random. */
+  | { kind: 'lookTakeLandAndSpell'; who: 'controller' | 'eachOpponent' }
+  /** Archway Commons, Wandering Archaic: that player pays this, or `otherwise` happens (for the controller). */
+  | {
+      kind: 'payOrElse';
+      who: 'controller' | 'eachOpponent';
+      cost: ManaCost;
+      otherwise: EffectDef[];
+    }
   // Strixhaven (13a): Lorehold Apprentice, Academic Dispute
   /** Until end of turn, these creatures have this ability (Lorehold Apprentice: "{T}: deals 1 damage to each opponent"). */
   | { kind: 'grantAbility'; to: Ref; ability: AbilityDef }
@@ -1357,6 +1386,9 @@ export type EffectDef =
       restOnTop?: boolean;
       /** Marvel Super Heroes: the rest go to the graveyard (Earth's Mightiest Heroes). */
       restToGraveyard?: boolean;
+      // Strixhaven (13c): The Biblioplex
+      /** The card looked at may instead be put into your graveyard. */
+      canBin?: boolean;
       // Final Fantasy (11b): look for a land
       /** The card taken goes onto the battlefield tapped instead (Ignis Scientia: a land). */
       to?: 'battlefieldTapped';
@@ -2327,6 +2359,9 @@ export type Decision =
       damageTo?: number;
       /** Connive: the creature that gets a +1/+1 counter if a nonland card is discarded. */
       connive?: ObjectRef;
+      // Strixhaven (13c): Illuminate History
+      /** "Discard any number of cards, then draw that many": `count` counts the ones discarded; chooseEffect stops. */
+      anyNumber?: { discarded: number };
       resume: PausedResolution;
       thenPriority: PlayerId;
     }
@@ -2338,7 +2373,21 @@ export type Decision =
       /** Choosing from the graveyard instead of searching the library (Inspiration from Beyond). */
       fromGraveyard?: boolean;
       /** Where the card goes. Default: hand. */
-      to?: 'hand' | 'battlefieldTapped' | 'battlefield' | 'graveyard' | 'libraryTop' | 'castFree';
+      to?:
+        | 'hand'
+        | 'battlefieldTapped'
+        | 'battlefield'
+        | 'graveyard'
+        | 'libraryTop'
+        | 'castFree'
+        | 'libraryBottom';
+      // Strixhaven (13c): Ardent Dustspeaker, The Biblioplex
+      /** From the graveyard to the library bottom: these effects follow only if a card was chosen. */
+      onPick?: EffectDef[];
+      /** The looked-at top card may instead be put into the graveyard (chooseEffect accepts). */
+      canBin?: boolean;
+      /** Explore the Vastlands: after this answer, choose a card matching this from the rest of the cards looked at. */
+      followUp?: CardFilter;
       required?: boolean;
       /** Only these top cards were looked at: the rest go to the bottom in a random order (no shuffle). */
       looked?: ObjectId[];
@@ -2502,10 +2551,13 @@ export type Decision =
       /** Pay `cost` or the spell is countered. */
       kind: 'payOrCounter';
       player: PlayerId;
-      spell: ObjectId;
+      spell?: ObjectId;
       cost: ManaCost;
       /** Exiled instead of put into the graveyard when countered (Reject). */
       exile?: boolean;
+      // Strixhaven (13c): Archway Commons, Wandering Archaic
+      /** No spell: if the player doesn't (or can't) pay, these effects happen instead. */
+      otherwise?: EffectDef[];
       resume: PausedResolution;
       thenPriority: PlayerId;
     }

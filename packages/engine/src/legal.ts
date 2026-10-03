@@ -309,8 +309,14 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
     // Dragon Man: from the graveyard, discarding a card as well.
     const discardToCast =
       d.discardToCast || (zone === 'graveyard' && d.castFromGraveyardWithDiscard);
-    const discards = discardToCast ? ps.hand.filter((id) => id !== card) : [undefined];
-    if (d.discardToCast && discards.length === 0) return;
+    // Strixhaven (13c): Draconic Intervention exiles an instant or sorcery card from your graveyard.
+    const exileToCast = d.exileFromGraveyardToCast;
+    const discards = exileToCast
+      ? ps.graveyard.filter((id) => cardMatches(ctx, id, exileToCast))
+      : discardToCast
+        ? ps.hand.filter((id) => id !== card)
+        : [undefined];
+    if ((d.discardToCast || exileToCast) && discards.length === 0) return;
     if (!instantSpeed && !sorcery) return;
     // The usual ways, plus graveyard casts through other cards.
     // Extract Power: exiled cards played for free.
@@ -382,6 +388,8 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
                 : creatures;
             for (const sacrifice of v.sacrifice ? sacrificeable : [undefined]) {
               for (const targets of combosFor(specs, card, sacrifice)) {
+                // Strixhaven (13c): Crackle with Power: up to X targets.
+                if (d.upToXTargets && targets.length > (x ?? 0)) continue;
                 const ward = wardCost(ctx, player, targets);
                 // Dire Downdraft costs less with some targets.
                 const cost = targetDiscount ? castCost(ctx, player, card, choice, targets) : base;
@@ -678,9 +686,13 @@ export function getLegalActions(ctx: Ctx, player: PlayerId): Action[] {
     case 'scry':
       return scryAnswers(d.cards).map(({ top, bottom }) => ({ type: 'scry', player, top, bottom }));
     case 'discard':
-      return s.players[player].hand
-        .filter((card) => !d.filter || cardMatches(ctx, card, d.filter))
-        .map((card) => ({ type: 'discard', player, card }) as const);
+      return [
+        ...s.players[player].hand
+          .filter((card) => !d.filter || cardMatches(ctx, card, d.filter))
+          .map((card) => ({ type: 'discard', player, card }) as const),
+        // Strixhaven (13c): "any number": you may stop.
+        ...(d.anyNumber ? [{ type: 'chooseEffect', player, accept: false } as const] : []),
+      ];
     case 'pickCards':
       return [
         ...d.options.map((card) => ({ type: 'chooseCard', player, card }) as const),
@@ -785,6 +797,8 @@ export function getLegalActions(ctx: Ctx, player: PlayerId): Action[] {
         out.push({ type: 'chooseCard', player, card });
       }
       if (!d.required || !d.options.length) out.push({ type: 'chooseCard', player, card: null });
+      // Strixhaven (13c): The Biblioplex: put the card looked at into the graveyard.
+      if (d.canBin) out.push({ type: 'chooseEffect', player, accept: true });
       return out;
     }
     case 'chooseTriggerTargets': {

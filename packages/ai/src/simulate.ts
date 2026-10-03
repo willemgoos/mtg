@@ -74,6 +74,10 @@ function passiveAction(
         ? { type: 'addBlock', player: d.player, ...next }
         : { type: 'confirmBlockers', player: d.player };
     }
+    case 'discard':
+      // Strixhaven (13c): "any number": stop discarding at once.
+      if (d.anyNumber) return { type: 'chooseEffect', player: d.player, accept: false };
+      return engine.getLegalActions(s, d.player)[0]!;
     case 'chooseTriggerTargets':
     case 'optionalEffect':
     case 'forage':

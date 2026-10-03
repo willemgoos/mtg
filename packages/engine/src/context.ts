@@ -4,7 +4,8 @@ import { FIN_EFFECTS } from './fin-effects.ts';
 import { LOREHOLD_EFFECTS } from './stx-lorehold-effects.ts';
 import { STX_13C_A_EFFECTS } from './stx-13c-a-effects.ts';
 import { STX_13C_B_EFFECTS } from './stx-13c-b-effects.ts';
-import { STX_13C_EFFECTS } from './stx-13c-effects.ts';
+import { STX_13C_C_EFFECTS } from './stx-13c-c-effects.ts';
+import { STX_13C_D_EFFECTS } from './stx-13c-d-effects.ts';
 import { checkCondition } from './triggers.ts';
 import type { EffectSource } from './effects.ts';
 import type {
@@ -69,7 +70,8 @@ const BUILT_IN_EFFECTS: Record<string, CustomEffect> = {
   // Strixhaven (13c), group B.
   ...STX_13C_B_EFFECTS,
   // Strixhaven (13c).
-  ...STX_13C_EFFECTS,
+  ...STX_13C_C_EFFECTS,
+  ...STX_13C_D_EFFECTS,
   // Strixhaven (13a): Learn: put the chosen Lesson from outside the game into your hand.
   learnFetch(ctx, es, params) {
     const ps = ctx.s.players[es.controller];

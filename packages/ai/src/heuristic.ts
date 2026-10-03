@@ -59,9 +59,12 @@ export function createHeuristicBot(db: CardDb, name = 'heuristic'): Bot {
         // Brawl: always send the commander back.
         case 'commandZone':
           return { type: 'chooseEffect', player: me, accept: true };
+        case 'discard':
+          // Strixhaven (13c): "discard any number, then draw that many": only surplus lands.
+          if (d.anyNumber) return discardAnyNumber(engine, view, me, legal);
+          return pickCardToLose(engine, view, me, legal);
         case 'bottomCards':
         case 'discardToHandSize':
-        case 'discard':
           return pickCardToLose(engine, view, me, legal);
         case 'chooseTriggerTargets':
         case 'optionalEffect':
@@ -382,6 +385,19 @@ function keepOrMulligan(engine: Engine, view: GameState, me: PlayerId, legal: Ac
   const keepSize = p.hand.length - p.mulligans;
   const ok = p.mulligans >= 2 || (lands >= 2 && lands <= Math.min(5, keepSize - 1));
   return legal.find((a) => a.type === (ok ? 'keepHand' : 'mulligan')) ?? legal[0]!;
+}
+
+/** Strixhaven (13c): swap away a land only when we hold plenty; otherwise stop. */
+function discardAnyNumber(engine: Engine, view: GameState, me: PlayerId, legal: Action[]): Action {
+  const landsInPlay = view.battlefield.filter(
+    (id) => view.objects[id]!.controller === me && isLand(engine, view, id),
+  ).length;
+  const handLands = view.players[me].hand.filter((id) => isLand(engine, view, id));
+  if (handLands.length > 0 && landsInPlay + handLands.length > 7) {
+    const pick = legal.find((a) => a.type === 'discard' && a.card === handLands[0]);
+    if (pick) return pick;
+  }
+  return legal.find((a) => a.type === 'chooseEffect') ?? legal[0]!;
 }
 
 /** Bottom/discard: a land if we have plenty, otherwise the most expensive spell. */

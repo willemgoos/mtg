@@ -40,6 +40,7 @@ import { addLore } from './sagas.ts';
 import { CHOOSERS } from './stx-13c-a-effects.ts';
 import type {
   CardDefId,
+  CardFilter,
   GameObject,
   ObjectRef,
   Amount,
@@ -510,6 +511,18 @@ export function resolveAmount(ctx: Ctx, es: EffectSource, amount: Amount): numbe
  * something (the decision holds the rest); the caller must not finish
  * resolving the item then.
  */
+// Strixhaven (13c): Explore the Vastlands
+const INSTANT_OR_SORCERY: CardFilter = { types: ['Instant', 'Sorcery'] };
+
+/** Puts these cards from a library on its bottom in a random order. */
+export function sendToBottomRandom(ctx: Ctx, player: PlayerId, ids: readonly ObjectId[]): void {
+  const lib = ctx.s.players[player].library;
+  const rest = ids.filter((id) => lib.includes(id));
+  for (const id of rest) lib.splice(lib.indexOf(id), 1);
+  shuffleInPlace(ctx.s.rng, rest);
+  lib.push(...rest);
+}
+
 export function runEffects(
   ctx: Ctx,
   es: EffectSource,
@@ -587,7 +600,11 @@ export function runEffects(
       // Strixhaven (13a)
       e.kind === 'learn' ||
       // Strixhaven (13c)
-      e.kind === 'chooseCustom'
+      e.kind === 'chooseCustom' ||
+      e.kind === 'graveyardCardToLibraryBottom' ||
+      e.kind === 'discardAnyThenDraw' ||
+      e.kind === 'lookTakeLandAndSpell' ||
+      e.kind === 'payOrElse'
     ) {
       const lib = ctx.s.players[es.controller].library;
       const { controller, source, sourceDefId, targets, lkiPower, subject, amount, chosen, x } = es;
@@ -1155,8 +1172,73 @@ export function runEffects(
           ...(e.battlefieldOnYourTurn ? { battlefieldOnYourTurn: true } : {}),
           ...(e.restOnTop ? { restOnTop: true } : {}),
           ...(e.restToGraveyard ? { restToGraveyard: true } : {}),
+          // Strixhaven (13c): The Biblioplex
+          ...(e.canBin ? { canBin: true } : {}),
           // Final Fantasy (11b): look for a land (Ignis Scientia).
           ...(e.to ? { to: e.to } : {}),
+          resume,
+          thenPriority,
+        };
+      } else if (e.kind === 'graveyardCardToLibraryBottom') {
+        // Strixhaven (13c): Ardent Dustspeaker
+        const options = ctx.s.players[controller].graveyard.filter((id) =>
+          cardMatches(ctx, id, e.filter, es.source?.id),
+        );
+        if (options.length === 0) continue;
+        ctx.s.decision = {
+          kind: 'searchLibrary',
+          player: controller,
+          options,
+          fromGraveyard: true,
+          to: 'libraryBottom',
+          shuffle: false,
+          onPick: e.then,
+          resume,
+          thenPriority,
+        };
+      } else if (e.kind === 'lookTakeLandAndSpell') {
+        // Strixhaven (13c): Explore the Vastlands
+        const who = e.who === 'eachOpponent' ? other(controller) : controller;
+        const looked = ctx.s.players[who].library.slice(0, 5);
+        const lands = looked.filter((id) => cardMatches(ctx, id, { types: ['Land'] }));
+        const spells = looked.filter((id) => cardMatches(ctx, id, INSTANT_OR_SORCERY));
+        if (lands.length === 0 && spells.length === 0) {
+          sendToBottomRandom(ctx, who, looked);
+          continue;
+        }
+        ctx.s.decision = {
+          kind: 'searchLibrary',
+          player: who,
+          options: lands.length ? lands : spells,
+          looked,
+          ...(lands.length ? { followUp: INSTANT_OR_SORCERY } : {}),
+          resume,
+          thenPriority,
+        };
+      } else if (e.kind === 'discardAnyThenDraw') {
+        // Strixhaven (13c): Illuminate History, Fervent Mastery
+        const who = e.who === 'eachOpponent' ? other(controller) : controller;
+        if (ctx.s.players[who].hand.length === 0) continue;
+        ctx.s.decision = {
+          kind: 'discard',
+          player: who,
+          count: 1,
+          anyNumber: { discarded: 0 },
+          resume,
+          thenPriority,
+        };
+      } else if (e.kind === 'payOrElse') {
+        // Strixhaven (13c): Archway Commons, Wandering Archaic
+        const who = e.who === 'eachOpponent' ? other(controller) : controller;
+        if (!canPayFrom(e.cost, manaSources(ctx, who))) {
+          list.splice(i + 1, 0, ...e.otherwise);
+          continue;
+        }
+        ctx.s.decision = {
+          kind: 'payOrCounter',
+          player: who,
+          cost: e.cost,
+          otherwise: e.otherwise,
           resume,
           thenPriority,
         };
@@ -2198,6 +2280,10 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
     case 'learn':
     case 'millThenTake':
     case 'lookTakeRestGraveyard':
+    case 'graveyardCardToLibraryBottom': // Strixhaven (13c)
+    case 'discardAnyThenDraw':
+    case 'lookTakeLandAndSpell':
+    case 'payOrElse':
       return; // handled by runEffects
     case 'copySpell': {
       // The triggering spell, or a target spell.
@@ -2294,6 +2380,8 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
           : {}),
         // Galvanic Iteration: "when you next cast an instant or sorcery spell this turn".
         ...(e.until === 'nextSpellThisTurn' ? { untilTurn: ctx.s.turn.number, once: true } : {}),
+        // Strixhaven (13c): First Day of Class
+        ...(e.until === 'thisTurn' ? { untilTurn: ctx.s.turn.number } : {}),
       });
       return;
     }

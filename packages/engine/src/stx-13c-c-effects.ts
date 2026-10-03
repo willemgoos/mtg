@@ -21,7 +21,7 @@ function makeToken(ctx: Ctx, token: string, controller: PlayerId): void {
   emit(ctx, { type: 'objectMoved', id: t.id, defId: t.defId, from: null, to: 'battlefield' });
 }
 
-export const STX_13C_EFFECTS: Record<string, CustomEffect> = {
+export const STX_13C_C_EFFECTS: Record<string, CustomEffect> = {
   /**
    * Kianne, Dean of Substance: exile the top card of your library. A land goes
    * into your hand; any other card gets a study counter.

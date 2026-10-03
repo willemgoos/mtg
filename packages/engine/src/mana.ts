@@ -1,7 +1,7 @@
 import { commanderColors, legendaryColors, opponentLandColors } from './brawl.ts';
 import { damageSourceFor, dealDamage } from './effects.ts';
 import { canTapForAbility, isCreature, matchesFilter } from './characteristics.ts';
-import { type Ctx, def, emit, obj, sacrifice, tap } from './context.ts';
+import { type Ctx, addCounters, def, emit, obj, sacrifice, tap } from './context.ts';
 import { manaValue, pipsOf } from './cost.ts';
 import { checkCondition } from './triggers.ts';
 import type { ManaCost, ManaType, ObjectId, PlayerId } from './types.ts';
@@ -71,6 +71,12 @@ export function manaSources(
     let pain: ManaType[] | undefined;
     for (const a of def(ctx, id).abilities) {
       if (a.kind !== 'mana' || !a.cost.tapSelf || a.cost.mana) continue;
+      // Strixhaven (13c): Spell Satchel: "Remove a book counter" as part of the cost.
+      if (
+        a.cost.removeCounters &&
+        (obj(ctx, id).counters?.[a.cost.removeCounters.name] ?? 0) < a.cost.removeCounters.count
+      )
+        continue;
       // Unclaimed Territory: only for creature spells of the type chosen for it.
       const only = a.onlyFor === 'chosenType' ? (obj(ctx, id).chosenType ?? '?') : a.onlyFor;
       if (a.onlyFor === 'chosenType' && !forSubtypes.includes('Creature')) continue;
@@ -209,6 +215,17 @@ export function payMana(ctx: Ctx, sources: Readonly<Payment>): void {
     tap(ctx, id);
     if (def(ctx, id).abilities.some((a) => a.kind === 'mana' && a.cost.sacrificeSelf))
       sacrifice(ctx, id);
+    // Strixhaven (13c): Spell Satchel loses a book counter; Strixhaven Stadium gains a point counter.
+    const left = ctx.s.objects[id];
+    if (!left) continue;
+    for (const a of def(ctx, id).abilities) {
+      if (a.kind !== 'mana') continue;
+      const o = ctx.s.objects[id];
+      if (!o || o.zone !== 'battlefield') continue;
+      if (a.cost.removeCounters && o.counters?.[a.cost.removeCounters.name])
+        o.counters[a.cost.removeCounters.name]! -= a.cost.removeCounters.count;
+      if (a.addCounter) addCounters(ctx, id, 1, a.addCounter);
+    }
   }
   for (const id of sources.pain ?? [])
     dealDamage(ctx, damageSourceFor(ctx, id, player), { player }, 1, false);
