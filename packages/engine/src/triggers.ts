@@ -3,6 +3,7 @@ import {
   characteristics,
   countOf,
   creaturesOnBattlefield,
+  isCreature as isCreatureNow,
   matchesFilter,
 } from './characteristics.ts';
 import { type Ctx, createObject, def, defOf, obj, other } from './context.ts';
@@ -129,6 +130,9 @@ export function checkCondition(
   }
   // Secrets of Strixhaven (14a): Lluwen, Exchange Student.
   if (c.kind === 'notPrepared') return !self?.prepared;
+  // Secrets of Strixhaven (14b): Emeritus of Woe, Great Hall of the Biblioplex.
+  if (c.kind === 'creaturesDiedAtLeast') return ctx.s.turn.creaturesDied >= c.min;
+  if (c.kind === 'sourceIsCreature') return !!self && isCreatureNow(ctx, self.id);
   if (c.kind === 'lifeThisTurn') {
     const p = c.who === 'you' ? controller : other(controller);
     const gained = ctx.s.turn.lifeGains[p] > 0;
@@ -748,6 +752,25 @@ function detect(ctx: Ctx, ev: GameEvent): void {
           ((a.trigger.on === 'youGainLife' && ev.delta > 0) ||
             (a.trigger.on === 'youGainOrLoseLife' && (!a.trigger.duringYourTurn || yours))),
       );
+      // Secrets of Strixhaven (14b): Professor Dellian Fel's emblem: "whenever you gain life, ... that much".
+      if (ev.delta > 0)
+        for (const e of s.emblems ?? []) {
+          const a = e.ability;
+          if (
+            a.kind !== 'triggered' ||
+            a.trigger.on !== 'youGainLife' ||
+            e.controller !== ev.player
+          )
+            continue;
+          s.pendingTriggers.push({
+            source: e.source,
+            sourceDefId: e.sourceDefId,
+            abilityIndex: -1,
+            controller: e.controller,
+            emblem: a,
+            amount: ev.delta,
+          });
+        }
       return;
     }
     // Strixhaven (13a): magecraft. "Whenever you cast or copy an instant or sorcery spell" (`orCopy`).
@@ -1321,6 +1344,12 @@ export function nextPendingTriggerIndex(ctx: Ctx): number {
 function defMatches(d: CardDefinition, f: CardFilter): boolean {
   if (f.types && !f.types.some((t) => d.types.includes(t))) return false;
   if (f.hasKeyword && !d.keywords.includes(f.hasKeyword)) return false;
+  // Secrets of Strixhaven (14b): Arnyn, Deathbloom Botanist (printed power and toughness).
+  if (
+    f.maxPowerOrToughness !== undefined &&
+    Math.min(d.power ?? 0, d.toughness ?? 0) > f.maxPowerOrToughness
+  )
+    return false;
   if (f.subtype && !d.subtypes.includes(f.subtype)) return false;
   if (f.subtypes && !f.subtypes.some((st) => d.subtypes.includes(st))) return false;
   return true;

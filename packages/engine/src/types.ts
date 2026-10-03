@@ -392,6 +392,9 @@ export interface CostDef {
   // Secrets of Strixhaven (14b): Harmonized Trio
   /** Tap this many other untapped creatures you control (the engine picks the least useful). */
   tapOtherCreatures?: number;
+  // Secrets of Strixhaven (14b): Page, Loose Leaf
+  /** Discard another card with the same name as the source (with `discard`). */
+  discardSameName?: boolean;
 }
 
 export type TriggerDef =
@@ -722,6 +725,10 @@ export type ConditionDef =
   | { kind: 'cardsLeftGraveyardThisTurn' }
   /** One or more cards were put into exile this turn (Ennis, Debate Moderator). */
   | { kind: 'cardsExiledThisTurn' }
+  /** At least `min` creatures died this turn (Emeritus of Woe). */
+  | { kind: 'creaturesDiedAtLeast'; min: number }
+  /** The source is a creature right now (Great Hall of the Biblioplex once animated). */
+  | { kind: 'sourceIsCreature' }
   | { kind: 'custom'; handler: string };
 
 export interface CardFilter {
@@ -750,7 +757,14 @@ export interface CardFilter {
   notSubtype?: string;
   /** Mana value at most this ('sourcePower': the source's power, e.g. as it died). */
   // Secrets of Strixhaven (14a): Moseo, 'lifeGainedThisTurn' is the life its controller gained this turn.
-  maxManaValue?: number | 'sourcePower' | 'lifeGainedThisTurn';
+  // Secrets of Strixhaven (14b): Sundering Archaic, 'colorsSpent' is the number of colours spent to cast the source.
+  maxManaValue?: number | 'sourcePower' | 'lifeGainedThisTurn' | 'colorsSpent';
+  // Secrets of Strixhaven (14b): Arnyn, Deathbloom Botanist
+  /** Power or toughness at most this (printed, for a card that has left the battlefield). */
+  maxPowerOrToughness?: number;
+  // Secrets of Strixhaven (14b): Mage Tower Referee
+  /** Two or more colours. */
+  multicolored?: boolean;
   /** Put into its current zone this turn (Abyssal Harvester). */
   enteredThisTurn?: boolean;
   /** Same card as the source ("named Charmed Stray"). */
@@ -1361,6 +1375,11 @@ export type EffectDef =
       kind: 'discard';
       count: number;
       who?: 'controller' | 'eachOpponent';
+      // Secrets of Strixhaven (14b): "target player discards X cards"
+      /** The (target) player who discards, instead of `who`. */
+      of?: Ref;
+      /** The number of cards, instead of `count`. */
+      amount?: Amount;
       /** Only cards matching this. */
       filter?: CardFilter;
       /** Exiled instead (Ruthless Negotiation: "exiles a card from their hand"). */
@@ -1488,6 +1507,8 @@ export type EffectDef =
       kind: 'opponentSacrifices';
       gainToughness?: boolean;
       greatestPower?: boolean;
+      /** Secrets of Strixhaven (14b): End of the Hunt: only among those with the greatest mana value. */
+      greatestManaValue?: boolean;
       /** A permanent matching this instead of a creature. */
       filter?: CardFilter;
       /** Exiled instead of sacrificed (Early Winter). */
@@ -2109,6 +2130,9 @@ export interface PlayerState {
   pendingMainMana?: number;
   /** "You have no maximum hand size for the rest of the game." */
   noMaxHandSize?: boolean;
+  // Secrets of Strixhaven (14b): Ral Zarek, Guest Lecturer
+  /** Turns this player skips (their next turns). */
+  skipTurns?: number;
   // Strixhaven (13b): Maelstrom Muse
   /** The next instant or sorcery spell cast on `turn` costs `amount` less. */
   nextSpellDiscount?: { turn: number; amount: number };

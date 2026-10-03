@@ -5,6 +5,7 @@ import { LOREHOLD_EFFECTS } from './stx-lorehold-effects.ts';
 import { SOS_14A_EFFECTS } from './sos-14a-effects.ts';
 import { SOS_14B_A_EFFECTS } from './sos-14b-a-effects.ts';
 import { SOS_14B_B_EFFECTS } from './sos-14b-b-effects.ts';
+import { SOS_14B_C_EFFECTS } from './sos-14b-c-effects.ts';
 import { STX_13C_A_EFFECTS } from './stx-13c-a-effects.ts';
 import { STX_13C_B_EFFECTS } from './stx-13c-b-effects.ts';
 import { STX_13C_C_EFFECTS } from './stx-13c-c-effects.ts';
@@ -81,6 +82,8 @@ const BUILT_IN_EFFECTS: Record<string, CustomEffect> = {
   ...SOS_14B_A_EFFECTS,
   // Secrets of Strixhaven (14b), group B (blue).
   ...SOS_14B_B_EFFECTS,
+  // Secrets of Strixhaven (14b), group C.
+  ...SOS_14B_C_EFFECTS,
   // Strixhaven (13a): Learn: put the chosen Lesson from outside the game into your hand.
   learnFetch(ctx, es, params) {
     const ps = ctx.s.players[es.controller];

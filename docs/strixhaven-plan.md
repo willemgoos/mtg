@@ -288,3 +288,10 @@ whole (SOS's `prepare` is the riskiest). The shortest path to Quintorius is 0, 1
 - Ark of Hunger's milled card is playable this turn from the graveyard (no spell lock, unlike Conduit of Worlds).
   Nita's exiled spell goes to exile instead of a graveyard (`exileAfterCast`). Practiced Scrollsmith and Suspend Aggression
   use `playableUntilTurn` (the owner may cast or play from exile). Practiced Offense's target player is you or the opponent.
+14b (group C: black, Witherbloom, colourless; `sos/cards-c.ts`):
+
+- Arnyn reads the dying creature's printed power and toughness. Rabid Attack targets up to three creatures. Dina's Guidance
+  asks hand or graveyard before the search. Mind Roots: the discarding player picks both cards, then you pick the land.
+  Pox Plague asks one card or permanent at a time (you, then the opponent). Great Hall of the Biblioplex pays the life as
+  damage when its mana is spent. Petrified Hamlet picks from a list of land names (lands in play first).
+  Together as One and the other converge cards read the colours spent as recorded on the spell or permanent.

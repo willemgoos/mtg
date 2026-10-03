@@ -3,6 +3,7 @@ import { damageSourceFor, dealDamage } from './effects.ts';
 import { canTapForAbility, isCreature, matchesFilter } from './characteristics.ts';
 import { type Ctx, addCounters, def, emit, obj, sacrifice, tap } from './context.ts';
 import { manaValue, pipsOf } from './cost.ts';
+import { hamletColorless } from './sos-14b-c-effects.ts';
 import { checkCondition } from './triggers.ts';
 import type { Color, ManaCost, ManaType, ObjectId, PlayerId } from './types.ts';
 
@@ -105,6 +106,15 @@ export function manaSources(
         produces = [];
       }
       if (!produces.includes(a.produces)) produces.push(a.produces);
+    }
+    // Secrets of Strixhaven (14b): Petrified Hamlet: lands with the chosen name have "{T}: Add {C}".
+    if (
+      def(ctx, id).types.includes('Land') &&
+      hamletColorless(ctx, id) &&
+      canTapForAbility(ctx, id)
+    ) {
+      produces ??= [];
+      if (!produces.includes('C')) produces.push('C');
     }
     // Eluge: a land with a flood counter is an Island too.
     if (produces && obj(ctx, id).counters?.flood && !produces.includes('U')) produces.push('U');

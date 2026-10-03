@@ -473,11 +473,14 @@ export function Board({
                 ? first.type === 'activateAbility' &&
                   exilesFromHand(view.objects[first.source]!.defId, first.abilityIndex)
                   ? 'an instant or sorcery card to exile'
-                  : // Strixhaven (13c): Draconic Intervention exiles a card from your graveyard.
-                    first.type === 'castSpell' &&
-                      cardDb.get(view.objects[first.card]?.defId ?? '')?.exileFromGraveyardToCast
-                    ? 'an instant or sorcery card to exile from your graveyard'
-                    : 'a card to discard'
+                  : first.type === 'activateAbility' &&
+                      discardsSameName(view.objects[first.source]!.defId, first.abilityIndex)
+                    ? 'another card with the same name to discard'
+                    : // Strixhaven (13c): Draconic Intervention exiles a card from your graveyard.
+                      first.type === 'castSpell' &&
+                        cardDb.get(view.objects[first.card]?.defId ?? '')?.exileFromGraveyardToCast
+                      ? 'an instant or sorcery card to exile from your graveyard'
+                      : 'a card to discard'
                 : first.type === 'castSpell' && first.copyOf
                   ? 'a creature to copy (or skip)'
                   : first.type === 'castSpell' && first.sneak
@@ -1481,6 +1484,12 @@ function ChooseCardOverlay({ game, onHover }: { game: GameSession; onHover: Hove
 function exilesFromHand(defId: CardDefId, index: number): boolean {
   const a = cardDb.get(defId)?.abilities[index];
   return a?.kind === 'activated' && !!a.cost.exileRefine;
+}
+
+/** Secrets of Strixhaven (14b): Page, Loose Leaf discards another card with its name. */
+function discardsSameName(defId: CardDefId, index: number): boolean {
+  const a = cardDb.get(defId)?.abilities[index];
+  return a?.kind === 'activated' && !!a.cost.discardSameName;
 }
 
 /** Final Fantasy (11b): what a kicker paid with a permanent asks for (Vayne's Treachery, Chocobo Kick). */

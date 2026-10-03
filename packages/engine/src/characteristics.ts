@@ -514,6 +514,7 @@ export function matchesFilter(
     filter.maxPower !== undefined ||
     filter.minPower !== undefined ||
     filter.minToughness !== undefined ||
+    filter.maxPowerOrToughness !== undefined ||
     !!filter.hasKeyword ||
     !!filter.lacksKeyword;
   const c = needsComputed
@@ -525,6 +526,12 @@ export function matchesFilter(
         subtypes: [...def(ctx, id).subtypes, ...(obj(ctx, id).addedSubtypes ?? [])],
       };
   if (filter.maxPower !== undefined && c.power > filter.maxPower) return false;
+  // Secrets of Strixhaven (14b): Arnyn, Deathbloom Botanist.
+  if (
+    filter.maxPowerOrToughness !== undefined &&
+    Math.min(c.power, c.toughness) > filter.maxPowerOrToughness
+  )
+    return false;
   if (
     filter.minPlusOneCounters !== undefined &&
     obj(ctx, id).plusOneCounters < filter.minPlusOneCounters
@@ -632,6 +639,8 @@ export function cardMatches(
   if (filter.notTypes?.some((t) => d.types.includes(t))) return false;
   // Strixhaven (13b): monocolored.
   if (filter.monocolored && d.colors.length !== 1) return false;
+  // Secrets of Strixhaven (14b): multicolored.
+  if (filter.multicolored && d.colors.length < 2) return false;
   // Strixhaven (13c): nonlegendary.
   if (filter.nonlegendary && d.supertypes.includes('Legendary')) return false;
   if (filter.commander && !isCommander(ctx, id)) return false;
@@ -679,7 +688,12 @@ export function cardMatches(
             sourceId
             ? (ctx.s.turn.lifeGained?.[obj(ctx, sourceId).controller] ?? 0)
             : 0
-          : filter.maxManaValue;
+          : filter.maxManaValue === 'colorsSpent'
+            ? // Secrets of Strixhaven (14b): Sundering Archaic.
+              sourceId
+              ? (obj(ctx, sourceId).manaColors?.length ?? 0)
+              : 0
+            : filter.maxManaValue;
     if (mv > max) return false;
   }
   if (filter.other && id === sourceId) return false;

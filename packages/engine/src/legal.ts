@@ -38,6 +38,7 @@ import {
 } from './stack.ts';
 import { addCosts } from './spells.ts';
 import { checkCondition, triggeredAbility } from './triggers.ts';
+import { nameLocked } from './sos-14b-c-effects.ts';
 
 const NO_COST = { generic: 0, colored: {} };
 import { targetCombos } from './targets.ts';
@@ -524,6 +525,8 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
       )
         return;
       if (a.cost.loyalty !== undefined && s.turn.noLoyalty?.includes(player)) return;
+      // Secrets of Strixhaven (14b): Petrified Hamlet.
+      if (nameLocked(ctx, source)) return;
       if ((a.once || a.powerUp) && obj(ctx, source).usedAbilities?.includes(abilityIndex)) return;
       if (a.powerUp && s.turn.noPowerUp) return;
       if (a.oncePerTurn && obj(ctx, source).onceTurns?.[-1 - abilityIndex] === s.turn.number)
@@ -569,7 +572,10 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
       const discards = a.cost.exileRefine
         ? ps.hand.filter((id) => matchesFilter(ctx, id, { types: ['Instant', 'Sorcery'] }))
         : a.cost.discard
-          ? ps.hand
+          ? // Secrets of Strixhaven (14b): Page, Loose Leaf discards another card with its name.
+            a.cost.discardSameName
+            ? ps.hand.filter((id) => id !== source && obj(ctx, id).defId === obj(ctx, source).defId)
+            : ps.hand
           : [undefined];
       if (discards.length === 0) return;
       const rc = a.cost.removeCounters;
