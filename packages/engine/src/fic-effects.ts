@@ -660,6 +660,94 @@ export const FIC_EFFECTS: Record<string, CustomEffect> = {
     }
   },
 
+  // ---------------------------------------------------------------- 12g
+  /**
+   * Locke's Mug: each player mills a card; a land among them makes a Treasure;
+   * you may cast a spell from among them this turn (with any mana: a simplification).
+   */
+  mug(ctx, es) {
+    let land = false;
+    for (const p of ['p1', 'p2'] as const) {
+      const top = ctx.s.players[p].library[0];
+      if (!top) continue;
+      moveObject(ctx, top, 'graveyard');
+      if (isLand(ctx, top)) {
+        land = true;
+        continue;
+      }
+      // Castable from the graveyard this turn: put in exile, playable by you.
+      moveObject(ctx, top, 'exile');
+      const o = obj(ctx, top);
+      o.anyMana = true;
+      if (o.owner === es.controller) o.playableUntilTurn = ctx.s.turn.number;
+      else o.castableBy = es.controller;
+    }
+    if (land) tokenCopyOfCard(ctx, 'treasure-token', es.controller);
+  },
+
+  /** The Gold Saucer: flip a coin; a win makes a Treasure. */
+  coinFlipTreasure(ctx, es) {
+    if (nextInt(ctx.s.rng, 2) === 0) tokenCopyOfCard(ctx, 'treasure-token', es.controller);
+  },
+
+  /**
+   * Exile the top card of the opponent's library; you may cast it (any mana).
+   * `params.orTreasure`: a land (not castable) makes a Treasure instead (Vaan).
+   */
+  stealTop(ctx, es, params) {
+    const top = ctx.s.players[other(es.controller)].library[0];
+    if (!top) return;
+    moveObject(ctx, top, 'exile');
+    if (isLand(ctx, top)) {
+      if ((params as { orTreasure?: boolean } | undefined)?.orTreasure)
+        tokenCopyOfCard(ctx, 'treasure-token', es.controller);
+      return;
+    }
+    const o = obj(ctx, top);
+    o.castableBy = es.controller;
+    o.anyMana = true;
+  },
+
+  /** Blazing Bomb: damage equal to its power as it was sacrificed, to the target. */
+  damageByLkiPower(ctx, es) {
+    const t = targetObj(ctx, es);
+    if (!t || t.zone !== 'battlefield' || !es.source) return;
+    dealDamage(
+      ctx,
+      damageSourceFor(ctx, es.source.id, es.controller),
+      { object: { id: t.id, zcc: t.zcc } },
+      es.lkiPower ?? 0,
+      false,
+    );
+  },
+
+  /** Nibelheim Aflame: the target deals damage equal to its power to each other creature. */
+  nibelheim(ctx, es) {
+    const t = targetObj(ctx, es);
+    if (!t || t.zone !== 'battlefield') return;
+    const p = characteristics(ctx, t.id).power;
+    const src = damageSourceFor(ctx, t.id, es.controller);
+    for (const id of [...ctx.s.battlefield]) {
+      if (id === t.id || !characteristics(ctx, id).types.includes('Creature')) continue;
+      dealDamage(ctx, src, { object: { id, zcc: obj(ctx, id).zcc } }, p, false);
+    }
+  },
+
+  /** Sidequest: Play Blitzball: transform, then attach to your most powerful creature. */
+  blitzballChampion(ctx, es) {
+    const self = sourceObj(ctx, es);
+    if (!self || self.zone !== 'battlefield') return;
+    transform(ctx, self.id);
+    const best = ctx.s.battlefield
+      .filter(
+        (id) =>
+          obj(ctx, id).controller === es.controller &&
+          characteristics(ctx, id).types.includes('Creature'),
+      )
+      .sort((a, b) => characteristics(ctx, b).power - characteristics(ctx, a).power)[0];
+    if (best) self.attachedTo = best;
+  },
+
   // ---------------------------------------------------------------- 12e
   /**
    * Sidequest: Catch a Fish: an artifact or creature card on top goes to your
@@ -697,6 +785,8 @@ export const FIC_CONDITIONS: Record<
   startingPlayer: (ctx, p) => (ctx.s.turn.number % 2 === 1) === (ctx.s.turn.activePlayer === p),
   /** "If it's the first combat phase of the turn" (Genji Glove, Tifa). */
   firstCombat: (ctx) => !ctx.s.turn.laterCombat,
+  /** An opponent lost 6 or more life this turn (Sidequest: Play Blitzball's "6 or more combat damage"). */
+  opponentLostSix: (ctx, p) => (ctx.s.turn.lifeLostTotal?.[other(p)] ?? 0) >= 6,
   /** A creature died under an opponent's control this turn (Sidequest: Hunt the Mark). */
   opponentCreatureDied: (ctx, p) => (ctx.s.turn.creaturesLost?.[other(p)] ?? 0) > 0,
   /** You gained 7 or more life this turn (Aerith, Last Ancient). */

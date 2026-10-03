@@ -139,12 +139,12 @@ four decks. Three more FIC Brawl decks followed (9 December 2025, "Arena Store d
 | Sub-phase | Deck | Commander | Colours |
 |---|---|---|---|
 | 12a | Revival Trance (done) | Terra, Herald of Hope | R/W/B |
-| 12b | Limit Break | Cloud, Ex-SOLDIER | R/G/W |
-| 12c | Counter Blitz | Tidus, Yuna's Guardian | G/W/U |
-| 12d | Scions & Spellcraft | Y'shtola, Night's Blessed | W/U/B |
-| 12e | Brawl Aerith, Last Ancient | Aerith, Last Ancient | G/W |
-| 12f | Brawl Emet-Selch of the Third Seat | Emet-Selch of the Third Seat | U/B |
-| 12g | Brawl Locke, Treasure Hunter | Locke, Treasure Hunter | B/R |
+| 12b | Limit Break (done) | Cloud, Ex-SOLDIER | R/G/W |
+| 12c | Counter Blitz (done) | Tidus, Yuna's Guardian | G/W/U |
+| 12d | Scions & Spellcraft (done) | Y'shtola, Night's Blessed | W/U/B |
+| 12e | Brawl Aerith, Last Ancient (done) | Aerith, Last Ancient | G/W |
+| 12f | Brawl Emet-Selch of the Third Seat (done) | Emet-Selch of the Third Seat | U/B |
+| 12g | Brawl Locke, Treasure Hunter (done) | Locke, Treasure Hunter | B/R |
 
 - Lists: Arena is the reference, so the Arena Store lists from mtg.wiki come first. The Arena versions swap cards that are
   not on Arena (Cloud's list has Sword of Forge and Frontier, for example). Check them against the paper lists on
@@ -191,6 +191,12 @@ four decks. Three more FIC Brawl decks followed (9 December 2025, "Arena Store d
   exile), "whenever one or more opponents lose life", spells cast from your graveyard costing less, Demon Wall
   attacking with a counter, Zenos's chosen creature leaving. Win rate over 20 games a pairing: 41% (25–65% per
   opponent).
+- **12g Done:** Brawl Locke, Treasure Hunter. New: Mug (each player mills, a land makes a Treasure, a spell among
+  them castable this turn), casting the opponent's exiled top card (Reno and Rude, Vaan), ninjutsu as sneak (Yuffie),
+  Sephiroth's fourth death of a turn with its emblem. Win rate over 20 games a pairing: 53% (35–70% per opponent).
+- **Final win rates** (all 12 Brawl decks, 12 games a pairing in both seats, after every fix above): Revival
+  Trance 55%, Limit Break 48%, Counter Blitz 51%, Scions & Spellcraft 51%, Brawl Aerith 64%, Brawl Emet-Selch 41%,
+  Brawl Locke 53%.
 
 ### Lists: Arena against paper
 
@@ -270,3 +276,9 @@ only, for the merge with phase 11.
   graveyard) and isn't exiled afterwards. Gogo copies the top triggered ability X times (abilities aren't targets).
   Y'shtola Rhul's additional end step isn't built. Chocobo-style kickers that sacrifice (Vayne's Treachery) are paid
   as the spell resolves. Sahagin and The Prima Vista count mana value, not mana spent.
+- **12g:** Mug's and the stolen cards are castable with any mana (Mug's for the turn, stolen ones while exiled).
+  Ninjutsu is sneak (the card is cast). Trance Kuja gives Wizards +1 damage, not double. Sephiroth, One-Winged Angel
+  sacrifices at most one creature. Sidequest: Play Blitzball checks at your end step for 6 or more life lost by the
+  opponent, and attaches to your most powerful creature. The Masamune always gives first strike and doesn't force
+  blocks or double death triggers. Vaan's "spell you don't own" trigger isn't built. Blazing Bomb, Prompto count
+  mana value. Sorceress's Schemes only returns from the graveyard.

@@ -5,6 +5,7 @@ import { FIC_SHARED, FIC_SHARED_BACK_FACES } from './fic/shared.ts';
 import { AERITH } from './fic/aerith.ts';
 import { CLOUD } from './fic/cloud.ts';
 import { EMET_SELCH } from './fic/emet-selch.ts';
+import { LOCKE } from './fic/locke.ts';
 import { TERRA } from './fic/terra.ts';
 import { TIDUS } from './fic/tidus.ts';
 import { YSHTOLA, YSHTOLA_BACK_FACES } from './fic/yshtola.ts';
@@ -24,6 +25,7 @@ export const FINAL_FANTASY_BRAWL_BEHAVIORS: Record<string, Behavior> = {
   ...YSHTOLA,
   ...AERITH,
   ...EMET_SELCH,
+  ...LOCKE,
 };
 
 /** Back faces of double-faced cards: not cards of their own, so not in the pool. */

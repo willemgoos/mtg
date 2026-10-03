@@ -30879,6 +30879,783 @@
   }
  },
  {
+  "name": "The Gold Saucer",
+  "scryfallId": "5363c881-443d-43df-afd8-f81e1a1741a2",
+  "oracleId": "93e38650-ce22-4ab9-b79d-cc7b6477c075",
+  "set": "fin",
+  "collectorNumber": "279",
+  "rarity": "uncommon",
+  "manaCost": "",
+  "typeLine": "Land — Town",
+  "oracleText": "{T}: Add {C}.\n{2}, {T}: Flip a coin. If you win the flip, create a Treasure token.\n{3}, {T}, Sacrifice two artifacts: Draw a card.",
+  "colors": [],
+  "keywords": [
+   "Treasure"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/3/5363c881-443d-43df-afd8-f81e1a1741a2.jpg?1783906549",
+   "normal": "https://cards.scryfall.io/normal/front/5/3/5363c881-443d-43df-afd8-f81e1a1741a2.jpg?1783906549",
+   "large": "https://cards.scryfall.io/large/front/5/3/5363c881-443d-43df-afd8-f81e1a1741a2.jpg?1783906549",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/3/5363c881-443d-43df-afd8-f81e1a1741a2.jpg?1783906549"
+  }
+ },
+ {
+  "name": "Ahriman",
+  "scryfallId": "162a415c-5465-497e-8f4e-c6f09681641d",
+  "oracleId": "37d1d507-25dc-4cd0-b51e-2f1e9b24832c",
+  "set": "fin",
+  "collectorNumber": "87",
+  "rarity": "common",
+  "manaCost": "{2}{B}",
+  "typeLine": "Creature — Eye Horror",
+  "oracleText": "Flying, deathtouch\n{3}, Sacrifice another creature or artifact: Draw a card.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Deathtouch",
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/6/162a415c-5465-497e-8f4e-c6f09681641d.jpg?1783906624",
+   "normal": "https://cards.scryfall.io/normal/front/1/6/162a415c-5465-497e-8f4e-c6f09681641d.jpg?1783906624",
+   "large": "https://cards.scryfall.io/large/front/1/6/162a415c-5465-497e-8f4e-c6f09681641d.jpg?1783906624",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/6/162a415c-5465-497e-8f4e-c6f09681641d.jpg?1783906624"
+  }
+ },
+ {
+  "name": "Black Waltz No. 3",
+  "scryfallId": "fe86e41b-b0f6-4aa1-8827-c095c721f304",
+  "oracleId": "9c84c681-40c1-4ff3-86e6-48b4ab7491e5",
+  "set": "fin",
+  "collectorNumber": "214",
+  "rarity": "uncommon",
+  "manaCost": "{2}{B}{R}",
+  "typeLine": "Legendary Creature — Wizard",
+  "oracleText": "Flying, deathtouch\nWhenever you cast a noncreature spell, Black Waltz No. 3 deals 2 damage to each opponent.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "B",
+   "R"
+  ],
+  "keywords": [
+   "Deathtouch",
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/e/fe86e41b-b0f6-4aa1-8827-c095c721f304.jpg?1783906575",
+   "normal": "https://cards.scryfall.io/normal/front/f/e/fe86e41b-b0f6-4aa1-8827-c095c721f304.jpg?1783906575",
+   "large": "https://cards.scryfall.io/large/front/f/e/fe86e41b-b0f6-4aa1-8827-c095c721f304.jpg?1783906575",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/e/fe86e41b-b0f6-4aa1-8827-c095c721f304.jpg?1783906575"
+  }
+ },
+ {
+  "name": "Blazing Bomb",
+  "scryfallId": "70f47277-ca47-428a-808f-0fb32e820a71",
+  "oracleId": "088acd15-029b-4091-960a-d5060a364ca9",
+  "set": "fin",
+  "collectorNumber": "130",
+  "rarity": "common",
+  "manaCost": "{R}",
+  "typeLine": "Creature — Elemental",
+  "oracleText": "Whenever you cast a noncreature spell, if at least four mana was spent to cast it, put a +1/+1 counter on this creature.\nBlow Up — {T}, Sacrifice this creature: It deals damage equal to its power to target creature. Activate only as a sorcery.",
+  "power": "1",
+  "toughness": "1",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Blow Up"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/0/70f47277-ca47-428a-808f-0fb32e820a71.jpg?1783906606",
+   "normal": "https://cards.scryfall.io/normal/front/7/0/70f47277-ca47-428a-808f-0fb32e820a71.jpg?1783906606",
+   "large": "https://cards.scryfall.io/large/front/7/0/70f47277-ca47-428a-808f-0fb32e820a71.jpg?1783906606",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/0/70f47277-ca47-428a-808f-0fb32e820a71.jpg?1783906606"
+  }
+ },
+ {
+  "name": "Kuja, Genome Sorcerer",
+  "scryfallId": "008782d2-72b0-4554-b1ce-2db99969a4d8",
+  "oracleId": "3998a60d-9521-4100-8d41-3e612972a3de",
+  "set": "fin",
+  "collectorNumber": "232",
+  "rarity": "rare",
+  "manaCost": "{2}{B}{R}",
+  "typeLine": "Legendary Creature — Human Mutant Wizard",
+  "oracleText": "At the beginning of your end step, create a tapped 0/1 black Wizard creature token with \"Whenever you cast a noncreature spell, this token deals 1 damage to each opponent.\" Then if you control four or more Wizards, transform Kuja.",
+  "power": "3",
+  "toughness": "4",
+  "colors": [
+   "B",
+   "R"
+  ],
+  "keywords": [
+   "Transform"
+  ],
+  "back": "Trance Kuja, Fate Defied",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/0/008782d2-72b0-4554-b1ce-2db99969a4d8.jpg?1783906574",
+   "normal": "https://cards.scryfall.io/normal/front/0/0/008782d2-72b0-4554-b1ce-2db99969a4d8.jpg?1783906574",
+   "large": "https://cards.scryfall.io/large/front/0/0/008782d2-72b0-4554-b1ce-2db99969a4d8.jpg?1783906574",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/0/008782d2-72b0-4554-b1ce-2db99969a4d8.jpg?1783906574"
+  }
+ },
+ {
+  "name": "Trance Kuja, Fate Defied",
+  "scryfallId": "008782d2-72b0-4554-b1ce-2db99969a4d8",
+  "oracleId": "3998a60d-9521-4100-8d41-3e612972a3de",
+  "set": "fin",
+  "collectorNumber": "232",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Legendary Creature — Avatar Wizard",
+  "oracleText": "Flare Star — If a Wizard you control would deal damage to a permanent or player, it deals double that damage instead.",
+  "power": "4",
+  "toughness": "6",
+  "colors": [
+   "B",
+   "R"
+  ],
+  "keywords": [
+   "Flare Star",
+   "Double"
+  ],
+  "front": "Kuja, Genome Sorcerer",
+  "image": {
+   "small": "https://cards.scryfall.io/small/back/0/0/008782d2-72b0-4554-b1ce-2db99969a4d8.jpg?1783906574",
+   "normal": "https://cards.scryfall.io/normal/back/0/0/008782d2-72b0-4554-b1ce-2db99969a4d8.jpg?1783906574",
+   "large": "https://cards.scryfall.io/large/back/0/0/008782d2-72b0-4554-b1ce-2db99969a4d8.jpg?1783906574",
+   "artCrop": "https://cards.scryfall.io/art_crop/back/0/0/008782d2-72b0-4554-b1ce-2db99969a4d8.jpg?1783906574"
+  }
+ },
+ {
+  "name": "Mysidian Elder",
+  "scryfallId": "6bc39af4-be19-4889-b930-df7ebf7b9481",
+  "oracleId": "10039992-d51a-47e7-9a70-02fe2227c163",
+  "set": "fin",
+  "collectorNumber": "145",
+  "rarity": "common",
+  "manaCost": "{2}{R}",
+  "typeLine": "Creature — Human Wizard",
+  "oracleText": "When this creature enters, create a 0/1 black Wizard creature token with \"Whenever you cast a noncreature spell, this token deals 1 damage to each opponent.\"",
+  "power": "1",
+  "toughness": "3",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/b/6bc39af4-be19-4889-b930-df7ebf7b9481.jpg?1783906602",
+   "normal": "https://cards.scryfall.io/normal/front/6/b/6bc39af4-be19-4889-b930-df7ebf7b9481.jpg?1783906602",
+   "large": "https://cards.scryfall.io/large/front/6/b/6bc39af4-be19-4889-b930-df7ebf7b9481.jpg?1783906602",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/b/6bc39af4-be19-4889-b930-df7ebf7b9481.jpg?1783906602"
+  }
+ },
+ {
+  "name": "Prompto Argentum",
+  "scryfallId": "4c617bcd-05f8-40c2-bb38-489bc863ce6b",
+  "oracleId": "e13d7600-0924-42eb-9d65-aa18548624a7",
+  "set": "fin",
+  "collectorNumber": "148",
+  "rarity": "uncommon",
+  "manaCost": "{1}{R}",
+  "typeLine": "Legendary Creature — Human Scout",
+  "oracleText": "Haste\nSelfie Shot — Whenever you cast a noncreature spell, if at least four mana was spent to cast it, create a Treasure token.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Selfie Shot",
+   "Treasure",
+   "Haste"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/c/4c617bcd-05f8-40c2-bb38-489bc863ce6b.jpg?1783906601",
+   "normal": "https://cards.scryfall.io/normal/front/4/c/4c617bcd-05f8-40c2-bb38-489bc863ce6b.jpg?1783906601",
+   "large": "https://cards.scryfall.io/large/front/4/c/4c617bcd-05f8-40c2-bb38-489bc863ce6b.jpg?1783906601",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/c/4c617bcd-05f8-40c2-bb38-489bc863ce6b.jpg?1783906601"
+  }
+ },
+ {
+  "name": "Queen Brahne",
+  "scryfallId": "c38c98bb-74c9-460f-9997-ea5c5f922347",
+  "oracleId": "0527b7b5-a55d-4720-af1f-17fc1178f4a6",
+  "set": "fin",
+  "collectorNumber": "149",
+  "rarity": "uncommon",
+  "manaCost": "{2}{R}",
+  "typeLine": "Legendary Creature — Human Noble",
+  "oracleText": "Prowess (Whenever you cast a noncreature spell, this creature gets +1/+1 until end of turn.)\nWhenever Queen Brahne attacks, create a 0/1 black Wizard creature token with \"Whenever you cast a noncreature spell, this token deals 1 damage to each opponent.\"",
+  "power": "2",
+  "toughness": "1",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Prowess"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/3/c38c98bb-74c9-460f-9997-ea5c5f922347.jpg?1783906600",
+   "normal": "https://cards.scryfall.io/normal/front/c/3/c38c98bb-74c9-460f-9997-ea5c5f922347.jpg?1783906600",
+   "large": "https://cards.scryfall.io/large/front/c/3/c38c98bb-74c9-460f-9997-ea5c5f922347.jpg?1783906600",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/3/c38c98bb-74c9-460f-9997-ea5c5f922347.jpg?1783906600"
+  }
+ },
+ {
+  "name": "Reno and Rude",
+  "scryfallId": "b5eb0064-c7c4-4e3e-add2-b86269de3fb9",
+  "oracleId": "f749a6d6-2c55-439f-bb02-e95fa54c2ef3",
+  "set": "fin",
+  "collectorNumber": "113",
+  "rarity": "uncommon",
+  "manaCost": "{1}{B}",
+  "typeLine": "Legendary Creature — Human Assassin",
+  "oracleText": "Menace\nWhenever Reno and Rude deals combat damage to a player, exile the top card of that player's library. Then you may sacrifice another creature or artifact. If you do, you may play the exiled card this turn, and mana of any type can be spent to cast it.",
+  "power": "2",
+  "toughness": "1",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Menace"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/5/b5eb0064-c7c4-4e3e-add2-b86269de3fb9.jpg?1783906613",
+   "normal": "https://cards.scryfall.io/normal/front/b/5/b5eb0064-c7c4-4e3e-add2-b86269de3fb9.jpg?1783906613",
+   "large": "https://cards.scryfall.io/large/front/b/5/b5eb0064-c7c4-4e3e-add2-b86269de3fb9.jpg?1783906613",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/5/b5eb0064-c7c4-4e3e-add2-b86269de3fb9.jpg?1783906613"
+  }
+ },
+ {
+  "name": "Seifer Almasy",
+  "scryfallId": "9c776984-99ea-4181-ac95-78c41ba9d54f",
+  "oracleId": "7088a901-0489-41c3-9f2f-633939514de8",
+  "set": "fin",
+  "collectorNumber": "156",
+  "rarity": "rare",
+  "manaCost": "{3}{R}",
+  "typeLine": "Legendary Creature — Human Knight",
+  "oracleText": "Whenever a creature you control attacks alone, it gains double strike until end of turn.\nFire Cross — Whenever Seifer Almasy deals combat damage to a player, you may cast target instant or sorcery card with mana value 3 or less from your graveyard without paying its mana cost. If that spell would be put into your graveyard, exile it instead.",
+  "power": "3",
+  "toughness": "4",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Fire Cross"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/c/9c776984-99ea-4181-ac95-78c41ba9d54f.jpg?1783906597",
+   "normal": "https://cards.scryfall.io/normal/front/9/c/9c776984-99ea-4181-ac95-78c41ba9d54f.jpg?1783906597",
+   "large": "https://cards.scryfall.io/large/front/9/c/9c776984-99ea-4181-ac95-78c41ba9d54f.jpg?1783906597",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/c/9c776984-99ea-4181-ac95-78c41ba9d54f.jpg?1783906597"
+  }
+ },
+ {
+  "name": "Sephiroth, Fabled SOLDIER",
+  "scryfallId": "85eaf5e7-77dc-4842-a70c-ce4ac7f724df",
+  "oracleId": "70113003-be5e-406a-9aec-cb480468c36d",
+  "set": "fin",
+  "collectorNumber": "115",
+  "rarity": "mythic",
+  "manaCost": "{2}{B}",
+  "typeLine": "Legendary Creature — Human Avatar Soldier",
+  "oracleText": "Whenever Sephiroth enters or attacks, you may sacrifice another creature. If you do, draw a card.\nWhenever another creature dies, target opponent loses 1 life and you gain 1 life. If this is the fourth time this ability has resolved this turn, transform Sephiroth.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Transform"
+  ],
+  "back": "Sephiroth, One-Winged Angel",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/5/85eaf5e7-77dc-4842-a70c-ce4ac7f724df.jpg?1783906617",
+   "normal": "https://cards.scryfall.io/normal/front/8/5/85eaf5e7-77dc-4842-a70c-ce4ac7f724df.jpg?1783906617",
+   "large": "https://cards.scryfall.io/large/front/8/5/85eaf5e7-77dc-4842-a70c-ce4ac7f724df.jpg?1783906617",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/5/85eaf5e7-77dc-4842-a70c-ce4ac7f724df.jpg?1783906617"
+  }
+ },
+ {
+  "name": "Sephiroth, One-Winged Angel",
+  "scryfallId": "85eaf5e7-77dc-4842-a70c-ce4ac7f724df",
+  "oracleId": "70113003-be5e-406a-9aec-cb480468c36d",
+  "set": "fin",
+  "collectorNumber": "115",
+  "rarity": "mythic",
+  "manaCost": "",
+  "typeLine": "Legendary Creature — Angel Nightmare Avatar",
+  "oracleText": "Flying\nSuper Nova — As this creature transforms into Sephiroth, One-Winged Angel, you get an emblem with \"Whenever a creature dies, target opponent loses 1 life and you gain 1 life.\"\nWhenever Sephiroth attacks, you may sacrifice any number of other creatures. If you do, draw that many cards.",
+  "power": "5",
+  "toughness": "5",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Flying",
+   "Transform",
+   "Super Nova"
+  ],
+  "front": "Sephiroth, Fabled SOLDIER",
+  "image": {
+   "small": "https://cards.scryfall.io/small/back/8/5/85eaf5e7-77dc-4842-a70c-ce4ac7f724df.jpg?1783906617",
+   "normal": "https://cards.scryfall.io/normal/back/8/5/85eaf5e7-77dc-4842-a70c-ce4ac7f724df.jpg?1783906617",
+   "large": "https://cards.scryfall.io/large/back/8/5/85eaf5e7-77dc-4842-a70c-ce4ac7f724df.jpg?1783906617",
+   "artCrop": "https://cards.scryfall.io/art_crop/back/8/5/85eaf5e7-77dc-4842-a70c-ce4ac7f724df.jpg?1783906617"
+  }
+ },
+ {
+  "name": "Undercity Dire Rat",
+  "scryfallId": "274788f4-fbf3-4a15-bdc0-f513a2fde30d",
+  "oracleId": "f09811d0-c5da-4061-aaa7-835ccee3b05a",
+  "set": "fin",
+  "collectorNumber": "123",
+  "rarity": "common",
+  "manaCost": "{1}{B}",
+  "typeLine": "Creature — Rat",
+  "oracleText": "Rat Tail — When this creature dies, create a Treasure token. (It's an artifact with \"{T}, Sacrifice this token: Add one mana of any color.\")",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Treasure",
+   "Rat Tail"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/7/274788f4-fbf3-4a15-bdc0-f513a2fde30d.jpg?1783906610",
+   "normal": "https://cards.scryfall.io/normal/front/2/7/274788f4-fbf3-4a15-bdc0-f513a2fde30d.jpg?1783906610",
+   "large": "https://cards.scryfall.io/large/front/2/7/274788f4-fbf3-4a15-bdc0-f513a2fde30d.jpg?1783906610",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/7/274788f4-fbf3-4a15-bdc0-f513a2fde30d.jpg?1783906610"
+  }
+ },
+ {
+  "name": "Vaan, Street Thief",
+  "scryfallId": "50e1ec29-9de3-4f1b-b818-057e030d475b",
+  "oracleId": "24fd1f47-bb15-45c6-a7b1-ba8eb3bb8b1d",
+  "set": "fin",
+  "collectorNumber": "168",
+  "rarity": "rare",
+  "manaCost": "{2}{R}",
+  "typeLine": "Legendary Creature — Human Scout",
+  "oracleText": "Whenever one or more Scouts, Pirates, and/or Rogues you control deal combat damage to a player, exile the top card of that player's library. You may cast it. If you don't, create a Treasure token.\nWhenever you cast a spell you don't own, put a +1/+1 counter on each Scout, Pirate, and Rogue you control.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Treasure"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/0/50e1ec29-9de3-4f1b-b818-057e030d475b.jpg?1783906593",
+   "normal": "https://cards.scryfall.io/normal/front/5/0/50e1ec29-9de3-4f1b-b818-057e030d475b.jpg?1783906593",
+   "large": "https://cards.scryfall.io/large/front/5/0/50e1ec29-9de3-4f1b-b818-057e030d475b.jpg?1783906593",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/0/50e1ec29-9de3-4f1b-b818-057e030d475b.jpg?1783906593"
+  }
+ },
+ {
+  "name": "Dark Knight's Greatsword",
+  "scryfallId": "b50dcc7c-260f-4d8c-9a9e-9244ec23a91e",
+  "oracleId": "eda09ed4-7509-4d1e-b169-2b7c1c87e936",
+  "set": "fin",
+  "collectorNumber": "95",
+  "rarity": "uncommon",
+  "manaCost": "{2}{B}",
+  "typeLine": "Artifact — Equipment",
+  "oracleText": "Job select (When this Equipment enters, create a 1/1 colorless Hero creature token, then attach this to it.)\nEquipped creature gets +3/+0 and is a Knight in addition to its other types.\nChaosbringer — Equip—Pay 3 life. Activate only once each turn.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Chaosbringer",
+   "Job select",
+   "Equip"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/5/b50dcc7c-260f-4d8c-9a9e-9244ec23a91e.jpg?1783906621",
+   "normal": "https://cards.scryfall.io/normal/front/b/5/b50dcc7c-260f-4d8c-9a9e-9244ec23a91e.jpg?1783906621",
+   "large": "https://cards.scryfall.io/large/front/b/5/b50dcc7c-260f-4d8c-9a9e-9244ec23a91e.jpg?1783906621",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/5/b50dcc7c-260f-4d8c-9a9e-9244ec23a91e.jpg?1783906621"
+  }
+ },
+ {
+  "name": "Lion Heart",
+  "scryfallId": "04d327a3-1699-4556-b681-a957671ad142",
+  "oracleId": "bd4151cc-743a-40f0-9e51-1f67555d9ab3",
+  "set": "fin",
+  "collectorNumber": "261",
+  "rarity": "uncommon",
+  "manaCost": "{4}",
+  "typeLine": "Artifact — Equipment",
+  "oracleText": "When this Equipment enters, it deals 2 damage to any target.\nEquipped creature gets +2/+1.\nEquip {2}",
+  "colors": [],
+  "keywords": [
+   "Equip"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/4/04d327a3-1699-4556-b681-a957671ad142.jpg?1783906556",
+   "normal": "https://cards.scryfall.io/normal/front/0/4/04d327a3-1699-4556-b681-a957671ad142.jpg?1783906556",
+   "large": "https://cards.scryfall.io/large/front/0/4/04d327a3-1699-4556-b681-a957671ad142.jpg?1783906556",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/4/04d327a3-1699-4556-b681-a957671ad142.jpg?1783906556"
+  }
+ },
+ {
+  "name": "Monk's Fist",
+  "scryfallId": "995033f0-873d-4e46-b0c9-98ec8ef270ff",
+  "oracleId": "1b524149-340e-4f94-9520-6a5258fabb00",
+  "set": "fin",
+  "collectorNumber": "265",
+  "rarity": "common",
+  "manaCost": "{2}",
+  "typeLine": "Artifact — Equipment",
+  "oracleText": "Job select (When this Equipment enters, create a 1/1 colorless Hero creature token, then attach this to it.)\nEquipped creature gets +1/+0 and is a Monk in addition to its other types.\nEquip {2} ({2}: Attach to target creature you control. Equip only as a sorcery.)",
+  "colors": [],
+  "keywords": [
+   "Job select",
+   "Equip"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/9/995033f0-873d-4e46-b0c9-98ec8ef270ff.jpg?1783906554",
+   "normal": "https://cards.scryfall.io/normal/front/9/9/995033f0-873d-4e46-b0c9-98ec8ef270ff.jpg?1783906554",
+   "large": "https://cards.scryfall.io/large/front/9/9/995033f0-873d-4e46-b0c9-98ec8ef270ff.jpg?1783906554",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/9/995033f0-873d-4e46-b0c9-98ec8ef270ff.jpg?1783906554"
+  }
+ },
+ {
+  "name": "Phantom Train",
+  "scryfallId": "7a50d2ac-101d-41e1-b400-18fa7d2d7125",
+  "oracleId": "a0c4eb78-bee0-42c6-ab1e-64bacde87960",
+  "set": "fin",
+  "collectorNumber": "110",
+  "rarity": "uncommon",
+  "manaCost": "{3}{B}",
+  "typeLine": "Artifact — Vehicle",
+  "oracleText": "Trample\nSacrifice another artifact or creature: Put a +1/+1 counter on this Vehicle. It becomes a Spirit artifact creature in addition to its other types until end of turn.",
+  "power": "4",
+  "toughness": "4",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Trample"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/a/7a50d2ac-101d-41e1-b400-18fa7d2d7125.jpg?1783906616",
+   "normal": "https://cards.scryfall.io/normal/front/7/a/7a50d2ac-101d-41e1-b400-18fa7d2d7125.jpg?1783906616",
+   "large": "https://cards.scryfall.io/large/front/7/a/7a50d2ac-101d-41e1-b400-18fa7d2d7125.jpg?1783906616",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/a/7a50d2ac-101d-41e1-b400-18fa7d2d7125.jpg?1783906616"
+  }
+ },
+ {
+  "name": "Red Mage's Rapier",
+  "scryfallId": "e0579955-75f9-47a9-8b03-e287d120826a",
+  "oracleId": "35ad9e15-3e00-4bd2-96cf-36a6ef49059f",
+  "set": "fin",
+  "collectorNumber": "152",
+  "rarity": "common",
+  "manaCost": "{1}{R}",
+  "typeLine": "Artifact — Equipment",
+  "oracleText": "Job select (When this Equipment enters, create a 1/1 colorless Hero creature token, then attach this to it.)\nEquipped creature has \"Whenever you cast a noncreature spell, this creature gets +2/+0 until end of turn\" and is a Wizard in addition to its other types.\nEquip {3}",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Job select",
+   "Equip"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/0/e0579955-75f9-47a9-8b03-e287d120826a.jpg?1783906600",
+   "normal": "https://cards.scryfall.io/normal/front/e/0/e0579955-75f9-47a9-8b03-e287d120826a.jpg?1783906600",
+   "large": "https://cards.scryfall.io/large/front/e/0/e0579955-75f9-47a9-8b03-e287d120826a.jpg?1783906600",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/0/e0579955-75f9-47a9-8b03-e287d120826a.jpg?1783906600"
+  }
+ },
+ {
+  "name": "The Masamune",
+  "scryfallId": "fc408575-8ef7-4043-b6b7-b38cef7c97d1",
+  "oracleId": "89eb4c39-35ae-405b-8af4-779880cb11c9",
+  "set": "fin",
+  "collectorNumber": "264",
+  "rarity": "rare",
+  "manaCost": "{3}",
+  "typeLine": "Legendary Artifact — Equipment",
+  "oracleText": "As long as equipped creature is attacking, it has first strike and must be blocked if able.\nEquipped creature has \"If a creature dying causes a triggered ability of this creature or an emblem you own to trigger, that ability triggers an additional time.\"\nEquip {2}",
+  "colors": [],
+  "keywords": [
+   "Equip"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/c/fc408575-8ef7-4043-b6b7-b38cef7c97d1.jpg?1783906555",
+   "normal": "https://cards.scryfall.io/normal/front/f/c/fc408575-8ef7-4043-b6b7-b38cef7c97d1.jpg?1783906555",
+   "large": "https://cards.scryfall.io/large/front/f/c/fc408575-8ef7-4043-b6b7-b38cef7c97d1.jpg?1783906555",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/c/fc408575-8ef7-4043-b6b7-b38cef7c97d1.jpg?1783906555"
+  }
+ },
+ {
+  "name": "The Regalia",
+  "scryfallId": "dc420e79-c483-474f-97cd-e9c6a636c306",
+  "oracleId": "27a7610e-acbe-4a2b-9f61-81b383eb20a5",
+  "set": "fin",
+  "collectorNumber": "267",
+  "rarity": "rare",
+  "manaCost": "{4}",
+  "typeLine": "Legendary Artifact — Vehicle",
+  "oracleText": "Haste\nWhenever The Regalia attacks, reveal cards from the top of your library until you reveal a land card. Put that card onto the battlefield tapped and the rest on the bottom of your library in a random order.\nCrew 1",
+  "power": "4",
+  "toughness": "4",
+  "colors": [],
+  "keywords": [
+   "Haste",
+   "Crew"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/c/dc420e79-c483-474f-97cd-e9c6a636c306.jpg?1783906553",
+   "normal": "https://cards.scryfall.io/normal/front/d/c/dc420e79-c483-474f-97cd-e9c6a636c306.jpg?1783906553",
+   "large": "https://cards.scryfall.io/large/front/d/c/dc420e79-c483-474f-97cd-e9c6a636c306.jpg?1783906553",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/c/dc420e79-c483-474f-97cd-e9c6a636c306.jpg?1783906553"
+  }
+ },
+ {
+  "name": "World Map",
+  "scryfallId": "70d9ab99-ec8a-402e-ba1d-ffa6c4c84a3f",
+  "oracleId": "51d4f95e-aad2-4e5f-9f15-a68bbdf9ab3e",
+  "set": "fin",
+  "collectorNumber": "270",
+  "rarity": "common",
+  "manaCost": "{1}",
+  "typeLine": "Artifact",
+  "oracleText": "{1}, {T}, Sacrifice this artifact: Search your library for a basic land card, reveal it, put it into your hand, then shuffle.\n{3}, {T}, Sacrifice this artifact: Search your library for a land card, reveal it, put it into your hand, then shuffle.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/0/70d9ab99-ec8a-402e-ba1d-ffa6c4c84a3f.jpg?1783906553",
+   "normal": "https://cards.scryfall.io/normal/front/7/0/70d9ab99-ec8a-402e-ba1d-ffa6c4c84a3f.jpg?1783906553",
+   "large": "https://cards.scryfall.io/large/front/7/0/70d9ab99-ec8a-402e-ba1d-ffa6c4c84a3f.jpg?1783906553",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/0/70d9ab99-ec8a-402e-ba1d-ffa6c4c84a3f.jpg?1783906553"
+  }
+ },
+ {
+  "name": "Sidequest: Play Blitzball",
+  "scryfallId": "31e2ad37-73cf-4858-8a3a-fc1165cd21a7",
+  "oracleId": "9c0255ff-6579-4ce4-810d-01df9922ab33",
+  "set": "fin",
+  "collectorNumber": "158",
+  "rarity": "uncommon",
+  "manaCost": "{2}{R}",
+  "typeLine": "Enchantment",
+  "oracleText": "At the beginning of combat on your turn, target creature you control gets +2/+0 until end of turn.\nAt the end of combat on your turn, if a player was dealt 6 or more combat damage this turn, transform this enchantment, then attach it to a creature you control.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Transform"
+  ],
+  "back": "World Champion, Celestial Weapon",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/1/31e2ad37-73cf-4858-8a3a-fc1165cd21a7.jpg?1783906601",
+   "normal": "https://cards.scryfall.io/normal/front/3/1/31e2ad37-73cf-4858-8a3a-fc1165cd21a7.jpg?1783906601",
+   "large": "https://cards.scryfall.io/large/front/3/1/31e2ad37-73cf-4858-8a3a-fc1165cd21a7.jpg?1783906601",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/1/31e2ad37-73cf-4858-8a3a-fc1165cd21a7.jpg?1783906601"
+  }
+ },
+ {
+  "name": "World Champion, Celestial Weapon",
+  "scryfallId": "31e2ad37-73cf-4858-8a3a-fc1165cd21a7",
+  "oracleId": "9c0255ff-6579-4ce4-810d-01df9922ab33",
+  "set": "fin",
+  "collectorNumber": "158",
+  "rarity": "uncommon",
+  "manaCost": "",
+  "typeLine": "Legendary Artifact — Equipment",
+  "oracleText": "Double Overdrive — Equipped creature gets +2/+0 and has double strike.\nEquip {3} ({3}: Attach to target creature you control. Equip only as a sorcery.)",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Double Overdrive",
+   "Equip",
+   "Double"
+  ],
+  "front": "Sidequest: Play Blitzball",
+  "image": {
+   "small": "https://cards.scryfall.io/small/back/3/1/31e2ad37-73cf-4858-8a3a-fc1165cd21a7.jpg?1783906601",
+   "normal": "https://cards.scryfall.io/normal/back/3/1/31e2ad37-73cf-4858-8a3a-fc1165cd21a7.jpg?1783906601",
+   "large": "https://cards.scryfall.io/large/back/3/1/31e2ad37-73cf-4858-8a3a-fc1165cd21a7.jpg?1783906601",
+   "artCrop": "https://cards.scryfall.io/art_crop/back/3/1/31e2ad37-73cf-4858-8a3a-fc1165cd21a7.jpg?1783906601"
+  }
+ },
+ {
+  "name": "Summon: Anima",
+  "scryfallId": "aa4f6703-21f8-4c29-ad5a-5afb54188ade",
+  "oracleId": "0990e57f-279e-4348-a049-e06187cc38d4",
+  "set": "fin",
+  "collectorNumber": "120",
+  "rarity": "uncommon",
+  "manaCost": "{4}{B}{B}",
+  "typeLine": "Enchantment Creature — Saga Horror",
+  "oracleText": "(As this Saga enters and after your draw step, add a lore counter. Sacrifice after IV.)\nI, II, III — Pain — You draw a card and you lose 1 life.\nIV — Oblivion — Each opponent sacrifices a creature of their choice and loses 3 life.\nMenace",
+  "power": "4",
+  "toughness": "4",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Menace"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/a/aa4f6703-21f8-4c29-ad5a-5afb54188ade.jpg?1783906610",
+   "normal": "https://cards.scryfall.io/normal/front/a/a/aa4f6703-21f8-4c29-ad5a-5afb54188ade.jpg?1783906610",
+   "large": "https://cards.scryfall.io/large/front/a/a/aa4f6703-21f8-4c29-ad5a-5afb54188ade.jpg?1783906610",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/a/aa4f6703-21f8-4c29-ad5a-5afb54188ade.jpg?1783906610"
+  }
+ },
+ {
+  "name": "Call the Mountain Chocobo",
+  "scryfallId": "b2e1986c-2852-4843-bdc4-eddb727ba3d4",
+  "oracleId": "a0dd3eb4-f6f1-4bfb-935c-032dd5af3811",
+  "set": "fin",
+  "collectorNumber": "131",
+  "rarity": "common",
+  "manaCost": "{3}{R}",
+  "typeLine": "Sorcery",
+  "oracleText": "Search your library for a Mountain card, reveal it, put it into your hand, then shuffle. Create a 2/2 green Bird creature token with \"Whenever a land you control enters, this token gets +1/+0 until end of turn.\"\nFlashback {5}{R} (You may cast this card from your graveyard for its flashback cost. Then exile it.)",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Flashback"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/2/b2e1986c-2852-4843-bdc4-eddb727ba3d4.jpg?1783906607",
+   "normal": "https://cards.scryfall.io/normal/front/b/2/b2e1986c-2852-4843-bdc4-eddb727ba3d4.jpg?1783906607",
+   "large": "https://cards.scryfall.io/large/front/b/2/b2e1986c-2852-4843-bdc4-eddb727ba3d4.jpg?1783906607",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/2/b2e1986c-2852-4843-bdc4-eddb727ba3d4.jpg?1783906607"
+  }
+ },
+ {
+  "name": "Choco-Comet",
+  "scryfallId": "8d8d3903-a7f4-4cd8-8d29-b4a173e4fbb2",
+  "oracleId": "07b28ed7-eab8-4560-9994-3befcba876d3",
+  "set": "fin",
+  "collectorNumber": "132",
+  "rarity": "uncommon",
+  "manaCost": "{X}{R}{R}",
+  "typeLine": "Sorcery",
+  "oracleText": "Choco-Comet deals X damage to any target.\nCreate a 2/2 green Bird creature token with \"Whenever a land you control enters, this token gets +1/+0 until end of turn.\"",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/d/8d8d3903-a7f4-4cd8-8d29-b4a173e4fbb2.jpg?1783906607",
+   "normal": "https://cards.scryfall.io/normal/front/8/d/8d8d3903-a7f4-4cd8-8d29-b4a173e4fbb2.jpg?1783906607",
+   "large": "https://cards.scryfall.io/large/front/8/d/8d8d3903-a7f4-4cd8-8d29-b4a173e4fbb2.jpg?1783906607",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/d/8d8d3903-a7f4-4cd8-8d29-b4a173e4fbb2.jpg?1783906607"
+  }
+ },
+ {
+  "name": "Nibelheim Aflame",
+  "scryfallId": "3d3e926a-74af-4996-849f-d31e0fdedeae",
+  "oracleId": "eab5eef8-d180-4b08-a770-6b3a1df03745",
+  "set": "fin",
+  "collectorNumber": "146",
+  "rarity": "mythic",
+  "manaCost": "{2}{R}{R}",
+  "typeLine": "Sorcery",
+  "oracleText": "Choose target creature you control. It deals damage equal to its power to each other creature. If this spell was cast from a graveyard, discard your hand and draw four cards.\nFlashback {5}{R}{R} (You may cast this card from your graveyard for its flashback cost. Then exile it.)",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Flashback"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/d/3d3e926a-74af-4996-849f-d31e0fdedeae.jpg?1783906601",
+   "normal": "https://cards.scryfall.io/normal/front/3/d/3d3e926a-74af-4996-849f-d31e0fdedeae.jpg?1783906601",
+   "large": "https://cards.scryfall.io/large/front/3/d/3d3e926a-74af-4996-849f-d31e0fdedeae.jpg?1783906601",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/d/3d3e926a-74af-4996-849f-d31e0fdedeae.jpg?1783906601"
+  }
+ },
+ {
+  "name": "Opera Love Song",
+  "scryfallId": "0343916d-1b65-4e95-aef1-e72dbcebf0c4",
+  "oracleId": "22f259b3-9de1-44a1-a89d-f2f1b1249d4d",
+  "set": "fin",
+  "collectorNumber": "147",
+  "rarity": "uncommon",
+  "manaCost": "{1}{R}",
+  "typeLine": "Instant",
+  "oracleText": "Choose one —\n• Exile the top two cards of your library. You may play those cards until your next end step.\n• One or two target creatures each get +2/+0 until end of turn.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/3/0343916d-1b65-4e95-aef1-e72dbcebf0c4.jpg?1783906601",
+   "normal": "https://cards.scryfall.io/normal/front/0/3/0343916d-1b65-4e95-aef1-e72dbcebf0c4.jpg?1783906601",
+   "large": "https://cards.scryfall.io/large/front/0/3/0343916d-1b65-4e95-aef1-e72dbcebf0c4.jpg?1783906601",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/3/0343916d-1b65-4e95-aef1-e72dbcebf0c4.jpg?1783906601"
+  }
+ },
+ {
+  "name": "Sorceress's Schemes",
+  "scryfallId": "7efd7627-0754-4685-9d04-8f5f82f45632",
+  "oracleId": "945e56b9-709f-4bb3-8a6b-0a04d9202a03",
+  "set": "fin",
+  "collectorNumber": "159",
+  "rarity": "uncommon",
+  "manaCost": "{3}{R}",
+  "typeLine": "Sorcery",
+  "oracleText": "Return target instant or sorcery card from your graveyard or exiled card with flashback you own to your hand. Add {R}.\nFlashback {4}{R} (You may cast this card from your graveyard for its flashback cost. Then exile it.)",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Flashback"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/e/7efd7627-0754-4685-9d04-8f5f82f45632.jpg?1783906596",
+   "normal": "https://cards.scryfall.io/normal/front/7/e/7efd7627-0754-4685-9d04-8f5f82f45632.jpg?1783906596",
+   "large": "https://cards.scryfall.io/large/front/7/e/7efd7627-0754-4685-9d04-8f5f82f45632.jpg?1783906596",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/e/7efd7627-0754-4685-9d04-8f5f82f45632.jpg?1783906596"
+  }
+ },
+ {
+  "name": "Thunder Magic",
+  "scryfallId": "9f2b202c-91da-40ec-8324-6b6be7cb3bc8",
+  "oracleId": "623c1873-cd83-4a5f-b391-fd0d2bb89061",
+  "set": "fin",
+  "collectorNumber": "165",
+  "rarity": "common",
+  "manaCost": "{R}",
+  "typeLine": "Instant",
+  "oracleText": "Tiered (Choose one additional cost.)\n• Thunder — {0} — Thunder Magic deals 2 damage to target creature.\n• Thundara — {3} — Thunder Magic deals 4 damage to target creature.\n• Thundaga — {5}{R} — Thunder Magic deals 8 damage to target creature.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Thunder",
+   "Thundaga",
+   "Tiered",
+   "Thundara"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/f/9f2b202c-91da-40ec-8324-6b6be7cb3bc8.jpg?1783906595",
+   "normal": "https://cards.scryfall.io/normal/front/9/f/9f2b202c-91da-40ec-8324-6b6be7cb3bc8.jpg?1783906595",
+   "large": "https://cards.scryfall.io/large/front/9/f/9f2b202c-91da-40ec-8324-6b6be7cb3bc8.jpg?1783906595",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/f/9f2b202c-91da-40ec-8324-6b6be7cb3bc8.jpg?1783906595"
+  }
+ },
+ {
   "name": "Jidoor, Aristocratic Capital",
   "scryfallId": "98b2d5b5-f85b-4c42-a0f5-a76f6af304ba",
   "oracleId": "bd513d9d-5aa2-4860-bd86-8b5d9430f133",
@@ -34223,6 +35000,59 @@
    "normal": "https://cards.scryfall.io/normal/front/d/3/d377cc5f-f6eb-4ed0-a358-af22245f3550.jpg?1783906360",
    "large": "https://cards.scryfall.io/large/front/d/3/d377cc5f-f6eb-4ed0-a358-af22245f3550.jpg?1783906360",
    "artCrop": "https://cards.scryfall.io/art_crop/front/d/3/d377cc5f-f6eb-4ed0-a358-af22245f3550.jpg?1783906360"
+  }
+ },
+ {
+  "name": "Locke, Treasure Hunter",
+  "scryfallId": "42cd66f2-0704-4c8e-b5de-6df93f4a8bed",
+  "oracleId": "a800bec4-bacc-43f9-a773-dd795959935b",
+  "set": "fic",
+  "collectorNumber": "87",
+  "rarity": "rare",
+  "manaCost": "{1}{B}{R}",
+  "typeLine": "Legendary Creature — Human Rogue",
+  "oracleText": "Locke can't be blocked by creatures with greater power.\nMug — Whenever Locke attacks, each player mills a card. If a land card was milled this way, create a Treasure token. Until end of turn, you may cast a spell from among those cards.",
+  "power": "2",
+  "toughness": "3",
+  "colors": [
+   "B",
+   "R"
+  ],
+  "keywords": [
+   "Treasure",
+   "Mill",
+   "Mug"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/2/42cd66f2-0704-4c8e-b5de-6df93f4a8bed.jpg?1783906344",
+   "normal": "https://cards.scryfall.io/normal/front/4/2/42cd66f2-0704-4c8e-b5de-6df93f4a8bed.jpg?1783906344",
+   "large": "https://cards.scryfall.io/large/front/4/2/42cd66f2-0704-4c8e-b5de-6df93f4a8bed.jpg?1783906344",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/2/42cd66f2-0704-4c8e-b5de-6df93f4a8bed.jpg?1783906344"
+  }
+ },
+ {
+  "name": "Yuffie, Materia Hunter",
+  "scryfallId": "117bb5db-4a1c-4704-b0b5-c67b45ac2f52",
+  "oracleId": "acdcbb49-9d71-4c36-8ccb-650fb11c3a58",
+  "set": "fic",
+  "collectorNumber": "65",
+  "rarity": "rare",
+  "manaCost": "{2}{R}",
+  "typeLine": "Legendary Creature — Human Ninja",
+  "oracleText": "Ninjutsu {1}{R} ({1}{R}, Return an unblocked attacker you control to hand: Put this card onto the battlefield from your hand tapped and attacking.)\nWhen Yuffie enters, gain control of target noncreature artifact for as long as you control Yuffie. Then you may attach an Equipment you control to Yuffie.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Ninjutsu"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/1/117bb5db-4a1c-4704-b0b5-c67b45ac2f52.jpg?1783906353",
+   "normal": "https://cards.scryfall.io/normal/front/1/1/117bb5db-4a1c-4704-b0b5-c67b45ac2f52.jpg?1783906353",
+   "large": "https://cards.scryfall.io/large/front/1/1/117bb5db-4a1c-4704-b0b5-c67b45ac2f52.jpg?1783906353",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/1/117bb5db-4a1c-4704-b0b5-c67b45ac2f52.jpg?1783906353"
   }
  }
 ]

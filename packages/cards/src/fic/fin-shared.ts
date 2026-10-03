@@ -1,4 +1,5 @@
 import type { Behavior } from '../build.ts';
+import { prowess } from '../blb/helpers.ts';
 import { combos, COLORS, cycling, tapFor, tapForEither } from '../msc/helpers.ts';
 import {
   activated,
@@ -1079,6 +1080,294 @@ export const FIN_SHARED: Record<string, Behavior> = {
     pump(yours(), 0, 0, ['indestructible']),
   ),
 
+  // ============================================================ Brawl Locke (12g)
+  'The Gold Saucer': {
+    abilities: [
+      tapFor('C'),
+      activated('{2}', { tapSelf: true }, [], [custom('coinFlipTreasure')]),
+      activated('{3}', { tapSelf: true, sacrificeArtifacts: 2 }, [], [draw(1)]),
+    ],
+  },
+  // ------------------------------------------------------------ creatures
+  Ahriman: {
+    abilities: [
+      activated(
+        '{3}',
+        { sacrificePermanent: { ...creatureOrArtifact, other: true } },
+        [],
+        [draw(1)],
+      ),
+    ],
+  },
+  'Black Waltz No. 3': {
+    abilities: [when({ on: 'castSpell', filter: 'noncreature' }, [], damage(2, 'eachOpponent'))],
+  },
+  'Blazing Bomb': {
+    // "At least four mana spent": mana value 4 or more (a simplification).
+    abilities: [
+      when(
+        { on: 'castSpell', filter: 'noncreature', spell: { minManaValue: 4 } },
+        [],
+        counters(self),
+      ),
+      activated(
+        null,
+        { tapSelf: true, sacrificeSelf: true },
+        [creature],
+        [custom('damageByLkiPower')],
+        {
+          sorcerySpeed: true,
+        },
+      ),
+    ],
+  },
+  'Kuja, Genome Sorcerer': {
+    abilities: [
+      when(
+        { on: 'beginningOfEndStep', whose: 'yours' },
+        [],
+        token('wizard-ping-token', 1, { tapped: true }),
+        {
+          kind: 'if',
+          condition: { kind: 'controlsPermanents', filter: { subtype: 'Wizard' }, min: 4 },
+          then: [{ kind: 'transform', what: self }],
+        },
+      ),
+    ],
+  },
+  'Mysidian Elder': { abilities: [onEnter([], token('wizard-ping-token'))] },
+  'Prompto Argentum': {
+    abilities: [
+      when({ on: 'castSpell', filter: 'noncreature', spell: { minManaValue: 4 } }, [], treasure()),
+    ],
+  },
+  'Queen Brahne': {
+    abilities: [prowess, when({ on: 'attacks' }, [], token('wizard-ping-token'))],
+  },
+  'Reno and Rude': {
+    abilities: [
+      when(
+        { on: 'combatDamageToPlayer' },
+        [],
+        may({
+          kind: 'sacrificeSeveral',
+          count: 1,
+          filter: creatureOrArtifact,
+          then: [custom('stealTop')],
+        }),
+      ),
+    ],
+  },
+  'Seifer Almasy': {
+    abilities: [
+      when(
+        { on: 'creatureYouControlAttacks', alone: true },
+        [],
+        pump('subject', 0, 0, ['doubleStrike']),
+      ),
+      when(
+        { on: 'combatDamageToPlayer' },
+        [graveyardCard({ types: ['Instant', 'Sorcery'], maxManaValue: 3 }, { optional: true })],
+        { kind: 'castFree', what: t0, exileAfter: true },
+      ),
+    ],
+  },
+  'Sephiroth, Fabled SOLDIER': {
+    abilities: [
+      when(
+        { on: 'etb' },
+        [],
+        may({
+          kind: 'sacrificeSeveral',
+          count: 1,
+          filter: { types: ['Creature'] },
+          then: [draw(1)],
+        }),
+      ),
+      when(
+        { on: 'attacks' },
+        [],
+        may({
+          kind: 'sacrificeSeveral',
+          count: 1,
+          filter: { types: ['Creature'] },
+          then: [draw(1)],
+        }),
+      ),
+      when(
+        { on: 'otherCreatureDies', controller: 'any' },
+        [],
+        ...drain(1),
+        { kind: 'noteResolution' },
+        {
+          kind: 'if',
+          condition: { kind: 'resolvedThisTurn', n: 4 },
+          then: [
+            { kind: 'transform', what: self },
+            // Super Nova: the emblem as it transforms.
+            {
+              kind: 'emblem',
+              until: 'permanent',
+              ability: when({ on: 'otherCreatureDies', controller: 'any' }, [], ...drain(1)),
+            },
+          ],
+        },
+      ),
+    ],
+  },
+  'Undercity Dire Rat': { abilities: [when({ on: 'dies' }, [], treasure())] },
+  'Vaan, Street Thief': {
+    // "Whenever you cast a spell you don't own" isn't built (a simplification).
+    abilities: [
+      when(
+        {
+          on: 'creaturesYouControlDealCombatDamageToPlayer',
+          filter: { subtypes: ['Scout', 'Pirate', 'Rogue'] },
+        },
+        [],
+        custom('stealTop', { orTreasure: true }),
+      ),
+    ],
+  },
+  // ------------------------------------------------------------ artifacts
+  "Dark Knight's Greatsword": {
+    abilities: [
+      jobSelect,
+      equipped(3, 0),
+      activated(null, { life: 3 }, [yourCreature], [{ kind: 'attach', to: t0 }], {
+        sorcerySpeed: true,
+        oncePerTurn: true,
+        label: 'Equip—Pay 3 life',
+      }),
+    ],
+  },
+  'Lion Heart': {
+    abilities: [onEnter([{ what: 'any' }], damage(2, t0)), equipped(2, 1), equip('{2}')],
+  },
+  "Monk's Fist": { abilities: [jobSelect, equipped(1, 0), equip('{2}')] },
+  'Phantom Train': {
+    abilities: [
+      activated(
+        null,
+        { sacrificePermanent: { ...creatureOrArtifact, other: true } },
+        [],
+        [counters(self), { kind: 'becomeCreature', what: self }],
+      ),
+    ],
+  },
+  "Red Mage's Rapier": {
+    abilities: [
+      jobSelect,
+      when({ on: 'castSpell', filter: 'noncreature' }, [], pump('attached', 2, 0)),
+      equip('{3}'),
+    ],
+  },
+  'The Masamune': {
+    // First strike always (not only attacking); "must be blocked" and the extra death triggers aren't built.
+    abilities: [equipped(0, 0, ['firstStrike']), equip('{2}')],
+  },
+  'The Regalia': {
+    abilities: [
+      when({ on: 'attacks' }, [], {
+        kind: 'revealUntil',
+        filter: { types: ['Land'] },
+        to: 'battlefieldTapped',
+      }),
+      activated(null, { crew: 1 }, [], [{ kind: 'becomeCreature', what: self }], {
+        label: 'Crew 1',
+      }),
+    ],
+  },
+  'World Map': {
+    abilities: [
+      activated(
+        '{1}',
+        { tapSelf: true, sacrificeSelf: true },
+        [],
+        [{ kind: 'searchLibrary', filter: 'basicLand', to: 'hand' }],
+      ),
+      activated(
+        '{3}',
+        { tapSelf: true, sacrificeSelf: true },
+        [],
+        [{ kind: 'searchLibrary', filter: { types: ['Land'] }, to: 'hand' }],
+      ),
+    ],
+  },
+  'Sidequest: Play Blitzball': {
+    abilities: [
+      atCombat([yourCreature], pump(t0, 2, 0)),
+      // "At end of combat, if a player was dealt 6 or more combat damage this turn": at your end step,
+      // if an opponent lost 6 or more life this turn (a simplification).
+      {
+        ...when({ on: 'beginningOfEndStep', whose: 'yours' }, [], custom('blitzballChampion')),
+        condition: condition('opponentLostSix'),
+      },
+    ],
+  },
+  'Summon: Anima': summon(
+    4,
+    chapter([1, 2, 3], [], draw(1), lose(1)),
+    chapter(
+      [4],
+      [],
+      { kind: 'opponentSacrifices' },
+      { kind: 'loseLife', who: 'eachOpponent', amount: 3 },
+    ),
+  ),
+  // ------------------------------------------------------------ spells
+  'Call the Mountain Chocobo': {
+    flashback: mana('{5}{R}'),
+    ...spell(
+      [],
+      { kind: 'searchLibrary', filter: { types: ['Land'], subtype: 'Mountain' }, to: 'hand' },
+      token('chocobo-bird-token'),
+    ),
+  },
+  'Choco-Comet': spell([{ what: 'any' }], damage({ x: true }, t0), token('chocobo-bird-token')),
+  'Nibelheim Aflame': {
+    flashback: mana('{5}{R}{R}'),
+    ...spell([yourCreature], custom('nibelheim')),
+    flashbackSpell: {
+      targets: [yourCreature],
+      effects: [custom('nibelheim'), { kind: 'discardHand' }, draw(4)],
+    },
+  },
+  'Opera Love Song': {
+    modes: [
+      mode('Exile the top two; play them until your next end step', [], {
+        kind: 'exileTopPlayable',
+        count: 2,
+        until: 'endOfNextTurn',
+      }),
+      mode(
+        'One or two creatures get +2/+0',
+        [creature, { what: 'creature', optional: true }],
+        pump(t0, 2, 0),
+        pump(t1, 2, 0),
+      ),
+    ],
+  },
+  "Sorceress's Schemes": {
+    flashback: mana('{4}{R}'),
+    // Exiled flashback cards aren't offered: the graveyard only.
+    ...spell(
+      [graveyardCard({ types: ['Instant', 'Sorcery'] })],
+      { kind: 'returnToHand', what: t0 },
+      {
+        kind: 'addMana',
+        mana: [['R']],
+      },
+    ),
+  },
+  'Thunder Magic': {
+    modes: [
+      tier('Thunder', '{0}', [creature], damage(2, t0)),
+      tier('Thundara', '{3}', [creature], damage(4, t0)),
+      tier('Thundaga', '{5}{R}', [creature], damage(8, t0)),
+    ],
+  },
+
   // ============================================================ Brawl Emet-Selch (12f)
   'Jidoor, Aristocratic Capital': { entersTapped: true, abilities: [tapFor('U')] },
   // ------------------------------------------------------------ creatures
@@ -1546,6 +1835,28 @@ export const FIN_SHARED_BACK_FACES: Record<string, Behavior> = {
     chapter([2], [], { kind: 'addMana', mana: [['G'], ['G']] }),
     chapter([3], [], pump(yours({ other: true }), 2, 2, ['trample'])),
   ),
+  'Trance Kuja, Fate Defied': {
+    // "Wizards deal double damage": +1 damage from Wizards (their pings deal 1, so the same; a simplification).
+    abilities: [staticAbility({ kind: 'damageBonus', amount: 1, source: { subtype: 'Wizard' } })],
+  },
+  'Sephiroth, One-Winged Angel': {
+    // "Sacrifice any number of other creatures": one, for a card (a simplification).
+    abilities: [
+      when(
+        { on: 'attacks' },
+        [],
+        may({
+          kind: 'sacrificeSeveral',
+          count: 1,
+          filter: { types: ['Creature'] },
+          then: [draw(1)],
+        }),
+      ),
+    ],
+  },
+  'World Champion, Celestial Weapon': {
+    abilities: [equipped(2, 0, ['doubleStrike']), equip('{3}')],
+  },
   "Braska's Final Aeon": summon(
     3,
     chapter([1, 2], [], { kind: 'discard', count: 1, who: 'eachOpponent' }, draw(1)),
