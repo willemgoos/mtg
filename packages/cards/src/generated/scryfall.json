@@ -34191,5 +34191,380 @@
    "large": "https://cards.scryfall.io/large/front/e/a/ea51991c-1589-4c62-965b-5ae8d233520b.jpg?1783927316",
    "artCrop": "https://cards.scryfall.io/art_crop/front/e/a/ea51991c-1589-4c62-965b-5ae8d233520b.jpg?1783927316"
   }
+ },
+ {
+  "name": "Clever Lumimancer",
+  "scryfallId": "69957656-cfdf-4001-8e84-0ef29e4a468d",
+  "oracleId": "901eb916-f318-4a30-a43e-8e7f9eef358b",
+  "set": "stx",
+  "collectorNumber": "10",
+  "rarity": "uncommon",
+  "manaCost": "{W}",
+  "typeLine": "Creature — Human Wizard",
+  "oracleText": "Magecraft — Whenever you cast or copy an instant or sorcery spell, this creature gets +2/+2 until end of turn.",
+  "power": "0",
+  "toughness": "1",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Magecraft"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/9/69957656-cfdf-4001-8e84-0ef29e4a468d.jpg?1783927394",
+   "normal": "https://cards.scryfall.io/normal/front/6/9/69957656-cfdf-4001-8e84-0ef29e4a468d.jpg?1783927394",
+   "large": "https://cards.scryfall.io/large/front/6/9/69957656-cfdf-4001-8e84-0ef29e4a468d.jpg?1783927394",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/9/69957656-cfdf-4001-8e84-0ef29e4a468d.jpg?1783927394"
+  }
+ },
+ {
+  "name": "Leonin Lightscribe",
+  "scryfallId": "2a465d7b-398c-444b-9eae-331ea2513f6d",
+  "oracleId": "14079b33-cf68-4d16-962c-5c40518c4163",
+  "set": "stx",
+  "collectorNumber": "20",
+  "rarity": "rare",
+  "manaCost": "{1}{W}",
+  "typeLine": "Creature — Cat Cleric",
+  "oracleText": "Magecraft — Whenever you cast or copy an instant or sorcery spell, creatures you control get +1/+1 until end of turn.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Magecraft"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/a/2a465d7b-398c-444b-9eae-331ea2513f6d.jpg?1783927388",
+   "normal": "https://cards.scryfall.io/normal/front/2/a/2a465d7b-398c-444b-9eae-331ea2513f6d.jpg?1783927388",
+   "large": "https://cards.scryfall.io/large/front/2/a/2a465d7b-398c-444b-9eae-331ea2513f6d.jpg?1783927388",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/a/2a465d7b-398c-444b-9eae-331ea2513f6d.jpg?1783927388"
+  }
+ },
+ {
+  "name": "Symmetry Sage",
+  "scryfallId": "3e726fc7-36cf-405c-9b7c-d1e41cd6c68f",
+  "oracleId": "16cb916d-bb19-42ec-9a01-969e9d067b40",
+  "set": "stx",
+  "collectorNumber": "56",
+  "rarity": "uncommon",
+  "manaCost": "{U}",
+  "typeLine": "Creature — Human Wizard",
+  "oracleText": "Flying\nMagecraft — Whenever you cast or copy an instant or sorcery spell, target creature you control has base power 2 until end of turn.",
+  "power": "0",
+  "toughness": "2",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Flying",
+   "Magecraft"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/e/3e726fc7-36cf-405c-9b7c-d1e41cd6c68f.jpg?1783927373",
+   "normal": "https://cards.scryfall.io/normal/front/3/e/3e726fc7-36cf-405c-9b7c-d1e41cd6c68f.jpg?1783927373",
+   "large": "https://cards.scryfall.io/large/front/3/e/3e726fc7-36cf-405c-9b7c-d1e41cd6c68f.jpg?1783927373",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/e/3e726fc7-36cf-405c-9b7c-d1e41cd6c68f.jpg?1783927373"
+  }
+ },
+ {
+  "name": "Ageless Guardian",
+  "scryfallId": "4a5ff6af-402f-4bf6-a75b-dc1e0e40aff6",
+  "oracleId": "468658bc-19d8-464a-ab8e-d36281680273",
+  "set": "stx",
+  "collectorNumber": "8",
+  "rarity": "common",
+  "manaCost": "{1}{W}",
+  "typeLine": "Creature — Spirit Soldier",
+  "oracleText": "",
+  "power": "1",
+  "toughness": "4",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/a/4a5ff6af-402f-4bf6-a75b-dc1e0e40aff6.jpg?1783927397",
+   "normal": "https://cards.scryfall.io/normal/front/4/a/4a5ff6af-402f-4bf6-a75b-dc1e0e40aff6.jpg?1783927397",
+   "large": "https://cards.scryfall.io/large/front/4/a/4a5ff6af-402f-4bf6-a75b-dc1e0e40aff6.jpg?1783927397",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/a/4a5ff6af-402f-4bf6-a75b-dc1e0e40aff6.jpg?1783927397"
+  }
+ },
+ {
+  "name": "Thunderous Orator",
+  "scryfallId": "ef3b2961-559f-42b1-be13-ff3d03e62809",
+  "oracleId": "7716ad72-9e96-4915-bc1e-e12b4d0f6f9c",
+  "set": "stx",
+  "collectorNumber": "35",
+  "rarity": "uncommon",
+  "manaCost": "{1}{W}",
+  "typeLine": "Creature — Kor Wizard",
+  "oracleText": "Vigilance\nWhenever this creature attacks, it gains flying until end of turn if you control a creature with flying. The same is true for first strike, double strike, deathtouch, indestructible, lifelink, menace, and trample.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Vigilance"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/f/ef3b2961-559f-42b1-be13-ff3d03e62809.jpg?1783927382",
+   "normal": "https://cards.scryfall.io/normal/front/e/f/ef3b2961-559f-42b1-be13-ff3d03e62809.jpg?1783927382",
+   "large": "https://cards.scryfall.io/large/front/e/f/ef3b2961-559f-42b1-be13-ff3d03e62809.jpg?1783927382",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/f/ef3b2961-559f-42b1-be13-ff3d03e62809.jpg?1783927382"
+  }
+ },
+ {
+  "name": "Excavated Wall",
+  "scryfallId": "fed54d00-b11f-4529-864c-63a114617b36",
+  "oracleId": "16e48b95-f030-400c-a2b7-c3f3111cc165",
+  "set": "stx",
+  "collectorNumber": "255",
+  "rarity": "common",
+  "manaCost": "{1}",
+  "typeLine": "Artifact Creature — Wall",
+  "oracleText": "Defender\n{1}, {T}: Mill a card. (Put the top card of your library into your graveyard.)",
+  "power": "0",
+  "toughness": "4",
+  "colors": [],
+  "keywords": [
+   "Mill",
+   "Defender"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/e/fed54d00-b11f-4529-864c-63a114617b36.jpg?1783927281",
+   "normal": "https://cards.scryfall.io/normal/front/f/e/fed54d00-b11f-4529-864c-63a114617b36.jpg?1783927281",
+   "large": "https://cards.scryfall.io/large/front/f/e/fed54d00-b11f-4529-864c-63a114617b36.jpg?1783927281",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/e/fed54d00-b11f-4529-864c-63a114617b36.jpg?1783927281"
+  }
+ },
+ {
+  "name": "Dream Strix",
+  "scryfallId": "31d82f7a-64f1-463f-bb6b-936c3e49bf2b",
+  "oracleId": "bfd6a73e-d126-4afe-99db-98cf716a1772",
+  "set": "stx",
+  "collectorNumber": "42",
+  "rarity": "rare",
+  "manaCost": "{2}{U}",
+  "typeLine": "Creature — Bird Illusion",
+  "oracleText": "Flying\nWhen this creature becomes the target of a spell, sacrifice it.\nWhen this creature dies, learn. (You may reveal a Lesson card you own from outside the game and put it into your hand, or discard a card to draw a card.)",
+  "power": "3",
+  "toughness": "2",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Flying",
+   "Learn"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/1/31d82f7a-64f1-463f-bb6b-936c3e49bf2b.jpg?1783927380",
+   "normal": "https://cards.scryfall.io/normal/front/3/1/31d82f7a-64f1-463f-bb6b-936c3e49bf2b.jpg?1783927380",
+   "large": "https://cards.scryfall.io/large/front/3/1/31d82f7a-64f1-463f-bb6b-936c3e49bf2b.jpg?1783927380",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/1/31d82f7a-64f1-463f-bb6b-936c3e49bf2b.jpg?1783927380"
+  }
+ },
+ {
+  "name": "Burrog Befuddler",
+  "scryfallId": "c5f11ea2-cd4c-417a-804c-3df80d9ddd5f",
+  "oracleId": "73b60c2c-7c74-4554-8861-daa0d6fc22b4",
+  "set": "fdn",
+  "collectorNumber": "504",
+  "rarity": "common",
+  "manaCost": "{1}{U}",
+  "typeLine": "Creature — Frog Wizard",
+  "oracleText": "Flash (You may cast this spell any time you could cast an instant.)\nWhen this creature enters, target creature an opponent controls gets -1/-0 until end of turn.",
+  "power": "2",
+  "toughness": "1",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Flash"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/5/c5f11ea2-cd4c-417a-804c-3df80d9ddd5f.jpg?1783908964",
+   "normal": "https://cards.scryfall.io/normal/front/c/5/c5f11ea2-cd4c-417a-804c-3df80d9ddd5f.jpg?1783908964",
+   "large": "https://cards.scryfall.io/large/front/c/5/c5f11ea2-cd4c-417a-804c-3df80d9ddd5f.jpg?1783908964",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/5/c5f11ea2-cd4c-417a-804c-3df80d9ddd5f.jpg?1783908964"
+  }
+ },
+ {
+  "name": "Soothsayer Adept",
+  "scryfallId": "eb93c9d2-88eb-403d-bb67-8e8b0462ac27",
+  "oracleId": "29723d39-aaca-48fd-ba4a-14931e4483e9",
+  "set": "stx",
+  "collectorNumber": "55",
+  "rarity": "common",
+  "manaCost": "{1}{U}",
+  "typeLine": "Creature — Merfolk Wizard",
+  "oracleText": "{1}{U}, {T}: Draw a card, then discard a card.",
+  "power": "1",
+  "toughness": "3",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/b/eb93c9d2-88eb-403d-bb67-8e8b0462ac27.jpg?1783927374",
+   "normal": "https://cards.scryfall.io/normal/front/e/b/eb93c9d2-88eb-403d-bb67-8e8b0462ac27.jpg?1783927374",
+   "large": "https://cards.scryfall.io/large/front/e/b/eb93c9d2-88eb-403d-bb67-8e8b0462ac27.jpg?1783927374",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/b/eb93c9d2-88eb-403d-bb67-8e8b0462ac27.jpg?1783927374"
+  }
+ },
+ {
+  "name": "Biblioplex Assistant",
+  "scryfallId": "d74e1117-0196-4268-be97-a1e81b5dc90e",
+  "oracleId": "3dadb654-6191-4ad3-8315-46f5613fbc01",
+  "set": "stx",
+  "collectorNumber": "251",
+  "rarity": "common",
+  "manaCost": "{4}",
+  "typeLine": "Artifact Creature — Gargoyle",
+  "oracleText": "Flying\nWhen this creature enters, put up to one target instant or sorcery card from your graveyard on top of your library.",
+  "power": "2",
+  "toughness": "1",
+  "colors": [],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/7/d74e1117-0196-4268-be97-a1e81b5dc90e.jpg?1783927282",
+   "normal": "https://cards.scryfall.io/normal/front/d/7/d74e1117-0196-4268-be97-a1e81b5dc90e.jpg?1783927282",
+   "large": "https://cards.scryfall.io/large/front/d/7/d74e1117-0196-4268-be97-a1e81b5dc90e.jpg?1783927282",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/7/d74e1117-0196-4268-be97-a1e81b5dc90e.jpg?1783927282"
+  }
+ },
+ {
+  "name": "Detention Vortex",
+  "scryfallId": "54ebe581-be17-415a-a160-28d8f4e95636",
+  "oracleId": "5383a1c1-662f-46fe-a0e5-0f38efe1a37a",
+  "set": "stx",
+  "collectorNumber": "13",
+  "rarity": "uncommon",
+  "manaCost": "{W}",
+  "typeLine": "Enchantment — Aura",
+  "oracleText": "Enchant nonland permanent\nEnchanted permanent can't attack or block, and its activated abilities can't be activated.\n{3}: Destroy this Aura. Only your opponents may activate this ability and only as a sorcery.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Enchant"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/4/54ebe581-be17-415a-a160-28d8f4e95636.jpg?1783927393",
+   "normal": "https://cards.scryfall.io/normal/front/5/4/54ebe581-be17-415a-a160-28d8f4e95636.jpg?1783927393",
+   "large": "https://cards.scryfall.io/large/front/5/4/54ebe581-be17-415a-a160-28d8f4e95636.jpg?1783927393",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/4/54ebe581-be17-415a-a160-28d8f4e95636.jpg?1783927393"
+  }
+ },
+ {
+  "name": "Cogwork Archivist",
+  "scryfallId": "8c024a2d-20fb-478b-a62e-e3590a1e3ac1",
+  "oracleId": "60674ef7-f8e2-41e8-bab3-0100cfc9fbe9",
+  "set": "stx",
+  "collectorNumber": "254",
+  "rarity": "common",
+  "manaCost": "{6}",
+  "typeLine": "Artifact Creature — Construct",
+  "oracleText": "Reach\n{2}, {T}: Put target card from a graveyard on the bottom of its owner's library.",
+  "power": "4",
+  "toughness": "5",
+  "colors": [],
+  "keywords": [
+   "Reach"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/c/8c024a2d-20fb-478b-a62e-e3590a1e3ac1.jpg?1783927281",
+   "normal": "https://cards.scryfall.io/normal/front/8/c/8c024a2d-20fb-478b-a62e-e3590a1e3ac1.jpg?1783927281",
+   "large": "https://cards.scryfall.io/large/front/8/c/8c024a2d-20fb-478b-a62e-e3590a1e3ac1.jpg?1783927281",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/c/8c024a2d-20fb-478b-a62e-e3590a1e3ac1.jpg?1783927281"
+  }
+ },
+ {
+  "name": "Zephyr Boots",
+  "scryfallId": "4d0566fd-3775-48f1-ba22-6e659558c3d3",
+  "oracleId": "02f3b9c3-f611-4f05-ab3e-b296916efdad",
+  "set": "stx",
+  "collectorNumber": "261",
+  "rarity": "uncommon",
+  "manaCost": "{1}",
+  "typeLine": "Artifact — Equipment",
+  "oracleText": "Equipped creature has flying.\nWhenever equipped creature deals combat damage to a player, draw a card, then discard a card.\nEquip {2} ({2}: Attach to target creature you control. Equip only as a sorcery.)",
+  "colors": [],
+  "keywords": [
+   "Equip"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/d/4d0566fd-3775-48f1-ba22-6e659558c3d3.jpg?1783927277",
+   "normal": "https://cards.scryfall.io/normal/front/4/d/4d0566fd-3775-48f1-ba22-6e659558c3d3.jpg?1783927277",
+   "large": "https://cards.scryfall.io/large/front/4/d/4d0566fd-3775-48f1-ba22-6e659558c3d3.jpg?1783927277",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/d/4d0566fd-3775-48f1-ba22-6e659558c3d3.jpg?1783927277"
+  }
+ },
+ {
+  "name": "Sparring Regimen",
+  "scryfallId": "ab7c80d3-3e0c-4510-9ed0-bb9fe39d838f",
+  "oracleId": "2aac3575-4a06-452c-bb0f-68dc34086226",
+  "set": "stx",
+  "collectorNumber": "29",
+  "rarity": "rare",
+  "manaCost": "{2}{W}",
+  "typeLine": "Enchantment",
+  "oracleText": "When this enchantment enters, learn. (You may reveal a Lesson card you own from outside the game and put it into your hand, or discard a card to draw a card.)\nWhenever you attack, put a +1/+1 counter on target attacking creature and untap it.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Learn"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/b/ab7c80d3-3e0c-4510-9ed0-bb9fe39d838f.jpg?1783927388",
+   "normal": "https://cards.scryfall.io/normal/front/a/b/ab7c80d3-3e0c-4510-9ed0-bb9fe39d838f.jpg?1783927388",
+   "large": "https://cards.scryfall.io/large/front/a/b/ab7c80d3-3e0c-4510-9ed0-bb9fe39d838f.jpg?1783927388",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/b/ab7c80d3-3e0c-4510-9ed0-bb9fe39d838f.jpg?1783927388"
+  }
+ },
+ {
+  "name": "Introduction to Annihilation",
+  "scryfallId": "b0bc4682-bcaf-4f51-be0b-9f2851a16e3b",
+  "oracleId": "60e36f86-e284-468e-8073-07f19a3ed65e",
+  "set": "stx",
+  "collectorNumber": "3",
+  "rarity": "common",
+  "manaCost": "{5}",
+  "typeLine": "Sorcery — Lesson",
+  "oracleText": "Exile target nonland permanent. Its controller draws a card.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/0/b0bc4682-bcaf-4f51-be0b-9f2851a16e3b.jpg?1783927394",
+   "normal": "https://cards.scryfall.io/normal/front/b/0/b0bc4682-bcaf-4f51-be0b-9f2851a16e3b.jpg?1783927394",
+   "large": "https://cards.scryfall.io/large/front/b/0/b0bc4682-bcaf-4f51-be0b-9f2851a16e3b.jpg?1783927394",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/0/b0bc4682-bcaf-4f51-be0b-9f2851a16e3b.jpg?1783927394"
+  }
+ },
+ {
+  "name": "Teachings of the Archaics",
+  "scryfallId": "967148b1-2bb6-4bc0-95e6-c45fcf99afd2",
+  "oracleId": "6ac3abba-cf55-4d97-a253-bce45972b050",
+  "set": "stx",
+  "collectorNumber": "57",
+  "rarity": "rare",
+  "manaCost": "{2}{U}",
+  "typeLine": "Sorcery — Lesson",
+  "oracleText": "If an opponent has more cards in hand than you, draw two cards. Draw three cards instead if an opponent has at least four more cards in hand than you.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/6/967148b1-2bb6-4bc0-95e6-c45fcf99afd2.jpg?1783927373",
+   "normal": "https://cards.scryfall.io/normal/front/9/6/967148b1-2bb6-4bc0-95e6-c45fcf99afd2.jpg?1783927373",
+   "large": "https://cards.scryfall.io/large/front/9/6/967148b1-2bb6-4bc0-95e6-c45fcf99afd2.jpg?1783927373",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/6/967148b1-2bb6-4bc0-95e6-c45fcf99afd2.jpg?1783927373"
+  }
  }
 ]
