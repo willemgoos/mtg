@@ -9,6 +9,7 @@ import {
   obj,
 } from './context.ts';
 import { manaValue } from './cost.ts';
+import { addLore } from './sagas.ts';
 import { shuffleLibrary } from './setup.ts';
 import type { ObjectId } from './types.ts';
 
@@ -30,6 +31,24 @@ export const MSH_EFFECTS: Record<string, CustomEffect> = {
       if (o.controller !== es.controller || !isCreature(ctx, id) || !o.plusOneCounters) continue;
       if (subtype && !matchesFilter(ctx, id, { subtype })) continue;
       addCounters(ctx, id, o.plusOneCounters);
+    }
+  },
+
+  // Marvel Super Heroes Jumpstart (Tenacious/Rampaging)
+  /**
+   * Powerful Broker: "for each kind of counter on target permanent, give it another counter of
+   * that kind" (players have no counters here). Lore counters trigger the Saga's chapter.
+   */
+  counterOfEachKind(ctx, es) {
+    const t = es.targets[0];
+    if (!t || !('object' in t)) return;
+    const o = ctx.s.objects[t.object.id];
+    if (!o || o.zone !== 'battlefield' || o.zcc !== t.object.zcc) return;
+    if (o.plusOneCounters > 0) addCounters(ctx, o.id, 1);
+    for (const [name, n] of Object.entries(o.counters ?? {})) {
+      if (n <= 0) continue;
+      if (name === 'lore') addLore(ctx, o.id);
+      else addCounters(ctx, o.id, 1, name);
     }
   },
 

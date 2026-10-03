@@ -815,6 +815,13 @@ export function resolveTop(ctx: Ctx): boolean {
     }
     // Royal Talon Fighter Jet: "enters with X +1/+1 counters".
     if (d.entersWithXCounters && item.x) addCounters(ctx, o.id, item.x);
+    // Marvel Super Heroes Jumpstart (Tenacious/Rampaging): Voracious Brood.
+    if (d.entersWithCountersAmount)
+      addCounters(
+        ctx,
+        o.id,
+        countOf(ctx, item.controller, d.entersWithCountersAmount, false, o.id),
+      );
     if (d.entersWithCounters && checkCondition(ctx, d.entersWithCountersIf, item.controller, o))
       addCounters(ctx, o.id, d.entersWithCounters);
     if (host) attachAura(ctx, o.id, host);
