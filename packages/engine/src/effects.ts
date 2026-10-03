@@ -914,8 +914,13 @@ export function runEffects(
           typeof e.what === 'object' && 'target' in e.what ? es.targets[e.what.target] : null;
         const item = t && 'object' in t ? findSpell(ctx, t.object.id) : undefined;
         if (!item) continue;
+        // Final Fantasy Commander (12c): a cost counted as it resolves ({X}, cards in your graveyard).
+        const cost =
+          e.costAmount !== undefined
+            ? { generic: resolveAmount(ctx, es, e.costAmount), colored: {} }
+            : e.cost;
         // Can't pay: countered straight away.
-        if (!canPayFrom(e.cost, manaSources(ctx, item.controller))) {
+        if (!canPayFrom(cost, manaSources(ctx, item.controller))) {
           counterSpell(ctx, item.id);
           continue;
         }
@@ -923,7 +928,7 @@ export function runEffects(
           kind: 'payOrCounter',
           player: item.controller,
           spell: item.id,
-          cost: e.cost,
+          cost,
           resume,
           thenPriority,
         };

@@ -13,6 +13,7 @@ import {
   addCounters,
   createObject,
   refOf,
+  transform,
 } from './context.ts';
 import { commanderTax, commanderTypes } from './brawl.ts';
 import { type EffectSource, runEffects } from './effects.ts';
@@ -45,6 +46,7 @@ import { addCosts, type CastVia, spellOnStack, spellTags, variantOf } from './sp
 import { isTargetLegal } from './targets.ts';
 import { checkCondition, triggeredAbility } from './triggers.ts';
 import { givePriority } from './turn.ts';
+import { addLore } from './sagas.ts';
 import type {
   AbilityDef,
   CardDefinition,
@@ -754,6 +756,11 @@ export function resolveTop(ctx: Ctx): boolean {
     if (item.x) o.xPaid = item.x;
     if (item.copyOf && d.entersAsCopy) enterAsCopy(ctx, o.id, item.copyOf, d.entersAsCopy);
     addCounters(ctx, o.id, bonusCounters(ctx, item.controller, o.id, d.subtypes));
+    // Final Fantasy Commander (12c): "that creature enters with additional +1/+1 counters".
+    if (o.bonusCounters) {
+      addCounters(ctx, o.id, o.bonusCounters);
+      delete o.bonusCounters;
+    }
     // A permanent's gift (Scrapshooter): the opponent gets it as it resolves.
     if (item.kicked && d.kicker?.as === 'gift' && d.kicker.gift)
       runEffects(
@@ -841,6 +848,16 @@ export function finishResolution(ctx: Ctx, item: PausedResolution['item']): void
   if (item.libraryBottom) return moveObject(ctx, item.id, 'library', { position: 'bottom' });
   moveObject(ctx, item.id, item.exile || item.rebound ? 'exile' : 'graveyard');
   const o = ctx.s.objects[item.id];
+  // Final Fantasy Commander (12c): Esper Origins comes back transformed with a finality counter.
+  if (o?.returnTransformed) {
+    delete o.returnTransformed;
+    if (o.zone !== 'exile') moveObject(ctx, o.id, 'exile');
+    moveObject(ctx, o.id, 'battlefield');
+    transform(ctx, o.id);
+    (o.counters ??= {}).finality = 1;
+    if (def(ctx, o.id).saga) addLore(ctx, o.id);
+    return;
+  }
   if (item.rebound && o?.zone === 'exile')
     (ctx.s.delayed ??= []).push({
       controller: item.rebound,

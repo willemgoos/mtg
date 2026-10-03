@@ -84,6 +84,8 @@ export interface CardDefinition {
     counter?: boolean;
     /** It isn't legendary (Spark Double; Chameleon keeps its own name). */
     notLegendary?: boolean;
+    /** Final Fantasy Commander (12c): any creature, whatever its mana value (Altered Ego). */
+    anyManaValue?: boolean;
   };
   id: CardDefId;
   name: string;
@@ -1006,7 +1008,13 @@ export type EffectDef =
       otherwise?: EffectDef[];
     }
   /** Counter a spell unless its controller pays this. */
-  | { kind: 'counterUnlessPays'; what: Ref; cost: ManaCost }
+  | {
+      kind: 'counterUnlessPays';
+      what: Ref;
+      cost: ManaCost;
+      /** Final Fantasy Commander (12c): generic cost counted as it resolves (Syncopate's X). */
+      costAmount?: Amount;
+    }
   /** Reveal cards from the top until one matches; it goes to hand or onto the battlefield tapped, the rest to the bottom. */
   | { kind: 'revealUntil'; filter: CardFilter; to: 'hand' | 'battlefieldTapped' }
   /**
@@ -1474,7 +1482,12 @@ export type StaticDef =
   /** Spells you cast matching the filter cost {N} less, while the condition holds. */
   | { kind: 'spellsCostLessIf'; filter: CardFilter; amount: number; condition?: ConditionDef }
   /** Look at the top card of your library any time; play cards matching the filter from there (Glarb). */
-  | { kind: 'playFromTop'; filter: CardFilter }
+  | {
+      kind: 'playFromTop';
+      filter: CardFilter;
+      /** Final Fantasy Commander (12c): only while this holds (Ranger Class level 3). */
+      condition?: ConditionDef;
+    }
   /** During your turn, cast instants and sorceries from your graveyard by paying 1 life more (Festival of Embers). */
   | { kind: 'castFromGraveyardForLife' }
   /** Cards and tokens that would go to your graveyard are exiled instead (Festival of Embers). */
@@ -1518,7 +1531,10 @@ export type StaticDef =
   /** Equip abilities you activate cost {amount} less (Fighter Class, Arms Scavenger). */
   | { kind: 'equipCostsLess'; amount: number; condition?: ConditionDef }
   /** Nonartifact spells you cast have improvise (Inspiring Statuary). */
-  | { kind: 'nonartifactSpellsHaveImprovise' };
+  | { kind: 'nonartifactSpellsHaveImprovise' }
+  // Final Fantasy Commander (12c): counters.
+  /** +1/+1 counters put on a creature you control: that many plus one (Hardened Scales). */
+  | { kind: 'oneMoreCounter' };
 
 export type CardDb = ReadonlyMap<CardDefId, CardDefinition>;
 
@@ -1664,6 +1680,16 @@ export interface GameObject {
   equipDiscount?: number;
   /** It blocks this attacker this combat if able (Fighter Class). */
   mustBlock?: ObjectRef;
+  // Final Fantasy Commander (12c).
+  /** A creature spell that enters with this many additional +1/+1 counters (Summon: Fenrir, Yuna). */
+  bonusCounters?: number;
+  /** The turn it became saddled (Mounts). */
+  saddledTurn?: number;
+  /** +1/+1 counters were put on it this many times during turn `countersTurn` (Botanical Brawler). */
+  countersTurn?: number;
+  countersTimes?: number;
+  /** As it's exiled after resolving, it comes back transformed with a finality counter (Esper Origins). */
+  returnTransformed?: boolean;
 }
 
 /** A reference that goes stale when the object changes zones. */

@@ -365,6 +365,152 @@ export const FIC_EFFECTS: Record<string, CustomEffect> = {
     if (blocker && attacker) blocker.mustBlock = { id: attacker.id, zcc: attacker.zcc };
   },
 
+  // ---------------------------------------------------------------- 12c: counters
+  /**
+   * Proliferate: each permanent you control with counters gets one more of
+   * each kind, and so does each opponent's permanent with a stun counter (the
+   * engine's choice: the helpful ones only).
+   */
+  proliferate(ctx, es) {
+    for (const id of [...ctx.s.battlefield]) {
+      const o = obj(ctx, id);
+      const mine = o.controller === es.controller;
+      if (mine && o.plusOneCounters > 0) addCounters(ctx, id, 1);
+      for (const [k, v] of Object.entries(o.counters ?? {})) {
+        if (v <= 0) continue;
+        const helpful = k !== 'stun' && k !== 'finality';
+        if (mine === helpful) addCounters(ctx, id, 1, k);
+      }
+    }
+  },
+
+  /** Saddle: this Mount is saddled until end of turn. */
+  saddle(ctx, es) {
+    const o = sourceObj(ctx, es);
+    if (o && o.zone === 'battlefield') o.saddledTurn = ctx.s.turn.number;
+  },
+
+  /**
+   * Hideaway N: look at the top N, exile one face down (the engine picks the
+   * most expensive nonland card), the rest to the bottom in a random order.
+   */
+  hideaway(ctx, es, params) {
+    const p = es.controller;
+    const top = ctx.s.players[p].library.slice(0, (params as { count: number }).count);
+    const pick = [...top].sort(
+      (a, b) => Number(isLand(ctx, a)) - Number(isLand(ctx, b)) || mv(ctx, b) - mv(ctx, a),
+    )[0];
+    const self = sourceObj(ctx, es);
+    if (pick) {
+      moveObject(ctx, pick, 'exile');
+      if (self) self.exiledWith = [...(self.exiledWith ?? []), pick];
+    }
+    for (const id of top) if (id !== pick) moveObject(ctx, id, 'library', { position: 'bottom' });
+  },
+
+  /** Bahamut, Shiva, Phoenix: "Exile this Saga, then return it to the battlefield (front face up)." */
+  blinkFront(ctx, es) {
+    const o = sourceObj(ctx, es);
+    if (!o || o.zone !== 'battlefield') return;
+    moveObject(ctx, o.id, 'exile');
+    moveObject(ctx, o.id, 'battlefield');
+  },
+
+  /** Clash of the Eikons: put a lore counter on the target Saga (its chapter triggers). */
+  addLoreToTarget(ctx, es) {
+    const o = targetObj(ctx, es, (es as { loreTarget?: number }).loreTarget ?? 0);
+    if (o && o.zone === 'battlefield') addLore(ctx, o.id);
+  },
+
+  /** Clash of the Eikons: remove a lore counter from the target Saga (no chapter triggers). */
+  removeLoreFromTarget(ctx, es) {
+    const o = targetObj(ctx, es);
+    if (o?.counters?.lore) o.counters.lore--;
+  },
+
+  /**
+   * Garnet: remove a lore counter from each Saga you control that has one (the
+   * engine always does: it delays their sacrifice), +1/+1 counters on Garnet for each.
+   */
+  garnet(ctx, es) {
+    let n = 0;
+    for (const id of ctx.s.battlefield) {
+      const o = obj(ctx, id);
+      if (o.controller !== es.controller || !def(ctx, id).saga || !o.counters?.lore) continue;
+      o.counters.lore--;
+      n++;
+    }
+    const self = sourceObj(ctx, es);
+    if (self && self.zone === 'battlefield' && n) addCounters(ctx, self.id, n);
+  },
+
+  /**
+   * The creature spell that caused the trigger enters with additional +1/+1
+   * counters: `params.n`, or one per Dog and/or Wolf you control (Torgal).
+   */
+  subjectBonusCounters(ctx, es, params) {
+    const o = es.subject && ctx.s.objects[es.subject.id];
+    if (!o || o.zone !== 'stack') return;
+    const p = params as { n?: number; dogsAndWolves?: boolean };
+    const n = p.dogsAndWolves
+      ? ctx.s.battlefield.filter((id) => {
+          const x = obj(ctx, id);
+          const st = characteristics(ctx, id).subtypes;
+          return x.controller === es.controller && (st.includes('Dog') || st.includes('Wolf'));
+        }).length
+      : (p.n ?? 1);
+    o.bonusCounters = (o.bonusCounters ?? 0) + n;
+  },
+
+  /** Chasm Skulker: X tokens, X = the +1/+1 counters it had as it died. */
+  tokensBySourceCounters(ctx, es, params) {
+    const self = es.source && ctx.s.objects[es.source.id];
+    const x = self?.lastCounters ?? 0;
+    for (let i = 0; i < x; i++)
+      tokenCopyOfCard(ctx, (params as { token: string }).token, es.controller);
+  },
+
+  /** "Remove N +1/+1 counters from this creature" (as the ability resolves: District Mascot). */
+  removeSelfCounters(ctx, es, params) {
+    const o = sourceObj(ctx, es);
+    if (o) o.plusOneCounters = Math.max(0, o.plusOneCounters - (params as { n: number }).n);
+  },
+
+  /** Summon: Leviathan I: return each creature that isn't a Kraken, Leviathan, Merfolk, Octopus or Serpent. */
+  leviathanWave(ctx) {
+    const keep = ['Kraken', 'Leviathan', 'Merfolk', 'Octopus', 'Serpent'];
+    for (const id of [...ctx.s.battlefield]) {
+      const c = characteristics(ctx, id);
+      if (c.types.includes('Creature') && !c.subtypes.some((t) => keep.includes(t)))
+        moveObject(ctx, id, 'hand');
+    }
+  },
+
+  /** Esper Origins cast from a graveyard: it comes back transformed after resolving. */
+  markReturnTransformed(ctx, es) {
+    const o = es.source && ctx.s.objects[es.source.id];
+    if (o && o.zone === 'stack') o.returnTransformed = true;
+  },
+
+  /** Summon: Esper Maduin I: reveal the top card; a permanent card goes to your hand. */
+  revealTopPermanentToHand(ctx, es) {
+    const top = ctx.s.players[es.controller].library[0];
+    if (!top) return;
+    const d = def(ctx, top);
+    if (!d.types.includes('Instant') && !d.types.includes('Sorcery')) moveObject(ctx, top, 'hand');
+  },
+
+  /** Yuna: +1/+1 counters on the target equal to the counters the permanent that died had. */
+  countersBySubjectLastCounters(ctx, es) {
+    const subj = es.subject && ctx.s.objects[es.subject.id];
+    const t = targetObj(ctx, es);
+    if (!t || t.zone !== 'battlefield') return;
+    const n =
+      (subj?.lastCounters ?? 0) +
+      Object.values(subj?.lastNamedCounters ?? {}).reduce((a, b) => a + b, 0);
+    addCounters(ctx, t.id, n);
+  },
+
   /** Put +1/+1 counters on the source equal to the power of what caused the trigger, as it last was. */
   countersBySubjectPower(ctx, es) {
     const self = sourceObj(ctx, es);
@@ -378,7 +524,7 @@ export const FIC_EFFECTS: Record<string, CustomEffect> = {
 
 export const FIC_CONDITIONS: Record<
   string,
-  (ctx: Ctx, controller: PlayerId, self: GameObject | undefined) => boolean
+  (ctx: Ctx, controller: PlayerId, self: GameObject | undefined, subject?: GameObject) => boolean
 > = {
   /** Starting Town: "your first, second, or third turn of the game". */
   firstThreeTurns: (ctx) => ctx.s.turn.number <= 6,
@@ -386,6 +532,32 @@ export const FIC_CONDITIONS: Record<
   startingPlayer: (ctx, p) => (ctx.s.turn.number % 2 === 1) === (ctx.s.turn.activePlayer === p),
   /** "If it's the first combat phase of the turn" (Genji Glove, Tifa). */
   firstCombat: (ctx) => !ctx.s.turn.laterCombat,
+  /** This Mount is saddled. */
+  saddled: (ctx, _p, self) => self?.saddledTurn === ctx.s.turn.number,
+  /** You control the creature with the greatest power, or tied (Summon: Fenrir III). */
+  greatestPower: (ctx, p) => {
+    let mine = -99;
+    let theirs = -99;
+    for (const id of ctx.s.battlefield) {
+      const c = characteristics(ctx, id);
+      if (!c.types.includes('Creature')) continue;
+      if (obj(ctx, id).controller === p) mine = Math.max(mine, c.power);
+      else theirs = Math.max(theirs, c.power);
+    }
+    return mine > -99 && mine >= theirs;
+  },
+  /** The first time +1/+1 counters were put on what caused the trigger this turn (Botanical Brawler). */
+  subjectFirstCounters: (ctx, _p, _self, subject) =>
+    subject?.countersTurn === ctx.s.turn.number && subject.countersTimes === 1,
+  /** What caused the trigger is the source itself (Generous Pup: "on this creature"). */
+  subjectIsSelf: (_ctx, _p, self, subject) => !!self && subject?.id === self.id,
+  /** It had no flying counter as it died (Luminous Broodmoth's returns don't loop). */
+  subjectHadNoFlyingCounter: (_ctx, _p, _self, subject) => !subject?.lastNamedCounters?.flying,
+  /** It had counters as it left the battlefield (Yuna). */
+  subjectHadCounters: (_ctx, _p, _self, subject) =>
+    !!subject &&
+    ((subject.lastCounters ?? 0) > 0 ||
+      Object.values(subject.lastNamedCounters ?? {}).some((n) => n > 0)),
   /** A Saga creature's later chapters (Summon: Primal Odin II). */
   loreTwo: (_ctx, _p, self) => (self?.counters?.lore ?? 0) >= 2,
   /**

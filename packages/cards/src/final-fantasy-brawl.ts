@@ -4,6 +4,7 @@ import { FIN_SHARED, FIN_SHARED_BACK_FACES } from './fic/fin-shared.ts';
 import { FIC_SHARED, FIC_SHARED_BACK_FACES } from './fic/shared.ts';
 import { CLOUD } from './fic/cloud.ts';
 import { TERRA } from './fic/terra.ts';
+import { TIDUS } from './fic/tidus.ts';
 
 /**
  * Final Fantasy Commander (FIC) card behaviour for the Arena Store Brawl decks
@@ -16,6 +17,7 @@ export const FINAL_FANTASY_BRAWL_BEHAVIORS: Record<string, Behavior> = {
   ...FIN_SHARED,
   ...TERRA,
   ...CLOUD,
+  ...TIDUS,
 };
 
 /** Back faces of double-faced cards: not cards of their own, so not in the pool. */
@@ -60,5 +62,20 @@ export const FINAL_FANTASY_BRAWL_TOKENS: CardDefinition[] = [
   {
     ...creatureToken('angelo-token', 'Angelo', ['G', 'W'], ['Dog'], 1, 1),
     supertypes: ['Legendary'],
+  },
+  creatureToken('wolf-2-2-token', 'Wolf', ['G'], ['Wolf'], 2, 2),
+  // Islandwalk isn't built.
+  creatureToken('squid-token', 'Squid', ['U'], ['Squid'], 1, 1),
+  {
+    // Summon: Fat Chocobo's Bird: "Whenever a land you control enters, this token gets +1/+0 until end of turn."
+    ...creatureToken('chocobo-bird-token', 'Bird', ['G'], ['Bird'], 2, 2),
+    abilities: [
+      {
+        kind: 'triggered',
+        trigger: { on: 'landfall' },
+        targets: [],
+        effects: [{ kind: 'pump', to: 'self', power: 1, toughness: 0 }],
+      },
+    ],
   },
 ];

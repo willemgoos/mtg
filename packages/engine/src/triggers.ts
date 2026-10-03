@@ -207,7 +207,7 @@ export function checkCondition(
     case 'custom': {
       // Final Fantasy Commander (12): one-off conditions.
       const fn = FIC_CONDITIONS[c.handler];
-      if (fn) return fn(ctx, controller, self);
+      if (fn) return fn(ctx, controller, self, subject);
       throw new Error(`Custom condition "${c.handler}" not registered`);
     }
   }
@@ -1070,6 +1070,8 @@ export function nextPendingTriggerIndex(ctx: Ctx): number {
 function defMatches(d: CardDefinition, f: CardFilter): boolean {
   if (f.types && !f.types.some((t) => d.types.includes(t))) return false;
   if (f.hasKeyword && !d.keywords.includes(f.hasKeyword)) return false;
+  // Final Fantasy Commander (12c): "a creature you control without flying" (Luminous Broodmoth).
+  if (f.lacksKeyword && d.keywords.includes(f.lacksKeyword)) return false;
   if (f.subtype && !d.subtypes.includes(f.subtype)) return false;
   if (f.subtypes && !f.subtypes.some((st) => d.subtypes.includes(st))) return false;
   return true;

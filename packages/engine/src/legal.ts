@@ -95,6 +95,8 @@ export function castableCards(ctx: Ctx, player: PlayerId): ObjectId[] {
           a.kind === 'static' &&
           a.effect.kind === 'playFromTop' &&
           cardMatches(ctx, topCard, a.effect.filter) &&
+          // Final Fantasy Commander (12c): Ranger Class level 3.
+          checkCondition(ctx, a.effect.condition, player, obj(ctx, id)) &&
           !out.includes(topCard)
         )
           out.push(topCard);
@@ -391,6 +393,8 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
               .filter(
                 (c) =>
                   d.entersAsCopy!.yours ||
+                  // Final Fantasy Commander (12c): Altered Ego copies any creature.
+                  d.entersAsCopy!.anyManaValue ||
                   manaValue(def(ctx, c.id).manaCost) <= (a.x ?? 0) + manaValue(d.manaCost),
               )
               .map((c) => ({ ...a, copyOf: c.id })),

@@ -168,6 +168,13 @@ four decks. Three more FIC Brawl decks followed (9 December 2025, "Arena Store d
   life and legendary-only keywords, improvise for nonartifact spells, spree (as modes with costs), Buster Sword's
   "that damage" free cast. Fixes: Equipment "whenever equipped creature attacks" triggered twice; free casts didn't
   check ward. Win rate over 20 games a pairing: 38% (15–60% per opponent).
+- **12c Done:** Counter Blitz (Tidus). New: proliferate (engine-picked: your counters and the opponents' stun
+  counters), Hardened Scales (`oneMoreCounter`, before doubling), "enters with additional counters" for the next
+  creature spell (`bonusCounters`), saddle, hideaway, lore counters added or removed by spells (Clash of the
+  Eikons, Garnet), Esper Origins returning transformed after its flashback, "counter unless they pay" with a cost
+  counted on resolution (Syncopate, Swallowed by Leviathan), Altered Ego copying any creature, Ranger Class's
+  top-of-library casting at level 3, "first time counters were put on it this turn". Win rate over 20 games a
+  pairing: 56% (30–75% per opponent).
 
 ### Lists: Arena against paper
 
@@ -227,3 +234,10 @@ only, for the merge with phase 11.
   Summon: Alexander's prevention is indestructible this turn. Delivery Moogle searches the library only. Raubahn's
   ward is 2 life (his printed power). Zack Fair moves an unattached Equipment, not "the one on Zack". Beatrix and
   Gilgamesh: the engine picks what to attach. Requisition Raid's counters go on your creatures.
+- **12c:** Proliferate never adds to an opponent's +1/+1 counters nor to players. Incubation Druid makes two mana
+  with a counter, not three, of any colour. Yuna's "Grand Summon" bonus goes to the first creature spell cast
+  while Yuna is tapped. Forgotten Ancient never moves its counters. Endless Detour only targets nonland permanents
+  (put on top). Syncopate puts the countered spell in the graveyard. Sleep Magic isn't sacrificed when the creature
+  is dealt damage. Ride the Shoopuf can't become a 7/7. Town Greeter's Town life gain, the Squid tokens'
+  islandwalk and Sword of Body and Mind's protection aren't built. The Earth Crystal's distribute puts one counter on
+  each of two targets. Summon: Leviathan's II–III draw only for Leviathan itself.

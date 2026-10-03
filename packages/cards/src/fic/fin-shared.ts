@@ -1,5 +1,5 @@
 import type { Behavior } from '../build.ts';
-import { COLORS, cycling, tapFor, tapForEither } from '../msc/helpers.ts';
+import { combos, COLORS, cycling, tapFor, tapForEither } from '../msc/helpers.ts';
 import {
   activated,
   atCombat,
@@ -7,6 +7,7 @@ import {
   chapter,
   condition,
   counters,
+  creature,
   creatureCard,
   creatureOrArtifact,
   custom,
@@ -656,6 +657,228 @@ export const FIN_SHARED: Record<string, Behavior> = {
     count: 3,
     filter: { types: ['Artifact', 'Creature', 'Land'] },
   }),
+
+  // ============================================================ Counter Blitz (12c)
+  'Guadosalam, Farplane Gateway': town('G', 'U'),
+  'Sharlayan, Nation of Scholars': town('W', 'U'),
+  // ------------------------------------------------------------ creatures
+  "Dion, Bahamut's Dominant": {
+    abilities: [
+      staticAbility({
+        kind: 'anthem',
+        affects: 'creaturesYouControl',
+        filter: { subtype: 'Knight' },
+        condition: { kind: 'yourTurn' },
+        power: 0,
+        toughness: 0,
+        keywords: ['flying'],
+      }),
+      onEnter([], token('knight-2-2-token')),
+      activated('{4}{W}{W}', { tapSelf: true }, [], [custom('blinkTransformed')], {
+        sorcerySpeed: true,
+        label: 'Transform',
+      }),
+    ],
+  },
+  'Garnet, Princess of Alexandria': {
+    abilities: [when({ on: 'attacks' }, [], custom('garnet'))],
+  },
+  'Il Mheg Pixie': { abilities: [when({ on: 'attacks' }, [], surveil(1))] },
+  "Jill, Shiva's Dominant": {
+    abilities: [
+      onEnter([permanent({ nonland: true, other: true }, { optional: true })], {
+        kind: 'bounce',
+        what: t0,
+      }),
+      activated('{3}{U}{U}', { tapSelf: true }, [], [custom('blinkTransformed')], {
+        sorcerySpeed: true,
+        label: 'Transform',
+      }),
+    ],
+  },
+  'Rosa, Resolute White Mage': {
+    abilities: [atCombat([yourCreature], counters(t0), pump(t0, 0, 0, ['lifelink']))],
+  },
+  'Sazh Katzroy': {
+    abilities: [
+      onEnter([], {
+        kind: 'may',
+        effects: [
+          {
+            kind: 'searchLibrary',
+            filter: { anyOf: [{ subtype: 'Bird' }, { types: ['Land'], supertypes: ['Basic'] }] },
+            to: 'hand',
+          },
+        ],
+      }),
+      when({ on: 'attacks' }, [{ what: 'creature' }], counters(t0), {
+        kind: 'counters',
+        to: t0,
+        amount: { countersOn: t0 },
+      }),
+    ],
+  },
+  "Sazh's Chocobo": { abilities: [when({ on: 'landfall' }, [], counters(self))] },
+  'Torgal, A Fine Hound': {
+    abilities: [
+      oncePerTurn(
+        when(
+          { on: 'castSpell', filter: 'creature', spell: { subtype: 'Human' } },
+          [],
+          custom('subjectBonusCounters', { dogsAndWolves: true }),
+        ),
+      ),
+      ...COLORS.map((c) => tapFor(c)),
+    ],
+  },
+  'Town Greeter': {
+    // "If you put a Town card into your hand this way, you gain 2 life" isn't built (a simplification).
+    abilities: [onEnter([], { kind: 'millThenTake', count: 4, filter: { types: ['Land'] } })],
+  },
+  // ------------------------------------------------------------ Summons
+  'Summon: Bahamut': summon(
+    4,
+    chapter([1, 2], [permanent({ nonland: true }, { optional: true })], destroy(t0)),
+    chapter([3], [], draw(2)),
+    chapter([4], [], {
+      kind: 'damage',
+      amount: { count: 'totalManaValue', filter: { other: true } },
+      to: 'eachOpponent',
+      from: self,
+    }),
+  ),
+  'Summon: Choco/Mog': summon(4, chapter([1, 2, 3, 4], [], pump(yours({ other: true }), 1, 0))),
+  'Summon: Fat Chocobo': summon(
+    4,
+    chapter([1], [], token('chocobo-bird-token')),
+    chapter([2, 3, 4], [], pump(yours(), 0, 0, ['trample'])),
+  ),
+  'Summon: Fenrir': summon(
+    3,
+    chapter([1], [], { kind: 'searchLibrary', filter: 'basicLand', to: 'battlefieldTapped' }),
+    chapter([2], [], {
+      kind: 'emblem',
+      until: 'nextSpellThisTurn',
+      ability: when(
+        { on: 'castSpell', filter: 'creature' },
+        [],
+        custom('subjectBonusCounters', { n: 1 }),
+      ),
+    }),
+    chapter([3], [], { kind: 'if', condition: condition('greatestPower'), then: [draw(1)] }),
+  ),
+  'Summon: Leviathan': summon(
+    3,
+    chapter([1], [], custom('leviathanWave')),
+    // II, III: only Leviathan itself is one of those types in these decks.
+    { ...when({ on: 'attacks' }, [], draw(1)), condition: condition('loreTwo') },
+  ),
+  'Summon: Shiva': summon(
+    3,
+    chapter(
+      [1, 2],
+      [theirCreature],
+      { kind: 'tap', what: t0 },
+      {
+        kind: 'namedCounters',
+        name: 'stun',
+        amount: 1,
+        to: t0,
+      },
+    ),
+    chapter(
+      [3],
+      [],
+      draw({ count: 'permanentsOpponentsControl', filter: { types: ['Creature'], tapped: true } }),
+    ),
+  ),
+  'Summon: Titan': summon(
+    3,
+    chapter([1], [], mill(5)),
+    chapter([2], [], { kind: 'returnLandsFromGraveyard' }),
+    chapter(
+      [3],
+      [{ ...yourCreature, filter: { other: true } }],
+      pump(t0, { count: 'landsYouControl' }, { count: 'landsYouControl' }, ['trample']),
+    ),
+  ),
+  // ------------------------------------------------------------ other permanents
+  'Ride the Shoopuf': {
+    // Its {5}{G}{G} "becomes a 7/7 Beast" isn't built (a simplification).
+    abilities: [when({ on: 'landfall' }, [yourCreature], counters(t0))],
+  },
+  'Sleep Magic': {
+    // "When enchanted creature is dealt damage, sacrifice this Aura" isn't built (a simplification).
+    enchant: { what: 'creature' },
+    abilities: [
+      onEnter([], { kind: 'tap', what: 'attached' }),
+      staticAbility({ kind: 'attached', power: 0, toughness: 0, doesntUntap: true }),
+    ],
+  },
+  'The Earth Crystal': {
+    abilities: [
+      staticAbility({ kind: 'spellsCostLess', filter: { colors: ['G'] }, amount: 1 }),
+      staticAbility({ kind: 'doubleCounters' }),
+      // "Distribute two counters among one or two": one on each target (two on a lone target isn't offered).
+      activated(
+        '{4}{G}{G}',
+        { tapSelf: true },
+        [yourCreature, { ...yourCreature, optional: true }],
+        [counters(t0), counters(t1)],
+      ),
+    ],
+  },
+  // ------------------------------------------------------------ spells
+  'Clash of the Eikons': {
+    modes: combos(
+      [
+        mode('Fight', [yourCreature, theirCreature], { kind: 'fight', a: t0, b: t1 }),
+        mode(
+          'Remove a lore counter',
+          [permanent({ subtype: 'Saga' }, { controller: 'you' })],
+          custom('removeLoreFromTarget'),
+        ),
+        mode(
+          'Add a lore counter',
+          [permanent({ subtype: 'Saga' }, { controller: 'you' })],
+          custom('addLoreToTarget'),
+        ),
+      ],
+      [1, 2, 3],
+    ),
+  },
+  'Combat Tutorial': spell([{ ...yourCreature, optional: true }], draw(2), counters(t0)),
+  'Esper Origins': {
+    flashback: mana('{3}{G}'),
+    ...spell([], surveil(2), gain(2)),
+    flashbackSpell: {
+      targets: [],
+      effects: [surveil(2), gain(2), custom('markReturnTransformed')],
+    },
+  },
+  "Prishe's Wanderings": spell(
+    [{ ...yourCreature, optional: true }],
+    {
+      kind: 'searchLibrary',
+      filter: { anyOf: [{ types: ['Land'], supertypes: ['Basic'] }, { subtype: 'Town' }] },
+      to: 'battlefieldTapped',
+    },
+    counters(t0),
+  ),
+  'Swallowed by Leviathan': spell([{ what: 'spell' }], surveil(2), {
+    kind: 'counterUnlessPays',
+    what: t0,
+    cost: { generic: 0, colored: {} },
+    costAmount: { count: 'cardsInGraveyard' },
+  }),
+  // "Exile it instead of putting it into its owner's graveyard" isn't built (a simplification).
+  Syncopate: spell([{ what: 'spell' }], {
+    kind: 'counterUnlessPays',
+    what: t0,
+    cost: { generic: 0, colored: {} },
+    costAmount: { x: true },
+  }),
+  "The Crystal's Chosen": spell([], token('hero-1-1-token', 4), counters(yours())),
 };
 
 /** Back faces of the FIN double-faced cards above. */
@@ -672,6 +895,35 @@ export const FIN_SHARED_BACK_FACES: Record<string, Behavior> = {
     ],
   },
   // "Prevent all damage to creatures you control this turn": indestructible this turn (a simplification).
+  'Bahamut, Warden of Light': summon(
+    3,
+    chapter(
+      [1, 2],
+      [],
+      counters(yours({ other: true })),
+      pump(yours({ other: true }), 0, 0, ['flying']),
+    ),
+    chapter([3], [permanent()], destroy(t0), custom('blinkFront')),
+  ),
+  'Shiva, Warden of Ice': summon(
+    3,
+    chapter([1, 2], [creature], pump(t0, 0, 0, [], { cantBeBlocked: true })),
+    chapter(
+      [3],
+      [],
+      {
+        kind: 'tap',
+        what: { each: 'permanent', controller: 'opponent', filter: { types: ['Land'] } },
+      },
+      custom('blinkFront'),
+    ),
+  ),
+  'Summon: Esper Maduin': summon(
+    3,
+    chapter([1], [], custom('revealTopPermanentToHand')),
+    chapter([2], [], { kind: 'addMana', mana: [['G'], ['G']] }),
+    chapter([3], [], pump(yours({ other: true }), 2, 2, ['trample'])),
+  ),
   'Summon: Alexander': summon(
     3,
     chapter([1, 2], [], pump(yours(), 0, 0, ['indestructible'])),

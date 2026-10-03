@@ -140,6 +140,10 @@ export const KEYWORDS_AS_ABILITIES = new Set([
   'Meld',
   'Draft from a spellbook',
   'Spree',
+  'Proliferate',
+  'Saddle',
+  'Adapt',
+  'Hideaway',
 ]);
 
 const BASIC_MANA: Record<string, ManaType> = {
