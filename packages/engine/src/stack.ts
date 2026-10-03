@@ -359,6 +359,8 @@ export function castSpell(
   if (d.types.includes('Instant') || d.types.includes('Sorcery'))
     (ctx.s.turn.instantsSorceriesCast ??= { p1: 0, p2: 0 })[player]++;
   // Final Fantasy (11b): "Kicker—Return a land you control to its owner's hand".
+  // Strixhaven (13b): the sacrificed creature's power (Tend the Pests).
+  const sacrificedPower = choice.sacrifice ? power(ctx, choice.sacrifice) : undefined;
   if (choice.sacrifice && choice.kicked && d.kicker?.returnLand)
     moveObject(ctx, choice.sacrifice, 'hand');
   else if (choice.sacrifice) sacrificePermanent(ctx, choice.sacrifice);
@@ -379,6 +381,7 @@ export function castSpell(
     ...(choice.kicked ? { kicked: true } : {}),
     ...(flashback ? { flashback: true } : {}),
     ...(choice.x ? { x: choice.x } : {}),
+    ...(sacrificedPower !== undefined ? { lkiPower: sacrificedPower } : {}),
     ...(choice.paws ? { paws: choice.paws } : {}),
     ...(v.finality ? { finality: true } : {}),
     ...(choice.copyOf ? { copyOf: choice.copyOf } : {}),
@@ -692,6 +695,7 @@ export function resolveTop(ctx: Ctx): boolean {
         sourceDefId: o.defId,
         targets,
         ...(item.x !== undefined ? { x: item.x } : {}),
+        ...(item.lkiPower !== undefined ? { lkiPower: item.lkiPower } : {}),
       };
       const paused = {
         kind: 'spell' as const,

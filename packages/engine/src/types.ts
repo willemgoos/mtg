@@ -156,6 +156,9 @@ export interface CardDefinition {
     sacrifice?: CardFilter;
     /** "Kicker—Return a land you control to its owner's hand" (Chocobo Kick): `cost` is {0}. */
     returnLand?: boolean;
+    // Strixhaven (13b): Baleful Mastery
+    /** An alternative cost: `cost` is paid rather than the mana cost (not on top of it). */
+    replacesCost?: boolean;
   };
   /** Costs {amount} less if its first target matches (Dire Downdraft: an attacking or tapped creature). */
   costReductionIfTarget?: { filter: CardFilter; amount: number };
@@ -1817,6 +1820,9 @@ export type StackItem =
       copyOf?: ObjectId;
       /** Cast from its owner's hand (rebound cares). */
       fromHand?: boolean;
+      // Strixhaven (13b): Tend the Pests
+      /** The power of the creature sacrificed as an additional cost to cast it. */
+      lkiPower?: number;
       /** Times it was kicked (multikicker). */
       kickCount?: number;
       /** Cast from exile (Klaw). */

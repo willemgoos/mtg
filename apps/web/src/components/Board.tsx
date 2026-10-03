@@ -1482,6 +1482,11 @@ function castLabel(defId: CardDefId, a: Action): string {
     return a.kicked ? `With offspring (+${manaText(def.kicker.cost)})` : 'Without offspring';
   if (def.kicker.teamwork !== undefined)
     return a.kicked ? `Teamwork (tap power ${def.kicker.teamwork})` : 'Without teamwork';
+  // Strixhaven (13b): an alternative cost (Baleful Mastery).
+  if (def.kicker.replacesCost)
+    return a.kicked
+      ? `Alternative cost (${manaText(def.kicker.cost)}): an opponent draws a card`
+      : 'Full cost';
   // Final Fantasy (11b): a kicker paid with a permanent.
   if (def.kicker.returnLand) return a.kicked ? 'Kicked (return a land)' : 'Not kicked';
   if (def.kicker.sacrifice)
