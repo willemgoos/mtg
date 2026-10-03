@@ -80,6 +80,23 @@ export const FIN_EFFECTS: Record<string, CustomEffect> = {
     if (nextInt(ctx.s.rng, 2) === 0) makeToken(ctx, 'treasure-token', es.controller);
   },
 
+  // Final Fantasy (11b)
+
+  /** Chaos, the Endless: "When Chaos dies, put it on the bottom of its owner's library." */
+  sourceToLibraryBottom(ctx, es) {
+    const o = es.source && ctx.s.objects[es.source.id];
+    if (o && o.zone === 'graveyard') moveObject(ctx, o.id, 'library', { position: 'bottom' });
+  },
+
+  /**
+   * Ultimecia, Time Sorceress: "exile eight cards from your graveyard" (part of
+   * a cost paid on resolution). The engine picks the oldest cards.
+   */
+  exileEightFromGraveyard(ctx, es) {
+    for (const id of ctx.s.players[es.controller].graveyard.slice(0, 8))
+      moveObject(ctx, id, 'exile');
+  },
+
   /** Overture: "Target opponent mills half their library, rounded down." */
   millHalf(ctx, es) {
     const t = es.targets[0];

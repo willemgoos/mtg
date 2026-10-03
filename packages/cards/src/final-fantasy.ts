@@ -1,13 +1,25 @@
 import type { Behavior } from './build.ts';
 import {
+  HIGHWIND_WORKSHOP,
+  TIME_COMPRESSION,
+  TIME_COMPRESSION_BACKS,
+} from './fin/artifacts-graveyard.ts';
+import {
   EIDOLONS_CALL,
   EIDOLONS_CALL_BACKS,
   HEROES_ARSENAL,
   HEROES_ARSENAL_BACKS,
 } from './fin/equipment-summons.ts';
+import { FINAL_FANTASY_TOKENS as BASE_TOKENS } from './fin/helpers.ts';
 import { FIN_ADVENTURES, FIN_TOWNS } from './fin/lands.ts';
+import { SHARED_A, SHARED_A_BACKS, SHARED_A_TOKENS } from './fin/shared-a.ts';
+import {
+  BLACK_MAGES_WALTZ,
+  BLACK_MAGES_WALTZ_BACKS,
+  CHOCOBO_STAMPEDE,
+} from './fin/spells-landfall.ts';
 
-export { FINAL_FANTASY_TOKENS } from './fin/helpers.ts';
+export const FINAL_FANTASY_TOKENS = [...BASE_TOKENS, ...SHARED_A_TOKENS];
 
 /**
  * Final Fantasy (FIN) card behaviour, one file per pair of decks in fin/
@@ -19,6 +31,12 @@ export const FINAL_FANTASY_BEHAVIORS: Record<string, Behavior> = {
   ...HEROES_ARSENAL,
   ...EIDOLONS_CALL,
   ...FIN_TOWNS,
+  // 11b (group A)
+  ...SHARED_A,
+  ...HIGHWIND_WORKSHOP,
+  ...TIME_COMPRESSION,
+  ...BLACK_MAGES_WALTZ,
+  ...CHOCOBO_STAMPEDE,
 };
 
 /** Back faces of double-faced cards (and Adventures): not cards of their own, so not in the pool. */
@@ -26,4 +44,8 @@ export const FINAL_FANTASY_BACK_FACES: Record<string, Behavior> = {
   ...HEROES_ARSENAL_BACKS,
   ...EIDOLONS_CALL_BACKS,
   ...FIN_ADVENTURES,
+  // 11b (group A)
+  ...SHARED_A_BACKS,
+  ...TIME_COMPRESSION_BACKS,
+  ...BLACK_MAGES_WALTZ_BACKS,
 };

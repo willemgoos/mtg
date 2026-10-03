@@ -336,9 +336,20 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
             const specs = v.spell?.targets ?? (d.enchant ? [d.enchant] : []);
             const forages = v.forage ? forageChoices(ctx, player) : [undefined];
             // Ultimate Nullification: only a legendary creature.
-            const sacrificeable = d.sacrificeToCastFilter
-              ? creatures.filter((id) => matchesFilter(ctx, id, d.sacrificeToCastFilter))
-              : creatures;
+            // Final Fantasy (11b): a kicker paid with an artifact or creature, or with a land.
+            const kickPermanent = v.kicked
+              ? d.kicker?.returnLand
+                ? { types: ['Land' as const] }
+                : d.kicker?.sacrifice
+              : undefined;
+            const sacrificeable = kickPermanent
+              ? s.battlefield.filter(
+                  (id) =>
+                    obj(ctx, id).controller === player && matchesFilter(ctx, id, kickPermanent),
+                )
+              : d.sacrificeToCastFilter
+                ? creatures.filter((id) => matchesFilter(ctx, id, d.sacrificeToCastFilter))
+                : creatures;
             for (const sacrifice of v.sacrifice ? sacrificeable : [undefined]) {
               for (const targets of combosFor(specs, card, sacrifice)) {
                 const ward = wardCost(ctx, player, targets);
@@ -357,7 +368,8 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
                   for (const discard of discards) {
                     // Paying without what this cast sacrifices.
                     const spent = [
-                      sacrifice,
+                      // Final Fantasy (11b): a land returned for kicker may tap for mana first.
+                      v.kicked && d.kicker?.returnLand ? undefined : sacrifice,
                       ...(sacrificeMany ?? []),
                       forage === 'graveyard' ? undefined : forage,
                       ...(teamwork ?? []),

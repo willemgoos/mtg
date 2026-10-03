@@ -367,7 +367,8 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
   if (from === 'battlefield' && ctx.s.effects.some((e) => e.whileSourceId === id)) {
     for (const e of ctx.s.effects) {
       const a = e.whileSourceId === id ? ctx.s.objects[e.affected.id] : undefined;
-      if (a && e.previousController && a.zcc === e.affected.zcc) a.controller = e.previousController;
+      if (a && e.previousController && a.zcc === e.affected.zcc)
+        a.controller = e.previousController;
     }
     ctx.s.effects = ctx.s.effects.filter((e) => e.whileSourceId !== id);
   }
@@ -377,6 +378,7 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
   else delete o.leftAttacking;
   if (from === 'battlefield') removeFromCombat(ctx, id);
   // A double-faced card shows its front again anywhere but the stack and the battlefield.
+  const leftAs = from === 'battlefield' && o.front ? o.defId : undefined;
   if (o.front && to !== 'stack' && !(from === 'stack' && to === 'battlefield')) {
     o.defId = o.front;
     delete o.front;
@@ -422,7 +424,7 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
   // Ygra entering or leaving changes what the other creatures are.
   if ((from === 'battlefield' || to === 'battlefield') && makesFood(defOf(ctx, o.defId)))
     refreshCreaturesAreFood(ctx);
-  emit(ctx, { type: 'objectMoved', id, defId: o.defId, from, to });
+  emit(ctx, { type: 'objectMoved', id, defId: o.defId, from, to, ...(leftAs ? { leftAs } : {}) });
   if (discarded && o.zone === 'graveyard') {
     o.discardedTurn = ctx.s.turn.number;
     (ctx.s.turn.discards ??= { p1: 0, p2: 0 })[o.owner]++;

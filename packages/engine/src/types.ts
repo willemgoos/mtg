@@ -151,6 +151,11 @@ export interface CardDefinition {
     // Teamwork (Marvel Super Heroes)
     /** Teamwork N: the kicker is tapping your creatures with total power N or more (`cost` is {0}). */
     teamwork?: number;
+    // Final Fantasy (11b): kicker paid with a permanent
+    /** "Kicker—Sacrifice an artifact or creature" (Vayne's Treachery): `cost` is {0}. */
+    sacrifice?: CardFilter;
+    /** "Kicker—Return a land you control to its owner's hand" (Chocobo Kick): `cost` is {0}. */
+    returnLand?: boolean;
   };
   /** Costs {amount} less if its first target matches (Dire Downdraft: an attacking or tapped creature). */
   costReductionIfTarget?: { filter: CardFilter; amount: number };
@@ -729,7 +734,15 @@ export type Amount =
   // Marvel Super Heroes: "costs {2} less if ..." (Punishing Punch).
   | { if: ConditionDef; then: number; else?: number }
   /** Cards in your graveyard (of these types). */
-  | { count: 'cardsInGraveyard'; types?: CardType[]; named?: CardDefId; plus?: number }
+  | {
+      count: 'cardsInGraveyard';
+      types?: CardType[];
+      named?: CardDefId;
+      plus?: number;
+      // Final Fantasy (11b): "each Artificer card in your graveyard" (Cid); "noncreature, nonland" (Esper Ramuh).
+      subtype?: string;
+      notTypes?: CardType[];
+    }
   /** The amount from the trigger event ("that much damage"). */
   | { event: 'amount' }
   /** Permanents you control matching the filter (Honored Dreyleader: Squirrels and Food). */
@@ -816,6 +829,8 @@ export type EffectDef =
       addSubtype?: string;
       // Marvel Super Heroes: 'with a finality counter on him' (Winter Soldier).
       named?: string;
+      // Final Fantasy (11b): returned transformed (Garland, Knight of Cornelia).
+      transformed?: boolean;
     }
   | { kind: 'exile'; what: Ref }
   /** Exile a card from a graveyard; extra effects if it was a creature card (Scavenging Ooze). */
@@ -1009,7 +1024,13 @@ export type EffectDef =
    */
   | { kind: 'blinkOnCombatDamage'; what: Ref }
   /** Put permanents on the top or bottom of their owners' libraries. */
-  | { kind: 'putInLibrary'; what: Ref; position: 'top' | 'bottom' | 'second' }
+  | {
+      kind: 'putInLibrary';
+      what: Ref;
+      position: 'top' | 'bottom' | 'second';
+      // Final Fantasy (11b): "shuffles it into their library" (Ice Magic).
+      shuffle?: boolean;
+    }
   /** Gain control of permanents until end of turn (Reptilian Recruiter), or until your next turn (Stilt-Man). */
   | {
       kind: 'gainControl';
@@ -2348,7 +2369,15 @@ export type Action =
   | { type: 'concede'; player: PlayerId };
 
 export type GameEvent =
-  | { type: 'objectMoved'; id: ObjectId; defId: CardDefId; from: ZoneName | null; to: ZoneName }
+  | {
+      type: 'objectMoved';
+      id: ObjectId;
+      defId: CardDefId;
+      from: ZoneName | null;
+      to: ZoneName;
+      // Final Fantasy (11b): the back face it showed as it left (Chaos dying shows Garland after).
+      leftAs?: CardDefId;
+    }
   | { type: 'damageDealt'; source: ObjectId; to: TargetChoice; amount: number; combat: boolean }
   | { type: 'lifeChanged'; player: PlayerId; delta: number; life: number }
   | { type: 'tapped'; id: ObjectId; first?: boolean }

@@ -437,7 +437,9 @@ function detect(ctx: Ctx, ev: GameEvent): void {
       ) {
         // "Dies" triggers look back in time: the ability triggers from the graveyard card.
         const card = moved ?? null;
-        movedDef.abilities.forEach((a, i) => {
+        // Final Fantasy (11b): a back face that dies (Chaos) triggers its own abilities.
+        const diedAs = ev.leftAs ? defOf(ctx, ev.leftAs) : movedDef;
+        diedAs.abilities.forEach((a, i) => {
           if (a.kind !== 'triggered') return;
           const t = a.trigger;
           if (t.on !== 'dies' && t.on !== 'creatureYouControlDies') return;
@@ -445,8 +447,11 @@ function detect(ctx: Ctx, ev: GameEvent): void {
           if (t.on === 'creatureYouControlDies' && t.filter && !defMatches(movedDef, t.filter))
             return;
           const controller = card?.owner ?? 'p1';
-          if (card && checkCondition(ctx, a.condition, controller, card))
+          if (card && checkCondition(ctx, a.condition, controller, card)) {
             queue(ctx, card, i, controller, card);
+            const last = ctx.s.pendingTriggers.at(-1);
+            if (last && ev.leftAs) last.sourceDefId = ev.leftAs;
+          }
         });
         // Heroic Sacrifice: "When that creature dies this turn, ...".
         if (moved)
@@ -649,6 +654,15 @@ function detect(ctx: Ctx, ev: GameEvent): void {
           subject: { id: spellObj.id, zcc: spellObj.zcc },
           // Storm: the spells cast before it this turn.
           amount: (ev.nth ?? 1) - 1,
+        });
+      }
+      // Final Fantasy (11b): graveyard cast triggers ("return this card from your graveyard", Shambling Cie'th).
+      for (const id of s.players[ev.player].graveyard) {
+        const card = s.objects[id]!;
+        def(ctx, id).abilities.forEach((a, i) => {
+          if (a.kind !== 'triggered' || !a.fromGraveyard || a.trigger.on !== 'castSpell') return;
+          if (spellMatches(ctx, a.trigger, spell, item, card))
+            if (checkCondition(ctx, a.condition, ev.player, card)) queue(ctx, card, i, ev.player);
         });
       }
       return;

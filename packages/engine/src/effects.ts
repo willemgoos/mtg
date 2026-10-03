@@ -2256,8 +2256,12 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
         card?.zone === 'graveyard' && t && 'object' in t && card.zcc === t.object.zcc
           ? [card.id]
           : [];
-      for (const id of [...objectsOf(ctx, es, e.what), ...fromGraveyard])
+      for (const id of [...objectsOf(ctx, es, e.what), ...fromGraveyard]) {
+        const owner = obj(ctx, id).owner;
         moveObject(ctx, id, 'library', { position: e.position });
+        // Final Fantasy (11b): "shuffles it into their library" (a token just ceases to exist).
+        if (e.shuffle) shuffleInPlace(ctx.s.rng, ctx.s.players[owner].library);
+      }
       return;
     }
     case 'gainControl':
@@ -2305,7 +2309,11 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
       const o = es.source && ctx.s.objects[es.source.id];
       if (!o || o.zone !== 'graveyard' || o.zcc !== es.source!.zcc) return;
       if (e.to === 'hand') return moveObject(ctx, o.id, 'hand');
-      moveObject(ctx, o.id, 'battlefield', { controller: o.owner });
+      // Final Fantasy (11b): returned transformed (Garland).
+      moveObject(ctx, o.id, 'battlefield', {
+        controller: o.owner,
+        ...(e.transformed ? { transformed: true } : {}),
+      });
       if (e.tapped) o.tapped = true;
       if (e.attacking && ctx.s.combat) {
         o.tapped = true;
