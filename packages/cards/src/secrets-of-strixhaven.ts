@@ -4,7 +4,7 @@ import { SOS_BLUE_B, SOS_BLUE_B_BACKS, SOS_BLUE_B_TOKENS } from './sos/cards-b.t
 import { PREPARE_SPIKE, PREPARE_SPIKE_BACKS } from './sos/prepare-spike.ts';
 import { SOS_A, SOS_A_BACKS, SOS_A_TOKENS } from './sos/cards-a.ts';
 import { SOS_C, SOS_C_BACKS } from './sos/cards-c.ts';
-import { SOS_D, SOS_D_BACKS, SOS_D_TOKENS } from './sos/cards-d.ts';
+import { SOS_D, SOS_D_BACKS } from './sos/cards-d.ts';
 import { SOS_E, SOS_E_BACKS } from './sos/cards-e.ts';
 import { SHARED_14A } from './sos/shared-14a.ts';
 import {
@@ -51,7 +51,6 @@ export const SECRETS_OF_STRIXHAVEN_BACK_FACES: Record<string, Behavior> = {
 /** Secrets of Strixhaven tokens (Inkling, Pest). */
 export const SECRETS_OF_STRIXHAVEN_TOKENS: CardDefinition[] = [
   ...SILVERQUILL_SOS_TOKENS,
-  ...SOS_D_TOKENS,
   ...SOS_WITHERBLOOM_TOKENS,
   ...SOS_A_TOKENS,
   ...SOS_BLUE_B_TOKENS,

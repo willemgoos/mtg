@@ -66,6 +66,16 @@ export const SOS_14B_A_EFFECTS: Record<string, CustomEffect> = {
     o.exileAfterCast = true;
   },
 
+  /** Flashback: the target instant or sorcery card gains flashback (its mana cost) until end of turn. */
+  grantFlashback(ctx, es) {
+    const id = targetIn(ctx, es, 0, 'graveyard');
+    if (id === undefined) return;
+    const o = obj(ctx, id);
+    o.playableUntilTurn = ctx.s.turn.number;
+    o.flashbackGrantedTurn = ctx.s.turn.number;
+    o.noSpellLock = true;
+  },
+
   /** Ark of Hunger: mill a card; you may play it this turn. */
   millAndMayPlay(ctx, es) {
     const top = ctx.s.players[es.controller].library[0];

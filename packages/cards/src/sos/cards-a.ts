@@ -103,6 +103,10 @@ export const SOS_A: Record<string, Behavior> = {
       combatExile,
     ],
   },
+  Flashback: spell(
+    [{ what: 'graveyardCard', controller: 'you', filter: { types: ['Instant', 'Sorcery'] } }],
+    custom('grantFlashback'),
+  ),
   Daydream: {
     flashback: mana('{2}{W}'),
     spell: { targets: [yourCreature], effects: [{ kind: 'blink', what: t0, counters: 1 }] },

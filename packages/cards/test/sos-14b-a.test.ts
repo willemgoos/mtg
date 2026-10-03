@@ -878,3 +878,24 @@ describe('Lorehold (R/W)', () => {
     expect(h.obj(h.id('p1', 'sundown-pass')).tapped).toBe(false);
   });
 });
+
+describe('Flashback (the card)', () => {
+  it('gives an instant in the graveyard flashback for its mana cost, then exiles it', () => {
+    const g = game({
+      p1: { hand: ['flashback'], graveyard: ['shock'], battlefield: mountains(3) },
+    });
+    const shock = g.id('p1', 'shock', 'graveyard');
+    cast(g, 'flashback', [g.ref(shock)]);
+    run(g);
+    g.do({
+      type: 'castSpell',
+      player: 'p1',
+      card: shock,
+      targets: [{ player: 'p2' }],
+      via: 'conduit',
+    });
+    run(g);
+    expect(g.life('p2')).toBe(18);
+    expect(g.zoneOf(shock)).toBe('exile');
+  });
+});

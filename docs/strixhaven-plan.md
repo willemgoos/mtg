@@ -277,7 +277,9 @@ whole (SOS's `prepare` is the riskiest). The shortest path to Quintorius is 0, 1
   order (the second creature can't be picked while skipping the first). Foolish Fate and Moseo read the life gained this
   turn from the turn tally. The SOS Pest (`sos-pest-token`, gains 1 life on attack) is not the STX Pest.
 
-14b (group A: white, Silverquill, Lorehold; `sos/cards-a.ts`, `sos-14b-a-effects.ts`):
+14b (cards):
+
+Group A (white, Silverquill, Lorehold; `sos/cards-a.ts`, `sos-14b-a-effects.ts`):
 
 - Silverquill, the Disputant's casualty 1 is a trigger when you cast an instant or sorcery (you may sacrifice a creature
   with power 1 or more; if you do, copy that spell). Aziza's copy and Social Snub's copy keep the original targets.
@@ -288,23 +290,28 @@ whole (SOS's `prepare` is the riskiest). The shortest path to Quintorius is 0, 1
 - Ark of Hunger's milled card is playable this turn from the graveyard (no spell lock, unlike Conduit of Worlds).
   Nita's exiled spell goes to exile instead of a graveyard (`exileAfterCast`). Practiced Scrollsmith and Suspend Aggression
   use `playableUntilTurn` (the owner may cast or play from exile). Practiced Offense's target player is you or the opponent.
-14b (group C: black, Witherbloom, colourless; `sos/cards-c.ts`):
+Group B (blue; `sos/cards-b.ts`, `sos-14b-b-effects.ts`):
+
+- Hydro-Channeler's second ability is a stack ability that adds the mana, not a mana ability. Divergent Equation has at most three targets, however large X is. Flow State puts the cards not taken on the bottom of the library at random, not in a chosen order. Fractalize changes only the base power and toughness (it keeps its colours and creature types). Emeritus of Ideation exiles instants and sorceries last, then the oldest first.
+
+Group C (black, Witherbloom, colourless; `sos/cards-c.ts`):
 
 - Arnyn reads the dying creature's printed power and toughness. Rabid Attack targets up to three creatures. Dina's Guidance
   asks hand or graveyard before the search. Mind Roots: the discarding player picks both cards, then you pick the land.
   Pox Plague asks one card or permanent at a time (you, then the opponent). Great Hall of the Biblioplex pays the life as
   damage when its mana is spent. Petrified Hamlet picks from a list of land names (lands in play first).
   Together as One and the other converge cards read the colours spent as recorded on the spell or permanent.
-14b (group D, red and Prismari, `sos/cards-d.ts`, `sos-14b-d-effects.ts`):
+
+Group D (red and Prismari; `sos/cards-d.ts`, `sos-14b-d-effects.ts`):
 
 - Impractical Joke has no "damage can't be prevented" clause. Steal the Show's discard-and-draw is for you (the target player is always you).
   Choreographed Sparks and Prismari, the Inspiration keep the original targets on copies (no new-target choice); Sparks' copy of a
   creature spell is hasty and sacrificed at the end step. Rubble Rouser's mana ability is an activated ability (it deals damage), so
   it can't pay a cost mid-cast. Resonating Lute makes each land two mana of any colours (not necessarily the same colour) and
   replaces the land's own mana for instants and sorceries. Tablet of Discovery's milled card is playable from the graveyard
-  this turn (`playGraveyardTurn`). Magmablood Archaic's {2/R} pips are paid with {R} where possible, else two generic
-  (`ManaCost.twoHybrid`). SOS Spirit (2/2 red and white) and Elemental (3/3 blue and red flying) tokens are this group's own
-  (`sos-spirit-rw-token`, `sos-elemental-ur-token`).
-14b (group E: green and Quandrix, `sos/cards-e.ts`):
+  this turn (`playableUntilTurn`, like Ark of Hunger). Magmablood Archaic's {2/R} pips are paid with {R} where possible, else two generic
+  (`ManaCost.twoHybrid`). The R/W Spirit and U/R Elemental tokens are shared with groups A and B (`sos-spirit-token`, `sos-elemental-3-3-flying-token`).
+
+Group E (green and Quandrix; `sos/cards-e.ts`):
 
 - Planar Engineering searches four times (each may find nothing). Zimone's Experiment and Paradox Surveyor reveal nothing to the opponent. Applied Geometry's copy keeps its own colours (not green and blue). Ambitious Augmenter moves only +1/+1 counters. Fractal Tender counts any counter put on it. Quandrix, the Proof's granted cascade is a cast trigger, and Geometer's Arthropod and Bind to Life let you decline the card. Twobrid pips (`{2/G}`) are `ManaCost.twoHybrid`.

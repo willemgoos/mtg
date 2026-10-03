@@ -2168,6 +2168,9 @@ export interface GameObject {
   // Secrets of Strixhaven (14b)
   /** Cast from exile with permission, it's exiled instead of going to the graveyard (Nita, Forum Conciliator). */
   exileAfterCast?: boolean;
+  // Secrets of Strixhaven (14b): Flashback
+  /** In a graveyard: it has flashback (its mana cost) until the end of this turn number. */
+  flashbackGrantedTurn?: number;
   /** Playing it from the graveyard this turn doesn't stop other spells (Ark of Hunger). */
   noSpellLock?: boolean;
   /** A copy of a card cast from exile (prepare, paradigm): it ceases to exist once it leaves the stack. */

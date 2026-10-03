@@ -372,6 +372,8 @@ export function castSpell(
   const flashback =
     (o.zone === 'graveyard' && !choice.via && !!d.flashback) ||
     !!choice.exileAfter ||
+    // Secrets of Strixhaven (14b): Flashback grants flashback until end of turn.
+    (o.zone === 'graveyard' && o.flashbackGrantedTurn === ctx.s.turn.number) ||
     !!o.exileAfterCast; // Secrets of Strixhaven (14b): Nita, Forum Conciliator
   const fromHand = o.zone === 'hand';
   // Rule 601.2: move to stack, choose targets, then pay costs.

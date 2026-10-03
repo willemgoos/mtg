@@ -6,8 +6,8 @@ import { all, cast, game, handSize, n, pt, settle } from './blb-helpers.ts';
 
 // Secrets of Strixhaven 14b, group D: red and Prismari (U/R).
 
-const SPIRIT = 'sos-spirit-rw-token';
-const ELEMENTAL = 'sos-elemental-ur-token';
+const SPIRIT = 'sos-spirit-token';
+const ELEMENTAL = 'sos-elemental-3-3-flying-token';
 const keywords = (g: GameDriver, id: string) => [
   ...getCharacteristics(g.state, cardDb, id).keywords,
 ];

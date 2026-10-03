@@ -1,4 +1,4 @@
-import type { AbilityDef, CardDefinition, EffectDef, TargetSpec } from '@mtg/engine';
+import type { AbilityDef, EffectDef, TargetSpec } from '@mtg/engine';
 import { type Behavior, parseManaCost as mana } from '../build.ts';
 import {
   combos,
@@ -13,49 +13,20 @@ import {
   tapFor,
 } from '../fin/helpers.ts';
 import { opus } from './helpers.ts';
+import { SOS_SPIRIT } from './cards-a.ts';
+import { SOS_ELEMENTAL } from './cards-b.ts';
 
 /**
  * Secrets of Strixhaven (14b, group D): the red and Prismari (U/R) cards. Printed
  * characteristics come from Scryfall; only rules text lives here.
  */
 
-export const SOS_SPIRIT_RW = 'sos-spirit-rw-token';
-export const SOS_ELEMENTAL_UR = 'sos-elemental-ur-token';
 const TREASURE = 'treasure-token';
 
-const token = (
-  id: string,
-  name: string,
-  colors: CardDefinition['colors'],
-  subtype: string,
-  power: number,
-  toughness: number,
-  keywords: CardDefinition['keywords'] = [],
-): CardDefinition => ({
-  id,
-  name,
-  manaCost: { generic: 0, colored: {} },
-  colors,
-  types: ['Creature'],
-  supertypes: [],
-  subtypes: [subtype],
-  power,
-  toughness,
-  keywords,
-  abilities: [],
-  isToken: true,
-});
-
-/** The 2/2 red and white Spirit and the 3/3 blue and red flying Elemental creature tokens. */
-export const SOS_D_TOKENS: CardDefinition[] = [
-  token(SOS_SPIRIT_RW, 'Spirit', ['R', 'W'], 'Spirit', 2, 2),
-  token(SOS_ELEMENTAL_UR, 'Elemental', ['U', 'R'], 'Elemental', 3, 3, ['flying']),
-];
-
-const spirit = (count = 1): EffectDef => ({ kind: 'createToken', token: SOS_SPIRIT_RW, count });
+const spirit = (count = 1): EffectDef => ({ kind: 'createToken', token: SOS_SPIRIT, count });
 const elemental = (count = 1, hasteThisTurn = false): EffectDef => ({
   kind: 'createToken',
-  token: SOS_ELEMENTAL_UR,
+  token: SOS_ELEMENTAL,
   count,
   ...(hasteThisTurn ? { hasteThisTurn } : {}),
 });
