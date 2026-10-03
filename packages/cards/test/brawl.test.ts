@@ -5,6 +5,7 @@ import {
   commanderId,
   deckGameOptions,
   deckIds,
+  FINAL_FANTASY_BRAWL_DECKS,
   MARVEL_BRAWL_DECKS,
   PLAYABLE_BRAWL_DECKS,
   PLAYABLE_DECKS,
@@ -25,7 +26,9 @@ const canCastCommander = (g: ReturnType<typeof game>) =>
 
 describe('Brawl decks', () => {
   it('have 100 cards, are singleton and fit the commander’s colour identity', () => {
-    for (const d of MARVEL_BRAWL_DECKS) {
+    // Final Fantasy Commander (12): the FIC decks once all their cards are in.
+    const fic = FINAL_FANTASY_BRAWL_DECKS.filter((d) => PLAYABLE_BRAWL_DECKS.includes(d));
+    for (const d of [...MARVEL_BRAWL_DECKS, ...fic]) {
       expect(d.commander, d.name).toBeDefined();
       expect(deckIds(d).length + 1, d.name).toBe(100);
       for (const [name, count] of d.cards)
@@ -144,7 +147,8 @@ describe('Brawl format', () => {
     const pairs = PLAYABLE_BRAWL_DECKS.flatMap((a, i) =>
       PLAYABLE_BRAWL_DECKS.slice(i).map((b) => [a, b] as const),
     );
-    for (let seed = 1; seed <= Math.max(6, pairs.length * 3); seed++) {
+    // Final Fantasy Commander (12): once per pairing now that there are many Brawl decks.
+    for (let seed = 1; seed <= Math.max(6, pairs.length); seed++) {
       const [a, b] = pairs[seed % pairs.length]!;
       const initial = engine.newGame({ ...deckGameOptions(a, b), seed });
       const r = playRandomGame(engine, initial, seed * 7919);

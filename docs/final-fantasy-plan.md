@@ -182,15 +182,15 @@ On Arena the four FIC decks came as **Arena Store Brawl decks** (7 July 2025, mt
 Fantasy)"), led by the four FIC face commanders. So "four Brawl decks led by FIN legends" and the FIC precons are the same
 four decks. Three more FIC Brawl decks followed (9 December 2025, "Arena Store decks (Final Fantasy Commander)").
 
-| Sub-phase | Deck                               | Commander                    | Colours |
-| --------- | ---------------------------------- | ---------------------------- | ------- |
-| 12a       | Revival Trance                     | Terra, Herald of Hope        | R/W/B   |
-| 12b       | Limit Break                        | Cloud, Ex-SOLDIER            | R/G/W   |
-| 12c       | Counter Blitz                      | Tidus, Yuna's Guardian       | G/W/U   |
-| 12d       | Scions & Spellcraft                | Y'shtola, Night's Blessed    | W/U/B   |
-| 12e       | Brawl Aerith, Last Ancient         | Aerith, Last Ancient         | G/W     |
-| 12f       | Brawl Emet-Selch of the Third Seat | Emet-Selch of the Third Seat | U/B     |
-| 12g       | Brawl Locke, Treasure Hunter       | Locke, Treasure Hunter       | B/R     |
+| Sub-phase | Deck | Commander | Colours |
+|---|---|---|---|
+| 12a | Revival Trance (done) | Terra, Herald of Hope | R/W/B |
+| 12b | Limit Break (done) | Cloud, Ex-SOLDIER | R/G/W |
+| 12c | Counter Blitz (done) | Tidus, Yuna's Guardian | G/W/U |
+| 12d | Scions & Spellcraft (done) | Y'shtola, Night's Blessed | W/U/B |
+| 12e | Brawl Aerith, Last Ancient (done) | Aerith, Last Ancient | G/W |
+| 12f | Brawl Emet-Selch of the Third Seat (done) | Emet-Selch of the Third Seat | U/B |
+| 12g | Brawl Locke, Treasure Hunter (done) | Locke, Treasure Hunter | B/R |
 
 - Lists: Arena is the reference, so the Arena Store lists from mtg.wiki come first. The Arena versions swap cards that are
   not on Arena (Cloud's list has Sword of Forge and Frontier, for example). Check them against the paper lists on
@@ -200,6 +200,85 @@ four decks. Three more FIC Brawl decks followed (9 December 2025, "Arena Store d
   Command Tower and the rest are in `packages/cards/src/msc/staples.ts`).
 - Stream A's Brawl rules apply unchanged.
 - 12eâ€“12g are optional, after the four precons.
+
+### Progress
+
+- **12a Done:** Revival Trance (Terra). New: tiered, "creature or artifact you control dies", "cards leave your
+  graveyard", "creatures enter from a graveyard", back-face death triggers (Galian Beast, Chaos), "becomes untapped",
+  Pathways, the shared FIC lands of all seven decks, Saga creatures (Summons) on the generic Saga rules. Brawl arena
+  (10 games a pairing): 29–21 (58%) against the four Marvel decks and Mabel's Militia, 35–65% against each.
+  Measured again with 20 games a pairing against all other Brawl decks (both seats): 63%.
+- **12b Done:** Limit Break (Cloud). New: job select (minimal, `jobSelect` custom effect and the colourless 1/1
+  `hero-1-1-token`), "equip abilities cost less" (`equipCostsLess`, Firion's copies' own discount), "an additional
+  land this turn", first-combat checks (`laterCombat`), forced blocks (Fighter Class), Equipment with base P/T =
+  life and legendary-only keywords, improvise for nonartifact spells, spree (as modes with costs), Buster Sword's
+  "that damage" free cast. Fixes: Equipment "whenever equipped creature attacks" triggered twice; free casts didn't
+  check ward. Win rate over 20 games a pairing: 38% (15–60% per opponent).
+- **12c Done:** Counter Blitz (Tidus). New: proliferate (engine-picked: your counters and the opponents' stun
+  counters), Hardened Scales (`oneMoreCounter`, before doubling), "enters with additional counters" for the next
+  creature spell (`bonusCounters`), saddle, hideaway, lore counters added or removed by spells (Clash of the
+  Eikons, Garnet), Esper Origins returning transformed after its flashback, "counter unless they pay" with a cost
+  counted on resolution (Syncopate, Swallowed by Leviathan), Altered Ego copying any creature, Ranger Class's
+  top-of-library casting at level 3, "first time counters were put on it this turn". Win rate over 20 games a
+  pairing: 56% (30–75% per opponent).
+- **12d Done:** Scions & Spellcraft (Y'shtola). New: **Adventures** (built minimally here; 11a builds them too):
+  `fetch-scryfall.ts` fetches the `adventure` layout as two faces (the Adventure is the back face, cast from hand
+  like a modal double-faced card's), the resolved Adventure goes to exile `onAdventure`, and its owner may cast the
+  creature (or play the land) from there; the web UI labels it "On an adventure". Also delve (the engine exiles the
+  oldest cards), casting from the graveyard on your turn (Hades) and artifacts for 3 life with a finality counter
+  (Noctis), Authority of the Consuls, "whenever you scry or surveil", life lost in total this turn. Fix: a
+  transform card's back face (no mana cost) could be cast from hand for free. The Brawl fuzz test now plays each
+  pairing once (it had grown past its time limit). Win rate over 20 games a pairing: 51% (30–60% per opponent).
+- **12e Done:** Brawl Aerith, Last Ancient. New: life gained in total this turn, doubled life gain (The Wind
+  Crystal), Quina's extra Frog token, Excalibur II's charge counters counted from the Equipment, "first legendary
+  creature spell each turn costs less" (Serah Farron), Sidequests that transform. Win rate over 20 games a pairing:
+  67% (55–90% per opponent), a little over the 65% aim with Arena's list unchanged.
+- **12f Done:** Brawl Emet-Selch of the Third Seat. New: an Adventure land (Jidoor: Overture, then the land from
+  exile), "whenever one or more opponents lose life", spells cast from your graveyard costing less, Demon Wall
+  attacking with a counter, Zenos's chosen creature leaving. Win rate over 20 games a pairing: 41% (25–65% per
+  opponent).
+- **12g Done:** Brawl Locke, Treasure Hunter. New: Mug (each player mills, a land makes a Treasure, a spell among
+  them castable this turn), casting the opponent's exiled top card (Reno and Rude, Vaan), ninjutsu as sneak (Yuffie),
+  Sephiroth's fourth death of a turn with its emblem. Win rate over 20 games a pairing: 53% (35–70% per opponent).
+- **Merged with phase 11** (11a, 11b): phase 11's version of each FIN mechanic won: job select (11a's `jobSelect`
+  effect and `fin-hero-token`), tiered (`tiered` costs; Requisition Raid's spree now uses them), Adventures (11a's
+  fetch layout and `onAdventure`; a creature on an adventure is cast from exile through it too), Saga transforms
+  (`blink` with `transformed`), the back-face free-cast fix (`noManaCost`), a back face's own "dies" triggers
+  (`objectMoved.leftAs`), "creature or artifact you control dies" (`permanentYouControlDies`, `other` instead of
+  12's `self`), Esper Origins, Garnet and the lore-counter spells. 129 FIN cards phase 11 already had kept phase 11's
+  version; Zack Fair kept 12's (it moves his counters and Equipment); the other 91 FIN cards (mostly rares) moved to
+  `fin/from-brawl.ts`. The FIN tokens (Hero, Knight, Darkstar, Angelo, Horror, Robot Warrior, Wizard, Bird) are
+  phase 11's. Brawl win rates after the merge (20 games a pairing): Revival Trance 58%,
+  Limit Break 30%, Counter Blitz 50%, Scions & Spellcraft 46%, Brawl Aerith 65%, Brawl Emet-Selch 49%, Brawl Locke 52%.
+  Limit Break measures the same on the fin-brawl branch itself with the one-deck check (26% both), so the merge didn't
+  cause the drop from the 48% noted below; it needs retuning.
+- **Final win rates** (all 12 Brawl decks, 12 games a pairing in both seats, after every fix above): Revival
+  Trance 55%, Limit Break 48%, Counter Blitz 51%, Scions & Spellcraft 51%, Brawl Aerith 64%, Brawl Emet-Selch 41%,
+  Brawl Locke 53%.
+
+### Lists: Arena against paper
+
+The four mtg.wiki lists (and the three of 12e–12g) each add up to 100 (commander included), so they went in as
+they are (`FINAL_FANTASY_BRAWL_DECKS` in `decks.ts`, generated from the wiki text). The Arena Store decks are not the
+paper precons with a few swaps: they are "Foundation" tier decks rebuilt around the same commander, mostly from FIN
+booster cards. Against the mtg.wtf paper lists, about half of each deck differs:
+
+- **Revival Trance** (Terra): 48 cards differ. Arena drops the FF VI cast (Celes stays; Cyan, Gau, Sabin, Setzer,
+  Kefka, Locke, the Esper summons), Sol Ring, the Talismans and the commander lands; it adds FIN legends (Ardyn,
+  Squall, Rufus Shinra, Gabranth, Vincent, Kain, Garland, Joshua, Fang), six Summons, Fire Magic, Ultima, Swords to
+  Plowshares, Path to Exile, Village Rites, Pathways, slow lands and Towns.
+- **Limit Break** (Cloud): 55 differ. Arena keeps the Equipment theme with FIN Equipment (Buster Sword, Genji Glove,
+  Ultima Weapon, the job-select weapons), Sword of Forge and Frontier, Lost Jitte, Fighter Class; it drops the FF VII
+  cast, Skullclamp, Sol Ring and Lightning Greaves.
+- **Counter Blitz** (Tidus): 48 differ. Arena drops the FF X cast and Walking Ballista; it adds the FIN Summons
+  (Bahamut, Shiva, Leviathan, Titan, Fenrir, Choco/Mog, Fat Chocobo), Garnet, Rosa, Dion, Jill, Sword of Body and
+  Mind and Ranger Class.
+- **Scions & Spellcraft** (Y'shtola): 47 differ. Arena drops the FF XIV Scions and the Talismans; it adds the tiered
+  spells (Ice Magic, Restoration Magic), Emet-Selch, Ultimecia, Xande, Locke Cole and The Lunar Whale.
+
+Arena-only Alchemy cards appear (Arms Scavenger, Captivating Crossroads, Forsaken Crossroads): `fetch-scryfall.ts`
+now allows the digital sets `ymid` and `ywoe`, and `pool.ts` lists the other sets the Arena lists borrow from
+(Pathways, slow lands, Verges, fetch and shock lands), after every earlier set so no card changes printing.
 
 ## Simplifications to revisit
 
@@ -237,7 +316,6 @@ four decks. Three more FIC Brawl decks followed (9 December 2025, "Arena Store d
   triggers with `minManaSpent` (same result).
 - The Wandering Minstrel untaps only lands that enter tapped by their own text (taplands, Towns); a land put onto the
   battlefield tapped by an effect stays tapped.
-- Zack Fair moves one +1/+1 counter (the one he enters with); other counters and his Equipment stay behind.
 - Phoenix Down's "choose one" is two abilities with the same cost. Phantom Train becomes an artifact creature, not also a
   Spirit. PuPu UFO's {3} gives +X/+0 on its printed 0 instead of setting its base power.
 - Ether's copy keeps the spell's targets. Opera Love Song's "until your next end step" lasts until the end of your next
@@ -253,4 +331,48 @@ Both groups:
 
 ### Phase 12
 
-(none yet)
+Engine additions are in blocks marked `Final Fantasy Commander (12)` (`types.ts`, `triggers.ts`, `context.ts`,
+`characteristics.ts`, `spells.ts`, `engine.ts`); one-offs are custom effects and conditions in
+`packages/engine/src/fic-effects.ts`. FIN booster cards the decks use live in `packages/cards/src/fin/` since the
+merge with phase 11 (below).
+
+- **Pathways:** Arena asks which face to play; here the face is chosen as the land enters (a `choose` prompt), and it
+  taps for that colour only. Back faces are cards of their own with no rules.
+- **Shock lands:** enter tapped with a "may pay 2 life: untap it" as they enter. **Starting Town:** "Pay 1 life" is a
+  pain land's 1 damage. **Forsaken Crossroads:** always scries (never "untap instead").
+- **Meld:** Fang is a normal card (`meld` layout fetched as one face); Vanille isn't in any deck.
+- **Ultima** doesn't end the turn.
+- **Ardyn's** Demon token copy keeps its colours. **Celes** counts creatures entering from a graveyard, not ones cast
+  from it. **Celes / Joshua** rummaging: the engine picks the discards (spare lands, uncastable cards).
+- **Blitzball:** "dealt combat damage by a legendary creature" is read as "a legendary creature of yours attacked and
+  the opponent lost life this turn". **Summon: Brynhildr I:** the exiled card is playable this turn and the next.
+- **Summon: Primal Odin II:** its "loses the game" trigger is printed on it and works from chapter II on.
+- **Combustible Gearhulk:** the opponent's choice is a `choose` prompt for them.
+- **12b:** Arms Scavenger's spellbook (Alchemy) is the Equipment of our pool, one at random, playable that turn.
+  Gilgamesh attaches to himself or any Samurai. Sword of Forge and Frontier has no protection. Lost Jitte only
+  charges on combat damage to a player. Summoner's Grimoire doesn't put enchantment creatures in attacking.
+  Raubahn's
+  ward is 2 life (his printed power). Zack Fair moves an unattached Equipment, not "the one on Zack". Beatrix and
+  Gilgamesh: the engine picks what to attach. Requisition Raid's counters go on your creatures.
+- **12c:** Proliferate never adds to an opponent's +1/+1 counters nor to players. Incubation Druid makes two mana
+  with a counter, not three, of any colour. Yuna's "Grand Summon" bonus goes to the first creature spell cast
+  while Yuna is tapped. Forgotten Ancient never moves its counters. Endless Detour only targets nonland permanents
+  (put on top). Syncopate puts the countered spell in the graveyard. Sleep Magic isn't sacrificed when the creature
+  is dealt damage. The Squid tokens'
+  islandwalk and Sword of Body and Mind's protection aren't built. The Earth Crystal's distribute puts one counter on
+  each of two targets. Summon: Leviathan's II–III draw only for Leviathan itself.
+- **12d:** Abilities can't be targeted, so Louisoix's Sacrifice and Sublime Epiphany only counter spells. Magecraft
+  ignores copies. Dig Through Time's two cards and Memories Returning's split are the engine's picks. Quistis Trepe's
+  card can be cast for the rest of the turn. Astrologian's Planisphere
+  doesn't count third draws. Ninja's Blades discards the most expensive card.
+  Xande counts artifact creature cards too.
+- **12e:** Cloud, Midgar Mercenary and Traveling Chocobo don't double triggers. Tataru Taru's opponent always draws. Catch a Fish always takes the card. Quina's Frog comes with tokens made by token effects, not with Hero
+  tokens from job select.
+- **12f:** Emet-Selch's graveyard spell can be cast for the rest of the turn (from exile, still counted as from the
+  graveyard) and isn't exiled afterwards. Gogo copies the top triggered ability X times (abilities aren't targets).
+  Y'shtola Rhul's additional end step isn't built.
+- **12g:** Mug's and the stolen cards are castable with any mana (Mug's for the turn, stolen ones while exiled).
+  Ninjutsu is sneak (the card is cast). Trance Kuja gives Wizards +1 damage, not double. Sephiroth, One-Winged Angel
+  sacrifices at most one creature. Sidequest: Play Blitzball checks at your end step for 6 or more life lost by the
+  opponent, and attaches to your most powerful creature. The Masamune always gives first strike and doesn't force
+  blocks or double death triggers. Vaan's "spell you don't own" trigger isn't built.

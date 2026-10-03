@@ -116,6 +116,8 @@ function nextStep(ctx: Ctx, step: Step): Step | 'nextTurn' {
     case 'endCombat':
       if (ctx.s.turn.extraCombats > 0) {
         ctx.s.turn.extraCombats--;
+        // Final Fantasy Commander (12b): no longer the first combat phase.
+        ctx.s.turn.laterCombat = true;
         return 'beginCombat';
       }
       return 'main2';
@@ -158,6 +160,11 @@ export function startTurn(ctx: Ctx, player: PlayerId, noPowerUp = false): void {
   const p = s.players[player];
   p.landsPlayedThisTurn = 0;
   s.turn.extraCombats = 0;
+  // Final Fantasy Commander (12b).
+  delete s.turn.laterCombat;
+  delete s.turn.extraLands;
+  delete s.turn.lifeLostTotal;
+  delete s.turn.lifeGainedTotal;
   s.turn.attackers = [];
   s.turn.lifeGains = { p1: 0, p2: 0 };
   s.turn.creaturesDied = 0;
@@ -334,9 +341,24 @@ function enforceLure(
   const lures = (ctx.s.combat?.attackers ?? []).filter((a) =>
     def(ctx, a.id).abilities.some((x) => x.kind === 'static' && x.effect.kind === 'lure'),
   );
-  if (lures.length === 0) return [...declared];
+  // Final Fantasy Commander (12b): a creature told to block an attacker this combat does so if able.
+  const forced = possibleBlockers(ctx, defenderOf(ctx)).filter((b) => {
+    const m = ctx.s.objects[b]?.mustBlock;
+    return !!m && !!ctx.s.combat?.attackers.some((a) => a.id === m.id) && canBlock(ctx, b, m.id);
+  });
+  const musts = forced.map((b) => [b, ctx.s.objects[b]!.mustBlock!] as const);
+  // "This combat" only: the requirement is used up once blockers are declared.
+  for (const id of ctx.s.battlefield) delete ctx.s.objects[id]!.mustBlock;
+  if (lures.length === 0 && forced.length === 0) return [...declared];
   const out = [...declared];
   const defender = defenderOf(ctx);
+  for (const [b, m] of musts) {
+    if (ctx.s.objects[m.id]?.zcc !== m.zcc) continue;
+    if (out.some((d) => d.blocker === b && d.attacker === m.id)) continue;
+    const i = out.findIndex((d) => d.blocker === b);
+    if (i >= 0) out.splice(i, 1);
+    out.push({ blocker: b, attacker: m.id });
+  }
   for (const lure of lures)
     for (const b of possibleBlockers(ctx, defender)) {
       if (out.some((d) => d.blocker === b && d.attacker === lure.id)) continue;

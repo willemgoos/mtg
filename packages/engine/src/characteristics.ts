@@ -136,8 +136,19 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
             power += st.basePT[0] - (basePower ?? base ?? o.copyPT?.power ?? d.power ?? 0);
             toughness += st.basePT[1] - (base ?? o.copyPT?.toughness ?? d.toughness ?? 0);
           }
-          power += countOf(ctx, src.controller, st.power);
-          toughness += countOf(ctx, src.controller, st.toughness);
+          // Final Fantasy Commander (12b): Aettir and Priwen (base X/X, X = life), Hero's Heirloom.
+          if (st.basePTLife) {
+            const life = ctx.s.players[src.controller].life;
+            power += life - (basePower ?? base ?? o.copyPT?.power ?? d.power ?? 0);
+            toughness += life - (base ?? o.copyPT?.toughness ?? d.toughness ?? 0);
+          }
+          if (st.legendaryKeywords?.length && d.supertypes.includes('Legendary')) {
+            granted ??= new Set(keywords);
+            for (const k of st.legendaryKeywords) granted.add(k);
+          }
+          // Final Fantasy Commander (12e): counts can look at the Equipment (Excalibur II's charge counters).
+          power += countOf(ctx, src.controller, st.power, false, srcId);
+          toughness += countOf(ctx, src.controller, st.toughness, false, srcId);
           if (st.keywords?.length) {
             granted ??= new Set(keywords);
             for (const k of st.keywords) granted.add(k);
@@ -591,6 +602,8 @@ export function cardMatches(
   if (filter.notTypes?.some((t) => d.types.includes(t))) return false;
   if (filter.commander && !isCommander(ctx, id)) return false;
   if (filter.supertypes && !filter.supertypes.some((t) => d.supertypes.includes(t))) return false;
+  // Final Fantasy Commander (12): "nonbasic", "nonlegendary".
+  if (filter.notSupertypes?.some((t) => d.supertypes.includes(t))) return false;
   const mv = manaValue(d.manaCost);
   if (filter.minManaValue !== undefined && mv < filter.minManaValue) return false;
   if (filter.manaValueIsSourceCounters) {

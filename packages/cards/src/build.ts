@@ -140,6 +140,14 @@ export const KEYWORDS_AS_ABILITIES = new Set([
   'Hideaway',
   'Meld',
   'Triple',
+  // Final Fantasy Commander (12).
+  'Draft from a spellbook',
+  'Spree',
+  'Proliferate',
+  'Saddle',
+  'Adapt',
+  'Delve',
+  'Ninjutsu',
 ]);
 
 const BASIC_MANA: Record<string, ManaType> = {

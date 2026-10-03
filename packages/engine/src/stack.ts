@@ -231,6 +231,15 @@ export function castCost(
   // Brawl: commander tax.
   if (o.zone === 'command') cost = { ...cost, generic: cost.generic + commanderTax(ctx, player) };
   let reduce = d.costReduction !== undefined ? amountFor(ctx, player, d.costReduction) : 0;
+  // Final Fantasy Commander (12d): delve.
+  if (d.delve && !choice.via) reduce += delveCount(ctx, player, d);
+  // Final Fantasy Commander (12f): spells cast from your graveyard cost less (Emet-Selch of the Third Seat).
+  if (o.zone === 'graveyard' || o.fromGraveyardCast)
+    for (const id of ctx.s.battlefield)
+      if (obj(ctx, id).controller === player)
+        for (const a of def(ctx, id).abilities)
+          if (a.kind === 'static' && a.effect.kind === 'graveyardSpellsCostLess')
+            reduce += a.effect.amount;
   // Heroic Return, Avenge: "costs {2} less if ...".
   if (d.costReductionIf && checkCondition(ctx, d.costReductionIf.condition, player, o))
     reduce += d.costReductionIf.amount;
@@ -386,6 +395,10 @@ export function castSpell(
   payMana(ctx, payment);
   // Final Fantasy (11b): mana spent (convoking creatures don't spend mana).
   o.manaSpent = payment.filter((id) => !convokers.includes(id)).length;
+  // Final Fantasy Commander (12d): delve exiles the cards that paid (the oldest in the graveyard).
+  if (d.delve && !choice.via)
+    for (const id of ctx.s.players[player].graveyard.slice(0, delveCount(ctx, player, d)))
+      moveObject(ctx, id, 'exile');
   if (teamwork) payTeamwork(ctx, teamwork);
   if (convokers.length) o.convokedBy = payment.filter((id) => convokers.includes(id));
   if (d.types.includes('Creature')) scryForAncestry(ctx, player, d, payment);
@@ -488,6 +501,9 @@ export function abilityManaCost(
       generic: countOf(ctx, o.controller, a.costReduction, false, source),
       colored: {},
     });
+  // Final Fantasy Commander (12b): equip abilities cost less (Fighter Class, Arms Scavenger, Firion).
+  const equipLess = a.cost.mana ? equipDiscount(ctx, o, a) : 0;
+  if (equipLess) return reduceCost(a.cost.mana!, { generic: equipLess, colored: {} });
   if (!a.powerUp || !a.cost.mana) return a.cost.mana;
   let cost = a.cost.mana;
   if (o.zoneTurn === ctx.s.turn.number) cost = reduceCost(cost, def(ctx, source).manaCost);
@@ -498,6 +514,37 @@ export function abilityManaCost(
         cost = reduceCost(cost, { generic: s.effect.amount, colored: {} });
   }
   return cost;
+}
+
+// Final Fantasy Commander (12d): delve pays generic mana with graveyard cards (up to the printed generic).
+function delveCount(ctx: Ctx, player: PlayerId, d: CardDefinition): number {
+  return Math.min(ctx.s.players[player].graveyard.length, d.manaCost.generic);
+}
+
+// Final Fantasy Commander (12b): equip cost reductions.
+/** How much less an equip ability costs: the controller's "equip abilities cost less" and the Equipment's own. */
+function equipDiscount(
+  ctx: Ctx,
+  o: { id: ObjectId; controller: PlayerId; equipDiscount?: number },
+  a: ReturnType<typeof activatedAbility>,
+): number {
+  const isEquip =
+    def(ctx, o.id).subtypes.includes('Equipment') &&
+    a.effects.length === 1 &&
+    a.effects[0]!.kind === 'attach';
+  if (!isEquip) return 0;
+  let n = o.equipDiscount ?? 0;
+  for (const id of ctx.s.battlefield) {
+    if (obj(ctx, id).controller !== o.controller) continue;
+    for (const s of def(ctx, id).abilities)
+      if (
+        s.kind === 'static' &&
+        s.effect.kind === 'equipCostsLess' &&
+        checkCondition(ctx, s.effect.condition, o.controller, obj(ctx, id))
+      )
+        n += s.effect.amount;
+  }
+  return n;
 }
 
 export function activateAbility(

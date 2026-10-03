@@ -17,7 +17,14 @@ export function canAttack(ctx: Ctx, id: ObjectId): boolean {
   if (o.zone !== 'battlefield' || o.tapped || o.controller !== ctx.s.turn.activePlayer)
     return false;
   const c = characteristics(ctx, id);
-  if (!c.types.includes('Creature') || c.keywords.has('defender') || c.cantAttack) return false;
+  // Final Fantasy Commander (12f): Demon Wall attacks as though it lacked defender while it has a counter.
+  const defenderOff =
+    def(ctx, id).abilities.some(
+      (a) => a.kind === 'static' && a.effect.kind === 'attacksWithCounterDespiteDefender',
+    ) &&
+    (o.plusOneCounters > 0 || Object.values(o.counters ?? {}).some((n) => n > 0));
+  if (!c.types.includes('Creature') || (c.keywords.has('defender') && !defenderOff) || c.cantAttack)
+    return false;
   if (cantAttackDefender(ctx, id)) return false;
   // Promise of Loyalty: it can't attack the player it made its vow to.
   if (o.vowedTo && o.vowedTo !== o.controller) return false;

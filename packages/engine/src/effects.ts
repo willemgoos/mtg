@@ -291,6 +291,8 @@ export function changeLife(ctx: Ctx, player: PlayerId, delta: number): void {
   const p = ctx.s.players[player];
   p.life += delta;
   if (delta < 0) (ctx.s.turn.lifeLost ??= { p1: 0, p2: 0 })[player]++;
+  // Final Fantasy Commander (12d): how much, too (Y'shtola).
+  if (delta < 0) (ctx.s.turn.lifeLostTotal ??= { p1: 0, p2: 0 })[player] -= delta;
   emit(ctx, { type: 'lifeChanged', player, delta, life: p.life });
 }
 
@@ -302,6 +304,12 @@ export function gainLife(ctx: Ctx, player: PlayerId, amount: number): void {
     for (const a of def(ctx, id).abilities)
       if (a.kind === 'static' && a.effect.kind === 'extraLifeGain') amount += a.effect.amount;
   }
+  // Final Fantasy Commander (12e): The Wind Crystal doubles it; the total gained this turn (Aerith).
+  for (const id of ctx.s.battlefield)
+    if (obj(ctx, id).controller === player)
+      for (const a of def(ctx, id).abilities)
+        if (a.kind === 'static' && a.effect.kind === 'doubleLifeGain') amount *= 2;
+  (ctx.s.turn.lifeGainedTotal ??= { p1: 0, p2: 0 })[player] += amount;
   ctx.s.turn.lifeGains[player]++;
   changeLife(ctx, player, amount);
 }
@@ -732,8 +740,14 @@ export function runEffects(
             : e.from === 'lastExiledWithSource'
               ? exiled.slice(-1)
               : exiled;
+        // Final Fantasy Commander (12b): "with mana value less than or equal to that damage".
+        const maxMv =
+          e.maxManaValueAmount !== undefined ? resolveAmount(ctx, es, e.maxManaValueAmount) : 99;
         const cards = pool.filter(
-          (id) => !def(ctx, id).types.includes('Land') && cardMatches(ctx, id, e.filter ?? {}),
+          (id) =>
+            !def(ctx, id).types.includes('Land') &&
+            cardMatches(ctx, id, e.filter ?? {}) &&
+            manaValue(def(ctx, id).manaCost) <= maxMv,
         );
         if (cards.length === 0) continue;
         ctx.s.decision = { kind: 'castFree', player: controller, cards, resume, thenPriority };
@@ -928,8 +942,13 @@ export function runEffects(
           typeof e.what === 'object' && 'target' in e.what ? es.targets[e.what.target] : null;
         const item = t && 'object' in t ? findSpell(ctx, t.object.id) : undefined;
         if (!item) continue;
+        // Final Fantasy Commander (12c): a cost counted as it resolves ({X}, cards in your graveyard).
+        const cost =
+          e.costAmount !== undefined
+            ? { generic: resolveAmount(ctx, es, e.costAmount), colored: {} }
+            : e.cost;
         // Can't pay: countered straight away.
-        if (!canPayFrom(e.cost, manaSources(ctx, item.controller))) {
+        if (!canPayFrom(cost, manaSources(ctx, item.controller))) {
           counterSpell(ctx, item.id);
           continue;
         }
@@ -937,7 +956,7 @@ export function runEffects(
           kind: 'payOrCounter',
           player: item.controller,
           spell: item.id,
-          cost: e.cost,
+          cost,
           resume,
           thenPriority,
         };
@@ -1347,6 +1366,22 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
         ctx.s.battlefield.push(t.id);
         emit(ctx, { type: 'objectMoved', id: t.id, defId: t.defId, from: null, to: 'battlefield' });
       }
+      // Final Fantasy Commander (12e): Quina, "those tokens plus a 1/1 green Frog".
+      if (n > 0 && e.token !== 'frog-token')
+        for (const id of ctx.s.battlefield)
+          if (obj(ctx, id).controller === owner)
+            for (const a of def(ctx, id).abilities)
+              if (a.kind === 'static' && a.effect.kind === 'plusFrogToken') {
+                const f = createObject(ctx, 'frog-token', owner, 'battlefield', true);
+                ctx.s.battlefield.push(f.id);
+                emit(ctx, {
+                  type: 'objectMoved',
+                  id: f.id,
+                  defId: f.defId,
+                  from: null,
+                  to: 'battlefield',
+                });
+              }
       return;
     }
     case 'scry':

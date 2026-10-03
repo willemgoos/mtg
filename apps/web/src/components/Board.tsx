@@ -395,7 +395,13 @@ export function Board({
           : [];
       }),
     ),
-  ].map((id) => ({ id, label: extraLabel(view.objects[id]!.zone, view.objects[id]!.defId) }));
+  ].map((id) => ({
+    id,
+    // Final Fantasy Commander (12d): a card on an adventure.
+    label: view.objects[id]!.onAdventure
+      ? 'On an adventure'
+      : extraLabel(view.objects[id]!.zone, view.objects[id]!.defId),
+  }));
 
   const targetablePlayer = (p: PlayerId) =>
     !!options?.has(`player:${p}`) || !!dragTargets?.has(`player:${p}`);
@@ -1443,6 +1449,9 @@ function castLabel(defId: CardDefId, a: Action): string {
   if (a.type === 'activateAbility') return 'Activate';
   if (a.via === 'festival') return 'From your graveyard (pay 1 life)';
   if (a.via === 'osteomancer') return 'From your graveyard (forage)';
+  // Final Fantasy Commander (12d): Hades and Noctis.
+  if (a.via === 'hades') return 'From your graveyard';
+  if (a.via === 'noctis') return 'From your graveyard (pay 3 life)';
   if (a.paws) return pawLabel(defId, a.paws);
   const def = cardDb.get(defId);
   if (a.type === 'castSpell' && a.sneak && def?.sneak) return `Sneak (${manaText(def.sneak)})`;

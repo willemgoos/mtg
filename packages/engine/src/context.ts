@@ -428,6 +428,20 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
     )
   )
     o.tapped = false;
+  // Final Fantasy Commander (12d): Authority of the Consuls.
+  if (
+    to === 'battlefield' &&
+    defOf(ctx, o.defId).types.includes('Creature') &&
+    ctx.s.battlefield.some(
+      (b) =>
+        b !== id &&
+        ctx.s.objects[b]!.controller !== o.controller &&
+        def(ctx, b).abilities.some(
+          (a) => a.kind === 'static' && a.effect.kind === 'opponentCreaturesEnterTapped',
+        ),
+    )
+  )
+    o.tapped = true;
 
   // Tokens cease to exist once they leave the battlefield (rule 111.7).
   const ceases = o.isToken && to !== 'battlefield';
@@ -468,6 +482,12 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
 export function addCounters(ctx: Ctx, id: ObjectId, n: number, name?: string): void {
   if (n <= 0) return;
   const o = obj(ctx, id);
+  // Final Fantasy Commander (12c): Hardened Scales, before any doubling (the better order).
+  if (!name && defOf(ctx, o.defId).types.includes('Creature'))
+    for (const src of ctx.s.battlefield)
+      if (obj(ctx, src).controller === o.controller)
+        for (const a of def(ctx, src).abilities)
+          if (a.kind === 'static' && a.effect.kind === 'oneMoreCounter') n++;
   for (const src of ctx.s.battlefield) {
     const so = obj(ctx, src);
     if (so.controller !== o.controller) continue;
@@ -485,6 +505,12 @@ export function addCounters(ctx: Ctx, id: ObjectId, n: number, name?: string): v
     return;
   }
   o.plusOneCounters += n;
+  // Final Fantasy Commander (12c): "the first time +1/+1 counters have been put on it this turn".
+  if (o.countersTurn === ctx.s.turn.number) o.countersTimes = (o.countersTimes ?? 0) + 1;
+  else {
+    o.countersTurn = ctx.s.turn.number;
+    o.countersTimes = 1;
+  }
   emit(ctx, { type: 'countersAdded', id, count: n, player: o.controller });
 }
 

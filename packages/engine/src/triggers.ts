@@ -8,6 +8,7 @@ import {
 import { type Ctx, def, defOf, obj, other } from './context.ts';
 import { manaValue } from './cost.ts';
 import { addLore } from './sagas.ts';
+import { FIC_CONDITIONS } from './fic-effects.ts';
 import type {
   AbilityDef,
   EffectDef,
@@ -203,8 +204,12 @@ export function checkCondition(
       );
     case 'firstAttackThisTurn':
       return ctx.s.turn.attackers.filter((id) => id === self.id).length === 1;
-    case 'custom':
+    case 'custom': {
+      // Final Fantasy Commander (12): one-off conditions.
+      const fn = FIC_CONDITIONS[c.handler];
+      if (fn) return fn(ctx, controller, self, subject);
       throw new Error(`Custom condition "${c.handler}" not registered`);
+    }
   }
 }
 
@@ -348,6 +353,7 @@ function spellMatches(
 
 function detect(ctx: Ctx, ev: GameEvent): void {
   const s = ctx.s;
+  detectFic(ctx, ev);
   switch (ev.type) {
     case 'objectMoved': {
       const moved = s.objects[ev.id];
@@ -702,8 +708,7 @@ function detect(ctx: Ctx, ev: GameEvent): void {
       // Wakanda Forever (9c): Equipment on an attacker; the defending player's "attacks you" triggers.
       forEachBattlefieldTrigger(ctx, (o, a) => {
         const t = a.trigger;
-        if (t.on === 'equippedAttacks')
-          return o.attachedTo !== undefined && ev.attackers.includes(o.attachedTo);
+        // Final Fantasy Commander (12b): 'equippedAttacks' is queued once, below (it triggered twice).
         if (t.on === 'opponentAttacks') return o.controller !== ap && ev.attackers.length >= t.min;
         return false;
       });
@@ -896,6 +901,9 @@ function detect(ctx: Ctx, ev: GameEvent): void {
       forEachBattlefieldTrigger(
         ctx,
         (o, a) => a.trigger.on === 'equippedDealsCombatDamageToPlayer' && o.attachedTo === src.id,
+        // Final Fantasy Commander (12b): "that damage" (Buster Sword).
+        src,
+        ev.amount,
       );
       return;
     }
@@ -1097,6 +1105,8 @@ export function nextPendingTriggerIndex(ctx: Ctx): number {
 function defMatches(d: CardDefinition, f: CardFilter): boolean {
   if (f.types && !f.types.some((t) => d.types.includes(t))) return false;
   if (f.hasKeyword && !d.keywords.includes(f.hasKeyword)) return false;
+  // Final Fantasy Commander (12c): "a creature you control without flying" (Luminous Broodmoth).
+  if (f.lacksKeyword && d.keywords.includes(f.lacksKeyword)) return false;
   if (f.subtype && !d.subtypes.includes(f.subtype)) return false;
   if (f.subtypes && !f.subtypes.some((st) => d.subtypes.includes(st))) return false;
   return true;
@@ -1128,4 +1138,66 @@ export function triggeredAbility(
 /** Who cast the spell a castSpell trigger looks at (the stack item's controller). */
 function spellCaster(ctx: Ctx, item: StackItem | undefined, self: GameObject): PlayerId {
   return item?.controller ?? self.controller;
+}
+
+// ---------------------------------------------------------------------------
+// Final Fantasy Commander (12): triggers of the FIC Brawl decks.
+
+function detectFic(ctx: Ctx, ev: GameEvent): void {
+  const s = ctx.s;
+  if (ev.type === 'untapped') {
+    const o = s.objects[ev.id];
+    if (!o || o.zone !== 'battlefield') return;
+    def(ctx, o.id).abilities.forEach((a, i) => {
+      if (a.kind === 'triggered' && a.trigger.on === 'becomesUntapped')
+        queue(ctx, o, i, o.controller);
+    });
+    return;
+  }
+  // 12f: Emet-Selch of the Third Seat.
+  if (ev.type === 'lifeChanged' && ev.delta < 0) {
+    forEachBattlefieldTrigger(
+      ctx,
+      (o, a) => a.trigger.on === 'opponentLosesLife' && o.controller !== ev.player,
+    );
+    return;
+  }
+  // 12d: Matoya.
+  if (ev.type === 'scried') {
+    forEachBattlefieldTrigger(
+      ctx,
+      (o, a) => a.trigger.on === 'youScryOrSurveil' && o.controller === ev.player,
+    );
+    return;
+  }
+  if (ev.type !== 'objectMoved') return;
+  const moved = s.objects[ev.id];
+  const movedDef = defOf(ctx, ev.defId);
+  // 12f: Zenos yae Galvus, "when the chosen creature leaves the battlefield".
+  if (ev.from === 'battlefield')
+    forEachBattlefieldTrigger(
+      ctx,
+      (o, a) => a.trigger.on === 'chosenLeaves' && o.chosenCreature?.id === ev.id,
+    );
+  // "A creature or artifact you control dies" (permanentYouControlDies) and a back face's own
+  // "dies" triggers (objectMoved.leftAs) are handled with phase 11's in detect().
+  if (ev.from === 'graveyard' && moved) {
+    forEachBattlefieldTrigger(
+      ctx,
+      (o, a) => a.trigger.on === 'cardsLeaveYourGraveyard' && o.controller === moved.owner,
+    );
+    if (
+      ev.to === 'battlefield' &&
+      moved.zone === 'battlefield' &&
+      movedDef.types.includes('Creature')
+    )
+      forEachBattlefieldTrigger(
+        ctx,
+        (o, a) =>
+          a.trigger.on === 'creaturesEnterFromGraveyard' &&
+          o.id !== moved.id &&
+          o.controller === moved.controller,
+        moved,
+      );
+  }
 }

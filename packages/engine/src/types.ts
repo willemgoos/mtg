@@ -81,6 +81,8 @@ export interface CardDefinition {
     counter?: boolean;
     /** It isn't legendary (Spark Double; Chameleon keeps its own name). */
     notLegendary?: boolean;
+    /** Final Fantasy Commander (12c): any creature, whatever its mana value (Altered Ego). */
+    anyManaValue?: boolean;
   };
   id: CardDefId;
   name: string;
@@ -223,6 +225,9 @@ export interface CardDefinition {
   adventure?: boolean;
   /** It has no mana cost (a transforming card's back face), so it can't be cast. */
   noManaCost?: boolean;
+  // Final Fantasy Commander (12d).
+  /** Delve: each card exiled from your graveyard while casting it pays for {1} (the engine exiles them). */
+  delve?: boolean;
 }
 
 export type AbilityDef =
@@ -498,7 +503,20 @@ export type TriggerDef =
    * into a graveyard from the battlefield ("a creature or artifact you control
    * dies"); `other`: only other permanents (Judge Magister Gabranth).
    */
-  | { on: 'permanentYouControlDies'; filter: CardFilter; other?: boolean };
+  | { on: 'permanentYouControlDies'; filter: CardFilter; other?: boolean }
+  // Final Fantasy Commander (12): triggers of the FIC Brawl decks.
+  /** Whenever one or more cards leave your graveyard (Fang). Use with `batch`. */
+  | { on: 'cardsLeaveYourGraveyard' }
+  /** Whenever one or more other creatures you control enter from a graveyard (Celes). Use with `batch`. */
+  | { on: 'creaturesEnterFromGraveyard' }
+  /** Whenever this permanent becomes untapped (Key to the City). */
+  | { on: 'becomesUntapped' }
+  /** Whenever you scry or surveil (Matoya). */
+  | { on: 'youScryOrSurveil' }
+  /** Whenever one or more opponents lose life (Emet-Selch of the Third Seat). Use with `batch`. */
+  | { on: 'opponentLosesLife' }
+  /** When the creature chosen for this one leaves the battlefield (Zenos yae Galvus). */
+  | { on: 'chosenLeaves' };
 
 export type ConditionDef =
   | { kind: 'controlsPermanents'; filter: CardFilter; min: number }
@@ -684,6 +702,9 @@ export interface CardFilter {
   notChosenTypeOfSource?: boolean;
   /** Shares a creature type with its controller's commander (Folk Hero). */
   sharesTypeWithCommander?: boolean;
+  // Final Fantasy Commander (12).
+  /** Has none of these supertypes ("nonbasic land", "nonlegendary"). */
+  notSupertypes?: Supertype[];
 }
 
 export interface TargetSpec {
@@ -894,6 +915,8 @@ export type EffectDef =
        */
       from?: 'hand' | 'exiledWithSource' | 'lastExiledWithSource';
       filter?: CardFilter;
+      /** Final Fantasy Commander (12b): mana value at most this ("that damage": Buster Sword). */
+      maxManaValueAmount?: Amount;
     }
   /** Portent of Calamity: reveal the top X and exile one card of each type; four or more lets you cast one free. */
   | { kind: 'portent' }
@@ -1031,7 +1054,13 @@ export type EffectDef =
       otherwise?: EffectDef[];
     }
   /** Counter a spell unless its controller pays this. */
-  | { kind: 'counterUnlessPays'; what: Ref; cost: ManaCost }
+  | {
+      kind: 'counterUnlessPays';
+      what: Ref;
+      cost: ManaCost;
+      /** Final Fantasy Commander (12c): generic cost counted as it resolves (Syncopate's X). */
+      costAmount?: Amount;
+    }
   /** Reveal cards from the top until one matches; it goes to hand or onto the battlefield tapped, the rest to the bottom. */
   | { kind: 'revealUntil'; filter: CardFilter; to: 'hand' | 'battlefieldTapped' }
   /**
@@ -1445,6 +1474,11 @@ export type StaticDef =
       addSubtypes?: string[];
       /** Keywords it has only during its controller's turn (Dragoon's Lance: flying). */
       yourTurnKeywords?: Keyword[];
+      // Final Fantasy Commander (12b).
+      /** Base power and toughness equal to its controller's life total (Aettir and Priwen). */
+      basePTLife?: boolean;
+      /** These keywords only while the equipped creature is legendary (Hero's Heirloom). */
+      legendaryKeywords?: Keyword[];
     }
   /** All creatures able to block this creature do so (Prized Unicorn). */
   | { kind: 'lure' }
@@ -1521,7 +1555,12 @@ export type StaticDef =
   /** Spells you cast matching the filter cost {N} less, while the condition holds. */
   | { kind: 'spellsCostLessIf'; filter: CardFilter; amount: number; condition?: ConditionDef }
   /** Look at the top card of your library any time; play cards matching the filter from there (Glarb). */
-  | { kind: 'playFromTop'; filter: CardFilter }
+  | {
+      kind: 'playFromTop';
+      filter: CardFilter;
+      /** Final Fantasy Commander (12c): only while this holds (Ranger Class level 3). */
+      condition?: ConditionDef;
+    }
   /** During your turn, cast instants and sorceries from your graveyard by paying 1 life more (Festival of Embers). */
   | { kind: 'castFromGraveyardForLife' }
   /** Cards and tokens that would go to your graveyard are exiled instead (Festival of Embers). */
@@ -1566,7 +1605,32 @@ export type StaticDef =
   | { kind: 'landsEnterUntapped' }
   // Final Fantasy (11b): permanents in the graveyard
   /** "Prevent all combat damage that would be dealt to this creature" (Diamond Weapon). */
-  | { kind: 'preventCombatDamageToSelf' };
+  | { kind: 'preventCombatDamageToSelf' }
+  // Final Fantasy Commander (12b): Equipment.
+  /** Equip abilities you activate cost {amount} less (Fighter Class, Arms Scavenger). */
+  | { kind: 'equipCostsLess'; amount: number; condition?: ConditionDef }
+  /** Nonartifact spells you cast have improvise (Inspiring Statuary). */
+  | { kind: 'nonartifactSpellsHaveImprovise' }
+  // Final Fantasy Commander (12c): counters.
+  /** +1/+1 counters put on a creature you control: that many plus one (Hardened Scales). */
+  | { kind: 'oneMoreCounter' }
+  // Final Fantasy Commander (12d).
+  /** Creatures your opponents control enter tapped (Authority of the Consuls). */
+  | { kind: 'opponentCreaturesEnterTapped' }
+  /** During your turn, you may play cards from your graveyard (Hades, Sorcerer of Eld). */
+  | { kind: 'playFromGraveyardOnYourTurn' }
+  /** You may cast artifact spells from your graveyard for 3 more life; they enter with a finality counter (Noctis). */
+  | { kind: 'castArtifactsFromGraveyard' }
+  // Final Fantasy Commander (12e).
+  /** If you would gain life, you gain twice that much instead (The Wind Crystal). */
+  | { kind: 'doubleLifeGain' }
+  /** Tokens you create come with a 1/1 green Frog (Quina; once per effect, not for the Frogs). */
+  | { kind: 'plusFrogToken' }
+  // Final Fantasy Commander (12f).
+  /** It can attack as though it didn't have defender while it has a counter (Demon Wall). */
+  | { kind: 'attacksWithCounterDespiteDefender' }
+  /** Spells you cast from your graveyard cost {amount} less (Emet-Selch of the Third Seat). */
+  | { kind: 'graveyardSpellsCostLess'; amount: number };
 
 export type CardDb = ReadonlyMap<CardDefId, CardDefinition>;
 
@@ -1716,6 +1780,22 @@ export interface GameObject {
   // Final Fantasy (11b): mana spent
   /** The mana spent to cast it, the last time it was cast (Shantotto, Sahagin). */
   manaSpent?: number;
+  // Final Fantasy Commander (12).
+  /** Its equip abilities cost this much less (Firion's token copies). */
+  equipDiscount?: number;
+  /** It blocks this attacker this combat if able (Fighter Class). */
+  mustBlock?: ObjectRef;
+  // Final Fantasy Commander (12c).
+  /** The turn it became saddled (Mounts). */
+  saddledTurn?: number;
+  /** +1/+1 counters were put on it this many times during turn `countersTurn` (Botanical Brawler). */
+  countersTurn?: number;
+  countersTimes?: number;
+  // Final Fantasy Commander (12f).
+  /** Exiled from a graveyard to be cast this turn: it counts as cast from a graveyard (Emet-Selch). */
+  fromGraveyardCast?: boolean;
+  /** The creature chosen for it as it entered (Zenos yae Galvus). */
+  chosenCreature?: ObjectRef;
 }
 
 /** A reference that goes stale when the object changes zones. */
@@ -1876,6 +1956,15 @@ export interface TurnState {
   // Final Fantasy (11a): saga creatures
   /** Players whose creatures are dealt no damage this turn (Summon: Alexander). */
   creaturesShielded?: PlayerId[];
+  // Final Fantasy Commander (12b).
+  /** An additional combat phase has begun this turn (not the first combat any more). */
+  laterCombat?: boolean;
+  /** Additional land plays this turn (Explore, Sword of Forge and Frontier). */
+  extraLands?: Record<PlayerId, number>;
+  /** Final Fantasy Commander (12d): life each player lost this turn, in total (Y'shtola). */
+  lifeLostTotal?: Record<PlayerId, number>;
+  /** Final Fantasy Commander (12e): life each player gained this turn, in total (Aerith, Last Ancient). */
+  lifeGainedTotal?: Record<PlayerId, number>;
 }
 
 export interface Attacker {
@@ -2337,7 +2426,7 @@ export type Action =
       // Sneak (Marvel Super Heroes)
       /** Cast for its sneak cost by returning this unblocked attacker to its owner's hand. */
       sneak?: ObjectId;
-      via?: 'festival' | 'osteomancer' | 'conduit' | 'free';
+      via?: 'festival' | 'osteomancer' | 'conduit' | 'free' | 'hades' | 'noctis';
       /** Mockingbird: the creature to enter as a copy of. */
       copyOf?: ObjectId;
       /** Rottenmouth Viper: permanents sacrificed to make it cheaper. */

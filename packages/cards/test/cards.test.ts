@@ -16,6 +16,7 @@ import {
   GREEN_POOL,
   LAND_POOL,
   MARVEL_BRAWL_POOL,
+  FINAL_FANTASY_BRAWL_POOL,
   OTHER_POOL,
   PLAYABLE_DECKS,
   parseManaCost,
@@ -54,6 +55,7 @@ describe('card data', () => {
         ...SCRYFALL.filter((c) => c.front).map((c) => c.name),
         ...MARVEL_BRAWL_POOL,
         ...FINAL_FANTASY_POOL,
+        ...FINAL_FANTASY_BRAWL_POOL,
       ].sort(),
     );
     for (const c of SCRYFALL) expect(c.image?.normal).toMatch(/^https:\/\/cards\.scryfall\.io\//);
