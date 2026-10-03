@@ -127,6 +127,13 @@ seats). All the drafted cards are implemented even where they didn't make the li
 
 ### 13b: the rest of the decks
 
+Group A done (four agents in parallel worktrees, then one merge with dedupes): **Silverquill Inkwell** (W/B, 36/36 STX,
+49%), **Prismari Artistry** (U/R, 31/36, 46%), **Witherbloom Bloodroot** (B/G, 35/36, 46%), **Azorius Skies** (W/U, 30/36,
+40%: below target, retuned in group B). Engine: `kicker.replacesCost` (alternative costs, Baleful Mastery), `lkiPower` on a
+spell, `pump.ignoreDefender`, `nextSpellCostsLess`, `spellsCostLessTargeting` (Killian), `CardFilter.monocolored`.
+Group B (Dimir, Rakdos, Gruul, Selesnya, plus the Azorius retune) claims cards in a shared list before implementing, so
+parallel agents don't build the same card twice.
+
 - Groups of four (like FIN 11b): **Silverquill (W/B)**, **Prismari (U/R)**, **Witherbloom (B/G)**, then the five off-college
   pairs. Bot win rate 45–65% against the ten Foundations starter decks.
 
@@ -202,3 +209,14 @@ whole (SOS's `prepare` is the riskiest). The shortest path to Quintorius is 0, 1
 - Quandrix Apprentice puts the rest on the bottom in random order. Quandrix Command is six "choose one" modes (one per
   pair); its shuffle mode targets only your own graveyard. Divide by Zero is two modes (spell or permanent). Frost
   Trickster uses a stun counter.
+
+13b (group A):
+
+- Shadrix Silverquill offers two fixed pairs of modes. Mage Hunters' Onslaught has no "blocks: lose 1 life" clause. Blot
+  Out the Sky has no X≥6 sweep. Exhilarating Elocution's team pump includes the target. The sacrifice modes of Umbral
+  Juke and Silverquill Command don't target. Master Symmetrist has no trample trigger.
+- Magma Opus deals 4 to one target or 2 and 2. Prismari Command's loot and Treasure modes are for you. Elemental
+  Expressionist makes its Elemental when the creature dies, not when exiled. Galazeth Prismari only makes a Treasure.
+  Retriever Phoenix always learns on entering.
+- Symmetry Sage sets total power to 2. Dream Strix triggers only on opponents targeting it. Detention Vortex has no
+  "{3}: destroy" and doesn't stop activated abilities. Teachings of the Archaics never draws three.
