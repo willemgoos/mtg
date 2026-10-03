@@ -432,6 +432,8 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
     delete o.front;
   }
 
+  // Final Fantasy (11b): creatures and artifacts dying ("you control" looks back).
+  const leftController = from === 'battlefield' ? o.controller : undefined;
   o.zone = to;
   o.zcc++;
   o.zoneTurn = ctx.s.turn.number;
@@ -469,13 +471,14 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
   const tappedIf = to === 'battlefield' ? defOf(ctx, o.defId).entersTappedIf : undefined;
   // Eddymurk Crab: "enters tapped if it's not your turn"; check lands and the like.
   if (tappedIf && checkCondition(ctx, tappedIf, o.controller, o)) o.tapped = true;
-  // Final Fantasy (11c): entering permanents. The Wandering Minstrel: lands you control enter untapped.
+  // Final Fantasy (11b): The Wandering Minstrel: "Lands you control enter untapped."
   if (
     o.tapped &&
     to === 'battlefield' &&
     defOf(ctx, o.defId).types.includes('Land') &&
     ctx.s.battlefield.some(
       (b) =>
+        b !== o.id &&
         ctx.s.objects[b]!.controller === o.controller &&
         def(ctx, b).abilities.some(
           (a) => a.kind === 'static' && a.effect.kind === 'landsEnterUntapped',
@@ -504,6 +507,7 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
     ...(leftAs ? { leftAs } : {}),
     // Final Fantasy (11c): "that creature's power" (Vincent Valentine).
     ...(from === 'battlefield' && o.lastPower !== undefined ? { lastPower: o.lastPower } : {}),
+    ...(leftController ? { controller: leftController } : {}),
   });
   if (discarded && o.zone === 'graveyard') {
     o.discardedTurn = ctx.s.turn.number;

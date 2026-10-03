@@ -387,6 +387,8 @@ export function castSpell(
     ...(sneakFrom ? { sneak: sneakFrom } : {}),
   });
   payMana(ctx, payment);
+  // Final Fantasy (11b): mana spent (convoking creatures don't spend mana).
+  o.manaSpent = payment.filter((id) => !convokers.includes(id)).length;
   if (teamwork) payTeamwork(ctx, teamwork);
   if (convokers.length) o.convokedBy = payment.filter((id) => convokers.includes(id));
   if (d.types.includes('Creature')) scryForAncestry(ctx, player, d, payment);

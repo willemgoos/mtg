@@ -520,24 +520,6 @@ export const SHARED_A: Record<string, Behavior> = {
     ],
   },
   'Laughing Mad': { discardToCast: true, ...spell([], draw(2)), flashback: mana('{3}{R}') },
-  // "Until your next end step": until the end of this turn.
-  'Opera Love Song': {
-    modes: [
-      mode('Exile the top two cards', [], {
-        kind: 'exileTopPlayable',
-        count: 2,
-        until: 'endOfTurn',
-      }),
-      mode(
-        'One or two creatures get +2/+0',
-        [creature, { what: 'creature', optional: true }],
-        pump(t0, 2, 0),
-        pump(t1, 2, 0),
-      ),
-    ],
-  },
-  // "Destroy up to one Equipment attached to that creature" isn't modelled.
-  'Light of Judgment': spell([creature], { kind: 'damage', amount: 6, to: t0 }),
   'Choco-Comet': spell([{ what: 'any' }], { kind: 'damage', amount: { x: true }, to: t0 }, bird),
   Sabotender: { abilities: [landfall([], { kind: 'damage', amount: 1, to: 'eachOpponent' })] },
   'Hill Gigas': { abilities: [landcycling('Mountain')] },

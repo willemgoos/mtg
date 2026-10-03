@@ -1,4 +1,4 @@
-import { hasSubtype, isCreature, power } from './characteristics.ts';
+import { hasKeyword, hasSubtype, isCreature, power } from './characteristics.ts';
 import {
   addCounters,
   createObject,
@@ -497,5 +497,19 @@ export const FIN_EFFECTS: Record<string, CustomEffect> = {
       (id) => obj(ctx, id).controller === es.controller && def(ctx, id).types.includes('Artifact'),
     ).length;
     if (artifacts >= 8) changeLife(ctx, other(es.controller), -(def(ctx, card.id).power ?? 0));
+  },
+
+  /** Light of Judgment: "Destroy up to one Equipment attached to that creature" (the engine picks it). */
+  destroyEquipmentOnTarget(ctx, es) {
+    const t = es.targets[0];
+    const host = t && 'object' in t ? t.object.id : undefined;
+    if (!host) return;
+    const equipment = ctx.s.battlefield.find(
+      (id) =>
+        obj(ctx, id).attachedTo === host &&
+        def(ctx, id).subtypes.includes('Equipment') &&
+        !hasKeyword(ctx, id, 'indestructible'),
+    );
+    if (equipment) moveObject(ctx, equipment, 'graveyard');
   },
 };

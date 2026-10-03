@@ -483,6 +483,24 @@ function detect(ctx: Ctx, ev: GameEvent): void {
             !ygra(movedDef) &&
             s.battlefield.some((b) => ygra(defOf(ctx, s.objects[b]!.defId))));
         if (wasFood) forEachBattlefieldTrigger(ctx, (_o, a) => a.trigger.on === 'foodToGraveyard');
+        // Final Fantasy (11b): "whenever this or another creature or artifact you control dies".
+        const diedUnder = ev.controller ?? moved?.controller;
+        if (moved)
+          movedDef.abilities.forEach((a, i) => {
+            if (a.kind !== 'triggered' || a.trigger.on !== 'permanentYouControlDies') return;
+            if (a.trigger.other || !defMatches(movedDef, a.trigger.filter)) return;
+            if (checkCondition(ctx, a.condition, moved.owner, moved))
+              queue(ctx, moved, i, moved.owner, moved);
+          });
+        forEachBattlefieldTrigger(
+          ctx,
+          (o, a) =>
+            a.trigger.on === 'permanentYouControlDies' &&
+            o.id !== ev.id &&
+            o.controller === diedUnder &&
+            defMatches(movedDef, a.trigger.filter),
+          moved,
+        );
       }
       if (
         ev.from === 'battlefield' &&
@@ -726,7 +744,10 @@ function detect(ctx: Ctx, ev: GameEvent): void {
           (!a.trigger.fromExile || (item?.kind === 'spell' && !!item.fromExile)) &&
           // Final Fantasy (11c): a spell you don't own (Vaan).
           (!a.trigger.notOwned || spellObj.owner !== ev.player) &&
-          (!a.trigger.spell || cardMatches(ctx, ev.id, a.trigger.spell, o.id)),
+          (!a.trigger.spell || cardMatches(ctx, ev.id, a.trigger.spell, o.id)) &&
+          // Final Fantasy (11b): "if at least four mana was spent to cast it".
+          (spellObj.manaSpent ?? 0) >= (a.trigger.minManaSpent ?? 0) &&
+          !a.fromGraveyard,
         spellObj,
         manaValueOf(spell),
       );

@@ -1,7 +1,6 @@
 import type {
   Amount,
   AbilityDef,
-  CardDefinition,
   CardFilter,
   CardType,
   ConditionDef,
@@ -16,7 +15,6 @@ import {
   draw,
   equip,
   equipped,
-  hero,
   jobSelect,
   mana,
   mayRummage,
@@ -443,28 +441,6 @@ export const RARES_2: Record<string, Behavior> = {
       ),
     ],
   },
-  'Tellah, Great Sage': {
-    abilities: [
-      when(
-        { on: 'castSpell', filter: 'noncreature' },
-        [],
-        hero(),
-        {
-          kind: 'if',
-          condition: { kind: 'amountAtLeast', amount: { manaValueOfSubject: true }, min: 4 },
-          then: [draw(2)],
-        },
-        {
-          kind: 'if',
-          condition: { kind: 'amountAtLeast', amount: { manaValueOfSubject: true }, min: 8 },
-          then: [
-            { kind: 'damage', amount: { manaValueOfSubject: true }, to: 'eachOpponent' },
-            { kind: 'sacrifice', what: 'self' },
-          ],
-        },
-      ),
-    ],
-  },
   'Emet-Selch, Unsundered': {
     abilities: [
       ...entersOrAttacks(draw(1), { kind: 'discard', count: 1 }),
@@ -531,22 +507,6 @@ export const RARES_2: Record<string, Behavior> = {
       stat({ kind: 'preventDamageToYou', amount: 999 }),
     ],
   },
-  'Squall, SeeD Mercenary': {
-    abilities: [
-      attacksAloneDoubleStrike,
-      when(
-        { on: 'combatDamageToPlayer' },
-        [
-          {
-            what: 'graveyardCard',
-            controller: 'you',
-            filter: { ...permanentCard, maxManaValue: 3 },
-          },
-        ],
-        { kind: 'returnToBattlefield', what: t0 },
-      ),
-    ],
-  },
   'Serah Farron': {
     abilities: [
       legendDiscount,
@@ -577,29 +537,6 @@ export const RARES_2: Record<string, Behavior> = {
         cost: mana('{1}{R}{G}'),
         targets: [],
         effects: [{ kind: 'extraCombat' }],
-      },
-    ],
-  },
-  'The Wandering Minstrel': {
-    abilities: [
-      stat({ kind: 'landsEnterUntapped' }),
-      atYourCombat([], [{ kind: 'createToken', token: 'fin-elemental-token', count: 1 }], {
-        kind: 'amountAtLeast',
-        amount: towns,
-        min: 5,
-      }),
-      {
-        kind: 'activated',
-        cost: { mana: mana('{3}{W}{U}{B}{R}{G}') },
-        targets: [],
-        effects: [
-          {
-            kind: 'pump',
-            to: { each: 'creature', controller: 'you', filter: { other: true } },
-            power: towns,
-            toughness: towns,
-          },
-        ],
       },
     ],
   },
@@ -800,21 +737,3 @@ export const RARES_2_BACKS: Record<string, Behavior> = {
     ],
   },
 };
-
-/** "Create a 2/2 Elemental creature token that's all colors" (The Wandering Minstrel). */
-export const RARES_2_TOKENS: CardDefinition[] = [
-  {
-    id: 'fin-elemental-token',
-    name: 'Elemental',
-    manaCost: { generic: 0, colored: {} },
-    colors: ['W', 'U', 'B', 'R', 'G'],
-    types: ['Creature'],
-    supertypes: [],
-    subtypes: ['Elemental'],
-    power: 2,
-    toughness: 2,
-    keywords: [],
-    abilities: [],
-    isToken: true,
-  },
-];

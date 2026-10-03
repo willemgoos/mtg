@@ -150,6 +150,21 @@ to your hand"), castSpell triggers from the graveyard (Shambling Cie'th), `retur
 back face that dies triggers its own "dies" abilities (`objectMoved.leftAs`; Chaos). Custom handlers
 `sourceToLibraryBottom` and `exileEightFromGraveyard` in `fin-effects.ts`.
 
+11b (group B) done: four decks, built mostly from commons and uncommons. **Turks' Contract** (W/B creatures and artifacts
+dying: Judge Magister Gabranth, Rufus Shinra, Squall), **Forbidden Magicks** (U/R expensive noncreature spells: Shantotto,
+The Emperor of Palamecia, Tellah), **Into the Void** (B/G permanents in the graveyard: Exdeath, Cloud of Darkness, Diamond
+Weapon) and **Road Trip** (G/U lands and Towns: Ignis Scientia, Omega, Gigantoad, Chocobo Kick; The Wandering Minstrel is
+implemented but didn't make the list). New rules: "if at least N mana was spent to cast it" (`minManaSpent` on cast
+triggers, the `manaSpentOnSubject` amount; the mana spent is kept on the spell's object), "Noncreature" as a spell tag for
+restricted mana (the Emperor), "whenever a creature or artifact you control dies" (`permanentYouControlDies`; zone-change
+events now carry the controller, so tokens count), activated-ability cost reduction (Qiqirn
+Merchant), `lookAndTake` onto the battlefield tapped (Ignis), "lands you control enter untapped" (Minstrel), "prevent all
+combat damage dealt to it" (Diamond Weapon) and the Light of Judgment handler `destroyEquipmentOnTarget`. Merged with group A:
+where both groups had a card, group A's version stayed (Light of Judgment and Opera Love Song excepted). Card
+behaviour in `fin/sacrifice-spellcraft.ts`, `fin/graveyard-towns.ts` and (mono-coloured and colourless) `fin/shared-b.ts`.
+Bot vs bot over 160 games against the ten Foundations starter decks: Turks' Contract 54%, Forbidden Magicks 46%, Into the
+Void 52%, Road Trip 52%.
+
 ### 11c: every rare and mythic, Jump In, boosters
 
 - All 74 rares and 20 mythics (with meld and hideaway), and any remaining commons and uncommons.
@@ -210,14 +225,31 @@ four decks. Three more FIC Brawl decks followed (9 December 2025, "Arena Store d
 11b (group A):
 
 - Ultimecia exiles the eight oldest cards of your graveyard (no choice); the extra turn is part of the transform trigger.
-- Rydia's "Summon â€” {X}, {T}" is one ability per X from 1 to 6.
-- Ice Magic's Blizzara puts the creature on top (not the owner's choice of top or bottom).
-- Delivery Moogle searches the library only (not the graveyard). Reach the Horizon doesn't check "different names".
-  Qutrub Forayer doesn't check "from a single graveyard".
-- Light of Judgment doesn't destroy an Equipment attached to the creature. Ride the Shoopuf can't become a 7/7.
-- Opera Love Song's exiled cards are playable until end of turn (not "until your next end step").
+- Rydia's "Summon — {X}, {T}" is one ability per X from 1 to 6.
+- Delivery Moogle searches the library only (not the graveyard). Qutrub Forayer doesn't check "from a single graveyard".
+- Ride the Shoopuf can't become a 7/7.
 - Edgar's coin-flip ability isn't modelled.
 - A land returned for Chocobo Kick's kicker can tap for mana first; a sacrificed permanent for Vayne's Treachery can't.
+
+11b (group B):
+
+- Mana spent: convoking creatures don't count; Shantotto's draw and Tellah's four- and eight-mana parts are separate
+  triggers with `minManaSpent` (same result).
+- The Wandering Minstrel untaps only lands that enter tapped by their own text (taplands, Towns); a land put onto the
+  battlefield tapped by an effect stays tapped.
+- Zack Fair moves one +1/+1 counter (the one he enters with); other counters and his Equipment stay behind.
+- Phoenix Down's "choose one" is two abilities with the same cost. Phantom Train becomes an artifact creature, not also a
+  Spirit. PuPu UFO's {3} gives +X/+0 on its printed 0 instead of setting its base power.
+- Ether's copy keeps the spell's targets. Opera Love Song's "until your next end step" lasts until the end of your next
+  turn. Light of Judgment: the engine picks the Equipment it destroys. Sorceress's Schemes returns only instants and
+  sorceries from the graveyard (not exiled flashback cards). Stuck in Summoner's Sanctum doesn't stop activated abilities.
+- Not done (not in a deck, for 11c): Syncopate (X counter), Jenova (Mutants), Vanille and Fang (meld), Quina, Sidequest:
+  Hunt the Mark, Starting Town.
+
+Both groups:
+
+- Ice Magic's Blizzara puts the creature on top (not the owner's choice of top or bottom). Reach the Horizon doesn't check
+  "different names".
 
 11c (group 1):
 
@@ -255,7 +287,6 @@ four decks. Three more FIC Brawl decks followed (9 December 2025, "Arena Store d
 - Vaan: a nonland card he exiles stays castable by you while exiled (paying its cost, not "now or never"); only a land makes the
   Treasure.
 - Joshua's "discard up to two, then draw that many" is two "you may discard a card; if you do, draw" in a row.
-- Tellah counts the spell's mana value, not the mana spent on it.
 - Vivi's {0} mana ability uses the stack (like Capital City's). Starting Town's "{T}, Pay 1 life" is 1 damage as the mana is
   spent (like a Talisman). Its "first, second, or third turn" is turn 6 or earlier on your turn (extra turns aside).
 - Summon: Brynhildr II/III's haste lasts as long as the creature stays (not until end of turn). G.F. Cerberus's copies keep the

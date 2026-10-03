@@ -280,8 +280,8 @@ export type AbilityDef =
       powerUp?: boolean;
       /** Activated from your hand (cycling). */
       fromHand?: boolean;
-      // Final Fantasy (11c): activated cost reduction
-      /** "This ability costs {1} less to activate for each ..." (Balamb Garden). */
+      // Final Fantasy (11b/11c): activated cost reduction
+      /** "This ability costs {1} less to activate for each ..." (Qiqirn Merchant: Towns; Balamb Garden). */
       costReduction?: Amount;
     }
   | {
@@ -402,6 +402,9 @@ export type TriggerDef =
       // Final Fantasy (11c): spells you don't own
       /** Only spells the caster doesn't own (Vaan, Street Thief). */
       notOwned?: boolean;
+      // Final Fantasy (11b): mana spent
+      /** "If at least N mana was spent to cast it" (Sahagin, Ultros). */
+      minManaSpent?: number;
     }
   /** Whenever a player (an opponent: Monologue Tax) casts their second spell each turn (Hearthborn Battler). */
   | { on: 'anyPlayerSecondSpell'; opponentOnly?: boolean }
@@ -515,7 +518,14 @@ export type TriggerDef =
   /** Whenever an opponent loses life ("that many"), during your turn if `duringYourTurn` (Kefka, Ruler of Ruin). */
   | { on: 'opponentLosesLife'; duringYourTurn?: boolean }
   /** Whenever one or more cards leave your graveyard (Fang, Fearless l'Cie). */
-  | { on: 'cardsLeaveYourGraveyard' };
+  | { on: 'cardsLeaveYourGraveyard' }
+  // Final Fantasy (11b): creatures and artifacts dying
+  /**
+   * Whenever this or another permanent you control matching the filter is put
+   * into a graveyard from the battlefield ("a creature or artifact you control
+   * dies"); `other`: only other permanents (Judge Magister Gabranth).
+   */
+  | { on: 'permanentYouControlDies'; filter: CardFilter; other?: boolean };
 
 export type ConditionDef =
   | { kind: 'controlsPermanents'; filter: CardFilter; min: number }
@@ -857,7 +867,10 @@ export type Amount =
   /** Devotion: the mana symbols of this colour in the mana costs of permanents you control (Clive). */
   | { count: 'devotion'; color: Color }
   /** The life you gained this turn (Hope Estheim). */
-  | { count: 'lifeGainedThisTurn' };
+  | { count: 'lifeGainedThisTurn' }
+  // Final Fantasy (11b): mana spent
+  /** The mana spent to cast the triggering spell (Shantotto). */
+  | { manaSpentOnSubject: true };
 
 export type EffectDef =
   | { kind: 'may'; effects: EffectDef[]; cost?: ManaCost }
@@ -1257,6 +1270,9 @@ export type EffectDef =
       restOnTop?: boolean;
       /** Marvel Super Heroes: the rest go to the graveyard (Earth's Mightiest Heroes). */
       restToGraveyard?: boolean;
+      // Final Fantasy (11b): look for a land
+      /** The card taken goes onto the battlefield tapped instead (Ignis Scientia: a land). */
+      to?: 'battlefieldTapped';
     }
   /** Exile the top N; you may play them until the end of this turn or of your next turn. */
   | {
@@ -1695,13 +1711,17 @@ export type StaticDef =
   // Final Fantasy (11c): entering permanents
   /** A permanent matching the filter entering under your control triggers your abilities twice (Traveling Chocobo). */
   | { kind: 'etbTriggersTwice'; filter: CardFilter }
-  /** Lands you control enter untapped (The Wandering Minstrel). */
-  | { kind: 'landsEnterUntapped' }
   // Final Fantasy (11c): playing from the graveyard
   /** You may play cards from your graveyard while the condition holds (Hades: during your turn). */
   | { kind: 'playFromGraveyard'; condition?: ConditionDef }
   /** You may cast artifact spells from your graveyard for `life` more; they enter with a finality counter (Noctis). */
-  | { kind: 'castArtifactsFromGraveyard'; life: number };
+  | { kind: 'castArtifactsFromGraveyard'; life: number }
+  // Final Fantasy (11b): lands and Towns
+  /** "Lands you control enter untapped" (The Wandering Minstrel). */
+  | { kind: 'landsEnterUntapped' }
+  // Final Fantasy (11b): permanents in the graveyard
+  /** "Prevent all combat damage that would be dealt to this creature" (Diamond Weapon). */
+  | { kind: 'preventCombatDamageToSelf' };
 
 export type CardDb = ReadonlyMap<CardDefId, CardDefinition>;
 
@@ -1860,6 +1880,9 @@ export interface GameObject {
   // Final Fantasy (11c): turn conditions
   /** A Vehicle: the creatures that crewed it this turn (Balthier and Fran). */
   crewedBy?: { turn: number; ids: ObjectId[] };
+  // Final Fantasy (11b): mana spent
+  /** The mana spent to cast it, the last time it was cast (Shantotto, Sahagin). */
+  manaSpent?: number;
 }
 
 /** A reference that goes stale when the object changes zones. */
@@ -2567,6 +2590,9 @@ export type GameEvent =
       defId: CardDefId;
       from: ZoneName | null;
       to: ZoneName;
+      // Final Fantasy (11b): creatures and artifacts dying
+      /** Who controlled it as it left the battlefield (a token is gone by the time triggers look). */
+      controller?: PlayerId;
       // Final Fantasy (11b): the back face it showed as it left (Chaos dying shows Garland after).
       leftAs?: CardDefId;
       // Final Fantasy (11c): its power as it left (a token's too): "that creature's power" (Vincent Valentine).
