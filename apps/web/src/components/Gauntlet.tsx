@@ -11,6 +11,8 @@ import {
   wins,
 } from '../game/gauntlet.ts';
 import { UiSize } from './UiSize.tsx';
+import './home.css';
+import './expedition.css';
 
 const deckOf = (id: string) => deckById(id);
 
@@ -61,7 +63,7 @@ export function Gauntlet({
         : '';
 
   return (
-    <div className={`start gauntlet gauntlet--${status}`}>
+    <div className={`start shell gauntlet gauntlet--${status}`}>
       <UiSize />
       <div className="start__title">
         <span className="start__eyebrow">

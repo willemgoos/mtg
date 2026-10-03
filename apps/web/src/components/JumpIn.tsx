@@ -4,6 +4,8 @@ import { ruleNotes } from '../game/notes.ts';
 import { play } from '../game/sound.ts';
 import { HoverPreview, type HoverState } from './Preview.tsx';
 import { UiSize } from './UiSize.tsx';
+import './home.css';
+import './expedition.css';
 
 type PacketSet = Packet['set'];
 
@@ -59,7 +61,7 @@ export function JumpIn({
   };
 
   return (
-    <div className="start jumpin">
+    <div className="start shell jumpin">
       <UiSize />
       <div className="start__title">
         <span className="start__eyebrow">Expedition · Jump In!</span>

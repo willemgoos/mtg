@@ -1,0 +1,1030 @@
+/* ==========================================================================
+   Expedition and pack opening in the home page's look: neutral dark
+   surfaces, hairline borders, one sans, white primary actions and the amber
+   accent for where you are and the path behind you. The cards and the
+   booster stay as they are; they're the objects on the table.
+
+   The tokens come from home.css (.shell is in its list). Every rule starts
+   with .shell so it beats the older rules in styles.css, which load later.
+   ========================================================================== */
+
+/* ---------------------------------------------------------------- screen */
+
+.shell.start {
+  font-family: var(--h-font);
+  color: var(--h-text);
+  background:
+    radial-gradient(ellipse 70% 45% at 50% 0%, rgba(255, 255, 255, 0.045), transparent 70%),
+    var(--h-bg);
+}
+
+.shell.start::before,
+.shell.start::after {
+  content: none;
+}
+
+.shell ::selection {
+  color: var(--h-bg);
+  background: var(--h-accent);
+}
+
+.shell .start__eyebrow {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-family: var(--h-font);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0;
+  color: var(--h-muted);
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow: inset 0 0 0 0.0625rem var(--h-line);
+}
+
+/* Like .start h1, the title keeps its size whatever the UI size. */
+.shell .start__title h1 {
+  margin: 0.875rem 0 0.5rem;
+  font-family: var(--h-font);
+  font-size: calc(3.5rem / var(--ui-scale));
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: -0.035em;
+  color: #fff;
+  background: none;
+  -webkit-background-clip: border-box;
+  background-clip: border-box;
+  filter: none;
+}
+
+.shell .start__title p {
+  font-size: 1.0625rem;
+  line-height: 1.5;
+  color: var(--h-muted);
+}
+
+/* -------------------------------------------------------------- controls */
+
+.shell .btn {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  height: 2.5rem;
+  padding: 0 1rem;
+  border-radius: 0.5rem;
+  font-family: var(--h-font);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  filter: none;
+  transition:
+    background 0.15s,
+    transform 0.1s,
+    box-shadow 0.15s;
+}
+
+.shell .btn--primary,
+.shell .btn--big {
+  color: var(--h-bg);
+  background: var(--h-text);
+  box-shadow: none;
+}
+
+.shell .btn--primary:hover,
+.shell .btn--big:hover {
+  background: #fff;
+  box-shadow: none;
+  filter: none;
+}
+
+.shell .btn--big {
+  min-width: 9rem;
+  height: 2.875rem;
+  padding: 0 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.shell .btn--ghost {
+  color: var(--h-text);
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow: inset 0 0 0 0.0625rem var(--h-line);
+}
+
+.shell .btn--ghost:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.shell .btn:disabled {
+  opacity: 0.4;
+  cursor: var(--cursor, default);
+  transform: none;
+}
+
+.shell .btn:focus-visible,
+.shell .choice__option:focus-visible,
+.shell .card-choice:focus-visible,
+.shell .xnode:focus-visible {
+  outline: 0.125rem solid var(--h-accent);
+  outline-offset: 0.1875rem;
+}
+
+/* Nothing left to do but this: a soft ring breathes out of the button. */
+.shell .btn--nudge {
+  animation: shell-nudge 1.8s ease-out 1.2s infinite;
+}
+
+@keyframes shell-nudge {
+  from {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.35);
+  }
+  to {
+    box-shadow: 0 0 0 0.625rem rgba(255, 255, 255, 0);
+  }
+}
+
+.shell .gauntlet__confirm {
+  color: var(--h-text);
+}
+
+.shell .ui-size {
+  gap: 0.125rem;
+  padding: 0.1875rem;
+  border-radius: 0.5rem;
+  font-family: var(--h-font);
+  font-size: 0;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.shell .ui-size button {
+  height: 1.625rem;
+  min-width: 1.75rem;
+  padding: 0 0.375rem;
+  border-radius: 0.375rem;
+  font-family: var(--h-font);
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--h-muted);
+  background: none;
+  box-shadow: none;
+}
+
+.shell .ui-size button.is-on {
+  color: var(--h-text);
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* ---------------------------------------------------------- status row */
+
+.shell .xmap__status {
+  gap: 0.75rem;
+}
+
+.shell .lives {
+  gap: 0.25rem;
+}
+
+.shell .life::before {
+  font-size: 1.25rem;
+}
+
+.shell .life.is-full::before {
+  color: #f06b6b;
+  text-shadow: none;
+}
+
+.shell .life.is-lost::before {
+  color: rgba(255, 255, 255, 0.14);
+  -webkit-text-stroke: 0;
+}
+
+.shell .xmap__deck,
+.shell .boon-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  height: 1.75rem;
+  padding: 0 0.75rem;
+  border-radius: 999px;
+  font-family: var(--h-font);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0;
+  color: var(--h-text);
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow: inset 0 0 0 0.0625rem var(--h-line);
+}
+
+.shell .boon-chip {
+  color: var(--h-accent);
+  background: rgba(244, 177, 62, 0.08);
+  box-shadow: inset 0 0 0 0.0625rem rgba(244, 177, 62, 0.25);
+}
+
+/* ------------------------------------------------------------------ map */
+
+/* Five lanes of nodes need a little more height than the old three. */
+.shell .xmap__board {
+  height: 30rem;
+  border-radius: 1.125rem;
+  background:
+    radial-gradient(circle, rgba(255, 255, 255, 0.05) 0.0625rem, transparent 0.0625rem) 0 0 / 1.5rem
+      1.5rem,
+    var(--h-surface);
+  box-shadow: inset 0 0 0 0.0625rem var(--h-line);
+}
+
+.shell .xmap__lines line {
+  stroke: rgba(255, 255, 255, 0.12);
+  stroke-width: 1.5;
+  stroke-dasharray: none;
+}
+
+.shell .xmap__lines line.is-taken {
+  stroke: var(--h-accent);
+  stroke-width: 2.5;
+  filter: none;
+}
+
+.shell .xmap__lines line.is-next {
+  stroke: rgba(255, 255, 255, 0.6);
+  stroke-width: 2;
+  stroke-dasharray: 4 5;
+}
+
+/* Each kind of stop has its own colour, used for its icon. */
+.shell .xnode--duel {
+  --k: #c9cad1;
+}
+.shell .xnode--elite,
+.shell .xnode--boss {
+  --k: #f2555a;
+}
+.shell .xnode--camp {
+  --k: #f59e5b;
+}
+.shell .xnode--shrine {
+  --k: #7cc4ff;
+}
+.shell .xnode--treasure {
+  --k: #e8c872;
+}
+.shell .xnode--merchant {
+  --k: #6fd49a;
+}
+.shell .xnode--mystery {
+  --k: #b99cff;
+}
+
+.shell .xnode {
+  width: 3.75rem;
+  height: 3.75rem;
+  color: color-mix(in srgb, var(--k) 75%, var(--h-dim));
+  background: var(--h-raised);
+  box-shadow:
+    inset 0 0 0 0.0625rem var(--h-line-hi),
+    0 0.5rem 1rem rgba(0, 0, 0, 0.35);
+  transition:
+    scale 0.2s var(--ease),
+    box-shadow 0.2s,
+    background 0.2s,
+    opacity 0.2s;
+}
+
+.shell .xnode svg {
+  width: 48%;
+  height: 48%;
+}
+
+.shell .xnode--boss {
+  width: 5rem;
+  height: 5rem;
+  background: color-mix(in srgb, var(--k) 10%, var(--h-raised));
+  box-shadow:
+    inset 0 0 0 0.0625rem color-mix(in srgb, var(--k) 45%, transparent),
+    0 0.5rem 1.5rem rgba(0, 0, 0, 0.4);
+}
+
+.shell .xnode.is-open {
+  color: var(--k);
+  background: #232429;
+  box-shadow:
+    inset 0 0 0 0.125rem var(--h-text),
+    0 0.5rem 1rem rgba(0, 0, 0, 0.35);
+  animation: shell-node 1.8s ease-out infinite;
+}
+
+.shell .xnode.is-open:hover {
+  scale: 1.08;
+  background: #2a2b31;
+}
+
+.shell .xnode.is-here {
+  scale: 1.1;
+  color: var(--k);
+  background: color-mix(in srgb, var(--k) 16%, var(--h-raised));
+  box-shadow:
+    inset 0 0 0 0.125rem var(--h-accent),
+    0 0 0 0.375rem rgba(244, 177, 62, 0.16),
+    0 0.75rem 1.5rem rgba(0, 0, 0, 0.45);
+}
+
+.shell .xnode.is-done {
+  color: var(--k);
+  box-shadow:
+    inset 0 0 0 0.125rem var(--h-accent),
+    0 0.5rem 1rem rgba(0, 0, 0, 0.35);
+}
+
+.shell .xnode.is-done.is-loss {
+  color: var(--h-dim);
+  box-shadow: inset 0 0 0 0.125rem #e5484d;
+}
+
+.shell .xnode.is-past {
+  opacity: 0.3;
+}
+
+.shell .xnode.is-ahead {
+  opacity: 0.85;
+}
+
+.shell .xnode__mark {
+  top: -0.1875rem;
+  right: -0.1875rem;
+  width: 1.25rem;
+  height: 1.25rem;
+  font-family: var(--h-font);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  background: #e5484d;
+}
+
+/* The pack a duel pays out, as a small pip on the node. */
+.shell .xnode__reward {
+  width: 1rem;
+  height: 1rem;
+  box-shadow: 0 0 0 0.1875rem var(--h-surface);
+}
+
+.shell .xnode__reward.is-rare {
+  --pip: radial-gradient(circle at 40% 35%, #ffe7a8, var(--h-accent) 60%, #a8681a);
+}
+
+@keyframes shell-node {
+  from {
+    box-shadow:
+      inset 0 0 0 0.125rem var(--h-text),
+      0 0 0 0 rgba(255, 255, 255, 0.28);
+  }
+  to {
+    box-shadow:
+      inset 0 0 0 0.125rem var(--h-text),
+      0 0 0 0.75rem rgba(255, 255, 255, 0);
+  }
+}
+
+.shell .xmap__token {
+  box-shadow:
+    0 0 0 0.1875rem var(--h-text),
+    0 0.5rem 1rem rgba(0, 0, 0, 0.6);
+}
+
+/* What waits at the hovered node, as a small panel beside the buttons. */
+.shell .xmap__info {
+  min-width: 24rem;
+  min-height: 4.5rem;
+  padding: 0.75rem 1rem;
+  border-radius: var(--h-radius);
+  font-size: 0.875rem;
+  line-height: 1.45;
+  color: var(--h-muted);
+  background: var(--h-surface);
+  box-shadow: inset 0 0 0 0.0625rem var(--h-line);
+}
+
+.shell .xmap__info-title {
+  font-family: var(--h-font);
+  font-size: 1.0625rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--h-text);
+}
+
+.shell .xmap__info-hint {
+  color: var(--h-dim);
+}
+
+/* -------------------------------------------- boons, camps and mysteries */
+
+.shell .choice__options {
+  gap: 1rem;
+}
+
+/* Top-aligned, so icons and names line up when one card's text runs longer. */
+.shell .choice__option {
+  justify-content: flex-start;
+  gap: 0.75rem;
+  width: 16rem;
+  min-height: 14rem;
+  padding: 2rem 1.5rem 1.75rem;
+  border-radius: 1.125rem;
+  font-family: var(--h-font);
+  color: var(--h-text);
+  background: var(--h-surface);
+  box-shadow: inset 0 0 0 0.0625rem var(--h-line);
+  transition:
+    translate 0.2s var(--ease),
+    box-shadow 0.15s,
+    background 0.15s;
+}
+
+.shell .choice__option:hover:not(:disabled) {
+  translate: 0 -0.25rem;
+  background: var(--h-raised);
+  box-shadow:
+    inset 0 0 0 0.09375rem var(--h-text),
+    0 0.75rem 2rem rgba(0, 0, 0, 0.4);
+}
+
+.shell .choice__option:disabled {
+  filter: none;
+  opacity: 0.4;
+}
+
+.shell .choice__glyph {
+  --g: var(--h-accent);
+  width: 4rem;
+  height: 4rem;
+  margin-bottom: 0.5rem;
+  color: var(--g);
+  background: color-mix(in srgb, var(--g) 12%, transparent);
+  box-shadow: inset 0 0 0 0.0625rem color-mix(in srgb, var(--g) 30%, transparent);
+}
+
+.shell .choice__glyph--heart {
+  --g: #f06b6b;
+}
+
+.shell .choice__name {
+  font-family: var(--h-font);
+  font-size: 1.375rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: #fff;
+}
+
+.shell .choice__text {
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: var(--h-muted);
+}
+
+.shell .choice__story {
+  max-width: 40rem;
+  font-size: 1.125rem;
+  font-style: normal;
+}
+
+/* ------------------------------------------- rare draft and the merchant */
+
+.shell .card-choice {
+  box-shadow:
+    0 0 0 0.0625rem var(--h-line),
+    0 1rem 2rem rgba(0, 0, 0, 0.5);
+}
+
+.shell .card-choice:hover,
+.shell .card-choice.is-on {
+  translate: 0 -0.375rem;
+  box-shadow:
+    0 0 0 0.1875rem var(--h-text),
+    0 1.25rem 2.5rem rgba(0, 0, 0, 0.55);
+}
+
+.shell .merchant__pay {
+  padding: 1rem;
+  border-radius: var(--h-radius);
+  background: var(--h-surface);
+  box-shadow: inset 0 0 0 0.0625rem var(--h-line);
+}
+
+.shell .merchant__card.is-on {
+  box-shadow:
+    0 0 0 0.1875rem #e5484d,
+    0 0.5rem 1rem rgba(0, 0, 0, 0.5);
+}
+
+.shell .merchant__give {
+  font-family: var(--h-font);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  background: #e5484d;
+}
+
+/* ------------------------------------------------------------ pack opening */
+
+.shell .booster__hint {
+  font-family: var(--h-font);
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: 0;
+  color: var(--h-muted);
+}
+
+.shell .pcard.is-up:hover .pcard__face {
+  box-shadow:
+    0 0 0 0.125rem rgba(255, 255, 255, 0.55),
+    0 0.5rem 1.25rem rgba(0, 0, 0, 0.6);
+}
+
+.shell .pcard.is-kept .pcard__face {
+  box-shadow:
+    0 0 0 0.1875rem var(--h-text),
+    0 0.75rem 1.75rem rgba(0, 0, 0, 0.6);
+}
+
+.shell .pcard.is-kept::after {
+  bottom: -1.875rem;
+  padding: 0.125rem 0.625rem;
+  border-radius: 999px;
+  font-family: var(--h-font);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  color: var(--h-bg);
+  background: var(--h-text);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shell .xnode.is-open,
+  .shell .btn--nudge {
+    animation: none;
+  }
+}
+
+/* ------------------------------------------------------------------ pacts */
+
+/* A pact sits beside the boons: the same card, with a red edge for its cost. */
+.shell .choice__option--pact {
+  position: relative;
+  background:
+    radial-gradient(ellipse 90% 60% at 50% 0%, rgba(229, 72, 77, 0.1), transparent 70%),
+    var(--h-surface);
+  box-shadow: inset 0 0 0 0.0625rem rgba(229, 72, 77, 0.35);
+}
+
+.shell .choice__option--pact:hover:not(:disabled) {
+  box-shadow:
+    inset 0 0 0 0.09375rem #f2555a,
+    0 0.75rem 2rem rgba(0, 0, 0, 0.4);
+}
+
+.shell .choice__option--pact .choice__glyph {
+  --g: #f2555a;
+}
+
+.shell .choice__tag {
+  position: absolute;
+  top: 0.875rem;
+  right: 0.875rem;
+  padding: 0.125rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #f2555a;
+  background: rgba(229, 72, 77, 0.12);
+}
+
+.shell .choice__cost {
+  margin-top: auto;
+  padding-top: 0.75rem;
+  border-top: 0.0625rem solid var(--h-line);
+  font-size: 0.875rem;
+  line-height: 1.45;
+  color: #f2a0a3;
+}
+
+.shell .boon-chip--pact {
+  color: #f2a0a3;
+  background: rgba(229, 72, 77, 0.08);
+  box-shadow: inset 0 0 0 0.0625rem rgba(229, 72, 77, 0.3);
+}
+
+/* Second Wind once it has spared a life. */
+.shell .boon-chip.is-spent {
+  color: var(--h-dim);
+  background: rgba(255, 255, 255, 0.03);
+  box-shadow: inset 0 0 0 0.0625rem var(--h-line);
+  text-decoration: line-through;
+}
+
+/* An elite's twist: a small red diamond on its top-left. */
+.shell .xnode__twist {
+  position: absolute;
+  top: -0.125rem;
+  left: -0.125rem;
+  width: 0.875rem;
+  height: 0.875rem;
+  border-radius: 0.1875rem;
+  rotate: 45deg;
+  background: #f2555a;
+  box-shadow: 0 0 0 0.1875rem var(--h-surface);
+}
+
+/* A card you were given: shown, not picked. */
+.shell .card-choice--gift,
+.shell .card-choice--gift:hover {
+  width: 17rem;
+  cursor: default;
+  translate: none;
+}
+
+/* ------------------------------------------------------------- surveyor */
+
+.shell .xnode--surveyor {
+  --k: #5fd3c6;
+}
+
+.shell .land-choice {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0;
+  border: 0;
+  font-family: var(--h-font);
+  color: var(--h-text);
+  background: none;
+  cursor: var(--cursor-hover, pointer);
+  animation: choice-in 0.5s var(--ease) both;
+  animation-delay: calc(var(--i) * 0.08s);
+}
+
+.shell .land-choice .card-choice {
+  display: block;
+  animation: none;
+}
+
+.shell .land-choice:hover .card-choice {
+  translate: 0 -0.375rem;
+  box-shadow:
+    0 0 0 0.1875rem var(--h-text),
+    0 1.25rem 2.5rem rgba(0, 0, 0, 0.55);
+}
+
+.shell .land-choice__copies {
+  margin-top: 0.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.shell .land-choice__swap {
+  font-size: 0.875rem;
+  color: var(--h-muted);
+}
+
+/* ---------------------------------------------------------- choice polish */
+
+/* The option you picked pops; the others step back while it takes effect. */
+.shell .is-choosing > * {
+  transition:
+    opacity 0.25s,
+    scale 0.25s var(--ease),
+    filter 0.25s;
+}
+
+.shell .is-choosing > :not(.is-chosen) {
+  opacity: 0.3;
+  scale: 0.96;
+  filter: saturate(0.4);
+}
+
+.shell .is-chosen {
+  animation: shell-chosen 0.42s var(--ease) both;
+}
+
+@keyframes shell-chosen {
+  40% {
+    scale: 1.07;
+  }
+  to {
+    scale: 1.03;
+  }
+}
+
+/* A gift flips in from its back, with a glow in its rarity's colour. */
+.shell .gift {
+  perspective: 80rem;
+}
+
+.shell .card-choice--gift {
+  --glow: rgba(201, 202, 209, 0.25);
+  animation: shell-gift 0.7s var(--ease) both;
+  box-shadow:
+    0 0 0 0.0625rem var(--h-line),
+    0 0 3rem var(--glow),
+    0 1.25rem 2.5rem rgba(0, 0, 0, 0.55);
+}
+
+.shell .card-choice--gift.is-uncommon {
+  --glow: rgba(159, 208, 238, 0.3);
+}
+
+.shell .card-choice--gift.is-rare {
+  --glow: rgba(244, 177, 62, 0.4);
+}
+
+.shell .card-choice--gift.is-mythic {
+  --glow: rgba(255, 122, 61, 0.45);
+}
+
+@keyframes shell-gift {
+  from {
+    opacity: 0;
+    transform: rotateY(-90deg) scale(0.85);
+  }
+  60% {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shell .is-chosen,
+  .shell .card-choice--gift {
+    animation: none;
+  }
+}
+
+/* ==========================================================================
+   Gauntlet and Jump In, in the same look
+   ========================================================================== */
+
+/* Deck and packet tiles, like the home page's mode tiles. */
+.shell .deck {
+  border-radius: var(--h-radius);
+  font-family: var(--h-font);
+  color: var(--h-text);
+  box-shadow:
+    inset 0 0 0 0.0625rem var(--h-line),
+    0 1rem 2rem rgba(0, 0, 0, 0.45);
+}
+
+.shell .deck:not(:disabled):hover {
+  box-shadow:
+    0 0 0 0.125rem var(--h-text),
+    0 1.25rem 2.5rem rgba(0, 0, 0, 0.5);
+}
+
+.shell .deck__name {
+  font-family: var(--h-font);
+  font-size: 1.125rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: #fff;
+}
+
+.shell .deck__blurb {
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  color: var(--h-muted);
+}
+
+/* Jump In's set switch: a segmented control. */
+.shell .start__opponent {
+  margin-bottom: 0;
+  padding: 0.1875rem;
+  border-radius: 0.625rem;
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: inset 0 0 0 0.0625rem var(--h-line);
+}
+
+.shell .opp {
+  min-width: 11rem;
+  padding: 0.5rem 0.875rem;
+  border-radius: 0.5rem;
+  font-family: var(--h-font);
+  color: var(--h-muted);
+}
+
+.shell .opp:hover {
+  color: var(--h-text);
+}
+
+.shell .opp.is-on {
+  color: var(--h-text);
+  background: rgba(255, 255, 255, 0.12);
+  box-shadow: none;
+}
+
+.shell .opp__name {
+  font-family: var(--h-font);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.shell .opp__blurb {
+  font-size: 0.8125rem;
+  opacity: 1;
+  color: var(--h-dim);
+}
+
+.shell .opp.is-on .opp__blurb {
+  color: var(--h-muted);
+}
+
+/* A packet's card list. */
+.shell .jumpin__list {
+  padding: 0.625rem 0.875rem;
+  border-radius: 0.625rem;
+  font-family: var(--h-font);
+  color: var(--h-text);
+  background: var(--h-surface);
+  box-shadow: inset 0 0 0 0.0625rem var(--h-line);
+}
+
+.shell .jumpin__list li span {
+  color: var(--h-dim);
+  font-variant-numeric: tabular-nums;
+}
+
+.shell .jumpin__list li.is-rare {
+  color: var(--h-accent);
+}
+
+/* The Gauntlet's ladder of opponents. */
+.shell .ladder::before {
+  background: rgba(255, 255, 255, 0.1);
+  opacity: 1;
+}
+
+.shell .rung {
+  border-radius: var(--h-radius);
+  font-family: var(--h-font);
+  box-shadow:
+    inset 0 0 0 0.0625rem var(--h-line),
+    0 1rem 2rem rgba(0, 0, 0, 0.45);
+}
+
+.shell .rung__num {
+  padding: 0.0625rem 0.4375rem;
+  border-radius: 999px;
+  font-family: var(--h-font);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  color: var(--h-text);
+  background: rgba(11, 12, 14, 0.75);
+  backdrop-filter: blur(0.5rem);
+}
+
+.shell .rung__tier {
+  font-family: var(--h-font);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0;
+  color: var(--h-muted);
+}
+
+.shell .rung__name {
+  font-family: var(--h-font);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: #fff;
+}
+
+.shell .rung--boss {
+  box-shadow:
+    inset 0 0 0 0.125rem rgba(244, 177, 62, 0.6),
+    0 1rem 2rem rgba(0, 0, 0, 0.45);
+}
+
+.shell .rung--next {
+  box-shadow:
+    0 0 0 0.125rem var(--h-text),
+    0 1.25rem 2.5rem rgba(0, 0, 0, 0.55);
+}
+
+.shell .rung--fell {
+  box-shadow:
+    0 0 0 0.125rem #e5484d,
+    0 1rem 2rem rgba(0, 0, 0, 0.45);
+}
+
+.shell .rung__mark {
+  width: 2.5rem;
+  height: 2.5rem;
+  font-family: var(--h-font);
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.shell .rung__mark--won {
+  color: var(--h-bg);
+  background: var(--h-accent);
+  box-shadow: 0 0 0 0.25rem rgba(244, 177, 62, 0.2);
+}
+
+.shell .rung__mark--fell {
+  background: #e5484d;
+  box-shadow: 0 0 0 0.25rem rgba(229, 72, 77, 0.2);
+}
+
+.shell.gauntlet--cleared .rung--boss {
+  box-shadow:
+    0 0 0 0.1875rem var(--h-accent),
+    0 0 0 0.5rem rgba(244, 177, 62, 0.18),
+    0 1.25rem 2.5rem rgba(0, 0, 0, 0.55);
+}
+
+/* --------------------------------------------- paying with your cards */
+
+/* Spare copies first, then cards only in your deck, each under its own heading. */
+.shell .merchant__pay {
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: stretch;
+  gap: 1.25rem;
+}
+
+.shell .merchant__group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.shell .merchant__heading {
+  margin: 0;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--h-text);
+}
+
+.shell .merchant__heading span {
+  margin-left: 0.5rem;
+  font-size: 0.8125rem;
+  font-weight: 400;
+  color: var(--h-muted);
+}
+
+.shell .merchant__cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.625rem;
+}
+
+/* Where a card's copies are, as a small label along its bottom. */
+.shell .merchant__where,
+.shell .merchant__give {
+  position: absolute;
+  bottom: 0.375rem;
+  left: 50%;
+  translate: -50% 0;
+  padding: 0.0625rem 0.5rem;
+  border-radius: 999px;
+  font-family: var(--h-font);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.shell .merchant__where {
+  color: var(--h-text);
+  background: rgba(11, 12, 14, 0.85);
+  backdrop-filter: blur(0.25rem);
+}
+
+.shell .merchant__card.is-on {
+  box-shadow:
+    0 0 0 0.1875rem var(--h-text),
+    0 0.5rem 1rem rgba(0, 0, 0, 0.5);
+}
+
+.shell .merchant__card.is-on .merchant__give {
+  color: var(--h-bg);
+  background: var(--h-text);
+}
+
+/* A copy that would come out of your deck is red. */
+.shell .merchant__card.is-from-deck {
+  box-shadow:
+    0 0 0 0.1875rem #e5484d,
+    0 0.5rem 1rem rgba(0, 0, 0, 0.5);
+}
+
+.shell .merchant__card.is-from-deck .merchant__give {
+  color: #fff;
+  background: #e5484d;
+}
+
+.shell .merchant__note {
+  margin: -0.5rem 0 0;
+  font-size: 0.875rem;
+  color: #f2a0a3;
+}

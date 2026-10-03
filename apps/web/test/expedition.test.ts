@@ -1,6 +1,7 @@
 import { cardDb, findDeck, PLAYABLE_DECKS, registerDeck, SCRYFALL, slug } from '@mtg/cards';
 import { describe, expect, it } from 'vitest';
 import {
+  owned,
   applySuggestion,
   camp,
   canChoose,
@@ -23,7 +24,9 @@ import {
   FLOORS,
   gameOptions,
   keepCount,
+  links,
   makeMap,
+  MAX_LANES,
   type MapNode,
   maxLives,
   MIN_DECK,
@@ -40,6 +43,21 @@ import {
   startExpedition,
   startMatch,
   statusOf,
+  choosePact,
+  dismissGift,
+  extraRares,
+  fightOf,
+  merchantPrice,
+  packKeeps,
+  pickCard,
+  pickable,
+  twistOf,
+  difficultyIn,
+  chooseLand,
+  landCopies,
+  landsFor,
+  type BoonId,
+  type PactId,
 } from '../src/game/expedition.ts';
 
 const deck = PLAYABLE_DECKS.find((d) => d.series === 'starter')!.id;
@@ -94,8 +112,8 @@ describe('expedition packs', () => {
     const pack = rollPack({ kind: 'color', color: 'G' }, 3);
     expect(pack.filter((n) => card.get(n)!.colors.includes('G')).length).toBeGreaterThanOrEqual(8);
     expect(rollPack({ kind: 'rare' }, 3).filter(isRare)).toHaveLength(2);
-    expect(rollPack({ kind: 'booster' }, 3, true).filter(isRare)).toHaveLength(2);
-    expect(rollPack({ kind: 'rare' }, 3, true)).toHaveLength(packSize);
+    expect(rollPack({ kind: 'booster' }, 3, 1).filter(isRare)).toHaveLength(2);
+    expect(rollPack({ kind: 'rare' }, 3, 1)).toHaveLength(packSize);
   });
 
   it('opens Bloomburrow boosters on an expedition with a Bloomburrow deck', () => {
@@ -106,7 +124,7 @@ describe('expedition packs', () => {
     expect([0, 1, 2].map((n) => packSetOf(mixed, n))).toEqual(['blb', 'msh', 'blb']);
     expect(packSetOf({ deck: 'jump-in:goblins+msh-robots' }, 0)).toBe('fdn');
     for (let seed = 0; seed < 20; seed++) {
-      const pack = rollPack({ kind: 'booster' }, seed, false, 'blb');
+      const pack = rollPack({ kind: 'booster' }, seed, 0, 'blb');
       expect(new Set(pack).size).toBe(packSize);
       for (const name of pack) expect(card.get(name)!.set).toBe('blb');
     }
@@ -115,7 +133,7 @@ describe('expedition packs', () => {
   it('opens Marvel Super Heroes boosters with a Marvel deck, never a back face alone', () => {
     expect(packSetOf({ deck: 'msh-heroes-unite' })).toBe('msh');
     for (let seed = 0; seed < 20; seed++) {
-      const pack = rollPack({ kind: 'booster' }, seed, false, 'msh');
+      const pack = rollPack({ kind: 'booster' }, seed, 0, 'msh');
       expect(new Set(pack).size).toBe(packSize);
       for (const name of pack) {
         expect(card.get(name)!.set).toBe('msh');
@@ -159,15 +177,120 @@ describe('expedition packs', () => {
 });
 
 describe('expedition map', () => {
-  it('has ten floors of three lanes, then a final battle, fixed by the seed', () => {
+  it('has ten floors on a grid of five lanes, then a final battle, fixed by the seed', () => {
     const map = makeMap(deck, 9);
     expect(map).toHaveLength(FLOORS);
     expect(FLOORS).toBe(10);
-    expect(map.slice(0, -1).every((f) => f.length === 3)).toBe(true);
+    expect(MAX_LANES).toBe(5);
+    for (const f of map.slice(0, -1)) {
+      expect(f.length).toBeGreaterThanOrEqual(2);
+      expect(f.length).toBeLessThanOrEqual(MAX_LANES);
+      // Nodes sit in distinct grid lanes, top to bottom.
+      const rows = f.map((n) => n.row!);
+      expect(rows).toEqual([...new Set(rows)].sort((a, b) => a - b));
+      for (const r of rows) expect(r).toBeLessThan(MAX_LANES);
+    }
     expect(map.at(-1)).toEqual([expect.objectContaining({ kind: 'boss' })]);
     expect(map[0]!.every((n) => n.kind === 'duel' && n.reward && n.opponent)).toBe(true);
     expect(makeMap(deck, 9)).toEqual(map);
     for (const f of map) for (const n of f) if (n.opponent) expect(n.opponent).not.toBe(deck);
+  });
+
+  it('varies its shape from seed to seed', () => {
+    const shapes = new Set(
+      Array.from({ length: 20 }, (_, seed) =>
+        JSON.stringify(makeMap(deck, seed).map((f) => f.map((n) => [n.kind, n.next]))),
+      ),
+    );
+    expect(shapes.size).toBe(20);
+  });
+
+  it('joins every floor to the next with paths that never cross or dead-end', () => {
+    for (let seed = 0; seed < 200; seed++) {
+      const map = makeMap(deck, seed);
+      for (let f = 0; f < FLOORS - 1; f++) {
+        const edges = map[f]!.flatMap((_, i) => links(map, f, i).map((j) => [i, j] as const));
+        // Every node leads on, and every node on the next floor is reached.
+        for (let i = 0; i < map[f]!.length; i++) expect(links(map, f, i).length).toBeGreaterThan(0);
+        for (let j = 0; j < map[f + 1]!.length; j++)
+          expect(edges.some(([, to]) => to === j)).toBe(true);
+        for (const [i, j] of edges) {
+          expect(j).toBeLessThan(map[f + 1]!.length);
+          for (const [k, l] of edges) expect(i < k && j > l).toBe(false);
+        }
+      }
+    }
+  });
+
+  it('follows the rules for what waits where', () => {
+    const repeatable = ['duel', 'mystery'];
+    let forks = 0;
+    let nodes = 0;
+    for (let seed = 0; seed < 200; seed++) {
+      const map = makeMap(deck, seed);
+      const all = map.flat();
+      const count = (k: MapNode['kind']) => all.filter((n) => n.kind === k).length;
+      expect(count('elite')).toBeGreaterThanOrEqual(2);
+      expect(count('elite')).toBeLessThanOrEqual(4);
+      for (const k of ['camp', 'shrine', 'merchant'] as const)
+        expect(count(k)).toBeGreaterThanOrEqual(1);
+      expect(count('treasure')).toBeLessThanOrEqual(2);
+      expect(map[FLOORS - 2]!.filter((n) => n.kind === 'camp')).toHaveLength(1);
+      for (const f of [0, 1])
+        for (const n of map[f]!) expect(['elite', 'camp', 'merchant']).not.toContain(n.kind);
+      map.forEach((floor, f) =>
+        floor.forEach((n, i) => {
+          if (repeatable.includes(n.kind) || n.kind === 'boss') return;
+          // Not twice on a floor, nor twice in a row along a path.
+          expect(floor.filter((m) => m.kind === n.kind)).toHaveLength(1);
+          for (const j of links(map, f, i)) expect(map[f + 1]![j]!.kind).not.toBe(n.kind);
+        }),
+      );
+      for (let f = 0; f < FLOORS - 2; f++)
+        for (let i = 0; i < map[f]!.length; i++) {
+          nodes++;
+          if (links(map, f, i).length > 1) forks++;
+        }
+    }
+    // About a third of nodes give a choice of where to go next.
+    expect(forks / nodes).toBeGreaterThan(0.3);
+  });
+
+  it('keeps routes apart, so a choice now rules out stops a few floors on', () => {
+    let shares = 0;
+    let open = 0;
+    let n = 0;
+    for (let seed = 0; seed < 200; seed++) {
+      const map = makeMap(deck, seed);
+      for (let f = 0; f + 4 < FLOORS - 1; f++)
+        for (let lane = 0; lane < map[f]!.length; lane++) {
+          let at = new Set([lane]);
+          for (let k = 1; k <= 4; k++)
+            at = new Set([...at].flatMap((l) => links(map, f + k - 1, l)));
+          shares += at.size / map[f + 4]!.length;
+          if (at.size === map[f + 4]!.length) open++;
+          n++;
+        }
+      // Each step moves at most one lane on the grid.
+      map.slice(0, -2).forEach((floor, f) =>
+        floor.forEach((node, i) => {
+          for (const j of links(map, f, i))
+            expect(Math.abs(map[f + 1]![j]!.row! - node.row!)).toBeLessThanOrEqual(1);
+        }),
+      );
+    }
+    // Four floors on, a node reaches well under the whole floor, and rarely all of it.
+    expect(shares / n).toBeLessThan(0.66);
+    expect(open / n).toBeLessThan(0.2);
+  });
+
+  it('leads to neighbouring lanes on maps saved before paths branched freely', () => {
+    const old = makeMap(deck, 4).map((f) => f.map(({ next: _, ...n }) => n));
+    const wide = [old[0]!, [old[1]![0]!, old[1]![0]!, old[1]![0]!], old.at(-1)!];
+    expect(links(wide, 0, 0)).toEqual([0, 1]);
+    expect(links(wide, 0, 1)).toEqual([0, 1, 2]);
+    expect(links(wide, 1, 2)).toEqual([0]);
+    expect(links(wide, 2, 0)).toEqual([]);
   });
 
   it('meets mostly Jump In pairs, all different, never your own deck', () => {
@@ -198,15 +321,16 @@ describe('expedition map', () => {
 });
 
 describe('expedition difficulty', () => {
-  it('climbs from 1 to 6 over the floors, with elites two steps up and the final battle at the top', () => {
+  it('climbs from 1 to 4 for duels, with elites two steps up and the final battle at the top', () => {
     const duel: MapNode = { kind: 'duel' };
     const floors = Array.from({ length: FLOORS - 1 }, (_, f) => f);
-    expect(floors.map((f) => difficultyOf(f, duel))).toEqual([1, 1, 2, 2, 3, 4, 4, 5, 6]);
+    expect(floors.map((f) => difficultyOf(f, duel))).toEqual([1, 1, 1, 2, 2, 2, 3, 3, 4]);
     expect(floors.map((f) => botFor(f, duel))).toEqual(
-      [1, 1, 2, 2, 3, 4, 4, 5, 6].map((d) => `level${d}`),
+      [1, 1, 1, 2, 2, 2, 3, 3, 4].map((d) => `level${d}`),
     );
-    expect(botFor(2, { kind: 'elite' })).toBe('level4');
-    expect(botFor(7, { kind: 'elite' })).toBe('heuristic');
+    expect(botFor(2, { kind: 'elite' })).toBe('level3');
+    expect(botFor(7, { kind: 'elite' })).toBe('level5');
+    expect(botFor(8, { kind: 'elite' })).toBe('level6');
     expect(botFor(FLOORS - 1, { kind: 'boss' })).toBe('heuristic');
   });
 
@@ -252,8 +376,9 @@ describe('expedition run', () => {
     let s = enterNode(onMap(['shrine', 'elite', 'shrine']), 0);
     const options = s.run!.pending?.kind === 'boon' ? s.run!.pending.options : [];
     expect(options).toHaveLength(3);
-    s = chooseBoon(s, options[0]!);
-    expect(s.run!.boons).toEqual([options[0]]);
+    const boon = options.find((b) => b !== 'deepPockets')!;
+    s = chooseBoon(s, boon);
+    expect(s.run!.boons).toEqual([boon]);
     expect(s.run!.outcomes).toEqual(['done']);
 
     s = fight(enterNode(s, 1), 'win');
@@ -416,5 +541,373 @@ describe('expedition run', () => {
     expect(s.run!.build.side.Forest).toBeUndefined();
     expect(moveCard(s, 'Not A Card', 'main')).toEqual(s);
     expect(MIN_DECK).toBe(40);
+  });
+});
+
+/** The run with these boons (and pacts). */
+const withBoons = (s: ExpeditionState, boons: BoonId[], pacts: PactId[] = []): ExpeditionState => ({
+  ...s,
+  run: { ...s.run!, boons, pacts },
+});
+
+/** A shrine on the first floor offering this pact. */
+function atShrine(pact: PactId, boons: BoonId[] = []): ExpeditionState {
+  const s = enterNode(withBoons(onMap(['shrine', 'shrine', 'shrine']), boons), 0);
+  const p = s.run!.pending;
+  return { ...s, run: { ...s.run!, pending: p?.kind === 'boon' ? { ...p, pact } : p } };
+}
+
+describe('expedition boons', () => {
+  it('Scavenger keeps one card from a lost duel', () => {
+    let s = withBoons(onMap(['duel', 'duel', 'duel']), ['scavenger']);
+    s = fight(enterNode(s, 0), 'loss');
+    expect(s.run!.build.packs).toEqual([{ kind: 'booster', keep: 1 }]);
+    expect(packKeeps(s.run!)).toEqual([1]);
+    s = openPacks(
+      s,
+      pendingPacks(s.run!).map((p) => p.slice(0, 3)),
+    );
+    expect(s.run!.build.fresh).toHaveLength(1);
+  });
+
+  it('Second Wind spares the first lost fight only', () => {
+    let s = withBoons(onMap(['duel', 'duel', 'duel']), ['secondWind']);
+    s = fight(enterNode(s, 1), 'loss');
+    expect(s.run!.livesLost).toBe(0);
+    expect(s.run!.windUsed).toBe(true);
+    s = fight(enterNode(s, 1), 'loss');
+    expect(s.run!.livesLost).toBe(1);
+  });
+
+  it('Haggler makes the merchant ask for one card', () => {
+    let s = enterNode(withBoons(onMap(['merchant', 'merchant', 'merchant']), ['haggler']), 0);
+    expect(merchantPrice(s.run!)).toBe(1);
+    const offers = s.run!.pending?.kind === 'merchant' ? s.run!.pending.offers : [];
+    const mine = Object.keys(s.run!.build.side);
+    expect(trade(s, offers[0]!, mine.slice(0, 2))).toEqual(s);
+    s = trade(s, offers[0]!, mine.slice(0, 1));
+    expect(s.run!.build.side[offers[0]!]).toBeGreaterThanOrEqual(1);
+  });
+
+  it('Deep Pockets offers four rares after an elite', () => {
+    const s = fight(
+      enterNode(withBoons(onMap(['elite', 'elite', 'elite']), ['deepPockets']), 0),
+      'win',
+    );
+    const p = s.run!.pending;
+    expect(p?.kind === 'rareDraft' && p.options).toHaveLength(4);
+  });
+
+  it('Mapmaker opens the lanes beside your paths', () => {
+    let s = withBoons(onMap(['duel', 'duel', 'duel']), ['mapmaker']);
+    const map = s.run!.map.map((f, i) => (i === 0 ? f.map((n) => ({ ...n, next: [0] })) : f));
+    s = fight(enterNode({ ...s, run: { ...s.run!, map } }, 0), 'win');
+    expect(reachable(s.run!)).toEqual([0, 1]);
+    expect(reachable({ ...s.run!, boons: [] })).toEqual([0]);
+  });
+});
+
+describe('expedition pacts', () => {
+  it('offers a pact beside the boons at shrines', () => {
+    let offered = 0;
+    for (let seed = 0; seed < 20; seed++) {
+      const s = enterNode(
+        {
+          ...onMap(['shrine', 'shrine', 'shrine']),
+          run: { ...onMap(['shrine', 'shrine', 'shrine']).run!, seed },
+        },
+        0,
+      );
+      if (s.run!.pending?.kind === 'boon' && s.run!.pending.pact) offered++;
+    }
+    expect(offered).toBe(20);
+  });
+
+  it('never offers the Mythic Pact on your last life', () => {
+    for (let seed = 0; seed < 40; seed++) {
+      const base = onMap(['shrine', 'shrine', 'shrine']);
+      const s = enterNode({ ...base, run: { ...base.run!, seed, livesLost: 2 } }, 0);
+      const p = s.run!.pending;
+      expect(p?.kind === 'boon' && p.pact).not.toBe('mythic');
+    }
+  });
+
+  it('Twin Blessing: two boons, and opponents start at 24', () => {
+    let s = choosePact(atShrine('twin'), 'twin');
+    const p = s.run!.pending;
+    expect(p).toMatchObject({ kind: 'boon', picks: 2 });
+    const options = p?.kind === 'boon' ? p.options : [];
+    s = chooseBoon(s, options[0]!);
+    expect(s.run!.pending).toMatchObject({ kind: 'boon', picks: 1 });
+    expect(s.run!.outcomes).toEqual([]);
+    s = chooseBoon(s, options[1]!);
+    expect(s.run!.boons).toEqual([options[0], options[1]]);
+    expect(s.run!.outcomes).toEqual(['done']);
+    const duel = enterNode(
+      {
+        ...onMap(['duel', 'duel', 'duel']),
+        run: { ...onMap(['duel', 'duel', 'duel']).run!, pacts: ['twin'] },
+      },
+      0,
+    );
+    expect(gameOptions(duel.run!).life).toEqual({ p2: 24 });
+  });
+
+  it("Hoarder's Pact: keep six, and opponents draw an extra card", () => {
+    const s = choosePact(atShrine('hoarder'), 'hoarder');
+    expect(s.run!.outcomes).toEqual(['done']);
+    expect(keepCount(s.run!)).toBe(6);
+    const duel = enterNode(
+      withBoons(onMap(['duel', 'duel', 'duel']), ['prepared'], ['hoarder']),
+      0,
+    );
+    expect(gameOptions(duel.run!).extraCards).toEqual({ p1: 1, p2: 1 });
+  });
+
+  it('Gilded Pact: two extra rares a pack, tougher elites and final battle', () => {
+    const s = withBoons(onMap(['elite', 'elite', 'elite']), ['lucky'], ['gilded']);
+    expect(extraRares(s.run!)).toBe(3);
+    expect(rollPack({ kind: 'booster' }, 3, 2).filter(isRare)).toHaveLength(3);
+    const elite = s.run!.map[2]![0]!;
+    expect(difficultyIn(s.run!, 2, elite)).toBe(difficultyOf(2, elite) + 1);
+    let b = onMap(['duel', 'duel', 'duel']);
+    for (let f = 0; f < FLOORS - 1; f++) b = openAll(fight(enterNode(b, 1), 'win'));
+    b = enterNode(withBoons(b, [], ['gilded']), 0);
+    expect(gameOptions(b.run!).life).toEqual({ p2: 25 });
+  });
+
+  it("Warlord's Pact: play first with two lands, and every elite has a twist", () => {
+    const s = enterNode(
+      withBoons(onMap(['elite', 'elite', 'elite']), ['trailblazer'], ['warlord']),
+      1,
+    );
+    const twist = twistOf(s.run!, 0, 1);
+    expect(twist).toBeDefined();
+    expect(twist).not.toBe('quick');
+    const o = gameOptions(s.run!);
+    expect(o.startingPlayer).toBe('p1');
+    expect(o.landInPlay!.filter((p) => p === 'p1')).toHaveLength(3);
+  });
+
+  it('Mythic Pact: one of three mythics, for a life', () => {
+    let s = choosePact(atShrine('mythic'), 'mythic');
+    const p = s.run!.pending;
+    const options = p?.kind === 'rareDraft' ? p.options : [];
+    expect(options).toHaveLength(3);
+    for (const n of options) expect(card.get(n)!.rarity).toBe('mythic');
+    expect(maxLives(s.run!)).toBe(2);
+    s = chooseRare(s, options[0]!);
+    expect(s.run!.pending).toBeNull();
+    expect(s.run!.outcomes).toEqual(['done']);
+    expect(s.run!.build.side[options[0]!]).toBeGreaterThanOrEqual(1);
+  });
+
+  it('starts over without pacts on a new map', () => {
+    let s = withBoons(onMap(['duel', 'duel', 'duel']), [], ['hoarder']);
+    for (let f = 0; f < FLOORS - 1; f++) s = openAll(fight(enterNode(s, 1), 'win'));
+    s = fight(enterNode(s, 0), 'win');
+    expect(continueExpedition(s, 3).run!.pacts).toBeUndefined();
+  });
+});
+
+describe('expedition elite twists', () => {
+  const twisted = (twist: MapNode['twist'], boons: BoonId[] = []) => {
+    const s = withBoons(onMap(['elite', 'elite', 'elite']), boons);
+    const map = s.run!.map.map((f, i) => (i === 0 ? f.map((n) => ({ ...n, twist })) : f));
+    return enterNode({ ...s, run: { ...s.run!, map } }, 0);
+  };
+
+  it('gives about half the elites a twist', () => {
+    const elites = Array.from({ length: 30 }, (_, seed) => makeMap(deck, seed))
+      .flat(2)
+      .filter((n) => n.kind === 'elite');
+    const share = elites.filter((n) => n.twist).length / elites.length;
+    expect(share).toBeGreaterThan(0.3);
+    expect(share).toBeLessThan(0.7);
+  });
+
+  it('sets the elite up with its twist, and pays a booster for beating it', () => {
+    expect(gameOptions(twisted('tough').run!)).toEqual({ life: { p2: 25 } });
+    expect(gameOptions(twisted('quick').run!)).toEqual({ startingPlayer: 'p2' });
+    expect(gameOptions(twisted('ready').run!)).toEqual({ landInPlay: ['p2'] });
+    expect(gameOptions(twisted('armed').run!)).toEqual({ extraCards: { p2: 1 } });
+    // Quick means nothing when you always play first, so it's Armed instead.
+    expect(fightOf(twisted('quick', ['initiative']).run!)!.twist).toBe('armed');
+    const won = fight(twisted('tough'), 'win');
+    expect(won.run!.build.packs).toEqual([{ kind: 'booster' }]);
+    expect(won.run!.pending?.kind).toBe('rareDraft');
+    expect(fight(twisted(undefined), 'win').run!.build.packs).toEqual([]);
+  });
+});
+
+describe('expedition events', () => {
+  const at = (event: EventId, run: Partial<ExpeditionState['run']> = {}) => {
+    const s = onMap(['mystery', 'mystery', 'mystery'], event);
+    return enterNode({ ...s, run: { ...s.run!, ...run } }, 0);
+  };
+
+  it('has twelve events, all of which turn up on maps', () => {
+    expect(Object.keys(EVENTS)).toHaveLength(12);
+    const seen = new Set(
+      Array.from({ length: 30 }, (_, seed) => makeMap(deck, seed))
+        .flat(2)
+        .flatMap((n) => n.event ?? []),
+    );
+    expect(seen.size).toBe(12);
+  });
+
+  it('a locked chest holds a rare pack or a booster', () => {
+    const kinds = new Set(
+      Array.from(
+        { length: 20 },
+        (_, seed) => resolveEvent(at('chest', { seed }), 0).run!.build.packs[0]!.kind,
+      ),
+    );
+    expect(kinds).toEqual(new Set(['rare', 'booster']));
+  });
+
+  it('an ambush is a fight for a rare pack that costs nothing to lose', () => {
+    let s = resolveEvent(at('ambush'), 0);
+    expect(s.run!.pending).toBeNull();
+    const f = fightOf(s.run!)!;
+    expect(f.kind).toBe('ambush');
+    // A step easier than a duel on its floor, but never below the easiest.
+    expect(f.difficulty).toBe(Math.max(1, difficultyOf(0, { kind: 'duel' }) - 1));
+    expect(f.opponent).not.toBe(deck);
+    const lost = fight(s, 'loss').run!;
+    expect(lost.livesLost).toBe(0);
+    expect(lost.outcomes).toEqual(['loss']);
+    expect(lost.fight).toBeUndefined();
+    s = fight(s, 'win');
+    expect(s.run!.build.packs).toEqual([{ kind: 'rare' }]);
+    expect(s.run!.outcomes).toEqual(['win']);
+  });
+
+  it('a duelist is a tough fight for a boon, never on your last life', () => {
+    const s = resolveEvent(at('duelist'), 0);
+    expect(fightOf(s.run!)!.difficulty).toBe(difficultyOf(0, { kind: 'elite' }));
+    expect(fight(s, 'loss').run!.livesLost).toBe(1);
+    expect(fight(s, 'win').run!.pending?.kind).toBe('boon');
+    expect(canChoose({ ...s.run!, livesLost: 2 }, EVENTS.duelist.choices[0]!)).toBe(false);
+  });
+
+  it('a wishing well swaps a card for a random one a rarity higher', () => {
+    let s = resolveEvent(at('well'), 0);
+    expect(s.run!.pending).toEqual({ kind: 'cardPick', mode: 'well' });
+    const options = pickable(s.run!, 'well');
+    expect(options.some((n) => card.get(n)!.rarity === 'mythic')).toBe(false);
+    const common = options.find((n) => card.get(n)!.rarity === 'common')!;
+    const before = owned(s.run!.build, common);
+    s = pickCard(s, common);
+    const gift = s.run!.pending;
+    expect(gift?.kind).toBe('gift');
+    const got = gift?.kind === 'gift' ? gift.card : '';
+    expect(card.get(got)!.rarity).toBe('uncommon');
+    expect(owned(s.run!.build, common)).toBe(before - 1);
+    expect(s.run!.outcomes).toEqual(['done']);
+    expect(dismissGift(s).run!.pending).toBeNull();
+    // Walking away costs nothing.
+    expect(pickCard(resolveEvent(at('well'), 0), null).run!.outcomes).toEqual(['done']);
+  });
+
+  it('a mirror copies a card you own', () => {
+    let s = resolveEvent(at('mirror'), 0);
+    const name = pickable(s.run!, 'mirror')[0]!;
+    const before = owned(s.run!.build, name);
+    s = pickCard(s, name);
+    expect(owned(s.run!.build, name)).toBe(before + 1);
+    expect(pickCard(resolveEvent(at('mirror'), 0), 'Forest')).toEqual(
+      resolveEvent(at('mirror'), 0),
+    );
+  });
+
+  it('a fortune makes duels on the next two floors pay rare packs', () => {
+    const s = resolveEvent(at('fortune'), 0);
+    const base = onMap(['duel', 'duel', 'duel']).run!;
+    const run = { ...s.run!, map: base.map };
+    const told = resolveEvent(
+      {
+        ...s,
+        run: { ...run, path: [0], outcomes: [], pending: { kind: 'event', event: 'fortune' } },
+      },
+      0,
+    ).run!;
+    expect(told.map[1]!.every((n) => n.reward?.kind === 'rare')).toBe(true);
+    expect(told.map[2]!.every((n) => n.reward?.kind === 'rare')).toBe(true);
+    expect(told.map[3]!.every((n) => n.reward?.kind === 'booster')).toBe(true);
+  });
+});
+
+describe('expedition surveyor', () => {
+  const surveyor = () => enterNode(openAll(onMap(['surveyor', 'surveyor', 'surveyor'])), 0);
+  const isBasicLand = (n: string) => card.get(n)!.typeLine.startsWith('Basic');
+  const basics = (m: Record<string, number>) =>
+    Object.entries(m)
+      .filter(([n]) => isBasicLand(n))
+      .reduce((k, [, c]) => k + c, 0);
+
+  it('turns up at least once on every map', () => {
+    for (let seed = 0; seed < 30; seed++)
+      expect(
+        makeMap(deck, seed)
+          .flat()
+          .some((n) => n.kind === 'surveyor'),
+      ).toBe(true);
+  });
+
+  it('offers a common, an uncommon and a rare land that suit the deck', () => {
+    const s = surveyor();
+    const p = s.run!.pending;
+    const offers = p?.kind === 'lands' ? p.offers : [];
+    expect(offers).toHaveLength(3);
+    expect(offers.map((n) => card.get(n)!.rarity)).toEqual(['common', 'uncommon', 'rare']);
+    for (const n of offers) expect(landsFor(s.run!.build)).toContain(n);
+    expect(offers.map(landCopies)).toEqual([3, 2, 1]);
+  });
+
+  it('swaps basics for the land, and keeps it after a clear', () => {
+    let s = surveyor();
+    const p = s.run!.pending;
+    const land = p?.kind === 'lands' ? p.offers[0]! : '';
+    const before = s.run!.build.main;
+    s = chooseLand(s, land);
+    const after = s.run!.build.main;
+    expect(after[land]).toBe(3);
+    expect(basics(after)).toBe(basics(before) - 3);
+    expect(size(after)).toBe(size(before));
+    expect(s.run!.pending).toMatchObject({ kind: 'gift', card: land });
+    expect(s.run!.outcomes).toEqual(['done']);
+    // Carried into the next map along with everything else.
+    s = dismissGift(s);
+    for (let f = 1; f < FLOORS - 1; f++) s = openAll(fight(enterNode(s, 1), 'win'));
+    s = fight(enterNode(s, 0), 'win');
+    expect(continueExpedition(s, 2).run!.build.main[land]).toBe(3);
+  });
+
+  it('can be left without a land, and comes as an event too', () => {
+    const s = chooseLand(surveyor(), null);
+    expect(s.run!.outcomes).toEqual(['done']);
+    expect(s.run!.pending).toBeNull();
+    const e = resolveEvent(
+      enterNode(openAll(onMap(['mystery', 'mystery', 'mystery'], 'surveyor')), 0),
+      0,
+    );
+    expect(e.run!.pending?.kind).toBe('lands');
+  });
+
+  it('suggests decks with up to three utility lands, and warns about more', () => {
+    const b = { ...openAll(startExpedition(empty, deck, 5)).run!.build };
+    const side = { ...b.side, "Rogue's Passage": 2, 'Cryptic Caves': 2, Fountainport: 1 };
+    const s = applySuggestion({
+      ...empty,
+      run: { ...startExpedition(empty, deck, 5).run!, build: { ...b, side } },
+    });
+    const util = ["Rogue's Passage", 'Cryptic Caves', 'Fountainport'];
+    const m = s.run!.build.main;
+    expect(util.reduce((k, n) => k + (m[n] ?? 0), 0)).toBe(3);
+    const heavy = { ...m, "Rogue's Passage": 2, 'Cryptic Caves': 2 };
+    expect(
+      deckAdvice({ ...s.run!.build, main: heavy }).some((a) => a.includes('no coloured mana')),
+    ).toBe(true);
   });
 });
