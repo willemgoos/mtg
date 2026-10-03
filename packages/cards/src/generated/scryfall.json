@@ -39381,5 +39381,1005 @@
    "large": "https://cards.scryfall.io/large/front/7/8/78897104-80e1-4d8a-9958-145b40f679e8.jpg?1783903621",
    "artCrop": "https://cards.scryfall.io/art_crop/front/7/8/78897104-80e1-4d8a-9958-145b40f679e8.jpg?1783903621"
   }
+ },
+ {
+  "name": "Campus Composer",
+  "scryfallId": "fac8ac39-ecb4-4142-bf37-131c65660a9b",
+  "oracleId": "9b3155c1-c662-4ff1-80e2-4064e6233dc5",
+  "set": "sos",
+  "collectorNumber": "40",
+  "rarity": "uncommon",
+  "manaCost": "{3}{U}",
+  "typeLine": "Creature — Merfolk Bard",
+  "oracleText": "Ward {2}\nThis creature enters prepared. (While it's prepared, you may cast a copy of its spell. Doing so unprepares it.)",
+  "power": "3",
+  "toughness": "4",
+  "colors": [
+   "U"
+  ],
+  "colorIdentity": [
+   "U"
+  ],
+  "keywords": [
+   "Prepared",
+   "Ward"
+  ],
+  "back": "Aqueous Aria (Campus Composer)",
+  "prepare": true,
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/a/fac8ac39-ecb4-4142-bf37-131c65660a9b.jpg?1783903694",
+   "normal": "https://cards.scryfall.io/normal/front/f/a/fac8ac39-ecb4-4142-bf37-131c65660a9b.jpg?1783903694",
+   "large": "https://cards.scryfall.io/large/front/f/a/fac8ac39-ecb4-4142-bf37-131c65660a9b.jpg?1783903694",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/a/fac8ac39-ecb4-4142-bf37-131c65660a9b.jpg?1783903694"
+  }
+ },
+ {
+  "name": "Aqueous Aria (Campus Composer)",
+  "flavorName": "Aqueous Aria",
+  "scryfallId": "fac8ac39-ecb4-4142-bf37-131c65660a9b",
+  "oracleId": "9b3155c1-c662-4ff1-80e2-4064e6233dc5",
+  "set": "sos",
+  "collectorNumber": "40",
+  "rarity": "uncommon",
+  "manaCost": "{4}{U}",
+  "typeLine": "Sorcery",
+  "oracleText": "Create a 3/3 blue and red Elemental creature token with flying.",
+  "colors": [
+   "U"
+  ],
+  "colorIdentity": [
+   "U"
+  ],
+  "keywords": [],
+  "front": "Campus Composer",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/a/fac8ac39-ecb4-4142-bf37-131c65660a9b.jpg?1783903694",
+   "normal": "https://cards.scryfall.io/normal/front/f/a/fac8ac39-ecb4-4142-bf37-131c65660a9b.jpg?1783903694",
+   "large": "https://cards.scryfall.io/large/front/f/a/fac8ac39-ecb4-4142-bf37-131c65660a9b.jpg?1783903694",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/a/fac8ac39-ecb4-4142-bf37-131c65660a9b.jpg?1783903694"
+  }
+ },
+ {
+  "name": "Emeritus of Ideation",
+  "scryfallId": "75961d36-acf6-425f-9698-0bf52af74f31",
+  "oracleId": "24a29be4-5bc2-469b-b2ce-2fb305c3facb",
+  "set": "sos",
+  "collectorNumber": "45",
+  "rarity": "mythic",
+  "manaCost": "{3}{U}{U}",
+  "typeLine": "Creature — Human Wizard",
+  "oracleText": "Flying, ward {2}\nThis creature enters prepared.\nWhenever this creature attacks, you may exile eight cards from your graveyard. If you do, this creature becomes prepared.",
+  "power": "5",
+  "toughness": "5",
+  "colors": [
+   "U"
+  ],
+  "colorIdentity": [
+   "U"
+  ],
+  "keywords": [
+   "Flying",
+   "Prepared",
+   "Ward"
+  ],
+  "back": "Ancestral Recall (Emeritus of Ideation)",
+  "prepare": true,
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/5/75961d36-acf6-425f-9698-0bf52af74f31.jpg?1783903694",
+   "normal": "https://cards.scryfall.io/normal/front/7/5/75961d36-acf6-425f-9698-0bf52af74f31.jpg?1783903694",
+   "large": "https://cards.scryfall.io/large/front/7/5/75961d36-acf6-425f-9698-0bf52af74f31.jpg?1783903694",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/5/75961d36-acf6-425f-9698-0bf52af74f31.jpg?1783903694"
+  }
+ },
+ {
+  "name": "Ancestral Recall (Emeritus of Ideation)",
+  "flavorName": "Ancestral Recall",
+  "scryfallId": "75961d36-acf6-425f-9698-0bf52af74f31",
+  "oracleId": "24a29be4-5bc2-469b-b2ce-2fb305c3facb",
+  "set": "sos",
+  "collectorNumber": "45",
+  "rarity": "mythic",
+  "manaCost": "{U}",
+  "typeLine": "Instant",
+  "oracleText": "Target player draws three cards.",
+  "colors": [
+   "U"
+  ],
+  "colorIdentity": [
+   "U"
+  ],
+  "keywords": [],
+  "front": "Emeritus of Ideation",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/5/75961d36-acf6-425f-9698-0bf52af74f31.jpg?1783903694",
+   "normal": "https://cards.scryfall.io/normal/front/7/5/75961d36-acf6-425f-9698-0bf52af74f31.jpg?1783903694",
+   "large": "https://cards.scryfall.io/large/front/7/5/75961d36-acf6-425f-9698-0bf52af74f31.jpg?1783903694",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/5/75961d36-acf6-425f-9698-0bf52af74f31.jpg?1783903694"
+  }
+ },
+ {
+  "name": "Encouraging Aviator",
+  "scryfallId": "72654b84-9902-41db-92ab-a3499c31221c",
+  "oracleId": "d6accaed-ff35-4324-b31b-35e6837bc079",
+  "set": "sos",
+  "collectorNumber": "46",
+  "rarity": "uncommon",
+  "manaCost": "{2}{U}",
+  "typeLine": "Creature — Bird Wizard",
+  "oracleText": "Flying\nWhenever this creature attacks, it becomes prepared. (While it's prepared, you may cast a copy of its spell. Doing so unprepares it.)",
+  "power": "2",
+  "toughness": "3",
+  "colors": [
+   "U"
+  ],
+  "colorIdentity": [
+   "U"
+  ],
+  "keywords": [
+   "Flying",
+   "Prepared"
+  ],
+  "back": "Jump (Encouraging Aviator)",
+  "prepare": true,
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/2/72654b84-9902-41db-92ab-a3499c31221c.jpg?1783903694",
+   "normal": "https://cards.scryfall.io/normal/front/7/2/72654b84-9902-41db-92ab-a3499c31221c.jpg?1783903694",
+   "large": "https://cards.scryfall.io/large/front/7/2/72654b84-9902-41db-92ab-a3499c31221c.jpg?1783903694",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/2/72654b84-9902-41db-92ab-a3499c31221c.jpg?1783903694"
+  }
+ },
+ {
+  "name": "Jump (Encouraging Aviator)",
+  "flavorName": "Jump",
+  "scryfallId": "72654b84-9902-41db-92ab-a3499c31221c",
+  "oracleId": "d6accaed-ff35-4324-b31b-35e6837bc079",
+  "set": "sos",
+  "collectorNumber": "46",
+  "rarity": "uncommon",
+  "manaCost": "{U}",
+  "typeLine": "Instant",
+  "oracleText": "Target creature gains flying until end of turn.",
+  "colors": [
+   "U"
+  ],
+  "colorIdentity": [
+   "U"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "front": "Encouraging Aviator",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/2/72654b84-9902-41db-92ab-a3499c31221c.jpg?1783903694",
+   "normal": "https://cards.scryfall.io/normal/front/7/2/72654b84-9902-41db-92ab-a3499c31221c.jpg?1783903694",
+   "large": "https://cards.scryfall.io/large/front/7/2/72654b84-9902-41db-92ab-a3499c31221c.jpg?1783903694",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/2/72654b84-9902-41db-92ab-a3499c31221c.jpg?1783903694"
+  }
+ },
+ {
+  "name": "Harmonized Trio",
+  "scryfallId": "617208ff-dd9b-44fd-a740-d3188081e5cc",
+  "oracleId": "f6036065-7196-44d4-8a27-2199f0e1a03c",
+  "set": "sos",
+  "collectorNumber": "52",
+  "rarity": "rare",
+  "manaCost": "{U}",
+  "typeLine": "Creature — Merfolk Bard Wizard",
+  "oracleText": "{T}, Tap two untapped creatures you control: This creature becomes prepared. (While it's prepared, you may cast a copy of its spell. Doing so unprepares it.)",
+  "power": "1",
+  "toughness": "1",
+  "colors": [
+   "U"
+  ],
+  "colorIdentity": [
+   "U"
+  ],
+  "keywords": [
+   "Prepared"
+  ],
+  "back": "Brainstorm (Harmonized Trio)",
+  "prepare": true,
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/1/617208ff-dd9b-44fd-a740-d3188081e5cc.jpg?1783903691",
+   "normal": "https://cards.scryfall.io/normal/front/6/1/617208ff-dd9b-44fd-a740-d3188081e5cc.jpg?1783903691",
+   "large": "https://cards.scryfall.io/large/front/6/1/617208ff-dd9b-44fd-a740-d3188081e5cc.jpg?1783903691",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/1/617208ff-dd9b-44fd-a740-d3188081e5cc.jpg?1783903691"
+  }
+ },
+ {
+  "name": "Brainstorm (Harmonized Trio)",
+  "flavorName": "Brainstorm",
+  "scryfallId": "617208ff-dd9b-44fd-a740-d3188081e5cc",
+  "oracleId": "f6036065-7196-44d4-8a27-2199f0e1a03c",
+  "set": "sos",
+  "collectorNumber": "52",
+  "rarity": "rare",
+  "manaCost": "{U}",
+  "typeLine": "Instant",
+  "oracleText": "Draw three cards, then put two cards from your hand on top of your library in any order.",
+  "colors": [
+   "U"
+  ],
+  "colorIdentity": [
+   "U"
+  ],
+  "keywords": [],
+  "front": "Harmonized Trio",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/1/617208ff-dd9b-44fd-a740-d3188081e5cc.jpg?1783903691",
+   "normal": "https://cards.scryfall.io/normal/front/6/1/617208ff-dd9b-44fd-a740-d3188081e5cc.jpg?1783903691",
+   "large": "https://cards.scryfall.io/large/front/6/1/617208ff-dd9b-44fd-a740-d3188081e5cc.jpg?1783903691",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/1/617208ff-dd9b-44fd-a740-d3188081e5cc.jpg?1783903691"
+  }
+ },
+ {
+  "name": "Jadzi, Steward of Fate",
+  "scryfallId": "a95b6baf-01e6-49c3-9a26-394b127d53c3",
+  "oracleId": "c63b3511-d597-4c6e-9094-eabdeaa8a394",
+  "set": "sos",
+  "collectorNumber": "55",
+  "rarity": "rare",
+  "manaCost": "{2}{U}",
+  "typeLine": "Legendary Creature — Human Wizard",
+  "oracleText": "Jadzi enters prepared. (While it's prepared, you may cast a copy of its spell. Doing so unprepares it.)\nWhen Jadzi enters, draw two cards, then discard two cards.",
+  "power": "2",
+  "toughness": "4",
+  "colors": [
+   "U"
+  ],
+  "colorIdentity": [
+   "U"
+  ],
+  "keywords": [
+   "Prepared"
+  ],
+  "back": "Oracle's Gift (Jadzi, Steward of Fate)",
+  "prepare": true,
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/9/a95b6baf-01e6-49c3-9a26-394b127d53c3.jpg?1783903689",
+   "normal": "https://cards.scryfall.io/normal/front/a/9/a95b6baf-01e6-49c3-9a26-394b127d53c3.jpg?1783903689",
+   "large": "https://cards.scryfall.io/large/front/a/9/a95b6baf-01e6-49c3-9a26-394b127d53c3.jpg?1783903689",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/9/a95b6baf-01e6-49c3-9a26-394b127d53c3.jpg?1783903689"
+  }
+ },
+ {
+  "name": "Oracle's Gift (Jadzi, Steward of Fate)",
+  "flavorName": "Oracle's Gift",
+  "scryfallId": "a95b6baf-01e6-49c3-9a26-394b127d53c3",
+  "oracleId": "c63b3511-d597-4c6e-9094-eabdeaa8a394",
+  "set": "sos",
+  "collectorNumber": "55",
+  "rarity": "rare",
+  "manaCost": "{X}{X}{U}",
+  "typeLine": "Sorcery",
+  "oracleText": "Create X 0/0 green and blue Fractal creature tokens, then put X +1/+1 counters on each Fractal you control.",
+  "colors": [
+   "U"
+  ],
+  "colorIdentity": [
+   "U"
+  ],
+  "keywords": [],
+  "front": "Jadzi, Steward of Fate",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/9/a95b6baf-01e6-49c3-9a26-394b127d53c3.jpg?1783903689",
+   "normal": "https://cards.scryfall.io/normal/front/a/9/a95b6baf-01e6-49c3-9a26-394b127d53c3.jpg?1783903689",
+   "large": "https://cards.scryfall.io/large/front/a/9/a95b6baf-01e6-49c3-9a26-394b127d53c3.jpg?1783903689",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/9/a95b6baf-01e6-49c3-9a26-394b127d53c3.jpg?1783903689"
+  }
+ },
+ {
+  "name": "Landscape Painter",
+  "scryfallId": "c0bd30c4-3cdf-4eda-8be5-0fb5e5ddddbf",
+  "oracleId": "5ba7abbc-f6e8-40c2-800b-11efd10cca5b",
+  "set": "sos",
+  "collectorNumber": "56",
+  "rarity": "common",
+  "manaCost": "{1}{U}",
+  "typeLine": "Creature — Merfolk Wizard",
+  "oracleText": "This creature enters prepared. (While it's prepared, you may cast a copy of its spell. Doing so unprepares it.)",
+  "power": "2",
+  "toughness": "1",
+  "colors": [
+   "U"
+  ],
+  "colorIdentity": [
+   "U"
+  ],
+  "keywords": [
+   "Prepared"
+  ],
+  "back": "Vibrant Idea (Landscape Painter)",
+  "prepare": true,
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/0/c0bd30c4-3cdf-4eda-8be5-0fb5e5ddddbf.jpg?1783903689",
+   "normal": "https://cards.scryfall.io/normal/front/c/0/c0bd30c4-3cdf-4eda-8be5-0fb5e5ddddbf.jpg?1783903689",
+   "large": "https://cards.scryfall.io/large/front/c/0/c0bd30c4-3cdf-4eda-8be5-0fb5e5ddddbf.jpg?1783903689",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/0/c0bd30c4-3cdf-4eda-8be5-0fb5e5ddddbf.jpg?1783903689"
+  }
+ },
+ {
+  "name": "Vibrant Idea (Landscape Painter)",
+  "flavorName": "Vibrant Idea",
+  "scryfallId": "c0bd30c4-3cdf-4eda-8be5-0fb5e5ddddbf",
+  "oracleId": "5ba7abbc-f6e8-40c2-800b-11efd10cca5b",
+  "set": "sos",
+  "collectorNumber": "56",
+  "rarity": "common",
+  "manaCost": "{4}{U}",
+  "typeLine": "Sorcery",
+  "oracleText": "Draw two cards.",
+  "colors": [
+   "U"
+  ],
+  "colorIdentity": [
+   "U"
+  ],
+  "keywords": [],
+  "front": "Landscape Painter",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/0/c0bd30c4-3cdf-4eda-8be5-0fb5e5ddddbf.jpg?1783903689",
+   "normal": "https://cards.scryfall.io/normal/front/c/0/c0bd30c4-3cdf-4eda-8be5-0fb5e5ddddbf.jpg?1783903689",
+   "large": "https://cards.scryfall.io/large/front/c/0/c0bd30c4-3cdf-4eda-8be5-0fb5e5ddddbf.jpg?1783903689",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/0/c0bd30c4-3cdf-4eda-8be5-0fb5e5ddddbf.jpg?1783903689"
+  }
+ },
+ {
+  "name": "Skycoach Conductor",
+  "scryfallId": "4ecbca71-9a1d-44c5-b709-d6f565941d5e",
+  "oracleId": "788d3cfa-7706-4728-9c48-cf7bc963d002",
+  "set": "sos",
+  "collectorNumber": "67",
+  "rarity": "rare",
+  "manaCost": "{2}{U}",
+  "typeLine": "Creature — Bird Pilot",
+  "oracleText": "Flash\nFlying, vigilance\nThis creature enters prepared. (While it's prepared, you may cast a copy of its spell. Doing so unprepares it.)",
+  "power": "2",
+  "toughness": "3",
+  "colors": [
+   "U"
+  ],
+  "colorIdentity": [
+   "U"
+  ],
+  "keywords": [
+   "Flying",
+   "Vigilance",
+   "Prepared",
+   "Flash"
+  ],
+  "back": "All Aboard (Skycoach Conductor)",
+  "prepare": true,
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/e/4ecbca71-9a1d-44c5-b709-d6f565941d5e.jpg?1783903688",
+   "normal": "https://cards.scryfall.io/normal/front/4/e/4ecbca71-9a1d-44c5-b709-d6f565941d5e.jpg?1783903688",
+   "large": "https://cards.scryfall.io/large/front/4/e/4ecbca71-9a1d-44c5-b709-d6f565941d5e.jpg?1783903688",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/e/4ecbca71-9a1d-44c5-b709-d6f565941d5e.jpg?1783903688"
+  }
+ },
+ {
+  "name": "All Aboard (Skycoach Conductor)",
+  "flavorName": "All Aboard",
+  "scryfallId": "4ecbca71-9a1d-44c5-b709-d6f565941d5e",
+  "oracleId": "788d3cfa-7706-4728-9c48-cf7bc963d002",
+  "set": "sos",
+  "collectorNumber": "67",
+  "rarity": "rare",
+  "manaCost": "{U}",
+  "typeLine": "Instant",
+  "oracleText": "Exile target non-Pilot creature you control, then return that card to the battlefield under its owner's control.",
+  "colors": [
+   "U"
+  ],
+  "colorIdentity": [
+   "U"
+  ],
+  "keywords": [],
+  "front": "Skycoach Conductor",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/e/4ecbca71-9a1d-44c5-b709-d6f565941d5e.jpg?1783903688",
+   "normal": "https://cards.scryfall.io/normal/front/4/e/4ecbca71-9a1d-44c5-b709-d6f565941d5e.jpg?1783903688",
+   "large": "https://cards.scryfall.io/large/front/4/e/4ecbca71-9a1d-44c5-b709-d6f565941d5e.jpg?1783903688",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/e/4ecbca71-9a1d-44c5-b709-d6f565941d5e.jpg?1783903688"
+  }
+ },
+ {
+  "name": "Spellbook Seeker",
+  "scryfallId": "cc44eaa4-59a4-419e-b1d1-d92f354ff588",
+  "oracleId": "df5e4100-8c83-42d6-af96-1a1ec84a9210",
+  "set": "sos",
+  "collectorNumber": "68",
+  "rarity": "common",
+  "manaCost": "{3}{U}",
+  "typeLine": "Creature — Bird Wizard",
+  "oracleText": "Flying\nThis creature enters prepared. (While it's prepared, you may cast a copy of its spell. Doing so unprepares it.)",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "U"
+  ],
+  "colorIdentity": [
+   "U"
+  ],
+  "keywords": [
+   "Flying",
+   "Prepared"
+  ],
+  "back": "Careful Study (Spellbook Seeker)",
+  "prepare": true,
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/c/cc44eaa4-59a4-419e-b1d1-d92f354ff588.jpg?1783903686",
+   "normal": "https://cards.scryfall.io/normal/front/c/c/cc44eaa4-59a4-419e-b1d1-d92f354ff588.jpg?1783903686",
+   "large": "https://cards.scryfall.io/large/front/c/c/cc44eaa4-59a4-419e-b1d1-d92f354ff588.jpg?1783903686",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/c/cc44eaa4-59a4-419e-b1d1-d92f354ff588.jpg?1783903686"
+  }
+ },
+ {
+  "name": "Careful Study (Spellbook Seeker)",
+  "flavorName": "Careful Study",
+  "scryfallId": "cc44eaa4-59a4-419e-b1d1-d92f354ff588",
+  "oracleId": "df5e4100-8c83-42d6-af96-1a1ec84a9210",
+  "set": "sos",
+  "collectorNumber": "68",
+  "rarity": "common",
+  "manaCost": "{U}",
+  "typeLine": "Sorcery",
+  "oracleText": "Draw two cards, then discard two cards.",
+  "colors": [
+   "U"
+  ],
+  "colorIdentity": [
+   "U"
+  ],
+  "keywords": [],
+  "front": "Spellbook Seeker",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/c/cc44eaa4-59a4-419e-b1d1-d92f354ff588.jpg?1783903686",
+   "normal": "https://cards.scryfall.io/normal/front/c/c/cc44eaa4-59a4-419e-b1d1-d92f354ff588.jpg?1783903686",
+   "large": "https://cards.scryfall.io/large/front/c/c/cc44eaa4-59a4-419e-b1d1-d92f354ff588.jpg?1783903686",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/c/cc44eaa4-59a4-419e-b1d1-d92f354ff588.jpg?1783903686"
+  }
+ },
+ {
+  "name": "Deluge Virtuoso",
+  "scryfallId": "2e3b16ed-8727-48fd-8b1f-c0cbd329385e",
+  "oracleId": "416c70ab-f136-43e0-b5d5-9af8d4211c01",
+  "set": "sos",
+  "collectorNumber": "42",
+  "rarity": "common",
+  "manaCost": "{2}{U}",
+  "typeLine": "Creature — Human Wizard",
+  "oracleText": "When this creature enters, tap target creature an opponent controls and put a stun counter on it. (If a permanent with a stun counter would become untapped, remove one from it instead.)\nOpus — Whenever you cast an instant or sorcery spell, this creature gets +1/+1 until end of turn. If five or more mana was spent to cast that spell, this creature gets +2/+2 until end of turn instead.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Opus"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/e/2e3b16ed-8727-48fd-8b1f-c0cbd329385e.jpg?1783903694",
+   "normal": "https://cards.scryfall.io/normal/front/2/e/2e3b16ed-8727-48fd-8b1f-c0cbd329385e.jpg?1783903694",
+   "large": "https://cards.scryfall.io/large/front/2/e/2e3b16ed-8727-48fd-8b1f-c0cbd329385e.jpg?1783903694",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/e/2e3b16ed-8727-48fd-8b1f-c0cbd329385e.jpg?1783903694"
+  }
+ },
+ {
+  "name": "Exhibition Tidecaller",
+  "scryfallId": "a58c364e-d0c5-41b9-8c8b-2e5a99468cc7",
+  "oracleId": "d32c9439-4c97-412b-83cc-6d9acb48be3c",
+  "set": "sos",
+  "collectorNumber": "48",
+  "rarity": "rare",
+  "manaCost": "{U}",
+  "typeLine": "Creature — Djinn Wizard",
+  "oracleText": "Opus — Whenever you cast an instant or sorcery spell, target player mills three cards. If five or more mana was spent to cast that spell, that player mills ten cards instead.",
+  "power": "0",
+  "toughness": "2",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Mill",
+   "Opus"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/5/a58c364e-d0c5-41b9-8c8b-2e5a99468cc7.jpg?1783903694",
+   "normal": "https://cards.scryfall.io/normal/front/a/5/a58c364e-d0c5-41b9-8c8b-2e5a99468cc7.jpg?1783903694",
+   "large": "https://cards.scryfall.io/large/front/a/5/a58c364e-d0c5-41b9-8c8b-2e5a99468cc7.jpg?1783903694",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/5/a58c364e-d0c5-41b9-8c8b-2e5a99468cc7.jpg?1783903694"
+  }
+ },
+ {
+  "name": "Hydro-Channeler",
+  "scryfallId": "099f8400-d70a-48ef-8ff6-645eae97e072",
+  "oracleId": "95630a83-3699-4340-b3e5-17e81db1b82f",
+  "set": "sos",
+  "collectorNumber": "54",
+  "rarity": "common",
+  "manaCost": "{1}{U}",
+  "typeLine": "Creature — Merfolk Wizard",
+  "oracleText": "{T}: Add {U}. Spend this mana only to cast an instant or sorcery spell.\n{1}, {T}: Add one mana of any color. Spend this mana only to cast an instant or sorcery spell.",
+  "power": "1",
+  "toughness": "3",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/9/099f8400-d70a-48ef-8ff6-645eae97e072.jpg?1783903690",
+   "normal": "https://cards.scryfall.io/normal/front/0/9/099f8400-d70a-48ef-8ff6-645eae97e072.jpg?1783903690",
+   "large": "https://cards.scryfall.io/large/front/0/9/099f8400-d70a-48ef-8ff6-645eae97e072.jpg?1783903690",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/9/099f8400-d70a-48ef-8ff6-645eae97e072.jpg?1783903690"
+  }
+ },
+ {
+  "name": "Matterbending Mage",
+  "scryfallId": "460c6afd-cddf-4fea-925f-b27517ff250a",
+  "oracleId": "94688e25-28cb-45aa-95ea-0d6f547cae57",
+  "set": "sos",
+  "collectorNumber": "59",
+  "rarity": "uncommon",
+  "manaCost": "{2}{U}",
+  "typeLine": "Creature — Human Wizard",
+  "oracleText": "When this creature enters, return up to one other target creature to its owner's hand.\nWhenever you cast a spell with {X} in its mana cost, this creature can't be blocked this turn.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/6/460c6afd-cddf-4fea-925f-b27517ff250a.jpg?1783903689",
+   "normal": "https://cards.scryfall.io/normal/front/4/6/460c6afd-cddf-4fea-925f-b27517ff250a.jpg?1783903689",
+   "large": "https://cards.scryfall.io/large/front/4/6/460c6afd-cddf-4fea-925f-b27517ff250a.jpg?1783903689",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/6/460c6afd-cddf-4fea-925f-b27517ff250a.jpg?1783903689"
+  }
+ },
+ {
+  "name": "Muse Seeker",
+  "scryfallId": "71cb4a6b-b500-4b28-bcdb-ec4188242f39",
+  "oracleId": "31f3d37f-e613-427f-b34c-cc87611ea078",
+  "set": "sos",
+  "collectorNumber": "60",
+  "rarity": "uncommon",
+  "manaCost": "{1}{U}",
+  "typeLine": "Creature — Elf Wizard",
+  "oracleText": "Opus — Whenever you cast an instant or sorcery spell, draw a card. Then discard a card unless five or more mana was spent to cast that spell.",
+  "power": "1",
+  "toughness": "2",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Opus"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/1/71cb4a6b-b500-4b28-bcdb-ec4188242f39.jpg?1783903688",
+   "normal": "https://cards.scryfall.io/normal/front/7/1/71cb4a6b-b500-4b28-bcdb-ec4188242f39.jpg?1783903688",
+   "large": "https://cards.scryfall.io/large/front/7/1/71cb4a6b-b500-4b28-bcdb-ec4188242f39.jpg?1783903688",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/1/71cb4a6b-b500-4b28-bcdb-ec4188242f39.jpg?1783903688"
+  }
+ },
+ {
+  "name": "Orysa, Tide Choreographer",
+  "scryfallId": "010ed379-63f5-452c-9cd4-00d51647c0e3",
+  "oracleId": "cf56a5b4-48fa-4d53-a4b9-14afe079c1d3",
+  "set": "sos",
+  "collectorNumber": "62",
+  "rarity": "uncommon",
+  "manaCost": "{4}{U}",
+  "typeLine": "Legendary Creature — Merfolk Bard",
+  "oracleText": "This spell costs {3} less to cast if creatures you control have total toughness 10 or greater.\nWhen Orysa enters, draw two cards.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/1/010ed379-63f5-452c-9cd4-00d51647c0e3.jpg?1783903690",
+   "normal": "https://cards.scryfall.io/normal/front/0/1/010ed379-63f5-452c-9cd4-00d51647c0e3.jpg?1783903690",
+   "large": "https://cards.scryfall.io/large/front/0/1/010ed379-63f5-452c-9cd4-00d51647c0e3.jpg?1783903690",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/1/010ed379-63f5-452c-9cd4-00d51647c0e3.jpg?1783903690"
+  }
+ },
+ {
+  "name": "Pensive Professor",
+  "scryfallId": "66d47940-84f9-4479-8562-45e5148435d4",
+  "oracleId": "4b8736e2-fc41-4a25-bb6c-7351afc40981",
+  "set": "sos",
+  "collectorNumber": "63",
+  "rarity": "rare",
+  "manaCost": "{1}{U}{U}",
+  "typeLine": "Creature — Human Wizard",
+  "oracleText": "Increment (Whenever you cast a spell, if the amount of mana you spent is greater than this creature's power or toughness, put a +1/+1 counter on this creature.)\nWhenever one or more +1/+1 counters are put on this creature, draw a card.",
+  "power": "0",
+  "toughness": "2",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Increment"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/6/66d47940-84f9-4479-8562-45e5148435d4.jpg?1783903688",
+   "normal": "https://cards.scryfall.io/normal/front/6/6/66d47940-84f9-4479-8562-45e5148435d4.jpg?1783903688",
+   "large": "https://cards.scryfall.io/large/front/6/6/66d47940-84f9-4479-8562-45e5148435d4.jpg?1783903688",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/6/66d47940-84f9-4479-8562-45e5148435d4.jpg?1783903688"
+  }
+ },
+ {
+  "name": "Tester of the Tangential",
+  "scryfallId": "bbd708ec-eef4-4f45-99dd-60e1cec4b991",
+  "oracleId": "a30a2b96-4a8c-4d18-b276-5005b8aff7ed",
+  "set": "sos",
+  "collectorNumber": "69",
+  "rarity": "uncommon",
+  "manaCost": "{1}{U}",
+  "typeLine": "Creature — Djinn Wizard",
+  "oracleText": "Increment (Whenever you cast a spell, if the amount of mana you spent is greater than this creature's power or toughness, put a +1/+1 counter on this creature.)\nAt the beginning of combat on your turn, you may pay {X}. When you do, move X +1/+1 counters from this creature onto another target creature.",
+  "power": "1",
+  "toughness": "1",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Increment"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/b/bbd708ec-eef4-4f45-99dd-60e1cec4b991.jpg?1783903685",
+   "normal": "https://cards.scryfall.io/normal/front/b/b/bbd708ec-eef4-4f45-99dd-60e1cec4b991.jpg?1783903685",
+   "large": "https://cards.scryfall.io/large/front/b/b/bbd708ec-eef4-4f45-99dd-60e1cec4b991.jpg?1783903685",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/b/bbd708ec-eef4-4f45-99dd-60e1cec4b991.jpg?1783903685"
+  }
+ },
+ {
+  "name": "Textbook Tabulator",
+  "scryfallId": "56f54fee-b48d-4582-8982-ca4c7b8ef553",
+  "oracleId": "ebb40a50-cfbc-4ec1-9c54-26a1bc2e7a6e",
+  "set": "sos",
+  "collectorNumber": "70",
+  "rarity": "common",
+  "manaCost": "{2}{U}",
+  "typeLine": "Creature — Frog Wizard",
+  "oracleText": "Increment (Whenever you cast a spell, if the amount of mana you spent is greater than this creature's power or toughness, put a +1/+1 counter on this creature.)\nWhen this creature enters, surveil 2. (Look at the top two cards of your library, then put any number of them into your graveyard and the rest on top of your library in any order.)",
+  "power": "0",
+  "toughness": "3",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Surveil",
+   "Increment"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/6/56f54fee-b48d-4582-8982-ca4c7b8ef553.jpg?1783903685",
+   "normal": "https://cards.scryfall.io/normal/front/5/6/56f54fee-b48d-4582-8982-ca4c7b8ef553.jpg?1783903685",
+   "large": "https://cards.scryfall.io/large/front/5/6/56f54fee-b48d-4582-8982-ca4c7b8ef553.jpg?1783903685",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/6/56f54fee-b48d-4582-8982-ca4c7b8ef553.jpg?1783903685"
+  }
+ },
+ {
+  "name": "Banishing Betrayal",
+  "scryfallId": "1ae9d2f3-7a9f-433a-aa1f-14337ae6f9d4",
+  "oracleId": "6b633e58-ea1b-4ed0-addb-6dfd93645ae4",
+  "set": "sos",
+  "collectorNumber": "38",
+  "rarity": "common",
+  "manaCost": "{1}{U}",
+  "typeLine": "Instant",
+  "oracleText": "Return target nonland permanent to its owner's hand. Surveil 1. (Look at the top card of your library. You may put it into your graveyard.)",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Surveil"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/a/1ae9d2f3-7a9f-433a-aa1f-14337ae6f9d4.jpg?1783903699",
+   "normal": "https://cards.scryfall.io/normal/front/1/a/1ae9d2f3-7a9f-433a-aa1f-14337ae6f9d4.jpg?1783903699",
+   "large": "https://cards.scryfall.io/large/front/1/a/1ae9d2f3-7a9f-433a-aa1f-14337ae6f9d4.jpg?1783903699",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/a/1ae9d2f3-7a9f-433a-aa1f-14337ae6f9d4.jpg?1783903699"
+  }
+ },
+ {
+  "name": "Brush Off",
+  "scryfallId": "151eab82-d20f-433b-b3bb-1d44e2871d5c",
+  "oracleId": "873694c0-c100-4d24-a74f-1ab26442dd18",
+  "set": "sos",
+  "collectorNumber": "39",
+  "rarity": "uncommon",
+  "manaCost": "{2}{U}{U}",
+  "typeLine": "Instant",
+  "oracleText": "This spell costs {1}{U} less to cast if it targets an instant or sorcery spell.\nCounter target spell.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/5/151eab82-d20f-433b-b3bb-1d44e2871d5c.jpg?1783903697",
+   "normal": "https://cards.scryfall.io/normal/front/1/5/151eab82-d20f-433b-b3bb-1d44e2871d5c.jpg?1783903697",
+   "large": "https://cards.scryfall.io/large/front/1/5/151eab82-d20f-433b-b3bb-1d44e2871d5c.jpg?1783903697",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/5/151eab82-d20f-433b-b3bb-1d44e2871d5c.jpg?1783903697"
+  }
+ },
+ {
+  "name": "Chase Inspiration",
+  "scryfallId": "06f9f257-c7ef-44b7-8b2b-f038fba900af",
+  "oracleId": "9c055ef0-1164-4a9f-80de-23405423aed5",
+  "set": "sos",
+  "collectorNumber": "41",
+  "rarity": "common",
+  "manaCost": "{U}",
+  "typeLine": "Instant",
+  "oracleText": "Target creature you control gets +0/+3 and gains hexproof until end of turn. (It can't be the target of spells or abilities your opponents control.)",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/6/06f9f257-c7ef-44b7-8b2b-f038fba900af.jpg?1783903695",
+   "normal": "https://cards.scryfall.io/normal/front/0/6/06f9f257-c7ef-44b7-8b2b-f038fba900af.jpg?1783903695",
+   "large": "https://cards.scryfall.io/large/front/0/6/06f9f257-c7ef-44b7-8b2b-f038fba900af.jpg?1783903695",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/6/06f9f257-c7ef-44b7-8b2b-f038fba900af.jpg?1783903695"
+  }
+ },
+ {
+  "name": "Divergent Equation",
+  "scryfallId": "26295e25-f1bf-4665-ba00-dad35c49bbc2",
+  "oracleId": "84681f12-2978-4f62-ab89-b579033c5192",
+  "set": "sos",
+  "collectorNumber": "43",
+  "rarity": "uncommon",
+  "manaCost": "{X}{X}{U}",
+  "typeLine": "Instant",
+  "oracleText": "Return up to X target instant and/or sorcery cards from your graveyard to your hand.\nExile Divergent Equation.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/6/26295e25-f1bf-4665-ba00-dad35c49bbc2.jpg?1783903695",
+   "normal": "https://cards.scryfall.io/normal/front/2/6/26295e25-f1bf-4665-ba00-dad35c49bbc2.jpg?1783903695",
+   "large": "https://cards.scryfall.io/large/front/2/6/26295e25-f1bf-4665-ba00-dad35c49bbc2.jpg?1783903695",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/6/26295e25-f1bf-4665-ba00-dad35c49bbc2.jpg?1783903695"
+  }
+ },
+ {
+  "name": "Echocasting Symposium",
+  "scryfallId": "5d7086a7-dc42-468a-a2cf-a6f89030f947",
+  "oracleId": "d88c3554-18db-4e5e-a979-2402990a0311",
+  "set": "sos",
+  "collectorNumber": "44",
+  "rarity": "mythic",
+  "manaCost": "{4}{U}{U}",
+  "typeLine": "Sorcery — Lesson",
+  "oracleText": "Target player creates a token that's a copy of target creature you control.\nParadigm (Then exile this spell. After you first resolve a spell with this name, you may cast a copy of it from exile without paying its mana cost at the beginning of each of your first main phases.)",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Paradigm"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/d/5d7086a7-dc42-468a-a2cf-a6f89030f947.jpg?1783903694",
+   "normal": "https://cards.scryfall.io/normal/front/5/d/5d7086a7-dc42-468a-a2cf-a6f89030f947.jpg?1783903694",
+   "large": "https://cards.scryfall.io/large/front/5/d/5d7086a7-dc42-468a-a2cf-a6f89030f947.jpg?1783903694",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/d/5d7086a7-dc42-468a-a2cf-a6f89030f947.jpg?1783903694"
+  }
+ },
+ {
+  "name": "Flow State",
+  "scryfallId": "47d6093b-b1b6-4956-8bfd-02cce899f832",
+  "oracleId": "e7194bca-0cf4-4a86-8b84-d2f9219a08b3",
+  "set": "sos",
+  "collectorNumber": "49",
+  "rarity": "uncommon",
+  "manaCost": "{1}{U}",
+  "typeLine": "Sorcery",
+  "oracleText": "Look at the top three cards of your library. Put one of them into your hand and the rest on the bottom of your library in any order. If there is an instant card and a sorcery card in your graveyard, instead put two of them into your hand and the rest on the bottom of your library in any order.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/7/47d6093b-b1b6-4956-8bfd-02cce899f832.jpg?1783903694",
+   "normal": "https://cards.scryfall.io/normal/front/4/7/47d6093b-b1b6-4956-8bfd-02cce899f832.jpg?1783903694",
+   "large": "https://cards.scryfall.io/large/front/4/7/47d6093b-b1b6-4956-8bfd-02cce899f832.jpg?1783903694",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/7/47d6093b-b1b6-4956-8bfd-02cce899f832.jpg?1783903694"
+  }
+ },
+ {
+  "name": "Fractal Anomaly",
+  "scryfallId": "e1975a61-aef0-49a6-a6d6-c3a37e2e2b22",
+  "oracleId": "644379e7-782e-48e1-9b47-c4dc62e62d85",
+  "set": "sos",
+  "collectorNumber": "50",
+  "rarity": "uncommon",
+  "manaCost": "{U}",
+  "typeLine": "Instant",
+  "oracleText": "Create a 0/0 green and blue Fractal creature token and put X +1/+1 counters on it, where X is the number of cards you've drawn this turn.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/1/e1975a61-aef0-49a6-a6d6-c3a37e2e2b22.jpg?1783903693",
+   "normal": "https://cards.scryfall.io/normal/front/e/1/e1975a61-aef0-49a6-a6d6-c3a37e2e2b22.jpg?1783903693",
+   "large": "https://cards.scryfall.io/large/front/e/1/e1975a61-aef0-49a6-a6d6-c3a37e2e2b22.jpg?1783903693",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/1/e1975a61-aef0-49a6-a6d6-c3a37e2e2b22.jpg?1783903693"
+  }
+ },
+ {
+  "name": "Fractalize",
+  "scryfallId": "e3c3b19b-01b6-4f5a-b428-513b778c5d89",
+  "oracleId": "9e7bd032-8946-4d72-9910-b224823bc940",
+  "set": "sos",
+  "collectorNumber": "51",
+  "rarity": "uncommon",
+  "manaCost": "{X}{U}",
+  "typeLine": "Instant",
+  "oracleText": "Until end of turn, target creature becomes a green and blue Fractal with base power and toughness each equal to X plus 1. (It loses all other colors and creature types.)",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/3/e3c3b19b-01b6-4f5a-b428-513b778c5d89.jpg?1783903692",
+   "normal": "https://cards.scryfall.io/normal/front/e/3/e3c3b19b-01b6-4f5a-b428-513b778c5d89.jpg?1783903692",
+   "large": "https://cards.scryfall.io/large/front/e/3/e3c3b19b-01b6-4f5a-b428-513b778c5d89.jpg?1783903692",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/3/e3c3b19b-01b6-4f5a-b428-513b778c5d89.jpg?1783903692"
+  }
+ },
+ {
+  "name": "Homesickness",
+  "scryfallId": "6e4a1f82-b0b1-4608-91f8-130bee731435",
+  "oracleId": "ee57fba8-e68b-4c52-8de7-9b9873d84506",
+  "set": "sos",
+  "collectorNumber": "53",
+  "rarity": "uncommon",
+  "manaCost": "{4}{U}{U}",
+  "typeLine": "Instant",
+  "oracleText": "Target player draws two cards. Tap up to two target creatures. Put a stun counter on each of them. (If a permanent with a stun counter would become untapped, remove one from it instead.)",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/e/6e4a1f82-b0b1-4608-91f8-130bee731435.jpg?1783903691",
+   "normal": "https://cards.scryfall.io/normal/front/6/e/6e4a1f82-b0b1-4608-91f8-130bee731435.jpg?1783903691",
+   "large": "https://cards.scryfall.io/large/front/6/e/6e4a1f82-b0b1-4608-91f8-130bee731435.jpg?1783903691",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/e/6e4a1f82-b0b1-4608-91f8-130bee731435.jpg?1783903691"
+  }
+ },
+ {
+  "name": "Mana Sculpt",
+  "scryfallId": "200c8e3d-c53b-40c7-a29a-fccc1281bfc6",
+  "oracleId": "35e2f82e-7ca3-4a92-9134-b7999eef5337",
+  "set": "sos",
+  "collectorNumber": "57",
+  "rarity": "rare",
+  "manaCost": "{1}{U}{U}",
+  "typeLine": "Instant",
+  "oracleText": "Counter target spell. If you control a Wizard, add an amount of {C} equal to the amount of mana spent to cast that spell at the beginning of your next main phase.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/0/200c8e3d-c53b-40c7-a29a-fccc1281bfc6.jpg?1783903688",
+   "normal": "https://cards.scryfall.io/normal/front/2/0/200c8e3d-c53b-40c7-a29a-fccc1281bfc6.jpg?1783903688",
+   "large": "https://cards.scryfall.io/large/front/2/0/200c8e3d-c53b-40c7-a29a-fccc1281bfc6.jpg?1783903688",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/0/200c8e3d-c53b-40c7-a29a-fccc1281bfc6.jpg?1783903688"
+  }
+ },
+ {
+  "name": "Mathemagics",
+  "scryfallId": "cd3cc172-5609-4bc8-9d84-50680fed6df9",
+  "oracleId": "5f56a303-b3da-41df-a959-7823a87ee60c",
+  "set": "sos",
+  "collectorNumber": "58",
+  "rarity": "mythic",
+  "manaCost": "{X}{X}{U}{U}",
+  "typeLine": "Sorcery",
+  "oracleText": "Target player draws 2ˣ cards. (2⁰ = 1, 2¹ = 2, 2² = 4, 2³ = 8, 2⁴ = 16, 2⁵ = 32, and so on.)",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/d/cd3cc172-5609-4bc8-9d84-50680fed6df9.jpg?1783903688",
+   "normal": "https://cards.scryfall.io/normal/front/c/d/cd3cc172-5609-4bc8-9d84-50680fed6df9.jpg?1783903688",
+   "large": "https://cards.scryfall.io/large/front/c/d/cd3cc172-5609-4bc8-9d84-50680fed6df9.jpg?1783903688",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/d/cd3cc172-5609-4bc8-9d84-50680fed6df9.jpg?1783903688"
+  }
+ },
+ {
+  "name": "Muse's Encouragement",
+  "scryfallId": "c59e0004-1d6a-42a1-8ce4-31da2af2e1bf",
+  "oracleId": "62421084-96e6-40dd-8d34-7c8c1091d4a4",
+  "set": "sos",
+  "collectorNumber": "61",
+  "rarity": "common",
+  "manaCost": "{4}{U}",
+  "typeLine": "Instant",
+  "oracleText": "Create a 3/3 blue and red Elemental creature token with flying.\nSurveil 2. (Look at the top two cards of your library, then put any number of them into your graveyard and the rest on top of your library in any order.)",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Surveil"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/5/c59e0004-1d6a-42a1-8ce4-31da2af2e1bf.jpg?1783903689",
+   "normal": "https://cards.scryfall.io/normal/front/c/5/c59e0004-1d6a-42a1-8ce4-31da2af2e1bf.jpg?1783903689",
+   "large": "https://cards.scryfall.io/large/front/c/5/c59e0004-1d6a-42a1-8ce4-31da2af2e1bf.jpg?1783903689",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/5/c59e0004-1d6a-42a1-8ce4-31da2af2e1bf.jpg?1783903689"
+  }
+ },
+ {
+  "name": "Procrastinate",
+  "scryfallId": "1edb449d-620f-4e21-9d76-2c840635eb9d",
+  "oracleId": "6f8fa68e-e961-4ae1-b27d-22d87e90f26b",
+  "set": "sos",
+  "collectorNumber": "64",
+  "rarity": "common",
+  "manaCost": "{X}{U}",
+  "typeLine": "Sorcery",
+  "oracleText": "Tap target creature. Put twice X stun counters on it. (If a permanent with a stun counter would become untapped, remove one from it instead.)",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/e/1edb449d-620f-4e21-9d76-2c840635eb9d.jpg?1783903688",
+   "normal": "https://cards.scryfall.io/normal/front/1/e/1edb449d-620f-4e21-9d76-2c840635eb9d.jpg?1783903688",
+   "large": "https://cards.scryfall.io/large/front/1/e/1edb449d-620f-4e21-9d76-2c840635eb9d.jpg?1783903688",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/e/1edb449d-620f-4e21-9d76-2c840635eb9d.jpg?1783903688"
+  }
+ },
+ {
+  "name": "Run Behind",
+  "scryfallId": "40ecc34b-4cd0-4998-bbf4-7faa6fd3d7e0",
+  "oracleId": "7578a192-82e5-43ff-8dee-225f313c484a",
+  "set": "sos",
+  "collectorNumber": "66",
+  "rarity": "common",
+  "manaCost": "{3}{U}",
+  "typeLine": "Instant",
+  "oracleText": "This spell costs {1} less to cast if it targets an attacking creature.\nTarget creature's owner puts it on their choice of the top or bottom of their library.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/0/40ecc34b-4cd0-4998-bbf4-7faa6fd3d7e0.jpg?1783903686",
+   "normal": "https://cards.scryfall.io/normal/front/4/0/40ecc34b-4cd0-4998-bbf4-7faa6fd3d7e0.jpg?1783903686",
+   "large": "https://cards.scryfall.io/large/front/4/0/40ecc34b-4cd0-4998-bbf4-7faa6fd3d7e0.jpg?1783903686",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/0/40ecc34b-4cd0-4998-bbf4-7faa6fd3d7e0.jpg?1783903686"
+  }
+ },
+ {
+  "name": "Wisdom of Ages",
+  "scryfallId": "b227ef04-33e4-44e8-a357-0ea3dfe5d49b",
+  "oracleId": "d9722ec3-aa5e-4c69-8ff0-cef1b1839fa4",
+  "set": "sos",
+  "collectorNumber": "71",
+  "rarity": "rare",
+  "manaCost": "{4}{U}{U}{U}",
+  "typeLine": "Sorcery",
+  "oracleText": "Return all instant and sorcery cards from your graveyard to your hand. You have no maximum hand size for the rest of the game.\nExile Wisdom of Ages.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/2/b227ef04-33e4-44e8-a357-0ea3dfe5d49b.jpg?1783903684",
+   "normal": "https://cards.scryfall.io/normal/front/b/2/b227ef04-33e4-44e8-a357-0ea3dfe5d49b.jpg?1783903684",
+   "large": "https://cards.scryfall.io/large/front/b/2/b227ef04-33e4-44e8-a357-0ea3dfe5d49b.jpg?1783903684",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/2/b227ef04-33e4-44e8-a357-0ea3dfe5d49b.jpg?1783903684"
+  }
  }
 ]

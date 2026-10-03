@@ -43,7 +43,10 @@ export function spellTags(d: CardDefinition): string[] {
   // Final Fantasy (11b): The Emperor of Palamecia: "only to cast a noncreature spell".
   const noncreature = d.types.includes('Creature') ? [] : ['Noncreature'];
   // Plaza of Heroes: "only to cast a legendary spell".
-  return [...d.subtypes, ...d.types, ...d.supertypes, ...big, ...noncreature];
+  // Secrets of Strixhaven (14b): Hydro-Channeler: "only to cast an instant or sorcery spell".
+  const instantOrSorcery =
+    d.types.includes('Instant') || d.types.includes('Sorcery') ? ['InstantOrSorcery'] : [];
+  return [...d.subtypes, ...d.types, ...d.supertypes, ...big, ...noncreature, ...instantOrSorcery];
 }
 
 const MAX_PAWS = 5;

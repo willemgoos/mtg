@@ -2413,12 +2413,16 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
       return;
     case 'tokenCopy': {
       const n = e.count !== undefined ? resolveAmount(ctx, es, e.count) : 1;
+      // Secrets of Strixhaven (14b): Echocasting Symposium: the token is created under a target player's control.
+      const tokenOwnerTarget = e.underTarget !== undefined ? es.targets[e.underTarget] : undefined;
+      const tokenOwner =
+        tokenOwnerTarget && 'player' in tokenOwnerTarget ? tokenOwnerTarget.player : es.controller;
       for (const id of objectsOf(ctx, es, e.of)) {
         const o = obj(ctx, id);
         const d = def(ctx, id);
         if (e.nonlegendary && d.supertypes.includes('Legendary')) continue;
         for (let i = 0; i < n; i++) {
-          const t = createObject(ctx, o.defId, es.controller, 'battlefield', true);
+          const t = createObject(ctx, o.defId, tokenOwner, 'battlefield', true);
           const pt = e.pt ?? (o.copyPT ? [o.copyPT.power, o.copyPT.toughness] : undefined);
           if (pt) t.copyPT = { power: pt[0], toughness: pt[1] };
           // "Except the token isn't legendary" (Quantum Misalignment); "that token gains haste" (Helm of the Host).

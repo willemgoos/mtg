@@ -1087,6 +1087,8 @@ function detect(ctx: Ctx, ev: GameEvent): void {
           a.trigger.on === 'youPutCounters' &&
           o.controller === target.controller &&
           !(a.trigger.other && o.id === target.id) &&
+          // Secrets of Strixhaven (14b): Pensive Professor.
+          !(a.trigger.onlySelf && o.id !== target.id) &&
           matchesFilter(ctx, target.id, a.trigger.filter, o.id),
         target,
         ev.count,
@@ -1200,6 +1202,13 @@ function detect(ctx: Ctx, ev: GameEvent): void {
       }
       if (ev.step === 'main1' || ev.step === 'main2') {
         const which = ev.step === 'main1' ? 1 : 2;
+        // Secrets of Strixhaven (14b): Mana Sculpt. The mana stays until the end of the phase.
+        const pending = s.players[ev.activePlayer].pendingMainMana;
+        if (pending) {
+          delete s.players[ev.activePlayer].pendingMainMana;
+          const pool = (s.players[ev.activePlayer].pool ??= []);
+          for (let i = 0; i < pending; i++) pool.push({ produces: ['C'] });
+        }
         // Secrets of Strixhaven (14a): paradigm. A free copy of each exiled paradigm spell, if you want to cast it.
         if (which === 1)
           for (const defId of s.players[ev.activePlayer].paradigms ?? []) {

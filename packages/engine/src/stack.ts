@@ -274,6 +274,14 @@ export function castCost(
     matchesFilter(ctx, first.object.id, d.costReductionIfTarget.filter)
   )
     reduce += d.costReductionIfTarget.amount;
+  // Secrets of Strixhaven (14b): Brush Off takes a coloured pip off too.
+  const reducedPip =
+    d.costReductionIfTarget?.alsoColored &&
+    first &&
+    'object' in first &&
+    matchesFilter(ctx, first.object.id, d.costReductionIfTarget.filter)
+      ? d.costReductionIfTarget.alsoColored
+      : undefined;
   for (const id of ctx.s.battlefield)
     if (obj(ctx, id).controller === player)
       for (const a of def(ctx, id).abilities) {
@@ -320,6 +328,8 @@ export function castCost(
   if (!d.sacrificeCreaturesToCopy)
     reduce += (choice.sacrificeMany?.length ?? 0) * (d.sacrificeCreaturesForReduction ?? 1);
   if (reduce) cost = { ...cost, generic: Math.max(0, cost.generic - reduce) };
+  if (reducedPip && (cost.colored[reducedPip] ?? 0) > 0)
+    cost = { ...cost, colored: { ...cost.colored, [reducedPip]: cost.colored[reducedPip]! - 1 } };
   // Eluge: the first instant or sorcery each turn costs {U} less per flooded land.
   const flood = floodDiscount(ctx, player, d);
   if (flood) {
@@ -621,6 +631,10 @@ export function activateAbility(
   if (a.cost.discardSelf) moveObject(ctx, source, 'graveyard');
   if (a.cost.tapTokens)
     for (const id of tokensToTap(ctx, player, source).slice(0, a.cost.tapTokens)) tap(ctx, id);
+  // Secrets of Strixhaven (14b): Harmonized Trio.
+  if (a.cost.tapOtherCreatures)
+    for (const id of creaturesToTap(ctx, player, source).slice(0, a.cost.tapOtherCreatures))
+      tap(ctx, id);
   if (a.cost.crew) for (const id of crewFor(ctx, player, source, a.cost.crew) ?? []) tap(ctx, id);
   if (a.cost.sacrificeArtifacts)
     for (const id of artifactsToSacrifice(ctx, player, a.cost.sacrificeArtifacts) ?? [])
@@ -1049,6 +1063,16 @@ export function graveyardCostCard(
         keep(a) - keep(b) || manaValue(def(ctx, a).manaCost) - manaValue(def(ctx, b).manaCost),
     );
   return options[0] ?? null;
+}
+
+/** Secrets of Strixhaven (14b): other untapped creatures you control, the least useful first. */
+export function creaturesToTap(ctx: Ctx, player: PlayerId, source?: ObjectId): ObjectId[] {
+  return ctx.s.battlefield
+    .filter((id) => {
+      const o = obj(ctx, id);
+      return id !== source && o.controller === player && !o.tapped && isCreature(ctx, id);
+    })
+    .sort((x, y) => power(ctx, x) - power(ctx, y));
 }
 
 export function tokensToTap(ctx: Ctx, player: PlayerId, source?: ObjectId): ObjectId[] {

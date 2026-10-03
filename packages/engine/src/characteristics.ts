@@ -279,6 +279,13 @@ export function countOf(
   if (a.count === 'creaturesYouLostThisTurn') return ctx.s.turn.creaturesLost?.[player] ?? 0;
   // Strixhaven (13c): life gained this turn.
   if (a.count === 'lifeGainedThisTurn') return ctx.s.turn.lifeGained?.[player] ?? 0;
+  // Secrets of Strixhaven (14b): Orysa, Fractal Anomaly
+  if (a.count === 'totalToughnessOfCreaturesYouControl')
+    return creaturesOnBattlefield(ctx, player).reduce(
+      (n, c) => n + Math.max(0, characteristics(ctx, c.id).toughness),
+      0,
+    );
+  if (a.count === 'cardsDrawnThisTurn') return ctx.s.turn.cardsDrawn[player] ?? 0;
   if (a.count === 'greatestPowerYouControl')
     return creaturesOnBattlefield(ctx, player).reduce((n, c) => Math.max(n, power(ctx, c.id)), 0);
   if (a.count === 'creatureCardsInExileAndGraveyard') {
@@ -631,6 +638,8 @@ export function cardMatches(
   if (filter.supertypes && !filter.supertypes.some((t) => d.supertypes.includes(t))) return false;
   // Strixhaven (13c): Plargg (nonlegendary), Silverquill Silencer (the chosen name).
   if (filter.nonlegendary && d.supertypes.includes('Legendary')) return false;
+  // Secrets of Strixhaven (14b): Matterbending Mage.
+  if (filter.hasX && !d.manaCost.x) return false;
   if (filter.chosenNameOfSource) {
     const name = sourceId ? ctx.s.objects[sourceId]?.chosenName : undefined;
     if (!name || obj(ctx, id).defId !== name) return false;

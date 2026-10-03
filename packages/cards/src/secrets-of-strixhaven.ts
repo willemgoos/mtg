@@ -1,5 +1,6 @@
 import type { CardDefinition } from '@mtg/engine';
 import type { Behavior } from './build.ts';
+import { SOS_BLUE_B, SOS_BLUE_B_BACKS, SOS_BLUE_B_TOKENS } from './sos/cards-b.ts';
 import { PREPARE_SPIKE, PREPARE_SPIKE_BACKS } from './sos/prepare-spike.ts';
 import { SHARED_14A } from './sos/shared-14a.ts';
 import {
@@ -23,6 +24,7 @@ export const SECRETS_OF_STRIXHAVEN_BEHAVIORS: Record<string, Behavior> = {
   ...SHARED_14A,
   ...SILVERQUILL_SOS,
   ...SOS_WITHERBLOOM,
+  ...SOS_BLUE_B,
 };
 
 /** Back faces of double-faced cards: not cards of their own, so not in the pool. */
@@ -30,10 +32,12 @@ export const SECRETS_OF_STRIXHAVEN_BACK_FACES: Record<string, Behavior> = {
   ...PREPARE_SPIKE_BACKS,
   ...SILVERQUILL_SOS_BACKS,
   ...SOS_WITHERBLOOM_BACKS,
+  ...SOS_BLUE_B_BACKS,
 };
 
 /** Secrets of Strixhaven tokens (Inkling, Pest). */
 export const SECRETS_OF_STRIXHAVEN_TOKENS: CardDefinition[] = [
   ...SILVERQUILL_SOS_TOKENS,
   ...SOS_WITHERBLOOM_TOKENS,
+  ...SOS_BLUE_B_TOKENS,
 ];
