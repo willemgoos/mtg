@@ -80,6 +80,8 @@ export function checkCondition(
   if (c.kind === 'opponentAttackedLastTurn')
     return ctx.s.players[other(controller)].attackedLastTurn === true;
   if (c.kind === 'sourceDamagedSubject') return !!self && !!subject?.damagedBy?.includes(self.id);
+  // Marvel Super Heroes Jumpstart (Heroes for Hire)
+  if (c.kind === 'targetChosen') return !!targets?.[c.target];
   if (c.kind === 'targetMatches') {
     const t = targets?.[c.target];
     if (!t || !('object' in t)) return false;
