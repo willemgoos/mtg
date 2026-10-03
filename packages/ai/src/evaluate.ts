@@ -47,6 +47,15 @@ export const WEIGHTS = {
 };
 /** Each loyalty counter on a planeswalker. */
 export const LOYALTY = 0.4;
+/** An Equipment on the battlefield while its controller has a creature to equip (a little more than a card). */
+export const EQUIPMENT = 2.5;
+
+function controlsCreature(s: GameState, db: CardDb, p: PlayerId): boolean {
+  return s.battlefield.some(
+    (id) =>
+      s.objects[id]!.controller === p && !!db.get(s.objects[id]!.defId)?.types.includes('Creature'),
+  );
+}
 
 /**
  * Before combat on `me`'s turn: permanents with a beginning-of-combat trigger
@@ -139,6 +148,12 @@ export function evaluate(s: GameState, db: CardDb, me: PlayerId): number {
       else if (def?.types.includes('Planeswalker'))
         v += sign * (OTHER_PERMANENT + LOYALTY * (o.counters?.loyalty ?? 0));
       else if (o.isToken) v += sign * SPENDABLE_TOKEN;
+      // Final Fantasy Commander: an Equipment is worth at least a card while there's a creature to carry it
+      // (otherwise the bot never casts a cheap one, and never gets to equip it).
+      else if (def?.subtypes.includes('Equipment') && controlsCreature(s, db, o.controller))
+        v +=
+          sign *
+          Math.max(EQUIPMENT, OTHER_PERMANENT + WEIGHTS.permanentPerMana * manaValue(def.manaCost));
       else {
         const mv = def ? manaValue(def.manaCost) : 0;
         v +=

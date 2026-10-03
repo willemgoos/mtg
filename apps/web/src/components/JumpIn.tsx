@@ -23,6 +23,7 @@ const GROUPS = [
     has: (p: Packet) => p.set === 'blb' && p.source === 'arena',
   },
   { key: 'msh', name: 'Marvel Super Heroes', has: (p: Packet) => p.set === 'msh' },
+  { key: 'fin', name: 'Final Fantasy', has: (p: Packet) => p.set === 'fin' },
 ] as const;
 
 type Group = (typeof GROUPS)[number]['key'];

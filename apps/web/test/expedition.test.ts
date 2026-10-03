@@ -142,6 +142,27 @@ describe('expedition packs', () => {
     }
   });
 
+  it('opens Final Fantasy boosters with a FIN deck: one rare, three uncommons, eight commons', () => {
+    expect(packSetOf({ deck: 'fin-chocobo-stampede' })).toBe('fin');
+    expect(packSetOf({ deck: 'jump-in:fin-chocobos+fin-monsters' })).toBe('fin');
+    const mixed = { deck: 'jump-in:fin-knights+blb-bats' };
+    expect([0, 1].map((n) => packSetOf(mixed, n))).toEqual(['fin', 'blb']);
+    const fin = SCRYFALL.filter((c) => c.set === 'fin');
+    for (let seed = 0; seed < 20; seed++) {
+      const pack = rollPack({ kind: 'booster' }, seed, 0, 'fin');
+      expect(new Set(pack).size).toBe(packSize);
+      const printings = pack.map((name) => fin.find((c) => c.name === name)!);
+      for (const c of printings) {
+        expect(c.front).toBeUndefined();
+        expect(+c.collectorNumber, c.name).toBeLessThanOrEqual(309);
+      }
+      const count = (...r: string[]) => printings.filter((c) => r.includes(c.rarity)).length;
+      expect(count('rare', 'mythic')).toBe(1);
+      expect(count('uncommon')).toBe(3);
+      expect(count('common')).toBe(8);
+    }
+  });
+
   it('keeps only the chosen cards, up to the keep count, from each pack', () => {
     const s = startExpedition(empty, deck, 5);
     expect(s.run!.build.packs).toHaveLength(START_PACKS);

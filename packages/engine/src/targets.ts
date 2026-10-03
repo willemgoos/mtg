@@ -77,6 +77,20 @@ function spellOk(ctx: Ctx, spec: TargetSpec, id: ObjectId, src: TargetingSource)
   return !spec.filter || cardMatches(ctx, id, spec.filter, src.sourceId);
 }
 
+/** Final Fantasy (11c): an activated or triggered ability on the stack (not this one's own). */
+function abilityOk(ctx: Ctx, spec: TargetSpec, id: ObjectId, src: TargetingSource): boolean {
+  const item = ctx.s.stack.find((x) => x.kind === 'ability' && x.id === id);
+  if (!item || item.kind !== 'ability') return false;
+  if (spec.controller === 'you' && item.controller !== src.controller) return false;
+  if (spec.controller === 'opponent' && item.controller === src.controller) return false;
+  // An ability of the targeting source (Gogo copying its own ability).
+  if (src.sourceId && item.source.id === src.sourceId && !item.inline && !item.emblem) {
+    const a = defOf(ctx, item.sourceDefId).abilities[item.abilityIndex];
+    if (a?.kind === 'activated' && a.targets.some((t) => t.abilitiesOnly)) return false;
+  }
+  return true;
+}
+
 function graveyardCardOk(ctx: Ctx, spec: TargetSpec, id: ObjectId, src: TargetingSource): boolean {
   const o = ctx.s.objects[id];
   if (!o || o.zone !== 'graveyard') return false;
@@ -96,8 +110,13 @@ export function targetCandidates(ctx: Ctx, spec: TargetSpec, src: TargetingSourc
   }
   if (spec.what === 'spell') {
     for (const item of ctx.s.stack)
-      if (item.kind === 'spell' && spellOk(ctx, spec, item.id, src))
+      if (item.kind === 'spell' && !spec.abilitiesOnly && spellOk(ctx, spec, item.id, src))
         out.push({ object: refOf(obj(ctx, item.id)) });
+    // Final Fantasy (11c): activated and triggered abilities on the stack.
+    if (spec.abilities || spec.abilitiesOnly)
+      for (const item of ctx.s.stack)
+        if (item.kind === 'ability' && abilityOk(ctx, spec, item.id, src))
+          out.push({ object: { id: item.id, zcc: 0 } });
   }
   if (spec.what === 'graveyardCard') {
     for (const p of PLAYERS)
@@ -143,6 +162,13 @@ export function isTargetLegal(
 ): boolean {
   if ('player' in t) return spec.what !== 'creature' && playerOk(ctx, spec, t.player, src);
   if (spec.what === 'player') return false;
+  // Final Fantasy (11c): an ability on the stack (it has no object).
+  if (
+    spec.what === 'spell' &&
+    (spec.abilities || spec.abilitiesOnly) &&
+    !ctx.s.objects[t.object.id]
+  )
+    return abilityOk(ctx, spec, t.object.id, src);
   const o = deref(ctx, t.object);
   if (!o) return false;
   if (spec.what === 'spell') return spellOk(ctx, spec, o.id, src);

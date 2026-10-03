@@ -17,7 +17,7 @@ import {
 import { type Ctx, def, obj, other, withBackFace } from './context.ts';
 import { forageChoices } from './forage.ts';
 import { artifactHelpers, canPayFrom, creatureHelpers, hasImprovise, manaSources } from './mana.ts';
-import { castVariants, spellTags } from './spells.ts';
+import { type CastVia, castVariants, spellTags } from './spells.ts';
 import {
   abilityManaCost,
   castCost,
@@ -65,7 +65,10 @@ export function castableCards(ctx: Ctx, player: PlayerId): ObjectId[] {
   const ps = ctx.s.players[player];
   // Brawl: your commander from the command zone.
   const out = [...ps.hand, ...ps.command];
-  const landsFromGraveyard = hasStatic(ctx, player, 'playLandsFromGraveyard');
+  const landsFromGraveyard =
+    hasStatic(ctx, player, 'playLandsFromGraveyard') ||
+    // Final Fantasy (11c): playing from the graveyard (Hades).
+    playsFromGraveyard(ctx, player);
   for (const id of ps.graveyard) {
     const d = def(ctx, id);
     // Conduit of Worlds: "You may play lands from your graveyard."
@@ -95,14 +98,18 @@ export function castableCards(ctx: Ctx, player: PlayerId): ObjectId[] {
           a.kind === 'static' &&
           a.effect.kind === 'playFromTop' &&
           cardMatches(ctx, topCard, a.effect.filter) &&
+          // Final Fantasy (11c): The Lunar Whale, as long as it attacked this turn.
+          checkCondition(ctx, a.effect.condition, player, obj(ctx, id)) &&
           !out.includes(topCard)
         )
           out.push(topCard);
     }
+  // Final Fantasy (11a): adventure lands. A card on an adventure: its owner may play the land.
+  for (const id of ps.exile) if (obj(ctx, id).onAdventure && !out.includes(id)) out.push(id);
   // Strongbox Raider: exiled cards you may play for a while.
   for (const id of ps.exile) {
     const until = obj(ctx, id).playableUntilTurn;
-    if (until !== undefined && until >= ctx.s.turn.number) out.push(id);
+    if (until !== undefined && until >= ctx.s.turn.number && !out.includes(id)) out.push(id);
   }
   // Extract Power: either player's exiled cards you may play for free.
   for (const p of ['p1', 'p2'] as const)
@@ -155,9 +162,9 @@ export function graveyardVias(
   ctx: Ctx,
   player: PlayerId,
   card: ObjectId,
-): ('festival' | 'osteomancer' | 'conduit')[] {
+): Exclude<CastVia, 'free'>[] {
   const d = def(ctx, card);
-  const out: ('festival' | 'osteomancer' | 'conduit')[] = [];
+  const out: Exclude<CastVia, 'free'>[] = [];
   const instantOrSorcery = d.types.includes('Instant') || d.types.includes('Sorcery');
   if (
     instantOrSorcery &&
@@ -169,12 +176,31 @@ export function graveyardVias(
     out.push('osteomancer');
   // Conduit of Worlds: the card it chose, this turn.
   if (obj(ctx, card).playableUntilTurn === ctx.s.turn.number) out.push('conduit');
+  // Final Fantasy (11c): playing from the graveyard (Noctis: artifacts for 3 life more; Hades: during your turn).
+  if (d.types.includes('Artifact') && hasStatic(ctx, player, 'castArtifactsFromGraveyard'))
+    out.push('noctis');
+  if (playsFromGraveyard(ctx, player)) out.push('hades');
   return out;
+}
+
+/** Final Fantasy (11c): playing from the graveyard. Hades: "you may play cards from your graveyard". */
+export function playsFromGraveyard(ctx: Ctx, player: PlayerId): boolean {
+  return ctx.s.battlefield.some(
+    (id) =>
+      obj(ctx, id).controller === player &&
+      def(ctx, id).abilities.some(
+        (a) =>
+          a.kind === 'static' &&
+          a.effect.kind === 'playFromGraveyard' &&
+          checkCondition(ctx, a.effect.condition, player, obj(ctx, id)),
+      ),
+  );
 }
 
 /** Land plays allowed per turn: one, plus one for each "additional land" effect (Loot). */
 function landDrops(ctx: Ctx, player: PlayerId): number {
-  let n = 1;
+  // Final Fantasy Commander (12b): "you may play an additional land this turn".
+  let n = 1 + (ctx.s.turn.extraLands?.[player] ?? 0);
   for (const id of ctx.s.battlefield) {
     if (obj(ctx, id).controller !== player) continue;
     for (const a of def(ctx, id).abilities)
@@ -246,7 +272,9 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
       if (
         sorcery &&
         ps.landsPlayedThisTurn < landDrops(ctx, player) &&
-        (zone !== 'graveyard' || hasStatic(ctx, player, 'playLandsFromGraveyard'))
+        (zone !== 'graveyard' ||
+          hasStatic(ctx, player, 'playLandsFromGraveyard') ||
+          playsFromGraveyard(ctx, player))
       )
         out.push({ type: 'playLand', player, card });
       return;
@@ -285,7 +313,7 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
     // The usual ways, plus graveyard casts through other cards.
     // Extract Power: exiled cards played for free.
     const free = zone === 'exile' && obj(ctx, card).playFreeBy === player;
-    const vias: ('festival' | 'osteomancer' | 'conduit' | 'free' | undefined)[] = free
+    const vias: (CastVia | undefined)[] = free
       ? ['free']
       : [
           ...(zone !== 'graveyard' ||
@@ -334,9 +362,20 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
             const specs = v.spell?.targets ?? (d.enchant ? [d.enchant] : []);
             const forages = v.forage ? forageChoices(ctx, player) : [undefined];
             // Ultimate Nullification: only a legendary creature.
-            const sacrificeable = d.sacrificeToCastFilter
-              ? creatures.filter((id) => matchesFilter(ctx, id, d.sacrificeToCastFilter))
-              : creatures;
+            // Final Fantasy (11b): a kicker paid with an artifact or creature, or with a land.
+            const kickPermanent = v.kicked
+              ? d.kicker?.returnLand
+                ? { types: ['Land' as const] }
+                : d.kicker?.sacrifice
+              : undefined;
+            const sacrificeable = kickPermanent
+              ? s.battlefield.filter(
+                  (id) =>
+                    obj(ctx, id).controller === player && matchesFilter(ctx, id, kickPermanent),
+                )
+              : d.sacrificeToCastFilter
+                ? creatures.filter((id) => matchesFilter(ctx, id, d.sacrificeToCastFilter))
+                : creatures;
             for (const sacrifice of v.sacrifice ? sacrificeable : [undefined]) {
               for (const targets of combosFor(specs, card, sacrifice)) {
                 const ward = wardCost(ctx, player, targets);
@@ -355,7 +394,8 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
                   for (const discard of discards) {
                     // Paying without what this cast sacrifices.
                     const spent = [
-                      sacrifice,
+                      // Final Fantasy (11b): a land returned for kicker may tap for mana first.
+                      v.kicked && d.kicker?.returnLand ? undefined : sacrifice,
                       ...(sacrificeMany ?? []),
                       forage === 'graveyard' ? undefined : forage,
                       ...(teamwork ?? []),
@@ -390,6 +430,8 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
               .filter(
                 (c) =>
                   d.entersAsCopy!.yours ||
+                  // Final Fantasy Commander (12c): Altered Ego copies any creature.
+                  d.entersAsCopy!.anyManaValue ||
                   manaValue(def(ctx, c.id).manaCost) <= (a.x ?? 0) + manaValue(d.manaCost),
               )
               .map((c) => ({ ...a, copyOf: c.id })),
@@ -402,6 +444,7 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
   for (const card of silenced ? [] : castableCards(ctx, player)) {
     castsOf(card);
     // Modal double-faced cards: the back face can be cast from hand too.
+    // (A transforming card's back face has `noManaCost`: castVariants offers nothing for it.)
     if (def(ctx, card).back && obj(ctx, card).zone === 'hand') {
       const from = out.length;
       withBackFace(ctx, card, () => castsOf(card));
@@ -458,7 +501,8 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
       const usable = a.cost.convoke
         ? [...own, ...creatureHelpers(ctx, player, own, a.cost.tapSelf ? source : undefined)]
         : own;
-      const mana = abilityManaCost(ctx, source, a);
+      // Final Fantasy (11d): an equip discount may depend on the target (Cloud, Planet's Champion).
+      const mana = abilityManaCost(ctx, source, a, 'best');
       if (!canPayFrom(mana, usable)) return;
       if (a.cost.tapTokens && tokensToTap(ctx, player, source).length < a.cost.tapTokens) return;
       if (a.cost.crew && !crewFor(ctx, player, source, a.cost.crew)) return;
@@ -487,15 +531,17 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
       const firstOfAbility = out.length;
       for (const sacrifice of sacrifices) {
         for (const targets of combosFor(a.targets, source, sacrifice)) {
+          const m = abilityManaCost(ctx, source, a, targets);
+          if (m !== mana && !canPayFrom(m, usable)) continue;
           const ward = wardCost(ctx, player, targets);
-          if (ward.generic && !canPayFrom(addCosts(mana ?? NO_COST, ward), usable)) continue;
+          if (ward.generic && !canPayFrom(addCosts(m ?? NO_COST, ward), usable)) continue;
           if (!wardPayable(ctx, player, targets)) continue;
           for (const forage of forages)
             for (const discard of discards) {
               const spent = [sacrifice, forage === 'graveyard' ? undefined : forage];
-              if (mana && spent.some((id) => id && usable.some((p) => p.id === id))) {
+              if (m && spent.some((id) => id && usable.some((p) => p.id === id))) {
                 const rest = usable.filter((p) => !spent.includes(p.id));
-                if (!canPayFrom(addCosts(mana, ward), rest)) continue;
+                if (!canPayFrom(addCosts(m, ward), rest)) continue;
               }
               out.push({
                 type: 'activateAbility',
@@ -666,7 +712,11 @@ export function getLegalActions(ctx: Ctx, player: PlayerId): Action[] {
       return out;
     }
     case 'chooseObject':
-      return d.options.map((card) => ({ type: 'chooseCard', player, card }) as const);
+      return [
+        ...d.options.map((card) => ({ type: 'chooseCard', player, card }) as const),
+        // Final Fantasy (11a): saga creatures (Garnet may stop choosing).
+        ...(d.optional ? [{ type: 'chooseCard', player, card: null } as const] : []),
+      ];
     case 'payOrCounter':
       return [
         { type: 'chooseEffect', player, accept: false },

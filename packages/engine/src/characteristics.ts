@@ -48,6 +48,8 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
   let cantBeBlocked = false;
   let cantAttack = false;
   const removed = new Set<Keyword>();
+  // Final Fantasy (11a): job select ("is a Knight in addition to its other types").
+  const extraSubtypes: string[] = [];
   // A Vehicle that became an artifact creature this turn.
   let crewed = false;
 
@@ -134,11 +136,33 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
             power += st.basePT[0] - (basePower ?? base ?? o.copyPT?.power ?? d.power ?? 0);
             toughness += st.basePT[1] - (base ?? o.copyPT?.toughness ?? d.toughness ?? 0);
           }
-          power += countOf(ctx, src.controller, st.power);
-          toughness += countOf(ctx, src.controller, st.toughness);
+          // Final Fantasy (11c): amounts know their Equipment (Excalibur II's charge counters).
+          power += countOf(ctx, src.controller, st.power, false, srcId);
+          toughness += countOf(ctx, src.controller, st.toughness, false, srcId);
+          // Final Fantasy (11c): Aettir and Priwen (base X/X), The Masamune (first strike while attacking).
+          if (st.basePTAmount !== undefined) {
+            const x = countOf(ctx, src.controller, st.basePTAmount, false, srcId);
+            power += x - (basePower ?? base ?? o.copyPT?.power ?? d.power ?? 0);
+            toughness += x - (base ?? o.copyPT?.toughness ?? d.toughness ?? 0);
+          }
+          // Final Fantasy Commander (12b): Hero's Heirloom, keywords only while it's legendary.
+          if (st.legendaryKeywords?.length && d.supertypes.includes('Legendary')) {
+            granted ??= new Set(keywords);
+            for (const k of st.legendaryKeywords) granted.add(k);
+          }
+          if (st.attackingKeywords?.length && isAttacking(ctx, id)) {
+            granted ??= new Set(keywords);
+            for (const k of st.attackingKeywords) granted.add(k);
+          }
           if (st.keywords?.length) {
             granted ??= new Set(keywords);
             for (const k of st.keywords) granted.add(k);
+          }
+          // Final Fantasy (11a): job select.
+          if (st.addSubtypes) extraSubtypes.push(...st.addSubtypes);
+          if (st.yourTurnKeywords?.length && ctx.s.turn.activePlayer === src.controller) {
+            granted ??= new Set(keywords);
+            for (const k of st.yourTurnKeywords) granted.add(k);
           }
           continue;
         }
@@ -199,7 +223,10 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
     for (const k of removed) granted.delete(k);
     keywords = granted;
   }
-  const subtypes = o.addedSubtypes ? [...d.subtypes, ...o.addedSubtypes] : d.subtypes;
+  let subtypes = o.addedSubtypes ? [...d.subtypes, ...o.addedSubtypes] : d.subtypes;
+  // Final Fantasy (11a): job select.
+  if (extraSubtypes.length)
+    subtypes = [...subtypes, ...extraSubtypes.filter((t) => !subtypes.includes(t))];
   return {
     power,
     toughness,
@@ -235,6 +262,9 @@ export function countOf(
 ): number {
   if (typeof a === 'number') return a;
   if ('multiply' in a) return a.multiply * countOf(ctx, player, a.amount, printed, sourceId);
+  // Final Fantasy (11a)
+  if ('sum' in a)
+    return a.sum.reduce<number>((n, x) => n + countOf(ctx, player, x, printed, sourceId), 0);
   if ('if' in a) {
     const self = sourceId ? ctx.s.objects[sourceId] : undefined;
     return checkCondition(ctx, a.if, player, self) ? a.then : (a.else ?? 0);
@@ -248,13 +278,28 @@ export function countOf(
     return src?.counters?.[a.namedCountersOnSource] ?? 0;
   }
   if (!('count' in a)) return 0;
+  // Final Fantasy (11c): your life total (Aettir and Priwen).
+  if (a.count === 'lifeTotal') return ctx.s.players[player].life;
+  // Final Fantasy (11c): devotion and life gained.
+  if (a.count === 'devotion') {
+    const color = a.color;
+    return ctx.s.battlefield.reduce((n, id) => {
+      if (obj(ctx, id).controller !== player) return n;
+      const c = def(ctx, id).manaCost;
+      return n + (c.colored[color] ?? 0) + (c.hybrid ?? []).filter((h) => h.includes(color)).length;
+    }, 0);
+  }
+  if (a.count === 'lifeGainedThisTurn') return ctx.s.turn.lifeGained?.[player] ?? 0;
   if (a.count === 'cardsInGraveyard')
     return (
       (a.plus ?? 0) +
       ctx.s.players[player].graveyard.filter(
         (id) =>
           (!a.named || obj(ctx, id).defId === a.named) &&
-          (!a.types || a.types.some((t: CardType) => def(ctx, id).types.includes(t))),
+          (!a.types || a.types.some((t: CardType) => def(ctx, id).types.includes(t))) &&
+          // Final Fantasy (11b): by subtype, and without some types.
+          (!a.subtype || def(ctx, id).subtypes.includes(a.subtype)) &&
+          (!a.notTypes || !a.notTypes.some((t: CardType) => def(ctx, id).types.includes(t))),
       ).length
     );
   if (a.count === 'greatestManaValueInGraveyard')
@@ -282,9 +327,14 @@ export function countOf(
   // Wakanda Forever (9c).
   if (a.count === 'creaturesOnBattlefield') return creaturesOnBattlefield(ctx).length;
   if (a.count === 'totalManaValue')
-    return ctx.s.battlefield
-      .filter((id) => obj(ctx, id).controller === player && matchesFilter(ctx, id, a.filter))
-      .reduce((n, id) => n + manaValue(def(ctx, id).manaCost), 0);
+    return (
+      ctx.s.battlefield
+        // Final Fantasy (11c): the filter knows the source ("other permanents": Summon: Bahamut).
+        .filter(
+          (id) => obj(ctx, id).controller === player && matchesFilter(ctx, id, a.filter, sourceId),
+        )
+        .reduce((n, id) => n + manaValue(def(ctx, id).manaCost), 0)
+    );
   if (a.count === 'commanderCasts') return ctx.s.players[player].commanderCasts ?? 0;
   // Doom Prevails (9e).
   if (a.count === 'cardsDiscardedThisTurn') return ctx.s.turn.discards?.[player] ?? 0;
@@ -513,6 +563,8 @@ export function matchesFilter(
   if (filter.commander && !isCommander(ctx, id)) return false;
   if (filter.supertypes && !filter.supertypes.some((t) => def(ctx, id).supertypes.includes(t)))
     return false;
+  // Final Fantasy (11c): nonlegendary.
+  if (filter.notSupertypes?.some((t) => def(ctx, id).supertypes.includes(t))) return false;
   if (filter.toughnessGreaterThanPower) {
     const ch = characteristics(ctx, id);
     if (ch.toughness <= ch.power) return false;
@@ -580,6 +632,8 @@ export function cardMatches(
   if (filter.notTypes?.some((t) => d.types.includes(t))) return false;
   if (filter.commander && !isCommander(ctx, id)) return false;
   if (filter.supertypes && !filter.supertypes.some((t) => d.supertypes.includes(t))) return false;
+  // Final Fantasy (11c): nonlegendary.
+  if (filter.notSupertypes?.some((t) => d.supertypes.includes(t))) return false;
   const mv = manaValue(d.manaCost);
   if (filter.minManaValue !== undefined && mv < filter.minManaValue) return false;
   if (filter.manaValueIsSourceCounters) {
@@ -600,6 +654,9 @@ export function cardMatches(
     if ((mv % 2 === 1 ? 'odd' : 'even') !== filter.manaValueParity) return false;
   }
   if (filter.notSubtype && d.subtypes.includes(filter.notSubtype)) return false;
+  // Final Fantasy (11c): "isn't a Kraken, Leviathan, Merfolk, Octopus, or Serpent".
+  if (filter.notSubtypes?.some((st) => subtypes.includes(st) || changeling(ctx, id, st)))
+    return false;
   if (filter.maxManaValue !== undefined) {
     const max =
       filter.maxManaValue === 'sourcePower'

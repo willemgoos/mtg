@@ -8,6 +8,7 @@ import {
   dealCombatDamage,
   defenderOf,
   mustAttack,
+  mustBeBlocked,
   possibleAttackers,
   possibleBlockers,
 } from './combat.ts';
@@ -122,6 +123,11 @@ function nextStep(ctx: Ctx, step: Step): Step | 'nextTurn' {
     case 'main2':
       return 'end';
     case 'end':
+      // Final Fantasy (11c): "there is an additional end step after this step" (Y'shtola Rhul).
+      if (ctx.s.turn.extraEndSteps) {
+        ctx.s.turn.extraEndSteps--;
+        return 'end';
+      }
       return 'cleanup';
     case 'cleanup':
       return 'nextTurn';
@@ -158,6 +164,9 @@ export function startTurn(ctx: Ctx, player: PlayerId, noPowerUp = false): void {
   const p = s.players[player];
   p.landsPlayedThisTurn = 0;
   s.turn.extraCombats = 0;
+  // Final Fantasy Commander (12b).
+  delete s.turn.extraLands;
+  delete s.turn.lifeLostTotal;
   s.turn.attackers = [];
   s.turn.lifeGains = { p1: 0, p2: 0 };
   s.turn.creaturesDied = 0;
@@ -176,6 +185,15 @@ export function startTurn(ctx: Ctx, player: PlayerId, noPowerUp = false): void {
   delete s.turn.flashTypes;
   delete s.turn.instantsSorceriesCast;
   delete s.turn.castDefs;
+  // Final Fantasy (11a): saga creatures (Summon: Alexander).
+  delete s.turn.creaturesShielded;
+  // Final Fantasy (11c): extra phases and steps, life gained, and Lightning's Stagger (until its controller's next turn).
+  delete s.turn.combats;
+  delete s.turn.endSteps;
+  delete s.turn.extraEndSteps;
+  delete s.turn.lifeGained;
+  if (s.staggered?.some((x) => x.by === player))
+    s.staggered = s.staggered.filter((x) => x.by !== player);
   for (const q of Object.values(s.players)) q.attackedThisTurn = false;
   endEffects(ctx, (e) => e.expires === 'untilYourNextTurn' && e.player === player);
   enterStep(ctx, 'untap');
@@ -224,6 +242,8 @@ function enterStep(ctx: Ctx, step: Step): void {
 
     case 'beginCombat':
       s.combat = { attackers: [], dealtFirstStrikeDamage: [] };
+      // Final Fantasy (11c): combat phases (Genji Glove, Balthier and Fran: the first combat phase).
+      s.turn.combats = (s.turn.combats ?? 0) + 1;
       return givePriority(ctx, ap);
 
     case 'declareAttackers': {
@@ -254,6 +274,8 @@ function enterStep(ctx: Ctx, step: Step): void {
     case 'end':
       // The monarch draws a card at the beginning of their end step (drawn here, not on the stack).
       if (s.monarch === ap) drawCard(ctx, ap);
+      // Final Fantasy (11c): Y'shtola Rhul counts end steps.
+      s.turn.endSteps = (s.turn.endSteps ?? 0) + 1;
       return givePriority(ctx, ap);
 
     case 'cleanup': {
@@ -316,7 +338,10 @@ export function confirmAttackers(ctx: Ctx): void {
 
 export function confirmBlockers(ctx: Ctx): void {
   const s = ctx.s;
-  const decl = enforceLure(ctx, s.decision.kind === 'declareBlockers' ? s.decision.declared : []);
+  const decl = enforceMustBeBlocked(
+    ctx,
+    enforceLure(ctx, s.decision.kind === 'declareBlockers' ? s.decision.declared : []),
+  );
   for (const a of s.combat?.attackers ?? []) {
     a.blockers = decl.filter((d) => d.attacker === a.id).map((d) => d.blocker);
     a.blocked = a.blockers.length > 0;
@@ -336,9 +361,24 @@ function enforceLure(
   const lures = (ctx.s.combat?.attackers ?? []).filter((a) =>
     def(ctx, a.id).abilities.some((x) => x.kind === 'static' && x.effect.kind === 'lure'),
   );
-  if (lures.length === 0) return [...declared];
+  // Final Fantasy Commander (12b): a creature told to block an attacker this combat does so if able.
+  const forced = possibleBlockers(ctx, defenderOf(ctx)).filter((b) => {
+    const m = ctx.s.objects[b]?.mustBlock;
+    return !!m && !!ctx.s.combat?.attackers.some((a) => a.id === m.id) && canBlock(ctx, b, m.id);
+  });
+  const musts = forced.map((b) => [b, ctx.s.objects[b]!.mustBlock!] as const);
+  // "This combat" only: the requirement is used up once blockers are declared.
+  for (const id of ctx.s.battlefield) delete ctx.s.objects[id]!.mustBlock;
+  if (lures.length === 0 && forced.length === 0) return [...declared];
   const out = [...declared];
   const defender = defenderOf(ctx);
+  for (const [b, m] of musts) {
+    if (ctx.s.objects[m.id]?.zcc !== m.zcc) continue;
+    if (out.some((d) => d.blocker === b && d.attacker === m.id)) continue;
+    const i = out.findIndex((d) => d.blocker === b);
+    if (i >= 0) out.splice(i, 1);
+    out.push({ blocker: b, attacker: m.id });
+  }
   for (const lure of lures)
     for (const b of possibleBlockers(ctx, defender)) {
       if (out.some((d) => d.blocker === b && d.attacker === lure.id)) continue;
@@ -350,11 +390,37 @@ function enforceLure(
   return out;
 }
 
+/**
+ * Final Fantasy (11c): The Masamune ("must be blocked if able"). An attacker
+ * that must be blocked and isn't gets a blocker able to block it: a free one
+ * if there is one, otherwise one taken from another block (the engine picks).
+ */
+function enforceMustBeBlocked(
+  ctx: Ctx,
+  declared: { blocker: ObjectId; attacker: ObjectId }[],
+): { blocker: ObjectId; attacker: ObjectId }[] {
+  const out = [...declared];
+  for (const a of ctx.s.combat?.attackers ?? []) {
+    if (!mustBeBlocked(ctx, a.id) || out.some((d) => d.attacker === a.id)) continue;
+    const able = possibleBlockers(ctx, defenderOf(ctx)).filter((b) => canBlock(ctx, b, a.id));
+    const b = able.find((x) => !out.some((d) => d.blocker === x)) ?? able[0];
+    if (!b) continue;
+    const i = out.findIndex((d) => d.blocker === b);
+    if (i >= 0) out.splice(i, 1);
+    out.push({ blocker: b, attacker: a.id });
+  }
+  return out;
+}
+
 export function finishCleanup(ctx: Ctx): void {
   const s = ctx.s;
   for (const id of s.battlefield) {
     const o = obj(ctx, id);
-    o.damage = 0;
+    // Final Fantasy (11c): damage absorbing (Ancient Adamantoise keeps its damage).
+    const stays = def(ctx, id).abilities.some(
+      (a) => a.kind === 'static' && a.effect.kind === 'damageStays',
+    );
+    if (!stays) o.damage = 0;
     o.damagedByDeathtouch = false;
     delete o.damagedBy;
     // Mirage Mirror: back to itself.
@@ -380,6 +446,20 @@ function endEffects(ctx: Ctx, ending: (e: ContinuousEffect) => boolean): void {
     const o = s.objects[e.affected.id];
     if (!o || o.zone !== 'battlefield' || o.zcc !== e.affected.zcc) continue;
     if (e.previousController) o.controller = e.previousController;
+    // Final Fantasy (11c): Stolen Uniform and Unexpected Request: the Equipment comes off.
+    if (e.unattachOnRevert) {
+      const host = o.attachedTo !== undefined ? s.objects[o.attachedTo] : undefined;
+      if (host && host.controller !== o.controller) delete o.attachedTo;
+      for (const id of s.battlefield) {
+        const x = s.objects[id]!;
+        if (
+          x.attachedTo === o.id &&
+          x.controller !== o.controller &&
+          def(ctx, id).subtypes.includes('Equipment')
+        )
+          delete x.attachedTo;
+      }
+    }
     if (e.loseAbilities)
       o.blank = s.effects.some(
         (x) => x.loseAbilities && x.affected.id === o.id && x.affected.zcc === o.zcc,

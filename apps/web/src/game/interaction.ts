@@ -108,6 +108,11 @@ export function handActions(legal: readonly Action[], card: ObjectId): Action[] 
 export function castGroups(casts: readonly Action[]): Action[][] {
   const groups = new Map<string, Action[]>();
   for (const a of casts) {
+    // Final Fantasy (11a): an adventure land's "play the land" option is a group of its own.
+    if (a.type === 'playLand') {
+      groups.set('land', [a]);
+      continue;
+    }
     if (a.type !== 'castSpell' && a.type !== 'activateAbility') continue;
     const forage = a.forage ? (a.forage === 'graveyard' ? 'g' : 'f') : '';
     const key =

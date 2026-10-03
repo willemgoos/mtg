@@ -16,9 +16,13 @@ import {
   deckIds,
   FOUNDATIONS_DRAFT_POOL,
   FOUNDATIONS_JUMP_IN_POOL,
+  FINAL_FANTASY_DECKS,
+  FINAL_FANTASY_STARTER_KIT_DECKS,
+  FINAL_FANTASY_POOL,
   GREEN_POOL,
   LAND_POOL,
   MARVEL_BRAWL_POOL,
+  FINAL_FANTASY_BRAWL_POOL,
   OTHER_POOL,
   PLAYABLE_DECKS,
   parseManaCost,
@@ -58,6 +62,8 @@ describe('card data', () => {
         // Back faces of double-faced cards come with their fronts.
         ...SCRYFALL.filter((c) => c.front).map((c) => c.name),
         ...MARVEL_BRAWL_POOL,
+        ...FINAL_FANTASY_POOL,
+        ...FINAL_FANTASY_BRAWL_POOL,
       ].sort(),
     );
     for (const c of SCRYFALL) expect(c.image?.normal).toMatch(/^https:\/\/cards\.scryfall\.io\//);
@@ -140,6 +146,8 @@ describe('card data', () => {
         ...BLOOMBURROW_TROPHY_DECKS.map((d) => d.id),
         ...MARVEL_TROPHY_DECKS.map((d) => d.id),
         ...MARVEL_DECKS.map((d) => d.id),
+        ...FINAL_FANTASY_DECKS.map((d) => d.id),
+        ...FINAL_FANTASY_STARTER_KIT_DECKS.map((d) => d.id),
       ].sort(),
     );
     for (const d of PLAYABLE_DECKS)

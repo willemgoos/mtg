@@ -3,9 +3,10 @@ import type { Color } from '@mtg/engine';
 /**
  * Themed half-decks for Jump In!, Arena's mode where you pick two 20-card
  * packets and shuffle them together. Most are our own, ten per set
- * (Foundations, Bloomburrow, Marvel Super Heroes): twelve spells around a
- * theme, one rare, plus eight basic lands of the packet's colour. Arena's own
- * ten Bloomburrow packets are here too (`ARENA_BLB_PACKETS`).
+ * (Foundations, Bloomburrow, Marvel Super Heroes, Final Fantasy): twelve spells
+ * around a theme, one rare, plus eight basic lands of the packet's colour.
+ * Arena's own Bloomburrow and Foundations packets are here too
+ * (`ARENA_BLB_PACKETS`, `ARENA_FDN_PACKETS`).
  */
 export interface Packet {
   id: string;
@@ -15,8 +16,8 @@ export interface Packet {
   /** Card shown on the packet. */
   face: string;
   blurb: string;
-  /** Bloomburrow or Marvel Super Heroes (default Foundations). Packets of different sets pair freely. */
-  set?: 'blb' | 'msh';
+  /** Bloomburrow, Marvel Super Heroes or Final Fantasy (default Foundations). Packets of different sets pair freely. */
+  set?: 'blb' | 'msh' | 'fin';
   /** Arena's own packet (default: ours). */
   source?: 'arena';
   /** The twelve spells; the basic lands are added by `packetCards`. */
@@ -640,6 +641,217 @@ const OWN_PACKETS: Packet[] = [
       ['Training Regimen', 1],
       ['Go Nuts!', 1],
       ['Rapid Rescue', 1],
+    ],
+  },
+  // Final Fantasy: our own packets around the set's jobs, summons and creatures.
+  {
+    id: 'fin-knights',
+    name: 'Knights',
+    colors: ['W'],
+    face: "Dion, Bahamut's Dominant",
+    blurb: 'Heroes take up arms and fly with Bahamut',
+    set: 'fin',
+    spells: [
+      ['Dwarven Castle Guard', 2],
+      ['Zack Fair', 1],
+      ['Adelbert Steiner', 1],
+      ['Coeurl', 1],
+      ['Weapons Vendor', 1],
+      ["Dion, Bahamut's Dominant", 1],
+      ["Paladin's Arms", 1],
+      ["Dragoon's Lance", 1],
+      ['Battle Menu', 1],
+      ['Slash of Light', 1],
+      ['Fate of the Sun-Cryst', 1],
+    ],
+  },
+  {
+    id: 'fin-white-magic',
+    name: 'White Magic',
+    colors: ['W'],
+    face: 'Aerith Gainsborough',
+    blurb: 'Healers and moogles who keep the party standing',
+    set: 'fin',
+    spells: [
+      ['Aerith Gainsborough', 1],
+      ["White Mage's Staff", 1],
+      ['Ambrosia Whiteheart', 1],
+      ['Snow Villiers', 1],
+      ['Coeurl', 1],
+      ['Cloudbound Moogle', 2],
+      ['Delivery Moogle', 1],
+      ['Summon: Choco/Mog', 1],
+      ['Phoenix Down', 1],
+      ['Restoration Magic', 1],
+      ['White Auracite', 1],
+    ],
+  },
+  {
+    id: 'fin-summons',
+    name: 'Summons',
+    colors: ['U'],
+    face: 'Summon: Leviathan',
+    blurb: 'Call on Shiva and Leviathan to freeze and flood the field',
+    set: 'fin',
+    spells: [
+      ["Dragoon's Wyvern", 2],
+      ['Sahagin', 1],
+      ['Il Mheg Pixie', 1],
+      ['Qiqirn Merchant', 1],
+      ['Ice Flan', 1],
+      ['Summon: Shiva', 1],
+      ['Summon: Leviathan', 1],
+      ['Ice Magic', 1],
+      ['Dreams of Laguna', 1],
+      ["Stuck in Summoner's Sanctum", 1],
+      ['Syncopate', 1],
+    ],
+  },
+  {
+    id: 'fin-airships',
+    name: 'Airships',
+    colors: ['U'],
+    face: 'The Lunar Whale',
+    blurb: 'Machina crews take to the skies',
+    set: 'fin',
+    spells: [
+      ['Scorpion Sentinel', 2],
+      ["Dragoon's Wyvern", 1],
+      ['Rook Turret', 1],
+      ['Valkyrie Aerial Unit', 1],
+      ['The Prima Vista', 1],
+      ['The Lunar Whale', 1],
+      ["Thief's Knife", 1],
+      ["Sage's Nouliths", 1],
+      ['Retrieve the Esper', 1],
+      ['Combat Tutorial', 1],
+      ['Eject', 1],
+    ],
+  },
+  {
+    id: 'fin-black-mages',
+    name: 'Black Mages',
+    colors: ['B'],
+    face: 'Dark Confidant',
+    blurb: 'Every spell they cast sends a spark at the enemy',
+    set: 'fin',
+    spells: [
+      ['Dark Confidant', 1],
+      ['Hecteyes', 1],
+      ['Ahriman', 1],
+      ['Qutrub Forayer', 1],
+      ["Shambling Cie'th", 1],
+      ["Black Mage's Rod", 1],
+      ['Cornered by Black Mages', 2],
+      ['Circle of Power', 1],
+      ["Vayne's Treachery", 1],
+      ["Sephiroth's Intervention", 1],
+      ['Poison the Waters', 1],
+    ],
+  },
+  {
+    id: 'fin-dark-knights',
+    name: 'Dark Knights',
+    colors: ['B'],
+    face: 'Cecil, Dark Knight',
+    blurb: 'Power drawn from darkness, at a price',
+    set: 'fin',
+    spells: [
+      ['Cecil, Dark Knight', 1],
+      ['Undercity Dire Rat', 2],
+      ['Tonberry', 1],
+      ['Reno and Rude', 1],
+      ['Shinra Reinforcements', 1],
+      ['Al Bhed Salvagers', 1],
+      ['Demon Wall', 1],
+      ['Malboro', 1],
+      ["Dark Knight's Greatsword", 1],
+      ['Overkill', 1],
+      ['Fight On!', 1],
+    ],
+  },
+  {
+    id: 'fin-warriors',
+    name: 'Warriors',
+    colors: ['R'],
+    face: 'Firion, Wild Rose Warrior',
+    blurb: 'Pick a weapon and charge in',
+    set: 'fin',
+    spells: [
+      ['Item Shopkeep', 2],
+      ['Freya Crescent', 1],
+      ['Prompto Argentum', 1],
+      ['Firion, Wild Rose Warrior', 1],
+      ['Barret Wallace', 1],
+      ['Hill Gigas', 1],
+      ["Red Mage's Rapier", 1],
+      ["Samurai's Katana", 1],
+      ["Warrior's Sword", 1],
+      ['Thunder Magic', 1],
+      ['Suplex', 1],
+    ],
+  },
+  {
+    id: 'fin-red-mages',
+    name: 'Red Mages',
+    colors: ['R'],
+    face: "Clive, Ifrit's Dominant",
+    blurb: 'Fire, thunder and the Eikon Ifrit',
+    set: 'fin',
+    spells: [
+      ['Blazing Bomb', 1],
+      ['Sabotender', 1],
+      ['Mysidian Elder', 1],
+      ['Queen Brahne', 1],
+      ['Summon: G.F. Ifrit', 1],
+      ['Summon: Esper Ramuh', 1],
+      ["Clive, Ifrit's Dominant", 1],
+      ['Fire Magic', 1],
+      ['Thunder Magic', 1],
+      ['Choco-Comet', 1],
+      ['Laughing Mad', 1],
+      ['Light of Judgment', 1],
+    ],
+  },
+  {
+    id: 'fin-chocobos',
+    name: 'Chocobos',
+    colors: ['G'],
+    face: 'Bartz and Boko',
+    blurb: 'A flock of chocobos that grows with every land',
+    set: 'fin',
+    spells: [
+      ["Sazh's Chocobo", 2],
+      ['Loporrit Scout', 1],
+      ['Bartz and Boko', 1],
+      ['Gysahl Greens', 2],
+      ['Summon: Fat Chocobo', 1],
+      ['Sidequest: Raise a Chocobo', 1],
+      ["Prishe's Wanderings", 1],
+      ['Chocobo Kick', 1],
+      ['Blitzball Shot', 1],
+      ['Clash of the Eikons', 1],
+    ],
+  },
+  {
+    id: 'fin-monsters',
+    name: 'Monsters',
+    colors: ['G'],
+    face: 'Jumbo Cactuar',
+    blurb: 'Cactuars, behemoths and other fiends of the wild',
+    set: 'fin',
+    spells: [
+      ['Cactuar', 1],
+      ['Gran Pulse Ochu', 1],
+      ['Goobbue Gardener', 2],
+      ['Town Greeter', 1],
+      ['Gigantoad', 1],
+      ['Balamb T-Rexaur', 1],
+      ['Coliseum Behemoth', 1],
+      ['Jumbo Cactuar', 1],
+      ["Tifa's Limit Break", 1],
+      ['Clash of the Eikons', 1],
+      ['Airship Crash', 1],
     ],
   },
 ];

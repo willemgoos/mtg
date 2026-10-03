@@ -17,7 +17,14 @@ export function canAttack(ctx: Ctx, id: ObjectId): boolean {
   if (o.zone !== 'battlefield' || o.tapped || o.controller !== ctx.s.turn.activePlayer)
     return false;
   const c = characteristics(ctx, id);
-  if (!c.types.includes('Creature') || c.keywords.has('defender') || c.cantAttack) return false;
+  // Final Fantasy Commander (12f): Demon Wall attacks as though it lacked defender while it has a counter.
+  const defenderOff =
+    def(ctx, id).abilities.some(
+      (a) => a.kind === 'static' && a.effect.kind === 'attacksWithCounterDespiteDefender',
+    ) &&
+    (o.plusOneCounters > 0 || Object.values(o.counters ?? {}).some((n) => n > 0));
+  if (!c.types.includes('Creature') || (c.keywords.has('defender') && !defenderOff) || c.cantAttack)
+    return false;
   if (cantAttackDefender(ctx, id)) return false;
   // Promise of Loyalty: it can't attack the player it made its vow to.
   if (o.vowedTo && o.vowedTo !== o.controller) return false;
@@ -113,6 +120,25 @@ export function possibleBlockers(ctx: Ctx, defender: PlayerId): ObjectId[] {
     .filter((id) => attackers.some((a) => canBlock(ctx, id, a.id)));
 }
 
+/** Final Fantasy (11c): an attacker with The Masamune must be blocked if able. */
+export function mustBeBlocked(ctx: Ctx, id: ObjectId): boolean {
+  if (!ctx.s.combat?.attackers.some((a) => a.id === id)) return false;
+  // Final Fantasy (11c): leftovers. Magitek Scythe: "must be blocked this turn if able".
+  const o = obj(ctx, id);
+  if (
+    ctx.s.effects.some((e) => e.mustBeBlocked && e.affected.id === id && e.affected.zcc === o.zcc)
+  )
+    return true;
+  return ctx.s.battlefield.some(
+    (e) =>
+      obj(ctx, e).attachedTo === id &&
+      def(ctx, e).abilities.some(
+        (a) =>
+          a.kind === 'static' && a.effect.kind === 'attached' && !!a.effect.mustBeBlockedAttacking,
+      ),
+  );
+}
+
 /** Block declarations that violate a restriction (menace). Empty if legal. */
 export function blockViolations(
   ctx: Ctx,
@@ -122,8 +148,18 @@ export function blockViolations(
   for (const a of ctx.s.combat?.attackers ?? []) {
     const n = declared.filter((d) => d.attacker === a.id).length;
     if (n === 1 && hasKeyword(ctx, a.id, 'menace')) out.push(a.id);
+    // Final Fantasy (11c): leftovers. Relentless X-ATM092: three or more blockers.
+    else if (n > 0 && n < minBlockers(ctx, a.id)) out.push(a.id);
   }
   return out;
+}
+
+/** Final Fantasy (11c): the fewest creatures that may block it ("except by three or more creatures"). */
+export function minBlockers(ctx: Ctx, id: ObjectId): number {
+  let n = 1;
+  for (const a of def(ctx, id).abilities)
+    if (a.kind === 'static' && a.effect.kind === 'minBlockers') n = Math.max(n, a.effect.count);
+  return n;
 }
 
 function dealsDamageThisStep(ctx: Ctx, id: ObjectId, firstStrikeStep: boolean): boolean {

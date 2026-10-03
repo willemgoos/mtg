@@ -5,7 +5,8 @@ import type { CardDefinition, ManaCost, SpellDef, ZoneName } from './types.ts';
  * How a card is cast, beyond its own options: for free (a 'castFree'
  * decision), or from the graveyard through Festival of Embers or Osteomancer Adept.
  */
-export type CastVia = 'free' | 'festival' | 'osteomancer' | 'conduit';
+// Final Fantasy (11c): playing from the graveyard ('noctis', 'hades').
+export type CastVia = 'free' | 'festival' | 'osteomancer' | 'conduit' | 'noctis' | 'hades';
 
 /** One way to cast a card: a mode, kicked or not, from hand or with flashback. */
 export interface CastVariant {
@@ -40,8 +41,10 @@ export function spellTags(d: CardDefinition): string[] {
     d.types.includes('Creature') && (manaValue(d.manaCost) >= 4 || !!d.manaCost.x)
       ? ['BigCreature']
       : [];
+  // Final Fantasy (11b): The Emperor of Palamecia: "only to cast a noncreature spell".
+  const noncreature = d.types.includes('Creature') ? [] : ['Noncreature'];
   // Plaza of Heroes: "only to cast a legendary spell".
-  return [...d.subtypes, ...d.types, ...d.supertypes, ...big];
+  return [...d.subtypes, ...d.types, ...d.supertypes, ...big, ...noncreature];
 }
 
 const MAX_PAWS = 5;
@@ -99,6 +102,8 @@ export function pawSpell(d: CardDefinition, paws: readonly number[]): SpellDef {
 /** The ways `d` can be cast from `zone` (empty if it can't be cast from there). */
 export function castVariants(d: CardDefinition, zone: ZoneName, via?: CastVia): CastVariant[] {
   if (d.types.includes('Land')) return [];
+  // Final Fantasy (11a): a transforming card's back face has no mana cost and can't be cast.
+  if (d.noManaCost) return [];
   // Cast as if from hand, then adjusted for how.
   if (via) {
     const free = { generic: 0, colored: {} };
@@ -107,9 +112,11 @@ export function castVariants(d: CardDefinition, zone: ZoneName, via?: CastVia): 
         ? { ...v, cost: free }
         : via === 'festival'
           ? { ...v, life: 1 }
-          : via === 'conduit'
+          : via === 'conduit' || via === 'hades'
             ? v
-            : { ...v, forage: true, finality: true },
+            : via === 'noctis'
+              ? { ...v, life: 3, finality: true }
+              : { ...v, forage: true, finality: true },
     );
   }
   // Dragon Man: cast from the graveyard as from the hand (plus a discard, see legal.ts).
@@ -132,7 +139,13 @@ export function castVariants(d: CardDefinition, zone: ZoneName, via?: CastVia): 
   if (d.pawprints) return pawCombos(d).map((paws) => ({ paws, cost, spell: pawSpell(d, paws) }));
   const extra = flashback ? { flashback: true, ...life } : {};
   if (d.modes) {
-    const modes: CastVariant[] = d.modes.map((spell, mode) => ({ mode, cost, spell, ...extra }));
+    const modes: CastVariant[] = d.modes.map((spell, mode) => ({
+      mode,
+      // Final Fantasy (11a): tiered: each mode adds its own cost.
+      cost: d.tiered?.[mode] ? addCosts(cost, d.tiered[mode]) : cost,
+      spell,
+      ...extra,
+    }));
     // Teamwork's "choose both instead": the kicked spell is every mode at once.
     if (d.kicker?.spell)
       modes.push({
@@ -168,6 +181,8 @@ export function castVariants(d: CardDefinition, zone: ZoneName, via?: CastVia): 
       kicked: true,
       cost: addCosts(cost, d.kicker.cost),
       spell: d.kicker.spell ?? d.spell ?? null,
+      // Final Fantasy (11b): a kicker paid with a permanent (chosen like a sacrifice).
+      ...(d.kicker.sacrifice || d.kicker.returnLand ? { sacrifice: true } : {}),
       ...extra,
     });
   return out;

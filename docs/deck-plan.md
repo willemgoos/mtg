@@ -205,6 +205,18 @@ Assemble, Wakanda Forever, The Fantastic Four, Doom Prevails) played as printed,
 win rates between the precons are within 35–65% except The Fantastic Four's two hardest matchups (33% and 30%); details
 and simplifications in `docs/marvel-plan.md`.
 
+## Phases 11 and 12: Final Fantasy
+
+The Final Fantasy (FIN) main set like Bloomburrow and MSH (11a to 11d: mechanics and the first two decks, the other
+eight decks, every rare and mythic with Jump In and boosters, then the Starter Kit), then the Final Fantasy Commander
+decks as Brawl, as Arena sells them (12a to 12g). See `docs/final-fantasy-plan.md`.
+
+**Phases 11 and 12 done:** all 293 FIN booster cards and the Starter Kit's 12 exclusives, with job select, tiered, Saga
+creatures, Towns, Adventure lands, meld and hideaway. Ten FIN decks of our own (45–53% against the Foundations starter
+decks), the two Starter Kit decks (Cloud 61%, Sephiroth 57%), ten FIN Jump In packets, FIN boosters in Expedition and
+Season, and the seven Arena FIC Brawl decks (39–64% among the Brawl decks). Details and simplifications in
+`docs/final-fantasy-plan.md`.
+
 ## Notes
 
 - Some cards will turn out to be one-offs. Put them in `custom` handlers instead of growing the engine vocabulary for a single card.

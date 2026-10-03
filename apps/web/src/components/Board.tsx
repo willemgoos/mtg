@@ -184,6 +184,12 @@ export function Board({
   const dropCard = (id: ObjectId, x: number, y: number) => {
     const acts = playable(id);
     const land = acts.find((a) => a.type === 'playLand');
+    // Final Fantasy (11a): an adventure land dropped on the board: the land or its Adventure.
+    if (land && acts.length > 1)
+      return setCastMenu({
+        source: id,
+        groups: [[land], ...castGroups(acts.filter((a) => a.type === 'castSpell'))],
+      });
     if (land) return act(land);
     if (acts.length === 0) return;
     if (castGroups(acts).length > 1) return startCast(id, acts);
@@ -245,10 +251,16 @@ export function Board({
       if (d.options.includes(id)) act({ type: 'chooseCard', player: HUMAN, card: id });
       return;
     }
+    // Final Fantasy (11c): an ability on the stack is only clicked as a target.
+    if (!view.objects[id]) return;
     const o = view.objects[id]!;
     if (o.zone !== 'battlefield') {
       const acts = handActions(legal, id);
       const casts = acts.filter((a) => a.type === 'castSpell');
+      // Final Fantasy (11a): an adventure land: play the land or cast its Adventure.
+      const land = acts.find((a) => a.type === 'playLand');
+      if (land && casts.length)
+        return setCastMenu({ source: id, groups: [[land], ...castGroups(casts)] });
       if (casts.length) return startCast(id, casts);
       const ability = legal.find((a) => a.type === 'activateAbility' && a.source === id);
       if (ability?.type === 'activateAbility') return activate(id, ability.abilityIndex);
@@ -349,6 +361,8 @@ export function Board({
       legal.some((a) => a.type === 'addBlock' && a.blocker === blocker && a.attacker === id)
     )
       return 'option';
+    // Final Fantasy (11c): an ability on the stack has no object.
+    if (!view.objects[id]) return null;
     const o = view.objects[id]!;
     if (o.zone !== 'battlefield')
       return handActions(legal, id).length ||
@@ -385,7 +399,13 @@ export function Board({
           : [];
       }),
     ),
-  ].map((id) => ({ id, label: extraLabel(view.objects[id]!.zone, view.objects[id]!.defId) }));
+  ].map((id) => ({
+    id,
+    // Final Fantasy Commander (12d): a card on an adventure.
+    label: view.objects[id]!.onAdventure
+      ? 'On an adventure'
+      : extraLabel(view.objects[id]!.zone, view.objects[id]!.defId),
+  }));
 
   const targetablePlayer = (p: PlayerId) =>
     !!options?.has(`player:${p}`) || !!dragTargets?.has(`player:${p}`);
@@ -452,7 +472,9 @@ export function Board({
         targeting.chosen.length === 0 &&
         (first?.type === 'castSpell' || first?.type === 'activateAbility')
           ? first.sacrifice
-            ? 'a creature to sacrifice'
+            ? (first.type === 'castSpell' &&
+                kickPermanentPrompt(view.objects[first.card]?.defId, first)) ||
+              'a creature to sacrifice'
             : forageFood(first)
               ? 'a Food to sacrifice'
               : first.type === 'castSpell' && first.discard
@@ -540,6 +562,8 @@ export function Board({
       case 'scry':
         return { prompt: `Scry ${d.cards.length}` };
       case 'searchLibrary':
+        // Final Fantasy (11c): hideaway.
+        if (d.to === 'hideaway') return { prompt: 'Hideaway: exile a card face down' };
         return { prompt: 'Search your library' };
       case 'sacrifice':
         return { prompt: 'Choose a creature to sacrifice' };
@@ -574,6 +598,15 @@ export function Board({
       case 'pickCards':
         return { prompt: `Choose ${d.count} card${d.count > 1 ? 's' : ''} to keep` };
       case 'chooseObject':
+        // Final Fantasy (11a): Garnet: any number of Sagas, one at a time.
+        if (d.optional)
+          return {
+            prompt: `${nameOf(d.resume.sourceDefId)}: choose a Saga to remove a lore counter from`,
+            secondary: ['Done', () => act({ type: 'chooseCard', player: HUMAN, card: null })] as [
+              string,
+              () => void,
+            ],
+          };
         return { prompt: `${nameOf(d.resume.sourceDefId)}: choose one of your permanents` };
       case 'payOrCounter': {
         const pay = legal.find((a) => a.type === 'chooseEffect' && a.accept);
@@ -1400,8 +1433,19 @@ function ChooseCardOverlay({ game, onHover }: { game: GameSession; onHover: Hove
   );
 }
 
+/** Final Fantasy (11b): what a kicker paid with a permanent asks for (Vayne's Treachery, Chocobo Kick). */
+function kickPermanentPrompt(defId: CardDefId | undefined, a: Action): string | null {
+  if (a.type !== 'castSpell' || !a.kicked || !defId) return null;
+  const kicker = cardDb.get(defId)?.kicker;
+  if (kicker?.returnLand) return 'a land to return to your hand';
+  if (kicker?.sacrifice) return 'an artifact or creature to sacrifice';
+  return null;
+}
+
 /** "Choose one" mode name, or kicked / not kicked. */
 function castLabel(defId: CardDefId, a: Action): string {
+  // Final Fantasy (11a): an adventure land's own option.
+  if (a.type === 'playLand') return `Play ${cardDb.get(defId)?.name ?? 'land'}`;
   if (a.type !== 'castSpell' && a.type !== 'activateAbility') return '';
   if (a.forage)
     return a.forage === 'graveyard'
@@ -1411,17 +1455,33 @@ function castLabel(defId: CardDefId, a: Action): string {
   if (a.type === 'activateAbility') return 'Activate';
   if (a.via === 'festival') return 'From your graveyard (pay 1 life)';
   if (a.via === 'osteomancer') return 'From your graveyard (forage)';
+  // Final Fantasy (11c): playing from the graveyard.
+  if (a.via === 'noctis') return 'From your graveyard (pay 3 life)';
+  if (a.via === 'hades') return 'From your graveyard';
   if (a.paws) return pawLabel(defId, a.paws);
   const def = cardDb.get(defId);
   if (a.type === 'castSpell' && a.sneak && def?.sneak) return `Sneak (${manaText(def.sneak)})`;
+  // Final Fantasy (11a): an adventure land's Adventure.
+  if (def?.adventure && a.back) {
+    const face = cardDb.get(def.back!);
+    return `Adventure: ${face?.name ?? ''} (${face ? manaText(face.manaCost) : ''})`;
+  }
   // A modal double-faced card: cast either face.
   if (def?.back) {
     const face = a.back ? cardDb.get(def.back) : def;
     return `Cast ${face?.name ?? ''} (${face ? manaText(face.manaCost) : ''})`;
   }
+  // Final Fantasy (11a): tiered: the mode with its additional cost ("Thundara — {3}").
+  if (a.mode !== undefined && def?.tiered?.[a.mode])
+    return `${def.modes?.[a.mode]?.label ?? `Mode ${a.mode + 1}`} — ${manaText(def.tiered[a.mode]!) || '{0}'}`;
   if (a.mode !== undefined) return def?.modes?.[a.mode]?.label ?? `Mode ${a.mode + 1}`;
   if (def?.sacrificeOrPay)
-    return a.sacrifice ? 'Sacrifice a creature' : `Pay ${manaText(def.sacrificeOrPay)}`;
+    return a.sacrifice
+      ? // Final Fantasy (11c): Louisoix's Sacrifice wants a legendary creature.
+        def.sacrificeToCastFilter?.supertypes?.includes('Legendary')
+        ? 'Sacrifice a legendary creature'
+        : 'Sacrifice a creature'
+      : `Pay ${manaText(def.sacrificeOrPay)}`;
   if (def?.forageOrPay) return `Pay ${manaText(def.forageOrPay)}`;
   // Multikicker (Batroc), overload (Vandalblast), Toxic Deluge's X life.
   if (a.kickCount) return `Kicked ×${a.kickCount}`;
@@ -1436,6 +1496,10 @@ function castLabel(defId: CardDefId, a: Action): string {
     return a.kicked ? `With offspring (+${manaText(def.kicker.cost)})` : 'Without offspring';
   if (def.kicker.teamwork !== undefined)
     return a.kicked ? `Teamwork (tap power ${def.kicker.teamwork})` : 'Without teamwork';
+  // Final Fantasy (11b): a kicker paid with a permanent.
+  if (def.kicker.returnLand) return a.kicked ? 'Kicked (return a land)' : 'Not kicked';
+  if (def.kicker.sacrifice)
+    return a.kicked ? 'Kicked (sacrifice an artifact or creature)' : 'Not kicked';
   return a.kicked ? `Kicked (+${manaText(def.kicker.cost)})` : 'Not kicked';
 }
 
@@ -1499,20 +1563,33 @@ function SearchOverlay({ game, onHover }: { game: GameSession; onHover: HoverFn 
     <div className="overlay overlay--mull">
       <div className="mull">
         <h2>
-          {d.kind === 'searchLibrary' && d.fromGraveyard
-            ? 'Choose from your graveyard'
-            : d.kind === 'searchLibrary' && d.looked
-              ? 'Top of your library'
-              : 'Search your library'}
+          {/* Final Fantasy (11c): a card from your hand (Summoner's Grimoire) or exile (The Darkness Crystal). */}
+          {d.kind === 'searchLibrary' &&
+          d.fromGraveyard &&
+          picks.every((a) => view.objects[a.card!]?.zone === 'hand')
+            ? 'Choose from your hand'
+            : d.kind === 'searchLibrary' &&
+                d.fromGraveyard &&
+                picks.every((a) => view.objects[a.card!]?.zone === 'exile')
+              ? 'Choose an exiled card'
+              : d.kind === 'searchLibrary' && d.fromGraveyard
+                ? 'Choose from your graveyard'
+                : d.kind === 'searchLibrary' && d.looked
+                  ? 'Top of your library'
+                  : 'Search your library'}
         </h2>
         <p>
-          {d.kind === 'searchLibrary' && d.to && d.to !== 'hand'
-            ? 'Choose a card to put onto the battlefield.'
-            : 'Choose a card to put into your hand.'}{' '}
+          {d.kind === 'searchLibrary' && d.to === 'hideaway'
+            ? 'Choose a card to exile face down.'
+            : d.kind === 'searchLibrary' && d.to && d.to !== 'hand'
+              ? 'Choose a card to put onto the battlefield.'
+              : 'Choose a card to put into your hand.'}{' '}
           {d.kind === 'searchLibrary' && d.fromGraveyard
             ? ''
             : d.kind === 'searchLibrary' && d.looked
-              ? 'The rest go to the bottom.'
+              ? d.restOnTop
+                ? 'The rest stay on top.'
+                : 'The rest go to the bottom.'
               : 'Your library is then shuffled.'}
         </p>
         <div className="mull__hand">
@@ -1529,14 +1606,17 @@ function SearchOverlay({ game, onHover }: { game: GameSession; onHover: HoverFn 
             </div>
           ))}
         </div>
-        <div className="mull__buttons">
-          <button
-            className="btn btn--ghost"
-            onClick={() => apply({ type: 'chooseCard', player: HUMAN, card: null })}
-          >
-            Find nothing
-          </button>
-        </div>
+        {/* Final Fantasy (11c): hideaway must exile a card. */}
+        {!(d.kind === 'searchLibrary' && d.to === 'hideaway') && (
+          <div className="mull__buttons">
+            <button
+              className="btn btn--ghost"
+              onClick={() => apply({ type: 'chooseCard', player: HUMAN, card: null })}
+            >
+              Find nothing
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

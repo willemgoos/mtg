@@ -129,6 +129,25 @@ export const KEYWORDS_AS_ABILITIES = new Set([
   'Sell Contraband',
   'Buy Information',
   'Hire a Mercenary',
+  // Final Fantasy (11a).
+  'Job select',
+  'Tiered',
+  'Plainscycling',
+  'Islandcycling',
+  'Swampcycling',
+  'Mountaincycling',
+  'Forestcycling',
+  'Hideaway',
+  'Meld',
+  'Triple',
+  // Final Fantasy Commander (12).
+  'Draft from a spellbook',
+  'Spree',
+  'Proliferate',
+  'Saddle',
+  'Adapt',
+  'Delve',
+  'Ninjutsu',
 ]);
 
 const BASIC_MANA: Record<string, ManaType> = {
@@ -251,6 +270,9 @@ export function buildCard(sc: ScryfallCard, behavior: Behavior = {}): CardDefini
     ...(wardCostOf(sc.oracleText) ? { wardCost: wardCostOf(sc.oracleText)! } : {}),
     colorIdentity: colorIdentityOf(sc),
     ...(sc.flavorName ? { flavorName: sc.flavorName } : {}),
+    // Final Fantasy (11a): adventure lands, and transforming back faces (no mana cost: not castable).
+    ...(sc.adventure ? { adventure: true } : {}),
+    ...(sc.front && sc.manaCost === '' && !types.includes('Land') ? { noManaCost: true } : {}),
     // Everything else the behaviour sets (spell, modes, kicker, costs, ...).
     ...rest,
   };

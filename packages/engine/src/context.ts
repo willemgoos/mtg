@@ -1,10 +1,12 @@
 import { characteristics } from './characteristics.ts';
 import { MSH_EFFECTS } from './msh-effects.ts';
+import { FIN_EFFECTS } from './fin-effects.ts';
 import { checkCondition } from './triggers.ts';
-import type { EffectSource } from './effects.ts';
+import { type EffectSource, gainLife } from './effects.ts';
 import type {
   ManaType,
   CardDb,
+  CardDefId,
   CardDefinition,
   GameEvent,
   GameObject,
@@ -54,6 +56,8 @@ export function makeCtx(
 /** Small one-off effects used by the engine's own effect kinds. */
 const BUILT_IN_EFFECTS: Record<string, CustomEffect> = {
   ...MSH_EFFECTS,
+  // Final Fantasy (11a).
+  ...FIN_EFFECTS,
   // "As this enters, choose a color/creature type" (or, for a spell, as it resolves: Raise the Palisade).
   setChosen(ctx, es, params) {
     const o = es.source && ctx.s.objects[es.source.id];
@@ -94,6 +98,9 @@ export function def(ctx: Ctx, id: ObjectId): CardDefinition {
     if (aura && aura.zone === 'battlefield' && aura.attachedTo === id) return foodDef(d);
   }
   if (o.blank) return blankDef(d);
+  // Final Fantasy (11c): a land with a blight counter (Ultima, Origin of Oblivion).
+  if (o.counters?.blight && o.zone === 'battlefield' && d.types.includes('Land'))
+    return blightDef(d);
   // Ygra: other creatures are Food artifacts with the Food ability.
   if (
     ctx.s.creaturesAreFood &&
@@ -172,6 +179,42 @@ function blankDef(d: CardDefinition): CardDefinition {
   return b;
 }
 
+const blightDefs = new WeakMap<CardDefinition, CardDefinition>();
+
+/**
+ * Final Fantasy (11c): "it loses all land types and abilities and has
+ * '{T}: Add {C}.'" (a land's subtypes are all land types).
+ */
+function blightDef(d: CardDefinition): CardDefinition {
+  let b = blightDefs.get(d);
+  if (!b) {
+    b = {
+      ...d,
+      subtypes: [],
+      keywords: [],
+      abilities: [{ kind: 'mana', cost: { tapSelf: true }, produces: 'C' }],
+    };
+    blightDefs.set(d, b);
+  }
+  return b;
+}
+
+/** Final Fantasy (11c): The Darkness Crystal that exiles this dying creature instead, if any. */
+function darknessCrystalFor(ctx: Ctx, o: GameObject): GameObject | undefined {
+  if (o.isToken || !defOf(ctx, o.defId).types.includes('Creature')) return undefined;
+  for (const id of ctx.s.battlefield) {
+    const src = ctx.s.objects[id]!;
+    if (src.controller === o.controller) continue;
+    if (
+      def(ctx, id).abilities.some(
+        (a) => a.kind === 'static' && a.effect.kind === 'exileOpponentNontokenCreatures',
+      )
+    )
+      return src;
+  }
+  return undefined;
+}
+
 export function refOf(o: GameObject): ObjectRef {
   return { id: o.id, zcc: o.zcc };
 }
@@ -241,6 +284,13 @@ export interface MoveOptions {
   // 'second': second from the top (Trickster's Stratagem, Marvel Super Heroes).
   position?: 'top' | 'bottom' | 'second';
   controller?: PlayerId;
+  // Final Fantasy (11a): saga creatures
+  /** Onto the battlefield showing its back face ("return it transformed"). */
+  transformed?: boolean;
+  // Final Fantasy (11c): meld
+  /** Onto the battlefield as this melded card, made of it and `meldedWith` (Ragnarok). */
+  meldInto?: CardDefId;
+  meldedWith?: ObjectId;
 }
 
 /**
@@ -259,6 +309,10 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
   )
     to = 'exile';
   if (from === 'battlefield' && to === 'graveyard' && exiledInsteadOfDying(ctx, o)) to = 'exile';
+  // Final Fantasy (11c): The Darkness Crystal exiles it instead (and its controller gains life).
+  const crystal =
+    from === 'battlefield' && to === 'graveyard' ? darknessCrystalFor(ctx, o) : undefined;
+  if (crystal) to = 'exile';
   // Festival of Embers: "If a card or token would be put into your graveyard from anywhere, exile it instead."
   if (to === 'graveyard' && graveyardExiles(ctx, o.owner)) to = 'exile';
   if (from === 'battlefield' && to === 'exile' && def(ctx, id).types.includes('Creature'))
@@ -372,11 +426,14 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
   else delete o.leftAttacking;
   if (from === 'battlefield') removeFromCombat(ctx, id);
   // A double-faced card shows its front again anywhere but the stack and the battlefield.
+  const leftAs = from === 'battlefield' && o.front ? o.defId : undefined;
   if (o.front && to !== 'stack' && !(from === 'stack' && to === 'battlefield')) {
     o.defId = o.front;
     delete o.front;
   }
 
+  // Final Fantasy (11b): creatures and artifacts dying ("you control" looks back).
+  const leftController = from === 'battlefield' ? o.controller : undefined;
   o.zone = to;
   o.zcc++;
   o.zoneTurn = ctx.s.turn.number;
@@ -387,10 +444,62 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
   o.plusOneCounters = 0;
   o.summoningSick = true;
   o.controller = to === 'battlefield' || to === 'stack' ? (opts.controller ?? o.owner) : o.owner;
+  // Final Fantasy (11a): saga creatures and adventure lands.
+  if (to === 'battlefield' && opts.transformed) {
+    const back = defOf(ctx, o.defId).back;
+    if (back) {
+      o.front = o.defId;
+      o.defId = back;
+    }
+  }
+  if (from === 'exile') delete o.onAdventure;
+  // Final Fantasy (11c): meld. The melded card shows the result; its other half waits in exile.
+  const meldPartner = from === 'battlefield' ? o.meldedWith : undefined;
+  delete o.meldedWith;
+  delete o.equipDiscount;
+  if (to === 'battlefield' && opts.meldInto) {
+    o.front = o.defId;
+    o.defId = opts.meldInto;
+    if (opts.meldedWith) o.meldedWith = opts.meldedWith;
+  }
+  delete o.loreRemovedTurn;
+  if (o.bonusCounters && to !== 'stack') {
+    if (to === 'battlefield') o.plusOneCounters += o.bonusCounters;
+    delete o.bonusCounters;
+  }
   if (to === 'battlefield' && defOf(ctx, o.defId).entersTapped) o.tapped = true;
   const tappedIf = to === 'battlefield' ? defOf(ctx, o.defId).entersTappedIf : undefined;
   // Eddymurk Crab: "enters tapped if it's not your turn"; check lands and the like.
   if (tappedIf && checkCondition(ctx, tappedIf, o.controller, o)) o.tapped = true;
+  // Final Fantasy (11b): The Wandering Minstrel: "Lands you control enter untapped."
+  if (
+    o.tapped &&
+    to === 'battlefield' &&
+    defOf(ctx, o.defId).types.includes('Land') &&
+    ctx.s.battlefield.some(
+      (b) =>
+        b !== o.id &&
+        ctx.s.objects[b]!.controller === o.controller &&
+        def(ctx, b).abilities.some(
+          (a) => a.kind === 'static' && a.effect.kind === 'landsEnterUntapped',
+        ),
+    )
+  )
+    o.tapped = false;
+  // Final Fantasy Commander (12d): Authority of the Consuls.
+  if (
+    to === 'battlefield' &&
+    defOf(ctx, o.defId).types.includes('Creature') &&
+    ctx.s.battlefield.some(
+      (b) =>
+        b !== id &&
+        ctx.s.objects[b]!.controller !== o.controller &&
+        def(ctx, b).abilities.some(
+          (a) => a.kind === 'static' && a.effect.kind === 'opponentCreaturesEnterTapped',
+        ),
+    )
+  )
+    o.tapped = true;
 
   // Tokens cease to exist once they leave the battlefield (rule 111.7).
   const ceases = o.isToken && to !== 'battlefield';
@@ -403,14 +512,36 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
   // Ygra entering or leaving changes what the other creatures are.
   if ((from === 'battlefield' || to === 'battlefield') && makesFood(defOf(ctx, o.defId)))
     refreshCreaturesAreFood(ctx);
-  emit(ctx, { type: 'objectMoved', id, defId: o.defId, from, to });
+  emit(ctx, {
+    type: 'objectMoved',
+    id,
+    defId: o.defId,
+    from,
+    to,
+    ...(leftAs ? { leftAs } : {}),
+    // Final Fantasy (11c): "that creature's power" (Vincent Valentine).
+    ...(from === 'battlefield' && o.lastPower !== undefined ? { lastPower: o.lastPower } : {}),
+    ...(leftController ? { controller: leftController } : {}),
+  });
   if (discarded && o.zone === 'graveyard') {
     o.discardedTurn = ctx.s.turn.number;
     (ctx.s.turn.discards ??= { p1: 0, p2: 0 })[o.owner]++;
     emit(ctx, { type: 'discarded', id, player: o.owner });
   }
 
+  if (crystal && o.zone === 'exile') {
+    crystal.exiledWith = [...(crystal.exiledWith ?? []), id];
+    for (const a of def(ctx, crystal.id).abilities)
+      if (a.kind === 'static' && a.effect.kind === 'exileOpponentNontokenCreatures')
+        gainLife(ctx, crystal.controller, a.effect.life);
+  }
   if (ceases) delete ctx.s.objects[id];
+  // Final Fantasy (11c): meld. The other half goes where the melded permanent went.
+  const partner = meldPartner ? ctx.s.objects[meldPartner] : undefined;
+  if (partner && partner.zone === 'exile' && o.zone !== 'exile')
+    moveObject(ctx, partner.id, o.zone, {
+      ...(opts.position ? { position: opts.position } : {}),
+    });
   // "Until this leaves the battlefield": the exiled cards come back.
   for (const back of returning ?? [])
     if (ctx.s.objects[back]?.zone === 'exile') moveObject(ctx, back, 'battlefield');
@@ -423,6 +554,12 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
 export function addCounters(ctx: Ctx, id: ObjectId, n: number, name?: string): void {
   if (n <= 0) return;
   const o = obj(ctx, id);
+  // Final Fantasy Commander (12c): Hardened Scales, before any doubling (the better order).
+  if (!name && defOf(ctx, o.defId).types.includes('Creature'))
+    for (const src of ctx.s.battlefield)
+      if (obj(ctx, src).controller === o.controller)
+        for (const a of def(ctx, src).abilities)
+          if (a.kind === 'static' && a.effect.kind === 'oneMoreCounter') n++;
   for (const src of ctx.s.battlefield) {
     const so = obj(ctx, src);
     if (so.controller !== o.controller) continue;
@@ -430,7 +567,9 @@ export function addCounters(ctx: Ctx, id: ObjectId, n: number, name?: string): v
       if (
         a.kind === 'static' &&
         a.effect.kind === 'doubleCounters' &&
-        checkCondition(ctx, a.effect.condition, so.controller, so)
+        checkCondition(ctx, a.effect.condition, so.controller, so) &&
+        // Final Fantasy (11c): The Earth Crystal doubles only +1/+1 counters on creatures.
+        !(a.effect.plusOneOnCreatures && (name || !defOf(ctx, o.defId).types.includes('Creature')))
       )
         n *= 2;
   }
@@ -446,6 +585,12 @@ export function addCounters(ctx: Ctx, id: ObjectId, n: number, name?: string): v
     return;
   }
   o.plusOneCounters += n;
+  // Final Fantasy Commander (12c): "the first time +1/+1 counters have been put on it this turn".
+  if (o.countersTurn === ctx.s.turn.number) o.countersTimes = (o.countersTimes ?? 0) + 1;
+  else {
+    o.countersTurn = ctx.s.turn.number;
+    o.countersTimes = 1;
+  }
   emit(ctx, { type: 'countersAdded', id, count: n, player: o.controller });
 }
 

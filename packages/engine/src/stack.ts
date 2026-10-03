@@ -139,8 +139,11 @@ function wardedTargets(ctx: Ctx, player: PlayerId, targets: readonly TargetChoic
     if (!('object' in t)) return [];
     const o = ctx.s.objects[t.object.id];
     if (!o || o.zone !== 'battlefield' || o.controller === player) return [];
-    if (hasKeyword(ctx, o.id, 'ward'))
-      return [def(ctx, o.id).wardCost ?? { mana: { generic: 2, colored: {} } }];
+    if (hasKeyword(ctx, o.id, 'ward')) {
+      const w = def(ctx, o.id).wardCost ?? { mana: { generic: 2, colored: {} } };
+      // Final Fantasy (11c): ward paid in life (Raubahn: life equal to his power).
+      return [w.lifeEqualsPower ? { ...w, life: Math.max(0, power(ctx, o.id)) } : w];
+    }
     if (hasKeyword(ctx, o.id, 'wardOne')) return [{ mana: { generic: 1, colored: {} } }];
     return [];
   });
@@ -231,6 +234,15 @@ export function castCost(
   // Brawl: commander tax.
   if (o.zone === 'command') cost = { ...cost, generic: cost.generic + commanderTax(ctx, player) };
   let reduce = d.costReduction !== undefined ? amountFor(ctx, player, d.costReduction) : 0;
+  // Final Fantasy Commander (12d): delve.
+  if (d.delve && !choice.via) reduce += delveCount(ctx, player, d);
+  // Final Fantasy Commander (12f): spells cast from your graveyard cost less (Emet-Selch of the Third Seat).
+  if (o.zone === 'graveyard' || o.fromGraveyardCast)
+    for (const id of ctx.s.battlefield)
+      if (obj(ctx, id).controller === player)
+        for (const a of def(ctx, id).abilities)
+          if (a.kind === 'static' && a.effect.kind === 'graveyardSpellsCostLess')
+            reduce += a.effect.amount;
   // Heroic Return, Avenge: "costs {2} less if ...".
   if (d.costReductionIf && checkCondition(ctx, d.costReductionIf.condition, player, o))
     reduce += d.costReductionIf.amount;
@@ -341,7 +353,8 @@ export function castSpell(
         : []),
     ],
     [
-      choice.sacrifice,
+      // Final Fantasy (11b): a land returned for kicker may tap for mana first.
+      choice.kicked && d.kicker?.returnLand ? undefined : choice.sacrifice,
       ...(choice.sacrificeMany ?? []),
       choice.forage !== 'graveyard' ? choice.forage : undefined,
       ...(teamwork ?? []),
@@ -356,7 +369,10 @@ export function castSpell(
   for (const id of choice.sacrificeMany ?? []) sacrificePermanent(ctx, id);
   if (d.types.includes('Instant') || d.types.includes('Sorcery'))
     (ctx.s.turn.instantsSorceriesCast ??= { p1: 0, p2: 0 })[player]++;
-  if (choice.sacrifice) sacrificePermanent(ctx, choice.sacrifice);
+  // Final Fantasy (11b): "Kicker—Return a land you control to its owner's hand".
+  if (choice.sacrifice && choice.kicked && d.kicker?.returnLand)
+    moveObject(ctx, choice.sacrifice, 'hand');
+  else if (choice.sacrifice) sacrificePermanent(ctx, choice.sacrifice);
   if (v.removeCounters) removeCounters(ctx, player, v.removeCounters);
   changeLife(ctx, player, -wardLife(ctx, player, targets) - (v.life ?? 0));
   // Toxic Deluge: "As an additional cost to cast this spell, pay X life."
@@ -380,6 +396,12 @@ export function castSpell(
     ...(sneakFrom ? { sneak: sneakFrom } : {}),
   });
   payMana(ctx, payment);
+  // Final Fantasy (11b): mana spent (convoking creatures don't spend mana).
+  o.manaSpent = payment.filter((id) => !convokers.includes(id)).length;
+  // Final Fantasy Commander (12d): delve exiles the cards that paid (the oldest in the graveyard).
+  if (d.delve && !choice.via)
+    for (const id of ctx.s.players[player].graveyard.slice(0, delveCount(ctx, player, d)))
+      moveObject(ctx, id, 'exile');
   if (teamwork) payTeamwork(ctx, teamwork);
   if (convokers.length) o.convokedBy = payment.filter((id) => convokers.includes(id));
   if (d.types.includes('Creature')) scryForAncestry(ctx, player, d, payment);
@@ -474,8 +496,19 @@ export function abilityManaCost(
   ctx: Ctx,
   source: ObjectId,
   a: ReturnType<typeof activatedAbility>,
+  /** Final Fantasy (11d): the chosen targets ('best': the cheapest any target could make it). */
+  targets?: readonly TargetChoice[] | 'best',
 ): ManaCost | undefined {
   const o = obj(ctx, source);
+  // Final Fantasy (11c): activated cost reduction (Balamb Garden), and Firion's cheaper equip.
+  const less =
+    (a.costReduction !== undefined
+      ? countOf(ctx, o.controller, a.costReduction, false, source)
+      : 0) +
+    // Firion's copies' own discount, and "equip abilities you activate cost less" (Fighter Class).
+    (a.cost.mana ? equipDiscount(ctx, o, a, targets) : 0);
+  if (less && a.cost.mana && !a.powerUp)
+    return reduceCost(a.cost.mana, { generic: Math.min(less, a.cost.mana.generic), colored: {} });
   if (!a.powerUp || !a.cost.mana) return a.cost.mana;
   let cost = a.cost.mana;
   if (o.zoneTurn === ctx.s.turn.number) cost = reduceCost(cost, def(ctx, source).manaCost);
@@ -486,6 +519,42 @@ export function abilityManaCost(
         cost = reduceCost(cost, { generic: s.effect.amount, colored: {} });
   }
   return cost;
+}
+
+// Final Fantasy Commander (12d): delve pays generic mana with graveyard cards (up to the printed generic).
+function delveCount(ctx: Ctx, player: PlayerId, d: CardDefinition): number {
+  return Math.min(ctx.s.players[player].graveyard.length, d.manaCost.generic);
+}
+
+// Final Fantasy Commander (12b): equip cost reductions.
+/** How much less an equip ability costs: the controller's "equip abilities cost less" and the Equipment's own. */
+function equipDiscount(
+  ctx: Ctx,
+  o: { id: ObjectId; controller: PlayerId; equipDiscount?: number },
+  a: ReturnType<typeof activatedAbility>,
+  targets?: readonly TargetChoice[] | 'best',
+): number {
+  const isEquip =
+    def(ctx, o.id).subtypes.includes('Equipment') &&
+    a.effects.length === 1 &&
+    a.effects[0]!.kind === 'attach';
+  if (!isEquip) return 0;
+  let n = o.equipDiscount ?? 0;
+  for (const id of ctx.s.battlefield) {
+    if (obj(ctx, id).controller !== o.controller) continue;
+    for (const s of def(ctx, id).abilities)
+      if (
+        s.kind === 'static' &&
+        s.effect.kind === 'equipCostsLess' &&
+        checkCondition(ctx, s.effect.condition, o.controller, obj(ctx, id)) &&
+        // Final Fantasy (11d): only when equipping this creature (Cloud, Planet's Champion).
+        (!s.effect.targetSelf ||
+          targets === 'best' ||
+          (!!targets?.[0] && 'object' in targets[0] && targets[0].object.id === id))
+      )
+        n += s.effect.amount;
+  }
+  return n;
 }
 
 export function activateAbility(
@@ -502,7 +571,7 @@ export function activateAbility(
 ): boolean {
   const a = activatedAbility(ctx, source, index);
   const src = obj(ctx, source);
-  const mana = abilityManaCost(ctx, source, a);
+  const mana = abilityManaCost(ctx, source, a, targets);
   const sourceRef = { id: source, zcc: src.zcc };
   const exclude = a.cost.tapSelf ? source : undefined;
   const payment = planPayment(
@@ -526,7 +595,14 @@ export function activateAbility(
   if (a.cost.discardSelf) moveObject(ctx, source, 'graveyard');
   if (a.cost.tapTokens)
     for (const id of tokensToTap(ctx, player, source).slice(0, a.cost.tapTokens)) tap(ctx, id);
-  if (a.cost.crew) for (const id of crewFor(ctx, player, source, a.cost.crew) ?? []) tap(ctx, id);
+  if (a.cost.crew) {
+    const crew = crewFor(ctx, player, source, a.cost.crew) ?? [];
+    for (const id of crew) tap(ctx, id);
+    // Final Fantasy (11c): crewed by (Balthier and Fran).
+    const v = obj(ctx, source);
+    const before = v.crewedBy?.turn === ctx.s.turn.number ? v.crewedBy.ids : [];
+    v.crewedBy = { turn: ctx.s.turn.number, ids: [...before, ...crew] };
+  }
   if (a.cost.sacrificeArtifacts)
     for (const id of artifactsToSacrifice(ctx, player, a.cost.sacrificeArtifacts) ?? [])
       sacrificePermanent(ctx, id);
@@ -682,6 +758,8 @@ export function resolveTop(ctx: Ctx): boolean {
         ...(d.afterResolving === 'libraryBottom' ? { libraryBottom: true } : {}),
         // Rebound: cast from your hand, it's exiled and cast again at your next upkeep.
         ...(d.rebound && item.fromHand && !item.flashback ? { rebound: item.controller } : {}),
+        // Final Fantasy (11a): an Adventure goes on an adventure (exile) as it resolves.
+        ...(o.front && defOf(ctx, o.front).adventure && !item.copy ? { adventure: true } : {}),
       };
       if (runEffects(ctx, es, spell.effects, paused)) return true;
       finishResolution(ctx, paused);
@@ -809,6 +887,15 @@ function attachAura(ctx: Ctx, aura: ObjectId, host: ObjectId): void {
 export function finishResolution(ctx: Ctx, item: PausedResolution['item']): void {
   emit(ctx, { type: 'resolved', id: item.id });
   if (item.kind !== 'spell') return;
+  // Final Fantasy (11a): a spell that put itself onto the battlefield as it resolved (Esper Origins).
+  if (ctx.s.objects[item.id]?.zone === 'battlefield') return;
+  // Final Fantasy (11a): adventure lands. Its owner may play the land from exile later.
+  if (item.adventure) {
+    moveObject(ctx, item.id, 'exile');
+    const o = ctx.s.objects[item.id];
+    if (o?.zone === 'exile') o.onAdventure = true;
+    return;
+  }
   if (item.libraryBottom) return moveObject(ctx, item.id, 'library', { position: 'bottom' });
   moveObject(ctx, item.id, item.exile || item.rebound ? 'exile' : 'graveyard');
   const o = ctx.s.objects[item.id];
@@ -1109,8 +1196,22 @@ export function answerSearch(ctx: Ctx, card: ObjectId | null): void {
   if (card !== null) {
     if (d.fromGraveyard) {
       if (d.to === 'battlefield') {
+        // Final Fantasy (11c): onto the battlefield attacking (checked as the card, before it enters).
+        const attacking = !!d.attackingIf && cardMatches(ctx, card, d.attackingIf);
         moveObject(ctx, card, 'battlefield', { controller: d.player });
         if (d.counter) (obj(ctx, card).counters ??= {})[d.counter] = 1;
+        // Final Fantasy (11c): The Darkness Crystal.
+        if (d.enterTapped) obj(ctx, card).tapped = true;
+        if (d.enterCounters) addCounters(ctx, card, d.enterCounters);
+        if (attacking && ctx.s.combat && obj(ctx, card).zone === 'battlefield') {
+          obj(ctx, card).tapped = true;
+          ctx.s.combat.attackers.push({
+            id: card,
+            defender: other(d.player),
+            blocked: false,
+            blockers: [],
+          });
+        }
       } else moveObject(ctx, card, 'hand');
       squirrelFood(ctx, d, card);
       return resume(ctx, d.resume, d.thenPriority);
@@ -1119,7 +1220,12 @@ export function answerSearch(ctx: Ctx, card: ObjectId | null): void {
       d.to === 'battlefield' ||
       d.to === 'battlefieldTapped' ||
       (d.battlefieldOnYourTurn && ctx.s.turn.activePlayer === d.player);
-    if (d.to === 'graveyard') moveObject(ctx, card, 'graveyard');
+    if (d.to === 'hideaway') {
+      // Final Fantasy (11c): hideaway. Exiled face down, remembered by the land.
+      moveObject(ctx, card, 'exile');
+      const land = d.resume.source && ctx.s.objects[d.resume.source.id];
+      if (land && land.zone === 'battlefield') land.exiledWith = [card];
+    } else if (d.to === 'graveyard') moveObject(ctx, card, 'graveyard');
     else if (d.to === 'libraryTop') {
       // Fountainport Bell: shuffle, then put it on top (done after the shuffle below).
     } else if (onBattlefield) {
@@ -1134,7 +1240,7 @@ export function answerSearch(ctx: Ctx, card: ObjectId | null): void {
       )
         obj(ctx, card).tapped = false;
     } else moveObject(ctx, card, 'hand');
-    emit(ctx, { type: 'searched', player: d.player, id: card });
+    if (d.to !== 'hideaway') emit(ctx, { type: 'searched', player: d.player, id: card });
   }
   if (d.fromGraveyard) {
     squirrelFood(ctx, d, null);
