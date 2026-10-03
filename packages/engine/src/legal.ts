@@ -309,7 +309,9 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
       d.discardToCast || (zone === 'graveyard' && d.castFromGraveyardWithDiscard);
     const discards = discardToCast ? ps.hand.filter((id) => id !== card) : [undefined];
     if (d.discardToCast && discards.length === 0) return;
-    if (!instantSpeed && !sorcery) return;
+    // Marvel Super Heroes Jumpstart (Pym Particles): flash only when kicked (Quantum Reduction).
+    const flashIfKicked = !instantSpeed && !sorcery && !!d.kicker?.flash;
+    if (!instantSpeed && !sorcery && !flashIfKicked) return;
     // The usual ways, plus graveyard casts through other cards.
     // Extract Power: exiled cards played for free.
     const free = zone === 'exile' && obj(ctx, card).playFreeBy === player;
@@ -327,6 +329,7 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
         ];
     for (const via of vias)
       for (const v of castVariants(d, zone, via)) {
+        if (flashIfKicked && !v.kicked) continue;
         if ((v.life ?? 0) > ps.life) continue;
         if (v.removeCounters && countersYouControl(ctx, player) < v.removeCounters) continue;
         // Escalate: enough untapped creatures to tap.

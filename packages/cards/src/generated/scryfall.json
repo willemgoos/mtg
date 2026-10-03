@@ -22279,6 +22279,128 @@
   }
  },
  {
+  "name": "Ant-Man's Air Force",
+  "scryfallId": "a94723d0-2137-41f6-87a1-6a33e1d50d1b",
+  "oracleId": "5d7eea87-b60f-4ab9-b485-30aadda0cd79",
+  "set": "msc",
+  "collectorNumber": "759",
+  "rarity": "uncommon",
+  "manaCost": "{1}{U}",
+  "typeLine": "Creature — Insect",
+  "oracleText": "Flying (This creature can't be blocked except by creatures with flying or reach.)\nWhenever this creature attacks, up to one target creature gets -1/-0 until end of turn.",
+  "power": "2",
+  "toughness": "1",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/9/a94723d0-2137-41f6-87a1-6a33e1d50d1b.jpg?1785842430",
+   "normal": "https://cards.scryfall.io/normal/front/a/9/a94723d0-2137-41f6-87a1-6a33e1d50d1b.jpg?1785842430",
+   "large": "https://cards.scryfall.io/large/front/a/9/a94723d0-2137-41f6-87a1-6a33e1d50d1b.jpg?1785842430",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/9/a94723d0-2137-41f6-87a1-6a33e1d50d1b.jpg?1785842430"
+  }
+ },
+ {
+  "name": "Ant-Man, Reformed Rogue",
+  "scryfallId": "777bc602-3c8d-43a1-812f-2103dc26b635",
+  "oracleId": "c51c429d-d8d7-40d6-9760-72c26acaed42",
+  "set": "msc",
+  "collectorNumber": "739",
+  "rarity": "uncommon",
+  "manaCost": "{2}{G/U}",
+  "typeLine": "Legendary Creature — Human Rogue Hero",
+  "oracleText": "Whenever you cast a green spell, Ant-Man gets +1/+0 and gains trample until end of turn.\nWhenever you cast a blue spell, Ant-Man gets -1/-0 until end of turn and can't be blocked this turn.\nWhenever Ant-Man deals combat damage to a player, draw a card.",
+  "power": "2",
+  "toughness": "3",
+  "colors": [
+   "G",
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/7/777bc602-3c8d-43a1-812f-2103dc26b635.jpg?1783903034",
+   "normal": "https://cards.scryfall.io/normal/front/7/7/777bc602-3c8d-43a1-812f-2103dc26b635.jpg?1783903034",
+   "large": "https://cards.scryfall.io/large/front/7/7/777bc602-3c8d-43a1-812f-2103dc26b635.jpg?1783903034",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/7/777bc602-3c8d-43a1-812f-2103dc26b635.jpg?1783903034"
+  }
+ },
+ {
+  "name": "Wasp, Shrinking Savior",
+  "scryfallId": "ad66392c-f117-4dfd-8ea1-86291e7e4ce5",
+  "oracleId": "002cd9b4-efce-429f-82cd-d37352d2e932",
+  "set": "msc",
+  "collectorNumber": "646",
+  "rarity": "rare",
+  "manaCost": "{2}{U}",
+  "typeLine": "Legendary Creature — Human Hero",
+  "oracleText": "Flying\nWhenever Wasp attacks, up to one other target creature gets -3/-0 until your next turn. Then draw a card for each creature with power less than 0 on the battlefield.",
+  "power": "1",
+  "toughness": "3",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/d/ad66392c-f117-4dfd-8ea1-86291e7e4ce5.jpg?1783903065",
+   "normal": "https://cards.scryfall.io/normal/front/a/d/ad66392c-f117-4dfd-8ea1-86291e7e4ce5.jpg?1783903065",
+   "large": "https://cards.scryfall.io/large/front/a/d/ad66392c-f117-4dfd-8ea1-86291e7e4ce5.jpg?1783903065",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/d/ad66392c-f117-4dfd-8ea1-86291e7e4ce5.jpg?1783903065"
+  }
+ },
+ {
+  "name": "Quantum Reduction",
+  "scryfallId": "ebeca5ab-ab9b-4f63-8313-5e2322617693",
+  "oracleId": "4e18d20f-f153-4607-9201-3e22591474db",
+  "set": "msc",
+  "collectorNumber": "635",
+  "rarity": "common",
+  "manaCost": "{1}{U}",
+  "typeLine": "Enchantment — Aura",
+  "oracleText": "Teamwork 2 (As an additional cost to cast this spell, you may tap any number of creatures you control with total power 2 or more.)\nYou may cast this spell as though it had flash if it's cast using teamwork.\nEnchant creature\nEnchanted creature gets -5/-0 and loses all abilities.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Enchant",
+   "Teamwork"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/b/ebeca5ab-ab9b-4f63-8313-5e2322617693.jpg?1783903070",
+   "normal": "https://cards.scryfall.io/normal/front/e/b/ebeca5ab-ab9b-4f63-8313-5e2322617693.jpg?1783903070",
+   "large": "https://cards.scryfall.io/large/front/e/b/ebeca5ab-ab9b-4f63-8313-5e2322617693.jpg?1783903070",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/b/ebeca5ab-ab9b-4f63-8313-5e2322617693.jpg?1783903070"
+  }
+ },
+ {
+  "name": "Robotics Mastery",
+  "scryfallId": "b5ed3c76-946a-4140-8c7b-2011e72a7d54",
+  "oracleId": "855318cb-9382-4183-87c7-93bdfac86431",
+  "set": "msc",
+  "collectorNumber": "786",
+  "rarity": "uncommon",
+  "manaCost": "{4}{U}",
+  "typeLine": "Enchantment — Aura",
+  "oracleText": "Flash\nEnchant creature\nWhen this Aura enters, create two 1/1 colorless Robot artifact creature tokens with flying.\nEnchanted creature gets +2/+2.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Enchant",
+   "Flash"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/5/b5ed3c76-946a-4140-8c7b-2011e72a7d54.jpg?1783903017",
+   "normal": "https://cards.scryfall.io/normal/front/b/5/b5ed3c76-946a-4140-8c7b-2011e72a7d54.jpg?1783903017",
+   "large": "https://cards.scryfall.io/large/front/b/5/b5ed3c76-946a-4140-8c7b-2011e72a7d54.jpg?1783903017",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/5/b5ed3c76-946a-4140-8c7b-2011e72a7d54.jpg?1783903017"
+  }
+ },
+ {
   "name": "Peggy Carter, Secret Agent",
   "scryfallId": "1f98293e-9d94-4185-8546-8beaf281dfa3",
   "oracleId": "2f3c6b8e-df89-4f0c-97bb-fbfcda5232b4",

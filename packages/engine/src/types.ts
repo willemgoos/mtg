@@ -168,6 +168,9 @@ export interface CardDefinition {
     sacrifice?: CardFilter;
     /** "Kicker—Return a land you control to its owner's hand" (Chocobo Kick): `cost` is {0}. */
     returnLand?: boolean;
+    // Marvel Super Heroes Jumpstart (Pym Particles)
+    /** "You may cast this spell as though it had flash if it's cast using teamwork" (Quantum Reduction). */
+    flash?: boolean;
   };
   /** Costs {amount} less if its first target matches (Dire Downdraft: an attacking or tapped creature). */
   costReductionIfTarget?: { filter: CardFilter; amount: number };
