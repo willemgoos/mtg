@@ -75,7 +75,7 @@ bottom of this file.
 ### Brawl rules (as on Arena)
 
 - 1v1 only, **25 starting life**, no commander damage.
-- 100-card singleton (basic lands excepted), with one legendary creature as commander. Every card must fit the commander's colour identity.
+- 100-card singleton (basic lands excepted), with one legendary creature or legendary planeswalker as commander (Arena allows both; Quintorius, History Chaser is one). Every card must fit the commander's colour identity.
 - The commander starts in the **command zone** and can be cast from there. Each earlier cast from the command zone adds {2} to the cost (commander tax).
 - If the commander would go to the graveyard or exile, or into the hand or library, its owner may put it into the command zone instead (Arena asks).
 - The first mulligan is free.

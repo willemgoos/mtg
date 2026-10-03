@@ -41,6 +41,10 @@ export const SET_PREFERENCE = [
   'sos',
   // Secrets of Strixhaven Commander: the Brawl decks (phase 15).
   'soc',
+  // Strixhaven Brawl 15a (rw): Lightning Helix, Warleader's Call, Elegant Parlor.
+  'rav',
+  'grn',
+  'mkm',
   'pmei',
   'pw26',
   'sld',
