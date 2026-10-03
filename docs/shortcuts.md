@@ -68,3 +68,6 @@ from) when it's fixed. Older phases keep their own "Simplifications" lists in `d
       targeted, and there's no chance to respond); the engine picks which Villain to tap (lowest power).
 - [ ] Radioactive Man: "that player" is always the opponent (two-player only).
 - [ ] Crimson Cowl, Master of Evil: triggers whenever nontoken Villains attack, without checking they attacked a player.
+- [ ] Flying Drone: the discount is a second, free version of the spell, offered once another flyer entered under your control
+      this turn; that flyer must still be on the battlefield (with flying) to count.
+- [ ] Vulture, Feathered Fiend: split into a counter trigger per flyer and one batched draw trigger instead of one trigger.
