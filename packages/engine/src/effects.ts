@@ -91,6 +91,14 @@ export function dealDamage(
     )
   )
     amount *= 2;
+  // Final Fantasy (11b): Diamond Weapon: "Prevent all combat damage that would be dealt to it."
+  if (
+    combat &&
+    'object' in to &&
+    hasStaticKind(ctx, to.object.id, 'preventCombatDamageToSelf') &&
+    !ctx.s.battlefield.some((id) => hasStaticKind(ctx, id, 'damageCantBePrevented'))
+  )
+    return;
   amount = prevented(ctx, src, to, amount);
   if (amount <= 0) return;
   // The monarch: combat damage to them makes the attacker's controller the monarch.
@@ -379,6 +387,11 @@ export function resolveAmount(ctx: Ctx, es: EffectSource, amount: Amount): numbe
   if ('multiply' in amount) return amount.multiply * resolveAmount(ctx, es, amount.amount);
   // Final Fantasy (11a)
   if ('sum' in amount) return amount.sum.reduce<number>((n, a) => n + resolveAmount(ctx, es, a), 0);
+  // Final Fantasy (11b): mana spent.
+  if ('manaSpentOnSubject' in amount) {
+    const o = es.subject && ctx.s.objects[es.subject.id];
+    return o?.manaSpent ?? 0;
+  }
   if ('manaValueOfSubject' in amount) {
     const o = es.subject && ctx.s.objects[es.subject.id];
     return o ? manaValue(def(ctx, o.id).manaCost) : 0;
@@ -998,6 +1011,8 @@ export function runEffects(
           ...(e.battlefieldOnYourTurn ? { battlefieldOnYourTurn: true } : {}),
           ...(e.restOnTop ? { restOnTop: true } : {}),
           ...(e.restToGraveyard ? { restToGraveyard: true } : {}),
+          // Final Fantasy (11b): look for a land (Ignis Scientia).
+          ...(e.to ? { to: e.to } : {}),
           resume,
           thenPriority,
         };

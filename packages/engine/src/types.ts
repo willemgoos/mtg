@@ -151,6 +151,11 @@ export interface CardDefinition {
     // Teamwork (Marvel Super Heroes)
     /** Teamwork N: the kicker is tapping your creatures with total power N or more (`cost` is {0}). */
     teamwork?: number;
+    // Final Fantasy (11b): kicker—sacrifice
+    /** "Kicker—Sacrifice an artifact or creature": the kicker is sacrificing a permanent you control matching this. */
+    sacrifice?: CardFilter;
+    /** "Kicker—Return a land you control to its owner's hand" (Chocobo Kick): with `sacrifice`, returned instead. */
+    returnLand?: boolean;
   };
   /** Costs {amount} less if its first target matches (Dire Downdraft: an attacking or tapped creature). */
   costReductionIfTarget?: { filter: CardFilter; amount: number };
@@ -267,6 +272,9 @@ export type AbilityDef =
       powerUp?: boolean;
       /** Activated from your hand (cycling). */
       fromHand?: boolean;
+      // Final Fantasy (11b): lands and Towns
+      /** "This ability costs {1} less to activate for each Town you control" (Qiqirn Merchant). */
+      costReduction?: Amount;
     }
   | {
       kind: 'triggered';
@@ -383,6 +391,9 @@ export type TriggerDef =
       caster?: 'any' | 'opponent';
       /** Only spells cast from exile (Klaw). */
       fromExile?: boolean;
+      // Final Fantasy (11b): mana spent
+      /** "If at least N mana was spent to cast it" (Sahagin, Ultros). */
+      minManaSpent?: number;
     }
   /** Whenever a player (an opponent: Monologue Tax) casts their second spell each turn (Hearthborn Battler). */
   | { on: 'anyPlayerSecondSpell'; opponentOnly?: boolean }
@@ -480,7 +491,14 @@ export type TriggerDef =
   /** Whenever a creature you control (matching the filter) becomes blocked; amount: its blockers (She-Hulk). */
   | { on: 'creatureYouControlBecomesBlocked'; filter?: CardFilter }
   /** Whenever a creature you control becomes tapped for the first time this turn, during your turn. */
-  | { on: 'creatureYouControlFirstTappedOnYourTurn' };
+  | { on: 'creatureYouControlFirstTappedOnYourTurn' }
+  // Final Fantasy (11b): creatures and artifacts dying
+  /**
+   * Whenever this or another permanent you control matching the filter is put
+   * into a graveyard from the battlefield ("a creature or artifact you control
+   * dies"); `other`: only other permanents (Judge Magister Gabranth).
+   */
+  | { on: 'permanentYouControlDies'; filter: CardFilter; other?: boolean };
 
 export type ConditionDef =
   | { kind: 'controlsPermanents'; filter: CardFilter; min: number }
@@ -729,7 +747,14 @@ export type Amount =
   // Marvel Super Heroes: "costs {2} less if ..." (Punishing Punch).
   | { if: ConditionDef; then: number; else?: number }
   /** Cards in your graveyard (of these types). */
-  | { count: 'cardsInGraveyard'; types?: CardType[]; named?: CardDefId; plus?: number }
+  | {
+      count: 'cardsInGraveyard';
+      types?: CardType[];
+      named?: CardDefId;
+      plus?: number;
+      // Final Fantasy (11b): "noncreature, nonland cards in your graveyard".
+      notTypes?: CardType[];
+    }
   /** The amount from the trigger event ("that much damage"). */
   | { event: 'amount' }
   /** Permanents you control matching the filter (Honored Dreyleader: Squirrels and Food). */
@@ -777,7 +802,10 @@ export type Amount =
   | { count: 'commanderCasts' }
   // Final Fantasy (11a)
   /** The amounts added up (Slash of Light: creatures plus Equipment you control). */
-  | { sum: Amount[] };
+  | { sum: Amount[] }
+  // Final Fantasy (11b): mana spent
+  /** The mana spent to cast the triggering spell (Shantotto). */
+  | { manaSpentOnSubject: true };
 
 export type EffectDef =
   | { kind: 'may'; effects: EffectDef[]; cost?: ManaCost }
@@ -1149,6 +1177,9 @@ export type EffectDef =
       restOnTop?: boolean;
       /** Marvel Super Heroes: the rest go to the graveyard (Earth's Mightiest Heroes). */
       restToGraveyard?: boolean;
+      // Final Fantasy (11b): look for a land
+      /** The card taken goes onto the battlefield tapped instead (Ignis Scientia: a land). */
+      to?: 'battlefieldTapped';
     }
   /** Exile the top N; you may play them until the end of this turn or of your next turn. */
   | {
@@ -1520,7 +1551,13 @@ export type StaticDef =
   /** You may play lands from your graveyard (Conduit of Worlds). */
   | { kind: 'playLandsFromGraveyard' }
   /** Creatures matching the filter can't attack you while the condition holds (Queen Mother Ramonda). */
-  | { kind: 'cantAttackYou'; filter: CardFilter; condition?: ConditionDef };
+  | { kind: 'cantAttackYou'; filter: CardFilter; condition?: ConditionDef }
+  // Final Fantasy (11b): lands and Towns
+  /** "Lands you control enter untapped" (The Wandering Minstrel). */
+  | { kind: 'landsEnterUntapped' }
+  // Final Fantasy (11b): permanents in the graveyard
+  /** "Prevent all combat damage that would be dealt to this creature" (Diamond Weapon). */
+  | { kind: 'preventCombatDamageToSelf' };
 
 export type CardDb = ReadonlyMap<CardDefId, CardDefinition>;
 
@@ -1667,6 +1704,9 @@ export interface GameObject {
   loreRemovedTurn?: number;
   /** It enters with this many more +1/+1 counters (Summon: Fenrir's next creature spell). */
   bonusCounters?: number;
+  // Final Fantasy (11b): mana spent
+  /** The mana spent to cast it, the last time it was cast (Shantotto, Sahagin). */
+  manaSpent?: number;
 }
 
 /** A reference that goes stale when the object changes zones. */
@@ -2348,7 +2388,16 @@ export type Action =
   | { type: 'concede'; player: PlayerId };
 
 export type GameEvent =
-  | { type: 'objectMoved'; id: ObjectId; defId: CardDefId; from: ZoneName | null; to: ZoneName }
+  | {
+      type: 'objectMoved';
+      id: ObjectId;
+      defId: CardDefId;
+      from: ZoneName | null;
+      to: ZoneName;
+      // Final Fantasy (11b): creatures and artifacts dying
+      /** Who controlled it as it left the battlefield (a token is gone by the time triggers look). */
+      controller?: PlayerId;
+    }
   | { type: 'damageDealt'; source: ObjectId; to: TargetChoice; amount: number; combat: boolean }
   | { type: 'lifeChanged'; player: PlayerId; delta: number; life: number }
   | { type: 'tapped'; id: ObjectId; first?: boolean }

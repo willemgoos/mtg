@@ -367,7 +367,8 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
   if (from === 'battlefield' && ctx.s.effects.some((e) => e.whileSourceId === id)) {
     for (const e of ctx.s.effects) {
       const a = e.whileSourceId === id ? ctx.s.objects[e.affected.id] : undefined;
-      if (a && e.previousController && a.zcc === e.affected.zcc) a.controller = e.previousController;
+      if (a && e.previousController && a.zcc === e.affected.zcc)
+        a.controller = e.previousController;
     }
     ctx.s.effects = ctx.s.effects.filter((e) => e.whileSourceId !== id);
   }
@@ -382,6 +383,8 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
     delete o.front;
   }
 
+  // Final Fantasy (11b): creatures and artifacts dying ("you control" looks back).
+  const leftController = from === 'battlefield' ? o.controller : undefined;
   o.zone = to;
   o.zcc++;
   o.zoneTurn = ctx.s.turn.number;
@@ -410,6 +413,20 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
   const tappedIf = to === 'battlefield' ? defOf(ctx, o.defId).entersTappedIf : undefined;
   // Eddymurk Crab: "enters tapped if it's not your turn"; check lands and the like.
   if (tappedIf && checkCondition(ctx, tappedIf, o.controller, o)) o.tapped = true;
+  // Final Fantasy (11b): The Wandering Minstrel: "Lands you control enter untapped."
+  if (
+    o.tapped &&
+    defOf(ctx, o.defId).types.includes('Land') &&
+    ctx.s.battlefield.some(
+      (id) =>
+        id !== o.id &&
+        ctx.s.objects[id]!.controller === o.controller &&
+        defOf(ctx, ctx.s.objects[id]!.defId).abilities.some(
+          (a) => a.kind === 'static' && a.effect.kind === 'landsEnterUntapped',
+        ),
+    )
+  )
+    o.tapped = false;
 
   // Tokens cease to exist once they leave the battlefield (rule 111.7).
   const ceases = o.isToken && to !== 'battlefield';
@@ -422,7 +439,14 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
   // Ygra entering or leaving changes what the other creatures are.
   if ((from === 'battlefield' || to === 'battlefield') && makesFood(defOf(ctx, o.defId)))
     refreshCreaturesAreFood(ctx);
-  emit(ctx, { type: 'objectMoved', id, defId: o.defId, from, to });
+  emit(ctx, {
+    type: 'objectMoved',
+    id,
+    defId: o.defId,
+    from,
+    to,
+    ...(leftController ? { controller: leftController } : {}),
+  });
   if (discarded && o.zone === 'graveyard') {
     o.discardedTurn = ctx.s.turn.number;
     (ctx.s.turn.discards ??= { p1: 0, p2: 0 })[o.owner]++;

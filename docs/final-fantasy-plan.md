@@ -137,6 +137,21 @@ Eight more, one per colour pair, from the themes above (W/U artifacts, U/B surve
 W/B sacrifice, U/R big spells, B/G graveyard permanents, G/U Towns). New rules on commons and uncommons go in as they come;
 rare-only mechanics wait for 11c. Each deck 45–65% against the ten Foundations starter decks.
 
+11b (group B) done: four decks, built mostly from commons and uncommons. **Turks' Contract** (W/B creatures and artifacts
+dying: Judge Magister Gabranth, Rufus Shinra, Squall), **Forbidden Magicks** (U/R expensive noncreature spells: Shantotto,
+The Emperor of Palamecia, Tellah), **Into the Void** (B/G permanents in the graveyard: Exdeath, Cloud of Darkness, Diamond
+Weapon) and **Road Trip** (G/U lands and Towns: Ignis Scientia, Omega, Gigantoad, Chocobo Kick; The Wandering Minstrel is
+implemented but didn't make the list). New rules: "if at least N mana was spent to cast it" (`minManaSpent` on cast
+triggers, the `manaSpentOnSubject` amount; the mana spent is kept on the spell's object), "Noncreature" as a spell tag for
+restricted mana (the Emperor), "whenever a creature or artifact you control dies" (`permanentYouControlDies`; zone-change
+events now carry the controller, so tokens count), kicker—sacrifice and kicker—return a land (`kicker.sacrifice`,
+`kicker.returnLand`), cast triggers from the graveyard (Shambling Cie'th), activated-ability cost reduction (Qiqirn
+Merchant), `lookAndTake` onto the battlefield tapped (Ignis), "lands you control enter untapped" (Minstrel), "prevent all
+combat damage dealt to it" (Diamond Weapon) and "noncreature, nonland cards in your graveyard" (`notTypes`). Card
+behaviour in `fin/sacrifice-spellcraft.ts`, `fin/graveyard-towns.ts` and (mono-coloured and colourless) `fin/shared-b.ts`.
+Bot vs bot over 160 games against the ten Foundations starter decks: Turks' Contract 54%, Forbidden Magicks 46%, Into the
+Void 52%, Road Trip 52%.
+
 ### 11c: every rare and mythic, Jump In, boosters
 
 - All 74 rares and 20 mythics (with meld and hideaway), and any remaining commons and uncommons.
@@ -193,6 +208,24 @@ four decks. Three more FIC Brawl decks followed (9 December 2025, "Arena Store d
 - Item Shopkeep's menace target must be your attacking equipped creature.
 - Adventure lands: an Adventure that fizzles or is countered goes to the graveyard (as the rules say); the exiled land
   shows only while it can be played (beside the hand, like the other castable cards from other zones).
+
+11b (group B):
+
+- Mana spent: convoking creatures don't count; Shantotto's draw and Tellah's four- and eight-mana parts are separate
+  triggers with `minManaSpent` (same result).
+- The Wandering Minstrel untaps only lands that enter tapped by their own text (taplands, Towns); a land put onto the
+  battlefield tapped by an effect stays tapped.
+- Zack Fair moves one +1/+1 counter (the one he enters with); other counters and his Equipment stay behind.
+- Phoenix Down's "choose one" is two abilities with the same cost. Phantom Train becomes an artifact creature, not also a
+  Spirit. PuPu UFO's {3} gives +X/+0 on its printed 0 instead of setting its base power.
+- Ice Magic (Blizzara): the owner always puts the creature on top. Ether's copy keeps the spell's targets. Opera Love
+  Song's "until your next end step" lasts until the end of your next turn. Light of Judgment: the engine picks the
+  Equipment. Malboro's exiled cards aren't tracked. Reach the Horizon doesn't check "different names". Sorceress's
+  Schemes returns only instants and sorceries from the graveyard (not exiled flashback cards). Stuck in Summoner's
+  Sanctum doesn't stop activated abilities.
+- Not done (not in a deck, for 11c): Delivery Moogle (library and/or graveyard), Syncopate (X counter), Ride the Shoopuf
+  (becomes a creature for good), Jenova (Mutants), Vanille and Fang (meld), Quina,
+  Sidequest: Hunt the Mark, Starting Town.
 
 ### Phase 12
 

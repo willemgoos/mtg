@@ -40,8 +40,10 @@ export function spellTags(d: CardDefinition): string[] {
     d.types.includes('Creature') && (manaValue(d.manaCost) >= 4 || !!d.manaCost.x)
       ? ['BigCreature']
       : [];
+  // Final Fantasy (11b): The Emperor of Palamecia: "only to cast a noncreature spell".
+  const noncreature = d.types.includes('Creature') ? [] : ['Noncreature'];
   // Plaza of Heroes: "only to cast a legendary spell".
-  return [...d.subtypes, ...d.types, ...d.supertypes, ...big];
+  return [...d.subtypes, ...d.types, ...d.supertypes, ...big, ...noncreature];
 }
 
 const MAX_PAWS = 5;
@@ -176,6 +178,8 @@ export function castVariants(d: CardDefinition, zone: ZoneName, via?: CastVia): 
       kicked: true,
       cost: addCosts(cost, d.kicker.cost),
       spell: d.kicker.spell ?? d.spell ?? null,
+      // Final Fantasy (11b): kicker—sacrifice.
+      ...(d.kicker.sacrifice ? { sacrifice: true } : {}),
       ...extra,
     });
   return out;

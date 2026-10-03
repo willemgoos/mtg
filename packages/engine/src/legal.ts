@@ -336,9 +336,16 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
             const specs = v.spell?.targets ?? (d.enchant ? [d.enchant] : []);
             const forages = v.forage ? forageChoices(ctx, player) : [undefined];
             // Ultimate Nullification: only a legendary creature.
-            const sacrificeable = d.sacrificeToCastFilter
-              ? creatures.filter((id) => matchesFilter(ctx, id, d.sacrificeToCastFilter))
-              : creatures;
+            // Final Fantasy (11b): kicker—sacrifice an artifact or creature (Vayne's Treachery).
+            const kickSacrifice = v.kicked ? d.kicker?.sacrifice : undefined;
+            const sacrificeable = kickSacrifice
+              ? s.battlefield.filter(
+                  (id) =>
+                    obj(ctx, id).controller === player && matchesFilter(ctx, id, kickSacrifice),
+                )
+              : d.sacrificeToCastFilter
+                ? creatures.filter((id) => matchesFilter(ctx, id, d.sacrificeToCastFilter))
+                : creatures;
             for (const sacrifice of v.sacrifice ? sacrificeable : [undefined]) {
               for (const targets of combosFor(specs, card, sacrifice)) {
                 const ward = wardCost(ctx, player, targets);

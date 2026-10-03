@@ -1465,6 +1465,11 @@ function castLabel(defId: CardDefId, a: Action): string {
     return a.kicked ? `With offspring (+${manaText(def.kicker.cost)})` : 'Without offspring';
   if (def.kicker.teamwork !== undefined)
     return a.kicked ? `Teamwork (tap power ${def.kicker.teamwork})` : 'Without teamwork';
+  // Final Fantasy (11b): "Kicker—Sacrifice an artifact or creature" (Vayne's Treachery).
+  if (def.kicker.sacrifice)
+    return a.kicked
+      ? `Kicked (${def.kicker.returnLand ? 'return a land' : 'sacrifice a permanent'})`
+      : 'Not kicked';
   return a.kicked ? `Kicked (+${manaText(def.kicker.cost)})` : 'Not kicked';
 }
 

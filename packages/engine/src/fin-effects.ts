@@ -1,4 +1,5 @@
-import { isCreature, power } from './characteristics.ts';
+import { hasKeyword, isCreature, power } from './characteristics.ts';
+import { shuffleLibrary } from './setup.ts';
 import {
   addCounters,
   createObject,
@@ -87,5 +88,38 @@ export const FIN_EFFECTS: Record<string, CustomEffect> = {
     if (!player) return;
     const lib = ctx.s.players[player].library;
     for (const id of lib.slice(0, Math.floor(lib.length / 2))) moveObject(ctx, id, 'graveyard');
+  },
+
+  // 11b (group B)
+
+  /** Malboro: "each opponent ... exiles the top three cards of their library" (params.count). */
+  opponentExilesTop(ctx, es, params) {
+    const opp: PlayerId = es.controller === 'p1' ? 'p2' : 'p1';
+    const count = typeof params?.count === 'number' ? params.count : 1;
+    for (const id of ctx.s.players[opp].library.slice(0, count)) moveObject(ctx, id, 'exile');
+  },
+
+  /** Ice Magic (Blizzaga): "Target creature's owner shuffles it into their library." */
+  shuffleTargetIntoLibrary(ctx, es) {
+    const t = es.targets[0];
+    const o = t && 'object' in t ? ctx.s.objects[t.object.id] : undefined;
+    if (!o || o.zone !== 'battlefield' || o.zcc !== (t as { object: { zcc: number } }).object.zcc)
+      return;
+    moveObject(ctx, o.id, 'library');
+    shuffleLibrary(ctx, o.owner);
+  },
+
+  /** Light of Judgment: "Destroy up to one Equipment attached to that creature" (the engine picks it). */
+  destroyEquipmentOnTarget(ctx, es) {
+    const t = es.targets[0];
+    const host = t && 'object' in t ? t.object.id : undefined;
+    if (!host) return;
+    const equipment = ctx.s.battlefield.find(
+      (id) =>
+        obj(ctx, id).attachedTo === host &&
+        def(ctx, id).subtypes.includes('Equipment') &&
+        !hasKeyword(ctx, id, 'indestructible'),
+    );
+    if (equipment) moveObject(ctx, equipment, 'graveyard');
   },
 };

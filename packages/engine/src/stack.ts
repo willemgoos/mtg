@@ -356,7 +356,10 @@ export function castSpell(
   for (const id of choice.sacrificeMany ?? []) sacrificePermanent(ctx, id);
   if (d.types.includes('Instant') || d.types.includes('Sorcery'))
     (ctx.s.turn.instantsSorceriesCast ??= { p1: 0, p2: 0 })[player]++;
-  if (choice.sacrifice) sacrificePermanent(ctx, choice.sacrifice);
+  // Final Fantasy (11b): Chocobo Kick's kicker returns a land instead of sacrificing it.
+  if (choice.sacrifice && choice.kicked && d.kicker?.returnLand)
+    moveObject(ctx, choice.sacrifice, 'hand');
+  else if (choice.sacrifice) sacrificePermanent(ctx, choice.sacrifice);
   if (v.removeCounters) removeCounters(ctx, player, v.removeCounters);
   changeLife(ctx, player, -wardLife(ctx, player, targets) - (v.life ?? 0));
   // Toxic Deluge: "As an additional cost to cast this spell, pay X life."
@@ -380,6 +383,8 @@ export function castSpell(
     ...(sneakFrom ? { sneak: sneakFrom } : {}),
   });
   payMana(ctx, payment);
+  // Final Fantasy (11b): mana spent (convoking creatures don't spend mana).
+  o.manaSpent = payment.filter((id) => !convokers.includes(id)).length;
   if (teamwork) payTeamwork(ctx, teamwork);
   if (convokers.length) o.convokedBy = payment.filter((id) => convokers.includes(id));
   if (d.types.includes('Creature')) scryForAncestry(ctx, player, d, payment);
@@ -476,6 +481,12 @@ export function abilityManaCost(
   a: ReturnType<typeof activatedAbility>,
 ): ManaCost | undefined {
   const o = obj(ctx, source);
+  // Final Fantasy (11b): Qiqirn Merchant costs {1} less for each Town you control.
+  if (a.costReduction && a.cost.mana)
+    return reduceCost(a.cost.mana, {
+      generic: countOf(ctx, o.controller, a.costReduction, false, source),
+      colored: {},
+    });
   if (!a.powerUp || !a.cost.mana) return a.cost.mana;
   let cost = a.cost.mana;
   if (o.zoneTurn === ctx.s.turn.number) cost = reduceCost(cost, def(ctx, source).manaCost);
