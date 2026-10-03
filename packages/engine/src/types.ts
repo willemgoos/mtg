@@ -1673,6 +1673,9 @@ export type StaticDef =
   // Power-up (Marvel Super Heroes)
   /** Power-up abilities of other creatures you control cost {amount} less (Hulk, Gamma Goliath). */
   | { kind: 'powerUpCostsLess'; amount: number }
+  // Marvel Super Heroes Jumpstart (Trained)
+  /** "You may pay {0} rather than pay the power-up cost of the first power-up ability you activate during each of your turns" (Advancing the Spirit). */
+  | { kind: 'firstPowerUpFree' }
   /** This creature can't be blocked. */
   | { kind: 'cantBeBlocked' }
   /** This creature can't be blocked by creatures matching the filter. */
@@ -2103,6 +2106,9 @@ export interface TurnState {
   // Marvel Super Heroes
   /** Power-up abilities can't be activated this turn (Kang the Conqueror's extra turn). */
   noPowerUp?: boolean;
+  // Marvel Super Heroes Jumpstart (Trained)
+  /** The active player has activated a power-up ability this turn (Advancing the Spirit frees only the first). */
+  powerUpActivated?: boolean;
   /** Creatures these players control assign combat damage by toughness if greater (The Kingpin of Crime). Replaced, never mutated. */
   toughnessDamage?: PlayerId[];
   /** 0 during the mulligan phase. */

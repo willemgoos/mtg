@@ -1,3 +1,4 @@
+import { isCreature } from './characteristics.ts';
 import { addCounters, type Ctx, type CustomEffect, def, moveObject, obj } from './context.ts';
 import { manaValue } from './cost.ts';
 import { shuffleLibrary } from './setup.ts';
@@ -11,6 +12,16 @@ import type { ObjectId } from './types.ts';
 const isCreatureCard = (ctx: Ctx, id: ObjectId) => def(ctx, id).types.includes('Creature');
 
 export const MSH_EFFECTS: Record<string, CustomEffect> = {
+  // Marvel Super Heroes Jumpstart (Trained)
+  /** She-Hulk, Attorney-at-Law: "double the number of +1/+1 counters on each creature you control". */
+  doubleCountersOnYourCreatures(ctx, es) {
+    for (const id of [...ctx.s.battlefield]) {
+      const o = obj(ctx, id);
+      if (o.controller !== es.controller || !isCreature(ctx, id) || !o.plusOneCounters) continue;
+      addCounters(ctx, id, o.plusOneCounters);
+    }
+  },
+
   /** Earth's Mightiest Heroes with teamwork: every creature card among the top N onto the battlefield, the rest into the graveyard. */
   putAllCreaturesFromTop(ctx, es, params) {
     const count = (params as { count: number }).count;

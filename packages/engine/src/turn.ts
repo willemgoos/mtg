@@ -150,6 +150,8 @@ export function startTurn(ctx: Ctx, player: PlayerId, noPowerUp = false): void {
   // Kang the Conqueror: "During that turn, power-up abilities can't be activated."
   if (noPowerUp) s.turn.noPowerUp = true;
   else delete s.turn.noPowerUp;
+  // Marvel Super Heroes Jumpstart (Trained): Advancing the Spirit's free power-up, once per turn.
+  delete s.turn.powerUpActivated;
   // Absorbing Man, Taskmaster: their copies last until their controller's next turn.
   for (const id of s.battlefield)
     if (s.objects[id]!.copyUntilTurnOf === player) endCopy(ctx, s.objects[id]!);

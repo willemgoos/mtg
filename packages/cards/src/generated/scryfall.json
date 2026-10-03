@@ -22184,6 +22184,106 @@
   }
  },
  {
+  "name": "She-Hulk, Attorney-at-Law",
+  "scryfallId": "93a44ea5-a571-4abb-b8fa-14b8224ecaeb",
+  "oracleId": "db99d52b-bbe6-4a48-8f2c-bf77912dc0a9",
+  "set": "msc",
+  "collectorNumber": "745",
+  "rarity": "uncommon",
+  "manaCost": "{2}{G/W}",
+  "typeLine": "Legendary Creature — Gamma Advisor Hero",
+  "oracleText": "Vigilance\nPower-up — {6}{G/W}: Put a +1/+1 counter on She-Hulk. Then double the number of +1/+1 counters on each creature you control. (Activate each power-up ability only once. Reduce the cost by her mana cost if she entered this turn.)",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "G",
+   "W"
+  ],
+  "keywords": [
+   "Power-up",
+   "Vigilance",
+   "Double"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/3/93a44ea5-a571-4abb-b8fa-14b8224ecaeb.jpg?1783903030",
+   "normal": "https://cards.scryfall.io/normal/front/9/3/93a44ea5-a571-4abb-b8fa-14b8224ecaeb.jpg?1783903030",
+   "large": "https://cards.scryfall.io/large/front/9/3/93a44ea5-a571-4abb-b8fa-14b8224ecaeb.jpg?1783903030",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/3/93a44ea5-a571-4abb-b8fa-14b8224ecaeb.jpg?1783903030"
+  }
+ },
+ {
+  "name": "Shang-Chi, Martial Mentor",
+  "scryfallId": "fbc4bf7b-cd8e-4a85-9485-c190f8f8f7fb",
+  "oracleId": "14d3e014-9c4f-4864-8f1e-a45ac27e4dbf",
+  "set": "msc",
+  "collectorNumber": "732",
+  "rarity": "rare",
+  "manaCost": "{3}{G}{G}",
+  "typeLine": "Legendary Creature — Human Warrior Hero",
+  "oracleText": "If one or more +1/+1 counters would be put on a creature you control, twice that many +1/+1 counters are put on that creature instead.\nPower-up — {5}{G}{G}: Put three +1/+1 counters on Shang-Chi. (Activate each power-up ability only once. Reduce the cost by his mana cost if he entered this turn.)",
+  "power": "4",
+  "toughness": "4",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Power-up"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/b/fbc4bf7b-cd8e-4a85-9485-c190f8f8f7fb.jpg?1783903036",
+   "normal": "https://cards.scryfall.io/normal/front/f/b/fbc4bf7b-cd8e-4a85-9485-c190f8f8f7fb.jpg?1783903036",
+   "large": "https://cards.scryfall.io/large/front/f/b/fbc4bf7b-cd8e-4a85-9485-c190f8f8f7fb.jpg?1783903036",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/b/fbc4bf7b-cd8e-4a85-9485-c190f8f8f7fb.jpg?1783903036"
+  }
+ },
+ {
+  "name": "Advancing the Spirit",
+  "scryfallId": "85d0495c-cca0-4aeb-a03e-2bc102b3c556",
+  "oracleId": "c9949a5a-13d4-41ca-80fe-902b0ae71204",
+  "set": "msc",
+  "collectorNumber": "712",
+  "rarity": "uncommon",
+  "manaCost": "{2}{G}",
+  "typeLine": "Enchantment",
+  "oracleText": "When this enchantment enters, draw a card.\nYou may pay {0} rather than pay the power-up cost of the first power-up ability you activate during each of your turns.",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/5/85d0495c-cca0-4aeb-a03e-2bc102b3c556.jpg?1783903042",
+   "normal": "https://cards.scryfall.io/normal/front/8/5/85d0495c-cca0-4aeb-a03e-2bc102b3c556.jpg?1783903042",
+   "large": "https://cards.scryfall.io/large/front/8/5/85d0495c-cca0-4aeb-a03e-2bc102b3c556.jpg?1783903042",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/5/85d0495c-cca0-4aeb-a03e-2bc102b3c556.jpg?1783903042"
+  }
+ },
+ {
+  "name": "Colossal Collision",
+  "scryfallId": "3a58da0c-6853-4d82-8388-668758e2bf16",
+  "oracleId": "c2f7f39b-0569-4c32-bdbf-7fb0a0efd5cf",
+  "set": "msc",
+  "collectorNumber": "558",
+  "rarity": "common",
+  "manaCost": "{3}{G}",
+  "typeLine": "Sorcery",
+  "oracleText": "Put a +1/+1 counter on target creature you control. Then that creature deals damage equal to its power to target creature an opponent controls.\nBasic landcycling {2} ({2}, Discard this card: Search your library for a basic land card, reveal it, put it into your hand, then shuffle.)",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Landcycling",
+   "Basic landcycling",
+   "Typecycling",
+   "Cycling"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/a/3a58da0c-6853-4d82-8388-668758e2bf16.jpg?1783903097",
+   "normal": "https://cards.scryfall.io/normal/front/3/a/3a58da0c-6853-4d82-8388-668758e2bf16.jpg?1783903097",
+   "large": "https://cards.scryfall.io/large/front/3/a/3a58da0c-6853-4d82-8388-668758e2bf16.jpg?1783903097",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/a/3a58da0c-6853-4d82-8388-668758e2bf16.jpg?1783903097"
+  }
+ },
+ {
   "name": "Sol Ring",
   "scryfallId": "91fdb56b-54d5-4272-8319-505ff987fe9b",
   "oracleId": "6ad8011d-3471-4369-9d68-b264cc027487",
