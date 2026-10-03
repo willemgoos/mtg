@@ -2,6 +2,7 @@ import { characteristics } from './characteristics.ts';
 import { MSH_EFFECTS } from './msh-effects.ts';
 import { FIN_EFFECTS } from './fin-effects.ts';
 import { LOREHOLD_EFFECTS } from './stx-lorehold-effects.ts';
+import { STX_13C_B_EFFECTS } from './stx-13c-b-effects.ts';
 import { checkCondition } from './triggers.ts';
 import type { EffectSource } from './effects.ts';
 import type {
@@ -60,6 +61,8 @@ const BUILT_IN_EFFECTS: Record<string, CustomEffect> = {
   ...FIN_EFFECTS,
   // Strixhaven (13a).
   ...LOREHOLD_EFFECTS,
+  // Strixhaven (13c), group B.
+  ...STX_13C_B_EFFECTS,
   // Strixhaven (13a): Learn: put the chosen Lesson from outside the game into your hand.
   learnFetch(ctx, es, params) {
     const ps = ctx.s.players[es.controller];
@@ -280,7 +283,11 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
       ctx.s.effects.some((e) => e.exileIfDies && e.affected.id === id && e.affected.zcc === o.zcc))
   )
     to = 'exile';
-  if (from === 'battlefield' && to === 'graveyard' && exiledInsteadOfDying(ctx, o)) to = 'exile';
+  let exiledInstead = false;
+  if (from === 'battlefield' && to === 'graveyard' && exiledInsteadOfDying(ctx, o)) {
+    to = 'exile';
+    exiledInstead = true; // Strixhaven (13c): Valentin
+  }
   // Festival of Embers: "If a card or token would be put into your graveyard from anywhere, exile it instead."
   if (to === 'graveyard' && graveyardExiles(ctx, o.owner)) to = 'exile';
   if (from === 'battlefield' && to === 'exile' && def(ctx, id).types.includes('Creature'))
@@ -464,6 +471,7 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
     to,
     ...(leftAs ? { leftAs } : {}),
     ...(leftController ? { controller: leftController } : {}),
+    ...(exiledInstead ? { exiledInstead: true } : {}),
   });
   if (discarded && o.zone === 'graveyard') {
     o.discardedTurn = ctx.s.turn.number;
@@ -523,7 +531,11 @@ function exiledInsteadOfDying(ctx: Ctx, o: GameObject): boolean {
     return (
       src.controller !== o.controller &&
       def(ctx, id).abilities.some(
-        (a) => a.kind === 'static' && a.effect.kind === 'exileOpponentCreaturesInstead',
+        (a) =>
+          a.kind === 'static' &&
+          a.effect.kind === 'exileOpponentCreaturesInstead' &&
+          // Strixhaven (13c): Valentin: only nontoken creatures.
+          !(a.effect.nontoken && o.isToken),
       )
     );
   });

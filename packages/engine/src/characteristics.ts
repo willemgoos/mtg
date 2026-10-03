@@ -274,6 +274,8 @@ export function countOf(
       0,
     );
   if (a.count === 'creaturesYouLostThisTurn') return ctx.s.turn.creaturesLost?.[player] ?? 0;
+  // Strixhaven (13c): life gained this turn.
+  if (a.count === 'lifeGainedThisTurn') return ctx.s.turn.lifeGained?.[player] ?? 0;
   if (a.count === 'greatestPowerYouControl')
     return creaturesOnBattlefield(ctx, player).reduce((n, c) => Math.max(n, power(ctx, c.id)), 0);
   if (a.count === 'creatureCardsInExileAndGraveyard') {

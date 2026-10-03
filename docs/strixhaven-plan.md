@@ -220,3 +220,13 @@ whole (SOS's `prepare` is the riskiest). The shortest path to Quintorius is 0, 1
   Retriever Phoenix always learns on entering.
 - Symmetry Sage sets total power to 2. Dream Strix triggers only on opponents targeting it. Detention Vortex has no
   "{3}: destroy" and doesn't stop activated abilities. Teachings of the Archaics never draws three.
+
+13c (group B: black, green, Witherbloom):
+
+- Accomplished Alchemist's two mana abilities are one: X mana (at least one), each of any colour. Emergent Sequence's
+  land doesn't become green and blue. Ecological Appreciation takes the four creatures with the greatest mana value
+  and the opponent puts back the two best, both without a prompt. Confront the Past's planeswalker target ignores X
+  when targeting (it does nothing on resolution if the mana value is above X). Pestilent Cauldron's exile is two
+  abilities (your graveyard, an opponent's). Plumb the Forbidden sacrifices up to three creatures (tokens and the
+  cheapest first, not chosen). Deadly Brew returns its card before the opponent sacrifices. Verdant Mastery and Search for
+  Blex pick one card at a time. Professor Onyx's -8 asks the discard one decision at a time.

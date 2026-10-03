@@ -160,6 +160,7 @@ export function startTurn(ctx: Ctx, player: PlayerId, noPowerUp = false): void {
   s.turn.extraCombats = 0;
   s.turn.attackers = [];
   s.turn.lifeGains = { p1: 0, p2: 0 };
+  s.turn.lifeGained = { p1: 0, p2: 0 }; // Strixhaven (13c)
   s.turn.creaturesDied = 0;
   s.turn.cardsDrawn = { p1: 0, p2: 0 };
   s.turn.manaSpent = { p1: 0, p2: 0 };

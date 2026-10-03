@@ -216,5 +216,13 @@ export function chooseFromHand(engine: Engine, s: GameState, legal: Action[]): A
     const d = a.type === 'chooseCard' && a.card ? defOf(engine, s, a.card) : undefined;
     return d ? manaValue(d.manaCost) : -1;
   };
-  return legal.reduce((best, a) => (value(a) > value(best) ? a : best));
+  const best = legal.reduce((b, a) => (value(a) > value(b) ? a : b));
+  // Strixhaven (13c): Search for Blex: "any number" at 3 life each; only spells worth it, while life lasts.
+  const d = s.decision;
+  if (d.kind === 'pickCards' && d.upTo) {
+    const done = legal.find((a) => a.type === 'chooseCard' && !a.card);
+    const life = s.players[d.player].life - (d.lifePerCard ?? 0);
+    if (done && (life < 8 || value(best) < 2)) return done;
+  }
+  return best;
 }

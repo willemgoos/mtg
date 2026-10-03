@@ -1041,10 +1041,19 @@ export function Board({
         <div className="overlay overlay--mull">
           <div className="mull">
             <h2>{nameOf(d.resume.sourceDefId)}</h2>
-            <p>
-              Put {d.count} more card{d.count > 1 ? 's' : ''} into your hand. The rest go to your
-              graveyard.
-            </p>
+            {d.upTo ? (
+              // Strixhaven (13c): Search for Blex: any number, each costing life.
+              <p>
+                Put any number of these into your hand
+                {d.lifePerCard ? `, losing ${d.lifePerCard} life for each` : ''}. The rest go to
+                your graveyard.
+              </p>
+            ) : (
+              <p>
+                Put {d.count} more card{d.count > 1 ? 's' : ''} into your hand. The rest go to your
+                graveyard.
+              </p>
+            )}
             <div className="mull__hand">
               {d.options.map((id, i) => (
                 <div key={id} className="mull__card" style={{ '--i': i } as React.CSSProperties}>
@@ -1059,6 +1068,16 @@ export function Board({
                 </div>
               ))}
             </div>
+            {d.upTo && (
+              <div className="mull__buttons">
+                <button
+                  className="btn btn--primary"
+                  onClick={() => act({ type: 'chooseCard', player: HUMAN, card: null })}
+                >
+                  Done
+                </button>
+              </div>
+            )}
           </div>
         </div>
       )}
@@ -1473,6 +1492,13 @@ function castLabel(defId: CardDefId, a: Action): string {
   if (a.kickCount) return `Kicked ×${a.kickCount}`;
   if (def?.payXLife && a.x !== undefined) return `Pay ${a.x} life`;
   if (def?.multikicker) return 'Not kicked';
+  // Strixhaven (13c): Plumb the Forbidden: sacrifice creatures, copy the spell for each.
+  if (def?.sacrificeCreaturesToCopy) {
+    const n = a.type === 'castSpell' ? (a.sacrificeMany?.length ?? 0) : 0;
+    return n
+      ? `Sacrifice ${n} creature${n > 1 ? 's' : ''}: copy it ${n} time${n > 1 ? 's' : ''}`
+      : 'No sacrifice';
+  }
   if (!def?.kicker) return 'Cast';
   if (def.kicker.as === 'overload')
     return a.kicked ? `Overload (each, ${manaText(def.kicker.cost)} more)` : 'One target';
@@ -1485,7 +1511,7 @@ function castLabel(defId: CardDefId, a: Action): string {
   // Strixhaven (13b): an alternative cost (Baleful Mastery).
   if (def.kicker.replacesCost)
     return a.kicked
-      ? `Alternative cost (${manaText(def.kicker.cost)}): an opponent draws a card`
+      ? `Alternative cost (${manaText(def.kicker.cost)}): ${def.kicker.altLabel ?? 'an opponent draws a card'}`
       : 'Full cost';
   // Final Fantasy (11b): a kicker paid with a permanent.
   if (def.kicker.returnLand) return a.kicked ? 'Kicked (return a land)' : 'Not kicked';

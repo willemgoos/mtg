@@ -89,6 +89,8 @@ export function manaSources(
       if (a.colorFrom === 'legendaries' && !legendaryColors(ctx, player).includes(a.produces))
         continue;
       if (a.amount) units = Math.max(units, a.amount);
+      // Strixhaven (13c): Accomplished Alchemist.
+      if (a.perLifeGained) units = Math.max(units, ctx.s.turn.lifeGained?.[player] ?? 0);
       if (a.pain) (pain ??= []).push(a.produces);
       if (a.doubleIf && checkCondition(ctx, a.doubleIf, player, obj(ctx, id))) double = true;
       if (a.cost.sacrificeSelf) sacrifice = true;

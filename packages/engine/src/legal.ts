@@ -135,6 +135,19 @@ function sacrificePrefixes(
   card: ObjectId,
   d: ReturnType<typeof def>,
 ): (ObjectId[] | undefined)[] {
+  // Strixhaven (13c): Plumb the Forbidden: sacrifice up to three creatures (tokens, then the cheapest first).
+  if (d.sacrificeCreaturesToCopy) {
+    const fodder = ctx.s.battlefield
+      .filter((id) => obj(ctx, id).controller === player && isCreature(ctx, id))
+      .sort(
+        (a, b) =>
+          Number(obj(ctx, b).isToken) - Number(obj(ctx, a).isToken) ||
+          manaValue(def(ctx, a).manaCost) - manaValue(def(ctx, b).manaCost),
+      );
+    const out: (ObjectId[] | undefined)[] = [undefined];
+    for (let k = 1; k <= Math.min(fodder.length, 3); k++) out.push(fodder.slice(0, k));
+    return out;
+  }
   if (!d.sacrificeAnyForReduction) return [undefined];
   const fodder = ctx.s.battlefield
     .filter((id) => obj(ctx, id).controller === player && !def(ctx, id).types.includes('Land'))
@@ -624,7 +637,11 @@ export function getLegalActions(ctx: Ctx, player: PlayerId): Action[] {
         .filter((card) => !d.filter || cardMatches(ctx, card, d.filter))
         .map((card) => ({ type: 'discard', player, card }) as const);
     case 'pickCards':
-      return d.options.map((card) => ({ type: 'chooseCard', player, card }) as const);
+      return [
+        ...d.options.map((card) => ({ type: 'chooseCard', player, card }) as const),
+        // Strixhaven (13c): "any number": stop here.
+        ...(d.upTo ? [{ type: 'chooseCard', player, card: null } as const] : []),
+      ];
     case 'splitPiles':
       return pileSplits(d.cards).map((faceUp) => ({ type: 'splitPiles', player, faceUp }));
     case 'choosePile':
