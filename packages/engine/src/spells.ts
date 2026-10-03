@@ -5,7 +5,7 @@ import type { CardDefinition, ManaCost, SpellDef, ZoneName } from './types.ts';
  * How a card is cast, beyond its own options: for free (a 'castFree'
  * decision), or from the graveyard through Festival of Embers or Osteomancer Adept.
  */
-export type CastVia = 'free' | 'festival' | 'osteomancer' | 'conduit';
+export type CastVia = 'free' | 'festival' | 'osteomancer' | 'conduit' | 'zaffai' | 'graveyard';
 
 /** One way to cast a card: a mode, kicked or not, from hand or with flashback. */
 export interface CastVariant {
@@ -43,7 +43,10 @@ export function spellTags(d: CardDefinition): string[] {
   // Final Fantasy (11b): The Emperor of Palamecia: "only to cast a noncreature spell".
   const noncreature = d.types.includes('Creature') ? [] : ['Noncreature'];
   // Plaza of Heroes: "only to cast a legendary spell".
-  return [...d.subtypes, ...d.types, ...d.supertypes, ...big, ...noncreature];
+  // Secrets of Strixhaven (14b): "only to cast instant and sorcery spells".
+  const instantOrSorcery =
+    d.types.includes('Instant') || d.types.includes('Sorcery') ? ['InstantOrSorcery'] : [];
+  return [...d.subtypes, ...d.types, ...d.supertypes, ...big, ...noncreature, ...instantOrSorcery];
 }
 
 const MAX_PAWS = 5;
@@ -107,11 +110,11 @@ export function castVariants(d: CardDefinition, zone: ZoneName, via?: CastVia): 
   if (via) {
     const free = { generic: 0, colored: {} };
     return castVariants(d, 'hand').map((v) =>
-      via === 'free'
+      via === 'free' || via === 'zaffai'
         ? { ...v, cost: free }
         : via === 'festival'
           ? { ...v, life: 1 }
-          : via === 'conduit'
+          : via === 'conduit' || via === 'graveyard'
             ? v
             : { ...v, forage: true, finality: true },
     );

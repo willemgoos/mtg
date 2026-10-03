@@ -485,6 +485,8 @@ export function castSpell(
   });
   // Conduit of Worlds: a card cast this way stops further spells this turn.
   if (choice.via === 'conduit') (ctx.s.turn.spellLock ??= []).push(player);
+  // Secrets of Strixhaven (14b): Zaffai and the Tempests, once each turn.
+  if (choice.via === 'zaffai') (ctx.s.turn.zaffaiUsed ??= []).push(player);
   const cast = (ctx.s.turn.spellsCast ??= { p1: 0, p2: 0 });
   emit(ctx, { type: 'spellCast', id: card, player, nth: ++cast[player] });
   noteTargets(ctx, player, targets);
@@ -808,6 +810,24 @@ export function resolveTop(ctx: Ctx): boolean {
     }
     emit(ctx, { type: 'resolved', id: item.id });
     moveObject(ctx, item.id, 'battlefield', { controller: item.controller });
+    // Secrets of Strixhaven (14b): Choreographed Sparks: the copy has haste and is sacrificed at the end step.
+    if (item.hasteSacrifice) {
+      ctx.s.effects.push({
+        timestamp: newTimestamp(ctx),
+        affected: { id: o.id, zcc: o.zcc },
+        power: 0,
+        toughness: 0,
+        keywords: ['haste'],
+        expires: 'endOfTurn',
+      });
+      (ctx.s.delayed ??= []).push({
+        controller: item.controller,
+        sourceDefId: o.defId,
+        subject: { id: o.id, zcc: o.zcc },
+        effects: [{ kind: 'sacrifice', what: 'subject' }],
+        fromTurn: ctx.s.turn.number,
+      });
+    }
     if (item.kicked) o.kicked = true;
     // Multikicker: "enters with a +1/+1 counter for each time he was kicked".
     if (item.kickCount) {
@@ -1130,6 +1150,14 @@ export function answerPayOrCounter(ctx: Ctx, pay: boolean): void {
 export function finishCastFree(ctx: Ctx, cast: ObjectId | null): void {
   const d = ctx.s.decision;
   if (d.kind !== 'castFree') throw new Error('Not casting for free');
+  // Secrets of Strixhaven (14b): Improvisation Capstone: any number may be cast, one after another.
+  if (d.more && cast !== null) {
+    const cards = d.cards.filter((id) => id !== cast && ctx.s.objects[id]?.zone === 'exile');
+    if (cards.length > 0) {
+      ctx.s.decision = { ...d, cards };
+      return;
+    }
+  }
   for (const id of d.thenToHand ?? [])
     if (id !== cast && ctx.s.objects[id]?.zone === 'exile') moveObject(ctx, id, 'hand');
   for (const id of d.thenToBottom ?? [])

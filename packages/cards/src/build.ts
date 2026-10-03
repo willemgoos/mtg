@@ -181,6 +181,8 @@ export function parseManaCost(s: string): ManaCost {
       cost.colored[t] = (cost.colored[t] ?? 0) + 1;
     } else if (/^[WUBRG]\/[WUBRG]$/.test(sym!))
       (cost.hybrid ??= []).push(sym!.split('/') as [ManaType, ManaType]);
+    else if (/^2\/[WUBRG]$/.test(sym!))
+      (cost.twoHybrid ??= []).push(sym!.split('/')[1] as ManaType);
     else if (sym === 'X') cost.x = (cost.x ?? 0) + 1;
     else throw new Error(`Unsupported mana symbol {${sym}}`);
   }

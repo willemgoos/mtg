@@ -45,6 +45,9 @@ export function checkCondition(
     return (ctx.s.turn.castDefs?.[controller] ?? []).some(
       (id) => !defOf(ctx, id).types.includes('Creature'),
     );
+  // Secrets of Strixhaven (14b): Living History
+  if (c.kind === 'cardLeftGraveyardThisTurn')
+    return (ctx.s.turn.leftGraveyard?.[controller] ?? 0) > 0;
   // Strixhaven (13a): Mage Duel
   if (c.kind === 'castInstantOrSorceryThisTurn')
     return (ctx.s.turn.instantsSorceriesCast?.[controller] ?? 0) > 0;

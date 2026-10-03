@@ -294,6 +294,12 @@ export function countOf(
       return t.includes('Instant') || t.includes('Sorcery');
     }).length;
   }
+  // Secrets of Strixhaven (14b): Prismari, the Inspiration (storm)
+  if (a.count === 'spellsCastBeforeSubject')
+    return Math.max(
+      0,
+      (ctx.s.turn.spellsCast?.p1 ?? 0) + (ctx.s.turn.spellsCast?.p2 ?? 0) - 1,
+    );
   // Strixhaven (13c): Show of Confidence
   if (a.count === 'otherInstantsSorceriesCastThisTurn')
     return Math.max(0, (ctx.s.turn.instantsSorceriesCast?.[player] ?? 0) - 1);
@@ -549,6 +555,8 @@ export function matchesFilter(
     !Object.values(obj(ctx, id).counters ?? {}).some((n) => n > 0)
   )
     return false;
+  // Secrets of Strixhaven (14b): Rocket Volley.
+  if (filter.nonbasic && def(ctx, id).supertypes.includes('Basic')) return false;
   // Strixhaven (13b): monocolored (Vanishing Verse).
   if (filter.monocolored && def(ctx, id).colors.length !== 1) return false;
   // Strixhaven (13c): nonlegendary.
@@ -623,6 +631,8 @@ export function cardMatches(
     return false;
   if (filter.colors && !filter.colors.some((color) => d.colors.includes(color))) return false;
   if (filter.notTypes?.some((t) => d.types.includes(t))) return false;
+  // Secrets of Strixhaven (14b): Rocket Volley.
+  if (filter.nonbasic && d.supertypes.includes('Basic')) return false;
   // Strixhaven (13b): monocolored.
   if (filter.monocolored && d.colors.length !== 1) return false;
   // Strixhaven (13c): nonlegendary.

@@ -2,7 +2,7 @@ import type { ManaCost, ManaType } from './types.ts';
 
 /** Mana value of a cost: generic + coloured + hybrid pips (X counts as 0). */
 export function manaValue(cost: ManaCost): number {
-  let n = cost.generic + (cost.hybrid?.length ?? 0);
+  let n = cost.generic + (cost.hybrid?.length ?? 0) + 2 * (cost.twoHybrid?.length ?? 0);
   for (const v of Object.values(cost.colored)) n += v ?? 0;
   return n;
 }
@@ -12,7 +12,14 @@ export function addCosts(a: ManaCost, b: ManaCost): ManaCost {
   for (const [k, v] of Object.entries(b.colored) as [ManaType, number][])
     colored[k] = (colored[k] ?? 0) + v;
   const hybrid = [...(a.hybrid ?? []), ...(b.hybrid ?? [])];
-  return { generic: a.generic + b.generic, colored, ...(hybrid.length ? { hybrid } : {}) };
+  // Secrets of Strixhaven (14b): {2/R} pips.
+  const twoHybrid = [...(a.twoHybrid ?? []), ...(b.twoHybrid ?? [])];
+  return {
+    generic: a.generic + b.generic,
+    colored,
+    ...(hybrid.length ? { hybrid } : {}),
+    ...(twoHybrid.length ? { twoHybrid } : {}),
+  };
 }
 
 /**
@@ -53,6 +60,7 @@ export function reduceCost(cost: ManaCost, by: ManaCost): ManaCost {
     generic: Math.max(0, generic),
     colored,
     ...(hybrid.length ? { hybrid } : {}),
+    ...(cost.twoHybrid?.length ? { twoHybrid: cost.twoHybrid } : {}),
     ...(cost.x ? { x: cost.x } : {}),
   };
 }

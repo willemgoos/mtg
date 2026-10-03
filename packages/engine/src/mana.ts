@@ -133,6 +133,18 @@ export function manaSources(
     for (const a of def(ctx, src).abilities) {
       if (a.kind !== 'static' || a.effect.kind !== 'grantMana') continue;
       const g = a.effect;
+      // Secrets of Strixhaven (14b): Resonating Lute: matching lands tap for `amount` mana (any of these) for such spells.
+      if (g.onlyFor) {
+        if (!forSubtypes.includes(g.onlyFor)) continue;
+        for (const id of ctx.s.battlefield) {
+          if (id === exclude || obj(ctx, id).controller !== player) continue;
+          if (!matchesFilter(ctx, id, g.filter) || !canTapForAbility(ctx, id)) continue;
+          for (let i = out.length - 1; i >= 0; i--) if (out[i]!.id === id) out.splice(i, 1);
+          for (let k = 0; k < (g.amount ?? 1); k++)
+            out.push({ id, produces: [...g.produces], isCreature: false, sacrifice: false });
+        }
+        continue;
+      }
       if (g.onlyForCreatures && !forSubtypes.includes('Creature')) continue;
       for (const id of ctx.s.battlefield) {
         if (id === exclude || obj(ctx, id).controller !== player || out.some((x) => x.id === id))
@@ -159,6 +171,25 @@ export function manaSources(
  * left, in source order. Returns null if the cost can't be paid.
  */
 export function findPayment(cost: ManaCost, sources: readonly ManaSource[]): ObjectId[] | null {
+  // Secrets of Strixhaven (14b): {2/R} pips are paid with their colour where possible, else with two generic.
+  const two = cost.twoHybrid ?? [];
+  if (two.length) {
+    const { twoHybrid: _unused, ...rest } = cost;
+    for (let generic = 0; generic <= two.length; generic++) {
+      const colored = { ...rest.colored };
+      for (const t of two.slice(generic)) colored[t] = (colored[t] ?? 0) + 1;
+      const plan = findPaymentBase(
+        { ...rest, generic: rest.generic + 2 * generic, colored },
+        sources,
+      );
+      if (plan) return plan;
+    }
+    return null;
+  }
+  return findPaymentBase(cost, sources);
+}
+
+function findPaymentBase(cost: ManaCost, sources: readonly ManaSource[]): ObjectId[] | null {
   const pips = pipsOf(cost);
   const key = pips.map((p) => p.join(''));
   const chosen: number[] = [];
