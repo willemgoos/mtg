@@ -228,7 +228,11 @@ function apply(ctx: Ctx, action: Action): void {
     case 'passPriority':
       return passPriority(ctx, player);
     case 'playLand':
-      moveObject(ctx, action.card, 'battlefield', { controller: player });
+      // Strixhaven Brawl (15a): `back` plays a modal double-faced card's land back face.
+      moveObject(ctx, action.card, 'battlefield', {
+        controller: player,
+        ...(action.back ? { transformed: true } : {}),
+      });
       ps.landsPlayedThisTurn++;
       s.turn.passed = [];
       return givePriority(ctx, player);

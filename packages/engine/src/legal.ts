@@ -83,11 +83,14 @@ export function castableCards(ctx: Ctx, player: PlayerId): ObjectId[] {
       d.flashback ||
       d.castFromGraveyardRemovingCounters ||
       d.castFromGraveyardWithDiscard ||
+      d.castFromGraveyardOrExile ||
       mayhemReady(ctx, id) ||
       graveyardVias(ctx, player, id).length
     )
       out.push(id);
   }
+  // Strixhaven Brawl (15a): Squee, the Immortal, from your own exile.
+  for (const id of ps.exile) if (def(ctx, id).castFromGraveyardOrExile) out.push(id);
   // Cruelclaw's Heist: an opponent's exiled card you may cast.
   for (const id of ctx.s.players[other(player)].exile)
     if (
@@ -353,6 +356,7 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
           d.flashback ||
           d.castFromGraveyardRemovingCounters ||
           d.castFromGraveyardWithDiscard ||
+          d.castFromGraveyardOrExile ||
           mayhemReady(ctx, card)
             ? [undefined]
             : []),
@@ -497,7 +501,8 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
       withBackFace(ctx, card, () => {
         if (!blocked(card)) castsOf(card);
       });
-      for (const a of out.slice(from)) if (a.type === 'castSpell') a.back = true;
+      for (const a of out.slice(from))
+        if (a.type === 'castSpell' || a.type === 'playLand') a.back = true;
     }
   }
   // Sneak (Marvel Super Heroes): during your declare blockers step, return an unblocked attacker.

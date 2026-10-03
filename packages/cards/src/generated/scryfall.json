@@ -3002,10 +3002,10 @@
  },
  {
   "name": "Jungle Delver",
-  "scryfallId": "57fd403a-397e-423e-979a-69cf7a6096d8",
+  "scryfallId": "15fdc16c-d61c-4703-a153-b099afb2120a",
   "oracleId": "2f299e69-d82b-48c9-b7f5-cf07cd9dced2",
-  "set": "anb",
-  "collectorNumber": "99",
+  "set": "j25",
+  "collectorNumber": "678",
   "rarity": "common",
   "manaCost": "{G}",
   "typeLine": "Creature — Merfolk Warrior",
@@ -3017,10 +3017,10 @@
   ],
   "keywords": [],
   "image": {
-   "small": "https://cards.scryfall.io/small/front/5/7/57fd403a-397e-423e-979a-69cf7a6096d8.jpg?1783929791",
-   "normal": "https://cards.scryfall.io/normal/front/5/7/57fd403a-397e-423e-979a-69cf7a6096d8.jpg?1783929791",
-   "large": "https://cards.scryfall.io/large/front/5/7/57fd403a-397e-423e-979a-69cf7a6096d8.jpg?1783929791",
-   "artCrop": "https://cards.scryfall.io/art_crop/front/5/7/57fd403a-397e-423e-979a-69cf7a6096d8.jpg?1783929791"
+   "small": "https://cards.scryfall.io/small/front/1/5/15fdc16c-d61c-4703-a153-b099afb2120a.jpg?1783908636",
+   "normal": "https://cards.scryfall.io/normal/front/1/5/15fdc16c-d61c-4703-a153-b099afb2120a.jpg?1783908636",
+   "large": "https://cards.scryfall.io/large/front/1/5/15fdc16c-d61c-4703-a153-b099afb2120a.jpg?1783908636",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/5/15fdc16c-d61c-4703-a153-b099afb2120a.jpg?1783908636"
   }
  },
  {
@@ -3288,10 +3288,10 @@
  },
  {
   "name": "Stony Strength",
-  "scryfallId": "4a0597ce-f91a-43a0-aad6-fbb2a4d9fe57",
+  "scryfallId": "c68038be-cf6b-4fca-8cca-430d41dc83be",
   "oracleId": "da5a7cb8-1fa7-4b91-abd4-9e766291be63",
-  "set": "anb",
-  "collectorNumber": "105",
+  "set": "j25",
+  "collectorNumber": "720",
   "rarity": "common",
   "manaCost": "{G}",
   "typeLine": "Instant",
@@ -3301,10 +3301,10 @@
   ],
   "keywords": [],
   "image": {
-   "small": "https://cards.scryfall.io/small/front/4/a/4a0597ce-f91a-43a0-aad6-fbb2a4d9fe57.jpg?1783929784",
-   "normal": "https://cards.scryfall.io/normal/front/4/a/4a0597ce-f91a-43a0-aad6-fbb2a4d9fe57.jpg?1783929784",
-   "large": "https://cards.scryfall.io/large/front/4/a/4a0597ce-f91a-43a0-aad6-fbb2a4d9fe57.jpg?1783929784",
-   "artCrop": "https://cards.scryfall.io/art_crop/front/4/a/4a0597ce-f91a-43a0-aad6-fbb2a4d9fe57.jpg?1783929784"
+   "small": "https://cards.scryfall.io/small/front/c/6/c68038be-cf6b-4fca-8cca-430d41dc83be.jpg?1783908619",
+   "normal": "https://cards.scryfall.io/normal/front/c/6/c68038be-cf6b-4fca-8cca-430d41dc83be.jpg?1783908619",
+   "large": "https://cards.scryfall.io/large/front/c/6/c68038be-cf6b-4fca-8cca-430d41dc83be.jpg?1783908619",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/6/c68038be-cf6b-4fca-8cca-430d41dc83be.jpg?1783908619"
   }
  },
  {
@@ -45110,6 +45110,354 @@
    "normal": "https://cards.scryfall.io/normal/front/d/b/dbc3447e-1329-4ea1-b4ca-b321b0ffec8f.jpg?1783903620",
    "large": "https://cards.scryfall.io/large/front/d/b/dbc3447e-1329-4ea1-b4ca-b321b0ffec8f.jpg?1783903620",
    "artCrop": "https://cards.scryfall.io/art_crop/front/d/b/dbc3447e-1329-4ea1-b4ca-b321b0ffec8f.jpg?1783903620"
+  }
+ },
+ {
+  "name": "Pinnacle Monk",
+  "scryfallId": "24d4f26e-7f96-4b38-867e-4fac819b2679",
+  "oracleId": "f3d48efa-910a-4872-a5b1-a353c5dbce99",
+  "set": "mh3",
+  "collectorNumber": "246",
+  "rarity": "uncommon",
+  "manaCost": "{3}{R}{R}",
+  "typeLine": "Creature — Djinn Monk",
+  "oracleText": "Prowess (Whenever you cast a noncreature spell, this creature gets +1/+1 until end of turn.)\nWhen this creature enters, return target instant or sorcery card from your graveyard to your hand.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Prowess"
+  ],
+  "back": "Mystic Peak",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/4/24d4f26e-7f96-4b38-867e-4fac819b2679.jpg?1783911228",
+   "normal": "https://cards.scryfall.io/normal/front/2/4/24d4f26e-7f96-4b38-867e-4fac819b2679.jpg?1783911228",
+   "large": "https://cards.scryfall.io/large/front/2/4/24d4f26e-7f96-4b38-867e-4fac819b2679.jpg?1783911228",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/4/24d4f26e-7f96-4b38-867e-4fac819b2679.jpg?1783911228"
+  }
+ },
+ {
+  "name": "Mystic Peak",
+  "scryfallId": "24d4f26e-7f96-4b38-867e-4fac819b2679",
+  "oracleId": "f3d48efa-910a-4872-a5b1-a353c5dbce99",
+  "set": "mh3",
+  "collectorNumber": "246",
+  "rarity": "uncommon",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "As this land enters, you may pay 3 life. If you don't, it enters tapped.\n{T}: Add {R}.",
+  "colors": [],
+  "keywords": [],
+  "front": "Pinnacle Monk",
+  "image": {
+   "small": "https://cards.scryfall.io/small/back/2/4/24d4f26e-7f96-4b38-867e-4fac819b2679.jpg?1783911228",
+   "normal": "https://cards.scryfall.io/normal/back/2/4/24d4f26e-7f96-4b38-867e-4fac819b2679.jpg?1783911228",
+   "large": "https://cards.scryfall.io/large/back/2/4/24d4f26e-7f96-4b38-867e-4fac819b2679.jpg?1783911228",
+   "artCrop": "https://cards.scryfall.io/art_crop/back/2/4/24d4f26e-7f96-4b38-867e-4fac819b2679.jpg?1783911228"
+  }
+ },
+ {
+  "name": "Big Score",
+  "scryfallId": "3383a939-4ab3-4546-9995-6c65cd3f4441",
+  "oracleId": "a5cbd257-c836-493e-bb1a-76242619dea2",
+  "set": "msc",
+  "collectorNumber": "802",
+  "rarity": "common",
+  "manaCost": "{3}{R}",
+  "typeLine": "Instant",
+  "oracleText": "As an additional cost to cast this spell, discard a card.\nDraw two cards and create two Treasure tokens. (They're artifacts with \"{T}, Sacrifice this token: Add one mana of any color.\")",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Treasure"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/3/3383a939-4ab3-4546-9995-6c65cd3f4441.jpg?1783903010",
+   "normal": "https://cards.scryfall.io/normal/front/3/3/3383a939-4ab3-4546-9995-6c65cd3f4441.jpg?1783903010",
+   "large": "https://cards.scryfall.io/large/front/3/3/3383a939-4ab3-4546-9995-6c65cd3f4441.jpg?1783903010",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/3/3383a939-4ab3-4546-9995-6c65cd3f4441.jpg?1783903010"
+  }
+ },
+ {
+  "name": "Enduring Courage",
+  "scryfallId": "f46ac55f-d68e-4d5d-af0a-3879f97f705e",
+  "oracleId": "b3de29cb-7d7d-4566-b5bf-37e571bd5d78",
+  "set": "dsk",
+  "collectorNumber": "133",
+  "rarity": "rare",
+  "manaCost": "{2}{R}{R}",
+  "typeLine": "Enchantment Creature — Dog Glimmer",
+  "oracleText": "Whenever another creature you control enters, it gets +2/+0 and gains haste until end of turn.\nWhen Enduring Courage dies, if it was a creature, return it to the battlefield under its owner's control. It's an enchantment. (It's not a creature.)",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/4/f46ac55f-d68e-4d5d-af0a-3879f97f705e.jpg?1783909470",
+   "normal": "https://cards.scryfall.io/normal/front/f/4/f46ac55f-d68e-4d5d-af0a-3879f97f705e.jpg?1783909470",
+   "large": "https://cards.scryfall.io/large/front/f/4/f46ac55f-d68e-4d5d-af0a-3879f97f705e.jpg?1783909470",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/4/f46ac55f-d68e-4d5d-af0a-3879f97f705e.jpg?1783909470"
+  }
+ },
+ {
+  "name": "Fallaji Antiquarian",
+  "scryfallId": "6f281fb5-ea7a-4539-984e-86d2edbfb996",
+  "oracleId": "665b00cb-1dac-4b6b-8d5a-7af14275df93",
+  "set": "ybro",
+  "collectorNumber": "8",
+  "rarity": "rare",
+  "manaCost": "{3}{R}",
+  "typeLine": "Creature — Human Artificer",
+  "oracleText": "Haste\nWhen Fallaji Antiquarian enters, conjure a duplicate of another target nontoken creature or artifact you control into your graveyard. The duplicate perpetually gains unearth {1}{R}.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Haste",
+   "Conjure"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/f/6f281fb5-ea7a-4539-984e-86d2edbfb996.jpg?1783918548",
+   "normal": "https://cards.scryfall.io/normal/front/6/f/6f281fb5-ea7a-4539-984e-86d2edbfb996.jpg?1783918548",
+   "large": "https://cards.scryfall.io/large/front/6/f/6f281fb5-ea7a-4539-984e-86d2edbfb996.jpg?1783918548",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/f/6f281fb5-ea7a-4539-984e-86d2edbfb996.jpg?1783918548"
+  }
+ },
+ {
+  "name": "Ivora, Insatiable Heir",
+  "scryfallId": "2ba70366-b6ae-423a-a8d8-29d2b8afd939",
+  "oracleId": "d847542b-7522-43ec-91b0-f0aba5d7dddd",
+  "set": "j25",
+  "collectorNumber": "50",
+  "rarity": "uncommon",
+  "manaCost": "{1}{R}",
+  "typeLine": "Legendary Creature — Vampire Warrior",
+  "oracleText": "Trample\nWhen Ivora enters and whenever it deals combat damage to a player, create a Blood token. (It's an artifact with \"{1}, {T}, Discard a card, Sacrifice this token: Draw a card.\")\nWhenever you discard a card, put a +1/+1 counter on Ivora.",
+  "power": "1",
+  "toughness": "1",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Trample"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/b/2ba70366-b6ae-423a-a8d8-29d2b8afd939.jpg?1783908854",
+   "normal": "https://cards.scryfall.io/normal/front/2/b/2ba70366-b6ae-423a-a8d8-29d2b8afd939.jpg?1783908854",
+   "large": "https://cards.scryfall.io/large/front/2/b/2ba70366-b6ae-423a-a8d8-29d2b8afd939.jpg?1783908854",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/b/2ba70366-b6ae-423a-a8d8-29d2b8afd939.jpg?1783908854"
+  }
+ },
+ {
+  "name": "Molten Gatekeeper",
+  "scryfallId": "9f5ba065-2806-4e99-a330-168cfe76250f",
+  "oracleId": "90fdfba8-f29e-44f9-91d2-7bf3c458a9c1",
+  "set": "mh3",
+  "collectorNumber": "128",
+  "rarity": "common",
+  "manaCost": "{2}{R}",
+  "typeLine": "Artifact Creature — Golem",
+  "oracleText": "Whenever another creature you control enters, this creature deals 1 damage to each opponent.\nUnearth {R} ({R}: Return this card from your graveyard to the battlefield. It gains haste. Exile it at the beginning of the next end step or if it would leave the battlefield. Unearth only as a sorcery.)",
+  "power": "2",
+  "toughness": "3",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Unearth"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/f/9f5ba065-2806-4e99-a330-168cfe76250f.jpg?1783911269",
+   "normal": "https://cards.scryfall.io/normal/front/9/f/9f5ba065-2806-4e99-a330-168cfe76250f.jpg?1783911269",
+   "large": "https://cards.scryfall.io/large/front/9/f/9f5ba065-2806-4e99-a330-168cfe76250f.jpg?1783911269",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/f/9f5ba065-2806-4e99-a330-168cfe76250f.jpg?1783911269"
+  }
+ },
+ {
+  "name": "Scrapwork Mutt",
+  "scryfallId": "4742800a-4872-4c2d-b884-01e0ba16950c",
+  "oracleId": "5906b378-c7a7-44fd-a63b-55a347d97854",
+  "set": "bro",
+  "collectorNumber": "164",
+  "rarity": "common",
+  "manaCost": "{2}",
+  "typeLine": "Artifact Creature — Dog",
+  "oracleText": "When this creature enters, you may discard a card. If you do, draw a card.\nUnearth {1}{R} ({1}{R}: Return this card from your graveyard to the battlefield. It gains haste. Exile it at the beginning of the next end step or if it would leave the battlefield. Unearth only as a sorcery.)",
+  "power": "2",
+  "toughness": "1",
+  "colors": [],
+  "keywords": [
+   "Unearth"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/7/4742800a-4872-4c2d-b884-01e0ba16950c.jpg?1783920056",
+   "normal": "https://cards.scryfall.io/normal/front/4/7/4742800a-4872-4c2d-b884-01e0ba16950c.jpg?1783920056",
+   "large": "https://cards.scryfall.io/large/front/4/7/4742800a-4872-4c2d-b884-01e0ba16950c.jpg?1783920056",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/7/4742800a-4872-4c2d-b884-01e0ba16950c.jpg?1783920056"
+  }
+ },
+ {
+  "name": "Seasoned Pyromancer",
+  "scryfallId": "2e139ad1-1079-49e9-babd-6399c44ad333",
+  "oracleId": "02238355-9c84-4ae0-b850-269f460144a8",
+  "set": "mh1",
+  "collectorNumber": "145",
+  "rarity": "mythic",
+  "manaCost": "{1}{R}{R}",
+  "typeLine": "Creature — Human Shaman",
+  "oracleText": "When this creature enters, discard two cards, then draw two cards. For each nonland card discarded this way, create a 1/1 red Elemental creature token.\n{3}{R}{R}, Exile this card from your graveyard: Create two 1/1 red Elemental creature tokens.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/e/2e139ad1-1079-49e9-babd-6399c44ad333.jpg?1783933105",
+   "normal": "https://cards.scryfall.io/normal/front/2/e/2e139ad1-1079-49e9-babd-6399c44ad333.jpg?1783933105",
+   "large": "https://cards.scryfall.io/large/front/2/e/2e139ad1-1079-49e9-babd-6399c44ad333.jpg?1783933105",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/e/2e139ad1-1079-49e9-babd-6399c44ad333.jpg?1783933105"
+  }
+ },
+ {
+  "name": "Squee, the Immortal",
+  "scryfallId": "a3974c62-a524-454e-9ce7-2c23b704e5cb",
+  "oracleId": "481fb71a-11b9-462e-a4da-ca35ffd1bd22",
+  "set": "dom",
+  "collectorNumber": "146",
+  "rarity": "rare",
+  "manaCost": "{1}{R}{R}",
+  "typeLine": "Legendary Creature — Goblin",
+  "oracleText": "You may cast this card from your graveyard or from exile.",
+  "power": "2",
+  "toughness": "1",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/3/a3974c62-a524-454e-9ce7-2c23b704e5cb.jpg?1783934987",
+   "normal": "https://cards.scryfall.io/normal/front/a/3/a3974c62-a524-454e-9ce7-2c23b704e5cb.jpg?1783934987",
+   "large": "https://cards.scryfall.io/large/front/a/3/a3974c62-a524-454e-9ce7-2c23b704e5cb.jpg?1783934987",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/3/a3974c62-a524-454e-9ce7-2c23b704e5cb.jpg?1783934987"
+  }
+ },
+ {
+  "name": "Tersa Lightshatter",
+  "scryfallId": "99e96b34-b1c4-4647-a38e-2cf1aedaaace",
+  "oracleId": "9918eb7b-054e-4b1c-afc7-1163ab642d50",
+  "set": "tdm",
+  "collectorNumber": "127",
+  "rarity": "rare",
+  "manaCost": "{2}{R}",
+  "typeLine": "Legendary Creature — Orc Wizard",
+  "oracleText": "Haste\nWhen Tersa Lightshatter enters, discard up to two cards, then draw that many cards.\nWhenever Tersa Lightshatter attacks, if there are seven or more cards in your graveyard, exile a card at random from your graveyard. You may play that card this turn.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Haste"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/9/99e96b34-b1c4-4647-a38e-2cf1aedaaace.jpg?1783907351",
+   "normal": "https://cards.scryfall.io/normal/front/9/9/99e96b34-b1c4-4647-a38e-2cf1aedaaace.jpg?1783907351",
+   "large": "https://cards.scryfall.io/large/front/9/9/99e96b34-b1c4-4647-a38e-2cf1aedaaace.jpg?1783907351",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/9/99e96b34-b1c4-4647-a38e-2cf1aedaaace.jpg?1783907351"
+  }
+ },
+ {
+  "name": "Thrill of Possibility",
+  "scryfallId": "882b348c-076b-41d8-b505-063480636669",
+  "oracleId": "1cb0610b-a731-42c2-b93f-0a29f63cebf4",
+  "set": "fdn",
+  "collectorNumber": "210",
+  "rarity": "common",
+  "manaCost": "{1}{R}",
+  "typeLine": "Instant",
+  "oracleText": "As an additional cost to cast this spell, discard a card.\nDraw two cards.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/8/882b348c-076b-41d8-b505-063480636669.jpg?1783909062",
+   "normal": "https://cards.scryfall.io/normal/front/8/8/882b348c-076b-41d8-b505-063480636669.jpg?1783909062",
+   "large": "https://cards.scryfall.io/large/front/8/8/882b348c-076b-41d8-b505-063480636669.jpg?1783909062",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/8/882b348c-076b-41d8-b505-063480636669.jpg?1783909062"
+  }
+ },
+ {
+  "name": "Faithless Looting",
+  "scryfallId": "fc019ffa-4461-4f3d-ab8d-e4d20e77ca0c",
+  "oracleId": "3d6fa57a-aa53-4b5c-b8af-a7612c823117",
+  "set": "soc",
+  "collectorNumber": "244",
+  "rarity": "common",
+  "manaCost": "{R}",
+  "typeLine": "Sorcery",
+  "oracleText": "Draw two cards, then discard two cards.\nFlashback {2}{R} (You may cast this card from your graveyard for its flashback cost. Then exile it.)",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Flashback"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/c/fc019ffa-4461-4f3d-ab8d-e4d20e77ca0c.jpg?1783903774",
+   "normal": "https://cards.scryfall.io/normal/front/f/c/fc019ffa-4461-4f3d-ab8d-e4d20e77ca0c.jpg?1783903774",
+   "large": "https://cards.scryfall.io/large/front/f/c/fc019ffa-4461-4f3d-ab8d-e4d20e77ca0c.jpg?1783903774",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/c/fc019ffa-4461-4f3d-ab8d-e4d20e77ca0c.jpg?1783903774"
+  }
+ },
+ {
+  "name": "Bitter Reunion",
+  "scryfallId": "345a1c80-41d6-43b1-83ab-1aa56dd06b1b",
+  "oracleId": "173e86f4-17f3-44f5-8073-78e7e2e12c4a",
+  "set": "bro",
+  "collectorNumber": "127",
+  "rarity": "common",
+  "manaCost": "{1}{R}",
+  "typeLine": "Enchantment",
+  "oracleText": "When this enchantment enters, you may discard a card. If you do, draw two cards.\n{1}, Sacrifice this enchantment: Creatures you control gain haste until end of turn.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/4/345a1c80-41d6-43b1-83ab-1aa56dd06b1b.jpg?1783920075",
+   "normal": "https://cards.scryfall.io/normal/front/3/4/345a1c80-41d6-43b1-83ab-1aa56dd06b1b.jpg?1783920075",
+   "large": "https://cards.scryfall.io/large/front/3/4/345a1c80-41d6-43b1-83ab-1aa56dd06b1b.jpg?1783920075",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/4/345a1c80-41d6-43b1-83ab-1aa56dd06b1b.jpg?1783920075"
+  }
+ },
+ {
+  "name": "Shared Animosity",
+  "scryfallId": "bb7a56c4-5f20-4fd0-8f95-44061dec1df8",
+  "oracleId": "a27445db-33f2-4571-98b5-83206b797484",
+  "set": "c20",
+  "collectorNumber": "158",
+  "rarity": "rare",
+  "manaCost": "{2}{R}",
+  "typeLine": "Enchantment",
+  "oracleText": "Whenever a creature you control attacks, it gets +1/+0 until end of turn for each other attacking creature that shares a creature type with it.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/b/bb7a56c4-5f20-4fd0-8f95-44061dec1df8.jpg?1783931170",
+   "normal": "https://cards.scryfall.io/normal/front/b/b/bb7a56c4-5f20-4fd0-8f95-44061dec1df8.jpg?1783931170",
+   "large": "https://cards.scryfall.io/large/front/b/b/bb7a56c4-5f20-4fd0-8f95-44061dec1df8.jpg?1783931170",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/b/bb7a56c4-5f20-4fd0-8f95-44061dec1df8.jpg?1783931170"
   }
  }
 ]

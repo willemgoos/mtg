@@ -123,6 +123,8 @@ export function castVariants(d: CardDefinition, zone: ZoneName, via?: CastVia): 
   }
   // Dragon Man: cast from the graveyard as from the hand (plus a discard, see legal.ts).
   if (zone === 'graveyard' && d.castFromGraveyardWithDiscard) return castVariants(d, 'hand');
+  // Strixhaven Brawl (15a): Squee, the Immortal.
+  if (zone === 'graveyard' && d.castFromGraveyardOrExile) return castVariants(d, 'hand');
   // Mayhem: from the graveyard for its mayhem cost (legal.ts checks it was discarded this turn).
   if (zone === 'graveyard' && d.mayhem) return [{ cost: d.mayhem, spell: d.spell ?? null }];
   if (zone === 'graveyard' && d.castFromGraveyardRemovingCounters)

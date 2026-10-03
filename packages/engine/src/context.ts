@@ -6,6 +6,7 @@ import { SOS_14A_EFFECTS } from './sos-14a-effects.ts';
 import { SOS_14B_A_EFFECTS } from './sos-14b-a-effects.ts';
 import { SOS_14B_B_EFFECTS } from './sos-14b-b-effects.ts';
 import { SOS_14B_C_EFFECTS } from './sos-14b-c-effects.ts';
+import { BRAWL_15A_R_EFFECTS } from './brawl-15a-r-effects.ts';
 import { SOS_14B_D_EFFECTS } from './sos-14b-d-effects.ts';
 import { STX_13C_A_EFFECTS } from './stx-13c-a-effects.ts';
 import { STX_13C_B_EFFECTS } from './stx-13c-b-effects.ts';
@@ -85,6 +86,8 @@ const BUILT_IN_EFFECTS: Record<string, CustomEffect> = {
   ...SOS_14B_B_EFFECTS,
   // Secrets of Strixhaven (14b), group C.
   ...SOS_14B_C_EFFECTS,
+  // Strixhaven Brawl (15a, red).
+  ...BRAWL_15A_R_EFFECTS,
   // Secrets of Strixhaven (14b, group D).
   ...SOS_14B_D_EFFECTS,
   // Strixhaven (13a): Learn: put the chosen Lesson from outside the game into your hand.
@@ -152,7 +155,11 @@ export function def(ctx: Ctx, id: ObjectId): CardDefinition {
     if (shared.length) return { ...d, abilities: [...d.abilities, ...shared] };
   }
   // Strixhaven (13a): Lorehold Apprentice grants abilities until end of turn.
-  if (o.tempAbilities?.length) return { ...d, abilities: [...d.abilities, ...o.tempAbilities] };
+  if (o.tempAbilities?.length || o.perpetualAbilities?.length)
+    return {
+      ...d,
+      abilities: [...d.abilities, ...(o.tempAbilities ?? []), ...(o.perpetualAbilities ?? [])],
+    };
   return d;
 }
 
@@ -399,6 +406,10 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
     if (o.addedSubtypes) o.lastAddedSubtypes = o.addedSubtypes;
     else delete o.lastAddedSubtypes;
     delete o.addedSubtypes;
+    // Strixhaven Brawl (15a): Enduring Courage: "if it was a creature".
+    if (o.notCreature) o.lastNotCreature = true;
+    else delete o.lastNotCreature;
+    delete o.notCreature;
     const host = o.attachedTo !== undefined ? ctx.s.objects[o.attachedTo] : undefined;
     if (host)
       o.lastAttachedTo = {

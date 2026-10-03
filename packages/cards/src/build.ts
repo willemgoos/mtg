@@ -151,6 +151,8 @@ export const KEYWORDS_AS_ABILITIES = new Set([
   'Converge',
   'Paradigm',
   'Learn',
+  // Strixhaven Brawl (15a): Alchemy conjure.
+  'Conjure',
   // Final Fantasy (11a).
   'Job select',
   'Tiered',

@@ -1532,6 +1532,7 @@ export function answerDiscard(ctx: Ctx, card: ObjectId): void {
       false,
     );
   d.count--;
+  if (nonland) d.nonlandDiscarded = (d.nonlandDiscarded ?? 0) + 1;
   const c = d.connive && ctx.s.objects[d.connive.id];
   if (c && nonland && c.zone === 'battlefield' && c.zcc === d.connive!.zcc)
     addCounters(ctx, c.id, 1);
@@ -1544,10 +1545,18 @@ export function answerDiscard(ctx: Ctx, card: ObjectId): void {
   // Strixhaven (13c): "discard any number of cards, then draw that many".
   if (d.anyNumber) {
     d.anyNumber.discarded++;
-    if (left.length === 0) finishDiscardAny(ctx);
+    if (left.length === 0 || d.anyNumber.discarded === d.anyNumber.max) finishDiscardAny(ctx);
     return;
   }
-  if (d.count === 0 || left.length === 0) resume(ctx, d.resume, d.thenPriority);
+  if (d.count === 0 || left.length === 0) {
+    // Strixhaven Brawl (15a): Seasoned Pyromancer: draw, then a token for each nonland card.
+    if (d.drawAfter) {
+      const after: EffectDef[] = [{ kind: 'draw', who: 'controller', amount: d.drawAfter }];
+      if (d.tokenPerNonland && d.nonlandDiscarded)
+        after.push({ kind: 'createToken', token: d.tokenPerNonland, count: d.nonlandDiscarded });
+      continueWith(ctx, d.resume, after, d.thenPriority);
+    } else resume(ctx, d.resume, d.thenPriority);
+  }
 }
 
 /** Strixhaven (13c): Illuminate History: the player stopped discarding; they draw that many. */

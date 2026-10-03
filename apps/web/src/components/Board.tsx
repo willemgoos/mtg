@@ -1504,7 +1504,12 @@ function kickPermanentPrompt(defId: CardDefId | undefined, a: Action): string | 
 /** "Choose one" mode name, or kicked / not kicked. */
 function castLabel(defId: CardDefId, a: Action): string {
   // Final Fantasy (11a): an adventure land's own option.
-  if (a.type === 'playLand') return `Play ${cardDb.get(defId)?.name ?? 'land'}`;
+  if (a.type === 'playLand') {
+    // Strixhaven Brawl (15a): a modal double-faced card's land back face (Mystic Peak).
+    const def = cardDb.get(defId);
+    const face = a.back && def?.back ? cardDb.get(def.back) : def;
+    return `Play ${face?.name ?? 'land'}`;
+  }
   if (a.type !== 'castSpell' && a.type !== 'activateAbility') return '';
   if (a.forage)
     return a.forage === 'graveyard'

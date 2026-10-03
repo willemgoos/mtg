@@ -202,6 +202,8 @@ export interface CardDefinition {
   sacrificeToCastFilter?: CardFilter;
   /** It may be cast from your graveyard by discarding a card as well (Dragon Man). */
   castFromGraveyardWithDiscard?: boolean;
+  /** Strixhaven Brawl (15a): Squee, the Immortal: "You may cast this card from your graveyard or from exile." */
+  castFromGraveyardOrExile?: boolean;
   /** It enters with X +1/+1 counters (Royal Talon Fighter Jet). */
   entersWithXCounters?: boolean;
   /** Costs {amount} less while the condition holds (Heroic Return, Avenge). */
@@ -1209,6 +1211,8 @@ export type EffectDef =
       who: 'controller' | 'eachOpponent';
       /** Secrets of Strixhaven (14b): Colossus of the Blood Age, "that many cards plus one". */
       plus?: number;
+      // Strixhaven Brawl (15a): Tersa Lightshatter, "up to two"
+      max?: number;
     }
   /** Explore the Vastlands: that player looks at the top five, may take a land and/or an instant or sorcery; the rest go to the bottom at random. */
   | { kind: 'lookTakeLandAndSpell'; who: 'controller' | 'eachOpponent' }
@@ -1436,6 +1440,11 @@ export type EffectDef =
       // Strixhaven (13c): Flamethrower Sonata
       /** Discarding an instant or sorcery deals damage equal to its mana value to this target. */
       damageTo?: number;
+      // Strixhaven Brawl (15a): Seasoned Pyromancer
+      /** Draw this many cards once the discarding is done (even if nothing was discarded). */
+      drawAfter?: number;
+      /** Then create one token of this id for each nonland card discarded. */
+      tokenPerNonland?: string;
     }
   /** Put the top N cards of your library into your graveyard. */
   | { kind: 'mill'; count: Amount; who?: Ref }
@@ -2048,6 +2057,11 @@ export interface GameObject {
   addedSubtypes?: string[];
   /** Subtypes it had gained as it last left the battlefield. */
   lastAddedSubtypes?: string[];
+  // Strixhaven Brawl (15a): Enduring Courage
+  /** It's not a creature (it came back as an enchantment). */
+  notCreature?: boolean;
+  /** It wasn't a creature as it last left the battlefield. */
+  lastNotCreature?: boolean;
   /** A card in exile its owner may play until the end of that turn (Strongbox Raider). */
   playableUntilTurn?: number;
   /** The turn it entered its current zone. */
@@ -2069,6 +2083,8 @@ export interface GameObject {
   onceTurns?: Record<number, number>;
   // Strixhaven (13a): abilities granted until end of turn (Lorehold Apprentice)
   tempAbilities?: AbilityDef[];
+  /** Strixhaven Brawl (15a): abilities it gained perpetually (Fallaji Antiquarian's unearth). */
+  perpetualAbilities?: AbilityDef[];
   /** It has lost all abilities (an effect until its controller's next turn). */
   blank?: boolean;
   /** A Class's level (1 if unset). */
@@ -2577,7 +2593,11 @@ export type Decision =
       connive?: ObjectRef;
       // Strixhaven (13c): Illuminate History
       /** "Discard any number of cards, then draw that many": `count` counts the ones discarded; chooseEffect stops. */
-      anyNumber?: { discarded: number; plus?: number };
+      anyNumber?: { discarded: number; plus?: number; max?: number };
+      // Strixhaven Brawl (15a): Seasoned Pyromancer
+      drawAfter?: number;
+      tokenPerNonland?: string;
+      nonlandDiscarded?: number;
       resume: PausedResolution;
       thenPriority: PlayerId;
     }
@@ -2865,7 +2885,8 @@ export type Action =
   /** London mulligan: put one card on the bottom (repeated until done). */
   | { type: 'bottomCard'; player: PlayerId; card: ObjectId }
   | { type: 'passPriority'; player: PlayerId }
-  | { type: 'playLand'; player: PlayerId; card: ObjectId }
+  // Strixhaven Brawl (15a): `back`: play the back face (Pinnacle Monk // Mystic Peak).
+  | { type: 'playLand'; player: PlayerId; card: ObjectId; back?: boolean }
   | {
       type: 'castSpell';
       player: PlayerId;

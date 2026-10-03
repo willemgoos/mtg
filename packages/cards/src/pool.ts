@@ -45,6 +45,16 @@ export const SET_PREFERENCE = [
   'pw26',
   'sld',
   // Arena Beginner Set: Arena-only cards (last resort).
+  // Strixhaven Brawl (15a, red): Quintorius deck staples.
+  'mh3',
+  'tdm',
+  'dsk',
+  'bro',
+  'j25',
+  'dom',
+  'mh1',
+  'ybro',
+  'c20',
   'anb',
 ];
 
