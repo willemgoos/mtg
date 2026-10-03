@@ -233,6 +233,8 @@ export function castCost(
   // Brawl: commander tax.
   if (o.zone === 'command') cost = { ...cost, generic: cost.generic + commanderTax(ctx, player) };
   let reduce = d.costReduction !== undefined ? amountFor(ctx, player, d.costReduction) : 0;
+  // Final Fantasy Commander (12d): delve.
+  if (d.delve && !choice.via) reduce += delveCount(ctx, player, d);
   // Heroic Return, Avenge: "costs {2} less if ...".
   if (d.costReductionIf && checkCondition(ctx, d.costReductionIf.condition, player, o))
     reduce += d.costReductionIf.amount;
@@ -382,6 +384,10 @@ export function castSpell(
     ...(sneakFrom ? { sneak: sneakFrom } : {}),
   });
   payMana(ctx, payment);
+  // Final Fantasy Commander (12d): delve exiles the cards that paid (the oldest in the graveyard).
+  if (d.delve && !choice.via)
+    for (const id of ctx.s.players[player].graveyard.slice(0, delveCount(ctx, player, d)))
+      moveObject(ctx, id, 'exile');
   if (teamwork) payTeamwork(ctx, teamwork);
   if (convokers.length) o.convokedBy = payment.filter((id) => convokers.includes(id));
   if (d.types.includes('Creature')) scryForAncestry(ctx, player, d, payment);
@@ -491,6 +497,11 @@ export function abilityManaCost(
         cost = reduceCost(cost, { generic: s.effect.amount, colored: {} });
   }
   return cost;
+}
+
+// Final Fantasy Commander (12d): delve pays generic mana with graveyard cards (up to the printed generic).
+function delveCount(ctx: Ctx, player: PlayerId, d: CardDefinition): number {
+  return Math.min(ctx.s.players[player].graveyard.length, d.manaCost.generic);
 }
 
 // Final Fantasy Commander (12b): equip cost reductions.
@@ -846,6 +857,13 @@ export function finishResolution(ctx: Ctx, item: PausedResolution['item']): void
   emit(ctx, { type: 'resolved', id: item.id });
   if (item.kind !== 'spell') return;
   if (item.libraryBottom) return moveObject(ctx, item.id, 'library', { position: 'bottom' });
+  // Final Fantasy Commander (12d): an Adventure goes into exile "on an adventure".
+  const adventure = ctx.s.objects[item.id];
+  if (adventure && !item.exile && def(ctx, item.id).subtypes.includes('Adventure')) {
+    moveObject(ctx, item.id, 'exile');
+    adventure.onAdventure = true;
+    return;
+  }
   moveObject(ctx, item.id, item.exile || item.rebound ? 'exile' : 'graveyard');
   const o = ctx.s.objects[item.id];
   // Final Fantasy Commander (12c): Esper Origins comes back transformed with a finality counter.

@@ -352,6 +352,8 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
     o.grantedKeywords = ['haste'];
   }
   if (from === 'exile') delete o.jailedBy;
+  // Final Fantasy Commander (12d): it leaves its adventure.
+  if (from === 'exile') delete o.onAdventure;
   // Damage sources are remembered as it dies (Hawkeye), forgotten as it enters.
   if (to === 'battlefield') delete o.damagedBy;
   delete o.blank;
@@ -395,6 +397,20 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
   const tappedIf = to === 'battlefield' ? defOf(ctx, o.defId).entersTappedIf : undefined;
   // Eddymurk Crab: "enters tapped if it's not your turn"; check lands and the like.
   if (tappedIf && checkCondition(ctx, tappedIf, o.controller, o)) o.tapped = true;
+  // Final Fantasy Commander (12d): Authority of the Consuls.
+  if (
+    to === 'battlefield' &&
+    defOf(ctx, o.defId).types.includes('Creature') &&
+    ctx.s.battlefield.some(
+      (b) =>
+        b !== id &&
+        ctx.s.objects[b]!.controller !== o.controller &&
+        def(ctx, b).abilities.some(
+          (a) => a.kind === 'static' && a.effect.kind === 'opponentCreaturesEnterTapped',
+        ),
+    )
+  )
+    o.tapped = true;
 
   // Tokens cease to exist once they leave the battlefield (rule 111.7).
   const ceases = o.isToken && to !== 'battlefield';

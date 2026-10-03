@@ -163,6 +163,7 @@ export function startTurn(ctx: Ctx, player: PlayerId, noPowerUp = false): void {
   // Final Fantasy Commander (12b).
   delete s.turn.laterCombat;
   delete s.turn.extraLands;
+  delete s.turn.lifeLostTotal;
   s.turn.attackers = [];
   s.turn.lifeGains = { p1: 0, p2: 0 };
   s.turn.creaturesDied = 0;

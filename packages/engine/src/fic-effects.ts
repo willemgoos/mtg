@@ -172,6 +172,8 @@ export const FIC_EFFECTS: Record<string, CustomEffect> = {
     const o = sourceObj(ctx, es);
     if (!o || o.zone !== 'battlefield') return;
     moveObject(ctx, o.id, 'exile');
+    // A token ceases to exist in exile.
+    if (!ctx.s.objects[o.id]) return;
     moveObject(ctx, o.id, 'battlefield');
     transform(ctx, o.id);
     // A Saga back face gets its first lore counter as it enters.
@@ -197,6 +199,8 @@ export const FIC_EFFECTS: Record<string, CustomEffect> = {
     const o = sourceObj(ctx, es);
     if (!o || o.zone !== 'battlefield') return;
     moveObject(ctx, o.id, 'exile');
+    // A token ceases to exist in exile.
+    if (!ctx.s.objects[o.id]) return;
     moveObject(ctx, o.id, 'battlefield');
   },
 
@@ -413,6 +417,8 @@ export const FIC_EFFECTS: Record<string, CustomEffect> = {
     const o = sourceObj(ctx, es);
     if (!o || o.zone !== 'battlefield') return;
     moveObject(ctx, o.id, 'exile');
+    // A token ceases to exist in exile.
+    if (!ctx.s.objects[o.id]) return;
     moveObject(ctx, o.id, 'battlefield');
   },
 
@@ -511,6 +517,97 @@ export const FIC_EFFECTS: Record<string, CustomEffect> = {
     addCounters(ctx, t.id, n);
   },
 
+  // ---------------------------------------------------------------- 12d: spellcraft
+  /**
+   * Look at the top N; put `take` into your hand (the engine picks: a land if
+   * you have fewer than five, then the most expensive), the rest on the bottom.
+   */
+  lookTakeRestBottom(ctx, es, params) {
+    const p = es.controller;
+    const { count, take } = params as { count: number; take: number };
+    const top = ctx.s.players[p].library.slice(0, count);
+    const needLand = landsOf(ctx, p) < 5;
+    const ranked = [...top].sort(
+      (a, b) =>
+        (needLand ? Number(isLand(ctx, b)) - Number(isLand(ctx, a)) : 0) ||
+        Number(isLand(ctx, a)) - Number(isLand(ctx, b)) ||
+        mv(ctx, b) - mv(ctx, a),
+    );
+    const land = needLand ? ranked.find((id) => isLand(ctx, id)) : undefined;
+    const picks = land ? [land, ...ranked.filter((id) => id !== land)] : ranked;
+    const taken = picks.slice(0, take);
+    for (const id of taken) moveObject(ctx, id, 'hand');
+    for (const id of top)
+      if (!taken.includes(id)) moveObject(ctx, id, 'library', { position: 'bottom' });
+  },
+
+  /** G'raha Tia, Scion Reborn: pay X life (X: the spell's mana value) for a 1/1 Hero with X +1/+1 counters. */
+  grahaHero(ctx, es) {
+    const spell = es.subject && ctx.s.objects[es.subject.id];
+    const x = spell ? mv(ctx, spell.id) : 0;
+    if (ctx.s.players[es.controller].life <= x) return;
+    changeLife(ctx, es.controller, -x);
+    const hero = tokenCopyOfCard(ctx, 'hero-1-1-token', es.controller);
+    addCounters(ctx, hero.id, x);
+  },
+
+  /** Ninja's Blades: draw, then discard (the engine discards the most expensive); that player loses its mana value. */
+  ninjaLoot(ctx, es) {
+    const p = es.controller;
+    drawCard(ctx, p);
+    const hand = ctx.s.players[p].hand;
+    const pick = [...hand].sort((a, b) => mv(ctx, b) - mv(ctx, a))[0];
+    if (!pick) return;
+    const loss = mv(ctx, pick);
+    moveObject(ctx, pick, 'graveyard');
+    changeLife(ctx, other(p), -loss);
+  },
+
+  /**
+   * Quistis Trepe: the target instant or sorcery card may be cast this turn
+   * with mana of any type (from a graveyard, put in exile to cast it).
+   */
+  quistis(ctx, es) {
+    const card = targetObj(ctx, es);
+    if (!card || card.zone !== 'graveyard') return;
+    moveObject(ctx, card.id, 'exile');
+    card.anyMana = true;
+    if (card.owner === es.controller) card.playableUntilTurn = ctx.s.turn.number;
+    else card.castableBy = es.controller;
+  },
+
+  /** Ice Magic's Blizzaga: the target creature's owner shuffles it into their library. */
+  shuffleIntoLibrary(ctx, es) {
+    const o = targetObj(ctx, es);
+    if (!o || o.zone !== 'battlefield') return;
+    moveObject(ctx, o.id, 'library');
+    shuffleLibrary(ctx, o.owner);
+  },
+
+  /** Exile N cards from your graveyard (the oldest first): Ultimecia's cost. */
+  exileFromGraveyard(ctx, es, params) {
+    const gy = ctx.s.players[es.controller].graveyard;
+    for (const id of gy.slice(0, (params as { n: number }).n)) moveObject(ctx, id, 'exile');
+  },
+
+  /**
+   * Memories Returning: of the top five, three go to your hand and two to the
+   * bottom (the opponent's picks: the engine sends the most expensive two down).
+   */
+  memoriesReturning(ctx, es) {
+    const p = es.controller;
+    const top = ctx.s.players[p].library.slice(0, 5);
+    const ranked = [...top].sort((a, b) => mv(ctx, b) - mv(ctx, a));
+    const bottom = ranked.slice(0, Math.max(0, top.length - 3));
+    for (const id of top)
+      moveObject(
+        ctx,
+        id,
+        bottom.includes(id) ? 'library' : 'hand',
+        bottom.includes(id) ? { position: 'bottom' } : {},
+      );
+  },
+
   /** Put +1/+1 counters on the source equal to the power of what caused the trigger, as it last was. */
   countersBySubjectPower(ctx, es) {
     const self = sourceObj(ctx, es);
@@ -532,6 +629,14 @@ export const FIC_CONDITIONS: Record<
   startingPlayer: (ctx, p) => (ctx.s.turn.number % 2 === 1) === (ctx.s.turn.activePlayer === p),
   /** "If it's the first combat phase of the turn" (Genji Glove, Tifa). */
   firstCombat: (ctx) => !ctx.s.turn.laterCombat,
+  /** An opponent has seven or more cards in their graveyard (Into the Story). */
+  opponentGraveyardSeven: (ctx, p) => ctx.s.players[other(p)].graveyard.length >= 7,
+  /** A player lost 4 or more life this turn (Y'shtola). */
+  someoneLostFour: (ctx) => Object.values(ctx.s.turn.lifeLostTotal ?? {}).some((n) => n >= 4),
+  /** What caused the trigger is an opponent's (Authority of the Consuls). */
+  subjectIsOpponents: (_ctx, p, _self, subject) => !!subject && subject.controller !== p,
+  /** The source attacked this turn (The Lunar Whale). */
+  sourceAttackedThisTurn: (ctx, _p, self) => !!self && ctx.s.turn.attackers.includes(self.id),
   /** This Mount is saddled. */
   saddled: (ctx, _p, self) => self?.saddledTurn === ctx.s.turn.number,
   /** You control the creature with the greatest power, or tied (Summon: Fenrir III). */

@@ -5,6 +5,7 @@ import { FIC_SHARED, FIC_SHARED_BACK_FACES } from './fic/shared.ts';
 import { CLOUD } from './fic/cloud.ts';
 import { TERRA } from './fic/terra.ts';
 import { TIDUS } from './fic/tidus.ts';
+import { YSHTOLA, YSHTOLA_BACK_FACES } from './fic/yshtola.ts';
 
 /**
  * Final Fantasy Commander (FIC) card behaviour for the Arena Store Brawl decks
@@ -18,12 +19,14 @@ export const FINAL_FANTASY_BRAWL_BEHAVIORS: Record<string, Behavior> = {
   ...TERRA,
   ...CLOUD,
   ...TIDUS,
+  ...YSHTOLA,
 };
 
 /** Back faces of double-faced cards: not cards of their own, so not in the pool. */
 export const FINAL_FANTASY_BRAWL_BACK_FACES: Record<string, Behavior> = {
   ...FIC_SHARED_BACK_FACES,
   ...FIN_SHARED_BACK_FACES,
+  ...YSHTOLA_BACK_FACES,
 };
 
 const creatureToken = (
@@ -64,6 +67,18 @@ export const FINAL_FANTASY_BRAWL_TOKENS: CardDefinition[] = [
     supertypes: ['Legendary'],
   },
   creatureToken('wolf-2-2-token', 'Wolf', ['G'], ['Wolf'], 2, 2),
+  {
+    // Black Mage Wizard: "Whenever you cast a noncreature spell, this token deals 1 damage to each opponent."
+    ...creatureToken('wizard-ping-token', 'Wizard', ['B'], ['Wizard'], 0, 1),
+    abilities: [
+      {
+        kind: 'triggered',
+        trigger: { on: 'castSpell', filter: 'noncreature' },
+        targets: [],
+        effects: [{ kind: 'damage', amount: 1, to: 'eachOpponent' }],
+      },
+    ],
+  },
   // Islandwalk isn't built.
   creatureToken('squid-token', 'Squid', ['U'], ['Squid'], 1, 1),
   {

@@ -1119,6 +1119,14 @@ function detectFic(ctx: Ctx, ev: GameEvent): void {
     });
     return;
   }
+  // 12d: Matoya.
+  if (ev.type === 'scried') {
+    forEachBattlefieldTrigger(
+      ctx,
+      (o, a) => a.trigger.on === 'youScryOrSurveil' && o.controller === ev.player,
+    );
+    return;
+  }
   if (ev.type !== 'objectMoved') return;
   const moved = s.objects[ev.id];
   const movedDef = defOf(ctx, ev.defId);

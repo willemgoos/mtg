@@ -280,6 +280,8 @@ export function changeLife(ctx: Ctx, player: PlayerId, delta: number): void {
   const p = ctx.s.players[player];
   p.life += delta;
   if (delta < 0) (ctx.s.turn.lifeLost ??= { p1: 0, p2: 0 })[player]++;
+  // Final Fantasy Commander (12d): how much, too (Y'shtola).
+  if (delta < 0) (ctx.s.turn.lifeLostTotal ??= { p1: 0, p2: 0 })[player] -= delta;
   emit(ctx, { type: 'lifeChanged', player, delta, life: p.life });
 }
 

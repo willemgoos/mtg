@@ -215,6 +215,9 @@ export interface CardDefinition {
   colorIdentity?: Color[];
   /** The name printed on a Marvel reprint (Fellwar Stone is "S.H.I.E.L.D. Spy Satellite"). */
   flavorName?: string;
+  // Final Fantasy Commander (12d).
+  /** Delve: each card exiled from your graveyard while casting it pays for {1} (the engine exiles them). */
+  delve?: boolean;
 }
 
 export type AbilityDef =
@@ -489,7 +492,9 @@ export type TriggerDef =
   /** Whenever one or more other creatures you control enter from a graveyard (Celes). Use with `batch`. */
   | { on: 'creaturesEnterFromGraveyard' }
   /** Whenever this permanent becomes untapped (Key to the City). */
-  | { on: 'becomesUntapped' };
+  | { on: 'becomesUntapped' }
+  /** Whenever you scry or surveil (Matoya). */
+  | { on: 'youScryOrSurveil' };
 
 export type ConditionDef =
   | { kind: 'controlsPermanents'; filter: CardFilter; min: number }
@@ -1534,7 +1539,14 @@ export type StaticDef =
   | { kind: 'nonartifactSpellsHaveImprovise' }
   // Final Fantasy Commander (12c): counters.
   /** +1/+1 counters put on a creature you control: that many plus one (Hardened Scales). */
-  | { kind: 'oneMoreCounter' };
+  | { kind: 'oneMoreCounter' }
+  // Final Fantasy Commander (12d).
+  /** Creatures your opponents control enter tapped (Authority of the Consuls). */
+  | { kind: 'opponentCreaturesEnterTapped' }
+  /** During your turn, you may play cards from your graveyard (Hades, Sorcerer of Eld). */
+  | { kind: 'playFromGraveyardOnYourTurn' }
+  /** You may cast artifact spells from your graveyard for 3 more life; they enter with a finality counter (Noctis). */
+  | { kind: 'castArtifactsFromGraveyard' };
 
 export type CardDb = ReadonlyMap<CardDefId, CardDefinition>;
 
@@ -1690,6 +1702,9 @@ export interface GameObject {
   countersTimes?: number;
   /** As it's exiled after resolving, it comes back transformed with a finality counter (Esper Origins). */
   returnTransformed?: boolean;
+  // Final Fantasy Commander (12d).
+  /** In exile "on an adventure": its owner may cast the creature (or play the land) from there. */
+  onAdventure?: boolean;
 }
 
 /** A reference that goes stale when the object changes zones. */
@@ -1852,6 +1867,8 @@ export interface TurnState {
   laterCombat?: boolean;
   /** Additional land plays this turn (Explore, Sword of Forge and Frontier). */
   extraLands?: Record<PlayerId, number>;
+  /** Final Fantasy Commander (12d): life each player lost this turn, in total (Y'shtola). */
+  lifeLostTotal?: Record<PlayerId, number>;
 }
 
 export interface Attacker {
@@ -2307,7 +2324,7 @@ export type Action =
       // Sneak (Marvel Super Heroes)
       /** Cast for its sneak cost by returning this unblocked attacker to its owner's hand. */
       sneak?: ObjectId;
-      via?: 'festival' | 'osteomancer' | 'conduit' | 'free';
+      via?: 'festival' | 'osteomancer' | 'conduit' | 'free' | 'hades' | 'noctis';
       /** Mockingbird: the creature to enter as a copy of. */
       copyOf?: ObjectId;
       /** Rottenmouth Viper: permanents sacrificed to make it cheaper. */

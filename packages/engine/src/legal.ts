@@ -17,7 +17,7 @@ import {
 import { type Ctx, def, obj, other, withBackFace } from './context.ts';
 import { forageChoices } from './forage.ts';
 import { artifactHelpers, canPayFrom, creatureHelpers, hasImprovise, manaSources } from './mana.ts';
-import { castVariants, spellTags } from './spells.ts';
+import { type CastVia, castVariants, spellTags } from './spells.ts';
 import {
   abilityManaCost,
   castCost,
@@ -65,7 +65,10 @@ export function castableCards(ctx: Ctx, player: PlayerId): ObjectId[] {
   const ps = ctx.s.players[player];
   // Brawl: your commander from the command zone.
   const out = [...ps.hand, ...ps.command];
-  const landsFromGraveyard = hasStatic(ctx, player, 'playLandsFromGraveyard');
+  const landsFromGraveyard =
+    hasStatic(ctx, player, 'playLandsFromGraveyard') ||
+    // Final Fantasy Commander (12d): Hades, during your turn.
+    (ctx.s.turn.activePlayer === player && hasStatic(ctx, player, 'playFromGraveyardOnYourTurn'));
   for (const id of ps.graveyard) {
     const d = def(ctx, id);
     // Conduit of Worlds: "You may play lands from your graveyard."
@@ -105,6 +108,8 @@ export function castableCards(ctx: Ctx, player: PlayerId): ObjectId[] {
   for (const id of ps.exile) {
     const until = obj(ctx, id).playableUntilTurn;
     if (until !== undefined && until >= ctx.s.turn.number) out.push(id);
+    // Final Fantasy Commander (12d): a card on an adventure.
+    else if (obj(ctx, id).onAdventure) out.push(id);
   }
   // Extract Power: either player's exiled cards you may play for free.
   for (const p of ['p1', 'p2'] as const)
@@ -153,13 +158,9 @@ function mayhemReady(ctx: Ctx, card: ObjectId): boolean {
 }
 
 /** Other ways to cast a graveyard card: Festival of Embers, Osteomancer Adept. */
-export function graveyardVias(
-  ctx: Ctx,
-  player: PlayerId,
-  card: ObjectId,
-): ('festival' | 'osteomancer' | 'conduit')[] {
+export function graveyardVias(ctx: Ctx, player: PlayerId, card: ObjectId): CastVia[] {
   const d = def(ctx, card);
-  const out: ('festival' | 'osteomancer' | 'conduit')[] = [];
+  const out: CastVia[] = [];
   const instantOrSorcery = d.types.includes('Instant') || d.types.includes('Sorcery');
   if (
     instantOrSorcery &&
@@ -171,6 +172,15 @@ export function graveyardVias(
     out.push('osteomancer');
   // Conduit of Worlds: the card it chose, this turn.
   if (obj(ctx, card).playableUntilTurn === ctx.s.turn.number) out.push('conduit');
+  // Final Fantasy Commander (12d): Hades (your turn, any card) and Noctis (artifacts, 3 life).
+  if (
+    !d.types.includes('Land') &&
+    ctx.s.turn.activePlayer === player &&
+    hasStatic(ctx, player, 'playFromGraveyardOnYourTurn')
+  )
+    out.push('hades');
+  if (d.types.includes('Artifact') && hasStatic(ctx, player, 'castArtifactsFromGraveyard'))
+    out.push('noctis');
   return out;
 }
 
@@ -249,7 +259,10 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
       if (
         sorcery &&
         ps.landsPlayedThisTurn < landDrops(ctx, player) &&
-        (zone !== 'graveyard' || hasStatic(ctx, player, 'playLandsFromGraveyard'))
+        (zone !== 'graveyard' ||
+          hasStatic(ctx, player, 'playLandsFromGraveyard') ||
+          // Final Fantasy Commander (12d): Hades (only your turn has land plays anyway).
+          hasStatic(ctx, player, 'playFromGraveyardOnYourTurn'))
       )
         out.push({ type: 'playLand', player, card });
       return;
@@ -288,7 +301,7 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
     // The usual ways, plus graveyard casts through other cards.
     // Extract Power: exiled cards played for free.
     const free = zone === 'exile' && obj(ctx, card).playFreeBy === player;
-    const vias: ('festival' | 'osteomancer' | 'conduit' | 'free' | undefined)[] = free
+    const vias: (CastVia | undefined)[] = free
       ? ['free']
       : [
           ...(zone !== 'graveyard' ||
@@ -407,7 +420,15 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
   for (const card of silenced ? [] : castableCards(ctx, player)) {
     castsOf(card);
     // Modal double-faced cards: the back face can be cast from hand too.
-    if (def(ctx, card).back && obj(ctx, card).zone === 'hand') {
+    // Final Fantasy Commander (12d): a transform card's back face has no mana cost and can't be cast.
+    const backFace = def(ctx, card).back ? ctx.db.get(def(ctx, card).back!) : undefined;
+    const castableBack =
+      !!backFace &&
+      (backFace.manaCost.generic > 0 ||
+        !!backFace.manaCost.x ||
+        !!backFace.manaCost.hybrid?.length ||
+        Object.values(backFace.manaCost.colored).some((n) => (n ?? 0) > 0));
+    if (castableBack && obj(ctx, card).zone === 'hand') {
       const from = out.length;
       withBackFace(ctx, card, () => castsOf(card));
       for (const a of out.slice(from)) if (a.type === 'castSpell') a.back = true;

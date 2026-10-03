@@ -69,7 +69,8 @@ type RawFace = Pick<
 const DIGITAL_SETS = ['anb', 'ymid', 'ywoe'];
 
 /** Double-faced layouts: each face becomes its own record, linked to the other. */
-const DOUBLE_FACED = ['modal_dfc', 'transform'];
+// Final Fantasy Commander (12d): an Adventure card as its creature (or land) front and its Adventure back.
+const DOUBLE_FACED = ['modal_dfc', 'transform', 'adventure'];
 
 async function download(): Promise<void> {
   const meta = (await (await fetch('https://api.scryfall.com/bulk-data', { headers })).json()) as {

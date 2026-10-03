@@ -175,6 +175,14 @@ four decks. Three more FIC Brawl decks followed (9 December 2025, "Arena Store d
   counted on resolution (Syncopate, Swallowed by Leviathan), Altered Ego copying any creature, Ranger Class's
   top-of-library casting at level 3, "first time counters were put on it this turn". Win rate over 20 games a
   pairing: 56% (30–75% per opponent).
+- **12d Done:** Scions & Spellcraft (Y'shtola). New: **Adventures** (built minimally here; 11a builds them too):
+  `fetch-scryfall.ts` fetches the `adventure` layout as two faces (the Adventure is the back face, cast from hand
+  like a modal double-faced card's), the resolved Adventure goes to exile `onAdventure`, and its owner may cast the
+  creature (or play the land) from there; the web UI labels it "On an adventure". Also delve (the engine exiles the
+  oldest cards), casting from the graveyard on your turn (Hades) and artifacts for 3 life with a finality counter
+  (Noctis), Authority of the Consuls, "whenever you scry or surveil", life lost in total this turn. Fix: a
+  transform card's back face (no mana cost) could be cast from hand for free. The Brawl fuzz test now plays each
+  pairing once (it had grown past its time limit). Win rate over 20 games a pairing: 51% (30–60% per opponent).
 
 ### Lists: Arena against paper
 
@@ -241,3 +249,8 @@ only, for the merge with phase 11.
   is dealt damage. Ride the Shoopuf can't become a 7/7. Town Greeter's Town life gain, the Squid tokens'
   islandwalk and Sword of Body and Mind's protection aren't built. The Earth Crystal's distribute puts one counter on
   each of two targets. Summon: Leviathan's II–III draw only for Leviathan itself.
+- **12d:** Abilities can't be targeted, so Louisoix's Sacrifice and Sublime Epiphany only counter spells. Magecraft
+  ignores copies. Dig Through Time's two cards and Memories Returning's split are the engine's picks. Quistis Trepe's
+  card can be cast for the rest of the turn. Ultros counts mana value, not mana spent. Astrologian's Planisphere
+  doesn't count third draws. Ninja's Blades discards the most expensive card. Ice Magic's Blizzara puts the creature
+  on top. Xande counts artifact creature cards too. Ultimecia's extra turn comes with its own transform.

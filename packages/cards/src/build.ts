@@ -144,6 +144,7 @@ export const KEYWORDS_AS_ABILITIES = new Set([
   'Saddle',
   'Adapt',
   'Hideaway',
+  'Delve',
 ]);
 
 const BASIC_MANA: Record<string, ManaType> = {

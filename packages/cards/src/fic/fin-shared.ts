@@ -879,6 +879,248 @@ export const FIN_SHARED: Record<string, Behavior> = {
     costAmount: { x: true },
   }),
   "The Crystal's Chosen": spell([], token('hero-1-1-token', 4), counters(yours())),
+
+  // ============================================================ Scions & Spellcraft (12d)
+  'Treno, Dark City': town('U', 'B'),
+  // ------------------------------------------------------------ creatures
+  'Emet-Selch, Unsundered': {
+    abilities: [
+      when({ on: 'etb' }, [], draw(1), { kind: 'discard', count: 1 }),
+      when({ on: 'attacks' }, [], draw(1), { kind: 'discard', count: 1 }),
+      {
+        ...when(
+          { on: 'beginningOfUpkeep', whose: 'yours' },
+          [],
+          may({ kind: 'transform', what: self }),
+        ),
+        condition: { kind: 'graveyardCount', min: 14 },
+      },
+    ],
+  },
+  'Locke Cole': {
+    abilities: [when({ on: 'combatDamageToPlayer' }, [], draw(1), { kind: 'discard', count: 1 })],
+  },
+  'Matoya, Archon Elder': { abilities: [when({ on: 'youScryOrSurveil' }, [], draw(1))] },
+  'Noctis, Prince of Lucis': {
+    abilities: [staticAbility({ kind: 'castArtifactsFromGraveyard' })],
+  },
+  'Quistis Trepe': {
+    // Castable this turn rather than right away (a simplification).
+    abilities: [
+      onEnter(
+        [{ what: 'graveyardCard', filter: { types: ['Instant', 'Sorcery'] }, optional: true }],
+        custom('quistis'),
+      ),
+    ],
+  },
+  'Ultimecia, Time Sorceress': {
+    abilities: [
+      when({ on: 'etb' }, [], surveil(2)),
+      when({ on: 'attacks' }, [], surveil(2)),
+      {
+        ...when(
+          { on: 'beginningOfEndStep', whose: 'yours' },
+          [],
+          custom('exileFromGraveyard', { n: 8 }),
+          { kind: 'transform', what: self },
+          // Time Compression: the extra turn as it transforms.
+          { kind: 'extraTurn' },
+        ),
+        cost: mana('{4}{U}{U}{B}{B}'),
+        condition: { kind: 'graveyardCount', min: 8 },
+      },
+    ],
+  },
+  'Ultros, Obnoxious Octopus': {
+    // "Mana spent to cast it": its mana value here (a simplification).
+    abilities: [
+      when(
+        { on: 'castSpell', filter: 'noncreature', spell: { minManaValue: 4 } },
+        [theirCreature],
+        { kind: 'tap', what: t0 },
+        { kind: 'namedCounters', name: 'stun', amount: 1, to: t0 },
+      ),
+      when(
+        { on: 'castSpell', filter: 'noncreature', spell: { minManaValue: 8 } },
+        [],
+        counters(self, 8),
+      ),
+    ],
+  },
+  'Xande, Dark Mage': {
+    abilities: [
+      staticAbility({
+        kind: 'boost',
+        power: {
+          count: 'cardsInGraveyard',
+          types: ['Instant', 'Sorcery', 'Artifact', 'Enchantment', 'Planeswalker'],
+        },
+        toughness: {
+          count: 'cardsInGraveyard',
+          types: ['Instant', 'Sorcery', 'Artifact', 'Enchantment', 'Planeswalker'],
+        },
+      }),
+    ],
+  },
+  // ------------------------------------------------------------ artifacts
+  "Astrologian's Planisphere": {
+    // "Whenever you draw your third card each turn" isn't built (a simplification).
+    abilities: [
+      jobSelect,
+      when({ on: 'castSpell', filter: 'noncreature' }, [], counters('attached')),
+      equip('{2}'),
+    ],
+  },
+  Ether: {
+    abilities: [
+      activated(
+        null,
+        { tapSelf: true },
+        [],
+        [
+          exile(self),
+          { kind: 'addMana', mana: [['U']] },
+          {
+            kind: 'emblem',
+            until: 'nextSpellThisTurn',
+            ability: when({ on: 'castSpell', filter: 'instantOrSorcery' }, [], {
+              kind: 'copySpell',
+              what: 'subject',
+              retarget: true,
+            }),
+          },
+        ],
+      ),
+    ],
+  },
+  'Magitek Armor': {
+    abilities: [
+      onEnter([], token('hero-1-1-token')),
+      activated(null, { crew: 1 }, [], [{ kind: 'becomeCreature', what: self }], {
+        label: 'Crew 1',
+      }),
+    ],
+  },
+  "Ninja's Blades": {
+    abilities: [
+      jobSelect,
+      equipped(1, 1),
+      when({ on: 'equippedDealsCombatDamageToPlayer' }, [], custom('ninjaLoot')),
+      equip('{2}'),
+    ],
+  },
+  'Ring of the Lucii': {
+    abilities: [
+      tapFor('C', { amount: 2 }),
+      activated(
+        '{2}',
+        { tapSelf: true, life: 1 },
+        [permanent({ nonland: true })],
+        [{ kind: 'tap', what: t0 }],
+      ),
+    ],
+  },
+  "Sage's Nouliths": {
+    abilities: [
+      jobSelect,
+      equipped(1, 0),
+      when({ on: 'equippedAttacks' }, [{ what: 'creature', filter: { attacking: true } }], {
+        kind: 'untap',
+        what: t0,
+      }),
+      equip('{3}'),
+    ],
+  },
+  'The Lunar Whale': {
+    abilities: [
+      staticAbility({
+        kind: 'playFromTop',
+        filter: {},
+        condition: condition('sourceAttackedThisTurn'),
+      }),
+      activated(null, { crew: 1 }, [], [{ kind: 'becomeCreature', what: self }], {
+        label: 'Crew 1',
+      }),
+    ],
+  },
+  'White Auracite': {
+    abilities: [
+      onEnter([permanent({ nonland: true }, { controller: 'opponent' })], {
+        kind: 'exileUntilSourceLeaves',
+        what: t0,
+      }),
+      tapFor('W'),
+    ],
+  },
+  // ------------------------------------------------------------ spells
+  'Battle Menu': {
+    modes: [
+      mode('Attack — a 2/2 Knight', [], token('knight-2-2-token')),
+      mode('Ability — +0/+4', [creature], pump(t0, 0, 4)),
+      mode(
+        'Magic — destroy power 4+',
+        [{ what: 'creature', filter: { minPower: 4 } }],
+        destroy(t0),
+      ),
+      mode('Item — gain 4 life', [], gain(4)),
+    ],
+  },
+  'Circle of Power': spell(
+    [],
+    draw(2),
+    lose(2),
+    token('wizard-ping-token'),
+    pump(yours({ subtype: 'Wizard' }), 1, 0, ['lifelink']),
+  ),
+  'Cornered by Black Mages': spell([], { kind: 'opponentSacrifices' }, token('wizard-ping-token')),
+  'Dreams of Laguna': {
+    flashback: mana('{3}{U}'),
+    ...spell([], surveil(1), draw(1)),
+  },
+  Eject: spell([permanent({ nonland: true })], { kind: 'bounce', what: t0 }, draw(1)),
+  'Fate of the Sun-Cryst': {
+    costReductionIfTarget: { filter: { tapped: true }, amount: 2 },
+    ...spell([permanent({ nonland: true })], destroy(t0)),
+  },
+  'Ice Magic': {
+    modes: [
+      tier('Blizzard', '{0}', [creature], { kind: 'bounce', what: t0 }),
+      // The owner's choice of top or bottom: the top (a simplification).
+      tier('Blizzara', '{2}', [creature], { kind: 'putInLibrary', what: t0, position: 'top' }),
+      tier('Blizzaga', '{5}{U}', [creature], custom('shuffleIntoLibrary')),
+    ],
+  },
+  "Louisoix's Sacrifice": {
+    // Abilities can't be targeted here: a noncreature spell only.
+    sacrificeOrPay: mana('{2}'),
+    sacrificeToCastFilter: { supertypes: ['Legendary'] },
+    ...spell([{ what: 'spell', filter: { notTypes: ['Creature'] } }], {
+      kind: 'counter',
+      what: t0,
+    }),
+  },
+  'Memories Returning': {
+    flashback: mana('{7}{U}{U}'),
+    ...spell([], custom('memoriesReturning')),
+  },
+  Overkill: spell([creature], pump(t0, 0, -9999)),
+  "Relm's Sketching": spell([permanent({ types: ['Artifact', 'Creature', 'Land'] })], {
+    kind: 'tokenCopy',
+    of: t0,
+  }),
+  'Restoration Magic': {
+    modes: [
+      tier('Cure', '{0}', [permanent()], pump(t0, 0, 0, ['hexproof', 'indestructible'])),
+      tier('Cura', '{1}', [permanent()], pump(t0, 0, 0, ['hexproof', 'indestructible']), gain(3)),
+      tier(
+        'Curaga',
+        '{3}{W}',
+        [],
+        pump({ each: 'permanent', controller: 'you' }, 0, 0, ['hexproof', 'indestructible']),
+        gain(6),
+      ),
+    ],
+  },
 };
 
 /** Back faces of the FIN double-faced cards above. */
@@ -924,6 +1166,14 @@ export const FIN_SHARED_BACK_FACES: Record<string, Behavior> = {
     chapter([2], [], { kind: 'addMana', mana: [['G'], ['G']] }),
     chapter([3], [], pump(yours({ other: true }), 2, 2, ['trample'])),
   ),
+  'Hades, Sorcerer of Eld': {
+    abilities: [
+      staticAbility({ kind: 'playFromGraveyardOnYourTurn' }),
+      staticAbility({ kind: 'graveyardToExile' }),
+    ],
+  },
+  // Time Compression's extra turn comes with Ultimecia's transform (front face).
+  'Ultimecia, Omnipotent': {},
   'Summon: Alexander': summon(
     3,
     chapter([1, 2], [], pump(yours(), 0, 0, ['indestructible'])),

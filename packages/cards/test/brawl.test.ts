@@ -147,7 +147,8 @@ describe('Brawl format', () => {
     const pairs = PLAYABLE_BRAWL_DECKS.flatMap((a, i) =>
       PLAYABLE_BRAWL_DECKS.slice(i).map((b) => [a, b] as const),
     );
-    for (let seed = 1; seed <= Math.max(6, pairs.length * 3); seed++) {
+    // Final Fantasy Commander (12): once per pairing now that there are many Brawl decks.
+    for (let seed = 1; seed <= Math.max(6, pairs.length); seed++) {
       const [a, b] = pairs[seed % pairs.length]!;
       const initial = engine.newGame({ ...deckGameOptions(a, b), seed });
       const r = playRandomGame(engine, initial, seed * 7919);
