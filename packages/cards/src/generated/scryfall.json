@@ -34250,6 +34250,302 @@
   }
  },
  {
+  "name": "Cargo Ship",
+  "scryfallId": "932b865c-bfe7-4bb7-82e9-2403cf0e0522",
+  "oracleId": "93e336e3-2be7-4581-8ab3-9bea422d81c3",
+  "set": "fin",
+  "collectorNumber": "47",
+  "rarity": "uncommon",
+  "manaCost": "{1}{U}",
+  "typeLine": "Artifact — Vehicle",
+  "oracleText": "Flying, vigilance\n{T}: Add {C}. Spend this mana only to cast an artifact spell or activate an ability of an artifact source.\nCrew 1 (Tap any number of creatures you control with total power 1 or more: This Vehicle becomes an artifact creature until end of turn.)",
+  "power": "2",
+  "toughness": "3",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Flying",
+   "Vigilance",
+   "Crew"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/3/932b865c-bfe7-4bb7-82e9-2403cf0e0522.jpg?1783906640",
+   "normal": "https://cards.scryfall.io/normal/front/9/3/932b865c-bfe7-4bb7-82e9-2403cf0e0522.jpg?1783906640",
+   "large": "https://cards.scryfall.io/large/front/9/3/932b865c-bfe7-4bb7-82e9-2403cf0e0522.jpg?1783906640",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/3/932b865c-bfe7-4bb7-82e9-2403cf0e0522.jpg?1783906640"
+  }
+ },
+ {
+  "name": "Stolen Uniform",
+  "scryfallId": "0d80c511-2f4d-4f77-8143-7b49b2b19fae",
+  "oracleId": "17c0cf45-a031-40e8-a37f-eda98a8f785b",
+  "set": "fin",
+  "collectorNumber": "75",
+  "rarity": "uncommon",
+  "manaCost": "{U}",
+  "typeLine": "Instant",
+  "oracleText": "Choose target creature you control and target Equipment. Gain control of that Equipment until end of turn. Attach it to the chosen creature. When you lose control of that Equipment this turn, if it's attached to a creature you control, unattach it.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/d/0d80c511-2f4d-4f77-8143-7b49b2b19fae.jpg?1783906629",
+   "normal": "https://cards.scryfall.io/normal/front/0/d/0d80c511-2f4d-4f77-8143-7b49b2b19fae.jpg?1783906629",
+   "large": "https://cards.scryfall.io/large/front/0/d/0d80c511-2f4d-4f77-8143-7b49b2b19fae.jpg?1783906629",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/d/0d80c511-2f4d-4f77-8143-7b49b2b19fae.jpg?1783906629"
+  }
+ },
+ {
+  "name": "Vincent's Limit Break",
+  "scryfallId": "0502c426-5271-4989-8598-5bc159afe79c",
+  "oracleId": "814679b4-51bd-4b07-a7b8-d3375d36ff45",
+  "set": "fin",
+  "collectorNumber": "126",
+  "rarity": "common",
+  "manaCost": "{1}{B}",
+  "typeLine": "Instant",
+  "oracleText": "Tiered (Choose one additional cost.)\nUntil end of turn, target creature you control gains \"When this creature dies, return it to the battlefield tapped under its owner's control\" and has the chosen base power and toughness.\n• Galian Beast — {0} — 3/2.\n• Death Gigas — {1} — 5/2.\n• Hellmasker — {3} — 7/2.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Hellmasker",
+   "Death Gigas",
+   "Tiered",
+   "Galian Beast"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/5/0502c426-5271-4989-8598-5bc159afe79c.jpg?1783906608",
+   "normal": "https://cards.scryfall.io/normal/front/0/5/0502c426-5271-4989-8598-5bc159afe79c.jpg?1783906608",
+   "large": "https://cards.scryfall.io/large/front/0/5/0502c426-5271-4989-8598-5bc159afe79c.jpg?1783906608",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/5/0502c426-5271-4989-8598-5bc159afe79c.jpg?1783906608"
+  }
+ },
+ {
+  "name": "Coral Sword",
+  "scryfallId": "13e81e32-7246-46b9-872e-cde77cedd197",
+  "oracleId": "d4f0dd14-bc2a-4c6d-bfd5-bc5838ab18a5",
+  "set": "fin",
+  "collectorNumber": "134",
+  "rarity": "uncommon",
+  "manaCost": "{R}",
+  "typeLine": "Artifact — Equipment",
+  "oracleText": "Flash\nWhen this Equipment enters, attach it to target creature you control. That creature gains first strike until end of turn.\nEquipped creature gets +1/+0.\nEquip {1}",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Equip",
+   "Flash"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/3/13e81e32-7246-46b9-872e-cde77cedd197.jpg?1783906606",
+   "normal": "https://cards.scryfall.io/normal/front/1/3/13e81e32-7246-46b9-872e-cde77cedd197.jpg?1783906606",
+   "large": "https://cards.scryfall.io/large/front/1/3/13e81e32-7246-46b9-872e-cde77cedd197.jpg?1783906606",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/3/13e81e32-7246-46b9-872e-cde77cedd197.jpg?1783906606"
+  }
+ },
+ {
+  "name": "Haste Magic",
+  "scryfallId": "3af9d100-70ee-4c6c-a762-11a0c4f3ef6f",
+  "oracleId": "5249dd0d-3bda-452e-ac6e-774c0ebc2e41",
+  "set": "fin",
+  "collectorNumber": "140",
+  "rarity": "common",
+  "manaCost": "{1}{R}",
+  "typeLine": "Instant",
+  "oracleText": "Target creature gets +3/+1 and gains haste until end of turn. Exile the top card of your library. You may play it until your next end step.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/a/3af9d100-70ee-4c6c-a762-11a0c4f3ef6f.jpg?1783906605",
+   "normal": "https://cards.scryfall.io/normal/front/3/a/3af9d100-70ee-4c6c-a762-11a0c4f3ef6f.jpg?1783906605",
+   "large": "https://cards.scryfall.io/large/front/3/a/3af9d100-70ee-4c6c-a762-11a0c4f3ef6f.jpg?1783906605",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/a/3af9d100-70ee-4c6c-a762-11a0c4f3ef6f.jpg?1783906605"
+  }
+ },
+ {
+  "name": "Sandworm",
+  "scryfallId": "a6e021da-2397-4ad3-a07b-65c701df531a",
+  "oracleId": "e92185f8-579c-4645-9cb8-ef5deb9eebc8",
+  "set": "fin",
+  "collectorNumber": "155",
+  "rarity": "uncommon",
+  "manaCost": "{4}{R}",
+  "typeLine": "Creature — Worm",
+  "oracleText": "Haste\nWhen this creature enters, destroy target land. Its controller may search their library for a basic land card, put it onto the battlefield tapped, then shuffle.",
+  "power": "5",
+  "toughness": "4",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Haste"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/6/a6e021da-2397-4ad3-a07b-65c701df531a.jpg?1783906599",
+   "normal": "https://cards.scryfall.io/normal/front/a/6/a6e021da-2397-4ad3-a07b-65c701df531a.jpg?1783906599",
+   "large": "https://cards.scryfall.io/large/front/a/6/a6e021da-2397-4ad3-a07b-65c701df531a.jpg?1783906599",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/6/a6e021da-2397-4ad3-a07b-65c701df531a.jpg?1783906599"
+  }
+ },
+ {
+  "name": "Self-Destruct",
+  "scryfallId": "7661003c-bf83-46bb-bcc0-8fbf5819ffa8",
+  "oracleId": "98bf6311-bc9b-4bf8-ac83-c041973b86d0",
+  "set": "fin",
+  "collectorNumber": "157",
+  "rarity": "uncommon",
+  "manaCost": "{1}{R}",
+  "typeLine": "Instant",
+  "oracleText": "Target creature you control deals X damage to any other target and X damage to itself, where X is its power.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/6/7661003c-bf83-46bb-bcc0-8fbf5819ffa8.jpg?1783906597",
+   "normal": "https://cards.scryfall.io/normal/front/7/6/7661003c-bf83-46bb-bcc0-8fbf5819ffa8.jpg?1783906597",
+   "large": "https://cards.scryfall.io/large/front/7/6/7661003c-bf83-46bb-bcc0-8fbf5819ffa8.jpg?1783906597",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/6/7661003c-bf83-46bb-bcc0-8fbf5819ffa8.jpg?1783906597"
+  }
+ },
+ {
+  "name": "Unexpected Request",
+  "scryfallId": "0265fd20-a85d-49ce-b338-4c40843a5b18",
+  "oracleId": "f4497af5-8b81-46b3-bb52-eaed1999809b",
+  "set": "fin",
+  "collectorNumber": "167",
+  "rarity": "uncommon",
+  "manaCost": "{2}{R}",
+  "typeLine": "Sorcery",
+  "oracleText": "Gain control of target creature until end of turn. Untap that creature. It gains haste until end of turn. You may attach an Equipment you control to that creature. If you do, unattach it at the beginning of the next end step.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/2/0265fd20-a85d-49ce-b338-4c40843a5b18.jpg?1783906594",
+   "normal": "https://cards.scryfall.io/normal/front/0/2/0265fd20-a85d-49ce-b338-4c40843a5b18.jpg?1783906594",
+   "large": "https://cards.scryfall.io/large/front/0/2/0265fd20-a85d-49ce-b338-4c40843a5b18.jpg?1783906594",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/2/0265fd20-a85d-49ce-b338-4c40843a5b18.jpg?1783906594"
+  }
+ },
+ {
+  "name": "Galuf's Final Act",
+  "scryfallId": "0ce05634-6c01-4941-a135-904cb4e33ac4",
+  "oracleId": "9268d369-173e-4325-98f6-348beeb8ba62",
+  "set": "fin",
+  "collectorNumber": "186",
+  "rarity": "uncommon",
+  "manaCost": "{1}{G}",
+  "typeLine": "Instant",
+  "oracleText": "Until end of turn, target creature gets +1/+0 and gains \"When this creature dies, put a number of +1/+1 counters equal to its power on up to one target creature.\"",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/c/0ce05634-6c01-4941-a135-904cb4e33ac4.jpg?1783906586",
+   "normal": "https://cards.scryfall.io/normal/front/0/c/0ce05634-6c01-4941-a135-904cb4e33ac4.jpg?1783906586",
+   "large": "https://cards.scryfall.io/large/front/0/c/0ce05634-6c01-4941-a135-904cb4e33ac4.jpg?1783906586",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/c/0ce05634-6c01-4941-a135-904cb4e33ac4.jpg?1783906586"
+  }
+ },
+ {
+  "name": "Adventurer's Airship",
+  "scryfallId": "0a1d6dcd-bd41-4f57-a35b-6613811fe4d4",
+  "oracleId": "e3016295-00f7-4daf-91b0-57653733b103",
+  "set": "fin",
+  "collectorNumber": "252",
+  "rarity": "common",
+  "manaCost": "{3}",
+  "typeLine": "Artifact — Vehicle",
+  "oracleText": "Flying\nWhenever this Vehicle attacks, draw a card, then discard a card.\nCrew 2 (Tap any number of creatures you control with total power 2 or more: This Vehicle becomes an artifact creature until end of turn.)",
+  "power": "3",
+  "toughness": "2",
+  "colors": [],
+  "keywords": [
+   "Flying",
+   "Crew"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/a/0a1d6dcd-bd41-4f57-a35b-6613811fe4d4.jpg?1783906558",
+   "normal": "https://cards.scryfall.io/normal/front/0/a/0a1d6dcd-bd41-4f57-a35b-6613811fe4d4.jpg?1783906558",
+   "large": "https://cards.scryfall.io/large/front/0/a/0a1d6dcd-bd41-4f57-a35b-6613811fe4d4.jpg?1783906558",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/a/0a1d6dcd-bd41-4f57-a35b-6613811fe4d4.jpg?1783906558"
+  }
+ },
+ {
+  "name": "Elixir",
+  "scryfallId": "a4b05d37-df62-475c-8371-735ed2fa1b05",
+  "oracleId": "3e978db3-77ef-4b93-8f8f-e414e27254bd",
+  "set": "fin",
+  "collectorNumber": "256",
+  "rarity": "uncommon",
+  "manaCost": "{1}",
+  "typeLine": "Artifact",
+  "oracleText": "This artifact enters tapped.\n{5}, {T}, Exile this artifact: Shuffle all nonland cards from your graveyard into your library. You gain life equal to the number of cards shuffled into your library this way.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/4/a4b05d37-df62-475c-8371-735ed2fa1b05.jpg?1783906557",
+   "normal": "https://cards.scryfall.io/normal/front/a/4/a4b05d37-df62-475c-8371-735ed2fa1b05.jpg?1783906557",
+   "large": "https://cards.scryfall.io/large/front/a/4/a4b05d37-df62-475c-8371-735ed2fa1b05.jpg?1783906557",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/4/a4b05d37-df62-475c-8371-735ed2fa1b05.jpg?1783906557"
+  }
+ },
+ {
+  "name": "Iron Giant",
+  "scryfallId": "e48cf6d5-4d32-4b66-80be-3495ecd3e906",
+  "oracleId": "325b4288-fe1b-4e29-ae13-72924b4db3dd",
+  "set": "fin",
+  "collectorNumber": "260",
+  "rarity": "common",
+  "manaCost": "{7}",
+  "typeLine": "Artifact Creature — Demon",
+  "oracleText": "Reach, vigilance, trample",
+  "power": "6",
+  "toughness": "6",
+  "colors": [],
+  "keywords": [
+   "Reach",
+   "Vigilance",
+   "Trample"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/4/e48cf6d5-4d32-4b66-80be-3495ecd3e906.jpg?1783906556",
+   "normal": "https://cards.scryfall.io/normal/front/e/4/e48cf6d5-4d32-4b66-80be-3495ecd3e906.jpg?1783906556",
+   "large": "https://cards.scryfall.io/large/front/e/4/e48cf6d5-4d32-4b66-80be-3495ecd3e906.jpg?1783906556",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/4/e48cf6d5-4d32-4b66-80be-3495ecd3e906.jpg?1783906556"
+  }
+ },
+ {
+  "name": "Relentless X-ATM092",
+  "scryfallId": "e09ee4c9-85ef-4d1e-864b-d659b8e8f51d",
+  "oracleId": "50994df7-300d-4e30-897a-0974dc0820ee",
+  "set": "fin",
+  "collectorNumber": "268",
+  "rarity": "uncommon",
+  "manaCost": "{6}",
+  "typeLine": "Artifact Creature — Robot Spider",
+  "oracleText": "This creature can't be blocked except by three or more creatures.\n{8}: Return this card from your graveyard to the battlefield tapped with a finality counter on it. (If a creature with a finality counter on it would die, exile it instead.)",
+  "power": "6",
+  "toughness": "5",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/0/e09ee4c9-85ef-4d1e-864b-d659b8e8f51d.jpg?1783906553",
+   "normal": "https://cards.scryfall.io/normal/front/e/0/e09ee4c9-85ef-4d1e-864b-d659b8e8f51d.jpg?1783906553",
+   "large": "https://cards.scryfall.io/large/front/e/0/e09ee4c9-85ef-4d1e-864b-d659b8e8f51d.jpg?1783906553",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/0/e09ee4c9-85ef-4d1e-864b-d659b8e8f51d.jpg?1783906553"
+  }
+ },
+ {
   "name": "Ash Barrens",
   "scryfallId": "77df073b-49dc-4743-82a3-d595bc938761",
   "oracleId": "58257464-278e-45fa-8e0b-bcd9a7500bc1",

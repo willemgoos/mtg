@@ -496,6 +496,8 @@ export function abilityManaCost(
   ctx: Ctx,
   source: ObjectId,
   a: ReturnType<typeof activatedAbility>,
+  /** Final Fantasy (11d): the chosen targets ('best': the cheapest any target could make it). */
+  targets?: readonly TargetChoice[] | 'best',
 ): ManaCost | undefined {
   const o = obj(ctx, source);
   // Final Fantasy (11c): activated cost reduction (Balamb Garden), and Firion's cheaper equip.
@@ -504,7 +506,7 @@ export function abilityManaCost(
       ? countOf(ctx, o.controller, a.costReduction, false, source)
       : 0) +
     // Firion's copies' own discount, and "equip abilities you activate cost less" (Fighter Class).
-    (a.cost.mana ? equipDiscount(ctx, o, a) : 0);
+    (a.cost.mana ? equipDiscount(ctx, o, a, targets) : 0);
   if (less && a.cost.mana && !a.powerUp)
     return reduceCost(a.cost.mana, { generic: Math.min(less, a.cost.mana.generic), colored: {} });
   if (!a.powerUp || !a.cost.mana) return a.cost.mana;
@@ -530,6 +532,7 @@ function equipDiscount(
   ctx: Ctx,
   o: { id: ObjectId; controller: PlayerId; equipDiscount?: number },
   a: ReturnType<typeof activatedAbility>,
+  targets?: readonly TargetChoice[] | 'best',
 ): number {
   const isEquip =
     def(ctx, o.id).subtypes.includes('Equipment') &&
@@ -543,7 +546,11 @@ function equipDiscount(
       if (
         s.kind === 'static' &&
         s.effect.kind === 'equipCostsLess' &&
-        checkCondition(ctx, s.effect.condition, o.controller, obj(ctx, id))
+        checkCondition(ctx, s.effect.condition, o.controller, obj(ctx, id)) &&
+        // Final Fantasy (11d): only when equipping this creature (Cloud, Planet's Champion).
+        (!s.effect.targetSelf ||
+          targets === 'best' ||
+          (!!targets?.[0] && 'object' in targets[0] && targets[0].object.id === id))
       )
         n += s.effect.amount;
   }
@@ -564,7 +571,7 @@ export function activateAbility(
 ): boolean {
   const a = activatedAbility(ctx, source, index);
   const src = obj(ctx, source);
-  const mana = abilityManaCost(ctx, source, a);
+  const mana = abilityManaCost(ctx, source, a, targets);
   const sourceRef = { id: source, zcc: src.zcc };
   const exclude = a.cost.tapSelf ? source : undefined;
   const payment = planPayment(

@@ -9,6 +9,7 @@ import { type Ctx, def, defOf, obj, other } from './context.ts';
 import { manaValue } from './cost.ts';
 import { addLore } from './sagas.ts';
 import { FIC_CONDITIONS } from './fic-effects.ts';
+import { FIN_CONDITIONS } from './fin-effects.ts';
 import type {
   AbilityDef,
   EffectDef,
@@ -232,7 +233,8 @@ export function checkCondition(
       return ctx.s.turn.attackers.filter((id) => id === self.id).length === 1;
     case 'custom': {
       // Final Fantasy Commander (12): one-off conditions.
-      const fn = FIC_CONDITIONS[c.handler];
+      // Final Fantasy (11d): and FIN one-offs.
+      const fn = FIC_CONDITIONS[c.handler] ?? FIN_CONDITIONS[c.handler];
       if (fn) return fn(ctx, controller, self, subject);
       throw new Error(`Custom condition "${c.handler}" not registered`);
     }

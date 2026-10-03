@@ -382,6 +382,18 @@ Both groups:
 - A Realm Reborn's granted ability is used only when paying costs (it isn't listed as an ability of each permanent).
 - Fixed in passing: `all` / `any` / `not` conditions now pass the trigger's subject to the conditions inside them.
 
+11c (leftovers) (the last 13 booster commons and uncommons; `fin/others.ts`):
+
+- Cargo Ship's mana pays for artifact spells only, not for abilities of artifacts.
+- Stolen Uniform and Unexpected Request: the Equipment comes off as control reverts in the cleanup step (Unexpected
+  Request's printed "beginning of the next end step" is a little earlier). Unexpected Request's Equipment is a "you may"
+  then a choose-a-permanent prompt.
+- Galuf's Final Act: "up to one target creature" is a creature you control, chosen with the choose-a-permanent prompt as it
+  dies.
+- Sandworm: the land's controller always searches, and the engine takes the first basic land in their library.
+- Elixir is exiled as its ability resolves (not as a cost).
+- Relentless X-ATM092: the bot never blocks it (it would need three blockers).
+
 ### Phase 12
 
 Engine additions are in blocks marked `Final Fantasy Commander (12)` (`types.ts`, `triggers.ts`, `context.ts`,

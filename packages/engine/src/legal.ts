@@ -501,7 +501,8 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
       const usable = a.cost.convoke
         ? [...own, ...creatureHelpers(ctx, player, own, a.cost.tapSelf ? source : undefined)]
         : own;
-      const mana = abilityManaCost(ctx, source, a);
+      // Final Fantasy (11d): an equip discount may depend on the target (Cloud, Planet's Champion).
+      const mana = abilityManaCost(ctx, source, a, 'best');
       if (!canPayFrom(mana, usable)) return;
       if (a.cost.tapTokens && tokensToTap(ctx, player, source).length < a.cost.tapTokens) return;
       if (a.cost.crew && !crewFor(ctx, player, source, a.cost.crew)) return;
@@ -530,15 +531,17 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
       const firstOfAbility = out.length;
       for (const sacrifice of sacrifices) {
         for (const targets of combosFor(a.targets, source, sacrifice)) {
+          const m = abilityManaCost(ctx, source, a, targets);
+          if (m !== mana && !canPayFrom(m, usable)) continue;
           const ward = wardCost(ctx, player, targets);
-          if (ward.generic && !canPayFrom(addCosts(mana ?? NO_COST, ward), usable)) continue;
+          if (ward.generic && !canPayFrom(addCosts(m ?? NO_COST, ward), usable)) continue;
           if (!wardPayable(ctx, player, targets)) continue;
           for (const forage of forages)
             for (const discard of discards) {
               const spent = [sacrifice, forage === 'graveyard' ? undefined : forage];
-              if (mana && spent.some((id) => id && usable.some((p) => p.id === id))) {
+              if (m && spent.some((id) => id && usable.some((p) => p.id === id))) {
                 const rest = usable.filter((p) => !spent.includes(p.id));
-                if (!canPayFrom(addCosts(mana, ward), rest)) continue;
+                if (!canPayFrom(addCosts(m, ward), rest)) continue;
               }
               out.push({
                 type: 'activateAbility',

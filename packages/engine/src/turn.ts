@@ -442,6 +442,20 @@ function endEffects(ctx: Ctx, ending: (e: ContinuousEffect) => boolean): void {
     const o = s.objects[e.affected.id];
     if (!o || o.zone !== 'battlefield' || o.zcc !== e.affected.zcc) continue;
     if (e.previousController) o.controller = e.previousController;
+    // Final Fantasy (11c): Stolen Uniform and Unexpected Request: the Equipment comes off.
+    if (e.unattachOnRevert) {
+      const host = o.attachedTo !== undefined ? s.objects[o.attachedTo] : undefined;
+      if (host && host.controller !== o.controller) delete o.attachedTo;
+      for (const id of s.battlefield) {
+        const x = s.objects[id]!;
+        if (
+          x.attachedTo === o.id &&
+          x.controller !== o.controller &&
+          def(ctx, id).subtypes.includes('Equipment')
+        )
+          delete x.attachedTo;
+      }
+    }
     if (e.loseAbilities)
       o.blank = s.effects.some(
         (x) => x.loseAbilities && x.affected.id === o.id && x.affected.zcc === o.zcc,

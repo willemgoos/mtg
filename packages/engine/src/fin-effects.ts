@@ -15,9 +15,9 @@ import {
   other,
 } from './context.ts';
 import { manaValue } from './cost.ts';
-import { changeLife, damageSourceFor, dealDamage, millCount } from './effects.ts';
+import { changeLife, damageSourceFor, dealDamage, gainLife, millCount } from './effects.ts';
 import { nextInt, shuffleInPlace } from './rng.ts';
-import type { PlayerId } from './types.ts';
+import type { GameObject, PlayerId } from './types.ts';
 
 /**
  * Final Fantasy (FIN) one-offs, as custom effects. They run without asking:
@@ -512,4 +512,70 @@ export const FIN_EFFECTS: Record<string, CustomEffect> = {
     );
     if (equipment) moveObject(ctx, equipment, 'graveyard');
   },
+
+  // Final Fantasy (11c): leftovers
+
+  /**
+   * Sandworm: the destroyed land's controller "may search their library for a
+   * basic land card, put it onto the battlefield tapped, then shuffle" (the engine always does, taking the first).
+   */
+  landControllerSearchesBasic(ctx, es) {
+    const t = es.targets[0];
+    const land = t && 'object' in t ? ctx.s.objects[t.object.id] : undefined;
+    if (!land) return;
+    const p = land.zone === 'battlefield' ? land.controller : land.owner;
+    const lib = ctx.s.players[p].library;
+    const basic = lib.find((id) => {
+      const d = def(ctx, id);
+      return d.types.includes('Land') && d.supertypes.includes('Basic');
+    });
+    if (basic) {
+      moveObject(ctx, basic, 'battlefield');
+      obj(ctx, basic).tapped = true;
+    }
+    shuffleInPlace(ctx.s.rng, ctx.s.players[p].library);
+  },
+
+  /**
+   * Elixir: exile it, shuffle every nonland card from your graveyard into your
+   * library, and gain that much life (the exile happens as the ability resolves).
+   */
+  elixir(ctx, es) {
+    const self = es.source && ctx.s.objects[es.source.id];
+    if (self && self.zone === 'battlefield' && self.zcc === es.source!.zcc)
+      moveObject(ctx, self.id, 'exile');
+    const cards = ctx.s.players[es.controller].graveyard.filter(
+      (id) => !def(ctx, id).types.includes('Land'),
+    );
+    for (const id of cards) moveObject(ctx, id, 'library');
+    shuffleInPlace(ctx.s.rng, ctx.s.players[es.controller].library);
+    if (cards.length) gainLife(ctx, es.controller, cards.length);
+  },
+
+  // Final Fantasy (11d): the Starter Kit
+
+  /**
+   * Lightning, Security Sergeant: exile the top card of your library; you may
+   * play it for as long as it stays exiled (not only while you control Lightning).
+   */
+  exileTopPlayableWhileExiled(ctx, es) {
+    const top = ctx.s.players[es.controller].library[0];
+    if (!top) return;
+    moveObject(ctx, top, 'exile');
+    obj(ctx, top).playableUntilTurn = Number.MAX_SAFE_INTEGER;
+  },
+};
+
+/** Final Fantasy one-off conditions (custom conditions). */
+export const FIN_CONDITIONS: Record<
+  string,
+  (ctx: Ctx, controller: PlayerId, self: GameObject | undefined, subject?: GameObject) => boolean
+> = {
+  // Final Fantasy (11d): the Starter Kit
+  /** "As long as it's equipped" (Cloud, Planet's Champion). */
+  sourceEquipped: (ctx, _p, self) =>
+    !!self &&
+    ctx.s.battlefield.some(
+      (id) => obj(ctx, id).attachedTo === self.id && def(ctx, id).subtypes.includes('Equipment'),
+    ),
 };

@@ -905,6 +905,11 @@ export type EffectDef =
       cantBeBlockedExcept?: Keyword;
       /** "Whenever it deals combat damage to a player this turn, put a +1/+1 counter on it" (Love on the Battlefield). */
       counterOnCombatDamage?: boolean;
+      // Final Fantasy (11c): leftovers
+      /** It has this base power and toughness until end of turn (Vincent's Limit Break). */
+      basePT?: [number, number];
+      /** It must be blocked this turn if able (Magitek Scythe). */
+      mustBeBlocked?: boolean;
     }
   /** Resolution-time "if": Morbid-style choices between two effects. */
   | { kind: 'if'; condition: ConditionDef; then: EffectDef[]; else?: EffectDef[] }
@@ -1147,6 +1152,9 @@ export type EffectDef =
       untilYourNextTurn?: boolean;
       // Marvel Super Heroes: 'for as long as this Saga remains on the battlefield'.
       whileSource?: boolean;
+      // Final Fantasy (11c): leftovers
+      /** As control reverts, Equipment and the creature it's on part if their controllers differ (Stolen Uniform). */
+      unattachOnRevert?: boolean;
     }
   /**
    * Until your next turn, permanents lose all abilities (and have base power
@@ -1745,7 +1753,14 @@ export type StaticDef =
   | { kind: 'preventCombatDamageToSelf' }
   // Final Fantasy Commander (12b): Equipment.
   /** Equip abilities you activate cost {amount} less (Fighter Class, Arms Scavenger). */
-  | { kind: 'equipCostsLess'; amount: number; condition?: ConditionDef }
+  | {
+      kind: 'equipCostsLess';
+      amount: number;
+      condition?: ConditionDef;
+      // Final Fantasy (11d): the Starter Kit
+      /** Only equip abilities that target this creature (Cloud, Planet's Champion). */
+      targetSelf?: boolean;
+    }
   /** Nonartifact spells you cast have improvise (Inspiring Statuary). */
   | { kind: 'nonartifactSpellsHaveImprovise' }
   // Final Fantasy Commander (12c): counters.
@@ -1761,7 +1776,10 @@ export type StaticDef =
   /** It can attack as though it didn't have defender while it has a counter (Demon Wall). */
   | { kind: 'attacksWithCounterDespiteDefender' }
   /** Spells you cast from your graveyard cost {amount} less (Emet-Selch of the Third Seat). */
-  | { kind: 'graveyardSpellsCostLess'; amount: number };
+  | { kind: 'graveyardSpellsCostLess'; amount: number }
+  // Final Fantasy (11c): leftovers
+  /** It can't be blocked except by `count` or more creatures (Relentless X-ATM092: three). */
+  | { kind: 'minBlockers'; count: number };
 
 export type CardDb = ReadonlyMap<CardDefId, CardDefinition>;
 
@@ -2165,6 +2183,11 @@ export interface ContinuousEffect {
   redirectFor?: PlayerId;
   /** What happens if the affected creature dies while this lasts. */
   onDies?: { effects: EffectDef[]; controller: PlayerId; sourceDefId: CardDefId };
+  // Final Fantasy (11c): leftovers
+  /** It must be blocked this turn if able (Magitek Scythe). */
+  mustBeBlocked?: boolean;
+  /** As control reverts, an Equipment on a creature its controller doesn't control falls off (Stolen Uniform). */
+  unattachOnRevert?: boolean;
 }
 
 /** What an effect needs to know about the spell or ability producing it. */

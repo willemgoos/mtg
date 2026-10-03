@@ -1349,6 +1349,9 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
           ...(e.returnWhenDies ? { returnWhenDies: e.returnWhenDies } : {}),
           ...(e.cantBeBlockedExcept ? { cantBeBlockedExcept: e.cantBeBlockedExcept } : {}),
           ...(e.counterOnCombatDamage ? { counterOnCombatDamage: true } : {}),
+          // Final Fantasy (11c): leftovers.
+          ...(e.basePT ? { basePT: e.basePT } : {}),
+          ...(e.mustBeBlocked ? { mustBeBlocked: true } : {}),
           ...(e.untilYourNextTurn
             ? { expires: 'untilYourNextTurn' as const, player: es.controller }
             : { expires: 'endOfTurn' as const }),
@@ -2455,6 +2458,7 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
           toughness: 0,
           keywords: [],
           previousController: o.controller,
+          ...(e.unattachOnRevert ? { unattachOnRevert: true } : {}),
           ...(e.whileSource && es.source
             ? { expires: 'whileSource' as const, whileSourceId: es.source.id }
             : e.untilYourNextTurn

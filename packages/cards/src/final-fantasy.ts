@@ -15,6 +15,7 @@ import { INTO_THE_VOID, INTO_THE_VOID_BACKS, ROAD_TRIP } from './fin/graveyard-t
 import { FINAL_FANTASY_TOKENS as BASE_TOKENS } from './fin/helpers.ts';
 import { FROM_BRAWL, FROM_BRAWL_BACKS } from './fin/from-brawl.ts';
 import { FIN_ADVENTURES, FIN_TOWNS } from './fin/lands.ts';
+import { OTHERS } from './fin/others.ts';
 import {
   FORBIDDEN_MAGICKS,
   FORBIDDEN_MAGICKS_BACKS,
@@ -65,6 +66,8 @@ export const FINAL_FANTASY_BEHAVIORS: Record<string, Behavior> = {
   ...RARES_2,
   // Phase 12's FIN cards (the Brawl decks), not otherwise in fin/.
   ...FROM_BRAWL,
+  // 11c (leftovers): the last booster cards.
+  ...OTHERS,
 };
 
 /** Back faces of double-faced cards (and Adventures): not cards of their own, so not in the pool. */
