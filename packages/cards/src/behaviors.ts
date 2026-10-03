@@ -2,6 +2,7 @@ import type { AbilityDef, CardDefinition, EffectDef, ManaType, TargetSpec } from
 import { type Behavior, parseManaCost } from './build.ts';
 import { BLOOMBURROW_BEHAVIORS } from './bloomburrow.ts';
 import { MARVEL_BACK_FACES, MARVEL_BEHAVIORS, MARVEL_TOKENS } from './marvel.ts';
+import { FINAL_FANTASY_BACK_FACES, FINAL_FANTASY_BEHAVIORS } from './final-fantasy.ts';
 import { MARVEL_BRAWL_BEHAVIORS, MARVEL_BRAWL_TOKENS } from './marvel-brawl.ts';
 import { FOUNDATIONS_BATCH_BEHAVIORS } from './foundations-batch.ts';
 
@@ -133,6 +134,8 @@ export const BEHAVIORS: Record<string, Behavior> = {
   ...MARVEL_BEHAVIORS,
   ...MARVEL_BACK_FACES,
   ...MARVEL_BRAWL_BEHAVIORS,
+  ...FINAL_FANTASY_BEHAVIORS,
+  ...FINAL_FANTASY_BACK_FACES,
   // ---------------------------------------------------------------- red
   Shock: burn(2),
   'Lightning Strike': burn(3),

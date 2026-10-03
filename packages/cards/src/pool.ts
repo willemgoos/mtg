@@ -1,6 +1,7 @@
 import { BLOOMBURROW_BEHAVIORS } from './bloomburrow.ts';
 import { MARVEL_BEHAVIORS } from './marvel.ts';
 import { MARVEL_BRAWL_BEHAVIORS } from './marvel-brawl.ts';
+import { FINAL_FANTASY_BEHAVIORS } from './final-fantasy.ts';
 
 /**
  * Allowed sets, most preferred first: Foundations, then older core sets, then
@@ -29,6 +30,9 @@ export const SET_PREFERENCE = [
   'msh',
   // Marvel Super Heroes Commander: the Brawl precons (a few of their cards are only in msh or promos).
   'msc',
+  'fin',
+  // Final Fantasy Commander: the Brawl precons (phase 12).
+  'fic',
   'pmei',
   'pw26',
   'sld',
@@ -489,6 +493,9 @@ export const LAND_POOL = [
 /** Marvel Super Heroes cards (fronts only: a double-faced card's back comes with it). */
 export const MARVEL_POOL = Object.keys(MARVEL_BEHAVIORS);
 
+/** Final Fantasy cards (fronts only). */
+export const FINAL_FANTASY_POOL = Object.keys(FINAL_FANTASY_BEHAVIORS);
+
 export const POOL: { name: string }[] = [
   ...RED_POOL,
   ...GREEN_POOL,
@@ -500,6 +507,7 @@ export const POOL: { name: string }[] = [
   ...BLOOMBURROW_POOL,
   ...MARVEL_POOL,
   ...MARVEL_BRAWL_POOL,
+  ...FINAL_FANTASY_POOL,
 ].map((name) => ({
   name,
 }));
