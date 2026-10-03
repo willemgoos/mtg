@@ -1,22 +1,37 @@
 import type { CardDefinition } from '@mtg/engine';
 import type { Behavior } from './build.ts';
 import {
+  HIGHWIND_WORKSHOP,
+  TIME_COMPRESSION,
+  TIME_COMPRESSION_BACKS,
+} from './fin/artifacts-graveyard.ts';
+import {
   EIDOLONS_CALL,
   EIDOLONS_CALL_BACKS,
   HEROES_ARSENAL,
   HEROES_ARSENAL_BACKS,
 } from './fin/equipment-summons.ts';
 import { INTO_THE_VOID, INTO_THE_VOID_BACKS, ROAD_TRIP } from './fin/graveyard-towns.ts';
-import { FINAL_FANTASY_TOKENS as FIN_TOKENS_A } from './fin/helpers.ts';
+import { FINAL_FANTASY_TOKENS as BASE_TOKENS } from './fin/helpers.ts';
 import { FIN_ADVENTURES, FIN_TOWNS } from './fin/lands.ts';
 import {
   FORBIDDEN_MAGICKS,
   FORBIDDEN_MAGICKS_BACKS,
   TURKS_CONTRACT,
 } from './fin/sacrifice-spellcraft.ts';
+import { SHARED_A, SHARED_A_BACKS, SHARED_A_TOKENS } from './fin/shared-a.ts';
 import { FIN_TOKENS_B, SHARED_B } from './fin/shared-b.ts';
+import {
+  BLACK_MAGES_WALTZ,
+  BLACK_MAGES_WALTZ_BACKS,
+  CHOCOBO_STAMPEDE,
+} from './fin/spells-landfall.ts';
 
-export const FINAL_FANTASY_TOKENS: CardDefinition[] = [...FIN_TOKENS_A, ...FIN_TOKENS_B];
+export const FINAL_FANTASY_TOKENS: CardDefinition[] = [
+  ...BASE_TOKENS,
+  ...SHARED_A_TOKENS,
+  ...FIN_TOKENS_B,
+];
 
 /**
  * Final Fantasy (FIN) card behaviour, one file per pair of decks in fin/
@@ -28,6 +43,12 @@ export const FINAL_FANTASY_BEHAVIORS: Record<string, Behavior> = {
   ...HEROES_ARSENAL,
   ...EIDOLONS_CALL,
   ...FIN_TOWNS,
+  // 11b (group A)
+  ...SHARED_A,
+  ...HIGHWIND_WORKSHOP,
+  ...TIME_COMPRESSION,
+  ...BLACK_MAGES_WALTZ,
+  ...CHOCOBO_STAMPEDE,
   // 11b (group B)
   ...SHARED_B,
   ...TURKS_CONTRACT,
@@ -41,6 +62,10 @@ export const FINAL_FANTASY_BACK_FACES: Record<string, Behavior> = {
   ...HEROES_ARSENAL_BACKS,
   ...EIDOLONS_CALL_BACKS,
   ...FIN_ADVENTURES,
+  // 11b (group A)
+  ...SHARED_A_BACKS,
+  ...TIME_COMPRESSION_BACKS,
+  ...BLACK_MAGES_WALTZ_BACKS,
   // 11b (group B)
   ...FORBIDDEN_MAGICKS_BACKS,
   ...INTO_THE_VOID_BACKS,

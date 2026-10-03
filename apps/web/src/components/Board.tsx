@@ -462,7 +462,9 @@ export function Board({
         targeting.chosen.length === 0 &&
         (first?.type === 'castSpell' || first?.type === 'activateAbility')
           ? first.sacrifice
-            ? 'a creature to sacrifice'
+            ? (first.type === 'castSpell' &&
+                kickPermanentPrompt(view.objects[first.card]?.defId, first)) ||
+              'a creature to sacrifice'
             : forageFood(first)
               ? 'a Food to sacrifice'
               : first.type === 'castSpell' && first.discard
@@ -1419,6 +1421,15 @@ function ChooseCardOverlay({ game, onHover }: { game: GameSession; onHover: Hove
   );
 }
 
+/** Final Fantasy (11b): what a kicker paid with a permanent asks for (Vayne's Treachery, Chocobo Kick). */
+function kickPermanentPrompt(defId: CardDefId | undefined, a: Action): string | null {
+  if (a.type !== 'castSpell' || !a.kicked || !defId) return null;
+  const kicker = cardDb.get(defId)?.kicker;
+  if (kicker?.returnLand) return 'a land to return to your hand';
+  if (kicker?.sacrifice) return 'an artifact or creature to sacrifice';
+  return null;
+}
+
 /** "Choose one" mode name, or kicked / not kicked. */
 function castLabel(defId: CardDefId, a: Action): string {
   // Final Fantasy (11a): an adventure land's own option.
@@ -1465,11 +1476,10 @@ function castLabel(defId: CardDefId, a: Action): string {
     return a.kicked ? `With offspring (+${manaText(def.kicker.cost)})` : 'Without offspring';
   if (def.kicker.teamwork !== undefined)
     return a.kicked ? `Teamwork (tap power ${def.kicker.teamwork})` : 'Without teamwork';
-  // Final Fantasy (11b): "Kicker—Sacrifice an artifact or creature" (Vayne's Treachery).
+  // Final Fantasy (11b): a kicker paid with a permanent.
+  if (def.kicker.returnLand) return a.kicked ? 'Kicked (return a land)' : 'Not kicked';
   if (def.kicker.sacrifice)
-    return a.kicked
-      ? `Kicked (${def.kicker.returnLand ? 'return a land' : 'sacrifice a permanent'})`
-      : 'Not kicked';
+    return a.kicked ? 'Kicked (sacrifice an artifact or creature)' : 'Not kicked';
   return a.kicked ? `Kicked (+${manaText(def.kicker.cost)})` : 'Not kicked';
 }
 

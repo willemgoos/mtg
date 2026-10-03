@@ -341,7 +341,8 @@ export function castSpell(
         : []),
     ],
     [
-      choice.sacrifice,
+      // Final Fantasy (11b): a land returned for kicker may tap for mana first.
+      choice.kicked && d.kicker?.returnLand ? undefined : choice.sacrifice,
       ...(choice.sacrificeMany ?? []),
       choice.forage !== 'graveyard' ? choice.forage : undefined,
       ...(teamwork ?? []),
@@ -356,7 +357,7 @@ export function castSpell(
   for (const id of choice.sacrificeMany ?? []) sacrificePermanent(ctx, id);
   if (d.types.includes('Instant') || d.types.includes('Sorcery'))
     (ctx.s.turn.instantsSorceriesCast ??= { p1: 0, p2: 0 })[player]++;
-  // Final Fantasy (11b): Chocobo Kick's kicker returns a land instead of sacrificing it.
+  // Final Fantasy (11b): "Kicker—Return a land you control to its owner's hand".
   if (choice.sacrifice && choice.kicked && d.kicker?.returnLand)
     moveObject(ctx, choice.sacrifice, 'hand');
   else if (choice.sacrifice) sacrificePermanent(ctx, choice.sacrifice);

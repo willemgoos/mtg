@@ -10,13 +10,9 @@ import type {
 import type { Behavior } from '../build.ts';
 import { crew } from '../msh/helpers.ts';
 import {
-  basicOrTown,
-  chapter,
   creature,
   draw,
   gain,
-  hero,
-  landcycling,
   mana,
   mode,
   onEnter,
@@ -24,7 +20,6 @@ import {
   t0,
   t1,
   theirCreature,
-  tiered,
   yourCreature,
 } from './helpers.ts';
 
@@ -126,10 +121,6 @@ export const DARKSTAR = 'fin-darkstar-token';
 export const FIN_TOKENS_B: CardDefinition[] = [
   // Rufus Shinra: "Darkstar, a legendary 2/2 white and black Dog creature token".
   token(DARKSTAR, 'Darkstar', ['W', 'B'], ['Dog'], 2, 2, { supertypes: ['Legendary'] }),
-  // Retrieve the Esper: "a 3/3 blue Robot Warrior artifact creature token".
-  token('fin-robot-warrior-token', 'Robot Warrior', ['U'], ['Robot', 'Warrior'], 3, 3, {
-    types: ['Artifact', 'Creature'],
-  }),
   // The Wandering Minstrel: "a 2/2 Elemental creature token that's all colors".
   token('fin-elemental-token', 'Elemental', ['W', 'U', 'B', 'R', 'G'], ['Elemental'], 2, 2),
 ];
@@ -137,28 +128,6 @@ export const FIN_TOKENS_B: CardDefinition[] = [
 // ------------------------------------------------------------------ white
 
 const WHITE: Record<string, Behavior> = {
-  'Magitek Infantry': {
-    abilities: [
-      {
-        kind: 'static',
-        effect: {
-          kind: 'while',
-          condition: {
-            kind: 'controlsPermanents',
-            filter: { types: ['Artifact'], other: true },
-            min: 1,
-          },
-          power: 1,
-          toughness: 0,
-        },
-      },
-      activated({ mana: mana('{2}{W}') }, [], {
-        kind: 'searchLibrary',
-        filter: { named: 'magitek-infantry' },
-        to: 'battlefieldTapped',
-      }),
-    ],
-  },
   "G'raha Tia": {
     abilities: [
       {
@@ -183,72 +152,9 @@ const WHITE: Record<string, Behavior> = {
       ),
     ],
   },
-  // "Choose one" as two abilities with the same cost.
-  'Phoenix Down': {
-    abilities: [
-      {
-        kind: 'activated',
-        cost: { mana: mana('{1}{W}'), tapSelf: true, exileSelf: true },
-        targets: [yourGraveyardCard({ types: ['Creature'], maxManaValue: 4 })],
-        effects: [
-          { kind: 'returnToBattlefield', what: t0 },
-          { kind: 'tap', what: 'chosen' },
-        ],
-        label: 'Return a creature card',
-      },
-      {
-        kind: 'activated',
-        cost: { mana: mana('{1}{W}'), tapSelf: true, exileSelf: true },
-        targets: [{ what: 'permanent', filter: { subtypes: ['Skeleton', 'Spirit', 'Zombie'] } }],
-        effects: [{ kind: 'exile', what: t0 }],
-        label: 'Exile a Skeleton, Spirit or Zombie',
-      },
-    ],
-  },
-  Gaelicat: {
-    abilities: [
-      {
-        kind: 'static',
-        effect: {
-          kind: 'while',
-          condition: { kind: 'controlsPermanents', filter: { types: ['Artifact'] }, min: 2 },
-          power: 2,
-          toughness: 0,
-        },
-      },
-    ],
-  },
-  'White Auracite': {
-    abilities: [
-      triggered(
-        { on: 'etb' },
-        [{ what: 'permanent', controller: 'opponent', filter: { nonland: true } }],
-        { kind: 'exileUntilSourceLeaves', what: t0 },
-      ),
-      { kind: 'mana', cost: { tapSelf: true }, produces: 'W' },
-    ],
-  },
-  'Aerith Rescue Mission': {
-    modes: [
-      mode('Take the Elevator: three Heroes', [], hero(3)),
-      mode(
-        'Take 59 Flights of Stairs: tap three',
-        [
-          { ...creature, optional: true },
-          { ...creature, optional: true },
-          { ...creature, optional: true },
-        ],
-        ...stun({ kind: 'tap', what: t0 }),
-        { kind: 'tap', what: t1 },
-        { kind: 'tap', what: { target: 2 } },
-      ),
-    ],
-  },
 };
 
 // ------------------------------------------------------------------ blue
-
-const iceTarget: TargetSpec[] = [creature];
 
 const BLUE: Record<string, Behavior> = {
   Sahagin: {
@@ -267,53 +173,6 @@ const BLUE: Record<string, Behavior> = {
       bigSpell(8, [], { kind: 'counters', to: 'self', amount: 8 }),
     ],
   },
-  'Ice Flan': {
-    abilities: [
-      triggered(
-        { on: 'etb' },
-        [
-          {
-            what: 'permanent',
-            controller: 'opponent',
-            filter: { types: ['Artifact', 'Creature'] },
-          },
-        ],
-        ...stun({ kind: 'tap', what: t0 }),
-      ),
-      landcycling('Island'),
-    ],
-  },
-  // Blizzara: the owner puts it on top (their usual choice).
-  'Ice Magic': tiered(
-    ['{0}', mode('Blizzard', iceTarget, { kind: 'bounce', what: t0 })],
-    ['{2}', mode('Blizzara', iceTarget, { kind: 'putInLibrary', what: t0, position: 'top' })],
-    [
-      '{5}{U}',
-      mode('Blizzaga', iceTarget, { kind: 'custom', handler: 'shuffleTargetIntoLibrary' }),
-    ],
-  ),
-  Eject: spell(
-    [{ what: 'permanent', filter: { nonland: true } }],
-    { kind: 'bounce', what: t0 },
-    draw(1),
-  ),
-  'Retrieve the Esper': {
-    ...spell([], { kind: 'createToken', token: 'fin-robot-warrior-token', count: 1 }),
-    flashback: mana('{5}{U}'),
-    flashbackSpell: {
-      targets: [],
-      effects: [{ kind: 'createToken', token: 'fin-robot-warrior-token', count: 1, counters: 2 }],
-    },
-  },
-  'Dreams of Laguna': {
-    ...spell([], { kind: 'surveil', amount: 1 }, draw(1)),
-    flashback: mana('{3}{U}'),
-  },
-  'Combat Tutorial': spell(
-    [{ what: 'player' }, { ...yourCreature, optional: true }],
-    { kind: 'draw', who: t0, amount: 2 },
-    { kind: 'counters', to: t1, amount: 1 },
-  ),
   // "When you next cast an instant or sorcery spell this turn, copy that spell" (same targets).
   Ether: {
     abilities: [
@@ -348,39 +207,13 @@ const BLUE: Record<string, Behavior> = {
     ],
   },
   'Scorpion Sentinel': { abilities: [{ kind: 'static', effect: { ...sevenLands, power: 3 } }] },
-  'Il Mheg Pixie': {
-    abilities: [triggered({ on: 'attacks' }, [], { kind: 'surveil', amount: 1 })],
-  },
   'Travel the Overworld': { ...spell([], draw(4)), costReduction: towns },
-  'Summon: Shiva': {
-    saga: 3,
-    abilities: [
-      chapter([1, 2], [theirCreature], ...stun({ kind: 'tap', what: t0 })),
-      chapter([3], [], {
-        kind: 'draw',
-        who: 'controller',
-        amount: {
-          count: 'permanentsOpponentsControl',
-          filter: { types: ['Creature'], tapped: true },
-        },
-      }),
-    ],
-  },
-  "Dragoon's Wyvern": { abilities: [onEnter(hero())] },
   // "Its activated abilities can't be activated" isn't modelled.
   "Stuck in Summoner's Sanctum": {
     enchant: { what: 'permanent', filter: { types: ['Artifact', 'Creature'] } },
     abilities: [
       onEnter({ kind: 'tap', what: 'attached' }),
       { kind: 'static', effect: { kind: 'attached', power: 0, toughness: 0, doesntUntap: true } },
-    ],
-  },
-  'Rook Turret': {
-    abilities: [
-      triggered({ on: 'otherPermanentEtb', filter: { types: ['Artifact'] } }, [], {
-        kind: 'may',
-        effects: [draw(1), { kind: 'discard', count: 1 }],
-      }),
     ],
   },
 };
@@ -398,57 +231,6 @@ const BLACK: Record<string, Behavior> = {
       ),
     ],
   },
-  Ahriman: {
-    abilities: [
-      activated({ mana: mana('{3}'), sacrificePermanent: anotherCreatureOrArtifact }, [], draw(1)),
-    ],
-  },
-  'Undercity Dire Rat': { abilities: [triggered({ on: 'dies' }, [], treasure)] },
-  'Namazu Trader': {
-    abilities: [
-      onEnter({ kind: 'loseLife', who: 'controller', amount: 1 }, treasure),
-      triggered({ on: 'attacks' }, [], {
-        kind: 'may',
-        effects: [
-          {
-            kind: 'sacrificeSeveral',
-            count: 1,
-            filter: creatureOrArtifact,
-            then: [{ kind: 'surveil', amount: 2 }],
-          },
-        ],
-      }),
-    ],
-  },
-  "Vayne's Treachery": {
-    ...spell([creature], { kind: 'pump', to: t0, power: -2, toughness: -2 }),
-    kicker: {
-      cost: mana('{0}'),
-      sacrifice: creatureOrArtifact,
-      spell: { targets: [creature], effects: [{ kind: 'pump', to: t0, power: -6, toughness: -6 }] },
-    },
-  },
-  "Sephiroth's Intervention": spell([creature], { kind: 'destroy', what: t0 }, gain(2)),
-  Overkill: spell([creature], { kind: 'pump', to: t0, power: 0, toughness: -9999 }),
-  'Cornered by Black Mages': spell([], { kind: 'opponentSacrifices' }, wizard),
-  'Evil Reawakened': spell([yourGraveyardCard({ types: ['Creature'] })], {
-    kind: 'returnToBattlefield',
-    what: t0,
-    countersIf: { filter: {}, count: 2 },
-  }),
-  Hecteyes: { abilities: [onEnter({ kind: 'discard', count: 1, who: 'eachOpponent' })] },
-  'Summon: Anima': {
-    saga: 4,
-    abilities: [
-      chapter([1, 2, 3], [], draw(1), { kind: 'loseLife', who: 'controller', amount: 1 }),
-      chapter(
-        [4],
-        [],
-        { kind: 'opponentSacrifices' },
-        { kind: 'loseLife', who: 'eachOpponent', amount: 3 },
-      ),
-    ],
-  },
   // It becomes an artifact creature until end of turn (not also a Spirit).
   'Phantom Train': {
     abilities: [
@@ -459,9 +241,6 @@ const BLACK: Record<string, Behavior> = {
         { kind: 'becomeCreature', what: 'self' },
       ),
     ],
-  },
-  'Shinra Reinforcements': {
-    abilities: [onEnter({ kind: 'mill', count: 3 }, gain(3))],
   },
   Tonberry: {
     entersTapped: true,
@@ -478,41 +257,6 @@ const BLACK: Record<string, Behavior> = {
         },
       },
     ],
-  },
-  "Shambling Cie'th": {
-    entersTapped: true,
-    abilities: [
-      {
-        ...(triggered({ on: 'castSpell', filter: 'noncreature' }, [], {
-          kind: 'may',
-          cost: mana('{B}'),
-          effects: [{ kind: 'returnSource', to: 'hand' }],
-        }) as Extract<AbilityDef, { kind: 'triggered' }>),
-        fromGraveyard: true,
-      },
-    ],
-  },
-  Malboro: {
-    abilities: [
-      onEnter(
-        { kind: 'discard', count: 1, who: 'eachOpponent' },
-        { kind: 'loseLife', who: 'eachOpponent', amount: 2 },
-        { kind: 'custom', handler: 'opponentExilesTop', params: { count: 3 } },
-      ),
-      landcycling('Swamp'),
-    ],
-  },
-  'Fight On!': spell(
-    [
-      yourGraveyardCard({ types: ['Creature'] }, true),
-      yourGraveyardCard({ types: ['Creature'] }, true),
-    ],
-    { kind: 'returnToHand', what: t0 },
-    { kind: 'returnToHand', what: t1 },
-  ),
-  'Resentful Revelation': {
-    ...spell([], { kind: 'lookTakeRestGraveyard', count: 3, take: 1 }),
-    flashback: mana('{6}{B}'),
   },
 };
 
@@ -533,49 +277,11 @@ const RED: Record<string, Behavior> = {
     ],
   },
   'Prompto Argentum': { abilities: [bigSpell(4, [], treasure)] },
-  'Mysidian Elder': { abilities: [onEnter(wizard)] },
-  'Hill Gigas': { abilities: [landcycling('Mountain')] },
-  'Summon: Esper Ramuh': {
-    saga: 3,
-    abilities: [
-      chapter([1], [theirCreature], {
-        kind: 'damage',
-        amount: noncreatureNonlandInGraveyard,
-        to: t0,
-      }),
-      chapter([2, 3], [], {
-        kind: 'pump',
-        to: { each: 'creature', controller: 'you', filter: { subtype: 'Wizard' } },
-        power: 1,
-        toughness: 0,
-      }),
-    ],
-  },
   'Light of Judgment': spell(
     [creature],
     { kind: 'damage', amount: 6, to: t0 },
     { kind: 'custom', handler: 'destroyEquipmentOnTarget' },
   ),
-  Suplex: {
-    modes: [
-      mode(
-        'Deal 3 damage (exile it if it would die)',
-        [creature],
-        { kind: 'pump', to: t0, power: 0, toughness: 0, exileIfDies: true },
-        { kind: 'damage', amount: 3, to: t0 },
-      ),
-      mode('Exile an artifact', [{ what: 'permanent', filter: { types: ['Artifact'] } }], {
-        kind: 'exile',
-        what: t0,
-      }),
-    ],
-  },
-  'Laughing Mad': { ...spell([], draw(2)), discardToCast: true, flashback: mana('{3}{R}') },
-  'Call the Mountain Chocobo': {
-    ...spell([], { kind: 'searchLibrary', filter: { subtype: 'Mountain' }, to: 'hand' }, bird),
-    flashback: mana('{5}{R}'),
-  },
-  'Choco-Comet': spell([{ what: 'any' }], { kind: 'damage', amount: { x: true }, to: t0 }, bird),
   // Only instant and sorcery cards from your graveyard (not exiled flashback cards).
   "Sorceress's Schemes": {
     ...spell(
@@ -616,7 +322,6 @@ const GREEN: Record<string, Behavior> = {
       }),
     ],
   },
-  Gigantoad: { abilities: [{ kind: 'static', effect: { ...sevenLands, power: 2, toughness: 2 } }] },
   'Diamond Weapon': {
     costReduction: permanentCardsInGraveyard,
     abilities: [{ kind: 'static', effect: { kind: 'preventCombatDamageToSelf' } }],
@@ -650,40 +355,6 @@ const GREEN: Record<string, Behavior> = {
       },
     ],
   },
-  'Commune with Beavers': spell([], {
-    kind: 'lookAndTake',
-    count: 3,
-    filter: { types: ['Artifact', 'Creature', 'Land'] },
-  }),
-  'Chocobo Kick': {
-    ...spell([yourCreature, theirCreature], {
-      kind: 'damage',
-      amount: { powerOf: t0 },
-      from: t0,
-      to: t1,
-    }),
-    kicker: {
-      cost: mana('{0}'),
-      sacrifice: { types: ['Land'] },
-      returnLand: true,
-      spell: {
-        targets: [yourCreature, theirCreature],
-        effects: [
-          { kind: 'damage', amount: { multiply: 2, amount: { powerOf: t0 } }, from: t0, to: t1 },
-        ],
-      },
-    },
-  },
-  'Chocobo Racetrack': { abilities: [triggered({ on: 'landfall' }, [], bird)] },
-  "Sazh's Chocobo": {
-    abilities: [triggered({ on: 'landfall' }, [], { kind: 'counters', to: 'self', amount: 1 })],
-  },
-  // "With different names" isn't checked.
-  'Reach the Horizon': spell(
-    [],
-    { kind: 'searchLibrary', filter: basicOrTown, to: 'battlefieldTapped' },
-    { kind: 'searchLibrary', filter: basicOrTown, to: 'battlefieldTapped' },
-  ),
 };
 
 // ------------------------------------------------------------------ colourless
@@ -696,12 +367,6 @@ const COLORLESS: Record<string, Behavior> = {
         kind: 'exileGraveyardCard',
         what: t0,
       }),
-    ],
-  },
-  'Instant Ramen': {
-    abilities: [
-      onEnter(draw(1)),
-      activated({ mana: mana('{2}'), tapSelf: true, sacrificeSelf: true }, [], gain(3)),
     ],
   },
   // "{3}: base power becomes the number of Towns": +X/+0 on its printed 0.

@@ -178,8 +178,8 @@ export function castVariants(d: CardDefinition, zone: ZoneName, via?: CastVia): 
       kicked: true,
       cost: addCosts(cost, d.kicker.cost),
       spell: d.kicker.spell ?? d.spell ?? null,
-      // Final Fantasy (11b): kicker—sacrifice.
-      ...(d.kicker.sacrifice ? { sacrifice: true } : {}),
+      // Final Fantasy (11b): a kicker paid with a permanent (chosen like a sacrifice).
+      ...(d.kicker.sacrifice || d.kicker.returnLand ? { sacrifice: true } : {}),
       ...extra,
     });
   return out;

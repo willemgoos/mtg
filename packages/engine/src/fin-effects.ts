@@ -1,5 +1,4 @@
 import { hasKeyword, isCreature, power } from './characteristics.ts';
-import { shuffleLibrary } from './setup.ts';
 import {
   addCounters,
   createObject,
@@ -81,6 +80,23 @@ export const FIN_EFFECTS: Record<string, CustomEffect> = {
     if (nextInt(ctx.s.rng, 2) === 0) makeToken(ctx, 'treasure-token', es.controller);
   },
 
+  // Final Fantasy (11b)
+
+  /** Chaos, the Endless: "When Chaos dies, put it on the bottom of its owner's library." */
+  sourceToLibraryBottom(ctx, es) {
+    const o = es.source && ctx.s.objects[es.source.id];
+    if (o && o.zone === 'graveyard') moveObject(ctx, o.id, 'library', { position: 'bottom' });
+  },
+
+  /**
+   * Ultimecia, Time Sorceress: "exile eight cards from your graveyard" (part of
+   * a cost paid on resolution). The engine picks the oldest cards.
+   */
+  exileEightFromGraveyard(ctx, es) {
+    for (const id of ctx.s.players[es.controller].graveyard.slice(0, 8))
+      moveObject(ctx, id, 'exile');
+  },
+
   /** Overture: "Target opponent mills half their library, rounded down." */
   millHalf(ctx, es) {
     const t = es.targets[0];
@@ -88,25 +104,6 @@ export const FIN_EFFECTS: Record<string, CustomEffect> = {
     if (!player) return;
     const lib = ctx.s.players[player].library;
     for (const id of lib.slice(0, Math.floor(lib.length / 2))) moveObject(ctx, id, 'graveyard');
-  },
-
-  // 11b (group B)
-
-  /** Malboro: "each opponent ... exiles the top three cards of their library" (params.count). */
-  opponentExilesTop(ctx, es, params) {
-    const opp: PlayerId = es.controller === 'p1' ? 'p2' : 'p1';
-    const count = typeof params?.count === 'number' ? params.count : 1;
-    for (const id of ctx.s.players[opp].library.slice(0, count)) moveObject(ctx, id, 'exile');
-  },
-
-  /** Ice Magic (Blizzaga): "Target creature's owner shuffles it into their library." */
-  shuffleTargetIntoLibrary(ctx, es) {
-    const t = es.targets[0];
-    const o = t && 'object' in t ? ctx.s.objects[t.object.id] : undefined;
-    if (!o || o.zone !== 'battlefield' || o.zcc !== (t as { object: { zcc: number } }).object.zcc)
-      return;
-    moveObject(ctx, o.id, 'library');
-    shuffleLibrary(ctx, o.owner);
   },
 
   /** Light of Judgment: "Destroy up to one Equipment attached to that creature" (the engine picks it). */

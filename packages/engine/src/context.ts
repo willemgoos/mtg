@@ -378,6 +378,7 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
   else delete o.leftAttacking;
   if (from === 'battlefield') removeFromCombat(ctx, id);
   // A double-faced card shows its front again anywhere but the stack and the battlefield.
+  const leftAs = from === 'battlefield' && o.front ? o.defId : undefined;
   if (o.front && to !== 'stack' && !(from === 'stack' && to === 'battlefield')) {
     o.defId = o.front;
     delete o.front;
@@ -445,6 +446,7 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
     defId: o.defId,
     from,
     to,
+    ...(leftAs ? { leftAs } : {}),
     ...(leftController ? { controller: leftController } : {}),
   });
   if (discarded && o.zone === 'graveyard') {

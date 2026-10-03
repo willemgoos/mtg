@@ -263,8 +263,9 @@ export function countOf(
         (id) =>
           (!a.named || obj(ctx, id).defId === a.named) &&
           (!a.types || a.types.some((t: CardType) => def(ctx, id).types.includes(t))) &&
-          // Final Fantasy (11b): "noncreature, nonland".
-          !a.notTypes?.some((t: CardType) => def(ctx, id).types.includes(t)),
+          // Final Fantasy (11b): by subtype, and without some types.
+          (!a.subtype || def(ctx, id).subtypes.includes(a.subtype)) &&
+          (!a.notTypes || !a.notTypes.some((t: CardType) => def(ctx, id).types.includes(t))),
       ).length
     );
   if (a.count === 'greatestManaValueInGraveyard')
