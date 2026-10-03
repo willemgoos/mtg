@@ -6,6 +6,7 @@ import {
   deckGameOptions,
   deckIds,
   MARVEL_BRAWL_DECKS,
+  STRIXHAVEN_BRAWL_DECKS,
   PLAYABLE_BRAWL_DECKS,
   PLAYABLE_DECKS,
 } from '../src/index.ts';
@@ -25,7 +26,7 @@ const canCastCommander = (g: ReturnType<typeof game>) =>
 
 describe('Brawl decks', () => {
   it('have 100 cards, are singleton and fit the commander’s colour identity', () => {
-    for (const d of MARVEL_BRAWL_DECKS) {
+    for (const d of [...MARVEL_BRAWL_DECKS, ...STRIXHAVEN_BRAWL_DECKS]) {
       expect(d.commander, d.name).toBeDefined();
       expect(deckIds(d).length + 1, d.name).toBe(100);
       for (const [name, count] of d.cards)

@@ -26,6 +26,8 @@ export const BLURBS: Record<string, string> = {
   'goblins-everywhere': 'Swarm the board with Goblins and burn the rest.',
   'large-and-in-charge': 'Big green creatures, bigger with every land.',
   'brawl-mabels-militia': 'Mabel leads a hundred mice, soldiers and sparks into battle.',
+  'brawl-quintorius-history-chaser':
+    'Quintorius leads Spirits and relics: recur the graveyard, then swing with Lorehold.',
   'msc-wakanda-forever': 'T’Challa builds a Vibranium arsenal and rules as the monarch.',
   'msc-the-fantastic-four':
     'Invisible Woman leads the family: every spell you cast powers up the team.',

@@ -16,7 +16,7 @@ export interface Decklist {
    */
   series: 'starter' | 'colorChallenge' | 'jumpIn' | 'season' | 'brawl';
   /** A deck from another set than Foundations (shown in its own section). */
-  set?: 'blb' | 'msh' | 'msc' | 'fin' | 'stx' | 'sos';
+  set?: 'blb' | 'msh' | 'msc' | 'fin' | 'stx' | 'sos' | 'soc';
   cards: [name: string, count: number][];
   /** Brawl: the commander (not in `cards`, which hold the other 99). */
   commander?: string;
@@ -2999,6 +2999,102 @@ export const SECRETS_OF_STRIXHAVEN_DECKS: Decklist[] = [
   },
 ];
 
+/**
+ * Our Strixhaven Commander (SOC) Brawl decks: the Arena Store lists as listed in
+ * docs/strixhaven-decklists.md. 100 cards, singleton, within the commander's colours.
+ */
+export const STRIXHAVEN_BRAWL_DECKS: Decklist[] = [
+  {
+    id: 'brawl-quintorius-history-chaser',
+    name: 'Quintorius, History Chaser',
+    colors: ['R', 'W'],
+    face: 'Quintorius, History Chaser',
+    commander: 'Quintorius, History Chaser',
+    source: 'arena',
+    series: 'brawl',
+    set: 'soc',
+    cards: [
+      ...[
+        'Charging Strifeknight',
+        'Conspiracy Theorist',
+        'Containment Construct',
+        'Enduring Courage',
+        'Excava, the Risen Past',
+        'Fallaji Antiquarian',
+        'Fuming Effigy',
+        'Furious Forebear',
+        'Garrison Excavator',
+        'Hardened Academic',
+        'Hofri Ghostforge',
+        'Ivora, Insatiable Heir',
+        'Keening Apparition',
+        'Kirol, History Buff',
+        'Lunarch Veteran',
+        'Molten Gatekeeper',
+        'Moonshaker Cavalry',
+        'Patchplate Resolute',
+        'Pinnacle Monk',
+        'Practiced Scrollsmith',
+        'Quintorius, Field Historian',
+        'Scrapwork Mutt',
+        'Seasoned Pyromancer',
+        'Selfless Spirit',
+        'Skyclave Apparition',
+        'Spirit Mascot',
+        'Squee, the Immortal',
+        'Stonebound Mentor',
+        'Sun Titan',
+        'Tersa Lightshatter',
+        'Venerable Warsinger',
+        'Witch Enchanter',
+        'Abrade',
+        'Big Score',
+        'Lightning Helix',
+        'Lorehold Charm',
+        'Thrill of Possibility',
+        'Antiquities on the Loose',
+        'Battle Screech',
+        'Call a Surprise Witness',
+        'Faithless Looting',
+        'Group Project',
+        'Helping Hand',
+        'Late to Dinner',
+        'Rip Apart',
+        'Seize the Spoils',
+        "Sevinne's Reclamation",
+        'Thrilling Discovery',
+        'Arcane Signet',
+        'Boros Signet',
+        'Crucible of Worlds',
+        'Ghost Vacuum',
+        'Mind Stone',
+        'Talisman of Conviction',
+        'Anointed Procession',
+        'Bitter Reunion',
+        'Deification',
+        'Lorehold Excavation',
+        "Sentinel's Eyes",
+        'Shared Animosity',
+        "Warleader's Call",
+        'Battlefield Forge',
+        'Command Tower',
+        'Elegant Parlor',
+        'Fields of Strife',
+        'Furycalm Snarl',
+        'Gate to the Citadel',
+        'Inspiring Vantage',
+        'Sacred Foundry',
+        'Sundown Pass',
+        'Terramorphic Expanse',
+        "Tocasia's Dig Site",
+        'Wind-Scarred Crag',
+      ].map((name): [string, number] => [name, 1]),
+      ['Plains', 12],
+      ['Mountain', 14],
+    ],
+  },
+];
+
 export const DECKS: Decklist[] = [
   ...ARENA_DECKS,
   ...COLOR_CHALLENGE_DECKS,
@@ -3008,4 +3104,5 @@ export const DECKS: Decklist[] = [
   ...FINAL_FANTASY_DECKS,
   ...STRIXHAVEN_DECKS,
   ...SECRETS_OF_STRIXHAVEN_DECKS,
+  ...STRIXHAVEN_BRAWL_DECKS,
 ];
