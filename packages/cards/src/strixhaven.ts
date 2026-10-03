@@ -2,6 +2,8 @@ import type { CardDefinition } from '@mtg/engine';
 import type { Behavior } from './build.ts';
 import { LOREHOLD, LOREHOLD_TOKENS } from './stx/lorehold.ts';
 import { QUANDRIX, QUANDRIX_TOKENS } from './stx/quandrix.ts';
+import { PRISMARI } from './stx/prismari.ts';
+import { PRISMARI_LESSONS } from './stx/lessons-prismari.ts';
 
 /**
  * Strixhaven (STX) card behaviour, one file per group of decks in stx/,
@@ -9,7 +11,12 @@ import { QUANDRIX, QUANDRIX_TOKENS } from './stx/quandrix.ts';
  * lives here. Filled in from the first Strixhaven deck phase on
  * (docs/strixhaven-plan.md).
  */
-export const STRIXHAVEN_BEHAVIORS: Record<string, Behavior> = { ...LOREHOLD, ...QUANDRIX };
+export const STRIXHAVEN_BEHAVIORS: Record<string, Behavior> = {
+  ...LOREHOLD,
+  ...QUANDRIX,
+  ...PRISMARI,
+  ...PRISMARI_LESSONS,
+};
 
 /** Strixhaven tokens (the Lorehold Spirit, the Quandrix Fractal). */
 export const STRIXHAVEN_TOKENS: CardDefinition[] = [...LOREHOLD_TOKENS, ...QUANDRIX_TOKENS];

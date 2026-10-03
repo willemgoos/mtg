@@ -32730,5 +32730,401 @@
    "large": "https://cards.scryfall.io/large/front/4/6/46b394fc-a99c-44e7-9226-da0699167541.jpg?1783927397",
    "artCrop": "https://cards.scryfall.io/art_crop/front/4/6/46b394fc-a99c-44e7-9226-da0699167541.jpg?1783927397"
   }
+ },
+ {
+  "name": "Prismari Pledgemage",
+  "scryfallId": "404b4c7b-5d40-4ad1-bd40-3da1d08f5c78",
+  "oracleId": "47ecedec-7bf7-4a3b-ac33-2bf203fa50d9",
+  "set": "stx",
+  "collectorNumber": "215",
+  "rarity": "common",
+  "manaCost": "{U/R}{U/R}",
+  "typeLine": "Creature — Orc Wizard",
+  "oracleText": "Defender\nMagecraft — Whenever you cast or copy an instant or sorcery spell, this creature can attack this turn as though it didn't have defender.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "R",
+   "U"
+  ],
+  "keywords": [
+   "Magecraft",
+   "Defender"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/0/404b4c7b-5d40-4ad1-bd40-3da1d08f5c78.jpg?1783927301",
+   "normal": "https://cards.scryfall.io/normal/front/4/0/404b4c7b-5d40-4ad1-bd40-3da1d08f5c78.jpg?1783927301",
+   "large": "https://cards.scryfall.io/large/front/4/0/404b4c7b-5d40-4ad1-bd40-3da1d08f5c78.jpg?1783927301",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/0/404b4c7b-5d40-4ad1-bd40-3da1d08f5c78.jpg?1783927301"
+  }
+ },
+ {
+  "name": "Prismari Apprentice",
+  "scryfallId": "dca3aa59-c8ac-4930-abf7-0a74d657122a",
+  "oracleId": "0d60ffba-9904-442e-8d4a-a6b1b50a38eb",
+  "set": "stx",
+  "collectorNumber": "213",
+  "rarity": "uncommon",
+  "manaCost": "{U}{R}",
+  "typeLine": "Creature — Human Shaman",
+  "oracleText": "Magecraft — Whenever you cast or copy an instant or sorcery spell, this creature can't be blocked this turn. If that spell has mana value 5 or greater, put a +1/+1 counter on this creature.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "R",
+   "U"
+  ],
+  "keywords": [
+   "Magecraft"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/c/dca3aa59-c8ac-4930-abf7-0a74d657122a.jpg?1783927301",
+   "normal": "https://cards.scryfall.io/normal/front/d/c/dca3aa59-c8ac-4930-abf7-0a74d657122a.jpg?1783927301",
+   "large": "https://cards.scryfall.io/large/front/d/c/dca3aa59-c8ac-4930-abf7-0a74d657122a.jpg?1783927301",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/c/dca3aa59-c8ac-4930-abf7-0a74d657122a.jpg?1783927301"
+  }
+ },
+ {
+  "name": "Vortex Runner",
+  "scryfallId": "bab4a68d-5d26-42d8-bc51-15e3c1f95ebe",
+  "oracleId": "37cf4ee6-e146-4354-afc8-6b59b0700e87",
+  "set": "stx",
+  "collectorNumber": "60",
+  "rarity": "common",
+  "manaCost": "{2}{U}",
+  "typeLine": "Creature — Human Wizard",
+  "oracleText": "As long as you control eight or more lands, this creature gets +1/+0 and can't be blocked.",
+  "power": "2",
+  "toughness": "3",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/a/bab4a68d-5d26-42d8-bc51-15e3c1f95ebe.jpg?1783927372",
+   "normal": "https://cards.scryfall.io/normal/front/b/a/bab4a68d-5d26-42d8-bc51-15e3c1f95ebe.jpg?1783927372",
+   "large": "https://cards.scryfall.io/large/front/b/a/bab4a68d-5d26-42d8-bc51-15e3c1f95ebe.jpg?1783927372",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/a/bab4a68d-5d26-42d8-bc51-15e3c1f95ebe.jpg?1783927372"
+  }
+ },
+ {
+  "name": "Spectacle Mage",
+  "scryfallId": "f74223e1-b66b-42fa-aaac-001f5dab2aac",
+  "oracleId": "71920c05-7061-4ba5-8903-cffd3d2f85f4",
+  "set": "stx",
+  "collectorNumber": "235",
+  "rarity": "common",
+  "manaCost": "{1}{U}{R}",
+  "typeLine": "Creature — Bird Shaman",
+  "oracleText": "Flying\nInstant and sorcery spells you cast with mana value 5 or greater cost {1} less to cast.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "R",
+   "U"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/7/f74223e1-b66b-42fa-aaac-001f5dab2aac.jpg?1783927290",
+   "normal": "https://cards.scryfall.io/normal/front/f/7/f74223e1-b66b-42fa-aaac-001f5dab2aac.jpg?1783927290",
+   "large": "https://cards.scryfall.io/large/front/f/7/f74223e1-b66b-42fa-aaac-001f5dab2aac.jpg?1783927290",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/7/f74223e1-b66b-42fa-aaac-001f5dab2aac.jpg?1783927290"
+  }
+ },
+ {
+  "name": "Maelstrom Muse",
+  "scryfallId": "5516e81e-16ea-411c-9df0-ed3b03670220",
+  "oracleId": "30b03dda-409f-4615-b392-477d66eb49f4",
+  "set": "stx",
+  "collectorNumber": "202",
+  "rarity": "uncommon",
+  "manaCost": "{1}{U}{U/R}{R}",
+  "typeLine": "Creature — Djinn Wizard",
+  "oracleText": "Flying\nWhenever this creature attacks, the next instant or sorcery spell you cast this turn costs {X} less to cast, where X is this creature's power as this ability resolves.",
+  "power": "2",
+  "toughness": "4",
+  "colors": [
+   "R",
+   "U"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/5/5516e81e-16ea-411c-9df0-ed3b03670220.jpg?1783927307",
+   "normal": "https://cards.scryfall.io/normal/front/5/5/5516e81e-16ea-411c-9df0-ed3b03670220.jpg?1783927307",
+   "large": "https://cards.scryfall.io/large/front/5/5/5516e81e-16ea-411c-9df0-ed3b03670220.jpg?1783927307",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/5/5516e81e-16ea-411c-9df0-ed3b03670220.jpg?1783927307"
+  }
+ },
+ {
+  "name": "Oggyar Battle-Seer",
+  "scryfallId": "a38329f1-af6e-47b8-86e4-f2a39e1edbf8",
+  "oracleId": "645005dd-3438-4b88-bb19-561f9679a022",
+  "set": "stx",
+  "collectorNumber": "209",
+  "rarity": "common",
+  "manaCost": "{3}{U}{R}",
+  "typeLine": "Creature — Ogre Shaman",
+  "oracleText": "Haste\n{T}: Scry 1.",
+  "power": "3",
+  "toughness": "4",
+  "colors": [
+   "R",
+   "U"
+  ],
+  "keywords": [
+   "Haste",
+   "Scry"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/3/a38329f1-af6e-47b8-86e4-f2a39e1edbf8.jpg?1783927304",
+   "normal": "https://cards.scryfall.io/normal/front/a/3/a38329f1-af6e-47b8-86e4-f2a39e1edbf8.jpg?1783927304",
+   "large": "https://cards.scryfall.io/large/front/a/3/a38329f1-af6e-47b8-86e4-f2a39e1edbf8.jpg?1783927304",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/3/a38329f1-af6e-47b8-86e4-f2a39e1edbf8.jpg?1783927304"
+  }
+ },
+ {
+  "name": "Galazeth Prismari",
+  "scryfallId": "06c9158c-064b-4d12-b860-d2c1450d1897",
+  "oracleId": "f9217532-f7cf-4436-b476-72d97a3147dc",
+  "set": "stx",
+  "collectorNumber": "189",
+  "rarity": "mythic",
+  "manaCost": "{2}{U}{R}",
+  "typeLine": "Legendary Creature — Elder Dragon",
+  "oracleText": "Flying\nWhen Galazeth Prismari enters, create a Treasure token.\nArtifacts you control have \"{T}: Add one mana of any color. Spend this mana only to cast an instant or sorcery spell.\"",
+  "power": "3",
+  "toughness": "4",
+  "colors": [
+   "R",
+   "U"
+  ],
+  "keywords": [
+   "Flying",
+   "Treasure"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/6/06c9158c-064b-4d12-b860-d2c1450d1897.jpg?1783927311",
+   "normal": "https://cards.scryfall.io/normal/front/0/6/06c9158c-064b-4d12-b860-d2c1450d1897.jpg?1783927311",
+   "large": "https://cards.scryfall.io/large/front/0/6/06c9158c-064b-4d12-b860-d2c1450d1897.jpg?1783927311",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/6/06c9158c-064b-4d12-b860-d2c1450d1897.jpg?1783927311"
+  }
+ },
+ {
+  "name": "Retriever Phoenix",
+  "scryfallId": "4dd6cb53-3c82-4ac3-be1e-311322729198",
+  "oracleId": "279e573d-b7a3-4e62-a708-3ec992d97972",
+  "set": "stx",
+  "collectorNumber": "113",
+  "rarity": "rare",
+  "manaCost": "{3}{R}",
+  "typeLine": "Creature — Phoenix",
+  "oracleText": "Flying, haste\nWhen this creature enters, if you cast it, learn. (You may reveal a Lesson card you own from outside the game and put it into your hand, or discard a card to draw a card.)\nAs long as this card is in your graveyard, if you would learn, you may instead return this card to the battlefield.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Flying",
+   "Haste",
+   "Learn"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/d/4dd6cb53-3c82-4ac3-be1e-311322729198.jpg?1783927349",
+   "normal": "https://cards.scryfall.io/normal/front/4/d/4dd6cb53-3c82-4ac3-be1e-311322729198.jpg?1783927349",
+   "large": "https://cards.scryfall.io/large/front/4/d/4dd6cb53-3c82-4ac3-be1e-311322729198.jpg?1783927349",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/d/4dd6cb53-3c82-4ac3-be1e-311322729198.jpg?1783927349"
+  }
+ },
+ {
+  "name": "Wormhole Serpent",
+  "scryfallId": "2d0fd73f-e161-4e42-b4f9-9246a9dba785",
+  "oracleId": "6eb21aca-116e-427b-9e75-8adaee0cc62a",
+  "set": "stx",
+  "collectorNumber": "62",
+  "rarity": "uncommon",
+  "manaCost": "{4}{U}",
+  "typeLine": "Creature — Serpent",
+  "oracleText": "{3}{U}: Target creature can't be blocked this turn.",
+  "power": "3",
+  "toughness": "5",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/d/2d0fd73f-e161-4e42-b4f9-9246a9dba785.jpg?1783927371",
+   "normal": "https://cards.scryfall.io/normal/front/2/d/2d0fd73f-e161-4e42-b4f9-9246a9dba785.jpg?1783927371",
+   "large": "https://cards.scryfall.io/large/front/2/d/2d0fd73f-e161-4e42-b4f9-9246a9dba785.jpg?1783927371",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/d/2d0fd73f-e161-4e42-b4f9-9246a9dba785.jpg?1783927371"
+  }
+ },
+ {
+  "name": "Elemental Expressionist",
+  "scryfallId": "7473db42-905b-4fda-af8c-fd24d906b642",
+  "oracleId": "dfc45c58-821c-42f3-ab48-05b912748bdf",
+  "set": "stx",
+  "collectorNumber": "181",
+  "rarity": "rare",
+  "manaCost": "{U/R}{U/R}{U/R}{U/R}",
+  "typeLine": "Creature — Orc Wizard",
+  "oracleText": "Magecraft — Whenever you cast or copy an instant or sorcery spell, choose target creature you control. Until end of turn, it gains \"If this creature would leave the battlefield, exile it instead of putting it anywhere else\" and \"When this creature is put into exile, create a 4/4 blue and red Elemental creature token.\" (Each instance of that ability triggers separately.)",
+  "power": "4",
+  "toughness": "4",
+  "colors": [
+   "R",
+   "U"
+  ],
+  "keywords": [
+   "Magecraft"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/4/7473db42-905b-4fda-af8c-fd24d906b642.jpg?1783927316",
+   "normal": "https://cards.scryfall.io/normal/front/7/4/7473db42-905b-4fda-af8c-fd24d906b642.jpg?1783927316",
+   "large": "https://cards.scryfall.io/large/front/7/4/7473db42-905b-4fda-af8c-fd24d906b642.jpg?1783927316",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/4/7473db42-905b-4fda-af8c-fd24d906b642.jpg?1783927316"
+  }
+ },
+ {
+  "name": "Sudden Breakthrough",
+  "scryfallId": "b011707a-471b-41c2-bc73-376a55d26bee",
+  "oracleId": "f5576cd4-6b21-4b29-902c-9c1fbdd7b2be",
+  "set": "stx",
+  "collectorNumber": "116",
+  "rarity": "common",
+  "manaCost": "{1}{R}",
+  "typeLine": "Instant",
+  "oracleText": "Target creature gets +2/+0 and gains first strike until end of turn.\nCreate a Treasure token. (It's an artifact with \"{T}, Sacrifice this token: Add one mana of any color.\")",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Treasure"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/0/b011707a-471b-41c2-bc73-376a55d26bee.jpg?1783927349",
+   "normal": "https://cards.scryfall.io/normal/front/b/0/b011707a-471b-41c2-bc73-376a55d26bee.jpg?1783927349",
+   "large": "https://cards.scryfall.io/large/front/b/0/b011707a-471b-41c2-bc73-376a55d26bee.jpg?1783927349",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/0/b011707a-471b-41c2-bc73-376a55d26bee.jpg?1783927349"
+  }
+ },
+ {
+  "name": "Prismari Command",
+  "scryfallId": "866b7fd4-86e3-4b42-b1ea-33bad0db1f9f",
+  "oracleId": "fa3e28b1-131c-4223-81e0-18dfbab22c26",
+  "set": "stx",
+  "collectorNumber": "214",
+  "rarity": "rare",
+  "manaCost": "{1}{U}{R}",
+  "typeLine": "Instant",
+  "oracleText": "Choose two —\n• Prismari Command deals 2 damage to any target.\n• Target player draws two cards, then discards two cards.\n• Target player creates a Treasure token.\n• Destroy target artifact.",
+  "colors": [
+   "R",
+   "U"
+  ],
+  "keywords": [
+   "Treasure"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/6/866b7fd4-86e3-4b42-b1ea-33bad0db1f9f.jpg?1783927301",
+   "normal": "https://cards.scryfall.io/normal/front/8/6/866b7fd4-86e3-4b42-b1ea-33bad0db1f9f.jpg?1783927301",
+   "large": "https://cards.scryfall.io/large/front/8/6/866b7fd4-86e3-4b42-b1ea-33bad0db1f9f.jpg?1783927301",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/6/866b7fd4-86e3-4b42-b1ea-33bad0db1f9f.jpg?1783927301"
+  }
+ },
+ {
+  "name": "Magma Opus",
+  "scryfallId": "27c914a3-2294-4feb-9450-c012cfd307a6",
+  "oracleId": "985f9dd7-e693-48ff-9dd6-a1a3cbaa236b",
+  "set": "stx",
+  "collectorNumber": "203",
+  "rarity": "mythic",
+  "manaCost": "{6}{U}{R}",
+  "typeLine": "Instant",
+  "oracleText": "Magma Opus deals 4 damage divided as you choose among any number of targets. Tap two target permanents. Create a 4/4 blue and red Elemental creature token. Draw two cards.\n{U/R}{U/R}, Discard this card: Create a Treasure token.",
+  "colors": [
+   "R",
+   "U"
+  ],
+  "keywords": [
+   "Treasure"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/7/27c914a3-2294-4feb-9450-c012cfd307a6.jpg?1783927307",
+   "normal": "https://cards.scryfall.io/normal/front/2/7/27c914a3-2294-4feb-9450-c012cfd307a6.jpg?1783927307",
+   "large": "https://cards.scryfall.io/large/front/2/7/27c914a3-2294-4feb-9450-c012cfd307a6.jpg?1783927307",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/7/27c914a3-2294-4feb-9450-c012cfd307a6.jpg?1783927307"
+  }
+ },
+ {
+  "name": "Elemental Masterpiece",
+  "scryfallId": "4331a7a6-e98e-4517-b0f9-ace379426a94",
+  "oracleId": "e9f5f87d-a485-4e69-9beb-49a51230bd53",
+  "set": "stx",
+  "collectorNumber": "182",
+  "rarity": "common",
+  "manaCost": "{5}{U}{R}",
+  "typeLine": "Sorcery",
+  "oracleText": "Create two 4/4 blue and red Elemental creature tokens.\n{U/R}{U/R}, Discard this card: Create a Treasure token. (It's an artifact with \"{T}, Sacrifice this token: Add one mana of any color.\")",
+  "colors": [
+   "R",
+   "U"
+  ],
+  "keywords": [
+   "Treasure"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/3/4331a7a6-e98e-4517-b0f9-ace379426a94.jpg?1783927319",
+   "normal": "https://cards.scryfall.io/normal/front/4/3/4331a7a6-e98e-4517-b0f9-ace379426a94.jpg?1783927319",
+   "large": "https://cards.scryfall.io/large/front/4/3/4331a7a6-e98e-4517-b0f9-ace379426a94.jpg?1783927319",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/3/4331a7a6-e98e-4517-b0f9-ace379426a94.jpg?1783927319"
+  }
+ },
+ {
+  "name": "Prismari Campus",
+  "scryfallId": "768120f5-9401-4e52-924e-3374bde65b3d",
+  "oracleId": "3a3a1b35-ae4d-49d5-ae09-5a1693ad53ce",
+  "set": "stx",
+  "collectorNumber": "270",
+  "rarity": "common",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "This land enters tapped.\n{T}: Add {U} or {R}.\n{4}, {T}: Scry 1. (Look at the top card of your library. You may put that card on the bottom.)",
+  "colors": [],
+  "keywords": [
+   "Scry"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/6/768120f5-9401-4e52-924e-3374bde65b3d.jpg?1783927271",
+   "normal": "https://cards.scryfall.io/normal/front/7/6/768120f5-9401-4e52-924e-3374bde65b3d.jpg?1783927271",
+   "large": "https://cards.scryfall.io/large/front/7/6/768120f5-9401-4e52-924e-3374bde65b3d.jpg?1783927271",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/6/768120f5-9401-4e52-924e-3374bde65b3d.jpg?1783927271"
+  }
+ },
+ {
+  "name": "Elemental Summoning",
+  "scryfallId": "ea51991c-1589-4c62-965b-5ae8d233520b",
+  "oracleId": "f9e668f9-21af-4fd8-9a37-6505ab2234e3",
+  "set": "stx",
+  "collectorNumber": "183",
+  "rarity": "common",
+  "manaCost": "{3}{U/R}{U/R}",
+  "typeLine": "Sorcery — Lesson",
+  "oracleText": "Create a 4/4 blue and red Elemental creature token.",
+  "colors": [
+   "R",
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/a/ea51991c-1589-4c62-965b-5ae8d233520b.jpg?1783927316",
+   "normal": "https://cards.scryfall.io/normal/front/e/a/ea51991c-1589-4c62-965b-5ae8d233520b.jpg?1783927316",
+   "large": "https://cards.scryfall.io/large/front/e/a/ea51991c-1589-4c62-965b-5ae8d233520b.jpg?1783927316",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/a/ea51991c-1589-4c62-965b-5ae8d233520b.jpg?1783927316"
+  }
  }
 ]

@@ -133,3 +133,16 @@ Implemented but not in the main deck: Apprentice, Zimone, Karok Wrangler, Overgr
 Quandrix Command, Eureka Moment, Decisive Denial, Divide by Zero, Resculpt, Arcane Subtraction, Curate, Bury in Books, Reject,
 Springmane Cervin, Waterfall Aerialist, and the Lessons Fractal Summoning, Introduction to Prophecy, Expanded Anatomy and
 Environmental Sciences (the sideboard, fetched by Learn).
+
+## Prismari Artistry (13b, U/R): as built
+
+`stx-prismari-artistry`, card behaviour in `stx/prismari.ts` and `stx/lessons-prismari.ts`. 24 lands (Prismari Campus 4, Island 10,
+Mountain 10), 31 of 36 spells from STX plus Giant Cindermaw 2, Quaketusk Boar, Shivan Dragon, Skyskipper Duo and Scorching
+Dragonfire (Foundations/Bloomburrow). The pure-STX first draft won 31%, then 30% with Dragons added, so it was rebuilt around
+bodies and burn: Pledgemage 3, Fuming Effigy 3, Frost Trickster 3, Heated Debate 3, Pigment Storm 3. 47% over 800 games
+against the ten Foundations starters. Implemented but not in the list: Sudden Breakthrough, Vortex Runner, Spectacle Mage,
+Storm-Kiln Artist (lorehold.ts), Archmage Emeritus (quandrix.ts), Magma Opus, Spectacle Mage,
+Engine: `pump.ignoreDefender` (Pledgemage) and `nextSpellCostsLess` (Maelstrom Muse), blocks `Strixhaven (13b)`.
+Simplified: Magma Opus deals 4 to one target or 2 and 2 to two (no free division); Prismari Command's loot and Treasure modes
+are for you; Elemental Expressionist makes the Elemental if the creature dies (not when exiled); Galazeth Prismari only makes
+the Treasure; Retriever Phoenix always learns on entering and has no graveyard replacement.

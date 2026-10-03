@@ -17,7 +17,13 @@ export function canAttack(ctx: Ctx, id: ObjectId): boolean {
   if (o.zone !== 'battlefield' || o.tapped || o.controller !== ctx.s.turn.activePlayer)
     return false;
   const c = characteristics(ctx, id);
-  if (!c.types.includes('Creature') || c.keywords.has('defender') || c.cantAttack) return false;
+  if (!c.types.includes('Creature') || c.cantAttack) return false;
+  // Strixhaven (13b): Prismari Pledgemage can attack this turn despite defender.
+  if (
+    c.keywords.has('defender') &&
+    !ctx.s.effects.some((e) => e.ignoreDefender && e.affected.id === id && e.affected.zcc === o.zcc)
+  )
+    return false;
   if (cantAttackDefender(ctx, id)) return false;
   // Promise of Loyalty: it can't attack the player it made its vow to.
   if (o.vowedTo && o.vowedTo !== o.controller) return false;

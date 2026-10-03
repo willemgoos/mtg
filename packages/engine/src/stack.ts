@@ -260,6 +260,13 @@ export function castCost(
         )
           reduce += a.effect.amount;
       }
+  // Strixhaven (13b): Maelstrom Muse's "next instant or sorcery costs less".
+  const discount = ctx.s.players[player].nextSpellDiscount;
+  if (
+    discount?.turn === ctx.s.turn.number &&
+    (d.types.includes('Instant') || d.types.includes('Sorcery'))
+  )
+    reduce += discount.amount;
   // Archmage of Runes: instants and sorceries cost less.
   if (d.types.includes('Instant') || d.types.includes('Sorcery'))
     for (const id of ctx.s.battlefield) {
@@ -318,6 +325,9 @@ export function castSpell(
     choice.sneak ? d.sneak! : castCost(ctx, player, card, choice, targets),
     wardCost(ctx, player, targets),
   );
+  // Strixhaven (13b): the Maelstrom Muse discount is used up by the next instant or sorcery.
+  if (d.types.includes('Instant') || d.types.includes('Sorcery'))
+    delete ctx.s.players[player].nextSpellDiscount;
   const teamwork = teamworkFor(ctx, player, card, choice);
   // Convoke: remembered for "each creature that convoked this spell" (Lethal Scheme).
   const convokers = d.convoke
