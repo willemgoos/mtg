@@ -23054,6 +23054,155 @@
   }
  },
  {
+  "name": "Marvel Boy, Noh-Varr",
+  "scryfallId": "89abf5d4-d462-4f6c-aa47-3df67a5e1a6f",
+  "oracleId": "7a315db3-e66c-4648-b7a0-5aef2ce9b580",
+  "set": "msc",
+  "collectorNumber": "743",
+  "rarity": "uncommon",
+  "manaCost": "{1}{R/W}",
+  "typeLine": "Legendary Creature — Kree Soldier Hero",
+  "oracleText": "Whenever another creature you control enters and whenever you activate a power-up ability, put a +1/+1 counter on Marvel Boy.",
+  "power": "1",
+  "toughness": "1",
+  "colors": [
+   "R",
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/9/89abf5d4-d462-4f6c-aa47-3df67a5e1a6f.jpg?1783903031",
+   "normal": "https://cards.scryfall.io/normal/front/8/9/89abf5d4-d462-4f6c-aa47-3df67a5e1a6f.jpg?1783903031",
+   "large": "https://cards.scryfall.io/large/front/8/9/89abf5d4-d462-4f6c-aa47-3df67a5e1a6f.jpg?1783903031",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/9/89abf5d4-d462-4f6c-aa47-3df67a5e1a6f.jpg?1783903031"
+  }
+ },
+ {
+  "name": "Ms. Marvel, Elastic Ally",
+  "scryfallId": "bf9ce355-f472-4f0f-8d8e-96df363e1b02",
+  "oracleId": "26a1b36c-3c27-4eb4-b85f-63459653b773",
+  "set": "msc",
+  "collectorNumber": "744",
+  "rarity": "uncommon",
+  "manaCost": "{2}{G/W}",
+  "typeLine": "Legendary Creature — Mutant Inhuman Hero",
+  "oracleText": "Reach\nWhen Ms. Marvel enters, target creature gets +2/+0 until end of turn.\nWhenever a creature you control with power greater than its base power deals combat damage to a player, draw a card. This ability triggers only once each turn.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "G",
+   "W"
+  ],
+  "keywords": [
+   "Reach"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/f/bf9ce355-f472-4f0f-8d8e-96df363e1b02.jpg?1783903031",
+   "normal": "https://cards.scryfall.io/normal/front/b/f/bf9ce355-f472-4f0f-8d8e-96df363e1b02.jpg?1783903031",
+   "large": "https://cards.scryfall.io/large/front/b/f/bf9ce355-f472-4f0f-8d8e-96df363e1b02.jpg?1783903031",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/f/bf9ce355-f472-4f0f-8d8e-96df363e1b02.jpg?1783903031"
+  }
+ },
+ {
+  "name": "Photon, Lady of Light",
+  "scryfallId": "fa755966-0b96-4747-ba1f-26182d265335",
+  "oracleId": "2d0aa801-1227-4226-8c27-3bdd441857aa",
+  "set": "msc",
+  "collectorNumber": "606",
+  "rarity": "uncommon",
+  "manaCost": "{3}{W}",
+  "typeLine": "Legendary Creature — Human Hero",
+  "oracleText": "Flying\nWhenever Photon attacks, exile up to one other target creature you control, then return that card to the battlefield under its owner's control.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/a/fa755966-0b96-4747-ba1f-26182d265335.jpg?1783903079",
+   "normal": "https://cards.scryfall.io/normal/front/f/a/fa755966-0b96-4747-ba1f-26182d265335.jpg?1783903079",
+   "large": "https://cards.scryfall.io/large/front/f/a/fa755966-0b96-4747-ba1f-26182d265335.jpg?1783903079",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/a/fa755966-0b96-4747-ba1f-26182d265335.jpg?1783903079"
+  }
+ },
+ {
+  "name": "Captain Marvel, Shooting Star",
+  "scryfallId": "bc52fc96-69ea-4eda-97ec-6f54014797c2",
+  "oracleId": "73fdb375-9c71-421d-8027-8636e3ea8f35",
+  "set": "msc",
+  "collectorNumber": "589",
+  "rarity": "mythic",
+  "manaCost": "{5}{W}{W}",
+  "typeLine": "Legendary Creature — Human Kree Hero",
+  "oracleText": "Flying\nWhenever Captain Marvel enters or attacks, exile up to one target creature. That creature's controller gains life equal to its power.\nWhenever a creature other than Captain Marvel is exiled from the battlefield, you gain life equal to its power.",
+  "power": "6",
+  "toughness": "6",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/c/bc52fc96-69ea-4eda-97ec-6f54014797c2.jpg?1783903085",
+   "normal": "https://cards.scryfall.io/normal/front/b/c/bc52fc96-69ea-4eda-97ec-6f54014797c2.jpg?1783903085",
+   "large": "https://cards.scryfall.io/large/front/b/c/bc52fc96-69ea-4eda-97ec-6f54014797c2.jpg?1783903085",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/c/bc52fc96-69ea-4eda-97ec-6f54014797c2.jpg?1783903085"
+  }
+ },
+ {
+  "name": "Quantum Entanglement",
+  "scryfallId": "546e6506-e711-49d7-b9ad-e7791ec4264a",
+  "oracleId": "4b072fbb-5e61-4009-bcb1-d493eb4a1be4",
+  "set": "msc",
+  "collectorNumber": "607",
+  "rarity": "rare",
+  "manaCost": "{1}{W}",
+  "typeLine": "Enchantment",
+  "oracleText": "Flash\nWhen this enchantment enters and at the beginning of your end step, you may pay {1}{W}. When you do, exile target creature you control, then return that card to the battlefield under its owner's control.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Flash"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/4/546e6506-e711-49d7-b9ad-e7791ec4264a.jpg?1783903079",
+   "normal": "https://cards.scryfall.io/normal/front/5/4/546e6506-e711-49d7-b9ad-e7791ec4264a.jpg?1783903079",
+   "large": "https://cards.scryfall.io/large/front/5/4/546e6506-e711-49d7-b9ad-e7791ec4264a.jpg?1783903079",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/4/546e6506-e711-49d7-b9ad-e7791ec4264a.jpg?1783903079"
+  }
+ },
+ {
+  "name": "Fall to Earth",
+  "scryfallId": "8c8e39b0-c5c7-447e-a483-ceb72a980fc7",
+  "oracleId": "223db021-979f-4312-8cb5-169ae4bf17bc",
+  "set": "msc",
+  "collectorNumber": "517",
+  "rarity": "common",
+  "manaCost": "{4}{W}",
+  "typeLine": "Instant",
+  "oracleText": "Exile target creature. Each player gains 3 life.\nBasic landcycling {2} ({2}, Discard this card: Search your library for a basic land card, reveal it, put it into your hand, then shuffle.)",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Landcycling",
+   "Basic landcycling",
+   "Typecycling",
+   "Cycling"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/c/8c8e39b0-c5c7-447e-a483-ceb72a980fc7.jpg?1783903107",
+   "normal": "https://cards.scryfall.io/normal/front/8/c/8c8e39b0-c5c7-447e-a483-ceb72a980fc7.jpg?1783903107",
+   "large": "https://cards.scryfall.io/large/front/8/c/8c8e39b0-c5c7-447e-a483-ceb72a980fc7.jpg?1783903107",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/c/8c8e39b0-c5c7-447e-a483-ceb72a980fc7.jpg?1783903107"
+  }
+ },
+ {
   "name": "Boomerang, Blade Flinger",
   "scryfallId": "6b9f9d5d-a1b6-4e3a-8b65-69eba94ee990",
   "oracleId": "bbd84035-3efd-4301-9778-913898efd57a",

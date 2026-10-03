@@ -493,6 +493,14 @@ function detect(ctx: Ctx, ev: GameEvent): void {
           ctx,
           (o, a) => a.trigger.on === 'leavesWithoutDying' && o.id !== ev.id && o.controller === was,
         );
+        // Marvel Super Heroes Jumpstart (Marvelous): Captain Marvel, Shooting Star.
+        if (ev.to === 'exile')
+          forEachBattlefieldTrigger(
+            ctx,
+            (o, a) => a.trigger.on === 'otherCreatureExiled' && o.id !== ev.id,
+            moved,
+            ev.lastPower ?? 0,
+          );
       }
       // Justice, Vance Astrovik: "another nonland permanent you control is returned to its owner's hand".
       if (ev.from === 'battlefield' && ev.to === 'hand' && !movedDef.types.includes('Land')) {
@@ -1191,6 +1199,16 @@ function detect(ctx: Ctx, ev: GameEvent): void {
         )
           queue(ctx, o, i, o.controller);
       });
+      return;
+    }
+    // Marvel Super Heroes Jumpstart (Marvelous): Marvel Boy, Noh-Varr.
+    case 'abilityActivated': {
+      const item = s.stack.find((i) => i.id === ev.id);
+      if (item?.kind === 'ability' && item.activated?.powerUp)
+        forEachBattlefieldTrigger(
+          ctx,
+          (o, a) => a.trigger.on === 'youActivatePowerUp' && o.controller === ev.player,
+        );
       return;
     }
     case 'tappedForTeamwork': {
