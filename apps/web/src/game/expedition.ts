@@ -6,6 +6,7 @@ import {
   pickOpponent,
   registerDeck,
   SCRYFALL,
+  strixhavenBoosterSheets,
   scryfallById,
   slug,
 } from '@mtg/cards';
@@ -643,7 +644,7 @@ const SHEETS = {
   blb: sheetsOf('blb'),
   msh: sheetsOf('msh'),
   // Arena's STX boosters also had a Mystical Archive slot (phase 16); not modelled yet.
-  stx: sheetsOf('stx'),
+  stx: strixhavenBoosterSheets(),
 };
 type Sheet = (typeof SHEETS.fdn)['common'];
 

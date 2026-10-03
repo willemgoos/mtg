@@ -1,4 +1,5 @@
 import { cardDb, findDeck, PLAYABLE_DECKS, registerDeck, SCRYFALL, slug } from '@mtg/cards';
+import { STX_BOOSTER_LIST } from '../../../packages/cards/src/stx/booster-list.ts';
 import { describe, expect, it } from 'vitest';
 import {
   applySuggestion,
@@ -45,6 +46,7 @@ import {
 const deck = PLAYABLE_DECKS.find((d) => d.series === 'starter')!.id;
 const empty: ExpeditionState = { run: null, records: {} };
 const card = new Map(SCRYFALL.map((c) => [c.name, c]));
+const boosterNames = new Set(STX_BOOSTER_LIST.map(([n]) => n));
 const packSize = PACK_SIZE.rare + PACK_SIZE.uncommon + PACK_SIZE.common;
 const isRare = (n: string) => ['rare', 'mythic'].includes(card.get(n)!.rarity);
 
@@ -132,7 +134,7 @@ describe('expedition packs', () => {
       const pack = rollPack({ kind: 'booster' }, seed, false, 'stx');
       expect(new Set(pack).size).toBe(packSize);
       for (const name of pack) {
-        expect(card.get(name)!.set).toBe('stx');
+        expect(boosterNames.has(name)).toBe(true);
         expect(card.get(name)!.front).toBeUndefined();
       }
     }

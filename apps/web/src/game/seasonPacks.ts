@@ -1,4 +1,10 @@
-import { FOUNDATIONS_PACK_CANDIDATES, SCRYFALL, cardDb, slug } from '@mtg/cards';
+import {
+  FOUNDATIONS_PACK_CANDIDATES,
+  SCRYFALL,
+  cardDb,
+  slug,
+  strixhavenBoosterSheets,
+} from '@mtg/cards';
 import { nextInt, type RngState } from '@mtg/engine';
 import {
   copyLimit,
@@ -48,12 +54,11 @@ export const MARVEL_SHEETS = Object.fromEntries(
 ) as Record<Rarity, string[]>;
 
 /** Strixhaven's booster cards: every card in the set we play, but the basics (fronts only). The Mystical Archive slot comes with phase 16. */
+const stxCards = strixhavenBoosterSheets();
 export const STRIXHAVEN_SHEETS = Object.fromEntries(
   RARITIES.map((rarity) => [
     rarity,
-    SCRYFALL.filter((c) => c.set === 'stx' && c.rarity === rarity && !c.front)
-      .map((c) => slug(c.name))
-      .filter((id) => cardDb.has(id) && !isBasic(id)),
+    stxCards[rarity].map((c) => slug(c.name)).filter((id) => cardDb.has(id) && !isBasic(id)),
   ]),
 ) as Record<Rarity, string[]>;
 

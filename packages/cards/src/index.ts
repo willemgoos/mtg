@@ -6,6 +6,7 @@ import { type Packet, PACKETS, packetCards } from './jumpin.ts';
 import scryfall from './generated/scryfall.json' with { type: 'json' };
 import foundations from './generated/foundations-pack-candidates.json' with { type: 'json' };
 import type { ScryfallCard } from './scryfall-types.ts';
+import { STX_BOOSTER_LIST } from './stx/booster-list.ts';
 
 export { BEHAVIORS, TOKENS } from './behaviors.ts';
 export { buildCard, slug, parseManaCost, parseTypeLine } from './build.ts';
@@ -41,6 +42,23 @@ export type { ScryfallCard } from './scryfall-types.ts';
 
 export const SCRYFALL: readonly ScryfallCard[] = scryfall as ScryfallCard[];
 export const FOUNDATIONS_PACK_CANDIDATES = foundations;
+
+/**
+ * Strixhaven's booster cards by STX rarity, basics left out. scryfall.json keeps
+ * one printing per card, so reprints there have another set; the list is by name.
+ */
+export function strixhavenBoosterSheets(): Record<
+  'common' | 'uncommon' | 'rare' | 'mythic',
+  ScryfallCard[]
+> {
+  const byName = new Map(SCRYFALL.map((c) => [c.name, c]));
+  const sheets: Record<string, ScryfallCard[]> = { common: [], uncommon: [], rare: [], mythic: [] };
+  for (const [name, rarity] of STX_BOOSTER_LIST) {
+    const c = byName.get(name);
+    if (c && !c.typeLine.startsWith('Basic')) sheets[rarity]!.push(c);
+  }
+  return sheets as ReturnType<typeof strixhavenBoosterSheets>;
+}
 
 const BUILT = SCRYFALL.map((sc) => buildCard(sc, BEHAVIORS[sc.name]));
 const builtById = new Map(BUILT.map((c) => [c.id, c]));
@@ -81,9 +99,7 @@ export function missingCards(list: Decklist): string[] {
     ...list.cards.map(([name]) => name),
     ...(list.sideboard ?? []).map(([name]) => name),
     ...(list.commander ? [list.commander] : []),
-  ].filter(
-    (name) => !cardDb.has(slug(name)),
-  );
+  ].filter((name) => !cardDb.has(slug(name)));
 }
 
 /** A Brawl deck's commander as a card id (undefined for other decks). */

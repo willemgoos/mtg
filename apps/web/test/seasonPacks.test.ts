@@ -1,4 +1,5 @@
 import { SCRYFALL, cardDb, slug } from '@mtg/cards';
+import { STX_BOOSTER_LIST } from '../../../packages/cards/src/stx/booster-list.ts';
 import FOUNDATIONS_MANIFEST from '../../../packages/cards/src/generated/foundations-manifest.json';
 import { createRng } from '@mtg/engine';
 import { describe, expect, it } from 'vitest';
@@ -28,6 +29,7 @@ import {
 } from '../src/game/seasonStorage.ts';
 
 const fresh = () => createSeasonSave('a', 'Test', SEASON_STARTERS[0]!.id, 19, 0);
+const boosterNames = new Set(STX_BOOSTER_LIST.map(([n]) => n));
 const misses = (): WildcardMisses => ({ common: 0, uncommon: 0, rareMythic: 0 });
 
 describe('Season Bloomburrow packs', () => {
@@ -58,13 +60,22 @@ describe('Season Bloomburrow packs', () => {
     expect(SEASON_STARTERS.some((d) => d.id === 'msh-heroes-unite')).toBe(true);
   });
 
+  it('builds the Strixhaven sheets from the full booster list, reprints included', () => {
+    const tally = (r: string) => STX_BOOSTER_LIST.filter(([, x]) => x === r).length;
+    expect(STX_BOOSTER_LIST).toHaveLength(280);
+    expect(['common', 'uncommon', 'rare', 'mythic'].map(tally)).toEqual([110, 80, 69, 21]);
+    // The five basics are in the list but not in our sheets.
+    expect(Object.values(STRIXHAVEN_SHEETS).map((s) => s.length)).toEqual([105, 80, 69, 21]);
+    expect(STRIXHAVEN_SHEETS.uncommon).toContain(slug('Rip Apart'));
+  });
+
   it('sells Strixhaven boosters too, and the Strixhaven decks as starters', () => {
     for (const [rarity, sheet] of Object.entries(STRIXHAVEN_SHEETS)) {
       expect(sheet.length, rarity).toBeGreaterThan(0);
       for (const id of sheet) {
         const c = SCRYFALL.find((x) => slug(x.name) === id)!;
-        expect(c.set).toBe('stx');
-        expect(c.rarity).toBe(rarity);
+        expect(boosterNames.has(c.name), c.name).toBe(true);
+        expect(STX_BOOSTER_LIST.find(([n]) => n === c.name)![1]).toBe(rarity);
       }
     }
     let save = { ...fresh(), coins: 1000 };
@@ -73,7 +84,8 @@ describe('Season Bloomburrow packs', () => {
     const opened = openSeasonPack(save, save.packs[0]!.id, packGenerator('strixhaven'), 2);
     const cards = opened.lastPack!.rewards.flatMap((r) => (r.kind === 'card' ? [r.cardId] : []));
     expect(cards.length).toBeGreaterThan(0);
-    for (const id of cards) expect(SCRYFALL.find((c) => slug(c.name) === id)!.set).toBe('stx');
+    for (const id of cards)
+      expect(boosterNames.has(SCRYFALL.find((c) => slug(c.name) === id)!.name)).toBe(true);
     expect(SEASON_STARTERS.some((d) => d.id === 'stx-lorehold-reckoning')).toBe(true);
   });
 
