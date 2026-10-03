@@ -1212,6 +1212,9 @@ export function answerSearch(ctx: Ctx, card: ObjectId | null): void {
             blockers: [],
           });
         }
+        // Marvel Super Heroes (Nick Fury, Spymaster): "it" for the effects after it ('chosen').
+        const put = obj(ctx, card);
+        if (put.zone === 'battlefield') d.resume.chosen = { id: put.id, zcc: put.zcc };
       } else moveObject(ctx, card, 'hand');
       squirrelFood(ctx, d, card);
       return resume(ctx, d.resume, d.thenPriority);
