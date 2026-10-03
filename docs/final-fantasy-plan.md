@@ -192,15 +192,15 @@ On Arena the four FIC decks came as **Arena Store Brawl decks** (7 July 2025, mt
 Fantasy)"), led by the four FIC face commanders. So "four Brawl decks led by FIN legends" and the FIC precons are the same
 four decks. Three more FIC Brawl decks followed (9 December 2025, "Arena Store decks (Final Fantasy Commander)").
 
-| Sub-phase | Deck | Commander | Colours |
-|---|---|---|---|
-| 12a | Revival Trance (done) | Terra, Herald of Hope | R/W/B |
-| 12b | Limit Break (done) | Cloud, Ex-SOLDIER | R/G/W |
-| 12c | Counter Blitz (done) | Tidus, Yuna's Guardian | G/W/U |
-| 12d | Scions & Spellcraft (done) | Y'shtola, Night's Blessed | W/U/B |
-| 12e | Brawl Aerith, Last Ancient (done) | Aerith, Last Ancient | G/W |
-| 12f | Brawl Emet-Selch of the Third Seat (done) | Emet-Selch of the Third Seat | U/B |
-| 12g | Brawl Locke, Treasure Hunter (done) | Locke, Treasure Hunter | B/R |
+| Sub-phase | Deck                                      | Commander                    | Colours |
+| --------- | ----------------------------------------- | ---------------------------- | ------- |
+| 12a       | Revival Trance (done)                     | Terra, Herald of Hope        | R/W/B   |
+| 12b       | Limit Break (done)                        | Cloud, Ex-SOLDIER            | R/G/W   |
+| 12c       | Counter Blitz (done)                      | Tidus, Yuna's Guardian       | G/W/U   |
+| 12d       | Scions & Spellcraft (done)                | Y'shtola, Night's Blessed    | W/U/B   |
+| 12e       | Brawl Aerith, Last Ancient (done)         | Aerith, Last Ancient         | G/W     |
+| 12f       | Brawl Emet-Selch of the Third Seat (done) | Emet-Selch of the Third Seat | U/B     |
+| 12g       | Brawl Locke, Treasure Hunter (done)       | Locke, Treasure Hunter       | B/R     |
 
 - Lists: Arena is the reference, so the Arena Store lists from mtg.wiki come first. The Arena versions swap cards that are
   not on Arena (Cloud's list has Sword of Forge and Frontier, for example). Check them against the paper lists on
