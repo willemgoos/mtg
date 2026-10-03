@@ -348,6 +348,11 @@ export function countOf(
       (id) => obj(ctx, id).controller !== player && matchesFilter(ctx, id, a.filter),
     ).length;
   if (a.count === 'cardsInHand') return ctx.s.players[player].hand.length;
+  // Marvel Super Heroes Jumpstart (Lethal)
+  if (a.count === 'opponentCreatureCardsInGraveyard')
+    return ctx.s.players[other(player)].graveyard.filter((id) =>
+      def(ctx, id).types.includes('Creature'),
+    ).length;
   // The Fantastic Four (9d).
   if (a.count === 'colorsAmongPermanentsAndSpells') {
     const colors = new Set<string>();
