@@ -320,6 +320,18 @@ export function countOf(
       (id) => obj(ctx, id).controller !== player && matchesFilter(ctx, id, a.filter),
     ).length;
   if (a.count === 'cardsInHand') return ctx.s.players[player].hand.length;
+  // Strixhaven (13c)
+  if (a.count === 'cardsInLibrary') return ctx.s.players[player].library.length;
+  if (a.count === 'differentPowersYouControl')
+    return new Set(creaturesOnBattlefield(ctx, player).map((c) => power(ctx, c.id))).size;
+  if (a.count === 'differentStudyManaValues')
+    return new Set(
+      ctx.s.players[player].exile
+        .filter(
+          (id) => (obj(ctx, id).counters?.study ?? 0) > 0 && !def(ctx, id).types.includes('Land'),
+        )
+        .map((id) => manaValueOfDef(def(ctx, id))),
+    ).size;
   // The Fantastic Four (9d).
   if (a.count === 'colorsAmongPermanentsAndSpells') {
     const colors = new Set<string>();
@@ -539,6 +551,8 @@ export function matchesFilter(
     return false;
   // Strixhaven (13b): monocolored (Vanishing Verse).
   if (filter.monocolored && def(ctx, id).colors.length !== 1) return false;
+  // Strixhaven (13c): nonlegendary.
+  if (filter.nonlegendary && def(ctx, id).supertypes.includes('Legendary')) return false;
   if (filter.commander && !isCommander(ctx, id)) return false;
   if (filter.supertypes && !filter.supertypes.some((t) => def(ctx, id).supertypes.includes(t)))
     return false;
@@ -611,6 +625,8 @@ export function cardMatches(
   if (filter.notTypes?.some((t) => d.types.includes(t))) return false;
   // Strixhaven (13b): monocolored.
   if (filter.monocolored && d.colors.length !== 1) return false;
+  // Strixhaven (13c): nonlegendary.
+  if (filter.nonlegendary && d.supertypes.includes('Legendary')) return false;
   if (filter.commander && !isCommander(ctx, id)) return false;
   if (filter.supertypes && !filter.supertypes.some((t) => d.supertypes.includes(t))) return false;
   // Strixhaven (13c): Plargg (nonlegendary), Silverquill Silencer (the chosen name).

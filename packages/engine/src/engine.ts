@@ -241,6 +241,8 @@ function apply(ctx: Ctx, action: Action): void {
           discard: action.discard,
           via: 'free',
           exileAfter: d.exileAfter,
+          freePay: d.pay,
+          freeLess: d.costLess,
         });
         return finishCastFree(ctx, action.card);
       }

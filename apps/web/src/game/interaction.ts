@@ -21,7 +21,8 @@ export function forageFood(a: Action): ObjectId | null {
  */
 export function targetsOf(a: Action): TargetChoice[] {
   if (a.type === 'castSpell' || a.type === 'activateAbility') {
-    const discard = a.type === 'castSpell' ? a.discard : undefined;
+    // Strixhaven (13c): an ability's discard (Jadzi) or exile-from-hand (Uvilda) cost is picked too.
+    const discard = a.discard;
     const copyOf = a.type === 'castSpell' ? a.copyOf : undefined;
     // Sneak: the unblocked attacker to return is picked first.
     const sneak = a.type === 'castSpell' ? a.sneak : undefined;

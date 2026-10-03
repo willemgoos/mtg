@@ -468,8 +468,11 @@ export function Board({
               'a creature to sacrifice'
             : forageFood(first)
               ? 'a Food to sacrifice'
-              : first.type === 'castSpell' && first.discard
-                ? 'a card to discard'
+              : first.discard
+                ? first.type === 'activateAbility' &&
+                  exilesFromHand(view.objects[first.source]!.defId, first.abilityIndex)
+                  ? 'an instant or sorcery card to exile'
+                  : 'a card to discard'
                 : first.type === 'castSpell' && first.copyOf
                   ? 'a creature to copy (or skip)'
                   : first.type === 'castSpell' && first.sneak
@@ -1007,7 +1010,11 @@ export function Board({
             <p>
               {d.discardInstead
                 ? 'You may cast it by discarding a card instead of paying its mana cost.'
-                : 'You may cast it without paying its mana cost.'}
+                : d.pay
+                  ? `You may cast it by paying ${manaText(d.pay)} rather than its mana cost.`
+                  : d.costLess
+                    ? `You may cast it; it costs {${d.costLess}} less.`
+                    : 'You may cast it without paying its mana cost.'}
             </p>
             <div className="mull__hand">
               {d.cards.map((id, i) => {
@@ -1436,6 +1443,12 @@ function ChooseCardOverlay({ game, onHover }: { game: GameSession; onHover: Hove
   );
 }
 
+/** Strixhaven (13c): Uvilda exiles a card from your hand as a cost. */
+function exilesFromHand(defId: CardDefId, index: number): boolean {
+  const a = cardDb.get(defId)?.abilities[index];
+  return a?.kind === 'activated' && !!a.cost.exileRefine;
+}
+
 /** Final Fantasy (11b): what a kicker paid with a permanent asks for (Vayne's Treachery, Chocobo Kick). */
 function kickPermanentPrompt(defId: CardDefId | undefined, a: Action): string | null {
   if (a.type !== 'castSpell' || !a.kicked || !defId) return null;
@@ -1571,15 +1584,19 @@ function SearchOverlay({ game, onHover }: { game: GameSession; onHover: HoverFn 
       <div className="mull">
         <h2>
           {d.kind === 'searchLibrary' && d.fromGraveyard
-            ? 'Choose from your graveyard'
+            ? picks[0]?.card && view.objects[picks[0].card]?.zone === 'exile'
+              ? 'Choose a card you own in exile'
+              : 'Choose from your graveyard'
             : d.kind === 'searchLibrary' && d.looked
               ? 'Top of your library'
               : 'Search your library'}
         </h2>
         <p>
-          {d.kind === 'searchLibrary' && d.to && d.to !== 'hand'
-            ? 'Choose a card to put onto the battlefield.'
-            : 'Choose a card to put into your hand.'}{' '}
+          {d.kind === 'searchLibrary' && d.to === 'castFree'
+            ? 'Choose a card to exile; you may cast it without paying its mana cost.'
+            : d.kind === 'searchLibrary' && d.to && d.to !== 'hand'
+              ? 'Choose a card to put onto the battlefield.'
+              : 'Choose a card to put into your hand.'}{' '}
           {d.kind === 'searchLibrary' && d.fromGraveyard
             ? ''
             : d.kind === 'searchLibrary' && d.looked

@@ -198,6 +198,8 @@ export interface CardDefinition {
   sacrificeAnyForReduction?: boolean;
   /** Strixhaven (13c): Plumb the Forbidden: "you may sacrifice one or more creatures; when you do, copy this spell for each". */
   sacrificeCreaturesToCopy?: boolean;
+  /** "You may sacrifice any number of creatures. This spell costs {N} less for each" (Awaken the Blood Avatar). */
+  sacrificeCreaturesForReduction?: number;
   /** "As an additional cost to cast this spell, discard a card" (Sazacap's Brew). */
   discardToCast?: boolean;
   /** It enters tapped while this holds (Eddymurk Crab: if it's not your turn). */
@@ -349,6 +351,13 @@ export interface CostDef {
   // Strixhaven (13a): Stonerise Spirit, Tome Shredder
   /** Exile a card matching the filter from your graveyard (the engine picks the least useful one). */
   exileFromGraveyard?: CardFilter;
+  // Strixhaven (13c)
+  /** A loyalty ability with X: remove X loyalty counters (Kasmina, Enigma Sage). */
+  loyaltyX?: boolean;
+  /** Return this permanent to its owner's hand (Rootha, Mercurial Artist). */
+  returnSelf?: boolean;
+  /** Exile an instant or sorcery card from your hand with three refine counters (Uvilda, Dean of Perfection). */
+  exileRefine?: boolean;
 }
 
 export type TriggerDef =
@@ -585,6 +594,9 @@ export type ConditionDef =
     }
   /** You have at least `min` cards in hand. */
   | { kind: 'handSize'; min: number }
+  // Strixhaven (13c): Rowan, Scholar of Sparks
+  /** You've drawn at least `min` cards this turn. */
+  | { kind: 'cardsDrawnThisTurn'; min: number }
   /** Every condition holds. */
   | { kind: 'all'; of: ConditionDef[] }
   /** An opponent has a card matching the filter in hand (Bandit's Talent: a nonland card). */
@@ -867,7 +879,16 @@ export type Amount =
   /** The mana spent to cast the triggering spell (Shantotto). */
   | { manaSpentOnSubject: true }
   // Strixhaven (13c): life you gained this turn (Fortifying Draught, Accomplished Alchemist).
-  | { count: 'lifeGainedThisTurn' };
+  | { count: 'lifeGainedThisTurn' }
+  // Strixhaven (13c)
+  /** Cards in your library (Body of Research). */
+  | { count: 'cardsInLibrary' }
+  /** Different powers among creatures you control (Golden Ratio). */
+  | { count: 'differentPowersYouControl' }
+  /** Different mana values among nonland cards you own in exile with study counters (Kianne). */
+  | { count: 'differentStudyManaValues' }
+  /** Half the mana value of the Ref'd card, rounded up (Torrent Sculptor). */
+  | { halfManaValueUpOf: Ref };
 
 export type EffectDef =
   | { kind: 'may'; effects: EffectDef[]; cost?: ManaCost }
@@ -895,6 +916,9 @@ export type EffectDef =
       // Strixhaven (13b): Prismari Pledgemage
       /** "Can attack this turn as though it didn't have defender." */
       ignoreDefender?: boolean;
+      // Strixhaven (13c): Square Up, Tanazir Quandrix
+      /** `power` and `toughness` are the base power and toughness rather than a bonus. */
+      setBase?: boolean;
     }
   // Strixhaven (13b): Maelstrom Muse
   /** The next instant or sorcery spell you cast this turn costs {amount} less (X is read now). */
@@ -995,7 +1019,14 @@ export type EffectDef =
     }
   /** Copy a spell on the stack (`count` times): a target spell, or the spell that triggered this. */
   /** `retarget`: each copy gets another legal target if there is one (Ancestral Communion). */
-  | { kind: 'copySpell'; what: Ref; count?: Amount; retarget?: boolean }
+  | {
+      kind: 'copySpell';
+      what: Ref;
+      count?: Amount;
+      retarget?: boolean;
+      /** The copy isn't legendary (Double Major). */
+      nonlegendary?: boolean;
+    }
   /** Each player sacrifices a creature of their choice (Season of Loss). */
   | { kind: 'eachPlayerSacrifices' }
   /**
@@ -1108,7 +1139,15 @@ export type EffectDef =
       // Strixhaven (13a): Zimone, Quandrix Prodigy
       /** It enters tapped. */
       tapped?: boolean;
+      // Strixhaven (13c): Journey to the Oracle
+      /** Every matching card from your hand, without asking ("any number": the best choice). */
+      all?: boolean;
     }
+  // Strixhaven (13c)
+  /** The resolving spell returns to its owner's hand rather than the graveyard (Journey to the Oracle). */
+  | { kind: 'returnSelfFromStack' }
+  /** You may put a card you own in exile with a study counter on it into your hand (Imbraham). */
+  | { kind: 'takeStudyCard' }
   /** Exile permanents, then return them under their owners' control (with +1/+1 counters). */
   | {
       kind: 'blink';
@@ -1188,7 +1227,7 @@ export type EffectDef =
       /** Search your library (Bushwhack, Circuitous Route). Shuffles afterwards unless `shuffle` is false. */
       kind: 'searchLibrary';
       filter: 'basicLand' | 'basicLandOrGate' | CardFilter;
-      to: 'hand' | 'battlefieldTapped' | 'battlefield' | 'graveyard' | 'libraryTop';
+      to: 'hand' | 'battlefieldTapped' | 'battlefield' | 'graveyard' | 'libraryTop' | 'castFree';
       /** Unrestricted tutors cannot fail to find a card in a nonempty library. */
       required?: boolean;
       shuffle?: boolean;
@@ -1219,6 +1258,9 @@ export type EffectDef =
       filter?: CardFilter;
       /** Exiled instead (Ruthless Negotiation: "exiles a card from their hand"). */
       exile?: boolean;
+      // Strixhaven (13c): Flamethrower Sonata
+      /** Discarding an instant or sorcery deals damage equal to its mana value to this target. */
+      damageTo?: number;
     }
   /** Put the top N cards of your library into your graveyard. */
   | { kind: 'mill'; count: Amount; who?: Ref }
@@ -1413,7 +1455,14 @@ export type EffectDef =
   | { kind: 'exiledWithSourceToHand' }
   // The Fantastic Four (9d).
   /** You may cast this exiled card without paying its mana cost (rebound, Power Pack); also a card in hand (miracle). */
-  | { kind: 'castFreeCard'; card: ObjectRef; exileAfter?: boolean }
+  | {
+      kind: 'castFreeCard';
+      card: ObjectRef;
+      exileAfter?: boolean;
+      // Strixhaven (13c): Uvilda
+      /** It costs this many generic mana less instead of being free. */
+      costLess?: number;
+    }
   /**
    * Exile cards from the top until a nonland card with mana value at most `max`
    * (cascade: less than the source's). You may cast it free (discover: or put
@@ -1421,11 +1470,14 @@ export type EffectDef =
    */
   | {
       kind: 'revealUntilCastable';
-      max: Amount | 'belowSource';
+      max: Amount | 'belowSource' | 'belowSubject';
       orHand?: boolean;
-      // Strixhaven (13c): Plargg, Dean of Chaos (nonlegendary)
+      /** Only a card matching this stops the search (Codie: an instant or sorcery). */
       filter?: CardFilter;
     }
+  // Strixhaven (13c)
+  /** Jadzi: reveal the top card; a land goes onto the battlefield, a nonland card may be cast by paying `pay`. */
+  | { kind: 'revealTopCastOrPlay'; pay: ManaCost }
   /**
    * Goad (or "attacks each combat if able"): until your next turn they attack
    * each combat if able. `draws`: whenever one deals combat damage to a player, you draw (Kang Dynasty).
@@ -1446,6 +1498,9 @@ export type EffectDef =
       until?: 'yourNextTurn' | 'whileSource';
       /** "Except he's a 4/4 Human Villain creature with vigilance" (Absorbing Man). */
       asCreature?: { power: number; toughness: number; subtypes: string[]; keywords: Keyword[] };
+      // Strixhaven (13c): Echoing Equation
+      /** The copies aren't legendary. */
+      nonlegendary?: boolean;
     }
   /** Tragic Arrogance: each player keeps one artifact, creature, enchantment and planeswalker (picked for them). */
   | { kind: 'keepOneOfEachType' }
@@ -1723,7 +1778,12 @@ export type StaticDef =
   | { kind: 'landsEnterUntapped' }
   // Final Fantasy (11b): permanents in the graveyard
   /** "Prevent all combat damage that would be dealt to this creature" (Diamond Weapon). */
-  | { kind: 'preventCombatDamageToSelf' };
+  | { kind: 'preventCombatDamageToSelf' }
+  // Strixhaven (13c)
+  /** You can't cast permanent spells (Codie, Vociferous Codex). */
+  | { kind: 'cantCastPermanentSpells' }
+  /** Each other planeswalker you control has this permanent's loyalty abilities (Kasmina, Enigma Sage). */
+  | { kind: 'sharesLoyaltyAbilities' };
 
 export type CardDb = ReadonlyMap<CardDefId, CardDefinition>;
 
@@ -1822,6 +1882,8 @@ export interface GameObject {
   /** Someone other than its owner may cast it from exile, with any mana (Cruelclaw's Heist). */
   castableBy?: PlayerId;
   anyMana?: boolean;
+  /** Strixhaven (13c): `castableBy` only through the end of this turn (Nassari). */
+  castableUntilTurn?: number;
   /** The X paid for it as a spell (Hugs). */
   xPaid?: number;
   /** Mockingbird: it entered as a copy; this is what it really is. */
@@ -1864,6 +1926,8 @@ export interface GameObject {
   monstrous?: boolean;
   /** A token copy that isn't legendary (Helm of the Host). */
   nonlegendary?: boolean;
+  /** Strixhaven (13c): not legendary only while it's a copy (Echoing Equation). */
+  copyNonlegendary?: boolean;
   /** Exiled until an opponent of this player becomes the monarch (Palace Jailer). */
   jailedBy?: PlayerId;
   /** Kimoyo Beads: the modes of its triggered ability already chosen. */
@@ -2259,6 +2323,8 @@ export type Decision =
       filter?: CardFilter;
       /** Exiled instead of discarded (Ruthless Negotiation). */
       exile?: boolean;
+      /** Strixhaven (13c): see the effect. */
+      damageTo?: number;
       /** Connive: the creature that gets a +1/+1 counter if a nonland card is discarded. */
       connive?: ObjectRef;
       resume: PausedResolution;
@@ -2272,7 +2338,7 @@ export type Decision =
       /** Choosing from the graveyard instead of searching the library (Inspiration from Beyond). */
       fromGraveyard?: boolean;
       /** Where the card goes. Default: hand. */
-      to?: 'hand' | 'battlefieldTapped' | 'battlefield' | 'graveyard' | 'libraryTop';
+      to?: 'hand' | 'battlefieldTapped' | 'battlefield' | 'graveyard' | 'libraryTop' | 'castFree';
       required?: boolean;
       /** Only these top cards were looked at: the rest go to the bottom in a random order (no shuffle). */
       looked?: ObjectId[];
@@ -2455,6 +2521,11 @@ export type Decision =
       thenToHand?: ObjectId[];
       /** Marvel Super Heroes: cards not cast go to the bottom of their owner's library. */
       thenToBottom?: ObjectId[];
+      // Strixhaven (13c)
+      /** The cast costs this instead of nothing (Jadzi: {1}). */
+      pay?: ManaCost;
+      /** The cast costs its mana cost less this much (Uvilda: {4}). */
+      costLess?: number;
       resume: PausedResolution;
       thenPriority: PlayerId;
     }

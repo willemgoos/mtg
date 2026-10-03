@@ -240,3 +240,13 @@ whole (SOS's `prepare` is the riskiest). The shortest path to Quintorius is 0, 1
   abilities (your graveyard, an opponent's). Plumb the Forbidden sacrifices up to three creatures (tokens and the
   cheapest first, not chosen). Deadly Brew returns its card before the opponent sacrifices. Verdant Mastery and Search for
   Blex pick one card at a time. Professor Onyx's -8 asks the discard one decision at a time.
+
+13c (group C: Quandrix, Prismari, Codie, Extus; `stx/rares-c.ts`):
+
+- Frostboil Snarl and Expressive Iteration were already in the pool (msc). Kasmina's shared loyalty abilities use her own
+  colours for the -8 on other walkers. Jadzi, Double Major and Rootha copies keep the original targets (Rootha, Teach by
+  Example, Rowan's emblem; no new-target choice). Codie's free cast happens when the trigger resolves, not "until end of turn".
+- Practical Research always discards an instant or sorcery when you hold one. Journey to the Oracle puts every land from hand
+  onto the battlefield. Torrent Sculptor and Flamethrower Sonata target (the card / the creature) instead of choosing on
+  resolution. Uvilda exiles the card as a cost; the refine counters are an engine counter, so the exiled card shows no text.
+  Echoing Equation's copies end with the turn like any copy. Will's +1 and Rowan's other targets are chosen as usual.
