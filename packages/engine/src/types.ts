@@ -668,7 +668,10 @@ export type ConditionDef =
   /** It's your turn, and one of your first `max` turns of the game (Starting Town). */
   | { kind: 'yourEarlyTurn'; max: number }
   /** The creature that caused the trigger was crewed by the source this turn (Balthier and Fran). */
-  | { kind: 'subjectCrewedBySource' };
+  | { kind: 'subjectCrewedBySource' }
+  // Marvel Super Heroes Jumpstart (Heroes for Hire)
+  /** Target `target` was chosen and is still legal ("up to" targets: Iron Fist, Hero for Hire). */
+  | { kind: 'targetChosen'; target: number };
 
 export interface CardFilter {
   anyOf?: CardFilter[];

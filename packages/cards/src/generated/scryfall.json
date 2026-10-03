@@ -22184,6 +22184,154 @@
   }
  },
  {
+  "name": "Iron Fist, Hero for Hire",
+  "scryfallId": "9f1cdf84-c034-4435-8ce7-50f6b777fb57",
+  "oracleId": "58c8bf6a-1b13-4c90-9e0b-24fb687f1e13",
+  "set": "msc",
+  "collectorNumber": "692",
+  "rarity": "rare",
+  "manaCost": "{1}{R}",
+  "typeLine": "Legendary Creature — Human Mercenary Hero",
+  "oracleText": "Trample\nProwess (Whenever you cast a noncreature spell, this creature gets +1/+1 until end of turn.)\nPower-up — {7}{R}: Iron Fist deals 5 damage divided as you choose among up to five targets. Put five +1/+1 counters on Iron Fist. (Activate each power-up ability only once. Reduce the cost by his mana cost if he entered this turn.)",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Power-up",
+   "Prowess",
+   "Trample"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/f/9f1cdf84-c034-4435-8ce7-50f6b777fb57.jpg?1783903049",
+   "normal": "https://cards.scryfall.io/normal/front/9/f/9f1cdf84-c034-4435-8ce7-50f6b777fb57.jpg?1783903049",
+   "large": "https://cards.scryfall.io/large/front/9/f/9f1cdf84-c034-4435-8ce7-50f6b777fb57.jpg?1783903049",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/f/9f1cdf84-c034-4435-8ce7-50f6b777fb57.jpg?1783903049"
+  }
+ },
+ {
+  "name": "Contract Hero",
+  "scryfallId": "784af2b7-9f2d-450f-af93-b344fae39e8a",
+  "oracleId": "a5c9b167-5824-4fc8-ba7a-ffa64363c029",
+  "set": "msc",
+  "collectorNumber": "683",
+  "rarity": "common",
+  "manaCost": "{2}{R}",
+  "typeLine": "Creature — Human Mercenary Hero",
+  "oracleText": "When this creature enters, create a Treasure token. (It's an artifact with \"{T}, Sacrifice this token: Add one mana of any color.\")\nWhenever this creature attacks, you may sacrifice an artifact or discard a card. If you do, this creature gets +2/+0 until end of turn.",
+  "power": "2",
+  "toughness": "3",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Treasure"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/8/784af2b7-9f2d-450f-af93-b344fae39e8a.jpg?1783903052",
+   "normal": "https://cards.scryfall.io/normal/front/7/8/784af2b7-9f2d-450f-af93-b344fae39e8a.jpg?1783903052",
+   "large": "https://cards.scryfall.io/large/front/7/8/784af2b7-9f2d-450f-af93-b344fae39e8a.jpg?1783903052",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/8/784af2b7-9f2d-450f-af93-b344fae39e8a.jpg?1783903052"
+  }
+ },
+ {
+  "name": "Luke Cage, Hero for Hire",
+  "scryfallId": "51cef04a-fa47-4f82-8772-76d4bc82bada",
+  "oracleId": "3d776a25-c341-4058-9b5f-84e70edb25a4",
+  "set": "msc",
+  "collectorNumber": "696",
+  "rarity": "rare",
+  "manaCost": "{2}{R}{R}",
+  "typeLine": "Legendary Creature — Human Mercenary Hero",
+  "oracleText": "Trample\nAt the beginning of combat on your turn, create a Treasure token. (It's an artifact with \"{T}, Sacrifice this token: Add one mana of any color.\")",
+  "power": "4",
+  "toughness": "4",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Treasure",
+   "Trample"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/1/51cef04a-fa47-4f82-8772-76d4bc82bada.jpg?1783903048",
+   "normal": "https://cards.scryfall.io/normal/front/5/1/51cef04a-fa47-4f82-8772-76d4bc82bada.jpg?1783903048",
+   "large": "https://cards.scryfall.io/large/front/5/1/51cef04a-fa47-4f82-8772-76d4bc82bada.jpg?1783903048",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/1/51cef04a-fa47-4f82-8772-76d4bc82bada.jpg?1783903048"
+  }
+ },
+ {
+  "name": "Bionic Blow",
+  "scryfallId": "956773a9-b604-46de-b7c4-28b8de49950a",
+  "oracleId": "27683e43-7c3f-45b3-8ca4-968428000315",
+  "set": "msc",
+  "collectorNumber": "680",
+  "rarity": "uncommon",
+  "manaCost": "{X}{R}{R}",
+  "typeLine": "Sorcery",
+  "oracleText": "Target creature you control gets +X/+0 until end of turn. Then it deals damage equal to its power to up to one other target creature.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/5/956773a9-b604-46de-b7c4-28b8de49950a.jpg?1783903053",
+   "normal": "https://cards.scryfall.io/normal/front/9/5/956773a9-b604-46de-b7c4-28b8de49950a.jpg?1783903053",
+   "large": "https://cards.scryfall.io/large/front/9/5/956773a9-b604-46de-b7c4-28b8de49950a.jpg?1783903053",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/5/956773a9-b604-46de-b7c4-28b8de49950a.jpg?1783903053"
+  }
+ },
+ {
+  "name": "Heroes for Hire",
+  "scryfallId": "37759556-ea31-47b4-8457-a83d17a51e28",
+  "oracleId": "45e5135b-274c-46b4-8249-7e05e37aaff7",
+  "set": "msc",
+  "collectorNumber": "688",
+  "rarity": "uncommon",
+  "manaCost": "{3}{R}{R}",
+  "typeLine": "Enchantment",
+  "oracleText": "When this enchantment enters, create three Treasure tokens. (They're artifacts with \"{T}, Sacrifice this token: Add one mana of any color.\")\nSacrifice a Treasure: Exile the top card of your library. You may play it this turn.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Treasure"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/7/37759556-ea31-47b4-8457-a83d17a51e28.jpg?1783903050",
+   "normal": "https://cards.scryfall.io/normal/front/3/7/37759556-ea31-47b4-8457-a83d17a51e28.jpg?1783903050",
+   "large": "https://cards.scryfall.io/large/front/3/7/37759556-ea31-47b4-8457-a83d17a51e28.jpg?1783903050",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/7/37759556-ea31-47b4-8457-a83d17a51e28.jpg?1783903050"
+  }
+ },
+ {
+  "name": "Marvelous Melee",
+  "scryfallId": "16c69bbf-7cae-481f-9984-8c8cac68c3e3",
+  "oracleId": "5ee9940a-0569-45b6-b28c-0ef3914013a9",
+  "set": "msc",
+  "collectorNumber": "549",
+  "rarity": "common",
+  "manaCost": "{4}{R}",
+  "typeLine": "Instant",
+  "oracleText": "Marvelous Melee deals 6 damage to target creature.\nBasic landcycling {2} ({2}, Discard this card: Search your library for a basic land card, reveal it, put it into your hand, then shuffle.)",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Landcycling",
+   "Basic landcycling",
+   "Typecycling",
+   "Cycling"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/6/16c69bbf-7cae-481f-9984-8c8cac68c3e3.jpg?1783903099",
+   "normal": "https://cards.scryfall.io/normal/front/1/6/16c69bbf-7cae-481f-9984-8c8cac68c3e3.jpg?1783903099",
+   "large": "https://cards.scryfall.io/large/front/1/6/16c69bbf-7cae-481f-9984-8c8cac68c3e3.jpg?1783903099",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/6/16c69bbf-7cae-481f-9984-8c8cac68c3e3.jpg?1783903099"
+  }
+ },
+ {
   "name": "Bob, Reluctant HYDRA Agent",
   "scryfallId": "423c5752-b634-44a9-82b3-2dd1045e4d90",
   "oracleId": "9caa490e-dc28-4069-9ffb-4b1afd8fdd54",
