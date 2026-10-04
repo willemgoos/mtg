@@ -25,6 +25,8 @@ export function phaseOut(ctx: Ctx, ids: readonly ObjectId[]): void {
 /** At `player`'s untap step, their phased-out permanents phase back in. */
 export function phaseIn(ctx: Ctx, player: PlayerId): void {
   const s = ctx.s;
+  // Mystical Archive (16): Teferi's Protection ends at their next untap step.
+  delete s.players[player].lifeFrozen;
   if (!s.phasedOut?.length) return;
   const back = s.phasedOut.filter((p) => p.player === player);
   s.phasedOut = s.phasedOut.filter((p) => p.player !== player);

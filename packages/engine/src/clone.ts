@@ -64,6 +64,9 @@ export function cloneState(s: GameState): GameState {
       ...(s.turn.permanentsLeft ? { permanentsLeft: { ...s.turn.permanentsLeft } } : {}),
       ...(s.turn.hexproofPlayers ? { hexproofPlayers: s.turn.hexproofPlayers.slice() } : {}),
       ...(s.turn.osteomancer ? { osteomancer: s.turn.osteomancer.slice() } : {}),
+      ...(s.turn.cantLose ? { cantLose: s.turn.cantLose.slice() } : {}),
+      ...(s.turn.deflect ? { deflect: s.turn.deflect.slice() } : {}),
+      ...(s.turn.uncounterable ? { uncounterable: s.turn.uncounterable.slice() } : {}),
       ...(s.turn.zaffaiUsed ? { zaffaiUsed: s.turn.zaffaiUsed.slice() } : {}),
       ...(s.turn.castDefs
         ? { castDefs: { p1: s.turn.castDefs.p1.slice(), p2: s.turn.castDefs.p2.slice() } }

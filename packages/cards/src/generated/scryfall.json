@@ -37757,6 +37757,951 @@
   }
  },
  {
+  "name": "Gift of Estates",
+  "scryfallId": "896389ba-a509-4a9c-b35b-c2b122df3fa4",
+  "oracleId": "1bd70be6-752c-4ecb-a3e8-2bacec4b94fc",
+  "set": "9ed",
+  "collectorNumber": "15★",
+  "rarity": "uncommon",
+  "manaCost": "{1}{W}",
+  "typeLine": "Sorcery",
+  "oracleText": "If an opponent controls more lands than you, search your library for up to three Plains cards, reveal them, put them into your hand, then shuffle.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/9/896389ba-a509-4a9c-b35b-c2b122df3fa4.jpg?1783944114",
+   "normal": "https://cards.scryfall.io/normal/front/8/9/896389ba-a509-4a9c-b35b-c2b122df3fa4.jpg?1783944114",
+   "large": "https://cards.scryfall.io/large/front/8/9/896389ba-a509-4a9c-b35b-c2b122df3fa4.jpg?1783944114",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/9/896389ba-a509-4a9c-b35b-c2b122df3fa4.jpg?1783944114"
+  }
+ },
+ {
+  "name": "Divine Gambit",
+  "scryfallId": "696a8c12-4a1f-4b96-a921-538fa1a2de43",
+  "oracleId": "25fcf381-6f0a-49ef-9c41-f202be7d8368",
+  "set": "khm",
+  "collectorNumber": "8",
+  "rarity": "uncommon",
+  "manaCost": "{W}{W}",
+  "typeLine": "Sorcery",
+  "oracleText": "Exile target artifact, creature, or enchantment an opponent controls. That player may put a permanent card from their hand onto the battlefield.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/9/696a8c12-4a1f-4b96-a921-538fa1a2de43.jpg?1783928285",
+   "normal": "https://cards.scryfall.io/normal/front/6/9/696a8c12-4a1f-4b96-a921-538fa1a2de43.jpg?1783928285",
+   "large": "https://cards.scryfall.io/large/front/6/9/696a8c12-4a1f-4b96-a921-538fa1a2de43.jpg?1783928285",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/9/696a8c12-4a1f-4b96-a921-538fa1a2de43.jpg?1783928285"
+  }
+ },
+ {
+  "name": "Despark",
+  "scryfallId": "4a8bb7d9-14d3-41e3-8721-4a9036468dfc",
+  "oracleId": "bd16434d-55ea-4c5a-a9ef-752971a4af16",
+  "set": "c20",
+  "collectorNumber": "209",
+  "rarity": "uncommon",
+  "manaCost": "{W}{B}",
+  "typeLine": "Instant",
+  "oracleText": "Exile target permanent with mana value 4 or greater.",
+  "colors": [
+   "B",
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/a/4a8bb7d9-14d3-41e3-8721-4a9036468dfc.jpg?1783931152",
+   "normal": "https://cards.scryfall.io/normal/front/4/a/4a8bb7d9-14d3-41e3-8721-4a9036468dfc.jpg?1783931152",
+   "large": "https://cards.scryfall.io/large/front/4/a/4a8bb7d9-14d3-41e3-8721-4a9036468dfc.jpg?1783931152",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/a/4a8bb7d9-14d3-41e3-8721-4a9036468dfc.jpg?1783931152"
+  }
+ },
+ {
+  "name": "Ephemerate",
+  "scryfallId": "954fbf3c-7cc2-4f5e-ba96-e3033a20ce61",
+  "oracleId": "0fd57894-b917-41c8-a394-360d1d31b236",
+  "set": "sld",
+  "collectorNumber": "1990",
+  "rarity": "rare",
+  "manaCost": "{W}",
+  "typeLine": "Instant",
+  "oracleText": "Exile target creature you control, then return it to the battlefield under its owner's control.\nRebound (If you cast this spell from your hand, exile it as it resolves. At the beginning of your next upkeep, you may cast this card from exile without paying its mana cost.)",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Rebound"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/5/954fbf3c-7cc2-4f5e-ba96-e3033a20ce61.jpg?1783905573",
+   "normal": "https://cards.scryfall.io/normal/front/9/5/954fbf3c-7cc2-4f5e-ba96-e3033a20ce61.jpg?1783905573",
+   "large": "https://cards.scryfall.io/large/front/9/5/954fbf3c-7cc2-4f5e-ba96-e3033a20ce61.jpg?1783905573",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/5/954fbf3c-7cc2-4f5e-ba96-e3033a20ce61.jpg?1783905573"
+  }
+ },
+ {
+  "name": "Gods Willing",
+  "scryfallId": "90883bac-bcd8-4fa9-a17c-c2402fb0714e",
+  "oracleId": "48e603a2-b965-4fbc-ad57-4388bce5ac8b",
+  "set": "m20",
+  "collectorNumber": "19",
+  "rarity": "uncommon",
+  "manaCost": "{W}",
+  "typeLine": "Instant",
+  "oracleText": "Target creature you control gains protection from the color of your choice until end of turn. (It can't be blocked, targeted, dealt damage, enchanted, or equipped by anything of that color.)\nScry 1.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Scry"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/0/90883bac-bcd8-4fa9-a17c-c2402fb0714e.jpg?1783933027",
+   "normal": "https://cards.scryfall.io/normal/front/9/0/90883bac-bcd8-4fa9-a17c-c2402fb0714e.jpg?1783933027",
+   "large": "https://cards.scryfall.io/large/front/9/0/90883bac-bcd8-4fa9-a17c-c2402fb0714e.jpg?1783933027",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/0/90883bac-bcd8-4fa9-a17c-c2402fb0714e.jpg?1783933027"
+  }
+ },
+ {
+  "name": "Defiant Strike",
+  "scryfallId": "5c23869b-c99a-49dd-9e29-fcc0eb63fad1",
+  "oracleId": "f8c2d9c5-6fe6-4698-9972-83cdd625d94b",
+  "set": "m21",
+  "collectorNumber": "15",
+  "rarity": "common",
+  "manaCost": "{W}",
+  "typeLine": "Instant",
+  "oracleText": "Target creature gets +1/+0 until end of turn.\nDraw a card.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/c/5c23869b-c99a-49dd-9e29-fcc0eb63fad1.jpg?1783930743",
+   "normal": "https://cards.scryfall.io/normal/front/5/c/5c23869b-c99a-49dd-9e29-fcc0eb63fad1.jpg?1783930743",
+   "large": "https://cards.scryfall.io/large/front/5/c/5c23869b-c99a-49dd-9e29-fcc0eb63fad1.jpg?1783930743",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/c/5c23869b-c99a-49dd-9e29-fcc0eb63fad1.jpg?1783930743"
+  }
+ },
+ {
+  "name": "Revitalize",
+  "scryfallId": "a3bd4bce-8ab0-40b9-aad7-7d57a011bb0b",
+  "oracleId": "b1385b03-cb4b-4812-857f-7421f1df39af",
+  "set": "m21",
+  "collectorNumber": "31",
+  "rarity": "common",
+  "manaCost": "{1}{W}",
+  "typeLine": "Instant",
+  "oracleText": "You gain 3 life.\nDraw a card.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/3/a3bd4bce-8ab0-40b9-aad7-7d57a011bb0b.jpg?1783930737",
+   "normal": "https://cards.scryfall.io/normal/front/a/3/a3bd4bce-8ab0-40b9-aad7-7d57a011bb0b.jpg?1783930737",
+   "large": "https://cards.scryfall.io/large/front/a/3/a3bd4bce-8ab0-40b9-aad7-7d57a011bb0b.jpg?1783930737",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/3/a3bd4bce-8ab0-40b9-aad7-7d57a011bb0b.jpg?1783930737"
+  }
+ },
+ {
+  "name": "Mana Tithe",
+  "scryfallId": "e7f32354-893d-4f0b-b555-e0757fb5443b",
+  "oracleId": "948217ac-289e-455f-8c7c-519aa75fa345",
+  "set": "sta",
+  "collectorNumber": "8",
+  "rarity": "rare",
+  "manaCost": "{W}",
+  "typeLine": "Instant",
+  "oracleText": "Counter target spell unless its controller pays {1}.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/7/e7f32354-893d-4f0b-b555-e0757fb5443b.jpg?1783927442",
+   "normal": "https://cards.scryfall.io/normal/front/e/7/e7f32354-893d-4f0b-b555-e0757fb5443b.jpg?1783927442",
+   "large": "https://cards.scryfall.io/large/front/e/7/e7f32354-893d-4f0b-b555-e0757fb5443b.jpg?1783927442",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/7/e7f32354-893d-4f0b-b555-e0757fb5443b.jpg?1783927442"
+  }
+ },
+ {
+  "name": "Teferi's Protection",
+  "scryfallId": "e59f4627-58ab-45c8-b31b-eaa52dad33fc",
+  "oracleId": "0d4ecdb1-ec90-497f-a7a4-1c68092b8757",
+  "set": "sld",
+  "collectorNumber": "164",
+  "rarity": "rare",
+  "manaCost": "{2}{W}",
+  "typeLine": "Instant",
+  "oracleText": "Until your next turn, your life total can't change and you gain protection from everything. All permanents you control phase out. (While they're phased out, they're treated as though they don't exist. They phase in before you untap during your untap step.)\nExile Teferi's Protection.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/5/e59f4627-58ab-45c8-b31b-eaa52dad33fc.jpg?1783929085",
+   "normal": "https://cards.scryfall.io/normal/front/e/5/e59f4627-58ab-45c8-b31b-eaa52dad33fc.jpg?1783929085",
+   "large": "https://cards.scryfall.io/large/front/e/5/e59f4627-58ab-45c8-b31b-eaa52dad33fc.jpg?1783929085",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/5/e59f4627-58ab-45c8-b31b-eaa52dad33fc.jpg?1783929085"
+  }
+ },
+ {
+  "name": "Approach of the Second Sun",
+  "scryfallId": "7dd2850b-8b86-4af0-a6f0-5dddfed6e811",
+  "oracleId": "e4125377-34c0-4b54-bdf8-4e88f5d24565",
+  "set": "sld",
+  "collectorNumber": "1035",
+  "rarity": "rare",
+  "manaCost": "{6}{W}",
+  "typeLine": "Sorcery",
+  "oracleText": "If this spell was cast from your hand and you've cast another spell named Approach of the Second Sun this game, you win the game. Otherwise, put Approach of the Second Sun into its owner's library seventh from the top and you gain 7 life.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/d/7dd2850b-8b86-4af0-a6f0-5dddfed6e811.jpg?1783919217",
+   "normal": "https://cards.scryfall.io/normal/front/7/d/7dd2850b-8b86-4af0-a6f0-5dddfed6e811.jpg?1783919217",
+   "large": "https://cards.scryfall.io/large/front/7/d/7dd2850b-8b86-4af0-a6f0-5dddfed6e811.jpg?1783919217",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/d/7dd2850b-8b86-4af0-a6f0-5dddfed6e811.jpg?1783919217"
+  }
+ },
+ {
+  "name": "Brainstorm",
+  "scryfallId": "1d6603e3-0680-4ba3-951b-cd9919eefd4f",
+  "oracleId": "36cd2364-d113-47d1-b2c4-b088d9eb88dd",
+  "set": "5ed",
+  "collectorNumber": "76",
+  "rarity": "common",
+  "manaCost": "{U}",
+  "typeLine": "Instant",
+  "oracleText": "Draw three cards, then put two cards from your hand on top of your library in any order.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/d/1d6603e3-0680-4ba3-951b-cd9919eefd4f.jpg?1783946951",
+   "normal": "https://cards.scryfall.io/normal/front/1/d/1d6603e3-0680-4ba3-951b-cd9919eefd4f.jpg?1783946951",
+   "large": "https://cards.scryfall.io/large/front/1/d/1d6603e3-0680-4ba3-951b-cd9919eefd4f.jpg?1783946951",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/d/1d6603e3-0680-4ba3-951b-cd9919eefd4f.jpg?1783946951"
+  }
+ },
+ {
+  "name": "Compulsive Research",
+  "scryfallId": "20b9c057-b80a-4e4e-a0d7-34b7ff3a69f4",
+  "oracleId": "f947808c-a1cc-41ea-9d06-e1279a0da527",
+  "set": "rav",
+  "collectorNumber": "40",
+  "rarity": "common",
+  "manaCost": "{2}{U}",
+  "typeLine": "Sorcery",
+  "oracleText": "Target player draws three cards. Then that player discards two cards unless they discard a land card.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/0/20b9c057-b80a-4e4e-a0d7-34b7ff3a69f4.jpg?1783943689",
+   "normal": "https://cards.scryfall.io/normal/front/2/0/20b9c057-b80a-4e4e-a0d7-34b7ff3a69f4.jpg?1783943689",
+   "large": "https://cards.scryfall.io/large/front/2/0/20b9c057-b80a-4e4e-a0d7-34b7ff3a69f4.jpg?1783943689",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/0/20b9c057-b80a-4e4e-a0d7-34b7ff3a69f4.jpg?1783943689"
+  }
+ },
+ {
+  "name": "Blue Sun's Zenith",
+  "scryfallId": "8287b55b-ed12-4a86-b2ca-e462457570f4",
+  "oracleId": "613a41b8-0b4f-4995-bf1e-ca41f96e6438",
+  "set": "c15",
+  "collectorNumber": "88",
+  "rarity": "rare",
+  "manaCost": "{X}{U}{U}{U}",
+  "typeLine": "Instant",
+  "oracleText": "Target player draws X cards. Shuffle Blue Sun's Zenith into its owner's library.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/2/8287b55b-ed12-4a86-b2ca-e462457570f4.jpg?1783938095",
+   "normal": "https://cards.scryfall.io/normal/front/8/2/8287b55b-ed12-4a86-b2ca-e462457570f4.jpg?1783938095",
+   "large": "https://cards.scryfall.io/large/front/8/2/8287b55b-ed12-4a86-b2ca-e462457570f4.jpg?1783938095",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/2/8287b55b-ed12-4a86-b2ca-e462457570f4.jpg?1783938095"
+  }
+ },
+ {
+  "name": "Memory Lapse",
+  "scryfallId": "8c2437b9-22ed-4835-9ac4-e9625bf8464a",
+  "oracleId": "bbfb3e4a-b389-4391-8141-13b68c0ef2e0",
+  "set": "7ed",
+  "collectorNumber": "88★",
+  "rarity": "common",
+  "manaCost": "{1}{U}",
+  "typeLine": "Instant",
+  "oracleText": "Counter target spell. If that spell is countered this way, put it on top of its owner's library instead of into that player's graveyard.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/c/8c2437b9-22ed-4835-9ac4-e9625bf8464a.jpg?1783945539",
+   "normal": "https://cards.scryfall.io/normal/front/8/c/8c2437b9-22ed-4835-9ac4-e9625bf8464a.jpg?1783945539",
+   "large": "https://cards.scryfall.io/large/front/8/c/8c2437b9-22ed-4835-9ac4-e9625bf8464a.jpg?1783945539",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/c/8c2437b9-22ed-4835-9ac4-e9625bf8464a.jpg?1783945539"
+  }
+ },
+ {
+  "name": "Whirlwind Denial",
+  "scryfallId": "83b68363-173e-4a2b-b5ed-7e759e2c3e33",
+  "oracleId": "ba9e129d-a3cf-431c-93af-f2e4902d40a0",
+  "set": "j25",
+  "collectorNumber": "388",
+  "rarity": "uncommon",
+  "manaCost": "{2}{U}",
+  "typeLine": "Instant",
+  "oracleText": "For each spell and ability your opponents control, counter it unless its controller pays {4}.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/3/83b68363-173e-4a2b-b5ed-7e759e2c3e33.jpg?1783908745",
+   "normal": "https://cards.scryfall.io/normal/front/8/3/83b68363-173e-4a2b-b5ed-7e759e2c3e33.jpg?1783908745",
+   "large": "https://cards.scryfall.io/large/front/8/3/83b68363-173e-4a2b-b5ed-7e759e2c3e33.jpg?1783908745",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/3/83b68363-173e-4a2b-b5ed-7e759e2c3e33.jpg?1783908745"
+  }
+ },
+ {
+  "name": "Time Warp",
+  "scryfallId": "f21c7628-0571-4c09-8763-8e434e5e87d2",
+  "oracleId": "dbd6a94b-62ff-4a10-9d52-bdd90b26e425",
+  "set": "m10",
+  "collectorNumber": "75",
+  "rarity": "mythic",
+  "manaCost": "{3}{U}{U}",
+  "typeLine": "Sorcery",
+  "oracleText": "Target player takes an extra turn after this one.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/2/f21c7628-0571-4c09-8763-8e434e5e87d2.jpg?1783942388",
+   "normal": "https://cards.scryfall.io/normal/front/f/2/f21c7628-0571-4c09-8763-8e434e5e87d2.jpg?1783942388",
+   "large": "https://cards.scryfall.io/large/front/f/2/f21c7628-0571-4c09-8763-8e434e5e87d2.jpg?1783942388",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/2/f21c7628-0571-4c09-8763-8e434e5e87d2.jpg?1783942388"
+  }
+ },
+ {
+  "name": "Strategic Planning",
+  "scryfallId": "29306305-cb71-4fef-bf86-f5deb4e7e561",
+  "oracleId": "02b5acf3-47cb-4d39-9307-e02656f1879b",
+  "set": "khm",
+  "collectorNumber": "77",
+  "rarity": "common",
+  "manaCost": "{1}{U}",
+  "typeLine": "Sorcery",
+  "oracleText": "Look at the top three cards of your library. Put one of them into your hand and the rest into your graveyard.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/9/29306305-cb71-4fef-bf86-f5deb4e7e561.jpg?1783928255",
+   "normal": "https://cards.scryfall.io/normal/front/2/9/29306305-cb71-4fef-bf86-f5deb4e7e561.jpg?1783928255",
+   "large": "https://cards.scryfall.io/large/front/2/9/29306305-cb71-4fef-bf86-f5deb4e7e561.jpg?1783928255",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/9/29306305-cb71-4fef-bf86-f5deb4e7e561.jpg?1783928255"
+  }
+ },
+ {
+  "name": "Mind's Desire",
+  "scryfallId": "95f4e609-7fb7-4903-8d4c-45d38cf743be",
+  "oracleId": "b3739b5a-5731-4c64-a244-815a363b0d5c",
+  "set": "sta",
+  "collectorNumber": "17",
+  "rarity": "mythic",
+  "manaCost": "{4}{U}{U}",
+  "typeLine": "Sorcery",
+  "oracleText": "Shuffle your library. Then exile the top card of your library. Until end of turn, you may play that card without paying its mana cost.\nStorm (When you cast this spell, copy it for each spell cast before it this turn.)",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Storm"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/5/95f4e609-7fb7-4903-8d4c-45d38cf743be.jpg?1783927440",
+   "normal": "https://cards.scryfall.io/normal/front/9/5/95f4e609-7fb7-4903-8d4c-45d38cf743be.jpg?1783927440",
+   "large": "https://cards.scryfall.io/large/front/9/5/95f4e609-7fb7-4903-8d4c-45d38cf743be.jpg?1783927440",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/5/95f4e609-7fb7-4903-8d4c-45d38cf743be.jpg?1783927440"
+  }
+ },
+ {
+  "name": "Dark Ritual",
+  "scryfallId": "fae25afd-0d16-431c-a85e-7ac91cef9050",
+  "oracleId": "53f7c868-b03e-4fc2-8dcf-a75bbfa3272b",
+  "set": "5ed",
+  "collectorNumber": "153",
+  "rarity": "common",
+  "manaCost": "{B}",
+  "typeLine": "Instant",
+  "oracleText": "Add {B}{B}{B}.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/a/fae25afd-0d16-431c-a85e-7ac91cef9050.jpg?1783946932",
+   "normal": "https://cards.scryfall.io/normal/front/f/a/fae25afd-0d16-431c-a85e-7ac91cef9050.jpg?1783946932",
+   "large": "https://cards.scryfall.io/large/front/f/a/fae25afd-0d16-431c-a85e-7ac91cef9050.jpg?1783946932",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/a/fae25afd-0d16-431c-a85e-7ac91cef9050.jpg?1783946932"
+  }
+ },
+ {
+  "name": "Demonic Tutor",
+  "scryfallId": "9ab384fe-1935-4e6e-a3a2-aed932ed6643",
+  "oracleId": "82004860-e589-4e38-8d61-8c0210e4ea39",
+  "set": "sld",
+  "collectorNumber": "1856",
+  "rarity": "mythic",
+  "manaCost": "{1}{B}",
+  "typeLine": "Sorcery",
+  "oracleText": "Search your library for a card, put that card into your hand, then shuffle.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/a/9ab384fe-1935-4e6e-a3a2-aed932ed6643.jpg?1783905171",
+   "normal": "https://cards.scryfall.io/normal/front/9/a/9ab384fe-1935-4e6e-a3a2-aed932ed6643.jpg?1783905171",
+   "large": "https://cards.scryfall.io/large/front/9/a/9ab384fe-1935-4e6e-a3a2-aed932ed6643.jpg?1783905171",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/a/9ab384fe-1935-4e6e-a3a2-aed932ed6643.jpg?1783905171"
+  }
+ },
+ {
+  "name": "Sign in Blood",
+  "scryfallId": "9f9cead6-7806-4c51-abd1-62c3b8f366b5",
+  "oracleId": "c6207f6a-a624-4754-88f5-dbe700c841ff",
+  "set": "m15",
+  "collectorNumber": "114",
+  "rarity": "common",
+  "manaCost": "{B}{B}",
+  "typeLine": "Sorcery",
+  "oracleText": "Target player draws two cards and loses 2 life.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/f/9f9cead6-7806-4c51-abd1-62c3b8f366b5.jpg?1783939180",
+   "normal": "https://cards.scryfall.io/normal/front/9/f/9f9cead6-7806-4c51-abd1-62c3b8f366b5.jpg?1783939180",
+   "large": "https://cards.scryfall.io/large/front/9/f/9f9cead6-7806-4c51-abd1-62c3b8f366b5.jpg?1783939180",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/f/9f9cead6-7806-4c51-abd1-62c3b8f366b5.jpg?1783939180"
+  }
+ },
+ {
+  "name": "Duress",
+  "scryfallId": "34c3a894-ee75-4db9-a69f-711bb3cc150a",
+  "oracleId": "33d405ea-7a9a-4970-b70f-9c05d90dd6f0",
+  "set": "fdn",
+  "collectorNumber": "606",
+  "rarity": "common",
+  "manaCost": "{B}",
+  "typeLine": "Sorcery",
+  "oracleText": "Target opponent reveals their hand. You choose a noncreature, nonland card from it. That player discards that card.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/4/34c3a894-ee75-4db9-a69f-711bb3cc150a.jpg?1783908930",
+   "normal": "https://cards.scryfall.io/normal/front/3/4/34c3a894-ee75-4db9-a69f-711bb3cc150a.jpg?1783908930",
+   "large": "https://cards.scryfall.io/large/front/3/4/34c3a894-ee75-4db9-a69f-711bb3cc150a.jpg?1783908930",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/4/34c3a894-ee75-4db9-a69f-711bb3cc150a.jpg?1783908930"
+  }
+ },
+ {
+  "name": "Inquisition of Kozilek",
+  "scryfallId": "2f9f9fb7-c79a-4991-914f-c3500a488bf1",
+  "oracleId": "395611fa-aec2-4c9e-92c3-70cf95cc00f4",
+  "set": "sld",
+  "collectorNumber": "1152",
+  "rarity": "rare",
+  "manaCost": "{B}",
+  "typeLine": "Sorcery",
+  "oracleText": "Target player reveals their hand. You choose a nonland card from it with mana value 3 or less. That player discards that card.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/f/2f9f9fb7-c79a-4991-914f-c3500a488bf1.jpg?1783918766",
+   "normal": "https://cards.scryfall.io/normal/front/2/f/2f9f9fb7-c79a-4991-914f-c3500a488bf1.jpg?1783918766",
+   "large": "https://cards.scryfall.io/large/front/2/f/2f9f9fb7-c79a-4991-914f-c3500a488bf1.jpg?1783918766",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/f/2f9f9fb7-c79a-4991-914f-c3500a488bf1.jpg?1783918766"
+  }
+ },
+ {
+  "name": "Agonizing Remorse",
+  "scryfallId": "09270c65-546e-4737-a6b7-402cbb87917a",
+  "oracleId": "1267dfda-eb1a-4963-9fe3-fa619d924d7a",
+  "set": "thb",
+  "collectorNumber": "83",
+  "rarity": "uncommon",
+  "manaCost": "{1}{B}",
+  "typeLine": "Sorcery",
+  "oracleText": "Target opponent reveals their hand. You choose a nonland card from it or a card from their graveyard. Exile that card. You lose 1 life.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/9/09270c65-546e-4737-a6b7-402cbb87917a.jpg?1783931572",
+   "normal": "https://cards.scryfall.io/normal/front/0/9/09270c65-546e-4737-a6b7-402cbb87917a.jpg?1783931572",
+   "large": "https://cards.scryfall.io/large/front/0/9/09270c65-546e-4737-a6b7-402cbb87917a.jpg?1783931572",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/9/09270c65-546e-4737-a6b7-402cbb87917a.jpg?1783931572"
+  }
+ },
+ {
+  "name": "Doom Blade",
+  "scryfallId": "75d96a37-bdbe-46ae-926f-8742699a0b20",
+  "oracleId": "59e7f2ae-4535-4191-98be-3e65b6b2befa",
+  "set": "m14",
+  "collectorNumber": "96",
+  "rarity": "uncommon",
+  "manaCost": "{1}{B}",
+  "typeLine": "Instant",
+  "oracleText": "Destroy target nonblack creature.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/5/75d96a37-bdbe-46ae-926f-8742699a0b20.jpg?1783939924",
+   "normal": "https://cards.scryfall.io/normal/front/7/5/75d96a37-bdbe-46ae-926f-8742699a0b20.jpg?1783939924",
+   "large": "https://cards.scryfall.io/large/front/7/5/75d96a37-bdbe-46ae-926f-8742699a0b20.jpg?1783939924",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/5/75d96a37-bdbe-46ae-926f-8742699a0b20.jpg?1783939924"
+  }
+ },
+ {
+  "name": "Eliminate",
+  "scryfallId": "f8eb4087-3a4c-4de8-8e29-f4cd71acb180",
+  "oracleId": "cf307f81-488c-4df5-8b08-ba46e3e7f3d9",
+  "set": "m21",
+  "collectorNumber": "97",
+  "rarity": "uncommon",
+  "manaCost": "{1}{B}",
+  "typeLine": "Instant",
+  "oracleText": "Destroy target creature or planeswalker with mana value 3 or less.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/8/f8eb4087-3a4c-4de8-8e29-f4cd71acb180.jpg?1783930710",
+   "normal": "https://cards.scryfall.io/normal/front/f/8/f8eb4087-3a4c-4de8-8e29-f4cd71acb180.jpg?1783930710",
+   "large": "https://cards.scryfall.io/large/front/f/8/f8eb4087-3a4c-4de8-8e29-f4cd71acb180.jpg?1783930710",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/8/f8eb4087-3a4c-4de8-8e29-f4cd71acb180.jpg?1783930710"
+  }
+ },
+ {
+  "name": "Tainted Pact",
+  "scryfallId": "4c92756f-1dc2-49be-bb38-0f8cf10079fa",
+  "oracleId": "1a85ba2b-ae10-4917-954a-7709b75a9740",
+  "set": "sta",
+  "collectorNumber": "33",
+  "rarity": "mythic",
+  "manaCost": "{1}{B}",
+  "typeLine": "Instant",
+  "oracleText": "Exile the top card of your library. You may put that card into your hand unless it has the same name as another card exiled this way. Repeat this process until you put a card into your hand or you exile two cards with the same name, whichever comes first.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/c/4c92756f-1dc2-49be-bb38-0f8cf10079fa.jpg?1783927434",
+   "normal": "https://cards.scryfall.io/normal/front/4/c/4c92756f-1dc2-49be-bb38-0f8cf10079fa.jpg?1783927434",
+   "large": "https://cards.scryfall.io/large/front/4/c/4c92756f-1dc2-49be-bb38-0f8cf10079fa.jpg?1783927434",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/c/4c92756f-1dc2-49be-bb38-0f8cf10079fa.jpg?1783927434"
+  }
+ },
+ {
+  "name": "Tendrils of Agony",
+  "scryfallId": "28d27f6b-9db2-4f2e-937b-054f32bca46d",
+  "oracleId": "78db3190-59bc-4033-95bc-32d8ed872b6a",
+  "set": "sld",
+  "collectorNumber": "2004",
+  "rarity": "rare",
+  "manaCost": "{2}{B}{B}",
+  "typeLine": "Sorcery",
+  "oracleText": "Target player loses 2 life and you gain 2 life.\nStorm (When you cast this spell, copy it for each spell cast before it this turn. You may choose new targets for the copies.)",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Storm"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/8/28d27f6b-9db2-4f2e-937b-054f32bca46d.jpg?1783905569",
+   "normal": "https://cards.scryfall.io/normal/front/2/8/28d27f6b-9db2-4f2e-937b-054f32bca46d.jpg?1783905569",
+   "large": "https://cards.scryfall.io/large/front/2/8/28d27f6b-9db2-4f2e-937b-054f32bca46d.jpg?1783905569",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/8/28d27f6b-9db2-4f2e-937b-054f32bca46d.jpg?1783905569"
+  }
+ },
+ {
+  "name": "Infuriate",
+  "scryfallId": "7ac778f6-8997-47ee-a676-3eb9f8d1592f",
+  "oracleId": "d23119ca-73d1-4a48-a8d0-dab8919d891f",
+  "set": "m20",
+  "collectorNumber": "145",
+  "rarity": "common",
+  "manaCost": "{R}",
+  "typeLine": "Instant",
+  "oracleText": "Target creature gets +3/+2 until end of turn.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/a/7ac778f6-8997-47ee-a676-3eb9f8d1592f.jpg?1783932976",
+   "normal": "https://cards.scryfall.io/normal/front/7/a/7ac778f6-8997-47ee-a676-3eb9f8d1592f.jpg?1783932976",
+   "large": "https://cards.scryfall.io/large/front/7/a/7ac778f6-8997-47ee-a676-3eb9f8d1592f.jpg?1783932976",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/a/7ac778f6-8997-47ee-a676-3eb9f8d1592f.jpg?1783932976"
+  }
+ },
+ {
+  "name": "Claim the Firstborn",
+  "scryfallId": "40be25fe-0b66-4b1e-ade0-8283f633fa8e",
+  "oracleId": "9bb82829-05e8-4cdd-91e4-b837a620bfc8",
+  "set": "sld",
+  "collectorNumber": "2837",
+  "rarity": "rare",
+  "manaCost": "{R}",
+  "typeLine": "Sorcery",
+  "oracleText": "Gain control of target creature with mana value 3 or less until end of turn. Untap that creature. It gains haste until end of turn.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/0/40be25fe-0b66-4b1e-ade0-8283f633fa8e.jpg?1790771512",
+   "normal": "https://cards.scryfall.io/normal/front/4/0/40be25fe-0b66-4b1e-ade0-8283f633fa8e.jpg?1790771512",
+   "large": "https://cards.scryfall.io/large/front/4/0/40be25fe-0b66-4b1e-ade0-8283f633fa8e.jpg?1790771512",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/0/40be25fe-0b66-4b1e-ade0-8283f633fa8e.jpg?1790771512"
+  }
+ },
+ {
+  "name": "Stone Rain",
+  "scryfallId": "e9bd15ff-c52e-4caf-8146-e61469ad94a2",
+  "oracleId": "6e880df6-fc00-43d2-a9c8-f575f40b78c6",
+  "set": "9ed",
+  "collectorNumber": "221★",
+  "rarity": "common",
+  "manaCost": "{2}{R}",
+  "typeLine": "Sorcery",
+  "oracleText": "Destroy target land.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/9/e9bd15ff-c52e-4caf-8146-e61469ad94a2.jpg?1783943948",
+   "normal": "https://cards.scryfall.io/normal/front/e/9/e9bd15ff-c52e-4caf-8146-e61469ad94a2.jpg?1783943948",
+   "large": "https://cards.scryfall.io/large/front/e/9/e9bd15ff-c52e-4caf-8146-e61469ad94a2.jpg?1783943948",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/9/e9bd15ff-c52e-4caf-8146-e61469ad94a2.jpg?1783943948"
+  }
+ },
+ {
+  "name": "Grapeshot",
+  "scryfallId": "e3e2d90a-3557-49d5-9986-cb50fd31f396",
+  "oracleId": "ebd2d760-5ad8-4027-b124-171822f3edfe",
+  "set": "msc",
+  "collectorNumber": "803",
+  "rarity": "common",
+  "manaCost": "{1}{R}",
+  "typeLine": "Sorcery",
+  "oracleText": "Grapeshot deals 1 damage to any target.\nStorm (When you cast this spell, copy it for each spell cast before it this turn. You may choose new targets for the copies.)",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Storm"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/3/e3e2d90a-3557-49d5-9986-cb50fd31f396.jpg?1783903011",
+   "normal": "https://cards.scryfall.io/normal/front/e/3/e3e2d90a-3557-49d5-9986-cb50fd31f396.jpg?1783903011",
+   "large": "https://cards.scryfall.io/large/front/e/3/e3e2d90a-3557-49d5-9986-cb50fd31f396.jpg?1783903011",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/3/e3e2d90a-3557-49d5-9986-cb50fd31f396.jpg?1783903011"
+  }
+ },
+ {
+  "name": "Urza's Rage",
+  "scryfallId": "5c91e364-c157-494e-bb1b-f2cef004900f",
+  "oracleId": "363f8c66-fe0c-44b9-987d-1d160e3f9c54",
+  "set": "mh1",
+  "collectorNumber": "151",
+  "rarity": "uncommon",
+  "manaCost": "{2}{R}",
+  "typeLine": "Instant",
+  "oracleText": "Kicker {8}{R} (You may pay an additional {8}{R} as you cast this spell.)\nThis spell can't be countered.\nUrza's Rage deals 3 damage to any target. If this spell was kicked, instead it deals 10 damage to that permanent or player and the damage can't be prevented.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Kicker"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/c/5c91e364-c157-494e-bb1b-f2cef004900f.jpg?1783933104",
+   "normal": "https://cards.scryfall.io/normal/front/5/c/5c91e364-c157-494e-bb1b-f2cef004900f.jpg?1783933104",
+   "large": "https://cards.scryfall.io/large/front/5/c/5c91e364-c157-494e-bb1b-f2cef004900f.jpg?1783933104",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/c/5c91e364-c157-494e-bb1b-f2cef004900f.jpg?1783933104"
+  }
+ },
+ {
+  "name": "Electrolyze",
+  "scryfallId": "08a4d142-b98b-4027-94cb-314f67fb1d4a",
+  "oracleId": "07b222d7-24f2-4994-9004-ff6672ebe161",
+  "set": "sta",
+  "collectorNumber": "60",
+  "rarity": "rare",
+  "manaCost": "{1}{U}{R}",
+  "typeLine": "Instant",
+  "oracleText": "Electrolyze deals 2 damage divided as you choose among one or two targets.\nDraw a card.",
+  "colors": [
+   "R",
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/8/08a4d142-b98b-4027-94cb-314f67fb1d4a.jpg?1783927424",
+   "normal": "https://cards.scryfall.io/normal/front/0/8/08a4d142-b98b-4027-94cb-314f67fb1d4a.jpg?1783927424",
+   "large": "https://cards.scryfall.io/large/front/0/8/08a4d142-b98b-4027-94cb-314f67fb1d4a.jpg?1783927424",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/8/08a4d142-b98b-4027-94cb-314f67fb1d4a.jpg?1783927424"
+  }
+ },
+ {
+  "name": "Increasing Vengeance",
+  "scryfallId": "6ef32c03-14f5-4ee2-af3a-4cbee45cd152",
+  "oracleId": "a5ca7bd9-0964-405f-adb9-7c27153595e6",
+  "set": "sta",
+  "collectorNumber": "40",
+  "rarity": "mythic",
+  "manaCost": "{R}{R}",
+  "typeLine": "Instant",
+  "oracleText": "Copy target instant or sorcery spell you control. If this spell was cast from a graveyard, copy that spell twice instead. You may choose new targets for the copies.\nFlashback {3}{R}{R} (You may cast this card from your graveyard for its flashback cost. Then exile it.)",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Flashback"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/e/6ef32c03-14f5-4ee2-af3a-4cbee45cd152.jpg?1783927430",
+   "normal": "https://cards.scryfall.io/normal/front/6/e/6ef32c03-14f5-4ee2-af3a-4cbee45cd152.jpg?1783927430",
+   "large": "https://cards.scryfall.io/large/front/6/e/6ef32c03-14f5-4ee2-af3a-4cbee45cd152.jpg?1783927430",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/e/6ef32c03-14f5-4ee2-af3a-4cbee45cd152.jpg?1783927430"
+  }
+ },
+ {
+  "name": "Abundant Harvest",
+  "scryfallId": "5ad86b17-3fed-418a-938c-c49adb409531",
+  "oracleId": "34841228-31ac-48ac-b6d6-486b5e1e07dd",
+  "set": "mh2",
+  "collectorNumber": "147",
+  "rarity": "common",
+  "manaCost": "{G}",
+  "typeLine": "Sorcery",
+  "oracleText": "Choose land or nonland. Reveal cards from the top of your library until you reveal a card of the chosen kind. Put that card into your hand and the rest on the bottom of your library in a random order.",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/a/5ad86b17-3fed-418a-938c-c49adb409531.jpg?1783926837",
+   "normal": "https://cards.scryfall.io/normal/front/5/a/5ad86b17-3fed-418a-938c-c49adb409531.jpg?1783926837",
+   "large": "https://cards.scryfall.io/large/front/5/a/5ad86b17-3fed-418a-938c-c49adb409531.jpg?1783926837",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/a/5ad86b17-3fed-418a-938c-c49adb409531.jpg?1783926837"
+  }
+ },
+ {
+  "name": "Adventurous Impulse",
+  "scryfallId": "913e79c9-c342-4efd-bd11-cec5af81e668",
+  "oracleId": "5bf49f39-b3d5-4148-8dc2-b5b5011769d2",
+  "set": "j25",
+  "collectorNumber": "621",
+  "rarity": "common",
+  "manaCost": "{G}",
+  "typeLine": "Sorcery",
+  "oracleText": "Look at the top three cards of your library. You may reveal a creature or land card from among them and put it into your hand. Put the rest on the bottom of your library in any order.",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/1/913e79c9-c342-4efd-bd11-cec5af81e668.jpg?1783908659",
+   "normal": "https://cards.scryfall.io/normal/front/9/1/913e79c9-c342-4efd-bd11-cec5af81e668.jpg?1783908659",
+   "large": "https://cards.scryfall.io/large/front/9/1/913e79c9-c342-4efd-bd11-cec5af81e668.jpg?1783908659",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/1/913e79c9-c342-4efd-bd11-cec5af81e668.jpg?1783908659"
+  }
+ },
+ {
+  "name": "Channel",
+  "scryfallId": "e42eb95f-638d-410c-a830-a414fb2494ec",
+  "oracleId": "d1b815d1-2848-40d4-a555-66822d1becbc",
+  "set": "4ed",
+  "collectorNumber": "236",
+  "rarity": "uncommon",
+  "manaCost": "{G}{G}",
+  "typeLine": "Sorcery",
+  "oracleText": "Until end of turn, any time you could activate a mana ability, you may pay 1 life. If you do, add {C}.",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/4/e42eb95f-638d-410c-a830-a414fb2494ec.jpg?1783947821",
+   "normal": "https://cards.scryfall.io/normal/front/e/4/e42eb95f-638d-410c-a830-a414fb2494ec.jpg?1783947821",
+   "large": "https://cards.scryfall.io/large/front/e/4/e42eb95f-638d-410c-a830-a414fb2494ec.jpg?1783947821",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/4/e42eb95f-638d-410c-a830-a414fb2494ec.jpg?1783947821"
+  }
+ },
+ {
+  "name": "Krosan Grip",
+  "scryfallId": "4a8b631f-7b03-441a-b551-59236d79804c",
+  "oracleId": "3e39224c-72ce-4ecc-aa17-12c071ea1f3e",
+  "set": "sld",
+  "collectorNumber": "481",
+  "rarity": "rare",
+  "manaCost": "{2}{G}",
+  "typeLine": "Instant",
+  "oracleText": "Split second (As long as this spell is on the stack, players can't cast spells or activate abilities that aren't mana abilities.)\nDestroy target artifact or enchantment.",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Split second"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/a/4a8b631f-7b03-441a-b551-59236d79804c.jpg?1783924576",
+   "normal": "https://cards.scryfall.io/normal/front/4/a/4a8b631f-7b03-441a-b551-59236d79804c.jpg?1783924576",
+   "large": "https://cards.scryfall.io/large/front/4/a/4a8b631f-7b03-441a-b551-59236d79804c.jpg?1783924576",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/a/4a8b631f-7b03-441a-b551-59236d79804c.jpg?1783924576"
+  }
+ },
+ {
+  "name": "Natural Order",
+  "scryfallId": "4bb72f05-5173-4e70-9e71-278249b378e7",
+  "oracleId": "8c1fe337-375a-4add-93b6-0ac39ed72b4f",
+  "set": "sta",
+  "collectorNumber": "54",
+  "rarity": "mythic",
+  "manaCost": "{2}{G}{G}",
+  "typeLine": "Sorcery",
+  "oracleText": "As an additional cost to cast this spell, sacrifice a green creature.\nSearch your library for a green creature card, put it onto the battlefield, then shuffle.",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/b/4bb72f05-5173-4e70-9e71-278249b378e7.jpg?1783927424",
+   "normal": "https://cards.scryfall.io/normal/front/4/b/4bb72f05-5173-4e70-9e71-278249b378e7.jpg?1783927424",
+   "large": "https://cards.scryfall.io/large/front/4/b/4bb72f05-5173-4e70-9e71-278249b378e7.jpg?1783927424",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/b/4bb72f05-5173-4e70-9e71-278249b378e7.jpg?1783927424"
+  }
+ },
+ {
+  "name": "Primal Command",
+  "scryfallId": "3a95986b-532b-4e3a-acf4-c93c6db7282f",
+  "oracleId": "350f5c0a-563f-41c5-8f7b-10f409bb4d3b",
+  "set": "sta",
+  "collectorNumber": "55",
+  "rarity": "mythic",
+  "manaCost": "{3}{G}{G}",
+  "typeLine": "Sorcery",
+  "oracleText": "Choose two —\n• Target player gains 7 life.\n• Put target noncreature permanent on top of its owner's library.\n• Target player shuffles their graveyard into their library.\n• Search your library for a creature card, reveal it, put it into your hand, then shuffle.",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/a/3a95986b-532b-4e3a-acf4-c93c6db7282f.jpg?1783927424",
+   "normal": "https://cards.scryfall.io/normal/front/3/a/3a95986b-532b-4e3a-acf4-c93c6db7282f.jpg?1783927424",
+   "large": "https://cards.scryfall.io/large/front/3/a/3a95986b-532b-4e3a-acf4-c93c6db7282f.jpg?1783927424",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/a/3a95986b-532b-4e3a-acf4-c93c6db7282f.jpg?1783927424"
+  }
+ },
+ {
+  "name": "Putrefy",
+  "scryfallId": "97512e73-eac4-416b-8769-ee8a32309291",
+  "oracleId": "9b271430-f53d-42d6-a547-2f286dd9bcb6",
+  "set": "sld",
+  "collectorNumber": "2299",
+  "rarity": "rare",
+  "manaCost": "{1}{B}{G}",
+  "typeLine": "Instant",
+  "oracleText": "Destroy target artifact or creature. It can't be regenerated.",
+  "colors": [
+   "B",
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/7/97512e73-eac4-416b-8769-ee8a32309291.jpg?1783905088",
+   "normal": "https://cards.scryfall.io/normal/front/9/7/97512e73-eac4-416b-8769-ee8a32309291.jpg?1783905088",
+   "large": "https://cards.scryfall.io/large/front/9/7/97512e73-eac4-416b-8769-ee8a32309291.jpg?1783905088",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/7/97512e73-eac4-416b-8769-ee8a32309291.jpg?1783905088"
+  }
+ },
+ {
+  "name": "Weather the Storm",
+  "scryfallId": "f6a9fa51-78c3-42e6-8c2e-39658f59ed87",
+  "oracleId": "3a091f7b-efc9-4aaa-9da8-157ef8099a36",
+  "set": "mh1",
+  "collectorNumber": "191",
+  "rarity": "common",
+  "manaCost": "{1}{G}",
+  "typeLine": "Instant",
+  "oracleText": "You gain 3 life.\nStorm (When you cast this spell, copy it for each spell cast before it this turn.)",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Storm"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/6/f6a9fa51-78c3-42e6-8c2e-39658f59ed87.jpg?1783933087",
+   "normal": "https://cards.scryfall.io/normal/front/f/6/f6a9fa51-78c3-42e6-8c2e-39658f59ed87.jpg?1783933087",
+   "large": "https://cards.scryfall.io/large/front/f/6/f6a9fa51-78c3-42e6-8c2e-39658f59ed87.jpg?1783933087",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/6/f6a9fa51-78c3-42e6-8c2e-39658f59ed87.jpg?1783933087"
+  }
+ },
+ {
+  "name": "Crux of Fate",
+  "scryfallId": "4d507db6-29a6-4816-8e37-5b6e318d740f",
+  "oracleId": "52a0dae4-2a95-487e-acd4-eabdb2d031e2",
+  "set": "fic",
+  "collectorNumber": "275",
+  "rarity": "rare",
+  "manaCost": "{3}{B}{B}",
+  "typeLine": "Sorcery",
+  "oracleText": "Choose one —\n• Destroy all Dragon creatures.\n• Destroy all non-Dragon creatures.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/d/4d507db6-29a6-4816-8e37-5b6e318d740f.jpg?1783906273",
+   "normal": "https://cards.scryfall.io/normal/front/4/d/4d507db6-29a6-4816-8e37-5b6e318d740f.jpg?1783906273",
+   "large": "https://cards.scryfall.io/large/front/4/d/4d507db6-29a6-4816-8e37-5b6e318d740f.jpg?1783906273",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/d/4d507db6-29a6-4816-8e37-5b6e318d740f.jpg?1783906273"
+  }
+ },
+ {
   "name": "Goblin Glasswright",
   "scryfallId": "c85c5f06-dd31-4e2c-97be-2f64d65069ea",
   "oracleId": "23c3de07-8aa2-48e9-848c-50b5a40bd133",
@@ -45110,6 +46055,940 @@
    "normal": "https://cards.scryfall.io/normal/front/d/b/dbc3447e-1329-4ea1-b4ca-b321b0ffec8f.jpg?1783903620",
    "large": "https://cards.scryfall.io/large/front/d/b/dbc3447e-1329-4ea1-b4ca-b321b0ffec8f.jpg?1783903620",
    "artCrop": "https://cards.scryfall.io/art_crop/front/d/b/dbc3447e-1329-4ea1-b4ca-b321b0ffec8f.jpg?1783903620"
+  }
+ },
+ {
+  "name": "Armageddon",
+  "scryfallId": "ccf3abe6-0b86-4010-8fc6-616af77b4ace",
+  "oracleId": "c9ed8b01-959a-47d6-891e-0abbdccf6e4f",
+  "set": "6ed",
+  "collectorNumber": "4",
+  "rarity": "rare",
+  "manaCost": "{3}{W}",
+  "typeLine": "Sorcery",
+  "oracleText": "Destroy all lands.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/c/ccf3abe6-0b86-4010-8fc6-616af77b4ace.jpg?1783946216",
+   "normal": "https://cards.scryfall.io/normal/front/c/c/ccf3abe6-0b86-4010-8fc6-616af77b4ace.jpg?1783946216",
+   "large": "https://cards.scryfall.io/large/front/c/c/ccf3abe6-0b86-4010-8fc6-616af77b4ace.jpg?1783946216",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/c/ccf3abe6-0b86-4010-8fc6-616af77b4ace.jpg?1783946216"
+  }
+ },
+ {
+  "name": "Reprieve",
+  "scryfallId": "426038f3-f21e-43a5-bea8-0cfd8658c009",
+  "oracleId": "f0449cbd-855c-4c20-a1f5-f76a395d8d39",
+  "set": "soa",
+  "collectorNumber": "9",
+  "rarity": "rare",
+  "manaCost": "{1}{W}",
+  "typeLine": "Instant",
+  "oracleText": "Return target spell to its owner's hand.\nDraw a card.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/2/426038f3-f21e-43a5-bea8-0cfd8658c009.jpg?1783903930",
+   "normal": "https://cards.scryfall.io/normal/front/4/2/426038f3-f21e-43a5-bea8-0cfd8658c009.jpg?1783903930",
+   "large": "https://cards.scryfall.io/large/front/4/2/426038f3-f21e-43a5-bea8-0cfd8658c009.jpg?1783903930",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/2/426038f3-f21e-43a5-bea8-0cfd8658c009.jpg?1783903930"
+  }
+ },
+ {
+  "name": "Angel's Grace",
+  "scryfallId": "de0f22af-fb85-4178-8a35-ec3ff031f4df",
+  "oracleId": "66ca8a60-e028-4a5f-8177-860b888cb9d1",
+  "set": "soa",
+  "collectorNumber": "2",
+  "rarity": "rare",
+  "manaCost": "{W}",
+  "typeLine": "Instant",
+  "oracleText": "Split second (As long as this spell is on the stack, players can't cast spells or activate abilities that aren't mana abilities.)\nYou can't lose the game this turn and your opponents can't win the game this turn. Until end of turn, damage that would reduce your life total to less than 1 reduces it to 1 instead.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Split second"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/e/de0f22af-fb85-4178-8a35-ec3ff031f4df.jpg?1783903934",
+   "normal": "https://cards.scryfall.io/normal/front/d/e/de0f22af-fb85-4178-8a35-ec3ff031f4df.jpg?1783903934",
+   "large": "https://cards.scryfall.io/large/front/d/e/de0f22af-fb85-4178-8a35-ec3ff031f4df.jpg?1783903934",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/e/de0f22af-fb85-4178-8a35-ec3ff031f4df.jpg?1783903934"
+  }
+ },
+ {
+  "name": "Duty Beyond Death",
+  "scryfallId": "ddde574a-e442-42cc-a1ce-82243395de4c",
+  "oracleId": "67e6ce99-4883-4713-9822-cb2334765b5b",
+  "set": "sld",
+  "collectorNumber": "2387",
+  "rarity": "rare",
+  "manaCost": "{1}{W}",
+  "typeLine": "Instant",
+  "oracleText": "As an additional cost to cast this spell, sacrifice a creature.\nCreatures you control gain indestructible until end of turn. Put a +1/+1 counter on each creature you control. (Damage and effects that say \"destroy\" don't destroy those creatures.)",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/d/ddde574a-e442-42cc-a1ce-82243395de4c.jpg?1783903511",
+   "normal": "https://cards.scryfall.io/normal/front/d/d/ddde574a-e442-42cc-a1ce-82243395de4c.jpg?1783903511",
+   "large": "https://cards.scryfall.io/large/front/d/d/ddde574a-e442-42cc-a1ce-82243395de4c.jpg?1783903511",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/d/ddde574a-e442-42cc-a1ce-82243395de4c.jpg?1783903511"
+  }
+ },
+ {
+  "name": "Requisition Raid",
+  "scryfallId": "6d9efae9-365d-46c8-be92-d4a3038f0414",
+  "oracleId": "09669283-eb14-46a2-b37a-51d7a52da891",
+  "set": "soa",
+  "collectorNumber": "10",
+  "rarity": "uncommon",
+  "manaCost": "{W}",
+  "typeLine": "Sorcery",
+  "oracleText": "Spree (Choose one or more additional costs.)\n+ {1} — Destroy target artifact.\n+ {1} — Destroy target enchantment.\n+ {1} — Put a +1/+1 counter on each creature target player controls.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Spree"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/d/6d9efae9-365d-46c8-be92-d4a3038f0414.jpg?1783903930",
+   "normal": "https://cards.scryfall.io/normal/front/6/d/6d9efae9-365d-46c8-be92-d4a3038f0414.jpg?1783903930",
+   "large": "https://cards.scryfall.io/large/front/6/d/6d9efae9-365d-46c8-be92-d4a3038f0414.jpg?1783903930",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/d/6d9efae9-365d-46c8-be92-d4a3038f0414.jpg?1783903930"
+  }
+ },
+ {
+  "name": "Return to the Ranks",
+  "scryfallId": "9fccce64-abac-4b90-bbe5-dbba8434b3b4",
+  "oracleId": "0d4ee553-f206-4e70-a7b2-a3670440aee7",
+  "set": "m15",
+  "collectorNumber": "29",
+  "rarity": "rare",
+  "manaCost": "{X}{W}{W}",
+  "typeLine": "Sorcery",
+  "oracleText": "Convoke (Your creatures can help cast this spell. Each creature you tap while casting this spell pays for {1} or one mana of that creature's color.)\nReturn X target creature cards with mana value 2 or less from your graveyard to the battlefield.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Convoke"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/f/9fccce64-abac-4b90-bbe5-dbba8434b3b4.jpg?1783939198",
+   "normal": "https://cards.scryfall.io/normal/front/9/f/9fccce64-abac-4b90-bbe5-dbba8434b3b4.jpg?1783939198",
+   "large": "https://cards.scryfall.io/large/front/9/f/9fccce64-abac-4b90-bbe5-dbba8434b3b4.jpg?1783939198",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/f/9fccce64-abac-4b90-bbe5-dbba8434b3b4.jpg?1783939198"
+  }
+ },
+ {
+  "name": "Winds of Abandon",
+  "scryfallId": "0b7ad269-e8ad-471c-9f97-72b8746deb91",
+  "oracleId": "499a4715-6776-461b-bee4-22ed172d455e",
+  "set": "sld",
+  "collectorNumber": "882",
+  "rarity": "rare",
+  "manaCost": "{1}{W}",
+  "typeLine": "Sorcery",
+  "oracleText": "Exile target creature you don't control. For each creature exiled this way, its controller searches their library for a basic land card. Those players put those cards onto the battlefield tapped, then shuffle.\nOverload {4}{W}{W} (You may cast this spell for its overload cost. If you do, change \"target\" in its text to \"each.\")",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Overload"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/b/0b7ad269-e8ad-471c-9f97-72b8746deb91.jpg?1783907476",
+   "normal": "https://cards.scryfall.io/normal/front/0/b/0b7ad269-e8ad-471c-9f97-72b8746deb91.jpg?1783907476",
+   "large": "https://cards.scryfall.io/large/front/0/b/0b7ad269-e8ad-471c-9f97-72b8746deb91.jpg?1783907476",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/b/0b7ad269-e8ad-471c-9f97-72b8746deb91.jpg?1783907476"
+  }
+ },
+ {
+  "name": "Akroma's Will",
+  "scryfallId": "674e08ef-5291-4465-99c0-7313698f7a93",
+  "oracleId": "fd949f82-fc10-4e37-8aa9-6c7569fe3c55",
+  "set": "soa",
+  "collectorNumber": "1",
+  "rarity": "mythic",
+  "manaCost": "{3}{W}",
+  "typeLine": "Instant",
+  "oracleText": "Choose one. If you control a commander as you cast this spell, you may choose both instead.\n• Creatures you control gain flying, vigilance, and double strike until end of turn.\n• Creatures you control gain lifelink, indestructible, and protection from each color until end of turn.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/7/674e08ef-5291-4465-99c0-7313698f7a93.jpg?1783903936",
+   "normal": "https://cards.scryfall.io/normal/front/6/7/674e08ef-5291-4465-99c0-7313698f7a93.jpg?1783903936",
+   "large": "https://cards.scryfall.io/large/front/6/7/674e08ef-5291-4465-99c0-7313698f7a93.jpg?1783903936",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/7/674e08ef-5291-4465-99c0-7313698f7a93.jpg?1783903936"
+  }
+ },
+ {
+  "name": "Brain Freeze",
+  "scryfallId": "d33ff8fc-b2b7-4cd9-8724-b926459b519d",
+  "oracleId": "464c0150-3dbc-403b-9ada-fef25ab1f29d",
+  "set": "sld",
+  "collectorNumber": "410",
+  "rarity": "rare",
+  "manaCost": "{1}{U}",
+  "typeLine": "Instant",
+  "oracleText": "Target player mills three cards.\nStorm (When you cast this spell, copy it for each spell cast before it this turn. You may choose new targets for the copies.)",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Storm",
+   "Mill"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/3/d33ff8fc-b2b7-4cd9-8724-b926459b519d.jpg?1783924015",
+   "normal": "https://cards.scryfall.io/normal/front/d/3/d33ff8fc-b2b7-4cd9-8724-b926459b519d.jpg?1783924015",
+   "large": "https://cards.scryfall.io/large/front/d/3/d33ff8fc-b2b7-4cd9-8724-b926459b519d.jpg?1783924015",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/3/d33ff8fc-b2b7-4cd9-8724-b926459b519d.jpg?1783924015"
+  }
+ },
+ {
+  "name": "Bring to Light",
+  "scryfallId": "2b5cfc9b-90c0-4073-8584-8cf59d13fd60",
+  "oracleId": "67183256-23cc-4af5-991e-d7148e942c63",
+  "set": "soa",
+  "collectorNumber": "61",
+  "rarity": "rare",
+  "manaCost": "{3}{G}{U}",
+  "typeLine": "Sorcery",
+  "oracleText": "Converge — Search your library for a creature, instant, or sorcery card with mana value less than or equal to the number of colors of mana spent to cast this spell, exile that card, then shuffle. You may cast that card without paying its mana cost.",
+  "colors": [
+   "G",
+   "U"
+  ],
+  "keywords": [
+   "Converge"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/b/2b5cfc9b-90c0-4073-8584-8cf59d13fd60.jpg?1783903914",
+   "normal": "https://cards.scryfall.io/normal/front/2/b/2b5cfc9b-90c0-4073-8584-8cf59d13fd60.jpg?1783903914",
+   "large": "https://cards.scryfall.io/large/front/2/b/2b5cfc9b-90c0-4073-8584-8cf59d13fd60.jpg?1783903914",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/b/2b5cfc9b-90c0-4073-8584-8cf59d13fd60.jpg?1783903914"
+  }
+ },
+ {
+  "name": "Daze",
+  "scryfallId": "d080214c-f904-4840-bf4c-15ca4f76ecc5",
+  "oracleId": "70486bee-6ee7-41ea-b834-8caf4699302b",
+  "set": "sld",
+  "collectorNumber": "1934",
+  "rarity": "rare",
+  "manaCost": "{1}{U}",
+  "typeLine": "Instant",
+  "oracleText": "You may return an Island you control to its owner's hand rather than pay this spell's mana cost.\nCounter target spell unless its controller pays {1}.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/0/d080214c-f904-4840-bf4c-15ca4f76ecc5.jpg?1783907456",
+   "normal": "https://cards.scryfall.io/normal/front/d/0/d080214c-f904-4840-bf4c-15ca4f76ecc5.jpg?1783907456",
+   "large": "https://cards.scryfall.io/large/front/d/0/d080214c-f904-4840-bf4c-15ca4f76ecc5.jpg?1783907456",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/0/d080214c-f904-4840-bf4c-15ca4f76ecc5.jpg?1783907456"
+  }
+ },
+ {
+  "name": "Disdainful Stroke",
+  "scryfallId": "3a057032-6ece-4aa7-8e99-df2a07359b2b",
+  "oracleId": "11e02134-7b1a-46a4-a89e-7539dd1efada",
+  "set": "soa",
+  "collectorNumber": "17",
+  "rarity": "uncommon",
+  "manaCost": "{1}{U}",
+  "typeLine": "Instant",
+  "oracleText": "Counter target spell with mana value 4 or greater.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/a/3a057032-6ece-4aa7-8e99-df2a07359b2b.jpg?1783903929",
+   "normal": "https://cards.scryfall.io/normal/front/3/a/3a057032-6ece-4aa7-8e99-df2a07359b2b.jpg?1783903929",
+   "large": "https://cards.scryfall.io/large/front/3/a/3a057032-6ece-4aa7-8e99-df2a07359b2b.jpg?1783903929",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/a/3a057032-6ece-4aa7-8e99-df2a07359b2b.jpg?1783903929"
+  }
+ },
+ {
+  "name": "Flusterstorm",
+  "scryfallId": "75a98ff2-6e78-4133-ad4e-c62c396ba1e0",
+  "oracleId": "86bf58f2-7f25-4e10-b797-25e0e8e67769",
+  "set": "mh3",
+  "collectorNumber": "496",
+  "rarity": "rare",
+  "manaCost": "{U}",
+  "typeLine": "Instant",
+  "oracleText": "Counter target instant or sorcery spell unless its controller pays {1}.\nStorm (When you cast this spell, copy it for each spell cast before it this turn. You may choose new targets for the copies.)",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Storm"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/5/75a98ff2-6e78-4133-ad4e-c62c396ba1e0.jpg?1783911143",
+   "normal": "https://cards.scryfall.io/normal/front/7/5/75a98ff2-6e78-4133-ad4e-c62c396ba1e0.jpg?1783911143",
+   "large": "https://cards.scryfall.io/large/front/7/5/75a98ff2-6e78-4133-ad4e-c62c396ba1e0.jpg?1783911143",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/5/75a98ff2-6e78-4133-ad4e-c62c396ba1e0.jpg?1783911143"
+  }
+ },
+ {
+  "name": "Force of Will",
+  "scryfallId": "7a87f8bc-1b3e-4cb2-9343-5f008e942411",
+  "oracleId": "956381ba-6d37-4a8a-846c-bad79222dbee",
+  "set": "soa",
+  "collectorNumber": "19",
+  "rarity": "mythic",
+  "manaCost": "{3}{U}{U}",
+  "typeLine": "Instant",
+  "oracleText": "You may pay 1 life and exile a blue card from your hand rather than pay this spell's mana cost.\nCounter target spell.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/a/7a87f8bc-1b3e-4cb2-9343-5f008e942411.jpg?1783903928",
+   "normal": "https://cards.scryfall.io/normal/front/7/a/7a87f8bc-1b3e-4cb2-9343-5f008e942411.jpg?1783903928",
+   "large": "https://cards.scryfall.io/large/front/7/a/7a87f8bc-1b3e-4cb2-9343-5f008e942411.jpg?1783903928",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/a/7a87f8bc-1b3e-4cb2-9343-5f008e942411.jpg?1783903928"
+  }
+ },
+ {
+  "name": "Prismatic Ending",
+  "scryfallId": "944db708-6b7d-4dc0-b3c0-2ddf130e4be3",
+  "oracleId": "2cb98ca9-d7bb-416b-a17e-ee5f8e4d78f2",
+  "set": "sld",
+  "collectorNumber": "1868",
+  "rarity": "rare",
+  "manaCost": "{X}{W}",
+  "typeLine": "Sorcery",
+  "oracleText": "Converge — Exile target nonland permanent if its mana value is less than or equal to the number of colors of mana spent to cast this spell.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Converge"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/4/944db708-6b7d-4dc0-b3c0-2ddf130e4be3.jpg?1789284402",
+   "normal": "https://cards.scryfall.io/normal/front/9/4/944db708-6b7d-4dc0-b3c0-2ddf130e4be3.jpg?1789284402",
+   "large": "https://cards.scryfall.io/large/front/9/4/944db708-6b7d-4dc0-b3c0-2ddf130e4be3.jpg?1789284402",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/4/944db708-6b7d-4dc0-b3c0-2ddf130e4be3.jpg?1789284402"
+  }
+ },
+ {
+  "name": "Sleight of Hand",
+  "scryfallId": "950d422f-8c76-423b-8cc2-3e597184d58c",
+  "oracleId": "05a039ad-1689-4d13-b393-6c1219583b5d",
+  "set": "9ed",
+  "collectorNumber": "99★",
+  "rarity": "common",
+  "manaCost": "{U}",
+  "typeLine": "Sorcery",
+  "oracleText": "Look at the top two cards of your library. Put one of them into your hand and the other on the bottom of your library.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/5/950d422f-8c76-423b-8cc2-3e597184d58c.jpg?1783944033",
+   "normal": "https://cards.scryfall.io/normal/front/9/5/950d422f-8c76-423b-8cc2-3e597184d58c.jpg?1783944033",
+   "large": "https://cards.scryfall.io/large/front/9/5/950d422f-8c76-423b-8cc2-3e597184d58c.jpg?1783944033",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/5/950d422f-8c76-423b-8cc2-3e597184d58c.jpg?1783944033"
+  }
+ },
+ {
+  "name": "Ad Nauseam",
+  "scryfallId": "763fb195-6fd1-428a-b129-ec688f7b0066",
+  "oracleId": "981b0e21-e5e6-4a1e-bfde-679d56623f7f",
+  "set": "soa",
+  "collectorNumber": "25",
+  "rarity": "mythic",
+  "manaCost": "{3}{B}{B}",
+  "typeLine": "Instant",
+  "oracleText": "Reveal the top card of your library and put that card into your hand. You lose life equal to its mana value. You may repeat this process any number of times.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/6/763fb195-6fd1-428a-b129-ec688f7b0066.jpg?1783903926",
+   "normal": "https://cards.scryfall.io/normal/front/7/6/763fb195-6fd1-428a-b129-ec688f7b0066.jpg?1783903926",
+   "large": "https://cards.scryfall.io/large/front/7/6/763fb195-6fd1-428a-b129-ec688f7b0066.jpg?1783903926",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/6/763fb195-6fd1-428a-b129-ec688f7b0066.jpg?1783903926"
+  }
+ },
+ {
+  "name": "Culling the Weak",
+  "scryfallId": "10357c6f-3cc2-43c0-bfb1-7ed9eeecece1",
+  "oracleId": "6385fd0d-256d-4400-9319-afa8170024db",
+  "set": "sld",
+  "collectorNumber": "883",
+  "rarity": "rare",
+  "manaCost": "{B}",
+  "typeLine": "Instant",
+  "oracleText": "As an additional cost to cast this spell, sacrifice a creature.\nAdd {B}{B}{B}{B}.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/0/10357c6f-3cc2-43c0-bfb1-7ed9eeecece1.jpg?1783907482",
+   "normal": "https://cards.scryfall.io/normal/front/1/0/10357c6f-3cc2-43c0-bfb1-7ed9eeecece1.jpg?1783907482",
+   "large": "https://cards.scryfall.io/large/front/1/0/10357c6f-3cc2-43c0-bfb1-7ed9eeecece1.jpg?1783907482",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/0/10357c6f-3cc2-43c0-bfb1-7ed9eeecece1.jpg?1783907482"
+  }
+ },
+ {
+  "name": "Dismember",
+  "scryfallId": "317f1aff-9d0d-4003-84e9-3b63bd4e4fae",
+  "oracleId": "fd74f8eb-0253-42dd-8277-186d4934da38",
+  "set": "sld",
+  "collectorNumber": "1674",
+  "rarity": "rare",
+  "manaCost": "{1}{B/P}{B/P}",
+  "typeLine": "Instant",
+  "oracleText": "({B/P} can be paid with either {B} or 2 life.)\nTarget creature gets -5/-5 until end of turn.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/1/317f1aff-9d0d-4003-84e9-3b63bd4e4fae.jpg?1783910870",
+   "normal": "https://cards.scryfall.io/normal/front/3/1/317f1aff-9d0d-4003-84e9-3b63bd4e4fae.jpg?1783910870",
+   "large": "https://cards.scryfall.io/large/front/3/1/317f1aff-9d0d-4003-84e9-3b63bd4e4fae.jpg?1783910870",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/1/317f1aff-9d0d-4003-84e9-3b63bd4e4fae.jpg?1783910870"
+  }
+ },
+ {
+  "name": "Feed the Swarm",
+  "scryfallId": "e66d4541-160c-4137-98e7-0eaa692c7d7a",
+  "oracleId": "5825997b-10d7-4a36-972c-a80ddd90b8ed",
+  "set": "fdn",
+  "collectorNumber": "712",
+  "rarity": "common",
+  "manaCost": "{1}{B}",
+  "typeLine": "Sorcery",
+  "oracleText": "Destroy target creature or enchantment an opponent controls. You lose life equal to that permanent's mana value.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/6/e66d4541-160c-4137-98e7-0eaa692c7d7a.jpg?1783908893",
+   "normal": "https://cards.scryfall.io/normal/front/e/6/e66d4541-160c-4137-98e7-0eaa692c7d7a.jpg?1783908893",
+   "large": "https://cards.scryfall.io/large/front/e/6/e66d4541-160c-4137-98e7-0eaa692c7d7a.jpg?1783908893",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/6/e66d4541-160c-4137-98e7-0eaa692c7d7a.jpg?1783908893"
+  }
+ },
+ {
+  "name": "Living End",
+  "scryfallId": "6e5e7fd7-a21e-42ae-bad3-b35e4fab62f4",
+  "oracleId": "3939fbe0-3be4-41ef-828d-c93f2cb33b4f",
+  "set": "sld",
+  "collectorNumber": "1769",
+  "rarity": "mythic",
+  "manaCost": "",
+  "typeLine": "Sorcery",
+  "oracleText": "Suspend 3—{2}{B}{B}\nEach player exiles all creature cards from their graveyard, then sacrifices all creatures they control, then puts all cards they exiled this way onto the battlefield.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Suspend"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/e/6e5e7fd7-a21e-42ae-bad3-b35e4fab62f4.jpg?1783909212",
+   "normal": "https://cards.scryfall.io/normal/front/6/e/6e5e7fd7-a21e-42ae-bad3-b35e4fab62f4.jpg?1783909212",
+   "large": "https://cards.scryfall.io/large/front/6/e/6e5e7fd7-a21e-42ae-bad3-b35e4fab62f4.jpg?1783909212",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/e/6e5e7fd7-a21e-42ae-bad3-b35e4fab62f4.jpg?1783909212"
+  }
+ },
+ {
+  "name": "Locust Spray",
+  "scryfallId": "b221e1e9-7b14-4444-ac1c-3d5174c711e9",
+  "oracleId": "f9dce026-2653-4793-b949-357b08a936ea",
+  "set": "soa",
+  "collectorNumber": "31",
+  "rarity": "uncommon",
+  "manaCost": "{B}",
+  "typeLine": "Instant",
+  "oracleText": "Target creature gets -1/-1 until end of turn.\nCycling {B} ({B}, Discard this card: Draw a card.)",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Cycling"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/2/b221e1e9-7b14-4444-ac1c-3d5174c711e9.jpg?1783903924",
+   "normal": "https://cards.scryfall.io/normal/front/b/2/b221e1e9-7b14-4444-ac1c-3d5174c711e9.jpg?1783903924",
+   "large": "https://cards.scryfall.io/large/front/b/2/b221e1e9-7b14-4444-ac1c-3d5174c711e9.jpg?1783903924",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/2/b221e1e9-7b14-4444-ac1c-3d5174c711e9.jpg?1783903924"
+  }
+ },
+ {
+  "name": "Sheoldred's Edict",
+  "scryfallId": "dca66a1b-0acd-4b79-b5fe-16f2930f9c1b",
+  "oracleId": "217062f5-96f1-454c-9507-17f34ef37070",
+  "set": "soa",
+  "collectorNumber": "32",
+  "rarity": "rare",
+  "manaCost": "{1}{B}",
+  "typeLine": "Instant",
+  "oracleText": "Choose one —\n• Each opponent sacrifices a nontoken creature of their choice.\n• Each opponent sacrifices a creature token of their choice.\n• Each opponent sacrifices a planeswalker of their choice.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/c/dca66a1b-0acd-4b79-b5fe-16f2930f9c1b.jpg?1783903924",
+   "normal": "https://cards.scryfall.io/normal/front/d/c/dca66a1b-0acd-4b79-b5fe-16f2930f9c1b.jpg?1783903924",
+   "large": "https://cards.scryfall.io/large/front/d/c/dca66a1b-0acd-4b79-b5fe-16f2930f9c1b.jpg?1783903924",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/c/dca66a1b-0acd-4b79-b5fe-16f2930f9c1b.jpg?1783903924"
+  }
+ },
+ {
+  "name": "Smallpox",
+  "scryfallId": "93c8159b-8c1d-480a-b517-dbd67bba1838",
+  "oracleId": "7bd22c98-0782-447f-a5fa-4281585a3eab",
+  "set": "m12",
+  "collectorNumber": "108",
+  "rarity": "uncommon",
+  "manaCost": "{B}{B}",
+  "typeLine": "Sorcery",
+  "oracleText": "Each player loses 1 life, discards a card, sacrifices a creature of their choice, then sacrifices a land of their choice.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/3/93c8159b-8c1d-480a-b517-dbd67bba1838.jpg?1783941078",
+   "normal": "https://cards.scryfall.io/normal/front/9/3/93c8159b-8c1d-480a-b517-dbd67bba1838.jpg?1783941078",
+   "large": "https://cards.scryfall.io/large/front/9/3/93c8159b-8c1d-480a-b517-dbd67bba1838.jpg?1783941078",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/3/93c8159b-8c1d-480a-b517-dbd67bba1838.jpg?1783941078"
+  }
+ },
+ {
+  "name": "Vampiric Tutor",
+  "scryfallId": "c8505bc8-218f-4b56-be78-ebde535ebaa0",
+  "oracleId": "ededbdae-d9dc-4206-9335-d7158f2d7700",
+  "set": "6ed",
+  "collectorNumber": "161",
+  "rarity": "rare",
+  "manaCost": "{B}",
+  "typeLine": "Instant",
+  "oracleText": "Search your library for a card, then shuffle and put that card on top. You lose 2 life.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/8/c8505bc8-218f-4b56-be78-ebde535ebaa0.jpg?1783946177",
+   "normal": "https://cards.scryfall.io/normal/front/c/8/c8505bc8-218f-4b56-be78-ebde535ebaa0.jpg?1783946177",
+   "large": "https://cards.scryfall.io/large/front/c/8/c8505bc8-218f-4b56-be78-ebde535ebaa0.jpg?1783946177",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/8/c8505bc8-218f-4b56-be78-ebde535ebaa0.jpg?1783946177"
+  }
+ },
+ {
+  "name": "Berserk",
+  "scryfallId": "86ec6360-d69d-41b8-bfca-2c1a3aea2272",
+  "oracleId": "8b67d192-9a05-4a47-82ae-5fc4b7834d88",
+  "set": "sld",
+  "collectorNumber": "1003",
+  "rarity": "mythic",
+  "manaCost": "{G}",
+  "typeLine": "Instant",
+  "oracleText": "Cast this spell only before the combat damage step.\nTarget creature gains trample and gets +X/+0 until end of turn, where X is its power. At the beginning of the next end step, destroy that creature if it attacked this turn.",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/6/86ec6360-d69d-41b8-bfca-2c1a3aea2272.jpg?1783922242",
+   "normal": "https://cards.scryfall.io/normal/front/8/6/86ec6360-d69d-41b8-bfca-2c1a3aea2272.jpg?1783922242",
+   "large": "https://cards.scryfall.io/large/front/8/6/86ec6360-d69d-41b8-bfca-2c1a3aea2272.jpg?1783922242",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/6/86ec6360-d69d-41b8-bfca-2c1a3aea2272.jpg?1783922242"
+  }
+ },
+ {
+  "name": "Brotherhood's End",
+  "scryfallId": "98a399fa-822d-4e8c-8be0-fa929c9bbd4d",
+  "oracleId": "fe7bf8ca-88ae-4c6d-8d71-ef170a87c0d0",
+  "set": "soa",
+  "collectorNumber": "39",
+  "rarity": "rare",
+  "manaCost": "{1}{R}{R}",
+  "typeLine": "Sorcery",
+  "oracleText": "Choose one —\n• Brotherhood's End deals 3 damage to each creature and each planeswalker.\n• Destroy all artifacts with mana value 3 or less.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/8/98a399fa-822d-4e8c-8be0-fa929c9bbd4d.jpg?1783903923",
+   "normal": "https://cards.scryfall.io/normal/front/9/8/98a399fa-822d-4e8c-8be0-fa929c9bbd4d.jpg?1783903923",
+   "large": "https://cards.scryfall.io/large/front/9/8/98a399fa-822d-4e8c-8be0-fa929c9bbd4d.jpg?1783903923",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/8/98a399fa-822d-4e8c-8be0-fa929c9bbd4d.jpg?1783903923"
+  }
+ },
+ {
+  "name": "Deflecting Palm",
+  "scryfallId": "fa80a2e6-303f-4cd4-b719-cdc030a51181",
+  "oracleId": "dc5dffc8-fac5-4956-bac4-1ad2cc16f6be",
+  "set": "soa",
+  "collectorNumber": "63",
+  "rarity": "rare",
+  "manaCost": "{R}{W}",
+  "typeLine": "Instant",
+  "oracleText": "The next time a source of your choice would deal damage to you this turn, prevent that damage. If damage is prevented this way, Deflecting Palm deals that much damage to that source's controller.",
+  "colors": [
+   "R",
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/a/fa80a2e6-303f-4cd4-b719-cdc030a51181.jpg?1783903914",
+   "normal": "https://cards.scryfall.io/normal/front/f/a/fa80a2e6-303f-4cd4-b719-cdc030a51181.jpg?1783903914",
+   "large": "https://cards.scryfall.io/large/front/f/a/fa80a2e6-303f-4cd4-b719-cdc030a51181.jpg?1783903914",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/a/fa80a2e6-303f-4cd4-b719-cdc030a51181.jpg?1783903914"
+  }
+ },
+ {
+  "name": "Empty the Warrens",
+  "scryfallId": "07e5e725-c482-4dbc-9612-d3155ed71a75",
+  "oracleId": "3a59c882-8bb8-49ba-862f-125020dd5bec",
+  "set": "sld",
+  "collectorNumber": "2412",
+  "rarity": "rare",
+  "manaCost": "{3}{R}",
+  "typeLine": "Sorcery",
+  "oracleText": "Create two 1/1 red Goblin creature tokens.\nStorm (When you cast this spell, copy it for each spell cast before it this turn.)",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Storm"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/7/07e5e725-c482-4dbc-9612-d3155ed71a75.jpg?1783903427",
+   "normal": "https://cards.scryfall.io/normal/front/0/7/07e5e725-c482-4dbc-9612-d3155ed71a75.jpg?1783903427",
+   "large": "https://cards.scryfall.io/large/front/0/7/07e5e725-c482-4dbc-9612-d3155ed71a75.jpg?1783903427",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/7/07e5e725-c482-4dbc-9612-d3155ed71a75.jpg?1783903427"
+  }
+ },
+ {
+  "name": "Jeska's Will",
+  "scryfallId": "f2f2e39f-bf39-4b27-b211-e46b6045039d",
+  "oracleId": "0fd114c4-092b-4e28-b0dc-ef529f3bc73e",
+  "set": "sld",
+  "collectorNumber": "1744",
+  "rarity": "rare",
+  "manaCost": "{2}{R}",
+  "typeLine": "Sorcery",
+  "oracleText": "Choose one. If you control a commander as you cast this spell, you may choose both instead.\n• Add {R} for each card in target opponent's hand.\n• Exile the top three cards of your library. You may play them this turn.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/2/f2f2e39f-bf39-4b27-b211-e46b6045039d.jpg?1783909135",
+   "normal": "https://cards.scryfall.io/normal/front/f/2/f2f2e39f-bf39-4b27-b211-e46b6045039d.jpg?1783909135",
+   "large": "https://cards.scryfall.io/large/front/f/2/f2f2e39f-bf39-4b27-b211-e46b6045039d.jpg?1783909135",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/2/f2f2e39f-bf39-4b27-b211-e46b6045039d.jpg?1783909135"
+  }
+ },
+ {
+  "name": "Monstrous Rage",
+  "scryfallId": "4b2e000b-a147-443b-9138-9ff2d16c0422",
+  "oracleId": "646a2371-54c0-4492-ac2f-20f109d6108c",
+  "set": "soa",
+  "collectorNumber": "45",
+  "rarity": "uncommon",
+  "manaCost": "{R}",
+  "typeLine": "Instant",
+  "oracleText": "Target creature gets +2/+0 until end of turn. Create a Monster Role token attached to it. (If you control another Role on it, put that one into the graveyard. Enchanted creature gets +1/+1 and has trample.)",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Role token"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/b/4b2e000b-a147-443b-9138-9ff2d16c0422.jpg?1783903919",
+   "normal": "https://cards.scryfall.io/normal/front/4/b/4b2e000b-a147-443b-9138-9ff2d16c0422.jpg?1783903919",
+   "large": "https://cards.scryfall.io/large/front/4/b/4b2e000b-a147-443b-9138-9ff2d16c0422.jpg?1783903919",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/b/4b2e000b-a147-443b-9138-9ff2d16c0422.jpg?1783903919"
+  }
+ },
+ {
+  "name": "Pyretic Ritual",
+  "scryfallId": "1e577638-a7ed-4bcc-90fb-0cffe87d5a28",
+  "oracleId": "86ef6474-613f-41fb-931c-d4279b03ed99",
+  "set": "m11",
+  "collectorNumber": "153",
+  "rarity": "common",
+  "manaCost": "{1}{R}",
+  "typeLine": "Instant",
+  "oracleText": "Add {R}{R}{R}.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/e/1e577638-a7ed-4bcc-90fb-0cffe87d5a28.jpg?1783941802",
+   "normal": "https://cards.scryfall.io/normal/front/1/e/1e577638-a7ed-4bcc-90fb-0cffe87d5a28.jpg?1783941802",
+   "large": "https://cards.scryfall.io/large/front/1/e/1e577638-a7ed-4bcc-90fb-0cffe87d5a28.jpg?1783941802",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/e/1e577638-a7ed-4bcc-90fb-0cffe87d5a28.jpg?1783941802"
+  }
+ },
+ {
+  "name": "Subterranean Tremors",
+  "scryfallId": "02a20564-90af-4dbd-bf5c-debc49e4f391",
+  "oracleId": "f0881756-de74-43b1-a9fe-c2fde93faf5a",
+  "set": "soa",
+  "collectorNumber": "48",
+  "rarity": "mythic",
+  "manaCost": "{X}{R}",
+  "typeLine": "Sorcery",
+  "oracleText": "Subterranean Tremors deals X damage to each creature without flying. If X is 4 or more, destroy all artifacts. If X is 8 or more, create an 8/8 red Lizard creature token.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/2/02a20564-90af-4dbd-bf5c-debc49e4f391.jpg?1783903919",
+   "normal": "https://cards.scryfall.io/normal/front/0/2/02a20564-90af-4dbd-bf5c-debc49e4f391.jpg?1783903919",
+   "large": "https://cards.scryfall.io/large/front/0/2/02a20564-90af-4dbd-bf5c-debc49e4f391.jpg?1783903919",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/2/02a20564-90af-4dbd-bf5c-debc49e4f391.jpg?1783903919"
+  }
+ },
+ {
+  "name": "Crop Rotation",
+  "scryfallId": "29dd649c-86b5-40a1-94b0-5859d03be9cd",
+  "oracleId": "28b46183-c62f-47b1-9fee-3ba148202cab",
+  "set": "pmei",
+  "collectorNumber": "2025-9",
+  "rarity": "rare",
+  "manaCost": "{G}",
+  "typeLine": "Instant",
+  "oracleText": "As an additional cost to cast this spell, sacrifice a land.\nSearch your library for a land card, put that card onto the battlefield, then shuffle.",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/9/29dd649c-86b5-40a1-94b0-5859d03be9cd.jpg?1787806940",
+   "normal": "https://cards.scryfall.io/normal/front/2/9/29dd649c-86b5-40a1-94b0-5859d03be9cd.jpg?1787806940",
+   "large": "https://cards.scryfall.io/large/front/2/9/29dd649c-86b5-40a1-94b0-5859d03be9cd.jpg?1787806940",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/9/29dd649c-86b5-40a1-94b0-5859d03be9cd.jpg?1787806940"
+  }
+ },
+ {
+  "name": "Glimpse of Nature",
+  "scryfallId": "7cb6fd05-0bd9-4f2f-b159-280aba98d3a5",
+  "oracleId": "5fae52ed-1b84-406e-951d-b0d329dc48a7",
+  "set": "soa",
+  "collectorNumber": "53",
+  "rarity": "rare",
+  "manaCost": "{G}",
+  "typeLine": "Sorcery",
+  "oracleText": "Whenever you cast a creature spell this turn, draw a card.",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/c/7cb6fd05-0bd9-4f2f-b159-280aba98d3a5.jpg?1783903919",
+   "normal": "https://cards.scryfall.io/normal/front/7/c/7cb6fd05-0bd9-4f2f-b159-280aba98d3a5.jpg?1783903919",
+   "large": "https://cards.scryfall.io/large/front/7/c/7cb6fd05-0bd9-4f2f-b159-280aba98d3a5.jpg?1783903919",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/c/7cb6fd05-0bd9-4f2f-b159-280aba98d3a5.jpg?1783903919"
+  }
+ },
+ {
+  "name": "Knockout Maneuver",
+  "scryfallId": "9d218831-2a41-46a3-8e9d-93462cae5cab",
+  "oracleId": "7e4931f4-f518-4200-aad4-4ac8acf202e5",
+  "set": "tdm",
+  "collectorNumber": "147",
+  "rarity": "uncommon",
+  "manaCost": "{2}{G}",
+  "typeLine": "Sorcery",
+  "oracleText": "Put a +1/+1 counter on target creature you control, then it deals damage equal to its power to target creature an opponent controls.",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/d/9d218831-2a41-46a3-8e9d-93462cae5cab.jpg?1783907340",
+   "normal": "https://cards.scryfall.io/normal/front/9/d/9d218831-2a41-46a3-8e9d-93462cae5cab.jpg?1783907340",
+   "large": "https://cards.scryfall.io/large/front/9/d/9d218831-2a41-46a3-8e9d-93462cae5cab.jpg?1783907340",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/d/9d218831-2a41-46a3-8e9d-93462cae5cab.jpg?1783907340"
+  }
+ },
+ {
+  "name": "Pick Your Poison",
+  "scryfallId": "f58cfb23-4d99-4133-bf4b-d7e7c7d17cea",
+  "oracleId": "9af4a832-d634-47aa-91ed-79d44fe08864",
+  "set": "mkm",
+  "collectorNumber": "170",
+  "rarity": "common",
+  "manaCost": "{G}",
+  "typeLine": "Sorcery",
+  "oracleText": "Choose one —\n• Each opponent sacrifices an artifact of their choice.\n• Each opponent sacrifices an enchantment of their choice.\n• Each opponent sacrifices a creature with flying of their choice.",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/5/f58cfb23-4d99-4133-bf4b-d7e7c7d17cea.jpg?1783912863",
+   "normal": "https://cards.scryfall.io/normal/front/f/5/f58cfb23-4d99-4133-bf4b-d7e7c7d17cea.jpg?1783912863",
+   "large": "https://cards.scryfall.io/large/front/f/5/f58cfb23-4d99-4133-bf4b-d7e7c7d17cea.jpg?1783912863",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/5/f58cfb23-4d99-4133-bf4b-d7e7c7d17cea.jpg?1783912863"
+  }
+ },
+ {
+  "name": "Pongify",
+  "scryfallId": "5780936e-629d-4737-9005-651234f5426d",
+  "oracleId": "05849bd6-8f38-4031-be2b-e2aa03beb8cc",
+  "set": "soa",
+  "collectorNumber": "20",
+  "rarity": "rare",
+  "manaCost": "{U}",
+  "typeLine": "Instant",
+  "oracleText": "Destroy target creature. It can't be regenerated. Its controller creates a 3/3 green Ape creature token.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/7/5780936e-629d-4737-9005-651234f5426d.jpg?1783903929",
+   "normal": "https://cards.scryfall.io/normal/front/5/7/5780936e-629d-4737-9005-651234f5426d.jpg?1783903929",
+   "large": "https://cards.scryfall.io/large/front/5/7/5780936e-629d-4737-9005-651234f5426d.jpg?1783903929",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/7/5780936e-629d-4737-9005-651234f5426d.jpg?1783903929"
+  }
+ },
+ {
+  "name": "Royal Treatment",
+  "scryfallId": "009bad41-5e96-4bb3-9f5e-66500fb8af29",
+  "oracleId": "fd0f8fdc-4065-41f4-b8fb-ecb8f185774d",
+  "set": "soa",
+  "collectorNumber": "56",
+  "rarity": "uncommon",
+  "manaCost": "{G}",
+  "typeLine": "Instant",
+  "oracleText": "Target creature you control gains hexproof until end of turn. Create a Royal Role token attached to that creature. (If you control another Role on it, put that one into the graveyard. Enchanted creature gets +1/+1 and has ward {1}.)",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Role token"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/0/009bad41-5e96-4bb3-9f5e-66500fb8af29.jpg?1783903918",
+   "normal": "https://cards.scryfall.io/normal/front/0/0/009bad41-5e96-4bb3-9f5e-66500fb8af29.jpg?1783903918",
+   "large": "https://cards.scryfall.io/large/front/0/0/009bad41-5e96-4bb3-9f5e-66500fb8af29.jpg?1783903918",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/0/009bad41-5e96-4bb3-9f5e-66500fb8af29.jpg?1783903918"
+  }
+ },
+ {
+  "name": "Shamanic Revelation",
+  "scryfallId": "5dc1904b-b0e6-49e5-9ef3-7ea538db202b",
+  "oracleId": "d1d171de-1c6d-4fb9-817a-9c689c709f3d",
+  "set": "soa",
+  "collectorNumber": "57",
+  "rarity": "rare",
+  "manaCost": "{3}{G}{G}",
+  "typeLine": "Sorcery",
+  "oracleText": "Draw a card for each creature you control.\nFerocious — You gain 4 life for each creature you control with power 4 or greater.",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Ferocious"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/d/5dc1904b-b0e6-49e5-9ef3-7ea538db202b.jpg?1783903916",
+   "normal": "https://cards.scryfall.io/normal/front/5/d/5dc1904b-b0e6-49e5-9ef3-7ea538db202b.jpg?1783903916",
+   "large": "https://cards.scryfall.io/large/front/5/d/5dc1904b-b0e6-49e5-9ef3-7ea538db202b.jpg?1783903916",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/d/5dc1904b-b0e6-49e5-9ef3-7ea538db202b.jpg?1783903916"
+  }
+ },
+ {
+  "name": "Shared Roots",
+  "scryfallId": "63a74a85-b57e-46a8-a485-69f07000dfe7",
+  "oracleId": "9e0fd3bf-f47a-4f06-8ff1-73f6bf5d1e03",
+  "set": "sld",
+  "collectorNumber": "2391",
+  "rarity": "rare",
+  "manaCost": "{1}{G}",
+  "typeLine": "Sorcery — Lesson",
+  "oracleText": "Search your library for a basic land card, put it onto the battlefield tapped, then shuffle.",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/3/63a74a85-b57e-46a8-a485-69f07000dfe7.jpg?1783903509",
+   "normal": "https://cards.scryfall.io/normal/front/6/3/63a74a85-b57e-46a8-a485-69f07000dfe7.jpg?1783903509",
+   "large": "https://cards.scryfall.io/large/front/6/3/63a74a85-b57e-46a8-a485-69f07000dfe7.jpg?1783903509",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/3/63a74a85-b57e-46a8-a485-69f07000dfe7.jpg?1783903509"
+  }
+ },
+ {
+  "name": "Triumph of the Hordes",
+  "scryfallId": "5c3f5bf2-6032-4016-8ede-91e65c87e1c2",
+  "oracleId": "3ded0c0c-40ce-4d14-a9a6-b023bc19ee0e",
+  "set": "sld",
+  "collectorNumber": "445",
+  "rarity": "rare",
+  "manaCost": "{2}{G}{G}",
+  "typeLine": "Sorcery",
+  "oracleText": "Until end of turn, creatures you control get +1/+1 and gain trample and infect. (Creatures with infect deal damage to creatures in the form of -1/-1 counters and to players in the form of poison counters.)",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/c/5c3f5bf2-6032-4016-8ede-91e65c87e1c2.jpg?1783921954",
+   "normal": "https://cards.scryfall.io/normal/front/5/c/5c3f5bf2-6032-4016-8ede-91e65c87e1c2.jpg?1783921954",
+   "large": "https://cards.scryfall.io/large/front/5/c/5c3f5bf2-6032-4016-8ede-91e65c87e1c2.jpg?1783921954",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/c/5c3f5bf2-6032-4016-8ede-91e65c87e1c2.jpg?1783921954"
+  }
+ },
+ {
+  "name": "Veil of Summer",
+  "scryfallId": "aa686c34-1c11-469f-93c2-f9891aea521f",
+  "oracleId": "002965be-a36f-4a09-9ce0-c6535bca1703",
+  "set": "m20",
+  "collectorNumber": "198",
+  "rarity": "uncommon",
+  "manaCost": "{G}",
+  "typeLine": "Instant",
+  "oracleText": "Draw a card if an opponent has cast a blue or black spell this turn. Spells you control can't be countered this turn. You and permanents you control gain hexproof from blue and from black until end of turn. (You and they can't be the targets of blue or black spells or abilities your opponents control.)",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/a/aa686c34-1c11-469f-93c2-f9891aea521f.jpg?1783932955",
+   "normal": "https://cards.scryfall.io/normal/front/a/a/aa686c34-1c11-469f-93c2-f9891aea521f.jpg?1783932955",
+   "large": "https://cards.scryfall.io/large/front/a/a/aa686c34-1c11-469f-93c2-f9891aea521f.jpg?1783932955",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/a/aa686c34-1c11-469f-93c2-f9891aea521f.jpg?1783932955"
   }
  },
  {

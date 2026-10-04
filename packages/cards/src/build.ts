@@ -222,6 +222,9 @@ export const KEYWORDS_AS_ABILITIES = new Set([
   'Boon',
   'Perpetually',
   'Phasing',
+  // Mystical Archive (16): rules text lives in the behaviour (storm is a cast trigger, split second a card field).
+  'Storm',
+  'Split second',
 ]);
 
 const BASIC_MANA: Record<string, ManaType> = {

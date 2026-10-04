@@ -1,4 +1,5 @@
 import {
+  ARCHIVE_SLOT_WEIGHTS,
   deckById,
   type Decklist,
   findDeck,
@@ -6,7 +7,9 @@ import {
   pickOpponent,
   registerDeck,
   SCRYFALL,
+  secretsOfStrixhavenArchiveSheets,
   secretsOfStrixhavenBoosterSheets,
+  strixhavenArchiveSheets,
   strixhavenBoosterSheets,
   scryfallById,
   slug,
@@ -645,12 +648,15 @@ const SHEETS = {
   fdn: sheetsOf('fdn'),
   blb: sheetsOf('blb'),
   msh: sheetsOf('msh'),
-  // Arena's STX boosters also had a Mystical Archive slot (phase 16); not modelled yet.
   stx: strixhavenBoosterSheets(),
-  // Likewise SOS's Mystical Archive slot (phase 16).
   sos: secretsOfStrixhavenBoosterSheets(),
 };
 type Sheet = (typeof SHEETS.fdn)['common'];
+/** Mystical Archive (16): STX and SOS boosters have one archive card in place of a common. */
+const ARCHIVE: Partial<Record<PackSet, Record<'uncommon' | 'rare' | 'mythic', Sheet>>> = {
+  stx: strixhavenArchiveSheets(),
+  sos: secretsOfStrixhavenArchiveSheets(),
+};
 
 export const PACK_SIZE = { rare: 1, uncommon: 3, common: 8 };
 
@@ -680,10 +686,26 @@ export function rollPack(
   const rare = (themed: boolean) => draw(next() < 1 / 8 ? sheets.mythic : sheets.rare, themed);
   const color = pack.kind === 'color';
   const rares = 1 + (pack.kind === 'rare' ? 1 : 0) + (extraRare ? 1 : 0);
+  // Mystical Archive (16): one common slot is an archive card (an uncommon half the time, a rare
+  // three times in eight, a mythic one in eight: Arena's odds aren't published).
+  const archive = ARCHIVE[set];
   rare(color);
   for (let i = 0; i < PACK_SIZE.uncommon; i++) draw(sheets.uncommon, color && i < 2);
-  for (let i = 0; i < PACK_SIZE.common - (rares - 1); i++) draw(sheets.common, color && i < 5);
+  for (let i = 0; i < PACK_SIZE.common - (rares - 1) - (archive ? 1 : 0); i++)
+    draw(sheets.common, color && i < 5);
   for (let i = 1; i < rares; i++) rare(false);
+  if (archive) {
+    const w = ARCHIVE_SLOT_WEIGHTS;
+    const roll = next() * (w.uncommon + w.rare + w.mythic);
+    draw(
+      roll < w.uncommon
+        ? archive.uncommon
+        : roll < w.uncommon + w.rare
+          ? archive.rare
+          : archive.mythic,
+      false,
+    );
+  }
   return [...picked];
 }
 

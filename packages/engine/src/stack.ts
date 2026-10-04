@@ -489,6 +489,9 @@ export function castSpell(
   if (choice.discard && d.exileFromGraveyardToCast) {
     exiledValue = manaValue(def(ctx, choice.discard).manaCost);
     moveObject(ctx, choice.discard, 'exile');
+  } else if (choice.discard && choice.kicked && d.kicker?.exileFromHand) {
+    // Mystical Archive (16): Force of Will.
+    moveObject(ctx, choice.discard, 'exile');
   } else if (choice.discard) moveObject(ctx, choice.discard, 'graveyard');
   for (const id of choice.sacrificeMany ?? []) sacrificePermanent(ctx, id);
   if (d.types.includes('Instant') || d.types.includes('Sorcery'))
@@ -1049,6 +1052,8 @@ export function finishResolution(ctx: Ctx, item: PausedResolution['item']): void
   if (ctx.s.objects[item.id]?.zone === 'hand') return;
   // Strixhaven (13c): Dragon's Approach exiled itself as it resolved.
   if (ctx.s.objects[item.id]?.zone === 'exile') return;
+  // Mystical Archive (16): Blue Sun's Zenith and Approach of the Second Sun put themselves into the library.
+  if (ctx.s.objects[item.id]?.zone === 'library') return;
   // Final Fantasy (11a): adventure lands. Its owner may play the land from exile later.
   if (item.adventure) {
     moveObject(ctx, item.id, 'exile');

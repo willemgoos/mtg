@@ -268,6 +268,35 @@ rules line). 24 of 50 games won against the other Brawl decks, no errors; checke
   pack structure). Most are reprints of older cards, so implemented already or in 15a. Also makes the Archive cards
   available as rewards.
 
+**16 done.** Lists from the bulk cache (`scripts/fetch-archive-list.ts sta|soa`, no API): STA 63 cards (18 uncommon,
+30 rare, 15 mythic) in `stx/archive-list.ts`, SOA 65 (25, 25, 15) in `sos/archive-list.ts`, each card once (the
+Japanese alternate-art prints share the English name). Few were already implemented: 44 STA and 43 SOA cards are new
+(`stx/archive.ts`, `sos/archive.ts`; tests in `packages/cards/test/archive.test.ts`); `sta` is appended to
+`SET_PREFERENCE` (no pooled card changed printing). Engine blocks are `// Mystical Archive (16): ...`: split second,
+alternative costs (Daze, Force of Will, Dismember), `notColors`, Angel's Grace / Teferi's Protection life locks, and
+custom effects in `archive-16-effects.ts`. Pack slot (Expedition `rollPack` and Season packs, STX and SOS only): one
+archive card replaces one common, rolled uncommon 4/8, rare 3/8, mythic 1/8 (Arena's odds aren't published; this
+follows the main sheets' mythic rate), then a card of that rarity. The pack reveal shows the archive rarity
+(`ARCHIVE_RARITY`), not the shown printing's. Simplifications:
+
+- Storm is a cast trigger (copies keep their targets, and spells cast in response to the trigger count too).
+- Channel: floating {C} (at most 12) that costs 1 life each time it is spent, lost at end of step.
+- Teferi's Protection phases out your permanents and freezes your life total until your next untap step; the
+  opponent can't target you.
+- Angel's Grace: life can't drop below 1 this turn (any life loss, not only damage).
+- Deflecting Palm: the next damage to you from any source this turn (no choice of source).
+- Whirlwind Denial counters one target spell unless {4} is paid (not every opposing spell and ability).
+- Veil of Summer gives hexproof (not hexproof from blue and black) to you and your creatures (not other permanents).
+- Triumph of the Hordes has no infect (+1/+1 and trample only).
+- Compulsive Research and Time Warp target no player (they affect you).
+- Return to the Ranks has no targets: up to X creature cards of mana value 2 or less come back, strongest first.
+- Winds of Abandon overload takes the first basic lands in the library.
+- Dismember: {1}{B}{B}, or {1} and 4 life (not mixed payments). Approach of the Second Sun wins on a second cast
+  (not checked to be from hand). Mind's Desire's card is playable free this turn only.
+- Akroma's Will and Jeska's Will allow both modes only while you control a commander on the battlefield.
+- An archive card's collection value in a Season (wildcards, coins) follows the printing the game shows, not its
+  archive rarity.
+
 ## Order and size
 
 13 (STX main), 14 (SOS main), 15 (Brawl), 16 (Mystical Archive) in that order; 15 can start after 13a and 14a if

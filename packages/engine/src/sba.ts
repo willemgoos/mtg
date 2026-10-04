@@ -13,7 +13,12 @@ export function runSBAs(ctx: Ctx): void {
     let changed = false;
     for (const p of PLAYERS) {
       const ps = ctx.s.players[p];
-      if (!ps.lost && (ps.life <= 0 || ps.drewFromEmptyLibrary)) {
+      // Mystical Archive (16): Angel's Grace, "you can't lose the game this turn".
+      if (
+        !ps.lost &&
+        (ps.life <= 0 || ps.drewFromEmptyLibrary) &&
+        !ctx.s.turn.cantLose?.includes(p)
+      ) {
         ps.lost = true;
         changed = true;
       }

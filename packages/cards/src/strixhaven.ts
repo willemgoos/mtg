@@ -15,6 +15,7 @@ import { GRUUL, GRUUL_TOKENS } from './stx/gruul.ts';
 import { RARES_D, RARES_D_BACKS, RARES_D_TOKENS } from './stx/rares-d.ts';
 import { DIMIR, DIMIR_TOKENS } from './stx/dimir.ts';
 import { RARES_A, RARES_A_BACKS, RARES_A_TOKENS } from './stx/rares-a.ts';
+import { STX_ARCHIVE } from './stx/archive.ts';
 import { RARES_B, RARES_B_BACKS } from './stx/rares-b.ts';
 import { RARES_C, RARES_C_BACKS, RARES_C_TOKENS } from './stx/rares-c.ts';
 
@@ -42,6 +43,8 @@ export const STRIXHAVEN_BEHAVIORS: Record<string, Behavior> = {
   ...RARES_B,
   ...RARES_C,
   ...RARES_D,
+  // Mystical Archive (16): STA.
+  ...STX_ARCHIVE,
 };
 
 /** Strixhaven tokens (the Lorehold Spirit, the Quandrix Fractal). */

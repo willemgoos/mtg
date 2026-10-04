@@ -35,6 +35,8 @@ function playerOk(ctx: Ctx, spec: TargetSpec, p: PlayerId, src: TargetingSource)
   if (p !== src.controller && ctx.s.turn.hexproofPlayers?.includes(p)) return false;
   // Marvel Super Heroes: "you have hexproof" (Captain America, Super-Soldier).
   if (p !== src.controller && youHaveHexproof(ctx, p)) return false;
+  // Mystical Archive (16): Teferi's Protection, "protection from everything".
+  if (p !== src.controller && ctx.s.players[p].lifeFrozen) return false;
   if (spec.controller === 'you' && p !== src.controller) return false;
   if (spec.controller === 'opponent' && p !== other(src.controller)) return false;
   return true;

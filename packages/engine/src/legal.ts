@@ -133,6 +133,9 @@ export function castableCards(ctx: Ctx, player: PlayerId): ObjectId[] {
       if (
         obj(ctx, id).playFreeBy === player &&
         !out.includes(id) &&
+        // Mystical Archive (16): Mind's Desire, only this turn.
+        (obj(ctx, id).playFreeUntilTurn === undefined ||
+          obj(ctx, id).playFreeUntilTurn! >= ctx.s.turn.number) &&
         // Strixhaven Brawl (15b, u): plot, only on a later turn.
         (obj(ctx, id).plottedTurn === undefined || obj(ctx, id).plottedTurn! < ctx.s.turn.number)
       )
@@ -416,6 +419,13 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
             // Teamwork: kicked only if there are creatures to tap.
             const teamwork = teamworkFor(ctx, player, card, { kicked: v.kicked });
             if (v.kicked && d.kicker?.teamwork !== undefined && !teamwork) continue;
+            // Mystical Archive (16): Akroma's Will, Jeska's Will: both modes only with a commander.
+            if (
+              v.kicked &&
+              d.kicker?.onlyIf &&
+              !checkCondition(ctx, d.kicker.onlyIf, player, obj(ctx, card))
+            )
+              continue;
             // Strixhaven Brawl (15b, u): delve, exiling only as many cards as the cost needs.
             if (d.delve) {
               const most = Math.min(
@@ -450,7 +460,7 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
             // Final Fantasy (11b): a kicker paid with an artifact or creature, or with a land.
             const kickPermanent = v.kicked
               ? d.kicker?.returnLand
-                ? { types: ['Land' as const] }
+                ? (d.kicker.returnLandFilter ?? { types: ['Land' as const] })
                 : d.kicker?.sacrifice
               : undefined;
             const sacrificeable = kickPermanent
@@ -489,7 +499,16 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
                 if (wardLife(ctx, player, targets) > s.players[player].life) continue;
                 if (!wardPayable(ctx, player, targets, zone === 'hand' ? 1 : 0)) continue;
                 // Strixhaven Brawl (15b, b): Bone Shards and Bitter Triumph: this way of casting discards a card.
-                const vDiscards = v.discard ? ps.hand.filter((id) => id !== card) : discards;
+                const vDiscards = v.discard
+                  ? ps.hand.filter(
+                      (id) =>
+                        id !== card &&
+                        // Mystical Archive (16): Force of Will exiles a blue card.
+                        (!v.kicked ||
+                          !d.kicker?.exileFromHand ||
+                          cardMatches(ctx, id, d.kicker.exileFromHand)),
+                    )
+                  : discards;
                 for (const forage of forages)
                   for (const discard of vDiscards) {
                     // Paying without what this cast sacrifices.
@@ -749,8 +768,12 @@ export function getLegalActions(ctx: Ctx, player: PlayerId): Action[] {
       ];
     case 'discardToHandSize':
       return s.players[player].hand.map((card) => ({ type: 'discard', player, card }) as const);
-    case 'priority':
+    case 'priority': {
+      // Mystical Archive (16): split second. Nothing but passing while one is on the stack.
+      if (s.stack.some((x) => x.kind === 'spell' && def(ctx, x.id).splitSecond))
+        return [{ type: 'passPriority', player }];
       return priorityActions(ctx, player);
+    }
     case 'declareAttackers': {
       const out: Action[] = [{ type: 'confirmAttackers', player }];
       const defender = defenderOf(ctx);

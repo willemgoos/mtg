@@ -1,5 +1,15 @@
-import { cardDb, findDeck, PLAYABLE_DECKS, registerDeck, SCRYFALL, slug } from '@mtg/cards';
+import {
+  ARCHIVE_RARITY,
+  cardDb,
+  findDeck,
+  PLAYABLE_DECKS,
+  registerDeck,
+  SCRYFALL,
+  slug,
+} from '@mtg/cards';
+import { SOA_ARCHIVE_LIST } from '../../../packages/cards/src/sos/archive-list.ts';
 import { SOS_BOOSTER_LIST } from '../../../packages/cards/src/sos/booster-list.ts';
+import { STA_ARCHIVE_LIST } from '../../../packages/cards/src/stx/archive-list.ts';
 import { STX_BOOSTER_LIST } from '../../../packages/cards/src/stx/booster-list.ts';
 import { describe, expect, it } from 'vitest';
 import {
@@ -49,6 +59,8 @@ const empty: ExpeditionState = { run: null, records: {} };
 const card = new Map(SCRYFALL.map((c) => [c.name, c]));
 const boosterNames = new Set(STX_BOOSTER_LIST.map(([n]) => n));
 const sosBoosterNames = new Set(SOS_BOOSTER_LIST.map(([n]) => n));
+const staNames = new Set(STA_ARCHIVE_LIST.map(([n]) => n));
+const soaNames = new Set(SOA_ARCHIVE_LIST.map(([n]) => n));
 const packSize = PACK_SIZE.rare + PACK_SIZE.uncommon + PACK_SIZE.common;
 const isRare = (n: string) => ['rare', 'mythic'].includes(card.get(n)!.rarity);
 
@@ -135,10 +147,50 @@ describe('expedition packs', () => {
     for (let seed = 0; seed < 20; seed++) {
       const pack = rollPack({ kind: 'booster' }, seed, false, 'stx');
       expect(new Set(pack).size).toBe(packSize);
+      // One Mystical Archive card in place of a common; the rest are STX booster cards.
+      expect(pack.filter((name) => staNames.has(name))).toHaveLength(1);
       for (const name of pack) {
-        expect(boosterNames.has(name)).toBe(true);
+        expect(boosterNames.has(name) || staNames.has(name)).toBe(true);
         expect(card.get(name)!.front).toBeUndefined();
       }
+    }
+  });
+
+  it('puts one Mystical Archive card in each Strixhaven and Secrets of Strixhaven pack, by archive rarity', () => {
+    const tally = (set: 'stx' | 'sos', list: typeof STA_ARCHIVE_LIST) => {
+      const rarity = new Map<string, string>(list);
+      const seen = { uncommon: 0, rare: 0, mythic: 0 } as Record<string, number>;
+      for (let seed = 0; seed < 400; seed++) {
+        const pack = rollPack({ kind: 'booster' }, seed, false, set);
+        const archive = pack.filter((name) => rarity.has(name));
+        expect(archive).toHaveLength(1);
+        seen[rarity.get(archive[0]!)!]!++;
+      }
+      return seen;
+    };
+    for (const [set, list] of [
+      ['stx', STA_ARCHIVE_LIST],
+      ['sos', SOA_ARCHIVE_LIST],
+    ] as const) {
+      const seen = tally(set, list);
+      // Half uncommon, three eighths rare, an eighth mythic.
+      expect(seen.uncommon!).toBeGreaterThan(160);
+      expect(seen.uncommon!).toBeLessThan(240);
+      expect(seen.rare!).toBeGreaterThan(110);
+      expect(seen.rare!).toBeLessThan(190);
+      expect(seen.mythic!).toBeGreaterThan(25);
+      expect(seen.mythic!).toBeLessThan(80);
+    }
+  });
+
+  it('still adds the extra rare for rare packs, and the other sets have no archive slot', () => {
+    for (let seed = 0; seed < 20; seed++) {
+      // (An FDN card can share its name with an archive reprint, but no pack of those sets is built from the archive.)
+      for (const set of ['fdn', 'blb', 'msh'] as const)
+        expect(new Set(rollPack({ kind: 'booster' }, seed, false, set)).size).toBe(packSize);
+      const pack = rollPack({ kind: 'rare' }, seed, false, 'sos');
+      expect(pack).toHaveLength(packSize);
+      expect(pack.filter((n) => ARCHIVE_RARITY.has(n))).toHaveLength(1);
     }
   });
 
@@ -149,8 +201,9 @@ describe('expedition packs', () => {
     for (let seed = 0; seed < 20; seed++) {
       const pack = rollPack({ kind: 'booster' }, seed, false, 'sos');
       expect(new Set(pack).size).toBe(packSize);
+      expect(pack.filter((name) => soaNames.has(name))).toHaveLength(1);
       for (const name of pack) {
-        expect(sosBoosterNames.has(name)).toBe(true);
+        expect(sosBoosterNames.has(name) || soaNames.has(name)).toBe(true);
         expect(card.get(name)!.front).toBeUndefined();
       }
     }

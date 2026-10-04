@@ -183,6 +183,9 @@ export function startTurn(ctx: Ctx, player: PlayerId, noPowerUp = false): void {
   s.turn.permanentsLeft = { p1: 0, p2: 0 }; // Strixhaven Brawl (15b, pair): revolt
   delete s.turn.exiledCards; // Secrets of Strixhaven (14b)
   delete s.turn.hexproofPlayers;
+  delete s.turn.cantLose; // Mystical Archive (16): Angel's Grace
+  delete s.turn.uncounterable; // Mystical Archive (16): Veil of Summer
+  delete s.turn.deflect; // Mystical Archive (16): Deflecting Palm
   delete s.turn.osteomancer;
   delete s.turn.spellLock;
   delete s.turn.discards;
