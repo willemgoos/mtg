@@ -22867,6 +22867,150 @@
   }
  },
  {
+  "name": "Mob Lookout",
+  "scryfallId": "3a9d6068-dd7b-4cbe-a9d6-5f716d8d1917",
+  "oracleId": "47654b36-b215-4333-aa70-d88d627447e3",
+  "set": "msc",
+  "collectorNumber": "821",
+  "rarity": "common",
+  "manaCost": "{1}{U/B}",
+  "typeLine": "Creature — Human Rogue Villain",
+  "oracleText": "When this creature enters, target creature you control connives. (Draw a card, then discard a card. If you discarded a nonland card, put a +1/+1 counter on that creature.)",
+  "power": "0",
+  "toughness": "3",
+  "colors": [
+   "B",
+   "U"
+  ],
+  "keywords": [
+   "Connive"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/a/3a9d6068-dd7b-4cbe-a9d6-5f716d8d1917.jpg?1783903002",
+   "normal": "https://cards.scryfall.io/normal/front/3/a/3a9d6068-dd7b-4cbe-a9d6-5f716d8d1917.jpg?1783903002",
+   "large": "https://cards.scryfall.io/large/front/3/a/3a9d6068-dd7b-4cbe-a9d6-5f716d8d1917.jpg?1783903002",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/a/3a9d6068-dd7b-4cbe-a9d6-5f716d8d1917.jpg?1783903002"
+  }
+ },
+ {
+  "name": "Flying Octobot",
+  "scryfallId": "88de34bb-81bb-49b7-af33-3f064b38b9dd",
+  "oracleId": "5ef8925c-5f43-49ca-83f0-e2ca8e655600",
+  "set": "msc",
+  "collectorNumber": "785",
+  "rarity": "uncommon",
+  "manaCost": "{1}{U}",
+  "typeLine": "Artifact Creature — Robot Villain",
+  "oracleText": "Flying\nWhenever another Villain you control enters, put a +1/+1 counter on this creature. This ability triggers only once each turn.",
+  "power": "1",
+  "toughness": "1",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/8/88de34bb-81bb-49b7-af33-3f064b38b9dd.jpg?1783903015",
+   "normal": "https://cards.scryfall.io/normal/front/8/8/88de34bb-81bb-49b7-af33-3f064b38b9dd.jpg?1783903015",
+   "large": "https://cards.scryfall.io/large/front/8/8/88de34bb-81bb-49b7-af33-3f064b38b9dd.jpg?1783903015",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/8/88de34bb-81bb-49b7-af33-3f064b38b9dd.jpg?1783903015"
+  }
+ },
+ {
+  "name": "Graviton, Fundamental Force",
+  "scryfallId": "127cfe92-0433-46b7-a2b4-c0d858ce8c6c",
+  "oracleId": "eab391d2-ccdd-401c-8f10-69aac4619213",
+  "set": "msc",
+  "collectorNumber": "531",
+  "rarity": "uncommon",
+  "manaCost": "{2}{U}",
+  "typeLine": "Legendary Creature — Human Villain",
+  "oracleText": "Whenever you draw your second card each turn, choose one —\n• Target creature gains flying until end of turn. (It can't be blocked except by creatures with flying or reach.)\n• Tap target creature.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/2/127cfe92-0433-46b7-a2b4-c0d858ce8c6c.jpg?1783903103",
+   "normal": "https://cards.scryfall.io/normal/front/1/2/127cfe92-0433-46b7-a2b4-c0d858ce8c6c.jpg?1783903103",
+   "large": "https://cards.scryfall.io/large/front/1/2/127cfe92-0433-46b7-a2b4-c0d858ce8c6c.jpg?1783903103",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/2/127cfe92-0433-46b7-a2b4-c0d858ce8c6c.jpg?1783903103"
+  }
+ },
+ {
+  "name": "Doc Ock's Henchmen",
+  "scryfallId": "455e9558-494e-43b2-b661-8e996d767f49",
+  "oracleId": "ae91c16c-5267-4957-b36c-5aa787fa6b5e",
+  "set": "msc",
+  "collectorNumber": "784",
+  "rarity": "common",
+  "manaCost": "{2}{U}",
+  "typeLine": "Creature — Human Villain",
+  "oracleText": "Flash\nWhenever this creature attacks, it connives. (Draw a card, then discard a card. If you discarded a nonland card, put a +1/+1 counter on this creature.)",
+  "power": "2",
+  "toughness": "1",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Flash",
+   "Connive"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/5/455e9558-494e-43b2-b661-8e996d767f49.jpg?1783903019",
+   "normal": "https://cards.scryfall.io/normal/front/4/5/455e9558-494e-43b2-b661-8e996d767f49.jpg?1783903019",
+   "large": "https://cards.scryfall.io/large/front/4/5/455e9558-494e-43b2-b661-8e996d767f49.jpg?1783903019",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/5/455e9558-494e-43b2-b661-8e996d767f49.jpg?1783903019"
+  }
+ },
+ {
+  "name": "Doc Ock, Sinister Scientist",
+  "scryfallId": "38681802-429a-4465-8c23-f3d8f790431d",
+  "oracleId": "dbaa70e6-26de-4ce9-9543-e652cbe387c1",
+  "set": "msc",
+  "collectorNumber": "783",
+  "rarity": "common",
+  "manaCost": "{4}{U}",
+  "typeLine": "Legendary Creature — Human Scientist Villain",
+  "oracleText": "As long as there are eight or more cards in your graveyard, Doc Ock has base power and toughness 8/8.\nAs long as you control another Villain, Doc Ock has hexproof. (He can't be the target of spells or abilities your opponents control.)",
+  "power": "4",
+  "toughness": "5",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/8/38681802-429a-4465-8c23-f3d8f790431d.jpg?1783903017",
+   "normal": "https://cards.scryfall.io/normal/front/3/8/38681802-429a-4465-8c23-f3d8f790431d.jpg?1783903017",
+   "large": "https://cards.scryfall.io/large/front/3/8/38681802-429a-4465-8c23-f3d8f790431d.jpg?1783903017",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/8/38681802-429a-4465-8c23-f3d8f790431d.jpg?1783903017"
+  }
+ },
+ {
+  "name": "Mysterio's Mirage",
+  "scryfallId": "d5628e8b-7df6-4c9e-9ddc-57f124b38470",
+  "oracleId": "60733a3a-dfc9-429a-af2d-f0ce9a58d533",
+  "set": "msc",
+  "collectorNumber": "630",
+  "rarity": "rare",
+  "manaCost": "{2}{U}",
+  "typeLine": "Enchantment",
+  "oracleText": "At the beginning of your end step, if you discarded a card this turn, create a 3/3 blue Illusion Villain creature token.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/5/d5628e8b-7df6-4c9e-9ddc-57f124b38470.jpg?1783903070",
+   "normal": "https://cards.scryfall.io/normal/front/d/5/d5628e8b-7df6-4c9e-9ddc-57f124b38470.jpg?1783903070",
+   "large": "https://cards.scryfall.io/large/front/d/5/d5628e8b-7df6-4c9e-9ddc-57f124b38470.jpg?1783903070",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/5/d5628e8b-7df6-4c9e-9ddc-57f124b38470.jpg?1783903070"
+  }
+ },
+ {
   "name": "Bob, Reluctant HYDRA Agent",
   "scryfallId": "423c5752-b634-44a9-82b3-2dd1045e4d90",
   "oracleId": "9caa490e-dc28-4069-9ffb-4b1afd8fdd54",
