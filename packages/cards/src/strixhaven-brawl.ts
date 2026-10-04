@@ -3,6 +3,7 @@ import type { Behavior } from './build.ts';
 import { CARDS_15A_W, CARDS_15A_W_BACK_FACES, CARDS_15A_W_TOKENS } from './soc/cards-15a-w.ts';
 import { BRAWL_15A_R, BRAWL_15A_R_BACKS, BRAWL_15A_R_TOKENS } from './soc/cards-15a-r.ts';
 import { BRAWL_15B_G, BRAWL_15B_G_BACKS, BRAWL_15B_G_TOKENS } from './soc/cards-15b-g.ts';
+import { BRAWL_15B_R, BRAWL_15B_R_BACKS, BRAWL_15B_R_TOKENS } from './soc/cards-15b-r.ts';
 import { QUINTORIUS_RW } from './soc/cards-15a-rw.ts';
 import { BRAWL_15B_B, BRAWL_15B_B_BACKS, BRAWL_15B_B_TOKENS } from './soc/cards-15b-b.ts';
 import {
@@ -28,6 +29,7 @@ export const STRIXHAVEN_BRAWL_BEHAVIORS: Record<string, Behavior> = {
   // Strixhaven Brawl (15b): blue.
   ...BRAWL_15B_U,
   ...BRAWL_15B_G,
+  ...BRAWL_15B_R,
 };
 
 /** Back faces of double-faced Brawl cards: not cards of their own, so not in the pool. */
@@ -39,6 +41,7 @@ export const STRIXHAVEN_BRAWL_BACK_FACES: Record<string, Behavior> = {
   ...BRAWL_15B_W_BACKS,
   ...BRAWL_15B_U_BACKS,
   ...BRAWL_15B_G_BACKS,
+  ...BRAWL_15B_R_BACKS,
 };
 
 /** Tokens made by the Brawl decks' cards. */
@@ -50,4 +53,5 @@ export const STRIXHAVEN_BRAWL_TOKENS: CardDefinition[] = [
   ...BRAWL_15B_W_TOKENS,
   ...BRAWL_15B_U_TOKENS,
   ...BRAWL_15B_G_TOKENS,
+  ...BRAWL_15B_R_TOKENS,
 ];

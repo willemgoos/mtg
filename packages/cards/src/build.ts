@@ -191,6 +191,11 @@ export const KEYWORDS_AS_ABILITIES = new Set([
   'Modified',
   'Cycling',
   'Landfall',
+  // Strixhaven Brawl (15b, r): spree and bargain (modelled by spree/pawprints and a sacrifice kicker), myriad (no effect with one opponent), boon.
+  'Spree',
+  'Bargain',
+  'Myriad',
+  'Boon',
   // Final Fantasy (11a).
   'Job select',
   'Tiered',

@@ -633,7 +633,12 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
       if (a.cost.crew && !crewFor(ctx, player, source, a.cost.crew)) return;
       if (
         a.cost.sacrificeArtifacts &&
-        !artifactsToSacrifice(ctx, player, a.cost.sacrificeArtifacts)
+        !artifactsToSacrifice(
+          ctx,
+          player,
+          a.cost.sacrificeArtifacts,
+          a.cost.sacrificeArtifactsFilter,
+        )
       )
         return;
       if (

@@ -548,7 +548,6 @@ export const BRAWL_15B_G: Record<string, Behavior> = {
   // Simplified: the life is "damage" to you (pain), not paid as a cost.
   'Mana Confluence': { abilities: ALL_COLOURS.map((c) => tapFor(c, { pain: true })) },
   // The Gates of Follow the Tracks's spellbook (Gate to the Citadel is in cards-15a-w.ts).
-  'Gate to Tumbledown': gate('R'),
   'Gate to Manorborn': gate('G'),
 };
 

@@ -317,6 +317,24 @@ export function countOf(
       return t.includes('Instant') || t.includes('Sorcery');
     }).length;
   }
+  // Strixhaven Brawl (15b, r): Seize the Storm.
+  if (a.count === 'instantsSorceriesInGraveyardPlusFlashbackInExile') {
+    const ps = ctx.s.players[player];
+    return (
+      ps.graveyard.filter((id) => {
+        const t = def(ctx, id).types;
+        return t.includes('Instant') || t.includes('Sorcery');
+      }).length + ps.exile.filter((id) => def(ctx, id).flashback !== undefined).length
+    );
+  }
+  // Strixhaven Brawl (15b, r): Rootha, Mastering the Moment.
+  if (a.count === 'greatestInstantSorceryCastThisTurn')
+    return (ctx.s.turn.castDefs?.[player] ?? []).reduce((n, id) => {
+      const d = defOf(ctx, id);
+      return d.types.includes('Instant') || d.types.includes('Sorcery')
+        ? Math.max(n, manaValueOfDef(d))
+        : n;
+    }, 0);
   // Secrets of Strixhaven (14b): Prismari, the Inspiration (storm)
   if (a.count === 'spellsCastBeforeSubject')
     return Math.max(

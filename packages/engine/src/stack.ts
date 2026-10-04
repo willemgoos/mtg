@@ -699,7 +699,12 @@ export function activateAbility(
       tap(ctx, id);
   if (a.cost.crew) for (const id of crewFor(ctx, player, source, a.cost.crew) ?? []) tap(ctx, id);
   if (a.cost.sacrificeArtifacts)
-    for (const id of artifactsToSacrifice(ctx, player, a.cost.sacrificeArtifacts) ?? [])
+    for (const id of artifactsToSacrifice(
+      ctx,
+      player,
+      a.cost.sacrificeArtifacts,
+      a.cost.sacrificeArtifactsFilter,
+    ) ?? [])
       sacrificePermanent(ctx, id);
   // Strixhaven (13a): exile a card from your graveyard as a cost.
   if (a.cost.exileFromGraveyard) {
@@ -1127,9 +1132,20 @@ export function escalateCrew(
 }
 
 /** Metalwork Colossus: the N least useful artifacts `player` controls (tokens, then the cheapest), or null. */
-export function artifactsToSacrifice(ctx: Ctx, player: PlayerId, n: number): ObjectId[] | null {
+export function artifactsToSacrifice(
+  ctx: Ctx,
+  player: PlayerId,
+  n: number,
+  filter?: CardFilter,
+): ObjectId[] | null {
   const artifacts = ctx.s.battlefield
-    .filter((id) => obj(ctx, id).controller === player && def(ctx, id).types.includes('Artifact'))
+    .filter(
+      (id) =>
+        obj(ctx, id).controller === player &&
+        def(ctx, id).types.includes('Artifact') &&
+        // Strixhaven Brawl (15b, r): Magda, Brazen Outlaw: five Treasures.
+        (!filter || matchesFilter(ctx, id, filter)),
+    )
     .sort(
       (a, b) =>
         Number(obj(ctx, b).isToken) - Number(obj(ctx, a).isToken) ||

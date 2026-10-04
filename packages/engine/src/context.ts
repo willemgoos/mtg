@@ -10,6 +10,7 @@ import { BRAWL_15A_R_EFFECTS } from './brawl-15a-r-effects.ts';
 import { BRAWL_15A_RW_EFFECTS } from './brawl-15a-rw-effects.ts';
 import { BRAWL_15B_MULTI_EFFECTS } from './brawl-15b-multi-effects.ts';
 import { SOS_14B_D_EFFECTS } from './sos-14b-d-effects.ts';
+import { BRAWL_15B_R_EFFECTS } from './brawl-15b-r-effects.ts';
 import { BRAWL_15A_W_EFFECTS } from './brawl-15a-w-effects.ts';
 import { BRAWL_15B_B_EFFECTS } from './brawl-15b-b-effects.ts';
 import { BRAWL_15B_W_EFFECTS } from './brawl-15b-w-effects.ts';
@@ -111,6 +112,8 @@ const BUILT_IN_EFFECTS: Record<string, CustomEffect> = {
   ...BRAWL_15B_U_EFFECTS,
   // Strixhaven Brawl (15b, g): green.
   ...BRAWL_15B_G_EFFECTS,
+  // Strixhaven Brawl (15b): red and blue-red.
+  ...BRAWL_15B_R_EFFECTS,
   // Strixhaven (13a): Learn: put the chosen Lesson from outside the game into your hand.
   learnFetch(ctx, es, params) {
     const ps = ctx.s.players[es.controller];

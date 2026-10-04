@@ -449,6 +449,8 @@ export interface CostDef {
   // Wakanda Forever (9c).
   /** Sacrifice this many artifacts (the engine picks the least useful): Metalwork Colossus. */
   sacrificeArtifacts?: number;
+  /** Strixhaven Brawl (15b, r): only artifacts matching this count for `sacrificeArtifacts` (Magda: Treasures). */
+  sacrificeArtifactsFilter?: CardFilter;
   // Avengers Assemble (9b).
   /** Crew N: tap untapped creatures you control with total power N or more (the engine picks them). */
   crew?: number;
@@ -526,7 +528,12 @@ export type TriggerDef =
         | 'third'
         // Strixhaven Brawl (15b, w): Psemilla
         /** The caster's first enchantment spell this turn. */
-        | 'firstEnchantment';
+        | 'firstEnchantment'
+        // Strixhaven Brawl (15b, r): Arcane Bombardment
+        /** The caster's first instant or sorcery spell this turn. */
+        | 'firstInstantOrSorcery'
+        /** The caster's second noncreature spell this turn (Sapphire Collector). */
+        | 'secondNoncreature';
       /** The spell must also match this (Gev: a Lizard spell). */
       spell?: CardFilter;
       /** Any player's spell, cast when it isn't their turn (Vision). */
@@ -701,7 +708,10 @@ export type TriggerDef =
   /** Rooms: when you unlock this door (a Room's other door, unlocked later; casting a half is that half's own `etb`). */
   | { on: 'doorUnlocked'; door: 'front' | 'back' }
   /** Eerie: whenever you fully unlock a Room. */
-  | { on: 'fullyUnlock' };
+  | { on: 'fullyUnlock' }
+  // Strixhaven Brawl (15b, r): Magda, Brazen Outlaw
+  /** Whenever a creature you control (matching the filter) becomes tapped. */
+  | { on: 'creatureYouControlBecomesTapped'; filter?: CardFilter };
 
 export type ConditionDef =
   // Strixhaven Brawl (15b, g): Orochi Merge-Keeper
@@ -1123,7 +1133,12 @@ export type Amount =
   /** The value of X of the spell that caused the trigger (Geometer's Arthropod). */
   | { xOfSubject: true }
   /** Lands with different names you control (Emil, Vastlands Roamer). */
-  | { count: 'differentlyNamedLands' };
+  | { count: 'differentlyNamedLands' }
+  // Strixhaven Brawl (15b, r)
+  /** Instant and sorcery cards in your graveyard plus cards with flashback you own in exile (Seize the Storm). */
+  | { count: 'instantsSorceriesInGraveyardPlusFlashbackInExile' }
+  /** The greatest mana value among instant and sorcery spells you've cast this turn (Rootha). */
+  | { count: 'greatestInstantSorceryCastThisTurn' };
 
 export type EffectDef =
   | { kind: 'may'; effects: EffectDef[]; cost?: ManaCost }
@@ -2136,7 +2151,10 @@ export type StaticDef =
   | { kind: 'sharesLoyaltyAbilities' }
   // Strixhaven Brawl (15b, b): Nowhere to Run
   /** Creatures your opponents control can be targeted as though they didn't have hexproof; their ward doesn't trigger. */
-  | { kind: 'ignoreHexproofWard' };
+  | { kind: 'ignoreHexproofWard' }
+  // Strixhaven Brawl (15b, r): Goldspan Dragon
+  /** Treasures you control tap for two mana of one colour instead of one. */
+  | { kind: 'treasuresTapForTwo' };
 
 export type CardDb = ReadonlyMap<CardDefId, CardDefinition>;
 

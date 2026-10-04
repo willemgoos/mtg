@@ -35,6 +35,16 @@ function lanternFor(ctx: Ctx, player: PlayerId): boolean {
   );
 }
 
+function treasuresDouble(ctx: Ctx, player: PlayerId): boolean {
+  return ctx.s.battlefield.some(
+    (id) =>
+      obj(ctx, id).controller === player &&
+      def(ctx, id).abilities.some(
+        (a) => a.kind === 'static' && a.effect.kind === 'treasuresTapForTwo',
+      ),
+  );
+}
+
 /** Sources to tap; `pain` lists those that hurt (one entry per pip they pay). */
 export type Payment = ObjectId[] & { pain?: ObjectId[] };
 
@@ -149,6 +159,9 @@ export function manaSources(
       out.push(src);
       // Two mana from one tap: a second unit with the same id (tapping it twice is harmless).
       if (double) units = Math.max(units, 2);
+      // Strixhaven Brawl (15b, r): Goldspan Dragon: Treasures tap for two mana.
+      if (def(ctx, id).subtypes.includes('Treasure') && treasuresDouble(ctx, player))
+        units = Math.max(units, 2);
       for (let i = 1; i < units; i++) out.push({ ...src });
       // Strixhaven Brawl (15b, g): Utopia Sprawl: an extra mana of the chosen colour.
       for (const aura of ctx.s.battlefield) {
