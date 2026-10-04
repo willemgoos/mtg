@@ -322,6 +322,9 @@ export function wardCostOf(oracle: string): CardDefinition['wardCost'] | undefin
   // Strixhaven Brawl (15b, b): Vein Ripper.
   if (/Ward—Sacrifice a creature\./.test(oracle)) return { mana: none, sacrificeCreature: true };
   if (/Ward—Sacrifice a Food\./.test(oracle)) return { mana: none, sacrificeFood: true };
+  // Reality Fracture (17a): Emrakul, the Exigent Doom.
+  if (/Ward—Sacrifice three permanents\./.test(oracle))
+    return { mana: none, sacrificePermanents: 3 };
   const m = /Ward(?: |—)\{(\d+)\}(?:, Pay (\d+) life)?/.exec(oracle);
   if (!m) return undefined;
   return {

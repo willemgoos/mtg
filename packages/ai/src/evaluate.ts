@@ -88,7 +88,11 @@ function laterCards(s: GameState, p: PlayerId): number {
     for (const id of s.players[q].exile) {
       const o = s.objects[id]!;
       if (
-        (q === p && (o.suspended || (o.playableUntilTurn ?? -1) >= s.turn.number)) ||
+        (q === p &&
+          (o.suspended ||
+            // Reality Fracture (17a): Emrakul, the Exigent Doom, exiled from hand.
+            o.castableWhileExiled ||
+            (o.playableUntilTurn ?? -1) >= s.turn.number)) ||
         o.castableBy === p ||
         o.playFreeBy === p
       )

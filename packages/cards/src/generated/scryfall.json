@@ -69235,5 +69235,510 @@
    "large": "https://cards.scryfall.io/large/front/b/8/b8dfd087-2434-42c6-ac4c-1decbcdde2db.jpg?1789470909",
    "artCrop": "https://cards.scryfall.io/art_crop/front/b/8/b8dfd087-2434-42c6-ac4c-1decbcdde2db.jpg?1789470909"
   }
+ },
+ {
+  "name": "Afterthought Sentry",
+  "scryfallId": "4d4b3bf7-a149-4099-b97d-4e36a87dfa60",
+  "oracleId": "f0c533a2-751a-4c5a-8cec-b83da3c8c62f",
+  "set": "fra",
+  "collectorNumber": "166",
+  "rarity": "common",
+  "manaCost": "{2}",
+  "typeLine": "Artifact Creature — Gargoyle",
+  "oracleText": "{2}: This creature gains flying until end of turn.\nWhenever this creature attacks, exile up to one target card from a graveyard.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/d/4d4b3bf7-a149-4099-b97d-4e36a87dfa60.jpg?1789385875",
+   "normal": "https://cards.scryfall.io/normal/front/4/d/4d4b3bf7-a149-4099-b97d-4e36a87dfa60.jpg?1789385875",
+   "large": "https://cards.scryfall.io/large/front/4/d/4d4b3bf7-a149-4099-b97d-4e36a87dfa60.jpg?1789385875",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/d/4d4b3bf7-a149-4099-b97d-4e36a87dfa60.jpg?1789385875"
+  }
+ },
+ {
+  "name": "Archive Arbiter",
+  "scryfallId": "024bce1e-a5f3-4292-bc17-d0355a5d65e1",
+  "oracleId": "36cb3d18-019c-464d-b591-8c87e1b81f31",
+  "set": "fra",
+  "collectorNumber": "167",
+  "rarity": "uncommon",
+  "manaCost": "{6}",
+  "typeLine": "Artifact Creature — Sphinx",
+  "oracleText": "Flying\nWhen this creature enters, choose one —\n• Destroy target noncreature, nonland permanent.\n• You gain 4 life.",
+  "power": "4",
+  "toughness": "4",
+  "colors": [],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/2/024bce1e-a5f3-4292-bc17-d0355a5d65e1.jpg?1789614867",
+   "normal": "https://cards.scryfall.io/normal/front/0/2/024bce1e-a5f3-4292-bc17-d0355a5d65e1.jpg?1789614867",
+   "large": "https://cards.scryfall.io/large/front/0/2/024bce1e-a5f3-4292-bc17-d0355a5d65e1.jpg?1789614867",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/2/024bce1e-a5f3-4292-bc17-d0355a5d65e1.jpg?1789614867"
+  }
+ },
+ {
+  "name": "Codie, Ravenous Codex",
+  "scryfallId": "c3192390-1518-49fc-8716-f2c7a0384f39",
+  "oracleId": "a17e414c-8de0-47fd-bcbc-540c7fec7642",
+  "set": "fra",
+  "collectorNumber": "168",
+  "rarity": "rare",
+  "manaCost": "{3}",
+  "typeLine": "Legendary Artifact Creature — Book Construct",
+  "oracleText": "Whenever you cast a prepared spell, copy it. You may choose new targets for the copy.\n{W}{U}{B}{R}{G}, {T}: Each creature you control becomes prepared. (Only creatures with prepare spells can become prepared.)",
+  "power": "1",
+  "toughness": "4",
+  "colors": [],
+  "keywords": [
+   "Prepared"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/3/c3192390-1518-49fc-8716-f2c7a0384f39.jpg?1789646811",
+   "normal": "https://cards.scryfall.io/normal/front/c/3/c3192390-1518-49fc-8716-f2c7a0384f39.jpg?1789646811",
+   "large": "https://cards.scryfall.io/large/front/c/3/c3192390-1518-49fc-8716-f2c7a0384f39.jpg?1789646811",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/3/c3192390-1518-49fc-8716-f2c7a0384f39.jpg?1789646811"
+  }
+ },
+ {
+  "name": "Eye of Jace",
+  "scryfallId": "0edba64a-39cf-4a8d-ba20-4f7da10b6c3d",
+  "oracleId": "c8f802ad-4621-4f71-b52d-fbc55853dc88",
+  "set": "fra",
+  "collectorNumber": "170",
+  "rarity": "uncommon",
+  "manaCost": "{1}",
+  "typeLine": "Artifact",
+  "oracleText": "At the beginning of your upkeep, surveil 1. Then if there are seven or more cards in your graveyard, sacrifice this artifact, it deals 2 damage to each opponent, and you gain 2 life. (To surveil 1, look at the top card of your library. You may put it into your graveyard.)",
+  "colors": [],
+  "keywords": [
+   "Surveil"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/e/0edba64a-39cf-4a8d-ba20-4f7da10b6c3d.jpg?1789614864",
+   "normal": "https://cards.scryfall.io/normal/front/0/e/0edba64a-39cf-4a8d-ba20-4f7da10b6c3d.jpg?1789614864",
+   "large": "https://cards.scryfall.io/large/front/0/e/0edba64a-39cf-4a8d-ba20-4f7da10b6c3d.jpg?1789614864",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/e/0edba64a-39cf-4a8d-ba20-4f7da10b6c3d.jpg?1789614864"
+  }
+ },
+ {
+  "name": "Karn, Argent Defender",
+  "scryfallId": "1ebbbddb-2dc3-4194-b72b-13bcebe2ab89",
+  "oracleId": "aecc621f-67da-41a7-9d47-05ded302ae35",
+  "set": "fra",
+  "collectorNumber": "279",
+  "rarity": "rare",
+  "manaCost": "{2}",
+  "typeLine": "Legendary Artifact Creature — Golem",
+  "oracleText": "Artifacts and creatures entering the battlefield don't cause abilities to trigger.",
+  "power": "1",
+  "toughness": "3",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/e/1ebbbddb-2dc3-4194-b72b-13bcebe2ab89.jpg?1788878301",
+   "normal": "https://cards.scryfall.io/normal/front/1/e/1ebbbddb-2dc3-4194-b72b-13bcebe2ab89.jpg?1788878301",
+   "large": "https://cards.scryfall.io/large/front/1/e/1ebbbddb-2dc3-4194-b72b-13bcebe2ab89.jpg?1788878301",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/e/1ebbbddb-2dc3-4194-b72b-13bcebe2ab89.jpg?1788878301"
+  }
+ },
+ {
+  "name": "Living Library",
+  "scryfallId": "5d4a8e5f-0024-4da3-a2f5-edb48b12e733",
+  "oracleId": "81f022a7-fd19-4340-b8a0-6b11ab3e9d91",
+  "set": "fra",
+  "collectorNumber": "172",
+  "rarity": "common",
+  "manaCost": "{2}",
+  "typeLine": "Artifact Creature — Book Illusion",
+  "oracleText": "{6}, Sacrifice this creature: Choose target creature or planeswalker an opponent controls. Its owner shuffles it into their library.",
+  "power": "0",
+  "toughness": "4",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/d/5d4a8e5f-0024-4da3-a2f5-edb48b12e733.jpg?1789556949",
+   "normal": "https://cards.scryfall.io/normal/front/5/d/5d4a8e5f-0024-4da3-a2f5-edb48b12e733.jpg?1789556949",
+   "large": "https://cards.scryfall.io/large/front/5/d/5d4a8e5f-0024-4da3-a2f5-edb48b12e733.jpg?1789556949",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/d/5d4a8e5f-0024-4da3-a2f5-edb48b12e733.jpg?1789556949"
+  }
+ },
+ {
+  "name": "Medic's Kitesail",
+  "scryfallId": "8b07409a-1dce-461d-95e4-1130521ff4c4",
+  "oracleId": "eacfe895-5106-437c-b8c1-2ff03c107744",
+  "set": "fra",
+  "collectorNumber": "173",
+  "rarity": "common",
+  "manaCost": "{2}",
+  "typeLine": "Artifact — Equipment",
+  "oracleText": "Equipped creature gets +1/+0 and has flying and \"Whenever this creature attacks, you gain 1 life.\"\nEquip {2} ({2}: Attach to target creature you control. Equip only as a sorcery.)",
+  "colors": [],
+  "keywords": [
+   "Equip"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/b/8b07409a-1dce-461d-95e4-1130521ff4c4.jpg?1789556945",
+   "normal": "https://cards.scryfall.io/normal/front/8/b/8b07409a-1dce-461d-95e4-1130521ff4c4.jpg?1789556945",
+   "large": "https://cards.scryfall.io/large/front/8/b/8b07409a-1dce-461d-95e4-1130521ff4c4.jpg?1789556945",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/b/8b07409a-1dce-461d-95e4-1130521ff4c4.jpg?1789556945"
+  }
+ },
+ {
+  "name": "Murmuring Volume",
+  "scryfallId": "d68eab2e-89dd-4377-b7af-01512b1804a0",
+  "oracleId": "4baa7847-dfcc-4aa3-aa64-2deeaa3f013b",
+  "set": "fra",
+  "collectorNumber": "174",
+  "rarity": "common",
+  "manaCost": "{3}",
+  "typeLine": "Artifact — Book",
+  "oracleText": "{T}: Add one mana of any color.\n{2}, {T}, Discard a card: Draw a card.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/6/d68eab2e-89dd-4377-b7af-01512b1804a0.jpg?1789385977",
+   "normal": "https://cards.scryfall.io/normal/front/d/6/d68eab2e-89dd-4377-b7af-01512b1804a0.jpg?1789385977",
+   "large": "https://cards.scryfall.io/large/front/d/6/d68eab2e-89dd-4377-b7af-01512b1804a0.jpg?1789385977",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/6/d68eab2e-89dd-4377-b7af-01512b1804a0.jpg?1789385977"
+  }
+ },
+ {
+  "name": "The Echoverse Fulcrum",
+  "scryfallId": "d71d250f-c0e0-44b2-877c-76f3bcab4f34",
+  "oracleId": "c04197ad-d2f3-499f-b863-bed0c869519c",
+  "set": "fra",
+  "collectorNumber": "169",
+  "rarity": "mythic",
+  "manaCost": "{2}",
+  "typeLine": "Legendary Artifact",
+  "oracleText": "When The Echoverse Fulcrum enters, draw a card, then discard a card.\n{5}, {T}, Exile The Echoverse Fulcrum: Destroy all creatures. Activate only as a sorcery.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/7/d71d250f-c0e0-44b2-877c-76f3bcab4f34.jpg?1789385887",
+   "normal": "https://cards.scryfall.io/normal/front/d/7/d71d250f-c0e0-44b2-877c-76f3bcab4f34.jpg?1789385887",
+   "large": "https://cards.scryfall.io/large/front/d/7/d71d250f-c0e0-44b2-877c-76f3bcab4f34.jpg?1789385887",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/7/d71d250f-c0e0-44b2-877c-76f3bcab4f34.jpg?1789385887"
+  }
+ },
+ {
+  "name": "Traxos, Scourge Eternal",
+  "scryfallId": "05102c46-96f8-44a0-a1e6-e388fa5e0841",
+  "oracleId": "acf4abde-4034-4fcf-b531-78c935aecd8c",
+  "set": "fra",
+  "collectorNumber": "280",
+  "rarity": "uncommon",
+  "manaCost": "{4}",
+  "typeLine": "Legendary Artifact Creature — Dragon Construct",
+  "oracleText": "Trample\nTraxos doesn't untap during your untap step.\nWhenever you cast an artifact or creature spell, untap Traxos.",
+  "power": "5",
+  "toughness": "4",
+  "colors": [],
+  "keywords": [
+   "Trample"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/5/05102c46-96f8-44a0-a1e6-e388fa5e0841.jpg?1789557046",
+   "normal": "https://cards.scryfall.io/normal/front/0/5/05102c46-96f8-44a0-a1e6-e388fa5e0841.jpg?1789557046",
+   "large": "https://cards.scryfall.io/large/front/0/5/05102c46-96f8-44a0-a1e6-e388fa5e0841.jpg?1789557046",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/5/05102c46-96f8-44a0-a1e6-e388fa5e0841.jpg?1789557046"
+  }
+ },
+ {
+  "name": "Emrakul, the Exigent Doom",
+  "scryfallId": "c3ff8dd3-88a8-49dc-a59b-e2748680623c",
+  "oracleId": "4421ab7d-6d9b-4edd-b5a0-53a8ed84da6f",
+  "set": "fra",
+  "collectorNumber": "1",
+  "rarity": "mythic",
+  "manaCost": "{10}",
+  "typeLine": "Legendary Creature — Eldrazi",
+  "oracleText": "When you cast this spell, untap all lands you control.\nFlying, trample\nWard—Sacrifice three permanents.\n{3}, Exile this card from your hand: Target land gains \"{T}: Add {C}{C}\" until this card is cast from exile. You may cast this card for as long as it remains exiled.",
+  "power": "12",
+  "toughness": "12",
+  "colors": [],
+  "keywords": [
+   "Flying",
+   "Trample",
+   "Ward"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/3/c3ff8dd3-88a8-49dc-a59b-e2748680623c.jpg?1790829846",
+   "normal": "https://cards.scryfall.io/normal/front/c/3/c3ff8dd3-88a8-49dc-a59b-e2748680623c.jpg?1790829846",
+   "large": "https://cards.scryfall.io/large/front/c/3/c3ff8dd3-88a8-49dc-a59b-e2748680623c.jpg?1790829846",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/3/c3ff8dd3-88a8-49dc-a59b-e2748680623c.jpg?1790829846"
+  }
+ },
+ {
+  "name": "Dedicated Commons",
+  "scryfallId": "3223e5db-5cc4-42f9-ae9e-ff58abc7c390",
+  "oracleId": "d4e0749a-e179-4c19-8536-bf8f1a198549",
+  "set": "fra",
+  "collectorNumber": "175",
+  "rarity": "common",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "This land enters tapped unless you control a planeswalker.\n{T}: Add {R} or {W}.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/2/3223e5db-5cc4-42f9-ae9e-ff58abc7c390.jpg?1789556950",
+   "normal": "https://cards.scryfall.io/normal/front/3/2/3223e5db-5cc4-42f9-ae9e-ff58abc7c390.jpg?1789556950",
+   "large": "https://cards.scryfall.io/large/front/3/2/3223e5db-5cc4-42f9-ae9e-ff58abc7c390.jpg?1789556950",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/2/3223e5db-5cc4-42f9-ae9e-ff58abc7c390.jpg?1789556950"
+  }
+ },
+ {
+  "name": "Fatehold Annex",
+  "scryfallId": "5140f962-62f3-40fd-a322-44896c7e2613",
+  "oracleId": "d35876a3-e891-43d3-a50c-69e8469497e0",
+  "set": "fra",
+  "collectorNumber": "177",
+  "rarity": "common",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "This land enters tapped unless you control a planeswalker.\n{T}: Add {W} or {U}.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/1/5140f962-62f3-40fd-a322-44896c7e2613.jpg?1789556955",
+   "normal": "https://cards.scryfall.io/normal/front/5/1/5140f962-62f3-40fd-a322-44896c7e2613.jpg?1789556955",
+   "large": "https://cards.scryfall.io/large/front/5/1/5140f962-62f3-40fd-a322-44896c7e2613.jpg?1789556955",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/1/5140f962-62f3-40fd-a322-44896c7e2613.jpg?1789556955"
+  }
+ },
+ {
+  "name": "Formidable Commons",
+  "scryfallId": "e6ca6c3e-f145-42d6-8a17-90770c15afaf",
+  "oracleId": "3e51c060-1e86-4a0e-8fee-8b7273161468",
+  "set": "fra",
+  "collectorNumber": "178",
+  "rarity": "common",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "This land enters tapped unless you control a planeswalker.\n{T}: Add {B} or {G}.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/6/e6ca6c3e-f145-42d6-8a17-90770c15afaf.jpg?1789556960",
+   "normal": "https://cards.scryfall.io/normal/front/e/6/e6ca6c3e-f145-42d6-8a17-90770c15afaf.jpg?1789556960",
+   "large": "https://cards.scryfall.io/large/front/e/6/e6ca6c3e-f145-42d6-8a17-90770c15afaf.jpg?1789556960",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/6/e6ca6c3e-f145-42d6-8a17-90770c15afaf.jpg?1789556960"
+  }
+ },
+ {
+  "name": "Innovative Commons",
+  "scryfallId": "84ea799a-faa2-4ff1-a933-432d4ee31a3b",
+  "oracleId": "6812e4d3-0034-4fc8-9ee9-520f76a0ea94",
+  "set": "fra",
+  "collectorNumber": "182",
+  "rarity": "common",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "This land enters tapped unless you control a planeswalker.\n{T}: Add {U} or {R}.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/4/84ea799a-faa2-4ff1-a933-432d4ee31a3b.jpg?1789556991",
+   "normal": "https://cards.scryfall.io/normal/front/8/4/84ea799a-faa2-4ff1-a933-432d4ee31a3b.jpg?1789556991",
+   "large": "https://cards.scryfall.io/large/front/8/4/84ea799a-faa2-4ff1-a933-432d4ee31a3b.jpg?1789556991",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/4/84ea799a-faa2-4ff1-a933-432d4ee31a3b.jpg?1789556991"
+  }
+ },
+ {
+  "name": "Konstrari Annex",
+  "scryfallId": "39c805e3-82cd-42a9-80fe-8d81712a94ea",
+  "oracleId": "31ea4f3f-392a-4319-a95b-eb28790a80e6",
+  "set": "fra",
+  "collectorNumber": "183",
+  "rarity": "common",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "This land enters tapped unless you control a planeswalker.\n{T}: Add {R} or {G}.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/9/39c805e3-82cd-42a9-80fe-8d81712a94ea.jpg?1789556993",
+   "normal": "https://cards.scryfall.io/normal/front/3/9/39c805e3-82cd-42a9-80fe-8d81712a94ea.jpg?1789556993",
+   "large": "https://cards.scryfall.io/large/front/3/9/39c805e3-82cd-42a9-80fe-8d81712a94ea.jpg?1789556993",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/9/39c805e3-82cd-42a9-80fe-8d81712a94ea.jpg?1789556993"
+  }
+ },
+ {
+  "name": "Meticulous Commons",
+  "scryfallId": "93ac525e-1919-43dd-aba4-073b7e4c1768",
+  "oracleId": "7fdd471f-ec95-4aa7-8f8a-ad8946de5ab4",
+  "set": "fra",
+  "collectorNumber": "184",
+  "rarity": "common",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "This land enters tapped unless you control a planeswalker.\n{T}: Add {W} or {B}.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/3/93ac525e-1919-43dd-aba4-073b7e4c1768.jpg?1789557002",
+   "normal": "https://cards.scryfall.io/normal/front/9/3/93ac525e-1919-43dd-aba4-073b7e4c1768.jpg?1789557002",
+   "large": "https://cards.scryfall.io/large/front/9/3/93ac525e-1919-43dd-aba4-073b7e4c1768.jpg?1789557002",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/3/93ac525e-1919-43dd-aba4-073b7e4c1768.jpg?1789557002"
+  }
+ },
+ {
+  "name": "Stingerquill Annex",
+  "scryfallId": "6ede3143-69ac-4cbe-922a-d25b07c26da7",
+  "oracleId": "26e20ae5-4059-4d63-9db5-6e12421d1aba",
+  "set": "fra",
+  "collectorNumber": "190",
+  "rarity": "common",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "This land enters tapped unless you control a planeswalker.\n{T}: Add {B} or {R}.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/e/6ede3143-69ac-4cbe-922a-d25b07c26da7.jpg?1789557046",
+   "normal": "https://cards.scryfall.io/normal/front/6/e/6ede3143-69ac-4cbe-922a-d25b07c26da7.jpg?1789557046",
+   "large": "https://cards.scryfall.io/large/front/6/e/6ede3143-69ac-4cbe-922a-d25b07c26da7.jpg?1789557046",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/e/6ede3143-69ac-4cbe-922a-d25b07c26da7.jpg?1789557046"
+  }
+ },
+ {
+  "name": "Theorix Annex",
+  "scryfallId": "97bbbd23-ecb1-4407-ac14-dede08532a1e",
+  "oracleId": "00ad5200-5179-4d1b-8bb3-a09e1b31be58",
+  "set": "fra",
+  "collectorNumber": "192",
+  "rarity": "common",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "This land enters tapped unless you control a planeswalker.\n{T}: Add {U} or {B}.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/7/97bbbd23-ecb1-4407-ac14-dede08532a1e.jpg?1789557008",
+   "normal": "https://cards.scryfall.io/normal/front/9/7/97bbbd23-ecb1-4407-ac14-dede08532a1e.jpg?1789557008",
+   "large": "https://cards.scryfall.io/large/front/9/7/97bbbd23-ecb1-4407-ac14-dede08532a1e.jpg?1789557008",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/7/97bbbd23-ecb1-4407-ac14-dede08532a1e.jpg?1789557008"
+  }
+ },
+ {
+  "name": "Transformative Commons",
+  "scryfallId": "b57d5be7-3157-4b49-aeb8-d7368ca7e9dd",
+  "oracleId": "8ec56e2a-380f-4de7-9fb7-52de803008fc",
+  "set": "fra",
+  "collectorNumber": "193",
+  "rarity": "common",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "This land enters tapped unless you control a planeswalker.\n{T}: Add {G} or {U}.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/5/b57d5be7-3157-4b49-aeb8-d7368ca7e9dd.jpg?1789557014",
+   "normal": "https://cards.scryfall.io/normal/front/b/5/b57d5be7-3157-4b49-aeb8-d7368ca7e9dd.jpg?1789557014",
+   "large": "https://cards.scryfall.io/large/front/b/5/b57d5be7-3157-4b49-aeb8-d7368ca7e9dd.jpg?1789557014",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/5/b57d5be7-3157-4b49-aeb8-d7368ca7e9dd.jpg?1789557014"
+  }
+ },
+ {
+  "name": "Vigorbloom Annex",
+  "scryfallId": "db8c7bdd-76cd-4be0-ae0d-d430e9a5fe7a",
+  "oracleId": "fcb35d42-bcd2-427c-9640-ff3602b79912",
+  "set": "fra",
+  "collectorNumber": "194",
+  "rarity": "common",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "This land enters tapped unless you control a planeswalker.\n{T}: Add {G} or {W}.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/b/db8c7bdd-76cd-4be0-ae0d-d430e9a5fe7a.jpg?1789557019",
+   "normal": "https://cards.scryfall.io/normal/front/d/b/db8c7bdd-76cd-4be0-ae0d-d430e9a5fe7a.jpg?1789557019",
+   "large": "https://cards.scryfall.io/large/front/d/b/db8c7bdd-76cd-4be0-ae0d-d430e9a5fe7a.jpg?1789557019",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/b/db8c7bdd-76cd-4be0-ae0d-d430e9a5fe7a.jpg?1789557019"
+  }
+ },
+ {
+  "name": "Hall of Echoes",
+  "scryfallId": "4a771010-b397-4849-ac9b-08e4dd5d6a72",
+  "oracleId": "dc0a51d4-5b7e-4987-b1fe-349fd118a625",
+  "set": "fra",
+  "collectorNumber": "179",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "{T}: Add {C}.\n{5}: This land becomes a copy of target creature you control until end of turn. The \"legend rule\" doesn't apply to permanents you control this turn.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/a/4a771010-b397-4849-ac9b-08e4dd5d6a72.jpg?1789644859",
+   "normal": "https://cards.scryfall.io/normal/front/4/a/4a771010-b397-4849-ac9b-08e4dd5d6a72.jpg?1789644859",
+   "large": "https://cards.scryfall.io/large/front/4/a/4a771010-b397-4849-ac9b-08e4dd5d6a72.jpg?1789644859",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/a/4a771010-b397-4849-ac9b-08e4dd5d6a72.jpg?1789644859"
+  }
+ },
+ {
+  "name": "Hexhaven Dueling Arena",
+  "scryfallId": "9128ce00-6744-4d36-bfbe-ef75d78110b0",
+  "oracleId": "2cc075da-f79b-4050-84eb-2c1b9a30260c",
+  "set": "fra",
+  "collectorNumber": "181",
+  "rarity": "uncommon",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "{T}: Add {C}.\n{2}, {T}: Target creature that attacked this turn becomes prepared. Activate only as a sorcery. (Only creatures with prepare spells can become prepared.)\n{4}, {T}: Target creature becomes prepared.",
+  "colors": [],
+  "keywords": [
+   "Prepared"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/1/9128ce00-6744-4d36-bfbe-ef75d78110b0.jpg?1789556985",
+   "normal": "https://cards.scryfall.io/normal/front/9/1/9128ce00-6744-4d36-bfbe-ef75d78110b0.jpg?1789556985",
+   "large": "https://cards.scryfall.io/large/front/9/1/9128ce00-6744-4d36-bfbe-ef75d78110b0.jpg?1789556985",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/1/9128ce00-6744-4d36-bfbe-ef75d78110b0.jpg?1789556985"
+  }
+ },
+ {
+  "name": "Roiling Canopy",
+  "scryfallId": "db61361b-bd12-453e-abc2-bbe09b66e3d9",
+  "oracleId": "c6e87760-4cd0-4281-82d4-7a377ea960ad",
+  "set": "fra",
+  "collectorNumber": "187",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "This land enters tapped.\nWhenever a Forest you control enters, if you control at least five other Forests, target creature you control gets +3/+3 until end of turn.\n{T}: Add {G}.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/b/db61361b-bd12-453e-abc2-bbe09b66e3d9.jpg?1789514074",
+   "normal": "https://cards.scryfall.io/normal/front/d/b/db61361b-bd12-453e-abc2-bbe09b66e3d9.jpg?1789514074",
+   "large": "https://cards.scryfall.io/large/front/d/b/db61361b-bd12-453e-abc2-bbe09b66e3d9.jpg?1789514074",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/b/db61361b-bd12-453e-abc2-bbe09b66e3d9.jpg?1789514074"
+  }
+ },
+ {
+  "name": "Room of Refuge",
+  "scryfallId": "9a467560-6676-4fc2-9400-768a79650aa4",
+  "oracleId": "27d5b2eb-94fe-45fb-806c-354044de7ba5",
+  "set": "fra",
+  "collectorNumber": "188",
+  "rarity": "common",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "This land enters tapped. As it enters, choose a color.\n{T}: Add one mana of the chosen color.\n{5}, {T}, Sacrifice this land: Put two +1/+1 counters on target creature. Activate only as a sorcery.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/a/9a467560-6676-4fc2-9400-768a79650aa4.jpg?1789557010",
+   "normal": "https://cards.scryfall.io/normal/front/9/a/9a467560-6676-4fc2-9400-768a79650aa4.jpg?1789557010",
+   "large": "https://cards.scryfall.io/large/front/9/a/9a467560-6676-4fc2-9400-768a79650aa4.jpg?1789557010",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/a/9a467560-6676-4fc2-9400-768a79650aa4.jpg?1789557010"
+  }
  }
 ]

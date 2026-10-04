@@ -96,6 +96,9 @@ export function castableCards(ctx: Ctx, player: PlayerId): ObjectId[] {
     )
       out.push(id);
   }
+  // Reality Fracture (17a): Emrakul, the Exigent Doom, for as long as it remains exiled.
+  for (const id of ps.exile)
+    if (obj(ctx, id).castableWhileExiled && !out.includes(id)) out.push(id);
   // Strixhaven Brawl (15a): Squee, the Immortal, from your own exile.
   for (const id of ps.exile) if (def(ctx, id).castFromGraveyardOrExile) out.push(id);
   // Cruelclaw's Heist: an opponent's exiled card you may cast.

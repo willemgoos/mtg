@@ -109,6 +109,8 @@ function extraLegends(ctx: Ctx): ObjectId[] {
     const o = obj(ctx, id);
     // Council of Reeds: "The legend rule doesn't apply to creatures you control."
     if (def(ctx, id).types.includes('Creature') && legendRuleOff(ctx, o.controller)) continue;
+    // Reality Fracture (17a): Hall of Echoes: "the legend rule doesn't apply to permanents you control this turn".
+    if (ctx.s.turn.noLegendRule?.includes(o.controller)) continue;
     // Impossible Man keeps his own name while copying.
     const key = `${o.controller}:${o.copyKeepsName && o.originalDefId ? o.originalDefId : o.defId}`;
     const prev = newest.get(key);

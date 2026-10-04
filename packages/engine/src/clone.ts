@@ -68,6 +68,8 @@ export function cloneState(s: GameState): GameState {
       ...(s.turn.deflect ? { deflect: s.turn.deflect.slice() } : {}),
       ...(s.turn.uncounterable ? { uncounterable: s.turn.uncounterable.slice() } : {}),
       ...(s.turn.zaffaiUsed ? { zaffaiUsed: s.turn.zaffaiUsed.slice() } : {}),
+      // Reality Fracture (17a): Hall of Echoes.
+      ...(s.turn.noLegendRule ? { noLegendRule: s.turn.noLegendRule.slice() } : {}),
       ...(s.turn.castDefs
         ? { castDefs: { p1: s.turn.castDefs.p1.slice(), p2: s.turn.castDefs.p2.slice() } }
         : {}),
