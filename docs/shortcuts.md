@@ -105,3 +105,11 @@ from) when it's fixed. Older phases keep their own "Simplifications" lists in `d
 - [ ] Doc Ock, Sinister Scientist: "base power and toughness 8/8" is +4/+3 on his printed 4/5; "another Villain" only counts
       creatures.
 - [ ] Flying Octobot: only sees Villain creatures entering, not noncreature Villains.
+
+## Reality Fracture (`fra/*.ts`, phase 17a)
+
+- [ ] Gallia, Tragic Host: the "exile another creature card from your graveyard" cost picks the card for you (the engine's
+      existing `exileFromGraveyard` cost, as for Postmortem Professor); you should choose.
+- [ ] Rise of the Deathbringer: loses life equal to the greatest power, not the number of cards actually drawn (differs only
+      when the library runs out or a draw is replaced).
+- [ ] Extrapolate the Impossible: not implemented ("cards you own from outside the game"; there's no sideboard outside Learn).
