@@ -584,13 +584,15 @@ function detect(ctx: Ctx, ev: GameEvent): void {
                 o.controller === moved.controller &&
                 matchesFilter(ctx, moved.id, t.filter)
               );
-            if (t.on === 'selfOrCreatureEtb')
+            if (t.on === 'selfOrCreatureEtb') {
+              if (t.castFromNonHand && ev.castFromNonHandBy !== o.controller) return false;
               return (
                 o.id === moved.id ||
                 (isCreature &&
                   o.controller === moved.controller &&
                   matchesFilter(ctx, moved.id, t.filter))
               );
+            }
             return false;
           },
           moved,
@@ -1116,6 +1118,7 @@ function detect(ctx: Ctx, ev: GameEvent): void {
             (item?.kind === 'spell' && !!item.kicked && spell.kicker?.teamwork !== undefined)) &&
           // Secrets of Strixhaven (14b): Quandrix, the Proof.
           (!a.trigger.fromHand || (item?.kind === 'spell' && !!item.fromHand)) &&
+          (!a.trigger.notFromHand || (item?.kind === 'spell' && !item.fromHand)) &&
           // Final Fantasy (11c): a spell you don't own (Vaan).
           (!a.trigger.notOwned || spellObj.owner !== ev.player) &&
           (!a.trigger.spell || cardMatches(ctx, ev.id, a.trigger.spell, o.id)) &&

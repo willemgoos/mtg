@@ -416,6 +416,7 @@ export function castSpell(
     // Secrets of Strixhaven (14b): Flashback grants flashback until end of turn.
     (o.zone === 'graveyard' && o.flashbackGrantedTurn === ctx.s.turn.number) ||
     !!o.exileAfterCast; // Secrets of Strixhaven (14b): Nita, Forum Conciliator
+  const escaping = o.zone === 'graveyard' && !choice.via && !!d.escapeExiles;
   const fromHand = o.zone === 'hand';
   // Rule 601.2: move to stack, choose targets, then pay costs.
   const cost = addCosts(
@@ -428,7 +429,7 @@ export function castSpell(
   const teamwork = teamworkFor(ctx, player, card, choice);
   // Convoke: remembered for "each creature that convoked this spell" (Lethal Scheme).
   const convokers = d.convoke
-    ? creatureHelpers(ctx, player, manaSources(ctx, player, undefined, spellTags(d))).map(
+    ? creatureHelpers(ctx, player, manaSources(ctx, player, undefined, spellTags(d, o.zone))).map(
         (h) => h.id,
       )
     : [];
@@ -438,14 +439,19 @@ export function castSpell(
     cost,
     payWith,
     undefined,
-    spellTags(d),
+    spellTags(d, o.zone),
     [
       // Convoke: creatures pay for generic mana; improvise: artifacts do.
       ...(d.convoke
-        ? creatureHelpers(ctx, player, manaSources(ctx, player, undefined, spellTags(d)))
+        ? creatureHelpers(ctx, player, manaSources(ctx, player, undefined, spellTags(d, o.zone)))
         : []),
       ...(hasImprovise(ctx, player, card)
-        ? artifactHelpers(ctx, player, manaSources(ctx, player, undefined, spellTags(d)), card)
+        ? artifactHelpers(
+            ctx,
+            player,
+            manaSources(ctx, player, undefined, spellTags(d, o.zone)),
+            card,
+          )
         : []),
     ],
     [
@@ -485,12 +491,6 @@ export function castSpell(
     ctx.s.players[player].creatureBoons!--;
     o.bonusCounters = (o.bonusCounters ?? 0) + 1;
   }
-  // Strixhaven Brawl (15a): Escape exiles other cards from your graveyard as a cost.
-  if (d.escapeExiles && flashback)
-    for (let i = 0; i < d.escapeExiles; i++) {
-      const gone = graveyardCostCard(ctx, player, {}, card);
-      if (gone) moveObject(ctx, gone, 'exile');
-    }
   // Secrets of Strixhaven (14a): prepare. Casting the copy unprepares its creature.
   const preparer = o.preparedBy !== undefined ? ctx.s.objects[o.preparedBy] : undefined;
   if (preparer && preparer.prepared === card) {
@@ -523,6 +523,7 @@ export function castSpell(
   payWardExtras(ctx, player, targets);
   ctx.s.stack.push({
     kind: 'spell',
+    castBy: player,
     id: card,
     controller: player,
     targets,
@@ -531,7 +532,7 @@ export function castSpell(
     ...(choice.kickCount ? { kickCount: choice.kickCount } : {}),
     ...(choice.mode !== undefined ? { mode: choice.mode } : {}),
     ...(choice.kicked ? { kicked: true } : {}),
-    ...(flashback ? { flashback: true } : {}),
+    ...(flashback && !escaping ? { flashback: true } : {}),
     ...(choice.x ? { x: choice.x } : {}),
     ...(exiledValue ? { x: exiledValue } : {}),
     ...(sacrificedPower !== undefined ? { lkiPower: sacrificedPower } : {}),
@@ -551,13 +552,54 @@ export function castSpell(
   if (v.spell?.escalate)
     for (const id of escalateCrew(ctx, player, v.spell.escalate, v.spell.escalateFilter) ?? [])
       tap(ctx, id);
+  // Conduit of Worlds: a card cast this way stops further spells this turn.
+  if (choice.via === 'conduit' && !o.noSpellLock) (ctx.s.turn.spellLock ??= []).push(player);
+  // Secrets of Strixhaven (14b): Zaffai and the Tempests, once each turn.
+  if (choice.via === 'zaffai') (ctx.s.turn.zaffaiUsed ??= []).push(player);
+  // Runaways: escape chooses every exiled card without enumerating combinations.
+  if (escaping && d.escapeExiles) {
+    const graveyard = ctx.s.players[player].graveyard;
+    if (graveyard.length === d.escapeExiles) {
+      for (const id of [...graveyard]) moveObject(ctx, id, 'exile');
+    } else {
+      ctx.s.decision = {
+        kind: 'forageExile',
+        player,
+        count: d.escapeExiles,
+        thenPriority: player,
+        castingSpell: { card, targets, sacrificed: choice.sacrificeMany?.length ?? 0 },
+      };
+      return true;
+    }
+  }
+  if (
+    choice.forage !== undefined &&
+    payForage(ctx, player, choice.forage, {
+      thenPriority: player,
+      castingSpell: { card, targets, sacrificed: choice.sacrificeMany?.length ?? 0 },
+    })
+  )
+    return true;
+  finishCasting(ctx, player, card, targets, choice.sacrificeMany?.length ?? 0);
+  return false;
+}
+
+/** Runaways: casting completes after every additional cost, including sequential exile choices. */
+function finishCasting(
+  ctx: Ctx,
+  player: PlayerId,
+  card: ObjectId,
+  targets: TargetChoice[],
+  sacrificed: number,
+): void {
+  const o = obj(ctx, card);
+  const d = def(ctx, card);
   ((ctx.s.turn.castDefs ??= { p1: [], p2: [] })[player] ??= []).push(o.defId);
   // "When you cast this spell" (Ancestral Communion, Hatut Zeraze Strike Force).
   d.abilities.forEach((a, i) => {
     if (a.kind !== 'triggered' || a.trigger.on !== 'castSelf') return;
     if (!checkCondition(ctx, a.condition, player, o)) return;
     // Strixhaven (13c): Plumb the Forbidden: one copy for each creature sacrificed to cast it.
-    const sacrificed = choice.sacrificeMany?.length ?? 0;
     if (a.trigger.perSacrificed && sacrificed === 0) return;
     ctx.s.pendingTriggers.push({
       source: { id: o.id, zcc: o.zcc },
@@ -569,16 +611,9 @@ export function castSpell(
       amount: a.trigger.perSacrificed ? sacrificed : (ctx.s.turn.spellsCast?.[player] ?? 0),
     });
   });
-  // Conduit of Worlds: a card cast this way stops further spells this turn.
-  if (choice.via === 'conduit' && !o.noSpellLock) (ctx.s.turn.spellLock ??= []).push(player);
-  // Secrets of Strixhaven (14b): Zaffai and the Tempests, once each turn.
-  if (choice.via === 'zaffai') (ctx.s.turn.zaffaiUsed ??= []).push(player);
   const cast = (ctx.s.turn.spellsCast ??= { p1: 0, p2: 0 });
   emit(ctx, { type: 'spellCast', id: card, player, nth: ++cast[player] });
   noteTargets(ctx, player, targets);
-  return (
-    choice.forage !== undefined && payForage(ctx, player, choice.forage, { thenPriority: player })
-  );
 }
 
 /**
@@ -990,7 +1025,10 @@ export function resolveTop(ctx: Ctx): boolean {
       } else host = target.object.id;
     }
     emit(ctx, { type: 'resolved', id: item.id });
-    moveObject(ctx, item.id, 'battlefield', { controller: item.controller });
+    moveObject(ctx, item.id, 'battlefield', {
+      controller: item.controller,
+      ...(!item.fromHand && !item.copy && item.castBy ? { castFromNonHandBy: item.castBy } : {}),
+    });
     // Secrets of Strixhaven (14b): Choreographed Sparks: the copy has haste and is sacrificed at the end step.
     if (item.hasteSacrifice) {
       ctx.s.effects.push({
@@ -1452,6 +1490,14 @@ export function answerForageExile(ctx: Ctx, card: ObjectId): void {
   moveObject(ctx, card, 'exile');
   d.count--;
   if (d.count > 0 && ctx.s.players[d.player].graveyard.length > 0) return;
+  if (d.castingSpell)
+    finishCasting(
+      ctx,
+      d.player,
+      d.castingSpell.card,
+      d.castingSpell.targets,
+      d.castingSpell.sacrificed,
+    );
   if (d.resume) continueWith(ctx, d.resume, d.then ?? [], d.thenPriority);
   else givePriority(ctx, d.thenPriority);
 }

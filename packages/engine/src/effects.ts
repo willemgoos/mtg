@@ -1256,12 +1256,12 @@ export function runEffects(
             break;
           }
         }
-        if (!card || ctx.s.players[controller].hand.length === 0) continue;
+        if (!card || (!e.withoutDiscard && ctx.s.players[controller].hand.length === 0)) continue;
         ctx.s.decision = {
           kind: 'castFree',
           player: controller,
           cards: [card],
-          discardInstead: true,
+          ...(!e.withoutDiscard ? { discardInstead: true } : { exact: true }),
           resume,
           thenPriority,
         };
@@ -3178,6 +3178,7 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
             ...(e.untilEndOfTurn ? { untilEndOfTurn: true } : {}),
             // Secrets of Strixhaven (14b): "Spend this mana only to cast instant and sorcery spells."
             ...(e.onlyFor ? { onlyFor: e.onlyFor } : {}),
+            ...(e.notForHandSpells ? { notForHandSpells: true } : {}),
           });
       return;
     }

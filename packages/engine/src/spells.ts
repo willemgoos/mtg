@@ -14,6 +14,7 @@ export type CastVia =
   | 'zaffai'
   // Marvel Super Heroes Jumpstart (Analyzed): Vision, Spectral Synthezoid.
   | 'freeOnceEachTurn'
+  | 'freeExact'
   | 'noctis'
   | 'hades';
 
@@ -49,7 +50,7 @@ export interface CastVariant {
 export { addCosts };
 
 /** What restricted mana can be spent on: the spell's subtypes and card types ("only for Angels", "only for creature spells"). */
-export function spellTags(d: CardDefinition): string[] {
+export function spellTags(d: CardDefinition, from?: ZoneName): string[] {
   // Helga's mana: creature spells with mana value 4 or greater, or with {X}.
   const big =
     d.types.includes('Creature') && (manaValue(d.manaCost) >= 4 || !!d.manaCost.x)
@@ -64,6 +65,7 @@ export function spellTags(d: CardDefinition): string[] {
   // Strixhaven Brawl (15b, pair): Troyan, Gutsy Explorer: spells with mana value 5 or greater or with {X}.
   const bigSpell = manaValue(d.manaCost) >= 5 || d.manaCost.x ? ['BigSpell'] : [];
   return [
+    ...(from === 'hand' ? ['FromHand'] : []),
     ...d.subtypes,
     ...d.types,
     ...d.supertypes,
@@ -160,11 +162,11 @@ export function castVariants(d: CardDefinition, zone: ZoneName, via?: CastVia): 
   if (d.types.includes('Land')) return [];
   // Final Fantasy (11a): a transforming card's back face has no mana cost and can't be cast.
   // Strixhaven Brawl (15a): a disturb back face is cast for its disturb cost (its `flashback`).
-  if (d.noManaCost && !d.flashback) return [];
+  if (d.noManaCost && !d.flashback && via !== 'freeExact') return [];
   // Marvel Super Heroes Jumpstart (Analyzed): without paying its mana cost, so X is 0 and
   // additional costs (kicker) are still paid; an alternative cost can't be added.
-  if (via === 'freeOnceEachTurn')
-    return castVariants(d, 'hand')
+  if (via === 'freeOnceEachTurn' || via === 'freeExact')
+    return castVariants(d.noManaCost ? { ...d, noManaCost: false } : d, 'hand')
       .filter((v) => !(v.kicked && d.kicker?.replacesCost))
       .map((v) => ({ ...v, cost: withoutManaCost(v.cost, d.manaCost) }));
   // Cast as if from hand, then adjusted for how.

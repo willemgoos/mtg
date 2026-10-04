@@ -173,9 +173,12 @@ export function createEngine(db: CardDb, options: EngineOptions = {}): Engine {
           castCost(ctx, player, card, { ...action, back: undefined }, targets),
           wardCost(ctx, player, targets),
         );
-        const pool = manaSources(ctx, player, undefined, spellTags(def(ctx, card))).filter(
-          (m) => !action.teamwork!.includes(m.id),
-        );
+        const pool = manaSources(
+          ctx,
+          player,
+          undefined,
+          spellTags(def(ctx, card), state.objects[card]!.zone),
+        ).filter((m) => !action.teamwork!.includes(m.id));
         if (!canPayFrom(cost, pool)) throw new IllegalActionError(action);
       }
     }
@@ -239,6 +242,22 @@ function apply(ctx: Ctx, action: Action): void {
       return givePriority(ctx, player);
     case 'castSpell': {
       // Cast for free in the middle of a resolution (Daring Waverider).
+      if (d.kind === 'castFree' && d.exact) {
+        const paused = castSpell(
+          ctx,
+          player,
+          action.card,
+          action.targets,
+          { ...action, via: 'freeExact' },
+          action.payWith,
+        );
+        if (paused && ctx.s.decision.kind === 'forageExile') {
+          ctx.s.decision.resume = d.resume;
+          ctx.s.decision.thenPriority = d.thenPriority;
+          return;
+        }
+        return finishCastFree(ctx, action.card);
+      }
       if (d.kind === 'castFree') {
         castSpell(ctx, player, action.card, action.targets, {
           mode: action.mode,

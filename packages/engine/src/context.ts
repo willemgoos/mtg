@@ -410,6 +410,8 @@ function zoneList(ctx: Ctx, o: GameObject, zone: ZoneName): ObjectId[] | null {
 }
 
 export interface MoveOptions {
+  /** Runaways: provenance of the resolving spell, never retained through blinking. */
+  castFromNonHandBy?: PlayerId;
   /** Library position; default top. */
   // 'second': second from the top (Trickster's Stratagem, Marvel Super Heroes).
   position?: 'top' | 'bottom' | 'second';
@@ -741,6 +743,7 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
     defId: o.defId,
     from,
     to,
+    ...(opts.castFromNonHandBy ? { castFromNonHandBy: opts.castFromNonHandBy } : {}),
     ...(leftAs ? { leftAs } : {}),
     ...(leftBlank ? { leftBlank } : {}),
     // Final Fantasy (11c): "that creature's power" (Vincent Valentine).
