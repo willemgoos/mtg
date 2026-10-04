@@ -432,6 +432,8 @@ export function castSpell(
     (o.zone === 'graveyard' && o.flashbackGrantedTurn === ctx.s.turn.number) ||
     !!o.exileAfterCast; // Secrets of Strixhaven (14b): Nita, Forum Conciliator
   const fromHand = o.zone === 'hand';
+  // Reality Fracture (17a): Twinned Vision, "if this spell wasn't cast from your hand" (the stack item is gone by resolution).
+  o.castFromHand = fromHand;
   // Rule 601.2: move to stack, choose targets, then pay costs.
   const cost = addCosts(
     choice.sneak ? d.sneak! : castCost(ctx, player, card, choice, targets),
@@ -685,7 +687,9 @@ export function abilityManaCost(
       ? countOf(ctx, o.controller, a.costReduction, false, source)
       : 0) +
     // Firion's copies' own discount, and "equip abilities you activate cost less" (Fighter Class).
-    (a.cost.mana ? equipDiscount(ctx, o, a, targets) : 0);
+    (a.cost.mana ? equipDiscount(ctx, o, a, targets) : 0) +
+    // Reality Fracture (17a): Warrior's Blades, "{1} less for each +1/+1 counter on the creature it targets".
+    (a.costReductionPerTargetCounter ? counterDiscount(ctx, o.controller, targets) : 0);
   if (less && a.cost.mana && !a.powerUp)
     return reduceCost(a.cost.mana, { generic: Math.min(less, a.cost.mana.generic), colored: {} });
   if (!a.powerUp || !a.cost.mana) return a.cost.mana;
@@ -711,6 +715,24 @@ export function abilityManaCost(
         cost = reduceCost(cost, { generic: s.effect.amount, colored: {} });
   }
   return cost;
+}
+
+// Reality Fracture (17a): Warrior's Blades
+/** The +1/+1 counters on the creature a cost-reducing ability targets ('best': the most on a creature of yours). */
+function counterDiscount(
+  ctx: Ctx,
+  player: PlayerId,
+  targets?: readonly TargetChoice[] | 'best',
+): number {
+  if (targets === 'best')
+    return Math.max(
+      0,
+      ...ctx.s.battlefield
+        .filter((id) => obj(ctx, id).controller === player && isCreature(ctx, id))
+        .map((id) => obj(ctx, id).plusOneCounters),
+    );
+  const t = targets?.[0];
+  return t && 'object' in t ? (ctx.s.objects[t.object.id]?.plusOneCounters ?? 0) : 0;
 }
 
 // Final Fantasy Commander (12b): equip cost reductions.

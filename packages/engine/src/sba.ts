@@ -23,6 +23,17 @@ export function runSBAs(ctx: Ctx): void {
         changed = true;
       }
     }
+    // Reality Fracture (17a): Hapatra, the Desert Fang: a +1/+1 and a -1/-1 counter cancel out (rule 704.5q).
+    for (const id of ctx.s.battlefield) {
+      const o = obj(ctx, id);
+      const minus = o.counters?.['-1/-1'] ?? 0;
+      const n = Math.min(minus, o.plusOneCounters);
+      if (n > 0) {
+        o.plusOneCounters -= n;
+        o.counters!['-1/-1'] = minus - n;
+        changed = true;
+      }
+    }
     const dying: ObjectId[] = [];
     for (const c of creaturesOnBattlefield(ctx)) {
       const t = toughness(ctx, c.id);

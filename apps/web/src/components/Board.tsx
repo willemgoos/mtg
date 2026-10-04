@@ -634,7 +634,10 @@ export function Board({
         // Final Fantasy (11a): Garnet: any number of Sagas, one at a time.
         if (d.optional)
           return {
-            prompt: `${nameOf(d.resume.sourceDefId)}: choose a Saga to remove a lore counter from`,
+            // Reality Fracture (17a): Tam, the Possibility: proliferate, one permanent at a time.
+            prompt: d.title
+              ? `${nameOf(d.resume.sourceDefId)}: ${d.title}: choose a permanent to add counters to`
+              : `${nameOf(d.resume.sourceDefId)}: choose a Saga to remove a lore counter from`,
             secondary: ['Done', () => act({ type: 'chooseCard', player: HUMAN, card: null })] as [
               string,
               () => void,

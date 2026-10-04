@@ -69237,6 +69237,497 @@
   }
  },
  {
+  "name": "Blessed Ghoul",
+  "scryfallId": "bb975803-9bf2-401e-9414-d272df314398",
+  "oracleId": "fe99d90e-4809-4310-a3f7-ceb540511d55",
+  "set": "fra",
+  "collectorNumber": "123",
+  "rarity": "common",
+  "manaCost": "{W/B}",
+  "typeLine": "Creature — Zombie Cleric",
+  "oracleText": "Lifelink\n{2}{W/B}: Return this card from your graveyard to your hand.",
+  "power": "1",
+  "toughness": "1",
+  "colors": [
+   "B",
+   "W"
+  ],
+  "keywords": [
+   "Lifelink"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/b/bb975803-9bf2-401e-9414-d272df314398.jpg?1789556847",
+   "normal": "https://cards.scryfall.io/normal/front/b/b/bb975803-9bf2-401e-9414-d272df314398.jpg?1789556847",
+   "large": "https://cards.scryfall.io/large/front/b/b/bb975803-9bf2-401e-9414-d272df314398.jpg?1789556847",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/b/bb975803-9bf2-401e-9414-d272df314398.jpg?1789556847"
+  }
+ },
+ {
+  "name": "Charge the Sanctum",
+  "scryfallId": "87b40df5-5c0a-41f5-a09c-a04f17066a91",
+  "oracleId": "9d835137-584c-46bd-952e-4b2812bba1a3",
+  "set": "fra",
+  "collectorNumber": "125",
+  "rarity": "common",
+  "manaCost": "{2}{R/W}",
+  "typeLine": "Instant",
+  "oracleText": "Choose one —\n• Creatures you control get +2/+0 until end of turn.\n• Target creature gets +2/+0 and gains first strike until end of turn. Put a +1/+1 counter on it.",
+  "colors": [
+   "R",
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/7/87b40df5-5c0a-41f5-a09c-a04f17066a91.jpg?1788521570",
+   "normal": "https://cards.scryfall.io/normal/front/8/7/87b40df5-5c0a-41f5-a09c-a04f17066a91.jpg?1788521570",
+   "large": "https://cards.scryfall.io/large/front/8/7/87b40df5-5c0a-41f5-a09c-a04f17066a91.jpg?1788521570",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/7/87b40df5-5c0a-41f5-a09c-a04f17066a91.jpg?1788521570"
+  }
+ },
+ {
+  "name": "Clash of Elements",
+  "scryfallId": "b61bcef7-5832-45e6-a2bc-26d4f23707fc",
+  "oracleId": "78304a06-4c9a-4cdf-b67f-067d88762381",
+  "set": "fra",
+  "collectorNumber": "126",
+  "rarity": "uncommon",
+  "manaCost": "{1}{U}{R}",
+  "typeLine": "Instant",
+  "oracleText": "Choose target nonland permanent. Its owner may put it on top of their library. If they do, Clash of Elements deals 2 damage to them. If they didn't put the card on top of their library, they put it on the bottom.",
+  "colors": [
+   "R",
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/6/b61bcef7-5832-45e6-a2bc-26d4f23707fc.jpg?1788878210",
+   "normal": "https://cards.scryfall.io/normal/front/b/6/b61bcef7-5832-45e6-a2bc-26d4f23707fc.jpg?1788878210",
+   "large": "https://cards.scryfall.io/large/front/b/6/b61bcef7-5832-45e6-a2bc-26d4f23707fc.jpg?1788878210",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/6/b61bcef7-5832-45e6-a2bc-26d4f23707fc.jpg?1788878210"
+  }
+ },
+ {
+  "name": "Edgar, Ancient Bloodlord",
+  "scryfallId": "7c619fed-2394-4efc-8cdc-6df5f51c1f57",
+  "oracleId": "cab2bc93-f38b-4301-ac42-05765615586b",
+  "set": "fra",
+  "collectorNumber": "270",
+  "rarity": "uncommon",
+  "manaCost": "{W}{B}",
+  "typeLine": "Legendary Creature — Vampire Noble",
+  "oracleText": "Whenever another creature or planeswalker you control dies, you gain 1 life.\n{2}, Sacrifice another creature or planeswalker: Put a +1/+1 counter on Edgar. He gains menace until end of turn. (He can't be blocked except by two or more creatures.)",
+  "power": "2",
+  "toughness": "3",
+  "colors": [
+   "B",
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/c/7c619fed-2394-4efc-8cdc-6df5f51c1f57.jpg?1789127743",
+   "normal": "https://cards.scryfall.io/normal/front/7/c/7c619fed-2394-4efc-8cdc-6df5f51c1f57.jpg?1789127743",
+   "large": "https://cards.scryfall.io/large/front/7/c/7c619fed-2394-4efc-8cdc-6df5f51c1f57.jpg?1789127743",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/c/7c619fed-2394-4efc-8cdc-6df5f51c1f57.jpg?1789127743"
+  }
+ },
+ {
+  "name": "Entrust the Spark",
+  "scryfallId": "ca894d25-b9fc-4cd6-8746-70d8c2868721",
+  "oracleId": "b796ecc8-a2e8-4ab9-8736-6825b650434d",
+  "set": "fra",
+  "collectorNumber": "131",
+  "rarity": "rare",
+  "manaCost": "{3}{G}{U}",
+  "typeLine": "Sorcery",
+  "oracleText": "You may sacrifice a planeswalker. If you do, search your library for a planeswalker card, put it onto the battlefield, then shuffle.",
+  "colors": [
+   "G",
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/a/ca894d25-b9fc-4cd6-8746-70d8c2868721.jpg?1789614779",
+   "normal": "https://cards.scryfall.io/normal/front/c/a/ca894d25-b9fc-4cd6-8746-70d8c2868721.jpg?1789614779",
+   "large": "https://cards.scryfall.io/large/front/c/a/ca894d25-b9fc-4cd6-8746-70d8c2868721.jpg?1789614779",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/a/ca894d25-b9fc-4cd6-8746-70d8c2868721.jpg?1789614779"
+  }
+ },
+ {
+  "name": "Ferocity of the Hunt",
+  "scryfallId": "a9793ce9-5a0b-41fe-b9ad-02f6f7da2481",
+  "oracleId": "747a1b36-eb4f-44e6-9e5a-bb1a0259a471",
+  "set": "fra",
+  "collectorNumber": "134",
+  "rarity": "common",
+  "manaCost": "{1}{B/G}",
+  "typeLine": "Enchantment — Aura",
+  "oracleText": "Flash\nEnchant creature\nEnchanted creature gets +1/+0 and has deathtouch.\nWhen enchanted creature dies, return that card to the battlefield tapped under its owner's control.",
+  "colors": [
+   "B",
+   "G"
+  ],
+  "keywords": [
+   "Enchant",
+   "Flash"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/9/a9793ce9-5a0b-41fe-b9ad-02f6f7da2481.jpg?1789644856",
+   "normal": "https://cards.scryfall.io/normal/front/a/9/a9793ce9-5a0b-41fe-b9ad-02f6f7da2481.jpg?1789644856",
+   "large": "https://cards.scryfall.io/large/front/a/9/a9793ce9-5a0b-41fe-b9ad-02f6f7da2481.jpg?1789644856",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/9/a9793ce9-5a0b-41fe-b9ad-02f6f7da2481.jpg?1789644856"
+  }
+ },
+ {
+  "name": "Frostbite Pyromental",
+  "scryfallId": "7a44581f-8fc4-457d-888a-1e211090ee7e",
+  "oracleId": "9a104f73-597b-49e3-8088-13db31f61900",
+  "set": "fra",
+  "collectorNumber": "135",
+  "rarity": "rare",
+  "manaCost": "{U}{R}{R}",
+  "typeLine": "Creature — Elemental",
+  "oracleText": "Trample, haste\nWhenever this creature deals combat damage to a player, draw two cards.\nAt the beginning of the end step, sacrifice this creature.",
+  "power": "4",
+  "toughness": "4",
+  "colors": [
+   "R",
+   "U"
+  ],
+  "keywords": [
+   "Haste",
+   "Trample"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/a/7a44581f-8fc4-457d-888a-1e211090ee7e.jpg?1789470870",
+   "normal": "https://cards.scryfall.io/normal/front/7/a/7a44581f-8fc4-457d-888a-1e211090ee7e.jpg?1789470870",
+   "large": "https://cards.scryfall.io/large/front/7/a/7a44581f-8fc4-457d-888a-1e211090ee7e.jpg?1789470870",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/a/7a44581f-8fc4-457d-888a-1e211090ee7e.jpg?1789470870"
+  }
+ },
+ {
+  "name": "Hapatra, the Desert Fang",
+  "scryfallId": "cf7c1534-af41-4991-b3c3-f0a34ae330b5",
+  "oracleId": "6894345f-52a6-46e4-b278-0783087daee1",
+  "set": "fra",
+  "collectorNumber": "271",
+  "rarity": "uncommon",
+  "manaCost": "{2}{B}{B}{G}",
+  "typeLine": "Legendary Creature — Human Cleric",
+  "oracleText": "When Hapatra enters, for each opponent, put X -1/-1 counters on up to one target creature that player controls, where X is the greatest mana value among cards in your graveyard.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "B",
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/f/cf7c1534-af41-4991-b3c3-f0a34ae330b5.jpg?1789385991",
+   "normal": "https://cards.scryfall.io/normal/front/c/f/cf7c1534-af41-4991-b3c3-f0a34ae330b5.jpg?1789385991",
+   "large": "https://cards.scryfall.io/large/front/c/f/cf7c1534-af41-4991-b3c3-f0a34ae330b5.jpg?1789385991",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/f/cf7c1534-af41-4991-b3c3-f0a34ae330b5.jpg?1789385991"
+  }
+ },
+ {
+  "name": "Karn, Gilded Guardian",
+  "scryfallId": "3abcae65-5b21-4c98-adad-34b8bc76ea3a",
+  "oracleId": "20b90a18-ff62-4995-b0d6-fbef44dca357",
+  "set": "fra",
+  "collectorNumber": "272",
+  "rarity": "rare",
+  "manaCost": "{2/W}{2/U}{2/B}{2/R}{2/G}",
+  "typeLine": "Legendary Artifact Creature — Golem",
+  "oracleText": "Vigilance, trample\nWhen Karn enters, draw a card for each color among other artifacts you control.",
+  "power": "5",
+  "toughness": "5",
+  "colors": [
+   "B",
+   "G",
+   "R",
+   "U",
+   "W"
+  ],
+  "keywords": [
+   "Vigilance",
+   "Trample"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/a/3abcae65-5b21-4c98-adad-34b8bc76ea3a.jpg?1789014541",
+   "normal": "https://cards.scryfall.io/normal/front/3/a/3abcae65-5b21-4c98-adad-34b8bc76ea3a.jpg?1789014541",
+   "large": "https://cards.scryfall.io/large/front/3/a/3abcae65-5b21-4c98-adad-34b8bc76ea3a.jpg?1789014541",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/a/3abcae65-5b21-4c98-adad-34b8bc76ea3a.jpg?1789014541"
+  }
+ },
+ {
+  "name": "Mabel, Valley Hero",
+  "scryfallId": "47abea4b-9848-48aa-bc1b-f04f4799e920",
+  "oracleId": "ab56f7cf-9538-45b5-a657-1e2ebef1e92b",
+  "set": "fra",
+  "collectorNumber": "274",
+  "rarity": "uncommon",
+  "manaCost": "{1}{R}{W}",
+  "typeLine": "Legendary Creature — Mouse Soldier",
+  "oracleText": "Whenever Mabel or another creature you control enters, put a +1/+1 counter on target creature that entered this turn.",
+  "power": "1",
+  "toughness": "2",
+  "colors": [
+   "R",
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/7/47abea4b-9848-48aa-bc1b-f04f4799e920.jpg?1790135467",
+   "normal": "https://cards.scryfall.io/normal/front/4/7/47abea4b-9848-48aa-bc1b-f04f4799e920.jpg?1790135467",
+   "large": "https://cards.scryfall.io/large/front/4/7/47abea4b-9848-48aa-bc1b-f04f4799e920.jpg?1790135467",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/7/47abea4b-9848-48aa-bc1b-f04f4799e920.jpg?1790135467"
+  }
+ },
+ {
+  "name": "Primal Witchstalker",
+  "scryfallId": "04e64af7-cca1-499e-8951-f386e84c8b5b",
+  "oracleId": "c21fafaf-4510-4752-a501-606ae68e6699",
+  "set": "fra",
+  "collectorNumber": "144",
+  "rarity": "uncommon",
+  "manaCost": "{1}{B}{G}",
+  "typeLine": "Creature — Wolf",
+  "oracleText": "Menace (This creature can't be blocked except by two or more creatures.)\nWhen this creature enters, mill four cards. When you do, return target land card from your graveyard to the battlefield tapped. (To mill four cards, put the top four cards of your library into your graveyard.)",
+  "power": "2",
+  "toughness": "1",
+  "colors": [
+   "B",
+   "G"
+  ],
+  "keywords": [
+   "Menace",
+   "Mill"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/4/04e64af7-cca1-499e-8951-f386e84c8b5b.jpg?1789644850",
+   "normal": "https://cards.scryfall.io/normal/front/0/4/04e64af7-cca1-499e-8951-f386e84c8b5b.jpg?1789644850",
+   "large": "https://cards.scryfall.io/large/front/0/4/04e64af7-cca1-499e-8951-f386e84c8b5b.jpg?1789644850",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/4/04e64af7-cca1-499e-8951-f386e84c8b5b.jpg?1789644850"
+  }
+ },
+ {
+  "name": "Saheeli, Jewel of Avishkar",
+  "scryfallId": "28d84ef6-e190-46d4-882d-1cea5e111e2a",
+  "oracleId": "83705258-1f42-41db-a32e-de99ffd759eb",
+  "set": "fra",
+  "collectorNumber": "275",
+  "rarity": "uncommon",
+  "manaCost": "{2}{U}{R}",
+  "typeLine": "Legendary Creature — Human Artificer",
+  "oracleText": "Thopters you control have haste.\nWhenever you cast a noncreature spell, create a 1/1 colorless Thopter artifact creature token with flying.",
+  "power": "2",
+  "toughness": "4",
+  "colors": [
+   "R",
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/8/28d84ef6-e190-46d4-882d-1cea5e111e2a.jpg?1789644883",
+   "normal": "https://cards.scryfall.io/normal/front/2/8/28d84ef6-e190-46d4-882d-1cea5e111e2a.jpg?1789644883",
+   "large": "https://cards.scryfall.io/large/front/2/8/28d84ef6-e190-46d4-882d-1cea5e111e2a.jpg?1789644883",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/8/28d84ef6-e190-46d4-882d-1cea5e111e2a.jpg?1789644883"
+  }
+ },
+ {
+  "name": "Solitary Cell",
+  "scryfallId": "5142bbb6-194c-4b12-b11a-1a21c9fe81a6",
+  "oracleId": "66a22b35-3dc0-4a74-8474-e73293403de6",
+  "set": "fra",
+  "collectorNumber": "149",
+  "rarity": "rare",
+  "manaCost": "{R}{W}",
+  "typeLine": "Artifact",
+  "oracleText": "When this artifact enters, exile target nonland permanent an opponent controls with mana value 3 or less until this artifact leaves the battlefield.\n{1}, {T}, Discard a legendary card: Draw a card.",
+  "colors": [
+   "R",
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/1/5142bbb6-194c-4b12-b11a-1a21c9fe81a6.jpg?1790558834",
+   "normal": "https://cards.scryfall.io/normal/front/5/1/5142bbb6-194c-4b12-b11a-1a21c9fe81a6.jpg?1790558834",
+   "large": "https://cards.scryfall.io/large/front/5/1/5142bbb6-194c-4b12-b11a-1a21c9fe81a6.jpg?1790558834",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/1/5142bbb6-194c-4b12-b11a-1a21c9fe81a6.jpg?1790558834"
+  }
+ },
+ {
+  "name": "Tam, the Possibility",
+  "scryfallId": "6529d399-677e-45a6-ac3e-12a0b10f6c37",
+  "oracleId": "c92c7744-0c92-4a36-9ada-4ffca812009e",
+  "set": "fra",
+  "collectorNumber": "276",
+  "rarity": "rare",
+  "manaCost": "{1}{G}{U}",
+  "typeLine": "Legendary Creature — Gorgon Wizard",
+  "oracleText": "Planeswalker spells you cast cost {1} less to cast.\n{W}{U}{B}{R}{G}, {T}: Proliferate X times, where X is the number of planeswalker types among planeswalkers you control. (To proliferate, choose any number of permanents and/or players, then give each another counter of each kind already there.)",
+  "power": "2",
+  "toughness": "4",
+  "colors": [
+   "G",
+   "U"
+  ],
+  "keywords": [
+   "Proliferate"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/5/6529d399-677e-45a6-ac3e-12a0b10f6c37.jpg?1789644886",
+   "normal": "https://cards.scryfall.io/normal/front/6/5/6529d399-677e-45a6-ac3e-12a0b10f6c37.jpg?1789644886",
+   "large": "https://cards.scryfall.io/large/front/6/5/6529d399-677e-45a6-ac3e-12a0b10f6c37.jpg?1789644886",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/5/6529d399-677e-45a6-ac3e-12a0b10f6c37.jpg?1789644886"
+  }
+ },
+ {
+  "name": "Twinned Vision",
+  "scryfallId": "55f85984-0137-4899-8993-bbc8c4794d33",
+  "oracleId": "fa1cc78f-26bc-4d5d-973b-7cb7d7490973",
+  "set": "fra",
+  "collectorNumber": "157",
+  "rarity": "common",
+  "manaCost": "{1}{U/R}",
+  "typeLine": "Instant",
+  "oracleText": "Draw a card. If this spell wasn't cast from your hand, draw two cards instead.\nFlashback—{1}{U/R}{U/R}, Discard a card. (You may cast this card from your graveyard for its flashback cost. Then exile it.)",
+  "colors": [
+   "R",
+   "U"
+  ],
+  "keywords": [
+   "Flashback"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/5/55f85984-0137-4899-8993-bbc8c4794d33.jpg?1789556940",
+   "normal": "https://cards.scryfall.io/normal/front/5/5/55f85984-0137-4899-8993-bbc8c4794d33.jpg?1789556940",
+   "large": "https://cards.scryfall.io/large/front/5/5/55f85984-0137-4899-8993-bbc8c4794d33.jpg?1789556940",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/5/55f85984-0137-4899-8993-bbc8c4794d33.jpg?1789556940"
+  }
+ },
+ {
+  "name": "Twisted Fates",
+  "scryfallId": "c7c0765d-38fd-4d7b-bfb4-49b10ff5939b",
+  "oracleId": "3ce30a19-e716-478f-be89-e2d95753cfed",
+  "set": "fra",
+  "collectorNumber": "158",
+  "rarity": "uncommon",
+  "manaCost": "{2}{W}{W}{B}",
+  "typeLine": "Sorcery",
+  "oracleText": "Destroy target nonland permanent. Put a +1/+1 counter on each creature target player controls.",
+  "colors": [
+   "B",
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/7/c7c0765d-38fd-4d7b-bfb4-49b10ff5939b.jpg?1789614785",
+   "normal": "https://cards.scryfall.io/normal/front/c/7/c7c0765d-38fd-4d7b-bfb4-49b10ff5939b.jpg?1789614785",
+   "large": "https://cards.scryfall.io/large/front/c/7/c7c0765d-38fd-4d7b-bfb4-49b10ff5939b.jpg?1789614785",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/7/c7c0765d-38fd-4d7b-bfb4-49b10ff5939b.jpg?1789614785"
+  }
+ },
+ {
+  "name": "Vindictive Triumph",
+  "scryfallId": "a803dbe7-153a-4e92-ad4d-c2babebe003d",
+  "oracleId": "d6b478d1-5015-49ba-b1aa-cbc2b08107a6",
+  "set": "fra",
+  "collectorNumber": "162",
+  "rarity": "rare",
+  "manaCost": "{W}{B}{B}",
+  "typeLine": "Instant",
+  "oracleText": "Exile target creature or planeswalker. If that permanent's mana value was 3 or less, return it to the battlefield tapped under your control. Exile it at the beginning of the next end step.",
+  "colors": [
+   "B",
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/8/a803dbe7-153a-4e92-ad4d-c2babebe003d.jpg?1790558815",
+   "normal": "https://cards.scryfall.io/normal/front/a/8/a803dbe7-153a-4e92-ad4d-c2babebe003d.jpg?1790558815",
+   "large": "https://cards.scryfall.io/large/front/a/8/a803dbe7-153a-4e92-ad4d-c2babebe003d.jpg?1790558815",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/8/a803dbe7-153a-4e92-ad4d-c2babebe003d.jpg?1790558815"
+  }
+ },
+ {
+  "name": "Vraska, Soul of Stone",
+  "scryfallId": "f3869752-eade-4e7a-8dd1-68cafb9e10be",
+  "oracleId": "cad63b31-667b-4518-bc49-be4ffb82bc63",
+  "set": "fra",
+  "collectorNumber": "277",
+  "rarity": "rare",
+  "manaCost": "{U}{R}{W}",
+  "typeLine": "Legendary Creature — Gorgon Wizard",
+  "oracleText": "Artifact creatures you control have vigilance.\nWhenever you cast a noncreature spell, create a 1/1 colorless Sculpture Treasure artifact creature token with \"{T}, Sacrifice this token: Add one mana of any color.\"",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "R",
+   "U",
+   "W"
+  ],
+  "keywords": [
+   "Treasure"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/3/f3869752-eade-4e7a-8dd1-68cafb9e10be.jpg?1789128008",
+   "normal": "https://cards.scryfall.io/normal/front/f/3/f3869752-eade-4e7a-8dd1-68cafb9e10be.jpg?1789128008",
+   "large": "https://cards.scryfall.io/large/front/f/3/f3869752-eade-4e7a-8dd1-68cafb9e10be.jpg?1789128008",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/3/f3869752-eade-4e7a-8dd1-68cafb9e10be.jpg?1789128008"
+  }
+ },
+ {
+  "name": "Vraska, the Cutting Glare",
+  "scryfallId": "5c28b012-5efb-488f-a1c1-09e2dddfd6ee",
+  "oracleId": "580de511-863c-4b7a-9d2e-fcdf6e12d54b",
+  "set": "fra",
+  "collectorNumber": "278",
+  "rarity": "rare",
+  "manaCost": "{B}{B}{G}",
+  "typeLine": "Legendary Creature — Gorgon Assassin",
+  "oracleText": "Deathtouch\nWhen Vraska enters, if you control six or more lands, destroy target permanent an opponent controls. They create a Treasure token. (It's an artifact with \"{T}, Sacrifice this token: Add one mana of any color.\")",
+  "power": "4",
+  "toughness": "4",
+  "colors": [
+   "B",
+   "G"
+  ],
+  "keywords": [
+   "Treasure",
+   "Deathtouch"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/c/5c28b012-5efb-488f-a1c1-09e2dddfd6ee.jpg?1789127776",
+   "normal": "https://cards.scryfall.io/normal/front/5/c/5c28b012-5efb-488f-a1c1-09e2dddfd6ee.jpg?1789127776",
+   "large": "https://cards.scryfall.io/large/front/5/c/5c28b012-5efb-488f-a1c1-09e2dddfd6ee.jpg?1789127776",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/c/5c28b012-5efb-488f-a1c1-09e2dddfd6ee.jpg?1789127776"
+  }
+ },
+ {
+  "name": "Warrior's Blades",
+  "scryfallId": "c63d5b0e-ee72-42ed-aa7e-484ba84507cd",
+  "oracleId": "f47419a5-b975-4934-a987-ea064a0c7c1a",
+  "set": "fra",
+  "collectorNumber": "163",
+  "rarity": "uncommon",
+  "manaCost": "{2}{R}{W}",
+  "typeLine": "Artifact — Equipment",
+  "oracleText": "When this Equipment enters, it deals 3 damage to any target and you gain 3 life.\nEquipped creature gets +2/+1.\nEquip {3}. This ability costs {1} less to activate for each +1/+1 counter on the creature it targets.",
+  "colors": [
+   "R",
+   "W"
+  ],
+  "keywords": [
+   "Equip"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/6/c63d5b0e-ee72-42ed-aa7e-484ba84507cd.jpg?1789007648",
+   "normal": "https://cards.scryfall.io/normal/front/c/6/c63d5b0e-ee72-42ed-aa7e-484ba84507cd.jpg?1789007648",
+   "large": "https://cards.scryfall.io/large/front/c/6/c63d5b0e-ee72-42ed-aa7e-484ba84507cd.jpg?1789007648",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/6/c63d5b0e-ee72-42ed-aa7e-484ba84507cd.jpg?1789007648"
+  }
+ },
+ {
   "name": "Afterthought Sentry",
   "scryfallId": "4d4b3bf7-a149-4099-b97d-4e36a87dfa60",
   "oracleId": "f0c533a2-751a-4c5a-8cec-b83da3c8c62f",
