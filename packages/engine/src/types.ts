@@ -1797,6 +1797,24 @@ export type EffectDef =
   | { kind: 'setStackTargets'; id: ObjectId; targets: TargetChoice[] }
   /** Internal (Loki Laufeyson): its controller may choose new targets for the copy just made ('chosen'). */
   | { kind: 'chooseNewTargets' }
+  /**
+   * Iron Fist, Hero for Hire; Rhino, Terrible Trampler: "N damage divided as you choose among up
+   * to M targets" / "distribute N +1/+1 counters among up to M target creatures". The targets
+   * and the split are chosen as it resolves, one target (and how much it gets) at a time, so the
+   * bots never list every combination; `each` then applies to every target chosen (as target 0).
+   */
+  | {
+      kind: 'divide';
+      amount: number;
+      maxTargets: number;
+      spec: TargetSpec;
+      give: 'damage' | 'counters';
+      each?: EffectDef[];
+      /** Internal: the targets chosen so far and what each gets. */
+      chosen?: { to: TargetChoice; n: number }[];
+      /** Internal: the choosing is over; deal the damage or put the counters. */
+      done?: boolean;
+    }
   /** The controller discards N cards of their choice. */
   | {
       kind: 'discard';
@@ -2625,6 +2643,8 @@ export interface GameObject {
   lastNotCreature?: boolean;
   /** A card in exile its owner may play until the end of that turn (Strongbox Raider). */
   playableUntilTurn?: number;
+  /** Wiccan, Young Avenger: "until your next end step": not once that turn's end step has begun. */
+  playableBeforeEndStep?: boolean;
   /** The turn it entered its current zone. */
   zoneTurn?: number;
   /** Named counters (e.g. incubation). */

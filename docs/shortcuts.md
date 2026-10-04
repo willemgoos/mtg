@@ -60,7 +60,8 @@ from) when it's fixed. Older phases keep their own "Simplifications" lists in `d
 - [ ] Wasp, Shrinking Savior: if her only target becomes illegal, the whole trigger fizzles, including the draw.
 - [ ] Tippy-Toe, Terrific Partner: the extra Food only comes with tokens from the normal create-token effect, not a few
       special token paths (`stack.ts`, `fin-effects.ts`, `fic-effects.ts`).
-- [ ] Iron Fist, Hero for Hire: the power-up's 5 damage goes to up to two targets (5, 4/1 or 3/2) instead of up to five.
+- [ ] Iron Fist, Hero for Hire: the 5 damage is divided among up to five targets, but the targets and the split are chosen
+      as the power-up resolves (one target and its share at a time), not as it's activated (so nothing can respond to them).
 - [ ] Contract Hero: the attack trigger always asks for a choice, even when you have no artifact and no cards in hand.
 - [ ] The Clone Saga, chapter III: "choose a card name" is choosing a creature you control (up to one); with none, the chapter
       does nothing.
@@ -73,16 +74,16 @@ from) when it's fixed. Older phases keep their own "Simplifications" lists in `d
 - [ ] Flying Drone: the discount is a second, free version of the spell, offered once another flyer entered under your control
       this turn; that flyer must still be on the battlefield (with flying) to count.
 - [ ] Vulture, Feathered Fiend: split into a counter trigger per flyer and one batched draw trigger instead of one trigger.
-- [ ] Grapeshot: storm copies keep the original's target (no new targets), like Ral's storm emblem.
-- [ ] Wiccan, Young Avenger: "until your next end step" lasts until the end of that turn (playable during the end step and
+- [x] Grapeshot: storm copies keep the original's target (no new targets), like Ral's storm emblem.
+- [x] Wiccan, Young Avenger: "until your next end step" lasts until the end of that turn (playable during the end step and
       cleanup too).
 - [ ] Wanda's Vision: "exile until you exile a nonland card" uses mana value up to 99 as "no limit".
 - [ ] The Vision and Scarlet Witch: the {R} it adds empties between steps, like all mana in the engine.
 - [ ] Hulk's Thunderclap: the beheld creature or card isn't chosen or shown; the behold version is offered whenever a Gamma
       creature is available, and needs a noncreature artifact or enchantment to target.
 - [ ] Secure Detention: mana that another permanent grants the locked one (Clement-style) is still usable.
-- [ ] Rhino, Terrible Trampler: its three counters are three separate triggers (one counter each, targets chosen per trigger)
-      plus a separate destroy trigger, instead of one trigger.
+- [ ] Rhino, Terrible Trampler: one trigger now, but the creatures for the three counters and the split are chosen as it
+      resolves (one creature and its share at a time), not as it's put on the stack.
 - [ ] Rhino's Rampage: the noncreature artifact is chosen as the spell is cast, not by a reflexive trigger on excess damage.
 - [ ] Powerful Broker: can only target a permanent (players have no counters in this engine).
 - [ ] Voracious Brood: its entering counters only apply when it's cast.

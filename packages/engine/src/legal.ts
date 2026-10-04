@@ -131,7 +131,13 @@ export function castableCards(ctx: Ctx, player: PlayerId): ObjectId[] {
   // Strongbox Raider: exiled cards you may play for a while.
   for (const id of ps.exile) {
     const until = obj(ctx, id).playableUntilTurn;
-    if (until !== undefined && until >= ctx.s.turn.number && !out.includes(id)) out.push(id);
+    // Wiccan, Young Avenger: "until your next end step" ends as that end step begins.
+    const over =
+      until === ctx.s.turn.number &&
+      obj(ctx, id).playableBeforeEndStep &&
+      (ctx.s.turn.step === 'end' || ctx.s.turn.step === 'cleanup');
+    if (until !== undefined && until >= ctx.s.turn.number && !over && !out.includes(id))
+      out.push(id);
   }
   // Extract Power: either player's exiled cards you may play for free.
   for (const p of ['p1', 'p2'] as const)

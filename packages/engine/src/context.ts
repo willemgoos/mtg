@@ -660,6 +660,8 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
   const meldPartner = from === 'battlefield' ? o.meldedWith : undefined;
   delete o.meldedWith;
   delete o.equipDiscount;
+  // Wiccan, Young Avenger: set again by whatever exiles it next.
+  delete o.playableBeforeEndStep;
   if (to === 'battlefield' && opts.meldInto) {
     o.front = o.defId;
     o.defId = opts.meldInto;

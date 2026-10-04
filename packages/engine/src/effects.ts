@@ -32,7 +32,7 @@ import {
 } from './context.ts';
 import { setMonarch } from './monarch.ts';
 import { spellOnStack } from './spells.ts';
-import { targetCombos } from './targets.ts';
+import { isTargetLegal, targetCandidates, targetCombos } from './targets.ts';
 import { phaseOut } from './phasing.ts';
 import { foodsOf } from './forage.ts';
 import { canPayFrom, manaSources, manaValue } from './mana.ts';
@@ -374,6 +374,44 @@ function newTargetOptions(
     }));
 }
 
+/**
+ * Iron Fist, Hero for Hire; Rhino, Terrible Trampler: the next step of a 'divide': a choice of
+ * one more target and how much it gets (the last target allowed gets all that's left), or the
+ * finished split.
+ */
+function divideStep(
+  ctx: Ctx,
+  es: EffectSource,
+  e: Extract<EffectDef, { kind: 'divide' }>,
+): EffectDef[] {
+  const chosen = e.chosen ?? [];
+  const left = e.amount - chosen.reduce((n, c) => n + c.n, 0);
+  const finish: EffectDef = { ...e, done: true };
+  if (left <= 0 || chosen.length >= e.maxTargets) return chosen.length ? [finish] : [];
+  const same = (a: TargetChoice, b: TargetChoice) =>
+    'player' in a
+      ? 'player' in b && a.player === b.player
+      : 'object' in b && a.object.id === b.object.id;
+  const cands = targetCandidates(ctx, e.spec, {
+    controller: es.controller,
+    ...(es.source ? { sourceId: es.source.id } : {}),
+  }).filter((t) => !chosen.some((c) => same(c.to, t)));
+  if (cands.length === 0) return chosen.length ? [finish] : [];
+  const last = chosen.length === e.maxTargets - 1 || cands.length === 1;
+  const what = (n: number) =>
+    e.give === 'damage' ? `${n} damage to` : `${n} +1/+1 counter${n === 1 ? '' : 's'} on`;
+  const options: { label: string; effects: EffectDef[] }[] = [];
+  // "Up to": choosing no targets at all.
+  if (!chosen.length) options.push({ label: 'No targets', effects: [] });
+  for (let n = left; n >= (last ? left : 1); n--)
+    for (const t of cands)
+      options.push({
+        label: `${what(n)} ${targetLabel(ctx, es.controller, t)}`,
+        effects: [{ ...e, chosen: [...chosen, { to: t, n }] }],
+      });
+  return [{ kind: 'choose', options }];
+}
+
 /** The id of the spell or ability a target refers to (Bolt Bend). */
 function stackTargetId(es: EffectSource, what: Ref): ObjectId | undefined {
   const t = typeof what === 'object' && 'target' in what ? es.targets[what.target] : null;
@@ -712,6 +750,12 @@ export function runEffects(
         1,
         ...(options.length ? [{ kind: 'choose', options: [keep, ...options] } as EffectDef] : []),
       );
+      i--;
+      continue;
+    }
+    // Iron Fist, Hero for Hire; Rhino, Terrible Trampler: divide among up to N targets.
+    if (e.kind === 'divide' && !e.done) {
+      list.splice(i, 1, ...divideStep(ctx, es, e));
       i--;
       continue;
     }
@@ -1858,6 +1902,23 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
     case 'changeTarget':
     case 'chooseNewTargets':
       return; // handled by runEffects
+    // Iron Fist, Hero for Hire; Rhino, Terrible Trampler: the finished split (chosen by runEffects).
+    case 'divide': {
+      const chosen = e.chosen ?? [];
+      // Rechecked like targets: one that became illegal gets nothing.
+      const src = {
+        controller: es.controller,
+        ...(es.source ? { sourceId: es.source.id } : {}),
+      };
+      const legal = chosen.filter((c) => isTargetLegal(ctx, e.spec, c.to, src));
+      if (e.give === 'damage') {
+        const from = damageSourceFor(ctx, es.source?.id ?? 'unknown', es.controller);
+        for (const c of legal) dealDamage(ctx, from, c.to, c.n, false);
+      } else for (const c of legal) if ('object' in c.to) addCounters(ctx, c.to.object.id, c.n);
+      for (const c of legal)
+        for (const x of e.each ?? []) runEffect(ctx, { ...es, targets: [c.to] }, x);
+      return;
+    }
     case 'setStackTargets': {
       const item = ctx.s.stack.find((x) => x.id === e.id);
       if (item) item.targets = e.targets;
@@ -2745,6 +2806,7 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
       for (const id of lib.slice(0, resolveAmount(ctx, es, e.count))) {
         moveObject(ctx, id, 'exile');
         obj(ctx, id).playableUntilTurn = until;
+        if (e.until === 'yourNextEndStep') obj(ctx, id).playableBeforeEndStep = true;
         if (e.ifExiled && cardMatches(ctx, id, e.ifExiled.filter))
           for (const then of e.ifExiled.then) runEffect(ctx, es, then);
       }

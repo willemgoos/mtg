@@ -62,26 +62,62 @@ describe('Iron Fist, Hero for Hire', () => {
     expect(pt(g, fist)).toEqual([2, 2]);
   });
 
+  /** Answers each of Iron Fist's "divide" prompts with the option starting with the next label. */
+  const divide = (g: G, ...labels: string[]) => {
+    for (const label of labels) {
+      settle(g);
+      const d = g.decision;
+      if (d.kind !== 'chooseOption') throw new Error(`no choice for ${label}`);
+      const index = d.options.findIndex((o) => o.label.startsWith(label));
+      expect(index, label).toBeGreaterThanOrEqual(0);
+      g.do({ type: 'chooseOption', player: g.actor, index });
+    }
+    return settle(g);
+  };
+
   it('power-up deals 5 damage to one target and puts five counters on him', () => {
     const { g, fist, baloth } = setup();
-    resolveChoosing(activate(g, fist, [g.ref(baloth)]), 0);
+    divide(activate(g, fist, []), "5 damage to Rumbling Baloth (opponent's)");
     // A 4/4: 5 damage kills it.
     expect(g.state.battlefield).not.toContain(baloth);
     expect(g.obj(fist).plusOneCounters).toBe(5);
     expect(pt(g, fist)).toEqual([7, 7]);
   });
 
-  it('power-up divides the damage between two targets', () => {
+  it('power-up divides the damage among up to five targets', () => {
     const { g, fist, bear, baloth } = setup();
-    resolveChoosing(activate(g, fist, [g.ref(baloth), g.ref(bear)]), 1);
-    expect(g.obj(baloth).damage).toBe(3);
+    divide(
+      activate(g, fist, []),
+      "1 damage to Rumbling Baloth (opponent's)",
+      "2 damage to Bear Cub (opponent's)",
+      '1 damage to Your opponent',
+      '1 damage to You',
+    );
+    expect(g.decision.kind).toBe('priority');
+    expect(g.obj(baloth).damage).toBe(1);
     expect(g.state.battlefield).not.toContain(bear);
+    expect(g.state.players.p2.life).toBe(19);
+    expect(g.state.players.p1.life).toBe(19);
     expect(g.obj(fist).plusOneCounters).toBe(5);
+  });
+
+  it('each target is chosen once, and choosing none is allowed', () => {
+    const { g, fist } = setup();
+    activate(g, fist, []);
+    settle(g);
+    const first = g.decision;
+    if (first.kind !== 'chooseOption') throw new Error('no choice');
+    expect(first.options[0]!.label).toBe('No targets');
+    divide(g, '3 damage to Your opponent');
+    const d = g.decision;
+    if (d.kind !== 'chooseOption') throw new Error('no choice');
+    expect(d.options.some((o) => o.label.includes('Your opponent'))).toBe(false);
+    expect(d.options.some((o) => o.label === 'No targets')).toBe(false);
   });
 
   it('power-up can hit a player', () => {
     const { g, fist } = setup();
-    resolveChoosing(activate(g, fist, [{ player: 'p2' }]), 0);
+    divide(activate(g, fist, []), '5 damage to Your opponent');
     expect(g.state.players.p2.life).toBe(15);
   });
 });
