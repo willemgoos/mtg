@@ -196,6 +196,8 @@ function prevented(ctx: Ctx, src: DamageSource, to: TargetChoice, amount: number
   if ('object' in to && useShield(ctx, to.object.id)) return 0;
   if (ctx.s.battlefield.some((id) => hasStaticKind(ctx, id, 'damageCantBePrevented')))
     return amount;
+  // Marvel Super Heroes Jumpstart (Squadron): Hyperion prevents all but 1 of damage to you and your Heroes.
+  if (amount > 1 && allButOne(ctx, to)) amount = 1;
   if ('player' in to) {
     if (src.controller === to.player) return amount;
     // Mystical Archive (16): Deflecting Palm, the next damage to you this turn is prevented and dealt to its source's controller.
@@ -230,6 +232,22 @@ function prevented(ctx: Ctx, src: DamageSource, to: TargetChoice, amount: number
   if (!habit) return amount;
   addCounters(ctx, host, amount);
   return 0;
+}
+
+/** Marvel Super Heroes Jumpstart (Squadron): whether damage to this player or permanent is cut to 1 (Hyperion). */
+function allButOne(ctx: Ctx, to: TargetChoice): boolean {
+  const hit = 'player' in to ? to.player : onBattlefield(ctx, to.object)?.controller;
+  if (!hit) return false;
+  return ctx.s.battlefield.some(
+    (id) =>
+      obj(ctx, id).controller === hit &&
+      def(ctx, id).abilities.some(
+        (a) =>
+          a.kind === 'static' &&
+          a.effect.kind === 'preventAllButOne' &&
+          ('player' in to || matchesFilter(ctx, to.object.id, a.effect.filter)),
+      ),
+  );
 }
 
 const hasStaticKind = (ctx: Ctx, id: ObjectId, kind: string) =>
