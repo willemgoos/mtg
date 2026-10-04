@@ -23379,6 +23379,125 @@
   }
  },
  {
+  "name": "Hawkeye, Bowslinger",
+  "scryfallId": "ec6889e2-14ad-4193-9272-c1c758f61724",
+  "oracleId": "b218f1f8-984c-488e-8222-37f05c674a6b",
+  "set": "msc",
+  "collectorNumber": "596",
+  "rarity": "rare",
+  "manaCost": "{2}{W}",
+  "typeLine": "Legendary Creature — Human Archer Hero",
+  "oracleText": "Reach, vigilance\nWhenever you cast a spell that targets a creature, put a +1/+1 counter on Hawkeye. Scry 1. (Look at the top card of your library. You may put that card on the bottom.)",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Reach",
+   "Vigilance",
+   "Scry"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/c/ec6889e2-14ad-4193-9272-c1c758f61724.jpg?1783903084",
+   "normal": "https://cards.scryfall.io/normal/front/e/c/ec6889e2-14ad-4193-9272-c1c758f61724.jpg?1783903084",
+   "large": "https://cards.scryfall.io/large/front/e/c/ec6889e2-14ad-4193-9272-c1c758f61724.jpg?1783903084",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/c/ec6889e2-14ad-4193-9272-c1c758f61724.jpg?1783903084"
+  }
+ },
+ {
+  "name": "Mockingbird, Ace Agent",
+  "scryfallId": "0f5701ac-ec30-4fb1-bd71-4bac4693c075",
+  "oracleId": "1fd00656-83ba-4feb-b089-224007936b99",
+  "set": "msh",
+  "collectorNumber": "22",
+  "rarity": "uncommon",
+  "manaCost": "{3}{W}",
+  "typeLine": "Legendary Creature — Human Spy Hero",
+  "oracleText": "Double strike\nWhenever you cast a spell that targets a creature you control, put a +1/+1 counter on Mockingbird.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Double strike"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/f/0f5701ac-ec30-4fb1-bd71-4bac4693c075.jpg?1783902972",
+   "normal": "https://cards.scryfall.io/normal/front/0/f/0f5701ac-ec30-4fb1-bd71-4bac4693c075.jpg?1783902972",
+   "large": "https://cards.scryfall.io/large/front/0/f/0f5701ac-ec30-4fb1-bd71-4bac4693c075.jpg?1783902972",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/f/0f5701ac-ec30-4fb1-bd71-4bac4693c075.jpg?1783902972"
+  }
+ },
+ {
+  "name": "Valkyrior Skyrider",
+  "scryfallId": "7b75958b-7b72-4c0f-a75e-5e62e3727a7d",
+  "oracleId": "ea0b0c71-4a1b-49aa-b4cd-db6c5d26b95e",
+  "set": "msc",
+  "collectorNumber": "525",
+  "rarity": "common",
+  "manaCost": "{4}{W}",
+  "typeLine": "Creature — God Warrior Hero",
+  "oracleText": "Flying (This creature can't be blocked except by creatures with flying or reach.)\nWhen this creature enters, you gain 4 life.",
+  "power": "3",
+  "toughness": "4",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/b/7b75958b-7b72-4c0f-a75e-5e62e3727a7d.jpg?1783903106",
+   "normal": "https://cards.scryfall.io/normal/front/7/b/7b75958b-7b72-4c0f-a75e-5e62e3727a7d.jpg?1783903106",
+   "large": "https://cards.scryfall.io/large/front/7/b/7b75958b-7b72-4c0f-a75e-5e62e3727a7d.jpg?1783903106",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/b/7b75958b-7b72-4c0f-a75e-5e62e3727a7d.jpg?1783903106"
+  }
+ },
+ {
+  "name": "Stunning Shot",
+  "scryfallId": "ed190f57-2061-4c47-860c-85554c576332",
+  "oracleId": "0c0bb9b0-e7e0-465e-826b-2e56032aed1b",
+  "set": "msc",
+  "collectorNumber": "610",
+  "rarity": "uncommon",
+  "manaCost": "{1}{W}",
+  "typeLine": "Sorcery",
+  "oracleText": "Put two +1/+1 counters on up to one target creature you control. Tap up to one target creature an opponent controls and put a stun counter on it. (If a permanent with a stun counter would become untapped, remove one from it instead.)",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/d/ed190f57-2061-4c47-860c-85554c576332.jpg?1783903080",
+   "normal": "https://cards.scryfall.io/normal/front/e/d/ed190f57-2061-4c47-860c-85554c576332.jpg?1783903080",
+   "large": "https://cards.scryfall.io/large/front/e/d/ed190f57-2061-4c47-860c-85554c576332.jpg?1783903080",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/d/ed190f57-2061-4c47-860c-85554c576332.jpg?1783903080"
+  }
+ },
+ {
+  "name": "Sudden Strike",
+  "scryfallId": "03d56bb2-9cb1-4825-b31b-1f4bbf21a500",
+  "oracleId": "8147a759-e387-48f6-9c1e-bb39622ed553",
+  "set": "msc",
+  "collectorNumber": "779",
+  "rarity": "uncommon",
+  "manaCost": "{1}{W}",
+  "typeLine": "Instant",
+  "oracleText": "Destroy target attacking or blocking creature.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/3/03d56bb2-9cb1-4825-b31b-1f4bbf21a500.jpg?1783903018",
+   "normal": "https://cards.scryfall.io/normal/front/0/3/03d56bb2-9cb1-4825-b31b-1f4bbf21a500.jpg?1783903018",
+   "large": "https://cards.scryfall.io/large/front/0/3/03d56bb2-9cb1-4825-b31b-1f4bbf21a500.jpg?1783903018",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/3/03d56bb2-9cb1-4825-b31b-1f4bbf21a500.jpg?1783903018"
+  }
+ },
+ {
   "name": "Ant-Man's Air Force",
   "scryfallId": "a94723d0-2137-41f6-87a1-6a33e1d50d1b",
   "oracleId": "5d7eea87-b60f-4ab9-b485-30aadda0cd79",

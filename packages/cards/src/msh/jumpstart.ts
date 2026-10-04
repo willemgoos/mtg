@@ -11,6 +11,7 @@ import { MSH_JUMPSTART_INCREDIBLE } from './jumpstart-incredible.ts';
 import { MSH_JUMPSTART_LETHAL } from './jumpstart-lethal.ts';
 import { MSH_JUMPSTART_MARVELOUS } from './jumpstart-marvelous.ts';
 import { MSH_JUMPSTART_MASTERS } from './jumpstart-masters.ts';
+import { MSH_JUMPSTART_PRECISE } from './jumpstart-precise.ts';
 import { MSH_JUMPSTART_PYM } from './jumpstart-pym.ts';
 import { MSH_JUMPSTART_RAMPAGING } from './jumpstart-rampaging.ts';
 import { MSH_JUMPSTART_SCARLET } from './jumpstart-scarlet.ts';
@@ -63,6 +64,7 @@ export const MSH_JUMPSTART: Record<string, Behavior> = {
   ...MSH_JUMPSTART_LETHAL,
   ...MSH_JUMPSTART_MARVELOUS,
   ...MSH_JUMPSTART_MASTERS,
+  ...MSH_JUMPSTART_PRECISE,
   ...MSH_JUMPSTART_PYM,
   ...MSH_JUMPSTART_RAMPAGING,
   ...MSH_JUMPSTART_SCARLET,

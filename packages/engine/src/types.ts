@@ -562,6 +562,9 @@ export type TriggerDef =
         | 'firstInstantSorceryOrVillain'
         /** Marvel Super Heroes: a spell that targets a creature you control (Ms. Marvel). */
         | 'targetsYourCreature'
+        // Marvel Super Heroes Jumpstart (Precise)
+        /** A spell that targets a creature, anyone's (Hawkeye, Bowslinger). */
+        | 'targetsCreature'
         /** Marvel Super Heroes: an instant or sorcery that targets an artifact or land (Fin Fang Foom). */
         | 'instantOrSorceryTargetingArtifactOrLand'
         // Strixhaven (13c): Reflective Golem

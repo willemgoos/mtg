@@ -476,6 +476,12 @@ function spellMatches(
           def(ctx, o.id).types.includes('Creature')
         );
       });
+    // Marvel Super Heroes Jumpstart (Precise): Hawkeye, Bowslinger
+    case 'targetsCreature':
+      return !!item?.targets.some((x) => {
+        const o = 'object' in x ? ctx.s.objects[x.object.id] : undefined;
+        return !!o && o.zone === 'battlefield' && def(ctx, o.id).types.includes('Creature');
+      });
     case 'instantOrSorceryTargetingArtifactOrLand':
       return (
         (spell.types.includes('Instant') || spell.types.includes('Sorcery')) &&
