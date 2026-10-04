@@ -186,7 +186,17 @@ export interface CardDefinition {
     altLabel?: string;
     /** Strixhaven Brawl (15b, u): life paid as part of the alternative cost (Tezzeret's Gambit: 2). */
     life?: number;
+    // Mystical Archive (16): Daze, Force of Will
+    /** With `returnLand`: only a land matching this may be returned (Daze: an Island). */
+    returnLandFilter?: CardFilter;
+    /** The alternative cost also exiles a card from your hand matching this (Force of Will: a blue card). */
+    exileFromHand?: CardFilter;
+    /** The kicked (all modes at once) version may only be cast while this holds (Akroma's Will: you control a commander). */
+    onlyIf?: ConditionDef;
   };
+  // Mystical Archive (16): Angel's Grace, Krosan Grip, Berserk
+  /** Split second: while it is on the stack, nobody can cast spells or activate (non-mana) abilities. */
+  splitSecond?: boolean;
   /** Costs {amount} less if its first target matches (Dire Downdraft: an attacking or tapped creature). */
   costReductionIfTarget?: {
     filter: CardFilter;
@@ -864,6 +874,10 @@ export type ConditionDef =
   | { kind: 'cardsLeftGraveyardThisTurn' }
   /** One or more cards were put into exile this turn (Ennis, Debate Moderator). */
   | { kind: 'cardsExiledThisTurn' }
+  // Mystical Archive (16): Berserk (cast only before the combat damage step), Veil of Summer
+  | { kind: 'beforeCombatDamage' }
+  /** An opponent has cast a spell of one of these colours this turn. */
+  | { kind: 'opponentCastColoredSpell'; colors: Color[] }
   /** At least `min` creatures died this turn (Emeritus of Woe). */
   | { kind: 'creaturesDiedAtLeast'; min: number }
   /** The source is a creature right now (Great Hall of the Biblioplex once animated). */
@@ -992,6 +1006,9 @@ export interface CardFilter {
   // Strixhaven Brawl (15b, u): Wash Away
   /** A spell on the stack that wasn't cast from its owner's hand. */
   notCastFromHand?: boolean;
+  // Mystical Archive (16): Doom Blade
+  /** Has none of these colours (a "nonblack" creature). */
+  notColors?: Color[];
 }
 
 export interface TargetSpec {
@@ -2322,6 +2339,8 @@ export interface GameObject {
   hasteOnEntry?: boolean;
   /** Extract Power: it may be played for free while exiled, by this player. */
   playFreeBy?: PlayerId;
+  /** Mystical Archive (16): Mind's Desire: `playFreeBy` only lasts through this turn number. */
+  playFreeUntilTurn?: number;
   // The Fantastic Four (9d).
   /** Promise of Loyalty: it can't attack this player. */
   vowedTo?: PlayerId;
@@ -2431,7 +2450,18 @@ export interface PlayerState {
   /** Cards drawn for an opening hand, if not the usual seven (an expedition boon). */
   openingHand?: number;
   /** Floating mana: each entry is one mana of one of its types. */
-  pool?: { produces: ManaType[]; untilEndOfTurn?: boolean; onlyFor?: string }[];
+  pool?: {
+    produces: ManaType[];
+    untilEndOfTurn?: boolean;
+    onlyFor?: string;
+    /** Mystical Archive (16): Channel: spending this mana costs 1 life. */
+    lifeCost?: boolean;
+  }[];
+  // Mystical Archive (16): Teferi's Protection, Approach of the Second Sun
+  /** Their life total can't change and they have protection from everything, until their next untap step. */
+  lifeFrozen?: boolean;
+  /** How many spells named Approach of the Second Sun they have cast this game. */
+  approachCasts?: number;
   /** They attacked during their most recent turn before the current one (Avenge). */
   attackedLastTurn?: boolean;
   // Brawl.
@@ -2534,6 +2564,12 @@ export interface TurnState {
   passed: PlayerId[];
   /** Additional combat phases still to come this turn. */
   extraCombats: number;
+  /** Mystical Archive (16): Angel's Grace: these players can't lose the game this turn and their life can't drop below 1. */
+  cantLose?: PlayerId[];
+  /** Mystical Archive (16): Veil of Summer: spells these players control can't be countered this turn. */
+  uncounterable?: PlayerId[];
+  /** Mystical Archive (16): Deflecting Palm: the next damage to these players this turn is prevented and dealt to its source's controller. */
+  deflect?: PlayerId[];
   /** Creatures declared as attackers this turn, once per combat. */
   attackers: ObjectId[];
   /** How many times each player gained life this turn. */

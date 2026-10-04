@@ -6,6 +6,7 @@ import { SOS_A, SOS_A_BACKS, SOS_A_TOKENS } from './sos/cards-a.ts';
 import { SOS_C, SOS_C_BACKS } from './sos/cards-c.ts';
 import { SOS_D, SOS_D_BACKS } from './sos/cards-d.ts';
 import { SOS_E, SOS_E_BACKS } from './sos/cards-e.ts';
+import { SOS_ARCHIVE, SOS_ARCHIVE_TOKENS } from './sos/archive.ts';
 import { SHARED_14A } from './sos/shared-14a.ts';
 import {
   SILVERQUILL_SOS,
@@ -34,6 +35,8 @@ export const SECRETS_OF_STRIXHAVEN_BEHAVIORS: Record<string, Behavior> = {
   ...SOS_BLUE_B,
   ...SOS_C,
   ...SOS_E,
+  // Mystical Archive (16): SOA.
+  ...SOS_ARCHIVE,
 };
 
 /** Back faces of double-faced cards: not cards of their own, so not in the pool. */
@@ -54,4 +57,5 @@ export const SECRETS_OF_STRIXHAVEN_TOKENS: CardDefinition[] = [
   ...SOS_WITHERBLOOM_TOKENS,
   ...SOS_A_TOKENS,
   ...SOS_BLUE_B_TOKENS,
+  ...SOS_ARCHIVE_TOKENS,
 ];

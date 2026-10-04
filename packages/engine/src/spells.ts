@@ -243,6 +243,8 @@ export function castVariants(d: CardDefinition, zone: ZoneName, via?: CastVia): 
       ...(d.kicker.sacrifice || d.kicker.returnLand ? { sacrifice: true } : {}),
       // Strixhaven Brawl (15b, u): Tezzeret's Gambit, "pay 2 life" for the Phyrexian pip.
       ...(d.kicker.life ? { life: d.kicker.life } : {}),
+      // Mystical Archive (16): Force of Will also exiles a blue card from your hand.
+      ...(d.kicker.exileFromHand ? { discard: true } : {}),
       ...extra,
     });
   return out;

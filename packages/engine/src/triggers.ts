@@ -64,6 +64,15 @@ export function checkCondition(
   }
   if (c.kind === 'monstrous') return !!self?.monstrous;
   if (c.kind === 'youCastSpellThisTurn') return (ctx.s.turn.spellsCast?.[controller] ?? 0) > 0;
+  // Mystical Archive (16): Berserk (before the combat damage step), Veil of Summer.
+  if (c.kind === 'beforeCombatDamage')
+    return ['untap', 'upkeep', 'draw', 'main1', 'beginCombat', 'declareAttackers', 'declareBlockers'].includes(
+      ctx.s.turn.step,
+    );
+  if (c.kind === 'opponentCastColoredSpell')
+    return (ctx.s.turn.castDefs?.[other(controller)] ?? []).some((id) =>
+      defOf(ctx, id).colors.some((col) => c.colors.includes(col)),
+    );
   if (c.kind === 'yourStep')
     return ctx.s.turn.activePlayer === controller && c.steps.includes(ctx.s.turn.step);
   // Avengers Assemble (9b).

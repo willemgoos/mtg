@@ -17,6 +17,7 @@ import { BRAWL_15B_W_EFFECTS } from './brawl-15b-w-effects.ts';
 import { BRAWL_15B_U_EFFECTS } from './brawl-15b-u-effects.ts';
 import { BRAWL_15B_G_EFFECTS } from './brawl-15b-g-effects.ts';
 import { BRAWL_15B_PAIR_EFFECTS } from './brawl-15b-pair-effects.ts';
+import { ARCHIVE_16_EFFECTS } from './archive-16-effects.ts';
 import { STX_13C_A_EFFECTS } from './stx-13c-a-effects.ts';
 import { STX_13C_B_EFFECTS } from './stx-13c-b-effects.ts';
 import { STX_13C_C_EFFECTS } from './stx-13c-c-effects.ts';
@@ -117,6 +118,8 @@ const BUILT_IN_EFFECTS: Record<string, CustomEffect> = {
   ...BRAWL_15B_R_EFFECTS,
   // Strixhaven Brawl (15b): two-colour cards.
   ...BRAWL_15B_PAIR_EFFECTS,
+  // Mystical Archive (16).
+  ...ARCHIVE_16_EFFECTS,
   // Strixhaven (13a): Learn: put the chosen Lesson from outside the game into your hand.
   learnFetch(ctx, es, params) {
     const ps = ctx.s.players[es.controller];

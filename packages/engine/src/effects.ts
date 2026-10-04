@@ -166,6 +166,13 @@ function prevented(ctx: Ctx, src: DamageSource, to: TargetChoice, amount: number
     return amount;
   if ('player' in to) {
     if (src.controller === to.player) return amount;
+    // Mystical Archive (16): Deflecting Palm, the next damage to you this turn is prevented and dealt to its source's controller.
+    if (ctx.s.turn.deflect?.includes(to.player)) {
+      const i = ctx.s.turn.deflect.indexOf(to.player);
+      ctx.s.turn.deflect = ctx.s.turn.deflect.filter((_, j) => j !== i);
+      dealDamage(ctx, src, { player: src.controller }, amount, false);
+      return 0;
+    }
     for (const id of ctx.s.battlefield) {
       if (obj(ctx, id).controller !== to.player) continue;
       for (const a of def(ctx, id).abilities)
@@ -293,6 +300,8 @@ export function counterSpell(ctx: Ctx, id: ObjectId, exile = false): void {
         ),
     );
   if (def(ctx, item.id).uncounterable || protectedByStatic) return;
+  // Mystical Archive (16): Veil of Summer.
+  if (ctx.s.turn.uncounterable?.includes(controller)) return;
   ctx.s.stack.splice(i, 1);
   emit(ctx, { type: 'countered', id: item.id });
   moveObject(ctx, item.id, item.flashback || exile ? 'exile' : 'graveyard');
@@ -301,6 +310,10 @@ export function counterSpell(ctx: Ctx, id: ObjectId, exile = false): void {
 export function changeLife(ctx: Ctx, player: PlayerId, delta: number): void {
   if (delta === 0) return;
   const p = ctx.s.players[player];
+  // Mystical Archive (16): Teferi's Protection (life can't change), Angel's Grace (can't drop below 1).
+  if (p.lifeFrozen) return;
+  if (delta < 0 && ctx.s.turn.cantLose?.includes(player)) delta = Math.max(delta, 1 - p.life);
+  if (delta === 0) return;
   p.life += delta;
   if (delta < 0) (ctx.s.turn.lifeLost ??= { p1: 0, p2: 0 })[player]++;
   emit(ctx, { type: 'lifeChanged', player, delta, life: p.life });
@@ -1513,7 +1526,8 @@ export function runEffects(
               manaValue(def(ctx, id).manaCost) >= manaValue(defOf(ctx, sub.defId).manaCost)
             )
               return false;
-            return cardMatches(ctx, id, e.filter);
+            // Mystical Archive (16): Bring to Light's filter looks at the colours spent on the spell.
+            return cardMatches(ctx, id, e.filter, es.source?.id);
           }
           const d = defOf(ctx, obj(ctx, id).defId);
           const basic = d.supertypes.includes('Basic') && d.types.includes('Land');

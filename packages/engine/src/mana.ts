@@ -1,5 +1,5 @@
 import { commanderColors, legendaryColors, opponentLandColors } from './brawl.ts';
-import { damageSourceFor, dealDamage } from './effects.ts';
+import { changeLife, damageSourceFor, dealDamage } from './effects.ts';
 import { canTapForAbility, isCreature, matchesFilter, power } from './characteristics.ts';
 import { type Ctx, addCounters, def, emit, obj, sacrifice, tap } from './context.ts';
 import { manaValue, pipsOf } from './cost.ts';
@@ -291,7 +291,11 @@ export function payMana(ctx: Ctx, sources: Readonly<Payment>): void {
     .filter(isPoolId)
     .map((id) => Number(id.split(':')[2]))
     .sort((a, b) => b - a);
-  for (const i of fromPool) ctx.s.players[player].pool!.splice(i, 1);
+  for (const i of fromPool) {
+    // Mystical Archive (16): Channel, mana that costs 1 life to use.
+    if (ctx.s.players[player].pool![i]?.lifeCost) changeLife(ctx, player, -1);
+    ctx.s.players[player].pool!.splice(i, 1);
+  }
   for (const id of sources) {
     if (isPoolId(id)) continue;
     // A Treasure that taps for two (Goldspan Dragon) is listed twice: the first unit sacrifices it.

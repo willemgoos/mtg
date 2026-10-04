@@ -694,6 +694,8 @@ export function cardMatches(
     return false;
   if (filter.colors && !filter.colors.some((color) => d.colors.includes(color))) return false;
   if (filter.notTypes?.some((t) => d.types.includes(t))) return false;
+  // Mystical Archive (16): Doom Blade.
+  if (filter.notColors?.some((c) => d.colors.includes(c))) return false;
   // Secrets of Strixhaven (14b): Rocket Volley.
   if (filter.nonbasic && d.supertypes.includes('Basic')) return false;
   // Strixhaven (13b): monocolored.

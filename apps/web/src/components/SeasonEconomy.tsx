@@ -22,7 +22,9 @@ import {
   BLOOMBURROW_SHEETS,
   FOUNDATIONS_PACK_COUNT,
   MARVEL_SHEETS,
+  SECRETS_ARCHIVE_SHEETS,
   SECRETS_SHEETS,
+  STRIXHAVEN_ARCHIVE_SHEETS,
   STRIXHAVEN_SHEETS,
 } from '../game/seasonPacks.ts';
 import { PACK_SET_NAMES, type PackSet } from '../game/expedition.ts';
@@ -266,13 +268,17 @@ const BOOSTERS: { kind: SeasonPackKind; set: PackSet; title: string; count: numb
     kind: 'strixhaven',
     set: 'stx',
     title: 'Strixhaven',
-    count: Object.values(STRIXHAVEN_SHEETS).reduce((n, sheet) => n + sheet.length, 0),
+    count: [STRIXHAVEN_SHEETS, STRIXHAVEN_ARCHIVE_SHEETS]
+      .flatMap((s) => Object.values(s))
+      .reduce((n, sheet) => n + sheet.length, 0),
   },
   {
     kind: 'secrets',
     set: 'sos',
     title: 'Secrets of Strixhaven',
-    count: Object.values(SECRETS_SHEETS).reduce((n, sheet) => n + sheet.length, 0),
+    count: [SECRETS_SHEETS, SECRETS_ARCHIVE_SHEETS]
+      .flatMap((s) => Object.values(s))
+      .reduce((n, sheet) => n + sheet.length, 0),
   },
 ];
 

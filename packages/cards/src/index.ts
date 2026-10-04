@@ -8,6 +8,8 @@ import foundations from './generated/foundations-pack-candidates.json' with { ty
 import type { ScryfallCard } from './scryfall-types.ts';
 import { SOS_BOOSTER_LIST } from './sos/booster-list.ts';
 import { STX_BOOSTER_LIST } from './stx/booster-list.ts';
+import { SOA_ARCHIVE_LIST } from './sos/archive-list.ts';
+import { STA_ARCHIVE_LIST } from './stx/archive-list.ts';
 import { bestowAura } from './soc/cards-15b-w.ts';
 
 export { BEHAVIORS, TOKENS } from './behaviors.ts';
@@ -60,6 +62,42 @@ export function strixhavenBoosterSheets(): BoosterSheets {
 /** Secrets of Strixhaven's booster cards by SOS rarity (main set, no basics). */
 export function secretsOfStrixhavenBoosterSheets(): BoosterSheets {
   return boosterSheets(SOS_BOOSTER_LIST);
+}
+
+/**
+ * Mystical Archive (16): the bonus card in Strixhaven (STA) and Secrets of
+ * Strixhaven (SOA) boosters, by archive rarity. Reprints keep another printing's
+ * set and rarity in scryfall.json, so the lists (and `ARCHIVE_RARITY`) are by name.
+ */
+export function strixhavenArchiveSheets(): ArchiveSheets {
+  return archiveSheets(STA_ARCHIVE_LIST);
+}
+export function secretsOfStrixhavenArchiveSheets(): ArchiveSheets {
+  return archiveSheets(SOA_ARCHIVE_LIST);
+}
+
+/**
+ * Chance (out of 8) that the archive slot is an uncommon, a rare or a mythic. Arena's odds
+ * aren't published: it follows the main sheets' shape (a mythic one time in eight).
+ */
+export const ARCHIVE_SLOT_WEIGHTS = { uncommon: 4, rare: 3, mythic: 1 } as const;
+
+/** An archive card's rarity in the archive (not the rarity of whichever printing the game shows). */
+export const ARCHIVE_RARITY: ReadonlyMap<string, 'uncommon' | 'rare' | 'mythic'> = new Map([
+  ...STA_ARCHIVE_LIST,
+  ...SOA_ARCHIVE_LIST,
+]);
+
+type ArchiveSheets = Record<'uncommon' | 'rare' | 'mythic', ScryfallCard[]>;
+
+function archiveSheets(list: typeof STA_ARCHIVE_LIST): ArchiveSheets {
+  const byName = new Map(SCRYFALL.map((c) => [c.name, c]));
+  const sheets: ArchiveSheets = { uncommon: [], rare: [], mythic: [] };
+  for (const [name, rarity] of list) {
+    const c = byName.get(name);
+    if (c) sheets[rarity].push(c);
+  }
+  return sheets;
 }
 
 type BoosterSheets = Record<'common' | 'uncommon' | 'rare' | 'mythic', ScryfallCard[]>;

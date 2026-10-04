@@ -1,6 +1,8 @@
 import { SCRYFALL, cardDb, slug } from '@mtg/cards';
 import { SOS_BOOSTER_LIST } from '../../../packages/cards/src/sos/booster-list.ts';
 import { STX_BOOSTER_LIST } from '../../../packages/cards/src/stx/booster-list.ts';
+import { SOA_ARCHIVE_LIST } from '../../../packages/cards/src/sos/archive-list.ts';
+import { STA_ARCHIVE_LIST } from '../../../packages/cards/src/stx/archive-list.ts';
 import FOUNDATIONS_MANIFEST from '../../../packages/cards/src/generated/foundations-manifest.json';
 import { createRng } from '@mtg/engine';
 import { describe, expect, it } from 'vitest';
@@ -17,6 +19,8 @@ import {
   BLOOMBURROW_SHEETS,
   MARVEL_SHEETS,
   SECRETS_SHEETS,
+  SECRETS_ARCHIVE_SHEETS,
+  STRIXHAVEN_ARCHIVE_SHEETS,
   STRIXHAVEN_SHEETS,
   FOUNDATIONS_SHEETS,
   generateFoundationsPack,
@@ -87,7 +91,10 @@ describe('Season Bloomburrow packs', () => {
     const cards = opened.lastPack!.rewards.flatMap((r) => (r.kind === 'card' ? [r.cardId] : []));
     expect(cards.length).toBeGreaterThan(0);
     for (const id of cards)
-      expect(boosterNames.has(SCRYFALL.find((c) => slug(c.name) === id)!.name)).toBe(true);
+      expect(
+        boosterNames.has(SCRYFALL.find((c) => slug(c.name) === id)!.name) ||
+          STA_ARCHIVE_LIST.some(([n]) => slug(n) === id),
+      ).toBe(true);
     expect(SEASON_STARTERS.some((d) => d.id === 'stx-lorehold-reckoning')).toBe(true);
   });
 
@@ -109,8 +116,49 @@ describe('Season Bloomburrow packs', () => {
     const cards = opened.lastPack!.rewards.flatMap((r) => (r.kind === 'card' ? [r.cardId] : []));
     expect(cards.length).toBeGreaterThan(0);
     for (const id of cards)
-      expect(names.has(SCRYFALL.find((c) => slug(c.name) === id)!.name)).toBe(true);
+      expect(
+        names.has(SCRYFALL.find((c) => slug(c.name) === id)!.name) ||
+          SOA_ARCHIVE_LIST.some(([n]) => slug(n) === id),
+      ).toBe(true);
     expect(SEASON_STARTERS.some((d) => d.id === 'sos-lorehold-spirit-archive')).toBe(true);
+  });
+
+  it('puts one Mystical Archive card (by archive rarity) in each Strixhaven and Secrets of Strixhaven pack, in place of a common', () => {
+    const sets = [
+      ['strixhaven', STRIXHAVEN_SHEETS, STRIXHAVEN_ARCHIVE_SHEETS, STA_ARCHIVE_LIST],
+      ['secrets', SECRETS_SHEETS, SECRETS_ARCHIVE_SHEETS, SOA_ARCHIVE_LIST],
+    ] as const;
+    for (const [kind, main, archive, list] of sets) {
+      expect(archive.common).toEqual([]);
+      expect(Object.values(archive).reduce((n, s) => n + s.length, 0)).toBe(list.length);
+      const rarityByName = new Map<string, string>(list);
+      const inArchive = new Set(Object.values(archive).flat());
+      const rng = createRng(11);
+      const seen: Record<string, number> = { uncommon: 0, rare: 0, mythic: 0 };
+      for (let i = 0; i < 300; i++) {
+        const pack = packGenerator(kind)(rng, {}, misses());
+        expect(pack).toHaveLength(8);
+        const cards = pack.flatMap((r) => (r.kind === 'card' ? [r.cardId] : []));
+        const picked = cards.filter((id) => inArchive.has(id));
+        expect(picked).toHaveLength(1);
+        const name = SCRYFALL.find((c) => slug(c.name) === picked[0])!.name;
+        seen[rarityByName.get(name)!]!++;
+        // The other cards come from the main sheets: one fewer common than a pack without the slot.
+        const mains = cards.filter((id) => Object.values(main).some((s) => s.includes(id)));
+        expect(mains.length).toBeGreaterThanOrEqual(cards.length - 1 - 0);
+      }
+      expect(seen.uncommon!).toBeGreaterThan(110);
+      expect(seen.rare!).toBeGreaterThan(80);
+      expect(seen.mythic!).toBeGreaterThan(15);
+    }
+  });
+
+  it('keeps the seed-stable wildcard slot first among the commons when the archive card replaces one', () => {
+    const rng = createRng(3);
+    const pack = packGenerator('strixhaven')(rng, {}, { common: 4, uncommon: 0, rareMythic: 0 });
+    // A common wildcard forced at the first common slot still appears alongside the archive card.
+    expect(pack[0]!.kind).toBe('wildcard');
+    expect(pack).toHaveLength(8);
   });
 
   it('offers the Bloomburrow decks as starters', () => {

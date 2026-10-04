@@ -1,9 +1,12 @@
 import {
+  ARCHIVE_SLOT_WEIGHTS,
   FOUNDATIONS_PACK_CANDIDATES,
   SCRYFALL,
   cardDb,
   slug,
+  secretsOfStrixhavenArchiveSheets,
   secretsOfStrixhavenBoosterSheets,
+  strixhavenArchiveSheets,
   strixhavenBoosterSheets,
 } from '@mtg/cards';
 import { nextInt, type RngState } from '@mtg/engine';
@@ -54,7 +57,7 @@ export const MARVEL_SHEETS = Object.fromEntries(
   ]),
 ) as Record<Rarity, string[]>;
 
-/** Strixhaven's booster cards: every card in the set we play, but the basics (fronts only). The Mystical Archive slot comes with phase 16. */
+/** Strixhaven's booster cards: every card in the set we play, but the basics (fronts only). The Mystical Archive card is its own sheet. */
 const stxCards = strixhavenBoosterSheets();
 export const STRIXHAVEN_SHEETS = Object.fromEntries(
   RARITIES.map((rarity) => [
@@ -63,7 +66,7 @@ export const STRIXHAVEN_SHEETS = Object.fromEntries(
   ]),
 ) as Record<Rarity, string[]>;
 
-/** Secrets of Strixhaven's booster cards: the main set's cards we play, but the basics (fronts only). The Mystical Archive slot comes with phase 16. */
+/** Secrets of Strixhaven's booster cards: the main set's cards we play, but the basics (fronts only). The Mystical Archive card is its own sheet. */
 const sosCards = secretsOfStrixhavenBoosterSheets();
 export const SECRETS_SHEETS = Object.fromEntries(
   RARITIES.map((rarity) => [
@@ -72,6 +75,23 @@ export const SECRETS_SHEETS = Object.fromEntries(
   ]),
 ) as Record<Rarity, string[]>;
 
+/**
+ * Mystical Archive (16): the STA and SOA cards by archive rarity (a common slot in each
+ * Strixhaven or Secrets of Strixhaven booster). Reprints are by name, so the card shown
+ * may be another printing; there are no archive commons.
+ */
+const archiveSheet = (cards: ReturnType<typeof strixhavenArchiveSheets>) =>
+  Object.fromEntries(
+    RARITIES.map((rarity) => [
+      rarity,
+      rarity === 'common'
+        ? []
+        : cards[rarity].map((c) => slug(c.name)).filter((id) => cardDb.has(id) && !isBasic(id)),
+    ]),
+  ) as Record<Rarity, string[]>;
+export const STRIXHAVEN_ARCHIVE_SHEETS = archiveSheet(strixhavenArchiveSheets());
+export const SECRETS_ARCHIVE_SHEETS = archiveSheet(secretsOfStrixhavenArchiveSheets());
+
 const SHEETS: Record<SeasonPackKind, Record<Rarity, string[]>> = {
   foundations: FOUNDATIONS_SHEETS,
   bloomburrow: BLOOMBURROW_SHEETS,
@@ -79,12 +99,16 @@ const SHEETS: Record<SeasonPackKind, Record<Rarity, string[]>> = {
   strixhaven: STRIXHAVEN_SHEETS,
   secrets: SECRETS_SHEETS,
 };
+const ARCHIVE: Partial<Record<SeasonPackKind, Record<Rarity, string[]>>> = {
+  strixhaven: STRIXHAVEN_ARCHIVE_SHEETS,
+  secrets: SECRETS_ARCHIVE_SHEETS,
+};
 
 /** The pack generator for a kind of booster. */
 export const packGenerator =
   (kind: SeasonPackKind): PackGenerator =>
   (rng, collection, misses) =>
-    generatePack(SHEETS[kind], rng, collection, misses);
+    generatePack(SHEETS[kind], rng, collection, misses, ARCHIVE[kind]);
 
 /** Uniform waiting time 1..(2*mean-1): mean exactly matches the published average.
  * Conditional hit chance rises after misses. High wildcards share a mean-15 stream
@@ -133,6 +157,8 @@ function generatePack(
   rng: RngState,
   collection: Readonly<Counts>,
   misses: WildcardMisses,
+  /** Mystical Archive (16): this set's archive sheet; one card of it takes the place of a common. */
+  archive?: Record<Rarity, string[]>,
 ): PackReward[] {
   // Replacements are rolled once per pack, before choosing identities.
   const common = wildcardHit(rng, misses, 'common');
@@ -145,11 +171,16 @@ function generatePack(
     : nextInt(rng, 7) === 0
       ? 'mythic'
       : 'rare';
-  const slots: { rarity: Rarity; wildcard: boolean }[] = [
-    ...Array.from({ length: 5 }, (_, i) => ({
+  const w = ARCHIVE_SLOT_WEIGHTS;
+  const archiveRoll = archive ? nextInt(rng, w.uncommon + w.rare + w.mythic) : 0;
+  const archiveRarity: Rarity =
+    archiveRoll < w.uncommon ? 'uncommon' : archiveRoll < w.uncommon + w.rare ? 'rare' : 'mythic';
+  const slots: { rarity: Rarity; wildcard: boolean; from?: Record<Rarity, string[]> }[] = [
+    ...Array.from({ length: archive ? 4 : 5 }, (_, i) => ({
       rarity: 'common' as const,
       wildcard: i === 0 && common,
     })),
+    ...(archive ? [{ rarity: archiveRarity, wildcard: false, from: archive }] : []),
     ...Array.from({ length: 2 }, (_, i) => ({
       rarity: 'uncommon' as const,
       wildcard: i === 0 && uncommon,
@@ -157,9 +188,9 @@ function generatePack(
     { rarity: highRarity, wildcard: high },
   ];
   const quantities = { ...collection };
-  return slots.map(({ rarity, wildcard }) => {
+  return slots.map(({ rarity, wildcard, from }) => {
     if (wildcard) return { kind: 'wildcard', rarity };
-    const id = protectedCard(rng, rarity, quantities, sheets);
+    const id = protectedCard(rng, rarity, quantities, from ?? sheets);
     quantities[id] = (quantities[id] ?? 0) + 1;
     return { kind: 'card', cardId: id };
   });
