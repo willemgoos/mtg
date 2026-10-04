@@ -35,7 +35,7 @@ export interface ManaCost {
 
 export type CardType =
   'Creature' | 'Instant' | 'Sorcery' | 'Land' | 'Enchantment' | 'Artifact' | 'Planeswalker';
-export type Supertype = 'Basic' | 'Legendary' | 'Snow'; // Strixhaven Brawl (15b, w): Snow
+export type Supertype = 'Basic' | 'Legendary' | 'Snow'; // Strixhaven Brawl (15b, w/u): Snow
 
 export type Keyword =
   | 'flying'
@@ -176,6 +176,8 @@ export interface CardDefinition {
     replacesCost?: boolean;
     /** Strixhaven (13c): what the alternative cost does, for the cast menu (Verdant Mastery). */
     altLabel?: string;
+    /** Strixhaven Brawl (15b, u): life paid as part of the alternative cost (Tezzeret's Gambit: 2). */
+    life?: number;
   };
   /** Costs {amount} less if its first target matches (Dire Downdraft: an attacking or tapped creature). */
   costReductionIfTarget?: {
@@ -307,6 +309,16 @@ export interface CardDefinition {
   bestowAbilities?: AbilityDef[];
   /** Bestow: this is the Aura form of the creature card with this id; unattached, it becomes that creature again. */
   bestowFront?: CardDefId;
+  // Strixhaven Brawl (15b, u): delve, spree, X-value targets
+  /** Delve: each card exiled from your graveyard pays for {1} of the generic cost (the engine exiles only as many as needed). */
+  delve?: boolean;
+  /**
+   * Spree: choose one or more of `pawprints` (one {P} each, no repeats); each mode adds its own cost here
+   * (index-aligned with `pawprints`) to the card's mana cost.
+   */
+  spree?: ManaCost[];
+  /** The first target's mana value must equal X (Stolen by the Fae). */
+  targetManaValueX?: boolean;
 }
 
 export type AbilityDef =
@@ -930,6 +942,9 @@ export interface CardFilter {
   hostOfSource?: boolean;
   /** Power less than the source's (mentor); for an Aura source, less than the power of the creature it enchants. */
   lesserPowerThanSource?: boolean;
+  // Strixhaven Brawl (15b, u): Wash Away
+  /** A spell on the stack that wasn't cast from its owner's hand. */
+  notCastFromHand?: boolean;
 }
 
 export interface TargetSpec {
@@ -1422,6 +1437,8 @@ export type EffectDef =
       cost: ManaCost;
       // Strixhaven (13a): Reject, "exile it instead of putting it into its owner's graveyard".
       exile?: boolean;
+      /** Strixhaven Brawl (15b, u): Syncopate, `cost` plus {X} (the value chosen for X). */
+      xCost?: boolean;
     }
   // Strixhaven (13a): Divide by Zero
   /** Return a target spell on the stack to its owner's hand. */
@@ -2290,6 +2307,11 @@ export interface GameObject {
   spellCopyCard?: boolean;
   /** Converge: the colours of mana spent to cast it (kept while it's on the battlefield). */
   manaColors?: Color[];
+  // Strixhaven Brawl (15b, u): plot, Housemeld
+  /** Plot: the turn it was exiled plotted (it can be cast for free on a later turn). */
+  plottedTurn?: number;
+  /** Housemeld: it perpetually has exactly these card types. */
+  perpetualTypes?: CardType[];
 }
 
 /** A reference that goes stale when the object changes zones. */
@@ -2491,6 +2513,9 @@ export interface TurnState {
   // Strixhaven (13c): Revel in Silence
   /** Players who can't activate planeswalkers' loyalty abilities this turn. */
   noLoyalty?: PlayerId[];
+  // Strixhaven Brawl (15b, u): Quicken
+  /** Players whose next sorcery spell this turn can be cast as though it had flash. */
+  sorceryFlash?: PlayerId[];
 }
 
 export interface Attacker {
@@ -3027,6 +3052,8 @@ export type Action =
       sacrificeMany?: ObjectId[];
       /** Times multikicker is paid (Batroc). */
       kickCount?: number;
+      /** Strixhaven Brawl (15b, u): cards exiled from the graveyard with delve. */
+      delve?: number;
       // Teamwork (Marvel Super Heroes)
       /** The creatures tapped to pay teamwork (a kicked teamwork spell). Omitted: the engine picks. */
       teamwork?: ObjectId[];

@@ -106,6 +106,8 @@ export interface CastChoice {
   // Strixhaven (13c): a 'free' cast that costs something (Jadzi: {1}, Uvilda: {4} less).
   freePay?: ManaCost | undefined;
   freeLess?: number | undefined;
+  /** Strixhaven Brawl (15b, u): delve, the cards exiled from the graveyard. */
+  delve?: number | undefined;
 }
 
 /** The creatures a kicked teamwork cast taps: the chosen ones, or the engine's pick (sparing mana sources if it can). */
@@ -340,6 +342,8 @@ export function castCost(
         if (a.kind === 'static' && a.effect.kind === 'instantsAndSorceriesCostLess')
           reduce += a.effect.amount;
     }
+  // Strixhaven Brawl (15b, u): delve pays for generic mana.
+  if (choice.delve) reduce += choice.delve;
   // {X}: X is chosen as the spell is cast.
   if (cost.x) cost = { ...cost, generic: cost.generic + cost.x * (choice.x ?? 0), x: 0 };
   // Strixhaven (13c): Plumb the Forbidden's sacrifices make copies, not a discount.
@@ -449,6 +453,14 @@ export function castSpell(
       const gone = graveyardCostCard(ctx, player, {}, card);
       if (gone) moveObject(ctx, gone, 'exile');
     }
+  // Strixhaven Brawl (15b, u): delve exiles the least useful cards from your graveyard.
+  for (let i = 0; i < (choice.delve ?? 0); i++) {
+    const gone = graveyardCostCard(ctx, player, {}, card);
+    if (gone) moveObject(ctx, gone, 'exile');
+  }
+  // Strixhaven Brawl (15b, u): Quicken is used up by the next sorcery you cast.
+  if (d.types.includes('Sorcery') && ctx.s.turn.sorceryFlash?.includes(player))
+    ctx.s.turn.sorceryFlash = ctx.s.turn.sorceryFlash.filter((p) => p !== player);
   // Strixhaven Brawl (15a): Patchplate Resolute's boon: that creature enters with an additional +1/+1 counter.
   if (d.types.includes('Creature') && (ctx.s.players[player].creatureBoons ?? 0) > 0) {
     ctx.s.players[player].creatureBoons!--;

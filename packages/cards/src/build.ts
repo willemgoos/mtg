@@ -192,6 +192,18 @@ export const KEYWORDS_AS_ABILITIES = new Set([
   'Hideaway',
   'Meld',
   'Triple',
+  // Strixhaven Brawl (15b, u): keywords that are labels or reminder text (rules text lives in the behaviour).
+  'Plot',
+  'Delve',
+  'Skulk',
+  'Spree',
+  'Cleave',
+  'Awaken',
+  'Proliferate',
+  'Amass',
+  'Boon',
+  'Perpetually',
+  'Phasing',
 ]);
 
 const BASIC_MANA: Record<string, ManaType> = {
@@ -211,7 +223,11 @@ export function parseManaCost(s: string): ManaCost {
       cost.colored[t] = (cost.colored[t] ?? 0) + 1;
     } else if (/^[WUBRG]\/[WUBRG]$/.test(sym!))
       (cost.hybrid ??= []).push(sym!.split('/') as [ManaType, ManaType]);
-    else if (/^2\/[WUBRG]$/.test(sym!))
+    // Strixhaven Brawl (15b, u): Phyrexian mana is paid with its colour (the 2-life option is a kicker alternative on the card).
+    else if (/^[WUBRG]\/P$/.test(sym!)) {
+      const t = sym!.split('/')[0] as ManaType;
+      cost.colored[t] = (cost.colored[t] ?? 0) + 1;
+    } else if (/^2\/[WUBRG]$/.test(sym!))
       (cost.twoHybrid ??= []).push(sym!.split('/')[1] as ManaType);
     else if (sym === 'X') cost.x = (cost.x ?? 0) + 1;
     else throw new Error(`Unsupported mana symbol {${sym}}`);

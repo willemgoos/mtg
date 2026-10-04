@@ -79,6 +79,12 @@ function spellOk(ctx: Ctx, spec: TargetSpec, id: ObjectId, src: TargetingSource)
   if (spec.controller === 'you' && o.controller !== src.controller) return false;
   if (spec.controller === 'opponent' && o.controller === src.controller) return false;
   if (id === src.sourceId) return false;
+  // Strixhaven Brawl (15b, u): Wash Away, "that wasn't cast from its owner's hand".
+  if (
+    spec.filter?.notCastFromHand &&
+    ctx.s.stack.some((x) => x.kind === 'spell' && x.id === id && x.fromHand)
+  )
+    return false;
   return !spec.filter || cardMatches(ctx, id, spec.filter, src.sourceId);
 }
 

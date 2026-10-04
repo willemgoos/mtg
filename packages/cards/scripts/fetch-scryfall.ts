@@ -29,6 +29,8 @@ const DIGITAL_SETS_ALLOWED = new Set([
   'yneo',
   'ydsk',
   'ydmu',
+  // Strixhaven Brawl (15b, u): Bounty of the Deep (Jumpstart: Historic Horizons).
+  'j21',
 ]);
 const outFile = join(root, 'src', 'generated', 'scryfall.json');
 const headers = { 'User-Agent': 'mtg-personal-client/0.1', Accept: 'application/json' };

@@ -130,7 +130,13 @@ export function castableCards(ctx: Ctx, player: PlayerId): ObjectId[] {
   // Extract Power: either player's exiled cards you may play for free.
   for (const p of ['p1', 'p2'] as const)
     for (const id of ctx.s.players[p].exile)
-      if (obj(ctx, id).playFreeBy === player && !out.includes(id)) out.push(id);
+      if (
+        obj(ctx, id).playFreeBy === player &&
+        !out.includes(id) &&
+        // Strixhaven Brawl (15b, u): plot, only on a later turn.
+        (obj(ctx, id).plottedTurn === undefined || obj(ctx, id).plottedTurn! < ctx.s.turn.number)
+      )
+        out.push(id);
   const top = ps.library[0];
   if (
     top &&
@@ -309,7 +315,9 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
       d.keywords.includes('flash') ||
       flashFilters.some((f) => cardMatches(ctx, card, f)) ||
       // Progenitor's Icon: spells of the chosen type have flash this turn.
-      !!s.turn.flashTypes?.some((f) => f.player === player && d.subtypes.includes(f.type));
+      !!s.turn.flashTypes?.some((f) => f.player === player && d.subtypes.includes(f.type)) ||
+      // Strixhaven Brawl (15b, u): Quicken, the next sorcery spell you cast this turn.
+      (d.types.includes('Sorcery') && !!s.turn.sorceryFlash?.includes(player));
     // Restricted mana (Giada: only for Angels; Villages: only for creature spells).
     const base = restricted ? manaSources(ctx, player, undefined, spellTags(d)) : sources;
     // Convoke: untapped creatures can pay for {1} each.
@@ -398,10 +406,25 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
               discard: v.discard ? 'x' : undefined,
               forage: v.forage ? 'graveyard' : undefined,
               x,
+              delve: undefined as number | undefined,
             };
             // Teamwork: kicked only if there are creatures to tap.
             const teamwork = teamworkFor(ctx, player, card, { kicked: v.kicked });
             if (v.kicked && d.kicker?.teamwork !== undefined && !teamwork) continue;
+            // Strixhaven Brawl (15b, u): delve, exiling only as many cards as the cost needs.
+            if (d.delve) {
+              const most = Math.min(
+                ps.graveyard.filter((id) => id !== card).length,
+                v.cost.generic,
+              );
+              let k = 0;
+              while (
+                k < most &&
+                !canPayFrom(castCost(ctx, player, card, { ...choice, delve: k }), pool)
+              )
+                k++;
+              if (k > 0) choice.delve = k;
+            }
             const base = castCost(ctx, player, card, choice);
             // Strixhaven (13b): Killian also lowers the cost by what the spell targets.
             const targetDiscount = !!d.costReductionIfTarget || hasTargetCostReduction(ctx, player);
@@ -412,6 +435,7 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
               ...(v.kickCount ? { kickCount: v.kickCount } : {}),
               ...(x !== undefined ? { x } : {}),
               ...(v.paws ? { paws: v.paws } : {}),
+              ...(choice.delve ? { delve: choice.delve } : {}),
               ...(via ? { via } : {}),
               ...(sacrificeMany ? { sacrificeMany } : {}),
             };
@@ -440,6 +464,16 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
               for (const targets of combosFor(specs, card, sacrifice)) {
                 // Strixhaven (13c): Crackle with Power: up to X targets.
                 if (d.upToXTargets && targets.length > (x ?? 0)) continue;
+                // Strixhaven Brawl (15b, u): Stolen by the Fae, the target's mana value is X.
+                if (d.targetManaValueX) {
+                  const first = targets[0];
+                  if (
+                    !first ||
+                    !('object' in first) ||
+                    manaValue(def(ctx, first.object.id).manaCost) !== (x ?? 0)
+                  )
+                    continue;
+                }
                 const ward = wardCost(ctx, player, targets);
                 // Dire Downdraft costs less with some targets.
                 const cost = targetDiscount ? castCost(ctx, player, card, choice, targets) : base;
