@@ -551,6 +551,21 @@ describe('Codie, Vociferous Codex', () => {
     expect(casts.some((a) => a.type === 'castSpell' && g.obj(a.card).defId === 'shock')).toBe(true);
   });
 
+  it('can be cast from the command zone, and does not stop the opponent casting permanents', () => {
+    const g = game({
+      p1: { commander: 'codie-vociferous-codex', battlefield: n('forest', 3) },
+    });
+    const commander = g.state.players.p1.commander!;
+    expect(g.legal().some((a) => a.type === 'castSpell' && a.card === commander)).toBe(true);
+    const h = game({
+      p1: { hand: ['bear-cub'], battlefield: ['forest', 'forest'] },
+      p2: { battlefield: ['codie-vociferous-codex'] },
+    });
+    expect(
+      h.legal().some((a) => a.type === 'castSpell' && h.obj(a.card).defId === 'bear-cub'),
+    ).toBe(true);
+  });
+
   it('makes five mana, and your next spell finds a cheaper instant or sorcery to cast free', () => {
     const g = game({
       p1: {

@@ -125,6 +125,43 @@ export function createHeuristicBot(db: CardDb, name = 'heuristic'): Bot {
 // Priority
 // ---------------------------------------------------------------------------
 
+/**
+ * Codie, Vociferous Codex: {4},{T} turns four lands into five mana of any
+ * colours and makes the next spell find a free, cheaper instant or sorcery.
+ * The evaluation can't see that payoff, so activate it by rule in our main
+ * phase when an instant or sorcery in hand (mana value 2 or more, so the
+ * trigger can find something cheaper) is affordable with the extra mana.
+ */
+function chooseCodie(
+  engine: Engine,
+  view: GameState,
+  me: PlayerId,
+  legal: Action[],
+): Action | undefined {
+  if (view.turn.activePlayer !== me || view.stack.length > 0) return undefined;
+  if (view.turn.step !== 'main1' && view.turn.step !== 'main2') return undefined;
+  if (view.players[me].pool?.some((m) => m.untilEndOfTurn)) return undefined;
+  const act = legal.find(
+    (a) =>
+      a.type === 'activateAbility' &&
+      view.objects[a.source]?.defId === 'codie-vociferous-codex' &&
+      a.abilityIndex === 1,
+  );
+  if (!act) return undefined;
+  const untapped = view.battlefield.filter((id) => {
+    const o = view.objects[id]!;
+    return o.controller === me && !o.tapped && isLand(engine, view, id);
+  }).length;
+  const afford = untapped + 1;
+  const worthIt = view.players[me].hand.some((id) => {
+    const c = engine.db.get(view.objects[id]!.defId);
+    if (!c || !c.types.some((t) => t === 'Instant' || t === 'Sorcery')) return false;
+    const mv = manaValue(c.manaCost);
+    return mv >= 2 && mv <= afford;
+  });
+  return worthIt ? act : undefined;
+}
+
 function choosePriorityAction(
   engine: Engine,
   view: GameState,
@@ -135,6 +172,8 @@ function choosePriorityAction(
   if (lands.length > 0) return chooseLandToPlay(engine, view, me, lands);
 
   const pass = legal.find((a) => a.type === 'passPriority')!;
+  const codie = chooseCodie(engine, view, me, legal);
+  if (codie) return codie;
   // Teamwork taps our creatures: never before our own attack (the evaluation can't see the lost attack).
   const beforeOurAttack =
     view.turn.activePlayer === me &&

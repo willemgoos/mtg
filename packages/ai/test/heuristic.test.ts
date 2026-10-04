@@ -244,3 +244,24 @@ describe('easy bot', () => {
     });
   });
 });
+
+describe('heuristic bot: Codie, Vociferous Codex', () => {
+  it('activates Codie in its main phase when an instant or sorcery in hand needs the mana', () => {
+    const g = game({
+      p1: {
+        hand: ['lightning-strike'],
+        battlefield: ['codie-vociferous-codex', ...lands('forest', 4)],
+      },
+    });
+    const a = choose(g);
+    expect(a.type).toBe('activateAbility');
+    expect(a.type === 'activateAbility' && name(g, a.source)).toBe('codie-vociferous-codex');
+  });
+
+  it('leaves Codie alone with nothing to cast', () => {
+    const g = game({
+      p1: { hand: [], battlefield: ['codie-vociferous-codex', ...lands('forest', 4)] },
+    });
+    expect(choose(g).type).toBe('passPriority');
+  });
+});
