@@ -219,11 +219,13 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
     toughness,
     keywords,
     types:
-      (crewed || o.copyAsCreature) && !d.types.includes('Creature')
+      // Strixhaven Brawl (15b, u): Housemeld, perpetually an enchantment.
+      o.perpetualTypes ??
+      ((crewed || o.copyAsCreature) && !d.types.includes('Creature')
         ? [...d.types, 'Creature']
         : o.notCreature
           ? d.types.filter((x) => x !== 'Creature')
-          : d.types,
+          : d.types),
     subtypes,
     cantBlock,
     cantBeBlocked,

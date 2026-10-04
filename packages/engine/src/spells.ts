@@ -66,6 +66,15 @@ export function pawCombos(d: CardDefinition): number[][] {
   return out;
 }
 
+/** Strixhaven Brawl (15b, u): every non-empty set of a spree card's modes, in printed order. */
+export function spreeCombos(d: CardDefinition): number[][] {
+  const n = d.pawprints?.length ?? 0;
+  const out: number[][] = [];
+  for (let mask = 1; mask < 1 << n; mask++)
+    out.push(Array.from({ length: n }, (_, i) => i).filter((i) => mask & (1 << i)));
+  return out;
+}
+
 /** Shifts target indices ({ target: n }, controllerOf, ownerOf) by `by`. */
 function shiftTargets<T>(x: T, by: number): T {
   if (Array.isArray(x)) return x.map((v) => shiftTargets(v, by)) as T;
@@ -141,6 +150,13 @@ export function castVariants(d: CardDefinition, zone: ZoneName, via?: CastVia): 
   const cost = flashback ? d.flashback! : d.manaCost;
   // Deep Analysis: "Flashback—{1}{U}, Pay 3 life."
   const life = flashback && d.flashbackLife ? { life: d.flashbackLife } : {};
+  // Strixhaven Brawl (15b, u): spree: any non-empty set of modes, each adding its own cost.
+  if (d.pawprints && d.spree)
+    return spreeCombos(d).map((paws) => ({
+      paws,
+      cost: paws.reduce((c, m) => addCosts(c, d.spree![m]!), cost),
+      spell: pawSpell(d, paws),
+    }));
   if (d.pawprints) return pawCombos(d).map((paws) => ({ paws, cost, spell: pawSpell(d, paws) }));
   const extra = flashback ? { flashback: true, ...life } : {};
   if (d.modes) {
@@ -198,6 +214,8 @@ export function castVariants(d: CardDefinition, zone: ZoneName, via?: CastVia): 
       spell: d.kicker.spell ?? d.spell ?? null,
       // Final Fantasy (11b): a kicker paid with a permanent (chosen like a sacrifice).
       ...(d.kicker.sacrifice || d.kicker.returnLand ? { sacrifice: true } : {}),
+      // Strixhaven Brawl (15b, u): Tezzeret's Gambit, "pay 2 life" for the Phyrexian pip.
+      ...(d.kicker.life ? { life: d.kicker.life } : {}),
       ...extra,
     });
   return out;

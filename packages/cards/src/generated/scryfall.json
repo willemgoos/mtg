@@ -46192,5 +46192,1109 @@
    "large": "https://cards.scryfall.io/large/front/5/2/52e55b85-92c1-4b83-9a9d-4afb8e938e4f.jpg?1783927081",
    "artCrop": "https://cards.scryfall.io/art_crop/front/5/2/52e55b85-92c1-4b83-9a9d-4afb8e938e4f.jpg?1783927081"
   }
+ },
+ {
+  "name": "Slickshot Lockpicker",
+  "scryfallId": "109a9464-ce30-4747-874e-3bbf75913081",
+  "oracleId": "e6e4ad3c-079d-429b-9f29-b9e42a1a236f",
+  "set": "otj",
+  "collectorNumber": "67",
+  "rarity": "uncommon",
+  "manaCost": "{2}{U}",
+  "typeLine": "Creature — Human Rogue",
+  "oracleText": "When this creature enters, target instant or sorcery card in your graveyard gains flashback until end of turn. The flashback cost is equal to its mana cost. (You may cast that card from your graveyard for its flashback cost. Then exile it.)\nPlot {2}{U} (You may pay {2}{U} and exile this card from your hand. Cast it as a sorcery on a later turn without paying its mana cost. Plot only as a sorcery.)",
+  "power": "2",
+  "toughness": "3",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Plot"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/0/109a9464-ce30-4747-874e-3bbf75913081.jpg?1783911840",
+   "normal": "https://cards.scryfall.io/normal/front/1/0/109a9464-ce30-4747-874e-3bbf75913081.jpg?1783911840",
+   "large": "https://cards.scryfall.io/large/front/1/0/109a9464-ce30-4747-874e-3bbf75913081.jpg?1783911840",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/0/109a9464-ce30-4747-874e-3bbf75913081.jpg?1783911840"
+  }
+ },
+ {
+  "name": "Soulblade Djinn",
+  "scryfallId": "e2a48455-dde4-4263-9146-af547c0aad48",
+  "oracleId": "a598e6ce-21ee-49c1-989e-ee864208262f",
+  "set": "ori",
+  "collectorNumber": "75",
+  "rarity": "rare",
+  "manaCost": "{3}{U}{U}",
+  "typeLine": "Creature — Djinn",
+  "oracleText": "Flying\nWhenever you cast a noncreature spell, creatures you control get +1/+1 until end of turn.",
+  "power": "4",
+  "toughness": "3",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/2/e2a48455-dde4-4263-9146-af547c0aad48.jpg?1783938347",
+   "normal": "https://cards.scryfall.io/normal/front/e/2/e2a48455-dde4-4263-9146-af547c0aad48.jpg?1783938347",
+   "large": "https://cards.scryfall.io/large/front/e/2/e2a48455-dde4-4263-9146-af547c0aad48.jpg?1783938347",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/2/e2a48455-dde4-4263-9146-af547c0aad48.jpg?1783938347"
+  }
+ },
+ {
+  "name": "Ingenious Prodigy",
+  "scryfallId": "8d242dc2-5117-4bd6-a0c9-813d36d01e11",
+  "oracleId": "6f498ff7-38c9-44ea-9cb5-994a003825ee",
+  "set": "soc",
+  "collectorNumber": "115",
+  "rarity": "rare",
+  "manaCost": "{X}{U}",
+  "typeLine": "Creature — Human Wizard",
+  "oracleText": "Skulk (This creature can't be blocked by creatures with greater power.)\nThis creature enters with X +1/+1 counters on it.\nAt the beginning of your upkeep, if this creature has one or more +1/+1 counters on it, you may remove a +1/+1 counter from it. If you do, draw a card.",
+  "power": "0",
+  "toughness": "1",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Skulk"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/d/8d242dc2-5117-4bd6-a0c9-813d36d01e11.jpg?1783903822",
+   "normal": "https://cards.scryfall.io/normal/front/8/d/8d242dc2-5117-4bd6-a0c9-813d36d01e11.jpg?1783903822",
+   "large": "https://cards.scryfall.io/large/front/8/d/8d242dc2-5117-4bd6-a0c9-813d36d01e11.jpg?1783903822",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/d/8d242dc2-5117-4bd6-a0c9-813d36d01e11.jpg?1783903822"
+  }
+ },
+ {
+  "name": "Hydroelectric Specimen",
+  "scryfallId": "8689ecd7-e9a6-458b-99d2-6dbaca527f00",
+  "oracleId": "573151f0-00d4-4a8a-8a09-745c5f376532",
+  "set": "mh3",
+  "collectorNumber": "240",
+  "rarity": "uncommon",
+  "manaCost": "{2}{U}",
+  "typeLine": "Creature — Weird",
+  "oracleText": "Flash\nWhen this creature enters, you may change the target of target instant or sorcery spell with a single target to this creature.",
+  "power": "1",
+  "toughness": "4",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Flash"
+  ],
+  "back": "Hydroelectric Laboratory",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/6/8689ecd7-e9a6-458b-99d2-6dbaca527f00.jpg?1783911234",
+   "normal": "https://cards.scryfall.io/normal/front/8/6/8689ecd7-e9a6-458b-99d2-6dbaca527f00.jpg?1783911234",
+   "large": "https://cards.scryfall.io/large/front/8/6/8689ecd7-e9a6-458b-99d2-6dbaca527f00.jpg?1783911234",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/6/8689ecd7-e9a6-458b-99d2-6dbaca527f00.jpg?1783911234"
+  }
+ },
+ {
+  "name": "Hydroelectric Laboratory",
+  "scryfallId": "8689ecd7-e9a6-458b-99d2-6dbaca527f00",
+  "oracleId": "573151f0-00d4-4a8a-8a09-745c5f376532",
+  "set": "mh3",
+  "collectorNumber": "240",
+  "rarity": "uncommon",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "As this land enters, you may pay 3 life. If you don't, it enters tapped.\n{T}: Add {U}.",
+  "colors": [],
+  "keywords": [],
+  "front": "Hydroelectric Specimen",
+  "image": {
+   "small": "https://cards.scryfall.io/small/back/8/6/8689ecd7-e9a6-458b-99d2-6dbaca527f00.jpg?1783911234",
+   "normal": "https://cards.scryfall.io/normal/back/8/6/8689ecd7-e9a6-458b-99d2-6dbaca527f00.jpg?1783911234",
+   "large": "https://cards.scryfall.io/large/back/8/6/8689ecd7-e9a6-458b-99d2-6dbaca527f00.jpg?1783911234",
+   "artCrop": "https://cards.scryfall.io/art_crop/back/8/6/8689ecd7-e9a6-458b-99d2-6dbaca527f00.jpg?1783911234"
+  }
+ },
+ {
+  "name": "Haughty Djinn",
+  "scryfallId": "35095a68-b7c0-4805-b0b6-6ca15a338692",
+  "oracleId": "44036bb5-f300-40bd-9180-6b246315d886",
+  "set": "dmu",
+  "collectorNumber": "52",
+  "rarity": "rare",
+  "manaCost": "{1}{U}{U}",
+  "typeLine": "Creature — Djinn",
+  "oracleText": "Flying\nHaughty Djinn's power is equal to the number of instant and sorcery cards in your graveyard.\nInstant and sorcery spells you cast cost {1} less to cast.",
+  "power": "*",
+  "toughness": "4",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/5/35095a68-b7c0-4805-b0b6-6ca15a338692.jpg?1783921349",
+   "normal": "https://cards.scryfall.io/normal/front/3/5/35095a68-b7c0-4805-b0b6-6ca15a338692.jpg?1783921349",
+   "large": "https://cards.scryfall.io/large/front/3/5/35095a68-b7c0-4805-b0b6-6ca15a338692.jpg?1783921349",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/5/35095a68-b7c0-4805-b0b6-6ca15a338692.jpg?1783921349"
+  }
+ },
+ {
+  "name": "Murmuring Mystic",
+  "scryfallId": "d3fbbf86-d784-4dd0-b3f1-818c2a74a940",
+  "oracleId": "dcd4da46-5438-4454-8b1b-43ca51bda1f9",
+  "set": "j25",
+  "collectorNumber": "107",
+  "rarity": "uncommon",
+  "manaCost": "{3}{U}",
+  "typeLine": "Creature — Human Wizard",
+  "oracleText": "Whenever you cast an instant or sorcery spell, create a 1/1 blue Bird Illusion creature token with flying.",
+  "power": "1",
+  "toughness": "5",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/3/d3fbbf86-d784-4dd0-b3f1-818c2a74a940.jpg?1783908836",
+   "normal": "https://cards.scryfall.io/normal/front/d/3/d3fbbf86-d784-4dd0-b3f1-818c2a74a940.jpg?1783908836",
+   "large": "https://cards.scryfall.io/large/front/d/3/d3fbbf86-d784-4dd0-b3f1-818c2a74a940.jpg?1783908836",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/3/d3fbbf86-d784-4dd0-b3f1-818c2a74a940.jpg?1783908836"
+  }
+ },
+ {
+  "name": "Reflective Rimekin",
+  "scryfallId": "e37ba923-1d41-4d39-a9bb-df5bc142d74e",
+  "oracleId": "6e924ac1-c9f1-4fd1-8c44-a933b82151fd",
+  "set": "yecl",
+  "collectorNumber": "6",
+  "rarity": "uncommon",
+  "manaCost": "{2}{U}",
+  "typeLine": "Creature — Elemental Wizard",
+  "oracleText": "When this creature enters, you get a one-time boon with \"When you cast an instant or sorcery spell with mana value 3 or less, copy it. You may choose new targets for the copy.\"",
+  "power": "3",
+  "toughness": "2",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/3/e37ba923-1d41-4d39-a9bb-df5bc142d74e.jpg?1783904259",
+   "normal": "https://cards.scryfall.io/normal/front/e/3/e37ba923-1d41-4d39-a9bb-df5bc142d74e.jpg?1783904259",
+   "large": "https://cards.scryfall.io/large/front/e/3/e37ba923-1d41-4d39-a9bb-df5bc142d74e.jpg?1783904259",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/3/e37ba923-1d41-4d39-a9bb-df5bc142d74e.jpg?1783904259"
+  }
+ },
+ {
+  "name": "Counterspell",
+  "scryfallId": "8bed211e-f3ec-4e9e-b9a7-0989930dd049",
+  "oracleId": "cc187110-1148-4090-bbb8-e205694a39f5",
+  "set": "7ed",
+  "collectorNumber": "67★",
+  "rarity": "common",
+  "manaCost": "{U}{U}",
+  "typeLine": "Instant",
+  "oracleText": "Counter target spell.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/b/8bed211e-f3ec-4e9e-b9a7-0989930dd049.jpg?1783945556",
+   "normal": "https://cards.scryfall.io/normal/front/8/b/8bed211e-f3ec-4e9e-b9a7-0989930dd049.jpg?1783945556",
+   "large": "https://cards.scryfall.io/large/front/8/b/8bed211e-f3ec-4e9e-b9a7-0989930dd049.jpg?1783945556",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/b/8bed211e-f3ec-4e9e-b9a7-0989930dd049.jpg?1783945556"
+  }
+ },
+ {
+  "name": "Spell Pierce",
+  "scryfallId": "a4f8b11a-6b21-4532-96c9-bdb2cad603e8",
+  "oracleId": "d64b0848-0193-4025-ba62-63ecd8fb9f50",
+  "set": "sld",
+  "collectorNumber": "41",
+  "rarity": "rare",
+  "manaCost": "{U}",
+  "typeLine": "Instant",
+  "oracleText": "Counter target noncreature spell unless its controller pays {2}.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/4/a4f8b11a-6b21-4532-96c9-bdb2cad603e8.jpg?1783930778",
+   "normal": "https://cards.scryfall.io/normal/front/a/4/a4f8b11a-6b21-4532-96c9-bdb2cad603e8.jpg?1783930778",
+   "large": "https://cards.scryfall.io/large/front/a/4/a4f8b11a-6b21-4532-96c9-bdb2cad603e8.jpg?1783930778",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/4/a4f8b11a-6b21-4532-96c9-bdb2cad603e8.jpg?1783930778"
+  }
+ },
+ {
+  "name": "Syncopate",
+  "scryfallId": "83e1cd8d-5b97-427a-be75-2a1947f9c59b",
+  "oracleId": "318f7f70-e374-40ef-8afb-3389c10461d8",
+  "set": "fin",
+  "collectorNumber": "80",
+  "rarity": "common",
+  "manaCost": "{X}{U}",
+  "typeLine": "Instant",
+  "oracleText": "Counter target spell unless its controller pays {X}. If that spell is countered this way, exile it instead of putting it into its owner's graveyard.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/3/83e1cd8d-5b97-427a-be75-2a1947f9c59b.jpg?1783906627",
+   "normal": "https://cards.scryfall.io/normal/front/8/3/83e1cd8d-5b97-427a-be75-2a1947f9c59b.jpg?1783906627",
+   "large": "https://cards.scryfall.io/large/front/8/3/83e1cd8d-5b97-427a-be75-2a1947f9c59b.jpg?1783906627",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/3/83e1cd8d-5b97-427a-be75-2a1947f9c59b.jpg?1783906627"
+  }
+ },
+ {
+  "name": "Spell Swindle",
+  "scryfallId": "6e619ada-e9ce-4758-afd8-8def853877eb",
+  "oracleId": "81fa8e6a-5fb8-43de-802f-df5b985c6a7d",
+  "set": "xln",
+  "collectorNumber": "82",
+  "rarity": "rare",
+  "manaCost": "{3}{U}{U}",
+  "typeLine": "Instant",
+  "oracleText": "Counter target spell. Create X Treasure tokens, where X is that spell's mana value. (They're artifacts with \"{T}, Sacrifice this token: Add one mana of any color.\")",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Treasure"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/e/6e619ada-e9ce-4758-afd8-8def853877eb.jpg?1783935770",
+   "normal": "https://cards.scryfall.io/normal/front/6/e/6e619ada-e9ce-4758-afd8-8def853877eb.jpg?1783935770",
+   "large": "https://cards.scryfall.io/large/front/6/e/6e619ada-e9ce-4758-afd8-8def853877eb.jpg?1783935770",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/e/6e619ada-e9ce-4758-afd8-8def853877eb.jpg?1783935770"
+  }
+ },
+ {
+  "name": "Essence Capture",
+  "scryfallId": "f39bf1fa-b530-4353-a683-843466227109",
+  "oracleId": "0f730bd9-2060-46b1-9208-0ac6562e8b2a",
+  "set": "neo",
+  "collectorNumber": "52",
+  "rarity": "uncommon",
+  "manaCost": "{U}{U}",
+  "typeLine": "Instant",
+  "oracleText": "Counter target creature spell. Put a +1/+1 counter on up to one target creature you control.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/3/f39bf1fa-b530-4353-a683-843466227109.jpg?1783923906",
+   "normal": "https://cards.scryfall.io/normal/front/f/3/f39bf1fa-b530-4353-a683-843466227109.jpg?1783923906",
+   "large": "https://cards.scryfall.io/large/front/f/3/f39bf1fa-b530-4353-a683-843466227109.jpg?1783923906",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/3/f39bf1fa-b530-4353-a683-843466227109.jpg?1783923906"
+  }
+ },
+ {
+  "name": "Wash Away",
+  "scryfallId": "43411ade-be80-4535-8baa-7055e78496df",
+  "oracleId": "a4630da0-fe9b-4ead-9621-eac4b7825c35",
+  "set": "vow",
+  "collectorNumber": "87",
+  "rarity": "uncommon",
+  "manaCost": "{U}",
+  "typeLine": "Instant",
+  "oracleText": "Cleave {1}{U}{U} (You may cast this spell for its cleave cost. If you do, remove the words in square brackets.)\nCounter target spell [that wasn't cast from its owner's hand].",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Cleave"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/3/43411ade-be80-4535-8baa-7055e78496df.jpg?1783924878",
+   "normal": "https://cards.scryfall.io/normal/front/4/3/43411ade-be80-4535-8baa-7055e78496df.jpg?1783924878",
+   "large": "https://cards.scryfall.io/large/front/4/3/43411ade-be80-4535-8baa-7055e78496df.jpg?1783924878",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/3/43411ade-be80-4535-8baa-7055e78496df.jpg?1783924878"
+  }
+ },
+ {
+  "name": "Three Steps Ahead",
+  "scryfallId": "8fffd839-2337-4a14-9312-cee085a17f4b",
+  "oracleId": "282dfeaa-6243-4f92-838a-5cb54fa85184",
+  "set": "otj",
+  "collectorNumber": "75",
+  "rarity": "rare",
+  "manaCost": "{U}",
+  "typeLine": "Instant",
+  "oracleText": "Spree (Choose one or more additional costs.)\n+ {1}{U} — Counter target spell.\n+ {3} — Create a token that's a copy of target artifact or creature you control.\n+ {2} — Draw two cards, then discard a card.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Spree"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/f/8fffd839-2337-4a14-9312-cee085a17f4b.jpg?1783911837",
+   "normal": "https://cards.scryfall.io/normal/front/8/f/8fffd839-2337-4a14-9312-cee085a17f4b.jpg?1783911837",
+   "large": "https://cards.scryfall.io/large/front/8/f/8fffd839-2337-4a14-9312-cee085a17f4b.jpg?1783911837",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/f/8fffd839-2337-4a14-9312-cee085a17f4b.jpg?1783911837"
+  }
+ },
+ {
+  "name": "Quicken",
+  "scryfallId": "066bef3d-c785-4b25-9b91-8f676aa9906f",
+  "oracleId": "cf188dd3-1927-481b-b8c0-93b1222dbf53",
+  "set": "m14",
+  "collectorNumber": "68",
+  "rarity": "rare",
+  "manaCost": "{U}",
+  "typeLine": "Instant",
+  "oracleText": "The next sorcery spell you cast this turn can be cast as though it had flash. (It can be cast any time you could cast an instant.)\nDraw a card.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/6/066bef3d-c785-4b25-9b91-8f676aa9906f.jpg?1783939931",
+   "normal": "https://cards.scryfall.io/normal/front/0/6/066bef3d-c785-4b25-9b91-8f676aa9906f.jpg?1783939931",
+   "large": "https://cards.scryfall.io/large/front/0/6/066bef3d-c785-4b25-9b91-8f676aa9906f.jpg?1783939931",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/6/066bef3d-c785-4b25-9b91-8f676aa9906f.jpg?1783939931"
+  }
+ },
+ {
+  "name": "Preordain",
+  "scryfallId": "e3868c3d-4fcd-444b-866f-0f8e50ce7b67",
+  "oracleId": "ac641490-ca14-48d7-8cc4-b69ce984befa",
+  "set": "m11",
+  "collectorNumber": "70",
+  "rarity": "common",
+  "manaCost": "{U}",
+  "typeLine": "Sorcery",
+  "oracleText": "Scry 2, then draw a card. (To scry 2, look at the top two cards of your library, then put any number of them on the bottom and the rest on top in any order.)",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Scry"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/3/e3868c3d-4fcd-444b-866f-0f8e50ce7b67.jpg?1783941822",
+   "normal": "https://cards.scryfall.io/normal/front/e/3/e3868c3d-4fcd-444b-866f-0f8e50ce7b67.jpg?1783941822",
+   "large": "https://cards.scryfall.io/large/front/e/3/e3868c3d-4fcd-444b-866f-0f8e50ce7b67.jpg?1783941822",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/3/e3868c3d-4fcd-444b-866f-0f8e50ce7b67.jpg?1783941822"
+  }
+ },
+ {
+  "name": "Consider",
+  "scryfallId": "f80f726b-471c-4bc1-8fd7-66db5207e4ce",
+  "oracleId": "4c9bcba6-87b5-4fb3-97ee-6fe5b739337d",
+  "set": "sld",
+  "collectorNumber": "1524",
+  "rarity": "rare",
+  "manaCost": "{U}",
+  "typeLine": "Instant",
+  "oracleText": "Surveil 1. (Look at the top card of your library. You may put it into your graveyard.)\nDraw a card.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Surveil"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/8/f80f726b-471c-4bc1-8fd7-66db5207e4ce.jpg?1783912477",
+   "normal": "https://cards.scryfall.io/normal/front/f/8/f80f726b-471c-4bc1-8fd7-66db5207e4ce.jpg?1783912477",
+   "large": "https://cards.scryfall.io/large/front/f/8/f80f726b-471c-4bc1-8fd7-66db5207e4ce.jpg?1783912477",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/8/f80f726b-471c-4bc1-8fd7-66db5207e4ce.jpg?1783912477"
+  }
+ },
+ {
+  "name": "Deduce",
+  "scryfallId": "7cbb17af-e17e-438a-ad72-0c942e6706b6",
+  "oracleId": "eeae4161-9f35-45df-8b3c-c55e37f49cd1",
+  "set": "mkm",
+  "collectorNumber": "52",
+  "rarity": "common",
+  "manaCost": "{1}{U}",
+  "typeLine": "Instant",
+  "oracleText": "Draw a card. Investigate. (Create a Clue token. It's an artifact with \"{2}, Sacrifice this token: Draw a card.\")",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Investigate"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/c/7cbb17af-e17e-438a-ad72-0c942e6706b6.jpg?1783912912",
+   "normal": "https://cards.scryfall.io/normal/front/7/c/7cbb17af-e17e-438a-ad72-0c942e6706b6.jpg?1783912912",
+   "large": "https://cards.scryfall.io/large/front/7/c/7cbb17af-e17e-438a-ad72-0c942e6706b6.jpg?1783912912",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/c/7cbb17af-e17e-438a-ad72-0c942e6706b6.jpg?1783912912"
+  }
+ },
+ {
+  "name": "Stock Up",
+  "scryfallId": "ad048b7c-588f-4c34-906f-4224f1aaaeb6",
+  "oracleId": "2251e34e-4ce8-4452-9dc6-d8cce8583996",
+  "set": "soa",
+  "collectorNumber": "24",
+  "rarity": "uncommon",
+  "manaCost": "{2}{U}",
+  "typeLine": "Sorcery",
+  "oracleText": "Look at the top five cards of your library. Put two of them into your hand and the rest on the bottom of your library in any order.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/d/ad048b7c-588f-4c34-906f-4224f1aaaeb6.jpg?1783903928",
+   "normal": "https://cards.scryfall.io/normal/front/a/d/ad048b7c-588f-4c34-906f-4224f1aaaeb6.jpg?1783903928",
+   "large": "https://cards.scryfall.io/large/front/a/d/ad048b7c-588f-4c34-906f-4224f1aaaeb6.jpg?1783903928",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/d/ad048b7c-588f-4c34-906f-4224f1aaaeb6.jpg?1783903928"
+  }
+ },
+ {
+  "name": "Experimental Augury",
+  "scryfallId": "e508ae5d-ffb5-4480-be90-a4394954b559",
+  "oracleId": "2ee08dcd-5558-45be-b619-8a550f3865ad",
+  "set": "one",
+  "collectorNumber": "49",
+  "rarity": "common",
+  "manaCost": "{1}{U}",
+  "typeLine": "Instant",
+  "oracleText": "Look at the top three cards of your library. Put one of them into your hand and the rest on the bottom of your library in any order. Proliferate. (Choose any number of permanents and/or players, then give each another counter of each kind already there.)",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Proliferate"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/5/e508ae5d-ffb5-4480-be90-a4394954b559.jpg?1783918065",
+   "normal": "https://cards.scryfall.io/normal/front/e/5/e508ae5d-ffb5-4480-be90-a4394954b559.jpg?1783918065",
+   "large": "https://cards.scryfall.io/large/front/e/5/e508ae5d-ffb5-4480-be90-a4394954b559.jpg?1783918065",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/5/e508ae5d-ffb5-4480-be90-a4394954b559.jpg?1783918065"
+  }
+ },
+ {
+  "name": "Tezzeret's Gambit",
+  "scryfallId": "fff5a09e-9276-44b8-b374-4b84aebd47cc",
+  "oracleId": "b33d2b77-f068-4fdc-a1a8-0353a35e3973",
+  "set": "nph",
+  "collectorNumber": "47",
+  "rarity": "uncommon",
+  "manaCost": "{3}{U/P}",
+  "typeLine": "Sorcery",
+  "oracleText": "({U/P} can be paid with either {U} or 2 life.)\nDraw two cards, then proliferate. (Choose any number of permanents and/or players, then give each another counter of each kind already there.)",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Proliferate"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/f/fff5a09e-9276-44b8-b374-4b84aebd47cc.jpg?1783941318",
+   "normal": "https://cards.scryfall.io/normal/front/f/f/fff5a09e-9276-44b8-b374-4b84aebd47cc.jpg?1783941318",
+   "large": "https://cards.scryfall.io/large/front/f/f/fff5a09e-9276-44b8-b374-4b84aebd47cc.jpg?1783941318",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/f/fff5a09e-9276-44b8-b374-4b84aebd47cc.jpg?1783941318"
+  }
+ },
+ {
+  "name": "Unexpected Assistance",
+  "scryfallId": "7b540a5f-7f1b-421a-864f-5af469556fc6",
+  "oracleId": "c452e748-8a2a-4f68-8869-e294925a8b0b",
+  "set": "ecl",
+  "collectorNumber": "80",
+  "rarity": "common",
+  "manaCost": "{3}{U}{U}",
+  "typeLine": "Instant",
+  "oracleText": "Convoke (Your creatures can help cast this spell. Each creature you tap while casting this spell pays for {1} or one mana of that creature's color.)\nDraw three cards, then discard a card.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Convoke"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/b/7b540a5f-7f1b-421a-864f-5af469556fc6.jpg?1783904474",
+   "normal": "https://cards.scryfall.io/normal/front/7/b/7b540a5f-7f1b-421a-864f-5af469556fc6.jpg?1783904474",
+   "large": "https://cards.scryfall.io/large/front/7/b/7b540a5f-7f1b-421a-864f-5af469556fc6.jpg?1783904474",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/b/7b540a5f-7f1b-421a-864f-5af469556fc6.jpg?1783904474"
+  }
+ },
+ {
+  "name": "Thoughtcast",
+  "scryfallId": "3109aefc-7ca5-4329-ba70-75a4e8466a46",
+  "oracleId": "cce9bbff-82dc-4b2f-addd-d6715588de20",
+  "set": "j25",
+  "collectorNumber": "374",
+  "rarity": "common",
+  "manaCost": "{4}{U}",
+  "typeLine": "Sorcery",
+  "oracleText": "Affinity for artifacts (This spell costs {1} less to cast for each artifact you control.)\nDraw two cards.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Affinity"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/1/3109aefc-7ca5-4329-ba70-75a4e8466a46.jpg?1783908749",
+   "normal": "https://cards.scryfall.io/normal/front/3/1/3109aefc-7ca5-4329-ba70-75a4e8466a46.jpg?1783908749",
+   "large": "https://cards.scryfall.io/large/front/3/1/3109aefc-7ca5-4329-ba70-75a4e8466a46.jpg?1783908749",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/1/3109aefc-7ca5-4329-ba70-75a4e8466a46.jpg?1783908749"
+  }
+ },
+ {
+  "name": "Treasure Cruise",
+  "scryfallId": "42c45880-15c7-4259-8066-c04d031d8216",
+  "oracleId": "5b6bdf5a-2742-4851-92cd-a857a3852836",
+  "set": "soc",
+  "collectorNumber": "205",
+  "rarity": "common",
+  "manaCost": "{7}{U}",
+  "typeLine": "Sorcery",
+  "oracleText": "Delve (Each card you exile from your graveyard while casting this spell pays for {1}.)\nDraw three cards.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Delve"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/2/42c45880-15c7-4259-8066-c04d031d8216.jpg?1783903788",
+   "normal": "https://cards.scryfall.io/normal/front/4/2/42c45880-15c7-4259-8066-c04d031d8216.jpg?1783903788",
+   "large": "https://cards.scryfall.io/large/front/4/2/42c45880-15c7-4259-8066-c04d031d8216.jpg?1783903788",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/2/42c45880-15c7-4259-8066-c04d031d8216.jpg?1783903788"
+  }
+ },
+ {
+  "name": "Distant Melody",
+  "scryfallId": "0bf6f926-8dde-45ce-8aa6-966fbcf79a7f",
+  "oracleId": "ac6c5852-71c7-4f19-8c87-ccb345052862",
+  "set": "sld",
+  "collectorNumber": "1464",
+  "rarity": "rare",
+  "manaCost": "{3}{U}",
+  "typeLine": "Sorcery",
+  "oracleText": "Choose a creature type. Draw a card for each permanent you control of that type.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/b/0bf6f926-8dde-45ce-8aa6-966fbcf79a7f.jpg?1783913417",
+   "normal": "https://cards.scryfall.io/normal/front/0/b/0bf6f926-8dde-45ce-8aa6-966fbcf79a7f.jpg?1783913417",
+   "large": "https://cards.scryfall.io/large/front/0/b/0bf6f926-8dde-45ce-8aa6-966fbcf79a7f.jpg?1783913417",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/b/0bf6f926-8dde-45ce-8aa6-966fbcf79a7f.jpg?1783913417"
+  }
+ },
+ {
+  "name": "Seek New Knowledge",
+  "scryfallId": "365cebf6-6356-4496-89b2-e9edbb294f90",
+  "oracleId": "5a335534-f2de-4c9a-8584-1bb9b301034d",
+  "set": "hbg",
+  "collectorNumber": "36",
+  "rarity": "uncommon",
+  "manaCost": "{1}{U}",
+  "typeLine": "Instant",
+  "oracleText": "Seek two nonland cards, then put a card from your hand on the bottom of your library.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Seek"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/6/365cebf6-6356-4496-89b2-e9edbb294f90.jpg?1783922116",
+   "normal": "https://cards.scryfall.io/normal/front/3/6/365cebf6-6356-4496-89b2-e9edbb294f90.jpg?1783922116",
+   "large": "https://cards.scryfall.io/large/front/3/6/365cebf6-6356-4496-89b2-e9edbb294f90.jpg?1783922116",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/6/365cebf6-6356-4496-89b2-e9edbb294f90.jpg?1783922116"
+  }
+ },
+ {
+  "name": "Bounty of the Deep",
+  "scryfallId": "936df148-e8c8-4359-8861-2b8a4abeadc4",
+  "oracleId": "b13c23f2-ef59-4ea8-b3e9-e462868e46d6",
+  "set": "j21",
+  "collectorNumber": "8",
+  "rarity": "common",
+  "manaCost": "{2}{U}",
+  "typeLine": "Sorcery",
+  "oracleText": "If you have no land cards in your hand, seek a land card and a nonland card. Otherwise, seek two nonland cards. (To seek a card, put one at random from your library into your hand.)",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Seek"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/3/936df148-e8c8-4359-8861-2b8a4abeadc4.jpg?1783925893",
+   "normal": "https://cards.scryfall.io/normal/front/9/3/936df148-e8c8-4359-8861-2b8a4abeadc4.jpg?1783925893",
+   "large": "https://cards.scryfall.io/large/front/9/3/936df148-e8c8-4359-8861-2b8a4abeadc4.jpg?1783925893",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/3/936df148-e8c8-4359-8861-2b8a4abeadc4.jpg?1783925893"
+  }
+ },
+ {
+  "name": "Sea Gate Restoration",
+  "scryfallId": "193071fe-180b-4d35-ba78-9c16675c29fc",
+  "oracleId": "4a8d41fe-e04d-484b-a7d1-19be311e6ca7",
+  "set": "znr",
+  "collectorNumber": "76",
+  "rarity": "mythic",
+  "manaCost": "{4}{U}{U}{U}",
+  "typeLine": "Sorcery",
+  "oracleText": "Draw cards equal to the number of cards in your hand plus one. You have no maximum hand size for the rest of the game.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "back": "Sea Gate, Reborn",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/9/193071fe-180b-4d35-ba78-9c16675c29fc.jpg?1783929396",
+   "normal": "https://cards.scryfall.io/normal/front/1/9/193071fe-180b-4d35-ba78-9c16675c29fc.jpg?1783929396",
+   "large": "https://cards.scryfall.io/large/front/1/9/193071fe-180b-4d35-ba78-9c16675c29fc.jpg?1783929396",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/9/193071fe-180b-4d35-ba78-9c16675c29fc.jpg?1783929396"
+  }
+ },
+ {
+  "name": "Sea Gate, Reborn",
+  "scryfallId": "193071fe-180b-4d35-ba78-9c16675c29fc",
+  "oracleId": "4a8d41fe-e04d-484b-a7d1-19be311e6ca7",
+  "set": "znr",
+  "collectorNumber": "76",
+  "rarity": "mythic",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "As this land enters, you may pay 3 life. If you don't, it enters tapped.\n{T}: Add {U}.",
+  "colors": [],
+  "keywords": [],
+  "front": "Sea Gate Restoration",
+  "image": {
+   "small": "https://cards.scryfall.io/small/back/1/9/193071fe-180b-4d35-ba78-9c16675c29fc.jpg?1783929396",
+   "normal": "https://cards.scryfall.io/normal/back/1/9/193071fe-180b-4d35-ba78-9c16675c29fc.jpg?1783929396",
+   "large": "https://cards.scryfall.io/large/back/1/9/193071fe-180b-4d35-ba78-9c16675c29fc.jpg?1783929396",
+   "artCrop": "https://cards.scryfall.io/art_crop/back/1/9/193071fe-180b-4d35-ba78-9c16675c29fc.jpg?1783929396"
+  }
+ },
+ {
+  "name": "Silundi Vision",
+  "scryfallId": "11568cdf-6148-494c-8b98-f5ca5797d775",
+  "oracleId": "b0182ca0-f353-4012-9121-6f4ac9f7a046",
+  "set": "znr",
+  "collectorNumber": "80",
+  "rarity": "uncommon",
+  "manaCost": "{2}{U}",
+  "typeLine": "Instant",
+  "oracleText": "Look at the top six cards of your library. You may reveal an instant or sorcery card from among them and put it into your hand. Put the rest on the bottom of your library in a random order.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "back": "Silundi Isle",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/1/11568cdf-6148-494c-8b98-f5ca5797d775.jpg?1783929393",
+   "normal": "https://cards.scryfall.io/normal/front/1/1/11568cdf-6148-494c-8b98-f5ca5797d775.jpg?1783929393",
+   "large": "https://cards.scryfall.io/large/front/1/1/11568cdf-6148-494c-8b98-f5ca5797d775.jpg?1783929393",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/1/11568cdf-6148-494c-8b98-f5ca5797d775.jpg?1783929393"
+  }
+ },
+ {
+  "name": "Silundi Isle",
+  "scryfallId": "11568cdf-6148-494c-8b98-f5ca5797d775",
+  "oracleId": "b0182ca0-f353-4012-9121-6f4ac9f7a046",
+  "set": "znr",
+  "collectorNumber": "80",
+  "rarity": "uncommon",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "This land enters tapped.\n{T}: Add {U}.",
+  "colors": [],
+  "keywords": [],
+  "front": "Silundi Vision",
+  "image": {
+   "small": "https://cards.scryfall.io/small/back/1/1/11568cdf-6148-494c-8b98-f5ca5797d775.jpg?1783929393",
+   "normal": "https://cards.scryfall.io/normal/back/1/1/11568cdf-6148-494c-8b98-f5ca5797d775.jpg?1783929393",
+   "large": "https://cards.scryfall.io/large/back/1/1/11568cdf-6148-494c-8b98-f5ca5797d775.jpg?1783929393",
+   "artCrop": "https://cards.scryfall.io/art_crop/back/1/1/11568cdf-6148-494c-8b98-f5ca5797d775.jpg?1783929393"
+  }
+ },
+ {
+  "name": "Sink into Stupor",
+  "scryfallId": "5358b87a-1a29-426d-b165-40c97da2c14d",
+  "oracleId": "bcc6eece-75ea-494c-b33a-d4477d504e0b",
+  "set": "mh3",
+  "collectorNumber": "241",
+  "rarity": "uncommon",
+  "manaCost": "{1}{U}{U}",
+  "typeLine": "Instant",
+  "oracleText": "Return target spell or nonland permanent an opponent controls to its owner's hand.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "back": "Soporific Springs",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/3/5358b87a-1a29-426d-b165-40c97da2c14d.jpg?1783911236",
+   "normal": "https://cards.scryfall.io/normal/front/5/3/5358b87a-1a29-426d-b165-40c97da2c14d.jpg?1783911236",
+   "large": "https://cards.scryfall.io/large/front/5/3/5358b87a-1a29-426d-b165-40c97da2c14d.jpg?1783911236",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/3/5358b87a-1a29-426d-b165-40c97da2c14d.jpg?1783911236"
+  }
+ },
+ {
+  "name": "Soporific Springs",
+  "scryfallId": "5358b87a-1a29-426d-b165-40c97da2c14d",
+  "oracleId": "bcc6eece-75ea-494c-b33a-d4477d504e0b",
+  "set": "mh3",
+  "collectorNumber": "241",
+  "rarity": "uncommon",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "As this land enters, you may pay 3 life. If you don't, it enters tapped.\n{T}: Add {U}.",
+  "colors": [],
+  "keywords": [],
+  "front": "Sink into Stupor",
+  "image": {
+   "small": "https://cards.scryfall.io/small/back/5/3/5358b87a-1a29-426d-b165-40c97da2c14d.jpg?1783911236",
+   "normal": "https://cards.scryfall.io/normal/back/5/3/5358b87a-1a29-426d-b165-40c97da2c14d.jpg?1783911236",
+   "large": "https://cards.scryfall.io/large/back/5/3/5358b87a-1a29-426d-b165-40c97da2c14d.jpg?1783911236",
+   "artCrop": "https://cards.scryfall.io/art_crop/back/5/3/5358b87a-1a29-426d-b165-40c97da2c14d.jpg?1783911236"
+  }
+ },
+ {
+  "name": "Cyclonic Rift",
+  "scryfallId": "45617b0f-fdac-4747-b2d3-d571b717008f",
+  "oracleId": "d75b9c82-1b49-4c3e-a1b5-aeef57d6644b",
+  "set": "sld",
+  "collectorNumber": "1869",
+  "rarity": "rare",
+  "manaCost": "{1}{U}",
+  "typeLine": "Instant",
+  "oracleText": "Return target nonland permanent you don't control to its owner's hand.\nOverload {6}{U} (You may cast this spell for its overload cost. If you do, change \"target\" in its text to \"each.\")",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Overload"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/5/45617b0f-fdac-4747-b2d3-d571b717008f.jpg?1789283269",
+   "normal": "https://cards.scryfall.io/normal/front/4/5/45617b0f-fdac-4747-b2d3-d571b717008f.jpg?1789283269",
+   "large": "https://cards.scryfall.io/large/front/4/5/45617b0f-fdac-4747-b2d3-d571b717008f.jpg?1789283269",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/5/45617b0f-fdac-4747-b2d3-d571b717008f.jpg?1789283269"
+  }
+ },
+ {
+  "name": "Baral's Expertise",
+  "scryfallId": "d273f5b7-b3a3-485a-acc8-34e10a504646",
+  "oracleId": "a1cdcb8c-1e12-4d39-aa4a-db678a80df9c",
+  "set": "aer",
+  "collectorNumber": "29",
+  "rarity": "rare",
+  "manaCost": "{3}{U}{U}",
+  "typeLine": "Sorcery",
+  "oracleText": "Return up to three target artifacts and/or creatures to their owners' hands.\nYou may cast a spell with mana value 4 or less from your hand without paying its mana cost.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/2/d273f5b7-b3a3-485a-acc8-34e10a504646.jpg?1783936775",
+   "normal": "https://cards.scryfall.io/normal/front/d/2/d273f5b7-b3a3-485a-acc8-34e10a504646.jpg?1783936775",
+   "large": "https://cards.scryfall.io/large/front/d/2/d273f5b7-b3a3-485a-acc8-34e10a504646.jpg?1783936775",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/2/d273f5b7-b3a3-485a-acc8-34e10a504646.jpg?1783936775"
+  }
+ },
+ {
+  "name": "Stolen by the Fae",
+  "scryfallId": "85d4af60-a143-42d1-a580-b4ba197ca1ea",
+  "oracleId": "5bafd0e0-8bf8-4e06-a54a-81cc6cc4bdb7",
+  "set": "j25",
+  "collectorNumber": "369",
+  "rarity": "rare",
+  "manaCost": "{X}{U}{U}",
+  "typeLine": "Sorcery",
+  "oracleText": "Return target creature with mana value X to its owner's hand. You create X 1/1 blue Faerie creature tokens with flying.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/5/85d4af60-a143-42d1-a580-b4ba197ca1ea.jpg?1783908752",
+   "normal": "https://cards.scryfall.io/normal/front/8/5/85d4af60-a143-42d1-a580-b4ba197ca1ea.jpg?1783908752",
+   "large": "https://cards.scryfall.io/large/front/8/5/85d4af60-a143-42d1-a580-b4ba197ca1ea.jpg?1783908752",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/5/85d4af60-a143-42d1-a580-b4ba197ca1ea.jpg?1783908752"
+  }
+ },
+ {
+  "name": "Slip Out the Back",
+  "scryfallId": "952a0817-0a17-445b-a4f2-b99e09e7722b",
+  "oracleId": "82506e51-3fe1-446f-83c9-69e67583cefc",
+  "set": "sld",
+  "collectorNumber": "7115",
+  "rarity": "rare",
+  "manaCost": "{U}",
+  "typeLine": "Instant",
+  "oracleText": "Put a +1/+1 counter on target creature. It phases out. (Treat it and anything attached to it as though they don't exist until its controller's next turn.)",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/5/952a0817-0a17-445b-a4f2-b99e09e7722b.jpg?1790063243",
+   "normal": "https://cards.scryfall.io/normal/front/9/5/952a0817-0a17-445b-a4f2-b99e09e7722b.jpg?1790063243",
+   "large": "https://cards.scryfall.io/large/front/9/5/952a0817-0a17-445b-a4f2-b99e09e7722b.jpg?1790063243",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/5/952a0817-0a17-445b-a4f2-b99e09e7722b.jpg?1790063243"
+  }
+ },
+ {
+  "name": "Mizzium Skin",
+  "scryfallId": "d9859344-4efc-4b87-a3fb-147e496cee68",
+  "oracleId": "02d998a6-0afd-4be1-a209-05618fcc43ea",
+  "set": "rtr",
+  "collectorNumber": "45",
+  "rarity": "common",
+  "manaCost": "{U}",
+  "typeLine": "Instant",
+  "oracleText": "Target creature you control gets +0/+1 and gains hexproof until end of turn.\nOverload {1}{U} (You may cast this spell for its overload cost. If you do, change \"target\" in its text to \"each.\")",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Overload"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/9/d9859344-4efc-4b87-a3fb-147e496cee68.jpg?1783940367",
+   "normal": "https://cards.scryfall.io/normal/front/d/9/d9859344-4efc-4b87-a3fb-147e496cee68.jpg?1783940367",
+   "large": "https://cards.scryfall.io/large/front/d/9/d9859344-4efc-4b87-a3fb-147e496cee68.jpg?1783940367",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/9/d9859344-4efc-4b87-a3fb-147e496cee68.jpg?1783940367"
+  }
+ },
+ {
+  "name": "Lazotep Plating",
+  "scryfallId": "f03b5405-6016-405b-a504-a454731b9276",
+  "oracleId": "ba0082fb-2d4c-489e-8140-93a6fa693fd0",
+  "set": "war",
+  "collectorNumber": "59",
+  "rarity": "uncommon",
+  "manaCost": "{1}{U}",
+  "typeLine": "Instant",
+  "oracleText": "Amass Zombies 1. (Put a +1/+1 counter on an Army you control. It's also a Zombie. If you don't control an Army, create a 0/0 black Zombie Army creature token first.)\nYou and permanents you control gain hexproof until end of turn. (You and they can't be the targets of spells or abilities your opponents control.)",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Amass"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/0/f03b5405-6016-405b-a504-a454731b9276.jpg?1783933460",
+   "normal": "https://cards.scryfall.io/normal/front/f/0/f03b5405-6016-405b-a504-a454731b9276.jpg?1783933460",
+   "large": "https://cards.scryfall.io/large/front/f/0/f03b5405-6016-405b-a504-a454731b9276.jpg?1783933460",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/0/f03b5405-6016-405b-a504-a454731b9276.jpg?1783933460"
+  }
+ },
+ {
+  "name": "Part the Waterveil",
+  "scryfallId": "83fe992f-0441-42be-89f9-2387b4bc24ce",
+  "oracleId": "54dd35ee-6f89-460d-9370-72bc3fa6840a",
+  "set": "bfz",
+  "collectorNumber": "80",
+  "rarity": "mythic",
+  "manaCost": "{4}{U}{U}",
+  "typeLine": "Sorcery",
+  "oracleText": "Take an extra turn after this one. Exile Part the Waterveil.\nAwaken 6—{6}{U}{U}{U} (If you cast this spell for {6}{U}{U}{U}, also put six +1/+1 counters on target land you control and it becomes a 0/0 Elemental creature with haste. It's still a land.)",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Awaken"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/3/83fe992f-0441-42be-89f9-2387b4bc24ce.jpg?1783938208",
+   "normal": "https://cards.scryfall.io/normal/front/8/3/83fe992f-0441-42be-89f9-2387b4bc24ce.jpg?1783938208",
+   "large": "https://cards.scryfall.io/large/front/8/3/83fe992f-0441-42be-89f9-2387b4bc24ce.jpg?1783938208",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/3/83fe992f-0441-42be-89f9-2387b4bc24ce.jpg?1783938208"
+  }
+ },
+ {
+  "name": "Rise from the Tides",
+  "scryfallId": "6e099a6a-97c4-42cd-aca6-5e1a2da0d5e5",
+  "oracleId": "390b862a-2a85-44bd-832c-f5bbd3eb4ea0",
+  "set": "soi",
+  "collectorNumber": "83",
+  "rarity": "uncommon",
+  "manaCost": "{5}{U}",
+  "typeLine": "Sorcery",
+  "oracleText": "Create a tapped 2/2 black Zombie creature token for each instant and sorcery card in your graveyard.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/e/6e099a6a-97c4-42cd-aca6-5e1a2da0d5e5.jpg?1783937789",
+   "normal": "https://cards.scryfall.io/normal/front/6/e/6e099a6a-97c4-42cd-aca6-5e1a2da0d5e5.jpg?1783937789",
+   "large": "https://cards.scryfall.io/large/front/6/e/6e099a6a-97c4-42cd-aca6-5e1a2da0d5e5.jpg?1783937789",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/e/6e099a6a-97c4-42cd-aca6-5e1a2da0d5e5.jpg?1783937789"
+  }
+ },
+ {
+  "name": "Better Offer",
+  "scryfallId": "dbec6d58-aa78-47ab-a874-73bd676142c7",
+  "oracleId": "5e2c6c36-4bff-4479-b322-f13434b81ea3",
+  "set": "yneo",
+  "collectorNumber": "10",
+  "rarity": "rare",
+  "manaCost": "{X}{U}",
+  "typeLine": "Sorcery",
+  "oracleText": "Put a random creature card with mana value X or less from target opponent's library onto the battlefield under your control. It perpetually has base power and toughness X/X and perpetually gains ward {1}.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/b/dbec6d58-aa78-47ab-a874-73bd676142c7.jpg?1783923601",
+   "normal": "https://cards.scryfall.io/normal/front/d/b/dbec6d58-aa78-47ab-a874-73bd676142c7.jpg?1783923601",
+   "large": "https://cards.scryfall.io/large/front/d/b/dbec6d58-aa78-47ab-a874-73bd676142c7.jpg?1783923601",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/b/dbec6d58-aa78-47ab-a874-73bd676142c7.jpg?1783923601"
+  }
+ },
+ {
+  "name": "Mass Manipulation",
+  "scryfallId": "782760d7-59cc-4d40-a885-6a7980094fee",
+  "oracleId": "68e87559-7cae-4dcf-b7cd-a61f19bcd840",
+  "set": "rna",
+  "collectorNumber": "42",
+  "rarity": "rare",
+  "manaCost": "{X}{X}{U}{U}{U}{U}",
+  "typeLine": "Sorcery",
+  "oracleText": "Gain control of X target creatures and/or planeswalkers.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/8/782760d7-59cc-4d40-a885-6a7980094fee.jpg?1783933708",
+   "normal": "https://cards.scryfall.io/normal/front/7/8/782760d7-59cc-4d40-a885-6a7980094fee.jpg?1783933708",
+   "large": "https://cards.scryfall.io/large/front/7/8/782760d7-59cc-4d40-a885-6a7980094fee.jpg?1783933708",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/8/782760d7-59cc-4d40-a885-6a7980094fee.jpg?1783933708"
+  }
+ },
+ {
+  "name": "Expropriate",
+  "scryfallId": "c0397e48-7ee3-4d47-9248-f65b6cab5737",
+  "oracleId": "a69265b2-0e37-4d86-866e-e4a923233b4d",
+  "set": "sld",
+  "collectorNumber": "2396",
+  "rarity": "mythic",
+  "manaCost": "{7}{U}{U}",
+  "typeLine": "Sorcery",
+  "oracleText": "Council's dilemma — Starting with you, each player votes for time or money. For each time vote, take an extra turn after this one. For each money vote, choose a permanent owned by the voter and gain control of it. Exile Expropriate.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Council's dilemma"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/0/c0397e48-7ee3-4d47-9248-f65b6cab5737.jpg?1783904239",
+   "normal": "https://cards.scryfall.io/normal/front/c/0/c0397e48-7ee3-4d47-9248-f65b6cab5737.jpg?1783904239",
+   "large": "https://cards.scryfall.io/large/front/c/0/c0397e48-7ee3-4d47-9248-f65b6cab5737.jpg?1783904239",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/0/c0397e48-7ee3-4d47-9248-f65b6cab5737.jpg?1783904239"
+  }
+ },
+ {
+  "name": "Housemeld",
+  "scryfallId": "d3cf68c1-d137-4a10-b20a-d3e08744ff33",
+  "oracleId": "903dbd51-674d-476e-b074-2954f74f435c",
+  "set": "ydsk",
+  "collectorNumber": "5",
+  "rarity": "uncommon",
+  "manaCost": "{2}{U}{U}",
+  "typeLine": "Sorcery",
+  "oracleText": "Exile target creature. The exiled card perpetually becomes an enchantment. At the beginning of your next end step, put it onto the battlefield under your control. (It loses all other card types.)",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/3/d3cf68c1-d137-4a10-b20a-d3e08744ff33.jpg?1783909200",
+   "normal": "https://cards.scryfall.io/normal/front/d/3/d3cf68c1-d137-4a10-b20a-d3e08744ff33.jpg?1783909200",
+   "large": "https://cards.scryfall.io/large/front/d/3/d3cf68c1-d137-4a10-b20a-d3e08744ff33.jpg?1783909200",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/3/d3cf68c1-d137-4a10-b20a-d3e08744ff33.jpg?1783909200"
+  }
+ },
+ {
+  "name": "Snow-Covered Island",
+  "scryfallId": "3d7c3929-cd56-448d-9752-6d5f9d1fd778",
+  "oracleId": "5b2460a5-6ae5-4cad-ba94-1a9e98e6e4c0",
+  "set": "sld",
+  "collectorNumber": "2",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Basic Snow Land — Island",
+  "oracleText": "({T}: Add {U}.)",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/d/3d7c3929-cd56-448d-9752-6d5f9d1fd778.jpg?1783931628",
+   "normal": "https://cards.scryfall.io/normal/front/3/d/3d7c3929-cd56-448d-9752-6d5f9d1fd778.jpg?1783931628",
+   "large": "https://cards.scryfall.io/large/front/3/d/3d7c3929-cd56-448d-9752-6d5f9d1fd778.jpg?1783931628",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/d/3d7c3929-cd56-448d-9752-6d5f9d1fd778.jpg?1783931628"
+  }
+ },
+ {
+  "name": "Thriving Isle",
+  "scryfallId": "58a3b5a5-eba0-4b4e-869a-5387ec7dd2b8",
+  "oracleId": "69fc70b8-b143-4662-ac95-e2743037239d",
+  "set": "msc",
+  "collectorNumber": "581",
+  "rarity": "common",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "This land enters tapped. As it enters, choose a color other than blue.\n{T}: Add {U} or one mana of the chosen color.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/8/58a3b5a5-eba0-4b4e-869a-5387ec7dd2b8.jpg?1783903089",
+   "normal": "https://cards.scryfall.io/normal/front/5/8/58a3b5a5-eba0-4b4e-869a-5387ec7dd2b8.jpg?1783903089",
+   "large": "https://cards.scryfall.io/large/front/5/8/58a3b5a5-eba0-4b4e-869a-5387ec7dd2b8.jpg?1783903089",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/8/58a3b5a5-eba0-4b4e-869a-5387ec7dd2b8.jpg?1783903089"
+  }
+ },
+ {
+  "name": "Gate to Seatower",
+  "scryfallId": "86382685-e54c-4152-a500-2148a2d6b5a4",
+  "oracleId": "357132e0-1d8d-4d2d-a73d-b3e0f4196310",
+  "set": "hbg",
+  "collectorNumber": "79",
+  "rarity": "uncommon",
+  "manaCost": "",
+  "typeLine": "Land — Island Gate",
+  "oracleText": "({T}: Add {U}.)\nGate to Seatower enters the battlefield tapped.\n{3}{U}, {T}: Seek a nonland card. Activate only once.",
+  "colors": [],
+  "keywords": [
+   "Seek"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/6/86382685-e54c-4152-a500-2148a2d6b5a4.jpg?1783922091",
+   "normal": "https://cards.scryfall.io/normal/front/8/6/86382685-e54c-4152-a500-2148a2d6b5a4.jpg?1783922091",
+   "large": "https://cards.scryfall.io/large/front/8/6/86382685-e54c-4152-a500-2148a2d6b5a4.jpg?1783922091",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/6/86382685-e54c-4152-a500-2148a2d6b5a4.jpg?1783922091"
+  }
+ },
+ {
+  "name": "Mystic Sanctuary",
+  "scryfallId": "4cd86997-d7b9-4b5b-9488-11f5c679e4d3",
+  "oracleId": "17b60106-a4c7-410a-8ac3-ec8e74e29a7c",
+  "set": "soc",
+  "collectorNumber": "388",
+  "rarity": "common",
+  "manaCost": "",
+  "typeLine": "Land — Island",
+  "oracleText": "({T}: Add {U}.)\nThis land enters tapped unless you control three or more other Islands.\nWhen this land enters untapped, you may put target instant or sorcery card from your graveyard on top of your library.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/c/4cd86997-d7b9-4b5b-9488-11f5c679e4d3.jpg?1783903726",
+   "normal": "https://cards.scryfall.io/normal/front/4/c/4cd86997-d7b9-4b5b-9488-11f5c679e4d3.jpg?1783903726",
+   "large": "https://cards.scryfall.io/large/front/4/c/4cd86997-d7b9-4b5b-9488-11f5c679e4d3.jpg?1783903726",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/c/4cd86997-d7b9-4b5b-9488-11f5c679e4d3.jpg?1783903726"
+  }
  }
 ]

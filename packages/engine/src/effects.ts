@@ -1135,8 +1135,12 @@ export function runEffects(
           typeof e.what === 'object' && 'target' in e.what ? es.targets[e.what.target] : null;
         const item = t && 'object' in t ? findSpell(ctx, t.object.id) : undefined;
         if (!item) continue;
+        // Strixhaven Brawl (15b, u): Syncopate, "unless its controller pays {X}".
+        const toPay = e.xCost ? { ...e.cost, generic: e.cost.generic + (x ?? 0) } : e.cost;
+        if (e.xCost && toPay.generic === 0 && Object.values(toPay.colored).every((n) => !n))
+          continue; // X is 0: paid
         // Can't pay: countered straight away.
-        if (!canPayFrom(e.cost, manaSources(ctx, item.controller))) {
+        if (!canPayFrom(toPay, manaSources(ctx, item.controller))) {
           counterSpell(ctx, item.id, e.exile);
           continue;
         }
@@ -1144,7 +1148,7 @@ export function runEffects(
           kind: 'payOrCounter',
           player: item.controller,
           spell: item.id,
-          cost: e.cost,
+          cost: toPay,
           ...(e.exile ? { exile: true } : {}),
           resume,
           thenPriority,
