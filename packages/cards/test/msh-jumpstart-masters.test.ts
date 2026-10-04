@@ -261,6 +261,11 @@ describe('Villainous Syndication', () => {
     const baloth = g.id('p1', 'rumbling-baloth', 'graveyard');
     activate(g, plan, 0);
     g.passBoth();
+    // "When the fourth plan counter is put on this": its own trigger, which sacrifices it.
+    expect(g.obj(plan).counters?.plan).toBe(4);
+    expect(g.zoneOf(plan)).toBe('battlefield');
+    expect(g.state.stack).toHaveLength(1);
+    g.passBoth();
     // Sacrificed; "when you do" is a reflexive trigger that targets the creature card.
     expect(g.zoneOf(plan)).toBe('graveyard');
     expect(g.decision.kind).toBe('chooseTriggerTargets');

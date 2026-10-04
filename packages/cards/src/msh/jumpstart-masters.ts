@@ -78,8 +78,9 @@ export const MSH_JUMPSTART_MASTERS: Record<string, Behavior> = {
       },
     ],
   },
-  // The fourth counter's "sacrifice it" happens as the ability resolves; "when you do" is a
-  // reflexive trigger that targets the creature card.
+  // "When the fourth plan counter is put on this": a trigger (ability 2) set off as the counter
+  // is put; it sacrifices it, and "when you do" is a reflexive trigger (ability 1) that targets
+  // the creature card.
   'Villainous Syndication': {
     abilities: [
       {
@@ -97,9 +98,7 @@ export const MSH_JUMPSTART_MASTERS: Record<string, Behavior> = {
               amount: { namedCountersOnSource: 'plan' },
               min: 4,
             },
-            then: [
-              { kind: 'sacrifice', what: 'self', then: [{ kind: 'reflexiveTrigger', ability: 1 }] },
-            ],
+            then: [{ kind: 'reflexiveTrigger', ability: 2 }],
           },
         ],
         label: 'Tap a Villain: Mill a card, plan counter',
@@ -109,6 +108,14 @@ export const MSH_JUMPSTART_MASTERS: Record<string, Behavior> = {
         trigger: { on: 'reflexive' },
         targets: [{ what: 'graveyardCard', controller: 'you', filter: { types: ['Creature'] } }],
         effects: [{ kind: 'returnToBattlefield', what: { target: 0 } }],
+      },
+      {
+        kind: 'triggered',
+        trigger: { on: 'reflexive' },
+        targets: [],
+        effects: [
+          { kind: 'sacrifice', what: 'self', then: [{ kind: 'reflexiveTrigger', ability: 1 }] },
+        ],
       },
     ],
   },

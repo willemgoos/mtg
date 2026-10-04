@@ -67,8 +67,8 @@ from) when it's fixed. Older phases keep their own "Simplifications" lists in `d
 - [ ] The Clone Saga, chapter III: "choose a card name" offers only the names of the creatures on the battlefield and the
       creature cards in your hand, not every card name.
 - [ ] Impossible Man: while copying, the UI shows the copied card (and its name); the rules see his own name.
-- [ ] Villainous Syndication: the engine picks which Villain to tap (lowest power); the fourth counter's sacrifice happens as
-      the ability resolves, not as its own trigger.
+- [x] Villainous Syndication: the fourth counter's payoff isn't a separate reflexive trigger (the returned card isn't
+      targeted, and there's no chance to respond); the engine picks which Villain to tap (lowest power).
 - [x] Radioactive Man: "that player" is always the opponent (two-player only). (Games are two-player, so that's exact.)
 - [x] Crimson Cowl, Master of Evil: triggers whenever nontoken Villains attack, without checking they attacked a player.
 - [x] Flying Drone: the discount is a second, free version of the spell, offered once another flyer entered under your control
