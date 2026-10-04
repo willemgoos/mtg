@@ -14,6 +14,7 @@ import {
 } from '@mtg/cards';
 import { useCallback, useEffect, useState } from 'react';
 import { Board } from './components/Board.tsx';
+import { CardSearch } from './components/CardSearch.tsx';
 import { DeckView } from './components/DeckView.tsx';
 import { ErrorBoundary } from './components/ErrorBoundary.tsx';
 import { Expedition } from './components/Expedition.tsx';
@@ -441,6 +442,8 @@ export function App() {
         onBack={() => setJumping(false)}
       />
     );
+  if (!match && tab === 'cards')
+    return <CardSearch onTab={setTab} clears={clearsOf(gauntlet) + clearsOf(expedition)} />;
   if (!match && tab === 'home')
     return (
       <Home

@@ -16,7 +16,7 @@ const MODE_NAMES: Record<Mode, string> = {
   gauntlet: 'Gauntlet',
   expedition: 'Expedition',
 };
-export type Tab = 'home' | 'decks';
+export type Tab = 'home' | 'decks' | 'cards';
 
 const art = (card: string) => scryfallById.get(slug(card))?.image?.artCrop ?? '';
 const image = (card: string) => scryfallById.get(slug(card))?.image?.normal ?? '';
@@ -33,14 +33,14 @@ export function Nav({ tab, onTab, clears }: { tab: Tab; onTab: (t: Tab) => void;
         Foundations
       </div>
       <nav className="nav__tabs">
-        {(['home', 'decks'] as const).map((t) => (
+        {(['home', 'decks', 'cards'] as const).map((t) => (
           <button
             key={t}
             className={`nav__tab ${tab === t ? 'is-on' : ''}`}
             aria-current={tab === t ? 'page' : undefined}
             onClick={() => onTab(t)}
           >
-            {t === 'home' ? 'Home' : 'Decks'}
+            {t === 'home' ? 'Home' : t === 'decks' ? 'Decks' : 'Cards'}
           </button>
         ))}
       </nav>
