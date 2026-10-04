@@ -663,7 +663,11 @@ describe('green-blue spells', () => {
       .map((id) => cardDb.get(g.obj(id).defId)!)
       .map((d) => d.manaCost.generic + Object.values(d.manaCost.colored).reduce((a, b) => a + b, 0))
       .sort();
-    expect(conjured).toHaveLength(3);
+    // A conjured creature may leave at once (it can have a drawback), so count those in the graveyard too.
+    const gone = g.state.players.p1.graveyard.filter(
+      (id) => g.obj(id).defId !== 'ornate-imitations',
+    ).length;
+    expect(conjured.length + gone).toBe(3);
   });
 
   it('Simic Charm can bounce a creature', () => {

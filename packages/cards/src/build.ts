@@ -277,8 +277,8 @@ export function mapKeywords(scryfall: readonly string[], oracle = ''): Keyword[]
   for (const k of scryfall) {
     // Strixhaven Brawl (15b, g): Mistcutter Hydra.
     if (k === 'Protection') {
-      if (!/protection from blue/i.test(oracle)) throw new Error('Unsupported "Protection"');
-      out.push('protectionBlue');
+      // Alseid of Life's Bounty (15b, w) only grants it: the keyword is in its rules text, not a printed one.
+      if (/protection from blue/i.test(oracle)) out.push('protectionBlue');
       continue;
     }
     if (k === 'Ward') {
