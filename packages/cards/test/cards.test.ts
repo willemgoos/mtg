@@ -3,6 +3,10 @@ import {
   BEHAVIORS,
   BLACK_POOL,
   BLOOMBURROW_DECKS,
+  BLOOMBURROW_TROPHY_DECKS,
+  FOUNDATIONS_TROPHY_DECKS,
+  MARVEL_TROPHY_DECKS,
+  FINAL_FANTASY_TROPHY_DECKS,
   BLOOMBURROW_POOL,
   MARVEL_DECKS,
   MARVEL_POOL,
@@ -11,7 +15,10 @@ import {
   cardDb,
   DECKS,
   deckIds,
+  FOUNDATIONS_DRAFT_POOL,
+  FOUNDATIONS_JUMP_IN_POOL,
   FINAL_FANTASY_DECKS,
+  FINAL_FANTASY_STARTER_KIT_DECKS,
   FINAL_FANTASY_POOL,
   STRIXHAVEN_DECKS,
   SECRETS_OF_STRIXHAVEN_DECKS,
@@ -21,6 +28,7 @@ import {
   GREEN_POOL,
   LAND_POOL,
   MARVEL_BRAWL_POOL,
+  FINAL_FANTASY_BRAWL_POOL,
   OTHER_POOL,
   PLAYABLE_DECKS,
   parseManaCost,
@@ -52,6 +60,8 @@ describe('card data', () => {
         ...BLUE_POOL,
         ...BLACK_POOL,
         ...OTHER_POOL,
+        ...FOUNDATIONS_JUMP_IN_POOL,
+        ...FOUNDATIONS_DRAFT_POOL,
         ...LAND_POOL,
         ...BLOOMBURROW_POOL,
         ...MARVEL_POOL,
@@ -62,6 +72,7 @@ describe('card data', () => {
         ...STRIXHAVEN_POOL,
         ...SECRETS_OF_STRIXHAVEN_POOL,
         ...STRIXHAVEN_BRAWL_POOL,
+        ...FINAL_FANTASY_BRAWL_POOL,
       ].sort(),
     );
     for (const c of SCRYFALL) expect(c.image?.normal).toMatch(/^https:\/\/cards\.scryfall\.io\//);
@@ -109,10 +120,10 @@ describe('card data', () => {
     });
   });
 
-  it('decks are 60 cards and legal (max 4 non-basic copies), with unique ids', () => {
+  it('decks are 60 cards (draft decks 40) and legal (max 4 non-basic copies), with unique ids', () => {
     const basics = ['Plains', 'Island', 'Swamp', 'Mountain', 'Forest'];
     for (const d of DECKS.filter((x) => x.series !== 'brawl')) {
-      expect(deckIds(d), d.name).toHaveLength(60);
+      expect(deckIds(d), d.name).toHaveLength(d.series === 'trophy' ? 40 : 60);
       expect(
         d.cards.map(([name]) => name),
         d.name,
@@ -140,10 +151,15 @@ describe('card data', () => {
         'goblins-everywhere',
         'large-and-in-charge',
         ...BLOOMBURROW_DECKS.map((d) => d.id),
+        ...FOUNDATIONS_TROPHY_DECKS.map((d) => d.id),
+        ...BLOOMBURROW_TROPHY_DECKS.map((d) => d.id),
+        ...MARVEL_TROPHY_DECKS.map((d) => d.id),
+        ...FINAL_FANTASY_TROPHY_DECKS.map((d) => d.id),
         ...MARVEL_DECKS.map((d) => d.id),
         ...FINAL_FANTASY_DECKS.map((d) => d.id),
         ...STRIXHAVEN_DECKS.map((d) => d.id),
         ...SECRETS_OF_STRIXHAVEN_DECKS.map((d) => d.id),
+        ...FINAL_FANTASY_STARTER_KIT_DECKS.map((d) => d.id),
       ].sort(),
     );
     for (const d of PLAYABLE_DECKS)

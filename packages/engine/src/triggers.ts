@@ -9,11 +9,15 @@ import {
 import { type Ctx, createObject, def, defOf, obj, other } from './context.ts';
 import { manaValue } from './cost.ts';
 import { addLore } from './sagas.ts';
+import { FIC_CONDITIONS } from './fic-effects.ts';
+import { FIN_CONDITIONS } from './fin-effects.ts';
 import type {
   AbilityDef,
   EffectDef,
   CardDefinition,
   ConditionDef,
+  Emblem,
+  PendingTrigger,
   GameEvent,
   GameObject,
   ObjectId,
@@ -66,9 +70,15 @@ export function checkCondition(
   if (c.kind === 'youCastSpellThisTurn') return (ctx.s.turn.spellsCast?.[controller] ?? 0) > 0;
   // Mystical Archive (16): Berserk (before the combat damage step), Veil of Summer.
   if (c.kind === 'beforeCombatDamage')
-    return ['untap', 'upkeep', 'draw', 'main1', 'beginCombat', 'declareAttackers', 'declareBlockers'].includes(
-      ctx.s.turn.step,
-    );
+    return [
+      'untap',
+      'upkeep',
+      'draw',
+      'main1',
+      'beginCombat',
+      'declareAttackers',
+      'declareBlockers',
+    ].includes(ctx.s.turn.step);
   if (c.kind === 'opponentCastColoredSpell')
     return (ctx.s.turn.castDefs?.[other(controller)] ?? []).some((id) =>
       defOf(ctx, id).colors.some((col) => c.colors.includes(col)),
@@ -79,9 +89,26 @@ export function checkCondition(
   if (c.kind === 'opponentCastSpellThisTurn')
     return (ctx.s.turn.spellsCast?.[other(controller)] ?? 0) > 0;
   if (c.kind === 'sourceTapped') return !!self?.tapped;
+  // Final Fantasy (11c): turn conditions.
+  if (c.kind === 'noneCastThisTurn')
+    return !(ctx.s.turn.castDefs?.[controller] ?? []).some((id) =>
+      defMatches(defOf(ctx, id), c.filter),
+    );
+  if (c.kind === 'yourEarlyTurn')
+    // Turns alternate, so each player's Nth turn comes by turn 2N (extra turns aside).
+    return ctx.s.turn.activePlayer === controller && ctx.s.turn.number <= 2 * c.max;
+  if (c.kind === 'firstCombatPhase') return (ctx.s.turn.combats ?? 0) <= 1;
+  if (c.kind === 'subjectCrewedBySource')
+    return (
+      !!self &&
+      subject?.crewedBy?.turn === ctx.s.turn.number &&
+      subject.crewedBy.ids.includes(self.id)
+    );
   if (c.kind === 'opponentAttackedLastTurn')
     return ctx.s.players[other(controller)].attackedLastTurn === true;
   if (c.kind === 'sourceDamagedSubject') return !!self && !!subject?.damagedBy?.includes(self.id);
+  // Marvel Super Heroes Jumpstart (Heroes for Hire)
+  if (c.kind === 'targetChosen') return !!targets?.[c.target];
   if (c.kind === 'targetMatches') {
     const t = targets?.[c.target];
     if (!t || !('object' in t)) return false;
@@ -150,7 +177,7 @@ export function checkCondition(
   if (c.kind === 'sourceNamedCounters') return (self?.counters?.[c.name] ?? 0) >= c.min;
   if (c.kind === 'sourceHadCounters')
     return (self?.zone === 'battlefield' ? self.plusOneCounters : (self?.lastCounters ?? 0)) > 0;
-  if (c.kind === 'sourceCounteredThisTurn') return self?.countersTurn === ctx.s.turn.number;
+  if (c.kind === 'sourceCounteredThisTurn') return self?.anyCountersTurn === ctx.s.turn.number;
   if (c.kind === 'lifeThisTurn') {
     const p = c.who === 'you' ? controller : other(controller);
     const gained = ctx.s.turn.lifeGains[p] > 0;
@@ -161,11 +188,18 @@ export function checkCondition(
   // Strixhaven (13c): Rowan, Scholar of Sparks.
   if (c.kind === 'cardsDrawnThisTurn') return (ctx.s.turn.cardsDrawn[controller] ?? 0) >= c.min;
   if (c.kind === 'handSize') return ctx.s.players[controller].hand.length >= c.min;
-  if (c.kind === 'all') return c.of.every((x) => checkCondition(ctx, x, controller, self, targets));
-  if (c.kind === 'any') return c.of.some((x) => checkCondition(ctx, x, controller, self, targets));
-  if (c.kind === 'not') return !checkCondition(ctx, c.condition, controller, self, targets);
+  if (c.kind === 'all')
+    return c.of.every((x) => checkCondition(ctx, x, controller, self, targets, subject));
+  if (c.kind === 'any')
+    return c.of.some((x) => checkCondition(ctx, x, controller, self, targets, subject));
+  if (c.kind === 'not')
+    return !checkCondition(ctx, c.condition, controller, self, targets, subject);
   if (c.kind === 'resolvedThisTurn')
-    return self?.resolutions?.turn === ctx.s.turn.number && self.resolutions.count === c.n;
+    return (
+      self?.resolutions?.turn === ctx.s.turn.number &&
+      // Iron Fist, Living Weapon: `n` or more.
+      (c.orMore ? self.resolutions.count >= c.n : self.resolutions.count === c.n)
+    );
   if (c.kind === 'controlsPermanents')
     return (
       ctx.s.battlefield.filter(
@@ -179,6 +213,8 @@ export function checkCondition(
   // Marvel Super Heroes.
   if (c.kind === 'sourceEnteredThisTurn') return !!self && self.zoneTurn === ctx.s.turn.number;
   if (c.kind === 'sourceHasCounter') return (self?.counters?.[c.name] ?? 0) > 0;
+  if (c.kind === 'anyPlayerControls')
+    return ctx.s.battlefield.some((id) => matchesFilter(ctx, id, c.filter, self?.id));
   if (c.kind === 'heroAttackedOrEnteredThisTurn') {
     const hero = (id: ObjectId) => !!ctx.s.objects[id] && def(ctx, id).subtypes.includes('Hero');
     return (
@@ -218,6 +254,12 @@ export function checkCondition(
         ...(c.types ? { types: c.types } : {}),
       }) >= c.min
     );
+  // Final Fantasy (11c): rare conditions.
+  if (c.kind === 'lifeAtMostHalfStarting')
+    return ctx.s.players[controller].life <= Math.floor((ctx.s.format === 'brawl' ? 25 : 20) / 2);
+  if (c.kind === 'firstEndStep') return (ctx.s.turn.endSteps ?? 1) <= 1;
+  if (c.kind === 'sourceAttackedThisTurn')
+    return !!self && (ctx.s.turn.attackers ?? []).includes(self.id);
   if (!self) return false;
   switch (c.kind) {
     case 'attackedThisTurn':
@@ -251,8 +293,13 @@ export function checkCondition(
       const item = ctx.s.stack.find((x) => x.kind === 'spell' && x.id === self.id);
       return item?.kind === 'spell' && !!item.flashback;
     }
-    case 'custom':
+    case 'custom': {
+      // Final Fantasy Commander (12): one-off conditions.
+      // Final Fantasy (11d): and FIN one-offs.
+      const fn = FIC_CONDITIONS[c.handler] ?? FIN_CONDITIONS[c.handler];
+      if (fn) return fn(ctx, controller, self, subject);
       throw new Error(`Custom condition "${c.handler}" not registered`);
+    }
   }
 }
 
@@ -264,8 +311,15 @@ function queue(
   subject?: GameObject,
   amount?: number,
 ): void {
+  // Marvel Super Heroes Jumpstart (Young Avengers): an ability a copy kept is its own card's (Hulkling).
+  let defId = o.defId;
+  const copied = o.copyKeptAbilities && o.originalDefId ? defOf(ctx, o.defId).abilities.length : -1;
+  if (copied >= 0 && index >= copied) {
+    defId = o.originalDefId!;
+    index = o.copyKeptAbilities![index - copied] ?? index;
+  }
   // "This ability triggers only once each turn."
-  const printed = defOf(ctx, o.defId).abilities[index];
+  const printed = defOf(ctx, defId).abilities[index];
   // An ability granted until end of turn (Root Manipulation on a Pest) sits after the printed ones
   // and has no printed counterpart to look up later, so the pending trigger carries it itself.
   const granted = printed ? undefined : def(ctx, o.id).abilities[index];
@@ -291,7 +345,7 @@ function queue(
   }
   const pending = {
     source: { id: o.id, zcc: o.zcc },
-    sourceDefId: o.defId,
+    sourceDefId: defId,
     abilityIndex: index,
     controller,
     ...(granted?.kind === 'triggered' ? { emblem: granted } : {}),
@@ -313,6 +367,9 @@ function queue(
         ),
     )
   )
+    ctx.s.pendingTriggers.push({ ...pending });
+  // Final Fantasy (11c): Cloud, Midgar Mercenary and The Masamune.
+  if (a?.kind === 'triggered' && triggersTwice(ctx, o, a))
     ctx.s.pendingTriggers.push({ ...pending });
 }
 
@@ -344,7 +401,10 @@ function targetsMatch(
   return !!item?.targets.some((x) => {
     const t = 'object' in x ? ctx.s.objects[x.object.id] : undefined;
     return (
-      !!t && t.zone === 'battlefield' && t.controller === controller && matchesFilter(ctx, t.id, filter)
+      !!t &&
+      t.zone === 'battlefield' &&
+      t.controller === controller &&
+      matchesFilter(ctx, t.id, filter)
     );
   });
 }
@@ -469,15 +529,22 @@ function spellMatches(
 
 function detect(ctx: Ctx, ev: GameEvent): void {
   const s = ctx.s;
+  detectFic(ctx, ev);
+  detectAnimal(ctx, ev);
   switch (ev.type) {
     case 'objectMoved': {
       const moved = s.objects[ev.id];
       const movedDef = defOf(ctx, ev.defId);
+      // Marvel Super Heroes Jumpstart (Tenacious/Rampaging): creature cards put into your
+      // graveyard from anywhere, counted per batch ("that many": Voracious Brood).
+      if (ev.to === 'graveyard' && moved && !moved.isToken && movedDef.types.includes('Creature'))
+        creatureCardToGraveyard(ctx, moved.owner);
       if (ev.to === 'battlefield' && moved && moved.zone === 'battlefield') {
         // A Saga enters with its first lore counter.
         if (movedDef.saga) addLore(ctx, moved.id);
         const isCreature = movedDef.types.includes('Creature');
         const isLand = movedDef.types.includes('Land');
+        const before = s.pendingTriggers.length;
         forEachBattlefieldTrigger(
           ctx,
           (o, a) => {
@@ -527,6 +594,24 @@ function detect(ctx: Ctx, ev: GameEvent): void {
             emblem: a,
             subject: { id: moved.id, zcc: moved.zcc },
           });
+        }
+        // Final Fantasy (11c): entering permanents. Traveling Chocobo: a land or Bird you
+        // control entering triggers your permanents' abilities an additional time.
+        const twice = s.battlefield.filter(
+          (id) =>
+            obj(ctx, id).controller === moved.controller &&
+            def(ctx, id).abilities.some(
+              (a) =>
+                a.kind === 'static' &&
+                a.effect.kind === 'etbTriggersTwice' &&
+                matchesFilter(ctx, moved.id, a.effect.filter),
+            ),
+        ).length;
+        if (twice) {
+          const caused = s.pendingTriggers
+            .slice(before)
+            .filter((t) => t.controller === moved.controller);
+          for (let k = 0; k < twice; k++) for (const t of caused) s.pendingTriggers.push({ ...t });
         }
         // From the graveyard: "whenever your commander enters" (Endless Ranks of HYDRA).
         for (const id of s.players[moved.controller].graveyard) {
@@ -588,6 +673,25 @@ function detect(ctx: Ctx, ev: GameEvent): void {
           ctx,
           (o, a) => a.trigger.on === 'leavesWithoutDying' && o.id !== ev.id && o.controller === was,
         );
+        // Marvel Super Heroes Jumpstart (Marvelous): Captain Marvel, Shooting Star.
+        if (ev.to === 'exile')
+          forEachBattlefieldTrigger(
+            ctx,
+            (o, a) => a.trigger.on === 'otherCreatureExiled' && o.id !== ev.id,
+            moved,
+            ev.lastPower ?? 0,
+          );
+      }
+      // Justice, Vance Astrovik: "another nonland permanent you control is returned to its owner's hand".
+      if (ev.from === 'battlefield' && ev.to === 'hand' && !movedDef.types.includes('Land')) {
+        const was = ev.controller ?? moved?.owner;
+        forEachBattlefieldTrigger(
+          ctx,
+          (o, a) =>
+            a.trigger.on === 'yourPermanentReturnedToHand' &&
+            o.id !== ev.id &&
+            o.controller === was,
+        );
       }
       // Ygra: "Whenever a Food is put into a graveyard from the battlefield".
       if (ev.from === 'battlefield' && ev.to === 'graveyard') {
@@ -642,7 +746,7 @@ function detect(ctx: Ctx, ev: GameEvent): void {
           (o, a) =>
             a.trigger.on === 'opponentCreatureExiledInstead' && o.controller !== ev.controller,
         );
-      // Strixhaven (13a): "whenever one or more cards leave your graveyard" (Quintorius, Field Historian).
+      // Strixhaven (13a), Final Fantasy (11c): "whenever one or more cards leave your graveyard" (Quintorius, Fang).
       if (ev.from === 'graveyard' && ev.to !== 'graveyard' && moved && !moved.isToken)
         forEachBattlefieldTrigger(
           ctx,
@@ -675,7 +779,8 @@ function detect(ctx: Ctx, ev: GameEvent): void {
         const card = moved ?? ghost;
         // Final Fantasy (11b): a back face that dies (Chaos) triggers its own abilities.
         const diedAs = ev.leftAs ? defOf(ctx, ev.leftAs) : movedDef;
-        diedAs.abilities.forEach((a, i) => {
+        // Hellcat: one that had lost all its abilities has no dies triggers.
+        (ev.leftBlank ? [] : diedAs.abilities).forEach((a, i) => {
           if (a.kind !== 'triggered' || a.fromGraveyard) return;
           const t = a.trigger;
           if (t.on !== 'dies' && t.on !== 'creatureYouControlDies') return;
@@ -751,13 +856,19 @@ function detect(ctx: Ctx, ev: GameEvent): void {
             if (t.on !== 'otherCreatureDies' && t.on !== 'creatureYouControlDies') return false;
             if (o.id === ev.id) return false;
             if (t.nontoken && wasToken) return false;
-            if (t.on === 'creatureYouControlDies' && t.filter && !defMatches(movedDef, t.filter))
+            if (
+              t.on === 'creatureYouControlDies' &&
+              t.filter &&
+              !defMatches(movedDef, t.filter) &&
+              // Final Fantasy (11c): a type it gained (Jenova's Mutants).
+              !(t.filter.subtype && moved?.lastAddedSubtypes?.includes(t.filter.subtype))
+            )
               return false;
             // Marvel Super Heroes (Ares): "an attacking creature you control".
             if (
               t.on === 'creatureYouControlDies' &&
-              t.filter?.leftAttacking &&
-              !moved?.leftAttacking
+              t.filter?.leftAttacking !== undefined &&
+              t.filter.leftAttacking !== !!moved?.leftAttacking
             )
               return false;
             if (diedUnder === undefined) return true;
@@ -767,6 +878,8 @@ function detect(ctx: Ctx, ev: GameEvent): void {
             return o.controller === diedUnder;
           },
           moved,
+          // Final Fantasy (11c): "that creature's power" (Vincent Valentine).
+          ev.lastPower,
         );
         // Strixhaven Brawl (15a): Furious Forebear, "whenever a creature you control dies while this card is in your graveyard".
         if (diedUnder !== undefined)
@@ -782,8 +895,27 @@ function detect(ctx: Ctx, ev: GameEvent): void {
             });
           }
       }
+      // Final Fantasy (11c): emblems that see a creature die (Sephiroth), and Zenos's chosen creature.
+      if (ev.from === 'battlefield' && ev.to === 'graveyard' && movedDef.types.includes('Creature'))
+        emblemTriggers(ctx, (t) => t.on === 'otherCreatureDies', moved, true);
+      if (ev.from === 'battlefield')
+        forEachBattlefieldTrigger(
+          ctx,
+          (o, a) =>
+            a.trigger.on === 'chosenLeaves' &&
+            o.chosenObject?.id === ev.id &&
+            // A token is gone for good.
+            (!moved || o.chosenObject.zcc === moved.zcc - 1),
+        );
       return;
     }
+    // Final Fantasy (11c): Matoya, Archon Elder.
+    case 'scried':
+      forEachBattlefieldTrigger(
+        ctx,
+        (o, a) => a.trigger.on === 'youScryOrSurveil' && o.controller === ev.player,
+      );
+      return;
     // Doom Prevails (9e).
     case 'discarded': {
       const card = s.objects[ev.id];
@@ -870,6 +1002,12 @@ function detect(ctx: Ctx, ev: GameEvent): void {
               ? o.controller === ev.player
               : o.controller !== ev.player)),
       );
+      // Final Fantasy (11c): Astrologian's Planisphere.
+      if (ev.nth === 3)
+        forEachBattlefieldTrigger(
+          ctx,
+          (o, a) => a.trigger.on === 'drawThirdCard' && o.controller === ev.player,
+        );
       return;
     }
     case 'lifeChanged': {
@@ -903,6 +1041,17 @@ function detect(ctx: Ctx, ev: GameEvent): void {
             amount: ev.delta,
           });
         }
+      // Final Fantasy (11c): life loss triggers. "Whenever an opponent loses life" ("that many").
+      if (ev.delta < 0)
+        forEachBattlefieldTrigger(
+          ctx,
+          (o, a) =>
+            a.trigger.on === 'opponentLosesLife' &&
+            o.controller !== ev.player &&
+            (!a.trigger.duringYourTurn || s.turn.activePlayer === o.controller),
+          undefined,
+          -ev.delta,
+        );
       return;
     }
     // Strixhaven (13a): magecraft. "Whenever you cast or copy an instant or sorcery spell" (`orCopy`).
@@ -944,6 +1093,8 @@ function detect(ctx: Ctx, ev: GameEvent): void {
           (!a.trigger.fromExile || (item?.kind === 'spell' && !!item.fromExile)) &&
           // Secrets of Strixhaven (14b): Quandrix, the Proof.
           (!a.trigger.fromHand || (item?.kind === 'spell' && !!item.fromHand)) &&
+          // Final Fantasy (11c): a spell you don't own (Vaan).
+          (!a.trigger.notOwned || spellObj.owner !== ev.player) &&
           (!a.trigger.spell || cardMatches(ctx, ev.id, a.trigger.spell, o.id)) &&
           // Strixhaven Brawl (15b, w): Pearl-Ear, "an Aura spell that targets a modified permanent you control".
           targetsMatch(ctx, item, o.controller, a.trigger.targetFilter) &&
@@ -958,14 +1109,36 @@ function detect(ctx: Ctx, ev: GameEvent): void {
           ctx,
           (o, a) =>
             a.trigger.on === 'anyPlayerSecondSpell' &&
-            (!a.trigger.opponentOnly || o.controller !== ev.player),
+            (!a.trigger.opponentOnly || o.controller !== ev.player) &&
+            // Marvel Super Heroes Jumpstart (Scarlet): Wanda's Vision.
+            (!a.trigger.yoursOnly || o.controller === ev.player),
         );
+      // Bria, Riptide Rogue: "Other creatures you control have prowess" (each its own trigger).
+      if (!spell.types.includes('Creature'))
+        for (const bria of s.battlefield) {
+          const b = s.objects[bria]!;
+          if (b.controller !== ev.player) continue;
+          for (const a of def(ctx, bria).abilities) {
+            if (a.kind !== 'static' || a.effect.kind !== 'othersHaveProwess') continue;
+            for (const c of creaturesOnBattlefield(ctx, ev.player))
+              if (c.id !== bria)
+                s.pendingTriggers.push({
+                  source: { id: c.id, zcc: c.zcc },
+                  sourceDefId: c.defId,
+                  abilityIndex: -1,
+                  controller: ev.player,
+                  inline: [{ kind: 'pump', to: 'self', power: 1, toughness: 1 }],
+                });
+          }
+        }
       // Emblems: "whenever you cast a spell" (Season of the Bold, Ral).
       for (const e of s.emblems ?? []) {
         const a = e.ability;
         if (a.kind !== 'triggered' || a.trigger.on !== 'castSpell' || e.controller !== ev.player)
           continue;
         if (!spellMatches(ctx, a.trigger, spell, item, spellObj)) continue;
+        // Loki Laufeyson: "with mana value less than or equal to Loki's power" (the emblem's source).
+        if (a.trigger.spell && !cardMatches(ctx, ev.id, a.trigger.spell, e.source.id)) continue;
         // Galvanic Iteration: only the next one.
         if (e.once) s.emblems = s.emblems!.filter((x) => x !== e);
         s.pendingTriggers.push({
@@ -1001,11 +1174,10 @@ function detect(ctx: Ctx, ev: GameEvent): void {
           return o.controller === ap && attackedWith(a.trigger.filter, o.id);
         return false;
       });
-      // Wakanda Forever (9c): Equipment on an attacker; the defending player's "attacks you" triggers.
+      // Wakanda Forever (9c): the defending player's "attacks you" triggers.
       forEachBattlefieldTrigger(ctx, (o, a) => {
         const t = a.trigger;
-        if (t.on === 'equippedAttacks')
-          return o.attachedTo !== undefined && ev.attackers.includes(o.attachedTo);
+        // Final Fantasy (11c): "whenever equipped creature attacks" is queued once, below (with its subject).
         if (t.on === 'opponentAttacks') return o.controller !== ap && ev.attackers.length >= t.min;
         // Strixhaven (13c): Mila, Crafty Companion.
         if (t.on === 'opponentAttacksPlaneswalker')
@@ -1046,7 +1218,13 @@ function detect(ctx: Ctx, ev: GameEvent): void {
           const e = s.objects[eq]!;
           if (e.attachedTo !== id) continue;
           def(ctx, eq).abilities.forEach((a, i) => {
-            if (a.kind === 'triggered' && a.trigger.on === 'equippedAttacks')
+            if (
+              a.kind === 'triggered' &&
+              a.trigger.on === 'equippedAttacks' &&
+              (!a.trigger.alone || ev.attackers.length === 1) &&
+              // Final Fantasy (11c): its intervening "if" (Genji Glove: the first combat phase).
+              checkCondition(ctx, a.condition, e.controller, e)
+            )
               queue(ctx, e, i, e.controller, s.objects[id]);
           });
         }
@@ -1064,17 +1242,30 @@ function detect(ctx: Ctx, ev: GameEvent): void {
           attacker,
         );
       }
+      // Final Fantasy (11c): emblems that see a creature attack (Summon: Leviathan).
+      for (const id of ev.attackers) {
+        const attacker = s.objects[id];
+        if (!attacker) continue;
+        emblemTriggers(
+          ctx,
+          (t, e) =>
+            t.on === 'creatureYouControlAttacks' &&
+            e.controller === attacker.controller &&
+            matchesFilter(ctx, id, t.filter),
+          attacker,
+        );
+      }
       return;
     }
     case 'blockersDeclared': {
       const blocked = new Set(ev.blocks.map((b) => b.attacker));
+      // Marvel Super Heroes Jumpstart (Tenacious/Rampaging): "whenever this creature blocks" (Atlas).
+      const blockers = new Set(ev.blocks.map((b) => b.blocker));
+      forEachBattlefieldTrigger(ctx, (o, a) => a.trigger.on === 'blocks' && blockers.has(o.id));
       forEachBattlefieldTrigger(
         ctx,
         (o, a) => a.trigger.on === 'becomesBlocked' && blocked.has(o.id),
       );
-      // Strixhaven (13b): Daemogoth Titan: "whenever this creature blocks".
-      const blockers = new Set(ev.blocks.map((b) => b.blocker));
-      forEachBattlefieldTrigger(ctx, (o, a) => a.trigger.on === 'blocks' && blockers.has(o.id));
       // Coveted Jewel: attackers that weren't blocked.
       const unblocked = (s.combat?.attackers ?? []).filter((a) => !blocked.has(a.id));
       if (unblocked.length)
@@ -1128,6 +1319,21 @@ function detect(ctx: Ctx, ev: GameEvent): void {
       return;
     }
     case 'damageDealt': {
+      // Final Fantasy (11c): "Whenever Cecil deals damage" ("that much").
+      const dealer = s.objects[ev.source];
+      if (dealer?.zone === 'battlefield')
+        def(ctx, dealer.id).abilities.forEach((a, i) => {
+          if (a.kind === 'triggered' && a.trigger.on === 'dealsDamage')
+            queue(ctx, dealer, i, dealer.controller, undefined, ev.amount);
+          // Thieving Otter: "whenever this creature deals damage to an opponent".
+          if (
+            a.kind === 'triggered' &&
+            a.trigger.on === 'dealsDamageToOpponent' &&
+            'player' in ev.to &&
+            ev.to.player !== dealer.controller
+          )
+            queue(ctx, dealer, i, dealer.controller, undefined, ev.amount);
+        });
       // Hercules: "whenever this creature is dealt damage".
       if ('object' in ev.to) {
         const hurt = s.objects[ev.to.object.id];
@@ -1157,6 +1363,16 @@ function detect(ctx: Ctx, ev: GameEvent): void {
           undefined,
           ev.amount,
         );
+        // Marvel Super Heroes Jumpstart (Thor): from the graveyard (Asgardian Inspiration).
+        for (const id of s.players[by].graveyard) {
+          const card = s.objects[id]!;
+          def(ctx, id).abilities.forEach((a, i) => {
+            if (a.kind !== 'triggered' || !a.fromGraveyard) return;
+            if (a.trigger.on !== 'yourNoncombatDamageToOpponent') return;
+            if (checkCondition(ctx, a.condition, by, card))
+              queue(ctx, card, i, by, undefined, ev.amount);
+          });
+        }
         return;
       }
       const src = s.objects[ev.source];
@@ -1173,26 +1389,6 @@ function detect(ctx: Ctx, ev: GameEvent): void {
           controller: src.controller,
           inline: [{ kind: 'may', effects: [{ kind: 'blink', what: 'self' }] }],
         });
-      // Strixhaven Brawl (15b, r): Great Train Heist: an emblem "whenever a creature you control deals combat damage to that player this turn".
-      if ('player' in ev.to && ev.to.player !== src.controller)
-        for (const e of s.emblems ?? []) {
-          const a = e.ability;
-          if (
-            a.kind !== 'triggered' ||
-            a.trigger.on !== 'creatureYouControlDealsCombatDamage' ||
-            e.controller !== src.controller
-          )
-            continue;
-          s.pendingTriggers.push({
-            source: e.source,
-            sourceDefId: e.sourceDefId,
-            abilityIndex: -1,
-            controller: e.controller,
-            emblem: a,
-            subject: { id: src.id, zcc: src.zcc },
-            amount: ev.amount,
-          });
-        }
       if (src.controller === s.turn.activePlayer)
         forEachBattlefieldTrigger(
           ctx,
@@ -1204,6 +1400,31 @@ function detect(ctx: Ctx, ev: GameEvent): void {
           src,
           ev.amount,
         );
+      // Marvel Super Heroes Jumpstart (Tricksters): The Clone Saga's "whenever a creature with the chosen name ...";
+      // Strixhaven Brawl (15b, r): Great Train Heist's "whenever a creature you control deals combat damage".
+      emblemTriggers(
+        ctx,
+        (t, e) =>
+          t.on === 'creatureYouControlDealsCombatDamage' &&
+          e.controller === src.controller &&
+          (!t.toPlayer || 'player' in ev.to) &&
+          matchesFilter(ctx, src.id, t.filter),
+        src,
+      );
+      // Dropkick Bomber: "When this creature deals combat damage, sacrifice it" (to a player or a creature).
+      if (
+        s.effects.some(
+          (e) =>
+            e.sacrificeOnCombatDamage && e.affected.id === src.id && e.affected.zcc === src.zcc,
+        )
+      )
+        s.pendingTriggers.push({
+          source: { id: src.id, zcc: src.zcc },
+          sourceDefId: src.defId,
+          abilityIndex: -1,
+          controller: src.controller,
+          inline: [{ kind: 'sacrifice', what: 'self' }],
+        });
       if (!('player' in ev.to)) return;
       // Strixhaven (13c): Strixhaven Stadium: "whenever a creature deals combat damage to you".
       const damaged = ev.to.player;
@@ -1267,6 +1488,9 @@ function detect(ctx: Ctx, ev: GameEvent): void {
       forEachBattlefieldTrigger(
         ctx,
         (o, a) => a.trigger.on === 'equippedDealsCombatDamageToPlayer' && o.attachedTo === src.id,
+        // Final Fantasy (11c): "that damage" (Buster Sword).
+        undefined,
+        ev.amount,
       );
       return;
     }
@@ -1290,6 +1514,12 @@ function detect(ctx: Ctx, ev: GameEvent): void {
       );
       // Strixhaven Brawl (15b, multi): Mayhem Devil, "whenever a player sacrifices a permanent".
       forEachBattlefieldTrigger(ctx, (_o, a) => a.trigger.on === 'playerSacrifices');
+      // Final Fantasy (11c): Zodiark, "whenever a player sacrifices another creature".
+      if (d.types.includes('Creature'))
+        forEachBattlefieldTrigger(
+          ctx,
+          (o, a) => a.trigger.on === 'playerSacrificesCreature' && o.id !== ev.id,
+        );
       return;
     }
     // Strixhaven Brawl (15b, w): Rooms. Unlocking a door triggers that door's own ability and eerie.
@@ -1297,8 +1527,13 @@ function detect(ctx: Ctx, ev: GameEvent): void {
       const room = s.objects[ev.id];
       if (room && room.zone === 'battlefield')
         def(ctx, room.id).abilities.forEach((a, i) => {
-          if (a.kind === 'triggered' && a.trigger.on === 'doorUnlocked' && a.trigger.door === ev.door)
-            if (checkCondition(ctx, a.condition, room.controller, room)) queue(ctx, room, i, room.controller);
+          if (
+            a.kind === 'triggered' &&
+            a.trigger.on === 'doorUnlocked' &&
+            a.trigger.door === ev.door
+          )
+            if (checkCondition(ctx, a.condition, room.controller, room))
+              queue(ctx, room, i, room.controller);
         });
       if (ev.fully)
         forEachBattlefieldTrigger(
@@ -1329,8 +1564,8 @@ function detect(ctx: Ctx, ev: GameEvent): void {
           a.trigger.on === 'youPutCounters' &&
           o.controller === target.controller &&
           !(a.trigger.other && o.id === target.id) &&
-          // Secrets of Strixhaven (14b): Pensive Professor.
-          !(a.trigger.onlySelf && o.id !== target.id) &&
+          // Exemplar of Light; Secrets of Strixhaven (14b): Pensive Professor.
+          (!a.trigger.self || o.id === target.id) &&
           matchesFilter(ctx, target.id, a.trigger.filter, o.id),
         target,
         ev.count,
@@ -1348,6 +1583,21 @@ function detect(ctx: Ctx, ev: GameEvent): void {
         )
           queue(ctx, o, i, o.controller);
       });
+      return;
+    }
+    // Marvel Super Heroes Jumpstart (Marvelous): Marvel Boy, Noh-Varr.
+    case 'abilityActivated': {
+      const item = s.stack.find((i) => i.id === ev.id);
+      if (item?.kind === 'ability' && item.activated?.powerUp)
+        forEachBattlefieldTrigger(
+          ctx,
+          (o, a) => a.trigger.on === 'youActivatePowerUp' && o.controller === ev.player,
+        );
+      // Strixhaven (13c): Flamescroll Celebrant.
+      forEachBattlefieldTrigger(
+        ctx,
+        (o, a) => a.trigger.on === 'opponentActivatesAbility' && o.controller !== ev.player,
+      );
       return;
     }
     case 'tappedForTeamwork': {
@@ -1370,13 +1620,6 @@ function detect(ctx: Ctx, ev: GameEvent): void {
       );
       return;
     }
-    // Strixhaven (13c): Flamescroll Celebrant.
-    case 'abilityActivated':
-      forEachBattlefieldTrigger(
-        ctx,
-        (o, a) => a.trigger.on === 'opponentActivatesAbility' && o.controller !== ev.player,
-      );
-      return;
     case 'targeted': {
       // Strixhaven (13c): Mila, Crafty Companion (any permanent, not just creatures).
       for (const id of ev.ids) {
@@ -1506,6 +1749,11 @@ function detect(ctx: Ctx, ev: GameEvent): void {
         const t = a.trigger;
         if (t.on !== on) return false;
         if (t.whose === 'opponents') return o.controller !== ev.activePlayer;
+        // Marvel Super Heroes Jumpstart (Geniuses): Super Intelligence.
+        if (t.whose === 'enchantedController') {
+          const host = o.attachedTo ? ctx.s.objects[o.attachedTo] : undefined;
+          return host?.zone === 'battlefield' && host.controller === ev.activePlayer;
+        }
         return t.whose === 'each' || o.controller === ev.activePlayer;
       });
       return;
@@ -1542,8 +1790,12 @@ function defMatches(d: CardDefinition, f: CardFilter): boolean {
     Math.min(d.power ?? 0, d.toughness ?? 0) > f.maxPowerOrToughness
   )
     return false;
+  // Final Fantasy Commander (12c): "a creature you control without flying" (Luminous Broodmoth).
+  if (f.lacksKeyword && d.keywords.includes(f.lacksKeyword)) return false;
   if (f.subtype && !d.subtypes.includes(f.subtype)) return false;
   if (f.subtypes && !f.subtypes.some((st) => d.subtypes.includes(st))) return false;
+  // Final Fantasy (11c): "legendary creature spell" (Serah Farron).
+  if (f.supertypes && !f.supertypes.some((t) => d.supertypes.includes(t))) return false;
   return true;
 }
 
@@ -1573,4 +1825,171 @@ export function triggeredAbility(
 /** Who cast the spell a castSpell trigger looks at (the stack item's controller). */
 function spellCaster(ctx: Ctx, item: StackItem | undefined, self: GameObject): PlayerId {
   return item?.controller ?? self.controller;
+}
+
+// ---------------------------------------------------------------------------
+// Marvel Super Heroes Jumpstart (Animal): "whenever this becomes tapped" (Wakandan Tusker).
+
+// Marvel Super Heroes Jumpstart (Tenacious/Rampaging)
+/** Voracious Brood: one trigger per batch, its amount the creature cards put into the graveyard. */
+function creatureCardToGraveyard(ctx: Ctx, owner: PlayerId): void {
+  for (const id of ctx.s.battlefield) {
+    const o = obj(ctx, id);
+    if (o.controller !== owner) continue;
+    def(ctx, id).abilities.forEach((a, i) => {
+      if (a.kind !== 'triggered' || a.trigger.on !== 'creatureCardsToYourGraveyard') return;
+      const queued = ctx.batched.has(`${o.id}:${o.zcc}:${i}`)
+        ? ctx.s.pendingTriggers.find(
+            (t) => t.source.id === o.id && t.source.zcc === o.zcc && t.abilityIndex === i,
+          )
+        : undefined;
+      if (queued) queued.amount = (queued.amount ?? 0) + 1;
+      else {
+        ctx.batched.add(`${o.id}:${o.zcc}:${i}`);
+        queue(ctx, o, i, o.controller, undefined, 1);
+      }
+    });
+  }
+}
+
+function detectAnimal(ctx: Ctx, ev: GameEvent): void {
+  if (ev.type !== 'tapped') return;
+  const o = ctx.s.objects[ev.id];
+  if (!o || o.zone !== 'battlefield') return;
+  def(ctx, o.id).abilities.forEach((a, i) => {
+    if (a.kind === 'triggered' && a.trigger.on === 'becomesTapped') queue(ctx, o, i, o.controller);
+  });
+  // Marvel Super Heroes Jumpstart (Young Avengers): "Whenever equipped creature becomes tapped" (Hawkeye's Bow).
+  for (const eq of ctx.s.battlefield) {
+    const e = ctx.s.objects[eq]!;
+    if (e.attachedTo !== o.id) continue;
+    def(ctx, eq).abilities.forEach((a, i) => {
+      if (a.kind === 'triggered' && a.trigger.on === 'equippedBecomesTapped')
+        queue(ctx, e, i, e.controller, o);
+    });
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Final Fantasy Commander (12): triggers of the FIC Brawl decks.
+
+function detectFic(ctx: Ctx, ev: GameEvent): void {
+  const s = ctx.s;
+  if (ev.type === 'untapped') {
+    const o = s.objects[ev.id];
+    if (!o || o.zone !== 'battlefield') return;
+    def(ctx, o.id).abilities.forEach((a, i) => {
+      if (a.kind === 'triggered' && a.trigger.on === 'becomesUntapped')
+        queue(ctx, o, i, o.controller);
+    });
+    return;
+  }
+  // (Opponents losing life, scry or surveil, a chosen creature leaving, cards leaving your graveyard,
+  // a creature or artifact dying and back faces' own "dies" triggers: phase 11's, in detect().)
+  if (ev.type !== 'objectMoved') return;
+  const moved = s.objects[ev.id];
+  const movedDef = defOf(ctx, ev.defId);
+  if (
+    ev.from === 'graveyard' &&
+    moved &&
+    ev.to === 'battlefield' &&
+    moved.zone === 'battlefield' &&
+    movedDef.types.includes('Creature')
+  )
+    forEachBattlefieldTrigger(
+      ctx,
+      (o, a) =>
+        a.trigger.on === 'creaturesEnterFromGraveyard' &&
+        o.id !== moved.id &&
+        o.controller === moved.controller,
+      moved,
+    );
+}
+
+// Final Fantasy (11c): rare triggers
+
+/** Triggers caused by a creature dying (The Masamune). */
+const DEATH_TRIGGERS: ReadonlySet<TriggerDef['on']> = new Set([
+  'dies',
+  'otherCreatureDies',
+  'creatureYouControlDies',
+]);
+
+/** An Equipment with The Masamune's "triggers an additional time" is (or was, as it died) on this creature. */
+function masamuneOn(ctx: Ctx, o: GameObject): boolean {
+  return ctx.s.battlefield.some((id) => {
+    const eq = ctx.s.objects[id]!;
+    const on =
+      eq.attachedTo === o.id ||
+      (eq.lastAttachedTo?.id === o.id && eq.lastAttachedTo.zcc === o.zcc - 1);
+    return (
+      on &&
+      def(ctx, id).abilities.some(
+        (a) => a.kind === 'static' && a.effect.kind === 'attached' && !!a.effect.deathTriggersTwice,
+      )
+    );
+  });
+}
+
+/**
+ * Does this trigger happen an additional time? The Masamune: a creature dying
+ * triggers an ability of the equipped creature. Cloud, Midgar Mercenary: while
+ * equipped, its abilities and those of Equipment attached to it.
+ */
+function triggersTwice(ctx: Ctx, o: GameObject, a: Triggered): boolean {
+  if (DEATH_TRIGGERS.has(a.trigger.on) && masamuneOn(ctx, o)) return true;
+  if (o.zone !== 'battlefield') return false;
+  const host = def(ctx, o.id).types.includes('Creature')
+    ? o
+    : o.attachedTo !== undefined
+      ? ctx.s.objects[o.attachedTo]
+      : undefined;
+  if (!host || host.zone !== 'battlefield') return false;
+  if (
+    !def(ctx, host.id).abilities.some(
+      (x) => x.kind === 'static' && x.effect.kind === 'equippedTriggersTwice',
+    )
+  )
+    return false;
+  return ctx.s.battlefield.some(
+    (id) =>
+      ctx.s.objects[id]!.attachedTo === host.id && def(ctx, id).subtypes.includes('Equipment'),
+  );
+}
+
+/**
+ * Emblems whose triggered ability matches (Sephiroth's "whenever a creature
+ * dies", Summon: Leviathan's attack draws). `death`: The Masamune doubles it
+ * for an emblem whose owner controls the equipped creature.
+ */
+function emblemTriggers(
+  ctx: Ctx,
+  test: (t: TriggerDef, e: Emblem) => boolean,
+  subject: GameObject | undefined,
+  death = false,
+): void {
+  for (const e of ctx.s.emblems ?? []) {
+    const a = e.ability;
+    if (a.kind !== 'triggered' || !test(a.trigger, e)) continue;
+    const t: PendingTrigger = {
+      source: e.source,
+      sourceDefId: e.sourceDefId,
+      abilityIndex: -1,
+      controller: e.controller,
+      emblem: a,
+      ...(subject ? { subject: { id: subject.id, zcc: subject.zcc } } : {}),
+    };
+    ctx.s.pendingTriggers.push(t);
+    const doubled =
+      death &&
+      ctx.s.battlefield.some((id) => {
+        const c = ctx.s.objects[id]!;
+        return (
+          c.controller === e.controller &&
+          def(ctx, id).types.includes('Creature') &&
+          masamuneOn(ctx, c)
+        );
+      });
+    if (doubled) ctx.s.pendingTriggers.push({ ...t });
+  }
 }

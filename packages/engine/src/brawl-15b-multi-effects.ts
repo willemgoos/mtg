@@ -82,14 +82,6 @@ export const BRAWL_15B_MULTI_EFFECTS: Record<string, CustomEffect> = {
     const keep = (params as { keep?: ObjectId } | undefined)?.keep;
     for (const o of [...creaturesOnBattlefield(ctx)]) if (o.id !== keep) destroy(ctx, o.id);
   },
-  /** Ruinous Ultimatum: destroy all nonland permanents your opponents control. */
-  ruinousUltimatum(ctx, es) {
-    for (const id of [...ctx.s.battlefield]) {
-      if (obj(ctx, id).controller === es.controller || def(ctx, id).types.includes('Land'))
-        continue;
-      destroy(ctx, id);
-    }
-  },
   /**
    * Fractured Identity: exile the target nonland permanent; each player other than its controller
    * creates a token that's a copy of it.

@@ -19,6 +19,8 @@ export {
   BLOOMBURROW_POOL,
   MARVEL_POOL,
   BLUE_POOL,
+  FOUNDATIONS_DRAFT_POOL,
+  FOUNDATIONS_JUMP_IN_POOL,
   GREEN_POOL,
   LAND_POOL,
   MARVEL_BRAWL_POOL,
@@ -26,6 +28,7 @@ export {
   STRIXHAVEN_POOL,
   SECRETS_OF_STRIXHAVEN_POOL,
   STRIXHAVEN_BRAWL_POOL,
+  FINAL_FANTASY_BRAWL_POOL,
   OTHER_POOL,
   RED_POOL,
   WHITE_POOL,
@@ -34,17 +37,30 @@ export { describeEvent } from './log.ts';
 export {
   ARENA_DECKS,
   BLOOMBURROW_DECKS,
+  BLOOMBURROW_TROPHY_DECKS,
   COLOR_CHALLENGE_DECKS,
   DECKS,
+  FOUNDATIONS_TROPHY_DECKS,
   MARVEL_DECKS,
   MARVEL_BRAWL_DECKS,
   STRIXHAVEN_BRAWL_DECKS,
+  MARVEL_TROPHY_DECKS,
+  FINAL_FANTASY_TROPHY_DECKS,
   FINAL_FANTASY_DECKS,
   STRIXHAVEN_DECKS,
   SECRETS_OF_STRIXHAVEN_DECKS,
+  FINAL_FANTASY_STARTER_KIT_DECKS,
+  FINAL_FANTASY_BRAWL_DECKS,
 } from './decks.ts';
 export type { Decklist } from './decks.ts';
-export { PACKET_LANDS, PACKETS, packetCards } from './jumpin.ts';
+export {
+  ARENA_BLB_PACKETS,
+  MARVEL_JUMPSTART_PACKETS,
+  ARENA_FDN_PACKETS,
+  PACKET_LANDS,
+  PACKETS,
+  packetCards,
+} from './jumpin.ts';
 export type { Packet } from './jumpin.ts';
 export type { ScryfallCard } from './scryfall-types.ts';
 
@@ -234,7 +250,7 @@ function jumpInDeck(id: string): Decklist | undefined {
   return {
     id,
     name: `${a.name} + ${b.name}`,
-    colors: [...new Set([a.color, b.color])],
+    colors: [...new Set([...a.colors, ...b.colors])],
     face: a.face,
     source: 'custom',
     series: 'jumpIn',
@@ -278,6 +294,11 @@ const OPPONENT_GROUPS: [tenths: number, decks: readonly Decklist[]][] = [
   [1, PLAYABLE_DECKS.filter((d) => d.series === 'colorChallenge')],
 ];
 
+/** Draft decks that won on Arena: the tougher opponents (Expedition elites and bosses). */
+export const TROPHY_DECKS: readonly Decklist[] = PLAYABLE_DECKS.filter(
+  (d) => d.series === 'trophy',
+);
+
 /** Every deck a bot can play. */
 export const OPPONENT_DECKS: readonly Decklist[] = OPPONENT_GROUPS.flatMap(([, d]) => d);
 
@@ -297,5 +318,17 @@ export function pickOpponent(
   const others = (ds: readonly Decklist[]) => ds.filter((d) => d.id !== you);
   const unmet = (ds: readonly Decklist[]) => others(ds).filter((d) => !met.includes(d.id));
   const from = [unmet(group), unmet(OPPONENT_DECKS), others(group)].find((ds) => ds.length)!;
+  return from[int(from.length)]!.id;
+}
+
+/** A trophy deck for a tough fight, like `pickOpponent`: unmet ones first, never `you`. */
+export function pickTrophyOpponent(
+  int: (n: number) => number,
+  you?: string,
+  met: readonly string[] = [],
+): string {
+  const others = TROPHY_DECKS.filter((d) => d.id !== you);
+  const unmet = others.filter((d) => !met.includes(d.id));
+  const from = unmet.length ? unmet : others;
   return from[int(from.length)]!.id;
 }

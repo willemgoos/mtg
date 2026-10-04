@@ -177,7 +177,7 @@ export const BRAWL_15B_R: Record<string, Behavior> = {
         [],
         {
           kind: 'emblem',
-          until: 'thisTurn',
+          until: 'endOfTurn',
           ability: {
             kind: 'triggered',
             trigger: { on: 'creatureYouControlDealsCombatDamage', toPlayer: true },

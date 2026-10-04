@@ -57,6 +57,8 @@ export type Keyword =
   | 'indestructible'
   /** Can't be the target of instants an opponent controls (Elenda). */
   | 'hexproofFromInstants'
+  /** Can't be the target of white spells or abilities an opponent controls (Knight of Malice). */
+  | 'hexproofFromWhite'
   /** Ward: targeting it costs an opponent `CardDefinition.wardCost` (default {2}). */
   | 'ward'
   /** Ward {1}, granted by another permanent (Long River Lurker, Innkeeper's Talent). */
@@ -90,10 +92,10 @@ export interface CardDefinition {
     /** It isn't legendary (Spark Double; Chameleon keeps its own name). */
     notLegendary?: boolean;
     // Strixhaven Brawl (15b, pair): Altered Ego
-    /** Any creature on the battlefield, of any mana value. */
-    anyMV?: boolean;
     /** X additional +1/+1 counters on it. */
     xCounters?: boolean;
+    /** Final Fantasy Commander (12c): any creature, whatever its mana value (Altered Ego). */
+    anyManaValue?: boolean;
   };
   id: CardDefId;
   name: string;
@@ -136,6 +138,9 @@ export interface CardDefinition {
     sacrificeFood?: boolean;
     // Strixhaven Brawl (15b, b): Vein Ripper, "Ward—Sacrifice a creature."
     sacrificeCreature?: boolean;
+    // Final Fantasy (11c): ward paid in life
+    /** "Ward—Pay life equal to its power" (Raubahn). */
+    lifeEqualsPower?: boolean;
   };
   /** "This spell can't be countered." */
   uncounterable?: boolean;
@@ -193,6 +198,15 @@ export interface CardDefinition {
     exileFromHand?: CardFilter;
     /** The kicked (all modes at once) version may only be cast while this holds (Akroma's Will: you control a commander). */
     onlyIf?: ConditionDef;
+    // Marvel Super Heroes Jumpstart (Incredible)
+    /**
+     * "As an additional cost, you may behold a <filter>" (Hulk's Thunderclap): `cost` is {0}; kicked
+     * only if you control a matching permanent or have another matching card in hand.
+     */
+    behold?: CardFilter;
+    // Marvel Super Heroes Jumpstart (Pym Particles)
+    /** "You may cast this spell as though it had flash if it's cast using teamwork" (Quantum Reduction). */
+    flash?: boolean;
   };
   // Mystical Archive (16): Angel's Grace, Krosan Grip, Berserk
   /** Split second: while it is on the stack, nobody can cast spells or activate (non-mana) abilities. */
@@ -241,6 +255,9 @@ export interface CardDefinition {
   // Strixhaven Brawl (15b, pair)
   /** X can't be less than this (Ornate Imitations: "X can't be 0"). */
   minX?: number;
+  // Marvel Super Heroes Jumpstart (Tenacious/Rampaging)
+  /** It enters with this many +1/+1 counters (Voracious Brood: one per creature card in your graveyard). */
+  entersWithCountersAmount?: Amount;
   /** Costs {amount} less while the condition holds (Heroic Return, Avenge). */
   costReductionIf?: {
     condition: ConditionDef;
@@ -256,6 +273,8 @@ export interface CardDefinition {
   sacrificeCreaturesForReduction?: number;
   /** "As an additional cost to cast this spell, discard a card" (Sazacap's Brew). */
   discardToCast?: boolean;
+  /** "As an additional cost to cast this spell, discard a card or pay this" (Titania, Rugged Rumbler). */
+  discardOrPay?: ManaCost;
   /** It enters tapped while this holds (Eddymurk Crab: if it's not your turn). */
   entersTappedIf?: ConditionDef;
   /** "As an additional cost to cast this spell, forage or pay this" (Feed the Cycle). */
@@ -359,6 +378,8 @@ export type AbilityDef =
       // Brawl staples.
       /** Mana per tap, if more than one (Sol Ring). */
       amount?: number;
+      /** Mana per tap from a count (Elvish Archdruid: {G} for each Elf you control). */
+      amountOf?: Amount;
       /**
        * Only if the colour is in your commander's colour identity (Command
        * Tower), or a land an opponent controls could make it (Exotic Orchard).
@@ -400,13 +421,16 @@ export type AbilityDef =
       label?: string;
       /** Activated from the graveyard (Reassembling Skeleton). */
       fromGraveyard?: boolean;
+      // Marvel Super Heroes Jumpstart (Great Lakes Avengers)
+      /** Also activated from exile, with `fromGraveyard` (Mister Immortal). */
+      fromExile?: boolean;
       // Power-up (Marvel Super Heroes)
       /** Power-up: once only, and it costs the card's mana cost less if it entered this turn. */
       powerUp?: boolean;
       /** Activated from your hand (cycling). */
       fromHand?: boolean;
-      // Final Fantasy (11b): lands and Towns
-      /** "This ability costs {1} less to activate for each Town you control" (Qiqirn Merchant). */
+      // Final Fantasy (11b/11c): activated cost reduction
+      /** "This ability costs {1} less to activate for each ..." (Qiqirn Merchant: Towns; Balamb Garden). */
       costReduction?: Amount;
     }
   | {
@@ -455,6 +479,9 @@ export interface CostDef {
   discard?: boolean;
   /** Tap this many untapped tokens you control (Baylen, Tangle Tumbler). */
   tapTokens?: number;
+  // Marvel Super Heroes Jumpstart (Masters of Evil)
+  /** Tap an untapped creature you control matching this (the engine picks the weakest): Villainous Syndication. */
+  tapCreature?: CardFilter;
   /** Sacrifice a permanent matching this (Fountainport: a token). */
   sacrificePermanent?: CardFilter;
   /** Untapped creatures you control may each pay for {1} (Heirloom Epic). */
@@ -566,6 +593,9 @@ export type TriggerDef =
       // Secrets of Strixhaven (14b): Quandrix, the Proof
       /** Only spells cast from your hand. */
       fromHand?: boolean;
+      // Final Fantasy (11c): spells you don't own
+      /** Only spells the caster doesn't own (Vaan, Street Thief). */
+      notOwned?: boolean;
       // Final Fantasy (11b): mana spent
       /** "If at least N mana was spent to cast it" (Sahagin, Ultros). */
       minManaSpent?: number;
@@ -577,7 +607,13 @@ export type TriggerDef =
       targetFilter?: CardFilter;
     }
   /** Whenever a player (an opponent: Monologue Tax) casts their second spell each turn (Hearthborn Battler). */
-  | { on: 'anyPlayerSecondSpell'; opponentOnly?: boolean }
+  | {
+      on: 'anyPlayerSecondSpell';
+      opponentOnly?: boolean;
+      // Marvel Super Heroes Jumpstart (Scarlet)
+      /** Only your own second spell each turn (Wanda's Vision). */
+      yoursOnly?: boolean;
+    }
   /** At the beginning of your precombat or postcombat main phase. */
   | { on: 'beginningOfMain'; which: 1 | 2 }
   /** Whenever you (or, with 'opponents', an opponent: Black Widow) draw your second card each turn. */
@@ -586,7 +622,7 @@ export type TriggerDef =
   /** Whenever a creature you control is dealt damage ("that much": the event amount). */
   | { on: 'yourCreatureDealtDamage' }
   /** Equipment: whenever the equipped creature attacks (Captain America's Shield). */
-  | { on: 'equippedAttacks' }
+  | { on: 'equippedAttacks'; alone?: boolean }
   /** Whenever a player or permanent becomes the target of an ability you control (Loki, God of Mischief). */
   | { on: 'youTargetWithAbility' }
   | { on: 'drawCard'; whose: 'yours' | 'opponents' }
@@ -594,9 +630,10 @@ export type TriggerDef =
   | { on: 'yourNoncombatDamageToOpponent' }
   /** Whenever this creature becomes blocked. */
   | { on: 'becomesBlocked' }
-  // Strixhaven (13b): Daemogoth Titan
-  /** Whenever this creature blocks. */
-  | { on: 'blocks' }
+  /** Whenever this deals damage, combat or not, to an opponent (Thieving Otter). */
+  | { on: 'dealsDamageToOpponent' }
+  /** Whenever another nonland permanent you control is returned to its owner's hand (Justice, Vance Astrovik). */
+  | { on: 'yourPermanentReturnedToHand' }
   /** Whenever a creature you control (matching the filter) attacks; "that creature" is the subject. */
   | {
       on: 'creatureYouControlAttacks';
@@ -605,7 +642,16 @@ export type TriggerDef =
       alone?: boolean;
     }
   | { on: 'landfall' }
-  | { on: 'beginningOfUpkeep'; whose: 'yours' | 'each' | 'opponents' }
+  | {
+      on: 'beginningOfUpkeep';
+      whose:
+        | 'yours'
+        | 'each'
+        | 'opponents'
+        // Marvel Super Heroes Jumpstart (Geniuses)
+        /** The upkeep of the enchanted creature's controller (Super Intelligence). */
+        | 'enchantedController';
+    }
   | { on: 'beginningOfEndStep'; whose: 'yours' | 'each' }
   /** Whenever another permanent you control matching the filter enters (Honored Dreyleader). */
   | { on: 'otherPermanentEtb'; filter: CardFilter }
@@ -639,9 +685,7 @@ export type TriggerDef =
       on: 'youPutCounters';
       other?: boolean;
       filter?: CardFilter;
-      // Secrets of Strixhaven (14b): Pensive Professor
-      /** Only counters put on the source itself. */
-      onlySelf?: boolean;
+      /** Only this creature (Exemplar of Light, Pensive Professor). */ self?: boolean;
     }
   /** At the beginning of your draw step. */
   | { on: 'beginningOfDraw' }
@@ -652,6 +696,25 @@ export type TriggerDef =
   // Teamwork (Marvel Super Heroes)
   /** Whenever this becomes tapped to pay a teamwork cost (Agent Maria Hill). */
   | { on: 'tappedForTeamwork' }
+  // Marvel Super Heroes Jumpstart (Animal).
+  /** Whenever this permanent becomes tapped (Wakandan Tusker). */
+  | { on: 'becomesTapped' }
+  // Marvel Super Heroes Jumpstart (Young Avengers)
+  /** Whenever the creature this Equipment is attached to becomes tapped ("it" is the subject): Hawkeye's Bow. */
+  | { on: 'equippedBecomesTapped' }
+  // Marvel Super Heroes Jumpstart (Tenacious/Rampaging)
+  /** Whenever this creature blocks (Atlas, Sizable Stooge; Daemogoth Titan). */
+  | { on: 'blocks' }
+  // Marvel Super Heroes Jumpstart (Marvelous)
+  /** Whenever you activate a power-up ability (Marvel Boy, Noh-Varr). */
+  | { on: 'youActivatePowerUp' }
+  /** Whenever another creature is exiled from the battlefield; "that much" is its power (Captain Marvel, Shooting Star). */
+  | { on: 'otherCreatureExiled' }
+  /**
+   * Whenever one or more creature cards are put into your graveyard from anywhere ("that many"
+   * is the event amount; once per batch of events): Voracious Brood.
+   */
+  | { on: 'creatureCardsToYourGraveyard' }
   /** Whenever one or more creatures you control (matching the filter) deal combat damage to a player (Kastral). */
   | { on: 'creaturesYouControlDealCombatDamageToPlayer'; filter?: CardFilter }
   /** When you sacrifice this permanent (Carrot Cake). */
@@ -670,7 +733,7 @@ export type TriggerDef =
   | { on: 'targetedByOpponent' }
   // Wakanda Forever (9c).
   /** Whenever the creature this Equipment is attached to attacks. */
-  | { on: 'equippedAttacks' }
+  | { on: 'equippedAttacks'; alone?: boolean }
   /** Whenever a creature an opponent controls (matching the filter) attacks you ("that creature"): Storm. */
   | { on: 'opponentCreatureAttacks'; filter?: CardFilter }
   /** Whenever an opponent attacks you with `min` or more creatures (Everett K. Ross). */
@@ -690,6 +753,22 @@ export type TriggerDef =
   | { on: 'creatureYouControlBecomesBlocked'; filter?: CardFilter }
   /** Whenever a creature you control becomes tapped for the first time this turn, during your turn. */
   | { on: 'creatureYouControlFirstTappedOnYourTurn' }
+  // Final Fantasy (11c): rare triggers
+  /** Whenever you scry or surveil (Matoya, Archon Elder). */
+  | { on: 'youScryOrSurveil' }
+  /** Whenever you draw your third card each turn (Astrologian's Planisphere). */
+  | { on: 'drawThirdCard' }
+  /** Whenever this deals damage, combat or not ("that much"): Cecil, Dark Knight. */
+  | { on: 'dealsDamage' }
+  /** Whenever a player sacrifices another creature (Zodiark, Umbral God). */
+  | { on: 'playerSacrificesCreature' }
+  /** When the creature chosen for this (`chosenObject`) leaves the battlefield (Zenos yae Galvus). */
+  | { on: 'chosenLeaves' }
+  // Final Fantasy (11c): life loss and graveyard triggers
+  /** Whenever an opponent loses life ("that many"), during your turn if `duringYourTurn` (Kefka, Ruler of Ruin). */
+  | { on: 'opponentLosesLife'; duringYourTurn?: boolean }
+  /** Whenever one or more cards leave your graveyard (Fang, Fearless l'Cie). */
+  | { on: 'cardsLeaveYourGraveyard' }
   // Final Fantasy (11b): creatures and artifacts dying
   /**
    * Whenever this or another permanent you control matching the filter is put
@@ -697,9 +776,6 @@ export type TriggerDef =
    * dies"); `other`: only other permanents (Judge Magister Gabranth).
    */
   | { on: 'permanentYouControlDies'; filter: CardFilter; other?: boolean }
-  // Strixhaven (13a): Quintorius, Field Historian
-  /** "Whenever one or more cards leave your graveyard" (use with `batch`). */
-  | { on: 'cardsLeaveYourGraveyard' }
   // Strixhaven (13c): Flamescroll Celebrant
   /** Whenever an opponent activates an ability that isn't a mana ability. */
   | { on: 'opponentActivatesAbility' }
@@ -732,7 +808,12 @@ export type TriggerDef =
   | { on: 'fullyUnlock' }
   // Strixhaven Brawl (15b, r): Magda, Brazen Outlaw
   /** Whenever a creature you control (matching the filter) becomes tapped. */
-  | { on: 'creatureYouControlBecomesTapped'; filter?: CardFilter };
+  | { on: 'creatureYouControlBecomesTapped'; filter?: CardFilter }
+  // Final Fantasy Commander (12): triggers of the FIC Brawl decks.
+  /** Whenever one or more other creatures you control enter from a graveyard (Celes). Use with `batch`. */
+  | { on: 'creaturesEnterFromGraveyard' }
+  /** Whenever this permanent becomes untapped (Key to the City). */
+  | { on: 'becomesUntapped' };
 
 export type ConditionDef =
   // Strixhaven Brawl (15b, g): Orochi Merge-Keeper
@@ -771,7 +852,12 @@ export type ConditionDef =
   /** A count reaches `min` (Finneas: total power 10 or greater). */
   | { kind: 'amountAtLeast'; amount: Amount; min: number }
   /** This ability has resolved exactly `n` times this turn, counting this one (Harvestrite Host). */
-  | { kind: 'resolvedThisTurn'; n: number }
+  | {
+      kind: 'resolvedThisTurn';
+      n: number;
+      /** `n` times or more (Iron Fist, Living Weapon: it has triggered this turn). */
+      orMore?: boolean;
+    }
   /**
    * Life changes this turn for you or an opponent: `gained` and/or `lost`
    * (both must hold), or `either`.
@@ -885,7 +971,28 @@ export type ConditionDef =
   // Strixhaven Brawl (15a): Sevinne's Reclamation
   /** This spell was cast from a graveyard (flashback). */
   | { kind: 'castFromGraveyard' }
-  | { kind: 'custom'; handler: string };
+  /** Any player controls a permanent matching the filter (Knight of Malice: a white one). */
+  | { kind: 'anyPlayerControls'; filter: CardFilter }
+  | { kind: 'custom'; handler: string }
+  // Final Fantasy (11c): rare conditions
+  /** Your life total is at most half your starting life total (Cecil, Dark Knight). */
+  | { kind: 'lifeAtMostHalfStarting' }
+  /** This is the first combat phase of the turn (Genji Glove, Balthier and Fran). */
+  | { kind: 'firstCombatPhase' }
+  /** This is the first end step of the turn (Y'shtola Rhul). */
+  | { kind: 'firstEndStep' }
+  /** The source attacked this turn (The Lunar Whale). */
+  | { kind: 'sourceAttackedThisTurn' }
+  // Final Fantasy (11c): turn conditions
+  /** You haven't cast a spell matching the filter this turn (Serah Farron: the first legendary creature spell). */
+  | { kind: 'noneCastThisTurn'; filter: CardFilter }
+  /** It's your turn, and one of your first `max` turns of the game (Starting Town). */
+  | { kind: 'yourEarlyTurn'; max: number }
+  /** The creature that caused the trigger was crewed by the source this turn (Balthier and Fran). */
+  | { kind: 'subjectCrewedBySource' }
+  // Marvel Super Heroes Jumpstart (Heroes for Hire)
+  /** Target `target` was chosen and is still legal ("up to" targets: Iron Fist, Hero for Hire). */
+  | { kind: 'targetChosen'; target: number };
 
 export interface CardFilter {
   anyOf?: CardFilter[];
@@ -941,6 +1048,9 @@ export interface CardFilter {
   damaged?: boolean;
   /** Toughness greater than its power (Fecund Greenshell). */
   toughnessGreaterThanPower?: boolean;
+  // Marvel Super Heroes Jumpstart (Marvelous)
+  /** Power greater than its base power (Ms. Marvel, Elastic Ally). */
+  powerAboveBase?: boolean;
   /** Has the creature type chosen for the source (Patchwork Banner). */
   chosenTypeOfSource?: boolean;
   /** Has counters on it (Innkeeper's Talent). */
@@ -948,11 +1058,16 @@ export interface CardFilter {
   // Strixhaven (13b): monocolored
   /** Exactly one colour (Vanishing Verse). */
   monocolored?: boolean;
+  /** +1/+1 counters were put on it this turn (Kid Loki). */
+  countersPutThisTurn?: boolean;
   // The Fantastic Four (9d).
   /** A card with this id ("a creature named Silver Surfer"). */
   named?: CardDefId;
   // Marvel Super Heroes
-  /** It was attacking as it left the battlefield ("an attacking creature you control dies"). */
+  /**
+   * It was attacking as it left the battlefield ("an attacking creature you control dies");
+   * false: it wasn't (Garna, Bloodfist of Keld's "otherwise").
+   */
   leftAttacking?: boolean;
   /** Attached to the source (Winter Soldier: "for each Equipment attached to him"). */
   attachedToSource?: boolean;
@@ -968,6 +1083,9 @@ export interface CardFilter {
   enchantedByYourAura?: boolean;
   /** Its base (printed) power is 0 (Primo, the Unbounded). */
   basePowerZero?: boolean;
+  // Marvel Super Heroes Jumpstart (HYDRA)
+  /** "Creature that's attacking alone": the only attacking creature (Viper, Cruel Conspirator). */
+  attackingAlone?: boolean;
   // Brawl.
   /** Is its controller's commander ("your commander"). */
   commander?: boolean;
@@ -1009,6 +1127,12 @@ export interface CardFilter {
   // Mystical Archive (16): Doom Blade
   /** Has none of these colours (a "nonblack" creature). */
   notColors?: Color[];
+  // Final Fantasy (11c): rare filters
+  /** Has none of these subtypes ("isn't a Kraken, Leviathan, ...": Summon: Leviathan). */
+  notSubtypes?: string[];
+  // Final Fantasy (11c): nonlegendary
+  /** Has none of these supertypes (Ragnarok: a nonlegendary permanent card). */
+  notSupertypes?: Supertype[];
 }
 
 export interface TargetSpec {
@@ -1021,6 +1145,13 @@ export interface TargetSpec {
   filter?: CardFilter;
   /** "Up to": this target and the ones after it may be left out. */
   optional?: boolean;
+  // Final Fantasy (11c): targeting abilities
+  /**
+   * With 'spell': activated and triggered abilities on the stack are targets
+   * too (Louisoix's Sacrifice); `abilitiesOnly` leaves spells out (Gogo).
+   */
+  abilities?: boolean;
+  abilitiesOnly?: boolean;
 }
 
 /**
@@ -1040,6 +1171,9 @@ export type Ref =
   | { each: 'creature'; controller?: 'you' | 'opponent'; filter?: CardFilter }
   /** The controller of a chosen target (Blooming Blast: "that creature's controller"). */
   | { controllerOf: number }
+  // Marvel Super Heroes Jumpstart (Geniuses)
+  /** The controller of the permanent the source is attached to (Super Intelligence: "that player"). */
+  | 'attachedController'
   /** The permanent chosen by a 'chooseYourPermanent' effect. */
   | 'chosen';
 
@@ -1063,6 +1197,8 @@ export type Amount =
   | { toughnessOf: Ref }
   /** The mana value of the triggering spell (Thor, God of Thunder). */
   | { manaValueOfSubject: true }
+  /** The mana value of a permanent (Feed the Swarm: "equal to that permanent's mana value"). */
+  | { manaValueOf: Ref }
   /** Blue mana symbols in the triggering spell's mana cost (Namor). */
   | { bluePipsOfSubject: true }
   /** "Draw cards equal to the difference" up to this hand size (The Ten Rings). */
@@ -1124,6 +1260,9 @@ export type Amount =
   | { count: 'permanentsOpponentsControl'; filter: CardFilter }
   /** Cards in your hand (Kang Dynasty). */
   | { count: 'cardsInHand' }
+  // Marvel Super Heroes Jumpstart (Lethal)
+  /** Creature cards in the opponent's graveyard (Origin of Black Widow). */
+  | { count: 'opponentCreatureCardsInGraveyard' }
   // The Fantastic Four (9d).
   /** Colours among permanents you control and spells you've cast this turn (First Family). */
   | { count: 'colorsAmongPermanentsAndSpells' }
@@ -1131,6 +1270,9 @@ export type Amount =
   | { count: 'subjectColors' }
   /** Cards in an opponent's hand (Recurring Insight). */
   | { count: 'opponentHandSize' }
+  // Marvel Super Heroes Jumpstart (Masters of Evil)
+  /** Half the opponent's life total, rounded up (Radioactive Man). */
+  | { count: 'opponentLifeHalf' }
   /** Greatest mana value among noncreature permanents you control and noncreature cards in your graveyard (Dragon Man). */
   | { count: 'greatestNoncreatureManaValue' }
   // Wakanda Forever (9c).
@@ -1143,6 +1285,14 @@ export type Amount =
   // Final Fantasy (11a)
   /** The amounts added up (Slash of Light: creatures plus Equipment you control). */
   | { sum: Amount[] }
+  // Final Fantasy (11c): rare amounts
+  /** Your life total (Aettir and Priwen). */
+  | { count: 'lifeTotal' }
+  // Final Fantasy (11c): devotion and life gained
+  /** Devotion: the mana symbols of this colour in the mana costs of permanents you control (Clive). */
+  | { count: 'devotion'; color: Color }
+  /** The life you gained this turn (Hope Estheim). */
+  | { count: 'lifeGainedThisTurn' }
   // Final Fantasy (11b): mana spent
   /** The mana spent to cast the triggering spell (Shantotto). */
   | { manaSpentOnSubject: true }
@@ -1152,8 +1302,6 @@ export type Amount =
   // Secrets of Strixhaven (14a): converge
   /** The number of colors of mana spent to cast the source spell, or the triggering spell. */
   | { colorsSpent: 'source' | 'subject' }
-  // Strixhaven (13c): life you gained this turn (Fortifying Draught, Accomplished Alchemist).
-  | { count: 'lifeGainedThisTurn' }
   // Strixhaven (13c)
   /** Cards in your library (Body of Research). */
   | { count: 'cardsInLibrary' }
@@ -1181,7 +1329,15 @@ export type Amount =
 export type EffectDef =
   | { kind: 'may'; effects: EffectDef[]; cost?: ManaCost }
   /** `exceptFrom`: not to the creature dealing it (Nova Flame: "each other creature"). */
-  | { kind: 'damage'; amount: Amount; to: Ref; from?: Ref; exceptFrom?: boolean }
+  | {
+      kind: 'damage';
+      amount: Amount;
+      to: Ref;
+      from?: Ref;
+      exceptFrom?: boolean;
+      /** Create one of these tokens per point of excess damage dealt to a creature (Goblin Negotiation). */
+      excessTokens?: CardDefId;
+    }
   /** Until end of turn (or until your next turn). */
   | {
       kind: 'pump';
@@ -1199,6 +1355,11 @@ export type EffectDef =
       returnWhenDies?: ReturnWhenDies;
       /** Can't be blocked except by creatures with this keyword (Speed: haste). */
       cantBeBlockedExcept?: Keyword;
+      // Marvel Super Heroes Jumpstart (Great Lakes Avengers)
+      /** Can't be blocked by creatures matching this filter this turn (Doorman). */
+      cantBeBlockedBy?: CardFilter;
+      /** Switch its power and toughness until end of turn (Flatman). */
+      switchPT?: boolean;
       /** "Whenever it deals combat damage to a player this turn, put a +1/+1 counter on it" (Love on the Battlefield). */
       counterOnCombatDamage?: boolean;
       // Strixhaven (13b): Prismari Pledgemage
@@ -1207,6 +1368,17 @@ export type EffectDef =
       // Strixhaven (13c): Square Up, Tanazir Quandrix
       /** `power` and `toughness` are the base power and toughness rather than a bonus. */
       setBase?: boolean;
+      /** "When this creature deals combat damage, sacrifice it" (Dropkick Bomber). */
+      sacrificeOnCombatDamage?: boolean;
+      /** Base power and toughness until end of turn (Reptil, I Am Iron Man). */
+      basePT?: [number, number];
+      /** It becomes an artifact creature until end of turn (I Am Iron Man). */
+      becomesCreature?: boolean;
+      /** Prevent all combat damage that would be dealt to it this turn (Fleeting Flight). */
+      preventCombatDamage?: boolean;
+      // Final Fantasy (11c): leftovers
+      /** It must be blocked this turn if able (Magitek Scythe). */
+      mustBeBlocked?: boolean;
     }
   // Strixhaven (13b): Maelstrom Muse
   /** The next instant or sorcery spell you cast this turn costs {amount} less (X is read now). */
@@ -1227,6 +1399,8 @@ export type EffectDef =
       named?: string;
       // Final Fantasy (11b): returned transformed (Garland, Knight of Cornelia).
       transformed?: boolean;
+      /** "She loses all abilities and gains haste" (Hellcat, Undying Vigilante): for as long as she stays. */
+      losesAbilitiesGains?: Keyword[];
     }
   | { kind: 'exile'; what: Ref }
   /** Exile a card from a graveyard; extra effects if it was a creature card (Scavenging Ooze). */
@@ -1256,6 +1430,8 @@ export type EffectDef =
       then: 'discard' | 'exile';
       /** You may cast the exiled card while it stays exiled, with any mana (Cruelclaw's Heist). */
       castable?: boolean;
+      /** They reveal this many cards (picked for them: the cheapest), and you choose among those (Klaw). */
+      reveal?: Amount;
     }
   /** A player chooses one of these (the owner of target `ownerOf`, or the controller). */
   | {
@@ -1279,6 +1455,8 @@ export type EffectDef =
        */
       from?: 'hand' | 'exiledWithSource' | 'lastExiledWithSource';
       filter?: CardFilter;
+      // Final Fantasy (11c): "with mana value less than or equal to that damage" (Buster Sword).
+      maxManaValue?: Amount;
     }
   /** Portent of Calamity: reveal the top X and exile one card of each type; four or more lets you cast one free. */
   | { kind: 'portent' }
@@ -1317,6 +1495,9 @@ export type EffectDef =
       // Secrets of Strixhaven (14b): Choreographed Sparks
       /** A creature spell's copy gains haste and is sacrificed at the beginning of the end step. */
       hasteSacrifice?: boolean;
+      // Marvel Super Heroes Jumpstart (Tricksters)
+      /** "You may choose new targets for the copy" (Loki Laufeyson): its controller chooses. */
+      newTargets?: boolean;
     }
   /** Each player sacrifices a creature of their choice (Season of Loss). */
   | { kind: 'eachPlayerSacrifices' }
@@ -1327,7 +1508,11 @@ export type EffectDef =
   | {
       kind: 'emblem';
       ability: AbilityDef;
-      until: 'endOfYourNextTurn' | 'permanent' | 'nextSpellThisTurn' | 'thisTurn';
+      // Final Fantasy (11c): 'endOfTurn' (Summon: Leviathan's attack draws).
+      until: 'endOfYourNextTurn' | 'permanent' | 'nextSpellThisTurn' | 'endOfTurn';
+      // Marvel Super Heroes Jumpstart (Tricksters)
+      /** Its trigger's filter only matches cards with this object's name (The Clone Saga). */
+      namedLike?: Ref;
     }
   /** Marks the gift as given (for "whenever you give a gift"). */
   | { kind: 'giftGiven' }
@@ -1355,6 +1540,13 @@ export type EffectDef =
       // Secrets of Strixhaven (14b): Applied Geometry
       /** It's a 0/0 Fractal creature in addition to its other types, with this many +1/+1 counters. */
       asFractal?: number;
+      // Final Fantasy (11c): temporary token copies
+      /** Sacrifice the copies at the beginning of the next end step, your next end step, or the next upkeep. */
+      sacrificeAt?: 'nextEndStep' | 'yourNextEndStep' | 'nextUpkeep';
+      /** "If it's a Saga, put up to N lore counters on it" (Esper Terra). */
+      lore?: number;
+      /** "Its equip abilities cost {N} less to activate" (Firion). */
+      equipDiscount?: number;
     }
   /** Choose a color (or a creature type) for the source, as it enters. */
   | { kind: 'chooseColor' }
@@ -1471,6 +1663,9 @@ export type EffectDef =
       // Secrets of Strixhaven (14b): Mind into Matter
       /** Mana value X or less (the value chosen for X). */
       maxManaValueX?: boolean;
+      // Final Fantasy (11c): onto the battlefield attacking
+      /** A card matching this enters tapped and attacking (Summoner's Grimoire: an enchantment card). */
+      attackingIf?: CardFilter;
     }
   // Strixhaven (13c)
   /** The resolving spell returns to its owner's hand rather than the graveyard (Journey to the Oracle). */
@@ -1496,6 +1691,8 @@ export type EffectDef =
   | {
       kind: 'chooseYourPermanent';
       filter?: CardFilter;
+      /** A permanent an opponent controls instead (Vial Smasher: one of their planeswalkers). */
+      opponents?: boolean;
       then: EffectDef[];
       otherwise?: EffectDef[];
     }
@@ -1504,12 +1701,12 @@ export type EffectDef =
       kind: 'counterUnlessPays';
       what: Ref;
       cost: ManaCost;
-      /** Strixhaven Brawl (15b, pair): Repulsive Mutation: pay this much generic mana instead of `cost`. */
-      genericAmount?: Amount;
       // Strixhaven (13a): Reject, "exile it instead of putting it into its owner's graveyard".
       exile?: boolean;
       /** Strixhaven Brawl (15b, u): Syncopate, `cost` plus {X} (the value chosen for X). */
       xCost?: boolean;
+      /** Final Fantasy Commander (12c): generic cost counted as it resolves (Syncopate's X). */
+      costAmount?: Amount;
     }
   // Strixhaven (13a): Divide by Zero
   /** Return a target spell on the stack to its owner's hand. */
@@ -1538,6 +1735,9 @@ export type EffectDef =
       permanent?: boolean;
       // Marvel Super Heroes: 'for as long as this Saga remains on the battlefield'.
       whileSource?: boolean;
+      // Final Fantasy (11c): leftovers
+      /** As control reverts, Equipment and the creature it's on part if their controllers differ (Stolen Uniform). */
+      unattachOnRevert?: boolean;
     }
   /**
    * Until your next turn, permanents lose all abilities (and have base power
@@ -1587,6 +1787,16 @@ export type EffectDef =
   | { kind: 'prepare'; what: Ref }
   /** The permanent stops being prepared (its exiled copy ceases to exist). */
   | { kind: 'unprepare'; what: Ref }
+  /** It can't become untapped for as long as you control the source (Spider-Woman, Secret Agent). */
+  | { kind: 'doesntUntapWhileSource'; what: Ref }
+  /** Change the target of a target spell with a single target to another legal one, best for you (Bolt Bend). */
+  | { kind: 'changeTarget'; what: Ref }
+  /** Time Stop: exile every spell and ability on the stack, then skip to the cleanup step. */
+  | { kind: 'endTheTurn' }
+  /** Internal (Bolt Bend): the spell or ability on the stack with this id gets these targets. */
+  | { kind: 'setStackTargets'; id: ObjectId; targets: TargetChoice[] }
+  /** Internal (Loki Laufeyson): its controller may choose new targets for the copy just made ('chosen'). */
+  | { kind: 'chooseNewTargets' }
   /** The controller discards N cards of their choice. */
   | {
       kind: 'discard';
@@ -1655,7 +1865,14 @@ export type EffectDef =
   /** Put all creature cards from all graveyards onto the battlefield under your control. */
   | { kind: 'reanimateAll' }
   /** Exile the target graveyard card and create a token copy of it (Abyssal Harvester). */
-  | { kind: 'tokenCopyOf'; what: Ref; addSubtype: string; exileOtherTokensWithSubtype: boolean }
+  | {
+      kind: 'tokenCopyOf';
+      what: Ref;
+      addSubtype: string;
+      exileOtherTokensWithSubtype: boolean;
+      // Final Fantasy (11c): "except it's a 5/5 black Demon" (Ardyn, the Usurper).
+      pt?: [number, number];
+    }
   /** Put named counters on the source (Drake Hatcher), or on `to`. */
   | { kind: 'namedCounters'; name: string; amount: Amount; to?: Ref }
   /** Look at the top N, split them into two piles; an opponent picks one for your hand (Curator of Destinies). */
@@ -1677,12 +1894,14 @@ export type EffectDef =
       kind: 'returnToBattlefield';
       what: Ref;
       counter?: string;
+      /** It enters tapped (Deadly Plot, Grim Reaper). */
+      tapped?: boolean;
+      /** "Tapped and attacking" (Grim Reaper, Lethal Legionnaire). */
+      attacking?: boolean;
       /** It enters with +1/+1 counters if it matches the filter (Heroic Return: a Hero gets two). */
       countersIf?: { filter: CardFilter; count: number };
       // Marvel Super Heroes: "is a Hero in addition to its other types" (Thunderbolts Conspiracy).
       addSubtype?: string;
-      /** Strixhaven Brawl (15a): Helping Hand, "tapped". */
-      tapped?: boolean;
     }
   /** Destroy all creatures (matching the filter). `returnOne`: then return one of yours that died (Starfall Invocation). */
   | {
@@ -1712,7 +1931,8 @@ export type EffectDef =
       canBin?: boolean;
       // Final Fantasy (11b): look for a land
       /** The card taken goes onto the battlefield tapped instead (Ignis Scientia: a land). */
-      to?: 'battlefieldTapped';
+      // Foundations: 'libraryTop', it goes back on top (Gutless Plunderer, with `restToGraveyard`).
+      to?: 'battlefieldTapped' | 'libraryTop';
       // Secrets of Strixhaven (14a): Follow the Lumarets. After the first pick, choose another card matching this from the rest.
       followUp?: CardFilter;
       // Secrets of Strixhaven (14b): Zimone's Experiment
@@ -1723,7 +1943,8 @@ export type EffectDef =
   | {
       kind: 'exileTopPlayable';
       count: Amount;
-      until: 'endOfTurn' | 'endOfNextTurn';
+      // Marvel Super Heroes Jumpstart (Scarlet): 'yourNextEndStep' (Wiccan, Young Avenger).
+      until: 'endOfTurn' | 'endOfNextTurn' | 'yourNextEndStep';
       // Marvel Super Heroes (Daredevil): "If that card is a Hero card, ...".
       ifExiled?: { filter: CardFilter; then: EffectDef[] };
     }
@@ -1755,7 +1976,14 @@ export type EffectDef =
   /** Counts a resolution of this ability this turn (see the `resolvedThisTurn` condition). */
   | { kind: 'noteResolution' }
   | { kind: 'counters'; to: Ref; amount: Amount }
-  | { kind: 'fight'; a: Ref; b: Ref }
+  | {
+      kind: 'fight';
+      a: Ref;
+      b: Ref;
+      // Marvel Super Heroes Jumpstart (Tenacious/Rampaging)
+      /** Then these, if `a` dealt excess damage to `b` (Rhino's Rampage). */
+      ifExcess?: EffectDef[];
+    }
   | { kind: 'destroy'; what: Ref }
   | { kind: 'gainLife'; who: Ref; amount: Amount }
   | { kind: 'loseLife'; who: Ref; amount: Amount }
@@ -1837,6 +2065,9 @@ export type EffectDef =
       orHand?: boolean;
       /** Only a card matching this stops the search (Codie: an instant or sorcery). */
       filter?: CardFilter;
+      // Marvel Super Heroes Jumpstart (Scarlet)
+      /** The exiled cards (and the hit, if not cast) stay in exile (Wanda's Vision). */
+      stayExiled?: boolean;
     }
   // Strixhaven (13c)
   /** Jadzi: reveal the top card; a land goes onto the battlefield, a nonland card may be cast by paying `pay`. */
@@ -1862,8 +2093,16 @@ export type EffectDef =
       /** "Except he's a 4/4 Human Villain creature with vigilance" (Absorbing Man). */
       asCreature?: { power: number; toughness: number; subtypes: string[]; keywords: Keyword[] };
       // Strixhaven (13c): Echoing Equation
-      /** The copies aren't legendary. */
+      /** The copies aren't legendary (also Loki, Lord of Misrule: "except it isn't legendary"). */
       nonlegendary?: boolean;
+      // Marvel Super Heroes Jumpstart (Tricksters)
+      /** Every object in `what` other than the copied one becomes a copy (Loki, Lord of Misrule). */
+      each?: boolean;
+      /** "Except his name is Impossible Man": it keeps its own name (for the legend rule). */
+      keepName?: boolean;
+      // Marvel Super Heroes Jumpstart (Young Avengers)
+      /** "And he has this ability": the source's own abilities (by index) it keeps (Hulkling, Young Avenger). */
+      keepAbilities?: number[];
     }
   /** Tragic Arrogance: each player keeps one artifact, creature, enchantment and planeswalker (picked for them). */
   | { kind: 'keepOneOfEachType' }
@@ -1958,12 +2197,32 @@ export type EffectDef =
   | { kind: 'chooseCustom'; handler: string; params?: Record<string, unknown> }
   // Secrets of Strixhaven (14b): Improvisation Capstone
   /** Exile cards from the top of your library until their total mana value is `total` or more; cast any number of them free. */
-  | { kind: 'exileUntilTotalCastFree'; total: number };
+  | { kind: 'exileUntilTotalCastFree'; total: number }
+  // Final Fantasy (11c): rare effects
+  /** Each player sacrifices half the creatures matching the filter they control, rounded down (Zodiark). */
+  | { kind: 'eachPlayerSacrificesHalf'; filter: CardFilter }
+  /**
+   * Choose a card exiled with the source matching the filter; it enters under
+   * your control, tapped and with +1/+1 counters if asked (The Darkness Crystal).
+   */
+  | { kind: 'putExiledWithSource'; filter: CardFilter; tapped?: boolean; counters?: number }
+  // Final Fantasy (11c): hideaway
+  /**
+   * Hideaway N: look at the top N cards, exile one face down (remembered as
+   * exiled with the source), the rest on the bottom in a random order.
+   */
+  | { kind: 'hideaway'; count: number };
 
 export type StaticDef =
   // Strixhaven Brawl (15b, g): Hardened Scales, Kami of Whispered Hopes
   /** If +1/+1 counters would be put on a creature (or any permanent) you control, that many plus `amount` are put instead. */
-  | { kind: 'extraCounters'; amount: number; creaturesOnly?: boolean }
+  | {
+      kind: 'extraCounters';
+      amount: number;
+      creaturesOnly?: boolean;
+      /** Counters of any kind, not just +1/+1 counters (Doc Samson). */
+      anyCounters?: boolean;
+    }
   // Strixhaven Brawl (15b, g): Utopia Sprawl
   /** The enchanted land adds one extra mana of the colour chosen for this Aura when tapped for mana. */
   | { kind: 'landBonusMana' }
@@ -2010,6 +2269,9 @@ export type StaticDef =
       /** Lands (not creatures) tap for `amount` mana of any of these, only for spells with this tag. */
       onlyFor?: string;
       amount?: number;
+      // Final Fantasy (11c): mana from every permanent
+      /** Other permanents you control of any type, not just creatures (A Realm Reborn). */
+      otherPermanents?: boolean;
     }
   /** You may play an additional land on each of your turns (Loot). */
   | { kind: 'extraLandDrop' }
@@ -2038,11 +2300,28 @@ export type StaticDef =
       cantBeBlocked?: boolean;
       /** Damage to it is prevented and becomes +1/+1 counters (Panther Habit). */
       damageToCounters?: boolean;
+      // Marvel Super Heroes Jumpstart (Wakanda)
+      /** "Its activated abilities can't be activated" (Secure Detention), mana abilities included. */
+      cantActivate?: boolean;
       // Final Fantasy (11a): job select
       /** "Is a Knight in addition to its other types." */
       addSubtypes?: string[];
       /** Keywords it has only during its controller's turn (Dragoon's Lance: flying). */
       yourTurnKeywords?: Keyword[];
+      // Final Fantasy Commander (12b).
+      /** Base power and toughness equal to its controller's life total (Aettir and Priwen). */
+      basePTLife?: boolean;
+      /** These keywords only while the equipped creature is legendary (Hero's Heirloom). */
+      legendaryKeywords?: Keyword[];
+      // Final Fantasy (11c): rare Equipment
+      /** Base power and toughness X/X from an amount (Aettir and Priwen: your life total). */
+      basePTAmount?: Amount;
+      /** Keywords it has while attacking (The Masamune: first strike). */
+      attackingKeywords?: Keyword[];
+      /** While attacking, it must be blocked if able (The Masamune). */
+      mustBeBlockedAttacking?: boolean;
+      /** A creature dying makes its triggered abilities (and your emblems') trigger twice (The Masamune). */
+      deathTriggersTwice?: boolean;
     }
   /** All creatures able to block this creature do so (Prized Unicorn). */
   | { kind: 'lure' }
@@ -2076,6 +2355,12 @@ export type StaticDef =
   | { kind: 'instantsAndSorceriesUncounterable' }
   /** You have no maximum hand size. */
   | { kind: 'noMaxHandSize' }
+  // Marvel Super Heroes Jumpstart (Geniuses)
+  /**
+   * The first time you would draw a card each turn, except the first card you draw during each of
+   * your draw steps, you draw `count` cards instead (Reed Richards, Smartest Man).
+   */
+  | { kind: 'firstExtraDrawBecomes'; count: number }
   /** Vizier: look at the top of your library any time; cast creatures from there with any mana. */
   | { kind: 'creaturesFromTopOfLibrary' }
   /** This creature gets +X/+Y (Persistent Marshstalker: +1/+0 for each other Rat you control). */
@@ -2100,8 +2385,13 @@ export type StaticDef =
   // Power-up (Marvel Super Heroes)
   /** Power-up abilities of other creatures you control cost {amount} less (Hulk, Gamma Goliath). */
   | { kind: 'powerUpCostsLess'; amount: number }
+  // Marvel Super Heroes Jumpstart (Trained)
+  /** "You may pay {0} rather than pay the power-up cost of the first power-up ability you activate during each of your turns" (Advancing the Spirit). */
+  | { kind: 'firstPowerUpFree' }
   /** This creature can't be blocked. */
   | { kind: 'cantBeBlocked' }
+  /** "Other creatures you control have prowess" (Bria, Riptide Rogue). */
+  | { kind: 'othersHaveProwess' }
   /** This creature can't be blocked by creatures matching the filter. */
   | { kind: 'cantBeBlockedBy'; filter: CardFilter }
   /**
@@ -2115,7 +2405,8 @@ export type StaticDef =
    */
   | {
       kind: 'damageBonus';
-      amount: number;
+      /** 'sourcePower': this permanent's power (Hawkeye, Young Avenger). */
+      amount: number | 'sourcePower';
       source?: CardFilter;
       noncombat?: boolean;
       toOpponents?: boolean;
@@ -2124,11 +2415,21 @@ export type StaticDef =
       otherSources?: boolean;
     }
   /** If you would put counters on a permanent, put twice that many instead (Innkeeper's Talent). */
-  | { kind: 'doubleCounters'; condition?: ConditionDef }
+  | {
+      kind: 'doubleCounters';
+      condition?: ConditionDef;
+      // Final Fantasy (11c): only +1/+1 counters on creatures (The Earth Crystal).
+      plusOneOnCreatures?: boolean;
+    }
   /** Spells you cast matching the filter cost {N} less, while the condition holds. */
   | { kind: 'spellsCostLessIf'; filter: CardFilter; amount: number; condition?: ConditionDef }
   /** Look at the top card of your library any time; play cards matching the filter from there (Glarb). */
-  | { kind: 'playFromTop'; filter: CardFilter }
+  | {
+      kind: 'playFromTop';
+      filter: CardFilter;
+      // Final Fantasy (11c): "as long as The Lunar Whale attacked this turn".
+      condition?: ConditionDef;
+    }
   /** During your turn, cast instants and sorceries from your graveyard by paying 1 life more (Festival of Embers). */
   | { kind: 'castFromGraveyardForLife' }
   /** Cards and tokens that would go to your graveyard are exiled instead (Festival of Embers). */
@@ -2184,6 +2485,36 @@ export type StaticDef =
   | { kind: 'freeSpellOncePerTurn' }
   /** Creatures matching the filter can't attack you while the condition holds (Queen Mother Ramonda). */
   | { kind: 'cantAttackYou'; filter: CardFilter; condition?: ConditionDef }
+  // Final Fantasy (11c): rare statics
+  /** If you would gain life, you gain twice that much instead (The Wind Crystal). */
+  | { kind: 'doubleLifeGain' }
+  /** If an opponent would mill cards, they mill that many plus `amount` instead (The Water Crystal). */
+  | { kind: 'opponentsMillMore'; amount: number }
+  /**
+   * If a nontoken creature an opponent controls would die, it's exiled with
+   * this instead and you gain `life` (The Darkness Crystal).
+   */
+  | { kind: 'exileOpponentNontokenCreatures'; life: number }
+  /** While this is equipped, its triggered abilities and its Equipment's trigger twice (Cloud). */
+  | { kind: 'equippedTriggersTwice' }
+  /** Whenever you tap a land for {C}, add an additional {C} (Ultima, Origin of Oblivion). */
+  | { kind: 'extraColorlessFromLands' }
+  // Final Fantasy (11c): damage doubling
+  /** Damage from sources you control matching the filter is doubled (Trance Kuja: Wizards). */
+  | { kind: 'doubleDamage'; source: CardFilter }
+  // Final Fantasy (11c): damage absorbing
+  /** All damage to you and other permanents you control is dealt to this creature instead (Ancient Adamantoise). */
+  | { kind: 'absorbDamage' }
+  /** Damage isn't removed from this creature during cleanup steps. */
+  | { kind: 'damageStays' }
+  // Final Fantasy (11c): entering permanents
+  /** A permanent matching the filter entering under your control triggers your abilities twice (Traveling Chocobo). */
+  | { kind: 'etbTriggersTwice'; filter: CardFilter }
+  // Final Fantasy (11c): playing from the graveyard
+  /** You may play cards from your graveyard while the condition holds (Hades: during your turn). */
+  | { kind: 'playFromGraveyard'; condition?: ConditionDef }
+  /** You may cast artifact spells from your graveyard for `life` more; they enter with a finality counter (Noctis). */
+  | { kind: 'castArtifactsFromGraveyard'; life: number }
   // Final Fantasy (11b): lands and Towns
   /** "Lands you control enter untapped" (The Wandering Minstrel). */
   | { kind: 'landsEnterUntapped' }
@@ -2200,7 +2531,36 @@ export type StaticDef =
   | { kind: 'ignoreHexproofWard' }
   // Strixhaven Brawl (15b, r): Goldspan Dragon
   /** Treasures you control tap for two mana of one colour instead of one. */
-  | { kind: 'treasuresTapForTwo' };
+  | { kind: 'treasuresTapForTwo' }
+  // Final Fantasy Commander (12b): Equipment.
+  /** Equip abilities you activate cost {amount} less (Fighter Class, Arms Scavenger). */
+  | {
+      kind: 'equipCostsLess';
+      amount: number;
+      condition?: ConditionDef;
+      // Final Fantasy (11d): the Starter Kit
+      /** Only equip abilities that target this creature (Cloud, Planet's Champion). */
+      targetSelf?: boolean;
+    }
+  /** Nonartifact spells you cast have improvise (Inspiring Statuary). */
+  | { kind: 'nonartifactSpellsHaveImprovise' }
+  // Final Fantasy Commander (12d).
+  /** Creatures your opponents control enter tapped (Authority of the Consuls). */
+  | { kind: 'opponentCreaturesEnterTapped' }
+  // Final Fantasy Commander (12e).
+  /** Tokens you create come with a 1/1 green Frog (Quina; once per effect, not for the Frogs). */
+  | { kind: 'plusFrogToken' }
+  // Marvel Super Heroes Jumpstart (Animal).
+  /** Tokens you create come with an additional Food token (Tippy-Toe, Terrific Partner; once per effect). */
+  | { kind: 'plusFoodToken' }
+  // Final Fantasy Commander (12f).
+  /** It can attack as though it didn't have defender while it has a counter (Demon Wall). */
+  | { kind: 'attacksWithCounterDespiteDefender' }
+  /** Spells you cast from your graveyard cost {amount} less (Emet-Selch of the Third Seat). */
+  | { kind: 'graveyardSpellsCostLess'; amount: number }
+  // Final Fantasy (11c): leftovers
+  /** It can't be blocked except by `count` or more creatures (Relentless X-ATM092: three). */
+  | { kind: 'minBlockers'; count: number };
 
 export type CardDb = ReadonlyMap<CardDefId, CardDefinition>;
 
@@ -2278,8 +2638,8 @@ export interface GameObject {
   /** +1/+1 counters it had as it last left the battlefield (Essence Channeler). */
   lastCounters?: number;
   // Secrets of Strixhaven (14b): Fractal Tender
-  /** The turn a counter was last put on it. */
-  countersTurn?: number;
+  /** The turn a counter (of any kind) was last put on it. */
+  anyCountersTurn?: number;
   /** "Triggers only once each turn": the turn each such ability (by index) last triggered. */
   onceTurns?: Record<number, number>;
   // Strixhaven (13a): abilities granted until end of turn (Lorehold Apprentice)
@@ -2354,6 +2714,12 @@ export interface GameObject {
   /** While copying, it's still a creature with copyPT (Absorbing Man), and these subtypes were added. */
   copyAsCreature?: boolean;
   copyAddedSubtypes?: string[];
+  // Marvel Super Heroes Jumpstart (Tricksters)
+  /** While copying, it keeps its own name (Impossible Man). */
+  copyKeepsName?: boolean;
+  // Marvel Super Heroes Jumpstart (Young Avengers)
+  /** While copying, it also has these abilities of its own card, by index (Hulkling, Young Avenger). */
+  copyKeptAbilities?: number[];
   // Wakanda Forever (9c).
   /** It's monstrous (Fleecemane Lion). */
   monstrous?: boolean;
@@ -2378,6 +2744,18 @@ export interface GameObject {
   loreRemovedTurn?: number;
   /** It enters with this many more +1/+1 counters (Summon: Fenrir's next creature spell). */
   bonusCounters?: number;
+  // Final Fantasy (11c): rare triggers
+  /** The creature chosen for it as it entered (Zenos yae Galvus). */
+  chosenObject?: ObjectRef;
+  // Final Fantasy (11c): meld
+  /** A melded permanent: the other card it's made of (in exile meanwhile); it follows this one as it leaves. */
+  meldedWith?: ObjectId;
+  // Final Fantasy (11c): temporary token copies
+  /** Its equip abilities cost this much less (Firion's copies). */
+  equipDiscount?: number;
+  // Final Fantasy (11c): turn conditions
+  /** A Vehicle: the creatures that crewed it this turn (Balthier and Fran). */
+  crewedBy?: { turn: number; ids: ObjectId[] };
   // Final Fantasy (11b): mana spent
   /** The mana spent to cast it, the last time it was cast (Shantotto, Sahagin). */
   manaSpent?: number;
@@ -2403,6 +2781,18 @@ export interface GameObject {
   plottedTurn?: number;
   /** Housemeld: it perpetually has exactly these card types. */
   perpetualTypes?: CardType[];
+  // Final Fantasy Commander (12).
+  /** It blocks this attacker this combat if able (Fighter Class). */
+  mustBlock?: ObjectRef;
+  // Final Fantasy Commander (12c).
+  /** The turn it became saddled (Mounts). */
+  saddledTurn?: number;
+  /** +1/+1 counters were put on it this many times during turn `countersTurn` (Botanical Brawler). */
+  countersTurn?: number;
+  countersTimes?: number;
+  // Final Fantasy Commander (12f).
+  /** Exiled from a graveyard to be cast this turn: it counts as cast from a graveyard (Emet-Selch). */
+  fromGraveyardCast?: boolean;
 }
 
 /** A reference that goes stale when the object changes zones. */
@@ -2554,6 +2944,9 @@ export interface TurnState {
   // Marvel Super Heroes
   /** Power-up abilities can't be activated this turn (Kang the Conqueror's extra turn). */
   noPowerUp?: boolean;
+  // Marvel Super Heroes Jumpstart (Trained)
+  /** The active player has activated a power-up ability this turn (Advancing the Spirit frees only the first). */
+  powerUpActivated?: boolean;
   /** Creatures these players control assign combat damage by toughness if greater (The Kingpin of Crime). Replaced, never mutated. */
   toughnessDamage?: PlayerId[];
   /** 0 during the mulligan phase. */
@@ -2574,12 +2967,13 @@ export interface TurnState {
   attackers: ObjectId[];
   /** How many times each player gained life this turn. */
   lifeGains: Record<PlayerId, number>;
-  /** Strixhaven (13c): how much life each player gained this turn. */
-  lifeGained?: Record<PlayerId, number>;
   /** Creatures that died this turn (Morbid). */
   creaturesDied: number;
   /** Cards each player drew this turn. */
   cardsDrawn: Record<PlayerId, number>;
+  // Marvel Super Heroes Jumpstart (Geniuses)
+  /** Players who would already have drawn a card this turn other than their draw step's first (Reed Richards). Replaced, never mutated. */
+  extraDrawSeen?: PlayerId[];
   /** Total mana each player spent this turn (expend). Missing in older saves. */
   manaSpent?: Record<PlayerId, number>;
   /** How many times each player lost life this turn. Missing in older saves. */
@@ -2615,6 +3009,8 @@ export interface TurnState {
   flashTypes?: { player: PlayerId; type: string }[];
   /** Players with hexproof until end of turn (Dawn's Truce). */
   hexproofPlayers?: PlayerId[];
+  /** Time Stop resolved: the turn skips to its cleanup step. */
+  endTheTurn?: boolean;
   // Final Fantasy (11a): saga creatures
   /** Players whose creatures are dealt no damage this turn (Summon: Alexander). */
   creaturesShielded?: PlayerId[];
@@ -2627,6 +3023,20 @@ export interface TurnState {
   // Strixhaven Brawl (15b, pair): Hidden Stockpile (revolt)
   /** Permanents that left the battlefield under each player's control this turn. */
   permanentsLeft?: Record<PlayerId, number>;
+  // Final Fantasy Commander (12b).
+  /** Additional land plays this turn (Explore, Sword of Forge and Frontier). */
+  extraLands?: Record<PlayerId, number>;
+  /** Final Fantasy Commander (12d): life each player lost this turn, in total (Y'shtola). */
+  lifeLostTotal?: Record<PlayerId, number>;
+  // Final Fantasy (11c): extra phases and steps
+  /** Combat phases begun this turn (Genji Glove, Balthier and Fran: "the first combat phase"). */
+  combats?: number;
+  /** End steps begun this turn, and additional end steps to come (Y'shtola Rhul). */
+  endSteps?: number;
+  extraEndSteps?: number;
+  // Final Fantasy (11c): devotion and life gained
+  /** Life each player gained this turn (Hope Estheim). */
+  lifeGained?: Record<PlayerId, number>;
 }
 
 export interface Attacker {
@@ -2657,10 +3067,16 @@ export interface ContinuousEffect {
   returnWhenDies?: ReturnWhenDies;
   /** Loses all abilities. */
   loseAbilities?: boolean;
+  /** Sacrificed when it deals combat damage (Dropkick Bomber). */
+  sacrificeOnCombatDamage?: boolean;
+  /** Doesn't untap during its controller's untap step (Spider-Woman, Secret Agent). */
+  doesntUntap?: boolean;
   /** "Whenever it deals combat damage this turn, you may exile it, then return it." */
   blinkOnCombatDamage?: boolean;
   /** It's an artifact creature (a crewed Vehicle). */
   becomesCreature?: boolean;
+  /** Combat damage that would be dealt to it is prevented (Fleeting Flight). */
+  preventCombatDamage?: boolean;
   /** Base power and toughness. */
   basePT?: [number, number];
   /** Control change: who controlled it before (restored when this expires). */
@@ -2678,6 +3094,11 @@ export interface ContinuousEffect {
   mustAttack?: boolean;
   // Avengers Assemble (9b).
   cantBeBlockedExcept?: Keyword;
+  // Marvel Super Heroes Jumpstart (Great Lakes Avengers)
+  /** Can't be blocked by creatures matching this filter (Doorman). */
+  cantBeBlockedBy?: CardFilter;
+  /** Its power and toughness are switched (Flatman). */
+  switchPT?: boolean;
   counterOnCombatDamage?: boolean;
   /** Damage to this player and their creatures goes to the affected creature instead (Heroic Sacrifice). */
   redirectFor?: PlayerId;
@@ -2697,6 +3118,11 @@ export interface ContinuousEffect {
   // Strixhaven Brawl (15b, w): Alseid of Life's Bounty
   /** Protection from this colour (targeting and damage; not blocking). */
   protectionFrom?: Color;
+  // Final Fantasy (11c): leftovers
+  /** It must be blocked this turn if able (Magitek Scythe). */
+  mustBeBlocked?: boolean;
+  /** As control reverts, an Equipment on a creature its controller doesn't control falls off (Stolen Uniform). */
+  unattachOnRevert?: boolean;
 }
 
 /** What an effect needs to know about the spell or ability producing it. */
@@ -2857,7 +3283,9 @@ export type Decision =
         | 'graveyard'
         | 'libraryTop'
         | 'castFree'
-        | 'libraryBottom';
+        | 'libraryBottom'
+        // Final Fantasy (11c): hideaway ('hideaway': exiled face down with the source).
+        | 'hideaway';
       // Strixhaven (13c): Ardent Dustspeaker, The Biblioplex
       /** From the graveyard to the library bottom: these effects follow only if a card was chosen. */
       onPick?: EffectDef[];
@@ -2892,6 +3320,12 @@ export type Decision =
       restOnTop?: boolean;
       /** Marvel Super Heroes: the cards not taken go to the graveyard. */
       restToGraveyard?: boolean;
+      // Final Fantasy (11c): The Darkness Crystal ("tapped ... with two additional +1/+1 counters").
+      enterTapped?: boolean;
+      enterCounters?: number;
+      // Final Fantasy (11c): onto the battlefield attacking
+      /** The chosen card enters tapped and attacking if it matches this. */
+      attackingIf?: CardFilter;
       resume: PausedResolution;
       thenPriority: PlayerId;
     }
@@ -3106,6 +3540,9 @@ export interface GameState {
   monarch?: PlayerId;
   /** Phased-out permanents (treated as though they don't exist), and whose untap step brings them back. */
   phasedOut?: { id: ObjectId; player: PlayerId }[];
+  // Final Fantasy (11c): damage doubling
+  /** Lightning's Stagger: damage to `player` and their permanents is doubled until `by`'s next turn. */
+  staggered?: { player: PlayerId; by: PlayerId }[];
   /** Exactly one player is always being asked something (or the game is over). */
   decision: Decision;
   winner: PlayerId | 'draw' | null;
@@ -3156,7 +3593,8 @@ export type Action =
       // Sneak (Marvel Super Heroes)
       /** Cast for its sneak cost by returning this unblocked attacker to its owner's hand. */
       sneak?: ObjectId;
-      via?: 'festival' | 'osteomancer' | 'conduit' | 'free' | 'zaffai';
+      // Final Fantasy (11c): playing from the graveyard ('noctis', 'hades').
+      via?: 'festival' | 'osteomancer' | 'conduit' | 'free' | 'zaffai' | 'noctis' | 'hades';
       /** Mockingbird: the creature to enter as a copy of. */
       copyOf?: ObjectId;
       /** Rottenmouth Viper: permanents sacrificed to make it cheaper. */
@@ -3231,6 +3669,10 @@ export type GameEvent =
       leftAs?: CardDefId;
       /** Strixhaven (13c): a creature exiled instead of dying (Valentin). */
       exiledInstead?: boolean;
+      /** It had lost all its abilities as it left the battlefield (Hellcat): none of its own trigger. */
+      leftBlank?: boolean;
+      // Final Fantasy (11c): its power as it left (a token's too): "that creature's power" (Vincent Valentine).
+      lastPower?: number;
     }
   | { type: 'damageDealt'; source: ObjectId; to: TargetChoice; amount: number; combat: boolean }
   | { type: 'lifeChanged'; player: PlayerId; delta: number; life: number }

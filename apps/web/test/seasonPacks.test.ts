@@ -17,6 +17,7 @@ import {
 } from '../src/game/season.ts';
 import {
   BLOOMBURROW_SHEETS,
+  FINAL_FANTASY_SHEETS,
   MARVEL_SHEETS,
   SECRETS_SHEETS,
   SECRETS_ARCHIVE_SHEETS,
@@ -159,6 +160,31 @@ describe('Season Bloomburrow packs', () => {
     // A common wildcard forced at the first common slot still appears alongside the archive card.
     expect(pack[0]!.kind).toBe('wildcard');
     expect(pack).toHaveLength(8);
+  });
+
+  it('sells Final Fantasy boosters without the Starter Kit exclusives, and the FIN decks as starters', () => {
+    for (const sheet of Object.values(FINAL_FANTASY_SHEETS)) {
+      expect(sheet.length).toBeGreaterThan(0);
+      expect(new Set(sheet).size).toBe(sheet.length);
+      for (const id of sheet) {
+        const c = SCRYFALL.find((x) => slug(x.name) === id && x.set === 'fin')!;
+        expect(c, id).toBeDefined();
+        expect(+c.collectorNumber, id).toBeLessThanOrEqual(309);
+      }
+    }
+    expect(FINAL_FANTASY_SHEETS.rare).not.toContain('beatrix-loyal-general');
+    let save = { ...fresh(), coins: 1000 };
+    save = buySeasonPack(save, 1, 'finalFantasy');
+    expect(save.packs[0]!.kind).toBe('finalFantasy');
+    const opened = openSeasonPack(save, save.packs[0]!.id, packGenerator('finalFantasy'), 2);
+    const cards = opened.lastPack!.rewards.flatMap((r) => (r.kind === 'card' ? [r.cardId] : []));
+    expect(cards.length).toBeGreaterThan(0);
+    const all = Object.values(FINAL_FANTASY_SHEETS).flat();
+    for (const id of cards) expect(all, id).toContain(id);
+    const starters = SEASON_STARTERS.filter((d) => d.set === 'fin');
+    expect(starters.length).toBeGreaterThanOrEqual(10);
+    expect(starters.some((d) => d.id === 'fin-road-trip')).toBe(true);
+    for (const d of starters) expect(d.series).toBe('starter');
   });
 
   it('offers the Bloomburrow decks as starters', () => {

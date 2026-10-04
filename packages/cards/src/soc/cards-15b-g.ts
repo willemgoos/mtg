@@ -102,7 +102,7 @@ const adapt = (cost: string, n: number): AbilityDef => ({
 
 /** "Whenever one or more +1/+1 counters are put on this creature, ...". */
 const onCountersOnSelf = (targets: TargetSpec[], ...effects: EffectDef[]): AbilityDef =>
-  when({ on: 'youPutCounters', onlySelf: true }, targets, ...effects);
+  when({ on: 'youPutCounters', self: true }, targets, ...effects);
 
 const ALL_COLOURS: ManaType[] = ['W', 'U', 'B', 'R', 'G'];
 
@@ -359,7 +359,6 @@ export const BRAWL_15B_G: Record<string, Behavior> = {
       })),
     },
   },
-  Explore: { spell: { targets: [], effects: [custom('extraLandThisTurn'), draw(1)] } },
   'Follow the Tracks': {
     spell: { targets: [], effects: [{ kind: 'chooseCustom', handler: 'followTheTracks' }] },
   },
@@ -379,7 +378,6 @@ export const BRAWL_15B_G: Record<string, Behavior> = {
     spell: { targets: [], effects: basicsTapped(2) },
     abilities: [cycling('{2}')],
   },
-  'Rampant Growth': { spell: { targets: [], effects: basicsTapped(1) } },
   Regrowth: {
     spell: {
       targets: [{ what: 'graveyardCard', controller: 'you' }],
@@ -410,11 +408,6 @@ export const BRAWL_15B_G: Record<string, Behavior> = {
     },
   },
   // ------------------------------------------------------------ enchantments
-  'Hardened Scales': {
-    abilities: [
-      { kind: 'static', effect: { kind: 'extraCounters', amount: 1, creaturesOnly: true } },
-    ],
-  },
   'Ordeal of Nylea': {
     enchant: { what: 'creature' },
     abilities: [
@@ -505,19 +498,6 @@ export const BRAWL_15B_G: Record<string, Behavior> = {
           },
         ],
         label: '{2}, {T}, Sacrifice: draw a card for an artifact and for an enchantment',
-      },
-    ],
-  },
-  "Bonders' Enclave": {
-    abilities: [
-      tapFor('C'),
-      {
-        kind: 'activated',
-        cost: { mana: mana('{3}'), tapSelf: true },
-        condition: { kind: 'controlsCreature', filter: { minPower: 4 } },
-        targets: [],
-        effects: [draw(1)],
-        label: '{3}, {T}: draw a card',
       },
     ],
   },

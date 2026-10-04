@@ -5,7 +5,9 @@ import type { CardDefinition, ManaCost, SpellDef, ZoneName } from './types.ts';
  * How a card is cast, beyond its own options: for free (a 'castFree'
  * decision), or from the graveyard through Festival of Embers or Osteomancer Adept.
  */
-export type CastVia = 'free' | 'festival' | 'osteomancer' | 'conduit' | 'zaffai';
+// Final Fantasy (11c): playing from the graveyard ('noctis', 'hades').
+export type CastVia =
+  'free' | 'festival' | 'osteomancer' | 'conduit' | 'zaffai' | 'noctis' | 'hades';
 
 /** One way to cast a card: a mode, kicked or not, from hand or with flashback. */
 export interface CastVariant {
@@ -22,7 +24,10 @@ export interface CastVariant {
   sacrifice?: boolean;
   /** Needs a forage as an additional cost (Feed the Cycle). */
   forage?: boolean;
-  /** Strixhaven Brawl (15b, b): needs a card discarded (true) or explicitly not (false): Bone Shards, Bitter Triumph. */
+  /**
+   * Needs a card discarded (true) or explicitly not (false): Bone Shards, Bitter Triumph (Strixhaven
+   * Brawl (15b, b)), Titania, Rugged Rumbler ("discard a card or pay {2}").
+   */
   discard?: boolean;
   /** Cast from the graveyard by removing this many +1/+1 counters (Quilled Greatwurm). */
   removeCounters?: number;
@@ -138,9 +143,11 @@ export function castVariants(d: CardDefinition, zone: ZoneName, via?: CastVia): 
         ? { ...v, cost: free }
         : via === 'festival'
           ? { ...v, life: 1 }
-          : via === 'conduit'
+          : via === 'conduit' || via === 'hades'
             ? v
-            : { ...v, forage: true, finality: true },
+            : via === 'noctis'
+              ? { ...v, life: 3, finality: true }
+              : { ...v, forage: true, finality: true },
     );
   }
   // Dragon Man: cast from the graveyard as from the hand (plus a discard, see legal.ts).
@@ -215,6 +222,12 @@ export function castVariants(d: CardDefinition, zone: ZoneName, via?: CastVia): 
     return [
       { cost, spell: d.spell ?? null, sacrifice: true, ...extra },
       { cost: addCosts(cost, d.sacrificeOrPay), spell: d.spell ?? null, ...extra },
+    ];
+  // Titania, Rugged Rumbler: "discard a card or pay {2}".
+  if (d.discardOrPay)
+    return [
+      { cost, spell: d.spell ?? null, discard: true, ...extra },
+      { cost: addCosts(cost, d.discardOrPay), spell: d.spell ?? null, discard: false, ...extra },
     ];
   // Secrets of Strixhaven (14b): Group Project's flashback also taps three creatures.
   const flashSpell =

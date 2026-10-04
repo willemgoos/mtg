@@ -175,15 +175,6 @@ export const CARDS_15A_W: Record<string, Behavior> = {
       when({ on: 'leavesWithoutDying', who: 'selfOrOther' }, [], custom('skyclaveToken')),
     ],
   },
-  'Sun Titan': {
-    abilities: [
-      onEnterTarget([cheapPermanentCard(true)], { kind: 'returnToBattlefield', what: t0 }),
-      when({ on: 'attacks' }, [cheapPermanentCard(true)], {
-        kind: 'returnToBattlefield',
-        what: t0,
-      }),
-    ],
-  },
   // ------------------------------------------------------------ auras, enchantments
   "Sentinel's Eyes": {
     enchant: { what: 'creature' },
@@ -239,18 +230,6 @@ export const CARDS_15A_W: Record<string, Behavior> = {
     ],
   },
   // ------------------------------------------------------------ artifacts
-  'Mind Stone': {
-    abilities: [
-      tapFor('C'),
-      {
-        kind: 'activated',
-        cost: { mana: mana('{1}'), tapSelf: true, sacrificeSelf: true },
-        targets: [],
-        effects: [{ kind: 'draw', who: 'controller', amount: 1 }],
-        label: '{1}, {T}, Sacrifice: draw a card',
-      },
-    ],
-  },
   'Crucible of Worlds': {
     abilities: [{ kind: 'static', effect: { kind: 'playLandsFromGraveyard' } }],
   },

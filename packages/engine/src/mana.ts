@@ -1,6 +1,13 @@
 import { commanderColors, legendaryColors, opponentLandColors } from './brawl.ts';
 import { changeLife, damageSourceFor, dealDamage } from './effects.ts';
-import { canTapForAbility, isCreature, matchesFilter, power } from './characteristics.ts';
+import {
+  abilitiesLocked,
+  canTapForAbility,
+  countOf,
+  isCreature,
+  matchesFilter,
+  power,
+} from './characteristics.ts';
 import { type Ctx, addCounters, def, emit, obj, sacrifice, tap } from './context.ts';
 import { manaValue, pipsOf } from './cost.ts';
 import { hamletColorless } from './sos-14b-c-effects.ts';
@@ -45,6 +52,17 @@ function treasuresDouble(ctx: Ctx, player: PlayerId): boolean {
   );
 }
 
+/** Final Fantasy (11c): `player` controls Ultima, Origin of Oblivion. */
+function extraColorless(ctx: Ctx, player: PlayerId): boolean {
+  return ctx.s.battlefield.some(
+    (id) =>
+      obj(ctx, id).controller === player &&
+      def(ctx, id).abilities.some(
+        (a) => a.kind === 'static' && a.effect.kind === 'extraColorlessFromLands',
+      ),
+  );
+}
+
 /** Sources to tap; `pain` lists those that hurt (one entry per pip they pay). */
 export type Payment = ObjectId[] & { pain?: ObjectId[] };
 
@@ -80,6 +98,8 @@ export function manaSources(
   );
   for (const id of ctx.s.battlefield) {
     if (id === exclude || obj(ctx, id).controller !== player) continue;
+    // Marvel Super Heroes Jumpstart (Wakanda): Secure Detention.
+    if (abilitiesLocked(ctx, id)) continue;
     let produces: ManaType[] | null = null;
     let sacrifice = false;
     let double = false;
@@ -119,6 +139,9 @@ export function manaSources(
       if (a.perLifeGained) units = Math.max(units, ctx.s.turn.lifeGained?.[player] ?? 0);
       // Secrets of Strixhaven (14b): Topiary Lecturer.
       if (a.perPower) units = Math.max(units, power(ctx, id));
+      // Elvish Archdruid: {G} for each Elf you control.
+      if (a.amountOf !== undefined)
+        units = Math.max(units, countOf(ctx, player, a.amountOf, false, id));
       if (a.pain) (pain ??= []).push(a.produces);
       if (a.doubleIf && checkCondition(ctx, a.doubleIf, player, obj(ctx, id))) double = true;
       // Strixhaven Brawl (15b, g): Incubation Druid (three mana), Astral Cornucopia (a mana per charge counter).
@@ -157,6 +180,14 @@ export function manaSources(
         ...(pain ? { pain } : {}),
       };
       out.push(src);
+      // Final Fantasy (11c): Ultima, Origin of Oblivion ("tap a land for {C}, add an additional {C}").
+      if (
+        produces.length === 1 &&
+        produces[0] === 'C' &&
+        def(ctx, id).types.includes('Land') &&
+        extraColorless(ctx, player)
+      )
+        double = true;
       // Two mana from one tap: a second unit with the same id (tapping it twice is harmless).
       if (double) units = Math.max(units, 2);
       // Strixhaven Brawl (15b, r): Goldspan Dragon: Treasures tap for two mana.
@@ -197,6 +228,25 @@ export function manaSources(
         continue;
       }
       if (g.onlyForCreatures && !forSubtypes.includes('Creature')) continue;
+      // Final Fantasy (11c): mana from every permanent. A Realm Reborn: other permanents tap for any colour.
+      if (g.otherPermanents) {
+        for (const id of ctx.s.battlefield) {
+          if (id === exclude || id === src || obj(ctx, id).controller !== player) continue;
+          const have = out.find((x) => x.id === id && !x.pool);
+          if (have) {
+            for (const c of g.produces) if (!have.produces.includes(c)) have.produces.push(c);
+            continue;
+          }
+          if (!canTapForAbility(ctx, id)) continue;
+          out.push({
+            id,
+            produces: [...g.produces],
+            isCreature: isCreature(ctx, id),
+            sacrifice: false,
+          });
+        }
+        continue;
+      }
       for (const id of ctx.s.battlefield) {
         if (id === exclude || obj(ctx, id).controller !== player || out.some((x) => x.id === id))
           continue;
@@ -385,6 +435,18 @@ export function planPayment(
 export function hasImprovise(ctx: Ctx, player: PlayerId, card: ObjectId): boolean {
   const d = def(ctx, card);
   if (d.improvise) return true;
+  // Final Fantasy Commander (12b): Inspiring Statuary ("nonartifact spells you cast have improvise").
+  if (
+    !d.types.includes('Artifact') &&
+    ctx.s.battlefield.some(
+      (id) =>
+        obj(ctx, id).controller === player &&
+        def(ctx, id).abilities.some(
+          (a) => a.kind === 'static' && a.effect.kind === 'nonartifactSpellsHaveImprovise',
+        ),
+    )
+  )
+    return true;
   if (d.types.includes('Creature')) return false;
   return ctx.s.battlefield.some(
     (id) =>

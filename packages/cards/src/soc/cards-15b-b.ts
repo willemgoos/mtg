@@ -248,14 +248,6 @@ export const BRAWL_15B_B: Record<string, Behavior> = {
       },
     ],
   },
-  'Morbid Opportunist': {
-    abilities: [
-      {
-        ...when({ on: 'otherCreatureDies', controller: 'any' }, [], draw(1)),
-        oncePerTurn: true,
-      } as AbilityDef,
-    ],
-  },
   'Nested Shambler': {
     abilities: [
       onDies([], {
@@ -265,9 +257,6 @@ export const BRAWL_15B_B: Record<string, Behavior> = {
         tapped: true,
       }),
     ],
-  },
-  'Pitiless Plunderer': {
-    abilities: [when({ on: 'otherCreatureDies', controller: 'you' }, [], treasure)],
   },
   'Synapse Necromage': { abilities: [onDies([], token(FUNGUS, 2))] },
   'Umbral Collar Zealot': {
@@ -431,9 +420,6 @@ export const BRAWL_15B_B: Record<string, Behavior> = {
     ],
   },
   'Grave Pact': { abilities: [yourCreatureDies([], { kind: 'opponentSacrifices' })] },
-  'Bastion of Remembrance': {
-    abilities: [when({ on: 'etb' }, [], token(SOLDIER)), yourCreatureDies([], ...drain(1))],
-  },
   // Simplified: X is the target's mana value, and the creature you control with the greatest toughness is blighted.
   'Blighted Nightmare': {
     abilities: [
@@ -489,10 +475,6 @@ export const BRAWL_15B_B: Record<string, Behavior> = {
     spell: { targets: [], effects: [draw(2), treasure] },
   },
   'Corrupted Conviction': {
-    sacrificeCreatureToCast: true,
-    spell: { targets: [], effects: [draw(2)] },
-  },
-  'Village Rites': {
     sacrificeCreatureToCast: true,
     spell: { targets: [], effects: [draw(2)] },
   },

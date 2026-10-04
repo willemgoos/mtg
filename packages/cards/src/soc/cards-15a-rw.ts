@@ -113,9 +113,6 @@ export const QUINTORIUS_RW: Record<string, Behavior> = {
       },
     ],
   },
-  'Battlefield Forge': {
-    abilities: [tapFor('C'), tapFor('R', { pain: true }), tapFor('W', { pain: true })],
-  },
   'Elegant Parlor': {
     entersTapped: true,
     abilities: [

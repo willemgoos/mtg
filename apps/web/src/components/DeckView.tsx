@@ -15,6 +15,7 @@ import {
 } from '../game/deckView.ts';
 import { ruleNotes } from '../game/notes.ts';
 import { HoverPreview, type HoverState } from './Preview.tsx';
+import { HumanMade } from './HumanMade.tsx';
 
 type Hover = (e: DeckEntry | null, anchor?: Element) => void;
 
@@ -63,9 +64,10 @@ export function DeckView({
             {deck.colors.map((c) => (
               <span key={c} className={`pip pip--${c}`} />
             ))}
+            <HumanMade of={deck} inline />
           </span>
           <h1>{deck.name}</h1>
-          <p>{BLURBS[deck.id]}</p>
+          <p>{BLURBS[deck.id] ?? deck.credit}</p>
         </div>
         <button className="btn btn--primary deckview__play" disabled={!playable} onClick={onPlay}>
           {playable ? 'Play this deck' : 'Coming soon'}

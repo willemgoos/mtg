@@ -1,0 +1,321 @@
+/**
+ * Foundations cards that Arena's Foundations draft trophy decks play, the
+ * ones Arena's Foundations Jump In packets list that foundations-jumpin.ts
+ * didn't cover, and three reprints the Final Fantasy trophy decks need.
+ */
+import type { AbilityDef, EffectDef, TargetSpec, TriggerDef } from '@mtg/engine';
+import { parseManaCost, type Behavior } from './build.ts';
+
+const t0 = { target: 0 } as const;
+const mana = parseManaCost;
+const creature: TargetSpec = { what: 'creature' };
+const yourCreature: TargetSpec = { what: 'creature', controller: 'you' };
+const when = (
+  trigger: TriggerDef,
+  targets: TargetSpec[],
+  ...effects: EffectDef[]
+): Extract<AbilityDef, { kind: 'triggered' }> => ({ kind: 'triggered', trigger, targets, effects });
+const draw = (amount: number): EffectDef => ({ kind: 'draw', who: 'controller', amount });
+const vialDamage = (to: 'eachOpponent' | 'chosen'): EffectDef => ({
+  kind: 'damage',
+  amount: { manaValueOfSubject: true },
+  to,
+});
+const anthem = (subtype: string): AbilityDef => ({
+  kind: 'static',
+  effect: {
+    kind: 'anthem',
+    affects: 'otherCreaturesYouControl',
+    filter: { subtype },
+    power: 1,
+    toughness: 1,
+  },
+});
+const equip = (cost: string): AbilityDef => ({
+  kind: 'activated',
+  cost: { mana: mana(cost) },
+  sorcerySpeed: true,
+  targets: [yourCreature],
+  effects: [{ kind: 'attach', to: t0 }],
+});
+
+export const FOUNDATIONS_DRAFT_BEHAVIORS: Record<string, Behavior> = {
+  // ------------------------------------------------------------------ white
+  'Squad Rallier': {
+    abilities: [
+      {
+        kind: 'activated',
+        cost: { mana: mana('{2}{W}') },
+        targets: [],
+        effects: [{ kind: 'lookAndTake', count: 4, filter: { types: ['Creature'], maxPower: 2 } }],
+      },
+    ],
+  },
+  'Exemplar of Light': {
+    abilities: [
+      when({ on: 'youGainLife' }, [], { kind: 'counters', to: 'self', amount: 1 }),
+      { ...when({ on: 'youPutCounters', self: true }, [], draw(1)), oncePerTurn: true },
+    ],
+  },
+  'Luminous Rebuke': {
+    costReductionIfTarget: { filter: { tapped: true }, amount: 3 },
+    spell: { targets: [creature], effects: [{ kind: 'destroy', what: t0 }] },
+  },
+
+  // ------------------------------------------------------------------- blue
+  'Self-Reflection': {
+    spell: { targets: [yourCreature], effects: [{ kind: 'tokenCopy', of: t0 }] },
+    flashback: mana('{3}{U}'),
+  },
+  'Time Stop': {
+    // Exiled with everything else on the stack.
+    afterResolving: 'exile',
+    spell: { targets: [], effects: [{ kind: 'endTheTurn' }] },
+  },
+  'Homunculus Horde': {
+    abilities: [when({ on: 'drawSecondCard' }, [], { kind: 'tokenCopy', of: 'self' })],
+  },
+
+  // ------------------------------------------------------------------ black
+  Pilfer: {
+    spell: {
+      targets: [],
+      effects: [{ kind: 'chooseFromOpponentHand', filter: { nonland: true }, then: 'discard' }],
+    },
+  },
+  'Gutless Plunderer': {
+    // Raid: one of the top three may go back on top; the rest go to the graveyard.
+    abilities: [
+      {
+        ...when({ on: 'etb' }, [], {
+          kind: 'lookAndTake',
+          count: 3,
+          filter: {},
+          to: 'libraryTop',
+          restToGraveyard: true,
+        }),
+        condition: { kind: 'attackedThisTurn' },
+      },
+    ],
+  },
+  'Zul Ashur, Lich Lord': {
+    wardCost: { mana: mana(''), life: 2 },
+    abilities: [
+      {
+        kind: 'activated',
+        cost: { tapSelf: true },
+        targets: [
+          {
+            what: 'graveyardCard',
+            controller: 'you',
+            filter: { types: ['Creature'], subtype: 'Zombie' },
+          },
+        ],
+        effects: [{ kind: 'castFromGraveyardThisTurn', what: t0 }],
+      },
+    ],
+  },
+  'Deadly Plot': {
+    modes: [
+      {
+        targets: [{ what: 'permanent', filter: { types: ['Creature', 'Planeswalker'] } }],
+        effects: [{ kind: 'destroy', what: t0 }],
+      },
+      {
+        targets: [
+          {
+            what: 'graveyardCard',
+            controller: 'you',
+            filter: { types: ['Creature'], subtype: 'Zombie' },
+          },
+        ],
+        effects: [{ kind: 'returnToBattlefield', what: t0, tapped: true }],
+      },
+    ],
+  },
+
+  // -------------------------------------------------------------------- red
+  'Firespitter Whelp': {
+    abilities: [
+      when(
+        {
+          on: 'castSpell',
+          filter: 'any',
+          spell: { anyOf: [{ notTypes: ['Creature'] }, { subtype: 'Dragon' }] },
+        },
+        [],
+        { kind: 'damage', amount: 1, to: 'eachOpponent' },
+      ),
+    ],
+  },
+  'Bolt Bend': {
+    costReductionIf: {
+      condition: { kind: 'controlsCreature', filter: { minPower: 4 } },
+      amount: 3,
+    },
+    spell: {
+      targets: [{ what: 'spell', abilities: true }],
+      effects: [{ kind: 'changeTarget', what: t0 }],
+    },
+  },
+  'Dropkick Bomber': {
+    abilities: [
+      anthem('Goblin'),
+      {
+        kind: 'activated',
+        cost: { mana: mana('{R}') },
+        targets: [
+          { what: 'creature', controller: 'you', filter: { subtype: 'Goblin', other: true } },
+        ],
+        effects: [
+          {
+            kind: 'pump',
+            to: t0,
+            power: 0,
+            toughness: 0,
+            keywords: ['flying'],
+            sacrificeOnCombatDamage: true,
+          },
+        ],
+      },
+    ],
+  },
+
+  // ------------------------------------------------------------------ green
+  'Vivien Reid': {
+    abilities: [
+      {
+        kind: 'activated',
+        cost: { loyalty: 1 },
+        targets: [],
+        effects: [
+          {
+            kind: 'lookAndTake',
+            count: 4,
+            filter: { anyOf: [{ types: ['Creature'] }, { types: ['Land'] }] },
+          },
+        ],
+        label: '+1: look at four',
+      },
+      {
+        kind: 'activated',
+        cost: { loyalty: -3 },
+        targets: [
+          {
+            what: 'permanent',
+            filter: {
+              anyOf: [
+                { types: ['Artifact', 'Enchantment'] },
+                { types: ['Creature'], hasKeyword: 'flying' },
+              ],
+            },
+          },
+        ],
+        effects: [{ kind: 'destroy', what: t0 }],
+        label: '−3: destroy',
+      },
+      {
+        kind: 'activated',
+        cost: { loyalty: -8 },
+        targets: [],
+        effects: [
+          {
+            kind: 'emblem',
+            until: 'permanent',
+            ability: {
+              kind: 'static',
+              effect: {
+                kind: 'anthem',
+                affects: 'creaturesYouControl',
+                power: 2,
+                toughness: 2,
+                keywords: ['vigilance', 'trample', 'indestructible'],
+              },
+            },
+          },
+        ],
+        label: '−8: emblem',
+      },
+    ],
+  },
+  'Elvish Archdruid': {
+    abilities: [
+      anthem('Elf'),
+      {
+        kind: 'mana',
+        cost: { tapSelf: true },
+        produces: 'G',
+        amountOf: { count: 'creaturesYouControl', subtype: 'Elf' },
+      },
+    ],
+  },
+
+  // ------------------------------------------------- multicolour and others
+  'Koma, World-Eater': {
+    uncounterable: true,
+    wardCost: { mana: mana('{4}') },
+    abilities: [
+      when({ on: 'combatDamageToPlayer' }, [], {
+        kind: 'createToken',
+        token: 'komas-coil-token',
+        count: 4,
+      }),
+    ],
+  },
+  'Leyline Axe': {
+    beginsOnBattlefield: true,
+    abilities: [
+      {
+        kind: 'static',
+        effect: { kind: 'attached', power: 1, toughness: 1, keywords: ['doubleStrike', 'trample'] },
+      },
+      equip('{3}'),
+    ],
+  },
+
+  // Final Fantasy draft trophy decks: reprints from Through the Ages and older sets.
+  'Captain Lannery Storm': {
+    abilities: [
+      when({ on: 'attacks' }, [], { kind: 'createToken', token: 'treasure-token', count: 1 }),
+      when({ on: 'youSacrifice', filter: { subtype: 'Treasure' } }, [], {
+        kind: 'pump',
+        to: 'self',
+        power: 1,
+        toughness: 0,
+      }),
+    ],
+  },
+  'Vial Smasher the Fierce': {
+    // Two players: the opponent, or one of their planeswalkers if they have one.
+    abilities: [
+      when({ on: 'castSpell', filter: 'first' }, [], {
+        kind: 'if',
+        condition: {
+          kind: 'amountAtLeast',
+          amount: { count: 'permanentsOpponentsControl', filter: { types: ['Planeswalker'] } },
+          min: 1,
+        },
+        then: [
+          {
+            kind: 'choose',
+            options: [
+              { label: 'Damage to your opponent', effects: [vialDamage('eachOpponent')] },
+              {
+                label: 'Damage to a planeswalker they control',
+                effects: [
+                  {
+                    kind: 'chooseYourPermanent',
+                    opponents: true,
+                    filter: { types: ['Planeswalker'] },
+                    then: [vialDamage('chosen')],
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+        else: [vialDamage('eachOpponent')],
+      }),
+    ],
+  },
+};

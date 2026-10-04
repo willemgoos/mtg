@@ -15,7 +15,10 @@ export interface NewGameOptions {
   life?: Partial<Record<PlayerId, number>>;
   /** Extra cards in the opening hand (and each mulligan's new hand). */
   extraCards?: Partial<Record<PlayerId, number>>;
-  /** Players who start with a basic land from their library on the battlefield. */
+  /**
+   * Players who start with a basic land from their library on the battlefield;
+   * a player listed twice starts with two.
+   */
   landInPlay?: readonly PlayerId[];
   /** Brawl: 25 life, the first mulligan free, and each player's commander in the command zone. */
   format?: 'brawl';
@@ -102,7 +105,7 @@ export function setupGame(ctx: Ctx, opts: NewGameOptions): void {
     if (opts.sideboards?.[p]?.length) ps.sideboard = [...opts.sideboards[p]!];
     if (opts.life?.[p] !== undefined) ps.life = opts.life[p]!;
     if (opts.extraCards?.[p]) ps.openingHand = OPENING_HAND + opts.extraCards[p]!;
-    if (opts.landInPlay?.includes(p)) {
+    for (const _ of opts.landInPlay?.filter((x) => x === p) ?? []) {
       const land = ps.library.find((id) => def(ctx, id).supertypes.includes('Basic'));
       if (land !== undefined) moveObject(ctx, land, 'battlefield', { controller: p });
     }

@@ -92,10 +92,26 @@ const archiveSheet = (cards: ReturnType<typeof strixhavenArchiveSheets>) =>
 export const STRIXHAVEN_ARCHIVE_SHEETS = archiveSheet(strixhavenArchiveSheets());
 export const SECRETS_ARCHIVE_SHEETS = archiveSheet(secretsOfStrixhavenArchiveSheets());
 
+/**
+ * Final Fantasy's booster cards: the set's main cards we play (collector number up to 309, so
+ * not the Starter Kit's exclusives), fronts only, no basics.
+ */
+export const FINAL_FANTASY_SHEETS = Object.fromEntries(
+  RARITIES.map((rarity) => [
+    rarity,
+    SCRYFALL.filter(
+      (c) => c.set === 'fin' && c.rarity === rarity && !c.front && +c.collectorNumber <= 309,
+    )
+      .map((c) => slug(c.name))
+      .filter((id) => cardDb.has(id) && !isBasic(id)),
+  ]),
+) as Record<Rarity, string[]>;
+
 const SHEETS: Record<SeasonPackKind, Record<Rarity, string[]>> = {
   foundations: FOUNDATIONS_SHEETS,
   bloomburrow: BLOOMBURROW_SHEETS,
   marvel: MARVEL_SHEETS,
+  finalFantasy: FINAL_FANTASY_SHEETS,
   strixhaven: STRIXHAVEN_SHEETS,
   secrets: SECRETS_SHEETS,
 };

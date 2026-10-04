@@ -171,7 +171,7 @@ export const RARES_D: Record<string, Behavior> = {
       effects: [
         {
           kind: 'emblem',
-          until: 'thisTurn',
+          until: 'endOfTurn',
           ability: when(
             { on: 'otherCreatureEtb', controller: 'you' },
             [],

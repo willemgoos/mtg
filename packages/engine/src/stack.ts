@@ -158,8 +158,11 @@ function wardedTargets(ctx: Ctx, player: PlayerId, targets: readonly TargetChoic
     if (!o || o.zone !== 'battlefield' || o.controller === player) return [];
     // Strixhaven Brawl (15b, b): Nowhere to Run: their ward abilities don't trigger.
     if (ignoresHexproofAndWard(ctx, o.controller)) return [];
-    if (hasKeyword(ctx, o.id, 'ward'))
-      return [def(ctx, o.id).wardCost ?? { mana: { generic: 2, colored: {} } }];
+    if (hasKeyword(ctx, o.id, 'ward')) {
+      const w = def(ctx, o.id).wardCost ?? { mana: { generic: 2, colored: {} } };
+      // Final Fantasy (11c): ward paid in life (Raubahn: life equal to his power).
+      return [w.lifeEqualsPower ? { ...w, life: Math.max(0, power(ctx, o.id)) } : w];
+    }
     if (hasKeyword(ctx, o.id, 'wardOne')) return [{ mana: { generic: 1, colored: {} } }];
     return [];
   });
@@ -279,6 +282,13 @@ export function castCost(
   // Brawl: commander tax.
   if (o.zone === 'command') cost = { ...cost, generic: cost.generic + commanderTax(ctx, player) };
   let reduce = d.costReduction !== undefined ? amountFor(ctx, player, d.costReduction) : 0;
+  // Final Fantasy Commander (12f): spells cast from your graveyard cost less (Emet-Selch of the Third Seat).
+  if (o.zone === 'graveyard' || o.fromGraveyardCast)
+    for (const id of ctx.s.battlefield)
+      if (obj(ctx, id).controller === player)
+        for (const a of def(ctx, id).abilities)
+          if (a.kind === 'static' && a.effect.kind === 'graveyardSpellsCostLess')
+            reduce += a.effect.amount;
   // Heroic Return, Avenge: "costs {2} less if ...".
   if (d.costReductionIf && checkCondition(ctx, d.costReductionIf.condition, player, o))
     reduce += d.costReductionIf.amount;
@@ -551,7 +561,8 @@ export function castSpell(
       abilityIndex: i,
       controller: player,
       subject: { id: o.id, zcc: o.zcc },
-      ...(a.trigger.perSacrificed ? { amount: sacrificed } : {}),
+      // Marvel Super Heroes Jumpstart (Scarlet): storm counts the spells cast before it (Grapeshot).
+      amount: a.trigger.perSacrificed ? sacrificed : (ctx.s.turn.spellsCast?.[player] ?? 0),
     });
   });
   // Conduit of Worlds: a card cast this way stops further spells this turn.
@@ -631,15 +642,33 @@ export function abilityManaCost(
   ctx: Ctx,
   source: ObjectId,
   a: ReturnType<typeof activatedAbility>,
+  /** Final Fantasy (11d): the chosen targets ('best': the cheapest any target could make it). */
+  targets?: readonly TargetChoice[] | 'best',
 ): ManaCost | undefined {
   const o = obj(ctx, source);
-  // Final Fantasy (11b): Qiqirn Merchant costs {1} less for each Town you control.
-  if (a.costReduction && a.cost.mana)
-    return reduceCost(a.cost.mana, {
-      generic: countOf(ctx, o.controller, a.costReduction, false, source),
-      colored: {},
-    });
+  // Final Fantasy (11c): activated cost reduction (Balamb Garden), and Firion's cheaper equip.
+  const less =
+    (a.costReduction !== undefined
+      ? countOf(ctx, o.controller, a.costReduction, false, source)
+      : 0) +
+    // Firion's copies' own discount, and "equip abilities you activate cost less" (Fighter Class).
+    (a.cost.mana ? equipDiscount(ctx, o, a, targets) : 0);
+  if (less && a.cost.mana && !a.powerUp)
+    return reduceCost(a.cost.mana, { generic: Math.min(less, a.cost.mana.generic), colored: {} });
   if (!a.powerUp || !a.cost.mana) return a.cost.mana;
+  // Marvel Super Heroes Jumpstart (Trained): Advancing the Spirit, the first power-up on your turn costs {0}.
+  if (
+    ctx.s.turn.activePlayer === o.controller &&
+    !ctx.s.turn.powerUpActivated &&
+    ctx.s.battlefield.some(
+      (id) =>
+        obj(ctx, id).controller === o.controller &&
+        def(ctx, id).abilities.some(
+          (s) => s.kind === 'static' && s.effect.kind === 'firstPowerUpFree',
+        ),
+    )
+  )
+    return { generic: 0, colored: {} };
   let cost = a.cost.mana;
   if (o.zoneTurn === ctx.s.turn.number) cost = reduceCost(cost, def(ctx, source).manaCost);
   for (const id of ctx.s.battlefield) {
@@ -649,6 +678,37 @@ export function abilityManaCost(
         cost = reduceCost(cost, { generic: s.effect.amount, colored: {} });
   }
   return cost;
+}
+
+// Final Fantasy Commander (12b): equip cost reductions.
+/** How much less an equip ability costs: the controller's "equip abilities cost less" and the Equipment's own. */
+function equipDiscount(
+  ctx: Ctx,
+  o: { id: ObjectId; controller: PlayerId; equipDiscount?: number },
+  a: ReturnType<typeof activatedAbility>,
+  targets?: readonly TargetChoice[] | 'best',
+): number {
+  const isEquip =
+    def(ctx, o.id).subtypes.includes('Equipment') &&
+    a.effects.length === 1 &&
+    a.effects[0]!.kind === 'attach';
+  if (!isEquip) return 0;
+  let n = o.equipDiscount ?? 0;
+  for (const id of ctx.s.battlefield) {
+    if (obj(ctx, id).controller !== o.controller) continue;
+    for (const s of def(ctx, id).abilities)
+      if (
+        s.kind === 'static' &&
+        s.effect.kind === 'equipCostsLess' &&
+        checkCondition(ctx, s.effect.condition, o.controller, obj(ctx, id)) &&
+        // Final Fantasy (11d): only when equipping this creature (Cloud, Planet's Champion).
+        (!s.effect.targetSelf ||
+          targets === 'best' ||
+          (!!targets?.[0] && 'object' in targets[0] && targets[0].object.id === id))
+      )
+        n += s.effect.amount;
+  }
+  return n;
 }
 
 export function activateAbility(
@@ -665,7 +725,7 @@ export function activateAbility(
 ): boolean {
   const a = activatedAbility(ctx, source, index);
   const src = obj(ctx, source);
-  const mana = abilityManaCost(ctx, source, a);
+  const mana = abilityManaCost(ctx, source, a, targets);
   const sourceRef = { id: source, zcc: src.zcc };
   const exclude = a.cost.tapSelf ? source : undefined;
   const payment = planPayment(
@@ -703,9 +763,24 @@ export function activateAbility(
     for (const id of tokensToTap(ctx, player, source).slice(0, a.cost.tapTokens)) tap(ctx, id);
   // Secrets of Strixhaven (14b): Harmonized Trio.
   if (a.cost.tapOtherCreatures)
-    for (const id of creaturesToTap(ctx, player, source).slice(0, a.cost.tapOtherCreatures))
+    for (const id of creaturesToTap(ctx, player, undefined, source, true).slice(
+      0,
+      a.cost.tapOtherCreatures,
+    ))
       tap(ctx, id);
-  if (a.cost.crew) for (const id of crewFor(ctx, player, source, a.cost.crew) ?? []) tap(ctx, id);
+  // Marvel Super Heroes Jumpstart (Masters of Evil)
+  if (a.cost.tapCreature) {
+    const id = creaturesToTap(ctx, player, a.cost.tapCreature, source)[0];
+    if (id) tap(ctx, id);
+  }
+  if (a.cost.crew) {
+    const crew = crewFor(ctx, player, source, a.cost.crew) ?? [];
+    for (const id of crew) tap(ctx, id);
+    // Final Fantasy (11c): crewed by (Balthier and Fran).
+    const v = obj(ctx, source);
+    const before = v.crewedBy?.turn === ctx.s.turn.number ? v.crewedBy.ids : [];
+    v.crewedBy = { turn: ctx.s.turn.number, ids: [...before, ...crew] };
+  }
   if (a.cost.sacrificeArtifacts)
     for (const id of artifactsToSacrifice(
       ctx,
@@ -754,6 +829,8 @@ export function activateAbility(
   }
   payMana(ctx, payment);
   if (a.once || a.powerUp) (src.usedAbilities ??= []).push(index);
+  // Marvel Super Heroes Jumpstart (Trained): Advancing the Spirit frees only the first power-up each turn.
+  if (a.powerUp && player === ctx.s.turn.activePlayer) ctx.s.turn.powerUpActivated = true;
   if (a.cost.sacrificeSelf) {
     item.lkiPower = power(ctx, source);
     sacrificePermanent(ctx, source);
@@ -947,6 +1024,13 @@ export function resolveTop(ctx: Ctx): boolean {
       if (stun) (o.counters ??= {}).stun = (o.counters.stun ?? 0) + stun;
       if (x < d.stunCountersMinusX) o.tapped = true;
     }
+    // Marvel Super Heroes Jumpstart (Tenacious/Rampaging): Voracious Brood.
+    if (d.entersWithCountersAmount)
+      addCounters(
+        ctx,
+        o.id,
+        countOf(ctx, item.controller, d.entersWithCountersAmount, false, o.id),
+      );
     if (d.entersWithCounters && checkCondition(ctx, d.entersWithCountersIf, item.controller, o))
       addCounters(ctx, o.id, d.entersWithCounters);
     if (host) attachAura(ctx, o.id, host);
@@ -1201,12 +1285,28 @@ export function graveyardCostCard(
   return options[0] ?? null;
 }
 
-/** Secrets of Strixhaven (14b): other untapped creatures you control, the least useful first. */
-export function creaturesToTap(ctx: Ctx, player: PlayerId, source?: ObjectId): ObjectId[] {
+// Marvel Super Heroes Jumpstart (Masters of Evil)
+/**
+ * Untapped creatures you control matching the filter, weakest first ("Tap an untapped Villain you
+ * control"); with `other`, not the source (Secrets of Strixhaven (14b): Harmonized Trio).
+ */
+export function creaturesToTap(
+  ctx: Ctx,
+  player: PlayerId,
+  filter: CardFilter | undefined,
+  source?: ObjectId,
+  other = false,
+): ObjectId[] {
   return ctx.s.battlefield
     .filter((id) => {
       const o = obj(ctx, id);
-      return id !== source && o.controller === player && !o.tapped && isCreature(ctx, id);
+      return (
+        !(other && id === source) &&
+        o.controller === player &&
+        !o.tapped &&
+        isCreature(ctx, id) &&
+        (!filter || matchesFilter(ctx, id, filter, source))
+      );
     })
     .sort((x, y) => power(ctx, x) - power(ctx, y));
 }
@@ -1501,10 +1601,27 @@ export function answerSearch(ctx: Ctx, card: ObjectId | null): void {
     }
     if (d.fromGraveyard) {
       if (d.to === 'battlefield' || d.to === 'battlefieldTapped') {
+        // Final Fantasy (11c): onto the battlefield attacking (checked as the card, before it enters).
+        const attacking = !!d.attackingIf && cardMatches(ctx, card, d.attackingIf);
         moveObject(ctx, card, 'battlefield', { controller: d.player });
         // Strixhaven (13a): Zimone puts a land onto the battlefield tapped.
         if (d.to === 'battlefieldTapped') obj(ctx, card).tapped = true;
         if (d.counter) (obj(ctx, card).counters ??= {})[d.counter] = 1;
+        // Final Fantasy (11c): The Darkness Crystal.
+        if (d.enterTapped) obj(ctx, card).tapped = true;
+        if (d.enterCounters) addCounters(ctx, card, d.enterCounters);
+        if (attacking && ctx.s.combat && obj(ctx, card).zone === 'battlefield') {
+          obj(ctx, card).tapped = true;
+          ctx.s.combat.attackers.push({
+            id: card,
+            defender: other(d.player),
+            blocked: false,
+            blockers: [],
+          });
+        }
+        // Marvel Super Heroes (Nick Fury, Spymaster): "it" for the effects after it ('chosen').
+        const put = obj(ctx, card);
+        if (put.zone === 'battlefield') d.resume.chosen = { id: put.id, zcc: put.zcc };
       } else moveObject(ctx, card, 'hand');
       squirrelFood(ctx, d, card);
       return resume(ctx, d.resume, d.thenPriority);
@@ -1515,7 +1632,12 @@ export function answerSearch(ctx: Ctx, card: ObjectId | null): void {
       // Secrets of Strixhaven (14b): Zimone's Experiment: lands go onto the battlefield tapped.
       (d.landsTapped && def(ctx, card).types.includes('Land')) ||
       (d.battlefieldOnYourTurn && ctx.s.turn.activePlayer === d.player);
-    if (d.to === 'graveyard') moveObject(ctx, card, 'graveyard');
+    if (d.to === 'hideaway') {
+      // Final Fantasy (11c): hideaway. Exiled face down, remembered by the land.
+      moveObject(ctx, card, 'exile');
+      const land = d.resume.source && ctx.s.objects[d.resume.source.id];
+      if (land && land.zone === 'battlefield') land.exiledWith = [card];
+    } else if (d.to === 'graveyard') moveObject(ctx, card, 'graveyard');
     else if (d.to === 'castFree') moveObject(ctx, card, 'exile');
     else if (d.to === 'libraryTop') {
       // Fountainport Bell: shuffle, then put it on top (done after the shuffle below).
@@ -1536,7 +1658,7 @@ export function answerSearch(ctx: Ctx, card: ObjectId | null): void {
       )
         obj(ctx, card).tapped = false;
     } else moveObject(ctx, card, 'hand');
-    emit(ctx, { type: 'searched', player: d.player, id: card });
+    if (d.to !== 'hideaway') emit(ctx, { type: 'searched', player: d.player, id: card });
     // Strixhaven (13c): Oriq Loremage: a +1/+1 counter if it's an instant or sorcery card.
     if (d.sourceCounterIfTypes && d.resume.source) {
       const src = ctx.s.objects[d.resume.source.id];

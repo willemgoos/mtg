@@ -3,7 +3,7 @@ import type { Color } from '@mtg/engine';
 import { type ReactNode, useEffect, useMemo, useRef, useState } from 'react';
 import {
   type ExpeditionRun,
-  keepCount,
+  packKeeps,
   type Pack,
   PACK_SET_NAMES,
   type PackSet,
@@ -16,6 +16,8 @@ import { ruleNotes } from '../game/notes.ts';
 import { play } from '../game/sound.ts';
 import { HoverPreview, type HoverState } from './Preview.tsx';
 import { UiSize } from './UiSize.tsx';
+import './home.css';
+import './expedition.css';
 
 export const COLOR_NAMES: Record<Color, string> = {
   W: 'White',
@@ -31,12 +33,19 @@ export function packName(p: Pack, set: PackSet = 'fdn'): string {
   return `${PACK_SET_NAMES[set]} booster`;
 }
 
-/** Art for a pack: the first rare of its set and colour, or a mythic. */
+/** A set's booster wrapper art, where its first mythic isn't the set's face (Cloud on Final Fantasy's). */
+const BOOSTER_FACE: Partial<Record<PackSet, string>> = { fin: 'Cloud, Midgar Mercenary' };
+
+/** Art for a pack: the first rare of its set and colour, or the set's face or first mythic. */
 export function packArt(p: Pack, set: PackSet = 'fdn'): string {
+  // Booster cards only (Final Fantasy's Starter Kit exclusives are numbered past 309).
+  const inSet = (c: (typeof SCRYFALL)[number]) =>
+    c.set === set && (set !== 'fin' || +c.collectorNumber <= 309);
   const card =
     p.kind === 'color'
-      ? SCRYFALL.find((c) => c.set === set && c.rarity === 'rare' && c.colors.join() === p.color)
-      : SCRYFALL.find((c) => c.set === set && c.rarity === 'mythic');
+      ? SCRYFALL.find((c) => inSet(c) && c.rarity === 'rare' && c.colors.join() === p.color)
+      : (SCRYFALL.find((c) => inSet(c) && c.name === BOOSTER_FACE[set]) ??
+        SCRYFALL.find((c) => inSet(c) && c.rarity === 'mythic'));
   return card?.image?.artCrop ?? '';
 }
 
@@ -90,7 +99,7 @@ export function PackOpening({
         pack={run.build.packs[index]!}
         set={packSetOf(run, run.build.opened + index)}
         cards={packs[index]!}
-        keep={Math.min(keepCount(run), packs[index]!.length)}
+        keep={Math.min(packKeeps(run)[index]!, packs[index]!.length)}
         eyebrow={`Expedition · ${runDeck(run).name}${packs.length > 1 ? ` · Pack ${index + 1} of ${packs.length}` : ''}`}
         onKeep={(names) => {
           const all = [...kept, names];
@@ -322,7 +331,7 @@ function OnePack({
   const cols = cards.length === 8 ? 4 : COLS;
   const rows = Math.ceil(cards.length / cols);
   return (
-    <div ref={root} className={`start opening opening--${phase}`}>
+    <div ref={root} className={`start shell opening opening--${phase}`}>
       <UiSize />
       <div className="start__title">
         <span className="start__eyebrow">{eyebrow}</span>

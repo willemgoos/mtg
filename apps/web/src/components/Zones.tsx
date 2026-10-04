@@ -627,7 +627,14 @@ export function StackView({
                 {...(onCard ? { onClick: () => onCard(item.id) } : {})}
               />
             ) : (
-              <Card defId={defId} size="stack" onHover={onHover} />
+              // Final Fantasy (11c): an ability can be a target (Louisoix's Sacrifice, Gogo).
+              <Card
+                defId={defId}
+                size="stack"
+                mark={markOf?.(item.id) ?? null}
+                onHover={onHover}
+                {...(onCard ? { onClick: () => onCard(item.id) } : {})}
+              />
             )}
             {item.kind === 'ability' && <span className="stack__tag">Ability</span>}
           </div>

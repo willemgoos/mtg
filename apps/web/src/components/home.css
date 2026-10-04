@@ -6,10 +6,12 @@
 
 .home,
 .nav,
+.shell,
 .season,
 .swelcome,
 .smodal,
-.dbk {
+.dbk,
+.dpick {
   --h-bg: #0b0c0e;
   --h-surface: #131417;
   --h-raised: #1a1b1f;
@@ -469,7 +471,7 @@
 
 .tiles {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 1rem;
 }
 
@@ -746,6 +748,12 @@
 @media (max-width: 1100px) {
   .home__grid {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 1100px) and (min-width: 761px) {
+  .tiles {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 

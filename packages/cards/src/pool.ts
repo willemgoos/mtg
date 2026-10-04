@@ -1,10 +1,13 @@
 import { BLOOMBURROW_BEHAVIORS } from './bloomburrow.ts';
+import { FOUNDATIONS_DRAFT_BEHAVIORS } from './foundations-draft.ts';
+import { FOUNDATIONS_JUMP_IN_BEHAVIORS } from './foundations-jumpin.ts';
 import { MARVEL_BEHAVIORS } from './marvel.ts';
 import { MARVEL_BRAWL_BEHAVIORS } from './marvel-brawl.ts';
 import { FINAL_FANTASY_BEHAVIORS } from './final-fantasy.ts';
 import { STRIXHAVEN_BEHAVIORS } from './strixhaven.ts';
 import { SECRETS_OF_STRIXHAVEN_BEHAVIORS } from './secrets-of-strixhaven.ts';
 import { STRIXHAVEN_BRAWL_BEHAVIORS } from './strixhaven-brawl.ts';
+import { FINAL_FANTASY_BRAWL_BEHAVIORS } from './final-fantasy-brawl.ts';
 
 /**
  * Allowed sets, most preferred first: Foundations, then older core sets, then
@@ -41,27 +44,45 @@ export const SET_PREFERENCE = [
   'sos',
   // Secrets of Strixhaven Commander: the Brawl decks (phase 15).
   'soc',
+  // Final Fantasy's Through the Ages reprints (draft trophy decks: Captain Lannery Storm, Vial Smasher).
+  'fca',
+  // Outlaws of Thunder Junction: Sterling Hound, in Arena's Bloomburrow Threshold packet.
+  'otj',
   'pmei',
   'pw26',
   'sld',
   // Arena Beginner Set: Arena-only cards (last resort).
   'anb',
+  // Final Fantasy Commander (phase 12): the Arena Store Brawl decks swap in cards from other sets
+  // (last, so no earlier card changes printing). Arena-only Alchemy cards come from ymid and ywoe.
+  'znr',
+  'khm',
+  'mid',
+  'vow',
+  'afr',
+  'mkm',
+  'dsk',
+  'dft',
+  'mom',
+  'otj',
+  'ktk',
+  'som',
+  'big',
+  'j25',
+  'ymid',
+  'ywoe',
   // Strixhaven Brawl (15a): sets for the Brawl decks' reprints.
   'mh3',
   'hbg',
   'tdm',
   'rtr',
-  'mid',
   'ybro',
-  'mkm',
   'soa',
   'mh1',
   'mh2',
   'akh',
   'mat',
-  'dsk',
   'bro',
-  'j25',
   'dom',
   'c20',
   'rav',
@@ -69,27 +90,20 @@ export const SET_PREFERENCE = [
   // Strixhaven Brawl (15b): sets for the other seven Brawl decks' reprints.
   'woe',
   'gtc',
-  'dft',
   'war',
   'dmu',
   'aer',
-  'khm',
   'thb',
   'bng',
   'ths',
-  'vow',
   'neo',
-  'otj',
   'eld',
   'isd',
   'one',
   'bfz',
-  'ymid',
   'lci',
-  'znr',
   'ecl',
   'ydft',
-  'mom',
   'yecl',
   'mbc',
   'ytdm',
@@ -111,8 +125,6 @@ export const SET_PREFERENCE = [
   'csp',
   'ydmu',
   // Strixhaven Brawl (15b, multi): Siege Rhino (conjured by Call the Crash), Ochre Jelly.
-  'ktk',
-  'afr',
   // Mystical Archive (16): the Strixhaven Mystical Archive (a last resort: STA cards have older printings).
   'sta',
 ];
@@ -567,6 +579,11 @@ export const LAND_POOL = [
   'Temple of Mystery',
 ];
 
+/** Foundations cards from Arena's Foundations Jump In packets. */
+export const FOUNDATIONS_JUMP_IN_POOL = Object.keys(FOUNDATIONS_JUMP_IN_BEHAVIORS);
+/** Foundations cards for the draft trophy decks and the rest of Arena's Jump In packets. */
+export const FOUNDATIONS_DRAFT_POOL = Object.keys(FOUNDATIONS_DRAFT_BEHAVIORS);
+
 /** Marvel Super Heroes cards (fronts only: a double-faced card's back comes with it). */
 export const MARVEL_POOL = Object.keys(MARVEL_BEHAVIORS);
 
@@ -582,6 +599,9 @@ export const SECRETS_OF_STRIXHAVEN_POOL = Object.keys(SECRETS_OF_STRIXHAVEN_BEHA
 /** The Strixhaven Brawl precons' cards (not already in the pool above). */
 export const STRIXHAVEN_BRAWL_POOL = Object.keys(STRIXHAVEN_BRAWL_BEHAVIORS);
 
+/** The Final Fantasy Commander Brawl decks' cards (not already in the pool above). */
+export const FINAL_FANTASY_BRAWL_POOL = Object.keys(FINAL_FANTASY_BRAWL_BEHAVIORS);
+
 export const POOL: { name: string }[] = [
   ...RED_POOL,
   ...GREEN_POOL,
@@ -589,6 +609,8 @@ export const POOL: { name: string }[] = [
   ...BLUE_POOL,
   ...BLACK_POOL,
   ...OTHER_POOL,
+  ...FOUNDATIONS_JUMP_IN_POOL,
+  ...FOUNDATIONS_DRAFT_POOL,
   ...LAND_POOL,
   ...BLOOMBURROW_POOL,
   ...MARVEL_POOL,
@@ -597,6 +619,7 @@ export const POOL: { name: string }[] = [
   ...STRIXHAVEN_POOL,
   ...SECRETS_OF_STRIXHAVEN_POOL,
   ...STRIXHAVEN_BRAWL_POOL,
+  ...FINAL_FANTASY_BRAWL_POOL,
 ].map((name) => ({
   name,
 }));

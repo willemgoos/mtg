@@ -53,6 +53,14 @@ describe('game setup and mulligans', () => {
     expect(after.players.p1.hand).toHaveLength(8);
   });
 
+  it('puts a land in play for each time a player is listed', () => {
+    const s = engine.newGame({ decks, seed: 7, landInPlay: ['p1', 'p1', 'p2'] });
+    const mine = s.battlefield.filter((id) => s.objects[id]!.controller === 'p1');
+    expect(mine).toHaveLength(2);
+    expect(s.battlefield).toHaveLength(3);
+    expect(s.players.p1.library).toHaveLength(31);
+  });
+
   it('is reproducible from the seed', () => {
     const mixed = { p1: [...Array(20).fill('forest'), ...Array(20).fill('bear')], p2: decks.p2 };
     const a = engine.newGame({ decks: mixed, seed: 99 });

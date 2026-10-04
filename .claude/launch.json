@@ -4,7 +4,23 @@
     {
       "name": "web",
       "runtimeExecutable": "corepack",
-      "runtimeArgs": ["pnpm", "--filter", "@mtg/web", "dev"],
+      "runtimeArgs": [
+        "pnpm",
+        "--filter",
+        "@mtg/web",
+        "dev"
+      ],
+      "port": 5173,
+      "autoPort": true
+    },
+    {
+      "name": "web-pnpm",
+      "runtimeExecutable": "/opt/homebrew/bin/pnpm",
+      "runtimeArgs": [
+        "--filter",
+        "@mtg/web",
+        "dev"
+      ],
       "port": 5173,
       "autoPort": true
     }

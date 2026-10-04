@@ -20,7 +20,6 @@ import {
   t0,
   t1,
   theirCreature,
-  yourCreature,
 } from './helpers.ts';
 
 /**
@@ -138,18 +137,6 @@ const WHITE: Record<string, Behavior> = {
         ) as Extract<AbilityDef, { kind: 'triggered' }>),
         oncePerTurn: true,
       },
-    ],
-  },
-  // His counters: the +1/+1 counter he enters with (other counters and his Equipment stay behind).
-  'Zack Fair': {
-    entersWithCounters: 1,
-    abilities: [
-      activated(
-        { mana: mana('{1}'), sacrificeSelf: true },
-        [{ ...yourCreature, filter: { other: true } }],
-        { kind: 'pump', to: t0, power: 0, toughness: 0, keywords: ['indestructible'] },
-        { kind: 'counters', to: t0, amount: 1 },
-      ),
     ],
   },
 };

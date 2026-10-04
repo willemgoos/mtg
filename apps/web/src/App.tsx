@@ -1,10 +1,13 @@
 import {
   DECKS,
   deckById,
+  findDeck,
   type Decklist,
   isBrawl,
   isJumpIn,
   isPlayable,
+  JUMP_IN_DECKS,
+  jumpInPackets,
   registerDeck,
   scryfallById,
   slug,
@@ -17,10 +20,14 @@ import { Expedition } from './components/Expedition.tsx';
 import { Gauntlet } from './components/Gauntlet.tsx';
 import { type Event, Home, isEvent, type Mode, Nav, type Tab } from './components/Home.tsx';
 import { JumpIn } from './components/JumpIn.tsx';
+import { JumpInLobby } from './components/JumpInLobby.tsx';
 import { Season } from './components/Season.tsx';
 import type { BotKind } from './game/bot.worker.ts';
+import './components/decks.css';
 import { artFor, BLURBS } from './game/deckArt.ts';
+import { HumanMade } from './components/HumanMade.tsx';
 import * as X from './game/expedition.ts';
+import * as J from './game/jumpInMatch.ts';
 import {
   type DeckRecord,
   type GauntletState,
@@ -36,7 +43,7 @@ import {
 } from './game/gauntlet.ts';
 import { clearGame, loadGame, type SavedGame } from './game/saved.ts';
 import { createSeasonRepository } from './game/seasonStorage.ts';
-import { type DeckChoice, HUMAN, useGame } from './game/useGame.ts';
+import { BOT, type DeckChoice, HUMAN, useGame } from './game/useGame.ts';
 
 // Playable decks first; the rest show as "coming soon".
 /** Deck grid sections, playable decks first within each. */
@@ -47,9 +54,20 @@ const SECTIONS: { title: string; blurb: string; decks: Decklist[] }[] = [
     series: 'starter' as const,
   },
   {
+    title: 'Foundations draft decks',
+    blurb: '40-card decks that went 7–0 in Arena’s Premier Draft; they play each other',
+    series: 'trophy' as const,
+  },
+  {
     title: 'Bloomburrow',
-    blurb: 'Our two-colour decks from Bloomburrow, built to face the starter decks',
+    blurb: 'Two-colour Bloomburrow decks to face the starter decks: ours and the Starter Kit’s',
     series: 'starter' as const,
+    set: 'blb' as const,
+  },
+  {
+    title: 'Bloomburrow draft decks',
+    blurb: '40-card decks that went 7–0 to 7–2 in Arena’s Premier Draft; they play each other',
+    series: 'trophy' as const,
     set: 'blb' as const,
   },
   {
@@ -59,9 +77,22 @@ const SECTIONS: { title: string; blurb: string; decks: Decklist[] }[] = [
     set: 'msh' as const,
   },
   {
+    title: 'Marvel Super Heroes draft decks',
+    blurb: '40-card decks that went 7–0 in Arena’s Premier Draft; they play each other',
+    series: 'trophy' as const,
+    set: 'msh' as const,
+  },
+  {
     title: 'Final Fantasy',
-    blurb: 'Our two-colour decks from Final Fantasy, built to face the starter decks',
+    blurb:
+      'Our two-colour decks from Final Fantasy, built to face the starter decks, and the Starter Kit’s Cloud and Sephiroth',
     series: 'starter' as const,
+    set: 'fin' as const,
+  },
+  {
+    title: 'Final Fantasy draft decks',
+    blurb: '40-card decks that went 7–0 in Arena’s Premier Draft; they play each other',
+    series: 'trophy' as const,
     set: 'fin' as const,
   },
   {
@@ -97,14 +128,25 @@ const SECTIONS: { title: string; blurb: string; decks: Decklist[] }[] = [
   },
 );
 /** Brawl's own deck grid: commander decks only play each other. */
+const brawlDecks = (inSet: (d: Decklist) => boolean) => [
+  ...DECKS.filter((d) => isBrawl(d) && inSet(d) && isPlayable(d)),
+  ...DECKS.filter((d) => isBrawl(d) && inSet(d) && !isPlayable(d)),
+];
 const BRAWL_SECTIONS: { title: string; blurb: string; decks: Decklist[] }[] = [
   {
     title: 'Brawl',
     blurb: '100-card singleton decks led by a legendary commander, 25 life',
-    decks: [
-      ...DECKS.filter((d) => isBrawl(d) && isPlayable(d)),
-      ...DECKS.filter((d) => isBrawl(d) && !isPlayable(d)),
-    ],
+    decks: brawlDecks((d) => d.set !== 'fic' && d.set !== 'soc' && d.set !== 'stx'),
+  },
+  {
+    title: 'Final Fantasy',
+    blurb: 'Arena’s Final Fantasy Brawl decks, led by heroes of the series',
+    decks: brawlDecks((d) => d.set === 'fic'),
+  },
+  {
+    title: 'Strixhaven',
+    blurb: 'Our Brawl decks led by Strixhaven’s commanders, built like Arena’s precons',
+    decks: brawlDecks((d) => d.set === 'soc' || d.set === 'stx'),
   },
 ];
 const PLAYABLE = DECKS.filter(isPlayable);
@@ -136,6 +178,8 @@ interface Match {
   bot: BotKind;
   /** A round of a run (its result counts toward the run) rather than a quick match. */
   event: Event | null;
+  /** A game of the Jump In match (`jumpIn.series`). */
+  series?: boolean;
 }
 
 const EVENT_NAMES: Record<Event, string> = { gauntlet: 'Gauntlet', expedition: 'Expedition' };
@@ -145,6 +189,7 @@ export function App() {
   const [saved] = useState(loadGame);
   const [gauntlet, setGauntlet] = useState(loadGauntlet);
   const [expedition, setExpedition] = useState(X.loadExpedition);
+  const [jumpIn, setJumpIn] = useState(J.loadJumpIn);
   const [match, setMatch] = useState<Match | null>(
     () =>
       saved && {
@@ -159,10 +204,19 @@ export function App() {
             : expedition.run?.match === saved.seed
               ? 'expedition'
               : null,
+        series: !!jumpIn.series && J.current(jumpIn.series) === saved.seed,
       },
   );
   const [mode, setMode] = useState<Mode>(
-    () => match?.event ?? (expedition.run ? 'expedition' : gauntlet.run ? 'gauntlet' : 'quick'),
+    () =>
+      match?.event ??
+      (match?.series
+        ? 'jumpIn'
+        : expedition.run
+          ? 'expedition'
+          : gauntlet.run
+            ? 'gauntlet'
+            : 'quick'),
   );
   const [hub, setHub] = useState<Event | null>(null);
   /** Picking Jump In packets for a new expedition. */
@@ -178,7 +232,9 @@ export function App() {
   const pick = (you: string, bot = opponent) => {
     const seed = newSeed();
     // A chosen opponent deck from the other kind (Brawl or 60 cards) doesn't apply.
-    const chosen = theirDeck && isBrawl(deckById(theirDeck)) === isBrawl(deckById(you));
+    // A Jump In deck always meets another Jump In deck.
+    const chosen =
+      theirDeck && !isJumpIn(you) && isBrawl(deckById(theirDeck)) === isBrawl(deckById(you));
     const them = chosen ? theirDeck : randomOther(you, seed);
     setLastQuick(saveLastQuick({ deck: you, opponent: bot }));
     setMatch({
@@ -198,6 +254,50 @@ export function App() {
     clearGame();
     setMatch(null);
     setTab('home');
+  };
+
+  // ------------------------------------------------------------ Jump In
+  const updateJumpIn = (f: (s: J.JumpInState) => J.JumpInState) =>
+    setJumpIn((s) => J.saveJumpIn(f(s)));
+  const series = jumpIn.series;
+  /** The match's current game was left part-way. */
+  const seriesPaused = !!series && loadGame()?.seed === J.current(series);
+  const playSeries = (s: J.Series) => {
+    const left = loadGame();
+    const resume = left?.seed === J.current(s) ? left : null;
+    const first = J.startingPlayer(s, HUMAN, BOT);
+    setMatch({
+      choice: resume?.choice ?? {
+        you: s.you,
+        them: s.them,
+        ...(first ? { options: { startingPlayer: first } } : {}),
+      },
+      seed: J.current(s),
+      resume,
+      attempt: 0,
+      bot: s.bot,
+      event: null,
+      series: true,
+    });
+  };
+  const startSeries = (s: J.Series) => {
+    updateJumpIn((x) => ({ ...x, series: s }));
+    playSeries(s);
+  };
+  /** The next game of the match, or the one left part-way. */
+  const continueSeries = () => {
+    if (!series) return;
+    if (seriesPaused || !J.gameDone(series)) return playSeries(series);
+    if (!J.isOver(series)) startSeries(J.nextGame(series, newSeed()));
+  };
+  const abandonSeries = () => {
+    if (seriesPaused) clearGame();
+    updateJumpIn((x) => ({ ...x, series: null }));
+  };
+  const toLobby = () => {
+    setMatch(null);
+    setMode('jumpIn');
+    setTab('decks');
   };
 
   // ------------------------------------------------- gauntlet and expedition
@@ -239,17 +339,17 @@ export function App() {
       return start({ you: r.deck, them: r.opponents[round]! }, ROUNDS[round]!.bot);
     }
     const r = expedition.run;
-    const at = r && X.currentNode(r);
-    if (!r || !at?.node.opponent) return;
+    const fight = r && X.fightOf(r);
+    if (!r || !fight) return;
     if (!resume) updateExpedition((s) => X.startMatch(s, seed));
     start(
       {
         you: r.deck,
-        them: at.node.opponent,
+        them: fight.opponent,
         cards: X.deckCards(r.build),
         options: X.gameOptions(r),
       },
-      X.botFor(at.floor, at.node, X.floorsOf(r)),
+      fight.bot,
     );
   };
   // Leaving a run's match keeps it saved, so the round can be resumed rather than restarted.
@@ -267,6 +367,7 @@ export function App() {
   const playHome = (m: Mode) => {
     setMode(m);
     if (isEvent(m) && summaries[m]) return setHub(m);
+    if (m === 'jumpIn') return setTab('decks');
     // Replay the last single game if it was in this mode (Brawl decks only play Brawl).
     const brawlDeck = lastQuick && isBrawl(deckById(lastQuick.deck));
     if (!isEvent(m) && lastQuick && brawlDeck === (m === 'brawl'))
@@ -278,6 +379,8 @@ export function App() {
     if (seed === undefined) return;
     if (match?.event === 'gauntlet') updateGauntlet((s) => recordResult(s, seed, outcome));
     if (match?.event === 'expedition') updateExpedition((s) => X.recordMatch(s, seed, outcome));
+    if (match?.series)
+      updateJumpIn((s) => ({ ...s, series: s.series && J.recordGame(s.series, seed, outcome) }));
   };
   const back = useCallback(() => setViewing(null), []);
   if (seasonOpen) return <Season onHome={() => setSeasonOpen(false)} />;
@@ -354,6 +457,11 @@ export function App() {
         onPlay={playHome}
         onDecks={openDecks}
         onJumpIn={() => setJumping(true)}
+        jumpIn={
+          series && series.bestOf > 1 && !J.isOver(series)
+            ? `Best of ${series.bestOf} · ${J.scoreLine(series)}`
+            : null
+        }
         onTab={setTab}
         onSeason={() => setSeasonOpen(true)}
       />
@@ -370,6 +478,18 @@ export function App() {
         onContinue={() => isEvent(mode) && setHub(mode)}
         onRun={(deck) => isEvent(mode) && beginRun(mode, deck)}
         onJumpIn={() => setJumping(true)}
+        lobby={
+          <JumpInLobby
+            setup={jumpIn.setup}
+            onSetup={(setup) => updateJumpIn((x) => ({ ...x, setup }))}
+            series={series}
+            resumable={seriesPaused}
+            opponents={OPPONENTS}
+            onPlay={() => startSeries(J.startSeries(jumpIn.setup, newSeed()))}
+            onContinue={continueSeries}
+            onAbandon={abandonSeries}
+          />
+        }
         opponent={opponent}
         onOpponent={setOpponent}
         theirDeck={theirDeck}
@@ -378,6 +498,8 @@ export function App() {
         onView={setViewing}
       />
     );
+  const inSeries = match.series && series ? series : null;
+  const bo3 = inSeries && inSeries.bestOf > 1 ? inSeries : null;
   return (
     <ErrorBoundary
       onMenu={menu}
@@ -394,13 +516,25 @@ export function App() {
           match.event === 'expedition' && expedition.run ? X.runDeck(expedition.run) : undefined
         }
         gauntlet={
-          match.event ? runLabel(EVENT_NAMES[match.event], summaries[match.event]) : undefined
+          match.event
+            ? runLabel(EVENT_NAMES[match.event], summaries[match.event])
+            : bo3
+              ? J.gameLabel(bo3)
+              : undefined
         }
-        onMenu={match.event ? () => toHub(match.event!) : menu}
+        resultText={bo3 && J.gameDone(bo3) ? J.scoreLine(bo3) : undefined}
+        concedeText={bo3 ? 'Concede this game? It counts as a loss.' : undefined}
+        pauseText={bo3 ? 'Leave the match? You can pick this game up from Jump In.' : undefined}
+        onMenu={match.event ? () => toHub(match.event!) : bo3 ? toLobby : menu}
         onRematch={
           match.event
             ? () => toHub(match.event!)
-            : () => setMatch((m) => m && { ...m, seed: newSeed(), resume: null, attempt: 0 })
+            : bo3
+              ? // Continue: the next game, or back to the lobby once the match is decided.
+                () => (J.isOver(bo3) ? toLobby() : startSeries(J.nextGame(bo3, newSeed())))
+              : inSeries
+                ? () => startSeries({ ...inSeries, seeds: [newSeed()], results: [] })
+                : () => setMatch((m) => m && { ...m, seed: newSeed(), resume: null, attempt: 0 })
         }
       />
     </ErrorBoundary>
@@ -424,7 +558,8 @@ const LAST_QUICK = 'mtg.lastQuick';
 function loadLastQuick(): LastQuick | null {
   try {
     const q = JSON.parse(localStorage.getItem(LAST_QUICK) ?? 'null') as LastQuick | null;
-    const known = q && DECKS.some((d) => d.id === q.deck && isPlayable(d));
+    const deck = q && findDeck(q.deck);
+    const known = deck && isPlayable(deck);
     return known && OPPONENTS.some((o) => o.id === q.opponent) ? q : null;
   } catch {
     return null;
@@ -446,6 +581,12 @@ function newSeed(): number {
 
 /** A random playable deck for the bot, other than the player's when possible. */
 function randomOther(you: string, seed: number): string {
+  // A Jump In player meets a Jump In bot whose halves are both different from theirs.
+  const mine = jumpInPackets(you);
+  if (mine) {
+    const pool = JUMP_IN_DECKS.filter((d) => !jumpInPackets(d.id)!.some((p) => mine.includes(p)));
+    return pool[seed % pool.length]!.id;
+  }
   // Same series as the player's deck (Color Challenge decks meet each other, like on Arena).
   const series = DECKS.find((d) => d.id === you)?.series;
   const others = PLAYABLE.filter((d) => d.id !== you && d.series === series);
@@ -461,6 +602,9 @@ function Game({
   resume,
   yours,
   gauntlet,
+  resultText,
+  concedeText,
+  pauseText,
   onEnd,
   onMenu,
   onRematch,
@@ -472,6 +616,9 @@ function Game({
   /** The player's deck when it isn't a stock list (an expedition deck). */
   yours?: Decklist;
   gauntlet?: string;
+  resultText?: string;
+  concedeText?: string;
+  pauseText?: string;
   onEnd: (outcome: 'win' | 'loss' | 'draw') => void;
   onMenu: () => void;
   onRematch: () => void;
@@ -488,6 +635,9 @@ function Game({
       game={game}
       decks={{ you: yours ?? deck(choice.you), them: deck(choice.them) }}
       gauntlet={gauntlet}
+      resultText={resultText}
+      concedeText={concedeText}
+      pauseText={pauseText}
       onMenu={onMenu}
       onRematch={onRematch}
     />
@@ -508,6 +658,11 @@ const MODES: { id: Mode; name: string; blurb: string }[] = [
   { id: 'quick', name: 'Quick match', blurb: 'One game, any deck against any opponent' },
   { id: 'brawl', name: 'Brawl', blurb: '1v1 Commander: 100-card decks, 25 life' },
   {
+    id: 'jumpIn',
+    name: 'Jump In!',
+    blurb: 'Two half-decks each from every packet; one game or a best of three',
+  },
+  {
     id: 'gauntlet',
     name: 'Gauntlet',
     blurb: `${ROUNDS.length} opponents, each tougher. Three losses and you're out`,
@@ -519,6 +674,8 @@ const MODES: { id: Mode; name: string; blurb: string }[] = [
   },
 ];
 
+const cardCount = (d: Decklist) => d.cards.reduce((n, [, k]) => n + k, 0) + (d.commander ? 1 : 0);
+
 function Start({
   onTab,
   clears,
@@ -529,6 +686,7 @@ function Start({
   onContinue,
   onRun,
   onJumpIn,
+  lobby,
   onPick,
   onView,
   opponent,
@@ -546,6 +704,8 @@ function Start({
   onContinue: () => void;
   onRun: (deckId: string) => void;
   onJumpIn: () => void;
+  /** The Jump In mode's lobby, shown instead of the deck grid. */
+  lobby: React.ReactNode;
   onPick: (deckId: string) => void;
   onView: (deckId: string) => void;
   opponent: BotKind;
@@ -557,6 +717,8 @@ function Start({
   const name = isEvent(mode) ? EVENT_NAMES[mode] : '';
   const single = !isEvent(mode);
   const [season] = useState(seasonDecks);
+  /** The one section shown, or every section. */
+  const [filter, setFilter] = useState<string | null>(null);
   // Expeditions can also set out with a deck built in Season mode.
   const sections =
     mode === 'brawl'
@@ -568,149 +730,249 @@ function Start({
             ...SECTIONS.slice(1),
           ]
         : SECTIONS;
+  // Jump In has its own packet browser (the lobby) instead of the deck grid.
+  const shown = mode === 'jumpIn' ? [] : sections.filter((s) => !filter || s.title === filter);
   const steps = mode === 'expedition' ? X.FLOORS : ROUNDS.length;
+  const playable = (s: { decks: Decklist[] }) => s.decks.filter(isPlayable).length;
+  const status = (d: Decklist): TileStatus | undefined => {
+    if (!isPlayable(d)) return { text: 'Coming soon' };
+    const record = single ? undefined : records[d.id];
+    if (!record || record.runs === 0) return undefined;
+    return record.clears
+      ? { text: `Cleared${record.clears > 1 ? ` ×${record.clears}` : ''}`, cleared: true }
+      : { text: `Best ${record.best}/${steps}` };
+  };
   return (
-    <div className="decks-page">
+    <div className="dpick">
       <Nav tab="decks" onTab={onTab} clears={clears} />
-      <div className="start">
-        <div className="start__title">
-          <h1>{mode === 'quick' ? 'Quick match' : mode === 'brawl' ? 'Brawl' : name}</h1>
-          <p>
-            {single
-              ? 'Choose your opponent, then your deck.'
-              : running
-                ? 'Your run is waiting.'
-                : mode === 'gauntlet'
-                  ? 'Choose a deck to take through the gauntlet.'
-                  : 'Choose a deck to set out with.'}
-          </p>
-        </div>
-        <div className="start__opponent start__mode" role="radiogroup" aria-label="Mode">
-          {MODES.map((m) => (
-            <button
-              key={m.id}
-              role="radio"
-              aria-checked={mode === m.id}
-              className={`opp ${mode === m.id ? 'is-on' : ''}`}
-              onClick={() => onMode(m.id)}
-            >
-              <span className="opp__name">{m.name}</span>
-              <span className="opp__blurb">{m.blurb}</span>
-            </button>
-          ))}
-        </div>
-        {single ? (
-          <>
-            <div className="start__opponent" role="radiogroup" aria-label="Opponent">
-              {OPPONENTS.map((o) => (
-                <button
-                  key={o.id}
-                  role="radio"
-                  aria-checked={opponent === o.id}
-                  className={`opp ${opponent === o.id ? 'is-on' : ''}`}
-                  onClick={() => onOpponent(o.id)}
-                >
-                  <span className="opp__name">{o.name}</span>
-                  <span className="opp__blurb">{o.blurb}</span>
-                </button>
-              ))}
-            </div>
-            <label className="start__their-deck">
-              <span className="start__label">Opponent's deck</span>
-              <select
-                className="chip is-on"
-                value={theirDeck ?? ''}
-                onChange={(e) => onTheirDeck(e.target.value || null)}
+      <main className="dpick__main">
+        <header className="dpick__head">
+          <div className="dpick__title">
+            <h1>
+              {mode === 'quick'
+                ? 'Quick match'
+                : mode === 'brawl'
+                  ? 'Brawl'
+                  : mode === 'jumpIn'
+                    ? 'Jump In!'
+                    : name}
+            </h1>
+            <p>
+              {mode === 'jumpIn'
+                ? 'Two themed half-decks make a 40-card deck. Pick yours and, if you like, the bot’s.'
+                : single
+                  ? 'Choose your opponent, then pick a deck to play.'
+                  : running
+                    ? 'Your run is waiting. Finish it to start another.'
+                    : mode === 'gauntlet'
+                      ? 'Choose a deck to take through the gauntlet.'
+                      : 'Choose a deck to set out with.'}
+            </p>
+          </div>
+          <div className="dseg" role="radiogroup" aria-label="Mode">
+            {MODES.map((m) => (
+              <button
+                key={m.id}
+                role="radio"
+                aria-checked={mode === m.id}
+                title={m.blurb}
+                className={`dseg__opt ${mode === m.id ? 'is-on' : ''}`}
+                onClick={() => {
+                  setFilter(null);
+                  onMode(m.id);
+                }}
               >
-                <option value="">Random</option>
-                {sections.map((s) => (
-                  <optgroup key={s.title} label={s.title}>
-                    {s.decks.filter(isPlayable).map((d) => (
-                      <option key={d.id} value={d.id}>
-                        {d.name}
-                      </option>
-                    ))}
-                  </optgroup>
+                {m.name}
+              </button>
+            ))}
+          </div>
+        </header>
+
+        {mode === 'jumpIn' ? (
+          lobby
+        ) : single ? (
+          <div className="dsetup">
+            <div className="dsetup__field">
+              <span className="dsetup__label">Opponent</span>
+              <div className="dseg dseg--sm" role="radiogroup" aria-label="Opponent">
+                {OPPONENTS.map((o) => (
+                  <button
+                    key={o.id}
+                    role="radio"
+                    aria-checked={opponent === o.id}
+                    className={`dseg__opt ${opponent === o.id ? 'is-on' : ''}`}
+                    onClick={() => onOpponent(o.id)}
+                  >
+                    {o.name}
+                  </button>
                 ))}
-              </select>
+              </div>
+              <span className="dsetup__hint">
+                {OPPONENTS.find((o) => o.id === opponent)?.blurb}
+              </span>
+            </div>
+            <label className="dsetup__field">
+              <span className="dsetup__label">Their deck</span>
+              <span className="dselect">
+                <select
+                  value={theirDeck ?? ''}
+                  onChange={(e) => onTheirDeck(e.target.value || null)}
+                >
+                  <option value="">Random</option>
+                  {sections.map((s) => (
+                    <optgroup key={s.title} label={s.title}>
+                      {s.decks.filter(isPlayable).map((d) => (
+                        <option key={d.id} value={d.id}>
+                          {d.name}
+                        </option>
+                      ))}
+                    </optgroup>
+                  ))}
+                </select>
+                <svg className="hico" viewBox="0 0 16 16" aria-hidden>
+                  <path d="m4 6 4 4 4-4" />
+                </svg>
+              </span>
+              <span className="dsetup__hint">
+                {theirDeck ? 'Always this deck' : 'A different deck from the same series'}
+              </span>
             </label>
-          </>
+          </div>
         ) : (
           run && <RunBanner name={name} run={run} onContinue={onContinue} />
         )}
-        {mode === 'expedition' && (
+
+        {mode !== 'jumpIn' && (
+          <div className="dfilter" role="toolbar" aria-label="Deck series">
+            <button
+              aria-pressed={!filter}
+              className={`dfilter__chip ${!filter ? 'is-on' : ''}`}
+              onClick={() => setFilter(null)}
+            >
+              All <span>{sections.reduce((n, s) => n + playable(s), 0)}</span>
+            </button>
+            {sections.map((s) => (
+              <button
+                key={s.title}
+                aria-pressed={filter === s.title}
+                className={`dfilter__chip ${filter === s.title ? 'is-on' : ''}`}
+                onClick={() => setFilter(filter === s.title ? null : s.title)}
+              >
+                {s.title} <span>{playable(s)}</span>
+              </button>
+            ))}
+          </div>
+        )}
+
+        {mode === 'expedition' && !filter && (
           <JumpInSection records={records} locked={running} onJumpIn={onJumpIn} />
         )}
-        {sections.map((section, si) => (
-          <section key={section.title} className="start__section">
-            <h2 className="start__section-title">
-              {section.title}
-              <span>{section.blurb}</span>
-            </h2>
-            <div className={`start__decks ${running ? 'is-waiting' : ''}`}>
-              {section.decks.map((d, j) => {
-                const i = si * 10 + j;
-                const locked = !isPlayable(d);
-                const record = single ? undefined : records[d.id];
-                return (
-                  <div key={d.id} className="deck-slot">
-                    <button
-                      className={`deck ${locked ? 'is-locked' : ''}`}
-                      style={
-                        {
-                          '--art': `url("${artFor(d)}")`,
-                          '--glow': `var(--mana-${d.colors[0]})`,
-                          '--i': i,
-                        } as React.CSSProperties
-                      }
-                      disabled={locked || running}
-                      onClick={() => (single ? onPick(d.id) : onRun(d.id))}
-                    >
-                      <span className="deck__art" />
-                      {record && record.runs > 0 && (
-                        <span className={`deck__record ${record.clears ? 'is-cleared' : ''}`}>
-                          {record.clears
-                            ? `★ Cleared${record.clears > 1 ? ` ×${record.clears}` : ''}`
-                            : `Best ${record.best}/${steps}`}
-                        </span>
-                      )}
-                      <span className="deck__pips">
-                        {d.colors.map((c) => (
-                          <span key={c} className={`pip pip--${c}`} />
-                        ))}
-                      </span>
-                      <span className="deck__name">{d.name}</span>
-                      <span className="deck__blurb">
-                        {locked
-                          ? 'Coming soon'
-                          : (BLURBS[d.id] ??
-                            `${d.cards.reduce((n, [, k]) => n + k, 0)} cards from Season`)}
-                      </span>
-                    </button>
-                    <button
-                      className="deck-slot__view"
-                      style={{ '--i': i } as React.CSSProperties}
-                      onClick={() => onView(d.id)}
-                    >
-                      View deck
-                    </button>
-                  </div>
-                );
-              })}
+        {shown.map((section) => (
+          <section key={section.title} className="dsection">
+            <div className="dsection__head">
+              <h2>{section.title}</h2>
+              <p>{section.blurb}</p>
+            </div>
+            <div className={`dgrid ${running ? 'is-waiting' : ''}`}>
+              {section.decks.map((d, i) => (
+                <DeckTile
+                  key={d.id}
+                  deck={d}
+                  art={artFor(d)}
+                  i={i}
+                  disabled={!isPlayable(d) || running}
+                  status={status(d)}
+                  meta={
+                    BLURBS[d.id] ??
+                    d.credit ??
+                    `${cardCount(d)} cards${d.series === 'season' ? ' from Season' : ''}`
+                  }
+                  badge={<HumanMade of={d} />}
+                  onPick={() => (single ? onPick(d.id) : onRun(d.id))}
+                  onView={() => onView(d.id)}
+                />
+              ))}
             </div>
           </section>
         ))}
-      </div>
+      </main>
+    </div>
+  );
+}
+
+interface TileStatus {
+  text: string;
+  cleared?: boolean;
+}
+
+/** A deck in the picker: art, name and colours; View opens the list. */
+function DeckTile({
+  deck,
+  art,
+  i,
+  disabled,
+  status,
+  meta,
+  badge,
+  onPick,
+  onView,
+}: {
+  deck: Pick<Decklist, 'name' | 'colors'>;
+  art: string;
+  i: number;
+  disabled: boolean;
+  status?: TileStatus;
+  meta: string;
+  /** Shown on the art's corner (the human-made badge). */
+  badge?: React.ReactNode;
+  onPick: () => void;
+  onView?: () => void;
+}) {
+  return (
+    <div
+      className={`dtile ${disabled ? 'is-off' : ''}`}
+      style={{ '--i': Math.min(i, 12) } as React.CSSProperties}
+    >
+      <button className="dtile__main" disabled={disabled} onClick={onPick}>
+        <span className="dtile__media" style={{ backgroundImage: `url("${art}")` }}>
+          {badge}
+          {status && (
+            <span className={`tile__status ${status.cleared ? 'tile__status--cleared' : ''}`}>
+              {status.text}
+            </span>
+          )}
+        </span>
+        <span className="dtile__body">
+          <span className="dtile__row">
+            <span className="dtile__name">{deck.name}</span>
+            <span className="dpips" aria-label={deck.colors.join('')}>
+              {deck.colors.map((c) => (
+                <i key={c} style={{ background: `var(--mana-${c})` }} />
+              ))}
+            </span>
+          </span>
+          <span className="dtile__meta">{meta}</span>
+        </span>
+      </button>
+      {onView && (
+        <button className="dtile__view" onClick={onView} aria-label={`View ${deck.name}`}>
+          View deck
+        </button>
+      )}
     </div>
   );
 }
 
 /** The Jump In! entry for expeditions, with the best record over every pair of packets. */
 function JumpInSection({
+  blurb = 'Pick two themed half-decks and shuffle them together',
+  deckBlurb = 'A new 40-card deck every run',
   records,
   locked,
   onJumpIn,
 }: {
+  blurb?: string;
+  deckBlurb?: string;
   records: Record<string, DeckRecord>;
   locked: boolean;
   onJumpIn: () => void;
@@ -721,42 +983,27 @@ function JumpInSection({
   const clears = mine.reduce((n, r) => n + r.clears, 0);
   const best = Math.max(0, ...mine.map((r) => r.best));
   return (
-    <section className="start__section">
-      <h2 className="start__section-title">
-        Jump In!
-        <span>Pick two themed half-decks and shuffle them together</span>
-      </h2>
-      <div className={`start__decks ${locked ? 'is-waiting' : ''}`}>
-        <div className="deck-slot">
-          <button
-            className="deck"
-            style={
-              {
-                '--art': `url("${scryfallById.get(slug(JUMP_IN_FACE))?.image?.artCrop ?? ''}")`,
-                '--glow': 'var(--mana-R)',
-                '--i': 0,
-              } as React.CSSProperties
-            }
-            disabled={locked}
-            onClick={onJumpIn}
-          >
-            <span className="deck__art" />
-            {mine.length > 0 && (
-              <span className={`deck__record ${clears ? 'is-cleared' : ''}`}>
-                {clears
-                  ? `★ Cleared${clears > 1 ? ` ×${clears}` : ''}`
-                  : `Best ${best}/${X.FLOORS}`}
-              </span>
-            )}
-            <span className="deck__pips">
-              {(['W', 'U', 'B', 'R', 'G'] as const).map((c) => (
-                <span key={c} className={`pip pip--${c}`} />
-              ))}
-            </span>
-            <span className="deck__name">Jump In!</span>
-            <span className="deck__blurb">A new 40-card deck every run</span>
-          </button>
-        </div>
+    <section className="dsection">
+      <div className="dsection__head">
+        <h2>Jump In!</h2>
+        <p>{blurb}</p>
+      </div>
+      <div className={`dgrid ${locked ? 'is-waiting' : ''}`}>
+        <DeckTile
+          deck={{ name: 'Jump In!', colors: ['W', 'U', 'B', 'R', 'G'] }}
+          art={scryfallById.get(slug(JUMP_IN_FACE))?.image?.artCrop ?? ''}
+          i={0}
+          disabled={locked}
+          status={
+            mine.length > 0
+              ? clears
+                ? { text: `Cleared${clears > 1 ? ` ×${clears}` : ''}`, cleared: true }
+                : { text: `Best ${best}/${X.FLOORS}` }
+              : undefined
+          }
+          meta={deckBlurb}
+          onPick={onJumpIn}
+        />
       </div>
     </section>
   );
@@ -777,27 +1024,19 @@ function RunBanner({
   const deck = deckById(run.deck);
   const status = run.status;
   return (
-    <div
-      className="run-banner"
-      style={
-        {
-          '--art': `url("${artFor(deck)}")`,
-          '--glow': `var(--mana-${deck.colors[0]})`,
-        } as React.CSSProperties
-      }
-    >
-      <span className="run-banner__art" />
-      <div className="run-banner__text">
-        <span className="run-banner__deck">{deck.name}</span>
-        <span className="run-banner__state">
+    <div className="drun">
+      <span className="drun__art" style={{ backgroundImage: `url("${artFor(deck)}")` }} />
+      <div className="drun__text">
+        <span className={`drun__state ${status === 'playing' ? 'is-live' : ''}`}>
           {status === 'playing'
             ? `${run.unit} ${run.step} of ${run.steps} · ${run.livesLeft} ${run.livesLeft === 1 ? 'life' : 'lives'} left`
             : status === 'cleared'
               ? `${name} cleared!`
               : 'Run over'}
         </span>
+        <span className="drun__deck">{deck.name}</span>
       </div>
-      <button className="btn btn--primary" onClick={onContinue}>
+      <button className="hbtn hbtn--primary" onClick={onContinue}>
         {status === 'playing' ? 'Continue run' : 'See result'}
       </button>
     </div>

@@ -382,7 +382,7 @@ export const SOS_ARCHIVE: Record<string, Behavior> = {
   },
   'Glimpse of Nature': spell([], {
     kind: 'emblem',
-    until: 'thisTurn',
+    until: 'endOfTurn',
     ability: when({ on: 'castSpell', filter: 'creature' }, [], draw(1)) as AbilityDef,
   }),
   'Knockout Maneuver': spell(

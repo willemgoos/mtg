@@ -20,6 +20,7 @@ import {
 } from '../game/season.ts';
 import {
   BLOOMBURROW_SHEETS,
+  FINAL_FANTASY_SHEETS,
   FOUNDATIONS_PACK_COUNT,
   MARVEL_SHEETS,
   SECRETS_ARCHIVE_SHEETS,
@@ -249,7 +250,7 @@ export function RewardTracks({ save, update }: Omit<Props, 'error'>) {
 
 /* -------------------------------------------------------------- the store */
 
-/** The boosters on sale: Foundations, Bloomburrow and Marvel Super Heroes. */
+/** The boosters on sale: Foundations, Bloomburrow, Marvel Super Heroes and Final Fantasy. */
 const BOOSTERS: { kind: SeasonPackKind; set: PackSet; title: string; count: number }[] = [
   { kind: 'foundations', set: 'fdn', title: 'Foundations', count: FOUNDATIONS_PACK_COUNT },
   {
@@ -280,6 +281,12 @@ const BOOSTERS: { kind: SeasonPackKind; set: PackSet; title: string; count: numb
       .flatMap((s) => Object.values(s))
       .reduce((n, sheet) => n + sheet.length, 0),
   },
+  {
+    kind: 'finalFantasy',
+    set: 'fin',
+    title: 'Final Fantasy',
+    count: Object.values(FINAL_FANTASY_SHEETS).reduce((n, sheet) => n + sheet.length, 0),
+  },
 ];
 
 /** The set of a pack kind (for its art). */
@@ -288,11 +295,13 @@ export const packSetOfKind = (kind: SeasonPackKind): PackSet =>
     ? 'blb'
     : kind === 'marvel'
       ? 'msh'
-      : kind === 'strixhaven'
-        ? 'stx'
-        : kind === 'secrets'
-          ? 'sos'
-          : 'fdn';
+      : kind === 'finalFantasy'
+        ? 'fin'
+        : kind === 'strixhaven'
+          ? 'stx'
+          : kind === 'secrets'
+            ? 'sos'
+            : 'fdn';
 
 export function Booster({
   onClick,
@@ -348,6 +357,7 @@ export function SeasonStore({
     marvel: 0,
     strixhaven: 0,
     secrets: 0,
+    finalFantasy: 0,
   });
   const list = SEASON_STARTERS.find((d) => d.id === starter);
   const buy = (n: number, kind: SeasonPackKind) => {

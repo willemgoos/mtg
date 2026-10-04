@@ -120,6 +120,7 @@ export const MARVEL_TOKENS: CardDefinition[] = [
   token('hero-token', 'Hero', 'W', ['Hero'], 3, 2, ['vigilance']),
   token('insect-token', 'Insect', 'G', ['Insect'], 1, 1),
   token('merfolk-token', 'Merfolk', 'U', ['Merfolk'], 1, 1),
+  token('leviathan-token', 'Leviathan', 'U', ['Leviathan'], 6, 5, ['hexproof']),
   {
     ...token('galactus-token', 'Galactus', 'B', ['Elder', 'Alien'], 16, 16, ['flying', 'trample']),
     supertypes: ['Legendary'],

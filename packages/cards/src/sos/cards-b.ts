@@ -211,7 +211,7 @@ export const SOS_BLUE_B: Record<string, Behavior> = {
       increment,
       {
         kind: 'triggered',
-        trigger: { on: 'youPutCounters', onlySelf: true },
+        trigger: { on: 'youPutCounters', self: true },
         targets: [],
         effects: [draw(1)],
       },

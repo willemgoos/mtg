@@ -76,11 +76,11 @@ describe('lands', () => {
   });
 
   it('a shock land can enter tapped, keeping the life', () => {
-    const g = game({ p1: { hand: ['temple-garden'] } });
-    playLand(g, 'temple-garden');
+    const g = game({ p1: { hand: ['overgrown-tomb'] } });
+    playLand(g, 'overgrown-tomb');
     settle(g);
     pick(g, /Enter tapped/);
-    expect(g.obj(onField(g, 'temple-garden')[0]!).tapped).toBe(true);
+    expect(g.obj(onField(g, 'overgrown-tomb')[0]!).tapped).toBe(true);
     expect(g.life('p1')).toBe(20);
   });
 

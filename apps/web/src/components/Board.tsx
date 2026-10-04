@@ -253,6 +253,8 @@ export function Board({
       if (d.options.includes(id)) act({ type: 'chooseCard', player: HUMAN, card: id });
       return;
     }
+    // Final Fantasy (11c): an ability on the stack is only clicked as a target.
+    if (!view.objects[id]) return;
     const o = view.objects[id]!;
     if (o.zone !== 'battlefield') {
       const acts = handActions(legal, id);
@@ -361,6 +363,8 @@ export function Board({
       legal.some((a) => a.type === 'addBlock' && a.blocker === blocker && a.attacker === id)
     )
       return 'option';
+    // Final Fantasy (11c): an ability on the stack has no object.
+    if (!view.objects[id]) return null;
     const o = view.objects[id]!;
     if (o.zone !== 'battlefield')
       return handActions(legal, id).length ||
@@ -397,7 +401,11 @@ export function Board({
           : [];
       }),
     ),
-  ].map((id) => ({ id, label: extraLabel(view.objects[id]!) }));
+  ].map((id) => ({
+    id,
+    // Final Fantasy Commander (12d): a card on an adventure.
+    label: view.objects[id]!.onAdventure ? 'On an adventure' : extraLabel(view.objects[id]!),
+  }));
 
   const targetablePlayer = (p: PlayerId) =>
     !!options?.has(`player:${p}`) || !!dragTargets?.has(`player:${p}`);
@@ -575,6 +583,8 @@ export function Board({
       case 'scry':
         return { prompt: `Scry ${d.cards.length}` };
       case 'searchLibrary':
+        // Final Fantasy (11c): hideaway.
+        if (d.to === 'hideaway') return { prompt: 'Hideaway: exile a card face down' };
         return { prompt: 'Search your library' };
       case 'sacrifice':
         return { prompt: 'Choose a creature to sacrifice' };
@@ -1524,6 +1534,9 @@ function castLabel(defId: CardDefId, a: Action): string {
   if (a.via === 'osteomancer') return 'From your graveyard (forage)';
   // Secrets of Strixhaven (14b): Zaffai and the Tempests (free, once a turn).
   if (a.via === 'zaffai') return 'Cast free (Zaffai)';
+  // Final Fantasy (11c): playing from the graveyard.
+  if (a.via === 'noctis') return 'From your graveyard (pay 3 life)';
+  if (a.via === 'hades') return 'From your graveyard';
   if (a.paws) return pawLabel(defId, a.paws);
   const def = cardDb.get(defId);
   if (a.type === 'castSpell' && a.sneak && def?.sneak) return `Sneak (${manaText(def.sneak)})`;
@@ -1545,7 +1558,12 @@ function castLabel(defId: CardDefId, a: Action): string {
     return `${def.modes?.[a.mode]?.label ?? `Mode ${a.mode + 1}`} — ${manaText(def.tiered[a.mode]!) || '{0}'}`;
   if (a.mode !== undefined) return def?.modes?.[a.mode]?.label ?? `Mode ${a.mode + 1}`;
   if (def?.sacrificeOrPay)
-    return a.sacrifice ? 'Sacrifice a creature' : `Pay ${manaText(def.sacrificeOrPay)}`;
+    return a.sacrifice
+      ? // Final Fantasy (11c): Louisoix's Sacrifice wants a legendary creature.
+        def.sacrificeToCastFilter?.supertypes?.includes('Legendary')
+        ? 'Sacrifice a legendary creature'
+        : 'Sacrifice a creature'
+      : `Pay ${manaText(def.sacrificeOrPay)}`;
   if (def?.forageOrPay) return `Pay ${manaText(def.forageOrPay)}`;
   // Multikicker (Batroc), overload (Vandalblast), Toxic Deluge's X life.
   if (a.kickCount) return `Kicked ×${a.kickCount}`;
@@ -1649,30 +1667,41 @@ function SearchOverlay({ game, onHover }: { game: GameSession; onHover: HoverFn 
     <div className="overlay overlay--mull">
       <div className="mull">
         <h2>
-          {d.kind === 'searchLibrary' && d.fromGraveyard
-            ? picks[0]?.card && view.objects[picks[0].card]?.zone === 'exile'
-              ? 'Choose a card you own in exile'
-              : 'Choose from your graveyard'
-            : d.kind === 'searchLibrary' && d.looked
-              ? 'Top of your library'
-              : 'Search your library'}
+          {/* Final Fantasy (11c): a card from your hand (Summoner's Grimoire) or exile (The Darkness Crystal). */}
+          {d.kind === 'searchLibrary' &&
+          d.fromGraveyard &&
+          picks.every((a) => view.objects[a.card!]?.zone === 'hand')
+            ? 'Choose from your hand'
+            : d.kind === 'searchLibrary' &&
+                d.fromGraveyard &&
+                picks.every((a) => view.objects[a.card!]?.zone === 'exile')
+              ? 'Choose an exiled card'
+              : d.kind === 'searchLibrary' && d.fromGraveyard
+                ? 'Choose from your graveyard'
+                : d.kind === 'searchLibrary' && d.looked
+                  ? 'Top of your library'
+                  : 'Search your library'}
         </h2>
         <p>
-          {d.kind === 'searchLibrary' && d.to === 'libraryBottom'
-            ? // Strixhaven (13c): Ardent Dustspeaker
-              'Choose a card to put on the bottom of your library.'
-            : d.kind === 'searchLibrary' && d.to === 'castFree'
-              ? 'Choose a card to exile; you may cast it without paying its mana cost.'
-              : d.kind === 'searchLibrary' && d.to && d.to !== 'hand'
-                ? 'Choose a card to put onto the battlefield.'
-                : d.kind === 'searchLibrary' && d.canBin
-                  ? // Strixhaven (13c): The Biblioplex
-                    'An instant or sorcery card may go into your hand; otherwise you may put it into your graveyard.'
-                  : 'Choose a card to put into your hand.'}{' '}
+          {d.kind === 'searchLibrary' && d.to === 'hideaway'
+            ? 'Choose a card to exile face down.'
+            : d.kind === 'searchLibrary' && d.to === 'libraryBottom'
+              ? // Strixhaven (13c): Ardent Dustspeaker
+                'Choose a card to put on the bottom of your library.'
+              : d.kind === 'searchLibrary' && d.to === 'castFree'
+                ? 'Choose a card to exile; you may cast it without paying its mana cost.'
+                : d.kind === 'searchLibrary' && d.to && d.to !== 'hand'
+                  ? 'Choose a card to put onto the battlefield.'
+                  : d.kind === 'searchLibrary' && d.canBin
+                    ? // Strixhaven (13c): The Biblioplex
+                      'An instant or sorcery card may go into your hand; otherwise you may put it into your graveyard.'
+                    : 'Choose a card to put into your hand.'}{' '}
           {d.kind === 'searchLibrary' && d.fromGraveyard
             ? ''
             : d.kind === 'searchLibrary' && d.looked
-              ? 'The rest go to the bottom.'
+              ? d.restOnTop
+                ? 'The rest stay on top.'
+                : 'The rest go to the bottom.'
               : 'Your library is then shuffled.'}
         </p>
         <div className="mull__hand">
@@ -1709,16 +1738,19 @@ function SearchOverlay({ game, onHover }: { game: GameSession; onHover: HoverFn 
               Put it into your graveyard
             </button>
           )}
-          <button
-            className="btn btn--ghost"
-            onClick={() => apply({ type: 'chooseCard', player: HUMAN, card: null })}
-          >
-            {d.kind === 'searchLibrary' && d.canBin
-              ? 'Leave it on top'
-              : d.kind === 'searchLibrary' && d.fromGraveyard
-                ? 'Choose nothing'
-                : 'Find nothing'}
-          </button>
+          {/* Final Fantasy (11c): hideaway must exile a card. */}
+          {!(d.kind === 'searchLibrary' && d.to === 'hideaway') && (
+            <button
+              className="btn btn--ghost"
+              onClick={() => apply({ type: 'chooseCard', player: HUMAN, card: null })}
+            >
+              {d.kind === 'searchLibrary' && d.canBin
+                ? 'Leave it on top'
+                : d.kind === 'searchLibrary' && d.fromGraveyard
+                  ? 'Choose nothing'
+                  : 'Find nothing'}
+            </button>
+          )}
         </div>
       </div>
     </div>

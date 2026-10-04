@@ -1,6 +1,7 @@
 import {
   ARENA_DECKS,
   BLOOMBURROW_DECKS,
+  FINAL_FANTASY_DECKS,
   MARVEL_DECKS,
   STRIXHAVEN_DECKS,
   SECRETS_OF_STRIXHAVEN_DECKS,
@@ -39,11 +40,12 @@ export type MatchOutcome = 'win' | 'loss' | 'draw' | 'concede';
 
 /** Stable rules identities, independent of artwork/Scryfall printing IDs. */
 export const SEASON_CARDS = new Map(SCRYFALL.map((c) => [slug(c.name), c]));
-/** Starter decks on sale: Arena's Foundations ones and our Bloomburrow and Marvel ones. */
+/** Starter decks on sale: Arena's Foundations ones and our Bloomburrow, Marvel, Final Fantasy and Strixhaven ones. */
 export const SEASON_STARTERS = [
   ...ARENA_DECKS,
   ...BLOOMBURROW_DECKS,
   ...MARVEL_DECKS,
+  ...FINAL_FANTASY_DECKS.filter((d) => d.series === 'starter'),
   ...STRIXHAVEN_DECKS,
   ...SECRETS_OF_STRIXHAVEN_DECKS,
 ].filter(isPlayable);
@@ -60,11 +62,13 @@ export interface SeasonPack {
   id: number;
   kind: SeasonPackKind;
 }
-export type SeasonPackKind = 'foundations' | 'bloomburrow' | 'marvel' | 'strixhaven' | 'secrets';
+export type SeasonPackKind =
+  'foundations' | 'bloomburrow' | 'marvel' | 'finalFantasy' | 'strixhaven' | 'secrets';
 export const SEASON_PACK_KINDS: readonly SeasonPackKind[] = [
   'foundations',
   'bloomburrow',
   'marvel',
+  'finalFantasy',
   'strixhaven',
   'secrets',
 ];

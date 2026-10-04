@@ -13,7 +13,6 @@ const custom = (handler: string): EffectDef => ({ kind: 'custom', handler });
 const BLOOD = 'blood-token';
 const ELEMENTAL = 'brawl-elemental-1-1-red-token';
 const token = (id: string, count = 1): EffectDef => ({ kind: 'createToken', token: id, count });
-const treasure = (count: number): EffectDef => token('treasure-token', count);
 
 /** "{cost}: Unearth": return it from your graveyard with haste; exiled at the end step. */
 const unearth = (cost: string): AbilityDef => ({
@@ -54,10 +53,6 @@ export const BRAWL_15A_R: Record<string, Behavior> = {
       prowess,
       when({ on: 'etb' }, [instantOrSorceryCard], { kind: 'returnToHand', what: t0 }),
     ],
-  },
-  'Big Score': {
-    discardToCast: true,
-    spell: { targets: [], effects: [draw(2), treasure(2)] },
   },
   'Thrill of Possibility': {
     discardToCast: true,
@@ -174,7 +169,10 @@ export const BRAWL_15A_R_BACKS: Record<string, Behavior> = {
       // "As this land enters, you may pay 3 life. If you don't, it enters tapped."
       onEnter({
         kind: 'may',
-        effects: [{ kind: 'loseLife', who: 'controller', amount: 3 }, { kind: 'untap', what: 'self' }],
+        effects: [
+          { kind: 'loseLife', who: 'controller', amount: 3 },
+          { kind: 'untap', what: 'self' },
+        ],
       }),
     ],
   },

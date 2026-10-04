@@ -767,12 +767,13 @@ describe('green-blue spells', () => {
   it('a copy of Unexpected Results that finds a land resolves without error', () => {
     const g = game({
       p1: {
-        hand: ['reflective-rimekin', 'unexpected-results'],
-        battlefield: [...n('forest', 5), ...n('island', 5)],
+        hand: ['galvanic-iteration', 'unexpected-results'],
+        battlefield: [...n('forest', 5), ...n('island', 5), 'mountain'],
         library: n('forest', 8),
       },
     });
-    cast(g, 'reflective-rimekin');
+    // Galvanic Iteration copies the next instant or sorcery (Reflective Rimekin only copies mana value 3 or less).
+    cast(g, 'galvanic-iteration');
     settle(g);
     cast(g, 'unexpected-results');
     settle(g);

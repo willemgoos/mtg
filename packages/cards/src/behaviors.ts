@@ -19,7 +19,19 @@ import {
   STRIXHAVEN_BRAWL_BEHAVIORS,
   STRIXHAVEN_BRAWL_TOKENS,
 } from './strixhaven-brawl.ts';
+import { MSH_JUMPSTART_INCREDIBLE_TOKENS } from './msh/jumpstart-incredible.ts';
+import { MSH_JUMPSTART_PYM_TOKENS } from './msh/jumpstart-pym.ts';
+import { MSH_JUMPSTART_THOR_TOKENS } from './msh/jumpstart-thor.ts';
+import { MSH_JUMPSTART_WAKANDA_TOKENS } from './msh/jumpstart-wakanda.ts';
+import { MSH_JUMPSTART_WILD_TOKENS } from './msh/jumpstart-wild.ts';
+import {
+  FINAL_FANTASY_BRAWL_BACK_FACES,
+  FINAL_FANTASY_BRAWL_BEHAVIORS,
+  FINAL_FANTASY_BRAWL_TOKENS,
+} from './final-fantasy-brawl.ts';
 import { FOUNDATIONS_BATCH_BEHAVIORS } from './foundations-batch.ts';
+import { FOUNDATIONS_DRAFT_BEHAVIORS } from './foundations-draft.ts';
+import { FOUNDATIONS_JUMP_IN_BEHAVIORS } from './foundations-jumpin.ts';
 
 // Helpers for the common shapes.
 const t0 = { target: 0 } as const;
@@ -145,6 +157,8 @@ const dualLandBehaviors = (): Record<string, Behavior> =>
  */
 export const BEHAVIORS: Record<string, Behavior> = {
   ...FOUNDATIONS_BATCH_BEHAVIORS,
+  ...FOUNDATIONS_JUMP_IN_BEHAVIORS,
+  ...FOUNDATIONS_DRAFT_BEHAVIORS,
   ...BLOOMBURROW_BEHAVIORS,
   ...MARVEL_BEHAVIORS,
   ...MARVEL_BACK_FACES,
@@ -157,6 +171,9 @@ export const BEHAVIORS: Record<string, Behavior> = {
   ...SECRETS_OF_STRIXHAVEN_BACK_FACES,
   ...STRIXHAVEN_BRAWL_BEHAVIORS,
   ...STRIXHAVEN_BRAWL_BACK_FACES,
+  // Final Fantasy Commander (phase 12).
+  ...FINAL_FANTASY_BRAWL_BEHAVIORS,
+  ...FINAL_FANTASY_BRAWL_BACK_FACES,
   // ---------------------------------------------------------------- red
   Shock: burn(2),
   'Lightning Strike': burn(3),
@@ -2189,12 +2206,19 @@ const artifactToken = (id: string, name: string, abilities: AbilityDef[]): CardD
 
 export const TOKENS: CardDefinition[] = [
   ...MARVEL_TOKENS,
+  ...MSH_JUMPSTART_PYM_TOKENS,
+  ...MSH_JUMPSTART_INCREDIBLE_TOKENS,
+  ...MSH_JUMPSTART_THOR_TOKENS,
+  ...MSH_JUMPSTART_WAKANDA_TOKENS,
+  ...MSH_JUMPSTART_WILD_TOKENS,
   ...MARVEL_BRAWL_TOKENS,
   ...FINAL_FANTASY_TOKENS,
   ...STRIXHAVEN_TOKENS,
   ...SECRETS_OF_STRIXHAVEN_TOKENS,
   ...STRIXHAVEN_BRAWL_TOKENS,
+  ...FINAL_FANTASY_BRAWL_TOKENS,
   token('zombie-token', 'Zombie', 'B', ['Zombie'], 2, 2),
+  token('komas-coil-token', "Koma's Coil", 'U', ['Serpent'], 3, 3),
   token('cat-beast-token', 'Cat Beast', 'W', ['Cat', 'Beast'], 2, 2),
   token('raccoon-token', 'Raccoon', 'G', ['Raccoon'], 3, 3),
   token('dragon-5-token', 'Dragon', 'R', ['Dragon'], 5, 5, ['flying']),

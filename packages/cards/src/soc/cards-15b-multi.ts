@@ -316,7 +316,6 @@ export const BRAWL_15B_MULTI: Record<string, Behavior> = {
     },
     { kind: 'destroyAll' },
   ),
-  'Ruinous Ultimatum': spell([], custom('ruinousUltimatum')),
   // ------------------------------------------------------------ mana rocks
   'Talisman of Resilience': { abilities: painland('B', 'G').abilities },
   'Rakdos Signet': {
@@ -334,19 +333,14 @@ export const BRAWL_15B_MULTI: Record<string, Behavior> = {
   'Blooming Marsh': { entersTappedIf: unlessTwoOrFewerLands, abilities: pair('B', 'G') },
   'Llanowar Wastes': painland('B', 'G'),
   'Overgrown Tomb': shock('B', 'G'),
-  'Blood Crypt': shock('B', 'R'),
   'Stomping Ground': shock('R', 'G'),
-  'Temple Garden': shock('G', 'W'),
   'Underground Mortuary': { entersTapped: true, abilities: [...pair('B', 'G'), surveil1] },
-  'Raucous Theater': { entersTapped: true, abilities: [...pair('B', 'R'), surveil1] },
   'Woodland Cemetery': {
     entersTappedIf: unlessYouControlType('B', 'G'),
     abilities: pair('B', 'G'),
   },
-  'Sacred Peaks': tapped('R', 'W'),
   'Ice Tunnel': tapped('U', 'B'),
   'Highland Forest': tapped('R', 'G'),
-  'Nomad Outpost': { entersTapped: true, abilities: tapForEither('R', 'W', 'B') },
   'Frontier Bivouac': { entersTapped: true, abilities: tapForEither('G', 'U', 'R') },
   'Indatha Triome': triome('W', 'B', 'G'),
   'Savai Triome': triome('R', 'W', 'B'),

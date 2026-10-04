@@ -1,4 +1,5 @@
 import {
+  abilitiesLocked,
   canTapForAbility,
   cardMatches,
   creaturesOnBattlefield,
@@ -22,6 +23,7 @@ import {
   abilityManaCost,
   castCost,
   teamworkFor,
+  creaturesToTap,
   crewFor,
   escalateCrew,
   artifactsToSacrifice,
@@ -32,7 +34,6 @@ import {
   wardCost,
   LOYALTY_KEY,
   tokensToTap,
-  creaturesToTap,
   wardLife,
   wardPayable,
 } from './stack.ts';
@@ -42,7 +43,7 @@ import { nameLocked } from './sos-14b-c-effects.ts';
 
 const NO_COST = { generic: 0, colored: {} };
 import { targetCombos } from './targets.ts';
-import type { Action, ObjectId, PlayerId, TargetChoice, TargetSpec } from './types.ts';
+import type { Action, CardFilter, ObjectId, PlayerId, TargetChoice, TargetSpec } from './types.ts';
 
 const MAX_MULLIGANS = 7;
 
@@ -69,7 +70,10 @@ export function castableCards(ctx: Ctx, player: PlayerId): ObjectId[] {
   const ps = ctx.s.players[player];
   // Brawl: your commander from the command zone.
   const out = [...ps.hand, ...ps.command];
-  const landsFromGraveyard = hasStatic(ctx, player, 'playLandsFromGraveyard');
+  const landsFromGraveyard =
+    hasStatic(ctx, player, 'playLandsFromGraveyard') ||
+    // Final Fantasy (11c): playing from the graveyard (Hades).
+    playsFromGraveyard(ctx, player);
   for (const id of ps.graveyard) {
     const d = def(ctx, id);
     // Conduit of Worlds: "You may play lands from your graveyard."
@@ -110,6 +114,8 @@ export function castableCards(ctx: Ctx, player: PlayerId): ObjectId[] {
           a.kind === 'static' &&
           a.effect.kind === 'playFromTop' &&
           cardMatches(ctx, topCard, a.effect.filter) &&
+          // Final Fantasy (11c): The Lunar Whale, as long as it attacked this turn.
+          checkCondition(ctx, a.effect.condition, player, obj(ctx, id)) &&
           !out.includes(topCard)
         )
           out.push(topCard);
@@ -125,7 +131,7 @@ export function castableCards(ctx: Ctx, player: PlayerId): ObjectId[] {
   // Strongbox Raider: exiled cards you may play for a while.
   for (const id of ps.exile) {
     const until = obj(ctx, id).playableUntilTurn;
-    if (until !== undefined && until >= ctx.s.turn.number) out.push(id);
+    if (until !== undefined && until >= ctx.s.turn.number && !out.includes(id)) out.push(id);
   }
   // Extract Power: either player's exiled cards you may play for free.
   for (const p of ['p1', 'p2'] as const)
@@ -208,9 +214,9 @@ export function graveyardVias(
   ctx: Ctx,
   player: PlayerId,
   card: ObjectId,
-): ('festival' | 'osteomancer' | 'conduit')[] {
+): Exclude<CastVia, 'free'>[] {
   const d = def(ctx, card);
-  const out: ('festival' | 'osteomancer' | 'conduit')[] = [];
+  const out: Exclude<CastVia, 'free'>[] = [];
   const instantOrSorcery = d.types.includes('Instant') || d.types.includes('Sorcery');
   if (
     instantOrSorcery &&
@@ -222,18 +228,47 @@ export function graveyardVias(
     out.push('osteomancer');
   // Conduit of Worlds: the card it chose, this turn.
   if (obj(ctx, card).playableUntilTurn === ctx.s.turn.number) out.push('conduit');
+  // Final Fantasy (11c): playing from the graveyard (Noctis: artifacts for 3 life more; Hades: during your turn).
+  if (d.types.includes('Artifact') && hasStatic(ctx, player, 'castArtifactsFromGraveyard'))
+    out.push('noctis');
+  if (playsFromGraveyard(ctx, player)) out.push('hades');
   return out;
+}
+
+/** Final Fantasy (11c): playing from the graveyard. Hades: "you may play cards from your graveyard". */
+export function playsFromGraveyard(ctx: Ctx, player: PlayerId): boolean {
+  return ctx.s.battlefield.some(
+    (id) =>
+      obj(ctx, id).controller === player &&
+      def(ctx, id).abilities.some(
+        (a) =>
+          a.kind === 'static' &&
+          a.effect.kind === 'playFromGraveyard' &&
+          checkCondition(ctx, a.effect.condition, player, obj(ctx, id)),
+      ),
+  );
 }
 
 /** Land plays allowed per turn: one, plus one for each "additional land" effect (Loot). */
 function landDrops(ctx: Ctx, player: PlayerId): number {
-  let n = 1;
+  // Final Fantasy Commander (12b): "you may play an additional land this turn".
+  let n = 1 + (ctx.s.turn.extraLands?.[player] ?? 0);
   for (const id of ctx.s.battlefield) {
     if (obj(ctx, id).controller !== player) continue;
     for (const a of def(ctx, id).abilities)
       if (a.kind === 'static' && a.effect.kind === 'extraLandDrop') n++;
   }
   return n;
+}
+
+// Marvel Super Heroes Jumpstart (Incredible)
+/** Behold: a matching permanent you control, or another matching card in your hand. */
+function canBehold(ctx: Ctx, player: PlayerId, card: ObjectId, filter: CardFilter): boolean {
+  return (
+    ctx.s.battlefield.some(
+      (id) => obj(ctx, id).controller === player && matchesFilter(ctx, id, filter),
+    ) || ctx.s.players[player].hand.some((id) => id !== card && cardMatches(ctx, id, filter))
+  );
 }
 
 /** Every way to choose the face-up pile (order within a pile doesn't matter). */
@@ -306,7 +341,8 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
         ps.landsPlayedThisTurn < landDrops(ctx, player) &&
         (zone !== 'graveyard' ||
           hasStatic(ctx, player, 'playLandsFromGraveyard') ||
-          obj(ctx, card).playableUntilTurn === s.turn.number)
+          obj(ctx, card).playableUntilTurn === s.turn.number ||
+          playsFromGraveyard(ctx, player))
       )
         out.push({ type: 'playLand', player, card });
       return;
@@ -356,7 +392,9 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
         ? ps.hand.filter((id) => id !== card)
         : [undefined];
     if ((d.discardToCast || exileToCast) && discards.length === 0) return;
-    if (!instantSpeed && !sorcery) return;
+    // Marvel Super Heroes Jumpstart (Pym Particles): flash only when kicked (Quantum Reduction).
+    const flashIfKicked = !instantSpeed && !sorcery && !!d.kicker?.flash;
+    if (!instantSpeed && !sorcery && !flashIfKicked) return;
     // The usual ways, plus graveyard casts through other cards.
     // Extract Power: exiled cards played for free.
     const free = zone === 'exile' && (obj(ctx, card).playFreeBy === player || plottedCard);
@@ -382,6 +420,7 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
         ];
     for (const via of vias)
       for (const v of castVariants(d, zone, via)) {
+        if (flashIfKicked && !v.kicked) continue;
         if ((v.life ?? 0) > ps.life) continue;
         // Secrets of Strixhaven (14b): Soaring Stoneglider exiles cards unless the kicker is paid.
         if (
@@ -440,6 +479,9 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
                 k++;
               if (k > 0) choice.delve = k;
             }
+            // Marvel Super Heroes Jumpstart (Incredible): behold needs something to behold.
+            if (v.kicked && d.kicker?.behold && !canBehold(ctx, player, card, d.kicker.behold))
+              continue;
             const base = castCost(ctx, player, card, choice);
             // Strixhaven (13b): Killian also lowers the cost by what the spell targets.
             const targetDiscount = !!d.costReductionIfTarget || hasTargetCostReduction(ctx, player);
@@ -549,7 +591,8 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
               .filter(
                 (c) =>
                   d.entersAsCopy!.yours ||
-                  d.entersAsCopy!.anyMV ||
+                  // Final Fantasy Commander (12c): Altered Ego copies any creature.
+                  d.entersAsCopy!.anyManaValue ||
                   manaValue(def(ctx, c.id).manaCost) <= (a.x ?? 0) + manaValue(d.manaCost),
               )
               .map((c) => ({ ...a, copyOf: c.id })),
@@ -609,12 +652,19 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
     ...s.battlefield.filter((id) => obj(ctx, id).controller === player),
     ...ps.graveyard,
     ...ps.hand,
+    ...ps.exile,
   ];
   for (const source of abilitySources) {
     const zone = obj(ctx, source).zone;
     def(ctx, source).abilities.forEach((a, abilityIndex) => {
       if (a.kind !== 'activated') return;
-      if ((a.fromGraveyard ? 'graveyard' : a.fromHand ? 'hand' : 'battlefield') !== zone) return;
+      // Marvel Super Heroes Jumpstart (Great Lakes Avengers): Mister Immortal, also from exile.
+      const fromExile = a.fromExile && zone === 'exile';
+      if (
+        !fromExile &&
+        (a.fromGraveyard ? 'graveyard' : a.fromHand ? 'hand' : 'battlefield') !== zone
+      )
+        return;
       if (a.sorcerySpeed && !sorcery) return;
       // Strixhaven (13c): Academic Probation (no activated abilities), Revel in Silence (no loyalty abilities).
       if (
@@ -627,6 +677,8 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
       if (a.cost.loyalty !== undefined && s.turn.noLoyalty?.includes(player)) return;
       // Secrets of Strixhaven (14b): Petrified Hamlet.
       if (nameLocked(ctx, source)) return;
+      // Marvel Super Heroes Jumpstart (Wakanda): Secure Detention.
+      if (zone === 'battlefield' && abilitiesLocked(ctx, source)) return;
       if ((a.once || a.powerUp) && obj(ctx, source).usedAbilities?.includes(abilityIndex)) return;
       if (a.powerUp && s.turn.noPowerUp) return;
       if (a.oncePerTurn && obj(ctx, source).onceTurns?.[-1 - abilityIndex] === s.turn.number)
@@ -648,13 +700,20 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
       const usable = a.cost.convoke
         ? [...own, ...creatureHelpers(ctx, player, own, a.cost.tapSelf ? source : undefined)]
         : own;
-      const mana = abilityManaCost(ctx, source, a);
+      // Final Fantasy (11d): an equip discount may depend on the target (Cloud, Planet's Champion).
+      const mana = abilityManaCost(ctx, source, a, 'best');
       if (!canPayFrom(mana, usable)) return;
       if (a.cost.tapTokens && tokensToTap(ctx, player, source).length < a.cost.tapTokens) return;
       // Secrets of Strixhaven (14b): Harmonized Trio.
       if (
         a.cost.tapOtherCreatures &&
-        creaturesToTap(ctx, player, source).length < a.cost.tapOtherCreatures
+        creaturesToTap(ctx, player, undefined, source, true).length < a.cost.tapOtherCreatures
+      )
+        return;
+      // Marvel Super Heroes Jumpstart (Masters of Evil)
+      if (
+        a.cost.tapCreature &&
+        creaturesToTap(ctx, player, a.cost.tapCreature, source).length === 0
       )
         return;
       if (a.cost.crew && !crewFor(ctx, player, source, a.cost.crew)) return;
@@ -701,15 +760,17 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
       const firstOfAbility = out.length;
       for (const sacrifice of sacrifices) {
         for (const targets of combosFor(a.targets, source, sacrifice)) {
+          const m = abilityManaCost(ctx, source, a, targets);
+          if (m !== mana && !canPayFrom(m, usable)) continue;
           const ward = wardCost(ctx, player, targets);
-          if (ward.generic && !canPayFrom(addCosts(mana ?? NO_COST, ward), usable)) continue;
+          if (ward.generic && !canPayFrom(addCosts(m ?? NO_COST, ward), usable)) continue;
           if (!wardPayable(ctx, player, targets)) continue;
           for (const forage of forages)
             for (const discard of discards) {
               const spent = [sacrifice, forage === 'graveyard' ? undefined : forage];
-              if (mana && spent.some((id) => id && usable.some((p) => p.id === id))) {
+              if (m && spent.some((id) => id && usable.some((p) => p.id === id))) {
                 const rest = usable.filter((p) => !spent.includes(p.id));
-                if (!canPayFrom(addCosts(mana, ward), rest)) continue;
+                if (!canPayFrom(addCosts(m, ward), rest)) continue;
               }
               out.push({
                 type: 'activateAbility',
@@ -866,9 +927,11 @@ export function getLegalActions(ctx: Ctx, player: PlayerId): Action[] {
       return d.options.map((card) => ({ type: 'chooseCard', player, card }) as const);
     case 'castFree': {
       const out: Action[] = [{ type: 'chooseEffect', player, accept: false }];
+      const pool = manaSources(ctx, player);
       for (const card of d.cards) {
         const cd = def(ctx, card);
         if (cd.types.includes('Land')) continue;
+        const zone = obj(ctx, card).zone;
         const discards = d.discardInstead ? s.players[player].hand : [undefined];
         // Strixhaven (13c): a cast that costs {1} (Jadzi) or is {4} cheaper (Uvilda).
         const price =
@@ -885,12 +948,10 @@ export function getLegalActions(ctx: Ctx, player: PlayerId): Action[] {
             v.discard === undefined ? discards : v.discard ? s.players[player].hand : [undefined];
           const specs = v.spell?.targets ?? (cd.enchant ? [cd.enchant] : []);
           for (const targets of targetCombos(ctx, specs, { controller: player, sourceId: card })) {
-            // Strixhaven (13b): a free cast still pays ward.
-            if (
-              !wardPayable(ctx, player, targets) ||
-              !canPayFrom(wardCost(ctx, player, targets), manaSources(ctx, player))
-            )
-              continue;
+            // Free casts still pay ward.
+            if (!canPayFrom(wardCost(ctx, player, targets), pool)) continue;
+            if (wardLife(ctx, player, targets) > s.players[player].life) continue;
+            if (!wardPayable(ctx, player, targets, zone === 'hand' ? 1 : 0)) continue;
             for (const discard of vDiscards)
               out.push({
                 type: 'castSpell',

@@ -1,7 +1,7 @@
 import type { AbilityDef, CardDefinition, EffectDef, TargetSpec } from '@mtg/engine';
 import type { Behavior } from '../build.ts';
 import { atYourEndStep, draw, drain, gain, mana, t0, when, yourCreature } from '../blb/helpers.ts';
-import { tapFor, unlessTwoOrFewerLands, unlessYouControlType } from '../msc/helpers.ts';
+import { tapFor, unlessTwoOrFewerLands } from '../msc/helpers.ts';
 
 /**
  * Strixhaven Brawl (15b, pair): the white-black (Killian) and green-blue (Zimone) cards of the
@@ -12,7 +12,6 @@ import { tapFor, unlessTwoOrFewerLands, unlessYouControlType } from '../msc/help
  */
 
 const FRACTAL = 'stx-fractal-token';
-const SPIRIT_FLYING = 'spirit-flying-token';
 export const SERVO = 'soc-15b-pair-servo';
 export const ANGEL_WARRIOR = 'soc-15b-pair-angel-warrior';
 export const CONTRACT = 'soc-15b-pair-contract';
@@ -85,8 +84,6 @@ const shockTrigger: AbilityDef = {
   targets: [],
   effects: [{ kind: 'chooseCustom', handler: 'shockLand' }],
 };
-/** "When this land enters, surveil 1." */
-const surveil1: AbilityDef = when({ on: 'etb' }, [], { kind: 'surveil', amount: 1 });
 
 /** Painlands and Talismans: "{T}: Add {C}" and one coloured mana per tap that deals 1 damage to you. */
 const painPair = (a: 'W' | 'G', b: 'B' | 'U'): AbilityDef[] => [
@@ -214,10 +211,6 @@ export const BRAWL_15B_PAIR: Record<string, Behavior> = {
       },
     },
   },
-  'Lingering Souls': {
-    spell: { targets: [], effects: [createToken(SPIRIT_FLYING, 2)] },
-    flashback: mana('{1}{B}'),
-  },
   'Rite of Oblivion': {
     sacrificeCreatureToCast: true,
     sacrificeToCastFilter: { nonland: true },
@@ -256,9 +249,6 @@ export const BRAWL_15B_PAIR: Record<string, Behavior> = {
     ],
   },
   'Godless Shrine': { entersTapped: true, abilities: [...wb, shockTrigger] },
-  'Isolated Chapel': { entersTappedIf: unlessYouControlType('W', 'B'), abilities: wb },
-  'Shadowy Backstreet': { entersTapped: true, abilities: [...wb, surveil1] },
-  'Sunlit Marsh': { entersTapped: true, abilities: wb },
   'Great Hall of Starnheim': {
     entersTapped: true,
     abilities: [
@@ -297,7 +287,6 @@ export const BRAWL_15B_PAIR: Record<string, Behavior> = {
       }),
     ],
   },
-  'Altered Ego': { entersAsCopy: { anyMV: true, xCounters: true } },
   'Hydroid Krasis': {
     entersWithXCounters: true,
     abilities: [when({ on: 'castSelf' }, [], custom('krasisCast'))],
@@ -359,7 +348,7 @@ export const BRAWL_15B_PAIR: Record<string, Behavior> = {
           kind: 'counterUnlessPays',
           what: { target: 1 },
           cost: { generic: 0, colored: {} },
-          genericAmount: { count: 'greatestPowerYouControl' },
+          costAmount: { count: 'greatestPowerYouControl' },
         },
       ],
     },

@@ -1,5 +1,15 @@
-import { addCounters, type Ctx, type CustomEffect, def, moveObject, obj } from './context.ts';
+import { isCreature, matchesFilter } from './characteristics.ts';
+import {
+  addCounters,
+  type Ctx,
+  type CustomEffect,
+  def,
+  drawCard,
+  moveObject,
+  obj,
+} from './context.ts';
 import { manaValue } from './cost.ts';
+import { addLore } from './sagas.ts';
 import { shuffleLibrary } from './setup.ts';
 import type { ObjectId } from './types.ts';
 
@@ -11,6 +21,52 @@ import type { ObjectId } from './types.ts';
 const isCreatureCard = (ctx: Ctx, id: ObjectId) => def(ctx, id).types.includes('Creature');
 
 export const MSH_EFFECTS: Record<string, CustomEffect> = {
+  // Marvel Super Heroes Jumpstart (Trained)
+  /** She-Hulk, Attorney-at-Law: "double the number of +1/+1 counters on each creature you control". */
+  doubleCountersOnYourCreatures(ctx, es, params) {
+    // Marvel Super Heroes Jumpstart (Incredible): Hulk, Strongest There Is only doubles Gamma creatures.
+    const subtype = (params as { subtype?: string } | undefined)?.subtype;
+    for (const id of [...ctx.s.battlefield]) {
+      const o = obj(ctx, id);
+      if (o.controller !== es.controller || !isCreature(ctx, id) || !o.plusOneCounters) continue;
+      if (subtype && !matchesFilter(ctx, id, { subtype })) continue;
+      addCounters(ctx, id, o.plusOneCounters);
+    }
+  },
+
+  // Marvel Super Heroes Jumpstart (Tenacious/Rampaging)
+  /**
+   * Powerful Broker: "for each kind of counter on target permanent, give it another counter of
+   * that kind" (players have no counters here). Lore counters trigger the Saga's chapter.
+   */
+  counterOfEachKind(ctx, es) {
+    const t = es.targets[0];
+    if (!t || !('object' in t)) return;
+    const o = ctx.s.objects[t.object.id];
+    if (!o || o.zone !== 'battlefield' || o.zcc !== t.object.zcc) return;
+    if (o.plusOneCounters > 0) addCounters(ctx, o.id, 1);
+    for (const [name, n] of Object.entries(o.counters ?? {})) {
+      if (n <= 0) continue;
+      if (name === 'lore') addLore(ctx, o.id);
+      else addCounters(ctx, o.id, 1, name);
+    }
+  },
+
+  // Marvel Super Heroes Jumpstart (Scarlet)
+  /**
+   * Hex Magic: exile all the cards from your hand, then draw that many; until
+   * the end of your next turn, you may play the exiled cards.
+   */
+  exileHandDrawPlayable(ctx, es) {
+    const hand = [...ctx.s.players[es.controller].hand];
+    const ownTurn = ctx.s.turn.activePlayer === es.controller;
+    for (const id of hand) {
+      moveObject(ctx, id, 'exile');
+      obj(ctx, id).playableUntilTurn = ctx.s.turn.number + (ownTurn ? 2 : 1);
+    }
+    for (let i = 0; i < hand.length; i++) drawCard(ctx, es.controller);
+  },
+
   /** Earth's Mightiest Heroes with teamwork: every creature card among the top N onto the battlefield, the rest into the graveyard. */
   putAllCreaturesFromTop(ctx, es, params) {
     const count = (params as { count: number }).count;

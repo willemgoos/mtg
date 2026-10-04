@@ -199,12 +199,18 @@ export function blockOptions(
 export function combatStats(engine: Engine, s: GameState, id: ObjectId) {
   const c = getCharacteristics(s, engine.db, id);
   const strikes = c.keywords.has('doubleStrike') ? 2 : 1;
+  // Final Fantasy (11c): "can't be blocked except by three or more creatures" (Relentless X-ATM092).
+  let minBlockers = c.keywords.has('menace') ? 2 : 1;
+  for (const a of engine.db.get(s.objects[id]!.defId)?.abilities ?? [])
+    if (a.kind === 'static' && a.effect.kind === 'minBlockers')
+      minBlockers = Math.max(minBlockers, a.effect.count);
   return {
     power: Math.max(0, c.power),
     toughness: c.toughness - s.objects[id]!.damage,
     damage: Math.max(0, c.power) * strikes,
     deathtouch: c.keywords.has('deathtouch'),
-    menace: c.keywords.has('menace'),
+    menace: minBlockers > 1,
+    minBlockers,
     value: creatureValue(s, engine.db, id),
   };
 }

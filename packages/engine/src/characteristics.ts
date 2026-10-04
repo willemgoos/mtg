@@ -52,6 +52,8 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
   const extraSubtypes: string[] = [];
   // A Vehicle that became an artifact creature this turn.
   let crewed = false;
+  // Marvel Super Heroes Jumpstart (Great Lakes Avengers): Flatman switches power and toughness.
+  let switched = false;
 
   if (o.zone === 'battlefield') {
     for (const e of ctx.s.effects) {
@@ -63,6 +65,7 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
     for (const e of ctx.s.effects) {
       if (e.affected.id !== id || e.affected.zcc !== o.zcc) continue;
       if (e.becomesCreature) crewed = true;
+      if (e.switchPT) switched = !switched;
       power += e.power;
       toughness += e.toughness;
       if (e.cantBlock) cantBlock = true;
@@ -137,8 +140,24 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
             power += st.basePT[0] - (basePower ?? base ?? o.copyPT?.power ?? d.power ?? 0);
             toughness += st.basePT[1] - (base ?? o.copyPT?.toughness ?? d.toughness ?? 0);
           }
+          // Final Fantasy (11c): amounts know their Equipment (Excalibur II's charge counters).
           power += countOf(ctx, src.controller, st.power, false, srcId);
           toughness += countOf(ctx, src.controller, st.toughness, false, srcId);
+          // Final Fantasy (11c): Aettir and Priwen (base X/X), The Masamune (first strike while attacking).
+          if (st.basePTAmount !== undefined) {
+            const x = countOf(ctx, src.controller, st.basePTAmount, false, srcId);
+            power += x - (basePower ?? base ?? o.copyPT?.power ?? d.power ?? 0);
+            toughness += x - (base ?? o.copyPT?.toughness ?? d.toughness ?? 0);
+          }
+          // Final Fantasy Commander (12b): Hero's Heirloom, keywords only while it's legendary.
+          if (st.legendaryKeywords?.length && d.supertypes.includes('Legendary')) {
+            granted ??= new Set(keywords);
+            for (const k of st.legendaryKeywords) granted.add(k);
+          }
+          if (st.attackingKeywords?.length && isAttacking(ctx, id)) {
+            granted ??= new Set(keywords);
+            for (const k of st.attackingKeywords) granted.add(k);
+          }
           if (st.keywords?.length) {
             granted ??= new Set(keywords);
             for (const k of st.keywords) granted.add(k);
@@ -205,11 +224,25 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
         }
       }
     }
+    // Vivien Reid's emblem: "Creatures you control get +2/+2 and have vigilance, trample, and indestructible."
+    for (const em of ctx.s.emblems ?? []) {
+      const st = em.ability.kind === 'static' ? em.ability.effect : undefined;
+      if (st?.kind !== 'anthem' || em.controller !== o.controller) continue;
+      if (!d.types.includes('Creature') && !crewed) continue;
+      power += countOf(ctx, em.controller, st.power);
+      toughness += countOf(ctx, em.controller, st.toughness);
+      if (st.keywords?.length) {
+        granted ??= new Set(keywords);
+        for (const k of st.keywords) granted.add(k);
+      }
+    }
   }
   if (granted) {
     for (const k of removed) granted.delete(k);
     keywords = granted;
   }
+  // Switching is applied after every other change to power and toughness.
+  if (switched) [power, toughness] = [toughness, power];
   let subtypes = o.addedSubtypes ? [...d.subtypes, ...o.addedSubtypes] : d.subtypes;
   // Final Fantasy (11a): job select.
   if (extraSubtypes.length)
@@ -218,14 +251,21 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
     power,
     toughness,
     keywords,
+    // A crewed Vehicle, or anything that "becomes an artifact creature" (I Am Iron Man).
+    // Strixhaven Brawl (15b, u): Housemeld, perpetually an enchantment.
     types:
-      // Strixhaven Brawl (15b, u): Housemeld, perpetually an enchantment.
       o.perpetualTypes ??
-      ((crewed || o.copyAsCreature) && !d.types.includes('Creature')
-        ? [...d.types, 'Creature']
-        : o.notCreature
-          ? d.types.filter((x) => x !== 'Creature')
-          : d.types),
+      (crewed
+        ? [
+            ...(d.types.includes('Artifact') ? [] : (['Artifact'] as const)),
+            ...d.types,
+            ...(d.types.includes('Creature') ? [] : (['Creature'] as const)),
+          ]
+        : o.copyAsCreature && !d.types.includes('Creature')
+          ? [...d.types, 'Creature']
+          : o.notCreature
+            ? d.types.filter((x) => x !== 'Creature')
+            : d.types),
     subtypes,
     cantBlock,
     cantBeBlocked,
@@ -259,7 +299,9 @@ export function countOf(
     return a.powerOf === 'self' && sourceId ? Math.max(0, power(ctx, sourceId)) : 0;
   // Strixhaven Brawl (15b, w): Glyph Elemental, "for each +1/+1 counter on this Aura".
   if ('countersOn' in a)
-    return a.countersOn === 'self' && sourceId ? (ctx.s.objects[sourceId]?.plusOneCounters ?? 0) : 0;
+    return a.countersOn === 'self' && sourceId
+      ? (ctx.s.objects[sourceId]?.plusOneCounters ?? 0)
+      : 0;
   // Door of Destinies: its charge counters.
   if ('namedCountersOnSource' in a) {
     const src = sourceId ? ctx.s.objects[sourceId] : undefined;
@@ -271,6 +313,18 @@ export function countOf(
     return a.countersOn === 'self' ? (src?.plusOneCounters ?? 0) : 0;
   }
   if (!('count' in a)) return 0;
+  // Final Fantasy (11c): your life total (Aettir and Priwen).
+  if (a.count === 'lifeTotal') return ctx.s.players[player].life;
+  // Final Fantasy (11c): devotion and life gained.
+  if (a.count === 'devotion') {
+    const color = a.color;
+    return ctx.s.battlefield.reduce((n, id) => {
+      if (obj(ctx, id).controller !== player) return n;
+      const c = def(ctx, id).manaCost;
+      return n + (c.colored[color] ?? 0) + (c.hybrid ?? []).filter((h) => h.includes(color)).length;
+    }, 0);
+  }
+  if (a.count === 'lifeGainedThisTurn') return ctx.s.turn.lifeGained?.[player] ?? 0;
   if (a.count === 'cardsInGraveyard')
     return (
       (a.plus ?? 0) +
@@ -298,8 +352,6 @@ export function countOf(
         .filter((id) => obj(ctx, id).controller === player && def(ctx, id).types.includes('Land'))
         .map((id) => def(ctx, id).name),
     ).size;
-  // Strixhaven (13c): life gained this turn.
-  if (a.count === 'lifeGainedThisTurn') return ctx.s.turn.lifeGained?.[player] ?? 0;
   // Secrets of Strixhaven (14b): Orysa, Fractal Anomaly
   if (a.count === 'totalToughnessOfCreaturesYouControl')
     return creaturesOnBattlefield(ctx, player).reduce(
@@ -342,10 +394,7 @@ export function countOf(
     }, 0);
   // Secrets of Strixhaven (14b): Prismari, the Inspiration (storm)
   if (a.count === 'spellsCastBeforeSubject')
-    return Math.max(
-      0,
-      (ctx.s.turn.spellsCast?.p1 ?? 0) + (ctx.s.turn.spellsCast?.p2 ?? 0) - 1,
-    );
+    return Math.max(0, (ctx.s.turn.spellsCast?.p1 ?? 0) + (ctx.s.turn.spellsCast?.p2 ?? 0) - 1);
   // Strixhaven (13c): Show of Confidence
   if (a.count === 'otherInstantsSorceriesCastThisTurn')
     return Math.max(0, (ctx.s.turn.instantsSorceriesCast?.[player] ?? 0) - 1);
@@ -361,9 +410,14 @@ export function countOf(
   // Wakanda Forever (9c).
   if (a.count === 'creaturesOnBattlefield') return creaturesOnBattlefield(ctx).length;
   if (a.count === 'totalManaValue')
-    return ctx.s.battlefield
-      .filter((id) => obj(ctx, id).controller === player && matchesFilter(ctx, id, a.filter))
-      .reduce((n, id) => n + manaValue(def(ctx, id).manaCost), 0);
+    return (
+      ctx.s.battlefield
+        // Final Fantasy (11c): the filter knows the source ("other permanents": Summon: Bahamut).
+        .filter(
+          (id) => obj(ctx, id).controller === player && matchesFilter(ctx, id, a.filter, sourceId),
+        )
+        .reduce((n, id) => n + manaValue(def(ctx, id).manaCost), 0)
+    );
   if (a.count === 'commanderCasts') return ctx.s.players[player].commanderCasts ?? 0;
   // Doom Prevails (9e).
   if (a.count === 'cardsDiscardedThisTurn') return ctx.s.turn.discards?.[player] ?? 0;
@@ -384,6 +438,11 @@ export function countOf(
         )
         .map((id) => manaValueOfDef(def(ctx, id))),
     ).size;
+  // Marvel Super Heroes Jumpstart (Lethal)
+  if (a.count === 'opponentCreatureCardsInGraveyard')
+    return ctx.s.players[other(player)].graveyard.filter((id) =>
+      def(ctx, id).types.includes('Creature'),
+    ).length;
   // The Fantastic Four (9d).
   if (a.count === 'colorsAmongPermanentsAndSpells') {
     const colors = new Set<string>();
@@ -395,6 +454,9 @@ export function countOf(
   }
   if (a.count === 'subjectColors') return 0; // resolved with the trigger (see resolveAmount)
   if (a.count === 'opponentHandSize') return ctx.s.players[other(player)].hand.length;
+  // Marvel Super Heroes Jumpstart (Masters of Evil)
+  if (a.count === 'opponentLifeHalf')
+    return Math.max(0, Math.ceil(ctx.s.players[other(player)].life / 2));
   if (a.count === 'greatestNoncreatureManaValue') {
     const noncreature = (id: ObjectId) => !def(ctx, id).types.includes('Creature');
     const ids = [
@@ -549,6 +611,18 @@ export function canTapForAbility(ctx: Ctx, id: ObjectId): boolean {
   );
 }
 
+// Marvel Super Heroes Jumpstart (Wakanda)
+/** An Aura on it says "its activated abilities can't be activated" (Secure Detention). */
+export function abilitiesLocked(ctx: Ctx, id: ObjectId): boolean {
+  return ctx.s.battlefield.some(
+    (src) =>
+      obj(ctx, src).attachedTo === id &&
+      def(ctx, src).abilities.some(
+        (a) => a.kind === 'static' && a.effect.kind === 'attached' && a.effect.cantActivate,
+      ),
+  );
+}
+
 export function matchesFilter(
   ctx: Ctx,
   id: ObjectId,
@@ -589,6 +663,12 @@ export function matchesFilter(
   if (filter.lacksKeyword && c.keywords.has(filter.lacksKeyword)) return false;
   if (filter.tapped !== undefined && obj(ctx, id).tapped !== filter.tapped) return false;
   if (filter.attacking !== undefined && isAttacking(ctx, id) !== filter.attacking) return false;
+  // Marvel Super Heroes Jumpstart (HYDRA): "attacking alone".
+  if (
+    filter.attackingAlone &&
+    !(ctx.s.combat?.attackers.length === 1 && ctx.s.combat.attackers[0]!.id === id)
+  )
+    return false;
   if (
     filter.subtype &&
     !c.subtypes.includes(filter.subtype) &&
@@ -629,10 +709,14 @@ export function matchesFilter(
     return false;
   // Strixhaven (13c): Hofri's Spirits etc. use nonlegendary too.
   if (filter.nonlegendary && def(ctx, id).supertypes.includes('Legendary')) return false;
+  // Final Fantasy (11c): nonlegendary.
+  if (filter.notSupertypes?.some((t) => def(ctx, id).supertypes.includes(t))) return false;
   if (filter.toughnessGreaterThanPower) {
     const ch = characteristics(ctx, id);
     if (ch.toughness <= ch.power) return false;
   }
+  // Marvel Super Heroes Jumpstart (Marvelous): Ms. Marvel, Elastic Ally.
+  if (filter.powerAboveBase && characteristics(ctx, id).power <= basePowerOf(ctx, id)) return false;
   if (filter.chosenTypeOfSource) {
     const chosen = sourceId ? obj(ctx, sourceId).chosenType : undefined;
     if (!chosen || !hasSubtype(ctx, id, chosen)) return false;
@@ -716,6 +800,8 @@ export function cardMatches(
     const name = sourceId ? ctx.s.objects[sourceId]?.chosenName : undefined;
     if (!name || obj(ctx, id).defId !== name) return false;
   }
+  // Final Fantasy (11c): nonlegendary.
+  if (filter.notSupertypes?.some((t) => d.supertypes.includes(t))) return false;
   const mv = manaValue(d.manaCost);
   if (filter.minManaValue !== undefined && mv < filter.minManaValue) return false;
   if (filter.manaValueIsSourceCounters) {
@@ -739,7 +825,10 @@ export function cardMatches(
   if (filter.hostOfSource && (!sourceId || obj(ctx, sourceId).attachedTo !== id)) return false;
   if (filter.lesserPowerThanSource && sourceId) {
     const s = obj(ctx, sourceId);
-    const ref = s.attachedTo !== undefined && def(ctx, sourceId).subtypes.includes('Aura') ? s.attachedTo : sourceId;
+    const ref =
+      s.attachedTo !== undefined && def(ctx, sourceId).subtypes.includes('Aura')
+        ? s.attachedTo
+        : sourceId;
     if (power(ctx, id) >= power(ctx, ref)) return false;
   }
   if (filter.notAttachedHost && sourceId && obj(ctx, sourceId).attachedTo === id) return false;
@@ -748,6 +837,9 @@ export function cardMatches(
     if ((mv % 2 === 1 ? 'odd' : 'even') !== filter.manaValueParity) return false;
   }
   if (filter.notSubtype && d.subtypes.includes(filter.notSubtype)) return false;
+  // Final Fantasy (11c): "isn't a Kraken, Leviathan, Merfolk, Octopus, or Serpent".
+  if (filter.notSubtypes?.some((st) => subtypes.includes(st) || changeling(ctx, id, st)))
+    return false;
   if (filter.maxManaValue !== undefined) {
     const max =
       filter.maxManaValue === 'sourcePower'
@@ -770,8 +862,28 @@ export function cardMatches(
     if (mv > max) return false;
   }
   if (filter.other && id === sourceId) return false;
+  // Kid Loki: "that you've put one or more +1/+1 counters on this turn".
+  if (filter.countersPutThisTurn && obj(ctx, id).countersTurn !== ctx.s.turn.number) return false;
   if (!avengersFilter(ctx, id, filter, sourceId)) return false;
   return true;
+}
+
+/**
+ * Base power: printed, copied, characteristic-defining or set by an effect ("base power
+ * 3"); static "base power" abilities aren't counted. Marvel Super Heroes Jumpstart (Marvelous).
+ */
+function basePowerOf(ctx: Ctx, id: ObjectId): number {
+  const o = obj(ctx, id);
+  const d = def(ctx, id);
+  let base =
+    d.powerEquals !== undefined
+      ? countOf(ctx, o.controller, d.powerEquals, true)
+      : d.ptEquals !== undefined
+        ? countFor(ctx, o, d)
+        : (o.copyPT?.power ?? d.power ?? 0);
+  for (const e of ctx.s.effects)
+    if (e.basePT && e.affected.id === id && e.affected.zcc === o.zcc) base = e.basePT[0];
+  return base;
 }
 
 /** Avengers Assemble (9b) filter parts: chosen types, modified, power, the commander's types. */
@@ -801,7 +913,9 @@ function avengersFilter(
     const who = sourceId ? obj(ctx, sourceId).controller : o.controller;
     const enchanted = ctx.s.battlefield.some((a) => {
       const att = obj(ctx, a);
-      return att.attachedTo === id && att.controller === who && def(ctx, a).subtypes.includes('Aura');
+      return (
+        att.attachedTo === id && att.controller === who && def(ctx, a).subtypes.includes('Aura')
+      );
     });
     if (!enchanted) return false;
   }

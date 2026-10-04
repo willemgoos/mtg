@@ -1,4 +1,4 @@
-import { cardDb, DECKS, deckGameOptions, describeEvent } from '@mtg/cards';
+import { cardDb, deckById, deckGameOptions, describeEvent } from '@mtg/cards';
 import {
   type Action,
   type CardDefId,
@@ -87,13 +87,9 @@ export function useGame(
   }, []);
   const [thinking, setThinking] = useState(false);
   const setup = useMemo(() => {
-    const list = (id: string) => {
-      const d = DECKS.find((x) => x.id === id);
-      if (!d) throw new Error(`Unknown deck "${id}"`);
-      return d;
-    };
+    // Jump In pairs and registered (Season) decks aren't in DECKS, so look up by id.
     // Brawl decks bring their commanders and the Brawl format.
-    const opts = deckGameOptions(list(choice.you), list(choice.them));
+    const opts = deckGameOptions(deckById(choice.you), deckById(choice.them));
     return { ...opts, decks: { ...opts.decks, p1: choice.cards ?? opts.decks.p1 } };
   }, [choice.you, choice.them, choice.cards]);
 

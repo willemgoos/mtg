@@ -37,13 +37,14 @@ import { phaseOut } from './phasing.ts';
 import { foodsOf } from './forage.ts';
 import { canPayFrom, manaSources, manaValue } from './mana.ts';
 import { nextInt, shuffleInPlace } from './rng.ts';
-import { checkCondition } from './triggers.ts';
+import { checkCondition, triggeredAbility } from './triggers.ts';
 import { addLore } from './sagas.ts';
 import { CHOOSERS } from './stx-13c-a-effects.ts';
 import { planeswalkersSurvive, tokenMultiplier } from './brawl-15a-w-effects.ts';
 import { protectedFrom } from './brawl-15b-w-effects.ts';
 import { SOS_14B_C_CHOOSERS } from './sos-14b-c-effects.ts';
 import type {
+  AbilityDef,
   CardDefId,
   CardFilter,
   GameObject,
@@ -56,7 +57,9 @@ import type {
   ObjectId,
   PlayerId,
   Ref,
+  StackItem,
   TargetChoice,
+  TargetSpec,
 } from './types.ts';
 
 export type { EffectSource } from './types.ts';
@@ -106,6 +109,8 @@ export function dealDamage(
     !ctx.s.battlefield.some((id) => hasStaticKind(ctx, id, 'damageCantBePrevented'))
   )
     return;
+  // Final Fantasy (11c): damage doubling (Trance Kuja's Wizards, Lightning's Stagger).
+  amount *= doubling(ctx, src, to);
   amount = prevented(ctx, src, to, amount);
   if (amount <= 0) return;
   // The monarch: combat damage to them makes the attacker's controller the monarch.
@@ -151,7 +156,34 @@ function redirected(ctx: Ctx, to: TargetChoice): TargetChoice {
     if (!host || ('object' in to && to.object.id === host.id)) continue;
     return { object: { id: host.id, zcc: host.zcc } };
   }
+  // Final Fantasy (11c): damage absorbing. Ancient Adamantoise takes it for you and your other permanents.
+  for (const id of ctx.s.battlefield) {
+    if (obj(ctx, id).controller !== owner || ('object' in to && to.object.id === id)) continue;
+    if (
+      hasStaticKind(ctx, id, 'absorbDamage') &&
+      characteristics(ctx, id).types.includes('Creature')
+    )
+      return { object: { id, zcc: obj(ctx, id).zcc } };
+  }
   return to;
+}
+
+/** Final Fantasy (11c): damage doubling. The factor damage is multiplied by. */
+function doubling(ctx: Ctx, src: DamageSource, to: TargetChoice): number {
+  let factor = 1;
+  for (const id of ctx.s.battlefield) {
+    if (obj(ctx, id).controller !== src.controller || !ctx.s.objects[src.id]) continue;
+    for (const a of def(ctx, id).abilities)
+      if (
+        a.kind === 'static' &&
+        a.effect.kind === 'doubleDamage' &&
+        cardMatches(ctx, src.id, a.effect.source)
+      )
+        factor *= 2;
+  }
+  const hit = 'player' in to ? to.player : onBattlefield(ctx, to.object)?.controller;
+  for (const x of ctx.s.staggered ?? []) if (x.player === hit) factor *= 2;
+  return factor;
 }
 
 /**
@@ -243,7 +275,7 @@ function damageBonus(ctx: Ctx, src: DamageSource, to: TargetChoice, combat: bool
       if (b.source && !(source?.zone === 'battlefield' && matchesFilter(ctx, src.id, b.source)))
         continue;
       if (b.condition && !checkCondition(ctx, b.condition, o.controller, o)) continue;
-      n += b.amount;
+      n += b.amount === 'sourcePower' ? Math.max(0, characteristics(ctx, id).power ?? 0) : b.amount;
     }
   }
   return n;
@@ -284,6 +316,70 @@ export function findSpell(ctx: Ctx, id: ObjectId) {
   return item?.kind === 'spell' ? item : undefined;
 }
 
+/** The targets an activated or triggered ability on the stack asks for (Bolt Bend). */
+function abilityTargetSpecs(
+  ctx: Ctx,
+  item: Extract<StackItem, { kind: 'ability' }>,
+): readonly TargetSpec[] {
+  if (item.activated) return item.activated.targets;
+  if (item.inline || item.emblem) return triggeredAbility(ctx, item).targets;
+  const a = defOf(ctx, item.sourceDefId).abilities[item.abilityIndex];
+  if (a?.kind === 'triggered')
+    return (item.mode !== undefined ? a.modes?.[item.mode]?.targets : undefined) ?? a.targets;
+  return a?.kind === 'activated' ? a.targets : [];
+}
+
+/** How a target reads in a choice for `viewer` (Bolt Bend's new targets). */
+function targetLabel(ctx: Ctx, viewer: PlayerId, t: TargetChoice): string {
+  if ('player' in t) return t.player === viewer ? 'You' : 'Your opponent';
+  const o = ctx.s.objects[t.object.id];
+  if (o) return `${defOf(ctx, o.defId).name} (${o.controller === viewer ? 'yours' : "opponent's"})`;
+  const ab = ctx.s.stack.find((x) => x.id === t.object.id);
+  return ab?.kind === 'ability' ? `${defOf(ctx, ab.sourceDefId).name}'s ability` : 'Another target';
+}
+
+/**
+ * The other legal targets for a spell or ability on the stack, as options for
+ * `es.controller`: Bolt Bend's "change the target of target spell or ability
+ * with a single target" (`single`), or a copy's "you may choose new targets".
+ * The best for the chooser come first (aimed at the other side from before).
+ */
+function newTargetOptions(
+  ctx: Ctx,
+  es: EffectSource,
+  id: ObjectId | undefined,
+  single: boolean,
+): { label: string; effects: EffectDef[] }[] {
+  const item = ctx.s.stack.find((x) => x.id === id);
+  if (!item || item.targets.length === 0 || (single && item.targets.length !== 1)) return [];
+  const spec =
+    item.kind === 'spell'
+      ? (spellOnStack(defOf(ctx, obj(ctx, item.id).defId), item)?.targets ?? [])
+      : abilityTargetSpecs(ctx, item);
+  const sourceId = item.kind === 'spell' ? item.id : item.source.id;
+  const combos = targetCombos(ctx, spec, { controller: item.controller, sourceId }).filter(
+    (c) => c.length === item.targets.length && JSON.stringify(c) !== JSON.stringify(item.targets),
+  );
+  const mine = (c: TargetChoice) =>
+    'player' in c
+      ? c.player === es.controller
+      : ctx.s.objects[c.object.id]?.controller === es.controller;
+  const wasMine = mine(item.targets[0]!);
+  const best = (c: TargetChoice[]) => Number(mine(c[0]!) === wasMine);
+  return combos
+    .sort((a, b) => best(a) - best(b))
+    .map((c) => ({
+      label: c.map((x) => targetLabel(ctx, es.controller, x)).join(', '),
+      effects: [{ kind: 'setStackTargets', id: item.id, targets: c }],
+    }));
+}
+
+/** The id of the spell or ability a target refers to (Bolt Bend). */
+function stackTargetId(es: EffectSource, what: Ref): ObjectId | undefined {
+  const t = typeof what === 'object' && 'target' in what ? es.targets[what.target] : null;
+  return t && 'object' in t ? t.object.id : undefined;
+}
+
 /** Counters a spell (unless it can't be countered). */
 export function counterSpell(ctx: Ctx, id: ObjectId, exile = false): void {
   const i = ctx.s.stack.findIndex((x) => x.kind === 'spell' && x.id === id);
@@ -316,6 +412,8 @@ export function changeLife(ctx: Ctx, player: PlayerId, delta: number): void {
   if (delta === 0) return;
   p.life += delta;
   if (delta < 0) (ctx.s.turn.lifeLost ??= { p1: 0, p2: 0 })[player]++;
+  // Final Fantasy Commander (12d): how much, too (Y'shtola).
+  if (delta < 0) (ctx.s.turn.lifeLostTotal ??= { p1: 0, p2: 0 })[player] -= delta;
   emit(ctx, { type: 'lifeChanged', player, delta, life: p.life });
 }
 
@@ -327,10 +425,15 @@ export function gainLife(ctx: Ctx, player: PlayerId, amount: number): void {
     for (const a of def(ctx, id).abilities)
       if (a.kind === 'static' && a.effect.kind === 'extraLifeGain') amount += a.effect.amount;
   }
+  // Final Fantasy (11c): The Wind Crystal, "twice that much life instead".
+  for (const id of ctx.s.battlefield) {
+    if (obj(ctx, id).controller !== player) continue;
+    for (const a of def(ctx, id).abilities)
+      if (a.kind === 'static' && a.effect.kind === 'doubleLifeGain') amount *= 2;
+  }
   ctx.s.turn.lifeGains[player]++;
-  // Strixhaven (13c): the amount gained this turn.
-  const gained = (ctx.s.turn.lifeGained ??= { p1: 0, p2: 0 });
-  gained[player] += amount;
+  // Final Fantasy (11c), Strixhaven (13c): life gained this turn (Hope Estheim, Fortifying Draught).
+  (ctx.s.turn.lifeGained ??= { p1: 0, p2: 0 })[player] += amount;
   changeLife(ctx, player, amount);
 }
 
@@ -387,6 +490,12 @@ export function resolveRef(ctx: Ctx, es: EffectSource, ref: Ref): TargetChoice[]
     const o = t && 'object' in t ? ctx.s.objects[t.object.id] : undefined;
     return o ? [{ player: o.controller }] : [];
   }
+  // Marvel Super Heroes Jumpstart (Geniuses): "that player" (Super Intelligence).
+  if (ref === 'attachedController') {
+    const host = es.source && ctx.s.objects[es.source.id]?.attachedTo;
+    const o = host && ctx.s.objects[host];
+    return o && o.zone === 'battlefield' ? [{ player: o.controller }] : [];
+  }
   if (ref === 'eachOpponent') return [{ player: other(es.controller) }];
   if (ref === 'eachPlayer') return [{ player: 'p1' }, { player: 'p2' }];
   if (ref === 'attached') {
@@ -427,6 +536,10 @@ function playersOf(ctx: Ctx, es: EffectSource, ref: Ref): PlayerId[] {
 export function resolveAmount(ctx: Ctx, es: EffectSource, amount: Amount): number {
   if (typeof amount === 'number') return amount;
   if ('multiply' in amount) return amount.multiply * resolveAmount(ctx, es, amount.amount);
+  if ('manaValueOf' in amount) {
+    const id = objectsOf(ctx, es, amount.manaValueOf)[0];
+    return id ? manaValue(def(ctx, id).manaCost) : 0;
+  }
   // Final Fantasy (11a)
   if ('sum' in amount) return amount.sum.reduce<number>((n, a) => n + resolveAmount(ctx, es, a), 0);
   // Final Fantasy (11b): mana spent.
@@ -499,6 +612,9 @@ export function resolveAmount(ctx: Ctx, es: EffectSource, amount: Amount): numbe
       const last = es.lkiPower ?? (es.source && ctx.s.objects[es.source.id]?.lastPower);
       return Math.max(0, last ?? 0);
     }
+    // Final Fantasy (11c): "its power" for a creature that died (Jenova's Mutants).
+    if (amount.powerOf === 'subject' && es.subject)
+      return Math.max(0, ctx.s.objects[es.subject.id]?.lastPower ?? 0);
     return 0;
   }
   if ('event' in amount) return es.amount ?? 0;
@@ -573,9 +689,58 @@ export function runEffects(
       i--;
       continue;
     }
+    // Bolt Bend: the caster chooses the new target among the other legal ones.
+    if (e.kind === 'changeTarget') {
+      const options = newTargetOptions(ctx, es, stackTargetId(es, e.what), true);
+      list.splice(
+        i,
+        1,
+        ...(options.length > 1 ? [{ kind: 'choose', options } as EffectDef] : []),
+        ...(options.length === 1 ? options[0]!.effects : []),
+      );
+      i--;
+      continue;
+    }
+    // Loki Laufeyson: "You may choose new targets for the copy" (the copy is 'chosen').
+    if (e.kind === 'copySpell' && e.newTargets && list[i + 1]?.kind !== 'chooseNewTargets')
+      list.splice(i + 1, 0, { kind: 'chooseNewTargets' });
+    if (e.kind === 'chooseNewTargets') {
+      const options = newTargetOptions(ctx, es, es.chosen?.id, false);
+      const keep = { label: 'Keep the same targets', effects: [] };
+      list.splice(
+        i,
+        1,
+        ...(options.length ? [{ kind: 'choose', options: [keep, ...options] } as EffectDef] : []),
+      );
+      i--;
+      continue;
+    }
     if (e.kind === 'eachPlayerSacrifices') {
       // You choose, then your opponent.
       list.splice(i, 1, { kind: 'opponentSacrifices', you: true }, { kind: 'opponentSacrifices' });
+      i--;
+      continue;
+    }
+    // Final Fantasy (11c): Zodiark. Counted first; you choose, then your opponent.
+    if (e.kind === 'eachPlayerSacrificesHalf') {
+      const sourceId = es.source?.id;
+      const half = (p: PlayerId) =>
+        Math.floor(
+          creaturesOnBattlefield(ctx, p).filter(
+            (c) => c.id !== sourceId && matchesFilter(ctx, c.id, e.filter, sourceId),
+          ).length / 2,
+        );
+      const mine = half(es.controller);
+      const theirs = half(other(es.controller));
+      const filter: CardFilter = { ...e.filter, types: ['Creature'] };
+      const expanded: EffectDef[] = [
+        ...(mine ? [{ kind: 'sacrificeSeveral', count: mine, filter, then: [] } as EffectDef] : []),
+        ...Array.from({ length: theirs }, (): EffectDef => ({
+          kind: 'opponentSacrifices',
+          filter,
+        })),
+      ];
+      list.splice(i, 1, ...expanded);
       i--;
       continue;
     }
@@ -641,7 +806,11 @@ export function runEffects(
       e.kind === 'graveyardCardToLibraryBottom' ||
       e.kind === 'discardAnyThenDraw' ||
       e.kind === 'lookTakeLandAndSpell' ||
-      e.kind === 'payOrElse'
+      e.kind === 'payOrElse' ||
+      // Final Fantasy (11c): The Darkness Crystal
+      e.kind === 'putExiledWithSource' ||
+      // Final Fantasy (11c): hideaway
+      e.kind === 'hideaway'
     ) {
       const lib = ctx.s.players[es.controller].library;
       const { controller, source, sourceDefId, targets, lkiPower, subject, amount, chosen, x } = es;
@@ -801,8 +970,11 @@ export function runEffects(
           exiled.push(id);
         }
         // The misses go to the bottom in a random order.
-        shuffleInPlace(ctx.s.rng, exiled);
-        for (const id of exiled) moveObject(ctx, id, 'library', { position: 'bottom' });
+        // Marvel Super Heroes Jumpstart (Scarlet): or stay in exile (Wanda's Vision).
+        if (!e.stayExiled) {
+          shuffleInPlace(ctx.s.rng, exiled);
+          for (const id of exiled) moveObject(ctx, id, 'library', { position: 'bottom' });
+        }
         if (!hit) continue;
         const after: EffectDef = {
           kind: 'afterReveal',
@@ -813,7 +985,7 @@ export function runEffects(
           kind: 'castFree',
           player: controller,
           cards: [hit],
-          resume: { ...resume, effects: [after, ...resume.effects] },
+          resume: { ...resume, effects: [...(e.stayExiled ? [] : [after]), ...resume.effects] },
           thenPriority,
         };
       } else if (e.kind === 'takeStudyCard') {
@@ -875,8 +1047,13 @@ export function runEffects(
             : e.from === 'lastExiledWithSource'
               ? exiled.slice(-1)
               : exiled;
+        // Final Fantasy (11c): "mana value less than or equal to that damage" (Buster Sword).
+        const max = e.maxManaValue !== undefined ? resolveAmount(ctx, es, e.maxManaValue) : 99;
         const cards = pool.filter(
-          (id) => !def(ctx, id).types.includes('Land') && cardMatches(ctx, id, e.filter ?? {}),
+          (id) =>
+            !def(ctx, id).types.includes('Land') &&
+            cardMatches(ctx, id, e.filter ?? {}) &&
+            manaValue(def(ctx, id).manaCost) <= max,
         );
         if (cards.length === 0) continue;
         ctx.s.decision = { kind: 'castFree', player: controller, cards, resume, thenPriority };
@@ -1055,7 +1232,7 @@ export function runEffects(
           thenPriority,
         };
       } else if (e.kind === 'millThenTake') {
-        const milled = lib.slice(0, e.count);
+        const milled = lib.slice(0, millCount(ctx, controller, e.count));
         for (const id of milled) moveObject(ctx, id, 'graveyard');
         const options = milled.filter((id) => cardMatches(ctx, id, e.filter));
         if (options.length === 0) {
@@ -1121,6 +1298,7 @@ export function runEffects(
           to: e.tapped ? 'battlefieldTapped' : 'battlefield',
           shuffle: false,
           ...(e.counter ? { counter: e.counter } : {}),
+          ...(e.attackingIf ? { attackingIf: e.attackingIf } : {}),
           resume,
           thenPriority,
         };
@@ -1129,7 +1307,8 @@ export function runEffects(
         const options = ctx.s.battlefield.filter(
           (id) =>
             id !== sourceId &&
-            obj(ctx, id).controller === controller &&
+            // Vial Smasher: a permanent an opponent controls.
+            (obj(ctx, id).controller === controller) !== !!e.opponents &&
             matchesFilter(ctx, id, e.filter, sourceId),
         );
         if (options.length === 0) {
@@ -1152,10 +1331,11 @@ export function runEffects(
         const item = t && 'object' in t ? findSpell(ctx, t.object.id) : undefined;
         if (!item) continue;
         // Strixhaven Brawl (15b, u): Syncopate, "unless its controller pays {X}".
-        // Strixhaven Brawl (15b, pair): Repulsive Mutation, "equal to the greatest power among creatures you control".
+        // Final Fantasy Commander (12c), Strixhaven Brawl (15b, pair): a cost counted as it resolves ({X},
+        // cards in your graveyard; Repulsive Mutation, "equal to the greatest power among creatures you control".
         const base =
-          e.genericAmount !== undefined
-            ? { generic: Math.max(0, resolveAmount(ctx, es, e.genericAmount)), colored: {} }
+          e.costAmount !== undefined
+            ? { generic: Math.max(0, resolveAmount(ctx, es, e.costAmount)), colored: {} }
             : e.cost;
         const toPay = e.xCost ? { ...base, generic: base.generic + (x ?? 0) } : base;
         if (e.xCost && toPay.generic === 0 && Object.values(toPay.colored).every((n) => !n))
@@ -1176,9 +1356,14 @@ export function runEffects(
         };
       } else if (e.kind === 'chooseFromOpponentHand') {
         const from = other(controller);
-        const options = ctx.s.players[from].hand.filter(
+        let options = ctx.s.players[from].hand.filter(
           (id) => !e.filter || cardMatches(ctx, id, e.filter),
         );
+        // Klaw: they reveal only some cards (picked for them: the cheapest), and you choose among those.
+        if (e.reveal !== undefined)
+          options = [...options]
+            .sort((a, b) => manaValue(def(ctx, a).manaCost) - manaValue(def(ctx, b).manaCost))
+            .slice(0, resolveAmount(ctx, es, e.reveal));
         ctx.s.decision = {
           kind: 'chooseFromHand',
           player: controller,
@@ -1508,6 +1693,39 @@ export function runEffects(
           resume,
           thenPriority,
         };
+      } else if (e.kind === 'putExiledWithSource') {
+        // Final Fantasy (11c): The Darkness Crystal. A card it exiled, still in exile.
+        const self = es.source && ctx.s.objects[es.source.id];
+        const options = (self?.exiledWith ?? []).filter(
+          (id) => ctx.s.objects[id]?.zone === 'exile' && cardMatches(ctx, id, e.filter),
+        );
+        if (options.length === 0) continue;
+        ctx.s.decision = {
+          kind: 'searchLibrary',
+          player: controller,
+          options,
+          fromGraveyard: true,
+          to: 'battlefield',
+          shuffle: false,
+          ...(e.tapped ? { enterTapped: true } : {}),
+          ...(e.counters ? { enterCounters: e.counters } : {}),
+          resume,
+          thenPriority,
+        };
+      } else if (e.kind === 'hideaway') {
+        // Final Fantasy (11c): hideaway. One of the top N exiled face down, the rest to the bottom.
+        const looked = lib.slice(0, e.count);
+        if (looked.length === 0) continue;
+        ctx.s.decision = {
+          kind: 'searchLibrary',
+          player: controller,
+          options: looked,
+          looked,
+          to: 'hideaway',
+          required: true,
+          resume,
+          thenPriority,
+        };
       } else {
         // Path to Exile: the exiled creature's controller searches their own library.
         const t = e.forControllerOf !== undefined ? es.targets[e.forControllerOf] : undefined;
@@ -1572,7 +1790,14 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
       for (const t of resolveRef(ctx, es, e.to)) {
         // Nova Flame: "each other creature".
         if (e.exceptFrom && 'object' in t && t.object.id === src.id) continue;
+        const hit = e.excessTokens && 'object' in t ? onBattlefield(ctx, t.object) : undefined;
+        const before = hit?.damage ?? 0;
+        const lethal = hit ? Math.max(0, characteristics(ctx, hit.id).toughness - before) : 0;
         dealDamage(ctx, src, t, amount, false);
+        // Goblin Negotiation: the damage beyond what was lethal.
+        const excess = hit ? hit.damage - before - lethal : 0;
+        if (e.excessTokens && excess > 0)
+          runEffect(ctx, es, { kind: 'createToken', token: e.excessTokens, count: excess });
       }
       return;
     }
@@ -1596,8 +1821,16 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
           ...(e.cantBeBlocked ? { cantBeBlocked: true } : {}),
           ...(e.returnWhenDies ? { returnWhenDies: e.returnWhenDies } : {}),
           ...(e.cantBeBlockedExcept ? { cantBeBlockedExcept: e.cantBeBlockedExcept } : {}),
+          // Marvel Super Heroes Jumpstart (Great Lakes Avengers)
+          ...(e.cantBeBlockedBy ? { cantBeBlockedBy: e.cantBeBlockedBy } : {}),
+          ...(e.switchPT ? { switchPT: true } : {}),
           ...(e.counterOnCombatDamage ? { counterOnCombatDamage: true } : {}),
           ...(e.ignoreDefender ? { ignoreDefender: true } : {}),
+          ...(e.sacrificeOnCombatDamage ? { sacrificeOnCombatDamage: true } : {}),
+          ...(e.basePT ? { basePT: e.basePT } : {}),
+          ...(e.becomesCreature ? { becomesCreature: true } : {}),
+          ...(e.preventCombatDamage ? { preventCombatDamage: true } : {}),
+          ...(e.mustBeBlocked ? { mustBeBlocked: true } : {}),
           ...(e.untilYourNextTurn
             ? { expires: 'untilYourNextTurn' as const, player: es.controller }
             : { expires: 'endOfTurn' as const }),
@@ -1622,6 +1855,42 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
     case 'untap':
       for (const id of objectsOf(ctx, es, e.what)) untap(ctx, id);
       return;
+    case 'changeTarget':
+    case 'chooseNewTargets':
+      return; // handled by runEffects
+    case 'setStackTargets': {
+      const item = ctx.s.stack.find((x) => x.id === e.id);
+      if (item) item.targets = e.targets;
+      return;
+    }
+    case 'endTheTurn': {
+      // Rule 723.1: every spell and ability on the stack is exiled (Time Stop itself as it
+      // finishes resolving), combat ends, and the turn skips to its cleanup step.
+      const self = es.source?.id;
+      for (const x of [...ctx.s.stack]) {
+        if (x.kind === 'spell' && x.id === self) continue;
+        ctx.s.stack.splice(ctx.s.stack.indexOf(x), 1);
+        if (x.kind === 'spell') moveObject(ctx, x.id, 'exile');
+      }
+      ctx.s.combat = null;
+      ctx.s.pendingTriggers = [];
+      ctx.s.turn.endTheTurn = true;
+      return;
+    }
+    case 'doesntUntapWhileSource':
+      if (!es.source || !onBattlefield(ctx, es.source)) return;
+      for (const id of objectsOf(ctx, es, e.what))
+        ctx.s.effects.push({
+          timestamp: newTimestamp(ctx),
+          affected: { id, zcc: obj(ctx, id).zcc },
+          power: 0,
+          toughness: 0,
+          keywords: [],
+          doesntUntap: true,
+          expires: 'whileSource',
+          whileSourceId: es.source.id,
+        });
+      return;
     case 'extraCombat':
       ctx.s.turn.extraCombats++;
       return;
@@ -1635,7 +1904,10 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
     }
     case 'counters': {
       const n = resolveAmount(ctx, es, e.amount);
-      for (const id of objectsOf(ctx, es, e.to)) addCounters(ctx, id, n);
+      for (const id of objectsOf(ctx, es, e.to))
+        // A negative amount removes +1/+1 counters (Mister Hyde).
+        if (n < 0) obj(ctx, id).plusOneCounters = Math.max(0, obj(ctx, id).plusOneCounters + n);
+        else addCounters(ctx, id, n);
       return;
     }
     case 'fight': {
@@ -1646,8 +1918,13 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
       const pb = power(ctx, b);
       const sa = damageSourceFor(ctx, a, es.controller);
       const sb = damageSourceFor(ctx, b, obj(ctx, b).controller);
+      // Marvel Super Heroes Jumpstart (Tenacious/Rampaging): excess damage to b (Rhino's Rampage).
+      const beforeB = obj(ctx, b).damage;
+      const lethalB = Math.max(0, characteristics(ctx, b).toughness - beforeB);
       dealDamage(ctx, sa, { object: { id: b, zcc: obj(ctx, b).zcc } }, pa, false);
       dealDamage(ctx, sb, { object: { id: a, zcc: obj(ctx, a).zcc } }, pb, false);
+      if (e.ifExcess && obj(ctx, b).damage - beforeB > lethalB)
+        for (const x of e.ifExcess) runEffect(ctx, es, x);
       return;
     }
     case 'destroy':
@@ -1683,7 +1960,8 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
       const targetOwner =
         target && 'object' in target
           ? ctx.s.objects[target.object.id]?.controller
-          : target && 'player' in target
+          : // Atlantis Attacks: "target player creates".
+            target && 'player' in target
             ? target.player
             : undefined;
       const owner = targetOwner ?? (e.forOpponent ? other(es.controller) : es.controller);
@@ -1731,6 +2009,38 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
         ctx.s.battlefield.push(t.id);
         emit(ctx, { type: 'objectMoved', id: t.id, defId: t.defId, from: null, to: 'battlefield' });
       }
+      // Final Fantasy Commander (12e): Quina, "those tokens plus a 1/1 green Frog".
+      if (n > 0 && e.token !== 'frog-token')
+        for (const id of ctx.s.battlefield)
+          if (obj(ctx, id).controller === owner)
+            for (const a of def(ctx, id).abilities)
+              if (a.kind === 'static' && a.effect.kind === 'plusFrogToken') {
+                const f = createObject(ctx, 'frog-token', owner, 'battlefield', true);
+                ctx.s.battlefield.push(f.id);
+                emit(ctx, {
+                  type: 'objectMoved',
+                  id: f.id,
+                  defId: f.defId,
+                  from: null,
+                  to: 'battlefield',
+                });
+              }
+      // Marvel Super Heroes Jumpstart (Animal): Tippy-Toe, "those tokens plus an additional Food token".
+      if (n > 0)
+        for (const id of [...ctx.s.battlefield])
+          if (obj(ctx, id).controller === owner)
+            for (const a of def(ctx, id).abilities)
+              if (a.kind === 'static' && a.effect.kind === 'plusFoodToken') {
+                const f = createObject(ctx, 'food-token', owner, 'battlefield', true);
+                ctx.s.battlefield.push(f.id);
+                emit(ctx, {
+                  type: 'objectMoved',
+                  id: f.id,
+                  defId: f.defId,
+                  from: null,
+                  to: 'battlefield',
+                });
+              }
       return;
     }
     case 'scry':
@@ -1802,7 +2112,10 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
     case 'mill': {
       const players = e.who ? playersOf(ctx, es, e.who) : [es.controller];
       for (const p of players)
-        for (const id of ctx.s.players[p].library.slice(0, resolveAmount(ctx, es, e.count)))
+        for (const id of ctx.s.players[p].library.slice(
+          0,
+          millCount(ctx, p, resolveAmount(ctx, es, e.count)),
+        ))
           moveObject(ctx, id, 'graveyard');
       return;
     }
@@ -1810,7 +2123,15 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
       const t = typeof e.what === 'object' && 'target' in e.what ? es.targets[e.what.target] : null;
       if (!t || !('object' in t)) return;
       const item = findSpell(ctx, t.object.id);
-      if (!item) return;
+      // Final Fantasy (11c): countering an activated or triggered ability (Louisoix's Sacrifice).
+      if (!item) {
+        const i = ctx.s.stack.findIndex((x) => x.kind === 'ability' && x.id === t.object.id);
+        if (i >= 0) {
+          ctx.s.stack.splice(i, 1);
+          emit(ctx, { type: 'countered', id: t.object.id });
+        }
+        return;
+      }
       const controller = item.controller;
       counterSpell(ctx, item.id);
       if (e.controllerTokens)
@@ -1850,6 +2171,8 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
       moveObject(ctx, card.id, 'exile');
       const token = createObject(ctx, card.defId, es.controller, 'battlefield', true);
       token.addedSubtypes = [e.addSubtype];
+      // Final Fantasy (11c): "except it's a 5/5" (Ardyn).
+      if (e.pt) token.copyPT = { power: e.pt[0], toughness: e.pt[1] };
       ctx.s.battlefield.push(token.id);
       emit(ctx, {
         type: 'objectMoved',
@@ -1922,6 +2245,19 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
       if (!o || o.zone !== 'graveyard' || o.zcc !== t.object.zcc) return;
       moveObject(ctx, o.id, 'battlefield', { controller: es.controller });
       if (e.tapped) o.tapped = true;
+      if (e.tapped) o.tapped = true;
+      // Grim Reaper: "tapped and attacking" (never declared, so no attack triggers).
+      if (e.attacking && ctx.s.combat && obj(ctx, o.id).zone === 'battlefield') {
+        o.tapped = true;
+        const self = es.source && ctx.s.combat.attackers.find((a) => a.id === es.source!.id);
+        ctx.s.combat.attackers.push({
+          id: o.id,
+          defender: self?.defender ?? other(es.controller),
+          ...(self?.planeswalker ? { planeswalker: self.planeswalker } : {}),
+          blocked: false,
+          blockers: [],
+        });
+      }
       if (e.counter) (o.counters ??= {})[e.counter] = 1;
       if (e.addSubtype) o.addedSubtypes = [...(o.addedSubtypes ?? []), e.addSubtype];
       // Heroic Return, Winter Soldier: "if a Hero enters this way, it enters with counters".
@@ -2231,7 +2567,7 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
     case 'becomeCopy': {
       const source = es.source && onBattlefield(ctx, es.source);
       const of = objectsOf(ctx, es, e.of)[0];
-      // Strixhaven (13c): Echoing Equation: a group (without the one copied) becomes the copy.
+      // Strixhaven (13c): Echoing Equation (and Loki, Lord of Misrule): a group (without the one copied) becomes the copy.
       const selves = (
         e.what ? objectsOf(ctx, es, e.what).filter((id) => id !== of) : source ? [source.id] : []
       ).map((id) => ctx.s.objects[id]);
@@ -2249,6 +2585,10 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
           self.nonlegendary = true;
           self.copyNonlegendary = true;
         }
+        // Marvel Super Heroes Jumpstart (Tricksters): keeps its name (Impossible Man).
+        if (e.keepName) self.copyKeepsName = true;
+        // Marvel Super Heroes Jumpstart (Young Avengers): "and he has this ability" (Hulkling).
+        if (e.keepAbilities) self.copyKeptAbilities = e.keepAbilities;
         if (e.asCreature) {
           self.copyAsCreature = true;
           self.copyPT = { power: e.asCreature.power, toughness: e.asCreature.toughness };
@@ -2395,7 +2735,13 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
       const lib = ctx.s.players[es.controller].library;
       const ownTurn = ctx.s.turn.activePlayer === es.controller;
       const until =
-        e.until === 'endOfTurn' ? ctx.s.turn.number : ctx.s.turn.number + (ownTurn ? 2 : 1);
+        e.until === 'endOfTurn'
+          ? ctx.s.turn.number
+          : // Marvel Super Heroes Jumpstart (Scarlet): until your next end step (this turn's if it's still ahead).
+            e.until === 'yourNextEndStep'
+            ? ctx.s.turn.number +
+              (ownTurn ? (ctx.s.turn.step === 'end' || ctx.s.turn.step === 'cleanup' ? 2 : 0) : 1)
+            : ctx.s.turn.number + (ownTurn ? 2 : 1);
       for (const id of lib.slice(0, resolveAmount(ctx, es, e.count))) {
         moveObject(ctx, id, 'exile');
         obj(ctx, id).playableUntilTurn = until;
@@ -2467,6 +2813,8 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
         });
         // Strixhaven (13a): magecraft.
         emit(ctx, { type: 'spellCopied', id: copy.id, player: es.controller });
+        // Loki Laufeyson: the copy whose targets may change next.
+        if (e.newTargets) es.chosen = { id: copy.id, zcc: copy.zcc };
       }
       return;
     }
@@ -2512,18 +2860,29 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
     }
     case 'emblem': {
       const ownTurn = ctx.s.turn.activePlayer === es.controller;
+      // Marvel Super Heroes Jumpstart (Tricksters): only creatures with the chosen name (The Clone Saga).
+      let ability = e.ability;
+      if (e.namedLike) {
+        const named = objectsOf(ctx, es, e.namedLike)[0];
+        const t = ability.kind === 'triggered' ? ability.trigger : undefined;
+        if (!named || t?.on !== 'creatureYouControlDealsCombatDamage') return;
+        ability = {
+          ...ability,
+          trigger: { ...t, filter: { ...t.filter, named: obj(ctx, named).defId } },
+        } as AbilityDef;
+      }
       (ctx.s.emblems ??= []).push({
         controller: es.controller,
         source: es.source ?? { id: 'emblem', zcc: 0 },
         sourceDefId: es.sourceDefId,
-        ability: e.ability,
+        ability,
         ...(e.until === 'endOfYourNextTurn'
           ? { untilTurn: ctx.s.turn.number + (ownTurn ? 2 : 1) }
           : {}),
         // Galvanic Iteration: "when you next cast an instant or sorcery spell this turn".
         ...(e.until === 'nextSpellThisTurn' ? { untilTurn: ctx.s.turn.number, once: true } : {}),
-        // Strixhaven (13c): First Day of Class
-        ...(e.until === 'thisTurn' ? { untilTurn: ctx.s.turn.number } : {}),
+        // Final Fantasy (11c): "until end of turn" (Summon: Leviathan); Strixhaven (13c): First Day of Class.
+        ...(e.until === 'endOfTurn' ? { untilTurn: ctx.s.turn.number } : {}),
       });
       return;
     }
@@ -2598,6 +2957,29 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
               fromTurn: ctx.s.turn.number + (step === 'end' || step === 'cleanup' ? 1 : 0),
             });
           }
+          // Final Fantasy (11c): temporary token copies.
+          if (e.equipDiscount) t.equipDiscount = e.equipDiscount;
+          if (e.sacrificeAt) {
+            const late = ['end', 'cleanup'].includes(ctx.s.turn.step);
+            const ownTurn = ctx.s.turn.activePlayer === es.controller;
+            (ctx.s.delayed ??= []).push({
+              controller: es.controller,
+              sourceDefId: es.sourceDefId,
+              subject: { id: t.id, zcc: t.zcc },
+              effects: [{ kind: 'sacrifice', what: 'subject' }],
+              ...(e.sacrificeAt === 'nextUpkeep'
+                ? { fromTurn: ctx.s.turn.number + 1, at: 'upkeep' as const }
+                : e.sacrificeAt === 'yourNextEndStep'
+                  ? {
+                      fromTurn: ctx.s.turn.number + (ownTurn && !late ? 0 : ownTurn ? 2 : 1),
+                      whose: es.controller,
+                    }
+                  : { fromTurn: ctx.s.turn.number + (late ? 1 : 0) }),
+            });
+          }
+          const chapters = defOf(ctx, t.defId).saga;
+          if (e.lore && chapters)
+            for (let k = 0; k < Math.min(e.lore, chapters - 1); k++) addLore(ctx, t.id);
         }
       }
       return;
@@ -2789,6 +3171,7 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
           toughness: 0,
           keywords: [],
           previousController: o.controller,
+          ...(e.unattachOnRevert ? { unattachOnRevert: true } : {}),
           ...(e.whileSource && es.source
             ? { expires: 'whileSource' as const, whileSourceId: es.source.id }
             : e.untilYourNextTurn
@@ -2819,9 +3202,9 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
       }
       return;
     case 'returnSource': {
-      // Only the same card, still in the graveyard it went to.
+      // Only the same card, still in the graveyard it went to (or in exile: Mister Immortal).
       const o = es.source && ctx.s.objects[es.source.id];
-      if (!o || o.zone !== 'graveyard' || o.zcc !== es.source!.zcc) return;
+      if (!o || (o.zone !== 'graveyard' && o.zone !== 'exile') || o.zcc !== es.source!.zcc) return;
       if (e.to === 'hand') return moveObject(ctx, o.id, 'hand');
       // Strixhaven (13b): Bookwurm.
       if (e.to === 'libraryThird') {
@@ -2851,6 +3234,22 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
       if (e.counters) addCounters(ctx, o.id, e.counters);
       if (e.addSubtype) o.addedSubtypes = [...(o.addedSubtypes ?? []), e.addSubtype];
       if (e.named) (o.counters ??= {})[e.named] = 1;
+      // Hellcat: "She loses all abilities and gains haste" for as long as she stays.
+      if (e.losesAbilitiesGains && obj(ctx, o.id).zone === 'battlefield') {
+        ctx.s.effects.push({
+          timestamp: newTimestamp(ctx),
+          affected: { id: o.id, zcc: o.zcc },
+          power: 0,
+          toughness: 0,
+          keywords: [],
+          loseAbilities: true,
+          expires: 'whileSource',
+          whileSourceId: o.id,
+          player: es.controller,
+        });
+        o.blank = true;
+        o.grantedKeywords = [...(o.grantedKeywords ?? []), ...e.losesAbilitiesGains];
+      }
       return;
     }
     case 'exile':
@@ -2919,6 +3318,7 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
       return;
     case 'removeLoreFromAny':
     case 'chooseCustom': // Strixhaven (13c)
+    case 'hideaway':
       return; // handled by runEffects
     case 'custom': {
       const fn = ctx.customEffects[e.handler];
@@ -2927,6 +3327,19 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
       return;
     }
   }
+}
+
+// Final Fantasy (11c): The Water Crystal
+
+/** How many cards `player` mills for "mill N": opponents' Water Crystals add to it. */
+export function millCount(ctx: Ctx, player: PlayerId, n: number): number {
+  if (n <= 0) return n;
+  for (const id of ctx.s.battlefield) {
+    if (obj(ctx, id).controller === player) continue;
+    for (const a of def(ctx, id).abilities)
+      if (a.kind === 'static' && a.effect.kind === 'opponentsMillMore') n += a.effect.amount;
+  }
+  return n;
 }
 
 // Shield counters (Marvel Super Heroes)
@@ -2965,6 +3378,9 @@ export function endCopy(ctx: Ctx, o: GameObject): void {
   delete o.copyingUntilTurn;
   delete o.copyUntilTurnOf;
   delete o.copyWhileSource;
+  delete o.copyKeepsName;
+  // Marvel Super Heroes Jumpstart (Young Avengers).
+  delete o.copyKeptAbilities;
   if (o.copyAsCreature) delete o.grantedKeywords;
   delete o.copyAsCreature;
   if (o.copyNonlegendary) {

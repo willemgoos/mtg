@@ -106,7 +106,8 @@ function extraLegends(ctx: Ctx): ObjectId[] {
     const o = obj(ctx, id);
     // Council of Reeds: "The legend rule doesn't apply to creatures you control."
     if (def(ctx, id).types.includes('Creature') && legendRuleOff(ctx, o.controller)) continue;
-    const key = `${o.controller}:${o.defId}`;
+    // Impossible Man keeps his own name while copying.
+    const key = `${o.controller}:${o.copyKeepsName && o.originalDefId ? o.originalDefId : o.defId}`;
     const prev = newest.get(key);
     if (prev === undefined) newest.set(key, id);
     else if (obj(ctx, prev).timestamp < o.timestamp) {

@@ -16,6 +16,7 @@ import { canPayFrom, manaSources } from './mana.ts';
 import { addCosts, spellTags } from './spells.ts';
 import { teamworkValid } from './teamwork.ts';
 import { collectTriggers } from './triggers.ts';
+import { FIC_EFFECTS } from './fic-effects.ts';
 import {
   openingHand,
   type NewGameOptions,
@@ -115,7 +116,8 @@ function stableStringify(v: unknown): string {
 }
 
 export function createEngine(db: CardDb, options: EngineOptions = {}): Engine {
-  const custom = options.customEffects ?? {};
+  // Final Fantasy Commander (12): the FIC one-offs are built in.
+  const custom = { ...FIC_EFFECTS, ...options.customEffects };
 
   return {
     db,
