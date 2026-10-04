@@ -193,10 +193,14 @@ export function wardPayable(
   const foods = w.filter((x) => x.sacrificeFood).length;
   // Strixhaven Brawl (15b, b): Vein Ripper, ward—sacrifice a creature.
   const creatures = w.filter((x) => x.sacrificeCreature).length;
+  // Reality Fracture (17a): Emrakul, the Exigent Doom, ward—sacrifice three permanents.
+  const permanents = w.reduce((n, x) => n + (x.sacrificePermanents ?? 0), 0);
   return (
     ctx.s.players[player].hand.length - inHand >= discards &&
     foodsOf(ctx, player).length >= foods &&
-    (creatures === 0 || creaturesOnBattlefield(ctx, player).length >= creatures)
+    (creatures === 0 || creaturesOnBattlefield(ctx, player).length >= creatures) &&
+    (permanents === 0 ||
+      ctx.s.battlefield.filter((id) => obj(ctx, id).controller === player).length >= permanents)
   );
 }
 
@@ -224,6 +228,17 @@ function payWardExtras(ctx: Ctx, player: PlayerId, targets: readonly TargetChoic
         (a, b) => power(ctx, a.id) - power(ctx, b.id),
       )[0];
       if (least) sacrificePermanent(ctx, least.id);
+    }
+    // Reality Fracture (17a): Emrakul, the Exigent Doom: the three least useful permanents (tokens, then the cheapest).
+    if (w.sacrificePermanents) {
+      const fodder = ctx.s.battlefield
+        .filter((id) => obj(ctx, id).controller === player)
+        .sort(
+          (a, b) =>
+            Number(obj(ctx, b).isToken) - Number(obj(ctx, a).isToken) ||
+            manaValue(def(ctx, a).manaCost) - manaValue(def(ctx, b).manaCost),
+        );
+      for (const id of fodder.slice(0, w.sacrificePermanents)) sacrificePermanent(ctx, id);
     }
   }
 }
@@ -541,6 +556,15 @@ export function castSpell(
     ...(sneakFrom ? { sneak: sneakFrom } : {}),
   });
   payMana(ctx, payment);
+  // Reality Fracture (17a): Emrakul, the Exigent Doom: lands tap for {C}{C} only until the card is cast from exile.
+  for (const id of ctx.s.battlefield) {
+    const held = obj(ctx, id).abilitiesUntilCast;
+    if (held?.some((x) => x.card === card)) {
+      const rest = held.filter((x) => x.card !== card);
+      if (rest.length) obj(ctx, id).abilitiesUntilCast = rest;
+      else delete obj(ctx, id).abilitiesUntilCast;
+    }
+  }
   // Final Fantasy (11b): mana spent (convoking creatures don't spend mana).
   o.manaSpent = payment.filter((id) => !convokers.includes(id)).length;
   o.manaColors = manaColors;

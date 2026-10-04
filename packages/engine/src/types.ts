@@ -141,6 +141,9 @@ export interface CardDefinition {
     // Final Fantasy (11c): ward paid in life
     /** "Ward—Pay life equal to its power" (Raubahn). */
     lifeEqualsPower?: boolean;
+    // Reality Fracture (17a): Emrakul, the Exigent Doom
+    /** "Ward—Sacrifice three permanents." */
+    sacrificePermanents?: number;
   };
   /** "This spell can't be countered." */
   uncounterable?: boolean;
@@ -613,6 +616,9 @@ export type TriggerDef =
       // Secrets of Strixhaven (14b): Quandrix, the Proof
       /** Only spells cast from your hand. */
       fromHand?: boolean;
+      // Reality Fracture (17a): Codie, Ravenous Codex
+      /** Only prepared spells (the copy of a prepare spell, cast while its creature is prepared). */
+      prepared?: boolean;
       // Final Fantasy (11c): spells you don't own
       /** Only spells the caster doesn't own (Vaan, Street Thief). */
       notOwned?: boolean;
@@ -1071,6 +1077,9 @@ export interface CardFilter {
   equipped?: boolean;
   /** Was dealt damage this turn (Downwind Ambusher). */
   damaged?: boolean;
+  // Reality Fracture (17a): Hexhaven Dueling Arena
+  /** Attacked this turn ("target creature that attacked this turn"). */
+  attackedThisTurn?: boolean;
   /** Toughness greater than its power (Fecund Greenshell). */
   toughnessGreaterThanPower?: boolean;
   // Marvel Super Heroes Jumpstart (Marvelous)
@@ -2421,6 +2430,9 @@ export type StaticDef =
       /** A creature dying makes its triggered abilities (and your emblems') trigger twice (The Masamune). */
       deathTriggersTwice?: boolean;
     }
+  // Reality Fracture (17a): Karn, Argent Defender
+  /** "Artifacts and creatures entering the battlefield don't cause abilities to trigger." */
+  | { kind: 'etbDoesntTrigger' }
   /** All creatures able to block this creature do so (Prized Unicorn). */
   | { kind: 'lure' }
   /** If you would gain life, you gain that much plus N instead (Angel of Vitality). */
@@ -2755,6 +2767,11 @@ export interface GameObject {
   tempAbilities?: AbilityDef[];
   /** Strixhaven Brawl (15a): abilities it gained perpetually (Fallaji Antiquarian's unearth). */
   perpetualAbilities?: AbilityDef[];
+  // Reality Fracture (17a): Emrakul, the Exigent Doom
+  /** Abilities it has until the exiled card `card` is cast. */
+  abilitiesUntilCast?: { card: ObjectId; ability: AbilityDef }[];
+  /** In exile: its owner may cast it for as long as it remains there. */
+  castableWhileExiled?: boolean;
   /** It has lost all abilities (an effect until its controller's next turn). */
   blank?: boolean;
   /** A Class's level (1 if unset). */
@@ -3081,6 +3098,9 @@ export interface TurnState {
   deflect?: PlayerId[];
   /** Creatures declared as attackers this turn, once per combat. */
   attackers: ObjectId[];
+  // Reality Fracture (17a): Hall of Echoes
+  /** "The legend rule doesn't apply to permanents you control this turn." */
+  noLegendRule?: PlayerId[];
   /** How many times each player gained life this turn. */
   lifeGains: Record<PlayerId, number>;
   /** Creatures that died this turn (Morbid). */

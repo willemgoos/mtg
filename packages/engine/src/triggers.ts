@@ -420,6 +420,18 @@ function targetsMatch(
   });
 }
 
+/** Reality Fracture (17a): Karn, Argent Defender: this artifact or creature entering causes no triggers. */
+function etbSuppressed(ctx: Ctx, entered: CardDefinition): boolean {
+  return (
+    (entered.types.includes('Creature') || entered.types.includes('Artifact')) &&
+    ctx.s.battlefield.some((id) =>
+      def(ctx, id).abilities.some(
+        (a) => a.kind === 'static' && a.effect.kind === 'etbDoesntTrigger',
+      ),
+    )
+  );
+}
+
 function spellMatches(
   ctx: Ctx,
   t: Extract<TriggerDef, { on: 'castSpell' }>,
@@ -565,9 +577,12 @@ function detect(ctx: Ctx, ev: GameEvent): void {
           (s.turn.flyersEntered ??= []).push({ id: moved.id, player: moved.controller });
         const isLand = movedDef.types.includes('Land');
         const before = s.pendingTriggers.length;
+        // Reality Fracture (17a): Karn, Argent Defender: artifacts and creatures entering don't cause abilities to trigger.
+        const suppressed = etbSuppressed(ctx, movedDef);
         forEachBattlefieldTrigger(
           ctx,
           (o, a) => {
+            if (suppressed) return false;
             const t = a.trigger;
             if (t.on === 'etb') return o.id === moved.id;
             if (t.on === 'otherCreatureEtb')
@@ -601,6 +616,7 @@ function detect(ctx: Ctx, ev: GameEvent): void {
           if (
             a.kind !== 'triggered' ||
             a.trigger.on !== 'otherCreatureEtb' ||
+            suppressed ||
             !isCreature ||
             e.controller !== moved.controller ||
             !matchesFilter(ctx, moved.id, a.trigger.filter, e.source.id)
@@ -639,7 +655,7 @@ function detect(ctx: Ctx, ev: GameEvent): void {
           def(ctx, id).abilities.forEach((a, i) => {
             if (a.kind !== 'triggered' || !a.fromGraveyard || a.trigger.on !== 'otherCreatureEtb')
               return;
-            if (isCreature && matchesFilter(ctx, moved.id, a.trigger.filter, id))
+            if (!suppressed && isCreature && matchesFilter(ctx, moved.id, a.trigger.filter, id))
               queue(ctx, card, i, moved.controller, moved);
           });
         }
@@ -1116,6 +1132,8 @@ function detect(ctx: Ctx, ev: GameEvent): void {
             (item?.kind === 'spell' && !!item.kicked && spell.kicker?.teamwork !== undefined)) &&
           // Secrets of Strixhaven (14b): Quandrix, the Proof.
           (!a.trigger.fromHand || (item?.kind === 'spell' && !!item.fromHand)) &&
+          // Reality Fracture (17a): Codie, Ravenous Codex: a prepared spell (the copy of a prepare spell).
+          (!a.trigger.prepared || spellObj.preparedBy !== undefined) &&
           // Final Fantasy (11c): a spell you don't own (Vaan).
           (!a.trigger.notOwned || spellObj.owner !== ev.player) &&
           (!a.trigger.spell || cardMatches(ctx, ev.id, a.trigger.spell, o.id)) &&
@@ -1934,7 +1952,8 @@ function detectFic(ctx: Ctx, ev: GameEvent): void {
     moved &&
     ev.to === 'battlefield' &&
     moved.zone === 'battlefield' &&
-    movedDef.types.includes('Creature')
+    movedDef.types.includes('Creature') &&
+    !etbSuppressed(ctx, movedDef)
   )
     forEachBattlefieldTrigger(
       ctx,

@@ -1,6 +1,7 @@
 import { characteristics, countOf } from './characteristics.ts';
 import { MSH_EFFECTS } from './msh-effects.ts';
 import { FIN_EFFECTS } from './fin-effects.ts';
+import { FRA_COLORLESS_EFFECTS } from './fra-colorless-effects.ts';
 import { LOREHOLD_EFFECTS } from './stx-lorehold-effects.ts';
 import { SOS_14A_EFFECTS } from './sos-14a-effects.ts';
 import { SOS_14B_A_EFFECTS } from './sos-14b-a-effects.ts';
@@ -78,6 +79,8 @@ export function makeCtx(
 /** Small one-off effects used by the engine's own effect kinds. */
 const BUILT_IN_EFFECTS: Record<string, CustomEffect> = {
   ...MSH_EFFECTS,
+  // Reality Fracture (17a, colorless).
+  ...FRA_COLORLESS_EFFECTS,
   // Final Fantasy (11a).
   ...FIN_EFFECTS,
   // Strixhaven (13a).
@@ -192,10 +195,16 @@ export function def(ctx: Ctx, id: ObjectId): CardDefinition {
     if (shared.length) return { ...d, abilities: [...d.abilities, ...shared] };
   }
   // Strixhaven (13a): Lorehold Apprentice grants abilities until end of turn.
-  if (o.tempAbilities?.length || o.perpetualAbilities?.length)
+  if (o.tempAbilities?.length || o.perpetualAbilities?.length || o.abilitiesUntilCast?.length)
     return {
       ...d,
-      abilities: [...d.abilities, ...(o.tempAbilities ?? []), ...(o.perpetualAbilities ?? [])],
+      abilities: [
+        ...d.abilities,
+        ...(o.tempAbilities ?? []),
+        ...(o.perpetualAbilities ?? []),
+        // Reality Fracture (17a): Emrakul, the Exigent Doom: a land's mana ability until the card is cast.
+        ...(o.abilitiesUntilCast ?? []).map((x) => x.ability),
+      ],
     };
   return d;
 }
@@ -546,6 +555,7 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
   delete o.foodBy;
   delete o.controlledBy;
   delete o.xPaid;
+  delete o.abilitiesUntilCast; // Reality Fracture (17a): Emrakul, the Exigent Doom
   delete o.grantedKeywords;
   // Mockingbird turns back into itself.
   if (o.originalDefId) {
@@ -595,6 +605,8 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
   if (from === 'stack') delete o.convokedBy;
   delete o.kickCount;
   if (from === 'exile') {
+    // Reality Fracture (17a): Emrakul, the Exigent Doom.
+    delete o.castableWhileExiled;
     delete o.suspended;
     delete o.playFreeBy;
     delete o.plottedTurn; // Strixhaven Brawl (15b): plot

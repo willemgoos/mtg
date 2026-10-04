@@ -188,6 +188,8 @@ export function startTurn(ctx: Ctx, player: PlayerId, noPowerUp = false): void {
   s.turn.extraCombats = 0;
   // Final Fantasy Commander (12b).
   delete s.turn.extraLands;
+  // Reality Fracture (17a): Hall of Echoes.
+  delete s.turn.noLegendRule;
   delete s.turn.lifeLostTotal;
   s.turn.attackers = [];
   s.turn.lifeGains = { p1: 0, p2: 0 };
