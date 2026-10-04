@@ -29,6 +29,7 @@ import {
   LAND_POOL,
   MARVEL_BRAWL_POOL,
   FINAL_FANTASY_BRAWL_POOL,
+  REALITY_FRACTURE_POOL,
   OTHER_POOL,
   PLAYABLE_DECKS,
   parseManaCost,
@@ -73,6 +74,7 @@ describe('card data', () => {
         ...SECRETS_OF_STRIXHAVEN_POOL,
         ...STRIXHAVEN_BRAWL_POOL,
         ...FINAL_FANTASY_BRAWL_POOL,
+        ...REALITY_FRACTURE_POOL,
       ].sort(),
     );
     for (const c of SCRYFALL) expect(c.image?.normal).toMatch(/^https:\/\/cards\.scryfall\.io\//);

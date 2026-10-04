@@ -294,6 +294,9 @@ export function checkCondition(
       const item = ctx.s.stack.find((x) => x.kind === 'spell' && x.id === self.id);
       return item?.kind === 'spell' && !!item.flashback;
     }
+    // Reality Fracture (17a): Twinned Vision, "if this spell wasn't cast from your hand".
+    case 'notCastFromHand':
+      return !self.castFromHand;
     case 'custom': {
       // Final Fantasy Commander (12): one-off conditions.
       // Final Fantasy (11d): and FIN one-offs.
@@ -861,7 +864,8 @@ function detect(ctx: Ctx, ev: GameEvent): void {
               if (g.timestamp < moved.timestamp) continue;
               def(ctx, gid).abilities.forEach((a, i) => {
                 if (a.kind === 'triggered' && a.trigger.on === 'attachedDies')
-                  queue(ctx, g, i, g.owner);
+                  // Reality Fracture (17a): Ferocity of the Hunt returns "that card".
+                  queue(ctx, g, i, g.owner, moved);
               });
             }
           }

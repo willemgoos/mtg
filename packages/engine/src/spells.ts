@@ -107,7 +107,8 @@ function shiftTargets<T>(x: T, by: number): T {
     const out: Record<string, unknown> = {};
     for (const [k, v] of Object.entries(x))
       out[k] =
-        (k === 'target' || k === 'controllerOf' || k === 'ownerOf') && typeof v === 'number'
+        (k === 'target' || k === 'controllerOf' || k === 'ownerOf' || k === 'targetPlayer') &&
+        typeof v === 'number'
           ? v + by
           : shiftTargets(v, by);
     return out as T;
@@ -213,7 +214,10 @@ export function castVariants(d: CardDefinition, zone: ZoneName, via?: CastVia): 
       spell: pawSpell(d, paws),
     }));
   if (d.pawprints) return pawCombos(d).map((paws) => ({ paws, cost, spell: pawSpell(d, paws) }));
-  const extra = flashback ? { flashback: true, ...life } : {};
+  // Reality Fracture (17a): Twinned Vision, "Flashback—{1}{U/R}{U/R}, Discard a card".
+  const extra = flashback
+    ? { flashback: true, ...life, ...(d.flashbackDiscard ? { discard: true } : {}) }
+    : {};
   if (d.modes) {
     const modes: CastVariant[] = d.modes.map((spell, mode) => ({
       mode,

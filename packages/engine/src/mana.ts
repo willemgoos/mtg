@@ -279,9 +279,19 @@ export function findPayment(cost: ManaCost, sources: readonly ManaSource[]): Obj
   const two = cost.twoHybrid ?? [];
   if (two.length) {
     const { twoHybrid: _unused, ...rest } = cost;
-    for (let generic = 0; generic <= two.length; generic++) {
+    // Reality Fracture (17a): Karn, Gilded Guardian ({2/W}{2/U}{2/B}{2/R}{2/G}): which pips go to generic matters
+    // (a pool of Plains pays the {2/W} with its colour and the rest with two each), so try every choice,
+    // paying as few pips as possible with generic mana.
+    const choices = Array.from({ length: 1 << two.length }, (_, m) => m);
+    const bits = (m: number) => m.toString(2).replace(/0/g, '').length;
+    choices.sort((a, b) => bits(a) - bits(b));
+    for (const m of choices) {
       const colored = { ...rest.colored };
-      for (const t of two.slice(generic)) colored[t] = (colored[t] ?? 0) + 1;
+      let generic = 0;
+      two.forEach((t, i) => {
+        if (m & (1 << i)) generic++;
+        else colored[t] = (colored[t] ?? 0) + 1;
+      });
       const plan = findPaymentBase(
         { ...rest, generic: rest.generic + 2 * generic, colored },
         sources,

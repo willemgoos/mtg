@@ -18,6 +18,7 @@ import { BRAWL_15B_U_EFFECTS } from './brawl-15b-u-effects.ts';
 import { BRAWL_15B_G_EFFECTS } from './brawl-15b-g-effects.ts';
 import { BRAWL_15B_PAIR_EFFECTS } from './brawl-15b-pair-effects.ts';
 import { ARCHIVE_16_EFFECTS } from './archive-16-effects.ts';
+import { FRA_MULTI_B_EFFECTS } from './fra-multi-b-effects.ts';
 import { STX_13C_A_EFFECTS } from './stx-13c-a-effects.ts';
 import { STX_13C_B_EFFECTS } from './stx-13c-b-effects.ts';
 import { STX_13C_C_EFFECTS } from './stx-13c-c-effects.ts';
@@ -121,6 +122,8 @@ const BUILT_IN_EFFECTS: Record<string, CustomEffect> = {
   ...BRAWL_15B_PAIR_EFFECTS,
   // Mystical Archive (16).
   ...ARCHIVE_16_EFFECTS,
+  // Reality Fracture (17a): multi-b.
+  ...FRA_MULTI_B_EFFECTS,
   // Strixhaven (13a): Learn: put the chosen Lesson from outside the game into your hand.
   learnFetch(ctx, es, params) {
     const ps = ctx.s.players[es.controller];
@@ -683,6 +686,14 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
     if (to === 'battlefield') o.plusOneCounters += o.bonusCounters;
     delete o.bonusCounters;
   }
+  // Reality Fracture (17a): Entrust the Spark, a planeswalker put onto the battlefield enters with its loyalty counters.
+  const startingLoyalty = defOf(ctx, o.defId).loyalty;
+  if (
+    to === 'battlefield' &&
+    startingLoyalty !== undefined &&
+    !ctx.s.objects[id]!.counters?.loyalty
+  )
+    (ctx.s.objects[id]!.counters ??= {}).loyalty = startingLoyalty;
   if (to === 'battlefield' && defOf(ctx, o.defId).entersTapped) o.tapped = true;
   const tappedIf = to === 'battlefield' ? defOf(ctx, o.defId).entersTappedIf : undefined;
   // Eddymurk Crab: "enters tapped if it's not your turn"; check lands and the like.

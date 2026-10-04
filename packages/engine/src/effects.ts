@@ -568,6 +568,12 @@ export function resolveRef(ctx: Ctx, es: EffectSource, ref: Ref): TargetChoice[]
     const o = t && 'object' in t ? ctx.s.objects[t.object.id] : undefined;
     return o ? [{ player: o.controller }] : [];
   }
+  // Reality Fracture (17a): Clash of Elements, "its owner".
+  if (typeof ref === 'object' && 'ownerOf' in ref) {
+    const t = es.targets[ref.ownerOf];
+    const o = t && 'object' in t ? ctx.s.objects[t.object.id] : undefined;
+    return o ? [{ player: o.owner }] : [];
+  }
   // Marvel Super Heroes Jumpstart (Geniuses): "that player" (Super Intelligence).
   if (ref === 'attachedController') {
     const host = es.source && ctx.s.objects[es.source.id]?.attachedTo;
@@ -609,6 +615,11 @@ export function resolveRef(ctx: Ctx, es: EffectSource, ref: Ref): TargetChoice[]
       : creaturesOnBattlefield(ctx)
   )
     .filter((c) => {
+      // Reality Fracture (17a): Twisted Fates, "each creature target player controls".
+      if ('targetPlayer' in ref && ref.targetPlayer !== undefined) {
+        const tp = es.targets[ref.targetPlayer];
+        if (!tp || !('player' in tp) || c.controller !== tp.player) return false;
+      }
       if (ref.controller === 'you' && c.controller !== es.controller) return false;
       if (ref.controller === 'opponent' && c.controller === es.controller) return false;
       return matchesFilter(ctx, c.id, ref.filter, sourceId);
@@ -896,6 +907,8 @@ export function runEffects(
       e.kind === 'exileUntilTotalCastFree' ||
       // Final Fantasy (11a): saga creatures
       e.kind === 'removeLoreFromAny' ||
+      // Reality Fracture (17a): Tam, the Possibility
+      e.kind === 'proliferate' ||
       // Strixhaven (13a)
       e.kind === 'learn' ||
       // Strixhaven (13c)
@@ -1771,6 +1784,48 @@ export function runEffects(
           resume,
           thenPriority,
         };
+      } else if (e.kind === 'proliferate') {
+        // Reality Fracture (17a): Tam, the Possibility. Proliferate, `times` times: each time the player
+        // picks permanents with counters one at a time (each at most once) until they say "Done".
+        let remaining = e.remaining ?? resolveAmount(ctx, es, e.times ?? 1);
+        let done = e.done ?? [];
+        if (e.afterChoice) {
+          const c = es.chosen && ctx.s.objects[es.chosen.id];
+          if (c && c.zone === 'battlefield') {
+            for (const [name, n] of Object.entries(c.counters ?? {}))
+              if (n > 0) addCounters(ctx, c.id, 1, name);
+            if (c.plusOneCounters > 0) addCounters(ctx, c.id, 1);
+            done = [...done, c.id];
+          }
+        }
+        const withCounters = () =>
+          ctx.s.battlefield.filter((id) => {
+            const o = obj(ctx, id);
+            return (
+              !done.includes(id) &&
+              (o.plusOneCounters > 0 || Object.values(o.counters ?? {}).some((n) => n > 0))
+            );
+          });
+        let options = withCounters();
+        while (remaining > 0 && options.length === 0 && done.length > 0) {
+          remaining--;
+          done = [];
+          options = withCounters();
+        }
+        if (remaining <= 0 || options.length === 0) continue;
+        const nextPass: EffectDef[] =
+          remaining > 1 ? [{ ...e, remaining: remaining - 1, done: [], afterChoice: false }] : [];
+        ctx.s.decision = {
+          kind: 'chooseObject',
+          player: controller,
+          options,
+          optional: true,
+          title: 'Proliferate',
+          then: [{ ...e, remaining, done, afterChoice: true }],
+          otherwise: nextPass,
+          resume,
+          thenPriority,
+        };
       } else if (e.kind === 'removeLoreFromAny') {
         // Final Fantasy (11a): saga creatures. Garnet: one Saga at a time, each at most once.
         const options = ctx.s.battlefield.filter((id) => {
@@ -2364,7 +2419,8 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
       if (!t || !('object' in t)) return;
       const o = ctx.s.objects[t.object.id];
       if (!o || o.zone !== 'graveyard' || o.zcc !== t.object.zcc) return;
-      moveObject(ctx, o.id, 'battlefield', { controller: es.controller });
+      // Reality Fracture (17a): Ferocity of the Hunt, "under its owner's control".
+      moveObject(ctx, o.id, 'battlefield', { controller: e.underOwner ? o.owner : es.controller });
       if (e.tapped) o.tapped = true;
       if (e.tapped) o.tapped = true;
       // Grim Reaper: "tapped and attacking" (never declared, so no attack triggers).
@@ -2882,6 +2938,7 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
     case 'revealPutAndTake':
     case 'pickFromCards':
       return; // handled by runEffects
+    case 'proliferate': // Reality Fracture (17a)
     case 'chooseColor':
     case 'chooseCreatureType':
     case 'learn':

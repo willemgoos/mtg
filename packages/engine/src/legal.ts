@@ -746,13 +746,17 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
       )
         return;
       // Strixhaven (13c): Uvilda exiles an instant or sorcery from hand.
+      const discardFilter = a.cost.discardFilter ?? {};
       const discards = a.cost.exileRefine
         ? ps.hand.filter((id) => matchesFilter(ctx, id, { types: ['Instant', 'Sorcery'] }))
         : a.cost.discard
           ? // Secrets of Strixhaven (14b): Page, Loose Leaf discards another card with its name.
             a.cost.discardSameName
             ? ps.hand.filter((id) => id !== source && obj(ctx, id).defId === obj(ctx, source).defId)
-            : ps.hand
+            : // Reality Fracture (17a): Solitary Cell, "Discard a legendary card".
+              a.cost.discardFilter
+              ? ps.hand.filter((id) => cardMatches(ctx, id, discardFilter))
+              : ps.hand
           : [undefined];
       if (discards.length === 0) return;
       const rc = a.cost.removeCounters;

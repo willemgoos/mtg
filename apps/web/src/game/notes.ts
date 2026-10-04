@@ -167,9 +167,18 @@ export function cardNotes(view: GameState, defId: CardDefId, oid?: ObjectId | nu
       text: `${n} +1/+1 counter${n > 1 ? 's' : ''} (${signed(n)}/${signed(n)}).`,
     });
   }
+  // Reality Fracture (17a): -1/-1 counters (the named counter '-1/-1').
+  const minus = o.counters?.['-1/-1'] ?? 0;
+  if (minus) {
+    notes.push({
+      kind: 'effect',
+      title: 'Counters',
+      text: `${minus} -1/-1 counter${minus > 1 ? 's' : ''} (${signed(-minus)}/${signed(-minus)}).`,
+    });
+  }
   if (def.types.includes('Creature')) {
-    const staticP = c.power - (def.power ?? 0) - o.plusOneCounters - eotP;
-    const staticT = c.toughness - (def.toughness ?? 0) - o.plusOneCounters - eotT;
+    const staticP = c.power - (def.power ?? 0) - o.plusOneCounters + minus - eotP;
+    const staticT = c.toughness - (def.toughness ?? 0) - o.plusOneCounters + minus - eotT;
     if (staticP || staticT) {
       notes.push({
         kind: 'effect',

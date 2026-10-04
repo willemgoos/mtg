@@ -239,6 +239,9 @@ export interface CardDefinition {
   convoke?: boolean;
   /** Life paid in addition to the flashback cost (Deep Analysis). */
   flashbackLife?: number;
+  // Reality Fracture (17a): Twinned Vision
+  /** "Flashback—{cost}, Discard a card": flashing it back also discards a card. */
+  flashbackDiscard?: boolean;
   /** As it resolves it's exiled (Genesis Ultimatum) or put on the bottom of its owner's library (Ultimate Nullification). */
   afterResolving?: 'exile' | 'libraryBottom';
   /** Only creatures matching this may be sacrificed for `sacrificeCreatureToCast` (Ultimate Nullification: legendary). */
@@ -432,6 +435,9 @@ export type AbilityDef =
       // Final Fantasy (11b/11c): activated cost reduction
       /** "This ability costs {1} less to activate for each ..." (Qiqirn Merchant: Towns; Balamb Garden). */
       costReduction?: Amount;
+      // Reality Fracture (17a): Warrior's Blades
+      /** "This ability costs {1} less to activate for each +1/+1 counter on the creature it targets." */
+      costReductionPerTargetCounter?: boolean;
     }
   | {
       kind: 'triggered';
@@ -477,6 +483,9 @@ export interface CostDef {
   life?: number;
   /** Discard a card (chosen when activating). */
   discard?: boolean;
+  // Reality Fracture (17a): Solitary Cell
+  /** With `discard`: only a card matching this may be discarded ("Discard a legendary card"). */
+  discardFilter?: CardFilter;
   /** Tap this many untapped tokens you control (Baylen, Tangle Tumbler). */
   tapTokens?: number;
   // Marvel Super Heroes Jumpstart (Masters of Evil)
@@ -996,6 +1005,9 @@ export type ConditionDef =
   // Strixhaven Brawl (15a): Sevinne's Reclamation
   /** This spell was cast from a graveyard (flashback). */
   | { kind: 'castFromGraveyard' }
+  // Reality Fracture (17a): Twinned Vision
+  /** This spell wasn't cast from its owner's hand (flashback, from exile, a copy). */
+  | { kind: 'notCastFromHand' }
   /** Any player controls a permanent matching the filter (Knight of Malice: a white one). */
   | { kind: 'anyPlayerControls'; filter: CardFilter }
   | { kind: 'custom'; handler: string }
@@ -1203,9 +1215,19 @@ export type Ref =
   | { each: 'permanent'; controller?: 'you' | 'opponent'; filter?: CardFilter }
   /** The object that caused the trigger ("that creature"). */
   | 'subject'
-  | { each: 'creature'; controller?: 'you' | 'opponent'; filter?: CardFilter }
+  | {
+      each: 'creature';
+      controller?: 'you' | 'opponent';
+      filter?: CardFilter;
+      // Reality Fracture (17a): Twisted Fates
+      /** Only creatures controlled by the player chosen as this target ("each creature target player controls"). */
+      targetPlayer?: number;
+    }
   /** The controller of a chosen target (Blooming Blast: "that creature's controller"). */
   | { controllerOf: number }
+  // Reality Fracture (17a): Clash of Elements
+  /** The owner of a chosen target ("its owner"), even once it has left the battlefield. */
+  | { ownerOf: number }
   // Marvel Super Heroes Jumpstart (Geniuses)
   /** The controller of the permanent the source is attached to (Super Intelligence: "that player"). */
   | 'attachedController'
@@ -1315,6 +1337,12 @@ export type Amount =
   | { count: 'opponentLifeHalf' }
   /** Greatest mana value among noncreature permanents you control and noncreature cards in your graveyard (Dragon Man). */
   | { count: 'greatestNoncreatureManaValue' }
+  // Reality Fracture (17a): Karn, Gilded Guardian
+  /** Colours among other artifacts you control (the source excluded). */
+  | { count: 'colorsAmongOtherArtifactsYouControl' }
+  // Reality Fracture (17a): Tam, the Possibility
+  /** Different planeswalker types among planeswalkers you control. */
+  | { count: 'planeswalkerTypesYouControl' }
   // Wakanda Forever (9c).
   /** Creatures on the battlefield (Vanquish the Horde). */
   | { count: 'creaturesOnBattlefield' }
@@ -1956,6 +1984,20 @@ export type EffectDef =
       // Final Fantasy (11c): "except it's a 5/5 black Demon" (Ardyn, the Usurper).
       pt?: [number, number];
     }
+  // Reality Fracture (17a): Tam, the Possibility
+  /**
+   * Proliferate (`times` times, default once): choose any number of permanents with counters, one at a
+   * time, and each gets another counter of each kind it has. The rest of the fields are internal.
+   */
+  | {
+      kind: 'proliferate';
+      times?: Amount;
+      /** Internal: passes still to do, and the permanents already chosen in this pass. */
+      remaining?: number;
+      done?: ObjectId[];
+      /** Internal: the permanent just chosen ('chosen') gets its counters now. */
+      afterChoice?: boolean;
+    }
   /** Put named counters on the source (Drake Hatcher), or on `to`. */
   | { kind: 'namedCounters'; name: string; amount: Amount; to?: Ref }
   /** Look at the top N, split them into two piles; an opponent picks one for your hand (Curator of Destinies). */
@@ -1984,6 +2026,9 @@ export type EffectDef =
       tapped?: boolean;
       /** "Tapped and attacking" (Grim Reaper, Lethal Legionnaire). */
       attacking?: boolean;
+      // Reality Fracture (17a): Ferocity of the Hunt
+      /** Under its owner's control rather than yours. */
+      underOwner?: boolean;
       /** It enters with +1/+1 counters if it matches the filter (Heroic Return: a Hero gets two). */
       countersIf?: { filter: CardFilter; count: number };
       // Marvel Super Heroes: "is a Hero in addition to its other types" (Thunderbolts Conspiracy).
@@ -2732,6 +2777,9 @@ export interface GameObject {
   lastNotCreature?: boolean;
   /** A card in exile its owner may play until the end of that turn (Strongbox Raider). */
   playableUntilTurn?: number;
+  // Reality Fracture (17a): Twinned Vision
+  /** The spell this object was cast as came from its owner's hand (copies have no flag: they weren't cast). */
+  castFromHand?: boolean;
   /** Wiccan, Young Avenger: "until your next end step": not once that turn's end step has begun. */
   playableBeforeEndStep?: boolean;
   /** The turn it entered its current zone. */
@@ -3582,6 +3630,9 @@ export type Decision =
       kind: 'chooseObject';
       player: PlayerId;
       options: ObjectId[];
+      // Reality Fracture (17a): Tam, the Possibility (proliferate)
+      /** Prompt heading, if not the usual one. */
+      title?: string;
       // Final Fantasy (11a): saga creatures
       /** Choosing none is allowed (Garnet: "any number of Sagas"). */
       optional?: boolean;

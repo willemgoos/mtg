@@ -128,6 +128,8 @@ export const SET_PREFERENCE = [
   // Strixhaven Brawl (15b, multi): Siege Rhino (conjured by Call the Crash), Ochre Jelly.
   // Mystical Archive (16): the Strixhaven Mystical Archive (a last resort: STA cards have older printings).
   'sta',
+  // Reality Fracture (17a): last, so no earlier card changes printing.
+  'fra',
 ];
 
 export const RED_POOL = [

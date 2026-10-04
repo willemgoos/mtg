@@ -39,8 +39,10 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
   const base = d.ptEquals !== undefined && onField ? countFor(ctx, o, d) : null;
   const basePower =
     d.powerEquals !== undefined && onField ? countOf(ctx, o.controller, d.powerEquals, true) : null;
-  let power = (basePower ?? base ?? o.copyPT?.power ?? d.power ?? 0) + o.plusOneCounters;
-  let toughness = (base ?? o.copyPT?.toughness ?? d.toughness ?? 0) + o.plusOneCounters;
+  // Reality Fracture (17a): Hapatra, the Desert Fang: -1/-1 counters (the named counter '-1/-1').
+  const minus = o.counters?.['-1/-1'] ?? 0;
+  let power = (basePower ?? base ?? o.copyPT?.power ?? d.power ?? 0) + o.plusOneCounters - minus;
+  let toughness = (base ?? o.copyPT?.toughness ?? d.toughness ?? 0) + o.plusOneCounters - minus;
   // Copy-on-write: most creatures have no granted keywords, so share the printed set.
   let keywords = printedKeywords(d);
   let granted: Set<Keyword> | null = null;
@@ -460,6 +462,26 @@ export function countOf(
     for (const id of ctx.s.turn.castDefs?.[player] ?? [])
       for (const c of defOf(ctx, id).colors) colors.add(c);
     return colors.size;
+  }
+  // Reality Fracture (17a): Karn, Gilded Guardian.
+  if (a.count === 'colorsAmongOtherArtifactsYouControl') {
+    const colors = new Set<string>();
+    for (const id of ctx.s.battlefield)
+      if (
+        id !== sourceId &&
+        obj(ctx, id).controller === player &&
+        def(ctx, id).types.includes('Artifact')
+      )
+        for (const c of def(ctx, id).colors) colors.add(c);
+    return colors.size;
+  }
+  // Reality Fracture (17a): Tam, the Possibility.
+  if (a.count === 'planeswalkerTypesYouControl') {
+    const types = new Set<string>();
+    for (const id of ctx.s.battlefield)
+      if (obj(ctx, id).controller === player && def(ctx, id).types.includes('Planeswalker'))
+        for (const t of def(ctx, id).subtypes) types.add(t);
+    return types.size;
   }
   if (a.count === 'subjectColors') return 0; // resolved with the trigger (see resolveAmount)
   if (a.count === 'opponentHandSize') return ctx.s.players[other(player)].hand.length;
