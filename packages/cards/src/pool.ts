@@ -8,6 +8,7 @@ import { STRIXHAVEN_BEHAVIORS } from './strixhaven.ts';
 import { SECRETS_OF_STRIXHAVEN_BEHAVIORS } from './secrets-of-strixhaven.ts';
 import { STRIXHAVEN_BRAWL_BEHAVIORS } from './strixhaven-brawl.ts';
 import { FINAL_FANTASY_BRAWL_BEHAVIORS } from './final-fantasy-brawl.ts';
+import { REALITY_FRACTURE_BEHAVIORS } from './reality-fracture.ts';
 
 /**
  * Allowed sets, most preferred first: Foundations, then older core sets, then
@@ -602,6 +603,9 @@ export const STRIXHAVEN_BRAWL_POOL = Object.keys(STRIXHAVEN_BRAWL_BEHAVIORS);
 /** The Final Fantasy Commander Brawl decks' cards (not already in the pool above). */
 export const FINAL_FANTASY_BRAWL_POOL = Object.keys(FINAL_FANTASY_BRAWL_BEHAVIORS);
 
+/** Reality Fracture cards (fronts only). */
+export const REALITY_FRACTURE_POOL = Object.keys(REALITY_FRACTURE_BEHAVIORS);
+
 export const POOL: { name: string }[] = [
   ...RED_POOL,
   ...GREEN_POOL,
@@ -620,6 +624,7 @@ export const POOL: { name: string }[] = [
   ...SECRETS_OF_STRIXHAVEN_POOL,
   ...STRIXHAVEN_BRAWL_POOL,
   ...FINAL_FANTASY_BRAWL_POOL,
+  ...REALITY_FRACTURE_POOL,
 ].map((name) => ({
   name,
 }));

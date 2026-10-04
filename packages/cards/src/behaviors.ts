@@ -32,6 +32,11 @@ import {
   FINAL_FANTASY_BRAWL_BEHAVIORS,
   FINAL_FANTASY_BRAWL_TOKENS,
 } from './final-fantasy-brawl.ts';
+import {
+  REALITY_FRACTURE_BACK_FACES,
+  REALITY_FRACTURE_BEHAVIORS,
+  REALITY_FRACTURE_TOKENS,
+} from './reality-fracture.ts';
 import { FOUNDATIONS_BATCH_BEHAVIORS } from './foundations-batch.ts';
 import { FOUNDATIONS_DRAFT_BEHAVIORS } from './foundations-draft.ts';
 import { FOUNDATIONS_JUMP_IN_BEHAVIORS } from './foundations-jumpin.ts';
@@ -177,6 +182,9 @@ export const BEHAVIORS: Record<string, Behavior> = {
   // Final Fantasy Commander (phase 12).
   ...FINAL_FANTASY_BRAWL_BEHAVIORS,
   ...FINAL_FANTASY_BRAWL_BACK_FACES,
+  // Reality Fracture (phase 17).
+  ...REALITY_FRACTURE_BEHAVIORS,
+  ...REALITY_FRACTURE_BACK_FACES,
   // ---------------------------------------------------------------- red
   Shock: burn(2),
   'Lightning Strike': burn(3),
@@ -2223,6 +2231,7 @@ export const TOKENS: CardDefinition[] = [
   ...SECRETS_OF_STRIXHAVEN_TOKENS,
   ...STRIXHAVEN_BRAWL_TOKENS,
   ...FINAL_FANTASY_BRAWL_TOKENS,
+  ...REALITY_FRACTURE_TOKENS,
   token('zombie-token', 'Zombie', 'B', ['Zombie'], 2, 2),
   token('komas-coil-token', "Koma's Coil", 'U', ['Serpent'], 3, 3),
   token('cat-beast-token', 'Cat Beast', 'W', ['Cat', 'Beast'], 2, 2),

@@ -2,16 +2,19 @@
  * Writes src/<set>/booster-list.ts: every card in a set's booster packs with
  * its rarity in that set. The generated scryfall.json keeps one printing per
  * card, so cards reprinted in a preferred set lose their `set`; this list doesn't.
- * Run from packages/cards: node scripts/fetch-booster-list.ts stx|sos
+ * Run from packages/cards: node scripts/fetch-booster-list.ts stx|sos|fra
  *
  * STX: Scryfall `is:booster`. SOS: Scryfall marks no card `is:booster`, so it is
  * the main-set cards (numeric collector numbers up to 280), basics left out.
+ * FRA: the same (collector numbers 1 to 280 are the 280 nonbasic main-set cards).
  */
 import { writeFileSync } from 'node:fs';
 
 const set = process.argv[2];
-if (set !== 'stx' && set !== 'sos') throw new Error('usage: fetch-booster-list.ts stx|sos');
-const query = set === 'stx' ? 'set:stx is:booster' : 'set:sos cn>=1 cn<=280 -t:basic -is:promo';
+if (set !== 'stx' && set !== 'sos' && set !== 'fra')
+  throw new Error('usage: fetch-booster-list.ts stx|sos|fra');
+const query =
+  set === 'stx' ? 'set:stx is:booster' : `set:${set} cn>=1 cn<=280 -t:basic -is:promo`;
 
 const headers = { 'User-Agent': 'mtg-personal-client/0.1', Accept: 'application/json' };
 interface C {
