@@ -171,6 +171,16 @@ export const KEYWORDS_AS_ABILITIES = new Set([
   'Role token',
   // Strixhaven Brawl (15b, multi): Call the Crash.
   'Suspend',
+  // Strixhaven Brawl (15b, white): rules text lives in the behaviour.
+  'Bestow',
+  'Heroic',
+  'Constellation',
+  'Eerie',
+  'Mentor',
+  'Afterlife',
+  'Populate',
+  'Protection',
+  'Room',
   // Final Fantasy (11a).
   'Job select',
   'Tiered',
@@ -214,9 +224,7 @@ export function parseTypeLine(line: string) {
   const supertypes: Supertype[] = [];
   const types: CardType[] = [];
   for (const w of left!.trim().split(/\s+/)) {
-    if (w === 'Basic' || w === 'Legendary') supertypes.push(w);
-    // Strixhaven Brawl (15b, b): the Snow supertype has no rules of its own here (Snow-Covered Swamp).
-    else if (w === 'Snow') continue;
+    if (w === 'Basic' || w === 'Legendary' || w === 'Snow') supertypes.push(w);
     else types.push(w as CardType);
   }
   const subtypes = right.trim() ? right.trim().split(/\s+/) : [];

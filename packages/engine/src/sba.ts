@@ -45,6 +45,16 @@ export function runSBAs(ctx: Ctx): void {
       if (host && host.zone === 'battlefield' && host.foodBy === id) continue;
       // Archnemesis enchants a player.
       if (aura && def(ctx, id).enchantPlayer) continue;
+      // Strixhaven Brawl (15b, w): bestow, an unattached bestowed Aura is the creature again (rule 702.103e).
+      if (aura && def(ctx, id).bestowFront) {
+        const front = def(ctx, id).bestowFront!;
+        o.defId = front;
+        delete o.front;
+        if (host) o.lastAttachedTo = { id: host.id, zcc: host.zcc - 1 };
+        delete o.attachedTo;
+        changed = true;
+        continue;
+      }
       if (aura) orphanedAuras.push(id);
       else {
         // An Equipment falls off, remembering its creature (Skullclamp's "whenever equipped creature dies").

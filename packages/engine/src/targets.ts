@@ -1,5 +1,6 @@
 import { planeswalkersHexproof } from './brawl-15a-w-effects.ts';
 import { ignoresHexproofAndWard } from './brawl-15b-b-effects.ts';
+import { protectedFrom } from './brawl-15b-w-effects.ts';
 import { cardMatches, hasKeyword, isCreature, matchesFilter } from './characteristics.ts';
 import { type Ctx, def, defOf, deref, obj, other, refOf } from './context.ts';
 import { manaValue } from './cost.ts';
@@ -48,6 +49,8 @@ function permanentOk(ctx: Ctx, spec: TargetSpec, id: ObjectId, src: TargetingSou
   if (spec.controller === 'opponent' && o.controller === src.controller) return false;
   // Whispersilk Cloak: nobody can target it.
   if (hasKeyword(ctx, id, 'shroud')) return false;
+  // Strixhaven Brawl (15b, w): Alseid of Life's Bounty, protection from a colour.
+  if (src.sourceId && protectedFrom(ctx, id, src.sourceId)) return false;
   if (o.controller !== src.controller) {
     // Strixhaven Brawl (15b, b): Nowhere to Run: hexproof is ignored for its controller's opponents' creatures.
     const ignoreHexproof = isCreature(ctx, id) && ignoresHexproofAndWard(ctx, o.controller);

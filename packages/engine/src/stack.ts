@@ -864,11 +864,16 @@ export function resolveTop(ctx: Ctx): boolean {
       const t = checkTargets(ctx, [d.enchant], item.targets, item.controller, item.id);
       const target = t?.[0];
       if (!target || !('object' in target)) {
-        emit(ctx, { type: 'fizzled', id: item.id });
-        moveObject(ctx, item.id, 'graveyard');
-        return false;
-      }
-      host = target.object.id;
+        // Strixhaven Brawl (15b, w): bestow, an illegal target means it resolves as a creature (rule 702.103e).
+        if (d.bestowFront) {
+          o.defId = d.bestowFront;
+          delete o.front;
+        } else {
+          emit(ctx, { type: 'fizzled', id: item.id });
+          moveObject(ctx, item.id, 'graveyard');
+          return false;
+        }
+      } else host = target.object.id;
     }
     emit(ctx, { type: 'resolved', id: item.id });
     moveObject(ctx, item.id, 'battlefield', { controller: item.controller });

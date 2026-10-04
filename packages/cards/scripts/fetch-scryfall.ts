@@ -78,6 +78,7 @@ type RawFace = Pick<
 
 /** Double-faced layouts: each face becomes its own record, linked to the other. */
 // Strixhaven Brawl (15b, multi): split cards (Discovery // Dispersal) are two records, either half castable from hand like a modal double-faced card.
+// Strixhaven Brawl (15b, w): Rooms (Surgical Suite // Hospital Room) are `split` cards, two doors on one card.
 const DOUBLE_FACED = ['modal_dfc', 'transform', 'split'];
 /**
  * Final Fantasy (11a): adventurer cards (FIN's five Town lands) also become two

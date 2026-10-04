@@ -35,7 +35,7 @@ export interface ManaCost {
 
 export type CardType =
   'Creature' | 'Instant' | 'Sorcery' | 'Land' | 'Enchantment' | 'Artifact' | 'Planeswalker';
-export type Supertype = 'Basic' | 'Legendary';
+export type Supertype = 'Basic' | 'Legendary' | 'Snow'; // Strixhaven Brawl (15b, w): Snow
 
 export type Keyword =
   | 'flying'
@@ -300,6 +300,13 @@ export interface CardDefinition {
   discardOrLife?: number;
   /** Cast from the graveyard (with `castFromGraveyardWithDiscard`) paying this much life too (Demonic Embrace). */
   graveyardCastLife?: number;
+  // Strixhaven Brawl (15b, w): bestow
+  /** Bestow: the cost of casting it as an Aura (its `back` is that Aura, derived from this card by the cards package). */
+  bestow?: ManaCost;
+  /** Bestow: what the Aura says in addition to the card's own abilities ("Enchanted creature gets +1/+1 and has lifelink"). */
+  bestowAbilities?: AbilityDef[];
+  /** Bestow: this is the Aura form of the creature card with this id; unattached, it becomes that creature again. */
+  bestowFront?: CardDefId;
 }
 
 export type AbilityDef =
@@ -452,7 +459,7 @@ export type TriggerDef =
   | { on: 'creatureYouControlDies'; nontoken?: boolean; filter?: CardFilter }
   /** Whenever a creature you control deals combat damage (on your turn); "that creature", "that much". */
   | { on: 'creatureYouControlDealsCombatDamage'; toPlayer?: boolean; filter?: CardFilter }
-  | { on: 'beginningOfCombat'; whose: 'yours' }
+  | { on: 'beginningOfCombat'; whose: 'yours' | 'each' }
   | { on: 'youGainLife' }
   /** Whenever the creature this Aura is attached to dies. */
   | { on: 'attachedDies' }
@@ -493,7 +500,10 @@ export type TriggerDef =
         // Secrets of Strixhaven (14a): repartee
         | 'instantOrSorceryTargetingCreature'
         /** The caster's third spell this turn (Emeritus of Conflict). */
-        | 'third';
+        | 'third'
+        // Strixhaven Brawl (15b, w): Psemilla
+        /** The caster's first enchantment spell this turn. */
+        | 'firstEnchantment';
       /** The spell must also match this (Gev: a Lizard spell). */
       spell?: CardFilter;
       /** Any player's spell, cast when it isn't their turn (Vision). */
@@ -511,6 +521,9 @@ export type TriggerDef =
       // Strixhaven (13a): magecraft
       /** Magecraft: also when you copy a matching spell (a copy is not cast, so it has no mana spent). */
       orCopy?: boolean;
+      // Strixhaven Brawl (15b, w): Pearl-Ear, Imperial Advisor
+      /** The spell must target an object (on the battlefield, under the source's controller) matching this filter. */
+      targetFilter?: CardFilter;
     }
   /** Whenever a player (an opponent: Monologue Tax) casts their second spell each turn (Hearthborn Battler). */
   | { on: 'anyPlayerSecondSpell'; opponentOnly?: boolean }
@@ -658,7 +671,14 @@ export type TriggerDef =
   | { on: 'tokenToGraveyard' }
   // Strixhaven Brawl (15b, multi): Mayhem Devil
   /** Whenever a player (any player) sacrifices a permanent. */
-  | { on: 'playerSacrifices' };
+  | { on: 'playerSacrifices' }
+  // Strixhaven Brawl (15b, w)
+  /** When this permanent is put into a graveyard from the battlefield (afterlife; works for a non-creature). */
+  | { on: 'selfToGraveyard' }
+  /** Rooms: when you unlock this door (a Room's other door, unlocked later; casting a half is that half's own `etb`). */
+  | { on: 'doorUnlocked'; door: 'front' | 'back' }
+  /** Eerie: whenever you fully unlock a Room. */
+  | { on: 'fullyUnlock' };
 
 export type ConditionDef =
   | { kind: 'controlsPermanents'; filter: CardFilter; min: number }
@@ -903,6 +923,13 @@ export interface CardFilter {
   // Secrets of Strixhaven (14b): Nita, Forum Conciliator
   /** Its controller doesn't own it. */
   notOwnedByController?: boolean;
+  // Strixhaven Brawl (15b, w)
+  /** Attached to a creature on the battlefield (Sage's Reverie: "each Aura you control that's attached to a creature"). */
+  attachedToCreature?: boolean;
+  /** The permanent the source is attached to (a Role or bestowed Aura triggering on "enchanted creature attacks"). */
+  hostOfSource?: boolean;
+  /** Power less than the source's (mentor); for an Aura source, less than the power of the creature it enchants. */
+  lesserPowerThanSource?: boolean;
 }
 
 export interface TargetSpec {
@@ -2531,6 +2558,9 @@ export interface ContinuousEffect {
   noActivate?: boolean;
   /** What happens if the affected creature dies while this lasts. */
   onDies?: { effects: EffectDef[]; controller: PlayerId; sourceDefId: CardDefId };
+  // Strixhaven Brawl (15b, w): Alseid of Life's Bounty
+  /** Protection from this colour (targeting and damage; not blocking). */
+  protectionFrom?: Color;
 }
 
 /** What an effect needs to know about the spell or ability producing it. */
@@ -3124,6 +3154,8 @@ export type GameEvent =
       byAbility?: boolean;
       anyTarget?: boolean;
     }
+  // Strixhaven Brawl (15b, w): Rooms. `door` is the door unlocked now; `fully`: both doors are unlocked now.
+  | { type: 'doorUnlocked'; id: ObjectId; player: PlayerId; door: 'front' | 'back'; fully: boolean }
   | { type: 'gameOver'; winner: PlayerId | 'draw' };
 
 export interface ApplyResult {
