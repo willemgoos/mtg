@@ -219,7 +219,11 @@ export const FRA_GREEN: Record<string, Behavior> = {
   "Hunter's Axe": {
     abilities: [
       { kind: 'static', effect: { kind: 'attached', power: 2, toughness: 0 } },
-      when({ on: 'equippedAttacks', creatureAbility: true }, [], chooseKeyword('trample', 'deathtouch')),
+      when(
+        { on: 'equippedAttacks', creatureAbility: true },
+        [],
+        chooseKeyword('trample', 'deathtouch'),
+      ),
       equip('{2}'),
     ],
   },
