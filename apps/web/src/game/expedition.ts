@@ -9,6 +9,7 @@ import {
   registerDeck,
   SCRYFALL,
   secretsOfStrixhavenArchiveSheets,
+  realityFractureBoosterSheets,
   secretsOfStrixhavenBoosterSheets,
   strixhavenArchiveSheets,
   strixhavenBoosterSheets,
@@ -1329,8 +1330,8 @@ export function summarize(r: ExpeditionRun): RunSummary {
 // Packs
 // ---------------------------------------------------------------------------
 
-/** The set a booster comes from: Foundations, or the set of a Bloomburrow, Marvel, Final Fantasy or Strixhaven deck. */
-export type PackSet = 'fdn' | 'blb' | 'msh' | 'fin' | 'stx' | 'sos';
+/** The set a booster comes from: Foundations, or the set of a Bloomburrow, Marvel, Final Fantasy, Strixhaven or Reality Fracture deck. */
+export type PackSet = 'fdn' | 'blb' | 'msh' | 'fin' | 'stx' | 'sos' | 'fra';
 
 /** Booster names, by set. */
 export const PACK_SET_NAMES: Record<PackSet, string> = {
@@ -1340,13 +1341,21 @@ export const PACK_SET_NAMES: Record<PackSet, string> = {
   stx: 'Strixhaven',
   sos: 'Secrets of Strixhaven',
   fin: 'Final Fantasy',
+  fra: 'Reality Fracture',
 };
 
 const asPackSet = (set: string | undefined): PackSet =>
-  set === 'blb' || set === 'msh' || set === 'fin' || set === 'stx' || set === 'sos' ? set : 'fdn';
+  set === 'blb' ||
+  set === 'msh' ||
+  set === 'fin' ||
+  set === 'stx' ||
+  set === 'sos' ||
+  set === 'fra'
+    ? set
+    : 'fdn';
 
 /**
- * The set of the run's `n`th booster: a Bloomburrow, Marvel, Final Fantasy or Strixhaven deck opens that
+ * The set of the run's `n`th booster: a Bloomburrow, Marvel, Final Fantasy, Strixhaven or Reality Fracture deck opens that
  * set's boosters, and a Jump In deck mixing two sets alternates between them.
  */
 export function packSetOf(r: Pick<ExpeditionRun, 'deck'>, n = 0): PackSet {
@@ -1383,6 +1392,7 @@ const SHEETS = {
   fin: sheetsOf('fin'),
   stx: strixhavenBoosterSheets(),
   sos: secretsOfStrixhavenBoosterSheets(),
+  fra: realityFractureBoosterSheets(),
 };
 type Sheet = (typeof SHEETS.fdn)['common'];
 /** Mystical Archive (16): STX and SOS boosters have one archive card in place of a common. */

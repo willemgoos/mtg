@@ -7,6 +7,7 @@ import scryfall from './generated/scryfall.json' with { type: 'json' };
 import foundations from './generated/foundations-pack-candidates.json' with { type: 'json' };
 import type { ScryfallCard } from './scryfall-types.ts';
 import { SOS_BOOSTER_LIST } from './sos/booster-list.ts';
+import { FRA_BOOSTER_LIST } from './fra/booster-list.ts';
 import { STX_BOOSTER_LIST } from './stx/booster-list.ts';
 import { SOA_ARCHIVE_LIST } from './sos/archive-list.ts';
 import { STA_ARCHIVE_LIST } from './stx/archive-list.ts';
@@ -83,6 +84,14 @@ export function secretsOfStrixhavenBoosterSheets(): BoosterSheets {
 }
 
 /**
+ * Reality Fracture's booster cards by FRA rarity (main set, no basics). Only cards the pool has
+ * (the planeswalker group waits for phase 17c), so they join the sheets as they are built.
+ */
+export function realityFractureBoosterSheets(): BoosterSheets {
+  return boosterSheets(FRA_BOOSTER_LIST, (c) => cardDb.has(slug(c.name)));
+}
+
+/**
  * Mystical Archive (16): the bonus card in Strixhaven (STA) and Secrets of
  * Strixhaven (SOA) boosters, by archive rarity. Reprints keep another printing's
  * set and rarity in scryfall.json, so the lists (and `ARCHIVE_RARITY`) are by name.
@@ -120,12 +129,15 @@ function archiveSheets(list: typeof STA_ARCHIVE_LIST): ArchiveSheets {
 
 type BoosterSheets = Record<'common' | 'uncommon' | 'rare' | 'mythic', ScryfallCard[]>;
 
-function boosterSheets(list: typeof STX_BOOSTER_LIST): BoosterSheets {
+function boosterSheets(
+  list: typeof STX_BOOSTER_LIST,
+  keep: (c: ScryfallCard) => boolean = () => true,
+): BoosterSheets {
   const byName = new Map(SCRYFALL.map((c) => [c.name, c]));
   const sheets: BoosterSheets = { common: [], uncommon: [], rare: [], mythic: [] };
   for (const [name, rarity] of list) {
     const c = byName.get(name);
-    if (c && !c.typeLine.startsWith('Basic')) sheets[rarity].push(c);
+    if (c && !c.typeLine.startsWith('Basic') && keep(c)) sheets[rarity].push(c);
   }
   return sheets;
 }

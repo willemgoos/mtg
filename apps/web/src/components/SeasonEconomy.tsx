@@ -23,6 +23,7 @@ import {
   FINAL_FANTASY_SHEETS,
   FOUNDATIONS_PACK_COUNT,
   MARVEL_SHEETS,
+  REALITY_FRACTURE_SHEETS,
   SECRETS_ARCHIVE_SHEETS,
   SECRETS_SHEETS,
   STRIXHAVEN_ARCHIVE_SHEETS,
@@ -287,6 +288,12 @@ const BOOSTERS: { kind: SeasonPackKind; set: PackSet; title: string; count: numb
     title: 'Final Fantasy',
     count: Object.values(FINAL_FANTASY_SHEETS).reduce((n, sheet) => n + sheet.length, 0),
   },
+  {
+    kind: 'realityFracture',
+    set: 'fra',
+    title: 'Reality Fracture',
+    count: Object.values(REALITY_FRACTURE_SHEETS).reduce((n, sheet) => n + sheet.length, 0),
+  },
 ];
 
 /** The set of a pack kind (for its art). */
@@ -301,7 +308,9 @@ export const packSetOfKind = (kind: SeasonPackKind): PackSet =>
           ? 'stx'
           : kind === 'secrets'
             ? 'sos'
-            : 'fdn';
+            : kind === 'realityFracture'
+              ? 'fra'
+              : 'fdn';
 
 export function Booster({
   onClick,
@@ -358,6 +367,7 @@ export function SeasonStore({
     strixhaven: 0,
     secrets: 0,
     finalFantasy: 0,
+    realityFracture: 0,
   });
   const list = SEASON_STARTERS.find((d) => d.id === starter);
   const buy = (n: number, kind: SeasonPackKind) => {

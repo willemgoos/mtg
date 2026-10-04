@@ -31,6 +31,7 @@ export const GROUPS = [
   { key: 'fin', name: 'Final Fantasy', has: (p: Packet) => p.set === 'fin' },
   { key: 'stx', name: 'Strixhaven', has: (p: Packet) => p.set === 'stx' },
   { key: 'sos', name: 'Secrets of Strixhaven', has: (p: Packet) => p.set === 'sos' },
+  { key: 'fra', name: 'Reality Fracture', has: (p: Packet) => p.set === 'fra' },
 ] as const;
 
 type Group = (typeof GROUPS)[number]['key'];

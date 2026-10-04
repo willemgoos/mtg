@@ -3,10 +3,12 @@ import {
   cardDb,
   findDeck,
   PLAYABLE_DECKS,
+  REALITY_FRACTURE_DECKS,
   registerDeck,
   SCRYFALL,
   slug,
 } from '@mtg/cards';
+import { FRA_BOOSTER_LIST } from '../../../packages/cards/src/fra/booster-list.ts';
 import { SOA_ARCHIVE_LIST } from '../../../packages/cards/src/sos/archive-list.ts';
 import { SOS_BOOSTER_LIST } from '../../../packages/cards/src/sos/booster-list.ts';
 import { STA_ARCHIVE_LIST } from '../../../packages/cards/src/stx/archive-list.ts';
@@ -224,6 +226,24 @@ describe('expedition packs', () => {
         expect(sosBoosterNames.has(name) || soaNames.has(name)).toBe(true);
         expect(card.get(name)!.front).toBeUndefined();
       }
+    }
+  });
+
+  it('opens Reality Fracture boosters with an FRA deck: one rare, three uncommons, eight commons', () => {
+    const fra = REALITY_FRACTURE_DECKS[0]!;
+    expect(packSetOf({ deck: fra.id })).toBe('fra');
+    expect(packSetOf({ deck: 'jump-in:fra-lifegain+fra-titans' })).toBe('fra');
+    const mixed = { deck: 'jump-in:fra-lifegain+blb-bats' };
+    expect([0, 1].map((n) => packSetOf(mixed, n))).toEqual(['fra', 'blb']);
+    const rarityOf = new Map(FRA_BOOSTER_LIST);
+    for (let seed = 0; seed < 20; seed++) {
+      const pack = rollPack({ kind: 'booster' }, seed, 0, 'fra');
+      expect(new Set(pack).size).toBe(packSize);
+      const count = (...r: string[]) => pack.filter((n) => r.includes(rarityOf.get(n)!)).length;
+      for (const n of pack) expect(cardDb.has(slug(n)), n).toBe(true);
+      expect(count('rare', 'mythic')).toBe(1);
+      expect(count('uncommon')).toBe(3);
+      expect(count('common')).toBe(8);
     }
   });
 
