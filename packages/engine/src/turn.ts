@@ -216,6 +216,9 @@ export function startTurn(ctx: Ctx, player: PlayerId, noPowerUp = false): void {
   delete s.turn.flashTypes;
   delete s.turn.instantsSorceriesCast;
   delete s.turn.castDefs;
+  // Iron Man: resolution-time optional uses and last known spell information.
+  delete s.turn.optionalUses;
+  delete s.turn.spellHistory;
   delete s.turn.zaffaiUsed; // Secrets of Strixhaven (14b)
   // Final Fantasy (11a): saga creatures (Summon: Alexander).
   delete s.turn.creaturesShielded;

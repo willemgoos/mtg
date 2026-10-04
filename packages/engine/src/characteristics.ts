@@ -30,7 +30,7 @@ export interface Characteristics {
 /**
  * Current characteristics of a permanent: printed values + counters +
  * until-end-of-turn effects + static abilities of permanents (a small layer-7
- * subset; every effect in our pool is additive, so order doesn't matter).
+ * subset; base-setting effects use timestamps before additive bonuses).
  */
 export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
   const o = obj(ctx, id);
@@ -39,6 +39,9 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
   const base = d.ptEquals !== undefined && onField ? countFor(ctx, o, d) : null;
   const basePower =
     d.powerEquals !== undefined && onField ? countOf(ctx, o.controller, d.powerEquals, true) : null;
+  // Iron Suitcase: base-setting effects (including attached statics) share timestamp order.
+  let override: [number, number] | undefined;
+  let baseTimestamp = -1;
   let power = (basePower ?? base ?? o.copyPT?.power ?? d.power ?? 0) + o.plusOneCounters;
   let toughness = (base ?? o.copyPT?.toughness ?? d.toughness ?? 0) + o.plusOneCounters;
   // Copy-on-write: most creatures have no granted keywords, so share the printed set.
@@ -57,13 +60,11 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
 
   if (o.zone === 'battlefield') {
     for (const e of ctx.s.effects) {
-      if (e.basePT && e.affected.id === id && e.affected.zcc === o.zcc) {
-        power += e.basePT[0] - (basePower ?? base ?? o.copyPT?.power ?? d.power ?? 0);
-        toughness += e.basePT[1] - (base ?? o.copyPT?.toughness ?? d.toughness ?? 0);
-      }
-    }
-    for (const e of ctx.s.effects) {
       if (e.affected.id !== id || e.affected.zcc !== o.zcc) continue;
+      if (e.basePT && e.timestamp >= baseTimestamp) {
+        override = e.basePT;
+        baseTimestamp = e.timestamp;
+      }
       if (e.becomesCreature) crewed = true;
       if (e.switchPT) switched = !switched;
       power += e.power;
@@ -129,26 +130,26 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
         const st = a.effect;
         if (st.kind === 'attached') {
           if (src.attachedTo !== id) continue;
+          if (src.timestamp >= baseTimestamp) {
+            if (st.basePT) {
+              override = st.basePT;
+              baseTimestamp = src.timestamp;
+            }
+            if (st.basePTAmount !== undefined) {
+              const x = countOf(ctx, src.controller, st.basePTAmount, false, srcId);
+              override = [x, x];
+              baseTimestamp = src.timestamp;
+            }
+          }
           if (st.cantAttackOrBlock) cantAttack = cantBlock = true;
           if (st.cantBeBlocked) cantBeBlocked = true;
           if (st.loseKeywords?.length) {
             granted ??= new Set(keywords);
             for (const k of st.loseKeywords) removed.add(k);
           }
-          // Hulkbuster Armor: base 9/9.
-          if (st.basePT) {
-            power += st.basePT[0] - (basePower ?? base ?? o.copyPT?.power ?? d.power ?? 0);
-            toughness += st.basePT[1] - (base ?? o.copyPT?.toughness ?? d.toughness ?? 0);
-          }
           // Final Fantasy (11c): amounts know their Equipment (Excalibur II's charge counters).
           power += countOf(ctx, src.controller, st.power, false, srcId);
           toughness += countOf(ctx, src.controller, st.toughness, false, srcId);
-          // Final Fantasy (11c): Aettir and Priwen (base X/X), The Masamune (first strike while attacking).
-          if (st.basePTAmount !== undefined) {
-            const x = countOf(ctx, src.controller, st.basePTAmount, false, srcId);
-            power += x - (basePower ?? base ?? o.copyPT?.power ?? d.power ?? 0);
-            toughness += x - (base ?? o.copyPT?.toughness ?? d.toughness ?? 0);
-          }
           // Final Fantasy Commander (12b): Hero's Heirloom, keywords only while it's legendary.
           if (st.legendaryKeywords?.length && d.supertypes.includes('Legendary')) {
             granted ??= new Set(keywords);
@@ -241,9 +242,13 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
     for (const k of removed) granted.delete(k);
     keywords = granted;
   }
+  if (override) {
+    power += override[0] - (basePower ?? base ?? o.copyPT?.power ?? d.power ?? 0);
+    toughness += override[1] - (base ?? o.copyPT?.toughness ?? d.toughness ?? 0);
+  }
   // Switching is applied after every other change to power and toughness.
   if (switched) [power, toughness] = [toughness, power];
-  let subtypes = o.addedSubtypes ? [...d.subtypes, ...o.addedSubtypes] : d.subtypes;
+  let subtypes = animatedSubtypes(ctx, id);
   // Final Fantasy (11a): job select.
   if (extraSubtypes.length)
     subtypes = [...subtypes, ...extraSubtypes.filter((t) => !subtypes.includes(t))];
@@ -577,19 +582,31 @@ const NON_CREATURE_SUBTYPES = new Set([
   'Forest',
 ]);
 
+/** Temporary type-setting effects share one path with subtype filters (Iron Suitcase). */
+function animatedSubtypes(ctx: Ctx, id: ObjectId): readonly string[] {
+  const o = obj(ctx, id);
+  const d = def(ctx, id);
+  if (o.zone !== 'battlefield') return d.subtypes;
+  let result = o.addedSubtypes ? [...d.subtypes, ...o.addedSubtypes] : d.subtypes;
+  for (const e of ctx.s.effects) {
+    if (e.affected.id === id && e.affected.zcc === o.zcc && e.creatureSubtype)
+      result = [...result.filter((t) => NON_CREATURE_SUBTYPES.has(t)), e.creatureSubtype];
+  }
+  return result;
+}
+
 /** Changeling: it's every creature type. */
 function changeling(ctx: Ctx, id: ObjectId, subtype: string): boolean {
-  return def(ctx, id).keywords.includes('changeling') && !NON_CREATURE_SUBTYPES.has(subtype);
+  const o = obj(ctx, id);
+  const typeSet = o.zone === 'battlefield' && ctx.s.effects.some(
+    (e) => e.affected.id === id && e.affected.zcc === o.zcc && e.creatureSubtype,
+  );
+  return !typeSet && def(ctx, id).keywords.includes('changeling') && !NON_CREATURE_SUBTYPES.has(subtype);
 }
 
 /** Has this subtype (printed, gained, or every creature type for a changeling). */
 export function hasSubtype(ctx: Ctx, id: ObjectId, subtype: string): boolean {
-  const o = obj(ctx, id);
-  return (
-    def(ctx, id).subtypes.includes(subtype) ||
-    !!o.addedSubtypes?.includes(subtype) ||
-    changeling(ctx, id, subtype)
-  );
+  return animatedSubtypes(ctx, id).includes(subtype) || changeling(ctx, id, subtype);
 }
 
 export function creaturesOnBattlefield(ctx: Ctx, controller?: PlayerId): GameObject[] {
@@ -653,7 +670,7 @@ export function matchesFilter(
         power: 0,
         toughness: 0,
         keywords: new Set<Keyword>(),
-        subtypes: [...def(ctx, id).subtypes, ...(obj(ctx, id).addedSubtypes ?? [])],
+        subtypes: animatedSubtypes(ctx, id),
       };
   if (filter.maxPower !== undefined && c.power > filter.maxPower) return false;
   // Secrets of Strixhaven (14b): Arnyn, Deathbloom Botanist.
@@ -760,10 +777,7 @@ export function cardMatches(
   sourceId?: ObjectId,
 ): boolean {
   const d = def(ctx, id);
-  const subtypes = [
-    ...d.subtypes,
-    ...(obj(ctx, id).zone === 'battlefield' ? (obj(ctx, id).addedSubtypes ?? []) : []),
-  ];
+  const subtypes = animatedSubtypes(ctx, id);
   if (
     filter.anyOf &&
     !filter.anyOf.some((branch) =>
@@ -891,26 +905,38 @@ function basePowerOf(ctx: Ctx, id: ObjectId): number {
       : d.ptEquals !== undefined
         ? countFor(ctx, o, d)
         : (o.copyPT?.power ?? d.power ?? 0);
-  const set: { timestamp: number; power: number }[] = [];
-  for (const e of ctx.s.effects)
-    if (e.basePT && e.affected.id === id && e.affected.zcc === o.zcc)
-      set.push({ timestamp: e.timestamp, power: e.basePT[0] });
-  // Ms. Marvel, Elastic Ally: "has base power and toughness" from what's attached.
-  for (const srcId of ctx.s.battlefield) {
-    const src = obj(ctx, srcId);
-    if (src.attachedTo !== id) continue;
-    for (const a of def(ctx, srcId).abilities) {
-      if (a.kind !== 'static' || a.effect.kind !== 'attached') continue;
-      if (a.effect.basePT) set.push({ timestamp: src.timestamp, power: a.effect.basePT[0] });
-      if (a.effect.basePTAmount !== undefined)
-        set.push({
-          timestamp: src.timestamp,
-          power: countOf(ctx, src.controller, a.effect.basePTAmount, false, srcId),
-        });
+  base = basePTOverride(ctx, id)?.[0] ?? base;
+  return base;
+}
+
+/** The latest layer-7b setting, before counters and additive bonuses (Iron Suitcase). */
+function basePTOverride(ctx: Ctx, id: ObjectId): [number, number] | undefined {
+  const o = obj(ctx, id);
+  let latest = -1;
+  let result: [number, number] | undefined;
+  for (const e of ctx.s.effects) {
+    if (e.basePT && e.affected.id === id && e.affected.zcc === o.zcc && e.timestamp >= latest) {
+      latest = e.timestamp;
+      result = e.basePT;
     }
   }
-  for (const x of set.sort((a, b) => a.timestamp - b.timestamp)) base = x.power;
-  return base;
+  for (const srcId of ctx.s.battlefield) {
+    const src = obj(ctx, srcId);
+    if (src.attachedTo !== id || src.timestamp < latest) continue;
+    for (const a of def(ctx, srcId).abilities) {
+      if (a.kind !== 'static' || a.effect.kind !== 'attached') continue;
+      if (a.effect.basePT) {
+        latest = src.timestamp;
+        result = a.effect.basePT;
+      }
+      if (a.effect.basePTAmount !== undefined) {
+        const x = countOf(ctx, src.controller, a.effect.basePTAmount, false, srcId);
+        latest = src.timestamp;
+        result = [x, x];
+      }
+    }
+  }
+  return result;
 }
 
 /** Avengers Assemble (9b) filter parts: chosen types, modified, power, the commander's types. */

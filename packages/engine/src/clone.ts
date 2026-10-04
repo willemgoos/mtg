@@ -47,6 +47,8 @@ export function cloneState(s: GameState): GameState {
     turn: {
       ...s.turn,
       passed: s.turn.passed.slice(),
+      ...(s.turn.spellHistory ? { spellHistory: { ...s.turn.spellHistory } } : {}),
+      ...(s.turn.optionalUses ? { optionalUses: s.turn.optionalUses.slice() } : {}),
       attackers: s.turn.attackers.slice(),
       lifeGains: { ...s.turn.lifeGains },
       ...(s.turn.lifeGained ? { lifeGained: { ...s.turn.lifeGained } } : {}),

@@ -365,7 +365,7 @@ function queue(
   };
   ctx.s.pendingTriggers.push(pending);
   // Annie Joins Up: a legendary creature's triggered ability triggers an additional time.
-  const d = defOf(ctx, o.defId);
+  const d = def(ctx, o.id);
   if (
     o.zone === 'battlefield' &&
     d.supertypes.includes('Legendary') &&

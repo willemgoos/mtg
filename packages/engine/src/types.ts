@@ -1369,7 +1369,9 @@ export type Amount =
   | { count: 'greatestInstantSorceryCastThisTurn' };
 
 export type EffectDef =
-  | { kind: 'may'; effects: EffectDef[]; cost?: ManaCost }
+  | { kind: 'may'; effects: EffectDef[]; cost?: ManaCost; oncePerTurn?: string }
+  // Iron Man: resolution-time use, consumed only when the optional action is taken.
+  | { kind: 'noteOptionalUse'; key: string }
   /** `exceptFrom`: not to the creature dealing it (Nova Flame: "each other creature"). */
   | {
       kind: 'damage';
@@ -1416,6 +1418,8 @@ export type EffectDef =
       basePT?: [number, number];
       /** It becomes an artifact creature until end of turn (I Am Iron Man). */
       becomesCreature?: boolean;
+      /** Temporary creature subtype (Iron Suitcase). */
+      creatureSubtype?: string;
       /** Prevent all combat damage that would be dealt to it this turn (Fleeting Flight). */
       preventCombatDamage?: boolean;
       // Final Fantasy (11c): leftovers
@@ -3064,6 +3068,10 @@ export type Step =
   | 'cleanup';
 
 export interface TurnState {
+  /** Iron Man: source identity and effect key, independent of later zone changes. */
+  optionalUses?: string[];
+  /** Iron Man: last known spell information for non-targeted trigger copies. */
+  spellHistory?: Record<string, { defId: CardDefId; spell: Extract<StackItem, { kind: 'spell' }> }>;
   // Marvel Super Heroes
   /** Power-up abilities can't be activated this turn (Kang the Conqueror's extra turn). */
   noPowerUp?: boolean;
@@ -3200,6 +3208,7 @@ export interface ContinuousEffect {
   blinkOnCombatDamage?: boolean;
   /** It's an artifact creature (a crewed Vehicle). */
   becomesCreature?: boolean;
+  creatureSubtype?: string;
   /** Combat damage that would be dealt to it is prevented (Fleeting Flight). */
   preventCombatDamage?: boolean;
   /** Base power and toughness. */
