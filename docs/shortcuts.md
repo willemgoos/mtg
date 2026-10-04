@@ -132,3 +132,5 @@ from) when it's fixed. Older phases keep their own "Simplifications" lists in `d
 - [x] Inspired Tethermage: "whenever you put one or more loyalty counters on a planeswalker" fires for counters put on a
       walker you control by anyone (the engine doesn't record who puts counters).
 - [x] Behold a Jace (Countersculpt, Theorist's Sanctum): you can't pick which Jace, and a Jace card in hand isn't revealed.
+- [ ] Theorist's Sanctum: "as this land enters, you may behold a Jace" is an enters-tapped land with an enters trigger that
+      untaps it (the shock-land pattern), so in principle the opponent could respond before it untaps.
