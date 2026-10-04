@@ -8,6 +8,9 @@ import { FRA_GREEN, FRA_GREEN_BACKS, FRA_GREEN_TOKENS } from './fra/green.ts';
 import { FRA_MULTI_A, FRA_MULTI_A_BACKS, FRA_MULTI_A_TOKENS } from './fra/multi-a.ts';
 import { FRA_MULTI_B, FRA_MULTI_B_BACKS, FRA_MULTI_B_TOKENS } from './fra/multi-b.ts';
 import { FRA_COLORLESS, FRA_COLORLESS_BACKS, FRA_COLORLESS_TOKENS } from './fra/colorless.ts';
+import { FRA_PW_CORE, FRA_PW_CORE_BACKS, FRA_PW_CORE_TOKENS } from './fra/pw-core.ts';
+import { FRA_PW_B, FRA_PW_B_BACKS, FRA_PW_B_TOKENS } from './fra/pw-b.ts';
+import { FRA_PW_C, FRA_PW_C_BACKS, FRA_PW_C_TOKENS } from './fra/pw-c.ts';
 import { FRA_SHARED_TOKENS } from './fra/tokens.ts';
 
 /**
@@ -24,6 +27,9 @@ export const REALITY_FRACTURE_BEHAVIORS: Record<string, Behavior> = {
   ...FRA_MULTI_A,
   ...FRA_MULTI_B,
   ...FRA_COLORLESS,
+  ...FRA_PW_C,
+  ...FRA_PW_B,
+  ...FRA_PW_CORE,
 };
 
 /** Back faces (the prepare spells): not cards of their own, so not in the pool. */
@@ -36,6 +42,9 @@ export const REALITY_FRACTURE_BACK_FACES: Record<string, Behavior> = {
   ...FRA_MULTI_A_BACKS,
   ...FRA_MULTI_B_BACKS,
   ...FRA_COLORLESS_BACKS,
+  ...FRA_PW_C_BACKS,
+  ...FRA_PW_B_BACKS,
+  ...FRA_PW_CORE_BACKS,
 };
 
 /** Reality Fracture tokens (Cadet, Heartwood and the one-card tokens). */
@@ -49,4 +58,7 @@ export const REALITY_FRACTURE_TOKENS: CardDefinition[] = [
   ...FRA_MULTI_A_TOKENS,
   ...FRA_MULTI_B_TOKENS,
   ...FRA_COLORLESS_TOKENS,
+  ...FRA_PW_C_TOKENS,
+  ...FRA_PW_B_TOKENS,
+  ...FRA_PW_CORE_TOKENS,
 ];
