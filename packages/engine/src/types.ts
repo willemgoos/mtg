@@ -1645,6 +1645,9 @@ export type EffectDef =
     }
   /** Discard your whole hand. */
   | { kind: 'discardHand' }
+  // Marvel Super Heroes Jumpstart (Kang Dynasty)
+  /** Each of these players shuffles their hand and graveyard into their library (Immortus). */
+  | { kind: 'shuffleHandAndGraveyardIntoLibrary'; who: Ref }
   /**
    * Put a card matching the filter from your hand or graveyard onto the
    * battlefield (Kastral), optionally with a named counter.

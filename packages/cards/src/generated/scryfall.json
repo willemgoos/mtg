@@ -22942,6 +22942,126 @@
   }
  },
  {
+  "name": "TVA Bureaucrat",
+  "scryfallId": "62da11c2-e37d-46e9-b225-ba864b7f2c11",
+  "oracleId": "e9638ad1-4e1d-4721-91f5-8cf13d0d0d0d",
+  "set": "msc",
+  "collectorNumber": "761",
+  "rarity": "common",
+  "manaCost": "{1}{U}",
+  "typeLine": "Creature — Human Advisor",
+  "oracleText": "Whenever you cast a noncreature spell, this creature gets +1/+0 until end of turn and can't be blocked this turn.",
+  "power": "1",
+  "toughness": "3",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/2/62da11c2-e37d-46e9-b225-ba864b7f2c11.jpg?1783903026",
+   "normal": "https://cards.scryfall.io/normal/front/6/2/62da11c2-e37d-46e9-b225-ba864b7f2c11.jpg?1783903026",
+   "large": "https://cards.scryfall.io/large/front/6/2/62da11c2-e37d-46e9-b225-ba864b7f2c11.jpg?1783903026",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/2/62da11c2-e37d-46e9-b225-ba864b7f2c11.jpg?1783903026"
+  }
+ },
+ {
+  "name": "Immortus, Master of Eternity",
+  "scryfallId": "c8bd16f1-f8f2-44d2-a737-40f08a4cff3f",
+  "oracleId": "8952a7e6-4ede-42bb-b90c-00ea4f24f8f8",
+  "set": "msc",
+  "collectorNumber": "623",
+  "rarity": "mythic",
+  "manaCost": "{2}{U}{U}",
+  "typeLine": "Legendary Creature — Human Hero Villain",
+  "oracleText": "{T}: Add {U} for each card you've drawn this turn. Spend this mana only to cast noncreature spells.\nPower-up — {5}{U}{U}: Each player shuffles their hand and graveyard into their library, then draws seven cards. Put a +1/+1 counter on Immortus. (Activate each power-up ability only once. Reduce the cost by his mana cost if he entered this turn.)",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Power-up"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/8/c8bd16f1-f8f2-44d2-a737-40f08a4cff3f.jpg?1783903073",
+   "normal": "https://cards.scryfall.io/normal/front/c/8/c8bd16f1-f8f2-44d2-a737-40f08a4cff3f.jpg?1783903073",
+   "large": "https://cards.scryfall.io/large/front/c/8/c8bd16f1-f8f2-44d2-a737-40f08a4cff3f.jpg?1783903073",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/8/c8bd16f1-f8f2-44d2-a737-40f08a4cff3f.jpg?1783903073"
+  }
+ },
+ {
+  "name": "Victor Timely, Wily Tycoon",
+  "scryfallId": "60178b2b-a049-4254-b754-b56910cece84",
+  "oracleId": "2ad77eb7-9466-432f-87b4-e80e4b66e143",
+  "set": "msc",
+  "collectorNumber": "642",
+  "rarity": "uncommon",
+  "manaCost": "{4}{U}",
+  "typeLine": "Legendary Creature — Human Artificer Villain",
+  "oracleText": "When Victor Timely enters, you may cast target artifact, instant, or sorcery card with mana value 4 or less from your graveyard without paying its mana cost. If that spell would be put into your graveyard, exile it instead.",
+  "power": "3",
+  "toughness": "4",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/0/60178b2b-a049-4254-b754-b56910cece84.jpg?1783903068",
+   "normal": "https://cards.scryfall.io/normal/front/6/0/60178b2b-a049-4254-b754-b56910cece84.jpg?1783903068",
+   "large": "https://cards.scryfall.io/large/front/6/0/60178b2b-a049-4254-b754-b56910cece84.jpg?1783903068",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/0/60178b2b-a049-4254-b754-b56910cece84.jpg?1783903068"
+  }
+ },
+ {
+  "name": "Pharaoh Rama-Tut",
+  "scryfallId": "96b699c8-f014-4eb7-9345-ed158beb91f6",
+  "oracleId": "2c02c8e3-943a-4c20-9dad-1408793a825e",
+  "set": "msc",
+  "collectorNumber": "634",
+  "rarity": "uncommon",
+  "manaCost": "{4}{U}",
+  "typeLine": "Legendary Creature — Human Noble Villain",
+  "oracleText": "Ward {2} (Whenever this creature becomes the target of a spell or ability an opponent controls, counter it unless that player pays {2}.)\nWhenever you cast a noncreature spell, Pharaoh Rama-Tut connives. (Draw a card, then discard a card. If you discarded a nonland card, put a +1/+1 counter on this creature.)",
+  "power": "4",
+  "toughness": "4",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Ward",
+   "Connive"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/6/96b699c8-f014-4eb7-9345-ed158beb91f6.jpg?1783903070",
+   "normal": "https://cards.scryfall.io/normal/front/9/6/96b699c8-f014-4eb7-9345-ed158beb91f6.jpg?1783903070",
+   "large": "https://cards.scryfall.io/large/front/9/6/96b699c8-f014-4eb7-9345-ed158beb91f6.jpg?1783903070",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/6/96b699c8-f014-4eb7-9345-ed158beb91f6.jpg?1783903070"
+  }
+ },
+ {
+  "name": "Timeline Inquiry",
+  "scryfallId": "30a0db77-4427-42e5-b009-a1564cbe64c0",
+  "oracleId": "74a478c8-7498-43a6-ae0b-3964c5815b3d",
+  "set": "msc",
+  "collectorNumber": "641",
+  "rarity": "uncommon",
+  "manaCost": "{3}{U}",
+  "typeLine": "Instant",
+  "oracleText": "Teamwork 2 (As an additional cost to cast this spell, you may tap any number of creatures you control with total power 2 or more.)\nDraw three cards. Then discard a card unless this spell was cast using teamwork.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Teamwork"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/0/30a0db77-4427-42e5-b009-a1564cbe64c0.jpg?1783903067",
+   "normal": "https://cards.scryfall.io/normal/front/3/0/30a0db77-4427-42e5-b009-a1564cbe64c0.jpg?1783903067",
+   "large": "https://cards.scryfall.io/large/front/3/0/30a0db77-4427-42e5-b009-a1564cbe64c0.jpg?1783903067",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/0/30a0db77-4427-42e5-b009-a1564cbe64c0.jpg?1783903067"
+  }
+ },
+ {
   "name": "White Widow, Yelena Belova",
   "scryfallId": "7dd6db74-1dba-4b66-8e54-9f876f16357c",
   "oracleId": "7aff7cb6-aa56-47ae-8813-75d850917320",
