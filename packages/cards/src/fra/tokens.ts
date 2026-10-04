@@ -23,12 +23,12 @@ export const FRA_SHARED_TOKENS: CardDefinition[] = [
     abilities: [],
     isToken: true,
   },
-  // Heartwood: artifact token, "{T}: Add {R} or {G}."
+  // Heartwood: red and green artifact token, "{T}: Add {R} or {G}."
   {
     id: FRA_HEARTWOOD,
     name: 'Heartwood',
     manaCost: { generic: 0, colored: {} },
-    colors: [],
+    colors: ['R', 'G'],
     types: ['Artifact'],
     supertypes: [],
     subtypes: ['Heartwood'],

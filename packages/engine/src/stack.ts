@@ -428,7 +428,7 @@ export function castSpell(
   const teamwork = teamworkFor(ctx, player, card, choice);
   // Convoke: remembered for "each creature that convoked this spell" (Lethal Scheme).
   const convokers = d.convoke
-    ? creatureHelpers(ctx, player, manaSources(ctx, player, undefined, spellTags(d))).map(
+    ? creatureHelpers(ctx, player, manaSources(ctx, player, undefined, spellTags(d, o.zone))).map(
         (h) => h.id,
       )
     : [];
@@ -438,14 +438,19 @@ export function castSpell(
     cost,
     payWith,
     undefined,
-    spellTags(d),
+    spellTags(d, o.zone),
     [
       // Convoke: creatures pay for generic mana; improvise: artifacts do.
       ...(d.convoke
-        ? creatureHelpers(ctx, player, manaSources(ctx, player, undefined, spellTags(d)))
+        ? creatureHelpers(ctx, player, manaSources(ctx, player, undefined, spellTags(d, o.zone)))
         : []),
       ...(hasImprovise(ctx, player, card)
-        ? artifactHelpers(ctx, player, manaSources(ctx, player, undefined, spellTags(d)), card)
+        ? artifactHelpers(
+            ctx,
+            player,
+            manaSources(ctx, player, undefined, spellTags(d, o.zone)),
+            card,
+          )
         : []),
     ],
     [
@@ -1137,6 +1142,21 @@ function attachAura(ctx: Ctx, aura: ObjectId, host: ObjectId): void {
       });
       h.blank = true;
     }
+    // Reality Fracture (17a): Puppet Crafting, the enchanted permanent is a creature while the Aura stays.
+    if (ab.effect.kind === 'attached' && ab.effect.becomesCreature) {
+      ctx.s.effects.push({
+        timestamp: newTimestamp(ctx),
+        affected: { id: host, zcc: h.zcc },
+        power: 0,
+        toughness: 0,
+        keywords: [],
+        becomesCreature: true,
+        creatureOnly: true,
+        expires: 'whileSource',
+        whileSourceId: aura,
+        player: a.controller,
+      });
+    }
     if (ab.effect.kind === 'attached' && ab.effect.control && h.controller !== a.controller) {
       h.controlledBy = { aura, previous: h.controller };
       h.controller = a.controller;
@@ -1680,6 +1700,20 @@ export function answerSearch(ctx: Ctx, card: ObjectId | null): void {
         obj(ctx, card).tapped = false;
     } else moveObject(ctx, card, 'hand');
     if (d.to !== 'hideaway') emit(ctx, { type: 'searched', player: d.player, id: card });
+    // Reality Fracture (17a): Fblthp, Hexhaven Invigorator: "up to N cards", one more pick while some are left.
+    if (d.remaining !== undefined && d.remaining > 1) {
+      const options = d.options.filter(
+        (id) =>
+          id !== card &&
+          ctx.s.objects[id]?.zone === 'library' &&
+          !(d.differentNames && obj(ctx, id).defId === obj(ctx, card).defId),
+      );
+      if (options.length > 0) {
+        d.options = options;
+        d.remaining--;
+        return;
+      }
+    }
     // Strixhaven (13c): Oriq Loremage: a +1/+1 counter if it's an instant or sorcery card.
     if (d.sourceCounterIfTypes && d.resume.source) {
       const src = ctx.s.objects[d.resume.source.id];

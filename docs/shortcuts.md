@@ -113,3 +113,5 @@ from) when it's fixed. Older phases keep their own "Simplifications" lists in `d
 - [ ] Rise of the Deathbringer: loses life equal to the greatest power, not the number of cards actually drawn (differs only
       when the library runs out or a draw is replaced).
 - [ ] Extrapolate the Impossible: not implemented ("cards you own from outside the game"; there's no sideboard outside Learn).
+- [ ] Loot, the Nexus: its mana ability is an activated ability that goes on the stack (like Doc Samson's), not a mana
+      ability, so it can't be used while paying a cost.

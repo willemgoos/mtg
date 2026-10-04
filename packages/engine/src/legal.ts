@@ -44,6 +44,7 @@ import { nameLocked } from './sos-14b-c-effects.ts';
 const NO_COST = { generic: 0, colored: {} };
 import { targetCandidates, targetCombos } from './targets.ts';
 import { freeCastSource, playableWhileControlling } from './msh-analyzed.ts';
+import { omnipresenceCastable } from './fra-green-effects.ts';
 import type { Action, CardFilter, ObjectId, PlayerId, TargetChoice, TargetSpec } from './types.ts';
 
 const MAX_MULLIGANS = 7;
@@ -326,7 +327,8 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
         obj(ctx, id).controller === player &&
         def(ctx, id).abilities.some(
           (a) =>
-            (a.kind === 'mana' && !!a.onlyFor) ||
+            // Reality Fracture (17a): Heartwood Crafter's mana can't cast spells from your hand.
+            (a.kind === 'mana' && (!!a.onlyFor || !!a.notForSpellsFromHand)) ||
             (a.kind === 'static' &&
               a.effect.kind === 'grantMana' &&
               (!!a.effect.onlyForCreatures || !!a.effect.onlyFor)),
@@ -370,7 +372,7 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
         // Strixhaven Brawl (15b, u): Quicken, the next sorcery spell you cast this turn.
         (d.types.includes('Sorcery') && !!s.turn.sorceryFlash?.includes(player)));
     // Restricted mana (Giada: only for Angels; Villages: only for creature spells).
-    const base = restricted ? manaSources(ctx, player, undefined, spellTags(d)) : sources;
+    const base = restricted ? manaSources(ctx, player, undefined, spellTags(d, zone)) : sources;
     // Convoke: untapped creatures can pay for {1} each.
     let pool = d.convoke ? [...base, ...creatureHelpers(ctx, player, base)] : base;
     if (hasImprovise(ctx, player, card))
@@ -428,6 +430,8 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
           ...(zaffai ? (['zaffai'] as const) : []),
           // Marvel Super Heroes Jumpstart (Analyzed): Vision, Spectral Synthezoid.
           ...(freeCastSource(ctx, player, card) ? (['freeOnceEachTurn'] as const) : []),
+          // Reality Fracture (17a): Omnipresence.
+          ...(omnipresenceCastable(ctx, player, card) ? (['omnipresence'] as const) : []),
         ];
     for (const via of vias)
       for (const v of castVariants(d, zone, via)) {
@@ -454,7 +458,7 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
         for (const sacrificeMany of sacrificePrefixes(ctx, player, card, d))
           for (const x of xs) {
             // Marvel Super Heroes Jumpstart (Analyzed): without paying its mana cost, X is 0.
-            if (via === 'freeOnceEachTurn' && x) continue;
+            if ((via === 'freeOnceEachTurn' || via === 'omnipresence') && x) continue;
             const choice = {
               sacrificeMany,
               via,

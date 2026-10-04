@@ -1544,6 +1544,8 @@ function castLabel(defId: CardDefId, a: Action): string {
   if (a.via === 'zaffai') return 'Cast free (Zaffai)';
   // Marvel Super Heroes Jumpstart (Analyzed): Vision, Spectral Synthezoid (free, once each turn).
   if (a.via === 'freeOnceEachTurn') return 'Cast free (once this turn)';
+  // Reality Fracture (17a): Omnipresence.
+  if (a.via === 'omnipresence') return 'Cast free (Omnipresence)';
   // Final Fantasy (11c): playing from the graveyard.
   if (a.via === 'noctis') return 'From your graveyard (pay 3 life)';
   if (a.via === 'hades') return 'From your graveyard';
@@ -1693,19 +1695,22 @@ function SearchOverlay({ game, onHover }: { game: GameSession; onHover: HoverFn 
                   : 'Search your library'}
         </h2>
         <p>
-          {d.kind === 'searchLibrary' && d.to === 'hideaway'
-            ? 'Choose a card to exile face down.'
-            : d.kind === 'searchLibrary' && d.to === 'libraryBottom'
-              ? // Strixhaven (13c): Ardent Dustspeaker
-                'Choose a card to put on the bottom of your library.'
-              : d.kind === 'searchLibrary' && d.to === 'castFree'
-                ? 'Choose a card to exile; you may cast it without paying its mana cost.'
-                : d.kind === 'searchLibrary' && d.to && d.to !== 'hand'
-                  ? 'Choose a card to put onto the battlefield.'
-                  : d.kind === 'searchLibrary' && d.canBin
-                    ? // Strixhaven (13c): The Biblioplex
-                      'An instant or sorcery card may go into your hand; otherwise you may put it into your graveyard.'
-                    : 'Choose a card to put into your hand.'}{' '}
+          {d.kind === 'searchLibrary' && d.remaining !== undefined
+            ? // Reality Fracture (17a): "up to N cards" (Fblthp, Knows the Way; Hexhaven Invigorator).
+              `Choose up to ${d.remaining} ${d.remaining === 1 ? 'card' : 'cards'}, one at a time${d.differentNames ? ', each with a different name,' : ''} to put ${d.to && d.to !== 'hand' ? 'onto the battlefield' : 'into your hand'}.`
+            : d.kind === 'searchLibrary' && d.to === 'hideaway'
+              ? 'Choose a card to exile face down.'
+              : d.kind === 'searchLibrary' && d.to === 'libraryBottom'
+                ? // Strixhaven (13c): Ardent Dustspeaker
+                  'Choose a card to put on the bottom of your library.'
+                : d.kind === 'searchLibrary' && d.to === 'castFree'
+                  ? 'Choose a card to exile; you may cast it without paying its mana cost.'
+                  : d.kind === 'searchLibrary' && d.to && d.to !== 'hand'
+                    ? 'Choose a card to put onto the battlefield.'
+                    : d.kind === 'searchLibrary' && d.canBin
+                      ? // Strixhaven (13c): The Biblioplex
+                        'An instant or sorcery card may go into your hand; otherwise you may put it into your graveyard.'
+                      : 'Choose a card to put into your hand.'}{' '}
           {d.kind === 'searchLibrary' && d.fromGraveyard
             ? ''
             : d.kind === 'searchLibrary' && d.looked
@@ -1758,7 +1763,9 @@ function SearchOverlay({ game, onHover }: { game: GameSession; onHover: HoverFn 
                 ? 'Leave it on top'
                 : d.kind === 'searchLibrary' && d.fromGraveyard
                   ? 'Choose nothing'
-                  : 'Find nothing'}
+                  : d.kind === 'searchLibrary' && d.remaining !== undefined
+                    ? 'Done'
+                    : 'Find nothing'}
             </button>
           )}
         </div>

@@ -536,6 +536,7 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
   if (to !== 'stack' && !(from === 'stack' && to === 'battlefield')) delete o.manaColors;
   delete o.attachedTo;
   delete o.usedAbilities;
+  delete o.dealtCombatDamage; // Reality Fracture (17a): Ruric Thar
   delete o.exiledUntilLeaves;
   delete o.kicked;
   if (from === 'battlefield') {

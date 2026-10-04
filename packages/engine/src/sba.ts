@@ -45,7 +45,10 @@ export function runSBAs(ctx: Ctx): void {
       const o = obj(ctx, id);
       const aura = def(ctx, id).subtypes.includes('Aura');
       const host = o.attachedTo !== undefined ? ctx.s.objects[o.attachedTo] : undefined;
-      if (host && host.zone === 'battlefield' && isCreature(ctx, host.id)) continue;
+      // Reality Fracture (17a): Puppet Crafting: an Equipment that's a creature can't equip (rule 704.5n).
+      const equipmentCreature = !aura && host !== undefined && isCreature(ctx, id);
+      if (!equipmentCreature && host && host.zone === 'battlefield' && isCreature(ctx, host.id))
+        continue;
       // Strixhaven Brawl (15b, g): Utopia Sprawl enchants a Forest.
       if (host && host.zone === 'battlefield' && aura && def(ctx, id).enchant?.what === 'permanent')
         continue;

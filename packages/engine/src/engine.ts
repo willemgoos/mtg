@@ -8,6 +8,7 @@ import {
   makeCtx,
   moveObject,
   drawCard,
+  obj,
   other,
 } from './context.ts';
 import { getLegalActions as legalActions } from './legal.ts';
@@ -173,9 +174,12 @@ export function createEngine(db: CardDb, options: EngineOptions = {}): Engine {
           castCost(ctx, player, card, { ...action, back: undefined }, targets),
           wardCost(ctx, player, targets),
         );
-        const pool = manaSources(ctx, player, undefined, spellTags(def(ctx, card))).filter(
-          (m) => !action.teamwork!.includes(m.id),
-        );
+        const pool = manaSources(
+          ctx,
+          player,
+          undefined,
+          spellTags(def(ctx, card), obj(ctx, card).zone),
+        ).filter((m) => !action.teamwork!.includes(m.id));
         if (!canPayFrom(cost, pool)) throw new IllegalActionError(action);
       }
     }

@@ -405,6 +405,9 @@ export type AbilityDef =
       // Strixhaven (13c): Strixhaven Stadium
       /** Puts a named counter on this permanent each time it's tapped for this mana. */
       addCounter?: string;
+      // Reality Fracture (17a): Heartwood Crafter
+      /** "This mana can't be spent to cast spells from your hand." */
+      notForSpellsFromHand?: boolean;
     }
   | {
       kind: 'activated';
@@ -758,6 +761,9 @@ export type TriggerDef =
   // Reality Fracture (17a): Massacre Girl, Most Wanted
   /** Whenever an opponent is dealt noncombat damage (from any source). */
   | { on: 'opponentDealtNoncombatDamage' }
+  // Reality Fracture (17a): Titanbones, Towering Heart
+  /** "When you discard this card": triggers from the graveyard (with `fromGraveyard`). */
+  | { on: 'selfDiscarded' }
   /** Whenever a creature you control connives ("that creature" is the subject). */
   | { on: 'creatureYouControlConnives' }
   /** A Saga's chapter abilities (triggered as lore counters are added). */
@@ -950,6 +956,9 @@ export type ConditionDef =
   | { kind: 'sourceHasExiled' }
   /** The source was kicked at least N times (multikicker: Batroc). */
   | { kind: 'kickedAtLeast'; n: number }
+  // Reality Fracture (17a): Ruric Thar, Magecrusher
+  /** The source has dealt combat damage since it entered the battlefield. */
+  | { kind: 'sourceDealtCombatDamage' }
   // The Fantastic Four (9d).
   /** You've cast a noncreature spell this turn. */
   | { kind: 'castNoncreatureThisTurn' }
@@ -1359,6 +1368,12 @@ export type Amount =
   | { count: 'cardsInLibrary' }
   /** Different powers among creatures you control (Golden Ratio). */
   | { count: 'differentPowersYouControl' }
+  // Reality Fracture (17a): Fblthp, Knows the Way
+  /** Domain: the basic land types among lands you control. */
+  | { count: 'basicLandTypesYouControl' }
+  // Reality Fracture (17a): Tarmogoyf
+  /** The card types among cards in all graveyards. */
+  | { count: 'cardTypesInGraveyards' }
   /** Different mana values among nonland cards you own in exile with study counters (Kianne). */
   | { count: 'differentStudyManaValues' }
   /** Half the mana value of the Ref'd card, rounded up (Torrent Sculptor). */
@@ -1815,6 +1830,9 @@ export type EffectDef =
       basePT?: [number, number];
       // Marvel Super Heroes: "for as long as the source remains on the battlefield" (The Wondrous Wasp).
       whileSource?: boolean;
+      // Reality Fracture (17a): Flourishing Grapple
+      /** Until end of turn rather than until your next turn. */
+      untilEndOfTurn?: boolean;
     }
   | { kind: 'untap'; what: Ref }
   /** An additional combat phase after this one. */
@@ -1841,6 +1859,11 @@ export type EffectDef =
       fractalLand?: boolean;
       /** If the card found has one of these types, put a +1/+1 counter on the source (Oriq Loremage). */
       sourceCounterIfTypes?: CardType[];
+      // Reality Fracture (17a): Fblthp, Knows the Way; Hexhaven Invigorator
+      /** "Up to N cards": found one at a time, stopping whenever the searcher likes. */
+      upTo?: Amount;
+      /** With `upTo`: "with different names". */
+      differentNames?: boolean;
     }
   /** Look at the top N; you may put a creature with mana value up to your land count onto the battlefield (Loot). */
   | { kind: 'lookForCreature'; count: number }
@@ -2416,6 +2439,9 @@ export type StaticDef =
       cantActivate?: boolean;
       /** "Loses all abilities" (Quantum Reduction): from the moment the Aura attaches, while it stays. */
       loseAbilities?: boolean;
+      // Reality Fracture (17a): Puppet Crafting
+      /** "Is a creature in addition to its other types" (not an artifact too): from the moment the Aura attaches, while it stays. */
+      becomesCreature?: boolean;
       // Final Fantasy (11a): job select
       /** "Is a Knight in addition to its other types." */
       addSubtypes?: string[];
@@ -2646,6 +2672,12 @@ export type StaticDef =
   // Strixhaven (13c)
   /** You can't cast permanent spells (Codie, Vociferous Codex). */
   | { kind: 'cantCastPermanentSpells' }
+  // Reality Fracture (17a): Marwyn, the Preserver
+  /** Lands you control have hexproof. */
+  | { kind: 'landsHexproof' }
+  // Reality Fracture (17a): Omnipresence
+  /** You may cast spells with mana value at most the number of creatures you control from your hand without paying their mana costs. */
+  | { kind: 'freeCastByCreatureCount' }
   /** Each other planeswalker you control has this permanent's loyalty abilities (Kasmina, Enigma Sage). */
   | { kind: 'sharesLoyaltyAbilities' }
   // Strixhaven Brawl (15b, b): Nowhere to Run
@@ -2865,6 +2897,9 @@ export interface GameObject {
   firstTappedTurn?: number;
   /** Sources that dealt damage to it this turn (Hawkeye); kept as it leaves. */
   damagedBy?: ObjectId[];
+  // Reality Fracture (17a): Ruric Thar, Magecrusher
+  /** It has dealt combat damage since it entered the battlefield. */
+  dealtCombatDamage?: boolean;
   // Final Fantasy (11a): adventure lands
   /** In exile "on an adventure": its owner may play it (the land) from there. */
   onAdventure?: boolean;
@@ -3208,6 +3243,9 @@ export interface ContinuousEffect {
   blinkOnCombatDamage?: boolean;
   /** It's an artifact creature (a crewed Vehicle). */
   becomesCreature?: boolean;
+  // Reality Fracture (17a): Puppet Crafting
+  /** With `becomesCreature`: a creature only, not an artifact too. */
+  creatureOnly?: boolean;
   /** Combat damage that would be dealt to it is prevented (Fleeting Flight). */
   preventCombatDamage?: boolean;
   /** Base power and toughness. */
@@ -3452,6 +3490,11 @@ export type Decision =
       // Strixhaven (13c)
       /** The card enters under an opponent's control (Verdant Mastery). */
       forOpponent?: boolean;
+      // Reality Fracture (17a): Fblthp, Knows the Way; Hexhaven Invigorator
+      /** "Up to N cards": how many more may be taken (one at a time). */
+      remaining?: number;
+      /** Each card taken must have a different name from the ones already taken. */
+      differentNames?: boolean;
       /** The land found becomes a Fractal creature (Emergent Sequence). */
       fractalLand?: boolean;
       /** If the card has one of these types, the source gets a +1/+1 counter (Oriq Loremage). */
@@ -3746,6 +3789,8 @@ export type Action =
         | 'zaffai'
         // Marvel Super Heroes Jumpstart (Analyzed): Vision, Spectral Synthezoid.
         | 'freeOnceEachTurn'
+        // Reality Fracture (17a): Omnipresence.
+        | 'omnipresence'
         | 'noctis'
         | 'hades';
       /** Mockingbird: the creature to enter as a copy of. */

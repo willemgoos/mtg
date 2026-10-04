@@ -118,6 +118,8 @@ export function manaSources(
       const only = a.onlyFor === 'chosenType' ? (obj(ctx, id).chosenType ?? '?') : a.onlyFor;
       if (a.onlyFor === 'chosenType' && !forSubtypes.includes('Creature')) continue;
       if (only && !forSubtypes.includes(only)) continue;
+      // Reality Fracture (17a): Heartwood Crafter.
+      if (a.notForSpellsFromHand && forSubtypes.includes('FromHand')) continue;
       if (a.ifChosen && obj(ctx, id).chosenColor !== a.produces) continue;
       // Marvel Super Heroes lands: "Activate only if this land entered this turn or ...".
       if (a.condition && !checkCondition(ctx, a.condition, player, obj(ctx, id))) continue;

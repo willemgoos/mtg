@@ -14,6 +14,8 @@ export type CastVia =
   | 'zaffai'
   // Marvel Super Heroes Jumpstart (Analyzed): Vision, Spectral Synthezoid.
   | 'freeOnceEachTurn'
+  // Reality Fracture (17a): Omnipresence.
+  | 'omnipresence'
   | 'noctis'
   | 'hades';
 
@@ -49,7 +51,7 @@ export interface CastVariant {
 export { addCosts };
 
 /** What restricted mana can be spent on: the spell's subtypes and card types ("only for Angels", "only for creature spells"). */
-export function spellTags(d: CardDefinition): string[] {
+export function spellTags(d: CardDefinition, zone?: ZoneName): string[] {
   // Helga's mana: creature spells with mana value 4 or greater, or with {X}.
   const big =
     d.types.includes('Creature') && (manaValue(d.manaCost) >= 4 || !!d.manaCost.x)
@@ -63,10 +65,13 @@ export function spellTags(d: CardDefinition): string[] {
     d.types.includes('Instant') || d.types.includes('Sorcery') ? ['InstantOrSorcery'] : [];
   // Strixhaven Brawl (15b, pair): Troyan, Gutsy Explorer: spells with mana value 5 or greater or with {X}.
   const bigSpell = manaValue(d.manaCost) >= 5 || d.manaCost.x ? ['BigSpell'] : [];
+  // Reality Fracture (17a): Heartwood Crafter: "can't be spent to cast spells from your hand".
+  const fromHand = zone === 'hand' ? ['FromHand'] : [];
   return [
     ...d.subtypes,
     ...d.types,
     ...d.supertypes,
+    ...fromHand,
     ...big,
     ...noncreature,
     ...instantOrSorcery,
@@ -163,7 +168,7 @@ export function castVariants(d: CardDefinition, zone: ZoneName, via?: CastVia): 
   if (d.noManaCost && !d.flashback) return [];
   // Marvel Super Heroes Jumpstart (Analyzed): without paying its mana cost, so X is 0 and
   // additional costs (kicker) are still paid; an alternative cost can't be added.
-  if (via === 'freeOnceEachTurn')
+  if (via === 'freeOnceEachTurn' || via === 'omnipresence')
     return castVariants(d, 'hand')
       .filter((v) => !(v.kicked && d.kicker?.replacesCost))
       .map((v) => ({ ...v, cost: withoutManaCost(v.cost, d.manaCost) }));

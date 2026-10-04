@@ -68434,5 +68434,806 @@
    "large": "https://cards.scryfall.io/large/front/6/4/645cfc1b-76f2-4823-9fb0-03cb009f8b32.jpg?1783934999",
    "artCrop": "https://cards.scryfall.io/art_crop/front/6/4/645cfc1b-76f2-4823-9fb0-03cb009f8b32.jpg?1783934999"
   }
+ },
+ {
+  "name": "Bestial Incursion",
+  "scryfallId": "e0de5f66-f0df-4866-9f73-104ce50411b4",
+  "oracleId": "bc00f29a-e9d2-4b86-bb22-33b686ac4365",
+  "set": "fra",
+  "collectorNumber": "98",
+  "rarity": "common",
+  "manaCost": "{3}{G}",
+  "typeLine": "Sorcery",
+  "oracleText": "Create a 4/4 green Beast creature token with trample.\nFlashback {5}{G} (You may cast this card from your graveyard for its flashback cost. Then exile it.)",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Flashback"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/0/e0de5f66-f0df-4866-9f73-104ce50411b4.jpg?1789127248",
+   "normal": "https://cards.scryfall.io/normal/front/e/0/e0de5f66-f0df-4866-9f73-104ce50411b4.jpg?1789127248",
+   "large": "https://cards.scryfall.io/large/front/e/0/e0de5f66-f0df-4866-9f73-104ce50411b4.jpg?1789127248",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/0/e0de5f66-f0df-4866-9f73-104ce50411b4.jpg?1789127248"
+  }
+ },
+ {
+  "name": "Budding Insurgent",
+  "scryfallId": "18c59d60-2640-4576-9375-3ba38aa3ecb7",
+  "oracleId": "723669e0-4a04-45ec-8c76-b1a369aa6892",
+  "set": "fra",
+  "collectorNumber": "99",
+  "rarity": "common",
+  "manaCost": "{2}{G}",
+  "typeLine": "Creature — Dryad Scout",
+  "oracleText": "Vigilance\nSacrifice this creature: Destroy target artifact or enchantment. If that permanent was a legendary enchantment, draw a card. Activate only as a sorcery.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Vigilance"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/8/18c59d60-2640-4576-9375-3ba38aa3ecb7.jpg?1789127120",
+   "normal": "https://cards.scryfall.io/normal/front/1/8/18c59d60-2640-4576-9375-3ba38aa3ecb7.jpg?1789127120",
+   "large": "https://cards.scryfall.io/large/front/1/8/18c59d60-2640-4576-9375-3ba38aa3ecb7.jpg?1789127120",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/8/18c59d60-2640-4576-9375-3ba38aa3ecb7.jpg?1789127120"
+  }
+ },
+ {
+  "name": "Carnivorous Cultivator",
+  "scryfallId": "79dd5c54-5ea5-47b5-8f9b-50ed57a5ea45",
+  "oracleId": "db655c5a-06f6-42bc-8180-d9ca1c1d939a",
+  "set": "fra",
+  "collectorNumber": "100",
+  "rarity": "rare",
+  "manaCost": "{1}{G}",
+  "typeLine": "Creature — Elf Warlock",
+  "oracleText": "Deathtouch\nThis creature enters prepared.\nWhenever this creature deals combat damage to a player, return target land card from your graveyard to your hand.",
+  "power": "2",
+  "toughness": "3",
+  "colors": [
+   "G"
+  ],
+  "colorIdentity": [
+   "G"
+  ],
+  "keywords": [
+   "Prepared",
+   "Deathtouch"
+  ],
+  "back": "Enroot (Carnivorous Cultivator)",
+  "prepare": true,
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/9/79dd5c54-5ea5-47b5-8f9b-50ed57a5ea45.jpg?1789385967",
+   "normal": "https://cards.scryfall.io/normal/front/7/9/79dd5c54-5ea5-47b5-8f9b-50ed57a5ea45.jpg?1789385967",
+   "large": "https://cards.scryfall.io/large/front/7/9/79dd5c54-5ea5-47b5-8f9b-50ed57a5ea45.jpg?1789385967",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/9/79dd5c54-5ea5-47b5-8f9b-50ed57a5ea45.jpg?1789385967"
+  }
+ },
+ {
+  "name": "Enroot (Carnivorous Cultivator)",
+  "flavorName": "Enroot",
+  "scryfallId": "79dd5c54-5ea5-47b5-8f9b-50ed57a5ea45",
+  "oracleId": "db655c5a-06f6-42bc-8180-d9ca1c1d939a",
+  "set": "fra",
+  "collectorNumber": "100",
+  "rarity": "rare",
+  "manaCost": "{G}",
+  "typeLine": "Sorcery",
+  "oracleText": "Search your library for a land card, put it into your graveyard, then shuffle.",
+  "colors": [
+   "G"
+  ],
+  "colorIdentity": [
+   "G"
+  ],
+  "keywords": [],
+  "front": "Carnivorous Cultivator",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/9/79dd5c54-5ea5-47b5-8f9b-50ed57a5ea45.jpg?1789385967",
+   "normal": "https://cards.scryfall.io/normal/front/7/9/79dd5c54-5ea5-47b5-8f9b-50ed57a5ea45.jpg?1789385967",
+   "large": "https://cards.scryfall.io/large/front/7/9/79dd5c54-5ea5-47b5-8f9b-50ed57a5ea45.jpg?1789385967",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/9/79dd5c54-5ea5-47b5-8f9b-50ed57a5ea45.jpg?1789385967"
+  }
+ },
+ {
+  "name": "Edgar, Moonlit Sovereign",
+  "scryfallId": "dad6afc9-8505-4cdd-bf79-e9ba4670f2bb",
+  "oracleId": "1917bda6-c0e1-4c80-8009-74c28cf6b8e9",
+  "set": "fra",
+  "collectorNumber": "257",
+  "rarity": "uncommon",
+  "manaCost": "{3}{G}{G}",
+  "typeLine": "Legendary Creature — Werewolf Noble",
+  "oracleText": "Flash\nAt the beginning of your end step, if you didn't cast a spell this turn, put two +1/+1 counters on Edgar.\n{4}{G}: Put a +1/+1 counter on each creature you control with a +1/+1 counter on it.",
+  "power": "4",
+  "toughness": "4",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Flash"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/a/dad6afc9-8505-4cdd-bf79-e9ba4670f2bb.jpg?1789127966",
+   "normal": "https://cards.scryfall.io/normal/front/d/a/dad6afc9-8505-4cdd-bf79-e9ba4670f2bb.jpg?1789127966",
+   "large": "https://cards.scryfall.io/large/front/d/a/dad6afc9-8505-4cdd-bf79-e9ba4670f2bb.jpg?1789127966",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/a/dad6afc9-8505-4cdd-bf79-e9ba4670f2bb.jpg?1789127966"
+  }
+ },
+ {
+  "name": "Fblthp, Knows the Way",
+  "scryfallId": "28fbb55a-5c9d-45ee-bf42-a84b1048f5d2",
+  "oracleId": "48b891b6-3175-4864-bb98-af131098c557",
+  "set": "fra",
+  "collectorNumber": "258",
+  "rarity": "uncommon",
+  "manaCost": "{X}{G}{G}",
+  "typeLine": "Legendary Creature — Homunculus Scout",
+  "oracleText": "Domain — Fblthp's power is equal to the number of basic land types among lands you control.\nWhen Fblthp enters, search your library for up to X basic land cards with different names, reveal them, put them into your hand, then shuffle.",
+  "power": "*",
+  "toughness": "2",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Domain"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/8/28fbb55a-5c9d-45ee-bf42-a84b1048f5d2.jpg?1789127976",
+   "normal": "https://cards.scryfall.io/normal/front/2/8/28fbb55a-5c9d-45ee-bf42-a84b1048f5d2.jpg?1789127976",
+   "large": "https://cards.scryfall.io/large/front/2/8/28fbb55a-5c9d-45ee-bf42-a84b1048f5d2.jpg?1789127976",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/8/28fbb55a-5c9d-45ee-bf42-a84b1048f5d2.jpg?1789127976"
+  }
+ },
+ {
+  "name": "Flourishing Grapple",
+  "scryfallId": "f71958e9-6d6d-4393-8b49-567103b50877",
+  "oracleId": "6b4f1569-2025-46a8-89ba-79859208b04e",
+  "set": "fra",
+  "collectorNumber": "102",
+  "rarity": "uncommon",
+  "manaCost": "{G}",
+  "typeLine": "Instant",
+  "oracleText": "Target creature or planeswalker an opponent controls that's red or white loses all abilities until end of turn. Target creature you control deals damage equal to its power to that permanent.",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/7/f71958e9-6d6d-4393-8b49-567103b50877.jpg?1789470852",
+   "normal": "https://cards.scryfall.io/normal/front/f/7/f71958e9-6d6d-4393-8b49-567103b50877.jpg?1789470852",
+   "large": "https://cards.scryfall.io/large/front/f/7/f71958e9-6d6d-4393-8b49-567103b50877.jpg?1789470852",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/7/f71958e9-6d6d-4393-8b49-567103b50877.jpg?1789470852"
+  }
+ },
+ {
+  "name": "Gardenize",
+  "scryfallId": "930b89c3-4433-48de-829f-20fc3dbfced9",
+  "oracleId": "e74a2a4c-ca3c-49e8-9b0f-b4d1bb91fb54",
+  "set": "fra",
+  "collectorNumber": "103",
+  "rarity": "rare",
+  "manaCost": "{1}{G}{G}",
+  "typeLine": "Enchantment",
+  "oracleText": "Whenever a creature you control dies, put a charge counter on this enchantment.\nAt the beginning of your first main phase, add {G} for each charge counter on this enchantment.",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/3/930b89c3-4433-48de-829f-20fc3dbfced9.jpg?1789644837",
+   "normal": "https://cards.scryfall.io/normal/front/9/3/930b89c3-4433-48de-829f-20fc3dbfced9.jpg?1789644837",
+   "large": "https://cards.scryfall.io/large/front/9/3/930b89c3-4433-48de-829f-20fc3dbfced9.jpg?1789644837",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/3/930b89c3-4433-48de-829f-20fc3dbfced9.jpg?1789644837"
+  }
+ },
+ {
+  "name": "Ghalta the Unstoppable",
+  "scryfallId": "1d535b5f-c916-4f16-89a7-9477578826d2",
+  "oracleId": "8e5ea773-a60b-4502-9db5-ce93fa61cc89",
+  "set": "fra",
+  "collectorNumber": "260",
+  "rarity": "uncommon",
+  "manaCost": "{8}{G}",
+  "typeLine": "Legendary Creature — Elder Dinosaur",
+  "oracleText": "This spell costs {X} less to cast, where X is the greatest power among creatures you control.\nTrample\nOther creatures you control have trample.",
+  "power": "8",
+  "toughness": "8",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Trample"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/d/1d535b5f-c916-4f16-89a7-9477578826d2.jpg?1788878290",
+   "normal": "https://cards.scryfall.io/normal/front/1/d/1d535b5f-c916-4f16-89a7-9477578826d2.jpg?1788878290",
+   "large": "https://cards.scryfall.io/large/front/1/d/1d535b5f-c916-4f16-89a7-9477578826d2.jpg?1788878290",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/d/1d535b5f-c916-4f16-89a7-9477578826d2.jpg?1788878290"
+  }
+ },
+ {
+  "name": "Greenhouse Propagator",
+  "scryfallId": "a56e0f91-b128-4693-a949-53cb403f4fbf",
+  "oracleId": "b6b77cb9-49a5-4d1a-ae2d-02ae176dc1fa",
+  "set": "fra",
+  "collectorNumber": "104",
+  "rarity": "common",
+  "manaCost": "{2}{G}",
+  "typeLine": "Creature — Cat Druid",
+  "oracleText": "Whenever another creature you control enters, you gain 1 life.\n{T}: Add {G}.",
+  "power": "2",
+  "toughness": "3",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/5/a56e0f91-b128-4693-a949-53cb403f4fbf.jpg?1789127136",
+   "normal": "https://cards.scryfall.io/normal/front/a/5/a56e0f91-b128-4693-a949-53cb403f4fbf.jpg?1789127136",
+   "large": "https://cards.scryfall.io/large/front/a/5/a56e0f91-b128-4693-a949-53cb403f4fbf.jpg?1789127136",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/5/a56e0f91-b128-4693-a949-53cb403f4fbf.jpg?1789127136"
+  }
+ },
+ {
+  "name": "Heartwood Crafter",
+  "scryfallId": "910a1f41-17fd-4ab0-9597-7151e79dc760",
+  "oracleId": "c8b3a070-408e-4a8f-8597-6476eeec0a5f",
+  "set": "fra",
+  "collectorNumber": "105",
+  "rarity": "uncommon",
+  "manaCost": "{G}",
+  "typeLine": "Creature — Elf Artificer",
+  "oracleText": "This creature enters prepared. (While it's prepared, you may cast a copy of its spell. Doing so unprepares it.)\n{T}: Add {C}. This mana can't be spent to cast spells from your hand.",
+  "power": "1",
+  "toughness": "1",
+  "colors": [
+   "G"
+  ],
+  "colorIdentity": [
+   "G",
+   "R"
+  ],
+  "keywords": [
+   "Prepared"
+  ],
+  "back": "Soul Tether (Heartwood Crafter)",
+  "prepare": true,
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/1/910a1f41-17fd-4ab0-9597-7151e79dc760.jpg?1789127630",
+   "normal": "https://cards.scryfall.io/normal/front/9/1/910a1f41-17fd-4ab0-9597-7151e79dc760.jpg?1789127630",
+   "large": "https://cards.scryfall.io/large/front/9/1/910a1f41-17fd-4ab0-9597-7151e79dc760.jpg?1789127630",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/1/910a1f41-17fd-4ab0-9597-7151e79dc760.jpg?1789127630"
+  }
+ },
+ {
+  "name": "Soul Tether (Heartwood Crafter)",
+  "flavorName": "Soul Tether",
+  "scryfallId": "910a1f41-17fd-4ab0-9597-7151e79dc760",
+  "oracleId": "c8b3a070-408e-4a8f-8597-6476eeec0a5f",
+  "set": "fra",
+  "collectorNumber": "105",
+  "rarity": "uncommon",
+  "manaCost": "{2}{R/G}",
+  "typeLine": "Sorcery",
+  "oracleText": "Create a Heartwood token. (It's a red and green artifact with \"{T}: Add {R} or {G}.\")",
+  "colors": [
+   "R",
+   "G"
+  ],
+  "colorIdentity": [
+   "G",
+   "R"
+  ],
+  "keywords": [],
+  "front": "Heartwood Crafter",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/1/910a1f41-17fd-4ab0-9597-7151e79dc760.jpg?1789127630",
+   "normal": "https://cards.scryfall.io/normal/front/9/1/910a1f41-17fd-4ab0-9597-7151e79dc760.jpg?1789127630",
+   "large": "https://cards.scryfall.io/large/front/9/1/910a1f41-17fd-4ab0-9597-7151e79dc760.jpg?1789127630",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/1/910a1f41-17fd-4ab0-9597-7151e79dc760.jpg?1789127630"
+  }
+ },
+ {
+  "name": "Hexhaven Invigorator",
+  "scryfallId": "9a446cae-e93c-4574-8ffd-7688f9729a8a",
+  "oracleId": "12d617b1-c95b-4b1c-a586-ccfdf5898b03",
+  "set": "fra",
+  "collectorNumber": "106",
+  "rarity": "mythic",
+  "manaCost": "{G}{G}{G}{G}",
+  "typeLine": "Creature — Chimera Horror",
+  "oracleText": "Vigilance\nWhenever this creature is dealt damage, you may search your library for up to that many land cards, put them onto the battlefield tapped, then shuffle.",
+  "power": "6",
+  "toughness": "6",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Vigilance"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/a/9a446cae-e93c-4574-8ffd-7688f9729a8a.jpg?1788878191",
+   "normal": "https://cards.scryfall.io/normal/front/9/a/9a446cae-e93c-4574-8ffd-7688f9729a8a.jpg?1788878191",
+   "large": "https://cards.scryfall.io/large/front/9/a/9a446cae-e93c-4574-8ffd-7688f9729a8a.jpg?1788878191",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/a/9a446cae-e93c-4574-8ffd-7688f9729a8a.jpg?1788878191"
+  }
+ },
+ {
+  "name": "Hungering Puppetbeast",
+  "scryfallId": "3db2da7a-8088-4117-916b-f9c905d1b45b",
+  "oracleId": "690ae865-87bd-46b2-8e65-c53bd80c1a18",
+  "set": "fra",
+  "collectorNumber": "107",
+  "rarity": "rare",
+  "manaCost": "{3}{G}{G}",
+  "typeLine": "Artifact Creature — Beast Construct",
+  "oracleText": "When this creature enters, create a Heartwood token. (It's a red and green artifact with \"{T}: Add {R} or {G}.\")\n{1}, Sacrifice another artifact: Put a +1/+1 counter on this creature. It gains your choice of trample, hexproof, or haste until end of turn.",
+  "power": "5",
+  "toughness": "5",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/d/3db2da7a-8088-4117-916b-f9c905d1b45b.jpg?1789127646",
+   "normal": "https://cards.scryfall.io/normal/front/3/d/3db2da7a-8088-4117-916b-f9c905d1b45b.jpg?1789127646",
+   "large": "https://cards.scryfall.io/large/front/3/d/3db2da7a-8088-4117-916b-f9c905d1b45b.jpg?1789127646",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/d/3db2da7a-8088-4117-916b-f9c905d1b45b.jpg?1789127646"
+  }
+ },
+ {
+  "name": "Hunter's Axe",
+  "scryfallId": "a2cc5d0e-9643-4ee2-81de-fa2c3bd1ab09",
+  "oracleId": "d7d59fef-1401-464b-b1bb-ee5da92cde51",
+  "set": "fra",
+  "collectorNumber": "108",
+  "rarity": "uncommon",
+  "manaCost": "{G}",
+  "typeLine": "Artifact — Equipment",
+  "oracleText": "Equipped creature gets +2/+0 and has \"Whenever this creature attacks, it gains your choice of trample or deathtouch until end of turn.\"\nEquip {2} ({2}: Attach to target creature you control. Equip only as a sorcery.)",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Equip"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/2/a2cc5d0e-9643-4ee2-81de-fa2c3bd1ab09.jpg?1789556822",
+   "normal": "https://cards.scryfall.io/normal/front/a/2/a2cc5d0e-9643-4ee2-81de-fa2c3bd1ab09.jpg?1789556822",
+   "large": "https://cards.scryfall.io/large/front/a/2/a2cc5d0e-9643-4ee2-81de-fa2c3bd1ab09.jpg?1789556822",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/2/a2cc5d0e-9643-4ee2-81de-fa2c3bd1ab09.jpg?1789556822"
+  }
+ },
+ {
+  "name": "Jiang Yanggu, Never Alone",
+  "scryfallId": "f5a0bb3e-8119-4739-8684-e61d1d607dcb",
+  "oracleId": "4ba661d7-1cb8-4fec-bfaa-5f2797235fcf",
+  "set": "fra",
+  "collectorNumber": "261",
+  "rarity": "uncommon",
+  "manaCost": "{3}{G}",
+  "typeLine": "Legendary Creature — Human Druid",
+  "oracleText": "When Jiang Yanggu enters, create Mowu, a legendary 3/3 green Dog creature token.\nAt the beginning of your end step, untap all tokens you control.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/5/f5a0bb3e-8119-4739-8684-e61d1d607dcb.jpg?1789014406",
+   "normal": "https://cards.scryfall.io/normal/front/f/5/f5a0bb3e-8119-4739-8684-e61d1d607dcb.jpg?1789014406",
+   "large": "https://cards.scryfall.io/large/front/f/5/f5a0bb3e-8119-4739-8684-e61d1d607dcb.jpg?1789014406",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/5/f5a0bb3e-8119-4739-8684-e61d1d607dcb.jpg?1789014406"
+  }
+ },
+ {
+  "name": "Loot, the Nexus",
+  "scryfallId": "3cfa4fc6-4d90-4576-a83f-6496c7f21104",
+  "oracleId": "a99ce9db-9b7d-45a0-bee7-0875fc62ca48",
+  "set": "fra",
+  "collectorNumber": "262",
+  "rarity": "uncommon",
+  "manaCost": "{2}{G}",
+  "typeLine": "Legendary Creature — Beast Noble",
+  "oracleText": "{T}: Choose a color. Add one mana of that color for each different power among creatures you control.",
+  "power": "2",
+  "toughness": "1",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/c/3cfa4fc6-4d90-4576-a83f-6496c7f21104.jpg?1789614764",
+   "normal": "https://cards.scryfall.io/normal/front/3/c/3cfa4fc6-4d90-4576-a83f-6496c7f21104.jpg?1789614764",
+   "large": "https://cards.scryfall.io/large/front/3/c/3cfa4fc6-4d90-4576-a83f-6496c7f21104.jpg?1789614764",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/c/3cfa4fc6-4d90-4576-a83f-6496c7f21104.jpg?1789614764"
+  }
+ },
+ {
+  "name": "Marwyn, the Preserver",
+  "scryfallId": "90f33f99-7bc5-42e1-815e-bfb4c2b74107",
+  "oracleId": "eb03f6c1-c94f-4f09-b2e9-a55ce5533653",
+  "set": "fra",
+  "collectorNumber": "263",
+  "rarity": "uncommon",
+  "manaCost": "{1}{G}",
+  "typeLine": "Legendary Creature — Elf Druid",
+  "oracleText": "Lands you control have hexproof. (They can't be the targets of spells or abilities your opponents control.)\n{2}: Return target land card from your graveyard to your hand.",
+  "power": "3",
+  "toughness": "2",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/0/90f33f99-7bc5-42e1-815e-bfb4c2b74107.jpg?1789644564",
+   "normal": "https://cards.scryfall.io/normal/front/9/0/90f33f99-7bc5-42e1-815e-bfb4c2b74107.jpg?1789644564",
+   "large": "https://cards.scryfall.io/large/front/9/0/90f33f99-7bc5-42e1-815e-bfb4c2b74107.jpg?1789644564",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/0/90f33f99-7bc5-42e1-815e-bfb4c2b74107.jpg?1789644564"
+  }
+ },
+ {
+  "name": "Omnipresence",
+  "scryfallId": "eaf9dc77-c83b-49cf-84be-6bd791cb925e",
+  "oracleId": "8dad1fa8-3533-4e3c-b9b3-fcd57b20a33d",
+  "set": "fra",
+  "collectorNumber": "110",
+  "rarity": "mythic",
+  "manaCost": "{5}{G}{G}{G}",
+  "typeLine": "Enchantment",
+  "oracleText": "You may cast spells with mana value less than or equal to the number of creatures you control from your hand without paying their mana costs.",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/a/eaf9dc77-c83b-49cf-84be-6bd791cb925e.jpg?1790558797",
+   "normal": "https://cards.scryfall.io/normal/front/e/a/eaf9dc77-c83b-49cf-84be-6bd791cb925e.jpg?1790558797",
+   "large": "https://cards.scryfall.io/large/front/e/a/eaf9dc77-c83b-49cf-84be-6bd791cb925e.jpg?1790558797",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/a/eaf9dc77-c83b-49cf-84be-6bd791cb925e.jpg?1790558797"
+  }
+ },
+ {
+  "name": "Pia, Aether Ascetic",
+  "scryfallId": "ff0bc30f-9d20-458e-808f-bdc2825905a5",
+  "oracleId": "6519dc16-4960-4220-aaa8-7e4279743714",
+  "set": "fra",
+  "collectorNumber": "264",
+  "rarity": "uncommon",
+  "manaCost": "{2}{G}",
+  "typeLine": "Legendary Creature — Human Druid",
+  "oracleText": "When Pia enters, you may discard a card. If you do, search your library for an enchantment card, reveal it, put it into your hand, then shuffle.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/f/ff0bc30f-9d20-458e-808f-bdc2825905a5.jpg?1789387120",
+   "normal": "https://cards.scryfall.io/normal/front/f/f/ff0bc30f-9d20-458e-808f-bdc2825905a5.jpg?1789387120",
+   "large": "https://cards.scryfall.io/large/front/f/f/ff0bc30f-9d20-458e-808f-bdc2825905a5.jpg?1789387120",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/f/ff0bc30f-9d20-458e-808f-bdc2825905a5.jpg?1789387120"
+  }
+ },
+ {
+  "name": "Puppet Crafting",
+  "scryfallId": "6b8789a6-3b63-4198-af5f-c2f2f49fafd9",
+  "oracleId": "d13c111a-ebfc-48ac-b734-f203c7c29d21",
+  "set": "fra",
+  "collectorNumber": "111",
+  "rarity": "rare",
+  "manaCost": "{1}{G}",
+  "typeLine": "Enchantment — Aura",
+  "oracleText": "Enchant artifact or non-Aura enchantment\nEnchanted permanent is a Construct creature with base power and toughness 5/5 in addition to its other types.\n{4}{G}: Return this card from your graveyard to your hand.",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Enchant"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/b/6b8789a6-3b63-4198-af5f-c2f2f49fafd9.jpg?1789470736",
+   "normal": "https://cards.scryfall.io/normal/front/6/b/6b8789a6-3b63-4198-af5f-c2f2f49fafd9.jpg?1789470736",
+   "large": "https://cards.scryfall.io/large/front/6/b/6b8789a6-3b63-4198-af5f-c2f2f49fafd9.jpg?1789470736",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/b/6b8789a6-3b63-4198-af5f-c2f2f49fafd9.jpg?1789470736"
+  }
+ },
+ {
+  "name": "Restore with Empathy",
+  "scryfallId": "3546b93b-a7d1-451d-a369-22cc8ddcd00d",
+  "oracleId": "cb1e697f-6689-4f0b-8725-61d51432b8dd",
+  "set": "fra",
+  "collectorNumber": "112",
+  "rarity": "uncommon",
+  "manaCost": "{2}{G}",
+  "typeLine": "Instant",
+  "oracleText": "Return target permanent card from your graveyard to your hand. You gain 4 life.",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/5/3546b93b-a7d1-451d-a369-22cc8ddcd00d.jpg?1788865848",
+   "normal": "https://cards.scryfall.io/normal/front/3/5/3546b93b-a7d1-451d-a369-22cc8ddcd00d.jpg?1788865848",
+   "large": "https://cards.scryfall.io/large/front/3/5/3546b93b-a7d1-451d-a369-22cc8ddcd00d.jpg?1788865848",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/5/3546b93b-a7d1-451d-a369-22cc8ddcd00d.jpg?1788865848"
+  }
+ },
+ {
+  "name": "Ruric Thar, Magecrusher",
+  "scryfallId": "eed83302-dc2c-45f4-a4bd-af9da51edef5",
+  "oracleId": "453b2b3c-7df5-4515-9565-82f603cf451b",
+  "set": "fra",
+  "collectorNumber": "265",
+  "rarity": "uncommon",
+  "manaCost": "{5}{G}{G}",
+  "typeLine": "Legendary Creature — Ogre Warrior",
+  "oracleText": "This spell can't be countered.\nReach, vigilance, trample\nRuric Thar has hexproof as long as they haven't dealt combat damage yet. (They can't be the target of spells or abilities your opponents control.)",
+  "power": "7",
+  "toughness": "7",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Reach",
+   "Vigilance",
+   "Trample"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/e/eed83302-dc2c-45f4-a4bd-af9da51edef5.jpg?1789358701",
+   "normal": "https://cards.scryfall.io/normal/front/e/e/eed83302-dc2c-45f4-a4bd-af9da51edef5.jpg?1789358701",
+   "large": "https://cards.scryfall.io/large/front/e/e/eed83302-dc2c-45f4-a4bd-af9da51edef5.jpg?1789358701",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/e/eed83302-dc2c-45f4-a4bd-af9da51edef5.jpg?1789358701"
+  }
+ },
+ {
+  "name": "Simulacrum Shaper",
+  "scryfallId": "7c725702-8696-4e5a-8318-62f5e2616d52",
+  "oracleId": "9e45e2da-7064-4ec0-8d09-55fc7d1aeaa8",
+  "set": "fra",
+  "collectorNumber": "113",
+  "rarity": "rare",
+  "manaCost": "{1}{G}{G}",
+  "typeLine": "Creature — Elf Druid",
+  "oracleText": "When this creature enters, you may search your library for a basic land card, put that card onto the battlefield tapped, then shuffle.\nWhen this creature dies, draw a card.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/c/7c725702-8696-4e5a-8318-62f5e2616d52.jpg?1789470857",
+   "normal": "https://cards.scryfall.io/normal/front/7/c/7c725702-8696-4e5a-8318-62f5e2616d52.jpg?1789470857",
+   "large": "https://cards.scryfall.io/large/front/7/c/7c725702-8696-4e5a-8318-62f5e2616d52.jpg?1789470857",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/c/7c725702-8696-4e5a-8318-62f5e2616d52.jpg?1789470857"
+  }
+ },
+ {
+  "name": "Something Worth Saving",
+  "scryfallId": "02ee7817-40af-4fcf-a2df-eb218b669281",
+  "oracleId": "46cf0e3e-3c3e-4eb8-a71a-4b4b87744ced",
+  "set": "fra",
+  "collectorNumber": "114",
+  "rarity": "common",
+  "manaCost": "{1}{G}",
+  "typeLine": "Instant",
+  "oracleText": "Mill four cards. You may put a permanent card from among them into your hand. You gain 1 life. (To mill four cards, put the top four cards of your library into your graveyard.)",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Mill"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/2/02ee7817-40af-4fcf-a2df-eb218b669281.jpg?1788878199",
+   "normal": "https://cards.scryfall.io/normal/front/0/2/02ee7817-40af-4fcf-a2df-eb218b669281.jpg?1788878199",
+   "large": "https://cards.scryfall.io/large/front/0/2/02ee7817-40af-4fcf-a2df-eb218b669281.jpg?1788878199",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/2/02ee7817-40af-4fcf-a2df-eb218b669281.jpg?1788878199"
+  }
+ },
+ {
+  "name": "Sureshot Sower",
+  "scryfallId": "b635389c-e286-4edb-80d1-23dbe4a18857",
+  "oracleId": "5bbc9d7d-91bd-4a58-8d19-f7be650720b7",
+  "set": "fra",
+  "collectorNumber": "115",
+  "rarity": "common",
+  "manaCost": "{1}{G}",
+  "typeLine": "Creature — Human Archer",
+  "oracleText": "Reach\n{3}{G}, Discard this card: Destroy target creature with flying.",
+  "power": "3",
+  "toughness": "1",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Reach"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/6/b635389c-e286-4edb-80d1-23dbe4a18857.jpg?1789614751",
+   "normal": "https://cards.scryfall.io/normal/front/b/6/b635389c-e286-4edb-80d1-23dbe4a18857.jpg?1789614751",
+   "large": "https://cards.scryfall.io/large/front/b/6/b635389c-e286-4edb-80d1-23dbe4a18857.jpg?1789614751",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/6/b635389c-e286-4edb-80d1-23dbe4a18857.jpg?1789614751"
+  }
+ },
+ {
+  "name": "Tarmogoyf",
+  "scryfallId": "8be5ee47-8f8a-4e3c-b1a1-9ca0e1fdec7f",
+  "oracleId": "45900b2f-f6a9-4c42-9642-008f3c1cf6dd",
+  "set": "fra",
+  "collectorNumber": "116",
+  "rarity": "mythic",
+  "manaCost": "{1}{G}",
+  "typeLine": "Creature — Lhurgoyf",
+  "oracleText": "Tarmogoyf's power is equal to the number of card types among cards in all graveyards and its toughness is equal to that number plus 1.",
+  "power": "*",
+  "toughness": "1+*",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/b/8be5ee47-8f8a-4e3c-b1a1-9ca0e1fdec7f.jpg?1789127270",
+   "normal": "https://cards.scryfall.io/normal/front/8/b/8be5ee47-8f8a-4e3c-b1a1-9ca0e1fdec7f.jpg?1789127270",
+   "large": "https://cards.scryfall.io/large/front/8/b/8be5ee47-8f8a-4e3c-b1a1-9ca0e1fdec7f.jpg?1789127270",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/b/8be5ee47-8f8a-4e3c-b1a1-9ca0e1fdec7f.jpg?1789127270"
+  }
+ },
+ {
+  "name": "Tethermage's Advantage",
+  "scryfallId": "38589a7c-9cfb-4bcc-845e-9dc205095853",
+  "oracleId": "b4f89885-eeb9-46c7-9820-9758b624ca24",
+  "set": "fra",
+  "collectorNumber": "117",
+  "rarity": "common",
+  "manaCost": "{G}",
+  "typeLine": "Instant",
+  "oracleText": "Target creature gets +2/+2 and gains reach until end of turn. Untap it.",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/8/38589a7c-9cfb-4bcc-845e-9dc205095853.jpg?1789129937",
+   "normal": "https://cards.scryfall.io/normal/front/3/8/38589a7c-9cfb-4bcc-845e-9dc205095853.jpg?1789129937",
+   "large": "https://cards.scryfall.io/large/front/3/8/38589a7c-9cfb-4bcc-845e-9dc205095853.jpg?1789129937",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/8/38589a7c-9cfb-4bcc-845e-9dc205095853.jpg?1789129937"
+  }
+ },
+ {
+  "name": "Titanbones, Towering Heart",
+  "scryfallId": "edea6f70-a5a7-475d-b7f2-97933d0f32cf",
+  "oracleId": "510bccb1-61cd-49f1-a54a-80352653d1e3",
+  "set": "fra",
+  "collectorNumber": "266",
+  "rarity": "uncommon",
+  "manaCost": "{3}{G}",
+  "typeLine": "Legendary Creature — Skeleton Druid",
+  "oracleText": "Reach\nWhenever you gain life, put two +1/+1 counters on Titanbones.\nWhen you discard this card, you gain 3 life.",
+  "power": "4",
+  "toughness": "3",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Reach"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/d/edea6f70-a5a7-475d-b7f2-97933d0f32cf.jpg?1788329375",
+   "normal": "https://cards.scryfall.io/normal/front/e/d/edea6f70-a5a7-475d-b7f2-97933d0f32cf.jpg?1788329375",
+   "large": "https://cards.scryfall.io/large/front/e/d/edea6f70-a5a7-475d-b7f2-97933d0f32cf.jpg?1788329375",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/d/edea6f70-a5a7-475d-b7f2-97933d0f32cf.jpg?1788329375"
+  }
+ },
+ {
+  "name": "Verdant Kraken",
+  "scryfallId": "2bb7a8eb-227f-410b-859f-750ef0aea2f0",
+  "oracleId": "83c61083-b357-4775-a855-5a9013cc2bdf",
+  "set": "fra",
+  "collectorNumber": "118",
+  "rarity": "rare",
+  "manaCost": "{4}{G}{G}{G}",
+  "typeLine": "Creature — Plant Kraken",
+  "oracleText": "At the beginning of each player's upkeep, you create a 3/3 green Forest Tentacle land creature token. (It has \"{T}: Add {G}.\" It's affected by summoning sickness until your next turn.)",
+  "power": "6",
+  "toughness": "6",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/b/2bb7a8eb-227f-410b-859f-750ef0aea2f0.jpg?1789644841",
+   "normal": "https://cards.scryfall.io/normal/front/2/b/2bb7a8eb-227f-410b-859f-750ef0aea2f0.jpg?1789644841",
+   "large": "https://cards.scryfall.io/large/front/2/b/2bb7a8eb-227f-410b-859f-750ef0aea2f0.jpg?1789644841",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/b/2bb7a8eb-227f-410b-859f-750ef0aea2f0.jpg?1789644841"
+  }
+ },
+ {
+  "name": "Vinelasher Adept",
+  "scryfallId": "e5ed142b-2b61-4ef5-8b23-2db2a0a0319d",
+  "oracleId": "b5918fb0-c33f-4e33-ac6d-8f94723d4296",
+  "set": "fra",
+  "collectorNumber": "119",
+  "rarity": "common",
+  "manaCost": "{4}{G}{G}",
+  "typeLine": "Creature — Rhino Soldier",
+  "oracleText": "Reach\nWhen this creature enters, put three +1/+1 counters on target creature.\nBasic landcycling {2} ({2}, Discard this card: Search your library for a basic land card, reveal it, put it into your hand, then shuffle.)",
+  "power": "2",
+  "toughness": "4",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Reach",
+   "Landcycling",
+   "Basic landcycling",
+   "Typecycling",
+   "Cycling"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/5/e5ed142b-2b61-4ef5-8b23-2db2a0a0319d.jpg?1789556814",
+   "normal": "https://cards.scryfall.io/normal/front/e/5/e5ed142b-2b61-4ef5-8b23-2db2a0a0319d.jpg?1789556814",
+   "large": "https://cards.scryfall.io/large/front/e/5/e5ed142b-2b61-4ef5-8b23-2db2a0a0319d.jpg?1789556814",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/5/e5ed142b-2b61-4ef5-8b23-2db2a0a0319d.jpg?1789556814"
+  }
+ },
+ {
+  "name": "Wrecking Gecko",
+  "scryfallId": "3d693cb0-681e-480a-8f70-07e94c39225c",
+  "oracleId": "4a9e0294-c967-4e90-b776-6d3195034a23",
+  "set": "fra",
+  "collectorNumber": "120",
+  "rarity": "common",
+  "manaCost": "{4}{G}",
+  "typeLine": "Artifact Creature — Lizard Construct",
+  "oracleText": "Ward {2} (Whenever this creature becomes the target of a spell or ability an opponent controls, counter it unless that player pays {2}.)\n{6}{G}{G}: This creature gets +4/+4 and gains trample until end of turn.",
+  "power": "5",
+  "toughness": "5",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Ward"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/d/3d693cb0-681e-480a-8f70-07e94c39225c.jpg?1789385843",
+   "normal": "https://cards.scryfall.io/normal/front/3/d/3d693cb0-681e-480a-8f70-07e94c39225c.jpg?1789385843",
+   "large": "https://cards.scryfall.io/large/front/3/d/3d693cb0-681e-480a-8f70-07e94c39225c.jpg?1789385843",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/d/3d693cb0-681e-480a-8f70-07e94c39225c.jpg?1789385843"
+  }
+ },
+ {
+  "name": "Yoshimaru, Scrappy Stray",
+  "scryfallId": "b8dfd087-2434-42c6-ac4c-1decbcdde2db",
+  "oracleId": "c87da757-3daa-4874-a1e4-be0aa2adcb28",
+  "set": "fra",
+  "collectorNumber": "269",
+  "rarity": "uncommon",
+  "manaCost": "{1}{G}",
+  "typeLine": "Legendary Creature — Dog",
+  "oracleText": "When Yoshimaru enters, another target creature you control fights up to one target creature an opponent controls. (Each deals damage equal to its power to the other.)\n{6}: Put a +1/+1 counter on target nonlegendary creature.",
+  "power": "1",
+  "toughness": "1",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Fight"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/8/b8dfd087-2434-42c6-ac4c-1decbcdde2db.jpg?1789470909",
+   "normal": "https://cards.scryfall.io/normal/front/b/8/b8dfd087-2434-42c6-ac4c-1decbcdde2db.jpg?1789470909",
+   "large": "https://cards.scryfall.io/large/front/b/8/b8dfd087-2434-42c6-ac4c-1decbcdde2db.jpg?1789470909",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/8/b8dfd087-2434-42c6-ac4c-1decbcdde2db.jpg?1789470909"
+  }
  }
 ]
