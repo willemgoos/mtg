@@ -129,6 +129,6 @@ from) when it's fixed. Older phases keep their own "Simplifications" lists in `d
 
 ## Reality Fracture planeswalkers (`fra/pw-*.ts`, phase 17c)
 
-- [ ] Inspired Tethermage: "whenever you put one or more loyalty counters on a planeswalker" fires for counters put on a
+- [x] Inspired Tethermage: "whenever you put one or more loyalty counters on a planeswalker" fires for counters put on a
       walker you control by anyone (the engine doesn't record who puts counters).
-- [ ] Behold a Jace (Countersculpt, Theorist's Sanctum): you can't pick which Jace, and a Jace card in hand isn't revealed.
+- [x] Behold a Jace (Countersculpt, Theorist's Sanctum): you can't pick which Jace, and a Jace card in hand isn't revealed.

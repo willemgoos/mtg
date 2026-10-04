@@ -57,6 +57,7 @@ import { shuffleLibrary } from './setup.ts';
 import { addCosts, type CastVia, spellOnStack, spellTags, variantOf } from './spells.ts';
 import { isTargetLegal } from './targets.ts';
 import { useFreeCast } from './msh-analyzed.ts';
+import { revealBeheld } from './fra-pw-b-effects.ts';
 import { checkCondition, triggeredAbility } from './triggers.ts';
 import { givePriority } from './turn.ts';
 import type {
@@ -102,6 +103,8 @@ export interface CastChoice {
   kickCount?: number | undefined;
   /** Reality Fracture (17c): beholding for `beholdOrPay` (Countersculpt). */
   beheld?: boolean | undefined;
+  /** Reality Fracture (17c): the card beheld (a kicker's behold, or `beholdOrPay`); one from your hand is revealed. */
+  beholdCard?: ObjectId | undefined;
   /** Cast as its back face (a modal double-faced card). */
   back?: boolean | undefined;
   /** Sneak: the unblocked attacker returned to hand. */
@@ -583,6 +586,8 @@ export function castSpell(
     payment.filter((id) => !convokers.includes(id)),
   );
   moveObject(ctx, card, 'stack', { controller: player });
+  // Reality Fracture (17c): beholding a card from your hand reveals it (a permanent you control is only chosen).
+  if (choice.beholdCard !== undefined) revealBeheld(ctx, player, choice.beholdCard);
   // Secrets of Strixhaven (14b): Soaring Stoneglider, exile two cards from your graveyard unless kicked.
   if (d.unkickedExilesGraveyard && !choice.kicked)
     for (let i = 0; i < d.unkickedExilesGraveyard; i++) {
@@ -1006,7 +1011,7 @@ export function activateAbility(
     // Reality Fracture (17c): Kiora of Salt and Sand ("if you've activated a loyalty ability this turn").
     if (!ctx.s.turn.loyaltyActivated?.includes(player))
       ctx.s.turn.loyaltyActivated = [...(ctx.s.turn.loyaltyActivated ?? []), player];
-    if (a.cost.loyalty > 0) addCounters(ctx, source, a.cost.loyalty, 'loyalty');
+    if (a.cost.loyalty > 0) addCounters(ctx, source, a.cost.loyalty, 'loyalty', player);
     else
       (src.counters ??= {}).loyalty =
         (src.counters?.loyalty ?? 0) + a.cost.loyalty - (a.cost.loyaltyX ? (x ?? 0) : 0);

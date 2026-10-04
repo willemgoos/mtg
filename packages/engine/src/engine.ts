@@ -260,6 +260,8 @@ function apply(ctx: Ctx, action: Action): void {
           forage: action.forage,
           sacrificeMany: action.sacrificeMany,
           kickCount: action.kickCount,
+          beheld: action.beheld,
+          beholdCard: action.beholdCard,
         });
         // Reality Fracture (17a fixes): paused to choose a forage or ward's sacrifices: the rest of this free
         // cast (more spells, the end of the effect) follows once they are made.
@@ -290,6 +292,7 @@ function apply(ctx: Ctx, action: Action): void {
           sacrificeMany: action.sacrificeMany,
           kickCount: action.kickCount,
           beheld: action.beheld,
+          beholdCard: action.beholdCard,
           delve: action.delve,
           teamwork: action.teamwork,
           back: action.back,

@@ -1725,7 +1725,8 @@ function detect(ctx: Ctx, ev: GameEvent): void {
       if (!target || target.zone !== 'battlefield') return;
       forEachBattlefieldTrigger(
         ctx,
-        (o, a) => a.trigger.on === 'youPutLoyaltyCounters' && o.controller === target.controller,
+        // Counters you put on any planeswalker (an opponent's too), not ones an opponent puts on yours.
+        (o, a) => a.trigger.on === 'youPutLoyaltyCounters' && o.controller === ev.by,
         target,
         ev.count,
       );

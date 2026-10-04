@@ -524,7 +524,10 @@ export function Board({
       if (targeting.skip)
         return {
           prompt,
-          primary: [targeting.anyNumber ? 'Done' : 'Skip', () => act(targeting.skip!)],
+          primary: [
+            targeting.anyNumber || targeting.chosen.length > 0 ? 'Done' : 'Skip',
+            () => act(targeting.skip!),
+          ],
         };
       if (d.kind === 'chooseTriggerTargets') return { prompt };
       return { prompt, secondary: ['Cancel', () => setTargeting(null)] };
@@ -1062,14 +1065,14 @@ export function Board({
             <div className="menu__title">{nameOf(view.objects[castMenu.source]!.defId)}</div>
             {castMenu.groups.map((g) => (
               <button
-                key={castLabel(view.objects[castMenu.source]!.defId, g[0]!)}
+                key={castLabel(view.objects[castMenu.source]!.defId, g[0]!, view)}
                 className="btn btn--ghost"
                 onClick={() => {
                   setCastMenu(null);
                   beginOrApply(castMenu.source, nameOf(view.objects[castMenu.source]!.defId), g);
                 }}
               >
-                {castLabel(view.objects[castMenu.source]!.defId, g[0]!)}
+                {castLabel(view.objects[castMenu.source]!.defId, g[0]!, view)}
               </button>
             ))}
           </div>
@@ -1235,7 +1238,7 @@ export function Board({
             {targeting.skip && (
               <div className="mull__buttons">
                 <button className="btn btn--ghost" onClick={() => act(targeting.skip!)}>
-                  Skip
+                  {targeting.anyNumber || targeting.chosen.length > 0 ? 'Done' : 'Skip'}
                 </button>
               </div>
             )}
@@ -1564,7 +1567,7 @@ function kickPermanentPrompt(defId: CardDefId | undefined, a: Action): string | 
 }
 
 /** "Choose one" mode name, or kicked / not kicked. */
-function castLabel(defId: CardDefId, a: Action): string {
+function castLabel(defId: CardDefId, a: Action, view: GameState): string {
   // Final Fantasy (11a): an adventure land's own option.
   if (a.type === 'playLand') {
     // Strixhaven Brawl (15a): a spell // land card played as its land face.
@@ -1621,7 +1624,7 @@ function castLabel(defId: CardDefId, a: Action): string {
   // Reality Fracture (17c): Countersculpt, "behold a Jace or pay {1}".
   if (def?.beholdOrPay)
     return a.type === 'castSpell' && a.beheld
-      ? 'Behold a Jace'
+      ? beholdText(view, a) || 'Behold a Jace'
       : `Pay ${manaText(def.beholdOrPay.pay)}`;
   // Multikicker (Batroc), overload (Vandalblast), Toxic Deluge's X life.
   if (a.kickCount) return `Kicked ×${a.kickCount}`;
@@ -1657,7 +1660,17 @@ function castLabel(defId: CardDefId, a: Action): string {
   if (def.kicker.returnLand) return a.kicked ? 'Kicked (return a land)' : 'Not kicked';
   if (def.kicker.sacrifice)
     return a.kicked ? 'Kicked (sacrifice an artifact or creature)' : 'Not kicked';
+  // Marvel Super Heroes Jumpstart (Incredible): a kicker that beholds; the player says which card.
+  if (def.kicker.behold && a.kicked) return beholdText(view, a) || 'Kicked (behold)';
   return a.kicked ? `Kicked (+${manaText(def.kicker.cost)})` : 'Not kicked';
+}
+
+/** Reality Fracture (17c): "Behold Jace, Reality Sculptor": the card chosen to behold; one in hand is revealed. */
+function beholdText(view: GameState, a: Action): string {
+  if (a.type !== 'castSpell' || a.beholdCard === undefined) return '';
+  const o = view.objects[a.beholdCard];
+  if (!o) return '';
+  return `Behold ${nameOf(o.defId)}${o.zone === 'hand' ? ' (reveal it from your hand)' : ''}`;
 }
 
 /** A Season's chosen modes: "Rabbit ×3, Exile, they draw". */

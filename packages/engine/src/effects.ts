@@ -1924,7 +1924,7 @@ export function runEffects(
           const c = es.chosen && ctx.s.objects[es.chosen.id];
           if (c && c.zone === 'battlefield') {
             for (const [name, n] of Object.entries(c.counters ?? {}))
-              if (n > 0) addCounters(ctx, c.id, 1, name);
+              if (n > 0) addCounters(ctx, c.id, 1, name, controller);
             if (c.plusOneCounters > 0) addCounters(ctx, c.id, 1);
             done = [...done, c.id];
           }
@@ -1967,7 +1967,7 @@ export function runEffects(
         }
         if (n <= 0 || tokens.length === 0) continue;
         if (tokens.length === 1) {
-          addCounters(ctx, tokens[0]!, n, 'loyalty');
+          addCounters(ctx, tokens[0]!, n, 'loyalty', controller);
           continue;
         }
         ctx.s.decision = {
@@ -2099,6 +2099,17 @@ export function runEffects(
 }
 
 function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
+  // Reality Fracture (17c): counters this effect adds are put by its controller (Inspired Tethermage).
+  const before = ctx.puttingPlayer;
+  ctx.puttingPlayer = es.controller;
+  try {
+    runEffectInner(ctx, es, e);
+  } finally {
+    ctx.puttingPlayer = before;
+  }
+}
+
+function runEffectInner(ctx: Ctx, es: EffectSource, e: EffectDef): void {
   switch (e.kind) {
     case 'damage': {
       const amount = resolveAmount(ctx, es, e.amount);
@@ -2578,7 +2589,12 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
       const t = typeof e.what === 'object' && 'target' in e.what ? es.targets[e.what.target] : null;
       if (!t || !('object' in t)) return;
       const i = ctx.s.stack.findIndex((x) => x.kind === 'spell' && x.id === t.object.id);
-      if (i < 0) return;
+      if (i < 0) {
+        // Reality Fracture (17c): Fatehold Charm, "target spell or creature".
+        const o = e.orCreature ? ctx.s.objects[t.object.id] : undefined;
+        if (o && o.zone === 'battlefield' && o.zcc === t.object.zcc) moveObject(ctx, o.id, 'hand');
+        return;
+      }
       ctx.s.stack.splice(i, 1);
       moveObject(ctx, t.object.id, 'hand');
       return;

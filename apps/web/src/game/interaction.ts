@@ -101,6 +101,10 @@ export function pickTarget(t: Targeting, key: TargetKey): Action | Targeting | n
   const next: Targeting = { ...t, chosen: [...t.chosen, choice] };
   const left = matching(next);
   const done = left.find((a) => targetsOf(a).length === next.chosen.length);
+  // Reality Fracture (17c): "up to one" target after a required one (Way of the Warlord): the choice so far is a finished
+  // action, but a further target may still be picked, so finishing is offered as "Done" instead of happening at once.
+  if (done && left.some((a) => targetsOf(a).length > next.chosen.length))
+    return { ...next, skip: done };
   return done ?? next;
 }
 
@@ -139,7 +143,7 @@ export function castGroups(casts: readonly Action[]): Action[][] {
     const forage = a.forage ? (a.forage === 'graveyard' ? 'g' : 'f') : '';
     const key =
       a.type === 'castSpell'
-        ? `${a.mode ?? ''}:${a.kicked ? 'k' : ''}:${a.sacrifice ? 's' : ''}:${forage}:${a.x ?? ''}:${a.paws?.join() ?? ''}:${a.via ?? ''}:${a.back ? 'b' : ''}:${a.sneak ? 'sn' : ''}:${a.beheld ? 'bh' : ''}`
+        ? `${a.mode ?? ''}:${a.kicked ? 'k' : ''}:${a.sacrifice ? 's' : ''}:${forage}:${a.x ?? ''}:${a.paws?.join() ?? ''}:${a.via ?? ''}:${a.back ? 'b' : ''}:${a.sneak ? 'sn' : ''}:${a.beheld ? 'bh' : ''}:${a.beholdCard ?? ''}`
         : `${forage}:${a.x ?? ''}`;
     groups.set(key, [...(groups.get(key) ?? []), a]);
   }

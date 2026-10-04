@@ -1304,6 +1304,9 @@ export interface TargetSpec {
    * different card types (each card taking one of its own types, no type twice).
    */
   onePerType?: boolean;
+  // Reality Fracture (17c): Fatehold Charm
+  /** With 'spell': a creature on the battlefield is a legal target too ("target spell or creature"). */
+  orCreature?: boolean;
 }
 
 /**
@@ -1973,8 +1976,11 @@ export type EffectDef =
       costAmount?: Amount;
     }
   // Strixhaven (13a): Divide by Zero
-  /** Return a target spell on the stack to its owner's hand. */
-  | { kind: 'returnSpellToHand'; what: Ref }
+  /**
+   * Return a target spell on the stack to its owner's hand. Reality Fracture (17c): `orCreature`, the target may be a
+   * creature on the battlefield instead (Fatehold Charm).
+   */
+  | { kind: 'returnSpellToHand'; what: Ref; orCreature?: boolean }
   /** Reveal cards from the top until one matches; it goes to hand or onto the battlefield tapped, the rest to the bottom. */
   | {
       kind: 'revealUntil';
@@ -4153,6 +4159,8 @@ export type Action =
       kickCount?: number;
       /** Reality Fracture (17c): beholding for `beholdOrPay` instead of paying (Countersculpt). */
       beheld?: boolean;
+      /** Reality Fracture (17c): the permanent you control, or the card in your hand (revealed), you behold for this cast. */
+      beholdCard?: ObjectId;
       /** Strixhaven Brawl (15b, u): cards exiled from the graveyard with delve. */
       delve?: number;
       // Teamwork (Marvel Super Heroes)
@@ -4272,7 +4280,8 @@ export type GameEvent =
   /** +1/+1 counters were put on a permanent. */
   | { type: 'countersAdded'; id: ObjectId; count: number; player: PlayerId }
   // Reality Fracture (17c): loyalty counters put on a planeswalker
-  | { type: 'loyaltyCountersAdded'; id: ObjectId; count: number; player: PlayerId }
+  /** `player` controls the planeswalker; `by` is the player who put the counters. */
+  | { type: 'loyaltyCountersAdded'; id: ObjectId; count: number; player: PlayerId; by: PlayerId }
   /** `player` foraged. */
   | { type: 'foraged'; player: PlayerId }
   /** `player` gave a gift. */
