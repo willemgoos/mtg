@@ -22098,6 +22098,123 @@
   }
  },
  {
+  "name": "Virtual Assistant",
+  "scryfallId": "89d43d64-eb3b-4152-90f7-2fca851499c6",
+  "oracleId": "69db9cb8-9152-4d1b-9ac9-16aac42c0908",
+  "set": "msc",
+  "collectorNumber": "643",
+  "rarity": "uncommon",
+  "manaCost": "{1}{U}",
+  "typeLine": "Artifact Creature — Illusion Advisor",
+  "oracleText": "Defender\nWhenever you cast a spell using teamwork, create a 1/1 colorless Robot Hero artifact creature token with flying.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Defender"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/9/89d43d64-eb3b-4152-90f7-2fca851499c6.jpg?1783903067",
+   "normal": "https://cards.scryfall.io/normal/front/8/9/89d43d64-eb3b-4152-90f7-2fca851499c6.jpg?1783903067",
+   "large": "https://cards.scryfall.io/large/front/8/9/89d43d64-eb3b-4152-90f7-2fca851499c6.jpg?1783903067",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/9/89d43d64-eb3b-4152-90f7-2fca851499c6.jpg?1783903067"
+  }
+ },
+ {
+  "name": "Echo, Perceptive Prodigy",
+  "scryfallId": "cd9b9be6-0143-467c-8a2a-937ecafe0473",
+  "oracleId": "1091c83a-a4b9-457f-a69a-9a44a7e10759",
+  "set": "msh",
+  "collectorNumber": "51",
+  "rarity": "uncommon",
+  "manaCost": "{2}{U}",
+  "typeLine": "Legendary Creature — Human Hero",
+  "oracleText": "Vigilance\n{1}, {T}: Copy target activated or triggered ability you control from a creature source. You may choose new targets for the copy. (Mana abilities can't be targeted.)",
+  "power": "1",
+  "toughness": "4",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Vigilance"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/d/cd9b9be6-0143-467c-8a2a-937ecafe0473.jpg?1783902961",
+   "normal": "https://cards.scryfall.io/normal/front/c/d/cd9b9be6-0143-467c-8a2a-937ecafe0473.jpg?1783902961",
+   "large": "https://cards.scryfall.io/large/front/c/d/cd9b9be6-0143-467c-8a2a-937ecafe0473.jpg?1783902961",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/d/cd9b9be6-0143-467c-8a2a-937ecafe0473.jpg?1783902961"
+  }
+ },
+ {
+  "name": "Machine Man, Model X-51",
+  "scryfallId": "b15fcd0a-ad2a-4265-a4f6-c11d361ad686",
+  "oracleId": "853587be-9709-43a4-81c9-5b6dabe523cf",
+  "set": "msc",
+  "collectorNumber": "751",
+  "rarity": "uncommon",
+  "manaCost": "{4}",
+  "typeLine": "Legendary Artifact Creature — Robot Hero",
+  "oracleText": "Whenever you cast a noncreature spell, put a +1/+1 counter on Machine Man and he gains flying until end of turn.",
+  "power": "2",
+  "toughness": "3",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/1/b15fcd0a-ad2a-4265-a4f6-c11d361ad686.jpg?1783903028",
+   "normal": "https://cards.scryfall.io/normal/front/b/1/b15fcd0a-ad2a-4265-a4f6-c11d361ad686.jpg?1783903028",
+   "large": "https://cards.scryfall.io/large/front/b/1/b15fcd0a-ad2a-4265-a4f6-c11d361ad686.jpg?1783903028",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/1/b15fcd0a-ad2a-4265-a4f6-c11d361ad686.jpg?1783903028"
+  }
+ },
+ {
+  "name": "Victor Mancha, Runaway",
+  "scryfallId": "4d9bc6d6-fada-41f9-8a85-483e8806bb4b",
+  "oracleId": "606a83ae-c774-4abc-ba30-c113cbd1c05b",
+  "set": "msc",
+  "collectorNumber": "574",
+  "rarity": "uncommon",
+  "manaCost": "{5}",
+  "typeLine": "Legendary Artifact Creature — Human Hero",
+  "oracleText": "When Victor Mancha enters, exile target card from your graveyard. You may play it for as long as you control Victor Mancha.",
+  "power": "4",
+  "toughness": "4",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/d/4d9bc6d6-fada-41f9-8a85-483e8806bb4b.jpg?1783903092",
+   "normal": "https://cards.scryfall.io/normal/front/4/d/4d9bc6d6-fada-41f9-8a85-483e8806bb4b.jpg?1783903092",
+   "large": "https://cards.scryfall.io/large/front/4/d/4d9bc6d6-fada-41f9-8a85-483e8806bb4b.jpg?1783903092",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/d/4d9bc6d6-fada-41f9-8a85-483e8806bb4b.jpg?1783903092"
+  }
+ },
+ {
+  "name": "Vision, Spectral Synthezoid",
+  "scryfallId": "c3da7f82-d2f7-4aaa-b62a-238b3e3e4871",
+  "oracleId": "1a44261a-2b6a-45dc-91a4-b2eb219ba6fb",
+  "set": "msc",
+  "collectorNumber": "644",
+  "rarity": "rare",
+  "manaCost": "{6}{U}{U}",
+  "typeLine": "Legendary Artifact Creature — Robot Hero",
+  "oracleText": "Flying\nOnce during each of your turns, you may cast a noncreature or Robot spell from your hand without paying its mana cost.",
+  "power": "2",
+  "toughness": "5",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/3/c3da7f82-d2f7-4aaa-b62a-238b3e3e4871.jpg?1783903066",
+   "normal": "https://cards.scryfall.io/normal/front/c/3/c3da7f82-d2f7-4aaa-b62a-238b3e3e4871.jpg?1783903066",
+   "large": "https://cards.scryfall.io/large/front/c/3/c3da7f82-d2f7-4aaa-b62a-238b3e3e4871.jpg?1783903066",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/3/c3da7f82-d2f7-4aaa-b62a-238b3e3e4871.jpg?1783903066"
+  }
+ },
+ {
   "name": "Lucky the Pizza Dog",
   "scryfallId": "5fc454a5-39af-421d-a494-727ac7b6115e",
   "oracleId": "3a429a1e-62c0-4f01-b09e-2bbf63e56a98",

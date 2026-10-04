@@ -54,6 +54,7 @@ import { shuffleInPlace } from './rng.ts';
 import { shuffleLibrary } from './setup.ts';
 import { addCosts, type CastVia, spellOnStack, spellTags, variantOf } from './spells.ts';
 import { isTargetLegal } from './targets.ts';
+import { useFreeCast } from './msh-analyzed.ts';
 import { checkCondition, triggeredAbility } from './triggers.ts';
 import { givePriority } from './turn.ts';
 import type {
@@ -399,6 +400,8 @@ export function castSpell(
     o.front = o.defId;
     o.defId = back;
   }
+  // Marvel Super Heroes Jumpstart (Analyzed): Vision's once this turn is used (while it's in hand).
+  if (choice.via === 'freeOnceEachTurn') useFreeCast(ctx, player, card);
   const d = defOf(ctx, o.defId);
   const v = choice.sneak
     ? { cost: d.sneak!, spell: d.spell ?? null }
