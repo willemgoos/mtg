@@ -50,6 +50,10 @@ export function checkCondition(
     return (ctx.s.turn.castDefs?.[controller] ?? []).some(
       (id) => !defOf(ctx, id).types.includes('Creature'),
     );
+  // Strixhaven Brawl (15b, pair): Lakeside Shack, Hidden Stockpile
+  if (c.kind === 'anyPlayerLifeAtMost')
+    return ctx.s.players.p1.life <= c.max || ctx.s.players.p2.life <= c.max;
+  if (c.kind === 'revolt') return (ctx.s.turn.permanentsLeft?.[controller] ?? 0) > 0;
   // Strixhaven (13a): Mage Duel
   if (c.kind === 'castInstantOrSorceryThisTurn')
     return (ctx.s.turn.instantsSorceriesCast?.[controller] ?? 0) > 0;
@@ -260,7 +264,16 @@ function queue(
   // "Whenever one or more ...": once for events collected together.
   if (a?.kind === 'triggered' && a.batch) {
     const key = `${o.id}:${o.zcc}:${index}`;
-    if (ctx.batched.has(key)) return;
+    if (ctx.batched.has(key)) {
+      // Strixhaven Brawl (15b, pair): a batched trigger with an amount adds the amounts up (Primo: the damage dealt).
+      if (amount !== undefined) {
+        const earlier = ctx.s.pendingTriggers.find(
+          (t) => t.source.id === o.id && t.abilityIndex === index && t.amount !== undefined,
+        );
+        if (earlier) earlier.amount = (earlier.amount ?? 0) + amount;
+      }
+      return;
+    }
     ctx.batched.add(key);
   }
   if (a?.kind === 'triggered' && a.oncePerTurn) {
@@ -425,6 +438,12 @@ function spellMatches(
           defOf(ctx, id).types.includes('Enchantment'),
         ).length === 1
       );
+    // Strixhaven Brawl (15b, pair): Zimone, Infinite Analyst (counted among the caster's spells this turn, this one included).
+    case 'firstXSpell': {
+      if (!spell.manaCost.x) return false;
+      const cast = ctx.s.turn.castDefs?.[spellCaster(ctx, item, self)] ?? [];
+      return cast.filter((id) => !!defOf(ctx, id).manaCost.x).length === 1;
+    }
     case 'firstOfItsKind': {
       // Alania: the first instant, the first sorcery, or the first Otter spell other than itself.
       const cast = (ctx.s.turn.castDefs?.[self.controller] ?? []).map((id) => defOf(ctx, id));
@@ -1215,6 +1234,8 @@ function detect(ctx: Ctx, ev: GameEvent): void {
           a.trigger.on === 'creaturesYouControlDealCombatDamageToPlayer' &&
           o.controller === src.controller &&
           matchesFilter(ctx, src.id, a.trigger.filter),
+        undefined,
+        ev.amount, // Strixhaven Brawl (15b, pair): Primo, "damage dealt"
       );
       // Secrets of Strixhaven (14a): Killian's Confidence triggers from your graveyard.
       for (const gid of s.players[src.controller].graveyard) {

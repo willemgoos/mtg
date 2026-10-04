@@ -265,6 +265,11 @@ export function countOf(
     const src = sourceId ? ctx.s.objects[sourceId] : undefined;
     return src?.counters?.[a.namedCountersOnSource] ?? 0;
   }
+  // Strixhaven Brawl (15b, pair): Zimone, Infinite Analyst: its own +1/+1 counters.
+  if ('countersOn' in a) {
+    const src = sourceId ? ctx.s.objects[sourceId] : undefined;
+    return a.countersOn === 'self' ? (src?.plusOneCounters ?? 0) : 0;
+  }
   if (!('count' in a)) return 0;
   if (a.count === 'cardsInGraveyard')
     return (
@@ -789,6 +794,17 @@ function avengersFilter(
     });
     if (!counters && !attached) return false;
   }
+  // Strixhaven Brawl (15b, pair): Killian, Eriette: enchanted by an Aura the source's controller controls.
+  if (filter.enchantedByYourAura) {
+    const who = sourceId ? obj(ctx, sourceId).controller : o.controller;
+    const enchanted = ctx.s.battlefield.some((a) => {
+      const att = obj(ctx, a);
+      return att.attachedTo === id && att.controller === who && def(ctx, a).subtypes.includes('Aura');
+    });
+    if (!enchanted) return false;
+  }
+  // Strixhaven Brawl (15b, pair): Primo, the Unbounded: base power 0.
+  if (filter.basePowerZero && (def(ctx, id).power ?? 0) !== 0) return false;
   if (filter.greaterPowerThanSource) {
     if (!sourceId || o.zone !== 'battlefield') return false;
     if (characteristics(ctx, id).power <= characteristics(ctx, sourceId).power) return false;

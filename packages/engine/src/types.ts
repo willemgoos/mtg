@@ -89,6 +89,11 @@ export interface CardDefinition {
     counter?: boolean;
     /** It isn't legendary (Spark Double; Chameleon keeps its own name). */
     notLegendary?: boolean;
+    // Strixhaven Brawl (15b, pair): Altered Ego
+    /** Any creature on the battlefield, of any mana value. */
+    anyMV?: boolean;
+    /** X additional +1/+1 counters on it. */
+    xCounters?: boolean;
   };
   id: CardDefId;
   name: string;
@@ -218,11 +223,14 @@ export interface CardDefinition {
   castFromGraveyardWithDiscard?: boolean;
   /** Strixhaven Brawl (15a): Squee, the Immortal: "You may cast this card from your graveyard or from exile." */
   castFromGraveyardOrExile?: boolean;
-  /** It enters with X +1/+1 counters (Royal Talon Fighter Jet). */
-  entersWithXCounters?: boolean;
   // Strixhaven Brawl (15b, g): Spinning Wheel Kick
   /** With `upToXTargets`: this many targets don't count against X (the first target is not one of the X). */
   upToXOffset?: number;
+  /** It enters with X +1/+1 counters (Royal Talon Fighter Jet); a number: that many times X (Primo: twice X). */
+  entersWithXCounters?: boolean | number;
+  // Strixhaven Brawl (15b, pair)
+  /** X can't be less than this (Ornate Imitations: "X can't be 0"). */
+  minX?: number;
   /** Costs {amount} less while the condition holds (Heroic Return, Avenge). */
   costReductionIf?: {
     condition: ConditionDef;
@@ -533,7 +541,10 @@ export type TriggerDef =
         /** The caster's first instant or sorcery spell this turn. */
         | 'firstInstantOrSorcery'
         /** The caster's second noncreature spell this turn (Sapphire Collector). */
-        | 'secondNoncreature';
+        | 'secondNoncreature'
+        // Strixhaven Brawl (15b, pair): Zimone, Infinite Analyst
+        /** The caster's first spell with {X} in its mana cost this turn. */
+        | 'firstXSpell';
       /** The spell must also match this (Gev: a Lizard spell). */
       spell?: CardFilter;
       /** Any player's spell, cast when it isn't their turn (Vision). */
@@ -790,6 +801,11 @@ export type ConditionDef =
   | { kind: 'notPrepared' }
   /** At least one condition holds. */
   | { kind: 'any'; of: ConditionDef[] }
+  // Strixhaven Brawl (15b, pair): Lakeside Shack, Hidden Stockpile
+  /** A player (either) has this much life or less. */
+  | { kind: 'anyPlayerLifeAtMost'; max: number }
+  /** Revolt: a permanent left the battlefield under your control this turn. */
+  | { kind: 'revolt' }
   /** The condition doesn't hold. */
   | { kind: 'not'; condition: ConditionDef }
   // Secrets of Strixhaven (14b)
@@ -933,6 +949,11 @@ export interface CardFilter {
   notAttachedHost?: boolean;
   /** Its mana value is odd or even (Thanos). */
   manaValueParity?: 'odd' | 'even';
+  // Strixhaven Brawl (15b, pair)
+  /** Enchanted by an Aura that the source's controller controls (Killian, Eriette). */
+  enchantedByYourAura?: boolean;
+  /** Its base (printed) power is 0 (Primo, the Unbounded). */
+  basePowerZero?: boolean;
   // Brawl.
   /** Is its controller's commander ("your commander"). */
   commander?: boolean;
@@ -1466,6 +1487,8 @@ export type EffectDef =
       kind: 'counterUnlessPays';
       what: Ref;
       cost: ManaCost;
+      /** Strixhaven Brawl (15b, pair): Repulsive Mutation: pay this much generic mana instead of `cost`. */
+      genericAmount?: Amount;
       // Strixhaven (13a): Reject, "exile it instead of putting it into its owner's graveyard".
       exile?: boolean;
       /** Strixhaven Brawl (15b, u): Syncopate, `cost` plus {X} (the value chosen for X). */
@@ -2023,7 +2046,13 @@ export type StaticDef =
     }
   /** Instant and sorcery spells you cast cost {N} less (Archmage of Runes). */
   | { kind: 'instantsAndSorceriesCostLess'; amount: number }
-  | { kind: 'spellsCostLess'; filter: CardFilter; amount: Amount }
+  | {
+      kind: 'spellsCostLess';
+      filter: CardFilter;
+      amount: Amount;
+      /** Strixhaven Brawl (15b, pair): Zimone, Infinite Analyst: only the first spell with {X} you cast each turn. */
+      firstXOnly?: boolean;
+    }
   // Strixhaven (13b): Killian, Ink Duelist
   /** Spells you cast that target a permanent matching the filter cost {N} less. */
   | { kind: 'spellsCostLessTargeting'; filter: CardFilter; amount: number }
@@ -2559,6 +2588,9 @@ export interface TurnState {
   // Strixhaven Brawl (15b, u): Quicken
   /** Players whose next sorcery spell this turn can be cast as though it had flash. */
   sorceryFlash?: PlayerId[];
+  // Strixhaven Brawl (15b, pair): Hidden Stockpile (revolt)
+  /** Permanents that left the battlefield under each player's control this turn. */
+  permanentsLeft?: Record<PlayerId, number>;
 }
 
 export interface Attacker {

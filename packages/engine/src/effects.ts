@@ -1139,7 +1139,12 @@ export function runEffects(
         const item = t && 'object' in t ? findSpell(ctx, t.object.id) : undefined;
         if (!item) continue;
         // Strixhaven Brawl (15b, u): Syncopate, "unless its controller pays {X}".
-        const toPay = e.xCost ? { ...e.cost, generic: e.cost.generic + (x ?? 0) } : e.cost;
+        // Strixhaven Brawl (15b, pair): Repulsive Mutation, "equal to the greatest power among creatures you control".
+        const base =
+          e.genericAmount !== undefined
+            ? { generic: Math.max(0, resolveAmount(ctx, es, e.genericAmount)), colored: {} }
+            : e.cost;
+        const toPay = e.xCost ? { ...base, generic: base.generic + (x ?? 0) } : base;
         if (e.xCost && toPay.generic === 0 && Object.values(toPay.colored).every((n) => !n))
           continue; // X is 0: paid
         // Can't pay: countered straight away.
