@@ -10,7 +10,16 @@ import { type Ctx, def, obj, other } from './context.ts';
 import { damageSourceFor, dealDamage, type DamageSource } from './effects.ts';
 import { checkCondition } from './triggers.ts';
 import { manaSources } from './mana.ts';
-import type { Attacker, ObjectId, PlayerId, TargetChoice } from './types.ts';
+import type { Attacker, ObjectId, PlayerId, StaticDef, TargetChoice } from './types.ts';
+
+/** Does `player` control a permanent with this static ability? */
+function controlsStatic(ctx: Ctx, player: PlayerId, kind: StaticDef['kind']): boolean {
+  return ctx.s.battlefield.some(
+    (src) =>
+      obj(ctx, src).controller === player &&
+      def(ctx, src).abilities.some((a) => a.kind === 'static' && a.effect.kind === kind),
+  );
+}
 
 export function canAttack(ctx: Ctx, id: ObjectId): boolean {
   const o = obj(ctx, id);
@@ -24,9 +33,12 @@ export function canAttack(ctx: Ctx, id: ObjectId): boolean {
     ) &&
     (o.plusOneCounters > 0 || Object.values(o.counters ?? {}).some((n) => n > 0));
   // Strixhaven (13b): Prismari Pledgemage can attack this turn despite defender.
-  const ignoreDefender = ctx.s.effects.some(
-    (e) => e.ignoreDefender && e.affected.id === id && e.affected.zcc === o.zcc,
-  );
+  const ignoreDefender =
+    ctx.s.effects.some(
+      (e) => e.ignoreDefender && e.affected.id === id && e.affected.zcc === o.zcc,
+    ) ||
+    // Reality Fracture (17a): Ghalta the Immovable.
+    controlsStatic(ctx, o.controller, 'creaturesIgnoreDefender');
   if (
     !c.types.includes('Creature') ||
     (c.keywords.has('defender') && !defenderOff && !ignoreDefender) ||
@@ -341,6 +353,11 @@ export function affordableAttackers(ctx: Ctx, player: PlayerId): number {
  */
 function combatPower(ctx: Ctx, id: ObjectId): number {
   const p = power(ctx, id);
-  if (!ctx.s.turn.toughnessDamage?.includes(obj(ctx, id).controller)) return p;
+  if (
+    !ctx.s.turn.toughnessDamage?.includes(obj(ctx, id).controller) &&
+    // Reality Fracture (17a): Ghalta the Immovable.
+    !controlsStatic(ctx, obj(ctx, id).controller, 'toughnessAssignsCombatDamage')
+  )
+    return p;
   return Math.max(p, characteristics(ctx, id).toughness);
 }

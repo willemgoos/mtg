@@ -22,6 +22,7 @@ import { STX_13C_A_EFFECTS } from './stx-13c-a-effects.ts';
 import { STX_13C_B_EFFECTS } from './stx-13c-b-effects.ts';
 import { STX_13C_C_EFFECTS } from './stx-13c-c-effects.ts';
 import { STX_13C_D_EFFECTS } from './stx-13c-d-effects.ts';
+import { FRA_WHITE_EFFECTS } from './fra-white-effects.ts';
 import { checkCondition } from './triggers.ts';
 import { type EffectSource, gainLife } from './effects.ts';
 import type {
@@ -89,6 +90,8 @@ const BUILT_IN_EFFECTS: Record<string, CustomEffect> = {
   // Strixhaven (13c).
   ...STX_13C_C_EFFECTS,
   ...STX_13C_D_EFFECTS,
+  // Reality Fracture (17a): white.
+  ...FRA_WHITE_EFFECTS,
   // Secrets of Strixhaven (14a).
   ...SOS_14A_EFFECTS,
   // Secrets of Strixhaven (14b), group A.
@@ -732,6 +735,17 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
   const countersAmount =
     to === 'battlefield' ? defOf(ctx, o.defId).entersWithCountersAmount : undefined;
   if (countersAmount) addCounters(ctx, id, countOf(ctx, o.controller, countersAmount, false, id));
+  // Reality Fracture (17a): Graft Surgeon, Generous Revival: a permanent put onto the battlefield without being cast
+  // still enters with its own counters (a spell resolving does this in stack.ts).
+  if (to === 'battlefield' && from !== 'stack') {
+    const ed = defOf(ctx, o.defId);
+    if (ed.entersWithCounters && checkCondition(ctx, ed.entersWithCountersIf, o.controller, o))
+      addCounters(ctx, id, ed.entersWithCounters);
+    for (const [k, v] of Object.entries(ed.entersWithNamedCounters ?? {}))
+      (o.counters ??= {})[k] = (o.counters[k] ?? 0) + v;
+    if (ed.loyalty !== undefined && o.counters?.loyalty === undefined)
+      (o.counters ??= {}).loyalty = ed.loyalty;
+  }
   // Ygra entering or leaving changes what the other creatures are.
   if ((from === 'battlefield' || to === 'battlefield') && makesFood(defOf(ctx, o.defId)))
     refreshCreaturesAreFood(ctx);

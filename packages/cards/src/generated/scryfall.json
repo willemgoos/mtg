@@ -67726,5 +67726,736 @@
    "large": "https://cards.scryfall.io/large/front/1/1/117bb5db-4a1c-4704-b0b5-c67b45ac2f52.jpg?1783906353",
    "artCrop": "https://cards.scryfall.io/art_crop/front/1/1/117bb5db-4a1c-4704-b0b5-c67b45ac2f52.jpg?1783906353"
   }
+ },
+ {
+  "name": "Blossom-Blessed Angel",
+  "scryfallId": "5e77fbf0-9d1f-4e7d-a02e-43065d11b0d9",
+  "oracleId": "cd61c26b-8d3c-4730-92f2-0d94d961bafd",
+  "set": "fra",
+  "collectorNumber": "3",
+  "rarity": "common",
+  "manaCost": "{3}{W}",
+  "typeLine": "Creature — Angel Cleric",
+  "oracleText": "Flying, vigilance\nThis creature enters prepared. (While it's prepared, you may cast a copy of its spell. Doing so unprepares it.)",
+  "power": "2",
+  "toughness": "4",
+  "colors": [
+   "W"
+  ],
+  "colorIdentity": [
+   "G",
+   "W"
+  ],
+  "keywords": [
+   "Flying",
+   "Vigilance",
+   "Prepared"
+  ],
+  "back": "Seed Suture (Blossom-Blessed Angel)",
+  "prepare": true,
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/e/5e77fbf0-9d1f-4e7d-a02e-43065d11b0d9.jpg?1789692643",
+   "normal": "https://cards.scryfall.io/normal/front/5/e/5e77fbf0-9d1f-4e7d-a02e-43065d11b0d9.jpg?1789692643",
+   "large": "https://cards.scryfall.io/large/front/5/e/5e77fbf0-9d1f-4e7d-a02e-43065d11b0d9.jpg?1789692643",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/e/5e77fbf0-9d1f-4e7d-a02e-43065d11b0d9.jpg?1789692643"
+  }
+ },
+ {
+  "name": "Seed Suture (Blossom-Blessed Angel)",
+  "flavorName": "Seed Suture",
+  "scryfallId": "5e77fbf0-9d1f-4e7d-a02e-43065d11b0d9",
+  "oracleId": "cd61c26b-8d3c-4730-92f2-0d94d961bafd",
+  "set": "fra",
+  "collectorNumber": "3",
+  "rarity": "common",
+  "manaCost": "{G/W}",
+  "typeLine": "Sorcery",
+  "oracleText": "Put a +1/+1 counter on target creature. You gain 1 life.",
+  "colors": [
+   "G",
+   "W"
+  ],
+  "colorIdentity": [
+   "G",
+   "W"
+  ],
+  "keywords": [],
+  "front": "Blossom-Blessed Angel",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/e/5e77fbf0-9d1f-4e7d-a02e-43065d11b0d9.jpg?1789692643",
+   "normal": "https://cards.scryfall.io/normal/front/5/e/5e77fbf0-9d1f-4e7d-a02e-43065d11b0d9.jpg?1789692643",
+   "large": "https://cards.scryfall.io/large/front/5/e/5e77fbf0-9d1f-4e7d-a02e-43065d11b0d9.jpg?1789692643",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/e/5e77fbf0-9d1f-4e7d-a02e-43065d11b0d9.jpg?1789692643"
+  }
+ },
+ {
+  "name": "Danitha, Sword of Hope",
+  "scryfallId": "d5cb9810-3c2d-4ae4-b8b6-0155ca3f47ad",
+  "oracleId": "f7b754d3-9863-420d-895d-00e70b8b078a",
+  "set": "fra",
+  "collectorNumber": "196",
+  "rarity": "uncommon",
+  "manaCost": "{2}{W}",
+  "typeLine": "Legendary Creature — Human Knight",
+  "oracleText": "First strike\nWhenever you cast an Equipment spell or a spell that targets a creature you control, draw a card. This ability triggers only once each turn.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "First strike"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/5/d5cb9810-3c2d-4ae4-b8b6-0155ca3f47ad.jpg?1789127178",
+   "normal": "https://cards.scryfall.io/normal/front/d/5/d5cb9810-3c2d-4ae4-b8b6-0155ca3f47ad.jpg?1789127178",
+   "large": "https://cards.scryfall.io/large/front/d/5/d5cb9810-3c2d-4ae4-b8b6-0155ca3f47ad.jpg?1789127178",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/5/d5cb9810-3c2d-4ae4-b8b6-0155ca3f47ad.jpg?1789127178"
+  }
+ },
+ {
+  "name": "Enlightened Confidant",
+  "scryfallId": "483fcc58-cc6e-4452-a696-7b38e117c837",
+  "oracleId": "a139eb7f-3853-490c-a839-35d0e5aed7b5",
+  "set": "fra",
+  "collectorNumber": "5",
+  "rarity": "mythic",
+  "manaCost": "{1}{W}",
+  "typeLine": "Creature — Kor Cleric",
+  "oracleText": "Lifelink\nAt the beginning of your end step, if you gained life this turn, surveil 1. If you put a card with mana value less than or equal to the amount of life you gained this turn into your graveyard this way, put that card into your hand.",
+  "power": "2",
+  "toughness": "1",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Surveil",
+   "Lifelink"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/8/483fcc58-cc6e-4452-a696-7b38e117c837.jpg?1788329184",
+   "normal": "https://cards.scryfall.io/normal/front/4/8/483fcc58-cc6e-4452-a696-7b38e117c837.jpg?1788329184",
+   "large": "https://cards.scryfall.io/large/front/4/8/483fcc58-cc6e-4452-a696-7b38e117c837.jpg?1788329184",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/8/483fcc58-cc6e-4452-a696-7b38e117c837.jpg?1788329184"
+  }
+ },
+ {
+  "name": "Fateshaper Aspirant",
+  "scryfallId": "f0c8400d-824f-4d79-84bc-7615a0deb831",
+  "oracleId": "bb3996b6-b68d-4ea1-b3dd-1600f8da2f1c",
+  "set": "fra",
+  "collectorNumber": "6",
+  "rarity": "common",
+  "manaCost": "{4}{W}",
+  "typeLine": "Creature — Rhino Cleric",
+  "oracleText": "When this creature enters, choose one —\n• Return target legendary card from your graveyard to your hand.\n• Put a +1/+1 counter on target creature. It gains vigilance and indestructible until end of turn. (Damage and effects that say \"destroy\" don't destroy it.)",
+  "power": "3",
+  "toughness": "4",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/0/f0c8400d-824f-4d79-84bc-7615a0deb831.jpg?1789556683",
+   "normal": "https://cards.scryfall.io/normal/front/f/0/f0c8400d-824f-4d79-84bc-7615a0deb831.jpg?1789556683",
+   "large": "https://cards.scryfall.io/large/front/f/0/f0c8400d-824f-4d79-84bc-7615a0deb831.jpg?1789556683",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/0/f0c8400d-824f-4d79-84bc-7615a0deb831.jpg?1789556683"
+  }
+ },
+ {
+  "name": "Flickering Hound",
+  "scryfallId": "686f3a25-305d-4f02-8972-eba7b8e9635f",
+  "oracleId": "162421d2-8761-437f-bed9-578b61c96f1f",
+  "set": "fra",
+  "collectorNumber": "7",
+  "rarity": "rare",
+  "manaCost": "{3}{W}",
+  "typeLine": "Creature — Dog",
+  "oracleText": "Whenever you cast a creature spell, exile up to one other target creature you control, then return that card to the battlefield under its owner's control.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/8/686f3a25-305d-4f02-8972-eba7b8e9635f.jpg?1789470769",
+   "normal": "https://cards.scryfall.io/normal/front/6/8/686f3a25-305d-4f02-8972-eba7b8e9635f.jpg?1789470769",
+   "large": "https://cards.scryfall.io/large/front/6/8/686f3a25-305d-4f02-8972-eba7b8e9635f.jpg?1789470769",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/8/686f3a25-305d-4f02-8972-eba7b8e9635f.jpg?1789470769"
+  }
+ },
+ {
+  "name": "Graft Surgeon",
+  "scryfallId": "32a7a905-11bf-4b66-a28e-1066a0e372b8",
+  "oracleId": "fe7938ce-6289-4bf8-a8f5-85ecccbb7f86",
+  "set": "fra",
+  "collectorNumber": "10",
+  "rarity": "common",
+  "manaCost": "{2}{W}",
+  "typeLine": "Creature — Human Cleric",
+  "oracleText": "This creature enters with a +1/+1 counter on it.\nWhen this creature dies, put its counters on up to one target creature you control.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/2/32a7a905-11bf-4b66-a28e-1066a0e372b8.jpg?1789644811",
+   "normal": "https://cards.scryfall.io/normal/front/3/2/32a7a905-11bf-4b66-a28e-1066a0e372b8.jpg?1789644811",
+   "large": "https://cards.scryfall.io/large/front/3/2/32a7a905-11bf-4b66-a28e-1066a0e372b8.jpg?1789644811",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/2/32a7a905-11bf-4b66-a28e-1066a0e372b8.jpg?1789644811"
+  }
+ },
+ {
+  "name": "Ghalta the Immovable",
+  "scryfallId": "a9f3aa55-908f-42db-8135-4201433df850",
+  "oracleId": "0d496c6e-8f7b-420f-9197-dacd2feb528f",
+  "set": "fra",
+  "collectorNumber": "197",
+  "rarity": "uncommon",
+  "manaCost": "{8}{W}",
+  "typeLine": "Legendary Creature — Elder Dinosaur",
+  "oracleText": "This spell costs {X} less to cast, where X is the greatest toughness among creatures you control.\nCreatures you control can attack as though they didn't have defender.\nEach creature you control with toughness greater than its power assigns combat damage equal to its toughness rather than its power.",
+  "power": "0",
+  "toughness": "7",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/9/a9f3aa55-908f-42db-8135-4201433df850.jpg?1789014423",
+   "normal": "https://cards.scryfall.io/normal/front/a/9/a9f3aa55-908f-42db-8135-4201433df850.jpg?1789014423",
+   "large": "https://cards.scryfall.io/large/front/a/9/a9f3aa55-908f-42db-8135-4201433df850.jpg?1789014423",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/9/a9f3aa55-908f-42db-8135-4201433df850.jpg?1789014423"
+  }
+ },
+ {
+  "name": "Guiding Hydra",
+  "scryfallId": "a53eb840-039d-4c45-b701-d58cb26b1a6c",
+  "oracleId": "24f1445c-16c9-45c0-be56-0266e6c78cdb",
+  "set": "fra",
+  "collectorNumber": "11",
+  "rarity": "rare",
+  "manaCost": "{X}{W}",
+  "typeLine": "Creature — Hydra Horror",
+  "oracleText": "This creature enters with X +1/+1 counters on it.\nAt the beginning of combat on your turn, you may remove a +1/+1 counter from this creature. If you do, put a +1/+1 counter on each other creature you control.",
+  "power": "1",
+  "toughness": "0",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/5/a53eb840-039d-4c45-b701-d58cb26b1a6c.jpg?1789644816",
+   "normal": "https://cards.scryfall.io/normal/front/a/5/a53eb840-039d-4c45-b701-d58cb26b1a6c.jpg?1789644816",
+   "large": "https://cards.scryfall.io/large/front/a/5/a53eb840-039d-4c45-b701-d58cb26b1a6c.jpg?1789644816",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/5/a53eb840-039d-4c45-b701-d58cb26b1a6c.jpg?1789644816"
+  }
+ },
+ {
+  "name": "Koth of the Homestead",
+  "scryfallId": "920703fd-2a2f-454b-8829-af8f2afda4f4",
+  "oracleId": "567aeb60-a441-41b1-98f4-54510d299317",
+  "set": "fra",
+  "collectorNumber": "199",
+  "rarity": "uncommon",
+  "manaCost": "{2}{W}",
+  "typeLine": "Legendary Creature — Human Citizen",
+  "oracleText": "Landfall — Whenever a land you control enters, you gain 1 life.\nWhenever a Plains you control enters, put a +1/+1 counter on target creature.",
+  "power": "2",
+  "toughness": "3",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Landfall"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/2/920703fd-2a2f-454b-8829-af8f2afda4f4.jpg?1789568532",
+   "normal": "https://cards.scryfall.io/normal/front/9/2/920703fd-2a2f-454b-8829-af8f2afda4f4.jpg?1789568532",
+   "large": "https://cards.scryfall.io/large/front/9/2/920703fd-2a2f-454b-8829-af8f2afda4f4.jpg?1789568532",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/2/920703fd-2a2f-454b-8829-af8f2afda4f4.jpg?1789568532"
+  }
+ },
+ {
+  "name": "Liliana the Faultless",
+  "scryfallId": "70d8c400-87dc-4f15-808f-e54a95d779fc",
+  "oracleId": "22c2e66d-a2a1-46db-a70a-dff5ad5d6c14",
+  "set": "fra",
+  "collectorNumber": "200",
+  "rarity": "rare",
+  "manaCost": "{W}",
+  "typeLine": "Legendary Creature — Human Cleric",
+  "oracleText": "Whenever another creature or planeswalker you control enters, you gain 1 life.\n{1}, {T}, Discard a card: Another target creature or planeswalker you control gains hexproof until end of turn.",
+  "power": "1",
+  "toughness": "1",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/0/70d8c400-87dc-4f15-808f-e54a95d779fc.jpg?1788329194",
+   "normal": "https://cards.scryfall.io/normal/front/7/0/70d8c400-87dc-4f15-808f-e54a95d779fc.jpg?1788329194",
+   "large": "https://cards.scryfall.io/large/front/7/0/70d8c400-87dc-4f15-808f-e54a95d779fc.jpg?1788329194",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/0/70d8c400-87dc-4f15-808f-e54a95d779fc.jpg?1788329194"
+  }
+ },
+ {
+  "name": "Lyra, Archangel of Dawn",
+  "scryfallId": "86a3866e-68a8-402c-baf0-1908e98e3995",
+  "oracleId": "0fca3328-484f-4050-925e-91840710b5d6",
+  "set": "fra",
+  "collectorNumber": "201",
+  "rarity": "rare",
+  "manaCost": "{2}{W}",
+  "typeLine": "Legendary Creature — Angel Knight",
+  "oracleText": "Flying\nWhenever you gain life, put a +1/+1 counter on each Angel you control.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/6/86a3866e-68a8-402c-baf0-1908e98e3995.jpg?1789127693",
+   "normal": "https://cards.scryfall.io/normal/front/8/6/86a3866e-68a8-402c-baf0-1908e98e3995.jpg?1789127693",
+   "large": "https://cards.scryfall.io/large/front/8/6/86a3866e-68a8-402c-baf0-1908e98e3995.jpg?1789127693",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/6/86a3866e-68a8-402c-baf0-1908e98e3995.jpg?1789127693"
+  }
+ },
+ {
+  "name": "Rescue Girl, First Responder",
+  "scryfallId": "699874e3-1ccf-4a6c-8371-61040de82d08",
+  "oracleId": "df6fc0b4-333b-4f6c-804c-ba6c8e29c88e",
+  "set": "fra",
+  "collectorNumber": "202",
+  "rarity": "uncommon",
+  "manaCost": "{2}{W}",
+  "typeLine": "Legendary Creature — Human Cleric",
+  "oracleText": "Flying\n{T}: Return another target permanent you control to its owner's hand. Activate only during your turn.",
+  "power": "1",
+  "toughness": "3",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/9/699874e3-1ccf-4a6c-8371-61040de82d08.jpg?1789645598",
+   "normal": "https://cards.scryfall.io/normal/front/6/9/699874e3-1ccf-4a6c-8371-61040de82d08.jpg?1789645598",
+   "large": "https://cards.scryfall.io/large/front/6/9/699874e3-1ccf-4a6c-8371-61040de82d08.jpg?1789645598",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/9/699874e3-1ccf-4a6c-8371-61040de82d08.jpg?1789645598"
+  }
+ },
+ {
+  "name": "Saheeli, Consul of Oversight",
+  "scryfallId": "07572be0-6610-493c-a21e-14b78e9805c9",
+  "oracleId": "dfa95c0e-393d-4b22-9de3-45a7efc0ba14",
+  "set": "fra",
+  "collectorNumber": "203",
+  "rarity": "uncommon",
+  "manaCost": "{3}{W}{W}",
+  "typeLine": "Legendary Creature — Human Advisor",
+  "oracleText": "Flying\nWhenever you scry or surveil, create a 1/1 colorless Thopter artifact creature token with flying. This ability triggers only once each turn.",
+  "power": "4",
+  "toughness": "4",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/7/07572be0-6610-493c-a21e-14b78e9805c9.jpg?1789645608",
+   "normal": "https://cards.scryfall.io/normal/front/0/7/07572be0-6610-493c-a21e-14b78e9805c9.jpg?1789645608",
+   "large": "https://cards.scryfall.io/large/front/0/7/07572be0-6610-493c-a21e-14b78e9805c9.jpg?1789645608",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/7/07572be0-6610-493c-a21e-14b78e9805c9.jpg?1789645608"
+  }
+ },
+ {
+  "name": "Shatterwing Pegasus",
+  "scryfallId": "e29095de-59ec-4562-ba8e-73f952e457ae",
+  "oracleId": "7d6641e7-4d14-4a06-b588-0c752af529bd",
+  "set": "fra",
+  "collectorNumber": "21",
+  "rarity": "common",
+  "manaCost": "{2}{W}",
+  "typeLine": "Creature — Pegasus",
+  "oracleText": "Flying\n{4}{W}: Creatures you control get +1/+1 until end of turn.",
+  "power": "2",
+  "toughness": "3",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/2/e29095de-59ec-4562-ba8e-73f952e457ae.jpg?1789385580",
+   "normal": "https://cards.scryfall.io/normal/front/e/2/e29095de-59ec-4562-ba8e-73f952e457ae.jpg?1789385580",
+   "large": "https://cards.scryfall.io/large/front/e/2/e29095de-59ec-4562-ba8e-73f952e457ae.jpg?1789385580",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/2/e29095de-59ec-4562-ba8e-73f952e457ae.jpg?1789385580"
+  }
+ },
+ {
+  "name": "Thalia, the Survivor",
+  "scryfallId": "80226231-9e70-430e-aabc-f262f70b9226",
+  "oracleId": "55ef129e-698e-424f-be3c-3fbba6c2cc3e",
+  "set": "fra",
+  "collectorNumber": "205",
+  "rarity": "uncommon",
+  "manaCost": "{3}{W}",
+  "typeLine": "Legendary Creature — Human Soldier",
+  "oracleText": "Lifelink\nNoncreature spells your opponents cast cost {1} more to cast.",
+  "power": "3",
+  "toughness": "4",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Lifelink"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/0/80226231-9e70-430e-aabc-f262f70b9226.jpg?1789127700",
+   "normal": "https://cards.scryfall.io/normal/front/8/0/80226231-9e70-430e-aabc-f262f70b9226.jpg?1789127700",
+   "large": "https://cards.scryfall.io/large/front/8/0/80226231-9e70-430e-aabc-f262f70b9226.jpg?1789127700",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/0/80226231-9e70-430e-aabc-f262f70b9226.jpg?1789127700"
+  }
+ },
+ {
+  "name": "Unflinching Hortimancer",
+  "scryfallId": "63f82985-c9c2-4d0a-ac4f-560166bebd9f",
+  "oracleId": "7cd0bd74-2463-4e9d-9802-69ac4ef6d543",
+  "set": "fra",
+  "collectorNumber": "23",
+  "rarity": "common",
+  "manaCost": "{1}{W}",
+  "typeLine": "Creature — Human Cleric",
+  "oracleText": "Ward {1} (Whenever this creature becomes the target of a spell or ability an opponent controls, counter it unless that player pays {1}.)\nWhenever you gain life, put a +1/+1 counter on this creature.",
+  "power": "2",
+  "toughness": "1",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Ward"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/3/63f82985-c9c2-4d0a-ac4f-560166bebd9f.jpg?1789556741",
+   "normal": "https://cards.scryfall.io/normal/front/6/3/63f82985-c9c2-4d0a-ac4f-560166bebd9f.jpg?1789556741",
+   "large": "https://cards.scryfall.io/large/front/6/3/63f82985-c9c2-4d0a-ac4f-560166bebd9f.jpg?1789556741",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/3/63f82985-c9c2-4d0a-ac4f-560166bebd9f.jpg?1789556741"
+  }
+ },
+ {
+  "name": "Yoshimaru, Beloved Companion",
+  "scryfallId": "384f3b7d-8d7f-41bf-bebd-64e8babe7fca",
+  "oracleId": "c00a0be5-d9a9-4263-a87e-7bf2d128ab3a",
+  "set": "fra",
+  "collectorNumber": "209",
+  "rarity": "uncommon",
+  "manaCost": "{2}{W}",
+  "typeLine": "Legendary Creature — Dog",
+  "oracleText": "If one or more +1/+1 counters would be put on a creature you control, that many plus one +1/+1 counters are put on it instead.\n{6}: Put a +1/+1 counter on target legendary creature.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/8/384f3b7d-8d7f-41bf-bebd-64e8babe7fca.jpg?1789470881",
+   "normal": "https://cards.scryfall.io/normal/front/3/8/384f3b7d-8d7f-41bf-bebd-64e8babe7fca.jpg?1789470881",
+   "large": "https://cards.scryfall.io/large/front/3/8/384f3b7d-8d7f-41bf-bebd-64e8babe7fca.jpg?1789470881",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/8/384f3b7d-8d7f-41bf-bebd-64e8babe7fca.jpg?1789470881"
+  }
+ },
+ {
+  "name": "Yuriko, Blade of the Mighty",
+  "scryfallId": "ccbe92a5-42bc-4228-9d5a-212df2f5dc15",
+  "oracleId": "f89b0143-4b19-4ab1-a96b-356b21e435ef",
+  "set": "fra",
+  "collectorNumber": "210",
+  "rarity": "uncommon",
+  "manaCost": "{3}{W}",
+  "typeLine": "Legendary Creature — Human Samurai",
+  "oracleText": "During combat, players can't cast spells or activate abilities that aren't mana abilities.\nWhenever a creature you control attacks a player alone, it gains double strike until end of turn.",
+  "power": "2",
+  "toughness": "3",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/c/ccbe92a5-42bc-4228-9d5a-212df2f5dc15.jpg?1789128047",
+   "normal": "https://cards.scryfall.io/normal/front/c/c/ccbe92a5-42bc-4228-9d5a-212df2f5dc15.jpg?1789128047",
+   "large": "https://cards.scryfall.io/large/front/c/c/ccbe92a5-42bc-4228-9d5a-212df2f5dc15.jpg?1789128047",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/c/ccbe92a5-42bc-4228-9d5a-212df2f5dc15.jpg?1789128047"
+  }
+ },
+ {
+  "name": "Gideon's Memorial",
+  "scryfallId": "768c0e64-9907-417a-a763-c836fdf36883",
+  "oracleId": "c8f08704-7330-4fa9-b456-2e96aa252a2c",
+  "set": "fra",
+  "collectorNumber": "198",
+  "rarity": "rare",
+  "manaCost": "{1}{W}",
+  "typeLine": "Legendary Artifact",
+  "oracleText": "Creature tokens you control get +1/+0 and have vigilance.\n{T}: Add one mana of any color. Spend this mana only to cast a planeswalker spell.\n{1}{W}, Discard this card: It deals 4 damage to target attacking or blocking creature.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/6/768c0e64-9907-417a-a763-c836fdf36883.jpg?1789127685",
+   "normal": "https://cards.scryfall.io/normal/front/7/6/768c0e64-9907-417a-a763-c836fdf36883.jpg?1789127685",
+   "large": "https://cards.scryfall.io/large/front/7/6/768c0e64-9907-417a-a763-c836fdf36883.jpg?1789127685",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/6/768c0e64-9907-417a-a763-c836fdf36883.jpg?1789127685"
+  }
+ },
+ {
+  "name": "Memory Trap",
+  "scryfallId": "2f5345ae-4489-4d05-b2d5-c71285254f05",
+  "oracleId": "70616a8c-9b6c-408e-8f3e-2c348ec136d8",
+  "set": "fra",
+  "collectorNumber": "15",
+  "rarity": "common",
+  "manaCost": "{2}{W}",
+  "typeLine": "Enchantment",
+  "oracleText": "When this enchantment enters, exile target nonland permanent an opponent controls until this enchantment leaves the battlefield.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/f/2f5345ae-4489-4d05-b2d5-c71285254f05.jpg?1788866058",
+   "normal": "https://cards.scryfall.io/normal/front/2/f/2f5345ae-4489-4d05-b2d5-c71285254f05.jpg?1788866058",
+   "large": "https://cards.scryfall.io/large/front/2/f/2f5345ae-4489-4d05-b2d5-c71285254f05.jpg?1788866058",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/f/2f5345ae-4489-4d05-b2d5-c71285254f05.jpg?1788866058"
+  }
+ },
+ {
+  "name": "Generous Revival",
+  "scryfallId": "f82f181b-a43b-4cec-b8f6-f6c1dd4c64fd",
+  "oracleId": "f8601f5f-0f7c-4689-9d15-137f1e82c49c",
+  "set": "fra",
+  "collectorNumber": "8",
+  "rarity": "uncommon",
+  "manaCost": "{2}{W}",
+  "typeLine": "Sorcery",
+  "oracleText": "Return target creature card with mana value 3 or less from your graveyard to the battlefield with an additional +1/+1 counter on it.\nFlashback {4}{W} (You may cast this card from your graveyard for its flashback cost. Then exile it.)",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Flashback"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/8/f82f181b-a43b-4cec-b8f6-f6c1dd4c64fd.jpg?1788433351",
+   "normal": "https://cards.scryfall.io/normal/front/f/8/f82f181b-a43b-4cec-b8f6-f6c1dd4c64fd.jpg?1788433351",
+   "large": "https://cards.scryfall.io/large/front/f/8/f82f181b-a43b-4cec-b8f6-f6c1dd4c64fd.jpg?1788433351",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/8/f82f181b-a43b-4cec-b8f6-f6c1dd4c64fd.jpg?1788433351"
+  }
+ },
+ {
+  "name": "Germinate Recruits",
+  "scryfallId": "1b5d7d19-b32a-4786-ae9a-00da5e6658ad",
+  "oracleId": "2c3a1313-a66e-4317-9732-e4ff9288b0db",
+  "set": "fra",
+  "collectorNumber": "9",
+  "rarity": "rare",
+  "manaCost": "{2}{W}",
+  "typeLine": "Instant",
+  "oracleText": "Create X 2/2 colorless Wizard Soldier creature tokens named Cadet, where X is the amount of life you gained this turn.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/b/1b5d7d19-b32a-4786-ae9a-00da5e6658ad.jpg?1789644810",
+   "normal": "https://cards.scryfall.io/normal/front/1/b/1b5d7d19-b32a-4786-ae9a-00da5e6658ad.jpg?1789644810",
+   "large": "https://cards.scryfall.io/large/front/1/b/1b5d7d19-b32a-4786-ae9a-00da5e6658ad.jpg?1789644810",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/b/1b5d7d19-b32a-4786-ae9a-00da5e6658ad.jpg?1789644810"
+  }
+ },
+ {
+  "name": "Kindred Judgment",
+  "scryfallId": "6f9f814b-8249-4e48-a05e-4c84060fe6fb",
+  "oracleId": "b5dce42a-a769-4d7d-b29e-8722f79d4092",
+  "set": "fra",
+  "collectorNumber": "13",
+  "rarity": "rare",
+  "manaCost": "{5}{W}{W}",
+  "typeLine": "Sorcery",
+  "oracleText": "Choose a creature type. Destroy all creatures that aren't of the chosen type.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/f/6f9f814b-8249-4e48-a05e-4c84060fe6fb.jpg?1789470776",
+   "normal": "https://cards.scryfall.io/normal/front/6/f/6f9f814b-8249-4e48-a05e-4c84060fe6fb.jpg?1789470776",
+   "large": "https://cards.scryfall.io/large/front/6/f/6f9f814b-8249-4e48-a05e-4c84060fe6fb.jpg?1789470776",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/f/6f9f814b-8249-4e48-a05e-4c84060fe6fb.jpg?1789470776"
+  }
+ },
+ {
+  "name": "Loyal Tutor",
+  "scryfallId": "490dae91-94ce-42a9-a11f-6c5e77c4e486",
+  "oracleId": "7e52f151-d1f6-4fcb-9b21-1baecae27da6",
+  "set": "fra",
+  "collectorNumber": "14",
+  "rarity": "rare",
+  "manaCost": "{W}",
+  "typeLine": "Instant",
+  "oracleText": "Search your library for a planeswalker card, reveal it, then shuffle and put that card on top.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/9/490dae91-94ce-42a9-a11f-6c5e77c4e486.jpg?1788878096",
+   "normal": "https://cards.scryfall.io/normal/front/4/9/490dae91-94ce-42a9-a11f-6c5e77c4e486.jpg?1788878096",
+   "large": "https://cards.scryfall.io/large/front/4/9/490dae91-94ce-42a9-a11f-6c5e77c4e486.jpg?1788878096",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/9/490dae91-94ce-42a9-a11f-6c5e77c4e486.jpg?1788878096"
+  }
+ },
+ {
+  "name": "Predictive Preparations",
+  "scryfallId": "50a0e5f0-3c39-4f16-9a73-eec8ef71f12e",
+  "oracleId": "d06a5642-861b-4b0d-9ea5-07046b7e1d37",
+  "set": "fra",
+  "collectorNumber": "16",
+  "rarity": "common",
+  "manaCost": "{1}{W}",
+  "typeLine": "Sorcery",
+  "oracleText": "Put a +1/+1 counter on each of one or two target creatures.\nFlashback {3}{W} (You may cast this card from your graveyard for its flashback cost. Then exile it.)",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Flashback"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/0/50a0e5f0-3c39-4f16-9a73-eec8ef71f12e.jpg?1789556696",
+   "normal": "https://cards.scryfall.io/normal/front/5/0/50a0e5f0-3c39-4f16-9a73-eec8ef71f12e.jpg?1789556696",
+   "large": "https://cards.scryfall.io/large/front/5/0/50a0e5f0-3c39-4f16-9a73-eec8ef71f12e.jpg?1789556696",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/0/50a0e5f0-3c39-4f16-9a73-eec8ef71f12e.jpg?1789556696"
+  }
+ },
+ {
+  "name": "Prophesied End",
+  "scryfallId": "1f95399a-9766-4f3d-aa6a-ece55e0530d9",
+  "oracleId": "45f4d057-5134-40a2-9590-ddba73a65582",
+  "set": "fra",
+  "collectorNumber": "17",
+  "rarity": "uncommon",
+  "manaCost": "{1}{W}",
+  "typeLine": "Instant",
+  "oracleText": "Destroy target creature. If it wasn't attacking, its controller draws a card.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/f/1f95399a-9766-4f3d-aa6a-ece55e0530d9.jpg?1788951920",
+   "normal": "https://cards.scryfall.io/normal/front/1/f/1f95399a-9766-4f3d-aa6a-ece55e0530d9.jpg?1788951920",
+   "large": "https://cards.scryfall.io/large/front/1/f/1f95399a-9766-4f3d-aa6a-ece55e0530d9.jpg?1788951920",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/f/1f95399a-9766-4f3d-aa6a-ece55e0530d9.jpg?1788951920"
+  }
+ },
+ {
+  "name": "Refute Destiny",
+  "scryfallId": "2c588954-c6eb-4aae-a2fa-0651ccf2d90a",
+  "oracleId": "2a18b3f0-8a78-46d8-b60f-3cd634062f1b",
+  "set": "fra",
+  "collectorNumber": "18",
+  "rarity": "uncommon",
+  "manaCost": "{1}{W}",
+  "typeLine": "Sorcery",
+  "oracleText": "Exile target creature or planeswalker that's green or blue. Surveil 1. (Look at the top card of your library. You may put it into your graveyard.)",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Surveil"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/c/2c588954-c6eb-4aae-a2fa-0651ccf2d90a.jpg?1789470778",
+   "normal": "https://cards.scryfall.io/normal/front/2/c/2c588954-c6eb-4aae-a2fa-0651ccf2d90a.jpg?1789470778",
+   "large": "https://cards.scryfall.io/large/front/2/c/2c588954-c6eb-4aae-a2fa-0651ccf2d90a.jpg?1789470778",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/c/2c588954-c6eb-4aae-a2fa-0651ccf2d90a.jpg?1789470778"
+  }
+ },
+ {
+  "name": "Return to the Light Realms",
+  "scryfallId": "9e72f397-2384-40f1-882b-f627664d97df",
+  "oracleId": "217e76ca-ea94-417c-b5b0-82e2302eeee8",
+  "set": "fra",
+  "collectorNumber": "20",
+  "rarity": "mythic",
+  "manaCost": "{7}{W}{W}",
+  "typeLine": "Sorcery",
+  "oracleText": "Return all nonland permanent cards from your graveyard to the battlefield.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/e/9e72f397-2384-40f1-882b-f627664d97df.jpg?1788878107",
+   "normal": "https://cards.scryfall.io/normal/front/9/e/9e72f397-2384-40f1-882b-f627664d97df.jpg?1788878107",
+   "large": "https://cards.scryfall.io/large/front/9/e/9e72f397-2384-40f1-882b-f627664d97df.jpg?1788878107",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/e/9e72f397-2384-40f1-882b-f627664d97df.jpg?1788878107"
+  }
+ },
+ {
+  "name": "Surgical Precision",
+  "scryfallId": "d3acf176-ef02-4729-88c4-0f0dfbfdada4",
+  "oracleId": "0caccec3-4942-499a-9434-0c94389afcf8",
+  "set": "fra",
+  "collectorNumber": "22",
+  "rarity": "common",
+  "manaCost": "{1}{W}",
+  "typeLine": "Sorcery",
+  "oracleText": "Choose one —\n• Destroy target creature with toughness 4 or greater. You gain 1 life.\n• You draw a card and gain 2 life.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/3/d3acf176-ef02-4729-88c4-0f0dfbfdada4.jpg?1789385570",
+   "normal": "https://cards.scryfall.io/normal/front/d/3/d3acf176-ef02-4729-88c4-0f0dfbfdada4.jpg?1789385570",
+   "large": "https://cards.scryfall.io/large/front/d/3/d3acf176-ef02-4729-88c4-0f0dfbfdada4.jpg?1789385570",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/3/d3acf176-ef02-4729-88c4-0f0dfbfdada4.jpg?1789385570"
+  }
+ },
+ {
+  "name": "Your Fate Ends Here",
+  "scryfallId": "25000a17-b701-4d69-b2ef-2c74029199d3",
+  "oracleId": "28a362c2-0c99-48e0-b9cb-485a6c1f350b",
+  "set": "fra",
+  "collectorNumber": "24",
+  "rarity": "uncommon",
+  "manaCost": "{2}{W}",
+  "typeLine": "Instant",
+  "oracleText": "Destroy target creature or planeswalker with mana value 3 or greater. Surveil 1. (Look at the top card of your library. You may put it into your graveyard.)",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Surveil"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/5/25000a17-b701-4d69-b2ef-2c74029199d3.jpg?1789729751",
+   "normal": "https://cards.scryfall.io/normal/front/2/5/25000a17-b701-4d69-b2ef-2c74029199d3.jpg?1789729751",
+   "large": "https://cards.scryfall.io/large/front/2/5/25000a17-b701-4d69-b2ef-2c74029199d3.jpg?1789729751",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/5/25000a17-b701-4d69-b2ef-2c74029199d3.jpg?1789729751"
+  }
  }
 ]

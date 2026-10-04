@@ -200,6 +200,8 @@ export function chooseScry(engine: Engine, s: GameState, me: PlayerId, legal: Ac
   const keep = (id: ObjectId) => {
     const c = defOf(engine, s, id);
     if (!c) return true;
+    // Reality Fracture (17a): Enlightened Confidant: a card put into the graveyard that cheap goes to hand.
+    if (d.toHandMaxMv !== undefined && manaValue(c.manaCost) <= d.toHandMaxMv) return false;
     if (c.types.includes('Land')) return lands < 5;
     return lands >= 3 && manaValue(c.manaCost) <= lands + 1;
   };

@@ -363,6 +363,16 @@ export function castCost(
   if (choice.delve) reduce += choice.delve;
   // {X}: X is chosen as the spell is cast.
   if (cost.x) cost = { ...cost, generic: cost.generic + cost.x * (choice.x ?? 0), x: 0 };
+  // Reality Fracture (17a): Thalia, the Survivor: your opponents' permanents make these spells cost more.
+  for (const id of ctx.s.battlefield)
+    if (obj(ctx, id).controller !== player)
+      for (const a of def(ctx, id).abilities)
+        if (
+          a.kind === 'static' &&
+          a.effect.kind === 'opponentSpellsCostMore' &&
+          cardMatches(ctx, card, a.effect.filter, id)
+        )
+          cost = { ...cost, generic: cost.generic + a.effect.amount };
   // Strixhaven (13c): Plumb the Forbidden's sacrifices make copies, not a discount.
   if (!d.sacrificeCreaturesToCopy)
     reduce += (choice.sacrificeMany?.length ?? 0) * (d.sacrificeCreaturesForReduction ?? 1);
@@ -1115,7 +1125,7 @@ function enterAsCopy(
 }
 
 /** An Aura attaches; Sugar Coat makes its host a Food, Kitnap takes control of it. */
-function attachAura(ctx: Ctx, aura: ObjectId, host: ObjectId): void {
+export function attachAura(ctx: Ctx, aura: ObjectId, host: ObjectId): void {
   const a = obj(ctx, aura);
   a.attachedTo = host;
   const h = obj(ctx, host);
@@ -1478,6 +1488,14 @@ export function answerScry(ctx: Ctx, top: readonly ObjectId[], bottom: readonly 
     // Surveil: "bottom" means the graveyard. Put them back on top first so moveObject finds them.
     lib.unshift(...bottom);
     for (const id of bottom) moveObject(ctx, id, 'graveyard');
+    // Reality Fracture (17a): Enlightened Confidant: a card with low enough mana value goes to your hand.
+    if (d.toHandMaxMv !== undefined)
+      for (const id of bottom)
+        if (
+          ctx.s.objects[id]?.zone === 'graveyard' &&
+          manaValue(def(ctx, id).manaCost) <= d.toHandMaxMv
+        )
+          moveObject(ctx, id, 'hand');
   } else lib.push(...bottom);
   emit(ctx, { type: 'scried', player: d.player, top: top.length, bottom: bottom.length });
   resume(ctx, d.resume, d.thenPriority);

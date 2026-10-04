@@ -945,6 +945,10 @@ export function runEffects(
           kind: 'scry',
           player: scryer,
           ...(e.kind === 'surveil' ? { surveil: true } : {}),
+          // Reality Fracture (17a): Enlightened Confidant
+          ...(e.kind === 'surveil' && e.graveyardToHand
+            ? { toHandMaxMv: resolveAmount(ctx, es, e.graveyardToHand.maxManaValue) }
+            : {}),
           cards,
           resume,
           thenPriority,
