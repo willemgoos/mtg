@@ -17,6 +17,7 @@ import { MSH_JUMPSTART_SCARLET } from './jumpstart-scarlet.ts';
 import { MSH_JUMPSTART_SHIELD } from './jumpstart-shield.ts';
 import { MSH_JUMPSTART_SOARING } from './jumpstart-soaring.ts';
 import { MSH_JUMPSTART_THOR } from './jumpstart-thor.ts';
+import { MSH_JUMPSTART_TOWERING } from './jumpstart-towering.ts';
 import { MSH_JUMPSTART_TRAINED } from './jumpstart-trained.ts';
 import { MSH_JUMPSTART_TRICKSTERS } from './jumpstart-tricksters.ts';
 import { MSH_JUMPSTART_WAKANDA } from './jumpstart-wakanda.ts';
@@ -68,6 +69,7 @@ export const MSH_JUMPSTART: Record<string, Behavior> = {
   ...MSH_JUMPSTART_SHIELD,
   ...MSH_JUMPSTART_SOARING,
   ...MSH_JUMPSTART_THOR,
+  ...MSH_JUMPSTART_TOWERING,
   ...MSH_JUMPSTART_TRAINED,
   ...MSH_JUMPSTART_TRICKSTERS,
   ...MSH_JUMPSTART_WAKANDA,

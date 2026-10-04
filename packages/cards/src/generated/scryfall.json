@@ -24158,6 +24158,105 @@
   }
  },
  {
+  "name": "Goliath, Mass Manipulator",
+  "scryfallId": "78216454-a0d5-4b4d-bd72-b96c742202b4",
+  "oracleId": "d06d7065-27e5-4119-a226-6f6d990d72c7",
+  "set": "msc",
+  "collectorNumber": "766",
+  "rarity": "uncommon",
+  "manaCost": "{1}{G}",
+  "typeLine": "Legendary Creature — Human Scientist Hero",
+  "oracleText": "Reach (This creature can block creatures with flying.)\nPower-up — {4}{G}: Put two +1/+1 counters on Goliath. Then draw a card for each creature you control with power 4 or greater. (Activate each power-up ability only once. Reduce the cost by his mana cost if he entered this turn.)",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Power-up",
+   "Reach"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/8/78216454-a0d5-4b4d-bd72-b96c742202b4.jpg?1783903023",
+   "normal": "https://cards.scryfall.io/normal/front/7/8/78216454-a0d5-4b4d-bd72-b96c742202b4.jpg?1783903023",
+   "large": "https://cards.scryfall.io/large/front/7/8/78216454-a0d5-4b4d-bd72-b96c742202b4.jpg?1783903023",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/8/78216454-a0d5-4b4d-bd72-b96c742202b4.jpg?1783903023"
+  }
+ },
+ {
+  "name": "Giant-Man, Gargantuan Genius",
+  "scryfallId": "45c6871c-0b6a-4ae1-a2b6-e1049b2225ea",
+  "oracleId": "effa84e6-0aee-422f-81e9-3feeca38eda2",
+  "set": "msc",
+  "collectorNumber": "722",
+  "rarity": "rare",
+  "manaCost": "{3}{G}{G}",
+  "typeLine": "Legendary Creature — Human Scientist Hero",
+  "oracleText": "Reach\nAt the beginning of your first main phase, add {G} for each creature you control with power 4 or greater.",
+  "power": "6",
+  "toughness": "6",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Reach"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/5/45c6871c-0b6a-4ae1-a2b6-e1049b2225ea.jpg?1783903039",
+   "normal": "https://cards.scryfall.io/normal/front/4/5/45c6871c-0b6a-4ae1-a2b6-e1049b2225ea.jpg?1783903039",
+   "large": "https://cards.scryfall.io/large/front/4/5/45c6871c-0b6a-4ae1-a2b6-e1049b2225ea.jpg?1783903039",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/5/45c6871c-0b6a-4ae1-a2b6-e1049b2225ea.jpg?1783903039"
+  }
+ },
+ {
+  "name": "Spider-Rex, Daring Dino",
+  "scryfallId": "531bad8f-a1e2-43ff-9d76-d702142f50a1",
+  "oracleId": "58b771d4-dfaf-4189-a5f6-4bc0fb4c0fa3",
+  "set": "msc",
+  "collectorNumber": "818",
+  "rarity": "common",
+  "manaCost": "{4}{G}{G}",
+  "typeLine": "Legendary Creature — Spider Dinosaur Hero",
+  "oracleText": "Reach, trample\nWard {2} (Whenever this creature becomes the target of a spell or ability an opponent controls, counter it unless that player pays {2}.)",
+  "power": "6",
+  "toughness": "6",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Reach",
+   "Trample",
+   "Ward"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/3/531bad8f-a1e2-43ff-9d76-d702142f50a1.jpg?1783903006",
+   "normal": "https://cards.scryfall.io/normal/front/5/3/531bad8f-a1e2-43ff-9d76-d702142f50a1.jpg?1783903006",
+   "large": "https://cards.scryfall.io/large/front/5/3/531bad8f-a1e2-43ff-9d76-d702142f50a1.jpg?1783903006",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/3/531bad8f-a1e2-43ff-9d76-d702142f50a1.jpg?1783903006"
+  }
+ },
+ {
+  "name": "Terrific Team-Up",
+  "scryfallId": "378f0a20-61cf-4947-8816-8a065dc44275",
+  "oracleId": "431c5b04-7387-4724-adfa-d1eb7874e79e",
+  "set": "msc",
+  "collectorNumber": "819",
+  "rarity": "uncommon",
+  "manaCost": "{3}{G}",
+  "typeLine": "Instant",
+  "oracleText": "This spell costs {2} less to cast if you control a permanent with mana value 4 or greater.\nOne or two target creatures you control each get +1/+0 until end of turn. They each deal damage equal to their power to target creature an opponent controls.",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/7/378f0a20-61cf-4947-8816-8a065dc44275.jpg?1783903004",
+   "normal": "https://cards.scryfall.io/normal/front/3/7/378f0a20-61cf-4947-8816-8a065dc44275.jpg?1783903004",
+   "large": "https://cards.scryfall.io/large/front/3/7/378f0a20-61cf-4947-8816-8a065dc44275.jpg?1783903004",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/7/378f0a20-61cf-4947-8816-8a065dc44275.jpg?1783903004"
+  }
+ },
+ {
   "name": "She-Hulk, Attorney-at-Law",
   "scryfallId": "93a44ea5-a571-4abb-b8fa-14b8224ecaeb",
   "oracleId": "db99d52b-bbe6-4a48-8f2c-bf77912dc0a9",
