@@ -50,6 +50,7 @@ export function runSBAs(ctx: Ctx): void {
         const front = def(ctx, id).bestowFront!;
         o.defId = front;
         delete o.front;
+        if (host) o.lastAttachedTo = { id: host.id, zcc: host.zcc - 1 };
         delete o.attachedTo;
         changed = true;
         continue;

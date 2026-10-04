@@ -299,13 +299,14 @@ export const BRAWL_15B_W: Record<string, Behavior> = {
   'Indebted Spirit': bestow(
     'Indebted Spirit',
     '{2}{W}',
+    [attachedStatic(1, 1)],
     [
-      attachedStatic(1, 1),
-      // "Enchanted creature has afterlife 1": when it dies, its controller makes the Spirit.
+      // Afterlife 1: when this permanent is put into a graveyard from the battlefield.
+      when({ on: 'selfToGraveyard' }, [], create(SOC_15B_WB_SPIRIT)),
+      // "Enchanted creature has afterlife 1" (kept on the creature face so it still fires once the
+      // bestowed Aura has become a creature again).
       when({ on: 'attachedDies' }, [], create(SOC_15B_WB_SPIRIT)),
     ],
-    // Afterlife 1: when this permanent is put into a graveyard from the battlefield.
-    [when({ on: 'selfToGraveyard' }, [], create(SOC_15B_WB_SPIRIT))],
   ),
   // Protection from Vampires isn't modelled (see simplifications).
   'Katilda, Dawnhart Martyr': {

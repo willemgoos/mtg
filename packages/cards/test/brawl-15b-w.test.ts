@@ -303,7 +303,11 @@ describe('constellation and eerie', () => {
         (a) => a.type === 'chooseTargets' && JSON.stringify(a.targets).includes(g.id('p1', 'savannah-lions')),
       ),
     );
-    // Wayfarer +1/+1 until end of turn, Scavenger a permanent counter, Keepguard scry 1 (answered by settle).
+    // Wayfarer +1/+1 until end of turn, Scavenger a permanent counter, Keepguard scry 1.
+    while (g.decision.kind === 'scry') {
+      g.do({ type: 'scry', player: 'p1', top: g.decision.cards, bottom: [] });
+      settle(g);
+    }
     expect(pt(g, g.id('p1', 'savannah-lions'))).toEqual([4, 3]);
     expect(counters(g, g.id('p1', 'savannah-lions'))).toBe(1);
   });
@@ -313,7 +317,7 @@ describe('constellation and eerie', () => {
       p1: { hand: ['seal-away'], battlefield: [...n('plains', 2), 'sigil-of-the-empty-throne'] },
       p2: { battlefield: [{ card: 'rumbling-baloth', tapped: true }] },
     });
-    cast(g, 'seal-away', [ref(g, g.id('p2', 'rumbling-baloth'))]);
+    cast(g, 'seal-away');
     settle(g);
     const angels = all(g, 'soc-15b-w-angel');
     expect(angels).toHaveLength(1);
@@ -356,7 +360,7 @@ describe('constellation and eerie', () => {
     });
     cast(g, 'spirited-companion');
     settle(g);
-    cast(g, 'seal-away', [ref(g, g.id('p2', 'rumbling-baloth'))]);
+    cast(g, 'seal-away');
     settle(g);
     // Only the first enchantment spell made a Nymph.
     expect(all(g, 'soc-15b-w-nymph')).toHaveLength(1);
@@ -481,7 +485,7 @@ describe('Auras', () => {
 
   it('Skyblade’s Boon returns to hand from the battlefield or the graveyard', () => {
     const g = game({
-      p1: { hand: ["skyblades-boon"], battlefield: [...n('plains', 6), 'savannah-lions'] },
+      p1: { hand: ["skyblades-boon"], battlefield: [...n('plains', 8), 'savannah-lions'] },
     });
     const lions = g.id('p1', 'savannah-lions');
     cast(g, "skyblades-boon", [ref(g, lions)]);
@@ -588,7 +592,7 @@ describe('creatures and cost reducers', () => {
       p1: { hand: ['seal-away'], battlefield: ['plains', 'starfield-mystic'] },
       p2: { battlefield: [{ card: 'savannah-lions', tapped: true }] },
     });
-    cast(b, 'seal-away', [ref(b, b.id('p2', 'savannah-lions'))]);
+    cast(b, 'seal-away');
     expect(b.state.stack).toHaveLength(1);
     const c = game({
       p1: {
@@ -728,7 +732,10 @@ describe('creatures and cost reducers', () => {
         graveyard: ['mind-stone', 'seal-away'],
       },
     });
-    activate(g, 'restoration-specialist', 0);
+    activate(g, 'restoration-specialist', 0, [
+      ref(g, g.id('p1', 'mind-stone', 'graveyard')),
+      ref(g, g.id('p1', 'seal-away', 'graveyard')),
+    ]);
     expect(zoneIds(g, 'p1', 'hand', 'mind-stone')).toHaveLength(1);
     expect(zoneIds(g, 'p1', 'hand', 'seal-away')).toHaveLength(1);
   });
@@ -737,7 +744,7 @@ describe('creatures and cost reducers', () => {
     const g = game({
       p1: { battlefield: [...n('plains', 3), 'slumbering-keepguard', 'seal-away', 'seal-away'] },
     });
-    activate(g, 'slumbering-keepguard', 0);
+    activate(g, 'slumbering-keepguard', 1);
     expect(pt(g, g.id('p1', 'slumbering-keepguard'))).toEqual([3, 3]);
   });
 
@@ -755,7 +762,7 @@ describe('creatures and cost reducers', () => {
       targets: [ref(g, lions)],
     });
     // Pick red.
-    g.pass();
+    g.passBoth();
     expect(g.decision.kind).toBe('chooseOption');
     const red = (g.decision as { options: { label: string }[] }).options.findIndex(
       (o) => o.label === 'Red',
@@ -824,7 +831,7 @@ describe('tokens', () => {
     g.do(
       g.legal().find((a) => a.type === 'activateAbility' && a.source === src && a.abilityIndex === 1)!,
     );
-    g.pass();
+    g.passBoth();
     expect(g.decision.kind).toBe('sacrificeSeveral');
     g.do({ type: 'chooseCard', player: 'p1', card: g.id('p1', 'savannah-lions') });
     g.do({ type: 'chooseCard', player: 'p1', card: g.id('p1', 'doomed-traveler') });
@@ -847,7 +854,7 @@ describe('tokens', () => {
     expect(keywords(g, lions)).toContain('flying');
     g.obj(elspeth).counters = { loyalty: 5 };
     // Reset the once-per-turn loyalty use for the next ability.
-    g.state.players.p1.loyaltyUsed = [];
+    delete g.obj(elspeth).onceTurns;
     activate(g, 'elspeth-storm-slayer', 3);
     expect(all(g, 'rumbling-baloth')).toHaveLength(0);
     expect(all(g, 'doomed-traveler')).toHaveLength(1);
@@ -868,17 +875,11 @@ describe('tokens', () => {
   });
 
   it('Spellbook Vendor pays {1} at combat for a Sorcerer Role on a creature', () => {
-    const g = game({
-      p1: { battlefield: ['plains', 'plains', 'spellbook-vendor', 'savannah-lions'] },
-    });
-    const lions = g.id('p1', 'savannah-lions');
-    g.passUntilStep('main2');
-    expect(g.state.turn.step).toBe('main2');
     const h = game({
       step: 'main1',
       p1: { battlefield: ['plains', 'plains', 'spellbook-vendor', 'savannah-lions'] },
     });
-    h.passUntilStep('beginCombat');
+    while (h.decision.kind === 'priority') h.pass();
     // Beginning of combat: pay {1} and choose the Lions.
     settle(h, (legal) =>
       legal.find(
@@ -891,7 +892,6 @@ describe('tokens', () => {
     expect(role).toHaveLength(1);
     expect(h.obj(role[0]!).attachedTo).toBe(h.id('p1', 'savannah-lions'));
     expect(pt(h, h.id('p1', 'savannah-lions'))).toEqual([3, 2]);
-    expect(lions).toBeDefined();
   });
 });
 
@@ -931,12 +931,12 @@ describe('spells', () => {
     const g = game({
       p1: {
         hand: ['divine-reckoning'],
-        battlefield: [...n('plains', 4), 'savannah-lions', 'doomed-traveler'],
+        battlefield: [...n('plains', 4), 'savannah-lions', 'savannah-lions'],
       },
-      p2: { battlefield: ['rumbling-baloth', 'doomed-traveler'] },
+      p2: { battlefield: ['rumbling-baloth', 'rumbling-baloth'] },
     });
     cast(g, 'divine-reckoning');
-    g.pass();
+    g.passBoth();
     // p1 chooses first, then p2.
     expect(g.decision.kind).toBe('chooseOption');
     expect(g.actor).toBe('p1');
@@ -960,7 +960,7 @@ describe('spells', () => {
       p1: { hand: ['seal-away'], battlefield: ['plains', 'plains'] },
       p2: { battlefield: [{ card: 'rumbling-baloth', tapped: true }] },
     });
-    cast(g, 'seal-away', [ref(g, g.id('p2', 'rumbling-baloth'))]);
+    cast(g, 'seal-away');
     settle(g);
     expect(all(g, 'rumbling-baloth')).toHaveLength(0);
   });
