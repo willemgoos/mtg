@@ -107,6 +107,13 @@ export function checkCondition(
     );
   if (c.kind === 'opponentAttackedLastTurn')
     return ctx.s.players[other(controller)].attackedLastTurn === true;
+  // Reality Fracture (17a): Command the Stage, Master of Barbs, Koth, the Geomancer.
+  if (c.kind === 'opponentDealtNoncombatDamageThisTurn')
+    return (ctx.s.turn.noncombatDamaged ?? []).includes(other(controller));
+  if (c.kind === 'opponentDealtNoncombatDamageLastTurn')
+    return (ctx.s.turn.lastNoncombatDamaged ?? []).includes(other(controller));
+  if (c.kind === 'subjectMatches')
+    return !!subject && subject.zone === 'battlefield' && matchesFilter(ctx, subject.id, c.filter);
   if (c.kind === 'sourceDamagedSubject') return !!self && !!subject?.damagedBy?.includes(self.id);
   // Marvel Super Heroes Jumpstart (Heroes for Hire)
   if (c.kind === 'targetChosen') return !!targets?.[c.target];
@@ -1277,6 +1284,8 @@ function detect(ctx: Ctx, ev: GameEvent): void {
             a.trigger.on === 'creatureYouControlAttacks' &&
             o.controller === attacker.controller &&
             (!a.trigger.alone || ev.attackers.length === 1) &&
+            // Reality Fracture (17a): Jiang Yanggu, "attacks a player".
+            (!a.trigger.aPlayer || !s.combat?.attackers.find((x) => x.id === id)?.planeswalker) &&
             matchesFilter(ctx, id, a.trigger.filter, o.id),
           attacker,
         );
@@ -1301,6 +1310,19 @@ function detect(ctx: Ctx, ev: GameEvent): void {
       // Marvel Super Heroes Jumpstart (Tenacious/Rampaging): "whenever this creature blocks" (Atlas).
       const blockers = new Set(ev.blocks.map((b) => b.blocker));
       forEachBattlefieldTrigger(ctx, (o, a) => a.trigger.on === 'blocks' && blockers.has(o.id));
+      // Reality Fracture (17a): Tetsuko Umezawa, Pursuer: "a creature an opponent controls ... blocks".
+      for (const id of blockers) {
+        const blocker = s.objects[id];
+        if (!blocker) continue;
+        forEachBattlefieldTrigger(
+          ctx,
+          (o, a) =>
+            a.trigger.on === 'opponentCreatureBlocks' &&
+            o.controller !== blocker.controller &&
+            matchesFilter(ctx, id, a.trigger.filter, o.id),
+          blocker,
+        );
+      }
       forEachBattlefieldTrigger(
         ctx,
         (o, a) => a.trigger.on === 'becomesBlocked' && blocked.has(o.id),
@@ -1390,6 +1412,16 @@ function detect(ctx: Ctx, ev: GameEvent): void {
             hurt,
             ev.amount,
           );
+      }
+      // Reality Fracture (17a): Master of Barbs: an opponent was dealt noncombat damage (by any source).
+      if (!ev.combat && 'player' in ev.to) {
+        const hurtPlayer = ev.to.player;
+        forEachBattlefieldTrigger(
+          ctx,
+          (o, a) => a.trigger.on === 'opponentDealtNoncombatDamage' && o.controller !== hurtPlayer,
+          undefined,
+          ev.amount,
+        );
       }
       if (!ev.combat) {
         // Niv-Mizzet: noncombat damage to an opponent from a source you control.
@@ -1785,6 +1817,17 @@ function detect(ctx: Ctx, ev: GameEvent): void {
       }
       if (ev.step !== 'upkeep' && ev.step !== 'end') return;
       const on = ev.step === 'upkeep' ? 'beginningOfUpkeep' : 'beginningOfEndStep';
+      // Reality Fracture (17a): Command the Stage: "At the beginning of each upkeep, ... return this card from your graveyard".
+      for (const owner of ['p1', 'p2'] as const)
+        for (const id of s.players[owner].graveyard) {
+          const card = s.objects[id]!;
+          def(ctx, id).abilities.forEach((a, i) => {
+            if (a.kind !== 'triggered' || !a.fromGraveyard || a.trigger.on !== on) return;
+            const whose = (a.trigger as { whose?: string }).whose;
+            if (whose !== 'each' && !(whose === 'yours' && owner === ev.activePlayer)) return;
+            if (checkCondition(ctx, a.condition, owner, card)) queue(ctx, card, i, owner);
+          });
+        }
       forEachBattlefieldTrigger(ctx, (o, a) => {
         const t = a.trigger;
         if (t.on !== on) return false;

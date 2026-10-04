@@ -67726,5 +67726,888 @@
    "large": "https://cards.scryfall.io/large/front/1/1/117bb5db-4a1c-4704-b0b5-c67b45ac2f52.jpg?1783906353",
    "artCrop": "https://cards.scryfall.io/art_crop/front/1/1/117bb5db-4a1c-4704-b0b5-c67b45ac2f52.jpg?1783906353"
   }
+ },
+ {
+  "name": "Ajani's Anguish",
+  "scryfallId": "d9039a58-2f17-4b8a-b714-3a2f0b46f057",
+  "oracleId": "4a37f4a0-2869-4f81-b51b-4c3e7e0e0671",
+  "set": "fra",
+  "collectorNumber": "72",
+  "rarity": "rare",
+  "manaCost": "{X}{R}",
+  "typeLine": "Enchantment",
+  "oracleText": "When this enchantment enters, it deals X damage to any target.\nCreatures you control have trample.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/9/d9039a58-2f17-4b8a-b714-3a2f0b46f057.jpg?1789470674",
+   "normal": "https://cards.scryfall.io/normal/front/d/9/d9039a58-2f17-4b8a-b714-3a2f0b46f057.jpg?1789470674",
+   "large": "https://cards.scryfall.io/large/front/d/9/d9039a58-2f17-4b8a-b714-3a2f0b46f057.jpg?1789470674",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/9/d9039a58-2f17-4b8a-b714-3a2f0b46f057.jpg?1789470674"
+  }
+ },
+ {
+  "name": "Arni, Renowned Champion",
+  "scryfallId": "bd8db649-1dba-457d-8327-e1f1da1aab36",
+  "oracleId": "1a929c4f-ae1f-44d9-a0a7-2ca2dc928dee",
+  "set": "fra",
+  "collectorNumber": "243",
+  "rarity": "uncommon",
+  "manaCost": "{3}{R}",
+  "typeLine": "Legendary Creature — Human Berserker",
+  "oracleText": "Trample\nWhenever another creature you control enters, Arni gets +X/+0 until end of turn, where X is that creature's power.",
+  "power": "1",
+  "toughness": "5",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Trample"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/d/bd8db649-1dba-457d-8327-e1f1da1aab36.jpg?1789557035",
+   "normal": "https://cards.scryfall.io/normal/front/b/d/bd8db649-1dba-457d-8327-e1f1da1aab36.jpg?1789557035",
+   "large": "https://cards.scryfall.io/large/front/b/d/bd8db649-1dba-457d-8327-e1f1da1aab36.jpg?1789557035",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/d/bd8db649-1dba-457d-8327-e1f1da1aab36.jpg?1789557035"
+  }
+ },
+ {
+  "name": "Artifist Acumen",
+  "scryfallId": "7d3b720d-f27c-462a-8f80-15748e5086e1",
+  "oracleId": "129b41cf-8327-42f0-b186-1111b42c08ab",
+  "set": "fra",
+  "collectorNumber": "73",
+  "rarity": "common",
+  "manaCost": "{R}",
+  "typeLine": "Sorcery",
+  "oracleText": "Creatures you control gain first strike until end of turn.\nDraw a card.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/d/7d3b720d-f27c-462a-8f80-15748e5086e1.jpg?1789729762",
+   "normal": "https://cards.scryfall.io/normal/front/7/d/7d3b720d-f27c-462a-8f80-15748e5086e1.jpg?1789729762",
+   "large": "https://cards.scryfall.io/large/front/7/d/7d3b720d-f27c-462a-8f80-15748e5086e1.jpg?1789729762",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/d/7d3b720d-f27c-462a-8f80-15748e5086e1.jpg?1789729762"
+  }
+ },
+ {
+  "name": "Awaken the Inferno",
+  "scryfallId": "c596c4ec-8480-4be9-a45d-700398a126f6",
+  "oracleId": "e729fce5-a1cf-4e95-9fd5-fccf4f704d31",
+  "set": "fra",
+  "collectorNumber": "74",
+  "rarity": "common",
+  "manaCost": "{4}{R}",
+  "typeLine": "Sorcery",
+  "oracleText": "Awaken the Inferno deals 6 damage to target creature or planeswalker an opponent controls. Put a +1/+1 counter on up to one target creature you control.\nBasic landcycling {2} ({2}, Discard this card: Search your library for a basic land card, reveal it, put it into your hand, then shuffle.)",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Landcycling",
+   "Basic landcycling",
+   "Typecycling",
+   "Cycling"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/5/c596c4ec-8480-4be9-a45d-700398a126f6.jpg?1789556812",
+   "normal": "https://cards.scryfall.io/normal/front/c/5/c596c4ec-8480-4be9-a45d-700398a126f6.jpg?1789556812",
+   "large": "https://cards.scryfall.io/large/front/c/5/c596c4ec-8480-4be9-a45d-700398a126f6.jpg?1789556812",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/5/c596c4ec-8480-4be9-a45d-700398a126f6.jpg?1789556812"
+  }
+ },
+ {
+  "name": "Chandra's Emberling",
+  "scryfallId": "3a64c5f4-9cfc-4d19-bd99-13d619b1aa9d",
+  "oracleId": "d3576617-7867-4c3d-aa31-d6742483465b",
+  "set": "fra",
+  "collectorNumber": "76",
+  "rarity": "common",
+  "manaCost": "{2}{R}",
+  "typeLine": "Creature — Gremlin Elemental",
+  "oracleText": "Haste\nWhenever you cast a noncreature spell, put a +1/+1 counter on this creature.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Haste"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/a/3a64c5f4-9cfc-4d19-bd99-13d619b1aa9d.jpg?1789385708",
+   "normal": "https://cards.scryfall.io/normal/front/3/a/3a64c5f4-9cfc-4d19-bd99-13d619b1aa9d.jpg?1789385708",
+   "large": "https://cards.scryfall.io/large/front/3/a/3a64c5f4-9cfc-4d19-bd99-13d619b1aa9d.jpg?1789385708",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/a/3a64c5f4-9cfc-4d19-bd99-13d619b1aa9d.jpg?1789385708"
+  }
+ },
+ {
+  "name": "Command the Stage",
+  "scryfallId": "f3307da2-6dad-4ef2-9614-a7d34f38088e",
+  "oracleId": "13bfc51f-d079-40ef-a4ba-47d06d3150a3",
+  "set": "fra",
+  "collectorNumber": "77",
+  "rarity": "uncommon",
+  "manaCost": "{2}{R}",
+  "typeLine": "Sorcery",
+  "oracleText": "Create a 2/2 colorless Wizard Soldier creature token named Cadet, then put a +1/+1 counter on each other Wizard token you control.\nAt the beginning of each upkeep, if an opponent was dealt noncombat damage last turn, return this card from your graveyard to your hand.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/3/f3307da2-6dad-4ef2-9614-a7d34f38088e.jpg?1789644825",
+   "normal": "https://cards.scryfall.io/normal/front/f/3/f3307da2-6dad-4ef2-9614-a7d34f38088e.jpg?1789644825",
+   "large": "https://cards.scryfall.io/large/front/f/3/f3307da2-6dad-4ef2-9614-a7d34f38088e.jpg?1789644825",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/3/f3307da2-6dad-4ef2-9614-a7d34f38088e.jpg?1789644825"
+  }
+ },
+ {
+  "name": "Craterclaw Colossus",
+  "scryfallId": "47793a51-08c6-4ad2-a7e5-a4484d83a5cd",
+  "oracleId": "71355b51-e70e-47b0-8460-933af3567141",
+  "set": "fra",
+  "collectorNumber": "78",
+  "rarity": "mythic",
+  "manaCost": "{4}{R}{R}{R}",
+  "typeLine": "Artifact Creature — Beast Construct",
+  "oracleText": "Haste\nWhen this creature enters, creatures you control gain trample and get +X/+0 until end of turn, where X is the number of artifacts you control.",
+  "power": "5",
+  "toughness": "5",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Haste"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/7/47793a51-08c6-4ad2-a7e5-a4484d83a5cd.jpg?1788329298",
+   "normal": "https://cards.scryfall.io/normal/front/4/7/47793a51-08c6-4ad2-a7e5-a4484d83a5cd.jpg?1788329298",
+   "large": "https://cards.scryfall.io/large/front/4/7/47793a51-08c6-4ad2-a7e5-a4484d83a5cd.jpg?1788329298",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/7/47793a51-08c6-4ad2-a7e5-a4484d83a5cd.jpg?1788329298"
+  }
+ },
+ {
+  "name": "Curse-Marred Demon",
+  "scryfallId": "8f827e50-0a08-4bc8-98b1-b26c9af15ef2",
+  "oracleId": "f30a084c-5705-40f5-8e0d-2083d33973c7",
+  "set": "fra",
+  "collectorNumber": "79",
+  "rarity": "rare",
+  "manaCost": "{2}{R}{R}",
+  "typeLine": "Creature — Demon",
+  "oracleText": "Flying, trample\nWhen this creature enters, search your library for a card, put it into your hand, shuffle, then discard a card at random.",
+  "power": "4",
+  "toughness": "4",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Flying",
+   "Trample"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/f/8f827e50-0a08-4bc8-98b1-b26c9af15ef2.jpg?1789470818",
+   "normal": "https://cards.scryfall.io/normal/front/8/f/8f827e50-0a08-4bc8-98b1-b26c9af15ef2.jpg?1789470818",
+   "large": "https://cards.scryfall.io/large/front/8/f/8f827e50-0a08-4bc8-98b1-b26c9af15ef2.jpg?1789470818",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/f/8f827e50-0a08-4bc8-98b1-b26c9af15ef2.jpg?1789470818"
+  }
+ },
+ {
+  "name": "Draconic Visitor",
+  "scryfallId": "112f8478-bd89-4a14-9721-8ab750613129",
+  "oracleId": "6745e850-68f6-480b-a1e0-e06180dde169",
+  "set": "fra",
+  "collectorNumber": "80",
+  "rarity": "rare",
+  "manaCost": "{3}{R}{R}",
+  "typeLine": "Creature — Dragon",
+  "oracleText": "Flying\nIf one or more artifact tokens would be created under your control, that many 5/5 red Dragon creature tokens with flying are created instead.",
+  "power": "5",
+  "toughness": "5",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/1/112f8478-bd89-4a14-9721-8ab750613129.jpg?1789470842",
+   "normal": "https://cards.scryfall.io/normal/front/1/1/112f8478-bd89-4a14-9721-8ab750613129.jpg?1789470842",
+   "large": "https://cards.scryfall.io/large/front/1/1/112f8478-bd89-4a14-9721-8ab750613129.jpg?1789470842",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/1/112f8478-bd89-4a14-9721-8ab750613129.jpg?1789470842"
+  }
+ },
+ {
+  "name": "Eardrum Rattler",
+  "scryfallId": "5f8771f9-8128-4818-a11d-41ea368cf697",
+  "oracleId": "25151d18-8e73-4b0d-a8d2-e5fa291e5729",
+  "set": "fra",
+  "collectorNumber": "81",
+  "rarity": "common",
+  "manaCost": "{1}{R}",
+  "typeLine": "Creature — Human Bard",
+  "oracleText": "{1}, {T}: Another target creature you control with power 2 or less can't be blocked this turn.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/f/5f8771f9-8128-4818-a11d-41ea368cf697.jpg?1789127173",
+   "normal": "https://cards.scryfall.io/normal/front/5/f/5f8771f9-8128-4818-a11d-41ea368cf697.jpg?1789127173",
+   "large": "https://cards.scryfall.io/large/front/5/f/5f8771f9-8128-4818-a11d-41ea368cf697.jpg?1789127173",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/f/5f8771f9-8128-4818-a11d-41ea368cf697.jpg?1789127173"
+  }
+ },
+ {
+  "name": "Essence Burn",
+  "scryfallId": "d2e958de-70de-4156-8f9b-b2c0c1ba704a",
+  "oracleId": "f1216f36-00fd-4d03-85c1-f4910a02d4d0",
+  "set": "fra",
+  "collectorNumber": "82",
+  "rarity": "uncommon",
+  "manaCost": "{1}{R}",
+  "typeLine": "Instant",
+  "oracleText": "Essence Burn deals 5 damage to target black or green creature or planeswalker. If that permanent would die this turn, exile it instead.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/2/d2e958de-70de-4156-8f9b-b2c0c1ba704a.jpg?1789470825",
+   "normal": "https://cards.scryfall.io/normal/front/d/2/d2e958de-70de-4156-8f9b-b2c0c1ba704a.jpg?1789470825",
+   "large": "https://cards.scryfall.io/large/front/d/2/d2e958de-70de-4156-8f9b-b2c0c1ba704a.jpg?1789470825",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/2/d2e958de-70de-4156-8f9b-b2c0c1ba704a.jpg?1789470825"
+  }
+ },
+ {
+  "name": "Face Yourself",
+  "scryfallId": "3ccf8f64-19bd-4fdf-b70a-30a042bacf2f",
+  "oracleId": "3c0fe71c-bee1-41d3-aeb5-1723028eedde",
+  "set": "fra",
+  "collectorNumber": "83",
+  "rarity": "rare",
+  "manaCost": "{5}{R}{R}",
+  "typeLine": "Sorcery",
+  "oracleText": "For each creature target player controls, create a token that's a copy of that creature, except it has haste and \"At the beginning of the end step, if you don't control a planeswalker, sacrifice this creature.\"",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/c/3ccf8f64-19bd-4fdf-b70a-30a042bacf2f.jpg?1789127528",
+   "normal": "https://cards.scryfall.io/normal/front/3/c/3ccf8f64-19bd-4fdf-b70a-30a042bacf2f.jpg?1789127528",
+   "large": "https://cards.scryfall.io/large/front/3/c/3ccf8f64-19bd-4fdf-b70a-30a042bacf2f.jpg?1789127528",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/c/3ccf8f64-19bd-4fdf-b70a-30a042bacf2f.jpg?1789127528"
+  }
+ },
+ {
+  "name": "Fulminous Forte",
+  "scryfallId": "19acb2b5-3b3e-43f0-bd81-8426ed3d9c55",
+  "oracleId": "2a29d028-d1a4-413f-9c01-d6842294420a",
+  "set": "fra",
+  "collectorNumber": "84",
+  "rarity": "uncommon",
+  "manaCost": "{2}{R}",
+  "typeLine": "Instant",
+  "oracleText": "Choose one —\n• Fulminous Forte deals 1 damage to each creature and planeswalker your opponents control.\n• Fulminous Forte deals 5 damage to target creature or planeswalker.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/9/19acb2b5-3b3e-43f0-bd81-8426ed3d9c55.jpg?1789614832",
+   "normal": "https://cards.scryfall.io/normal/front/1/9/19acb2b5-3b3e-43f0-bd81-8426ed3d9c55.jpg?1789614832",
+   "large": "https://cards.scryfall.io/large/front/1/9/19acb2b5-3b3e-43f0-bd81-8426ed3d9c55.jpg?1789614832",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/9/19acb2b5-3b3e-43f0-bd81-8426ed3d9c55.jpg?1789614832"
+  }
+ },
+ {
+  "name": "Gallia, the Merrymaker",
+  "scryfallId": "f27d50f0-d76e-4ce1-a8d9-d997af6a5b41",
+  "oracleId": "87f39199-3e4b-44fa-8406-62019eb43c10",
+  "set": "fra",
+  "collectorNumber": "245",
+  "rarity": "uncommon",
+  "manaCost": "{1}{R}",
+  "typeLine": "Legendary Creature — Satyr",
+  "oracleText": "Haste\nEach other creature you control with a +1/+1 counter on it has haste.\n{1}{R}, {T}: Put a +1/+1 counter on target creature that entered this turn.",
+  "power": "2",
+  "toughness": "1",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Haste"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/2/f27d50f0-d76e-4ce1-a8d9-d997af6a5b41.jpg?1789385716",
+   "normal": "https://cards.scryfall.io/normal/front/f/2/f27d50f0-d76e-4ce1-a8d9-d997af6a5b41.jpg?1789385716",
+   "large": "https://cards.scryfall.io/large/front/f/2/f27d50f0-d76e-4ce1-a8d9-d997af6a5b41.jpg?1789385716",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/2/f27d50f0-d76e-4ce1-a8d9-d997af6a5b41.jpg?1789385716"
+  }
+ },
+ {
+  "name": "Hallway Heckler",
+  "scryfallId": "7e324816-552f-455d-97c4-5ea6b26d2e6e",
+  "oracleId": "d1af8018-35b5-4b6f-93c8-1ed6bd8c92b1",
+  "set": "fra",
+  "collectorNumber": "85",
+  "rarity": "common",
+  "manaCost": "{2}{R}",
+  "typeLine": "Creature — Elemental Sorcerer",
+  "oracleText": "This creature enters prepared. (While it's prepared, you may cast a copy of its spell. Doing so unprepares it.)\n{T}, Discard a card: Draw a card.",
+  "power": "2",
+  "toughness": "3",
+  "colors": [
+   "R"
+  ],
+  "colorIdentity": [
+   "B",
+   "R"
+  ],
+  "keywords": [
+   "Prepared"
+  ],
+  "back": "Vicious Verse (Hallway Heckler)",
+  "prepare": true,
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/e/7e324816-552f-455d-97c4-5ea6b26d2e6e.jpg?1789127576",
+   "normal": "https://cards.scryfall.io/normal/front/7/e/7e324816-552f-455d-97c4-5ea6b26d2e6e.jpg?1789127576",
+   "large": "https://cards.scryfall.io/large/front/7/e/7e324816-552f-455d-97c4-5ea6b26d2e6e.jpg?1789127576",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/e/7e324816-552f-455d-97c4-5ea6b26d2e6e.jpg?1789127576"
+  }
+ },
+ {
+  "name": "Vicious Verse (Hallway Heckler)",
+  "flavorName": "Vicious Verse",
+  "scryfallId": "7e324816-552f-455d-97c4-5ea6b26d2e6e",
+  "oracleId": "d1af8018-35b5-4b6f-93c8-1ed6bd8c92b1",
+  "set": "fra",
+  "collectorNumber": "85",
+  "rarity": "common",
+  "manaCost": "{B/R}",
+  "typeLine": "Sorcery",
+  "oracleText": "Vicious Verse deals 1 damage to target opponent.",
+  "colors": [
+   "B",
+   "R"
+  ],
+  "colorIdentity": [
+   "B",
+   "R"
+  ],
+  "keywords": [],
+  "front": "Hallway Heckler",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/e/7e324816-552f-455d-97c4-5ea6b26d2e6e.jpg?1789127576",
+   "normal": "https://cards.scryfall.io/normal/front/7/e/7e324816-552f-455d-97c4-5ea6b26d2e6e.jpg?1789127576",
+   "large": "https://cards.scryfall.io/large/front/7/e/7e324816-552f-455d-97c4-5ea6b26d2e6e.jpg?1789127576",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/e/7e324816-552f-455d-97c4-5ea6b26d2e6e.jpg?1789127576"
+  }
+ },
+ {
+  "name": "Heartstring Puller",
+  "scryfallId": "cbfe3354-7ced-4773-9a4e-a937ae9f94f8",
+  "oracleId": "2cdcf65c-03d2-416f-8a3f-0322f75e8595",
+  "set": "fra",
+  "collectorNumber": "86",
+  "rarity": "common",
+  "manaCost": "{3}{R}",
+  "typeLine": "Creature — Elf Sorcerer",
+  "oracleText": "Trample\nWhen this creature enters, create a 2/2 colorless Wizard Soldier creature token named Cadet.",
+  "power": "3",
+  "toughness": "1",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Trample"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/b/cbfe3354-7ced-4773-9a4e-a937ae9f94f8.jpg?1789556808",
+   "normal": "https://cards.scryfall.io/normal/front/c/b/cbfe3354-7ced-4773-9a4e-a937ae9f94f8.jpg?1789556808",
+   "large": "https://cards.scryfall.io/large/front/c/b/cbfe3354-7ced-4773-9a4e-a937ae9f94f8.jpg?1789556808",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/b/cbfe3354-7ced-4773-9a4e-a937ae9f94f8.jpg?1789556808"
+  }
+ },
+ {
+  "name": "Identity Echo",
+  "scryfallId": "e600b33b-8916-43dd-95d3-d7cbf874933d",
+  "oracleId": "4dbf8c43-d7c5-4037-875e-6accd87aaf6f",
+  "set": "fra",
+  "collectorNumber": "87",
+  "rarity": "rare",
+  "manaCost": "{2}{R}",
+  "typeLine": "Enchantment",
+  "oracleText": "{3}{R}: Exile target creature or planeswalker you control. Reveal cards from the top of your library until you reveal a creature or planeswalker card. Put that card onto the battlefield and the rest on the bottom of your library in a random order. Activate only as a sorcery.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/6/e600b33b-8916-43dd-95d3-d7cbf874933d.jpg?1789385968",
+   "normal": "https://cards.scryfall.io/normal/front/e/6/e600b33b-8916-43dd-95d3-d7cbf874933d.jpg?1789385968",
+   "large": "https://cards.scryfall.io/large/front/e/6/e600b33b-8916-43dd-95d3-d7cbf874933d.jpg?1789385968",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/6/e600b33b-8916-43dd-95d3-d7cbf874933d.jpg?1789385968"
+  }
+ },
+ {
+  "name": "Jiang Yanggu, Alone",
+  "scryfallId": "e8c1ce21-b77d-40bf-9ed1-478604e71f5f",
+  "oracleId": "fa8b3557-b35a-4a68-ab85-cf09683f3bc5",
+  "set": "fra",
+  "collectorNumber": "246",
+  "rarity": "uncommon",
+  "manaCost": "{4}{R}",
+  "typeLine": "Legendary Creature — Human Berserker",
+  "oracleText": "Menace (This creature can't be blocked except by two or more creatures.)\nWhenever a creature you control attacks a player alone, discard a card, then draw a card. Then put a +1/+1 counter on that creature for each card you've discarded this turn.",
+  "power": "4",
+  "toughness": "4",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Menace"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/8/e8c1ce21-b77d-40bf-9ed1-478604e71f5f.jpg?1789014416",
+   "normal": "https://cards.scryfall.io/normal/front/e/8/e8c1ce21-b77d-40bf-9ed1-478604e71f5f.jpg?1789014416",
+   "large": "https://cards.scryfall.io/large/front/e/8/e8c1ce21-b77d-40bf-9ed1-478604e71f5f.jpg?1789014416",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/8/e8c1ce21-b77d-40bf-9ed1-478604e71f5f.jpg?1789014416"
+  }
+ },
+ {
+  "name": "Kiora of Fire and Ashes",
+  "scryfallId": "08657053-86f9-4c52-abf0-d9cdd443ae3b",
+  "oracleId": "02b41d0e-82e7-4307-8cc4-8175ff78ea1f",
+  "set": "fra",
+  "collectorNumber": "247",
+  "rarity": "uncommon",
+  "manaCost": "{4}{R}{R}",
+  "typeLine": "Legendary Creature — Merfolk Noble",
+  "oracleText": "When Kiora enters, create a 5/5 red Dragon creature token with flying.\n{8}: Create a 5/5 red Dragon creature token with flying.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/8/08657053-86f9-4c52-abf0-d9cdd443ae3b.jpg?1789127995",
+   "normal": "https://cards.scryfall.io/normal/front/0/8/08657053-86f9-4c52-abf0-d9cdd443ae3b.jpg?1789127995",
+   "large": "https://cards.scryfall.io/large/front/0/8/08657053-86f9-4c52-abf0-d9cdd443ae3b.jpg?1789127995",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/8/08657053-86f9-4c52-abf0-d9cdd443ae3b.jpg?1789127995"
+  }
+ },
+ {
+  "name": "Koth, the Geomancer",
+  "scryfallId": "54f64e95-5a97-4d7c-9939-7f33a3165562",
+  "oracleId": "3b17da84-ae4d-4fc1-a327-85e54e6156c6",
+  "set": "fra",
+  "collectorNumber": "248",
+  "rarity": "uncommon",
+  "manaCost": "{2}{R}",
+  "typeLine": "Legendary Creature — Human Warrior",
+  "oracleText": "Reach\nLandfall — Whenever a land you control enters, Koth deals 1 damage to each opponent. If that land is a Mountain, add {R}.",
+  "power": "3",
+  "toughness": "2",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Reach",
+   "Landfall"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/4/54f64e95-5a97-4d7c-9939-7f33a3165562.jpg?1789470892",
+   "normal": "https://cards.scryfall.io/normal/front/5/4/54f64e95-5a97-4d7c-9939-7f33a3165562.jpg?1789470892",
+   "large": "https://cards.scryfall.io/large/front/5/4/54f64e95-5a97-4d7c-9939-7f33a3165562.jpg?1789470892",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/4/54f64e95-5a97-4d7c-9939-7f33a3165562.jpg?1789470892"
+  }
+ },
+ {
+  "name": "Marwyn, the Clearcutter",
+  "scryfallId": "f93da73c-ca8b-438e-8387-6109dac3fc1a",
+  "oracleId": "aff4e43d-cafa-47de-8e39-011f9254a26a",
+  "set": "fra",
+  "collectorNumber": "249",
+  "rarity": "uncommon",
+  "manaCost": "{R}",
+  "typeLine": "Legendary Creature — Elf Warrior",
+  "oracleText": "{2}, {T}, Sacrifice an artifact or land: Draw a card.",
+  "power": "2",
+  "toughness": "1",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/9/f93da73c-ca8b-438e-8387-6109dac3fc1a.jpg?1789644549",
+   "normal": "https://cards.scryfall.io/normal/front/f/9/f93da73c-ca8b-438e-8387-6109dac3fc1a.jpg?1789644549",
+   "large": "https://cards.scryfall.io/large/front/f/9/f93da73c-ca8b-438e-8387-6109dac3fc1a.jpg?1789644549",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/9/f93da73c-ca8b-438e-8387-6109dac3fc1a.jpg?1789644549"
+  }
+ },
+ {
+  "name": "Master of Barbs",
+  "scryfallId": "4404d9d4-9cdd-4dad-a4f6-574d90db5052",
+  "oracleId": "e8c36337-135c-460d-a1da-cc01743dda71",
+  "set": "fra",
+  "collectorNumber": "88",
+  "rarity": "rare",
+  "manaCost": "{1}{R}",
+  "typeLine": "Creature — Lizard Bard",
+  "oracleText": "Menace\nWhenever one or more opponents are dealt noncombat damage, creatures you control get +1/+0 until end of turn.",
+  "power": "2",
+  "toughness": "1",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Menace"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/4/4404d9d4-9cdd-4dad-a4f6-574d90db5052.jpg?1789127596",
+   "normal": "https://cards.scryfall.io/normal/front/4/4/4404d9d4-9cdd-4dad-a4f6-574d90db5052.jpg?1789127596",
+   "large": "https://cards.scryfall.io/large/front/4/4/4404d9d4-9cdd-4dad-a4f6-574d90db5052.jpg?1789127596",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/4/4404d9d4-9cdd-4dad-a4f6-574d90db5052.jpg?1789127596"
+  }
+ },
+ {
+  "name": "Pia, Determined Rebuilder",
+  "scryfallId": "dd3faaf4-45ca-4714-8dbe-37102ec131cf",
+  "oracleId": "a49c0c64-ea87-44f4-9acf-e7181962aeb2",
+  "set": "fra",
+  "collectorNumber": "250",
+  "rarity": "uncommon",
+  "manaCost": "{2}{R}",
+  "typeLine": "Legendary Creature — Human Artificer",
+  "oracleText": "When Pia enters, create a 1/1 colorless Thopter artifact creature token with flying.\n{5}{R}: Target creature gets +X/+0 until end of turn, where X is the number of artifacts you control.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/d/dd3faaf4-45ca-4714-8dbe-37102ec131cf.jpg?1789385851",
+   "normal": "https://cards.scryfall.io/normal/front/d/d/dd3faaf4-45ca-4714-8dbe-37102ec131cf.jpg?1789385851",
+   "large": "https://cards.scryfall.io/large/front/d/d/dd3faaf4-45ca-4714-8dbe-37102ec131cf.jpg?1789385851",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/d/dd3faaf4-45ca-4714-8dbe-37102ec131cf.jpg?1789385851"
+  }
+ },
+ {
+  "name": "Pompous Battlemage",
+  "scryfallId": "aa0f77ac-741a-444a-8bf0-a42c644726bf",
+  "oracleId": "33e3793c-098f-4897-88f3-9f9ce9081e0f",
+  "set": "fra",
+  "collectorNumber": "90",
+  "rarity": "rare",
+  "manaCost": "{R}",
+  "typeLine": "Creature — Goblin Sorcerer",
+  "oracleText": "Prowess\nThis creature enters prepared. (While it's prepared, you may cast a copy of its spell. Doing so unprepares it.)",
+  "power": "1",
+  "toughness": "1",
+  "colors": [
+   "R"
+  ],
+  "colorIdentity": [
+   "R"
+  ],
+  "keywords": [
+   "Prowess",
+   "Prepared"
+  ],
+  "back": "Improvised Act (Pompous Battlemage)",
+  "prepare": true,
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/a/aa0f77ac-741a-444a-8bf0-a42c644726bf.jpg?1788878186",
+   "normal": "https://cards.scryfall.io/normal/front/a/a/aa0f77ac-741a-444a-8bf0-a42c644726bf.jpg?1788878186",
+   "large": "https://cards.scryfall.io/large/front/a/a/aa0f77ac-741a-444a-8bf0-a42c644726bf.jpg?1788878186",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/a/aa0f77ac-741a-444a-8bf0-a42c644726bf.jpg?1788878186"
+  }
+ },
+ {
+  "name": "Improvised Act (Pompous Battlemage)",
+  "flavorName": "Improvised Act",
+  "scryfallId": "aa0f77ac-741a-444a-8bf0-a42c644726bf",
+  "oracleId": "33e3793c-098f-4897-88f3-9f9ce9081e0f",
+  "set": "fra",
+  "collectorNumber": "90",
+  "rarity": "rare",
+  "manaCost": "{R}",
+  "typeLine": "Sorcery",
+  "oracleText": "You may discard a card. If you do, draw a card.",
+  "colors": [
+   "R"
+  ],
+  "colorIdentity": [
+   "R"
+  ],
+  "keywords": [],
+  "front": "Pompous Battlemage",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/a/aa0f77ac-741a-444a-8bf0-a42c644726bf.jpg?1788878186",
+   "normal": "https://cards.scryfall.io/normal/front/a/a/aa0f77ac-741a-444a-8bf0-a42c644726bf.jpg?1788878186",
+   "large": "https://cards.scryfall.io/large/front/a/a/aa0f77ac-741a-444a-8bf0-a42c644726bf.jpg?1788878186",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/a/aa0f77ac-741a-444a-8bf0-a42c644726bf.jpg?1788878186"
+  }
+ },
+ {
+  "name": "Pyre Rhymer",
+  "scryfallId": "2b0ebea0-86de-4da4-9fe8-dacc1e75c161",
+  "oracleId": "8940f503-fc6d-4fae-be74-22c660cae1a7",
+  "set": "fra",
+  "collectorNumber": "91",
+  "rarity": "rare",
+  "manaCost": "{1}{R}{R}",
+  "typeLine": "Creature — Elemental Sorcerer",
+  "oracleText": "Prowess\nThis creature enters prepared. (While it's prepared, you may cast a copy of its spell. Doing so unprepares it.)",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "R"
+  ],
+  "colorIdentity": [
+   "R"
+  ],
+  "keywords": [
+   "Prowess",
+   "Prepared"
+  ],
+  "back": "Molten Tide (Pyre Rhymer)",
+  "prepare": true,
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/b/2b0ebea0-86de-4da4-9fe8-dacc1e75c161.jpg?1789470850",
+   "normal": "https://cards.scryfall.io/normal/front/2/b/2b0ebea0-86de-4da4-9fe8-dacc1e75c161.jpg?1789470850",
+   "large": "https://cards.scryfall.io/large/front/2/b/2b0ebea0-86de-4da4-9fe8-dacc1e75c161.jpg?1789470850",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/b/2b0ebea0-86de-4da4-9fe8-dacc1e75c161.jpg?1789470850"
+  }
+ },
+ {
+  "name": "Molten Tide (Pyre Rhymer)",
+  "flavorName": "Molten Tide",
+  "scryfallId": "2b0ebea0-86de-4da4-9fe8-dacc1e75c161",
+  "oracleId": "8940f503-fc6d-4fae-be74-22c660cae1a7",
+  "set": "fra",
+  "collectorNumber": "91",
+  "rarity": "rare",
+  "manaCost": "{R}",
+  "typeLine": "Instant",
+  "oracleText": "Until end of turn, whenever you tap a Mountain for mana, add an additional {R}.",
+  "colors": [
+   "R"
+  ],
+  "colorIdentity": [
+   "R"
+  ],
+  "keywords": [],
+  "front": "Pyre Rhymer",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/b/2b0ebea0-86de-4da4-9fe8-dacc1e75c161.jpg?1789470850",
+   "normal": "https://cards.scryfall.io/normal/front/2/b/2b0ebea0-86de-4da4-9fe8-dacc1e75c161.jpg?1789470850",
+   "large": "https://cards.scryfall.io/large/front/2/b/2b0ebea0-86de-4da4-9fe8-dacc1e75c161.jpg?1789470850",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/b/2b0ebea0-86de-4da4-9fe8-dacc1e75c161.jpg?1789470850"
+  }
+ },
+ {
+  "name": "Samut, Hazoret's Champion",
+  "scryfallId": "ba920f23-f05c-410e-8516-c93abedf1d4d",
+  "oracleId": "add02a36-8811-438b-a8e1-f5c8a8146b4e",
+  "set": "fra",
+  "collectorNumber": "251",
+  "rarity": "rare",
+  "manaCost": "{1}{R}",
+  "typeLine": "Legendary Creature — Human Warrior Cleric",
+  "oracleText": "Creatures you control have haste.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/a/ba920f23-f05c-410e-8516-c93abedf1d4d.jpg?1789729662",
+   "normal": "https://cards.scryfall.io/normal/front/b/a/ba920f23-f05c-410e-8516-c93abedf1d4d.jpg?1789729662",
+   "large": "https://cards.scryfall.io/large/front/b/a/ba920f23-f05c-410e-8516-c93abedf1d4d.jpg?1789729662",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/a/ba920f23-f05c-410e-8516-c93abedf1d4d.jpg?1789729662"
+  }
+ },
+ {
+  "name": "Skilled Battlecarver",
+  "scryfallId": "0e44f959-1322-4abd-b6eb-dea992307c0c",
+  "oracleId": "4fc7c7a0-bfff-4833-a0d0-a38dc29e9dfb",
+  "set": "fra",
+  "collectorNumber": "92",
+  "rarity": "common",
+  "manaCost": "{1}{R}",
+  "typeLine": "Creature — Human Warrior",
+  "oracleText": "During your turn, this creature has first strike.\n{1}{R}: This creature gets +1/+0 until end of turn.",
+  "power": "2",
+  "toughness": "1",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/e/0e44f959-1322-4abd-b6eb-dea992307c0c.jpg?1789556811",
+   "normal": "https://cards.scryfall.io/normal/front/0/e/0e44f959-1322-4abd-b6eb-dea992307c0c.jpg?1789556811",
+   "large": "https://cards.scryfall.io/large/front/0/e/0e44f959-1322-4abd-b6eb-dea992307c0c.jpg?1789556811",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/e/0e44f959-1322-4abd-b6eb-dea992307c0c.jpg?1789556811"
+  }
+ },
+ {
+  "name": "Stingcaster Mage",
+  "scryfallId": "2d8e8e5f-3bf5-490d-aa9c-9df2b26f1460",
+  "oracleId": "056b651e-e0e2-4333-9235-d1ffe8fcca29",
+  "set": "fra",
+  "collectorNumber": "93",
+  "rarity": "mythic",
+  "manaCost": "{1}{R}",
+  "typeLine": "Creature — Human Wizard",
+  "oracleText": "Haste\nWhen this creature enters, target instant or sorcery card in your graveyard gains flashback until end of turn. The flashback cost is equal to its mana cost. (You may cast that card from your graveyard for its flashback cost. Then exile it.)",
+  "power": "2",
+  "toughness": "1",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Haste"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/d/2d8e8e5f-3bf5-490d-aa9c-9df2b26f1460.jpg?1788329303",
+   "normal": "https://cards.scryfall.io/normal/front/2/d/2d8e8e5f-3bf5-490d-aa9c-9df2b26f1460.jpg?1788329303",
+   "large": "https://cards.scryfall.io/large/front/2/d/2d8e8e5f-3bf5-490d-aa9c-9df2b26f1460.jpg?1788329303",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/d/2d8e8e5f-3bf5-490d-aa9c-9df2b26f1460.jpg?1788329303"
+  }
+ },
+ {
+  "name": "Tether Technician",
+  "scryfallId": "b75bbf46-a421-467a-9433-6cf22398a3a5",
+  "oracleId": "a9d0657f-2c5e-4b6f-b8ae-d657cc0f7aef",
+  "set": "fra",
+  "collectorNumber": "94",
+  "rarity": "common",
+  "manaCost": "{4}{R}",
+  "typeLine": "Creature — Minotaur Artificer",
+  "oracleText": "Reach\nWhen this creature enters, you may discard a card. When you do, this creature deals 2 damage to any target.",
+  "power": "4",
+  "toughness": "5",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Reach"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/7/b75bbf46-a421-467a-9433-6cf22398a3a5.jpg?1789556839",
+   "normal": "https://cards.scryfall.io/normal/front/b/7/b75bbf46-a421-467a-9433-6cf22398a3a5.jpg?1789556839",
+   "large": "https://cards.scryfall.io/large/front/b/7/b75bbf46-a421-467a-9433-6cf22398a3a5.jpg?1789556839",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/7/b75bbf46-a421-467a-9433-6cf22398a3a5.jpg?1789556839"
+  }
+ },
+ {
+  "name": "Tetsuko Umezawa, Pursuer",
+  "scryfallId": "df818900-ce5e-4b0d-a927-c975cbef7eda",
+  "oracleId": "708d4567-a5a3-437f-bae4-ae10f1537aa9",
+  "set": "fra",
+  "collectorNumber": "252",
+  "rarity": "uncommon",
+  "manaCost": "{3}{R}",
+  "typeLine": "Legendary Creature — Human Mercenary",
+  "oracleText": "Double strike\nProwess (Whenever you cast a noncreature spell, this creature gets +1/+1 until end of turn.)\nWhenever a creature an opponent controls with power or toughness 1 or less blocks, Tetsuko Umezawa deals 1 damage to that creature's controller.",
+  "power": "2",
+  "toughness": "4",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Prowess",
+   "Double strike"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/f/df818900-ce5e-4b0d-a927-c975cbef7eda.jpg?1789128002",
+   "normal": "https://cards.scryfall.io/normal/front/d/f/df818900-ce5e-4b0d-a927-c975cbef7eda.jpg?1789128002",
+   "large": "https://cards.scryfall.io/large/front/d/f/df818900-ce5e-4b0d-a927-c975cbef7eda.jpg?1789128002",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/f/df818900-ce5e-4b0d-a927-c975cbef7eda.jpg?1789128002"
+  }
+ },
+ {
+  "name": "Tomik, Izzet Sparkmage",
+  "scryfallId": "5c5afd5f-6f37-4c3e-83f0-68fdcea98810",
+  "oracleId": "16604fee-cd8d-41e4-8269-3c7ff756613d",
+  "set": "fra",
+  "collectorNumber": "253",
+  "rarity": "uncommon",
+  "manaCost": "{1}{R}",
+  "typeLine": "Legendary Creature — Human Wizard",
+  "oracleText": "Prowess (Whenever you cast a noncreature spell, this creature gets +1/+1 until end of turn.)\nIf a source you control would deal noncombat damage to an opponent or a permanent an opponent controls, it deals that much damage plus 1 instead.",
+  "power": "1",
+  "toughness": "2",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Prowess"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/c/5c5afd5f-6f37-4c3e-83f0-68fdcea98810.jpg?1789729773",
+   "normal": "https://cards.scryfall.io/normal/front/5/c/5c5afd5f-6f37-4c3e-83f0-68fdcea98810.jpg?1789729773",
+   "large": "https://cards.scryfall.io/large/front/5/c/5c5afd5f-6f37-4c3e-83f0-68fdcea98810.jpg?1789729773",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/c/5c5afd5f-6f37-4c3e-83f0-68fdcea98810.jpg?1789729773"
+  }
+ },
+ {
+  "name": "Winter, Team Player",
+  "scryfallId": "df8713cd-3f4b-43ef-adbd-e37c2617c617",
+  "oracleId": "254f133a-eee5-48b9-b19f-110555e49300",
+  "set": "fra",
+  "collectorNumber": "256",
+  "rarity": "uncommon",
+  "manaCost": "{4}{R}",
+  "typeLine": "Legendary Creature — Human Warrior",
+  "oracleText": "Convoke (Your creatures can help cast this spell. Each creature you tap while casting this spell pays for {1} or one mana of that creature's color.)\nWhenever you cast a noncreature spell, creatures you control get +1/+0 until end of turn.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Convoke"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/f/df8713cd-3f4b-43ef-adbd-e37c2617c617.jpg?1789128020",
+   "normal": "https://cards.scryfall.io/normal/front/d/f/df8713cd-3f4b-43ef-adbd-e37c2617c617.jpg?1789128020",
+   "large": "https://cards.scryfall.io/large/front/d/f/df8713cd-3f4b-43ef-adbd-e37c2617c617.jpg?1789128020",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/f/df8713cd-3f4b-43ef-adbd-e37c2617c617.jpg?1789128020"
+  }
+ },
+ {
+  "name": "Wrath of the Bloodmane",
+  "scryfallId": "b5b55617-684a-4036-be9b-a3b24fc9cd5a",
+  "oracleId": "c1994d6a-984d-4b75-9198-1f1822eab6eb",
+  "set": "fra",
+  "collectorNumber": "96",
+  "rarity": "common",
+  "manaCost": "{2}{R}",
+  "typeLine": "Instant",
+  "oracleText": "This spell costs {1} less to cast if you control a legendary creature.\nWrath of the Bloodmane deals 4 damage to target creature or planeswalker.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/5/b5b55617-684a-4036-be9b-a3b24fc9cd5a.jpg?1789385820",
+   "normal": "https://cards.scryfall.io/normal/front/b/5/b5b55617-684a-4036-be9b-a3b24fc9cd5a.jpg?1789385820",
+   "large": "https://cards.scryfall.io/large/front/b/5/b5b55617-684a-4036-be9b-a3b24fc9cd5a.jpg?1789385820",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/5/b5b55617-684a-4036-be9b-a3b24fc9cd5a.jpg?1789385820"
+  }
  }
 ]

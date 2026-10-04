@@ -118,6 +118,9 @@ export function dealDamage(
     setMonarch(ctx, src.controller);
   if ('player' in to) {
     emit(ctx, { type: 'damageDealt', source: src.id, to, amount, combat });
+    // Reality Fracture (17a): Command the Stage, Master of Barbs.
+    if (!combat && !(ctx.s.turn.noncombatDamaged ?? []).includes(to.player))
+      ctx.s.turn.noncombatDamaged = [...(ctx.s.turn.noncombatDamaged ?? []), to.player];
     changeLife(ctx, to.player, -amount);
   } else {
     const o = onBattlefield(ctx, to.object);
@@ -262,8 +265,29 @@ const PERMANENT_TYPES: readonly string[] = [
   'Battle',
 ];
 
+/**
+ * Reality Fracture (17a): Draconic Visitor: the token `player` creates instead of an artifact token
+ * (`token`: the token's, or a token copy's original's, card id), if something replaces them.
+ */
+export function artifactTokenReplacement(
+  ctx: Ctx,
+  player: PlayerId,
+  token: CardDefId,
+): CardDefId | undefined {
+  if (!defOf(ctx, token).types.includes('Artifact')) return undefined;
+  for (const id of ctx.s.battlefield) {
+    if (obj(ctx, id).controller !== player) continue;
+    for (const a of def(ctx, id).abilities)
+      if (a.kind === 'static' && a.effect.kind === 'artifactTokensBecome') return a.effect.token;
+  }
+  return undefined;
+}
+
 /** Divine Visitation: the token a player creates instead of a creature token. */
-function replacedToken(ctx: Ctx, player: PlayerId, token: CardDefId): CardDefId {
+export function replacedToken(ctx: Ctx, player: PlayerId, token: CardDefId): CardDefId {
+  // Reality Fracture (17a): Draconic Visitor.
+  const artifact = artifactTokenReplacement(ctx, player, token);
+  if (artifact) return artifact;
   if (!defOf(ctx, token).types.includes('Creature')) return token;
   for (const id of ctx.s.battlefield) {
     if (obj(ctx, id).controller !== player) continue;
@@ -440,7 +464,14 @@ export function plusFoodTokens(ctx: Ctx, owner: PlayerId): void {
     if (obj(ctx, id).controller === owner)
       for (const a of def(ctx, id).abilities)
         if (a.kind === 'static' && a.effect.kind === 'plusFoodToken') {
-          const f = createObject(ctx, 'food-token', owner, 'battlefield', true);
+          // Reality Fracture (17a): Draconic Visitor turns the Food into a Dragon.
+          const f = createObject(
+            ctx,
+            replacedToken(ctx, owner, 'food-token'),
+            owner,
+            'battlefield',
+            true,
+          );
           ctx.s.battlefield.push(f.id);
           emit(ctx, {
             type: 'objectMoved',
@@ -611,6 +642,13 @@ export function resolveRef(ctx: Ctx, es: EffectSource, ref: Ref): TargetChoice[]
     .filter((c) => {
       if (ref.controller === 'you' && c.controller !== es.controller) return false;
       if (ref.controller === 'opponent' && c.controller === es.controller) return false;
+      // Reality Fracture (17a): Command the Stage, "each other Wizard token" (not the one just created).
+      if (ref.exceptChosen && es.chosen && c.id === es.chosen.id) return false;
+      // Reality Fracture (17a): Face Yourself, "each creature target player controls".
+      if (ref.controllerTarget !== undefined) {
+        const who = es.targets[ref.controllerTarget];
+        if (!who || !('player' in who) || c.controller !== who.player) return false;
+      }
       return matchesFilter(ctx, c.id, ref.filter, sourceId);
     })
     .map((c) => ({ object: { id: c.id, zcc: c.zcc } }));
@@ -848,7 +886,15 @@ export function runEffects(
       const holds =
         e.condition.kind === 'amountAtLeast'
           ? resolveAmount(ctx, es, e.condition.amount) >= e.condition.min
-          : checkCondition(ctx, e.condition, es.controller, self, es.targets);
+          : checkCondition(
+              ctx,
+              e.condition,
+              es.controller,
+              self,
+              es.targets,
+              // Reality Fracture (17a): Koth, the Geomancer ("if that land is a Mountain").
+              es.subject ? ctx.s.objects[es.subject.id] : undefined,
+            );
       const branch = holds ? e.then : (e.else ?? []);
       list.splice(i, 1, ...branch);
       i--;
@@ -1689,6 +1735,8 @@ export function runEffects(
           ...(e.filter ? { filter: e.filter } : {}),
           ...(e.exile ? { exile: true } : {}),
           ...(e.damageTo !== undefined ? { damageTo: e.damageTo } : {}),
+          // Reality Fracture (17a): Tether Technician, Improvised Act.
+          ...(e.then ? { then: e.then } : {}),
           resume,
           thenPriority,
         };
@@ -3031,6 +3079,21 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
         const d = def(ctx, id);
         if (e.nonlegendary && d.supertypes.includes('Legendary')) continue;
         for (let i = 0; i < n; i++) {
+          // Reality Fracture (17a): Draconic Visitor: a copy of an artifact is an artifact token, so a Dragon instead.
+          const dragon = artifactTokenReplacement(ctx, tokenOwner, o.defId);
+          if (dragon) {
+            const t = createObject(ctx, dragon, tokenOwner, 'battlefield', true);
+            ctx.s.battlefield.push(t.id);
+            emit(ctx, {
+              type: 'objectMoved',
+              id: t.id,
+              defId: t.defId,
+              from: null,
+              to: 'battlefield',
+            });
+            made = true;
+            continue;
+          }
           const t = createObject(ctx, o.defId, tokenOwner, 'battlefield', true);
           const pt = e.pt ?? (o.copyPT ? [o.copyPT.power, o.copyPT.toughness] : undefined);
           if (pt) t.copyPT = { power: pt[0], toughness: pt[1] };
@@ -3083,6 +3146,8 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
           }
           // Final Fantasy (11c): temporary token copies.
           if (e.equipDiscount) t.equipDiscount = e.equipDiscount;
+          // Reality Fracture (17a): Face Yourself: "except it has ...".
+          if (e.grantAbilities) t.perpetualAbilities = [...e.grantAbilities];
           if (e.sacrificeAt) {
             const late = ['end', 'cleanup'].includes(ctx.s.turn.step);
             const ownTurn = ctx.s.turn.activePlayer === es.controller;
@@ -3284,7 +3349,8 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
         if (e.to === 'hand') moveObject(ctx, found, 'hand');
         else {
           moveObject(ctx, found, 'battlefield', { controller: es.controller });
-          obj(ctx, found).tapped = true;
+          // Reality Fracture (17a): Identity Echo puts it onto the battlefield untapped.
+          if (e.to === 'battlefieldTapped') obj(ctx, found).tapped = true;
         }
         emit(ctx, { type: 'revealed', player: es.controller, id: found });
       }

@@ -230,6 +230,11 @@ export function startTurn(ctx: Ctx, player: PlayerId, noPowerUp = false): void {
   delete s.turn.endSteps;
   delete s.turn.extraEndSteps;
   delete s.turn.lifeGained;
+  // Reality Fracture (17a): Command the Stage ("last turn"), Molten Tide.
+  if (s.turn.noncombatDamaged) s.turn.lastNoncombatDamaged = s.turn.noncombatDamaged;
+  else delete s.turn.lastNoncombatDamaged;
+  delete s.turn.noncombatDamaged;
+  delete s.turn.moltenTide;
   if (s.staggered?.some((x) => x.by === player))
     s.staggered = s.staggered.filter((x) => x.by !== player);
   for (const q of Object.values(s.players)) q.attackedThisTurn = false;

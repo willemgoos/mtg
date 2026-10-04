@@ -665,6 +665,9 @@ export type TriggerDef =
       filter?: CardFilter;
       // Marvel Super Heroes: "attacks alone" (it is the only attacker).
       alone?: boolean;
+      // Reality Fracture (17a): Jiang Yanggu, Alone
+      /** "Attacks a player": one attacking a planeswalker doesn't count. */
+      aPlayer?: boolean;
     }
   | { on: 'landfall' }
   | {
@@ -730,6 +733,12 @@ export type TriggerDef =
   // Marvel Super Heroes Jumpstart (Tenacious/Rampaging)
   /** Whenever this creature blocks (Atlas, Sizable Stooge; Daemogoth Titan). */
   | { on: 'blocks' }
+  // Reality Fracture (17a): Tetsuko Umezawa, Pursuer
+  /** Whenever a creature an opponent controls (matching the filter) blocks; "that creature" is the subject. */
+  | { on: 'opponentCreatureBlocks'; filter?: CardFilter }
+  // Reality Fracture (17a): Master of Barbs
+  /** Whenever one or more opponents are dealt noncombat damage by any source (use with `batch`; "that much" adds up). */
+  | { on: 'opponentDealtNoncombatDamage' }
   // Marvel Super Heroes Jumpstart (Marvelous)
   /** Whenever you activate a power-up ability (Marvel Boy, Noh-Varr). */
   | { on: 'youActivatePowerUp' }
@@ -971,6 +980,14 @@ export type ConditionDef =
   // Brawl staples.
   /** You have a card matching this in your hand (snarls reveal one). */
   | { kind: 'handHas'; filter: CardFilter }
+  // Reality Fracture (17a): Command the Stage, Master of Barbs
+  /** An opponent was dealt noncombat damage this turn. */
+  | { kind: 'opponentDealtNoncombatDamageThisTurn' }
+  /** An opponent was dealt noncombat damage during the turn before this one. */
+  | { kind: 'opponentDealtNoncombatDamageLastTurn' }
+  // Reality Fracture (17a): Koth, the Geomancer
+  /** The creature, land or spell that caused the trigger matches the filter ("if that land is a Mountain"). */
+  | { kind: 'subjectMatches'; filter: CardFilter }
   // Marvel Super Heroes
   /** The source entered the battlefield this turn. */
   | { kind: 'sourceEnteredThisTurn' }
@@ -1200,10 +1217,26 @@ export type Ref =
   | 'eachOpponent'
   | 'eachPlayer'
   | 'attached'
-  | { each: 'permanent'; controller?: 'you' | 'opponent'; filter?: CardFilter }
+  | {
+      each: 'permanent';
+      controller?: 'you' | 'opponent';
+      filter?: CardFilter;
+      // Reality Fracture (17a): Face Yourself
+      /** Only those the player chosen as target `controllerTarget` controls. */
+      controllerTarget?: number;
+      exceptChosen?: boolean;
+    }
   /** The object that caused the trigger ("that creature"). */
   | 'subject'
-  | { each: 'creature'; controller?: 'you' | 'opponent'; filter?: CardFilter }
+  | {
+      each: 'creature';
+      controller?: 'you' | 'opponent';
+      filter?: CardFilter;
+      // Reality Fracture (17a): Face Yourself ("each creature target player controls")
+      controllerTarget?: number;
+      // Reality Fracture (17a): Command the Stage ("each other Wizard token": not the token just created)
+      exceptChosen?: boolean;
+    }
   /** The controller of a chosen target (Blooming Blast: "that creature's controller"). */
   | { controllerOf: number }
   // Marvel Super Heroes Jumpstart (Geniuses)
@@ -1589,6 +1622,9 @@ export type EffectDef =
       lore?: number;
       /** "Its equip abilities cost {N} less to activate" (Firion). */
       equipDiscount?: number;
+      // Reality Fracture (17a): Face Yourself
+      /** "Except it has this ability": it keeps it for as long as it's on the battlefield. */
+      grantAbilities?: AbilityDef[];
     }
   /** Choose a color (or a creature type) for the source, as it enters. */
   | {
@@ -1766,7 +1802,12 @@ export type EffectDef =
   /** Return a target spell on the stack to its owner's hand. */
   | { kind: 'returnSpellToHand'; what: Ref }
   /** Reveal cards from the top until one matches; it goes to hand or onto the battlefield tapped, the rest to the bottom. */
-  | { kind: 'revealUntil'; filter: CardFilter; to: 'hand' | 'battlefieldTapped' }
+  | {
+      kind: 'revealUntil';
+      filter: CardFilter;
+      // Reality Fracture (17a): Identity Echo ('battlefield': untapped)
+      to: 'hand' | 'battlefieldTapped' | 'battlefield';
+    }
   /**
    * Until end of turn, whenever the creature deals combat damage, its
    * controller may exile it and return it (Long River Lurker).
@@ -1902,6 +1943,9 @@ export type EffectDef =
       drawAfter?: number;
       /** Then create one token of this id for each nonland card discarded. */
       tokenPerNonland?: string;
+      // Reality Fracture (17a): Tether Technician, Improvised Act
+      /** "If you do": these effects follow once a card was discarded (not if the hand was empty). */
+      then?: EffectDef[];
     }
   /** Put the top N cards of your library into your graveyard. */
   | { kind: 'mill'; count: Amount; who?: Ref }
@@ -2579,6 +2623,9 @@ export type StaticDef =
   | { kind: 'preventDamageToYou'; amount: number }
   /** Creature tokens you would create are this token instead (Divine Visitation: 4/4 Angels). */
   | { kind: 'creatureTokensBecome'; token: CardDefId }
+  // Reality Fracture (17a): Draconic Visitor
+  /** Artifact tokens you would create are this token instead, that many of them. */
+  | { kind: 'artifactTokensBecome'; token: CardDefId }
   /** You may play lands from your graveyard (Conduit of Worlds). */
   | { kind: 'playLandsFromGraveyard' }
   // Secrets of Strixhaven (14b): Zaffai and the Tempests
@@ -3155,6 +3202,13 @@ export interface TurnState {
   // Final Fantasy (11c): devotion and life gained
   /** Life each player gained this turn (Hope Estheim). */
   lifeGained?: Record<PlayerId, number>;
+  // Reality Fracture (17a): Command the Stage, Master of Barbs
+  /** Players dealt noncombat damage this turn, and during the turn before. */
+  noncombatDamaged?: PlayerId[];
+  lastNoncombatDamaged?: PlayerId[];
+  // Reality Fracture (17a): Molten Tide
+  /** Players whose Mountains add an additional {R} when tapped for mana this turn. */
+  moltenTide?: PlayerId[];
 }
 
 export interface Attacker {
@@ -3394,6 +3448,8 @@ export type Decision =
       drawAfter?: number;
       tokenPerNonland?: string;
       nonlandDiscarded?: number;
+      // Reality Fracture (17a): Tether Technician
+      then?: EffectDef[];
       resume: PausedResolution;
       thenPriority: PlayerId;
     }

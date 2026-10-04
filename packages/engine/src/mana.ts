@@ -194,6 +194,13 @@ export function manaSources(
       if (def(ctx, id).subtypes.includes('Treasure') && treasuresDouble(ctx, player))
         units = Math.max(units, 2);
       for (let i = 1; i < units; i++) out.push({ ...src });
+      // Reality Fracture (17a): Molten Tide: "whenever you tap a Mountain for mana, add an additional {R}".
+      if (
+        ctx.s.turn.moltenTide?.includes(player) &&
+        def(ctx, id).types.includes('Land') &&
+        def(ctx, id).subtypes.includes('Mountain')
+      )
+        out.push({ ...src, produces: ['R'] });
       // Strixhaven Brawl (15b, g): Utopia Sprawl: an extra mana of the chosen colour.
       for (const aura of ctx.s.battlefield) {
         const ao = obj(ctx, aura);
