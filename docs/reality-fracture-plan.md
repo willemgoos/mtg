@@ -113,6 +113,13 @@ New engine pieces, each in a `// Reality Fracture (17a)` block (custom handlers 
   | G/U | landfall and planeswalkers | Mind Meanderer and Kiora are 17c; built around landfall until then |
 
   The first two decks go in as soon as their cards are merged, so they can be played early.
+
+  **Decks done** (`fra/decks-1.ts` to `decks-3.ts`, tests `fra-decks-*.test.ts`). Bot vs bot, 20 games per seat against each
+  starter deck: Foresight and Flight (W/U) 50.5%, Heartwood Forge (R/G) 56.2%, Drowned Archive (U/B) 46.8%, Stingerquill
+  Barrage (B/R) 53.0%, Vigorbloom Grove (G/W) 61.4%, Bloodline Requiem (W/B) 50.4%, Clockwork Spellslingers (U/R) 48.3%,
+  Grave Harvest (B/G) 54.5%, Rallying Blades (R/W) 50.3%, Tidal Terrain (G/U) 48.5%. The first six were measured against
+  the fourteen `source: 'arena'` starter decks, the last four against the ten Foundations ones. Tidal Terrain is ramp and
+  land recursion for now: G/U has no landfall payoffs outside the planeswalker cards.
 - **Ten Jump In packets** of our own (Arena has announced none for FRA), two per colour, each twelve FRA cards with one
   rare or mythic plus eight basics; `'fra'` in the Packet `set` union and a Reality Fracture button in the picker.
 - **Boosters**: `PackSet` `'fra'` in Expedition and a Season pack kind, sheets from `FRA_BOOSTER_LIST` (cards the pool
