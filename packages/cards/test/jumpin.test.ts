@@ -71,15 +71,21 @@ describe('Jump In packets', () => {
         expect(+card.get(name)!.collectorNumber, `${p.name}: ${name}`).toBeLessThanOrEqual(309);
   });
 
-  it('builds ten Reality Fracture packets from implemented cards: no planeswalkers, no Empower Jace', () => {
+  it('builds ten Reality Fracture packets with planeswalker-related cards, one rare each', () => {
     const fra = PACKETS.filter((p) => p.set === 'fra');
     expect(fra).toHaveLength(10);
-    for (const p of fra)
-      for (const [name] of p.spells) {
+    for (const p of fra) {
+      let rares = 0;
+      for (const [name, k] of p.spells) {
         const c = card.get(name)!;
-        expect(c.typeLine, name).not.toContain('Planeswalker');
-        expect(c.oracleText, name).not.toContain('Jace');
+        if (c.rarity === 'rare' || c.rarity === 'mythic') rares += k;
       }
+      expect(rares, p.name).toBe(1);
+    }
+    // Empower Jace cards are in the packets now (17c).
+    expect(fra.some((p) => p.spells.some(([n]) => card.get(n)!.oracleText?.includes('Jace')))).toBe(
+      true,
+    );
     expect(deckById(jumpInId('fra-lifegain', 'fra-titans')).set).toBe('fra');
     expect(deckById(jumpInId('fra-lifegain', 'angels')).set).toBeUndefined();
   });
