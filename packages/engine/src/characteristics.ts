@@ -243,7 +243,7 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
   }
   // Switching is applied after every other change to power and toughness.
   if (switched) [power, toughness] = [toughness, power];
-  let subtypes = o.addedSubtypes ? [...d.subtypes, ...o.addedSubtypes] : d.subtypes;
+  let subtypes = subtypesOf(ctx, id);
   // Final Fantasy (11a): job select.
   if (extraSubtypes.length)
     subtypes = [...subtypes, ...extraSubtypes.filter((t) => !subtypes.includes(t))];
@@ -561,7 +561,7 @@ export function isCreature(ctx: Ctx, id: ObjectId): boolean {
 }
 
 /** Not creature types, so a changeling doesn't have them. */
-const NON_CREATURE_SUBTYPES = new Set([
+export const NON_CREATURE_SUBTYPES = new Set([
   'Food',
   'Equipment',
   'Aura',
@@ -579,17 +579,27 @@ const NON_CREATURE_SUBTYPES = new Set([
 
 /** Changeling: it's every creature type. */
 function changeling(ctx: Ctx, id: ObjectId, subtype: string): boolean {
-  return def(ctx, id).keywords.includes('changeling') && !NON_CREATURE_SUBTYPES.has(subtype);
+  return (
+    !obj(ctx, id).creatureTypes &&
+    def(ctx, id).keywords.includes('changeling') &&
+    !NON_CREATURE_SUBTYPES.has(subtype)
+  );
+}
+
+/** Caretakers: permanent creature-type changes preserve noncreature subtypes. */
+export function subtypesOf(ctx: Ctx, id: ObjectId): string[] {
+  const o = obj(ctx, id);
+  const printed = def(ctx, id).subtypes;
+  return [
+    ...(o.creatureTypes ? printed.filter((t) => NON_CREATURE_SUBTYPES.has(t)) : printed),
+    ...(o.creatureTypes ?? []),
+    ...(o.addedSubtypes ?? []),
+  ];
 }
 
 /** Has this subtype (printed, gained, or every creature type for a changeling). */
 export function hasSubtype(ctx: Ctx, id: ObjectId, subtype: string): boolean {
-  const o = obj(ctx, id);
-  return (
-    def(ctx, id).subtypes.includes(subtype) ||
-    !!o.addedSubtypes?.includes(subtype) ||
-    changeling(ctx, id, subtype)
-  );
+  return subtypesOf(ctx, id).includes(subtype) || changeling(ctx, id, subtype);
 }
 
 export function creaturesOnBattlefield(ctx: Ctx, controller?: PlayerId): GameObject[] {
@@ -653,7 +663,7 @@ export function matchesFilter(
         power: 0,
         toughness: 0,
         keywords: new Set<Keyword>(),
-        subtypes: [...def(ctx, id).subtypes, ...(obj(ctx, id).addedSubtypes ?? [])],
+        subtypes: subtypesOf(ctx, id),
       };
   if (filter.maxPower !== undefined && c.power > filter.maxPower) return false;
   // Secrets of Strixhaven (14b): Arnyn, Deathbloom Botanist.
@@ -760,10 +770,7 @@ export function cardMatches(
   sourceId?: ObjectId,
 ): boolean {
   const d = def(ctx, id);
-  const subtypes = [
-    ...d.subtypes,
-    ...(obj(ctx, id).zone === 'battlefield' ? (obj(ctx, id).addedSubtypes ?? []) : []),
-  ];
+  const subtypes = obj(ctx, id).zone === 'battlefield' ? subtypesOf(ctx, id) : d.subtypes;
   if (
     filter.anyOf &&
     !filter.anyOf.some((branch) =>

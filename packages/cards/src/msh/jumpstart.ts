@@ -5,6 +5,7 @@ import { MSH_JUMPSTART_ANALYZED } from './jumpstart-analyzed.ts';
 import { MSH_JUMPSTART_ANIMAL } from './jumpstart-animal.ts';
 import { MSH_JUMPSTART_ATLANTIS } from './jumpstart-atlantis.ts';
 import { MSH_JUMPSTART_BATTALION } from './jumpstart-battalion.ts';
+import { MSH_JUMPSTART_CARETAKERS } from './jumpstart-caretakers.ts';
 import { MSH_JUMPSTART_BLINK } from './jumpstart-blink.ts';
 import { MSH_JUMPSTART_EQUIPPED } from './jumpstart-equipped.ts';
 import { MSH_JUMPSTART_GENIUSES } from './jumpstart-geniuses.ts';
@@ -66,6 +67,7 @@ export const MSH_JUMPSTART: Record<string, Behavior> = {
   ...MSH_JUMPSTART_ATLANTIS,
   ...MSH_JUMPSTART_BATTALION,
   ...MSH_JUMPSTART_BLINK,
+  ...MSH_JUMPSTART_CARETAKERS,
   ...MSH_JUMPSTART_EQUIPPED,
   ...MSH_JUMPSTART_GENIUSES,
   ...MSH_JUMPSTART_GREAT_LAKES,

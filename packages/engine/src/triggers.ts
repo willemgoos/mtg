@@ -256,6 +256,12 @@ export function checkCondition(
       }) >= c.min
     );
   // Final Fantasy (11c): rare conditions.
+  // Caretakers: use the configured starting life, not a fixed life threshold.
+  if (c.kind === 'lifeAboveStarting')
+    return (
+      ctx.s.players[controller].life >=
+      (ctx.s.players[controller].startingLife ?? (ctx.s.format === 'brawl' ? 25 : 20)) + c.amount
+    );
   if (c.kind === 'lifeAtMostHalfStarting')
     return ctx.s.players[controller].life <= Math.floor((ctx.s.format === 'brawl' ? 25 : 20) / 2);
   if (c.kind === 'firstEndStep') return (ctx.s.turn.endSteps ?? 1) <= 1;
@@ -279,7 +285,7 @@ export function checkCondition(
       return !!self.kicked;
     case 'diedWithout':
       return (
-        !def(ctx, self.id).subtypes.includes(c.subtype) &&
+        !(self.lastSubtypes ?? def(ctx, self.id).subtypes).includes(c.subtype) &&
         !self.lastAddedSubtypes?.includes(c.subtype)
       );
     case 'firstLifeGainThisTurn':
@@ -879,7 +885,10 @@ function detect(ctx: Ctx, ev: GameEvent): void {
             if (
               t.on === 'creatureYouControlDies' &&
               t.filter &&
-              !defMatches(movedDef, t.filter) &&
+              !defMatches(
+                moved?.lastSubtypes ? { ...movedDef, subtypes: moved.lastSubtypes } : movedDef,
+                t.filter,
+              ) &&
               // Final Fantasy (11c): a type it gained (Jenova's Mutants).
               !(t.filter.subtype && moved?.lastAddedSubtypes?.includes(t.filter.subtype))
             )

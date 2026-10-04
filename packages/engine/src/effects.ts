@@ -1,3 +1,4 @@
+import { replaceLifeGain, type LifeGainReplacement } from './life-gain-replacements.ts';
 import {
   characteristics,
   cardMatches,
@@ -8,6 +9,7 @@ import {
   lifeGainPrevented,
   matchesFilter,
   power,
+  NON_CREATURE_SUBTYPES,
 } from './characteristics.ts';
 import {
   type Ctx,
@@ -496,19 +498,27 @@ export function changeLife(ctx: Ctx, player: PlayerId, delta: number): void {
 }
 
 export function gainLife(ctx: Ctx, player: PlayerId, amount: number): void {
-  if (amount <= 0 || lifeGainPrevented(ctx)) return;
-  // Angel of Vitality: "you gain that much life plus 1 instead".
+  if (amount <= 0 || ctx.s.players[player].lifeFrozen || lifeGainPrevented(ctx)) return;
+  // Caretakers: the affected player orders noncommuting life-gain replacements.
+  const replacements: LifeGainReplacement[] = [];
   for (const id of ctx.s.battlefield) {
     if (obj(ctx, id).controller !== player) continue;
-    for (const a of def(ctx, id).abilities)
-      if (a.kind === 'static' && a.effect.kind === 'extraLifeGain') amount += a.effect.amount;
+    const d = def(ctx, id);
+    for (const a of d.abilities) {
+      if (a.kind !== 'static') continue;
+      if (a.effect.kind === 'extraLifeGain')
+        replacements.push({
+          sourceDefId: d.id, kind: 'add', amount: a.effect.amount,
+          label: d.name + ': gain ' + a.effect.amount + ' additional life',
+        });
+      if (a.effect.kind === 'doubleLifeGain')
+        replacements.push({
+          sourceDefId: d.id, kind: 'double', amount: 2,
+          label: d.name + ': gain twice as much life',
+        });
+    }
   }
-  // Final Fantasy (11c): The Wind Crystal, "twice that much life instead".
-  for (const id of ctx.s.battlefield) {
-    if (obj(ctx, id).controller !== player) continue;
-    for (const a of def(ctx, id).abilities)
-      if (a.kind === 'static' && a.effect.kind === 'doubleLifeGain') amount *= 2;
-  }
+  amount = replaceLifeGain(ctx, player, amount, replacements);
   ctx.s.turn.lifeGains[player]++;
   // Final Fantasy (11c), Strixhaven (13c): life gained this turn (Hope Estheim, Fortifying Draught).
   (ctx.s.turn.lifeGained ??= { p1: 0, p2: 0 })[player] += amount;
@@ -2306,6 +2316,16 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
             moveObject(ctx, id, 'exile');
         }
       return;
+    }
+    // Caretakers: Donald Blake's permanent creature-type replacement.
+    case 'setCreatureTypes': {
+      for (const id of objectsOf(ctx, es, e.what)) {
+        const o = obj(ctx, id);
+        o.addedSubtypes = (o.addedSubtypes ?? []).filter((t) => NON_CREATURE_SUBTYPES.has(t));
+        o.creatureTypes = [...e.subtypes];
+        o.creatureTypesTimestamp = newTimestamp(ctx);
+      }
+      break;
     }
     case 'namedCounters': {
       const n = resolveAmount(ctx, es, e.amount);
