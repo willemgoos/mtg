@@ -19,6 +19,7 @@ import {
   STRIXHAVEN_BRAWL_BEHAVIORS,
   STRIXHAVEN_BRAWL_TOKENS,
 } from './strixhaven-brawl.ts';
+import { MSH_JUMPSTART_EQUIPPED_TOKENS } from './msh/jumpstart-equipped.ts';
 import { MSH_JUMPSTART_INCREDIBLE_TOKENS } from './msh/jumpstart-incredible.ts';
 import { MSH_JUMPSTART_PYM_TOKENS } from './msh/jumpstart-pym.ts';
 import { MSH_JUMPSTART_THOR_TOKENS } from './msh/jumpstart-thor.ts';
@@ -2208,6 +2209,7 @@ export const TOKENS: CardDefinition[] = [
   ...MARVEL_TOKENS,
   ...MSH_JUMPSTART_PYM_TOKENS,
   ...MSH_JUMPSTART_INCREDIBLE_TOKENS,
+  ...MSH_JUMPSTART_EQUIPPED_TOKENS,
   ...MSH_JUMPSTART_THOR_TOKENS,
   ...MSH_JUMPSTART_WAKANDA_TOKENS,
   ...MSH_JUMPSTART_WILD_TOKENS,

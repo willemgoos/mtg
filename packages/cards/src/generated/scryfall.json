@@ -22365,6 +22365,145 @@
   }
  },
  {
+  "name": "Bucky Barnes, Eager Ally",
+  "scryfallId": "58a6ca84-64b8-4137-b3ce-9540b6dfa162",
+  "oracleId": "55bc5d06-7dd1-4403-af32-0e10d8bbe327",
+  "set": "msc",
+  "collectorNumber": "586",
+  "rarity": "uncommon",
+  "manaCost": "{1}{W}",
+  "typeLine": "Legendary Creature — Human Soldier Hero",
+  "oracleText": "Vigilance\nWhen Bucky Barnes dies, look at the top four cards of your library. You may reveal an Equipment, Hero, or Soldier card from among them and put it into your hand. Put the rest on the bottom of your library in a random order.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Vigilance"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/8/58a6ca84-64b8-4137-b3ce-9540b6dfa162.jpg?1783903086",
+   "normal": "https://cards.scryfall.io/normal/front/5/8/58a6ca84-64b8-4137-b3ce-9540b6dfa162.jpg?1783903086",
+   "large": "https://cards.scryfall.io/large/front/5/8/58a6ca84-64b8-4137-b3ce-9540b6dfa162.jpg?1783903086",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/8/58a6ca84-64b8-4137-b3ce-9540b6dfa162.jpg?1783903086"
+  }
+ },
+ {
+  "name": "The Howling Commandos",
+  "scryfallId": "e1982da2-4ed5-4fa7-aa88-26362b7b4dc5",
+  "oracleId": "49325445-0825-405e-be86-2a814699ce03",
+  "set": "msc",
+  "collectorNumber": "598",
+  "rarity": "common",
+  "manaCost": "{1}{W}",
+  "typeLine": "Legendary Creature — Human Soldier Hero",
+  "oracleText": "{5}: Creatures you control get +1/+1 until end of turn. Soldiers you control gain vigilance until end of turn.",
+  "power": "3",
+  "toughness": "1",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/1/e1982da2-4ed5-4fa7-aa88-26362b7b4dc5.jpg?1783903082",
+   "normal": "https://cards.scryfall.io/normal/front/e/1/e1982da2-4ed5-4fa7-aa88-26362b7b4dc5.jpg?1783903082",
+   "large": "https://cards.scryfall.io/large/front/e/1/e1982da2-4ed5-4fa7-aa88-26362b7b4dc5.jpg?1783903082",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/1/e1982da2-4ed5-4fa7-aa88-26362b7b4dc5.jpg?1783903082"
+  }
+ },
+ {
+  "name": "U.S.Agent, John Walker",
+  "scryfallId": "35e11911-799c-4d82-9109-3ca27964bef0",
+  "oracleId": "2b6fa8b6-4865-4eb6-974b-00f6b16b6f0f",
+  "set": "msh",
+  "collectorNumber": "236",
+  "rarity": "uncommon",
+  "manaCost": "{3}{W/B}",
+  "typeLine": "Legendary Creature — Human Soldier Hero",
+  "oracleText": "When U.S.Agent enters, create a colorless Equipment artifact token named Sturdy Shield with \"Equipped creature gets +1/+2\" and equip {2}. Attach it to U.S.Agent.",
+  "power": "3",
+  "toughness": "2",
+  "colors": [
+   "B",
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/5/35e11911-799c-4d82-9109-3ca27964bef0.jpg?1783902894",
+   "normal": "https://cards.scryfall.io/normal/front/3/5/35e11911-799c-4d82-9109-3ca27964bef0.jpg?1783902894",
+   "large": "https://cards.scryfall.io/large/front/3/5/35e11911-799c-4d82-9109-3ca27964bef0.jpg?1783902894",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/5/35e11911-799c-4d82-9109-3ca27964bef0.jpg?1783902894"
+  }
+ },
+ {
+  "name": "Captain America, Liberator",
+  "scryfallId": "bfa75d51-307f-45da-8fac-81bb32830ee9",
+  "oracleId": "26e92eb8-7a23-4e7e-be83-244bb6078606",
+  "set": "msc",
+  "collectorNumber": "587",
+  "rarity": "rare",
+  "manaCost": "{3}{W}{W}",
+  "typeLine": "Legendary Creature — Human Soldier Hero",
+  "oracleText": "When Captain America enters, you may search your library for an Equipment card with mana value 3 or less, put it onto the battlefield, then shuffle.\nWhenever Captain America attacks, for each Equipment attached to him, create a 1/1 white Soldier creature token.",
+  "power": "5",
+  "toughness": "5",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/f/bfa75d51-307f-45da-8fac-81bb32830ee9.jpg?1783903085",
+   "normal": "https://cards.scryfall.io/normal/front/b/f/bfa75d51-307f-45da-8fac-81bb32830ee9.jpg?1783903085",
+   "large": "https://cards.scryfall.io/large/front/b/f/bfa75d51-307f-45da-8fac-81bb32830ee9.jpg?1783903085",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/f/bfa75d51-307f-45da-8fac-81bb32830ee9.jpg?1783903085"
+  }
+ },
+ {
+  "name": "Infinity Formula",
+  "scryfallId": "18286716-cdd6-4035-af0d-8e0a8dde68f7",
+  "oracleId": "83669321-46cd-4805-b4ce-441c5db0f338",
+  "set": "msc",
+  "collectorNumber": "601",
+  "rarity": "common",
+  "manaCost": "{2}{W}",
+  "typeLine": "Artifact — Equipment",
+  "oracleText": "When this Equipment enters, attach it to target creature you control.\nEquipped creature gets +1/+2 and has \"Whenever this creature attacks, you gain 2 life.\"\nEquip {2} ({2}: Attach to target creature you control. Equip only as a sorcery.)",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Equip"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/8/18286716-cdd6-4035-af0d-8e0a8dde68f7.jpg?1783903081",
+   "normal": "https://cards.scryfall.io/normal/front/1/8/18286716-cdd6-4035-af0d-8e0a8dde68f7.jpg?1783903081",
+   "large": "https://cards.scryfall.io/large/front/1/8/18286716-cdd6-4035-af0d-8e0a8dde68f7.jpg?1783903081",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/8/18286716-cdd6-4035-af0d-8e0a8dde68f7.jpg?1783903081"
+  }
+ },
+ {
+  "name": "Origin of Captain America",
+  "scryfallId": "649ac84b-be8e-4f00-9603-815ee2b11d00",
+  "oracleId": "cf4ce0f2-101e-46ec-9368-7395872910b3",
+  "set": "msc",
+  "collectorNumber": "605",
+  "rarity": "uncommon",
+  "manaCost": "{2}{W}",
+  "typeLine": "Enchantment — Saga",
+  "oracleText": "(As this Saga enters and after your draw step, add a lore counter. Sacrifice after III.)\nI — Put a +1/+1 counter on target creature you control. It gains first strike and vigilance until end of turn.\nII — Create a colorless Equipment artifact token named Sturdy Shield with \"Equipped creature gets +1/+2\" and equip {2}.\nIII — Tap up to one target creature and put a stun counter on it.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/4/649ac84b-be8e-4f00-9603-815ee2b11d00.jpg?1784182914",
+   "normal": "https://cards.scryfall.io/normal/front/6/4/649ac84b-be8e-4f00-9603-815ee2b11d00.jpg?1784182914",
+   "large": "https://cards.scryfall.io/large/front/6/4/649ac84b-be8e-4f00-9603-815ee2b11d00.jpg?1784182914",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/4/649ac84b-be8e-4f00-9603-815ee2b11d00.jpg?1784182914"
+  }
+ },
+ {
   "name": "Beast, Erudite Aerialist",
   "scryfallId": "a92a95d2-9529-417a-b7d5-b4244d7fdca7",
   "oracleId": "191ba5f0-45f4-4b7f-910d-4bd4d2d28b33",
