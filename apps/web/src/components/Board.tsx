@@ -495,7 +495,9 @@ export function Board({
                     ? 'an unblocked attacker to return'
                     : first.type === 'activateAbility' && first.tapCreature
                       ? 'a creature to tap'
-                      : null
+                      : first.type === 'activateAbility' && first.tapArtifacts?.length
+                        ? 'artifacts to tap'
+                        : null
           : null;
       const prompt = paying
         ? `${targeting.label}: choose ${paying}`
@@ -1068,7 +1070,10 @@ export function Board({
                   ? `You may cast it by paying ${manaText(d.pay)} rather than its mana cost.`
                   : d.costLess
                     ? `You may cast it; it costs {${d.costLess}} less.`
-                    : 'You may cast it without paying its mana cost.'}
+                    : // Reality Fracture (17a): Uldaros Theorix, total mana value left.
+                      d.budget !== undefined
+                      ? `You may cast any number of them without paying their mana costs (total mana value ${d.budget} or less left).`
+                      : 'You may cast it without paying its mana cost.'}
             </p>
             <div className="mull__hand">
               {d.cards.map((id, i) => {

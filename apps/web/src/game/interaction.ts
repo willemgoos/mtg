@@ -28,6 +28,8 @@ export function targetsOf(a: Action): TargetChoice[] {
     const sneak = a.type === 'castSpell' ? a.sneak : undefined;
     // Villainous Syndication: the creature tapped for the cost is picked too.
     const tapped = a.type === 'activateAbility' ? a.tapCreature : undefined;
+    // Reality Fracture (17a): Tenured Tethermage: the artifacts tapped for the cost are picked too.
+    const tappedArtifacts = a.type === 'activateAbility' ? (a.tapArtifacts ?? []) : [];
     const costs: TargetChoice[] = [
       a.sacrifice,
       forageFood(a),
@@ -35,6 +37,7 @@ export function targetsOf(a: Action): TargetChoice[] {
       copyOf,
       sneak,
       tapped,
+      ...tappedArtifacts,
     ].flatMap((id) => (id ? [{ object: { id, zcc: -1 } }] : []));
     return [...costs, ...a.targets];
   }

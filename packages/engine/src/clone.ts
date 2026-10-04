@@ -63,12 +63,17 @@ export function cloneState(s: GameState): GameState {
         : {}),
       ...(s.turn.handSwap ? { handSwap: s.turn.handSwap.slice() } : {}),
       ...(s.turn.creaturesLost ? { creaturesLost: { ...s.turn.creaturesLost } } : {}),
-      ...(s.turn.creaturesLost ? { creaturesLost: { ...s.turn.creaturesLost } } : {}),
       ...(s.turn.foodsSacrificed ? { foodsSacrificed: { ...s.turn.foodsSacrificed } } : {}),
       ...(s.turn.countersPut ? { countersPut: { ...s.turn.countersPut } } : {}), // Strixhaven Brawl (15b, multi)
       // Strixhaven Brawl (15b, pair): revolt.
       ...(s.turn.permanentsLeft ? { permanentsLeft: { ...s.turn.permanentsLeft } } : {}),
       ...(s.turn.hexproofPlayers ? { hexproofPlayers: s.turn.hexproofPlayers.slice() } : {}),
+      // Reality Fracture (17a): noncombat damage this turn and last turn, Molten Tide.
+      ...(s.turn.noncombatDamaged ? { noncombatDamaged: s.turn.noncombatDamaged.slice() } : {}),
+      ...(s.turn.lastNoncombatDamaged
+        ? { lastNoncombatDamaged: s.turn.lastNoncombatDamaged.slice() }
+        : {}),
+      ...(s.turn.moltenTide ? { moltenTide: s.turn.moltenTide.slice() } : {}),
       ...(s.turn.osteomancer ? { osteomancer: s.turn.osteomancer.slice() } : {}),
       ...(s.turn.cantLose ? { cantLose: s.turn.cantLose.slice() } : {}),
       ...(s.turn.deflect ? { deflect: s.turn.deflect.slice() } : {}),

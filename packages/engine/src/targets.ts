@@ -181,6 +181,27 @@ export function targetCombos(
   return [...done, ...combos];
 }
 
+/**
+ * Reality Fracture (17a): Uldaros Theorix, "one target card of each card type". Can each of these cards
+ * stand for a different one of its own card types (a card with two types takes either)?
+ */
+export function standForDistinctTypes(ctx: Ctx, ids: readonly ObjectId[]): boolean {
+  const taken = new Map<string, number>();
+  const place = (i: number, seen: Set<string>): boolean => {
+    for (const t of def(ctx, ids[i]!).types) {
+      if (t === 'Land' || seen.has(t)) continue;
+      seen.add(t);
+      const holder = taken.get(t);
+      if (holder === undefined || place(holder, seen)) {
+        taken.set(t, i);
+        return true;
+      }
+    }
+    return false;
+  };
+  return ids.every((_, i) => place(i, new Set()));
+}
+
 /** Is a previously chosen target still legal (checked on resolution)? */
 export function isTargetLegal(
   ctx: Ctx,

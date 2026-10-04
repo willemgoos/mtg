@@ -71605,6 +71605,1091 @@
   }
  },
  {
+  "name": "Prudent Fateseer",
+  "scryfallId": "6c1c790b-9e0e-4964-9ea3-554843907f06",
+  "oracleId": "63f67baa-3f37-41b8-9ee6-3c37f828917d",
+  "set": "fra",
+  "collectorNumber": "146",
+  "rarity": "uncommon",
+  "manaCost": "{1}{W/U}{W/U}",
+  "typeLine": "Creature — Dwarf Wizard",
+  "oracleText": "This creature enters prepared.\nWhenever you scry or surveil, creatures you control get +1/+0 until end of turn. This ability triggers only once each turn.",
+  "power": "1",
+  "toughness": "4",
+  "colors": [
+   "U",
+   "W"
+  ],
+  "colorIdentity": [
+   "U",
+   "W"
+  ],
+  "keywords": [
+   "Surveil",
+   "Prepared"
+  ],
+  "back": "Peer Review (Prudent Fateseer)",
+  "prepare": true,
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/c/6c1c790b-9e0e-4964-9ea3-554843907f06.jpg?1788329412",
+   "normal": "https://cards.scryfall.io/normal/front/6/c/6c1c790b-9e0e-4964-9ea3-554843907f06.jpg?1788329412",
+   "large": "https://cards.scryfall.io/large/front/6/c/6c1c790b-9e0e-4964-9ea3-554843907f06.jpg?1788329412",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/c/6c1c790b-9e0e-4964-9ea3-554843907f06.jpg?1788329412"
+  }
+ },
+ {
+  "name": "Peer Review (Prudent Fateseer)",
+  "flavorName": "Peer Review",
+  "scryfallId": "6c1c790b-9e0e-4964-9ea3-554843907f06",
+  "oracleId": "63f67baa-3f37-41b8-9ee6-3c37f828917d",
+  "set": "fra",
+  "collectorNumber": "146",
+  "rarity": "uncommon",
+  "manaCost": "{2}{W/U}",
+  "typeLine": "Sorcery",
+  "oracleText": "Create a 2/2 colorless Wizard Soldier creature token named Cadet. Surveil 1.",
+  "colors": [
+   "W",
+   "U"
+  ],
+  "colorIdentity": [
+   "U",
+   "W"
+  ],
+  "keywords": [
+   "Surveil"
+  ],
+  "front": "Prudent Fateseer",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/c/6c1c790b-9e0e-4964-9ea3-554843907f06.jpg?1788329412",
+   "normal": "https://cards.scryfall.io/normal/front/6/c/6c1c790b-9e0e-4964-9ea3-554843907f06.jpg?1788329412",
+   "large": "https://cards.scryfall.io/large/front/6/c/6c1c790b-9e0e-4964-9ea3-554843907f06.jpg?1788329412",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/c/6c1c790b-9e0e-4964-9ea3-554843907f06.jpg?1788329412"
+  }
+ },
+ {
+  "name": "Desperate Futurescribe",
+  "scryfallId": "cfaa3ebd-5c21-4e99-a0dd-8426d19b53a5",
+  "oracleId": "83c12f50-e5a1-479d-afab-edb0b40412f2",
+  "set": "fra",
+  "collectorNumber": "129",
+  "rarity": "uncommon",
+  "manaCost": "{2}{W}{U}",
+  "typeLine": "Creature — Kor Scout",
+  "oracleText": "Flying\nAt the beginning of combat on your turn, another target creature you control gets +1/+1 until end of turn. If you've scried or surveilled this turn, put a +1/+1 counter on that creature instead.",
+  "power": "3",
+  "toughness": "4",
+  "colors": [
+   "U",
+   "W"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/f/cfaa3ebd-5c21-4e99-a0dd-8426d19b53a5.jpg?1789644852",
+   "normal": "https://cards.scryfall.io/normal/front/c/f/cfaa3ebd-5c21-4e99-a0dd-8426d19b53a5.jpg?1789644852",
+   "large": "https://cards.scryfall.io/large/front/c/f/cfaa3ebd-5c21-4e99-a0dd-8426d19b53a5.jpg?1789644852",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/f/cfaa3ebd-5c21-4e99-a0dd-8426d19b53a5.jpg?1789644852"
+  }
+ },
+ {
+  "name": "Denzilore Fatehold",
+  "scryfallId": "986f9e98-9d8d-428b-9187-860745cf3269",
+  "oracleId": "0f8de7f0-c61d-415d-b4db-4959374343da",
+  "set": "fra",
+  "collectorNumber": "128",
+  "rarity": "mythic",
+  "manaCost": "{1}{W}{U}{U}",
+  "typeLine": "Legendary Creature — Elder Sphinx",
+  "oracleText": "Flash\nFlying\nWhenever you scry or surveil, put a +1/+1 counter on each creature you control.",
+  "power": "3",
+  "toughness": "4",
+  "colors": [
+   "U",
+   "W"
+  ],
+  "keywords": [
+   "Flying",
+   "Flash"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/8/986f9e98-9d8d-428b-9187-860745cf3269.jpg?1788878215",
+   "normal": "https://cards.scryfall.io/normal/front/9/8/986f9e98-9d8d-428b-9187-860745cf3269.jpg?1788878215",
+   "large": "https://cards.scryfall.io/large/front/9/8/986f9e98-9d8d-428b-9187-860745cf3269.jpg?1788878215",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/8/986f9e98-9d8d-428b-9187-860745cf3269.jpg?1788878215"
+  }
+ },
+ {
+  "name": "Fatehold Chronologist",
+  "scryfallId": "29e7ec16-0c16-48aa-8e09-ce6e0d5bd40b",
+  "oracleId": "1063822f-47d3-42e9-8a21-f62b12609fe1",
+  "set": "fra",
+  "collectorNumber": "133",
+  "rarity": "common",
+  "manaCost": "{1}{W/U}",
+  "typeLine": "Creature — Bird Wizard",
+  "oracleText": "Flying\nThis creature enters prepared. (While it's prepared, you may cast a copy of its spell. Doing so unprepares it.)",
+  "power": "1",
+  "toughness": "2",
+  "colors": [
+   "U",
+   "W"
+  ],
+  "colorIdentity": [
+   "U",
+   "W"
+  ],
+  "keywords": [
+   "Flying",
+   "Prepared"
+  ],
+  "back": "Peer Review (Fatehold Chronologist)",
+  "prepare": true,
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/9/29e7ec16-0c16-48aa-8e09-ce6e0d5bd40b.jpg?1789060173",
+   "normal": "https://cards.scryfall.io/normal/front/2/9/29e7ec16-0c16-48aa-8e09-ce6e0d5bd40b.jpg?1789060173",
+   "large": "https://cards.scryfall.io/large/front/2/9/29e7ec16-0c16-48aa-8e09-ce6e0d5bd40b.jpg?1789060173",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/9/29e7ec16-0c16-48aa-8e09-ce6e0d5bd40b.jpg?1789060173"
+  }
+ },
+ {
+  "name": "Peer Review (Fatehold Chronologist)",
+  "flavorName": "Peer Review",
+  "scryfallId": "29e7ec16-0c16-48aa-8e09-ce6e0d5bd40b",
+  "oracleId": "1063822f-47d3-42e9-8a21-f62b12609fe1",
+  "set": "fra",
+  "collectorNumber": "133",
+  "rarity": "common",
+  "manaCost": "{2}{W/U}",
+  "typeLine": "Sorcery",
+  "oracleText": "Create a 2/2 colorless Wizard Soldier creature token named Cadet. Surveil 1.",
+  "colors": [
+   "W",
+   "U"
+  ],
+  "colorIdentity": [
+   "U",
+   "W"
+  ],
+  "keywords": [
+   "Surveil"
+  ],
+  "front": "Fatehold Chronologist",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/9/29e7ec16-0c16-48aa-8e09-ce6e0d5bd40b.jpg?1789060173",
+   "normal": "https://cards.scryfall.io/normal/front/2/9/29e7ec16-0c16-48aa-8e09-ce6e0d5bd40b.jpg?1789060173",
+   "large": "https://cards.scryfall.io/large/front/2/9/29e7ec16-0c16-48aa-8e09-ce6e0d5bd40b.jpg?1789060173",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/9/29e7ec16-0c16-48aa-8e09-ce6e0d5bd40b.jpg?1789060173"
+  }
+ },
+ {
+  "name": "Proctor of Potential",
+  "scryfallId": "cf0eec8c-0475-4050-8144-481a9bb13a0f",
+  "oracleId": "c612ba0a-5134-45fa-a762-f4621bda4f83",
+  "set": "fra",
+  "collectorNumber": "145",
+  "rarity": "rare",
+  "manaCost": "{W}{U}",
+  "typeLine": "Creature — Human Cleric",
+  "oracleText": "Whenever this creature or another creature you control enters, surveil 1. (Look at the top card of your library. You may put it into your graveyard.)\n{W}{U}: Return this card from your graveyard to the battlefield with a finality counter on it. Activate only if you've scried or surveilled this turn. (If a creature with a finality counter on it would die, exile it instead.)",
+  "power": "3",
+  "toughness": "1",
+  "colors": [
+   "U",
+   "W"
+  ],
+  "keywords": [
+   "Surveil"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/f/cf0eec8c-0475-4050-8144-481a9bb13a0f.jpg?1789127661",
+   "normal": "https://cards.scryfall.io/normal/front/c/f/cf0eec8c-0475-4050-8144-481a9bb13a0f.jpg?1789127661",
+   "large": "https://cards.scryfall.io/large/front/c/f/cf0eec8c-0475-4050-8144-481a9bb13a0f.jpg?1789127661",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/f/cf0eec8c-0475-4050-8144-481a9bb13a0f.jpg?1789127661"
+  }
+ },
+ {
+  "name": "Paradox Shaper",
+  "scryfallId": "e61b9d48-0ace-4453-afe0-a1024444bac0",
+  "oracleId": "511951ed-fbff-4e44-9429-27f237496672",
+  "set": "fra",
+  "collectorNumber": "143",
+  "rarity": "uncommon",
+  "manaCost": "{1}{U/B}",
+  "typeLine": "Creature — Octopus Wizard",
+  "oracleText": "At the beginning of your upkeep, if this creature isn't prepared, it becomes prepared.\n{2}: Put target card from your graveyard on the bottom of your library.",
+  "power": "1",
+  "toughness": "3",
+  "colors": [
+   "B",
+   "U"
+  ],
+  "colorIdentity": [
+   "B",
+   "U"
+  ],
+  "keywords": [
+   "Prepared"
+  ],
+  "back": "Omit Variables (Paradox Shaper)",
+  "prepare": true,
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/6/e61b9d48-0ace-4453-afe0-a1024444bac0.jpg?1788329390",
+   "normal": "https://cards.scryfall.io/normal/front/e/6/e61b9d48-0ace-4453-afe0-a1024444bac0.jpg?1788329390",
+   "large": "https://cards.scryfall.io/large/front/e/6/e61b9d48-0ace-4453-afe0-a1024444bac0.jpg?1788329390",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/6/e61b9d48-0ace-4453-afe0-a1024444bac0.jpg?1788329390"
+  }
+ },
+ {
+  "name": "Omit Variables (Paradox Shaper)",
+  "flavorName": "Omit Variables",
+  "scryfallId": "e61b9d48-0ace-4453-afe0-a1024444bac0",
+  "oracleId": "511951ed-fbff-4e44-9429-27f237496672",
+  "set": "fra",
+  "collectorNumber": "143",
+  "rarity": "uncommon",
+  "manaCost": "{U/B}",
+  "typeLine": "Sorcery",
+  "oracleText": "Mill three cards. (Put the top three cards of your library into your graveyard.)",
+  "colors": [
+   "U",
+   "B"
+  ],
+  "colorIdentity": [
+   "B",
+   "U"
+  ],
+  "keywords": [
+   "Mill"
+  ],
+  "front": "Paradox Shaper",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/6/e61b9d48-0ace-4453-afe0-a1024444bac0.jpg?1788329390",
+   "normal": "https://cards.scryfall.io/normal/front/e/6/e61b9d48-0ace-4453-afe0-a1024444bac0.jpg?1788329390",
+   "large": "https://cards.scryfall.io/large/front/e/6/e61b9d48-0ace-4453-afe0-a1024444bac0.jpg?1788329390",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/6/e61b9d48-0ace-4453-afe0-a1024444bac0.jpg?1788329390"
+  }
+ },
+ {
+  "name": "Theorix Metamage",
+  "scryfallId": "fb6bad96-841d-4738-8e62-92f346f914fd",
+  "oracleId": "92a0aa44-0ef7-4e6f-8288-7c33067c5fd1",
+  "set": "fra",
+  "collectorNumber": "156",
+  "rarity": "common",
+  "manaCost": "{2}{U/B}",
+  "typeLine": "Creature — Shade Wizard",
+  "oracleText": "This creature enters prepared. (While it's prepared, you may cast a copy of its spell. Doing so unprepares it.)\nThreshold — This creature gets +1/+0 and has flying as long as there are seven or more cards in your graveyard.",
+  "power": "2",
+  "toughness": "3",
+  "colors": [
+   "B",
+   "U"
+  ],
+  "colorIdentity": [
+   "B",
+   "U"
+  ],
+  "keywords": [
+   "Threshold",
+   "Prepared"
+  ],
+  "back": "Omit Variables (Theorix Metamage)",
+  "prepare": true,
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/b/fb6bad96-841d-4738-8e62-92f346f914fd.jpg?1789556930",
+   "normal": "https://cards.scryfall.io/normal/front/f/b/fb6bad96-841d-4738-8e62-92f346f914fd.jpg?1789556930",
+   "large": "https://cards.scryfall.io/large/front/f/b/fb6bad96-841d-4738-8e62-92f346f914fd.jpg?1789556930",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/b/fb6bad96-841d-4738-8e62-92f346f914fd.jpg?1789556930"
+  }
+ },
+ {
+  "name": "Omit Variables (Theorix Metamage)",
+  "flavorName": "Omit Variables",
+  "scryfallId": "fb6bad96-841d-4738-8e62-92f346f914fd",
+  "oracleId": "92a0aa44-0ef7-4e6f-8288-7c33067c5fd1",
+  "set": "fra",
+  "collectorNumber": "156",
+  "rarity": "common",
+  "manaCost": "{U/B}",
+  "typeLine": "Sorcery",
+  "oracleText": "Mill three cards. (Put the top three cards of your library into your graveyard.)",
+  "colors": [
+   "U",
+   "B"
+  ],
+  "colorIdentity": [
+   "B",
+   "U"
+  ],
+  "keywords": [
+   "Mill"
+  ],
+  "front": "Theorix Metamage",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/b/fb6bad96-841d-4738-8e62-92f346f914fd.jpg?1789556930",
+   "normal": "https://cards.scryfall.io/normal/front/f/b/fb6bad96-841d-4738-8e62-92f346f914fd.jpg?1789556930",
+   "large": "https://cards.scryfall.io/large/front/f/b/fb6bad96-841d-4738-8e62-92f346f914fd.jpg?1789556930",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/b/fb6bad96-841d-4738-8e62-92f346f914fd.jpg?1789556930"
+  }
+ },
+ {
+  "name": "Null Summoner",
+  "scryfallId": "3afdc75a-1bf5-4f2f-84eb-d82f77a095cd",
+  "oracleId": "56c412be-daab-4461-931f-1e2ea8ecd75d",
+  "set": "fra",
+  "collectorNumber": "142",
+  "rarity": "rare",
+  "manaCost": "{2}{U}{B}",
+  "typeLine": "Creature — Human Warlock",
+  "oracleText": "When this creature enters, if you cast it, target opponent reveals their hand. You choose a nonland card from it. Exile that card.\nThreshold — As long as there are seven or more cards in your graveyard, you may cast the exiled card, and mana of any type can be spent to cast that spell.",
+  "power": "4",
+  "toughness": "2",
+  "colors": [
+   "B",
+   "U"
+  ],
+  "keywords": [
+   "Threshold"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/a/3afdc75a-1bf5-4f2f-84eb-d82f77a095cd.jpg?1789127648",
+   "normal": "https://cards.scryfall.io/normal/front/3/a/3afdc75a-1bf5-4f2f-84eb-d82f77a095cd.jpg?1789127648",
+   "large": "https://cards.scryfall.io/large/front/3/a/3afdc75a-1bf5-4f2f-84eb-d82f77a095cd.jpg?1789127648",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/a/3afdc75a-1bf5-4f2f-84eb-d82f77a095cd.jpg?1789127648"
+  }
+ },
+ {
+  "name": "Theorix Charm",
+  "scryfallId": "2835c9aa-0904-44db-8da2-e8c4e04201aa",
+  "oracleId": "cf527bbd-e898-4aa9-909d-daec2f4b62ad",
+  "set": "fra",
+  "collectorNumber": "155",
+  "rarity": "uncommon",
+  "manaCost": "{U}{B}",
+  "typeLine": "Instant",
+  "oracleText": "Choose one —\n• Counter target noncreature spell unless its controller pays {2}.\n• Target creature gets -2/-2 until end of turn.\n• Mill three cards, then draw a card. (To mill three cards, put the top three cards of your library into your graveyard.)",
+  "colors": [
+   "B",
+   "U"
+  ],
+  "keywords": [
+   "Mill"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/8/2835c9aa-0904-44db-8da2-e8c4e04201aa.jpg?1789127659",
+   "normal": "https://cards.scryfall.io/normal/front/2/8/2835c9aa-0904-44db-8da2-e8c4e04201aa.jpg?1789127659",
+   "large": "https://cards.scryfall.io/large/front/2/8/2835c9aa-0904-44db-8da2-e8c4e04201aa.jpg?1789127659",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/8/2835c9aa-0904-44db-8da2-e8c4e04201aa.jpg?1789127659"
+  }
+ },
+ {
+  "name": "Recursive Recruitment",
+  "scryfallId": "68fddb6a-86d4-4ebb-907d-fdcaadebc4b3",
+  "oracleId": "b73e35b0-b8c9-471a-bdff-f7dc8f453d7a",
+  "set": "fra",
+  "collectorNumber": "147",
+  "rarity": "uncommon",
+  "manaCost": "{2}{U}{B}",
+  "typeLine": "Sorcery",
+  "oracleText": "Create two 2/2 colorless Wizard Soldier creature tokens named Cadet. If this spell was cast from a graveyard, put a +1/+1 counter on each of them for every three cards in your graveyard.\nFlashback {6}{U}{B} (You may cast this card from your graveyard for its flashback cost. Then exile it.)",
+  "colors": [
+   "B",
+   "U"
+  ],
+  "keywords": [
+   "Flashback"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/8/68fddb6a-86d4-4ebb-907d-fdcaadebc4b3.jpg?1789556898",
+   "normal": "https://cards.scryfall.io/normal/front/6/8/68fddb6a-86d4-4ebb-907d-fdcaadebc4b3.jpg?1789556898",
+   "large": "https://cards.scryfall.io/large/front/6/8/68fddb6a-86d4-4ebb-907d-fdcaadebc4b3.jpg?1789556898",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/8/68fddb6a-86d4-4ebb-907d-fdcaadebc4b3.jpg?1789556898"
+  }
+ },
+ {
+  "name": "Uldaros Theorix",
+  "scryfallId": "a7ad622a-42ff-48fa-ae95-12e0a5bd9387",
+  "oracleId": "020d561b-2e5d-439e-9e6a-318d23e73542",
+  "set": "fra",
+  "collectorNumber": "159",
+  "rarity": "mythic",
+  "manaCost": "{3}{U}{B}{B}",
+  "typeLine": "Legendary Creature — Elder Sphinx",
+  "oracleText": "Flying\nWhen Uldaros Theorix enters, if you cast him, exile up to one target nonland card of each card type from your graveyard. Copy those cards. You may cast any number of spells with total mana value 6 or less from among the copies without paying their mana costs. (Permanent spells cast this way become tokens.)",
+  "power": "5",
+  "toughness": "5",
+  "colors": [
+   "B",
+   "U"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/7/a7ad622a-42ff-48fa-ae95-12e0a5bd9387.jpg?1788878220",
+   "normal": "https://cards.scryfall.io/normal/front/a/7/a7ad622a-42ff-48fa-ae95-12e0a5bd9387.jpg?1788878220",
+   "large": "https://cards.scryfall.io/large/front/a/7/a7ad622a-42ff-48fa-ae95-12e0a5bd9387.jpg?1788878220",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/7/a7ad622a-42ff-48fa-ae95-12e0a5bd9387.jpg?1788878220"
+  }
+ },
+ {
+  "name": "Grim Repriser",
+  "scryfallId": "8295c48c-b4dd-4bc1-a206-04cf12b79bbd",
+  "oracleId": "e853e2fb-f90d-4934-aa70-c8d3cdf12e56",
+  "set": "fra",
+  "collectorNumber": "136",
+  "rarity": "uncommon",
+  "manaCost": "{B}{R}",
+  "typeLine": "Creature — Zombie Bard",
+  "oracleText": "Prowess (Whenever you cast a noncreature spell, this creature gets +1/+1 until end of turn.)\n{B}{R}: Return this card from your graveyard to the battlefield with a finality counter on it. Activate only if an opponent has been dealt noncombat damage this turn. (If a creature with a finality counter on it would die, exile it instead.)",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "B",
+   "R"
+  ],
+  "keywords": [
+   "Prowess"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/2/8295c48c-b4dd-4bc1-a206-04cf12b79bbd.jpg?1789470746",
+   "normal": "https://cards.scryfall.io/normal/front/8/2/8295c48c-b4dd-4bc1-a206-04cf12b79bbd.jpg?1789470746",
+   "large": "https://cards.scryfall.io/large/front/8/2/8295c48c-b4dd-4bc1-a206-04cf12b79bbd.jpg?1789470746",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/2/8295c48c-b4dd-4bc1-a206-04cf12b79bbd.jpg?1789470746"
+  }
+ },
+ {
+  "name": "Whiplash Wordsmith",
+  "scryfallId": "8096bc9a-a610-448f-bef2-7230e17e9777",
+  "oracleId": "e1ffb884-a89e-4e2a-9beb-8bd5838b6a94",
+  "set": "fra",
+  "collectorNumber": "164",
+  "rarity": "common",
+  "manaCost": "{3}{B/R}",
+  "typeLine": "Creature — Vampire Sorcerer",
+  "oracleText": "This creature enters prepared. (While it's prepared, you may cast a copy of its spell. Doing so unprepares it.)\nAs long as an opponent was dealt noncombat damage this turn, this creature has flying and haste.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "B",
+   "R"
+  ],
+  "colorIdentity": [
+   "B",
+   "R"
+  ],
+  "keywords": [
+   "Prepared"
+  ],
+  "back": "Vicious Verse (Whiplash Wordsmith)",
+  "prepare": true,
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/0/8096bc9a-a610-448f-bef2-7230e17e9777.jpg?1789127692",
+   "normal": "https://cards.scryfall.io/normal/front/8/0/8096bc9a-a610-448f-bef2-7230e17e9777.jpg?1789127692",
+   "large": "https://cards.scryfall.io/large/front/8/0/8096bc9a-a610-448f-bef2-7230e17e9777.jpg?1789127692",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/0/8096bc9a-a610-448f-bef2-7230e17e9777.jpg?1789127692"
+  }
+ },
+ {
+  "name": "Vicious Verse (Whiplash Wordsmith)",
+  "flavorName": "Vicious Verse",
+  "scryfallId": "8096bc9a-a610-448f-bef2-7230e17e9777",
+  "oracleId": "e1ffb884-a89e-4e2a-9beb-8bd5838b6a94",
+  "set": "fra",
+  "collectorNumber": "164",
+  "rarity": "common",
+  "manaCost": "{B/R}",
+  "typeLine": "Sorcery",
+  "oracleText": "Vicious Verse deals 1 damage to target opponent.",
+  "colors": [
+   "B",
+   "R"
+  ],
+  "colorIdentity": [
+   "B",
+   "R"
+  ],
+  "keywords": [],
+  "front": "Whiplash Wordsmith",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/0/8096bc9a-a610-448f-bef2-7230e17e9777.jpg?1789127692",
+   "normal": "https://cards.scryfall.io/normal/front/8/0/8096bc9a-a610-448f-bef2-7230e17e9777.jpg?1789127692",
+   "large": "https://cards.scryfall.io/large/front/8/0/8096bc9a-a610-448f-bef2-7230e17e9777.jpg?1789127692",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/0/8096bc9a-a610-448f-bef2-7230e17e9777.jpg?1789127692"
+  }
+ },
+ {
+  "name": "Stingerquill Voxmancer",
+  "scryfallId": "84b1c268-3b8a-41b6-92e3-a2ce0cc3d738",
+  "oracleId": "e8f755f7-ec93-4d2e-bffc-c719984fa13d",
+  "set": "fra",
+  "collectorNumber": "151",
+  "rarity": "uncommon",
+  "manaCost": "{B/R}",
+  "typeLine": "Creature — Goblin Sorcerer",
+  "oracleText": "At the beginning of your upkeep, if this creature isn't prepared, it becomes prepared. (While it's prepared, you may cast a copy of its spell. Doing so unprepares it.)",
+  "power": "1",
+  "toughness": "2",
+  "colors": [
+   "B",
+   "R"
+  ],
+  "colorIdentity": [
+   "B",
+   "R"
+  ],
+  "keywords": [
+   "Prepared"
+  ],
+  "back": "Vicious Verse (Stingerquill Voxmancer)",
+  "prepare": true,
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/4/84b1c268-3b8a-41b6-92e3-a2ce0cc3d738.jpg?1788329418",
+   "normal": "https://cards.scryfall.io/normal/front/8/4/84b1c268-3b8a-41b6-92e3-a2ce0cc3d738.jpg?1788329418",
+   "large": "https://cards.scryfall.io/large/front/8/4/84b1c268-3b8a-41b6-92e3-a2ce0cc3d738.jpg?1788329418",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/4/84b1c268-3b8a-41b6-92e3-a2ce0cc3d738.jpg?1788329418"
+  }
+ },
+ {
+  "name": "Vicious Verse (Stingerquill Voxmancer)",
+  "flavorName": "Vicious Verse",
+  "scryfallId": "84b1c268-3b8a-41b6-92e3-a2ce0cc3d738",
+  "oracleId": "e8f755f7-ec93-4d2e-bffc-c719984fa13d",
+  "set": "fra",
+  "collectorNumber": "151",
+  "rarity": "uncommon",
+  "manaCost": "{B/R}",
+  "typeLine": "Sorcery",
+  "oracleText": "Vicious Verse deals 1 damage to target opponent.",
+  "colors": [
+   "B",
+   "R"
+  ],
+  "colorIdentity": [
+   "B",
+   "R"
+  ],
+  "keywords": [],
+  "front": "Stingerquill Voxmancer",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/4/84b1c268-3b8a-41b6-92e3-a2ce0cc3d738.jpg?1788329418",
+   "normal": "https://cards.scryfall.io/normal/front/8/4/84b1c268-3b8a-41b6-92e3-a2ce0cc3d738.jpg?1788329418",
+   "large": "https://cards.scryfall.io/large/front/8/4/84b1c268-3b8a-41b6-92e3-a2ce0cc3d738.jpg?1788329418",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/4/84b1c268-3b8a-41b6-92e3-a2ce0cc3d738.jpg?1788329418"
+  }
+ },
+ {
+  "name": "Ingris Stingerquill",
+  "scryfallId": "6471b135-33a8-4005-9a07-ebb74e0bf145",
+  "oracleId": "bda098cb-31ec-41a1-a9d7-122877cc69d2",
+  "set": "fra",
+  "collectorNumber": "137",
+  "rarity": "mythic",
+  "manaCost": "{B}{R}{R}",
+  "typeLine": "Legendary Creature — Elder Sphinx",
+  "oracleText": "Flying\nWhenever a creature you control attacks, that creature deals 1 damage to each opponent.\n{4}: Create a 2/2 colorless Wizard Soldier creature token named Cadet. Then creatures you control gain haste until end of turn.",
+  "power": "1",
+  "toughness": "4",
+  "colors": [
+   "B",
+   "R"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/4/6471b135-33a8-4005-9a07-ebb74e0bf145.jpg?1788878212",
+   "normal": "https://cards.scryfall.io/normal/front/6/4/6471b135-33a8-4005-9a07-ebb74e0bf145.jpg?1788878212",
+   "large": "https://cards.scryfall.io/large/front/6/4/6471b135-33a8-4005-9a07-ebb74e0bf145.jpg?1788878212",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/4/6471b135-33a8-4005-9a07-ebb74e0bf145.jpg?1788878212"
+  }
+ },
+ {
+  "name": "Stinging Vitriol",
+  "scryfallId": "a7d78297-7411-4ec5-8931-a25146869d5b",
+  "oracleId": "624cf822-0b4e-4f0c-9893-a53cb094f616",
+  "set": "fra",
+  "collectorNumber": "152",
+  "rarity": "rare",
+  "manaCost": "{B}{R}",
+  "typeLine": "Sorcery",
+  "oracleText": "Stinging Vitriol deals 2 damage to target opponent. That player reveals their hand. You choose a nonland card from it. They discard that card.",
+  "colors": [
+   "B",
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/7/a7d78297-7411-4ec5-8931-a25146869d5b.jpg?1789385971",
+   "normal": "https://cards.scryfall.io/normal/front/a/7/a7d78297-7411-4ec5-8931-a25146869d5b.jpg?1789385971",
+   "large": "https://cards.scryfall.io/large/front/a/7/a7d78297-7411-4ec5-8931-a25146869d5b.jpg?1789385971",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/7/a7d78297-7411-4ec5-8931-a25146869d5b.jpg?1789385971"
+  }
+ },
+ {
+  "name": "Stingerquill Charm",
+  "scryfallId": "81733ff7-e611-43ee-bf38-6bb700676017",
+  "oracleId": "987aadac-d6a6-4e50-9468-9e8e53cc5529",
+  "set": "fra",
+  "collectorNumber": "150",
+  "rarity": "uncommon",
+  "manaCost": "{B}{R}",
+  "typeLine": "Instant",
+  "oracleText": "Choose one —\n• Stingerquill Charm deals 3 damage to any target.\n• Target creature gains first strike and deathtouch until end of turn.\n• Create a 2/2 colorless Wizard Soldier creature token named Cadet. It gains haste until end of turn.",
+  "colors": [
+   "B",
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/1/81733ff7-e611-43ee-bf38-6bb700676017.jpg?1789127652",
+   "normal": "https://cards.scryfall.io/normal/front/8/1/81733ff7-e611-43ee-bf38-6bb700676017.jpg?1789127652",
+   "large": "https://cards.scryfall.io/large/front/8/1/81733ff7-e611-43ee-bf38-6bb700676017.jpg?1789127652",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/1/81733ff7-e611-43ee-bf38-6bb700676017.jpg?1789127652"
+  }
+ },
+ {
+  "name": "Aerid Konstrari",
+  "scryfallId": "f17d2792-b075-4c47-ad38-e7a7eaee5f8c",
+  "oracleId": "172a8f58-c420-4497-b962-c5853f923667",
+  "set": "fra",
+  "collectorNumber": "121",
+  "rarity": "mythic",
+  "manaCost": "{1}{R}{G}{G}",
+  "typeLine": "Legendary Creature — Elder Sphinx",
+  "oracleText": "Flying\nWhen Aerid Konstrari enters or dies, create a Heartwood token. (It's a red and green artifact with \"{T}: Add {R} or {G}.\")\n{6}: Create a Heartwood token. Then Aerid Konstrari gets +X/+0 until end of turn, where X is the number of artifacts you control.",
+  "power": "5",
+  "toughness": "4",
+  "colors": [
+   "G",
+   "R"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/1/f17d2792-b075-4c47-ad38-e7a7eaee5f8c.jpg?1788878199",
+   "normal": "https://cards.scryfall.io/normal/front/f/1/f17d2792-b075-4c47-ad38-e7a7eaee5f8c.jpg?1788878199",
+   "large": "https://cards.scryfall.io/large/front/f/1/f17d2792-b075-4c47-ad38-e7a7eaee5f8c.jpg?1788878199",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/1/f17d2792-b075-4c47-ad38-e7a7eaee5f8c.jpg?1788878199"
+  }
+ },
+ {
+  "name": "Woodwork Prodigy",
+  "scryfallId": "7d17f7e3-7b63-4674-9024-4fd1827f40ec",
+  "oracleId": "f3ed157f-a09b-405f-aec4-0e7a81d80fc8",
+  "set": "fra",
+  "collectorNumber": "165",
+  "rarity": "uncommon",
+  "manaCost": "{2}{R/G}",
+  "typeLine": "Creature — Cat Druid",
+  "oracleText": "At the beginning of your upkeep, if this creature isn't prepared, it becomes prepared. (While it's prepared, you may cast a copy of its spell. Doing so unprepares it.)",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "G",
+   "R"
+  ],
+  "colorIdentity": [
+   "G",
+   "R"
+  ],
+  "keywords": [
+   "Prepared"
+  ],
+  "back": "Soul Tether (Woodwork Prodigy)",
+  "prepare": true,
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/d/7d17f7e3-7b63-4674-9024-4fd1827f40ec.jpg?1788329429",
+   "normal": "https://cards.scryfall.io/normal/front/7/d/7d17f7e3-7b63-4674-9024-4fd1827f40ec.jpg?1788329429",
+   "large": "https://cards.scryfall.io/large/front/7/d/7d17f7e3-7b63-4674-9024-4fd1827f40ec.jpg?1788329429",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/d/7d17f7e3-7b63-4674-9024-4fd1827f40ec.jpg?1788329429"
+  }
+ },
+ {
+  "name": "Soul Tether (Woodwork Prodigy)",
+  "flavorName": "Soul Tether",
+  "scryfallId": "7d17f7e3-7b63-4674-9024-4fd1827f40ec",
+  "oracleId": "f3ed157f-a09b-405f-aec4-0e7a81d80fc8",
+  "set": "fra",
+  "collectorNumber": "165",
+  "rarity": "uncommon",
+  "manaCost": "{2}{R/G}",
+  "typeLine": "Sorcery",
+  "oracleText": "Create a Heartwood token. (It's a red and green artifact with \"{T}: Add {R} or {G}.\")",
+  "colors": [
+   "R",
+   "G"
+  ],
+  "colorIdentity": [
+   "G",
+   "R"
+  ],
+  "keywords": [],
+  "front": "Woodwork Prodigy",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/d/7d17f7e3-7b63-4674-9024-4fd1827f40ec.jpg?1788329429",
+   "normal": "https://cards.scryfall.io/normal/front/7/d/7d17f7e3-7b63-4674-9024-4fd1827f40ec.jpg?1788329429",
+   "large": "https://cards.scryfall.io/large/front/7/d/7d17f7e3-7b63-4674-9024-4fd1827f40ec.jpg?1788329429",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/d/7d17f7e3-7b63-4674-9024-4fd1827f40ec.jpg?1788329429"
+  }
+ },
+ {
+  "name": "Konstrari Improviser",
+  "scryfallId": "42e28bd2-486b-45d4-8840-6e33c19c2d57",
+  "oracleId": "bad2e3b2-ad47-4e17-b35e-0fcc13e82937",
+  "set": "fra",
+  "collectorNumber": "139",
+  "rarity": "common",
+  "manaCost": "{1}{R/G}",
+  "typeLine": "Creature — Human Artificer",
+  "oracleText": "This creature enters prepared. (While it's prepared, you may cast a copy of its spell. Doing so unprepares it.)",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "G",
+   "R"
+  ],
+  "colorIdentity": [
+   "G",
+   "R"
+  ],
+  "keywords": [
+   "Prepared"
+  ],
+  "back": "Soul Tether (Konstrari Improviser)",
+  "prepare": true,
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/2/42e28bd2-486b-45d4-8840-6e33c19c2d57.jpg?1789556881",
+   "normal": "https://cards.scryfall.io/normal/front/4/2/42e28bd2-486b-45d4-8840-6e33c19c2d57.jpg?1789556881",
+   "large": "https://cards.scryfall.io/large/front/4/2/42e28bd2-486b-45d4-8840-6e33c19c2d57.jpg?1789556881",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/2/42e28bd2-486b-45d4-8840-6e33c19c2d57.jpg?1789556881"
+  }
+ },
+ {
+  "name": "Soul Tether (Konstrari Improviser)",
+  "flavorName": "Soul Tether",
+  "scryfallId": "42e28bd2-486b-45d4-8840-6e33c19c2d57",
+  "oracleId": "bad2e3b2-ad47-4e17-b35e-0fcc13e82937",
+  "set": "fra",
+  "collectorNumber": "139",
+  "rarity": "common",
+  "manaCost": "{2}{R/G}",
+  "typeLine": "Sorcery",
+  "oracleText": "Create a Heartwood token. (It's a red and green artifact with \"{T}: Add {R} or {G}.\")",
+  "colors": [
+   "R",
+   "G"
+  ],
+  "colorIdentity": [
+   "G",
+   "R"
+  ],
+  "keywords": [],
+  "front": "Konstrari Improviser",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/2/42e28bd2-486b-45d4-8840-6e33c19c2d57.jpg?1789556881",
+   "normal": "https://cards.scryfall.io/normal/front/4/2/42e28bd2-486b-45d4-8840-6e33c19c2d57.jpg?1789556881",
+   "large": "https://cards.scryfall.io/large/front/4/2/42e28bd2-486b-45d4-8840-6e33c19c2d57.jpg?1789556881",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/2/42e28bd2-486b-45d4-8840-6e33c19c2d57.jpg?1789556881"
+  }
+ },
+ {
+  "name": "Tenured Tethermage",
+  "scryfallId": "1703306d-6a3d-4ab8-bf58-a9992236ef0f",
+  "oracleId": "571cb06d-55b5-46e4-9678-1f74aca73068",
+  "set": "fra",
+  "collectorNumber": "154",
+  "rarity": "rare",
+  "manaCost": "{1}{R}{G}",
+  "typeLine": "Creature — Human Artificer",
+  "oracleText": "When this creature enters, you may sacrifice a land. If you do, create two tapped Heartwood tokens. (They're red and green artifacts with \"{T}: Add {R} or {G}.\")\nTap two untapped artifacts you control: Put two +1/+1 counters on this creature.",
+  "power": "1",
+  "toughness": "1",
+  "colors": [
+   "G",
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/7/1703306d-6a3d-4ab8-bf58-a9992236ef0f.jpg?1789385792",
+   "normal": "https://cards.scryfall.io/normal/front/1/7/1703306d-6a3d-4ab8-bf58-a9992236ef0f.jpg?1789385792",
+   "large": "https://cards.scryfall.io/large/front/1/7/1703306d-6a3d-4ab8-bf58-a9992236ef0f.jpg?1789385792",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/7/1703306d-6a3d-4ab8-bf58-a9992236ef0f.jpg?1789385792"
+  }
+ },
+ {
+  "name": "Konstrari Charm",
+  "scryfallId": "7d29dfa1-9582-47bc-8f42-62b611bdcc4e",
+  "oracleId": "40961b23-b153-434a-aeb9-b9c2ff613dcb",
+  "set": "fra",
+  "collectorNumber": "138",
+  "rarity": "uncommon",
+  "manaCost": "{R}{G}",
+  "typeLine": "Instant",
+  "oracleText": "Choose one —\n• Konstrari Charm deals 6 damage to target creature with flying.\n• Put two +1/+1 counters on target creature. It gains trample until end of turn.\n• Add {C}{C}{C}.",
+  "colors": [
+   "G",
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/d/7d29dfa1-9582-47bc-8f42-62b611bdcc4e.jpg?1789127645",
+   "normal": "https://cards.scryfall.io/normal/front/7/d/7d29dfa1-9582-47bc-8f42-62b611bdcc4e.jpg?1789127645",
+   "large": "https://cards.scryfall.io/large/front/7/d/7d29dfa1-9582-47bc-8f42-62b611bdcc4e.jpg?1789127645",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/d/7d29dfa1-9582-47bc-8f42-62b611bdcc4e.jpg?1789127645"
+  }
+ },
+ {
+  "name": "Craftwork Crusher",
+  "scryfallId": "03f9839c-aa07-4ee7-847b-091e47ab80c4",
+  "oracleId": "d25284b9-50e4-4dcb-9aaf-6f6478c4a90a",
+  "set": "fra",
+  "collectorNumber": "127",
+  "rarity": "uncommon",
+  "manaCost": "{3}{R}{R}{G}{G}",
+  "typeLine": "Artifact Creature — Boar Construct",
+  "oracleText": "Trample\nWhen this creature enters, choose two —\n• This creature deals 4 damage to target creature or planeswalker.\n• Create a 2/2 colorless Wizard Soldier creature token named Cadet.\n• Draw a card.",
+  "power": "7",
+  "toughness": "5",
+  "colors": [
+   "G",
+   "R"
+  ],
+  "keywords": [
+   "Trample"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/3/03f9839c-aa07-4ee7-847b-091e47ab80c4.jpg?1789470711",
+   "normal": "https://cards.scryfall.io/normal/front/0/3/03f9839c-aa07-4ee7-847b-091e47ab80c4.jpg?1789470711",
+   "large": "https://cards.scryfall.io/large/front/0/3/03f9839c-aa07-4ee7-847b-091e47ab80c4.jpg?1789470711",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/3/03f9839c-aa07-4ee7-847b-091e47ab80c4.jpg?1789470711"
+  }
+ },
+ {
+  "name": "Bloombrute",
+  "scryfallId": "6b804503-9c70-4b1f-bb13-a65fb6dd3ef8",
+  "oracleId": "b7040175-7411-43a8-9b46-dba1d7c2135d",
+  "set": "fra",
+  "collectorNumber": "124",
+  "rarity": "uncommon",
+  "manaCost": "{2}{G}{W}",
+  "typeLine": "Creature — Plant Elemental",
+  "oracleText": "Whenever you gain life, draw a card. This ability triggers only once each turn.\n{4}{G}{W}: Target creature gains trample and lifelink until end of turn.",
+  "power": "4",
+  "toughness": "4",
+  "colors": [
+   "G",
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/b/6b804503-9c70-4b1f-bb13-a65fb6dd3ef8.jpg?1789644843",
+   "normal": "https://cards.scryfall.io/normal/front/6/b/6b804503-9c70-4b1f-bb13-a65fb6dd3ef8.jpg?1789644843",
+   "large": "https://cards.scryfall.io/large/front/6/b/6b804503-9c70-4b1f-bb13-a65fb6dd3ef8.jpg?1789644843",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/b/6b804503-9c70-4b1f-bb13-a65fb6dd3ef8.jpg?1789644843"
+  }
+ },
+ {
+  "name": "Vigorbloom Vanguard",
+  "scryfallId": "acefc515-bf97-4dc0-b0f7-ae8ae5a61671",
+  "oracleId": "bd416426-d037-45e3-9647-816bf982cbea",
+  "set": "fra",
+  "collectorNumber": "161",
+  "rarity": "uncommon",
+  "manaCost": "{1}{G/W}",
+  "typeLine": "Creature — Troll Druid",
+  "oracleText": "This creature enters prepared. (While it's prepared, you may cast a copy of its spell. Doing so unprepares it.)\nEach creature you control with a +1/+1 counter on it has vigilance.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "G",
+   "W"
+  ],
+  "colorIdentity": [
+   "G",
+   "W"
+  ],
+  "keywords": [
+   "Prepared"
+  ],
+  "back": "Seed Suture (Vigorbloom Vanguard)",
+  "prepare": true,
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/c/acefc515-bf97-4dc0-b0f7-ae8ae5a61671.jpg?1788329423",
+   "normal": "https://cards.scryfall.io/normal/front/a/c/acefc515-bf97-4dc0-b0f7-ae8ae5a61671.jpg?1788329423",
+   "large": "https://cards.scryfall.io/large/front/a/c/acefc515-bf97-4dc0-b0f7-ae8ae5a61671.jpg?1788329423",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/c/acefc515-bf97-4dc0-b0f7-ae8ae5a61671.jpg?1788329423"
+  }
+ },
+ {
+  "name": "Seed Suture (Vigorbloom Vanguard)",
+  "flavorName": "Seed Suture",
+  "scryfallId": "acefc515-bf97-4dc0-b0f7-ae8ae5a61671",
+  "oracleId": "bd416426-d037-45e3-9647-816bf982cbea",
+  "set": "fra",
+  "collectorNumber": "161",
+  "rarity": "uncommon",
+  "manaCost": "{G/W}",
+  "typeLine": "Sorcery",
+  "oracleText": "Put a +1/+1 counter on target creature. You gain 1 life.",
+  "colors": [
+   "G",
+   "W"
+  ],
+  "colorIdentity": [
+   "G",
+   "W"
+  ],
+  "keywords": [],
+  "front": "Vigorbloom Vanguard",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/c/acefc515-bf97-4dc0-b0f7-ae8ae5a61671.jpg?1788329423",
+   "normal": "https://cards.scryfall.io/normal/front/a/c/acefc515-bf97-4dc0-b0f7-ae8ae5a61671.jpg?1788329423",
+   "large": "https://cards.scryfall.io/large/front/a/c/acefc515-bf97-4dc0-b0f7-ae8ae5a61671.jpg?1788329423",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/c/acefc515-bf97-4dc0-b0f7-ae8ae5a61671.jpg?1788329423"
+  }
+ },
+ {
+  "name": "Emergency Phytomedic",
+  "scryfallId": "de94d388-919d-44ff-baef-8c90a417ac6d",
+  "oracleId": "7737ccdc-49f2-463e-8ffd-43ab98d11f45",
+  "set": "fra",
+  "collectorNumber": "130",
+  "rarity": "common",
+  "manaCost": "{G/W}",
+  "typeLine": "Creature — Dryad Cleric",
+  "oracleText": "This creature enters prepared. (While it's prepared, you may cast a copy of its spell. Doing so unprepares it.)",
+  "power": "1",
+  "toughness": "1",
+  "colors": [
+   "G",
+   "W"
+  ],
+  "colorIdentity": [
+   "G",
+   "W"
+  ],
+  "keywords": [
+   "Prepared"
+  ],
+  "back": "Seed Suture (Emergency Phytomedic)",
+  "prepare": true,
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/e/de94d388-919d-44ff-baef-8c90a417ac6d.jpg?1789637792",
+   "normal": "https://cards.scryfall.io/normal/front/d/e/de94d388-919d-44ff-baef-8c90a417ac6d.jpg?1789637792",
+   "large": "https://cards.scryfall.io/large/front/d/e/de94d388-919d-44ff-baef-8c90a417ac6d.jpg?1789637792",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/e/de94d388-919d-44ff-baef-8c90a417ac6d.jpg?1789637792"
+  }
+ },
+ {
+  "name": "Seed Suture (Emergency Phytomedic)",
+  "flavorName": "Seed Suture",
+  "scryfallId": "de94d388-919d-44ff-baef-8c90a417ac6d",
+  "oracleId": "7737ccdc-49f2-463e-8ffd-43ab98d11f45",
+  "set": "fra",
+  "collectorNumber": "130",
+  "rarity": "common",
+  "manaCost": "{G/W}",
+  "typeLine": "Sorcery",
+  "oracleText": "Put a +1/+1 counter on target creature. You gain 1 life.",
+  "colors": [
+   "G",
+   "W"
+  ],
+  "colorIdentity": [
+   "G",
+   "W"
+  ],
+  "keywords": [],
+  "front": "Emergency Phytomedic",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/e/de94d388-919d-44ff-baef-8c90a417ac6d.jpg?1789637792",
+   "normal": "https://cards.scryfall.io/normal/front/d/e/de94d388-919d-44ff-baef-8c90a417ac6d.jpg?1789637792",
+   "large": "https://cards.scryfall.io/large/front/d/e/de94d388-919d-44ff-baef-8c90a417ac6d.jpg?1789637792",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/e/de94d388-919d-44ff-baef-8c90a417ac6d.jpg?1789637792"
+  }
+ },
+ {
+  "name": "Kwia Vigorbloom",
+  "scryfallId": "2d6ff182-a853-4898-895b-072c89324ca7",
+  "oracleId": "07a28621-e617-46b0-af3e-2efb03b5056a",
+  "set": "fra",
+  "collectorNumber": "140",
+  "rarity": "mythic",
+  "manaCost": "{3}{G}{W}{W}",
+  "typeLine": "Legendary Creature — Elder Sphinx",
+  "oracleText": "Flying, vigilance, lifelink, ward {2}\nWhenever you gain life, create a colorless artifact token named Lotus with \"{T}, Sacrifice this token: Add three mana of any one color.\" This ability triggers only once each turn.",
+  "power": "6",
+  "toughness": "6",
+  "colors": [
+   "G",
+   "W"
+  ],
+  "keywords": [
+   "Flying",
+   "Lifelink",
+   "Vigilance",
+   "Ward"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/d/2d6ff182-a853-4898-895b-072c89324ca7.jpg?1788878236",
+   "normal": "https://cards.scryfall.io/normal/front/2/d/2d6ff182-a853-4898-895b-072c89324ca7.jpg?1788878236",
+   "large": "https://cards.scryfall.io/large/front/2/d/2d6ff182-a853-4898-895b-072c89324ca7.jpg?1788878236",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/d/2d6ff182-a853-4898-895b-072c89324ca7.jpg?1788878236"
+  }
+ },
+ {
+  "name": "Solarium Sentry",
+  "scryfallId": "1ef12dcf-df50-4da6-8c4c-e2937ba9698e",
+  "oracleId": "afddba56-f9a0-4917-8167-c9fd17ca9954",
+  "set": "fra",
+  "collectorNumber": "148",
+  "rarity": "rare",
+  "manaCost": "{G}{W}",
+  "typeLine": "Creature — Cat Soldier",
+  "oracleText": "Whenever an opponent casts a spell with mana value 2 or less, you gain 2 life.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "G",
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/e/1ef12dcf-df50-4da6-8c4c-e2937ba9698e.jpg?1789127651",
+   "normal": "https://cards.scryfall.io/normal/front/1/e/1ef12dcf-df50-4da6-8c4c-e2937ba9698e.jpg?1789127651",
+   "large": "https://cards.scryfall.io/large/front/1/e/1ef12dcf-df50-4da6-8c4c-e2937ba9698e.jpg?1789127651",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/e/1ef12dcf-df50-4da6-8c4c-e2937ba9698e.jpg?1789127651"
+  }
+ },
+ {
+  "name": "Vigorbloom Charm",
+  "scryfallId": "2b198e10-b507-4314-a29c-a219f06e48b7",
+  "oracleId": "826f17d1-3806-4579-8b1b-2082b7b03d69",
+  "set": "fra",
+  "collectorNumber": "160",
+  "rarity": "uncommon",
+  "manaCost": "{G}{W}",
+  "typeLine": "Instant",
+  "oracleText": "Choose one —\n• Target permanent you control gains hexproof and indestructible until end of turn.\n• You draw a card and gain 3 life.\n• Put a +1/+1 counter on target creature you control. Then it fights target creature an opponent controls. (Each deals damage equal to its power to the other.)",
+  "colors": [
+   "G",
+   "W"
+  ],
+  "keywords": [
+   "Fight"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/b/2b198e10-b507-4314-a29c-a219f06e48b7.jpg?1789127656",
+   "normal": "https://cards.scryfall.io/normal/front/2/b/2b198e10-b507-4314-a29c-a219f06e48b7.jpg?1789127656",
+   "large": "https://cards.scryfall.io/large/front/2/b/2b198e10-b507-4314-a29c-a219f06e48b7.jpg?1789127656",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/b/2b198e10-b507-4314-a29c-a219f06e48b7.jpg?1789127656"
+  }
+ },
+ {
   "name": "Blessed Ghoul",
   "scryfallId": "bb975803-9bf2-401e-9414-d272df314398",
   "oracleId": "fe99d90e-4809-4310-a3f7-ceb540511d55",

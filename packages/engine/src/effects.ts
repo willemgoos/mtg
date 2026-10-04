@@ -11,6 +11,7 @@ import {
 } from './characteristics.ts';
 import {
   type Ctx,
+  ceaseSpellCopy,
   createObject,
   def,
   defOf,
@@ -120,10 +121,10 @@ export function dealDamage(
   if (combat && 'player' in to && ctx.s.monarch === to.player && src.controller !== to.player)
     setMonarch(ctx, src.controller);
   if ('player' in to) {
-    emit(ctx, { type: 'damageDealt', source: src.id, to, amount, combat });
-    // Reality Fracture (17a): Command the Stage, Master of Barbs.
-    if (!combat && !(ctx.s.turn.noncombatDamaged ?? []).includes(to.player))
+    // Reality Fracture (17a): Grim Repriser, Command the Stage, Master of Barbs: "dealt noncombat damage this turn".
+    if (!combat && !ctx.s.turn.noncombatDamaged?.includes(to.player))
       ctx.s.turn.noncombatDamaged = [...(ctx.s.turn.noncombatDamaged ?? []), to.player];
+    emit(ctx, { type: 'damageDealt', source: src.id, to, amount, combat });
     changeLife(ctx, to.player, -amount);
   } else {
     const o = onBattlefield(ctx, to.object);
@@ -679,7 +680,7 @@ function playersOf(ctx: Ctx, es: EffectSource, ref: Ref): PlayerId[] {
 export function resolveAmount(ctx: Ctx, es: EffectSource, amount: Amount): number {
   if (typeof amount === 'number') return amount;
   if ('multiply' in amount) return amount.multiply * resolveAmount(ctx, es, amount.amount);
-  // Reality Fracture (17a): Dark Matter Manipulator
+  // Reality Fracture (17a): Dark Matter Manipulator, Recursive Recruitment
   if ('floorDiv' in amount)
     return Math.floor(resolveAmount(ctx, es, amount.amount) / amount.floorDiv);
   if ('manaValueOf' in amount) {
@@ -963,6 +964,7 @@ export function runEffects(
       e.kind === 'castFreeFromTop' ||
       // Secrets of Strixhaven (14b)
       e.kind === 'exileUntilTotalCastFree' ||
+      e.kind === 'exileCopyCastFree' || // Reality Fracture (17a): Uldaros Theorix
       // Final Fantasy (11a): saga creatures
       e.kind === 'removeLoreFromAny' ||
       // Reality Fracture (17a): Tam, the Possibility
@@ -1011,7 +1013,15 @@ export function runEffects(
         const cards = (
           e.kind === 'scry' && e.forOpponent ? ctx.s.players[scryer].library : lib
         ).slice(0, e.amount);
-        if (cards.length === 0) continue;
+        if (cards.length === 0) {
+          // Reality Fracture (17a): scrying or surveilling an empty library still counts as having done it.
+          if (e.amount > 0) {
+            if (!ctx.s.turn.scriedOrSurveilled?.includes(scryer))
+              ctx.s.turn.scriedOrSurveilled = [...(ctx.s.turn.scriedOrSurveilled ?? []), scryer];
+            emit(ctx, { type: 'scried', player: scryer, top: 0, bottom: 0 });
+          }
+          continue;
+        }
         ctx.s.decision = {
           kind: 'scry',
           player: scryer,
@@ -1246,6 +1256,40 @@ export function runEffects(
           player: controller,
           cards,
           more: true,
+          resume,
+          thenPriority,
+        };
+      } else if (e.kind === 'exileCopyCastFree') {
+        // Reality Fracture (17a): Uldaros Theorix. The cards are exiled and copied; the copies may be cast.
+        const copies: ObjectId[] = [];
+        for (const t of es.targets.slice(e.from)) {
+          if (!t || !('object' in t)) continue;
+          const id = t.object.id;
+          const card = ctx.s.objects[id];
+          // Still in the graveyard it was targeted in.
+          if (!card || card.zone !== 'graveyard' || card.zcc !== t.object.zcc) continue;
+          moveObject(ctx, id, 'exile');
+          const copy = createObject(ctx, card.defId, controller, 'exile');
+          copy.spellCopyCard = true;
+          copy.copyBecomesToken = true;
+          ctx.s.players[controller].exile.push(copy.id);
+          copies.push(copy.id);
+        }
+        const cards = copies.filter(
+          (id) =>
+            !def(ctx, id).types.includes('Land') && manaValue(def(ctx, id).manaCost) <= e.budget,
+        );
+        if (cards.length === 0) {
+          for (const id of copies) ceaseSpellCopy(ctx, id);
+          continue;
+        }
+        ctx.s.decision = {
+          kind: 'castFree',
+          player: controller,
+          cards,
+          more: true,
+          budget: e.budget,
+          copies,
           resume,
           thenPriority,
         };
@@ -1546,6 +1590,7 @@ export function runEffects(
           options,
           then: e.then,
           ...(e.castable ? { castable: true } : {}),
+          ...(e.castableIf ? { castableIf: e.castableIf } : {}), // Reality Fracture (17a): Null Summoner
           resume,
           thenPriority,
         };
@@ -2392,6 +2437,7 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
     }
     case 'castFreeFromTop':
     case 'exileUntilTotalCastFree':
+    case 'exileCopyCastFree':
       return; // handled by runEffects
     case 'removePlusOneCounters':
       for (const id of objectsOf(ctx, es, e.from)) obj(ctx, id).plusOneCounters = 0;

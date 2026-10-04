@@ -533,6 +533,9 @@ export interface CostDef {
   // Strixhaven Brawl (15b, multi): Call the Crash
   /** Suspend N: exile this card from your hand with N time counters on it. */
   suspendSelf?: number;
+  // Reality Fracture (17a): Tenured Tethermage
+  /** Tap this many untapped artifacts you control (chosen when activating; the source may be one). */
+  tapArtifacts?: number;
 }
 
 export type TriggerDef =
@@ -885,6 +888,9 @@ export type ConditionDef =
   | { kind: 'sourceModified' }
   /** The source has no +1/+1 counters on it (Adapt). */
   | { kind: 'sourceNoCounters' }
+  // Reality Fracture (17a): Null Summoner, Uldaros Theorix
+  /** The source permanent was cast (not put onto the battlefield some other way). */
+  | { kind: 'wasCast' }
   | { kind: 'controlsPermanents'; filter: CardFilter; min: number }
   | { kind: 'attackedThisTurn' }
   | { kind: 'controlsAnother'; subtype: string }
@@ -1013,7 +1019,7 @@ export type ConditionDef =
   // Brawl staples.
   /** You have a card matching this in your hand (snarls reveal one). */
   | { kind: 'handHas'; filter: CardFilter }
-  // Reality Fracture (17a): Command the Stage, Master of Barbs
+  // Reality Fracture (17a): Command the Stage, Master of Barbs, Grim Repriser, Whiplash Wordsmith
   /** An opponent was dealt noncombat damage this turn. */
   | { kind: 'opponentDealtNoncombatDamageThisTurn' }
   /** An opponent was dealt noncombat damage during the turn before this one. */
@@ -1035,7 +1041,7 @@ export type ConditionDef =
   | { kind: 'cardsLeftGraveyardThisTurn' }
   /** One or more cards were put into exile this turn (Ennis, Debate Moderator). */
   | { kind: 'cardsExiledThisTurn' }
-  // Reality Fracture (17a): Surveillance Phantasm (shared name)
+  // Reality Fracture (17a): Surveillance Phantasm, Desperate Futurescribe, Proctor of Potential
   /** You've scried or surveilled this turn. */
   | { kind: 'scriedOrSurveilledThisTurn' }
   // Reality Fracture (17a): Sphinx of False Conclusions
@@ -1252,6 +1258,12 @@ export interface TargetSpec {
   // Marvel Super Heroes Jumpstart (Analyzed)
   /** With `abilitiesOnly`: only abilities from a creature source (Echo, Perceptive Prodigy). */
   creatureSource?: boolean;
+  // Reality Fracture (17a): Uldaros Theorix
+  /**
+   * With `anyNumber`: "one target card of each card type": the targets picked must be able to stand for
+   * different card types (each card taking one of its own types, no type twice).
+   */
+  onePerType?: boolean;
 }
 
 /**
@@ -1320,8 +1332,8 @@ export type Amount =
       basicOnly?: boolean;
     }
   | { multiply: number; amount: Amount }
-  // Reality Fracture (17a): Dark Matter Manipulator ("for every seven cards in your graveyard")
-  /** The amount divided by `floorDiv`, rounded down. */
+  // Reality Fracture (17a): Dark Matter Manipulator, Recursive Recruitment
+  /** The amount divided by `floorDiv`, rounded down ("for every seven cards in your graveyard"). */
   | { floorDiv: number; amount: Amount }
   // Marvel Super Heroes: "where X is Captain America's toughness".
   | { toughnessOf: Ref }
@@ -1578,6 +1590,9 @@ export type EffectDef =
       then: 'discard' | 'exile';
       /** You may cast the exiled card while it stays exiled, with any mana (Cruelclaw's Heist). */
       castable?: boolean;
+      // Reality Fracture (17a): Null Summoner
+      /** With `castable`: only while this holds for you (threshold). */
+      castableIf?: ConditionDef;
       /** They reveal this many cards (picked for them: the cheapest), and you choose among those (Klaw). */
       reveal?: Amount;
     }
@@ -2463,6 +2478,13 @@ export type EffectDef =
   // Secrets of Strixhaven (14b): Improvisation Capstone
   /** Exile cards from the top of your library until their total mana value is `total` or more; cast any number of them free. */
   | { kind: 'exileUntilTotalCastFree'; total: number }
+  // Reality Fracture (17a): Uldaros Theorix
+  /**
+   * Exile the cards targeted from target number `from` on, which are in your graveyard, and copy them; you may cast any number of the copies without
+   * paying their mana costs, with total mana value `budget` or less. A permanent spell cast this way
+   * becomes a token.
+   */
+  | { kind: 'exileCopyCastFree'; from: number; budget: number }
   // Final Fantasy (11c): rare effects
   /** Each player sacrifices half the creatures matching the filter they control, rounded down (Zodiark). */
   | { kind: 'eachPlayerSacrificesHalf'; filter: CardFilter }
@@ -3002,6 +3024,9 @@ export interface GameObject {
   /** Someone other than its owner may cast it from exile, with any mana (Cruelclaw's Heist). */
   castableBy?: PlayerId;
   anyMana?: boolean;
+  // Reality Fracture (17a): Null Summoner
+  /** `castableBy` only while this holds for that player (threshold). */
+  castableIf?: ConditionDef;
   /** Strixhaven (13c): `castableBy` only through the end of this turn (Nassari). */
   castableUntilTurn?: number;
   // Marvel Super Heroes Jumpstart (Analyzed)
@@ -3130,6 +3155,11 @@ export interface GameObject {
   // Final Fantasy Commander (12f).
   /** Exiled from a graveyard to be cast this turn: it counts as cast from a graveyard (Emet-Selch). */
   fromGraveyardCast?: boolean;
+  // Reality Fracture (17a): Null Summoner, Uldaros Theorix
+  /** It entered the battlefield as a spell that was cast. */
+  wasCast?: boolean;
+  /** A copy of a card cast from exile: if it's a permanent spell it becomes a token as it resolves (Uldaros Theorix). */
+  copyBecomesToken?: boolean;
 }
 
 /** A reference that goes stale when the object changes zones. */
@@ -3820,6 +3850,8 @@ export type Decision =
       then: 'discard' | 'exile';
       /** The chooser may cast the exiled card (Cruelclaw's Heist). */
       castable?: boolean;
+      // Reality Fracture (17a): Null Summoner
+      castableIf?: ConditionDef;
       resume: PausedResolution;
       thenPriority: PlayerId;
     }
@@ -3883,6 +3915,11 @@ export type Decision =
       // Secrets of Strixhaven (14b): Improvisation Capstone
       /** Any number of these may be cast: after one is, the rest are offered again. */
       more?: boolean;
+      // Reality Fracture (17a): Uldaros Theorix
+      /** With `more`: the total mana value still left to cast; only cards that fit are offered. */
+      budget?: number;
+      /** Copies made for this: the ones not cast cease to exist once it's over. */
+      copies?: ObjectId[];
       resume: PausedResolution;
       thenPriority: PlayerId;
     }
@@ -4022,6 +4059,9 @@ export type Action =
       discard?: ObjectId;
       /** Villainous Syndication: the creature tapped for "tap an untapped Villain". */
       tapCreature?: ObjectId;
+      // Reality Fracture (17a): Tenured Tethermage
+      /** The artifacts tapped for "tap two untapped artifacts you control". */
+      tapArtifacts?: ObjectId[];
       payWith?: ObjectId[];
       // Marvel Super Heroes
       /** The value chosen for {X} in the ability's cost (Bruce Banner). */
