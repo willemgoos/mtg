@@ -278,6 +278,15 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
  * A count from `player`'s point of view. `printed` uses printed subtypes, for
  * characteristic-defining abilities (avoids recursing into characteristics).
  */
+/**
+ * The card whose name it has: its own while a copy that keeps its name (Impossible Man), else
+ * what it is now.
+ */
+export function nameId(ctx: Ctx, id: ObjectId): CardDefId {
+  const o = obj(ctx, id);
+  return o.copyKeepsName && o.originalDefId ? o.originalDefId : o.defId;
+}
+
 export function countOf(
   ctx: Ctx,
   player: PlayerId,
@@ -474,7 +483,7 @@ export function countOf(
     ).length;
   const matching = ctx.s.battlefield.filter((id) => {
     if (obj(ctx, id).controller !== player) return false;
-    if (a.named && obj(ctx, id).defId !== a.named) return false;
+    if (a.named && nameId(ctx, id) !== a.named) return false;
     if (a.other && id === sourceId) return false;
     if (a.attacking !== undefined && isAttacking(ctx, id) !== a.attacking) return false;
     if (a.minPlusOneCounters !== undefined && obj(ctx, id).plusOneCounters < a.minPlusOneCounters)
@@ -893,7 +902,7 @@ function avengersFilter(
   filter: CardFilter,
   sourceId: ObjectId | undefined,
 ): boolean {
-  if (filter.named && obj(ctx, id).defId !== filter.named) return false;
+  if (filter.named && nameId(ctx, id) !== filter.named) return false;
   const chosen = sourceId ? ctx.s.objects[sourceId]?.chosenType : undefined;
   if (filter.chosenTypeOfSource && !(chosen && hasSubtype(ctx, id, chosen))) return false;
   if (filter.notChosenTypeOfSource && chosen && hasSubtype(ctx, id, chosen)) return false;

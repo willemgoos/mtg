@@ -65,6 +65,21 @@ describe('Voracious Brood', () => {
     expect(pt(g, g.id('p1', 'voracious-brood'))).toEqual([3, 3]);
   });
 
+  it('enters with its counters even when it is not cast', () => {
+    const g = game({
+      p1: {
+        hand: ['zombify'],
+        battlefield: n('swamp', 4),
+        graveyard: ['voracious-brood', 'bear-cub', 'llanowar-elves'],
+      },
+    });
+    const brood = g.id('p1', 'voracious-brood', 'graveyard');
+    settle(cast(g, 'zombify', [ref(g, brood)]));
+    expect(g.zoneOf(brood)).toBe('battlefield');
+    // The other two creature cards (it's no longer in the graveyard as it enters).
+    expect(pt(g, brood)).toEqual([3, 3]);
+  });
+
   it('grows by that many when creature cards are milled together, once', () => {
     const g = game({
       p1: {
@@ -283,7 +298,7 @@ describe('Rhino, Terrible Trampler', () => {
 });
 
 describe("Rhino's Rampage", () => {
-  it('pumps and fights; excess damage destroys the chosen artifact', () => {
+  it('pumps and fights; excess damage triggers, and the trigger destroys an artifact', () => {
     const g = game({
       p1: { hand: [slug("Rhino's Rampage")], battlefield: ['forest', 'bear-cub'] },
       p2: { battlefield: ['llanowar-elves', 'swiftfoot-boots'] },
@@ -291,7 +306,14 @@ describe("Rhino's Rampage", () => {
     const bear = g.id('p1', 'bear-cub');
     const elves = g.id('p2', 'llanowar-elves');
     const boots = g.id('p2', 'swiftfoot-boots');
-    settle(cast(g, slug("Rhino's Rampage"), [ref(g, bear), ref(g, elves), ref(g, boots)]));
+    cast(g, slug("Rhino's Rampage"), [ref(g, bear), ref(g, elves)]);
+    g.passBoth();
+    // The artifact is targeted by the reflexive trigger, after the fight.
+    expect(g.decision.kind).toBe('chooseTriggerTargets');
+    expect(g.state.players.p2.graveyard).toContain(elves);
+    g.do({ type: 'chooseTargets', player: 'p1', targets: [ref(g, boots)] });
+    expect(g.state.stack).toHaveLength(1);
+    settle(g);
     expect(g.state.players.p2.graveyard).toEqual(expect.arrayContaining([elves, boots]));
     expect(g.obj(bear).damage).toBe(1);
   });
@@ -304,8 +326,9 @@ describe("Rhino's Rampage", () => {
     const elves = g.id('p1', 'llanowar-elves');
     const bear = g.id('p2', 'bear-cub');
     const boots = g.id('p2', 'swiftfoot-boots');
-    settle(cast(g, slug("Rhino's Rampage"), [ref(g, elves), ref(g, bear), ref(g, boots)]));
-    // 2 damage to a 2/2: lethal, not excess.
+    settle(cast(g, slug("Rhino's Rampage"), [ref(g, elves), ref(g, bear)]));
+    // 2 damage to a 2/2: lethal, not excess. No trigger.
+    expect(g.decision.kind).toBe('priority');
     expect(g.state.players.p2.graveyard).toEqual([bear]);
     expect(g.state.battlefield).toContain(boots);
   });

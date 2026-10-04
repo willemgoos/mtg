@@ -25,7 +25,7 @@ export const MSH_JUMPSTART_MASTERS: Record<string, Behavior> = {
     abilities: [
       {
         kind: 'triggered',
-        trigger: { on: 'youAttack', filter: { subtype: 'Villain', nontoken: true } },
+        trigger: { on: 'youAttack', filter: { subtype: 'Villain', nontoken: true }, aPlayer: true },
         targets: [],
         effects: [villain()],
       },
@@ -78,10 +78,8 @@ export const MSH_JUMPSTART_MASTERS: Record<string, Behavior> = {
       },
     ],
   },
-  /**
-   * The fourth counter's reflexive "return target creature card" is folded into
-   * the ability: the creature card is chosen (untargeted) as it resolves.
-   */
+  // The fourth counter's "sacrifice it" happens as the ability resolves; "when you do" is a
+  // reflexive trigger that targets the creature card.
   'Villainous Syndication': {
     abilities: [
       {
@@ -100,16 +98,17 @@ export const MSH_JUMPSTART_MASTERS: Record<string, Behavior> = {
               min: 4,
             },
             then: [
-              { kind: 'sacrifice', what: 'self' },
-              {
-                kind: 'putFromHandOrGraveyard',
-                filter: { types: ['Creature'] },
-                graveyardOnly: true,
-              },
+              { kind: 'sacrifice', what: 'self', then: [{ kind: 'reflexiveTrigger', ability: 1 }] },
             ],
           },
         ],
         label: 'Tap a Villain: Mill a card, plan counter',
+      },
+      {
+        kind: 'triggered',
+        trigger: { on: 'reflexive' },
+        targets: [{ what: 'graveyardCard', controller: 'you', filter: { types: ['Creature'] } }],
+        effects: [{ kind: 'returnToBattlefield', what: { target: 0 } }],
       },
     ],
   },

@@ -1,6 +1,6 @@
 import type { AbilityDef, CardFilter, EffectDef } from '@mtg/engine';
 import type { Behavior } from '../build.ts';
-import { mana, spell, t0, t1, t2, theirCreature, yourCreature } from './helpers.ts';
+import { mana, spell, t0, t1, theirCreature, yourCreature } from './helpers.ts';
 
 // Marvel Super Heroes Jumpstart packets: Tenacious (Voracious Brood, Return of the Mole
 // Man) and Rampaging (Bushmaster, Powerful Broker, Atlas, Rhino, Rhino's Rampage).
@@ -120,14 +120,20 @@ export const MSH_JUMPSTART_RAMPAGING: Record<string, Behavior> = {
       },
     ],
   },
-  // The artifact is chosen as the spell is cast, not when the excess damage is dealt.
-  "Rhino's Rampage": spell(
-    [
-      yourCreature,
-      theirCreature,
-      { what: 'permanent', filter: smallNoncreatureArtifact, optional: true },
+  // "When excess damage is dealt ...": a reflexive trigger that targets the artifact then.
+  "Rhino's Rampage": {
+    ...spell(
+      [yourCreature, theirCreature],
+      { kind: 'pump', to: t0, power: 1, toughness: 0 },
+      { kind: 'fight', a: t0, b: t1, ifExcess: [{ kind: 'reflexiveTrigger', ability: 0 }] },
+    ),
+    abilities: [
+      {
+        kind: 'triggered',
+        trigger: { on: 'reflexive' },
+        targets: [{ what: 'permanent', filter: smallNoncreatureArtifact, optional: true }],
+        effects: [{ kind: 'destroy', what: t0 }],
+      },
     ],
-    { kind: 'pump', to: t0, power: 1, toughness: 0 },
-    { kind: 'fight', a: t0, b: t1, ifExcess: [{ kind: 'destroy', what: t2 }] },
-  ),
+  },
 };

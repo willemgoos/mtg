@@ -3,6 +3,7 @@ import {
   characteristics,
   countOf,
   creaturesOnBattlefield,
+  hasKeyword,
   isCreature as isCreatureNow,
   matchesFilter,
 } from './characteristics.ts';
@@ -543,6 +544,9 @@ function detect(ctx: Ctx, ev: GameEvent): void {
         // A Saga enters with its first lore counter.
         if (movedDef.saga) addLore(ctx, moved.id);
         const isCreature = movedDef.types.includes('Creature');
+        // Flying Drone: "another creature with flying entered the battlefield under your control".
+        if (isCreature && hasKeyword(ctx, moved.id, 'flying'))
+          (s.turn.flyersEntered ??= []).push({ id: moved.id, player: moved.controller });
         const isLand = movedDef.types.includes('Land');
         const before = s.pendingTriggers.length;
         forEachBattlefieldTrigger(
@@ -1170,6 +1174,17 @@ function detect(ctx: Ctx, ev: GameEvent): void {
       forEachBattlefieldTrigger(ctx, (o, a) => {
         if (a.trigger.on === 'attacks')
           return ev.attackers.includes(o.id) && (!a.trigger.alone || ev.attackers.length === 1);
+        // Crimson Cowl, Master of Evil: "attack a player".
+        if (a.trigger.on === 'youAttack' && a.trigger.aPlayer)
+          return (
+            o.controller === ap &&
+            !!s.combat?.attackers.some(
+              (x) =>
+                !x.planeswalker &&
+                !!s.objects[x.id] &&
+                matchesFilter(ctx, x.id, (a.trigger as { filter?: CardFilter }).filter, o.id),
+            )
+          );
         if (a.trigger.on === 'youAttack')
           return o.controller === ap && attackedWith(a.trigger.filter, o.id);
         return false;
@@ -1406,7 +1421,7 @@ function detect(ctx: Ctx, ev: GameEvent): void {
         ctx,
         (t, e) =>
           t.on === 'creatureYouControlDealsCombatDamage' &&
-          e.controller === src.controller &&
+          (e.controller === src.controller || !!t.anyController) &&
           (!t.toPlayer || 'player' in ev.to) &&
           matchesFilter(ctx, src.id, t.filter),
         src,

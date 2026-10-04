@@ -25,14 +25,17 @@ const shootingStar: Pick<Extract<AbilityDef, { kind: 'triggered' }>, 'targets' |
   ],
 };
 
-/** "You may pay {1}{W}. When you do, exile target creature you control, then return that card." */
+/**
+ * "You may pay {1}{W}" (as it resolves). "When you do, exile target creature you control, then
+ * return that card": the reflexive trigger, ability 2.
+ */
 const entangle = (trigger: Extract<AbilityDef, { kind: 'triggered' }>['trigger']): AbilityDef => ({
   kind: 'triggered',
   trigger,
   optional: true,
   cost: mana('{1}{W}'),
-  targets: [yourCreature],
-  effects: [{ kind: 'blink', what: t0 }],
+  targets: [],
+  effects: [{ kind: 'reflexiveTrigger', ability: 2 }],
 });
 
 const counterOnSelf: EffectDef = { kind: 'counters', to: 'self', amount: 1 };
@@ -102,7 +105,16 @@ export const MSH_JUMPSTART_MARVELOUS: Record<string, Behavior> = {
   },
   // Flash comes from Scryfall.
   'Quantum Entanglement': {
-    abilities: [entangle({ on: 'etb' }), entangle({ on: 'beginningOfEndStep', whose: 'yours' })],
+    abilities: [
+      entangle({ on: 'etb' }),
+      entangle({ on: 'beginningOfEndStep', whose: 'yours' }),
+      {
+        kind: 'triggered',
+        trigger: { on: 'reflexive' },
+        targets: [yourCreature],
+        effects: [{ kind: 'blink', what: t0 }],
+      },
+    ],
   },
   'Fall to Earth': {
     spell: {

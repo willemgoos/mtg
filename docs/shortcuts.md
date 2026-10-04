@@ -51,27 +51,27 @@ from) when it's fixed. Older phases keep their own "Simplifications" lists in `d
 
 ## Marvel Jumpstart packets (`msh/jumpstart-*.ts`)
 
-- [ ] Bob, Reluctant HYDRA Agent: "if you do" checks that he's still attacking, not that he actually returned to hand.
-- [ ] Strategic Intervention: two triggers (pump, then an optional tap) instead of one.
+- [x] Bob, Reluctant HYDRA Agent: "if you do" checks that he's still attacking, not that he actually returned to hand.
+- [x] Strategic Intervention: two triggers (pump, then an optional tap) instead of one.
 - [ ] Advancing the Spirit: the free power-up isn't optional; two copies still give one per turn; it doesn't check that it was
       on the battlefield when the turn's first power-up was activated.
-- [ ] Quantum Reduction: "loses all abilities" is applied by a trigger as the Aura enters (like Frozen in Ice), so there's a
+- [x] Quantum Reduction: "loses all abilities" is applied by a trigger as the Aura enters (like Frozen in Ice), so there's a
       window to respond before the creature loses them.
-- [ ] Wasp, Shrinking Savior: if her only target becomes illegal, the whole trigger fizzles, including the draw.
+- [x] Wasp, Shrinking Savior: if her only target becomes illegal, the whole trigger fizzles, including the draw. (That part
+      is the rules; choosing no target used to drop the trigger, draw included.)
 - [ ] Tippy-Toe, Terrific Partner: the extra Food only comes with tokens from the normal create-token effect, not a few
       special token paths (`stack.ts`, `fin-effects.ts`, `fic-effects.ts`).
 - [ ] Iron Fist, Hero for Hire: the 5 damage is divided among up to five targets, but the targets and the split are chosen
       as the power-up resolves (one target and its share at a time), not as it's activated (so nothing can respond to them).
-- [ ] Contract Hero: the attack trigger always asks for a choice, even when you have no artifact and no cards in hand.
-- [ ] The Clone Saga, chapter III: "choose a card name" is choosing a creature you control (up to one); with none, the chapter
-      does nothing.
-- [ ] Impossible Man: keeping his name only matters for the legend rule; while copying, the UI shows the copied name and he
-      doesn't count as "named Impossible Man" for name filters.
-- [ ] Villainous Syndication: the fourth counter's payoff isn't a separate reflexive trigger (the returned card isn't
-      targeted, and there's no chance to respond); the engine picks which Villain to tap (lowest power).
+- [x] Contract Hero: the attack trigger always asks for a choice, even when you have no artifact and no cards in hand.
+- [ ] The Clone Saga, chapter III: "choose a card name" offers only the names of the creatures on the battlefield and the
+      creature cards in your hand, not every card name.
+- [ ] Impossible Man: while copying, the UI shows the copied card (and its name); the rules see his own name.
+- [ ] Villainous Syndication: the engine picks which Villain to tap (lowest power); the fourth counter's sacrifice happens as
+      the ability resolves, not as its own trigger.
 - [ ] Radioactive Man: "that player" is always the opponent (two-player only).
-- [ ] Crimson Cowl, Master of Evil: triggers whenever nontoken Villains attack, without checking they attacked a player.
-- [ ] Flying Drone: the discount is a second, free version of the spell, offered once another flyer entered under your control
+- [x] Crimson Cowl, Master of Evil: triggers whenever nontoken Villains attack, without checking they attacked a player.
+- [x] Flying Drone: the discount is a second, free version of the spell, offered once another flyer entered under your control
       this turn; that flyer must still be on the battlefield (with flying) to count.
 - [ ] Vulture, Feathered Fiend: split into a counter trigger per flyer and one batched draw trigger instead of one trigger.
 - [x] Grapeshot: storm copies keep the original's target (no new targets), like Ral's storm emblem.
@@ -84,11 +84,11 @@ from) when it's fixed. Older phases keep their own "Simplifications" lists in `d
 - [ ] Secure Detention: mana that another permanent grants the locked one (Clement-style) is still usable.
 - [ ] Rhino, Terrible Trampler: one trigger now, but the creatures for the three counters and the split are chosen as it
       resolves (one creature and its share at a time), not as it's put on the stack.
-- [ ] Rhino's Rampage: the noncreature artifact is chosen as the spell is cast, not by a reflexive trigger on excess damage.
+- [x] Rhino's Rampage: the noncreature artifact is chosen as the spell is cast, not by a reflexive trigger on excess damage.
 - [ ] Powerful Broker: can only target a permanent (players have no counters in this engine).
-- [ ] Voracious Brood: its entering counters only apply when it's cast.
+- [x] Voracious Brood: its entering counters only apply when it's cast.
 - [ ] Ms. Marvel, Elastic Ally: base power ignores static "has base power X" abilities (e.g. Hulkbuster Armor).
-- [ ] Quantum Entanglement: the exile target is chosen when the {1}{W} is paid, not by a separate reflexive trigger.
+- [x] Quantum Entanglement: the exile target is chosen when the {1}{W} is paid, not by a separate reflexive trigger.
 - [ ] Captain Marvel, Shooting Star: "enters or attacks" is two triggers; she doesn't see creatures exiled at the same moment
       as her.
 - [ ] Beast, Erudite Aerialist: flying turns on for any +1/+1 counter put on him this turn, even an opponent's.

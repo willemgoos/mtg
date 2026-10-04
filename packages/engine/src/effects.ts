@@ -1902,6 +1902,16 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
     case 'changeTarget':
     case 'chooseNewTargets':
       return; // handled by runEffects
+    // Quantum Entanglement, Villainous Syndication, Rhino's Rampage: "when you do".
+    case 'reflexiveTrigger':
+      if (es.source)
+        ctx.s.pendingTriggers.push({
+          source: es.source,
+          sourceDefId: es.sourceDefId,
+          abilityIndex: e.ability,
+          controller: es.controller,
+        });
+      return;
     // Iron Fist, Hero for Hire; Rhino, Terrible Trampler: the finished split (chosen by runEffects).
     case 'divide': {
       const chosen = e.chosen ?? [];
@@ -1993,9 +2003,13 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
         if (!hasKeyword(ctx, id, 'indestructible') && !useShield(ctx, id))
           moveObject(ctx, id, 'graveyard');
       return;
-    case 'sacrifice':
-      for (const id of objectsOf(ctx, es, e.what)) sacrifice(ctx, id);
+    case 'sacrifice': {
+      const ids = objectsOf(ctx, es, e.what);
+      for (const id of ids) sacrifice(ctx, id);
+      // Villainous Syndication: "when you do".
+      if (ids.length) for (const x of e.then ?? []) runEffect(ctx, es, x);
       return;
+    }
     case 'gainLife': {
       const n = resolveAmount(ctx, es, e.amount);
       for (const p of playersOf(ctx, es, e.who)) gainLife(ctx, p, n);
@@ -2258,9 +2272,13 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
       for (const id of ids) addCounters(ctx, id, n, e.name);
       return;
     }
-    case 'bounce':
-      for (const id of objectsOf(ctx, es, e.what)) moveObject(ctx, id, 'hand');
+    case 'bounce': {
+      const ids = objectsOf(ctx, es, e.what);
+      for (const id of ids) moveObject(ctx, id, 'hand');
+      // Bob, Reluctant HYDRA Agent: "if you do".
+      if (ids.length) for (const x of e.then ?? []) runEffect(ctx, es, x);
       return;
+    }
     case 'returnToHand': {
       const t = typeof e.what === 'object' && 'target' in e.what ? es.targets[e.what.target] : null;
       const o = t && 'object' in t && ctx.s.objects[t.object.id];
@@ -2924,13 +2942,14 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
       const ownTurn = ctx.s.turn.activePlayer === es.controller;
       // Marvel Super Heroes Jumpstart (Tricksters): only creatures with the chosen name (The Clone Saga).
       let ability = e.ability;
-      if (e.namedLike) {
-        const named = objectsOf(ctx, es, e.namedLike)[0];
+      if (e.namedLike || e.named) {
+        const like = e.namedLike ? objectsOf(ctx, es, e.namedLike)[0] : undefined;
+        const named = e.named ?? (like ? obj(ctx, like).defId : undefined);
         const t = ability.kind === 'triggered' ? ability.trigger : undefined;
         if (!named || t?.on !== 'creatureYouControlDealsCombatDamage') return;
         ability = {
           ...ability,
-          trigger: { ...t, filter: { ...t.filter, named: obj(ctx, named).defId } },
+          trigger: { ...t, filter: { ...t.filter, named } },
         } as AbilityDef;
       }
       (ctx.s.emblems ??= []).push({

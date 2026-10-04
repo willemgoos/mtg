@@ -104,6 +104,32 @@ describe('Pym Particles packet', () => {
     expect(pt(g, bear)).toEqual([-1, 2]);
   });
 
+  it('Wasp still draws when no creature is chosen to shrink', () => {
+    const g = game({
+      step: 'beginCombat',
+      p1: { battlefield: ['wasp-shrinking-savior'], library: n('island', 5) },
+      p2: { battlefield: ['bear-cub'] },
+    });
+    const bear = g.id('p2', 'bear-cub');
+    // The Bear Cub is already shrunk (-3/-0 until end of turn).
+    g.state.effects.push({
+      timestamp: 0,
+      affected: g.ref(bear).object,
+      power: -3,
+      toughness: 0,
+      keywords: [],
+      expires: 'endOfTurn',
+    });
+    const hand = handSize(g, 'p1');
+    g.passBoth().attack(g.id('p1', 'wasp-shrinking-savior'));
+    expect(g.decision.kind).toBe('chooseTriggerTargets');
+    g.do({ type: 'chooseTargets', player: 'p1', targets: [] });
+    expect(g.state.stack).toHaveLength(1);
+    settle(g);
+    expect(pt(g, bear)).toEqual([-1, 2]);
+    expect(handSize(g, 'p1')).toBe(hand + 1);
+  });
+
   it('Wasp draws nothing when no creature has negative power', () => {
     const g = game({
       step: 'beginCombat',
@@ -123,9 +149,32 @@ describe('Pym Particles packet', () => {
       p2: { battlefield: ['serra-angel'] },
     });
     const angel = g.id('p2', 'serra-angel');
-    settle(cast(g, 'quantum-reduction', [g.ref(angel)]));
+    cast(g, 'quantum-reduction', [g.ref(angel)]);
+    g.passBoth();
+    // No trigger: it loses them as the Aura attaches, with no window to respond.
+    expect(g.state.stack).toHaveLength(0);
+    expect(g.state.pendingTriggers).toHaveLength(0);
     expect(pt(g, angel)).toEqual([-1, 4]);
     expect(keywords(g, angel).has('flying')).toBe(false);
+  });
+
+  it('Quantum Reduction: the creature gets its abilities back when the Aura leaves', () => {
+    const g = game({
+      p1: {
+        hand: ['quantum-reduction', 'fantastic-bounce'],
+        battlefield: n('island', 6),
+        library: n('island', 2),
+      },
+      p2: { battlefield: ['serra-angel'] },
+    });
+    const angel = g.id('p2', 'serra-angel');
+    settle(cast(g, 'quantum-reduction', [g.ref(angel)]));
+    expect(keywords(g, angel).has('flying')).toBe(false);
+    const aura = g.id('p1', 'quantum-reduction');
+    settle(cast(g, 'fantastic-bounce', [g.ref(aura)]));
+    expect(g.zoneOf(aura)).toBe('hand');
+    expect(keywords(g, angel).has('flying')).toBe(true);
+    expect(pt(g, angel)).toEqual([4, 4]);
   });
 
   it('Quantum Reduction has flash only when cast using teamwork', () => {

@@ -1024,13 +1024,6 @@ export function resolveTop(ctx: Ctx): boolean {
       if (stun) (o.counters ??= {}).stun = (o.counters.stun ?? 0) + stun;
       if (x < d.stunCountersMinusX) o.tapped = true;
     }
-    // Marvel Super Heroes Jumpstart (Tenacious/Rampaging): Voracious Brood.
-    if (d.entersWithCountersAmount)
-      addCounters(
-        ctx,
-        o.id,
-        countOf(ctx, item.controller, d.entersWithCountersAmount, false, o.id),
-      );
     if (d.entersWithCounters && checkCondition(ctx, d.entersWithCountersIf, item.controller, o))
       addCounters(ctx, o.id, d.entersWithCounters);
     if (host) attachAura(ctx, o.id, host);
@@ -1116,6 +1109,21 @@ function attachAura(ctx: Ctx, aura: ObjectId, host: ObjectId): void {
   for (const ab of def(ctx, aura).abilities) {
     if (ab.kind !== 'static') continue;
     if (ab.effect.kind === 'enchantedIsFood') h.foodBy = aura;
+    // Marvel Super Heroes Jumpstart (Pym): Quantum Reduction, no window before it loses them.
+    if (ab.effect.kind === 'attached' && ab.effect.loseAbilities) {
+      ctx.s.effects.push({
+        timestamp: newTimestamp(ctx),
+        affected: { id: host, zcc: h.zcc },
+        power: 0,
+        toughness: 0,
+        keywords: [],
+        loseAbilities: true,
+        expires: 'whileSource',
+        whileSourceId: aura,
+        player: a.controller,
+      });
+      h.blank = true;
+    }
     if (ab.effect.kind === 'attached' && ab.effect.control && h.controller !== a.controller) {
       h.controlledBy = { aura, previous: h.controller };
       h.controller = a.controller;

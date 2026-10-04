@@ -22,13 +22,6 @@ const attacks = (targets: TargetSpec[], ...effects: EffectDef[]): AbilityDef => 
 /** Creatures with power less than 0, on either side. */
 const negativePower = { types: ['Creature' as const], maxPower: -1 };
 
-/** "Enchanted creature loses all abilities" (as Frozen in Ice: applied as the Aura enters). */
-const enchantedLosesAbilities = onEnter({
-  kind: 'loseAbilities',
-  what: 'attached',
-  whileSource: true,
-});
-
 export const MSH_JUMPSTART_PYM_TOKENS: CardDefinition[] = [
   {
     id: 'robot-flying-token',
@@ -92,8 +85,10 @@ export const MSH_JUMPSTART_PYM: Record<string, Behavior> = {
     enchant: creature,
     kicker: { cost: mana(''), teamwork: 2, flash: true },
     abilities: [
-      { kind: 'static', effect: { kind: 'attached', power: -5, toughness: 0 } },
-      enchantedLosesAbilities,
+      {
+        kind: 'static',
+        effect: { kind: 'attached', power: -5, toughness: 0, loseAbilities: true },
+      },
     ],
   },
   'Robotics Mastery': {

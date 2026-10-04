@@ -94,8 +94,6 @@ Missing counts include the packet's Thriving land (refreshed 4 October 2026, aft
   Marvel), power above base power (Ms. Marvel), and copies that keep some of their own abilities (Hulkling).
 - Simplifications (also in `docs/shortcuts.md`):
   - Thriving lands may choose their own colour.
-  - Bob's "if you do" checks that he's still attacking.
-  - Strategic Intervention is two triggers (pump, then an optional tap).
   - Advancing the Spirit's free power-up isn't optional, and two copies still give one per turn.
 
 ## First batch

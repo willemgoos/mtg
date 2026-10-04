@@ -445,6 +445,9 @@ export const FIC_CONDITIONS: Record<
   opponentCreatureDied: (ctx, p) => (ctx.s.turn.creaturesLost?.[other(p)] ?? 0) > 0,
   /** You gained 7 or more life this turn (Aerith, Last Ancient). */
   gainedSeven: (ctx, p) => (ctx.s.turn.lifeGained?.[p] ?? 0) >= 7,
+  /** Flying Drone: another creature with flying entered under your control this turn (even if it's gone). */
+  anotherFlyerEntered: (ctx, p, self) =>
+    !!ctx.s.turn.flyersEntered?.some((f) => f.player === p && f.id !== self?.id),
   /** +1/+1 counters were put on the source this turn (Wakka). */
   sourceCountersThisTurn: (ctx, _p, self) => self?.countersTurn === ctx.s.turn.number,
   /** An opponent has seven or more cards in their graveyard (Into the Story). */

@@ -142,16 +142,22 @@ describe('Contract Hero', () => {
     const g = game({ p1: { battlefield: ['contract-hero'], hand: ['mountain'] } });
     const hero = g.id('p1', 'contract-hero');
     g.passUntilStep('beginCombat').passBoth().attack(hero);
-    resolveChoosing(g, 1);
+    // No artifact: only discarding (or not) is offered.
+    settle(g);
+    const d = g.decision;
+    if (d.kind !== 'chooseOption') throw new Error('no choice');
+    expect(d.options.map((o) => o.label)).toEqual(['Discard a card: +2/+0', "Don't"]);
+    resolveChoosing(g, 0);
     expect(handSize(g, 'p1')).toBe(0);
     expect(pt(g, hero)).toEqual([4, 3]);
   });
 
-  it('gets nothing without a card to discard', () => {
+  it('asks nothing with no artifact and no card in hand', () => {
     const g = game({ p1: { battlefield: ['contract-hero'] } });
     const hero = g.id('p1', 'contract-hero');
     g.passUntilStep('beginCombat').passBoth().attack(hero);
-    resolveChoosing(g, 1);
+    settle(g);
+    expect(g.decision.kind).toBe('priority');
     expect(pt(g, hero)).toEqual([2, 3]);
   });
 });

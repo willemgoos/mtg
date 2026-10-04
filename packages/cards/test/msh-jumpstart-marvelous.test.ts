@@ -165,13 +165,23 @@ describe('Captain Marvel, Shooting Star', () => {
 });
 
 describe('Quantum Entanglement', () => {
+  /** Accepts each "you may pay" and settles the stack (bounded). */
+  const payAndSettle = (g: ReturnType<typeof game>) => {
+    for (let i = 0; i < 10; i++) {
+      settle(g);
+      if (g.decision.kind !== 'optionalEffect') return g;
+      g.do({ type: 'chooseEffect', player: g.actor, accept: true });
+    }
+    return g;
+  };
+
   it('may pay {1}{W} as it enters to blink a creature you control', () => {
     const g = game({
       p1: { hand: [ENTANGLEMENT], battlefield: ['bear-cub', ...n('plains', 4)] },
     });
     const bear = g.id('p1', 'bear-cub');
     const zcc = g.obj(bear).zcc;
-    settle(cast(g, ENTANGLEMENT));
+    payAndSettle(cast(g, ENTANGLEMENT));
     expect(g.obj(bear).zcc).toBeGreaterThan(zcc);
     expect(g.obj(bear).zone).toBe('battlefield');
     expect(g.state.battlefield.filter((id) => g.obj(id).tapped)).toHaveLength(4);
@@ -186,8 +196,39 @@ describe('Quantum Entanglement', () => {
     g.passUntilStep('main2');
     for (let i = 0; i < 10 && g.decision.kind === 'priority'; i++) g.pass();
     expect(g.state.turn.step).toBe('end');
-    settle(g);
+    payAndSettle(g);
     expect(g.obj(bear).zcc).toBeGreaterThan(zcc);
+  });
+
+  it('the creature is chosen by a reflexive trigger once {1}{W} is paid', () => {
+    const g = game({
+      p1: { hand: [ENTANGLEMENT], battlefield: ['bear-cub', ...n('plains', 4)] },
+    });
+    const bear = g.id('p1', 'bear-cub');
+    cast(g, ENTANGLEMENT);
+    settle(g);
+    // The enters trigger asks to pay as it resolves; nothing is targeted yet.
+    expect(g.decision.kind).toBe('optionalEffect');
+    expect(g.state.stack).toHaveLength(0);
+    g.do({ type: 'chooseEffect', player: 'p1', accept: true });
+    // "When you do": a new trigger, targeting the creature, that can be responded to.
+    expect(g.decision.kind).toBe('chooseTriggerTargets');
+    g.do({ type: 'chooseTargets', player: 'p1', targets: [g.ref(bear)] });
+    expect(g.state.stack).toHaveLength(1);
+    expect(g.decision.kind).toBe('priority');
+  });
+
+  it('declining to pay blinks nothing', () => {
+    const g = game({
+      p1: { hand: [ENTANGLEMENT], battlefield: ['bear-cub', ...n('plains', 4)] },
+    });
+    const bear = g.id('p1', 'bear-cub');
+    const zcc = g.obj(bear).zcc;
+    settle(cast(g, ENTANGLEMENT));
+    g.do({ type: 'chooseEffect', player: 'p1', accept: false });
+    settle(g);
+    expect(g.obj(bear).zcc).toBe(zcc);
+    expect(g.decision.kind).toBe('priority');
   });
 });
 

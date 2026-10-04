@@ -528,7 +528,13 @@ export type TriggerDef =
   /** Whenever this or another creature you control (matching the filter, as printed) dies. */
   | { on: 'creatureYouControlDies'; nontoken?: boolean; filter?: CardFilter }
   /** Whenever a creature you control deals combat damage (on your turn); "that creature", "that much". */
-  | { on: 'creatureYouControlDealsCombatDamage'; toPlayer?: boolean; filter?: CardFilter }
+  | {
+      on: 'creatureYouControlDealsCombatDamage';
+      toPlayer?: boolean;
+      filter?: CardFilter;
+      /** Any player's creature, not just yours (The Clone Saga's emblem: "a creature with the chosen name"). */
+      anyController?: boolean;
+    }
   | { on: 'beginningOfCombat'; whose: 'yours' | 'each' }
   | { on: 'youGainLife' }
   /** Whenever the creature this Aura is attached to dies. */
@@ -541,7 +547,12 @@ export type TriggerDef =
       alone?: boolean;
     }
   /** "Whenever you attack" (with one or more creatures matching the filter): once per combat. */
-  | { on: 'youAttack'; filter?: CardFilter }
+  | {
+      on: 'youAttack';
+      filter?: CardFilter;
+      /** "Attack a player" (Crimson Cowl): ones attacking a planeswalker don't count. */
+      aPlayer?: boolean;
+    }
   | { on: 'combatDamageToPlayer' }
   | {
       on: 'castSpell';
@@ -630,6 +641,11 @@ export type TriggerDef =
   | { on: 'yourNoncombatDamageToOpponent' }
   /** Whenever this creature becomes blocked. */
   | { on: 'becomesBlocked' }
+  /**
+   * Never triggers by itself: a "when you do" reflexive trigger, set off by a 'reflexiveTrigger'
+   * effect (Quantum Entanglement, Villainous Syndication, Rhino's Rampage).
+   */
+  | { on: 'reflexive' }
   /** Whenever this deals damage, combat or not, to an opponent (Thieving Otter). */
   | { on: 'dealsDamageToOpponent' }
   /** Whenever another nonland permanent you control is returned to its owner's hand (Justice, Vance Astrovik). */
@@ -1513,6 +1529,8 @@ export type EffectDef =
       // Marvel Super Heroes Jumpstart (Tricksters)
       /** Its trigger's filter only matches cards with this object's name (The Clone Saga). */
       namedLike?: Ref;
+      /** Its trigger's filter only matches cards with this name, chosen as it resolves (The Clone Saga). */
+      named?: CardDefId;
     }
   /** Marks the gift as given (for "whenever you give a gift"). */
   | { kind: 'giftGiven' }
@@ -1778,7 +1796,12 @@ export type EffectDef =
     }
   /** Look at the top N; you may put a creature with mana value up to your land count onto the battlefield (Loot). */
   | { kind: 'lookForCreature'; count: number }
-  | { kind: 'bounce'; what: Ref }
+  | {
+      kind: 'bounce';
+      what: Ref;
+      /** "If you do" (Bob, Reluctant HYDRA Agent): only if something was returned. */
+      then?: EffectDef[];
+    }
   | { kind: 'returnToHand'; what: Ref }
   | { kind: 'exileGraveyard'; who: Ref }
   | { kind: 'tap'; what: Ref }
@@ -1793,6 +1816,12 @@ export type EffectDef =
   | { kind: 'changeTarget'; what: Ref }
   /** Time Stop: exile every spell and ability on the stack, then skip to the cleanup step. */
   | { kind: 'endTheTurn' }
+  /**
+   * "When you do, ...": this card's ability number `ability` (a { on: 'reflexive' } trigger)
+   * triggers now; its targets are chosen as it goes on the stack (Quantum Entanglement,
+   * Villainous Syndication, Rhino's Rampage).
+   */
+  | { kind: 'reflexiveTrigger'; ability: number }
   /** Internal (Bolt Bend): the spell or ability on the stack with this id gets these targets. */
   | { kind: 'setStackTargets'; id: ObjectId; targets: TargetChoice[] }
   /** Internal (Loki Laufeyson): its controller may choose new targets for the copy just made ('chosen'). */
@@ -2023,7 +2052,12 @@ export type EffectDef =
     }
   /** Return all land cards from your graveyard to the battlefield tapped (World Shaper). */
   | { kind: 'returnLandsFromGraveyard' }
-  | { kind: 'sacrifice'; what: Ref }
+  | {
+      kind: 'sacrifice';
+      what: Ref;
+      /** "When you do" (Villainous Syndication): only if something was sacrificed. */
+      then?: EffectDef[];
+    }
   /** The controller scries N (asks them to order the top cards). */
   | {
       kind: 'scry';
@@ -2321,6 +2355,8 @@ export type StaticDef =
       // Marvel Super Heroes Jumpstart (Wakanda)
       /** "Its activated abilities can't be activated" (Secure Detention), mana abilities included. */
       cantActivate?: boolean;
+      /** "Loses all abilities" (Quantum Reduction): from the moment the Aura attaches, while it stays. */
+      loseAbilities?: boolean;
       // Final Fantasy (11a): job select
       /** "Is a Knight in addition to its other types." */
       addSubtypes?: string[];
@@ -3031,6 +3067,8 @@ export interface TurnState {
   hexproofPlayers?: PlayerId[];
   /** Time Stop resolved: the turn skips to its cleanup step. */
   endTheTurn?: boolean;
+  /** Flying Drone: creatures with flying that entered this turn, and who controlled them then. */
+  flyersEntered?: { id: ObjectId; player: PlayerId }[];
   // Final Fantasy (11a): saga creatures
   /** Players whose creatures are dealt no damage this turn (Summon: Alexander). */
   creaturesShielded?: PlayerId[];

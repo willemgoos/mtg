@@ -65,6 +65,27 @@ describe('Crimson Cowl, Master of Evil', () => {
     expect(all(g, 'villain-token')).toHaveLength(1);
   });
 
+  it('needs a Villain attacking a player, not a planeswalker', () => {
+    const g = game({
+      p1: { battlefield: ['crimson-cowl-master-of-evil', 'boomerang-blade-flinger'] },
+      p2: { battlefield: ['ral-crackling-wit'] },
+    });
+    const ral = g.id('p2', 'ral-crackling-wit');
+    g.obj(ral).counters = { loyalty: 4 };
+    g.passUntilStep('beginCombat').passBoth();
+    const boomerang = g.id('p1', 'boomerang-blade-flinger');
+    g.do({
+      type: 'addAttacker',
+      player: 'p1',
+      attacker: boomerang,
+      defender: 'p2',
+      planeswalker: ral,
+    });
+    g.do({ type: 'confirmAttackers', player: 'p1' });
+    settle(g);
+    expect(all(g, 'villain-token')).toHaveLength(0);
+  });
+
   it('makes only one token however many Villains attack', () => {
     const g = game({
       p1: { battlefield: ['crimson-cowl-master-of-evil', 'boomerang-blade-flinger'] },
@@ -202,8 +223,15 @@ describe('Villainous Syndication', () => {
     });
     const plan = g.id('p1', 'villainous-syndication');
     g.obj(plan).counters = { plan: 3 };
-    resolve(activate(g, plan, 0), g.id('p1', 'rumbling-baloth', 'graveyard'));
-    expect(g.zoneOf(plan)).not.toBe('battlefield');
+    const baloth = g.id('p1', 'rumbling-baloth', 'graveyard');
+    activate(g, plan, 0);
+    g.passBoth();
+    // Sacrificed; "when you do" is a reflexive trigger that targets the creature card.
+    expect(g.zoneOf(plan)).toBe('graveyard');
+    expect(g.decision.kind).toBe('chooseTriggerTargets');
+    g.do({ type: 'chooseTargets', player: 'p1', targets: [g.ref(baloth)] });
+    expect(g.state.stack).toHaveLength(1);
+    settle(g);
     expect(all(g, 'rumbling-baloth')).toHaveLength(1);
   });
 });

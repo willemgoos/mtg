@@ -1,4 +1,4 @@
-import type { AbilityDef, EffectDef } from '@mtg/engine';
+import type { AbilityDef, ConditionDef, EffectDef } from '@mtg/engine';
 import type { Behavior } from '../build.ts';
 import {
   mana,
@@ -30,6 +30,34 @@ const basicLandcycling = (cost: string): AbilityDef => ({
   label: `Basic landcycling ${cost}`,
 });
 
+// Contract Hero's attack trigger.
+const hasArtifact: ConditionDef = {
+  kind: 'controlsPermanents',
+  filter: { types: ['Artifact'] },
+  min: 1,
+};
+const hasCard: ConditionDef = { kind: 'handHas', filter: {} };
+const plusTwo: EffectDef = { kind: 'pump', to: 'self', power: 2, toughness: 0 };
+const sacArtifact = {
+  label: 'Sacrifice an artifact: +2/+0',
+  effects: [
+    {
+      kind: 'sacrificeSeveral',
+      count: 1,
+      filter: { types: ['Artifact'] },
+      then: [plusTwo],
+    } satisfies EffectDef,
+  ],
+};
+const discardCard = {
+  label: 'Discard a card: +2/+0',
+  effects: [{ kind: 'discard', count: 1 } satisfies EffectDef, plusTwo],
+};
+const contractChoice = (...options: { label: string; effects: EffectDef[] }[]): EffectDef => ({
+  kind: 'choose',
+  options: [...options, { label: "Don't", effects: [] }],
+});
+
 export const MSH_JUMPSTART_HIRE: Record<string, Behavior> = {
   // Trample comes from Scryfall. "5 damage divided as you choose among up to five targets": the
   // targets and the split are chosen as the power-up resolves.
@@ -44,6 +72,7 @@ export const MSH_JUMPSTART_HIRE: Record<string, Behavior> = {
       ),
     ],
   },
+  // "You may sacrifice an artifact or discard a card": only the ones you can do are offered.
   'Contract Hero': {
     abilities: [
       onEnter(treasure()),
@@ -53,34 +82,17 @@ export const MSH_JUMPSTART_HIRE: Record<string, Behavior> = {
         targets: [],
         effects: [
           {
-            kind: 'choose',
-            options: [
+            kind: 'if',
+            condition: hasArtifact,
+            then: [
               {
-                label: 'Sacrifice an artifact: +2/+0',
-                effects: [
-                  {
-                    kind: 'sacrificeSeveral',
-                    count: 1,
-                    filter: { types: ['Artifact'] },
-                    then: [{ kind: 'pump', to: 'self', power: 2, toughness: 0 }],
-                  },
-                ],
+                kind: 'if',
+                condition: hasCard,
+                then: [contractChoice(sacArtifact, discardCard)],
+                else: [contractChoice(sacArtifact)],
               },
-              {
-                label: 'Discard a card: +2/+0',
-                effects: [
-                  {
-                    kind: 'if',
-                    condition: { kind: 'handHas', filter: {} },
-                    then: [
-                      { kind: 'discard', count: 1 },
-                      { kind: 'pump', to: 'self', power: 2, toughness: 0 },
-                    ],
-                  },
-                ],
-              },
-              { label: "Don't", effects: [] },
             ],
+            else: [{ kind: 'if', condition: hasCard, then: [contractChoice(discardCard)] }],
           },
         ],
       },

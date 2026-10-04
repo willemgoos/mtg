@@ -47,33 +47,45 @@ describe('Soaring packet', () => {
 });
 
 describe('Flying Drone', () => {
-  it('loots for {1}{U}, or for free once another flyer entered this turn', () => {
+  it('loots for {1}{U}, or for free once another flyer entered under your control this turn', () => {
     const g = game({
       p1: {
-        battlefield: ['flying-drone', 'namora-the-sea-queen', ...n('island', 2)],
-        hand: ['mountain'],
+        battlefield: ['flying-drone', ...n('island', 4)],
+        hand: ['flying-drone', 'whoosh', 'mountain'],
         library: ['forest'],
       },
     });
     const drone = g.id('p1', 'flying-drone');
-    const namora = g.id('p1', 'namora-the-sea-queen');
     g.obj(drone).zoneTurn = 0;
     expect(cardDb.get('flying-drone')!.keywords).toEqual(
       expect.arrayContaining(['flying', 'vigilance']),
     );
-    // Namora entered this turn: only the free version.
-    g.obj(namora).zoneTurn = g.state.turn.number;
-    expect(activations(g, drone)).toEqual([1]);
-    g.obj(namora).zoneTurn = 0;
     expect(activations(g, drone)).toEqual([0]);
-    g.obj(namora).zoneTurn = g.state.turn.number;
+    // A second Drone (a flyer) enters: the first one's loot is free.
+    resolve(cast(g, 'flying-drone'));
+    const second = g.state.battlefield.find(
+      (id) => id !== drone && g.obj(id).defId === 'flying-drone',
+    )!;
+    expect(activations(g, drone)).toEqual([1]);
+    // It still counts once it's gone (bounced with Whoosh!).
+    resolve(cast(g, 'whoosh', [g.ref(second)]));
+    expect(g.zoneOf(second)).toBe('hand');
+    expect(activations(g, drone)).toEqual([1]);
     g.do({ type: 'activateAbility', player: 'p1', source: drone, abilityIndex: 1, targets: [] });
     resolve(g);
-    expect(handSize(g, 'p1')).toBe(1);
-    expect(g.state.players.p1.graveyard).toHaveLength(1);
     expect(g.obj(drone).tapped).toBe(true);
-    // No mana spent.
-    expect(g.state.battlefield.filter((id) => g.obj(id).tapped)).toHaveLength(1);
+    // No mana spent on the loot: only the four Islands used for the two spells are tapped.
+    expect(g.state.battlefield.filter((id) => g.obj(id).tapped)).toHaveLength(5);
+  });
+
+  it("an opponent's flyer doesn't count", () => {
+    const g = game({
+      p1: { battlefield: ['flying-drone', ...n('island', 2)] },
+    });
+    const drone = g.id('p1', 'flying-drone');
+    g.obj(drone).zoneTurn = 0;
+    g.state.turn.flyersEntered = [{ id: 'other', player: 'p2' }];
+    expect(activations(g, drone)).toEqual([0]);
   });
 });
 
