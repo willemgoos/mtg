@@ -4,6 +4,7 @@ import { protectedFrom } from './brawl-15b-w-effects.ts';
 import { cardMatches, hasKeyword, isCreature, matchesFilter } from './characteristics.ts';
 import { type Ctx, def, defOf, deref, obj, other, refOf } from './context.ts';
 import { manaValue } from './cost.ts';
+import { fromCreatureSource } from './msh-analyzed.ts';
 import { checkCondition } from './triggers.ts';
 import type { ObjectId, PlayerId, TargetChoice, TargetSpec } from './types.ts';
 import { PLAYERS } from './types.ts';
@@ -102,6 +103,8 @@ function abilityOk(ctx: Ctx, spec: TargetSpec, id: ObjectId, src: TargetingSourc
   if (!item || item.kind !== 'ability') return false;
   if (spec.controller === 'you' && item.controller !== src.controller) return false;
   if (spec.controller === 'opponent' && item.controller === src.controller) return false;
+  // Marvel Super Heroes Jumpstart (Analyzed): "from a creature source" (Echo, which may copy its own).
+  if (spec.creatureSource) return fromCreatureSource(ctx, item);
   // An ability of the targeting source (Gogo copying its own ability).
   if (src.sourceId && item.source.id === src.sourceId && !item.inline && !item.emblem) {
     const a = defOf(ctx, item.sourceDefId).abilities[item.abilityIndex];

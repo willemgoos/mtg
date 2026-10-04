@@ -9,6 +9,7 @@ import {
   obj,
 } from './context.ts';
 import { manaValue } from './cost.ts';
+import { copyStackAbility } from './msh-analyzed.ts';
 import { addLore } from './sagas.ts';
 import { shuffleLibrary } from './setup.ts';
 import type { ObjectId } from './types.ts';
@@ -50,6 +51,34 @@ export const MSH_EFFECTS: Record<string, CustomEffect> = {
       if (name === 'lore') addLore(ctx, o.id);
       else addCounters(ctx, o.id, 1, name);
     }
+  },
+
+  // Marvel Super Heroes Jumpstart (Analyzed)
+  /**
+   * Echo, Perceptive Prodigy: copy the target ability (an activated or triggered ability on the
+   * stack). The copy is 'chosen', so a following 'chooseNewTargets' may retarget it.
+   */
+  copyTargetStackAbility(ctx, es) {
+    const t = es.targets[0];
+    if (!t || !('object' in t)) return;
+    const id = copyStackAbility(ctx, t.object.id);
+    if (!id) return;
+    const copy = ctx.s.stack.find((x) => x.id === id)!;
+    copy.controller = es.controller;
+    es.chosen = { id, zcc: 0 };
+  },
+
+  /**
+   * Victor Mancha, Runaway: exile the target card from your graveyard; you may play it for as
+   * long as you control the source.
+   */
+  exilePlayableWhileControlling(ctx, es) {
+    const t = es.targets[0];
+    if (!t || !('object' in t) || !es.source) return;
+    const o = ctx.s.objects[t.object.id];
+    if (!o || o.zone !== 'graveyard' || o.zcc !== t.object.zcc) return;
+    moveObject(ctx, o.id, 'exile');
+    obj(ctx, o.id).playableWhileControlling = { source: es.source, player: es.controller };
   },
 
   // Marvel Super Heroes Jumpstart (Scarlet)

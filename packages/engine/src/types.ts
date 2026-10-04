@@ -593,6 +593,9 @@ export type TriggerDef =
       caster?: 'any' | 'opponent';
       /** Only spells cast from exile (Klaw). */
       fromExile?: boolean;
+      // Marvel Super Heroes Jumpstart (Analyzed)
+      /** Only spells cast using teamwork (Virtual Assistant). */
+      usingTeamwork?: boolean;
       // Secrets of Strixhaven (14b): Quandrix, the Proof
       /** Only spells cast from your hand. */
       fromHand?: boolean;
@@ -1155,6 +1158,9 @@ export interface TargetSpec {
    */
   abilities?: boolean;
   abilitiesOnly?: boolean;
+  // Marvel Super Heroes Jumpstart (Analyzed)
+  /** With `abilitiesOnly`: only abilities from a creature source (Echo, Perceptive Prodigy). */
+  creatureSource?: boolean;
 }
 
 /**
@@ -2492,6 +2498,12 @@ export type StaticDef =
   // Secrets of Strixhaven (14b): Zaffai and the Tempests
   /** Once during each of your turns, you may cast an instant or sorcery spell from your hand without paying its mana cost. */
   | { kind: 'freeSpellOncePerTurn' }
+  // Marvel Super Heroes Jumpstart (Analyzed)
+  /**
+   * Once during each of your turns, you may cast a spell matching the filter from your hand
+   * without paying its mana cost (Vision, Spectral Synthezoid). Once for each such permanent.
+   */
+  | { kind: 'freeCastOncePerYourTurn'; filter: CardFilter }
   /** Creatures matching the filter can't attack you while the condition holds (Queen Mother Ramonda). */
   | { kind: 'cantAttackYou'; filter: CardFilter; condition?: ConditionDef }
   // Final Fantasy (11c): rare statics
@@ -2684,6 +2696,11 @@ export interface GameObject {
   anyMana?: boolean;
   /** Strixhaven (13c): `castableBy` only through the end of this turn (Nassari). */
   castableUntilTurn?: number;
+  // Marvel Super Heroes Jumpstart (Analyzed)
+  /** In exile: `player` may play it for as long as they control `source` (Victor Mancha, Runaway). */
+  playableWhileControlling?: { source: ObjectRef; player: PlayerId };
+  /** Its 'freeCastOncePerYourTurn' was used this turn (as this object: `zcc`). */
+  freeCastUsed?: { turn: number; zcc: number };
   /** The X paid for it as a spell (Hugs). */
   xPaid?: number;
   /** Mockingbird: it entered as a copy; this is what it really is. */
@@ -3603,7 +3620,16 @@ export type Action =
       /** Cast for its sneak cost by returning this unblocked attacker to its owner's hand. */
       sneak?: ObjectId;
       // Final Fantasy (11c): playing from the graveyard ('noctis', 'hades').
-      via?: 'festival' | 'osteomancer' | 'conduit' | 'free' | 'zaffai' | 'noctis' | 'hades';
+      via?:
+        | 'festival'
+        | 'osteomancer'
+        | 'conduit'
+        | 'free'
+        | 'zaffai'
+        // Marvel Super Heroes Jumpstart (Analyzed): Vision, Spectral Synthezoid.
+        | 'freeOnceEachTurn'
+        | 'noctis'
+        | 'hades';
       /** Mockingbird: the creature to enter as a copy of. */
       copyOf?: ObjectId;
       /** Rottenmouth Viper: permanents sacrificed to make it cheaper. */

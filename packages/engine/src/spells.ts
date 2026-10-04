@@ -7,7 +7,15 @@ import type { CardDefinition, ManaCost, SpellDef, ZoneName } from './types.ts';
  */
 // Final Fantasy (11c): playing from the graveyard ('noctis', 'hades').
 export type CastVia =
-  'free' | 'festival' | 'osteomancer' | 'conduit' | 'zaffai' | 'noctis' | 'hades';
+  | 'free'
+  | 'festival'
+  | 'osteomancer'
+  | 'conduit'
+  | 'zaffai'
+  // Marvel Super Heroes Jumpstart (Analyzed): Vision, Spectral Synthezoid.
+  | 'freeOnceEachTurn'
+  | 'noctis'
+  | 'hades';
 
 /** One way to cast a card: a mode, kicked or not, from hand or with flashback. */
 export interface CastVariant {
@@ -129,12 +137,36 @@ export function pawSpell(d: CardDefinition, paws: readonly number[]): SpellDef {
   return spell;
 }
 
+// Marvel Super Heroes Jumpstart (Analyzed)
+/** A total cost less the mana cost it was built on (what's left: kicker and other additional costs). */
+function withoutManaCost(total: ManaCost, manaCost: ManaCost): ManaCost {
+  const colored: ManaCost['colored'] = {};
+  for (const [k, v] of Object.entries(total.colored) as [keyof ManaCost['colored'], number][]) {
+    const left = v - (manaCost.colored[k] ?? 0);
+    if (left > 0) colored[k] = left;
+  }
+  const hybrid = (total.hybrid ?? []).slice(manaCost.hybrid?.length ?? 0);
+  const twoHybrid = (total.twoHybrid ?? []).slice(manaCost.twoHybrid?.length ?? 0);
+  return {
+    generic: Math.max(0, total.generic - manaCost.generic),
+    colored,
+    ...(hybrid.length ? { hybrid } : {}),
+    ...(twoHybrid.length ? { twoHybrid } : {}),
+  };
+}
+
 /** The ways `d` can be cast from `zone` (empty if it can't be cast from there). */
 export function castVariants(d: CardDefinition, zone: ZoneName, via?: CastVia): CastVariant[] {
   if (d.types.includes('Land')) return [];
   // Final Fantasy (11a): a transforming card's back face has no mana cost and can't be cast.
   // Strixhaven Brawl (15a): a disturb back face is cast for its disturb cost (its `flashback`).
   if (d.noManaCost && !d.flashback) return [];
+  // Marvel Super Heroes Jumpstart (Analyzed): without paying its mana cost, so X is 0 and
+  // additional costs (kicker) are still paid; an alternative cost can't be added.
+  if (via === 'freeOnceEachTurn')
+    return castVariants(d, 'hand')
+      .filter((v) => !(v.kicked && d.kicker?.replacesCost))
+      .map((v) => ({ ...v, cost: withoutManaCost(v.cost, d.manaCost) }));
   // Cast as if from hand, then adjusted for how.
   if (via) {
     const free = { generic: 0, colored: {} };

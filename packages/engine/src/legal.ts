@@ -43,6 +43,7 @@ import { nameLocked } from './sos-14b-c-effects.ts';
 
 const NO_COST = { generic: 0, colored: {} };
 import { targetCombos } from './targets.ts';
+import { freeCastSource, playableWhileControlling } from './msh-analyzed.ts';
 import type { Action, CardFilter, ObjectId, PlayerId, TargetChoice, TargetSpec } from './types.ts';
 
 const MAX_MULLIGANS = 7;
@@ -128,6 +129,8 @@ export function castableCards(ctx: Ctx, player: PlayerId): ObjectId[] {
     if (host.controller === player && host.prepared !== undefined && !out.includes(host.prepared))
       out.push(host.prepared);
   }
+  // Marvel Super Heroes Jumpstart (Analyzed): Victor Mancha, for as long as you control him.
+  for (const id of playableWhileControlling(ctx, player)) if (!out.includes(id)) out.push(id);
   // Strongbox Raider: exiled cards you may play for a while.
   for (const id of ps.exile) {
     const until = obj(ctx, id).playableUntilTurn;
@@ -417,6 +420,8 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
             : []),
           ...(zone === 'graveyard' ? graveyardVias(ctx, player, card) : []),
           ...(zaffai ? (['zaffai'] as const) : []),
+          // Marvel Super Heroes Jumpstart (Analyzed): Vision, Spectral Synthezoid.
+          ...(freeCastSource(ctx, player, card) ? (['freeOnceEachTurn'] as const) : []),
         ];
     for (const via of vias)
       for (const v of castVariants(d, zone, via)) {
@@ -442,6 +447,8 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
         // Rottenmouth Viper: sacrifice 0 to 5 nonland permanents (the least useful first).
         for (const sacrificeMany of sacrificePrefixes(ctx, player, card, d))
           for (const x of xs) {
+            // Marvel Super Heroes Jumpstart (Analyzed): without paying its mana cost, X is 0.
+            if (via === 'freeOnceEachTurn' && x) continue;
             const choice = {
               sacrificeMany,
               via,

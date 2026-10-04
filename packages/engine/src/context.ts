@@ -577,6 +577,8 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
     delete o.castableBy;
     delete o.castableUntilTurn;
     delete o.anyMana;
+    // Marvel Super Heroes Jumpstart (Analyzed): Victor Mancha's permission ends too.
+    delete o.playableWhileControlling;
   }
   // Secrets of Strixhaven (14b): Ennis, "if one or more cards were put into exile this turn".
   if (to === 'exile' && from !== 'exile' && !o.isToken)

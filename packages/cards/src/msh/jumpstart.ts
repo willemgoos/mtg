@@ -1,6 +1,7 @@
 import type { AbilityDef, ManaType } from '@mtg/engine';
 import type { Behavior } from '../build.ts';
 import { onEnter } from './helpers.ts';
+import { MSH_JUMPSTART_ANALYZED } from './jumpstart-analyzed.ts';
 import { MSH_JUMPSTART_ANIMAL } from './jumpstart-animal.ts';
 import { MSH_JUMPSTART_ATLANTIS } from './jumpstart-atlantis.ts';
 import { MSH_JUMPSTART_EQUIPPED } from './jumpstart-equipped.ts';
@@ -58,6 +59,7 @@ export const MSH_JUMPSTART: Record<string, Behavior> = {
   'Thriving Moor': thriving('B'),
   'Thriving Bluff': thriving('R'),
   'Thriving Grove': thriving('G'),
+  ...MSH_JUMPSTART_ANALYZED,
   ...MSH_JUMPSTART_ANIMAL,
   ...MSH_JUMPSTART_ATLANTIS,
   ...MSH_JUMPSTART_EQUIPPED,

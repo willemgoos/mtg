@@ -1097,6 +1097,9 @@ function detect(ctx: Ctx, ev: GameEvent): void {
                 : o.controller === ev.player) &&
           spellMatches(ctx, a.trigger, spell, item, o) &&
           (!a.trigger.fromExile || (item?.kind === 'spell' && !!item.fromExile)) &&
+          // Marvel Super Heroes Jumpstart (Analyzed): cast using teamwork (Virtual Assistant).
+          (!a.trigger.usingTeamwork ||
+            (item?.kind === 'spell' && !!item.kicked && spell.kicker?.teamwork !== undefined)) &&
           // Secrets of Strixhaven (14b): Quandrix, the Proof.
           (!a.trigger.fromHand || (item?.kind === 'spell' && !!item.fromHand)) &&
           // Final Fantasy (11c): a spell you don't own (Vaan).

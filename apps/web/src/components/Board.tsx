@@ -1534,6 +1534,8 @@ function castLabel(defId: CardDefId, a: Action): string {
   if (a.via === 'osteomancer') return 'From your graveyard (forage)';
   // Secrets of Strixhaven (14b): Zaffai and the Tempests (free, once a turn).
   if (a.via === 'zaffai') return 'Cast free (Zaffai)';
+  // Marvel Super Heroes Jumpstart (Analyzed): Vision, Spectral Synthezoid (free, once each turn).
+  if (a.via === 'freeOnceEachTurn') return 'Cast free (once this turn)';
   // Final Fantasy (11c): playing from the graveyard.
   if (a.via === 'noctis') return 'From your graveyard (pay 3 life)';
   if (a.via === 'hades') return 'From your graveyard';
