@@ -162,7 +162,8 @@ export function targetCombos(
     ('player' in a && 'player' in b && a.player === b.player);
   for (const spec of specs) {
     // "Up to": stopping here is allowed too.
-    if (spec.optional) done.push(...combos);
+    // Marvel Super Heroes Jumpstart (Blink): "any number" is picked one at a time; here, none or one.
+    if (spec.optional || spec.anyNumber) done.push(...combos);
     const cands = targetCandidates(ctx, spec, src);
     const next: TargetChoice[][] = [];
     // The same object can't be chosen twice.

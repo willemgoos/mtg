@@ -71,11 +71,15 @@ export function givePriority(ctx: Ctx, player: PlayerId): void {
         sourceId: t.source.id,
       });
       if (combos.length === 0) continue; // no legal targets: removed from the stack
+      // Marvel Super Heroes Jumpstart (Blink): "any number of targets", picked one at a time.
+      const anyNumber = a.targets[a.targets.length - 1]!.anyNumber;
+      if (anyNumber && combos.every((c) => c.length === 0)) continue;
       s.decision = {
         kind: 'chooseTriggerTargets',
         player: t.controller,
         trigger: t,
         thenPriority: player,
+        ...(anyNumber ? { picked: [] } : {}),
       };
       return;
     }

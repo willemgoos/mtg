@@ -915,9 +915,13 @@ function checkTargets(
   sourceId: ObjectId | undefined,
 ): (TargetChoice | null)[] | null {
   const src = sourceId ? { controller, sourceId } : { controller };
-  const checked = targets.map((t, i) =>
-    specs[i] && isTargetLegal(ctx, specs[i], t, src) ? t : null,
-  );
+  // Marvel Super Heroes Jumpstart (Blink): an "any number" spec covers every target from its index on.
+  const last = specs[specs.length - 1];
+  const specAt = (i: number) => specs[i] ?? (last?.anyNumber ? last : undefined);
+  const checked = targets.map((t, i) => {
+    const spec = specAt(i);
+    return spec && isTargetLegal(ctx, spec, t, src) ? t : null;
+  });
   if (targets.length > 0 && checked.every((t) => t === null)) return null;
   return checked;
 }

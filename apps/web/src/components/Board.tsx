@@ -135,7 +135,7 @@ export function Board({
   useEffect(() => {
     if (d.kind === 'chooseTriggerTargets' && d.player === HUMAN && !targeting) {
       if (legal.some((a) => a.type === 'chooseTargets' && a.mode !== undefined)) return;
-      setTargeting(startTargeting(d.trigger.source.id, triggerLabel(d.trigger), legal));
+      setTargeting(startTargeting(d.trigger.source.id, triggerLabel(d.trigger), legal, d.picked));
     }
   }, [d, legal, targeting]);
 
@@ -497,8 +497,14 @@ export function Board({
           : null;
       const prompt = paying
         ? `${targeting.label}: choose ${paying}`
-        : `${targeting.label}: choose ${n > 1 ? `target ${targeting.chosen.length + 1} of ${n}` : 'a target'}`;
-      if (targeting.skip) return { prompt, primary: ['Skip', () => act(targeting.skip!)] };
+        : targeting.anyNumber
+          ? `${targeting.label}: choose any number of targets (${targeting.chosen.length} chosen)`
+          : `${targeting.label}: choose ${n > 1 ? `target ${targeting.chosen.length + 1} of ${n}` : 'a target'}`;
+      if (targeting.skip)
+        return {
+          prompt,
+          primary: [targeting.anyNumber ? 'Done' : 'Skip', () => act(targeting.skip!)],
+        };
       if (d.kind === 'chooseTriggerTargets') return { prompt };
       return { prompt, secondary: ['Cancel', () => setTargeting(null)] };
     }

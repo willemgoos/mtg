@@ -336,6 +336,11 @@ function apply(ctx: Ctx, action: Action): void {
       return answerOptionalEffect(ctx, action.accept);
     case 'chooseTargets': {
       if (d.kind !== 'chooseTriggerTargets') throw new IllegalActionError(action);
+      // Marvel Super Heroes Jumpstart (Blink): one more "any number" target; the decision stays.
+      if (d.picked && action.targets.length === d.picked.length + 1) {
+        d.picked = action.targets;
+        return;
+      }
       if (action.targets.length > 0 || action.mode !== undefined)
         pushTrigger(ctx, d.trigger, action.targets, action.mode);
       return givePriority(ctx, d.thenPriority);
