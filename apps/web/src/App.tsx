@@ -108,6 +108,12 @@ const SECTIONS: { title: string; blurb: string; decks: Decklist[] }[] = [
     set: 'sos' as const,
   },
   {
+    title: 'Reality Fracture',
+    blurb: 'Our two-colour decks from Reality Fracture, built to face the starter decks',
+    series: 'starter' as const,
+    set: 'fra' as const,
+  },
+  {
     title: 'Color Challenge',
     blurb: 'The mono-colour decks Sparky plays against new players',
     series: 'colorChallenge' as const,
@@ -121,7 +127,7 @@ const SECTIONS: { title: string; blurb: string; decks: Decklist[] }[] = [
     title: string;
     blurb: string;
     series: string;
-    set?: 'blb' | 'msh' | 'fin' | 'stx' | 'sos';
+    set?: 'blb' | 'msh' | 'fin' | 'stx' | 'sos' | 'fra';
   }) => {
     const decks = DECKS.filter((d) => d.series === series && d.set === set);
     return { ...s, decks: [...decks.filter(isPlayable), ...decks.filter((d) => !isPlayable(d))] };

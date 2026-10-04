@@ -1,4 +1,7 @@
 import type { Color } from '@mtg/engine';
+import { FRA_DECKS_1 } from './fra/decks-1.ts';
+import { FRA_DECKS_2 } from './fra/decks-2.ts';
+import { FRA_DECKS_3 } from './fra/decks-3.ts';
 
 export interface Decklist {
   /** Stable key, e.g. for saved preferences. */
@@ -4445,6 +4448,9 @@ export const SECRETS_OF_STRIXHAVEN_DECKS: Decklist[] = [
  * Our Strixhaven Commander (SOC) Brawl decks: the Arena Store lists as listed in
  * docs/strixhaven-decklists.md. 100 cards, singleton, within the commander's colours.
  */
+/** Reality Fracture (17b): our own two-colour decks, built from the set's non-planeswalker cards first. */
+export const REALITY_FRACTURE_DECKS: Decklist[] = [...FRA_DECKS_1, ...FRA_DECKS_2, ...FRA_DECKS_3];
+
 export const STRIXHAVEN_BRAWL_DECKS: Decklist[] = [
   {
     id: 'brawl-quintorius-history-chaser',
@@ -5982,4 +5988,5 @@ export const DECKS: Decklist[] = [
   ...STRIXHAVEN_DECKS,
   ...SECRETS_OF_STRIXHAVEN_DECKS,
   ...STRIXHAVEN_BRAWL_DECKS,
+  ...REALITY_FRACTURE_DECKS,
 ];
