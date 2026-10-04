@@ -6,6 +6,7 @@ import { MSH_JUMPSTART_ATLANTIS } from './jumpstart-atlantis.ts';
 import { MSH_JUMPSTART_GENIUSES } from './jumpstart-geniuses.ts';
 import { MSH_JUMPSTART_GREAT_LAKES } from './jumpstart-great-lakes.ts';
 import { MSH_JUMPSTART_HIRE } from './jumpstart-hire.ts';
+import { MSH_JUMPSTART_CONNIVING } from './jumpstart-conniving.ts';
 import { MSH_JUMPSTART_HYDRA } from './jumpstart-hydra.ts';
 import { MSH_JUMPSTART_INCREDIBLE } from './jumpstart-incredible.ts';
 import { MSH_JUMPSTART_KANG } from './jumpstart-kang.ts';
@@ -60,6 +61,7 @@ export const MSH_JUMPSTART: Record<string, Behavior> = {
   ...MSH_JUMPSTART_GENIUSES,
   ...MSH_JUMPSTART_GREAT_LAKES,
   ...MSH_JUMPSTART_HIRE,
+  ...MSH_JUMPSTART_CONNIVING,
   ...MSH_JUMPSTART_HYDRA,
   ...MSH_JUMPSTART_INCREDIBLE,
   ...MSH_JUMPSTART_KANG,
