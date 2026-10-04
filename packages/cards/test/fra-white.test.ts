@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { type Action, getCharacteristics } from '@mtg/engine';
 import type { GameDriver } from '@mtg/engine/testing';
-import { BEHAVIORS, cardDb } from '../src/index.ts';
+import { BEHAVIORS, cardDb, describeEvent } from '../src/index.ts';
 import { all, cast, game, n, pt, settle } from './blb-helpers.ts';
 
 // Reality Fracture 17a: the white cards.
@@ -661,6 +661,66 @@ describe('Kindred Judgment', () => {
   });
 });
 
+// Reality Fracture (17a fixes): "choose a creature type" offers every creature type.
+describe('Kindred Judgment and Raise the Palisade: every creature type', () => {
+  const optionsOf = (g: GameDriver) => {
+    expect(g.decision.kind).toBe('chooseOption');
+    return (g.decision as Extract<typeof g.decision, { kind: 'chooseOption' }>).options.map(
+      (o) => o.label,
+    );
+  };
+
+  it('offers the whole catalogue, the types in play and in hand first', () => {
+    const g = game({
+      p1: {
+        hand: ['kindred-judgment', 'serra-angel'],
+        battlefield: [...n('plains', 7), 'savannah-lions'],
+      },
+      p2: { battlefield: ['felidar-cub'] },
+    });
+    cast(g, 'kindred-judgment');
+    g.pass();
+    g.pass();
+    const labels = optionsOf(g);
+    expect(labels.length).toBeGreaterThan(300);
+    expect(new Set(labels).size).toBe(labels.length);
+    // Cat (Lions, Cub) and Angel (in hand) come before the rest, which is A to Z.
+    expect(labels.indexOf('Angel')).toBeLessThan(labels.indexOf('Advisor'));
+    expect(labels).toContain('Advisor');
+    expect(labels).toContain('Zubera');
+    expect(labels.indexOf('Cat')).toBeLessThan(labels.indexOf('Advisor'));
+  });
+
+  it('can name a type no creature has: everything is destroyed', () => {
+    const g = game({
+      p1: { hand: ['kindred-judgment'], battlefield: [...n('plains', 7), 'savannah-lions'] },
+      p2: { battlefield: ['serra-angel'] },
+    });
+    cast(g, 'kindred-judgment');
+    g.pass();
+    g.pass();
+    done(g, { option: /^Zubera$/ });
+    expect(on(g, 'savannah-lions')).toHaveLength(0);
+    expect(on(g, 'serra-angel')).toHaveLength(0);
+  });
+
+  it('Raise the Palisade returns the creatures that are not of the chosen type', () => {
+    const g = game({
+      p1: { hand: ['raise-the-palisade'], battlefield: [...n('island', 5), 'savannah-lions'] },
+      p2: { battlefield: ['serra-angel', 'felidar-cub'] },
+    });
+    cast(g, 'raise-the-palisade');
+    g.pass();
+    g.pass();
+    expect(optionsOf(g)).toContain('Zubera');
+    done(g, { option: /^Cat$/ });
+    expect(on(g, 'savannah-lions')).toHaveLength(1);
+    expect(on(g, 'felidar-cub')).toHaveLength(1);
+    expect(on(g, 'serra-angel')).toHaveLength(0);
+    expect(g.state.players.p2.hand.map((id) => g.obj(id).defId)).toEqual(['serra-angel']);
+  });
+});
+
 describe('Koth of the Homestead', () => {
   it('gains 1 life for any land and puts a +1/+1 counter on a creature for a Plains', () => {
     const g = game({
@@ -751,6 +811,35 @@ describe('Loyal Tutor', () => {
     expect(lib(g)[0]).toBe('elspeth-storm-slayer');
     expect(lib(g)).toHaveLength(4);
     expect(g.state.decision.kind).toBe('priority');
+  });
+
+  // Reality Fracture (17a fixes): "reveal it" shows the card found to the opponent.
+  it('reveals the planeswalker it found (the event names the card even though it goes to the library)', () => {
+    const g = game({
+      p1: {
+        hand: ['loyal-tutor'],
+        battlefield: ['plains'],
+        library: ['forest', 'elspeth-storm-slayer', 'forest'],
+      },
+    });
+    cast(g, 'loyal-tutor');
+    done(g);
+    const revealed = g.events.filter((e) => e.type === 'cardsRevealed');
+    expect(revealed).toEqual([
+      {
+        type: 'cardsRevealed',
+        player: 'p1',
+        cards: [{ id: expect.any(String), defId: 'elspeth-storm-slayer' }],
+      },
+    ]);
+    expect(describeEvent(revealed[0]!, g.state)).toContain('reveals Elspeth, Storm Slayer');
+  });
+
+  it('reveals nothing when it finds nothing', () => {
+    const g = game({ p1: { hand: ['loyal-tutor'], battlefield: ['plains'] } });
+    cast(g, 'loyal-tutor');
+    done(g);
+    expect(g.events.filter((e) => e.type === 'cardsRevealed')).toHaveLength(0);
   });
 
   it('may find nothing when there is no planeswalker in the library', () => {

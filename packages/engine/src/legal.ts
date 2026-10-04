@@ -29,6 +29,7 @@ import {
   escalateCrew,
   artifactsToSacrifice,
   graveyardCostCard,
+  graveyardCostOptions,
   countersYouControl,
   hasStatic,
   hasTargetCostReduction,
@@ -37,6 +38,7 @@ import {
   tokensToTap,
   wardLife,
   wardPayable,
+  wardSacrificeOptions,
 } from './stack.ts';
 import { addCosts } from './spells.ts';
 import { checkCondition, triggeredAbility } from './triggers.ts';
@@ -335,6 +337,42 @@ function combatLocked(ctx: Ctx): boolean {
   );
 }
 
+/**
+ * The permanents a cast's sacrifice cost may take (Eaten Alive; a kicker that sacrifices or returns a land;
+ * Deadly Dispute and other filters).
+ */
+function castSacrificeOptions(
+  ctx: Ctx,
+  player: PlayerId,
+  d: ReturnType<typeof def>,
+  v: ReturnType<typeof castVariants>[number],
+): ObjectId[] {
+  const s = ctx.s;
+  const creatures = s.battlefield.filter(
+    (id) => obj(ctx, id).controller === player && isCreature(ctx, id),
+  );
+  // Ultimate Nullification: only a legendary creature.
+  // Final Fantasy (11b): a kicker paid with an artifact or creature, or with a land.
+  const kickPermanent = v.kicked
+    ? d.kicker?.returnLand
+      ? (d.kicker.returnLandFilter ?? { types: ['Land' as const] })
+      : d.kicker?.sacrifice
+    : undefined;
+  return kickPermanent
+    ? s.battlefield.filter(
+        (id) => obj(ctx, id).controller === player && matchesFilter(ctx, id, kickPermanent),
+      )
+    : d.sacrificeToCastFilter
+      ? // Strixhaven Brawl (15b, b): a filter naming types (Deadly Dispute: artifact or creature) may pick other permanents.
+        (d.sacrificeToCastFilter.anyOf ||
+        d.sacrificeToCastFilter.types ||
+        d.sacrificeToCastFilter.nonland
+          ? s.battlefield.filter((id) => obj(ctx, id).controller === player)
+          : creatures
+        ).filter((id) => matchesFilter(ctx, id, d.sacrificeToCastFilter))
+      : creatures;
+}
+
 function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
   const s = ctx.s;
   const out: Action[] = [{ type: 'passPriority', player }];
@@ -552,27 +590,7 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
             };
             const specs = v.spell?.targets ?? (d.enchant ? [d.enchant] : []);
             const forages = v.forage ? forageChoices(ctx, player) : [undefined];
-            // Ultimate Nullification: only a legendary creature.
-            // Final Fantasy (11b): a kicker paid with an artifact or creature, or with a land.
-            const kickPermanent = v.kicked
-              ? d.kicker?.returnLand
-                ? (d.kicker.returnLandFilter ?? { types: ['Land' as const] })
-                : d.kicker?.sacrifice
-              : undefined;
-            const sacrificeable = kickPermanent
-              ? s.battlefield.filter(
-                  (id) =>
-                    obj(ctx, id).controller === player && matchesFilter(ctx, id, kickPermanent),
-                )
-              : d.sacrificeToCastFilter
-                ? // Strixhaven Brawl (15b, b): a filter naming types (Deadly Dispute: artifact or creature) may pick other permanents.
-                  (d.sacrificeToCastFilter.anyOf ||
-                  d.sacrificeToCastFilter.types ||
-                  d.sacrificeToCastFilter.nonland
-                    ? s.battlefield.filter((id) => obj(ctx, id).controller === player)
-                    : creatures
-                  ).filter((id) => matchesFilter(ctx, id, d.sacrificeToCastFilter))
-                : creatures;
+            const sacrificeable = castSacrificeOptions(ctx, player, d, v);
             for (const sacrifice of v.sacrifice ? sacrificeable : [undefined]) {
               for (const targets of combosFor(specs, card, sacrifice)) {
                 // Strixhaven (13c): Crackle with Power: up to X targets.
@@ -1028,6 +1046,11 @@ export function getLegalActions(ctx: Ctx, player: PlayerId): Action[] {
         : [{ type: 'chooseCard', player, card: null }];
     case 'chooseOption':
       return d.options.map((_, index) => ({ type: 'chooseOption', player, index }) as const);
+    // Reality Fracture (17a fixes): ward's sacrifices.
+    case 'wardSacrifice':
+      return wardSacrificeOptions(ctx, player, d.creatures > 0).map(
+        (card) => ({ type: 'chooseCard', player, card }) as const,
+      );
     case 'sacrificeSeveral':
       return d.options.map((card) => ({ type: 'chooseCard', player, card }) as const);
     case 'castFree': {
@@ -1039,58 +1062,96 @@ export function getLegalActions(ctx: Ctx, player: PlayerId): Action[] {
         if (cd.types.includes('Land')) continue;
         const zone = obj(ctx, card).zone;
         const discards = d.discardInstead ? s.players[player].hand : [undefined];
+        // Reality Fracture (17a fixes): Uldaros Theorix: a free cast still pays its additional costs (kicker,
+        // sacrifice, forage, a discard), as a normal cast would.
+        const ps = s.players[player];
         // Strixhaven (13c): a cast that costs {1} (Jadzi) or is {4} cheaper (Uvilda).
-        const price =
-          d.pay ??
-          (d.costLess
-            ? { ...cd.manaCost, generic: Math.max(0, cd.manaCost.generic - d.costLess) }
-            : undefined);
-        if (price && !canPayFrom(price, manaSources(ctx, player))) continue;
-        for (const v of castVariants(cd, obj(ctx, card).zone, 'free')) {
-          // Additional sacrifice or forage costs aren't offered on free casts (a simplification).
-          if (v.sacrifice || v.forage) continue;
-          // Demand Answers, Bone Shards: the discard variant discards a card, the other one doesn't.
-          const vDiscards =
-            v.discard === undefined ? discards : v.discard ? s.players[player].hand : [undefined];
+        for (const v of castVariants(cd, zone, 'free')) {
+          if ((v.life ?? 0) > ps.life) continue;
+          // Teamwork: kicked only if there are creatures to tap; some kickers have a condition.
+          const teamwork = teamworkFor(ctx, player, card, { kicked: v.kicked });
+          if (v.kicked && cd.kicker?.teamwork !== undefined && !teamwork) continue;
+          if (
+            v.kicked &&
+            cd.kicker?.onlyIf &&
+            !checkCondition(ctx, cd.kicker.onlyIf, player, obj(ctx, card))
+          )
+            continue;
+          if (v.kicked && cd.kicker?.behold && !canBehold(ctx, player, card, cd.kicker.behold))
+            continue;
+          // Additional costs: a card to discard (Sazacap's Brew), a creature or permanent to sacrifice, a forage.
+          const extraDiscards = cd.discardToCast
+            ? ps.hand.filter((id) => id !== card)
+            : v.discard
+              ? ps.hand.filter(
+                  (id) =>
+                    id !== card &&
+                    (!v.kicked ||
+                      !cd.kicker?.exileFromHand ||
+                      cardMatches(ctx, id, cd.kicker.exileFromHand)),
+                )
+              : undefined;
+          if (extraDiscards?.length === 0) continue;
+          const vDiscards = extraDiscards ?? discards;
+          const sacrificeable = v.sacrifice
+            ? castSacrificeOptions(ctx, player, cd, v)
+            : [undefined];
+          const forages = v.forage ? forageChoices(ctx, player) : [undefined];
           const specs = v.spell?.targets ?? (cd.enchant ? [cd.enchant] : []);
-          for (const targets of targetCombos(ctx, specs, { controller: player, sourceId: card })) {
-            // Free casts still pay ward.
-            if (!canPayFrom(wardCost(ctx, player, targets), pool)) continue;
-            // Reality Fracture (17a): Thalia, the Survivor: a free cast still pays what costs more.
-            if (
-              !price &&
-              s.battlefield.some((id) =>
-                def(ctx, id).abilities.some(
-                  (a) => a.kind === 'static' && a.effect.kind === 'opponentSpellsCostMore',
-                ),
-              ) &&
-              !canPayFrom(
-                castCost(
-                  ctx,
-                  player,
-                  card,
-                  { via: 'free', ...(v.kicked ? { kicked: true } : {}) },
-                  targets,
-                ),
-                pool,
-              )
-            )
-              continue;
-            if (wardLife(ctx, player, targets) > s.players[player].life) continue;
-            if (!wardPayable(ctx, player, targets, zone === 'hand' ? 1 : 0)) continue;
-            for (const discard of vDiscards)
-              out.push({
-                type: 'castSpell',
-                player,
-                card,
-                targets,
-                free: true,
-                ...(v.mode !== undefined ? { mode: v.mode } : {}),
-                ...(v.kicked ? { kicked: true } : {}),
-                ...(v.paws ? { paws: v.paws } : {}),
-                ...(discard ? { discard } : {}),
-              });
-          }
+          for (const sacrificeMany of sacrificePrefixes(ctx, player, card, cd))
+            for (const sacrifice of sacrificeable)
+              for (const forage of forages) {
+                const choice = {
+                  via: 'free' as const,
+                  mode: v.mode,
+                  paws: v.paws,
+                  kicked: v.kicked,
+                  kickCount: v.kickCount,
+                  sacrifice: v.sacrifice ? 'x' : undefined,
+                  forage: v.forage ? ('graveyard' as const) : undefined,
+                  discard: v.discard ? 'x' : undefined,
+                  sacrificeMany,
+                  freePay: d.pay,
+                  freeLess: d.costLess,
+                };
+                const targetsOf = targetCombos(ctx, specs, {
+                  controller: player,
+                  sourceId: card,
+                }).filter(
+                  (ts) => !sacrifice || !ts.some((t) => 'object' in t && t.object.id === sacrifice),
+                );
+                for (const targets of targetsOf) {
+                  const cost = castCost(ctx, player, card, choice, targets);
+                  const ward = wardCost(ctx, player, targets);
+                  // Paying without what this cast sacrifices.
+                  const spent = [
+                    v.kicked && cd.kicker?.returnLand ? undefined : sacrifice,
+                    ...(sacrificeMany ?? []),
+                    forage === 'graveyard' ? undefined : forage,
+                    ...(teamwork ?? []),
+                  ];
+                  const rest = pool.filter((p) => !spent.includes(p.id));
+                  if (!canPayFrom(addCosts(cost, ward), rest)) continue;
+                  if (wardLife(ctx, player, targets) > ps.life) continue;
+                  if (!wardPayable(ctx, player, targets, zone === 'hand' ? 1 : 0)) continue;
+                  for (const discard of vDiscards)
+                    out.push({
+                      type: 'castSpell',
+                      player,
+                      card,
+                      targets,
+                      free: true,
+                      ...(v.mode !== undefined ? { mode: v.mode } : {}),
+                      ...(v.kicked ? { kicked: true } : {}),
+                      ...(v.kickCount ? { kickCount: v.kickCount } : {}),
+                      ...(v.paws ? { paws: v.paws } : {}),
+                      ...(sacrifice ? { sacrifice } : {}),
+                      ...(sacrificeMany ? { sacrificeMany } : {}),
+                      ...(forage ? { forage } : {}),
+                      ...(discard ? { discard } : {}),
+                    });
+                }
+              }
         }
       }
       return out;
@@ -1109,9 +1170,12 @@ export function getLegalActions(ctx: Ctx, player: PlayerId): Action[] {
           : []),
       ];
     case 'forageExile':
-      return s.players[player].graveyard.map(
-        (card) => ({ type: 'chooseCard', player, card }) as const,
-      );
+      // Reality Fracture (17a fixes): Gallia, Tragic Host: a cost with a filter takes only matching cards.
+      return (
+        d.filter && d.source !== undefined
+          ? graveyardCostOptions(ctx, player, d.filter, d.source)
+          : s.players[player].graveyard
+      ).map((card) => ({ type: 'chooseCard', player, card }) as const);
     case 'punisher':
       return [
         ...d.options.map((card) => ({ type: 'chooseCard', player, card }) as const),

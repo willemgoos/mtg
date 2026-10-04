@@ -506,7 +506,8 @@ describe('Emrakul, the Exigent Doom', () => {
     expect(all(g, EM)).toHaveLength(1);
   });
 
-  it('ward: its opponent must sacrifice three permanents to target it', () => {
+  // Reality Fracture (17a fixes): the player paying ward chooses the permanents, one at a time.
+  it('ward: its opponent chooses and sacrifices three permanents to target it', () => {
     const g = game({
       p1: { battlefield: [EM] },
       p2: {
@@ -515,12 +516,31 @@ describe('Emrakul, the Exigent Doom', () => {
       },
       active: 'p2',
     });
-    const before = g.state.battlefield.filter((id) => g.obj(id).controller === 'p2').length;
     cast(g, 'doom-blade', [g.ref(g.id('p1', EM))]);
-    // Three of their permanents were sacrificed as the spell was cast (the cheapest: lands first).
-    const after = g.state.battlefield.filter((id) => g.obj(id).controller === 'p2').length;
-    expect(before - after).toBe(3);
-    expect(all(g, 'savannah-lions')).toHaveLength(1);
+    expect(g.decision.kind).toBe('wardSacrifice');
+    expect(g.state.stack).toHaveLength(1);
+    // Any of their permanents may be chosen (the Lions too), one at a time.
+    const lions = g.id('p2', 'savannah-lions');
+    expect(g.legal().some((a) => a.type === 'chooseCard' && a.card === lions)).toBe(true);
+    g.do({ type: 'chooseCard', player: 'p2', card: lions });
+    expect(g.decision.kind).toBe('wardSacrifice');
+    const forests = all(g, 'forest');
+    g.do({ type: 'chooseCard', player: 'p2', card: forests[0]! });
+    g.do({ type: 'chooseCard', player: 'p2', card: forests[1]! });
+    expect(g.decision.kind).toBe('priority');
+    const mine = g.state.battlefield.filter((id) => g.obj(id).controller === 'p2');
+    expect(mine.map((id) => g.obj(id).defId).sort()).toEqual(['forest', 'swamp', 'swamp']);
+  });
+
+  it('ward: with exactly three permanents there is nothing to choose', () => {
+    const g = game({
+      p1: { battlefield: [EM] },
+      p2: { hand: ['doom-blade'], battlefield: ['swamp', 'swamp', 'forest'] },
+      active: 'p2',
+    });
+    cast(g, 'doom-blade', [g.ref(g.id('p1', EM))]);
+    expect(g.decision.kind).toBe('priority');
+    expect(g.state.battlefield.filter((id) => g.obj(id).controller === 'p2')).toHaveLength(0);
   });
 
   it('ward: not payable with fewer than three permanents', () => {
@@ -719,6 +739,7 @@ describe('Hexhaven Dueling Arena', () => {
     const eater = g.id('p1', 'adventurous-eater');
     const lions = g.id('p1', 'savannah-lions');
     g.state.turn.attackers = [eater];
+    g.obj(eater).attackedZcc = g.obj(eater).zcc;
     const targets = legalAbility(g, arena, 1).map((a) => (a as { targets: unknown[] }).targets);
     expect(targets).toEqual([[g.ref(eater)]]);
     expect(targets).not.toContainEqual([g.ref(lions)]);
@@ -733,7 +754,27 @@ describe('Hexhaven Dueling Arena', () => {
       step: 'declareBlockers',
     });
     g.state.turn.attackers = [g.id('p1', 'adventurous-eater')];
+    g.obj(g.id('p1', 'adventurous-eater')).attackedZcc = g.obj(g.id('p1', 'adventurous-eater')).zcc;
     expect(legalAbility(g, g.id('p1', 'hexhaven-dueling-arena'), 1)).toHaveLength(0);
+  });
+
+  // Reality Fracture (17a fixes): a creature that left the battlefield and came back is a new object.
+  it('a creature that attacked and then left and returned (a new object) has not attacked this turn', () => {
+    const g = game({
+      p1: { battlefield: ['hexhaven-dueling-arena', 'adventurous-eater', ...n('forest', 2)] },
+      p2: { battlefield: [] },
+    });
+    const arena = g.id('p1', 'hexhaven-dueling-arena');
+    const eater = g.id('p1', 'adventurous-eater');
+    g.passUntilStep('beginCombat').passBoth();
+    g.attack(eater);
+    g.passUntilStep('main2');
+    // Still the attacker: it can be targeted.
+    expect(legalAbility(g, arena, 1).length).toBeGreaterThan(0);
+    // It leaves the battlefield and returns (as a blink does): the same card id, a new object.
+    g.obj(eater).zcc++;
+    expect(g.state.turn.attackers).toContain(eater);
+    expect(legalAbility(g, arena, 1)).toHaveLength(0);
   });
 
   it('{4}, {T}: target creature becomes prepared, at instant speed', () => {
@@ -917,6 +958,30 @@ describe("Medic's Kitesail", () => {
     g.passUntilStep('beginCombat').passBoth().attack(lions);
     settle(g);
     expect(g.life('p1')).toBe(21);
+  });
+
+  // Reality Fracture (17a fixes): the attack trigger is an ability the equipped creature has.
+  it('the life goes to the equipped creature’s controller, not the Equipment’s', () => {
+    const g = game({
+      p1: { battlefield: ['medics-kitesail'] },
+      p2: { battlefield: ['savannah-lions'] },
+      active: 'p2',
+    });
+    g.obj(g.id('p1', 'medics-kitesail')).attachedTo = g.id('p2', 'savannah-lions');
+    g.passUntilStep('beginCombat').passBoth().attack(g.id('p2', 'savannah-lions'));
+    settle(g);
+    expect(g.life('p2')).toBe(21);
+    expect(g.life('p1')).toBe(20);
+  });
+
+  it('a creature that has lost all abilities does not have it', () => {
+    const g = game({ p1: { battlefield: ['medics-kitesail', 'savannah-lions'] } });
+    const lions = g.id('p1', 'savannah-lions');
+    g.obj(g.id('p1', 'medics-kitesail')).attachedTo = lions;
+    g.obj(lions).blank = true;
+    g.passUntilStep('beginCombat').passBoth().attack(lions);
+    settle(g);
+    expect(g.life('p1')).toBe(20);
   });
 
   it('an unequipped creature attacking gains nothing', () => {

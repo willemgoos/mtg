@@ -3,6 +3,7 @@ import {
   type Action,
   type CardDefinition,
   type Engine,
+  getCharacteristics,
   type GameState,
   HIDDEN_CARD,
   type ManaType,
@@ -81,6 +82,62 @@ export function chooseForageExile(engine: Engine, s: GameState, legal: Action[])
     return d.types.includes('Creature') ? 10 + manaValue(d.manaCost) : 1 + manaValue(d.manaCost);
   };
   return legal.reduce((best, a) => (keep(a) < keep(best) ? a : best));
+}
+
+/**
+ * Reality Fracture (17a fixes): ward's sacrifices (Vein Ripper, Emrakul): the permanent we'd miss least:
+ * tokens, then surplus lands, then the cheapest or weakest of the rest.
+ */
+export function chooseWardSacrifice(engine: Engine, s: GameState, legal: Action[]): Action {
+  const value = (a: Action) => {
+    if (a.type !== 'chooseCard' || !a.card) return Infinity;
+    const o = s.objects[a.card]!;
+    const d = defOf(engine, s, a.card);
+    if (d?.types.includes('Creature'))
+      return (o.isToken ? 0 : 10) + creatureValue(s, engine.db, a.card);
+    if (o.isToken) return 0;
+    if (d?.types.includes('Land')) return 4;
+    return 6 + (d ? manaValue(d.manaCost) : 0);
+  };
+  return legal.reduce((best, a) => (value(a) < value(best) ? a : best));
+}
+
+/**
+ * Reality Fracture (17a fixes): "choose a creature type" with every type on offer (hundreds: never evaluate each).
+ * The type our creatures (and, a little, our hand) share most; for a spell that wipes or bounces everything else
+ * (Kindred Judgment, Raise the Palisade) the type that keeps our creatures and not theirs.
+ */
+export function chooseCreatureType(
+  engine: Engine,
+  s: GameState,
+  me: PlayerId,
+  d: Extract<GameState['decision'], { kind: 'chooseOption' }>,
+): Action {
+  const src = engine.db.get(d.resume.sourceDefId);
+  const purge = JSON.stringify(src?.spell ?? []).includes('notChosenTypeOfSource');
+  const score = new Map<string, number>();
+  const add = (type: string, v: number) => score.set(type, (score.get(type) ?? 0) + v);
+  for (const id of s.battlefield) {
+    const o = s.objects[id]!;
+    const c = getCharacteristics(s, engine.db, id);
+    if (!c.types.includes('Creature')) continue;
+    const v = creatureValue(s, engine.db, id);
+    for (const t of c.subtypes) add(t, o.controller === me ? v : purge ? -v : 0);
+  }
+  for (const id of s.players[me].hand) {
+    const c = defOf(engine, s, id);
+    if (c?.types.includes('Creature') && !purge) for (const t of c.subtypes) add(t, 0.5);
+  }
+  let best = 0;
+  let bestScore = -Infinity;
+  d.options.forEach((o, i) => {
+    const v = score.get(o.label) ?? 0;
+    if (v > bestScore) {
+      best = i;
+      bestScore = v;
+    }
+  });
+  return { type: 'chooseOption', player: me, index: best };
 }
 
 /** Sacrifice: the creature we value least. */

@@ -386,11 +386,21 @@ describe('shortcuts fixed', () => {
     expect(g.state.players.p2.life).toBe(20 - 12 - 2);
   });
 
-  it('Doc Samson makes mana of the colour you choose', () => {
-    const g = game({ p1: { battlefield: ['doc-samson-super-psychiatrist'] } });
-    activate(g, g.id('p1', 'doc-samson-super-psychiatrist'), 1);
-    drive(g, (legal) => legal.find((a) => a.type === 'chooseOption' && a.index === 3));
-    expect(g.state.players.p1.pool?.map((m) => m.produces)).toEqual([['R'], ['R'], ['R']]);
+  // Reality Fracture (17a fixes): a mana ability: X mana of any one colour, paid directly without the stack.
+  it('Doc Samson taps for mana of any one colour as a mana ability', () => {
+    const g = game({
+      p1: {
+        hand: ['serra-angel'],
+        battlefield: ['doc-samson-super-psychiatrist', 'plains', 'plains'],
+      },
+    });
+    const samson = g.obj(g.id('p1', 'doc-samson-super-psychiatrist'));
+    expect(samson.tapped).toBe(false);
+    // His power is the amount: with two Plains it pays for Serra Angel ({3}{W}{W}).
+    expect(g.legal().some((a) => a.type === 'castSpell')).toBe(true);
+    g.do(g.legal().find((a) => a.type === 'castSpell')!);
+    expect(g.state.stack).toHaveLength(1);
+    expect(g.obj(g.id('p1', 'doc-samson-super-psychiatrist')).tapped).toBe(true);
   });
 
   it('Claim the Kingdom puts its indestructible counter on a creature chosen at the end', () => {

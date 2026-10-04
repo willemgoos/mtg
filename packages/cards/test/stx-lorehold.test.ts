@@ -184,7 +184,7 @@ describe('Lorehold Reckoning: Spirits and the graveyard', () => {
     expect(g.state.players.p1.graveyard.map((id) => g.obj(id).defId)).toEqual(['serra-angel']);
   });
 
-  it('Stonerise Spirit exiles a graveyard card (a land first) to give a creature flying', () => {
+  it('Stonerise Spirit exiles a graveyard card of your choice to give a creature flying', () => {
     const g = game({
       p1: {
         battlefield: ['stonerise-spirit', 'eager-first-year', ...n('plains', 4)],
@@ -199,6 +199,9 @@ describe('Lorehold Reckoning: Spirits and the graveyard', () => {
       abilityIndex: 0,
       targets: [g.ref(first)],
     });
+    // Reality Fracture (17a fixes): the player chooses the card (two different ones: it asks).
+    expect(g.decision.kind).toBe('forageExile');
+    g.do({ type: 'chooseCard', player: 'p1', card: g.id('p1', 'plains', 'graveyard') });
     done(g);
     expect(g.state.players.p1.graveyard.map((id) => g.obj(id).defId)).toEqual(['shock']);
     expect(getCharacteristics(g.state, cardDb, first).keywords.has('flying')).toBe(true);

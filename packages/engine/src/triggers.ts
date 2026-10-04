@@ -1334,8 +1334,15 @@ function detect(ctx: Ctx, ev: GameEvent): void {
               (!a.trigger.alone || ev.attackers.length === 1) &&
               // Final Fantasy (11c): its intervening "if" (Genji Glove: the first combat phase).
               checkCondition(ctx, a.condition, e.controller, e)
-            )
-              queue(ctx, e, i, e.controller, s.objects[id]);
+            ) {
+              // Reality Fracture (17a fixes): the creature's own ability: its controller's, and not if it has lost
+              // its abilities (Medic's Kitesail, Hunter's Axe).
+              if (a.trigger.creatureAbility) {
+                const creature = s.objects[id]!;
+                if (creature.blank) return;
+                queue(ctx, e, i, creature.controller, creature);
+              } else queue(ctx, e, i, e.controller, s.objects[id]);
+            }
           });
         }
       // "Whenever a creature you control attacks": once per attacker.

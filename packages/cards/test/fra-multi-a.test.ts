@@ -851,6 +851,131 @@ describe('Uldaros Theorix', () => {
     expect(exile(g)).toEqual(['shock']);
   });
 
+  // Reality Fracture (17a fixes): free casts offer the card's additional costs, as a normal cast would.
+  describe('additional costs of the free casts', () => {
+    const copiesOf = (g: GameDriver, defId: string) =>
+      g.legal().filter((a) => a.type === 'castSpell' && g.obj(a.card).defId === defId);
+    const reachCopies = (g: GameDriver, card: string) => {
+      cast(g, 'uldaros-theorix');
+      g.pass();
+      g.pass();
+      g.do({
+        type: 'chooseTargets',
+        player: 'p1',
+        targets: [g.ref(g.id('p1', card, 'graveyard'))],
+      });
+      g.do({
+        type: 'chooseTargets',
+        player: 'p1',
+        targets: [g.ref(g.id('p1', card, 'graveyard'))],
+      });
+      g.pass();
+      g.pass();
+      expect(g.decision.kind).toBe('castFree');
+    };
+
+    it('Eaten Alive: the creature to sacrifice is chosen (the {3}{B} option can not be paid)', () => {
+      const g = game({
+        p1: {
+          hand: ['uldaros-theorix'],
+          battlefield: ['island', 'swamp', 'swamp', ...n('forest', 3), 'savannah-lions'],
+          graveyard: ['eaten-alive'],
+        },
+        p2: { battlefield: ['serra-angel'] },
+      });
+      reachCopies(g, 'eaten-alive');
+      const angel = g.id('p2', 'serra-angel');
+      const lions = g.id('p1', 'savannah-lions');
+      const casts = copiesOf(g, 'eaten-alive').filter(
+        (a) => a.type === 'castSpell' && JSON.stringify(a.targets).includes(angel),
+      );
+      // Every offered way sacrifices a creature: Uldaros or the Lions.
+      expect(casts.every((a) => a.type === 'castSpell' && a.sacrifice)).toBe(true);
+      const sacrificed = new Set(casts.map((a) => (a.type === 'castSpell' ? a.sacrifice : '')));
+      expect(sacrificed).toEqual(new Set([lions, g.id('p1', 'uldaros-theorix')]));
+      g.do(casts.find((a) => a.type === 'castSpell' && a.sacrifice === lions)!);
+      done(g);
+      expect(bf(g, 'savannah-lions')).toHaveLength(0);
+      expect(bf(g, 'serra-angel')).toHaveLength(0);
+      expect(bf(g, 'uldaros-theorix')).toHaveLength(1);
+    });
+
+    it('Feed the Cycle: forage with the graveyard (choosing which three cards), or pay {B}', () => {
+      const g = game({
+        p1: {
+          hand: ['uldaros-theorix'],
+          battlefield: [...n('forest', 3), 'island', ...n('swamp', 4)],
+          graveyard: ['feed-the-cycle', 'duress', 'pacifism', 'forest', 'plains'],
+        },
+        p2: { battlefield: ['serra-angel'] },
+      });
+      reachCopies(g, 'feed-the-cycle');
+      const angel = g.id('p2', 'serra-angel');
+      const casts = copiesOf(g, 'feed-the-cycle').filter(
+        (a) => a.type === 'castSpell' && JSON.stringify(a.targets).includes(angel),
+      );
+      // Forage (the graveyard has the cards) or pay {B}: both are offered.
+      expect(casts.some((a) => a.type === 'castSpell' && a.forage === 'graveyard')).toBe(true);
+      expect(casts.some((a) => a.type === 'castSpell' && !a.forage)).toBe(true);
+      g.do(casts.find((a) => a.type === 'castSpell' && a.forage === 'graveyard')!);
+      expect(g.decision.kind).toBe('forageExile');
+      for (const card of ['pacifism', 'forest', 'plains'])
+        g.do({ type: 'chooseCard', player: 'p1', card: g.id('p1', card, 'graveyard') });
+      // The free cast goes on once the forage is paid.
+      expect(g.decision.kind).not.toBe('forageExile');
+      done(g);
+      expect(exile(g)).toEqual(
+        expect.arrayContaining(['feed-the-cycle', 'pacifism', 'forest', 'plains']),
+      );
+      expect(gy(g)).toContain('duress');
+      expect(bf(g, 'serra-angel')).toHaveLength(0);
+    });
+
+    it('a kicker is an additional cost: not offered if it can not be paid', () => {
+      const g = game({
+        p1: {
+          hand: ['uldaros-theorix'],
+          battlefield: ['island', 'swamp', 'swamp', ...n('forest', 3)],
+          graveyard: ['burst-lightning'],
+        },
+      });
+      reachCopies(g, 'burst-lightning');
+      const casts = copiesOf(g, 'burst-lightning');
+      expect(casts.length).toBeGreaterThan(0);
+      expect(casts.some((a) => a.type === 'castSpell' && a.kicked)).toBe(false);
+    });
+
+    it('a kicker is offered when the lands to pay it are there', () => {
+      const g = game({
+        p1: {
+          hand: ['uldaros-theorix'],
+          battlefield: ['island', 'swamp', 'swamp', ...n('forest', 3), ...n('mountain', 4)],
+          graveyard: ['burst-lightning'],
+        },
+      });
+      reachCopies(g, 'burst-lightning');
+      const kicked = copiesOf(g, 'burst-lightning').filter(
+        (a) => a.type === 'castSpell' && a.kicked,
+      );
+      expect(kicked.length).toBeGreaterThan(0);
+      g.do(
+        kicked.find(
+          (a) =>
+            a.type === 'castSpell' &&
+            a.targets[0] &&
+            'player' in a.targets[0] &&
+            a.targets[0].player === 'p2',
+        )!,
+      );
+      done(g);
+      // Kicked: 4 damage, and the four Mountains were tapped for the kicker.
+      expect(g.life('p2')).toBe(16);
+      expect(
+        g.state.battlefield.filter((id) => g.obj(id).defId === 'mountain' && !g.obj(id).tapped),
+      ).toHaveLength(0);
+    });
+  });
+
   it('does nothing when it did not enter by being cast', () => {
     const g = game({
       p1: {

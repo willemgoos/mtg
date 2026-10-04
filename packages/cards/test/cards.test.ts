@@ -164,6 +164,8 @@ describe('card data', () => {
         ...SECRETS_OF_STRIXHAVEN_DECKS.map((d) => d.id),
         ...REALITY_FRACTURE_DECKS.map((d) => d.id),
         ...FINAL_FANTASY_STARTER_KIT_DECKS.map((d) => d.id),
+        // Reality Fracture: the ten decks.
+        ...DECKS.filter((d) => d.set === 'fra').map((d) => d.id),
       ].sort(),
     );
     for (const d of PLAYABLE_DECKS)

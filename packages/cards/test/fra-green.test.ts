@@ -870,6 +870,30 @@ describe("Hunter's Axe", () => {
     }
   });
 
+  // Reality Fracture (17a fixes): the attack trigger is an ability the equipped creature has.
+  it('the choice is made by the equipped creature’s controller, and not if it has lost its abilities', () => {
+    const g = game({
+      p1: { battlefield: ['hunters-axe'] },
+      p2: { battlefield: ['savannah-lions'] },
+      active: 'p2',
+    });
+    const lions = g.id('p2', 'savannah-lions');
+    g.obj(g.id('p1', 'hunters-axe')).attachedTo = lions;
+    g.passUntilStep('beginCombat').passBoth().attack(lions);
+    // The trigger is p2's: p2 chooses.
+    for (let k = 0; k < 10 && g.decision.kind === 'priority' && g.state.stack.length; k++) g.pass();
+    expect(g.decision.kind).toBe('chooseOption');
+    expect(g.decision.kind === 'chooseOption' && g.decision.player).toBe('p2');
+    const h = game({
+      p1: { battlefield: ['hunters-axe', 'savannah-lions'] },
+    });
+    const lion = h.id('p1', 'savannah-lions');
+    h.obj(h.id('p1', 'hunters-axe')).attachedTo = lion;
+    h.obj(lion).blank = true;
+    h.passUntilStep('beginCombat').passBoth().attack(lion);
+    expect(h.state.stack).toHaveLength(0);
+  });
+
   it('gives nothing to a creature that is not equipped', () => {
     const g = game({ p1: { battlefield: ['hunters-axe', 'savannah-lions'] } });
     attackWith(g, [g.id('p1', 'savannah-lions')]);
@@ -915,29 +939,61 @@ describe('Jiang Yanggu, Never Alone', () => {
 });
 
 describe('Loot, the Nexus', () => {
-  it('taps for one mana of a chosen colour per different power among your creatures', () => {
-    const g = game({
-      p1: { battlefield: ['loot-the-nexus', 'shivan-dragon', 'savannah-lions', 'bear-cub'] },
-    });
-    // Powers: Loot 2, Dragon 5, Lions 2, Bear 2: two different powers.
-    activate(g, g.id('p1', 'loot-the-nexus'), abilityIndex('loot-the-nexus', 'activated'));
-    done(g, { option: 4 });
-    expect(g.state.players.p1.pool?.map((m) => m.produces.join())).toEqual(['G', 'G']);
-    expect(tapped(g, 'loot-the-nexus')).toBe(1);
+  // Reality Fracture (17a fixes): a real mana ability, so it pays costs directly and never uses the stack.
+  const canCast = (g: GameDriver, card: string) =>
+    g.legal().some((a) => a.type === 'castSpell' && g.obj(a.card).defId === card);
+
+  it('is a mana ability, not an activated one', () => {
+    const abilities = cardDb.get('loot-the-nexus')!.abilities;
+    expect(abilities.some((a) => a.kind === 'mana')).toBe(true);
+    expect(abilities.some((a) => a.kind === 'activated')).toBe(false);
   });
 
-  it('counts each different power once, and any of the five colours', () => {
+  it('pays for a spell directly: one mana per different power, all of one colour', () => {
     const g = game({
-      p1: { battlefield: ['loot-the-nexus', 'shivan-dragon', 'serra-angel', 'serra-angel'] },
+      p1: {
+        hand: ['serra-angel'],
+        battlefield: [
+          'loot-the-nexus',
+          'shivan-dragon',
+          'savannah-lions',
+          'bear-cub',
+          ...n('mountain', 2),
+        ],
+      },
     });
-    // Powers 2, 5, 4: three.
-    activate(g, g.id('p1', 'loot-the-nexus'), abilityIndex('loot-the-nexus', 'activated'));
-    g.pass();
-    g.pass();
-    expect(g.decision.kind).toBe('chooseOption');
-    if (g.decision.kind === 'chooseOption') expect(g.decision.options).toHaveLength(5);
-    done(g, { option: 0 });
-    expect(g.state.players.p1.pool?.map((m) => m.produces.join())).toEqual(['W', 'W', 'W']);
+    // Powers: Loot 2, Dragon 5, Lions 2, Bear 2: two different powers, so two mana. Serra Angel costs {3}{W}{W}.
+    expect(canCast(g, 'serra-angel')).toBe(false);
+    const h = game({
+      p1: {
+        hand: ['serra-angel'],
+        battlefield: ['loot-the-nexus', 'shivan-dragon', 'serra-angel', ...n('mountain', 2)],
+      },
+    });
+    // Powers 2, 5, 4: three white mana plus two Mountains pay {3}{W}{W}, without the stack.
+    expect(canCast(h, 'serra-angel')).toBe(true);
+    cast(h, 'serra-angel');
+    expect(h.state.stack).toHaveLength(1);
+    expect(tapped(h, 'loot-the-nexus')).toBe(1);
+  });
+
+  it('cannot make two colours from one tap', () => {
+    const g = game({
+      p1: {
+        hand: ['proctor-of-potential'],
+        battlefield: ['loot-the-nexus', 'shivan-dragon', 'serra-angel'],
+      },
+    });
+    // Three mana, but all of one colour: {W}{U} can't be paid.
+    expect(canCast(g, 'proctor-of-potential')).toBe(false);
+    // With an Island for the {U}, Loot's mana is the {W}.
+    const h = game({
+      p1: {
+        hand: ['proctor-of-potential'],
+        battlefield: ['loot-the-nexus', 'shivan-dragon', 'serra-angel', 'island'],
+      },
+    });
+    expect(canCast(h, 'proctor-of-potential')).toBe(true);
   });
 });
 

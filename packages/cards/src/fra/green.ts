@@ -219,7 +219,11 @@ export const FRA_GREEN: Record<string, Behavior> = {
   "Hunter's Axe": {
     abilities: [
       { kind: 'static', effect: { kind: 'attached', power: 2, toughness: 0 } },
-      when({ on: 'equippedAttacks' }, [], chooseKeyword('trample', 'deathtouch')),
+      when(
+        { on: 'equippedAttacks', creatureAbility: true },
+        [],
+        chooseKeyword('trample', 'deathtouch'),
+      ),
       equip('{2}'),
     ],
   },
@@ -232,28 +236,16 @@ export const FRA_GREEN: Record<string, Behavior> = {
       }),
     ],
   },
-  // An activated ability that adds the mana at once (as other "one colour" mana cards here do).
+  // "{T}: Choose a color. Add one mana of that color for each different power among creatures you control."
+  // A mana ability: the colour is chosen as the mana is spent (Reality Fracture (17a fixes)).
   'Loot, the Nexus': {
     abilities: [
       {
-        kind: 'activated',
+        kind: 'mana',
         cost: { tapSelf: true },
-        targets: [],
-        effects: [
-          {
-            kind: 'choose',
-            options: (['W', 'U', 'B', 'R', 'G'] as const).map((c) => ({
-              label: `Add {${c}} for each different power among creatures you control`,
-              effects: [
-                {
-                  kind: 'addMana',
-                  mana: [[c]],
-                  count: { count: 'differentPowersYouControl' },
-                },
-              ],
-            })),
-          },
-        ],
+        produces: 'G',
+        anyOneColor: true,
+        amountOf: { count: 'differentPowersYouControl' },
       },
     ],
   },

@@ -26,6 +26,9 @@ export interface ManaSource {
   pool?: boolean;
   /** Types that deal 1 damage to its controller when it pays a coloured pip with them (Talismans). */
   pain?: ManaType[];
+  // Reality Fracture (17a fixes): Loot, the Nexus; Doc Samson, Super Psychiatrist
+  /** Every unit from this source (the entries with its id) must be the same colour: "N mana of any one color". */
+  oneColor?: boolean;
 }
 
 function lanternFor(ctx: Ctx, player: PlayerId): boolean {
@@ -105,6 +108,7 @@ export function manaSources(
     let double = false;
     let units = 1;
     let pain: ManaType[] | undefined;
+    let oneColor = false;
     for (const a of def(ctx, id).abilities) {
       // Strixhaven Brawl (15b, g): Eldrazi Spawn and Scion tokens: "Sacrifice this token: Add {C}" needs no tap.
       if (a.kind !== 'mana' || (!a.cost.tapSelf && !a.cost.sacrificeSelf) || a.cost.mana) continue;
@@ -136,6 +140,18 @@ export function manaSources(
       // Strixhaven Brawl (15b, g): Incubation Druid.
       if (a.colorFrom === 'yourLands' && !yourLandColors(ctx, player).includes(a.produces))
         continue;
+      // Reality Fracture (17a fixes): Loot, the Nexus; Doc Samson: N mana of any one colour, none if N is 0.
+      if (a.anyOneColor) {
+        const n = a.perPower ? power(ctx, id) : countOf(ctx, player, a.amountOf ?? 1, false, id);
+        if (n <= 0 || (!a.cost.tapSelf ? obj(ctx, id).tapped : !canTapForAbility(ctx, id)))
+          continue;
+        oneColor = true;
+        units = Math.max(units, n);
+        produces ??= [];
+        for (const c of ['W', 'U', 'B', 'R', 'G'] as const)
+          if (!produces.includes(c)) produces.push(c);
+        continue;
+      }
       if (a.amount) units = Math.max(units, a.amount);
       // Strixhaven (13c): Accomplished Alchemist.
       if (a.perLifeGained) units = Math.max(units, ctx.s.turn.lifeGained?.[player] ?? 0);
@@ -180,6 +196,7 @@ export function manaSources(
         isCreature: isCreature(ctx, id),
         sacrifice,
         ...(pain ? { pain } : {}),
+        ...(oneColor ? { oneColor } : {}),
       };
       out.push(src);
       // Final Fantasy (11c): Ultima, Origin of Oblivion ("tap a land for {C}, add an additional {C}").
@@ -317,16 +334,26 @@ function findPaymentBase(cost: ManaCost, sources: readonly ManaSource[]): Object
   const key = pips.map((p) => p.join(''));
   const chosen: number[] = [];
   const used = new Array<boolean>(sources.length).fill(false);
+  // Reality Fracture (17a fixes): "N mana of any one color": the colour the pips paid by one source were given.
+  const colorOf = new Map<ObjectId, ManaType>();
   const assign = (i: number): boolean => {
     if (i === pips.length) return true;
     // Identical pips take sources in increasing order, so we don't retry permutations.
     const from = i > 0 && key[i - 1] === key[i] ? chosen[i - 1]! + 1 : 0;
     for (let j = from; j < sources.length; j++) {
-      if (used[j] || !pips[i]!.some((t) => sources[j]!.produces.includes(t))) continue;
-      used[j] = true;
-      chosen[i] = j;
-      if (assign(i + 1)) return true;
-      used[j] = false;
+      const src = sources[j]!;
+      if (used[j]) continue;
+      for (const t of pips[i]!) {
+        if (!src.produces.includes(t)) continue;
+        const had = colorOf.get(src.id);
+        if (src.oneColor && had !== undefined && had !== t) continue;
+        used[j] = true;
+        chosen[i] = j;
+        if (src.oneColor) colorOf.set(src.id, t);
+        if (assign(i + 1)) return true;
+        used[j] = false;
+        if (src.oneColor && had === undefined) colorOf.delete(src.id);
+      }
     }
     return false;
   };
@@ -508,9 +535,16 @@ export function artifactHelpers(
  */
 export function colorsSpent(ctx: Ctx, player: PlayerId, payment: readonly ObjectId[]): Color[] {
   const sources = manaSources(ctx, player);
-  const options: ManaType[][] = payment.map(
-    (id) => sources.find((s) => s.id === id)?.produces ?? [],
-  );
+  // Reality Fracture (17a fixes): the units of an "any one color" source are one colour between them.
+  const seenOneColor = new Set<ObjectId>();
+  const options: ManaType[][] = payment.map((id) => {
+    const src = sources.find((s) => s.id === id);
+    if (src?.oneColor) {
+      if (seenOneColor.has(id)) return [];
+      seenOneColor.add(id);
+    }
+    return src?.produces ?? [];
+  });
   const colors = ['W', 'U', 'B', 'R', 'G'] as const;
   // colour -> index of the mana assigned to it
   const owner = new Map<Color, number>();

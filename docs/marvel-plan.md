@@ -417,4 +417,4 @@ bosses. Bot-vs-bot (small samples) against our Jump In pairs: about 65% on avera
 Simplifications: Kid Loki also counts +1/+1 counters an opponent put on your creatures; Klaw's opponent reveals their
 cheapest cards (picked for them); Titania's ward is always {2}; the Plans' "when you do" payoffs (Death to Our Enemies,
 Claim the Kingdom) are "when sacrificed" triggers, and Death to Our Enemies gives all 7 to the first target if the second
-becomes illegal; Doc Samson's mana is an activated ability on the stack.
+becomes illegal. (Doc Samson's mana is now a real mana ability, fixed in the Reality Fracture shortcut pass.)

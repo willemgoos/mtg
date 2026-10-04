@@ -11,7 +11,9 @@ import {
 import {
   chooseHandSwap,
   choosePickExiled,
+  chooseCreatureType,
   chooseForageExile,
+  chooseWardSacrifice,
   chooseFromHand,
   choosePile,
   chooseSplit,
@@ -86,6 +88,9 @@ function passiveAction(
     case 'chooseObject':
     case 'payOrCounter':
     case 'castFree':
+      // Reality Fracture (17a fixes): every creature type is on offer.
+      if (d.kind === 'chooseOption' && d.title === 'Choose a creature type')
+        return chooseCreatureType(engine, s, d.player, d);
       // Reality Fracture (17a): Arc of Fortune.
       if (d.kind === 'chooseOption' && d.options[0]?.label.startsWith('Discard your hand'))
         return { type: 'chooseOption', player: d.player, index: chooseHandSwap(s, d.player) };
@@ -106,6 +111,8 @@ function passiveAction(
       return chooseSearch(engine, s, d.player, engine.getLegalActions(s, d.player));
     case 'sacrifice':
       return chooseSacrifice(engine, s, engine.getLegalActions(s, d.player));
+    case 'wardSacrifice':
+      return chooseWardSacrifice(engine, s, engine.getLegalActions(s, d.player));
     case 'punisher':
       return choosePunishment(engine, s, d.player, engine.getLegalActions(s, d.player));
     case 'pickExiled':

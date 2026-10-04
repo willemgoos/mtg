@@ -13,7 +13,9 @@ import {
   chooseHandSwap,
   chooseLandToPlay,
   choosePickExiled,
+  chooseCreatureType,
   chooseForageExile,
+  chooseWardSacrifice,
   chooseFromHand,
   choosePile,
   chooseSplit,
@@ -83,6 +85,8 @@ export function createHeuristicBot(db: CardDb, name = 'heuristic'): Bot {
             return { type: 'chooseOption', player: me, index: 0 };
           // Strixhaven (13c): Augusta's "tap any number of creatures": the bot taps none ("Done" is first).
           if (d.title?.startsWith('Augusta')) return { type: 'chooseOption', player: me, index: 0 };
+          // Reality Fracture (17a fixes): every creature type is on offer.
+          if (d.title === 'Choose a creature type') return chooseCreatureType(engine, view, me, d);
           // Reality Fracture (17a): Arc of Fortune.
           if (d.options[0]?.label.startsWith('Discard your hand'))
             return { type: 'chooseOption', player: me, index: chooseHandSwap(view, me) };
@@ -99,6 +103,8 @@ export function createHeuristicBot(db: CardDb, name = 'heuristic'): Bot {
           return chooseSearch(engine, view, me, legal);
         case 'sacrifice':
           return chooseSacrifice(engine, view, legal);
+        case 'wardSacrifice':
+          return chooseWardSacrifice(engine, view, legal);
         case 'punisher':
           return choosePunishment(engine, view, me, legal);
         case 'pickExiled':

@@ -173,11 +173,17 @@ export function castVariants(d: CardDefinition, zone: ZoneName, via?: CastVia): 
     return castVariants(d, 'hand')
       .filter((v) => !(v.kicked && d.kicker?.replacesCost))
       .map((v) => ({ ...v, cost: withoutManaCost(v.cost, d.manaCost) }));
+  // Reality Fracture (17a fixes): a free cast ("without paying its mana cost") still pays additional costs
+  // (kicker, a forage or {2} instead, the cost of a mode); an alternative cost can't be paid with it.
+  if (via === 'free')
+    return castVariants(d, 'hand')
+      .filter((v) => !(v.kicked && d.kicker?.replacesCost))
+      .map((v) => ({ ...v, cost: withoutManaCost(v.cost, d.manaCost) }));
   // Cast as if from hand, then adjusted for how.
   if (via) {
     const free = { generic: 0, colored: {} };
     return castVariants(d, 'hand').map((v) =>
-      via === 'free' || via === 'zaffai'
+      via === 'zaffai'
         ? { ...v, cost: free }
         : via === 'festival'
           ? { ...v, life: 1 }

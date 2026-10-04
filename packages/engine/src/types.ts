@@ -414,6 +414,12 @@ export type AbilityDef =
       // Reality Fracture (17a): Heartwood Crafter
       /** "This mana can't be spent to cast spells from your hand." */
       notForSpellsFromHand?: boolean;
+      // Reality Fracture (17a fixes): Loot, the Nexus; Doc Samson, Super Psychiatrist
+      /**
+       * "Add N mana of any one color" (N from `amountOf` or `perPower`): every mana of one tap is the same
+       * colour, chosen as the mana is spent. `produces` is ignored.
+       */
+      anyOneColor?: boolean;
     }
   | {
       kind: 'activated';
@@ -669,7 +675,16 @@ export type TriggerDef =
   /** Whenever a creature you control is dealt damage ("that much": the event amount). */
   | { on: 'yourCreatureDealtDamage' }
   /** Equipment: whenever the equipped creature attacks (Captain America's Shield). */
-  | { on: 'equippedAttacks'; alone?: boolean }
+  | {
+      on: 'equippedAttacks';
+      alone?: boolean;
+      // Reality Fracture (17a fixes): Medic's Kitesail, Hunter's Axe
+      /**
+       * "...and has 'Whenever this creature attacks, ...'": an ability the equipped creature has: its controller
+       * controls it (not the Equipment's), and it's gone while the creature has lost its abilities.
+       */
+      creatureAbility?: boolean;
+    }
   /** Whenever a player or permanent becomes the target of an ability you control (Loki, God of Mischief). */
   | { on: 'youTargetWithAbility' }
   | { on: 'drawCard'; whose: 'yours' | 'opponents' }
@@ -800,7 +815,16 @@ export type TriggerDef =
   | { on: 'targetedByOpponent' }
   // Wakanda Forever (9c).
   /** Whenever the creature this Equipment is attached to attacks. */
-  | { on: 'equippedAttacks'; alone?: boolean }
+  | {
+      on: 'equippedAttacks';
+      alone?: boolean;
+      // Reality Fracture (17a fixes): Medic's Kitesail, Hunter's Axe
+      /**
+       * "...and has 'Whenever this creature attacks, ...'": an ability the equipped creature has: its controller
+       * controls it (not the Equipment's), and it's gone while the creature has lost its abilities.
+       */
+      creatureAbility?: boolean;
+    }
   /** Whenever a creature an opponent controls (matching the filter) attacks you ("that creature"): Storm. */
   | { on: 'opponentCreatureAttacks'; filter?: CardFilter }
   /** Whenever an opponent attacks you with `min` or more creatures (Everett K. Ross). */
@@ -1364,6 +1388,9 @@ export type Amount =
     }
   /** The amount from the trigger event ("that much damage"). */
   | { event: 'amount' }
+  // Reality Fracture (17a fixes): Rise of the Deathbringer
+  /** The number of cards the latest draw effect of this resolution actually drew. */
+  | { drawnThisWay: true }
   /** Permanents you control matching the filter (Honored Dreyleader: Squirrels and Food). */
   | { count: 'permanentsYouControl'; filter: CardFilter; other?: boolean }
   /** The greatest mana value among cards in your graveyard (Wick's Patrol). */
@@ -1989,6 +2016,9 @@ export type EffectDef =
       upTo?: Amount;
       /** With `upTo`: "with different names". */
       differentNames?: boolean;
+      // Reality Fracture (17a fixes): Loyal Tutor
+      /** "Reveal it": the card found is shown to the opponent (a 'cardsRevealed' event). */
+      reveal?: boolean;
     }
   /** Look at the top N; you may put a creature with mana value up to your land count onto the battlefield (Loot). */
   | { kind: 'lookForCreature'; count: number }
@@ -3032,6 +3062,9 @@ export interface GameObject {
   // Marvel Super Heroes Jumpstart (Analyzed)
   /** In exile: `player` may play it for as long as they control `source` (Victor Mancha, Runaway). */
   playableWhileControlling?: { source: ObjectRef; player: PlayerId };
+  // Reality Fracture (17a fixes): Hexhaven Dueling Arena
+  /** The zone change (zcc) it was at when it last attacked: a creature that has changed zones since is a new object. */
+  attackedZcc?: number;
   /** Its 'freeCastOncePerYourTurn' was used this turn (as this object: `zcc`). */
   freeCastUsed?: { turn: number; zcc: number };
   /** The X paid for it as a spell (Hugs). */
@@ -3536,6 +3569,9 @@ export interface EffectSource {
   chosen?: ObjectRef;
   /** The value chosen for X. */
   x?: number;
+  // Reality Fracture (17a fixes): Rise of the Deathbringer
+  /** Cards its latest draw effect actually drew ("the number of cards drawn this way"). */
+  drawnThisWay?: number;
 }
 
 /**
@@ -3720,6 +3756,9 @@ export type Decision =
       remaining?: number;
       /** Each card taken must have a different name from the ones already taken. */
       differentNames?: boolean;
+      // Reality Fracture (17a fixes): Loyal Tutor
+      /** The card found is revealed. */
+      reveal?: boolean;
       /** The land found becomes a Fractal creature (Emergent Sequence). */
       fractalLand?: boolean;
       /** If the card has one of these types, the source gets a +1/+1 counter (Oriq Loremage). */
@@ -3835,6 +3874,13 @@ export type Decision =
       kind: 'forageExile';
       player: PlayerId;
       count: number;
+      // Reality Fracture (17a fixes): Gallia, Tragic Host
+      /** An "exile a card from your graveyard" ability cost: only cards matching this, never `source`. */
+      filter?: CardFilter;
+      source?: ObjectId;
+      // Reality Fracture (17a fixes): Uldaros Theorix
+      /** The free cast this is paid for: once it's paid, that cast is finished (more spells, then its effect). */
+      afterFree?: { decision: Extract<Decision, { kind: 'castFree' }>; cast: ObjectId };
       /** A resolution-time forage: these effects, then the rest of the resolution. */
       then?: EffectDef[];
       resume?: PausedResolution;
@@ -3931,6 +3977,19 @@ export type Decision =
       count: number;
       then: EffectDef[];
       resume: PausedResolution;
+      thenPriority: PlayerId;
+    }
+  | {
+      // Reality Fracture (17a fixes): Vein Ripper, Emrakul, the Exigent Doom
+      /** Ward's sacrifices, one permanent at a time: `creatures` creatures first, then `permanents` permanents. */
+      kind: 'wardSacrifice';
+      player: PlayerId;
+      creatures: number;
+      permanents: number;
+      /** A forage still to pay once the sacrifices are made. */
+      forage?: ObjectId | 'graveyard';
+      /** The free cast this is paid for: once it's paid, that cast is finished. */
+      afterFree?: { decision: Extract<Decision, { kind: 'castFree' }>; cast: ObjectId };
       thenPriority: PlayerId;
     }
   | { kind: 'gameOver' };
@@ -4150,6 +4209,9 @@ export type GameEvent =
   | { type: 'searched'; player: PlayerId; id: ObjectId }
   /** A card revealed from a library and put into its owner's hand. */
   | { type: 'revealed'; player: PlayerId; id: ObjectId }
+  // Reality Fracture (17a fixes): Loyal Tutor
+  /** `player` reveals cards (a tutor's "reveal it"); the defId is carried since the card may go to a hidden zone. */
+  | { type: 'cardsRevealed'; player: PlayerId; cards: { id: ObjectId; defId: CardDefId }[] }
   /** +1/+1 counters were put on a permanent. */
   | { type: 'countersAdded'; id: ObjectId; count: number; player: PlayerId }
   /** `player` foraged. */

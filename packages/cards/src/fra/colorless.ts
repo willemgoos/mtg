@@ -152,7 +152,7 @@ export const FRA_COLORLESS: Record<string, Behavior> = {
         effect: { kind: 'attached', power: 1, toughness: 0, keywords: ['flying'] },
       },
       // "...and has 'Whenever this creature attacks, you gain 1 life.'"
-      when({ on: 'equippedAttacks' }, [], gain(1)),
+      when({ on: 'equippedAttacks', creatureAbility: true }, [], gain(1)),
       equip('{2}'),
     ],
   },

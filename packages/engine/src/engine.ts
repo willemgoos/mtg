@@ -51,6 +51,7 @@ import {
   castSpell,
   wardCost,
   pushTrigger,
+  answerWardSacrifice,
 } from './stack.ts';
 import {
   confirmAttackers,
@@ -244,7 +245,7 @@ function apply(ctx: Ctx, action: Action): void {
     case 'castSpell': {
       // Cast for free in the middle of a resolution (Daring Waverider).
       if (d.kind === 'castFree') {
-        castSpell(ctx, player, action.card, action.targets, {
+        const paused = castSpell(ctx, player, action.card, action.targets, {
           mode: action.mode,
           kicked: action.kicked,
           x: action.x,
@@ -254,7 +255,20 @@ function apply(ctx: Ctx, action: Action): void {
           exileAfter: d.exileAfter,
           freePay: d.pay,
           freeLess: d.costLess,
+          // Reality Fracture (17a fixes): additional costs of a free cast.
+          sacrifice: action.sacrifice,
+          forage: action.forage,
+          sacrificeMany: action.sacrificeMany,
+          kickCount: action.kickCount,
         });
+        // Reality Fracture (17a fixes): paused to choose a forage or ward's sacrifices: the rest of this free
+        // cast (more spells, the end of the effect) follows once they are made.
+        if (paused) {
+          const asking = ctx.s.decision;
+          if (asking.kind === 'forageExile' || asking.kind === 'wardSacrifice')
+            asking.afterFree = { decision: d, cast: action.card };
+          return;
+        }
         return finishCastFree(ctx, action.card);
       }
       s.turn.passed = [];
@@ -351,8 +365,12 @@ function apply(ctx: Ctx, action: Action): void {
       // stack (no targets chosen); only a "may" (or "you may pay") trigger is declined that way.
       const a = triggeredAbility(ctx, d.trigger);
       const upTo = !!a.targets[0]?.optional && !a.optional && !a.cost;
-      if (action.targets.length > 0 || action.mode !== undefined || upTo)
-        pushTrigger(ctx, d.trigger, action.targets, action.mode);
+      if (
+        (action.targets.length > 0 || action.mode !== undefined || upTo) &&
+        // Reality Fracture (17a fixes): paused to choose ward's sacrifices.
+        pushTrigger(ctx, d.trigger, action.targets, action.mode, d.thenPriority)
+      )
+        return;
       return givePriority(ctx, d.thenPriority);
     }
     case 'discard': {
@@ -386,6 +404,8 @@ function apply(ctx: Ctx, action: Action): void {
         return answerSacrificeSeveral(ctx, action.card);
       if (d.kind === 'chooseFromHand') return answerChooseFromHand(ctx, action.card);
       if (d.kind === 'forageExile' && action.card) return answerForageExile(ctx, action.card);
+      // Reality Fracture (17a fixes): ward's sacrifices.
+      if (d.kind === 'wardSacrifice' && action.card) return answerWardSacrifice(ctx, action.card);
       if (d.kind === 'sacrifice' && action.card) return answerSacrifice(ctx, action.card);
       if (d.kind === 'punisher') return answerPunisher(ctx, action.card);
       if (d.kind === 'pickExiled' && action.card) return answerPickExiled(ctx, action.card);
