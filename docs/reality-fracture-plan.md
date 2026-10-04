@@ -143,6 +143,33 @@ New engine pieces, each in a `// Reality Fracture (17a)` block (custom handlers 
 - Bots: using the Jace token and granted abilities sensibly, attacking walkers.
 - Second pass on the decks and packets: swap Empower Jace cards in where they fit (W/U and G/U most), rerun the balance.
 
+Files: `fra/pw-core.ts` (the core and the twelve commons), `fra/pw-b.ts` (uncommons), `fra/pw-c.ts` (rares and mythics).
+
+**Core done** (`fra/pw-core.ts`, tests `fra-pw-core.test.ts` and `ai/test/planeswalkers.test.ts`): the twelve commons, and
+this vocabulary (engine helpers in `engine/src/fra-pw-effects.ts`, card builders in `cards/src/fra/helpers.ts`):
+
+- **Jace token** `FRA_JACE` (`fra/tokens.ts`): loyalty 0, `−1: Surveil 1` (ability 0), `−3: Draw a card` (ability 1).
+  Planeswalker tokens and token copies of walkers enter with their loyalty (`enterWithLoyalty` in `context.ts`); the test
+  scenario builder takes `{ card, loyalty }`.
+- **`empowerJace(amount)`**: any `Amount`. No Jace token: create one, then add the counters; one: use it; several: a
+  `chooseObject` prompt. Nontoken Jaces and other players' tokens never count; 0 only creates the token (it dies). Works
+  inside follow-ups (`if`, `ifExcess`) through the `ctx.deferred` queue. `damage.ifExcess` (Violent Echoes) runs with
+  `{ event: 'amount' }` = the excess.
+- **Granted loyalty abilities**: `planeswalkersHave(loyaltyAbility(cost, label, effects))`, applying to every walker you
+  control, tokens included; granted abilities follow the printed ones. Activated and static abilities only (no card needs a
+  granted trigger). Statics `planeswalkersStayAtZero` (Sanctum Lurker), `oneAttackerOnly` (Tomik).
+- **Loyalty triggers and effects**: `youActivateLoyaltyAbility` (`removedAtLeast`), `opponentActivatesLoyaltyAbility`,
+  `youPutLoyaltyCounters` (`{ event: 'amount' }` = that many), condition `activatedLoyaltyAbilityThisTurn`, effect
+  `loyaltyCounters` (walkers only), effect `loyaltyAtInstantSpeed` (with `filter: JACE`).
+- **"A Jace"**: `JACE` (filter), `controlsJace` (condition), `noJaceToBehold` (Theorist's Sanctum's `entersTappedIf`),
+  amounts `{ count: 'loyaltyAmongPlaneswalkers', filter }` and `{ loyaltyOf }`, `beholdOrPay` (Countersculpt), behold with
+  `JACE`. `getAbilities(state, db, id)` is exported (printed plus granted abilities).
+- **Bots**: a Jace token is valued at 0.6 per loyalty counter, so `−3` draws as soon as it can (not with 2 or fewer cards in
+  the library); `−1` only in main phase 2 at 1–2 loyalty. `planWalkerAttacks` / `planAttackTargets` send attackers at
+  walkers when the simulation scores it better (heuristic and search bots).
+- **UI**: loyalty badge, Jace token text, granted abilities in the activation menu, the Jace-token choice, "Behold a Jace /
+  Pay {1}".
+
 ## Simplifications to revisit
 
 (none yet)

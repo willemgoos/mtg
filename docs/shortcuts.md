@@ -126,3 +126,9 @@ from) when it's fixed. Older phases keep their own "Simplifications" lists in `d
 - [x] Equipment attack triggers (Medic's Kitesail, Hunter's Axe) sit on the Equipment, not the equipped creature: they
       differ only if the creature changes controller or loses its abilities.
 - [x] Loyal Tutor: the searched card isn't revealed to the opponent (no tutor shows a reveal yet).
+
+## Reality Fracture planeswalkers (`fra/pw-*.ts`, phase 17c)
+
+- [ ] Inspired Tethermage: "whenever you put one or more loyalty counters on a planeswalker" fires for counters put on a
+      walker you control by anyone (the engine doesn't record who puts counters).
+- [ ] Behold a Jace (Countersculpt, Theorist's Sanctum): you can't pick which Jace, and a Jace card in hand isn't revealed.
