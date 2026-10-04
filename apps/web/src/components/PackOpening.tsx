@@ -34,7 +34,10 @@ export function packName(p: Pack, set: PackSet = 'fdn'): string {
 }
 
 /** A set's booster wrapper art, where its first mythic isn't the set's face (Cloud on Final Fantasy's). */
-const BOOSTER_FACE: Partial<Record<PackSet, string>> = { fin: 'Cloud, Midgar Mercenary' };
+const BOOSTER_FACE: Partial<Record<PackSet, string>> = {
+  fin: 'Cloud, Midgar Mercenary',
+  fra: 'Emrakul, the Exigent Doom',
+};
 
 /** Art for a pack: the first rare of its set and colour, or the set's face or first mythic. */
 export function packArt(p: Pack, set: PackSet = 'fdn'): string {

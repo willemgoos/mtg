@@ -49,7 +49,7 @@ describe('Jump In packets', () => {
   });
 
   it('has two packets per colour in each set', () => {
-    for (const set of [undefined, 'blb', 'msh', 'fin', 'stx', 'sos'])
+    for (const set of [undefined, 'blb', 'msh', 'fin', 'stx', 'sos', 'fra'])
       for (const c of ['W', 'U', 'B', 'R', 'G'])
         expect(
           PACKETS.filter((p) => p.set === set && !p.source && p.colors.join() === c),
@@ -69,6 +69,19 @@ describe('Jump In packets', () => {
     for (const p of fin)
       for (const [name] of p.spells)
         expect(+card.get(name)!.collectorNumber, `${p.name}: ${name}`).toBeLessThanOrEqual(309);
+  });
+
+  it('builds ten Reality Fracture packets from implemented cards: no planeswalkers, no Empower Jace', () => {
+    const fra = PACKETS.filter((p) => p.set === 'fra');
+    expect(fra).toHaveLength(10);
+    for (const p of fra)
+      for (const [name] of p.spells) {
+        const c = card.get(name)!;
+        expect(c.typeLine, name).not.toContain('Planeswalker');
+        expect(c.oracleText, name).not.toContain('Jace');
+      }
+    expect(deckById(jumpInId('fra-lifegain', 'fra-titans')).set).toBe('fra');
+    expect(deckById(jumpInId('fra-lifegain', 'angels')).set).toBeUndefined();
   });
 
   it('pairs packets across sets; a pair from one set is of that set', () => {
