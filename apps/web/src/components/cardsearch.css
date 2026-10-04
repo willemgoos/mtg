@@ -1,0 +1,260 @@
+/* ==========================================================================
+   Card search: the Cards tab. The deck builder's collection grid and filter
+   controls (deckbuilder.css) without the deck column, plus a detail view.
+   ========================================================================== */
+
+.csearch {
+  height: 100vh;
+}
+
+.csearch__shell {
+  flex: 1;
+  min-height: 0;
+  height: auto;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.csearch__bar {
+  padding: 0.75rem 1.5rem;
+}
+
+.csearch__search {
+  flex: 1 1 24rem;
+  max-width: 40rem;
+}
+
+.csearch__row {
+  flex: 1 0 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.625rem 1rem;
+}
+
+.csearch .dbk__pool {
+  padding: 1.25rem 1.5rem 3rem;
+}
+
+/* Multicolour: a gold dot, as on Arena. */
+.dbk__filter--M {
+  --c: #d9b44a;
+  background: conic-gradient(
+    var(--mana-W) 0 20%,
+    var(--mana-U) 0 40%,
+    var(--mana-B) 0 60%,
+    var(--mana-R) 0 80%,
+    var(--mana-G) 0
+  );
+}
+
+.csearch__seg {
+  display: flex;
+  padding: 0.125rem;
+  border-radius: 0.5rem;
+  box-shadow: inset 0 0 0 0.0625rem var(--h-line);
+}
+
+.csearch__seg button {
+  height: 1.75rem;
+  padding: 0 0.625rem;
+  border: 0;
+  border-radius: 0.375rem;
+  font: 500 0.8125rem var(--h-font);
+  color: var(--h-muted);
+  background: none;
+  cursor: var(--cursor-hover, pointer);
+}
+
+.csearch__seg button.is-on {
+  color: var(--h-text);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.csearch__rarity--common.is-on {
+  box-shadow: inset 0 0 0 0.0625rem #c9c9cf;
+}
+.csearch__rarity--uncommon.is-on {
+  box-shadow: inset 0 0 0 0.0625rem #a9c4d6;
+}
+.csearch__rarity--rare.is-on {
+  box-shadow: inset 0 0 0 0.0625rem #d8b45a;
+}
+.csearch__rarity--mythic.is-on {
+  box-shadow: inset 0 0 0 0.0625rem #e2672e;
+}
+
+.csearch__select {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.8125rem;
+  color: var(--h-dim);
+}
+
+.csearch__select select {
+  height: 2rem;
+  max-width: 12rem;
+  padding: 0 0.5rem;
+  border: 0;
+  border-radius: 0.5rem;
+  font: 500 0.8125rem var(--h-font);
+  color: var(--h-text);
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow: inset 0 0 0 0.0625rem var(--h-line);
+  color-scheme: dark;
+}
+
+.csearch__face {
+  padding: 0;
+  border: 0;
+  background: none;
+}
+
+.csearch__more {
+  height: 1px;
+}
+
+/* -------------------------------------------------------------- detail */
+
+.csearch__modal {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: grid;
+  place-items: center;
+  padding: 1.5rem;
+  background: rgba(0, 0, 0, 0.72);
+  backdrop-filter: blur(0.25rem);
+}
+
+.csearch__detail {
+  display: flex;
+  gap: 2rem;
+  max-width: 56rem;
+  max-height: 100%;
+  padding: 1.5rem;
+  overflow-y: auto;
+  border-radius: var(--h-radius);
+  background: var(--h-surface);
+  box-shadow:
+    inset 0 0 0 0.0625rem var(--h-line),
+    0 1.5rem 4rem rgba(0, 0, 0, 0.6);
+}
+
+.csearch__big {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* Scryfall's large image at its own size or smaller, never stretched. */
+.csearch__big img {
+  display: block;
+  width: 20rem;
+  max-width: 100%;
+  aspect-ratio: 63 / 88;
+  border-radius: 4.6% / 3.3%;
+  box-shadow: 0 0.75rem 2rem rgba(0, 0, 0, 0.6);
+}
+
+.csearch__info {
+  flex: 1;
+  min-width: 16rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.csearch__faceinfo h2 {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.csearch__faceinfo p {
+  margin: 0.25rem 0 0;
+}
+
+.csearch__cost {
+  display: inline-flex;
+  gap: 0.125rem;
+}
+
+.csearch__cost img {
+  width: 1.125rem;
+  height: 1.125rem;
+}
+
+.csearch__dim,
+.csearch__type {
+  font-size: 0.875rem;
+  color: var(--h-muted);
+}
+
+.csearch__oracle {
+  margin-top: 0.625rem;
+  padding: 0.75rem 0.875rem;
+  border-radius: 0.5rem;
+  font-size: 0.9375rem;
+  line-height: 1.45;
+  background: var(--h-raised);
+}
+
+.csearch__oracle p + p {
+  margin-top: 0.5rem;
+}
+
+.csearch__pt {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.csearch__meta {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.25rem 1rem;
+  margin: 0;
+  font-size: 0.875rem;
+}
+
+.csearch__meta dt {
+  color: var(--h-dim);
+}
+
+.csearch__meta dd {
+  margin: 0;
+  text-transform: capitalize;
+}
+
+dd.csearch__rarity--uncommon {
+  color: #a9c4d6;
+}
+dd.csearch__rarity--rare {
+  color: #d8b45a;
+}
+dd.csearch__rarity--mythic {
+  color: #e2672e;
+}
+
+.csearch__close {
+  align-self: flex-start;
+  margin-top: auto;
+}
+
+@media (max-width: 40rem) {
+  .csearch__detail {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .csearch__bar,
+  .csearch .dbk__pool {
+    padding-inline: 1rem;
+  }
+}
