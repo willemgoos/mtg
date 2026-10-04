@@ -636,7 +636,11 @@ function detect(ctx: Ctx, ev: GameEvent): void {
               return (
                 isCreature &&
                 o.id !== moved.id &&
-                (t.controller === 'any' || o.controller === moved.controller) &&
+                (t.controller === 'any' ||
+                  // Reality Fracture (17c): Gideon the Oathless: a creature an opponent controls.
+                  (t.controller === 'opponent'
+                    ? o.controller !== moved.controller
+                    : o.controller === moved.controller)) &&
                 matchesFilter(ctx, moved.id, t.filter, o.id)
               );
             if (t.on === 'landfall') return isLand && o.controller === moved.controller;
@@ -1378,6 +1382,40 @@ function detect(ctx: Ctx, ev: GameEvent): void {
           attacker,
         );
       }
+      // Reality Fracture (17c): Jace, Reality Sculptor: emblems that see a creature attack you or a planeswalker you control.
+      for (const id of ev.attackers) {
+        const attacker = s.objects[id];
+        const rec = s.combat?.attackers.find((x) => x.id === id);
+        if (!attacker || !rec) continue;
+        emblemTriggers(
+          ctx,
+          (t, e) =>
+            t.on === 'opponentCreatureAttacks' &&
+            !!t.orPlaneswalkers &&
+            e.controller !== attacker.controller &&
+            rec.defender === e.controller &&
+            matchesFilter(ctx, id, t.filter),
+          attacker,
+        );
+      }
+      // Reality Fracture (17c): Garruk, Curse Breaker: emblems that see creatures attack one of their controller's
+      // opponents (a player, not a planeswalker): once, with every such attacker.
+      for (const e of s.emblems ?? []) {
+        const a = e.ability;
+        if (a.kind !== 'triggered' || a.trigger.on !== 'creaturesAttackYourOpponent') continue;
+        const attacking = (s.combat?.attackers ?? []).filter(
+          (x) => !!s.objects[x.id] && x.defender !== e.controller && x.planeswalker === undefined,
+        );
+        if (attacking.length === 0) continue;
+        s.pendingTriggers.push({
+          source: e.source,
+          sourceDefId: e.sourceDefId,
+          abilityIndex: -1,
+          controller: e.controller,
+          emblem: a,
+          subjects: attacking.map((x) => ({ id: x.id, zcc: s.objects[x.id]!.zcc })),
+        });
+      }
       return;
     }
     case 'blockersDeclared': {
@@ -1871,7 +1909,12 @@ function detect(ctx: Ctx, ev: GameEvent): void {
       if (ev.step === 'draw') {
         forEachBattlefieldTrigger(
           ctx,
-          (o, a) => a.trigger.on === 'beginningOfDraw' && o.controller === ev.activePlayer,
+          (o, a) =>
+            a.trigger.on === 'beginningOfDraw' &&
+            // Reality Fracture (17c): The Theorist, Jace Beleren: each opponent's draw step.
+            (a.trigger.whose === 'opponents'
+              ? o.controller !== ev.activePlayer
+              : o.controller === ev.activePlayer),
         );
         return;
       }

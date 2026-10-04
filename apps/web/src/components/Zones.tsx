@@ -360,6 +360,7 @@ export function PlayerBadge({
 }) {
   const ps = view.players[player];
   const step = active ? view.turn.step : null;
+  const emblems = (view.emblems ?? []).filter((e) => e.controller === player);
   return (
     <div
       className={`badge ${targetable ? 'badge--target' : ''} ${active ? 'badge--active' : ''} ${
@@ -385,6 +386,22 @@ export function PlayerBadge({
       </div>
       <PhaseStrip phases={PHASES.slice(3)} step={step} />
       {command}
+      {/* Reality Fracture (17c): emblems and "until your next turn" effects, with their text on hover. */}
+      {emblems.length > 0 && (
+        <ul className="badge__emblems" aria-label="Emblems">
+          {emblems.map((e, i) => (
+            <li
+              key={i}
+              className="badge__emblem"
+              title={`${cardDb.get(e.sourceDefId)?.name ?? 'Emblem'}: ${e.label ?? 'an emblem'}`}
+            >
+              <svg viewBox="0 0 20 20" aria-hidden>
+                <path d="M10 1 L12.6 7.4 L19 8 L14 12.4 L15.6 19 L10 15.4 L4.4 19 L6 12.4 L1 8 L7.4 7.4 Z" />
+              </svg>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }

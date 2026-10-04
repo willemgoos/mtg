@@ -517,6 +517,7 @@ export function counterSpell(ctx: Ctx, id: ObjectId, exile = false): void {
         ),
     );
   if (def(ctx, item.id).uncounterable || protectedByStatic) return;
+  if (obj(ctx, item.id).cantBeCountered) return; // Reality Fracture (17c): Theorist's Proxy
   // Mystical Archive (16): Veil of Summer.
   if (ctx.s.turn.uncounterable?.includes(controller)) return;
   ctx.s.stack.splice(i, 1);
@@ -781,6 +782,7 @@ export function resolveAmount(ctx: Ctx, es: EffectSource, amount: Amount): numbe
   if ('event' in amount) return es.amount ?? 0;
   // Reality Fracture (17a fixes): Rise of the Deathbringer.
   if ('drawnThisWay' in amount) return es.drawnThisWay ?? 0;
+  if ('exiledThisWay' in amount) return es.exiledThisWay ?? 0; // Reality Fracture (17c): Overwrite the Multiverse
   // Strixhaven (13c): life gained this turn (Fortifying Draught).
   if ('count' in amount && amount.count === 'lifeGainedThisTurn')
     return ctx.s.turn.lifeGained?.[es.controller] ?? 0;
@@ -974,6 +976,7 @@ export function runEffects(
       e.kind === 'castFreeCard' ||
       e.kind === 'revealUntilCastable' ||
       e.kind === 'revealTopCastOrPlay' ||
+      e.kind === 'exileTopMayCast' || // Reality Fracture (17c): Chandra, Torch of Defiance
       e.kind === 'takeStudyCard' ||
       e.kind === 'expressiveIteration' ||
       e.kind === 'castFreeFromTop' ||
@@ -1044,8 +1047,12 @@ export function runEffects(
           player: scryer,
           ...(e.kind === 'surveil' ? { surveil: true } : {}),
           // Reality Fracture (17a): Enlightened Confidant
-          ...(e.kind === 'surveil' && e.graveyardToHand
+          ...(e.kind === 'surveil' && e.graveyardToHand?.maxManaValue !== undefined
             ? { toHandMaxMv: resolveAmount(ctx, es, e.graveyardToHand.maxManaValue) }
+            : {}),
+          // Reality Fracture (17c): Chandra, Chill of Compliance.
+          ...(e.kind === 'surveil' && e.graveyardToHand?.filter
+            ? { toHandFilter: e.graveyardToHand.filter }
             : {}),
           cards,
           resume,
@@ -1200,6 +1207,24 @@ export function runEffects(
           fromGraveyard: true,
           to: 'hand',
           shuffle: false,
+          resume,
+          thenPriority,
+        };
+      } else if (e.kind === 'exileTopMayCast') {
+        // Reality Fracture (17c): Chandra, Torch of Defiance. Exile the top card; you may cast it (a land can't be cast).
+        const top = lib[0];
+        if (top === undefined) continue;
+        moveObject(ctx, top, 'exile');
+        if (def(ctx, top).types.includes('Land')) {
+          list.splice(i + 1, 0, ...e.otherwise);
+          continue;
+        }
+        ctx.s.decision = {
+          kind: 'castFree',
+          player: controller,
+          cards: [top],
+          fullCost: true,
+          ifNotCast: e.otherwise,
           resume,
           thenPriority,
         };
@@ -1816,6 +1841,8 @@ export function runEffects(
         if (count === 0) {
           // Strixhaven Brawl (15a): Seasoned Pyromancer still draws with an empty hand.
           for (let n = 0; n < (e.drawAfter ?? 0); n++) drawCard(ctx, who);
+          // Reality Fracture (17c): Garruk, Veiled Butcher: nothing discarded is fewer than two nonland cards.
+          if (e.drawUnlessNonland !== undefined) drawCard(ctx, controller);
           continue;
         }
         ctx.s.decision = {
@@ -1833,6 +1860,8 @@ export function runEffects(
           ...(e.damageTo !== undefined ? { damageTo: e.damageTo } : {}),
           // Reality Fracture (17a): Tether Technician, Improvised Act.
           ...(e.then ? { then: e.then } : {}),
+          // Reality Fracture (17c): Garruk, Veiled Butcher.
+          ...(e.drawUnlessNonland !== undefined ? { drawUnlessNonland: e.drawUnlessNonland } : {}),
           resume,
           thenPriority,
         };
@@ -2433,6 +2462,7 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
     case 'lookForCreature':
     case 'takeStudyCard':
     case 'revealTopCastOrPlay':
+    case 'exileTopMayCast': // Reality Fracture (17c): Chandra, Torch of Defiance
       return; // handled by runEffects
     // Reality Fracture (17a): Fblthp, Impossibly Lost.
     case 'winGame': {
@@ -3318,7 +3348,8 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
       }
       (ctx.s.emblems ??= []).push({
         controller: es.controller,
-        source: es.source ?? { id: 'emblem', zcc: 0 },
+        // Reality Fracture (17c): a colorless emblem is not the card that made it (Chandra, Torch of Defiance).
+        source: e.colorless ? { id: 'emblem', zcc: 0 } : (es.source ?? { id: 'emblem', zcc: 0 }),
         sourceDefId: es.sourceDefId,
         ability,
         ...(e.until === 'endOfYourNextTurn'
@@ -3328,6 +3359,9 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
         ...(e.until === 'nextSpellThisTurn' ? { untilTurn: ctx.s.turn.number, once: true } : {}),
         // Final Fantasy (11c): "until end of turn" (Summon: Leviathan); Strixhaven (13c): First Day of Class.
         ...(e.until === 'endOfTurn' ? { untilTurn: ctx.s.turn.number } : {}),
+        // Reality Fracture (17c): Jace, Reality Sculptor, Garruk, Curse Breaker: "until your next turn".
+        ...(e.until === 'yourNextTurn' ? { untilTurnOf: es.controller } : {}),
+        ...(e.label ? { label: e.label } : {}),
       });
       return;
     }
@@ -3763,9 +3797,18 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
       }
       return;
     }
-    case 'exile':
-      for (const id of objectsOf(ctx, es, e.what)) moveObject(ctx, id, 'exile');
+    case 'exile': {
+      // Reality Fracture (17c): Overwrite the Multiverse, "the number of creatures exiled this way".
+      let exiled = 0;
+      for (const id of objectsOf(ctx, es, e.what)) {
+        const before = ctx.s.objects[id]?.zone;
+        moveObject(ctx, id, 'exile');
+        if (before && before !== 'exile' && ctx.s.objects[id]?.zone !== before) exiled++;
+        else if (before && !ctx.s.objects[id]) exiled++;
+      }
+      es.exiledThisWay = exiled;
       return;
+    }
     case 'exileGraveyardCard': {
       const t = typeof e.what === 'object' && 'target' in e.what ? es.targets[e.what.target] : null;
       if (!t || !('object' in t)) return;

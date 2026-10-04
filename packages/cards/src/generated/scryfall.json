@@ -73686,6 +73686,411 @@
   }
  },
  {
+  "name": "The Theorist, Jace Beleren",
+  "scryfallId": "20bb8c55-4b0b-425f-8201-b54fa2fdde86",
+  "oracleId": "89a6e876-0b00-4671-9652-766fd7ef9bf2",
+  "set": "fra",
+  "collectorNumber": "43",
+  "rarity": "mythic",
+  "manaCost": "{2}{U}{U}",
+  "typeLine": "Legendary Planeswalker — Jace",
+  "oracleText": "At the beginning of each opponent's draw step, you draw a card.\n+1: Create a 1/1 blue Illusion creature token.\n−2: For each opponent, return up to one target artifact or creature that player controls to its owner's hand.\n−6: Draw three cards. Then put X +1/+1 counters on each creature you control, where X is the number of cards in your hand.",
+  "loyalty": "3",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/0/20bb8c55-4b0b-425f-8201-b54fa2fdde86.jpg?1788329228",
+   "normal": "https://cards.scryfall.io/normal/front/2/0/20bb8c55-4b0b-425f-8201-b54fa2fdde86.jpg?1788329228",
+   "large": "https://cards.scryfall.io/large/front/2/0/20bb8c55-4b0b-425f-8201-b54fa2fdde86.jpg?1788329228",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/0/20bb8c55-4b0b-425f-8201-b54fa2fdde86.jpg?1788329228"
+  }
+ },
+ {
+  "name": "Jace, Reality Sculptor",
+  "scryfallId": "74087795-0b38-4fd2-9841-147583baca41",
+  "oracleId": "bf0e9e00-fba5-448a-9052-ae730aea4bf8",
+  "set": "fra",
+  "collectorNumber": "216",
+  "rarity": "rare",
+  "manaCost": "{3}{U}{U}",
+  "typeLine": "Legendary Planeswalker — Jace",
+  "oracleText": "+1: Empower Jace X, where X is the number of Islands you control.\n−3: Until your next turn, whenever a creature attacks you or a planeswalker you control, it gets -5/-0 until end of turn.\n0: Exile all but the bottom card of each opponent's library. Activate only if there are twenty-five or more loyalty counters among Jaces you control.",
+  "loyalty": "5",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Empower Jace"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/4/74087795-0b38-4fd2-9841-147583baca41.jpg?1790075861",
+   "normal": "https://cards.scryfall.io/normal/front/7/4/74087795-0b38-4fd2-9841-147583baca41.jpg?1790075861",
+   "large": "https://cards.scryfall.io/large/front/7/4/74087795-0b38-4fd2-9841-147583baca41.jpg?1790075861",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/4/74087795-0b38-4fd2-9841-147583baca41.jpg?1790075861"
+  }
+ },
+ {
+  "name": "Ajani Resolute",
+  "scryfallId": "a5e1a7dd-8c49-4435-935c-bcc78704082b",
+  "oracleId": "0d60c095-4c6c-4618-8ef3-508f3d454efa",
+  "set": "fra",
+  "collectorNumber": "195",
+  "rarity": "mythic",
+  "manaCost": "{1}{W}",
+  "typeLine": "Legendary Planeswalker — Ajani",
+  "oracleText": "Whenever you gain life, put a loyalty counter on Ajani.\n0: You gain 1 life.\n−4: Create a 2/2 white Cat Soldier creature token named Ajani's Pridemate with \"Whenever you gain life, put a +1/+1 counter on this token.\"\n−10: You get an emblem with \"Creatures you control get +2/+2.\"",
+  "loyalty": "2",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/5/a5e1a7dd-8c49-4435-935c-bcc78704082b.jpg?1788329189",
+   "normal": "https://cards.scryfall.io/normal/front/a/5/a5e1a7dd-8c49-4435-935c-bcc78704082b.jpg?1788329189",
+   "large": "https://cards.scryfall.io/large/front/a/5/a5e1a7dd-8c49-4435-935c-bcc78704082b.jpg?1788329189",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/5/a5e1a7dd-8c49-4435-935c-bcc78704082b.jpg?1788329189"
+  }
+ },
+ {
+  "name": "Ajani Unrelenting",
+  "scryfallId": "bc3c096f-7f6c-474c-a2c8-75d3e6ddd6f5",
+  "oracleId": "71620e92-45a4-49cb-94d5-348013ecf886",
+  "set": "fra",
+  "collectorNumber": "242",
+  "rarity": "mythic",
+  "manaCost": "{4}{R}{R}",
+  "typeLine": "Legendary Planeswalker — Ajani",
+  "oracleText": "Whenever you activate a loyalty ability, create a 2/2 colorless Wizard Soldier creature token named Cadet.\n+1: Creatures you control get +1/+0 and gain haste until end of turn.\n−2: Discard your hand, then draw a card for each creature you control.\n−3: Ajani deals 4 damage to each creature except for tokens you control.",
+  "loyalty": "5",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/c/bc3c096f-7f6c-474c-a2c8-75d3e6ddd6f5.jpg?1788329317",
+   "normal": "https://cards.scryfall.io/normal/front/b/c/bc3c096f-7f6c-474c-a2c8-75d3e6ddd6f5.jpg?1788329317",
+   "large": "https://cards.scryfall.io/large/front/b/c/bc3c096f-7f6c-474c-a2c8-75d3e6ddd6f5.jpg?1788329317",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/c/bc3c096f-7f6c-474c-a2c8-75d3e6ddd6f5.jpg?1788329317"
+  }
+ },
+ {
+  "name": "Chandra, Chill of Compliance",
+  "scryfallId": "240f58ab-944c-4f4c-9df9-5f40b132bf3e",
+  "oracleId": "c3dfa1e2-6785-49a0-a194-fb842a8eb63c",
+  "set": "fra",
+  "collectorNumber": "212",
+  "rarity": "mythic",
+  "manaCost": "{1}{U}{U}",
+  "typeLine": "Legendary Planeswalker — Chandra",
+  "oracleText": "+1: Surveil 1. If you put a noncreature, nonland card into your graveyard this way, put that card into your hand.\n+1: Add {U}. Spend this mana only to cast a noncreature spell.\n−X: Tap target artifact or creature. Put X stun counters on it.\n−6: You get an emblem with \"Whenever you cast a spell, draw a card.\"",
+  "loyalty": "3",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Surveil"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/4/240f58ab-944c-4f4c-9df9-5f40b132bf3e.jpg?1788329242",
+   "normal": "https://cards.scryfall.io/normal/front/2/4/240f58ab-944c-4f4c-9df9-5f40b132bf3e.jpg?1788329242",
+   "large": "https://cards.scryfall.io/large/front/2/4/240f58ab-944c-4f4c-9df9-5f40b132bf3e.jpg?1788329242",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/4/240f58ab-944c-4f4c-9df9-5f40b132bf3e.jpg?1788329242"
+  }
+ },
+ {
+  "name": "Chandra, Torch of Defiance",
+  "scryfallId": "ff8086cd-b868-4f4e-823e-2635ad7ebc07",
+  "oracleId": "12cc800c-c7be-4811-8207-fd01a99cc892",
+  "set": "kld",
+  "collectorNumber": "110",
+  "rarity": "mythic",
+  "manaCost": "{2}{R}{R}",
+  "typeLine": "Legendary Planeswalker — Chandra",
+  "oracleText": "+1: Exile the top card of your library. You may cast that card. If you don't, Chandra deals 2 damage to each opponent.\n+1: Add {R}{R}.\n−3: Chandra deals 4 damage to target creature.\n−7: You get an emblem with \"Whenever you cast a spell, this emblem deals 5 damage to any target.\"",
+  "loyalty": "4",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/f/ff8086cd-b868-4f4e-823e-2635ad7ebc07.jpg?1783937196",
+   "normal": "https://cards.scryfall.io/normal/front/f/f/ff8086cd-b868-4f4e-823e-2635ad7ebc07.jpg?1783937196",
+   "large": "https://cards.scryfall.io/large/front/f/f/ff8086cd-b868-4f4e-823e-2635ad7ebc07.jpg?1783937196",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/f/ff8086cd-b868-4f4e-823e-2635ad7ebc07.jpg?1783937196"
+  }
+ },
+ {
+  "name": "Garruk, Curse Breaker",
+  "scryfallId": "90ca5812-ceb5-46bd-b049-aed7ff10e6af",
+  "oracleId": "184d4672-05a9-4182-8b3f-3561fb33ed62",
+  "set": "fra",
+  "collectorNumber": "259",
+  "rarity": "mythic",
+  "manaCost": "{3}{G}{G}",
+  "typeLine": "Legendary Planeswalker — Garruk",
+  "oracleText": "Whenever a creature you control with power 4 or greater enters, draw a card.\n+2: Untap up to two target lands.\n−3: Create a 4/4 green Beast creature token with trample.\n−4: Until your next turn, whenever one or more creatures attack one of your opponents, those creatures get +2/+2 and gain trample until end of turn.",
+  "loyalty": "5",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/0/90ca5812-ceb5-46bd-b049-aed7ff10e6af.jpg?1788329370",
+   "normal": "https://cards.scryfall.io/normal/front/9/0/90ca5812-ceb5-46bd-b049-aed7ff10e6af.jpg?1788329370",
+   "large": "https://cards.scryfall.io/large/front/9/0/90ca5812-ceb5-46bd-b049-aed7ff10e6af.jpg?1788329370",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/0/90ca5812-ceb5-46bd-b049-aed7ff10e6af.jpg?1788329370"
+  }
+ },
+ {
+  "name": "Garruk, Veiled Butcher",
+  "scryfallId": "d48bfb8a-d135-45f3-be99-4694b4b9ab93",
+  "oracleId": "4a6972fe-348a-4a19-a1d0-bdf8f1f9c792",
+  "set": "fra",
+  "collectorNumber": "229",
+  "rarity": "mythic",
+  "manaCost": "{3}{B}{B}",
+  "typeLine": "Legendary Planeswalker — Garruk",
+  "oracleText": "If a creature an opponent controls would die, exile it instead.\n+2: Up to one target creature gets -4/-1 until your next turn.\n−2: Each player sacrifices a creature of their choice. If you sacrificed a creature this way, create a 4/4 green Beast creature token with trample.\n−3: Each opponent discards two cards. For each opponent who didn't discard two nonland cards this way, you draw a card.",
+  "loyalty": "5",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/4/d48bfb8a-d135-45f3-be99-4694b4b9ab93.jpg?1788329269",
+   "normal": "https://cards.scryfall.io/normal/front/d/4/d48bfb8a-d135-45f3-be99-4694b4b9ab93.jpg?1788329269",
+   "large": "https://cards.scryfall.io/large/front/d/4/d48bfb8a-d135-45f3-be99-4694b4b9ab93.jpg?1788329269",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/4/d48bfb8a-d135-45f3-be99-4694b4b9ab93.jpg?1788329269"
+  }
+ },
+ {
+  "name": "Avatar of Burgeoning Echoes",
+  "scryfallId": "5905995b-7a20-4602-a7cc-90aa5089a082",
+  "oracleId": "08e8a63c-9fcc-48cf-a9af-15cbaeec943f",
+  "set": "fra",
+  "collectorNumber": "122",
+  "rarity": "mythic",
+  "manaCost": "{G}{U}",
+  "typeLine": "Creature — Avatar",
+  "oracleText": "Landfall — Whenever a land you control enters, empower Jace 2. (Put two loyalty counters on a Jace token you control. If you don't control one, first create a blue Jace planeswalker token with \"[−1]: Surveil 1\" and \"[−3]: Draw a card.\")\nPlaneswalkers you control have \"[−10]: Put a +1/+1 counter on target creature for each land you control.\"",
+  "power": "2",
+  "toughness": "3",
+  "colors": [
+   "G",
+   "U"
+  ],
+  "keywords": [
+   "Surveil",
+   "Empower Jace",
+   "Landfall"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/9/5905995b-7a20-4602-a7cc-90aa5089a082.jpg?1788878208",
+   "normal": "https://cards.scryfall.io/normal/front/5/9/5905995b-7a20-4602-a7cc-90aa5089a082.jpg?1788878208",
+   "large": "https://cards.scryfall.io/large/front/5/9/5905995b-7a20-4602-a7cc-90aa5089a082.jpg?1788878208",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/9/5905995b-7a20-4602-a7cc-90aa5089a082.jpg?1788878208"
+  }
+ },
+ {
+  "name": "Gideon the Oathless",
+  "scryfallId": "c985b0d1-25bd-4069-aab7-a566ff27a8f6",
+  "oracleId": "7afa530f-ea51-4bee-af3b-59b83ea5cb25",
+  "set": "fra",
+  "collectorNumber": "230",
+  "rarity": "rare",
+  "manaCost": "{2}{B}",
+  "typeLine": "Legendary Creature — Human Mercenary",
+  "oracleText": "Ward—Discard a card.\nWhenever a creature an opponent controls enters, Gideon deals 1 damage to that player.\nWhenever an opponent activates a loyalty ability, Gideon deals 1 damage to that player.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Ward"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/9/c985b0d1-25bd-4069-aab7-a566ff27a8f6.jpg?1789127990",
+   "normal": "https://cards.scryfall.io/normal/front/c/9/c985b0d1-25bd-4069-aab7-a566ff27a8f6.jpg?1789127990",
+   "large": "https://cards.scryfall.io/large/front/c/9/c985b0d1-25bd-4069-aab7-a566ff27a8f6.jpg?1789127990",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/9/c985b0d1-25bd-4069-aab7-a566ff27a8f6.jpg?1789127990"
+  }
+ },
+ {
+  "name": "Jace's Machinations",
+  "scryfallId": "282588b9-3656-453b-aa25-2419e078ddc1",
+  "oracleId": "89bd056d-8f5b-4d0e-b80a-58a984e21100",
+  "set": "fra",
+  "collectorNumber": "32",
+  "rarity": "rare",
+  "manaCost": "{2}{U}",
+  "typeLine": "Instant",
+  "oracleText": "Until end of turn, you may activate loyalty abilities of Jace planeswalkers you control on any player's turn any time you could cast an instant.\nEmpower Jace 8. (Put eight loyalty counters on a Jace token you control. If you don't control one, first create a blue Jace planeswalker token with \"[−1]: Surveil 1\" and \"[−3]: Draw a card.\")",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Surveil",
+   "Empower Jace"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/8/282588b9-3656-453b-aa25-2419e078ddc1.jpg?1788878150",
+   "normal": "https://cards.scryfall.io/normal/front/2/8/282588b9-3656-453b-aa25-2419e078ddc1.jpg?1788878150",
+   "large": "https://cards.scryfall.io/large/front/2/8/282588b9-3656-453b-aa25-2419e078ddc1.jpg?1788878150",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/8/282588b9-3656-453b-aa25-2419e078ddc1.jpg?1788878150"
+  }
+ },
+ {
+  "name": "Overwrite the Multiverse",
+  "scryfallId": "c4554f5b-791b-48f6-bf54-ad28699e1beb",
+  "oracleId": "d0372cde-bf30-4a1b-93bb-9ff4ac1c116d",
+  "set": "fra",
+  "collectorNumber": "59",
+  "rarity": "mythic",
+  "manaCost": "{4}{B}{B}",
+  "typeLine": "Sorcery",
+  "oracleText": "Exile all creatures. Empower Jace X, where X is the number of creatures exiled this way. (Put that many loyalty counters on a Jace token you control. If you don't control one, first create a blue Jace planeswalker token with \"[−1]: Surveil 1\" and \"[−3]: Draw a card.\")",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Surveil",
+   "Empower Jace"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/4/c4554f5b-791b-48f6-bf54-ad28699e1beb.jpg?1788952080",
+   "normal": "https://cards.scryfall.io/normal/front/c/4/c4554f5b-791b-48f6-bf54-ad28699e1beb.jpg?1788952080",
+   "large": "https://cards.scryfall.io/large/front/c/4/c4554f5b-791b-48f6-bf54-ad28699e1beb.jpg?1788952080",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/4/c4554f5b-791b-48f6-bf54-ad28699e1beb.jpg?1788952080"
+  }
+ },
+ {
+  "name": "Repurposed Enforcer",
+  "scryfallId": "35000e93-85d3-44f8-976a-5918ee4c71e0",
+  "oracleId": "b775a404-ec0a-47ff-bb9d-eae2273d945b",
+  "set": "fra",
+  "collectorNumber": "19",
+  "rarity": "rare",
+  "manaCost": "{1}{W}",
+  "typeLine": "Creature — Human Soldier",
+  "oracleText": "Whenever this creature attacks, empower Jace X, where X is the number of creatures you control. (Put that many loyalty counters on a Jace token you control. If you don't control one, first create a blue Jace planeswalker token with \"[−1]: Surveil 1\" and \"[−3]: Draw a card.\")",
+  "power": "3",
+  "toughness": "2",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Surveil",
+   "Empower Jace"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/5/35000e93-85d3-44f8-976a-5918ee4c71e0.jpg?1788878108",
+   "normal": "https://cards.scryfall.io/normal/front/3/5/35000e93-85d3-44f8-976a-5918ee4c71e0.jpg?1788878108",
+   "large": "https://cards.scryfall.io/large/front/3/5/35000e93-85d3-44f8-976a-5918ee4c71e0.jpg?1788878108",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/5/35000e93-85d3-44f8-976a-5918ee4c71e0.jpg?1788878108"
+  }
+ },
+ {
+  "name": "Sanctum Lurker",
+  "scryfallId": "2185c08f-bb4d-49d5-8b6c-c629a48bb61c",
+  "oracleId": "3ebd64d2-c178-45a2-a51f-9869754baa0f",
+  "set": "fra",
+  "collectorNumber": "64",
+  "rarity": "rare",
+  "manaCost": "{2}{B}",
+  "typeLine": "Creature — Horror",
+  "oracleText": "When this creature enters, empower Jace 1.\nPlaneswalkers you control aren't put into their owners' graveyards for having 0 loyalty.\nPlaneswalkers you control have \"[+2]: This planeswalker deals 1 damage to each opponent and you gain 1 life.\"",
+  "power": "3",
+  "toughness": "2",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Empower Jace"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/1/2185c08f-bb4d-49d5-8b6c-c629a48bb61c.jpg?1789556729",
+   "normal": "https://cards.scryfall.io/normal/front/2/1/2185c08f-bb4d-49d5-8b6c-c629a48bb61c.jpg?1789556729",
+   "large": "https://cards.scryfall.io/large/front/2/1/2185c08f-bb4d-49d5-8b6c-c629a48bb61c.jpg?1789556729",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/1/2185c08f-bb4d-49d5-8b6c-c629a48bb61c.jpg?1789556729"
+  }
+ },
+ {
+  "name": "Theorist's Proxy",
+  "scryfallId": "710302ca-c4be-4069-8ce1-f531414c74e9",
+  "oracleId": "0089acfe-da66-4dd7-b1e5-4d7407f58257",
+  "set": "fra",
+  "collectorNumber": "44",
+  "rarity": "rare",
+  "manaCost": "{1}{U}",
+  "typeLine": "Creature — Illusion",
+  "oracleText": "Flash\nWhen this creature enters, empower Jace 3. (Put three loyalty counters on a Jace token you control. If you don't control one, first create a blue Jace planeswalker token with \"[−1]: Surveil 1\" and \"[−3]: Draw a card.\")\n{U}, Sacrifice this creature: The next spell you cast this turn can't be countered.",
+  "power": "0",
+  "toughness": "3",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Surveil",
+   "Empower Jace",
+   "Flash"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/1/710302ca-c4be-4069-8ce1-f531414c74e9.jpg?1788878151",
+   "normal": "https://cards.scryfall.io/normal/front/7/1/710302ca-c4be-4069-8ce1-f531414c74e9.jpg?1788878151",
+   "large": "https://cards.scryfall.io/large/front/7/1/710302ca-c4be-4069-8ce1-f531414c74e9.jpg?1788878151",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/1/710302ca-c4be-4069-8ce1-f531414c74e9.jpg?1788878151"
+  }
+ },
+ {
+  "name": "Theorist's Sanctum",
+  "scryfallId": "22db5bba-46c9-4a26-821d-303ddb386ea4",
+  "oracleId": "37513bd8-7303-4ac6-a7a7-224184faf758",
+  "set": "fra",
+  "collectorNumber": "191",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Land — Island",
+  "oracleText": "({T}: Add {U}.)\nAs this land enters, you may behold a Jace. If you don't, this land enters tapped. (To behold a Jace, choose a Jace you control or reveal a Jace card from your hand.)\n{2}{U}, {T}: Empower Jace 2.",
+  "colors": [],
+  "keywords": [
+   "Empower Jace",
+   "Behold"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/2/22db5bba-46c9-4a26-821d-303ddb386ea4.jpg?1788878256",
+   "normal": "https://cards.scryfall.io/normal/front/2/2/22db5bba-46c9-4a26-821d-303ddb386ea4.jpg?1788878256",
+   "large": "https://cards.scryfall.io/large/front/2/2/22db5bba-46c9-4a26-821d-303ddb386ea4.jpg?1788878256",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/2/22db5bba-46c9-4a26-821d-303ddb386ea4.jpg?1788878256"
+  }
+ },
+ {
+  "name": "Vraska's Final Mercy",
+  "scryfallId": "992bd991-7cfb-459f-bafd-9a44f3c925c5",
+  "oracleId": "7799413d-e313-4a05-ad28-f4c926c26d28",
+  "set": "fra",
+  "collectorNumber": "71",
+  "rarity": "rare",
+  "manaCost": "{B}{B}",
+  "typeLine": "Sorcery",
+  "oracleText": "Choose one —\n• You lose 2 life. Destroy target creature or planeswalker.\n• You lose 2 life. Empower Jace 6. (Put six loyalty counters on a Jace token you control. If you don't control one, first create a blue Jace planeswalker token with \"[−1]: Surveil 1\" and \"[−3]: Draw a card.\")",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Surveil",
+   "Empower Jace"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/9/992bd991-7cfb-459f-bafd-9a44f3c925c5.jpg?1789699369",
+   "normal": "https://cards.scryfall.io/normal/front/9/9/992bd991-7cfb-459f-bafd-9a44f3c925c5.jpg?1789699369",
+   "large": "https://cards.scryfall.io/large/front/9/9/992bd991-7cfb-459f-bafd-9a44f3c925c5.jpg?1789699369",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/9/992bd991-7cfb-459f-bafd-9a44f3c925c5.jpg?1789699369"
+  }
+ },
+ {
   "name": "Academic Ascent",
   "scryfallId": "730d8c28-1e58-4b8e-89e9-445d154d2e83",
   "oracleId": "406e853b-713f-4c89-9efb-aca74a11183f",

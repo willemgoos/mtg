@@ -251,7 +251,7 @@ function apply(ctx: Ctx, action: Action): void {
           x: action.x,
           paws: action.paws,
           discard: action.discard,
-          via: 'free',
+          via: d.fullCost ? 'now' : 'free', // Reality Fracture (17c): Chandra, Torch of Defiance
           exileAfter: d.exileAfter,
           freePay: d.pay,
           freeLess: d.costLess,
@@ -260,7 +260,17 @@ function apply(ctx: Ctx, action: Action): void {
           forage: action.forage,
           sacrificeMany: action.sacrificeMany,
           kickCount: action.kickCount,
-        });
+          // Reality Fracture (17c): Chandra, Torch of Defiance: a cast paying every cost as from hand.
+          ...(d.fullCost
+            ? {
+                beheld: action.beheld,
+                delve: action.delve,
+                teamwork: action.teamwork,
+                back: action.back,
+                copyOf: action.copyOf,
+              }
+            : {}),
+        }, d.fullCost ? action.payWith : undefined);
         // Reality Fracture (17a fixes): paused to choose a forage or ward's sacrifices: the rest of this free
         // cast (more spells, the end of the effect) follows once they are made.
         if (paused) {

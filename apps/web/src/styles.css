@@ -4805,3 +4805,29 @@ button {
   stroke: #6b4c0c;
   stroke-width: 1;
 }
+
+/* Emblems (and "until your next turn" effects) of a player, beside the portrait; the text is in the tooltip. */
+.badge__emblems {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.25rem;
+  margin: 0.25rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.badge__emblem {
+  width: 1.25rem;
+  height: 1.25rem;
+  cursor: help;
+  filter: drop-shadow(0 0.0625rem 0.125rem rgba(0, 0, 0, 0.7));
+}
+
+.badge__emblem svg {
+  display: block;
+  width: 100%;
+  fill: #8fd0ff;
+  stroke: #1d4a6b;
+  stroke-width: 1;
+}

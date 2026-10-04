@@ -29,6 +29,7 @@ import { STX_13C_C_EFFECTS } from './stx-13c-c-effects.ts';
 import { STX_13C_D_EFFECTS } from './stx-13c-d-effects.ts';
 import { FRA_WHITE_EFFECTS } from './fra-white-effects.ts';
 import { FRA_PW_EFFECTS } from './fra-pw-effects.ts';
+import { FRA_PW_C_EFFECTS } from './fra-pw-c-effects.ts';
 import { checkCondition } from './triggers.ts';
 import { type EffectSource, gainLife } from './effects.ts';
 import type {
@@ -106,6 +107,7 @@ const BUILT_IN_EFFECTS: Record<string, CustomEffect> = {
   // Reality Fracture (17a): white.
   ...FRA_WHITE_EFFECTS,
   ...FRA_PW_EFFECTS,
+  ...FRA_PW_C_EFFECTS,
   // Secrets of Strixhaven (14a).
   ...SOS_14A_EFFECTS,
   // Secrets of Strixhaven (14b), group A.
@@ -609,6 +611,7 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
   delete o.exiledUntilLeaves;
   delete o.kicked;
   delete o.wasCast; // Reality Fracture (17a)
+  delete o.cantBeCountered; // Reality Fracture (17c): Theorist's Proxy
   if (from === 'battlefield') {
     if (o.counters) o.lastNamedCounters = o.counters;
     else delete o.lastNamedCounters;

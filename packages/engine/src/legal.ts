@@ -374,7 +374,9 @@ function castSacrificeOptions(
       : creatures;
 }
 
-function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
+// Reality Fracture (17c): Chandra, Torch of Defiance: `now` lists only the ways to cast this card right now (in the middle of a
+// resolution), whatever the timing, paying its costs.
+function priorityActions(ctx: Ctx, player: PlayerId, now?: ObjectId): Action[] {
   const s = ctx.s;
   const out: Action[] = [{ type: 'passPriority', player }];
   if (combatLocked(ctx)) return out;
@@ -481,7 +483,7 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
     if ((d.discardToCast || exileToCast) && discards.length === 0) return;
     // Marvel Super Heroes Jumpstart (Pym Particles): flash only when kicked (Quantum Reduction).
     const flashIfKicked = !instantSpeed && !sorcery && !!d.kicker?.flash;
-    if (!instantSpeed && !sorcery && !flashIfKicked) return;
+    if (!instantSpeed && !sorcery && !flashIfKicked && now === undefined) return;
     // The usual ways, plus graveyard casts through other cards.
     // Extract Power: exiled cards played for free.
     const free = zone === 'exile' && (obj(ctx, card).playFreeBy === player || plottedCard);
@@ -491,7 +493,9 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
       (d.types.includes('Instant') || d.types.includes('Sorcery')) &&
       !s.turn.zaffaiUsed?.includes(player) &&
       hasStatic(ctx, player, 'freeSpellOncePerTurn');
-    const vias: (CastVia | undefined)[] = free
+    const vias: (CastVia | undefined)[] = now !== undefined
+      ? ['now']
+      : free
       ? ['free']
       : [
           ...(zone !== 'graveyard' ||
@@ -686,7 +690,7 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
   const noPermanents = hasStatic(ctx, player, 'cantCastPermanentSpells');
   const blocked = (card: ObjectId) =>
     noPermanents && !def(ctx, card).types.some((t) => t === 'Instant' || t === 'Sorcery');
-  const castable = silenced ? [] : castableCards(ctx, player);
+  const castable = silenced ? [] : now !== undefined ? [now] : castableCards(ctx, player);
   for (const card of banned.length
     ? castable.filter((c) => !banned.some((b) => b.defId === obj(ctx, c).defId))
     : castable) {
@@ -697,6 +701,7 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
       def(ctx, card).back &&
       !def(ctx, card).prepare &&
       (obj(ctx, card).zone === 'hand' ||
+        now !== undefined ||
         // Strixhaven Brawl (15a): Disturb, from the graveyard.
         (obj(ctx, card).zone === 'graveyard' && def(ctx, card).disturb))
     ) {
@@ -708,6 +713,7 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
         if (a.type === 'castSpell' || a.type === 'playLand') a.back = true;
     }
   }
+  if (now !== undefined) return out.filter((a) => a.type === 'castSpell');
   // Sneak (Marvel Super Heroes): during your declare blockers step, return an unblocked attacker.
   const unblocked =
     s.turn.activePlayer === player && s.turn.step === 'declareBlockers' && s.combat
@@ -878,7 +884,7 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
         const bases = out.splice(firstOfAbility);
         const have = obj(ctx, source).counters?.loyalty ?? 0;
         for (const base of bases)
-          for (let x = 1; x <= have; x++) out.push({ ...base, x } as Action);
+          for (let x = a.cost.loyaltyXZero ? 0 : 1; x <= have; x++) out.push({ ...base, x } as Action);
       }
       // Villainous Syndication: one action per creature that could be tapped for the cost.
       if (a.cost.tapCreature) {
@@ -1073,6 +1079,11 @@ export function getLegalActions(ctx: Ctx, player: PlayerId): Action[] {
     case 'castFree': {
       const out: Action[] = [{ type: 'chooseEffect', player, accept: false }];
       if (combatLocked(ctx)) return out; // Reality Fracture (17a): Yuriko
+      // Reality Fracture (17c): Chandra, Torch of Defiance: cast it paying everything, as from hand.
+      if (d.fullCost) {
+        for (const card of d.cards) out.push(...priorityActions(ctx, player, card));
+        return out;
+      }
       const pool = manaSources(ctx, player);
       for (const card of d.cards) {
         const cd = def(ctx, card);

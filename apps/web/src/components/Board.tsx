@@ -653,7 +653,9 @@ export function Board({
         };
       case 'castFree':
         return {
-          prompt: `${nameOf(d.resume.sourceDefId)}: you may cast a card without paying its cost`,
+          prompt: d.fullCost
+            ? `${nameOf(d.resume.sourceDefId)}: you may cast the exiled card`
+            : `${nameOf(d.resume.sourceDefId)}: you may cast a card without paying its cost`,
         };
       case 'pickCards':
         return { prompt: `Choose ${d.count} card${d.count > 1 ? 's' : ''} to keep` };
@@ -1095,7 +1097,10 @@ export function Board({
             <p>
               {d.discardInstead
                 ? 'You may cast it by discarding a card instead of paying its mana cost.'
-                : d.pay
+                : // Reality Fracture (17c): Chandra, Torch of Defiance.
+                  d.fullCost
+                  ? 'You may cast it, paying its costs.'
+                  : d.pay
                   ? `You may cast it by paying ${manaText(d.pay)} rather than its mana cost.`
                   : d.costLess
                     ? `You may cast it; it costs {${d.costLess}} less.`

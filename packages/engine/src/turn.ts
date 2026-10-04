@@ -214,6 +214,7 @@ export function startTurn(ctx: Ctx, player: PlayerId, noPowerUp = false): void {
   delete s.turn.hexproofPlayers;
   delete s.turn.cantLose; // Mystical Archive (16): Angel's Grace
   delete s.turn.uncounterable; // Mystical Archive (16): Veil of Summer
+  delete s.turn.nextSpellUncounterable; // Reality Fracture (17c): Theorist's Proxy
   delete s.turn.deflect; // Mystical Archive (16): Deflecting Palm
   delete s.turn.osteomancer;
   delete s.turn.spellLock;
@@ -246,6 +247,9 @@ export function startTurn(ctx: Ctx, player: PlayerId, noPowerUp = false): void {
     s.staggered = s.staggered.filter((x) => x.by !== player);
   for (const q of Object.values(s.players)) q.attackedThisTurn = false;
   endEffects(ctx, (e) => e.expires === 'untilYourNextTurn' && e.player === player);
+  // Reality Fracture (17c): Jace, Reality Sculptor, Garruk, Curse Breaker: "until your next turn" abilities end.
+  if (s.emblems?.some((e) => e.untilTurnOf === player))
+    s.emblems = s.emblems.filter((e) => e.untilTurnOf !== player);
   enterStep(ctx, 'untap');
 }
 

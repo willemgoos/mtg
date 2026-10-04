@@ -695,6 +695,11 @@ export function castSpell(
       amount: a.trigger.perSacrificed ? sacrificed : (ctx.s.turn.spellsCast?.[player] ?? 0),
     });
   });
+  // Reality Fracture (17c): Theorist's Proxy: "the next spell you cast this turn can't be countered".
+  if (ctx.s.turn.nextSpellUncounterable?.includes(player)) {
+    o.cantBeCountered = true;
+    ctx.s.turn.nextSpellUncounterable = ctx.s.turn.nextSpellUncounterable.filter((p) => p !== player);
+  }
   // Conduit of Worlds: a card cast this way stops further spells this turn.
   if (choice.via === 'conduit' && !o.noSpellLock) (ctx.s.turn.spellLock ??= []).push(player);
   // Secrets of Strixhaven (14b): Zaffai and the Tempests, once each turn.
@@ -1681,6 +1686,9 @@ export function finishCastFree(ctx: Ctx, cast: ObjectId | null): void {
   for (const id of d.thenToBottom ?? [])
     if (id !== cast && ctx.s.objects[id]?.zone === 'exile')
       moveObject(ctx, id, 'library', { position: 'bottom' });
+  // Reality Fracture (17c): Chandra, Torch of Defiance: "if you don't".
+  if (cast === null && d.ifNotCast?.length)
+    return continueWith(ctx, d.resume, d.ifNotCast, d.thenPriority);
   resume(ctx, d.resume, d.thenPriority);
 }
 
@@ -1740,11 +1748,13 @@ export function answerScry(ctx: Ctx, top: readonly ObjectId[], bottom: readonly 
     lib.unshift(...bottom);
     for (const id of bottom) moveObject(ctx, id, 'graveyard');
     // Reality Fracture (17a): Enlightened Confidant: a card with low enough mana value goes to your hand.
-    if (d.toHandMaxMv !== undefined)
+    // Reality Fracture (17c): Chandra, Chill of Compliance: or one matching a filter.
+    if (d.toHandMaxMv !== undefined || d.toHandFilter)
       for (const id of bottom)
         if (
           ctx.s.objects[id]?.zone === 'graveyard' &&
-          manaValue(def(ctx, id).manaCost) <= d.toHandMaxMv
+          (d.toHandMaxMv === undefined || manaValue(def(ctx, id).manaCost) <= d.toHandMaxMv) &&
+          (!d.toHandFilter || cardMatches(ctx, id, d.toHandFilter))
         )
           moveObject(ctx, id, 'hand');
   } else lib.push(...bottom);
@@ -2094,6 +2104,9 @@ export function answerDiscard(ctx: Ctx, card: ObjectId): void {
     return;
   }
   if (d.count === 0 || left.length === 0) {
+    // Reality Fracture (17c): Garruk, Veiled Butcher: "you draw a card" unless they discarded enough nonland cards.
+    if (d.drawUnlessNonland !== undefined && (d.nonlandDiscarded ?? 0) < d.drawUnlessNonland)
+      drawCard(ctx, d.resume.controller);
     // Reality Fracture (17a): Seasoned Cryomancer: "when you discard one or more nonland cards this way".
     if (d.reflexiveOnNonland !== undefined && d.nonlandDiscarded && d.resume.source)
       ctx.s.pendingTriggers.push({

@@ -532,6 +532,9 @@ export interface CostDef {
   // Strixhaven (13c)
   /** A loyalty ability with X: remove X loyalty counters (Kasmina, Enigma Sage). */
   loyaltyX?: boolean;
+  // Reality Fracture (17c): Chandra, Chill of Compliance
+  /** With `loyaltyX`: X may be 0 (the ability still does its work, e.g. taps the target). */
+  loyaltyXZero?: boolean;
   /** Return this permanent to its owner's hand (Rootha, Mercurial Artist). */
   returnSelf?: boolean;
   /** Exile an instant or sorcery card from your hand with three refine counters (Uvilda, Dean of Perfection). */
@@ -552,7 +555,8 @@ export interface CostDef {
 
 export type TriggerDef =
   | { on: 'etb' }
-  | { on: 'otherCreatureEtb'; controller: 'you' | 'any'; filter?: CardFilter }
+  // Reality Fracture (17c): Gideon the Oathless ('opponent': a creature an opponent controls enters)
+  | { on: 'otherCreatureEtb'; controller: 'you' | 'any' | 'opponent'; filter?: CardFilter }
   | { on: 'dies' }
   | { on: 'otherCreatureDies'; controller: 'you' | 'opponent' | 'any'; nontoken?: boolean }
   /** Whenever this or another creature you control (matching the filter, as printed) dies. */
@@ -764,7 +768,9 @@ export type TriggerDef =
       /** Only this creature (Exemplar of Light, Pensive Professor). */ self?: boolean;
     }
   /** At the beginning of your draw step. */
-  | { on: 'beginningOfDraw' }
+  // Reality Fracture (17c): The Theorist, Jace Beleren
+  /** `whose: 'opponents'`: at the beginning of each opponent's draw step. */
+  | { on: 'beginningOfDraw'; whose?: 'opponents' }
   /** Whenever a creature you control becomes the target of an opponent's spell or ability (Pawpatch Recruit). */
   | { on: 'yourCreatureTargetedByOpponent' }
   /** When this Class becomes level N. */
@@ -832,7 +838,11 @@ export type TriggerDef =
       creatureAbility?: boolean;
     }
   /** Whenever a creature an opponent controls (matching the filter) attacks you ("that creature"): Storm. */
-  | { on: 'opponentCreatureAttacks'; filter?: CardFilter }
+  // Reality Fracture (17c): Jace, Reality Sculptor ('orPlaneswalkers': or a planeswalker you control; emblems only)
+  | { on: 'opponentCreatureAttacks'; filter?: CardFilter; orPlaneswalkers?: boolean }
+  // Reality Fracture (17c): Garruk, Curse Breaker
+  /** Whenever one or more creatures attack one of your opponents (a player, not a planeswalker); "those creatures" (`subjects`). Emblems only. */
+  | { on: 'creaturesAttackYourOpponent' }
   /** Whenever an opponent attacks you with `min` or more creatures (Everett K. Ross). */
   | { on: 'opponentAttacks'; min: number }
   /** Whenever one or more creatures an opponent controls attack you and aren't blocked (Coveted Jewel). */
@@ -1407,6 +1417,9 @@ export type Amount =
   // Reality Fracture (17a fixes): Rise of the Deathbringer
   /** The number of cards the latest draw effect of this resolution actually drew. */
   | { drawnThisWay: true }
+  // Reality Fracture (17c): Overwrite the Multiverse
+  /** The number of permanents the latest `exile` effect of this resolution actually exiled. */
+  | { exiledThisWay: true }
   /** Permanents you control matching the filter (Honored Dreyleader: Squirrels and Food). */
   | { count: 'permanentsYouControl'; filter: CardFilter; other?: boolean }
   /** The greatest mana value among cards in your graveyard (Wick's Patrol). */
@@ -1723,7 +1736,13 @@ export type EffectDef =
       kind: 'emblem';
       ability: AbilityDef;
       // Final Fantasy (11c): 'endOfTurn' (Summon: Leviathan's attack draws).
-      until: 'endOfYourNextTurn' | 'permanent' | 'nextSpellThisTurn' | 'endOfTurn';
+      // Reality Fracture (17c): 'yourNextTurn' ("until your next turn": gone as it begins; Jace, Reality Sculptor)
+      until: 'endOfYourNextTurn' | 'permanent' | 'nextSpellThisTurn' | 'endOfTurn' | 'yourNextTurn';
+      // Reality Fracture (17c): Chandra, Torch of Defiance
+      /** The emblem is its own colorless source (it isn't the card that made it, which may be red). */
+      colorless?: boolean;
+      /** Its rules text, shown on the board ("Creatures you control get +2/+2."). */
+      label?: string;
       // Marvel Super Heroes Jumpstart (Tricksters)
       /** Its trigger's filter only matches cards with this object's name (The Clone Saga). */
       namedLike?: Ref;
@@ -2134,6 +2153,9 @@ export type EffectDef =
       // Reality Fracture (17a): Tether Technician, Improvised Act
       /** "If you do": these effects follow once a card was discarded (not if the hand was empty). */
       then?: EffectDef[];
+      // Reality Fracture (17c): Garruk, Veiled Butcher
+      /** Once the discarding is done, the controller draws a card unless this player discarded at least this many nonland cards. */
+      drawUnlessNonland?: number;
     }
   /** Put the top N cards of your library into your graveyard. */
   | { kind: 'mill'; count: Amount; who?: Ref }
@@ -2217,7 +2239,8 @@ export type EffectDef =
       amount: number;
       // Reality Fracture (17a): Enlightened Confidant
       /** A card put into your graveyard this way with mana value at most this goes into your hand. */
-      graveyardToHand?: { maxManaValue: Amount };
+      // Reality Fracture (17c): Chandra, Chill of Compliance ('filter': a card matching it goes to your hand, whatever its mana value)
+      graveyardToHand?: { maxManaValue?: Amount; filter?: CardFilter };
     }
   /** Exile a permanent until the source leaves the battlefield (Banishing Light). */
   | { kind: 'exileUntilSourceLeaves'; what: Ref }
@@ -2366,6 +2389,12 @@ export type EffectDef =
   | { kind: 'exileTopsPlayableFree' }
   /** Exile the top card; you may play it until you exile another with this source (Superior Foes). */
   | { kind: 'exileTopPlayableUntilNext' }
+  // Reality Fracture (17c): Chandra, Torch of Defiance
+  /**
+   * Exile the top card of your library. You may cast it now (paying its costs: a land can't be cast); if you don't (a
+   * land, or you decline or can't pay), `otherwise` happens.
+   */
+  | { kind: 'exileTopMayCast'; otherwise: EffectDef[] }
   /** Exile a card with N time counters; it gains suspend (Kang Prime: the next nonland card from the top). */
   | { kind: 'suspend'; what: Ref | 'nextNonlandFromLibrary'; time: number }
   /** Unearth: the source returns from your graveyard with haste; it's exiled at the next end step or if it would die. */
@@ -3138,6 +3167,9 @@ export interface GameObject {
   kickCount?: number;
   /** It gains haste as it enters (cast through suspend). */
   hasteOnEntry?: boolean;
+  // Reality Fracture (17c): Theorist's Proxy
+  /** This spell can't be countered (it was the next spell its controller cast after Theorist's Proxy's ability). */
+  cantBeCountered?: boolean;
   /** Extract Power: it may be played for free while exiled, by this player. */
   playFreeBy?: PlayerId;
   /** Mystical Archive (16): Mind's Desire: `playFreeBy` only lasts through this turn number. */
@@ -3412,6 +3444,9 @@ export interface TurnState {
   cantLose?: PlayerId[];
   /** Mystical Archive (16): Veil of Summer: spells these players control can't be countered this turn. */
   uncounterable?: PlayerId[];
+  // Reality Fracture (17c): Theorist's Proxy
+  /** The next spell each of these players casts this turn can't be countered. */
+  nextSpellUncounterable?: PlayerId[];
   /** Mystical Archive (16): Deflecting Palm: the next damage to these players this turn is prevented and dealt to its source's controller. */
   deflect?: PlayerId[];
   /** Creatures declared as attackers this turn, once per combat. */
@@ -3627,6 +3662,9 @@ export interface EffectSource {
   // Reality Fracture (17a fixes): Rise of the Deathbringer
   /** Cards its latest draw effect actually drew ("the number of cards drawn this way"). */
   drawnThisWay?: number;
+  // Reality Fracture (17c): Overwrite the Multiverse
+  /** Permanents its latest exile effect actually exiled ("the number of creatures exiled this way"). */
+  exiledThisWay?: number;
 }
 
 /**
@@ -3679,6 +3717,11 @@ export interface Emblem {
   untilTurn?: number;
   /** It goes away once it has triggered (Galvanic Iteration). */
   once?: boolean;
+  // Reality Fracture (17c): Jace, Reality Sculptor, Garruk, Curse Breaker
+  /** It goes away as this player's next turn begins ("until your next turn"). */
+  untilTurnOf?: PlayerId;
+  /** Its rules text, for the board. */
+  label?: string;
 }
 
 export interface DelayedTrigger {
@@ -3763,6 +3806,8 @@ export type Decision =
       nonlandDiscarded?: number;
       // Reality Fracture (17a): Tether Technician
       then?: EffectDef[];
+      // Reality Fracture (17c): Garruk, Veiled Butcher
+      drawUnlessNonland?: number;
       resume: PausedResolution;
       thenPriority: PlayerId;
     }
@@ -3907,6 +3952,8 @@ export type Decision =
       // Reality Fracture (17a): Enlightened Confidant
       /** Surveil: a card put into the graveyard with mana value at most this returns to the hand. */
       toHandMaxMv?: number;
+      // Reality Fracture (17c): Chandra, Chill of Compliance
+      toHandFilter?: CardFilter;
       /** The top cards of their library, top first. */
       cards: ObjectId[];
       resume: PausedResolution;
@@ -4014,6 +4061,11 @@ export type Decision =
       /** The cast costs its mana cost less this much (Uvilda: {4}). */
       costLess?: number;
       // Secrets of Strixhaven (14b): Improvisation Capstone
+      // Reality Fracture (17c): Chandra, Torch of Defiance
+      /** The cast pays the card's costs as usual (X, kicker, alternative costs) instead of being free. */
+      fullCost?: boolean;
+      /** Effects that happen if none of the cards is cast, before the resolution goes on. */
+      ifNotCast?: EffectDef[];
       /** Any number of these may be cast: after one is, the rest are offered again. */
       more?: boolean;
       // Reality Fracture (17a): Uldaros Theorix
@@ -4143,6 +4195,8 @@ export type Action =
         | 'freeOnceEachTurn'
         // Reality Fracture (17a): Omnipresence.
         | 'omnipresence'
+        // Reality Fracture (17c): Chandra, Torch of Defiance.
+        | 'now'
         | 'noctis'
         | 'hades';
       /** Mockingbird: the creature to enter as a copy of. */

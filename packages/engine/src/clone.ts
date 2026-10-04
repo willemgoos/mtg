@@ -80,6 +80,10 @@ export function cloneState(s: GameState): GameState {
       ...(s.turn.cantLose ? { cantLose: s.turn.cantLose.slice() } : {}),
       ...(s.turn.deflect ? { deflect: s.turn.deflect.slice() } : {}),
       ...(s.turn.uncounterable ? { uncounterable: s.turn.uncounterable.slice() } : {}),
+      // Reality Fracture (17c): Theorist's Proxy.
+      ...(s.turn.nextSpellUncounterable
+        ? { nextSpellUncounterable: s.turn.nextSpellUncounterable.slice() }
+        : {}),
       ...(s.turn.zaffaiUsed ? { zaffaiUsed: s.turn.zaffaiUsed.slice() } : {}),
       // Reality Fracture (17a): Hall of Echoes.
       ...(s.turn.noLegendRule ? { noLegendRule: s.turn.noLegendRule.slice() } : {}),

@@ -16,6 +16,8 @@ export type CastVia =
   | 'freeOnceEachTurn'
   // Reality Fracture (17a): Omnipresence.
   | 'omnipresence'
+  // Reality Fracture (17c): Chandra, Torch of Defiance: cast now, in the middle of a resolution, paying every cost.
+  | 'now'
   | 'noctis'
   | 'hades';
 
@@ -175,6 +177,8 @@ export function castVariants(d: CardDefinition, zone: ZoneName, via?: CastVia): 
     return castVariants(d, 'hand')
       .filter((v) => !(v.kicked && d.kicker?.replacesCost))
       .map((v) => ({ ...v, cost: withoutManaCost(v.cost, d.manaCost) }));
+  // Reality Fracture (17c): Chandra, Torch of Defiance: cast now, paying its costs as if from hand.
+  if (via === 'now') return castVariants(d, 'hand');
   // Reality Fracture (17a fixes): a free cast ("without paying its mana cost") still pays additional costs
   // (kicker, a forage or {2} instead, the cost of a mode); an alternative cost can't be paid with it.
   if (via === 'free')
