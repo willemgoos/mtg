@@ -58,8 +58,8 @@ describe('Jump In packets', () => {
   });
 
   it('uses cards of its own set', () => {
-    // Arena's packets borrow a few cards from other sets.
-    for (const p of PACKETS.filter((x) => x.set && !x.source))
+    // Official packets and explicitly cross-set custom themes may borrow cards.
+    for (const p of PACKETS.filter((x) => x.set && !x.source && !x.crossSet))
       for (const [name] of p.spells) expect(card.get(name)!.set, `${p.name}: ${name}`).toBe(p.set);
   });
 
@@ -92,6 +92,21 @@ describe('Jump In packets', () => {
     expect(deckIds(d)).toHaveLength(40);
     expect(deckById(jumpInId('elves', 'stompers')).colors).toEqual(['G']);
     expect(findDeck(jumpInId('elves', 'nope'))).toBeUndefined();
+  });
+
+  it('pairs Ten Rings with Cats into a playable white-blue deck with fixing', () => {
+    const d = deckById(jumpInId('msh-ten-rings', 'cats'));
+    expect(deckIds(d)).toHaveLength(40);
+    expect(d.colors).toEqual(['W', 'U']);
+    expect(d.cards).toEqual(
+      expect.arrayContaining([
+        ['Shang-Chi and the Ten Rings', 1],
+        ['Thriving Isle', 2],
+        ['Island', 3],
+        ['Plains', 11],
+      ]),
+    );
+    expect(jumpInPackets(d.id)?.map((p) => p.name)).toEqual(['Ten Rings', 'Cats']);
   });
 
   it("has Arena's ten Bloomburrow packets; two-colour ones bring both colours of land", () => {

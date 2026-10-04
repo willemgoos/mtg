@@ -21,6 +21,8 @@ export interface Packet {
   set?: 'blb' | 'msh' | 'fin' | 'stx' | 'sos';
   /** Arena's own packet (default: ours). */
   source?: 'arena';
+  /** Custom theme that deliberately borrows cards from multiple sets. */
+  crossSet?: boolean;
   /** The twelve spells; the basic lands are added by `packetCards`. */
   spells: [name: string, count: number][];
   /** Two-colour packets: their eight lands (default: eight basics of the colour). */
@@ -642,6 +644,32 @@ const OWN_PACKETS: Packet[] = [
       ['Training Regimen', 1],
       ['Go Nuts!', 1],
       ['Rapid Rescue', 1],
+    ],
+  },
+  {
+    id: 'msh-ten-rings',
+    name: 'Ten Rings',
+    colors: ['W', 'U'],
+    face: 'Shang-Chi and the Ten Rings',
+    blurb: 'Draw cards, grow Shang-Chi and strike through with flying allies',
+    set: 'msh',
+    crossSet: true,
+    spells: [
+      ['Shang-Chi and the Ten Rings', 1],
+      ['Helpful Hunter', 2],
+      ['Inspiring Overseer', 1],
+      ['Spectral Sailor', 1],
+      ['Mischievous Mystic', 1],
+      ['Opt', 2],
+      ['Quick Study', 1],
+      ['Shore Up', 1],
+      ['Banishing Light', 1],
+      ['Faebloom Trick', 1],
+    ],
+    lands: [
+      ['Thriving Isle', 2],
+      ['Island', 3],
+      ['Plains', 3],
     ],
   },
   // Strixhaven: our own packets around the school's creature types and spells.
