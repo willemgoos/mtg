@@ -3057,6 +3057,14 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
     case 'discardHand':
       for (const id of [...ctx.s.players[es.controller].hand]) moveObject(ctx, id, 'graveyard');
       return;
+    // Marvel Super Heroes Jumpstart (Kang Dynasty): Immortus, Master of Eternity.
+    case 'shuffleHandAndGraveyardIntoLibrary':
+      for (const p of playersOf(ctx, es, e.who)) {
+        const ps = ctx.s.players[p];
+        for (const id of [...ps.hand, ...ps.graveyard]) moveObject(ctx, id, 'library');
+        shuffleInPlace(ctx.s.rng, ps.library);
+      }
+      return;
     case 'exileUntilEndStep': {
       const step = ctx.s.turn.step;
       const fromTurn = ctx.s.turn.number + (step === 'end' || step === 'cleanup' ? 1 : 0);
