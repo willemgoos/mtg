@@ -1135,8 +1135,13 @@ export function runEffects(
           typeof e.what === 'object' && 'target' in e.what ? es.targets[e.what.target] : null;
         const item = t && 'object' in t ? findSpell(ctx, t.object.id) : undefined;
         if (!item) continue;
+        // Strixhaven Brawl (15b, pair): Repulsive Mutation, "equal to the greatest power among creatures you control".
+        const price =
+          e.genericAmount !== undefined
+            ? { generic: Math.max(0, resolveAmount(ctx, es, e.genericAmount)), colored: {} }
+            : e.cost;
         // Can't pay: countered straight away.
-        if (!canPayFrom(e.cost, manaSources(ctx, item.controller))) {
+        if (!canPayFrom(price, manaSources(ctx, item.controller))) {
           counterSpell(ctx, item.id, e.exile);
           continue;
         }
@@ -1144,7 +1149,7 @@ export function runEffects(
           kind: 'payOrCounter',
           player: item.controller,
           spell: item.id,
-          cost: e.cost,
+          cost: price,
           ...(e.exile ? { exile: true } : {}),
           resume,
           thenPriority,

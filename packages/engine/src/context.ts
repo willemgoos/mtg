@@ -10,6 +10,7 @@ import { BRAWL_15A_R_EFFECTS } from './brawl-15a-r-effects.ts';
 import { BRAWL_15A_RW_EFFECTS } from './brawl-15a-rw-effects.ts';
 import { SOS_14B_D_EFFECTS } from './sos-14b-d-effects.ts';
 import { BRAWL_15A_W_EFFECTS } from './brawl-15a-w-effects.ts';
+import { BRAWL_15B_PAIR_EFFECTS } from './brawl-15b-pair-effects.ts';
 import { STX_13C_A_EFFECTS } from './stx-13c-a-effects.ts';
 import { STX_13C_B_EFFECTS } from './stx-13c-b-effects.ts';
 import { STX_13C_C_EFFECTS } from './stx-13c-c-effects.ts';
@@ -96,6 +97,8 @@ const BUILT_IN_EFFECTS: Record<string, CustomEffect> = {
   ...BRAWL_15A_W_EFFECTS,
   // Strixhaven Brawl (15a): red-white.
   ...BRAWL_15A_RW_EFFECTS,
+  // Strixhaven Brawl (15b): two-colour cards.
+  ...BRAWL_15B_PAIR_EFFECTS,
   // Strixhaven (13a): Learn: put the chosen Lesson from outside the game into your hand.
   learnFetch(ctx, es, params) {
     const ps = ctx.s.players[es.controller];
@@ -403,6 +406,8 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
     const x = ctx.s.objects[ref.id];
     if (x && x.zone === 'exile' && x.zcc === ref.zcc) moveObject(ctx, x.id, 'graveyard');
   }
+  // Strixhaven Brawl (15b, pair): revolt.
+  if (from === 'battlefield') (ctx.s.turn.permanentsLeft ??= { p1: 0, p2: 0 })[o.controller]++;
   if (from === 'battlefield') {
     const c = characteristics(ctx, id);
     o.lastPower = c.power;
@@ -490,6 +495,7 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
   if (from === 'exile') {
     delete o.suspended;
     delete o.playFreeBy;
+    delete o.plottedTurn; // Strixhaven Brawl (15b, pair)
   }
   // Cast through suspend: haste as it enters.
   if (to === 'battlefield' && o.hasteOnEntry) {

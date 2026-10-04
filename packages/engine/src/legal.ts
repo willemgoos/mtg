@@ -127,6 +127,11 @@ export function castableCards(ctx: Ctx, player: PlayerId): ObjectId[] {
     const until = obj(ctx, id).playableUntilTurn;
     if (until !== undefined && until >= ctx.s.turn.number) out.push(id);
   }
+  // Strixhaven Brawl (15b, pair): Make Your Own Luck: plotted cards, on a later turn.
+  for (const id of ps.exile) {
+    const plotted = obj(ctx, id).plottedTurn;
+    if (plotted !== undefined && plotted < ctx.s.turn.number && !out.includes(id)) out.push(id);
+  }
   // Extract Power: either player's exiled cards you may play for free.
   for (const p of ['p1', 'p2'] as const)
     for (const id of ctx.s.players[p].exile)
@@ -304,12 +309,15 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
     }
     if (d.castOnlyIf && !checkCondition(ctx, d.castOnlyIf, player, obj(ctx, card))) return;
     const firstOfCard = out.length;
+    // Strixhaven Brawl (15b, pair): a plotted card is cast as a sorcery.
+    const plottedCard = zone === 'exile' && obj(ctx, card).plottedTurn !== undefined;
     const instantSpeed =
-      d.types.includes('Instant') ||
-      d.keywords.includes('flash') ||
-      flashFilters.some((f) => cardMatches(ctx, card, f)) ||
-      // Progenitor's Icon: spells of the chosen type have flash this turn.
-      !!s.turn.flashTypes?.some((f) => f.player === player && d.subtypes.includes(f.type));
+      !plottedCard &&
+      (d.types.includes('Instant') ||
+        d.keywords.includes('flash') ||
+        flashFilters.some((f) => cardMatches(ctx, card, f)) ||
+        // Progenitor's Icon: spells of the chosen type have flash this turn.
+        !!s.turn.flashTypes?.some((f) => f.player === player && d.subtypes.includes(f.type)));
     // Restricted mana (Giada: only for Angels; Villages: only for creature spells).
     const base = restricted ? manaSources(ctx, player, undefined, spellTags(d)) : sources;
     // Convoke: untapped creatures can pay for {1} each.
@@ -318,7 +326,7 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
       pool = [...pool, ...artifactHelpers(ctx, player, pool, card)];
     // {X}: every affordable value (up to 10).
     // Secrets of Strixhaven (14b): Molten Note's flashback cost has no {X}.
-    const xs =
+    const xsAll =
       d.manaCost.x && !(zone === 'graveyard' && d.flashback)
         ? Array.from(
             { length: Math.min(10, Math.floor(pool.length / d.manaCost.x)) + 1 },
@@ -328,6 +336,8 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
           d.payXLife
           ? Array.from({ length: Math.min(13, ps.life - 1) + 1 }, (_, x) => x)
           : [undefined];
+    // Strixhaven Brawl (15b, pair): Ornate Imitations, "X can't be 0".
+    const xs = d.minX ? xsAll.filter((x) => x === undefined || x >= d.minX!) : xsAll;
     // A card to discard as an additional cost (Sazacap's Brew).
     // Dragon Man: from the graveyard, discarding a card as well.
     const discardToCast =
@@ -343,7 +353,7 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
     if (!instantSpeed && !sorcery) return;
     // The usual ways, plus graveyard casts through other cards.
     // Extract Power: exiled cards played for free.
-    const free = zone === 'exile' && obj(ctx, card).playFreeBy === player;
+    const free = zone === 'exile' && (obj(ctx, card).playFreeBy === player || plottedCard);
     // Secrets of Strixhaven (14b): Zaffai and the Tempests: an instant or sorcery from your hand, free, once a turn.
     const zaffai =
       zone === 'hand' &&
@@ -430,7 +440,13 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
                 )
               : d.sacrificeToCastFilter
                 ? creatures.filter((id) => matchesFilter(ctx, id, d.sacrificeToCastFilter))
-                : creatures;
+                : // Strixhaven Brawl (15b, pair): Rite of Oblivion, any nonland permanent.
+                  d.sacrificeToCastNonland
+                  ? s.battlefield.filter(
+                      (id) =>
+                        obj(ctx, id).controller === player && !def(ctx, id).types.includes('Land'),
+                    )
+                  : creatures;
             for (const sacrifice of v.sacrifice ? sacrificeable : [undefined]) {
               for (const targets of combosFor(specs, card, sacrifice)) {
                 // Strixhaven (13c): Crackle with Power: up to X targets.
@@ -482,6 +498,7 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
               .filter(
                 (c) =>
                   d.entersAsCopy!.yours ||
+                  d.entersAsCopy!.anyMV ||
                   manaValue(def(ctx, c.id).manaCost) <= (a.x ?? 0) + manaValue(d.manaCost),
               )
               .map((c) => ({ ...a, copyOf: c.id })),

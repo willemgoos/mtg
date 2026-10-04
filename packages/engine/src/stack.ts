@@ -288,7 +288,12 @@ export function castCost(
         if (
           a.kind === 'static' &&
           a.effect.kind === 'spellsCostLess' &&
-          cardMatches(ctx, card, a.effect.filter, id)
+          cardMatches(ctx, card, a.effect.filter, id) &&
+          // Strixhaven Brawl (15b, pair): Zimone, Infinite Analyst: only before you've cast a spell with {X} this turn.
+          !(
+            a.effect.firstXOnly &&
+            (ctx.s.turn.castDefs?.[player] ?? []).some((cd) => !!defOf(ctx, cd).manaCost.x)
+          )
         )
           reduce += countOf(ctx, player, a.effect.amount, false, id);
         // Strixhaven (13b): Killian, Ink Duelist.
@@ -877,7 +882,12 @@ export function resolveTop(ctx: Ctx): boolean {
       ctx.s.combat.attackers.push({ id: o.id, defender: item.sneak, blocked: false, blockers: [] });
     }
     // Royal Talon Fighter Jet: "enters with X +1/+1 counters".
-    if (d.entersWithXCounters && item.x) addCounters(ctx, o.id, item.x);
+    if (d.entersWithXCounters && item.x)
+      addCounters(
+        ctx,
+        o.id,
+        item.x * (typeof d.entersWithXCounters === 'number' ? d.entersWithXCounters : 1),
+      );
     // Secrets of Strixhaven (14a): converge, "enters with a +1/+1 counter for each color of mana spent".
     if (d.entersWithCountersPerColorSpent) addCounters(ctx, o.id, o.manaColors?.length ?? 0);
     // Secrets of Strixhaven (14b): Slumbering Trudge, "enters with 3 - X stun counters; tapped if X is 2 or less".
@@ -897,6 +907,8 @@ export function resolveTop(ctx: Ctx): boolean {
     if (d.loyalty !== undefined) (o.counters ??= {}).loyalty = d.loyalty;
     if (item.x) o.xPaid = item.x;
     if (item.copyOf && d.entersAsCopy) enterAsCopy(ctx, o.id, item.copyOf, d.entersAsCopy);
+    // Strixhaven Brawl (15b, pair): Altered Ego, X additional +1/+1 counters if it copied.
+    if (item.copyOf && d.entersAsCopy?.xCounters && item.x) addCounters(ctx, o.id, item.x);
     addCounters(ctx, o.id, bonusCounters(ctx, item.controller, o.id, d.subtypes));
     // A permanent's gift (Scrapshooter): the opponent gets it as it resolves.
     if (item.kicked && d.kicker?.as === 'gift' && d.kicker.gift)

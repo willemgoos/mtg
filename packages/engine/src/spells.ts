@@ -46,7 +46,17 @@ export function spellTags(d: CardDefinition): string[] {
   // Secrets of Strixhaven (14b): Hydro-Channeler: "only to cast an instant or sorcery spell".
   const instantOrSorcery =
     d.types.includes('Instant') || d.types.includes('Sorcery') ? ['InstantOrSorcery'] : [];
-  return [...d.subtypes, ...d.types, ...d.supertypes, ...big, ...noncreature, ...instantOrSorcery];
+  // Strixhaven Brawl (15b, pair): Troyan, Gutsy Explorer: spells with mana value 5 or greater or with {X}.
+  const bigSpell = manaValue(d.manaCost) >= 5 || d.manaCost.x ? ['BigSpell'] : [];
+  return [
+    ...d.subtypes,
+    ...d.types,
+    ...d.supertypes,
+    ...big,
+    ...noncreature,
+    ...instantOrSorcery,
+    ...bigSpell,
+  ];
 }
 
 const MAX_PAWS = 5;

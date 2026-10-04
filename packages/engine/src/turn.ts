@@ -179,6 +179,7 @@ export function startTurn(ctx: Ctx, player: PlayerId, noPowerUp = false): void {
   s.turn.leftGraveyard = { p1: 0, p2: 0 };
   s.turn.creaturesLost = { p1: 0, p2: 0 };
   s.turn.foodsSacrificed = { p1: 0, p2: 0 };
+  s.turn.permanentsLeft = { p1: 0, p2: 0 }; // Strixhaven Brawl (15b, pair): revolt
   delete s.turn.exiledCards; // Secrets of Strixhaven (14b)
   delete s.turn.hexproofPlayers;
   delete s.turn.osteomancer;
