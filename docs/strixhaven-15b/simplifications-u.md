@@ -38,3 +38,5 @@ One bullet per card that isn't exactly per Oracle text. Rules text comes from th
 - **Reflective Rimekin** (Alchemy): the one-time boon is a permanent emblem-style triggered ability, so it copies each of your later instant or sorcery spells with mana value 3 or less. The copy keeps the original's targets ("you may choose new targets" is not offered).
 - **Counterspell, Spell Pierce, Spell Swindle, Wash Away, Three Steps Ahead**: Spell Swindle counts X for a spell with {X} in its cost as the announced value; Wash Away's cleave is the alternative cost {1}{U}{U} ("Alternative cost ({1}{U}{U}): cleave") and the unrestricted spell; the normal Wash Away can only target a spell that wasn't cast from its owner's hand. Three Steps Ahead's spree is any non-empty set of its three modes, each with its own additional cost, shown as one cast option per set.
 - **Soulblade Djinn, Consider, Preordain, Deduce, Thoughtcast**: none (Thoughtcast's affinity counts artifacts you control, tokens included).
+
+- **Group status**: all 48 listed cards are implemented (back faces in `BRAWL_15B_U_BACKS`); typecheck, lint and tests pass.
