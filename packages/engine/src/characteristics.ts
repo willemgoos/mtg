@@ -52,6 +52,8 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
   const extraSubtypes: string[] = [];
   // A Vehicle that became an artifact creature this turn.
   let crewed = false;
+  // Reality Fracture (17a): Puppet Crafting: a creature, but not an artifact too.
+  let artifactToo = false;
   // Marvel Super Heroes Jumpstart (Great Lakes Avengers): Flatman switches power and toughness.
   let switched = false;
 
@@ -64,7 +66,10 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
     }
     for (const e of ctx.s.effects) {
       if (e.affected.id !== id || e.affected.zcc !== o.zcc) continue;
-      if (e.becomesCreature) crewed = true;
+      if (e.becomesCreature) {
+        crewed = true;
+        if (!e.creatureOnly) artifactToo = true;
+      }
       if (e.switchPT) switched = !switched;
       power += e.power;
       toughness += e.toughness;
@@ -257,7 +262,7 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
       o.perpetualTypes ??
       (crewed
         ? [
-            ...(d.types.includes('Artifact') ? [] : (['Artifact'] as const)),
+            ...(d.types.includes('Artifact') || !artifactToo ? [] : (['Artifact'] as const)),
             ...d.types,
             ...(d.types.includes('Creature') ? [] : (['Creature'] as const)),
           ]
@@ -437,6 +442,26 @@ export function countOf(
   if (a.count === 'cardsInHand') return ctx.s.players[player].hand.length;
   // Strixhaven (13c)
   if (a.count === 'cardsInLibrary') return ctx.s.players[player].library.length;
+  // Reality Fracture (17a): Fblthp, Knows the Way (domain).
+  if (a.count === 'basicLandTypesYouControl') {
+    const types = new Set<string>();
+    for (const id of ctx.s.battlefield) {
+      if (obj(ctx, id).controller !== player || !def(ctx, id).types.includes('Land')) continue;
+      for (const t of ['Plains', 'Island', 'Swamp', 'Mountain', 'Forest'])
+        if (def(ctx, id).subtypes.includes(t) || obj(ctx, id).addedSubtypes?.includes(t))
+          types.add(t);
+      // Eluge's flood counters make lands Islands.
+      if (obj(ctx, id).counters?.flood) types.add('Island');
+    }
+    return types.size;
+  }
+  // Reality Fracture (17a): Tarmogoyf.
+  if (a.count === 'cardTypesInGraveyards') {
+    const types = new Set<string>();
+    for (const p of ['p1', 'p2'] as const)
+      for (const id of ctx.s.players[p].graveyard) for (const t of def(ctx, id).types) types.add(t);
+    return types.size;
+  }
   if (a.count === 'differentPowersYouControl')
     return new Set(creaturesOnBattlefield(ctx, player).map((c) => power(ctx, c.id))).size;
   if (a.count === 'differentStudyManaValues')
@@ -779,14 +804,18 @@ export function cardMatches(
     if (filter.minPower !== undefined && (d.power ?? 0) < filter.minPower) return false;
     if (filter.maxPower !== undefined && (d.power ?? 0) > filter.maxPower) return false;
   }
-  if (filter.types && !filter.types.some((t) => d.types.includes(t))) return false;
+  // Reality Fracture (17a): Puppet Crafting makes a permanent a creature (so does a crewed Vehicle).
+  const hasType = (t: CardType): boolean =>
+    d.types.includes(t) ||
+    (t === 'Creature' && obj(ctx, id).zone === 'battlefield' && isCreature(ctx, id));
+  if (filter.types && !filter.types.some(hasType)) return false;
   if (
     filter.subtypes &&
     !filter.subtypes.some((st) => subtypes.includes(st) || changeling(ctx, id, st))
   )
     return false;
   if (filter.colors && !filter.colors.some((color) => d.colors.includes(color))) return false;
-  if (filter.notTypes?.some((t) => d.types.includes(t))) return false;
+  if (filter.notTypes?.some(hasType)) return false;
   // Mystical Archive (16): Doom Blade.
   if (filter.notColors?.some((c) => d.colors.includes(c))) return false;
   // Secrets of Strixhaven (14b): Rocket Volley.

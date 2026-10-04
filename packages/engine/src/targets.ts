@@ -1,5 +1,6 @@
 import { planeswalkersHexproof } from './brawl-15a-w-effects.ts';
 import { ignoresHexproofAndWard } from './brawl-15b-b-effects.ts';
+import { landsHaveHexproof } from './fra-green-effects.ts';
 import { protectedFrom } from './brawl-15b-w-effects.ts';
 import { cardMatches, hasKeyword, isCreature, matchesFilter } from './characteristics.ts';
 import { type Ctx, def, defOf, deref, obj, other, refOf } from './context.ts';
@@ -61,6 +62,8 @@ function permanentOk(ctx: Ctx, spec: TargetSpec, id: ObjectId, src: TargetingSou
     // Strixhaven Brawl (15a): Deification.
     if (def(ctx, id).types.includes('Planeswalker') && planeswalkersHexproof(ctx, o.controller))
       return false;
+    // Reality Fracture (17a): Marwyn, the Preserver.
+    if (def(ctx, id).types.includes('Land') && landsHaveHexproof(ctx, o.controller)) return false;
     if (
       !ignoreHexproof &&
       hasKeyword(ctx, id, 'hexproofFromInstants') &&

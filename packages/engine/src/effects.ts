@@ -113,6 +113,9 @@ export function dealDamage(
   amount *= doubling(ctx, src, to);
   amount = prevented(ctx, src, to, amount);
   if (amount <= 0) return;
+  // Reality Fracture (17a): Ruric Thar, "as long as they haven't dealt combat damage yet".
+  if (combat && ctx.s.objects[src.id]?.zone === 'battlefield')
+    ctx.s.objects[src.id]!.dealtCombatDamage = true;
   // The monarch: combat damage to them makes the attacker's controller the monarch.
   if (combat && 'player' in to && ctx.s.monarch === to.player && src.controller !== to.player)
     setMonarch(ctx, src.controller);
@@ -1832,6 +1835,14 @@ export function runEffects(
         const searcher =
           (t && 'object' in t ? ctx.s.objects[t.object.id]?.controller : undefined) ?? controller;
         if (e.forControllerOf !== undefined && !t) continue;
+        // Reality Fracture (17a): "up to 0 cards" (Fblthp with X = 0): the library is still shuffled.
+        if (e.upTo !== undefined && resolveAmount(ctx, es, e.upTo) <= 0) {
+          if (e.shuffle !== false) {
+            shuffleInPlace(ctx.s.rng, ctx.s.players[searcher].library);
+            emit(ctx, { type: 'shuffled', player: searcher });
+          }
+          continue;
+        }
         const options = ctx.s.players[searcher].library.filter((id) => {
           if (typeof e.filter === 'object') {
             // Strixhaven (13c): Rushed Rebirth: "a creature card with lesser mana value" than the one that died.
@@ -1863,6 +1874,9 @@ export function runEffects(
           ...(e.forOpponent ? { forOpponent: true } : {}),
           ...(e.fractalLand ? { fractalLand: true } : {}),
           ...(e.sourceCounterIfTypes ? { sourceCounterIfTypes: e.sourceCounterIfTypes } : {}),
+          // Reality Fracture (17a): Fblthp, Hexhaven Invigorator.
+          ...(e.upTo !== undefined ? { remaining: resolveAmount(ctx, es, e.upTo) } : {}),
+          ...(e.differentNames ? { differentNames: true } : {}),
           resume,
           thenPriority,
         };
@@ -3362,7 +3376,10 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
           ...(e.basePT && def(ctx, id).types.includes('Creature') ? { basePT: e.basePT } : {}),
           ...(e.whileSource && es.source
             ? { expires: 'whileSource' as const, whileSourceId: es.source.id }
-            : { expires: 'untilYourNextTurn' as const }),
+            : // Reality Fracture (17a): Flourishing Grapple.
+              e.untilEndOfTurn
+              ? { expires: 'endOfTurn' as const }
+              : { expires: 'untilYourNextTurn' as const }),
           player: es.controller,
         });
         o.blank = true;

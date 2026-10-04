@@ -48,6 +48,8 @@ export function checkCondition(
   if (c.kind === 'cardsExiledThisTurn') return (ctx.s.turn.exiledCards ?? 0) > 0;
   // Doom Prevails (9e).
   if (c.kind === 'kickedAtLeast') return (self?.kickCount ?? 0) >= c.n;
+  // Reality Fracture (17a): Ruric Thar, Magecrusher.
+  if (c.kind === 'sourceDealtCombatDamage') return !!self?.dealtCombatDamage;
   if (c.kind === 'sourceHasExiled')
     return !!self?.exiledWith?.some((id) => ctx.s.objects[id]?.zone === 'exile');
   // The Fantastic Four (9d).
@@ -940,6 +942,12 @@ function detect(ctx: Ctx, ev: GameEvent): void {
     case 'discarded': {
       const card = s.objects[ev.id];
       if (!card) return;
+      // Reality Fracture (17a): Titanbones, "When you discard this card" (from the graveyard it went to).
+      if (card.zone === 'graveyard')
+        def(ctx, card.id).abilities.forEach((a, i) => {
+          if (a.kind === 'triggered' && a.trigger.on === 'selfDiscarded')
+            if (checkCondition(ctx, a.condition, ev.player, card)) queue(ctx, card, i, ev.player);
+        });
       forEachBattlefieldTrigger(
         ctx,
         (o, a) =>
