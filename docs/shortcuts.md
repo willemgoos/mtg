@@ -92,3 +92,5 @@ from) when it's fixed. Older phases keep their own "Simplifications" lists in `d
       as her.
 - [ ] Beast, Erudite Aerialist: flying turns on for any +1/+1 counter put on him this turn, even an opponent's.
 - [ ] Reed Richards, Smartest Man: the replacement still makes four draws when the library has fewer cards.
+- [ ] Stunning Shot: two modes ("up to one of yours, then up to one of theirs" or "theirs only") instead of two independent
+      "up to one" targets, because optional targets can only be dropped from the end.
