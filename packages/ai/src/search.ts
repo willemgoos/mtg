@@ -14,7 +14,7 @@ import {
   type RngState,
 } from '@mtg/engine';
 import { evaluate } from './evaluate.ts';
-import { createHeuristicBot, planAttacks, planBlocks } from './heuristic.ts';
+import { createHeuristicBot, planAttacks, planBlocks, planWalkerAttacks } from './heuristic.ts';
 import { type Block, inCombat, quickBlocks, scoreAction } from './simulate.ts';
 import { type Bot, other, viewEngine } from './view.ts';
 
@@ -40,6 +40,8 @@ interface Arm {
   apply(engine: Engine, s: GameState): void;
   /** For attack/block options: the full plan, declared one creature at a time. */
   attackers?: ObjectId[];
+  /** Reality Fracture (17c): attackers that go at an opposing planeswalker. */
+  attackAt?: ReadonlyMap<ObjectId, ObjectId>;
   blocks?: Block[];
 }
 
@@ -168,44 +170,80 @@ export function createSearchBot(
     );
     const fixed = declared.filter((id) => !removable.has(id));
     const planned = planAttacks(view, v, me, declared);
+    // Reality Fracture (17c): the same plan with some attackers sent at the opponent's planeswalkers.
+    const at = planWalkerAttacks(view, v, me, planned, declared);
     const options: ObjectId[][] = [planned, [], available];
     for (const id of available) options.push([id]);
     for (const id of available) {
       options.push(planned.includes(id) ? planned.filter((x) => x !== id) : [...planned, id]);
     }
     const seen = new Set<string>();
-    return (
-      options
-        .map((ids) => [...fixed.filter((id) => !ids.includes(id)), ...ids])
-        // Only creatures that may still be declared (Propaganda caps them).
-        .map((ids) => ids.filter((id) => available.includes(id)))
-        .filter((ids) => {
-          const k = [...ids].sort().join(',');
-          if (seen.has(k)) return false;
-          seen.add(k);
-          return true;
-        })
-        .map((ids) => attackArm(me, declared, ids))
-    );
+    const arms = options
+      .map((ids) => [...fixed.filter((id) => !ids.includes(id)), ...ids])
+      // Only creatures that may still be declared (Propaganda caps them).
+      .map((ids) => ids.filter((id) => available.includes(id)))
+      .filter((ids) => {
+        const k = [...ids].sort().join(',');
+        if (seen.has(k)) return false;
+        seen.add(k);
+        return true;
+      })
+      .map((ids) => attackArm(me, v, declared, ids));
+    if (at.size > 0) {
+      const ids = [...planned, ...[...at.keys()].filter((id) => !planned.includes(id))];
+      arms.push(attackArm(me, v, declared, ids, at));
+    }
+    return arms;
   }
 
-  function attackArm(me: PlayerId, declared: ObjectId[], ids: ObjectId[]): Arm {
+  function attackArm(
+    me: PlayerId,
+    v: GameState,
+    declared: ObjectId[],
+    ids: ObjectId[],
+    at: ReadonlyMap<ObjectId, ObjectId> = new Map(),
+  ): Arm {
     const wrong = declared.find((id) => !ids.includes(id));
     const next = ids.find((id) => !declared.includes(id));
+    const declaredAt = (id: ObjectId) =>
+      v.decision.kind === 'declareAttackers'
+        ? v.decision.declared.find((x) => x.id === id)
+        : undefined;
+    // Declared at the player but meant for a planeswalker: declare it again at the walker.
+    const redirect = ids.find(
+      (id) => at.has(id) && declared.includes(id) && declaredAt(id)?.planeswalker !== at.get(id),
+    );
+    const toward = (id: ObjectId): Action =>
+      at.has(id)
+        ? {
+            type: 'addAttacker',
+            player: me,
+            attacker: id,
+            defender: other(me),
+            planeswalker: at.get(id)!,
+          }
+        : { type: 'addAttacker', player: me, attacker: id, defender: other(me) };
     const first: Action = wrong
       ? { type: 'removeAttacker', player: me, attacker: wrong }
       : next
-        ? { type: 'addAttacker', player: me, attacker: next, defender: other(me) }
-        : { type: 'confirmAttackers', player: me };
+        ? toward(next)
+        : redirect
+          ? toward(redirect)
+          : { type: 'confirmAttackers', player: me };
     return {
-      label: `attack[${ids.join(',')}]`,
+      label: `attack[${ids.map((id) => (at.has(id) ? `${id}>${at.get(id)}` : id)).join(',')}]`,
       first,
       attackers: ids,
+      attackAt: at,
       apply: (e, s) => {
         s.decision = {
           kind: 'declareAttackers',
           player: me,
-          declared: ids.map((id) => ({ id, defender: other(me) })),
+          declared: ids.map((id) => ({
+            id,
+            defender: other(me),
+            ...(at.has(id) ? { planeswalker: at.get(id)! } : {}),
+          })),
         };
         e.applyActionInPlace(s, { type: 'confirmAttackers', player: me }, { trusted: true });
       },
@@ -284,8 +322,10 @@ export function createSearchBot(
       d.kind === 'declareAttackers'
         ? attackArm(
             me,
+            v,
             d.declared.map((x) => x.id),
             plan.attackers ?? [],
+            plan.attackAt,
           )
         : d.kind === 'declareBlockers'
           ? blockArm(me, d.declared, plan.blocks ?? [], '')

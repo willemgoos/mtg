@@ -280,6 +280,9 @@ export function checkCondition(
   switch (c.kind) {
     case 'attackedThisTurn':
       return ctx.s.players[controller].attackedThisTurn;
+    // Reality Fracture (17c): Kiora of Salt and Sand.
+    case 'activatedLoyaltyAbilityThisTurn':
+      return !!ctx.s.turn.loyaltyActivated?.includes(controller);
     case 'controlsAnother':
       return creaturesOnBattlefield(ctx, controller).some(
         (o) => o.id !== self.id && def(ctx, o.id).subtypes.includes(c.subtype),
@@ -1709,6 +1712,18 @@ function detect(ctx: Ctx, ev: GameEvent): void {
       );
       return;
     }
+    // Reality Fracture (17c): Inspired Tethermage.
+    case 'loyaltyCountersAdded': {
+      const target = s.objects[ev.id];
+      if (!target || target.zone !== 'battlefield') return;
+      forEachBattlefieldTrigger(
+        ctx,
+        (o, a) => a.trigger.on === 'youPutLoyaltyCounters' && o.controller === target.controller,
+        target,
+        ev.count,
+      );
+      return;
+    }
     case 'levelChanged': {
       const o = s.objects[ev.id];
       if (!o) return;
@@ -1735,6 +1750,20 @@ function detect(ctx: Ctx, ev: GameEvent): void {
         ctx,
         (o, a) => a.trigger.on === 'opponentActivatesAbility' && o.controller !== ev.player,
       );
+      // Reality Fracture (17c): loyalty abilities (Ajani Unrelenting, Way of the Mind Sculptor, Gideon the Oathless).
+      if (item?.kind === 'ability' && item.activated?.cost.loyalty !== undefined) {
+        const cost = item.activated.cost;
+        // Loyalty counters removed to pay: a minus cost, or X.
+        const removed = Math.max(0, -(cost.loyalty ?? 0)) + (cost.loyaltyX ? (item.x ?? 0) : 0);
+        forEachBattlefieldTrigger(
+          ctx,
+          (o, a) =>
+            (a.trigger.on === 'youActivateLoyaltyAbility' &&
+              o.controller === ev.player &&
+              removed >= (a.trigger.removedAtLeast ?? 0)) ||
+            (a.trigger.on === 'opponentActivatesLoyaltyAbility' && o.controller !== ev.player),
+        );
+      }
       return;
     }
     case 'tappedForTeamwork': {

@@ -20,7 +20,16 @@ import type {
 // Scenario builder
 // ---------------------------------------------------------------------------
 
-type PermSpec = string | { card: string; tapped?: boolean; sick?: boolean; damage?: number };
+type PermSpec =
+  | string
+  | {
+      card: string;
+      tapped?: boolean;
+      sick?: boolean;
+      damage?: number;
+      /** A planeswalker's loyalty counters (Reality Fracture 17c). */
+      loyalty?: number;
+    };
 
 export interface PlayerSpec {
   life?: number;
@@ -71,6 +80,10 @@ export function buildScenario(db: CardDb, spec: ScenarioSpec = {}): GameState {
       o.tapped = bs.tapped ?? false;
       o.summoningSick = bs.sick ?? false;
       o.damage = bs.damage ?? 0;
+      // Reality Fracture (17c): a planeswalker token definition (the Jace token) is a token; a planeswalker can be given loyalty.
+      if (db.get(bs.card)?.isToken && db.get(bs.card)!.types.includes('Planeswalker'))
+        o.isToken = true;
+      if (bs.loyalty !== undefined) o.counters = { ...o.counters, loyalty: bs.loyalty };
       s.battlefield.push(o.id);
     }
   }

@@ -46,6 +46,7 @@ const NO_COST = { generic: 0, colored: {} };
 import { standForDistinctTypes, targetCandidates, targetCombos } from './targets.ts';
 import { freeCastSource, playableWhileControlling } from './msh-analyzed.ts';
 import { omnipresenceCastable } from './fra-green-effects.ts';
+import { permanentHasStatic } from './fra-pw-effects.ts';
 import type {
   Action,
   CardFilter,
@@ -503,6 +504,7 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
               paws: v.paws,
               kicked: v.kicked,
               kickCount: v.kickCount,
+              beheld: v.beheld,
               sacrifice: v.sacrifice ? 'x' : undefined,
               discard: v.discard ? 'x' : undefined,
               forage: v.forage ? 'graveyard' : undefined,
@@ -536,6 +538,9 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
             // Marvel Super Heroes Jumpstart (Incredible): behold needs something to behold.
             if (v.kicked && d.kicker?.behold && !canBehold(ctx, player, card, d.kicker.behold))
               continue;
+            // Reality Fracture (17c): Countersculpt beholds a Jace or pays.
+            if (v.beheld && d.beholdOrPay && !canBehold(ctx, player, card, d.beholdOrPay.filter))
+              continue;
             const base = castCost(ctx, player, card, choice);
             // Strixhaven (13b): Killian also lowers the cost by what the spell targets.
             const targetDiscount = !!d.costReductionIfTarget || hasTargetCostReduction(ctx, player);
@@ -544,6 +549,7 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
               ...(v.mode !== undefined ? { mode: v.mode } : {}),
               ...(v.kicked ? { kicked: true } : {}),
               ...(v.kickCount ? { kickCount: v.kickCount } : {}),
+              ...(v.beheld ? { beheld: true } : {}),
               ...(x !== undefined ? { x } : {}),
               ...(v.paws ? { paws: v.paws } : {}),
               ...(choice.delve ? { delve: choice.delve } : {}),
@@ -743,7 +749,11 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
       // Loyalty abilities: sorcery speed, once per turn, enough loyalty to pay.
       if (a.cost.loyalty !== undefined) {
         const o = obj(ctx, source);
-        if (!sorcery || o.onceTurns?.[LOYALTY_KEY] === s.turn.number) return;
+        // Reality Fracture (17c): Jace's Machinations lets some be activated whenever you have priority.
+        const instant = !!s.turn.instantLoyalty?.some(
+          (x) => x.player === player && (!x.filter || matchesFilter(ctx, source, x.filter)),
+        );
+        if (!(sorcery || instant) || o.onceTurns?.[LOYALTY_KEY] === s.turn.number) return;
         if ((o.counters?.loyalty ?? 0) + a.cost.loyalty < 0) return;
       }
       const tagged = isCreature(ctx, source)
@@ -960,7 +970,14 @@ export function getLegalActions(ctx: Ctx, player: PlayerId): Action[] {
           out.push({ type: 'addAttacker', player, attacker: id, defender });
         if (at || (isCreature(ctx, id) && canAttack(ctx, id)))
           for (const pw of walkers)
-            if (at?.planeswalker !== pw)
+            // Reality Fracture (17c): Tomik, "no more than one creature can attack this planeswalker each combat".
+            if (
+              at?.planeswalker !== pw &&
+              !(
+                d.declared.some((x) => x.planeswalker === pw && x.id !== id) &&
+                permanentHasStatic(ctx, pw, 'oneAttackerOnly')
+              )
+            )
               out.push({ type: 'addAttacker', player, attacker: id, defender, planeswalker: pw });
       }
       return out;

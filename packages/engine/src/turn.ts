@@ -226,6 +226,8 @@ export function startTurn(ctx: Ctx, player: PlayerId, noPowerUp = false): void {
   delete s.turn.creaturesShielded;
   // Strixhaven (13c): Revel in Silence; Academic Probation's name bans end as their caster's turn begins.
   delete s.turn.noLoyalty;
+  delete s.turn.loyaltyActivated; // Reality Fracture (17c)
+  delete s.turn.instantLoyalty;
   for (const q of Object.values(s.players)) {
     if (q.castBans?.some((b) => b.until === player))
       q.castBans = q.castBans.filter((b) => b.until !== player);

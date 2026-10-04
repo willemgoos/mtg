@@ -73684,5 +73684,304 @@
    "large": "https://cards.scryfall.io/large/front/9/a/9a467560-6676-4fc2-9400-768a79650aa4.jpg?1789557010",
    "artCrop": "https://cards.scryfall.io/art_crop/front/9/a/9a467560-6676-4fc2-9400-768a79650aa4.jpg?1789557010"
   }
+ },
+ {
+  "name": "Academic Ascent",
+  "scryfallId": "730d8c28-1e58-4b8e-89e9-445d154d2e83",
+  "oracleId": "406e853b-713f-4c89-9efb-aca74a11183f",
+  "set": "fra",
+  "collectorNumber": "2",
+  "rarity": "common",
+  "manaCost": "{1}{W}",
+  "typeLine": "Instant",
+  "oracleText": "Target creature gets +2/+2 and gains flying until end of turn.\nEmpower Jace 2. (Put two loyalty counters on a Jace token you control. If you don't control one, first create a blue Jace planeswalker token with \"[−1]: Surveil 1\" and \"[−3]: Draw a card.\")",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Surveil",
+   "Empower Jace"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/3/730d8c28-1e58-4b8e-89e9-445d154d2e83.jpg?1788878081",
+   "normal": "https://cards.scryfall.io/normal/front/7/3/730d8c28-1e58-4b8e-89e9-445d154d2e83.jpg?1788878081",
+   "large": "https://cards.scryfall.io/large/front/7/3/730d8c28-1e58-4b8e-89e9-445d154d2e83.jpg?1788878081",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/3/730d8c28-1e58-4b8e-89e9-445d154d2e83.jpg?1788878081"
+  }
+ },
+ {
+  "name": "Arcane Amphisbaena",
+  "scryfallId": "1bf923c4-f0b7-4271-978c-fd2e79fe1cc8",
+  "oracleId": "5c151e3b-fcf2-4adb-a60b-9eff0c360705",
+  "set": "fra",
+  "collectorNumber": "97",
+  "rarity": "common",
+  "manaCost": "{1}{G}",
+  "typeLine": "Creature — Snake",
+  "oracleText": "Deathtouch\nWhen this creature enters, empower Jace 2. (Put two loyalty counters on a Jace token you control. If you don't control one, first create a blue Jace planeswalker token with \"[−1]: Surveil 1\" and \"[−3]: Draw a card.\")",
+  "power": "1",
+  "toughness": "1",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Surveil",
+   "Empower Jace",
+   "Deathtouch"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/b/1bf923c4-f0b7-4271-978c-fd2e79fe1cc8.jpg?1788878190",
+   "normal": "https://cards.scryfall.io/normal/front/1/b/1bf923c4-f0b7-4271-978c-fd2e79fe1cc8.jpg?1788878190",
+   "large": "https://cards.scryfall.io/large/front/1/b/1bf923c4-f0b7-4271-978c-fd2e79fe1cc8.jpg?1788878190",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/b/1bf923c4-f0b7-4271-978c-fd2e79fe1cc8.jpg?1788878190"
+  }
+ },
+ {
+  "name": "Campus Crier",
+  "scryfallId": "6047b14c-91d5-4f8e-af3f-057a541e2546",
+  "oracleId": "c1a9d60f-a469-48f9-8f1c-3ca5ae86bd64",
+  "set": "fra",
+  "collectorNumber": "4",
+  "rarity": "common",
+  "manaCost": "{1}{W}",
+  "typeLine": "Creature — Human Advisor",
+  "oracleText": "{1}, Exile this card from your graveyard: Empower Jace 2. (Put two loyalty counters on a Jace token you control. If you don't control one, first create a blue Jace planeswalker token with \"[−1]: Surveil 1\" and \"[−3]: Draw a card.\")",
+  "power": "3",
+  "toughness": "1",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Surveil",
+   "Empower Jace"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/0/6047b14c-91d5-4f8e-af3f-057a541e2546.jpg?1788878120",
+   "normal": "https://cards.scryfall.io/normal/front/6/0/6047b14c-91d5-4f8e-af3f-057a541e2546.jpg?1788878120",
+   "large": "https://cards.scryfall.io/large/front/6/0/6047b14c-91d5-4f8e-af3f-057a541e2546.jpg?1788878120",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/0/6047b14c-91d5-4f8e-af3f-057a541e2546.jpg?1788878120"
+  }
+ },
+ {
+  "name": "Compel Brutality",
+  "scryfallId": "bd32d736-7a58-46b9-90b4-2cac3c3e80a1",
+  "oracleId": "3a9059ac-c595-4e71-b704-b04d2d47db70",
+  "set": "fra",
+  "collectorNumber": "101",
+  "rarity": "common",
+  "manaCost": "{1}{G}",
+  "typeLine": "Instant",
+  "oracleText": "Choose one —\n• Target creature you control deals damage equal to its power to target creature or planeswalker an opponent controls.\n• Target planeswalker you control deals damage equal to its loyalty to target creature or planeswalker an opponent controls.",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/d/bd32d736-7a58-46b9-90b4-2cac3c3e80a1.jpg?1788521235",
+   "normal": "https://cards.scryfall.io/normal/front/b/d/bd32d736-7a58-46b9-90b4-2cac3c3e80a1.jpg?1788521235",
+   "large": "https://cards.scryfall.io/large/front/b/d/bd32d736-7a58-46b9-90b4-2cac3c3e80a1.jpg?1788521235",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/d/bd32d736-7a58-46b9-90b4-2cac3c3e80a1.jpg?1788521235"
+  }
+ },
+ {
+  "name": "Hexhaven Battalion",
+  "scryfallId": "3b6ac80e-c726-4bd0-893a-e666041a04a6",
+  "oracleId": "158823ed-6015-437a-82b0-8dadb1e9aab2",
+  "set": "fra",
+  "collectorNumber": "12",
+  "rarity": "common",
+  "manaCost": "{4}{W}{W}",
+  "typeLine": "Sorcery",
+  "oracleText": "Create three 2/2 colorless Wizard Soldier creature tokens named Cadet. Empower Jace 2. (Put two loyalty counters on a Jace token you control. If you don't control one, first create a blue Jace planeswalker token with \"[−1]: Surveil 1\" and \"[−3]: Draw a card.\")\nBasic landcycling {2} ({2}, Discard this card: Search your library for a basic land card, reveal it, put it into your hand, then shuffle.)",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Surveil",
+   "Empower Jace",
+   "Landcycling",
+   "Basic landcycling",
+   "Typecycling",
+   "Cycling"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/b/3b6ac80e-c726-4bd0-893a-e666041a04a6.jpg?1789556695",
+   "normal": "https://cards.scryfall.io/normal/front/3/b/3b6ac80e-c726-4bd0-893a-e666041a04a6.jpg?1789556695",
+   "large": "https://cards.scryfall.io/large/front/3/b/3b6ac80e-c726-4bd0-893a-e666041a04a6.jpg?1789556695",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/b/3b6ac80e-c726-4bd0-893a-e666041a04a6.jpg?1789556695"
+  }
+ },
+ {
+  "name": "Inspired Tethermage",
+  "scryfallId": "073f4998-a204-447b-93d5-746ae87fd6a1",
+  "oracleId": "80c2784b-f27d-4a51-9380-171eb32b961d",
+  "set": "fra",
+  "collectorNumber": "109",
+  "rarity": "common",
+  "manaCost": "{2}{G}",
+  "typeLine": "Creature — Elf Warrior",
+  "oracleText": "Whenever you put one or more loyalty counters on a planeswalker, put a +1/+1 counter on this creature.\n{6}: Empower Jace 2. (Put two loyalty counters on a Jace token you control. If you don't control one, first create a blue Jace planeswalker token with \"[−1]: Surveil 1\" and \"[−3]: Draw a card.\")",
+  "power": "3",
+  "toughness": "2",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Surveil",
+   "Empower Jace"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/7/073f4998-a204-447b-93d5-746ae87fd6a1.jpg?1788878192",
+   "normal": "https://cards.scryfall.io/normal/front/0/7/073f4998-a204-447b-93d5-746ae87fd6a1.jpg?1788878192",
+   "large": "https://cards.scryfall.io/large/front/0/7/073f4998-a204-447b-93d5-746ae87fd6a1.jpg?1788878192",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/7/073f4998-a204-447b-93d5-746ae87fd6a1.jpg?1788878192"
+  }
+ },
+ {
+  "name": "Keeper of the Quiet Hour",
+  "scryfallId": "b6331218-dbb8-44a9-8ba5-5fb1ab41c5c0",
+  "oracleId": "ecdfee75-15fd-41ea-89d4-4bfc1fa4d032",
+  "set": "fra",
+  "collectorNumber": "171",
+  "rarity": "common",
+  "manaCost": "{3}",
+  "typeLine": "Artifact Creature — Chimera",
+  "oracleText": "When this creature enters, empower Jace 2. (Put two loyalty counters on a Jace token you control. If you don't control one, first create a blue Jace planeswalker token with \"[−1]: Surveil 1\" and \"[−3]: Draw a card.\")",
+  "power": "3",
+  "toughness": "2",
+  "colors": [],
+  "keywords": [
+   "Surveil",
+   "Empower Jace"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/6/b6331218-dbb8-44a9-8ba5-5fb1ab41c5c0.jpg?1788878239",
+   "normal": "https://cards.scryfall.io/normal/front/b/6/b6331218-dbb8-44a9-8ba5-5fb1ab41c5c0.jpg?1788878239",
+   "large": "https://cards.scryfall.io/large/front/b/6/b6331218-dbb8-44a9-8ba5-5fb1ab41c5c0.jpg?1788878239",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/6/b6331218-dbb8-44a9-8ba5-5fb1ab41c5c0.jpg?1788878239"
+  }
+ },
+ {
+  "name": "Mindseeker Oculus",
+  "scryfallId": "f5324741-353a-4a70-adb2-b631b00806dd",
+  "oracleId": "aa9547b3-e4e4-4557-9dd1-3aa9a7cb9937",
+  "set": "fra",
+  "collectorNumber": "33",
+  "rarity": "common",
+  "manaCost": "{2}{U}",
+  "typeLine": "Creature — Homunculus",
+  "oracleText": "When this creature enters, empower Jace 4. (Put four loyalty counters on a Jace token you control. If you don't control one, first create a blue Jace planeswalker token with \"[−1]: Surveil 1\" and \"[−3]: Draw a card.\")",
+  "power": "2",
+  "toughness": "1",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Surveil",
+   "Empower Jace"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/5/f5324741-353a-4a70-adb2-b631b00806dd.jpg?1789556707",
+   "normal": "https://cards.scryfall.io/normal/front/f/5/f5324741-353a-4a70-adb2-b631b00806dd.jpg?1789556707",
+   "large": "https://cards.scryfall.io/large/front/f/5/f5324741-353a-4a70-adb2-b631b00806dd.jpg?1789556707",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/5/f5324741-353a-4a70-adb2-b631b00806dd.jpg?1789556707"
+  }
+ },
+ {
+  "name": "No Admittance",
+  "scryfallId": "11ba4fdd-cc03-4bb6-a493-91a9785771d0",
+  "oracleId": "d53ae01b-87e1-48e1-9fc3-23a734ce6622",
+  "set": "fra",
+  "collectorNumber": "89",
+  "rarity": "common",
+  "manaCost": "{1}{R}",
+  "typeLine": "Sorcery",
+  "oracleText": "No Admittance deals 3 damage to any target.\nEmpower Jace 1. (Put a loyalty counter on a Jace token you control. If you don't control one, first create a blue Jace planeswalker token with \"[−1]: Surveil 1\" and \"[−3]: Draw a card.\")",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Surveil",
+   "Empower Jace"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/1/11ba4fdd-cc03-4bb6-a493-91a9785771d0.jpg?1788878170",
+   "normal": "https://cards.scryfall.io/normal/front/1/1/11ba4fdd-cc03-4bb6-a493-91a9785771d0.jpg?1788878170",
+   "large": "https://cards.scryfall.io/large/front/1/1/11ba4fdd-cc03-4bb6-a493-91a9785771d0.jpg?1788878170",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/1/11ba4fdd-cc03-4bb6-a493-91a9785771d0.jpg?1788878170"
+  }
+ },
+ {
+  "name": "Protege's Awakening",
+  "scryfallId": "a08c7ec2-4c6a-4db2-85a7-41afe8731523",
+  "oracleId": "07617648-6490-4719-acec-7705671f7e01",
+  "set": "fra",
+  "collectorNumber": "37",
+  "rarity": "common",
+  "manaCost": "{3}{U}",
+  "typeLine": "Sorcery",
+  "oracleText": "Empower Jace 6. (Put six loyalty counters on a Jace token you control. If you don't control one, first create a blue Jace planeswalker token with \"[−1]: Surveil 1\" and \"[−3]: Draw a card.\")\nDraw a card.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Surveil",
+   "Empower Jace"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/0/a08c7ec2-4c6a-4db2-85a7-41afe8731523.jpg?1790558750",
+   "normal": "https://cards.scryfall.io/normal/front/a/0/a08c7ec2-4c6a-4db2-85a7-41afe8731523.jpg?1790558750",
+   "large": "https://cards.scryfall.io/large/front/a/0/a08c7ec2-4c6a-4db2-85a7-41afe8731523.jpg?1790558750",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/0/a08c7ec2-4c6a-4db2-85a7-41afe8731523.jpg?1790558750"
+  }
+ },
+ {
+  "name": "Solve for Disappointment",
+  "scryfallId": "7beaa8c9-1a2c-4c88-b579-91e371d8d9e3",
+  "oracleId": "3241a3f5-7ae5-4497-9dd2-a55f3370a055",
+  "set": "fra",
+  "collectorNumber": "67",
+  "rarity": "common",
+  "manaCost": "{1}{B}",
+  "typeLine": "Sorcery",
+  "oracleText": "Target opponent reveals their hand. You choose a nonland permanent card from it. That player discards that card.\nEmpower Jace 1. (Put a loyalty counter on a Jace token you control. If you don't control one, first create a blue Jace planeswalker token with \"[−1]: Surveil 1\" and \"[−3]: Draw a card.\")",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Surveil",
+   "Empower Jace"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/b/7beaa8c9-1a2c-4c88-b579-91e371d8d9e3.jpg?1788878155",
+   "normal": "https://cards.scryfall.io/normal/front/7/b/7beaa8c9-1a2c-4c88-b579-91e371d8d9e3.jpg?1788878155",
+   "large": "https://cards.scryfall.io/large/front/7/b/7beaa8c9-1a2c-4c88-b579-91e371d8d9e3.jpg?1788878155",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/b/7beaa8c9-1a2c-4c88-b579-91e371d8d9e3.jpg?1788878155"
+  }
+ },
+ {
+  "name": "Tam's Resistance",
+  "scryfallId": "b3d33df2-a77b-4c2e-ba7f-2cc9c1505f9b",
+  "oracleId": "7500b7dc-588d-46bd-acc5-885dcd464668",
+  "set": "fra",
+  "collectorNumber": "153",
+  "rarity": "common",
+  "manaCost": "{1}{G/U}",
+  "typeLine": "Sorcery",
+  "oracleText": "Put a +1/+1 counter on up to one target creature. It gains vigilance until end of turn.\nEmpower Jace 4. (Put four loyalty counters on a Jace token you control. If you don't control one, first create a blue Jace planeswalker token with \"[−1]: Surveil 1\" and \"[−3]: Draw a card.\")",
+  "colors": [
+   "G",
+   "U"
+  ],
+  "keywords": [
+   "Surveil",
+   "Empower Jace"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/3/b3d33df2-a77b-4c2e-ba7f-2cc9c1505f9b.jpg?1788878215",
+   "normal": "https://cards.scryfall.io/normal/front/b/3/b3d33df2-a77b-4c2e-ba7f-2cc9c1505f9b.jpg?1788878215",
+   "large": "https://cards.scryfall.io/large/front/b/3/b3d33df2-a77b-4c2e-ba7f-2cc9c1505f9b.jpg?1788878215",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/3/b3d33df2-a77b-4c2e-ba7f-2cc9c1505f9b.jpg?1788878215"
+  }
  }
 ]

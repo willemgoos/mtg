@@ -107,6 +107,8 @@ export const KEYWORDS_AS_ABILITIES = new Set([
   'Enrage',
   'Landcycling',
   'Basic landcycling',
+  // Reality Fracture (17c): the effect is built by the engine's `empowerJace`.
+  'Empower Jace',
   // Marvel Super Heroes Jumpstart (Incredible): Hulk's Thunderclap.
   'Behold',
   'Typecycling',

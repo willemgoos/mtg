@@ -285,6 +285,12 @@ export interface CardDefinition {
   entersTappedIf?: ConditionDef;
   /** "As an additional cost to cast this spell, forage or pay this" (Feed the Cycle). */
   forageOrPay?: ManaCost;
+  // Reality Fracture (17c): Countersculpt
+  /**
+   * "As an additional cost to cast this spell, behold a <filter> or pay <pay>": a Jace you control or a Jace card in your hand
+   * (revealed; nothing else happens to it) makes the cost free, else the cast pays `pay` too. The cast action says which (`beheld`).
+   */
+  beholdOrPay?: { filter: CardFilter; pay: ManaCost };
   /** Aura: what it enchants (chosen as a target when cast). */
   enchant?: TargetSpec;
   // Transform (Marvel Super Heroes)
@@ -846,6 +852,13 @@ export type TriggerDef =
   // Strixhaven (13c): Flamescroll Celebrant
   /** Whenever an opponent activates an ability that isn't a mana ability. */
   | { on: 'opponentActivatesAbility' }
+  // Reality Fracture (17c): Ajani Unrelenting, Way of the Mind Sculptor, Way of the Paradox, Gideon the Oathless
+  /** Whenever you activate a loyalty ability; `removedAtLeast`: only if you removed that many loyalty counters to activate it. */
+  | { on: 'youActivateLoyaltyAbility'; removedAtLeast?: number }
+  /** Whenever an opponent activates a loyalty ability. */
+  | { on: 'opponentActivatesLoyaltyAbility' }
+  /** Whenever you put one or more loyalty counters on a planeswalker (a loyalty ability's + cost counts); "that many". */
+  | { on: 'youPutLoyaltyCounters' }
   // Strixhaven (13c): Mila, Crafty Companion
   /** Whenever an opponent attacks one or more planeswalkers you control. */
   | { on: 'opponentAttacksPlaneswalker' }
@@ -893,6 +906,9 @@ export type ConditionDef =
   | { kind: 'wasCast' }
   | { kind: 'controlsPermanents'; filter: CardFilter; min: number }
   | { kind: 'attackedThisTurn' }
+  // Reality Fracture (17c): Kiora of Salt and Sand
+  /** You've activated a loyalty ability this turn. */
+  | { kind: 'activatedLoyaltyAbilityThisTurn' }
   | { kind: 'controlsAnother'; subtype: string }
   /** You control a creature (or `count` creatures) matching the filter (`other` excludes the source). */
   | { kind: 'controlsCreature'; filter: CardFilter; count?: number }
@@ -1429,6 +1445,11 @@ export type Amount =
   // Reality Fracture (17a): Tam, the Possibility
   /** Different planeswalker types among planeswalkers you control. */
   | { count: 'planeswalkerTypesYouControl' }
+  // Reality Fracture (17c): Jace, Reality Sculptor; Compel Brutality
+  /** The loyalty counters among planeswalkers you control matching the filter ("among Jaces you control": `{ subtype: 'Jace' }`). */
+  | { count: 'loyaltyAmongPlaneswalkers'; filter?: CardFilter }
+  /** The loyalty counters on a planeswalker ("equal to its loyalty"). */
+  | { loyaltyOf: Ref }
   // Wakanda Forever (9c).
   /** Creatures on the battlefield (Vanquish the Horde). */
   | { count: 'creaturesOnBattlefield' }
@@ -1497,6 +1518,9 @@ export type EffectDef =
       exceptFrom?: boolean;
       /** Create one of these tokens per point of excess damage dealt to a creature (Goblin Negotiation). */
       excessTokens?: CardDefId;
+      // Reality Fracture (17c): Violent Echoes
+      /** If excess damage was dealt to a creature or planeswalker this way, these effects follow; `{ event: 'amount' }` is the excess. */
+      ifExcess?: EffectDef[];
     }
   /** Until end of turn (or until your next turn). */
   | {
@@ -1763,6 +1787,18 @@ export type EffectDef =
   // Reality Fracture (17a): Sphinx of False Conclusions
   /** Creates a token that's a copy of the source, which may have left the battlefield ("create a token that's a copy of it" from a dies trigger). */
   | { kind: 'tokenCopyOfSource' }
+  // Reality Fracture (17c): Ajani Resolute, Teyo, Way of the Mentor / Necromancer
+  /** Put loyalty counters on a planeswalker (each planeswalker the Ref names; nothing for other permanents). */
+  | { kind: 'loyaltyCounters'; to: Ref; amount: Amount }
+  // Reality Fracture (17c): Jace's Machinations
+  /** Until end of turn, you may activate the loyalty abilities of planeswalkers you control (matching `filter`) any time you could cast an instant. */
+  | { kind: 'loyaltyAtInstantSpeed'; filter?: CardFilter }
+  // Reality Fracture (17c): Empower Jace
+  /**
+   * Empower Jace N: if you control no Jace planeswalker token, create one (with 0 loyalty), then put N loyalty counters on a Jace
+   * planeswalker token you control (you choose when you control several; a nontoken Jace never counts). N 0 only creates it.
+   */
+  | { kind: 'empowerJace'; amount: Amount }
   // Reality Fracture (17a): Sphinx's Approach
   /** Exile this spell and `count` other cards with its name from your graveyard (the engine picks which). */
   | { kind: 'exileSelfAndSameNameFromGraveyard'; count: number }
@@ -2867,6 +2903,19 @@ export type StaticDef =
   | { kind: 'freeCastByCreatureCount' }
   /** Each other planeswalker you control has this permanent's loyalty abilities (Kasmina, Enigma Sage). */
   | { kind: 'sharesLoyaltyAbilities' }
+  // Reality Fracture (17c): the Way of the ... enchantments, Sanctum Lurker, Kiora of Salt and Sand, Tomik
+  /**
+   * Planeswalkers you control (tokens too) have this ability: an activated one (a loyalty
+   * ability such as `{ cost: { loyalty: -2 } }`, which uses the planeswalker as its source) or a static one ("No more than one
+   * creature can attack this planeswalker each combat"). Triggered abilities can't be granted.
+   */
+  | { kind: 'planeswalkersHave'; ability: AbilityDef }
+  // Reality Fracture (17c): Sanctum Lurker
+  /** Planeswalkers you control aren't put into their owners' graveyards for having 0 loyalty. */
+  | { kind: 'planeswalkersStayAtZero' }
+  // Reality Fracture (17c): Tomik, Orzhov Lawmage (granted to planeswalkers with `planeswalkersHave`)
+  /** No more than one creature can attack this planeswalker each combat. */
+  | { kind: 'oneAttackerOnly' }
   // Strixhaven Brawl (15b, b): Nowhere to Run
   /** Creatures your opponents control can be targeted as though they didn't have hexproof; their ward doesn't trigger. */
   | { kind: 'ignoreHexproofWard' }
@@ -3400,6 +3449,12 @@ export interface TurnState {
   // Strixhaven (13c): Revel in Silence
   /** Players who can't activate planeswalkers' loyalty abilities this turn. */
   noLoyalty?: PlayerId[];
+  // Reality Fracture (17c): Kiora of Salt and Sand
+  /** Players who activated a loyalty ability this turn. */
+  loyaltyActivated?: PlayerId[];
+  // Reality Fracture (17c): Jace's Machinations
+  /** Players who may activate loyalty abilities at instant speed this turn (of planeswalkers matching the filter). */
+  instantLoyalty?: { player: PlayerId; filter?: CardFilter }[];
   // Strixhaven Brawl (15b, u): Quicken
   /** Players whose next sorcery spell this turn can be cast as though it had flash. */
   sorceryFlash?: PlayerId[];
@@ -4037,6 +4092,8 @@ export type Action =
       sacrificeMany?: ObjectId[];
       /** Times multikicker is paid (Batroc). */
       kickCount?: number;
+      /** Reality Fracture (17c): beholding for `beholdOrPay` instead of paying (Countersculpt). */
+      beheld?: boolean;
       /** Strixhaven Brawl (15b, u): cards exiled from the graveyard with delve. */
       delve?: number;
       // Teamwork (Marvel Super Heroes)
@@ -4152,6 +4209,8 @@ export type GameEvent =
   | { type: 'revealed'; player: PlayerId; id: ObjectId }
   /** +1/+1 counters were put on a permanent. */
   | { type: 'countersAdded'; id: ObjectId; count: number; player: PlayerId }
+  // Reality Fracture (17c): loyalty counters put on a planeswalker
+  | { type: 'loyaltyCountersAdded'; id: ObjectId; count: number; player: PlayerId }
   /** `player` foraged. */
   | { type: 'foraged'; player: PlayerId }
   /** `player` gave a gift. */

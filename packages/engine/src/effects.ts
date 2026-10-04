@@ -17,6 +17,7 @@ import {
   defOf,
   drawCard,
   emit,
+  enterWithLoyalty,
   moveObject,
   newId,
   newTimestamp,
@@ -32,6 +33,7 @@ import {
   unprepareObject,
 } from './context.ts';
 import { setMonarch } from './monarch.ts';
+import { JACE_TOKEN, jaceTokens } from './fra-pw-effects.ts';
 import { spellOnStack } from './spells.ts';
 import { isTargetLegal, targetCandidates, targetCombos } from './targets.ts';
 import { phaseOut } from './phasing.ts';
@@ -790,6 +792,11 @@ export function resolveAmount(ctx: Ctx, es: EffectSource, amount: Amount): numbe
     const counters = o.zone === 'battlefield' ? o.counters : o.lastNamedCounters;
     return counters?.[amount.namedCountersOnSource] ?? 0;
   }
+  // Reality Fracture (17c): Compel Brutality ("equal to its loyalty": nothing if it has left the battlefield).
+  if ('loyaltyOf' in amount) {
+    const id = objectsOf(ctx, es, amount.loyaltyOf)[0];
+    return id ? (obj(ctx, id).counters?.loyalty ?? 0) : 0;
+  }
   if ('countersOn' in amount) {
     const id = objectsOf(ctx, es, amount.countersOn)[0];
     if (id) return obj(ctx, id).plusOneCounters;
@@ -969,6 +976,8 @@ export function runEffects(
       e.kind === 'removeLoreFromAny' ||
       // Reality Fracture (17a): Tam, the Possibility
       e.kind === 'proliferate' ||
+      // Reality Fracture (17c): Empower Jace (a choice when you control several Jace tokens)
+      e.kind === 'empowerJace' ||
       // Strixhaven (13a)
       e.kind === 'learn' ||
       // Strixhaven (13c)
@@ -1939,6 +1948,29 @@ export function runEffects(
           resume,
           thenPriority,
         };
+      } else if (e.kind === 'empowerJace') {
+        // Reality Fracture (17c): Empower Jace N. Create the token if you control none; with several, you choose.
+        const n = Math.max(0, resolveAmount(ctx, es, e.amount));
+        let tokens = jaceTokens(ctx, controller);
+        if (tokens.length === 0) {
+          runEffect(ctx, es, { kind: 'createToken', token: JACE_TOKEN, count: 1 });
+          tokens = jaceTokens(ctx, controller);
+        }
+        if (n <= 0 || tokens.length === 0) continue;
+        if (tokens.length === 1) {
+          addCounters(ctx, tokens[0]!, n, 'loyalty');
+          continue;
+        }
+        ctx.s.decision = {
+          kind: 'chooseObject',
+          player: controller,
+          options: tokens,
+          title: `Empower Jace ${n}: choose a Jace token to put ${n === 1 ? 'a loyalty counter' : `${n} loyalty counters`} on`,
+          then: [{ kind: 'custom', handler: 'putLoyaltyOnChosen', params: { amount: n } }],
+          otherwise: [],
+          resume,
+          thenPriority,
+        };
       } else if (e.kind === 'removeLoreFromAny') {
         // Final Fantasy (11a): saga creatures. Garnet: one Saga at a time, each at most once.
         const options = ctx.s.battlefield.filter((id) => {
@@ -2049,6 +2081,8 @@ export function runEffects(
       return true;
     }
     runEffect(ctx, es, e);
+    // Reality Fracture (17c): effects the one just run asked to have run right after it (Empower Jace's choice).
+    if (ctx.deferred?.length) list.splice(i + 1, 0, ...ctx.deferred.splice(0));
   }
   return false;
 }
@@ -2069,14 +2103,26 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
       for (const t of resolveRef(ctx, es, e.to)) {
         // Nova Flame: "each other creature".
         if (e.exceptFrom && 'object' in t && t.object.id === src.id) continue;
-        const hit = e.excessTokens && 'object' in t ? onBattlefield(ctx, t.object) : undefined;
+        const hit =
+          (e.excessTokens || e.ifExcess) && 'object' in t
+            ? onBattlefield(ctx, t.object)
+            : undefined;
         const before = hit?.damage ?? 0;
         const lethal = hit ? Math.max(0, characteristics(ctx, hit.id).toughness - before) : 0;
+        // Reality Fracture (17c): a planeswalker's lethal damage is its loyalty (rule 120.4a).
+        const walker = hit && def(ctx, hit.id).types.includes('Planeswalker');
         dealDamage(ctx, src, t, amount, false);
         // Goblin Negotiation: the damage beyond what was lethal.
-        const excess = hit ? hit.damage - before - lethal : 0;
+        const excess = !hit
+          ? 0
+          : walker
+            ? Math.max(0, -(hit.counters?.loyalty ?? 0))
+            : hit.damage - before - lethal;
         if (e.excessTokens && excess > 0)
           runEffect(ctx, es, { kind: 'createToken', token: e.excessTokens, count: excess });
+        // Reality Fracture (17c): Violent Echoes, "if excess damage was dealt to that permanent this way, ... X is that excess damage".
+        if (e.ifExcess && excess > 0)
+          for (const x of e.ifExcess) runEffect(ctx, { ...es, amount: excess }, x);
       }
       return;
     }
@@ -2137,6 +2183,34 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
     case 'changeTarget':
     case 'chooseNewTargets':
       return; // handled by runEffects
+    // Reality Fracture (17c): "put a loyalty counter on ..." (a permanent that isn't a planeswalker gets none).
+    case 'loyaltyCounters': {
+      const n = resolveAmount(ctx, es, e.amount);
+      for (const id of objectsOf(ctx, es, e.to))
+        if (def(ctx, id).types.includes('Planeswalker')) addCounters(ctx, id, n, 'loyalty');
+      return;
+    }
+    // Reality Fracture (17c): Jace's Machinations.
+    case 'loyaltyAtInstantSpeed':
+      ctx.s.turn.instantLoyalty = [
+        ...(ctx.s.turn.instantLoyalty ?? []),
+        { player: es.controller, ...(e.filter ? { filter: e.filter } : {}) },
+      ];
+      return;
+    // Reality Fracture (17c): Empower Jace inside another effect's follow-up (damage `then`, `if`): the same, but a choice
+    // among several Jace tokens is handed to `runEffects` to ask once the effect that holds this one is done.
+    case 'empowerJace': {
+      const n = Math.max(0, resolveAmount(ctx, es, e.amount));
+      let tokens = jaceTokens(ctx, es.controller);
+      if (tokens.length === 0) {
+        runEffect(ctx, es, { kind: 'createToken', token: JACE_TOKEN, count: 1 });
+        tokens = jaceTokens(ctx, es.controller);
+      }
+      if (n <= 0 || tokens.length === 0) return;
+      if (tokens.length === 1) addCounters(ctx, tokens[0]!, n, 'loyalty');
+      else (ctx.deferred ??= []).push({ kind: 'empowerJace', amount: n });
+      return;
+    }
     // Quantum Entanglement, Villainous Syndication, Rhino's Rampage: "when you do".
     case 'reflexiveTrigger':
       if (es.source)
@@ -2296,6 +2370,7 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
         // "Then attach this Equipment to it" (Midnight Angel Armor): the token is "it".
         es.chosen = { id: t.id, zcc: t.zcc };
         if (defOf(ctx, e.token).entersTapped || e.tapped) t.tapped = true;
+        enterWithLoyalty(ctx, t.id); // Reality Fracture (17c): a planeswalker token
         if (e.counters) addCounters(ctx, t.id, resolveAmount(ctx, es, e.counters));
         if (e.attacking && ctx.s.combat) {
           // "Tapped and attacking": attacking the same player, never declared (no attack triggers).
@@ -3310,6 +3385,7 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
             });
             t.addedSubtypes = [...(t.addedSubtypes ?? []), 'Fractal'];
           }
+          enterWithLoyalty(ctx, t.id); // Reality Fracture (17c): a token copy of a planeswalker
           ctx.s.battlefield.push(t.id);
           emit(ctx, {
             type: 'objectMoved',

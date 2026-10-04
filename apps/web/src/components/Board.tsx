@@ -4,11 +4,13 @@ import type {
   CardDefId,
   CardDefinition,
   GameObject,
+  GameState,
   ManaCost,
   ObjectId,
   PendingTrigger,
   PlayerId,
 } from '@mtg/engine';
+import { getAbilities } from '@mtg/engine';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   castGroups,
@@ -645,6 +647,8 @@ export function Board({
               () => void,
             ],
           };
+        // Reality Fracture (17c): Empower Jace asks which Jace token.
+        if (d.title) return { prompt: `${nameOf(d.resume.sourceDefId)}: ${d.title}` };
         return { prompt: `${nameOf(d.resume.sourceDefId)}: choose one of your permanents` };
       case 'payOrCounter': {
         const pay = legal.find((a) => a.type === 'chooseEffect' && a.accept);
@@ -1020,7 +1024,7 @@ export function Board({
             <div className="menu__title">{nameOf(view.objects[menu.source]!.defId)}</div>
             {menu.indices.map((i) => (
               <button key={i} className="btn btn--ghost" onClick={() => activate(menu.source, i)}>
-                {abilityLabel(view.objects[menu.source]!.defId, i)}
+                {abilityLabel(view, menu.source, i)}
               </button>
             ))}
           </div>
@@ -1585,6 +1589,11 @@ function castLabel(defId: CardDefId, a: Action): string {
         : 'Sacrifice a creature'
       : `Pay ${manaText(def.sacrificeOrPay)}`;
   if (def?.forageOrPay) return `Pay ${manaText(def.forageOrPay)}`;
+  // Reality Fracture (17c): Countersculpt, "behold a Jace or pay {1}".
+  if (def?.beholdOrPay)
+    return a.type === 'castSpell' && a.beheld
+      ? 'Behold a Jace'
+      : `Pay ${manaText(def.beholdOrPay.pay)}`;
   // Multikicker (Batroc), overload (Vandalblast), Toxic Deluge's X life.
   if (a.kickCount) return `Kicked ×${a.kickCount}`;
   if (def?.payXLife && a.x !== undefined) return `Pay ${a.x} life`;
@@ -1641,11 +1650,15 @@ function giftText(def: CardDefinition): string {
 }
 
 /** A menu label for an activated ability: its own label, or its cost ("{1}{U}, {T}"). */
-function abilityLabel(defId: CardDefId, i: number): string {
-  const a = cardDb.get(defId)?.abilities[i];
+function abilityLabel(view: GameState, source: ObjectId, i: number): string {
+  // Its current abilities: a planeswalker may have been given more (Reality Fracture 17c).
+  const a = getAbilities(view, cardDb, source)[i];
   if (!a || a.kind !== 'activated') return `Ability ${i + 1}`;
   if (a.label) return a.label;
   const c = a.cost;
+  // A loyalty ability without a label ("+1", "−3").
+  if (c.loyalty !== undefined && !c.mana)
+    return `${c.loyalty > 0 ? '+' : c.loyalty < 0 ? '−' : ''}${Math.abs(c.loyalty)}`;
   const parts = [
     c.mana ? manaText(c.mana) : '',
     c.tapSelf ? '{T}' : '',

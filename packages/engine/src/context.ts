@@ -28,6 +28,7 @@ import { STX_13C_B_EFFECTS } from './stx-13c-b-effects.ts';
 import { STX_13C_C_EFFECTS } from './stx-13c-c-effects.ts';
 import { STX_13C_D_EFFECTS } from './stx-13c-d-effects.ts';
 import { FRA_WHITE_EFFECTS } from './fra-white-effects.ts';
+import { FRA_PW_EFFECTS } from './fra-pw-effects.ts';
 import { checkCondition } from './triggers.ts';
 import { type EffectSource, gainLife } from './effects.ts';
 import type {
@@ -36,6 +37,7 @@ import type {
   CardDb,
   CardDefId,
   CardDefinition,
+  EffectDef,
   GameEvent,
   GameObject,
   GameState,
@@ -64,6 +66,8 @@ export interface Ctx {
   customEffects: Readonly<Record<string, CustomEffect>>;
   /** "Whenever one or more" triggers already queued in this batch of events. */
   batched: Set<string>;
+  /** Reality Fracture (17c): effects an effect asks to run right after it (Empower Jace's choice); `runEffects` drains them. */
+  deferred?: EffectDef[];
 }
 
 export function makeCtx(
@@ -101,6 +105,7 @@ const BUILT_IN_EFFECTS: Record<string, CustomEffect> = {
   ...STX_13C_D_EFFECTS,
   // Reality Fracture (17a): white.
   ...FRA_WHITE_EFFECTS,
+  ...FRA_PW_EFFECTS,
   // Secrets of Strixhaven (14a).
   ...SOS_14A_EFFECTS,
   // Secrets of Strixhaven (14b), group A.
@@ -204,10 +209,17 @@ export function def(ctx: Ctx, id: ObjectId): CardDefinition {
     return foodCreatureDef(d);
   // Strixhaven (13c): Kasmina, Enigma Sage shares her loyalty abilities.
   if (o.zone === 'battlefield' && d.types.includes('Planeswalker')) {
-    const shared = sharedLoyaltyAbilities(ctx, id, d);
-    if (shared.length) return { ...d, abilities: [...d.abilities, ...shared] };
+    // Reality Fracture (17c): "Planeswalkers you control have ...".
+    const shared = [...sharedLoyaltyAbilities(ctx, id, d), ...grantedToPlaneswalker(ctx, id)];
+    if (shared.length)
+      return withExtraAbilities(ctx, o, { ...d, abilities: [...d.abilities, ...shared] });
   }
   // Strixhaven (13a): Lorehold Apprentice grants abilities until end of turn.
+  return withExtraAbilities(ctx, o, d);
+}
+
+/** `d` plus the abilities the object was given for a while (until end of turn, perpetually, until it's cast). */
+function withExtraAbilities(_ctx: Ctx, o: GameObject, d: CardDefinition): CardDefinition {
   if (o.tempAbilities?.length || o.perpetualAbilities?.length || o.abilitiesUntilCast?.length)
     return {
       ...d,
@@ -220,6 +232,28 @@ export function def(ctx: Ctx, id: ObjectId): CardDefinition {
       ],
     };
   return d;
+}
+
+/**
+ * Reality Fracture (17c): the abilities its controller's "Planeswalkers you control have ..." permanents give a planeswalker.
+ * Read from the sources' own definitions (a planeswalker's printed ones), so granting never recurses.
+ */
+function grantedToPlaneswalker(ctx: Ctx, id: ObjectId): AbilityDef[] {
+  const o = ctx.s.objects[id]!;
+  const out: AbilityDef[] = [];
+  for (const srcId of ctx.s.battlefield) {
+    const src = ctx.s.objects[srcId];
+    if (!src || src.controller !== o.controller) continue;
+    const sd = ctx.db.get(src.defId);
+    if (!sd) continue;
+    // A planeswalker's own abilities come from the printed card; anything else may be blanked or copied.
+    const abilities = sd.types.includes('Planeswalker') ? sd.abilities : def(ctx, srcId).abilities;
+    for (const a of abilities) {
+      if (a.kind !== 'static' || a.effect.kind !== 'planeswalkersHave') continue;
+      out.push(a.effect.ability);
+    }
+  }
+  return out;
 }
 
 /** Strixhaven (13c): the loyalty abilities of each Kasmina its controller has, for another planeswalker. */
@@ -375,6 +409,13 @@ export function refOf(o: GameObject): ObjectRef {
 export function deref(ctx: Ctx, ref: ObjectRef): GameObject | undefined {
   const o = ctx.s.objects[ref.id];
   return o && o.zcc === ref.zcc ? o : undefined;
+}
+
+/** Reality Fracture (17c): a planeswalker token (or a token copy of one) enters with its starting loyalty. */
+export function enterWithLoyalty(ctx: Ctx, id: ObjectId): void {
+  const loyalty = defOf(ctx, obj(ctx, id).defId).loyalty;
+  if (loyalty !== undefined && obj(ctx, id).counters?.loyalty === undefined)
+    (obj(ctx, id).counters ??= {}).loyalty = loyalty;
 }
 
 export function onBattlefield(ctx: Ctx, ref: ObjectRef): GameObject | undefined {
@@ -868,6 +909,9 @@ export function addCounters(ctx: Ctx, id: ObjectId, n: number, name?: string): v
   if (name) {
     const c = (o.counters ??= {});
     c[name] = (c[name] ?? 0) + n;
+    // Reality Fracture (17c): "whenever you put one or more loyalty counters on a planeswalker".
+    if (name === 'loyalty')
+      emit(ctx, { type: 'loyaltyCountersAdded', id, count: n, player: o.controller });
     return;
   }
   o.plusOneCounters += n;
