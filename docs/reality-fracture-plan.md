@@ -170,6 +170,22 @@ this vocabulary (engine helpers in `engine/src/fra-pw-effects.ts`, card builders
 - **UI**: loyalty badge, Jace token text, granted abilities in the activation menu, the Jace-token choice, "Behold a Jace /
   Pay {1}".
 
+**Phase 17c done** (5 October 2026). Every FRA card is in but Extrapolate the Impossible (279 of 280): the uncommons in
+`fra/pw-b.ts` (with exact "who put the counters" tracking and behold choice and reveal), the rares and mythics in
+`fra/pw-c.ts` (the eight planeswalkers; emblems and "until your next turn" effects now show beside the portrait).
+
+Second pass: every deck and packet now has planeswalker-group cards. Decks against the ten Foundations starters (400 games
+each, 800 for the two marked): Foresight and Flight 46.2%*, Heartwood Forge 56.5%, Drowned Archive 57.0%, Stingerquill
+Barrage 51.5%, Vigorbloom Grove 54.8%, Bloodline Requiem 56.2%, Clockwork Spellslingers 48.8%, Grave Harvest 48.2%,
+Rallying Blades 48.8%, Tidal Terrain 49.9%* (now the G/U landfall and planeswalker deck, face Avatar of Burgeoning
+Echoes). Packets (about 300 games each against random packets from every set): Lifegain 59.3%, Counters 53.7%, Scholars
+52.7%, Sphinxes and Flyers 49.3%, Graveyard 48.7%, Assassins 57.0%, Sparkmages 58.7%, Artificers 48.0%, Titans 59.3%,
+Heartwood 49.3%.
+
+Known issue: a lifegain stall (Tidal Terrain vs Learn From the Land, seed 9, Tidal Terrain first) runs 54 turns and
+about 5 minutes with dozens of tokens per side; the time goes to `canBlock` and `def`/`obj` on huge boards, and
+`grantedToPlaneswalker` (`engine/src/context.ts`) scans the battlefield on every `def()` of a planeswalker.
+
 ## Simplifications to revisit
 
 (none yet)
