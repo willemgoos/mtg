@@ -334,6 +334,32 @@ export function findSpell(ctx: Ctx, id: ObjectId) {
   return item?.kind === 'spell' ? item : undefined;
 }
 
+/** Iron Man: use last known information only for a nontargeted triggering spell. */
+function spellToCopy(ctx: Ctx, es: EffectSource, what: Ref) {
+  const ref =
+    what === 'subject'
+      ? es.subject
+      : typeof what === 'object' && 'target' in what
+        ? (() => {
+            const t = es.targets[what.target];
+            return t && 'object' in t ? t.object : undefined;
+          })()
+        : undefined;
+  const live =
+    ref && ctx.s.objects[ref.id]?.zcc === ref.zcc
+      ? findSpell(ctx, ref.id)
+      : undefined;
+  const saved =
+    what === 'subject' && ref
+      ? ctx.s.turn.spellHistory?.[`${ref.id}:${ref.zcc}`]
+      : undefined;
+  const item = live ?? saved?.spell;
+  if (!item) return undefined;
+  const copiedDef = live ? obj(ctx, live.id).defId : saved!.defId;
+  if (defOf(ctx, copiedDef).cantBeCopied) return undefined;
+  return { item, copiedDef };
+}
+
 /** The targets an activated or triggered ability on the stack asks for (Bolt Bend). */
 function abilityTargetSpecs(
   ctx: Ctx,
@@ -926,10 +952,16 @@ export function runEffects(
       };
       const thenPriority = ctx.s.turn.activePlayer;
       if (e.kind === 'may') {
+        // An impossible optional copy cannot be chosen or consume Iron Man's use.
+        const copy = e.effects.length === 1 ? e.effects[0] : undefined;
+        if (copy?.kind === 'copySpell' && !spellToCopy(ctx, es, copy.what)) continue;
+        // Iron Man: declining preserves the use; stacked triggers share the original source ref.
+        const key = e.oncePerTurn && `${source?.id}:${source?.zcc}:${e.oncePerTurn}`;
+        if (key && ctx.s.turn.optionalUses?.includes(key)) continue;
         ctx.s.decision = {
           kind: 'optionalEffect',
           player: controller,
-          effects: e.effects,
+          effects: key ? [{ kind: 'noteOptionalUse', key }, ...e.effects] : e.effects,
           ...(e.cost ? { cost: e.cost } : {}),
           resume,
           thenPriority,
@@ -1929,6 +1961,7 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
           ...(e.sacrificeOnCombatDamage ? { sacrificeOnCombatDamage: true } : {}),
           ...(e.basePT ? { basePT: e.basePT } : {}),
           ...(e.becomesCreature ? { becomesCreature: true } : {}),
+          ...(e.creatureSubtype ? { creatureSubtype: e.creatureSubtype } : {}),
           ...(e.preventCombatDamage ? { preventCombatDamage: true } : {}),
           ...(e.mustBeBlocked ? { mustBeBlocked: true } : {}),
           ...(e.untilYourNextTurn
@@ -2026,7 +2059,11 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
         ? objectsOf(ctx, es, e.what)[0]
         : es.source && onBattlefield(ctx, es.source)?.id;
       const to = objectsOf(ctx, es, e.to)[0];
-      if (what && to) obj(ctx, what).attachedTo = to;
+      if (what && to && obj(ctx, what).attachedTo !== to) {
+        obj(ctx, what).attachedTo = to;
+        // An Equipment gets a new timestamp when it becomes attached (Iron Suitcase layering).
+        obj(ctx, what).timestamp = newTimestamp(ctx);
+      }
       return;
     }
     case 'counters': {
@@ -2702,7 +2739,7 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
         if (e.until === 'yourNextTurn') self.copyUntilTurnOf = es.controller;
         else if (e.until === 'whileSource' && source) self.copyWhileSource = source.id;
         else self.copyingUntilTurn = ctx.s.turn.number;
-        if (e.nonlegendary && !self.nonlegendary) {
+        if ((e.nonlegendary || obj(ctx, of).nonlegendary) && !self.nonlegendary) {
           self.nonlegendary = true;
           self.copyNonlegendary = true;
         }
@@ -2893,23 +2930,12 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
     case 'payOrElse':
       return; // handled by runEffects
     case 'copySpell': {
-      // The triggering spell, or a target spell.
-      const ref =
-        e.what === 'subject'
-          ? es.subject
-          : typeof e.what === 'object' && 'target' in e.what
-            ? (() => {
-                const t = es.targets[e.what.target];
-                return t && 'object' in t ? t.object : undefined;
-              })()
-            : undefined;
-      const item = ref ? findSpell(ctx, ref.id) : undefined;
-      if (!item) return;
-      // Secrets of Strixhaven (14b): "This spell can't be copied."
-      if (defOf(ctx, obj(ctx, item.id).defId).cantBeCopied) return;
+      const copied = spellToCopy(ctx, es, e.what);
+      if (!copied) return;
+      const { item, copiedDef } = copied;
       const n = e.count !== undefined ? resolveAmount(ctx, es, e.count) : 1;
       // Ancestral Communion: the copies take other legal targets where there are any.
-      const spec = spellOnStack(defOf(ctx, obj(ctx, item.id).defId), item)?.targets ?? [];
+      const spec = spellOnStack(defOf(ctx, copiedDef), item)?.targets ?? [];
       const others = e.retarget
         ? targetCombos(ctx, spec, { controller: es.controller, sourceId: item.id }).filter(
             (c) => JSON.stringify(c) !== JSON.stringify(item.targets),
@@ -2917,7 +2943,7 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
         : [];
       for (let i = 0; i < n; i++) {
         // A copy is a token-like object on the stack: it ceases to exist as it leaves.
-        const copy = createObject(ctx, obj(ctx, item.id).defId, es.controller, 'stack', true);
+        const copy = createObject(ctx, copiedDef, es.controller, 'stack', true);
         copy.controller = es.controller;
         // Strixhaven (13c): Double Major.
         if (e.nonlegendary) copy.nonlegendary = true;
@@ -2930,6 +2956,9 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
           ...(item.kicked ? { kicked: true } : {}),
           ...(item.x ? { x: item.x } : {}),
           ...(item.paws ? { paws: item.paws } : {}),
+          ...(item.kickCount ? { kickCount: item.kickCount } : {}),
+          ...(item.copyOf ? { copyOf: item.copyOf } : {}),
+          ...(item.lkiPower !== undefined ? { lkiPower: item.lkiPower } : {}),
           copy: true,
           ...(e.hasteSacrifice ? { hasteSacrifice: true } : {}),
         });
@@ -3035,7 +3064,7 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
           const pt = e.pt ?? (o.copyPT ? [o.copyPT.power, o.copyPT.toughness] : undefined);
           if (pt) t.copyPT = { power: pt[0], toughness: pt[1] };
           // "Except the token isn't legendary" (Quantum Misalignment); "that token gains haste" (Helm of the Host).
-          if (e.notLegendary) t.nonlegendary = true;
+          if (e.notLegendary || o.nonlegendary) t.nonlegendary = true;
           if (e.haste) t.grantedKeywords = ['haste'];
           if (e.addSubtype) t.addedSubtypes = [e.addSubtype];
           // Living Laser, Loki: "tapped and attacking".
@@ -3444,6 +3473,10 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
       emit(ctx, { type: 'objectMoved', id: t.id, defId: t.defId, from: null, to: 'battlefield' });
       return;
     }
+    // Iron Man: remember use even if the triggering permanent has left.
+    case 'noteOptionalUse':
+      (ctx.s.turn.optionalUses ??= []).push(e.key);
+      return;
     case 'noteResolution': {
       const o = es.source && ctx.s.objects[es.source.id];
       if (!o) return;

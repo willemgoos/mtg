@@ -197,6 +197,26 @@ function afterMulliganDecision(ctx: Ctx, player: PlayerId): void {
 
 function apply(ctx: Ctx, action: Action): void {
   const s = ctx.s;
+  // Iron Man: copying a triggering spell still works after it leaves the stack.
+  // Snapshots are immutable and expire with the turn, like the cast history.
+  const subjects = [
+    ...s.pendingTriggers.map((t) => t.subject),
+    ...s.stack.flatMap((item) => item.kind === 'ability' ? [item.subject] : []),
+  ];
+  if ('resume' in s.decision) subjects.push(s.decision.resume?.subject);
+  if (s.decision.kind === 'chooseTriggerTargets') subjects.push(s.decision.trigger.subject);
+  for (const item of s.stack) {
+    if (item.kind !== 'spell' || !subjects.some((ref) => ref?.id === item.id)) continue;
+    const o = s.objects[item.id]!;
+    (s.turn.spellHistory ??= {})[`${o.id}:${o.zcc}`] = {
+      defId: o.defId,
+      spell: {
+        ...item,
+        targets: item.targets.map((t) => 'object' in t ? { object: { ...t.object } } : { ...t }),
+        ...(item.paws ? { paws: [...item.paws] } : {}),
+      },
+    };
+  }
   const player = action.player;
   const ps = s.players[player];
   const d = s.decision;

@@ -23590,6 +23590,98 @@
   }
  },
  {
+  "name": "Iron Man, Bleeding Edge",
+  "scryfallId": "b14b6721-6491-41a4-afb4-93bd76f21173",
+  "oracleId": "fc6e170c-820c-48bb-95c7-ee79fba634de",
+  "set": "msc",
+  "collectorNumber": "626",
+  "rarity": "rare",
+  "manaCost": "{3}{U}{U}",
+  "typeLine": "Legendary Artifact Creature — Human Hero",
+  "oracleText": "Flying\nWhenever you cast an artifact spell, you may copy it, except the copy isn't legendary. Do this only once each turn. (The copy becomes a token.)",
+  "power": "3",
+  "toughness": "5",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/1/b14b6721-6491-41a4-afb4-93bd76f21173.jpg?1783903072",
+   "normal": "https://cards.scryfall.io/normal/front/b/1/b14b6721-6491-41a4-afb4-93bd76f21173.jpg?1783903072",
+   "large": "https://cards.scryfall.io/large/front/b/1/b14b6721-6491-41a4-afb4-93bd76f21173.jpg?1783903072",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/1/b14b6721-6491-41a4-afb4-93bd76f21173.jpg?1783903072"
+  }
+ },
+ {
+  "name": "Happy Hogan, Bodyguard",
+  "scryfallId": "e9711fc5-7878-4d38-ac65-46bd720879ab",
+  "oracleId": "daaf33d8-2ee2-41f8-9872-66b6493c6e13",
+  "set": "msc",
+  "collectorNumber": "622",
+  "rarity": "uncommon",
+  "manaCost": "{5}{U}",
+  "typeLine": "Legendary Creature — Human Advisor",
+  "oracleText": "Vigilance\nWhen Happy Hogan enters, the owner of target creature an opponent controls puts it into their library second from the top or on the bottom.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Vigilance"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/9/e9711fc5-7878-4d38-ac65-46bd720879ab.jpg?1783903075",
+   "normal": "https://cards.scryfall.io/normal/front/e/9/e9711fc5-7878-4d38-ac65-46bd720879ab.jpg?1783903075",
+   "large": "https://cards.scryfall.io/large/front/e/9/e9711fc5-7878-4d38-ac65-46bd720879ab.jpg?1783903075",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/9/e9711fc5-7878-4d38-ac65-46bd720879ab.jpg?1783903075"
+  }
+ },
+ {
+  "name": "Iron Suitcase",
+  "scryfallId": "018d8d89-c90e-4245-93d3-6f8af4c95f81",
+  "oracleId": "d2ba20a0-7c08-49ed-b960-4b3154a8c025",
+  "set": "msc",
+  "collectorNumber": "750",
+  "rarity": "uncommon",
+  "manaCost": "{1}",
+  "typeLine": "Artifact",
+  "oracleText": "When this artifact enters, scry 2. (Look at the top two cards of your library, then put any number of them on the bottom and the rest on top in any order.)\n{3}: This artifact becomes a 3/3 Construct artifact creature with flying until end of turn.",
+  "colors": [],
+  "keywords": [
+   "Scry"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/1/018d8d89-c90e-4245-93d3-6f8af4c95f81.jpg?1783903028",
+   "normal": "https://cards.scryfall.io/normal/front/0/1/018d8d89-c90e-4245-93d3-6f8af4c95f81.jpg?1783903028",
+   "large": "https://cards.scryfall.io/large/front/0/1/018d8d89-c90e-4245-93d3-6f8af4c95f81.jpg?1783903028",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/1/018d8d89-c90e-4245-93d3-6f8af4c95f81.jpg?1783903028"
+  }
+ },
+ {
+  "name": "Origin of Iron Man",
+  "scryfallId": "85e61a72-5184-417d-8cda-f6b723ba00c4",
+  "oracleId": "6abb489e-cc62-42d7-b898-3e5095037e75",
+  "set": "msc",
+  "collectorNumber": "633",
+  "rarity": "uncommon",
+  "manaCost": "{4}{U}",
+  "typeLine": "Enchantment — Saga",
+  "oracleText": "(As this Saga enters and after your draw step, add a lore counter. Sacrifice after III.)\nI — Tap up to one target creature. It doesn't untap during its controller's untap step for as long as this Saga remains on the battlefield.\nII — Draw two cards.\nIII — You may put an artifact card with mana value 5 or less from your hand onto the battlefield.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/5/85e61a72-5184-417d-8cda-f6b723ba00c4.jpg?1784182928",
+   "normal": "https://cards.scryfall.io/normal/front/8/5/85e61a72-5184-417d-8cda-f6b723ba00c4.jpg?1784182928",
+   "large": "https://cards.scryfall.io/large/front/8/5/85e61a72-5184-417d-8cda-f6b723ba00c4.jpg?1784182928",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/5/85e61a72-5184-417d-8cda-f6b723ba00c4.jpg?1784182928"
+  }
+ },
+ {
   "name": "TVA Bureaucrat",
   "scryfallId": "62da11c2-e37d-46e9-b225-ba864b7f2c11",
   "oracleId": "e9638ad1-4e1d-4721-91f5-8cf13d0d0d0d",

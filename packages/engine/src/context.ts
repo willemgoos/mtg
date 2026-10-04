@@ -166,7 +166,11 @@ export function defOf(ctx: Ctx, defId: string): CardDefinition {
 
 export function def(ctx: Ctx, id: ObjectId): CardDefinition {
   const o = obj(ctx, id);
-  const d = defOf(ctx, o.defId);
+  const printed = defOf(ctx, o.defId);
+  // Iron Man: a nonlegendary copy is nonlegendary for every rule, not just the legend rule.
+  const d = o.nonlegendary
+    ? { ...printed, supertypes: printed.supertypes.filter((t) => t !== 'Legendary') }
+    : printed;
   if (o.foodBy !== undefined) {
     const aura = ctx.s.objects[o.foodBy];
     if (aura && aura.zone === 'battlefield' && aura.attachedTo === id) return foodDef(d);
