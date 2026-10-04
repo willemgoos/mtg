@@ -1,4 +1,4 @@
-import { createHeuristicBot, planAttacks, planBlocks, viewEngine } from '@mtg/ai';
+import { createHeuristicBot, planAttackTargets, planBlocks, viewEngine } from '@mtg/ai';
 import { cardDb, displayName } from '@mtg/cards';
 import type { Action, GameState, ObjectId, PlayerId } from '@mtg/engine';
 
@@ -29,14 +29,21 @@ export function hintFor(view: GameState, me: PlayerId): Hint | null {
   if (d.kind === 'gameOver' || d.player !== me) return null;
 
   if (d.kind === 'declareAttackers') {
-    const ids = planAttacks(
+    // Reality Fracture (17c): some attackers may go at an opposing planeswalker.
+    const { attackers: ids, at } = planAttackTargets(
       engine,
       view,
       me,
       d.declared.map((x) => x.id),
     );
+    const atWalkers = [...at].map(
+      ([id, walker]) => `${nameOf(view, id)} at ${nameOf(view, walker)}`,
+    );
     return ids.length
-      ? { text: `Attack with ${list(ids.map((id) => nameOf(view, id)))}.`, cards: ids }
+      ? {
+          text: `Attack with ${list(ids.map((id) => nameOf(view, id)))}${atWalkers.length ? `, sending ${list(atWalkers)}` : ''}.`,
+          cards: [...ids, ...at.values()],
+        }
       : { text: "Don't attack this turn: your creatures would trade badly.", cards: [] };
   }
   if (d.kind === 'declareBlockers') {

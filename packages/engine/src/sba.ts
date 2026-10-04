@@ -1,5 +1,6 @@
 import { creaturesOnBattlefield, hasKeyword, isCreature, toughness } from './characteristics.ts';
 import { type Ctx, def, emit, moveObject, obj, sacrifice } from './context.ts';
+import { permanentHasStatic } from './fra-pw-effects.ts';
 import { sagasToSacrifice } from './sagas.ts';
 import type { ObjectId, PlayerId } from './types.ts';
 import { PLAYERS } from './types.ts';
@@ -45,7 +46,16 @@ export function runSBAs(ctx: Ctx): void {
         dying.push(c.id);
     }
     for (const id of ctx.s.battlefield)
-      if (def(ctx, id).types.includes('Planeswalker') && (obj(ctx, id).counters?.loyalty ?? 0) <= 0)
+      if (
+        def(ctx, id).types.includes('Planeswalker') &&
+        (obj(ctx, id).counters?.loyalty ?? 0) <= 0 &&
+        // Reality Fracture (17c): Sanctum Lurker.
+        !ctx.s.battlefield.some(
+          (b) =>
+            obj(ctx, b).controller === obj(ctx, id).controller &&
+            permanentHasStatic(ctx, b, 'planeswalkersStayAtZero'),
+        )
+      )
         dying.push(id);
     for (const id of dying) moveObject(ctx, id, 'graveyard');
     if (dying.length) changed = true;

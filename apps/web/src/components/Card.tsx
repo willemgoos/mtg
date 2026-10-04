@@ -34,6 +34,8 @@ export interface CardProps {
   baseToughness?: number;
   damage?: number;
   counters?: number;
+  /** A planeswalker's loyalty (shown in the bottom corner like Arena). */
+  loyalty?: number;
   sick?: boolean;
   /** An Equipment attached to the creature before it. */
   attached?: boolean;
@@ -105,6 +107,7 @@ export function Card(p: CardProps) {
           </span>
         )}
         {!!p.counters && <span className="card__counters">+{p.counters}</span>}
+        {p.loyalty !== undefined && <span className="card__loyalty">{p.loyalty}</span>}
         {!!p.tags?.length && (
           <div className="card__tags">
             {p.tags.map((t) => (
@@ -120,6 +123,8 @@ export function Card(p: CardProps) {
 const TOKEN_TEXT: Record<string, string> = {
   'treasure-token': '{T}, Sacrifice: Add one mana of any color.',
   'food-token': '{2}, {T}, Sacrifice: You gain 3 life.',
+  // Reality Fracture (17c): the Jace planeswalker token.
+  'fra-jace-token': '−1: Surveil 1.\n−3: Draw a card.',
 };
 
 function TokenFace({ defId }: { defId: CardDefId }) {

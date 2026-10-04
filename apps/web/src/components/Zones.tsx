@@ -30,7 +30,9 @@ function cardTags(o: GameObject, def: CardDefinition | undefined): string[] {
   // Secrets of Strixhaven (14a): a prepared creature (its spell's copy can be cast from beside the hand).
   if (o.prepared !== undefined) tags.push('Prepared');
   for (const [name, n] of Object.entries(o.counters ?? {}))
-    if (n > 0) tags.push(`${name[0]!.toUpperCase()}${name.slice(1)}${n > 1 ? ` ${n}` : ''}`);
+    // Loyalty is shown as the number in the corner of a planeswalker, not as a label.
+    if (n > 0 && name !== 'loyalty')
+      tags.push(`${name[0]!.toUpperCase()}${name.slice(1)}${n > 1 ? ` ${n}` : ''}`);
   return tags;
 }
 
@@ -101,6 +103,8 @@ export function Battlefield({
                   counters: o.plusOneCounters,
                 }
               : {})}
+            // Reality Fracture (17c): a planeswalker's loyalty (the Jace token has no printed number to look at).
+            {...(def?.types.includes('Planeswalker') ? { loyalty: o.counters?.loyalty ?? 0 } : {})}
             tags={cardTags(o, def)}
             onClick={() => h.onCard(id)}
             onHover={h.onHover}

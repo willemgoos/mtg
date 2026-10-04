@@ -10,12 +10,17 @@ export { cloneState } from './clone.ts';
 export { manaValue } from './mana.ts';
 
 import { characteristics as characteristicsOf } from './characteristics.ts';
-import { makeCtx } from './context.ts';
-import type { CardDb, GameState, ObjectId } from './types.ts';
+import { def as defOf, makeCtx } from './context.ts';
+import type { AbilityDef, CardDb, GameState, ObjectId } from './types.ts';
 
 /** Current power/toughness/keywords of a permanent, for UIs and bots. */
 export function getCharacteristics(state: GameState, db: CardDb, id: ObjectId) {
   return characteristicsOf(makeCtx(state, db), id);
+}
+
+/** Reality Fracture (17c): a permanent's current abilities (printed ones plus any granted to it), indexed as `abilityIndex`. */
+export function getAbilities(state: GameState, db: CardDb, id: ObjectId): AbilityDef[] {
+  return defOf(makeCtx(state, db), id).abilities;
 }
 export { playRandomGame } from './random-play.ts';
 export type { RandomGameResult } from './random-play.ts';

@@ -47,6 +47,12 @@ export const WEIGHTS = {
 };
 /** Each loyalty counter on a planeswalker. */
 export const LOYALTY = 0.4;
+/**
+ * Each loyalty counter on a Jace token (Empower Jace): three counters buy a card with "−3: Draw a card" (a card is
+ * worth CARD_IN_HAND), a little less so spending them on the draw is a gain, and attacking the token beats the face. The token itself is worth nothing (it
+ * is gone at 0 loyalty), unlike a planeswalker card.
+ */
+export const JACE_TOKEN_LOYALTY = 0.6;
 /** An Equipment on the battlefield while its controller has a creature to equip (a little more than a card). */
 export const EQUIPMENT = 2.5;
 
@@ -148,6 +154,9 @@ export function evaluate(s: GameState, db: CardDb, me: PlayerId): number {
       const sign = o.controller === me ? 1 : -1;
       if (def?.types.includes('Creature')) v += sign * creatureValue(s, db, id);
       else if (def?.types.includes('Land')) v += sign * LAND_ON_BATTLEFIELD;
+      // Reality Fracture (17c): a Jace token is its loyalty and nothing else.
+      else if (def?.types.includes('Planeswalker') && o.isToken && def.subtypes.includes('Jace'))
+        v += sign * JACE_TOKEN_LOYALTY * (o.counters?.loyalty ?? 0);
       // A planeswalker is worth more the more loyalty it has.
       else if (def?.types.includes('Planeswalker'))
         v += sign * (OTHER_PERMANENT + LOYALTY * (o.counters?.loyalty ?? 0));

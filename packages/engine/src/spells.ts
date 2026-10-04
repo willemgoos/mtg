@@ -29,6 +29,8 @@ export interface CastVariant {
   /** Pawprint modes (Seasons). */
   paws?: number[];
   kicked?: boolean;
+  /** Reality Fracture (17c): beholds instead of paying `beholdOrPay.pay` (Countersculpt). */
+  beheld?: boolean;
   flashback?: boolean;
   /** Needs a creature sacrificed as an additional cost (Eaten Alive). */
   sacrifice?: boolean;
@@ -265,6 +267,12 @@ export function castVariants(d: CardDefinition, zone: ZoneName, via?: CastVia): 
       { cost, spell: d.spell ?? null, forage: true, ...extra },
       { cost: addCosts(cost, d.forageOrPay), spell: d.spell ?? null, ...extra },
     ];
+  // Reality Fracture (17c): Countersculpt, "behold a Jace or pay {1}".
+  if (d.beholdOrPay)
+    return [
+      { cost, spell: d.spell ?? null, beheld: true, ...extra },
+      { cost: addCosts(cost, d.beholdOrPay.pay), spell: d.spell ?? null, ...extra },
+    ];
   if (d.sacrificeOrPay)
     return [
       { cost, spell: d.spell ?? null, sacrifice: true, ...extra },
@@ -323,6 +331,7 @@ export function variantOf(
     discard?: string | undefined;
     paws?: number[] | undefined;
     kickCount?: number | undefined;
+    beheld?: boolean | undefined;
   },
 ): CastVariant | undefined {
   return castVariants(d, zone, choice.via).find(
@@ -333,6 +342,7 @@ export function variantOf(
       !!v.kicked === !!choice.kicked &&
       !!v.sacrifice === !!choice.sacrifice &&
       !!v.forage === !!choice.forage &&
+      !!v.beheld === !!choice.beheld &&
       // Strixhaven Brawl (15b, b): a variant that says whether a card is discarded must agree.
       (v.discard === undefined || v.discard === !!choice.discard),
   );

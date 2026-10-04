@@ -114,12 +114,7 @@ export function createHeuristicBot(db: CardDb, name = 'heuristic'): Bot {
         case 'choosePile':
           return choosePile(view, me);
         case 'declareAttackers':
-          return nextAttackAction(
-            engine,
-            view,
-            me,
-            d.declared.map((x) => x.id),
-          );
+          return nextAttackAction(engine, view, me, d.declared);
         case 'declareBlockers':
           return nextBlockAction(engine, view, me, d.declared);
         case 'priority':
@@ -172,6 +167,57 @@ function chooseCodie(
   return worthIt ? act : undefined;
 }
 
+// ---------------------------------------------------------------------------
+// The Jace token (Reality Fracture 17c)
+// ---------------------------------------------------------------------------
+
+const JACE_TOKEN = 'fra-jace-token';
+
+/** Is `a` the activation of ability `index` of one of our Jace tokens? */
+function isJaceTokenAbility(engine: Engine, view: GameState, a: Action, index: number): boolean {
+  return (
+    a.type === 'activateAbility' &&
+    a.abilityIndex === index &&
+    view.objects[a.source]?.defId === JACE_TOKEN &&
+    !!engine.db.get(JACE_TOKEN)
+  );
+}
+
+/** "−3: Draw a card" with almost nothing left in the library would only lose the game sooner. */
+function isLastCardsDraw(engine: Engine, view: GameState, me: PlayerId, a: Action): boolean {
+  return isJaceTokenAbility(engine, view, a, 1) && view.players[me].library.length <= 2;
+}
+
+/** Does a card in our hand, or a permanent of ours, have a way to put more loyalty counters on a Jace token? */
+function canEmpowerSoon(engine: Engine, view: GameState, me: PlayerId): boolean {
+  const mentions = (id: ObjectId) =>
+    JSON.stringify(engine.db.get(view.objects[id]!.defId) ?? {}).includes('"empowerJace"');
+  return (
+    view.players[me].hand.some(mentions) ||
+    view.battlefield.some((id) => view.objects[id]!.controller === me && mentions(id))
+  );
+}
+
+/**
+ * The Jace token's "−1: Surveil 1" costs a loyalty counter, which is worth about half a card, and the evaluation
+ * can't see what surveil gains. So the bot surveils by rule, only with counters it won't use otherwise: one or two
+ * left (not enough for the "−3: Draw a card"), nothing in sight to add more, in its own main phase.
+ */
+function chooseJaceSurveil(
+  engine: Engine,
+  view: GameState,
+  me: PlayerId,
+  legal: Action[],
+): Action | undefined {
+  if (view.turn.activePlayer !== me || view.stack.length > 0) return undefined;
+  if (view.turn.step !== 'main2') return undefined;
+  const act = legal.find((a) => isJaceTokenAbility(engine, view, a, 0));
+  if (!act || act.type !== 'activateAbility') return undefined;
+  if ((view.objects[act.source]!.counters?.loyalty ?? 0) > 2) return undefined;
+  if (canEmpowerSoon(engine, view, me)) return undefined;
+  return act;
+}
+
 function choosePriorityAction(
   engine: Engine,
   view: GameState,
@@ -184,19 +230,23 @@ function choosePriorityAction(
   const pass = legal.find((a) => a.type === 'passPriority')!;
   const codie = chooseCodie(engine, view, me, legal);
   if (codie) return codie;
+  const jace = chooseJaceSurveil(engine, view, me, legal);
+  if (jace) return jace;
   // Teamwork taps our creatures: never before our own attack (the evaluation can't see the lost attack).
   const beforeOurAttack =
     view.turn.activePlayer === me &&
     (view.turn.step === 'main1' || view.turn.step === 'beginCombat');
   const candidates = legal.filter(
     (a) =>
-      (a.type === 'castSpell' &&
+      !isJaceTokenAbility(engine, view, a, 0) && // the surveil is a rule (chooseJaceSurveil), not a score
+      !isLastCardsDraw(engine, view, me, a) &&
+      ((a.type === 'castSpell' &&
         !(
           beforeOurAttack &&
           a.kicked &&
           engine.db.get(view.objects[a.card]!.defId)?.kicker?.teamwork !== undefined
         )) ||
-      a.type === 'activateAbility',
+        a.type === 'activateAbility'),
   );
   if (candidates.length === 0) return pass;
 
@@ -258,16 +308,112 @@ function crackbackPenalty(engine: Engine, s: GameState, me: PlayerId): number {
   return 0.5 * (lifeValue(life) - lifeValue(life - unblocked));
 }
 
-function scoreAttack(engine: Engine, view: GameState, me: PlayerId, attackers: ObjectId[]): number {
+/** Where attackers go when not at the player: attacker id to the planeswalker it attacks (Reality Fracture 17c). */
+export type WalkerAttacks = ReadonlyMap<ObjectId, ObjectId>;
+
+function scoreAttack(
+  engine: Engine,
+  view: GameState,
+  me: PlayerId,
+  attackers: ObjectId[],
+  at?: WalkerAttacks,
+): number {
   const sim = cloneState(view);
   sim.decision = {
     kind: 'declareAttackers',
     player: me,
-    declared: attackers.map((id) => ({ id, defender: other(me) })),
+    declared: attackers.map((id) => ({
+      id,
+      defender: other(me),
+      ...(at?.has(id) ? { planeswalker: at.get(id)! } : {}),
+    })),
   };
   engine.applyActionInPlace(sim, { type: 'confirmAttackers', player: me }, { trusted: true });
   settle(engine, sim, 'combat');
   return evaluate(sim, engine.db, me) - (sim.winner ? 0 : crackbackPenalty(engine, sim, me));
+}
+
+/** The planeswalkers `me`'s opponent controls. */
+function opposingWalkers(engine: Engine, view: GameState, me: PlayerId): ObjectId[] {
+  return view.battlefield.filter(
+    (id) =>
+      view.objects[id]!.controller === other(me) &&
+      !!engine.db.get(view.objects[id]!.defId)?.types.includes('Planeswalker'),
+  );
+}
+
+/**
+ * Reality Fracture (17c): sends attackers at the opponent's planeswalkers when that scores better than hitting
+ * the player (a walker's loyalty is worth cards, see evaluate). Starts from the attackers already planned and
+ * also considers adding ones that stayed home, one change at a time while something improves.
+ */
+export function planWalkerAttacks(
+  engine: Engine,
+  view: GameState,
+  me: PlayerId,
+  attackers: ObjectId[],
+  declared: ObjectId[] = [],
+): Map<ObjectId, ObjectId> {
+  const walkers = opposingWalkers(engine, view, me);
+  const at = new Map<ObjectId, ObjectId>();
+  if (walkers.length === 0) return at;
+  const legal = engine.getLegalActions(view, me);
+  // Attackers that may go at a walker: any that can attack at all.
+  const canAtWalker = new Set(
+    legal.flatMap((a) => (a.type === 'addAttacker' && a.planeswalker ? [a.attacker] : [])),
+  );
+  // Ones already declared at a walker have no such action for that walker, but are still attackers at it.
+  if (view.decision.kind === 'declareAttackers')
+    for (const x of view.decision.declared) if (x.planeswalker) canAtWalker.add(x.id);
+  const available = [...new Set([...declared, ...attackers, ...canAtWalker])].filter((id) =>
+    canAtWalker.has(id),
+  );
+  let chosen = [...attackers];
+  let score = scoreAttack(engine, view, me, chosen, at);
+  for (let round = 0; round < 8; round++) {
+    let best: { id: ObjectId; walker: ObjectId } | null = null;
+    let bestScore = score + MARGIN;
+    const tried = new Set<string>();
+    for (const id of available) {
+      if (at.has(id)) continue;
+      for (const w of walkers) {
+        // Interchangeable attackers at the same walker give the same answer.
+        const c = getCharacteristics(view, engine.db, id);
+        const k = `${view.objects[id]!.defId}|${c.power}|${c.toughness}|${[...c.keywords].sort().join()}|${chosen.includes(id)}|${w}`;
+        if (tried.has(k)) continue;
+        tried.add(k);
+        const next = new Map(at).set(id, w);
+        const v = scoreAttack(
+          engine,
+          view,
+          me,
+          chosen.includes(id) ? chosen : [...chosen, id],
+          next,
+        );
+        if (v > bestScore) {
+          bestScore = v;
+          best = { id, walker: w };
+        }
+      }
+    }
+    if (!best) break;
+    at.set(best.id, best.walker);
+    if (!chosen.includes(best.id)) chosen = [...chosen, best.id];
+    score = bestScore;
+  }
+  return at;
+}
+
+/** The attackers to declare and the planeswalkers some of them attack (the rest attack the player). */
+export function planAttackTargets(
+  engine: Engine,
+  view: GameState,
+  me: PlayerId,
+  declared: ObjectId[],
+): { attackers: ObjectId[]; at: Map<ObjectId, ObjectId> } {
+  const planned = planAttacks(engine, view, me, declared);
+  const at = planWalkerAttacks(engine, view, me, planned, declared);
+  return { attackers: [...planned, ...[...at.keys()].filter((id) => !planned.includes(id))], at };
 }
 
 /** Greedy attack plan: add the attacker that helps most until nothing helps; also try all-in. */
@@ -324,7 +470,7 @@ export function planAttacks(
  * time. Keyed by the decision object, which stays the same while a simulation
  * mutates its state in place (in the real game each action makes a new one).
  */
-const attackPlans = new WeakMap<object, ObjectId[]>();
+const attackPlans = new WeakMap<object, { attackers: ObjectId[]; at: Map<ObjectId, ObjectId> }>();
 const blockPlans = new WeakMap<object, Block[]>();
 
 function memo<T>(cache: WeakMap<object, T>, key: object, make: () => T): T {
@@ -340,18 +486,40 @@ function nextAttackAction(
   engine: Engine,
   view: GameState,
   me: PlayerId,
-  declared: ObjectId[],
+  declared: readonly { id: ObjectId; planeswalker?: ObjectId }[],
 ): Action {
-  const plan = memo(attackPlans, view.decision, () => planAttacks(engine, view, me, declared));
+  const plan = memo(attackPlans, view.decision, () =>
+    planAttackTargets(
+      engine,
+      view,
+      me,
+      declared.map((x) => x.id),
+    ),
+  );
   // Goaded attackers can't be taken back; Propaganda may cap how many attack.
   const legal = engine.getLegalActions(view, me);
   const removable = legal.flatMap((a) => (a.type === 'removeAttacker' ? [a.attacker] : []));
   const addable = legal.flatMap((a) => (a.type === 'addAttacker' ? [a.attacker] : []));
-  const wrong = declared.find((id) => !plan.includes(id) && removable.includes(id));
-  if (wrong) return { type: 'removeAttacker', player: me, attacker: wrong };
-  const next = plan.find((id) => !declared.includes(id) && addable.includes(id));
-  if (next) return { type: 'addAttacker', player: me, attacker: next, defender: other(me) };
+  const wrong = declared.find((x) => !plan.attackers.includes(x.id) && removable.includes(x.id));
+  if (wrong) return { type: 'removeAttacker', player: me, attacker: wrong.id };
+  const have = (id: ObjectId) => declared.some((x) => x.id === id);
+  const next = plan.attackers.find((id) => !have(id) && addable.includes(id));
+  if (next) return attackAction(legal, me, next, plan.at.get(next));
+  // Reality Fracture (17c): an attacker declared at the player that should go at a planeswalker.
+  const redirect = declared.find((x) => plan.at.has(x.id) && x.planeswalker !== plan.at.get(x.id));
+  if (redirect) {
+    const act = attackAction(legal, me, redirect.id, plan.at.get(redirect.id));
+    if (act.type === 'addAttacker' && act.planeswalker) return act;
+  }
   return { type: 'confirmAttackers', player: me };
+}
+
+/** Declares `id` as an attacker, at `walker` if it can (else the player). */
+function attackAction(legal: Action[], me: PlayerId, id: ObjectId, walker?: ObjectId): Action {
+  const at = walker
+    ? legal.find((a) => a.type === 'addAttacker' && a.attacker === id && a.planeswalker === walker)
+    : undefined;
+  return at ?? { type: 'addAttacker', player: me, attacker: id, defender: other(me) };
 }
 
 function scoreBlocks(engine: Engine, view: GameState, me: PlayerId, blocks: Block[]): number {

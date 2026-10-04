@@ -321,6 +321,11 @@ export function countOf(
     return a.countersOn === 'self' && sourceId
       ? (ctx.s.objects[sourceId]?.plusOneCounters ?? 0)
       : 0;
+  // Reality Fracture (17c): "its loyalty" (the source itself; a chosen planeswalker is read in resolveAmount).
+  if ('loyaltyOf' in a)
+    return a.loyaltyOf === 'self' && sourceId
+      ? (ctx.s.objects[sourceId]?.counters?.loyalty ?? 0)
+      : 0;
   // Door of Destinies: its charge counters.
   if ('namedCountersOnSource' in a) {
     const src = sourceId ? ctx.s.objects[sourceId] : undefined;
@@ -509,6 +514,17 @@ export function countOf(
         for (const c of def(ctx, id).colors) colors.add(c);
     return colors.size;
   }
+  // Reality Fracture (17c): Jace, Reality Sculptor ("loyalty counters among Jaces you control").
+  if (a.count === 'loyaltyAmongPlaneswalkers')
+    return ctx.s.battlefield.reduce(
+      (n, id) =>
+        obj(ctx, id).controller === player &&
+        def(ctx, id).types.includes('Planeswalker') &&
+        matchesFilter(ctx, id, a.filter ?? {}, sourceId)
+          ? n + (obj(ctx, id).counters?.loyalty ?? 0)
+          : n,
+      0,
+    );
   // Reality Fracture (17a): Tam, the Possibility.
   if (a.count === 'planeswalkerTypesYouControl') {
     const types = new Set<string>();

@@ -100,6 +100,8 @@ export interface CastChoice {
   sacrificeMany?: ObjectId[] | undefined;
   /** Times multikicker is paid (Batroc). */
   kickCount?: number | undefined;
+  /** Reality Fracture (17c): beholding for `beholdOrPay` (Countersculpt). */
+  beheld?: boolean | undefined;
   /** Cast as its back face (a modal double-faced card). */
   back?: boolean | undefined;
   /** Sneak: the unblocked attacker returned to hand. */
@@ -1001,6 +1003,9 @@ export function activateAbility(
   // Loyalty abilities: one per planeswalker per turn; the cost changes its loyalty.
   if (a.cost.loyalty !== undefined) {
     src.onceTurns = { ...src.onceTurns, [LOYALTY_KEY]: ctx.s.turn.number };
+    // Reality Fracture (17c): Kiora of Salt and Sand ("if you've activated a loyalty ability this turn").
+    if (!ctx.s.turn.loyaltyActivated?.includes(player))
+      ctx.s.turn.loyaltyActivated = [...(ctx.s.turn.loyaltyActivated ?? []), player];
     if (a.cost.loyalty > 0) addCounters(ctx, source, a.cost.loyalty, 'loyalty');
     else
       (src.counters ??= {}).loyalty =

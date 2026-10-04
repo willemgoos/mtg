@@ -289,6 +289,7 @@ function apply(ctx: Ctx, action: Action): void {
           copyOf: action.copyOf,
           sacrificeMany: action.sacrificeMany,
           kickCount: action.kickCount,
+          beheld: action.beheld,
           delve: action.delve,
           teamwork: action.teamwork,
           back: action.back,
