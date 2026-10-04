@@ -77,7 +77,8 @@ type RawFace = Pick<
 >;
 
 /** Double-faced layouts: each face becomes its own record, linked to the other. */
-const DOUBLE_FACED = ['modal_dfc', 'transform'];
+// Strixhaven Brawl (15b, w): Rooms (Surgical Suite // Hospital Room) are `split` cards, two doors on one card.
+const DOUBLE_FACED = ['modal_dfc', 'transform', 'split'];
 /**
  * Final Fantasy (11a): adventurer cards (FIN's five Town lands) also become two
  * records, the main face naming its Adventure as its back (and marked `adventure`).

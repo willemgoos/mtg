@@ -163,6 +163,17 @@ export const KEYWORDS_AS_ABILITIES = new Set([
   'Learn',
   // Strixhaven Brawl (15a): Alchemy conjure.
   'Conjure',
+  // Strixhaven Brawl (15b, white): rules text lives in the behaviour.
+  'Bestow',
+  'Heroic',
+  'Constellation',
+  'Eerie',
+  'Mentor',
+  'Afterlife',
+  'Populate',
+  'Role token',
+  'Protection',
+  'Room',
   // Final Fantasy (11a).
   'Job select',
   'Tiered',
@@ -206,7 +217,7 @@ export function parseTypeLine(line: string) {
   const supertypes: Supertype[] = [];
   const types: CardType[] = [];
   for (const w of left!.trim().split(/\s+/)) {
-    if (w === 'Basic' || w === 'Legendary') supertypes.push(w);
+    if (w === 'Basic' || w === 'Legendary' || w === 'Snow') supertypes.push(w);
     else types.push(w as CardType);
   }
   const subtypes = right.trim() ? right.trim().split(/\s+/) : [];

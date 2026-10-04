@@ -8,6 +8,7 @@ import foundations from './generated/foundations-pack-candidates.json' with { ty
 import type { ScryfallCard } from './scryfall-types.ts';
 import { SOS_BOOSTER_LIST } from './sos/booster-list.ts';
 import { STX_BOOSTER_LIST } from './stx/booster-list.ts';
+import { bestowAura } from './soc/cards-15b-w.ts';
 
 export { BEHAVIORS, TOKENS } from './behaviors.ts';
 export { buildCard, slug, parseManaCost, parseTypeLine } from './build.ts';
@@ -75,6 +76,8 @@ function boosterSheets(list: typeof STX_BOOSTER_LIST): BoosterSheets {
 
 const BUILT = SCRYFALL.map((sc) => buildCard(sc, BEHAVIORS[sc.name]));
 const builtById = new Map(BUILT.map((c) => [c.id, c]));
+// Strixhaven Brawl (15b, w): bestow. Each bestow creature has an Aura form of its own (its `back`).
+const BESTOW_AURAS = BUILT.filter((c) => c.bestow).map(bestowAura);
 
 /** Strixhaven (13a): a modal double-faced card's colour identity covers both faces (Brawl). */
 function withBackIdentity(c: CardDefinition): CardDefinition {
@@ -84,14 +87,23 @@ function withBackIdentity(c: CardDefinition): CardDefinition {
   return { ...c, colorIdentity: (['W', 'U', 'B', 'R', 'G'] as const).filter((x) => ids.has(x)) };
 }
 
-export const CARDS: readonly CardDefinition[] = [...BUILT.map(withBackIdentity), ...TOKENS];
+export const CARDS: readonly CardDefinition[] = [
+  ...BUILT.map(withBackIdentity),
+  ...TOKENS,
+  ...BESTOW_AURAS,
+];
 
 export const cardDb: CardDb = new Map(CARDS.map((c) => [c.id, c]));
 
 /** Scryfall data by card id, for image hotlinking in the UI. */
-export const scryfallById: ReadonlyMap<CardDefId, ScryfallCard> = new Map(
-  SCRYFALL.map((sc) => [slug(sc.name), sc]),
-);
+export const scryfallById: ReadonlyMap<CardDefId, ScryfallCard> = new Map([
+  ...SCRYFALL.map((sc): [CardDefId, ScryfallCard] => [slug(sc.name), sc]),
+  // A bestowed creature shows its card.
+  ...BESTOW_AURAS.flatMap((c): [CardDefId, ScryfallCard][] => {
+    const sc = SCRYFALL.find((x) => slug(x.name) === c.bestowFront);
+    return sc ? [[c.id, sc]] : [];
+  }),
+]);
 
 /** The name to show: the Marvel name on a Marvel reprint, else the card's name. */
 export const displayName = (d: CardDefinition): string => d.flavorName ?? d.name;

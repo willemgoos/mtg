@@ -307,6 +307,22 @@ function forEachBattlefieldTrigger(
   }
 }
 
+/** Strixhaven Brawl (15b, w): the spell targets a permanent under `controller` matching the filter (if there is one). */
+function targetsMatch(
+  ctx: Ctx,
+  item: StackItem | undefined,
+  controller: PlayerId,
+  filter: CardFilter | undefined,
+): boolean {
+  if (!filter) return true;
+  return !!item?.targets.some((x) => {
+    const t = 'object' in x ? ctx.s.objects[x.object.id] : undefined;
+    return (
+      !!t && t.zone === 'battlefield' && t.controller === controller && matchesFilter(ctx, t.id, filter)
+    );
+  });
+}
+
 function spellMatches(
   ctx: Ctx,
   t: Extract<TriggerDef, { on: 'castSpell' }>,
@@ -388,6 +404,14 @@ function spellMatches(
       );
     case 'third':
       return (ctx.s.turn.castDefs?.[spellCaster(ctx, item, self)] ?? []).length === 3;
+    // Strixhaven Brawl (15b, w): Psemilla, "your first enchantment spell each turn".
+    case 'firstEnchantment':
+      return (
+        spell.types.includes('Enchantment') &&
+        (ctx.s.turn.castDefs?.[spellCaster(ctx, item, self)] ?? []).filter((id) =>
+          defOf(ctx, id).types.includes('Enchantment'),
+        ).length === 1
+      );
     case 'firstOfItsKind': {
       // Alania: the first instant, the first sorcery, or the first Otter spell other than itself.
       const cast = (ctx.s.turn.castDefs?.[self.controller] ?? []).map((id) => defOf(ctx, id));
@@ -516,6 +540,13 @@ function detect(ctx: Ctx, ev: GameEvent): void {
         if (wasFood) forEachBattlefieldTrigger(ctx, (_o, a) => a.trigger.on === 'foodToGraveyard');
         // Final Fantasy (11b): "whenever this or another creature or artifact you control dies".
         const diedUnder = ev.controller ?? moved?.controller;
+        // Strixhaven Brawl (15b, w): "when this permanent is put into a graveyard from the battlefield" (afterlife).
+        if (moved)
+          (ev.leftAs ? defOf(ctx, ev.leftAs) : movedDef).abilities.forEach((a, i) => {
+            if (a.kind !== 'triggered' || a.trigger.on !== 'selfToGraveyard') return;
+            if (checkCondition(ctx, a.condition, moved.owner, moved))
+              queue(ctx, moved, i, moved.owner, moved);
+          });
         if (moved)
           movedDef.abilities.forEach((a, i) => {
             if (a.kind !== 'triggered' || a.trigger.on !== 'permanentYouControlDies') return;
@@ -850,6 +881,8 @@ function detect(ctx: Ctx, ev: GameEvent): void {
           // Secrets of Strixhaven (14b): Quandrix, the Proof.
           (!a.trigger.fromHand || (item?.kind === 'spell' && !!item.fromHand)) &&
           (!a.trigger.spell || cardMatches(ctx, ev.id, a.trigger.spell, o.id)) &&
+          // Strixhaven Brawl (15b, w): Pearl-Ear, "an Aura spell that targets a modified permanent you control".
+          targetsMatch(ctx, item, o.controller, a.trigger.targetFilter) &&
           // Final Fantasy (11b): "if at least four mana was spent to cast it".
           (spellObj.manaSpent ?? 0) >= (a.trigger.minManaSpent ?? 0) &&
           !a.fromGraveyard,
@@ -1157,6 +1190,21 @@ function detect(ctx: Ctx, ev: GameEvent): void {
       );
       return;
     }
+    // Strixhaven Brawl (15b, w): Rooms. Unlocking a door triggers that door's own ability and eerie.
+    case 'doorUnlocked': {
+      const room = s.objects[ev.id];
+      if (room && room.zone === 'battlefield')
+        def(ctx, room.id).abilities.forEach((a, i) => {
+          if (a.kind === 'triggered' && a.trigger.on === 'doorUnlocked' && a.trigger.door === ev.door)
+            if (checkCondition(ctx, a.condition, room.controller, room)) queue(ctx, room, i, room.controller);
+        });
+      if (ev.fully)
+        forEachBattlefieldTrigger(
+          ctx,
+          (o, a) => a.trigger.on === 'fullyUnlock' && o.controller === ev.player,
+        );
+      return;
+    }
     case 'foraged':
       forEachBattlefieldTrigger(
         ctx,
@@ -1281,7 +1329,10 @@ function detect(ctx: Ctx, ev: GameEvent): void {
       if (ev.step === 'beginCombat') {
         forEachBattlefieldTrigger(
           ctx,
-          (o, a) => a.trigger.on === 'beginningOfCombat' && o.controller === ev.activePlayer,
+          (o, a) =>
+            a.trigger.on === 'beginningOfCombat' &&
+            // Strixhaven Brawl (15b, w): Psemilla, "at the beginning of each combat".
+            (a.trigger.whose === 'each' || o.controller === ev.activePlayer),
         );
         return;
       }

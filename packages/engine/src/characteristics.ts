@@ -137,8 +137,8 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
             power += st.basePT[0] - (basePower ?? base ?? o.copyPT?.power ?? d.power ?? 0);
             toughness += st.basePT[1] - (base ?? o.copyPT?.toughness ?? d.toughness ?? 0);
           }
-          power += countOf(ctx, src.controller, st.power);
-          toughness += countOf(ctx, src.controller, st.toughness);
+          power += countOf(ctx, src.controller, st.power, false, srcId);
+          toughness += countOf(ctx, src.controller, st.toughness, false, srcId);
           if (st.keywords?.length) {
             granted ??= new Set(keywords);
             for (const k of st.keywords) granted.add(k);
@@ -255,6 +255,9 @@ export function countOf(
   // Marvel Super Heroes (The Scarlet Witch): 'where X is her power'.
   if ('powerOf' in a)
     return a.powerOf === 'self' && sourceId ? Math.max(0, power(ctx, sourceId)) : 0;
+  // Strixhaven Brawl (15b, w): Glyph Elemental, "for each +1/+1 counter on this Aura".
+  if ('countersOn' in a)
+    return a.countersOn === 'self' && sourceId ? (ctx.s.objects[sourceId]?.plusOneCounters ?? 0) : 0;
   // Door of Destinies: its charge counters.
   if ('namedCountersOnSource' in a) {
     const src = sourceId ? ctx.s.objects[sourceId] : undefined;
@@ -690,6 +693,18 @@ export function cardMatches(
   if (filter.enteredThisTurn && obj(ctx, id).zoneTurn !== ctx.s.turn.number) return false;
   if (filter.leftAttacking && !obj(ctx, id).leftAttacking) return false;
   if (filter.attachedToSource && (!sourceId || obj(ctx, id).attachedTo !== sourceId)) return false;
+  // Strixhaven Brawl (15b, w): Sage's Reverie, Role tokens, bestowed Auras, mentor.
+  if (filter.attachedToCreature) {
+    const host = obj(ctx, id).attachedTo;
+    const h = host !== undefined ? ctx.s.objects[host] : undefined;
+    if (!h || h.zone !== 'battlefield' || !isCreature(ctx, h.id)) return false;
+  }
+  if (filter.hostOfSource && (!sourceId || obj(ctx, sourceId).attachedTo !== id)) return false;
+  if (filter.lesserPowerThanSource && sourceId) {
+    const s = obj(ctx, sourceId);
+    const ref = s.attachedTo !== undefined && def(ctx, sourceId).subtypes.includes('Aura') ? s.attachedTo : sourceId;
+    if (power(ctx, id) >= power(ctx, ref)) return false;
+  }
   if (filter.notAttachedHost && sourceId && obj(ctx, sourceId).attachedTo === id) return false;
   if (filter.manaValueParity) {
     const mv = manaValue(def(ctx, id).manaCost);

@@ -41,6 +41,7 @@ import { checkCondition } from './triggers.ts';
 import { addLore } from './sagas.ts';
 import { CHOOSERS } from './stx-13c-a-effects.ts';
 import { planeswalkersSurvive, tokenMultiplier } from './brawl-15a-w-effects.ts';
+import { protectedFrom } from './brawl-15b-w-effects.ts';
 import { SOS_14B_C_CHOOSERS } from './sos-14b-c-effects.ts';
 import type {
   CardDefId,
@@ -174,6 +175,8 @@ function prevented(ctx: Ctx, src: DamageSource, to: TargetChoice, amount: number
     return amount;
   }
   const host = to.object.id;
+  // Strixhaven Brawl (15b, w): protection from a colour prevents damage from sources of that colour.
+  if (protectedFrom(ctx, host, src.id)) return 0;
   // Marvel Super Heroes: "Prevent all damage that would be dealt to Black Panther."
   if (hasStaticKind(ctx, host, 'preventDamageToSelf')) return 0;
   // Final Fantasy (11a): Summon: Alexander prevents all damage to its controller's creatures this turn.
