@@ -42,7 +42,7 @@ import { checkCondition, triggeredAbility } from './triggers.ts';
 import { nameLocked } from './sos-14b-c-effects.ts';
 
 const NO_COST = { generic: 0, colored: {} };
-import { targetCombos } from './targets.ts';
+import { targetCandidates, targetCombos } from './targets.ts';
 import type { Action, CardFilter, ObjectId, PlayerId, TargetChoice, TargetSpec } from './types.ts';
 
 const MAX_MULLIGANS = 7;
@@ -1021,6 +1021,22 @@ export function getLegalActions(ctx: Ctx, player: PlayerId): Action[] {
         canPayFrom(addCosts(a.cost ?? NO_COST, wardCost(ctx, player, targets)), pool) &&
         wardPayable(ctx, player, targets) &&
         (a.lifeCost ?? 0) <= s.players[player].life;
+      // Marvel Super Heroes Jumpstart (Blink): "any number of targets", one at a time. Done (the
+      // targets so far) comes first, then each further target.
+      if (d.picked) {
+        const picked = d.picked;
+        const spec = a.targets[picked.length] ?? a.targets[a.targets.length - 1]!;
+        const canStop = picked.length >= a.targets.length - 1 || spec.optional;
+        if (canStop && (picked.length === 0 || payable(picked)))
+          out.push({ type: 'chooseTargets', player, targets: picked });
+        const key = (t: TargetChoice) => ('object' in t ? t.object.id : t.player);
+        const taken = new Set(picked.map(key));
+        for (const t of targetCandidates(ctx, spec, src))
+          if (!taken.has(key(t)) && payable([...picked, t]))
+            out.push({ type: 'chooseTargets', player, targets: [...picked, t] });
+        if (out.length === 0) out.push({ type: 'chooseTargets', player, targets: [] });
+        return out;
+      }
       if (a.modes) {
         // Kimoyo Beads: "choose one that hasn't been chosen".
         const used = a.modesOnce ? (s.objects[d.trigger.source.id]?.usedModes ?? []) : [];

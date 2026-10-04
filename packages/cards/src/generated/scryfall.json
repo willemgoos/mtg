@@ -22495,6 +22495,124 @@
   }
  },
  {
+  "name": "Shi'ar Soldier",
+  "scryfallId": "7fb26734-efbf-4d0b-9fcc-63a2db68adba",
+  "oracleId": "f20ec8e2-d6e4-4707-9b86-107dbc09ac63",
+  "set": "msc",
+  "collectorNumber": "637",
+  "rarity": "uncommon",
+  "manaCost": "{1}{U}",
+  "typeLine": "Creature — Shi'ar Soldier",
+  "oracleText": "Flying\n{U}, {T}: Return another target permanent you control to its owner's hand. Activate only during your turn.",
+  "power": "1",
+  "toughness": "3",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/f/7fb26734-efbf-4d0b-9fcc-63a2db68adba.jpg?1783903069",
+   "normal": "https://cards.scryfall.io/normal/front/7/f/7fb26734-efbf-4d0b-9fcc-63a2db68adba.jpg?1783903069",
+   "large": "https://cards.scryfall.io/large/front/7/f/7fb26734-efbf-4d0b-9fcc-63a2db68adba.jpg?1783903069",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/f/7fb26734-efbf-4d0b-9fcc-63a2db68adba.jpg?1783903069"
+  }
+ },
+ {
+  "name": "Imperial Cosmographer",
+  "scryfallId": "76cfd45f-62c4-4832-aae2-3f02d1dea38a",
+  "oracleId": "b2aa052c-08b7-4334-9ea7-e78da57ff9ea",
+  "set": "msc",
+  "collectorNumber": "624",
+  "rarity": "uncommon",
+  "manaCost": "{2}{U}",
+  "typeLine": "Creature — Kree Scientist",
+  "oracleText": "Vigilance\nWhenever another creature you control leaves the battlefield without dying, put two +1/+1 counters on this creature.",
+  "power": "2",
+  "toughness": "3",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Vigilance"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/6/76cfd45f-62c4-4832-aae2-3f02d1dea38a.jpg?1783903073",
+   "normal": "https://cards.scryfall.io/normal/front/7/6/76cfd45f-62c4-4832-aae2-3f02d1dea38a.jpg?1783903073",
+   "large": "https://cards.scryfall.io/large/front/7/6/76cfd45f-62c4-4832-aae2-3f02d1dea38a.jpg?1783903073",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/6/76cfd45f-62c4-4832-aae2-3f02d1dea38a.jpg?1783903073"
+  }
+ },
+ {
+  "name": "Silver Surfer, Cosmic Voyager",
+  "scryfallId": "4f200c66-2356-4aec-978b-6bb509a3d885",
+  "oracleId": "3ce1f550-d044-4cb1-991b-e98449f74507",
+  "set": "msc",
+  "collectorNumber": "639",
+  "rarity": "rare",
+  "manaCost": "{4}{U}{U}",
+  "typeLine": "Legendary Creature — Alien Hero",
+  "oracleText": "Flash\nFlying\nWhen Silver Surfer enters, exile any number of other target permanents you control. Return those cards to the battlefield under their owner's control at the beginning of the next end step. If a land enters this way, it enters tapped.",
+  "power": "5",
+  "toughness": "5",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Flying",
+   "Flash"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/f/4f200c66-2356-4aec-978b-6bb509a3d885.jpg?1783903067",
+   "normal": "https://cards.scryfall.io/normal/front/4/f/4f200c66-2356-4aec-978b-6bb509a3d885.jpg?1783903067",
+   "large": "https://cards.scryfall.io/large/front/4/f/4f200c66-2356-4aec-978b-6bb509a3d885.jpg?1783903067",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/f/4f200c66-2356-4aec-978b-6bb509a3d885.jpg?1783903067"
+  }
+ },
+ {
+  "name": "Spaceshift",
+  "scryfallId": "5c618451-5cf5-4cdc-b957-733960e6001e",
+  "oracleId": "5c63a244-75d7-4372-baf4-7a3526f240c8",
+  "set": "msc",
+  "collectorNumber": "640",
+  "rarity": "common",
+  "manaCost": "{1}{U}",
+  "typeLine": "Instant",
+  "oracleText": "Exile target artifact or creature, then return that card to the battlefield under its owner's control with a +1/+1 counter on it.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/c/5c618451-5cf5-4cdc-b957-733960e6001e.jpg?1783903067",
+   "normal": "https://cards.scryfall.io/normal/front/5/c/5c618451-5cf5-4cdc-b957-733960e6001e.jpg?1783903067",
+   "large": "https://cards.scryfall.io/large/front/5/c/5c618451-5cf5-4cdc-b957-733960e6001e.jpg?1783903067",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/c/5c618451-5cf5-4cdc-b957-733960e6001e.jpg?1783903067"
+  }
+ },
+ {
+  "name": "Collector's Case",
+  "scryfallId": "3449300f-c09d-48b7-8aec-08dd518ddc26",
+  "oracleId": "a347123d-191a-4758-aab1-9cc7769eac66",
+  "set": "msc",
+  "collectorNumber": "617",
+  "rarity": "common",
+  "manaCost": "{1}{U}",
+  "typeLine": "Artifact",
+  "oracleText": "When this artifact enters, tap up to one target creature and put two stun counters on it. (If a permanent with a stun counter would become untapped, remove one from it instead.)\n{3}{U}, {T}: Tap target creature.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/4/3449300f-c09d-48b7-8aec-08dd518ddc26.jpg?1783903075",
+   "normal": "https://cards.scryfall.io/normal/front/3/4/3449300f-c09d-48b7-8aec-08dd518ddc26.jpg?1783903075",
+   "large": "https://cards.scryfall.io/large/front/3/4/3449300f-c09d-48b7-8aec-08dd518ddc26.jpg?1783903075",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/4/3449300f-c09d-48b7-8aec-08dd518ddc26.jpg?1783903075"
+  }
+ },
+ {
   "name": "Bucky Barnes, Eager Ally",
   "scryfallId": "58a6ca84-64b8-4137-b3ce-9540b6dfa162",
   "oracleId": "55bc5d06-7dd1-4403-af32-0e10d8bbe327",

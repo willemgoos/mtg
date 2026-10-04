@@ -529,6 +529,13 @@ export function resolveRef(ctx: Ctx, es: EffectSource, ref: Ref): TargetChoice[]
     const o = es.chosen && onBattlefield(ctx, es.chosen);
     return o ? [{ object: { id: o.id, zcc: o.zcc } }] : [];
   }
+  // Marvel Super Heroes Jumpstart (Blink): "any number of target ...".
+  if (typeof ref === 'object' && 'targetsFrom' in ref)
+    return es.targets
+      .slice(ref.targetsFrom)
+      .flatMap((t): TargetChoice[] =>
+        !t ? [] : 'object' in t ? (onBattlefield(ctx, t.object) ? [t] : []) : [t],
+      );
   const sourceId = es.source?.id;
   return (
     ref.each === 'permanent'
@@ -3086,6 +3093,26 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
     case 'exileUntilEndStep': {
       const step = ctx.s.turn.step;
       const fromTurn = ctx.s.turn.number + (step === 'end' || step === 'cleanup' ? 1 : 0);
+      // Marvel Super Heroes Jumpstart (Blink): Silver Surfer, "return those cards" (one trigger, together).
+      if (e.together) {
+        const cards: ObjectRef[] = [];
+        for (const id of objectsOf(ctx, es, e.what)) {
+          const token = obj(ctx, id).isToken;
+          moveObject(ctx, id, 'exile');
+          if (!token && ctx.s.objects[id]) cards.push({ id, zcc: obj(ctx, id).zcc });
+        }
+        if (cards.length && es.source)
+          (ctx.s.delayed ??= []).push({
+            controller: es.controller,
+            sourceDefId: es.sourceDefId,
+            subject: es.source,
+            effects: [
+              { kind: 'returnExiledCards', cards, ...(e.landsTapped ? { landsTapped: true } : {}) },
+            ],
+            fromTurn,
+          });
+        return;
+      }
       for (const id of objectsOf(ctx, es, e.what)) {
         const token = obj(ctx, id).isToken;
         moveObject(ctx, id, 'exile');
@@ -3104,6 +3131,18 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
           ],
           fromTurn,
         });
+      }
+      return;
+    }
+    // Marvel Super Heroes Jumpstart (Blink)
+    case 'returnExiledCards': {
+      const back = e.cards.flatMap((r) => {
+        const o = ctx.s.objects[r.id];
+        return o && o.zone === 'exile' && o.zcc === r.zcc ? [o] : [];
+      });
+      for (const o of back) {
+        moveObject(ctx, o.id, 'battlefield', { controller: o.owner });
+        if (e.landsTapped && def(ctx, o.id).types.includes('Land')) obj(ctx, o.id).tapped = true;
       }
       return;
     }

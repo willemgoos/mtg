@@ -1151,6 +1151,13 @@ export interface TargetSpec {
   filter?: CardFilter;
   /** "Up to": this target and the ones after it may be left out. */
   optional?: boolean;
+  // Marvel Super Heroes Jumpstart (Blink)
+  /**
+   * "Any number of target ...": the last spec of a triggered ability only. Its
+   * targets (none or more, all different) are picked one at a time (the
+   * decision's `picked`), not enumerated as subsets. See `{ targetsFrom }`.
+   */
+  anyNumber?: boolean;
   // Final Fantasy (11c): targeting abilities
   /**
    * With 'spell': activated and triggered abilities on the stack are targets
@@ -1181,7 +1188,10 @@ export type Ref =
   /** The controller of the permanent the source is attached to (Super Intelligence: "that player"). */
   | 'attachedController'
   /** The permanent chosen by a 'chooseYourPermanent' effect. */
-  | 'chosen';
+  | 'chosen'
+  // Marvel Super Heroes Jumpstart (Blink)
+  /** Every target from this index on (an `anyNumber` spec's targets). */
+  | { targetsFrom: number };
 
 export type Amount =
   | number
@@ -1645,6 +1655,11 @@ export type EffectDef =
       loyaltyToo?: boolean;
       /** A named counter it returns with (Salvation Swan: flying). */
       named?: string;
+      // Marvel Super Heroes Jumpstart (Blink): Silver Surfer, Cosmic Voyager
+      /** One delayed trigger returns them all at once ("return those cards"). */
+      together?: boolean;
+      /** With `together`: "if a land enters this way, it enters tapped". */
+      landsTapped?: boolean;
     }
   /** Discard your whole hand. */
   | { kind: 'discardHand' }
@@ -1898,6 +1913,9 @@ export type EffectDef =
   /** Return the subject (an exiled card) to the battlefield under its owner's control. */
   // Strixhaven (13c): Semester's End (a planeswalker gets a loyalty counter instead)
   | { kind: 'returnSubject'; counters?: number; named?: string; loyaltyToo?: boolean }
+  // Marvel Super Heroes Jumpstart (Blink)
+  /** Return these exiled cards to the battlefield together under their owners' control (lands tapped). */
+  | { kind: 'returnExiledCards'; cards: ObjectRef[]; landsTapped?: boolean }
   /** Put a card from a graveyard onto the battlefield under your control (with a named counter: finality). */
   | {
       kind: 'returnToBattlefield';
@@ -3255,6 +3273,13 @@ export type Decision =
       trigger: PendingTrigger;
       /** Who receives priority once the trigger is on the stack. */
       thenPriority: PlayerId;
+      // Marvel Super Heroes Jumpstart (Blink)
+      /**
+       * An ability with an `anyNumber` spec: the targets picked so far. Each
+       * `chooseTargets` action is these plus one more (keep picking), or exactly
+       * these (done).
+       */
+      picked?: TargetChoice[];
     }
   | { kind: 'discardToHandSize'; player: PlayerId; count: number }
   /** Discard from an effect (Chart a Course); resolution continues afterwards. */

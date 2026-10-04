@@ -43,15 +43,26 @@ export interface Targeting {
   chosen: TargetChoice[];
   /** An optional trigger: choosing nothing is allowed. */
   skip: Action | null;
+  /** Marvel Super Heroes Jumpstart (Blink): "any number of targets", picked one at a time (`skip` is "done"). */
+  anyNumber?: boolean;
 }
 
 export function startTargeting(
   source: ObjectId | null,
   label: string,
   actions: Action[],
+  picked?: TargetChoice[],
 ): Targeting {
-  const skip = actions.find((a) => targetsOf(a).length === 0) ?? null;
-  return { source, label, candidates: actions.filter((a) => a !== skip), chosen: [], skip };
+  const n = picked?.length ?? 0;
+  const skip = actions.find((a) => targetsOf(a).length === n) ?? null;
+  return {
+    source,
+    label,
+    candidates: actions.filter((a) => a !== skip),
+    chosen: picked ?? [],
+    skip,
+    ...(picked ? { anyNumber: true } : {}),
+  };
 }
 
 function matching(t: Targeting): Action[] {
