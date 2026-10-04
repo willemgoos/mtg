@@ -508,6 +508,20 @@ function spellMatches(
           def(ctx, o.id).types.includes('Creature')
         );
       });
+    // Reality Fracture (17a): Danitha, Sword of Hope
+    case 'equipmentOrTargetsYourCreature':
+      return (
+        spell.subtypes.includes('Equipment') ||
+        !!item?.targets.some((x) => {
+          const o = 'object' in x ? ctx.s.objects[x.object.id] : undefined;
+          return (
+            !!o &&
+            o.zone === 'battlefield' &&
+            o.controller === self.controller &&
+            def(ctx, o.id).types.includes('Creature')
+          );
+        })
+      );
     // Marvel Super Heroes Jumpstart (Precise): Hawkeye, Bowslinger
     case 'targetsCreature':
       return !!item?.targets.some((x) => {
@@ -1325,6 +1339,9 @@ function detect(ctx: Ctx, ev: GameEvent): void {
             a.trigger.on === 'creatureYouControlAttacks' &&
             o.controller === attacker.controller &&
             (!a.trigger.alone || ev.attackers.length === 1) &&
+            // Reality Fracture (17a): Yuriko, "attacks a player alone".
+            (!a.trigger.aPlayer ||
+              s.combat?.attackers.find((x) => x.id === id)?.planeswalker === undefined) &&
             matchesFilter(ctx, id, a.trigger.filter, o.id),
           attacker,
         );

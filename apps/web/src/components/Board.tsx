@@ -1807,6 +1807,13 @@ function ScryOverlay({ game, onHover }: { game: GameSession; onHover: HoverFn })
           {d.surveil ? 'into your graveyard' : 'on the bottom of your library'}. The rest stay on
           top.
         </p>
+        {/* Reality Fracture (17a): Enlightened Confidant */}
+        {d.toHandMaxMv !== undefined && (
+          <p>
+            A card with mana value {d.toHandMaxMv} or less that goes into your graveyard returns to
+            your hand.
+          </p>
+        )}
         <div className="mull__hand">
           {d.cards.map((id, i) => (
             <div

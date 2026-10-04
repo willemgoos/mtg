@@ -616,7 +616,10 @@ export type TriggerDef =
         | 'firstXSpell'
         // Reality Fracture (17a): Danitha, Spear of Agony
         /** A spell that targets an opponent or a creature an opponent controls. */
-        | 'targetsOpponentOrTheirCreature';
+        | 'targetsOpponentOrTheirCreature'
+        // Reality Fracture (17a): Danitha, Sword of Hope
+        /** An Equipment spell, or a spell that targets a creature you control. */
+        | 'equipmentOrTargetsYourCreature';
       /** The spell must also match this (Gev: a Lizard spell). */
       spell?: CardFilter;
       /** Any player's spell, cast when it isn't their turn (Vision). */
@@ -686,6 +689,9 @@ export type TriggerDef =
       filter?: CardFilter;
       // Marvel Super Heroes: "attacks alone" (it is the only attacker).
       alone?: boolean;
+      // Reality Fracture (17a): Yuriko, Blade of the Mighty
+      /** It attacks a player (not a planeswalker). */
+      aPlayer?: boolean;
     }
   | { on: 'landfall' }
   | {
@@ -1337,6 +1343,9 @@ export type Amount =
   | { count: 'countersPutThisTurn' }
   /** The greatest power among creatures you control (Season of Gathering). */
   | { count: 'greatestPowerYouControl' }
+  // Reality Fracture (17a): Ghalta the Immovable
+  /** The greatest toughness among creatures you control. */
+  | { count: 'greatestToughnessYouControl' }
   /** Creature cards you own in exile and in your graveyard (Huskburster Swarm). */
   | { count: 'creatureCardsInExileAndGraveyard' }
   // Strixhaven (13c): Show of Confidence
@@ -2088,7 +2097,13 @@ export type EffectDef =
    */
   | { kind: 'revealUntilCreature' }
   /** The controller surveils N (like scry, but "bottom" means the graveyard). */
-  | { kind: 'surveil'; amount: number }
+  | {
+      kind: 'surveil';
+      amount: number;
+      // Reality Fracture (17a): Enlightened Confidant
+      /** A card put into your graveyard this way with mana value at most this goes into your hand. */
+      graveyardToHand?: { maxManaValue: Amount };
+    }
   /** Exile a permanent until the source leaves the battlefield (Banishing Light). */
   | { kind: 'exileUntilSourceLeaves'; what: Ref }
   /** Return the subject (an exiled card) to the battlefield under its owner's control. */
@@ -2464,6 +2479,17 @@ export type StaticDef =
       keywords?: Keyword[];
     }
   | { kind: 'noLifeGain' }
+  // Reality Fracture (17a): Thalia, the Survivor
+  /** Spells matching the filter that your opponents cast cost {amount} more. */
+  | { kind: 'opponentSpellsCostMore'; filter: CardFilter; amount: number }
+  // Reality Fracture (17a): Ghalta the Immovable
+  /** Creatures you control can attack as though they didn't have defender. */
+  | { kind: 'creaturesIgnoreDefender' }
+  /** Each creature you control with toughness greater than its power assigns combat damage equal to its toughness. */
+  | { kind: 'toughnessAssignsCombatDamage' }
+  // Reality Fracture (17a): Yuriko, Blade of the Mighty
+  /** During combat, players can't cast spells or activate abilities that aren't mana abilities. */
+  | { kind: 'noCastOrActivateInCombat' }
   // Strixhaven (13c): Radiant Scrollwielder
   /** Instant and sorcery spells you control have lifelink. */
   | { kind: 'instantsSorceriesLifelink' }
@@ -3708,6 +3734,9 @@ export type Decision =
       player: PlayerId;
       /** Surveil: "bottom" cards go to the graveyard instead. */
       surveil?: boolean;
+      // Reality Fracture (17a): Enlightened Confidant
+      /** Surveil: a card put into the graveyard with mana value at most this returns to the hand. */
+      toHandMaxMv?: number;
       /** The top cards of their library, top first. */
       cards: ObjectId[];
       resume: PausedResolution;

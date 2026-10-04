@@ -378,6 +378,12 @@ export function countOf(
       0,
     );
   if (a.count === 'cardsDrawnThisTurn') return ctx.s.turn.cardsDrawn[player] ?? 0;
+  // Reality Fracture (17a): Ghalta the Immovable.
+  if (a.count === 'greatestToughnessYouControl')
+    return creaturesOnBattlefield(ctx, player).reduce(
+      (n, c) => Math.max(n, characteristics(ctx, c.id).toughness),
+      0,
+    );
   if (a.count === 'greatestPowerYouControl')
     return creaturesOnBattlefield(ctx, player).reduce((n, c) => Math.max(n, power(ctx, c.id)), 0);
   if (a.count === 'creatureCardsInExileAndGraveyard') {

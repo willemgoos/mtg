@@ -45,7 +45,15 @@ const NO_COST = { generic: 0, colored: {} };
 import { targetCandidates, targetCombos } from './targets.ts';
 import { freeCastSource, playableWhileControlling } from './msh-analyzed.ts';
 import { omnipresenceCastable } from './fra-green-effects.ts';
-import type { Action, CardFilter, ObjectId, PlayerId, TargetChoice, TargetSpec } from './types.ts';
+import type {
+  Action,
+  CardFilter,
+  ObjectId,
+  PlayerId,
+  Step,
+  TargetChoice,
+  TargetSpec,
+} from './types.ts';
 
 const MAX_MULLIGANS = 7;
 
@@ -302,9 +310,31 @@ export function sorceryTiming(ctx: Ctx, player: PlayerId): boolean {
   return isMainPhase(ctx) && ctx.s.turn.activePlayer === player && ctx.s.stack.length === 0;
 }
 
+// Reality Fracture (17a): Yuriko, Blade of the Mighty
+const COMBAT_STEPS: readonly Step[] = [
+  'beginCombat',
+  'declareAttackers',
+  'declareBlockers',
+  'firstStrikeDamage',
+  'combatDamage',
+  'endCombat',
+];
+/** During combat, players can't cast spells or activate abilities that aren't mana abilities. */
+function combatLocked(ctx: Ctx): boolean {
+  return (
+    COMBAT_STEPS.includes(ctx.s.turn.step) &&
+    ctx.s.battlefield.some((id) =>
+      def(ctx, id).abilities.some(
+        (a) => a.kind === 'static' && a.effect.kind === 'noCastOrActivateInCombat',
+      ),
+    )
+  );
+}
+
 function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
   const s = ctx.s;
   const out: Action[] = [{ type: 'passPriority', player }];
+  if (combatLocked(ctx)) return out;
   const ps = s.players[player];
   const sorcery = sorceryTiming(ctx, player);
   const sources = manaSources(ctx, player);
@@ -972,6 +1002,7 @@ export function getLegalActions(ctx: Ctx, player: PlayerId): Action[] {
       return d.options.map((card) => ({ type: 'chooseCard', player, card }) as const);
     case 'castFree': {
       const out: Action[] = [{ type: 'chooseEffect', player, accept: false }];
+      if (combatLocked(ctx)) return out; // Reality Fracture (17a): Yuriko
       const pool = manaSources(ctx, player);
       for (const card of d.cards) {
         const cd = def(ctx, card);
@@ -995,6 +1026,26 @@ export function getLegalActions(ctx: Ctx, player: PlayerId): Action[] {
           for (const targets of targetCombos(ctx, specs, { controller: player, sourceId: card })) {
             // Free casts still pay ward.
             if (!canPayFrom(wardCost(ctx, player, targets), pool)) continue;
+            // Reality Fracture (17a): Thalia, the Survivor: a free cast still pays what costs more.
+            if (
+              !price &&
+              s.battlefield.some((id) =>
+                def(ctx, id).abilities.some(
+                  (a) => a.kind === 'static' && a.effect.kind === 'opponentSpellsCostMore',
+                ),
+              ) &&
+              !canPayFrom(
+                castCost(
+                  ctx,
+                  player,
+                  card,
+                  { via: 'free', ...(v.kicked ? { kicked: true } : {}) },
+                  targets,
+                ),
+                pool,
+              )
+            )
+              continue;
             if (wardLife(ctx, player, targets) > s.players[player].life) continue;
             if (!wardPayable(ctx, player, targets, zone === 'hand' ? 1 : 0)) continue;
             for (const discard of vDiscards)
