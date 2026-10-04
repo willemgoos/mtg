@@ -47,6 +47,14 @@ function permanentOk(ctx: Ctx, spec: TargetSpec, id: ObjectId, src: TargetingSou
   if (spec.controller === 'opponent' && o.controller === src.controller) return false;
   // Whispersilk Cloak: nobody can target it.
   if (hasKeyword(ctx, id, 'shroud')) return false;
+  // Strixhaven Brawl (15b, g): Mistcutter Hydra, protection from blue.
+  if (
+    hasKeyword(ctx, id, 'protectionBlue') &&
+    src.sourceId &&
+    ctx.s.objects[src.sourceId] &&
+    def(ctx, src.sourceId).colors.includes('U')
+  )
+    return false;
   if (o.controller !== src.controller) {
     if (hasKeyword(ctx, id, 'hexproof')) return false;
     // Strixhaven Brawl (15a): Deification.

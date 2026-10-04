@@ -57,6 +57,11 @@ const KEYWORDS: Record<Keyword, { name: string; text: string }> = {
     name: 'Hexproof from instants',
     text: 'This can’t be the target of instants your opponents control.',
   },
+  // Strixhaven Brawl (15b, g): Mistcutter Hydra.
+  protectionBlue: {
+    name: 'Protection from blue',
+    text: 'Can’t be blocked, targeted or dealt damage by blue sources.',
+  },
   ward: {
     name: 'Ward {2}',
     text: 'Whenever this becomes the target of a spell or ability an opponent controls, counter it unless that player pays {2}.',

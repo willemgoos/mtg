@@ -186,6 +186,10 @@ export function checkCondition(
         def(ctx, id).types.includes('Land'),
     );
   if (c.kind === 'sourceCounters') return !!self && self.plusOneCounters >= c.min;
+  // Strixhaven Brawl (15b, g): Orochi Merge-Keeper.
+  if (c.kind === 'sourceNoCounters') return !!self && self.plusOneCounters === 0;
+  if (c.kind === 'sourceModified')
+    return !!self && self.zone === 'battlefield' && matchesFilter(ctx, self.id, { modified: true });
   if (c.kind === 'sourceAttacking')
     return !!self && !!ctx.s.combat?.attackers.some((a) => a.id === self.id);
   if (c.kind === 'beingAttacked')

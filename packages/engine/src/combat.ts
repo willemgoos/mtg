@@ -95,6 +95,9 @@ export function canBlock(ctx: Ctx, blocker: ObjectId, attacker: ObjectId): boole
       matchesFilter(ctx, blocker, ab.effect.filter, attacker)
     )
       return false;
+  // Strixhaven Brawl (15b, g): Mistcutter Hydra can't be blocked by blue creatures.
+  if (hasKeyword(ctx, attacker, 'protectionBlue') && def(ctx, blocker).colors.includes('U'))
+    return false;
   // Speed: "can't be blocked this turn except by creatures with haste".
   for (const e of ctx.s.effects)
     if (
