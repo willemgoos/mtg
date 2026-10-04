@@ -67726,5 +67726,759 @@
    "large": "https://cards.scryfall.io/large/front/1/1/117bb5db-4a1c-4704-b0b5-c67b45ac2f52.jpg?1783906353",
    "artCrop": "https://cards.scryfall.io/art_crop/front/1/1/117bb5db-4a1c-4704-b0b5-c67b45ac2f52.jpg?1783906353"
   }
+ },
+ {
+  "name": "Arni, Humble Scribe",
+  "scryfallId": "8e3a2239-9348-4639-9318-e9e35b2cf86b",
+  "oracleId": "a680d1ab-99f2-43d0-b289-5fdba4083d03",
+  "set": "fra",
+  "collectorNumber": "211",
+  "rarity": "uncommon",
+  "manaCost": "{2}{U}",
+  "typeLine": "Legendary Creature — Human Wizard",
+  "oracleText": "Whenever another nontoken creature you control enters, untap Arni.\n{T}: Draw a card, then discard a card.",
+  "power": "3",
+  "toughness": "2",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/e/8e3a2239-9348-4639-9318-e9e35b2cf86b.jpg?1789568409",
+   "normal": "https://cards.scryfall.io/normal/front/8/e/8e3a2239-9348-4639-9318-e9e35b2cf86b.jpg?1789568409",
+   "large": "https://cards.scryfall.io/large/front/8/e/8e3a2239-9348-4639-9318-e9e35b2cf86b.jpg?1789568409",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/e/8e3a2239-9348-4639-9318-e9e35b2cf86b.jpg?1789568409"
+  }
+ },
+ {
+  "name": "Cruel Calculations",
+  "scryfallId": "f76c4d8e-3e1f-4264-99af-1b8adb9a06be",
+  "oracleId": "69b96fe5-9733-4b43-bd66-075742e142d9",
+  "set": "fra",
+  "collectorNumber": "26",
+  "rarity": "rare",
+  "manaCost": "{2}{U}",
+  "typeLine": "Sorcery",
+  "oracleText": "Draw X cards, where X is the number of cards that were put into target player's graveyard from their library this turn.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/7/f76c4d8e-3e1f-4264-99af-1b8adb9a06be.jpg?1789127482",
+   "normal": "https://cards.scryfall.io/normal/front/f/7/f76c4d8e-3e1f-4264-99af-1b8adb9a06be.jpg?1789127482",
+   "large": "https://cards.scryfall.io/large/front/f/7/f76c4d8e-3e1f-4264-99af-1b8adb9a06be.jpg?1789127482",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/7/f76c4d8e-3e1f-4264-99af-1b8adb9a06be.jpg?1789127482"
+  }
+ },
+ {
+  "name": "Cryotheory Adept",
+  "scryfallId": "9ba1f7ce-3404-4932-9795-22967707f762",
+  "oracleId": "a9b3ee21-1af1-4e7e-8e48-d7c90d056f5c",
+  "set": "fra",
+  "collectorNumber": "27",
+  "rarity": "common",
+  "manaCost": "{1}{U}",
+  "typeLine": "Creature — Human Wizard",
+  "oracleText": "Prowess (Whenever you cast a noncreature spell, this creature gets +1/+1 until end of turn.)\n{3}{U}, Exile this card from your graveyard: Tap target creature and put a stun counter on it. Activate only as a sorcery. (If a permanent with a stun counter would become untapped, remove one from it instead.)",
+  "power": "2",
+  "toughness": "1",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Prowess"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/b/9ba1f7ce-3404-4932-9795-22967707f762.jpg?1789556701",
+   "normal": "https://cards.scryfall.io/normal/front/9/b/9ba1f7ce-3404-4932-9795-22967707f762.jpg?1789556701",
+   "large": "https://cards.scryfall.io/large/front/9/b/9ba1f7ce-3404-4932-9795-22967707f762.jpg?1789556701",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/b/9ba1f7ce-3404-4932-9795-22967707f762.jpg?1789556701"
+  }
+ },
+ {
+  "name": "Diviner of Victory",
+  "scryfallId": "0853bb80-8664-432a-8457-600139fd96d5",
+  "oracleId": "e7b78acd-5288-4528-97a8-a5b43de90bf5",
+  "set": "fra",
+  "collectorNumber": "28",
+  "rarity": "rare",
+  "manaCost": "{U}",
+  "typeLine": "Creature — Dwarf Wizard",
+  "oracleText": "This creature enters prepared. (While it's prepared, you may cast a copy of its spell. Doing so unprepares it.)\nWhenever you scry or surveil, this creature gets +1/+1 until end of turn.",
+  "power": "1",
+  "toughness": "1",
+  "colors": [
+   "U"
+  ],
+  "colorIdentity": [
+   "U"
+  ],
+  "keywords": [
+   "Surveil",
+   "Prepared"
+  ],
+  "back": "Unwind History (Diviner of Victory)",
+  "prepare": true,
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/8/0853bb80-8664-432a-8457-600139fd96d5.jpg?1788878145",
+   "normal": "https://cards.scryfall.io/normal/front/0/8/0853bb80-8664-432a-8457-600139fd96d5.jpg?1788878145",
+   "large": "https://cards.scryfall.io/large/front/0/8/0853bb80-8664-432a-8457-600139fd96d5.jpg?1788878145",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/8/0853bb80-8664-432a-8457-600139fd96d5.jpg?1788878145"
+  }
+ },
+ {
+  "name": "Unwind History (Diviner of Victory)",
+  "flavorName": "Unwind History",
+  "scryfallId": "0853bb80-8664-432a-8457-600139fd96d5",
+  "oracleId": "e7b78acd-5288-4528-97a8-a5b43de90bf5",
+  "set": "fra",
+  "collectorNumber": "28",
+  "rarity": "rare",
+  "manaCost": "{1}{U}",
+  "typeLine": "Sorcery",
+  "oracleText": "Return target creature an opponent controls with mana value 3 or less to its owner's hand. Surveil 1.",
+  "colors": [
+   "U"
+  ],
+  "colorIdentity": [
+   "U"
+  ],
+  "keywords": [
+   "Surveil"
+  ],
+  "front": "Diviner of Victory",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/8/0853bb80-8664-432a-8457-600139fd96d5.jpg?1788878145",
+   "normal": "https://cards.scryfall.io/normal/front/0/8/0853bb80-8664-432a-8457-600139fd96d5.jpg?1788878145",
+   "large": "https://cards.scryfall.io/large/front/0/8/0853bb80-8664-432a-8457-600139fd96d5.jpg?1788878145",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/8/0853bb80-8664-432a-8457-600139fd96d5.jpg?1788878145"
+  }
+ },
+ {
+  "name": "Divining Duelist",
+  "scryfallId": "960c7335-331d-488b-be68-2ad1c1c695dc",
+  "oracleId": "d0ce03fa-2284-4217-85b2-4db6b8a88c94",
+  "set": "fra",
+  "collectorNumber": "29",
+  "rarity": "common",
+  "manaCost": "{2}{U}",
+  "typeLine": "Creature — Merfolk Wizard",
+  "oracleText": "Flash\nWhen this creature enters, choose one —\n• Tap target creature.\n• Untap target creature.\n• Draw a card, then discard a card.",
+  "power": "3",
+  "toughness": "2",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Flash"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/6/960c7335-331d-488b-be68-2ad1c1c695dc.jpg?1789556709",
+   "normal": "https://cards.scryfall.io/normal/front/9/6/960c7335-331d-488b-be68-2ad1c1c695dc.jpg?1789556709",
+   "large": "https://cards.scryfall.io/large/front/9/6/960c7335-331d-488b-be68-2ad1c1c695dc.jpg?1789556709",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/6/960c7335-331d-488b-be68-2ad1c1c695dc.jpg?1789556709"
+  }
+ },
+ {
+  "name": "Fblthp, Impossibly Lost",
+  "scryfallId": "a3a2edbb-d144-4670-acad-17316cea98d2",
+  "oracleId": "17e7212e-69d8-4014-af98-447baed2cae7",
+  "set": "fra",
+  "collectorNumber": "213",
+  "rarity": "uncommon",
+  "manaCost": "{1}{U}",
+  "typeLine": "Legendary Creature — Homunculus",
+  "oracleText": "When one or more of your opponents are dealt combat damage during your turn, draw two cards. If your library has no cards in it, you win the game. Fblthp's owner shuffles him into their library. (If you draw from an empty library this way, you still win the game.)",
+  "power": "1",
+  "toughness": "1",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/3/a3a2edbb-d144-4670-acad-17316cea98d2.jpg?1789127697",
+   "normal": "https://cards.scryfall.io/normal/front/a/3/a3a2edbb-d144-4670-acad-17316cea98d2.jpg?1789127697",
+   "large": "https://cards.scryfall.io/large/front/a/3/a3a2edbb-d144-4670-acad-17316cea98d2.jpg?1789127697",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/3/a3a2edbb-d144-4670-acad-17316cea98d2.jpg?1789127697"
+  }
+ },
+ {
+  "name": "Geist of Saint Thalia",
+  "scryfallId": "9c334530-0880-46b5-a358-9603eee3cecf",
+  "oracleId": "ef32a4a9-14e2-4738-b4c2-53ce5e1d2a53",
+  "set": "fra",
+  "collectorNumber": "214",
+  "rarity": "uncommon",
+  "manaCost": "{1}{U}",
+  "typeLine": "Legendary Creature — Spirit Cleric",
+  "oracleText": "Flying\nNoncreature spells you cast cost {1} less to cast.",
+  "power": "1",
+  "toughness": "2",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/c/9c334530-0880-46b5-a358-9603eee3cecf.jpg?1789128026",
+   "normal": "https://cards.scryfall.io/normal/front/9/c/9c334530-0880-46b5-a358-9603eee3cecf.jpg?1789128026",
+   "large": "https://cards.scryfall.io/large/front/9/c/9c334530-0880-46b5-a358-9603eee3cecf.jpg?1789128026",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/c/9c334530-0880-46b5-a358-9603eee3cecf.jpg?1789128026"
+  }
+ },
+ {
+  "name": "Hapatra, the Desert Frost",
+  "scryfallId": "85faaa9d-4656-4365-871d-7cba53ed0996",
+  "oracleId": "ac0f161a-e5ec-4a95-9f37-305bdf1ac900",
+  "set": "fra",
+  "collectorNumber": "215",
+  "rarity": "uncommon",
+  "manaCost": "{3}{U}",
+  "typeLine": "Legendary Creature — Human Wizard",
+  "oracleText": "When Hapatra enters, for each opponent, tap up to one target creature that player controls. Put a stun counter on each of those creatures. (If a permanent with a stun counter would become untapped, remove one from it instead.)\n{2}{U}: Untap target creature.",
+  "power": "4",
+  "toughness": "3",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/5/85faaa9d-4656-4365-871d-7cba53ed0996.jpg?1789387113",
+   "normal": "https://cards.scryfall.io/normal/front/8/5/85faaa9d-4656-4365-871d-7cba53ed0996.jpg?1789387113",
+   "large": "https://cards.scryfall.io/large/front/8/5/85faaa9d-4656-4365-871d-7cba53ed0996.jpg?1789387113",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/5/85faaa9d-4656-4365-871d-7cba53ed0996.jpg?1789387113"
+  }
+ },
+ {
+  "name": "Icy Reception",
+  "scryfallId": "8d754b96-5e44-45af-9c7a-b0da59fbe4c3",
+  "oracleId": "612c7807-be70-4e2f-afd2-3d3c03eddbbe",
+  "set": "fra",
+  "collectorNumber": "30",
+  "rarity": "common",
+  "manaCost": "{1}{U}",
+  "typeLine": "Instant",
+  "oracleText": "Choose one —\n• Counter target creature or legendary spell unless its controller pays {3}.\n• Target creature gets -5/-0 until end of turn.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/d/8d754b96-5e44-45af-9c7a-b0da59fbe4c3.jpg?1788779540",
+   "normal": "https://cards.scryfall.io/normal/front/8/d/8d754b96-5e44-45af-9c7a-b0da59fbe4c3.jpg?1788779540",
+   "large": "https://cards.scryfall.io/large/front/8/d/8d754b96-5e44-45af-9c7a-b0da59fbe4c3.jpg?1788779540",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/d/8d754b96-5e44-45af-9c7a-b0da59fbe4c3.jpg?1788779540"
+  }
+ },
+ {
+  "name": "Infinite Coursework",
+  "scryfallId": "a5988272-faaa-463d-a0a1-a8e96b946bad",
+  "oracleId": "666b34b5-a0c2-43e3-befd-7c3979313682",
+  "set": "fra",
+  "collectorNumber": "31",
+  "rarity": "common",
+  "manaCost": "{2}{U}",
+  "typeLine": "Enchantment — Aura",
+  "oracleText": "Enchant creature\nWhen this Aura enters, tap enchanted creature. It becomes unprepared.\nEnchanted creature loses all abilities and doesn't untap during its controller's untap step.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Enchant",
+   "Prepared"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/5/a5988272-faaa-463d-a0a1-a8e96b946bad.jpg?1789385916",
+   "normal": "https://cards.scryfall.io/normal/front/a/5/a5988272-faaa-463d-a0a1-a8e96b946bad.jpg?1789385916",
+   "large": "https://cards.scryfall.io/large/front/a/5/a5988272-faaa-463d-a0a1-a8e96b946bad.jpg?1789385916",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/5/a5988272-faaa-463d-a0a1-a8e96b946bad.jpg?1789385916"
+  }
+ },
+ {
+  "name": "Lyra, Tolarian Archangel",
+  "scryfallId": "a5183681-447b-4023-91f7-00e9338f4417",
+  "oracleId": "d9060fff-0b65-4b3d-930d-6e36315b802c",
+  "set": "fra",
+  "collectorNumber": "217",
+  "rarity": "rare",
+  "manaCost": "{1}{U}{U}",
+  "typeLine": "Legendary Creature — Angel Wizard",
+  "oracleText": "Flying\nAt the beginning of each end step, if you've drawn three or more cards this turn, create a 3/3 blue Angel creature token with flying.\n{3}{U}{U}: Until end of turn, whenever Lyra deals combat damage to a player, draw two cards.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/5/a5183681-447b-4023-91f7-00e9338f4417.jpg?1789128032",
+   "normal": "https://cards.scryfall.io/normal/front/a/5/a5183681-447b-4023-91f7-00e9338f4417.jpg?1789128032",
+   "large": "https://cards.scryfall.io/large/front/a/5/a5183681-447b-4023-91f7-00e9338f4417.jpg?1789128032",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/5/a5183681-447b-4023-91f7-00e9338f4417.jpg?1789128032"
+  }
+ },
+ {
+  "name": "Perfected Theory",
+  "scryfallId": "d0ecae06-bc5a-4886-84df-c2900816f226",
+  "oracleId": "d824a319-fa74-42e4-9cbe-dba1576d6bad",
+  "set": "fra",
+  "collectorNumber": "34",
+  "rarity": "uncommon",
+  "manaCost": "{U}",
+  "typeLine": "Instant",
+  "oracleText": "Choose one —\n• Target creature has base power and toughness 1/1 until end of turn.\n• Target creature has base power and toughness 4/5 until end of turn.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/0/d0ecae06-bc5a-4886-84df-c2900816f226.jpg?1788329222",
+   "normal": "https://cards.scryfall.io/normal/front/d/0/d0ecae06-bc5a-4886-84df-c2900816f226.jpg?1788329222",
+   "large": "https://cards.scryfall.io/large/front/d/0/d0ecae06-bc5a-4886-84df-c2900816f226.jpg?1788329222",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/0/d0ecae06-bc5a-4886-84df-c2900816f226.jpg?1788329222"
+  }
+ },
+ {
+  "name": "Precise Redaction",
+  "scryfallId": "9244efad-35ab-45c0-b173-4bc68276cb67",
+  "oracleId": "c251b676-0e98-4047-bed1-d72c83aa8da0",
+  "set": "fra",
+  "collectorNumber": "36",
+  "rarity": "uncommon",
+  "manaCost": "{1}{U}",
+  "typeLine": "Instant",
+  "oracleText": "Counter target white or black spell.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/2/9244efad-35ab-45c0-b173-4bc68276cb67.jpg?1789470790",
+   "normal": "https://cards.scryfall.io/normal/front/9/2/9244efad-35ab-45c0-b173-4bc68276cb67.jpg?1789470790",
+   "large": "https://cards.scryfall.io/large/front/9/2/9244efad-35ab-45c0-b173-4bc68276cb67.jpg?1789470790",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/2/9244efad-35ab-45c0-b173-4bc68276cb67.jpg?1789470790"
+  }
+ },
+ {
+  "name": "Proft, Consulting Detective",
+  "scryfallId": "b8466593-40fe-4557-89b2-760c1c92087b",
+  "oracleId": "45473bdb-b96f-4213-a46d-b2dbdf6b5e56",
+  "set": "fra",
+  "collectorNumber": "218",
+  "rarity": "uncommon",
+  "manaCost": "{1}{U}",
+  "typeLine": "Legendary Creature — Human Detective",
+  "oracleText": "Whenever you scry or surveil, you may pay {2}. If you do, put a +1/+1 counter on Proft and draw a card. (Draw after you scry or surveil.)",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/8/b8466593-40fe-4557-89b2-760c1c92087b.jpg?1789127178",
+   "normal": "https://cards.scryfall.io/normal/front/b/8/b8466593-40fe-4557-89b2-760c1c92087b.jpg?1789127178",
+   "large": "https://cards.scryfall.io/large/front/b/8/b8466593-40fe-4557-89b2-760c1c92087b.jpg?1789127178",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/8/b8466593-40fe-4557-89b2-760c1c92087b.jpg?1789127178"
+  }
+ },
+ {
+  "name": "Ruric Thar, Biomagus",
+  "scryfallId": "00af4e87-5576-4a43-9422-4c35b2b66775",
+  "oracleId": "873fa095-5662-407a-bd24-9a1c4712a428",
+  "set": "fra",
+  "collectorNumber": "219",
+  "rarity": "uncommon",
+  "manaCost": "{4}{U}{U}",
+  "typeLine": "Legendary Creature — Ogre Crab Wizard",
+  "oracleText": "Flying\nProwess, prowess (Whenever you cast a noncreature spell, this creature gets +1/+1 until end of turn twice.)\nWhenever Ruric Thar becomes the target of a spell or ability an opponent controls, draw a card.",
+  "power": "4",
+  "toughness": "6",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Flying",
+   "Prowess"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/0/00af4e87-5576-4a43-9422-4c35b2b66775.jpg?1789127229",
+   "normal": "https://cards.scryfall.io/normal/front/0/0/00af4e87-5576-4a43-9422-4c35b2b66775.jpg?1789127229",
+   "large": "https://cards.scryfall.io/large/front/0/0/00af4e87-5576-4a43-9422-4c35b2b66775.jpg?1789127229",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/0/00af4e87-5576-4a43-9422-4c35b2b66775.jpg?1789127229"
+  }
+ },
+ {
+  "name": "Samut, Tyrant of Naktamun",
+  "scryfallId": "6d7d8fa7-ce69-4a8c-9af0-55571393a244",
+  "oracleId": "a275f7ac-7dae-4422-875a-f34f24b6f28a",
+  "set": "fra",
+  "collectorNumber": "220",
+  "rarity": "rare",
+  "manaCost": "{1}{U}",
+  "typeLine": "Legendary Creature — Human Wizard",
+  "oracleText": "Instant and sorcery spells you control have split second. (As long as a spell with split second is on the stack, players can't cast spells or activate abilities that aren't mana abilities.)",
+  "power": "2",
+  "toughness": "1",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/d/6d7d8fa7-ce69-4a8c-9af0-55571393a244.jpg?1789729644",
+   "normal": "https://cards.scryfall.io/normal/front/6/d/6d7d8fa7-ce69-4a8c-9af0-55571393a244.jpg?1789729644",
+   "large": "https://cards.scryfall.io/large/front/6/d/6d7d8fa7-ce69-4a8c-9af0-55571393a244.jpg?1789729644",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/d/6d7d8fa7-ce69-4a8c-9af0-55571393a244.jpg?1789729644"
+  }
+ },
+ {
+  "name": "Seasoned Cryomancer",
+  "scryfallId": "51d86875-420d-4e82-b69c-4feeb99c9428",
+  "oracleId": "c3936db3-d3b6-4a92-9773-6f3c52dc419d",
+  "set": "fra",
+  "collectorNumber": "38",
+  "rarity": "mythic",
+  "manaCost": "{1}{U}{U}",
+  "typeLine": "Creature — Human Wizard",
+  "oracleText": "When this creature enters, draw two cards, then discard two cards. When you discard one or more nonland cards this way, tap up to that many target creatures and put a stun counter on each of them.\n{3}{U}{U}, Exile this card from your graveyard: Draw two cards.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/1/51d86875-420d-4e82-b69c-4feeb99c9428.jpg?1789470781",
+   "normal": "https://cards.scryfall.io/normal/front/5/1/51d86875-420d-4e82-b69c-4feeb99c9428.jpg?1789470781",
+   "large": "https://cards.scryfall.io/large/front/5/1/51d86875-420d-4e82-b69c-4feeb99c9428.jpg?1789470781",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/1/51d86875-420d-4e82-b69c-4feeb99c9428.jpg?1789470781"
+  }
+ },
+ {
+  "name": "Semester Foreseer",
+  "scryfallId": "7e5a640b-fd88-4b5a-9dfc-1d8f5a5cef41",
+  "oracleId": "21b8d59f-a90d-44ff-a2e3-9f439ac3e14a",
+  "set": "fra",
+  "collectorNumber": "39",
+  "rarity": "common",
+  "manaCost": "{3}{U}",
+  "typeLine": "Creature — Human Wizard",
+  "oracleText": "This creature enters prepared. (While it's prepared, you may cast a copy of its spell. Doing so unprepares it.)\nWhen this creature enters, surveil 1.",
+  "power": "3",
+  "toughness": "4",
+  "colors": [
+   "U"
+  ],
+  "colorIdentity": [
+   "U",
+   "W"
+  ],
+  "keywords": [
+   "Surveil",
+   "Prepared"
+  ],
+  "back": "Peer Review (Semester Foreseer)",
+  "prepare": true,
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/e/7e5a640b-fd88-4b5a-9dfc-1d8f5a5cef41.jpg?1789127516",
+   "normal": "https://cards.scryfall.io/normal/front/7/e/7e5a640b-fd88-4b5a-9dfc-1d8f5a5cef41.jpg?1789127516",
+   "large": "https://cards.scryfall.io/large/front/7/e/7e5a640b-fd88-4b5a-9dfc-1d8f5a5cef41.jpg?1789127516",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/e/7e5a640b-fd88-4b5a-9dfc-1d8f5a5cef41.jpg?1789127516"
+  }
+ },
+ {
+  "name": "Peer Review (Semester Foreseer)",
+  "flavorName": "Peer Review",
+  "scryfallId": "7e5a640b-fd88-4b5a-9dfc-1d8f5a5cef41",
+  "oracleId": "21b8d59f-a90d-44ff-a2e3-9f439ac3e14a",
+  "set": "fra",
+  "collectorNumber": "39",
+  "rarity": "common",
+  "manaCost": "{2}{W/U}",
+  "typeLine": "Sorcery",
+  "oracleText": "Create a 2/2 colorless Wizard Soldier creature token named Cadet. Surveil 1.",
+  "colors": [
+   "W",
+   "U"
+  ],
+  "colorIdentity": [
+   "U",
+   "W"
+  ],
+  "keywords": [
+   "Surveil"
+  ],
+  "front": "Semester Foreseer",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/e/7e5a640b-fd88-4b5a-9dfc-1d8f5a5cef41.jpg?1789127516",
+   "normal": "https://cards.scryfall.io/normal/front/7/e/7e5a640b-fd88-4b5a-9dfc-1d8f5a5cef41.jpg?1789127516",
+   "large": "https://cards.scryfall.io/large/front/7/e/7e5a640b-fd88-4b5a-9dfc-1d8f5a5cef41.jpg?1789127516",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/e/7e5a640b-fd88-4b5a-9dfc-1d8f5a5cef41.jpg?1789127516"
+  }
+ },
+ {
+  "name": "Sphinx of False Conclusions",
+  "scryfallId": "08ffbd51-2bd3-4262-8809-09576ce2b6f5",
+  "oracleId": "9f004382-c57b-4fde-af97-0c85516c3cf4",
+  "set": "fra",
+  "collectorNumber": "40",
+  "rarity": "rare",
+  "manaCost": "{2}{U}{U}",
+  "typeLine": "Creature — Sphinx Illusion",
+  "oracleText": "Flash\nFlying\nWhenever this creature attacks, draw a card, then discard a card.\nWhen this creature dies, if it isn't a token, create a token that's a copy of it.",
+  "power": "4",
+  "toughness": "2",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Flying",
+   "Flash"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/8/08ffbd51-2bd3-4262-8809-09576ce2b6f5.jpg?1789385594",
+   "normal": "https://cards.scryfall.io/normal/front/0/8/08ffbd51-2bd3-4262-8809-09576ce2b6f5.jpg?1789385594",
+   "large": "https://cards.scryfall.io/large/front/0/8/08ffbd51-2bd3-4262-8809-09576ce2b6f5.jpg?1789385594",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/8/08ffbd51-2bd3-4262-8809-09576ce2b6f5.jpg?1789385594"
+  }
+ },
+ {
+  "name": "Sphinx's Approach",
+  "scryfallId": "f49be090-c745-40e5-bc1c-605b8d98acdf",
+  "oracleId": "48b1ac27-430f-4fd9-a71b-6ad125c57fe3",
+  "set": "fra",
+  "collectorNumber": "41",
+  "rarity": "common",
+  "manaCost": "{1}{U}{U}",
+  "typeLine": "Instant",
+  "oracleText": "Draw two cards. Then you may exile this spell and four cards named Sphinx's Approach from your graveyard. If you do, search your library for a Sphinx creature card, put it onto the battlefield, then shuffle.\nA deck can have any number of cards named Sphinx's Approach.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/4/f49be090-c745-40e5-bc1c-605b8d98acdf.jpg?1789644816",
+   "normal": "https://cards.scryfall.io/normal/front/f/4/f49be090-c745-40e5-bc1c-605b8d98acdf.jpg?1789644816",
+   "large": "https://cards.scryfall.io/large/front/f/4/f49be090-c745-40e5-bc1c-605b8d98acdf.jpg?1789644816",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/4/f49be090-c745-40e5-bc1c-605b8d98acdf.jpg?1789644816"
+  }
+ },
+ {
+  "name": "Surveillance Phantasm",
+  "scryfallId": "9df8a06d-c7de-49af-8c01-06dca3dfef4b",
+  "oracleId": "b97648b7-ae98-45c9-8f0f-a52d6faf2d2d",
+  "set": "fra",
+  "collectorNumber": "42",
+  "rarity": "common",
+  "manaCost": "{1}{U}",
+  "typeLine": "Creature — Bird Illusion",
+  "oracleText": "Defender, flying, vigilance\nAs long as you've scried or surveilled this turn, this creature can attack as though it didn't have defender.\n{3}{U}: Surveil 1. (Look at the top card of your library. You may put it into your graveyard.)",
+  "power": "2",
+  "toughness": "3",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Flying",
+   "Surveil",
+   "Vigilance",
+   "Defender"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/d/9df8a06d-c7de-49af-8c01-06dca3dfef4b.jpg?1789385597",
+   "normal": "https://cards.scryfall.io/normal/front/9/d/9df8a06d-c7de-49af-8c01-06dca3dfef4b.jpg?1789385597",
+   "large": "https://cards.scryfall.io/large/front/9/d/9df8a06d-c7de-49af-8c01-06dca3dfef4b.jpg?1789385597",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/d/9df8a06d-c7de-49af-8c01-06dca3dfef4b.jpg?1789385597"
+  }
+ },
+ {
+  "name": "Tetsuko Umezawa, Fugitive",
+  "scryfallId": "d32f3fb7-df52-4cef-8686-c11f7360cfd9",
+  "oracleId": "ceeeacbc-01b0-4421-aaca-2ce6cdbe45d7",
+  "set": "sld",
+  "collectorNumber": "7055",
+  "rarity": "rare",
+  "manaCost": "{1}{U}",
+  "typeLine": "Legendary Creature — Human Rogue",
+  "oracleText": "Creatures you control with power or toughness 1 or less can't be blocked.",
+  "power": "1",
+  "toughness": "3",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/3/d32f3fb7-df52-4cef-8686-c11f7360cfd9.jpg?1783905121",
+   "normal": "https://cards.scryfall.io/normal/front/d/3/d32f3fb7-df52-4cef-8686-c11f7360cfd9.jpg?1783905121",
+   "large": "https://cards.scryfall.io/large/front/d/3/d32f3fb7-df52-4cef-8686-c11f7360cfd9.jpg?1783905121",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/3/d32f3fb7-df52-4cef-8686-c11f7360cfd9.jpg?1783905121"
+  }
+ },
+ {
+  "name": "Traxos, Academy Guardian",
+  "scryfallId": "a349800f-b634-4e74-a9d9-185df37ad909",
+  "oracleId": "7b9a574f-6d56-421b-8fbd-94da1e6e3ce1",
+  "set": "fra",
+  "collectorNumber": "222",
+  "rarity": "uncommon",
+  "manaCost": "{3}{U}",
+  "typeLine": "Legendary Artifact Creature — Dragon Construct",
+  "oracleText": "This spell costs {2} less to cast if you've cast a noncreature spell this turn.\nFlying, vigilance\nProwess (Whenever you cast a noncreature spell, this creature gets +1/+1 until end of turn.)",
+  "power": "1",
+  "toughness": "5",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Flying",
+   "Prowess",
+   "Vigilance"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/3/a349800f-b634-4e74-a9d9-185df37ad909.jpg?1789568451",
+   "normal": "https://cards.scryfall.io/normal/front/a/3/a349800f-b634-4e74-a9d9-185df37ad909.jpg?1789568451",
+   "large": "https://cards.scryfall.io/large/front/a/3/a349800f-b634-4e74-a9d9-185df37ad909.jpg?1789568451",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/3/a349800f-b634-4e74-a9d9-185df37ad909.jpg?1789568451"
+  }
+ },
+ {
+  "name": "Undulating Witness",
+  "scryfallId": "0adbb4b2-a142-48da-8f4b-fa91529dbac4",
+  "oracleId": "77b684b8-227b-40de-80b4-15d0e70914f4",
+  "set": "fra",
+  "collectorNumber": "45",
+  "rarity": "common",
+  "manaCost": "{4}{U}",
+  "typeLine": "Creature — Serpent",
+  "oracleText": "Flying\n{2}: This creature gets +1/-1 until end of turn.\nBasic landcycling {2} ({2}, Discard this card: Search your library for a basic land card, reveal it, put it into your hand, then shuffle.)",
+  "power": "3",
+  "toughness": "5",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Flying",
+   "Landcycling",
+   "Basic landcycling",
+   "Typecycling",
+   "Cycling"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/a/0adbb4b2-a142-48da-8f4b-fa91529dbac4.jpg?1789556706",
+   "normal": "https://cards.scryfall.io/normal/front/0/a/0adbb4b2-a142-48da-8f4b-fa91529dbac4.jpg?1789556706",
+   "large": "https://cards.scryfall.io/large/front/0/a/0adbb4b2-a142-48da-8f4b-fa91529dbac4.jpg?1789556706",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/a/0adbb4b2-a142-48da-8f4b-fa91529dbac4.jpg?1789556706"
+  }
+ },
+ {
+  "name": "Variable Chaser",
+  "scryfallId": "e3afedb1-bf9d-4e31-9700-433514cc29b1",
+  "oracleId": "67c603cc-ad66-4a1c-8386-5901c9c01bfb",
+  "set": "fra",
+  "collectorNumber": "47",
+  "rarity": "rare",
+  "manaCost": "{2}{U}",
+  "typeLine": "Creature — Human Wizard",
+  "oracleText": "Flying, prowess\nThis creature enters prepared. (While it's prepared, you may cast a copy of its spell. Doing so unprepares it.)",
+  "power": "2",
+  "toughness": "3",
+  "colors": [
+   "U"
+  ],
+  "colorIdentity": [
+   "U"
+  ],
+  "keywords": [
+   "Flying",
+   "Prowess",
+   "Prepared"
+  ],
+  "back": "Arc of Fortune (Variable Chaser)",
+  "prepare": true,
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/3/e3afedb1-bf9d-4e31-9700-433514cc29b1.jpg?1789470807",
+   "normal": "https://cards.scryfall.io/normal/front/e/3/e3afedb1-bf9d-4e31-9700-433514cc29b1.jpg?1789470807",
+   "large": "https://cards.scryfall.io/large/front/e/3/e3afedb1-bf9d-4e31-9700-433514cc29b1.jpg?1789470807",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/3/e3afedb1-bf9d-4e31-9700-433514cc29b1.jpg?1789470807"
+  }
+ },
+ {
+  "name": "Arc of Fortune (Variable Chaser)",
+  "flavorName": "Arc of Fortune",
+  "scryfallId": "e3afedb1-bf9d-4e31-9700-433514cc29b1",
+  "oracleId": "67c603cc-ad66-4a1c-8386-5901c9c01bfb",
+  "set": "fra",
+  "collectorNumber": "47",
+  "rarity": "rare",
+  "manaCost": "{2}{U}",
+  "typeLine": "Sorcery",
+  "oracleText": "Each player may discard their hand and draw seven cards.",
+  "colors": [
+   "U"
+  ],
+  "colorIdentity": [
+   "U"
+  ],
+  "keywords": [],
+  "front": "Variable Chaser",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/3/e3afedb1-bf9d-4e31-9700-433514cc29b1.jpg?1789470807",
+   "normal": "https://cards.scryfall.io/normal/front/e/3/e3afedb1-bf9d-4e31-9700-433514cc29b1.jpg?1789470807",
+   "large": "https://cards.scryfall.io/large/front/e/3/e3afedb1-bf9d-4e31-9700-433514cc29b1.jpg?1789470807",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/3/e3afedb1-bf9d-4e31-9700-433514cc29b1.jpg?1789470807"
+  }
+ },
+ {
+  "name": "Yargle, Goliath of Otaria",
+  "scryfallId": "f45ba926-6496-4bd4-96eb-663946d56bbf",
+  "oracleId": "014d0bcd-b80f-4c43-8f00-f4c31e8f3370",
+  "set": "fra",
+  "collectorNumber": "225",
+  "rarity": "uncommon",
+  "manaCost": "{4}{U}",
+  "typeLine": "Legendary Creature — Frog Spirit",
+  "oracleText": "",
+  "power": "3",
+  "toughness": "9",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/4/f45ba926-6496-4bd4-96eb-663946d56bbf.jpg?1789128043",
+   "normal": "https://cards.scryfall.io/normal/front/f/4/f45ba926-6496-4bd4-96eb-663946d56bbf.jpg?1789128043",
+   "large": "https://cards.scryfall.io/large/front/f/4/f45ba926-6496-4bd4-96eb-663946d56bbf.jpg?1789128043",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/4/f45ba926-6496-4bd4-96eb-663946d56bbf.jpg?1789128043"
+  }
+ },
+ {
+  "name": "Yuriko, Hope from the Shadows",
+  "scryfallId": "45e81487-8b8c-480b-922a-eaa9edc7201d",
+  "oracleId": "983f4fde-ab04-44f0-a294-c3b472de0b19",
+  "set": "fra",
+  "collectorNumber": "226",
+  "rarity": "uncommon",
+  "manaCost": "{U}",
+  "typeLine": "Legendary Creature — Human Ninja",
+  "oracleText": "Flash\nWhen Yuriko enters, choose one —\n• Target creature gets -X/-0 until end of turn, where X is the number of cards in your graveyard.\n• Surveil 2. (Look at the top two cards of your library, then put any number of them into your graveyard and the rest on top of your library in any order.)",
+  "power": "1",
+  "toughness": "1",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Surveil",
+   "Flash"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/5/45e81487-8b8c-480b-922a-eaa9edc7201d.jpg?1789127717",
+   "normal": "https://cards.scryfall.io/normal/front/4/5/45e81487-8b8c-480b-922a-eaa9edc7201d.jpg?1789127717",
+   "large": "https://cards.scryfall.io/large/front/4/5/45e81487-8b8c-480b-922a-eaa9edc7201d.jpg?1789127717",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/5/45e81487-8b8c-480b-922a-eaa9edc7201d.jpg?1789127717"
+  }
  }
 ]

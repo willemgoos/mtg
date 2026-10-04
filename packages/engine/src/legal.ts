@@ -829,6 +829,20 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
  * Covers everything applyAction accepts except explicit `payWith` choices and
  * conceding.
  */
+/** Split second: printed, or granted to its controller's instant and sorcery spells (Samut, Tyrant of Naktamun). */
+function hasSplitSecond(ctx: Ctx, spell: ObjectId, controller: PlayerId): boolean {
+  const d = def(ctx, spell);
+  if (d.splitSecond) return true;
+  if (!d.types.includes('Instant') && !d.types.includes('Sorcery')) return false;
+  return ctx.s.battlefield.some(
+    (id) =>
+      obj(ctx, id).controller === controller &&
+      def(ctx, id).abilities.some(
+        (a) => a.kind === 'static' && a.effect.kind === 'instantsSorceriesSplitSecond',
+      ),
+  );
+}
+
 export function getLegalActions(ctx: Ctx, player: PlayerId): Action[] {
   const s = ctx.s;
   const d = s.decision;
@@ -851,7 +865,7 @@ export function getLegalActions(ctx: Ctx, player: PlayerId): Action[] {
       return s.players[player].hand.map((card) => ({ type: 'discard', player, card }) as const);
     case 'priority': {
       // Mystical Archive (16): split second. Nothing but passing while one is on the stack.
-      if (s.stack.some((x) => x.kind === 'spell' && def(ctx, x.id).splitSecond))
+      if (s.stack.some((x) => x.kind === 'spell' && hasSplitSecond(ctx, x.id, x.controller)))
         return [{ type: 'passPriority', player }];
       return priorityActions(ctx, player);
     }
@@ -1051,7 +1065,9 @@ export function getLegalActions(ctx: Ctx, player: PlayerId): Action[] {
           out.push({ type: 'chooseTargets', player, targets: picked });
         const key = (t: TargetChoice) => ('object' in t ? t.object.id : t.player);
         const taken = new Set(picked.map(key));
-        for (const t of targetCandidates(ctx, spec, src))
+        // Reality Fracture (17a): Seasoned Cryomancer, "up to that many target creatures".
+        const full = !!spec.maxFromAmount && picked.length >= (d.trigger.amount ?? 0);
+        for (const t of full ? [] : targetCandidates(ctx, spec, src))
           if (!taken.has(key(t)) && payable([...picked, t]))
             out.push({ type: 'chooseTargets', player, targets: [...picked, t] });
         if (out.length === 0) out.push({ type: 'chooseTargets', player, targets: [] });

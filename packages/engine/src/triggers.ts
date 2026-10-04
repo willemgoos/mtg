@@ -46,6 +46,10 @@ export function checkCondition(
   if (c.kind === 'cardsLeftGraveyardThisTurn')
     return (ctx.s.turn.leftGraveyard?.[controller] ?? 0) > 0;
   if (c.kind === 'cardsExiledThisTurn') return (ctx.s.turn.exiledCards ?? 0) > 0;
+  // Reality Fracture (17a): Surveillance Phantasm, Sphinx of False Conclusions.
+  if (c.kind === 'scriedOrSurveilledThisTurn')
+    return !!ctx.s.turn.scriedOrSurveilled?.includes(controller);
+  if (c.kind === 'sourceNotToken') return !!self && !self.isToken;
   // Doom Prevails (9e).
   if (c.kind === 'kickedAtLeast') return (self?.kickCount ?? 0) >= c.n;
   if (c.kind === 'sourceHasExiled')

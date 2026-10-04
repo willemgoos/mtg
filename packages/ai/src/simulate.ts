@@ -9,6 +9,7 @@ import {
   type PlayerId,
 } from '@mtg/engine';
 import {
+  chooseHandSwap,
   choosePickExiled,
   chooseForageExile,
   chooseFromHand,
@@ -85,6 +86,9 @@ function passiveAction(
     case 'chooseObject':
     case 'payOrCounter':
     case 'castFree':
+      // Reality Fracture (17a): Arc of Fortune.
+      if (d.kind === 'chooseOption' && d.options[0]?.label.startsWith('Discard your hand'))
+        return { type: 'chooseOption', player: d.player, index: chooseHandSwap(s, d.player) };
       // A free cast can have tens of thousands of target splits (Magma Opus): don't list them when nested.
       if (d.kind === 'castFree' && depth >= 1)
         return { type: 'chooseEffect', player: d.player, accept: false };

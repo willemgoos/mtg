@@ -10,6 +10,7 @@ import {
   type PlayerId,
 } from '@mtg/engine';
 import {
+  chooseHandSwap,
   chooseLandToPlay,
   choosePickExiled,
   chooseForageExile,
@@ -82,6 +83,9 @@ export function createHeuristicBot(db: CardDb, name = 'heuristic'): Bot {
             return { type: 'chooseOption', player: me, index: 0 };
           // Strixhaven (13c): Augusta's "tap any number of creatures": the bot taps none ("Done" is first).
           if (d.title?.startsWith('Augusta')) return { type: 'chooseOption', player: me, index: 0 };
+          // Reality Fracture (17a): Arc of Fortune.
+          if (d.options[0]?.label.startsWith('Discard your hand'))
+            return { type: 'chooseOption', player: me, index: chooseHandSwap(view, me) };
           return bestByEvaluation(engine, view, me, legal, 'stack');
         }
         case 'chooseFromHand':

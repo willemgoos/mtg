@@ -1479,6 +1479,9 @@ export function answerScry(ctx: Ctx, top: readonly ObjectId[], bottom: readonly 
     lib.unshift(...bottom);
     for (const id of bottom) moveObject(ctx, id, 'graveyard');
   } else lib.push(...bottom);
+  // Reality Fracture (17a): Surveillance Phantasm, "as long as you've scried or surveilled this turn".
+  const seen = (ctx.s.turn.scriedOrSurveilled ??= []);
+  if (!seen.includes(d.player)) seen.push(d.player);
   emit(ctx, { type: 'scried', player: d.player, top: top.length, bottom: bottom.length });
   resume(ctx, d.resume, d.thenPriority);
 }
@@ -1801,6 +1804,15 @@ export function answerDiscard(ctx: Ctx, card: ObjectId): void {
     return;
   }
   if (d.count === 0 || left.length === 0) {
+    // Reality Fracture (17a): Seasoned Cryomancer: "when you discard one or more nonland cards this way".
+    if (d.reflexiveOnNonland !== undefined && d.nonlandDiscarded && d.resume.source)
+      ctx.s.pendingTriggers.push({
+        source: d.resume.source,
+        sourceDefId: d.resume.sourceDefId,
+        abilityIndex: d.reflexiveOnNonland,
+        controller: d.resume.controller,
+        amount: d.nonlandDiscarded,
+      });
     // Strixhaven Brawl (15a): Seasoned Pyromancer: draw, then a token for each nonland card.
     if (d.drawAfter) {
       const after: EffectDef[] = [{ kind: 'draw', who: 'controller', amount: d.drawAfter }];
