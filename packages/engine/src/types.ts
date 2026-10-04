@@ -141,7 +141,7 @@ export interface CardDefinition {
    * Bloomburrow's Seasons: "choose up to five {P} worth of modes; you may
    * choose the same mode more than once". Each mode costs `paws`.
    */
-  pawprints?: { paws: number; spell: SpellDef }[];
+  pawprints?: { paws: number; spell: SpellDef; cost?: ManaCost }[];
   /**
    * Kicker: pay this too. An instant or sorcery then does `spell` instead; a
    * permanent remembers it was kicked (see the `wasKicked` condition).
@@ -281,6 +281,12 @@ export interface CardDefinition {
   disturb?: boolean;
   /** Strixhaven Brawl (15a): "If this would be put into a graveyard from anywhere, exile it instead" (Luminous Phantom). */
   exileInsteadOfGraveyard?: boolean;
+  // Strixhaven Brawl (15b, r): Demand Answers
+  /** "As an additional cost to cast this spell, sacrifice an artifact or discard a card." */
+  sacrificeArtifactOrDiscardToCast?: boolean;
+  // Strixhaven Brawl (15b, r): Spree
+  /** Spree: choose one or more of `pawprints` (each once); each chosen mode adds its `cost` to the mana cost. */
+  spree?: boolean;
 }
 
 export type AbilityDef =
@@ -400,6 +406,8 @@ export interface CostDef {
   // Wakanda Forever (9c).
   /** Sacrifice this many artifacts (the engine picks the least useful): Metalwork Colossus. */
   sacrificeArtifacts?: number;
+  /** Strixhaven Brawl (15b, r): only artifacts matching this count for `sacrificeArtifacts` (Magda: Treasures). */
+  sacrificeArtifactsFilter?: CardFilter;
   // Avengers Assemble (9b).
   /** Crew N: tap untapped creatures you control with total power N or more (the engine picks them). */
   crew?: number;
@@ -471,7 +479,12 @@ export type TriggerDef =
         // Secrets of Strixhaven (14a): repartee
         | 'instantOrSorceryTargetingCreature'
         /** The caster's third spell this turn (Emeritus of Conflict). */
-        | 'third';
+        | 'third'
+        // Strixhaven Brawl (15b, r): Arcane Bombardment
+        /** The caster's first instant or sorcery spell this turn. */
+        | 'firstInstantOrSorcery'
+        /** The caster's second noncreature spell this turn (Sapphire Collector). */
+        | 'secondNoncreature';
       /** The spell must also match this (Gev: a Lizard spell). */
       spell?: CardFilter;
       /** Any player's spell, cast when it isn't their turn (Vision). */
@@ -630,7 +643,10 @@ export type TriggerDef =
   | { on: 'opponentCreatureExiledInstead' }
   // Strixhaven (13c): Strixhaven Stadium
   /** Whenever a creature (any controller's) deals combat damage to you. */
-  | { on: 'combatDamageToYou' };
+  | { on: 'combatDamageToYou' }
+  // Strixhaven Brawl (15b, r): Magda, Brazen Outlaw
+  /** Whenever a creature you control (matching the filter) becomes tapped. */
+  | { on: 'creatureYouControlBecomesTapped'; filter?: CardFilter };
 
 export type ConditionDef =
   | { kind: 'controlsPermanents'; filter: CardFilter; min: number }
@@ -1032,7 +1048,12 @@ export type Amount =
   /** The value of X of the spell that caused the trigger (Geometer's Arthropod). */
   | { xOfSubject: true }
   /** Lands with different names you control (Emil, Vastlands Roamer). */
-  | { count: 'differentlyNamedLands' };
+  | { count: 'differentlyNamedLands' }
+  // Strixhaven Brawl (15b, r)
+  /** Instant and sorcery cards in your graveyard plus cards with flashback you own in exile (Seize the Storm). */
+  | { count: 'instantsSorceriesInGraveyardPlusFlashbackInExile' }
+  /** The greatest mana value among instant and sorcery spells you've cast this turn (Rootha). */
+  | { count: 'greatestInstantSorceryCastThisTurn' };
 
 export type EffectDef =
   | { kind: 'may'; effects: EffectDef[]; cost?: ManaCost }
@@ -2025,7 +2046,10 @@ export type StaticDef =
   /** You can't cast permanent spells (Codie, Vociferous Codex). */
   | { kind: 'cantCastPermanentSpells' }
   /** Each other planeswalker you control has this permanent's loyalty abilities (Kasmina, Enigma Sage). */
-  | { kind: 'sharesLoyaltyAbilities' };
+  | { kind: 'sharesLoyaltyAbilities' }
+  // Strixhaven Brawl (15b, r): Goldspan Dragon
+  /** Treasures you control tap for two mana of one colour instead of one. */
+  | { kind: 'treasuresTapForTwo' };
 
 export type CardDb = ReadonlyMap<CardDefId, CardDefinition>;
 

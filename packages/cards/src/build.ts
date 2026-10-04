@@ -163,6 +163,11 @@ export const KEYWORDS_AS_ABILITIES = new Set([
   'Learn',
   // Strixhaven Brawl (15a): Alchemy conjure.
   'Conjure',
+  // Strixhaven Brawl (15b, r): spree and bargain (modelled by spree/pawprints and a sacrifice kicker), myriad (no effect with one opponent), boon.
+  'Spree',
+  'Bargain',
+  'Myriad',
+  'Boon',
   // Final Fantasy (11a).
   'Job select',
   'Tiered',
@@ -207,6 +212,8 @@ export function parseTypeLine(line: string) {
   const types: CardType[] = [];
   for (const w of left!.trim().split(/\s+/)) {
     if (w === 'Basic' || w === 'Legendary') supertypes.push(w);
+    // Strixhaven Brawl (15b, r): Snow-Covered basics: snow has no rules here, so it isn't kept as a type.
+    else if (w === 'Snow') continue;
     else types.push(w as CardType);
   }
   const subtypes = right.trim() ? right.trim().split(/\s+/) : [];

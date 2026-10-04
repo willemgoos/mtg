@@ -54,6 +54,13 @@ const MAX_PAWS = 5;
 /** Every choice of pawprint modes worth 1 to 5 {P}, repeats allowed, in printed order. */
 export function pawCombos(d: CardDefinition): number[][] {
   const modes = d.pawprints ?? [];
+  // Strixhaven Brawl (15b, r): Spree: any non-empty subset of the modes, each once.
+  if (d.spree) {
+    const subsets: number[][] = [];
+    for (let mask = 1; mask < 1 << modes.length; mask++)
+      subsets.push(modes.map((_, i) => i).filter((i) => mask & (1 << i)));
+    return subsets;
+  }
   // Secrets of Strixhaven (14b): Moment of Reckoning chooses up to four.
   const max = d.pawBudget ?? MAX_PAWS;
   const out: number[][] = [];
@@ -141,6 +148,16 @@ export function castVariants(d: CardDefinition, zone: ZoneName, via?: CastVia): 
   const cost = flashback ? d.flashback! : d.manaCost;
   // Deep Analysis: "Flashback—{1}{U}, Pay 3 life."
   const life = flashback && d.flashbackLife ? { life: d.flashbackLife } : {};
+  // Strixhaven Brawl (15b, r): Spree: each chosen mode adds its cost.
+  if (d.pawprints && d.spree)
+    return pawCombos(d).map((paws) => ({
+      paws,
+      cost: paws.reduce(
+        (c, m) => addCosts(c, d.pawprints![m]!.cost ?? { generic: 0, colored: {} }),
+        cost,
+      ),
+      spell: pawSpell(d, paws),
+    }));
   if (d.pawprints) return pawCombos(d).map((paws) => ({ paws, cost, spell: pawSpell(d, paws) }));
   const extra = flashback ? { flashback: true, ...life } : {};
   if (d.modes) {
@@ -163,6 +180,12 @@ export function castVariants(d: CardDefinition, zone: ZoneName, via?: CastVia): 
   }
   if (d.sacrificeCreatureToCast)
     return [{ cost, spell: d.spell ?? null, sacrifice: true, ...extra }];
+  // Strixhaven Brawl (15b, r): Demand Answers: sacrifice an artifact, or discard a card (see legal.ts).
+  if (d.sacrificeArtifactOrDiscardToCast)
+    return [
+      { cost, spell: d.spell ?? null, sacrifice: true, ...extra },
+      { cost, spell: d.spell ?? null, ...extra },
+    ];
   if (d.forageOrPay)
     return [
       { cost, spell: d.spell ?? null, forage: true, ...extra },

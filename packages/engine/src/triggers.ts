@@ -348,12 +348,21 @@ function spellMatches(
       const cast = ctx.s.turn.castDefs?.[spellCaster(ctx, item, self)] ?? [];
       return cast.filter((id) => fits(defOf(ctx, id))).length === 1;
     }
+    // Strixhaven Brawl (15b, r): Arcane Bombardment: the caster's first instant or sorcery spell this turn.
+    case 'firstInstantOrSorcery': {
+      const fits = (d: CardDefinition) =>
+        d.types.includes('Instant') || d.types.includes('Sorcery');
+      if (!fits(spell)) return false;
+      const cast = ctx.s.turn.castDefs?.[spellCaster(ctx, item, self)] ?? [];
+      return cast.filter((id) => fits(defOf(ctx, id))).length === 1;
+    }
     case 'firstNoncreature':
+    case 'secondNoncreature': // Strixhaven Brawl (15b, r): Sapphire Collector
     case 'fourthNoncreature': {
       if (spell.types.includes('Creature')) return false;
       const cast = ctx.s.turn.castDefs?.[spellCaster(ctx, item, self)] ?? [];
       const n = cast.filter((id) => !defOf(ctx, id).types.includes('Creature')).length;
-      return n === (t.filter === 'firstNoncreature' ? 1 : 4);
+      return n === (t.filter === 'firstNoncreature' ? 1 : t.filter === 'secondNoncreature' ? 2 : 4);
     }
     case 'targetsYourCreature':
       return !!item?.targets.some((x) => {
@@ -1005,6 +1014,18 @@ function detect(ctx: Ctx, ev: GameEvent): void {
       return;
     }
     case 'tapped': {
+      // Strixhaven Brawl (15b, r): Magda, Brazen Outlaw: whenever a Dwarf you control becomes tapped.
+      const tappedNow = s.objects[ev.id];
+      if (tappedNow && tappedNow.zone === 'battlefield')
+        forEachBattlefieldTrigger(
+          ctx,
+          (o, a) =>
+            a.trigger.on === 'creatureYouControlBecomesTapped' &&
+            o.controller === tappedNow.controller &&
+            def(ctx, tappedNow.id).types.includes('Creature') &&
+            matchesFilter(ctx, tappedNow.id, a.trigger.filter, o.id),
+          tappedNow,
+        );
       // Captain America, Living Legend: the first time a creature you control becomes tapped during your turn.
       const tapped = s.objects[ev.id];
       if (!ev.first || !tapped || tapped.controller !== s.turn.activePlayer) return;
@@ -1064,6 +1085,26 @@ function detect(ctx: Ctx, ev: GameEvent): void {
           controller: src.controller,
           inline: [{ kind: 'may', effects: [{ kind: 'blink', what: 'self' }] }],
         });
+      // Strixhaven Brawl (15b, r): Great Train Heist: an emblem "whenever a creature you control deals combat damage to that player this turn".
+      if ('player' in ev.to && ev.to.player !== src.controller)
+        for (const e of s.emblems ?? []) {
+          const a = e.ability;
+          if (
+            a.kind !== 'triggered' ||
+            a.trigger.on !== 'creatureYouControlDealsCombatDamage' ||
+            e.controller !== src.controller
+          )
+            continue;
+          s.pendingTriggers.push({
+            source: e.source,
+            sourceDefId: e.sourceDefId,
+            abilityIndex: -1,
+            controller: e.controller,
+            emblem: a,
+            subject: { id: src.id, zcc: src.zcc },
+            amount: ev.amount,
+          });
+        }
       if (src.controller === s.turn.activePlayer)
         forEachBattlefieldTrigger(
           ctx,

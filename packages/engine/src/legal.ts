@@ -428,9 +428,16 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
                   (id) =>
                     obj(ctx, id).controller === player && matchesFilter(ctx, id, kickPermanent),
                 )
-              : d.sacrificeToCastFilter
-                ? creatures.filter((id) => matchesFilter(ctx, id, d.sacrificeToCastFilter))
-                : creatures;
+              : d.sacrificeArtifactOrDiscardToCast
+                ? // Strixhaven Brawl (15b, r): Demand Answers.
+                  s.battlefield.filter(
+                    (id) =>
+                      obj(ctx, id).controller === player &&
+                      matchesFilter(ctx, id, { types: ['Artifact'] }),
+                  )
+                : d.sacrificeToCastFilter
+                  ? creatures.filter((id) => matchesFilter(ctx, id, d.sacrificeToCastFilter))
+                  : creatures;
             for (const sacrifice of v.sacrifice ? sacrificeable : [undefined]) {
               for (const targets of combosFor(specs, card, sacrifice)) {
                 // Strixhaven (13c): Crackle with Power: up to X targets.
@@ -443,7 +450,11 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
                 if (wardLife(ctx, player, targets) > s.players[player].life) continue;
                 if (!wardPayable(ctx, player, targets, zone === 'hand' ? 1 : 0)) continue;
                 for (const forage of forages)
-                  for (const discard of discards) {
+                  for (const discard of d.sacrificeArtifactOrDiscardToCast
+                    ? v.sacrifice
+                      ? [undefined]
+                      : ps.hand.filter((id) => id !== card)
+                    : discards) {
                     // Paying without what this cast sacrifices.
                     const spent = [
                       // Final Fantasy (11b): a land returned for kicker may tap for mana first.
@@ -591,7 +602,12 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
       if (a.cost.crew && !crewFor(ctx, player, source, a.cost.crew)) return;
       if (
         a.cost.sacrificeArtifacts &&
-        !artifactsToSacrifice(ctx, player, a.cost.sacrificeArtifacts)
+        !artifactsToSacrifice(
+          ctx,
+          player,
+          a.cost.sacrificeArtifacts,
+          a.cost.sacrificeArtifactsFilter,
+        )
       )
         return;
       if (
