@@ -248,7 +248,7 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
   }
   // Switching is applied after every other change to power and toughness.
   if (switched) [power, toughness] = [toughness, power];
-  let subtypes = animatedSubtypes(ctx, id);
+  let subtypes = subtypesOf(ctx, id);
   // Final Fantasy (11a): job select.
   if (extraSubtypes.length)
     subtypes = [...subtypes, ...extraSubtypes.filter((t) => !subtypes.includes(t))];
@@ -565,48 +565,215 @@ export function isCreature(ctx: Ctx, id: ObjectId): boolean {
   );
 }
 
-/** Not creature types, so a changeling doesn't have them. */
-const NON_CREATURE_SUBTYPES = new Set([
-  'Food',
-  'Equipment',
-  'Aura',
-  'Class',
-  'Vehicle',
-  'Treasure',
+/** Noncreature subtype catalogs, validated against Scryfall on 2026-10-04.
+ * https://api.scryfall.com/catalog/{artifact,enchantment,land,planeswalker,spell,battle}-types
+ * These survive creature-type replacement and are never granted by changeling.
+ * The supported-pool regression catches new noncreature subtypes when cards are added.
+ */
+export const NON_CREATURE_SUBTYPES = new Set([
+  // Artifact types.
+  'Attraction',
+  'Blood',
+  'Bobblehead',
   'Book',
-  'Gate',
-  'Plains',
-  'Island',
-  'Swamp',
-  'Mountain',
+  'Clue',
+  'Contraption',
+  'Equipment',
+  'Food',
+  'Fortification',
+  'Gold',
+  'Incubator',
+  'Infinity',
+  'Junk',
+  'Map',
+  'Powerstone',
+  'Stone',
+  'Terminus',
+  'Treasure',
+  'Vehicle',
+  'Spacecraft',
+  // Enchantment types.
+  'Aura',
+  'Background',
+  'Cartouche',
+  'Case',
+  'Class',
+  'Curse',
+  'Plan',
+  'Role',
+  'Room',
+  'Rune',
+  'Saga',
+  'Shard',
+  'Shrine',
+  // Land types.
+  'Cave',
+  'Cloud',
+  'Desert',
   'Forest',
+  'Gate',
+  'Island',
+  'Lair',
+  'Locus',
+  'Mine',
+  'Mountain',
+  'Sphere',
+  'Plains',
+  'Planet',
+  'Power-Plant',
+  'Swamp',
+  'Tower',
+  'Town',
+  "Urza's",
+  // Planeswalker types.
+  'Abian',
+  'Ajani',
+  'Aminatou',
+  'Angrath',
+  'Arlinn',
+  'Arzakon',
+  'Ashiok',
+  'B.O.B.',
+  'Bahamut',
+  'Basri',
+  'Bolas',
+  'Calix',
+  'Chandra',
+  'Comet',
+  'Dack',
+  'Dakkon',
+  'Daretti',
+  'Davriel',
+  'Deb',
+  'Dellian',
+  'Dihada',
+  'Domri',
+  'Dovin',
+  'Duck',
+  'Dungeon',
+  'Dyfed',
+  'Ellywick',
+  'Elminster',
+  'Elspeth',
+  'Ersta',
+  'Estrid',
+  'Feroz',
+  'Freyalise',
+  'Garruk',
+  'Gideon',
+  'Greensleeves',
+  'Grist',
+  'Guff',
+  'Huatli',
+  'Inzerva',
+  'Jace',
+  'Jared',
+  'Jaya',
+  'Jeska',
+  'Kaito',
+  'Karn',
+  'Kasmina',
+  'Kaya',
+  'Kiora',
+  'Koth',
+  'Liliana',
+  'Lolth',
+  'Lukka',
+  'Luxior',
+  'Master',
+  'Minsc',
+  'Monopoly',
+  'Mordenkainen',
+  'Nahiri',
+  'Narset',
+  'Niko',
+  'Nissa',
+  'Nixilis',
+  'Oko',
+  'Quintorius',
+  'Ral',
+  'Rowan',
+  'Saheeli',
+  'Samut',
+  'Sarkhan',
+  'Serra',
+  'Sifa',
+  'Sivitri',
+  'Sorin',
+  'Svega',
+  'Szat',
+  'Tamiyo',
+  'Tasha',
+  'Teferi',
+  'Teyo',
+  'Tezzeret',
+  'Thomil',
+  'Tibalt',
+  'Tyvar',
+  'Ugin',
+  'Urza',
+  'Venser',
+  'Vivien',
+  'Vraska',
+  'Vronos',
+  'Wanderer',
+  'Will',
+  'Windgrace',
+  'Worzel',
+  'Wrenn',
+  'Xenagos',
+  'Yanggu',
+  'Yanling',
+  'Zariel',
+  // Spell types.
+  'Adventure',
+  'Arcane',
+  'Chorus',
+  'Lesson',
+  'Omen',
+  'Trap',
+  // Battle types.
+  'Siege',
 ]);
 
-/** Temporary type-setting effects share one path with subtype filters (Iron Suitcase). */
-function animatedSubtypes(ctx: Ctx, id: ObjectId): readonly string[] {
+/** Permanent and temporary creature-type setters apply in timestamp order. */
+export function subtypesOf(ctx: Ctx, id: ObjectId): readonly string[] {
   const o = obj(ctx, id);
-  const d = def(ctx, id);
-  if (o.zone !== 'battlefield') return d.subtypes;
-  let result = o.addedSubtypes ? [...d.subtypes, ...o.addedSubtypes] : d.subtypes;
+  const printed = def(ctx, id).subtypes;
+  if (o.zone !== 'battlefield') return printed;
+  let result: readonly string[] = o.creatureTypes
+    ? [...printed.filter((t) => NON_CREATURE_SUBTYPES.has(t)), ...o.creatureTypes]
+    : printed;
+  if (o.addedSubtypes?.length) result = [...result, ...o.addedSubtypes];
+  let timestamp = o.creatureTypes ? (o.creatureTypesTimestamp ?? o.timestamp) : -1;
   for (const e of ctx.s.effects) {
-    if (e.affected.id === id && e.affected.zcc === o.zcc && e.creatureSubtype)
-      result = [...result.filter((t) => NON_CREATURE_SUBTYPES.has(t)), e.creatureSubtype];
+    if (
+      e.affected.id !== id || e.affected.zcc !== o.zcc || !e.creatureSubtype ||
+      e.timestamp <= timestamp
+    ) continue;
+    result = [...result.filter((t) => NON_CREATURE_SUBTYPES.has(t)), e.creatureSubtype];
+    timestamp = e.timestamp;
   }
   return result;
 }
 
-/** Changeling: it's every creature type. */
+/** Changeling's characteristic-defining ability precedes explicit type setters. */
 function changeling(ctx: Ctx, id: ObjectId, subtype: string): boolean {
   const o = obj(ctx, id);
-  const typeSet = o.zone === 'battlefield' && ctx.s.effects.some(
-    (e) => e.affected.id === id && e.affected.zcc === o.zcc && e.creatureSubtype,
+  const typeSet = o.zone === 'battlefield' && (
+    o.creatureTypes || ctx.s.effects.some(
+      (e) => e.affected.id === id && e.affected.zcc === o.zcc && e.creatureSubtype,
+    )
   );
-  return !typeSet && def(ctx, id).keywords.includes('changeling') && !NON_CREATURE_SUBTYPES.has(subtype);
+  return (
+    !typeSet && def(ctx, id).keywords.includes('changeling') &&
+    !NON_CREATURE_SUBTYPES.has(subtype)
+  );
 }
 
 /** Has this subtype (printed, gained, or every creature type for a changeling). */
 export function hasSubtype(ctx: Ctx, id: ObjectId, subtype: string): boolean {
-  return animatedSubtypes(ctx, id).includes(subtype) || changeling(ctx, id, subtype);
+  return subtypesOf(ctx, id).includes(subtype) || changeling(ctx, id, subtype);
 }
 
 export function creaturesOnBattlefield(ctx: Ctx, controller?: PlayerId): GameObject[] {
@@ -670,7 +837,7 @@ export function matchesFilter(
         power: 0,
         toughness: 0,
         keywords: new Set<Keyword>(),
-        subtypes: animatedSubtypes(ctx, id),
+        subtypes: subtypesOf(ctx, id),
       };
   if (filter.maxPower !== undefined && c.power > filter.maxPower) return false;
   // Secrets of Strixhaven (14b): Arnyn, Deathbloom Botanist.
@@ -777,7 +944,7 @@ export function cardMatches(
   sourceId?: ObjectId,
 ): boolean {
   const d = def(ctx, id);
-  const subtypes = animatedSubtypes(ctx, id);
+  const subtypes = subtypesOf(ctx, id);
   if (
     filter.anyOf &&
     !filter.anyOf.some((branch) =>

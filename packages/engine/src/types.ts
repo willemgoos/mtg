@@ -1004,6 +1004,8 @@ export type ConditionDef =
   // Final Fantasy (11c): rare conditions
   /** Your life total is at most half your starting life total (Cecil, Dark Knight). */
   | { kind: 'lifeAtMostHalfStarting' }
+  // Caretakers: Doctor Strange, Surgeon.
+  | { kind: 'lifeAboveStarting'; amount: number }
   /** This is the first combat phase of the turn (Genji Glove, Balthier and Fran). */
   | { kind: 'firstCombatPhase' }
   /** This is the first end step of the turn (Y'shtola Rhul). */
@@ -1964,6 +1966,8 @@ export type EffectDef =
       // Final Fantasy (11c): "except it's a 5/5 black Demon" (Ardyn, the Usurper).
       pt?: [number, number];
     }
+  // Caretakers: Donald Blake replaces only creature types, permanently.
+  | { kind: 'setCreatureTypes'; what: Ref; subtypes: string[] }
   /** Put named counters on the source (Drake Hatcher), or on `to`. */
   | { kind: 'namedCounters'; name: string; amount: Amount; to?: Ref }
   /** Look at the top N, split them into two piles; an opponent picks one for your hand (Curator of Destinies). */
@@ -2729,6 +2733,10 @@ export interface GameObject {
   lastAttachedTo?: ObjectRef;
   /** Subtypes gained on top of the printed ones (Infernal Vessel's Demon). */
   addedSubtypes?: string[];
+  /** Caretakers: creature types replacing the printed ones. */
+  creatureTypes?: string[];
+  creatureTypesTimestamp?: number;
+  lastSubtypes?: string[];
   /** Subtypes it had gained as it last left the battlefield. */
   lastAddedSubtypes?: string[];
   // Strixhaven Brawl (15b, b): Terrors of the Track's duplicate has lost double team.
@@ -2928,6 +2936,8 @@ export type TargetChoice = { player: PlayerId } | { object: ObjectRef };
 export interface PlayerState {
   id: PlayerId;
   life: number;
+  /** Actual starting life, including format and game setup overrides. */
+  startingLife?: number;
   /** Index 0 is the top card. */
   library: ObjectId[];
   hand: ObjectId[];
@@ -3591,6 +3601,8 @@ export type Decision =
       player: PlayerId;
       /** Heading for the prompt, if not "<card>: choose one" (Learn). */
       title?: string;
+      /** Caretakers: flat replay continuation for synchronous replacement choices. */
+      lifeGainReplay?: import('./life-gain-replacements.ts').LifeGainReplay;
       options: { label: string; effects: EffectDef[] }[];
       resume: PausedResolution;
       thenPriority: PlayerId;

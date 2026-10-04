@@ -22730,6 +22730,155 @@
   }
  },
  {
+  "name": "Crowd of True Believers",
+  "scryfallId": "4b2fffb8-d538-4772-8fbc-9bec3b9c4d9c",
+  "oracleId": "06296d4d-a1b3-4e9a-a2fd-a0183bb892a1",
+  "set": "msh",
+  "collectorNumber": "14",
+  "rarity": "common",
+  "manaCost": "{W}",
+  "typeLine": "Creature — Human Citizen",
+  "oracleText": "{T}: Target creature you control that's attacking alone gets +1/+0 until end of turn. You gain 1 life.",
+  "power": "1",
+  "toughness": "2",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/b/4b2fffb8-d538-4772-8fbc-9bec3b9c4d9c.jpg?1783902974",
+   "normal": "https://cards.scryfall.io/normal/front/4/b/4b2fffb8-d538-4772-8fbc-9bec3b9c4d9c.jpg?1783902974",
+   "large": "https://cards.scryfall.io/large/front/4/b/4b2fffb8-d538-4772-8fbc-9bec3b9c4d9c.jpg?1783902974",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/b/4b2fffb8-d538-4772-8fbc-9bec3b9c4d9c.jpg?1783902974"
+  }
+ },
+ {
+  "name": "Donald Blake, Guise of Thor",
+  "scryfallId": "ad0c9940-49fe-410e-b1bd-614b991c2e43",
+  "oracleId": "f966ae40-4717-4f41-9437-0e38b01a8be9",
+  "set": "msc",
+  "collectorNumber": "592",
+  "rarity": "uncommon",
+  "manaCost": "{1}{W}",
+  "typeLine": "Legendary Creature — Human Doctor",
+  "oracleText": "Lifelink\nPower-up — {4}{W}{W}: Put two +1/+1 counters and a flying counter on Donald Blake. He becomes a God Warrior Hero. (He loses all other creature types. Activate each power-up ability only once. Reduce the cost by his mana cost if he entered this turn.)",
+  "power": "1",
+  "toughness": "3",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Power-up",
+   "Lifelink"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/d/ad0c9940-49fe-410e-b1bd-614b991c2e43.jpg?1783903085",
+   "normal": "https://cards.scryfall.io/normal/front/a/d/ad0c9940-49fe-410e-b1bd-614b991c2e43.jpg?1783903085",
+   "large": "https://cards.scryfall.io/large/front/a/d/ad0c9940-49fe-410e-b1bd-614b991c2e43.jpg?1783903085",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/d/ad0c9940-49fe-410e-b1bd-614b991c2e43.jpg?1783903085"
+  }
+ },
+ {
+  "name": "MJ, Rising Star",
+  "scryfallId": "55428059-6222-470b-8d01-d398d763ffdb",
+  "oracleId": "06f647a7-ee53-42bd-8c73-53a0c6ede34a",
+  "set": "msc",
+  "collectorNumber": "773",
+  "rarity": "uncommon",
+  "manaCost": "{2}{W}",
+  "typeLine": "Legendary Creature — Human Performer",
+  "oracleText": "Vigilance (Attacking doesn't cause this creature to tap.)\nWhenever you gain life, put a +1/+1 counter on MJ.",
+  "power": "2",
+  "toughness": "3",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Vigilance"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/5/55428059-6222-470b-8d01-d398d763ffdb.jpg?1783903021",
+   "normal": "https://cards.scryfall.io/normal/front/5/5/55428059-6222-470b-8d01-d398d763ffdb.jpg?1783903021",
+   "large": "https://cards.scryfall.io/large/front/5/5/55428059-6222-470b-8d01-d398d763ffdb.jpg?1783903021",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/5/55428059-6222-470b-8d01-d398d763ffdb.jpg?1783903021"
+  }
+ },
+ {
+  "name": "Virtuous Variant",
+  "scryfallId": "87c73b0e-6df9-46db-a14f-f4f5ccc30d91",
+  "oracleId": "fa4ed027-6e18-4a87-9845-e13f274d9994",
+  "set": "msc",
+  "collectorNumber": "758",
+  "rarity": "common",
+  "manaCost": "{2}{W}",
+  "typeLine": "Creature — Spider Human Hero",
+  "oracleText": "Flying (This creature can't be blocked except by creatures with flying or reach.)\nWhen this creature enters, put a +1/+1 counter on target creature you control.",
+  "power": "1",
+  "toughness": "2",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/7/87c73b0e-6df9-46db-a14f-f4f5ccc30d91.jpg?1783903026",
+   "normal": "https://cards.scryfall.io/normal/front/8/7/87c73b0e-6df9-46db-a14f-f4f5ccc30d91.jpg?1783903026",
+   "large": "https://cards.scryfall.io/large/front/8/7/87c73b0e-6df9-46db-a14f-f4f5ccc30d91.jpg?1783903026",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/7/87c73b0e-6df9-46db-a14f-f4f5ccc30d91.jpg?1783903026"
+  }
+ },
+ {
+  "name": "Doctor Jane Foster",
+  "scryfallId": "cde387cc-d31b-4728-b49e-09eef49698fd",
+  "oracleId": "b1c8fddb-d686-4b4a-8aff-d79ea747801c",
+  "set": "msc",
+  "collectorNumber": "757",
+  "rarity": "uncommon",
+  "manaCost": "{3}{W}",
+  "typeLine": "Legendary Creature — Human Doctor",
+  "oracleText": "Vigilance (Attacking doesn't cause this creature to tap.)\nWhen Doctor Jane Foster enters, return target creature card with mana value 3 or less from your graveyard to your hand. If you gained life this turn, return that card to the battlefield instead.",
+  "power": "2",
+  "toughness": "3",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Vigilance"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/d/cde387cc-d31b-4728-b49e-09eef49698fd.jpg?1785842465",
+   "normal": "https://cards.scryfall.io/normal/front/c/d/cde387cc-d31b-4728-b49e-09eef49698fd.jpg?1785842465",
+   "large": "https://cards.scryfall.io/large/front/c/d/cde387cc-d31b-4728-b49e-09eef49698fd.jpg?1785842465",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/d/cde387cc-d31b-4728-b49e-09eef49698fd.jpg?1785842465"
+  }
+ },
+ {
+  "name": "Doctor Strange, Surgeon",
+  "scryfallId": "f872a2cd-e684-47be-885f-27a4666399fa",
+  "oracleId": "43c31a03-2bbd-49a6-8b78-c5f3cab04a07",
+  "set": "msc",
+  "collectorNumber": "591",
+  "rarity": "rare",
+  "manaCost": "{4}{W}",
+  "typeLine": "Legendary Creature — Human Doctor Hero",
+  "oracleText": "Lifelink\nIf you would gain life, you gain twice that much life instead.\nAt the beginning of each combat, if you have at least 10 life more than your starting life total, creatures you control get +2/+2 and gain vigilance until end of turn.",
+  "power": "2",
+  "toughness": "5",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Lifelink"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/8/f872a2cd-e684-47be-885f-27a4666399fa.jpg?1783903085",
+   "normal": "https://cards.scryfall.io/normal/front/f/8/f872a2cd-e684-47be-885f-27a4666399fa.jpg?1783903085",
+   "large": "https://cards.scryfall.io/large/front/f/8/f872a2cd-e684-47be-885f-27a4666399fa.jpg?1783903085",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/8/f872a2cd-e684-47be-885f-27a4666399fa.jpg?1783903085"
+  }
+ },
+ {
   "name": "Bucky Barnes, Eager Ally",
   "scryfallId": "58a6ca84-64b8-4137-b3ce-9540b6dfa162",
   "oracleId": "55bc5d06-7dd1-4403-af32-0e10d8bbe327",

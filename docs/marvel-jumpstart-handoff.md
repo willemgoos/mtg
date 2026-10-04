@@ -13,8 +13,8 @@ https://magic.wizards.com/en/news/announcements/marvel-super-heroes-jumpstart-bo
 
 ## Where it stands (4 October 2026)
 
-- **31 of 51 packets are done** and in `MARVEL_JUMPSTART_PACKETS` (`packages/cards/src/jumpin.ts`), shown in the picker as
-  "Marvel · Jumpstart". 20 packets are left, needing about 120 different cards.
+- **34 of 51 packets are done** and in `MARVEL_JUMPSTART_PACKETS` (`packages/cards/src/jumpin.ts`), shown in the picker as
+  "Marvel · Jumpstart". 17 packets are left, needing 107 different cards.
 - **Shortcuts:** `docs/shortcuts.md` has 24 open items (cards that don't do exactly what their text says), each with the
   reason. Two fixer passes have already been through it.
 - **The user's rule: no shortcuts.** New cards must do exactly what their oracle text says. If something needs a new

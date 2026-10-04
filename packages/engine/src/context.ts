@@ -58,6 +58,10 @@ export interface Ctx {
   customEffects: Readonly<Record<string, CustomEffect>>;
   /** "Whenever one or more" triggers already queued in this batch of events. */
   batched: Set<string>;
+  /** Caretakers: choices consumed while replaying a synchronous life gain. */
+  lifeGainChoices?: { choices: number[]; cursor: number };
+  /** Already-delivered event prefix reconstructed by a replacement replay. */
+  replayedEvents?: number;
 }
 
 export function makeCtx(
@@ -513,6 +517,7 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
   if (from === 'battlefield') {
     const c = characteristics(ctx, id);
     o.lastPower = c.power;
+    o.lastSubtypes = [...c.subtypes];
     o.lastCounters = o.plusOneCounters;
     if (to === 'graveyard' && c.types.includes('Creature')) {
       ctx.s.turn.creaturesDied++;
@@ -521,6 +526,8 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
     if (o.addedSubtypes) o.lastAddedSubtypes = o.addedSubtypes;
     else delete o.lastAddedSubtypes;
     delete o.addedSubtypes;
+    delete o.creatureTypes;
+    delete o.creatureTypesTimestamp;
     // Strixhaven Brawl (15a): Enduring Courage: "if it was a creature".
     if (o.notCreature) o.lastNotCreature = true;
     else delete o.lastNotCreature;

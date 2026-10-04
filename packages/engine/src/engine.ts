@@ -1,5 +1,6 @@
 import { answerCommandZone } from './brawl.ts';
 import { cloneState } from './clone.ts';
+import { applyWithLifeGainChoices, createLifeGainSnapshotGate } from './life-gain-replacements.ts';
 import {
   type Ctx,
   type CustomEffect,
@@ -118,6 +119,7 @@ function stableStringify(v: unknown): string {
 export function createEngine(db: CardDb, options: EngineOptions = {}): Engine {
   // Final Fantasy Commander (12): the FIC one-offs are built in.
   const custom = { ...FIC_EFFECTS, ...options.customEffects };
+  const needsLifeGainSnapshot = createLifeGainSnapshotGate(db);
 
   return {
     db,
@@ -139,17 +141,21 @@ export function createEngine(db: CardDb, options: EngineOptions = {}): Engine {
       validate(state, action, opts);
       const next = cloneState(state);
       const ctx = makeCtx(next, db, custom);
-      apply(ctx, action);
+      applyWithLifeGainChoices(ctx, action, state, apply);
       // A resolution that paused to ask something still owes its triggers so far.
       collectTriggers(ctx);
+      if (ctx.replayedEvents) ctx.events.splice(0, ctx.replayedEvents);
       return { state: next, events: ctx.events };
     },
 
     applyActionInPlace(state, action, opts = {}) {
       validate(state, action, opts);
+      const snapshot = needsLifeGainSnapshot(state) ? cloneState(state) : undefined;
       const ctx = makeCtx(state, db, custom);
-      apply(ctx, action);
+      if (snapshot) applyWithLifeGainChoices(ctx, action, snapshot, apply);
+      else apply(ctx, action);
       collectTriggers(ctx);
+      if (ctx.replayedEvents) ctx.events.splice(0, ctx.replayedEvents);
       return ctx.events;
     },
   };

@@ -553,3 +553,25 @@ it("an artifact that cannot be copied does not consume Iron Man's optional copy"
   resolve(cast(g, SUITCASE));
   expect(all(g, SUITCASE)).toHaveLength(2);
 });
+
+describe('Iron Man nonlegendary trigger lookup regression', () => {
+  it('queues a dead token\'s ability after the token has ceased to exist', () => {
+    const g = game({ p1: { battlefield: ['annie-joins-up', 'stx-pest-token'] } });
+    const pest = g.id('p1', 'stx-pest-token');
+    g.obj(pest).isToken = true;
+    g.obj(pest).damage = 1;
+    resolve(g.pass());
+    expect(g.state.objects[pest]).toBeUndefined();
+    expect(g.life('p1')).toBe(21);
+  });
+
+  it('queues a removed noncreature token\'s graveyard trigger without a live object lookup', () => {
+    const g = game({ p1: { battlefield: ['annie-joins-up', 'soc-15b-b-wicked-role-token'] } });
+    const role = g.id('p1', 'soc-15b-b-wicked-role-token');
+    g.obj(role).isToken = true;
+    // Unattached Auras are put into the graveyard by state-based actions.
+    resolve(g.pass());
+    expect(g.state.objects[role]).toBeUndefined();
+    expect(g.life('p2')).toBe(19);
+  });
+});
