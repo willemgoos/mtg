@@ -112,7 +112,8 @@ from) when it's fixed. Older phases keep their own "Simplifications" lists in `d
       existing `exileFromGraveyard` cost, as for Postmortem Professor); you should choose.
 - [ ] Rise of the Deathbringer: loses life equal to the greatest power, not the number of cards actually drawn (differs only
       when the library runs out or a draw is replaced).
-- [ ] Extrapolate the Impossible: not implemented ("cards you own from outside the game"; there's no sideboard outside Learn).
+- Extrapolate the Impossible: left out on purpose ("cards you own from outside the game"; there's no sideboard outside
+  Learn). Decided 4 October 2026: not to be added.
 - [ ] Loot, the Nexus: its mana ability is an activated ability that goes on the stack (like Doc Samson's), not a mana
       ability, so it can't be used while paying a cost.
 - [ ] Emrakul, the Exigent Doom: "Ward—Sacrifice three permanents" is paid with permanents the engine picks (tokens, then
