@@ -2380,6 +2380,9 @@ export type StaticDef =
   | { kind: 'flyersCantBlockYours' }
   /** "Prevent all damage that would be dealt to this creature" (Black Panther, Hope Enduring). */
   | { kind: 'preventDamageToSelf' }
+  // Marvel Super Heroes Jumpstart (Squadron)
+  /** "If a source would deal damage to you or a <filter> you control, prevent all but 1 of that damage" (Hyperion). */
+  | { kind: 'preventAllButOne'; filter: CardFilter }
   /** "If a creature you control would connive, instead you draw a card, then it connives" (Leader). */
   | { kind: 'conniveDrawsFirst' }
   /** "Noncreature spells you cast have improvise" (Ironheart). */

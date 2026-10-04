@@ -22,6 +22,7 @@ import {
 import { MSH_JUMPSTART_EQUIPPED_TOKENS } from './msh/jumpstart-equipped.ts';
 import { MSH_JUMPSTART_INCREDIBLE_TOKENS } from './msh/jumpstart-incredible.ts';
 import { MSH_JUMPSTART_PYM_TOKENS } from './msh/jumpstart-pym.ts';
+import { MSH_JUMPSTART_SQUADRON_TOKENS } from './msh/jumpstart-squadron.ts';
 import { MSH_JUMPSTART_THOR_TOKENS } from './msh/jumpstart-thor.ts';
 import { MSH_JUMPSTART_WAKANDA_TOKENS } from './msh/jumpstart-wakanda.ts';
 import { MSH_JUMPSTART_WILD_TOKENS } from './msh/jumpstart-wild.ts';
@@ -2208,6 +2209,7 @@ const artifactToken = (id: string, name: string, abilities: AbilityDef[]): CardD
 export const TOKENS: CardDefinition[] = [
   ...MARVEL_TOKENS,
   ...MSH_JUMPSTART_PYM_TOKENS,
+  ...MSH_JUMPSTART_SQUADRON_TOKENS,
   ...MSH_JUMPSTART_INCREDIBLE_TOKENS,
   ...MSH_JUMPSTART_EQUIPPED_TOKENS,
   ...MSH_JUMPSTART_THOR_TOKENS,

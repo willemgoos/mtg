@@ -24255,6 +24255,152 @@
   }
  },
  {
+  "name": "Nighthawk, Dark Defender",
+  "scryfallId": "ee250dd3-72fe-4387-be53-97e3ac5e5945",
+  "oracleId": "eb8a373a-ba15-4b3f-959a-b7c708fea616",
+  "set": "msc",
+  "collectorNumber": "604",
+  "rarity": "uncommon",
+  "manaCost": "{1}{W}",
+  "typeLine": "Legendary Creature — Human Hero",
+  "oracleText": "Flying\nWhenever Nighthawk or another Hero you control enters, target creature gets +1/+1 until end of turn.",
+  "power": "2",
+  "toughness": "1",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/e/ee250dd3-72fe-4387-be53-97e3ac5e5945.jpg?1783903081",
+   "normal": "https://cards.scryfall.io/normal/front/e/e/ee250dd3-72fe-4387-be53-97e3ac5e5945.jpg?1783903081",
+   "large": "https://cards.scryfall.io/large/front/e/e/ee250dd3-72fe-4387-be53-97e3ac5e5945.jpg?1783903081",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/e/ee250dd3-72fe-4387-be53-97e3ac5e5945.jpg?1783903081"
+  }
+ },
+ {
+  "name": "Zarda, the Power Princess",
+  "scryfallId": "f99b7504-a743-4923-becf-37b5759487b8",
+  "oracleId": "c7b158b9-19f7-47b6-a97c-74023dfe73b9",
+  "set": "msc",
+  "collectorNumber": "615",
+  "rarity": "uncommon",
+  "manaCost": "{3}{W}",
+  "typeLine": "Legendary Creature — Human Warrior Hero",
+  "oracleText": "Flying\nOther Heroes you control have exalted. (Whenever a creature you control attacks alone, it gets +1/+1 until end of turn for each instance of exalted among permanents you control.)",
+  "power": "2",
+  "toughness": "4",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/9/f99b7504-a743-4923-becf-37b5759487b8.jpg?1783903079",
+   "normal": "https://cards.scryfall.io/normal/front/f/9/f99b7504-a743-4923-becf-37b5759487b8.jpg?1783903079",
+   "large": "https://cards.scryfall.io/large/front/f/9/f99b7504-a743-4923-becf-37b5759487b8.jpg?1783903079",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/9/f99b7504-a743-4923-becf-37b5759487b8.jpg?1783903079"
+  }
+ },
+ {
+  "name": "Doctor Spectrum",
+  "scryfallId": "7e91d0b2-b67b-473e-b028-0bcf2ca55971",
+  "oracleId": "fad80e75-8d08-4a0b-a05e-14f4c96947bf",
+  "set": "msc",
+  "collectorNumber": "590",
+  "rarity": "uncommon",
+  "manaCost": "{3}{W}{W}",
+  "typeLine": "Legendary Creature — Human Hero",
+  "oracleText": "Flying\nWhen Doctor Spectrum enters, choose one —\n• Create a 0/4 colorless Wall creature token with defender.\n• Put a +1/+1 counter on each other Hero you control.\n• Destroy target enchantment.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/e/7e91d0b2-b67b-473e-b028-0bcf2ca55971.jpg?1783903088",
+   "normal": "https://cards.scryfall.io/normal/front/7/e/7e91d0b2-b67b-473e-b028-0bcf2ca55971.jpg?1783903088",
+   "large": "https://cards.scryfall.io/large/front/7/e/7e91d0b2-b67b-473e-b028-0bcf2ca55971.jpg?1783903088",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/e/7e91d0b2-b67b-473e-b028-0bcf2ca55971.jpg?1783903088"
+  }
+ },
+ {
+  "name": "Hyperion, Supreme Hero",
+  "scryfallId": "1604acc8-0d54-42bb-ac4b-399987a6b554",
+  "oracleId": "4f4a5966-3713-45c7-acc2-9ddb4ff73eab",
+  "set": "msc",
+  "collectorNumber": "599",
+  "rarity": "mythic",
+  "manaCost": "{4}{W}{W}{W}",
+  "typeLine": "Legendary Creature — Eternal Hero",
+  "oracleText": "Flash\nFlying\nIf a source would deal damage to you or a Hero you control, prevent all but 1 of that damage.",
+  "power": "7",
+  "toughness": "7",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Flying",
+   "Flash"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/6/1604acc8-0d54-42bb-ac4b-399987a6b554.jpg?1783903083",
+   "normal": "https://cards.scryfall.io/normal/front/1/6/1604acc8-0d54-42bb-ac4b-399987a6b554.jpg?1783903083",
+   "large": "https://cards.scryfall.io/large/front/1/6/1604acc8-0d54-42bb-ac4b-399987a6b554.jpg?1783903083",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/6/1604acc8-0d54-42bb-ac4b-399987a6b554.jpg?1783903083"
+  }
+ },
+ {
+  "name": "Hyperion's Atomic Vision",
+  "scryfallId": "13940d64-16f6-473b-9b6c-80a187c3d4fa",
+  "oracleId": "e1e82283-01ec-447f-b0d4-5bd4619ab3d8",
+  "set": "msc",
+  "collectorNumber": "600",
+  "rarity": "uncommon",
+  "manaCost": "{1}{W}",
+  "typeLine": "Instant",
+  "oracleText": "As an additional cost to cast this spell, you may behold a Hero. (You may choose a Hero you control or reveal a Hero card from your hand.)\nDestroy target tapped creature. If a Hero was beheld, scry 2. (Look at the top two cards of your library, then put any number of them on the bottom and the rest on top in any order.)",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Behold",
+   "Scry"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/3/13940d64-16f6-473b-9b6c-80a187c3d4fa.jpg?1783903082",
+   "normal": "https://cards.scryfall.io/normal/front/1/3/13940d64-16f6-473b-9b6c-80a187c3d4fa.jpg?1783903082",
+   "large": "https://cards.scryfall.io/large/front/1/3/13940d64-16f6-473b-9b6c-80a187c3d4fa.jpg?1783903082",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/3/13940d64-16f6-473b-9b6c-80a187c3d4fa.jpg?1783903082"
+  }
+ },
+ {
+  "name": "Blur of Heroism",
+  "scryfallId": "ca94680f-d46c-4b0f-a40f-635a0fcb16f5",
+  "oracleId": "b4a9b328-f976-4390-be9a-711ef357a50d",
+  "set": "msc",
+  "collectorNumber": "585",
+  "rarity": "uncommon",
+  "manaCost": "{2}{W}",
+  "typeLine": "Enchantment",
+  "oracleText": "When this enchantment enters, draw a card.\nYou may cast Hero spells as though they had flash.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/a/ca94680f-d46c-4b0f-a40f-635a0fcb16f5.jpg?1783903086",
+   "normal": "https://cards.scryfall.io/normal/front/c/a/ca94680f-d46c-4b0f-a40f-635a0fcb16f5.jpg?1783903086",
+   "large": "https://cards.scryfall.io/large/front/c/a/ca94680f-d46c-4b0f-a40f-635a0fcb16f5.jpg?1783903086",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/a/ca94680f-d46c-4b0f-a40f-635a0fcb16f5.jpg?1783903086"
+  }
+ },
+ {
   "name": "Flying Drone",
   "scryfallId": "3fea3eb2-9360-41fc-890e-8377e69fb9e3",
   "oracleId": "541f7525-a9a4-493d-b724-354ae6d37de5",

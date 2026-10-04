@@ -18,6 +18,7 @@ import { MSH_JUMPSTART_PYM } from './jumpstart-pym.ts';
 import { MSH_JUMPSTART_RAMPAGING } from './jumpstart-rampaging.ts';
 import { MSH_JUMPSTART_SCARLET } from './jumpstart-scarlet.ts';
 import { MSH_JUMPSTART_SHIELD } from './jumpstart-shield.ts';
+import { MSH_JUMPSTART_SQUADRON } from './jumpstart-squadron.ts';
 import { MSH_JUMPSTART_SOARING } from './jumpstart-soaring.ts';
 import { MSH_JUMPSTART_THOR } from './jumpstart-thor.ts';
 import { MSH_JUMPSTART_TOWERING } from './jumpstart-towering.ts';
@@ -73,6 +74,7 @@ export const MSH_JUMPSTART: Record<string, Behavior> = {
   ...MSH_JUMPSTART_RAMPAGING,
   ...MSH_JUMPSTART_SCARLET,
   ...MSH_JUMPSTART_SHIELD,
+  ...MSH_JUMPSTART_SQUADRON,
   ...MSH_JUMPSTART_SOARING,
   ...MSH_JUMPSTART_THOR,
   ...MSH_JUMPSTART_TOWERING,
