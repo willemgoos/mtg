@@ -549,6 +549,12 @@ export function resolveRef(ctx: Ctx, es: EffectSource, ref: Ref): TargetChoice[]
     const o = es.chosen && onBattlefield(ctx, es.chosen);
     return o ? [{ object: { id: o.id, zcc: o.zcc } }] : [];
   }
+  // Vulture, Feathered Fiend: "each of those creatures" (the ones still on the battlefield).
+  if (ref === 'subjects')
+    return (es.subjects ?? []).flatMap((r) => {
+      const o = onBattlefield(ctx, r);
+      return o ? [{ object: { id: o.id, zcc: o.zcc } }] : [];
+    });
   const sourceId = es.source?.id;
   return (
     ref.each === 'permanent'
@@ -1216,10 +1222,13 @@ export function runEffects(
         ctx.s.decision = {
           kind: 'chooseOption',
           player: controller,
-          options: (['W', 'U', 'B', 'R', 'G'] as const).map((color) => ({
-            label: COLOR_NAMES[color],
-            effects: [{ kind: 'custom', handler: 'setChosen', params: { color } }],
-          })),
+          // Thriving lands: "other than" their own colour.
+          options: (['W', 'U', 'B', 'R', 'G'] as const)
+            .filter((color) => color !== e.except)
+            .map((color) => ({
+              label: COLOR_NAMES[color],
+              effects: [{ kind: 'custom', handler: 'setChosen', params: { color } }],
+            })),
           resume,
           thenPriority,
         };

@@ -8,7 +8,7 @@ from) when it's fixed. Older phases keep their own "Simplifications" lists in `d
 
 - [ ] Arena's Bloomburrow and Foundations Jump In packets use their listed cards; Arena's random alternates for four slots per
       packet aren't modelled (`packages/cards/src/jumpin.ts`).
-- [ ] Thriving lands may choose their own colour as the "other" colour (`msh/jumpstart.ts`).
+- [x] Thriving lands may choose their own colour as the "other" colour (`msh/jumpstart.ts`).
 
 ## Bloomburrow Starter Kit (`blb/others.ts`)
 
@@ -53,8 +53,8 @@ from) when it's fixed. Older phases keep their own "Simplifications" lists in `d
 
 - [x] Bob, Reluctant HYDRA Agent: "if you do" checks that he's still attacking, not that he actually returned to hand.
 - [x] Strategic Intervention: two triggers (pump, then an optional tap) instead of one.
-- [ ] Advancing the Spirit: the free power-up isn't optional; two copies still give one per turn; it doesn't check that it was
-      on the battlefield when the turn's first power-up was activated.
+- [ ] Advancing the Spirit: the free power-up isn't optional (it's always your first power-up each turn). Two copies giving
+      one free power-up a turn, and none once a power-up was activated before it entered, are the rules.
 - [x] Quantum Reduction: "loses all abilities" is applied by a trigger as the Aura enters (like Frozen in Ice), so there's a
       window to respond before the creature loses them.
 - [x] Wasp, Shrinking Savior: if her only target becomes illegal, the whole trigger fizzles, including the draw. (That part
@@ -69,27 +69,31 @@ from) when it's fixed. Older phases keep their own "Simplifications" lists in `d
 - [ ] Impossible Man: while copying, the UI shows the copied card (and its name); the rules see his own name.
 - [ ] Villainous Syndication: the engine picks which Villain to tap (lowest power); the fourth counter's sacrifice happens as
       the ability resolves, not as its own trigger.
-- [ ] Radioactive Man: "that player" is always the opponent (two-player only).
+- [x] Radioactive Man: "that player" is always the opponent (two-player only). (Games are two-player, so that's exact.)
 - [x] Crimson Cowl, Master of Evil: triggers whenever nontoken Villains attack, without checking they attacked a player.
 - [x] Flying Drone: the discount is a second, free version of the spell, offered once another flyer entered under your control
       this turn; that flyer must still be on the battlefield (with flying) to count.
-- [ ] Vulture, Feathered Fiend: split into a counter trigger per flyer and one batched draw trigger instead of one trigger.
+- [x] Vulture, Feathered Fiend: split into a counter trigger per flyer and one batched draw trigger instead of one trigger.
 - [x] Grapeshot: storm copies keep the original's target (no new targets), like Ral's storm emblem.
 - [x] Wiccan, Young Avenger: "until your next end step" lasts until the end of that turn (playable during the end step and
       cleanup too).
-- [ ] Wanda's Vision: "exile until you exile a nonland card" uses mana value up to 99 as "no limit".
-- [ ] The Vision and Scarlet Witch: the {R} it adds empties between steps, like all mana in the engine.
-- [ ] Hulk's Thunderclap: the beheld creature or card isn't chosen or shown; the behold version is offered whenever a Gamma
-      creature is available, and needs a noncreature artifact or enchantment to target.
-- [ ] Secure Detention: mana that another permanent grants the locked one (Clement-style) is still usable.
+- [x] Wanda's Vision: "exile until you exile a nonland card" uses mana value up to 99 as "no limit". (No card's mana value
+      comes near 99, so it plays the same.)
+- [x] The Vision and Scarlet Witch: the {R} it adds empties between steps, like all mana in the engine. (That's the rules,
+      and Arena: mana empties at the end of each step and phase.)
+- [ ] Hulk's Thunderclap: the beheld creature or card isn't chosen or shown (which one doesn't change anything else). Offering
+      the behold version whenever a Gamma creature is available, and only with a noncreature artifact or enchantment to
+      target, is the rules.
+- [x] Secure Detention: mana that another permanent grants the locked one (Clement-style) is still usable.
 - [ ] Rhino, Terrible Trampler: one trigger now, but the creatures for the three counters and the split are chosen as it
       resolves (one creature and its share at a time), not as it's put on the stack.
 - [x] Rhino's Rampage: the noncreature artifact is chosen as the spell is cast, not by a reflexive trigger on excess damage.
 - [ ] Powerful Broker: can only target a permanent (players have no counters in this engine).
 - [x] Voracious Brood: its entering counters only apply when it's cast.
-- [ ] Ms. Marvel, Elastic Ally: base power ignores static "has base power X" abilities (e.g. Hulkbuster Armor).
+- [x] Ms. Marvel, Elastic Ally: base power ignores static "has base power X" abilities (e.g. Hulkbuster Armor).
 - [x] Quantum Entanglement: the exile target is chosen when the {1}{W} is paid, not by a separate reflexive trigger.
-- [ ] Captain Marvel, Shooting Star: "enters or attacks" is two triggers; she doesn't see creatures exiled at the same moment
-      as her.
+- [ ] Captain Marvel, Shooting Star: she doesn't see creatures exiled at the same moment as her. ("Enters or attacks" is two
+      triggers, which plays the same: one event never sets off both.)
 - [ ] Beast, Erudite Aerialist: flying turns on for any +1/+1 counter put on him this turn, even an opponent's.
-- [ ] Reed Richards, Smartest Man: the replacement still makes four draws when the library has fewer cards.
+- [x] Reed Richards, Smartest Man: the replacement still makes four draws when the library has fewer cards. (That's the
+      rules: the draws from an empty library lose the game, as on Arena.)

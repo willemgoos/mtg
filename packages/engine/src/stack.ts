@@ -722,6 +722,7 @@ export function activateAbility(
   forage?: ObjectId | 'graveyard',
   discard?: ObjectId,
   x?: number,
+  tapCreature?: ObjectId,
 ): boolean {
   const a = activatedAbility(ctx, source, index);
   const src = obj(ctx, source);
@@ -742,7 +743,7 @@ export function activateAbility(
     // Shang-Chi's mana can pay for abilities of creature sources.
     isCreature(ctx, source) ? ['CreatureAbility'] : undefined,
     a.cost.convoke ? creatureHelpers(ctx, player, manaSources(ctx, player, exclude), exclude) : [],
-    [sacrifice, forage !== 'graveyard' ? forage : undefined],
+    [sacrifice, forage !== 'graveyard' ? forage : undefined, tapCreature],
   );
   if (discard) {
     // Strixhaven (13c): Uvilda exiles the card with three refine counters.
@@ -770,7 +771,9 @@ export function activateAbility(
       tap(ctx, id);
   // Marvel Super Heroes Jumpstart (Masters of Evil)
   if (a.cost.tapCreature) {
-    const id = creaturesToTap(ctx, player, a.cost.tapCreature, source)[0];
+    const can = creaturesToTap(ctx, player, a.cost.tapCreature, source);
+    // Villainous Syndication: the Villain chosen, if it still can be.
+    const id = tapCreature && can.includes(tapCreature) ? tapCreature : can[0];
     if (id) tap(ctx, id);
   }
   if (a.cost.crew) {
@@ -878,6 +881,7 @@ export function pushTrigger(
     targets,
     ...(t.lkiPower !== undefined ? { lkiPower: t.lkiPower } : {}),
     ...(t.subject ? { subject: t.subject } : {}),
+    ...(t.subjects ? { subjects: t.subjects } : {}),
     ...(t.amount !== undefined ? { amount: t.amount } : {}),
     ...(t.inline ? { inline: t.inline } : {}),
     ...(t.emblem ? { emblem: t.emblem } : {}),
@@ -1067,6 +1071,7 @@ export function resolveTop(ctx: Ctx): boolean {
     ...(item.lkiPower !== undefined ? { lkiPower: item.lkiPower } : {}),
     ...(item.x !== undefined ? { x: item.x } : {}),
     ...(item.subject ? { subject: item.subject } : {}),
+    ...(item.subjects ? { subjects: item.subjects } : {}),
     ...(item.amount !== undefined ? { amount: item.amount } : {}),
   };
   const effects: EffectDef[] =

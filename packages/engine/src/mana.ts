@@ -209,18 +209,21 @@ export function manaSources(
     }
   }
   // Clement: Frogs you control have "{T}: Add {G} or {U}" (for creature spells).
+  // Marvel Super Heroes Jumpstart (Wakanda): never through Secure Detention's lock.
   for (const src of ctx.s.battlefield) {
     const so = obj(ctx, src);
     if (so.controller !== player) continue;
     for (const a of def(ctx, src).abilities) {
       if (a.kind !== 'static' || a.effect.kind !== 'grantMana') continue;
       const g = a.effect;
+      const granted = (id: ObjectId) => !!g.sourcesAbility || !abilitiesLocked(ctx, id);
       // Secrets of Strixhaven (14b): Resonating Lute: matching lands tap for `amount` mana (any of these) for such spells.
       if (g.onlyFor) {
         if (!forSubtypes.includes(g.onlyFor)) continue;
         for (const id of ctx.s.battlefield) {
           if (id === exclude || obj(ctx, id).controller !== player) continue;
           if (!matchesFilter(ctx, id, g.filter) || !canTapForAbility(ctx, id)) continue;
+          if (!granted(id)) continue;
           for (let i = out.length - 1; i >= 0; i--) if (out[i]!.id === id) out.splice(i, 1);
           for (let k = 0; k < (g.amount ?? 1); k++)
             out.push({ id, produces: [...g.produces], isCreature: false, sacrifice: false });
@@ -237,7 +240,7 @@ export function manaSources(
             for (const c of g.produces) if (!have.produces.includes(c)) have.produces.push(c);
             continue;
           }
-          if (!canTapForAbility(ctx, id)) continue;
+          if (!canTapForAbility(ctx, id) || !granted(id)) continue;
           out.push({
             id,
             produces: [...g.produces],
@@ -251,7 +254,7 @@ export function manaSources(
         if (id === exclude || obj(ctx, id).controller !== player || out.some((x) => x.id === id))
           continue;
         if (!isCreature(ctx, id) || !matchesFilter(ctx, id, g.filter)) continue;
-        if (!canTapForAbility(ctx, id)) continue;
+        if (!canTapForAbility(ctx, id) || !granted(id)) continue;
         out.push({ id, produces: [...g.produces], isCreature: true, sacrifice: false });
       }
     }

@@ -534,6 +534,7 @@ export const AVENGERS: Record<string, Behavior> = {
           kind: 'grantMana',
           filter: { types: ['Creature'], supertypes: ['Legendary'] },
           produces: [...COLORS],
+          sourcesAbility: true,
         },
       },
     ],

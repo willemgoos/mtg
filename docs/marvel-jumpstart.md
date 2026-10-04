@@ -93,8 +93,7 @@ Missing counts include the packet's Thriving land (refreshed 4 October 2026, aft
   Richards, Super Intelligence), "whenever you activate a power-up" and "another creature is exiled" (Marvel Boy, Captain
   Marvel), power above base power (Ms. Marvel), and copies that keep some of their own abilities (Hulkling).
 - Simplifications (also in `docs/shortcuts.md`):
-  - Thriving lands may choose their own colour.
-  - Advancing the Spirit's free power-up isn't optional, and two copies still give one per turn.
+  - Advancing the Spirit's free power-up isn't optional.
 
 ## First batch
 

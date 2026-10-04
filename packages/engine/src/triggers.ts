@@ -336,6 +336,13 @@ function queue(
         );
         if (earlier) earlier.amount = (earlier.amount ?? 0) + amount;
       }
+      // Vulture, Feathered Fiend: "those creatures".
+      if (subject) {
+        const earlier = ctx.s.pendingTriggers.find(
+          (t) => t.source.id === o.id && t.abilityIndex === index && t.subjects,
+        );
+        earlier?.subjects?.push({ id: subject.id, zcc: subject.zcc });
+      }
       return;
     }
     ctx.batched.add(key);
@@ -351,6 +358,9 @@ function queue(
     controller,
     ...(granted?.kind === 'triggered' ? { emblem: granted } : {}),
     ...(subject ? { subject: { id: subject.id, zcc: subject.zcc } } : {}),
+    ...(subject && a?.kind === 'triggered' && a.batch
+      ? { subjects: [{ id: subject.id, zcc: subject.zcc }] }
+      : {}),
     ...(amount !== undefined ? { amount } : {}),
   };
   ctx.s.pendingTriggers.push(pending);
@@ -1479,7 +1489,8 @@ function detect(ctx: Ctx, ev: GameEvent): void {
           a.trigger.on === 'creaturesYouControlDealCombatDamageToPlayer' &&
           o.controller === src.controller &&
           matchesFilter(ctx, src.id, a.trigger.filter),
-        undefined,
+        // Vulture, Feathered Fiend: the creatures that dealt the damage ("those creatures").
+        src,
         ev.amount, // Strixhaven Brawl (15b, pair): Primo, "damage dealt"
       );
       // Secrets of Strixhaven (14a): Killian's Confidence triggers from your graveyard.

@@ -1191,7 +1191,9 @@ export type Ref =
   /** The controller of the permanent the source is attached to (Super Intelligence: "that player"). */
   | 'attachedController'
   /** The permanent chosen by a 'chooseYourPermanent' effect. */
-  | 'chosen';
+  | 'chosen'
+  /** Vulture, Feathered Fiend: "each of those creatures" (every one that set off a batched trigger). */
+  | 'subjects';
 
 export type Amount =
   | number
@@ -1567,7 +1569,11 @@ export type EffectDef =
       equipDiscount?: number;
     }
   /** Choose a color (or a creature type) for the source, as it enters. */
-  | { kind: 'chooseColor' }
+  | {
+      kind: 'chooseColor';
+      /** Thriving lands: "choose a color other than" this one. */
+      except?: Color;
+    }
   | { kind: 'chooseCreatureType' }
   // Strixhaven (13a): Learn
   /** Learn: reveal a Lesson from your sideboard and put it into your hand, or discard a card to draw a card, or neither. */
@@ -2317,6 +2323,11 @@ export type StaticDef =
       filter: CardFilter;
       produces: ManaType[];
       onlyForCreatures?: boolean;
+      /**
+       * The mana ability is the source's own, tapping the creature only its cost (Relic of
+       * Legends), so Secure Detention on the creature doesn't stop it.
+       */
+      sourcesAbility?: boolean;
       // Secrets of Strixhaven (14b): Resonating Lute
       /** Lands (not creatures) tap for `amount` mana of any of these, only for spells with this tag. */
       onlyFor?: string;
@@ -2969,6 +2980,8 @@ export type StackItem =
       /** Source's power when it left the battlefield (e.g. sacrificed as a cost). */
       lkiPower?: number;
       subject?: ObjectRef;
+      /** Vulture, Feathered Fiend: every creature that set off a batched trigger ("those creatures"). */
+      subjects?: ObjectRef[];
       amount?: number;
       mode?: number;
       /** A granted trigger (Undying Malice): these effects instead of the card's ability. */
@@ -3194,6 +3207,8 @@ export interface EffectSource {
   lkiPower?: number;
   /** What caused the trigger. */
   subject?: ObjectRef;
+  /** Vulture, Feathered Fiend: every creature that set off a batched trigger. */
+  subjects?: ObjectRef[];
   amount?: number;
   /** The permanent picked by 'chooseYourPermanent'. */
   chosen?: ObjectRef;
@@ -3231,6 +3246,8 @@ export interface PendingTrigger {
   lkiPower?: number;
   /** What caused the trigger (e.g. the creature that entered). */
   subject?: ObjectRef;
+  /** Vulture, Feathered Fiend: every creature that set off this batched trigger. */
+  subjects?: ObjectRef[];
   /** A number from the trigger event (e.g. combat damage dealt). */
   amount?: number;
   /** A granted trigger: these effects instead of the card's ability. */
@@ -3679,6 +3696,8 @@ export type Action =
       forage?: ObjectId | 'graveyard';
       /** The card discarded as a cost (Flamecache Gecko). */
       discard?: ObjectId;
+      /** Villainous Syndication: the creature tapped for "tap an untapped Villain". */
+      tapCreature?: ObjectId;
       payWith?: ObjectId[];
       // Marvel Super Heroes
       /** The value chosen for {X} in the ability's cost (Bruce Banner). */

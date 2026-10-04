@@ -878,8 +878,9 @@ export function cardMatches(
 }
 
 /**
- * Base power: printed, copied, characteristic-defining or set by an effect ("base power
- * 3"); static "base power" abilities aren't counted. Marvel Super Heroes Jumpstart (Marvelous).
+ * Base power: printed, copied, characteristic-defining, or set by an effect ("base power 3")
+ * or an Aura's or Equipment's static ability (Hulkbuster Armor: base 9/9), the latest
+ * winning. Marvel Super Heroes Jumpstart (Marvelous).
  */
 function basePowerOf(ctx: Ctx, id: ObjectId): number {
   const o = obj(ctx, id);
@@ -890,8 +891,25 @@ function basePowerOf(ctx: Ctx, id: ObjectId): number {
       : d.ptEquals !== undefined
         ? countFor(ctx, o, d)
         : (o.copyPT?.power ?? d.power ?? 0);
+  const set: { timestamp: number; power: number }[] = [];
   for (const e of ctx.s.effects)
-    if (e.basePT && e.affected.id === id && e.affected.zcc === o.zcc) base = e.basePT[0];
+    if (e.basePT && e.affected.id === id && e.affected.zcc === o.zcc)
+      set.push({ timestamp: e.timestamp, power: e.basePT[0] });
+  // Ms. Marvel, Elastic Ally: "has base power and toughness" from what's attached.
+  for (const srcId of ctx.s.battlefield) {
+    const src = obj(ctx, srcId);
+    if (src.attachedTo !== id) continue;
+    for (const a of def(ctx, srcId).abilities) {
+      if (a.kind !== 'static' || a.effect.kind !== 'attached') continue;
+      if (a.effect.basePT) set.push({ timestamp: src.timestamp, power: a.effect.basePT[0] });
+      if (a.effect.basePTAmount !== undefined)
+        set.push({
+          timestamp: src.timestamp,
+          power: countOf(ctx, src.controller, a.effect.basePTAmount, false, srcId),
+        });
+    }
+  }
+  for (const x of set.sort((a, b) => a.timestamp - b.timestamp)) base = x.power;
   return base;
 }
 

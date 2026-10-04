@@ -116,6 +116,8 @@ describe('Vulture, Feathered Fiend', () => {
     for (const id of [vulture, namora, bear]) g.obj(id).zoneTurn = 0;
     g.passUntilStep('beginCombat').passBoth().attack(vulture, namora, bear);
     g.passUntilStep('combatDamage');
+    // One trigger for both flyers.
+    expect(g.state.stack.length + g.state.pendingTriggers.length).toBe(1);
     resolve(g);
     expect(g.life('p2')).toBe(20 - 2 - 2 - 2);
     expect(pt(g, vulture)).toEqual([3, 5]);

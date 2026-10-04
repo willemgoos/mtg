@@ -51,19 +51,9 @@ export const MSH_JUMPSTART_SOARING: Record<string, Behavior> = {
       ),
     ],
   },
-  // Flying comes from Scryfall. Two triggers: a counter on each flyer that connected, then one draw.
+  // Flying comes from Scryfall.
   'Vulture, Feathered Fiend': {
     abilities: [
-      {
-        kind: 'triggered',
-        trigger: {
-          on: 'creatureYouControlDealsCombatDamage',
-          toPlayer: true,
-          filter: { hasKeyword: 'flying' },
-        },
-        targets: [],
-        effects: [{ kind: 'counters', to: 'subject', amount: 1 }],
-      },
       {
         kind: 'triggered',
         trigger: {
@@ -72,7 +62,7 @@ export const MSH_JUMPSTART_SOARING: Record<string, Behavior> = {
         },
         batch: true,
         targets: [],
-        effects: [draw(1)],
+        effects: [{ kind: 'counters', to: 'subjects', amount: 1 }, draw(1)],
       },
     ],
   },

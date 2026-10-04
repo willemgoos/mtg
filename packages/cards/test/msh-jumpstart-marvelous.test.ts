@@ -102,6 +102,22 @@ describe('Ms. Marvel, Elastic Ally', () => {
     expect(g.life('p2')).toBe(18);
     expect(handSize(g, 'p1')).toBe(hand);
   });
+
+  it('counts base power set by Equipment (Hulkbuster Armor: base 9/9)', () => {
+    const g = game({
+      p1: { battlefield: [MS_MARVEL, 'bear-cub', 'hulkbuster-armor'], library: n('plains', 3) },
+    });
+    const bear = g.id('p1', 'bear-cub');
+    g.obj(g.id('p1', 'hulkbuster-armor')).attachedTo = bear;
+    const [power] = pt(g, bear);
+    const hand = handSize(g, 'p1');
+    g.passUntilStep('beginCombat').passBoth().attack(bear);
+    settle(g);
+    g.passUntilStep('main2');
+    expect(g.life('p2')).toBe(20 - power!);
+    // At its (new) base power: no card.
+    expect(handSize(g, 'p1')).toBe(hand);
+  });
 });
 
 describe('Photon, Lady of Light', () => {

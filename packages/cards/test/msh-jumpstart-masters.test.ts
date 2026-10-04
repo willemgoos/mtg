@@ -23,8 +23,16 @@ const MASTERS = [
 
 type G = ReturnType<typeof game>;
 
+/** Activates the ability (the first legal way: Villainous Syndication's Villain to tap). */
 const activate = (g: G, source: string, abilityIndex: number) =>
-  g.do({ type: 'activateAbility', player: g.actor, source, abilityIndex, targets: [] });
+  g.do(
+    g
+      .legal()
+      .find(
+        (a) =>
+          a.type === 'activateAbility' && a.source === source && a.abilityIndex === abilityIndex,
+      ) ?? { type: 'activateAbility', player: g.actor, source, abilityIndex, targets: [] },
+  );
 
 /** Resolves the stack, answering discard and search decisions with `card` when offered. */
 const resolve = (g: G, card?: string) => {
@@ -205,6 +213,33 @@ describe('Villainous Syndication', () => {
     expect(g.obj(plan).counters?.plan).toBe(1);
     // No untapped Villain left.
     expect(g.legal().some((a) => a.type === 'activateAbility' && a.source === plan)).toBe(false);
+  });
+
+  it('you choose which Villain to tap', () => {
+    const g = game({
+      p1: {
+        battlefield: ['villainous-syndication', 'boomerang-blade-flinger', 'villain-token'],
+        library: ['swamp', 'swamp'],
+      },
+    });
+    const plan = g.id('p1', 'villainous-syndication');
+    const boomerang = g.id('p1', 'boomerang-blade-flinger');
+    const token = g.id('p1', 'villain-token');
+    const choices = g
+      .legal()
+      .flatMap((a) => (a.type === 'activateAbility' && a.source === plan ? [a.tapCreature] : []));
+    expect(choices.sort()).toEqual([boomerang, token].sort());
+    g.do({
+      type: 'activateAbility',
+      player: 'p1',
+      source: plan,
+      abilityIndex: 0,
+      targets: [],
+      tapCreature: boomerang,
+    });
+    resolve(g);
+    expect(g.obj(boomerang).tapped).toBe(true);
+    expect(g.obj(token).tapped).toBe(false);
   });
 
   it('needs a Villain to tap', () => {

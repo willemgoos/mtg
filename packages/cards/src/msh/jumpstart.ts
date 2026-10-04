@@ -28,12 +28,12 @@ import { MSH_JUMPSTART_YOUNG_AVENGERS } from './jumpstart-young-avengers.ts';
 
 /**
  * Thriving land: enters tapped; as it enters, choose another colour; taps for
- * its own colour or the chosen one. (The colour may be chosen as its own.)
+ * its own colour or the chosen one.
  */
 const thriving = (color: ManaType): Behavior => ({
   entersTapped: true,
   abilities: [
-    onEnter({ kind: 'chooseColor' }),
+    onEnter({ kind: 'chooseColor', except: color }),
     { kind: 'mana', cost: { tapSelf: true }, produces: color },
     ...(['W', 'U', 'B', 'R', 'G'] as const)
       .filter((c) => c !== color)

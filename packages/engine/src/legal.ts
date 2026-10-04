@@ -798,6 +798,13 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
         for (const base of bases)
           for (let x = 1; x <= have; x++) out.push({ ...base, x } as Action);
       }
+      // Villainous Syndication: one action per creature that could be tapped for the cost.
+      if (a.cost.tapCreature) {
+        const bases = out.splice(firstOfAbility);
+        const can = creaturesToTap(ctx, player, a.cost.tapCreature, source);
+        for (const base of bases)
+          for (const tapCreature of can) out.push({ ...base, tapCreature } as Action);
+      }
       // Marvel Super Heroes: {X} in an ability's cost (Bruce Banner): every affordable X up to 10.
       if (mana?.x)
         for (const base of out.slice(firstOfAbility))

@@ -294,6 +294,7 @@ function apply(ctx: Ctx, action: Action): void {
         action.forage,
         action.discard,
         action.x,
+        action.tapCreature,
       );
       return paused ? undefined : givePriority(ctx, player);
     }
