@@ -146,13 +146,21 @@ describe("Hulk's Thunderclap", () => {
         .legal()
         .some((a) => a.type === 'castSpell' && a.card === g.id('p1', CLAP, 'hand') && a.kicked),
     ).toBe(true);
+    // The player picks which card to behold (Hulk in hand), and it is revealed.
+    const hulk = g.id('p1', HULK, 'hand');
     resolveAll(
-      cast(g, CLAP, [target(g, mine), target(g, theirs), target(g, saga)], { kicked: true }),
+      cast(g, CLAP, [target(g, mine), target(g, theirs), target(g, saga)], {
+        kicked: true,
+        beholdCard: hulk,
+      }),
     );
     expect(all(g, 'bear-cub')).toEqual([mine]);
     expect(all(g, ORIGIN)).toHaveLength(0);
     // Hulk was only revealed.
     expect(g.state.players.p1.hand).toHaveLength(1);
+    expect(g.events.filter((e) => e.type === 'cardsRevealed')).toEqual([
+      { type: 'cardsRevealed', player: 'p1', cards: [{ id: hulk, defId: HULK }] },
+    ]);
   });
 });
 

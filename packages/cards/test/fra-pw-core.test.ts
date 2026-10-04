@@ -9,7 +9,7 @@ import {
 } from '@mtg/engine';
 import { buildScenario, GameDriver, type ScenarioSpec } from '@mtg/engine/testing';
 import { cardDb } from '../src/index.ts';
-import { empowerJace, JACE, noJaceToBehold } from '../src/fra/helpers.ts';
+import { beholdToEnterUntapped, empowerJace, JACE } from '../src/fra/helpers.ts';
 import { FRA_CADET, FRA_JACE } from '../src/fra/tokens.ts';
 import { all, n } from './blb-helpers.ts';
 
@@ -221,8 +221,7 @@ const TEST_CARDS: CardDefinition[] = [
   printed('test-sanctum', {
     types: ['Land'],
     subtypes: ['Island'],
-    entersTappedIf: noJaceToBehold,
-    abilities: [{ kind: 'mana', cost: { tapSelf: true }, produces: 'U' }],
+    ...beholdToEnterUntapped(JACE, { kind: 'mana', cost: { tapSelf: true }, produces: 'U' }),
   }),
   // A spell with "behold a Jace" (the free kicker Hulk's Thunderclap uses).
   printed('test-behold-jace', {
@@ -1136,7 +1135,7 @@ describe('behold a Jace or pay (Countersculpt) and "you may behold a Jace" for a
       },
     });
     expect(casts(g)).toEqual(['behold']);
-    cast(g, 'test-countersculpt', [], { beheld: true });
+    cast(g, 'test-countersculpt', [], { beheld: true, beholdCard: jaces(g)[0]! });
     done(g);
     expect(g.life('p1')).toBe(23);
   });
@@ -1164,7 +1163,7 @@ describe('behold a Jace or pay (Countersculpt) and "you may behold a Jace" for a
       },
     });
     expect(casts(g).sort()).toEqual(['behold', 'pay']);
-    cast(g, 'test-countersculpt', [], { beheld: true });
+    cast(g, 'test-countersculpt', [], { beheld: true, beholdCard: g.id('p1', 'test-jace') });
     done(g);
     expect(g.state.battlefield.filter((id) => g.obj(id).tapped)).toHaveLength(2);
   });
@@ -1179,26 +1178,54 @@ describe('behold a Jace or pay (Countersculpt) and "you may behold a Jace" for a
     expect(casts(g)).toEqual([]);
   });
 
-  it('a land that enters tapped unless you could behold a Jace', () => {
+  it('a land that enters tapped unless you behold a Jace (you pick which; one in hand is revealed)', () => {
+    const play = (g: GameDriver) =>
+      g.do({ type: 'playLand', player: 'p1', card: g.id('p1', 'test-sanctum', 'hand') });
+    const tapped = (g: GameDriver) => g.obj(g.id('p1', 'test-sanctum')).tapped;
+    const reveals = (g: GameDriver) => g.events.filter((e) => e.type === 'cardsRevealed');
+    // Nothing to behold: it enters tapped and nothing is asked.
     const plain = game({ p1: { hand: ['test-sanctum'] } });
-    plain.do({ type: 'playLand', player: 'p1', card: plain.id('p1', 'test-sanctum', 'hand') });
-    expect(plain.obj(plain.id('p1', 'test-sanctum')).tapped).toBe(true);
-    const withJace = game({
-      p1: { hand: ['test-sanctum'], battlefield: [{ card: FRA_JACE, loyalty: 1 }] },
+    play(plain);
+    done(plain);
+    expect(plain.decision.kind).toBe('priority');
+    expect(tapped(plain)).toBe(true);
+    expect(reveals(plain)).toHaveLength(0);
+    // A Jace you control and a Jace card in hand: three answers.
+    const g = game({
+      p1: { hand: ['test-sanctum', 'test-jace'], battlefield: [{ card: FRA_JACE, loyalty: 1 }] },
     });
-    withJace.do({
-      type: 'playLand',
-      player: 'p1',
-      card: withJace.id('p1', 'test-sanctum', 'hand'),
-    });
-    expect(withJace.obj(withJace.id('p1', 'test-sanctum')).tapped).toBe(false);
-    const handJace = game({ p1: { hand: ['test-sanctum', 'test-jace'] } });
-    handJace.do({
-      type: 'playLand',
-      player: 'p1',
-      card: handJace.id('p1', 'test-sanctum', 'hand'),
-    });
-    expect(handJace.obj(handJace.id('p1', 'test-sanctum')).tapped).toBe(false);
+    play(g);
+    g.passBoth();
+    expect(g.decision.kind).toBe('chooseOption');
+    if (g.decision.kind !== 'chooseOption') return;
+    expect(g.decision.options.map((o) => o.label)).toEqual([
+      'Behold Jace',
+      'Behold Test Jace (reveal it from your hand)',
+      'Enter tapped',
+    ]);
+    expect(tapped(g)).toBe(true);
+    // Beholding the Jace token untaps it; nothing is revealed.
+    const onBoard = structuredClone(g.state);
+    g.do({ type: 'chooseOption', player: 'p1', index: 0 });
+    expect(tapped(g)).toBe(false);
+    expect(reveals(g)).toHaveLength(0);
+    // Beholding the card in hand reveals it (the opponent sees which), and it stays in hand.
+    const h = new GameDriver(engine, onBoard);
+    h.do({ type: 'chooseOption', player: 'p1', index: 1 });
+    expect(tapped(h)).toBe(false);
+    expect(reveals(h)).toEqual([
+      {
+        type: 'cardsRevealed',
+        player: 'p1',
+        cards: [{ id: h.id('p1', 'test-jace', 'hand'), defId: 'test-jace' }],
+      },
+    ]);
+    expect(hand(h)).toContain('test-jace');
+    // Declining leaves it tapped.
+    const k = new GameDriver(engine, structuredClone(onBoard));
+    k.do({ type: 'chooseOption', player: 'p1', index: 2 });
+    expect(tapped(k)).toBe(true);
+    expect(reveals(k)).toHaveLength(0);
   });
 });
 

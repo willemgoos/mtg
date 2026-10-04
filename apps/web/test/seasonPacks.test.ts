@@ -199,8 +199,8 @@ describe('Season Bloomburrow packs', () => {
         expect(rarityOf.get(SCRYFALL.find((x) => slug(x.name) === id)!.name), id).toBe(rarity);
       }
     }
-    // The planeswalker group waits for 17c.
-    expect(REALITY_FRACTURE_SHEETS.mythic).not.toContain('ajani-resolute');
+    // The planeswalker cards join the sheets once implemented (17c).
+    expect(REALITY_FRACTURE_SHEETS.mythic).toContain('ajani-resolute');
     let save = { ...fresh(), coins: 1000 };
     save = buySeasonPack(save, 1, 'realityFracture');
     expect(save.packs[0]!.kind).toBe('realityFracture');

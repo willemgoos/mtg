@@ -206,7 +206,7 @@ describe("Hyperion's Atomic Vision", () => {
     });
     const bear = g.id('p2', 'bear-cub');
     g.obj(bear).tapped = true;
-    cast(g, VISION, [g.ref(bear)], { kicked: true });
+    cast(g, VISION, [g.ref(bear)], { kicked: true, beholdCard: g.id('p1', AGENT, 'hand') });
     settle(g);
     expect(g.decision.kind).toBe('scry');
     resolve(g);

@@ -133,6 +133,11 @@ export function targetCandidates(ctx: Ctx, spec: TargetSpec, src: TargetingSourc
       if (permanentOk(ctx, spec, id, src)) out.push({ object: refOf(obj(ctx, id)) });
     }
   }
+  // Reality Fracture (17c): "target spell or creature".
+  if (spec.what === 'spell' && spec.orCreature)
+    for (const id of ctx.s.battlefield)
+      if (permanentOk(ctx, { ...spec, what: 'creature' }, id, src))
+        out.push({ object: refOf(obj(ctx, id)) });
   if (spec.what === 'spell') {
     for (const item of ctx.s.stack)
       if (item.kind === 'spell' && !spec.abilitiesOnly && spellOk(ctx, spec, item.id, src))
@@ -220,6 +225,8 @@ export function isTargetLegal(
     return abilityOk(ctx, spec, t.object.id, src);
   const o = deref(ctx, t.object);
   if (!o) return false;
+  if (spec.what === 'spell' && spec.orCreature && o.zone === 'battlefield')
+    return permanentOk(ctx, { ...spec, what: 'creature' }, o.id, src);
   if (spec.what === 'spell') return spellOk(ctx, spec, o.id, src);
   return spec.what === 'graveyardCard'
     ? graveyardCardOk(ctx, spec, o.id, src)

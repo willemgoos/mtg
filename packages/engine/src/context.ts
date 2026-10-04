@@ -30,6 +30,7 @@ import { STX_13C_D_EFFECTS } from './stx-13c-d-effects.ts';
 import { FRA_WHITE_EFFECTS } from './fra-white-effects.ts';
 import { FRA_PW_EFFECTS } from './fra-pw-effects.ts';
 import { FRA_PW_C_EFFECTS } from './fra-pw-c-effects.ts';
+import { FRA_PW_B_EFFECTS } from './fra-pw-b-effects.ts';
 import { checkCondition } from './triggers.ts';
 import { type EffectSource, gainLife } from './effects.ts';
 import type {
@@ -69,6 +70,8 @@ export interface Ctx {
   batched: Set<string>;
   /** Reality Fracture (17c): effects an effect asks to run right after it (Empower Jace's choice); `runEffects` drains them. */
   deferred?: EffectDef[];
+  /** Reality Fracture (17c): the player whose effect is running (who "puts" the counters it adds), set by `runEffect`. */
+  puttingPlayer?: PlayerId;
 }
 
 export function makeCtx(
@@ -108,6 +111,7 @@ const BUILT_IN_EFFECTS: Record<string, CustomEffect> = {
   ...FRA_WHITE_EFFECTS,
   ...FRA_PW_EFFECTS,
   ...FRA_PW_C_EFFECTS,
+  ...FRA_PW_B_EFFECTS,
   // Secrets of Strixhaven (14a).
   ...SOS_14A_EFFECTS,
   // Secrets of Strixhaven (14b), group A.
@@ -878,7 +882,7 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
  * Puts +1/+1 counters (or named counters) on a permanent. "Twice that many"
  * effects of its controller apply (Innkeeper's Talent).
  */
-export function addCounters(ctx: Ctx, id: ObjectId, n: number, name?: string): void {
+export function addCounters(ctx: Ctx, id: ObjectId, n: number, name?: string, by?: PlayerId): void {
   if (n <= 0) return;
   const o = obj(ctx, id);
   // Secrets of Strixhaven (14b): Fractal Tender.
@@ -913,8 +917,15 @@ export function addCounters(ctx: Ctx, id: ObjectId, n: number, name?: string): v
     const c = (o.counters ??= {});
     c[name] = (c[name] ?? 0) + n;
     // Reality Fracture (17c): "whenever you put one or more loyalty counters on a planeswalker".
+    // `by` is who puts them (Inspired Tethermage counts only counters you put, on any planeswalker).
     if (name === 'loyalty')
-      emit(ctx, { type: 'loyaltyCountersAdded', id, count: n, player: o.controller });
+      emit(ctx, {
+        type: 'loyaltyCountersAdded',
+        id,
+        count: n,
+        player: o.controller,
+        by: by ?? ctx.puttingPlayer ?? o.controller,
+      });
     return;
   }
   o.plusOneCounters += n;

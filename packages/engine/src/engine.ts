@@ -260,10 +260,11 @@ function apply(ctx: Ctx, action: Action): void {
           forage: action.forage,
           sacrificeMany: action.sacrificeMany,
           kickCount: action.kickCount,
+          beheld: action.beheld,
+          beholdCard: action.beholdCard,
           // Reality Fracture (17c): Chandra, Torch of Defiance: a cast paying every cost as from hand.
           ...(d.fullCost
             ? {
-                beheld: action.beheld,
                 delve: action.delve,
                 teamwork: action.teamwork,
                 back: action.back,
@@ -300,6 +301,7 @@ function apply(ctx: Ctx, action: Action): void {
           sacrificeMany: action.sacrificeMany,
           kickCount: action.kickCount,
           beheld: action.beheld,
+          beholdCard: action.beholdCard,
           delve: action.delve,
           teamwork: action.teamwork,
           back: action.back,

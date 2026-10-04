@@ -2,7 +2,7 @@ import type { AbilityDef, CardDefinition, EffectDef, TargetSpec } from '@mtg/eng
 import { type Behavior, parseManaCost as mana } from '../build.ts';
 import { creature, draw, gain, onEnter, pump, t0, when, yours } from '../blb/helpers.ts';
 import { mode } from '../fin/helpers.ts';
-import { empowerJace, JACE, loyaltyAbility, noJaceToBehold, planeswalkersHave } from './helpers.ts';
+import { beholdToEnterUntapped, empowerJace, JACE, loyaltyAbility, planeswalkersHave } from './helpers.ts';
 import { FRA_CADET } from './tokens.ts';
 
 /**
@@ -356,21 +356,18 @@ export const FRA_PW_C: Record<string, Behavior> = {
       },
     ],
   },
-  "Theorist's Sanctum": {
-    // "As this land enters, you may behold a Jace. If you don't, this land enters tapped." (`noJaceToBehold` until the exact
-    // choice exists)
-    entersTappedIf: noJaceToBehold,
-    abilities: [
-      { kind: 'mana', cost: { tapSelf: true }, produces: 'U' },
-      {
-        kind: 'activated',
-        cost: { mana: mana('{2}{U}'), tapSelf: true },
-        targets: [],
-        effects: [empowerJace(2)],
-        label: '{2}{U}, {T}: Empower Jace 2',
-      },
-    ],
-  },
+  // "As this land enters, you may behold a Jace. If you don't, this land enters tapped."
+  "Theorist's Sanctum": beholdToEnterUntapped(
+    JACE,
+    { kind: 'mana', cost: { tapSelf: true }, produces: 'U' },
+    {
+      kind: 'activated',
+      cost: { mana: mana('{2}{U}'), tapSelf: true },
+      targets: [],
+      effects: [empowerJace(2)],
+      label: '{2}{U}, {T}: Empower Jace 2',
+    },
+  ),
   "Vraska's Final Mercy": {
     modes: [
       mode(

@@ -49,9 +49,10 @@ import { standForDistinctTypes, targetCandidates, targetCombos } from './targets
 import { freeCastSource, playableWhileControlling } from './msh-analyzed.ts';
 import { omnipresenceCastable } from './fra-green-effects.ts';
 import { permanentHasStatic } from './fra-pw-effects.ts';
+import { beholdOptions } from './fra-pw-b-effects.ts';
 import type {
   Action,
-  CardFilter,
+  CardDefinition,
   ObjectId,
   PlayerId,
   Step,
@@ -290,13 +291,20 @@ function landDrops(ctx: Ctx, player: PlayerId): number {
 }
 
 // Marvel Super Heroes Jumpstart (Incredible)
-/** Behold: a matching permanent you control, or another matching card in your hand. */
-function canBehold(ctx: Ctx, player: PlayerId, card: ObjectId, filter: CardFilter): boolean {
-  return (
-    ctx.s.battlefield.some(
-      (id) => obj(ctx, id).controller === player && matchesFilter(ctx, id, filter),
-    ) || ctx.s.players[player].hand.some((id) => id !== card && cardMatches(ctx, id, filter))
-  );
+/**
+ * Reality Fracture (17c): what a cast can behold. `[undefined]`: it doesn't behold (the cast action carries no
+ * `beholdCard`); `[]`: it does but there is nothing to behold, so this way of casting isn't legal.
+ */
+function beholdChoices(
+  ctx: Ctx,
+  player: PlayerId,
+  card: ObjectId,
+  d: CardDefinition,
+  v: { kicked?: boolean | undefined; beheld?: boolean | undefined },
+): (ObjectId | undefined)[] {
+  const filter =
+    v.kicked && d.kicker?.behold ? d.kicker.behold : v.beheld ? d.beholdOrPay?.filter : undefined;
+  return filter ? beholdOptions(ctx, player, card, filter) : [undefined];
 }
 
 /** Every way to choose the face-up pile (order within a pile doesn't matter). */
@@ -577,12 +585,10 @@ function priorityActions(ctx: Ctx, player: PlayerId, now?: ObjectId): Action[] {
                 k++;
               if (k > 0) choice.delve = k;
             }
-            // Marvel Super Heroes Jumpstart (Incredible): behold needs something to behold.
-            if (v.kicked && d.kicker?.behold && !canBehold(ctx, player, card, d.kicker.behold))
-              continue;
-            // Reality Fracture (17c): Countersculpt beholds a Jace or pays.
-            if (v.beheld && d.beholdOrPay && !canBehold(ctx, player, card, d.beholdOrPay.filter))
-              continue;
+            // Marvel Super Heroes Jumpstart (Incredible): behold needs something to behold; Reality Fracture
+            // (17c): Countersculpt beholds a Jace or pays. Each card that could be beheld is its own action.
+            const beholds = beholdChoices(ctx, player, card, d, v);
+            if (beholds.length === 0) continue;
             const base = castCost(ctx, player, card, choice);
             // Strixhaven (13b): Killian also lowers the cost by what the spell targets.
             const targetDiscount = !!d.costReductionIfTarget || hasTargetCostReduction(ctx, player);
@@ -634,30 +640,32 @@ function priorityActions(ctx: Ctx, player: PlayerId, now?: ObjectId): Action[] {
                     )
                   : discards;
                 for (const forage of forages)
-                  for (const discard of vDiscards) {
-                    // Paying without what this cast sacrifices.
-                    const spent = [
-                      // Final Fantasy (11b): a land returned for kicker may tap for mana first.
-                      v.kicked && d.kicker?.returnLand ? undefined : sacrifice,
-                      ...(sacrificeMany ?? []),
-                      forage === 'graveyard' ? undefined : forage,
-                      ...(teamwork ?? []),
-                    ];
-                    if (spent.some((id) => id && pool.some((p) => p.id === id))) {
-                      const rest = pool.filter((p) => !spent.includes(p.id));
-                      if (!canPayFrom(addCosts(cost, ward), rest)) continue;
+                  for (const discard of vDiscards)
+                    for (const beholdCard of beholds) {
+                      // Paying without what this cast sacrifices.
+                      const spent = [
+                        // Final Fantasy (11b): a land returned for kicker may tap for mana first.
+                        v.kicked && d.kicker?.returnLand ? undefined : sacrifice,
+                        ...(sacrificeMany ?? []),
+                        forage === 'graveyard' ? undefined : forage,
+                        ...(teamwork ?? []),
+                      ];
+                      if (spent.some((id) => id && pool.some((p) => p.id === id))) {
+                        const rest = pool.filter((p) => !spent.includes(p.id));
+                        if (!canPayFrom(addCosts(cost, ward), rest)) continue;
+                      }
+                      out.push({
+                        type: 'castSpell',
+                        player,
+                        card,
+                        targets,
+                        ...extra,
+                        ...(sacrifice ? { sacrifice } : {}),
+                        ...(forage ? { forage } : {}),
+                        ...(discard ? { discard } : {}),
+                        ...(beholdCard ? { beholdCard } : {}),
+                      });
                     }
-                    out.push({
-                      type: 'castSpell',
-                      player,
-                      card,
-                      targets,
-                      ...extra,
-                      ...(sacrifice ? { sacrifice } : {}),
-                      ...(forage ? { forage } : {}),
-                      ...(discard ? { discard } : {}),
-                    });
-                  }
               }
             }
           }
@@ -1105,8 +1113,9 @@ export function getLegalActions(ctx: Ctx, player: PlayerId): Action[] {
             !checkCondition(ctx, cd.kicker.onlyIf, player, obj(ctx, card))
           )
             continue;
-          if (v.kicked && cd.kicker?.behold && !canBehold(ctx, player, card, cd.kicker.behold))
-            continue;
+          // Reality Fracture (17c): the cast's behold (a kicker's, or Countersculpt's) is a choice too.
+          const beholds = beholdChoices(ctx, player, card, cd, v);
+          if (beholds.length === 0) continue;
           // Additional costs: a card to discard (Sazacap's Brew), a creature or permanent to sacrifice, a forage.
           const extraDiscards = cd.discardToCast
             ? ps.hand.filter((id) => id !== card)
@@ -1135,6 +1144,7 @@ export function getLegalActions(ctx: Ctx, player: PlayerId): Action[] {
                   paws: v.paws,
                   kicked: v.kicked,
                   kickCount: v.kickCount,
+                  beheld: v.beheld,
                   sacrifice: v.sacrifice ? 'x' : undefined,
                   forage: v.forage ? ('graveyard' as const) : undefined,
                   discard: v.discard ? 'x' : undefined,
@@ -1163,21 +1173,24 @@ export function getLegalActions(ctx: Ctx, player: PlayerId): Action[] {
                   if (wardLife(ctx, player, targets) > ps.life) continue;
                   if (!wardPayable(ctx, player, targets, zone === 'hand' ? 1 : 0)) continue;
                   for (const discard of vDiscards)
-                    out.push({
-                      type: 'castSpell',
-                      player,
-                      card,
-                      targets,
-                      free: true,
-                      ...(v.mode !== undefined ? { mode: v.mode } : {}),
-                      ...(v.kicked ? { kicked: true } : {}),
-                      ...(v.kickCount ? { kickCount: v.kickCount } : {}),
-                      ...(v.paws ? { paws: v.paws } : {}),
-                      ...(sacrifice ? { sacrifice } : {}),
-                      ...(sacrificeMany ? { sacrificeMany } : {}),
-                      ...(forage ? { forage } : {}),
-                      ...(discard ? { discard } : {}),
-                    });
+                    for (const beholdCard of beholds)
+                      out.push({
+                        type: 'castSpell',
+                        player,
+                        card,
+                        targets,
+                        free: true,
+                        ...(beholdCard ? { beholdCard } : {}),
+                        ...(v.beheld ? { beheld: true } : {}),
+                        ...(v.mode !== undefined ? { mode: v.mode } : {}),
+                        ...(v.kicked ? { kicked: true } : {}),
+                        ...(v.kickCount ? { kickCount: v.kickCount } : {}),
+                        ...(v.paws ? { paws: v.paws } : {}),
+                        ...(sacrifice ? { sacrifice } : {}),
+                        ...(sacrificeMany ? { sacrificeMany } : {}),
+                        ...(forage ? { forage } : {}),
+                        ...(discard ? { discard } : {}),
+                      });
                 }
               }
         }
