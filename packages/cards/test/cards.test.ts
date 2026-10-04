@@ -22,6 +22,7 @@ import {
   FINAL_FANTASY_POOL,
   STRIXHAVEN_DECKS,
   SECRETS_OF_STRIXHAVEN_DECKS,
+  REALITY_FRACTURE_DECKS,
   STRIXHAVEN_POOL,
   SECRETS_OF_STRIXHAVEN_POOL,
   STRIXHAVEN_BRAWL_POOL,
@@ -161,6 +162,7 @@ describe('card data', () => {
         ...FINAL_FANTASY_DECKS.map((d) => d.id),
         ...STRIXHAVEN_DECKS.map((d) => d.id),
         ...SECRETS_OF_STRIXHAVEN_DECKS.map((d) => d.id),
+        ...REALITY_FRACTURE_DECKS.map((d) => d.id),
         ...FINAL_FANTASY_STARTER_KIT_DECKS.map((d) => d.id),
       ].sort(),
     );

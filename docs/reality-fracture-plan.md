@@ -125,6 +125,16 @@ New engine pieces, each in a `// Reality Fracture (17a)` block (custom handlers 
 - **Boosters**: `PackSet` `'fra'` in Expedition and a Season pack kind, sheets from `FRA_BOOSTER_LIST` (cards the pool
   doesn't have yet are left out until 17c).
 
+  **Jump In and boosters done.** Ten packets (`fra-*` in `jumpin.ts`), heuristic-bot win rates over about 300 games each
+  against random packets from every set: Lifegain (W, Lyra, Archangel of Dawn) 60%, Counters (W, Guiding Hydra) 51%,
+  Scholars (U, Diviner of Victory) 52%, Sphinxes and Flyers (U, Sphinx of False Conclusions) 56%, Graveyard (B, Dark Matter
+  Manipulator) 51%, Assassins (B, Lich's Relic) 63%, Sparkmages (R, Master of Barbs) 57%, Artificers (R, Draconic Visitor)
+  47%, Titans (G, Simulacrum Shaper) 67%, Heartwood (G, Hungering Puppetbeast) 44%; FRA as a whole 55%. Titans and
+  Assassins are above the 40–60% aim but inside the 20–70% the other sets' packets span. Boosters:
+  `realityFractureBoosterSheets()` (FRA booster list filtered on `cardDb`, so 17c cards join by themselves), `PackSet`
+  `'fra'` in Expedition, Season pack kind `realityFracture` with the ten FRA decks as starters; the wrapper shows Emrakul,
+  the Exigent Doom.
+
 ## Phase 17c: planeswalkers
 
 - Planeswalker tokens and the Jace token; the `empowerJace` effect (amounts may be counts: "X, where X is …").
