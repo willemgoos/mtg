@@ -4,7 +4,7 @@ import type { Color } from '@mtg/engine';
  * Themed half-decks for Jump In!, Arena's mode where you pick two 20-card
  * packets and shuffle them together. Most are our own, ten per set
  * (Foundations, Bloomburrow, Marvel Super Heroes, Final Fantasy, Strixhaven, Secrets of
- * Strixhaven): twelve spells
+ * Strixhaven), plus cross-set custom themes: twelve spells
  * around a theme, one rare, plus eight basic lands of the packet's colour.
  * Arena's own Bloomburrow and Foundations packets are here too
  * (`ARENA_BLB_PACKETS`, `ARENA_FDN_PACKETS`).
@@ -12,7 +12,7 @@ import type { Color } from '@mtg/engine';
 export interface Packet {
   id: string;
   name: string;
-  /** One colour, or two for some of Arena's packets. */
+  /** One colour, or two for multicolour themes. */
   colors: Color[];
   /** Card shown on the packet. */
   face: string;
@@ -31,7 +31,7 @@ export interface Packet {
 
 export const PACKET_LANDS = 8;
 
-/** Our own packets, ten per set. */
+/** Our own packets: ten per set, plus cross-set custom themes. */
 const OWN_PACKETS: Packet[] = [
   {
     id: 'angels',
@@ -670,6 +670,28 @@ const OWN_PACKETS: Packet[] = [
       ['Thriving Isle', 2],
       ['Island', 3],
       ['Plains', 3],
+    ],
+  },
+  {
+    id: 'msh-reborn-avengers',
+    name: 'Reborn Avengers',
+    colors: ['W'],
+    face: 'Winter Soldier, Reborn Avenger',
+    blurb: 'Trade Heroes early, then bring them back stronger with Winter Soldier',
+    set: 'msh',
+    crossSet: true,
+    spells: [
+      ['Winter Soldier, Reborn Avenger', 1],
+      ['Peggy Carter, Secret Agent', 1],
+      ['Hero in Training', 2],
+      ['Brave Brawler', 1],
+      ['Colleen Wing, Street Samurai', 1],
+      ['Agent of Atlas', 1],
+      ['Okoye, Dora Milaje Leader', 1],
+      ['Goldvein Pick', 1],
+      ['Take Up the Shield', 1],
+      ['Secure Detention', 1],
+      ['Moment of Triumph', 1],
     ],
   },
   // Strixhaven: our own packets around the school's creature types and spells.

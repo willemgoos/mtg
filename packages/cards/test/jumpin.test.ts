@@ -48,11 +48,11 @@ describe('Jump In packets', () => {
     }
   });
 
-  it('has two packets per colour in each set', () => {
+  it('has two base packets per colour in each set, before cross-set custom themes', () => {
     for (const set of [undefined, 'blb', 'msh', 'fin', 'stx', 'sos'])
       for (const c of ['W', 'U', 'B', 'R', 'G'])
         expect(
-          PACKETS.filter((p) => p.set === set && !p.source && p.colors.join() === c),
+          PACKETS.filter((p) => p.set === set && !p.source && !p.crossSet && p.colors.join() === c),
           `${set ?? 'fdn'} ${c}`,
         ).toHaveLength(2);
   });
