@@ -94,3 +94,9 @@ from) when it's fixed. Older phases keep their own "Simplifications" lists in `d
 - [ ] Reed Richards, Smartest Man: the replacement still makes four draws when the library has fewer cards.
 - [ ] Stunning Shot: two modes ("up to one of yours, then up to one of theirs" or "theirs only") instead of two independent
       "up to one" targets, because optional targets can only be dropped from the end.
+- [ ] Infinity Formula: the life gain is a trigger on the Equipment, not an ability granted to the creature.
+- [ ] Captain America, Liberator: only counts Equipment you control attached to him.
+- [ ] Zarda, the Power Princess: no exalted keyword; one trigger gives the lone attacker +X/+X (X = your other Heroes).
+- [ ] Doc Ock, Sinister Scientist: "base power and toughness 8/8" is +4/+3 on his printed 4/5; "another Villain" only counts
+      creatures.
+- [ ] Flying Octobot: only sees Villain creatures entering, not noncreature Villains.
