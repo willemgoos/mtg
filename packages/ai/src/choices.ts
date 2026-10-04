@@ -27,6 +27,15 @@ function landsInPlay(engine: Engine, s: GameState, me: PlayerId): ObjectId[] {
 }
 
 /**
+ * Reality Fracture (17a): Variable Chaser's Arc of Fortune ("you may discard your hand and draw seven
+ * cards"). The choice has no visible effect until the spell finishes, so evaluation can't compare the
+ * options: a small hand is worth swapping for seven fresh cards.
+ */
+export function chooseHandSwap(s: GameState, me: PlayerId): number {
+  return s.players[me].hand.length <= 3 ? 0 : 1;
+}
+
+/**
  * Which land to play. A land that enters tapped goes down on turns where one
  * more untapped mana wouldn't let us cast anything extra; otherwise we play
  * an untapped one. Ties go to the land adding a colour our hand needs.

@@ -203,6 +203,9 @@ export function startTurn(ctx: Ctx, player: PlayerId, noPowerUp = false): void {
   s.turn.spellsCast = { p1: 0, p2: 0 };
   s.turn.creaturesExiled = { p1: 0, p2: 0 };
   s.turn.leftGraveyard = { p1: 0, p2: 0 };
+  // Reality Fracture (17a): Cruel Calculations, Surveillance Phantasm.
+  delete s.turn.milled;
+  delete s.turn.scriedOrSurveilled;
   s.turn.creaturesLost = { p1: 0, p2: 0 };
   s.turn.foodsSacrificed = { p1: 0, p2: 0 };
   delete s.turn.countersPut; // Strixhaven Brawl (15b, multi)

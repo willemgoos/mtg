@@ -603,6 +603,8 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
     ctx.s.turn.exiledCards = (ctx.s.turn.exiledCards ?? 0) + 1;
   // Bonecache Overseer: cards leaving a graveyard.
   if (from === 'graveyard') (ctx.s.turn.leftGraveyard ??= { p1: 0, p2: 0 })[o.owner]++;
+  // Reality Fracture (17a): Cruel Calculations, cards put into a graveyard from a library this turn.
+  if (from === 'library' && to === 'graveyard') (ctx.s.turn.milled ??= { p1: 0, p2: 0 })[o.owner]++;
   // From hand to graveyard is a discard (mayhem, "whenever you discard").
   const discarded = from === 'hand' && to === 'graveyard';
   delete o.targetedByControllerTurn;

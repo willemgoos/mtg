@@ -690,6 +690,12 @@ export function resolveAmount(ctx: Ctx, es: EffectSource, amount: Amount): numbe
     );
   if ('handSizeUpTo' in amount)
     return Math.max(0, amount.handSizeUpTo - ctx.s.players[es.controller].hand.length);
+  // Reality Fracture (17a): Cruel Calculations.
+  if ('milledThisTurn' in amount)
+    return playersOf(ctx, es, amount.milledThisTurn).reduce(
+      (n, p) => n + (ctx.s.turn.milled?.[p] ?? 0),
+      0,
+    );
   // Strixhaven (13b): Flunk
   if ('handGapOfControllerOf' in amount) {
     const id = objectsOf(ctx, es, amount.handGapOfControllerOf)[0];
@@ -1705,6 +1711,10 @@ export function runEffects(
           count,
           ...(e.drawAfter ? { drawAfter: e.drawAfter } : {}),
           ...(e.tokenPerNonland ? { tokenPerNonland: e.tokenPerNonland } : {}),
+          // Reality Fracture (17a): Seasoned Cryomancer.
+          ...(e.reflexiveOnNonland !== undefined
+            ? { reflexiveOnNonland: e.reflexiveOnNonland }
+            : {}),
           ...(e.filter ? { filter: e.filter } : {}),
           ...(e.exile ? { exile: true } : {}),
           ...(e.damageTo !== undefined ? { damageTo: e.damageTo } : {}),
@@ -2238,6 +2248,56 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
     case 'takeStudyCard':
     case 'revealTopCastOrPlay':
       return; // handled by runEffects
+    // Reality Fracture (17a): Fblthp, Impossibly Lost.
+    case 'winGame': {
+      const opponent = other(es.controller);
+      // "Your opponents can't win" (Angel's Grace): an opponent who can't lose this turn keeps the game going.
+      if (ctx.s.winner || ctx.s.turn.cantLose?.includes(opponent)) return;
+      // Winning happens before state-based actions: drawing from an empty library first doesn't lose.
+      ctx.s.players[es.controller].drewFromEmptyLibrary = false;
+      ctx.s.players[opponent].lost = true;
+      ctx.s.winner = es.controller;
+      ctx.s.decision = { kind: 'gameOver' };
+      emit(ctx, { type: 'gameOver', winner: es.controller });
+      return;
+    }
+    // Reality Fracture (17a): Sphinx of False Conclusions.
+    case 'tokenCopyOfSource': {
+      const t = createObject(ctx, es.sourceDefId, es.controller, 'battlefield', true);
+      ctx.s.battlefield.push(t.id);
+      emit(ctx, { type: 'objectMoved', id: t.id, defId: t.defId, from: null, to: 'battlefield' });
+      return;
+    }
+    // Reality Fracture (17a): Sphinx's Approach.
+    case 'exileSelfAndSameNameFromGraveyard': {
+      const self = es.source && ctx.s.objects[es.source.id];
+      if (!self) return;
+      const same = ctx.s.players[es.controller].graveyard.filter(
+        (id) => id !== self.id && ctx.s.objects[id]!.defId === self.defId,
+      );
+      if (same.length < e.count) return;
+      for (const id of same.slice(0, e.count)) moveObject(ctx, id, 'exile');
+      if (self.zone === 'stack') moveObject(ctx, self.id, 'exile');
+      return;
+    }
+    // Reality Fracture (17a): Variable Chaser.
+    case 'markHandSwap': {
+      const p = e.who === 'controller' ? es.controller : other(es.controller);
+      const marked = (ctx.s.turn.handSwap ??= []);
+      if (!marked.includes(p)) marked.push(p);
+      return;
+    }
+    case 'handSwap': {
+      const marked = ctx.s.turn.handSwap ?? [];
+      delete ctx.s.turn.handSwap;
+      // Everyone discards, then everyone draws (in turn order).
+      for (const p of [ctx.s.turn.activePlayer, other(ctx.s.turn.activePlayer)])
+        if (marked.includes(p))
+          for (const id of [...ctx.s.players[p].hand]) moveObject(ctx, id, 'graveyard');
+      for (const p of [ctx.s.turn.activePlayer, other(ctx.s.turn.activePlayer)])
+        if (marked.includes(p)) for (let i = 0; i < e.count; i++) drawCard(ctx, p);
+      return;
+    }
     case 'returnSelfFromStack': {
       // Strixhaven (13c): Journey to the Oracle.
       const o = es.source && ctx.s.objects[es.source.id];
@@ -2708,7 +2768,8 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
         const o = obj(ctx, id);
         if (o.zone !== 'battlefield') continue;
         const key = JSON.stringify(e.ability);
-        if (!o.tempAbilities?.some((a) => JSON.stringify(a) === key))
+        // Reality Fracture (17a): Lyra, Tolarian Archangel: each activation grants its own ability.
+        if (e.stacking || !o.tempAbilities?.some((a) => JSON.stringify(a) === key))
           o.tempAbilities = [...(o.tempAbilities ?? []), e.ability];
       }
       return;

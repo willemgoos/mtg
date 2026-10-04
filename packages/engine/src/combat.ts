@@ -23,13 +23,20 @@ export function canAttack(ctx: Ctx, id: ObjectId): boolean {
       (a) => a.kind === 'static' && a.effect.kind === 'attacksWithCounterDespiteDefender',
     ) &&
     (o.plusOneCounters > 0 || Object.values(o.counters ?? {}).some((n) => n > 0));
+  // Reality Fracture (17a): Surveillance Phantasm attacks as though it lacked defender once you've scried or surveilled.
+  const defenderOffWhile = def(ctx, id).abilities.some(
+    (a) =>
+      a.kind === 'static' &&
+      a.effect.kind === 'canAttackDespiteDefender' &&
+      checkCondition(ctx, a.effect.condition, o.controller, o),
+  );
   // Strixhaven (13b): Prismari Pledgemage can attack this turn despite defender.
   const ignoreDefender = ctx.s.effects.some(
     (e) => e.ignoreDefender && e.affected.id === id && e.affected.zcc === o.zcc,
   );
   if (
     !c.types.includes('Creature') ||
-    (c.keywords.has('defender') && !defenderOff && !ignoreDefender) ||
+    (c.keywords.has('defender') && !defenderOff && !defenderOffWhile && !ignoreDefender) ||
     c.cantAttack
   )
     return false;
@@ -96,6 +103,17 @@ export function canBlock(ctx: Ctx, blocker: ObjectId, attacker: ObjectId): boole
     )
   )
     return false;
+  // Reality Fracture (17a): Tetsuko Umezawa, "creatures you control with power or toughness 1 or less can't be blocked".
+  for (const src of ctx.s.battlefield) {
+    if (obj(ctx, src).controller !== obj(ctx, attacker).controller) continue;
+    for (const ab of def(ctx, src).abilities)
+      if (
+        ab.kind === 'static' &&
+        ab.effect.kind === 'grantsCantBeBlocked' &&
+        matchesFilter(ctx, attacker, ab.effect.filter, src)
+      )
+        return false;
+  }
   // "Can't be blocked by creatures with power 2 or less" (Rust-Shield Rampager).
   for (const ab of def(ctx, attacker).abilities)
     if (

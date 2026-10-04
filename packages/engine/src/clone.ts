@@ -56,6 +56,12 @@ export function cloneState(s: GameState): GameState {
       ...(s.turn.spellsCast ? { spellsCast: { ...s.turn.spellsCast } } : {}),
       ...(s.turn.creaturesExiled ? { creaturesExiled: { ...s.turn.creaturesExiled } } : {}),
       ...(s.turn.leftGraveyard ? { leftGraveyard: { ...s.turn.leftGraveyard } } : {}),
+      // Reality Fracture (17a): Cruel Calculations, Surveillance Phantasm, Variable Chaser.
+      ...(s.turn.milled ? { milled: { ...s.turn.milled } } : {}),
+      ...(s.turn.scriedOrSurveilled
+        ? { scriedOrSurveilled: s.turn.scriedOrSurveilled.slice() }
+        : {}),
+      ...(s.turn.handSwap ? { handSwap: s.turn.handSwap.slice() } : {}),
       ...(s.turn.creaturesLost ? { creaturesLost: { ...s.turn.creaturesLost } } : {}),
       ...(s.turn.creaturesLost ? { creaturesLost: { ...s.turn.creaturesLost } } : {}),
       ...(s.turn.foodsSacrificed ? { foodsSacrificed: { ...s.turn.foodsSacrificed } } : {}),

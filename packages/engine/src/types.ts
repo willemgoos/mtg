@@ -1018,6 +1018,12 @@ export type ConditionDef =
   | { kind: 'cardsLeftGraveyardThisTurn' }
   /** One or more cards were put into exile this turn (Ennis, Debate Moderator). */
   | { kind: 'cardsExiledThisTurn' }
+  // Reality Fracture (17a): Surveillance Phantasm (shared name)
+  /** You've scried or surveilled this turn. */
+  | { kind: 'scriedOrSurveilledThisTurn' }
+  // Reality Fracture (17a): Sphinx of False Conclusions
+  /** The source isn't a token (an intervening "if it isn't a token"). */
+  | { kind: 'sourceNotToken' }
   // Mystical Archive (16): Berserk (cast only before the combat damage step), Veil of Summer
   | { kind: 'beforeCombatDamage' }
   /** An opponent has cast a spell of one of these colours this turn. */
@@ -1216,6 +1222,9 @@ export interface TargetSpec {
    * decision's `picked`), not enumerated as subsets. See `{ targetsFrom }`.
    */
   anyNumber?: boolean;
+  // Reality Fracture (17a): Seasoned Cryomancer
+  /** With `anyNumber`: no more targets than the amount the trigger carries ("up to that many target creatures"). */
+  maxFromAmount?: boolean;
   // Final Fantasy (11c): targeting abilities
   /**
    * With 'spell': activated and triggered abilities on the stack are targets
@@ -1346,6 +1355,9 @@ export type Amount =
   /** The value chosen for X (times `times`, plus `plus`). */
   | { x: true; times?: number; plus?: number }
   // Doom Prevails (9e).
+  // Reality Fracture (17a): Cruel Calculations
+  /** Cards put into the graveyard of the player the Ref names (a chosen target) from their library this turn. */
+  | { milledThisTurn: Ref }
   /** Cards you've discarded this turn (Living Laser). */
   | { count: 'cardsDiscardedThisTurn' }
   /** Permanents an opponent controls matching the filter (Killmonger: artifacts). */
@@ -1687,7 +1699,28 @@ export type EffectDef =
     }
   // Strixhaven (13a): Lorehold Apprentice, Academic Dispute
   /** Until end of turn, these creatures have this ability (Lorehold Apprentice: "{T}: deals 1 damage to each opponent"). */
-  | { kind: 'grantAbility'; to: Ref; ability: AbilityDef }
+  | {
+      kind: 'grantAbility';
+      to: Ref;
+      ability: AbilityDef;
+      // Reality Fracture (17a): Lyra, Tolarian Archangel
+      /** Each use adds its own copy of the ability (an activated ability's "until end of turn, whenever ..."). */
+      stacking?: boolean;
+    }
+  // Reality Fracture (17a): Fblthp, Impossibly Lost
+  /** You win the game (an opponent who can't lose this turn stops it). */
+  | { kind: 'winGame' }
+  // Reality Fracture (17a): Sphinx of False Conclusions
+  /** Creates a token that's a copy of the source, which may have left the battlefield ("create a token that's a copy of it" from a dies trigger). */
+  | { kind: 'tokenCopyOfSource' }
+  // Reality Fracture (17a): Sphinx's Approach
+  /** Exile this spell and `count` other cards with its name from your graveyard (the engine picks which). */
+  | { kind: 'exileSelfAndSameNameFromGraveyard'; count: number }
+  // Reality Fracture (17a): Variable Chaser
+  /** The player chose to discard their hand and draw cards (`who` is the chooser: 'controller' or 'eachOpponent'). */
+  | { kind: 'markHandSwap'; who: 'controller' | 'eachOpponent' }
+  /** Every marked player discards their hand, then every marked player draws `count` cards. */
+  | { kind: 'handSwap'; count: number }
   /** The creature blocks this turn if able (Academic Dispute). */
   | { kind: 'mustBlock'; what: Ref }
   /** Mill N, then you may put a card matching the filter from among them into your hand (Cache Grab). */
@@ -1974,6 +2007,9 @@ export type EffectDef =
       drawAfter?: number;
       /** Then create one token of this id for each nonland card discarded. */
       tokenPerNonland?: string;
+      // Reality Fracture (17a): Seasoned Cryomancer
+      /** Once the discarding is done, if any nonland card was discarded, the reflexive ability at this index triggers ("that many"). */
+      reflexiveOnNonland?: number;
     }
   /** Put the top N cards of your library into your graveyard. */
   | { kind: 'mill'; count: Amount; who?: Ref }
@@ -2548,6 +2584,15 @@ export type StaticDef =
   // Strixhaven (13b): Killian, Ink Duelist
   /** Spells you cast that target a permanent matching the filter cost {N} less. */
   | { kind: 'spellsCostLessTargeting'; filter: CardFilter; amount: number }
+  // Reality Fracture (17a): Samut, Tyrant of Naktamun
+  /** Instant and sorcery spells you control have split second. */
+  | { kind: 'instantsSorceriesSplitSecond' }
+  // Reality Fracture (17a): Tetsuko Umezawa, Fugitive
+  /** Creatures you control matching the filter can't be blocked. */
+  | { kind: 'grantsCantBeBlocked'; filter: CardFilter }
+  // Reality Fracture (17a): Surveillance Phantasm
+  /** It can attack as though it didn't have defender while the condition holds. */
+  | { kind: 'canAttackDespiteDefender'; condition: ConditionDef }
   | { kind: 'instantsAndSorceriesUncounterable' }
   /** You have no maximum hand size. */
   | { kind: 'noMaxHandSize' }
@@ -3227,6 +3272,15 @@ export interface TurnState {
   exiledCards?: number;
   /** Cards that left each player's graveyard this turn (Bonecache Overseer). */
   leftGraveyard?: Record<PlayerId, number>;
+  // Reality Fracture (17a): Cruel Calculations
+  /** Cards put into each player's graveyard from their library this turn. */
+  milled?: Record<PlayerId, number>;
+  // Reality Fracture (17a): Surveillance Phantasm
+  /** Players who scried or surveilled this turn. */
+  scriedOrSurveilled?: PlayerId[];
+  // Reality Fracture (17a): Variable Chaser
+  /** Players who chose to discard their hand and draw seven (until the spell finishes). */
+  handSwap?: PlayerId[];
   /** Foods each player sacrificed this turn. */
   foodsSacrificed?: Record<PlayerId, number>;
   /** Card definitions of the spells each player cast this turn, in order (Alania). */
@@ -3514,6 +3568,7 @@ export type Decision =
       // Strixhaven Brawl (15a): Seasoned Pyromancer
       drawAfter?: number;
       tokenPerNonland?: string;
+      reflexiveOnNonland?: number; // Reality Fracture (17a): Seasoned Cryomancer
       nonlandDiscarded?: number;
       resume: PausedResolution;
       thenPriority: PlayerId;
