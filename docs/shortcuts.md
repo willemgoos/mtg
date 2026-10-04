@@ -115,3 +115,13 @@ from) when it's fixed. Older phases keep their own "Simplifications" lists in `d
 - [ ] Extrapolate the Impossible: not implemented ("cards you own from outside the game"; there's no sideboard outside Learn).
 - [ ] Loot, the Nexus: its mana ability is an activated ability that goes on the stack (like Doc Samson's), not a mana
       ability, so it can't be used while paying a cost.
+- [ ] Emrakul, the Exigent Doom: "Ward—Sacrifice three permanents" is paid with permanents the engine picks (tokens, then
+      cheapest), as for Vein Ripper's ward; the opponent should choose.
+- [ ] Kindred Judgment (and the older Raise the Palisade): the creature types offered are those of the chooser's own cards,
+      not every creature type.
+- [ ] Hexhaven Dueling Arena: "attacked this turn" matches by object id, so a creature blinked after attacking still counts.
+- [ ] Uldaros Theorix: free casts never offer additional costs (sacrifice, forage), so a copy of a card with one can't be
+      cast this way with it.
+- [ ] Equipment attack triggers (Medic's Kitesail, Hunter's Axe) sit on the Equipment, not the equipped creature: they
+      differ only if the creature changes controller or loses its abilities.
+- [ ] Loyal Tutor: the searched card isn't revealed to the opponent (no tutor shows a reveal yet).

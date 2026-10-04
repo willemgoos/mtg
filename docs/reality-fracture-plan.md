@@ -72,6 +72,28 @@ already registered in `src/reality-fracture.ts`, so parallel agents never edit t
 Eight agents in parallel worktrees, one per group, then merges into `reality-fracture`. Tests in
 `packages/cards/test/fra-<group>.test.ts`. Done when `fra-status.ts` shows every group but `planeswalkers` complete.
 
+**Done** (4 October 2026): 222 of 223 cards, 230 of 280 with the eight already in the pool. Left out: Extrapolate the
+Impossible (cards "from outside the game"; there's no sideboard outside Learn). Cards that aren't exact yet are listed
+under Reality Fracture in `docs/shortcuts.md`.
+
+New engine pieces, each in a `// Reality Fracture (17a)` block (custom handlers in `engine/src/fra-<group>-effects.ts`):
+- Turn tracking: `scriedOrSurveilledThisTurn`, `opponentDealtNoncombatDamageThisTurn` / `LastTurn`, cards milled this
+  turn, no legend rule this turn (Hall of Echoes), hand swaps (Arc of Fortune), Molten Tide.
+- Triggers: `opponentDealtNoncombatDamage`, `playerDiscards`, `selfDiscarded`, `opponentCreatureBlocks`, beginning of
+  combat / upkeep / end step from the graveyard, "attacks a player" (`aPlayer`), castSpell filters for Danitha and Codie.
+- Statics: split second for instants and sorceries (Samut), opponents' spells cost more (Thalia), toughness assigns
+  combat damage and defenders can attack (Ghalta), no casting during combat (Yuriko), enters-the-battlefield triggers
+  suppressed (Karn, Argent Defender), artifact tokens replaced (Draconic Visitor), lands have hexproof (Marwyn), free
+  casting by creature count (Omnipresence), negative power assigns as positive (Loot).
+- Effects and costs: exact proliferate (one permanent at a time), "up to N" library searches with different names,
+  -1/-1 counters (cancelling +1/+1), tap N untapped artifacts as a cost, discard "if you do" follow-ups, exile-copy-cast
+  within a mana value budget (Uldaros Theorix), ward "sacrifice three permanents", cast from exile while a land keeps an
+  ability (Emrakul), Aura choice for permanents returned from the graveyard, token copies of a card no longer on the
+  battlefield, `winGame`.
+- Amounts: `floorDiv`, basic land types (domain), card types in graveyards (Tarmogoyf), colours among artifacts,
+  planeswalker types, greatest toughness.
+- A planeswalker put onto the battlefield without being cast enters with its loyalty.
+
 ## Phase 17b: decks, Jump In, boosters
 
 - **Ten decks**, one per colour pair (36 spells, 24 lands), `set: 'fra'`, built from 17a cards only, each 45–65% against
