@@ -1,4 +1,4 @@
-import type { AbilityDef, ManaType } from '@mtg/engine';
+import type { AbilityDef, Color } from '@mtg/engine';
 import type { Behavior } from '../build.ts';
 import { onEnter } from './helpers.ts';
 import { MSH_JUMPSTART_ANALYZED } from './jumpstart-analyzed.ts';
@@ -37,12 +37,12 @@ import { MSH_JUMPSTART_YOUNG_AVENGERS } from './jumpstart-young-avengers.ts';
 
 /**
  * Thriving land: enters tapped; as it enters, choose another colour; taps for
- * its own colour or the chosen one. (The colour may be chosen as its own.)
+ * its own colour or the chosen one.
  */
-const thriving = (color: ManaType): Behavior => ({
+const thriving = (color: Color): Behavior => ({
   entersTapped: true,
   abilities: [
-    onEnter({ kind: 'chooseColor' }),
+    onEnter({ kind: 'chooseColor', except: color }),
     { kind: 'mana', cost: { tapSelf: true }, produces: color },
     ...(['W', 'U', 'B', 'R', 'G'] as const)
       .filter((c) => c !== color)

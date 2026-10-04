@@ -528,7 +528,13 @@ export type TriggerDef =
   /** Whenever this or another creature you control (matching the filter, as printed) dies. */
   | { on: 'creatureYouControlDies'; nontoken?: boolean; filter?: CardFilter }
   /** Whenever a creature you control deals combat damage (on your turn); "that creature", "that much". */
-  | { on: 'creatureYouControlDealsCombatDamage'; toPlayer?: boolean; filter?: CardFilter }
+  | {
+      on: 'creatureYouControlDealsCombatDamage';
+      toPlayer?: boolean;
+      filter?: CardFilter;
+      /** Any player's creature, not just yours (The Clone Saga's emblem: "a creature with the chosen name"). */
+      anyController?: boolean;
+    }
   | { on: 'beginningOfCombat'; whose: 'yours' | 'each' }
   | { on: 'youGainLife' }
   /** Whenever the creature this Aura is attached to dies. */
@@ -544,7 +550,12 @@ export type TriggerDef =
       battalion?: boolean;
     }
   /** "Whenever you attack" (with one or more creatures matching the filter): once per combat. */
-  | { on: 'youAttack'; filter?: CardFilter }
+  | {
+      on: 'youAttack';
+      filter?: CardFilter;
+      /** "Attack a player" (Crimson Cowl): ones attacking a planeswalker don't count. */
+      aPlayer?: boolean;
+    }
   | { on: 'combatDamageToPlayer' }
   | {
       on: 'castSpell';
@@ -639,6 +650,11 @@ export type TriggerDef =
   | { on: 'yourNoncombatDamageToOpponent' }
   /** Whenever this creature becomes blocked. */
   | { on: 'becomesBlocked' }
+  /**
+   * Never triggers by itself: a "when you do" reflexive trigger, set off by a 'reflexiveTrigger'
+   * effect (Quantum Entanglement, Villainous Syndication, Rhino's Rampage).
+   */
+  | { on: 'reflexive' }
   /** Whenever this deals damage, combat or not, to an opponent (Thieving Otter). */
   | { on: 'dealsDamageToOpponent' }
   /** Whenever another nonland permanent you control is returned to its owner's hand (Justice, Vance Astrovik). */
@@ -1197,7 +1213,9 @@ export type Ref =
   | 'chosen'
   // Marvel Super Heroes Jumpstart (Blink)
   /** Every target from this index on (an `anyNumber` spec's targets). */
-  | { targetsFrom: number };
+  | { targetsFrom: number }
+  /** Vulture, Feathered Fiend: "each of those creatures" (every one that set off a batched trigger). */
+  | 'subjects';
 
 export type Amount =
   | number
@@ -1535,6 +1553,8 @@ export type EffectDef =
       // Marvel Super Heroes Jumpstart (Tricksters)
       /** Its trigger's filter only matches cards with this object's name (The Clone Saga). */
       namedLike?: Ref;
+      /** Its trigger's filter only matches cards with this name, chosen as it resolves (The Clone Saga). */
+      named?: CardDefId;
     }
   /** Marks the gift as given (for "whenever you give a gift"). */
   | { kind: 'giftGiven' }
@@ -1571,7 +1591,11 @@ export type EffectDef =
       equipDiscount?: number;
     }
   /** Choose a color (or a creature type) for the source, as it enters. */
-  | { kind: 'chooseColor' }
+  | {
+      kind: 'chooseColor';
+      /** Thriving lands: "choose a color other than" this one. */
+      except?: Color;
+    }
   | { kind: 'chooseCreatureType' }
   // Strixhaven (13a): Learn
   /** Learn: reveal a Lesson from your sideboard and put it into your hand, or discard a card to draw a card, or neither. */
@@ -1808,7 +1832,12 @@ export type EffectDef =
     }
   /** Look at the top N; you may put a creature with mana value up to your land count onto the battlefield (Loot). */
   | { kind: 'lookForCreature'; count: number }
-  | { kind: 'bounce'; what: Ref }
+  | {
+      kind: 'bounce';
+      what: Ref;
+      /** "If you do" (Bob, Reluctant HYDRA Agent): only if something was returned. */
+      then?: EffectDef[];
+    }
   | { kind: 'returnToHand'; what: Ref }
   | { kind: 'exileGraveyard'; who: Ref }
   | { kind: 'tap'; what: Ref }
@@ -1823,10 +1852,34 @@ export type EffectDef =
   | { kind: 'changeTarget'; what: Ref }
   /** Time Stop: exile every spell and ability on the stack, then skip to the cleanup step. */
   | { kind: 'endTheTurn' }
+  /**
+   * "When you do, ...": this card's ability number `ability` (a { on: 'reflexive' } trigger)
+   * triggers now; its targets are chosen as it goes on the stack (Quantum Entanglement,
+   * Villainous Syndication, Rhino's Rampage).
+   */
+  | { kind: 'reflexiveTrigger'; ability: number }
   /** Internal (Bolt Bend): the spell or ability on the stack with this id gets these targets. */
   | { kind: 'setStackTargets'; id: ObjectId; targets: TargetChoice[] }
   /** Internal (Loki Laufeyson): its controller may choose new targets for the copy just made ('chosen'). */
   | { kind: 'chooseNewTargets' }
+  /**
+   * Iron Fist, Hero for Hire; Rhino, Terrible Trampler: "N damage divided as you choose among up
+   * to M targets" / "distribute N +1/+1 counters among up to M target creatures". The targets
+   * and the split are chosen as it resolves, one target (and how much it gets) at a time, so the
+   * bots never list every combination; `each` then applies to every target chosen (as target 0).
+   */
+  | {
+      kind: 'divide';
+      amount: number;
+      maxTargets: number;
+      spec: TargetSpec;
+      give: 'damage' | 'counters';
+      each?: EffectDef[];
+      /** Internal: the targets chosen so far and what each gets. */
+      chosen?: { to: TargetChoice; n: number }[];
+      /** Internal: the choosing is over; deal the damage or put the counters. */
+      done?: boolean;
+    }
   /** The controller discards N cards of their choice. */
   | {
       kind: 'discard';
@@ -2038,7 +2091,12 @@ export type EffectDef =
     }
   /** Return all land cards from your graveyard to the battlefield tapped (World Shaper). */
   | { kind: 'returnLandsFromGraveyard' }
-  | { kind: 'sacrifice'; what: Ref }
+  | {
+      kind: 'sacrifice';
+      what: Ref;
+      /** "When you do" (Villainous Syndication): only if something was sacrificed. */
+      then?: EffectDef[];
+    }
   /** The controller scries N (asks them to order the top cards). */
   | {
       kind: 'scry';
@@ -2298,6 +2356,11 @@ export type StaticDef =
       filter: CardFilter;
       produces: ManaType[];
       onlyForCreatures?: boolean;
+      /**
+       * The mana ability is the source's own, tapping the creature only its cost (Relic of
+       * Legends), so Secure Detention on the creature doesn't stop it.
+       */
+      sourcesAbility?: boolean;
       // Secrets of Strixhaven (14b): Resonating Lute
       /** Lands (not creatures) tap for `amount` mana of any of these, only for spells with this tag. */
       onlyFor?: string;
@@ -2336,6 +2399,8 @@ export type StaticDef =
       // Marvel Super Heroes Jumpstart (Wakanda)
       /** "Its activated abilities can't be activated" (Secure Detention), mana abilities included. */
       cantActivate?: boolean;
+      /** "Loses all abilities" (Quantum Reduction): from the moment the Aura attaches, while it stays. */
+      loseAbilities?: boolean;
       // Final Fantasy (11a): job select
       /** "Is a Knight in addition to its other types." */
       addSubtypes?: string[];
@@ -2667,6 +2732,8 @@ export interface GameObject {
   lastNotCreature?: boolean;
   /** A card in exile its owner may play until the end of that turn (Strongbox Raider). */
   playableUntilTurn?: number;
+  /** Wiccan, Young Avenger: "until your next end step": not once that turn's end step has begun. */
+  playableBeforeEndStep?: boolean;
   /** The turn it entered its current zone. */
   zoneTurn?: number;
   /** Named counters (e.g. incubation). */
@@ -2960,6 +3027,8 @@ export type StackItem =
       /** Source's power when it left the battlefield (e.g. sacrificed as a cost). */
       lkiPower?: number;
       subject?: ObjectRef;
+      /** Vulture, Feathered Fiend: every creature that set off a batched trigger ("those creatures"). */
+      subjects?: ObjectRef[];
       amount?: number;
       mode?: number;
       /** A granted trigger (Undying Malice): these effects instead of the card's ability. */
@@ -3058,6 +3127,8 @@ export interface TurnState {
   hexproofPlayers?: PlayerId[];
   /** Time Stop resolved: the turn skips to its cleanup step. */
   endTheTurn?: boolean;
+  /** Flying Drone: creatures with flying that entered this turn, and who controlled them then. */
+  flyersEntered?: { id: ObjectId; player: PlayerId }[];
   // Final Fantasy (11a): saga creatures
   /** Players whose creatures are dealt no damage this turn (Summon: Alexander). */
   creaturesShielded?: PlayerId[];
@@ -3183,6 +3254,8 @@ export interface EffectSource {
   lkiPower?: number;
   /** What caused the trigger. */
   subject?: ObjectRef;
+  /** Vulture, Feathered Fiend: every creature that set off a batched trigger. */
+  subjects?: ObjectRef[];
   amount?: number;
   /** The permanent picked by 'chooseYourPermanent'. */
   chosen?: ObjectRef;
@@ -3220,6 +3293,8 @@ export interface PendingTrigger {
   lkiPower?: number;
   /** What caused the trigger (e.g. the creature that entered). */
   subject?: ObjectRef;
+  /** Vulture, Feathered Fiend: every creature that set off this batched trigger. */
+  subjects?: ObjectRef[];
   /** A number from the trigger event (e.g. combat damage dealt). */
   amount?: number;
   /** A granted trigger: these effects instead of the card's ability. */
@@ -3684,6 +3759,8 @@ export type Action =
       forage?: ObjectId | 'graveyard';
       /** The card discarded as a cost (Flamecache Gecko). */
       discard?: ObjectId;
+      /** Villainous Syndication: the creature tapped for "tap an untapped Villain". */
+      tapCreature?: ObjectId;
       payWith?: ObjectId[];
       // Marvel Super Heroes
       /** The value chosen for {X} in the ability's cost (Bruce Banner). */

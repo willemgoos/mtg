@@ -668,11 +668,10 @@ export const BRAWL_15B_B: Record<string, Behavior> = {
       } as AbilityDef,
     ],
   },
-  // Simplified: "choose a colour other than black" also offers black (which adds nothing).
   'Thriving Moor': {
     entersTapped: true,
     abilities: [
-      when({ on: 'etb' }, [], { kind: 'chooseColor' }),
+      when({ on: 'etb' }, [], { kind: 'chooseColor', except: 'B' }),
       tapFor('B'),
       ...(['W', 'U', 'R', 'G'] as const).map((c) => tapFor(c, { ifChosen: true })),
     ],

@@ -14,18 +14,14 @@ const basicLandcycling = (cost: string): AbilityDef => ({
   label: `Basic landcycling ${cost}`,
 });
 
-/** Another creature with flying entered under your control this turn (and is still there). */
-const flyerEntered: ConditionDef = {
-  kind: 'controlsPermanents',
-  filter: { types: ['Creature'], hasKeyword: 'flying', enteredThisTurn: true, other: true },
-  min: 1,
-};
+/** Another creature with flying entered the battlefield under your control this turn. */
+const flyerEntered: ConditionDef = { kind: 'custom', handler: 'anotherFlyerEntered' };
 
 const loot: EffectDef[] = [draw(1), { kind: 'discard', count: 1 }];
 
 export const MSH_JUMPSTART_SOARING: Record<string, Behavior> = {
-  // Flying and vigilance come from Scryfall. The discount is a second, free ability that is
-  // only available once another flyer entered (it must still be on the battlefield).
+  // Flying and vigilance come from Scryfall. "Costs {1}{U} less": once another flyer entered, the
+  // ability is offered without its mana cost instead.
   'Flying Drone': {
     abilities: [
       {
@@ -55,19 +51,9 @@ export const MSH_JUMPSTART_SOARING: Record<string, Behavior> = {
       ),
     ],
   },
-  // Flying comes from Scryfall. Two triggers: a counter on each flyer that connected, then one draw.
+  // Flying comes from Scryfall.
   'Vulture, Feathered Fiend': {
     abilities: [
-      {
-        kind: 'triggered',
-        trigger: {
-          on: 'creatureYouControlDealsCombatDamage',
-          toPlayer: true,
-          filter: { hasKeyword: 'flying' },
-        },
-        targets: [],
-        effects: [{ kind: 'counters', to: 'subject', amount: 1 }],
-      },
       {
         kind: 'triggered',
         trigger: {
@@ -76,7 +62,7 @@ export const MSH_JUMPSTART_SOARING: Record<string, Behavior> = {
         },
         batch: true,
         targets: [],
-        effects: [draw(1)],
+        effects: [{ kind: 'counters', to: 'subjects', amount: 1 }, draw(1)],
       },
     ],
   },

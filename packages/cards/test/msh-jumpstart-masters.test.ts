@@ -23,8 +23,16 @@ const MASTERS = [
 
 type G = ReturnType<typeof game>;
 
+/** Activates the ability (the first legal way: Villainous Syndication's Villain to tap). */
 const activate = (g: G, source: string, abilityIndex: number) =>
-  g.do({ type: 'activateAbility', player: g.actor, source, abilityIndex, targets: [] });
+  g.do(
+    g
+      .legal()
+      .find(
+        (a) =>
+          a.type === 'activateAbility' && a.source === source && a.abilityIndex === abilityIndex,
+      ) ?? { type: 'activateAbility', player: g.actor, source, abilityIndex, targets: [] },
+  );
 
 /** Resolves the stack, answering discard and search decisions with `card` when offered. */
 const resolve = (g: G, card?: string) => {
@@ -63,6 +71,27 @@ describe('Crimson Cowl, Master of Evil', () => {
     g.passUntilStep('beginCombat').passBoth().attack(g.id('p1', 'boomerang-blade-flinger'));
     settle(g);
     expect(all(g, 'villain-token')).toHaveLength(1);
+  });
+
+  it('needs a Villain attacking a player, not a planeswalker', () => {
+    const g = game({
+      p1: { battlefield: ['crimson-cowl-master-of-evil', 'boomerang-blade-flinger'] },
+      p2: { battlefield: ['ral-crackling-wit'] },
+    });
+    const ral = g.id('p2', 'ral-crackling-wit');
+    g.obj(ral).counters = { loyalty: 4 };
+    g.passUntilStep('beginCombat').passBoth();
+    const boomerang = g.id('p1', 'boomerang-blade-flinger');
+    g.do({
+      type: 'addAttacker',
+      player: 'p1',
+      attacker: boomerang,
+      defender: 'p2',
+      planeswalker: ral,
+    });
+    g.do({ type: 'confirmAttackers', player: 'p1' });
+    settle(g);
+    expect(all(g, 'villain-token')).toHaveLength(0);
   });
 
   it('makes only one token however many Villains attack', () => {
@@ -186,6 +215,33 @@ describe('Villainous Syndication', () => {
     expect(g.legal().some((a) => a.type === 'activateAbility' && a.source === plan)).toBe(false);
   });
 
+  it('you choose which Villain to tap', () => {
+    const g = game({
+      p1: {
+        battlefield: ['villainous-syndication', 'boomerang-blade-flinger', 'villain-token'],
+        library: ['swamp', 'swamp'],
+      },
+    });
+    const plan = g.id('p1', 'villainous-syndication');
+    const boomerang = g.id('p1', 'boomerang-blade-flinger');
+    const token = g.id('p1', 'villain-token');
+    const choices = g
+      .legal()
+      .flatMap((a) => (a.type === 'activateAbility' && a.source === plan ? [a.tapCreature] : []));
+    expect(choices.sort()).toEqual([boomerang, token].sort());
+    g.do({
+      type: 'activateAbility',
+      player: 'p1',
+      source: plan,
+      abilityIndex: 0,
+      targets: [],
+      tapCreature: boomerang,
+    });
+    resolve(g);
+    expect(g.obj(boomerang).tapped).toBe(true);
+    expect(g.obj(token).tapped).toBe(false);
+  });
+
   it('needs a Villain to tap', () => {
     const g = game({ p1: { battlefield: ['villainous-syndication', 'bear-cub'] } });
     const plan = g.id('p1', 'villainous-syndication');
@@ -202,8 +258,20 @@ describe('Villainous Syndication', () => {
     });
     const plan = g.id('p1', 'villainous-syndication');
     g.obj(plan).counters = { plan: 3 };
-    resolve(activate(g, plan, 0), g.id('p1', 'rumbling-baloth', 'graveyard'));
-    expect(g.zoneOf(plan)).not.toBe('battlefield');
+    const baloth = g.id('p1', 'rumbling-baloth', 'graveyard');
+    activate(g, plan, 0);
+    g.passBoth();
+    // "When the fourth plan counter is put on this": its own trigger, which sacrifices it.
+    expect(g.obj(plan).counters?.plan).toBe(4);
+    expect(g.zoneOf(plan)).toBe('battlefield');
+    expect(g.state.stack).toHaveLength(1);
+    g.passBoth();
+    // Sacrificed; "when you do" is a reflexive trigger that targets the creature card.
+    expect(g.zoneOf(plan)).toBe('graveyard');
+    expect(g.decision.kind).toBe('chooseTriggerTargets');
+    g.do({ type: 'chooseTargets', player: 'p1', targets: [g.ref(baloth)] });
+    expect(g.state.stack).toHaveLength(1);
+    settle(g);
     expect(all(g, 'rumbling-baloth')).toHaveLength(1);
   });
 });

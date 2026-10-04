@@ -443,7 +443,7 @@ From `docs/strixhaven-15b/simplifications-*.md` (now folded in here). 15b also: 
   - **Expropriate** (council's dilemma): you vote first, then your opponent, by a prompt for each (the engine's AI answers the opponent's vote). Each time vote is an extra turn for you. Your own money vote takes back a permanent you own that an opponent controls (the best by mana value, with no choice); an opponent's money vote lets them choose which of their permanents you gain control of (control is permanent; the permanent is summoning sick). Expropriate is exiled as it resolves.
   - **Housemeld** (Alchemy): the exiled card perpetually has exactly the enchantment type (it loses its creature type, and any other types) for as long as the card exists (it stays so after it returns to the battlefield and in every zone). A token exiled this way ceases to exist and doesn't return. "At the beginning of your next end step" is a delayed trigger on your next end step (this turn's if it hasn't begun yet).
   - **Snow-Covered Island**: snow is a new supertype ("Snow"); nothing in the engine reads it yet (no snow mana).
-  - **Thriving Isle**: "choose a color other than blue" offers all five colours; choosing blue just makes it a plain Island that enters tapped.
+  - **Thriving Isle**: none ("choose a color other than blue" offers the other four).
   - **Haughty Djinn**: none (power is a characteristic-defining count of instant and sorcery cards in your graveyard).
   - **Murmuring Mystic**: the token is a new 1/1 blue Bird Illusion with flying (`soc-15b-u-bird-illusion`).
   - **Reflective Rimekin** (Alchemy): the one-time boon is a permanent emblem-style triggered ability, so it copies each of your later instant or sorcery spells with mana value 3 or less. The copy keeps the original's targets ("you may choose new targets" is not offered).
@@ -459,7 +459,7 @@ From `docs/strixhaven-15b/simplifications-*.md` (now folded in here). 15b also: 
   - Blasphemous Edict: players sacrifice one creature at a time in turn (13 rounds), not all thirteen simultaneously. The {B} cost is a conditional cost reduction (the card's {3}{B}{B} less {3}{B}), not an alternative cost.
   - Phyrexian Tower: the "{T}, Sacrifice a creature: Add {B}{B}" ability uses the stack and adds the mana to your pool (it isn't a mana ability).
   - Westvale Abbey: the five creatures are sacrificed as the ability resolves, not as a cost (it needs five creatures when activated).
-  - Thriving Moor: "choose a color other than black" also offers black (which adds nothing).
+  - Thriving Moor: none ("choose a color other than black" offers the other four).
   - Blighted Nightmare: X is the target's mana value, and the blight (X -1/-1 counters, shown as a permanent -X/-X effect) goes on your creature with the greatest toughness; nothing returns if X exceeds that toughness (the Nightmare has already gone to hand). The perpetual +1/+1 is a perpetual static boost on each card.
   - Terrors of the Track: double team conjures a copy of the same card with a flag that it has lost double team.
   - Lord Skitter's Blessing: the Wicked Role's "only one Role per controller on a creature" replacement isn't implemented.

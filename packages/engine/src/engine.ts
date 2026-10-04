@@ -15,7 +15,7 @@ import { checkGameOver } from './sba.ts';
 import { canPayFrom, manaSources } from './mana.ts';
 import { addCosts, spellTags } from './spells.ts';
 import { teamworkValid } from './teamwork.ts';
-import { collectTriggers } from './triggers.ts';
+import { collectTriggers, triggeredAbility } from './triggers.ts';
 import { FIC_EFFECTS } from './fic-effects.ts';
 import {
   openingHand,
@@ -294,6 +294,7 @@ function apply(ctx: Ctx, action: Action): void {
         action.forage,
         action.discard,
         action.x,
+        action.tapCreature,
       );
       return paused ? undefined : givePriority(ctx, player);
     }
@@ -341,7 +342,11 @@ function apply(ctx: Ctx, action: Action): void {
         d.picked = action.targets;
         return;
       }
-      if (action.targets.length > 0 || action.mode !== undefined)
+      // Wasp, Strategic Intervention: an "up to" target left out still puts the trigger on the
+      // stack (no targets chosen); only a "may" (or "you may pay") trigger is declined that way.
+      const a = triggeredAbility(ctx, d.trigger);
+      const upTo = !!a.targets[0]?.optional && !a.optional && !a.cost;
+      if (action.targets.length > 0 || action.mode !== undefined || upTo)
         pushTrigger(ctx, d.trigger, action.targets, action.mode);
       return givePriority(ctx, d.thenPriority);
     }

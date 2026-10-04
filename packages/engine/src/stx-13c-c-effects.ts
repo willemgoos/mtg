@@ -9,16 +9,17 @@ import {
   obj,
   other,
 } from './context.ts';
-import { damageSourceFor, dealDamage } from './effects.ts';
+import { damageSourceFor, dealDamage, plusFoodTokens } from './effects.ts';
 import type { PlayerId } from './types.ts';
 
 /** Strixhaven (13c): one-offs of the Quandrix and Prismari cards, as custom effects. */
 
-/** Creates a token on the battlefield (no replacement effects apply). */
+/** Creates a token on the battlefield (no replacement effects apply but Tippy-Toe's Food). */
 function makeToken(ctx: Ctx, token: string, controller: PlayerId): void {
   const t = createObject(ctx, token, controller, 'battlefield', true);
   ctx.s.battlefield.push(t.id);
   emit(ctx, { type: 'objectMoved', id: t.id, defId: t.defId, from: null, to: 'battlefield' });
+  plusFoodTokens(ctx, controller);
 }
 
 export const STX_13C_C_EFFECTS: Record<string, CustomEffect> = {

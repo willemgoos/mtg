@@ -52,7 +52,7 @@ describe('Scarlet packet', () => {
 });
 
 describe('Wiccan, Young Avenger', () => {
-  it('exiles the top card on a noncreature spell; it stays playable through your end step', () => {
+  it('exiles the top card on a noncreature spell; it stays playable until your end step', () => {
     const g = game({
       p1: {
         hand: ['lightning-bolt'],
@@ -66,6 +66,23 @@ describe('Wiccan, Young Avenger', () => {
     expect(g.obj(top).defId).toBe('mountain');
     expect(g.obj(top).playableUntilTurn).toBe(g.state.turn.number);
     expect(g.legal().some((a) => a.type === 'playLand' && a.card === top)).toBe(true);
+  });
+
+  it('the card stops being playable as your end step begins', () => {
+    const g = game({
+      p1: {
+        hand: ['lightning-bolt'],
+        battlefield: [WICCAN, 'mountain', 'mountain'],
+        library: ['lightning-bolt', 'island'],
+      },
+    });
+    resolveAll(cast(g, 'lightning-bolt', [{ player: 'p2' }]));
+    const top = g.state.players.p1.exile[0]!;
+    const castable = () => g.legal().some((a) => a.type === 'castSpell' && a.card === top);
+    expect(castable()).toBe(true);
+    g.passUntilStep('end');
+    expect(g.state.turn.step).toBe('end');
+    expect(castable()).toBe(false);
   });
 
   it("doesn't trigger on creature spells", () => {
@@ -129,6 +146,37 @@ describe('Grapeshot', () => {
     });
     const baloth = g.id('p2', 'rumbling-baloth');
     resolveAll(cast(g, GRAPESHOT, [g.ref(baloth)]));
+    expect(g.obj(baloth).damage).toBe(1);
+  });
+
+  it('may choose a new target for each copy', () => {
+    const g = game({
+      p1: {
+        hand: ['lightning-bolt', 'lightning-bolt', GRAPESHOT],
+        battlefield: n('mountain', 4),
+      },
+      p2: { battlefield: ['bear-cub', 'rumbling-baloth'] },
+    });
+    const bear = g.id('p2', 'bear-cub');
+    const baloth = g.id('p2', 'rumbling-baloth');
+    resolveAll(cast(g, 'lightning-bolt', [{ player: 'p2' }]));
+    resolveAll(cast(g, 'lightning-bolt', [{ player: 'p2' }]));
+    cast(g, GRAPESHOT, [{ player: 'p2' }]);
+    // Two copies, each with its own choice: one at the Bear Cub, one at the Baloth.
+    const picks = ["Bear Cub (opponent's)", "Rumbling Baloth (opponent's)"];
+    for (let i = 0; i < 10 && g.state.stack.length; i++) {
+      const d = g.decision;
+      if (d.kind === 'chooseOption') {
+        const index = d.options.findIndex((o) => o.label === picks[0]);
+        expect(index).toBeGreaterThan(0);
+        picks.shift();
+        g.do({ type: 'chooseOption', player: 'p1', index });
+      } else if (d.kind === 'priority') g.pass();
+      else g.do(g.legal()[0]!);
+    }
+    expect(picks).toEqual([]);
+    expect(g.life('p2')).toBe(13);
+    expect(g.obj(bear).damage).toBe(1);
     expect(g.obj(baloth).damage).toBe(1);
   });
 });

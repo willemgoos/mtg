@@ -156,4 +156,25 @@ describe('Wakanda packet', () => {
     expect(all(g, 'soldier-token')).toHaveLength(2);
     expect(bearCastable()).toBe(false);
   });
+
+  it("Secure Detention: mana another permanent grants it can't be used either", () => {
+    const g = game({
+      p1: {
+        hand: ['secure-detention', 'bear-cub'],
+        battlefield: ['a-realm-reborn', { card: 'serra-angel', sick: false }, ...n('plains', 4)],
+      },
+    });
+    const angel = g.id('p1', 'serra-angel');
+    // A Realm Reborn: the Plains and the Angel tap for any colour.
+    const bearCastable = () =>
+      g.legal().some((a) => a.type === 'castSpell' && g.obj(a.card).defId === 'bear-cub');
+    expect(bearCastable()).toBe(true);
+    settle(cast(g, 'secure-detention', [g.ref(angel)]));
+    // The Aura itself (A Realm Reborn) and the Angel would pay {1}{G}, but the Angel is locked.
+    expect(g.obj(angel).tapped).toBe(false);
+    expect(
+      g.state.battlefield.filter((id) => g.obj(id).defId === 'plains' && !g.obj(id).tapped),
+    ).toHaveLength(0);
+    expect(bearCastable()).toBe(false);
+  });
 });

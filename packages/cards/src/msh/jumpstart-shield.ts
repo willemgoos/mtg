@@ -43,12 +43,14 @@ export const MSH_JUMPSTART_SHIELD: Record<string, Behavior> = {
       ),
     ],
   },
-  // Two triggers, so the +1/+1 still happens when no creature is tapped: choosing no
-  // target declines a trigger here. "Defending player": the opponent (two-player games).
+  // "Defending player": the opponent (two-player games).
   'Strategic Intervention': {
     abilities: [
-      attacksAlone([], { kind: 'pump', to: 'subject', power: 1, toughness: 1 }),
-      attacksAlone([{ ...theirCreature, optional: true }], { kind: 'tap', what: t0 }),
+      attacksAlone(
+        [{ ...theirCreature, optional: true }],
+        { kind: 'pump', to: 'subject', power: 1, toughness: 1 },
+        { kind: 'tap', what: t0 },
+      ),
     ],
   },
 };

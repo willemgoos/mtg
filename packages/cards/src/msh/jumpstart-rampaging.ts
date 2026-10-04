@@ -1,21 +1,10 @@
 import type { AbilityDef, CardFilter, EffectDef } from '@mtg/engine';
 import type { Behavior } from '../build.ts';
-import { mana, spell, t0, t1, t2, theirCreature, yourCreature } from './helpers.ts';
+import { mana, spell, t0, t1, theirCreature, yourCreature } from './helpers.ts';
 
 // Marvel Super Heroes Jumpstart packets: Tenacious (Voracious Brood, Return of the Mole
 // Man) and Rampaging (Bushmaster, Powerful Broker, Atlas, Rhino, Rhino's Rampage).
 // Atlas is also in Thunderbolts and Towering.
-
-/** One of Rhino's three counters: "up to one other target creature" gets it and trample. */
-const rhinoCounter: AbilityDef = {
-  kind: 'triggered',
-  trigger: { on: 'etb' },
-  targets: [{ what: 'creature', optional: true, filter: { other: true } }],
-  effects: [
-    { kind: 'counters', to: t0, amount: 1 },
-    { kind: 'pump', to: t0, power: 0, toughness: 0, keywords: ['trample'] },
-  ],
-};
 
 /** "You gain 1 life for each creature you control with power 4 or greater." */
 const atlasLife: EffectDef = {
@@ -109,31 +98,42 @@ export const MSH_JUMPSTART_RAMPAGING: Record<string, Behavior> = {
   'Atlas, Sizable Stooge': {
     abilities: [atlasTrigger('attacks'), atlasTrigger('blocks')],
   },
-  // Trample comes from Scryfall. The ETB is split into separate triggers so the bots don't weigh
-  // every ordered triple of creatures: destroy, then three times "a +1/+1 counter on up to one
-  // other target creature; it gains trample" (the same creature may be chosen more than once,
-  // which covers every way to distribute the three counters).
+  // Trample comes from Scryfall. The creatures for the counters and the split are chosen as the
+  // trigger resolves (one creature and how many counters it gets at a time).
   'Rhino, Terrible Trampler': {
     abilities: [
       {
         kind: 'triggered',
         trigger: { on: 'etb' },
         targets: [{ what: 'permanent', filter: { types: ['Artifact', 'Land'] } }],
-        effects: [{ kind: 'destroy', what: t0 }],
+        effects: [
+          { kind: 'destroy', what: t0 },
+          {
+            kind: 'divide',
+            amount: 3,
+            maxTargets: 3,
+            spec: { what: 'creature', filter: { other: true } },
+            give: 'counters',
+            each: [{ kind: 'pump', to: t0, power: 0, toughness: 0, keywords: ['trample'] }],
+          },
+        ],
       },
-      rhinoCounter,
-      rhinoCounter,
-      rhinoCounter,
     ],
   },
-  // The artifact is chosen as the spell is cast, not when the excess damage is dealt.
-  "Rhino's Rampage": spell(
-    [
-      yourCreature,
-      theirCreature,
-      { what: 'permanent', filter: smallNoncreatureArtifact, optional: true },
+  // "When excess damage is dealt ...": a reflexive trigger that targets the artifact then.
+  "Rhino's Rampage": {
+    ...spell(
+      [yourCreature, theirCreature],
+      { kind: 'pump', to: t0, power: 1, toughness: 0 },
+      { kind: 'fight', a: t0, b: t1, ifExcess: [{ kind: 'reflexiveTrigger', ability: 0 }] },
+    ),
+    abilities: [
+      {
+        kind: 'triggered',
+        trigger: { on: 'reflexive' },
+        targets: [{ what: 'permanent', filter: smallNoncreatureArtifact, optional: true }],
+        effects: [{ kind: 'destroy', what: t0 }],
+      },
     ],
-    { kind: 'pump', to: t0, power: 1, toughness: 0 },
-    { kind: 'fight', a: t0, b: t1, ifExcess: [{ kind: 'destroy', what: t2 }] },
-  ),
+  },
 };

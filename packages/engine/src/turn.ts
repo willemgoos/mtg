@@ -195,6 +195,7 @@ export function startTurn(ctx: Ctx, player: PlayerId, noPowerUp = false): void {
   s.turn.cardsDrawn = { p1: 0, p2: 0 };
   // Marvel Super Heroes Jumpstart (Geniuses): Reed Richards.
   delete s.turn.extraDrawSeen;
+  delete s.turn.flyersEntered; // Marvel Super Heroes Jumpstart (Soaring): Flying Drone
   s.turn.manaSpent = { p1: 0, p2: 0 };
   s.turn.lifeLost = { p1: 0, p2: 0 };
   s.turn.spellsCast = { p1: 0, p2: 0 };

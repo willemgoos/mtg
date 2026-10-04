@@ -49,6 +49,22 @@ describe('HYDRA packet', () => {
     expect(g.life('p1')).toBe(22);
   });
 
+  it("Bob's drain needs him returned: nothing if he's gone", () => {
+    const g = game({
+      p1: { battlefield: ['bob-reluctant-hydra-agent'] },
+      p2: { hand: ['lightning-bolt'], battlefield: ['mountain'] },
+    });
+    const bob = g.id('p1', 'bob-reluctant-hydra-agent');
+    g.passUntilStep('beginCombat').passBoth().attack(bob);
+    expect(g.state.stack).toHaveLength(1);
+    g.pass();
+    cast(g, 'lightning-bolt', [g.ref(bob)]);
+    settle(g);
+    expect(g.zoneOf(bob)).toBe('graveyard');
+    expect(g.life('p2')).toBe(20);
+    expect(g.life('p1')).toBe(20);
+  });
+
   it('Bob does nothing when he attacks with another creature', () => {
     const g = game({ p1: { battlefield: ['bob-reluctant-hydra-agent', 'bear-cub'] } });
     const bob = g.id('p1', 'bob-reluctant-hydra-agent');

@@ -493,7 +493,9 @@ export function Board({
                   ? 'a creature to copy (or skip)'
                   : first.type === 'castSpell' && first.sneak
                     ? 'an unblocked attacker to return'
-                    : null
+                    : first.type === 'activateAbility' && first.tapCreature
+                      ? 'a creature to tap'
+                      : null
           : null;
       const prompt = paying
         ? `${targeting.label}: choose ${paying}`

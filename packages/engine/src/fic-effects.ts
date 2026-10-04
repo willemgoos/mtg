@@ -14,7 +14,7 @@ import {
   transform,
 } from './context.ts';
 import { manaValue } from './cost.ts';
-import { changeLife, dealDamage, damageSourceFor } from './effects.ts';
+import { changeLife, dealDamage, damageSourceFor, plusFoodTokens } from './effects.ts';
 import { nextInt } from './rng.ts';
 import { shuffleLibrary } from './setup.ts';
 import type { GameObject, ObjectId, PlayerId } from './types.ts';
@@ -65,6 +65,7 @@ function tokenCopyOfCard(ctx: Ctx, defId: string, p: PlayerId): GameObject {
   const t = createObject(ctx, defId, p, 'battlefield', true);
   ctx.s.battlefield.push(t.id);
   emit(ctx, { type: 'objectMoved', id: t.id, defId, from: null, to: 'battlefield' });
+  plusFoodTokens(ctx, p); // Tippy-Toe
   return t;
 }
 
@@ -445,6 +446,9 @@ export const FIC_CONDITIONS: Record<
   opponentCreatureDied: (ctx, p) => (ctx.s.turn.creaturesLost?.[other(p)] ?? 0) > 0,
   /** You gained 7 or more life this turn (Aerith, Last Ancient). */
   gainedSeven: (ctx, p) => (ctx.s.turn.lifeGained?.[p] ?? 0) >= 7,
+  /** Flying Drone: another creature with flying entered under your control this turn (even if it's gone). */
+  anotherFlyerEntered: (ctx, p, self) =>
+    !!ctx.s.turn.flyersEntered?.some((f) => f.player === p && f.id !== self?.id),
   /** +1/+1 counters were put on the source this turn (Wakka). */
   sourceCountersThisTurn: (ctx, _p, self) => self?.countersTurn === ctx.s.turn.number,
   /** An opponent has seven or more cards in their graveyard (Into the Story). */

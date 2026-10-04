@@ -134,7 +134,13 @@ export function castableCards(ctx: Ctx, player: PlayerId): ObjectId[] {
   // Strongbox Raider: exiled cards you may play for a while.
   for (const id of ps.exile) {
     const until = obj(ctx, id).playableUntilTurn;
-    if (until !== undefined && until >= ctx.s.turn.number && !out.includes(id)) out.push(id);
+    // Wiccan, Young Avenger: "until your next end step" ends as that end step begins.
+    const over =
+      until === ctx.s.turn.number &&
+      obj(ctx, id).playableBeforeEndStep &&
+      (ctx.s.turn.step === 'end' || ctx.s.turn.step === 'cleanup');
+    if (until !== undefined && until >= ctx.s.turn.number && !over && !out.includes(id))
+      out.push(id);
   }
   // Extract Power: either player's exiled cards you may play for free.
   for (const p of ['p1', 'p2'] as const)
@@ -798,6 +804,13 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
         const have = obj(ctx, source).counters?.loyalty ?? 0;
         for (const base of bases)
           for (let x = 1; x <= have; x++) out.push({ ...base, x } as Action);
+      }
+      // Villainous Syndication: one action per creature that could be tapped for the cost.
+      if (a.cost.tapCreature) {
+        const bases = out.splice(firstOfAbility);
+        const can = creaturesToTap(ctx, player, a.cost.tapCreature, source);
+        for (const base of bases)
+          for (const tapCreature of can) out.push({ ...base, tapCreature } as Action);
       }
       // Marvel Super Heroes: {X} in an ability's cost (Bruce Banner): every affordable X up to 10.
       if (mana?.x)

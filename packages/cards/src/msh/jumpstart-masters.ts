@@ -25,7 +25,7 @@ export const MSH_JUMPSTART_MASTERS: Record<string, Behavior> = {
     abilities: [
       {
         kind: 'triggered',
-        trigger: { on: 'youAttack', filter: { subtype: 'Villain', nontoken: true } },
+        trigger: { on: 'youAttack', filter: { subtype: 'Villain', nontoken: true }, aPlayer: true },
         targets: [],
         effects: [villain()],
       },
@@ -78,10 +78,9 @@ export const MSH_JUMPSTART_MASTERS: Record<string, Behavior> = {
       },
     ],
   },
-  /**
-   * The fourth counter's reflexive "return target creature card" is folded into
-   * the ability: the creature card is chosen (untargeted) as it resolves.
-   */
+  // "When the fourth plan counter is put on this": a trigger (ability 2) set off as the counter
+  // is put; it sacrifices it, and "when you do" is a reflexive trigger (ability 1) that targets
+  // the creature card.
   'Villainous Syndication': {
     abilities: [
       {
@@ -99,17 +98,24 @@ export const MSH_JUMPSTART_MASTERS: Record<string, Behavior> = {
               amount: { namedCountersOnSource: 'plan' },
               min: 4,
             },
-            then: [
-              { kind: 'sacrifice', what: 'self' },
-              {
-                kind: 'putFromHandOrGraveyard',
-                filter: { types: ['Creature'] },
-                graveyardOnly: true,
-              },
-            ],
+            then: [{ kind: 'reflexiveTrigger', ability: 2 }],
           },
         ],
         label: 'Tap a Villain: Mill a card, plan counter',
+      },
+      {
+        kind: 'triggered',
+        trigger: { on: 'reflexive' },
+        targets: [{ what: 'graveyardCard', controller: 'you', filter: { types: ['Creature'] } }],
+        effects: [{ kind: 'returnToBattlefield', what: { target: 0 } }],
+      },
+      {
+        kind: 'triggered',
+        trigger: { on: 'reflexive' },
+        targets: [],
+        effects: [
+          { kind: 'sacrifice', what: 'self', then: [{ kind: 'reflexiveTrigger', ability: 1 }] },
+        ],
       },
     ],
   },

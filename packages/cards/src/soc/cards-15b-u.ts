@@ -405,7 +405,7 @@ export const BRAWL_15B_U: Record<string, Behavior> = {
   'Thriving Isle': {
     entersTapped: true,
     abilities: [
-      when({ on: 'etb' }, [], { kind: 'chooseColor' }),
+      when({ on: 'etb' }, [], { kind: 'chooseColor', except: 'U' }),
       tapFor('U'),
       ...(['W', 'B', 'R', 'G'] as const).map((produces): AbilityDef => ({
         kind: 'mana',

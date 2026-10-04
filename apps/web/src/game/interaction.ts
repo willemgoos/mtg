@@ -26,9 +26,16 @@ export function targetsOf(a: Action): TargetChoice[] {
     const copyOf = a.type === 'castSpell' ? a.copyOf : undefined;
     // Sneak: the unblocked attacker to return is picked first.
     const sneak = a.type === 'castSpell' ? a.sneak : undefined;
-    const costs: TargetChoice[] = [a.sacrifice, forageFood(a), discard, copyOf, sneak].flatMap(
-      (id) => (id ? [{ object: { id, zcc: -1 } }] : []),
-    );
+    // Villainous Syndication: the creature tapped for the cost is picked too.
+    const tapped = a.type === 'activateAbility' ? a.tapCreature : undefined;
+    const costs: TargetChoice[] = [
+      a.sacrifice,
+      forageFood(a),
+      discard,
+      copyOf,
+      sneak,
+      tapped,
+    ].flatMap((id) => (id ? [{ object: { id, zcc: -1 } }] : []));
     return [...costs, ...a.targets];
   }
   return a.type === 'chooseTargets' ? a.targets : [];

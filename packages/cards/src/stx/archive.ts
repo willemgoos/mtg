@@ -19,11 +19,14 @@ const anyTarget: TargetSpec = { what: 'any' };
 const aPlayer: TargetSpec = { what: 'player' };
 const aSpell: TargetSpec = { what: 'spell' };
 
-/** Storm: "When you cast this spell, copy it for each spell cast before it this turn." */
+/**
+ * Storm: "When you cast this spell, copy it for each spell cast before it this turn. You may
+ * choose new targets for the copies" (one choice per copy, as it's made).
+ */
 export const storm: AbilityDef = when({ on: 'castSelf' }, [], {
-  kind: 'copySpell',
-  what: 'subject',
+  kind: 'repeat',
   count: { count: 'spellsCastBeforeSubject' },
+  effects: [{ kind: 'copySpell', what: 'subject', newTargets: true }],
 });
 
 export const STX_ARCHIVE: Record<string, Behavior> = {

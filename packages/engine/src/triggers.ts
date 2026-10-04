@@ -3,6 +3,7 @@ import {
   characteristics,
   countOf,
   creaturesOnBattlefield,
+  hasKeyword,
   isCreature as isCreatureNow,
   matchesFilter,
 } from './characteristics.ts';
@@ -335,6 +336,13 @@ function queue(
         );
         if (earlier) earlier.amount = (earlier.amount ?? 0) + amount;
       }
+      // Vulture, Feathered Fiend: "those creatures".
+      if (subject) {
+        const earlier = ctx.s.pendingTriggers.find(
+          (t) => t.source.id === o.id && t.abilityIndex === index && t.subjects,
+        );
+        earlier?.subjects?.push({ id: subject.id, zcc: subject.zcc });
+      }
       return;
     }
     ctx.batched.add(key);
@@ -350,6 +358,9 @@ function queue(
     controller,
     ...(granted?.kind === 'triggered' ? { emblem: granted } : {}),
     ...(subject ? { subject: { id: subject.id, zcc: subject.zcc } } : {}),
+    ...(subject && a?.kind === 'triggered' && a.batch
+      ? { subjects: [{ id: subject.id, zcc: subject.zcc }] }
+      : {}),
     ...(amount !== undefined ? { amount } : {}),
   };
   ctx.s.pendingTriggers.push(pending);
@@ -549,6 +560,9 @@ function detect(ctx: Ctx, ev: GameEvent): void {
         // A Saga enters with its first lore counter.
         if (movedDef.saga) addLore(ctx, moved.id);
         const isCreature = movedDef.types.includes('Creature');
+        // Flying Drone: "another creature with flying entered the battlefield under your control".
+        if (isCreature && hasKeyword(ctx, moved.id, 'flying'))
+          (s.turn.flyersEntered ??= []).push({ id: moved.id, player: moved.controller });
         const isLand = movedDef.types.includes('Land');
         const before = s.pendingTriggers.length;
         forEachBattlefieldTrigger(
@@ -1184,6 +1198,17 @@ function detect(ctx: Ctx, ev: GameEvent): void {
             // Marvel Super Heroes Jumpstart (Battalion): it and at least two others.
             (!a.trigger.battalion || ev.attackers.length >= 3)
           );
+        // Crimson Cowl, Master of Evil: "attack a player".
+        if (a.trigger.on === 'youAttack' && a.trigger.aPlayer)
+          return (
+            o.controller === ap &&
+            !!s.combat?.attackers.some(
+              (x) =>
+                !x.planeswalker &&
+                !!s.objects[x.id] &&
+                matchesFilter(ctx, x.id, (a.trigger as { filter?: CardFilter }).filter, o.id),
+            )
+          );
         if (a.trigger.on === 'youAttack')
           return o.controller === ap && attackedWith(a.trigger.filter, o.id);
         return false;
@@ -1420,7 +1445,7 @@ function detect(ctx: Ctx, ev: GameEvent): void {
         ctx,
         (t, e) =>
           t.on === 'creatureYouControlDealsCombatDamage' &&
-          e.controller === src.controller &&
+          (e.controller === src.controller || !!t.anyController) &&
           (!t.toPlayer || 'player' in ev.to) &&
           matchesFilter(ctx, src.id, t.filter),
         src,
@@ -1478,7 +1503,8 @@ function detect(ctx: Ctx, ev: GameEvent): void {
           a.trigger.on === 'creaturesYouControlDealCombatDamageToPlayer' &&
           o.controller === src.controller &&
           matchesFilter(ctx, src.id, a.trigger.filter),
-        undefined,
+        // Vulture, Feathered Fiend: the creatures that dealt the damage ("those creatures").
+        src,
         ev.amount, // Strixhaven Brawl (15b, pair): Primo, "damage dealt"
       );
       // Secrets of Strixhaven (14a): Killian's Confidence triggers from your graveyard.

@@ -1,4 +1,4 @@
-import { characteristics } from './characteristics.ts';
+import { characteristics, countOf } from './characteristics.ts';
 import { MSH_EFFECTS } from './msh-effects.ts';
 import { FIN_EFFECTS } from './fin-effects.ts';
 import { LOREHOLD_EFFECTS } from './stx-lorehold-effects.ts';
@@ -623,7 +623,16 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
       if (a && e.previousController && a.zcc === e.affected.zcc)
         a.controller = e.previousController;
     }
+    const ended = ctx.s.effects.filter((e) => e.whileSourceId === id);
     ctx.s.effects = ctx.s.effects.filter((e) => e.whileSourceId !== id);
+    // Quantum Reduction: the creature gets its abilities back (unless something else still blanks it).
+    for (const e of ended) {
+      const a = ctx.s.objects[e.affected.id];
+      if (e.loseAbilities && a && a.zcc === e.affected.zcc)
+        a.blank = ctx.s.effects.some(
+          (x) => x.loseAbilities && x.affected.id === a.id && x.affected.zcc === a.zcc,
+        );
+    }
   }
   // Marvel Super Heroes (Ares): whether it was attacking as it left.
   if (from === 'battlefield' && ctx.s.combat?.attackers.some((a) => a.id === id))
@@ -662,6 +671,8 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
   const meldPartner = from === 'battlefield' ? o.meldedWith : undefined;
   delete o.meldedWith;
   delete o.equipDiscount;
+  // Wiccan, Young Avenger: set again by whatever exiles it next.
+  delete o.playableBeforeEndStep;
   if (to === 'battlefield' && opts.meldInto) {
     o.front = o.defId;
     o.defId = opts.meldInto;
@@ -717,6 +728,10 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
   }
   // Secrets of Strixhaven (14a): "This creature enters prepared."
   if (to === 'battlefield' && defOf(ctx, o.defId).entersPrepared) prepareObject(ctx, id);
+  // Marvel Super Heroes Jumpstart (Tenacious/Rampaging): Voracious Brood, however it enters.
+  const countersAmount =
+    to === 'battlefield' ? defOf(ctx, o.defId).entersWithCountersAmount : undefined;
+  if (countersAmount) addCounters(ctx, id, countOf(ctx, o.controller, countersAmount, false, id));
   // Ygra entering or leaving changes what the other creatures are.
   if ((from === 'battlefield' || to === 'battlefield') && makesFood(defOf(ctx, o.defId)))
     refreshCreaturesAreFood(ctx);

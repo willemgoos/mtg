@@ -123,9 +123,28 @@ describe('Agents of S.H.I.E.L.D. packet', () => {
     const bear = g.id('p1', 'bear-cub');
     const angel = g.id('p2', 'serra-angel');
     g.passBoth().attack(bear);
+    // One trigger.
+    expect(g.decision.kind).toBe('chooseTriggerTargets');
+    g.do({ type: 'chooseTargets', player: 'p1', targets: [g.ref(angel)] });
+    expect(g.state.stack).toHaveLength(1);
+    expect(g.state.pendingTriggers).toHaveLength(0);
     settle(g);
     expect(pt(g, bear)).toEqual([3, 3]);
     expect(g.obj(angel).tapped).toBe(true);
+  });
+
+  it('Strategic Intervention still pumps when no creature is chosen to tap', () => {
+    const g = game({
+      step: 'beginCombat',
+      p1: { battlefield: ['strategic-intervention', 'bear-cub'] },
+      p2: { battlefield: ['serra-angel'] },
+    });
+    const bear = g.id('p1', 'bear-cub');
+    g.passBoth().attack(bear);
+    g.do({ type: 'chooseTargets', player: 'p1', targets: [] });
+    settle(g);
+    expect(pt(g, bear)).toEqual([3, 3]);
+    expect(g.obj(g.id('p2', 'serra-angel')).tapped).toBe(false);
   });
 
   it('Strategic Intervention still pumps with no creature to tap', () => {

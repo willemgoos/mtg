@@ -65,7 +65,8 @@ export const MSH_JUMPSTART_TRICKSTERS: Record<string, Behavior> = {
       effects: [{ kind: 'tokenCopy', of: t0, notLegendary: true }],
     },
   },
-  // Chapter III names a creature you control (targeted) rather than any card name.
+  // Chapter III: "Choose a card name" offers the names of the creatures on the battlefield and
+  // the creature cards in your hand.
   'The Clone Saga': {
     saga: 3,
     abilities: [
@@ -80,15 +81,24 @@ export const MSH_JUMPSTART_TRICKSTERS: Record<string, Behavior> = {
           effects: [{ kind: 'copySpell', what: 'subject', nonlegendary: true }],
         },
       }),
-      chapter([3], [{ ...yourCreature, optional: true }], {
-        kind: 'emblem',
-        until: 'endOfTurn',
-        namedLike: t0,
-        ability: {
-          kind: 'triggered',
-          trigger: { on: 'creatureYouControlDealsCombatDamage', toPlayer: true },
-          targets: [],
-          effects: [draw(1)],
+      chapter([3], [], {
+        kind: 'chooseCustom',
+        handler: 'cloneSagaName',
+        params: {
+          then: {
+            kind: 'emblem',
+            until: 'endOfTurn',
+            ability: {
+              kind: 'triggered',
+              trigger: {
+                on: 'creatureYouControlDealsCombatDamage',
+                toPlayer: true,
+                anyController: true,
+              },
+              targets: [],
+              effects: [draw(1)],
+            },
+          },
         },
       }),
     ],

@@ -278,6 +278,15 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
  * A count from `player`'s point of view. `printed` uses printed subtypes, for
  * characteristic-defining abilities (avoids recursing into characteristics).
  */
+/**
+ * The card whose name it has: its own while a copy that keeps its name (Impossible Man), else
+ * what it is now.
+ */
+export function nameId(ctx: Ctx, id: ObjectId): CardDefId {
+  const o = obj(ctx, id);
+  return o.copyKeepsName && o.originalDefId ? o.originalDefId : o.defId;
+}
+
 export function countOf(
   ctx: Ctx,
   player: PlayerId,
@@ -474,7 +483,7 @@ export function countOf(
     ).length;
   const matching = ctx.s.battlefield.filter((id) => {
     if (obj(ctx, id).controller !== player) return false;
-    if (a.named && obj(ctx, id).defId !== a.named) return false;
+    if (a.named && nameId(ctx, id) !== a.named) return false;
     if (a.other && id === sourceId) return false;
     if (a.attacking !== undefined && isAttacking(ctx, id) !== a.attacking) return false;
     if (a.minPlusOneCounters !== undefined && obj(ctx, id).plusOneCounters < a.minPlusOneCounters)
@@ -869,8 +878,9 @@ export function cardMatches(
 }
 
 /**
- * Base power: printed, copied, characteristic-defining or set by an effect ("base power
- * 3"); static "base power" abilities aren't counted. Marvel Super Heroes Jumpstart (Marvelous).
+ * Base power: printed, copied, characteristic-defining, or set by an effect ("base power 3")
+ * or an Aura's or Equipment's static ability (Hulkbuster Armor: base 9/9), the latest
+ * winning. Marvel Super Heroes Jumpstart (Marvelous).
  */
 function basePowerOf(ctx: Ctx, id: ObjectId): number {
   const o = obj(ctx, id);
@@ -881,8 +891,25 @@ function basePowerOf(ctx: Ctx, id: ObjectId): number {
       : d.ptEquals !== undefined
         ? countFor(ctx, o, d)
         : (o.copyPT?.power ?? d.power ?? 0);
+  const set: { timestamp: number; power: number }[] = [];
   for (const e of ctx.s.effects)
-    if (e.basePT && e.affected.id === id && e.affected.zcc === o.zcc) base = e.basePT[0];
+    if (e.basePT && e.affected.id === id && e.affected.zcc === o.zcc)
+      set.push({ timestamp: e.timestamp, power: e.basePT[0] });
+  // Ms. Marvel, Elastic Ally: "has base power and toughness" from what's attached.
+  for (const srcId of ctx.s.battlefield) {
+    const src = obj(ctx, srcId);
+    if (src.attachedTo !== id) continue;
+    for (const a of def(ctx, srcId).abilities) {
+      if (a.kind !== 'static' || a.effect.kind !== 'attached') continue;
+      if (a.effect.basePT) set.push({ timestamp: src.timestamp, power: a.effect.basePT[0] });
+      if (a.effect.basePTAmount !== undefined)
+        set.push({
+          timestamp: src.timestamp,
+          power: countOf(ctx, src.controller, a.effect.basePTAmount, false, srcId),
+        });
+    }
+  }
+  for (const x of set.sort((a, b) => a.timestamp - b.timestamp)) base = x.power;
   return base;
 }
 
@@ -893,7 +920,7 @@ function avengersFilter(
   filter: CardFilter,
   sourceId: ObjectId | undefined,
 ): boolean {
-  if (filter.named && obj(ctx, id).defId !== filter.named) return false;
+  if (filter.named && nameId(ctx, id) !== filter.named) return false;
   const chosen = sourceId ? ctx.s.objects[sourceId]?.chosenType : undefined;
   if (filter.chosenTypeOfSource && !(chosen && hasSubtype(ctx, id, chosen))) return false;
   if (filter.notChosenTypeOfSource && chosen && hasSubtype(ctx, id, chosen)) return false;

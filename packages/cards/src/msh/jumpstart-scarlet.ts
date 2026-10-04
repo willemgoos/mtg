@@ -1,5 +1,6 @@
 import type { AbilityDef, EffectDef } from '@mtg/engine';
 import type { Behavior } from '../build.ts';
+import { storm } from '../stx/archive.ts';
 import { t0 } from './helpers.ts';
 
 // Marvel Super Heroes Jumpstart packet: Scarlet (R spells matter).
@@ -28,20 +29,13 @@ export const MSH_JUMPSTART_SCARLET: Record<string, Behavior> = {
       ),
     ],
   },
-  // Storm: the copies keep the original's target.
+  // Also a Mystical Archive card (stx/archive.ts, which shares this storm ability).
   Grapeshot: {
     spell: {
       targets: [{ what: 'any' }],
       effects: [{ kind: 'damage', amount: 1, to: t0 }],
     },
-    abilities: [
-      {
-        kind: 'triggered',
-        trigger: { on: 'castSelf' },
-        targets: [],
-        effects: [{ kind: 'copySpell', what: 'subject', count: { event: 'amount' } }],
-      },
-    ],
+    abilities: [storm],
   },
   // Also in Runaways.
   'Hex Magic': {

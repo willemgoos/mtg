@@ -1,4 +1,4 @@
-import { isCreature, matchesFilter } from './characteristics.ts';
+import { isCreature, matchesFilter, nameId } from './characteristics.ts';
 import {
   addCounters,
   type Ctx,
@@ -12,7 +12,8 @@ import { manaValue } from './cost.ts';
 import { copyStackAbility } from './msh-analyzed.ts';
 import { addLore } from './sagas.ts';
 import { shuffleLibrary } from './setup.ts';
-import type { ObjectId } from './types.ts';
+import { type Chooser, CHOOSERS } from './stx-13c-a-effects.ts';
+import type { EffectDef, ObjectId } from './types.ts';
 
 /**
  * Marvel Super Heroes one-offs, as custom effects. They run without asking:
@@ -149,3 +150,30 @@ export const MSH_EFFECTS: Record<string, CustomEffect> = {
     for (const id of exiled) if (ctx.s.objects[id]?.zone === 'exile') moveObject(ctx, id, 'hand');
   },
 };
+
+const MSH_CHOOSERS: Record<string, Chooser> = {
+  // Marvel Super Heroes Jumpstart (Tricksters)
+  /**
+   * The Clone Saga, chapter III: "Choose a card name." The names worth choosing: the creatures on
+   * the battlefield and the creature cards in your hand (yours first). `then` is the emblem, which
+   * gets the name.
+   */
+  cloneSagaName(ctx, es, params) {
+    const then = (params as { then: EffectDef }).then;
+    const ids = [
+      ...ctx.s.battlefield.filter((id) => obj(ctx, id).controller === es.controller),
+      ...ctx.s.players[es.controller].hand,
+      ...ctx.s.battlefield.filter((id) => obj(ctx, id).controller !== es.controller),
+    ].filter((id) => isCreatureCard(ctx, id) && !obj(ctx, id).isToken);
+    // Impossible Man keeps his own name while he's a copy.
+    const names = [...new Set(ids.map((id) => nameId(ctx, id)))];
+    return {
+      title: 'Choose a card name',
+      options: names.map((defId) => ({
+        label: ctx.db.get(defId)?.name ?? defId,
+        effects: [{ ...then, named: defId } as EffectDef],
+      })),
+    };
+  },
+};
+Object.assign(CHOOSERS, MSH_CHOOSERS);

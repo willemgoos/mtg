@@ -81,6 +81,43 @@ describe('Tricksters packet', () => {
     expect(g.obj(man).defId).toBe('impossible-man');
   });
 
+  it('Impossible Man is still named Impossible Man while a copy (The Clone Saga names him)', () => {
+    const g = game({
+      step: 'upkeep',
+      p1: {
+        battlefield: ['the-clone-saga', { card: 'impossible-man', sick: false }, ...n('island', 3)],
+        library: n('island', 5),
+      },
+      p2: { battlefield: ['bear-cub'] },
+    });
+    const man = g.id('p1', 'impossible-man');
+    g.obj(g.id('p1', 'the-clone-saga')).counters = { lore: 2 };
+    for (let i = 0; i < 10 && g.state.turn.step !== 'main1'; i++) g.pass();
+    // Chapter III is on the stack: Impossible Man becomes a copy of the Bear Cub first.
+    expect(g.state.stack).toHaveLength(1);
+    g.do({
+      type: 'activateAbility',
+      player: 'p1',
+      source: man,
+      abilityIndex: 0,
+      targets: [g.ref(g.id('p2', 'bear-cub'))],
+    });
+    g.passBoth();
+    expect(g.obj(man).defId).toBe('bear-cub');
+    g.passBoth();
+    const d = g.decision;
+    if (d.kind !== 'chooseOption') throw new Error('no name choice');
+    const index = d.options.findIndex((o) => o.label === 'Impossible Man');
+    expect(index).toBeGreaterThanOrEqual(0);
+    g.do({ type: 'chooseOption', player: 'p1', index });
+    resolveAll(g);
+    const hand = handSize(g, 'p1');
+    g.passUntilStep('beginCombat').passBoth().attack(man);
+    for (let i = 0; i < 20 && g.state.turn.step !== 'main2'; i++) resolveAll(g).pass();
+    expect(g.life('p2')).toBe(18);
+    expect(handSize(g, 'p1')).toBe(hand + 1);
+  });
+
   it('Impossible Man copying a legendary creature of yours keeps both (different names)', () => {
     const g = game({
       p1: { battlefield: ['impossible-man', 'kid-loki', ...n('island', 3)] },
@@ -196,5 +233,34 @@ describe('Tricksters packet', () => {
     for (let i = 0; i < 20 && g.state.turn.step !== 'main2'; i++) resolveAll(g).pass();
     expect(g.life('p2')).toBe(18);
     expect(handSize(g, 'p1')).toBe(hand + 1);
+  });
+
+  it('The Clone Saga chapter III chooses a name, even of a creature card in hand', () => {
+    const g = game({
+      step: 'upkeep',
+      p1: {
+        battlefield: ['the-clone-saga', { card: 'bear-cub', sick: false }],
+        hand: ['llanowar-elves', 'island'],
+        library: n('island', 5),
+      },
+      p2: { battlefield: ['serra-angel'] },
+    });
+    g.obj(g.id('p1', 'the-clone-saga')).counters = { lore: 2 };
+    for (let i = 0; i < 20 && g.decision.kind !== 'chooseOption'; i++) {
+      if (g.decision.kind === 'priority') g.pass();
+      else g.do(g.legal()[0]!);
+    }
+    const d = g.decision;
+    if (d.kind !== 'chooseOption') throw new Error('no name choice');
+    expect(d.title).toBe('Choose a card name');
+    expect(d.options.map((o) => o.label)).toEqual(['Bear Cub', 'Llanowar Elves', 'Serra Angel']);
+    // Naming the Elves: the Bear Cub's damage draws nothing.
+    g.do({ type: 'chooseOption', player: 'p1', index: 1 });
+    resolveAll(g);
+    const hand = handSize(g, 'p1');
+    g.passUntilStep('beginCombat').passBoth().attack(g.id('p1', 'bear-cub'));
+    for (let i = 0; i < 20 && g.state.turn.step !== 'main2'; i++) resolveAll(g).pass();
+    expect(g.life('p2')).toBe(18);
+    expect(handSize(g, 'p1')).toBe(hand);
   });
 });

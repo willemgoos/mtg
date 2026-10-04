@@ -27,20 +27,14 @@ const basicLandcycling = (cost: string): AbilityDef => ({
 });
 
 export const MSH_JUMPSTART_HYDRA: Record<string, Behavior> = {
-  // "Return him to his owner's hand. If you do": only while he's still attacking.
+  // "Return him to his owner's hand. If you do": only if he was still on the battlefield.
   'Bob, Reluctant HYDRA Agent': {
     abilities: [
       {
         kind: 'triggered',
         trigger: { on: 'attacks', alone: true },
         targets: [],
-        effects: [
-          {
-            kind: 'if',
-            condition: { kind: 'sourceAttacking' },
-            then: [{ kind: 'bounce', what: 'self' }, ...drain(2)],
-          },
-        ],
+        effects: [{ kind: 'bounce', what: 'self', then: drain(2) }],
       },
     ],
   },

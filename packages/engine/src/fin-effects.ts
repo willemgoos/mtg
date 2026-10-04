@@ -15,7 +15,14 @@ import {
   other,
 } from './context.ts';
 import { manaValue } from './cost.ts';
-import { changeLife, damageSourceFor, dealDamage, gainLife, millCount } from './effects.ts';
+import {
+  changeLife,
+  damageSourceFor,
+  dealDamage,
+  gainLife,
+  millCount,
+  plusFoodTokens,
+} from './effects.ts';
 import { nextInt, shuffleInPlace } from './rng.ts';
 import type { GameObject, PlayerId } from './types.ts';
 
@@ -26,11 +33,12 @@ import type { GameObject, PlayerId } from './types.ts';
 
 const PERMANENT_TYPES = ['Artifact', 'Creature', 'Enchantment', 'Land', 'Planeswalker', 'Battle'];
 
-/** Creates a token on the battlefield (no replacement effects apply). */
+/** Creates a token on the battlefield (no replacement effects apply but Tippy-Toe's Food). */
 function makeToken(ctx: Ctx, token: string, controller: PlayerId): void {
   const t = createObject(ctx, token, controller, 'battlefield', true);
   ctx.s.battlefield.push(t.id);
   emit(ctx, { type: 'objectMoved', id: t.id, defId: t.defId, from: null, to: 'battlefield' });
+  plusFoodTokens(ctx, controller);
 }
 
 export const FIN_EFFECTS: Record<string, CustomEffect> = {
@@ -371,6 +379,7 @@ export const FIN_EFFECTS: Record<string, CustomEffect> = {
       t.tapped = true;
       ctx.s.battlefield.push(t.id);
       emit(ctx, { type: 'objectMoved', id: t.id, defId, from: null, to: 'battlefield' });
+      plusFoodTokens(ctx, es.controller); // Tippy-Toe
       if (!defOf(ctx, defId).types.includes('Land')) return;
     }
   },
