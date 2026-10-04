@@ -1,0 +1,981 @@
+[
+  {
+    "name": "Agents of S.H.I.E.L.D.",
+    "cards": [
+      ["Agent Phil Coulson", 1],
+      ["Peggy Carter, Secret Agent", 1],
+      ["Agent 13, Sharon Carter", 1],
+      ["Agents of S.H.I.E.L.D.", 1],
+      ["Quake, Agent of S.H.I.E.L.D.", 1],
+      ["S.H.I.E.L.D. Helicarrier", 1],
+      ["Borough Backup", 1],
+      ["Nick Fury, Spymaster", 1],
+      ["S.H.I.E.L.D. Spy Kit", 1],
+      ["Helicarrier Strike", 1],
+      ["Strategic Intervention", 1],
+      ["Web Up", 1],
+      ["Thriving Heath", 1],
+      ["Plains", 7]
+    ]
+  },
+  {
+    "name": "Battalion",
+    "cards": [
+      ["General Thunderbolt Ross", 1],
+      ["The Howling Commandos", 1],
+      ["Wakandan Shield Guard", 1],
+      ["Wild Pack Squad", 1],
+      ["Falcon, Joaquin Torres", 1],
+      ["War Machine, James Rhodes", 1],
+      ["U.S.Agent, John Walker", 1],
+      ["Captain America, Skybound", 1],
+      ["Ultimate Alliance", 1],
+      ["Helicarrier Strike", 1],
+      ["Heroic Teamwork", 1],
+      ["Fall to Earth", 1],
+      ["Thriving Heath", 1],
+      ["Plains", 7]
+    ]
+  },
+  {
+    "name": "Caretakers",
+    "cards": [
+      ["Crowd of True Believers", 1],
+      ["Night Nurse, Healer of Heroes", 1],
+      ["Donald Blake, Guise of Thor", 1],
+      ["MJ, Rising Star", 1],
+      ["Virtuous Variant", 1],
+      ["Doctor Jane Foster", 1],
+      ["Valkyrior Skyrider", 1],
+      ["Doctor Strange, Surgeon", 1],
+      ["Take Up the Shield", 1],
+      ["Super Villain Lockup", 1],
+      ["Infinity Formula", 1],
+      ["Fall to Earth", 1],
+      ["Thriving Heath", 1],
+      ["Plains", 7]
+    ]
+  },
+  {
+    "name": "Counterargument",
+    "cards": [
+      ["City Pigeon", 1],
+      ["Selfless Police Captain", 1],
+      ["Matt Murdock, Justice Seeker", 1],
+      ["She-Hulk, Attorney-at-Law", 1],
+      ["Foggy Nelson, On Retainer", 1],
+      ["Daily Bugle Reporters", 1],
+      ["Starling, Aerial Ally", 1],
+      ["Vault Guardsman", 1],
+      ["Political Triumph", 1],
+      ["Costume Closet", 1],
+      ["Murdock's Crusade", 1],
+      ["Web Up", 1],
+      ["Thriving Heath", 1],
+      ["Plains", 7]
+    ]
+  },
+  {
+    "name": "Equipped",
+    "cards": [
+      ["Bucky Barnes, Eager Ally", 1],
+      ["Peggy Carter, Secret Agent", 1],
+      ["The Howling Commandos", 1],
+      ["Agent 13, Sharon Carter", 1],
+      ["Patriot, Young Avenger", 1],
+      ["U.S.Agent, John Walker", 1],
+      ["Captain America, Liberator", 1],
+      ["Captain America's Shield", 1],
+      ["Take Up the Shield", 1],
+      ["Infinity Formula", 1],
+      ["Origin of Captain America", 1],
+      ["Secure Detention", 1],
+      ["Thriving Heath", 1],
+      ["Plains", 7]
+    ]
+  },
+  {
+    "name": "Marvelous",
+    "cards": [
+      ["Wakandan Shield Guard", 1],
+      ["Raft Security Officer", 1],
+      ["Marvel Boy, Noh-Varr", 1],
+      ["Hero in Training", 1],
+      ["Ms. Marvel, Elastic Ally", 1],
+      ["Photon, Lady of Light", 1],
+      ["Captain Mar-Vell, Space-Born", 1],
+      ["Captain Marvel, Shooting Star", 1],
+      ["Helicarrier Strike", 1],
+      ["Quantum Entanglement", 1],
+      ["Super Villain Lockup", 1],
+      ["Fall to Earth", 1],
+      ["Thriving Heath", 1],
+      ["Plains", 7]
+    ]
+  },
+  {
+    "name": "Precise",
+    "cards": [
+      ["Colleen Wing, Street Samurai", 1],
+      ["Agent of Atlas", 1],
+      ["Raft Security Officer", 1],
+      ["Kree Commandos", 1],
+      ["Hawkeye, Bowslinger", 1],
+      ["Mockingbird, Ace Agent", 1],
+      ["Valkyrior Skyrider", 1],
+      ["Panther Pounce", 1],
+      ["Stunning Shot", 1],
+      ["Sudden Strike", 1],
+      ["Heroic Teamwork", 1],
+      ["Fall to Earth", 1],
+      ["Thriving Heath", 1],
+      ["Plains", 7]
+    ]
+  },
+  {
+    "name": "Squadron",
+    "cards": [
+      ["Agent of Atlas", 1],
+      ["Brave Brawler", 1],
+      ["Nighthawk, Dark Defender", 1],
+      ["Hero in Training", 1],
+      ["Zarda, the Power Princess", 1],
+      ["Doctor Spectrum", 1],
+      ["Borough Backup", 1],
+      ["Hyperion, Supreme Hero", 1],
+      ["Hyperion's Atomic Vision", 1],
+      ["Heroic Teamwork", 1],
+      ["Web Up", 1],
+      ["Blur of Heroism", 1],
+      ["Thriving Heath", 1],
+      ["Plains", 7]
+    ]
+  },
+  {
+    "name": "Wakanda",
+    "cards": [
+      ["Wakandan Shield Guard", 1],
+      ["Wakandan Tusker", 1],
+      ["Black Panther, Most Dangerous", 1],
+      ["Shuri, Vibranium Technologist", 1],
+      ["Okoye, Dora Milaje Leader", 1],
+      ["Wakandan Drone Flock", 1],
+      ["Borough Backup", 1],
+      ["Vibranium Energy Daggers", 1],
+      ["Ultimate Alliance", 1],
+      ["Panther Pounce", 1],
+      ["Heroic Teamwork", 1],
+      ["Secure Detention", 1],
+      ["Thriving Heath", 1],
+      ["Plains", 7]
+    ]
+  },
+  {
+    "name": "Web-Slinging",
+    "cards": [
+      ["Aunt May", 1],
+      ["Flash Thompson, Spider-Fan", 1],
+      ["Gallant Citizen", 1],
+      ["Spider-Man, Web-Slinger", 1],
+      ["Virtuous Variant", 1],
+      ["Spider-UK", 1],
+      ["Amazing Spider-Girl", 1],
+      ["Vault Guardsman", 1],
+      ["Thwip!", 1],
+      ["Spectacular Tactics", 1],
+      ["Web Up", 1],
+      ["Spider-Mobile", 1],
+      ["Thriving Heath", 1],
+      ["Plains", 7]
+    ]
+  },
+  {
+    "name": "Analyzed",
+    "cards": [
+      ["Virtual Assistant", 1],
+      ["TVA Bureaucrat", 1],
+      ["Viv Vision, Teen Synthezoid", 1],
+      ["Echo, Perceptive Prodigy", 1],
+      ["Machine Man, Model X-51", 1],
+      ["Victor Mancha, Runaway", 1],
+      ["Vision, Spectral Synthezoid", 1],
+      ["We Say Thee Nay!", 1],
+      ["Quantum Reduction", 1],
+      ["Frozen in Ice", 1],
+      ["Timeline Inquiry", 1],
+      ["Atlantis Attacks", 1],
+      ["Thriving Isle", 1],
+      ["Island", 7]
+    ]
+  },
+  {
+    "name": "Atlantis",
+    "cards": [
+      ["Mist-Cloaked Herald", 1],
+      ["Daughter of the Deep", 1],
+      ["Atlantean Skirmisher", 1],
+      ["Atlantean Cavalry", 1],
+      ["Namora, the Sea Queen", 1],
+      ["Attuma, Atlantean Warlord", 1],
+      ["Shipwreck Patrol", 1],
+      ["Namor, Scourge of the Seas", 1],
+      ["Quantum Reduction", 1],
+      ["Unstable Experiment", 1],
+      ["Frozen in Ice", 1],
+      ["Atlantis Attacks", 1],
+      ["Thriving Isle", 1],
+      ["Island", 7]
+    ]
+  },
+  {
+    "name": "Blink",
+    "cards": [
+      ["Shi'ar Soldier", 1],
+      ["Mob Lookout", 1],
+      ["Imperial Cosmographer", 1],
+      ["S.H.I.E.L.D. Deployment Drone", 1],
+      ["Justice, Vance Astrovik", 1],
+      ["Victor Timely, Wily Tycoon", 1],
+      ["Shipwreck Patrol", 1],
+      ["Silver Surfer, Cosmic Voyager", 1],
+      ["Spaceshift", 1],
+      ["We Say Thee Nay!", 1],
+      ["Collector's Case", 1],
+      ["Dismissive Denial", 1],
+      ["Thriving Isle", 1],
+      ["Island", 7]
+    ]
+  },
+  {
+    "name": "Conniving",
+    "cards": [
+      ["Kid Loki", 1],
+      ["Mob Lookout", 1],
+      ["Flying Octobot", 1],
+      ["Graviton, Fundamental Force", 1],
+      ["Doc Ock's Henchmen", 1],
+      ["Tiger Shark, Abyssal Hunter", 1],
+      ["Leader, Super-Genius", 1],
+      ["Doc Ock, Sinister Scientist", 1],
+      ["Unstable Experiment", 1],
+      ["Mysterio's Mirage", 1],
+      ["Trickster's Stratagem", 1],
+      ["Dismissive Denial", 1],
+      ["Thriving Isle", 1],
+      ["Villainous Hideout", 1],
+      ["Island", 6]
+    ]
+  },
+  {
+    "name": "Geniuses",
+    "cards": [
+      ["Kid Loki", 1],
+      ["Bold Biochemist", 1],
+      ["Brawn, Amadeus Cho", 1],
+      ["Shuri, Vibranium Technologist", 1],
+      ["Ant-Man, Reformed Rogue", 1],
+      ["Beast, Erudite Aerialist", 1],
+      ["Blue Marvel, Adam Brashear", 1],
+      ["Reed Richards, Smartest Man", 1],
+      ["Super Intelligence", 1],
+      ["Futurist Forge", 1],
+      ["Frozen in Ice", 1],
+      ["Fantastic Bounce", 1],
+      ["Thriving Isle", 1],
+      ["Island", 7]
+    ]
+  },
+  {
+    "name": "Iron Man",
+    "cards": [
+      ["Hydraulic Helper", 1],
+      ["Rescue, Pepper Potts", 1],
+      ["S.H.I.E.L.D. Deployment Drone", 1],
+      ["Iron Lad, Young Avenger", 1],
+      ["War Machine, James Rhodes", 1],
+      ["Iron Man, Bleeding Edge", 1],
+      ["Happy Hogan, Bodyguard", 1],
+      ["Iron Suitcase", 1],
+      ["Collector's Case", 1],
+      ["Futurist Forge", 1],
+      ["I Am Iron Man", 1],
+      ["Origin of Iron Man", 1],
+      ["Thriving Isle", 1],
+      ["Island", 7]
+    ]
+  },
+  {
+    "name": "Kang Dynasty",
+    "cards": [
+      ["Bold Biochemist", 1],
+      ["TVA Bureaucrat", 1],
+      ["S.H.I.E.L.D. Deployment Drone", 1],
+      ["Iron Lad, Young Avenger", 1],
+      ["Immortus, Master of Eternity", 1],
+      ["Victor Timely, Wily Tycoon", 1],
+      ["Pharaoh Rama-Tut", 1],
+      ["Think Twice", 1],
+      ["Depower", 1],
+      ["Timeline Inquiry", 1],
+      ["Multiversal Recruitment", 1],
+      ["Time Warp", 1],
+      ["Thriving Isle", 1],
+      ["Island", 7]
+    ]
+  },
+  {
+    "name": "Pym Particles",
+    "cards": [
+      ["Aerial Doombot", 1],
+      ["Bold Biochemist", 1],
+      ["Ant-Man's Air Force", 1],
+      ["Ant-Man, Reformed Rogue", 1],
+      ["Wasp, Shrinking Savior", 1],
+      ["A.I.M. Scientists", 1],
+      ["Giant-Sized Flying Ant", 1],
+      ["Pym Particles", 1],
+      ["Super Suit", 1],
+      ["Quantum Reduction", 1],
+      ["Depower", 1],
+      ["Robotics Mastery", 1],
+      ["Thriving Isle", 1],
+      ["Island", 7]
+    ]
+  },
+  {
+    "name": "Soaring",
+    "cards": [
+      ["Aerial Doombot", 1],
+      ["Rescue, Pepper Potts", 1],
+      ["Flying Drone", 1],
+      ["Namora, the Sea Queen", 1],
+      ["S.H.I.E.L.D. Deployment Drone", 1],
+      ["Justice, Vance Astrovik", 1],
+      ["Vulture, Feathered Fiend", 1],
+      ["Falcon, Winged Wonder", 1],
+      ["Whoosh!", 1],
+      ["Falcon's Wing Harness", 1],
+      ["I Am Iron Man", 1],
+      ["Dismissive Denial", 1],
+      ["Thriving Isle", 1],
+      ["Island", 7]
+    ]
+  },
+  {
+    "name": "Tricksters",
+    "cards": [
+      ["Kid Loki", 1],
+      ["Living Lies of Loki", 1],
+      ["Ant-Man's Air Force", 1],
+      ["Impossible Man", 1],
+      ["Ghost, Spectral Saboteur", 1],
+      ["Loki, Lord of Misrule", 1],
+      ["A.I.M. Scientists", 1],
+      ["We Say Thee Nay!", 1],
+      ["Quantum Reduction", 1],
+      ["Trickster's Stratagem", 1],
+      ["Multiversal Recruitment", 1],
+      ["The Clone Saga", 1],
+      ["Thriving Isle", 1],
+      ["Island", 7]
+    ]
+  },
+  {
+    "name": "Armed",
+    "cards": [
+      ["Whiplash, Vengeful Engineer", 1],
+      ["Swordsman, Sharp Scoundrel", 1],
+      ["Red Room Recruit", 1],
+      ["Ronin, Shadow Stalker", 1],
+      ["Kingpin's Enforcers", 1],
+      ["Armed Assailant", 1],
+      ["U.S.Agent, John Walker", 1],
+      ["HYDRA Disintegrator", 1],
+      ["Stolen Stark Tech", 1],
+      ["Voltaic Whip", 1],
+      ["Hour of Defeat", 1],
+      ["Swordsman's Steel", 1],
+      ["Thriving Moor", 1],
+      ["Swamp", 7]
+    ]
+  },
+  {
+    "name": "DOOM",
+    "cards": [
+      ["Project Deathlok Soldier", 1],
+      ["Common Crook", 1],
+      ["Doom's Servo-Guards", 1],
+      ["Doombot Harbinger", 1],
+      ["Ninja of the Hand", 1],
+      ["Doctor Doom, Unrivaled", 1],
+      ["Roxxon Brutes", 1],
+      ["Dark Ritual", 1],
+      ["Doom Blade", 1],
+      ["Deadly Dispute", 1],
+      ["Doomfall", 1],
+      ["Doomsday", 1],
+      ["Thriving Moor", 1],
+      ["Swamp", 7]
+    ]
+  },
+  {
+    "name": "HYDRA",
+    "cards": [
+      ["Bob, Reluctant HYDRA Agent", 1],
+      ["Viper, Cruel Conspirator", 1],
+      ["Agents of HYDRA", 1],
+      ["HYDRA Troopers", 1],
+      ["Baron Strucker, HYDRA Overlord", 1],
+      ["Arnim Zola, Bio-Fanatic", 1],
+      ["Crossbones, Malicious Mercenary", 1],
+      ["HYDRA Disintegrator", 1],
+      ["Dark Deed", 1],
+      ["Cruel Alliance", 1],
+      ["HYDRA Infiltration", 1],
+      ["Infernal Rebirth", 1],
+      ["Thriving Moor", 1],
+      ["Swamp", 7]
+    ]
+  },
+  {
+    "name": "Lethal",
+    "cards": [
+      ["Red Room Recruit", 1],
+      ["White Widow, Yelena Belova", 1],
+      ["Ninja of the Hand", 1],
+      ["Venomized Cat", 1],
+      ["Black Widow, Deadly Hunter", 1],
+      ["Titanium Man", 1],
+      ["Venom, Evil Unleashed", 1],
+      ["Stolen Stark Tech", 1],
+      ["Widow's Bite", 1],
+      ["Hour of Defeat", 1],
+      ["Origin of Black Widow", 1],
+      ["Infernal Rebirth", 1],
+      ["Thriving Moor", 1],
+      ["Swamp", 7]
+    ]
+  },
+  {
+    "name": "Masters of Evil",
+    "cards": [
+      ["Boomerang, Blade Flinger", 1],
+      ["Yellowjacket, Heartless Marauder", 1],
+      ["Titania, Rugged Rumbler", 1],
+      ["Klaw, Sonic Subjugator", 1],
+      ["Crimson Cowl, Master of Evil", 1],
+      ["Tiger Shark, Abyssal Hunter", 1],
+      ["Radioactive Man", 1],
+      ["The Masters of Evil", 1],
+      ["Villainous Syndication", 1],
+      ["Cruel Alliance", 1],
+      ["Visions of Villainy", 1],
+      ["Hour of Defeat", 1],
+      ["Thriving Moor", 1],
+      ["Swamp", 7]
+    ]
+  },
+  {
+    "name": "Mayhem",
+    "cards": [
+      ["Project Deathlok Soldier", 1],
+      ["Red Room Recruit", 1],
+      ["Yellowjacket, Heartless Marauder", 1],
+      ["Swarm, Being of Bees", 1],
+      ["Inner Demons Gangsters", 1],
+      ["Roxxon Brutes", 1],
+      ["Green Goblin, Back for More", 1],
+      ["Pumpkin Bombardment", 1],
+      ["Alien Symbiosis", 1],
+      ["Daily Bugle Newspaper", 1],
+      ["Rocket-Powered Goblin Glider", 1],
+      ["Sadistic Slash", 1],
+      ["Thriving Moor", 1],
+      ["Swamp", 7]
+    ]
+  },
+  {
+    "name": "Returned",
+    "cards": [
+      ["Project Deathlok Soldier", 1],
+      ["Doom's Servo-Guards", 1],
+      ["Undead Hand Ninja", 1],
+      ["Songbird, Sonic Screamer", 1],
+      ["Arnim Zola, Bio-Fanatic", 1],
+      ["Grim Reaper, Lethal Legionnaire", 1],
+      ["Unliving Legionnaire", 1],
+      ["Ultimo, Civilization's End", 1],
+      ["Minion Missile", 1],
+      ["Grim Reaper's Scythe", 1],
+      ["Too Evil to Stay Dead", 1],
+      ["Infernal Rebirth", 1],
+      ["Thriving Moor", 1],
+      ["Swamp", 7]
+    ]
+  },
+  {
+    "name": "Street Level Villains",
+    "cards": [
+      ["Agents of HYDRA", 1],
+      ["Common Crook", 1],
+      ["Hammerhead, Maggia Boss", 1],
+      ["Kingpin's Enforcers", 1],
+      ["Tombstone, Career Criminal", 1],
+      ["Kingpin, Wilson Fisk", 1],
+      ["Madame Masque", 1],
+      ["Count Nefaria", 1],
+      ["Minion Missile", 1],
+      ["Deadly Dispute", 1],
+      ["Criminal Enterprise", 1],
+      ["The Spot's Portal", 1],
+      ["Thriving Moor", 1],
+      ["Swamp", 7]
+    ]
+  },
+  {
+    "name": "Thunderbolts",
+    "cards": [
+      ["MACH-1, Swooping Scoundrel", 1],
+      ["Songbird, Sonic Screamer", 1],
+      ["Fixer, Techno Terror", 1],
+      ["Valentina Allegra de Fontaine", 1],
+      ["Citizen V, Helmut Zemo", 1],
+      ["Atlas, Sizable Stooge", 1],
+      ["Moonstone, Harsh Mistress", 1],
+      ["Roxxon Brutes", 1],
+      ["Stolen Stark Tech", 1],
+      ["Eerie Gravestone", 1],
+      ["Cruel Alliance", 1],
+      ["Void Helix", 1],
+      ["Thriving Moor", 1],
+      ["Swamp", 7]
+    ]
+  },
+  {
+    "name": "Ultron",
+    "cards": [
+      ["Project Deathlok Soldier", 1],
+      ["Doom's Servo-Guards", 1],
+      ["Ultron's Auxiliary", 1],
+      ["Doombot Harbinger", 1],
+      ["Ultron Drone", 1],
+      ["Ultron the Annihilator", 1],
+      ["Victor Mancha, Runaway", 1],
+      ["Minion Missile", 1],
+      ["Stolen Stark Tech", 1],
+      ["Eerie Gravestone", 1],
+      ["Dark Deed", 1],
+      ["Robot Domination", 1],
+      ["Thriving Moor", 1],
+      ["Swamp", 7]
+    ]
+  },
+  {
+    "name": "Boosted",
+    "cards": [
+      ["Quinjet Technician", 1],
+      ["Extremis Elite", 1],
+      ["Marvel Boy, Noh-Varr", 1],
+      ["Jack of Hearts, Volatile Hero", 1],
+      ["Molly Hayes, Runaway", 1],
+      ["Human Torch, Johnny Storm", 1],
+      ["Abomination, Terrifying Titan", 1],
+      ["Wonder Man, Hollywood Hero", 1],
+      ["Heroes' Hangout", 1],
+      ["Vision of Love", 1],
+      ["HULK SMASH!", 1],
+      ["Inspired Fire", 1],
+      ["Thriving Bluff", 1],
+      ["Mountain", 7]
+    ]
+  },
+  {
+    "name": "Fearless",
+    "cards": [
+      ["Unlucky Witness", 1],
+      ["Taxi Driver", 1],
+      ["Stick, Fearless Mentor", 1],
+      ["Daredevil, Fearless Fighter", 1],
+      ["Jessica Jones, Private Eye", 1],
+      ["Elektra, Femme Fatale", 1],
+      ["Stegron the Dinosaur Man", 1],
+      ["Blazing Crescendo", 1],
+      ["Daredevil's Billy Club", 1],
+      ["HULK SMASH!", 1],
+      ["Hire a Crew", 1],
+      ["Fogwell's Gym", 1],
+      ["Thriving Bluff", 1],
+      ["Mountain", 7]
+    ]
+  },
+  {
+    "name": "Heroes for Hire",
+    "cards": [
+      ["Stark Industries Executive", 1],
+      ["K'un-Lun Warrior", 1],
+      ["Misty Knight, Hero for Hire", 1],
+      ["Iron Fist, Hero for Hire", 1],
+      ["Contract Hero", 1],
+      ["Jessica Jones, Private Eye", 1],
+      ["Luke Cage, Hero for Hire", 1],
+      ["Red Hulk", 1],
+      ["Bionic Blow", 1],
+      ["Big Score", 1],
+      ["Heroes for Hire", 1],
+      ["Marvelous Melee", 1],
+      ["Thriving Bluff", 1],
+      ["Mountain", 7]
+    ]
+  },
+  {
+    "name": "Runaways",
+    "cards": [
+      ["Chase Stein, Runaway", 1],
+      ["Alex Wilder, Runaway", 1],
+      ["Molly Hayes, Runaway", 1],
+      ["Gert and Old Lace, Runaways", 1],
+      ["Karolina Dean, Runaway", 1],
+      ["Nico Minoru, Runaway", 1],
+      ["Victor Mancha, Runaway", 1],
+      ["Shock", 1],
+      ["Blazing Crescendo", 1],
+      ["Hex Magic", 1],
+      ["Crossover Collaboration", 1],
+      ["Marvelous Melee", 1],
+      ["Thriving Bluff", 1],
+      ["Mountain", 7]
+    ]
+  },
+  {
+    "name": "Scarlet",
+    "cards": [
+      ["Stark Industries Executive", 1],
+      ["Loki Laufeyson", 1],
+      ["Speed, Young Avenger", 1],
+      ["Molten Lavamancer", 1],
+      ["Wiccan, Young Avenger", 1],
+      ["The Vision and Scarlet Witch", 1],
+      ["Kree Sentinel", 1],
+      ["Lightning Bolt", 1],
+      ["Vision of Love", 1],
+      ["Grapeshot", 1],
+      ["Hex Magic", 1],
+      ["Wanda's Vision", 1],
+      ["Thriving Bluff", 1],
+      ["Mountain", 7]
+    ]
+  },
+  {
+    "name": "Speedy",
+    "cards": [
+      ["Masked Meower", 1],
+      ["Quicksilver, Brash Blur", 1],
+      ["Taxi Driver", 1],
+      ["Speed, Young Avenger", 1],
+      ["Whirlwind, Killer Cyclone", 1],
+      ["Volcanic Villain", 1],
+      ["The Whizzer, Classic Speedster", 1],
+      ["Living Lightning, Charged Up", 1],
+      ["Super Speed", 1],
+      ["Pick Up the Pace", 1],
+      ["Lightning Strike", 1],
+      ["Marvelous Melee", 1],
+      ["Thriving Bluff", 1],
+      ["Mountain", 7]
+    ]
+  },
+  {
+    "name": "Spider-Verse",
+    "cards": [
+      ["Masked Meower", 1],
+      ["Hobgoblin, Mantled Marauder", 1],
+      ["Lady Spider, Maybelle Reilly", 1],
+      ["Spider-Gwen, Free Spirit", 1],
+      ["Spider-Man, New Champion", 1],
+      ["Iceman and Firestar", 1],
+      ["Astonishing Spider-Man", 1],
+      ["Stegron the Dinosaur Man", 1],
+      ["Romantic Rendezvous", 1],
+      ["Daily Bugle Newspaper", 1],
+      ["Wisecrack", 1],
+      ["Marvelous Melee", 1],
+      ["Thriving Bluff", 1],
+      ["Fogwell's Gym", 1],
+      ["Mountain", 6]
+    ]
+  },
+  {
+    "name": "Thor",
+    "cards": [
+      ["K'un-Lun Warrior", 1],
+      ["Loki Laufeyson", 1],
+      ["Sif's Spearmaster", 1],
+      ["Molten Lavamancer", 1],
+      ["Crimson Operative", 1],
+      ["Thor, Asgard's Avenger", 1],
+      ["Kree Sentinel", 1],
+      ["Asgardian Inspiration", 1],
+      ["Lightning Bolt", 1],
+      ["Lightning Strike", 1],
+      ["Origin of Thor", 1],
+      ["Mjölnir's Might", 1],
+      ["Thriving Bluff", 1],
+      ["Mountain", 7]
+    ]
+  },
+  {
+    "name": "Vehicles",
+    "cards": [
+      ["Intrepid Ace", 1],
+      ["HYDRA Assault Robot", 1],
+      ["Extremis Elite", 1],
+      ["Taxi Driver", 1],
+      ["Machinesmith Automaton", 1],
+      ["Bullseye, Death Dealer", 1],
+      ["Captain America's Motorcycle", 1],
+      ["Big Wheel", 1],
+      ["S.H.I.E.L.D. Helicarrier", 1],
+      ["Sky Cycle", 1],
+      ["The Thanos-Copter", 1],
+      ["Truck Toss", 1],
+      ["Thriving Bluff", 1],
+      ["Mountain", 7]
+    ]
+  },
+  {
+    "name": "Young Avengers",
+    "cards": [
+      ["Stature, Young Avenger", 1],
+      ["Speed, Young Avenger", 1],
+      ["Patriot, Young Avenger", 1],
+      ["Iron Lad, Young Avenger", 1],
+      ["Wiccan, Young Avenger", 1],
+      ["Hawkeye, Young Avenger", 1],
+      ["Hulkling, Young Avenger", 1],
+      ["Hawkeye's Bow", 1],
+      ["Team Tactics", 1],
+      ["Lightning Strike", 1],
+      ["Crossover Collaboration", 1],
+      ["Marvelous Melee", 1],
+      ["Thriving Bluff", 1],
+      ["Mountain", 7]
+    ]
+  },
+  {
+    "name": "Animal",
+    "cards": [
+      ["Lucky the Pizza Dog", 1],
+      ["Guerrilla Gorilla", 1],
+      ["Tigra, Feline Fury", 1],
+      ["Wakandan Tusker", 1],
+      ["Ant-Man's Army", 1],
+      ["Tippy-Toe, Terrific Partner", 1],
+      ["Pet Avengers", 1],
+      ["Savage Land Dinosaur", 1],
+      ["Go Nuts!", 1],
+      ["Scout the City", 1],
+      ["Beast Mode", 1],
+      ["Heroic Feast", 1],
+      ["Thriving Grove", 1],
+      ["Forest", 7]
+    ]
+  },
+  {
+    "name": "Great Lakes Avengers",
+    "cards": [
+      ["Guerrilla Gorilla", 1],
+      ["Doorman", 1],
+      ["Mister Immortal", 1],
+      ["Tippy-Toe, Terrific Partner", 1],
+      ["Flatman", 1],
+      ["The Unbeatable Squirrel Girl", 1],
+      ["Big Bertha", 1],
+      ["Savage Land Dinosaur", 1],
+      ["Rapid Rescue", 1],
+      ["Go Nuts!", 1],
+      ["Beast Mode", 1],
+      ["Training Regimen", 1],
+      ["Thriving Grove", 1],
+      ["Forest", 7]
+    ]
+  },
+  {
+    "name": "Incredible",
+    "cards": [
+      ["Brawn, Amadeus Cho", 1],
+      ["Guerrilla Gorilla", 1],
+      ["She-Hulk, Attorney-at-Law", 1],
+      ["Hulk, Strongest There Is", 1],
+      ["Abomination, Terrifying Titan", 1],
+      ["Doc Samson, Super Psychiatrist", 1],
+      ["Savage Land Dinosaur", 1],
+      ["Giant Growth", 1],
+      ["Hulk's Thunderclap", 1],
+      ["Origin of the Hulk", 1],
+      ["Go Nuts!", 1],
+      ["Super Strength", 1],
+      ["Thriving Grove", 1],
+      ["Forest", 7]
+    ]
+  },
+  {
+    "name": "Rampaging",
+    "cards": [
+      ["Serpent Specialist", 1],
+      ["Knight of Wundagore", 1],
+      ["Bushmaster, Coiled Henchman", 1],
+      ["Titania, Rugged Rumbler", 1],
+      ["Powerful Broker", 1],
+      ["Mister Hyde, Monster Within", 1],
+      ["Atlas, Sizable Stooge", 1],
+      ["Rhino, Terrible Trampler", 1],
+      ["Rhino's Rampage", 1],
+      ["Beast Mode", 1],
+      ["Colossal Collision", 1],
+      ["Claim the Kingdom", 1],
+      ["Thriving Grove", 1],
+      ["Forest", 7]
+    ]
+  },
+  {
+    "name": "Savage Lands",
+    "cards": [
+      ["Reptil, Dinomorpher", 1],
+      ["Lurking Lizards", 1],
+      ["Moon-Boy, Dino Rider", 1],
+      ["Gert and Old Lace, Runaways", 1],
+      ["Devil Dinosaur", 1],
+      ["Ka-Zar of the Savage Land", 1],
+      ["Sauron, Dino Devotee", 1],
+      ["Savage Land Dinosaur", 1],
+      ["Commune with Dinosaurs", 1],
+      ["Go Nuts!", 1],
+      ["Accelerated Evolution", 1],
+      ["Terrific Team-Up", 1],
+      ["Thriving Grove", 1],
+      ["Savage Lands", 1],
+      ["Forest", 6]
+    ]
+  },
+  {
+    "name": "Tenacious",
+    "cards": [
+      ["Undercover Skrull", 1],
+      ["White Tiger, Amulet Keeper", 1],
+      ["Hellcat, Undying Vigilante", 1],
+      ["Gert and Old Lace, Runaways", 1],
+      ["Voracious Brood", 1],
+      ["Pet Avengers", 1],
+      ["Savage Land Dinosaur", 1],
+      ["Return of the Mole Man", 1],
+      ["Scout the City", 1],
+      ["Call Damage Control", 1],
+      ["Accelerated Evolution", 1],
+      ["Punishing Punch", 1],
+      ["Thriving Grove", 1],
+      ["Terramorphic Expanse", 1],
+      ["Forest", 6]
+    ]
+  },
+  {
+    "name": "Towering",
+    "cards": [
+      ["Reptil, Dinomorpher", 1],
+      ["Stature, Young Avenger", 1],
+      ["Goliath, Mass Manipulator", 1],
+      ["Ms. Marvel, Elastic Ally", 1],
+      ["Ant-Man, Reformed Rogue", 1],
+      ["Atlas, Sizable Stooge", 1],
+      ["Giant-Man, Gargantuan Genius", 1],
+      ["Spider-Rex, Daring Dino", 1],
+      ["Giant Growth", 1],
+      ["Rapid Rescue", 1],
+      ["Terrific Team-Up", 1],
+      ["Colossal Collision", 1],
+      ["Thriving Grove", 1],
+      ["Forest", 7]
+    ]
+  },
+  {
+    "name": "Trained",
+    "cards": [
+      ["Serpent Specialist", 1],
+      ["White Tiger, Ava Ayala", 1],
+      ["Undercover Skrull", 1],
+      ["Hercules, Prince of Power", 1],
+      ["She-Hulk, Attorney-at-Law", 1],
+      ["Pet Avengers", 1],
+      ["Shang-Chi, Martial Mentor", 1],
+      ["Wakandan Royal Guard", 1],
+      ["Advancing the Spirit", 1],
+      ["Restorative Technique", 1],
+      ["Punishing Punch", 1],
+      ["Colossal Collision", 1],
+      ["Thriving Grove", 1],
+      ["Forest", 7]
+    ]
+  },
+  {
+    "name": "Uncanny",
+    "cards": [
+      ["Black Tom Cassidy", 1],
+      ["Darwin, Adaptive Mutant", 1],
+      ["Wolfsbane, Highland Hero", 1],
+      ["X-23, Deadly Weapon", 1],
+      ["Wolverine, Claws Out", 1],
+      ["Beast, Erudite Aerialist", 1],
+      ["Colossus, Steel Stalwart", 1],
+      ["Storm, Shaker of Skies", 1],
+      ["Go Nuts!", 1],
+      ["Accelerated Evolution", 1],
+      ["Colossal Collision", 1],
+      ["Training Regimen", 1],
+      ["Thriving Grove", 1],
+      ["Forest", 7]
+    ]
+  },
+  {
+    "name": "Wild",
+    "cards": [
+      ["Hellcat, Undying Vigilante", 1],
+      ["White Tiger, Amulet Keeper", 1],
+      ["The Fabulous Frog-Man", 1],
+      ["Gert and Old Lace, Runaways", 1],
+      ["Mole Man, Moloid Master", 1],
+      ["Hit-Monkey", 1],
+      ["Ka-Zar of the Savage Land", 1],
+      ["Claim the Kingdom", 1],
+      ["Accelerated Evolution", 1],
+      ["Restorative Technique", 1],
+      ["Colossal Collision", 1],
+      ["Terramorphic Expanse", 1],
+      ["Thriving Grove", 1],
+      ["Forest", 7]
+    ]
+  },
+  {
+    "name": "Fantastic",
+    "cards": [
+      ["Human Torch, Johnny Storm", 1],
+      ["H.E.R.B.I.E. Scout Unit", 1],
+      ["Mister Fantastic, Reed Richards", 1],
+      ["Invisible Woman, Sue Storm", 1],
+      ["The Thing, Ben Grimm", 1],
+      ["The Fantastic Four", 1],
+      ["Farseek", 1],
+      ["Daily Bugle Newspaper", 1],
+      ["Wall Off", 1],
+      ["Fantastic Bounce", 1],
+      ["Inspired Fire", 1],
+      ["Thing Swing", 1],
+      ["Baxter Building", 1],
+      ["Thriving Grove", 1],
+      ["Pym Technologies", 1],
+      ["Forest", 1],
+      ["Plains", 1],
+      ["Island", 1],
+      ["Mountain", 1],
+      ["Terramorphic Expanse", 1]
+    ]
+  }
+]
