@@ -3,6 +3,7 @@ import type { Behavior } from '../build.ts';
 import { onEnter } from './helpers.ts';
 import { MSH_JUMPSTART_ANIMAL } from './jumpstart-animal.ts';
 import { MSH_JUMPSTART_ATLANTIS } from './jumpstart-atlantis.ts';
+import { MSH_JUMPSTART_BATTALION } from './jumpstart-battalion.ts';
 import { MSH_JUMPSTART_EQUIPPED } from './jumpstart-equipped.ts';
 import { MSH_JUMPSTART_GENIUSES } from './jumpstart-geniuses.ts';
 import { MSH_JUMPSTART_GREAT_LAKES } from './jumpstart-great-lakes.ts';
@@ -60,6 +61,7 @@ export const MSH_JUMPSTART: Record<string, Behavior> = {
   'Thriving Grove': thriving('G'),
   ...MSH_JUMPSTART_ANIMAL,
   ...MSH_JUMPSTART_ATLANTIS,
+  ...MSH_JUMPSTART_BATTALION,
   ...MSH_JUMPSTART_EQUIPPED,
   ...MSH_JUMPSTART_GENIUSES,
   ...MSH_JUMPSTART_GREAT_LAKES,

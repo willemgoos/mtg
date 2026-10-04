@@ -539,6 +539,9 @@ export type TriggerDef =
       on: 'attacks';
       // Marvel Super Heroes: "attacks alone" (Luke Cage).
       alone?: boolean;
+      // Marvel Super Heroes Jumpstart (Battalion)
+      /** Battalion: "whenever this and at least two other creatures attack". */
+      battalion?: boolean;
     }
   /** "Whenever you attack" (with one or more creatures matching the filter): once per combat. */
   | { on: 'youAttack'; filter?: CardFilter }

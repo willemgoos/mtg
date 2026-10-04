@@ -1175,7 +1175,12 @@ function detect(ctx: Ctx, ev: GameEvent): void {
         ev.attackers.some((id) => !!s.objects[id] && matchesFilter(ctx, id, f, source));
       forEachBattlefieldTrigger(ctx, (o, a) => {
         if (a.trigger.on === 'attacks')
-          return ev.attackers.includes(o.id) && (!a.trigger.alone || ev.attackers.length === 1);
+          return (
+            ev.attackers.includes(o.id) &&
+            (!a.trigger.alone || ev.attackers.length === 1) &&
+            // Marvel Super Heroes Jumpstart (Battalion): it and at least two others.
+            (!a.trigger.battalion || ev.attackers.length >= 3)
+          );
         if (a.trigger.on === 'youAttack')
           return o.controller === ap && attackedWith(a.trigger.filter, o.id);
         return false;

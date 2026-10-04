@@ -22365,6 +22365,136 @@
   }
  },
  {
+  "name": "General Thunderbolt Ross",
+  "scryfallId": "0f352743-383c-4806-8cbd-d2bea6057283",
+  "oracleId": "57ffb558-3a1c-43ea-a79c-bcfacad22ca4",
+  "set": "msc",
+  "collectorNumber": "595",
+  "rarity": "uncommon",
+  "manaCost": "{W}",
+  "typeLine": "Legendary Creature — Human Soldier",
+  "oracleText": "First strike\nBattalion — Whenever General Thunderbolt Ross and at least two other creatures attack, attacking creatures get +1/+0 until end of turn.",
+  "power": "1",
+  "toughness": "1",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Battalion",
+   "First strike"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/f/0f352743-383c-4806-8cbd-d2bea6057283.jpg?1783903084",
+   "normal": "https://cards.scryfall.io/normal/front/0/f/0f352743-383c-4806-8cbd-d2bea6057283.jpg?1783903084",
+   "large": "https://cards.scryfall.io/large/front/0/f/0f352743-383c-4806-8cbd-d2bea6057283.jpg?1783903084",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/f/0f352743-383c-4806-8cbd-d2bea6057283.jpg?1783903084"
+  }
+ },
+ {
+  "name": "Wild Pack Squad",
+  "scryfallId": "ca3cdbf8-f09c-43c4-bb43-87f244554838",
+  "oracleId": "294b2aa7-cb46-46bd-8241-69b26d73aa2d",
+  "set": "msc",
+  "collectorNumber": "781",
+  "rarity": "common",
+  "manaCost": "{2}{W}",
+  "typeLine": "Creature — Human Mercenary",
+  "oracleText": "At the beginning of combat on your turn, up to one target creature gains first strike and vigilance until end of turn.",
+  "power": "2",
+  "toughness": "3",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/a/ca3cdbf8-f09c-43c4-bb43-87f244554838.jpg?1783903018",
+   "normal": "https://cards.scryfall.io/normal/front/c/a/ca3cdbf8-f09c-43c4-bb43-87f244554838.jpg?1783903018",
+   "large": "https://cards.scryfall.io/large/front/c/a/ca3cdbf8-f09c-43c4-bb43-87f244554838.jpg?1783903018",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/a/ca3cdbf8-f09c-43c4-bb43-87f244554838.jpg?1783903018"
+  }
+ },
+ {
+  "name": "Falcon, Joaquin Torres",
+  "scryfallId": "cfa4837b-7d37-4026-a49d-eaf311d60e33",
+  "oracleId": "46399b09-1b5c-4c28-9134-cc2ed573b6aa",
+  "set": "msc",
+  "collectorNumber": "593",
+  "rarity": "uncommon",
+  "manaCost": "{2}{W}",
+  "typeLine": "Legendary Creature — Bird Human Hero",
+  "oracleText": "Flying, lifelink\nBattalion — Whenever Falcon and at least two other creatures attack, put a +1/+1 counter on him and scry 1. (Look at the top card of your library. You may put that card on the bottom.)",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Scry",
+   "Flying",
+   "Lifelink",
+   "Battalion"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/f/cfa4837b-7d37-4026-a49d-eaf311d60e33.jpg?1783903087",
+   "normal": "https://cards.scryfall.io/normal/front/c/f/cfa4837b-7d37-4026-a49d-eaf311d60e33.jpg?1783903087",
+   "large": "https://cards.scryfall.io/large/front/c/f/cfa4837b-7d37-4026-a49d-eaf311d60e33.jpg?1783903087",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/f/cfa4837b-7d37-4026-a49d-eaf311d60e33.jpg?1783903087"
+  }
+ },
+ {
+  "name": "War Machine, James Rhodes",
+  "scryfallId": "78bb5ed6-bb29-49a9-be0d-d9934f00dddd",
+  "oracleId": "0a512e55-793e-4936-bd27-80d749f4657e",
+  "set": "msc",
+  "collectorNumber": "572",
+  "rarity": "uncommon",
+  "manaCost": "{3}{W/U}",
+  "typeLine": "Legendary Artifact Creature — Human Hero",
+  "oracleText": "Flying (This creature can't be blocked except by creatures with flying or reach.)\nWhenever War Machine attacks, tap up to one target creature.",
+  "power": "3",
+  "toughness": "2",
+  "colors": [
+   "U",
+   "W"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/8/78bb5ed6-bb29-49a9-be0d-d9934f00dddd.jpg?1783903092",
+   "normal": "https://cards.scryfall.io/normal/front/7/8/78bb5ed6-bb29-49a9-be0d-d9934f00dddd.jpg?1783903092",
+   "large": "https://cards.scryfall.io/large/front/7/8/78bb5ed6-bb29-49a9-be0d-d9934f00dddd.jpg?1783903092",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/8/78bb5ed6-bb29-49a9-be0d-d9934f00dddd.jpg?1783903092"
+  }
+ },
+ {
+  "name": "Captain America, Skybound",
+  "scryfallId": "49d952d9-8584-435a-bf45-62bf13887083",
+  "oracleId": "e9566303-15cf-4444-a044-fc19540f21b6",
+  "set": "msc",
+  "collectorNumber": "588",
+  "rarity": "rare",
+  "manaCost": "{3}{W}{W}",
+  "typeLine": "Legendary Creature — Human Soldier Hero",
+  "oracleText": "Flying, vigilance\nBattalion — Whenever Captain America and at least two other creatures attack, put a +1/+1 counter on each attacking creature. They gain indestructible until end of turn. (Damage and effects that say \"destroy\" don't destroy them.)",
+  "power": "3",
+  "toughness": "5",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Flying",
+   "Vigilance",
+   "Battalion"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/9/49d952d9-8584-435a-bf45-62bf13887083.jpg?1783903086",
+   "normal": "https://cards.scryfall.io/normal/front/4/9/49d952d9-8584-435a-bf45-62bf13887083.jpg?1783903086",
+   "large": "https://cards.scryfall.io/large/front/4/9/49d952d9-8584-435a-bf45-62bf13887083.jpg?1783903086",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/9/49d952d9-8584-435a-bf45-62bf13887083.jpg?1783903086"
+  }
+ },
+ {
   "name": "Bucky Barnes, Eager Ally",
   "scryfallId": "58a6ca84-64b8-4137-b3ce-9540b6dfa162",
   "oracleId": "55bc5d06-7dd1-4403-af32-0e10d8bbe327",
