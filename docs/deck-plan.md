@@ -169,6 +169,10 @@ Strixhaven: School of Mages (13) and Secrets of Strixhaven (14) as main sets wit
 Arena Store Brawl decks led by Quintorius and the other commanders (15), then the Mystical Archive bonus cards (16). See
 `docs/strixhaven-plan.md`.
 
+**Phases 13 to 16 done:** every STX and SOS booster card, ten decks per set (all within 45–65% against the starters),
+Jump In packets and boosters for both, the eight Strixhaven Brawl decks (Quintorius is a planeswalker commander), and the
+Mystical Archive (STA, SOA) in both sets' packs. Simplifications are listed at the bottom of `docs/strixhaven-plan.md`.
+
 ## Notes
 
 - Some cards will turn out to be one-offs. Put them in `custom` handlers instead of growing the engine vocabulary for a single card.
