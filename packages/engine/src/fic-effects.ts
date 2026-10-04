@@ -14,7 +14,7 @@ import {
   transform,
 } from './context.ts';
 import { manaValue } from './cost.ts';
-import { changeLife, dealDamage, damageSourceFor } from './effects.ts';
+import { changeLife, dealDamage, damageSourceFor, plusFoodTokens } from './effects.ts';
 import { nextInt } from './rng.ts';
 import { shuffleLibrary } from './setup.ts';
 import type { GameObject, ObjectId, PlayerId } from './types.ts';
@@ -65,6 +65,7 @@ function tokenCopyOfCard(ctx: Ctx, defId: string, p: PlayerId): GameObject {
   const t = createObject(ctx, defId, p, 'battlefield', true);
   ctx.s.battlefield.push(t.id);
   emit(ctx, { type: 'objectMoved', id: t.id, defId, from: null, to: 'battlefield' });
+  plusFoodTokens(ctx, p); // Tippy-Toe
   return t;
 }
 

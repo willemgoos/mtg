@@ -34,6 +34,7 @@ import {
   damageSourceFor,
   dealDamage,
   gainLife,
+  plusFoodTokens,
   sendToBottomRandom,
 } from './effects.ts';
 import { foodsOf, payForage } from './forage.ts';
@@ -1753,6 +1754,7 @@ function squirrelFood(
   const food = createObject(ctx, 'food-token', d.player, 'battlefield', true);
   ctx.s.battlefield.push(food.id);
   emit(ctx, { type: 'objectMoved', id: food.id, defId: food.defId, from: null, to: 'battlefield' });
+  plusFoodTokens(ctx, d.player); // Tippy-Toe
 }
 
 /** Discard from an effect: one card at a time, then resolution continues. */

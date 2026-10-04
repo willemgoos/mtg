@@ -13,7 +13,7 @@ import {
   tap,
   untap,
 } from './context.ts';
-import { damageSourceFor, dealDamage, gainLife, useShield } from './effects.ts';
+import { damageSourceFor, dealDamage, gainLife, plusFoodTokens, useShield } from './effects.ts';
 import { nextInt, shuffleInPlace } from './rng.ts';
 import type { EffectDef, EffectSource, ObjectId, PlayerId } from './types.ts';
 
@@ -366,6 +366,7 @@ export const STX_13C_A_EFFECTS: Record<string, CustomEffect> = {
     token.hofriExiled = { id: dead.id, zcc: dead.zcc };
     ctx.s.battlefield.push(token.id);
     emit(ctx, { type: 'objectMoved', id: token.id, defId, from: null, to: 'battlefield' });
+    plusFoodTokens(ctx, es.controller); // Tippy-Toe
   },
   /**
    * Radiant Scrollwielder: exile an instant or sorcery card at random from your graveyard; you may cast it

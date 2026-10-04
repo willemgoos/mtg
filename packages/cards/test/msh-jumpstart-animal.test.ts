@@ -104,6 +104,18 @@ describe('Tippy-Toe, Terrific Partner', () => {
     expect(handSize(g, 'p1')).toBe(hand + 1);
   });
 
+  it('adds a Food to token copies too', () => {
+    const g = game({
+      p1: {
+        hand: ['multiversal-recruitment'],
+        battlefield: ['tippy-toe-terrific-partner', 'bear-cub', ...n('island', 4)],
+      },
+    });
+    settle(cast(g, 'multiversal-recruitment', [g.ref(g.id('p1', 'bear-cub'))]));
+    expect(all(g, 'bear-cub')).toHaveLength(2);
+    expect(all(g, 'food-token')).toHaveLength(1);
+  });
+
   it("doesn't draw if you didn't gain life", () => {
     const g = game({
       p1: { battlefield: ['tippy-toe-terrific-partner'], library: n('forest', 3) },

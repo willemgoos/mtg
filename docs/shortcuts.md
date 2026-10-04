@@ -59,8 +59,8 @@ from) when it's fixed. Older phases keep their own "Simplifications" lists in `d
       window to respond before the creature loses them.
 - [x] Wasp, Shrinking Savior: if her only target becomes illegal, the whole trigger fizzles, including the draw. (That part
       is the rules; choosing no target used to drop the trigger, draw included.)
-- [ ] Tippy-Toe, Terrific Partner: the extra Food only comes with tokens from the normal create-token effect, not a few
-      special token paths (`stack.ts`, `fin-effects.ts`, `fic-effects.ts`).
+- [ ] Tippy-Toe, Terrific Partner: the extra Food comes with token copies and the special token paths now, except the
+      Strixhaven Brawl decks' one-off token effects (`brawl-15*-effects.ts`).
 - [ ] Iron Fist, Hero for Hire: the 5 damage is divided among up to five targets, but the targets and the split are chosen
       as the power-up resolves (one target and its share at a time), not as it's activated (so nothing can respond to them).
 - [x] Contract Hero: the attack trigger always asks for a choice, even when you have no artifact and no cards in hand.

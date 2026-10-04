@@ -13,7 +13,7 @@ import {
   sacrifice,
 } from './context.ts';
 import { manaValue } from './cost.ts';
-import { changeLife, counterSpell } from './effects.ts';
+import { changeLife, counterSpell, plusFoodTokens } from './effects.ts';
 import { shuffleLibrary } from './setup.ts';
 import { type Chooser, CHOOSERS } from './stx-13c-a-effects.ts';
 import type { Color, EffectDef, EffectSource, ObjectId, PlayerId } from './types.ts';
@@ -51,6 +51,7 @@ function putToken(ctx: Ctx, defId: string, controller: PlayerId) {
     from: null,
     to: 'battlefield',
   });
+  plusFoodTokens(ctx, controller); // Tippy-Toe
   return token;
 }
 

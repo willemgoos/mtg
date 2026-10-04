@@ -412,6 +412,28 @@ function divideStep(
   return [{ kind: 'choose', options }];
 }
 
+/**
+ * Marvel Super Heroes Jumpstart (Animal): Tippy-Toe, "if you would create one or more tokens,
+ * instead create those tokens plus an additional Food token" (one per Tippy-Toe), after any
+ * effect that created tokens for `owner`.
+ */
+export function plusFoodTokens(ctx: Ctx, owner: PlayerId): void {
+  for (const id of [...ctx.s.battlefield])
+    if (obj(ctx, id).controller === owner)
+      for (const a of def(ctx, id).abilities)
+        if (a.kind === 'static' && a.effect.kind === 'plusFoodToken') {
+          const f = createObject(ctx, 'food-token', owner, 'battlefield', true);
+          ctx.s.battlefield.push(f.id);
+          emit(ctx, {
+            type: 'objectMoved',
+            id: f.id,
+            defId: f.defId,
+            from: null,
+            to: 'battlefield',
+          });
+        }
+}
+
 /** The id of the spell or ability a target refers to (Bolt Bend). */
 function stackTargetId(es: EffectSource, what: Ref): ObjectId | undefined {
   const t = typeof what === 'object' && 'target' in what ? es.targets[what.target] : null;
@@ -2109,22 +2131,7 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
                   to: 'battlefield',
                 });
               }
-      // Marvel Super Heroes Jumpstart (Animal): Tippy-Toe, "those tokens plus an additional Food token".
-      if (n > 0)
-        for (const id of [...ctx.s.battlefield])
-          if (obj(ctx, id).controller === owner)
-            for (const a of def(ctx, id).abilities)
-              if (a.kind === 'static' && a.effect.kind === 'plusFoodToken') {
-                const f = createObject(ctx, 'food-token', owner, 'battlefield', true);
-                ctx.s.battlefield.push(f.id);
-                emit(ctx, {
-                  type: 'objectMoved',
-                  id: f.id,
-                  defId: f.defId,
-                  from: null,
-                  to: 'battlefield',
-                });
-              }
+      if (n > 0) plusFoodTokens(ctx, owner);
       return;
     }
     case 'scry':
@@ -2265,6 +2272,7 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
         from: null,
         to: 'battlefield',
       });
+      plusFoodTokens(ctx, es.controller); // Tippy-Toe
       if (e.exileOtherTokensWithSubtype)
         for (const id of [...ctx.s.battlefield]) {
           const o = obj(ctx, id);
@@ -2992,6 +3000,7 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
       const tokenOwnerTarget = e.underTarget !== undefined ? es.targets[e.underTarget] : undefined;
       const tokenOwner =
         tokenOwnerTarget && 'player' in tokenOwnerTarget ? tokenOwnerTarget.player : es.controller;
+      let made = false;
       for (const id of objectsOf(ctx, es, e.of)) {
         const o = obj(ctx, id);
         const d = def(ctx, id);
@@ -3070,8 +3079,11 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
           const chapters = defOf(ctx, t.defId).saga;
           if (e.lore && chapters)
             for (let k = 0; k < Math.min(e.lore, chapters - 1); k++) addLore(ctx, t.id);
+          made = true;
         }
       }
+      // Tippy-Toe: one Food for the token copies this effect made.
+      if (made) plusFoodTokens(ctx, tokenOwner);
       return;
     }
     case 'revealTopToHandLoseLife': {
