@@ -456,6 +456,16 @@ export function unprepareObject(ctx: Ctx, id: ObjectId): void {
   emit(ctx, { type: 'unprepared', id, player: o.controller });
 }
 
+/** Reality Fracture (17a): a copy of a card that was made in exile and not cast ceases to exist. */
+export function ceaseSpellCopy(ctx: Ctx, id: ObjectId): void {
+  const copy = ctx.s.objects[id];
+  if (!copy || copy.zone !== 'exile' || !copy.spellCopyCard) return;
+  const list = ctx.s.players[copy.owner].exile;
+  const i = list.indexOf(id);
+  if (i >= 0) list.splice(i, 1);
+  delete ctx.s.objects[id];
+}
+
 /**
  * Moves an object between zones. The object keeps its id but becomes a new
  * object for rules purposes: zcc is bumped and per-zone status is reset.
@@ -534,6 +544,7 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
   delete o.usedAbilities;
   delete o.exiledUntilLeaves;
   delete o.kicked;
+  delete o.wasCast; // Reality Fracture (17a)
   if (from === 'battlefield') {
     if (o.counters) o.lastNamedCounters = o.counters;
     else delete o.lastNamedCounters;
@@ -575,6 +586,7 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
   // A stolen card's permission ends when it leaves exile.
   if (from === 'exile') {
     delete o.castableBy;
+    delete o.castableIf; // Reality Fracture (17a)
     delete o.castableUntilTurn;
     delete o.anyMana;
     // Marvel Super Heroes Jumpstart (Analyzed): Victor Mancha's permission ends too.

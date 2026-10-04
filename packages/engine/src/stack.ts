@@ -2,6 +2,7 @@ import { creaturesOnBattlefield, power } from './characteristics.ts';
 import { ignoresHexproofAndWard } from './brawl-15b-b-effects.ts';
 import {
   type Ctx,
+  ceaseSpellCopy,
   def,
   defOf,
   emit,
@@ -727,6 +728,7 @@ export function activateAbility(
   discard?: ObjectId,
   x?: number,
   tapCreature?: ObjectId,
+  tapArtifacts?: ObjectId[],
 ): boolean {
   const a = activatedAbility(ctx, source, index);
   const src = obj(ctx, source);
@@ -747,7 +749,7 @@ export function activateAbility(
     // Shang-Chi's mana can pay for abilities of creature sources.
     isCreature(ctx, source) ? ['CreatureAbility'] : undefined,
     a.cost.convoke ? creatureHelpers(ctx, player, manaSources(ctx, player, exclude), exclude) : [],
-    [sacrifice, forage !== 'graveyard' ? forage : undefined, tapCreature],
+    [sacrifice, forage !== 'graveyard' ? forage : undefined, tapCreature, ...(tapArtifacts ?? [])],
   );
   if (discard) {
     // Strixhaven (13c): Uvilda exiles the card with three refine counters.
@@ -779,6 +781,18 @@ export function activateAbility(
     // Villainous Syndication: the Villain chosen, if it still can be.
     const id = tapCreature && can.includes(tapCreature) ? tapCreature : can[0];
     if (id) tap(ctx, id);
+  }
+  // Reality Fracture (17a): Tenured Tethermage, "tap two untapped artifacts you control".
+  if (a.cost.tapArtifacts) {
+    const can = artifactsToTap(ctx, player);
+    const chosen = (tapArtifacts ?? []).filter(
+      (id, i, all) => can.includes(id) && all.indexOf(id) === i,
+    );
+    for (const id of [...chosen, ...can.filter((id) => !chosen.includes(id))].slice(
+      0,
+      a.cost.tapArtifacts,
+    ))
+      tap(ctx, id);
   }
   if (a.cost.crew) {
     const crew = crewFor(ctx, player, source, a.cost.crew) ?? [];
@@ -990,6 +1004,12 @@ export function resolveTop(ctx: Ctx): boolean {
       } else host = target.object.id;
     }
     emit(ctx, { type: 'resolved', id: item.id });
+    // Reality Fracture (17a): Uldaros Theorix: a permanent spell cast this way becomes a token.
+    if (o.copyBecomesToken) {
+      o.isToken = true;
+      delete o.spellCopyCard;
+      delete o.copyBecomesToken;
+    }
     moveObject(ctx, item.id, 'battlefield', { controller: item.controller });
     // Secrets of Strixhaven (14b): Choreographed Sparks: the copy has haste and is sacrificed at the end step.
     if (item.hasteSacrifice) {
@@ -1010,6 +1030,8 @@ export function resolveTop(ctx: Ctx): boolean {
       });
     }
     if (item.kicked) o.kicked = true;
+    // Reality Fracture (17a): Null Summoner, Uldaros Theorix: "if you cast it".
+    o.wasCast = true;
     // Multikicker: "enters with a +1/+1 counter for each time he was kicked".
     if (item.kickCount) {
       o.kickCount = item.kickCount;
@@ -1332,6 +1354,16 @@ export function creaturesToTap(
     .sort((x, y) => power(ctx, x) - power(ctx, y));
 }
 
+/** Reality Fracture (17a): Tenured Tethermage. The untapped artifacts `player` controls. */
+export function artifactsToTap(ctx: Ctx, player: PlayerId): ObjectId[] {
+  return ctx.s.battlefield.filter((id) => {
+    const o = obj(ctx, id);
+    return (
+      o.controller === player && !o.tapped && characteristics(ctx, id).types.includes('Artifact')
+    );
+  });
+}
+
 export function tokensToTap(ctx: Ctx, player: PlayerId, source?: ObjectId): ObjectId[] {
   return ctx.s.battlefield
     .filter((id) => {
@@ -1379,6 +1411,8 @@ export function answerChooseFromHand(ctx: Ctx, card: ObjectId | null): void {
     if (d.castable) {
       obj(ctx, card).castableBy = d.player;
       obj(ctx, card).anyMana = true;
+      // Reality Fracture (17a): Null Summoner, "as long as there are seven or more cards in your graveyard".
+      if (d.castableIf) obj(ctx, card).castableIf = d.castableIf;
     }
   }
   resume(ctx, d.resume, d.thenPriority);
@@ -1413,12 +1447,22 @@ export function finishCastFree(ctx: Ctx, cast: ObjectId | null): void {
   if (d.kind !== 'castFree') throw new Error('Not casting for free');
   // Secrets of Strixhaven (14b): Improvisation Capstone: any number may be cast, one after another.
   if (d.more && cast !== null) {
-    const cards = d.cards.filter((id) => id !== cast && ctx.s.objects[id]?.zone === 'exile');
+    // Reality Fracture (17a): Uldaros Theorix: only cards that still fit in the total mana value.
+    const budget =
+      d.budget !== undefined ? d.budget - manaValue(def(ctx, cast).manaCost) : undefined;
+    const cards = d.cards.filter(
+      (id) =>
+        id !== cast &&
+        ctx.s.objects[id]?.zone === 'exile' &&
+        (budget === undefined || manaValue(def(ctx, id).manaCost) <= budget),
+    );
     if (cards.length > 0) {
-      ctx.s.decision = { ...d, cards };
+      ctx.s.decision = { ...d, cards, ...(budget !== undefined ? { budget } : {}) };
       return;
     }
   }
+  // Reality Fracture (17a): copies that weren't cast cease to exist.
+  for (const id of d.copies ?? []) if (id !== cast) ceaseSpellCopy(ctx, id);
   for (const id of d.thenToHand ?? [])
     if (id !== cast && ctx.s.objects[id]?.zone === 'exile') moveObject(ctx, id, 'hand');
   for (const id of d.thenToBottom ?? [])
@@ -1479,6 +1523,9 @@ export function answerScry(ctx: Ctx, top: readonly ObjectId[], bottom: readonly 
     lib.unshift(...bottom);
     for (const id of bottom) moveObject(ctx, id, 'graveyard');
   } else lib.push(...bottom);
+  // Reality Fracture (17a): Desperate Futurescribe, Proctor of Potential.
+  if (!ctx.s.turn.scriedOrSurveilled?.includes(d.player))
+    ctx.s.turn.scriedOrSurveilled = [...(ctx.s.turn.scriedOrSurveilled ?? []), d.player];
   emit(ctx, { type: 'scried', player: d.player, top: top.length, bottom: bottom.length });
   resume(ctx, d.resume, d.thenPriority);
 }

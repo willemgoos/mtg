@@ -296,6 +296,9 @@ export function countOf(
 ): number {
   if (typeof a === 'number') return a;
   if ('multiply' in a) return a.multiply * countOf(ctx, player, a.amount, printed, sourceId);
+  // Reality Fracture (17a): Recursive Recruitment
+  if ('floorDiv' in a)
+    return Math.floor(countOf(ctx, player, a.amount, printed, sourceId) / a.floorDiv);
   // Final Fantasy (11a)
   if ('sum' in a)
     return a.sum.reduce<number>((n, x) => n + countOf(ctx, player, x, printed, sourceId), 0);

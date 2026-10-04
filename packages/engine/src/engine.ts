@@ -295,6 +295,7 @@ function apply(ctx: Ctx, action: Action): void {
         action.discard,
         action.x,
         action.tapCreature,
+        action.tapArtifacts,
       );
       return paused ? undefined : givePriority(ctx, player);
     }

@@ -171,6 +171,14 @@ export function checkCondition(
   }
   // Secrets of Strixhaven (14a): Lluwen, Exchange Student.
   if (c.kind === 'notPrepared') return !self?.prepared;
+  // Reality Fracture (17a): Desperate Futurescribe, Proctor of Potential.
+  if (c.kind === 'scriedOrSurveilledThisTurn')
+    return !!ctx.s.turn.scriedOrSurveilled?.includes(controller);
+  // Reality Fracture (17a): Grim Repriser, Whiplash Wordsmith.
+  if (c.kind === 'opponentDealtNoncombatDamageThisTurn')
+    return !!ctx.s.turn.noncombatDamaged?.includes(other(controller));
+  // Reality Fracture (17a): Null Summoner, Uldaros Theorix.
+  if (c.kind === 'wasCast') return !!self?.wasCast;
   // Secrets of Strixhaven (14b): Emeritus of Woe, Great Hall of the Biblioplex.
   if (c.kind === 'creaturesDiedAtLeast') return ctx.s.turn.creaturesDied >= c.min;
   if (c.kind === 'sourceIsCreature') return !!self && isCreatureNow(ctx, self.id);

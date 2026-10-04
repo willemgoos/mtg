@@ -63,6 +63,11 @@ export function cloneState(s: GameState): GameState {
       // Strixhaven Brawl (15b, pair): revolt.
       ...(s.turn.permanentsLeft ? { permanentsLeft: { ...s.turn.permanentsLeft } } : {}),
       ...(s.turn.hexproofPlayers ? { hexproofPlayers: s.turn.hexproofPlayers.slice() } : {}),
+      // Reality Fracture (17a)
+      ...(s.turn.scriedOrSurveilled
+        ? { scriedOrSurveilled: s.turn.scriedOrSurveilled.slice() }
+        : {}),
+      ...(s.turn.noncombatDamaged ? { noncombatDamaged: s.turn.noncombatDamaged.slice() } : {}),
       ...(s.turn.osteomancer ? { osteomancer: s.turn.osteomancer.slice() } : {}),
       ...(s.turn.cantLose ? { cantLose: s.turn.cantLose.slice() } : {}),
       ...(s.turn.deflect ? { deflect: s.turn.deflect.slice() } : {}),

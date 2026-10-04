@@ -23,6 +23,7 @@ import {
   abilityManaCost,
   castCost,
   teamworkFor,
+  artifactsToTap,
   creaturesToTap,
   crewFor,
   escalateCrew,
@@ -42,7 +43,7 @@ import { checkCondition, triggeredAbility } from './triggers.ts';
 import { nameLocked } from './sos-14b-c-effects.ts';
 
 const NO_COST = { generic: 0, colored: {} };
-import { targetCandidates, targetCombos } from './targets.ts';
+import { standForDistinctTypes, targetCandidates, targetCombos } from './targets.ts';
 import { freeCastSource, playableWhileControlling } from './msh-analyzed.ts';
 import type { Action, CardFilter, ObjectId, PlayerId, TargetChoice, TargetSpec } from './types.ts';
 
@@ -102,7 +103,10 @@ export function castableCards(ctx: Ctx, player: PlayerId): ObjectId[] {
     if (
       obj(ctx, id).castableBy === player &&
       // Strixhaven (13c): Nassari's cards are castable this turn only.
-      (obj(ctx, id).castableUntilTurn ?? ctx.s.turn.number) >= ctx.s.turn.number
+      (obj(ctx, id).castableUntilTurn ?? ctx.s.turn.number) >= ctx.s.turn.number &&
+      // Reality Fracture (17a): Null Summoner, only while its threshold holds.
+      (!obj(ctx, id).castableIf ||
+        checkCondition(ctx, obj(ctx, id).castableIf, player, obj(ctx, id)))
     )
       out.push(id);
   // Glarb: lands and big spells from the top of your library.
@@ -729,6 +733,8 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
         creaturesToTap(ctx, player, a.cost.tapCreature, source).length === 0
       )
         return;
+      // Reality Fracture (17a): Tenured Tethermage.
+      if (a.cost.tapArtifacts && artifactsToTap(ctx, player).length < a.cost.tapArtifacts) return;
       if (a.cost.crew && !crewFor(ctx, player, source, a.cost.crew)) return;
       if (
         a.cost.sacrificeArtifacts &&
@@ -811,6 +817,30 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
         const can = creaturesToTap(ctx, player, a.cost.tapCreature, source);
         for (const base of bases)
           for (const tapCreature of can) out.push({ ...base, tapCreature } as Action);
+      }
+      // Reality Fracture (17a): Tenured Tethermage: one action for each way of choosing the artifacts to tap
+      // (artifacts that look alike are one way).
+      if (a.cost.tapArtifacts) {
+        const bases = out.splice(firstOfAbility);
+        const can = artifactsToTap(ctx, player);
+        const key = (id: ObjectId) => `${obj(ctx, id).defId}|${obj(ctx, id).isToken ? 1 : 0}`;
+        const ways: ObjectId[][] = [];
+        const seen = new Set<string>();
+        // Every order is offered, since the board picks them one at a time in any order.
+        const pick = (chosen: ObjectId[]): void => {
+          if (chosen.length === a.cost.tapArtifacts) {
+            const k = chosen.map(key).join(',');
+            if (!seen.has(k)) {
+              seen.add(k);
+              ways.push(chosen);
+            }
+            return;
+          }
+          for (const id of can) if (!chosen.includes(id)) pick([...chosen, id]);
+        };
+        pick([]);
+        for (const base of bases)
+          for (const tapArtifacts of ways) out.push({ ...base, tapArtifacts } as Action);
       }
       // Marvel Super Heroes: {X} in an ability's cost (Bruce Banner): every affordable X up to 10.
       if (mana?.x)
@@ -1052,7 +1082,16 @@ export function getLegalActions(ctx: Ctx, player: PlayerId): Action[] {
         const key = (t: TargetChoice) => ('object' in t ? t.object.id : t.player);
         const taken = new Set(picked.map(key));
         for (const t of targetCandidates(ctx, spec, src))
-          if (!taken.has(key(t)) && payable([...picked, t]))
+          if (
+            !taken.has(key(t)) &&
+            payable([...picked, t]) &&
+            // Reality Fracture (17a): Uldaros Theorix, one card of each card type.
+            (!spec.onePerType ||
+              standForDistinctTypes(
+                ctx,
+                [...picked, t].flatMap((x) => ('object' in x ? [x.object.id] : [])),
+              ))
+          )
             out.push({ type: 'chooseTargets', player, targets: [...picked, t] });
         if (out.length === 0) out.push({ type: 'chooseTargets', player, targets: [] });
         return out;
