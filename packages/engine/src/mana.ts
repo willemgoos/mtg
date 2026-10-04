@@ -4,6 +4,7 @@ import { canTapForAbility, isCreature, matchesFilter, power } from './characteri
 import { type Ctx, addCounters, def, emit, obj, sacrifice, tap } from './context.ts';
 import { manaValue, pipsOf } from './cost.ts';
 import { hamletColorless } from './sos-14b-c-effects.ts';
+import { yourLandColors } from './brawl-15b-g-effects.ts';
 import { checkCondition } from './triggers.ts';
 import type { Color, ManaCost, ManaType, ObjectId, PlayerId } from './types.ts';
 
@@ -75,7 +76,8 @@ export function manaSources(
     let units = 1;
     let pain: ManaType[] | undefined;
     for (const a of def(ctx, id).abilities) {
-      if (a.kind !== 'mana' || !a.cost.tapSelf || a.cost.mana) continue;
+      // Strixhaven Brawl (15b, g): Eldrazi Spawn and Scion tokens: "Sacrifice this token: Add {C}" needs no tap.
+      if (a.kind !== 'mana' || (!a.cost.tapSelf && !a.cost.sacrificeSelf) || a.cost.mana) continue;
       // Strixhaven (13c): Spell Satchel: "Remove a book counter" as part of the cost.
       if (
         a.cost.removeCounters &&
@@ -99,6 +101,9 @@ export function manaSources(
         continue;
       if (a.colorFrom === 'legendaries' && !legendaryColors(ctx, player).includes(a.produces))
         continue;
+      // Strixhaven Brawl (15b, g): Incubation Druid.
+      if (a.colorFrom === 'yourLands' && !yourLandColors(ctx, player).includes(a.produces))
+        continue;
       if (a.amount) units = Math.max(units, a.amount);
       // Strixhaven (13c): Accomplished Alchemist.
       if (a.perLifeGained) units = Math.max(units, ctx.s.turn.lifeGained?.[player] ?? 0);
@@ -106,9 +111,14 @@ export function manaSources(
       if (a.perPower) units = Math.max(units, power(ctx, id));
       if (a.pain) (pain ??= []).push(a.produces);
       if (a.doubleIf && checkCondition(ctx, a.doubleIf, player, obj(ctx, id))) double = true;
+      // Strixhaven Brawl (15b, g): Incubation Druid (three mana), Astral Cornucopia (a mana per charge counter).
+      if (a.tripleIf && checkCondition(ctx, a.tripleIf, player, obj(ctx, id)))
+        units = Math.max(units, 3);
+      if (a.perNamedCounters)
+        units = Math.max(units, obj(ctx, id).counters?.[a.perNamedCounters] ?? 0);
       if (a.cost.sacrificeSelf) sacrifice = true;
       if (!produces) {
-        if (!canTapForAbility(ctx, id)) break;
+        if (!(!a.cost.tapSelf ? !obj(ctx, id).tapped : canTapForAbility(ctx, id))) break;
         produces = [];
       }
       if (!produces.includes(a.produces)) produces.push(a.produces);
@@ -140,6 +150,18 @@ export function manaSources(
       // Two mana from one tap: a second unit with the same id (tapping it twice is harmless).
       if (double) units = Math.max(units, 2);
       for (let i = 1; i < units; i++) out.push({ ...src });
+      // Strixhaven Brawl (15b, g): Utopia Sprawl: an extra mana of the chosen colour.
+      for (const aura of ctx.s.battlefield) {
+        const ao = obj(ctx, aura);
+        if (
+          ao.attachedTo === id &&
+          ao.chosenColor &&
+          def(ctx, aura).abilities.some(
+            (x) => x.kind === 'static' && x.effect.kind === 'landBonusMana',
+          )
+        )
+          out.push({ ...src, produces: [ao.chosenColor as ManaType] });
+      }
     }
   }
   // Clement: Frogs you control have "{T}: Add {G} or {U}" (for creature spells).

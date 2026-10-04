@@ -35,7 +35,7 @@ export interface ManaCost {
 
 export type CardType =
   'Creature' | 'Instant' | 'Sorcery' | 'Land' | 'Enchantment' | 'Artifact' | 'Planeswalker';
-export type Supertype = 'Basic' | 'Legendary' | 'Snow'; // Strixhaven Brawl (15b, w/u): Snow
+export type Supertype = 'Basic' | 'Legendary' | 'Snow'; // Strixhaven Brawl (15b, w/u/g): Snow
 
 export type Keyword =
   | 'flying'
@@ -49,6 +49,9 @@ export type Keyword =
   | 'lifelink'
   | 'menace'
   | 'hexproof'
+  // Strixhaven Brawl (15b, g): Mistcutter Hydra
+  /** Protection from blue: can't be targeted, damaged or blocked by blue sources. */
+  | 'protectionBlue'
   | 'defender'
   | 'flash'
   | 'indestructible'
@@ -217,6 +220,9 @@ export interface CardDefinition {
   castFromGraveyardOrExile?: boolean;
   /** It enters with X +1/+1 counters (Royal Talon Fighter Jet). */
   entersWithXCounters?: boolean;
+  // Strixhaven Brawl (15b, g): Spinning Wheel Kick
+  /** With `upToXTargets`: this many targets don't count against X (the first target is not one of the X). */
+  upToXOffset?: number;
   /** Costs {amount} less while the condition holds (Heroic Return, Avenge). */
   costReductionIf?: {
     condition: ConditionDef;
@@ -339,7 +345,12 @@ export type AbilityDef =
        * Only if the colour is in your commander's colour identity (Command
        * Tower), or a land an opponent controls could make it (Exotic Orchard).
        */
-      colorFrom?: 'commander' | 'opponentLands' | 'legendaries';
+      colorFrom?: 'commander' | 'opponentLands' | 'legendaries' | 'yourLands';
+      // Strixhaven Brawl (15b, g): Incubation Druid, Astral Cornucopia
+      /** Makes three mana instead of one while this holds. */
+      tripleIf?: ConditionDef;
+      /** Adds as much mana as this permanent has named counters of this kind. */
+      perNamedCounters?: string;
       /** Deals 1 damage to you when spent as this colour (Talismans). */
       pain?: boolean;
       /** Path of Ancestry: scry 1 when spent on a creature spell sharing a type with your commander. */
@@ -693,6 +704,11 @@ export type TriggerDef =
   | { on: 'fullyUnlock' };
 
 export type ConditionDef =
+  // Strixhaven Brawl (15b, g): Orochi Merge-Keeper
+  /** The source is modified (has counters, or an Equipment or Aura you control attached). */
+  | { kind: 'sourceModified' }
+  /** The source has no +1/+1 counters on it (Adapt). */
+  | { kind: 'sourceNoCounters' }
   | { kind: 'controlsPermanents'; filter: CardFilter; min: number }
   | { kind: 'attackedThisTurn' }
   | { kind: 'controlsAnother'; subtype: string }
@@ -1890,6 +1906,15 @@ export type EffectDef =
   | { kind: 'exileUntilTotalCastFree'; total: number };
 
 export type StaticDef =
+  // Strixhaven Brawl (15b, g): Hardened Scales, Kami of Whispered Hopes
+  /** If +1/+1 counters would be put on a creature (or any permanent) you control, that many plus `amount` are put instead. */
+  | { kind: 'extraCounters'; amount: number; creaturesOnly?: boolean }
+  // Strixhaven Brawl (15b, g): Utopia Sprawl
+  /** The enchanted land adds one extra mana of the colour chosen for this Aura when tapped for mana. */
+  | { kind: 'landBonusMana' }
+  // Strixhaven Brawl (15b, g): Academy Manufactor
+  /** If you would create a Clue, Food or Treasure token, instead create one of each. */
+  | { kind: 'clueFoodTreasure' }
   // Strixhaven Brawl (15a): Anointed Procession
   /** If an effect would create one or more tokens under your control, it creates twice that many instead. */
   | { kind: 'doubleTokens' }

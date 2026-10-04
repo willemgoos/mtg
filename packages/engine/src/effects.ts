@@ -1669,10 +1669,22 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
             : undefined;
       const owner = targetOwner ?? (e.forOpponent ? other(es.controller) : es.controller);
       // Divine Visitation: creature tokens are 4/4 Angels instead.
-      const token = replacedToken(ctx, owner, e.token);
+      const token0 = replacedToken(ctx, owner, e.token);
+      // Strixhaven Brawl (15b, g): Academy Manufactor: a Clue, Food or Treasure is one of each instead.
+      const tokenKinds =
+        ['treasure-token', 'food-token', 'clue-token'].includes(token0) &&
+        ctx.s.battlefield.some(
+          (id) =>
+            obj(ctx, id).controller === owner &&
+            def(ctx, id).abilities.some(
+              (a) => a.kind === 'static' && a.effect.kind === 'clueFoodTreasure',
+            ),
+        )
+          ? ['treasure-token', 'food-token', 'clue-token']
+          : [token0];
       // Strixhaven Brawl (15a): Anointed Procession doubles the tokens.
       const n = baseCount * tokenMultiplier(ctx, owner);
-      for (let i = 0; i < n; i++) {
+      for (const token of tokenKinds.flatMap((k) => Array<string>(n).fill(k))) {
         const t = createObject(ctx, token, owner, 'battlefield', true);
         // "Then attach this Equipment to it" (Midnight Angel Armor): the token is "it".
         es.chosen = { id: t.id, zcc: t.zcc };

@@ -463,7 +463,7 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
             for (const sacrifice of v.sacrifice ? sacrificeable : [undefined]) {
               for (const targets of combosFor(specs, card, sacrifice)) {
                 // Strixhaven (13c): Crackle with Power: up to X targets.
-                if (d.upToXTargets && targets.length > (x ?? 0)) continue;
+                if (d.upToXTargets && targets.length > (x ?? 0) + (d.upToXOffset ?? 0)) continue; // Strixhaven Brawl (15b, g): Spinning Wheel Kick
                 // Strixhaven Brawl (15b, u): Stolen by the Fae, the target's mana value is X.
                 if (d.targetManaValueX) {
                   const first = targets[0];
@@ -556,7 +556,8 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
       withBackFace(ctx, card, () => {
         if (!blocked(card)) castsOf(card);
       });
-      for (const a of out.slice(from)) if (a.type === 'castSpell' || a.type === 'playLand') a.back = true;
+      for (const a of out.slice(from))
+        if (a.type === 'castSpell' || a.type === 'playLand') a.back = true;
     }
   }
   // Sneak (Marvel Super Heroes): during your declare blockers step, return an unblocked attacker.

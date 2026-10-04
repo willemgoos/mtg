@@ -41,6 +41,9 @@ export function runSBAs(ctx: Ctx): void {
       const aura = def(ctx, id).subtypes.includes('Aura');
       const host = o.attachedTo !== undefined ? ctx.s.objects[o.attachedTo] : undefined;
       if (host && host.zone === 'battlefield' && isCreature(ctx, host.id)) continue;
+      // Strixhaven Brawl (15b, g): Utopia Sprawl enchants a Forest.
+      if (host && host.zone === 'battlefield' && aura && def(ctx, id).enchant?.what === 'permanent')
+        continue;
       // Sugar Coat stays on the Food it made.
       if (host && host.zone === 'battlefield' && host.foodBy === id) continue;
       // Archnemesis enchants a player.

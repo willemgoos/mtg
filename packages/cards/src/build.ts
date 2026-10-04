@@ -181,6 +181,16 @@ export const KEYWORDS_AS_ABILITIES = new Set([
   'Populate',
   'Protection',
   'Room',
+  // Strixhaven Brawl (15b, g): labels and reminder text (rules text lives in the behaviour).
+  'Devoid',
+  'Adapt',
+  'Proliferate',
+  'Warp',
+  'Reinforce',
+  'Coven',
+  'Modified',
+  'Cycling',
+  'Landfall',
   // Final Fantasy (11a).
   'Job select',
   'Tiered',
@@ -240,7 +250,8 @@ export function parseTypeLine(line: string) {
   const supertypes: Supertype[] = [];
   const types: CardType[] = [];
   for (const w of left!.trim().split(/\s+/)) {
-    if (w === 'Basic' || w === 'Legendary' || w === 'Snow') supertypes.push(w);
+    if (w === 'Basic' || w === 'Legendary' || w === 'Snow')
+      supertypes.push(w); // Strixhaven Brawl (15b, g): Snow
     else types.push(w as CardType);
   }
   const subtypes = right.trim() ? right.trim().split(/\s+/) : [];
@@ -256,6 +267,12 @@ export function mapKeywords(scryfall: readonly string[], oracle = ''): Keyword[]
     scryfall = scryfall.filter((k) => k !== 'Hexproof from' && k !== 'Hexproof');
   }
   for (const k of scryfall) {
+    // Strixhaven Brawl (15b, g): Mistcutter Hydra.
+    if (k === 'Protection') {
+      if (!/protection from blue/i.test(oracle)) throw new Error('Unsupported "Protection"');
+      out.push('protectionBlue');
+      continue;
+    }
     if (k === 'Ward') {
       // The cost comes from wardCostOf (below).
       out.push('ward');

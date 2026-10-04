@@ -14,6 +14,7 @@ import { BRAWL_15A_W_EFFECTS } from './brawl-15a-w-effects.ts';
 import { BRAWL_15B_B_EFFECTS } from './brawl-15b-b-effects.ts';
 import { BRAWL_15B_W_EFFECTS } from './brawl-15b-w-effects.ts';
 import { BRAWL_15B_U_EFFECTS } from './brawl-15b-u-effects.ts';
+import { BRAWL_15B_G_EFFECTS } from './brawl-15b-g-effects.ts';
 import { STX_13C_A_EFFECTS } from './stx-13c-a-effects.ts';
 import { STX_13C_B_EFFECTS } from './stx-13c-b-effects.ts';
 import { STX_13C_C_EFFECTS } from './stx-13c-c-effects.ts';
@@ -108,6 +109,8 @@ const BUILT_IN_EFFECTS: Record<string, CustomEffect> = {
   ...BRAWL_15B_W_EFFECTS,
   // Strixhaven Brawl (15b), blue.
   ...BRAWL_15B_U_EFFECTS,
+  // Strixhaven Brawl (15b, g): green.
+  ...BRAWL_15B_G_EFFECTS,
   // Strixhaven (13a): Learn: put the chosen Lesson from outside the game into your hand.
   learnFetch(ctx, es, params) {
     const ps = ctx.s.players[es.controller];
@@ -640,6 +643,18 @@ export function addCounters(ctx: Ctx, id: ObjectId, n: number, name?: string): v
       )
         n *= 2;
   }
+  // Strixhaven Brawl (15b, g): Hardened Scales, Kami of Whispered Hopes ("that many plus one +1/+1 counters").
+  if (!name)
+    for (const src of ctx.s.battlefield) {
+      if (obj(ctx, src).controller !== o.controller) continue;
+      for (const a of def(ctx, src).abilities)
+        if (
+          a.kind === 'static' &&
+          a.effect.kind === 'extraCounters' &&
+          (!a.effect.creaturesOnly || defOf(ctx, o.defId).types.includes('Creature'))
+        )
+          n += a.effect.amount;
+    }
   if (name) {
     const c = (o.counters ??= {});
     c[name] = (c[name] ?? 0) + n;

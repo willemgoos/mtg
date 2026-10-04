@@ -40,8 +40,11 @@ const custom = (handler: string, params?: Record<string, unknown>): EffectDef =>
 export function protectedFrom(ctx: Ctx, targetId: ObjectId, sourceId: ObjectId): boolean {
   const target = ctx.s.objects[targetId];
   const source = ctx.s.objects[sourceId];
-  if (!target || !source || ctx.s.effects.length === 0) return false;
+  if (!target || !source) return false;
   const colors = def(ctx, sourceId).colors;
+  // Printed protection from blue (Mistcutter Hydra, 15b g) is a keyword.
+  if (colors.includes('U') && hasKeyword(ctx, targetId, 'protectionBlue')) return true;
+  if (ctx.s.effects.length === 0) return false;
   return ctx.s.effects.some(
     (e) =>
       e.protectionFrom !== undefined &&
