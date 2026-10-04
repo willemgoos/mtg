@@ -598,7 +598,10 @@ export type TriggerDef =
         | 'secondNoncreature'
         // Strixhaven Brawl (15b, pair): Zimone, Infinite Analyst
         /** The caster's first spell with {X} in its mana cost this turn. */
-        | 'firstXSpell';
+        | 'firstXSpell'
+        // Reality Fracture (17a): Danitha, Spear of Agony
+        /** A spell that targets an opponent or a creature an opponent controls. */
+        | 'targetsOpponentOrTheirCreature';
       /** The spell must also match this (Gev: a Lizard spell). */
       spell?: CardFilter;
       /** Any player's spell, cast when it isn't their turn (Vision). */
@@ -749,6 +752,12 @@ export type TriggerDef =
   // Doom Prevails (9e).
   /** Whenever you discard a card ("that card" is the subject); Doctor Doom: one or more lands, once per batch. */
   | { on: 'youDiscard'; filter?: CardFilter }
+  // Reality Fracture (17a): Tinybones, Pocket Nuisance
+  /** Whenever a player (any player) discards one or more cards; use with `batch`. */
+  | { on: 'playerDiscards' }
+  // Reality Fracture (17a): Massacre Girl, Most Wanted
+  /** Whenever an opponent is dealt noncombat damage (from any source). */
+  | { on: 'opponentDealtNoncombatDamage' }
   /** Whenever a creature you control connives ("that creature" is the subject). */
   | { on: 'creatureYouControlConnives' }
   /** A Saga's chapter abilities (triggered as lore counters are added). */
@@ -1233,6 +1242,9 @@ export type Amount =
       basicOnly?: boolean;
     }
   | { multiply: number; amount: Amount }
+  // Reality Fracture (17a): Dark Matter Manipulator ("for every seven cards in your graveyard")
+  /** The amount divided by `floorDiv`, rounded down. */
+  | { floorDiv: number; amount: Amount }
   // Marvel Super Heroes: "where X is Captain America's toughness".
   | { toughnessOf: Ref }
   /** The mana value of the triggering spell (Thor, God of Thunder). */
@@ -2373,6 +2385,9 @@ export type StaticDef =
   | { kind: 'extraLandDrop' }
   /** Prevent all combat damage dealt to and by this creature (Fog Bank). */
   | { kind: 'preventCombatDamage' }
+  // Reality Fracture (17a): Loot, the Anomaly
+  /** "If this creature's power is negative, it assigns combat damage as though its power were positive." */
+  | { kind: 'negativePowerAsPositive' }
   /** Other creatures of this subtype you control enter with a +1/+1 counter per one already there (Giada). */
   | { kind: 'entersWithCountersPerSubtype'; subtype: string }
   /** Equipment or Aura: the creature it is attached to gets this. */

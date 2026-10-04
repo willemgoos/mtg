@@ -340,7 +340,15 @@ export function affordableAttackers(ctx: Ctx, player: PlayerId): number {
  * its toughness when that's greater and its controller paid for it this turn.
  */
 function combatPower(ctx: Ctx, id: ObjectId): number {
-  const p = power(ctx, id);
+  let p = power(ctx, id);
+  // Reality Fracture (17a): Loot, the Anomaly assigns damage as though its negative power were positive.
+  if (
+    p < 0 &&
+    def(ctx, id).abilities.some(
+      (a) => a.kind === 'static' && a.effect.kind === 'negativePowerAsPositive',
+    )
+  )
+    p = -p;
   if (!ctx.s.turn.toughnessDamage?.includes(obj(ctx, id).controller)) return p;
   return Math.max(p, characteristics(ctx, id).toughness);
 }

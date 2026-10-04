@@ -493,6 +493,18 @@ function spellMatches(
         const o = 'object' in x ? ctx.s.objects[x.object.id] : undefined;
         return !!o && o.zone === 'battlefield' && def(ctx, o.id).types.includes('Creature');
       });
+    // Reality Fracture (17a): Danitha, Spear of Agony
+    case 'targetsOpponentOrTheirCreature':
+      return !!item?.targets.some((x) => {
+        if ('player' in x) return x.player !== self.controller;
+        const o = ctx.s.objects[x.object.id];
+        return (
+          !!o &&
+          o.zone === 'battlefield' &&
+          o.controller !== self.controller &&
+          def(ctx, o.id).types.includes('Creature')
+        );
+      });
     case 'instantOrSorceryTargetingArtifactOrLand':
       return (
         (spell.types.includes('Instant') || spell.types.includes('Sorcery')) &&
@@ -948,6 +960,8 @@ function detect(ctx: Ctx, ev: GameEvent): void {
           (!a.trigger.filter || cardMatches(ctx, card.id, a.trigger.filter, o.id)),
         card,
       );
+      // Reality Fracture (17a): Tinybones, Pocket Nuisance: any player's discard (batched).
+      forEachBattlefieldTrigger(ctx, (_o, a) => a.trigger.on === 'playerDiscards', card);
       return;
     }
     case 'connived': {
@@ -1391,6 +1405,16 @@ function detect(ctx: Ctx, ev: GameEvent): void {
             ev.amount,
           );
       }
+      // Reality Fracture (17a): Massacre Girl, Most Wanted: an opponent is dealt noncombat damage (any source).
+      if (!ev.combat && 'player' in ev.to) {
+        const hurt = ev.to.player;
+        forEachBattlefieldTrigger(
+          ctx,
+          (o, a) => a.trigger.on === 'opponentDealtNoncombatDamage' && o.controller !== hurt,
+          undefined,
+          ev.amount,
+        );
+      }
       if (!ev.combat) {
         // Niv-Mizzet: noncombat damage to an opponent from a source you control.
         const src = s.objects[ev.source];
@@ -1717,8 +1741,22 @@ function detect(ctx: Ctx, ev: GameEvent): void {
           (o, a) =>
             a.trigger.on === 'beginningOfCombat' &&
             // Strixhaven Brawl (15b, w): Psemilla, "at the beginning of each combat".
-            (a.trigger.whose === 'each' || o.controller === ev.activePlayer),
+            (a.trigger.whose === 'each' || o.controller === ev.activePlayer) &&
+            !a.fromGraveyard,
         );
+        // Reality Fracture (17a): Darklight Phoenix returns itself from your graveyard.
+        for (const gid of s.players[ev.activePlayer].graveyard) {
+          const card = s.objects[gid]!;
+          def(ctx, gid).abilities.forEach((a, i) => {
+            if (a.kind !== 'triggered' || !a.fromGraveyard || a.trigger.on !== 'beginningOfCombat')
+              return;
+            if (
+              a.trigger.whose === 'yours' &&
+              checkCondition(ctx, a.condition, ev.activePlayer, card)
+            )
+              queue(ctx, card, i, ev.activePlayer);
+          });
+        }
         return;
       }
       if (ev.step === 'draw') {

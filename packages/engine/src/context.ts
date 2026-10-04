@@ -1,5 +1,7 @@
 import { characteristics, countOf } from './characteristics.ts';
 import { MSH_EFFECTS } from './msh-effects.ts';
+// Reality Fracture (17a): black
+import { FRA_BLACK_EFFECTS } from './fra-black-effects.ts';
 import { FIN_EFFECTS } from './fin-effects.ts';
 import { LOREHOLD_EFFECTS } from './stx-lorehold-effects.ts';
 import { SOS_14A_EFFECTS } from './sos-14a-effects.ts';
@@ -78,6 +80,8 @@ export function makeCtx(
 /** Small one-off effects used by the engine's own effect kinds. */
 const BUILT_IN_EFFECTS: Record<string, CustomEffect> = {
   ...MSH_EFFECTS,
+  // Reality Fracture (17a): black.
+  ...FRA_BLACK_EFFECTS,
   // Final Fantasy (11a).
   ...FIN_EFFECTS,
   // Strixhaven (13a).
@@ -728,6 +732,9 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
   }
   // Secrets of Strixhaven (14a): "This creature enters prepared."
   if (to === 'battlefield' && defOf(ctx, o.defId).entersPrepared) prepareObject(ctx, id);
+  // Reality Fracture (17a): Liliana the Repentant: a planeswalker card put onto the battlefield (not cast) enters with its loyalty.
+  if (to === 'battlefield' && defOf(ctx, o.defId).loyalty !== undefined)
+    (o.counters ??= {}).loyalty ??= defOf(ctx, o.defId).loyalty!;
   // Marvel Super Heroes Jumpstart (Tenacious/Rampaging): Voracious Brood, however it enters.
   const countersAmount =
     to === 'battlefield' ? defOf(ctx, o.defId).entersWithCountersAmount : undefined;

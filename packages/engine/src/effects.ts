@@ -627,6 +627,9 @@ function playersOf(ctx: Ctx, es: EffectSource, ref: Ref): PlayerId[] {
 export function resolveAmount(ctx: Ctx, es: EffectSource, amount: Amount): number {
   if (typeof amount === 'number') return amount;
   if ('multiply' in amount) return amount.multiply * resolveAmount(ctx, es, amount.amount);
+  // Reality Fracture (17a): Dark Matter Manipulator
+  if ('floorDiv' in amount)
+    return Math.floor(resolveAmount(ctx, es, amount.amount) / amount.floorDiv);
   if ('manaValueOf' in amount) {
     const id = objectsOf(ctx, es, amount.manaValueOf)[0];
     return id ? manaValue(def(ctx, id).manaCost) : 0;

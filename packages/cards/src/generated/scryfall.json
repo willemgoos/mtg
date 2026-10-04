@@ -67726,5 +67726,713 @@
    "large": "https://cards.scryfall.io/large/front/1/1/117bb5db-4a1c-4704-b0b5-c67b45ac2f52.jpg?1783906353",
    "artCrop": "https://cards.scryfall.io/art_crop/front/1/1/117bb5db-4a1c-4704-b0b5-c67b45ac2f52.jpg?1783906353"
   }
+ },
+ {
+  "name": "Apex Witchstalker",
+  "scryfallId": "cd56f047-6bdc-4e83-8a7c-923ebad26302",
+  "oracleId": "253d0cf7-65d3-4f13-aaf2-aae5bb60ac46",
+  "set": "fra",
+  "collectorNumber": "48",
+  "rarity": "common",
+  "manaCost": "{4}{B}{B}",
+  "typeLine": "Creature — Wolf",
+  "oracleText": "Menace (This creature can't be blocked except by two or more creatures.)\nWhen this creature enters or dies, you gain 2 life.\nBasic landcycling {2} ({2}, Discard this card: Search your library for a basic land card, reveal it, put it into your hand, then shuffle.)",
+  "power": "6",
+  "toughness": "4",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Landcycling",
+   "Menace",
+   "Basic landcycling",
+   "Typecycling",
+   "Cycling"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/d/cd56f047-6bdc-4e83-8a7c-923ebad26302.jpg?1789556710",
+   "normal": "https://cards.scryfall.io/normal/front/c/d/cd56f047-6bdc-4e83-8a7c-923ebad26302.jpg?1789556710",
+   "large": "https://cards.scryfall.io/large/front/c/d/cd56f047-6bdc-4e83-8a7c-923ebad26302.jpg?1789556710",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/d/cd56f047-6bdc-4e83-8a7c-923ebad26302.jpg?1789556710"
+  }
+ },
+ {
+  "name": "Bloodline Recollector",
+  "scryfallId": "4fcc913e-f736-460a-b24b-022fa2e861b9",
+  "oracleId": "c8e9a7e1-28ae-40e3-8715-1bb0aa2057c7",
+  "set": "fra",
+  "collectorNumber": "49",
+  "rarity": "mythic",
+  "manaCost": "{1}{B}",
+  "typeLine": "Creature — Vampire Warlock",
+  "oracleText": "At the beginning of each end step, if three or more creatures died this turn, this creature becomes prepared. (While it's prepared, you may cast a copy of its spell. Doing so unprepares it.)",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "B"
+  ],
+  "colorIdentity": [
+   "B"
+  ],
+  "keywords": [
+   "Prepared"
+  ],
+  "back": "Ancestral Craving (Bloodline Recollector)",
+  "prepare": true,
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/f/4fcc913e-f736-460a-b24b-022fa2e861b9.jpg?1788329264",
+   "normal": "https://cards.scryfall.io/normal/front/4/f/4fcc913e-f736-460a-b24b-022fa2e861b9.jpg?1788329264",
+   "large": "https://cards.scryfall.io/large/front/4/f/4fcc913e-f736-460a-b24b-022fa2e861b9.jpg?1788329264",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/f/4fcc913e-f736-460a-b24b-022fa2e861b9.jpg?1788329264"
+  }
+ },
+ {
+  "name": "Ancestral Craving (Bloodline Recollector)",
+  "flavorName": "Ancestral Craving",
+  "scryfallId": "4fcc913e-f736-460a-b24b-022fa2e861b9",
+  "oracleId": "c8e9a7e1-28ae-40e3-8715-1bb0aa2057c7",
+  "set": "fra",
+  "collectorNumber": "49",
+  "rarity": "mythic",
+  "manaCost": "{B}",
+  "typeLine": "Instant",
+  "oracleText": "Target player draws three cards and loses 3 life.",
+  "colors": [
+   "B"
+  ],
+  "colorIdentity": [
+   "B"
+  ],
+  "keywords": [],
+  "front": "Bloodline Recollector",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/f/4fcc913e-f736-460a-b24b-022fa2e861b9.jpg?1788329264",
+   "normal": "https://cards.scryfall.io/normal/front/4/f/4fcc913e-f736-460a-b24b-022fa2e861b9.jpg?1788329264",
+   "large": "https://cards.scryfall.io/large/front/4/f/4fcc913e-f736-460a-b24b-022fa2e861b9.jpg?1788329264",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/f/4fcc913e-f736-460a-b24b-022fa2e861b9.jpg?1788329264"
+  }
+ },
+ {
+  "name": "Break Under Pressure",
+  "scryfallId": "46974d94-e900-43e4-92b5-4fb9b9f7cf46",
+  "oracleId": "8dd23c50-cc84-4064-89cd-8d52fbfbd4ab",
+  "set": "fra",
+  "collectorNumber": "50",
+  "rarity": "uncommon",
+  "manaCost": "{2}{B}",
+  "typeLine": "Instant",
+  "oracleText": "Target opponent sacrifices a creature or planeswalker with the greatest mana value among creatures and planeswalkers they control. You gain 2 life.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/6/46974d94-e900-43e4-92b5-4fb9b9f7cf46.jpg?1789385622",
+   "normal": "https://cards.scryfall.io/normal/front/4/6/46974d94-e900-43e4-92b5-4fb9b9f7cf46.jpg?1789385622",
+   "large": "https://cards.scryfall.io/large/front/4/6/46974d94-e900-43e4-92b5-4fb9b9f7cf46.jpg?1789385622",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/6/46974d94-e900-43e4-92b5-4fb9b9f7cf46.jpg?1789385622"
+  }
+ },
+ {
+  "name": "Cast Away Doubt",
+  "scryfallId": "3b5b28a4-0abd-4dc2-9856-c9a8d27f6a2d",
+  "oracleId": "bcf29dd7-6d5a-4139-958e-7c59434c0770",
+  "set": "fra",
+  "collectorNumber": "51",
+  "rarity": "common",
+  "manaCost": "{2}{B}",
+  "typeLine": "Sorcery",
+  "oracleText": "Draw two cards. Cast Away Doubt deals 2 damage to each player.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/b/3b5b28a4-0abd-4dc2-9856-c9a8d27f6a2d.jpg?1788353191",
+   "normal": "https://cards.scryfall.io/normal/front/3/b/3b5b28a4-0abd-4dc2-9856-c9a8d27f6a2d.jpg?1788353191",
+   "large": "https://cards.scryfall.io/large/front/3/b/3b5b28a4-0abd-4dc2-9856-c9a8d27f6a2d.jpg?1788353191",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/b/3b5b28a4-0abd-4dc2-9856-c9a8d27f6a2d.jpg?1788353191"
+  }
+ },
+ {
+  "name": "Danitha, Spear of Agony",
+  "scryfallId": "6489814b-3d10-423e-988c-324740d36748",
+  "oracleId": "4b5c7f11-75f2-4bad-86cd-f0232861f569",
+  "set": "fra",
+  "collectorNumber": "227",
+  "rarity": "uncommon",
+  "manaCost": "{2}{B}",
+  "typeLine": "Legendary Creature — Human Knight",
+  "oracleText": "First strike\nWhenever you cast a spell that targets an opponent or a creature an opponent controls, put a +1/+1 counter on Danitha.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "First strike"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/4/6489814b-3d10-423e-988c-324740d36748.jpg?1789127194",
+   "normal": "https://cards.scryfall.io/normal/front/6/4/6489814b-3d10-423e-988c-324740d36748.jpg?1789127194",
+   "large": "https://cards.scryfall.io/large/front/6/4/6489814b-3d10-423e-988c-324740d36748.jpg?1789127194",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/4/6489814b-3d10-423e-988c-324740d36748.jpg?1789127194"
+  }
+ },
+ {
+  "name": "Dark Matter Manipulator",
+  "scryfallId": "4ec912d5-cbe7-4d07-9ece-b03ac02d3055",
+  "oracleId": "6a3862f0-8dfc-4ac9-8eb9-faefcad685d4",
+  "set": "fra",
+  "collectorNumber": "52",
+  "rarity": "rare",
+  "manaCost": "{B}",
+  "typeLine": "Creature — Human Warlock",
+  "oracleText": "When this creature enters, mill three cards.\nThis creature gets +2/+0 for every seven cards in your graveyard.",
+  "power": "1",
+  "toughness": "2",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Mill"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/e/4ec912d5-cbe7-4d07-9ece-b03ac02d3055.jpg?1789385959",
+   "normal": "https://cards.scryfall.io/normal/front/4/e/4ec912d5-cbe7-4d07-9ece-b03ac02d3055.jpg?1789385959",
+   "large": "https://cards.scryfall.io/large/front/4/e/4ec912d5-cbe7-4d07-9ece-b03ac02d3055.jpg?1789385959",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/e/4ec912d5-cbe7-4d07-9ece-b03ac02d3055.jpg?1789385959"
+  }
+ },
+ {
+  "name": "Darklight Phoenix",
+  "scryfallId": "ec454979-3839-4be3-a34a-9d25482948ba",
+  "oracleId": "e4b51c2d-7e56-435b-89d6-85e33df65879",
+  "set": "fra",
+  "collectorNumber": "53",
+  "rarity": "mythic",
+  "manaCost": "{3}{B}",
+  "typeLine": "Creature — Phoenix",
+  "oracleText": "Flying, haste\nAt the beginning of combat on your turn, if two or more creatures died this turn, return this card from your graveyard to the battlefield.",
+  "power": "3",
+  "toughness": "2",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Flying",
+   "Haste"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/c/ec454979-3839-4be3-a34a-9d25482948ba.jpg?1789470810",
+   "normal": "https://cards.scryfall.io/normal/front/e/c/ec454979-3839-4be3-a34a-9d25482948ba.jpg?1789470810",
+   "large": "https://cards.scryfall.io/large/front/e/c/ec454979-3839-4be3-a34a-9d25482948ba.jpg?1789470810",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/c/ec454979-3839-4be3-a34a-9d25482948ba.jpg?1789470810"
+  }
+ },
+ {
+  "name": "Extended Absence",
+  "scryfallId": "eb4b6ed8-782e-4473-abc9-d50bf2275c6a",
+  "oracleId": "973fb1e3-83d5-4763-bea8-799b426a8848",
+  "set": "fra",
+  "collectorNumber": "54",
+  "rarity": "common",
+  "manaCost": "{3}{B}",
+  "typeLine": "Instant",
+  "oracleText": "Exile target creature or planeswalker. Extended Absence deals 1 damage to each opponent and you gain 1 life.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/b/eb4b6ed8-782e-4473-abc9-d50bf2275c6a.jpg?1789556713",
+   "normal": "https://cards.scryfall.io/normal/front/e/b/eb4b6ed8-782e-4473-abc9-d50bf2275c6a.jpg?1789556713",
+   "large": "https://cards.scryfall.io/large/front/e/b/eb4b6ed8-782e-4473-abc9-d50bf2275c6a.jpg?1789556713",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/b/eb4b6ed8-782e-4473-abc9-d50bf2275c6a.jpg?1789556713"
+  }
+ },
+ {
+  "name": "Gallia, Tragic Host",
+  "scryfallId": "498fa810-8522-4020-b773-52ad404c9f65",
+  "oracleId": "58285b70-0d13-4723-b5a4-91fb6f9ccf03",
+  "set": "fra",
+  "collectorNumber": "228",
+  "rarity": "uncommon",
+  "manaCost": "{1}{B}",
+  "typeLine": "Legendary Creature — Zombie Satyr",
+  "oracleText": "Menace (This creature can't be blocked except by two or more creatures.)\n{4}{B}, Exile another creature card from your graveyard: Return this card from your graveyard to the battlefield tapped with a +1/+1 counter on her.",
+  "power": "2",
+  "toughness": "1",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Menace"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/9/498fa810-8522-4020-b773-52ad404c9f65.jpg?1789385697",
+   "normal": "https://cards.scryfall.io/normal/front/4/9/498fa810-8522-4020-b773-52ad404c9f65.jpg?1789385697",
+   "large": "https://cards.scryfall.io/large/front/4/9/498fa810-8522-4020-b773-52ad404c9f65.jpg?1789385697",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/9/498fa810-8522-4020-b773-52ad404c9f65.jpg?1789385697"
+  }
+ },
+ {
+  "name": "Lich's Relic",
+  "scryfallId": "b105511d-5022-4a84-b6ce-4bb433e93a62",
+  "oracleId": "0540eaca-0e03-4831-955a-192ae2b87d35",
+  "set": "fra",
+  "collectorNumber": "57",
+  "rarity": "rare",
+  "manaCost": "{B}",
+  "typeLine": "Artifact — Equipment",
+  "oracleText": "When this Equipment enters, you may pay {2}. When you do, for each opponent, destroy up to one target creature or planeswalker that player controls.\nEquipped creature gets +2/+1.\nEquip {2}",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Equip"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/1/b105511d-5022-4a84-b6ce-4bb433e93a62.jpg?1789644819",
+   "normal": "https://cards.scryfall.io/normal/front/b/1/b105511d-5022-4a84-b6ce-4bb433e93a62.jpg?1789644819",
+   "large": "https://cards.scryfall.io/large/front/b/1/b105511d-5022-4a84-b6ce-4bb433e93a62.jpg?1789644819",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/1/b105511d-5022-4a84-b6ce-4bb433e93a62.jpg?1789644819"
+  }
+ },
+ {
+  "name": "Liliana the Repentant",
+  "scryfallId": "1eb25a6c-d6b4-465d-990e-f1ab86b26b69",
+  "oracleId": "5eb4403f-f199-4f75-a7c6-e76783f9b07d",
+  "set": "fra",
+  "collectorNumber": "231",
+  "rarity": "rare",
+  "manaCost": "{1}{B}",
+  "typeLine": "Legendary Creature — Human Warlock",
+  "oracleText": "Whenever another creature or planeswalker you control enters, mill two cards.\nExhaust — {5}{B}: Return target creature or planeswalker card from your graveyard to the battlefield. Put a +1/+1 counter on Liliana. Activate only as a sorcery. (Activate each exhaust ability only once.)",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Exhaust",
+   "Mill"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/e/1eb25a6c-d6b4-465d-990e-f1ab86b26b69.jpg?1788329273",
+   "normal": "https://cards.scryfall.io/normal/front/1/e/1eb25a6c-d6b4-465d-990e-f1ab86b26b69.jpg?1788329273",
+   "large": "https://cards.scryfall.io/large/front/1/e/1eb25a6c-d6b4-465d-990e-f1ab86b26b69.jpg?1788329273",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/e/1eb25a6c-d6b4-465d-990e-f1ab86b26b69.jpg?1788329273"
+  }
+ },
+ {
+  "name": "Loot, the Anomaly",
+  "scryfallId": "4f6fd2fa-8bc8-4743-bbc8-b56475d64eff",
+  "oracleId": "e0142e7d-7b0b-4290-a56c-5fa950fdccf8",
+  "set": "fra",
+  "collectorNumber": "232",
+  "rarity": "uncommon",
+  "manaCost": "{2}{B}",
+  "typeLine": "Legendary Creature — Beast Horror",
+  "oracleText": "If Loot's power is negative, he assigns combat damage as though his power were positive.\nThreshold — Sacrifice another creature or planeswalker: Loot gets -2/-0 until end of turn. Activate only if there are seven or more cards in your graveyard.",
+  "power": "-2",
+  "toughness": "4",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Threshold"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/f/4f6fd2fa-8bc8-4743-bbc8-b56475d64eff.jpg?1789568430",
+   "normal": "https://cards.scryfall.io/normal/front/4/f/4f6fd2fa-8bc8-4743-bbc8-b56475d64eff.jpg?1789568430",
+   "large": "https://cards.scryfall.io/large/front/4/f/4f6fd2fa-8bc8-4743-bbc8-b56475d64eff.jpg?1789568430",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/f/4f6fd2fa-8bc8-4743-bbc8-b56475d64eff.jpg?1789568430"
+  }
+ },
+ {
+  "name": "Mabel, Bitter Recluse",
+  "scryfallId": "b2a412b0-2ae4-4552-bc5e-70654b6b9b4e",
+  "oracleId": "36924990-8e3a-434e-bcd1-f03603cb350d",
+  "set": "fra",
+  "collectorNumber": "233",
+  "rarity": "uncommon",
+  "manaCost": "{B}",
+  "typeLine": "Legendary Creature — Mouse Warlock",
+  "oracleText": "Deathtouch\nWhen Mabel enters, remove up to three counters from another target creature or planeswalker.",
+  "power": "1",
+  "toughness": "1",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Deathtouch"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/2/b2a412b0-2ae4-4552-bc5e-70654b6b9b4e.jpg?1789385677",
+   "normal": "https://cards.scryfall.io/normal/front/b/2/b2a412b0-2ae4-4552-bc5e-70654b6b9b4e.jpg?1789385677",
+   "large": "https://cards.scryfall.io/large/front/b/2/b2a412b0-2ae4-4552-bc5e-70654b6b9b4e.jpg?1789385677",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/2/b2a412b0-2ae4-4552-bc5e-70654b6b9b4e.jpg?1789385677"
+  }
+ },
+ {
+  "name": "Massacre Girl, Most Wanted",
+  "scryfallId": "9028d31f-9c41-47e3-885b-6a869bca8178",
+  "oracleId": "81f35914-73bf-429f-ba20-32e23ac30159",
+  "set": "fra",
+  "collectorNumber": "234",
+  "rarity": "uncommon",
+  "manaCost": "{4}{B}",
+  "typeLine": "Legendary Creature — Human Assassin",
+  "oracleText": "Whenever another creature or planeswalker you control dies, Massacre Girl deals 1 damage to target opponent and you gain 1 life.\nWhenever an opponent is dealt noncombat damage, put a +1/+1 counter on Massacre Girl.",
+  "power": "4",
+  "toughness": "4",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/0/9028d31f-9c41-47e3-885b-6a869bca8178.jpg?1789644882",
+   "normal": "https://cards.scryfall.io/normal/front/9/0/9028d31f-9c41-47e3-885b-6a869bca8178.jpg?1789644882",
+   "large": "https://cards.scryfall.io/large/front/9/0/9028d31f-9c41-47e3-885b-6a869bca8178.jpg?1789644882",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/0/9028d31f-9c41-47e3-885b-6a869bca8178.jpg?1789644882"
+  }
+ },
+ {
+  "name": "Multiply by Zero",
+  "scryfallId": "90d684a4-9639-4792-8760-2011a7a85370",
+  "oracleId": "d940611f-f84d-43fa-82d6-eecb4fb54164",
+  "set": "fra",
+  "collectorNumber": "58",
+  "rarity": "uncommon",
+  "manaCost": "{1}{B}",
+  "typeLine": "Instant",
+  "oracleText": "Target creature has base power and toughness 0/0 until end of turn.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/0/90d684a4-9639-4792-8760-2011a7a85370.jpg?1789644823",
+   "normal": "https://cards.scryfall.io/normal/front/9/0/90d684a4-9639-4792-8760-2011a7a85370.jpg?1789644823",
+   "large": "https://cards.scryfall.io/large/front/9/0/90d684a4-9639-4792-8760-2011a7a85370.jpg?1789644823",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/0/90d684a4-9639-4792-8760-2011a7a85370.jpg?1789644823"
+  }
+ },
+ {
+  "name": "Proft, Sinister Mastermind",
+  "scryfallId": "d36b0e06-cb82-4c48-bf35-e76f109116f6",
+  "oracleId": "a350856c-87f2-4605-999f-4e26aa362a55",
+  "set": "fra",
+  "collectorNumber": "235",
+  "rarity": "uncommon",
+  "manaCost": "{2}{B}",
+  "typeLine": "Legendary Creature — Human Rogue",
+  "oracleText": "Threshold — You can't cast this spell unless there are seven or more cards in your graveyard.\nMenace\n{B}, Discard this card: Target creature gets -3/-1 until end of turn.",
+  "power": "5",
+  "toughness": "5",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Threshold",
+   "Menace"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/3/d36b0e06-cb82-4c48-bf35-e76f109116f6.jpg?1789127196",
+   "normal": "https://cards.scryfall.io/normal/front/d/3/d36b0e06-cb82-4c48-bf35-e76f109116f6.jpg?1789127196",
+   "large": "https://cards.scryfall.io/large/front/d/3/d36b0e06-cb82-4c48-bf35-e76f109116f6.jpg?1789127196",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/3/d36b0e06-cb82-4c48-bf35-e76f109116f6.jpg?1789127196"
+  }
+ },
+ {
+  "name": "Rampart Hunter",
+  "scryfallId": "f4a80225-7459-4151-86bb-8fdea31c39a6",
+  "oracleId": "0867755a-9fb9-42ad-897e-6206fbfbc1f8",
+  "set": "fra",
+  "collectorNumber": "60",
+  "rarity": "common",
+  "manaCost": "{3}{B}",
+  "typeLine": "Creature — Horror",
+  "oracleText": "Deathtouch\nWhen this creature enters, target creature gets +2/+2 and gains deathtouch until end of turn.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Deathtouch"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/4/f4a80225-7459-4151-86bb-8fdea31c39a6.jpg?1789127211",
+   "normal": "https://cards.scryfall.io/normal/front/f/4/f4a80225-7459-4151-86bb-8fdea31c39a6.jpg?1789127211",
+   "large": "https://cards.scryfall.io/large/front/f/4/f4a80225-7459-4151-86bb-8fdea31c39a6.jpg?1789127211",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/4/f4a80225-7459-4151-86bb-8fdea31c39a6.jpg?1789127211"
+  }
+ },
+ {
+  "name": "Rank Rat",
+  "scryfallId": "4ff6da82-d7dd-4b59-b7e6-30670cea7169",
+  "oracleId": "64e7ef06-ba30-4b19-9d44-ca77944cc930",
+  "set": "fra",
+  "collectorNumber": "61",
+  "rarity": "common",
+  "manaCost": "{1}{B}",
+  "typeLine": "Creature — Zombie Rat",
+  "oracleText": "When this creature enters, each opponent discards a card.",
+  "power": "1",
+  "toughness": "1",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/f/4ff6da82-d7dd-4b59-b7e6-30670cea7169.jpg?1789556727",
+   "normal": "https://cards.scryfall.io/normal/front/4/f/4ff6da82-d7dd-4b59-b7e6-30670cea7169.jpg?1789556727",
+   "large": "https://cards.scryfall.io/large/front/4/f/4ff6da82-d7dd-4b59-b7e6-30670cea7169.jpg?1789556727",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/f/4ff6da82-d7dd-4b59-b7e6-30670cea7169.jpg?1789556727"
+  }
+ },
+ {
+  "name": "Rise of the Deathbringer",
+  "scryfallId": "811719ad-b5a3-4d31-8c6f-5dbdfccf7c1f",
+  "oracleId": "57ea9f63-8267-4303-a3dd-9ded220294dc",
+  "set": "fra",
+  "collectorNumber": "63",
+  "rarity": "rare",
+  "manaCost": "{4}{B}",
+  "typeLine": "Instant",
+  "oracleText": "Choose one —\n• Draw cards equal to the greatest power among creatures you control. You lose life equal to the number of cards drawn this way.\n• All creatures get -3/-3 until end of turn.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/1/811719ad-b5a3-4d31-8c6f-5dbdfccf7c1f.jpg?1789470807",
+   "normal": "https://cards.scryfall.io/normal/front/8/1/811719ad-b5a3-4d31-8c6f-5dbdfccf7c1f.jpg?1789470807",
+   "large": "https://cards.scryfall.io/large/front/8/1/811719ad-b5a3-4d31-8c6f-5dbdfccf7c1f.jpg?1789470807",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/1/811719ad-b5a3-4d31-8c6f-5dbdfccf7c1f.jpg?1789470807"
+  }
+ },
+ {
+  "name": "Screeching Soulbreaker",
+  "scryfallId": "738667a1-c184-43ea-829f-49fbb69b6fc0",
+  "oracleId": "47e33aa1-2f54-471c-a484-de13bcd2dceb",
+  "set": "fra",
+  "collectorNumber": "65",
+  "rarity": "common",
+  "manaCost": "{2}{B}",
+  "typeLine": "Creature — Siren Bard",
+  "oracleText": "Flying\nWhenever this creature attacks, it deals 1 damage to each opponent and you gain 1 life.",
+  "power": "1",
+  "toughness": "4",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/3/738667a1-c184-43ea-829f-49fbb69b6fc0.jpg?1789385960",
+   "normal": "https://cards.scryfall.io/normal/front/7/3/738667a1-c184-43ea-829f-49fbb69b6fc0.jpg?1789385960",
+   "large": "https://cards.scryfall.io/large/front/7/3/738667a1-c184-43ea-829f-49fbb69b6fc0.jpg?1789385960",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/3/738667a1-c184-43ea-829f-49fbb69b6fc0.jpg?1789385960"
+  }
+ },
+ {
+  "name": "Silence the Echo",
+  "scryfallId": "f1d274db-751b-4414-a38d-762198168e91",
+  "oracleId": "43654381-c55c-4d6d-abfd-12932ceb5a4a",
+  "set": "fra",
+  "collectorNumber": "66",
+  "rarity": "common",
+  "manaCost": "{1}{B}",
+  "typeLine": "Sorcery",
+  "oracleText": "As an additional cost to cast this spell, sacrifice a creature or planeswalker or pay {3}.\nDestroy target creature or planeswalker.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/1/f1d274db-751b-4414-a38d-762198168e91.jpg?1789385640",
+   "normal": "https://cards.scryfall.io/normal/front/f/1/f1d274db-751b-4414-a38d-762198168e91.jpg?1789385640",
+   "large": "https://cards.scryfall.io/large/front/f/1/f1d274db-751b-4414-a38d-762198168e91.jpg?1789385640",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/1/f1d274db-751b-4414-a38d-762198168e91.jpg?1789385640"
+  }
+ },
+ {
+  "name": "Terminal Criticism",
+  "scryfallId": "7ebd7e38-b27c-4c6e-aaea-e8ee5ba5e5df",
+  "oracleId": "213b0814-f768-4408-9cb7-6f5960bcbb7a",
+  "set": "fra",
+  "collectorNumber": "68",
+  "rarity": "uncommon",
+  "manaCost": "{1}{B}",
+  "typeLine": "Instant",
+  "oracleText": "Destroy target creature or planeswalker that's blue or red. You gain 1 life.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/e/7ebd7e38-b27c-4c6e-aaea-e8ee5ba5e5df.jpg?1789470810",
+   "normal": "https://cards.scryfall.io/normal/front/7/e/7ebd7e38-b27c-4c6e-aaea-e8ee5ba5e5df.jpg?1789470810",
+   "large": "https://cards.scryfall.io/large/front/7/e/7ebd7e38-b27c-4c6e-aaea-e8ee5ba5e5df.jpg?1789470810",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/e/7ebd7e38-b27c-4c6e-aaea-e8ee5ba5e5df.jpg?1789470810"
+  }
+ },
+ {
+  "name": "Theoretical Necromancer",
+  "scryfallId": "e36a7908-1e22-494b-adb4-e72ac0974d62",
+  "oracleId": "6c5ed756-b999-49f7-9a52-fb8196202f0f",
+  "set": "fra",
+  "collectorNumber": "69",
+  "rarity": "common",
+  "manaCost": "{2}{B}",
+  "typeLine": "Creature — Vampire Warlock",
+  "oracleText": "{3}{B}, Exile this card from your graveyard: Return another target creature card from your graveyard to your hand.",
+  "power": "4",
+  "toughness": "1",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/3/e36a7908-1e22-494b-adb4-e72ac0974d62.jpg?1789556734",
+   "normal": "https://cards.scryfall.io/normal/front/e/3/e36a7908-1e22-494b-adb4-e72ac0974d62.jpg?1789556734",
+   "large": "https://cards.scryfall.io/large/front/e/3/e36a7908-1e22-494b-adb4-e72ac0974d62.jpg?1789556734",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/3/e36a7908-1e22-494b-adb4-e72ac0974d62.jpg?1789556734"
+  }
+ },
+ {
+  "name": "Tinybones, Pocket Nuisance",
+  "scryfallId": "2f47ddf7-35b6-4205-8045-f057914c5f64",
+  "oracleId": "97dcf9fb-3f2f-4aa6-959a-e3c4889c1673",
+  "set": "fra",
+  "collectorNumber": "237",
+  "rarity": "uncommon",
+  "manaCost": "{2}{B}",
+  "typeLine": "Legendary Creature — Skeleton Rogue",
+  "oracleText": "When Tinybones enters, each opponent discards a card.\nWhenever a player discards one or more cards, Tinybones deals 1 damage to each opponent.",
+  "power": "2",
+  "toughness": "1",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/f/2f47ddf7-35b6-4205-8045-f057914c5f64.jpg?1788329294",
+   "normal": "https://cards.scryfall.io/normal/front/2/f/2f47ddf7-35b6-4205-8045-f057914c5f64.jpg?1788329294",
+   "large": "https://cards.scryfall.io/large/front/2/f/2f47ddf7-35b6-4205-8045-f057914c5f64.jpg?1788329294",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/f/2f47ddf7-35b6-4205-8045-f057914c5f64.jpg?1788329294"
+  }
+ },
+ {
+  "name": "Void Extrapolator",
+  "scryfallId": "0eae2efb-bf25-48ee-9c07-9098008110ad",
+  "oracleId": "517f84b5-cf99-410d-96ea-910740231dac",
+  "set": "fra",
+  "collectorNumber": "70",
+  "rarity": "common",
+  "manaCost": "{1}{B}",
+  "typeLine": "Creature — Aetherborn Warlock",
+  "oracleText": "This creature enters prepared. (While it's prepared, you may cast a copy of its spell. Doing so unprepares it.)\nThreshold — This creature gets +1/+1 as long as there are seven or more cards in your graveyard.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "B"
+  ],
+  "colorIdentity": [
+   "B",
+   "U"
+  ],
+  "keywords": [
+   "Threshold",
+   "Prepared"
+  ],
+  "back": "Omit Variables (Void Extrapolator)",
+  "prepare": true,
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/e/0eae2efb-bf25-48ee-9c07-9098008110ad.jpg?1789556787",
+   "normal": "https://cards.scryfall.io/normal/front/0/e/0eae2efb-bf25-48ee-9c07-9098008110ad.jpg?1789556787",
+   "large": "https://cards.scryfall.io/large/front/0/e/0eae2efb-bf25-48ee-9c07-9098008110ad.jpg?1789556787",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/e/0eae2efb-bf25-48ee-9c07-9098008110ad.jpg?1789556787"
+  }
+ },
+ {
+  "name": "Omit Variables (Void Extrapolator)",
+  "flavorName": "Omit Variables",
+  "scryfallId": "0eae2efb-bf25-48ee-9c07-9098008110ad",
+  "oracleId": "517f84b5-cf99-410d-96ea-910740231dac",
+  "set": "fra",
+  "collectorNumber": "70",
+  "rarity": "common",
+  "manaCost": "{U/B}",
+  "typeLine": "Sorcery",
+  "oracleText": "Mill three cards. (Put the top three cards of your library into your graveyard.)",
+  "colors": [
+   "U",
+   "B"
+  ],
+  "colorIdentity": [
+   "B",
+   "U"
+  ],
+  "keywords": [
+   "Mill"
+  ],
+  "front": "Void Extrapolator",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/e/0eae2efb-bf25-48ee-9c07-9098008110ad.jpg?1789556787",
+   "normal": "https://cards.scryfall.io/normal/front/0/e/0eae2efb-bf25-48ee-9c07-9098008110ad.jpg?1789556787",
+   "large": "https://cards.scryfall.io/large/front/0/e/0eae2efb-bf25-48ee-9c07-9098008110ad.jpg?1789556787",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/e/0eae2efb-bf25-48ee-9c07-9098008110ad.jpg?1789556787"
+  }
+ },
+ {
+  "name": "Winter, Tormented Loner",
+  "scryfallId": "9670f754-f41f-45ac-8e8b-025ad2c0f66b",
+  "oracleId": "84eaac2e-74ce-4a16-9faa-409df7c58eb3",
+  "set": "fra",
+  "collectorNumber": "240",
+  "rarity": "uncommon",
+  "manaCost": "{2}{B}",
+  "typeLine": "Legendary Creature — Human Warlock",
+  "oracleText": "When Winter enters, you may sacrifice a creature or planeswalker. When you do, each opponent sacrifices a creature of their choice.\nWinter gets +1/+0 for each creature and planeswalker card in your graveyard.",
+  "power": "0",
+  "toughness": "3",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/6/9670f754-f41f-45ac-8e8b-025ad2c0f66b.jpg?1789127724",
+   "normal": "https://cards.scryfall.io/normal/front/9/6/9670f754-f41f-45ac-8e8b-025ad2c0f66b.jpg?1789127724",
+   "large": "https://cards.scryfall.io/large/front/9/6/9670f754-f41f-45ac-8e8b-025ad2c0f66b.jpg?1789127724",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/6/9670f754-f41f-45ac-8e8b-025ad2c0f66b.jpg?1789127724"
+  }
+ },
+ {
+  "name": "Yargle, Glutton of Urborg",
+  "scryfallId": "645cfc1b-76f2-4823-9fb0-03cb009f8b32",
+  "oracleId": "ed66cd31-958f-4b28-82a3-e04acc819afc",
+  "set": "dom",
+  "collectorNumber": "113",
+  "rarity": "uncommon",
+  "manaCost": "{4}{B}",
+  "typeLine": "Legendary Creature — Frog Spirit",
+  "oracleText": "",
+  "power": "9",
+  "toughness": "3",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/4/645cfc1b-76f2-4823-9fb0-03cb009f8b32.jpg?1783934999",
+   "normal": "https://cards.scryfall.io/normal/front/6/4/645cfc1b-76f2-4823-9fb0-03cb009f8b32.jpg?1783934999",
+   "large": "https://cards.scryfall.io/large/front/6/4/645cfc1b-76f2-4823-9fb0-03cb009f8b32.jpg?1783934999",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/4/645cfc1b-76f2-4823-9fb0-03cb009f8b32.jpg?1783934999"
+  }
  }
 ]
