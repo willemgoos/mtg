@@ -267,7 +267,10 @@ describe('creatures with one-off rules', () => {
           x.type === 'activateAbility' && x.source === src && (x as never as { x: number }).x === 2,
       );
     expect(a).toBeDefined();
-    g.do({ ...(a as never), targets: [g.ref(g.id('p1', 'bassara-tower-archer'))] });
+    g.do({
+      ...(a as unknown as Record<string, unknown>),
+      targets: [g.ref(g.id('p1', 'bassara-tower-archer'))],
+    } as never);
     settle(g);
     expect(counters(g, g.id('p1', 'bassara-tower-archer'))).toBe(2);
     expect(g.state.players.p1.graveyard.some((id) => g.obj(id).defId === 'wrens-run-hydra')).toBe(
