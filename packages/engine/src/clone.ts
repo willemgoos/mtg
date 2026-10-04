@@ -59,6 +59,7 @@ export function cloneState(s: GameState): GameState {
       ...(s.turn.creaturesLost ? { creaturesLost: { ...s.turn.creaturesLost } } : {}),
       ...(s.turn.creaturesLost ? { creaturesLost: { ...s.turn.creaturesLost } } : {}),
       ...(s.turn.foodsSacrificed ? { foodsSacrificed: { ...s.turn.foodsSacrificed } } : {}),
+      ...(s.turn.countersPut ? { countersPut: { ...s.turn.countersPut } } : {}), // Strixhaven Brawl (15b, multi)
       ...(s.turn.hexproofPlayers ? { hexproofPlayers: s.turn.hexproofPlayers.slice() } : {}),
       ...(s.turn.osteomancer ? { osteomancer: s.turn.osteomancer.slice() } : {}),
       ...(s.turn.zaffaiUsed ? { zaffaiUsed: s.turn.zaffaiUsed.slice() } : {}),

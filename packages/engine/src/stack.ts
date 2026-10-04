@@ -672,6 +672,13 @@ export function activateAbility(
   }
   // Cycling.
   if (a.cost.discardSelf) moveObject(ctx, source, 'graveyard');
+  // Strixhaven Brawl (15b, multi): Suspend N, "exile it from your hand with N time counters".
+  if (a.cost.suspendSelf) {
+    moveObject(ctx, source, 'exile');
+    const exiled = obj(ctx, source);
+    exiled.suspended = true;
+    exiled.counters = { ...exiled.counters, time: a.cost.suspendSelf };
+  }
   if (a.cost.tapTokens)
     for (const id of tokensToTap(ctx, player, source).slice(0, a.cost.tapTokens)) tap(ctx, id);
   // Secrets of Strixhaven (14b): Harmonized Trio.
@@ -1414,6 +1421,16 @@ function bonusCounters(
       ).length;
     }
   }
+  // Strixhaven Brawl (15b, multi): Gorma, the Gullet: nontoken creatures you control enter with an
+  // additional +1/+1 counter for each creature that died under your control this turn (once per Gorma).
+  const eo = obj(ctx, entering);
+  const died = ctx.s.turn.creaturesLost?.[player] ?? 0;
+  if (died > 0 && !eo.isToken && defOf(ctx, eo.defId).types.includes('Creature'))
+    for (const id of ctx.s.battlefield) {
+      if (obj(ctx, id).controller !== player) continue;
+      for (const a of def(ctx, id).abilities)
+        if (a.kind === 'static' && a.effect.kind === 'nontokenEnterWithDiedCounters') n += died;
+    }
   return n;
 }
 

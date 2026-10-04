@@ -8,6 +8,7 @@ import { SOS_14B_B_EFFECTS } from './sos-14b-b-effects.ts';
 import { SOS_14B_C_EFFECTS } from './sos-14b-c-effects.ts';
 import { BRAWL_15A_R_EFFECTS } from './brawl-15a-r-effects.ts';
 import { BRAWL_15A_RW_EFFECTS } from './brawl-15a-rw-effects.ts';
+import { BRAWL_15B_MULTI_EFFECTS } from './brawl-15b-multi-effects.ts';
 import { SOS_14B_D_EFFECTS } from './sos-14b-d-effects.ts';
 import { BRAWL_15A_W_EFFECTS } from './brawl-15a-w-effects.ts';
 import { BRAWL_15B_B_EFFECTS } from './brawl-15b-b-effects.ts';
@@ -99,6 +100,8 @@ const BUILT_IN_EFFECTS: Record<string, CustomEffect> = {
   ...BRAWL_15A_RW_EFFECTS,
   // Strixhaven Brawl (15b, black).
   ...BRAWL_15B_B_EFFECTS,
+  // Strixhaven Brawl (15b): multicolour, colourless and lands.
+  ...BRAWL_15B_MULTI_EFFECTS,
   // Strixhaven (13a): Learn: put the chosen Lesson from outside the game into your hand.
   learnFetch(ctx, es, params) {
     const ps = ctx.s.players[es.controller];
@@ -637,6 +640,9 @@ export function addCounters(ctx: Ctx, id: ObjectId, n: number, name?: string): v
     return;
   }
   o.plusOneCounters += n;
+  // Strixhaven Brawl (15b, multi): Iridescent Hornbeetle counts the counters put on creatures this turn.
+  if (def(ctx, id).types.includes('Creature'))
+    (ctx.s.turn.countersPut ??= { p1: 0, p2: 0 })[o.controller] += n;
   emit(ctx, { type: 'countersAdded', id, count: n, player: o.controller });
 }
 
