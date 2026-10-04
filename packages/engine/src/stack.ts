@@ -1917,6 +1917,9 @@ export function answerDiscard(ctx: Ctx, card: ObjectId): void {
       if (d.tokenPerNonland && d.nonlandDiscarded)
         after.push({ kind: 'createToken', token: d.tokenPerNonland, count: d.nonlandDiscarded });
       continueWith(ctx, d.resume, after, d.thenPriority);
+    } else if (d.then) {
+      // Reality Fracture (17a): "If you do" (Tether Technician, Improvised Act).
+      continueWith(ctx, d.resume, d.then, d.thenPriority);
     } else resume(ctx, d.resume, d.thenPriority);
   }
 }

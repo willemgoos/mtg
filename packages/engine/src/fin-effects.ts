@@ -22,6 +22,7 @@ import {
   gainLife,
   millCount,
   plusFoodTokens,
+  replacedToken,
 } from './effects.ts';
 import { nextInt, shuffleInPlace } from './rng.ts';
 import type { GameObject, PlayerId } from './types.ts';
@@ -35,7 +36,14 @@ const PERMANENT_TYPES = ['Artifact', 'Creature', 'Enchantment', 'Land', 'Planesw
 
 /** Creates a token on the battlefield (no replacement effects apply but Tippy-Toe's Food). */
 function makeToken(ctx: Ctx, token: string, controller: PlayerId): void {
-  const t = createObject(ctx, token, controller, 'battlefield', true);
+  // Reality Fracture (17a): Draconic Visitor turns an artifact token into a Dragon.
+  const t = createObject(
+    ctx,
+    replacedToken(ctx, controller, token),
+    controller,
+    'battlefield',
+    true,
+  );
   ctx.s.battlefield.push(t.id);
   emit(ctx, { type: 'objectMoved', id: t.id, defId: t.defId, from: null, to: 'battlefield' });
   plusFoodTokens(ctx, controller);
