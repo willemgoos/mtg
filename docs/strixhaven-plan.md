@@ -241,6 +241,25 @@ rules line). 24 of 50 games won against the other Brawl decks, no errors; checke
 - Scryfall rate-limited us after heavy API use: agents should read card data from the bulk cache
   (`packages/cards/.cache/default-cards.jsonl.gz`) or `generated/scryfall.json`, not the API.
 
+**15b progress (paused 4 October 2026):** seven card agents ran (one per group, each on its own branch cut from
+`strixhaven` at `c6aa291`).
+
+| Group | Branch | State |
+| ----- | ------ | ----- |
+| b     | merged into `strixhaven` (`430c4bf`) | done: 56 of 57 (Fell already existed), checks pass |
+| multi | `strixhaven-15b-multi` (`56cdc93`) | done, checks pass, **not merged** |
+| w, u, g, r, pair | `strixhaven-15b-{w,u,g,r,pair}` | **WIP**: agent stopped near the end, one WIP commit each, checks not run |
+
+- Next: on each WIP branch, compare its card file with `brawl-g-<group>.txt`, finish the missing cards, write
+  `docs/strixhaven-15b/simplifications-<group>.md` if absent, run `pnpm typecheck && pnpm lint && pnpm test`, commit.
+- Merge order: multi, then the five. Expected conflicts (seen merging multi): `build.ts` (`KEYWORDS_AS_ABILITIES`),
+  `strixhaven-brawl.ts`, `context.ts`, `types.ts`, `pool.ts` (`SET_PREFERENCE` tail): keep both sides. For
+  `generated/scryfall.json`, take either side and re-run `pnpm cards:fetch` after the merge.
+- Then fold the `simplifications-*.md` files into the list at the bottom of this plan, and build the seven decks.
+- Aggro Amalgam is the Arena flavour name of Voracious Hydra (implemented in multi): list it as Voracious Hydra.
+- Rootha's missing 100th card: not found (mtg.wiki still 99; Moxfield and MTGGoldfish only have the paper precon or
+  player lists). Plan: one more basic land, recorded as a simplification.
+
 ## Phase 16: Mystical Archive
 
 - STA and SOA instants and sorceries as the bonus slot of STX and SOS boosters (one card per pack on Arena; check the
