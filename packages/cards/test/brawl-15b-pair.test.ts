@@ -764,6 +764,25 @@ describe('green-blue spells', () => {
     expect(inZone(g, 'p1', 'hand', 'unexpected-results')).toHaveLength(1);
   });
 
+  it('a copy of Unexpected Results that finds a land resolves without error', () => {
+    const g = game({
+      p1: {
+        hand: ['reflective-rimekin', 'unexpected-results'],
+        battlefield: [...n('forest', 5), ...n('island', 5)],
+        library: n('forest', 8),
+      },
+    });
+    cast(g, 'reflective-rimekin');
+    settle(g);
+    cast(g, 'unexpected-results');
+    settle(g);
+    pick(g, /Put it onto the battlefield/); // the copy
+    settle(g);
+    pick(g, /Put it onto the battlefield/); // the original
+    expect(g.decision.kind).toBe('priority');
+    expect(inZone(g, 'p1', 'hand', 'unexpected-results')).toHaveLength(1);
+  });
+
   it('Urban Evolution draws three cards and allows an additional land', () => {
     const g = game({
       p1: {

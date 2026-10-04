@@ -225,6 +225,8 @@ Lorehold Spirit, Quandrix Unlimited, on mtg.wtf `/deck/soc/...`) differ; note th
 missing cards in `soc/cards-15a-{w,r,rw}.ts`. Planeswalker commanders needed no engine change (only the Brawl test and the
 rules line). 24 of 50 games won against the other Brawl decks, no errors; checked in the browser (command zone, 25 life).
 
+**15b done: the seven remaining Brawl decks** (Killian, Rootha, Zimone, Dina, Codie, Extus, Galazeth Prismari, in `STRIXHAVEN_BRAWL_DECKS`, exactly the Arena Store lists in `docs/strixhaven-decklists.md`). Five are `set: 'soc'`, the 2021 three (Codie, Extus, Galazeth) `set: 'stx'` (the pickers filter by series, so Brawl decks never show in the STX sets). Simplifications: "A-" Alchemy names are the paper cards, "Aggro Amalgam" is Voracious Hydra, Extus is listed by its front face, and Rootha has one extra Mountain (wiki list has 99 cards). Arena run (6 games per pairing, heuristic bots, mirrors excluded), games won of played against the other Brawl decks: Quintorius 42/72, Killian 48/72, Rootha 43/72, Zimone 29/72, Dina 32/72, Codie 4/72, Extus 31/72, Galazeth 41/72; no errors. Codie (five colours) is weak for the bot and its games run long. Engine fixes found by the run: a Treasure that taps for two (Goldspan Dragon) crashed payment, a free cast of a discard-or-sacrifice card (Demand Answers via Mizzix's Mastery) offered illegal actions, a copy of Unexpected Results crashed on returning itself to hand; the AI also stalled on a free cast of Magma Opus (tens of thousands of target splits), so it now scores an even sample. The Brawl random-play test plays each pairing once.
+
 **Where 15b stands (paused 3 October 2026):**
 
 - 354 cards still missing for the other seven decks, split into seven disjoint colour groups in `docs/strixhaven-15b/`
@@ -369,3 +371,125 @@ Group D (red and Prismari; `sos/cards-d.ts`, `sos-14b-d-effects.ts`):
 Group E (green and Quandrix; `sos/cards-e.ts`):
 
 - Planar Engineering searches four times (each may find nothing). Zimone's Experiment and Paradox Surveyor reveal nothing to the opponent. Applied Geometry's copy keeps its own colours (not green and blue). Ambitious Augmenter moves only +1/+1 counters. Fractal Tender counts any counter put on it. Quandrix, the Proof's granted cascade is a cast trigger, and Geometer's Arthropod and Bind to Life let you decline the card. Twobrid pips (`{2/G}`) are `ManaCost.twoHybrid`.
+
+### 15 (Brawl cards)
+
+From `docs/strixhaven-15b/simplifications-*.md` (now folded in here). 15b also: Alchemy "A-" names (A-Maelstrom Muse, A-Iridescent Hornbeetle, A-Ochre Jelly, A-Haywire Mite) are the paper cards; "Aggro Amalgam" is Voracious Hydra; Rootha has one extra basic (the wiki list has 99 cards).
+
+- **white**
+  - Katilda, Dawnhart Martyr and Katilda's Rising Dawn: no protection from Vampires.
+  - Reprobation: the creature loses its abilities and becomes 0/1 but keeps its creature types.
+  - Alseid of Life's Bounty: protection from a colour is modelled as "can't be targeted, damaged, enchanted or blocked by" that colour via a tracked effect until end of turn.
+  - Indebted Spirit bestowed: the host's afterlife is a trigger on the creature face that fires when the host dies, even after the Aura has become a creature again.
+  - Bestow auras revert to creatures in state-based actions as soon as the host is gone (no separate "becomes unattached" trigger window).
+
+- **blue**
+  - **Negate**: already implemented (Foundations); skipped. **Opt**: likewise skipped.
+  - **Slickshot Lockpicker**: plot is an activated ability from hand at sorcery speed that uses the stack (the opponent can respond), not a special action. The plotted card can only be cast as a sorcery (fine for a creature; no other card in the group has plot).
+  - **Quicken**: "the next sorcery spell you cast this turn" is kept per player for the turn and used up by the next sorcery cast, whenever it is cast.
+  - **Silundi Vision**: the revealed card is not shown to the opponent as a reveal; the rest go to the bottom in a random order (as printed).
+  - **Sink into Stupor**: "target spell or nonland permanent" is two modes ("return target spell" / "return target nonland permanent"), chosen when casting.
+  - **Unexpected Assistance**: none (convoke).
+  - **Baral's Expertise**: "up to three targets" is exactly three optional target slots; the free spell is offered from hand (mana value 4 or less) as a cast decision, with no check that you could normally cast it.
+  - **Distant Melody**: counts the permanents you control (not only creatures) of the chosen creature type, as printed; the creature type list is the engine's usual list of types you could choose.
+  - **Lazotep Plating**: the Army is chosen by the engine (the first Zombie Army or Army you control); "you and permanents you control gain hexproof" uses the Dawn's Truce effect (permanents on the battlefield now plus the player).
+  - **Mizzium Skin, Cyclonic Rift**: overload is an alternative cost ("replaces the mana cost") with its own spell, as in other overload cards; the menu says "Alternative cost (...): overload (each)".
+  - **Part the Waterveil**: awaken 6 is the alternative cost with a target land you control. The awakened land becomes a 0/0 Elemental creature with haste permanently, as printed. The extra turn is queued the usual way (after this one).
+  - **Rise from the Tides**: the Zombie tokens are the common 2/2 black Zombie token (they enter tapped, as printed).
+  - **Sea Gate Restoration // Sea Gate, Reborn**, **Soporific Springs**, **Hydroelectric Laboratory**: "you may pay 3 life, if you don't it enters tapped" is modelled as enters tapped plus a "may pay 3 life, then untap" trigger (the permanent is briefly tapped; same as the 15a shock lands).
+  - **Stock Up, Experimental Augury**: the pick is a "choose a card or none" prompt; the rest go to the bottom in a random order rather than any order. **Experimental Augury / Tezzeret's Gambit**: see proliferate below.
+  - **Proliferate** (Experimental Augury, Tezzeret's Gambit): the engine chooses for you: it adds one more of each kind of counter (+1/+1, loyalty, named counters except finality, stun, time) to every permanent you control that has any. It never affects opponents' permanents or players' counters.
+  - **Treasure Cruise**: delve exiles only as many cards as the generic cost needs (the least useful first); you can't choose to exile more or to exile specific cards.
+  - **Gate to Seatower**: "seek" is the shared random-nonland handler; "activate only once" is per permanent.
+  - **Mystic Sanctuary**: "enters tapped unless you control three or more other Islands" is evaluated as it enters; "when this land enters untapped" is an intervening-if on the land being untapped, and the card goes on top of the library with no choice of "may" beyond leaving the target out.
+  - **Hydroelectric Specimen**: the redirect is only offered for a spell with exactly one target and only if the Specimen is a legal target for that spell; "you may" is a yes/no prompt.
+  - **Ingenious Prodigy**: skulk is the engine's "can't be blocked by creatures with greater power" (greater than its current power).
+  - **Essence Capture**: none.
+  - **Syncopate**: "unless its controller pays {X}" with X = the value chosen for Syncopate; an X of 0 lets the spell resolve without a prompt.
+  - **Better Offer** (Alchemy): the random creature is chosen from the target opponent's library (no search, no reveal, no shuffle). "Perpetually" is a base 0/0-replacing stat set (`copyPT`) that stays with the card in every zone; "perpetually gains ward {1}" is ward {1} only while it stays on the battlefield (it is lost if the card changes zones).
+  - **Mass Manipulation**: "X target creatures and/or planeswalkers" is at most three targets (never more than X), and fewer than X are allowed. Control is permanent, as printed.
+  - **Stolen by the Fae**: the target creature's mana value must equal X (checked when you cast it, not again on resolution).
+  - **Tezzeret's Gambit**: the Phyrexian {U/P} is a choice between the normal {3}{U} and a {3} alternative cost that also pays 2 life ("Alternative cost ({3}): pay 2 life"). Proliferate: see above.
+  - **Seek New Knowledge, Bounty of the Deep** (Alchemy): "seek" puts a random matching card from your library into your hand (no reveal). Seek New Knowledge puts a card of your choice from your hand on the bottom after seeking.
+  - **Expropriate** (council's dilemma): you vote first, then your opponent, by a prompt for each (the engine's AI answers the opponent's vote). Each time vote is an extra turn for you. Your own money vote takes back a permanent you own that an opponent controls (the best by mana value, with no choice); an opponent's money vote lets them choose which of their permanents you gain control of (control is permanent; the permanent is summoning sick). Expropriate is exiled as it resolves.
+  - **Housemeld** (Alchemy): the exiled card perpetually has exactly the enchantment type (it loses its creature type, and any other types) for as long as the card exists (it stays so after it returns to the battlefield and in every zone). A token exiled this way ceases to exist and doesn't return. "At the beginning of your next end step" is a delayed trigger on your next end step (this turn's if it hasn't begun yet).
+  - **Snow-Covered Island**: snow is a new supertype ("Snow"); nothing in the engine reads it yet (no snow mana).
+  - **Thriving Isle**: "choose a color other than blue" offers all five colours; choosing blue just makes it a plain Island that enters tapped.
+  - **Haughty Djinn**: none (power is a characteristic-defining count of instant and sorcery cards in your graveyard).
+  - **Murmuring Mystic**: the token is a new 1/1 blue Bird Illusion with flying (`soc-15b-u-bird-illusion`).
+  - **Reflective Rimekin** (Alchemy): the one-time boon is a permanent emblem-style triggered ability, so it copies each of your later instant or sorcery spells with mana value 3 or less. The copy keeps the original's targets ("you may choose new targets" is not offered).
+  - **Counterspell, Spell Pierce, Spell Swindle, Wash Away, Three Steps Ahead**: Spell Swindle counts X for a spell with {X} in its cost as the announced value; Wash Away's cleave is the alternative cost {1}{U}{U} ("Alternative cost ({1}{U}{U}): cleave") and the unrestricted spell; the normal Wash Away can only target a spell that wasn't cast from its owner's hand. Three Steps Ahead's spree is any non-empty set of its three modes, each with its own additional cost, shown as one cast option per set.
+  - **Soulblade Djinn, Consider, Preordain, Deduce, Thoughtcast**: none (Thoughtcast's affinity counts artifacts you control, tokens included).
+  - **Group status**: all 48 listed cards are implemented (back faces in `BRAWL_15B_U_BACKS`); typecheck, lint and tests pass.
+
+- **black**
+  - Boggart Trawler // Boggart Bog, Fell the Profane // Fell Mire: "you may pay 3 life, otherwise it enters tapped" is modelled as entering tapped, then an optional "pay 3 life, untap it".
+  - Hateful Eidolon: triggers on any creature dying and counts the Auras at resolution (drawing nothing if there were none), rather than checking "enchanted" when it triggers.
+  - Kaya's Ghostform: enchants a creature you control (not a planeswalker) and returns it only when it dies, not when it is exiled.
+  - Cursebound Witch: the spellbook draft is just drawing a card (the spellbook list isn't in the card data).
+  - Blasphemous Edict: players sacrifice one creature at a time in turn (13 rounds), not all thirteen simultaneously. The {B} cost is a conditional cost reduction (the card's {3}{B}{B} less {3}{B}), not an alternative cost.
+  - Phyrexian Tower: the "{T}, Sacrifice a creature: Add {B}{B}" ability uses the stack and adds the mana to your pool (it isn't a mana ability).
+  - Westvale Abbey: the five creatures are sacrificed as the ability resolves, not as a cost (it needs five creatures when activated).
+  - Thriving Moor: "choose a color other than black" also offers black (which adds nothing).
+  - Blighted Nightmare: X is the target's mana value, and the blight (X -1/-1 counters, shown as a permanent -X/-X effect) goes on your creature with the greatest toughness; nothing returns if X exceeds that toughness (the Nightmare has already gone to hand). The perpetual +1/+1 is a perpetual static boost on each card.
+  - Terrors of the Track: double team conjures a copy of the same card with a flag that it has lost double team.
+  - Lord Skitter's Blessing: the Wicked Role's "only one Role per controller on a creature" replacement isn't implemented.
+  - Vein Ripper: ward's creature sacrifice takes your creature with the lowest power automatically; the Brawl AI/UI doesn't offer the choice.
+  - Liliana, Dreadhorde General (-9): each opponent keeps their highest mana value permanent of each type (artifact, creature, enchantment, land, planeswalker) automatically instead of choosing.
+  - Bone Shards, Bitter Triumph: the discarded card goes to the graveyard directly (no "discard" event, so no discard triggers).
+  - Snow-Covered Swamp: the Snow supertype has no rules here (no snow mana).
+
+- **red**
+  - Cards not exactly per Scryfall oracle text (3 October 2026 bulk data). Behaviour: `packages/cards/src/soc/cards-15b-r.ts`,
+  - one-offs in `packages/engine/src/brawl-15b-r-effects.ts`.
+  - **Return the Favor:** the copy mode targets a spell only (not an activated or triggered ability) and the copy keeps the
+  - original's targets (no new targets chosen). The change-target mode works on spells with exactly one target, and is a choice
+  - among the legal new targets (or keep it).
+  - **Mizzix's Mastery, Arcane Bombardment:** the exiled card itself is cast without paying its mana cost, then returns to exile
+  - (as a copy would leave it), rather than a true copy being cast. For both you first say yes or no, then may decline each card.
+  - **Torch the Tower:** "if a permanent dealt damage by this spell would die, exile it instead" is "if the target creature would
+  - die this turn, exile it instead" (also for damage from other sources); planeswalker targets aren't covered. Bargain is a
+  - kicker with a sacrifice (an artifact, enchantment or token).
+  - **Great Train Heist:** the Treasure mode doesn't target (there is one opponent): creatures that deal combat damage to the
+  - opponent this turn each make a tapped Treasure.
+  - **Saheeli, Sublime Artificer:** the copy has only the copied permanent's types (it isn't an artifact in addition when it
+  - copies a creature).
+  - **Sapphire Collector:** "this ability triggers only once" is a `conjured` named counter on the creature
+  - (a second Collector triggers on its own). Mox Sapphire is in the pool (Alchemy: Dominaria United printing) so it can be conjured.
+  - **Glimpse the Impossible:** the Eldrazi Spawn's "Sacrifice this token: Add {C}" is an activated ability (uses the stack),
+  - not a mana ability, so it never pays costs automatically.
+  - **Muddle, the Ever-Changing:** myriad is left out (it only matters with more than one opponent).
+  - **Steam Vents:** "you may pay 2 life; if you don't it enters tapped" is modelled as entering tapped, then paying 2 life untaps it
+  - (same as the other shock lands).
+  - **Snow-Covered Mountain:** the snow supertype isn't tracked (nothing in the pool cares).
+
+- **green**
+  - Pest Infestation: up to three targets, however large X is.
+  - Spinning Wheel Kick: at most three targets, however large X is.
+  - Mana Confluence: the life is "damage" to you (pain), not paid as a cost.
+  - Proliferate (Karn's Bastion, Follow the Tracks): only your own permanents get counters; no opponents' permanents or players are chosen.
+
+- **two-colour**
+  - Eriette: "can't attack you or planeswalkers you control" is "can't attack" (two-player game).
+  - Ornate Imitations: the creature of each mana value is a deterministic pick (by card id) from the whole pool, not random.
+  - Ornate Imitations: X can't be 0 (no effect anyway).
+  - Planar Genesis / Make Your Own Luck: the cards left over go to the bottom in a fixed order (no random order choice).
+  - Growth Spiral: the land may only come from hand (as printed).
+  - Killian: the card draw triggers once per combat when you attack with any creature enchanted by your Aura.
+  - Damn: overload is modelled as an alternative cost that replaces the cost.
+  - Fracture, Pterafractyl and Hinterland Harbor were already implemented in earlier sets.
+
+- **multicolour**
+  - A-Maelstrom Muse: already in the pool as the paper STX card (not re-implemented); the Alchemy rebalance is not modelled.
+  - A-Iridescent Hornbeetle, A-Ochre Jelly, A-Haywire Mite: the "A-" rebalanced versions aren't in bulk data, so these are the paper cards.
+  - Aggro Amalgam: a flavour name (Through the Omenpaths) of Voracious Hydra. Implemented as `Voracious Hydra` (m20 printing); decks must list it under that name.
+  - Restless Cottage: becomes a 4/4 Horror until end of turn, but its colours (black and green) aren't tracked, and the Horror subtype stays after end of turn.
+  - The World Tree: "any number of God cards" is all Gods in the library (the choice is always to take every one).
+  - Dispersal: when several nonland permanents tie for the greatest mana value, the first one is returned (the opponent doesn't choose).
+  - Duneblast: "choose up to one creature" is a prompt with one option per creature (yours first), not a targeted choice.
+  - Vesuvan Mist: the duplicate's "spend mana as though it were mana of any color" is an any-type cost (colourless mana could also pay a coloured pip).
+  - Gorma, the Gullet: the extra counters apply only to creature spells resolving onto the battlefield, not to creatures put onto it by other effects.
+  - Time Wipe: the creature you return is chosen on resolution from your creatures; if you control none, nothing is returned.
+  - Call the Crash: suspend is an ability activated from hand at sorcery speed (any time you could cast it, which for a sorcery is the same), not a special action; the conjured Siege Rhinos are real cards (Khans of Tarkir printing).
+  - Iridescent Hornbeetle: counts +1/+1 counters put on your creatures as counters (a doubled put counts as the doubled number).
+  - Assassin's Trophy: the opponent's "may search" is a library search prompt that can be declined.

@@ -1041,6 +1041,8 @@ function attachAura(ctx: Ctx, aura: ObjectId, host: ObjectId): void {
 export function finishResolution(ctx: Ctx, item: PausedResolution['item']): void {
   emit(ctx, { type: 'resolved', id: item.id });
   if (item.kind !== 'spell') return;
+  // A copy that returned itself to hand (Unexpected Results) has already ceased to exist.
+  if (!ctx.s.objects[item.id]) return;
   // Final Fantasy (11a): a spell that put itself onto the battlefield as it resolved (Esper Origins).
   if (ctx.s.objects[item.id]?.zone === 'battlefield') return;
   // Strixhaven (13c): a spell that returned itself to its owner's hand (Journey to the Oracle).

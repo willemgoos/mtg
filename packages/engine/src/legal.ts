@@ -857,6 +857,9 @@ export function getLegalActions(ctx: Ctx, player: PlayerId): Action[] {
         for (const v of castVariants(cd, obj(ctx, card).zone, 'free')) {
           // Additional sacrifice or forage costs aren't offered on free casts (a simplification).
           if (v.sacrifice || v.forage) continue;
+          // Demand Answers, Bone Shards: the discard variant discards a card, the other one doesn't.
+          const vDiscards =
+            v.discard === undefined ? discards : v.discard ? s.players[player].hand : [undefined];
           const specs = v.spell?.targets ?? (cd.enchant ? [cd.enchant] : []);
           for (const targets of targetCombos(ctx, specs, { controller: player, sourceId: card })) {
             // Strixhaven (13b): a free cast still pays ward.
@@ -865,7 +868,7 @@ export function getLegalActions(ctx: Ctx, player: PlayerId): Action[] {
               !canPayFrom(wardCost(ctx, player, targets), manaSources(ctx, player))
             )
               continue;
-            for (const discard of discards)
+            for (const discard of vDiscards)
               out.push({
                 type: 'castSpell',
                 player,

@@ -28,6 +28,13 @@ export const BLURBS: Record<string, string> = {
   'brawl-mabels-militia': 'Mabel leads a hundred mice, soldiers and sparks into battle.',
   'brawl-quintorius-history-chaser':
     'Quintorius leads Spirits and relics: recur the graveyard, then swing with Lorehold.',
+  'brawl-killian-decisive-mentor': "Killian taxes the table with Auras and removal, while Silverquill drain finishes the job.",
+  'brawl-rootha-mastering-the-moment': "Rootha copies your best instants and sorceries: Wizards and burn that keep casting.",
+  'brawl-zimone-infinite-analyst': "Zimone doubles your lands and counters: ramp, grow, then cast it all.",
+  'brawl-dina-essence-brewer': "Dina drains the table as lifegain and creatures trade life for value.",
+  'brawl-codie-vociferous-codex': "Codie casts spells of every colour from a pile of artifacts and Auras.",
+  'brawl-extus-oriq-overlord': "Extus recasts spells from the graveyard: sacrifice, drain, repeat.",
+  'brawl-galazeth-prismari': "Galazeth turns artifacts into mana for Elementals and big spells.",
   'msc-wakanda-forever': 'T’Challa builds a Vibranium arsenal and rules as the monarch.',
   'msc-the-fantastic-four':
     'Invisible Woman leads the family: every spell you cast powers up the team.',

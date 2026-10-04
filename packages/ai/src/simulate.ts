@@ -85,6 +85,9 @@ function passiveAction(
     case 'chooseObject':
     case 'payOrCounter':
     case 'castFree':
+      // A free cast can have tens of thousands of target splits (Magma Opus): don't list them when nested.
+      if (d.kind === 'castFree' && depth >= 1)
+        return { type: 'chooseEffect', player: d.player, accept: false };
       return bestByEvaluation(
         engine,
         s,
@@ -154,7 +157,13 @@ export function bestByEvaluation(
   if (options.length === 1 || depth > 1) return options[0]!;
   let best = options[0]!;
   let bestScore = -Infinity;
-  for (const a of options) {
+  // A free cast of Magma Opus has tens of thousands of target splits: score an even sample (the first option included).
+  const cap = depth > 0 ? 12 : 48;
+  const sample =
+    options.length > cap
+      ? Array.from({ length: cap }, (_, k) => options[Math.floor((k * options.length) / cap)]!)
+      : options;
+  for (const a of sample) {
     const v = scoreAction(engine, s, a, me, horizon, depth);
     if (v > bestScore) {
       bestScore = v;

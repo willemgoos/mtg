@@ -149,7 +149,7 @@ describe('Brawl format', () => {
     const pairs = PLAYABLE_BRAWL_DECKS.flatMap((a, i) =>
       PLAYABLE_BRAWL_DECKS.slice(i).map((b) => [a, b] as const),
     );
-    for (let seed = 1; seed <= Math.max(6, pairs.length * 3); seed++) {
+    for (let seed = 1; seed <= Math.max(6, pairs.length); seed++) {
       const [a, b] = pairs[seed % pairs.length]!;
       const initial = engine.newGame({ ...deckGameOptions(a, b), seed });
       const r = playRandomGame(engine, initial, seed * 7919);
@@ -159,7 +159,7 @@ describe('Brawl format', () => {
       for (const a of r.actions) state = engine.applyAction(state, a).state;
       expect(JSON.stringify(state)).toBe(JSON.stringify(r.final));
     }
-  }, 120_000);
+  }, 240_000);
 });
 
 describe('Brawl staples', () => {

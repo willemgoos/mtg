@@ -294,6 +294,8 @@ export function payMana(ctx: Ctx, sources: Readonly<Payment>): void {
   for (const i of fromPool) ctx.s.players[player].pool!.splice(i, 1);
   for (const id of sources) {
     if (isPoolId(id)) continue;
+    // A Treasure that taps for two (Goldspan Dragon) is listed twice: the first unit sacrifices it.
+    if (!ctx.s.objects[id]) continue;
     tap(ctx, id);
     if (def(ctx, id).abilities.some((a) => a.kind === 'mana' && a.cost.sacrificeSelf))
       sacrifice(ctx, id);

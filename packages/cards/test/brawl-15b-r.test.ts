@@ -1,6 +1,6 @@
-import { getCharacteristics, type Action } from '@mtg/engine';
+import { createEngine, getCharacteristics, playRandomGame, type Action } from '@mtg/engine';
 import { describe, expect, it } from 'vitest';
-import { cardDb } from '../src/index.ts';
+import { cardDb, deckGameOptions, DECKS } from '../src/index.ts';
 import { all, cast, game, handSize, n, pt, settle } from './blb-helpers.ts';
 
 // Brawl decks (15b, red and Izzet): burn, spree, Treasures, artifacts, Izzet spellslingers, lands.
@@ -311,6 +311,14 @@ describe('Brawl decks (15b, red): Treasures, artifacts and graveyard spells', ()
     expect(all(atk, 'treasure-token')).toHaveLength(1);
   });
 
+  it('Goldspan Dragon: paying with a doubled Treasure (listed twice) does not crash', () => {
+    // Galazeth mirror, seed 272: Command Tower + one Treasure (twice over) paid a {2}{R} flashback.
+    const d = DECKS.find((x) => x.id === 'brawl-galazeth-prismari')!;
+    const engine = createEngine(cardDb);
+    const initial = engine.newGame({ ...deckGameOptions(d, d), seed: 272 });
+    expect(playRandomGame(engine, initial, 272 * 7919).truncated).toBe(false);
+  });
+
   it('Goldspan Dragon: becoming the target of a spell makes a Treasure', () => {
     const g = game({
       p1: { battlefield: ['goldspan-dragon'] },
@@ -411,6 +419,26 @@ describe('Brawl decks (15b, red): Treasures, artifacts and graveyard spells', ()
     expect(g.life('p2')).toBe(17);
     expect(defsIn(g, 'p1', 'exile')).toContain('lightning-bolt');
     expect(defsIn(g, 'p1', 'exile')).toContain('mizzixs-mastery');
+  });
+
+  it('a free cast of Demand Answers offers the discard way (no sacrifice) without crashing', () => {
+    const g = game({
+      p1: {
+        hand: ['mizzixs-mastery', 'forest'],
+        graveyard: ['demand-answers'],
+        battlefield: n('mountain', 4),
+      },
+    });
+    cast(g, 'mizzixs-mastery', [g.ref(g.id('p1', 'demand-answers', 'graveyard'))]);
+    g.pass();
+    g.pass();
+    g.do({ type: 'chooseOption', player: 'p1', index: 0 });
+    expect(g.decision.kind).toBe('castFree');
+    const casts = g.legal().filter((a) => a.type === 'castSpell');
+    expect(casts.length).toBeGreaterThan(0);
+    g.do(casts[0]!);
+    settle(g);
+    expect(defsIn(g, 'p1', 'exile')).toContain('demand-answers');
   });
 
   it("Mizzix's Mastery can be overloaded", () => {
