@@ -24558,6 +24558,127 @@
   }
  },
  {
+  "name": "Chase Stein, Runaway",
+  "scryfallId": "e4dab13d-98c3-4f78-b9be-cf29826fcd59",
+  "oracleId": "161ff063-b784-43c7-b608-f78be3daa5b2",
+  "set": "msc",
+  "collectorNumber": "682",
+  "rarity": "common",
+  "manaCost": "{1}{R}",
+  "typeLine": "Legendary Creature — Human Hero",
+  "oracleText": "{T}, Discard a card: Exile the top card of your library. Until the end of your next turn, you may play that card.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/4/e4dab13d-98c3-4f78-b9be-cf29826fcd59.jpg?1783903052",
+   "normal": "https://cards.scryfall.io/normal/front/e/4/e4dab13d-98c3-4f78-b9be-cf29826fcd59.jpg?1783903052",
+   "large": "https://cards.scryfall.io/large/front/e/4/e4dab13d-98c3-4f78-b9be-cf29826fcd59.jpg?1783903052",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/4/e4dab13d-98c3-4f78-b9be-cf29826fcd59.jpg?1783903052"
+  }
+ },
+ {
+  "name": "Alex Wilder, Runaway",
+  "scryfallId": "78ba8bef-5b36-4e63-b708-d77250ebaf62",
+  "oracleId": "f3031397-c2d5-40c6-8eca-88faed00a5ea",
+  "set": "msc",
+  "collectorNumber": "677",
+  "rarity": "uncommon",
+  "manaCost": "{1}{R}",
+  "typeLine": "Legendary Creature — Human Hero Villain",
+  "oracleText": "Whenever Alex Wilder or another creature you control enters, if you cast it from anywhere other than your hand, it gets +2/+0 and gains haste until end of turn.\nEscape—{2}{R}, Exile three other cards from your graveyard. (You may cast this card from your graveyard for its escape cost.)",
+  "power": "1",
+  "toughness": "3",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Escape"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/8/78ba8bef-5b36-4e63-b708-d77250ebaf62.jpg?1783903056",
+   "normal": "https://cards.scryfall.io/normal/front/7/8/78ba8bef-5b36-4e63-b708-d77250ebaf62.jpg?1783903056",
+   "large": "https://cards.scryfall.io/large/front/7/8/78ba8bef-5b36-4e63-b708-d77250ebaf62.jpg?1783903056",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/8/78ba8bef-5b36-4e63-b708-d77250ebaf62.jpg?1783903056"
+  }
+ },
+ {
+  "name": "Molly Hayes, Runaway",
+  "scryfallId": "c0251b8f-e848-47ad-a22c-9594e08f0f5c",
+  "oracleId": "e3f0a2a6-7a42-46bc-9736-d0f6a0ce0b37",
+  "set": "msc",
+  "collectorNumber": "698",
+  "rarity": "common",
+  "manaCost": "{2}{R}",
+  "typeLine": "Legendary Creature — Mutant Hero",
+  "oracleText": "Power-up — {5}{R}: Put two +1/+1 counters on Molly Hayes. Exile the top card of your library. Until the end of your next turn, you may play that card. (Activate each power-up ability only once. Reduce the cost by her mana cost if she entered this turn.)",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Power-up"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/0/c0251b8f-e848-47ad-a22c-9594e08f0f5c.jpg?1783903047",
+   "normal": "https://cards.scryfall.io/normal/front/c/0/c0251b8f-e848-47ad-a22c-9594e08f0f5c.jpg?1783903047",
+   "large": "https://cards.scryfall.io/large/front/c/0/c0251b8f-e848-47ad-a22c-9594e08f0f5c.jpg?1783903047",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/0/c0251b8f-e848-47ad-a22c-9594e08f0f5c.jpg?1783903047"
+  }
+ },
+ {
+  "name": "Karolina Dean, Runaway",
+  "scryfallId": "ecb8fc29-2d62-43ff-81b4-d035cc633688",
+  "oracleId": "50b5faff-acaa-426b-9f3e-1005c0392e6c",
+  "set": "msc",
+  "collectorNumber": "694",
+  "rarity": "uncommon",
+  "manaCost": "{3}{R}",
+  "typeLine": "Legendary Creature — Alien Hero",
+  "oracleText": "Flying\nAt the beginning of your first main phase, add {W}{U}{B}{R}{G}. This mana can't be spent to cast spells from your hand.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/c/ecb8fc29-2d62-43ff-81b4-d035cc633688.jpg?1783903048",
+   "normal": "https://cards.scryfall.io/normal/front/e/c/ecb8fc29-2d62-43ff-81b4-d035cc633688.jpg?1783903048",
+   "large": "https://cards.scryfall.io/large/front/e/c/ecb8fc29-2d62-43ff-81b4-d035cc633688.jpg?1783903048",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/c/ecb8fc29-2d62-43ff-81b4-d035cc633688.jpg?1783903048"
+  }
+ },
+ {
+  "name": "Nico Minoru, Runaway",
+  "scryfallId": "89c21b09-8869-4d94-bf29-29c8d1c69d4f",
+  "oracleId": "5303b3f6-970c-47d8-977e-2d6679206ba5",
+  "set": "msc",
+  "collectorNumber": "700",
+  "rarity": "mythic",
+  "manaCost": "{3}{R}",
+  "typeLine": "Legendary Creature — Human Warlock Hero",
+  "oracleText": "Whenever you cast a spell from anywhere other than your hand, Nico Minoru deals 2 damage to each opponent.\n{2}{R}, {T}, Discard a card: Exile cards from the top of your library until you exile a nonland card. You may cast that card without paying its mana cost.",
+  "power": "2",
+  "toughness": "4",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/9/89c21b09-8869-4d94-bf29-29c8d1c69d4f.jpg?1783903048",
+   "normal": "https://cards.scryfall.io/normal/front/8/9/89c21b09-8869-4d94-bf29-29c8d1c69d4f.jpg?1783903048",
+   "large": "https://cards.scryfall.io/large/front/8/9/89c21b09-8869-4d94-bf29-29c8d1c69d4f.jpg?1783903048",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/9/89c21b09-8869-4d94-bf29-29c8d1c69d4f.jpg?1783903048"
+  }
+ },
+ {
   "name": "Wiccan, Young Avenger",
   "scryfallId": "6f210b47-e265-43ed-a336-538170c722af",
   "oracleId": "a317d5f4-a998-4f72-b080-5345bc7cc668",

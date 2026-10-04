@@ -613,6 +613,8 @@ export type TriggerDef =
       // Secrets of Strixhaven (14b): Quandrix, the Proof
       /** Only spells cast from your hand. */
       fromHand?: boolean;
+      /** Runaways: spells cast from anywhere other than hand. */
+      notFromHand?: boolean;
       // Final Fantasy (11c): spells you don't own
       /** Only spells the caster doesn't own (Vaan, Street Thief). */
       notOwned?: boolean;
@@ -681,7 +683,7 @@ export type TriggerDef =
   /** Whenever another permanent you control matching the filter enters (Honored Dreyleader). */
   | { on: 'otherPermanentEtb'; filter: CardFilter }
   /** Whenever this creature or another creature you control matching the filter enters (Harvestrite Host). */
-  | { on: 'selfOrCreatureEtb'; filter: CardFilter }
+  | { on: 'selfOrCreatureEtb'; filter: CardFilter; castFromNonHand?: boolean }
   /** Expend N: whenever you spend your Nth total mana this turn. */
   | { on: 'expend'; amount: number }
   /** Valiant: this creature becomes the target of your spell or ability for the first time this turn. */
@@ -1501,7 +1503,7 @@ export type EffectDef =
   /** Portent of Calamity: reveal the top X and exile one card of each type; four or more lets you cast one free. */
   | { kind: 'portent' }
   /** The Infamous Cruelclaw: exile until a nonland card; you may cast it by discarding a card instead. */
-  | { kind: 'exileUntilNonlandCastByDiscard' }
+  | { kind: 'exileUntilNonlandCastByDiscard'; withoutDiscard?: boolean }
   /**
    * Dragonhawk: exile the top N (playable until your next end step); at your
    * next end step, deal `damage` to each opponent per card still exiled.
@@ -1675,6 +1677,8 @@ export type EffectDef =
       untilEndOfTurn?: boolean;
       /** Spend it only on spells with this tag (Helga: 'BigCreature'). */
       onlyFor?: string;
+      /** Karolina Dean: cannot pay for spells cast from hand. */
+      notForHandSpells?: boolean;
     }
   /** Exile permanents; return them at the beginning of the next end step (with counters). */
   | {
@@ -2958,6 +2962,7 @@ export interface PlayerState {
     produces: ManaType[];
     untilEndOfTurn?: boolean;
     onlyFor?: string;
+    notForHandSpells?: boolean;
     /** Mystical Archive (16): Channel: spending this mana costs 1 life. */
     lifeCost?: boolean;
   }[];
@@ -2983,6 +2988,8 @@ export interface PlayerState {
 export type StackItem =
   | {
       kind: 'spell';
+      /** Original caster, retained if control of the spell changes. */
+      castBy?: PlayerId;
       id: ObjectId;
       controller: PlayerId;
       targets: TargetChoice[];
@@ -3547,6 +3554,8 @@ export type Decision =
   | {
       /** Forage by exiling cards from the graveyard, one at a time. */
       kind: 'forageExile';
+      /** Runaways: the spell is cast only after all additional costs are paid. */
+      castingSpell?: { card: ObjectId; targets: TargetChoice[]; sacrificed: number };
       player: PlayerId;
       count: number;
       /** A resolution-time forage: these effects, then the rest of the resolution. */
@@ -3607,6 +3616,8 @@ export type Decision =
   | {
       /** Cast one of these cards for free now, or not (Daring Waverider, Portent of Calamity). */
       kind: 'castFree';
+      /** Runaways: normal additional costs and restrictions, with timing permission. */
+      exact?: boolean;
       player: PlayerId;
       cards: ObjectId[];
       exileAfter?: boolean;
@@ -3731,6 +3742,7 @@ export type Action =
         | 'zaffai'
         // Marvel Super Heroes Jumpstart (Analyzed): Vision, Spectral Synthezoid.
         | 'freeOnceEachTurn'
+        | 'freeExact'
         | 'noctis'
         | 'hades';
       /** Mockingbird: the creature to enter as a copy of. */
@@ -3801,6 +3813,8 @@ export type GameEvent =
       id: ObjectId;
       defId: CardDefId;
       from: ZoneName | null;
+      /** Runaways: a resolving creature spell actually cast outside hand. */
+      castFromNonHandBy?: PlayerId;
       to: ZoneName;
       // Final Fantasy (11b): creatures and artifacts dying
       /** Who controlled it as it left the battlefield (a token is gone by the time triggers look). */

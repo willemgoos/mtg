@@ -298,11 +298,11 @@ export function sorceryTiming(ctx: Ctx, player: PlayerId): boolean {
   return isMainPhase(ctx) && ctx.s.turn.activePlayer === player && ctx.s.stack.length === 0;
 }
 
-function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
+function priorityActions(ctx: Ctx, player: PlayerId, freeCards?: ObjectId[]): Action[] {
   const s = ctx.s;
   const out: Action[] = [{ type: 'passPriority', player }];
   const ps = s.players[player];
-  const sorcery = sorceryTiming(ctx, player);
+  const sorcery = !!freeCards || sorceryTiming(ctx, player);
   const sources = manaSources(ctx, player);
 
   // "You may cast (noncreature) spells as though they had flash."
@@ -320,7 +320,7 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
   );
   // Secrets of Strixhaven (14b): restricted mana floating in the pool (Abstract Paintmage).
   const restricted =
-    !!ps.pool?.some((m) => m.onlyFor) ||
+    !!ps.pool?.some((m) => m.onlyFor || m.notForHandSpells) ||
     s.battlefield.some(
       (id) =>
         obj(ctx, id).controller === player &&
@@ -370,7 +370,7 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
         // Strixhaven Brawl (15b, u): Quicken, the next sorcery spell you cast this turn.
         (d.types.includes('Sorcery') && !!s.turn.sorceryFlash?.includes(player)));
     // Restricted mana (Giada: only for Angels; Villages: only for creature spells).
-    const base = restricted ? manaSources(ctx, player, undefined, spellTags(d)) : sources;
+    const base = restricted ? manaSources(ctx, player, undefined, spellTags(d, zone)) : sources;
     // Convoke: untapped creatures can pay for {1} each.
     let pool = d.convoke ? [...base, ...creatureHelpers(ctx, player, base)] : base;
     if (hasImprovise(ctx, player, card))
@@ -413,22 +413,24 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
       (d.types.includes('Instant') || d.types.includes('Sorcery')) &&
       !s.turn.zaffaiUsed?.includes(player) &&
       hasStatic(ctx, player, 'freeSpellOncePerTurn');
-    const vias: (CastVia | undefined)[] = free
-      ? ['free']
-      : [
-          ...(zone !== 'graveyard' ||
-          d.flashback ||
-          d.castFromGraveyardRemovingCounters ||
-          d.castFromGraveyardWithDiscard ||
-          d.castFromGraveyardOrExile ||
-          mayhemReady(ctx, card)
-            ? [undefined]
-            : []),
-          ...(zone === 'graveyard' ? graveyardVias(ctx, player, card) : []),
-          ...(zaffai ? (['zaffai'] as const) : []),
-          // Marvel Super Heroes Jumpstart (Analyzed): Vision, Spectral Synthezoid.
-          ...(freeCastSource(ctx, player, card) ? (['freeOnceEachTurn'] as const) : []),
-        ];
+    const vias: (CastVia | undefined)[] = freeCards
+      ? ['freeExact']
+      : free
+        ? ['free']
+        : [
+            ...(zone !== 'graveyard' ||
+            d.flashback ||
+            d.castFromGraveyardRemovingCounters ||
+            d.castFromGraveyardWithDiscard ||
+            d.castFromGraveyardOrExile ||
+            mayhemReady(ctx, card)
+              ? [undefined]
+              : []),
+            ...(zone === 'graveyard' ? graveyardVias(ctx, player, card) : []),
+            ...(zaffai ? (['zaffai'] as const) : []),
+            // Marvel Super Heroes Jumpstart (Analyzed): Vision, Spectral Synthezoid.
+            ...(freeCastSource(ctx, player, card) ? (['freeOnceEachTurn'] as const) : []),
+          ];
     for (const via of vias)
       for (const v of castVariants(d, zone, via)) {
         if (flashIfKicked && !v.kicked) continue;
@@ -448,13 +450,14 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
         )
           continue;
         // Strixhaven Brawl (15a): Escape also exiles other cards from your graveyard.
-        if (d.escapeExiles && zone === 'graveyard' && ps.graveyard.length - 1 < d.escapeExiles)
+        if (d.escapeExiles && v.flashback && !via && ps.graveyard.length - 1 < d.escapeExiles)
           continue;
         // Rottenmouth Viper: sacrifice 0 to 5 nonland permanents (the least useful first).
         for (const sacrificeMany of sacrificePrefixes(ctx, player, card, d))
           for (const x of xs) {
             // Marvel Super Heroes Jumpstart (Analyzed): without paying its mana cost, X is 0.
-            if (via === 'freeOnceEachTurn' && x) continue;
+            if ((via === 'freeOnceEachTurn' || (via === 'freeExact' && d.manaCost.x)) && x)
+              continue;
             const choice = {
               sacrificeMany,
               via,
@@ -621,7 +624,10 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
   const noPermanents = hasStatic(ctx, player, 'cantCastPermanentSpells');
   const blocked = (card: ObjectId) =>
     noPermanents && !def(ctx, card).types.some((t) => t === 'Instant' || t === 'Sorcery');
-  const castable = silenced ? [] : castableCards(ctx, player);
+  const castable =
+    silenced || (freeCards && s.turn.spellLock?.includes(player))
+      ? []
+      : (freeCards ?? castableCards(ctx, player));
   for (const card of banned.length
     ? castable.filter((c) => !banned.some((b) => b.defId === obj(ctx, c).defId))
     : castable) {
@@ -631,7 +637,8 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
     if (
       def(ctx, card).back &&
       !def(ctx, card).prepare &&
-      (obj(ctx, card).zone === 'hand' ||
+      ((freeCards && !ctx.db.get(def(ctx, card).back!)?.noManaCost) ||
+        obj(ctx, card).zone === 'hand' ||
         // Strixhaven Brawl (15a): Disturb, from the graveyard.
         (obj(ctx, card).zone === 'graveyard' && def(ctx, card).disturb))
     ) {
@@ -643,6 +650,7 @@ function priorityActions(ctx: Ctx, player: PlayerId): Action[] {
         if (a.type === 'castSpell' || a.type === 'playLand') a.back = true;
     }
   }
+  if (freeCards) return out.filter((a) => a.type === 'castSpell');
   // Sneak (Marvel Super Heroes): during your declare blockers step, return an unblocked attacker.
   const unblocked =
     s.turn.activePlayer === player && s.turn.step === 'declareBlockers' && s.combat
@@ -946,6 +954,11 @@ export function getLegalActions(ctx: Ctx, player: PlayerId): Action[] {
     case 'sacrificeSeveral':
       return d.options.map((card) => ({ type: 'chooseCard', player, card }) as const);
     case 'castFree': {
+      if (d.exact)
+        return [
+          { type: 'chooseEffect', player, accept: false },
+          ...priorityActions(ctx, player, d.cards),
+        ];
       const out: Action[] = [{ type: 'chooseEffect', player, accept: false }];
       const pool = manaSources(ctx, player);
       for (const card of d.cards) {
