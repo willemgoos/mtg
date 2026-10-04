@@ -427,6 +427,29 @@ describe('Gallia, Tragic Host', () => {
     expect(canActivate(g, g.id('p1', 'gallia-tragic-host', 'graveyard'), 0)).toBe(false);
   });
 
+  // Reality Fracture (17a fixes): the player chooses the creature card to exile.
+  it('lets you choose which creature card to exile', () => {
+    const g = game({
+      p1: {
+        graveyard: ['gallia-tragic-host', 'savannah-lions', 'serra-angel', 'forest'],
+        battlefield: n('swamp', 5),
+      },
+    });
+    activate(g, g.id('p1', 'gallia-tragic-host', 'graveyard'), 0);
+    expect(g.decision.kind).toBe('forageExile');
+    // Only creature cards other than Gallia are offered.
+    const offered = g
+      .legal()
+      .filter((a) => a.type === 'chooseCard')
+      .map((a) => (a.type === 'chooseCard' && a.card ? g.obj(a.card).defId : ''));
+    expect(offered.sort()).toEqual(['savannah-lions', 'serra-angel']);
+    g.do({ type: 'chooseCard', player: 'p1', card: g.id('p1', 'serra-angel', 'graveyard') });
+    done(g);
+    expect(g.state.players.p1.exile.map((id) => g.obj(id).defId)).toEqual(['serra-angel']);
+    expect(gy(g)).toContain('savannah-lions');
+    expect(onBattlefield(g, 'gallia-tragic-host')).toHaveLength(1);
+  });
+
   it('cannot exile itself to pay', () => {
     const g = game({ p1: { graveyard: ['gallia-tragic-host'], battlefield: n('swamp', 5) } });
     expect(canActivate(g, g.id('p1', 'gallia-tragic-host', 'graveyard'), 0)).toBe(false);
@@ -916,6 +939,22 @@ describe('Rise of the Deathbringer', () => {
     done(g);
     expect(hand(g)).toHaveLength(4);
     expect(g.life('p1')).toBe(16);
+  });
+
+  // Reality Fracture (17a fixes): life lost is the number of cards actually drawn.
+  it('mode 1 loses life equal to the cards actually drawn when the library runs short', () => {
+    const g = game({
+      p1: {
+        hand: ['rise-of-the-deathbringer'],
+        battlefield: [...n('swamp', 5), 'serra-angel'],
+        library: ['forest', 'forest'],
+      },
+    });
+    cast(g, 'rise-of-the-deathbringer', [], { mode: 0 });
+    g.passBoth();
+    // Four were to be drawn, but only two were: two life lost (then the empty library loses the game).
+    expect(hand(g)).toHaveLength(2);
+    expect(g.life('p1')).toBe(18);
   });
 
   it('mode 1 with no creatures draws nothing', () => {

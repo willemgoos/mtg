@@ -381,7 +381,11 @@ export function confirmAttackers(ctx: Ctx): void {
     if (!hasKeyword(ctx, d.id, 'vigilance')) tap(ctx, d.id);
   }
   if (decl.length > 0) s.players[s.turn.activePlayer].attackedThisTurn = true;
-  for (const d of decl) s.turn.attackers.push(d.id);
+  for (const d of decl) {
+    s.turn.attackers.push(d.id);
+    // Reality Fracture (17a fixes): Hexhaven Dueling Arena: a creature that leaves and returns is a new object.
+    obj(ctx, d.id).attackedZcc = obj(ctx, d.id).zcc;
+  }
   emit(ctx, { type: 'attackersDeclared', attackers: decl.map((d) => d.id) });
   givePriority(ctx, s.turn.activePlayer);
 }

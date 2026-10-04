@@ -295,3 +295,48 @@ describe('heuristic bot: Codie, Vociferous Codex', () => {
     expect(choose(g).type).toBe('passPriority');
   });
 });
+
+// Reality Fracture (17a fixes): "choose a creature type" offers every creature type; the bot picks sensibly.
+describe('heuristic bot: choosing a creature type', () => {
+  const pickType = (g: GameDriver): string => {
+    const d = g.state.decision;
+    if (d.kind !== 'chooseOption') throw new Error(`Not choosing: ${d.kind}`);
+    const a = choose(g);
+    if (a.type !== 'chooseOption') throw new Error('Not an option');
+    return d.options[a.index]!.label;
+  };
+
+  it('Kindred Judgment: keeps its own creatures and not the opponent’s', () => {
+    const g = game({
+      p1: {
+        hand: ['kindred-judgment'],
+        battlefield: [...lands('plains', 7), 'serra-angel', 'savannah-lions'],
+      },
+      p2: { battlefield: ['felidar-cub', 'bear-cub'] },
+    });
+    g.do({
+      type: 'castSpell',
+      player: 'p1',
+      card: g.id('p1', 'kindred-judgment', 'hand'),
+      targets: [],
+    });
+    g.passBoth();
+    // Serra Angel's type (Angel) keeps the best creature and none of theirs.
+    expect(pickType(g)).toBe('Angel');
+  });
+
+  it('Kindred Judgment with no creatures of its own names a type nobody has', () => {
+    const g = game({
+      p1: { hand: ['kindred-judgment'], battlefield: lands('plains', 7) },
+      p2: { battlefield: ['felidar-cub', 'bear-cub'] },
+    });
+    g.do({
+      type: 'castSpell',
+      player: 'p1',
+      card: g.id('p1', 'kindred-judgment', 'hand'),
+      targets: [],
+    });
+    g.passBoth();
+    expect(['Cat', 'Bear']).not.toContain(pickType(g));
+  });
+});

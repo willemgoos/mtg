@@ -34,6 +34,9 @@ export function describeEvent(e: GameEvent, s: GameState): string | null {
       return `  ${e.player} searches their library for ${name(e.id)}`;
     case 'revealed':
       return `  ${e.player} reveals ${name(e.id)} and puts it into their hand`;
+    // Reality Fracture (17a fixes): Loyal Tutor.
+    case 'cardsRevealed':
+      return `  ${e.player} reveals ${e.cards.map((c) => cardDb.get(c.defId)?.name ?? c.defId).join(', ')}`;
     case 'transformed':
       return `  transforms into ${cardDb.get(e.defId)?.name}`;
     case 'gameOver':

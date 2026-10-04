@@ -31,7 +31,14 @@ import { reconcileHandOrder } from '../game/handOrder.ts';
 import { Card, type CardMark, type HoverFn } from './Card.tsx';
 import { OptionMenu } from './OptionMenu.tsx';
 import { FxLayer } from './FxLayer.tsx';
-import { type ArrowSpec, Arrows, Floaters, TurnBanner, winnerText } from './Effects.tsx';
+import {
+  type ArrowSpec,
+  Arrows,
+  Floaters,
+  RevealBanner,
+  TurnBanner,
+  winnerText,
+} from './Effects.tsx';
 import {
   Battlefield,
   Hand,
@@ -245,6 +252,12 @@ export function Board({
       if (d.options.includes(id)) act({ type: 'chooseCard', player: HUMAN, card: id });
       return;
     }
+    // Reality Fracture (17a fixes): ward's sacrifices.
+    if (d.kind === 'wardSacrifice') {
+      if (legal.some((a) => a.type === 'chooseCard' && a.card === id))
+        act({ type: 'chooseCard', player: HUMAN, card: id });
+      return;
+    }
     if (d.kind === 'forage') {
       if (d.foods.includes(id)) act({ type: 'forage', player: HUMAN, choice: id });
       return;
@@ -352,6 +365,8 @@ export function Board({
           ? 'option'
           : null;
     if (myDecision && d.kind === 'sacrifice') return d.options.includes(id) ? 'option' : null;
+    if (myDecision && d.kind === 'wardSacrifice')
+      return legal.some((a) => a.type === 'chooseCard' && a.card === id) ? 'option' : null;
     if (myDecision && d.kind === 'forage') return d.foods.includes(id) ? 'option' : null;
     if (myDecision && d.kind === 'chooseObject') return d.options.includes(id) ? 'option' : null;
     if (id === blocker) return 'selected';
@@ -598,6 +613,14 @@ export function Board({
         return { prompt: 'Search your library' };
       case 'sacrifice':
         return { prompt: 'Choose a creature to sacrifice' };
+      // Reality Fracture (17a fixes): ward's sacrifices.
+      case 'wardSacrifice':
+        return {
+          prompt:
+            d.creatures > 0
+              ? 'Ward: sacrifice a creature'
+              : `Ward: sacrifice ${d.permanents === 1 ? 'a permanent' : `${d.permanents} more permanents`}`,
+        };
       case 'punisher':
         return { prompt: `Sacrifice, discard, or lose ${d.life} life` };
       case 'pickExiled':
@@ -691,7 +714,9 @@ export function Board({
         return { prompt: 'Choose a card from your opponent’s hand' };
       case 'forageExile':
         return {
-          prompt: `Forage: exile ${d.count} more card${d.count > 1 ? 's' : ''} from your graveyard`,
+          prompt: d.filter
+            ? 'Exile a card from your graveyard'
+            : `Forage: exile ${d.count} more card${d.count > 1 ? 's' : ''} from your graveyard`,
         };
       case 'priority': {
         const top = view.stack[view.stack.length - 1];
@@ -1152,9 +1177,11 @@ export function Board({
       {d.kind === 'forageExile' && d.player === HUMAN && (
         <div className="overlay overlay--mull">
           <div className="mull">
-            <h2>Forage</h2>
+            <h2>{d.filter ? 'Exile a card' : 'Forage'}</h2>
             <p>
-              Exile {d.count} more card{d.count > 1 ? 's' : ''} from your graveyard.
+              {d.filter
+                ? 'Choose a card to exile from your graveyard.'
+                : `Exile ${d.count} more card${d.count > 1 ? 's' : ''} from your graveyard.`}
             </p>
             <div className="mull__hand">
               {legal.flatMap((a, i) =>
@@ -1231,6 +1258,7 @@ export function Board({
         <OptionMenu
           title={`${nameOf(d.resume.sourceDefId)}: ${d.title ?? 'choose one'}`}
           options={d.options}
+          noun={d.title === 'Choose a creature type' ? 'creature type' : undefined}
           onPick={(index) => act({ type: 'chooseOption', player: HUMAN, index })}
         />
       )}
@@ -1340,6 +1368,7 @@ export function Board({
       <Arrows specs={arrows} deps={[state, targeting]} />
       <Floaters batch={batch} />
       <TurnBanner batch={batch} me={HUMAN} />
+      <RevealBanner batch={batch} me={HUMAN} />
     </div>
   );
 }

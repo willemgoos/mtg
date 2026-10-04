@@ -8,10 +8,13 @@ export function OptionMenu({
   title,
   options,
   onPick,
+  noun = 'card name',
 }: {
   title: string;
   options: { label: string }[];
   onPick: (index: number) => void;
+  /** What is being chosen, for the search box ("card name", "creature type"). */
+  noun?: string;
 }) {
   const [query, setQuery] = useState('');
   const long = options.length > 12;
@@ -31,7 +34,7 @@ export function OptionMenu({
           <input
             autoFocus
             className="menu__search"
-            placeholder="Type a card name"
+            placeholder={`Type a ${noun}`}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
           />
@@ -41,7 +44,7 @@ export function OptionMenu({
             {o.label}
           </button>
         ))}
-        {long && shown.length === 0 && <div className="menu__title">No card by that name</div>}
+        {long && shown.length === 0 && <div className="menu__title">No {noun} like that</div>}
       </div>
     </div>
   );

@@ -253,7 +253,7 @@ export const FRA_BLACK: Record<string, Behavior> = {
         'Draw cards equal to the greatest power among creatures you control. You lose life equal to the number of cards drawn this way',
         [],
         { kind: 'draw', who: 'controller', amount: { count: 'greatestPowerYouControl' } },
-        { kind: 'loseLife', who: 'controller', amount: { count: 'greatestPowerYouControl' } },
+        { kind: 'loseLife', who: 'controller', amount: { drawnThisWay: true } },
       ),
       mode('All creatures get -3/-3 until end of turn', [], pump({ each: 'creature' }, -3, -3)),
     ],

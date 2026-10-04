@@ -411,21 +411,8 @@ export const MSH_DRAFT: Record<string, Behavior> = {
   'Doc Samson, Super Psychiatrist': {
     abilities: [
       { kind: 'static', effect: { kind: 'extraCounters', amount: 1, anyCounters: true } },
-      // X mana of any one colour (an activated ability rather than a mana ability).
-      {
-        kind: 'activated',
-        cost: { tapSelf: true },
-        targets: [],
-        effects: [
-          {
-            kind: 'choose',
-            options: (['W', 'U', 'B', 'R', 'G'] as const).map((c) => ({
-              label: `Add {${c}} for each point of his power`,
-              effects: [{ kind: 'addMana', mana: [[c]], count: { powerOf: 'self' } }],
-            })),
-          },
-        ],
-      },
+      // "{T}: Add X mana of any one color, where X is Doc Samson's power": a mana ability, all one colour.
+      { kind: 'mana', cost: { tapSelf: true }, produces: 'G', anyOneColor: true, perPower: true },
     ],
   },
   // "Choose up to two" of four modes: each single mode, and each pair of different modes.

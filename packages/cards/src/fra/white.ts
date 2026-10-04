@@ -361,7 +361,14 @@ export const FRA_WHITE: Record<string, Behavior> = {
     spell: {
       targets: [],
       // "Search your library for a planeswalker card, reveal it, then shuffle and put that card on top."
-      effects: [{ kind: 'searchLibrary', filter: { types: ['Planeswalker'] }, to: 'libraryTop' }],
+      effects: [
+        {
+          kind: 'searchLibrary',
+          filter: { types: ['Planeswalker'] },
+          to: 'libraryTop',
+          reveal: true,
+        },
+      ],
     },
   },
   'Predictive Preparations': {

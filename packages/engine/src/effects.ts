@@ -31,6 +31,7 @@ import {
   prepareObject,
   unprepareObject,
 } from './context.ts';
+import { CREATURE_TYPES } from './creature-types.ts';
 import { setMonarch } from './monarch.ts';
 import { spellOnStack } from './spells.ts';
 import { isTargetLegal, targetCandidates, targetCombos } from './targets.ts';
@@ -339,15 +340,20 @@ const PORTENT_TYPES = [
   'Land',
 ] as const;
 
-/** Creature types among cards `player` owns (choices for "choose a creature type"). */
+/**
+ * Reality Fracture (17a fixes): the creature types offered for "choose a creature type": every one (Scryfall's
+ * catalog), those on creatures on the battlefield and in the chooser's hand first, then the rest, each part A to Z.
+ */
 function creatureTypesOf(ctx: Ctx, player: PlayerId): string[] {
-  const types = new Set<string>();
-  for (const o of Object.values(ctx.s.objects)) {
-    if (o.owner !== player) continue;
-    const d = defOf(ctx, o.defId);
-    if (d.types.includes('Creature')) for (const t of d.subtypes) types.add(t);
-  }
-  return [...types].sort();
+  const first = new Set<string>();
+  const note = (id: ObjectId) => {
+    const d = defOf(ctx, obj(ctx, id).defId);
+    if (d.types.includes('Creature')) for (const t of d.subtypes) first.add(t);
+  };
+  for (const id of ctx.s.battlefield) note(id);
+  for (const id of ctx.s.players[player].hand) note(id);
+  const rest = CREATURE_TYPES.filter((t) => !first.has(t));
+  return [...[...first].sort(), ...rest];
 }
 
 function controlsSubtype(ctx: Ctx, player: PlayerId, subtype: string): boolean {
@@ -771,6 +777,8 @@ export function resolveAmount(ctx: Ctx, es: EffectSource, amount: Amount): numbe
     return 0;
   }
   if ('event' in amount) return es.amount ?? 0;
+  // Reality Fracture (17a fixes): Rise of the Deathbringer.
+  if ('drawnThisWay' in amount) return es.drawnThisWay ?? 0;
   // Strixhaven (13c): life gained this turn (Fortifying Draught).
   if ('count' in amount && amount.count === 'lifeGainedThisTurn')
     return ctx.s.turn.lifeGained?.[es.controller] ?? 0;
@@ -1443,6 +1451,7 @@ export function runEffects(
         ctx.s.decision = {
           kind: 'chooseOption',
           player: controller,
+          title: 'Choose a creature type',
           options: types.map((type) => ({
             label: type,
             effects: [{ kind: 'custom', handler: 'setChosen', params: { type } }],
@@ -2042,6 +2051,8 @@ export function runEffects(
           // Reality Fracture (17a): Fblthp, Hexhaven Invigorator.
           ...(e.upTo !== undefined ? { remaining: resolveAmount(ctx, es, e.upTo) } : {}),
           ...(e.differentNames ? { differentNames: true } : {}),
+          // Reality Fracture (17a fixes): Loyal Tutor.
+          ...(e.reveal ? { reveal: true } : {}),
           resume,
           thenPriority,
         };
@@ -2257,7 +2268,10 @@ function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
     }
     case 'draw': {
       const n = resolveAmount(ctx, es, e.amount);
+      // Reality Fracture (17a fixes): Rise of the Deathbringer, "cards drawn this way".
+      const before = ctx.s.turn.cardsDrawn[es.controller] ?? 0;
       for (const p of playersOf(ctx, es, e.who)) for (let i = 0; i < n; i++) drawCard(ctx, p);
+      es.drawnThisWay = (ctx.s.turn.cardsDrawn[es.controller] ?? 0) - before;
       return;
     }
     case 'createToken': {

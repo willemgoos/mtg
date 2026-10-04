@@ -758,7 +758,12 @@ export function matchesFilter(
     return false;
   if (filter.damaged && obj(ctx, id).damage <= 0) return false;
   // Reality Fracture (17a): Hexhaven Dueling Arena.
-  if (filter.attackedThisTurn && !ctx.s.turn.attackers.includes(id)) return false;
+  // Reality Fracture (17a fixes): and still the same object (not blinked or returned since).
+  if (
+    filter.attackedThisTurn &&
+    !(ctx.s.turn.attackers.includes(id) && obj(ctx, id).attackedZcc === obj(ctx, id).zcc)
+  )
+    return false;
   if (
     filter.hasCounters &&
     !obj(ctx, id).plusOneCounters &&

@@ -349,6 +349,30 @@ describe('more rules', () => {
     expect(g.zoneOf(ripper)).toBe('graveyard');
   });
 
+  // Reality Fracture (17a fixes): the player paying Vein Ripper's ward chooses the creature.
+  it('Vein Ripper’s ward lets its payer choose which creature to sacrifice', () => {
+    const g = game({
+      p1: {
+        hand: ['infernal-grasp'],
+        battlefield: [...n('swamp', 2), 'savannah-lions', 'serra-angel'],
+      },
+      p2: { battlefield: ['vein-ripper'] },
+    });
+    const ripper = g.id('p2', 'vein-ripper');
+    const act = castActions(g, 'infernal-grasp').find((a) =>
+      JSON.stringify(a.targets).includes(ripper),
+    );
+    g.do(act!);
+    expect(g.decision.kind).toBe('wardSacrifice');
+    // Only creatures are offered.
+    expect(g.legal().filter((a) => a.type === 'chooseCard')).toHaveLength(2);
+    g.do({ type: 'chooseCard', player: 'p1', card: g.id('p1', 'serra-angel') });
+    // (Vein Ripper's own death trigger now asks for its target.)
+    expect(g.decision.kind).not.toBe('wardSacrifice');
+    expect(all(g, 'serra-angel')).toHaveLength(0);
+    expect(all(g, 'savannah-lions')).toHaveLength(1);
+  });
+
   it('Blighted Nightmare boosts the creature cards in your graveyard and returns one', () => {
     const g = game({
       p1: {

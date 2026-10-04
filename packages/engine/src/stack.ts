@@ -206,9 +206,9 @@ export function wardPayable(
 }
 
 /**
- * Pays ward's discard and sacrifice costs. The card discarded is the one with
+ * Pays ward's discard and Food costs. The card discarded is the one with
  * the lowest mana value, the Food the first one (a simplification: the player
- * doesn't choose).
+ * doesn't choose). Sacrificed creatures and permanents are chosen: payWardSacrifices.
  */
 function payWardExtras(ctx: Ctx, player: PlayerId, targets: readonly TargetChoice[]): void {
   for (const w of wardedTargets(ctx, player, targets)) {
@@ -223,25 +223,103 @@ function payWardExtras(ctx: Ctx, player: PlayerId, targets: readonly TargetChoic
       const food = foodsOf(ctx, player)[0];
       if (food) sacrificePermanent(ctx, food);
     }
-    // Strixhaven Brawl (15b, b): the least useful creature (lowest power) is sacrificed.
-    if (w.sacrificeCreature) {
-      const least = creaturesOnBattlefield(ctx, player).sort(
-        (a, b) => power(ctx, a.id) - power(ctx, b.id),
-      )[0];
-      if (least) sacrificePermanent(ctx, least.id);
-    }
-    // Reality Fracture (17a): Emrakul, the Exigent Doom: the three least useful permanents (tokens, then the cheapest).
-    if (w.sacrificePermanents) {
-      const fodder = ctx.s.battlefield
-        .filter((id) => obj(ctx, id).controller === player)
-        .sort(
-          (a, b) =>
-            Number(obj(ctx, b).isToken) - Number(obj(ctx, a).isToken) ||
-            manaValue(def(ctx, a).manaCost) - manaValue(def(ctx, b).manaCost),
-        );
-      for (const id of fodder.slice(0, w.sacrificePermanents)) sacrificePermanent(ctx, id);
-    }
+    // Reality Fracture (17a fixes): ward's sacrifices (Vein Ripper, Emrakul) are chosen by the player: payWardSacrifices.
   }
+}
+
+// Reality Fracture (17a fixes): Vein Ripper, "Ward—Sacrifice a creature"; Emrakul, the Exigent Doom, "Ward—Sacrifice three permanents".
+/** What ward asks `player` to sacrifice for these targets: creatures, then other permanents. */
+function wardSacrifices(
+  ctx: Ctx,
+  player: PlayerId,
+  targets: readonly TargetChoice[],
+): { creatures: number; permanents: number } {
+  const w = wardedTargets(ctx, player, targets);
+  return {
+    creatures: w.filter((x) => x.sacrificeCreature).length,
+    permanents: w.reduce((n, x) => n + (x.sacrificePermanents ?? 0), 0),
+  };
+}
+
+/** The permanents `player` could sacrifice for ward next. */
+export function wardSacrificeOptions(
+  ctx: Ctx,
+  player: PlayerId,
+  creaturesOnly: boolean,
+): ObjectId[] {
+  return ctx.s.battlefield.filter(
+    (id) => obj(ctx, id).controller === player && (!creaturesOnly || isCreature(ctx, id)),
+  );
+}
+
+/**
+ * Asks for what ward costs in sacrifices, one permanent at a time, once the spell or ability is on the stack
+ * (ward is a trigger: the mana is already spent). Sacrifices with no real choice are made at once. Returns true
+ * if a 'wardSacrifice' decision was set.
+ */
+function nextWardSacrifice(
+  ctx: Ctx,
+  player: PlayerId,
+  creatures: number,
+  permanents: number,
+  after: {
+    thenPriority: PlayerId;
+    forage?: ObjectId | 'graveyard';
+    afterFree?: Extract<Decision, { kind: 'wardSacrifice' }>['afterFree'];
+  },
+): boolean {
+  for (let guard = 0; guard < 100 && (creatures > 0 || permanents > 0); guard++) {
+    const creaturesOnly = creatures > 0;
+    const left = creaturesOnly ? creatures : permanents;
+    const options = wardSacrificeOptions(ctx, player, creaturesOnly);
+    if (options.length > left) {
+      ctx.s.decision = { kind: 'wardSacrifice', player, creatures, permanents, ...after };
+      return true;
+    }
+    for (const id of options) sacrificePermanent(ctx, id);
+    if (creaturesOnly) creatures = 0;
+    else permanents = 0;
+  }
+  return false;
+}
+
+/** Pays ward's sacrifices for these targets (true if paused to ask which). */
+function payWardSacrifices(
+  ctx: Ctx,
+  player: PlayerId,
+  targets: readonly TargetChoice[],
+  after: Parameters<typeof nextWardSacrifice>[4],
+): boolean {
+  const { creatures, permanents } = wardSacrifices(ctx, player, targets);
+  return nextWardSacrifice(ctx, player, creatures, permanents, after);
+}
+
+/** One permanent sacrificed for ward; when all are, play goes on (after any forage). */
+export function answerWardSacrifice(ctx: Ctx, card: ObjectId): void {
+  const d = ctx.s.decision;
+  if (d.kind !== 'wardSacrifice') throw new Error('Not paying ward');
+  sacrificePermanent(ctx, card);
+  const creatures = d.creatures > 0 ? d.creatures - 1 : 0;
+  const permanents = d.creatures > 0 ? d.permanents : d.permanents - 1;
+  const after = {
+    thenPriority: d.thenPriority,
+    ...(d.forage !== undefined ? { forage: d.forage } : {}),
+    ...(d.afterFree ? { afterFree: d.afterFree } : {}),
+  };
+  if (nextWardSacrifice(ctx, d.player, creatures, permanents, after)) return;
+  if (
+    d.forage !== undefined &&
+    payForage(ctx, d.player, d.forage, {
+      thenPriority: d.thenPriority,
+      ...(d.afterFree ? { afterFree: d.afterFree } : {}),
+    })
+  )
+    return;
+  if (d.afterFree) {
+    ctx.s.decision = d.afterFree.decision;
+    return finishCastFree(ctx, d.afterFree.cast);
+  }
+  givePriority(ctx, d.thenPriority);
 }
 
 /** +1/+1 counters on creatures `player` controls (for Quilled Greatwurm). */
@@ -292,10 +370,14 @@ export function castCost(
   if (!v) throw new Error(`${o.defId} can't be cast that way`);
   let cost = v.cost;
   // Strixhaven (13c): Jadzi (pay {1}) and Uvilda ({4} less) cast it for a price.
+  // Reality Fracture (17a fixes): a free variant's cost is its additional costs only, which stay.
   if (choice.via === 'free') {
-    if (choice.freePay) cost = choice.freePay;
+    if (choice.freePay) cost = addCosts(choice.freePay, cost);
     else if (choice.freeLess)
-      cost = { ...d.manaCost, generic: Math.max(0, d.manaCost.generic - choice.freeLess) };
+      cost = addCosts(
+        { ...d.manaCost, generic: Math.max(0, d.manaCost.generic - choice.freeLess) },
+        cost,
+      );
   }
   // Brawl: commander tax.
   if (o.zone === 'command') cost = { ...cost, generic: cost.generic + commanderTax(ctx, player) };
@@ -618,6 +700,14 @@ export function castSpell(
   const cast = (ctx.s.turn.spellsCast ??= { p1: 0, p2: 0 });
   emit(ctx, { type: 'spellCast', id: card, player, nth: ++cast[player] });
   noteTargets(ctx, player, targets);
+  // Reality Fracture (17a fixes): ward's sacrifices are chosen (after them, any forage).
+  if (
+    payWardSacrifices(ctx, player, targets, {
+      thenPriority: player,
+      ...(choice.forage !== undefined ? { forage: choice.forage } : {}),
+    })
+  )
+    return true;
   return (
     choice.forage !== undefined && payForage(ctx, player, choice.forage, { thenPriority: player })
   );
@@ -872,9 +962,16 @@ export function activateAbility(
     ) ?? [])
       sacrificePermanent(ctx, id);
   // Strixhaven (13a): exile a card from your graveyard as a cost.
+  // Reality Fracture (17a fixes): Gallia, Tragic Host: with a real choice of card, the player picks it (after the
+  // ability is on the stack, like a forage); otherwise the only possible card goes.
+  let chooseGraveyardCard = false;
   if (a.cost.exileFromGraveyard) {
-    const card = graveyardCostCard(ctx, player, a.cost.exileFromGraveyard, source);
-    if (card) moveObject(ctx, card, 'exile');
+    const options = graveyardCostOptions(ctx, player, a.cost.exileFromGraveyard, source);
+    if (new Set(options.map((id) => obj(ctx, id).defId)).size > 1) chooseGraveyardCard = true;
+    else {
+      const card = graveyardCostCard(ctx, player, a.cost.exileFromGraveyard, source);
+      if (card) moveObject(ctx, card, 'exile');
+    }
   }
   const sacrificedPower = sacrifice ? power(ctx, sacrifice) : undefined;
   if (sacrifice) sacrificePermanent(ctx, sacrifice);
@@ -923,6 +1020,26 @@ export function activateAbility(
   ctx.s.stack.push(item);
   emit(ctx, { type: 'abilityActivated', id, source, player });
   noteTargets(ctx, player, targets, true);
+  // Reality Fracture (17a fixes): Gallia, Tragic Host.
+  if (chooseGraveyardCard) {
+    ctx.s.decision = {
+      kind: 'forageExile',
+      player,
+      count: 1,
+      filter: a.cost.exileFromGraveyard,
+      source,
+      thenPriority: player,
+    };
+    return true;
+  }
+  // Reality Fracture (17a fixes): ward's sacrifices are chosen (after them, any forage).
+  if (
+    payWardSacrifices(ctx, player, targets, {
+      thenPriority: player,
+      ...(forage !== undefined ? { forage } : {}),
+    })
+  )
+    return true;
   return forage !== undefined && payForage(ctx, player, forage, { thenPriority: player });
 }
 
@@ -931,7 +1048,9 @@ export function pushTrigger(
   t: PendingTrigger,
   targets: TargetChoice[],
   mode?: number,
-): void {
+  /** Who gets priority afterwards (needed if ward's sacrifices must be chosen). */
+  thenPriority?: PlayerId,
+): boolean {
   // "You may pay ..." and ward: paid as it goes on the stack.
   const cost = addCosts(
     (triggeredAbility(ctx, t).targets.length ? triggeredAbility(ctx, t).cost : undefined) ?? {
@@ -968,6 +1087,10 @@ export function pushTrigger(
   });
   emit(ctx, { type: 'triggerStacked', id, source: t.source.id, player: t.controller });
   noteTargets(ctx, t.controller, targets, true);
+  // Reality Fracture (17a fixes): ward's sacrifices are chosen by the player who pays them.
+  return (
+    thenPriority !== undefined && payWardSacrifices(ctx, t.controller, targets, { thenPriority })
+  );
 }
 
 function abilityOf(
@@ -1388,6 +1511,16 @@ export function graveyardCostCard(
   filter: CardFilter,
   source: ObjectId,
 ): ObjectId | null {
+  return graveyardCostOptions(ctx, player, filter, source)[0] ?? null;
+}
+
+/** Reality Fracture (17a fixes): every card a graveyard cost could exile, least useful first. */
+export function graveyardCostOptions(
+  ctx: Ctx,
+  player: PlayerId,
+  filter: CardFilter,
+  source: ObjectId,
+): ObjectId[] {
   const keep = (id: ObjectId) => {
     const d = def(ctx, id);
     if (d.types.includes('Land')) return 0;
@@ -1395,13 +1528,12 @@ export function graveyardCostCard(
       return 3;
     return d.types.includes('Creature') && manaValue(d.manaCost) <= 3 ? 2 : 1;
   };
-  const options = ctx.s.players[player].graveyard
+  return ctx.s.players[player].graveyard
     .filter((id) => id !== source && matchesFilter(ctx, id, filter, source))
     .sort(
       (a, b) =>
         keep(a) - keep(b) || manaValue(def(ctx, a).manaCost) - manaValue(def(ctx, b).manaCost),
     );
-  return options[0] ?? null;
 }
 
 // Marvel Super Heroes Jumpstart (Masters of Evil)
@@ -1573,7 +1705,11 @@ export function answerForageExile(ctx: Ctx, card: ObjectId): void {
   d.count--;
   if (d.count > 0 && ctx.s.players[d.player].graveyard.length > 0) return;
   if (d.resume) continueWith(ctx, d.resume, d.then ?? [], d.thenPriority);
-  else givePriority(ctx, d.thenPriority);
+  // Reality Fracture (17a fixes): the forage of a free cast: that cast goes on.
+  else if (d.afterFree) {
+    ctx.s.decision = d.afterFree.decision;
+    finishCastFree(ctx, d.afterFree.cast);
+  } else givePriority(ctx, d.thenPriority);
 }
 
 export function answerOptionalEffect(ctx: Ctx, accept: boolean): void {
@@ -1778,6 +1914,13 @@ export function answerSearch(ctx: Ctx, card: ObjectId | null): void {
       squirrelFood(ctx, d, card);
       return resume(ctx, d.resume, d.thenPriority);
     }
+    // Reality Fracture (17a fixes): Loyal Tutor, "reveal it": shown to everyone.
+    if (d.reveal)
+      emit(ctx, {
+        type: 'cardsRevealed',
+        player: d.player,
+        cards: [{ id: card, defId: obj(ctx, card).defId }],
+      });
     const onBattlefield =
       d.to === 'battlefield' ||
       d.to === 'battlefieldTapped' ||

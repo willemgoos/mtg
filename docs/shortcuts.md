@@ -108,21 +108,21 @@ from) when it's fixed. Older phases keep their own "Simplifications" lists in `d
 
 ## Reality Fracture (`fra/*.ts`, phase 17a)
 
-- [ ] Gallia, Tragic Host: the "exile another creature card from your graveyard" cost picks the card for you (the engine's
+- [x] Gallia, Tragic Host: the "exile another creature card from your graveyard" cost picks the card for you (the engine's
       existing `exileFromGraveyard` cost, as for Postmortem Professor); you should choose.
-- [ ] Rise of the Deathbringer: loses life equal to the greatest power, not the number of cards actually drawn (differs only
+- [x] Rise of the Deathbringer: loses life equal to the greatest power, not the number of cards actually drawn (differs only
       when the library runs out or a draw is replaced).
 - Extrapolate the Impossible: left out on purpose ("cards you own from outside the game"; there's no sideboard outside
   Learn). Decided 4 October 2026: not to be added.
-- [ ] Loot, the Nexus: its mana ability is an activated ability that goes on the stack (like Doc Samson's), not a mana
+- [x] Loot, the Nexus: its mana ability is an activated ability that goes on the stack (like Doc Samson's), not a mana
       ability, so it can't be used while paying a cost.
-- [ ] Emrakul, the Exigent Doom: "Ward—Sacrifice three permanents" is paid with permanents the engine picks (tokens, then
+- [x] Emrakul, the Exigent Doom: "Ward—Sacrifice three permanents" is paid with permanents the engine picks (tokens, then
       cheapest), as for Vein Ripper's ward; the opponent should choose.
-- [ ] Kindred Judgment (and the older Raise the Palisade): the creature types offered are those of the chooser's own cards,
+- [x] Kindred Judgment (and the older Raise the Palisade): the creature types offered are those of the chooser's own cards,
       not every creature type.
-- [ ] Hexhaven Dueling Arena: "attacked this turn" matches by object id, so a creature blinked after attacking still counts.
-- [ ] Uldaros Theorix: free casts never offer additional costs (sacrifice, forage), so a copy of a card with one can't be
+- [x] Hexhaven Dueling Arena: "attacked this turn" matches by object id, so a creature blinked after attacking still counts.
+- [x] Uldaros Theorix: free casts never offer additional costs (sacrifice, forage), so a copy of a card with one can't be
       cast this way with it.
-- [ ] Equipment attack triggers (Medic's Kitesail, Hunter's Axe) sit on the Equipment, not the equipped creature: they
+- [x] Equipment attack triggers (Medic's Kitesail, Hunter's Axe) sit on the Equipment, not the equipped creature: they
       differ only if the creature changes controller or loses its abilities.
-- [ ] Loyal Tutor: the searched card isn't revealed to the opponent (no tutor shows a reveal yet).
+- [x] Loyal Tutor: the searched card isn't revealed to the opponent (no tutor shows a reveal yet).

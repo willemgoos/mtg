@@ -1,6 +1,7 @@
 import type { GameState, PlayerId, TargetChoice } from '@mtg/engine';
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import type { EventBatch } from '../game/useGame.ts';
+import { Card } from './Card.tsx';
 
 function elFor(t: TargetChoice | string): Element | null {
   if (typeof t === 'string') return document.querySelector(t);
@@ -161,6 +162,42 @@ export function TurnBanner({ batch, me }: { batch: EventBatch; me: PlayerId }) {
       className={`turn-banner ${banner.mine ? 'turn-banner--me' : 'turn-banner--opp'}`}
     >
       <span>{banner.mine ? 'Your turn' : "Opponent's turn"}</span>
+    </div>
+  );
+}
+
+/**
+ * Reality Fracture (17a fixes): a card revealed to the table (Loyal Tutor's "reveal it"). As on Arena, it is shown
+ * large in the middle of the board for a moment, named by who revealed it; a click puts it away.
+ */
+export function RevealBanner({ batch, me }: { batch: EventBatch; me: PlayerId }) {
+  const [shown, setShown] = useState<{
+    key: number;
+    mine: boolean;
+    defIds: string[];
+  } | null>(null);
+  useEffect(() => {
+    const defIds: string[] = [];
+    let mine = true;
+    for (const e of batch.events)
+      if (e.type === 'cardsRevealed') {
+        mine = e.player === me;
+        defIds.push(...e.cards.map((c) => c.defId));
+      }
+    if (!defIds.length) return;
+    setShown({ key: batch.seq, mine, defIds });
+    const t = setTimeout(() => setShown(null), 3200);
+    return () => clearTimeout(t);
+  }, [batch, me]);
+  if (!shown) return null;
+  return (
+    <div key={shown.key} className="reveal" onClick={() => setShown(null)}>
+      <div className="reveal__title">{shown.mine ? 'You reveal' : 'Opponent reveals'}</div>
+      <div className="reveal__cards">
+        {shown.defIds.map((defId, i) => (
+          <Card key={i} defId={defId} size="mull" />
+        ))}
+      </div>
     </div>
   );
 }
