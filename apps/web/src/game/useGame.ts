@@ -12,6 +12,7 @@ import {
 } from '@mtg/engine';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { BotKind, BotRequest, BotResponse } from './bot.worker.ts';
+import { setBasicArt, trackBasics } from './basicArt.ts';
 import { type PassSettings, shouldAutoPass } from './interaction.ts';
 import { type SavedGame, saveGame } from './saved.ts';
 
@@ -97,6 +98,9 @@ export function useGame(
     () => resume?.state ?? engine.newGame({ ...choice.options, ...setup, seed }),
   );
   const stateRef = useRef(state);
+  // Basic lands' art follows their owner's deck; set before the board renders.
+  useMemo(() => setBasicArt(choice.you, choice.them), [choice.you, choice.them]);
+  trackBasics(state);
   const [log, setLog] = useState<LogLine[]>(() => resume?.log ?? []);
   const [batch, setBatch] = useState<EventBatch>({ seq: 0, events: [] });
   const [settings, setSettings] = useState<PassSettings>({ fullControl: false, passTurn: null });

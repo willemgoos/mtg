@@ -79,7 +79,9 @@ export function HoverPreview({ hover, notes }: { hover: HoverState | null; notes
     }
   } else left = clamp(left, gap, innerWidth - total - gap);
 
-  const img = hover.image ?? cardImage(hover.defId);
+  const img =
+    hover.image ??
+    cardImage(hover.defId, hover.anchor?.closest('[data-oid]')?.getAttribute('data-oid'));
   return (
     <div
       className={`hover ${rightSide ? '' : 'hover--flip'}`}

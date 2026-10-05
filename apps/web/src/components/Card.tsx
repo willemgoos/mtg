@@ -1,6 +1,7 @@
 import { cardDb, scryfallById } from '@mtg/cards';
 import type { CardDefId, ObjectId } from '@mtg/engine';
 import { type MouseEvent, useRef } from 'react';
+import { basicImage } from '../game/basicArt.ts';
 
 export type CardSize = 'hand' | 'field' | 'land' | 'stack' | 'preview' | 'mull';
 export type CardMark =
@@ -17,8 +18,9 @@ export type CardMark =
 /** Hover callback: the card and where it is on screen (for placing the preview). */
 export type HoverFn = (defId: CardDefId | null, anchor?: Element) => void;
 
-export function cardImage(defId: CardDefId): string | null {
-  return scryfallById.get(defId)?.image?.normal ?? null;
+/** A card's image; a basic land (by its object id) gets the art of its deck's set. */
+export function cardImage(defId: CardDefId, id?: ObjectId | null): string | null {
+  return basicImage(defId, id) ?? scryfallById.get(defId)?.image?.normal ?? null;
 }
 
 export interface CardProps {
@@ -48,7 +50,7 @@ export interface CardProps {
 
 export function Card(p: CardProps) {
   const def = cardDb.get(p.defId);
-  const img = cardImage(p.defId);
+  const img = cardImage(p.defId, p.id);
   const showPt = p.power !== undefined && p.toughness !== undefined;
   const ptClass =
     showPt && (p.power! > (p.basePower ?? 0) || p.toughness! > (p.baseToughness ?? 0))

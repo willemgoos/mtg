@@ -4,6 +4,7 @@ import { buildCard, slug } from './build.ts';
 import { DECKS, type Decklist } from './decks.ts';
 import { type Packet, PACKETS, packetCards } from './jumpin.ts';
 import scryfall from './generated/scryfall.json' with { type: 'json' };
+import basicArt from './generated/basic-art.json' with { type: 'json' };
 import foundations from './generated/foundations-pack-candidates.json' with { type: 'json' };
 import type { ScryfallCard } from './scryfall-types.ts';
 import { SOS_BOOSTER_LIST } from './sos/booster-list.ts';
@@ -12,6 +13,9 @@ import { STX_BOOSTER_LIST } from './stx/booster-list.ts';
 import { SOA_ARCHIVE_LIST } from './sos/archive-list.ts';
 import { STA_ARCHIVE_LIST } from './stx/archive-list.ts';
 import { bestowAura } from './soc/cards-15b-w.ts';
+
+/** Full-art basic land images by set, then basic land name (scripts/fetch-basic-art.ts). */
+export const BASIC_ART: Record<string, Record<string, string[]>> = basicArt;
 
 export { BEHAVIORS, TOKENS } from './behaviors.ts';
 export { buildCard, slug, parseManaCost, parseTypeLine } from './build.ts';
