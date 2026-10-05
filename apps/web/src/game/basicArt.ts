@@ -44,3 +44,9 @@ export function basicImage(defId: CardDefId, id: ObjectId | null | undefined): s
   for (const ch of id) h = (h * 31 + ch.charCodeAt(0)) >>> 0;
   return urls.length ? urls[h % urls.length]! : null;
 }
+
+/** The art a deck's basic land shows in lists (its set's first printing), or null for other cards. */
+export function deckBasicImage(name: string, deckId: string): string | null {
+  const set = setsOf(deckId)[0];
+  return (set && BASIC_ART[set]?.[name]?.[0]) || null;
+}

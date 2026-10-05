@@ -11,6 +11,7 @@ import {
   symbolUrl,
   total,
 } from '../game/deckView.ts';
+import { deckBasicImage } from '../game/basicArt.ts';
 import { ruleNotes } from '../game/notes.ts';
 import { play } from '../game/sound.ts';
 import { HoverPreview, type HoverState } from './Preview.tsx';
@@ -127,6 +128,7 @@ export function DeckBuilder({
   deck,
   pool,
   basics = false,
+  basicsDeck,
   fresh,
   min,
   tips = [],
@@ -142,6 +144,8 @@ export function DeckBuilder({
   deck: Counts;
   pool: Counts;
   basics?: boolean;
+  /** A deck id: its basic lands show that deck's set art. */
+  basicsDeck?: string;
   /** Cards to mark as new. */
   fresh?: ReadonlySet<string>;
   /** Cards needed before Done is enabled. */
@@ -165,18 +169,25 @@ export function DeckBuilder({
       e ? { defId: e.defId ?? slug(e.name), anchor: anchor ?? null, image: e.image } : null,
     );
 
-  const main = useMemo(() => cardEntries(Object.entries(deck)), [deck]);
+  const withArt = (es: DeckEntry[]) =>
+    basicsDeck
+      ? es.map((e) => {
+          const image = deckBasicImage(e.name, basicsDeck);
+          return image ? { ...e, image } : e;
+        })
+      : es;
+  const main = useMemo(() => withArt(cardEntries(Object.entries(deck))), [deck, basicsDeck]);
   // Everything you own, used-up cards included (they show dimmed, like Arena).
   const owned = useMemo(() => {
     const names = new Set([...Object.keys(pool), ...Object.keys(deck)]);
     if (basics) for (const b of Object.values(BASICS)) names.add(b);
-    return cardEntries([...names].map((n) => [n, pool[n] ?? 0] as const)).sort(
+    return withArt(cardEntries([...names].map((n) => [n, pool[n] ?? 0] as const))).sort(
       (a, b) =>
         collectionRank(a) - collectionRank(b) ||
         a.manaValue - b.manaValue ||
         a.name.localeCompare(b.name),
     );
-  }, [pool, deck, basics]);
+  }, [pool, deck, basics, basicsDeck]);
   const q = query.trim().toLowerCase();
   const isFreeBasic = (e: DeckEntry) => basics && basicColor.has(e.name);
   const shown = owned.filter(

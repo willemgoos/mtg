@@ -1475,6 +1475,7 @@ function ExpeditionBuilder({
       deck={b.main}
       pool={b.side}
       basics
+      basicsDeck={run.deck}
       fresh={fresh}
       min={MIN_DECK}
       tips={tips}
