@@ -4,9 +4,12 @@ import { useMemo, useState } from 'react';
 import type { BotKind } from '../game/bot.worker.ts';
 import {
   type BestOf,
+  inSets,
   isOver,
   type JumpInSetup,
   type Series,
+  SETS,
+  type SetKey,
   score,
   scoreLine,
 } from '../game/jumpInMatch.ts';
@@ -39,7 +42,8 @@ interface Slot {
 /**
  * The Jump In mode's lobby: every packet in one browsable grid (by set,
  * colour or name), two slots for your deck and two for the bot's (left empty,
- * they are random), the bot's level, and one game or a best of three.
+ * they are random), the sets both decks come from, the bot's level, and one
+ * game or a best of three.
  */
 export function JumpInLobby({
   setup,
@@ -73,9 +77,10 @@ export function JumpInLobby({
   const [hover, setHover] = useState<HoverState | null>(null);
 
   const live = series && series.bestOf > 1 && !isOver(series) ? series : null;
+  const allowed = useMemo(() => PACKETS.filter((p) => inSets(p, setup.sets)), [setup.sets]);
   const shown = useMemo(() => {
     const q = query.trim().toLowerCase();
-    return PACKETS.filter(
+    return allowed.filter(
       (p) =>
         (!group || groupOf(p).key === group) &&
         (!colors.length || p.colors.some((c) => colors.includes(c))) &&
@@ -84,7 +89,7 @@ export function JumpInLobby({
           p.blurb.toLowerCase().includes(q) ||
           p.spells.some(([n]) => n.toLowerCase().includes(q))),
     );
-  }, [group, colors, query]);
+  }, [allowed, group, colors, query]);
 
   const slots = (side: Side) => setup[side];
   /** The packet in the active slot's other half: a deck can't hold one packet twice. */
@@ -103,7 +108,18 @@ export function JumpInLobby({
     onSetup({ ...setup, [s.side]: next });
     setActive(s);
   };
-  const ready = !!setup.you[0] && !!setup.you[1];
+  /** Limits both decks to `sets`, emptying the slots holding a packet from elsewhere. */
+  const limit = (sets: SetKey[]) => {
+    const keep = (x: [string | null, string | null]) =>
+      x.map((id) => {
+        const p = byId(id);
+        return p && inSets(p, sets) ? id : null;
+      }) as [string | null, string | null];
+    onSetup({ ...setup, sets, you: keep(setup.you), them: keep(setup.them) });
+    setGroup(null);
+  };
+  const toggleSet = (k: SetKey) =>
+    limit(setup.sets.includes(k) ? setup.sets.filter((x) => x !== k) : [...setup.sets, k]);
   const detail = focus ?? byId(slots(active.side)[active.i]) ?? null;
 
   return (
@@ -151,7 +167,7 @@ export function JumpInLobby({
                 <SlotButton
                   key={i}
                   packet={byId(slots(side)[i])}
-                  empty={side === 'you' ? 'Choose a packet' : 'Random'}
+                  empty="Random"
                   on={active.side === side && active.i === i}
                   onClick={() => setActive({ side, i })}
                   onClear={() => clear({ side, i })}
@@ -161,6 +177,28 @@ export function JumpInLobby({
           </div>
         ))}
         <div className="jl__setup">
+          <div className="dsetup__field jl__sets">
+            <span className="dsetup__label">Sets</span>
+            <div className="dseg dseg--sm jl__sets-opts" role="group" aria-label="Sets">
+              <button
+                aria-pressed={!setup.sets.length}
+                className={`dseg__opt ${!setup.sets.length ? 'is-on' : ''}`}
+                onClick={() => limit([])}
+              >
+                All
+              </button>
+              {SETS.map((x) => (
+                <button
+                  key={x.key}
+                  aria-pressed={setup.sets.includes(x.key)}
+                  className={`dseg__opt ${setup.sets.includes(x.key) ? 'is-on' : ''}`}
+                  onClick={() => toggleSet(x.key)}
+                >
+                  {x.name}
+                </button>
+              ))}
+            </div>
+          </div>
           <div className="dsetup__field">
             <span className="dsetup__label">Opponent</span>
             <div className="dseg dseg--sm" role="radiogroup" aria-label="Opponent">
@@ -196,9 +234,8 @@ export function JumpInLobby({
           </div>
           <button
             className="hbtn hbtn--primary jl__play"
-            disabled={!ready || !!live}
+            disabled={!!live}
             onClick={onPlay}
-            title={ready ? undefined : 'Pick both halves of your deck'}
           >
             Play
           </button>
@@ -211,10 +248,10 @@ export function JumpInLobby({
           className={`dfilter__chip ${!group ? 'is-on' : ''}`}
           onClick={() => setGroup(null)}
         >
-          All <span>{PACKETS.length}</span>
+          All <span>{allowed.length}</span>
         </button>
         {GROUPS.map((g) => {
-          const n = PACKETS.filter((p) => groupOf(p).key === g.key).length;
+          const n = allowed.filter((p) => groupOf(p).key === g.key).length;
           return n ? (
             <button
               key={g.key}
@@ -257,7 +294,7 @@ export function JumpInLobby({
               {active.side === 'you' ? 'your deck' : 'their deck'},{' '}
               {active.i === 0 ? 'first' : 'second'} half
             </strong>
-            . Click a packet to put it there.
+            . Click a packet to put it there, or leave it empty for a random one.
           </p>
           {shown.length ? (
             <div className="dgrid jl__grid">

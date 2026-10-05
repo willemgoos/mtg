@@ -8,6 +8,7 @@ import {
   nextGame,
   recordGame,
   scoreLine,
+  setOf,
   startingPlayer,
   startSeries,
   winner,
@@ -33,7 +34,19 @@ describe('Jump In matches', () => {
     expect(them[0]).toBe(c);
     expect([a, b, c]).not.toContain(them[1]);
     expect(deckById(s.them).cards.reduce((n, [, k]) => n + k, 0)).toBe(40);
-    expect(() => startSeries({ ...DEFAULT_SETUP, you: [a!, null] }, 1)).toThrow();
+  });
+
+  it('deals your empty slots too, and only packets of the chosen sets', () => {
+    for (let i = 0; i < 50; i++) {
+      const s = startSeries({ ...DEFAULT_SETUP, you: [null, null], sets: ['blb'] }, 1);
+      const all = [...jumpInPackets(s.you)!, ...jumpInPackets(s.them)!];
+      expect(new Set(all.map((p) => p.id)).size).toBe(4);
+      for (const p of all) expect(p.set).toBe('blb');
+    }
+    const s = startSeries({ ...DEFAULT_SETUP, you: [a!, null], sets: ['fdn', 'stx'] }, 1);
+    const [mine, other] = jumpInPackets(s.you)!;
+    expect(mine!.id).toBe(a);
+    expect(['fdn', 'stx']).toContain(setOf(other!));
   });
 
   it('a best of one is over after a game', () => {

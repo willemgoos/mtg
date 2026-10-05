@@ -1,20 +1,41 @@
-import { jumpInId, PACKETS } from '@mtg/cards';
+import { jumpInId, type Packet, PACKETS } from '@mtg/cards';
 import type { PlayerId } from '@mtg/engine';
 import type { BotKind } from './bot.worker.ts';
 
 /**
  * Jump In matches: you pick two packets from all of them, and the bot's two
- * (or leave either to chance), then play one game or a best of three. As on
- * Arena, the loser of a game plays first in the next.
+ * (or leave any to chance), then play one game or a best of three. As on
+ * Arena, the loser of a game plays first in the next. A set limit keeps the
+ * packets you can pick, and those dealt at random, to the sets being practised.
  */
 
 export type BestOf = 1 | 3;
 export type Outcome = 'win' | 'loss' | 'draw';
 
-/** What the lobby has chosen: packet ids, null for an empty (yours) or random (theirs) slot. */
+/** The sets packets come from, in the order shown. */
+export const SETS = [
+  { key: 'fdn', name: 'Foundations' },
+  { key: 'blb', name: 'Bloomburrow' },
+  { key: 'msh', name: 'Marvel' },
+  { key: 'fin', name: 'Final Fantasy' },
+  { key: 'stx', name: 'Strixhaven' },
+  { key: 'sos', name: 'Secrets of Strixhaven' },
+  { key: 'fra', name: 'Reality Fracture' },
+] as const;
+
+export type SetKey = (typeof SETS)[number]['key'];
+export const setOf = (p: Packet): SetKey => p.set ?? 'fdn';
+
+/** The packet is in one of the sets (none: no limit). */
+export const inSets = (p: Packet, sets: readonly SetKey[]) =>
+  !sets.length || sets.includes(setOf(p));
+
+/** What the lobby has chosen: packet ids, null for a random slot. */
 export interface JumpInSetup {
   you: [string | null, string | null];
   them: [string | null, string | null];
+  /** The sets both decks are dealt from; empty for all. */
+  sets: SetKey[];
   bot: BotKind;
   bestOf: BestOf;
 }
@@ -34,25 +55,31 @@ export interface Series {
 export const DEFAULT_SETUP: JumpInSetup = {
   you: [null, null],
   them: [null, null],
+  sets: [],
   bot: 'heuristic',
   bestOf: 1,
 };
 
 const known = (id: string | null) => id === null || PACKETS.some((p) => p.id === id);
 
-/** Packets at random for the empty slots, never one already in the deck or in `avoid`. */
+/**
+ * Packets at random for the empty slots, from `sets` (empty: all), never one
+ * already in the deck or in `avoid`.
+ */
 export function fillRandom(
   slots: [string | null, string | null],
   avoid: (string | null)[] = [],
   random = Math.random,
+  sets: readonly SetKey[] = [],
 ): [string, string] {
   const taken = new Set([...slots, ...avoid].filter((x): x is string => !!x));
   const out = [...slots];
+  const allowed = PACKETS.filter((p) => inSets(p, sets));
   for (let i = 0; i < 2; i++) {
     if (out[i]) continue;
     // Leave out what's taken, unless that leaves nothing (then only the deck's other half).
-    let pool = PACKETS.filter((p) => !taken.has(p.id));
-    if (!pool.length) pool = PACKETS.filter((p) => p.id !== out[1 - i]);
+    let pool = allowed.filter((p) => !taken.has(p.id));
+    if (!pool.length) pool = allowed.filter((p) => p.id !== out[1 - i]);
     const p = pool[Math.floor(random() * pool.length)]!;
     out[i] = p.id;
     taken.add(p.id);
@@ -60,11 +87,10 @@ export function fillRandom(
   return out as [string, string];
 }
 
-/** Starts a match from the lobby's choices; your deck must be complete. */
+/** Starts a match from the lobby's choices, dealing packets to the empty slots. */
 export function startSeries(setup: JumpInSetup, seed: number, random = Math.random): Series {
-  const [a, b] = setup.you;
-  if (!a || !b) throw new Error('Pick both halves of your deck first');
-  const [c, d] = fillRandom(setup.them, [a, b], random);
+  const [a, b] = fillRandom(setup.you, setup.them, random, setup.sets);
+  const [c, d] = fillRandom(setup.them, [a, b], random, setup.sets);
   return {
     you: jumpInId(a, b),
     them: jumpInId(c, d),
@@ -155,6 +181,7 @@ export function loadJumpIn(): JumpInState {
       ...s.setup,
       you: slots(s.setup.you),
       them: slots(s.setup.them),
+      sets: (s.setup.sets ?? []).filter((k) => SETS.some((x) => x.key === k)),
     };
     const ok = (id: string) =>
       /^jump-in:([\w-]+)\+([\w-]+)$/.test(id) && id.slice(8).split('+').every(known);

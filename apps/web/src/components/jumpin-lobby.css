@@ -413,3 +413,12 @@
     grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
   }
 }
+
+.jl__sets {
+  flex: 1 1 100%;
+}
+
+.jl__sets-opts {
+  flex-wrap: wrap;
+  overflow-x: visible;
+}
