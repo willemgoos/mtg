@@ -91,6 +91,7 @@ export function manaSources(
   (ctx.s.players[player].pool ?? []).forEach(
     (p, i) =>
       (!p.onlyFor || forSubtypes.includes(p.onlyFor)) &&
+      (!p.notForHandSpells || !forSubtypes.includes('FromHand')) &&
       out.push({
         id: poolId(player, i),
         produces: p.produces,

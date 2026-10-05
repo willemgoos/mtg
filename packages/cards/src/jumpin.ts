@@ -4,7 +4,7 @@ import type { Color } from '@mtg/engine';
  * Themed half-decks for Jump In!, Arena's mode where you pick two 20-card
  * packets and shuffle them together. Most are our own, ten per set
  * (Foundations, Bloomburrow, Marvel Super Heroes, Final Fantasy, Strixhaven, Secrets of
- * Strixhaven, Reality Fracture): twelve spells
+ * Strixhaven, Reality Fracture), plus cross-set custom themes: twelve spells
  * around a theme, one rare, plus eight basic lands of the packet's colour.
  * Arena's own Bloomburrow and Foundations packets are here too
  * (`ARENA_BLB_PACKETS`, `ARENA_FDN_PACKETS`).
@@ -12,7 +12,7 @@ import type { Color } from '@mtg/engine';
 export interface Packet {
   id: string;
   name: string;
-  /** One colour, or two for some of Arena's packets. */
+  /** One colour, or two for multicolour themes. */
   colors: Color[];
   /** Card shown on the packet. */
   face: string;
@@ -31,7 +31,7 @@ export interface Packet {
 
 export const PACKET_LANDS = 8;
 
-/** Our own packets, ten per set. */
+/** Our own packets: ten per set, plus cross-set custom themes. */
 const OWN_PACKETS: Packet[] = [
   {
     id: 'angels',
@@ -670,6 +670,28 @@ const OWN_PACKETS: Packet[] = [
       ['Thriving Isle', 2],
       ['Island', 3],
       ['Plains', 3],
+    ],
+  },
+  {
+    id: 'msh-reborn-avengers',
+    name: 'Reborn Avengers',
+    colors: ['W'],
+    face: 'Winter Soldier, Reborn Avenger',
+    blurb: 'Trade Heroes early, then bring them back stronger with Winter Soldier',
+    set: 'msh',
+    crossSet: true,
+    spells: [
+      ['Winter Soldier, Reborn Avenger', 1],
+      ['Peggy Carter, Secret Agent', 1],
+      ['Hero in Training', 2],
+      ['Brave Brawler', 1],
+      ['Colleen Wing, Street Samurai', 1],
+      ['Agent of Atlas', 1],
+      ['Okoye, Dora Milaje Leader', 1],
+      ['Goldvein Pick', 1],
+      ['Take Up the Shield', 1],
+      ['Secure Detention', 1],
+      ['Moment of Triumph', 1],
     ],
   },
   // Strixhaven: our own packets around the school's creature types and spells.
@@ -2898,6 +2920,87 @@ export const MARVEL_JUMPSTART_PACKETS: Packet[] = [
     lands: [
       ['Thriving Isle', 1],
       ['Island', 7],
+    ],
+  },
+  {
+    id: 'msh-jumpstart-iron-man',
+    name: 'Iron Man',
+    colors: ['U'],
+    face: 'Iron Man, Bleeding Edge',
+    blurb: 'Build an artifact army and copy your best invention each turn',
+    set: 'msh',
+    source: 'arena',
+    spells: [
+      ['Hydraulic Helper', 1],
+      ['Rescue, Pepper Potts', 1],
+      ['S.H.I.E.L.D. Deployment Drone', 1],
+      ['Iron Lad, Young Avenger', 1],
+      ['War Machine, James Rhodes', 1],
+      ['Iron Man, Bleeding Edge', 1],
+      ['Happy Hogan, Bodyguard', 1],
+      ['Iron Suitcase', 1],
+      ["Collector's Case", 1],
+      ['Futurist Forge', 1],
+      ['I Am Iron Man', 1],
+      ['Origin of Iron Man', 1],
+    ],
+    lands: [
+      ['Thriving Isle', 1],
+      ['Island', 7],
+    ],
+  },
+  {
+    id: 'msh-jumpstart-runaways',
+    name: 'Runaways',
+    colors: ['R'],
+    face: 'Nico Minoru, Runaway',
+    blurb: 'Cast from exile and the graveyard to unleash the Runaways',
+    set: 'msh',
+    source: 'arena',
+    spells: [
+      ['Chase Stein, Runaway', 1],
+      ['Alex Wilder, Runaway', 1],
+      ['Molly Hayes, Runaway', 1],
+      ['Gert and Old Lace, Runaways', 1],
+      ['Karolina Dean, Runaway', 1],
+      ['Nico Minoru, Runaway', 1],
+      ['Victor Mancha, Runaway', 1],
+      ['Shock', 1],
+      ['Blazing Crescendo', 1],
+      ['Hex Magic', 1],
+      ['Crossover Collaboration', 1],
+      ['Marvelous Melee', 1],
+    ],
+    lands: [
+      ['Thriving Bluff', 1],
+      ['Mountain', 7],
+    ],
+  },
+  {
+    id: 'msh-jumpstart-caretakers',
+    name: 'Caretakers',
+    colors: ['W'],
+    face: 'Doctor Strange, Surgeon',
+    blurb: 'Heal your heroes and turn extra life into a stronger team',
+    set: 'msh',
+    source: 'arena',
+    spells: [
+      ['Crowd of True Believers', 1],
+      ['Night Nurse, Healer of Heroes', 1],
+      ['Donald Blake, Guise of Thor', 1],
+      ['MJ, Rising Star', 1],
+      ['Virtuous Variant', 1],
+      ['Doctor Jane Foster', 1],
+      ['Valkyrior Skyrider', 1],
+      ['Doctor Strange, Surgeon', 1],
+      ['Take Up the Shield', 1],
+      ['Super Villain Lockup', 1],
+      ['Infinity Formula', 1],
+      ['Fall to Earth', 1],
+    ],
+    lands: [
+      ['Thriving Heath', 1],
+      ['Plains', 7],
     ],
   },
 ];

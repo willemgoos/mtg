@@ -22730,6 +22730,155 @@
   }
  },
  {
+  "name": "Crowd of True Believers",
+  "scryfallId": "4b2fffb8-d538-4772-8fbc-9bec3b9c4d9c",
+  "oracleId": "06296d4d-a1b3-4e9a-a2fd-a0183bb892a1",
+  "set": "msh",
+  "collectorNumber": "14",
+  "rarity": "common",
+  "manaCost": "{W}",
+  "typeLine": "Creature — Human Citizen",
+  "oracleText": "{T}: Target creature you control that's attacking alone gets +1/+0 until end of turn. You gain 1 life.",
+  "power": "1",
+  "toughness": "2",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/b/4b2fffb8-d538-4772-8fbc-9bec3b9c4d9c.jpg?1783902974",
+   "normal": "https://cards.scryfall.io/normal/front/4/b/4b2fffb8-d538-4772-8fbc-9bec3b9c4d9c.jpg?1783902974",
+   "large": "https://cards.scryfall.io/large/front/4/b/4b2fffb8-d538-4772-8fbc-9bec3b9c4d9c.jpg?1783902974",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/b/4b2fffb8-d538-4772-8fbc-9bec3b9c4d9c.jpg?1783902974"
+  }
+ },
+ {
+  "name": "Donald Blake, Guise of Thor",
+  "scryfallId": "ad0c9940-49fe-410e-b1bd-614b991c2e43",
+  "oracleId": "f966ae40-4717-4f41-9437-0e38b01a8be9",
+  "set": "msc",
+  "collectorNumber": "592",
+  "rarity": "uncommon",
+  "manaCost": "{1}{W}",
+  "typeLine": "Legendary Creature — Human Doctor",
+  "oracleText": "Lifelink\nPower-up — {4}{W}{W}: Put two +1/+1 counters and a flying counter on Donald Blake. He becomes a God Warrior Hero. (He loses all other creature types. Activate each power-up ability only once. Reduce the cost by his mana cost if he entered this turn.)",
+  "power": "1",
+  "toughness": "3",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Power-up",
+   "Lifelink"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/d/ad0c9940-49fe-410e-b1bd-614b991c2e43.jpg?1783903085",
+   "normal": "https://cards.scryfall.io/normal/front/a/d/ad0c9940-49fe-410e-b1bd-614b991c2e43.jpg?1783903085",
+   "large": "https://cards.scryfall.io/large/front/a/d/ad0c9940-49fe-410e-b1bd-614b991c2e43.jpg?1783903085",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/d/ad0c9940-49fe-410e-b1bd-614b991c2e43.jpg?1783903085"
+  }
+ },
+ {
+  "name": "MJ, Rising Star",
+  "scryfallId": "55428059-6222-470b-8d01-d398d763ffdb",
+  "oracleId": "06f647a7-ee53-42bd-8c73-53a0c6ede34a",
+  "set": "msc",
+  "collectorNumber": "773",
+  "rarity": "uncommon",
+  "manaCost": "{2}{W}",
+  "typeLine": "Legendary Creature — Human Performer",
+  "oracleText": "Vigilance (Attacking doesn't cause this creature to tap.)\nWhenever you gain life, put a +1/+1 counter on MJ.",
+  "power": "2",
+  "toughness": "3",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Vigilance"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/5/55428059-6222-470b-8d01-d398d763ffdb.jpg?1783903021",
+   "normal": "https://cards.scryfall.io/normal/front/5/5/55428059-6222-470b-8d01-d398d763ffdb.jpg?1783903021",
+   "large": "https://cards.scryfall.io/large/front/5/5/55428059-6222-470b-8d01-d398d763ffdb.jpg?1783903021",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/5/55428059-6222-470b-8d01-d398d763ffdb.jpg?1783903021"
+  }
+ },
+ {
+  "name": "Virtuous Variant",
+  "scryfallId": "87c73b0e-6df9-46db-a14f-f4f5ccc30d91",
+  "oracleId": "fa4ed027-6e18-4a87-9845-e13f274d9994",
+  "set": "msc",
+  "collectorNumber": "758",
+  "rarity": "common",
+  "manaCost": "{2}{W}",
+  "typeLine": "Creature — Spider Human Hero",
+  "oracleText": "Flying (This creature can't be blocked except by creatures with flying or reach.)\nWhen this creature enters, put a +1/+1 counter on target creature you control.",
+  "power": "1",
+  "toughness": "2",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/7/87c73b0e-6df9-46db-a14f-f4f5ccc30d91.jpg?1783903026",
+   "normal": "https://cards.scryfall.io/normal/front/8/7/87c73b0e-6df9-46db-a14f-f4f5ccc30d91.jpg?1783903026",
+   "large": "https://cards.scryfall.io/large/front/8/7/87c73b0e-6df9-46db-a14f-f4f5ccc30d91.jpg?1783903026",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/7/87c73b0e-6df9-46db-a14f-f4f5ccc30d91.jpg?1783903026"
+  }
+ },
+ {
+  "name": "Doctor Jane Foster",
+  "scryfallId": "cde387cc-d31b-4728-b49e-09eef49698fd",
+  "oracleId": "b1c8fddb-d686-4b4a-8aff-d79ea747801c",
+  "set": "msc",
+  "collectorNumber": "757",
+  "rarity": "uncommon",
+  "manaCost": "{3}{W}",
+  "typeLine": "Legendary Creature — Human Doctor",
+  "oracleText": "Vigilance (Attacking doesn't cause this creature to tap.)\nWhen Doctor Jane Foster enters, return target creature card with mana value 3 or less from your graveyard to your hand. If you gained life this turn, return that card to the battlefield instead.",
+  "power": "2",
+  "toughness": "3",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Vigilance"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/d/cde387cc-d31b-4728-b49e-09eef49698fd.jpg?1785842465",
+   "normal": "https://cards.scryfall.io/normal/front/c/d/cde387cc-d31b-4728-b49e-09eef49698fd.jpg?1785842465",
+   "large": "https://cards.scryfall.io/large/front/c/d/cde387cc-d31b-4728-b49e-09eef49698fd.jpg?1785842465",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/d/cde387cc-d31b-4728-b49e-09eef49698fd.jpg?1785842465"
+  }
+ },
+ {
+  "name": "Doctor Strange, Surgeon",
+  "scryfallId": "f872a2cd-e684-47be-885f-27a4666399fa",
+  "oracleId": "43c31a03-2bbd-49a6-8b78-c5f3cab04a07",
+  "set": "msc",
+  "collectorNumber": "591",
+  "rarity": "rare",
+  "manaCost": "{4}{W}",
+  "typeLine": "Legendary Creature — Human Doctor Hero",
+  "oracleText": "Lifelink\nIf you would gain life, you gain twice that much life instead.\nAt the beginning of each combat, if you have at least 10 life more than your starting life total, creatures you control get +2/+2 and gain vigilance until end of turn.",
+  "power": "2",
+  "toughness": "5",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Lifelink"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/8/f872a2cd-e684-47be-885f-27a4666399fa.jpg?1783903085",
+   "normal": "https://cards.scryfall.io/normal/front/f/8/f872a2cd-e684-47be-885f-27a4666399fa.jpg?1783903085",
+   "large": "https://cards.scryfall.io/large/front/f/8/f872a2cd-e684-47be-885f-27a4666399fa.jpg?1783903085",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/8/f872a2cd-e684-47be-885f-27a4666399fa.jpg?1783903085"
+  }
+ },
+ {
   "name": "Bucky Barnes, Eager Ally",
   "scryfallId": "58a6ca84-64b8-4137-b3ce-9540b6dfa162",
   "oracleId": "55bc5d06-7dd1-4403-af32-0e10d8bbe327",
@@ -23587,6 +23736,98 @@
    "normal": "https://cards.scryfall.io/normal/front/1/d/1d24d200-63d4-44cf-8d3a-6c6ece5e16ff.jpg?1783902911",
    "large": "https://cards.scryfall.io/large/front/1/d/1d24d200-63d4-44cf-8d3a-6c6ece5e16ff.jpg?1783902911",
    "artCrop": "https://cards.scryfall.io/art_crop/front/1/d/1d24d200-63d4-44cf-8d3a-6c6ece5e16ff.jpg?1783902911"
+  }
+ },
+ {
+  "name": "Iron Man, Bleeding Edge",
+  "scryfallId": "b14b6721-6491-41a4-afb4-93bd76f21173",
+  "oracleId": "fc6e170c-820c-48bb-95c7-ee79fba634de",
+  "set": "msc",
+  "collectorNumber": "626",
+  "rarity": "rare",
+  "manaCost": "{3}{U}{U}",
+  "typeLine": "Legendary Artifact Creature — Human Hero",
+  "oracleText": "Flying\nWhenever you cast an artifact spell, you may copy it, except the copy isn't legendary. Do this only once each turn. (The copy becomes a token.)",
+  "power": "3",
+  "toughness": "5",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/1/b14b6721-6491-41a4-afb4-93bd76f21173.jpg?1783903072",
+   "normal": "https://cards.scryfall.io/normal/front/b/1/b14b6721-6491-41a4-afb4-93bd76f21173.jpg?1783903072",
+   "large": "https://cards.scryfall.io/large/front/b/1/b14b6721-6491-41a4-afb4-93bd76f21173.jpg?1783903072",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/1/b14b6721-6491-41a4-afb4-93bd76f21173.jpg?1783903072"
+  }
+ },
+ {
+  "name": "Happy Hogan, Bodyguard",
+  "scryfallId": "e9711fc5-7878-4d38-ac65-46bd720879ab",
+  "oracleId": "daaf33d8-2ee2-41f8-9872-66b6493c6e13",
+  "set": "msc",
+  "collectorNumber": "622",
+  "rarity": "uncommon",
+  "manaCost": "{5}{U}",
+  "typeLine": "Legendary Creature — Human Advisor",
+  "oracleText": "Vigilance\nWhen Happy Hogan enters, the owner of target creature an opponent controls puts it into their library second from the top or on the bottom.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Vigilance"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/9/e9711fc5-7878-4d38-ac65-46bd720879ab.jpg?1783903075",
+   "normal": "https://cards.scryfall.io/normal/front/e/9/e9711fc5-7878-4d38-ac65-46bd720879ab.jpg?1783903075",
+   "large": "https://cards.scryfall.io/large/front/e/9/e9711fc5-7878-4d38-ac65-46bd720879ab.jpg?1783903075",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/9/e9711fc5-7878-4d38-ac65-46bd720879ab.jpg?1783903075"
+  }
+ },
+ {
+  "name": "Iron Suitcase",
+  "scryfallId": "018d8d89-c90e-4245-93d3-6f8af4c95f81",
+  "oracleId": "d2ba20a0-7c08-49ed-b960-4b3154a8c025",
+  "set": "msc",
+  "collectorNumber": "750",
+  "rarity": "uncommon",
+  "manaCost": "{1}",
+  "typeLine": "Artifact",
+  "oracleText": "When this artifact enters, scry 2. (Look at the top two cards of your library, then put any number of them on the bottom and the rest on top in any order.)\n{3}: This artifact becomes a 3/3 Construct artifact creature with flying until end of turn.",
+  "colors": [],
+  "keywords": [
+   "Scry"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/1/018d8d89-c90e-4245-93d3-6f8af4c95f81.jpg?1783903028",
+   "normal": "https://cards.scryfall.io/normal/front/0/1/018d8d89-c90e-4245-93d3-6f8af4c95f81.jpg?1783903028",
+   "large": "https://cards.scryfall.io/large/front/0/1/018d8d89-c90e-4245-93d3-6f8af4c95f81.jpg?1783903028",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/1/018d8d89-c90e-4245-93d3-6f8af4c95f81.jpg?1783903028"
+  }
+ },
+ {
+  "name": "Origin of Iron Man",
+  "scryfallId": "85e61a72-5184-417d-8cda-f6b723ba00c4",
+  "oracleId": "6abb489e-cc62-42d7-b898-3e5095037e75",
+  "set": "msc",
+  "collectorNumber": "633",
+  "rarity": "uncommon",
+  "manaCost": "{4}{U}",
+  "typeLine": "Enchantment — Saga",
+  "oracleText": "(As this Saga enters and after your draw step, add a lore counter. Sacrifice after III.)\nI — Tap up to one target creature. It doesn't untap during its controller's untap step for as long as this Saga remains on the battlefield.\nII — Draw two cards.\nIII — You may put an artifact card with mana value 5 or less from your hand onto the battlefield.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/5/85e61a72-5184-417d-8cda-f6b723ba00c4.jpg?1784182928",
+   "normal": "https://cards.scryfall.io/normal/front/8/5/85e61a72-5184-417d-8cda-f6b723ba00c4.jpg?1784182928",
+   "large": "https://cards.scryfall.io/large/front/8/5/85e61a72-5184-417d-8cda-f6b723ba00c4.jpg?1784182928",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/5/85e61a72-5184-417d-8cda-f6b723ba00c4.jpg?1784182928"
   }
  },
  {
@@ -24555,6 +24796,127 @@
    "normal": "https://cards.scryfall.io/normal/front/7/2/722c62a0-a8f3-4bc3-b463-8904ba234eed.jpg?1783903002",
    "large": "https://cards.scryfall.io/large/front/7/2/722c62a0-a8f3-4bc3-b463-8904ba234eed.jpg?1783903002",
    "artCrop": "https://cards.scryfall.io/art_crop/front/7/2/722c62a0-a8f3-4bc3-b463-8904ba234eed.jpg?1783903002"
+  }
+ },
+ {
+  "name": "Chase Stein, Runaway",
+  "scryfallId": "e4dab13d-98c3-4f78-b9be-cf29826fcd59",
+  "oracleId": "161ff063-b784-43c7-b608-f78be3daa5b2",
+  "set": "msc",
+  "collectorNumber": "682",
+  "rarity": "common",
+  "manaCost": "{1}{R}",
+  "typeLine": "Legendary Creature — Human Hero",
+  "oracleText": "{T}, Discard a card: Exile the top card of your library. Until the end of your next turn, you may play that card.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/4/e4dab13d-98c3-4f78-b9be-cf29826fcd59.jpg?1783903052",
+   "normal": "https://cards.scryfall.io/normal/front/e/4/e4dab13d-98c3-4f78-b9be-cf29826fcd59.jpg?1783903052",
+   "large": "https://cards.scryfall.io/large/front/e/4/e4dab13d-98c3-4f78-b9be-cf29826fcd59.jpg?1783903052",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/4/e4dab13d-98c3-4f78-b9be-cf29826fcd59.jpg?1783903052"
+  }
+ },
+ {
+  "name": "Alex Wilder, Runaway",
+  "scryfallId": "78ba8bef-5b36-4e63-b708-d77250ebaf62",
+  "oracleId": "f3031397-c2d5-40c6-8eca-88faed00a5ea",
+  "set": "msc",
+  "collectorNumber": "677",
+  "rarity": "uncommon",
+  "manaCost": "{1}{R}",
+  "typeLine": "Legendary Creature — Human Hero Villain",
+  "oracleText": "Whenever Alex Wilder or another creature you control enters, if you cast it from anywhere other than your hand, it gets +2/+0 and gains haste until end of turn.\nEscape—{2}{R}, Exile three other cards from your graveyard. (You may cast this card from your graveyard for its escape cost.)",
+  "power": "1",
+  "toughness": "3",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Escape"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/8/78ba8bef-5b36-4e63-b708-d77250ebaf62.jpg?1783903056",
+   "normal": "https://cards.scryfall.io/normal/front/7/8/78ba8bef-5b36-4e63-b708-d77250ebaf62.jpg?1783903056",
+   "large": "https://cards.scryfall.io/large/front/7/8/78ba8bef-5b36-4e63-b708-d77250ebaf62.jpg?1783903056",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/8/78ba8bef-5b36-4e63-b708-d77250ebaf62.jpg?1783903056"
+  }
+ },
+ {
+  "name": "Molly Hayes, Runaway",
+  "scryfallId": "c0251b8f-e848-47ad-a22c-9594e08f0f5c",
+  "oracleId": "e3f0a2a6-7a42-46bc-9736-d0f6a0ce0b37",
+  "set": "msc",
+  "collectorNumber": "698",
+  "rarity": "common",
+  "manaCost": "{2}{R}",
+  "typeLine": "Legendary Creature — Mutant Hero",
+  "oracleText": "Power-up — {5}{R}: Put two +1/+1 counters on Molly Hayes. Exile the top card of your library. Until the end of your next turn, you may play that card. (Activate each power-up ability only once. Reduce the cost by her mana cost if she entered this turn.)",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Power-up"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/0/c0251b8f-e848-47ad-a22c-9594e08f0f5c.jpg?1783903047",
+   "normal": "https://cards.scryfall.io/normal/front/c/0/c0251b8f-e848-47ad-a22c-9594e08f0f5c.jpg?1783903047",
+   "large": "https://cards.scryfall.io/large/front/c/0/c0251b8f-e848-47ad-a22c-9594e08f0f5c.jpg?1783903047",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/0/c0251b8f-e848-47ad-a22c-9594e08f0f5c.jpg?1783903047"
+  }
+ },
+ {
+  "name": "Karolina Dean, Runaway",
+  "scryfallId": "ecb8fc29-2d62-43ff-81b4-d035cc633688",
+  "oracleId": "50b5faff-acaa-426b-9f3e-1005c0392e6c",
+  "set": "msc",
+  "collectorNumber": "694",
+  "rarity": "uncommon",
+  "manaCost": "{3}{R}",
+  "typeLine": "Legendary Creature — Alien Hero",
+  "oracleText": "Flying\nAt the beginning of your first main phase, add {W}{U}{B}{R}{G}. This mana can't be spent to cast spells from your hand.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/c/ecb8fc29-2d62-43ff-81b4-d035cc633688.jpg?1783903048",
+   "normal": "https://cards.scryfall.io/normal/front/e/c/ecb8fc29-2d62-43ff-81b4-d035cc633688.jpg?1783903048",
+   "large": "https://cards.scryfall.io/large/front/e/c/ecb8fc29-2d62-43ff-81b4-d035cc633688.jpg?1783903048",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/c/ecb8fc29-2d62-43ff-81b4-d035cc633688.jpg?1783903048"
+  }
+ },
+ {
+  "name": "Nico Minoru, Runaway",
+  "scryfallId": "89c21b09-8869-4d94-bf29-29c8d1c69d4f",
+  "oracleId": "5303b3f6-970c-47d8-977e-2d6679206ba5",
+  "set": "msc",
+  "collectorNumber": "700",
+  "rarity": "mythic",
+  "manaCost": "{3}{R}",
+  "typeLine": "Legendary Creature — Human Warlock Hero",
+  "oracleText": "Whenever you cast a spell from anywhere other than your hand, Nico Minoru deals 2 damage to each opponent.\n{2}{R}, {T}, Discard a card: Exile cards from the top of your library until you exile a nonland card. You may cast that card without paying its mana cost.",
+  "power": "2",
+  "toughness": "4",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/9/89c21b09-8869-4d94-bf29-29c8d1c69d4f.jpg?1783903048",
+   "normal": "https://cards.scryfall.io/normal/front/8/9/89c21b09-8869-4d94-bf29-29c8d1c69d4f.jpg?1783903048",
+   "large": "https://cards.scryfall.io/large/front/8/9/89c21b09-8869-4d94-bf29-29c8d1c69d4f.jpg?1783903048",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/9/89c21b09-8869-4d94-bf29-29c8d1c69d4f.jpg?1783903048"
   }
  },
  {

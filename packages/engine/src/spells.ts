@@ -18,6 +18,7 @@ export type CastVia =
   | 'omnipresence'
   // Reality Fracture (17c): Chandra, Torch of Defiance: cast now, in the middle of a resolution, paying every cost.
   | 'now'
+  | 'freeExact'
   | 'noctis'
   | 'hades';
 
@@ -170,11 +171,11 @@ export function castVariants(d: CardDefinition, zone: ZoneName, via?: CastVia): 
   if (d.types.includes('Land')) return [];
   // Final Fantasy (11a): a transforming card's back face has no mana cost and can't be cast.
   // Strixhaven Brawl (15a): a disturb back face is cast for its disturb cost (its `flashback`).
-  if (d.noManaCost && !d.flashback) return [];
+  if (d.noManaCost && !d.flashback && via !== 'freeExact') return [];
   // Marvel Super Heroes Jumpstart (Analyzed): without paying its mana cost, so X is 0 and
   // additional costs (kicker) are still paid; an alternative cost can't be added.
-  if (via === 'freeOnceEachTurn' || via === 'omnipresence')
-    return castVariants(d, 'hand')
+  if (via === 'freeOnceEachTurn' || via === 'omnipresence' || via === 'freeExact')
+    return castVariants(d.noManaCost ? { ...d, noManaCost: false } : d, 'hand')
       .filter((v) => !(v.kicked && d.kicker?.replacesCost))
       .map((v) => ({ ...v, cost: withoutManaCost(v.cost, d.manaCost) }));
   // Reality Fracture (17c): Chandra, Torch of Defiance: cast now, paying its costs as if from hand.

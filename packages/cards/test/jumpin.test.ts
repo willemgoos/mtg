@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import {
   ARENA_BLB_PACKETS,
@@ -9,6 +10,7 @@ import {
   jumpInId,
   jumpInPackets,
   JUMP_IN_DECKS,
+  MARVEL_JUMPSTART_PACKETS,
   PACKETS,
   packetCards,
   SCRYFALL,
@@ -16,8 +18,23 @@ import {
 } from '../src/index.ts';
 
 const card = new Map(SCRYFALL.map((c) => [c.name, c]));
+const marvelLists: { name: string; cards: [string, number][] }[] = JSON.parse(
+  readFileSync(new URL('../scripts/data/marvel-jumpstart-lists.json', import.meta.url), 'utf8'),
+);
 
 describe('Jump In packets', () => {
+  it.each(MARVEL_JUMPSTART_PACKETS.map((p) => p.name))(
+    '%s matches its official Jumpstart list',
+    (name) => {
+      const packet = MARVEL_JUMPSTART_PACKETS.find((p) => p.name === name);
+      expect(packet, name).toBeDefined();
+      const official = marvelLists.find((p) => p.name === name)!;
+      const sort = (cards: [string, number][]) =>
+        cards.slice().sort(([a], [b]) => a.localeCompare(b));
+      expect(sort(packetCards(packet!))).toEqual(sort(official.cards));
+    },
+  );
+
   it('are 20 implemented cards of their colours with exactly one rare', () => {
     expect(new Set(PACKETS.map((p) => p.id)).size).toBe(PACKETS.length);
     for (const p of PACKETS) {
@@ -48,11 +65,11 @@ describe('Jump In packets', () => {
     }
   });
 
-  it('has two packets per colour in each set', () => {
+  it('has two base packets per colour in each set, before cross-set custom themes', () => {
     for (const set of [undefined, 'blb', 'msh', 'fin', 'stx', 'sos', 'fra'])
       for (const c of ['W', 'U', 'B', 'R', 'G'])
         expect(
-          PACKETS.filter((p) => p.set === set && !p.source && p.colors.join() === c),
+          PACKETS.filter((p) => p.set === set && !p.source && !p.crossSet && p.colors.join() === c),
           `${set ?? 'fdn'} ${c}`,
         ).toHaveLength(2);
   });

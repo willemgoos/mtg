@@ -46,6 +46,22 @@ export function redactFor(state: GameState, viewer: PlayerId, db?: CardDb): Game
     for (const id of hidden)
       if (!seen.includes(id) && id !== ps.commander) s.objects[id]!.defId = HIDDEN_CARD;
   }
+  if (state.decision.kind === 'chooseOption' && state.decision.lifeGainReplay) {
+    for (const id of state.decision.lifeGainReplay.revealed)
+      if (s.objects[id]) s.objects[id]!.defId = state.objects[id]!.defId;
+  }
+  // Caretakers: redact the one bounded replay snapshot independently, then
+  // preserve identities the viewer learned during the partial resolution.
+  if (state.decision.kind === 'chooseOption' && state.decision.lifeGainReplay &&
+      s.decision.kind === 'chooseOption' && s.decision.lifeGainReplay) {
+    const original = state.decision.lifeGainReplay.original;
+    const redacted = redactFor(original, viewer, db);
+    for (const id in redacted.objects) {
+      if (s.objects[id] && s.objects[id]!.defId !== HIDDEN_CARD)
+        redacted.objects[id]!.defId = original.objects[id]!.defId;
+    }
+    s.decision.lifeGainReplay.original = redacted;
+  }
   s.seed = 0;
   s.rng = { s: [0, 0, 0, 0] };
   return s;
@@ -131,6 +147,19 @@ export function determinize(
       );
     shuffleInPlace(rng, remaining);
     hidden.forEach((id, i) => (s.objects[id]!.defId = remaining[i]!));
+  }
+  // Reuse the same physical-card assignment by object ID in the original
+  // snapshot. Sample only once, so a card drawn before the choice stays known.
+  if (s.decision.kind === 'chooseOption' && s.decision.lifeGainReplay) {
+    const original = cloneState(s.decision.lifeGainReplay.original);
+    for (const id in original.objects) {
+      const o = original.objects[id]!;
+      if (o.defId === HIDDEN_CARD && s.objects[id])
+        o.defId = s.objects[id]!.originalDefId ?? s.objects[id]!.defId;
+    }
+    original.seed = seed;
+    original.rng = createRng(seed ^ 0x5bd1e995);
+    s.decision.lifeGainReplay.original = original;
   }
   s.seed = seed;
   s.rng = createRng(seed ^ 0x5bd1e995);

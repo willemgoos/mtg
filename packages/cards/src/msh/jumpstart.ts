@@ -5,6 +5,7 @@ import { MSH_JUMPSTART_ANALYZED } from './jumpstart-analyzed.ts';
 import { MSH_JUMPSTART_ANIMAL } from './jumpstart-animal.ts';
 import { MSH_JUMPSTART_ATLANTIS } from './jumpstart-atlantis.ts';
 import { MSH_JUMPSTART_BATTALION } from './jumpstart-battalion.ts';
+import { MSH_JUMPSTART_CARETAKERS } from './jumpstart-caretakers.ts';
 import { MSH_JUMPSTART_BLINK } from './jumpstart-blink.ts';
 import { MSH_JUMPSTART_EQUIPPED } from './jumpstart-equipped.ts';
 import { MSH_JUMPSTART_GENIUSES } from './jumpstart-geniuses.ts';
@@ -13,6 +14,7 @@ import { MSH_JUMPSTART_HIRE } from './jumpstart-hire.ts';
 import { MSH_JUMPSTART_CONNIVING } from './jumpstart-conniving.ts';
 import { MSH_JUMPSTART_HYDRA } from './jumpstart-hydra.ts';
 import { MSH_JUMPSTART_INCREDIBLE } from './jumpstart-incredible.ts';
+import { MSH_JUMPSTART_IRON_MAN } from './jumpstart-iron-man.ts';
 import { MSH_JUMPSTART_KANG } from './jumpstart-kang.ts';
 import { MSH_JUMPSTART_LETHAL } from './jumpstart-lethal.ts';
 import { MSH_JUMPSTART_MARVELOUS } from './jumpstart-marvelous.ts';
@@ -20,6 +22,7 @@ import { MSH_JUMPSTART_MASTERS } from './jumpstart-masters.ts';
 import { MSH_JUMPSTART_PRECISE } from './jumpstart-precise.ts';
 import { MSH_JUMPSTART_PYM } from './jumpstart-pym.ts';
 import { MSH_JUMPSTART_RAMPAGING } from './jumpstart-rampaging.ts';
+import { MSH_JUMPSTART_RUNAWAYS } from './jumpstart-runaways.ts';
 import { MSH_JUMPSTART_SCARLET } from './jumpstart-scarlet.ts';
 import { MSH_JUMPSTART_SHIELD } from './jumpstart-shield.ts';
 import { MSH_JUMPSTART_SQUADRON } from './jumpstart-squadron.ts';
@@ -66,6 +69,7 @@ export const MSH_JUMPSTART: Record<string, Behavior> = {
   ...MSH_JUMPSTART_ATLANTIS,
   ...MSH_JUMPSTART_BATTALION,
   ...MSH_JUMPSTART_BLINK,
+  ...MSH_JUMPSTART_CARETAKERS,
   ...MSH_JUMPSTART_EQUIPPED,
   ...MSH_JUMPSTART_GENIUSES,
   ...MSH_JUMPSTART_GREAT_LAKES,
@@ -73,6 +77,7 @@ export const MSH_JUMPSTART: Record<string, Behavior> = {
   ...MSH_JUMPSTART_CONNIVING,
   ...MSH_JUMPSTART_HYDRA,
   ...MSH_JUMPSTART_INCREDIBLE,
+  ...MSH_JUMPSTART_IRON_MAN,
   ...MSH_JUMPSTART_KANG,
   ...MSH_JUMPSTART_LETHAL,
   ...MSH_JUMPSTART_MARVELOUS,
@@ -80,6 +85,7 @@ export const MSH_JUMPSTART: Record<string, Behavior> = {
   ...MSH_JUMPSTART_PRECISE,
   ...MSH_JUMPSTART_PYM,
   ...MSH_JUMPSTART_RAMPAGING,
+  ...MSH_JUMPSTART_RUNAWAYS,
   ...MSH_JUMPSTART_SCARLET,
   ...MSH_JUMPSTART_SHIELD,
   ...MSH_JUMPSTART_SQUADRON,

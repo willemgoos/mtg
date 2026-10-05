@@ -12,6 +12,7 @@ export function cloneState(s: GameState): GameState {
     const c = { ...o };
     if (o.usedAbilities) c.usedAbilities = o.usedAbilities.slice();
     if (o.exiledUntilLeaves) c.exiledUntilLeaves = o.exiledUntilLeaves.slice();
+    if (o.creatureTypes) c.creatureTypes = o.creatureTypes.slice();
     if (o.addedSubtypes) c.addedSubtypes = o.addedSubtypes.slice();
     if (o.counters) c.counters = { ...o.counters };
     if (o.onceTurns) c.onceTurns = { ...o.onceTurns };
@@ -47,6 +48,8 @@ export function cloneState(s: GameState): GameState {
     turn: {
       ...s.turn,
       passed: s.turn.passed.slice(),
+      ...(s.turn.spellHistory ? { spellHistory: { ...s.turn.spellHistory } } : {}),
+      ...(s.turn.optionalUses ? { optionalUses: s.turn.optionalUses.slice() } : {}),
       attackers: s.turn.attackers.slice(),
       lifeGains: { ...s.turn.lifeGains },
       ...(s.turn.lifeGained ? { lifeGained: { ...s.turn.lifeGained } } : {}),
@@ -108,6 +111,10 @@ export function cloneState(s: GameState): GameState {
 
 function cloneDecision(d: Decision): Decision {
   switch (d.kind) {
+    case 'chooseOption':
+      return d.lifeGainReplay
+        ? { ...d, lifeGainReplay: { ...d.lifeGainReplay, original: cloneState(d.lifeGainReplay.original) } }
+        : { ...d };
     case 'declareAttackers':
       return { ...d, declared: d.declared.map((x) => ({ ...x })) };
     case 'declareBlockers':

@@ -104,6 +104,7 @@ export function setupGame(ctx: Ctx, opts: NewGameOptions): void {
     if (commander) ps.commander = putInCommandZone(ctx, commander, p);
     if (opts.sideboards?.[p]?.length) ps.sideboard = [...opts.sideboards[p]!];
     if (opts.life?.[p] !== undefined) ps.life = opts.life[p]!;
+    ps.startingLife = ps.life;
     if (opts.extraCards?.[p]) ps.openingHand = OPENING_HAND + opts.extraCards[p]!;
     for (const _ of opts.landInPlay?.filter((x) => x === p) ?? []) {
       const land = ps.library.find((id) => def(ctx, id).supertypes.includes('Basic'));

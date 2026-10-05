@@ -10,6 +10,52 @@ const castable = (g: ReturnType<typeof game>, defId: string) =>
   g.legal().some((a) => a.type === 'castSpell' && g.obj(a.card).defId === defId);
 
 describe('Avengers Assemble', () => {
+  it('Winter Soldier revives a Hero with a counter while Peggy protects his solo attack', () => {
+    const g = game({
+      p1: {
+        battlefield: ['winter-soldier-reborn-avenger', 'peggy-carter-secret-agent'],
+        graveyard: ['hero-in-training'],
+      },
+      step: 'beginCombat',
+    });
+    const soldier = g.id('p1', 'winter-soldier-reborn-avenger');
+    const before = handSize(g, 'p1');
+    g.pass().pass();
+    g.attack(soldier);
+    settle(g);
+    const hero = g.id('p1', 'hero-in-training');
+    expect(g.obj(hero).plusOneCounters).toBe(1);
+    expect(pt(g, hero)).toEqual([3, 3]);
+    expect(handSize(g, 'p1')).toBe(before + 1);
+    expect(g.life('p1')).toBe(22);
+    expect(getCharacteristics(g.state, cardDb, soldier).keywords).toContain('indestructible');
+  });
+
+  it.each([false, true])(
+    'Winter Soldier can revive Okoye only after a power boost: %s',
+    (boost) => {
+      const g = game({
+        p1: {
+          battlefield: ['winter-soldier-reborn-avenger', ...n('plains', 2)],
+          graveyard: ['okoye-dora-milaje-leader'],
+          hand: ['take-up-the-shield'],
+        },
+        step: 'beginCombat',
+      });
+      const soldier = g.id('p1', 'winter-soldier-reborn-avenger');
+      if (boost) settle(cast(g, 'take-up-the-shield', [g.ref(soldier)]));
+      g.pass().pass();
+      g.attack(soldier);
+      settle(g);
+      expect(all(g, 'okoye-dora-milaje-leader')).toHaveLength(boost ? 1 : 0);
+      if (boost) {
+        const okoye = g.id('p1', 'okoye-dora-milaje-leader');
+        expect(g.obj(okoye).plusOneCounters).toBe(1);
+        expect(all(g, 'soldier-token')).toHaveLength(2);
+      }
+    },
+  );
+
   it('Thor adds 1 to damage other sources deal to opponents and their creatures', () => {
     const g = game({
       p1: { hand: ['shock', 'shock'], battlefield: ['thor-asgards-avenger', ...n('mountain', 2)] },

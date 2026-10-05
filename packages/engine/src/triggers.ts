@@ -271,6 +271,12 @@ export function checkCondition(
       }) >= c.min
     );
   // Final Fantasy (11c): rare conditions.
+  // Caretakers: use the configured starting life, not a fixed life threshold.
+  if (c.kind === 'lifeAboveStarting')
+    return (
+      ctx.s.players[controller].life >=
+      (ctx.s.players[controller].startingLife ?? (ctx.s.format === 'brawl' ? 25 : 20)) + c.amount
+    );
   if (c.kind === 'lifeAtMostHalfStarting')
     return ctx.s.players[controller].life <= Math.floor((ctx.s.format === 'brawl' ? 25 : 20) / 2);
   if (c.kind === 'firstEndStep') return (ctx.s.turn.endSteps ?? 1) <= 1;
@@ -297,7 +303,7 @@ export function checkCondition(
       return !!self.kicked;
     case 'diedWithout':
       return (
-        !def(ctx, self.id).subtypes.includes(c.subtype) &&
+        !(self.lastSubtypes ?? def(ctx, self.id).subtypes).includes(c.subtype) &&
         !self.lastAddedSubtypes?.includes(c.subtype)
       );
     case 'firstLifeGainThisTurn':
@@ -386,9 +392,11 @@ function queue(
   };
   ctx.s.pendingTriggers.push(pending);
   // Annie Joins Up: a legendary creature's triggered ability triggers an additional time.
+  // o can be a last-known token stand-in that no longer exists in state.objects.
   const d = defOf(ctx, o.defId);
   if (
     o.zone === 'battlefield' &&
+    !o.nonlegendary &&
     d.supertypes.includes('Legendary') &&
     d.types.includes('Creature') &&
     ctx.s.battlefield.some(
@@ -650,13 +658,15 @@ function detect(ctx: Ctx, ev: GameEvent): void {
                 o.controller === moved.controller &&
                 matchesFilter(ctx, moved.id, t.filter)
               );
-            if (t.on === 'selfOrCreatureEtb')
+            if (t.on === 'selfOrCreatureEtb') {
+              if (t.castFromNonHand && ev.castFromNonHandBy !== o.controller) return false;
               return (
                 o.id === moved.id ||
                 (isCreature &&
                   o.controller === moved.controller &&
                   matchesFilter(ctx, moved.id, t.filter))
               );
+            }
             return false;
           },
           moved,
@@ -947,7 +957,10 @@ function detect(ctx: Ctx, ev: GameEvent): void {
             if (
               t.on === 'creatureYouControlDies' &&
               t.filter &&
-              !defMatches(movedDef, t.filter) &&
+              !defMatches(
+                moved?.lastSubtypes ? { ...movedDef, subtypes: moved.lastSubtypes } : movedDef,
+                t.filter,
+              ) &&
               // Final Fantasy (11c): a type it gained (Jenova's Mutants).
               !(t.filter.subtype && moved?.lastAddedSubtypes?.includes(t.filter.subtype))
             )
@@ -1194,6 +1207,7 @@ function detect(ctx: Ctx, ev: GameEvent): void {
           (!a.trigger.fromHand || (item?.kind === 'spell' && !!item.fromHand)) &&
           // Reality Fracture (17a): Codie, Ravenous Codex: a prepared spell (the copy of a prepare spell).
           (!a.trigger.prepared || spellObj.preparedBy !== undefined) &&
+          (!a.trigger.notFromHand || (item?.kind === 'spell' && !item.fromHand)) &&
           // Final Fantasy (11c): a spell you don't own (Vaan).
           (!a.trigger.notOwned || spellObj.owner !== ev.player) &&
           (!a.trigger.spell || cardMatches(ctx, ev.id, a.trigger.spell, o.id)) &&

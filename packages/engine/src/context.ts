@@ -72,6 +72,10 @@ export interface Ctx {
   deferred?: EffectDef[];
   /** Reality Fracture (17c): the player whose effect is running (who "puts" the counters it adds), set by `runEffect`. */
   puttingPlayer?: PlayerId;
+  /** Caretakers: choices consumed while replaying a synchronous life gain. */
+  lifeGainChoices?: { choices: number[]; cursor: number };
+  /** Already-delivered event prefix reconstructed by a replacement replay. */
+  replayedEvents?: number;
 }
 
 export function makeCtx(
@@ -193,7 +197,11 @@ export function defOf(ctx: Ctx, defId: string): CardDefinition {
 
 export function def(ctx: Ctx, id: ObjectId): CardDefinition {
   const o = obj(ctx, id);
-  const d = defOf(ctx, o.defId);
+  const printed = defOf(ctx, o.defId);
+  // Iron Man: a nonlegendary copy is nonlegendary for every rule, not just the legend rule.
+  const d = o.nonlegendary
+    ? { ...printed, supertypes: printed.supertypes.filter((t) => t !== 'Legendary') }
+    : printed;
   if (o.foodBy !== undefined) {
     const aura = ctx.s.objects[o.foodBy];
     if (aura && aura.zone === 'battlefield' && aura.attachedTo === id) return foodDef(d);
@@ -479,6 +487,8 @@ function zoneList(ctx: Ctx, o: GameObject, zone: ZoneName): ObjectId[] | null {
 }
 
 export interface MoveOptions {
+  /** Runaways: provenance of the resolving spell, never retained through blinking. */
+  castFromNonHandBy?: PlayerId;
   /** Library position; default top. */
   // 'second': second from the top (Trickster's Stratagem, Marvel Super Heroes).
   position?: 'top' | 'bottom' | 'second';
@@ -586,6 +596,7 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
   if (from === 'battlefield') {
     const c = characteristics(ctx, id);
     o.lastPower = c.power;
+    o.lastSubtypes = [...c.subtypes];
     o.lastCounters = o.plusOneCounters;
     if (to === 'graveyard' && c.types.includes('Creature')) {
       ctx.s.turn.creaturesDied++;
@@ -594,6 +605,8 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
     if (o.addedSubtypes) o.lastAddedSubtypes = o.addedSubtypes;
     else delete o.lastAddedSubtypes;
     delete o.addedSubtypes;
+    delete o.creatureTypes;
+    delete o.creatureTypesTimestamp;
     // Strixhaven Brawl (15a): Enduring Courage: "if it was a creature".
     if (o.notCreature) o.lastNotCreature = true;
     else delete o.lastNotCreature;
@@ -847,6 +860,7 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
     defId: o.defId,
     from,
     to,
+    ...(opts.castFromNonHandBy ? { castFromNonHandBy: opts.castFromNonHandBy } : {}),
     ...(leftAs ? { leftAs } : {}),
     ...(leftBlank ? { leftBlank } : {}),
     // Final Fantasy (11c): "that creature's power" (Vincent Valentine).

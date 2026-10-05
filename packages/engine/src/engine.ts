@@ -1,5 +1,6 @@
 import { answerCommandZone } from './brawl.ts';
 import { cloneState } from './clone.ts';
+import { applyWithLifeGainChoices, createLifeGainSnapshotGate } from './life-gain-replacements.ts';
 import {
   type Ctx,
   type CustomEffect,
@@ -120,6 +121,7 @@ function stableStringify(v: unknown): string {
 export function createEngine(db: CardDb, options: EngineOptions = {}): Engine {
   // Final Fantasy Commander (12): the FIC one-offs are built in.
   const custom = { ...FIC_EFFECTS, ...options.customEffects };
+  const needsLifeGainSnapshot = createLifeGainSnapshotGate(db);
 
   return {
     db,
@@ -141,17 +143,21 @@ export function createEngine(db: CardDb, options: EngineOptions = {}): Engine {
       validate(state, action, opts);
       const next = cloneState(state);
       const ctx = makeCtx(next, db, custom);
-      apply(ctx, action);
+      applyWithLifeGainChoices(ctx, action, state, apply);
       // A resolution that paused to ask something still owes its triggers so far.
       collectTriggers(ctx);
+      if (ctx.replayedEvents) ctx.events.splice(0, ctx.replayedEvents);
       return { state: next, events: ctx.events };
     },
 
     applyActionInPlace(state, action, opts = {}) {
       validate(state, action, opts);
+      const snapshot = needsLifeGainSnapshot(state) ? cloneState(state) : undefined;
       const ctx = makeCtx(state, db, custom);
-      apply(ctx, action);
+      if (snapshot) applyWithLifeGainChoices(ctx, action, snapshot, apply);
+      else apply(ctx, action);
       collectTriggers(ctx);
+      if (ctx.replayedEvents) ctx.events.splice(0, ctx.replayedEvents);
       return ctx.events;
     },
   };
@@ -202,6 +208,26 @@ function afterMulliganDecision(ctx: Ctx, player: PlayerId): void {
 
 function apply(ctx: Ctx, action: Action): void {
   const s = ctx.s;
+  // Iron Man: copying a triggering spell still works after it leaves the stack.
+  // Snapshots are immutable and expire with the turn, like the cast history.
+  const subjects = [
+    ...s.pendingTriggers.map((t) => t.subject),
+    ...s.stack.flatMap((item) => item.kind === 'ability' ? [item.subject] : []),
+  ];
+  if ('resume' in s.decision) subjects.push(s.decision.resume?.subject);
+  if (s.decision.kind === 'chooseTriggerTargets') subjects.push(s.decision.trigger.subject);
+  for (const item of s.stack) {
+    if (item.kind !== 'spell' || !subjects.some((ref) => ref?.id === item.id)) continue;
+    const o = s.objects[item.id]!;
+    (s.turn.spellHistory ??= {})[`${o.id}:${o.zcc}`] = {
+      defId: o.defId,
+      spell: {
+        ...item,
+        targets: item.targets.map((t) => 'object' in t ? { object: { ...t.object } } : { ...t }),
+        ...(item.paws ? { paws: [...item.paws] } : {}),
+      },
+    };
+  }
   const player = action.player;
   const ps = s.players[player];
   const d = s.decision;
@@ -244,6 +270,22 @@ function apply(ctx: Ctx, action: Action): void {
       return givePriority(ctx, player);
     case 'castSpell': {
       // Cast for free in the middle of a resolution (Daring Waverider).
+      if (d.kind === 'castFree' && d.exact) {
+        const paused = castSpell(
+          ctx,
+          player,
+          action.card,
+          action.targets,
+          { ...action, via: 'freeExact' },
+          action.payWith,
+        );
+        if (paused && ctx.s.decision.kind === 'forageExile') {
+          ctx.s.decision.resume = d.resume;
+          ctx.s.decision.thenPriority = d.thenPriority;
+          return;
+        }
+        return finishCastFree(ctx, action.card);
+      }
       if (d.kind === 'castFree') {
         const paused = castSpell(ctx, player, action.card, action.targets, {
           mode: action.mode,

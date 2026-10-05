@@ -656,6 +656,8 @@ export type TriggerDef =
       // Reality Fracture (17a): Codie, Ravenous Codex
       /** Only prepared spells (the copy of a prepare spell, cast while its creature is prepared). */
       prepared?: boolean;
+      /** Runaways: spells cast from anywhere other than hand. */
+      notFromHand?: boolean;
       // Final Fantasy (11c): spells you don't own
       /** Only spells the caster doesn't own (Vaan, Street Thief). */
       notOwned?: boolean;
@@ -736,7 +738,7 @@ export type TriggerDef =
   /** Whenever another permanent you control matching the filter enters (Honored Dreyleader). */
   | { on: 'otherPermanentEtb'; filter: CardFilter }
   /** Whenever this creature or another creature you control matching the filter enters (Harvestrite Host). */
-  | { on: 'selfOrCreatureEtb'; filter: CardFilter }
+  | { on: 'selfOrCreatureEtb'; filter: CardFilter; castFromNonHand?: boolean }
   /** Expend N: whenever you spend your Nth total mana this turn. */
   | { on: 'expend'; amount: number }
   /** Valiant: this creature becomes the target of your spell or ability for the first time this turn. */
@@ -1117,6 +1119,8 @@ export type ConditionDef =
   // Final Fantasy (11c): rare conditions
   /** Your life total is at most half your starting life total (Cecil, Dark Knight). */
   | { kind: 'lifeAtMostHalfStarting' }
+  // Caretakers: Doctor Strange, Surgeon.
+  | { kind: 'lifeAboveStarting'; amount: number }
   /** This is the first combat phase of the turn (Genji Glove, Balthier and Fran). */
   | { kind: 'firstCombatPhase' }
   /** This is the first end step of the turn (Y'shtola Rhul). */
@@ -1551,7 +1555,9 @@ export type Amount =
   | { count: 'greatestInstantSorceryCastThisTurn' };
 
 export type EffectDef =
-  | { kind: 'may'; effects: EffectDef[]; cost?: ManaCost }
+  | { kind: 'may'; effects: EffectDef[]; cost?: ManaCost; oncePerTurn?: string }
+  // Iron Man: resolution-time use, consumed only when the optional action is taken.
+  | { kind: 'noteOptionalUse'; key: string }
   /** `exceptFrom`: not to the creature dealing it (Nova Flame: "each other creature"). */
   | {
       kind: 'damage';
@@ -1601,6 +1607,8 @@ export type EffectDef =
       basePT?: [number, number];
       /** It becomes an artifact creature until end of turn (I Am Iron Man). */
       becomesCreature?: boolean;
+      /** Temporary creature subtype (Iron Suitcase). */
+      creatureSubtype?: string;
       /** Prevent all combat damage that would be dealt to it this turn (Fleeting Flight). */
       preventCombatDamage?: boolean;
       // Final Fantasy (11c): leftovers
@@ -1691,7 +1699,7 @@ export type EffectDef =
   /** Portent of Calamity: reveal the top X and exile one card of each type; four or more lets you cast one free. */
   | { kind: 'portent' }
   /** The Infamous Cruelclaw: exile until a nonland card; you may cast it by discarding a card instead. */
-  | { kind: 'exileUntilNonlandCastByDiscard' }
+  | { kind: 'exileUntilNonlandCastByDiscard'; withoutDiscard?: boolean }
   /**
    * Dragonhawk: exile the top N (playable until your next end step); at your
    * next end step, deal `damage` to each opponent per card still exiled.
@@ -1907,6 +1915,8 @@ export type EffectDef =
       untilEndOfTurn?: boolean;
       /** Spend it only on spells with this tag (Helga: 'BigCreature'). */
       onlyFor?: string;
+      /** Karolina Dean: cannot pay for spells cast from hand. */
+      notForHandSpells?: boolean;
     }
   /** Exile permanents; return them at the beginning of the next end step (with counters). */
   | {
@@ -2230,6 +2240,8 @@ export type EffectDef =
       /** Internal: the permanent just chosen ('chosen') gets its counters now. */
       afterChoice?: boolean;
     }
+  // Caretakers: Donald Blake replaces only creature types, permanently.
+  | { kind: 'setCreatureTypes'; what: Ref; subtypes: string[] }
   /** Put named counters on the source (Drake Hatcher), or on `to`. */
   | { kind: 'namedCounters'; name: string; amount: Amount; to?: Ref }
   /** Look at the top N, split them into two piles; an opponent picks one for your hand (Curator of Destinies). */
@@ -3069,6 +3081,10 @@ export interface GameObject {
   lastAttachedTo?: ObjectRef;
   /** Subtypes gained on top of the printed ones (Infernal Vessel's Demon). */
   addedSubtypes?: string[];
+  /** Caretakers: creature types replacing the printed ones. */
+  creatureTypes?: string[];
+  creatureTypesTimestamp?: number;
+  lastSubtypes?: string[];
   /** Subtypes it had gained as it last left the battlefield. */
   lastAddedSubtypes?: string[];
   // Strixhaven Brawl (15b, b): Terrors of the Track's duplicate has lost double team.
@@ -3293,6 +3309,8 @@ export type TargetChoice = { player: PlayerId } | { object: ObjectRef };
 export interface PlayerState {
   id: PlayerId;
   life: number;
+  /** Actual starting life, including format and game setup overrides. */
+  startingLife?: number;
   /** Index 0 is the top card. */
   library: ObjectId[];
   hand: ObjectId[];
@@ -3331,6 +3349,7 @@ export interface PlayerState {
     produces: ManaType[];
     untilEndOfTurn?: boolean;
     onlyFor?: string;
+    notForHandSpells?: boolean;
     /** Mystical Archive (16): Channel: spending this mana costs 1 life. */
     lifeCost?: boolean;
   }[];
@@ -3356,6 +3375,8 @@ export interface PlayerState {
 export type StackItem =
   | {
       kind: 'spell';
+      /** Original caster, retained if control of the spell changes. */
+      castBy?: PlayerId;
       id: ObjectId;
       controller: PlayerId;
       targets: TargetChoice[];
@@ -3430,6 +3451,10 @@ export type Step =
   | 'cleanup';
 
 export interface TurnState {
+  /** Iron Man: source identity and effect key, independent of later zone changes. */
+  optionalUses?: string[];
+  /** Iron Man: last known spell information for non-targeted trigger copies. */
+  spellHistory?: Record<string, { defId: CardDefId; spell: Extract<StackItem, { kind: 'spell' }> }>;
   // Marvel Super Heroes
   /** Power-up abilities can't be activated this turn (Kang the Conqueror's extra turn). */
   noPowerUp?: boolean;
@@ -3597,6 +3622,7 @@ export interface ContinuousEffect {
   // Reality Fracture (17a): Puppet Crafting
   /** With `becomesCreature`: a creature only, not an artifact too. */
   creatureOnly?: boolean;
+  creatureSubtype?: string;
   /** Combat damage that would be dealt to it is prevented (Fleeting Flight). */
   preventCombatDamage?: boolean;
   /** Base power and toughness. */
@@ -3980,6 +4006,8 @@ export type Decision =
   | {
       /** Forage by exiling cards from the graveyard, one at a time. */
       kind: 'forageExile';
+      /** Runaways: the spell is cast only after all additional costs are paid. */
+      castingSpell?: { card: ObjectId; targets: TargetChoice[]; sacrificed: number };
       player: PlayerId;
       count: number;
       // Reality Fracture (17a fixes): Gallia, Tragic Host
@@ -4015,6 +4043,8 @@ export type Decision =
       player: PlayerId;
       /** Heading for the prompt, if not "<card>: choose one" (Learn). */
       title?: string;
+      /** Caretakers: flat replay continuation for synchronous replacement choices. */
+      lifeGainReplay?: import('./life-gain-replacements.ts').LifeGainReplay;
       options: { label: string; effects: EffectDef[] }[];
       resume: PausedResolution;
       thenPriority: PlayerId;
@@ -4052,6 +4082,8 @@ export type Decision =
   | {
       /** Cast one of these cards for free now, or not (Daring Waverider, Portent of Calamity). */
       kind: 'castFree';
+      /** Runaways: normal additional costs and restrictions, with timing permission. */
+      exact?: boolean;
       player: PlayerId;
       cards: ObjectId[];
       exileAfter?: boolean;
@@ -4203,6 +4235,7 @@ export type Action =
         | 'omnipresence'
         // Reality Fracture (17c): Chandra, Torch of Defiance.
         | 'now'
+        | 'freeExact'
         | 'noctis'
         | 'hades';
       /** Mockingbird: the creature to enter as a copy of. */
@@ -4280,6 +4313,8 @@ export type GameEvent =
       id: ObjectId;
       defId: CardDefId;
       from: ZoneName | null;
+      /** Runaways: a resolving creature spell actually cast outside hand. */
+      castFromNonHandBy?: PlayerId;
       to: ZoneName;
       // Final Fantasy (11b): creatures and artifacts dying
       /** Who controlled it as it left the battlefield (a token is gone by the time triggers look). */
