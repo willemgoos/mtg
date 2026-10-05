@@ -52,6 +52,8 @@ import {
   MAX_LANES,
   PACK_SET_NAMES,
   packSetOf,
+  isWildcardReward,
+  type MapNode,
   redeemWildcard,
   RARE_EVERY,
   salvageCard,
@@ -65,6 +67,7 @@ import {
 import { burst, flash, fxOn, later, mountFx, ring } from '../game/fx.ts';
 import { ruleNotes } from '../game/notes.ts';
 import { play } from '../game/sound.ts';
+import { useCardFilters } from './CardFilters.tsx';
 import { DeckBuilder } from './DeckBuilder.tsx';
 import './home.css';
 import './expedition.css';
@@ -159,7 +162,7 @@ function Screens({
         text={
           run.pending.mythic
             ? 'Take one for your collection.'
-            : 'Take one for your collection. A boon comes next.'
+            : 'Take one for your collection. You also earned an uncommon wildcard. A boon comes next.'
         }
         cards={run.pending.options}
         fx={run.pending.mythic ? 'mythic' : 'rare'}
@@ -389,7 +392,7 @@ function nodeInfo(
     : '';
   switch (node.kind) {
     case 'duel':
-      return { title, lines: [opp, `Win: ${packName(node.reward!)}`] };
+      return { title, lines: [opp, `Win: ${rewardName(node.reward!)}`] };
     case 'elite': {
       const twist = twistOf(run, floor, lane);
       return twist
@@ -519,7 +522,7 @@ function ExpeditionMap({
         ? 'Your next fight is ready.'
         : 'Choose where to go next.'
       : status === 'cleared'
-        ? 'Set out again with the deck and cards you’ve built. Lives and boons start over.'
+        ? 'The final battle paid a rare wildcard. Set out again with the deck and cards you’ve built. Lives and boons start over.'
         : `Floors cleared: ${run.outcomes.length} of ${floors} · best with this deck: ${best}`;
   // Expeditions cleared with this deck before this map, counting from the first.
   const number = (run.loop ?? 0) + 1;
@@ -654,11 +657,14 @@ function ExpeditionMap({
                 {!onPath && node.reward && (
                   <span
                     className={`xnode__reward ${node.reward.kind === 'color' ? `pip--${node.reward.color}` : `is-${node.reward.kind}`}`}
-                    title={packName(node.reward)}
+                    title={rewardName(node.reward)}
                   />
                 )}
                 {!onPath && node.kind === 'elite' && (
-                  <span className="xnode__reward is-rare" title="A rare of your choice" />
+                  <span
+                    className="xnode__reward is-rare"
+                    title="A rare of your choice and an uncommon wildcard"
+                  />
                 )}
                 {!onPath && twistOf(run, f, lane) && (
                   <span
@@ -943,6 +949,10 @@ function MysteryEvent({
     </div>
   );
 }
+
+/** What a duel pays, for the map. */
+const rewardName = (r: NonNullable<MapNode['reward']>) =>
+  isWildcardReward(r) ? `${r.rarity[0]!.toUpperCase()}${r.rarity.slice(1)} wildcard` : packName(r);
 
 const imageOf = (name: string) => scryfallById.get(slug(name))?.image?.normal ?? '';
 
@@ -1355,7 +1365,15 @@ function Salvage({
   const [choice, setRedeeming] = useState<WildcardRarity | null>(null);
   const b = run.build;
   const redeeming = choice && wildcardsOf(b, choice) > 0 ? choice : null;
+  const picker = useCardFilters();
+  const filters = useCardFilters({ rarity: true });
+  const [where, setWhere] = useState<'all' | 'spare' | 'deck'>('all');
   const cards = useMemo(() => pickable(run, 'mirror'), [run]);
+  const shown = cards.filter(
+    (n) =>
+      filters.test(n) &&
+      (where === 'all' || (where === 'spare' ? (b.side[n] ?? 0) > 0 : (b.main[n] ?? 0) > 0)),
+  );
   const meter = b.salvage ?? 0;
   const untilRare = RARE_EVERY - ((b.fills ?? 0) % RARE_EVERY);
   const kinds: WildcardRarity[] = ['uncommon', 'rare'];
@@ -1368,24 +1386,27 @@ function Salvage({
           <h1>Redeem {redeeming} wildcard</h1>
           <p>Choose any {redeeming} card. It goes into your collection.</p>
         </div>
+        {picker.bar()}
         <div className="merchant__cards">
-          {wildcardCards(run, redeeming).map((name) => (
-            <button
-              key={name}
-              className="merchant__card"
-              onClick={() => {
-                play('chime');
-                update((s) => redeemWildcard(s, redeeming, name));
-              }}
-              onMouseEnter={(e) => setHover({ defId: slug(name), anchor: e.currentTarget })}
-              onMouseLeave={() => setHover(null)}
-            >
-              <img src={imageOf(name)} alt={name} draggable={false} />
-              <span className="merchant__where">
-                {owned(b, name) > 0 ? `${owned(b, name)} owned` : 'New'}
-              </span>
-            </button>
-          ))}
+          {wildcardCards(run, redeeming)
+            .filter(picker.test)
+            .map((name) => (
+              <button
+                key={name}
+                className="merchant__card"
+                onClick={() => {
+                  play('chime');
+                  update((s) => redeemWildcard(s, redeeming, name));
+                }}
+                onMouseEnter={(e) => setHover({ defId: slug(name), anchor: e.currentTarget })}
+                onMouseLeave={() => setHover(null)}
+              >
+                <img src={imageOf(name)} alt={name} draggable={false} />
+                <span className="merchant__where">
+                  {owned(b, name) > 0 ? `${owned(b, name)} owned` : 'New'}
+                </span>
+              </button>
+            ))}
         </div>
         <div className="gauntlet__actions">
           <button className="btn btn--ghost" onClick={() => setRedeeming(null)}>
@@ -1426,9 +1447,24 @@ function Salvage({
           Done
         </button>
       </div>
+      {filters.bar(
+        <div className="dbk__chips" role="group" aria-label="Where the card is">
+          {(['all', 'spare', 'deck'] as const).map((w) => (
+            <button
+              key={w}
+              className={`dbk__chip ${where === w ? 'is-on' : ''}`}
+              aria-pressed={where === w}
+              onClick={() => setWhere(w)}
+            >
+              {w === 'all' ? 'Everything' : w === 'spare' ? 'Spare' : 'In deck'}
+            </button>
+          ))}
+        </div>,
+      )}
+      {shown.length === 0 && <p className="merchant__note">No cards match.</p>}
       <YourCards
         build={b}
-        cards={cards}
+        cards={shown}
         picked={[]}
         takes
         onPick={(name) => {

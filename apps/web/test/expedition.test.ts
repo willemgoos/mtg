@@ -1091,3 +1091,46 @@ describe('expedition salvage', () => {
     expect((b.fills ?? 0) * SALVAGE_METER + (b.salvage ?? 0)).toBe(total);
   });
 });
+
+describe('expedition wildcard rewards', () => {
+  const rarities = (s: ExpeditionState) => [
+    wildcardsOf(s.run!.build, 'uncommon'),
+    wildcardsOf(s.run!.build, 'rare'),
+  ];
+
+  it('rolls some duels that pay an uncommon wildcard', () => {
+    const rewards = Array.from({ length: 40 }, (_, seed) =>
+      makeMap(deck, seed)
+        .flat()
+        .flatMap((n) => (n.kind === 'duel' && n.reward ? [n.reward] : [])),
+    ).flat();
+    const wild = rewards.filter((r) => r.kind === 'wildcard');
+    expect(wild.length).toBeGreaterThan(0);
+    expect(wild.length).toBeLessThan(rewards.length / 4);
+    expect(wild.every((r) => r.kind === 'wildcard' && r.rarity === 'uncommon')).toBe(true);
+  });
+
+  it('pays the wildcard instead of a pack when such a duel is won', () => {
+    let s = onMap(['duel', 'duel', 'duel']);
+    const wild = { kind: 'wildcard', rarity: 'uncommon' } as const;
+    s = {
+      ...s,
+      run: { ...s.run!, map: s.run!.map.map((f) => f.map((n) => ({ ...n, reward: wild }))) },
+    };
+    s = fight(enterNode(s, 1), 'win');
+    expect(s.run!.build.packs).toEqual([]);
+    expect(rarities(s)).toEqual([1, 0]);
+  });
+
+  it('pays an uncommon wildcard for an elite and a rare one for the final battle', () => {
+    let s = fight(enterNode(onMap(['elite', 'elite', 'elite']), 1), 'win');
+    expect(rarities(s)).toEqual([1, 0]);
+    s = onMap(['duel', 'duel', 'duel']);
+    for (let f = 0; f < FLOORS - 1; f++) s = openAll(fight(enterNode(s, 1), 'win'));
+    const before = rarities(s);
+    s = fight(enterNode(s, 0), 'loss');
+    expect(rarities(s)).toEqual(before);
+    s = fight(s, 'win');
+    expect(rarities(s)[1]).toBe(before[1]! + 1);
+  });
+});

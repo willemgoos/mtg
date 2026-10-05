@@ -76,6 +76,13 @@ export interface Build {
 }
 
 export type WildcardRarity = 'uncommon' | 'rare';
+/** A duel that pays a wildcard instead of a pack. */
+export interface WildcardReward {
+  kind: 'wildcard';
+  rarity: WildcardRarity;
+}
+export const isWildcardReward = (p: Pack | WildcardReward): p is WildcardReward =>
+  p.kind === 'wildcard';
 
 // ---------------------------------------------------------------------------
 // Boons
@@ -179,7 +186,7 @@ export interface MapNode {
   /** The opponent's deck, for fights. */
   opponent?: string;
   /** What a won duel pays out. */
-  reward?: Pack;
+  reward?: Pack | WildcardReward;
   /** What happens at a mystery node. */
   event?: EventId;
   /** An elite's edge. */
@@ -414,10 +421,11 @@ export function makeMap(deck: string, seed: number): MapNode[][] {
     met.push(id);
     return id;
   };
-  const reward = (): Pack => {
+  const reward = (): Pack | WildcardReward => {
     const r = next();
     if (r < 0.4) return { kind: 'color', color: pick(own.length ? own : COLORS) };
     if (r < 0.7) return { kind: 'color', color: pick(COLORS.filter((c) => !own.includes(c))) };
+    if (r >= 0.9) return { kind: 'wildcard', rarity: 'uncommon' };
     return { kind: 'booster' };
   };
   // Mystery events don't repeat until every one has come up.
@@ -1222,14 +1230,19 @@ export function recordMatch(
   const { fight: event, ...rest } = r;
   const next: ExpeditionRun = { ...rest, match: null };
   const packs = [...r.build.packs];
+  let wildcard: WildcardRarity | null = null;
   if (outcome === 'win') {
     next.outcomes = [...r.outcomes, 'win'];
     if (event?.kind === 'ambush') packs.push({ kind: 'rare' });
     else if (event?.kind === 'duelist') {
       const options = boonOffer(r);
       if (options.length) next.pending = { kind: 'boon', options };
-    } else if (at.node.kind === 'duel' && at.node.reward) packs.push(at.node.reward);
+    } else if (at.node.kind === 'duel' && at.node.reward) {
+      if (isWildcardReward(at.node.reward)) wildcard = at.node.reward.rarity;
+      else packs.push(at.node.reward);
+    } else if (at.node.kind === 'boss') wildcard = 'rare';
     else if (at.node.kind === 'elite') {
+      wildcard = 'uncommon';
       next.pending = { kind: 'rareDraft', options: rareOffer(r, 2, has(r, 'deepPockets') ? 4 : 3) };
       if (f.twist) packs.push({ kind: 'booster' });
     }
@@ -1238,10 +1251,21 @@ export function recordMatch(
     if (!spared) next.livesLost = r.livesLost + 1;
     else if (event?.kind !== 'ambush') next.windUsed = true;
     if (at.node.kind !== 'boss') next.outcomes = [...r.outcomes, 'loss'];
-    if (has(r, 'scavenger') && !event && at.node.kind === 'duel' && at.node.reward)
+    if (
+      has(r, 'scavenger') &&
+      !event &&
+      at.node.kind === 'duel' &&
+      at.node.reward &&
+      !isWildcardReward(at.node.reward)
+    )
       packs.push({ ...at.node.reward, keep: 1 });
   }
   next.build = { ...r.build, packs };
+  if (wildcard)
+    next.build.wildcards = {
+      ...next.build.wildcards,
+      [wildcard]: wildcardsOf(next.build, wildcard) + 1,
+    };
   const rec = s.records[r.deck] ?? { runs: 1, clears: 0, best: 0 };
   return {
     run: next,
