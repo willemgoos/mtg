@@ -52,6 +52,15 @@ import {
   MAX_LANES,
   PACK_SET_NAMES,
   packSetOf,
+  redeemWildcard,
+  RARE_EVERY,
+  salvageCard,
+  SALVAGE_METER,
+  SALVAGE_POINTS,
+  UNKEPT_PER_POINT,
+  type WildcardRarity,
+  wildcardCards,
+  wildcardsOf,
 } from '../game/expedition.ts';
 import { burst, flash, fxOn, later, mountFx, ring } from '../game/fx.ts';
 import { ruleNotes } from '../game/notes.ts';
@@ -104,6 +113,7 @@ function Screens({
   const run = state.run!;
   const b = run.build;
   const [building, setBuilding] = useState(false);
+  const [salvaging, setSalvaging] = useState(false);
   if (b.packs.length)
     return (
       <PackOpening
@@ -195,6 +205,8 @@ function Screens({
     );
   if (!resumable && (building || size(b.main) < MIN_DECK))
     return <ExpeditionBuilder run={run} update={update} onDone={() => setBuilding(false)} />;
+  if (!resumable && salvaging)
+    return <Salvage run={run} update={update} onDone={() => setSalvaging(false)} />;
   return (
     <ExpeditionMap
       run={run}
@@ -206,6 +218,7 @@ function Screens({
       }}
       onPlay={onPlay}
       onDeck={() => setBuilding(true)}
+      onSalvage={() => setSalvaging(true)}
       onAbandon={onAbandon}
       onAgain={onAgain}
       onContinue={onContinue}
@@ -439,6 +452,7 @@ function ExpeditionMap({
   onEnter,
   onPlay,
   onDeck,
+  onSalvage,
   onAbandon,
   onAgain,
   onContinue,
@@ -450,6 +464,7 @@ function ExpeditionMap({
   onEnter: (lane: number) => void;
   onPlay: () => void;
   onDeck: () => void;
+  onSalvage: () => void;
   onAbandon: () => void;
   onAgain: () => void;
   onContinue: () => void;
@@ -709,6 +724,13 @@ function ExpeditionMap({
                 {!resumable && (
                   <button className="btn btn--ghost" onClick={onDeck}>
                     Edit deck
+                  </button>
+                )}
+                {!resumable && (
+                  <button className="btn btn--ghost" onClick={onSalvage}>
+                    Salvage
+                    {wildcardsOf(run.build, 'uncommon') + wildcardsOf(run.build, 'rare') > 0 &&
+                      ' ●'}
                   </button>
                 )}
                 <button className="btn btn--ghost" onClick={() => setConfirming(true)}>
@@ -1307,6 +1329,114 @@ function Merchant({
           Leave without trading
         </button>
       </div>
+      <HoverPreview hover={hover} notes={hover ? ruleNotes(hover.defId) : []} />
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Salvage
+// ---------------------------------------------------------------------------
+
+/**
+ * Break down cards you don't want: each copy fills the meter by its rarity, and a full
+ * meter pays a wildcard. Wildcards are redeemed here for any card of their rarity.
+ */
+function Salvage({
+  run,
+  update,
+  onDone,
+}: {
+  run: ExpeditionRun;
+  update: Update;
+  onDone: () => void;
+}) {
+  const [hover, setHover] = useState<HoverState | null>(null);
+  const [choice, setRedeeming] = useState<WildcardRarity | null>(null);
+  const b = run.build;
+  const redeeming = choice && wildcardsOf(b, choice) > 0 ? choice : null;
+  const cards = useMemo(() => pickable(run, 'mirror'), [run]);
+  const meter = b.salvage ?? 0;
+  const untilRare = RARE_EVERY - ((b.fills ?? 0) % RARE_EVERY);
+  const kinds: WildcardRarity[] = ['uncommon', 'rare'];
+  if (redeeming)
+    return (
+      <div className="start shell choice merchant">
+        <UiSize />
+        <div className="start__title">
+          <span className="start__eyebrow">Expedition · Wildcard</span>
+          <h1>Redeem {redeeming} wildcard</h1>
+          <p>Choose any {redeeming} card. It goes into your collection.</p>
+        </div>
+        <div className="merchant__cards">
+          {wildcardCards(run, redeeming).map((name) => (
+            <button
+              key={name}
+              className="merchant__card"
+              onClick={() => {
+                play('chime');
+                update((s) => redeemWildcard(s, redeeming, name));
+              }}
+              onMouseEnter={(e) => setHover({ defId: slug(name), anchor: e.currentTarget })}
+              onMouseLeave={() => setHover(null)}
+            >
+              <img src={imageOf(name)} alt={name} draggable={false} />
+              <span className="merchant__where">
+                {owned(b, name) > 0 ? `${owned(b, name)} owned` : 'New'}
+              </span>
+            </button>
+          ))}
+        </div>
+        <div className="gauntlet__actions">
+          <button className="btn btn--ghost" onClick={() => setRedeeming(null)}>
+            Back
+          </button>
+        </div>
+        <HoverPreview hover={hover} notes={hover ? ruleNotes(hover.defId) : []} />
+      </div>
+    );
+  return (
+    <div className="start shell choice merchant">
+      <UiSize />
+      <div className="start__title">
+        <span className="start__eyebrow">Expedition · Salvage</span>
+        <h1>
+          Salvage {meter}/{SALVAGE_METER}
+        </h1>
+        <p>
+          Click a card to break down one copy: common {SALVAGE_POINTS.common}, uncommon{' '}
+          {SALVAGE_POINTS.uncommon}, rare {SALVAGE_POINTS.rare}, mythic {SALVAGE_POINTS.mythic}. A
+          full meter pays an uncommon wildcard, and every {RARE_EVERY}rd one is a rare instead (
+          {untilRare === 1 ? 'the next one is' : `${untilRare} to go`}). Cards you pass on in a pack
+          count too: 1 point for every {UNKEPT_PER_POINT}.
+        </p>
+      </div>
+      <div className="gauntlet__actions">
+        {kinds.map((r) => (
+          <button
+            key={r}
+            className="btn btn--primary"
+            disabled={wildcardsOf(b, r) < 1}
+            onClick={() => setRedeeming(r)}
+          >
+            Redeem {r} wildcard ({wildcardsOf(b, r)})
+          </button>
+        ))}
+        <button className="btn btn--ghost" onClick={onDone}>
+          Done
+        </button>
+      </div>
+      <YourCards
+        build={b}
+        cards={cards}
+        picked={[]}
+        takes
+        onPick={(name) => {
+          play('place', { gain: 0.6 });
+          update((s) => salvageCard(s, name));
+        }}
+        onHover={setHover}
+      />
       <HoverPreview hover={hover} notes={hover ? ruleNotes(hover.defId) : []} />
     </div>
   );

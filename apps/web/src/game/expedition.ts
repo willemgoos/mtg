@@ -67,7 +67,15 @@ export interface Build {
   packs: Pack[];
   /** Cards kept from the most recent packs, marked as new in the deck builder. */
   fresh: string[];
+  /** Salvage progress toward the next wildcard (absent on runs saved before salvage). */
+  salvage?: number;
+  /** Salvage meters filled so far; every third one pays a rare wildcard. */
+  fills?: number;
+  /** Wildcards waiting to be redeemed for any card of their rarity. */
+  wildcards?: Partial<Record<WildcardRarity, number>>;
 }
+
+export type WildcardRarity = 'uncommon' | 'rare';
 
 // ---------------------------------------------------------------------------
 // Boons
@@ -1345,12 +1353,7 @@ export const PACK_SET_NAMES: Record<PackSet, string> = {
 };
 
 const asPackSet = (set: string | undefined): PackSet =>
-  set === 'blb' ||
-  set === 'msh' ||
-  set === 'fin' ||
-  set === 'stx' ||
-  set === 'sos' ||
-  set === 'fra'
+  set === 'blb' || set === 'msh' || set === 'fin' || set === 'stx' || set === 'sos' || set === 'fra'
     ? set
     : 'fdn';
 
@@ -1470,15 +1473,24 @@ export function openPacks(s: ExpeditionState, kept: string[][]): ExpeditionState
   return withRun(s, (r) => {
     const packs = pendingPacks(r);
     const keeps = packKeeps(r);
-    const cards = packs.flatMap((pack, i) =>
+    const keptPer = packs.map((pack, i) =>
       [...new Set(kept[i] ?? [])].filter((c) => pack.includes(c)).slice(0, keeps[i]),
     );
+    const cards = keptPer.flat();
     const side = { ...r.build.side };
     for (const c of cards) side[c] = (side[c] ?? 0) + 1;
     const b = r.build;
+    // Cards you passed on are salvaged, a point for every two from each pack.
+    const passed = packs.reduce(
+      (k, pack, i) => k + Math.floor((pack.length - keptPer[i]!.length) / UNKEPT_PER_POINT),
+      0,
+    );
     return {
       ...r,
-      build: { ...b, side, opened: b.opened + b.packs.length, packs: [], fresh: cards },
+      build: addSalvage(
+        { ...b, side, opened: b.opened + b.packs.length, packs: [], fresh: cards },
+        passed,
+      ),
     };
   });
 }
@@ -1486,6 +1498,80 @@ export function openPacks(s: ExpeditionState, kept: string[][]): ExpeditionState
 // ---------------------------------------------------------------------------
 // The deck
 // ---------------------------------------------------------------------------
+
+// ---------------------------------------------------------------------------
+// Salvage: cards you don't want fill a meter, and each full meter is a wildcard
+// ---------------------------------------------------------------------------
+
+/** Salvage points a copy is worth, by rarity. */
+export const SALVAGE_POINTS: Record<string, number> = {
+  common: 1,
+  uncommon: 2,
+  rare: 4,
+  mythic: 8,
+};
+/** Points that fill the meter. */
+export const SALVAGE_METER = 10;
+/** Every this-many meters pays a rare wildcard instead of an uncommon one. */
+export const RARE_EVERY = 3;
+/** Cards of a pack you didn't keep that make one salvage point. */
+export const UNKEPT_PER_POINT = 2;
+
+export const wildcardsOf = (b: Build, r: WildcardRarity): number => b.wildcards?.[r] ?? 0;
+
+/** Adds salvage points, paying a wildcard for each time the meter fills. */
+function addSalvage(b: Build, points: number): Build {
+  let meter = (b.salvage ?? 0) + points;
+  let fills = b.fills ?? 0;
+  const wild = { ...b.wildcards };
+  while (meter >= SALVAGE_METER) {
+    meter -= SALVAGE_METER;
+    fills++;
+    const r: WildcardRarity = fills % RARE_EVERY === 0 ? 'rare' : 'uncommon';
+    wild[r] = (wild[r] ?? 0) + 1;
+  }
+  return { ...b, salvage: meter, fills, wildcards: wild };
+}
+
+/** Salvages one copy of a card from the collection (or the deck, if no spare is left). */
+export function salvageCard(s: ExpeditionState, name: string): ExpeditionState {
+  return withRun(s, (r) => {
+    if (r.pending) return r;
+    const b = give(r.build, name);
+    const points = SALVAGE_POINTS[byName.get(name)?.rarity ?? ''];
+    if (!b || !points) return r;
+    return { ...r, build: { ...addSalvage(b, points), fresh: [] } };
+  });
+}
+
+/** Cards a wildcard of this rarity can redeem: that rarity from the run's set (both, for Jump In). */
+export function wildcardCards(r: ExpeditionRun, rarity: WildcardRarity): string[] {
+  const sets = new Set([packSetOf(r, 0), packSetOf(r, 1)]);
+  const names = [...sets].flatMap((set) => SHEETS[set][rarity].map((c) => c.name));
+  return [...new Set(names)].sort((a, b) => a.localeCompare(b));
+}
+
+/** Spends a wildcard on a card of its rarity, which goes into your collection. */
+export function redeemWildcard(
+  s: ExpeditionState,
+  rarity: WildcardRarity,
+  name: string,
+): ExpeditionState {
+  return withRun(s, (r) => {
+    if (r.pending || wildcardsOf(r.build, rarity) < 1) return r;
+    if (!wildcardCards(r, rarity).includes(name)) return r;
+    const b = r.build;
+    return {
+      ...r,
+      build: {
+        ...b,
+        wildcards: { ...b.wildcards, [rarity]: wildcardsOf(b, rarity) - 1 },
+        side: bump(b.side, name, 1),
+        fresh: [name],
+      },
+    };
+  });
+}
 
 /** Moves one copy between deck and collection. Basic lands come from and go back to the free supply. */
 export function moveCard(s: ExpeditionState, name: string, to: 'main' | 'side'): ExpeditionState {

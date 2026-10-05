@@ -16,6 +16,11 @@ import { STX_BOOSTER_LIST } from '../../../packages/cards/src/stx/booster-list.t
 import { describe, expect, it } from 'vitest';
 import {
   owned,
+  redeemWildcard,
+  salvageCard,
+  SALVAGE_METER,
+  wildcardCards,
+  wildcardsOf,
   applySuggestion,
   camp,
   canChoose,
@@ -1019,5 +1024,70 @@ describe('expedition surveyor', () => {
     expect(
       deckAdvice({ ...s.run!.build, main: heavy }).some((a) => a.includes('no coloured mana')),
     ).toBe(true);
+  });
+});
+
+describe('expedition salvage', () => {
+  const named = (rarity: string) =>
+    [...card.values()].filter((c) => c.set === 'fdn' && c.rarity === rarity && !c.front)[0]!.name;
+  const started = () => startExpedition(empty, deck, 5);
+  const withSide = (s: ExpeditionState, side: Record<string, number>): ExpeditionState => ({
+    ...s,
+    run: { ...s.run!, build: { ...s.run!.build, packs: [], side } },
+  });
+
+  it('breaks a copy down for points by rarity', () => {
+    const [c, r] = [named('common'), named('rare')];
+    let s = withSide(started(), { [c]: 2, [r]: 1 });
+    s = salvageCard(s, c);
+    expect(s.run!.build.side[c]).toBe(1);
+    expect(s.run!.build.salvage).toBe(1);
+    s = salvageCard(s, r);
+    expect(s.run!.build.salvage).toBe(5);
+    expect(s.run!.build.side[r]).toBeUndefined();
+  });
+
+  it('takes from the deck when no spare is left, and never from basic lands', () => {
+    const inDeck = Object.keys(started().run!.build.main).find(
+      (n) => card.get(n)?.rarity === 'common' && !card.get(n)?.typeLine.startsWith('Basic'),
+    )!;
+    const s = salvageCard(withSide(started(), {}), inDeck);
+    expect(owned(s.run!.build, inDeck)).toBe(owned(started().run!.build, inDeck) - 1);
+    expect(salvageCard(s, 'Plains')).toEqual(s);
+  });
+
+  it('pays an uncommon wildcard per full meter and a rare on every third', () => {
+    let s = withSide(started(), { [named('mythic')]: 99 });
+    for (let i = 0; i < 3; i++) {
+      s = salvageCard(s, named('mythic'));
+      s = salvageCard(s, named('mythic'));
+    }
+    // 6 mythics = 48 points: four meters and 8 over (fills 1-4: three uncommon, one rare on the 3rd).
+    const b = s.run!.build;
+    expect(b.fills).toBe(4);
+    expect(b.salvage).toBe(48 - 4 * SALVAGE_METER);
+    expect(wildcardsOf(b, 'uncommon')).toBe(3);
+    expect(wildcardsOf(b, 'rare')).toBe(1);
+  });
+
+  it('redeems a wildcard for a card of its rarity', () => {
+    let s = withSide(started(), { [named('mythic')]: 2 });
+    s = salvageCard(s, named('mythic'));
+    s = salvageCard(s, named('mythic'));
+    expect(wildcardsOf(s.run!.build, 'uncommon')).toBe(1);
+    const pick = wildcardCards(s.run!, 'uncommon')[0]!;
+    expect(redeemWildcard(s, 'rare', pick)).toEqual(s);
+    expect(redeemWildcard(s, 'uncommon', named('rare'))).toEqual(s);
+    s = redeemWildcard(s, 'uncommon', pick);
+    expect(wildcardsOf(s.run!.build, 'uncommon')).toBe(0);
+    expect(s.run!.build.side[pick]).toBe(1);
+  });
+
+  it('salvages cards you pass on in a pack, a point per two', () => {
+    const s = openPacks(started(), [[], []]);
+    const b = s.run!.build;
+    const left = pendingPacks(started().run!).map((p) => Math.floor(p.length / 2));
+    const total = left.reduce((a, n) => a + n, 0);
+    expect((b.fills ?? 0) * SALVAGE_METER + (b.salvage ?? 0)).toBe(total);
   });
 });
