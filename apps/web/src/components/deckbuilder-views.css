@@ -255,8 +255,7 @@
   flex: none;
   display: flex;
   flex-direction: column;
-  height: 46%;
-  min-height: 15rem;
+  min-height: 6rem;
   border-top: 0.0625rem solid var(--h-line);
   background: var(--h-surface);
 }
@@ -626,4 +625,51 @@
   .dbk__sort span {
     display: none;
   }
+}
+
+/* The handle between the collection and the deck tray: drag it up or down. */
+.dbk__splitter {
+  flex: none;
+  position: relative;
+  z-index: 2;
+  height: 0.625rem;
+  margin: -0.3125rem 0;
+  cursor: row-resize;
+  touch-action: none;
+}
+
+.dbk__splitter span {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 2.5rem;
+  height: 0.25rem;
+  border-radius: 1rem;
+  background: var(--h-line);
+  transform: translate(-50%, -50%);
+  transition:
+    background 0.15s,
+    width 0.15s;
+}
+
+.dbk__splitter:hover span,
+.dbk__splitter:focus-visible span,
+.dbk__stage.is-resizing .dbk__splitter span {
+  width: 4rem;
+  background: var(--h-accent);
+}
+
+.dbk__splitter:focus-visible {
+  outline: none;
+}
+
+/* While dragging: no text selection or hover effects in the panes. */
+.dbk__stage.is-resizing {
+  cursor: row-resize;
+  user-select: none;
+}
+
+.dbk__stage.is-resizing .dbk__pool,
+.dbk__stage.is-resizing .dbk__tray {
+  pointer-events: none;
 }

@@ -100,6 +100,20 @@ function savePref(key: string, value: string): void {
 }
 const bool = ['0', '1'] as const;
 
+/** The deck tray's share of the height in Columns view, between the collection and the tray. */
+const TRAY_SHARE = 0.46;
+const TRAY_MIN = 0.15;
+const TRAY_MAX = 0.85;
+const clampShare = (v: number) => Math.min(TRAY_MAX, Math.max(TRAY_MIN, v));
+function loadShare(): number {
+  try {
+    const v = Number(localStorage.getItem(PREFS + 'tray'));
+    return v ? clampShare(v) : TRAY_SHARE;
+  } catch {
+    return TRAY_SHARE;
+  }
+}
+
 interface Narrowing {
   colors: ReadonlySet<Filter>;
   costs: ReadonlySet<number>;
@@ -223,6 +237,9 @@ export function DeckBuilder({
   );
   const [view, setView] = useState(() => loadPref('view', ['list', 'columns'] as const, 'list'));
   const [split, setSplit] = useState(() => loadPref('split', bool, '1') === '1');
+  const [tray, setTray] = useState(loadShare);
+  const [resizing, setResizing] = useState(false);
+  const stageRef = useRef<HTMLDivElement>(null);
   const [moreOpen, setMoreOpen] = useState(false);
   const [landsOpen, setLandsOpen] = useState(false);
   const [drag, setDrag] = useState<{ from: 'pool' | 'deck'; name: string } | null>(null);
@@ -585,7 +602,7 @@ export function DeckBuilder({
         </span>
       </header>
 
-      <div className="dbk__stage">
+      <div className={`dbk__stage ${resizing ? 'is-resizing' : ''}`} ref={stageRef}>
         <main className={`dbk__pool ${dropClass('pool')}`} {...zone('pool')}>
           {shown.length === 0 && (
             <p className="dbk__empty">
@@ -664,7 +681,49 @@ export function DeckBuilder({
         </main>
 
         {columns && (
+          <div
+            className="dbk__splitter"
+            role="separator"
+            aria-orientation="horizontal"
+            aria-label="Resize the deck"
+            aria-valuemin={TRAY_MIN * 100}
+            aria-valuemax={TRAY_MAX * 100}
+            aria-valuenow={Math.round(tray * 100)}
+            tabIndex={0}
+            title="Drag to resize (double-click to reset)"
+            onPointerDown={(ev) => {
+              ev.preventDefault();
+              ev.currentTarget.setPointerCapture(ev.pointerId);
+              setResizing(true);
+            }}
+            onPointerMove={(ev) => {
+              const box = stageRef.current?.getBoundingClientRect();
+              if (!resizing || !box) return;
+              setTray(clampShare((box.bottom - ev.clientY) / box.height));
+            }}
+            onPointerUp={() => {
+              setResizing(false);
+              savePref('tray', String(tray));
+            }}
+            onDoubleClick={() => {
+              setTray(TRAY_SHARE);
+              savePref('tray', String(TRAY_SHARE));
+            }}
+            onKeyDown={(ev) => {
+              const step = ev.key === 'ArrowUp' ? 0.05 : ev.key === 'ArrowDown' ? -0.05 : 0;
+              if (!step) return;
+              ev.preventDefault();
+              const next = clampShare(tray + step);
+              setTray(next);
+              savePref('tray', String(next));
+            }}
+          >
+            <span aria-hidden />
+          </div>
+        )}
+        {columns && (
           <section
+            style={{ height: `${tray * 100}%` }}
             className={`dbk__tray ${dropClass('deck')}`}
             aria-label="Your deck, by mana value"
             {...zone('deck')}

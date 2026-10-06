@@ -77,6 +77,8 @@ import {
   landsFor,
   type BoonId,
   type PactId,
+  deckColors,
+  spellColors,
 } from '../src/game/expedition.ts';
 
 const deck = PLAYABLE_DECKS.find((d) => d.series === 'starter')!.id;
@@ -1132,5 +1134,38 @@ describe('expedition wildcard rewards', () => {
     expect(rarities(s)).toEqual(before);
     s = fight(s, 'win');
     expect(rarities(s)[1]).toBe(before[1]! + 1);
+  });
+});
+
+describe('deck colours', () => {
+  const build = (main: Record<string, number>) => ({
+    main,
+    side: {},
+    opened: 0,
+    packs: [],
+    fresh: [],
+  });
+  // A black-red deck with hybrid cards: {W/B}, {R/G} and {U/R} need only black or red.
+  const main = {
+    'Feed the Cycle': 4,
+    'Take Out the Trash': 4,
+    'Moonrise Cleric': 1,
+    'Junkblade Bruiser': 1,
+    'Tempest Angler': 1,
+    Swamp: 8,
+    Mountain: 9,
+  };
+
+  it('counts a hybrid card as the colour the deck already plays', () => {
+    expect(new Set(spellColors(main).keys())).toEqual(new Set(['B', 'R']));
+    expect(new Set(deckColors(build(main)))).toEqual(new Set(['B', 'R']));
+  });
+
+  it("doesn't warn about colours only hybrid cards could use", () => {
+    expect(deckAdvice(build(main)).join(' ')).not.toMatch(/white|blue|green|colours/);
+  });
+
+  it('still counts a hybrid card in a deck of neither colour', () => {
+    expect(spellColors({ 'Moonrise Cleric': 1 }).size).toBe(1);
   });
 });

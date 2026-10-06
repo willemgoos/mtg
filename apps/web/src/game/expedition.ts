@@ -1629,13 +1629,44 @@ const byName = new Map(SCRYFALL.map((c) => [c.name, c]));
 
 /** Colours of the deck's spells, most played first. */
 export function deckColors(b: Build): Color[] {
-  const n: Partial<Record<Color, number>> = {};
-  for (const [name, k] of Object.entries(b.main)) {
+  const n = spellColors(b.main);
+  return COLORS.filter((c) => n.get(c)).sort((a, b) => n.get(b)! - n.get(a)!);
+}
+
+/**
+ * The colours each spell in the deck needs, as spell copies per colour. A
+ * hybrid symbol ({W/B}) needs only one of its colours: the one the rest of the
+ * deck already plays, so a black-red deck's {W/B} card counts as black only.
+ */
+export function spellColors(main: Readonly<Counts>): Map<Color, number> {
+  const spells = Object.entries(main).flatMap(([name, k]) => {
     const c = byName.get(name);
-    if (!c || c.typeLine.includes('Land')) continue;
-    for (const col of c.colors as Color[]) n[col] = (n[col] ?? 0) + k;
-  }
-  return COLORS.filter((c) => n[c]).sort((a, b) => n[b]! - n[a]!);
+    if (!c || c.typeLine.includes('Land')) return [];
+    const must = new Set<Color>();
+    const hybrid: Color[][] = [];
+    for (const [, sym] of c.manaCost.matchAll(/\{([^}]+)\}/g)) {
+      const options = COLORS.filter((col) => sym!.split('/').includes(col));
+      if (options.length === 1) must.add(options[0]!);
+      else if (options.length > 1) hybrid.push(options);
+    }
+    // No coloured symbols to read (no cost, or a colour indicator): its colours.
+    if (!must.size && !hybrid.length) for (const col of c.colors as Color[]) must.add(col);
+    return [{ k, must, hybrid }];
+  });
+  const n = new Map<Color, number>();
+  const add = (c: Color, k: number) => n.set(c, (n.get(c) ?? 0) + k);
+  for (const { k, must } of spells) for (const c of must) add(c, k);
+  const fixed = new Map(n);
+  for (const { k, must, hybrid } of spells)
+    for (const options of hybrid) {
+      if (options.some((c) => must.has(c))) continue;
+      const best = [...options].sort((a, b) => (fixed.get(b) ?? 0) - (fixed.get(a) ?? 0))[0]!;
+      if (!must.has(best)) {
+        must.add(best);
+        add(best, k);
+      }
+    }
+  return n;
 }
 
 /**
@@ -1730,10 +1761,8 @@ export function deckAdvice(b: Build): string[] {
   if (total > 42)
     notes.push(`${total} cards. Trimming toward 40 means you draw your best cards more often.`);
 
-  const perColor = COLORS.map((c) => ({
-    c,
-    n: count((name) => !isLand(name) && colorsOf(name).includes(c)),
-  })).filter((x) => x.n > 0);
+  const needs = spellColors(b.main);
+  const perColor = COLORS.map((c) => ({ c, n: needs.get(c) ?? 0 })).filter((x) => x.n > 0);
   if (perColor.length >= 3) {
     const least = [...perColor].sort((a, b) => a.n - b.n)[0]!;
     notes.push(
