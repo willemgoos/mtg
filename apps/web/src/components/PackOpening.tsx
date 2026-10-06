@@ -348,8 +348,8 @@ function OnePack({
     });
   };
 
-  // A Season booster (eight cards) deals as two rows of four.
-  const cols = cards.length === 8 ? 4 : COLS;
+  // Two even rows: four for a Season booster (eight cards), seven for a Play Booster (14).
+  const cols = cards.length === 8 ? 4 : cards.length === 14 ? 7 : COLS;
   const rows = Math.ceil(cards.length / cols);
   return (
     <div ref={root} className={`start shell opening opening--${phase}`}>
