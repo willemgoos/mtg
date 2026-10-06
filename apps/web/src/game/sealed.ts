@@ -236,8 +236,11 @@ const buildOf = (e: Pick<SealedEvent, 'main' | 'side'>): Build => ({
 });
 
 /** Replaces the deck with the suggested 40; the rest of the pool goes to `side`. */
-export function applySealedSuggestion(s: SealedState): SealedState {
-  return withEvent(s, (e) => ({ ...e, ...suggestDeck(buildOf(e)) }));
+export function applySealedSuggestion(
+  s: SealedState,
+  colors?: readonly [Color, Color],
+): SealedState {
+  return withEvent(s, (e) => ({ ...e, ...suggestDeck(buildOf(e), { colors }) }));
 }
 
 /** The deck is big enough to play (40 cards or more). */

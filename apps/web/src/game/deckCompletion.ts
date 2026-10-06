@@ -2,7 +2,7 @@ import { scryfallById, slug } from '@mtg/cards';
 import type { Color } from '@mtg/engine';
 import { autoBasics, BASICS, basicColor, COLORS, landTarget } from './deckBuilderLogic.ts';
 import { cardEntries, manaValue } from './deckView.ts';
-import { landColors, spellColors } from './expedition.ts';
+import { castable, landColors, spellColors } from './expedition.ts';
 import { rateCard } from './limitedRating.ts';
 
 /** Card name -> copies. */
@@ -16,6 +16,8 @@ export interface Hint {
   /** A short, plain-English reason. */
   reason: string;
   land: boolean;
+  /** Part of the splash: a card or land for a third colour. */
+  splash?: boolean;
   /** One or two words for a badge on the card: "Removal", "2-drop", "Creature". */
   tag: string;
 }
@@ -23,6 +25,9 @@ export interface Hint {
 /** The badge for a reason (see `completionHints`). */
 export function hintTag(reason: string): string {
   if (reason === 'Removal') return 'Removal';
+  if (reason.startsWith('Splash')) return 'Splash';
+  if (reason.startsWith('Fixes your')) return 'Fixing';
+  if (reason.startsWith('Best of the rest')) return 'Best left';
   if (reason.startsWith('Creature')) return 'Creature';
   const drop = /^Fills your (\d)-drop/.exec(reason);
   if (drop) return `${drop[1]}-drop`;
@@ -40,18 +45,87 @@ const mvOf = (name: string) => manaValue(info(name)?.manaCost ?? '');
 /** Cards that deal with a creature or other permanent: destroy, exile, damage, shrink, fight. */
 const REMOVAL =
   /(?:destroy|exile) (?:up to \w+ )?target|deals? \d+ damage to (?:any|target|up to)|target creature gets -\d+\/-\d+|fights? (?:up to one )?(?:another )?target|-\d+\/-\d+ until end of turn/i;
-const isRemoval = (name: string) => REMOVAL.test(info(name)?.oracleText ?? '');
+export const isRemoval = (name: string) => REMOVAL.test(info(name)?.oracleText ?? '');
 
-/** Whether a card can be cast in these colours: every coloured symbol in its cost has one of them. */
-function castable(name: string, colors: readonly Color[]): boolean {
-  const c = info(name);
-  if (!c) return false;
-  if (!c.manaCost) return (c.colors as Color[]).every((k) => colors.includes(k));
-  return [...c.manaCost.matchAll(/\{([^}]+)\}/g)].every(([, sym]) => {
-    const needs = COLORS.filter((k) => sym!.split('/').includes(k));
-    return !needs.length || needs.some((k) => colors.includes(k));
-  });
+const COLOUR_WORD: Record<Color, string> = {
+  W: 'white',
+  U: 'blue',
+  B: 'black',
+  R: 'red',
+  G: 'green',
+};
+/** A splash is a few cards, no more. */
+export const SPLASH_MAX = 3;
+
+/** Coloured symbols in a cost that need `c` (hybrid ones count when `c` is one of their colours). */
+const pipsOf = (name: string, c: Color) =>
+  [...(info(name)?.manaCost ?? '').matchAll(/\{([^}]+)\}/g)].filter(([, sym]) =>
+    sym!.split('/').includes(c),
+  ).length;
+
+/** Whether a land or mana rock in the pool helps make colour `c`. */
+function fixesColour(name: string, c: Color): boolean {
+  const text = info(name)?.oracleText ?? '';
+  if (isLandName(name)) {
+    if (basicColor.has(name)) return false;
+    if (landColors(name).includes(c)) return true;
+    return !landColors(name).length && /search your library for a basic land/i.test(text);
+  }
+  if (!/\bArtifact\b/.test(info(name)?.typeLine ?? '')) return false;
+  return new RegExp(`Add[^.]*\\{${c}\\}|Add one mana of any color`, 'i').test(text);
 }
+
+/** A splash colour with its cards (one copy each, best first) and what in the pool fixes it. */
+export interface Splash {
+  color: Color;
+  cards: string[];
+  fixers: string[];
+}
+
+/**
+ * The best splash for a deck in `colors`: a third colour whose cards need
+ * exactly one pip of it, cost 5 or less and rate high (removal, bombs).
+ * `avail` is what can still be added (name -> copies). At most `max` cards.
+ */
+export function pickSplash(
+  avail: Counts,
+  colors: readonly Color[],
+  max = SPLASH_MAX,
+  prefer: readonly Color[] = [],
+): Splash | null {
+  let best: (Splash & { score: number }) | null = null;
+  for (const color of COLORS) {
+    if (colors.includes(color)) continue;
+    const cards = Object.keys(avail)
+      .filter(
+        (n) =>
+          avail[n]! > 0 &&
+          !isLandName(n) &&
+          info(n) &&
+          !castable(n, colors) &&
+          castable(n, [...colors, color]) &&
+          pipsOf(n, color) === 1 &&
+          mvOf(n) <= 5 &&
+          rateCard(n) >= 3,
+      )
+      .sort((a, b) => rateCard(b) - rateCard(a) || mvOf(a) - mvOf(b))
+      .slice(0, max);
+    if (!cards.length) continue;
+    const fixers = Object.keys(avail).filter(
+      (n) => avail[n]! > 0 && fixesColour(n, color) && castable(n, colors) && rateCard(n) >= 0,
+    );
+    const score =
+      cards.reduce((a, n) => a + rateCard(n) - 1.5, 0) +
+      0.3 * Math.min(fixers.length, 2) +
+      (prefer.includes(color) ? 0.5 : 0);
+    if (!best || score > best.score) best = { color, cards, fixers, score };
+  }
+  return best && { color: best.color, cards: best.cards, fixers: best.fixers };
+}
+
+/** Why a splash card is worth it. */
+const splashWhy = (n: string) =>
+  isRemoval(n) ? 'removal' : rateCard(n) >= 4 ? 'a bomb' : 'a strong card';
 
 /** The two colours the deck is in: its spells' two most-played, filled up from the pool's best pair. */
 function pickColors(deck: Counts, pool: Counts, spellWant: number): Color[] {
@@ -199,19 +273,141 @@ export function completionHints({
     }
     tally(best.name, 1);
   }
-  const spellCount = Object.values(picked).reduce((a, b) => a + b, 0);
+  const count = () => Object.values(picked).reduce((a, b) => a + b, 0);
+
+  /* ---- a splash, when the two colours are thin (or a splash card clearly beats the filler) */
+  const offInDeck = Object.entries(deck).reduce(
+    (n, [c, k]) => n + (!isLandName(c) && info(c) && !castable(c, colors) ? k : 0),
+    0,
+  );
+  const avail: Record<string, number> = {};
+  for (const [n, k] of Object.entries(pool)) {
+    const left = Math.min(k, Math.max(0, maxCopies - (deck[n] ?? 0))) - (picked[n] ?? 0);
+    if (left > 0) avail[n] = left;
+  }
+  const own = COLORS.filter((c) => !colors.includes(c) && (spellColors(deck).get(c) ?? 0) > 0);
+  const found =
+    Math.max(0, SPLASH_MAX - offInDeck) > 0
+      ? pickSplash(avail, colors, SPLASH_MAX - offInDeck, own)
+      : null;
+  const splashHints: Hint[] = [];
+  let splash: Splash | null = null;
+  const weakest = () =>
+    Object.keys(picked)
+      .filter((n) => !splashHints.some((h) => h.name === n))
+      .sort((a, b) => rateCard(a) - rateCard(b))[0];
+  const drop = (n: string) => {
+    picked[n]!--;
+    if (picked[n]! <= 0) {
+      delete picked[n];
+      order.splice(order.indexOf(n), 1);
+    }
+  };
+  /** Room for one more spell: a free slot, or the weakest filler it clearly beats (null if none). */
+  const room = (rate: number): boolean => {
+    if (count() < spellSlots) return true;
+    const w = weakest();
+    if (w === undefined || rateCard(w) >= 2.6 || rate - rateCard(w) < 1) return false;
+    drop(w);
+    return true;
+  };
+  if (found) {
+    const word = COLOUR_WORD[found.color];
+    for (const n of found.cards) {
+      if (!room(rateCard(n))) continue;
+      splashHints.push({
+        name: n,
+        count: 1,
+        reason: `Splash (${word}): ${splashWhy(n)}`,
+        land: false,
+        splash: true,
+        tag: 'Splash',
+      });
+      picked[n] = 1;
+      splash = found;
+    }
+    if (splash) {
+      // A mana rock that makes the colour is worth a slot too.
+      const rock = found.fixers
+        .filter((n) => !isLandName(n) && rateCard(n) >= 2)
+        .sort((a, b) => rateCard(b) - rateCard(a))[0];
+      if (rock && room(rateCard(rock) + 1)) {
+        splashHints.push({
+          name: rock,
+          count: 1,
+          reason: `Fixes your splash (${word})`,
+          land: false,
+          splash: true,
+          tag: 'Fixing',
+        });
+        picked[rock] = 1;
+      }
+    }
+  }
+  // Still short: the best of the rest of the pool, whatever its colour.
+  if (count() < spellSlots) {
+    const spare = Object.keys(avail)
+      .filter(
+        (n) => !isLandName(n) && info(n) && !picked[n] && !splashHints.some((h) => h.name === n),
+      )
+      .sort((a, b) => rateCard(b) - rateCard(a));
+    for (const n of spare) {
+      if (count() >= spellSlots) break;
+      const k = Math.min(avail[n]!, spellSlots - count());
+      picked[n] = k;
+      order.push(n);
+      reasons[n] = 'Best of the rest: not many cards in your colours';
+    }
+  }
+  const spellCount = count();
 
   /* ---- lands: on-colour nonbasics, then basics split by the deck's colour symbols */
-  const hints: Hint[] = order.map((name) => ({
+  const mainHints: Hint[] = order.map((name) => ({
     name,
     count: picked[name]!,
     reason: reasons[name]!,
     land: false,
     tag: hintTag(reasons[name]!),
   }));
+  // The splash cards come early in the list so they are not lost below the fold.
+  const hints: Hint[] = [...mainHints.slice(0, 4), ...splashHints, ...mainHints.slice(4)];
   const landSlots = Math.min(need - spellCount, basics ? need : landNonbasic);
-  const lands: Record<string, { count: number; reason: string }> = {};
+  const lands: Record<string, { count: number; reason: string; splash?: boolean }> = {};
   let landsLeft = landSlots;
+  const sc = splash?.color;
+  const splashLands = sc
+    ? Object.entries(pool)
+        .filter(([n, k]) => k > 0 && isLandName(n) && !basicColor.has(n) && fixesColour(n, sc))
+        .filter(([n]) => landColors(n).every((c) => c === sc || colors.includes(c)))
+        .map(([n, k]) => [n, Math.min(k, Math.max(0, maxCopies - (deck[n] ?? 0)))] as const)
+        .filter(([, k]) => k > 0)
+    : [];
+  let splashSources = splashHints.filter((h) => h.tag === 'Fixing').length;
+  for (const [n, k] of splashLands) {
+    const take = Math.min(k, landsLeft);
+    if (take <= 0) continue;
+    lands[n] = {
+      count: take,
+      reason: landColors(n).length
+        ? `Makes your splash colour (${COLOUR_WORD[sc!]})`
+        : `Fetches your splash colour (${COLOUR_WORD[sc!]})`,
+      splash: true,
+    };
+    landsLeft -= take;
+    splashSources += take;
+  }
+  // Two or three basics of the splash colour, fewer when lands already make it.
+  const splashCards = splashHints.filter((h) => h.tag === 'Splash').length;
+  const splashBasics =
+    basics && sc ? Math.min(Math.max(0, (splashCards >= 3 ? 3 : 2) - splashSources), landsLeft) : 0;
+  if (splashBasics > 0 && sc) {
+    lands[BASICS[sc]] = {
+      count: splashBasics,
+      reason: `Splash: ${splashBasics} ${BASICS[sc]} to cast your ${COLOUR_WORD[sc]} cards`,
+      splash: true,
+    };
+    landsLeft -= splashBasics;
+  }
   for (const [n, k] of nonbasicLands) {
     const take = Math.min(k, landsLeft);
     if (take <= 0) continue;
@@ -251,6 +447,13 @@ export function completionHints({
     }
   }
   for (const [name, v] of Object.entries(lands))
-    hints.push({ name, count: v.count, reason: v.reason, land: true, tag: 'Land' });
+    hints.push({
+      name,
+      count: v.count,
+      reason: v.reason,
+      land: true,
+      ...(v.splash ? { splash: true } : {}),
+      tag: 'Land',
+    });
   return hints;
 }

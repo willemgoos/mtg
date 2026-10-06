@@ -1872,7 +1872,7 @@ const SPELLS_PER_40 = MIN_DECK - LANDS_PER_40;
 const isCreature = (name: string) => byName.get(name)?.typeLine.includes('Creature') ?? false;
 
 /** Whether a card can be cast with these colours: every coloured symbol in its cost has one of them. */
-function castable(name: string, colors: readonly Color[]): boolean {
+export function castable(name: string, colors: readonly Color[]): boolean {
   const cost = byName.get(name)?.manaCost ?? '';
   if (!cost) return colorsOf(name).every((c) => colors.includes(c));
   return [...cost.matchAll(/\{([^}]+)\}/g)].every(([, sym]) => {
@@ -1885,7 +1885,7 @@ function castable(name: string, colors: readonly Color[]): boolean {
  * The best 23 spells for a deck: highest rated first, with a shape a person
  * would want: about 15 creatures, a handful of cheap plays and few expensive cards.
  */
-function pickSpells(cards: readonly string[]): string[] {
+export function pickSpells(cards: readonly string[], fill = true): string[] {
   const rest = [...cards].sort((a, b) => rateCard(b) - rateCard(a) || mv(a) - mv(b));
   const picked: string[] = [];
   const count = (pred: (n: string) => boolean) => picked.filter(pred).length;
@@ -1917,22 +1917,51 @@ function pickSpells(cards: readonly string[]): string[] {
     picked.push(rest.splice(best, 1)[0]!);
   }
   // Short of playable cards in these colours: fill with the best of what's left.
-  while (picked.length < SPELLS_PER_40 && rest.length) picked.push(rest.shift()!);
+  while (fill && picked.length < SPELLS_PER_40 && rest.length) picked.push(rest.shift()!);
   return picked;
 }
 
 /** How strong a deck is: quality counts more than depth (filler adds little). */
-const deckStrength = (spells: readonly string[]) =>
+export const deckStrength = (spells: readonly string[]) =>
   spells.reduce((k, n) => k + Math.max(0, rateCard(n) - 1.5), 0);
 
 /** Whether the pool can make colour `c` besides its basics: a land, rock or fetch for it. */
-const canFix = (pool: Counts, c: Color) =>
+export const canFix = (pool: Counts, c: Color) =>
   Object.keys(pool).some((n) => {
     const text = byName.get(n)?.oracleText ?? '';
     if (isLand(n))
       return landColors(n).includes(c) || (UTILITY_LANDS.includes(n) && /basic land/i.test(text));
     return new RegExp(`Add[^.]*\\{${c}\\}|Add one mana of any color`).test(text);
   });
+
+/** All ten colour pairs. */
+export function colourPairList(): Color[][] {
+  const out: Color[][] = [];
+  for (let i = 0; i < COLORS.length; i++)
+    for (let j = i + 1; j < COLORS.length; j++) out.push([COLORS[i]!, COLORS[j]!]);
+  return out;
+}
+
+/**
+ * The best spells a colour pair can cast from `copies` (one entry per copy,
+ * lands left out), and how strong that deck is: quality counts, plus a little
+ * for the pool's dual lands in the pair. Shared by `suggestDeck` and the colour advice.
+ */
+export function scorePair(
+  copies: readonly string[],
+  pool: Counts,
+  pair: readonly Color[],
+  fill = true,
+): { spells: string[]; score: number } {
+  const spells = pickSpells(
+    copies.filter((n) => castable(n, pair)),
+    fill,
+  );
+  const fixing = Object.keys(pool).filter(
+    (n) => isLand(n) && landColors(n).length === 2 && landColors(n).every((c) => pair.includes(c)),
+  ).length;
+  return { spells, score: deckStrength(spells) + 0.3 * Math.min(fixing, 3) };
+}
 
 /**
  * A sensible 40 from everything you own: the colour pair whose best 23 spells
@@ -1941,7 +1970,11 @@ const canFix = (pool: Counts, c: Color) =>
  * coloured mana symbols. A very strong off-colour card is splashed when the
  * pool can fix for it.
  */
-export function suggestDeck(b: Build): Pick<Build, 'main' | 'side'> {
+export function suggestDeck(
+  b: Build,
+  /** Build this colour pair instead of the strongest one. */
+  opts: { colors?: readonly [Color, Color] } = {},
+): Pick<Build, 'main' | 'side'> {
   const pool: Counts = {};
   for (const [n, k] of [...Object.entries(b.main), ...Object.entries(b.side)])
     if (!isBasic(n)) pool[n] = (pool[n] ?? 0) + k;
@@ -1949,21 +1982,14 @@ export function suggestDeck(b: Build): Pick<Build, 'main' | 'side'> {
     .filter(([n]) => !isLand(n))
     .flatMap(([n, k]) => Array<string>(k).fill(n));
 
-  // The colour pair with the strongest deck.
+  // The colour pair with the strongest deck (or the one asked for).
   let two: Color[] = [];
   let spells: string[] = [];
-  let best = -1;
-  for (let i = 0; i < COLORS.length; i++)
-    for (let j = i + 1; j < COLORS.length; j++) {
-      const pair = [COLORS[i]!, COLORS[j]!];
-      const picked = pickSpells(copies.filter((n) => castable(n, pair)));
-      const fixing = Object.keys(pool).filter(
-        (n) =>
-          isLand(n) && landColors(n).length === 2 && landColors(n).every((c) => pair.includes(c)),
-      ).length;
-      const s = deckStrength(picked) + 0.3 * Math.min(fixing, 3);
-      if (s > best) [best, two, spells] = [s, pair, picked];
-    }
+  let best = -Infinity;
+  for (const pair of opts.colors ? [[...opts.colors]] : colourPairList()) {
+    const s = scorePair(copies, pool, pair);
+    if (s.score > best) [best, two, spells] = [s.score, pair, s.spells];
+  }
 
   // A light splash: up to two very strong cards of a third colour, if the pool can fix it.
   const bombs = (c: Color) =>
@@ -2060,8 +2086,11 @@ export function suggestDeck(b: Build): Pick<Build, 'main' | 'side'> {
 }
 
 /** Replaces the deck with the suggested 40; everything else goes to the collection. */
-export function applySuggestion(s: ExpeditionState): ExpeditionState {
-  return withRun(s, (r) => ({ ...r, build: { ...r.build, ...suggestDeck(r.build) } }));
+export function applySuggestion(
+  s: ExpeditionState,
+  colors?: readonly [Color, Color],
+): ExpeditionState {
+  return withRun(s, (r) => ({ ...r, build: { ...r.build, ...suggestDeck(r.build, { colors }) } }));
 }
 
 // ---------------------------------------------------------------------------

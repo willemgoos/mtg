@@ -1500,7 +1500,7 @@ function ExpeditionBuilder({
   const suggest = () => {
     if (!confirming) return setConfirming(true);
     setConfirming(false);
-    update(applySuggestion);
+    update((s) => applySuggestion(s));
     play('shuffle');
   };
   return (
@@ -1527,6 +1527,7 @@ function ExpeditionBuilder({
       }
       onAdd={(name) => update((s) => moveCard(s, name, 'main'))}
       onRemove={(name) => update((s) => moveCard(s, name, 'side'))}
+      onBuildPair={(colors) => update((s) => applySuggestion(s, colors))}
       onDone={onDone}
     />
   );

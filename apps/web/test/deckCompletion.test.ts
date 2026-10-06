@@ -1,8 +1,10 @@
 import { scryfallById, slug } from '@mtg/cards';
 import { describe, expect, it } from 'vitest';
 import { BASICS, basicColor } from '../src/game/deckBuilderLogic.ts';
+import { colourPairs } from '../src/game/colourPairs.ts';
 import { completionHints } from '../src/game/deckCompletion.ts';
 import { rollPack, spellColors, suggestDeck } from '../src/game/expedition.ts';
+import { rateCard } from '../src/game/limitedRating.ts';
 
 type Counts = Record<string, number>;
 const sum = (c: Counts) => Object.values(c).reduce((a, b) => a + b, 0);
@@ -140,5 +142,140 @@ describe('completionHints', () => {
     });
     expect(hints.map((h) => h.name)).toContain(wb!.name);
     expect(hints.map((h) => h.name)).not.toContain(ur!.name);
+  });
+});
+
+/** A pool where white and blue are thin (8 cards each) but black is deep; the deck so far is white-blue. */
+function thin(seed: number, set: 'fdn' | 'blb' = 'fdn') {
+  const all: Counts = {};
+  for (let i = 0; i < 8; i++)
+    for (const n of rollPack({ kind: 'booster' }, seed + i, 0, set)) all[n] = (all[n] ?? 0) + 1;
+  const mono = (n: string, c: string) => info(n).manaCost.includes(`{${c}}`);
+  const nonland = Object.keys(all).filter((n) => !isLand(n));
+  const keep = (c: string) =>
+    nonland
+      .filter((n) => mono(n, c) && !/[WUBRG]\/|\{[WUBRG]\}.*\{[WUBRG]\}/.test(info(n).manaCost))
+      .sort((a, b) => rateCard(b) - rateCard(a))
+      .slice(0, 8);
+  const white = keep('W');
+  const blue = keep('U');
+  const pool: Counts = {};
+  for (const n of nonland) {
+    const w = /\{[WU]\}/.test(info(n).manaCost);
+    if (!w || white.includes(n) || blue.includes(n)) pool[n] = 1;
+  }
+  const deck: Counts = { [white[0]!]: 1, [white[1]!]: 1, [blue[0]!]: 1, [blue[1]!]: 1 };
+  for (const n of Object.keys(deck)) delete pool[n];
+  return { deck, pool };
+}
+
+describe('splash hints', () => {
+  it('suggests a few single-pip cards of a third colour when two colours are thin', () => {
+    let found = 0;
+    for (const seed of [1, 2, 3, 4, 5, 6]) {
+      const { deck, pool: p } = thin(seed);
+      const hints = completionHints({ deck, pool: p, min: 40, basics: true });
+      const splash = hints.filter((h) => h.tag === 'Splash');
+      if (!splash.length) continue;
+      found++;
+      expect(splash.reduce((n, h) => n + h.count, 0)).toBeLessThanOrEqual(3);
+      const main = ['W', 'U'];
+      const third = new Set<string>();
+      for (const h of splash) {
+        expect(h.reason).toMatch(/^Splash \((?:white|blue|black|red|green)\): /);
+        const syms = [...info(h.name).manaCost.matchAll(/\{([^}]+)\}/g)].map((m) => m[1]!);
+        const off = syms.filter((x) => /^[WUBRG]$/.test(x) && !main.includes(x));
+        expect(off.length).toBe(1);
+        third.add(off[0]!);
+        expect(rateCard(h.name)).toBeGreaterThanOrEqual(3);
+      }
+      expect(third.size).toBe(1);
+      // Land hints include the splash colour's basics, and the total is still 40.
+      const colour = [...third][0] as keyof typeof BASICS;
+      const splashLands = hints.filter((h) => h.land && h.splash);
+      expect(splashLands.some((h) => h.name === BASICS[colour])).toBe(true);
+      expect(sum(apply(deck, hints))).toBe(40);
+      const lands = hints.filter((h) => h.land).reduce((n, h) => n + h.count, 0);
+      expect(lands).toBeGreaterThanOrEqual(12);
+    }
+    expect(found).toBeGreaterThan(0);
+  });
+
+  it('does not splash when the two colours have plenty of good cards', () => {
+    const { deck, pool: rest } = partial(10);
+    const hints = completionHints({ deck, pool: rest, min: 40, basics: true });
+    expect(hints.some((h) => h.splash || h.tag === 'Splash')).toBe(false);
+  });
+
+  it('says so when even a splash cannot fill the deck: the best of the rest', () => {
+    const p: Counts = {};
+    for (const n of Object.keys(thin(2).pool).slice(0, 10)) p[n] = 1;
+    const hints = completionHints({ deck: {}, pool: p, min: 40, basics: true });
+    const spells = hints.filter((h) => !h.land);
+    expect(spells.length).toBeGreaterThan(0);
+    expect(sum(apply({}, hints))).toBeLessThanOrEqual(40);
+    // Nothing is left out that could be played: every pool card is suggested.
+    expect(spells.reduce((n, h) => n + h.count, 0)).toBe(Object.keys(p).length);
+  });
+});
+
+describe('colourPairs', () => {
+  const pools: [string, 'fdn' | 'blb', number][] = [
+    ['fdn 7', 'fdn', 7],
+    ['fdn 99', 'fdn', 99],
+    ['blb 31337', 'blb', 31337],
+    ['blb 5', 'blb', 5],
+  ];
+  for (const [label, set, seed] of pools)
+    it(`ranks pairs sensibly (${label})`, () => {
+      const p: Counts = {};
+      for (let i = 0; i < 6; i++)
+        for (const n of rollPack({ kind: 'booster' }, seed + i, 0, set)) p[n] = (p[n] ?? 0) + 1;
+      const pairs = colourPairs(p);
+      expect(pairs).toHaveLength(3);
+      expect(pairs[0]!.playables).toBeGreaterThanOrEqual(15);
+      for (let i = 1; i < pairs.length; i++)
+        expect(pairs[i - 1]!.score).toBeGreaterThanOrEqual(pairs[i]!.score);
+      for (const a of pairs) {
+        expect(a.colors).toHaveLength(2);
+        expect(a.name).not.toBe('Colourless');
+        expect(a.creatures).toBeLessThanOrEqual(a.playables);
+        expect(a.removal).toBeLessThanOrEqual(a.playables);
+        expect(a.standouts.length).toBeLessThanOrEqual(3);
+        for (const n of a.standouts) expect(p[n]).toBeGreaterThan(0);
+        if (a.playables >= 23) expect(a.splash).toBeNull();
+      }
+      // The top pair is the one suggestDeck builds.
+      const built = suggestDeck({ main: {}, side: p, opened: 0, packs: [], fresh: [] });
+      const top = pairs[0]!.colors;
+      const used = [...spellColors(built.main).keys()];
+      expect(top.every((c) => used.includes(c))).toBe(true);
+    });
+
+  it('flags a splash when a pair is short of playables', () => {
+    const { pool: p } = thin(3);
+    const pairs = colourPairs(p, { top: 10 });
+    const wu = pairs.find((x) => x.colors.join('') === 'WU');
+    expect(wu).toBeDefined();
+    expect(wu!.playables).toBeLessThan(23);
+  });
+
+  it('suggestDeck with a forced pair uses only those colours (plus a light splash)', () => {
+    const p = pool(21);
+    for (const colors of [
+      ['W', 'U'],
+      ['B', 'R'],
+      ['G', 'W'],
+    ] as const) {
+      const { main } = suggestDeck(
+        { main: {}, side: p, opened: 0, packs: [], fresh: [] },
+        { colors },
+      );
+      expect(sum(main)).toBe(40);
+      const used = [...spellColors(main).entries()].filter(([, k]) => k > 0).map(([c]) => c);
+      const off = used.filter((c) => !(colors as readonly string[]).includes(c));
+      expect(off.length).toBeLessThanOrEqual(1);
+      for (const c of colors) expect(used).toContain(c);
+    }
   });
 });
