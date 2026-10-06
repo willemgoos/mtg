@@ -232,8 +232,11 @@ const buildOf = (e: Pick<SealedEvent, 'main' | 'side'>): Build => ({
 });
 
 /** Replaces the deck with the suggested 40; the rest of the pool goes to `side`. */
-export function applySealedSuggestion(s: SealedState): SealedState {
-  return withEvent(s, (e) => ({ ...e, ...suggestDeck(buildOf(e)) }));
+export function applySealedSuggestion(
+  s: SealedState,
+  colors?: readonly [Color, Color],
+): SealedState {
+  return withEvent(s, (e) => ({ ...e, ...suggestDeck(buildOf(e), { colors }) }));
 }
 
 /** The deck is big enough to play (40 cards or more). */
@@ -558,7 +561,8 @@ export function loadSealed(): SealedState {
       if (r && isNat(r.events) && isNat(r.best) && isNat(r.sevenWins)) records[set] = r;
     }
     // An event saved before the reveal was recorded has been past it.
-    const saved = g.event && g.event.revealed === undefined ? { ...g.event, revealed: true } : g.event;
+    const saved =
+      g.event && g.event.revealed === undefined ? { ...g.event, revealed: true } : g.event;
     const state: SealedState = { event: validEvent(saved) ? saved : null, records };
     registerSealedDecks(state);
     return state;

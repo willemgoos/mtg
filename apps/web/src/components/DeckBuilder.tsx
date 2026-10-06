@@ -27,6 +27,7 @@ import {
   TYPE_KINDS,
   type TypeKind,
 } from '../game/deckBuilderLogic.ts';
+import { colourPairs, type PairAdvice } from '../game/colourPairs.ts';
 import { completionHints } from '../game/deckCompletion.ts';
 import { deckBasicImage } from '../game/basicArt.ts';
 import {
@@ -197,6 +198,7 @@ export function DeckBuilder({
   tools,
   onAdd,
   onRemove,
+  onBuildPair,
   onDone,
 }: {
   name: string;
@@ -219,6 +221,8 @@ export function DeckBuilder({
   tools?: ReactNode;
   onAdd: (name: string) => void;
   onRemove: (name: string) => void;
+  /** Builds a whole deck in this colour pair (a mode's own deck builder). Without it, colour advice only shows cards. */
+  onBuildPair?: (colors: [Color, Color]) => void;
   onDone: () => void;
 }) {
   const [query, setQuery] = useState('');
@@ -231,6 +235,9 @@ export function DeckBuilder({
   const [showHints, setShowHints] = useState(() => loadPref('hints', bool, '1') === '1');
   const [hintsOpen, setHintsOpen] = useState(() => loadPref('hintsOpen', bool, '1') === '1');
   const [suggestedOnly, setSuggestedOnly] = useState(false);
+  // Colour advice: open by default while the deck has no spells; a button reopens it later.
+  const [advice, setAdvice] = useState<boolean | null>(null);
+  const [confirmPair, setConfirmPair] = useState<string | null>(null);
   const [hideUsed, setHideUsed] = useState(() => loadPref('hideUsed', bool, '0') === '1');
   const [sort, setSort] = useState<SortKey>(() =>
     loadPref(
@@ -293,6 +300,15 @@ export function DeckBuilder({
     () => new Map(hints.filter((h) => !basicColor.has(h.name)).map((h) => [h.name, h])),
     [hints],
   );
+  const limited = min <= 45;
+  const spellsInDeck = main.some((e) => !isLand(e));
+  const adviceOpen = advice ?? !spellsInDeck;
+  const pairs = useMemo(() => {
+    if (!limited || !adviceOpen) return [];
+    const all: Record<string, number> = { ...pool };
+    for (const [n, k] of Object.entries(deck)) if (!basicColor.has(n)) all[n] = (all[n] ?? 0) + k;
+    return colourPairs(all);
+  }, [limited, adviceOpen, pool, deck]);
   const marking = showHints && hinted.size > 0;
   const shown = sorted.filter(
     (e) =>
@@ -680,7 +696,9 @@ export function DeckBuilder({
                     className={`dbk-card__face ${fresh?.has(e.name) ? 'is-new' : ''} ${
                       drag?.name === e.name && drag.from === 'pool' ? 'is-dragging' : ''
                     } ${foil?.has(e.name) ? 'is-foil' : ''} ${
-                      marking && !out && hinted.has(e.name) ? 'is-suggested' : ''
+                      marking && !out && hinted.has(e.name)
+                        ? `is-suggested ${hinted.get(e.name)!.splash ? 'is-splash' : ''}`
+                        : ''
                     }`}
                     data-card={e.name}
                     role="button"
@@ -1043,6 +1061,36 @@ export function DeckBuilder({
               </div>
             </>
           )}
+          {limited &&
+            (adviceOpen ? (
+              pairs.length > 0 && (
+                <ColourAdvice
+                  pairs={pairs}
+                  entries={[...owned, ...main]}
+                  confirm={confirmPair}
+                  canBuild={!!onBuildPair}
+                  onHover={setHover}
+                  onClose={() => setAdvice(false)}
+                  onShow={(c) => {
+                    setFilters(new Set<Filter>([...c, 'C']));
+                    setSuggestedOnly(false);
+                  }}
+                  onBuild={(p) => {
+                    const key = p.colors.join('');
+                    if (spellsInDeck && confirmPair !== key) return setConfirmPair(key);
+                    setConfirmPair(null);
+                    onBuildPair?.(p.colors);
+                    setAdvice(false);
+                    play('shuffle');
+                  }}
+                  onCancel={() => setConfirmPair(null)}
+                />
+              )
+            ) : (
+              <button className="dbk-advice__open" onClick={() => setAdvice(true)}>
+                Colour advice
+              </button>
+            ))}
           {hints.length > 0 && (
             <Suggestions
               hints={hints}
@@ -1116,13 +1164,25 @@ function Suggestions({
           <p className="dbk-hints__note">
             Cards in your colours that fit what the deck is missing. You choose.
           </p>
+          {spells.some((h) => h.tag === 'Splash') && (
+            <p className="dbk-hints__note">
+              Your colours are thin, so a few cards from a third colour are suggested. They need a
+              few lands of that colour.
+            </p>
+          )}
+          {spells.some((h) => h.tag === 'Best left') && (
+            <p className="dbk-hints__note">
+              Not enough cards in your colours: the ones marked "Best left" are the best of the
+              rest.
+            </p>
+          )}
           {spells.slice(0, 8).map((h) => {
             const e = entries.find((x) => x.name === h.name);
             if (!e) return null;
             return (
               <button
                 key={h.name}
-                className="dbk-hint"
+                className={`dbk-hint ${h.splash ? 'is-splash' : ''}`}
                 style={e.art ? ({ '--art': `url("${e.art}")` } as CSSProperties) : undefined}
                 title="Show it in your collection"
                 onMouseEnter={(ev) => onHover(e, ev.currentTarget)}
@@ -1150,11 +1210,94 @@ function Suggestions({
           {short > 0 && (
             <p className="dbk-hints__lands">
               You're {short} {short === 1 ? 'land' : 'lands'} short: about{' '}
-              {lands.map((h) => `${h.count} ${h.name}`).join(', ')}.
+              {lands.map((h) => `${h.count} ${h.name}${h.splash ? ' (splash)' : ''}`).join(', ')}.
             </p>
           )}
         </>
       )}
+    </section>
+  );
+}
+
+/** The colour pairs your cards are best in: show them, or build the deck (always your click). */
+function ColourAdvice({
+  pairs,
+  entries,
+  confirm,
+  canBuild,
+  onHover,
+  onClose,
+  onShow,
+  onBuild,
+  onCancel,
+}: {
+  pairs: readonly PairAdvice[];
+  entries: readonly DeckEntry[];
+  confirm: string | null;
+  canBuild: boolean;
+  onHover: (e: DeckEntry | null, anchor?: Element) => void;
+  onClose: () => void;
+  onShow: (colors: readonly Color[]) => void;
+  onBuild: (p: PairAdvice) => void;
+  onCancel: () => void;
+}) {
+  return (
+    <section className="dbk-advice" aria-label="Your best colours">
+      <button className="dbk-hints__head" aria-expanded onClick={onClose}>
+        <span>Your best colours</span>
+        <em />
+        <i aria-hidden>−</i>
+      </button>
+      {pairs.map((p) => {
+        const key = p.colors.join('');
+        return (
+          <div key={key} className="dbk-pair">
+            <div className="dbk-pair__head">
+              {p.colors.map((c) => (
+                <img key={c} src={symbolUrl(c)} alt={COLOR_NAMES[c]} />
+              ))}
+              <b>{p.name}</b>
+            </div>
+            <p className="dbk-pair__stats">
+              {p.playables} playables · {p.creatures} creatures · {p.removal} removal
+              {p.splash ? ` · + splash ${COLOR_NAMES[p.splash].toLowerCase()}` : ''}
+            </p>
+            {p.standouts.length > 0 && (
+              <p className="dbk-pair__stars">
+                {p.standouts.map((n, i) => {
+                  const e = entries.find((x) => x.name === n);
+                  return (
+                    <span key={n}>
+                      {i > 0 && ', '}
+                      <span
+                        className="dbk-pair__card"
+                        onMouseEnter={(ev) => e && onHover(e, ev.currentTarget)}
+                        onMouseLeave={() => onHover(null)}
+                      >
+                        {n}
+                      </span>
+                    </span>
+                  );
+                })}
+              </p>
+            )}
+            <div className="dbk-pair__btns">
+              <button className="dbk__btn" onClick={() => onShow(p.colors)}>
+                Show cards
+              </button>
+              {canBuild && (
+                <button
+                  className="dbk__btn"
+                  onClick={() => onBuild(p)}
+                  onMouseLeave={confirm === key ? onCancel : undefined}
+                >
+                  {confirm === key ? 'Replace my deck?' : 'Build this deck'}
+                </button>
+              )}
+            </div>
+          </div>
+        );
+      })}
     </section>
   );
 }

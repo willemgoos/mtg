@@ -434,7 +434,7 @@ function Builder({
   const suggest = () => {
     if (!empty && !confirming) return setConfirming(true);
     setConfirming(false);
-    update(applySealedSuggestion);
+    update((s) => applySealedSuggestion(s));
     play('shuffle');
   };
   return (
@@ -461,6 +461,7 @@ function Builder({
       }
       onAdd={(name) => update((s) => moveSealedCard(s, name, 'main'))}
       onRemove={(name) => update((s) => moveSealedCard(s, name, 'side'))}
+      onBuildPair={(colors) => update((s) => applySealedSuggestion(s, colors))}
       onDone={onDone}
     />
   );
