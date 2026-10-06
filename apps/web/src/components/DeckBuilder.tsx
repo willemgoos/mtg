@@ -17,6 +17,7 @@ import { play } from '../game/sound.ts';
 import { HoverPreview, type HoverState } from './Preview.tsx';
 import './home.css';
 import './deckbuilder.css';
+import './foil.css';
 
 /** Card name -> copies. */
 type Counts = Readonly<Record<string, number>>;
@@ -130,6 +131,7 @@ export function DeckBuilder({
   basics = false,
   basicsDeck,
   fresh,
+  foil,
   min,
   tips = [],
   tools,
@@ -148,6 +150,8 @@ export function DeckBuilder({
   basicsDeck?: string;
   /** Cards to mark as new. */
   fresh?: ReadonlySet<string>;
+  /** Cards to show with a foil sheen and a "Promo" tag (a prerelease promo). */
+  foil?: ReadonlySet<string>;
   /** Cards needed before Done is enabled. */
   min: number;
   tips?: readonly string[];
@@ -338,7 +342,7 @@ export function DeckBuilder({
             return (
               <div key={e.name} className={`dbk-card ${out ? 'is-out' : ''}`}>
                 <div
-                  className={`dbk-card__face ${fresh?.has(e.name) ? 'is-new' : ''}`}
+                  className={`dbk-card__face ${fresh?.has(e.name) ? 'is-new' : ''} ${foil?.has(e.name) ? 'is-foil' : ''}`}
                   role="button"
                   tabIndex={out ? -1 : 0}
                   aria-disabled={out}
@@ -355,6 +359,7 @@ export function DeckBuilder({
                     <div className="dcard__blank">{e.name}</div>
                   )}
                   {fresh?.has(e.name) && <span className="dbk-card__new">New</span>}
+                  {foil?.has(e.name) && <span className="foil-tag">Promo</span>}
                   {inDeck > 0 && <span className="dbk-card__in">{inDeck}</span>}
                 </div>
                 <span className="dbk-card__copies" aria-hidden>

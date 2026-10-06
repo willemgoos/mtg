@@ -11,6 +11,7 @@ import {
   grantSealedPool,
   leaveSealed,
   loadSealed,
+  markSealedRevealed,
   matchNumber,
   moveSealedCard,
   opponentFor,
@@ -23,6 +24,8 @@ import {
   SEALED_PRIZES,
   sealedDeckCards,
   sealedPacks,
+  sealedPool,
+  sealedPromo,
   sealedPlayerDeck,
   SEASON_PACK_OF,
   startSealed,
@@ -88,12 +91,16 @@ describe('sealed pool', () => {
     expect(a.event!.main).toEqual({});
   });
 
-  it.each(SETS)('%s: the pool is 72 known cards', (set) => {
+  it.each(SETS)('%s: the pool is 72 known cards and a promo rare', (set) => {
     const e = startSealed(emptySealed(), set, 9, null).event!;
     const packs = sealedPacks(e);
     for (const p of packs) expect(p).toHaveLength(12);
-    expect(size(e.side)).toBe(72);
-    for (const name of packs.flat()) {
+    expect(size(e.side)).toBe(73);
+    const promo = sealedPromo(e);
+    expect(sealedPromo(e)).toBe(promo);
+    expect(['rare', 'mythic']).toContain(SCRYFALL.find((c) => c.name === promo)?.rarity);
+    expect(sealedPool(e)).toEqual([promo, ...packs.flat()]);
+    for (const name of [promo, ...packs.flat()]) {
       expect(known.has(name)).toBe(true);
       expect(cardDb.has(slug(name))).toBe(true);
     }
@@ -104,10 +111,10 @@ describe('sealed pool', () => {
     const [name] = Object.keys(s.event!.side);
     s = moveSealedCard(s, name!, 'main');
     expect(s.event!.main[name!]).toBe(1);
-    expect(size(s.event!.side)).toBe(71);
+    expect(size(s.event!.side)).toBe(72);
     s = moveSealedCard(s, name!, 'side');
     expect(s.event!.main[name!]).toBeUndefined();
-    expect(size(s.event!.side)).toBe(72);
+    expect(size(s.event!.side)).toBe(73);
     // a card you don't hold can't move
     expect(moveSealedCard(s, name!, 'side')).toEqual(s);
     // basics are free and never in side
@@ -403,6 +410,25 @@ describe('sealed storage', () => {
     saveSealed(s);
     expect(store.has('mtg.sealed.v1')).toBe(true);
     expect(loadSealed()).toEqual(s);
+  });
+
+  it('remembers that the reveal was done, and treats older saves as past it', () => {
+    const store = new Map<string, string>();
+    installStorage(store);
+    const s = startSealed(emptySealed(), 'fdn', 5, null);
+    expect(s.event!.revealed).toBe(false);
+    const r = markSealedRevealed(s);
+    expect(r.event!.revealed).toBe(true);
+    expect(markSealedRevealed(r)).toBe(r);
+    saveSealed(r);
+    expect(loadSealed().event!.revealed).toBe(true);
+    const old = JSON.parse(store.get('mtg.sealed.v1')!);
+    delete old.event.revealed;
+    store.set('mtg.sealed.v1', JSON.stringify(old));
+    expect(loadSealed().event!.revealed).toBe(true);
+    old.event.revealed = 'yes';
+    store.set('mtg.sealed.v1', JSON.stringify(old));
+    expect(loadSealed().event).toBeNull();
   });
 
   it('tolerates missing, blocked and bad storage', () => {

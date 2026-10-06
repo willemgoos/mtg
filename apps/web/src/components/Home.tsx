@@ -2,19 +2,22 @@ import { deckById, type Decklist, scryfallById, slug } from '@mtg/cards';
 import { useEffect, useState } from 'react';
 import { artFor } from '../game/deckArt.ts';
 import { ROUNDS, type RunSummary } from '../game/gauntlet.ts';
+import { packArt } from './PackOpening.tsx';
 import { UiSize } from './UiSize.tsx';
 import './home.css';
 
-export type Event = 'gauntlet' | 'expedition';
+export type Event = 'gauntlet' | 'expedition' | 'sealed';
 /** Quick matches and Brawl are single games, Jump In one game or a best of three; the events are runs. */
 export type Mode = 'quick' | 'brawl' | 'jumpIn' | Event;
-export const isEvent = (m: Mode): m is Event => m === 'gauntlet' || m === 'expedition';
+export const isEvent = (m: Mode): m is Event =>
+  m === 'gauntlet' || m === 'expedition' || m === 'sealed';
 const MODE_NAMES: Record<Mode, string> = {
   quick: 'Quick match',
   brawl: 'Brawl',
   jumpIn: 'Jump In!',
   gauntlet: 'Gauntlet',
   expedition: 'Expedition',
+  sealed: 'Sealed',
 };
 export type Tab = 'home' | 'decks' | 'cards';
 
@@ -71,6 +74,7 @@ interface Slide {
 }
 
 const SLIDE_MS = 8000;
+const SEALED_ART = packArt({ kind: 'booster' }, 'fdn');
 
 /**
  * The home screen, after Arena's: a rotating banner of featured modes, a tile
@@ -89,6 +93,7 @@ export function Home({
   jumpIn,
   onTab,
   onSeason,
+  sealedBest,
 }: {
   mode: Mode;
   onMode: (m: Mode) => void;
@@ -105,6 +110,8 @@ export function Home({
   jumpIn: string | null;
   onTab: (t: Tab) => void;
   onSeason: () => void;
+  /** Most wins in any Sealed event so far (null before the first). */
+  sealedBest: number | null;
 }) {
   const slides: Slide[] = [
     {
@@ -136,6 +143,16 @@ export function Home({
       art: art('Ghalta, Primal Hunger'),
       cards: ['Ghalta, Primal Hunger', 'Llanowar Elves'],
       go: () => onDecks('jumpIn'),
+    },
+    {
+      id: 'sealed',
+      badge: 'New mode',
+      title: 'Sealed',
+      text: 'Open six boosters of any set, build a 40-card deck and play until seven wins or three losses.',
+      cta: runs.sealed ? 'Continue' : 'Open your packs',
+      art: SEALED_ART,
+      cards: [],
+      go: () => (runs.sealed ? onPlay('sealed') : onDecks('sealed')),
     },
     {
       id: 'gauntlet',
@@ -231,6 +248,18 @@ export function Home({
               onClick={() => onMode('gauntlet')}
             />
             <ModeTile
+              name="Sealed"
+              art={runs.sealed?.art ?? SEALED_ART}
+              blurb={
+                sealedBest
+                  ? `Six boosters, a 40-card deck, seven wins. Best: ${sealedBest}`
+                  : 'Open six boosters, build a deck, win seven before losing three'
+              }
+              run={runs.sealed}
+              on={mode === 'sealed'}
+              onClick={() => onMode('sealed')}
+            />
+            <ModeTile
               name="Quick match"
               art={
                 quick && quick.deck.series !== 'brawl' ? artFor(quick.deck) : art('Gigantosaurus')
@@ -268,7 +297,7 @@ export function Home({
               <button className="launch__deck" onClick={() => onDecks(mode)}>
                 <span className="launch__name">
                   {run
-                    ? deckById(run.deck).name
+                    ? (run.name ?? deckById(run.deck).name)
                     : mode === 'jumpIn'
                       ? (jumpIn ?? 'Choose your halves')
                       : !isEvent(mode) && last
@@ -341,7 +370,9 @@ function ModeTile({
       <span className="tile__body">
         <span className="tile__name">{name}</span>
         <span className="tile__meta">
-          {playing ? `${run.unit} ${run.step} of ${run.steps} · ${deckById(run.deck).name}` : blurb}
+          {playing
+            ? `${run.label ?? `${run.unit} ${run.step} of ${run.steps}`} · ${run.name ?? deckById(run.deck).name}`
+            : blurb}
         </span>
         {playing && (
           <span className="tile__progress">

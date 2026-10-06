@@ -125,6 +125,7 @@ export function BoosterReveal({
   eyebrow,
   note,
   extra,
+  doneLabel,
   onDone,
 }: {
   /** Card names, or `wildcardName(rarity)`. */
@@ -136,6 +137,8 @@ export function BoosterReveal({
   note?: ReactNode;
   /** More actions beside Done, once every card is face up. */
   extra?: ReactNode;
+  /** The Done button's text. */
+  doneLabel?: string;
   onDone: () => void;
 }) {
   const sorted = useMemo(
@@ -154,6 +157,7 @@ export function BoosterReveal({
         eyebrow={eyebrow}
         note={note}
         extra={extra}
+        {...(doneLabel ? { doneLabel } : {})}
         onKeep={onDone}
       />
       <canvas ref={canvas} className="fx-layer" aria-hidden />
@@ -171,6 +175,7 @@ function OnePack({
   eyebrow,
   note,
   extra,
+  doneLabel = 'Done',
   onKeep,
 }: {
   pack: Pack;
@@ -182,6 +187,7 @@ function OnePack({
   eyebrow: string;
   note?: ReactNode;
   extra?: ReactNode;
+  doneLabel?: string;
   onKeep: (names: string[]) => void;
 }) {
   const [phase, setPhase] = useState<Phase>('sealed');
@@ -452,7 +458,7 @@ function OnePack({
                 onClick={confirm}
               >
                 {!keep
-                  ? 'Done'
+                  ? doneLabel
                   : chosen.length < keep
                     ? `Choose ${keep - chosen.length} more`
                     : 'Keep these'}
