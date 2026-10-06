@@ -27,6 +27,7 @@ import {
   TYPE_KINDS,
   type TypeKind,
 } from '../game/deckBuilderLogic.ts';
+import { completionHints } from '../game/deckCompletion.ts';
 import { deckBasicImage } from '../game/basicArt.ts';
 import {
   cardEntries,
@@ -227,6 +228,9 @@ export function DeckBuilder({
   const [rarities, setRarities] = useState<ReadonlySet<Rarity>>(new Set());
   const [setFilter, setSetFilter] = useState('');
   const [newOnly, setNewOnly] = useState(false);
+  const [showHints, setShowHints] = useState(() => loadPref('hints', bool, '1') === '1');
+  const [hintsOpen, setHintsOpen] = useState(() => loadPref('hintsOpen', bool, '1') === '1');
+  const [suggestedOnly, setSuggestedOnly] = useState(false);
   const [hideUsed, setHideUsed] = useState(() => loadPref('hideUsed', bool, '0') === '1');
   const [sort, setSort] = useState<SortKey>(() =>
     loadPref(
@@ -277,14 +281,33 @@ export function DeckBuilder({
 
   const q = query.trim().toLowerCase();
   const isFree = (e: DeckEntry) => basics && basicColor.has(e.name);
+  // Hints for a deck that isn't full yet; they only point, the player decides.
+  const hints = useMemo(
+    () =>
+      Object.values(deck).reduce((a, b) => a + b, 0) < min
+        ? completionHints({ deck, pool, min, basics })
+        : [],
+    [deck, pool, min, basics],
+  );
+  const hinted = useMemo(
+    () => new Map(hints.filter((h) => !basicColor.has(h.name)).map((h) => [h.name, h])),
+    [hints],
+  );
+  const marking = showHints && hinted.size > 0;
   const shown = sorted.filter(
     (e) =>
+      (!suggestedOnly || !marking || hinted.has(e.name)) &&
       matches(e, { colors: filters, costs, types, rarities, set: setFilter, query: q }) &&
       (!newOnly || !!fresh?.has(e.name)) &&
       // Used up: every copy you own is already in the deck.
       (!hideUsed || isFree(e) || e.count > 0),
   );
-  const extra = types.size + rarities.size + (setFilter ? 1 : 0) + (newOnly ? 1 : 0);
+  const extra =
+    types.size +
+    rarities.size +
+    (setFilter ? 1 : 0) +
+    (newOnly ? 1 : 0) +
+    (suggestedOnly && marking ? 1 : 0);
   const narrowed = filters.size + costs.size + extra > 0 || !!q;
   const clear = () => {
     setFilters(new Set());
@@ -293,6 +316,7 @@ export function DeckBuilder({
     setRarities(new Set());
     setSetFilter('');
     setNewOnly(false);
+    setSuggestedOnly(false);
     setQuery('');
   };
 
@@ -592,6 +616,32 @@ export function DeckBuilder({
           <span className="dbk__switch" aria-hidden />
           Hide used
         </label>
+        {hinted.size > 0 && (
+          <>
+            <label className="dbk__toggle" title="Highlight cards that would help finish your deck">
+              <input
+                type="checkbox"
+                checked={showHints}
+                onChange={(e) => {
+                  setShowHints(e.target.checked);
+                  savePref('hints', e.target.checked ? '1' : '0');
+                }}
+              />
+              <span className="dbk__switch" aria-hidden />
+              Suggestions
+            </label>
+            {marking && (
+              <button
+                className={`dbk__pill ${suggestedOnly ? 'is-on' : ''}`}
+                aria-pressed={suggestedOnly}
+                title="Only the cards that would help finish your deck"
+                onClick={() => setSuggestedOnly(!suggestedOnly)}
+              >
+                Suggested only
+              </button>
+            )}
+          </>
+        )}
         <span className="dbk__shown">
           {shown.length} {shown.length === 1 ? 'card' : 'cards'}
           {narrowed && (
@@ -629,12 +679,21 @@ export function DeckBuilder({
                   <div
                     className={`dbk-card__face ${fresh?.has(e.name) ? 'is-new' : ''} ${
                       drag?.name === e.name && drag.from === 'pool' ? 'is-dragging' : ''
-                    } ${foil?.has(e.name) ? 'is-foil' : ''}`}
+                    } ${foil?.has(e.name) ? 'is-foil' : ''} ${
+                      marking && !out && hinted.has(e.name) ? 'is-suggested' : ''
+                    }`}
+                    data-card={e.name}
                     role="button"
                     tabIndex={out ? -1 : 0}
                     aria-disabled={out}
                     aria-label={`${e.name}${free ? '' : `, ${e.count} left`}`}
-                    title={out ? 'All copies are in your deck' : 'Add to the deck'}
+                    title={
+                      out
+                        ? 'All copies are in your deck'
+                        : marking && hinted.has(e.name)
+                          ? `Suggested: ${hinted.get(e.name)!.reason}`
+                          : 'Add to the deck'
+                    }
                     draggable={!out}
                     onDragStart={startDrag('pool', e)}
                     onDragEnd={endDrag}
@@ -659,6 +718,9 @@ export function DeckBuilder({
                     )}
                     {fresh?.has(e.name) && <span className="dbk-card__new">New</span>}
                     {foil?.has(e.name) && <span className="foil-tag">Promo</span>}
+                    {marking && !out && hinted.has(e.name) && (
+                      <span className="dbk-card__hint">{hinted.get(e.name)!.tag}</span>
+                    )}
                     {inDeck > 0 && <span className="dbk-card__in">{inDeck}</span>}
                   </div>
                   <span className="dbk-card__copies" aria-hidden>
@@ -981,6 +1043,24 @@ export function DeckBuilder({
               </div>
             </>
           )}
+          {hints.length > 0 && (
+            <Suggestions
+              hints={hints}
+              open={hintsOpen}
+              entries={owned}
+              onToggle={() => {
+                setHintsOpen(!hintsOpen);
+                savePref('hintsOpen', hintsOpen ? '0' : '1');
+              }}
+              onHover={setHover}
+              onPick={(e) => {
+                // Show where it is, and add one copy like a click on the card.
+                const el = document.querySelector(`[data-card="${CSS.escape(e.name)}"]`);
+                el?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+                add(e);
+              }}
+            />
+          )}
           {tips.length > 0 && (
             <ul className="dbk__tips" aria-label="Deck tips">
               {tips.map((t) => (
@@ -999,6 +1079,80 @@ export function DeckBuilder({
 
       <HoverPreview hover={drag ? null : hover} notes={hover ? ruleNotes(hover.defId) : []} />
     </div>
+  );
+}
+
+/** What would help finish the deck: a short ranked list (click adds one copy) and a line on lands. */
+function Suggestions({
+  hints,
+  open,
+  entries,
+  onToggle,
+  onHover,
+  onPick,
+}: {
+  hints: ReturnType<typeof completionHints>;
+  open: boolean;
+  entries: readonly DeckEntry[];
+  onToggle: () => void;
+  onHover: (e: DeckEntry | null, anchor?: Element) => void;
+  onPick: (e: DeckEntry) => void;
+}) {
+  const spells = hints.filter((h) => !h.land);
+  const lands = hints.filter((h) => h.land);
+  const short = lands.reduce((n, h) => n + h.count, 0);
+  return (
+    <section className="dbk-hints" aria-label="Suggestions">
+      <button className="dbk-hints__head" aria-expanded={open} onClick={onToggle}>
+        <span>Suggestions</span>
+        <em>{spells.reduce((n, h) => n + h.count, 0)} spells</em>
+        <i aria-hidden>{open ? '−' : '+'}</i>
+      </button>
+      {open && (
+        <>
+          <p className="dbk-hints__note">
+            Cards in your colours that fit what the deck is missing. You choose.
+          </p>
+          {spells.slice(0, 8).map((h) => {
+            const e = entries.find((x) => x.name === h.name);
+            if (!e) return null;
+            return (
+              <button
+                key={h.name}
+                className="dbk-hint"
+                style={e.art ? ({ '--art': `url("${e.art}")` } as CSSProperties) : undefined}
+                title="Add one copy"
+                onMouseEnter={(ev) => onHover(e, ev.currentTarget)}
+                onMouseLeave={() => onHover(null)}
+                onClick={() => onPick(e)}
+              >
+                <span className="dbk-hint__name">{h.name}</span>
+                <span className="dbk-row__cost">
+                  {costSymbols(e.manaCost).map((sym, i) => (
+                    <img key={i} src={symbolUrl(sym)} alt={sym} />
+                  ))}
+                </span>
+                <span className="dbk-hint__why">
+                  {h.count > 1 ? `×${h.count} · ` : ''}
+                  {h.reason}
+                </span>
+              </button>
+            );
+          })}
+          {spells.length > 8 && (
+            <p className="dbk-hints__note">
+              …and {spells.length - 8} more highlighted in your collection.
+            </p>
+          )}
+          {short > 0 && (
+            <p className="dbk-hints__lands">
+              You're {short} {short === 1 ? 'land' : 'lands'} short: about{' '}
+              {lands.map((h) => `${h.count} ${h.name}`).join(', ')}.
+            </p>
+          )}
+        </>
+      )}
+    </section>
   );
 }
 

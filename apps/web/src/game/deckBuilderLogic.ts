@@ -101,12 +101,17 @@ export interface DeckStats {
 
 export const curveIndex = (mv: number) => Math.min(Math.max(mv, 1), 6) - 1;
 
-export function colorSymbols(entries: readonly DeckEntry[]): Record<Color, number> {
+export function colorSymbols(
+  entries: readonly DeckEntry[],
+  /** Only count these colours: a hybrid symbol goes to the ones it shares with them. */
+  only?: readonly Color[],
+): Record<Color, number> {
   const out: Record<Color, number> = { W: 0, U: 0, B: 0, R: 0, G: 0 };
   for (const e of entries) {
     if (isLand(e)) continue;
     for (const sym of costSymbols(e.manaCost)) {
-      const cs = COLORS.filter((c) => sym.split('/').includes(c));
+      let cs = COLORS.filter((c) => sym.split('/').includes(c));
+      if (only) cs = cs.filter((c) => only.includes(c));
       for (const c of cs) out[c] += e.count / cs.length;
     }
   }
@@ -152,12 +157,14 @@ export function autoBasics(
   entries: readonly DeckEntry[],
   deckSize: number,
   fallback: readonly Color[] = [],
+  /** Only give basics to these colours (the deck's own, so a hybrid card doesn't pull in a third). */
+  only?: readonly Color[],
 ): Record<Color, number> {
   const out: Record<Color, number> = { W: 0, U: 0, B: 0, R: 0, G: 0 };
   const rest = entries.filter((e) => !basicColor.has(e.name));
   const nonbasicLands = total(rest.filter(isLand));
   const slots = Math.max(0, landTarget(deckSize) - nonbasicLands);
-  let weights = colorSymbols(rest);
+  let weights = colorSymbols(rest, only);
   let used = COLORS.filter((c) => weights[c] > 0);
   if (!used.length) {
     used = COLORS.filter((c) => fallback.includes(c));
