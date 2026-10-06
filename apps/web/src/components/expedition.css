@@ -650,7 +650,7 @@
 .shell .card-choice--gift,
 .shell .card-choice--gift:hover {
   width: 17rem;
-  cursor: default;
+  cursor: var(--cursor, default);
   translate: none;
 }
 
