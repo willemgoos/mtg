@@ -234,6 +234,39 @@ function grantCard(save: SeasonSave, id: string): void {
     natural(save.vaultPoints);
   }
 }
+/**
+ * Adds cards by id to the collection, as if opened from packs (copies past the limit pay out as
+ * coins or vault points, like packs). Basic lands and anything not collectible are skipped.
+ */
+export function grantSeasonCards(
+  save: SeasonSave,
+  ids: readonly CardDefId[],
+  now: number,
+): SeasonSave {
+  const next = draft(save, now);
+  for (const id of ids) {
+    const c = SEASON_CARDS.get(id);
+    if (!c || !RARITIES.includes(c.rarity as Rarity) || isBasic(id)) continue;
+    grantCard(next, id);
+  }
+  return next;
+}
+/** Pays an event prize: coins, and Season packs (with fresh ids) waiting to be opened. */
+export function awardSeasonPrize(
+  save: SeasonSave,
+  prize: { coins: number; packs: readonly SeasonPackKind[] },
+  now: number,
+): SeasonSave {
+  natural(prize.coins);
+  for (const kind of prize.packs) requireSeason(SEASON_PACK_KINDS.includes(kind), 'Unknown pack');
+  const next = draft(save, now);
+  addCoins(next, prize.coins);
+  for (const kind of prize.packs) {
+    natural(next.nextPackId + 1);
+    next.packs.push({ id: next.nextPackId++, kind });
+  }
+  return next;
+}
 function starter(id: string) {
   const deck = SEASON_STARTERS.find((d) => d.id === id);
   requireSeason(deck, 'Unknown or unsupported Season starter');

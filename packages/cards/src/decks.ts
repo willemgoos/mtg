@@ -19,9 +19,10 @@ export interface Decklist {
    * 'starter': two-colour Starter Deck Duel decks; 'colorChallenge': the
    * mono-colour decks Sparky plays; 'jumpIn': two Jump In packets together;
    * 'season': a deck built in Season mode, taken on an expedition;
-   * 'trophy': a 40-card deck that won a Premier Draft event on Arena.
+   * 'trophy': a 40-card deck that won a Premier Draft event on Arena;
+   * 'sealed': a deck built from Sealed boosters, yours or a bot's.
    */
-  series: 'starter' | 'colorChallenge' | 'jumpIn' | 'season' | 'brawl' | 'trophy';
+  series: 'starter' | 'colorChallenge' | 'jumpIn' | 'season' | 'brawl' | 'trophy' | 'sealed';
   /** A deck from another set than Foundations (shown in its own section). */
   set?: 'blb' | 'msh' | 'msc' | 'fin' | 'fic' | 'stx' | 'sos' | 'soc' | 'fra';
   cards: [name: string, count: number][];
