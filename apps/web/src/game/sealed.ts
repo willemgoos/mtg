@@ -293,9 +293,18 @@ export function sealedPlayerDeck(e: SealedEvent): Decklist {
 export const matchNumber = (e: Pick<SealedEvent, 'wins' | 'losses' | 'draws'>): number =>
   e.wins + e.losses + e.draws;
 
-/** Chance of each bot skill (easy, heuristic, search), by wins so far. */
+/**
+ * Chance of each bot skill (easy, heuristic, search), by wins so far: a gentle
+ * start with no Masters before 2 wins, and no Novices from 3 wins on.
+ */
 export const BOT_ODDS = (wins: number): [easy: number, heuristic: number, search: number] =>
-  wins <= 2 ? [0.3, 0.5, 0.2] : wins <= 4 ? [0.15, 0.55, 0.3] : [0.05, 0.5, 0.45];
+  wins <= 1
+    ? [0.4, 0.6, 0]
+    : wins === 2
+      ? [0.2, 0.6, 0.2]
+      : wins <= 4
+        ? [0, 0.65, 0.35]
+        : [0, 0.45, 0.55];
 
 /** The opponent of match `n`: a deck from six boosters of its own, and a bot skill. Registers the deck. */
 export function opponentFor(e: SealedEvent, n: number): { deck: Decklist; bot: BotKind } {

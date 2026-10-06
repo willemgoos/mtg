@@ -176,6 +176,15 @@ describe('sealed opponents', () => {
     expect(share(6)).toBeGreaterThan(share(0));
   });
 
+  it('start gently: no Master before 2 wins, no Novice from 3 wins', () => {
+    const e = ready('fdn', 3).event!;
+    for (let n = 0; n < 200; n++) {
+      expect(opponentFor({ ...e, seed: n, wins: 0 }, n).bot).not.toBe('search');
+      expect(opponentFor({ ...e, seed: n, wins: 1 }, n).bot).not.toBe('search');
+      expect(opponentFor({ ...e, seed: n, wins: 3 }, n).bot).not.toBe('easy');
+    }
+  });
+
   it('are named after their colours', () => {
     expect(colorsName(['W', 'U'])).toBe('Azorius');
     expect(colorsName(['U', 'W'])).toBe('Azorius');
