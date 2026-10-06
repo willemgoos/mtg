@@ -10,6 +10,8 @@ import {
   PACK_SET_NAMES,
   type PackSet,
   rollPack,
+  rollPlayBooster,
+  type PlayBooster,
   seasonDecklist,
   size,
   suggestDeck,
@@ -110,12 +112,16 @@ const byName = new Map(SCRYFALL.map((c) => [c.name, c]));
 // Pool
 // ---------------------------------------------------------------------------
 
-/** The six boosters of the event's pool, as card names. Deterministic from the event seed. */
-export function sealedPacks(event: Pick<SealedEvent, 'seed' | 'set'>): string[][] {
+/** The six Play Boosters (14 cards each) of the event's pool. Deterministic from the event seed. */
+export function sealedBoosters(event: Pick<SealedEvent, 'seed' | 'set'>): PlayBooster[] {
   return Array.from({ length: SEALED_PACKS }, (_, i) =>
-    rollPack({ kind: 'booster' }, derive(event.seed, PLAYER_SALT + i), 0, event.set),
+    rollPlayBooster(derive(event.seed, PLAYER_SALT + i), event.set),
   );
 }
+
+/** The six boosters of the event's pool, as card names (basic lands included, as opened). */
+export const sealedPacks = (event: Pick<SealedEvent, 'seed' | 'set'>): string[][] =>
+  sealedBoosters(event).map((b) => b.cards);
 
 /**
  * The event's prerelease promo: one extra rare (a mythic one time in eight) of the set, on top of the
@@ -125,11 +131,9 @@ export function sealedPromo(event: Pick<SealedEvent, 'seed' | 'set'>): string {
   return rollPack({ kind: 'booster' }, derive(event.seed, PROMO_SALT), 0, event.set)[0]!;
 }
 
-/** Every card of the pool: the promo, then the six boosters' cards. */
-export const sealedPool = (event: Pick<SealedEvent, 'seed' | 'set'>): string[] => [
-  sealedPromo(event),
-  ...sealedPacks(event).flat(),
-];
+/** Every card of the pool: the promo, then the six boosters' cards. Basic lands are free, so not in it. */
+export const sealedPool = (event: Pick<SealedEvent, 'seed' | 'set'>): string[] =>
+  [sealedPromo(event), ...sealedPacks(event).flat()].filter((n) => !isBasic(n));
 
 const countOf = (names: string[]): Counts => {
   const c: Counts = {};
@@ -558,7 +562,8 @@ export function loadSealed(): SealedState {
       if (r && isNat(r.events) && isNat(r.best) && isNat(r.sevenWins)) records[set] = r;
     }
     // An event saved before the reveal was recorded has been past it.
-    const saved = g.event && g.event.revealed === undefined ? { ...g.event, revealed: true } : g.event;
+    const saved =
+      g.event && g.event.revealed === undefined ? { ...g.event, revealed: true } : g.event;
     const state: SealedState = { event: validEvent(saved) ? saved : null, records };
     registerSealedDecks(state);
     return state;

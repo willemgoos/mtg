@@ -1476,6 +1476,77 @@ export function rollPack(pack: Pack, seed: number, extraRares = 0, set: PackSet 
   return [...picked];
 }
 
+/** A Play Booster's slots besides the 7 commons, 3 uncommons and rare: chances by rarity. */
+const WILDCARD_SLOT = { common: 0.417, uncommon: 0.417, rare: 0.146, mythic: 0.02 };
+const FOIL_SLOT = { common: 0.66, uncommon: 0.26, rare: 0.065, mythic: 0.015 };
+const BASIC_NAMES = ['Plains', 'Island', 'Swamp', 'Mountain', 'Forest'];
+
+/** A Play Booster: its 14 cards, and which one is the foil (an index into `cards`). */
+export interface PlayBooster {
+  cards: string[];
+  foil: number;
+}
+
+/**
+ * A Play Booster, like the ones Sealed and Draft open: 14 cards. Seven commons,
+ * three uncommons, a wildcard of any rarity, a rare (a mythic one time in
+ * eight), a foil of any rarity and a land: a common nonbasic land of the set
+ * half the time when it has any, otherwise a basic. STX and SOS swap a common
+ * for an archive card. The wildcard and foil can repeat a card of the pack;
+ * the other slots can't. Slot odds follow paper Play Boosters roughly (Arena
+ * doesn't publish its own).
+ */
+export function rollPlayBooster(seed: number, set: PackSet = 'fdn'): PlayBooster {
+  const sheets = SHEETS[set];
+  const next = rng(seed);
+  const pick = (sheet: Sheet, avoid?: Set<string>) => {
+    const from = avoid ? sheet.filter((c) => !avoid.has(c.name)) : sheet;
+    const card = from[Math.floor(next() * from.length)];
+    if (card && avoid) avoid.add(card.name);
+    return card?.name;
+  };
+  const isLand = (c: Sheet[number]) => c.typeLine.includes('Land');
+  const commons = sheets.common.filter((c) => !isLand(c));
+  const lands = sheets.common.filter(isLand);
+  const byOdds = (odds: Record<'common' | 'uncommon' | 'rare' | 'mythic', number>) => {
+    let roll = next();
+    for (const r of ['mythic', 'rare', 'uncommon'] as const) {
+      if (roll < odds[r] && sheets[r].length) return sheets[r];
+      roll -= odds[r];
+    }
+    return commons;
+  };
+  const seen = new Set<string>();
+  const cards: (string | undefined)[] = [];
+  const archive = ARCHIVE[set];
+  for (let i = 0; i < 7 - (archive ? 1 : 0); i++) cards.push(pick(commons, seen));
+  if (archive) {
+    const w = ARCHIVE_SLOT_WEIGHTS;
+    const roll = next() * (w.uncommon + w.rare + w.mythic);
+    cards.push(
+      pick(
+        roll < w.uncommon
+          ? archive.uncommon
+          : roll < w.uncommon + w.rare
+            ? archive.rare
+            : archive.mythic,
+        seen,
+      ),
+    );
+  }
+  for (let i = 0; i < PACK_SIZE.uncommon; i++) cards.push(pick(sheets.uncommon, seen));
+  cards.push(pick(byOdds(WILDCARD_SLOT)));
+  cards.push(pick(next() < 1 / 8 && sheets.mythic.length ? sheets.mythic : sheets.rare, seen));
+  cards.push(pick(byOdds(FOIL_SLOT)));
+  const foil = cards.length - 1;
+  cards.push(
+    lands.length && next() < 0.5
+      ? pick(lands)
+      : BASIC_NAMES[Math.floor(next() * BASIC_NAMES.length)],
+  );
+  return { cards: cards.filter((c): c is string => !!c), foil };
+}
+
 const packSeed = (r: ExpeditionRun, n: number) => (r.seed ^ Math.imul(n + 1, 0x9e3779b1)) >>> 0;
 
 /** The cards in each waiting pack. */

@@ -1,6 +1,6 @@
 import { cardDb, findDeck, SCRYFALL, slug } from '@mtg/cards';
 import { describe, expect, it } from 'vitest';
-import { PACK_SET_NAMES, type PackSet, size } from '../src/game/expedition.ts';
+import { PACK_SET_NAMES, type PackSet, rollPlayBooster, size } from '../src/game/expedition.ts';
 import {
   addSealedBasics,
   applySealedSuggestion,
@@ -91,30 +91,56 @@ describe('sealed pool', () => {
     expect(a.event!.main).toEqual({});
   });
 
-  it.each(SETS)('%s: the pool is 72 known cards and a promo rare', (set) => {
+  it.each(SETS)('%s: six 14-card Play Boosters of known cards and a promo rare', (set) => {
     const e = startSealed(emptySealed(), set, 9, null).event!;
     const packs = sealedPacks(e);
-    for (const p of packs) expect(p).toHaveLength(12);
-    expect(size(e.side)).toBe(73);
+    for (const p of packs) expect(p).toHaveLength(14);
     const promo = sealedPromo(e);
     expect(sealedPromo(e)).toBe(promo);
     expect(['rare', 'mythic']).toContain(SCRYFALL.find((c) => c.name === promo)?.rarity);
-    expect(sealedPool(e)).toEqual([promo, ...packs.flat()]);
-    for (const name of [promo, ...packs.flat()]) {
+    const basics = new Set(['Plains', 'Island', 'Swamp', 'Mountain', 'Forest']);
+    const kept = [promo, ...packs.flat()].filter((n) => !basics.has(n));
+    expect(sealedPool(e)).toEqual(kept);
+    expect(size(e.side)).toBe(kept.length);
+    expect(kept.length).toBeGreaterThanOrEqual(79);
+    for (const name of kept) {
       expect(known.has(name)).toBe(true);
       expect(cardDb.has(slug(name))).toBe(true);
     }
   });
 
+  it.each(SETS)('%s: a Play Booster has the slots of a real one', (set) => {
+    for (let seed = 1; seed <= 40; seed++) {
+      const { cards, foil } = rollPlayBooster(seed, set);
+      expect(cards).toHaveLength(14);
+      const rarity = (n: string) =>
+        (SCRYFALL.find((c) => c.name === n && c.set === set) ?? SCRYFALL.find((c) => c.name === n))
+          ?.rarity;
+      const archive = set === 'stx' || set === 'sos';
+      // Seven commons, three uncommons. STX and SOS reprint commons and archive cards whose
+      // card data comes from other printings, so only the other sets can check rarity here.
+      if (!archive) expect(cards.slice(0, 7).every((n) => rarity(n) === 'common')).toBe(true);
+      if (!archive) expect(cards.slice(7, 10).every((n) => rarity(n) === 'uncommon')).toBe(true);
+      if (!archive) expect(['rare', 'mythic']).toContain(rarity(cards[11]!));
+      expect(foil).toBe(12);
+      // The land slot: a basic or a land.
+      expect(SCRYFALL.find((c) => c.name === cards[13])?.typeLine ?? 'Basic Land').toMatch(/Land/);
+      // The fixed slots don't repeat a card.
+      const fixed = [...cards.slice(0, 10), cards[11]];
+      expect(new Set(fixed).size).toBe(fixed.length);
+    }
+  });
+
   it('keeps the pool in side and lets you build a deck', () => {
     let s = startSealed(emptySealed(), 'fdn', 5, null);
+    const pool = size(s.event!.side);
     const [name] = Object.keys(s.event!.side);
     s = moveSealedCard(s, name!, 'main');
     expect(s.event!.main[name!]).toBe(1);
-    expect(size(s.event!.side)).toBe(72);
+    expect(size(s.event!.side)).toBe(pool - 1);
     s = moveSealedCard(s, name!, 'side');
     expect(s.event!.main[name!]).toBeUndefined();
-    expect(size(s.event!.side)).toBe(73);
+    expect(size(s.event!.side)).toBe(pool);
     // a card you don't hold can't move
     expect(moveSealedCard(s, name!, 'side')).toEqual(s);
     // basics are free and never in side

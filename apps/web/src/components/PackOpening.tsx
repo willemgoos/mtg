@@ -16,6 +16,7 @@ import { ruleNotes } from '../game/notes.ts';
 import { play } from '../game/sound.ts';
 import { HoverPreview, type HoverState } from './Preview.tsx';
 import { UiSize } from './UiSize.tsx';
+import './foil.css';
 import './home.css';
 import './expedition.css';
 
@@ -126,10 +127,13 @@ export function BoosterReveal({
   note,
   extra,
   doneLabel,
+  foil,
   onDone,
 }: {
   /** Card names, or `wildcardName(rarity)`. */
   cards: string[];
+  /** The foil card's index in `cards` (a Play Booster's foil slot). */
+  foil?: number;
   /** Which set's booster. */
   set?: PackSet;
   eyebrow: string;
@@ -141,10 +145,14 @@ export function BoosterReveal({
   doneLabel?: string;
   onDone: () => void;
 }) {
-  const sorted = useMemo(
-    () => [...cards].sort((a, b) => RANK[rarityOf(a)] - RANK[rarityOf(b)]),
+  // Commons first, the rare last; the foil keeps track of where it went.
+  const order = useMemo(
+    () =>
+      cards.map((_, i) => i).sort((a, b) => RANK[rarityOf(cards[a]!)] - RANK[rarityOf(cards[b]!)]),
     [cards],
   );
+  const sorted = useMemo(() => order.map((i) => cards[i]!), [order, cards]);
+  const foilAt = foil === undefined ? undefined : order.indexOf(foil);
   const canvas = useRef<HTMLCanvasElement>(null);
   useEffect(() => mountFx(canvas.current!), []);
   return (
@@ -153,6 +161,7 @@ export function BoosterReveal({
         pack={{ kind: 'booster' }}
         {...(set ? { set } : {})}
         cards={sorted}
+        {...(foilAt !== undefined ? { foilAt } : {})}
         keep={0}
         eyebrow={eyebrow}
         note={note}
@@ -176,9 +185,12 @@ function OnePack({
   note,
   extra,
   doneLabel = 'Done',
+  foilAt,
   onKeep,
 }: {
   pack: Pack;
+  /** Index in `cards` of the card that shows as foil. */
+  foilAt?: number;
   /** Which set's booster (for its art and name). */
   set?: PackSet;
   cards: string[];
@@ -424,7 +436,7 @@ function OnePack({
                     <div className="pcard__back">
                       <div className="back" />
                     </div>
-                    <div className="pcard__face">
+                    <div className={`pcard__face ${i === foilAt ? 'is-foil' : ''}`}>
                       {wild ? (
                         <span className={`wildcard wildcard--${rarityOf(name)}`}>
                           <span className="wildcard__gem" />

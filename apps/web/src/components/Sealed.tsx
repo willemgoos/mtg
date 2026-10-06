@@ -28,7 +28,7 @@ import {
   SEALED_WINS,
   type SealedEvent,
   type SealedState,
-  sealedPacks,
+  sealedBoosters,
   sealedPlayerDeck,
   sealedPromo,
   startSealed,
@@ -68,7 +68,11 @@ function seasonInfo(): SeasonInfo {
 
 const SETS = Object.keys(PACK_SET_NAMES) as PackSet[];
 const setArt = (set: PackSet) => packArt({ kind: 'booster' }, set);
-const SKILLS: Record<string, string> = { easy: 'Novice', heuristic: 'Apprentice', search: 'Master' };
+const SKILLS: Record<string, string> = {
+  easy: 'Novice',
+  heuristic: 'Apprentice',
+  search: 'Master',
+};
 const plural = (n: number, word: string) =>
   `${n} ${n === 1 ? word : word.endsWith('s') ? `${word}es` : `${word}s`}`;
 const seed = () => Math.floor(Math.random() * 2 ** 31);
@@ -123,7 +127,8 @@ export function Sealed({
     () => !!e && !e.finished && e.revealed && size(e.main) === 0,
   );
   const info = useMemo(seasonInfo, [e?.id, e?.finished, e?.prizePaid]);
-  if (!e) return <Picker state={state} info={info} update={update} onMenu={onMenu} onSeason={onSeason} />;
+  if (!e)
+    return <Picker state={state} info={info} update={update} onMenu={onMenu} onSeason={onSeason} />;
   if (!e.revealed)
     return (
       <Reveal
@@ -170,12 +175,13 @@ function SeasonNote({
     <p className={`sealed-season ${saveId ? 'is-on' : ''}`}>
       {saveId ? (
         <>
-          Every card you open and the prize go to your Season save <strong>{name ?? 'Season'}</strong>.
+          Every card you open and the prize go to your Season save{' '}
+          <strong>{name ?? 'Season'}</strong>.
         </>
       ) : (
         <>
-          No Season save is active, so the cards and the prize would be lost. You need a Season
-          save to keep them.{' '}
+          No Season save is active, so the cards and the prize would be lost. You need a Season save
+          to keep them.{' '}
           {onSeason && (
             <button className="sealed-link" onClick={onSeason}>
               Open Season
@@ -208,7 +214,9 @@ function Picker({
   );
   const start = () => {
     play('fan', { gain: 0.6 });
-    update((s) => grantSealedPool(startSealed(s, set, seed(), info.activeId), seasonRepository(), Date.now()));
+    update((s) =>
+      grantSealedPool(startSealed(s, set, seed(), info.activeId), seasonRepository(), Date.now()),
+    );
   };
   return (
     <div className="start shell sealed sealed--pick">
@@ -230,10 +238,15 @@ function Picker({
               className={`sealed-set ${set === s ? 'is-on' : ''}`}
               onClick={() => setSet(s)}
             >
-              <span className="sealed-set__art" style={{ backgroundImage: `url("${setArt(s)}")` }} />
+              <span
+                className="sealed-set__art"
+                style={{ backgroundImage: `url("${setArt(s)}")` }}
+              />
               <span className="sealed-set__name">{PACK_SET_NAMES[s]}</span>
               <span className="sealed-set__rec">
-                {rec?.events ? `Best ${plural(rec.best, 'win')} · ${rec.events}×` : 'Not played yet'}
+                {rec?.events
+                  ? `Best ${plural(rec.best, 'win')} · ${rec.events}×`
+                  : 'Not played yet'}
               </span>
             </button>
           );
@@ -380,7 +393,7 @@ function Reveal({
   info: SeasonInfo;
   onDone: () => void;
 }) {
-  const packs = useMemo(() => sealedPacks(event), [event.seed, event.set]);
+  const packs = useMemo(() => sealedBoosters(event), [event.seed, event.set]);
   // The promo comes first (-1), then the packs.
   const [index, setIndex] = useState(-1);
   const last = index === packs.length - 1;
@@ -390,7 +403,8 @@ function Reveal({
     <>
       <BoosterReveal
         key={index}
-        cards={packs[index]!}
+        cards={packs[index]!.cards}
+        foil={packs[index]!.foil}
         set={event.set}
         eyebrow={`Sealed · Pack ${index + 1} of ${packs.length}`}
         note={
@@ -493,7 +507,10 @@ function Tracker({ event }: { event: SealedEvent }) {
         <span className="sealed-track__label">Wins</span>
         <ol className="sealed-wins">
           {Array.from({ length: SEALED_WINS }, (_, i) => (
-            <li key={i} className={i < event.wins ? 'is-won' : live && i === event.wins ? 'is-next' : ''}>
+            <li
+              key={i}
+              className={i < event.wins ? 'is-won' : live && i === event.wins ? 'is-next' : ''}
+            >
               {i < event.wins ? (
                 <svg viewBox="0 0 16 16" aria-hidden>
                   <path d="m3.5 8.5 3 3 6-7" />
@@ -636,7 +653,10 @@ function Hub({
 
       <div className="sealed-boxes">
         <section className="sealed-box">
-          <span className="sealed-box__art" style={{ backgroundImage: `url("${cards ? artFor(deck) : setArt(e.set)}")` }} />
+          <span
+            className="sealed-box__art"
+            style={{ backgroundImage: `url("${cards ? artFor(deck) : setArt(e.set)}")` }}
+          />
           <div className="sealed-box__text">
             <span className="sealed-box__label">Your deck</span>
             <span className="sealed-box__name">{deck.name}</span>
@@ -661,7 +681,10 @@ function Hub({
         </section>
         {foe && (
           <section className="sealed-box sealed-box--foe">
-            <span className="sealed-box__art" style={{ backgroundImage: `url("${artFor(foe.deck)}")` }} />
+            <span
+              className="sealed-box__art"
+              style={{ backgroundImage: `url("${artFor(foe.deck)}")` }}
+            />
             <div className="sealed-box__text">
               <span className="sealed-box__label">Opponent</span>
               <span className="sealed-box__name">{foe.deck.name}</span>
@@ -685,7 +708,8 @@ function Hub({
       )}
       {playing && e.seasonSaveId !== null && !e.poolGranted && (
         <p className="sealed-season">
-          Your cards could not be added to the Season save {save ?? ''}, so they stay in this event only.
+          Your cards could not be added to the Season save {save ?? ''}, so they stay in this event
+          only.
         </p>
       )}
       {playing && !ready && !resumable && (
@@ -701,10 +725,7 @@ function Hub({
               <span className="gauntlet__confirm">
                 Resign? The event ends and pays for {plural(e.wins, 'win')}.
               </span>
-              <button
-                className="btn btn--primary"
-                onClick={() => update(resignSealed)}
-              >
+              <button className="btn btn--primary" onClick={() => update(resignSealed)}>
                 Resign
               </button>
               <button className="btn btn--ghost" onClick={() => setConfirming(false)}>
