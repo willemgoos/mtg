@@ -20,6 +20,7 @@ import type { CardDefId, Color, NewGameOptions, PlayerId } from '@mtg/engine';
 import type { BotKind, LevelBot } from './bot.worker.ts';
 import { manaValue } from './deckView.ts';
 import { type DeckRecord, rng, type RunSummary } from './gauntlet.ts';
+import { rateCard } from './limitedRating.ts';
 
 /*
  * Expedition: a roguelike run. You set out with a deck and two boosters, then
@@ -1767,42 +1768,147 @@ export function deckAdvice(b: Build): string[] {
   return notes;
 }
 
+const SPELLS_PER_40 = MIN_DECK - LANDS_PER_40;
+const isCreature = (name: string) => byName.get(name)?.typeLine.includes('Creature') ?? false;
+
+/** Whether a card can be cast with these colours: every coloured symbol in its cost has one of them. */
+function castable(name: string, colors: readonly Color[]): boolean {
+  const cost = byName.get(name)?.manaCost ?? '';
+  if (!cost) return colorsOf(name).every((c) => colors.includes(c));
+  return [...cost.matchAll(/\{([^}]+)\}/g)].every(([, sym]) => {
+    const needs = COLORS.filter((c) => sym!.includes(c));
+    return !needs.length || needs.some((c) => colors.includes(c));
+  });
+}
+
 /**
- * A sensible 40 from everything you own: the two colours with the strongest
- * cards, their best 23 spells (with only a few expensive ones), matching
- * non-basic lands, and basics split by the spells' coloured mana symbols.
+ * The best 23 spells for a deck: highest rated first, with a shape a person
+ * would want: about 15 creatures, a handful of cheap plays and few expensive cards.
+ */
+function pickSpells(cards: readonly string[]): string[] {
+  const rest = [...cards].sort((a, b) => rateCard(b) - rateCard(a) || mv(a) - mv(b));
+  const picked: string[] = [];
+  const count = (pred: (n: string) => boolean) => picked.filter(pred).length;
+  while (picked.length < SPELLS_PER_40 && rest.length) {
+    const left = SPELLS_PER_40 - picked.length;
+    const wantCreatures = Math.max(0, 15 - count(isCreature));
+    const wantCheap = Math.max(0, 5 - count((n) => mv(n) <= 2 && rateCard(n) >= 2));
+    let best = -1;
+    let bestScore = -Infinity;
+    for (let i = 0; i < rest.length; i++) {
+      const n = rest[i]!;
+      const cost = mv(n);
+      // At most 5 cards that cost 5+, and 2 that cost 6+.
+      if (
+        (cost >= 5 && count((x) => mv(x) >= 5) >= 5) ||
+        (cost >= 6 && count((x) => mv(x) >= 6) >= 2)
+      )
+        continue;
+      if (wantCreatures >= left && !isCreature(n)) continue;
+      let s = rateCard(n);
+      if (wantCreatures && isCreature(n)) s += 0.35;
+      if (wantCheap && cost <= 2 && rateCard(n) >= 2) s += 0.3;
+      if (s > bestScore) {
+        bestScore = s;
+        best = i;
+      }
+    }
+    if (best < 0) break;
+    picked.push(rest.splice(best, 1)[0]!);
+  }
+  // Short of playable cards in these colours: fill with the best of what's left.
+  while (picked.length < SPELLS_PER_40 && rest.length) picked.push(rest.shift()!);
+  return picked;
+}
+
+/** How strong a deck is: quality counts more than depth (filler adds little). */
+const deckStrength = (spells: readonly string[]) =>
+  spells.reduce((k, n) => k + Math.max(0, rateCard(n) - 1.5), 0);
+
+/** Whether the pool can make colour `c` besides its basics: a land, rock or fetch for it. */
+const canFix = (pool: Counts, c: Color) =>
+  Object.keys(pool).some((n) => {
+    const text = byName.get(n)?.oracleText ?? '';
+    if (isLand(n))
+      return landColors(n).includes(c) || (UTILITY_LANDS.includes(n) && /basic land/i.test(text));
+    return new RegExp(`Add[^.]*\\{${c}\\}|Add one mana of any color`).test(text);
+  });
+
+/**
+ * A sensible 40 from everything you own: the colour pair whose best 23 spells
+ * are strongest (each rated by what it does), with a creature-heavy curve, the
+ * pool's removal, matching non-basic lands, and basics split by the spells'
+ * coloured mana symbols. A very strong off-colour card is splashed when the
+ * pool can fix for it.
  */
 export function suggestDeck(b: Build): Pick<Build, 'main' | 'side'> {
   const pool: Counts = {};
   for (const [n, k] of [...Object.entries(b.main), ...Object.entries(b.side)])
     if (!isBasic(n)) pool[n] = (pool[n] ?? 0) + k;
-  const score = (n: string) =>
-    (RARITY_SCORE[byName.get(n)?.rarity ?? 'common'] ?? 1) +
-    (byName.get(n)?.typeLine.includes('Creature') ? 0.5 : 0) -
-    (mv(n) >= 6 ? 1 : 0);
-
-  const weight = new Map<Color, number>();
-  for (const [n, k] of Object.entries(pool))
-    if (!isLand(n)) for (const c of colorsOf(n)) weight.set(c, (weight.get(c) ?? 0) + score(n) * k);
-  const two = [...weight.entries()]
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, 2)
-    .map(([c]) => c);
-  const fits = (n: string) => colorsOf(n).every((c) => two.includes(c));
-
   const copies = Object.entries(pool)
     .filter(([n]) => !isLand(n))
-    .flatMap(([n, k]) => Array<string>(k).fill(n))
-    .sort((a, b) => Number(fits(b)) - Number(fits(a)) || score(b) - score(a) || mv(a) - mv(b));
-  const spells: string[] = [];
-  const later: string[] = [];
-  for (const n of copies) {
-    if (spells.length >= MIN_DECK - LANDS_PER_40) break;
-    const expensive = mv(n) >= 5 && spells.filter((x) => mv(x) >= 5).length >= 4;
-    if (!fits(n) || expensive) later.push(n);
-    else spells.push(n);
+    .flatMap(([n, k]) => Array<string>(k).fill(n));
+
+  // The colour pair with the strongest deck.
+  let two: Color[] = [];
+  let spells: string[] = [];
+  let best = -1;
+  for (let i = 0; i < COLORS.length; i++)
+    for (let j = i + 1; j < COLORS.length; j++) {
+      const pair = [COLORS[i]!, COLORS[j]!];
+      const picked = pickSpells(copies.filter((n) => castable(n, pair)));
+      const fixing = Object.keys(pool).filter(
+        (n) =>
+          isLand(n) && landColors(n).length === 2 && landColors(n).every((c) => pair.includes(c)),
+      ).length;
+      const s = deckStrength(picked) + 0.3 * Math.min(fixing, 3);
+      if (s > best) [best, two, spells] = [s, pair, picked];
+    }
+
+  // A light splash: up to two very strong cards of a third colour, if the pool can fix it.
+  const bombs = (c: Color) =>
+    copies
+      .filter((n) => !castable(n, two) && castable(n, [...two, c]) && colorsOf(n).includes(c))
+      .filter((n) => {
+        const pips = [...(byName.get(n)?.manaCost ?? '').matchAll(/\{[^}]*[WUBRG][^}]*\}/g)];
+        return pips.length === 1 && mv(n) <= 5 && rateCard(n) >= 4;
+      })
+      .sort((x, y) => rateCard(y) - rateCard(x))
+      .slice(0, 2);
+  const options = COLORS.filter((c) => !two.includes(c) && canFix(pool, c))
+    .map((c) => ({ c, cards: bombs(c) }))
+    .filter((o) => o.cards.length)
+    .sort((x, y) => rateCard(y.cards[0]!) - rateCard(x.cards[0]!));
+  if (options.length && spells.length >= SPELLS_PER_40) {
+    const { cards } = options[0]!;
+    // Replace the weakest cards, but only when the bomb is clearly better.
+    const weakest = [...spells].sort((x, y) => rateCard(x) - rateCard(y));
+    const swaps = cards.filter((n, i) => rateCard(n) - rateCard(weakest[i]!) >= 1);
+    if (swaps.length) {
+      swaps.forEach((n, i) => spells.splice(spells.indexOf(weakest[i]!), 1, n));
+    }
   }
-  while (spells.length < MIN_DECK - LANDS_PER_40 && later.length) spells.push(later.shift()!);
+  // Too few playables in these colours: fill with the best of one more colour (then any).
+  if (spells.length < SPELLS_PER_40) {
+    const spare = (extra: readonly Color[]) => {
+      const left = [...copies];
+      for (const n of spells) left.splice(left.indexOf(n), 1);
+      return left
+        .filter((n) => castable(n, [...two, ...extra]))
+        .sort((x, y) => rateCard(y) - rateCard(x));
+    };
+    const third = COLORS.filter((c) => !two.includes(c))
+      .map((c) => ({ c, fill: spare([c]).slice(0, SPELLS_PER_40 - spells.length) }))
+      .sort((x, y) => deckStrength(y.fill) - deckStrength(x.fill))[0];
+    if (third) spells.push(...third.fill);
+    if (spells.length < SPELLS_PER_40)
+      spells.push(...spare(COLORS).slice(0, SPELLS_PER_40 - spells.length));
+  }
+  // Cards outside the pair (a hybrid card castable in it doesn't count) make up the splash.
+  const offPair = spells.filter((n) => !castable(n, two));
+  const colors = COLORS.filter(
+    (c) => two.includes(c) || offPair.some((n) => colorsOf(n).includes(c)),
+  );
 
   const main: Counts = {};
   const add = (n: string, k = 1) => (main[n] = (main[n] ?? 0) + k);
@@ -1814,25 +1920,35 @@ export function suggestDeck(b: Build): Pick<Build, 'main' | 'side'> {
     if (!isLand(n)) continue;
     const makes = landColors(n);
     const useful = UTILITY_LANDS.includes(n);
-    if (!useful && (!makes.length || !makes.every((c) => two.includes(c)))) continue;
+    if (!useful && (!makes.length || !makes.every((c) => colors.includes(c)))) continue;
     const take = Math.min(k, LANDS_PER_40 - lands, useful ? 3 - utility : Infinity);
     if (take > 0) add(n, take);
     lands += Math.max(0, take);
     if (useful) utility += Math.max(0, take);
   }
-  // Basics in proportion to the coloured mana symbols the spells ask for.
+  // Basics in proportion to the coloured mana symbols the main colours ask for;
+  // a splash of up to three cards gets two (fewer when lands already make it).
   const pips = new Map<Color, number>();
   for (const n of spells)
     for (const [, sym] of (byName.get(n)?.manaCost ?? '').matchAll(/\{([^}]+)\}/g))
       for (const c of COLORS) if (sym!.includes(c)) pips.set(c, (pips.get(c) ?? 0) + 1);
-  const colors = two.length ? two : ['G' as Color];
-  const totalPips = colors.reduce((k, c) => k + (pips.get(c) ?? 0), 0) || colors.length;
+  const cardsOf = (c: Color) => offPair.filter((n) => colorsOf(n).includes(c)).length;
+  const minor = colors.filter((c) => !two.includes(c) && cardsOf(c) <= 3);
   let left = LANDS_PER_40 - lands;
-  colors.forEach((c, i) => {
-    const k =
-      i === colors.length - 1
-        ? left
-        : Math.round(((pips.get(c) ?? 1) / totalPips) * (LANDS_PER_40 - lands));
+  for (const c of minor) {
+    const fixers = Object.entries(main)
+      .filter(([n]) => isLand(n) && landColors(n).includes(c))
+      .reduce((k, [, v]) => k + v, 0);
+    const k = Math.min(left, Math.max(0, 3 - fixers), 2);
+    if (k > 0) add(BASICS[c], k);
+    left -= k;
+  }
+  const mains = colors.filter((c) => !minor.includes(c));
+  if (!mains.length) mains.push('G');
+  const totalPips = mains.reduce((k, c) => k + (pips.get(c) ?? 0), 0) || mains.length;
+  const basics = left;
+  mains.forEach((c, i) => {
+    const k = i === mains.length - 1 ? left : Math.round(((pips.get(c) ?? 1) / totalPips) * basics);
     if (k > 0) add(BASICS[c], k);
     left -= k;
   });
