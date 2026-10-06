@@ -63,6 +63,8 @@ export interface SealedEvent {
   draws: number;
   /** Seed of the match being played, once it has started. */
   match: number | null;
+  /** The six boosters have been opened on screen (so a reload doesn't replay the reveal). */
+  revealed: boolean;
   /** The pool has been added to the Season save (happens once). */
   poolGranted: boolean;
   /** The prize has been paid to the Season save (happens once). */
@@ -99,6 +101,7 @@ const derive = (seed: number, salt: number): number =>
 const PLAYER_SALT = 0;
 const FOE_SALT = 1000;
 const BOT_SALT = 5000;
+const PROMO_SALT = 9000;
 
 const isBasic = (name: string) => Object.values(BASICS).includes(name);
 const byName = new Map(SCRYFALL.map((c) => [c.name, c]));
@@ -113,6 +116,20 @@ export function sealedPacks(event: Pick<SealedEvent, 'seed' | 'set'>): string[][
     rollPack({ kind: 'booster' }, derive(event.seed, PLAYER_SALT + i), 0, event.set),
   );
 }
+
+/**
+ * The event's prerelease promo: one extra rare (a mythic one time in eight) of the set, on top of the
+ * six boosters. It is the rare slot of a pack of its own, so it follows the boosters' odds.
+ */
+export function sealedPromo(event: Pick<SealedEvent, 'seed' | 'set'>): string {
+  return rollPack({ kind: 'booster' }, derive(event.seed, PROMO_SALT), 0, event.set)[0]!;
+}
+
+/** Every card of the pool: the promo, then the six boosters' cards. */
+export const sealedPool = (event: Pick<SealedEvent, 'seed' | 'set'>): string[] => [
+  sealedPromo(event),
+  ...sealedPacks(event).flat(),
+];
 
 const countOf = (names: string[]): Counts => {
   const c: Counts = {};
@@ -136,11 +153,12 @@ export function startSealed(
       set,
       seasonSaveId,
       main: {},
-      side: countOf(sealedPacks({ seed: seed >>> 0, set }).flat()),
+      side: countOf(sealedPool({ seed: seed >>> 0, set })),
       wins: 0,
       losses: 0,
       draws: 0,
       match: null,
+      revealed: false,
       poolGranted: false,
       prizePaid: false,
       finished: false,
@@ -148,6 +166,11 @@ export function startSealed(
     },
     records: { ...s.records, [set]: { ...rec, events: rec.events + 1 } },
   };
+}
+
+/** Marks the pool's reveal as done. */
+export function markSealedRevealed(s: SealedState): SealedState {
+  return withEvent(s, (e) => (e.revealed ? e : { ...e, revealed: true }));
 }
 
 /** Leaves a finished event (its records are kept), for the next one. A running event stays. */
@@ -277,11 +300,7 @@ export const BOT_ODDS = (wins: number): [easy: number, heuristic: number, search
 /** The opponent of match `n`: a deck from six boosters of its own, and a bot skill. Registers the deck. */
 export function opponentFor(e: SealedEvent, n: number): { deck: Decklist; bot: BotKind } {
   const foe = derive(e.seed, FOE_SALT + n);
-  const pool = countOf(
-    Array.from({ length: SEALED_PACKS }, (_, i) =>
-      rollPack({ kind: 'booster' }, derive(foe, i), 0, e.set),
-    ).flat(),
-  );
+  const pool = countOf(sealedPool({ seed: foe, set: e.set }));
   const { main } = suggestDeck({ main: {}, side: pool, opened: 0, packs: [], fresh: [] });
   // Whatever the suggester does, a bot deck is always a legal 40.
   const dominant = deckColors({ main, side: {}, opened: 0, packs: [], fresh: [] })[0] ?? 'G';
@@ -454,7 +473,7 @@ function inSeason(
 export function grantSealedPool(s: SealedState, repo: SeasonUpdater, now: number): SealedState {
   const e = s.event;
   if (!e || e.poolGranted) return s;
-  const ids = sealedPacks(e).flat().map(slug);
+  const ids = sealedPool(e).map(slug);
   return inSeason(repo, e, (save, t) => grantSeasonCards(save, ids, t), now)
     ? { ...s, event: { ...e, poolGranted: true } }
     : s;
@@ -510,6 +529,7 @@ function validEvent(e: SealedEvent | null | undefined): e is SealedEvent {
     isNat(e.losses) &&
     isNat(e.draws) &&
     (e.match === null || isNat(e.match)) &&
+    typeof e.revealed === 'boolean' &&
     typeof e.poolGranted === 'boolean' &&
     typeof e.prizePaid === 'boolean' &&
     typeof e.finished === 'boolean' &&
@@ -528,7 +548,9 @@ export function loadSealed(): SealedState {
       const r = g.records?.[set];
       if (r && isNat(r.events) && isNat(r.best) && isNat(r.sevenWins)) records[set] = r;
     }
-    const state: SealedState = { event: validEvent(g.event) ? g.event : null, records };
+    // An event saved before the reveal was recorded has been past it.
+    const saved = g.event && g.event.revealed === undefined ? { ...g.event, revealed: true } : g.event;
+    const state: SealedState = { event: validEvent(saved) ? saved : null, records };
     registerSealedDecks(state);
     return state;
   } catch {

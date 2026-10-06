@@ -50,7 +50,7 @@ export const roundOf = (r: Run): number => Math.min(wins(r), ROUNDS.length - 1);
 export interface RunSummary {
   deck: string;
   status: 'playing' | 'cleared' | 'out';
-  unit: 'Round' | 'Floor';
+  unit: 'Round' | 'Floor' | 'Match';
   /** The step being played, from 1. */
   step: number;
   steps: number;
@@ -58,6 +58,11 @@ export interface RunSummary {
   done: number;
   livesLeft: number;
   lives: number;
+  /** Replaces "Round 3 of 8" where the mode has its own wording (Sealed: "2 wins · 1 loss"). */
+  label?: string;
+  /** The mode's own name for the deck, and art for it, where `deck` isn't a stock list. */
+  name?: string;
+  art?: string;
 }
 
 export function summarize(r: Run): RunSummary {

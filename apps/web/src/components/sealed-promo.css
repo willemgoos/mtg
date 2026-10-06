@@ -1,0 +1,84 @@
+/* The Sealed prerelease promo: the big flip-over card in the reveal, and its tag on the event screen. */
+
+.shell .sealed-promo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.625rem;
+  margin: 0;
+  font-size: 0.9375rem;
+  font-weight: 500;
+}
+
+.shell .sealed-promo__tag {
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #1a1206;
+  background: linear-gradient(100deg, #ffd9a0, #f4b13e 40%, #ff9ec7 75%, #b9a0ff);
+  overflow: hidden;
+}
+
+.shell .promo {
+  width: min(20rem, 70vw);
+  padding: 0;
+  border: 0;
+  background: none;
+  perspective: 70rem;
+  aspect-ratio: 63 / 88;
+  cursor: var(--cursor-hover, pointer);
+}
+
+.shell .promo__inner {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.shell .promo.is-up .promo__inner {
+  transform: rotateY(180deg);
+}
+
+.shell .promo__back,
+.shell .promo__face {
+  position: absolute;
+  inset: 0;
+  display: block;
+  overflow: hidden;
+  border-radius: 4.6% / 3.3%;
+  backface-visibility: hidden;
+  box-shadow: 0 1rem 2.5rem rgba(0, 0, 0, 0.6);
+}
+
+.shell .promo__back .back {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.shell .promo__face {
+  transform: rotateY(180deg);
+  background: #111;
+}
+
+.shell .promo__face img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.shell .promo.is-up {
+  cursor: var(--cursor, default);
+  filter: drop-shadow(0 0 2rem rgba(244, 177, 62, 0.35));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shell .promo__inner {
+    transition: none;
+  }
+}

@@ -12,7 +12,7 @@ import {
   scryfallById,
   slug,
 } from '@mtg/cards';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Board } from './components/Board.tsx';
 import { CardSearch } from './components/CardSearch.tsx';
 import { DeckView } from './components/DeckView.tsx';
@@ -23,12 +23,14 @@ import { type Event, Home, isEvent, type Mode, Nav, type Tab } from './component
 import { JumpIn } from './components/JumpIn.tsx';
 import { JumpInLobby } from './components/JumpInLobby.tsx';
 import { Season } from './components/Season.tsx';
+import { Sealed, sealedRunSummary, seasonRepository } from './components/Sealed.tsx';
 import type { BotKind } from './game/bot.worker.ts';
 import './components/decks.css';
 import { artFor, BLURBS } from './game/deckArt.ts';
 import { HumanMade } from './components/HumanMade.tsx';
 import * as X from './game/expedition.ts';
 import * as J from './game/jumpInMatch.ts';
+import * as S from './game/sealed.ts';
 import {
   type DeckRecord,
   type GauntletState,
@@ -189,9 +191,16 @@ interface Match {
   series?: boolean;
 }
 
-const EVENT_NAMES: Record<Event, string> = { gauntlet: 'Gauntlet', expedition: 'Expedition' };
+const EVENT_NAMES: Record<Event, string> = {
+  gauntlet: 'Gauntlet',
+  expedition: 'Expedition',
+  sealed: 'Sealed',
+};
 
 export function App() {
+  // Loading Sealed registers its decks, which a saved Sealed game needs to be recognised below.
+  const [sealed, setSealed] = useState(S.loadSealed);
+  const sealedNow = useRef(sealed);
   // A game in progress when the page was closed or reloaded carries on.
   const [saved] = useState(loadGame);
   const [gauntlet, setGauntlet] = useState(loadGauntlet);
@@ -210,7 +219,9 @@ export function App() {
             ? 'gauntlet'
             : expedition.run?.match === saved.seed
               ? 'expedition'
-              : null,
+              : sealed.event?.match === saved.seed
+                ? 'sealed'
+                : null,
         series: !!jumpIn.series && J.current(jumpIn.series) === saved.seed,
       },
   );
@@ -223,7 +234,9 @@ export function App() {
           ? 'expedition'
           : gauntlet.run
             ? 'gauntlet'
-            : 'quick'),
+            : sealed.event && !sealed.event.finished
+              ? 'sealed'
+              : 'quick'),
   );
   const [hub, setHub] = useState<Event | null>(null);
   /** Picking Jump In packets for a new expedition. */
@@ -255,6 +268,7 @@ export function App() {
   };
   const openDecks = (m: Mode) => {
     setMode(m);
+    if (m === 'sealed') return setHub('sealed');
     setTab('decks');
   };
   const menu = () => {
@@ -314,6 +328,15 @@ export function App() {
       saveGauntlet(next);
       return next;
     });
+  /** Sealed changes go through a ref: finishing an event pays its prize, which must happen once. */
+  const updateSealed = (f: (s: S.SealedState) => S.SealedState) => {
+    let next = f(sealedNow.current);
+    if (next.event?.finished && !next.event.prizePaid)
+      next = S.paySealedPrize(next, seasonRepository(), Date.now());
+    sealedNow.current = next;
+    S.saveSealed(next);
+    setSealed(next);
+  };
   const updateExpedition = (f: (s: X.ExpeditionState) => X.ExpeditionState) =>
     setExpedition((s) => {
       const next = f(s);
@@ -323,9 +346,15 @@ export function App() {
   const summaries: Record<Event, RunSummary | null> = {
     gauntlet: gauntlet.run && summarize(gauntlet.run),
     expedition: expedition.run && X.summarize(expedition.run),
+    sealed: sealedRunSummary(sealed.event),
   };
   const paused = (e: Event) => {
-    const m = e === 'gauntlet' ? gauntlet.run?.match : expedition.run?.match;
+    const m =
+      e === 'gauntlet'
+        ? gauntlet.run?.match
+        : e === 'expedition'
+          ? expedition.run?.match
+          : sealed.event?.match;
     return m != null && loadGame()?.seed === m;
   };
   const beginRun = (e: Event, deck: string) => {
@@ -359,6 +388,27 @@ export function App() {
       fight.bot,
     );
   };
+  const playSealed = () => {
+    const e = sealed.event;
+    if (!e || e.finished) return;
+    const resume = paused('sealed') ? loadGame() : null;
+    if (!resume && !S.canPlay(e)) return;
+    const seed = resume?.seed ?? newSeed();
+    if (!resume) updateSealed((s) => S.startSealedMatch(s, seed));
+    const foe = S.currentOpponent(e);
+    setMatch({
+      choice: resume?.choice ?? {
+        you: S.sealedPlayerDeck(e).id,
+        them: foe.deck.id,
+        cards: S.sealedDeckCards(e),
+      },
+      seed,
+      resume,
+      attempt: 0,
+      bot: foe.bot,
+      event: 'sealed',
+    });
+  };
   // Leaving a run's match keeps it saved, so the round can be resumed rather than restarted.
   const toHub = (e: Event) => {
     setMatch(null);
@@ -373,7 +423,7 @@ export function App() {
   /** Home's Play button: carry on a run, replay the last quick match, or go pick a deck. */
   const playHome = (m: Mode) => {
     setMode(m);
-    if (isEvent(m) && summaries[m]) return setHub(m);
+    if (m === 'sealed' || (isEvent(m) && summaries[m])) return setHub(m as Event);
     if (m === 'jumpIn') return setTab('decks');
     // Replay the last single game if it was in this mode (Brawl decks only play Brawl).
     const brawlDeck = lastQuick && isBrawl(deckById(lastQuick.deck));
@@ -386,6 +436,7 @@ export function App() {
     if (seed === undefined) return;
     if (match?.event === 'gauntlet') updateGauntlet((s) => recordResult(s, seed, outcome));
     if (match?.event === 'expedition') updateExpedition((s) => X.recordMatch(s, seed, outcome));
+    if (match?.event === 'sealed') updateSealed((s) => S.recordSealedMatch(s, seed, outcome));
     if (match?.series)
       updateJumpIn((s) => ({ ...s, series: s.series && J.recordGame(s.series, seed, outcome) }));
   };
@@ -414,6 +465,20 @@ export function App() {
           setHub(null);
           setTab('home');
         }}
+      />
+    );
+  if (!match && hub === 'sealed')
+    return (
+      <Sealed
+        state={sealed}
+        update={updateSealed}
+        resumable={paused('sealed')}
+        onPlay={playSealed}
+        onMenu={() => {
+          setHub(null);
+          setTab('home');
+        }}
+        onSeason={() => setSeasonOpen(true)}
       />
     );
   if (!match && hub === 'expedition' && expedition.run)
@@ -473,19 +538,22 @@ export function App() {
         }
         onTab={setTab}
         onSeason={() => setSeasonOpen(true)}
+        sealedBest={Math.max(0, ...Object.values(sealed.records).map((r) => r.best)) || null}
       />
     );
+  // Sealed has no deck grid: its tile opens the event instead.
+  const startMode = mode === 'sealed' ? 'quick' : mode;
   if (!match)
     return (
       <Start
         onTab={setTab}
         clears={clearsOf(gauntlet) + clearsOf(expedition)}
-        mode={mode}
+        mode={startMode}
         onMode={setMode}
-        run={isEvent(mode) ? summaries[mode] : null}
-        records={!isEvent(mode) ? {} : mode === 'gauntlet' ? gauntlet.records : expedition.records}
-        onContinue={() => isEvent(mode) && setHub(mode)}
-        onRun={(deck) => isEvent(mode) && beginRun(mode, deck)}
+        run={isEvent(startMode) ? summaries[startMode] : null}
+        records={!isEvent(startMode) ? {} : startMode === 'gauntlet' ? gauntlet.records : expedition.records}
+        onContinue={() => isEvent(startMode) && setHub(startMode)}
+        onRun={(deck) => isEvent(startMode) && beginRun(startMode, deck)}
         onJumpIn={() => setJumping(true)}
         lobby={
           <JumpInLobby
@@ -552,7 +620,7 @@ export function App() {
 
 function runLabel(name: string, run: RunSummary | null): string {
   if (!run) return name;
-  return `${name} · ${run.status === 'playing' ? `${run.unit} ${run.step} of ${run.steps}` : 'Final result'}`;
+  return `${name} · ${run.status === 'playing' ? run.label ?? `${run.unit} ${run.step} of ${run.steps}` : 'Final result'}`;
 }
 
 const clearsOf = (s: { records: Record<string, DeckRecord> }) =>
