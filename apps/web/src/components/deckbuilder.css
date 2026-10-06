@@ -174,8 +174,17 @@
 
 /* ---------------------------------------------------------- collection */
 
-.dbk__pool {
+.dbk__stage {
   grid-column: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+}
+
+.dbk__pool {
+  position: relative;
+  flex: 1;
   min-height: 0;
   overflow-y: auto;
   padding: 1rem;
