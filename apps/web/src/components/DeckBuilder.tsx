@@ -1054,10 +1054,13 @@ export function DeckBuilder({
               }}
               onHover={setHover}
               onPick={(e) => {
-                // Show where it is, and add one copy like a click on the card.
+                // Show where it is in the collection; adding it stays your choice.
                 const el = document.querySelector(`[data-card="${CSS.escape(e.name)}"]`);
-                el?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
-                add(e);
+                if (!el) return;
+                el.scrollIntoView({ block: 'center', behavior: 'smooth' });
+                el.classList.remove('is-flash');
+                void (el as HTMLElement).offsetWidth;
+                el.classList.add('is-flash');
               }}
             />
           )}
@@ -1121,7 +1124,7 @@ function Suggestions({
                 key={h.name}
                 className="dbk-hint"
                 style={e.art ? ({ '--art': `url("${e.art}")` } as CSSProperties) : undefined}
-                title="Add one copy"
+                title="Show it in your collection"
                 onMouseEnter={(ev) => onHover(e, ev.currentTarget)}
                 onMouseLeave={() => onHover(null)}
                 onClick={() => onPick(e)}
