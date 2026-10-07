@@ -334,6 +334,12 @@
     opacity 0.15s;
 }
 
+.dbk-tile img {
+  transition:
+    filter 0.12s,
+    box-shadow 0.12s;
+}
+
 .dbk-tile + .dbk-tile {
   margin-top: calc(1.5rem - 139.68%);
 }
@@ -351,16 +357,20 @@
   box-shadow: 0 -0.125rem 0.5rem rgba(0, 0, 0, 0.55);
 }
 
-.dbk-tile:hover,
-.dbk-tile:focus-visible {
-  z-index: 2;
-  transform: translateY(-0.25rem);
+/* Hovering a card lights it up where it lies: raising it would cover the title bars
+   below it, so the mouse couldn't move down the column. The big preview shows it whole. */
+.dbk-tile:hover img,
+.dbk-tile:focus-visible img {
+  filter: brightness(1.12);
+  box-shadow:
+    0 0 0 0.125rem var(--h-accent),
+    0 -0.125rem 0.5rem rgba(0, 0, 0, 0.55);
 }
 
-.dbk-tile:hover img {
-  box-shadow:
-    0 0 0 0.125rem var(--h-text),
-    0 0.5rem 1rem rgba(0, 0, 0, 0.6);
+/* The last card of a column covers nothing, so it can still lift. */
+.dbk-tile:last-child:hover,
+.dbk-tile:last-child:focus-visible {
+  transform: translateY(-0.25rem);
 }
 
 .dbk-tile__qty {
