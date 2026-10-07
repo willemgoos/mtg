@@ -9,7 +9,7 @@ import {
   MIN_DECK,
   PACK_SET_NAMES,
   type PackSet,
-  rollPack,
+  rollRare,
   rollPlayBooster,
   type PlayBooster,
   seasonDecklist,
@@ -125,10 +125,10 @@ export const sealedPacks = (event: Pick<SealedEvent, 'seed' | 'set'>): string[][
 
 /**
  * The event's prerelease promo: one extra rare (a mythic one time in eight) of the set, on top of the
- * six boosters. It is the rare slot of a pack of its own, so it follows the boosters' odds.
+ * six boosters.
  */
 export function sealedPromo(event: Pick<SealedEvent, 'seed' | 'set'>): string {
-  return rollPack({ kind: 'booster' }, derive(event.seed, PROMO_SALT), 0, event.set)[0]!;
+  return rollRare(derive(event.seed, PROMO_SALT), event.set);
 }
 
 /** Every card of the pool: the promo, then the six boosters' cards. Basic lands are free, so not in it. */

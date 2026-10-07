@@ -1429,38 +1429,74 @@ const ARCHIVE: Partial<Record<PackSet, Record<'uncommon' | 'rare' | 'mythic', Sh
   sos: secretsOfStrixhavenArchiveSheets(),
 };
 
-export const PACK_SIZE = { rare: 1, uncommon: 3, common: 8 };
+/** A Play Booster's slots: 14 cards. */
+export const PACK_SIZE = { common: 7, uncommon: 3, wildcard: 1, rare: 1, foil: 1, land: 1 };
+export const PACK_CARDS = Object.values(PACK_SIZE).reduce((a, b) => a + b, 0);
+
+/** The wildcard and foil slots: chances by rarity (roughly paper Play Boosters'; Arena doesn't publish its own). */
+const WILDCARD_SLOT = { common: 0.417, uncommon: 0.417, rare: 0.146, mythic: 0.02 };
+const FOIL_SLOT = { common: 0.66, uncommon: 0.26, rare: 0.065, mythic: 0.015 };
+const BASIC_NAMES = ['Plains', 'Island', 'Swamp', 'Mountain', 'Forest'];
+
+/** A Play Booster: its cards, and which one is the foil (an index into `cards`). */
+export interface PlayBooster {
+  cards: string[];
+  foil: number;
+}
 
 /**
- * One pack: a rare (a mythic one time in eight), three uncommons and eight
- * commons, no duplicates. A colour pack draws most slots from that colour; a
- * rare pack swaps a common for another rare, and so does each of `extraRares`
- * (Lucky Find, the Gilded Pact).
+ * A Play Booster of 14 cards, no card twice: seven commons, three uncommons, a
+ * wildcard of any rarity, a rare (a mythic one time in eight), a foil of any
+ * rarity and a land. The land is a common nonbasic land of the set half the
+ * time when it has any, otherwise a basic; with `noBasic` (Expedition, where
+ * basics are free) it is always a nonbasic land, or a common when the set has
+ * none. STX and SOS swap a common for an archive card. A colour pack draws its
+ * rare and most commons and uncommons from that colour; a rare pack swaps a
+ * common for another rare, and so does each of `extraRares` (Lucky Find, the
+ * Gilded Pact).
  */
-export function rollPack(pack: Pack, seed: number, extraRares = 0, set: PackSet = 'fdn'): string[] {
+export function rollBooster(
+  pack: Pack,
+  seed: number,
+  extraRares = 0,
+  set: PackSet = 'fdn',
+  { noBasic = false } = {},
+): PlayBooster {
   const sheets = SHEETS[set];
   const next = rng(seed);
   const picked = new Set<string>();
+  const cards: string[] = [];
+  const isLand = (c: Sheet[number]) => c.typeLine.includes('Land');
+  const commons = sheets.common.filter((c) => !isLand(c));
+  const lands = sheets.common.filter(isLand);
   const inColor = (sheet: Sheet) =>
     pack.kind === 'color' ? sheet.filter((c) => c.colors.includes(pack.color)) : sheet;
-  const draw = (sheet: Sheet, themed: boolean) => {
+  const draw = (sheet: Sheet, themed = false) => {
     const from = (themed && inColor(sheet).length ? inColor(sheet) : sheet).filter(
       (c) => !picked.has(c.name),
     );
     const card = from[Math.floor(next() * from.length)];
-    if (card) picked.add(card.name);
+    if (card) {
+      picked.add(card.name);
+      cards.push(card.name);
+    }
   };
-  const rare = (themed: boolean) => draw(next() < 1 / 8 ? sheets.mythic : sheets.rare, themed);
+  const rare = (themed = false) => draw(next() < 1 / 8 ? sheets.mythic : sheets.rare, themed);
+  const anyRarity = (odds: Record<'common' | 'uncommon' | 'rare' | 'mythic', number>) => {
+    let roll = next();
+    for (const r of ['mythic', 'rare', 'uncommon'] as const) {
+      if (roll < odds[r] && sheets[r].length) return draw(sheets[r]);
+      roll -= odds[r];
+    }
+    draw(commons);
+  };
   const color = pack.kind === 'color';
-  const rares = 1 + (pack.kind === 'rare' ? 1 : 0) + extraRares;
+  const extra = (pack.kind === 'rare' ? 1 : 0) + extraRares;
   // Mystical Archive (16): one common slot is an archive card (an uncommon half the time, a rare
   // three times in eight, a mythic one in eight: Arena's odds aren't published).
   const archive = ARCHIVE[set];
-  rare(color);
-  for (let i = 0; i < PACK_SIZE.uncommon; i++) draw(sheets.uncommon, color && i < 2);
-  for (let i = 0; i < PACK_SIZE.common - (rares - 1) - (archive ? 1 : 0); i++)
-    draw(sheets.common, color && i < 5);
-  for (let i = 1; i < rares; i++) rare(false);
+  for (let i = 0; i < PACK_SIZE.common - extra - (archive ? 1 : 0); i++)
+    draw(commons, color && i < 5);
   if (archive) {
     const w = ARCHIVE_SLOT_WEIGHTS;
     const roll = next() * (w.uncommon + w.rare + w.mythic);
@@ -1470,92 +1506,54 @@ export function rollPack(pack: Pack, seed: number, extraRares = 0, set: PackSet 
         : roll < w.uncommon + w.rare
           ? archive.rare
           : archive.mythic,
-      false,
     );
   }
-  return [...picked];
+  for (let i = 0; i < PACK_SIZE.uncommon; i++) draw(sheets.uncommon, color && i < 2);
+  anyRarity(WILDCARD_SLOT);
+  for (let i = 0; i < extra; i++) rare();
+  rare(color);
+  anyRarity(FOIL_SLOT);
+  const foil = cards.length - 1;
+  if (lands.length && (noBasic || next() < 0.5)) draw(lands);
+  else if (noBasic) draw(commons);
+  else cards.push(BASIC_NAMES[Math.floor(next() * BASIC_NAMES.length)]!);
+  return { cards, foil };
 }
 
-/** A Play Booster's slots besides the 7 commons, 3 uncommons and rare: chances by rarity. */
-const WILDCARD_SLOT = { common: 0.417, uncommon: 0.417, rare: 0.146, mythic: 0.02 };
-const FOIL_SLOT = { common: 0.66, uncommon: 0.26, rare: 0.065, mythic: 0.015 };
-const BASIC_NAMES = ['Plains', 'Island', 'Swamp', 'Mountain', 'Forest'];
+/** A pack's cards (see `rollBooster`). */
+export const rollPack = (
+  pack: Pack,
+  seed: number,
+  extraRares = 0,
+  set: PackSet = 'fdn',
+  opts?: { noBasic?: boolean },
+): string[] => rollBooster(pack, seed, extraRares, set, opts).cards;
 
-/** A Play Booster: its 14 cards, and which one is the foil (an index into `cards`). */
-export interface PlayBooster {
-  cards: string[];
-  foil: number;
-}
+/** A plain Play Booster, as Sealed opens them. */
+export const rollPlayBooster = (seed: number, set: PackSet = 'fdn'): PlayBooster =>
+  rollBooster({ kind: 'booster' }, seed, 0, set);
 
-/**
- * A Play Booster, like the ones Sealed and Draft open: 14 cards. Seven commons,
- * three uncommons, a wildcard of any rarity, a rare (a mythic one time in
- * eight), a foil of any rarity and a land: a common nonbasic land of the set
- * half the time when it has any, otherwise a basic. STX and SOS swap a common
- * for an archive card. The wildcard and foil can repeat a card of the pack;
- * the other slots can't. Slot odds follow paper Play Boosters roughly (Arena
- * doesn't publish its own).
- */
-export function rollPlayBooster(seed: number, set: PackSet = 'fdn'): PlayBooster {
+/** One rare of the set (a mythic one time in eight), e.g. a prerelease promo. */
+export function rollRare(seed: number, set: PackSet = 'fdn'): string {
   const sheets = SHEETS[set];
   const next = rng(seed);
-  const pick = (sheet: Sheet, avoid?: Set<string>) => {
-    const from = avoid ? sheet.filter((c) => !avoid.has(c.name)) : sheet;
-    const card = from[Math.floor(next() * from.length)];
-    if (card && avoid) avoid.add(card.name);
-    return card?.name;
-  };
-  const isLand = (c: Sheet[number]) => c.typeLine.includes('Land');
-  const commons = sheets.common.filter((c) => !isLand(c));
-  const lands = sheets.common.filter(isLand);
-  const byOdds = (odds: Record<'common' | 'uncommon' | 'rare' | 'mythic', number>) => {
-    let roll = next();
-    for (const r of ['mythic', 'rare', 'uncommon'] as const) {
-      if (roll < odds[r] && sheets[r].length) return sheets[r];
-      roll -= odds[r];
-    }
-    return commons;
-  };
-  const seen = new Set<string>();
-  const cards: (string | undefined)[] = [];
-  const archive = ARCHIVE[set];
-  for (let i = 0; i < 7 - (archive ? 1 : 0); i++) cards.push(pick(commons, seen));
-  if (archive) {
-    const w = ARCHIVE_SLOT_WEIGHTS;
-    const roll = next() * (w.uncommon + w.rare + w.mythic);
-    cards.push(
-      pick(
-        roll < w.uncommon
-          ? archive.uncommon
-          : roll < w.uncommon + w.rare
-            ? archive.rare
-            : archive.mythic,
-        seen,
-      ),
-    );
-  }
-  for (let i = 0; i < PACK_SIZE.uncommon; i++) cards.push(pick(sheets.uncommon, seen));
-  cards.push(pick(byOdds(WILDCARD_SLOT)));
-  cards.push(pick(next() < 1 / 8 && sheets.mythic.length ? sheets.mythic : sheets.rare, seen));
-  cards.push(pick(byOdds(FOIL_SLOT)));
-  const foil = cards.length - 1;
-  cards.push(
-    lands.length && next() < 0.5
-      ? pick(lands)
-      : BASIC_NAMES[Math.floor(next() * BASIC_NAMES.length)],
-  );
-  return { cards: cards.filter((c): c is string => !!c), foil };
+  const sheet = next() < 1 / 8 ? sheets.mythic : sheets.rare;
+  return sheet[Math.floor(next() * sheet.length)]!.name;
 }
 
 const packSeed = (r: ExpeditionRun, n: number) => (r.seed ^ Math.imul(n + 1, 0x9e3779b1)) >>> 0;
 
-/** The cards in each waiting pack. */
-export function pendingPacks(r: ExpeditionRun): string[][] {
+/** Each waiting pack, with its foil. Basics are free on an expedition, so no pack holds one. */
+export function pendingBoosters(r: ExpeditionRun): PlayBooster[] {
   return r.build.packs.map((p, i) => {
     const n = r.build.opened + i;
-    return rollPack(p, packSeed(r, n), extraRares(r), packSetOf(r, n));
+    return rollBooster(p, packSeed(r, n), extraRares(r), packSetOf(r, n), { noBasic: true });
   });
 }
+
+/** The cards in each waiting pack. */
+export const pendingPacks = (r: ExpeditionRun): string[][] =>
+  pendingBoosters(r).map((b) => b.cards);
 
 /** Cards you keep from each waiting pack. */
 export const packKeeps = (r: ExpeditionRun): number[] =>

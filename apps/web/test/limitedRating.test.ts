@@ -29,7 +29,7 @@ const castableWith = (name: string, colors: string[]) =>
 function sealedPool(set: PackSet, seed: number): Build {
   const side: Counts = {};
   for (let i = 0; i < 6; i++)
-    for (const n of rollPack({ kind: 'booster' }, seed * 100 + i, 0, set))
+    for (const n of rollPack({ kind: 'booster' }, seed * 100 + i, 0, set, { noBasic: true }))
       if (!isBasic(n)) side[n] = (side[n] ?? 0) + 1;
   return { main: {}, side, opened: 6, packs: [], fresh: [] };
 }

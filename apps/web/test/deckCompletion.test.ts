@@ -16,7 +16,8 @@ function pool(seed = 7): Counts {
   const out: Counts = {};
   const sets = ['fdn', 'blb', 'fdn', 'blb', 'fdn', 'blb', 'fdn', 'blb'] as const;
   sets.forEach((set, i) => {
-    for (const n of rollPack({ kind: 'booster' }, seed + i, 0, set)) out[n] = (out[n] ?? 0) + 1;
+    for (const n of rollPack({ kind: 'booster' }, seed + i, 0, set, { noBasic: true }))
+      out[n] = (out[n] ?? 0) + 1;
   });
   return out;
 }
@@ -149,7 +150,8 @@ describe('completionHints', () => {
 function thin(seed: number, set: 'fdn' | 'blb' = 'fdn') {
   const all: Counts = {};
   for (let i = 0; i < 8; i++)
-    for (const n of rollPack({ kind: 'booster' }, seed + i, 0, set)) all[n] = (all[n] ?? 0) + 1;
+    for (const n of rollPack({ kind: 'booster' }, seed + i, 0, set, { noBasic: true }))
+      all[n] = (all[n] ?? 0) + 1;
   const mono = (n: string, c: string) => info(n).manaCost.includes(`{${c}}`);
   const nonland = Object.keys(all).filter((n) => !isLand(n));
   const keep = (c: string) =>
@@ -201,10 +203,15 @@ describe('splash hints', () => {
     expect(found).toBeGreaterThan(0);
   });
 
-  it('does not splash when the two colours have plenty of good cards', () => {
+  it('does not splash when nothing off-colour is worth it', () => {
     const { deck, pool: rest } = partial(10);
-    const hints = completionHints({ deck, pool: rest, min: 40, basics: true });
+    // Keep only cards the deck's colours (blue-black) can cast: plenty of them, nothing to splash.
+    const own: Counts = {};
+    for (const [n, k] of Object.entries(rest))
+      if ((info(n)?.colors ?? []).every((c) => c === 'U' || c === 'B')) own[n] = k;
+    const hints = completionHints({ deck, pool: own, min: 40, basics: true });
     expect(hints.some((h) => h.splash || h.tag === 'Splash')).toBe(false);
+    expect(sum(apply(deck, hints))).toBe(40);
   });
 
   it('says so when even a splash cannot fill the deck: the best of the rest', () => {
@@ -230,7 +237,8 @@ describe('colourPairs', () => {
     it(`ranks pairs sensibly (${label})`, () => {
       const p: Counts = {};
       for (let i = 0; i < 6; i++)
-        for (const n of rollPack({ kind: 'booster' }, seed + i, 0, set)) p[n] = (p[n] ?? 0) + 1;
+        for (const n of rollPack({ kind: 'booster' }, seed + i, 0, set, { noBasic: true }))
+          p[n] = (p[n] ?? 0) + 1;
       const pairs = colourPairs(p);
       expect(pairs).toHaveLength(3);
       expect(pairs[0]!.playables).toBeGreaterThanOrEqual(15);

@@ -8,7 +8,7 @@ import {
   PACK_SET_NAMES,
   type PackSet,
   packSetOf,
-  pendingPacks,
+  pendingBoosters,
   runDeck,
 } from '../game/expedition.ts';
 import { burst, flash, fxOn, later, mountFx, ring } from '../game/fx.ts';
@@ -83,14 +83,18 @@ export function PackOpening({
   /** The cards kept from each pack. */
   onDone: (kept: string[][]) => void;
 }) {
-  // Commons first, the rare last, like Arena's reveal.
-  const packs = useMemo(
+  // Commons first, the rare last, like Arena's reveal; the foil keeps track of where it went.
+  const boosters = useMemo(
     () =>
-      pendingPacks(run).map((cards) =>
-        [...cards].sort((a, b) => RANK[rarityOf(a)] - RANK[rarityOf(b)]),
-      ),
+      pendingBoosters(run).map(({ cards, foil }) => {
+        const order = cards
+          .map((_, i) => i)
+          .sort((a, b) => RANK[rarityOf(cards[a]!)] - RANK[rarityOf(cards[b]!)]);
+        return { cards: order.map((i) => cards[i]!), foilAt: order.indexOf(foil) };
+      }),
     [run],
   );
+  const packs = boosters.map((b) => b.cards);
   const [index, setIndex] = useState(0);
   const [kept, setKept] = useState<string[][]>([]);
   const canvas = useRef<HTMLCanvasElement>(null);
@@ -103,6 +107,7 @@ export function PackOpening({
         pack={run.build.packs[index]!}
         set={packSetOf(run, run.build.opened + index)}
         cards={packs[index]!}
+        foilAt={boosters[index]!.foilAt}
         keep={Math.min(packKeeps(run)[index]!, packs[index]!.length)}
         eyebrow={`Expedition · ${runDeck(run).name}${packs.length > 1 ? ` · Pack ${index + 1} of ${packs.length}` : ''}`}
         onKeep={(names) => {

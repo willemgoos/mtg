@@ -51,7 +51,7 @@ import {
   MIN_DECK,
   moveCard,
   openPacks,
-  PACK_SIZE,
+  PACK_CARDS,
   pendingPacks,
   reachable,
   recordMatch,
@@ -88,7 +88,15 @@ const boosterNames = new Set(STX_BOOSTER_LIST.map(([n]) => n));
 const sosBoosterNames = new Set(SOS_BOOSTER_LIST.map(([n]) => n));
 const staNames = new Set(STA_ARCHIVE_LIST.map(([n]) => n));
 const soaNames = new Set(SOA_ARCHIVE_LIST.map(([n]) => n));
-const packSize = PACK_SIZE.rare + PACK_SIZE.uncommon + PACK_SIZE.common;
+const packSize = PACK_CARDS;
+/** Expedition packs never hold a basic land (basics are free there). */
+const EXP = { noBasic: true };
+/** A Play Booster's slots: seven commons (0-6), three uncommons (7-9), the rare (11). */
+const slots = (pack: string[]) => ({
+  commons: pack.slice(0, 7),
+  uncommons: pack.slice(7, 10),
+  rare: pack[11]!,
+});
 const isRare = (n: string) => ['rare', 'mythic'].includes(card.get(n)!.rarity);
 
 /** Keeps the first cards of every waiting pack. */
@@ -121,23 +129,23 @@ function onMap(kinds: MapNode['kind'][], event: EventId = 'gambler'): Expedition
 describe('expedition packs', () => {
   it('rolls a fixed pack of distinct, playable Foundations cards', () => {
     for (let seed = 0; seed < 50; seed++) {
-      const pack = rollPack({ kind: 'booster' }, seed);
+      const pack = rollPack({ kind: 'booster' }, seed, 0, 'fdn', EXP);
       expect(pack).toHaveLength(packSize);
       expect(new Set(pack).size).toBe(packSize);
-      expect(rollPack({ kind: 'booster' }, seed)).toEqual(pack);
+      expect(rollPack({ kind: 'booster' }, seed, 0, 'fdn', EXP)).toEqual(pack);
       for (const name of pack) {
         expect(card.get(name)!.set).toBe('fdn');
         expect(cardDb.has(slug(name))).toBe(true);
       }
-      expect(pack.filter(isRare)).toHaveLength(1);
+      expect(isRare(slots(pack).rare)).toBe(true);
     }
   });
 
   it('puts most of a colour pack in its colour, and extra rares where due', () => {
     const pack = rollPack({ kind: 'color', color: 'G' }, 3);
     expect(pack.filter((n) => card.get(n)!.colors.includes('G')).length).toBeGreaterThanOrEqual(8);
-    expect(rollPack({ kind: 'rare' }, 3).filter(isRare)).toHaveLength(2);
-    expect(rollPack({ kind: 'booster' }, 3, 1).filter(isRare)).toHaveLength(2);
+    expect(rollPack({ kind: 'rare' }, 3).filter(isRare).length).toBeGreaterThanOrEqual(2);
+    expect(rollPack({ kind: 'booster' }, 3, 1).filter(isRare).length).toBeGreaterThanOrEqual(2);
     expect(rollPack({ kind: 'rare' }, 3, 1)).toHaveLength(packSize);
   });
 
@@ -149,7 +157,7 @@ describe('expedition packs', () => {
     expect([0, 1, 2].map((n) => packSetOf(mixed, n))).toEqual(['blb', 'msh', 'blb']);
     expect(packSetOf({ deck: 'jump-in:goblins+msh-robots' }, 0)).toBe('fdn');
     for (let seed = 0; seed < 20; seed++) {
-      const pack = rollPack({ kind: 'booster' }, seed, 0, 'blb');
+      const pack = rollPack({ kind: 'booster' }, seed, 0, 'blb', EXP);
       expect(new Set(pack).size).toBe(packSize);
       for (const name of pack) expect(card.get(name)!.set).toBe('blb');
     }
@@ -158,7 +166,7 @@ describe('expedition packs', () => {
   it('opens Marvel Super Heroes boosters with a Marvel deck, never a back face alone', () => {
     expect(packSetOf({ deck: 'msh-heroes-unite' })).toBe('msh');
     for (let seed = 0; seed < 20; seed++) {
-      const pack = rollPack({ kind: 'booster' }, seed, 0, 'msh');
+      const pack = rollPack({ kind: 'booster' }, seed, 0, 'msh', EXP);
       expect(new Set(pack).size).toBe(packSize);
       for (const name of pack) {
         expect(card.get(name)!.set).toBe('msh');
@@ -172,7 +180,7 @@ describe('expedition packs', () => {
     expect(packSetOf({ deck: 'jump-in:stx-wizards+stx-beasts' })).toBe('stx');
     expect(packSetOf({ deck: 'jump-in:goblins+stx-beasts' }, 1)).toBe('stx');
     for (let seed = 0; seed < 20; seed++) {
-      const pack = rollPack({ kind: 'booster' }, seed, 0, 'stx');
+      const pack = rollPack({ kind: 'booster' }, seed, 0, 'stx', EXP);
       expect(new Set(pack).size).toBe(packSize);
       // One Mystical Archive card in place of a common; the rest are STX booster cards.
       expect(pack.filter((name) => staNames.has(name))).toHaveLength(1);
@@ -188,7 +196,7 @@ describe('expedition packs', () => {
       const rarity = new Map<string, string>(list);
       const seen = { uncommon: 0, rare: 0, mythic: 0 } as Record<string, number>;
       for (let seed = 0; seed < 400; seed++) {
-        const pack = rollPack({ kind: 'booster' }, seed, 0, set);
+        const pack = rollPack({ kind: 'booster' }, seed, 0, set, EXP);
         const archive = pack.filter((name) => rarity.has(name));
         expect(archive).toHaveLength(1);
         seen[rarity.get(archive[0]!)!]!++;
@@ -214,8 +222,8 @@ describe('expedition packs', () => {
     for (let seed = 0; seed < 20; seed++) {
       // (An FDN card can share its name with an archive reprint, but no pack of those sets is built from the archive.)
       for (const set of ['fdn', 'blb', 'msh'] as const)
-        expect(new Set(rollPack({ kind: 'booster' }, seed, 0, set)).size).toBe(packSize);
-      const pack = rollPack({ kind: 'rare' }, seed, 0, 'sos');
+        expect(new Set(rollPack({ kind: 'booster' }, seed, 0, set, EXP)).size).toBe(packSize);
+      const pack = rollPack({ kind: 'rare' }, seed, 0, 'sos', EXP);
       expect(pack).toHaveLength(packSize);
       expect(pack.filter((n) => ARCHIVE_RARITY.has(n))).toHaveLength(1);
     }
@@ -226,7 +234,7 @@ describe('expedition packs', () => {
     expect(packSetOf({ deck: 'jump-in:sos-clerics+sos-beasts' })).toBe('sos');
     expect(packSetOf({ deck: 'jump-in:goblins+sos-beasts' }, 1)).toBe('sos');
     for (let seed = 0; seed < 20; seed++) {
-      const pack = rollPack({ kind: 'booster' }, seed, 0, 'sos');
+      const pack = rollPack({ kind: 'booster' }, seed, 0, 'sos', EXP);
       expect(new Set(pack).size).toBe(packSize);
       expect(pack.filter((name) => soaNames.has(name))).toHaveLength(1);
       for (const name of pack) {
@@ -236,7 +244,7 @@ describe('expedition packs', () => {
     }
   });
 
-  it('opens Reality Fracture boosters with an FRA deck: one rare, three uncommons, eight commons', () => {
+  it('opens Reality Fracture boosters with an FRA deck: seven commons, three uncommons, a rare and more', () => {
     const fra = REALITY_FRACTURE_DECKS[0]!;
     expect(packSetOf({ deck: fra.id })).toBe('fra');
     expect(packSetOf({ deck: 'jump-in:fra-lifegain+fra-titans' })).toBe('fra');
@@ -244,34 +252,37 @@ describe('expedition packs', () => {
     expect([0, 1].map((n) => packSetOf(mixed, n))).toEqual(['fra', 'blb']);
     const rarityOf = new Map(FRA_BOOSTER_LIST);
     for (let seed = 0; seed < 20; seed++) {
-      const pack = rollPack({ kind: 'booster' }, seed, 0, 'fra');
+      const pack = rollPack({ kind: 'booster' }, seed, 0, 'fra', EXP);
       expect(new Set(pack).size).toBe(packSize);
       const count = (...r: string[]) => pack.filter((n) => r.includes(rarityOf.get(n)!)).length;
       for (const n of pack) expect(cardDb.has(slug(n)), n).toBe(true);
-      expect(count('rare', 'mythic')).toBe(1);
-      expect(count('uncommon')).toBe(3);
-      expect(count('common')).toBe(8);
+      const { commons, uncommons, rare } = slots(pack);
+      expect(commons.every((n) => rarityOf.get(n) === 'common')).toBe(true);
+      expect(uncommons.every((n) => rarityOf.get(n) === 'uncommon')).toBe(true);
+      expect(['rare', 'mythic']).toContain(rarityOf.get(rare));
+      expect(count('rare', 'mythic')).toBeGreaterThanOrEqual(1);
     }
   });
 
-  it('opens Final Fantasy boosters with a FIN deck: one rare, three uncommons, eight commons', () => {
+  it('opens Final Fantasy boosters with a FIN deck: seven commons, three uncommons, a rare and more', () => {
     expect(packSetOf({ deck: 'fin-chocobo-stampede' })).toBe('fin');
     expect(packSetOf({ deck: 'jump-in:fin-chocobos+fin-monsters' })).toBe('fin');
     const mixed = { deck: 'jump-in:fin-knights+blb-bats' };
     expect([0, 1].map((n) => packSetOf(mixed, n))).toEqual(['fin', 'blb']);
     const fin = SCRYFALL.filter((c) => c.set === 'fin');
     for (let seed = 0; seed < 20; seed++) {
-      const pack = rollPack({ kind: 'booster' }, seed, 0, 'fin');
+      const pack = rollPack({ kind: 'booster' }, seed, 0, 'fin', EXP);
       expect(new Set(pack).size).toBe(packSize);
       const printings = pack.map((name) => fin.find((c) => c.name === name)!);
       for (const c of printings) {
         expect(c.front).toBeUndefined();
         expect(+c.collectorNumber, c.name).toBeLessThanOrEqual(309);
       }
-      const count = (...r: string[]) => printings.filter((c) => r.includes(c.rarity)).length;
-      expect(count('rare', 'mythic')).toBe(1);
-      expect(count('uncommon')).toBe(3);
-      expect(count('common')).toBe(8);
+      const rarity = (n: string) => fin.find((c) => c.name === n)!.rarity;
+      const { commons, uncommons, rare } = slots(pack);
+      expect(commons.every((n) => rarity(n) === 'common')).toBe(true);
+      expect(uncommons.every((n) => rarity(n) === 'uncommon')).toBe(true);
+      expect(['rare', 'mythic']).toContain(rarity(rare));
     }
   });
 
@@ -784,7 +795,7 @@ describe('expedition pacts', () => {
   it('Gilded Pact: two extra rares a pack, tougher elites and final battle', () => {
     const s = withBoons(onMap(['elite', 'elite', 'elite']), ['lucky'], ['gilded']);
     expect(extraRares(s.run!)).toBe(3);
-    expect(rollPack({ kind: 'booster' }, 3, 2).filter(isRare)).toHaveLength(3);
+    expect(rollPack({ kind: 'booster' }, 3, 2).filter(isRare).length).toBeGreaterThanOrEqual(3);
     const elite = s.run!.map[2]![0]!;
     expect(difficultyIn(s.run!, 2, elite)).toBe(difficultyOf(2, elite) + 1);
     let b = onMap(['duel', 'duel', 'duel']);
@@ -1119,14 +1130,16 @@ describe('expedition wildcard rewards', () => {
       ...s,
       run: { ...s.run!, map: s.run!.map.map((f) => f.map((n) => ({ ...n, reward: wild }))) },
     };
+    const before = rarities(s);
     s = fight(enterNode(s, 1), 'win');
     expect(s.run!.build.packs).toEqual([]);
-    expect(rarities(s)).toEqual([1, 0]);
+    expect(rarities(s)).toEqual([before[0]! + 1, before[1]]);
   });
 
   it('pays an uncommon wildcard for an elite and a rare one for the final battle', () => {
-    let s = fight(enterNode(onMap(['elite', 'elite', 'elite']), 1), 'win');
-    expect(rarities(s)).toEqual([1, 0]);
+    const start = onMap(['elite', 'elite', 'elite']);
+    let s = fight(enterNode(start, 1), 'win');
+    expect(rarities(s)).toEqual([rarities(start)[0]! + 1, rarities(start)[1]]);
     s = onMap(['duel', 'duel', 'duel']);
     for (let f = 0; f < FLOORS - 1; f++) s = openAll(fight(enterNode(s, 1), 'win'));
     const before = rarities(s);

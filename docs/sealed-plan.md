@@ -4,9 +4,11 @@ Arena's Sealed event, played against bots. Agreed 2026-10-06.
 
 ## The event
 
-- Pick a set (any set with boosters: FDN, BLB, MSH, FIN, STX, SOS, FRA), then open **6 boosters**
-  of it. Packs come from Expedition's `rollPack` (1 rare or mythic, 3 uncommons, 8 commons; STX
-  and SOS swap a common for an archive card): 72 cards.
+- Pick a set (any set with boosters: FDN, BLB, MSH, FIN, STX, SOS, FRA), then open **6 Play Boosters**
+  of it plus a foil **prerelease promo** rare. A Play Booster (`rollBooster` in expedition.ts, also used by
+  Expedition) has 14 cards: 7 commons, 3 uncommons, a wildcard of any rarity, a rare (a mythic 1 in 8), a
+  foil of any rarity and a land (a common nonbasic land or a basic; Expedition never gets basics). STX and
+  SOS swap a common for an archive card. About 85 cards in all.
 - Build a **40-card deck** from the pool with free, unlimited basics (the shared `DeckBuilder`).
   The deck can be edited between matches as often as you like, never during one.
 - Best-of-one matches until **7 wins or 3 losses**. The event screen shows seven win slots, three
