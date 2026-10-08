@@ -26,6 +26,12 @@ export interface NewGameOptions {
   commanders?: Partial<Record<PlayerId, CardDefId>>;
   /** Strixhaven (13a): cards outside the game that Learn can fetch (the deck's Lessons). */
   sideboards?: Partial<Record<PlayerId, readonly CardDefId[]>>;
+  /**
+   * Arena's best-of-one hand smoothing, for these players: their opening hand is
+   * the better of two shuffles, the one whose land count is closer to the deck's
+   * share of lands. Mulligans draw plain random hands.
+   */
+  handSmoothing?: readonly PlayerId[];
 }
 
 /** Cards a player draws for an opening hand. */
@@ -113,8 +119,28 @@ export function setupGame(ctx: Ctx, opts: NewGameOptions): void {
   }
   const first = opts.startingPlayer ?? (nextInt(s.rng, 2) === 0 ? 'p1' : 'p2');
   s.turn.activePlayer = first;
+  for (const p of opts.handSmoothing ?? []) smoothOpeningHand(ctx, p);
   for (const p of PLAYERS) for (let i = 0; i < openingHand(s.players[p]); i++) drawCard(ctx, p);
   s.decision = { kind: 'mulligan', player: first };
+}
+
+/**
+ * Hand smoothing: a second shuffle of the library, kept when its top cards (the
+ * opening hand) hold a number of lands closer to what the deck's share of lands
+ * predicts. A tie keeps the first shuffle.
+ */
+function smoothOpeningHand(ctx: Ctx, player: PlayerId): void {
+  const ps = ctx.s.players[player];
+  const n = Math.min(openingHand(ps), ps.library.length);
+  if (!n) return;
+  const isLand = (id: ObjectId) => def(ctx, id).types.includes('Land');
+  const expected = (ps.library.filter(isLand).length / ps.library.length) * n;
+  // The library's top is its first card.
+  const miss = (library: ObjectId[]) =>
+    Math.abs(library.slice(0, n).filter(isLand).length - expected);
+  const other = [...ps.library];
+  shuffleInPlace(ctx.s.rng, other);
+  if (miss(other) < miss(ps.library)) ps.library = other;
 }
 
 /** Brawl: creates a player's commander in their command zone. */

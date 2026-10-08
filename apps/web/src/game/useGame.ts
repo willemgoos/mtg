@@ -29,6 +29,7 @@ export interface DeckChoice {
 }
 
 const engine = createEngine(cardDb);
+const BOTH = ['p1', 'p2'] as const;
 
 export interface LogLine {
   id: number;
@@ -95,7 +96,10 @@ export function useGame(
   }, [choice.you, choice.them, choice.cards]);
 
   const [state, setState] = useState<GameState>(
-    () => resume?.state ?? engine.newGame({ ...choice.options, ...setup, seed }),
+    // Every game is best of one, so both players get Arena's hand smoothing unless the
+    // options say otherwise (a Jump In match's games).
+    () =>
+      resume?.state ?? engine.newGame({ handSmoothing: BOTH, ...choice.options, ...setup, seed }),
   );
   const stateRef = useRef(state);
   // Basic lands' art follows their owner's deck; set before the board renders.

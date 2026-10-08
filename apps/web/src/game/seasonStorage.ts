@@ -86,6 +86,7 @@ function match(value: unknown, save: SeasonSave): void {
     );
   }
   for (const action of array(m.actions)) record(action);
+  requireSeason(m.smoothing === undefined || typeof m.smoothing === 'boolean', 'Invalid smoothing');
   replaySeasonMatch(m as unknown as SeasonMatch);
 }
 

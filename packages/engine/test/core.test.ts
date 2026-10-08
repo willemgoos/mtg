@@ -85,6 +85,45 @@ describe('game setup and mulligans', () => {
     g.passUntilStep('main1');
     expect(g.state.players.p1.hand).toHaveLength(6);
   });
+
+  describe('hand smoothing', () => {
+    // 17 lands in 40: a hand of 7 "should" hold about 3.
+    const deck = [...Array(17).fill('forest'), ...Array(23).fill('shock')];
+    const lands = (s: ReturnType<typeof engine.newGame>, p: 'p1' | 'p2') =>
+      s.players[p].hand.filter((id) => s.objects[id]!.defId === 'forest').length;
+    const spread = (smooth: boolean) => {
+      const counts: number[] = [];
+      for (let seed = 1; seed <= 400; seed++) {
+        const s = engine.newGame({
+          decks: { p1: deck, p2: deck },
+          seed,
+          ...(smooth ? { handSmoothing: ['p1'] as const } : {}),
+        });
+        counts.push(lands(s, 'p1'));
+      }
+      return counts;
+    };
+
+    it("deals hands closer to the deck's share of lands", () => {
+      const bad = (cs: number[]) => cs.filter((n) => n <= 1 || n >= 6).length;
+      const plain = spread(false);
+      const smooth = spread(true);
+      expect(bad(smooth)).toBeLessThan(bad(plain) / 2);
+      expect(smooth.every((n) => n >= 0 && n <= 7)).toBe(true);
+    });
+
+    it('is deterministic, only for the players listed, and still deals 7', () => {
+      const opts = { decks: { p1: deck, p2: deck }, seed: 5, handSmoothing: ['p2'] as const };
+      const a = engine.newGame(opts);
+      const b = engine.newGame(opts);
+      expect(a.players.p2.hand.map((id) => a.objects[id]!.defId)).toEqual(
+        b.players.p2.hand.map((id) => b.objects[id]!.defId),
+      );
+      expect(a.players.p1.hand).toHaveLength(7);
+      expect(a.players.p2.hand).toHaveLength(7);
+      expect(a.players.p2.library).toHaveLength(33);
+    });
+  });
 });
 
 describe('turn structure', () => {

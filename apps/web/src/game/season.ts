@@ -92,6 +92,8 @@ export interface SeasonMatch {
   decks: Record<PlayerId, CardDefId[]>;
   /** Unredacted actions are needed for deterministic restoration. */
   actions: Action[];
+  /** Arena's best-of-one hand smoothing for both players (absent on matches begun before it). */
+  smoothing?: boolean;
 }
 export interface SeasonResult {
   matchId: number;
@@ -437,6 +439,7 @@ export function replaySeasonMatch(
     decks: match.decks,
     seed: match.seed,
     startingPlayer: match.startingPlayer,
+    ...(match.smoothing ? { handSmoothing: ['p1', 'p2'] as const } : {}),
   });
   let playerTurnsBegun = state.turn.number > 0 && state.turn.activePlayer === 'p1' ? 1 : 0;
   for (const action of match.actions) {
@@ -480,6 +483,7 @@ export function beginSeasonMatch(
       p2: deckIds(opponent),
     },
     actions: [],
+    smoothing: true,
   };
   return next;
 }

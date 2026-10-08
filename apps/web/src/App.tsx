@@ -291,7 +291,8 @@ export function App() {
       choice: resume?.choice ?? {
         you: s.you,
         them: s.them,
-        ...(first ? { options: { startingPlayer: first } } : {}),
+        // A Jump In match is best of three, which Arena plays without hand smoothing.
+        options: { handSmoothing: [], ...(first ? { startingPlayer: first } : {}) },
       },
       seed: J.current(s),
       resume,
