@@ -2,6 +2,8 @@ import { expect } from 'vitest';
 import { getCharacteristics } from '@mtg/engine';
 import type { Action } from '@mtg/engine';
 import type { GameDriver } from '@mtg/engine/testing';
+import { hasSubtype } from '../../engine/src/characteristics.ts';
+import { makeCtx } from '../../engine/src/context.ts';
 import { cardDb } from '../src/index.ts';
 import { cast, game, settle } from './blb-helpers.ts';
 
@@ -118,3 +120,33 @@ export const combat = (p1: string[], p2: string[] = [], lib?: string[]) => {
   expect(g.decision.kind).toBe('declareAttackers');
   return g;
 };
+
+/** Does this permanent have this creature type (changelings and gained types count)? */
+export const hasType = (g: GameDriver, id: string, subtype: string) =>
+  hasSubtype(makeCtx(g.state, cardDb), id, subtype);
+
+/** Passes priority (taking default choices) until the next turn's first main phase. */
+export function nextTurn(g: GameDriver): void {
+  const start = g.state.turn.number;
+  for (let i = 0; i < 120; i++) {
+    if (
+      g.state.turn.number > start &&
+      g.state.turn.step === 'main1' &&
+      g.decision.kind === 'priority'
+    )
+      return;
+    const d = g.decision;
+    if (d.kind === 'declareAttackers') g.do({ type: 'confirmAttackers', player: d.player });
+    else if (d.kind === 'declareBlockers') g.do({ type: 'confirmBlockers', player: d.player });
+    else if (d.kind === 'priority') g.pass();
+    else done(g);
+  }
+  throw new Error('never reached the next turn');
+}
+
+/** Passes priority until p1's declare attackers decision. */
+export function toAttackers(g: GameDriver): GameDriver {
+  for (let i = 0; i < 10 && g.decision.kind !== 'declareAttackers'; i++) g.pass();
+  expect(g.decision.kind).toBe('declareAttackers');
+  return g;
+}

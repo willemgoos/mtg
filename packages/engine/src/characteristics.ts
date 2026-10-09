@@ -321,6 +321,18 @@ export function countOf(
     const self = sourceId ? ctx.s.objects[sourceId] : undefined;
     return checkCondition(ctx, a.if, player, self) ? a.then : (a.else ?? 0);
   }
+  // Lorwyn Eclipsed (18b, blue): Sunderflock, "costs {X} less, where X is the greatest mana value among Elementals you control".
+  if ('greatestManaValueYouControl' in a)
+    return Math.max(
+      0,
+      ...ctx.s.battlefield
+        .filter(
+          (id) =>
+            obj(ctx, id).controller === player &&
+            matchesFilter(ctx, id, a.greatestManaValueYouControl),
+        )
+        .map((id) => manaValue(def(ctx, id).manaCost)),
+    );
   // Marvel Super Heroes (The Scarlet Witch): 'where X is her power'.
   if ('powerOf' in a)
     return a.powerOf === 'self' && sourceId ? Math.max(0, power(ctx, sourceId)) : 0;

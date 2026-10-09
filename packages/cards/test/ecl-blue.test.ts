@@ -74,7 +74,10 @@ describe('Spell Snare', () => {
     const g = game({
       active: 'p2',
       p1: { hand: ['spell-snare'], battlefield: ['island'] },
-      p2: { hand: ['summit-sentinel', 'serra-angel', 'savannah-lions'], battlefield: [...n('plains', 8), 'island'] },
+      p2: {
+        hand: ['summit-sentinel', 'serra-angel', 'savannah-lions'],
+        battlefield: [...n('plains', 8), 'island'],
+      },
     });
     cast(g, 'serra-angel');
     g.pass();
@@ -95,9 +98,7 @@ describe('Spell Snare', () => {
     cast(g, 'savannah-lions');
     g.pass();
     expect(
-      g
-        .legal()
-        .some((a) => a.type === 'castSpell' && a.card === g.id('p1', 'spell-snare', 'hand')),
+      g.legal().some((a) => a.type === 'castSpell' && a.card === g.id('p1', 'spell-snare', 'hand')),
     ).toBe(false);
     g.pass();
     done(g);
@@ -166,9 +167,9 @@ describe('Glen Elendra Guardian', () => {
     g.obj(guardian).counters = { '-1/-1': 1 };
     cast(g, 'savannah-lions');
     g.pass();
-    expect(
-      g.legal().some((a) => a.type === 'activateAbility' && a.source === guardian),
-    ).toBe(false);
+    expect(g.legal().some((a) => a.type === 'activateAbility' && a.source === guardian)).toBe(
+      false,
+    );
   });
 });
 
@@ -228,7 +229,10 @@ describe('Mirrorform', () => {
 
   it("can't target an Aura", () => {
     const g = game({
-      p1: { hand: ['mirrorform'], battlefield: [...n('island', 6), 'savannah-lions', 'blossombind'] },
+      p1: {
+        hand: ['mirrorform'],
+        battlefield: [...n('island', 6), 'savannah-lions', 'blossombind'],
+      },
     });
     const bind = g.id('p1', 'blossombind');
     g.obj(bind).attachedTo = g.id('p1', 'savannah-lions');
@@ -290,8 +294,9 @@ describe('Noggle the Mind', () => {
 
 function cardDbColors(g: GameDriver, id: string): string[] {
   // Colors as the engine sees them: through the matching filter for each color.
-  return ['W', 'U', 'B', 'R', 'G'].filter((c) =>
-    g.engine && cardDb.get(g.obj(id).defId)!.colors.includes(c as never) && !g.obj(id).colorless,
+  return ['W', 'U', 'B', 'R', 'G'].filter(
+    (c) =>
+      g.engine && cardDb.get(g.obj(id).defId)!.colors.includes(c as never) && !g.obj(id).colorless,
   );
 }
 
@@ -300,7 +305,12 @@ describe('Harmonized Crescendo', () => {
     const g = game({
       p1: {
         hand: ['harmonized-crescendo'],
-        battlefield: [...n('island', 4), 'pestered-wellguard', 'silvergill-peddler', 'savannah-lions'],
+        battlefield: [
+          ...n('island', 4),
+          'pestered-wellguard',
+          'silvergill-peddler',
+          'savannah-lions',
+        ],
         library: n('forest', 8),
       },
     });
@@ -318,7 +328,9 @@ describe('Disruptor of Currents', () => {
       p2: { battlefield: ['serra-angel', 'plains'] },
     });
     cast(g, 'disruptor-of-currents');
-    done(g, { pick: (legal) => legal.find((a) => a.type === 'chooseTargets' && a.targets.length > 0) });
+    done(g, {
+      pick: (legal) => legal.find((a) => a.type === 'chooseTargets' && a.targets.length > 0),
+    });
     expect(hand(g, 'p2')).toEqual(['serra-angel']);
     expect(all(g, 'plains')).toHaveLength(1);
   });
@@ -345,9 +357,7 @@ describe('Swat Away', () => {
       p2: { battlefield: ['savannah-lions'] },
     });
     // No attack: {2}{U}{U} can't be paid with two lands.
-    expect(
-      g.legal('p1').some((a) => a.type === 'castSpell'),
-    ).toBe(false);
+    expect(g.legal('p1').some((a) => a.type === 'castSpell')).toBe(false);
   });
 
   it('the owner puts the target creature on the top or bottom of their library (their choice)', () => {

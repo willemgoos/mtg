@@ -1,6 +1,16 @@
 import type { AbilityDef, CardDefinition, EffectDef, Ref, TargetSpec } from '@mtg/engine';
 import type { Behavior } from '../build.ts';
-import { creature, draw, mana, onEnter, pump, t0, t1, theirCreature, when } from '../blb/helpers.ts';
+import {
+  creature,
+  draw,
+  mana,
+  onEnter,
+  pump,
+  t0,
+  t1,
+  theirCreature,
+  when,
+} from '../blb/helpers.ts';
 import { mode } from '../fin/helpers.ts';
 import {
   entersWithMinusCounters,
@@ -16,7 +26,12 @@ import { ECL_FAERIE, ECL_MERFOLK } from './tokens.ts';
  * name in ECL_BLUE_BACKS. See docs/lorwyn-eclipsed-plan.md.
  */
 
-const stunCounter = (to: Ref): EffectDef => ({ kind: 'namedCounters', name: 'stun', amount: 1, to });
+const stunCounter = (to: Ref): EffectDef => ({
+  kind: 'namedCounters',
+  name: 'stun',
+  amount: 1,
+  to,
+});
 const tapAndStun = (to: Ref): EffectDef[] => [{ kind: 'tap', what: to }, stunCounter(to)];
 const custom = (handler: string, params?: Record<string, unknown>): EffectDef => ({
   kind: 'custom',
@@ -27,7 +42,11 @@ const surveil = (amount: number): EffectDef => ({ kind: 'surveil', amount });
 const loot: EffectDef[] = [draw(1), { kind: 'discard', count: 1 }];
 const anotherCreature: TargetSpec = { what: 'creature', filter: { other: true } };
 const upToOne = (t: TargetSpec): TargetSpec => ({ ...t, optional: true });
-const controlsMerfolk = { kind: 'controlsPermanents', filter: { subtype: 'Merfolk' }, min: 1 } as const;
+const controlsMerfolk = {
+  kind: 'controlsPermanents',
+  filter: { subtype: 'Merfolk' },
+  min: 1,
+} as const;
 
 /** "Basic landcycling {cost}": discard it to search for a basic land card. */
 const basicLandcycling = (cost: string): AbilityDef => ({
@@ -40,7 +59,10 @@ const basicLandcycling = (cost: string): AbilityDef => ({
 });
 
 /** An Aura: it enchants a creature (`enchant`), and these abilities. */
-const aura = (enchant: TargetSpec, ...abilities: AbilityDef[]): Behavior => ({ enchant, abilities });
+const aura = (enchant: TargetSpec, ...abilities: AbilityDef[]): Behavior => ({
+  enchant,
+  abilities,
+});
 
 export const ECL_BLUE: Record<string, Behavior> = {
   "Aquitect's Defenses": {
@@ -51,14 +73,16 @@ export const ECL_BLUE: Record<string, Behavior> = {
       { kind: 'static', effect: { kind: 'attached', power: 1, toughness: 2 } },
     ),
   },
-  Blossombind: aura(
-    creature,
-    onEnter({ kind: 'tap', what: 'attached' }),
-    {
-      kind: 'static',
-      effect: { kind: 'attached', power: 0, toughness: 0, cantBecomeUntapped: true, noCounters: true },
+  Blossombind: aura(creature, onEnter({ kind: 'tap', what: 'attached' }), {
+    kind: 'static',
+    effect: {
+      kind: 'attached',
+      power: 0,
+      toughness: 0,
+      cantBecomeUntapped: true,
+      noCounters: true,
     },
-  ),
+  }),
   'Champions of the Shoal': {
     beholdExile: { subtype: 'Merfolk' },
     abilities: [
@@ -129,7 +153,10 @@ export const ECL_BLUE: Record<string, Behavior> = {
         kind: 'activated',
         cost: withRemovedCounters(1, { mana: mana('{1}{U}') }),
         targets: [{ what: 'spell', filter: { notTypes: ['Creature'] } }],
-        effects: [{ kind: 'counter', what: t0 }, { kind: 'draw', who: { controllerOf: 0 }, amount: 1 }],
+        effects: [
+          { kind: 'counter', what: t0 },
+          { kind: 'draw', who: { controllerOf: 0 }, amount: 1 },
+        ],
       },
     ],
   },
@@ -199,11 +226,10 @@ export const ECL_BLUE: Record<string, Behavior> = {
   },
   'Lofty Dreams': {
     convoke: true,
-    ...aura(
-      creature,
-      onEnter(draw(1)),
-      { kind: 'static', effect: { kind: 'attached', power: 2, toughness: 2, keywords: ['flying'] } },
-    ),
+    ...aura(creature, onEnter(draw(1)), {
+      kind: 'static',
+      effect: { kind: 'attached', power: 2, toughness: 2, keywords: ['flying'] },
+    }),
   },
   Mirrorform: {
     spell: {
