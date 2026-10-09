@@ -24,7 +24,7 @@ export interface Decklist {
    */
   series: 'starter' | 'colorChallenge' | 'jumpIn' | 'season' | 'brawl' | 'trophy' | 'sealed';
   /** A deck from another set than Foundations (shown in its own section). */
-  set?: 'blb' | 'msh' | 'msc' | 'fin' | 'fic' | 'stx' | 'sos' | 'soc' | 'fra';
+  set?: 'blb' | 'msh' | 'msc' | 'fin' | 'fic' | 'stx' | 'sos' | 'soc' | 'fra' | 'ecl';
   cards: [name: string, count: number][];
   /** Who made it, for decks made by a player ('trophy'). */
   credit?: string;
