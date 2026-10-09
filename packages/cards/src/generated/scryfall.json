@@ -75237,5 +75237,913 @@
    "large": "https://cards.scryfall.io/large/front/b/3/b3d33df2-a77b-4c2e-ba7f-2cc9c1505f9b.jpg?1788878215",
    "artCrop": "https://cards.scryfall.io/art_crop/front/b/3/b3d33df2-a77b-4c2e-ba7f-2cc9c1505f9b.jpg?1788878215"
   }
+ },
+ {
+  "name": "Adept Watershaper",
+  "scryfallId": "6e53f246-8347-4632-9d5b-4aeb12f7b762",
+  "oracleId": "602cce3e-7033-47d6-aec1-d755f234f270",
+  "set": "ecl",
+  "collectorNumber": "3",
+  "rarity": "rare",
+  "manaCost": "{2}{W}",
+  "typeLine": "Creature — Merfolk Cleric",
+  "oracleText": "Other tapped creatures you control have indestructible.",
+  "power": "3",
+  "toughness": "4",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/e/6e53f246-8347-4632-9d5b-4aeb12f7b762.jpg?1783904512",
+   "normal": "https://cards.scryfall.io/normal/front/6/e/6e53f246-8347-4632-9d5b-4aeb12f7b762.jpg?1783904512",
+   "large": "https://cards.scryfall.io/large/front/6/e/6e53f246-8347-4632-9d5b-4aeb12f7b762.jpg?1783904512",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/e/6e53f246-8347-4632-9d5b-4aeb12f7b762.jpg?1783904512"
+  }
+ },
+ {
+  "name": "Burdened Stoneback",
+  "scryfallId": "3278b8d0-3d2b-4d3d-bbf1-fd9b714b53ed",
+  "oracleId": "8a5e17a0-6f3c-49ed-b328-ed90a46ed6c5",
+  "set": "ecl",
+  "collectorNumber": "8",
+  "rarity": "uncommon",
+  "manaCost": "{1}{W}",
+  "typeLine": "Creature — Giant Warrior",
+  "oracleText": "This creature enters with two -1/-1 counters on it.\n{1}{W}, Remove a counter from this creature: Target creature gains indestructible until end of turn. Activate only as a sorcery. (Damage and effects that say \"destroy\" don't destroy it. If its toughness is 0 or less, it still dies.)",
+  "power": "4",
+  "toughness": "4",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/2/3278b8d0-3d2b-4d3d-bbf1-fd9b714b53ed.jpg?1783904510",
+   "normal": "https://cards.scryfall.io/normal/front/3/2/3278b8d0-3d2b-4d3d-bbf1-fd9b714b53ed.jpg?1783904510",
+   "large": "https://cards.scryfall.io/large/front/3/2/3278b8d0-3d2b-4d3d-bbf1-fd9b714b53ed.jpg?1783904510",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/2/3278b8d0-3d2b-4d3d-bbf1-fd9b714b53ed.jpg?1783904510"
+  }
+ },
+ {
+  "name": "Champion of the Clachan",
+  "scryfallId": "46ce3474-381c-433b-acd8-4e628d0048d2",
+  "oracleId": "4a220e0c-e463-4264-9a96-658cf842b82e",
+  "set": "ecl",
+  "collectorNumber": "9",
+  "rarity": "rare",
+  "manaCost": "{3}{W}",
+  "typeLine": "Creature — Kithkin Knight",
+  "oracleText": "Flash\nAs an additional cost to cast this spell, behold a Kithkin and exile it. (Exile a Kithkin you control or a Kithkin card from your hand.)\nOther Kithkin you control get +1/+1.\nWhen this creature leaves the battlefield, return the exiled card to its owner's hand.",
+  "power": "4",
+  "toughness": "5",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Behold",
+   "Flash"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/6/46ce3474-381c-433b-acd8-4e628d0048d2.jpg?1783904510",
+   "normal": "https://cards.scryfall.io/normal/front/4/6/46ce3474-381c-433b-acd8-4e628d0048d2.jpg?1783904510",
+   "large": "https://cards.scryfall.io/large/front/4/6/46ce3474-381c-433b-acd8-4e628d0048d2.jpg?1783904510",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/6/46ce3474-381c-433b-acd8-4e628d0048d2.jpg?1783904510"
+  }
+ },
+ {
+  "name": "Curious Colossus",
+  "scryfallId": "582b6e5d-0bab-471d-af4d-19438c5fd524",
+  "oracleId": "c8de2e1b-f2fa-4b6a-a3c5-9811c7f5f051",
+  "set": "ecl",
+  "collectorNumber": "12",
+  "rarity": "mythic",
+  "manaCost": "{5}{W}{W}",
+  "typeLine": "Creature — Giant Warrior",
+  "oracleText": "When this creature enters, each creature target opponent controls loses all abilities, becomes a Coward in addition to its other types, and has base power and toughness 1/1.",
+  "power": "7",
+  "toughness": "7",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/8/582b6e5d-0bab-471d-af4d-19438c5fd524.jpg?1783904510",
+   "normal": "https://cards.scryfall.io/normal/front/5/8/582b6e5d-0bab-471d-af4d-19438c5fd524.jpg?1783904510",
+   "large": "https://cards.scryfall.io/large/front/5/8/582b6e5d-0bab-471d-af4d-19438c5fd524.jpg?1783904510",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/8/582b6e5d-0bab-471d-af4d-19438c5fd524.jpg?1783904510"
+  }
+ },
+ {
+  "name": "Encumbered Reejerey",
+  "scryfallId": "15ff6797-f59c-4333-98ea-5711150fd5b8",
+  "oracleId": "7668f7bc-9a43-4024-87c3-995aa0a65aaa",
+  "set": "ecl",
+  "collectorNumber": "14",
+  "rarity": "uncommon",
+  "manaCost": "{1}{W}",
+  "typeLine": "Creature — Merfolk Soldier",
+  "oracleText": "This creature enters with three -1/-1 counters on it.\nWhenever this creature becomes tapped while it has a -1/-1 counter on it, remove a -1/-1 counter from it.",
+  "power": "5",
+  "toughness": "4",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/5/15ff6797-f59c-4333-98ea-5711150fd5b8.jpg?1783904507",
+   "normal": "https://cards.scryfall.io/normal/front/1/5/15ff6797-f59c-4333-98ea-5711150fd5b8.jpg?1783904507",
+   "large": "https://cards.scryfall.io/large/front/1/5/15ff6797-f59c-4333-98ea-5711150fd5b8.jpg?1783904507",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/5/15ff6797-f59c-4333-98ea-5711150fd5b8.jpg?1783904507"
+  }
+ },
+ {
+  "name": "Flock Impostor",
+  "scryfallId": "d32d0336-5140-41f9-bc67-f3d743b9231d",
+  "oracleId": "6522070b-7002-44fd-8deb-832fe67ef9a9",
+  "set": "ecl",
+  "collectorNumber": "16",
+  "rarity": "uncommon",
+  "manaCost": "{2}{W}",
+  "typeLine": "Creature — Shapeshifter",
+  "oracleText": "Changeling (This card is every creature type.)\nFlash\nFlying\nWhen this creature enters, return up to one other target creature you control to its owner's hand.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Changeling",
+   "Flying",
+   "Flash"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/3/d32d0336-5140-41f9-bc67-f3d743b9231d.jpg?1783904505",
+   "normal": "https://cards.scryfall.io/normal/front/d/3/d32d0336-5140-41f9-bc67-f3d743b9231d.jpg?1783904505",
+   "large": "https://cards.scryfall.io/large/front/d/3/d32d0336-5140-41f9-bc67-f3d743b9231d.jpg?1783904505",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/3/d32d0336-5140-41f9-bc67-f3d743b9231d.jpg?1783904505"
+  }
+ },
+ {
+  "name": "Gallant Fowlknight",
+  "scryfallId": "fb6096ba-8083-4207-9a3f-c1e4ff095204",
+  "oracleId": "4e0ba9d5-4bd6-49a0-ae00-70818738d0ba",
+  "set": "ecl",
+  "collectorNumber": "17",
+  "rarity": "common",
+  "manaCost": "{3}{W}",
+  "typeLine": "Creature — Kithkin Knight",
+  "oracleText": "When this creature enters, creatures you control get +1/+0 until end of turn. Kithkin creatures you control also gain first strike until end of turn.",
+  "power": "3",
+  "toughness": "4",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/b/fb6096ba-8083-4207-9a3f-c1e4ff095204.jpg?1783904506",
+   "normal": "https://cards.scryfall.io/normal/front/f/b/fb6096ba-8083-4207-9a3f-c1e4ff095204.jpg?1783904506",
+   "large": "https://cards.scryfall.io/large/front/f/b/fb6096ba-8083-4207-9a3f-c1e4ff095204.jpg?1783904506",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/b/fb6096ba-8083-4207-9a3f-c1e4ff095204.jpg?1783904506"
+  }
+ },
+ {
+  "name": "Goldmeadow Nomad",
+  "scryfallId": "00ddbe6c-11de-4bc6-aabe-d6d8385a838a",
+  "oracleId": "79dfe2eb-82b9-4dae-95c8-58fdf9006bc7",
+  "set": "ecl",
+  "collectorNumber": "18",
+  "rarity": "common",
+  "manaCost": "{W}",
+  "typeLine": "Creature — Kithkin Scout",
+  "oracleText": "{W}, Exile this card from your graveyard: Create a 1/1 green and white Kithkin creature token. Activate only as a sorcery.",
+  "power": "1",
+  "toughness": "2",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/0/00ddbe6c-11de-4bc6-aabe-d6d8385a838a.jpg?1783904506",
+   "normal": "https://cards.scryfall.io/normal/front/0/0/00ddbe6c-11de-4bc6-aabe-d6d8385a838a.jpg?1783904506",
+   "large": "https://cards.scryfall.io/large/front/0/0/00ddbe6c-11de-4bc6-aabe-d6d8385a838a.jpg?1783904506",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/0/00ddbe6c-11de-4bc6-aabe-d6d8385a838a.jpg?1783904506"
+  }
+ },
+ {
+  "name": "Kinsbaile Aspirant",
+  "scryfallId": "56dfdab1-ea3f-4663-a855-a9e72505f85e",
+  "oracleId": "845d80ee-1cd5-437a-90a5-40dcc657d3aa",
+  "set": "ecl",
+  "collectorNumber": "21",
+  "rarity": "uncommon",
+  "manaCost": "{W}",
+  "typeLine": "Creature — Kithkin Citizen",
+  "oracleText": "As an additional cost to cast this spell, behold a Kithkin or pay {2}. (To behold a Kithkin, choose a Kithkin you control or reveal a Kithkin card from your hand.)\nWhenever another creature you control enters, this creature gets +1/+1 until end of turn.",
+  "power": "2",
+  "toughness": "1",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Behold"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/6/56dfdab1-ea3f-4663-a855-a9e72505f85e.jpg?1783904503",
+   "normal": "https://cards.scryfall.io/normal/front/5/6/56dfdab1-ea3f-4663-a855-a9e72505f85e.jpg?1783904503",
+   "large": "https://cards.scryfall.io/large/front/5/6/56dfdab1-ea3f-4663-a855-a9e72505f85e.jpg?1783904503",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/6/56dfdab1-ea3f-4663-a855-a9e72505f85e.jpg?1783904503"
+  }
+ },
+ {
+  "name": "Kinscaer Sentry",
+  "scryfallId": "333bf101-14e8-4753-99bc-9174f42c4122",
+  "oracleId": "fdf0fba8-f335-419c-b96b-e99037727c43",
+  "set": "ecl",
+  "collectorNumber": "22",
+  "rarity": "rare",
+  "manaCost": "{1}{W}",
+  "typeLine": "Creature — Kithkin Soldier",
+  "oracleText": "First strike, lifelink\nWhenever this creature attacks, you may put a creature card with mana value X or less from your hand onto the battlefield tapped and attacking, where X is the number of attacking creatures you control.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Lifelink",
+   "First strike"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/3/333bf101-14e8-4753-99bc-9174f42c4122.jpg?1783904507",
+   "normal": "https://cards.scryfall.io/normal/front/3/3/333bf101-14e8-4753-99bc-9174f42c4122.jpg?1783904507",
+   "large": "https://cards.scryfall.io/large/front/3/3/333bf101-14e8-4753-99bc-9174f42c4122.jpg?1783904507",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/3/333bf101-14e8-4753-99bc-9174f42c4122.jpg?1783904507"
+  }
+ },
+ {
+  "name": "Kithkeeper",
+  "scryfallId": "ef29eff7-72be-46e6-9275-0f0a44d29233",
+  "oracleId": "5c5766f9-befd-4426-9527-d50af0699ca1",
+  "set": "ecl",
+  "collectorNumber": "23",
+  "rarity": "uncommon",
+  "manaCost": "{6}{W}",
+  "typeLine": "Creature — Elemental",
+  "oracleText": "Vivid — When this creature enters, create X 1/1 green and white Kithkin creature tokens, where X is the number of colors among permanents you control.\nTap three untapped creatures you control: This creature gets +3/+0 and gains flying until end of turn.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Vivid"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/f/ef29eff7-72be-46e6-9275-0f0a44d29233.jpg?1783904502",
+   "normal": "https://cards.scryfall.io/normal/front/e/f/ef29eff7-72be-46e6-9275-0f0a44d29233.jpg?1783904502",
+   "large": "https://cards.scryfall.io/large/front/e/f/ef29eff7-72be-46e6-9275-0f0a44d29233.jpg?1783904502",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/f/ef29eff7-72be-46e6-9275-0f0a44d29233.jpg?1783904502"
+  }
+ },
+ {
+  "name": "Meanders Guide",
+  "scryfallId": "8c41a0ad-138e-4eef-8f7f-35017e3b086f",
+  "oracleId": "8229954b-e1ef-4503-8443-2356e2a87663",
+  "set": "ecl",
+  "collectorNumber": "25",
+  "rarity": "uncommon",
+  "manaCost": "{2}{W}",
+  "typeLine": "Creature — Merfolk Scout",
+  "oracleText": "Whenever this creature attacks, you may tap another untapped Merfolk you control. When you do, return target creature card with mana value 3 or less from your graveyard to the battlefield.",
+  "power": "3",
+  "toughness": "2",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/c/8c41a0ad-138e-4eef-8f7f-35017e3b086f.jpg?1783904503",
+   "normal": "https://cards.scryfall.io/normal/front/8/c/8c41a0ad-138e-4eef-8f7f-35017e3b086f.jpg?1783904503",
+   "large": "https://cards.scryfall.io/large/front/8/c/8c41a0ad-138e-4eef-8f7f-35017e3b086f.jpg?1783904503",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/c/8c41a0ad-138e-4eef-8f7f-35017e3b086f.jpg?1783904503"
+  }
+ },
+ {
+  "name": "Moonlit Lamenter",
+  "scryfallId": "fb8fc509-cff6-470f-abf6-b07f6c3f94e1",
+  "oracleId": "ce009bd4-5ffb-46a4-a9dd-b9c060926467",
+  "set": "ecl",
+  "collectorNumber": "26",
+  "rarity": "uncommon",
+  "manaCost": "{2}{W}",
+  "typeLine": "Creature — Treefolk Cleric",
+  "oracleText": "This creature enters with a -1/-1 counter on it.\n{1}{W}, Remove a counter from this creature: Draw a card. Activate only as a sorcery.",
+  "power": "2",
+  "toughness": "5",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/b/fb8fc509-cff6-470f-abf6-b07f6c3f94e1.jpg?1783904503",
+   "normal": "https://cards.scryfall.io/normal/front/f/b/fb8fc509-cff6-470f-abf6-b07f6c3f94e1.jpg?1783904503",
+   "large": "https://cards.scryfall.io/large/front/f/b/fb8fc509-cff6-470f-abf6-b07f6c3f94e1.jpg?1783904503",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/b/fb8fc509-cff6-470f-abf6-b07f6c3f94e1.jpg?1783904503"
+  }
+ },
+ {
+  "name": "Reluctant Dounguard",
+  "scryfallId": "dbce93c0-5efc-4b60-9cef-9d9b374d397b",
+  "oracleId": "162dcfa0-36e4-41cd-8322-08e810ff04d4",
+  "set": "ecl",
+  "collectorNumber": "31",
+  "rarity": "common",
+  "manaCost": "{2}{W}",
+  "typeLine": "Creature — Kithkin Soldier",
+  "oracleText": "This creature enters with two -1/-1 counters on it.\nWhenever another creature you control enters while this creature has a -1/-1 counter on it, remove a -1/-1 counter from this creature.",
+  "power": "4",
+  "toughness": "4",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/b/dbce93c0-5efc-4b60-9cef-9d9b374d397b.jpg?1783904500",
+   "normal": "https://cards.scryfall.io/normal/front/d/b/dbce93c0-5efc-4b60-9cef-9d9b374d397b.jpg?1783904500",
+   "large": "https://cards.scryfall.io/large/front/d/b/dbce93c0-5efc-4b60-9cef-9d9b374d397b.jpg?1783904500",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/b/dbce93c0-5efc-4b60-9cef-9d9b374d397b.jpg?1783904500"
+  }
+ },
+ {
+  "name": "Rhys, the Evermore",
+  "scryfallId": "a7072412-4aa2-40ef-a267-bd717551a42b",
+  "oracleId": "9f013b5d-fff0-4c50-8621-158b6dc34834",
+  "set": "ecl",
+  "collectorNumber": "32",
+  "rarity": "rare",
+  "manaCost": "{1}{W}",
+  "typeLine": "Legendary Creature — Elf Warrior",
+  "oracleText": "Flash\nWhen Rhys enters, another target creature you control gains persist until end of turn. (When it dies, if it had no -1/-1 counters on it, return it to the battlefield under its owner's control with a -1/-1 counter on it.)\n{W}, {T}: Remove any number of counters from target creature you control. Activate only as a sorcery.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Flash"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/7/a7072412-4aa2-40ef-a267-bd717551a42b.jpg?1783904499",
+   "normal": "https://cards.scryfall.io/normal/front/a/7/a7072412-4aa2-40ef-a267-bd717551a42b.jpg?1783904499",
+   "large": "https://cards.scryfall.io/large/front/a/7/a7072412-4aa2-40ef-a267-bd717551a42b.jpg?1783904499",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/7/a7072412-4aa2-40ef-a267-bd717551a42b.jpg?1783904499"
+  }
+ },
+ {
+  "name": "Shore Lurker",
+  "scryfallId": "bb353c27-e311-4677-9277-cab6820562ce",
+  "oracleId": "4288ba56-ddd0-4bd9-ba61-daf03e9f2d7f",
+  "set": "ecl",
+  "collectorNumber": "34",
+  "rarity": "common",
+  "manaCost": "{3}{W}",
+  "typeLine": "Creature — Merfolk Scout",
+  "oracleText": "Flying\nWhen this creature enters, surveil 1. (Look at the top card of your library. You may put it into your graveyard.)",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Flying",
+   "Surveil"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/b/bb353c27-e311-4677-9277-cab6820562ce.jpg?1783904497",
+   "normal": "https://cards.scryfall.io/normal/front/b/b/bb353c27-e311-4677-9277-cab6820562ce.jpg?1783904497",
+   "large": "https://cards.scryfall.io/large/front/b/b/bb353c27-e311-4677-9277-cab6820562ce.jpg?1783904497",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/b/bb353c27-e311-4677-9277-cab6820562ce.jpg?1783904497"
+  }
+ },
+ {
+  "name": "Slumbering Walker",
+  "scryfallId": "81e82915-e734-4754-829f-f5da6a7c550d",
+  "oracleId": "6d972501-4174-4bf0-a26b-2edef31b3a0c",
+  "set": "ecl",
+  "collectorNumber": "35",
+  "rarity": "rare",
+  "manaCost": "{3}{W}{W}",
+  "typeLine": "Creature — Giant Warrior",
+  "oracleText": "This creature enters with two -1/-1 counters on it.\nAt the beginning of your end step, you may remove a counter from this creature. When you do, return target creature card with power 2 or less from your graveyard to the battlefield.",
+  "power": "4",
+  "toughness": "7",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/1/81e82915-e734-4754-829f-f5da6a7c550d.jpg?1783904499",
+   "normal": "https://cards.scryfall.io/normal/front/8/1/81e82915-e734-4754-829f-f5da6a7c550d.jpg?1783904499",
+   "large": "https://cards.scryfall.io/large/front/8/1/81e82915-e734-4754-829f-f5da6a7c550d.jpg?1783904499",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/1/81e82915-e734-4754-829f-f5da6a7c550d.jpg?1783904499"
+  }
+ },
+ {
+  "name": "Sun-Dappled Celebrant",
+  "scryfallId": "91c715a5-6643-4064-a8a8-3e05dce15979",
+  "oracleId": "27c87371-697e-4ca6-a7f4-d99215d908bc",
+  "set": "ecl",
+  "collectorNumber": "37",
+  "rarity": "common",
+  "manaCost": "{4}{W}{W}",
+  "typeLine": "Creature — Treefolk Cleric",
+  "oracleText": "Convoke (Your creatures can help cast this spell. Each creature you tap while casting this spell pays for {1} or one mana of that creature's color.)\nVigilance",
+  "power": "5",
+  "toughness": "6",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Vigilance",
+   "Convoke"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/1/91c715a5-6643-4064-a8a8-3e05dce15979.jpg?1783904496",
+   "normal": "https://cards.scryfall.io/normal/front/9/1/91c715a5-6643-4064-a8a8-3e05dce15979.jpg?1783904496",
+   "large": "https://cards.scryfall.io/large/front/9/1/91c715a5-6643-4064-a8a8-3e05dce15979.jpg?1783904496",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/1/91c715a5-6643-4064-a8a8-3e05dce15979.jpg?1783904496"
+  }
+ },
+ {
+  "name": "Thoughtweft Imbuer",
+  "scryfallId": "7e585a6c-2d95-450e-98cb-8794d7d8ecca",
+  "oracleId": "9dee8c0b-71e0-4a94-b411-78b29b599847",
+  "set": "ecl",
+  "collectorNumber": "38",
+  "rarity": "uncommon",
+  "manaCost": "{3}{W}",
+  "typeLine": "Creature — Kithkin Advisor",
+  "oracleText": "Whenever a creature you control attacks alone, it gets +X/+X until end of turn, where X is the number of Kithkin you control.",
+  "power": "0",
+  "toughness": "5",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/e/7e585a6c-2d95-450e-98cb-8794d7d8ecca.jpg?1783904497",
+   "normal": "https://cards.scryfall.io/normal/front/7/e/7e585a6c-2d95-450e-98cb-8794d7d8ecca.jpg?1783904497",
+   "large": "https://cards.scryfall.io/large/front/7/e/7e585a6c-2d95-450e-98cb-8794d7d8ecca.jpg?1783904497",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/e/7e585a6c-2d95-450e-98cb-8794d7d8ecca.jpg?1783904497"
+  }
+ },
+ {
+  "name": "Timid Shieldbearer",
+  "scryfallId": "1c672d38-a1a6-4912-a9a6-b11e7bf0cc67",
+  "oracleId": "8bef3511-ceeb-4d57-972a-ab363ecacd5b",
+  "set": "ecl",
+  "collectorNumber": "39",
+  "rarity": "common",
+  "manaCost": "{1}{W}",
+  "typeLine": "Creature — Kithkin Soldier",
+  "oracleText": "{4}{W}: Creatures you control get +1/+1 until end of turn.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/c/1c672d38-a1a6-4912-a9a6-b11e7bf0cc67.jpg?1783904496",
+   "normal": "https://cards.scryfall.io/normal/front/1/c/1c672d38-a1a6-4912-a9a6-b11e7bf0cc67.jpg?1783904496",
+   "large": "https://cards.scryfall.io/large/front/1/c/1c672d38-a1a6-4912-a9a6-b11e7bf0cc67.jpg?1783904496",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/c/1c672d38-a1a6-4912-a9a6-b11e7bf0cc67.jpg?1783904496"
+  }
+ },
+ {
+  "name": "Tributary Vaulter",
+  "scryfallId": "a1db2c83-41d1-4cc6-b9a3-fed504b01127",
+  "oracleId": "991f4eec-cf3e-4554-ba88-c44bb0d255f0",
+  "set": "ecl",
+  "collectorNumber": "40",
+  "rarity": "common",
+  "manaCost": "{2}{W}",
+  "typeLine": "Creature — Merfolk Warrior",
+  "oracleText": "Flying\nWhenever this creature becomes tapped, another target Merfolk you control gets +2/+0 until end of turn.",
+  "power": "1",
+  "toughness": "3",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/1/a1db2c83-41d1-4cc6-b9a3-fed504b01127.jpg?1783904496",
+   "normal": "https://cards.scryfall.io/normal/front/a/1/a1db2c83-41d1-4cc6-b9a3-fed504b01127.jpg?1783904496",
+   "large": "https://cards.scryfall.io/large/front/a/1/a1db2c83-41d1-4cc6-b9a3-fed504b01127.jpg?1783904496",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/1/a1db2c83-41d1-4cc6-b9a3-fed504b01127.jpg?1783904496"
+  }
+ },
+ {
+  "name": "Wanderbrine Preacher",
+  "scryfallId": "3fc3f5f2-5a83-4358-8f23-42f26f345140",
+  "oracleId": "4b4dcdb1-0017-494f-8d83-6706b188e575",
+  "set": "ecl",
+  "collectorNumber": "41",
+  "rarity": "common",
+  "manaCost": "{1}{W}",
+  "typeLine": "Creature — Merfolk Cleric",
+  "oracleText": "Whenever this creature becomes tapped, you gain 2 life.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/f/3fc3f5f2-5a83-4358-8f23-42f26f345140.jpg?1783904496",
+   "normal": "https://cards.scryfall.io/normal/front/3/f/3fc3f5f2-5a83-4358-8f23-42f26f345140.jpg?1783904496",
+   "large": "https://cards.scryfall.io/large/front/3/f/3fc3f5f2-5a83-4358-8f23-42f26f345140.jpg?1783904496",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/f/3fc3f5f2-5a83-4358-8f23-42f26f345140.jpg?1783904496"
+  }
+ },
+ {
+  "name": "Wanderbrine Trapper",
+  "scryfallId": "f4c134ed-adbf-4e88-80e0-75c176ce94c3",
+  "oracleId": "915d70ac-46ce-41d0-a137-f17e7aaea87d",
+  "set": "ecl",
+  "collectorNumber": "42",
+  "rarity": "uncommon",
+  "manaCost": "{W}",
+  "typeLine": "Creature — Merfolk Scout",
+  "oracleText": "{1}, {T}, Tap another untapped creature you control: Tap target creature an opponent controls.",
+  "power": "2",
+  "toughness": "1",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/4/f4c134ed-adbf-4e88-80e0-75c176ce94c3.jpg?1783904493",
+   "normal": "https://cards.scryfall.io/normal/front/f/4/f4c134ed-adbf-4e88-80e0-75c176ce94c3.jpg?1783904493",
+   "large": "https://cards.scryfall.io/large/front/f/4/f4c134ed-adbf-4e88-80e0-75c176ce94c3.jpg?1783904493",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/4/f4c134ed-adbf-4e88-80e0-75c176ce94c3.jpg?1783904493"
+  }
+ },
+ {
+  "name": "Bark of Doran",
+  "scryfallId": "98210276-1b85-4db5-8ab4-ecb08f5d2ee2",
+  "oracleId": "db3ba239-2239-4e9d-ad70-cff32ed24578",
+  "set": "ecl",
+  "collectorNumber": "6",
+  "rarity": "uncommon",
+  "manaCost": "{1}{W}",
+  "typeLine": "Artifact — Equipment",
+  "oracleText": "Equipped creature gets +0/+1.\nAs long as equipped creature's toughness is greater than its power, it assigns combat damage equal to its toughness rather than its power.\nEquip {1} ({1}: Attach to target creature you control. Equip only as a sorcery.)",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Equip"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/8/98210276-1b85-4db5-8ab4-ecb08f5d2ee2.jpg?1783904510",
+   "normal": "https://cards.scryfall.io/normal/front/9/8/98210276-1b85-4db5-8ab4-ecb08f5d2ee2.jpg?1783904510",
+   "large": "https://cards.scryfall.io/large/front/9/8/98210276-1b85-4db5-8ab4-ecb08f5d2ee2.jpg?1783904510",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/8/98210276-1b85-4db5-8ab4-ecb08f5d2ee2.jpg?1783904510"
+  }
+ },
+ {
+  "name": "Clachan Festival",
+  "scryfallId": "324b5234-ffbf-4801-a475-8f693679ae2f",
+  "oracleId": "5396045d-744b-435e-8324-a1bfbb03449d",
+  "set": "ecl",
+  "collectorNumber": "10",
+  "rarity": "uncommon",
+  "manaCost": "{2}{W}",
+  "typeLine": "Kindred Enchantment — Kithkin",
+  "oracleText": "When this enchantment enters, create two 1/1 green and white Kithkin creature tokens.\n{4}{W}: Create a 1/1 green and white Kithkin creature token.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/2/324b5234-ffbf-4801-a475-8f693679ae2f.jpg?1783904510",
+   "normal": "https://cards.scryfall.io/normal/front/3/2/324b5234-ffbf-4801-a475-8f693679ae2f.jpg?1783904510",
+   "large": "https://cards.scryfall.io/large/front/3/2/324b5234-ffbf-4801-a475-8f693679ae2f.jpg?1783904510",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/2/324b5234-ffbf-4801-a475-8f693679ae2f.jpg?1783904510"
+  }
+ },
+ {
+  "name": "Evershrike's Gift",
+  "scryfallId": "231e46b6-b91a-4582-8894-e7de1c50213f",
+  "oracleId": "b5bc4adf-9105-4901-989c-63612314af5c",
+  "set": "ecl",
+  "collectorNumber": "15",
+  "rarity": "uncommon",
+  "manaCost": "{W}",
+  "typeLine": "Enchantment — Aura",
+  "oracleText": "Enchant creature\nEnchanted creature gets +1/+0 and has flying.\n{1}{W}, Blight 2: Return this card from your graveyard to your hand. Activate only as a sorcery. (To blight 2, put two -1/-1 counters on a creature you control.)",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Blight",
+   "Enchant"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/3/231e46b6-b91a-4582-8894-e7de1c50213f.jpg?1783904506",
+   "normal": "https://cards.scryfall.io/normal/front/2/3/231e46b6-b91a-4582-8894-e7de1c50213f.jpg?1783904506",
+   "large": "https://cards.scryfall.io/large/front/2/3/231e46b6-b91a-4582-8894-e7de1c50213f.jpg?1783904506",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/3/231e46b6-b91a-4582-8894-e7de1c50213f.jpg?1783904506"
+  }
+ },
+ {
+  "name": "Kinbinding",
+  "scryfallId": "b6e35fd5-de7e-40a8-a23c-00d07fd1ac56",
+  "oracleId": "da35de40-6fde-4018-bda8-b0ae91ed872a",
+  "set": "ecl",
+  "collectorNumber": "20",
+  "rarity": "rare",
+  "manaCost": "{3}{W}{W}",
+  "typeLine": "Enchantment",
+  "oracleText": "Creatures you control get +X/+X, where X is the number of creatures that entered the battlefield under your control this turn.\nAt the beginning of combat on your turn, create a 1/1 green and white Kithkin creature token.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/6/b6e35fd5-de7e-40a8-a23c-00d07fd1ac56.jpg?1783904504",
+   "normal": "https://cards.scryfall.io/normal/front/b/6/b6e35fd5-de7e-40a8-a23c-00d07fd1ac56.jpg?1783904504",
+   "large": "https://cards.scryfall.io/large/front/b/6/b6e35fd5-de7e-40a8-a23c-00d07fd1ac56.jpg?1783904504",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/6/b6e35fd5-de7e-40a8-a23c-00d07fd1ac56.jpg?1783904504"
+  }
+ },
+ {
+  "name": "Liminal Hold",
+  "scryfallId": "a5a40c16-7a5c-4ad1-be53-6b1b1be2affe",
+  "oracleId": "101407b4-e7e8-4aff-84a2-a97947358b88",
+  "set": "ecl",
+  "collectorNumber": "24",
+  "rarity": "common",
+  "manaCost": "{3}{W}",
+  "typeLine": "Enchantment",
+  "oracleText": "When this enchantment enters, exile up to one target nonland permanent an opponent controls until this enchantment leaves the battlefield. You gain 2 life.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/5/a5a40c16-7a5c-4ad1-be53-6b1b1be2affe.jpg?1783904505",
+   "normal": "https://cards.scryfall.io/normal/front/a/5/a5a40c16-7a5c-4ad1-be53-6b1b1be2affe.jpg?1783904505",
+   "large": "https://cards.scryfall.io/large/front/a/5/a5a40c16-7a5c-4ad1-be53-6b1b1be2affe.jpg?1783904505",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/5/a5a40c16-7a5c-4ad1-be53-6b1b1be2affe.jpg?1783904505"
+  }
+ },
+ {
+  "name": "Spiral into Solitude",
+  "scryfallId": "e7a12664-a930-4159-8311-19862488fb05",
+  "oracleId": "d8599f06-f030-4575-8497-307a4d7ec182",
+  "set": "ecl",
+  "collectorNumber": "36",
+  "rarity": "common",
+  "manaCost": "{1}{W}",
+  "typeLine": "Enchantment — Aura",
+  "oracleText": "Enchant creature\nEnchanted creature can't attack or block.\n{1}{W}, Blight 1, Sacrifice this Aura: Exile enchanted creature. (To blight 1, put a -1/-1 counter on a creature you control.)",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Blight",
+   "Enchant"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/7/e7a12664-a930-4159-8311-19862488fb05.jpg?1783904497",
+   "normal": "https://cards.scryfall.io/normal/front/e/7/e7a12664-a930-4159-8311-19862488fb05.jpg?1783904497",
+   "large": "https://cards.scryfall.io/large/front/e/7/e7a12664-a930-4159-8311-19862488fb05.jpg?1783904497",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/7/e7a12664-a930-4159-8311-19862488fb05.jpg?1783904497"
+  }
+ },
+ {
+  "name": "Ajani, Outland Chaperone",
+  "scryfallId": "6124a691-ae83-4d22-a177-0aee65b47064",
+  "oracleId": "3ba809ce-3556-415c-9fcc-291cb10a43cd",
+  "set": "ecl",
+  "collectorNumber": "4",
+  "rarity": "mythic",
+  "manaCost": "{1}{W}{W}",
+  "typeLine": "Legendary Planeswalker — Ajani",
+  "oracleText": "+1: Create a 1/1 green and white Kithkin creature token.\n−2: Ajani deals 4 damage to target tapped creature.\n−8: Look at the top X cards of your library, where X is your life total. You may put any number of nonland permanent cards with mana value 3 or less from among them onto the battlefield. Then shuffle.",
+  "loyalty": "3",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/1/6124a691-ae83-4d22-a177-0aee65b47064.jpg?1783904513",
+   "normal": "https://cards.scryfall.io/normal/front/6/1/6124a691-ae83-4d22-a177-0aee65b47064.jpg?1783904513",
+   "large": "https://cards.scryfall.io/large/front/6/1/6124a691-ae83-4d22-a177-0aee65b47064.jpg?1783904513",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/1/6124a691-ae83-4d22-a177-0aee65b47064.jpg?1783904513"
+  }
+ },
+ {
+  "name": "Appeal to Eirdu",
+  "scryfallId": "68ce9752-21f9-48e9-bf48-7f76f1cecbc5",
+  "oracleId": "cea09261-41a2-43e5-bf43-c4097e6615c6",
+  "set": "ecl",
+  "collectorNumber": "5",
+  "rarity": "common",
+  "manaCost": "{3}{W}",
+  "typeLine": "Instant",
+  "oracleText": "Convoke (Your creatures can help cast this spell. Each creature you tap while casting this spell pays for {1} or one mana of that creature's color.)\nOne or two target creatures each get +2/+1 until end of turn.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Convoke"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/8/68ce9752-21f9-48e9-bf48-7f76f1cecbc5.jpg?1783904510",
+   "normal": "https://cards.scryfall.io/normal/front/6/8/68ce9752-21f9-48e9-bf48-7f76f1cecbc5.jpg?1783904510",
+   "large": "https://cards.scryfall.io/large/front/6/8/68ce9752-21f9-48e9-bf48-7f76f1cecbc5.jpg?1783904510",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/8/68ce9752-21f9-48e9-bf48-7f76f1cecbc5.jpg?1783904510"
+  }
+ },
+ {
+  "name": "Crib Swap",
+  "scryfallId": "20aa5ffa-e393-47a1-8ebb-61d461e904ed",
+  "oracleId": "2987c385-011a-4032-a516-a46d1e9dc9e8",
+  "set": "sld",
+  "collectorNumber": "1850",
+  "rarity": "uncommon",
+  "manaCost": "{2}{W}",
+  "typeLine": "Kindred Instant — Shapeshifter",
+  "oracleText": "Changeling (This card is every creature type.)\nExile target creature. Its controller creates a 1/1 colorless Shapeshifter creature token with changeling.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Changeling"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/0/20aa5ffa-e393-47a1-8ebb-61d461e904ed.jpg?1783908452",
+   "normal": "https://cards.scryfall.io/normal/front/2/0/20aa5ffa-e393-47a1-8ebb-61d461e904ed.jpg?1783908452",
+   "large": "https://cards.scryfall.io/large/front/2/0/20aa5ffa-e393-47a1-8ebb-61d461e904ed.jpg?1783908452",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/0/20aa5ffa-e393-47a1-8ebb-61d461e904ed.jpg?1783908452"
+  }
+ },
+ {
+  "name": "Keep Out",
+  "scryfallId": "4ab1601c-634c-4f21-8926-ba3cb92008c1",
+  "oracleId": "61cb927a-4cf8-49d6-ab4b-9e882bc08774",
+  "set": "ecl",
+  "collectorNumber": "19",
+  "rarity": "common",
+  "manaCost": "{1}{W}",
+  "typeLine": "Instant",
+  "oracleText": "Choose one —\n• Keep Out deals 4 damage to target tapped creature.\n• Destroy target enchantment.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/a/4ab1601c-634c-4f21-8926-ba3cb92008c1.jpg?1783904503",
+   "normal": "https://cards.scryfall.io/normal/front/4/a/4ab1601c-634c-4f21-8926-ba3cb92008c1.jpg?1783904503",
+   "large": "https://cards.scryfall.io/large/front/4/a/4ab1601c-634c-4f21-8926-ba3cb92008c1.jpg?1783904503",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/a/4ab1601c-634c-4f21-8926-ba3cb92008c1.jpg?1783904503"
+  }
+ },
+ {
+  "name": "Morningtide's Light",
+  "scryfallId": "181ee045-5650-479a-8c03-015b38fdcd63",
+  "oracleId": "a25bcf65-4417-45e9-a4b1-94e0ea78af63",
+  "set": "ecl",
+  "collectorNumber": "27",
+  "rarity": "mythic",
+  "manaCost": "{3}{W}",
+  "typeLine": "Sorcery",
+  "oracleText": "Exile any number of target creatures. At the beginning of the next end step, return those cards to the battlefield tapped under their owners' control.\nUntil your next turn, prevent all damage that would be dealt to you.\nExile Morningtide's Light.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/8/181ee045-5650-479a-8c03-015b38fdcd63.jpg?1783904502",
+   "normal": "https://cards.scryfall.io/normal/front/1/8/181ee045-5650-479a-8c03-015b38fdcd63.jpg?1783904502",
+   "large": "https://cards.scryfall.io/large/front/1/8/181ee045-5650-479a-8c03-015b38fdcd63.jpg?1783904502",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/8/181ee045-5650-479a-8c03-015b38fdcd63.jpg?1783904502"
+  }
+ },
+ {
+  "name": "Personify",
+  "scryfallId": "1172582d-fb2d-4022-95b1-e48b03df3a95",
+  "oracleId": "e1708ad9-35d4-4243-92ca-ddf9d129aa32",
+  "set": "ecl",
+  "collectorNumber": "28",
+  "rarity": "uncommon",
+  "manaCost": "{1}{W}",
+  "typeLine": "Instant",
+  "oracleText": "Exile target creature you control, then return that card to the battlefield under its owner's control. Create a 1/1 colorless Shapeshifter creature token with changeling. (It's every creature type.)",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/1/1172582d-fb2d-4022-95b1-e48b03df3a95.jpg?1783904503",
+   "normal": "https://cards.scryfall.io/normal/front/1/1/1172582d-fb2d-4022-95b1-e48b03df3a95.jpg?1783904503",
+   "large": "https://cards.scryfall.io/large/front/1/1/1172582d-fb2d-4022-95b1-e48b03df3a95.jpg?1783904503",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/1/1172582d-fb2d-4022-95b1-e48b03df3a95.jpg?1783904503"
+  }
+ },
+ {
+  "name": "Protective Response",
+  "scryfallId": "113975e1-7712-4760-96ad-405f8b4e41e3",
+  "oracleId": "c840b89b-81be-4644-8bb5-35d14b1bc620",
+  "set": "ecl",
+  "collectorNumber": "29",
+  "rarity": "uncommon",
+  "manaCost": "{2}{W}",
+  "typeLine": "Instant",
+  "oracleText": "Convoke (Your creatures can help cast this spell. Each creature you tap while casting this spell pays for {1} or one mana of that creature's color.)\nDestroy target attacking or blocking creature.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Convoke"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/1/113975e1-7712-4760-96ad-405f8b4e41e3.jpg?1783904500",
+   "normal": "https://cards.scryfall.io/normal/front/1/1/113975e1-7712-4760-96ad-405f8b4e41e3.jpg?1783904500",
+   "large": "https://cards.scryfall.io/large/front/1/1/113975e1-7712-4760-96ad-405f8b4e41e3.jpg?1783904500",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/1/113975e1-7712-4760-96ad-405f8b4e41e3.jpg?1783904500"
+  }
+ },
+ {
+  "name": "Pyrrhic Strike",
+  "scryfallId": "cce5b16d-07fb-4e64-8ec9-b8b29ba86cff",
+  "oracleId": "5ea1d89c-8650-4373-9835-e369587020ef",
+  "set": "ecl",
+  "collectorNumber": "30",
+  "rarity": "uncommon",
+  "manaCost": "{2}{W}",
+  "typeLine": "Instant",
+  "oracleText": "As an additional cost to cast this spell, you may blight 2. (You may put two -1/-1 counters on a creature you control.)\nChoose one. If this spell's additional cost was paid, choose both instead.\n• Destroy target artifact or enchantment.\n• Destroy target creature with mana value 3 or greater.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Blight"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/c/cce5b16d-07fb-4e64-8ec9-b8b29ba86cff.jpg?1783904500",
+   "normal": "https://cards.scryfall.io/normal/front/c/c/cce5b16d-07fb-4e64-8ec9-b8b29ba86cff.jpg?1783904500",
+   "large": "https://cards.scryfall.io/large/front/c/c/cce5b16d-07fb-4e64-8ec9-b8b29ba86cff.jpg?1783904500",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/c/cce5b16d-07fb-4e64-8ec9-b8b29ba86cff.jpg?1783904500"
+  }
+ },
+ {
+  "name": "Riverguard's Reflexes",
+  "scryfallId": "88a79f3e-ca74-467c-b0a8-22802ac5b465",
+  "oracleId": "0bdebad7-a05e-439a-b5a9-241a2d09f943",
+  "set": "ecl",
+  "collectorNumber": "33",
+  "rarity": "common",
+  "manaCost": "{1}{W}",
+  "typeLine": "Instant",
+  "oracleText": "Target creature gets +2/+2 and gains first strike until end of turn. Untap it.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/8/88a79f3e-ca74-467c-b0a8-22802ac5b465.jpg?1783904498",
+   "normal": "https://cards.scryfall.io/normal/front/8/8/88a79f3e-ca74-467c-b0a8-22802ac5b465.jpg?1783904498",
+   "large": "https://cards.scryfall.io/large/front/8/8/88a79f3e-ca74-467c-b0a8-22802ac5b465.jpg?1783904498",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/8/88a79f3e-ca74-467c-b0a8-22802ac5b465.jpg?1783904498"
+  }
+ },
+ {
+  "name": "Winnowing",
+  "scryfallId": "f943a7d8-9550-427e-8c45-ef834329d345",
+  "oracleId": "8b834f83-951b-4b5c-b9f1-3d860baa3c0e",
+  "set": "ecl",
+  "collectorNumber": "43",
+  "rarity": "rare",
+  "manaCost": "{4}{W}{W}",
+  "typeLine": "Sorcery",
+  "oracleText": "Convoke (Your creatures can help cast this spell. Each creature you tap while casting this spell pays for {1} or one mana of that creature's color.)\nFor each player, you choose a creature that player controls. Then each player sacrifices all other creatures they control that don't share a creature type with the chosen creature they control.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Convoke"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/9/f943a7d8-9550-427e-8c45-ef834329d345.jpg?1783904492",
+   "normal": "https://cards.scryfall.io/normal/front/f/9/f943a7d8-9550-427e-8c45-ef834329d345.jpg?1783904492",
+   "large": "https://cards.scryfall.io/large/front/f/9/f943a7d8-9550-427e-8c45-ef834329d345.jpg?1783904492",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/9/f943a7d8-9550-427e-8c45-ef834329d345.jpg?1783904492"
+  }
  }
 ]

@@ -792,7 +792,7 @@ function finishCasting(
   const cast = (ctx.s.turn.spellsCast ??= { p1: 0, p2: 0 });
   emit(ctx, { type: 'spellCast', id: card, player, nth: ++cast[player] });
   noteTargets(ctx, player, targets);
-  return continueCasting(ctx, player, card, targets, 'counters');
+  return continueCasting(ctx, player, card, targets, 'targets');
 }
 
 /**
@@ -804,10 +804,19 @@ function continueCasting(
   player: PlayerId,
   card: ObjectId,
   targets: TargetChoice[],
-  from: 'counters' | 'behold' | 'conspire' | 'ward',
+  from: 'targets' | 'counters' | 'behold' | 'conspire' | 'ward',
 ): boolean {
   const item = ctx.s.stack.find((x) => x.kind === 'spell' && x.id === card);
   const cd = def(ctx, card);
+  // Lorwyn Eclipsed (18b, white): "any number of target creatures" on a spell (Morningtide's Light): picked one at a time.
+  if (from === 'targets') {
+    from = 'counters';
+    const specs = item?.kind === 'spell' ? (spellOnStack(cd, item)?.targets ?? []) : [];
+    if (specs[specs.length - 1]?.anyNumber) {
+      ctx.s.decision = { kind: 'spellTargets', player, spell: card, picked: [], thenPriority: player };
+      return true;
+    }
+  }
   // Lorwyn Eclipsed (18a): Dawnhand Dissident, counters removed from among your creatures one at a time.
   if (from === 'counters' && item?.kind === 'spell' && item.payCounters) {
     const options = creatureCounterOptions(ctx, player);
@@ -867,6 +876,30 @@ function continueCasting(
   }
   // Reality Fracture (17a fixes): ward's sacrifices are chosen (true: paused to ask which).
   return payWardSacrifices(ctx, player, targets, { thenPriority: player });
+}
+
+/**
+ * Lorwyn Eclipsed (18b, white): the targets picked so far for a spell's "any number of target ..." (the player's
+ * `chooseTargets` answer: one more, or the same list to finish). Finishing pays the ward of what was chosen and goes on
+ * with the rest of the cast.
+ */
+export function answerSpellTargets(ctx: Ctx, targets: TargetChoice[]): void {
+  const d = ctx.s.decision;
+  if (d.kind !== 'spellTargets') throw new Error('Not choosing spell targets');
+  if (targets.length === d.picked.length + 1) {
+    d.picked = targets;
+    return;
+  }
+  const item = ctx.s.stack.find((x) => x.kind === 'spell' && x.id === d.spell);
+  if (item?.kind !== 'spell') throw new Error('The spell is not on the stack');
+  const ward = wardCost(ctx, d.player, targets);
+  if (manaValue(ward) > 0) payMana(ctx, planPayment(ctx, d.player, ward, undefined));
+  changeLife(ctx, d.player, -wardLife(ctx, d.player, targets));
+  payWardExtras(ctx, d.player, targets);
+  noteTargets(ctx, d.player, targets);
+  item.targets = [...item.targets, ...targets];
+  if (continueCasting(ctx, d.player, d.spell, item.targets, 'counters')) return;
+  givePriority(ctx, d.thenPriority);
 }
 
 /** Dawnhand Dissident: one more counter removed (or the last of them), or all that remain if there is no real choice. */
@@ -1133,6 +1166,7 @@ export function activateAbility(
   tapArtifacts?: ObjectId[],
   blight?: ObjectId,
   removeKinds?: string[],
+  tapCreatures?: ObjectId[],
 ): boolean {
   const a = activatedAbility(ctx, source, index);
   const src = obj(ctx, source);
@@ -1153,7 +1187,13 @@ export function activateAbility(
     // Shang-Chi's mana can pay for abilities of creature sources.
     isCreature(ctx, source) ? ['CreatureAbility'] : undefined,
     a.cost.convoke ? creatureHelpers(ctx, player, manaSources(ctx, player, exclude), exclude) : [],
-    [sacrifice, forage !== 'graveyard' ? forage : undefined, tapCreature, ...(tapArtifacts ?? [])],
+    [
+      sacrifice,
+      forage !== 'graveyard' ? forage : undefined,
+      tapCreature,
+      ...(tapArtifacts ?? []),
+      ...(tapCreatures ?? []),
+    ],
   );
   if (discard) {
     // Strixhaven (13c): Uvilda exiles the card with three refine counters.
@@ -1185,6 +1225,18 @@ export function activateAbility(
     // Villainous Syndication: the Villain chosen, if it still can be.
     const id = tapCreature && can.includes(tapCreature) ? tapCreature : can[0];
     if (id) tap(ctx, id);
+  }
+  // Lorwyn Eclipsed (18b, white): Kithkeeper, "tap three untapped creatures you control" (the ones chosen).
+  if (a.cost.tapCreatures) {
+    const can = creaturesToTap(ctx, player, undefined);
+    const chosen = (tapCreatures ?? []).filter(
+      (id, i, all) => can.includes(id) && all.indexOf(id) === i,
+    );
+    for (const id of [...chosen, ...can.filter((id) => !chosen.includes(id))].slice(
+      0,
+      a.cost.tapCreatures,
+    ))
+      tap(ctx, id);
   }
   // Reality Fracture (17a): Tenured Tethermage, "tap two untapped artifacts you control".
   if (a.cost.tapArtifacts) {

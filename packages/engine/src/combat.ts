@@ -379,6 +379,17 @@ function combatPower(ctx: Ctx, id: ObjectId): number {
     )
   )
     p = -p;
+  // Lorwyn Eclipsed (18b, white): Bark of Doran, equipped creature with toughness greater than its power.
+  if (
+    ctx.s.battlefield.some(
+      (eq) =>
+        obj(ctx, eq).attachedTo === id &&
+        def(ctx, eq).abilities.some(
+          (a) => a.kind === 'static' && a.effect.kind === 'attached' && a.effect.toughnessAssignsDamage,
+        ),
+    )
+  )
+    p = Math.max(p, characteristics(ctx, id).toughness);
   if (
     !ctx.s.turn.toughnessDamage?.includes(obj(ctx, id).controller) &&
     // Reality Fracture (17a): Ghalta the Immovable.

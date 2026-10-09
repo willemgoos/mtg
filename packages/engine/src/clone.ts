@@ -69,6 +69,7 @@ export function cloneState(s: GameState): GameState {
       ...(s.turn.foodsSacrificed ? { foodsSacrificed: { ...s.turn.foodsSacrificed } } : {}),
       ...(s.turn.countersPut ? { countersPut: { ...s.turn.countersPut } } : {}), // Strixhaven Brawl (15b, multi)
       ...(s.turn.creatureCountersBy ? { creatureCountersBy: s.turn.creatureCountersBy.slice() } : {}), // Lorwyn Eclipsed (18a)
+      ...(s.turn.creaturesEntered ? { creaturesEntered: { ...s.turn.creaturesEntered } } : {}), // Lorwyn Eclipsed (18b, white)
       // Strixhaven Brawl (15b, pair): revolt.
       ...(s.turn.permanentsLeft ? { permanentsLeft: { ...s.turn.permanentsLeft } } : {}),
       ...(s.turn.hexproofPlayers ? { hexproofPlayers: s.turn.hexproofPlayers.slice() } : {}),

@@ -32,6 +32,8 @@ export function targetsOf(a: Action): TargetChoice[] {
     const tappedArtifacts = a.type === 'activateAbility' ? (a.tapArtifacts ?? []) : [];
     // Lorwyn Eclipsed (18a): the creature a blight cost puts its -1/-1 counters on is picked too.
     const blight = a.blight;
+    // Lorwyn Eclipsed (18b, white): Kithkeeper: the creatures tapped for "tap three untapped creatures" (any order).
+    const tappedCreatures = a.type === 'activateAbility' ? (a.tapCreatures ?? []) : [];
     const costs: TargetChoice[] = [
       a.sacrifice,
       forageFood(a),
@@ -41,6 +43,7 @@ export function targetsOf(a: Action): TargetChoice[] {
       sneak,
       tapped,
       ...tappedArtifacts,
+      ...tappedCreatures,
     ].flatMap((id) => (id ? [{ object: { id, zcc: -1 } }] : []));
     return [...costs, ...a.targets];
   }
@@ -78,19 +81,48 @@ export function startTargeting(
   };
 }
 
+/**
+ * Lorwyn Eclipsed (18b, white): the slots of an action that are a set rather than a sequence (the creatures tapped for
+ * "tap three untapped creatures you control" are picked in any order): [from, to) in `targetsOf(a)`.
+ */
+function unorderedSlots(a: Action): [number, number] | null {
+  if (a.type !== 'activateAbility' || !a.tapCreatures?.length) return null;
+  const to = targetsOf(a).length - a.targets.length;
+  return [to - a.tapCreatures.length, to];
+}
+
+/** Does the chosen list fit this action, the unordered slots in any order? */
+function fits(a: Action, chosen: readonly TargetChoice[]): boolean {
+  const ts = targetsOf(a);
+  const slots = unorderedSlots(a);
+  const used = new Set<TargetKey>();
+  return chosen.every((c, i) => {
+    const k = targetKey(c);
+    if (slots && i >= slots[0] && i < slots[1]) {
+      if (used.has(k)) return false;
+      used.add(k);
+      return ts.slice(slots[0], slots[1]).some((x) => targetKey(x) === k);
+    }
+    const x = ts[i];
+    return x !== undefined && targetKey(x) === k;
+  });
+}
+
 function matching(t: Targeting): Action[] {
-  return t.candidates.filter((a) =>
-    t.chosen.every((c, i) => {
-      const x = targetsOf(a)[i];
-      return x !== undefined && targetKey(x) === targetKey(c);
-    }),
-  );
+  return t.candidates.filter((a) => fits(a, t.chosen));
 }
 
 /** Targets that can be picked for the next slot. */
 export function targetOptions(t: Targeting): Map<TargetKey, TargetChoice> {
   const out = new Map<TargetKey, TargetChoice>();
+  const taken = new Set(t.chosen.map(targetKey));
   for (const a of matching(t)) {
+    const slots = unorderedSlots(a);
+    if (slots && t.chosen.length >= slots[0] && t.chosen.length < slots[1]) {
+      for (const next of targetsOf(a).slice(slots[0], slots[1]))
+        if (!taken.has(targetKey(next))) out.set(targetKey(next), next);
+      continue;
+    }
     const next = targetsOf(a)[t.chosen.length];
     if (next) out.set(targetKey(next), next);
   }

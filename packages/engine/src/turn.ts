@@ -210,6 +210,7 @@ export function startTurn(ctx: Ctx, player: PlayerId, noPowerUp = false): void {
   s.turn.foodsSacrificed = { p1: 0, p2: 0 };
   delete s.turn.countersPut; // Strixhaven Brawl (15b, multi)
   delete s.turn.creatureCountersBy; // Lorwyn Eclipsed (18a)
+  delete s.turn.creaturesEntered; // Lorwyn Eclipsed (18b, white)
   s.turn.permanentsLeft = { p1: 0, p2: 0 }; // Strixhaven Brawl (15b, pair): revolt
   delete s.turn.exiledCards; // Secrets of Strixhaven (14b)
   delete s.turn.hexproofPlayers;
@@ -250,6 +251,7 @@ export function startTurn(ctx: Ctx, player: PlayerId, noPowerUp = false): void {
   if (s.staggered?.some((x) => x.by === player))
     s.staggered = s.staggered.filter((x) => x.by !== player);
   for (const q of Object.values(s.players)) q.attackedThisTurn = false;
+  delete s.players[player].damagePrevented; // Lorwyn Eclipsed (18b, white): Morningtide's Light
   endEffects(ctx, (e) => e.expires === 'untilYourNextTurn' && e.player === player);
   // Reality Fracture (17c): Jace, Reality Sculptor, Garruk, Curse Breaker: "until your next turn" abilities end.
   if (s.emblems?.some((e) => e.untilTurnOf === player))

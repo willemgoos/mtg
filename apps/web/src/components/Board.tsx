@@ -148,6 +148,15 @@ export function Board({
     }
   }, [d, legal, targeting]);
 
+  // Lorwyn Eclipsed (18b, white): a spell's "any number of target creatures" (Morningtide's Light) is picked one at a time.
+  useEffect(() => {
+    if (d.kind === 'spellTargets' && d.player === HUMAN && !targeting) {
+      setTargeting(
+        startTargeting(d.spell, nameOf(view.objects[d.spell]?.defId ?? ''), legal, d.picked),
+      );
+    }
+  }, [d, legal, targeting, view]);
+
   const act = useCallback(
     (a: Action) => {
       setTargeting(null);
@@ -524,7 +533,10 @@ export function Board({
                       ? 'a creature to tap'
                       : first.type === 'activateAbility' && first.tapArtifacts?.length
                         ? 'artifacts to tap'
-                        : null
+                        : // Lorwyn Eclipsed (18b, white): Kithkeeper.
+                          first.type === 'activateAbility' && first.tapCreatures?.length
+                          ? 'creatures to tap'
+                          : null
           : null;
       const prompt = paying
         ? `${targeting.label}: choose ${paying}`

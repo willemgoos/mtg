@@ -18,6 +18,7 @@ import { BRAWL_15B_R_EFFECTS } from './brawl-15b-r-effects.ts';
 import { BRAWL_15A_W_EFFECTS } from './brawl-15a-w-effects.ts';
 import { BRAWL_15B_B_EFFECTS } from './brawl-15b-b-effects.ts';
 import { ECL_18A_EFFECTS, willPersist } from './ecl-18a.ts';
+import { ECL_WHITE_EFFECTS } from './ecl-white-effects.ts';
 import { BRAWL_15B_W_EFFECTS } from './brawl-15b-w-effects.ts';
 import { BRAWL_15B_U_EFFECTS } from './brawl-15b-u-effects.ts';
 import { BRAWL_15B_G_EFFECTS } from './brawl-15b-g-effects.ts';
@@ -141,6 +142,8 @@ const BUILT_IN_EFFECTS: Record<string, CustomEffect> = {
   ...BRAWL_15B_B_EFFECTS,
   // Lorwyn Eclipsed (18a).
   ...ECL_18A_EFFECTS,
+  // Lorwyn Eclipsed (18b): white.
+  ...ECL_WHITE_EFFECTS,
   // Strixhaven Brawl (15b): multicolour, colourless and lands.
   ...BRAWL_15B_MULTI_EFFECTS,
   // Strixhaven Brawl (15b), white.
@@ -444,6 +447,12 @@ export function onBattlefield(ctx: Ctx, ref: ObjectRef): GameObject | undefined 
 
 export function emit(ctx: Ctx, ev: GameEvent): void {
   ctx.events.push(ev);
+  // Lorwyn Eclipsed (18b, white): Kinbinding counts the creatures that entered under your control this turn.
+  if (ev.type === 'objectMoved' && ev.to === 'battlefield') {
+    const o = ctx.s.objects[ev.id];
+    if (o && ctx.db.get(o.defId)?.types.includes('Creature'))
+      (ctx.s.turn.creaturesEntered ??= { p1: 0, p2: 0 })[o.controller]++;
+  }
 }
 
 export function newId(ctx: Ctx): ObjectId {
