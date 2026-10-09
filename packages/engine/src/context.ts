@@ -22,6 +22,7 @@ import { ECL_18A_EFFECTS, willPersist } from './ecl-18a.ts';
 import { ECL_SPECIAL_EFFECTS } from './ecl-special-effects.ts';
 import { ECL_GREEN_EFFECTS } from './ecl-green-effects.ts';
 import { ECL_BLUE_EFFECTS } from './ecl-blue-effects.ts';
+import { ECL_WHITE_EFFECTS } from './ecl-white-effects.ts';
 import { BRAWL_15B_W_EFFECTS } from './brawl-15b-w-effects.ts';
 import { BRAWL_15B_U_EFFECTS } from './brawl-15b-u-effects.ts';
 import { BRAWL_15B_G_EFFECTS } from './brawl-15b-g-effects.ts';
@@ -155,6 +156,8 @@ const BUILT_IN_EFFECTS: Record<string, CustomEffect> = {
   ...ECL_MULTI_A_EFFECTS,
   // Lorwyn Eclipsed (18b): blue.
   ...ECL_BLUE_EFFECTS,
+  // Lorwyn Eclipsed (18b): white.
+  ...ECL_WHITE_EFFECTS,
   // Strixhaven Brawl (15b): multicolour, colourless and lands.
   ...BRAWL_15B_MULTI_EFFECTS,
   // Strixhaven Brawl (15b), white.

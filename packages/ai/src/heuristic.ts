@@ -71,6 +71,7 @@ export function createHeuristicBot(db: CardDb, name = 'heuristic'): Bot {
         case 'discardToHandSize':
           return pickCardToLose(engine, view, me, legal);
         case 'chooseTriggerTargets':
+        case 'spellTargets': // Lorwyn Eclipsed (18b, white): Morningtide's Light
         case 'optionalEffect':
         case 'forage':
         case 'chooseObject':

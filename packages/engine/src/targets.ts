@@ -204,6 +204,13 @@ export function targetCombos(
 }
 
 /**
+ * Lorwyn Eclipsed (18b, white): the target specs a spell is cast with. A trailing "any number of target ..." spec
+ * (Morningtide's Light) is picked one at a time afterwards (the `spellTargets` decision), not listed here.
+ */
+export const castTargetSpecs = (specs: TargetSpec[]): TargetSpec[] =>
+  specs[specs.length - 1]?.anyNumber ? specs.slice(0, -1) : specs;
+
+/**
  * Reality Fracture (17a): Uldaros Theorix, "one target card of each card type". Can each of these cards
  * stand for a different one of its own card types (a card with two types takes either)?
  */

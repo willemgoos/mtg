@@ -606,6 +606,9 @@ export interface CostDef {
    * (the action's `tapArtifacts` lists them, whatever their type; the source may be one of them).
    */
   tapUntapped?: { count: number; filter: CardFilter };
+  // Lorwyn Eclipsed (18b, white): Kithkeeper
+  /** "Tap three untapped creatures you control" (the source may be one of them; the player picks them on the board). */
+  tapCreatures?: number;
 }
 
 export type TriggerDef =
@@ -1553,6 +1556,9 @@ export type Amount =
   | { sacrificedPower: true }
   /** Creatures that died under your control this turn (Season of Loss). */
   | { count: 'creaturesYouLostThisTurn' }
+  // Lorwyn Eclipsed (18b, white): Kinbinding
+  /** The creatures that entered the battlefield under your control this turn (even ones that have left). */
+  | { count: 'creaturesEnteredThisTurn' }
   /** Strixhaven Brawl (15b, multi): +1/+1 counters you put on creatures you control this turn (Iridescent Hornbeetle). */
   | { count: 'countersPutThisTurn' }
   /** The greatest power among creatures you control (Season of Gathering). */
@@ -2066,6 +2072,9 @@ export type EffectDef =
       together?: boolean;
       /** With `together`: "if a land enters this way, it enters tapped". */
       landsTapped?: boolean;
+      // Lorwyn Eclipsed (18b, white): Morningtide's Light
+      /** With `together`: "return those cards to the battlefield tapped" (every card, not just lands). */
+      allTapped?: boolean;
     }
   /** Discard your whole hand. */
   | { kind: 'discardHand' }
@@ -2096,6 +2105,9 @@ export type EffectDef =
       // Final Fantasy (11c): onto the battlefield attacking
       /** A card matching this enters tapped and attacking (Summoner's Grimoire: an enchantment card). */
       attackingIf?: CardFilter;
+      // Lorwyn Eclipsed (18b, white): Kinscaer Sentry
+      /** Mana value at most this amount, read as the effect resolves ("where X is the number of attacking creatures you control"). */
+      maxManaValueAmount?: Amount;
     }
   // Strixhaven (13c)
   /** The resolving spell returns to its owner's hand rather than the graveyard (Journey to the Oracle). */
@@ -2407,7 +2419,7 @@ export type EffectDef =
   | { kind: 'returnSubject'; counters?: number; named?: string; loyaltyToo?: boolean }
   // Marvel Super Heroes Jumpstart (Blink)
   /** Return these exiled cards to the battlefield together under their owners' control (lands tapped). */
-  | { kind: 'returnExiledCards'; cards: ObjectRef[]; landsTapped?: boolean }
+  | { kind: 'returnExiledCards'; cards: ObjectRef[]; landsTapped?: boolean; allTapped?: boolean }
   /** Put a card from a graveyard onto the battlefield under your control (with a named counter: finality). */
   | {
       kind: 'returnToBattlefield';
@@ -2771,6 +2783,9 @@ export type EffectDef =
     }
   /** "Gains all creature types": for good (Oko's +2) or until end of turn (Glamer Gifter). */
   | { kind: 'allCreatureTypes'; what: Ref; duration: 'permanent' | 'endOfTurn' }
+  // Lorwyn Eclipsed (18b, white): Morningtide's Light
+  /** "Until your next turn, prevent all damage that would be dealt to you." */
+  | { kind: 'preventDamageToYouUntilYourNextTurn' }
   /** "Loses all creature types until end of turn" (Nameless Inversion). */
   | { kind: 'loseCreatureTypes'; what: Ref }
   /** "Return the exiled card to its owner's hand": the card the source beheld and exiled as it was cast (the Champions' leave trigger). */
@@ -2933,6 +2948,9 @@ export type StaticDef =
       cantBecomeUntapped?: boolean;
       /** "Enchanted creature can't have counters put on it." */
       noCounters?: boolean;
+      // Lorwyn Eclipsed (18b, white): Bark of Doran
+      /** "As long as equipped creature's toughness is greater than its power, it assigns combat damage equal to its toughness." */
+      toughnessAssignsDamage?: boolean;
     }
   // Reality Fracture (17a): Karn, Argent Defender
   /** "Artifacts and creatures entering the battlefield don't cause abilities to trigger." */
@@ -3575,6 +3593,9 @@ export interface PlayerState {
   // Strixhaven Brawl (15a): Patchplate Resolute
   /** One-time boons: the next creature spells you cast (one each) enter with an additional +1/+1 counter. */
   creatureBoons?: number;
+  // Lorwyn Eclipsed (18b, white): Morningtide's Light
+  /** "Prevent all damage that would be dealt to you" until this player's next turn begins. */
+  damagePrevented?: boolean;
   landsPlayedThisTurn: number;
   attackedThisTurn: boolean;
   drewFromEmptyLibrary: boolean;
@@ -4410,6 +4431,16 @@ export type Decision =
       thenPriority: PlayerId;
     }
   | {
+      // Lorwyn Eclipsed (18b, white): Morningtide's Light, "any number of target creatures" on a spell. The targets before the
+      // `anyNumber` spec are chosen with the cast; these are picked one at a time once the spell is on the stack. Each
+      // `chooseTargets` action is `picked` plus one more (keep picking), or exactly `picked` (done).
+      kind: 'spellTargets';
+      player: PlayerId;
+      spell: ObjectId;
+      picked: TargetChoice[];
+      thenPriority: PlayerId;
+    }
+  | {
       // Lorwyn Eclipsed (18a): Conspire. Tap two untapped creatures that share a colour with the spell, one at a time; then the spell is copied.
       kind: 'conspire';
       player: PlayerId;
@@ -4609,6 +4640,9 @@ export type Action =
       blight?: ObjectId;
       /** The kinds of counters removed for `removeAnyCounters` ('-1/-1', '+1/+1', 'stun', ...), one entry for each. */
       removeKinds?: string[];
+      // Lorwyn Eclipsed (18b, white): Kithkeeper
+      /** The creatures tapped for `tapCreatures` ("tap three untapped creatures you control"). */
+      tapCreatures?: ObjectId[];
     }
   | {
       type: 'addAttacker';

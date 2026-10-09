@@ -226,6 +226,8 @@ function prevented(ctx: Ctx, src: DamageSource, to: TargetChoice, amount: number
   // Marvel Super Heroes Jumpstart (Squadron): Hyperion prevents all but 1 of damage to you and your Heroes.
   if (amount > 1 && allButOne(ctx, to)) amount = 1;
   if ('player' in to) {
+    // Lorwyn Eclipsed (18b, white): Morningtide's Light, from any source.
+    if (ctx.s.players[to.player].damagePrevented) return 0;
     if (src.controller === to.player) return amount;
     // Mystical Archive (16): Deflecting Palm, the next damage to you this turn is prevented and dealt to its source's controller.
     if (ctx.s.turn.deflect?.includes(to.player)) {
@@ -1670,7 +1672,12 @@ export function runEffects(
           cardMatches(
             ctx,
             id,
-            e.maxManaValueX ? { ...e.filter, maxManaValue: es.x ?? 0 } : e.filter,
+            e.maxManaValueX
+              ? { ...e.filter, maxManaValue: es.x ?? 0 }
+              : // Lorwyn Eclipsed (18b, white): Kinscaer Sentry.
+                e.maxManaValueAmount !== undefined
+                ? { ...e.filter, maxManaValue: resolveAmount(ctx, es, e.maxManaValueAmount) }
+                : e.filter,
           ),
         );
         if (options.length === 0) continue;
@@ -2793,6 +2800,10 @@ function runEffectInner(ctx: Ctx, es: EffectSource, e: EffectDef): void {
     case 'persistReturn':
       persistReturn(ctx, es);
       return;
+    // Lorwyn Eclipsed (18b, white): Morningtide's Light.
+    case 'preventDamageToYouUntilYourNextTurn':
+      ctx.s.players[es.controller].damagePrevented = true;
+      return;
     case 'blight':
     case 'removeAnyNumberOfCounters':
       return; // handled by runEffects
@@ -3832,7 +3843,12 @@ function runEffectInner(ctx: Ctx, es: EffectSource, e: EffectDef): void {
             sourceDefId: es.sourceDefId,
             subject: es.source,
             effects: [
-              { kind: 'returnExiledCards', cards, ...(e.landsTapped ? { landsTapped: true } : {}) },
+              {
+                kind: 'returnExiledCards',
+                cards,
+                ...(e.landsTapped ? { landsTapped: true } : {}),
+                ...(e.allTapped ? { allTapped: true } : {}),
+              },
             ],
             fromTurn,
           });
@@ -3867,7 +3883,8 @@ function runEffectInner(ctx: Ctx, es: EffectSource, e: EffectDef): void {
       });
       for (const o of back) {
         moveObject(ctx, o.id, 'battlefield', { controller: o.owner });
-        if (e.landsTapped && def(ctx, o.id).types.includes('Land')) obj(ctx, o.id).tapped = true;
+        if (e.allTapped || (e.landsTapped && def(ctx, o.id).types.includes('Land')))
+          obj(ctx, o.id).tapped = true;
       }
       return;
     }

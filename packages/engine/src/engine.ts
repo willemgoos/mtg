@@ -41,6 +41,7 @@ import {
   answerForage,
   answerForageExile,
   answerConspire,
+  answerSpellTargets,
   answerBeholdType,
   answerPayCounters,
   answerBeholdCreature,
@@ -381,6 +382,7 @@ function apply(ctx: Ctx, action: Action): void {
         action.tapArtifacts,
         action.blight, // Lorwyn Eclipsed (18a)
         action.removeKinds,
+        action.tapCreatures, // Lorwyn Eclipsed (18b, white)
       );
       return paused ? undefined : givePriority(ctx, player);
     }
@@ -422,6 +424,8 @@ function apply(ctx: Ctx, action: Action): void {
       }
       return answerOptionalEffect(ctx, action.accept);
     case 'chooseTargets': {
+      // Lorwyn Eclipsed (18b, white): a spell's "any number of target ...", one at a time.
+      if (d.kind === 'spellTargets') return answerSpellTargets(ctx, action.targets);
       if (d.kind !== 'chooseTriggerTargets') throw new IllegalActionError(action);
       // Marvel Super Heroes Jumpstart (Blink): one more "any number" target; the decision stays.
       if (d.picked && action.targets.length === d.picked.length + 1) {

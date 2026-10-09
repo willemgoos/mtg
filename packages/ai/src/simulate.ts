@@ -82,6 +82,7 @@ function passiveAction(
       if (d.anyNumber) return { type: 'chooseEffect', player: d.player, accept: false };
       return engine.getLegalActions(s, d.player)[0]!;
     case 'chooseTriggerTargets':
+    case 'spellTargets': // Lorwyn Eclipsed (18b, white)
     case 'optionalEffect':
     case 'forage':
     case 'chooseOption':

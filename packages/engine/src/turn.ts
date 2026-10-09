@@ -256,6 +256,7 @@ export function startTurn(ctx: Ctx, player: PlayerId, noPowerUp = false): void {
   if (s.staggered?.some((x) => x.by === player))
     s.staggered = s.staggered.filter((x) => x.by !== player);
   for (const q of Object.values(s.players)) q.attackedThisTurn = false;
+  delete s.players[player].damagePrevented; // Lorwyn Eclipsed (18b, white): Morningtide's Light
   endEffects(ctx, (e) => e.expires === 'untilYourNextTurn' && e.player === player);
   // Reality Fracture (17c): Jace, Reality Sculptor, Garruk, Curse Breaker: "until your next turn" abilities end.
   if (s.emblems?.some((e) => e.untilTurnOf === player))

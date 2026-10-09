@@ -3,6 +3,7 @@ import {
   canTapForAbility,
   cardMatches,
   countOf,
+  characteristics,
   creaturesOnBattlefield,
   isCreature,
   matchesFilter,
@@ -32,7 +33,7 @@ import {
   hasConvoke,
 } from './ecl-18a.ts';
 import { abilityTags, artifactHelpers, canPayFrom, creatureHelpers, hasImprovise, manaSources } from './mana.ts';
-import { type CastVia, castVariants, spellTags } from './spells.ts';
+import { type CastVia, castVariants, spellOnStack, spellTags } from './spells.ts';
 import {
   abilityManaCost,
   castCost,
@@ -60,7 +61,12 @@ import { checkCondition, triggeredAbility } from './triggers.ts';
 import { nameLocked } from './sos-14b-c-effects.ts';
 
 const NO_COST = { generic: 0, colored: {} };
-import { standForDistinctTypes, targetCandidates, targetCombos } from './targets.ts';
+import {
+  castTargetSpecs,
+  standForDistinctTypes,
+  targetCandidates,
+  targetCombos,
+} from './targets.ts';
 import { freeCastSource, playableWhileControlling } from './msh-analyzed.ts';
 import { exiledCastCards, exiledCastSource } from './ecl-multi-b-effects.ts';
 import { omnipresenceCastable } from './fra-green-effects.ts';
@@ -682,7 +688,7 @@ function priorityActions(
             };
             // Lorwyn Eclipsed (18a): conspire, if the spell has it and two creatures are left to tap after paying.
             const conspirers = !via && hasConspire(ctx, player, card) ? conspireOptions(ctx, player, card) : [];
-            const specs = v.spell?.targets ?? (d.enchant ? [d.enchant] : []);
+            const specs = castTargetSpecs(v.spell?.targets ?? (d.enchant ? [d.enchant] : []));
             const forages = v.forage ? forageChoices(ctx, player) : [undefined];
             const sacrificeable = castSacrificeOptions(ctx, player, d, v);
             for (const sacrifice of v.sacrifice ? sacrificeable : [undefined]) {
@@ -927,6 +933,9 @@ function priorityActions(
           a.cost.tapUntapped.count
       )
         return;
+      // Lorwyn Eclipsed (18b, white): Kithkeeper.
+      if (a.cost.tapCreatures && creaturesToTap(ctx, player, undefined).length < a.cost.tapCreatures)
+        return;
       if (a.cost.crew && !crewFor(ctx, player, source, a.cost.crew)) return;
       if (
         a.cost.sacrificeArtifacts &&
@@ -1063,6 +1072,33 @@ function priorityActions(
         pick([]);
         for (const base of bases)
           for (const tapArtifacts of ways) out.push({ ...base, tapArtifacts } as Action);
+      }
+      // Lorwyn Eclipsed (18b, white): Kithkeeper, "tap three untapped creatures you control": one action for each set of
+      // creatures (creatures that look alike are one way); the board picks them one at a time, in any order.
+      if (a.cost.tapCreatures) {
+        const bases = out.splice(firstOfAbility);
+        const can = creaturesToTap(ctx, player, undefined);
+        const key = (id: ObjectId) => {
+          const o = obj(ctx, id);
+          const c = characteristics(ctx, id);
+          return `${o.defId}|${o.isToken ? 1 : 0}|${o.summoningSick ? 1 : 0}|${c.power}/${c.toughness}|${o.plusOneCounters}`;
+        };
+        const ways: ObjectId[][] = [];
+        const seen = new Set<string>();
+        const pick = (from: number, chosen: ObjectId[]): void => {
+          if (chosen.length === a.cost.tapCreatures) {
+            const k = chosen.map(key).sort().join(',');
+            if (!seen.has(k)) {
+              seen.add(k);
+              ways.push(chosen);
+            }
+            return;
+          }
+          for (let i = from; i < can.length; i++) pick(i + 1, [...chosen, can[i]!]);
+        };
+        pick(0, []);
+        for (const base of bases)
+          for (const tapCreatures of ways) out.push({ ...base, tapCreatures } as Action);
       }
       // Lorwyn Eclipsed (18a): "Remove a counter from this creature": one action for each choice of kinds (usually one).
       if (a.cost.removeAnyCounters) {
@@ -1305,7 +1341,7 @@ export function getLegalActions(ctx: Ctx, player: PlayerId): Action[] {
             ? castSacrificeOptions(ctx, player, cd, v)
             : [undefined];
           const forages = v.forage ? forageChoices(ctx, player) : [undefined];
-          const specs = v.spell?.targets ?? (cd.enchant ? [cd.enchant] : []);
+          const specs = castTargetSpecs(v.spell?.targets ?? (cd.enchant ? [cd.enchant] : []));
           for (const sacrificeMany of sacrificePrefixes(ctx, player, card, cd))
             for (const sacrifice of sacrificeable)
               for (const forage of forages) {
@@ -1368,6 +1404,26 @@ export function getLegalActions(ctx: Ctx, player: PlayerId): Action[] {
               }
         }
       }
+      return out;
+    }
+    // Lorwyn Eclipsed (18b, white): a spell's "any number of target ...", one at a time. Done (the targets so far) comes
+    // first, then each further target (that can pay its ward).
+    case 'spellTargets': {
+      const item = s.stack.find((x) => x.kind === 'spell' && x.id === d.spell);
+      const specs = item?.kind === 'spell' ? (spellOnStack(def(ctx, d.spell), item)?.targets ?? []) : [];
+      const spec = specs[specs.length - 1];
+      const pool = manaSources(ctx, player);
+      const payable = (targets: TargetChoice[]) =>
+        canPayFrom(wardCost(ctx, player, targets), pool) &&
+        wardPayable(ctx, player, targets) &&
+        wardLife(ctx, player, targets) <= s.players[player].life;
+      const out: Action[] = [{ type: 'chooseTargets', player, targets: d.picked }];
+      if (!spec) return out;
+      const key = (t: TargetChoice) => ('object' in t ? t.object.id : t.player);
+      const taken = new Set(d.picked.map(key));
+      for (const t of targetCandidates(ctx, spec, { controller: player, sourceId: d.spell }))
+        if (!taken.has(key(t)) && payable([...d.picked, t]))
+          out.push({ type: 'chooseTargets', player, targets: [...d.picked, t] });
       return out;
     }
     // Lorwyn Eclipsed (18a): conspire, the creatures to tap one at a time.
