@@ -10,6 +10,7 @@ import { ECL_MULTI_B, ECL_MULTI_B_BACKS, ECL_MULTI_B_TOKENS } from './ecl/multi-
 import { ECL_COLORLESS, ECL_COLORLESS_BACKS, ECL_COLORLESS_TOKENS } from './ecl/colorless.ts';
 import { ECL_TRANSFORM, ECL_TRANSFORM_BACKS, ECL_TRANSFORM_TOKENS } from './ecl/transform.ts';
 import { ECL_INCARNATIONS, ECL_INCARNATIONS_BACKS, ECL_INCARNATIONS_TOKENS } from './ecl/incarnations.ts';
+import { ECL_THEME_DECK_CARDS, ECL_THEME_DECK_TOKENS } from './ecl/theme-decks.ts';
 import { ECL_SHARED_TOKENS } from './ecl/tokens.ts';
 
 /**
@@ -28,6 +29,7 @@ export const LORWYN_ECLIPSED_BEHAVIORS: Record<string, Behavior> = {
   ...ECL_COLORLESS,
   ...ECL_TRANSFORM,
   ...ECL_INCARNATIONS,
+  ...ECL_THEME_DECK_CARDS,
 };
 
 /** Back faces (the transformed sides of the two-faced legends): not cards of their own, so not in the pool. */
@@ -57,4 +59,5 @@ export const LORWYN_ECLIPSED_TOKENS: CardDefinition[] = [
   ...ECL_COLORLESS_TOKENS,
   ...ECL_TRANSFORM_TOKENS,
   ...ECL_INCARNATIONS_TOKENS,
+  ...ECL_THEME_DECK_TOKENS,
 ];

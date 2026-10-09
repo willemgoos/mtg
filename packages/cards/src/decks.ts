@@ -2,6 +2,7 @@ import type { Color } from '@mtg/engine';
 import { FRA_DECKS_1 } from './fra/decks-1.ts';
 import { FRA_DECKS_2 } from './fra/decks-2.ts';
 import { FRA_DECKS_3 } from './fra/decks-3.ts';
+import { ECL_THEME_DECKS } from './ecl/theme-deck-lists.ts';
 
 export interface Decklist {
   /** Stable key, e.g. for saved preferences. */
@@ -5990,4 +5991,5 @@ export const DECKS: Decklist[] = [
   ...SECRETS_OF_STRIXHAVEN_DECKS,
   ...STRIXHAVEN_BRAWL_DECKS,
   ...REALITY_FRACTURE_DECKS,
+  ...ECL_THEME_DECKS,
 ];

@@ -158,6 +158,12 @@ export function dealDamage(
       if (has(src, 'lifelink')) gainLife(ctx, src.controller, amount);
       return;
     }
+    // Lorwyn Eclipsed (18c): excess damage is what a creature is dealt beyond lethal damage (Magmatic Galleon).
+    const toughness = characteristics(ctx, o.id).toughness;
+    const excess =
+      characteristics(ctx, o.id).types.includes('Creature') && amount > Math.max(0, toughness - o.damage)
+        ? amount - Math.max(0, toughness - o.damage)
+        : 0;
     // Lorwyn Eclipsed (18a): wither, damage to a creature is dealt as -1/-1 counters.
     if (has(src, 'wither')) addCounters(ctx, o.id, amount, '-1/-1', src.controller);
     // Wolverine: "that damage is dealt, but all other damage already dealt to him is healed".
@@ -165,7 +171,14 @@ export function dealDamage(
     if (has(src, 'deathtouch')) o.damagedByDeathtouch = true;
     // Hawkeye: "if Hawkeye dealt damage to it this turn".
     if (!o.damagedBy?.includes(src.id)) o.damagedBy = [...(o.damagedBy ?? []), src.id];
-    emit(ctx, { type: 'damageDealt', source: src.id, to, amount, combat });
+    emit(ctx, {
+      type: 'damageDealt',
+      source: src.id,
+      to,
+      amount,
+      combat,
+      ...(excess > 0 ? { excess } : {}),
+    });
   }
   if (has(src, 'lifelink')) gainLife(ctx, src.controller, amount);
 }
@@ -1120,7 +1133,9 @@ export function runEffects(
       // Final Fantasy (11c): hideaway
       e.kind === 'hideaway' ||
       // Lorwyn Eclipsed (18a): blight
-      e.kind === 'blight'
+      e.kind === 'blight' ||
+      // Lorwyn Eclipsed (18c, theme decks): explore ("put the card back or put it into your graveyard")
+      e.kind === 'explore'
     ) {
       const lib = ctx.s.players[es.controller].library;
       const { controller, source, sourceDefId, targets, lkiPower, subject, amount, chosen, x } = es;
@@ -1183,6 +1198,27 @@ export function runEffects(
             ? { toHandFilter: e.graveyardToHand.filter }
             : {}),
           cards,
+          resume,
+          thenPriority,
+        };
+      } else if (e.kind === 'explore') {
+        // Lorwyn Eclipsed (18c): reveal the top card; a land goes to hand, otherwise a +1/+1 counter and the card stays on top or goes
+        // to the graveyard (asked like a surveil, which doesn't count as one). Explorers go one at a time.
+        const ids = objectsOf(ctx, es, e.what);
+        const top = lib[0];
+        if (!top || ids.length === 0) continue;
+        emit(ctx, { type: 'revealed', player: controller, id: top });
+        if (def(ctx, top).types.includes('Land')) {
+          moveObject(ctx, top, 'hand');
+          continue;
+        }
+        addCounters(ctx, ids[0]!, 1);
+        ctx.s.decision = {
+          kind: 'scry',
+          player: controller,
+          surveil: true,
+          explore: true,
+          cards: [top],
           resume,
           thenPriority,
         };
@@ -1760,12 +1796,15 @@ export function runEffects(
           options = [...options]
             .sort((a, b) => manaValue(def(ctx, a).manaCost) - manaValue(def(ctx, b).manaCost))
             .slice(0, resolveAmount(ctx, es, e.reveal));
+        // Lorwyn Eclipsed (18c): Lightstall Inquisitor: the opponent chooses from their own hand (nothing to ask if it's empty).
+        if (e.ownerChooses && options.length === 0) continue;
         ctx.s.decision = {
           kind: 'chooseFromHand',
-          player: controller,
+          player: e.ownerChooses ? from : controller,
           from,
           options,
           then: e.then,
+          ...(e.ownerChooses ? { ownerChooses: e.ownerChooses } : {}),
           ...(e.castable ? { castable: true } : {}),
           ...(e.castableIf ? { castableIf: e.castableIf } : {}), // Reality Fracture (17a): Null Summoner
           resume,
@@ -2394,6 +2433,8 @@ function runEffectInner(ctx: Ctx, es: EffectSource, e: EffectDef): void {
           ...(e.cantBeBlockedBy ? { cantBeBlockedBy: e.cantBeBlockedBy } : {}),
           ...(e.switchPT ? { switchPT: true } : {}),
           ...(e.counterOnCombatDamage ? { counterOnCombatDamage: true } : {}),
+          // Lorwyn Eclipsed (18c): Captain Howler, Sea Scourge
+          ...(e.drawOnCombatDamage ? { drawsFor: es.controller } : {}),
           ...(e.ignoreDefender ? { ignoreDefender: true } : {}),
           ...(e.sacrificeOnCombatDamage ? { sacrificeOnCombatDamage: true } : {}),
           ...(e.basePT ? { basePT: e.basePT } : {}),
@@ -3278,15 +3319,7 @@ function runEffectInner(ctx: Ctx, es: EffectSource, e: EffectDef): void {
           player: es.controller,
         });
       return;
-    case 'explore':
-      for (const id of objectsOf(ctx, es, e.what)) {
-        const top = ctx.s.players[es.controller].library[0];
-        if (!top) continue;
-        emit(ctx, { type: 'revealed', player: es.controller, id: top });
-        // A nonland card stays on top (a simplification: never into the graveyard).
-        if (def(ctx, top).types.includes('Land')) moveObject(ctx, top, 'hand');
-        else addCounters(ctx, id, 1);
-      }
+    case 'explore': // Lorwyn Eclipsed (18c): handled by runEffects (the nonland card may go to the graveyard)
       return;
     case 'copyTopTrigger': {
       const top = [...ctx.s.stack]

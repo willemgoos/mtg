@@ -786,6 +786,8 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
   if (from === 'exile') {
     // Reality Fracture (17a): Emrakul, the Exigent Doom.
     delete o.castableWhileExiled;
+    delete o.exileCastTax; // Lorwyn Eclipsed (18c)
+    delete o.exilePlayTapped;
     delete o.suspended;
     delete o.playFreeBy;
     delete o.plottedTurn; // Strixhaven Brawl (15b): plot

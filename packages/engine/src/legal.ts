@@ -42,6 +42,7 @@ import {
   untappedMatching,
   creaturesToTap,
   crewFor,
+  crewWays,
   escalateCrew,
   artifactsToSacrifice,
   graveyardCostCard,
@@ -1097,6 +1098,14 @@ function priorityActions(
           for (let i = from; i < can.length; i++) pick(i + 1, [...chosen, can[i]!]);
         };
         pick(0, []);
+        for (const base of bases)
+          for (const tapCreatures of ways) out.push({ ...base, tapCreatures } as Action);
+      }
+      // Lorwyn Eclipsed (18c): Crew N: one action for each way of choosing the creatures to tap (smallest sets reaching N; creatures
+      // that look alike are one way); the board picks them one at a time, in any order.
+      if (a.cost.crew) {
+        const bases = out.splice(firstOfAbility);
+        const ways = crewWays(ctx, player, source, a.cost.crew);
         for (const base of bases)
           for (const tapCreatures of ways) out.push({ ...base, tapCreatures } as Action);
       }

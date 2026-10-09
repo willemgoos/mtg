@@ -61,6 +61,7 @@ export {
   FINAL_FANTASY_BRAWL_DECKS,
 } from './decks.ts';
 export type { Decklist } from './decks.ts';
+export { ECL_THEME_DECKS } from './ecl/theme-deck-lists.ts';
 export {
   ARENA_BLB_PACKETS,
   MARVEL_JUMPSTART_PACKETS,
