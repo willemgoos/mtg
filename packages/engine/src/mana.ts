@@ -13,6 +13,7 @@ import { manaValue, pipsOf } from './cost.ts';
 import { hamletColorless } from './sos-14b-c-effects.ts';
 import { yourLandColors } from './brawl-15b-g-effects.ts';
 import { checkCondition } from './triggers.ts';
+import { vividColors } from './ecl-18a.ts';
 import type { Color, ManaCost, ManaType, ObjectId, PlayerId } from './types.ts';
 
 export interface ManaSource {
@@ -110,6 +111,7 @@ export function manaSources(
     let units = 1;
     let pain: ManaType[] | undefined;
     let oneColor = false;
+    const vividUnits: Color[] = [];
     for (const a of def(ctx, id).abilities) {
       // Strixhaven Brawl (15b, g): Eldrazi Spawn and Scion tokens: "Sacrifice this token: Add {C}" needs no tap.
       if (a.kind !== 'mana' || (!a.cost.tapSelf && !a.cost.sacrificeSelf) || a.cost.mana) continue;
@@ -141,6 +143,12 @@ export function manaSources(
       // Strixhaven Brawl (15b, g): Incubation Druid.
       if (a.colorFrom === 'yourLands' && !yourLandColors(ctx, player).includes(a.produces))
         continue;
+      // Lorwyn Eclipsed (18b, green): Bloom Tender, one mana of each colour among permanents you control (a unit per colour).
+      if (a.vivid) {
+        if (!a.cost.tapSelf ? obj(ctx, id).tapped : !canTapForAbility(ctx, id)) continue;
+        for (const c of vividColors(ctx, player)) vividUnits.push(c);
+        continue;
+      }
       // Reality Fracture (17a fixes): Loot, the Nexus; Doc Samson: N mana of any one colour, none if N is 0.
       if (a.anyOneColor) {
         const n = a.perPower ? power(ctx, id) : countOf(ctx, player, a.amountOf ?? 1, false, id);
@@ -175,6 +183,8 @@ export function manaSources(
       }
       if (!produces.includes(a.produces)) produces.push(a.produces);
     }
+    for (const c of vividUnits)
+      out.push({ id, produces: [c], isCreature: isCreature(ctx, id), sacrifice: false });
     // Secrets of Strixhaven (14b): Petrified Hamlet: lands with the chosen name have "{T}: Add {C}".
     if (
       def(ctx, id).types.includes('Land') &&

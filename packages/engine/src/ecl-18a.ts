@@ -108,11 +108,15 @@ export function canBlight(ctx: Ctx, player: PlayerId, id: ObjectId | undefined):
 // Vivid: the number of colours among permanents you control
 // ---------------------------------------------------------------------------
 
-export function vividCount(ctx: Ctx, player: PlayerId): number {
+export function vividColors(ctx: Ctx, player: PlayerId): Color[] {
   const colors = new Set<Color>();
   for (const id of ctx.s.battlefield)
     if (obj(ctx, id).controller === player) for (const c of def(ctx, id).colors) colors.add(c);
-  return colors.size;
+  return [...colors];
+}
+
+export function vividCount(ctx: Ctx, player: PlayerId): number {
+  return vividColors(ctx, player).length;
 }
 
 // ---------------------------------------------------------------------------

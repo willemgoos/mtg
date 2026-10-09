@@ -179,6 +179,11 @@ export function mustBeBlocked(ctx: Ctx, id: ObjectId): boolean {
     ctx.s.effects.some((e) => e.mustBeBlocked && e.affected.id === id && e.affected.zcc === o.zcc)
   )
     return true;
+  // Lorwyn Eclipsed (18b, green): Vinebred Brawler.
+  if (
+    def(ctx, id).abilities.some((a) => a.kind === 'static' && a.effect.kind === 'mustBeBlockedIfAble')
+  )
+    return true;
   return ctx.s.battlefield.some(
     (e) =>
       obj(ctx, e).attachedTo === id &&
@@ -200,8 +205,18 @@ export function blockViolations(
     if (n === 1 && hasKeyword(ctx, a.id, 'menace')) out.push(a.id);
     // Final Fantasy (11c): leftovers. Relentless X-ATM092: three or more blockers.
     else if (n > 0 && n < minBlockers(ctx, a.id)) out.push(a.id);
+    // Lorwyn Eclipsed (18b, green): Safewright Cavalry.
+    else if (n > maxBlockers(ctx, a.id)) out.push(a.id);
   }
   return out;
+}
+
+/** Lorwyn Eclipsed (18b, green): the most creatures that may block it ("can't be blocked by more than one creature"). */
+export function maxBlockers(ctx: Ctx, id: ObjectId): number {
+  let n = Infinity;
+  for (const a of def(ctx, id).abilities)
+    if (a.kind === 'static' && a.effect.kind === 'maxBlockers') n = Math.min(n, a.effect.count);
+  return n;
 }
 
 /** Final Fantasy (11c): the fewest creatures that may block it ("except by three or more creatures"). */

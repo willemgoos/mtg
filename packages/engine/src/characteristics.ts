@@ -365,7 +365,7 @@ export function countOf(
           (!a.named || obj(ctx, id).defId === a.named) &&
           (!a.types || a.types.some((t: CardType) => def(ctx, id).types.includes(t))) &&
           // Final Fantasy (11b): by subtype, and without some types.
-          (!a.subtype || def(ctx, id).subtypes.includes(a.subtype)) &&
+          (!a.subtype || hasSubtype(ctx, id, a.subtype)) &&
           (!a.notTypes || !a.notTypes.some((t: CardType) => def(ctx, id).types.includes(t))),
       ).length
     );
@@ -398,7 +398,11 @@ export function countOf(
       0,
     );
   if (a.count === 'greatestPowerYouControl')
-    return creaturesOnBattlefield(ctx, player).reduce((n, c) => Math.max(n, power(ctx, c.id)), 0);
+    return creaturesOnBattlefield(ctx, player).reduce(
+      // Lorwyn Eclipsed (18b, green): "among Giants you control".
+      (n, c) => (a.subtype && !hasSubtype(ctx, c.id, a.subtype) ? n : Math.max(n, power(ctx, c.id))),
+      0,
+    );
   if (a.count === 'creatureCardsInExileAndGraveyard') {
     const ps = ctx.s.players[player];
     return [...ps.exile, ...ps.graveyard].filter((id) => def(ctx, id).types.includes('Creature'))

@@ -197,6 +197,11 @@ export function checkCondition(
     return (counters?.[c.name] ?? 0) >= (c.min ?? 1);
   }
   if (c.kind === 'manaSpentColors') return !!self && spentColors(ctx, self.id, c.colors);
+  // Lorwyn Eclipsed (18b, green): Bristlebane Outrider, Thoughtweft Charge.
+  if (c.kind === 'creatureEnteredThisTurn')
+    return !!ctx.s.turn.creaturesEntered?.some(
+      (e) => e.player === controller && !(c.other && e.id === self?.id),
+    );
   // Secrets of Strixhaven (14b): Emeritus of Woe, Great Hall of the Biblioplex.
   if (c.kind === 'creaturesDiedAtLeast') return ctx.s.turn.creaturesDied >= c.min;
   if (c.kind === 'sourceIsCreature') return !!self && isCreatureNow(ctx, self.id);
@@ -638,6 +643,11 @@ function detect(ctx: Ctx, ev: GameEvent): void {
         // A Saga enters with its first lore counter.
         if (movedDef.saga) addLore(ctx, moved.id);
         const isCreature = movedDef.types.includes('Creature');
+        // Lorwyn Eclipsed (18b, green): Shimmerwilds Growth recolours lands (`def` only looks for it once one has been in play).
+        if (movedDef.abilities.some((a) => a.kind === 'static' && a.effect.kind === 'landIsChosenColor'))
+          s.landColorAuras = true;
+        // Lorwyn Eclipsed (18b, green): "a creature entered the battlefield under your control this turn".
+        if (isCreature) (s.turn.creaturesEntered ??= []).push({ id: moved.id, player: moved.controller });
         // Flying Drone: "another creature with flying entered the battlefield under your control".
         if (isCreature && hasKeyword(ctx, moved.id, 'flying'))
           (s.turn.flyersEntered ??= []).push({ id: moved.id, player: moved.controller });
