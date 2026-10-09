@@ -21,6 +21,7 @@ import { BRAWL_15B_B_EFFECTS } from './brawl-15b-b-effects.ts';
 import { ECL_18A_EFFECTS, willPersist } from './ecl-18a.ts';
 import { ECL_SPECIAL_EFFECTS } from './ecl-special-effects.ts';
 import { ECL_GREEN_EFFECTS } from './ecl-green-effects.ts';
+import { ECL_BLUE_EFFECTS } from './ecl-blue-effects.ts';
 import { BRAWL_15B_W_EFFECTS } from './brawl-15b-w-effects.ts';
 import { BRAWL_15B_U_EFFECTS } from './brawl-15b-u-effects.ts';
 import { BRAWL_15B_G_EFFECTS } from './brawl-15b-g-effects.ts';
@@ -152,6 +153,8 @@ const BUILT_IN_EFFECTS: Record<string, CustomEffect> = {
   ...ECL_GREEN_EFFECTS,
   // Lorwyn Eclipsed (18b): multi-a.
   ...ECL_MULTI_A_EFFECTS,
+  // Lorwyn Eclipsed (18b): blue.
+  ...ECL_BLUE_EFFECTS,
   // Strixhaven Brawl (15b): multicolour, colourless and lands.
   ...BRAWL_15B_MULTI_EFFECTS,
   // Strixhaven Brawl (15b), white.
@@ -228,14 +231,16 @@ function defBase(ctx: Ctx, id: ObjectId): CardDefinition {
   const o = obj(ctx, id);
   const printed = defOf(ctx, o.defId);
   // Iron Man: a nonlegendary copy is nonlegendary for every rule, not just the legend rule.
-  const d0 = o.nonlegendary
+  const legal = o.nonlegendary
     ? { ...printed, supertypes: printed.supertypes.filter((t) => t !== 'Legendary') }
     : printed;
   // Lorwyn Eclipsed (18b, special): "becomes the chosen color" (Puca's Eye), "becomes that color until end of turn" (Foraging Wickermaw).
-  const d =
+  const d0 =
     o.colorOverride && (o.colorOverride.untilTurn ?? Infinity) >= ctx.s.turn.number
-      ? { ...d0, colors: o.colorOverride.colors }
-      : d0;
+      ? { ...legal, colors: o.colorOverride.colors }
+      : legal;
+  // Lorwyn Eclipsed (18b, blue): Noggle the Mind, "loses all colors".
+  const d = o.colorless ? colorlessDef(d0) : d0;
   if (o.foodBy !== undefined) {
     const aura = ctx.s.objects[o.foodBy];
     if (aura && aura.zone === 'battlefield' && aura.attachedTo === id) return foodDef(d);
@@ -414,6 +419,19 @@ function foodDef(d: CardDefinition): CardDefinition {
     foodDefs.set(d, f);
   }
   return f;
+}
+
+const colorlessDefs = new WeakMap<CardDefinition, CardDefinition>();
+
+/** Lorwyn Eclipsed (18b, blue): a definition with no colors (Noggle the Mind). */
+function colorlessDef(d: CardDefinition): CardDefinition {
+  if (d.colors.length === 0) return d;
+  let c = colorlessDefs.get(d);
+  if (!c) {
+    c = { ...d, colors: [] };
+    colorlessDefs.set(d, c);
+  }
+  return c;
 }
 
 const blankDefs = new WeakMap<CardDefinition, CardDefinition>();
@@ -782,6 +800,7 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
   delete o.blank;
   delete o.allColorsTurn; // Lorwyn Eclipsed (18b, multi-b)
   delete o.exiledWithThisTurn;
+  delete o.colorless; // Lorwyn Eclipsed (18b, blue)
   delete o.resolutions;
   const src = zoneList(ctx, o, from);
   if (src) {
@@ -803,6 +822,11 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
       if (e.loseAbilities && a && a.zcc === e.affected.zcc)
         a.blank = ctx.s.effects.some(
           (x) => x.loseAbilities && x.affected.id === a.id && x.affected.zcc === a.zcc,
+        );
+      // Lorwyn Eclipsed (18b, blue): Noggle the Mind
+      if (e.colorless && a && a.zcc === e.affected.zcc)
+        a.colorless = ctx.s.effects.some(
+          (x) => x.colorless && x.affected.id === a.id && x.affected.zcc === a.zcc,
         );
     }
   }
@@ -972,6 +996,8 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
 export function addCounters(ctx: Ctx, id: ObjectId, n: number, name?: string, by?: PlayerId): void {
   if (n <= 0) return;
   const o = obj(ctx, id);
+  // Lorwyn Eclipsed (18b, blue): Blossombind, "can't have counters put on it".
+  if (o.zone === 'battlefield' && auraRestricts(ctx, id, 'noCounters')) return;
   // Secrets of Strixhaven (14b): Fractal Tender.
   o.anyCountersTurn = ctx.s.turn.number;
   // Hardened Scales, Kami of Whispered Hopes ("that many plus one +1/+1 counters"), Doc Samson (any
@@ -1116,9 +1142,27 @@ export function tap(ctx: Ctx, id: ObjectId): void {
   emit(ctx, { type: 'tapped', id, ...(first ? { first } : {}) });
 }
 
+/** Lorwyn Eclipsed (18b, blue): an Aura on it says it can't become untapped (Blossombind) or can't have counters put on it. */
+export function auraRestricts(ctx: Ctx, id: ObjectId, what: 'cantBecomeUntapped' | 'noCounters'): boolean {
+  for (const a of ctx.s.battlefield) {
+    const ao = ctx.s.objects[a]!;
+    if (ao.attachedTo !== id) continue;
+    if (
+      defOf(ctx, ao.defId).abilities.some(
+        (ab) => ab.kind === 'static' && ab.effect.kind === 'attached' && ab.effect[what],
+      )
+    )
+      return true;
+  }
+  return false;
+}
+const cantBecomeUntapped = (ctx: Ctx, id: ObjectId) => auraRestricts(ctx, id, 'cantBecomeUntapped');
+
 export function untap(ctx: Ctx, id: ObjectId): void {
   const o = obj(ctx, id);
   if (!o.tapped) return;
+  // Lorwyn Eclipsed (18b, blue): Blossombind, "can't become untapped".
+  if (cantBecomeUntapped(ctx, id)) return;
   // "If a permanent with a stun counter would become untapped, instead remove a stun counter."
   if (o.counters?.stun) {
     o.counters.stun--;

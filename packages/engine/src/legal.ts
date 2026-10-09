@@ -480,6 +480,8 @@ function priorityActions(
       !plottedCard &&
       (d.types.includes('Instant') ||
         d.keywords.includes('flash') ||
+        // Lorwyn Eclipsed (18b, blue): Illusion Spinners, "as though it had flash if you control a Faerie".
+        (!!d.flashIf && checkCondition(ctx, d.flashIf, player, obj(ctx, card))) ||
         flashFilters.some((f) => cardMatches(ctx, card, f)) ||
         // Progenitor's Icon: spells of the chosen type have flash this turn.
         !!s.turn.flashTypes?.some((f) => f.player === player && d.subtypes.includes(f.type)) ||

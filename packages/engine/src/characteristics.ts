@@ -323,6 +323,18 @@ export function countOf(
     const self = sourceId ? ctx.s.objects[sourceId] : undefined;
     return checkCondition(ctx, a.if, player, self) ? a.then : (a.else ?? 0);
   }
+  // Lorwyn Eclipsed (18b, blue): Sunderflock, "costs {X} less, where X is the greatest mana value among Elementals you control".
+  if ('greatestManaValueYouControl' in a)
+    return Math.max(
+      0,
+      ...ctx.s.battlefield
+        .filter(
+          (id) =>
+            obj(ctx, id).controller === player &&
+            matchesFilter(ctx, id, a.greatestManaValueYouControl),
+        )
+        .map((id) => manaValue(def(ctx, id).manaCost)),
+    );
   // Marvel Super Heroes (The Scarlet Witch): 'where X is her power'.
   if ('powerOf' in a)
     return a.powerOf === 'self' && sourceId ? Math.max(0, power(ctx, sourceId)) : 0;
@@ -879,7 +891,8 @@ function allTypesAttachers(db: CardDb): ReadonlySet<CardDefId> {
 function changeling(ctx: Ctx, id: ObjectId, subtype: string): boolean {
   if (NON_CREATURE_SUBTYPES.has(subtype)) return false;
   const o = obj(ctx, id);
-  let all = def(ctx, id).keywords.includes('changeling') ? -1 : -2;
+  // Lorwyn Eclipsed (18b, blue): Omni-Changeling, a copy "except it has changeling".
+  let all = def(ctx, id).keywords.includes('changeling') || obj(ctx, id).grantedKeywords?.includes('changeling') ? -1 : -2;
   let setter = -2;
   if (o.zone === 'battlefield') {
     if (o.creatureTypes) setter = o.creatureTypesTimestamp ?? o.timestamp;
@@ -1147,7 +1160,12 @@ export function cardMatches(
   }
   // Final Fantasy (11c): nonlegendary.
   if (filter.notSupertypes?.some((t) => d.supertypes.includes(t))) return false;
-  const mv = manaValue(d.manaCost);
+  // Lorwyn Eclipsed (18b, blue): a spell on the stack counts X in its mana value (Kulrath Mystic, Spell Snare).
+  const stackX =
+    d.manaCost.x && obj(ctx, id).zone === 'stack'
+      ? (ctx.s.stack.find((x) => x.kind === 'spell' && x.id === id)?.x ?? 0) * d.manaCost.x
+      : 0;
+  const mv = manaValue(d.manaCost) + stackX;
   if (filter.minManaValue !== undefined && mv < filter.minManaValue) return false;
   if (filter.manaValueIsSourceCounters) {
     const { name, plus } = filter.manaValueIsSourceCounters;

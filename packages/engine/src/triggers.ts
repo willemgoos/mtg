@@ -32,6 +32,13 @@ import type {
   TriggerDef,
 } from './types.ts';
 
+/** Lorwyn Eclipsed (18b, blue): was the damage dealt to a player or a planeswalker (Flitterwing Nuisance)? */
+function playerOrPlaneswalker(ctx: Ctx, to: TargetChoice): boolean {
+  if ('player' in to) return true;
+  const o = ctx.s.objects[to.object.id];
+  return !!o && defOf(ctx, o.defId).types.includes('Planeswalker');
+}
+
 type Triggered = Extract<AbilityDef, { kind: 'triggered' }>;
 
 export function checkCondition(
@@ -1720,6 +1727,7 @@ function detect(ctx: Ctx, ev: GameEvent): void {
             a.trigger.on === 'creatureYouControlDealsCombatDamage' &&
             o.controller === src.controller &&
             (!a.trigger.toPlayer || 'player' in ev.to) &&
+            (!a.trigger.toPlayerOrPlaneswalker || playerOrPlaneswalker(ctx, ev.to)) &&
             matchesFilter(ctx, src.id, a.trigger.filter, o.id),
           src,
           ev.amount,
@@ -1732,6 +1740,7 @@ function detect(ctx: Ctx, ev: GameEvent): void {
           t.on === 'creatureYouControlDealsCombatDamage' &&
           (e.controller === src.controller || !!t.anyController) &&
           (!t.toPlayer || 'player' in ev.to) &&
+          (!t.toPlayerOrPlaneswalker || playerOrPlaneswalker(ctx, ev.to)) &&
           matchesFilter(ctx, src.id, t.filter),
         src,
       );
