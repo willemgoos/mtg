@@ -1,5 +1,6 @@
 import { cardDb, findDeck, SCRYFALL, slug } from '@mtg/cards';
 import { describe, expect, it } from 'vitest';
+import { ECL_BOOSTER_LIST } from '../../../packages/cards/src/ecl/booster-list.ts';
 import { PACK_SET_NAMES, type PackSet, rollPlayBooster, size } from '../src/game/expedition.ts';
 import {
   addSealedBasics,
@@ -44,6 +45,7 @@ import { packGenerator } from '../src/game/seasonPacks.ts';
 import { createSeasonRepository, validateSeasonSave } from '../src/game/seasonStorage.ts';
 
 const SETS = Object.keys(PACK_SET_NAMES) as PackSet[];
+const eclRarity = new Map<string, string>(ECL_BOOSTER_LIST);
 const known = new Set(SCRYFALL.map((c) => c.name));
 
 /** A Season repository on in-memory storage, with one save "a". */
@@ -113,7 +115,9 @@ describe('sealed pool', () => {
     for (let seed = 1; seed <= 40; seed++) {
       const { cards, foil } = rollPlayBooster(seed, set);
       expect(cards).toHaveLength(14);
+      // ECL's reprints keep an earlier printing's card data, so its rarities come from the booster list.
       const rarity = (n: string) =>
+        (set === 'ecl' ? eclRarity.get(n) : undefined) ??
         (SCRYFALL.find((c) => c.name === n && c.set === set) ?? SCRYFALL.find((c) => c.name === n))
           ?.rarity;
       const archive = set === 'stx' || set === 'sos';

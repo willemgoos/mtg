@@ -5,6 +5,7 @@ import {
   cardDb,
   slug,
   realityFractureBoosterSheets,
+  lorwynEclipsedBoosterSheets,
   secretsOfStrixhavenArchiveSheets,
   secretsOfStrixhavenBoosterSheets,
   strixhavenArchiveSheets,
@@ -120,6 +121,15 @@ export const REALITY_FRACTURE_SHEETS = Object.fromEntries(
   ]),
 ) as Record<Rarity, string[]>;
 
+/** Lorwyn Eclipsed's booster cards: the main set's cards we play (front faces, no basics). */
+const eclCards = lorwynEclipsedBoosterSheets();
+export const LORWYN_ECLIPSED_SHEETS = Object.fromEntries(
+  RARITIES.map((rarity) => [
+    rarity,
+    eclCards[rarity].map((c) => slug(c.name)).filter((id) => cardDb.has(id) && !isBasic(id)),
+  ]),
+) as Record<Rarity, string[]>;
+
 const SHEETS: Record<SeasonPackKind, Record<Rarity, string[]>> = {
   foundations: FOUNDATIONS_SHEETS,
   bloomburrow: BLOOMBURROW_SHEETS,
@@ -128,6 +138,7 @@ const SHEETS: Record<SeasonPackKind, Record<Rarity, string[]>> = {
   strixhaven: STRIXHAVEN_SHEETS,
   secrets: SECRETS_SHEETS,
   realityFracture: REALITY_FRACTURE_SHEETS,
+  lorwynEclipsed: LORWYN_ECLIPSED_SHEETS,
 };
 const ARCHIVE: Partial<Record<SeasonPackKind, Record<Rarity, string[]>>> = {
   strixhaven: STRIXHAVEN_ARCHIVE_SHEETS,

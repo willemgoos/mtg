@@ -1,4 +1,5 @@
 import { SCRYFALL, cardDb, slug } from '@mtg/cards';
+import { ECL_BOOSTER_LIST } from '../../../packages/cards/src/ecl/booster-list.ts';
 import { FRA_BOOSTER_LIST } from '../../../packages/cards/src/fra/booster-list.ts';
 import { SOS_BOOSTER_LIST } from '../../../packages/cards/src/sos/booster-list.ts';
 import { STX_BOOSTER_LIST } from '../../../packages/cards/src/stx/booster-list.ts';
@@ -19,6 +20,7 @@ import {
 import {
   BLOOMBURROW_SHEETS,
   FINAL_FANTASY_SHEETS,
+  LORWYN_ECLIPSED_SHEETS,
   MARVEL_SHEETS,
   REALITY_FRACTURE_SHEETS,
   SECRETS_SHEETS,
@@ -210,6 +212,29 @@ describe('Season Bloomburrow packs', () => {
     const all = Object.values(REALITY_FRACTURE_SHEETS).flat();
     for (const id of cards) expect(all, id).toContain(id);
     const starters = SEASON_STARTERS.filter((d) => d.set === 'fra');
+    expect(starters).toHaveLength(10);
+    for (const d of starters) expect(d.series).toBe('starter');
+  });
+
+  it('sells Lorwyn Eclipsed boosters from the list cards the pool has, and the ECL decks as starters', () => {
+    const rarityOf = new Map(ECL_BOOSTER_LIST);
+    for (const [rarity, sheet] of Object.entries(LORWYN_ECLIPSED_SHEETS)) {
+      expect(sheet.length).toBeGreaterThan(0);
+      expect(new Set(sheet).size).toBe(sheet.length);
+      for (const id of sheet) {
+        expect(cardDb.has(id), id).toBe(true);
+        expect(rarityOf.get(SCRYFALL.find((x) => slug(x.name) === id)!.name), id).toBe(rarity);
+      }
+    }
+    let save = { ...fresh(), coins: 1000 };
+    save = buySeasonPack(save, 1, 'lorwynEclipsed');
+    expect(save.packs[0]!.kind).toBe('lorwynEclipsed');
+    const opened = openSeasonPack(save, save.packs[0]!.id, packGenerator('lorwynEclipsed'), 2);
+    const cards = opened.lastPack!.rewards.flatMap((r) => (r.kind === 'card' ? [r.cardId] : []));
+    expect(cards.length).toBeGreaterThan(0);
+    const all = Object.values(LORWYN_ECLIPSED_SHEETS).flat();
+    for (const id of cards) expect(all, id).toContain(id);
+    const starters = SEASON_STARTERS.filter((d) => d.set === 'ecl');
     expect(starters).toHaveLength(10);
     for (const d of starters) expect(d.series).toBe('starter');
   });

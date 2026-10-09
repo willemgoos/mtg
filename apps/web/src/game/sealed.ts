@@ -428,6 +428,7 @@ export const SEASON_PACK_OF: Record<PackSet, SeasonPackKind> = {
   stx: 'strixhaven',
   sos: 'secrets',
   fra: 'realityFracture',
+  ecl: 'lorwynEclipsed',
 };
 
 /** What the event screen shows. */

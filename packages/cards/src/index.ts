@@ -9,6 +9,7 @@ import foundations from './generated/foundations-pack-candidates.json' with { ty
 import type { ScryfallCard } from './scryfall-types.ts';
 import { SOS_BOOSTER_LIST } from './sos/booster-list.ts';
 import { FRA_BOOSTER_LIST } from './fra/booster-list.ts';
+import { ECL_BOOSTER_LIST } from './ecl/booster-list.ts';
 import { STX_BOOSTER_LIST } from './stx/booster-list.ts';
 import { SOA_ARCHIVE_LIST } from './sos/archive-list.ts';
 import { STA_ARCHIVE_LIST } from './stx/archive-list.ts';
@@ -96,6 +97,11 @@ export function secretsOfStrixhavenBoosterSheets(): BoosterSheets {
  */
 export function realityFractureBoosterSheets(): BoosterSheets {
   return boosterSheets(FRA_BOOSTER_LIST, (c) => cardDb.has(slug(c.name)));
+}
+
+/** Lorwyn Eclipsed's booster cards by ECL rarity (main set, no basics), the cards the pool has. */
+export function lorwynEclipsedBoosterSheets(): BoosterSheets {
+  return boosterSheets(ECL_BOOSTER_LIST, (c) => cardDb.has(slug(c.name)));
 }
 
 /**

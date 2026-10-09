@@ -6,6 +6,7 @@ import {
   STRIXHAVEN_DECKS,
   SECRETS_OF_STRIXHAVEN_DECKS,
   REALITY_FRACTURE_DECKS,
+  LORWYN_ECLIPSED_DECKS,
   cardDb,
   deckIds,
   isPlayable,
@@ -41,7 +42,7 @@ export type MatchOutcome = 'win' | 'loss' | 'draw' | 'concede';
 
 /** Stable rules identities, independent of artwork/Scryfall printing IDs. */
 export const SEASON_CARDS = new Map(SCRYFALL.map((c) => [slug(c.name), c]));
-/** Starter decks on sale: Arena's Foundations ones and our Bloomburrow, Marvel, Final Fantasy, Strixhaven and Reality Fracture ones. */
+/** Starter decks on sale: Arena's Foundations ones and our Bloomburrow, Marvel, Final Fantasy, Strixhaven, Reality Fracture and Lorwyn Eclipsed ones. */
 export const SEASON_STARTERS = [
   ...ARENA_DECKS,
   ...BLOOMBURROW_DECKS,
@@ -50,6 +51,7 @@ export const SEASON_STARTERS = [
   ...STRIXHAVEN_DECKS,
   ...SECRETS_OF_STRIXHAVEN_DECKS,
   ...REALITY_FRACTURE_DECKS.filter((d) => d.series === 'starter'),
+  ...LORWYN_ECLIPSED_DECKS.filter((d) => d.series === 'starter'),
 ].filter(isPlayable);
 /** Decks a Season bot can play: mostly Jump In pairs, plus the starter and Color Challenge decks. */
 export const isSeasonOpponent = (id: string): boolean => OPPONENT_DECKS.some((d) => d.id === id);
@@ -71,7 +73,8 @@ export type SeasonPackKind =
   | 'finalFantasy'
   | 'strixhaven'
   | 'secrets'
-  | 'realityFracture';
+  | 'realityFracture'
+  | 'lorwynEclipsed';
 export const SEASON_PACK_KINDS: readonly SeasonPackKind[] = [
   'foundations',
   'bloomburrow',
@@ -80,6 +83,7 @@ export const SEASON_PACK_KINDS: readonly SeasonPackKind[] = [
   'strixhaven',
   'secrets',
   'realityFracture',
+  'lorwynEclipsed',
 ];
 export interface SeasonMatch {
   id: number;
