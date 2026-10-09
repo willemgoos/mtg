@@ -956,6 +956,7 @@ export function matchesFilter(
     filter.minPower !== undefined ||
     filter.minToughness !== undefined ||
     filter.maxPowerOrToughness !== undefined ||
+    filter.maxPowerPlusToughness !== undefined ||
     !!filter.hasKeyword ||
     !!filter.lacksKeyword;
   const c = needsComputed
@@ -971,6 +972,12 @@ export function matchesFilter(
   if (
     filter.maxPowerOrToughness !== undefined &&
     Math.min(c.power, c.toughness) > filter.maxPowerOrToughness
+  )
+    return false;
+  // Lorwyn Eclipsed (18b, red): Meek Attack.
+  if (
+    filter.maxPowerPlusToughness !== undefined &&
+    c.power + c.toughness > filter.maxPowerPlusToughness
   )
     return false;
   if (
@@ -1093,6 +1100,12 @@ export function cardMatches(
     if (filter.lacksKeyword && d.keywords.includes(filter.lacksKeyword)) return false;
     if (filter.minPower !== undefined && (d.power ?? 0) < filter.minPower) return false;
     if (filter.maxPower !== undefined && (d.power ?? 0) > filter.maxPower) return false;
+    // Lorwyn Eclipsed (18b, red): Meek Attack, a creature card in hand (printed power and toughness).
+    if (
+      filter.maxPowerPlusToughness !== undefined &&
+      (d.power ?? 0) + (d.toughness ?? 0) > filter.maxPowerPlusToughness
+    )
+      return false;
   }
   // Reality Fracture (17a): Puppet Crafting makes a permanent a creature (so does a crewed Vehicle).
   const hasType = (t: CardType): boolean =>

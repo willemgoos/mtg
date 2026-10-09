@@ -29,7 +29,7 @@ import {
   hasConspire,
   hasConvoke,
 } from './ecl-18a.ts';
-import { artifactHelpers, canPayFrom, creatureHelpers, hasImprovise, manaSources } from './mana.ts';
+import { abilityTags, artifactHelpers, canPayFrom, creatureHelpers, hasImprovise, manaSources } from './mana.ts';
 import { type CastVia, castVariants, spellTags } from './spells.ts';
 import {
   abilityManaCost,
@@ -876,9 +876,8 @@ function priorityActions(
         if (!(sorcery || instant) || o.onceTurns?.[LOYALTY_KEY] === s.turn.number) return;
         if ((o.counters?.loyalty ?? 0) + a.cost.loyalty < 0) return;
       }
-      const tagged = isCreature(ctx, source)
-        ? manaSources(ctx, player, undefined, ['CreatureAbility'])
-        : sources;
+      // Lorwyn Eclipsed (18b, red): restricted mana for abilities of sources of a type (Flamebraider).
+      const tagged = manaSources(ctx, player, undefined, abilityTags(ctx, source));
       const own = a.cost.tapSelf ? tagged.filter((x) => x.id !== source) : tagged;
       // Heirloom Epic: creatures can pay for generic mana.
       const usable = a.cost.convoke

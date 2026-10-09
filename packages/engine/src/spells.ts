@@ -1,4 +1,5 @@
 import { addCosts, manaValue } from './cost.ts';
+import { CREATURE_TYPES } from './creature-types.ts';
 import type { CardDefinition, ManaCost, SpellDef, ZoneName } from './types.ts';
 
 /**
@@ -85,8 +86,11 @@ export function spellTags(d: CardDefinition, zone?: ZoneName): string[] {
   const fourOrMore = manaValue(d.manaCost) >= 4 ? ['MV4Plus'] : [];
   // Reality Fracture (17a): Heartwood Crafter: "can't be spent to cast spells from your hand".
   const fromHand = zone === 'hand' ? ['FromHand'] : [];
+  // Lorwyn Eclipsed (18b, red): a changeling spell is every creature type (Flamebraider: Elemental spells).
+  const allTypes = d.keywords.includes('changeling') ? CREATURE_TYPES : [];
   return [
     ...d.subtypes,
+    ...allTypes,
     ...d.types,
     ...d.supertypes,
     ...fromHand,
