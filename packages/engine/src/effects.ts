@@ -3975,7 +3975,10 @@ function runEffectInner(ctx: Ctx, es: EffectSource, e: EffectDef): void {
             : // Reality Fracture (17a): Flourishing Grapple.
               e.untilEndOfTurn
               ? { expires: 'endOfTurn' as const }
-              : { expires: 'untilYourNextTurn' as const }),
+              : // Lorwyn Eclipsed (18b, multi-b): Abigale, Eloquent First-Year.
+                e.permanent
+                ? { expires: 'permanent' as const }
+                : { expires: 'untilYourNextTurn' as const }),
           player: es.controller,
         });
         o.blank = true;

@@ -6,6 +6,7 @@ import { cardMatches, hasKeyword, isCreature, matchesFilter } from './characteri
 import { type Ctx, def, defOf, deref, obj, other, refOf } from './context.ts';
 import { manaValue } from './cost.ts';
 import { fromCreatureSource } from './msh-analyzed.ts';
+import { hexproofFromOwnColors } from './ecl-multi-b-effects.ts';
 import { checkCondition } from './triggers.ts';
 import type { ObjectId, PlayerId, TargetChoice, TargetSpec } from './types.ts';
 import { PLAYERS } from './types.ts';
@@ -77,6 +78,8 @@ function permanentOk(ctx: Ctx, spec: TargetSpec, id: ObjectId, src: TargetingSou
       def(ctx, src.sourceId).colors.includes('W')
     )
       return false;
+    // Lorwyn Eclipsed (18b, multi-b): Tam, Mindful First-Year.
+    if (src.sourceId && hexproofFromOwnColors(ctx, id, src.sourceId)) return false;
   }
   if (!lesserThanSubject(ctx, spec, id, src)) return false;
   if (spec.filter?.notSubject && id === src.subjectId) return false;
@@ -106,6 +109,8 @@ function abilityOk(ctx: Ctx, spec: TargetSpec, id: ObjectId, src: TargetingSourc
   if (!item || item.kind !== 'ability') return false;
   if (spec.controller === 'you' && item.controller !== src.controller) return false;
   if (spec.controller === 'opponent' && item.controller === src.controller) return false;
+  // Lorwyn Eclipsed (18b, multi-b): Kirol, "target triggered ability": an activated ability has the ability it was activated with.
+  if (spec.triggeredOnly && item.activated) return false;
   // Marvel Super Heroes Jumpstart (Analyzed): "from a creature source" (Echo, which may copy its own).
   if (spec.creatureSource) return fromCreatureSource(ctx, item);
   // An ability of the targeting source (Gogo copying its own ability).
@@ -178,8 +183,10 @@ export function targetCombos(
     const cands = targetCandidates(ctx, spec, src);
     const next: TargetChoice[][] = [];
     // The same object can't be chosen twice.
+    // Lorwyn Eclipsed (18b, multi-b): "choose two" modes may name the same target (`modeStart`).
+    const from = spec.modeStart ?? 0;
     for (const c of combos)
-      for (const t of cands) if (!c.some((x) => same(x, t))) next.push([...c, t]);
+      for (const t of cands) if (!c.some((x, i) => i >= from && same(x, t))) next.push([...c, t]);
     combos = next;
     if (combos.length === 0) break;
   }

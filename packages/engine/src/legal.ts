@@ -36,6 +36,7 @@ import {
   castCost,
   teamworkFor,
   artifactsToTap,
+  untappedMatching,
   creaturesToTap,
   crewFor,
   escalateCrew,
@@ -59,6 +60,7 @@ import { nameLocked } from './sos-14b-c-effects.ts';
 const NO_COST = { generic: 0, colored: {} };
 import { standForDistinctTypes, targetCandidates, targetCombos } from './targets.ts';
 import { freeCastSource, playableWhileControlling } from './msh-analyzed.ts';
+import { exiledCastCards, exiledCastSource } from './ecl-multi-b-effects.ts';
 import { omnipresenceCastable } from './fra-green-effects.ts';
 import { permanentHasStatic } from './fra-pw-effects.ts';
 import { beholdOptions } from './fra-pw-b-effects.ts';
@@ -187,6 +189,8 @@ export function castableCards(ctx: Ctx, player: PlayerId): ObjectId[] {
         (obj(ctx, id).plottedTurn === undefined || obj(ctx, id).plottedTurn! < ctx.s.turn.number)
       )
         out.push(id);
+  // Lorwyn Eclipsed (18b, multi-b): Maralen, Fae Ascendant, cards exiled with it this turn.
+  for (const id of exiledCastCards(ctx, player)) if (!out.includes(id)) out.push(id);
   const top = ps.library[0];
   if (
     top &&
@@ -518,6 +522,14 @@ function priorityActions(
     const flashIfKicked = !instantSpeed && !sorcery && !!d.kicker?.flash;
     if (!instantSpeed && !sorcery && !flashIfKicked && now === undefined) return;
     // The usual ways, plus graveyard casts through other cards.
+    // Lorwyn Eclipsed (18b, multi-b): Maralen's cards can only be cast for free, through the static ability.
+    const exiledOnlyFree =
+      zone === 'exile' &&
+      obj(ctx, card).exiledWithThisTurn !== undefined &&
+      obj(ctx, card).playableUntilTurn === undefined &&
+      obj(ctx, card).castableBy === undefined &&
+      !obj(ctx, card).castableWhileExiled &&
+      !d.castFromGraveyardOrExile;
     // Extract Power: exiled cards played for free.
     const free = zone === 'exile' && (obj(ctx, card).playFreeBy === player || plottedCard);
     // Secrets of Strixhaven (14b): Zaffai and the Tempests: an instant or sorcery from your hand, free, once a turn.
@@ -536,18 +548,21 @@ function priorityActions(
             : exiledOnly.has(card)
               ? ['exiledWithSelf']
               : [
-                ...(zone !== 'graveyard' ||
+                ...((zone !== 'graveyard' ||
                 d.flashback ||
                 d.castFromGraveyardRemovingCounters ||
                 d.castFromGraveyardWithDiscard ||
                 d.castFromGraveyardOrExile ||
-                mayhemReady(ctx, card)
+                mayhemReady(ctx, card)) &&
+                !exiledOnlyFree
                   ? [undefined]
                   : []),
                 ...(zone === 'graveyard' ? graveyardVias(ctx, player, card) : []),
                 ...(zaffai ? (['zaffai'] as const) : []),
                 // Marvel Super Heroes Jumpstart (Analyzed): Vision, Spectral Synthezoid.
-                ...(freeCastSource(ctx, player, card) ? (['freeOnceEachTurn'] as const) : []),
+                ...(freeCastSource(ctx, player, card) || exiledCastSource(ctx, player, card)
+                  ? (['freeOnceEachTurn'] as const)
+                  : []),
                 // Reality Fracture (17a): Omnipresence.
                 ...(omnipresenceCastable(ctx, player, card) ? (['omnipresence'] as const) : []),
               ];
@@ -902,6 +917,13 @@ function priorityActions(
         return;
       // Reality Fracture (17a): Tenured Tethermage.
       if (a.cost.tapArtifacts && artifactsToTap(ctx, player).length < a.cost.tapArtifacts) return;
+      // Lorwyn Eclipsed (18b, multi-b): High Perfect Morcant, Kirol.
+      if (
+        a.cost.tapUntapped &&
+        untappedMatching(ctx, player, a.cost.tapUntapped.filter, source).length <
+          a.cost.tapUntapped.count
+      )
+        return;
       if (a.cost.crew && !crewFor(ctx, player, source, a.cost.crew)) return;
       if (
         a.cost.sacrificeArtifacts &&
@@ -1000,6 +1022,32 @@ function priorityActions(
         // Every order is offered, since the board picks them one at a time in any order.
         const pick = (chosen: ObjectId[]): void => {
           if (chosen.length === a.cost.tapArtifacts) {
+            const k = chosen.map(key).join(',');
+            if (!seen.has(k)) {
+              seen.add(k);
+              ways.push(chosen);
+            }
+            return;
+          }
+          for (const id of can) if (!chosen.includes(id)) pick([...chosen, id]);
+        };
+        pick([]);
+        for (const base of bases)
+          for (const tapArtifacts of ways) out.push({ ...base, tapArtifacts } as Action);
+      }
+      // Lorwyn Eclipsed (18b, multi-b): "Tap three untapped Elves you control": one action for each way of choosing them
+      // (permanents that look alike are one way); the board picks them one at a time in any order.
+      if (a.cost.tapUntapped) {
+        const bases = out.splice(firstOfAbility);
+        const can = untappedMatching(ctx, player, a.cost.tapUntapped.filter, source);
+        const key = (id: ObjectId) => {
+          const o = obj(ctx, id);
+          return `${o.defId}|${o.isToken ? 1 : 0}|${o.plusOneCounters}|${JSON.stringify(o.counters ?? {})}|${o.summoningSick ? 1 : 0}`;
+        };
+        const ways: ObjectId[][] = [];
+        const seen = new Set<string>();
+        const pick = (chosen: ObjectId[]): void => {
+          if (chosen.length === a.cost.tapUntapped!.count) {
             const k = chosen.map(key).join(',');
             if (!seen.has(k)) {
               seen.add(k);

@@ -588,6 +588,12 @@ export interface CostDef {
   blight?: number;
   /** "Remove a counter from this creature" / "Remove two counters from this creature": counters of any kinds, chosen when activating. */
   removeAnyCounters?: number;
+  // Lorwyn Eclipsed (18b, multi-b): High Perfect Morcant, Kirol
+  /**
+   * "Tap three untapped Elves you control" / "Tap two untapped creatures you control": the permanents are chosen when activating
+   * (the action's `tapArtifacts` lists them, whatever their type; the source may be one of them).
+   */
+  tapUntapped?: { count: number; filter: CardFilter };
 }
 
 export type TriggerDef =
@@ -973,7 +979,10 @@ export type TriggerDef =
   /** "Whenever this creature transforms into <this face>" (the back faces). */
   | { on: 'transforms' }
   /** "When this creature leaves the battlefield" (to any zone; the Champions). */
-  | { on: 'leavesBattlefield' };
+  | { on: 'leavesBattlefield' }
+  // Lorwyn Eclipsed (18b, multi-b): Doran, Besieged by Time
+  /** Whenever a creature you control blocks (the creature is the subject). */
+  | { on: 'creatureYouControlBlocks' };
 
 export type ConditionDef =
   // Strixhaven Brawl (15b, g): Orochi Merge-Keeper
@@ -1374,6 +1383,14 @@ export interface TargetSpec {
   // Reality Fracture (17c): Fatehold Charm
   /** With 'spell': a creature on the battlefield is a legal target too ("target spell or creature"). */
   orCreature?: boolean;
+  // Lorwyn Eclipsed (18b, multi-b): Kirol, Attentive First-Year
+  /** With `abilitiesOnly`: triggered abilities only ("target triggered ability"). */
+  triggeredOnly?: boolean;
+  /**
+   * In a "choose two" spell: the index of the first target of the mode this target belongs to. The targets before it belong to
+   * another mode and may be the same object or player (rule 115.3); only the ones from this index on must differ.
+   */
+  modeStart?: number;
 }
 
 /**
@@ -2115,6 +2132,9 @@ export type EffectDef =
       // Reality Fracture (17a): Flourishing Grapple
       /** Until end of turn rather than until your next turn. */
       untilEndOfTurn?: boolean;
+      // Lorwyn Eclipsed (18b, multi-b): Abigale, Eloquent First-Year
+      /** With no duration: for as long as it's on the battlefield. */
+      permanent?: boolean;
     }
   | { kind: 'untap'; what: Ref }
   /** An additional combat phase after this one. */
@@ -2911,6 +2931,16 @@ export type StaticDef =
   | { kind: 'conniveDrawsFirst' }
   /** "Noncreature spells you cast have improvise" (Ironheart). */
   | { kind: 'noncreatureSpellsHaveImprovise' }
+  // Lorwyn Eclipsed (18b, multi-b)
+  /** Each other creature you control has hexproof from each of its colors (Tam, Mindful First-Year). */
+  | { kind: 'hexproofFromOwnColors' }
+  /** If a triggered ability of another Elemental you control triggers, it triggers an additional time (Twinflame Travelers). */
+  | { kind: 'elementalTriggersTwice' }
+  /**
+   * "Once each turn, you may cast a spell with mana value less than or equal to <amount> from among cards exiled with this
+   * permanent this turn without paying its mana cost" (Maralen, Fae Ascendant). The cards are marked `exiledWithThisTurn`.
+   */
+  | { kind: 'castFreeFromThisTurnsExile'; maxManaValue: Amount }
   // Lorwyn Eclipsed (18a): Raiding Schemes
   /** "Each noncreature spell you cast has conspire." */
   | { kind: 'noncreatureSpellsHaveConspire' }
@@ -3272,6 +3302,11 @@ export interface GameObject {
   attackedZcc?: number;
   /** Its 'freeCastOncePerYourTurn' was used this turn (as this object: `zcc`). */
   freeCastUsed?: { turn: number; zcc: number };
+  // Lorwyn Eclipsed (18b, multi-b)
+  /** Tam, Mindful First-Year: it is all colors during this turn (turn number). Cleared when it changes zones. */
+  allColorsTurn?: number;
+  /** Maralen, Fae Ascendant: exiled with this permanent during this turn (turn number); castable by its controller under its static. */
+  exiledWithThisTurn?: { by: ObjectId; zcc: number; turn: number };
   /** The X paid for it as a spell (Hugs). */
   xPaid?: number;
   /** Mockingbird: it entered as a copy; this is what it really is. */

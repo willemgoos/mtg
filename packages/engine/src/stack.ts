@@ -1198,6 +1198,18 @@ export function activateAbility(
     ))
       tap(ctx, id);
   }
+  // Lorwyn Eclipsed (18b, multi-b): High Perfect Morcant, Kirol, "tap three untapped Elves you control".
+  if (a.cost.tapUntapped) {
+    const can = untappedMatching(ctx, player, a.cost.tapUntapped.filter, source);
+    const chosen = (tapArtifacts ?? []).filter(
+      (id, i, all) => can.includes(id) && all.indexOf(id) === i,
+    );
+    for (const id of [...chosen, ...can.filter((id) => !chosen.includes(id))].slice(
+      0,
+      a.cost.tapUntapped.count,
+    ))
+      tap(ctx, id);
+  }
   if (a.cost.crew) {
     const crew = crewFor(ctx, player, source, a.cost.crew) ?? [];
     for (const id of crew) tap(ctx, id);
@@ -1835,6 +1847,24 @@ export function artifactsToTap(ctx: Ctx, player: PlayerId): ObjectId[] {
     const o = obj(ctx, id);
     return (
       o.controller === player && !o.tapped && characteristics(ctx, id).types.includes('Artifact')
+    );
+  });
+}
+
+/** Lorwyn Eclipsed (18b, multi-b): the untapped creatures `player` controls that match the filter (the source may be one). */
+export function untappedMatching(
+  ctx: Ctx,
+  player: PlayerId,
+  filter: CardFilter,
+  source?: ObjectId,
+): ObjectId[] {
+  return ctx.s.battlefield.filter((id) => {
+    const o = obj(ctx, id);
+    return (
+      o.controller === player &&
+      !o.tapped &&
+      isCreature(ctx, id) &&
+      matchesFilter(ctx, id, filter, source)
     );
   });
 }

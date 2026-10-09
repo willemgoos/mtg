@@ -24,6 +24,7 @@ import { BRAWL_15B_G_EFFECTS } from './brawl-15b-g-effects.ts';
 import { BRAWL_15B_PAIR_EFFECTS } from './brawl-15b-pair-effects.ts';
 import { ARCHIVE_16_EFFECTS } from './archive-16-effects.ts';
 import { FRA_MULTI_B_EFFECTS } from './fra-multi-b-effects.ts';
+import { ECL_MULTI_B_EFFECTS } from './ecl-multi-b-effects.ts';
 import { STX_13C_A_EFFECTS } from './stx-13c-a-effects.ts';
 import { STX_13C_B_EFFECTS } from './stx-13c-b-effects.ts';
 import { STX_13C_C_EFFECTS } from './stx-13c-c-effects.ts';
@@ -36,6 +37,7 @@ import { checkCondition } from './triggers.ts';
 import { type EffectSource, gainLife } from './effects.ts';
 import type {
   AbilityDef,
+  Color,
   ManaType,
   CardDb,
   CardDefId,
@@ -157,6 +159,8 @@ const BUILT_IN_EFFECTS: Record<string, CustomEffect> = {
   ...ARCHIVE_16_EFFECTS,
   // Reality Fracture (17a): multi-b.
   ...FRA_MULTI_B_EFFECTS,
+  // Lorwyn Eclipsed (18b): multi-b.
+  ...ECL_MULTI_B_EFFECTS,
   // Strixhaven (13a): Learn: put the chosen Lesson from outside the game into your hand.
   learnFetch(ctx, es, params) {
     const ps = ctx.s.players[es.controller];
@@ -200,7 +204,18 @@ export function defOf(ctx: Ctx, defId: string): CardDefinition {
   return d;
 }
 
+const ALL_COLORS: Color[] = ['W', 'U', 'B', 'R', 'G'];
+
 export function def(ctx: Ctx, id: ObjectId): CardDefinition {
+  const d = defBase(ctx, id);
+  // Lorwyn Eclipsed (18b, multi-b): Tam, Mindful First-Year, "becomes all colors until end of turn".
+  const o = ctx.s.objects[id];
+  if (o?.allColorsTurn === ctx.s.turn.number && o.zone === 'battlefield')
+    return { ...d, colors: ALL_COLORS };
+  return d;
+}
+
+function defBase(ctx: Ctx, id: ObjectId): CardDefinition {
   const o = obj(ctx, id);
   const printed = defOf(ctx, o.defId);
   // Iron Man: a nonlegendary copy is nonlegendary for every rule, not just the legend rule.
@@ -733,6 +748,8 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
   // Hellcat: it had no abilities as it left, so none of its own trigger.
   const leftBlank = from === 'battlefield' && !!o.blank;
   delete o.blank;
+  delete o.allColorsTurn; // Lorwyn Eclipsed (18b, multi-b)
+  delete o.exiledWithThisTurn;
   delete o.resolutions;
   const src = zoneList(ctx, o, from);
   if (src) {

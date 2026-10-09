@@ -523,7 +523,15 @@ export function Board({
                     : first.type === 'activateAbility' && first.tapCreature
                       ? 'a creature to tap'
                       : first.type === 'activateAbility' && first.tapArtifacts?.length
-                        ? 'artifacts to tap'
+                        ? // Lorwyn Eclipsed (18b, multi-b): "tap three untapped Elves" (High Perfect Morcant, Kirol).
+                          (() => {
+                            const ab = cardDb.get(view.objects[first.source]?.defId ?? '')?.abilities[
+                              first.abilityIndex
+                            ];
+                            return ab?.kind === 'activated' && ab.cost.tapUntapped
+                              ? 'untapped creatures to tap'
+                              : 'artifacts to tap';
+                          })()
                         : null
           : null;
       const prompt = paying
