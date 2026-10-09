@@ -1266,6 +1266,8 @@ export function getLegalActions(ctx: Ctx, player: PlayerId): Action[] {
                   sacrificeMany,
                   freePay: d.pay,
                   freeLess: d.costLess,
+                  // Lorwyn Eclipsed (18b, red): a free cast of an optional blight (Cinder Strike) is the blighted variant.
+                  blight: typeof v.blight === 'number' ? 'x' : undefined,
                 };
                 const targetsOf = targetCombos(ctx, specs, {
                   controller: player,

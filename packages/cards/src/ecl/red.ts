@@ -123,11 +123,12 @@ export const ECL_RED: Record<string, Behavior> = {
     beholdExile: elemental,
     abilities: [
       // "Whenever another Elemental you control enters, it deals damage equal to its power to each opponent."
-      when(
-        { on: 'otherCreatureEtb', controller: 'you', filter: elemental },
-        [],
-        { kind: 'damage', amount: { powerOf: 'subject' }, to: 'eachOpponent', from: 'subject' },
-      ),
+      when({ on: 'otherCreatureEtb', controller: 'you', filter: elemental }, [], {
+        kind: 'damage',
+        amount: { powerOf: 'subject' },
+        to: 'eachOpponent',
+        from: 'subject',
+      }),
       returnBeheldWhenLeaves,
     ],
   },
@@ -217,22 +218,21 @@ export const ECL_RED: Record<string, Behavior> = {
   Flamebraider: {
     // "{T}: Add two mana in any combination of colors. Spend this mana only to cast Elemental spells or activate abilities
     // of Elemental sources." Every unit can be any of the five colors, chosen as it is spent.
-    abilities: (['W', 'U', 'B', 'R', 'G'] as const).map(
-      (produces): AbilityDef => ({
-        kind: 'mana',
-        cost: { tapSelf: true },
-        produces,
-        amount: 2,
-        onlyFor: 'Elemental',
-        orAbilitiesOfSources: true,
-      }),
-    ),
+    abilities: (['W', 'U', 'B', 'R', 'G'] as const).map((produces): AbilityDef => ({
+      kind: 'mana',
+      cost: { tapSelf: true },
+      produces,
+      amount: 2,
+      onlyFor: 'Elemental',
+      orAbilitiesOfSources: true,
+    })),
   },
   'Flamekin Gildweaver': { abilities: [onEnter(treasure)] },
   Giantfall: {
     modes: [
       {
-        label: 'Target creature you control deals damage equal to its power to target creature an opponent controls',
+        label:
+          'Target creature you control deals damage equal to its power to target creature an opponent controls',
         targets: [yourCreature, theirCreature],
         effects: [{ kind: 'damage', amount: { powerOf: t0 }, to: t1, from: t0 }],
       },
@@ -473,12 +473,8 @@ export const ECL_RED: Record<string, Behavior> = {
       // "...deals 3 damage to any target. You may discard a card. If you do, draw a card."
       effects: [
         { kind: 'damage', amount: 3, to: t0 },
-        {
-          kind: 'may',
-          effects: [
-            { kind: 'discard', count: 1, then: [{ kind: 'draw', who: 'controller', amount: 1 }] },
-          ],
-        },
+        // At most one card: discarding it draws one.
+        { kind: 'discardAnyThenDraw', who: 'controller', max: 1 },
       ],
     },
   },
