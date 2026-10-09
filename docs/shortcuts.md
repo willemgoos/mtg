@@ -153,3 +153,5 @@ from) when it's fixed. Older phases keep their own "Simplifications" lists in `d
       entering at the same time.
 - [ ] `colorSplitOfPayment` / `colorsSpent` read the first mana source with a given id, so several mana entries from one
       source (Bloom Tender, Utopia Sprawl) may report the wrong colours for "if {W}{W} was spent" and converge checks.
+- [ ] Kinscaer Sentry: the creature it puts onto the battlefield tapped and attacking always attacks the opponent, never a
+      planeswalker you could choose (the engine's "tapped and attacking" convention).
