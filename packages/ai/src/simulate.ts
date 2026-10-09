@@ -217,10 +217,9 @@ export function combatStats(engine: Engine, s: GameState, id: ObjectId) {
   // Lorwyn Eclipsed (18b): "can't be blocked by more than one creature" (Safewright Cavalry).
   let maxBlockers = Infinity;
   for (const a of engine.db.get(s.objects[id]!.defId)?.abilities ?? []) {
-    if (a.kind === 'static' && a.effect.kind === 'minBlockers')
-      minBlockers = Math.max(minBlockers, a.effect.count);
-    if (a.kind === 'static' && a.effect.kind === 'maxBlockers')
-      maxBlockers = Math.min(maxBlockers, a.effect.count);
+    if (a.kind !== 'static') continue;
+    if (a.effect.kind === 'minBlockers') minBlockers = Math.max(minBlockers, a.effect.count);
+    if (a.effect.kind === 'maxBlockers') maxBlockers = Math.min(maxBlockers, a.effect.count);
   }
   return {
     power: Math.max(0, c.power),

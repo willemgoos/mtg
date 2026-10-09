@@ -221,6 +221,17 @@ agent per group, each in its own worktree, merged into `lorwyn-eclipsed`.
 - **Arena's two Theme Decks** (exact lists from mtg.wiki `Lorwyn_Eclipsed/Theme_Decks`, `source: 'arena'`): Pirates
   (U/R, needs 12 cards from other sets) and Angels (W/G, needs 7).
 
+**18c part 1 done** (`ecl/decks-1.ts`, tests `ecl-decks-1.test.ts`, packets in `jumpin.ts`). Decks, bot vs bot, 20 games per
+seat against each of the fourteen `source: 'arena'` starter decks: Clachan Banner (G/W Kithkin, face Brigid, Clachan's
+Heart) 60.7%, Wanderwine Tide (W/U Merfolk, face Sygg, Wanderwine Wisdom) 50.9%. Both keep the MTGAZone skeleton's cards
+scaled by 1.5 (G/W: 36 spells; W/U filled with Adept Watershaper, Champions of the Shoal, Disruptor of Currents, Sygg and
+Tributary Vaulter); lands are basics plus Guildgates, Evolving Wilds, Hushwood Verge, Thriving Isle and Eclipsed Realms (ECL
+has no dual lands but that one). Packets (about 300 games each against random packets of every set): Kithkin (W/G,
+Brigid, Clachan's Heart) 60%, Merfolk (W/U, Deepway Navigator) 48%, Burdened (W, Slumbering Walker) 60%, Vivid (G, Aurora
+Awakener) 54%. Two bot/engine fixes found on the way: the heuristic bot no longer double-blocks Safewright Cavalry ("can't be
+blocked by more than one creature"), and an activated ability with "tap another creature" no longer lists a creature that
+is also the only mana source as the one to tap.
+
 **Goblins, Elves and Elementals done** (`ecl/decks-2.ts`, `ecl-*` packets in `jumpin.ts`, test `ecl-decks-2.test.ts`).
 Scaled from MTGAZone's Rakdos Goblins, Golgari Elves and Izzet Elementals skeletons (36 spells, 24 lands, one Blood
 Crypt / Overgrown Tomb / Steam Vents, Eclipsed Realms and Evolving Wilds). Bot vs bot, 20 games per seat against the ten

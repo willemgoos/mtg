@@ -1034,7 +1034,10 @@ function priorityActions(
       // Villainous Syndication: one action per creature that could be tapped for the cost.
       if (a.cost.tapCreature) {
         const bases = out.splice(firstOfAbility);
-        const can = creaturesToTap(ctx, player, a.cost.tapCreature, source);
+        // A creature that is also a mana source can't both pay for the ability and be tapped for its cost.
+        const can = creaturesToTap(ctx, player, a.cost.tapCreature, source).filter((c) =>
+          canPayFrom(mana, usable.filter((x) => x.id !== c)),
+        );
         for (const base of bases)
           for (const tapCreature of can) out.push({ ...base, tapCreature } as Action);
       }
