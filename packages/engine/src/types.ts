@@ -464,6 +464,9 @@ export type AbilityDef =
       // Lorwyn Eclipsed (18b, special): Brigid, Doun's Mind ("X {G} or X {W}")
       /** With `anyOneColor`: the colour is one of these only. */
       oneOf?: ManaType[];
+      // Lorwyn Eclipsed (18b, green): Bloom Tender
+      /** "For each color among permanents you control, add one mana of that color." */
+      vivid?: boolean;
     }
   | {
       kind: 'activated';
@@ -1212,7 +1215,13 @@ export type ConditionDef =
   /** "If you put a counter on a creature this turn": you put counters of any kind on a creature. */
   | { kind: 'putCounterOnCreatureThisTurn' }
   /** "If {W}{W} was spent to cast it": at least these amounts of each colour were spent on the source spell (the best split of the payer's mana). */
-  | { kind: 'manaSpentColors'; colors: Partial<Record<Color, number>> };
+  | { kind: 'manaSpentColors'; colors: Partial<Record<Color, number>> }
+  // Lorwyn Eclipsed (18b, green)
+  /**
+   * A creature entered the battlefield under your control this turn (even if it has left since). `other`: not the source itself
+   * (Bristlebane Outrider, Thoughtweft Charge).
+   */
+  | { kind: 'creatureEnteredThisTurn'; other?: boolean };
 
 export interface CardFilter {
   anyOf?: CardFilter[];
@@ -1408,6 +1417,9 @@ export interface TargetSpec {
    * another mode and may be the same object or player (rule 115.3); only the ones from this index on must differ.
    */
   modeStart?: number;
+  // Lorwyn Eclipsed (18b, green): Prismabasher
+  /** With `anyNumber`: no more targets than this amount as the targets are chosen ("up to X target creatures", X = vivid). */
+  maxAmount?: Amount;
 }
 
 /**
@@ -1527,7 +1539,11 @@ export type Amount =
   /** Strixhaven Brawl (15b, multi): +1/+1 counters you put on creatures you control this turn (Iridescent Hornbeetle). */
   | { count: 'countersPutThisTurn' }
   /** The greatest power among creatures you control (Season of Gathering). */
-  | { count: 'greatestPowerYouControl' }
+  | {
+      count: 'greatestPowerYouControl';
+      // Lorwyn Eclipsed (18b, green): Pummeler for Hire ("the greatest power among Giants you control")
+      subtype?: string;
+    }
   // Reality Fracture (17a): Ghalta the Immovable
   /** The greatest toughness among creatures you control. */
   | { count: 'greatestToughnessYouControl' }
@@ -1697,6 +1713,9 @@ export type EffectDef =
       basePT?: [number, number];
       /** It becomes an artifact creature until end of turn (I Am Iron Man). */
       becomesCreature?: boolean;
+      // Lorwyn Eclipsed (18b, green): the Mutavault token
+      /** With `becomesCreature`: a creature only, not an artifact too ("It's still a land"). */
+      creatureOnly?: boolean;
       /** Temporary creature subtype (Iron Suitcase). */
       creatureSubtype?: string;
       /** Prevent all combat damage that would be dealt to it this turn (Fleeting Flight). */
@@ -2995,6 +3014,13 @@ export type StaticDef =
   | { kind: 'othersHaveProwess' }
   /** This creature can't be blocked by creatures matching the filter. */
   | { kind: 'cantBeBlockedBy'; filter: CardFilter }
+  // Lorwyn Eclipsed (18b, green)
+  /** "This creature must be blocked if able" (Vinebred Brawler); enforced like The Masamune's. */
+  | { kind: 'mustBeBlockedIfAble' }
+  /** "This creature can't be blocked by more than N creatures" (Safewright Cavalry: one). */
+  | { kind: 'maxBlockers'; count: number }
+  /** An Aura: "Enchanted land is the chosen color" (Shimmerwilds Growth); the land has only the Aura's `chosenColor` while attached. */
+  | { kind: 'landIsChosenColor' }
   /**
    * Other creatures you control enter with an additional +1/+1 counter while this
    * holds (Gev), or if they match the filter (Metallic Mimic: the chosen type).
@@ -3734,6 +3760,8 @@ export interface TurnState {
   endTheTurn?: boolean;
   /** Flying Drone: creatures with flying that entered this turn, and who controlled them then. */
   flyersEntered?: { id: ObjectId; player: PlayerId }[];
+  // Lorwyn Eclipsed (18b, green): creatures that entered this turn and who controlled them then (Bristlebane Outrider, Thoughtweft Charge).
+  creaturesEntered?: { id: ObjectId; player: PlayerId }[];
   // Final Fantasy (11a): saga creatures
   /** Players whose creatures are dealt no damage this turn (Summon: Alexander). */
   creaturesShielded?: PlayerId[];
@@ -4405,6 +4433,8 @@ export interface GameState {
   pendingTriggers: PendingTrigger[];
   /** Ygra is on the battlefield: other creatures are Food artifacts. */
   creaturesAreFood?: boolean;
+  // Lorwyn Eclipsed (18b, green): a Shimmerwilds Growth has been on the battlefield (lands may be recoloured: `def` looks for the Aura).
+  landColorAuras?: boolean;
   /** Abilities players have from emblems or effects (Season of the Bold, Ral). */
   emblems?: Emblem[];
   /** "At the beginning of the next end step, ...": fire at the first end step after `afterTurn` / this step. */

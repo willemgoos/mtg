@@ -20,7 +20,7 @@ const PERMANENT_TYPES: readonly CardType[] = [
 const isAura = (ctx: Ctx, id: ObjectId) => def(ctx, id).subtypes.includes('Aura');
 
 /** Could this Aura enter attached to `host` (rule 303.4f: not targeted, so hexproof doesn't matter)? */
-function canEnchant(ctx: Ctx, aura: ObjectId, host: ObjectId): boolean {
+export function canEnchant(ctx: Ctx, aura: ObjectId, host: ObjectId): boolean {
   const a = obj(ctx, aura);
   const h = obj(ctx, host);
   const spec = def(ctx, aura).enchant;

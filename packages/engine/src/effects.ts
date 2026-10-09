@@ -2390,6 +2390,7 @@ function runEffectInner(ctx: Ctx, es: EffectSource, e: EffectDef): void {
           ...(e.sacrificeOnCombatDamage ? { sacrificeOnCombatDamage: true } : {}),
           ...(e.basePT ? { basePT: e.basePT } : {}),
           ...(e.becomesCreature ? { becomesCreature: true } : {}),
+          ...(e.becomesCreature && e.creatureOnly ? { creatureOnly: true } : {}),
           ...(e.creatureSubtype ? { creatureSubtype: e.creatureSubtype } : {}),
           ...(e.preventCombatDamage ? { preventCombatDamage: true } : {}),
           ...(e.mustBeBlocked ? { mustBeBlocked: true } : {}),

@@ -75239,6 +75239,917 @@
   }
  },
  {
+  "name": "Surly Farrier",
+  "scryfallId": "056f7f51-18a9-4d80-8928-decaf4d12c0d",
+  "oracleId": "ef67c170-68aa-4ada-8cee-261a4dbb1b5d",
+  "set": "ecl",
+  "collectorNumber": "196",
+  "rarity": "common",
+  "manaCost": "{1}{G}",
+  "typeLine": "Creature — Kithkin Citizen",
+  "oracleText": "{T}: Target creature you control gets +1/+1 and gains vigilance until end of turn. Activate only as a sorcery.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/5/056f7f51-18a9-4d80-8928-decaf4d12c0d.jpg?1783904422",
+   "normal": "https://cards.scryfall.io/normal/front/0/5/056f7f51-18a9-4d80-8928-decaf4d12c0d.jpg?1783904422",
+   "large": "https://cards.scryfall.io/large/front/0/5/056f7f51-18a9-4d80-8928-decaf4d12c0d.jpg?1783904422",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/5/056f7f51-18a9-4d80-8928-decaf4d12c0d.jpg?1783904422"
+  }
+ },
+ {
+  "name": "Virulent Emissary",
+  "scryfallId": "0702efed-915e-466a-96bb-ac09af06b21e",
+  "oracleId": "3d4bec90-7bbc-4385-a2b8-303c7a8d0a0f",
+  "set": "ecl",
+  "collectorNumber": "202",
+  "rarity": "uncommon",
+  "manaCost": "{G}",
+  "typeLine": "Creature — Elf Assassin",
+  "oracleText": "Deathtouch\nWhenever another creature you control enters, you gain 1 life.",
+  "power": "1",
+  "toughness": "1",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Deathtouch"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/7/0702efed-915e-466a-96bb-ac09af06b21e.jpg?1783904418",
+   "normal": "https://cards.scryfall.io/normal/front/0/7/0702efed-915e-466a-96bb-ac09af06b21e.jpg?1783904418",
+   "large": "https://cards.scryfall.io/large/front/0/7/0702efed-915e-466a-96bb-ac09af06b21e.jpg?1783904418",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/7/0702efed-915e-466a-96bb-ac09af06b21e.jpg?1783904418"
+  }
+ },
+ {
+  "name": "Bloom Tender",
+  "scryfallId": "35dbe45e-16df-4ebb-a76a-df24124de23b",
+  "oracleId": "0c23fefe-9891-4dd8-9bb1-eebdb3274e31",
+  "set": "sld",
+  "collectorNumber": "284",
+  "rarity": "rare",
+  "manaCost": "{1}{G}",
+  "typeLine": "Creature — Elf Druid",
+  "oracleText": "Vivid — {T}: For each color among permanents you control, add one mana of that color.",
+  "power": "1",
+  "toughness": "1",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Vivid"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/5/35dbe45e-16df-4ebb-a76a-df24124de23b.jpg?1783926555",
+   "normal": "https://cards.scryfall.io/normal/front/3/5/35dbe45e-16df-4ebb-a76a-df24124de23b.jpg?1783926555",
+   "large": "https://cards.scryfall.io/large/front/3/5/35dbe45e-16df-4ebb-a76a-df24124de23b.jpg?1783926555",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/5/35dbe45e-16df-4ebb-a76a-df24124de23b.jpg?1783926555"
+  }
+ },
+ {
+  "name": "Unforgiving Aim",
+  "scryfallId": "0bef3905-24f8-419b-aeca-396adfc6d0dc",
+  "oracleId": "be7e220e-272e-45ca-8265-8d78da2cd2a7",
+  "set": "ecl",
+  "collectorNumber": "200",
+  "rarity": "common",
+  "manaCost": "{2}{G}",
+  "typeLine": "Instant",
+  "oracleText": "Choose one —\n• Destroy target creature with flying.\n• Destroy target enchantment.\n• Create a 2/2 black and green Elf creature token.",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/b/0bef3905-24f8-419b-aeca-396adfc6d0dc.jpg?1783904419",
+   "normal": "https://cards.scryfall.io/normal/front/0/b/0bef3905-24f8-419b-aeca-396adfc6d0dc.jpg?1783904419",
+   "large": "https://cards.scryfall.io/large/front/0/b/0bef3905-24f8-419b-aeca-396adfc6d0dc.jpg?1783904419",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/b/0bef3905-24f8-419b-aeca-396adfc6d0dc.jpg?1783904419"
+  }
+ },
+ {
+  "name": "Wildvine Pummeler",
+  "scryfallId": "11bad5c7-fe9a-4d89-a531-8d4f03d5a0e4",
+  "oracleId": "6c34674f-856b-4062-87d5-6ed73d9a9855",
+  "set": "ecl",
+  "collectorNumber": "203",
+  "rarity": "common",
+  "manaCost": "{6}{G}",
+  "typeLine": "Creature — Giant Berserker",
+  "oracleText": "Vivid — This spell costs {1} less to cast for each color among permanents you control.\nReach, trample",
+  "power": "6",
+  "toughness": "5",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Reach",
+   "Trample",
+   "Vivid"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/1/11bad5c7-fe9a-4d89-a531-8d4f03d5a0e4.jpg?1783904419",
+   "normal": "https://cards.scryfall.io/normal/front/1/1/11bad5c7-fe9a-4d89-a531-8d4f03d5a0e4.jpg?1783904419",
+   "large": "https://cards.scryfall.io/large/front/1/1/11bad5c7-fe9a-4d89-a531-8d4f03d5a0e4.jpg?1783904419",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/1/11bad5c7-fe9a-4d89-a531-8d4f03d5a0e4.jpg?1783904419"
+  }
+ },
+ {
+  "name": "Formidable Speaker",
+  "scryfallId": "265522eb-4f6a-40e7-b374-3833fa63c80b",
+  "oracleId": "5bd06f9e-9a42-455d-ad26-24bc04e51c7c",
+  "set": "ecl",
+  "collectorNumber": "176",
+  "rarity": "rare",
+  "manaCost": "{2}{G}",
+  "typeLine": "Creature — Elf Druid",
+  "oracleText": "When this creature enters, you may discard a card. If you do, search your library for a creature card, reveal it, put it into your hand, then shuffle.\n{1}, {T}: Untap another target permanent.",
+  "power": "2",
+  "toughness": "4",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/6/265522eb-4f6a-40e7-b374-3833fa63c80b.jpg?1783904430",
+   "normal": "https://cards.scryfall.io/normal/front/2/6/265522eb-4f6a-40e7-b374-3833fa63c80b.jpg?1783904430",
+   "large": "https://cards.scryfall.io/large/front/2/6/265522eb-4f6a-40e7-b374-3833fa63c80b.jpg?1783904430",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/6/265522eb-4f6a-40e7-b374-3833fa63c80b.jpg?1783904430"
+  }
+ },
+ {
+  "name": "Spry and Mighty",
+  "scryfallId": "152b7374-e991-443f-b6ca-914415635c4a",
+  "oracleId": "04cc9177-1ffc-4ac8-a64d-7995b4f33d23",
+  "set": "ecl",
+  "collectorNumber": "195",
+  "rarity": "rare",
+  "manaCost": "{4}{G}",
+  "typeLine": "Sorcery",
+  "oracleText": "Choose exactly two creatures you control. You draw X cards and the chosen creatures get +X/+X and gain trample until end of turn, where X is the difference between the chosen creatures' powers.",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/5/152b7374-e991-443f-b6ca-914415635c4a.jpg?1783904420",
+   "normal": "https://cards.scryfall.io/normal/front/1/5/152b7374-e991-443f-b6ca-914415635c4a.jpg?1783904420",
+   "large": "https://cards.scryfall.io/large/front/1/5/152b7374-e991-443f-b6ca-914415635c4a.jpg?1783904420",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/5/152b7374-e991-443f-b6ca-914415635c4a.jpg?1783904420"
+  }
+ },
+ {
+  "name": "Thoughtweft Charge",
+  "scryfallId": "19cfc015-b6d5-4918-99a7-990209e77441",
+  "oracleId": "a8cdcaa0-8e25-4c17-b5ce-16f72b535123",
+  "set": "ecl",
+  "collectorNumber": "198",
+  "rarity": "uncommon",
+  "manaCost": "{1}{G}",
+  "typeLine": "Instant",
+  "oracleText": "Target creature gets +3/+3 until end of turn. If a creature entered the battlefield under your control this turn, draw a card.",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/9/19cfc015-b6d5-4918-99a7-990209e77441.jpg?1783904420",
+   "normal": "https://cards.scryfall.io/normal/front/1/9/19cfc015-b6d5-4918-99a7-990209e77441.jpg?1783904420",
+   "large": "https://cards.scryfall.io/large/front/1/9/19cfc015-b6d5-4918-99a7-990209e77441.jpg?1783904420",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/9/19cfc015-b6d5-4918-99a7-990209e77441.jpg?1783904420"
+  }
+ },
+ {
+  "name": "Dundoolin Weaver",
+  "scryfallId": "2260912b-4dfb-49dd-bf95-060d44333645",
+  "oracleId": "28564d10-bfc5-4beb-b0e2-b9aa5c03f740",
+  "set": "ecl",
+  "collectorNumber": "175",
+  "rarity": "uncommon",
+  "manaCost": "{1}{G}",
+  "typeLine": "Creature — Kithkin Druid",
+  "oracleText": "When this creature enters, if you control three or more creatures, return target permanent card from your graveyard to your hand.",
+  "power": "2",
+  "toughness": "1",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/2/2260912b-4dfb-49dd-bf95-060d44333645.jpg?1783904429",
+   "normal": "https://cards.scryfall.io/normal/front/2/2/2260912b-4dfb-49dd-bf95-060d44333645.jpg?1783904429",
+   "large": "https://cards.scryfall.io/large/front/2/2/2260912b-4dfb-49dd-bf95-060d44333645.jpg?1783904429",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/2/2260912b-4dfb-49dd-bf95-060d44333645.jpg?1783904429"
+  }
+ },
+ {
+  "name": "Selfless Safewright",
+  "scryfallId": "ac95b1c3-9eb2-4f80-bb32-72b36817d622",
+  "oracleId": "ce19b337-9266-471d-bec3-49eb7f0e62ac",
+  "set": "ecl",
+  "collectorNumber": "193",
+  "rarity": "rare",
+  "manaCost": "{3}{G}{G}",
+  "typeLine": "Creature — Elf Warrior",
+  "oracleText": "Flash\nConvoke (Your creatures can help cast this spell. Each creature you tap while casting this spell pays for {1} or one mana of that creature's color.)\nWhen this creature enters, choose a creature type. Other permanents you control of that type gain hexproof and indestructible until end of turn.",
+  "power": "4",
+  "toughness": "2",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Flash",
+   "Convoke"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/c/ac95b1c3-9eb2-4f80-bb32-72b36817d622.jpg?1783904421",
+   "normal": "https://cards.scryfall.io/normal/front/a/c/ac95b1c3-9eb2-4f80-bb32-72b36817d622.jpg?1783904421",
+   "large": "https://cards.scryfall.io/large/front/a/c/ac95b1c3-9eb2-4f80-bb32-72b36817d622.jpg?1783904421",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/c/ac95b1c3-9eb2-4f80-bb32-72b36817d622.jpg?1783904421"
+  }
+ },
+ {
+  "name": "Pitiless Fists",
+  "scryfallId": "295d828b-b2e7-41c7-afbc-5fb5f4eb242c",
+  "oracleId": "0d46a97a-b1d6-4bf3-b3ba-a5cdfd4c8bf5",
+  "set": "ecl",
+  "collectorNumber": "187",
+  "rarity": "uncommon",
+  "manaCost": "{3}{G}",
+  "typeLine": "Enchantment — Aura",
+  "oracleText": "Enchant creature you control\nWhen this Aura enters, enchanted creature fights up to one target creature an opponent controls. (Each deals damage equal to its power to the other.)\nEnchanted creature gets +2/+2.",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Fight",
+   "Enchant"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/9/295d828b-b2e7-41c7-afbc-5fb5f4eb242c.jpg?1783904424",
+   "normal": "https://cards.scryfall.io/normal/front/2/9/295d828b-b2e7-41c7-afbc-5fb5f4eb242c.jpg?1783904424",
+   "large": "https://cards.scryfall.io/large/front/2/9/295d828b-b2e7-41c7-afbc-5fb5f4eb242c.jpg?1783904424",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/9/295d828b-b2e7-41c7-afbc-5fb5f4eb242c.jpg?1783904424"
+  }
+ },
+ {
+  "name": "Champions of the Perfect",
+  "scryfallId": "4f359211-8be5-4818-b73c-14f24b7ddb21",
+  "oracleId": "9cb7f23f-322d-4a87-b6c6-15b9d446aef3",
+  "set": "ecl",
+  "collectorNumber": "171",
+  "rarity": "rare",
+  "manaCost": "{3}{G}",
+  "typeLine": "Creature — Elf Warrior",
+  "oracleText": "As an additional cost to cast this spell, behold an Elf and exile it. (Exile an Elf you control or an Elf card from your hand.)\nWhenever you cast a creature spell, draw a card.\nWhen this creature leaves the battlefield, return the exiled card to its owner's hand.",
+  "power": "6",
+  "toughness": "6",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Behold"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/f/4f359211-8be5-4818-b73c-14f24b7ddb21.jpg?1783904433",
+   "normal": "https://cards.scryfall.io/normal/front/4/f/4f359211-8be5-4818-b73c-14f24b7ddb21.jpg?1783904433",
+   "large": "https://cards.scryfall.io/large/front/4/f/4f359211-8be5-4818-b73c-14f24b7ddb21.jpg?1783904433",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/f/4f359211-8be5-4818-b73c-14f24b7ddb21.jpg?1783904433"
+  }
+ },
+ {
+  "name": "Sapling Nursery",
+  "scryfallId": "3199bea9-fef7-45fe-8777-2103d84a9347",
+  "oracleId": "8bcbae66-1854-480e-a449-33e5389610ab",
+  "set": "ecl",
+  "collectorNumber": "192",
+  "rarity": "rare",
+  "manaCost": "{6}{G}{G}",
+  "typeLine": "Enchantment",
+  "oracleText": "Affinity for Forests (This spell costs {1} less to cast for each Forest you control.)\nLandfall — Whenever a land you control enters, create a 3/4 green Treefolk creature token with reach.\n{1}{G}, Exile this enchantment: Treefolk and Forests you control gain indestructible until end of turn.",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Affinity",
+   "Landfall"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/1/3199bea9-fef7-45fe-8777-2103d84a9347.jpg?1783904423",
+   "normal": "https://cards.scryfall.io/normal/front/3/1/3199bea9-fef7-45fe-8777-2103d84a9347.jpg?1783904423",
+   "large": "https://cards.scryfall.io/large/front/3/1/3199bea9-fef7-45fe-8777-2103d84a9347.jpg?1783904423",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/1/3199bea9-fef7-45fe-8777-2103d84a9347.jpg?1783904423"
+  }
+ },
+ {
+  "name": "Bristlebane Outrider",
+  "scryfallId": "38b17a3c-4457-47e3-986e-ff0b94c41b1a",
+  "oracleId": "48f7217e-ae11-44bd-ac42-7c8d9dd5dc36",
+  "set": "ecl",
+  "collectorNumber": "169",
+  "rarity": "uncommon",
+  "manaCost": "{3}{G}",
+  "typeLine": "Creature — Kithkin Knight",
+  "oracleText": "This creature can't be blocked by creatures with power 2 or less.\nAs long as another creature entered the battlefield under your control this turn, this creature gets +2/+0.",
+  "power": "3",
+  "toughness": "5",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/8/38b17a3c-4457-47e3-986e-ff0b94c41b1a.jpg?1783904433",
+   "normal": "https://cards.scryfall.io/normal/front/3/8/38b17a3c-4457-47e3-986e-ff0b94c41b1a.jpg?1783904433",
+   "large": "https://cards.scryfall.io/large/front/3/8/38b17a3c-4457-47e3-986e-ff0b94c41b1a.jpg?1783904433",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/8/38b17a3c-4457-47e3-986e-ff0b94c41b1a.jpg?1783904433"
+  }
+ },
+ {
+  "name": "Blossoming Defense",
+  "scryfallId": "3cce80d0-b937-4325-a603-1278c110f244",
+  "oracleId": "5a851367-1c4a-4cc9-a9c3-3d2775986b4c",
+  "set": "ecl",
+  "collectorNumber": "167",
+  "rarity": "uncommon",
+  "manaCost": "{G}",
+  "typeLine": "Instant",
+  "oracleText": "Target creature you control gets +2/+2 and gains hexproof until end of turn. (It can't be the target of spells or abilities your opponents control.)",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/c/3cce80d0-b937-4325-a603-1278c110f244.jpg?1783904434",
+   "normal": "https://cards.scryfall.io/normal/front/3/c/3cce80d0-b937-4325-a603-1278c110f244.jpg?1783904434",
+   "large": "https://cards.scryfall.io/large/front/3/c/3cce80d0-b937-4325-a603-1278c110f244.jpg?1783904434",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/c/3cce80d0-b937-4325-a603-1278c110f244.jpg?1783904434"
+  }
+ },
+ {
+  "name": "Luminollusk",
+  "scryfallId": "3d591e66-4bf9-47e7-bcef-57769ec3edc6",
+  "oracleId": "c8bf2dce-7bcd-45cb-bf15-f53e24333a01",
+  "set": "ecl",
+  "collectorNumber": "179",
+  "rarity": "uncommon",
+  "manaCost": "{3}{G}",
+  "typeLine": "Creature — Elemental",
+  "oracleText": "Deathtouch\nVivid — When this creature enters, you gain life equal to the number of colors among permanents you control.",
+  "power": "2",
+  "toughness": "4",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Vivid",
+   "Deathtouch"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/d/3d591e66-4bf9-47e7-bcef-57769ec3edc6.jpg?1783904428",
+   "normal": "https://cards.scryfall.io/normal/front/3/d/3d591e66-4bf9-47e7-bcef-57769ec3edc6.jpg?1783904428",
+   "large": "https://cards.scryfall.io/large/front/3/d/3d591e66-4bf9-47e7-bcef-57769ec3edc6.jpg?1783904428",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/d/3d591e66-4bf9-47e7-bcef-57769ec3edc6.jpg?1783904428"
+  }
+ },
+ {
+  "name": "Pummeler for Hire",
+  "scryfallId": "42208996-7b99-474e-aba7-75190d7ee8e2",
+  "oracleId": "ffa23c3a-76a8-414f-aa3b-fc09aabd78c5",
+  "set": "ecl",
+  "collectorNumber": "190",
+  "rarity": "uncommon",
+  "manaCost": "{4}{G}",
+  "typeLine": "Creature — Giant Mercenary",
+  "oracleText": "Reach, vigilance\nWard {2} (Whenever this creature becomes the target of a spell or ability an opponent controls, counter it unless that player pays {2}.)\nWhen this creature enters, you gain X life, where X is the greatest power among Giants you control.",
+  "power": "4",
+  "toughness": "4",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Reach",
+   "Vigilance",
+   "Ward"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/2/42208996-7b99-474e-aba7-75190d7ee8e2.jpg?1783904425",
+   "normal": "https://cards.scryfall.io/normal/front/4/2/42208996-7b99-474e-aba7-75190d7ee8e2.jpg?1783904425",
+   "large": "https://cards.scryfall.io/large/front/4/2/42208996-7b99-474e-aba7-75190d7ee8e2.jpg?1783904425",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/2/42208996-7b99-474e-aba7-75190d7ee8e2.jpg?1783904425"
+  }
+ },
+ {
+  "name": "Celestial Reunion",
+  "scryfallId": "583b2863-aca1-4dab-9196-ea453b5d9454",
+  "oracleId": "ba0a815c-1dfe-47c1-890f-496c670124f3",
+  "set": "ecl",
+  "collectorNumber": "170",
+  "rarity": "mythic",
+  "manaCost": "{X}{G}",
+  "typeLine": "Sorcery",
+  "oracleText": "As an additional cost to cast this spell, you may choose a creature type and behold two creatures of that type.\nSearch your library for a creature card with mana value X or less, reveal it, put it into your hand, then shuffle. If this spell's additional cost was paid and the revealed card is the chosen type, put that card onto the battlefield instead of putting it into your hand.",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Behold"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/8/583b2863-aca1-4dab-9196-ea453b5d9454.jpg?1783904435",
+   "normal": "https://cards.scryfall.io/normal/front/5/8/583b2863-aca1-4dab-9196-ea453b5d9454.jpg?1783904435",
+   "large": "https://cards.scryfall.io/large/front/5/8/583b2863-aca1-4dab-9196-ea453b5d9454.jpg?1783904435",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/8/583b2863-aca1-4dab-9196-ea453b5d9454.jpg?1783904435"
+  }
+ },
+ {
+  "name": "Moon-Vigil Adherents",
+  "scryfallId": "60621c37-62e1-4261-ae76-3946b4a0cfa3",
+  "oracleId": "d0fa43f6-d8f6-4674-b538-6d546b7dcf40",
+  "set": "ecl",
+  "collectorNumber": "184",
+  "rarity": "uncommon",
+  "manaCost": "{2}{G}{G}",
+  "typeLine": "Creature — Elf Druid",
+  "oracleText": "Trample\nThis creature gets +1/+1 for each creature you control and each creature card in your graveyard.",
+  "power": "0",
+  "toughness": "0",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Trample"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/0/60621c37-62e1-4261-ae76-3946b4a0cfa3.jpg?1783904429",
+   "normal": "https://cards.scryfall.io/normal/front/6/0/60621c37-62e1-4261-ae76-3946b4a0cfa3.jpg?1783904429",
+   "large": "https://cards.scryfall.io/large/front/6/0/60621c37-62e1-4261-ae76-3946b4a0cfa3.jpg?1783904429",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/0/60621c37-62e1-4261-ae76-3946b4a0cfa3.jpg?1783904429"
+  }
+ },
+ {
+  "name": "Vinebred Brawler",
+  "scryfallId": "63c573fe-e74c-48ca-ad05-92f37dc466f1",
+  "oracleId": "5fffd840-1e6e-4f5d-b847-802f9a25eb5c",
+  "set": "ecl",
+  "collectorNumber": "201",
+  "rarity": "uncommon",
+  "manaCost": "{2}{G}",
+  "typeLine": "Creature — Elf Berserker",
+  "oracleText": "This creature must be blocked if able.\nWhenever this creature attacks, another target Elf you control gets +2/+1 until end of turn.",
+  "power": "4",
+  "toughness": "2",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/3/63c573fe-e74c-48ca-ad05-92f37dc466f1.jpg?1783904419",
+   "normal": "https://cards.scryfall.io/normal/front/6/3/63c573fe-e74c-48ca-ad05-92f37dc466f1.jpg?1783904419",
+   "large": "https://cards.scryfall.io/large/front/6/3/63c573fe-e74c-48ca-ad05-92f37dc466f1.jpg?1783904419",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/3/63c573fe-e74c-48ca-ad05-92f37dc466f1.jpg?1783904419"
+  }
+ },
+ {
+  "name": "Prismabasher",
+  "scryfallId": "65c057a7-70af-4464-bd8d-1e7e158d1ae7",
+  "oracleId": "f75be4f2-d1a7-40c7-a0e4-ba8b03556ac6",
+  "set": "ecl",
+  "collectorNumber": "188",
+  "rarity": "uncommon",
+  "manaCost": "{4}{G}{G}",
+  "typeLine": "Creature — Elemental",
+  "oracleText": "Trample\nVivid — When this creature enters, up to X target creatures you control get +X/+X until end of turn, where X is the number of colors among permanents you control.",
+  "power": "6",
+  "toughness": "6",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Trample",
+   "Vivid"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/5/65c057a7-70af-4464-bd8d-1e7e158d1ae7.jpg?1783904427",
+   "normal": "https://cards.scryfall.io/normal/front/6/5/65c057a7-70af-4464-bd8d-1e7e158d1ae7.jpg?1783904427",
+   "large": "https://cards.scryfall.io/large/front/6/5/65c057a7-70af-4464-bd8d-1e7e158d1ae7.jpg?1783904427",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/5/65c057a7-70af-4464-bd8d-1e7e158d1ae7.jpg?1783904427"
+  }
+ },
+ {
+  "name": "Assert Perfection",
+  "scryfallId": "6995b308-5582-4ca1-ab10-a536d5ca0a6d",
+  "oracleId": "ecf574a5-6410-466d-a726-732134f904b2",
+  "set": "ecl",
+  "collectorNumber": "164",
+  "rarity": "common",
+  "manaCost": "{1}{G}",
+  "typeLine": "Sorcery",
+  "oracleText": "Target creature you control gets +1/+0 until end of turn. It deals damage equal to its power to up to one target creature an opponent controls.",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/9/6995b308-5582-4ca1-ab10-a536d5ca0a6d.jpg?1783904435",
+   "normal": "https://cards.scryfall.io/normal/front/6/9/6995b308-5582-4ca1-ab10-a536d5ca0a6d.jpg?1783904435",
+   "large": "https://cards.scryfall.io/large/front/6/9/6995b308-5582-4ca1-ab10-a536d5ca0a6d.jpg?1783904435",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/9/6995b308-5582-4ca1-ab10-a536d5ca0a6d.jpg?1783904435"
+  }
+ },
+ {
+  "name": "Crossroads Watcher",
+  "scryfallId": "6d62fcbb-f1a0-46ce-a4af-2a33bcc3ac8e",
+  "oracleId": "ab5f8b8c-e3f7-4265-bbc6-814bbfd4693a",
+  "set": "ecl",
+  "collectorNumber": "173",
+  "rarity": "common",
+  "manaCost": "{2}{G}",
+  "typeLine": "Creature — Kithkin Ranger",
+  "oracleText": "Trample\nWhenever another creature you control enters, this creature gets +1/+0 until end of turn.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Trample"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/d/6d62fcbb-f1a0-46ce-a4af-2a33bcc3ac8e.jpg?1783904430",
+   "normal": "https://cards.scryfall.io/normal/front/6/d/6d62fcbb-f1a0-46ce-a4af-2a33bcc3ac8e.jpg?1783904430",
+   "large": "https://cards.scryfall.io/large/front/6/d/6d62fcbb-f1a0-46ce-a4af-2a33bcc3ac8e.jpg?1783904430",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/d/6d62fcbb-f1a0-46ce-a4af-2a33bcc3ac8e.jpg?1783904430"
+  }
+ },
+ {
+  "name": "Bristlebane Battler",
+  "scryfallId": "c857fa32-1b5d-4139-8809-b4d0df44b472",
+  "oracleId": "592689f2-f17c-40d6-b880-431f4b6a6b0c",
+  "set": "ecl",
+  "collectorNumber": "168",
+  "rarity": "rare",
+  "manaCost": "{1}{G}",
+  "typeLine": "Creature — Kithkin Soldier",
+  "oracleText": "Trample, ward {2}\nThis creature enters with five -1/-1 counters on it.\nWhenever another creature you control enters while this creature has a -1/-1 counter on it, remove a -1/-1 counter from this creature.",
+  "power": "6",
+  "toughness": "6",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Trample",
+   "Ward"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/8/c857fa32-1b5d-4139-8809-b4d0df44b472.jpg?1783904434",
+   "normal": "https://cards.scryfall.io/normal/front/c/8/c857fa32-1b5d-4139-8809-b4d0df44b472.jpg?1783904434",
+   "large": "https://cards.scryfall.io/large/front/c/8/c857fa32-1b5d-4139-8809-b4d0df44b472.jpg?1783904434",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/8/c857fa32-1b5d-4139-8809-b4d0df44b472.jpg?1783904434"
+  }
+ },
+ {
+  "name": "Gilt-Leaf's Embrace",
+  "scryfallId": "739e5ab5-d562-407a-906e-c5c5173ad325",
+  "oracleId": "5eb8bb1d-7567-4c24-913b-463b5fe463c4",
+  "set": "ecl",
+  "collectorNumber": "177",
+  "rarity": "common",
+  "manaCost": "{2}{G}",
+  "typeLine": "Enchantment — Aura",
+  "oracleText": "Flash\nEnchant creature\nWhen this Aura enters, enchanted creature gains trample and indestructible until end of turn. (Damage and effects that say \"destroy\" don't destroy it. If its toughness is 0 or less, it still dies.)\nEnchanted creature gets +2/+0.",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Enchant",
+   "Flash"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/3/739e5ab5-d562-407a-906e-c5c5173ad325.jpg?1783904429",
+   "normal": "https://cards.scryfall.io/normal/front/7/3/739e5ab5-d562-407a-906e-c5c5173ad325.jpg?1783904429",
+   "large": "https://cards.scryfall.io/large/front/7/3/739e5ab5-d562-407a-906e-c5c5173ad325.jpg?1783904429",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/3/739e5ab5-d562-407a-906e-c5c5173ad325.jpg?1783904429"
+  }
+ },
+ {
+  "name": "Dawn's Light Archer",
+  "scryfallId": "76e80656-6bcb-4d99-8bd2-ca5f75f40daf",
+  "oracleId": "1f2d1de6-42e0-4f45-b43d-ce4980146469",
+  "set": "ecl",
+  "collectorNumber": "174",
+  "rarity": "common",
+  "manaCost": "{2}{G}",
+  "typeLine": "Creature — Elf Archer",
+  "oracleText": "Flash\nReach",
+  "power": "4",
+  "toughness": "2",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Reach",
+   "Flash"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/6/76e80656-6bcb-4d99-8bd2-ca5f75f40daf.jpg?1783904429",
+   "normal": "https://cards.scryfall.io/normal/front/7/6/76e80656-6bcb-4d99-8bd2-ca5f75f40daf.jpg?1783904429",
+   "large": "https://cards.scryfall.io/large/front/7/6/76e80656-6bcb-4d99-8bd2-ca5f75f40daf.jpg?1783904429",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/6/76e80656-6bcb-4d99-8bd2-ca5f75f40daf.jpg?1783904429"
+  }
+ },
+ {
+  "name": "Great Forest Druid",
+  "scryfallId": "8793a19e-6743-4031-86d9-2ff55f384549",
+  "oracleId": "5cb6ebf7-6a75-4464-9e39-e171fcb52de3",
+  "set": "ecl",
+  "collectorNumber": "178",
+  "rarity": "common",
+  "manaCost": "{1}{G}",
+  "typeLine": "Creature — Treefolk Druid",
+  "oracleText": "{T}: Add one mana of any color.",
+  "power": "0",
+  "toughness": "4",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/7/8793a19e-6743-4031-86d9-2ff55f384549.jpg?1783904428",
+   "normal": "https://cards.scryfall.io/normal/front/8/7/8793a19e-6743-4031-86d9-2ff55f384549.jpg?1783904428",
+   "large": "https://cards.scryfall.io/large/front/8/7/8793a19e-6743-4031-86d9-2ff55f384549.jpg?1783904428",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/7/8793a19e-6743-4031-86d9-2ff55f384549.jpg?1783904428"
+  }
+ },
+ {
+  "name": "Mutable Explorer",
+  "scryfallId": "8f35d95a-caea-4d5e-b98e-55da1ba7c92d",
+  "oracleId": "34b93a66-de1e-4133-a479-e0d90ba94a3a",
+  "set": "ecl",
+  "collectorNumber": "186",
+  "rarity": "rare",
+  "manaCost": "{2}{G}",
+  "typeLine": "Creature — Shapeshifter",
+  "oracleText": "Changeling (This card is every creature type.)\nWhen this creature enters, create a tapped Mutavault token. (It's a land with \"{T}: Add {C}\" and \"{1}: This token becomes a 2/2 creature with all creature types until end of turn. It's still a land.\")",
+  "power": "1",
+  "toughness": "1",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Changeling"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/f/8f35d95a-caea-4d5e-b98e-55da1ba7c92d.jpg?1783904425",
+   "normal": "https://cards.scryfall.io/normal/front/8/f/8f35d95a-caea-4d5e-b98e-55da1ba7c92d.jpg?1783904425",
+   "large": "https://cards.scryfall.io/large/front/8/f/8f35d95a-caea-4d5e-b98e-55da1ba7c92d.jpg?1783904425",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/f/8f35d95a-caea-4d5e-b98e-55da1ba7c92d.jpg?1783904425"
+  }
+ },
+ {
+  "name": "Aurora Awakener",
+  "scryfallId": "913977c2-73f9-466b-bd01-827c1736e070",
+  "oracleId": "cf9d13e2-bdcc-4c66-95ad-654ef795dbd3",
+  "set": "ecl",
+  "collectorNumber": "165",
+  "rarity": "mythic",
+  "manaCost": "{6}{G}",
+  "typeLine": "Creature — Giant Druid",
+  "oracleText": "Trample\nVivid — When this creature enters, reveal cards from the top of your library until you reveal X permanent cards, where X is the number of colors among permanents you control. Put any number of those permanent cards onto the battlefield, then put the rest of the revealed cards on the bottom of your library in a random order.",
+  "power": "7",
+  "toughness": "7",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Trample",
+   "Vivid"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/1/913977c2-73f9-466b-bd01-827c1736e070.jpg?1783904435",
+   "normal": "https://cards.scryfall.io/normal/front/9/1/913977c2-73f9-466b-bd01-827c1736e070.jpg?1783904435",
+   "large": "https://cards.scryfall.io/large/front/9/1/913977c2-73f9-466b-bd01-827c1736e070.jpg?1783904435",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/1/913977c2-73f9-466b-bd01-827c1736e070.jpg?1783904435"
+  }
+ },
+ {
+  "name": "Lys Alana Dignitary",
+  "scryfallId": "94e8d6a9-7aa3-4e93-8e4d-e50da7ff09d2",
+  "oracleId": "ce7582a2-e014-41fb-8753-00d29cffc81a",
+  "set": "ecl",
+  "collectorNumber": "180",
+  "rarity": "uncommon",
+  "manaCost": "{1}{G}",
+  "typeLine": "Creature — Elf Advisor",
+  "oracleText": "As an additional cost to cast this spell, behold an Elf or pay {2}. (To behold an Elf, choose an Elf you control or reveal an Elf card from your hand.)\n{T}: Add {G}{G}. Activate only if there is an Elf card in your graveyard.",
+  "power": "2",
+  "toughness": "3",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Behold"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/4/94e8d6a9-7aa3-4e93-8e4d-e50da7ff09d2.jpg?1783904430",
+   "normal": "https://cards.scryfall.io/normal/front/9/4/94e8d6a9-7aa3-4e93-8e4d-e50da7ff09d2.jpg?1783904430",
+   "large": "https://cards.scryfall.io/large/front/9/4/94e8d6a9-7aa3-4e93-8e4d-e50da7ff09d2.jpg?1783904430",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/4/94e8d6a9-7aa3-4e93-8e4d-e50da7ff09d2.jpg?1783904430"
+  }
+ },
+ {
+  "name": "Morcant's Eyes",
+  "scryfallId": "a730b254-ff7c-4f89-a559-b44ad7fd6c6c",
+  "oracleId": "c55a27cc-8e25-4714-b1da-86e5c1c6661a",
+  "set": "ecl",
+  "collectorNumber": "185",
+  "rarity": "uncommon",
+  "manaCost": "{1}{G}",
+  "typeLine": "Kindred Enchantment — Elf",
+  "oracleText": "At the beginning of your upkeep, surveil 1. (Look at the top card of your library. You may put it into your graveyard.)\n{4}{G}{G}, Sacrifice this enchantment: Create X 2/2 black and green Elf creature tokens, where X is the number of Elf cards in your graveyard. Activate only as a sorcery.",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Surveil"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/7/a730b254-ff7c-4f89-a559-b44ad7fd6c6c.jpg?1783904431",
+   "normal": "https://cards.scryfall.io/normal/front/a/7/a730b254-ff7c-4f89-a559-b44ad7fd6c6c.jpg?1783904431",
+   "large": "https://cards.scryfall.io/large/front/a/7/a730b254-ff7c-4f89-a559-b44ad7fd6c6c.jpg?1783904431",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/7/a730b254-ff7c-4f89-a559-b44ad7fd6c6c.jpg?1783904431"
+  }
+ },
+ {
+  "name": "Lys Alana Informant",
+  "scryfallId": "a79649c4-559e-4306-a102-5fd8750629c7",
+  "oracleId": "b5058b5c-0359-42ec-ba9e-ae1371bb9c22",
+  "set": "ecl",
+  "collectorNumber": "181",
+  "rarity": "common",
+  "manaCost": "{1}{G}",
+  "typeLine": "Creature — Elf Scout",
+  "oracleText": "When this creature enters or dies, surveil 1. (Look at the top card of your library. You may put it into your graveyard.)",
+  "power": "3",
+  "toughness": "1",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Surveil"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/7/a79649c4-559e-4306-a102-5fd8750629c7.jpg?1783904427",
+   "normal": "https://cards.scryfall.io/normal/front/a/7/a79649c4-559e-4306-a102-5fd8750629c7.jpg?1783904427",
+   "large": "https://cards.scryfall.io/large/front/a/7/a79649c4-559e-4306-a102-5fd8750629c7.jpg?1783904427",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/7/a79649c4-559e-4306-a102-5fd8750629c7.jpg?1783904427"
+  }
+ },
+ {
+  "name": "Prismatic Undercurrents",
+  "scryfallId": "bb7490f2-1425-495f-b7d4-2f1e0df7490e",
+  "oracleId": "27a3aa64-1de7-4b0c-af23-52886e7d258a",
+  "set": "ecl",
+  "collectorNumber": "189",
+  "rarity": "uncommon",
+  "manaCost": "{3}{G}",
+  "typeLine": "Enchantment",
+  "oracleText": "Vivid — When this enchantment enters, search your library for up to X basic land cards, where X is the number of colors among permanents you control. Reveal those cards, put them into your hand, then shuffle.\nYou may play an additional land on each of your turns.",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Vivid"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/b/bb7490f2-1425-495f-b7d4-2f1e0df7490e.jpg?1783904425",
+   "normal": "https://cards.scryfall.io/normal/front/b/b/bb7490f2-1425-495f-b7d4-2f1e0df7490e.jpg?1783904425",
+   "large": "https://cards.scryfall.io/large/front/b/b/bb7490f2-1425-495f-b7d4-2f1e0df7490e.jpg?1783904425",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/b/bb7490f2-1425-495f-b7d4-2f1e0df7490e.jpg?1783904425"
+  }
+ },
+ {
+  "name": "Shimmerwilds Growth",
+  "scryfallId": "c122719c-f0d1-4170-a0d1-d62172df1d21",
+  "oracleId": "c63402b2-1f8c-4004-82d8-48ea26bfe3fc",
+  "set": "ecl",
+  "collectorNumber": "194",
+  "rarity": "uncommon",
+  "manaCost": "{1}{G}",
+  "typeLine": "Enchantment — Aura",
+  "oracleText": "Enchant land\nAs this Aura enters, choose a color.\nEnchanted land is the chosen color.\nWhenever enchanted land is tapped for mana, its controller adds an additional one mana of the chosen color.",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Enchant"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/1/c122719c-f0d1-4170-a0d1-d62172df1d21.jpg?1783904422",
+   "normal": "https://cards.scryfall.io/normal/front/c/1/c122719c-f0d1-4170-a0d1-d62172df1d21.jpg?1783904422",
+   "large": "https://cards.scryfall.io/large/front/c/1/c122719c-f0d1-4170-a0d1-d62172df1d21.jpg?1783904422",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/1/c122719c-f0d1-4170-a0d1-d62172df1d21.jpg?1783904422"
+  }
+ },
+ {
+  "name": "Midnight Tilling",
+  "scryfallId": "c5112bbf-752c-41e7-9c61-4c81e6a77463",
+  "oracleId": "79bc2c6d-b03d-4ceb-b468-293378ec73ae",
+  "set": "ecl",
+  "collectorNumber": "182",
+  "rarity": "common",
+  "manaCost": "{1}{G}",
+  "typeLine": "Instant",
+  "oracleText": "Mill four cards, then you may return a permanent card from among them to your hand. (To mill four cards, put the top four cards of your library into your graveyard.)",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Mill"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/5/c5112bbf-752c-41e7-9c61-4c81e6a77463.jpg?1783904434",
+   "normal": "https://cards.scryfall.io/normal/front/c/5/c5112bbf-752c-41e7-9c61-4c81e6a77463.jpg?1783904434",
+   "large": "https://cards.scryfall.io/large/front/c/5/c5112bbf-752c-41e7-9c61-4c81e6a77463.jpg?1783904434",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/5/c5112bbf-752c-41e7-9c61-4c81e6a77463.jpg?1783904434"
+  }
+ },
+ {
+  "name": "Mistmeadow Council",
+  "scryfallId": "d4a7c9bc-81c8-4c31-96a9-eb6ba7715e7f",
+  "oracleId": "9acfec0d-05a0-4b28-a883-e6863f1cb773",
+  "set": "ecl",
+  "collectorNumber": "183",
+  "rarity": "common",
+  "manaCost": "{4}{G}",
+  "typeLine": "Creature — Kithkin Advisor",
+  "oracleText": "This spell costs {1} less to cast if you control a Kithkin.\nWhen this creature enters, draw a card.",
+  "power": "4",
+  "toughness": "3",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/4/d4a7c9bc-81c8-4c31-96a9-eb6ba7715e7f.jpg?1783904429",
+   "normal": "https://cards.scryfall.io/normal/front/d/4/d4a7c9bc-81c8-4c31-96a9-eb6ba7715e7f.jpg?1783904429",
+   "large": "https://cards.scryfall.io/large/front/d/4/d4a7c9bc-81c8-4c31-96a9-eb6ba7715e7f.jpg?1783904429",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/4/d4a7c9bc-81c8-4c31-96a9-eb6ba7715e7f.jpg?1783904429"
+  }
+ },
+ {
+  "name": "Chomping Changeling",
+  "scryfallId": "e187dcc6-19ad-4cf6-94b4-daf07f5144e5",
+  "oracleId": "d740dbd9-8e90-4121-8d53-c6ddf5178d58",
+  "set": "ecl",
+  "collectorNumber": "172",
+  "rarity": "uncommon",
+  "manaCost": "{2}{G}",
+  "typeLine": "Creature — Shapeshifter",
+  "oracleText": "Changeling (This card is every creature type.)\nWhen this creature enters, destroy up to one target artifact or enchantment.",
+  "power": "1",
+  "toughness": "2",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Changeling"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/1/e187dcc6-19ad-4cf6-94b4-daf07f5144e5.jpg?1783904431",
+   "normal": "https://cards.scryfall.io/normal/front/e/1/e187dcc6-19ad-4cf6-94b4-daf07f5144e5.jpg?1783904431",
+   "large": "https://cards.scryfall.io/large/front/e/1/e187dcc6-19ad-4cf6-94b4-daf07f5144e5.jpg?1783904431",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/1/e187dcc6-19ad-4cf6-94b4-daf07f5144e5.jpg?1783904431"
+  }
+ },
+ {
+  "name": "Safewright Cavalry",
+  "scryfallId": "f7de412a-9731-4bfc-8fbc-c95988a3dd70",
+  "oracleId": "6e04a375-303e-43ba-bca1-4e959711a7f6",
+  "set": "ecl",
+  "collectorNumber": "191",
+  "rarity": "common",
+  "manaCost": "{3}{G}",
+  "typeLine": "Creature — Elf Warrior",
+  "oracleText": "This creature can't be blocked by more than one creature.\n{5}: Target Elf you control gets +2/+2 until end of turn.",
+  "power": "4",
+  "toughness": "4",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/7/f7de412a-9731-4bfc-8fbc-c95988a3dd70.jpg?1783904425",
+   "normal": "https://cards.scryfall.io/normal/front/f/7/f7de412a-9731-4bfc-8fbc-c95988a3dd70.jpg?1783904425",
+   "large": "https://cards.scryfall.io/large/front/f/7/f7de412a-9731-4bfc-8fbc-c95988a3dd70.jpg?1783904425",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/7/f7de412a-9731-4bfc-8fbc-c95988a3dd70.jpg?1783904425"
+  }
+ },
+ {
   "name": "Abigale, Eloquent First-Year",
   "scryfallId": "bf708169-a307-494b-b8d8-baae53b2e2f2",
   "oracleId": "48a773d0-c433-4463-b50f-b6d4604a042c",

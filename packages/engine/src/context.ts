@@ -19,6 +19,7 @@ import { BRAWL_15A_W_EFFECTS } from './brawl-15a-w-effects.ts';
 import { BRAWL_15B_B_EFFECTS } from './brawl-15b-b-effects.ts';
 import { ECL_18A_EFFECTS, willPersist } from './ecl-18a.ts';
 import { ECL_SPECIAL_EFFECTS } from './ecl-special-effects.ts';
+import { ECL_GREEN_EFFECTS } from './ecl-green-effects.ts';
 import { BRAWL_15B_W_EFFECTS } from './brawl-15b-w-effects.ts';
 import { BRAWL_15B_U_EFFECTS } from './brawl-15b-u-effects.ts';
 import { BRAWL_15B_G_EFFECTS } from './brawl-15b-g-effects.ts';
@@ -146,6 +147,8 @@ const BUILT_IN_EFFECTS: Record<string, CustomEffect> = {
   ...ECL_18A_EFFECTS,
   // Lorwyn Eclipsed (18b, special).
   ...ECL_SPECIAL_EFFECTS,
+  // Lorwyn Eclipsed (18b): green.
+  ...ECL_GREEN_EFFECTS,
   // Strixhaven Brawl (15b): multicolour, colourless and lands.
   ...BRAWL_15B_MULTI_EFFECTS,
   // Strixhaven Brawl (15b), white.
@@ -235,6 +238,21 @@ function defBase(ctx: Ctx, id: ObjectId): CardDefinition {
     if (aura && aura.zone === 'battlefield' && aura.attachedTo === id) return foodDef(d);
   }
   if (o.blank) return blankDef(d);
+  // Lorwyn Eclipsed (18b, green): Shimmerwilds Growth, "enchanted land is the chosen color".
+  if (ctx.s.landColorAuras && o.zone === 'battlefield' && d.types.includes('Land')) {
+    for (const auraId of ctx.s.battlefield) {
+      const aura = ctx.s.objects[auraId];
+      if (
+        aura?.attachedTo === id &&
+        aura.chosenColor &&
+        aura.chosenColor !== 'C' &&
+        defOf(ctx, aura.defId).abilities.some(
+          (a) => a.kind === 'static' && a.effect.kind === 'landIsChosenColor',
+        )
+      )
+        return withExtraAbilities(ctx, o, { ...d, colors: [aura.chosenColor] });
+    }
+  }
   // Final Fantasy (11c): a land with a blight counter (Ultima, Origin of Oblivion).
   if (o.counters?.blight && o.zone === 'battlefield' && d.types.includes('Land'))
     return blightDef(d);

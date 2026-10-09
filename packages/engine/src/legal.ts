@@ -2,6 +2,7 @@ import {
   abilitiesLocked,
   canTapForAbility,
   cardMatches,
+  countOf,
   creaturesOnBattlefield,
   isCreature,
   matchesFilter,
@@ -13,6 +14,7 @@ import {
   canAttack,
   canBlock,
   defenderOf,
+  maxBlockers,
   mustAttack,
 } from './combat.ts';
 import { type Ctx, def, obj, other, withBackFace } from './context.ts';
@@ -1174,7 +1176,11 @@ export function getLegalActions(ctx: Ctx, player: PlayerId): Action[] {
           continue;
         }
         for (const a of s.combat?.attackers ?? []) {
-          if (canBlock(ctx, id, a.id))
+          if (
+            canBlock(ctx, id, a.id) &&
+            // Lorwyn Eclipsed (18b, green): "can't be blocked by more than one creature".
+            d.declared.filter((x) => x.attacker === a.id).length < maxBlockers(ctx, a.id)
+          )
             out.push({ type: 'addBlock', player, blocker: id, attacker: a.id });
         }
       }
@@ -1442,7 +1448,10 @@ export function getLegalActions(ctx: Ctx, player: PlayerId): Action[] {
         const full =
           (!!spec.maxFromAmount && picked.length >= (d.trigger.amount ?? 0)) ||
           // Lorwyn Eclipsed (18b, special): Rooftop Percher, "up to two target cards".
-          (spec.maxTargets !== undefined && picked.length >= spec.maxTargets);
+          (spec.maxTargets !== undefined && picked.length >= spec.maxTargets) ||
+          // Lorwyn Eclipsed (18b, green): Prismabasher, "up to X target creatures".
+          (spec.maxAmount !== undefined &&
+            picked.length >= countOf(ctx, player, spec.maxAmount, false, t.source.id));
         for (const t of full ? [] : targetCandidates(ctx, spec, src))
           if (
             !taken.has(key(t)) &&
