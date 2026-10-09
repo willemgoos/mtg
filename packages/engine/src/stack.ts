@@ -40,6 +40,7 @@ import {
 } from './effects.ts';
 import { foodsOf, payForage } from './forage.ts';
 import {
+  abilityTags,
   anyTypeCost,
   artifactHelpers,
   colorsSpent,
@@ -1150,8 +1151,8 @@ export function activateAbility(
     ),
     payWith,
     exclude,
-    // Shang-Chi's mana can pay for abilities of creature sources.
-    isCreature(ctx, source) ? ['CreatureAbility'] : undefined,
+    // Shang-Chi's mana can pay for abilities of creature sources; Eclipsed Realms' mana for sources of the chosen type.
+    abilityTags(ctx, source),
     a.cost.convoke ? creatureHelpers(ctx, player, manaSources(ctx, player, exclude), exclude) : [],
     [sacrifice, forage !== 'graveyard' ? forage : undefined, tapCreature, ...(tapArtifacts ?? [])],
   );

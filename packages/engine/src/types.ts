@@ -413,7 +413,10 @@ export type AbilityDef =
       kind: 'mana';
       cost: CostDef;
       produces: ManaType;
-      /** "Spend this mana only to cast a spell of this subtype" (Giada: 'Angel'; 'chosenType': a creature spell of the type chosen for it). */
+      /**
+       * "Spend this mana only to cast a spell of this subtype" (Giada: 'Angel'; 'chosenType': a creature spell of the type chosen for it;
+       * Lorwyn Eclipsed (18b, special) 'chosenTypeOrAbility': a spell of the chosen type, or an ability of a source of the chosen type: Eclipsed Realms).
+       */
       onlyFor?: string;
       /** Makes two mana instead of one while this holds (Ilysian Caryatid). */
       doubleIf?: ConditionDef;
@@ -458,6 +461,9 @@ export type AbilityDef =
        * colour, chosen as the mana is spent. `produces` is ignored.
        */
       anyOneColor?: boolean;
+      // Lorwyn Eclipsed (18b, special): Brigid, Doun's Mind ("X {G} or X {W}")
+      /** With `anyOneColor`: the colour is one of these only. */
+      oneOf?: ManaType[];
     }
   | {
       kind: 'activated';
@@ -627,7 +633,12 @@ export type TriggerDef =
       /** "Attack a player" (Crimson Cowl): ones attacking a planeswalker don't count. */
       aPlayer?: boolean;
     }
-  | { on: 'combatDamageToPlayer' }
+  | {
+      on: 'combatDamageToPlayer';
+      // Lorwyn Eclipsed (18b, special): Sygg, Wanderwine Wisdom's granted ability
+      /** "to a player or planeswalker". */
+      orPlaneswalker?: boolean;
+    }
   | {
       on: 'castSpell';
       filter:
@@ -1011,6 +1022,9 @@ export type ConditionDef =
   | { kind: 'opponentControlsCreature'; filter: CardFilter }
   /** Threshold-style: at least `min` cards (of these types) in your graveyard. */
   | { kind: 'graveyardCount'; min: number; types?: CardType[] }
+  // Lorwyn Eclipsed (18b, special): Trystan, Callous Cultivator
+  /** Your graveyard has at least `min` (default 1) cards matching the filter ("an Elf card in your graveyard"). */
+  | { kind: 'graveyardHas'; filter: CardFilter; min?: number }
   /** It's your turn and this is the first time you gained life this turn. */
   | { kind: 'firstLifeGainThisTurn'; anyTurn?: boolean }
   /** A chosen target matches the filter (Hazardroot Herbalist: "if that creature is a token"). */
@@ -1355,6 +1369,9 @@ export interface TargetSpec {
   // Reality Fracture (17a): Seasoned Cryomancer
   /** With `anyNumber`: no more targets than the amount the trigger carries ("up to that many target creatures"). */
   maxFromAmount?: boolean;
+  // Lorwyn Eclipsed (18b, special): Rooftop Percher
+  /** With `anyNumber`: no more than this many targets ("up to two target cards from graveyards"), picked one at a time. */
+  maxTargets?: number;
   // Final Fantasy (11c): targeting abilities
   /**
    * With 'spell': activated and triggered abilities on the stack are targets
@@ -1862,7 +1879,12 @@ export type EffectDef =
       /** Thriving lands: "choose a color other than" this one. */
       except?: Color;
     }
-  | { kind: 'chooseCreatureType' }
+  | {
+      kind: 'chooseCreatureType';
+      // Lorwyn Eclipsed (18b, special): Dawn-Blessed Pennant, Eclipsed Realms ("choose Elemental, Elf, ... or Treefolk")
+      /** Only these types may be chosen. */
+      from?: string[];
+    }
   // Strixhaven (13a): Learn
   /** Learn: reveal a Lesson from your sideboard and put it into your hand, or discard a card to draw a card, or neither. */
   | { kind: 'learn' }
@@ -2780,6 +2802,11 @@ export type StaticDef =
       /** Other permanents you control of any type, not just creatures (A Realm Reborn). */
       otherPermanents?: boolean;
     }
+  /**
+   * Lorwyn Eclipsed (18b, special): Mirrormind Crown. "As long as this Equipment is attached to a creature, the first time you would
+   * create one or more tokens each turn, you may instead create that many tokens that are copies of equipped creature."
+   */
+  | { kind: 'firstTokensCopyEquipped' }
   /** You may play an additional land on each of your turns (Loot). */
   | { kind: 'extraLandDrop' }
   /** Prevent all combat damage dealt to and by this creature (Fog Bank). */
@@ -3250,6 +3277,11 @@ export interface GameObject {
   /** Cast from exile this turn: if it would be put into a graveyard from the stack, it's exiled instead. */
   exileInstead?: boolean;
   chosenType?: string;
+  // Lorwyn Eclipsed (18b, special): Puca's Eye, Foraging Wickermaw
+  /** It's these colours (a colour-changing effect); `untilTurn`: only through the end of that turn. */
+  colorOverride?: { colors: Color[]; untilTurn?: number };
+  /** The creature type that was chosen for it when it left the battlefield ("the chosen type" of a sacrificed source). */
+  lastChosenType?: string;
   /** Cards exiled with it (Keen-Eyed Curator). */
   exiledWith?: ObjectId[];
   /** Strixhaven Brawl (15a): Skyclave Apparition: the owner and mana value of the card it exiled. */
@@ -3706,6 +3738,9 @@ export interface TurnState {
   // Reality Fracture (17a): Molten Tide
   /** Players whose Mountains add an additional {R} when tapped for mana this turn. */
   moltenTide?: PlayerId[];
+  // Lorwyn Eclipsed (18b, special): Mirrormind Crown
+  /** Players whose first token creation this turn has happened ("the first time you would create one or more tokens each turn"). */
+  firstTokensDone?: PlayerId[];
 }
 
 export interface Attacker {

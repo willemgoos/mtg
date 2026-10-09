@@ -29,7 +29,7 @@ import {
   hasConspire,
   hasConvoke,
 } from './ecl-18a.ts';
-import { artifactHelpers, canPayFrom, creatureHelpers, hasImprovise, manaSources } from './mana.ts';
+import { abilityTags, artifactHelpers, canPayFrom, creatureHelpers, hasImprovise, manaSources } from './mana.ts';
 import { type CastVia, castVariants, spellTags } from './spells.ts';
 import {
   abilityManaCost,
@@ -876,9 +876,8 @@ function priorityActions(
         if (!(sorcery || instant) || o.onceTurns?.[LOYALTY_KEY] === s.turn.number) return;
         if ((o.counters?.loyalty ?? 0) + a.cost.loyalty < 0) return;
       }
-      const tagged = isCreature(ctx, source)
-        ? manaSources(ctx, player, undefined, ['CreatureAbility'])
-        : sources;
+      const tags = abilityTags(ctx, source);
+      const tagged = tags ? manaSources(ctx, player, undefined, tags) : sources;
       const own = a.cost.tapSelf ? tagged.filter((x) => x.id !== source) : tagged;
       // Heirloom Epic: creatures can pay for generic mana.
       const usable = a.cost.convoke
@@ -1392,7 +1391,10 @@ export function getLegalActions(ctx: Ctx, player: PlayerId): Action[] {
         const key = (t: TargetChoice) => ('object' in t ? t.object.id : t.player);
         const taken = new Set(picked.map(key));
         // Reality Fracture (17a): Seasoned Cryomancer, "up to that many target creatures".
-        const full = !!spec.maxFromAmount && picked.length >= (d.trigger.amount ?? 0);
+        const full =
+          (!!spec.maxFromAmount && picked.length >= (d.trigger.amount ?? 0)) ||
+          // Lorwyn Eclipsed (18b, special): Rooftop Percher, "up to two target cards".
+          (spec.maxTargets !== undefined && picked.length >= spec.maxTargets);
         for (const t of full ? [] : targetCandidates(ctx, spec, src))
           if (
             !taken.has(key(t)) &&

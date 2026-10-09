@@ -10,6 +10,7 @@ import { type Ctx, def, obj, other } from './context.ts';
 import { damageSourceFor, dealDamage, type DamageSource } from './effects.ts';
 import { checkCondition } from './triggers.ts';
 import { manaSources } from './mana.ts';
+import { protectedFrom } from './brawl-15b-w-effects.ts';
 import type { Attacker, ObjectId, PlayerId, StaticDef, TargetChoice } from './types.ts';
 
 /** Does `player` control a permanent with this static ability? */
@@ -137,6 +138,8 @@ export function canBlock(ctx: Ctx, blocker: ObjectId, attacker: ObjectId): boole
   // Strixhaven Brawl (15b, g): Mistcutter Hydra can't be blocked by blue creatures.
   if (hasKeyword(ctx, attacker, 'protectionBlue') && def(ctx, blocker).colors.includes('U'))
     return false;
+  // Lorwyn Eclipsed (18b, special): protection from a colour granted for a while (Sygg, Wanderbrine Shield) also stops blocks.
+  if (protectedFrom(ctx, attacker, blocker)) return false;
   // Marvel Super Heroes Jumpstart (Great Lakes Avengers): Doorman, until end of turn.
   for (const e of ctx.s.effects)
     if (

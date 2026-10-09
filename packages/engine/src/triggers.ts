@@ -281,6 +281,12 @@ export function checkCondition(
         ...(c.types ? { types: c.types } : {}),
       }) >= c.min
     );
+  // Lorwyn Eclipsed (18b, special): Trystan, Callous Cultivator ("an Elf card in your graveyard").
+  if (c.kind === 'graveyardHas')
+    return (
+      ctx.s.players[controller].graveyard.filter((id) => matchesFilter(ctx, id, c.filter)).length >=
+      (c.min ?? 1)
+    );
   // Final Fantasy (11c): rare conditions.
   // Caretakers: use the configured starting life, not a fixed life threshold.
   if (c.kind === 'lifeAboveStarting')
@@ -667,7 +673,7 @@ function detect(ctx: Ctx, ev: GameEvent): void {
               return (
                 o.id !== moved.id &&
                 o.controller === moved.controller &&
-                matchesFilter(ctx, moved.id, t.filter)
+                matchesFilter(ctx, moved.id, t.filter, o.id) // Lorwyn Eclipsed (18b, special): "of the chosen type" reads the source
               );
             if (t.on === 'selfOrCreatureEtb') {
               if (t.castFromNonHand && ev.castFromNonHandBy !== o.controller) return false;
@@ -1708,6 +1714,19 @@ function detect(ctx: Ctx, ev: GameEvent): void {
           controller: src.controller,
           inline: [{ kind: 'sacrifice', what: 'self' }],
         });
+      // Lorwyn Eclipsed (18b, special): "deals combat damage to a player or planeswalker" (Sygg's granted ability).
+      if ('object' in ev.to && ev.combat && ctx.s.objects[ev.to.object.id]) {
+        const hit = ctx.s.objects[ev.to.object.id]!;
+        if (hit.zone === 'battlefield' && def(ctx, hit.id).types.includes('Planeswalker'))
+          def(ctx, src.id).abilities.forEach((a, i) => {
+            if (
+              a.kind === 'triggered' &&
+              a.trigger.on === 'combatDamageToPlayer' &&
+              a.trigger.orPlaneswalker
+            )
+              queue(ctx, src, i, src.controller, undefined, ev.amount);
+          });
+      }
       if (!('player' in ev.to)) return;
       // Strixhaven (13c): Strixhaven Stadium: "whenever a creature deals combat damage to you".
       const damaged = ev.to.player;

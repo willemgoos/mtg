@@ -73,7 +73,11 @@ export function givePriority(ctx: Ctx, player: PlayerId): void {
       if (combos.length === 0) continue; // no legal targets: removed from the stack
       // Marvel Super Heroes Jumpstart (Blink): "any number of targets", picked one at a time.
       const anyNumber = a.targets[a.targets.length - 1]!.anyNumber;
-      if (anyNumber && combos.every((c) => c.length === 0)) continue;
+      if (anyNumber && combos.every((c) => c.length === 0)) {
+        // Lorwyn Eclipsed (18b, special): "up to two target cards ... You gain 3 life": with nothing to target, the rest still happens.
+        if (a.targets[a.targets.length - 1]!.maxTargets !== undefined) pushTrigger(ctx, t, []);
+        continue;
+      }
       s.decision = {
         kind: 'chooseTriggerTargets',
         player: t.controller,
@@ -247,6 +251,7 @@ export function startTurn(ctx: Ctx, player: PlayerId, noPowerUp = false): void {
   else delete s.turn.lastNoncombatDamaged;
   delete s.turn.noncombatDamaged;
   delete s.turn.moltenTide;
+  delete s.turn.firstTokensDone; // Lorwyn Eclipsed (18b, special)
   if (s.staggered?.some((x) => x.by === player))
     s.staggered = s.staggered.filter((x) => x.by !== player);
   for (const q of Object.values(s.players)) q.attackedThisTurn = false;

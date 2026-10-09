@@ -18,6 +18,7 @@ import { BRAWL_15B_R_EFFECTS } from './brawl-15b-r-effects.ts';
 import { BRAWL_15A_W_EFFECTS } from './brawl-15a-w-effects.ts';
 import { BRAWL_15B_B_EFFECTS } from './brawl-15b-b-effects.ts';
 import { ECL_18A_EFFECTS, willPersist } from './ecl-18a.ts';
+import { ECL_SPECIAL_EFFECTS } from './ecl-special-effects.ts';
 import { BRAWL_15B_W_EFFECTS } from './brawl-15b-w-effects.ts';
 import { BRAWL_15B_U_EFFECTS } from './brawl-15b-u-effects.ts';
 import { BRAWL_15B_G_EFFECTS } from './brawl-15b-g-effects.ts';
@@ -141,6 +142,8 @@ const BUILT_IN_EFFECTS: Record<string, CustomEffect> = {
   ...BRAWL_15B_B_EFFECTS,
   // Lorwyn Eclipsed (18a).
   ...ECL_18A_EFFECTS,
+  // Lorwyn Eclipsed (18b, special).
+  ...ECL_SPECIAL_EFFECTS,
   // Strixhaven Brawl (15b): multicolour, colourless and lands.
   ...BRAWL_15B_MULTI_EFFECTS,
   // Strixhaven Brawl (15b), white.
@@ -204,9 +207,14 @@ export function def(ctx: Ctx, id: ObjectId): CardDefinition {
   const o = obj(ctx, id);
   const printed = defOf(ctx, o.defId);
   // Iron Man: a nonlegendary copy is nonlegendary for every rule, not just the legend rule.
-  const d = o.nonlegendary
+  const d0 = o.nonlegendary
     ? { ...printed, supertypes: printed.supertypes.filter((t) => t !== 'Legendary') }
     : printed;
+  // Lorwyn Eclipsed (18b, special): "becomes the chosen color" (Puca's Eye), "becomes that color until end of turn" (Foraging Wickermaw).
+  const d =
+    o.colorOverride && (o.colorOverride.untilTurn ?? Infinity) >= ctx.s.turn.number
+      ? { ...d0, colors: o.colorOverride.colors }
+      : d0;
   if (o.foodBy !== undefined) {
     const aura = ctx.s.objects[o.foodBy];
     if (aura && aura.zone === 'battlefield' && aura.attachedTo === id) return foodDef(d);
@@ -658,7 +666,10 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
   delete o.counters;
   delete o.level;
   delete o.chosenColor;
+  if (from === 'battlefield' && o.chosenType) o.lastChosenType = o.chosenType; // Lorwyn Eclipsed (18b, special)
+  else delete o.lastChosenType;
   delete o.chosenType;
+  delete o.colorOverride; // Lorwyn Eclipsed (18b, special)
   delete o.exiledWith;
   delete o.foodBy;
   delete o.controlledBy;

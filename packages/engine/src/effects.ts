@@ -59,6 +59,7 @@ import { checkCondition, triggeredAbility } from './triggers.ts';
 import { addLore } from './sagas.ts';
 import { CHOOSERS } from './stx-13c-a-effects.ts';
 import { planeswalkersSurvive, tokenMultiplier } from './brawl-15a-w-effects.ts';
+import { crownReplacement } from './ecl-crown.ts';
 import { protectedFrom } from './brawl-15b-w-effects.ts';
 import { SOS_14B_C_CHOOSERS } from './sos-14b-c-effects.ts';
 import type {
@@ -362,7 +363,7 @@ const PORTENT_TYPES = [
  * Reality Fracture (17a fixes): the creature types offered for "choose a creature type": every one (Scryfall's
  * catalog), those on creatures on the battlefield and in the chooser's hand first, then the rest, each part A to Z.
  */
-function creatureTypesOf(ctx: Ctx, player: PlayerId): string[] {
+export function creatureTypesOf(ctx: Ctx, player: PlayerId): string[] {
   const first = new Set<string>();
   const note = (id: ObjectId) => {
     const d = defOf(ctx, obj(ctx, id).defId);
@@ -729,7 +730,7 @@ export function resolveRef(ctx: Ctx, es: EffectSource, ref: Ref): TargetChoice[]
     .map((c) => ({ object: { id: c.id, zcc: c.zcc } }));
 }
 
-function objectsOf(ctx: Ctx, es: EffectSource, ref: Ref): ObjectId[] {
+export function objectsOf(ctx: Ctx, es: EffectSource, ref: Ref): ObjectId[] {
   return resolveRef(ctx, es, ref).flatMap((t) => ('object' in t ? [t.object.id] : []));
 }
 
@@ -1024,6 +1025,15 @@ export function runEffects(
       list.splice(i, 1, ...expanded);
       i--;
       continue;
+    }
+    // Lorwyn Eclipsed (18b, special): Mirrormind Crown, "the first time you would create one or more tokens each turn".
+    if (e.kind === 'createToken' || e.kind === 'tokenCopy') {
+      const crown = crownReplacement(ctx, es, e);
+      if (crown) {
+        list.splice(i, 1, crown);
+        i--;
+        continue;
+      }
     }
     if (e.kind === 'if') {
       // Replace it with the chosen branch (which may itself pause).
@@ -1596,7 +1606,8 @@ export function runEffects(
           thenPriority,
         };
       } else if (e.kind === 'chooseCreatureType') {
-        const types = creatureTypesOf(ctx, controller);
+        // Lorwyn Eclipsed (18b, special): "choose Elemental, Elf, ... or Treefolk" offers only those.
+        const types = e.from ?? creatureTypesOf(ctx, controller);
         ctx.s.decision = {
           kind: 'chooseOption',
           player: controller,
@@ -2301,7 +2312,7 @@ export function runEffects(
   return false;
 }
 
-function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
+export function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
   // Reality Fracture (17c): counters this effect adds are put by its controller (Inspired Tethermage).
   const before = ctx.puttingPlayer;
   ctx.puttingPlayer = es.controller;

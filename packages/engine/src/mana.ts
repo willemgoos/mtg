@@ -4,10 +4,13 @@ import {
   abilitiesLocked,
   canTapForAbility,
   countOf,
+  hasAllCreatureTypes,
   isCreature,
   matchesFilter,
   power,
+  subtypesOf,
 } from './characteristics.ts';
+import { CREATURE_TYPES } from './creature-types.ts';
 import { type Ctx, addCounters, def, emit, obj, sacrifice, tap } from './context.ts';
 import { manaValue, pipsOf } from './cost.ts';
 import { hamletColorless } from './sos-14b-c-effects.ts';
@@ -66,6 +69,35 @@ function extraColorless(ctx: Ctx, player: PlayerId): boolean {
   );
 }
 
+/**
+ * What restricted mana can be spent on when `source` activates an ability: 'CreatureAbility' for a creature (Shang-Chi), and its
+ * creature types (Lorwyn Eclipsed (18b, special): Eclipsed Realms, "activate an ability of a source of the chosen type").
+ */
+export function abilityTags(ctx: Ctx, source: ObjectId): string[] | undefined {
+  const tags: string[] = isCreature(ctx, source) ? ['CreatureAbility'] : [];
+  if (typeRestrictedMana(ctx))
+    tags.push(...(hasAllCreatureTypes(ctx, source) ? CREATURE_TYPES : subtypesOf(ctx, source)));
+  return tags.length ? tags : undefined;
+}
+
+const typeRestrictedCache = new WeakMap<object, ReadonlySet<string>>();
+
+/** Is a permanent that makes mana "only for the chosen type" in play? */
+function typeRestrictedMana(ctx: Ctx): boolean {
+  let ids = typeRestrictedCache.get(ctx.db);
+  if (!ids) {
+    ids = new Set(
+      [...ctx.db.values()]
+        .filter((d) =>
+          d.abilities.some((a) => a.kind === 'mana' && a.onlyFor === 'chosenTypeOrAbility'),
+        )
+        .map((d) => d.id),
+    );
+    typeRestrictedCache.set(ctx.db, ids);
+  }
+  return ids.size > 0 && ctx.s.battlefield.some((id) => ids.has(obj(ctx, id).defId));
+}
+
 /** Sources to tap; `pain` lists those that hurt (one entry per pip they pay). */
 export type Payment = ObjectId[] & { pain?: ObjectId[] };
 
@@ -120,7 +152,10 @@ export function manaSources(
       )
         continue;
       // Unclaimed Territory: only for creature spells of the type chosen for it.
-      const only = a.onlyFor === 'chosenType' ? (obj(ctx, id).chosenType ?? '?') : a.onlyFor;
+      const only =
+        a.onlyFor === 'chosenType' || a.onlyFor === 'chosenTypeOrAbility'
+          ? (obj(ctx, id).chosenType ?? '?')
+          : a.onlyFor;
       if (a.onlyFor === 'chosenType' && !forSubtypes.includes('Creature')) continue;
       if (only && !forSubtypes.includes(only)) continue;
       // Reality Fracture (17a): Heartwood Crafter.
@@ -149,7 +184,7 @@ export function manaSources(
         oneColor = true;
         units = Math.max(units, n);
         produces ??= [];
-        for (const c of ['W', 'U', 'B', 'R', 'G'] as const)
+        for (const c of a.oneOf ?? (['W', 'U', 'B', 'R', 'G'] as const))
           if (!produces.includes(c)) produces.push(c);
         continue;
       }

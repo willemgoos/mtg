@@ -78,6 +78,7 @@ export function cloneState(s: GameState): GameState {
         ? { lastNoncombatDamaged: s.turn.lastNoncombatDamaged.slice() }
         : {}),
       ...(s.turn.moltenTide ? { moltenTide: s.turn.moltenTide.slice() } : {}),
+      ...(s.turn.firstTokensDone ? { firstTokensDone: s.turn.firstTokensDone.slice() } : {}), // Lorwyn Eclipsed (18b, special)
       ...(s.turn.instantLoyalty ? { instantLoyalty: s.turn.instantLoyalty.slice() } : {}),
       ...(s.turn.loyaltyActivated ? { loyaltyActivated: s.turn.loyaltyActivated.slice() } : {}), // Reality Fracture (17c)
       ...(s.turn.osteomancer ? { osteomancer: s.turn.osteomancer.slice() } : {}),

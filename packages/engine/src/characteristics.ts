@@ -240,6 +240,8 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
       const st = em.ability.kind === 'static' ? em.ability.effect : undefined;
       if (st?.kind !== 'anthem' || em.controller !== o.controller) continue;
       if (!d.types.includes('Creature') && !crewed) continue;
+      // Lorwyn Eclipsed (18b, special): Oko, Shadowmoor Scion's emblem ("creatures of the chosen type"): a type filter.
+      if (st.filter?.subtype && !hasSubtype(ctx, id, st.filter.subtype)) continue;
       power += countOf(ctx, em.controller, st.power);
       toughness += countOf(ctx, em.controller, st.toughness);
       if (st.keywords?.length) {
@@ -899,6 +901,15 @@ export function hasAllCreatureTypes(ctx: Ctx, id: ObjectId): boolean {
 }
 
 /** Has this subtype (printed, gained, or every creature type for a changeling). */
+/**
+ * The creature type chosen for the source as it entered. Lorwyn Eclipsed (18b, special): once it has left the battlefield the
+ * type it had is used (Dawn-Blessed Pennant, sacrificed as a cost: "return target card of the chosen type").
+ */
+export function chosenTypeOf(ctx: Ctx, sourceId: ObjectId): string | undefined {
+  const o = ctx.s.objects[sourceId];
+  return o?.chosenType ?? (o && o.zone !== 'battlefield' ? o.lastChosenType : undefined);
+}
+
 export function hasSubtype(ctx: Ctx, id: ObjectId, subtype: string): boolean {
   return subtypesOf(ctx, id).includes(subtype) || changeling(ctx, id, subtype);
 }
@@ -1045,7 +1056,7 @@ export function matchesFilter(
   // Marvel Super Heroes Jumpstart (Marvelous): Ms. Marvel, Elastic Ally.
   if (filter.powerAboveBase && characteristics(ctx, id).power <= basePowerOf(ctx, id)) return false;
   if (filter.chosenTypeOfSource) {
-    const chosen = sourceId ? obj(ctx, sourceId).chosenType : undefined;
+    const chosen = sourceId ? chosenTypeOf(ctx, sourceId) : undefined;
     if (!chosen || !hasSubtype(ctx, id, chosen)) return false;
   }
   if (filter.nontoken && obj(ctx, id).isToken) return false;
@@ -1141,6 +1152,11 @@ export function cardMatches(
   if (filter.subtype && !subtypes.includes(filter.subtype) && !changeling(ctx, id, filter.subtype))
     return false;
   if (filter.nonland && d.types.includes('Land')) return false;
+  // Lorwyn Eclipsed (18b, special): "spells you cast of the chosen type" (Gathering Stone, Chronicle of Victory), cards in hand or graveyard.
+  if (filter.chosenTypeOfSource) {
+    const chosen = sourceId ? chosenTypeOf(ctx, sourceId) : undefined;
+    if (!chosen || !hasSubtype(ctx, id, chosen)) return false;
+  }
   if (filter.enteredThisTurn && obj(ctx, id).zoneTurn !== ctx.s.turn.number) return false;
   if (filter.leftAttacking && !obj(ctx, id).leftAttacking) return false;
   if (filter.attachedToSource && (!sourceId || obj(ctx, id).attachedTo !== sourceId)) return false;
@@ -1259,7 +1275,7 @@ function avengersFilter(
   sourceId: ObjectId | undefined,
 ): boolean {
   if (filter.named && nameId(ctx, id) !== filter.named) return false;
-  const chosen = sourceId ? ctx.s.objects[sourceId]?.chosenType : undefined;
+  const chosen = sourceId ? chosenTypeOf(ctx, sourceId) : undefined;
   if (filter.chosenTypeOfSource && !(chosen && hasSubtype(ctx, id, chosen))) return false;
   if (filter.notChosenTypeOfSource && chosen && hasSubtype(ctx, id, chosen)) return false;
   const o = obj(ctx, id);

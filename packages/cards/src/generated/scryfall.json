@@ -75237,5 +75237,775 @@
    "large": "https://cards.scryfall.io/large/front/b/3/b3d33df2-a77b-4c2e-ba7f-2cc9c1505f9b.jpg?1788878215",
    "artCrop": "https://cards.scryfall.io/art_crop/front/b/3/b3d33df2-a77b-4c2e-ba7f-2cc9c1505f9b.jpg?1788878215"
   }
+ },
+ {
+  "name": "Changeling Wayfinder",
+  "scryfallId": "6c6061aa-a4da-4115-85b6-d0aa22f2386c",
+  "oracleId": "93409d98-93c8-4742-a635-2a4408e66c32",
+  "set": "ecl",
+  "collectorNumber": "1",
+  "rarity": "common",
+  "manaCost": "{3}",
+  "typeLine": "Creature — Shapeshifter",
+  "oracleText": "Changeling (This card is every creature type.)\nWhen this creature enters, you may search your library for a basic land card, reveal it, put it into your hand, then shuffle.",
+  "power": "1",
+  "toughness": "2",
+  "colors": [],
+  "keywords": [
+   "Changeling"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/c/6c6061aa-a4da-4115-85b6-d0aa22f2386c.jpg?1783904512",
+   "normal": "https://cards.scryfall.io/normal/front/6/c/6c6061aa-a4da-4115-85b6-d0aa22f2386c.jpg?1783904512",
+   "large": "https://cards.scryfall.io/large/front/6/c/6c6061aa-a4da-4115-85b6-d0aa22f2386c.jpg?1783904512",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/c/6c6061aa-a4da-4115-85b6-d0aa22f2386c.jpg?1783904512"
+  }
+ },
+ {
+  "name": "Rooftop Percher",
+  "scryfallId": "2d89595c-1542-41fe-8d23-997522922698",
+  "oracleId": "3dc73517-0767-46ae-bc8d-ee378237a509",
+  "set": "ecl",
+  "collectorNumber": "2",
+  "rarity": "common",
+  "manaCost": "{5}",
+  "typeLine": "Creature — Shapeshifter",
+  "oracleText": "Changeling (This card is every creature type.)\nFlying\nWhen this creature enters, exile up to two target cards from graveyards. You gain 3 life.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [],
+  "keywords": [
+   "Changeling",
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/d/2d89595c-1542-41fe-8d23-997522922698.jpg?1783904511",
+   "normal": "https://cards.scryfall.io/normal/front/2/d/2d89595c-1542-41fe-8d23-997522922698.jpg?1783904511",
+   "large": "https://cards.scryfall.io/large/front/2/d/2d89595c-1542-41fe-8d23-997522922698.jpg?1783904511",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/d/2d89595c-1542-41fe-8d23-997522922698.jpg?1783904511"
+  }
+ },
+ {
+  "name": "Chronicle of Victory",
+  "scryfallId": "b3c2d68d-690b-41e7-99ed-2d20c7e0a9b4",
+  "oracleId": "e949b362-4988-4482-ac51-c1049af9040c",
+  "set": "ecl",
+  "collectorNumber": "253",
+  "rarity": "mythic",
+  "manaCost": "{6}",
+  "typeLine": "Legendary Artifact",
+  "oracleText": "As Chronicle of Victory enters, choose a creature type.\nCreatures you control of the chosen type get +2/+2 and have first strike and trample.\nWhenever you cast a spell of the chosen type, draw a card.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/3/b3c2d68d-690b-41e7-99ed-2d20c7e0a9b4.jpg?1783904399",
+   "normal": "https://cards.scryfall.io/normal/front/b/3/b3c2d68d-690b-41e7-99ed-2d20c7e0a9b4.jpg?1783904399",
+   "large": "https://cards.scryfall.io/large/front/b/3/b3c2d68d-690b-41e7-99ed-2d20c7e0a9b4.jpg?1783904399",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/3/b3c2d68d-690b-41e7-99ed-2d20c7e0a9b4.jpg?1783904399"
+  }
+ },
+ {
+  "name": "Dawn-Blessed Pennant",
+  "scryfallId": "294266b6-0343-4fa5-90b8-0adf7df490e4",
+  "oracleId": "311eef28-21e9-44fa-96df-d281f0a9ba34",
+  "set": "ecl",
+  "collectorNumber": "254",
+  "rarity": "uncommon",
+  "manaCost": "{1}",
+  "typeLine": "Artifact",
+  "oracleText": "As this artifact enters, choose Elemental, Elf, Faerie, Giant, Goblin, Kithkin, Merfolk, or Treefolk.\nWhenever a permanent you control of the chosen type enters, you gain 1 life.\n{2}, {T}, Sacrifice this artifact: Return target card of the chosen type from your graveyard to your hand.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/9/294266b6-0343-4fa5-90b8-0adf7df490e4.jpg?1783904399",
+   "normal": "https://cards.scryfall.io/normal/front/2/9/294266b6-0343-4fa5-90b8-0adf7df490e4.jpg?1783904399",
+   "large": "https://cards.scryfall.io/large/front/2/9/294266b6-0343-4fa5-90b8-0adf7df490e4.jpg?1783904399",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/9/294266b6-0343-4fa5-90b8-0adf7df490e4.jpg?1783904399"
+  }
+ },
+ {
+  "name": "Firdoch Core",
+  "scryfallId": "8e45cd37-bf97-4742-978d-96f96ed653cd",
+  "oracleId": "126c75c0-414b-4e55-8747-2b5566ce716f",
+  "set": "ecl",
+  "collectorNumber": "255",
+  "rarity": "common",
+  "manaCost": "{3}",
+  "typeLine": "Kindred Artifact — Shapeshifter",
+  "oracleText": "Changeling (This card is every creature type.)\n{T}: Add one mana of any color.\n{4}: This artifact becomes a 4/4 artifact creature until end of turn.",
+  "colors": [],
+  "keywords": [
+   "Changeling"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/e/8e45cd37-bf97-4742-978d-96f96ed653cd.jpg?1783904397",
+   "normal": "https://cards.scryfall.io/normal/front/8/e/8e45cd37-bf97-4742-978d-96f96ed653cd.jpg?1783904397",
+   "large": "https://cards.scryfall.io/large/front/8/e/8e45cd37-bf97-4742-978d-96f96ed653cd.jpg?1783904397",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/e/8e45cd37-bf97-4742-978d-96f96ed653cd.jpg?1783904397"
+  }
+ },
+ {
+  "name": "Foraging Wickermaw",
+  "scryfallId": "f524bc08-caeb-4362-b960-eb8e0e4159d0",
+  "oracleId": "11ceb2db-021e-422d-976e-7bfe3b67a8aa",
+  "set": "ecl",
+  "collectorNumber": "256",
+  "rarity": "common",
+  "manaCost": "{2}",
+  "typeLine": "Artifact Creature — Scarecrow",
+  "oracleText": "When this creature enters, surveil 1. (Look at the top card of your library. You may put it into your graveyard.)\n{1}: Add one mana of any color. This creature becomes that color until end of turn. Activate only once each turn.",
+  "power": "1",
+  "toughness": "3",
+  "colors": [],
+  "keywords": [
+   "Surveil"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/5/f524bc08-caeb-4362-b960-eb8e0e4159d0.jpg?1783904398",
+   "normal": "https://cards.scryfall.io/normal/front/f/5/f524bc08-caeb-4362-b960-eb8e0e4159d0.jpg?1783904398",
+   "large": "https://cards.scryfall.io/large/front/f/5/f524bc08-caeb-4362-b960-eb8e0e4159d0.jpg?1783904398",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/5/f524bc08-caeb-4362-b960-eb8e0e4159d0.jpg?1783904398"
+  }
+ },
+ {
+  "name": "Gathering Stone",
+  "scryfallId": "81dfbfe1-143a-4637-b683-a34cfc51993d",
+  "oracleId": "9f6d6e90-7462-46e5-bf2f-725b4badc394",
+  "set": "ecl",
+  "collectorNumber": "257",
+  "rarity": "uncommon",
+  "manaCost": "{4}",
+  "typeLine": "Artifact",
+  "oracleText": "As this artifact enters, choose a creature type.\nSpells you cast of the chosen type cost {1} less to cast.\nWhen this artifact enters and at the beginning of your upkeep, look at the top card of your library. If it's a card of the chosen type, you may reveal it and put it into your hand. If you don't put the card into your hand, you may put it into your graveyard.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/1/81dfbfe1-143a-4637-b683-a34cfc51993d.jpg?1783904397",
+   "normal": "https://cards.scryfall.io/normal/front/8/1/81dfbfe1-143a-4637-b683-a34cfc51993d.jpg?1783904397",
+   "large": "https://cards.scryfall.io/large/front/8/1/81dfbfe1-143a-4637-b683-a34cfc51993d.jpg?1783904397",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/1/81dfbfe1-143a-4637-b683-a34cfc51993d.jpg?1783904397"
+  }
+ },
+ {
+  "name": "Mirrormind Crown",
+  "scryfallId": "061d765e-df27-406a-9ba0-b51b0cbb65da",
+  "oracleId": "353db389-b829-4e66-85d5-6018bc87c3e0",
+  "set": "ecl",
+  "collectorNumber": "258",
+  "rarity": "rare",
+  "manaCost": "{4}",
+  "typeLine": "Artifact — Equipment",
+  "oracleText": "As long as this Equipment is attached to a creature, the first time you would create one or more tokens each turn, you may instead create that many tokens that are copies of equipped creature.\nEquip {2}",
+  "colors": [],
+  "keywords": [
+   "Equip"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/6/061d765e-df27-406a-9ba0-b51b0cbb65da.jpg?1783904397",
+   "normal": "https://cards.scryfall.io/normal/front/0/6/061d765e-df27-406a-9ba0-b51b0cbb65da.jpg?1783904397",
+   "large": "https://cards.scryfall.io/large/front/0/6/061d765e-df27-406a-9ba0-b51b0cbb65da.jpg?1783904397",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/6/061d765e-df27-406a-9ba0-b51b0cbb65da.jpg?1783904397"
+  }
+ },
+ {
+  "name": "Puca's Eye",
+  "scryfallId": "c3a5ca02-3829-4c42-b0dc-98b660f8a8f0",
+  "oracleId": "499b4cf9-2aaa-45a0-8362-77b727b7f7cc",
+  "set": "ecl",
+  "collectorNumber": "259",
+  "rarity": "uncommon",
+  "manaCost": "{2}",
+  "typeLine": "Artifact",
+  "oracleText": "When this artifact enters, draw a card, then choose a color. This artifact becomes the chosen color.\n{3}, {T}: Draw a card. Activate only if there are five colors among permanents you control.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/3/c3a5ca02-3829-4c42-b0dc-98b660f8a8f0.jpg?1783904399",
+   "normal": "https://cards.scryfall.io/normal/front/c/3/c3a5ca02-3829-4c42-b0dc-98b660f8a8f0.jpg?1783904399",
+   "large": "https://cards.scryfall.io/large/front/c/3/c3a5ca02-3829-4c42-b0dc-98b660f8a8f0.jpg?1783904399",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/3/c3a5ca02-3829-4c42-b0dc-98b660f8a8f0.jpg?1783904399"
+  }
+ },
+ {
+  "name": "Springleaf Drum",
+  "scryfallId": "5bc9d645-0220-4a65-bbc7-abc64ded548e",
+  "oracleId": "bdeb440d-a714-40e8-9038-f651e6ae45fb",
+  "set": "bng",
+  "collectorNumber": "162",
+  "rarity": "uncommon",
+  "manaCost": "{1}",
+  "typeLine": "Artifact",
+  "oracleText": "{T}, Tap an untapped creature you control: Add one mana of any color.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/b/5bc9d645-0220-4a65-bbc7-abc64ded548e.jpg?1783939520",
+   "normal": "https://cards.scryfall.io/normal/front/5/b/5bc9d645-0220-4a65-bbc7-abc64ded548e.jpg?1783939520",
+   "large": "https://cards.scryfall.io/large/front/5/b/5bc9d645-0220-4a65-bbc7-abc64ded548e.jpg?1783939520",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/b/5bc9d645-0220-4a65-bbc7-abc64ded548e.jpg?1783939520"
+  }
+ },
+ {
+  "name": "Stalactite Dagger",
+  "scryfallId": "6954df09-95f3-46cf-9ba8-2a1aea653d8f",
+  "oracleId": "064c3269-c012-4fc7-84c3-5f147a82a03c",
+  "set": "ecl",
+  "collectorNumber": "261",
+  "rarity": "common",
+  "manaCost": "{2}",
+  "typeLine": "Artifact — Equipment",
+  "oracleText": "When this Equipment enters, create a 1/1 colorless Shapeshifter creature token with changeling. (It's every creature type.)\nEquipped creature gets +1/+1 and is all creature types.\nEquip {2} ({2}: Attach to target creature you control. Equip only as a sorcery.)",
+  "colors": [],
+  "keywords": [
+   "Equip"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/9/6954df09-95f3-46cf-9ba8-2a1aea653d8f.jpg?1783904396",
+   "normal": "https://cards.scryfall.io/normal/front/6/9/6954df09-95f3-46cf-9ba8-2a1aea653d8f.jpg?1783904396",
+   "large": "https://cards.scryfall.io/large/front/6/9/6954df09-95f3-46cf-9ba8-2a1aea653d8f.jpg?1783904396",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/9/6954df09-95f3-46cf-9ba8-2a1aea653d8f.jpg?1783904396"
+  }
+ },
+ {
+  "name": "Eclipsed Realms",
+  "scryfallId": "a174f0db-8b4f-4c37-9583-44c92d37b9c0",
+  "oracleId": "5715ed43-395c-4877-99a7-8e28e7bf9dce",
+  "set": "ecl",
+  "collectorNumber": "263",
+  "rarity": "uncommon",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "As this land enters, choose Elemental, Elf, Faerie, Giant, Goblin, Kithkin, Merfolk, or Treefolk.\n{T}: Add {C}.\n{T}: Add one mana of any color. Spend this mana only to cast a spell of the chosen type or activate an ability of a source of the chosen type.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/1/a174f0db-8b4f-4c37-9583-44c92d37b9c0.jpg?1783904396",
+   "normal": "https://cards.scryfall.io/normal/front/a/1/a174f0db-8b4f-4c37-9583-44c92d37b9c0.jpg?1783904396",
+   "large": "https://cards.scryfall.io/large/front/a/1/a174f0db-8b4f-4c37-9583-44c92d37b9c0.jpg?1783904396",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/1/a174f0db-8b4f-4c37-9583-44c92d37b9c0.jpg?1783904396"
+  }
+ },
+ {
+  "name": "Hallowed Fountain",
+  "scryfallId": "f321aa38-7aaf-48fd-b516-18e702fbddef",
+  "oracleId": "f1750962-a87c-49f6-b731-02ae971ac6ea",
+  "set": "sld",
+  "collectorNumber": "123",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Land — Plains Island",
+  "oracleText": "({T}: Add {W} or {U}.)\nAs this land enters, you may pay 2 life. If you don't, it enters tapped.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/3/f321aa38-7aaf-48fd-b516-18e702fbddef.jpg?1783927083",
+   "normal": "https://cards.scryfall.io/normal/front/f/3/f321aa38-7aaf-48fd-b516-18e702fbddef.jpg?1783927083",
+   "large": "https://cards.scryfall.io/large/front/f/3/f321aa38-7aaf-48fd-b516-18e702fbddef.jpg?1783927083",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/3/f321aa38-7aaf-48fd-b516-18e702fbddef.jpg?1783927083"
+  }
+ },
+ {
+  "name": "Brigid, Clachan's Heart",
+  "scryfallId": "cb7d5bbb-4f68-4e38-8bb0-a95af21b24c8",
+  "oracleId": "60fc89a1-cc6f-4a32-84c3-09abf7a4a1df",
+  "set": "ecl",
+  "collectorNumber": "7",
+  "rarity": "rare",
+  "manaCost": "{2}{W}",
+  "typeLine": "Legendary Creature — Kithkin Warrior",
+  "oracleText": "Whenever this creature enters or transforms into Brigid, Clachan's Heart, create a 1/1 green and white Kithkin creature token.\nAt the beginning of your first main phase, you may pay {G}. If you do, transform Brigid.",
+  "power": "3",
+  "toughness": "2",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Transform"
+  ],
+  "back": "Brigid, Doun's Mind",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/b/cb7d5bbb-4f68-4e38-8bb0-a95af21b24c8.jpg?1783904517",
+   "normal": "https://cards.scryfall.io/normal/front/c/b/cb7d5bbb-4f68-4e38-8bb0-a95af21b24c8.jpg?1783904517",
+   "large": "https://cards.scryfall.io/large/front/c/b/cb7d5bbb-4f68-4e38-8bb0-a95af21b24c8.jpg?1783904517",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/b/cb7d5bbb-4f68-4e38-8bb0-a95af21b24c8.jpg?1783904517"
+  }
+ },
+ {
+  "name": "Brigid, Doun's Mind",
+  "scryfallId": "cb7d5bbb-4f68-4e38-8bb0-a95af21b24c8",
+  "oracleId": "60fc89a1-cc6f-4a32-84c3-09abf7a4a1df",
+  "set": "ecl",
+  "collectorNumber": "7",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Legendary Creature — Kithkin Soldier",
+  "oracleText": "{T}: Add X {G} or X {W}, where X is the number of other creatures you control.\nAt the beginning of your first main phase, you may pay {W}. If you do, transform Brigid.",
+  "power": "3",
+  "toughness": "2",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Transform"
+  ],
+  "front": "Brigid, Clachan's Heart",
+  "image": {
+   "small": "https://cards.scryfall.io/small/back/c/b/cb7d5bbb-4f68-4e38-8bb0-a95af21b24c8.jpg?1783904517",
+   "normal": "https://cards.scryfall.io/normal/back/c/b/cb7d5bbb-4f68-4e38-8bb0-a95af21b24c8.jpg?1783904517",
+   "large": "https://cards.scryfall.io/large/back/c/b/cb7d5bbb-4f68-4e38-8bb0-a95af21b24c8.jpg?1783904517",
+   "artCrop": "https://cards.scryfall.io/art_crop/back/c/b/cb7d5bbb-4f68-4e38-8bb0-a95af21b24c8.jpg?1783904517"
+  }
+ },
+ {
+  "name": "Eirdu, Carrier of Dawn",
+  "scryfallId": "b2d9d5ca-7e15-437a-bdfc-5972b42148fe",
+  "oracleId": "36af3c2c-49d7-46ea-ab02-c254b332448e",
+  "set": "ecl",
+  "collectorNumber": "13",
+  "rarity": "mythic",
+  "manaCost": "{3}{W}{W}",
+  "typeLine": "Legendary Creature — Elemental God",
+  "oracleText": "Flying, lifelink\nCreature spells you cast have convoke. (Your creatures can help cast those spells. Each creature you tap while casting a creature spell pays for {1} or one mana of that creature's color.)\nAt the beginning of your first main phase, you may pay {B}. If you do, transform Eirdu.",
+  "power": "5",
+  "toughness": "5",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Flying",
+   "Lifelink",
+   "Transform"
+  ],
+  "back": "Isilu, Carrier of Twilight",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/2/b2d9d5ca-7e15-437a-bdfc-5972b42148fe.jpg?1783904521",
+   "normal": "https://cards.scryfall.io/normal/front/b/2/b2d9d5ca-7e15-437a-bdfc-5972b42148fe.jpg?1783904521",
+   "large": "https://cards.scryfall.io/large/front/b/2/b2d9d5ca-7e15-437a-bdfc-5972b42148fe.jpg?1783904521",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/2/b2d9d5ca-7e15-437a-bdfc-5972b42148fe.jpg?1783904521"
+  }
+ },
+ {
+  "name": "Isilu, Carrier of Twilight",
+  "scryfallId": "b2d9d5ca-7e15-437a-bdfc-5972b42148fe",
+  "oracleId": "36af3c2c-49d7-46ea-ab02-c254b332448e",
+  "set": "ecl",
+  "collectorNumber": "13",
+  "rarity": "mythic",
+  "manaCost": "",
+  "typeLine": "Legendary Creature — Elemental God",
+  "oracleText": "Flying, lifelink\nEach other nontoken creature you control has persist. (When it dies, if it had no -1/-1 counters on it, return it to the battlefield under its owner's control with a -1/-1 counter on it.)\nAt the beginning of your first main phase, you may pay {W}. If you do, transform Isilu.",
+  "power": "5",
+  "toughness": "5",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Flying",
+   "Lifelink",
+   "Transform"
+  ],
+  "front": "Eirdu, Carrier of Dawn",
+  "image": {
+   "small": "https://cards.scryfall.io/small/back/b/2/b2d9d5ca-7e15-437a-bdfc-5972b42148fe.jpg?1783904521",
+   "normal": "https://cards.scryfall.io/normal/back/b/2/b2d9d5ca-7e15-437a-bdfc-5972b42148fe.jpg?1783904521",
+   "large": "https://cards.scryfall.io/large/back/b/2/b2d9d5ca-7e15-437a-bdfc-5972b42148fe.jpg?1783904521",
+   "artCrop": "https://cards.scryfall.io/art_crop/back/b/2/b2d9d5ca-7e15-437a-bdfc-5972b42148fe.jpg?1783904521"
+  }
+ },
+ {
+  "name": "Oko, Lorwyn Liege",
+  "scryfallId": "1dab370a-1067-4d94-be1f-10362d4abf5a",
+  "oracleId": "a0c956dc-d7de-4f11-b76f-7537fbee1731",
+  "set": "ecl",
+  "collectorNumber": "61",
+  "rarity": "mythic",
+  "manaCost": "{2}{U}",
+  "typeLine": "Legendary Planeswalker — Oko",
+  "oracleText": "At the beginning of your first main phase, you may pay {G}. If you do, transform Oko.\n+2: Up to one target creature gains all creature types. (This effect doesn't end.)\n+1: Target creature gets -2/-0 until your next turn.",
+  "loyalty": "3",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Transform"
+  ],
+  "back": "Oko, Shadowmoor Scion",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/d/1dab370a-1067-4d94-be1f-10362d4abf5a.jpg?1783904490",
+   "normal": "https://cards.scryfall.io/normal/front/1/d/1dab370a-1067-4d94-be1f-10362d4abf5a.jpg?1783904490",
+   "large": "https://cards.scryfall.io/large/front/1/d/1dab370a-1067-4d94-be1f-10362d4abf5a.jpg?1783904490",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/d/1dab370a-1067-4d94-be1f-10362d4abf5a.jpg?1783904490"
+  }
+ },
+ {
+  "name": "Oko, Shadowmoor Scion",
+  "scryfallId": "1dab370a-1067-4d94-be1f-10362d4abf5a",
+  "oracleId": "a0c956dc-d7de-4f11-b76f-7537fbee1731",
+  "set": "ecl",
+  "collectorNumber": "61",
+  "rarity": "mythic",
+  "manaCost": "",
+  "typeLine": "Legendary Planeswalker — Oko",
+  "oracleText": "At the beginning of your first main phase, you may pay {U}. If you do, transform Oko.\n−1: Mill three cards. You may put a permanent card from among them into your hand.\n−3: Create two 3/3 green Elk creature tokens.\n−6: Choose a creature type. You get an emblem with \"Creatures you control of the chosen type get +3/+3 and have vigilance and hexproof.\"",
+  "loyalty": "3",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Transform",
+   "Mill"
+  ],
+  "front": "Oko, Lorwyn Liege",
+  "image": {
+   "small": "https://cards.scryfall.io/small/back/1/d/1dab370a-1067-4d94-be1f-10362d4abf5a.jpg?1783904490",
+   "normal": "https://cards.scryfall.io/normal/back/1/d/1dab370a-1067-4d94-be1f-10362d4abf5a.jpg?1783904490",
+   "large": "https://cards.scryfall.io/large/back/1/d/1dab370a-1067-4d94-be1f-10362d4abf5a.jpg?1783904490",
+   "artCrop": "https://cards.scryfall.io/art_crop/back/1/d/1dab370a-1067-4d94-be1f-10362d4abf5a.jpg?1783904490"
+  }
+ },
+ {
+  "name": "Sygg, Wanderwine Wisdom",
+  "scryfallId": "70adc870-f0db-4d4b-863b-673c2c258751",
+  "oracleId": "9cc91ac5-6f2b-4fc0-b810-cdc92eebe6de",
+  "set": "ecl",
+  "collectorNumber": "76",
+  "rarity": "rare",
+  "manaCost": "{1}{U}",
+  "typeLine": "Legendary Creature — Merfolk Wizard",
+  "oracleText": "Sygg can't be blocked.\nWhenever this creature enters or transforms into Sygg, Wanderwine Wisdom, target creature gains \"Whenever this creature deals combat damage to a player or planeswalker, draw a card\" until end of turn.\nAt the beginning of your first main phase, you may pay {W}. If you do, transform Sygg.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Transform"
+  ],
+  "back": "Sygg, Wanderbrine Shield",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/0/70adc870-f0db-4d4b-863b-673c2c258751.jpg?1783904483",
+   "normal": "https://cards.scryfall.io/normal/front/7/0/70adc870-f0db-4d4b-863b-673c2c258751.jpg?1783904483",
+   "large": "https://cards.scryfall.io/large/front/7/0/70adc870-f0db-4d4b-863b-673c2c258751.jpg?1783904483",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/0/70adc870-f0db-4d4b-863b-673c2c258751.jpg?1783904483"
+  }
+ },
+ {
+  "name": "Sygg, Wanderbrine Shield",
+  "scryfallId": "70adc870-f0db-4d4b-863b-673c2c258751",
+  "oracleId": "9cc91ac5-6f2b-4fc0-b810-cdc92eebe6de",
+  "set": "ecl",
+  "collectorNumber": "76",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Legendary Creature — Merfolk Rogue",
+  "oracleText": "Sygg can't be blocked.\nWhenever this creature transforms into Sygg, Wanderbrine Shield, target creature you control gains protection from each color until your next turn.\nAt the beginning of your first main phase, you may pay {U}. If you do, transform Sygg.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Transform"
+  ],
+  "front": "Sygg, Wanderwine Wisdom",
+  "image": {
+   "small": "https://cards.scryfall.io/small/back/7/0/70adc870-f0db-4d4b-863b-673c2c258751.jpg?1783904483",
+   "normal": "https://cards.scryfall.io/normal/back/7/0/70adc870-f0db-4d4b-863b-673c2c258751.jpg?1783904483",
+   "large": "https://cards.scryfall.io/large/back/7/0/70adc870-f0db-4d4b-863b-673c2c258751.jpg?1783904483",
+   "artCrop": "https://cards.scryfall.io/art_crop/back/7/0/70adc870-f0db-4d4b-863b-673c2c258751.jpg?1783904483"
+  }
+ },
+ {
+  "name": "Grub, Storied Matriarch",
+  "scryfallId": "1f51adf8-8234-4dae-aedf-7633310d5111",
+  "oracleId": "180286e4-67fa-44d5-9e90-4a4e99c016a7",
+  "set": "ecl",
+  "collectorNumber": "105",
+  "rarity": "rare",
+  "manaCost": "{2}{B}",
+  "typeLine": "Legendary Creature — Goblin Warlock",
+  "oracleText": "Menace\nWhenever this creature enters or transforms into Grub, Storied Matriarch, return up to one target Goblin card from your graveyard to your hand.\nAt the beginning of your first main phase, you may pay {R}. If you do, transform Grub.",
+  "power": "2",
+  "toughness": "1",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Transform",
+   "Menace"
+  ],
+  "back": "Grub, Notorious Auntie",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/f/1f51adf8-8234-4dae-aedf-7633310d5111.jpg?1783904468",
+   "normal": "https://cards.scryfall.io/normal/front/1/f/1f51adf8-8234-4dae-aedf-7633310d5111.jpg?1783904468",
+   "large": "https://cards.scryfall.io/large/front/1/f/1f51adf8-8234-4dae-aedf-7633310d5111.jpg?1783904468",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/f/1f51adf8-8234-4dae-aedf-7633310d5111.jpg?1783904468"
+  }
+ },
+ {
+  "name": "Grub, Notorious Auntie",
+  "scryfallId": "1f51adf8-8234-4dae-aedf-7633310d5111",
+  "oracleId": "180286e4-67fa-44d5-9e90-4a4e99c016a7",
+  "set": "ecl",
+  "collectorNumber": "105",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Legendary Creature — Goblin Warrior",
+  "oracleText": "Menace\nWhenever Grub attacks, you may blight 1. If you do, create a tapped and attacking token that's a copy of the blighted creature, except it has \"At the beginning of the end step, sacrifice this token.\"\nAt the beginning of your first main phase, you may pay {B}. If you do, transform Grub.",
+  "power": "2",
+  "toughness": "1",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Blight",
+   "Transform",
+   "Menace"
+  ],
+  "front": "Grub, Storied Matriarch",
+  "image": {
+   "small": "https://cards.scryfall.io/small/back/1/f/1f51adf8-8234-4dae-aedf-7633310d5111.jpg?1783904468",
+   "normal": "https://cards.scryfall.io/normal/back/1/f/1f51adf8-8234-4dae-aedf-7633310d5111.jpg?1783904468",
+   "large": "https://cards.scryfall.io/large/back/1/f/1f51adf8-8234-4dae-aedf-7633310d5111.jpg?1783904468",
+   "artCrop": "https://cards.scryfall.io/art_crop/back/1/f/1f51adf8-8234-4dae-aedf-7633310d5111.jpg?1783904468"
+  }
+ },
+ {
+  "name": "Ashling, Rekindled",
+  "scryfallId": "7d7faefe-9c0d-45b6-8ea4-5fa666762a2c",
+  "oracleId": "31fc5d8b-94bc-4688-8a84-f15800e717a8",
+  "set": "ecl",
+  "collectorNumber": "124",
+  "rarity": "rare",
+  "manaCost": "{1}{R}",
+  "typeLine": "Legendary Creature — Elemental Sorcerer",
+  "oracleText": "Whenever this creature enters or transforms into Ashling, Rekindled, you may discard a card. If you do, draw a card.\nAt the beginning of your first main phase, you may pay {U}. If you do, transform Ashling.",
+  "power": "1",
+  "toughness": "3",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Transform"
+  ],
+  "back": "Ashling, Rimebound",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/d/7d7faefe-9c0d-45b6-8ea4-5fa666762a2c.jpg?1783904460",
+   "normal": "https://cards.scryfall.io/normal/front/7/d/7d7faefe-9c0d-45b6-8ea4-5fa666762a2c.jpg?1783904460",
+   "large": "https://cards.scryfall.io/large/front/7/d/7d7faefe-9c0d-45b6-8ea4-5fa666762a2c.jpg?1783904460",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/d/7d7faefe-9c0d-45b6-8ea4-5fa666762a2c.jpg?1783904460"
+  }
+ },
+ {
+  "name": "Ashling, Rimebound",
+  "scryfallId": "7d7faefe-9c0d-45b6-8ea4-5fa666762a2c",
+  "oracleId": "31fc5d8b-94bc-4688-8a84-f15800e717a8",
+  "set": "ecl",
+  "collectorNumber": "124",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Legendary Creature — Elemental Wizard",
+  "oracleText": "Whenever this creature transforms into Ashling, Rimebound and at the beginning of your first main phase, add two mana of any one color. Spend this mana only to cast spells with mana value 4 or greater.\nAt the beginning of your first main phase, you may pay {R}. If you do, transform Ashling.",
+  "power": "1",
+  "toughness": "3",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Transform"
+  ],
+  "front": "Ashling, Rekindled",
+  "image": {
+   "small": "https://cards.scryfall.io/small/back/7/d/7d7faefe-9c0d-45b6-8ea4-5fa666762a2c.jpg?1783904460",
+   "normal": "https://cards.scryfall.io/normal/back/7/d/7d7faefe-9c0d-45b6-8ea4-5fa666762a2c.jpg?1783904460",
+   "large": "https://cards.scryfall.io/large/back/7/d/7d7faefe-9c0d-45b6-8ea4-5fa666762a2c.jpg?1783904460",
+   "artCrop": "https://cards.scryfall.io/art_crop/back/7/d/7d7faefe-9c0d-45b6-8ea4-5fa666762a2c.jpg?1783904460"
+  }
+ },
+ {
+  "name": "Trystan, Callous Cultivator",
+  "scryfallId": "2094f9b6-ce84-47d9-8819-81db14ba483f",
+  "oracleId": "961d1128-a022-480c-918e-16ba0abf844b",
+  "set": "ecl",
+  "collectorNumber": "199",
+  "rarity": "rare",
+  "manaCost": "{2}{G}",
+  "typeLine": "Legendary Creature — Elf Druid",
+  "oracleText": "Deathtouch\nWhenever this creature enters or transforms into Trystan, Callous Cultivator, mill three cards. Then if there is an Elf card in your graveyard, you gain 2 life.\nAt the beginning of your first main phase, you may pay {B}. If you do, transform Trystan.",
+  "power": "3",
+  "toughness": "4",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Transform",
+   "Mill",
+   "Deathtouch"
+  ],
+  "back": "Trystan, Penitent Culler",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/0/2094f9b6-ce84-47d9-8819-81db14ba483f.jpg?1783904424",
+   "normal": "https://cards.scryfall.io/normal/front/2/0/2094f9b6-ce84-47d9-8819-81db14ba483f.jpg?1783904424",
+   "large": "https://cards.scryfall.io/large/front/2/0/2094f9b6-ce84-47d9-8819-81db14ba483f.jpg?1783904424",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/0/2094f9b6-ce84-47d9-8819-81db14ba483f.jpg?1783904424"
+  }
+ },
+ {
+  "name": "Trystan, Penitent Culler",
+  "scryfallId": "2094f9b6-ce84-47d9-8819-81db14ba483f",
+  "oracleId": "961d1128-a022-480c-918e-16ba0abf844b",
+  "set": "ecl",
+  "collectorNumber": "199",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Legendary Creature — Elf Warlock",
+  "oracleText": "Deathtouch\nWhenever this creature transforms into Trystan, Penitent Culler, mill three cards, then you may exile an Elf card from your graveyard. If you do, each opponent loses 2 life.\nAt the beginning of your first main phase, you may pay {G}. If you do, transform Trystan.",
+  "power": "3",
+  "toughness": "4",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Transform",
+   "Mill",
+   "Deathtouch"
+  ],
+  "front": "Trystan, Callous Cultivator",
+  "image": {
+   "small": "https://cards.scryfall.io/small/back/2/0/2094f9b6-ce84-47d9-8819-81db14ba483f.jpg?1783904424",
+   "normal": "https://cards.scryfall.io/normal/back/2/0/2094f9b6-ce84-47d9-8819-81db14ba483f.jpg?1783904424",
+   "large": "https://cards.scryfall.io/large/back/2/0/2094f9b6-ce84-47d9-8819-81db14ba483f.jpg?1783904424",
+   "artCrop": "https://cards.scryfall.io/art_crop/back/2/0/2094f9b6-ce84-47d9-8819-81db14ba483f.jpg?1783904424"
+  }
+ },
+ {
+  "name": "Catharsis",
+  "scryfallId": "affb4500-2704-49fc-bbb4-02ed4bfb3b76",
+  "oracleId": "9e3303aa-2484-4832-86ac-f5ae290d02f1",
+  "set": "ecl",
+  "collectorNumber": "209",
+  "rarity": "mythic",
+  "manaCost": "{4}{R/W}{R/W}",
+  "typeLine": "Creature — Elemental Incarnation",
+  "oracleText": "When this creature enters, if {W}{W} was spent to cast it, create two 1/1 green and white Kithkin creature tokens.\nWhen this creature enters, if {R}{R} was spent to cast it, creatures you control get +1/+1 and gain haste until end of turn.\nEvoke {R/W}{R/W} (You may cast this spell for its evoke cost. If you do, it's sacrificed when it enters.)",
+  "power": "3",
+  "toughness": "4",
+  "colors": [
+   "R",
+   "W"
+  ],
+  "keywords": [
+   "Evoke"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/f/affb4500-2704-49fc-bbb4-02ed4bfb3b76.jpg?1783904415",
+   "normal": "https://cards.scryfall.io/normal/front/a/f/affb4500-2704-49fc-bbb4-02ed4bfb3b76.jpg?1783904415",
+   "large": "https://cards.scryfall.io/large/front/a/f/affb4500-2704-49fc-bbb4-02ed4bfb3b76.jpg?1783904415",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/f/affb4500-2704-49fc-bbb4-02ed4bfb3b76.jpg?1783904415"
+  }
+ },
+ {
+  "name": "Deceit",
+  "scryfallId": "bd82c9e4-9871-4e6d-b691-ee00b4b9a3c6",
+  "oracleId": "d7dddeac-c6ed-4111-ba40-e2830c08d480",
+  "set": "ecl",
+  "collectorNumber": "212",
+  "rarity": "mythic",
+  "manaCost": "{4}{U/B}{U/B}",
+  "typeLine": "Creature — Elemental Incarnation",
+  "oracleText": "When this creature enters, if {U}{U} was spent to cast it, return up to one other target nonland permanent to its owner's hand.\nWhen this creature enters, if {B}{B} was spent to cast it, target opponent reveals their hand. You choose a nonland card from it. That player discards that card.\nEvoke {U/B}{U/B}",
+  "power": "5",
+  "toughness": "5",
+  "colors": [
+   "B",
+   "U"
+  ],
+  "keywords": [
+   "Evoke"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/d/bd82c9e4-9871-4e6d-b691-ee00b4b9a3c6.jpg?1783904420",
+   "normal": "https://cards.scryfall.io/normal/front/b/d/bd82c9e4-9871-4e6d-b691-ee00b4b9a3c6.jpg?1783904420",
+   "large": "https://cards.scryfall.io/large/front/b/d/bd82c9e4-9871-4e6d-b691-ee00b4b9a3c6.jpg?1783904420",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/d/bd82c9e4-9871-4e6d-b691-ee00b4b9a3c6.jpg?1783904420"
+  }
+ },
+ {
+  "name": "Emptiness",
+  "scryfallId": "c6409eca-bef6-4f3a-8bbb-d69ec5dbfc13",
+  "oracleId": "dc5dd7f7-375e-4d51-85cb-1abf16ca3854",
+  "set": "ecl",
+  "collectorNumber": "222",
+  "rarity": "mythic",
+  "manaCost": "{4}{W/B}{W/B}",
+  "typeLine": "Creature — Elemental Incarnation",
+  "oracleText": "When this creature enters, if {W}{W} was spent to cast it, return target creature card with mana value 3 or less from your graveyard to the battlefield.\nWhen this creature enters, if {B}{B} was spent to cast it, put three -1/-1 counters on up to one target creature.\nEvoke {W/B}{W/B}",
+  "power": "3",
+  "toughness": "5",
+  "colors": [
+   "B",
+   "W"
+  ],
+  "keywords": [
+   "Evoke"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/6/c6409eca-bef6-4f3a-8bbb-d69ec5dbfc13.jpg?1783904411",
+   "normal": "https://cards.scryfall.io/normal/front/c/6/c6409eca-bef6-4f3a-8bbb-d69ec5dbfc13.jpg?1783904411",
+   "large": "https://cards.scryfall.io/large/front/c/6/c6409eca-bef6-4f3a-8bbb-d69ec5dbfc13.jpg?1783904411",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/6/c6409eca-bef6-4f3a-8bbb-d69ec5dbfc13.jpg?1783904411"
+  }
+ },
+ {
+  "name": "Vibrance",
+  "scryfallId": "b9f71c3b-0840-475f-9c17-fdacbc7f3213",
+  "oracleId": "52867cdd-8bf2-4cae-bb8d-0f16a18a455b",
+  "set": "ecl",
+  "collectorNumber": "249",
+  "rarity": "mythic",
+  "manaCost": "{3}{R/G}{R/G}",
+  "typeLine": "Creature — Elemental Incarnation",
+  "oracleText": "When this creature enters, if {R}{R} was spent to cast it, this creature deals 3 damage to any target.\nWhen this creature enters, if {G}{G} was spent to cast it, search your library for a land card, reveal it, put it into your hand, then shuffle. You gain 2 life.\nEvoke {R/G}{R/G}",
+  "power": "4",
+  "toughness": "4",
+  "colors": [
+   "G",
+   "R"
+  ],
+  "keywords": [
+   "Evoke"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/9/b9f71c3b-0840-475f-9c17-fdacbc7f3213.jpg?1783904400",
+   "normal": "https://cards.scryfall.io/normal/front/b/9/b9f71c3b-0840-475f-9c17-fdacbc7f3213.jpg?1783904400",
+   "large": "https://cards.scryfall.io/large/front/b/9/b9f71c3b-0840-475f-9c17-fdacbc7f3213.jpg?1783904400",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/9/b9f71c3b-0840-475f-9c17-fdacbc7f3213.jpg?1783904400"
+  }
+ },
+ {
+  "name": "Wistfulness",
+  "scryfallId": "db9aa986-ac2a-44bb-a88b-04c5d0d502b2",
+  "oracleId": "e5e8fce4-c97a-4ae4-9583-003c565e3bd6",
+  "set": "ecl",
+  "collectorNumber": "252",
+  "rarity": "mythic",
+  "manaCost": "{3}{G/U}{G/U}",
+  "typeLine": "Creature — Elemental Incarnation",
+  "oracleText": "When this creature enters, if {G}{G} was spent to cast it, exile target artifact or enchantment an opponent controls.\nWhen this creature enters, if {U}{U} was spent to cast it, draw two cards, then discard a card.\nEvoke {G/U}{G/U} (You may cast this spell for its evoke cost. If you do, it's sacrificed when it enters.)",
+  "power": "6",
+  "toughness": "5",
+  "colors": [
+   "G",
+   "U"
+  ],
+  "keywords": [
+   "Evoke"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/b/db9aa986-ac2a-44bb-a88b-04c5d0d502b2.jpg?1783904399",
+   "normal": "https://cards.scryfall.io/normal/front/d/b/db9aa986-ac2a-44bb-a88b-04c5d0d502b2.jpg?1783904399",
+   "large": "https://cards.scryfall.io/large/front/d/b/db9aa986-ac2a-44bb-a88b-04c5d0d502b2.jpg?1783904399",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/b/db9aa986-ac2a-44bb-a88b-04c5d0d502b2.jpg?1783904399"
+  }
  }
 ]
