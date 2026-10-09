@@ -221,6 +221,14 @@ agent per group, each in its own worktree, merged into `lorwyn-eclipsed`.
 - **Arena's two Theme Decks** (exact lists from mtg.wiki `Lorwyn_Eclipsed/Theme_Decks`, `source: 'arena'`): Pirates
   (U/R, needs 12 cards from other sets) and Angels (W/G, needs 7).
 
+**Goblins, Elves and Elementals done** (`ecl/decks-2.ts`, `ecl-*` packets in `jumpin.ts`, test `ecl-decks-2.test.ts`).
+Scaled from MTGAZone's Rakdos Goblins, Golgari Elves and Izzet Elementals skeletons (36 spells, 24 lands, one Blood
+Crypt / Overgrown Tomb / Steam Vents, Eclipsed Realms and Evolving Wilds). Bot vs bot, 20 games per seat against the ten
+Foundations starter decks: Boggart Rampage (B/R, Grub, Storied Matriarch) 46.0%, Gilt-Leaf Hunt (B/G, High Perfect
+Morcant) 60.5%, Kulrath Tempest (U/R, Ashling, Rekindled) 49.8%. Packets (our packet plus a random one against two
+random packets, 300 games): Elemental (Ashling, Rekindled) 43.0%, Goblins (Grub, Storied Matriarch) 44.7%, Elves (High
+Perfect Morcant) 48.0%. Mischievous Sneakling is U/B hybrid, so the Goblins deck leaves it out.
+
 ## Phase 18d: boosters
 
 `PackSet` `'ecl'` in Expedition and a Season pack kind, sheets from the ECL booster list.

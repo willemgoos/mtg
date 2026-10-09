@@ -2,6 +2,7 @@ import type { Color } from '@mtg/engine';
 import { FRA_DECKS_1 } from './fra/decks-1.ts';
 import { FRA_DECKS_2 } from './fra/decks-2.ts';
 import { FRA_DECKS_3 } from './fra/decks-3.ts';
+import { ECL_DECKS_2 } from './ecl/decks-2.ts';
 
 export interface Decklist {
   /** Stable key, e.g. for saved preferences. */
@@ -4452,6 +4453,9 @@ export const SECRETS_OF_STRIXHAVEN_DECKS: Decklist[] = [
 /** Reality Fracture (17b): our own two-colour decks, built from the set's non-planeswalker cards first. */
 export const REALITY_FRACTURE_DECKS: Decklist[] = [...FRA_DECKS_1, ...FRA_DECKS_2, ...FRA_DECKS_3];
 
+/** Lorwyn Eclipsed (18c): our own two-colour decks. */
+export const LORWYN_ECLIPSED_DECKS: Decklist[] = [...ECL_DECKS_2];
+
 export const STRIXHAVEN_BRAWL_DECKS: Decklist[] = [
   {
     id: 'brawl-quintorius-history-chaser',
@@ -5990,4 +5994,5 @@ export const DECKS: Decklist[] = [
   ...SECRETS_OF_STRIXHAVEN_DECKS,
   ...STRIXHAVEN_BRAWL_DECKS,
   ...REALITY_FRACTURE_DECKS,
+  ...LORWYN_ECLIPSED_DECKS,
 ];
