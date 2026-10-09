@@ -47,6 +47,148 @@ optional additional cost, "if blighted" condition, effect), vivid amount, evoke,
 first-main-phase transform trigger, behold-and-exile. Each with unit tests and bot handling (when to blight, when to
 evoke).
 
+**Core done** (9 October 2026; engine in `engine/src/ecl-18a.ts` plus hooks marked `// Lorwyn Eclipsed (18a)`, tests
+`engine/test/ecl-18a*.test.ts` with the fixture cards in `ecl-fixtures.ts`, `ai/test/ecl-18a.test.ts`,
+`web/test/ecl-interaction.test.ts`, `cards/test/ecl-vocab.test.ts`; card builders in `cards/src/ecl-vocab.ts`). The names
+below are what 18b card agents use. Every name is in `engine/src/types.ts` (search "Lorwyn Eclipsed (18a)"); the example is the
+card or card text it was built for. The `// Lorwyn Eclipsed (18a)` comments in `build.ts` mean `Persist` and `Wither` are mapped
+keywords and `Evoke`, `Conspire`, `Vivid` are labels (the rules text lives in the behaviour, as for any `KEYWORDS_AS_ABILITIES`).
+
+### Blight N
+
+The player always chooses the creature (a creature they control; a cost with no creature to blight isn't offered). Blighting a
+creature to death is legal. The counters are the named counter `'-1/-1'` (`o.counters['-1/-1']`), which already counts in
+power/toughness and cancels against +1/+1 counters.
+
+| Where | Name | Example |
+| --- | --- | --- |
+| Ability cost | `cost: { blight: N, ... }` (action field `blight`: the creature) | Gristle Glutton `cost: { tapSelf: true, blight: 1 }`; from the graveyard (Evershrike's Gift) with `fromGraveyard: true`, `sorcerySpeed: true`; Champion of the Weird `{ life: 1, blight: 2 }` |
+| Mandatory additional cost | `blightToCast: N` | "As an additional cost, blight 2" |
+| Either/or additional cost | `blightOrPay: { amount: 1, pay: { generic: 3, colored: {} } }` | Bogslither's Embrace, Wild Unraveling (`{ amount: 2, pay: {1} }`) |
+| X additional cost | `blightX: true`; X is `{ x: true }`; X is limited to the greatest toughness among your creatures | Soul Immolation: `damage { amount: { x: true }, to: 'eachOpponent' }` and `to: { each: 'creature', controller: 'opponent' }` |
+| Optional additional cost | `kicker: { cost: ZERO, blight: N }` (builder `optionalBlight(N)`); "if the additional cost was paid" is `{ kind: 'wasKicked' }` and now works for instants and sorceries | Cinder Strike `if { condition: wasKicked, then: [damage 4], else: [damage 2] }`, Burning Curiosity, Requiting Hex |
+| Optional cost that changes the modes | `kicker: { cost: ZERO, blight: 2, spell: combineSpells([mode0, mode1]) }` (`combineSpells` is exported from `@mtg/engine`) | Pyrrhic Strike ("choose both instead") |
+| Effect | `{ kind: 'blight', amount, who?, optional?, then?, otherwise? }` (builders `blight`, `mayBlight`); `who`: `'controller'` (default), `'eachOpponent'`, `{ target: n }`; mandatory with one creature: no prompt | Dream Seizer `mayBlight(1, [discard each opponent])`; High Perfect Morcant `blight(1, { who: 'eachOpponent' })`; Champion of the Weird's ability `targets: [{ what: 'player', controller: 'opponent' }]`, `blight(2, { who: { target: 0 } })`; Shadow Urchin attacks: `blight(1)` |
+| "The blighted creature" | Ref `'chosen'` (builder constant `BLIGHTED`) inside `then` | Grub, Notorious Auntie `tokenCopy { of: 'chosen', attacking: true, ... }`; Blighted Blackthorn |
+| "If you don't" / "If you can't" | `otherwise: [...]` | Gutsplitter Gang `mayBlight(2, [], [loseLife 3])` |
+| "When you do" | `then: [{ kind: 'reflexiveTrigger', ability: i }]` | Warren Torchmaster |
+| "You may pay {2}. If you don't, blight 2" | `{ kind: 'payOrElse', who: 'controller', cost, otherwise: [blight(2)] }` | Chaos Spewer |
+| "If it isn't your main phase" | `{ kind: 'not', condition: { kind: 'yourStep', steps: ['main1', 'main2'] } }` | Dose of Dawnglow |
+
+No card says "whenever you blight", so there is no trigger for it (the engine emits a `blighted` event if one is ever needed).
+Blighting is never "putting counters on an opponent's creature": `who: 'eachOpponent'` makes the opponent choose among their creatures.
+
+### Vivid
+
+`{ count: 'vivid' }` (constant `VIVID` in `ecl-vocab.ts`) is the number of colors among permanents you control. It is an ordinary
+`Amount`, so it goes wherever an amount does:
+
+- cost reduction: `costReduction: VIVID` (Wildvine Pummeler, Rime Chill); the cost is read as the spell is cast;
+- characteristic: `powerEquals: VIVID` (Squawkroaster);
+- effects: `draw { amount: VIVID }` (Shinestriker), `gainLife`/`loseLife { amount: VIVID }` (Luminollusk, Shimmercreep),
+  `damage { amount: VIVID }` (Explosive Prodigy), `pump { power: VIVID, toughness: VIVID }` (Glister Bairn, Prismabasher),
+  `createToken { count: VIVID }` (Kithkeeper), `searchLibrary { upTo: VIVID }` (Prismatic Undercurrents).
+
+Not covered by an Amount: "reveal cards until you reveal X permanent cards" (Aurora Awakener) and Sanar's "exile a card of each
+of those colors"; those need card-specific effects (18b).
+
+### Evoke
+
+- `evoke: <ManaCost>` on the card (builder `evoke(cost)`); all five Incarnations have a hybrid mana evoke cost
+  (`{ generic: 0, colored: {}, hybrid: [['R','W'],['R','W']] }`). It appears as its own cast action (`evoked: true`); the UI label
+  is "Evoke {R/W}{R/W}". An evoked permanent is sacrificed by a trigger the engine queues when it enters (it goes on the stack
+  under the creature's own enter triggers, so they resolve first).
+- `{ kind: 'wasEvoked' }`: "if it was evoked" (use `{ kind: 'not', condition: ... }` for "if it wasn't").
+- "If {W}{W} was spent to cast it": `{ kind: 'manaSpentColors', colors: { W: 2 } }` (builder `enterIfSpent({ W: 2 }, effects)`).
+  The mana is split into colors once, as it is paid: the split with the most colors at two or more mana (so a card with a {W}{W}
+  and a {B}{B} trigger gets whichever the payer's lands can make, not both when they can't); at most two of a color are counted.
+  An evoked Incarnation keeps it: evoking with {W}{W} still gets the {W}{W} enter trigger.
+
+### Persist, wither, conspire
+
+- Keywords `'persist'` and `'wither'` (`keywords: ['wither']`). Persist is checked as the creature dies, together with the others
+  dying at the same moment (Isilu): a nontoken creature with persist and no -1/-1 counters comes back with one.
+- Granted: Isilu `static anthem { affects: 'otherCreaturesYouControl', filter: { nontoken: true }, power: 0, toughness: 0, keywords: ['persist'] }`;
+  Rhys `pump { to: { target: 0 }, power: 0, toughness: 0, keywords: ['persist'] }`; Barbed Bloodletter `pump { keywords: ['wither'] }`.
+- Wither damage to a creature is -1/-1 counters (no damage marked); damage to players and planeswalkers is normal.
+  Spinerock Tyrant: `copySpell { what: 'subject', withWither: true, newTargets: true }` inside a `may`.
+- Conspire: `conspire: true` on a card, or the static `{ kind: 'noncreatureSpellsHaveConspire' }` (Raiding Schemes). Casting
+  offers a second action with `conspire: true`; the two creatures (untapped, sharing a color with the spell) are chosen one at a
+  time after the spell is on the stack (`conspire` decision), then a copy is made with new targets. Creatures that must tap for
+  the mana aren't offered.
+
+### The two-faced legends (first-main-phase transform)
+
+- `firstMainTransform(cost)` on both faces: `triggered { trigger: { on: 'beginningOfMain', which: 1 }, cost, effects: [transform self] }`.
+  "You may pay" prompts only when the mana is available.
+- Front faces: `entersOrTransforms(effects, targets?)` = `{ on: 'etbOrTransforms' }` ("Whenever this creature enters or
+  transforms into Brigid"); back faces: `transformsInto(effects, targets?)` = `{ on: 'transforms' }`. Both are read from the
+  face the permanent shows after the change.
+- Ashling, Rimebound: "add two mana of any one color, spend this mana only to cast spells with mana value 4 or greater": a
+  `choose` over the five colors, each option `addMana { mana: [['R'], ['R']], onlyFor: 'MV4Plus' }`.
+- Brigid, Doun's Mind: two mana abilities (`amountOf`, produces G / produces W). Oko: loyalty counters stay on transform (same
+  object).
+- Eirdu: static `{ kind: 'creatureSpellsHaveConvoke' }`; a convoking creature now pays for {1} or one mana of its colors.
+
+### Behold
+
+- `beholdOrPay` (existing) for "behold a Kithkin or pay {2}": `beholdOrPay: { filter: { subtype: 'Kithkin' }, pay: {2} }`.
+- Behold and exile (the Champions): `beholdExile: { subtype: 'Kithkin' }` on the card; one cast action per distinct choice
+  (`beholdCard`: a permanent you control or a card in hand, exiled as the cost) plus
+  `returnBeheldWhenLeaves` = `triggered { trigger: { on: 'leavesBattlefield' }, effects: [{ kind: 'returnBeholdExiled' }] }`.
+  A token that was exiled is simply gone. Countered, the exiled card stays exiled.
+- Flashback with behold (Kindle the Inner Flame): `flashback: <cost>` plus `flashbackBehold: { filter: { subtype: 'Elemental' }, count: 3 }`.
+- Celestial Reunion: `kicker: { cost: ZERO, beholdChosenType: 2 }`, and in its search
+  `searchLibrary { filter: { types: ['Creature'], maxManaValue: 'x' }, to: 'hand', battlefieldIfChosenType: true, reveal: true }`.
+  After the spell is cast the type is chosen, then the creatures one at a time (`beholdType` decision; hand cards are revealed).
+
+### Gains/loses all creature types
+
+`{ kind: 'allCreatureTypes', what, duration: 'permanent' | 'endOfTurn' }` (Oko's +2 permanent; Glamer Gifter until end of turn,
+together with `pump { setBase: true, power: 4, toughness: 4 }`), `{ kind: 'loseCreatureTypes', what }` (Nameless Inversion, until
+end of turn), and on Equipment `attached { ..., allCreatureTypes: true }` (Stalactite Dagger). They work with changelings, the
+creature-type lords and later type-setting effects by timestamp. A changeling that died is every type for "whenever a Goblin you
+control dies" (Boggart Mischief).
+
+### -1/-1 counters elsewhere
+
+- Enters with counters: `entersWithNamedCounters: { '-1/-1': 2 }` (builder `entersWithMinusCounters(2)`).
+- Put: `namedCounters { name: '-1/-1', amount, to }` (Blight Rot, Darkness Descends with `to: { each: 'creature' }`, Bile-Vial
+  Boggart's trigger, Nightmare Sower).
+- Remove as an effect: `{ kind: 'removeCounters', from: 'self', name: '-1/-1', count? }`; without `name` it is "a counter of any
+  kind" and the player picks the kind when there are several (Slumbering Walker). `{ kind: 'removeAnyNumberOfCounters', from }`
+  takes counters off one at a time until the player says done (Rhys).
+- Remove as a cost: `cost: { removeAnyCounters: N, mana }` (builder `withRemovedCounters(N, { mana })`); the action lists the
+  kinds taken (`removeKinds`), one action per way, normally exactly one.
+- Conditions: `hasMinusCounter` = `{ kind: 'sourceNamedCounters', name: '-1/-1', min: 1 }` ("while this creature has a -1/-1
+  counter"); `{ kind: 'sourceHadNamedCounter', name: '-1/-1' }` for dies triggers ("if it had a -1/-1 counter on it": Retched
+  Wretch, with `returnSource { to: 'battlefield', losesAbilitiesGains: [] }`); `{ kind: 'putCounterOnCreatureThisTurn' }` (Lasting
+  Tarfire).
+- Creatures with counters dying: `trigger: { on: 'creatureYouControlDies', filter: { hasCounters: true } }` with
+  `{ event: 'amount' }` = the counters of every kind it had ("exile that many cards": Shadow Urchin).
+- Dawnhand Dissident: `exileGraveyardCard { what, track: true }` remembers the card, and the static
+  `{ kind: 'castExiledWithSelf', filter: { types: ['Creature'] }, removeCounters: 3, yourTurnOnly: true }` lets you cast your
+  own tracked cards by removing counters from among your creatures (chosen one at a time, `payCounters` decision).
+
+### Bots and interface
+
+- Heuristic and search bots: a blight cost or choice is scored like any other action (the simulation sees the counters), so they
+  blight creatures that survive or don't matter, take the optional blight when it kills something worth more, and evoke only when the
+  enter effect is worth the card. Conspire's creatures, Celestial Reunion's type and Dawnhand's counters are chosen by evaluation
+  (`ai/src/choices.ts` `chooseBeholdType` for the type). Action counts: a blight cost multiplies the casts by the creatures you control
+  (about 5 to 10); everything else is step by step.
+- Interface: the blight creature is clicked on the board like a sacrifice ("choose a creature to put the -1/-1 counters on");
+  "Blight 1 / Pay {3}", "Evoke {..}", "Conspire", "Behold X and exile it" are cast-menu choices; optional blight and the
+  "you may pay {G}: transform" prompt show their cost; Conspire, Celestial Reunion and Dawnhand have their own click prompts.
+
+### Not covered (18b card-specific work)
+
+- Aurora Awakener ("reveal cards until you reveal X permanent cards, put any number onto the battlefield") and Sanar, Innovative
+  First-Year ("for each of those colors, you may exile a card of that color from among the revealed cards") are vivid cards whose
+  effects are card-specific; the amount (`VIVID`) is there, the effects are built in 18b with a `chooseCustom` or custom effect and a test.
+- Cards that only use older vocabulary (changeling, convoke, stun counters, surveil, mill, Treasure, emblems, landcycling) are left
+  to the groups. "Add two mana of any one color" for an effect is a `choose` over the five colors (see Ashling).
+
 ## Phase 18b: every card
 
 `scripts/data/ecl-groups.json` assigns every card to a group; `scripts/ecl-status.ts` shows what's left. One file per

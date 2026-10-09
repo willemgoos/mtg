@@ -6,10 +6,12 @@ import {
   hasKeyword,
   isCreature as isCreatureNow,
   matchesFilter,
+  NON_CREATURE_SUBTYPES,
 } from './characteristics.ts';
 import { type Ctx, createObject, def, defOf, obj, other } from './context.ts';
 import { manaValue } from './cost.ts';
 import { addLore } from './sagas.ts';
+import { countersOnLeft, spentColors } from './ecl-18a.ts';
 import { FIC_CONDITIONS } from './fic-effects.ts';
 import { FIN_CONDITIONS } from './fin-effects.ts';
 import type {
@@ -186,6 +188,15 @@ export function checkCondition(
   if (c.kind === 'notPrepared') return !self?.prepared;
   // Reality Fracture (17a): Null Summoner, Uldaros Theorix.
   if (c.kind === 'wasCast') return !!self?.wasCast;
+  // Lorwyn Eclipsed (18a): evoke, and "if {W}{W} was spent to cast it".
+  if (c.kind === 'wasEvoked') return !!self?.evoked;
+  if (c.kind === 'putCounterOnCreatureThisTurn')
+    return !!ctx.s.turn.creatureCountersBy?.includes(controller);
+  if (c.kind === 'sourceHadNamedCounter') {
+    const counters = self?.zone === 'battlefield' ? self.counters : self?.lastNamedCounters;
+    return (counters?.[c.name] ?? 0) >= (c.min ?? 1);
+  }
+  if (c.kind === 'manaSpentColors') return !!self && spentColors(ctx, self.id, c.colors);
   // Secrets of Strixhaven (14b): Emeritus of Woe, Great Hall of the Biblioplex.
   if (c.kind === 'creaturesDiedAtLeast') return ctx.s.turn.creaturesDied >= c.min;
   if (c.kind === 'sourceIsCreature') return !!self && isCreatureNow(ctx, self.id);
@@ -639,7 +650,7 @@ function detect(ctx: Ctx, ev: GameEvent): void {
           (o, a) => {
             if (suppressed) return false;
             const t = a.trigger;
-            if (t.on === 'etb') return o.id === moved.id;
+            if (t.on === 'etb' || t.on === 'etbOrTransforms') return o.id === moved.id;
             if (t.on === 'otherCreatureEtb')
               return (
                 isCreature &&
@@ -710,6 +721,17 @@ function detect(ctx: Ctx, ev: GameEvent): void {
             .filter((t) => t.controller === moved.controller);
           for (let k = 0; k < twice; k++) for (const t of caused) s.pendingTriggers.push({ ...t });
         }
+        // Lorwyn Eclipsed (18a): evoke, "when it enters, if its evoke cost was paid, sacrifice it". It goes on the
+        // stack first, so it resolves after the enter triggers.
+        if (moved.evoked && !suppressed)
+          s.pendingTriggers.splice(before, 0, {
+            source: { id: moved.id, zcc: moved.zcc },
+            sourceDefId: moved.defId,
+            abilityIndex: -1,
+            controller: moved.controller,
+            subject: { id: moved.id, zcc: moved.zcc },
+            inline: [{ kind: 'sacrifice', what: 'self' }],
+          });
         // From the graveyard: "whenever your commander enters" (Endless Ranks of HYDRA).
         for (const id of s.players[moved.controller].graveyard) {
           const card = s.objects[id]!;
@@ -871,6 +893,8 @@ function detect(ctx: Ctx, ev: GameEvent): void {
                 tapped: false,
                 summoningSick: false,
                 isToken: true,
+                // Lorwyn Eclipsed (18a): the counters it had, of every kind (Shadow Urchin).
+                lastCounters: ev.lastCounterTotal ?? 0,
               } as GameObject)
             : null;
         const card = moved ?? ghost;
@@ -884,9 +908,19 @@ function detect(ctx: Ctx, ev: GameEvent): void {
           if (t.on === 'creatureYouControlDies' && t.nontoken && (!card || card.isToken)) return;
           if (t.on === 'creatureYouControlDies' && t.filter && !defMatches(movedDef, t.filter))
             return;
+          // Lorwyn Eclipsed (18a): Shadow Urchin, "a creature you control with one or more counters on it dies".
+          if (
+            t.on === 'creatureYouControlDies' &&
+            t.filter?.hasCounters &&
+            !(ev.lastCounterTotal ?? countersOnLeft(card))
+          )
+            return;
           const controller = card?.owner ?? 'p1';
           if (card && checkCondition(ctx, a.condition, controller, card)) {
             queue(ctx, card, i, controller, card);
+            // Lorwyn Eclipsed (18a): "exile that many cards" is the counters it had.
+            if (t.on === 'creatureYouControlDies' && t.filter?.hasCounters)
+              ctx.s.pendingTriggers.at(-1)!.amount = ev.lastCounterTotal ?? 0;
             const last = ctx.s.pendingTriggers.at(-1);
             if (last && ev.leftAs) last.sourceDefId = ev.leftAs;
           }
@@ -944,6 +978,7 @@ function detect(ctx: Ctx, ev: GameEvent): void {
             }
           }
         }
+        const beforeDies = s.pendingTriggers.length;
         forEachBattlefieldTrigger(
           ctx,
           (o, a) => {
@@ -965,6 +1000,13 @@ function detect(ctx: Ctx, ev: GameEvent): void {
               !(t.filter.subtype && moved?.lastAddedSubtypes?.includes(t.filter.subtype))
             )
               return false;
+            // Lorwyn Eclipsed (18a): Shadow Urchin, "a creature you control with one or more counters on it dies".
+            if (
+              t.on === 'creatureYouControlDies' &&
+              t.filter?.hasCounters &&
+              !(ev.lastCounterTotal ?? countersOnLeft(moved))
+            )
+              return false;
             // Marvel Super Heroes (Ares): "an attacking creature you control".
             if (
               t.on === 'creatureYouControlDies' &&
@@ -982,6 +1024,16 @@ function detect(ctx: Ctx, ev: GameEvent): void {
           // Final Fantasy (11c): "that creature's power" (Vincent Valentine).
           ev.lastPower,
         );
+        // Lorwyn Eclipsed (18a): "that many" for a creature with counters dying is the counters it had.
+        for (const p of s.pendingTriggers.slice(beforeDies)) {
+          const pa = defOf(ctx, p.sourceDefId).abilities[p.abilityIndex];
+          if (
+            pa?.kind === 'triggered' &&
+            pa.trigger.on === 'creatureYouControlDies' &&
+            pa.trigger.filter?.hasCounters
+          )
+            p.amount = ev.lastCounterTotal ?? 0;
+        }
         // Strixhaven Brawl (15a): Furious Forebear, "whenever a creature you control dies while this card is in your graveyard".
         if (diedUnder !== undefined)
           for (const gid of s.players[diedUnder].graveyard) {
@@ -996,6 +1048,28 @@ function detect(ctx: Ctx, ev: GameEvent): void {
             });
           }
       }
+      // Lorwyn Eclipsed (18a): persist. It had no -1/-1 counters as it died: it comes back with one.
+      if (ev.persist && moved && moved.zone === 'graveyard')
+        s.pendingTriggers.push({
+          source: { id: moved.id, zcc: moved.zcc },
+          sourceDefId: moved.defId,
+          abilityIndex: -1,
+          controller: moved.owner,
+          subject: { id: moved.id, zcc: moved.zcc },
+          inline: [{ kind: 'persistReturn' }],
+        });
+      // Lorwyn Eclipsed (18a): "When this creature leaves the battlefield" (to any zone).
+      if (ev.from === 'battlefield' && moved && !ev.leftBlank) {
+        const who = ev.controller ?? moved.owner;
+        (ev.leftAs ? defOf(ctx, ev.leftAs) : movedDef).abilities.forEach((a, i) => {
+          if (a.kind !== 'triggered' || a.trigger.on !== 'leavesBattlefield' || a.fromGraveyard)
+            return;
+          if (!checkCondition(ctx, a.condition, who, moved)) return;
+          queue(ctx, moved, i, who, moved);
+          const last = ctx.s.pendingTriggers.at(-1);
+          if (last && ev.leftAs) last.sourceDefId = ev.leftAs;
+        });
+      }
       // Final Fantasy (11c): emblems that see a creature die (Sephiroth), and Zenos's chosen creature.
       if (ev.from === 'battlefield' && ev.to === 'graveyard' && movedDef.types.includes('Creature'))
         emblemTriggers(ctx, (t) => t.on === 'otherCreatureDies', moved, true);
@@ -1009,6 +1083,17 @@ function detect(ctx: Ctx, ev: GameEvent): void {
             (!moved || o.chosenObject.zcc === moved.zcc - 1),
         );
       return;
+    }
+    // Lorwyn Eclipsed (18a): "Whenever this creature transforms into <this face>".
+    case 'transformed': {
+      const o = s.objects[ev.id];
+      if (!o || o.zone !== 'battlefield') break;
+      def(ctx, o.id).abilities.forEach((a, i) => {
+        if (a.kind !== 'triggered') return;
+        if (a.trigger.on !== 'transforms' && a.trigger.on !== 'etbOrTransforms') return;
+        if (checkCondition(ctx, a.condition, o.controller, o)) queue(ctx, o, i, o.controller, o);
+      });
+      break;
     }
     // Final Fantasy (11c): Matoya, Archon Elder.
     case 'scried':
@@ -2048,8 +2133,11 @@ function defMatches(d: CardDefinition, f: CardFilter): boolean {
     return false;
   // Final Fantasy Commander (12c): "a creature you control without flying" (Luminous Broodmoth).
   if (f.lacksKeyword && d.keywords.includes(f.lacksKeyword)) return false;
-  if (f.subtype && !d.subtypes.includes(f.subtype)) return false;
-  if (f.subtypes && !f.subtypes.some((st) => d.subtypes.includes(st))) return false;
+  // Lorwyn Eclipsed (18a): a changeling that died was every creature type.
+  const hasType = (st: string) =>
+    d.subtypes.includes(st) || (d.keywords.includes('changeling') && !NON_CREATURE_SUBTYPES.has(st));
+  if (f.subtype && !hasType(f.subtype)) return false;
+  if (f.subtypes && !f.subtypes.some(hasType)) return false;
   // Final Fantasy (11c): "legendary creature spell" (Serah Farron).
   if (f.supertypes && !f.supertypes.some((t) => d.supertypes.includes(t))) return false;
   return true;

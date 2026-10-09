@@ -66,7 +66,12 @@ export type Keyword =
   /** Can't be the target of spells or abilities (Whispersilk Cloak). */
   | 'shroud'
   /** Changeling: every creature type. */
-  | 'changeling';
+  | 'changeling'
+  // Lorwyn Eclipsed (18a): persist and wither
+  /** Persist: when it dies, if it had no -1/-1 counters on it, it returns with a -1/-1 counter. */
+  | 'persist'
+  /** Wither: damage it deals to creatures is dealt as -1/-1 counters. */
+  | 'wither';
 
 /** What an instant or sorcery (or one of its modes) does when it resolves. */
 export interface SpellDef {
@@ -210,6 +215,15 @@ export interface CardDefinition {
     // Marvel Super Heroes Jumpstart (Pym Particles)
     /** "You may cast this spell as though it had flash if it's cast using teamwork" (Quantum Reduction). */
     flash?: boolean;
+    // Lorwyn Eclipsed (18a): "As an additional cost to cast this spell, you may blight N"
+    /** The optional additional cost is blighting a creature you control N times (`cost` is {0}); paid, the spell is `kicked`. */
+    blight?: number;
+    /**
+     * "You may choose a creature type and behold N creatures of that type" (Celestial Reunion): `cost` is {0}; paid, the spell is
+     * `kicked`, its caster picks the type and then the creatures one at a time, and the spell remembers the type
+     * (`searchLibrary.battlefieldIfChosenType`).
+     */
+    beholdChosenType?: number;
   };
   // Mystical Archive (16): Angel's Grace, Krosan Grip, Berserk
   /** Split second: while it is on the stack, nobody can cast spells or activate (non-mana) abilities. */
@@ -242,6 +256,8 @@ export interface CardDefinition {
   convoke?: boolean;
   /** Life paid in addition to the flashback cost (Deep Analysis). */
   flashbackLife?: number;
+  /** Lorwyn Eclipsed (18a): "Flashback—{1}{R}, Behold three Elementals": flashing it back also beholds `count` matching cards or permanents. */
+  flashbackBehold?: { filter: CardFilter; count: number };
   // Reality Fracture (17a): Twinned Vision
   /** "Flashback—{cost}, Discard a card": flashing it back also discards a card. */
   flashbackDiscard?: boolean;
@@ -285,6 +301,22 @@ export interface CardDefinition {
   entersTappedIf?: ConditionDef;
   /** "As an additional cost to cast this spell, forage or pay this" (Feed the Cycle). */
   forageOrPay?: ManaCost;
+  // Lorwyn Eclipsed (18a): blight, evoke, conspire, behold-and-exile
+  /** "As an additional cost to cast this spell, blight N" (put N -1/-1 counters on a creature you control; chosen when casting). */
+  blightToCast?: number;
+  /** "As an additional cost to cast this spell, blight N or pay <pay>" (Bogslither's Embrace, Wild Unraveling). */
+  blightOrPay?: { amount: number; pay: ManaCost };
+  /** "As an additional cost to cast this spell, blight X. X can't be greater than the greatest toughness among creatures you control" (Soul Immolation); X is `{ x: true }`. */
+  blightX?: boolean;
+  /** Evoke: may be cast for this instead of its mana cost; if it was, it's sacrificed when it enters (see the `wasEvoked` condition). */
+  evoke?: ManaCost;
+  /** Conspire: as it's cast, you may tap two untapped creatures you control that share a colour with it; if you do, copy it. */
+  conspire?: boolean;
+  /**
+   * "As an additional cost to cast this spell, behold a <filter> and exile it" (the Champions): a matching permanent you control
+   * or a matching card in your hand is exiled. A later "return the exiled card to its owner's hand" is the `returnBeholdExiled` effect.
+   */
+  beholdExile?: CardFilter;
   // Reality Fracture (17c): Countersculpt
   /**
    * "As an additional cost to cast this spell, behold a <filter> or pay <pay>": a Jace you control or a Jace card in your hand
@@ -551,6 +583,11 @@ export interface CostDef {
   // Reality Fracture (17a): Tenured Tethermage
   /** Tap this many untapped artifacts you control (chosen when activating; the source may be one). */
   tapArtifacts?: number;
+  // Lorwyn Eclipsed (18a): Blight N
+  /** Blight N: put N -1/-1 counters on a creature you control (chosen when activating). */
+  blight?: number;
+  /** "Remove a counter from this creature" / "Remove two counters from this creature": counters of any kinds, chosen when activating. */
+  removeAnyCounters?: number;
 }
 
 export type TriggerDef =
@@ -929,7 +966,14 @@ export type TriggerDef =
   /** Whenever one or more other creatures you control enter from a graveyard (Celes). Use with `batch`. */
   | { on: 'creaturesEnterFromGraveyard' }
   /** Whenever this permanent becomes untapped (Key to the City). */
-  | { on: 'becomesUntapped' };
+  | { on: 'becomesUntapped' }
+  // Lorwyn Eclipsed (18a)
+  /** "Whenever this creature enters or transforms into <this face>" (the seven two-faced legends' front faces). */
+  | { on: 'etbOrTransforms' }
+  /** "Whenever this creature transforms into <this face>" (the back faces). */
+  | { on: 'transforms' }
+  /** "When this creature leaves the battlefield" (to any zone; the Champions). */
+  | { on: 'leavesBattlefield' };
 
 export type ConditionDef =
   // Strixhaven Brawl (15b, g): Orochi Merge-Keeper
@@ -1136,7 +1180,16 @@ export type ConditionDef =
   | { kind: 'subjectCrewedBySource' }
   // Marvel Super Heroes Jumpstart (Heroes for Hire)
   /** Target `target` was chosen and is still legal ("up to" targets: Iron Fist, Hero for Hire). */
-  | { kind: 'targetChosen'; target: number };
+  | { kind: 'targetChosen'; target: number }
+  // Lorwyn Eclipsed (18a)
+  /** The source was cast for its evoke cost ("if it was evoked"). */
+  | { kind: 'wasEvoked' }
+  /** The source has (or, if it left, had) at least `min` (default 1) counters of this kind: "if it had a -1/-1 counter on it". */
+  | { kind: 'sourceHadNamedCounter'; name: string; min?: number }
+  /** "If you put a counter on a creature this turn": you put counters of any kind on a creature. */
+  | { kind: 'putCounterOnCreatureThisTurn' }
+  /** "If {W}{W} was spent to cast it": at least these amounts of each colour were spent on the source spell (the best split of the payer's mana). */
+  | { kind: 'manaSpentColors'; colors: Partial<Record<Color, number>> };
 
 export interface CardFilter {
   anyOf?: CardFilter[];
@@ -1165,7 +1218,7 @@ export interface CardFilter {
   /** Mana value at most this ('sourcePower': the source's power, e.g. as it died). */
   // Secrets of Strixhaven (14a): Moseo, 'lifeGainedThisTurn' is the life its controller gained this turn.
   // Secrets of Strixhaven (14b): Sundering Archaic, 'colorsSpent' is the number of colours spent to cast the source.
-  maxManaValue?: number | 'sourcePower' | 'lifeGainedThisTurn' | 'colorsSpent';
+  maxManaValue?: number | 'sourcePower' | 'lifeGainedThisTurn' | 'colorsSpent' | 'x';
   // Secrets of Strixhaven (14b): Arnyn, Deathbloom Botanist
   /** Power or toughness at most this (printed, for a card that has left the battlefield). */
   maxPowerOrToughness?: number;
@@ -1477,6 +1530,9 @@ export type Amount =
   // The Fantastic Four (9d).
   /** Colours among permanents you control and spells you've cast this turn (First Family). */
   | { count: 'colorsAmongPermanentsAndSpells' }
+  // Lorwyn Eclipsed (18a): Vivid
+  /** Vivid: the number of colours among permanents you control. */
+  | { count: 'vivid' }
   /** The colours of the spell that caused the trigger (Crystal). */
   | { count: 'subjectColors' }
   /** Cards in an opponent's hand (Recurring Insight). */
@@ -1736,6 +1792,9 @@ export type EffectDef =
       // Marvel Super Heroes Jumpstart (Tricksters)
       /** "You may choose new targets for the copy" (Loki Laufeyson): its controller chooses. */
       newTargets?: boolean;
+      // Lorwyn Eclipsed (18a): Spinerock Tyrant
+      /** "Those spells gain wither": the original and the copy. */
+      withWither?: boolean;
     }
   /** Each player sacrifices a creature of their choice (Season of Loss). */
   | { kind: 'eachPlayerSacrifices' }
@@ -1913,7 +1972,7 @@ export type EffectDef =
       mana: ManaType[][];
       count?: Amount;
       untilEndOfTurn?: boolean;
-      /** Spend it only on spells with this tag (Helga: 'BigCreature'). */
+      /** Spend it only on spells with this tag (Helga: 'BigCreature'; Lorwyn Eclipsed: 'MV4Plus', a spell with mana value 4 or greater). */
       onlyFor?: string;
       /** Karolina Dean: cannot pay for spells cast from hand. */
       notForHandSpells?: boolean;
@@ -2090,6 +2149,9 @@ export type EffectDef =
       // Reality Fracture (17a fixes): Loyal Tutor
       /** "Reveal it": the card found is shown to the opponent (a 'cardsRevealed' event). */
       reveal?: boolean;
+      // Lorwyn Eclipsed (18a): Celestial Reunion
+      /** If the spell's additional cost chose a creature type and the card found has it, it enters the battlefield instead of going to hand. */
+      battlefieldIfChosenType?: boolean;
     }
   /** Look at the top N; you may put a creature with mana value up to your land count onto the battlefield (Loot). */
   | { kind: 'lookForCreature'; count: number }
@@ -2611,7 +2673,36 @@ export type EffectDef =
    * Hideaway N: look at the top N cards, exile one face down (remembered as
    * exiled with the source), the rest on the bottom in a random order.
    */
-  | { kind: 'hideaway'; count: number };
+  | { kind: 'hideaway'; count: number }
+  // Lorwyn Eclipsed (18a)
+  /**
+   * Blight N as an effect: `who` (default you) puts N -1/-1 counters on a creature they control, of their choice (one choice, no
+   * prompt if they control just one creature). `optional`: "you may blight N". `then` happens if they blighted (the creature is
+   * the `'chosen'` Ref: "the blighted creature"); `otherwise` if they didn't ("if you don't") or couldn't.
+   */
+  | {
+      kind: 'blight';
+      amount: Amount;
+      who?: 'controller' | 'eachOpponent' | { target: number };
+      optional?: boolean;
+      then?: EffectDef[];
+      otherwise?: EffectDef[];
+    }
+  /** "Gains all creature types": for good (Oko's +2) or until end of turn (Glamer Gifter). */
+  | { kind: 'allCreatureTypes'; what: Ref; duration: 'permanent' | 'endOfTurn' }
+  /** "Loses all creature types until end of turn" (Nameless Inversion). */
+  | { kind: 'loseCreatureTypes'; what: Ref }
+  /** "Return the exiled card to its owner's hand": the card the source beheld and exiled as it was cast (the Champions' leave trigger). */
+  | { kind: 'returnBeholdExiled' }
+  /** Persist's return (engine use; the trigger is queued by the engine). */
+  | { kind: 'persistReturn' }
+  /**
+   * "Remove a -1/-1 counter from this creature" (`name`), or "remove a counter" of any kind (the player chooses the kind if
+   * the creature has several). `count` defaults to 1.
+   */
+  | { kind: 'removeCounters'; from: Ref; name?: string; count?: Amount }
+  /** "Remove any number of counters from target creature": the player takes them off one at a time, kind by kind, until they stop. */
+  | { kind: 'removeAnyNumberOfCounters'; from: Ref };
 
 export type StaticDef =
   // Strixhaven Brawl (15b, g): Hardened Scales, Kami of Whispered Hopes
@@ -2746,6 +2837,9 @@ export type StaticDef =
       mustBeBlockedAttacking?: boolean;
       /** A creature dying makes its triggered abilities (and your emblems') trigger twice (The Masamune). */
       deathTriggersTwice?: boolean;
+      // Lorwyn Eclipsed (18a): Stalactite Dagger
+      /** "Equipped creature ... is all creature types." */
+      allCreatureTypes?: boolean;
     }
   // Reality Fracture (17a): Karn, Argent Defender
   /** "Artifacts and creatures entering the battlefield don't cause abilities to trigger." */
@@ -2817,6 +2911,17 @@ export type StaticDef =
   | { kind: 'conniveDrawsFirst' }
   /** "Noncreature spells you cast have improvise" (Ironheart). */
   | { kind: 'noncreatureSpellsHaveImprovise' }
+  // Lorwyn Eclipsed (18a): Raiding Schemes
+  /** "Each noncreature spell you cast has conspire." */
+  | { kind: 'noncreatureSpellsHaveConspire' }
+  /** "Creature spells you cast have convoke." (Eirdu, Carrier of Dawn) */
+  | { kind: 'creatureSpellsHaveConvoke' }
+  /**
+   * "You may cast <filter> spells from among cards you own exiled with this creature by removing N counters from among creatures
+   * you control in addition to paying their other costs" (Dawnhand Dissident; the cards are remembered by `exileGraveyardCard.track`).
+   * The counters are chosen one at a time as it is cast.
+   */
+  | { kind: 'castExiledWithSelf'; filter: CardFilter; removeCounters: number; yourTurnOnly?: boolean }
   /** "Your opponents can't cast spells during your turn" (Jennifer Walters). */
   | { kind: 'opponentsCantCastDuringYourTurn' }
   /** "You have hexproof", while the condition holds (Captain America, Super-Soldier). */
@@ -3296,6 +3401,17 @@ export interface GameObject {
   wasCast?: boolean;
   /** A copy of a card cast from exile: if it's a permanent spell it becomes a token as it resolves (Uldaros Theorix). */
   copyBecomesToken?: boolean;
+  // Lorwyn Eclipsed (18a)
+  /** It was cast for its evoke cost (kept while it's on the battlefield). */
+  evoked?: boolean;
+  /** Mana spent to cast it, by colour (the payer's best split for the colours "spent" conditions ask about); kept like `manaColors`. */
+  manaPaid?: Partial<Record<Color, number>>;
+  /** The card exiled as its cost by "behold … and exile it", while it's on the stack or the battlefield. */
+  beholdExiled?: ObjectRef;
+  /** The card it exiled that way as it last left the battlefield (the leave trigger returns it). */
+  lastBeholdExiled?: ObjectRef;
+  /** It has all creature types for good, from this timestamp (Oko, Lorwyn Liege's +2). */
+  allCreatureTypes?: number;
 }
 
 /** A reference that goes stale when the object changes zones. */
@@ -3408,6 +3524,13 @@ export type StackItem =
       fromExile?: boolean;
       /** Marvel Super Heroes: cast for its sneak cost; it enters tapped and attacking this player. */
       sneak?: PlayerId;
+      // Lorwyn Eclipsed (18a)
+      /** Cast for its evoke cost: it's sacrificed when it enters. */
+      evoked?: boolean;
+      /** Conspire was chosen as it was cast: its caster picks the two creatures to tap, one at a time. */
+      conspire?: boolean;
+      /** Cast from exile by removing this many counters from among creatures its caster controls (Dawnhand Dissident). */
+      payCounters?: number;
     }
   | {
       kind: 'ability';
@@ -3509,6 +3632,8 @@ export interface TurnState {
   creaturesLost?: Record<PlayerId, number>;
   /** Strixhaven Brawl (15b, multi): +1/+1 counters each player put on creatures they control this turn (Iridescent Hornbeetle). */
   countersPut?: Record<PlayerId, number>;
+  /** Lorwyn Eclipsed (18a): players who put a counter of any kind on a creature this turn (Lasting Tarfire). */
+  creatureCountersBy?: PlayerId[];
   /** Secrets of Strixhaven (14b): cards (not tokens) put into exile this turn (Ennis, Debate Moderator). */
   exiledCards?: number;
   /** Cards that left each player's graveyard this turn (Bonecache Overseer). */
@@ -3671,6 +3796,11 @@ export interface ContinuousEffect {
   mustBeBlocked?: boolean;
   /** As control reverts, an Equipment on a creature its controller doesn't control falls off (Stolen Uniform). */
   unattachOnRevert?: boolean;
+  // Lorwyn Eclipsed (18a)
+  /** It has all creature types (Glamer Gifter). */
+  allCreatureTypes?: boolean;
+  /** It has no creature types (Nameless Inversion). */
+  noCreatureTypes?: boolean;
 }
 
 /** What an effect needs to know about the spell or ability producing it. */
@@ -3891,6 +4021,8 @@ export type Decision =
       // Reality Fracture (17a fixes): Loyal Tutor
       /** The card found is revealed. */
       reveal?: boolean;
+      /** Lorwyn Eclipsed (18a): Celestial Reunion: a card of this creature type goes onto the battlefield instead of into the hand. */
+      battlefieldIfType?: string;
       /** The land found becomes a Fractal creature (Emergent Sequence). */
       fractalLand?: boolean;
       /** If the card has one of these types, the source gets a +1/+1 counter (Oriq Loremage). */
@@ -4060,6 +4192,8 @@ export type Decision =
       // Final Fantasy (11a): saga creatures
       /** Choosing none is allowed (Garnet: "any number of Sagas"). */
       optional?: boolean;
+      /** Lorwyn Eclipsed (18a): choosing the creature to blight: this many -1/-1 counters go on it. */
+      blight?: number;
       then: EffectDef[];
       otherwise: EffectDef[];
       resume: PausedResolution;
@@ -4135,6 +4269,48 @@ export type Decision =
       forage?: ObjectId | 'graveyard';
       /** The free cast this is paid for: once it's paid, that cast is finished. */
       afterFree?: { decision: Extract<Decision, { kind: 'castFree' }>; cast: ObjectId };
+      thenPriority: PlayerId;
+    }
+  | {
+      // Lorwyn Eclipsed (18a): Conspire. Tap two untapped creatures that share a colour with the spell, one at a time; then the spell is copied.
+      kind: 'conspire';
+      player: PlayerId;
+      /** The spell on the stack. */
+      spell: ObjectId;
+      options: ObjectId[];
+      /** The first creature tapped. */
+      chosen: ObjectId[];
+      /** The targets the spell was cast with (ward's sacrifices come after). */
+      targets: TargetChoice[];
+      thenPriority: PlayerId;
+    }
+  | {
+      // Lorwyn Eclipsed (18a): Dawnhand Dissident. Counters removed from among your creatures, one at a time (`options`: the creature
+      // and the kind of counter, answered with chooseOption).
+      kind: 'payCounters';
+      player: PlayerId;
+      spell: ObjectId;
+      left: number;
+      options: { creature: ObjectId; kind: string }[];
+      targets: TargetChoice[];
+      thenPriority: PlayerId;
+    }
+  | {
+      // Lorwyn Eclipsed (18a): Celestial Reunion. The creature type (`types`, answered with chooseOption), then the creatures to
+      // behold one at a time (`options`, answered with chooseCard). The ones in hand are revealed.
+      kind: 'beholdType';
+      player: PlayerId;
+      /** The spell on the stack. */
+      spell: ObjectId;
+      /** How many creatures of the type are beheld. */
+      count: number;
+      /** Creature types that at least `count` creatures you could behold have. */
+      types: string[];
+      chosenType?: string;
+      /** The creatures of the chosen type still to pick from. */
+      options: ObjectId[];
+      chosen: ObjectId[];
+      targets: TargetChoice[];
       thenPriority: PlayerId;
     }
   | { kind: 'gameOver' };
@@ -4237,7 +4413,9 @@ export type Action =
         | 'now'
         | 'freeExact'
         | 'noctis'
-        | 'hades';
+        | 'hades'
+        // Lorwyn Eclipsed (18a): Dawnhand Dissident
+        | 'exiledWithSelf';
       /** Mockingbird: the creature to enter as a copy of. */
       copyOf?: ObjectId;
       /** Rottenmouth Viper: permanents sacrificed to make it cheaper. */
@@ -4255,6 +4433,15 @@ export type Action =
       teamwork?: ObjectId[];
       /** Mana sources to tap. Omitted: the engine picks. */
       payWith?: ObjectId[];
+      // Lorwyn Eclipsed (18a)
+      /** The creature you control that gets the -1/-1 counters of a blight cost. */
+      blight?: ObjectId;
+      /** Cast for its evoke cost. */
+      evoked?: boolean;
+      /** Conspire: you tap two creatures as it's cast (chosen one at a time once it's on the stack). */
+      conspire?: boolean;
+      /** The cards beheld for `flashbackBehold` (permanents you control, or cards in your hand, which are revealed). */
+      beholdCards?: ObjectId[];
     }
   | {
       type: 'activateAbility';
@@ -4277,6 +4464,11 @@ export type Action =
       // Marvel Super Heroes
       /** The value chosen for {X} in the ability's cost (Bruce Banner). */
       x?: number;
+      // Lorwyn Eclipsed (18a)
+      /** The creature you control that gets the -1/-1 counters of a blight cost. */
+      blight?: ObjectId;
+      /** The kinds of counters removed for `removeAnyCounters` ('-1/-1', '+1/+1', 'stun', ...), one entry for each. */
+      removeKinds?: string[];
     }
   | {
       type: 'addAttacker';
@@ -4327,6 +4519,11 @@ export type GameEvent =
       leftBlank?: boolean;
       // Final Fantasy (11c): its power as it left (a token's too): "that creature's power" (Vincent Valentine).
       lastPower?: number;
+      // Lorwyn Eclipsed (18a)
+      /** It died with persist and no -1/-1 counters on it: it returns with a -1/-1 counter. */
+      persist?: boolean;
+      /** The counters of every kind it had as it left the battlefield (a token's too). */
+      lastCounterTotal?: number;
     }
   | { type: 'damageDealt'; source: ObjectId; to: TargetChoice; amount: number; combat: boolean }
   | { type: 'lifeChanged'; player: PlayerId; delta: number; life: number }
@@ -4373,6 +4570,9 @@ export type GameEvent =
   | { type: 'loyaltyCountersAdded'; id: ObjectId; count: number; player: PlayerId; by: PlayerId }
   /** `player` foraged. */
   | { type: 'foraged'; player: PlayerId }
+  // Lorwyn Eclipsed (18a)
+  /** `player` blighted `id`: put `amount` -1/-1 counters on it. */
+  | { type: 'blighted'; player: PlayerId; id: ObjectId; amount: number }
   /** `player` gave a gift. */
   | { type: 'giftGiven'; player: PlayerId }
   /** A Class gained a level. */

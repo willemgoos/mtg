@@ -17,6 +17,7 @@ import { FRA_RED_EFFECTS } from './fra-red-effects.ts';
 import { BRAWL_15B_R_EFFECTS } from './brawl-15b-r-effects.ts';
 import { BRAWL_15A_W_EFFECTS } from './brawl-15a-w-effects.ts';
 import { BRAWL_15B_B_EFFECTS } from './brawl-15b-b-effects.ts';
+import { ECL_18A_EFFECTS, willPersist } from './ecl-18a.ts';
 import { BRAWL_15B_W_EFFECTS } from './brawl-15b-w-effects.ts';
 import { BRAWL_15B_U_EFFECTS } from './brawl-15b-u-effects.ts';
 import { BRAWL_15B_G_EFFECTS } from './brawl-15b-g-effects.ts';
@@ -76,6 +77,8 @@ export interface Ctx {
   lifeGainChoices?: { choices: number[]; cursor: number };
   /** Already-delivered event prefix reconstructed by a replacement replay. */
   replayedEvents?: number;
+  /** Lorwyn Eclipsed (18a): creatures dying together that have persist, worked out before any of them moves (look-back). */
+  persisting?: Set<ObjectId>;
 }
 
 export function makeCtx(
@@ -136,6 +139,8 @@ const BUILT_IN_EFFECTS: Record<string, CustomEffect> = {
   ...BRAWL_15A_RW_EFFECTS,
   // Strixhaven Brawl (15b, black).
   ...BRAWL_15B_B_EFFECTS,
+  // Lorwyn Eclipsed (18a).
+  ...ECL_18A_EFFECTS,
   // Strixhaven Brawl (15b): multicolour, colourless and lands.
   ...BRAWL_15B_MULTI_EFFECTS,
   // Strixhaven Brawl (15b), white.
@@ -591,6 +596,14 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
     const x = ctx.s.objects[ref.id];
     if (x && x.zone === 'exile' && x.zcc === ref.zcc) moveObject(ctx, x.id, 'graveyard');
   }
+  // Lorwyn Eclipsed (18a): the counters of every kind it has as it leaves (Shadow Urchin).
+  const countersLeaving =
+    from === 'battlefield'
+      ? o.plusOneCounters + Object.values(o.counters ?? {}).reduce((a, b) => a + b, 0)
+      : 0;
+  // Lorwyn Eclipsed (18a): persist looks back at the battlefield as the creature dies.
+  const persists =
+    from === 'battlefield' && to === 'graveyard' && (ctx.persisting?.has(id) || willPersist(ctx, id));
   // Strixhaven Brawl (15b, pair): revolt.
   if (from === 'battlefield') (ctx.s.turn.permanentsLeft ??= { p1: 0, p2: 0 })[o.controller]++;
   if (from === 'battlefield') {
@@ -621,7 +634,16 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
   }
   // Secrets of Strixhaven (14a): a prepared permanent that leaves takes its copy with it; converge's colours go too.
   if (from === 'battlefield') unprepareObject(ctx, id);
-  if (to !== 'stack' && !(from === 'stack' && to === 'battlefield')) delete o.manaColors;
+  if (to !== 'stack' && !(from === 'stack' && to === 'battlefield')) {
+    delete o.manaColors;
+    // Lorwyn Eclipsed (18a): the colours spent, evoke and the card exiled by "behold … and exile it" stay while it's on the stack and battlefield.
+    delete o.manaPaid;
+    delete o.evoked;
+    if (o.beholdExiled) {
+      if (from === 'battlefield') o.lastBeholdExiled = o.beholdExiled;
+      delete o.beholdExiled;
+    }
+  }
   delete o.attachedTo;
   delete o.usedAbilities;
   delete o.dealtCombatDamage; // Reality Fracture (17a): Ruric Thar
@@ -867,6 +889,8 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
     ...(from === 'battlefield' && o.lastPower !== undefined ? { lastPower: o.lastPower } : {}),
     ...(leftController ? { controller: leftController } : {}),
     ...(exiledInstead ? { exiledInstead: true } : {}),
+    ...(persists ? { persist: true } : {}),
+    ...(from === 'battlefield' ? { lastCounterTotal: countersLeaving } : {}),
   });
   if (discarded && o.zone === 'graveyard') {
     o.discardedTurn = ctx.s.turn.number;
@@ -926,6 +950,12 @@ export function addCounters(ctx: Ctx, id: ObjectId, n: number, name?: string, by
         !(a.effect.plusOneOnCreatures && (name || !defOf(ctx, o.defId).types.includes('Creature')))
       )
         n *= 2;
+  }
+  // Lorwyn Eclipsed (18a): Lasting Tarfire, "if you put a counter on a creature this turn".
+  if (def(ctx, id).types.includes('Creature')) {
+    const putBy = by ?? ctx.puttingPlayer ?? o.controller;
+    const list = (ctx.s.turn.creatureCountersBy ??= []);
+    if (!list.includes(putBy)) list.push(putBy);
   }
   if (name) {
     const c = (o.counters ??= {});

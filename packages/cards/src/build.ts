@@ -51,10 +51,17 @@ const KEYWORDS: Record<string, Keyword> = {
   Flash: 'flash',
   Indestructible: 'indestructible',
   Changeling: 'changeling',
+  // Lorwyn Eclipsed (18a).
+  Persist: 'persist',
+  Wither: 'wither',
 };
 
 /** Scryfall "keywords" that are really ability words or triggers we model as abilities. */
 export const KEYWORDS_AS_ABILITIES = new Set([
+  // Lorwyn Eclipsed (18a): the cost or effect lives in the behaviour (`evoke`, `conspire`, `Amount` `vivid`).
+  'Evoke',
+  'Conspire',
+  'Vivid',
   // Only matters for commanders: two partners may lead one deck (Vial Smasher).
   'Partner',
   'Prowess',

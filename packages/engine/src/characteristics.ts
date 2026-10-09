@@ -1,6 +1,7 @@
 import { commanderTypes, isCommander } from './brawl.ts';
 import { type Ctx, def, defOf, obj, other } from './context.ts';
 import { manaValue } from './cost.ts';
+import { vividCount } from './ecl-18a.ts';
 import { checkCondition } from './triggers.ts';
 import type {
   Amount,
@@ -193,6 +194,8 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
         if (st.affects === 'otherCreaturesYouControl' && srcId === id) continue;
         if (st.filter?.subtype && !hasSubtype(ctx, id, st.filter.subtype)) continue;
         if (st.filter?.token && !o.isToken) continue;
+        // Lorwyn Eclipsed (18a): Isilu, "each other nontoken creature you control".
+        if (st.filter?.nontoken && o.isToken) continue;
         if (
           st.filter?.hasCounters &&
           !o.plusOneCounters &&
@@ -507,6 +510,8 @@ export function countOf(
       for (const c of defOf(ctx, id).colors) colors.add(c);
     return colors.size;
   }
+  // Lorwyn Eclipsed (18a): Vivid.
+  if (a.count === 'vivid') return vividCount(ctx, player);
   // Reality Fracture (17a): Karn, Gilded Guardian.
   if (a.count === 'colorsAmongOtherArtifactsYouControl') {
     const colors = new Set<string>();
@@ -828,21 +833,69 @@ export function subtypesOf(ctx: Ctx, id: ObjectId): readonly string[] {
     result = [...result.filter((t) => NON_CREATURE_SUBTYPES.has(t)), e.creatureSubtype];
     timestamp = e.timestamp;
   }
+  // Lorwyn Eclipsed (18a): "loses all creature types".
+  for (const e of ctx.s.effects) {
+    if (
+      e.affected.id !== id || e.affected.zcc !== o.zcc || !e.noCreatureTypes ||
+      e.timestamp <= timestamp
+    ) continue;
+    result = result.filter((t) => NON_CREATURE_SUBTYPES.has(t));
+    timestamp = e.timestamp;
+  }
   return result;
 }
 
-/** Changeling's characteristic-defining ability precedes explicit type setters. */
+const allTypesAttachersCache = new WeakMap<CardDb, ReadonlySet<CardDefId>>();
+
+/** Lorwyn Eclipsed (18a): Equipment that makes the creature it's attached to every creature type (Stalactite Dagger). */
+function allTypesAttachers(db: CardDb): ReadonlySet<CardDefId> {
+  let set = allTypesAttachersCache.get(db);
+  if (!set) {
+    set = new Set(
+      [...db.values()]
+        .filter((d) =>
+          d.abilities.some(
+            (a) => a.kind === 'static' && a.effect.kind === 'attached' && a.effect.allCreatureTypes,
+          ),
+        )
+        .map((d) => d.id),
+    );
+    allTypesAttachersCache.set(db, set);
+  }
+  return set;
+}
+
+/**
+ * Changeling's characteristic-defining ability precedes explicit type setters. Lorwyn Eclipsed (18a): "gains all creature
+ * types" (for good, until end of turn, or while equipped) counts like it, and the latest of that and the type setters
+ * ("loses all creature types", Donald Blake's replacement) wins.
+ */
 function changeling(ctx: Ctx, id: ObjectId, subtype: string): boolean {
+  if (NON_CREATURE_SUBTYPES.has(subtype)) return false;
   const o = obj(ctx, id);
-  const typeSet = o.zone === 'battlefield' && (
-    o.creatureTypes || ctx.s.effects.some(
-      (e) => e.affected.id === id && e.affected.zcc === o.zcc && e.creatureSubtype,
-    )
-  );
-  return (
-    !typeSet && def(ctx, id).keywords.includes('changeling') &&
-    !NON_CREATURE_SUBTYPES.has(subtype)
-  );
+  let all = def(ctx, id).keywords.includes('changeling') ? -1 : -2;
+  let setter = -2;
+  if (o.zone === 'battlefield') {
+    if (o.creatureTypes) setter = o.creatureTypesTimestamp ?? o.timestamp;
+    if (o.allCreatureTypes !== undefined) all = Math.max(all, o.allCreatureTypes);
+    for (const e of ctx.s.effects) {
+      if (e.affected.id !== id || e.affected.zcc !== o.zcc) continue;
+      if (e.creatureSubtype || e.noCreatureTypes) setter = Math.max(setter, e.timestamp);
+      if (e.allCreatureTypes) all = Math.max(all, e.timestamp);
+    }
+    const attachers = allTypesAttachers(ctx.db);
+    if (attachers.size)
+      for (const srcId of ctx.s.battlefield) {
+        const src = obj(ctx, srcId);
+        if (src.attachedTo === id && attachers.has(src.defId)) all = Math.max(all, src.timestamp);
+      }
+  }
+  return all > setter;
+}
+
+/** Is it every creature type (a changeling, or something that gained all creature types)? */
+export function hasAllCreatureTypes(ctx: Ctx, id: ObjectId): boolean {
+  return changeling(ctx, id, 'Goblin');
 }
 
 /** Has this subtype (printed, gained, or every creature type for a changeling). */
@@ -1133,7 +1186,14 @@ export function cardMatches(
               sourceId
               ? (obj(ctx, sourceId).manaColors?.length ?? 0)
               : 0
-            : filter.maxManaValue;
+            : filter.maxManaValue === 'x'
+              ? // Lorwyn Eclipsed (18a): Celestial Reunion, "mana value X or less" (the spell's X).
+                sourceId
+                ? (ctx.s.stack.find((i) => i.kind === 'spell' && i.id === sourceId)?.x ??
+                  obj(ctx, sourceId).xPaid ??
+                  0)
+                : 0
+              : filter.maxManaValue;
     if (mv > max) return false;
   }
   if (filter.other && id === sourceId) return false;
