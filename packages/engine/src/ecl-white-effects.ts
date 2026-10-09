@@ -11,7 +11,6 @@ import {
   def,
   moveObject,
   newTimestamp,
-  obj,
   sacrifice,
 } from './context.ts';
 import { canEnchant } from './fra-white-effects.ts';
@@ -96,7 +95,8 @@ export const ECL_WHITE_EFFECTS: Record<string, CustomEffect> = {
     if (!o || o.zone !== 'library') return;
     if (host !== undefined && !canEnchant(ctx, card, host)) return;
     moveObject(ctx, card, 'battlefield', { controller: es.controller });
-    if (host !== undefined && ctx.s.objects[card]?.zone === 'battlefield') attachAura(ctx, card, host);
+    if (host !== undefined && ctx.s.objects[card]?.zone === 'battlefield')
+      attachAura(ctx, card, host);
   },
 
   /** Ajani, Outland Chaperone: "Then shuffle." */

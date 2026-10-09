@@ -32,7 +32,11 @@ import { ECL_KITHKIN, ECL_SHAPESHIFTER } from './tokens.ts';
  * name in ECL_WHITE_BACKS. See docs/lorwyn-eclipsed-plan.md.
  */
 
-const kithkin = (count: Amount = 1): EffectDef => ({ kind: 'createToken', token: ECL_KITHKIN, count });
+const kithkin = (count: Amount = 1): EffectDef => ({
+  kind: 'createToken',
+  token: ECL_KITHKIN,
+  count,
+});
 const shapeshifter: EffectDef = { kind: 'createToken', token: ECL_SHAPESHIFTER, count: 1 };
 const surveil1: EffectDef = { kind: 'surveil', amount: 1 };
 const custom = (handler: string, params?: Record<string, unknown>): EffectDef => ({
@@ -109,7 +113,11 @@ export const ECL_WHITE: Record<string, Behavior> = {
     abilities: [
       // "When this creature enters, each creature target opponent controls loses all abilities, becomes a Coward in
       // addition to its other types, and has base power and toughness 1/1."
-      when({ on: 'etb' }, [{ what: 'player', controller: 'opponent' }], custom('eclCuriousColossus')),
+      when(
+        { on: 'etb' },
+        [{ what: 'player', controller: 'opponent' }],
+        custom('eclCuriousColossus'),
+      ),
     ],
   },
   'Encumbered Reejerey': {
@@ -128,21 +136,17 @@ export const ECL_WHITE: Record<string, Behavior> = {
   'Flock Impostor': {
     abilities: [
       // "When this creature enters, return up to one other target creature you control to its owner's hand."
-      when(
-        { on: 'etb' },
-        [{ ...yourCreature, filter: { other: true }, optional: true }],
-        { kind: 'bounce', what: t0 },
-      ),
+      when({ on: 'etb' }, [{ ...yourCreature, filter: { other: true }, optional: true }], {
+        kind: 'bounce',
+        what: t0,
+      }),
     ],
   },
   'Gallant Fowlknight': {
     abilities: [
       // "When this creature enters, creatures you control get +1/+0 until end of turn. Kithkin creatures you control also
       // gain first strike until end of turn."
-      onEnter(
-        teamPump(1, 0),
-        pump(yourCreaturesOf('Kithkin'), 0, 0, ['firstStrike']),
-      ),
+      onEnter(teamPump(1, 0), pump(yourCreaturesOf('Kithkin'), 0, 0, ['firstStrike'])),
     ],
   },
   'Goldmeadow Nomad': {
@@ -204,7 +208,10 @@ export const ECL_WHITE: Record<string, Behavior> = {
           {
             kind: 'chooseYourPermanent',
             filter: { subtype: 'Merfolk', tapped: false },
-            then: [{ kind: 'tap', what: 'chosen' }, { kind: 'reflexiveTrigger', ability: 1 }],
+            then: [
+              { kind: 'tap', what: 'chosen' },
+              { kind: 'reflexiveTrigger', ability: 1 },
+            ],
           },
         ],
       }),
@@ -316,10 +323,14 @@ export const ECL_WHITE: Record<string, Behavior> = {
       when(
         { on: 'creatureYouControlAttacks', alone: true },
         [],
-        pump('subject', { count: 'creaturesYouControl', subtype: 'Kithkin' }, {
-          count: 'creaturesYouControl',
-          subtype: 'Kithkin',
-        }),
+        pump(
+          'subject',
+          { count: 'creaturesYouControl', subtype: 'Kithkin' },
+          {
+            count: 'creaturesYouControl',
+            subtype: 'Kithkin',
+          },
+        ),
       ),
     ],
   },
@@ -537,13 +548,7 @@ export const ECL_WHITE: Record<string, Behavior> = {
   'Pyrrhic Strike': {
     // "As an additional cost to cast this spell, you may blight 2. Choose one. If this spell's additional cost was paid,
     // choose both instead."
-    ...optionalBlight(
-      2,
-      combineSpells([
-        pyrrhicArtifactOrEnchantment(),
-        pyrrhicBigCreature(),
-      ]),
-    ),
+    ...optionalBlight(2, combineSpells([pyrrhicArtifactOrEnchantment(), pyrrhicBigCreature()])),
     modes: [pyrrhicArtifactOrEnchantment(), pyrrhicBigCreature()],
   },
   "Riverguard's Reflexes": {
