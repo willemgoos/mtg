@@ -107,6 +107,34 @@ describe('Jump In packets', () => {
     expect(deckById(jumpInId('fra-lifegain', 'angels')).set).toBeUndefined();
   });
 
+  it("has Lorwyn Eclipsed packets with Arena's names and colours, one rare each", () => {
+    const ecl = PACKETS.filter((p) => p.set === 'ecl');
+    // Arena's ten Lorwyn Eclipsed packets (Draftsim's list); the cards are ours.
+    const arena = [
+      'Kithkin WG',
+      'Merfolk WU',
+      'Elemental UR',
+      'Goblins BR',
+      'Elves BG',
+      'Flashy UB',
+      'Burdened W',
+      'Blighted B',
+      'Giant R',
+      'Vivid G',
+    ];
+    for (const p of ecl) expect(arena).toContain(`${p.name} ${p.colors.join('')}`);
+    expect(new Set(ecl.map((p) => p.name)).size).toBe(ecl.length);
+    for (const p of ecl) {
+      const rares = p.spells.filter(([n]) => ['rare', 'mythic'].includes(card.get(n)!.rarity));
+      expect(rares, p.name).toHaveLength(1);
+      expect(
+        p.spells.reduce((n, [, k]) => n + k, 0),
+        p.name,
+      ).toBe(12);
+    }
+    expect(deckById(jumpInId('ecl-kithkin', 'ecl-merfolk')).set).toBe('ecl');
+  });
+
   it('pairs packets across sets; a pair from one set is of that set', () => {
     const mixed = deckById(jumpInId('goblins', 'blb-lizards'));
     expect(deckIds(mixed)).toHaveLength(40);

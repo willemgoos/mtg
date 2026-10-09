@@ -34,7 +34,15 @@ export interface ManaCost {
 // ---------------------------------------------------------------------------
 
 export type CardType =
-  'Creature' | 'Instant' | 'Sorcery' | 'Land' | 'Enchantment' | 'Artifact' | 'Planeswalker';
+  | 'Creature'
+  | 'Instant'
+  | 'Sorcery'
+  | 'Land'
+  | 'Enchantment'
+  | 'Artifact'
+  | 'Planeswalker'
+  // Lorwyn Eclipsed (18b): Kindred cards (Firdoch Core, Morcant's Eyes, Boggart Mischief, Nameless Inversion).
+  | 'Kindred';
 export type Supertype = 'Basic' | 'Legendary' | 'Snow'; // Strixhaven Brawl (15b, w/u/g): Snow
 
 export type Keyword =
@@ -63,10 +71,18 @@ export type Keyword =
   | 'ward'
   /** Ward {1}, granted by another permanent (Long River Lurker, Innkeeper's Talent). */
   | 'wardOne'
+  // Lorwyn Eclipsed (18b, red): Hexing Squelcher
+  /** "Ward—Pay 2 life", granted by another permanent. */
+  | 'wardPayTwoLife'
   /** Can't be the target of spells or abilities (Whispersilk Cloak). */
   | 'shroud'
   /** Changeling: every creature type. */
-  | 'changeling';
+  | 'changeling'
+  // Lorwyn Eclipsed (18a): persist and wither
+  /** Persist: when it dies, if it had no -1/-1 counters on it, it returns with a -1/-1 counter. */
+  | 'persist'
+  /** Wither: damage it deals to creatures is dealt as -1/-1 counters. */
+  | 'wither';
 
 /** What an instant or sorcery (or one of its modes) does when it resolves. */
 export interface SpellDef {
@@ -192,6 +208,9 @@ export interface CardDefinition {
     replacesCost?: boolean;
     /** Strixhaven (13c): what the alternative cost does, for the cast menu (Verdant Mastery). */
     altLabel?: string;
+    // Lorwyn Eclipsed (18c, theme decks): Starfield Shepherd
+    /** The alternative cost can only be used from your hand (Warp: cast from exile later, it costs its mana cost). */
+    handOnly?: boolean;
     /** Strixhaven Brawl (15b, u): life paid as part of the alternative cost (Tezzeret's Gambit: 2). */
     life?: number;
     // Mystical Archive (16): Daze, Force of Will
@@ -210,6 +229,15 @@ export interface CardDefinition {
     // Marvel Super Heroes Jumpstart (Pym Particles)
     /** "You may cast this spell as though it had flash if it's cast using teamwork" (Quantum Reduction). */
     flash?: boolean;
+    // Lorwyn Eclipsed (18a): "As an additional cost to cast this spell, you may blight N"
+    /** The optional additional cost is blighting a creature you control N times (`cost` is {0}); paid, the spell is `kicked`. */
+    blight?: number;
+    /**
+     * "You may choose a creature type and behold N creatures of that type" (Celestial Reunion): `cost` is {0}; paid, the spell is
+     * `kicked`, its caster picks the type and then the creatures one at a time, and the spell remembers the type
+     * (`searchLibrary.battlefieldIfChosenType`).
+     */
+    beholdChosenType?: number;
   };
   // Mystical Archive (16): Angel's Grace, Krosan Grip, Berserk
   /** Split second: while it is on the stack, nobody can cast spells or activate (non-mana) abilities. */
@@ -242,6 +270,8 @@ export interface CardDefinition {
   convoke?: boolean;
   /** Life paid in addition to the flashback cost (Deep Analysis). */
   flashbackLife?: number;
+  /** Lorwyn Eclipsed (18a): "Flashback—{1}{R}, Behold three Elementals": flashing it back also beholds `count` matching cards or permanents. */
+  flashbackBehold?: { filter: CardFilter; count: number };
   // Reality Fracture (17a): Twinned Vision
   /** "Flashback—{cost}, Discard a card": flashing it back also discards a card. */
   flashbackDiscard?: boolean;
@@ -285,12 +315,31 @@ export interface CardDefinition {
   entersTappedIf?: ConditionDef;
   /** "As an additional cost to cast this spell, forage or pay this" (Feed the Cycle). */
   forageOrPay?: ManaCost;
+  // Lorwyn Eclipsed (18a): blight, evoke, conspire, behold-and-exile
+  /** "As an additional cost to cast this spell, blight N" (put N -1/-1 counters on a creature you control; chosen when casting). */
+  blightToCast?: number;
+  /** "As an additional cost to cast this spell, blight N or pay <pay>" (Bogslither's Embrace, Wild Unraveling). */
+  blightOrPay?: { amount: number; pay: ManaCost };
+  /** "As an additional cost to cast this spell, blight X. X can't be greater than the greatest toughness among creatures you control" (Soul Immolation); X is `{ x: true }`. */
+  blightX?: boolean;
+  /** Evoke: may be cast for this instead of its mana cost; if it was, it's sacrificed when it enters (see the `wasEvoked` condition). */
+  evoke?: ManaCost;
+  /** Conspire: as it's cast, you may tap two untapped creatures you control that share a colour with it; if you do, copy it. */
+  conspire?: boolean;
+  /**
+   * "As an additional cost to cast this spell, behold a <filter> and exile it" (the Champions): a matching permanent you control
+   * or a matching card in your hand is exiled. A later "return the exiled card to its owner's hand" is the `returnBeholdExiled` effect.
+   */
+  beholdExile?: CardFilter;
   // Reality Fracture (17c): Countersculpt
   /**
    * "As an additional cost to cast this spell, behold a <filter> or pay <pay>": a Jace you control or a Jace card in your hand
    * (revealed; nothing else happens to it) makes the cost free, else the cast pays `pay` too. The cast action says which (`beheld`).
    */
   beholdOrPay?: { filter: CardFilter; pay: ManaCost };
+  // Lorwyn Eclipsed (18b, blue): Illusion Spinners
+  /** "You may cast this spell as though it had flash if <condition>." */
+  flashIf?: ConditionDef;
   /** Aura: what it enchants (chosen as a target when cast). */
   enchant?: TargetSpec;
   // Transform (Marvel Super Heroes)
@@ -381,8 +430,14 @@ export type AbilityDef =
       kind: 'mana';
       cost: CostDef;
       produces: ManaType;
-      /** "Spend this mana only to cast a spell of this subtype" (Giada: 'Angel'; 'chosenType': a creature spell of the type chosen for it). */
+      /**
+       * "Spend this mana only to cast a spell of this subtype" (Giada: 'Angel'; 'chosenType': a creature spell of the type chosen for it;
+       * Lorwyn Eclipsed (18b, special) 'chosenTypeOrAbility': a spell of the chosen type, or an ability of a source of the chosen type: Eclipsed Realms).
+       */
       onlyFor?: string;
+      // Lorwyn Eclipsed (18b, red): Flamebraider
+      /** With `onlyFor`: the mana can also pay to activate abilities of sources of that subtype ("Elemental spells or abilities of Elemental sources"). */
+      orAbilitiesOfSources?: boolean;
       /** Makes two mana instead of one while this holds (Ilysian Caryatid). */
       doubleIf?: ConditionDef;
       /** Only if this is the color chosen for it (Uncharted Haven). */
@@ -426,6 +481,12 @@ export type AbilityDef =
        * colour, chosen as the mana is spent. `produces` is ignored.
        */
       anyOneColor?: boolean;
+      // Lorwyn Eclipsed (18b, special): Brigid, Doun's Mind ("X {G} or X {W}")
+      /** With `anyOneColor`: the colour is one of these only. */
+      oneOf?: ManaType[];
+      // Lorwyn Eclipsed (18b, green): Bloom Tender
+      /** "For each color among permanents you control, add one mana of that color." */
+      vivid?: boolean;
     }
   | {
       kind: 'activated';
@@ -551,6 +612,20 @@ export interface CostDef {
   // Reality Fracture (17a): Tenured Tethermage
   /** Tap this many untapped artifacts you control (chosen when activating; the source may be one). */
   tapArtifacts?: number;
+  // Lorwyn Eclipsed (18a): Blight N
+  /** Blight N: put N -1/-1 counters on a creature you control (chosen when activating). */
+  blight?: number;
+  /** "Remove a counter from this creature" / "Remove two counters from this creature": counters of any kinds, chosen when activating. */
+  removeAnyCounters?: number;
+  // Lorwyn Eclipsed (18b, multi-b): High Perfect Morcant, Kirol
+  /**
+   * "Tap three untapped Elves you control" / "Tap two untapped creatures you control": the permanents are chosen when activating
+   * (the action's `tapArtifacts` lists them, whatever their type; the source may be one of them).
+   */
+  tapUntapped?: { count: number; filter: CardFilter };
+  // Lorwyn Eclipsed (18b, white): Kithkeeper
+  /** "Tap three untapped creatures you control" (the source may be one of them; the player picks them on the board). */
+  tapCreatures?: number;
 }
 
 export type TriggerDef =
@@ -565,6 +640,9 @@ export type TriggerDef =
   | {
       on: 'creatureYouControlDealsCombatDamage';
       toPlayer?: boolean;
+      // Lorwyn Eclipsed (18b, blue): Flitterwing Nuisance
+      /** To a player or a planeswalker (not to a creature). */
+      toPlayerOrPlaneswalker?: boolean;
       filter?: CardFilter;
       /** Any player's creature, not just yours (The Clone Saga's emblem: "a creature with the chosen name"). */
       anyController?: boolean;
@@ -590,7 +668,12 @@ export type TriggerDef =
       /** "Attack a player" (Crimson Cowl): ones attacking a planeswalker don't count. */
       aPlayer?: boolean;
     }
-  | { on: 'combatDamageToPlayer' }
+  | {
+      on: 'combatDamageToPlayer';
+      // Lorwyn Eclipsed (18b, special): Sygg, Wanderwine Wisdom's granted ability
+      /** "to a player or planeswalker". */
+      orPlaneswalker?: boolean;
+    }
   | {
       on: 'castSpell';
       filter:
@@ -638,7 +721,10 @@ export type TriggerDef =
         | 'targetsOpponentOrTheirCreature'
         // Reality Fracture (17a): Danitha, Sword of Hope
         /** An Equipment spell, or a spell that targets a creature you control. */
-        | 'equipmentOrTargetsYourCreature';
+        | 'equipmentOrTargetsYourCreature'
+        // Lorwyn Eclipsed (18b, red): Spinerock Tyrant
+        /** An instant or sorcery spell with a single target (exactly one chosen target). */
+        | 'instantOrSorceryOneTarget';
       /** The spell must also match this (Gev: a Lizard spell). */
       spell?: CardFilter;
       /** Any player's spell, cast when it isn't their turn (Vision). */
@@ -772,7 +858,7 @@ export type TriggerDef =
   /** At the beginning of your draw step. */
   // Reality Fracture (17c): The Theorist, Jace Beleren
   /** `whose: 'opponents'`: at the beginning of each opponent's draw step. */
-  | { on: 'beginningOfDraw'; whose?: 'opponents' }
+  | { on: 'beginningOfDraw'; whose?: 'opponents' | 'each' } // Lorwyn Eclipsed (18b, black): 'each' (Mornsong Aria)
   /** Whenever a creature you control becomes the target of an opponent's spell or ability (Pawpatch Recruit). */
   | { on: 'yourCreatureTargetedByOpponent' }
   /** When this Class becomes level N. */
@@ -929,7 +1015,28 @@ export type TriggerDef =
   /** Whenever one or more other creatures you control enter from a graveyard (Celes). Use with `batch`. */
   | { on: 'creaturesEnterFromGraveyard' }
   /** Whenever this permanent becomes untapped (Key to the City). */
-  | { on: 'becomesUntapped' };
+  | { on: 'becomesUntapped' }
+  // Lorwyn Eclipsed (18a)
+  /** "Whenever this creature enters or transforms into <this face>" (the seven two-faced legends' front faces). */
+  | { on: 'etbOrTransforms' }
+  /** "Whenever this creature transforms into <this face>" (the back faces). */
+  | { on: 'transforms' }
+  /** "When this creature leaves the battlefield" (to any zone; the Champions). */
+  | { on: 'leavesBattlefield' }
+  // Lorwyn Eclipsed (18b, multi-b): Doran, Besieged by Time
+  /** Whenever a creature you control blocks (the creature is the subject). */
+  | { on: 'creatureYouControlBlocks' }
+  // Lorwyn Eclipsed (18b, black)
+  /** Moonshadow: whenever one or more permanent cards (not tokens) are put into your graveyard from anywhere (use with `batch`). */
+  | { on: 'permanentCardsToYourGraveyard' }
+  /**
+   * Twilight Diviner: whenever one or more other creatures you control enter, if they entered or were cast from a graveyard
+   * (use with `batch` and `oncePerTurn`; the creatures that did are the `subjects`).
+   */
+  | { on: 'creaturesEnterFromOrCastFromGraveyard' }
+  // Lorwyn Eclipsed (18c, theme decks): Magmatic Galleon
+  /** Whenever one or more creatures your opponents control are dealt excess noncombat damage (use with `batch`; the amount is the excess). */
+  | { on: 'opponentCreaturesDealtExcessNoncombat' };
 
 export type ConditionDef =
   // Strixhaven Brawl (15b, g): Orochi Merge-Keeper
@@ -967,6 +1074,9 @@ export type ConditionDef =
   | { kind: 'opponentControlsCreature'; filter: CardFilter }
   /** Threshold-style: at least `min` cards (of these types) in your graveyard. */
   | { kind: 'graveyardCount'; min: number; types?: CardType[] }
+  // Lorwyn Eclipsed (18b, special): Trystan, Callous Cultivator
+  /** Your graveyard has at least `min` (default 1) cards matching the filter ("an Elf card in your graveyard"). */
+  | { kind: 'graveyardHas'; filter: CardFilter; min?: number }
   /** It's your turn and this is the first time you gained life this turn. */
   | { kind: 'firstLifeGainThisTurn'; anyTurn?: boolean }
   /** A chosen target matches the filter (Hazardroot Herbalist: "if that creature is a token"). */
@@ -1082,6 +1192,11 @@ export type ConditionDef =
   // Marvel Super Heroes
   /** The source entered the battlefield this turn. */
   | { kind: 'sourceEnteredThisTurn' }
+  // Lorwyn Eclipsed (18b, multi-a)
+  /** You attacked with at least `count` creatures matching the filter this turn (Deepway Navigator). */
+  | { kind: 'attackedWithAtLeast'; filter: CardFilter; count: number }
+  /** A creature other than the source entered the battlefield under your control this turn (Wary Farmer). */
+  | { kind: 'otherCreatureEnteredThisTurn' }
   /** You control a basic land. */
   | { kind: 'controlsBasicLand' }
   /** The source has a counter of this kind (a shield counter). */
@@ -1136,7 +1251,25 @@ export type ConditionDef =
   | { kind: 'subjectCrewedBySource' }
   // Marvel Super Heroes Jumpstart (Heroes for Hire)
   /** Target `target` was chosen and is still legal ("up to" targets: Iron Fist, Hero for Hire). */
-  | { kind: 'targetChosen'; target: number };
+  | { kind: 'targetChosen'; target: number }
+  // Lorwyn Eclipsed (18a)
+  /** The source was cast for its evoke cost ("if it was evoked"). */
+  | { kind: 'wasEvoked' }
+  /** The source has (or, if it left, had) at least `min` (default 1) counters of this kind: "if it had a -1/-1 counter on it". */
+  | { kind: 'sourceHadNamedCounter'; name: string; min?: number }
+  /** "If you put a counter on a creature this turn": you put counters of any kind on a creature. */
+  | { kind: 'putCounterOnCreatureThisTurn' }
+  /** "If {W}{W} was spent to cast it": at least these amounts of each colour were spent on the source spell (the best split of the payer's mana). */
+  | { kind: 'manaSpentColors'; colors: Partial<Record<Color, number>> }
+  // Lorwyn Eclipsed (18b, green)
+  /**
+   * A creature entered the battlefield under your control this turn (even if it has left since). `other`: not the source itself
+   * (Bristlebane Outrider, Thoughtweft Charge).
+   */
+  | { kind: 'creatureEnteredThisTurn'; other?: boolean }
+  // Lorwyn Eclipsed (18c, theme decks): Fearless Swashbuckler
+  /** You attacked with a creature matching the filter in this combat (even if it has left since). */
+  | { kind: 'attackedThisCombat'; filter: CardFilter };
 
 export interface CardFilter {
   anyOf?: CardFilter[];
@@ -1165,10 +1298,13 @@ export interface CardFilter {
   /** Mana value at most this ('sourcePower': the source's power, e.g. as it died). */
   // Secrets of Strixhaven (14a): Moseo, 'lifeGainedThisTurn' is the life its controller gained this turn.
   // Secrets of Strixhaven (14b): Sundering Archaic, 'colorsSpent' is the number of colours spent to cast the source.
-  maxManaValue?: number | 'sourcePower' | 'lifeGainedThisTurn' | 'colorsSpent';
+  maxManaValue?: number | 'sourcePower' | 'lifeGainedThisTurn' | 'colorsSpent' | 'x';
   // Secrets of Strixhaven (14b): Arnyn, Deathbloom Botanist
   /** Power or toughness at most this (printed, for a card that has left the battlefield). */
   maxPowerOrToughness?: number;
+  // Lorwyn Eclipsed (18b, red): Meek Attack
+  /** Power plus toughness at most this ("total power and toughness 5 or less"; printed, for a card not on the battlefield). */
+  maxPowerPlusToughness?: number;
   // Secrets of Strixhaven (14b): Mage Tower Referee
   /** Two or more colours. */
   multicolored?: boolean;
@@ -1245,6 +1381,9 @@ export interface CardFilter {
   greaterPowerThanSource?: boolean;
   /** Not of the creature type chosen for the source (Raise the Palisade). */
   notChosenTypeOfSource?: boolean;
+  // Lorwyn Eclipsed (18c, theme decks): Subterranean Schooner
+  /** One of the creatures that crewed the source this turn ("target creature that crewed it this turn"). */
+  crewedSource?: boolean;
   // Strixhaven (13c): Silverquill Silencer, Plargg
   /** Has the card name chosen for the source. */
   chosenNameOfSource?: boolean;
@@ -1292,6 +1431,9 @@ export interface TargetSpec {
   filter?: CardFilter;
   /** "Up to": this target and the ones after it may be left out. */
   optional?: boolean;
+  // Lorwyn Eclipsed (18b, multi-a): the Commands
+  /** In a combined "choose two" spell: which chosen mode this target belongs to. Targets of different modes may be the same object. */
+  ofMode?: number;
   // Marvel Super Heroes Jumpstart (Blink)
   /**
    * "Any number of target ...": the last spec of a triggered ability only. Its
@@ -1302,6 +1444,9 @@ export interface TargetSpec {
   // Reality Fracture (17a): Seasoned Cryomancer
   /** With `anyNumber`: no more targets than the amount the trigger carries ("up to that many target creatures"). */
   maxFromAmount?: boolean;
+  // Lorwyn Eclipsed (18b, special): Rooftop Percher
+  /** With `anyNumber`: no more than this many targets ("up to two target cards from graveyards"), picked one at a time. */
+  maxTargets?: number;
   // Final Fantasy (11c): targeting abilities
   /**
    * With 'spell': activated and triggered abilities on the stack are targets
@@ -1321,6 +1466,23 @@ export interface TargetSpec {
   // Reality Fracture (17c): Fatehold Charm
   /** With 'spell': a creature on the battlefield is a legal target too ("target spell or creature"). */
   orCreature?: boolean;
+  // Lorwyn Eclipsed (18b, multi-b): Kirol, Attentive First-Year
+  /** With `abilitiesOnly`: triggered abilities only ("target triggered ability"). */
+  triggeredOnly?: boolean;
+  /**
+   * In a "choose two" spell: the index of the first target of the mode this target belongs to. The targets before it belong to
+   * another mode and may be the same object or player (rule 115.3); only the ones from this index on must differ.
+   */
+  modeStart?: number;
+  // Lorwyn Eclipsed (18b, green): Prismabasher
+  /** With `anyNumber`: no more targets than this amount as the targets are chosen ("up to X target creatures", X = vivid). */
+  maxAmount?: Amount;
+  // Lorwyn Eclipsed (18b, black): Unbury
+  /**
+   * "Two target creature cards that share a creature type": this target must share a creature type with the target
+   * chosen just before it (each pair is listed once, the second target always the later card).
+   */
+  sharesCreatureTypeWithPrevious?: boolean;
 }
 
 /**
@@ -1427,6 +1589,9 @@ export type Amount =
   // Reality Fracture (17c): Overwrite the Multiverse
   /** The number of permanents the latest `exile` effect of this resolution actually exiled. */
   | { exiledThisWay: true }
+  // Lorwyn Eclipsed (18b, blue): Wanderwine Farewell, Glen Elendra's Answer
+  /** How many things the latest `bounce` returned to hand, or `eclCounterAllOpponents` countered, in this resolution. */
+  | { affectedThisWay: true }
   /** Permanents you control matching the filter (Honored Dreyleader: Squirrels and Food). */
   | { count: 'permanentsYouControl'; filter: CardFilter; other?: boolean }
   /** The greatest mana value among cards in your graveyard (Wick's Patrol). */
@@ -1437,10 +1602,17 @@ export type Amount =
   | { sacrificedPower: true }
   /** Creatures that died under your control this turn (Season of Loss). */
   | { count: 'creaturesYouLostThisTurn' }
+  // Lorwyn Eclipsed (18b, white): Kinbinding
+  /** The creatures that entered the battlefield under your control this turn (even ones that have left). */
+  | { count: 'creaturesEnteredThisTurn' }
   /** Strixhaven Brawl (15b, multi): +1/+1 counters you put on creatures you control this turn (Iridescent Hornbeetle). */
   | { count: 'countersPutThisTurn' }
   /** The greatest power among creatures you control (Season of Gathering). */
-  | { count: 'greatestPowerYouControl' }
+  | {
+      count: 'greatestPowerYouControl';
+      // Lorwyn Eclipsed (18b, green): Pummeler for Hire ("the greatest power among Giants you control")
+      subtype?: string;
+    }
   // Reality Fracture (17a): Ghalta the Immovable
   /** The greatest toughness among creatures you control. */
   | { count: 'greatestToughnessYouControl' }
@@ -1477,6 +1649,9 @@ export type Amount =
   // The Fantastic Four (9d).
   /** Colours among permanents you control and spells you've cast this turn (First Family). */
   | { count: 'colorsAmongPermanentsAndSpells' }
+  // Lorwyn Eclipsed (18a): Vivid
+  /** Vivid: the number of colours among permanents you control. */
+  | { count: 'vivid' }
   /** The colours of the spell that caused the trigger (Crystal). */
   | { count: 'subjectColors' }
   /** Cards in an opponent's hand (Recurring Insight). */
@@ -1607,6 +1782,9 @@ export type EffectDef =
       basePT?: [number, number];
       /** It becomes an artifact creature until end of turn (I Am Iron Man). */
       becomesCreature?: boolean;
+      // Lorwyn Eclipsed (18b, green): the Mutavault token
+      /** With `becomesCreature`: a creature only, not an artifact too ("It's still a land"). */
+      creatureOnly?: boolean;
       /** Temporary creature subtype (Iron Suitcase). */
       creatureSubtype?: string;
       /** Prevent all combat damage that would be dealt to it this turn (Fleeting Flight). */
@@ -1614,6 +1792,9 @@ export type EffectDef =
       // Final Fantasy (11c): leftovers
       /** It must be blocked this turn if able (Magitek Scythe). */
       mustBeBlocked?: boolean;
+      // Lorwyn Eclipsed (18c, theme decks): Captain Howler, Sea Scourge
+      /** "Whenever it deals combat damage to a player this turn, you draw a card." */
+      drawOnCombatDamage?: boolean;
     }
   // Strixhaven (13b): Maelstrom Muse
   /** The next instant or sorcery spell you cast this turn costs {amount} less (X is read now). */
@@ -1654,7 +1835,7 @@ export type EffectDef =
       discardOnly?: boolean;
     }
   /** Exile the top N cards; choose one you may play until the end of your next turn (or of this turn). */
-  | { kind: 'exileTopChooseOne'; count: number; until?: 'endOfTurn' }
+  | { kind: 'exileTopChooseOne'; count: Amount; until?: 'endOfTurn' }
   /**
    * Look at an opponent's hand and choose a card matching the filter; they
    * discard it (Thought-Stalker Warlock) or it's exiled.
@@ -1670,6 +1851,21 @@ export type EffectDef =
       castableIf?: ConditionDef;
       /** They reveal this many cards (picked for them: the cheapest), and you choose among those (Klaw). */
       reveal?: Amount;
+      // Lorwyn Eclipsed (18b, black): Taster of Wares
+      /** Choose only among these cards (the ones the opponent revealed), if they're still in their hand. */
+      among?: ObjectId[];
+      /** With `castable`: only for as long as you control the source (the exiled card is castable with any mana type). */
+      castableWhileControlling?: boolean;
+      /** With `castable`: only a card matching this is castable (an instant or sorcery card). */
+      castableFilter?: CardFilter;
+      // Lorwyn Eclipsed (18c, theme decks): Lightstall Inquisitor
+      /** The opponent chooses the card from their own hand, and may play it for as long as it stays exiled. */
+      ownerChooses?: {
+        /** Each spell cast this way costs this much more. */
+        tax: number;
+        /** Each land played this way enters tapped. */
+        landsTapped: boolean;
+      };
     }
   /** A player chooses one of these (the owner of target `ownerOf`, or the controller). */
   | {
@@ -1691,7 +1887,10 @@ export type EffectDef =
        * Instead of a target: a card from your hand (West Coast Expansion) or
        * among the cards exiled with the source (Scarlet Witch), matching the filter.
        */
-      from?: 'hand' | 'exiledWithSource' | 'lastExiledWithSource';
+      from?: 'hand' | 'exiledWithSource' | 'lastExiledWithSource' | 'exileWithCounter';
+      // Lorwyn Eclipsed (18b, red): Goliath Daydreamer
+      /** With `from: 'exileWithCounter'`: cards you own in exile with a counter of this name on them. */
+      counter?: string;
       filter?: CardFilter;
       // Final Fantasy (11c): "with mana value less than or equal to that damage" (Buster Sword).
       maxManaValue?: Amount;
@@ -1736,6 +1935,9 @@ export type EffectDef =
       // Marvel Super Heroes Jumpstart (Tricksters)
       /** "You may choose new targets for the copy" (Loki Laufeyson): its controller chooses. */
       newTargets?: boolean;
+      // Lorwyn Eclipsed (18a): Spinerock Tyrant
+      /** "Those spells gain wither": the original and the copy. */
+      withWither?: boolean;
     }
   /** Each player sacrifices a creature of their choice (Season of Loss). */
   | { kind: 'eachPlayerSacrifices' }
@@ -1803,7 +2005,12 @@ export type EffectDef =
       /** Thriving lands: "choose a color other than" this one. */
       except?: Color;
     }
-  | { kind: 'chooseCreatureType' }
+  | {
+      kind: 'chooseCreatureType';
+      // Lorwyn Eclipsed (18b, special): Dawn-Blessed Pennant, Eclipsed Realms ("choose Elemental, Elf, ... or Treefolk")
+      /** Only these types may be chosen. */
+      from?: string[];
+    }
   // Strixhaven (13a): Learn
   /** Learn: reveal a Lesson from your sideboard and put it into your hand, or discard a card to draw a card, or neither. */
   | { kind: 'learn' }
@@ -1913,7 +2120,7 @@ export type EffectDef =
       mana: ManaType[][];
       count?: Amount;
       untilEndOfTurn?: boolean;
-      /** Spend it only on spells with this tag (Helga: 'BigCreature'). */
+      /** Spend it only on spells with this tag (Helga: 'BigCreature'; Lorwyn Eclipsed: 'MV4Plus', a spell with mana value 4 or greater). */
       onlyFor?: string;
       /** Karolina Dean: cannot pay for spells cast from hand. */
       notForHandSpells?: boolean;
@@ -1932,6 +2139,9 @@ export type EffectDef =
       together?: boolean;
       /** With `together`: "if a land enters this way, it enters tapped". */
       landsTapped?: boolean;
+      // Lorwyn Eclipsed (18b, white): Morningtide's Light
+      /** With `together`: "return those cards to the battlefield tapped" (every card, not just lands). */
+      allTapped?: boolean;
     }
   /** Discard your whole hand. */
   | { kind: 'discardHand' }
@@ -1962,6 +2172,9 @@ export type EffectDef =
       // Final Fantasy (11c): onto the battlefield attacking
       /** A card matching this enters tapped and attacking (Summoner's Grimoire: an enchantment card). */
       attackingIf?: CardFilter;
+      // Lorwyn Eclipsed (18b, white): Kinscaer Sentry
+      /** Mana value at most this amount, read as the effect resolves ("where X is the number of attacking creatures you control"). */
+      maxManaValueAmount?: Amount;
     }
   // Strixhaven (13c)
   /** The resolving spell returns to its owner's hand rather than the graveyard (Journey to the Oracle). */
@@ -2056,6 +2269,9 @@ export type EffectDef =
       // Reality Fracture (17a): Flourishing Grapple
       /** Until end of turn rather than until your next turn. */
       untilEndOfTurn?: boolean;
+      // Lorwyn Eclipsed (18b, multi-b): Abigale, Eloquent First-Year
+      /** With no duration: for as long as it's on the battlefield. */
+      permanent?: boolean;
     }
   | { kind: 'untap'; what: Ref }
   /** An additional combat phase after this one. */
@@ -2090,6 +2306,12 @@ export type EffectDef =
       // Reality Fracture (17a fixes): Loyal Tutor
       /** "Reveal it": the card found is shown to the opponent (a 'cardsRevealed' event). */
       reveal?: boolean;
+      // Lorwyn Eclipsed (18a): Celestial Reunion
+      /** If the spell's additional cost chose a creature type and the card found has it, it enters the battlefield instead of going to hand. */
+      battlefieldIfChosenType?: boolean;
+      // Lorwyn Eclipsed (18b, black): Mornsong Aria
+      /** The player whose turn it is searches (their own library, the card goes to their hand), not the controller. */
+      activePlayerSearches?: boolean;
     }
   /** Look at the top N; you may put a creature with mana value up to your land count onto the battlefield (Loot). */
   | { kind: 'lookForCreature'; count: number }
@@ -2267,7 +2489,7 @@ export type EffectDef =
   | { kind: 'returnSubject'; counters?: number; named?: string; loyaltyToo?: boolean }
   // Marvel Super Heroes Jumpstart (Blink)
   /** Return these exiled cards to the battlefield together under their owners' control (lands tapped). */
-  | { kind: 'returnExiledCards'; cards: ObjectRef[]; landsTapped?: boolean }
+  | { kind: 'returnExiledCards'; cards: ObjectRef[]; landsTapped?: boolean; allTapped?: boolean }
   /** Put a card from a graveyard onto the battlefield under your control (with a named counter: finality). */
   | {
       kind: 'returnToBattlefield';
@@ -2483,6 +2705,9 @@ export type EffectDef =
       what?: Ref;
       /** How long: until its controller's next turn, or while the source stays on the battlefield. */
       until?: 'yourNextTurn' | 'whileSource';
+      // Lorwyn Eclipsed (18b, blue): Mirrorform
+      /** No end: it stays a copy for as long as it is on the battlefield. */
+      permanent?: boolean;
       /** "Except he's a 4/4 Human Villain creature with vigilance" (Absorbing Man). */
       asCreature?: { power: number; toughness: number; subtypes: string[]; keywords: Keyword[] };
       // Strixhaven (13c): Echoing Equation
@@ -2611,7 +2836,39 @@ export type EffectDef =
    * Hideaway N: look at the top N cards, exile one face down (remembered as
    * exiled with the source), the rest on the bottom in a random order.
    */
-  | { kind: 'hideaway'; count: number };
+  | { kind: 'hideaway'; count: number }
+  // Lorwyn Eclipsed (18a)
+  /**
+   * Blight N as an effect: `who` (default you) puts N -1/-1 counters on a creature they control, of their choice (one choice, no
+   * prompt if they control just one creature). `optional`: "you may blight N". `then` happens if they blighted (the creature is
+   * the `'chosen'` Ref: "the blighted creature"); `otherwise` if they didn't ("if you don't") or couldn't.
+   */
+  | {
+      kind: 'blight';
+      amount: Amount;
+      who?: 'controller' | 'eachOpponent' | { target: number };
+      optional?: boolean;
+      then?: EffectDef[];
+      otherwise?: EffectDef[];
+    }
+  /** "Gains all creature types": for good (Oko's +2) or until end of turn (Glamer Gifter). */
+  | { kind: 'allCreatureTypes'; what: Ref; duration: 'permanent' | 'endOfTurn' }
+  // Lorwyn Eclipsed (18b, white): Morningtide's Light
+  /** "Until your next turn, prevent all damage that would be dealt to you." */
+  | { kind: 'preventDamageToYouUntilYourNextTurn' }
+  /** "Loses all creature types until end of turn" (Nameless Inversion). */
+  | { kind: 'loseCreatureTypes'; what: Ref }
+  /** "Return the exiled card to its owner's hand": the card the source beheld and exiled as it was cast (the Champions' leave trigger). */
+  | { kind: 'returnBeholdExiled' }
+  /** Persist's return (engine use; the trigger is queued by the engine). */
+  | { kind: 'persistReturn' }
+  /**
+   * "Remove a -1/-1 counter from this creature" (`name`), or "remove a counter" of any kind (the player chooses the kind if
+   * the creature has several). `count` defaults to 1.
+   */
+  | { kind: 'removeCounters'; from: Ref; name?: string; count?: Amount }
+  /** "Remove any number of counters from target creature": the player takes them off one at a time, kind by kind, until they stop. */
+  | { kind: 'removeAnyNumberOfCounters'; from: Ref };
 
 export type StaticDef =
   // Strixhaven Brawl (15b, g): Hardened Scales, Kami of Whispered Hopes
@@ -2642,6 +2899,9 @@ export type StaticDef =
       kind: 'anthem';
       affects: 'otherCreaturesYouControl' | 'creaturesYouControl' | 'creaturesOpponentsControl';
       filter?: CardFilter;
+      // Lorwyn Eclipsed (18c, theme decks): Fearless Swashbuckler ("Vehicles you control have haste")
+      /** Affects permanents matching the filter even when they aren't creatures (Vehicles). */
+      anyPermanent?: boolean;
       condition?: ConditionDef;
       power: Amount;
       toughness: Amount;
@@ -2689,6 +2949,11 @@ export type StaticDef =
       /** Other permanents you control of any type, not just creatures (A Realm Reborn). */
       otherPermanents?: boolean;
     }
+  /**
+   * Lorwyn Eclipsed (18b, special): Mirrormind Crown. "As long as this Equipment is attached to a creature, the first time you would
+   * create one or more tokens each turn, you may instead create that many tokens that are copies of equipped creature."
+   */
+  | { kind: 'firstTokensCopyEquipped' }
   /** You may play an additional land on each of your turns (Loot). */
   | { kind: 'extraLandDrop' }
   /** Prevent all combat damage dealt to and by this creature (Fog Bank). */
@@ -2746,6 +3011,19 @@ export type StaticDef =
       mustBeBlockedAttacking?: boolean;
       /** A creature dying makes its triggered abilities (and your emblems') trigger twice (The Masamune). */
       deathTriggersTwice?: boolean;
+      // Lorwyn Eclipsed (18a): Stalactite Dagger
+      /** "Equipped creature ... is all creature types." */
+      allCreatureTypes?: boolean;
+      // Lorwyn Eclipsed (18b, blue): Noggle the Mind, Blossombind
+      /** With `loseAbilities` and `basePT`: "is a colorless <subtype> ..." (loses all colors and all other creature types). */
+      colorlessSubtype?: string;
+      /** "Enchanted creature can't become untapped" (by any effect, not only the untap step). */
+      cantBecomeUntapped?: boolean;
+      /** "Enchanted creature can't have counters put on it." */
+      noCounters?: boolean;
+      // Lorwyn Eclipsed (18b, white): Bark of Doran
+      /** "As long as equipped creature's toughness is greater than its power, it assigns combat damage equal to its toughness." */
+      toughnessAssignsDamage?: boolean;
     }
   // Reality Fracture (17a): Karn, Argent Defender
   /** "Artifacts and creatures entering the battlefield don't cause abilities to trigger." */
@@ -2817,6 +3095,30 @@ export type StaticDef =
   | { kind: 'conniveDrawsFirst' }
   /** "Noncreature spells you cast have improvise" (Ironheart). */
   | { kind: 'noncreatureSpellsHaveImprovise' }
+  // Lorwyn Eclipsed (18b, multi-b)
+  /** Each other creature you control has hexproof from each of its colors (Tam, Mindful First-Year). */
+  | { kind: 'hexproofFromOwnColors' }
+  /** If a triggered ability of another Elemental you control triggers, it triggers an additional time (Twinflame Travelers). */
+  | { kind: 'elementalTriggersTwice' }
+  /**
+   * "Once each turn, you may cast a spell with mana value less than or equal to <amount> from among cards exiled with this
+   * permanent this turn without paying its mana cost" (Maralen, Fae Ascendant). The cards are marked `exiledWithThisTurn`.
+   */
+  | { kind: 'castFreeFromThisTurnsExile'; maxManaValue: Amount }
+  // Lorwyn Eclipsed (18b, black): Mornsong Aria
+  /** "Players can't draw cards." */
+  | { kind: 'playersCantDraw' }
+  // Lorwyn Eclipsed (18a): Raiding Schemes
+  /** "Each noncreature spell you cast has conspire." */
+  | { kind: 'noncreatureSpellsHaveConspire' }
+  /** "Creature spells you cast have convoke." (Eirdu, Carrier of Dawn) */
+  | { kind: 'creatureSpellsHaveConvoke' }
+  /**
+   * "You may cast <filter> spells from among cards you own exiled with this creature by removing N counters from among creatures
+   * you control in addition to paying their other costs" (Dawnhand Dissident; the cards are remembered by `exileGraveyardCard.track`).
+   * The counters are chosen one at a time as it is cast.
+   */
+  | { kind: 'castExiledWithSelf'; filter: CardFilter; removeCounters: number; yourTurnOnly?: boolean }
   /** "Your opponents can't cast spells during your turn" (Jennifer Walters). */
   | { kind: 'opponentsCantCastDuringYourTurn' }
   /** "You have hexproof", while the condition holds (Captain America, Super-Soldier). */
@@ -2833,6 +3135,13 @@ export type StaticDef =
   | { kind: 'othersHaveProwess' }
   /** This creature can't be blocked by creatures matching the filter. */
   | { kind: 'cantBeBlockedBy'; filter: CardFilter }
+  // Lorwyn Eclipsed (18b, green)
+  /** "This creature must be blocked if able" (Vinebred Brawler); enforced like The Masamune's. */
+  | { kind: 'mustBeBlockedIfAble' }
+  /** "This creature can't be blocked by more than N creatures" (Safewright Cavalry: one). */
+  | { kind: 'maxBlockers'; count: number }
+  /** An Aura: "Enchanted land is the chosen color" (Shimmerwilds Growth); the land has only the Aura's `chosenColor` while attached. */
+  | { kind: 'landIsChosenColor' }
   /**
    * Other creatures you control enter with an additional +1/+1 counter while this
    * holds (Gev), or if they match the filter (Metallic Mimic: the chosen type).
@@ -3027,7 +3336,12 @@ export type StaticDef =
   | { kind: 'graveyardSpellsCostLess'; amount: number }
   // Final Fantasy (11c): leftovers
   /** It can't be blocked except by `count` or more creatures (Relentless X-ATM092: three). */
-  | { kind: 'minBlockers'; count: number };
+  | { kind: 'minBlockers'; count: number }
+  // Lorwyn Eclipsed (18b, red): Lavaleaper, Hexing Squelcher
+  /** Whenever a player taps a basic land for mana, that player adds one more mana of any type that land produced (every player's lands). */
+  | { kind: 'basicLandsAddExtraMana' }
+  /** "Spells you control can't be countered." */
+  | { kind: 'spellsYouControlUncounterable' };
 
 export type CardDb = ReadonlyMap<CardDefId, CardDefinition>;
 
@@ -3127,6 +3441,11 @@ export interface GameObject {
   abilitiesUntilCast?: { card: ObjectId; ability: AbilityDef }[];
   /** In exile: its owner may cast it for as long as it remains there. */
   castableWhileExiled?: boolean;
+  // Lorwyn Eclipsed (18c, theme decks): Lightstall Inquisitor
+  /** In exile: each spell cast from there costs this much more. */
+  exileCastTax?: number;
+  /** In exile: a land played from there enters tapped. */
+  exilePlayTapped?: boolean;
   /** It has lost all abilities (an effect until its controller's next turn). */
   blank?: boolean;
   /** A Class's level (1 if unset). */
@@ -3145,6 +3464,11 @@ export interface GameObject {
   /** Cast from exile this turn: if it would be put into a graveyard from the stack, it's exiled instead. */
   exileInstead?: boolean;
   chosenType?: string;
+  // Lorwyn Eclipsed (18b, special): Puca's Eye, Foraging Wickermaw
+  /** It's these colours (a colour-changing effect); `untilTurn`: only through the end of that turn. */
+  colorOverride?: { colors: Color[]; untilTurn?: number };
+  /** The creature type that was chosen for it when it left the battlefield ("the chosen type" of a sacrificed source). */
+  lastChosenType?: string;
   /** Cards exiled with it (Keen-Eyed Curator). */
   exiledWith?: ObjectId[];
   /** Strixhaven Brawl (15a): Skyclave Apparition: the owner and mana value of the card it exiled. */
@@ -3162,11 +3486,21 @@ export interface GameObject {
   // Marvel Super Heroes Jumpstart (Analyzed)
   /** In exile: `player` may play it for as long as they control `source` (Victor Mancha, Runaway). */
   playableWhileControlling?: { source: ObjectRef; player: PlayerId };
+  // Lorwyn Eclipsed (18b, black)
+  /** With `castableBy`: only while that player controls this permanent (Taster of Wares). */
+  castableWhileControlling?: ObjectRef;
+  /** The spell this object was cast as came from a graveyard (Twilight Diviner). */
+  castFromGraveyardZone?: boolean;
   // Reality Fracture (17a fixes): Hexhaven Dueling Arena
   /** The zone change (zcc) it was at when it last attacked: a creature that has changed zones since is a new object. */
   attackedZcc?: number;
   /** Its 'freeCastOncePerYourTurn' was used this turn (as this object: `zcc`). */
   freeCastUsed?: { turn: number; zcc: number };
+  // Lorwyn Eclipsed (18b, multi-b)
+  /** Tam, Mindful First-Year: it is all colors during this turn (turn number). Cleared when it changes zones. */
+  allColorsTurn?: number;
+  /** Maralen, Fae Ascendant: exiled with this permanent during this turn (turn number); castable by its controller under its static. */
+  exiledWithThisTurn?: { by: ObjectId; zcc: number; turn: number };
   /** The X paid for it as a spell (Hugs). */
   xPaid?: number;
   /** Mockingbird: it entered as a copy; this is what it really is. */
@@ -3192,6 +3526,9 @@ export interface GameObject {
   // Reality Fracture (17c): Theorist's Proxy
   /** This spell can't be countered (it was the next spell its controller cast after Theorist's Proxy's ability). */
   cantBeCountered?: boolean;
+  // Lorwyn Eclipsed (18b, red): Goliath Daydreamer
+  /** This spell is exiled with a dream counter on it, instead of going to the graveyard, as it resolves. */
+  dreamExile?: boolean;
   /** Extract Power: it may be played for free while exiled, by this player. */
   playFreeBy?: PlayerId;
   /** Mystical Archive (16): Mind's Desire: `playFreeBy` only lasts through this turn number. */
@@ -3296,6 +3633,20 @@ export interface GameObject {
   wasCast?: boolean;
   /** A copy of a card cast from exile: if it's a permanent spell it becomes a token as it resolves (Uldaros Theorix). */
   copyBecomesToken?: boolean;
+  // Lorwyn Eclipsed (18a)
+  /** It was cast for its evoke cost (kept while it's on the battlefield). */
+  evoked?: boolean;
+  /** Mana spent to cast it, by colour (the payer's best split for the colours "spent" conditions ask about); kept like `manaColors`. */
+  manaPaid?: Partial<Record<Color, number>>;
+  /** The card exiled as its cost by "behold … and exile it", while it's on the stack or the battlefield. */
+  beholdExiled?: ObjectRef;
+  /** The card it exiled that way as it last left the battlefield (the leave trigger returns it). */
+  lastBeholdExiled?: ObjectRef;
+  /** It has all creature types for good, from this timestamp (Oko, Lorwyn Liege's +2). */
+  allCreatureTypes?: number;
+  // Lorwyn Eclipsed (18b, blue): Noggle the Mind
+  /** It has lost all its colors. */
+  colorless?: boolean;
 }
 
 /** A reference that goes stale when the object changes zones. */
@@ -3336,6 +3687,9 @@ export interface PlayerState {
   // Strixhaven Brawl (15a): Patchplate Resolute
   /** One-time boons: the next creature spells you cast (one each) enter with an additional +1/+1 counter. */
   creatureBoons?: number;
+  // Lorwyn Eclipsed (18b, white): Morningtide's Light
+  /** "Prevent all damage that would be dealt to you" until this player's next turn begins. */
+  damagePrevented?: boolean;
   landsPlayedThisTurn: number;
   attackedThisTurn: boolean;
   drewFromEmptyLibrary: boolean;
@@ -3408,6 +3762,13 @@ export type StackItem =
       fromExile?: boolean;
       /** Marvel Super Heroes: cast for its sneak cost; it enters tapped and attacking this player. */
       sneak?: PlayerId;
+      // Lorwyn Eclipsed (18a)
+      /** Cast for its evoke cost: it's sacrificed when it enters. */
+      evoked?: boolean;
+      /** Conspire was chosen as it was cast: its caster picks the two creatures to tap, one at a time. */
+      conspire?: boolean;
+      /** Cast from exile by removing this many counters from among creatures its caster controls (Dawnhand Dissident). */
+      payCounters?: number;
     }
   | {
       kind: 'ability';
@@ -3482,6 +3843,9 @@ export interface TurnState {
   deflect?: PlayerId[];
   /** Creatures declared as attackers this turn, once per combat. */
   attackers: ObjectId[];
+  // Lorwyn Eclipsed (18c, theme decks): Fearless Swashbuckler
+  /** The creatures declared as attackers in the latest combat (even ones that have left since). */
+  combatAttackers?: ObjectId[];
   // Reality Fracture (17a): Hall of Echoes
   /** "The legend rule doesn't apply to permanents you control this turn." */
   noLegendRule?: PlayerId[];
@@ -3509,6 +3873,8 @@ export interface TurnState {
   creaturesLost?: Record<PlayerId, number>;
   /** Strixhaven Brawl (15b, multi): +1/+1 counters each player put on creatures they control this turn (Iridescent Hornbeetle). */
   countersPut?: Record<PlayerId, number>;
+  /** Lorwyn Eclipsed (18a): players who put a counter of any kind on a creature this turn (Lasting Tarfire). */
+  creatureCountersBy?: PlayerId[];
   /** Secrets of Strixhaven (14b): cards (not tokens) put into exile this turn (Ennis, Debate Moderator). */
   exiledCards?: number;
   /** Cards that left each player's graveyard this turn (Bonecache Overseer). */
@@ -3542,6 +3908,9 @@ export interface TurnState {
   endTheTurn?: boolean;
   /** Flying Drone: creatures with flying that entered this turn, and who controlled them then. */
   flyersEntered?: { id: ObjectId; player: PlayerId }[];
+  // Lorwyn Eclipsed (18b, green, multi-a): Bristlebane Outrider, Thoughtweft Charge, Wary Farmer
+  /** Creatures that entered the battlefield this turn, and who controlled them then. */
+  creaturesEntered?: { id: ObjectId; player: PlayerId }[];
   // Final Fantasy (11a): saga creatures
   /** Players whose creatures are dealt no damage this turn (Summon: Alexander). */
   creaturesShielded?: PlayerId[];
@@ -3581,6 +3950,9 @@ export interface TurnState {
   // Reality Fracture (17a): Molten Tide
   /** Players whose Mountains add an additional {R} when tapped for mana this turn. */
   moltenTide?: PlayerId[];
+  // Lorwyn Eclipsed (18b, special): Mirrormind Crown
+  /** Players whose first token creation this turn has happened ("the first time you would create one or more tokens each turn"). */
+  firstTokensDone?: PlayerId[];
 }
 
 export interface Attacker {
@@ -3666,11 +4038,22 @@ export interface ContinuousEffect {
   // Strixhaven Brawl (15b, w): Alseid of Life's Bounty
   /** Protection from this colour (targeting and damage; not blocking). */
   protectionFrom?: Color;
+  // Lorwyn Eclipsed (18b, multi-a): Figure of Fable
+  /** Protection from everything controlled by anyone but this player ("protection from each of your opponents"). */
+  protectionFromOthersThan?: PlayerId;
   // Final Fantasy (11c): leftovers
   /** It must be blocked this turn if able (Magitek Scythe). */
   mustBeBlocked?: boolean;
   /** As control reverts, an Equipment on a creature its controller doesn't control falls off (Stolen Uniform). */
   unattachOnRevert?: boolean;
+  // Lorwyn Eclipsed (18a)
+  /** It has all creature types (Glamer Gifter). */
+  allCreatureTypes?: boolean;
+  /** It has no creature types (Nameless Inversion). */
+  noCreatureTypes?: boolean;
+  // Lorwyn Eclipsed (18b, blue): Noggle the Mind
+  /** It is colorless. */
+  colorless?: boolean;
 }
 
 /** What an effect needs to know about the spell or ability producing it. */
@@ -3697,6 +4080,9 @@ export interface EffectSource {
   // Reality Fracture (17c): Overwrite the Multiverse
   /** Permanents its latest exile effect actually exiled ("the number of creatures exiled this way"). */
   exiledThisWay?: number;
+  // Lorwyn Eclipsed (18b, blue)
+  /** Permanents the latest `bounce` returned to hand / spells and abilities Glen Elendra's Answer countered. */
+  affectedThisWay?: number;
 }
 
 /**
@@ -3891,6 +4277,8 @@ export type Decision =
       // Reality Fracture (17a fixes): Loyal Tutor
       /** The card found is revealed. */
       reveal?: boolean;
+      /** Lorwyn Eclipsed (18a): Celestial Reunion: a card of this creature type goes onto the battlefield instead of into the hand. */
+      battlefieldIfType?: string;
       /** The land found becomes a Fractal creature (Emergent Sequence). */
       fractalLand?: boolean;
       /** If the card has one of these types, the source gets a +1/+1 counter (Oriq Loremage). */
@@ -3981,6 +4369,8 @@ export type Decision =
       player: PlayerId;
       /** Surveil: "bottom" cards go to the graveyard instead. */
       surveil?: boolean;
+      // Lorwyn Eclipsed (18c, theme decks): explore's "put the card back or put it into your graveyard" (a surveil that isn't one)
+      explore?: boolean;
       // Reality Fracture (17a): Enlightened Confidant
       /** Surveil: a card put into the graveyard with mana value at most this returns to the hand. */
       toHandMaxMv?: number;
@@ -4034,6 +4424,13 @@ export type Decision =
       castable?: boolean;
       // Reality Fracture (17a): Null Summoner
       castableIf?: ConditionDef;
+      // Lorwyn Eclipsed (18b, black): Taster of Wares
+      castableWhileControlling?: boolean;
+      castableFilter?: CardFilter;
+      /** Only these cards of their hand are revealed (and can be chosen); the rest stay hidden. */
+      among?: ObjectId[];
+      // Lorwyn Eclipsed (18c, theme decks): Lightstall Inquisitor
+      ownerChooses?: { tax: number; landsTapped: boolean };
       resume: PausedResolution;
       thenPriority: PlayerId;
     }
@@ -4060,6 +4457,8 @@ export type Decision =
       // Final Fantasy (11a): saga creatures
       /** Choosing none is allowed (Garnet: "any number of Sagas"). */
       optional?: boolean;
+      /** Lorwyn Eclipsed (18a): choosing the creature to blight: this many -1/-1 counters go on it. */
+      blight?: number;
       then: EffectDef[];
       otherwise: EffectDef[];
       resume: PausedResolution;
@@ -4137,6 +4536,58 @@ export type Decision =
       afterFree?: { decision: Extract<Decision, { kind: 'castFree' }>; cast: ObjectId };
       thenPriority: PlayerId;
     }
+  | {
+      // Lorwyn Eclipsed (18b, white): Morningtide's Light, "any number of target creatures" on a spell. The targets before the
+      // `anyNumber` spec are chosen with the cast; these are picked one at a time once the spell is on the stack. Each
+      // `chooseTargets` action is `picked` plus one more (keep picking), or exactly `picked` (done).
+      kind: 'spellTargets';
+      player: PlayerId;
+      spell: ObjectId;
+      picked: TargetChoice[];
+      thenPriority: PlayerId;
+    }
+  | {
+      // Lorwyn Eclipsed (18a): Conspire. Tap two untapped creatures that share a colour with the spell, one at a time; then the spell is copied.
+      kind: 'conspire';
+      player: PlayerId;
+      /** The spell on the stack. */
+      spell: ObjectId;
+      options: ObjectId[];
+      /** The first creature tapped. */
+      chosen: ObjectId[];
+      /** The targets the spell was cast with (ward's sacrifices come after). */
+      targets: TargetChoice[];
+      thenPriority: PlayerId;
+    }
+  | {
+      // Lorwyn Eclipsed (18a): Dawnhand Dissident. Counters removed from among your creatures, one at a time (`options`: the creature
+      // and the kind of counter, answered with chooseOption).
+      kind: 'payCounters';
+      player: PlayerId;
+      spell: ObjectId;
+      left: number;
+      options: { creature: ObjectId; kind: string }[];
+      targets: TargetChoice[];
+      thenPriority: PlayerId;
+    }
+  | {
+      // Lorwyn Eclipsed (18a): Celestial Reunion. The creature type (`types`, answered with chooseOption), then the creatures to
+      // behold one at a time (`options`, answered with chooseCard). The ones in hand are revealed.
+      kind: 'beholdType';
+      player: PlayerId;
+      /** The spell on the stack. */
+      spell: ObjectId;
+      /** How many creatures of the type are beheld. */
+      count: number;
+      /** Creature types that at least `count` creatures you could behold have. */
+      types: string[];
+      chosenType?: string;
+      /** The creatures of the chosen type still to pick from. */
+      options: ObjectId[];
+      chosen: ObjectId[];
+      targets: TargetChoice[];
+      thenPriority: PlayerId;
+    }
   | { kind: 'gameOver' };
 
 export interface GameState {
@@ -4159,6 +4610,8 @@ export interface GameState {
   pendingTriggers: PendingTrigger[];
   /** Ygra is on the battlefield: other creatures are Food artifacts. */
   creaturesAreFood?: boolean;
+  // Lorwyn Eclipsed (18b, green): a Shimmerwilds Growth has been on the battlefield (lands may be recoloured: `def` looks for the Aura).
+  landColorAuras?: boolean;
   /** Abilities players have from emblems or effects (Season of the Bold, Ral). */
   emblems?: Emblem[];
   /** "At the beginning of the next end step, ...": fire at the first end step after `afterTurn` / this step. */
@@ -4237,7 +4690,9 @@ export type Action =
         | 'now'
         | 'freeExact'
         | 'noctis'
-        | 'hades';
+        | 'hades'
+        // Lorwyn Eclipsed (18a): Dawnhand Dissident
+        | 'exiledWithSelf';
       /** Mockingbird: the creature to enter as a copy of. */
       copyOf?: ObjectId;
       /** Rottenmouth Viper: permanents sacrificed to make it cheaper. */
@@ -4255,6 +4710,15 @@ export type Action =
       teamwork?: ObjectId[];
       /** Mana sources to tap. Omitted: the engine picks. */
       payWith?: ObjectId[];
+      // Lorwyn Eclipsed (18a)
+      /** The creature you control that gets the -1/-1 counters of a blight cost. */
+      blight?: ObjectId;
+      /** Cast for its evoke cost. */
+      evoked?: boolean;
+      /** Conspire: you tap two creatures as it's cast (chosen one at a time once it's on the stack). */
+      conspire?: boolean;
+      /** The cards beheld for `flashbackBehold` (permanents you control, or cards in your hand, which are revealed). */
+      beholdCards?: ObjectId[];
     }
   | {
       type: 'activateAbility';
@@ -4277,6 +4741,14 @@ export type Action =
       // Marvel Super Heroes
       /** The value chosen for {X} in the ability's cost (Bruce Banner). */
       x?: number;
+      // Lorwyn Eclipsed (18a)
+      /** The creature you control that gets the -1/-1 counters of a blight cost. */
+      blight?: ObjectId;
+      /** The kinds of counters removed for `removeAnyCounters` ('-1/-1', '+1/+1', 'stun', ...), one entry for each. */
+      removeKinds?: string[];
+      // Lorwyn Eclipsed (18b, white): Kithkeeper
+      /** The creatures tapped for `tapCreatures` ("tap three untapped creatures you control") or to crew (Lorwyn Eclipsed 18c). */
+      tapCreatures?: ObjectId[];
     }
   | {
       type: 'addAttacker';
@@ -4327,8 +4799,21 @@ export type GameEvent =
       leftBlank?: boolean;
       // Final Fantasy (11c): its power as it left (a token's too): "that creature's power" (Vincent Valentine).
       lastPower?: number;
+      // Lorwyn Eclipsed (18a)
+      /** It died with persist and no -1/-1 counters on it: it returns with a -1/-1 counter. */
+      persist?: boolean;
+      /** The counters of every kind it had as it left the battlefield (a token's too). */
+      lastCounterTotal?: number;
     }
-  | { type: 'damageDealt'; source: ObjectId; to: TargetChoice; amount: number; combat: boolean }
+  | {
+      type: 'damageDealt';
+      source: ObjectId;
+      to: TargetChoice;
+      amount: number;
+      combat: boolean;
+      // Lorwyn Eclipsed (18c, theme decks): damage dealt to a creature beyond lethal damage
+      excess?: number;
+    }
   | { type: 'lifeChanged'; player: PlayerId; delta: number; life: number }
   | { type: 'tapped'; id: ObjectId; first?: boolean }
   /** A card went from its owner's hand to their graveyard (Doom Prevails). */
@@ -4373,6 +4858,9 @@ export type GameEvent =
   | { type: 'loyaltyCountersAdded'; id: ObjectId; count: number; player: PlayerId; by: PlayerId }
   /** `player` foraged. */
   | { type: 'foraged'; player: PlayerId }
+  // Lorwyn Eclipsed (18a)
+  /** `player` blighted `id`: put `amount` -1/-1 counters on it. */
+  | { type: 'blighted'; player: PlayerId; id: ObjectId; amount: number }
   /** `player` gave a gift. */
   | { type: 'giftGiven'; player: PlayerId }
   /** A Class gained a level. */

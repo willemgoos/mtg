@@ -275,7 +275,7 @@ export function Season({ onHome }: { onHome: () => void }) {
       <BoosterReveal
         key={receipt.packId}
         set={
-          (['blb', 'msh', 'fin', 'stx', 'sos', 'fra'] as const).find((set) =>
+          (['blb', 'msh', 'fin', 'stx', 'sos', 'fra', 'ecl'] as const).find((set) =>
             receipt.rewards.some(
               (r) => r.kind === 'card' && SEASON_CARDS.get(r.cardId)?.set === set,
             ),

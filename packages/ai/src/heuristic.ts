@@ -13,6 +13,7 @@ import {
   chooseHandSwap,
   chooseLandToPlay,
   choosePickExiled,
+  chooseBeholdType,
   chooseCreatureType,
   chooseForageExile,
   chooseWardSacrifice,
@@ -70,11 +71,19 @@ export function createHeuristicBot(db: CardDb, name = 'heuristic'): Bot {
         case 'discardToHandSize':
           return pickCardToLose(engine, view, me, legal);
         case 'chooseTriggerTargets':
+        case 'spellTargets': // Lorwyn Eclipsed (18b, white): Morningtide's Light
         case 'optionalEffect':
         case 'forage':
         case 'chooseObject':
         case 'payOrCounter':
         case 'castFree':
+        case 'conspire': // Lorwyn Eclipsed (18a): which two creatures to tap (blight's creature is a chooseObject)
+          return bestByEvaluation(engine, view, me, legal, 'stack');
+        // Lorwyn Eclipsed (18a): Celestial Reunion, the creature type to behold (the one it has most of), then any creatures.
+        case 'beholdType':
+          return chooseBeholdType(engine, view, me, d, legal);
+        // Lorwyn Eclipsed (18a): Dawnhand Dissident, the counters to remove (the evaluation likes losing -1/-1 counters).
+        case 'payCounters':
           return bestByEvaluation(engine, view, me, legal, 'stack');
         case 'chooseOption': {
           // Strixhaven (13a): Learn takes a Lesson if there is one (the first option), else the best by evaluation.
@@ -550,7 +559,7 @@ export function planBlocks(engine: Engine, view: GameState, me: PlayerId): Block
     const choices: ObjectId[][] = [[]];
     if (!a.menace) for (const b of free) choices.push([b]);
     // Relentless X-ATM092 needs three blockers: the bot doesn't try.
-    const top = a.minBlockers > 2 ? [] : free.slice(0, 4);
+    const top = a.minBlockers > 2 || a.maxBlockers < 2 ? [] : free.slice(0, 4);
     for (let i = 0; i < top.length; i++)
       for (let j = i + 1; j < top.length; j++) choices.push([top[i]!, top[j]!]);
 

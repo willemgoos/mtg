@@ -151,7 +151,7 @@ export const BRAWL_15B_G: Record<string, Behavior> = {
   'Broodguard Elite': {
     entersWithXCounters: true,
     // Warp {X}{G}: an alternative cost; it's exiled at the next end step and may be cast from exile later.
-    kicker: { cost: mana('{X}{G}'), replacesCost: true, altLabel: 'Warp' },
+    kicker: { cost: mana('{X}{G}'), replacesCost: true, altLabel: 'Warp', handOnly: true },
     abilities: [
       {
         ...when({ on: 'etb' }, [], custom('warpSchedule')),

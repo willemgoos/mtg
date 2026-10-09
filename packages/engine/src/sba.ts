@@ -1,5 +1,6 @@
 import { creaturesOnBattlefield, hasKeyword, isCreature, toughness } from './characteristics.ts';
 import { type Ctx, def, emit, moveObject, obj, sacrifice } from './context.ts';
+import { willPersist } from './ecl-18a.ts';
 import { permanentHasStatic } from './fra-pw-effects.ts';
 import { sagasToSacrifice } from './sagas.ts';
 import type { ObjectId, PlayerId } from './types.ts';
@@ -57,7 +58,10 @@ export function runSBAs(ctx: Ctx): void {
         )
       )
         dying.push(id);
+    // Lorwyn Eclipsed (18a): creatures dying together look back at each other (Isilu gives the others persist).
+    ctx.persisting = new Set(dying.filter((id) => willPersist(ctx, id)));
     for (const id of dying) moveObject(ctx, id, 'graveyard');
+    delete ctx.persisting;
     if (dying.length) changed = true;
     // Equipment attached to something that is no longer a creature on the battlefield
     // falls off; an Aura in that situation (or attached to nothing) goes to the graveyard.

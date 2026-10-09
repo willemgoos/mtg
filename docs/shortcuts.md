@@ -134,3 +134,25 @@ from) when it's fixed. Older phases keep their own "Simplifications" lists in `d
 - [x] Behold a Jace (Countersculpt, Theorist's Sanctum): you can't pick which Jace, and a Jace card in hand isn't revealed.
 - [ ] Theorist's Sanctum: "as this land enters, you may behold a Jace" is an enters-tapped land with an enters trigger that
       untaps it (the shock-land pattern), so in principle the opponent could respond before it untaps.
+
+## Lorwyn Eclipsed (`ecl/*.ts`, phase 18b)
+
+- [ ] "As this enters, choose a creature type" (Chronicle of Victory, Dawn-Blessed Pennant, Gathering Stone, Eclipsed
+      Realms) is an enters trigger, like earlier sets' cards, so in principle an opponent could respond before the type is
+      set.
+- [ ] Hallowed Fountain: the shock-land pattern (enters tapped, a prompt untaps it for 2 life).
+- [ ] Springleaf Drum and Foraging Wickermaw's `{1}` ability: mana abilities with a non-tap cost go on the stack (the
+      engine's mana abilities take only tap or sacrifice costs), so they can't be used in the middle of paying for a spell.
+- [ ] Mirrormind Crown: tokens made by other sets' hand-written custom effects (Brawl, FIC) don't count as "creating
+      tokens" for its once-each-turn.
+- [ ] Vinebred Brawler: "must be blocked if able" uses the existing Masamune enforcement: if the defender declares no block
+      on it, the engine picks the blocker instead of the player.
+- [ ] Shimmerwilds Growth: the colour is chosen by an enters trigger (like Utopia Sprawl), not as it enters.
+- [ ] Aurora Awakener: an Aura it puts onto the battlefield can only enchant a permanent already there, not another card
+      entering at the same time.
+- [ ] `colorSplitOfPayment` / `colorsSpent` read the first mana source with a given id, so several mana entries from one
+      source (Bloom Tender, Utopia Sprawl) may report the wrong colours for "if {W}{W} was spent" and converge checks.
+- [ ] Kinscaer Sentry: the creature it puts onto the battlefield tapped and attacking always attacks the opponent, never a
+      planeswalker you could choose (the engine's "tapped and attacking" convention).
+- [ ] Collective Inferno, Rimefire Torque: "as this enters, choose a creature type" is an enters trigger (the convention
+      above).

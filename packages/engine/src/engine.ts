@@ -40,6 +40,11 @@ import {
   answerChooseOption,
   answerForage,
   answerForageExile,
+  answerConspire,
+  answerSpellTargets,
+  answerBeholdType,
+  answerPayCounters,
+  answerBeholdCreature,
   answerPickExiled,
   answerPile,
   answerPunisher,
@@ -260,14 +265,18 @@ function apply(ctx: Ctx, action: Action): void {
     }
     case 'passPriority':
       return passPriority(ctx, player);
-    case 'playLand':
+    case 'playLand': {
+      // Lorwyn Eclipsed (18c): Lightstall Inquisitor, "each land played this way enters tapped".
+      const playTapped = ctx.s.objects[action.card]?.exilePlayTapped;
       moveObject(ctx, action.card, 'battlefield', {
         controller: player,
         ...(action.back ? { transformed: true } : {}),
       });
+      if (playTapped) ctx.s.objects[action.card]!.tapped = true;
       ps.landsPlayedThisTurn++;
       s.turn.passed = [];
       return givePriority(ctx, player);
+    }
     case 'castSpell': {
       // Cast for free in the middle of a resolution (Daring Waverider).
       if (d.kind === 'castFree' && d.exact) {
@@ -304,6 +313,7 @@ function apply(ctx: Ctx, action: Action): void {
           kickCount: action.kickCount,
           beheld: action.beheld,
           beholdCard: action.beholdCard,
+          blight: action.blight, // Lorwyn Eclipsed (18a)
           // Reality Fracture (17c): Chandra, Torch of Defiance: a cast paying every cost as from hand.
           ...(d.fullCost
             ? {
@@ -348,6 +358,11 @@ function apply(ctx: Ctx, action: Action): void {
           teamwork: action.teamwork,
           back: action.back,
           sneak: action.sneak,
+          // Lorwyn Eclipsed (18a)
+          blight: action.blight,
+          evoked: action.evoked,
+          conspire: action.conspire,
+          beholdCards: action.beholdCards,
         },
         action.payWith,
       );
@@ -369,6 +384,9 @@ function apply(ctx: Ctx, action: Action): void {
         action.x,
         action.tapCreature,
         action.tapArtifacts,
+        action.blight, // Lorwyn Eclipsed (18a)
+        action.removeKinds,
+        action.tapCreatures, // Lorwyn Eclipsed (18b, white)
       );
       return paused ? undefined : givePriority(ctx, player);
     }
@@ -410,6 +428,8 @@ function apply(ctx: Ctx, action: Action): void {
       }
       return answerOptionalEffect(ctx, action.accept);
     case 'chooseTargets': {
+      // Lorwyn Eclipsed (18b, white): a spell's "any number of target ...", one at a time.
+      if (d.kind === 'spellTargets') return answerSpellTargets(ctx, action.targets);
       if (d.kind !== 'chooseTriggerTargets') throw new IllegalActionError(action);
       // Marvel Super Heroes Jumpstart (Blink): one more "any number" target; the decision stays.
       if (d.picked && action.targets.length === d.picked.length + 1) {
@@ -449,6 +469,9 @@ function apply(ctx: Ctx, action: Action): void {
       if (d.kind !== 'forage') throw new IllegalActionError(action);
       return answerForage(ctx, action.choice);
     case 'chooseOption':
+      // Lorwyn Eclipsed (18a): Celestial Reunion's creature type.
+      if (d.kind === 'beholdType') return answerBeholdType(ctx, action.index);
+      if (d.kind === 'payCounters') return answerPayCounters(ctx, action.index);
       if (d.kind !== 'chooseOption') throw new IllegalActionError(action);
       return answerChooseOption(ctx, action.index);
     case 'chooseCard':
@@ -459,6 +482,9 @@ function apply(ctx: Ctx, action: Action): void {
         return answerSacrificeSeveral(ctx, action.card);
       if (d.kind === 'chooseFromHand') return answerChooseFromHand(ctx, action.card);
       if (d.kind === 'forageExile' && action.card) return answerForageExile(ctx, action.card);
+      // Lorwyn Eclipsed (18a): conspire, and Celestial Reunion's creatures to behold.
+      if (d.kind === 'conspire' && action.card) return answerConspire(ctx, action.card);
+      if (d.kind === 'beholdType' && action.card) return answerBeholdCreature(ctx, action.card);
       // Reality Fracture (17a fixes): ward's sacrifices.
       if (d.kind === 'wardSacrifice' && action.card) return answerWardSacrifice(ctx, action.card);
       if (d.kind === 'sacrifice' && action.card) return answerSacrifice(ctx, action.card);

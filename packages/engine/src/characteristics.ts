@@ -1,6 +1,7 @@
 import { commanderTypes, isCommander } from './brawl.ts';
 import { type Ctx, def, defOf, obj, other } from './context.ts';
 import { manaValue } from './cost.ts';
+import { vividCount } from './ecl-18a.ts';
 import { checkCondition } from './triggers.ts';
 import type {
   Amount,
@@ -188,11 +189,17 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
         if (st.filter && !cardMatches(ctx, id, st.filter, srcId)) continue;
         if (st.condition && !checkCondition(ctx, st.condition, src.controller, src)) continue;
         const opponents = st.affects === 'creaturesOpponentsControl';
-        if ((src.controller !== o.controller) !== opponents || !d.types.includes('Creature'))
+        if (
+          (src.controller !== o.controller) !== opponents ||
+          // Lorwyn Eclipsed (18c): Fearless Swashbuckler, "Vehicles you control have haste".
+          !(d.types.includes('Creature') || (st.anyPermanent && st.filter))
+        )
           continue;
         if (st.affects === 'otherCreaturesYouControl' && srcId === id) continue;
         if (st.filter?.subtype && !hasSubtype(ctx, id, st.filter.subtype)) continue;
         if (st.filter?.token && !o.isToken) continue;
+        // Lorwyn Eclipsed (18a): Isilu, "each other nontoken creature you control".
+        if (st.filter?.nontoken && o.isToken) continue;
         if (
           st.filter?.hasCounters &&
           !o.plusOneCounters &&
@@ -237,6 +244,8 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
       const st = em.ability.kind === 'static' ? em.ability.effect : undefined;
       if (st?.kind !== 'anthem' || em.controller !== o.controller) continue;
       if (!d.types.includes('Creature') && !crewed) continue;
+      // Lorwyn Eclipsed (18b, special): Oko, Shadowmoor Scion's emblem ("creatures of the chosen type"): a type filter.
+      if (st.filter?.subtype && !hasSubtype(ctx, id, st.filter.subtype)) continue;
       power += countOf(ctx, em.controller, st.power);
       toughness += countOf(ctx, em.controller, st.toughness);
       if (st.keywords?.length) {
@@ -318,6 +327,18 @@ export function countOf(
     const self = sourceId ? ctx.s.objects[sourceId] : undefined;
     return checkCondition(ctx, a.if, player, self) ? a.then : (a.else ?? 0);
   }
+  // Lorwyn Eclipsed (18b, blue): Sunderflock, "costs {X} less, where X is the greatest mana value among Elementals you control".
+  if ('greatestManaValueYouControl' in a)
+    return Math.max(
+      0,
+      ...ctx.s.battlefield
+        .filter(
+          (id) =>
+            obj(ctx, id).controller === player &&
+            matchesFilter(ctx, id, a.greatestManaValueYouControl),
+        )
+        .map((id) => manaValue(def(ctx, id).manaCost)),
+    );
   // Marvel Super Heroes (The Scarlet Witch): 'where X is her power'.
   if ('powerOf' in a)
     return a.powerOf === 'self' && sourceId ? Math.max(0, power(ctx, sourceId)) : 0;
@@ -362,7 +383,7 @@ export function countOf(
           (!a.named || obj(ctx, id).defId === a.named) &&
           (!a.types || a.types.some((t: CardType) => def(ctx, id).types.includes(t))) &&
           // Final Fantasy (11b): by subtype, and without some types.
-          (!a.subtype || def(ctx, id).subtypes.includes(a.subtype)) &&
+          (!a.subtype || hasSubtype(ctx, id, a.subtype)) &&
           (!a.notTypes || !a.notTypes.some((t: CardType) => def(ctx, id).types.includes(t))),
       ).length
     );
@@ -372,6 +393,9 @@ export function countOf(
       0,
     );
   if (a.count === 'creaturesYouLostThisTurn') return ctx.s.turn.creaturesLost?.[player] ?? 0;
+  // Lorwyn Eclipsed (18b, white): Kinbinding.
+  if (a.count === 'creaturesEnteredThisTurn')
+    return ctx.s.turn.creaturesEntered?.filter((e) => e.player === player).length ?? 0;
   // Strixhaven Brawl (15b, multi): Iridescent Hornbeetle.
   if (a.count === 'countersPutThisTurn') return ctx.s.turn.countersPut?.[player] ?? 0;
   // Secrets of Strixhaven (14b): Emil, Vastlands Roamer.
@@ -395,7 +419,11 @@ export function countOf(
       0,
     );
   if (a.count === 'greatestPowerYouControl')
-    return creaturesOnBattlefield(ctx, player).reduce((n, c) => Math.max(n, power(ctx, c.id)), 0);
+    return creaturesOnBattlefield(ctx, player).reduce(
+      // Lorwyn Eclipsed (18b, green): "among Giants you control".
+      (n, c) => (a.subtype && !hasSubtype(ctx, c.id, a.subtype) ? n : Math.max(n, power(ctx, c.id))),
+      0,
+    );
   if (a.count === 'creatureCardsInExileAndGraveyard') {
     const ps = ctx.s.players[player];
     return [...ps.exile, ...ps.graveyard].filter((id) => def(ctx, id).types.includes('Creature'))
@@ -507,6 +535,8 @@ export function countOf(
       for (const c of defOf(ctx, id).colors) colors.add(c);
     return colors.size;
   }
+  // Lorwyn Eclipsed (18a): Vivid.
+  if (a.count === 'vivid') return vividCount(ctx, player);
   // Reality Fracture (17a): Karn, Gilded Guardian.
   if (a.count === 'colorsAmongOtherArtifactsYouControl') {
     const colors = new Set<string>();
@@ -828,24 +858,82 @@ export function subtypesOf(ctx: Ctx, id: ObjectId): readonly string[] {
     result = [...result.filter((t) => NON_CREATURE_SUBTYPES.has(t)), e.creatureSubtype];
     timestamp = e.timestamp;
   }
+  // Lorwyn Eclipsed (18a): "loses all creature types".
+  for (const e of ctx.s.effects) {
+    if (
+      e.affected.id !== id || e.affected.zcc !== o.zcc || !e.noCreatureTypes ||
+      e.timestamp <= timestamp
+    ) continue;
+    result = result.filter((t) => NON_CREATURE_SUBTYPES.has(t));
+    timestamp = e.timestamp;
+  }
   return result;
 }
 
-/** Changeling's characteristic-defining ability precedes explicit type setters. */
+const allTypesAttachersCache = new WeakMap<CardDb, ReadonlySet<CardDefId>>();
+
+/** Lorwyn Eclipsed (18a): Equipment that makes the creature it's attached to every creature type (Stalactite Dagger). */
+function allTypesAttachers(db: CardDb): ReadonlySet<CardDefId> {
+  let set = allTypesAttachersCache.get(db);
+  if (!set) {
+    set = new Set(
+      [...db.values()]
+        .filter((d) =>
+          d.abilities.some(
+            (a) => a.kind === 'static' && a.effect.kind === 'attached' && a.effect.allCreatureTypes,
+          ),
+        )
+        .map((d) => d.id),
+    );
+    allTypesAttachersCache.set(db, set);
+  }
+  return set;
+}
+
+/**
+ * Changeling's characteristic-defining ability precedes explicit type setters. Lorwyn Eclipsed (18a): "gains all creature
+ * types" (for good, until end of turn, or while equipped) counts like it, and the latest of that and the type setters
+ * ("loses all creature types", Donald Blake's replacement) wins.
+ */
 function changeling(ctx: Ctx, id: ObjectId, subtype: string): boolean {
+  if (NON_CREATURE_SUBTYPES.has(subtype)) return false;
   const o = obj(ctx, id);
-  const typeSet = o.zone === 'battlefield' && (
-    o.creatureTypes || ctx.s.effects.some(
-      (e) => e.affected.id === id && e.affected.zcc === o.zcc && e.creatureSubtype,
-    )
-  );
-  return (
-    !typeSet && def(ctx, id).keywords.includes('changeling') &&
-    !NON_CREATURE_SUBTYPES.has(subtype)
-  );
+  // Lorwyn Eclipsed (18b, blue): Omni-Changeling, a copy "except it has changeling".
+  let all = def(ctx, id).keywords.includes('changeling') || obj(ctx, id).grantedKeywords?.includes('changeling') ? -1 : -2;
+  let setter = -2;
+  if (o.zone === 'battlefield') {
+    if (o.creatureTypes) setter = o.creatureTypesTimestamp ?? o.timestamp;
+    if (o.allCreatureTypes !== undefined) all = Math.max(all, o.allCreatureTypes);
+    for (const e of ctx.s.effects) {
+      if (e.affected.id !== id || e.affected.zcc !== o.zcc) continue;
+      if (e.creatureSubtype || e.noCreatureTypes) setter = Math.max(setter, e.timestamp);
+      if (e.allCreatureTypes) all = Math.max(all, e.timestamp);
+    }
+    const attachers = allTypesAttachers(ctx.db);
+    if (attachers.size)
+      for (const srcId of ctx.s.battlefield) {
+        const src = obj(ctx, srcId);
+        if (src.attachedTo === id && attachers.has(src.defId)) all = Math.max(all, src.timestamp);
+      }
+  }
+  return all > setter;
+}
+
+/** Is it every creature type (a changeling, or something that gained all creature types)? */
+export function hasAllCreatureTypes(ctx: Ctx, id: ObjectId): boolean {
+  return changeling(ctx, id, 'Goblin');
 }
 
 /** Has this subtype (printed, gained, or every creature type for a changeling). */
+/**
+ * The creature type chosen for the source as it entered. Lorwyn Eclipsed (18b, special): once it has left the battlefield the
+ * type it had is used (Dawn-Blessed Pennant, sacrificed as a cost: "return target card of the chosen type").
+ */
+export function chosenTypeOf(ctx: Ctx, sourceId: ObjectId): string | undefined {
+  const o = ctx.s.objects[sourceId];
+  return o?.chosenType ?? (o && o.zone !== 'battlefield' ? o.lastChosenType : undefined);
+}
+
 export function hasSubtype(ctx: Ctx, id: ObjectId, subtype: string): boolean {
   return subtypesOf(ctx, id).includes(subtype) || changeling(ctx, id, subtype);
 }
@@ -903,6 +991,7 @@ export function matchesFilter(
     filter.minPower !== undefined ||
     filter.minToughness !== undefined ||
     filter.maxPowerOrToughness !== undefined ||
+    filter.maxPowerPlusToughness !== undefined ||
     !!filter.hasKeyword ||
     !!filter.lacksKeyword;
   const c = needsComputed
@@ -918,6 +1007,12 @@ export function matchesFilter(
   if (
     filter.maxPowerOrToughness !== undefined &&
     Math.min(c.power, c.toughness) > filter.maxPowerOrToughness
+  )
+    return false;
+  // Lorwyn Eclipsed (18b, red): Meek Attack.
+  if (
+    filter.maxPowerPlusToughness !== undefined &&
+    c.power + c.toughness > filter.maxPowerPlusToughness
   )
     return false;
   if (
@@ -992,7 +1087,7 @@ export function matchesFilter(
   // Marvel Super Heroes Jumpstart (Marvelous): Ms. Marvel, Elastic Ally.
   if (filter.powerAboveBase && characteristics(ctx, id).power <= basePowerOf(ctx, id)) return false;
   if (filter.chosenTypeOfSource) {
-    const chosen = sourceId ? obj(ctx, sourceId).chosenType : undefined;
+    const chosen = sourceId ? chosenTypeOf(ctx, sourceId) : undefined;
     if (!chosen || !hasSubtype(ctx, id, chosen)) return false;
   }
   if (filter.nontoken && obj(ctx, id).isToken) return false;
@@ -1036,10 +1131,18 @@ export function cardMatches(
   )
     return false;
   if (obj(ctx, id).zone !== 'battlefield') {
+    // Lorwyn Eclipsed (18b, multi-b): Doran, "creature spells with toughness greater than their power" (printed, off the battlefield).
+    if (filter.toughnessGreaterThanPower && (d.toughness ?? 0) <= (d.power ?? 0)) return false;
     if (filter.hasKeyword && !d.keywords.includes(filter.hasKeyword)) return false;
     if (filter.lacksKeyword && d.keywords.includes(filter.lacksKeyword)) return false;
     if (filter.minPower !== undefined && (d.power ?? 0) < filter.minPower) return false;
     if (filter.maxPower !== undefined && (d.power ?? 0) > filter.maxPower) return false;
+    // Lorwyn Eclipsed (18b, red): Meek Attack, a creature card in hand (printed power and toughness).
+    if (
+      filter.maxPowerPlusToughness !== undefined &&
+      (d.power ?? 0) + (d.toughness ?? 0) > filter.maxPowerPlusToughness
+    )
+      return false;
   }
   // Reality Fracture (17a): Puppet Crafting makes a permanent a creature (so does a crewed Vehicle).
   const hasType = (t: CardType): boolean =>
@@ -1077,7 +1180,12 @@ export function cardMatches(
   }
   // Final Fantasy (11c): nonlegendary.
   if (filter.notSupertypes?.some((t) => d.supertypes.includes(t))) return false;
-  const mv = manaValue(d.manaCost);
+  // Lorwyn Eclipsed (18b, blue): a spell on the stack counts X in its mana value (Kulrath Mystic, Spell Snare).
+  const stackX =
+    d.manaCost.x && obj(ctx, id).zone === 'stack'
+      ? (ctx.s.stack.find((x) => x.kind === 'spell' && x.id === id)?.x ?? 0) * d.manaCost.x
+      : 0;
+  const mv = manaValue(d.manaCost) + stackX;
   if (filter.minManaValue !== undefined && mv < filter.minManaValue) return false;
   if (filter.manaValueIsSourceCounters) {
     const { name, plus } = filter.manaValueIsSourceCounters;
@@ -1088,9 +1196,19 @@ export function cardMatches(
   if (filter.subtype && !subtypes.includes(filter.subtype) && !changeling(ctx, id, filter.subtype))
     return false;
   if (filter.nonland && d.types.includes('Land')) return false;
+  // Lorwyn Eclipsed (18b, special): "spells you cast of the chosen type" (Gathering Stone, Chronicle of Victory), cards in hand or graveyard.
+  if (filter.chosenTypeOfSource) {
+    const chosen = sourceId ? chosenTypeOf(ctx, sourceId) : undefined;
+    if (!chosen || !hasSubtype(ctx, id, chosen)) return false;
+  }
   if (filter.enteredThisTurn && obj(ctx, id).zoneTurn !== ctx.s.turn.number) return false;
   if (filter.leftAttacking && !obj(ctx, id).leftAttacking) return false;
   if (filter.attachedToSource && (!sourceId || obj(ctx, id).attachedTo !== sourceId)) return false;
+  // Lorwyn Eclipsed (18c): Subterranean Schooner, "target creature that crewed it this turn".
+  if (filter.crewedSource) {
+    const crewed = sourceId ? ctx.s.objects[sourceId]?.crewedBy : undefined;
+    if (crewed?.turn !== ctx.s.turn.number || !crewed.ids.includes(id)) return false;
+  }
   // Strixhaven Brawl (15b, w): Sage's Reverie, Role tokens, bestowed Auras, mentor.
   if (filter.attachedToCreature) {
     const host = obj(ctx, id).attachedTo;
@@ -1133,7 +1251,14 @@ export function cardMatches(
               sourceId
               ? (obj(ctx, sourceId).manaColors?.length ?? 0)
               : 0
-            : filter.maxManaValue;
+            : filter.maxManaValue === 'x'
+              ? // Lorwyn Eclipsed (18a): Celestial Reunion, "mana value X or less" (the spell's X).
+                sourceId
+                ? (ctx.s.stack.find((i) => i.kind === 'spell' && i.id === sourceId)?.x ??
+                  obj(ctx, sourceId).xPaid ??
+                  0)
+                : 0
+              : filter.maxManaValue;
     if (mv > max) return false;
   }
   if (filter.other && id === sourceId) return false;
@@ -1199,7 +1324,7 @@ function avengersFilter(
   sourceId: ObjectId | undefined,
 ): boolean {
   if (filter.named && nameId(ctx, id) !== filter.named) return false;
-  const chosen = sourceId ? ctx.s.objects[sourceId]?.chosenType : undefined;
+  const chosen = sourceId ? chosenTypeOf(ctx, sourceId) : undefined;
   if (filter.chosenTypeOfSource && !(chosen && hasSubtype(ctx, id, chosen))) return false;
   if (filter.notChosenTypeOfSource && chosen && hasSubtype(ctx, id, chosen)) return false;
   const o = obj(ctx, id);

@@ -82,12 +82,14 @@ function passiveAction(
       if (d.anyNumber) return { type: 'chooseEffect', player: d.player, accept: false };
       return engine.getLegalActions(s, d.player)[0]!;
     case 'chooseTriggerTargets':
+    case 'spellTargets': // Lorwyn Eclipsed (18b, white)
     case 'optionalEffect':
     case 'forage':
     case 'chooseOption':
     case 'chooseObject':
     case 'payOrCounter':
     case 'castFree':
+    case 'conspire': // Lorwyn Eclipsed (18a)
       // Reality Fracture (17a fixes): every creature type is on offer.
       if (d.kind === 'chooseOption' && d.title === 'Choose a creature type')
         return chooseCreatureType(engine, s, d.player, d);
@@ -212,9 +214,13 @@ export function combatStats(engine: Engine, s: GameState, id: ObjectId) {
   const strikes = c.keywords.has('doubleStrike') ? 2 : 1;
   // Final Fantasy (11c): "can't be blocked except by three or more creatures" (Relentless X-ATM092).
   let minBlockers = c.keywords.has('menace') ? 2 : 1;
-  for (const a of engine.db.get(s.objects[id]!.defId)?.abilities ?? [])
-    if (a.kind === 'static' && a.effect.kind === 'minBlockers')
-      minBlockers = Math.max(minBlockers, a.effect.count);
+  // Lorwyn Eclipsed (18b): "can't be blocked by more than one creature" (Safewright Cavalry).
+  let maxBlockers = Infinity;
+  for (const a of engine.db.get(s.objects[id]!.defId)?.abilities ?? []) {
+    if (a.kind !== 'static') continue;
+    if (a.effect.kind === 'minBlockers') minBlockers = Math.max(minBlockers, a.effect.count);
+    if (a.effect.kind === 'maxBlockers') maxBlockers = Math.min(maxBlockers, a.effect.count);
+  }
   return {
     power: Math.max(0, c.power),
     toughness: c.toughness - s.objects[id]!.damage,
@@ -222,6 +228,7 @@ export function combatStats(engine: Engine, s: GameState, id: ObjectId) {
     deathtouch: c.keywords.has('deathtouch'),
     menace: minBlockers > 1,
     minBlockers,
+    maxBlockers,
     value: creatureValue(s, engine.db, id),
   };
 }

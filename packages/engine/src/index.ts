@@ -11,7 +11,7 @@ export { manaValue } from './mana.ts';
 
 import { characteristics as characteristicsOf } from './characteristics.ts';
 import { def as defOf, makeCtx } from './context.ts';
-import type { AbilityDef, CardDb, GameState, ObjectId } from './types.ts';
+import type { AbilityDef, CardDb, Color, GameState, ObjectId } from './types.ts';
 
 /** Current power/toughness/keywords of a permanent, for UIs and bots. */
 export function getCharacteristics(state: GameState, db: CardDb, id: ObjectId) {
@@ -21,6 +21,10 @@ export function getCharacteristics(state: GameState, db: CardDb, id: ObjectId) {
 /** Reality Fracture (17c): a permanent's current abilities (printed ones plus any granted to it), indexed as `abilityIndex`. */
 export function getAbilities(state: GameState, db: CardDb, id: ObjectId): AbilityDef[] {
   return defOf(makeCtx(state, db), id).abilities;
+}
+/** Lorwyn Eclipsed (18b, multi-b): a permanent's current colors (all five while Tam, Mindful First-Year has made it so). */
+export function getColors(state: GameState, db: CardDb, id: ObjectId): readonly Color[] {
+  return defOf(makeCtx(state, db), id).colors;
 }
 export { playRandomGame } from './random-play.ts';
 export type { RandomGameResult } from './random-play.ts';

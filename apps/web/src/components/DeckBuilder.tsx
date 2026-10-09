@@ -80,6 +80,7 @@ const SET_NAMES: Record<string, string> = {
   stx: 'Strixhaven',
   sos: 'Secrets of Strixhaven',
   fra: 'Reality Fracture',
+  ecl: 'Lorwyn Eclipsed',
 };
 const setLabel = (code: string) => SET_NAMES[code] ?? code.toUpperCase();
 

@@ -2,6 +2,8 @@ import {
   abilitiesLocked,
   canTapForAbility,
   cardMatches,
+  countOf,
+  characteristics,
   creaturesOnBattlefield,
   isCreature,
   matchesFilter,
@@ -13,19 +15,42 @@ import {
   canAttack,
   canBlock,
   defenderOf,
+  maxBlockers,
   mustAttack,
 } from './combat.ts';
-import { type Ctx, def, obj, other, withBackFace } from './context.ts';
+import { type Ctx, def, obj, onBattlefield, other, withBackFace } from './context.ts';
 import { forageChoices } from './forage.ts';
-import { artifactHelpers, canPayFrom, creatureHelpers, hasImprovise, manaSources } from './mana.ts';
-import { type CastVia, castVariants, spellTags } from './spells.ts';
+import {
+  beholdExileOptions,
+  beholdManyOptions,
+  beholdTypes,
+  blightCreatures,
+  conspireOptions,
+  counterRemovals,
+  exiledWithCastable,
+  greatestToughness,
+  hasConspire,
+  hasConvoke,
+} from './ecl-18a.ts';
+import {
+  abilityTags,
+  artifactHelpers,
+  canPayFrom,
+  creatureHelpers,
+  hasImprovise,
+  hasRestrictedMana,
+  manaSources,
+} from './mana.ts';
+import { type CastVia, castVariants, spellOnStack, spellTags } from './spells.ts';
 import {
   abilityManaCost,
   castCost,
   teamworkFor,
   artifactsToTap,
+  untappedMatching,
   creaturesToTap,
   crewFor,
+  crewWays,
   escalateCrew,
   artifactsToSacrifice,
   graveyardCostCard,
@@ -45,8 +70,14 @@ import { checkCondition, triggeredAbility } from './triggers.ts';
 import { nameLocked } from './sos-14b-c-effects.ts';
 
 const NO_COST = { generic: 0, colored: {} };
-import { standForDistinctTypes, targetCandidates, targetCombos } from './targets.ts';
+import {
+  castTargetSpecs,
+  standForDistinctTypes,
+  targetCandidates,
+  targetCombos,
+} from './targets.ts';
 import { freeCastSource, playableWhileControlling } from './msh-analyzed.ts';
+import { exiledCastCards, exiledCastSource } from './ecl-multi-b-effects.ts';
 import { omnipresenceCastable } from './fra-green-effects.ts';
 import { permanentHasStatic } from './fra-pw-effects.ts';
 import { beholdOptions } from './fra-pw-b-effects.ts';
@@ -122,7 +153,10 @@ export function castableCards(ctx: Ctx, player: PlayerId): ObjectId[] {
       (obj(ctx, id).castableUntilTurn ?? ctx.s.turn.number) >= ctx.s.turn.number &&
       // Reality Fracture (17a): Null Summoner, only while its threshold holds.
       (!obj(ctx, id).castableIf ||
-        checkCondition(ctx, obj(ctx, id).castableIf, player, obj(ctx, id)))
+        checkCondition(ctx, obj(ctx, id).castableIf, player, obj(ctx, id))) &&
+      // Lorwyn Eclipsed (18b, black): Taster of Wares, for as long as you control the creature.
+      (!obj(ctx, id).castableWhileControlling ||
+        onBattlefield(ctx, obj(ctx, id).castableWhileControlling!)?.controller === player)
     )
       out.push(id);
   // Glarb: lands and big spells from the top of your library.
@@ -175,6 +209,8 @@ export function castableCards(ctx: Ctx, player: PlayerId): ObjectId[] {
         (obj(ctx, id).plottedTurn === undefined || obj(ctx, id).plottedTurn! < ctx.s.turn.number)
       )
         out.push(id);
+  // Lorwyn Eclipsed (18b, multi-b): Maralen, Fae Ascendant, cards exiled with it this turn.
+  for (const id of exiledCastCards(ctx, player)) if (!out.includes(id)) out.push(id);
   const top = ps.library[0];
   if (
     top &&
@@ -300,8 +336,10 @@ function beholdChoices(
   player: PlayerId,
   card: ObjectId,
   d: CardDefinition,
-  v: { kicked?: boolean | undefined; beheld?: boolean | undefined },
+  v: { kicked?: boolean | undefined; beheld?: boolean | undefined; beholdExile?: boolean | undefined },
 ): (ObjectId | undefined)[] {
+  // Lorwyn Eclipsed (18a): "behold … and exile it" exiles the card chosen, so each distinct permanent is a choice.
+  if (v.beholdExile && d.beholdExile) return beholdExileOptions(ctx, player, card, d.beholdExile);
   const filter =
     v.kicked && d.kicker?.behold ? d.kicker.behold : v.beheld ? d.beholdOrPay?.filter : undefined;
   return filter ? beholdOptions(ctx, player, card, filter) : [undefined];
@@ -397,6 +435,7 @@ function priorityActions(
   const ps = s.players[player];
   const sorcery = !!freeCards || sorceryTiming(ctx, player);
   const sources = manaSources(ctx, player);
+  const restrictedMana = hasRestrictedMana(ctx, player);
 
   // "You may cast (noncreature) spells as though they had flash."
   const flashFilters = s.battlefield.flatMap((id) =>
@@ -435,6 +474,8 @@ function priorityActions(
       (ts) => !sacrifice || !ts.some((t) => 'object' in t && t.object.id === sacrifice),
     );
 
+  // Lorwyn Eclipsed (18a): cards that can be cast only by removing counters (Dawnhand Dissident), set before casts are listed.
+  let exiledOnly = new Set<ObjectId>();
   const castsOf = (card: ObjectId): void => {
     const d = def(ctx, card);
     const zone = obj(ctx, card).zone;
@@ -458,6 +499,8 @@ function priorityActions(
       !plottedCard &&
       (d.types.includes('Instant') ||
         d.keywords.includes('flash') ||
+        // Lorwyn Eclipsed (18b, blue): Illusion Spinners, "as though it had flash if you control a Faerie".
+        (!!d.flashIf && checkCondition(ctx, d.flashIf, player, obj(ctx, card))) ||
         flashFilters.some((f) => cardMatches(ctx, card, f)) ||
         // Progenitor's Icon: spells of the chosen type have flash this turn.
         !!s.turn.flashTypes?.some((f) => f.player === player && d.subtypes.includes(f.type)) ||
@@ -466,7 +509,7 @@ function priorityActions(
     // Restricted mana (Giada: only for Angels; Villages: only for creature spells).
     const base = restricted ? manaSources(ctx, player, undefined, spellTags(d, zone)) : sources;
     // Convoke: untapped creatures can pay for {1} each.
-    let pool = d.convoke ? [...base, ...creatureHelpers(ctx, player, base)] : base;
+    let pool = hasConvoke(ctx, player, card) ? [...base, ...creatureHelpers(ctx, player, base)] : base;
     if (hasImprovise(ctx, player, card))
       pool = [...pool, ...artifactHelpers(ctx, player, pool, card)];
     // {X}: every affordable value (up to 10).
@@ -480,7 +523,10 @@ function priorityActions(
         : // Toxic Deluge: X life, up to one less than you have.
           d.payXLife
           ? Array.from({ length: Math.min(13, ps.life - 1) + 1 }, (_, x) => x)
-          : [undefined];
+          : // Lorwyn Eclipsed (18a): Soul Immolation, blight X with X up to the greatest toughness among your creatures.
+            d.blightX
+            ? Array.from({ length: Math.min(10, greatestToughness(ctx, player)) + 1 }, (_, x) => x)
+            : [undefined];
     // Strixhaven Brawl (15b, pair): Ornate Imitations, "X can't be 0".
     const xs = d.minX ? xsAll.filter((x) => x === undefined || x >= d.minX!) : xsAll;
     // A card to discard as an additional cost (Sazacap's Brew).
@@ -499,6 +545,14 @@ function priorityActions(
     const flashIfKicked = !instantSpeed && !sorcery && !!d.kicker?.flash;
     if (!instantSpeed && !sorcery && !flashIfKicked && now === undefined) return;
     // The usual ways, plus graveyard casts through other cards.
+    // Lorwyn Eclipsed (18b, multi-b): Maralen's cards can only be cast for free, through the static ability.
+    const exiledOnlyFree =
+      zone === 'exile' &&
+      obj(ctx, card).exiledWithThisTurn !== undefined &&
+      obj(ctx, card).playableUntilTurn === undefined &&
+      obj(ctx, card).castableBy === undefined &&
+      !obj(ctx, card).castableWhileExiled &&
+      !d.castFromGraveyardOrExile;
     // Extract Power: exiled cards played for free.
     const free = zone === 'exile' && (obj(ctx, card).playFreeBy === player || plottedCard);
     // Secrets of Strixhaven (14b): Zaffai and the Tempests: an instant or sorcery from your hand, free, once a turn.
@@ -514,19 +568,24 @@ function priorityActions(
           ? ['freeExact']
           : free
             ? ['free']
-            : [
-                ...(zone !== 'graveyard' ||
+            : exiledOnly.has(card)
+              ? ['exiledWithSelf']
+              : [
+                ...((zone !== 'graveyard' ||
                 d.flashback ||
                 d.castFromGraveyardRemovingCounters ||
                 d.castFromGraveyardWithDiscard ||
                 d.castFromGraveyardOrExile ||
-                mayhemReady(ctx, card)
+                mayhemReady(ctx, card)) &&
+                !exiledOnlyFree
                   ? [undefined]
                   : []),
                 ...(zone === 'graveyard' ? graveyardVias(ctx, player, card) : []),
                 ...(zaffai ? (['zaffai'] as const) : []),
                 // Marvel Super Heroes Jumpstart (Analyzed): Vision, Spectral Synthezoid.
-                ...(freeCastSource(ctx, player, card) ? (['freeOnceEachTurn'] as const) : []),
+                ...(freeCastSource(ctx, player, card) || exiledCastSource(ctx, player, card)
+                  ? (['freeOnceEachTurn'] as const)
+                  : []),
                 // Reality Fracture (17a): Omnipresence.
                 ...(omnipresenceCastable(ctx, player, card) ? (['omnipresence'] as const) : []),
               ];
@@ -575,7 +634,17 @@ function priorityActions(
               forage: v.forage ? 'graveyard' : undefined,
               x,
               delve: undefined as number | undefined,
+              // Lorwyn Eclipsed (18a)
+              blight: v.blight ? 'x' : undefined,
+              evoked: v.evoked,
             };
+            // Lorwyn Eclipsed (18a): Celestial Reunion, kicked only if two creatures share a type you could choose.
+            if (
+              v.kicked &&
+              d.kicker?.beholdChosenType !== undefined &&
+              beholdTypes(ctx, player, card, d.kicker.beholdChosenType).length === 0
+            )
+              continue;
             // Teamwork: kicked only if there are creatures to tap.
             const teamwork = teamworkFor(ctx, player, card, { kicked: v.kicked });
             if (v.kicked && d.kicker?.teamwork !== undefined && !teamwork) continue;
@@ -604,6 +673,16 @@ function priorityActions(
             // (17c): Countersculpt beholds a Jace or pays. Each card that could be beheld is its own action.
             const beholds = beholdChoices(ctx, player, card, d, v);
             if (beholds.length === 0) continue;
+            // Lorwyn Eclipsed (18a): a blight needs a creature you control to put the counters on.
+            const blightAmount = v.blight === 'x' ? (x ?? 0) : (v.blight ?? 0);
+            const blights = blightAmount > 0 ? blightCreatures(ctx, player) : [undefined];
+            if (blights.length === 0) continue;
+            // Lorwyn Eclipsed (18a): Kindle the Inner Flame's flashback beholds three Elementals.
+            const beholdSets =
+              v.beholdMany && d.flashbackBehold
+                ? beholdManyOptions(ctx, player, card, d.flashbackBehold.filter, d.flashbackBehold.count)
+                : [undefined];
+            if (beholdSets.length === 0) continue;
             const base = castCost(ctx, player, card, choice);
             // Strixhaven (13b): Killian also lowers the cost by what the spell targets.
             const targetDiscount = !!d.costReductionIfTarget || hasTargetCostReduction(ctx, player);
@@ -618,8 +697,11 @@ function priorityActions(
               ...(choice.delve ? { delve: choice.delve } : {}),
               ...(via ? { via } : {}),
               ...(sacrificeMany ? { sacrificeMany } : {}),
+              ...(v.evoked ? { evoked: true } : {}),
             };
-            const specs = v.spell?.targets ?? (d.enchant ? [d.enchant] : []);
+            // Lorwyn Eclipsed (18a): conspire, if the spell has it and two creatures are left to tap after paying.
+            const conspirers = !via && hasConspire(ctx, player, card) ? conspireOptions(ctx, player, card) : [];
+            const specs = castTargetSpecs(v.spell?.targets ?? (d.enchant ? [d.enchant] : []));
             const forages = v.forage ? forageChoices(ctx, player) : [undefined];
             const sacrificeable = castSacrificeOptions(ctx, player, d, v);
             for (const sacrifice of v.sacrifice ? sacrificeable : [undefined]) {
@@ -656,31 +738,47 @@ function priorityActions(
                   : discards;
                 for (const forage of forages)
                   for (const discard of vDiscards)
-                    for (const beholdCard of beholds) {
-                      // Paying without what this cast sacrifices.
-                      const spent = [
-                        // Final Fantasy (11b): a land returned for kicker may tap for mana first.
-                        v.kicked && d.kicker?.returnLand ? undefined : sacrifice,
-                        ...(sacrificeMany ?? []),
-                        forage === 'graveyard' ? undefined : forage,
-                        ...(teamwork ?? []),
-                      ];
-                      if (spent.some((id) => id && pool.some((p) => p.id === id))) {
-                        const rest = pool.filter((p) => !spent.includes(p.id));
-                        if (!canPayFrom(addCosts(cost, ward), rest)) continue;
+                    for (const beholdCard of beholds)
+                     for (const beholdCards of beholdSets)
+                      for (const blight of blights) {
+                        // Paying without what this cast sacrifices.
+                        const spent = [
+                          // Final Fantasy (11b): a land returned for kicker may tap for mana first.
+                          v.kicked && d.kicker?.returnLand ? undefined : sacrifice,
+                          ...(sacrificeMany ?? []),
+                          forage === 'graveyard' ? undefined : forage,
+                          ...(teamwork ?? []),
+                          // Lorwyn Eclipsed (18a): a card beheld and exiled isn't tapped for mana.
+                          ...(v.beholdExile ? [beholdCard] : []),
+                        ];
+                        if (spent.some((id) => id && pool.some((p) => p.id === id))) {
+                          const rest = pool.filter((p) => !spent.includes(p.id));
+                          if (!canPayFrom(addCosts(cost, ward), rest)) continue;
+                        }
+                        const action: Action = {
+                          type: 'castSpell',
+                          player,
+                          card,
+                          targets,
+                          ...extra,
+                          ...(sacrifice ? { sacrifice } : {}),
+                          ...(forage ? { forage } : {}),
+                          ...(discard ? { discard } : {}),
+                          ...(beholdCard ? { beholdCard } : {}),
+                          ...(blight ? { blight } : {}),
+                          ...(beholdCards ? { beholdCards } : {}),
+                        };
+                        out.push(action);
+                        // Conspire: another way to cast it, tapping two creatures that aren't needed for the mana.
+                        if (
+                          conspirers.length >= 2 &&
+                          canPayFrom(
+                            addCosts(cost, ward),
+                            pool.filter((p) => !spent.includes(p.id) && !conspirers.includes(p.id)),
+                          )
+                        )
+                          out.push({ ...action, conspire: true });
                       }
-                      out.push({
-                        type: 'castSpell',
-                        player,
-                        card,
-                        targets,
-                        ...extra,
-                        ...(sacrifice ? { sacrifice } : {}),
-                        ...(forage ? { forage } : {}),
-                        ...(discard ? { discard } : {}),
-                        ...(beholdCard ? { beholdCard } : {}),
-                      });
-                    }
               }
             }
           }
@@ -719,9 +817,16 @@ function priorityActions(
       : now !== undefined
         ? [now]
         : (freeCards ?? castableCards(ctx, player));
+  // Lorwyn Eclipsed (18a): Dawnhand Dissident, cards exiled with it that can only be cast by removing counters.
+  const exiledWithCards =
+    silenced || freeCards || now !== undefined
+      ? new Map<ObjectId, number>()
+      : exiledWithCastable(ctx, player);
+  exiledOnly = new Set([...exiledWithCards.keys()].filter((c) => !castable.includes(c)));
+  const castableAll = [...castable, ...exiledOnly];
   for (const card of banned.length
-    ? castable.filter((c) => !banned.some((b) => b.defId === obj(ctx, c).defId))
-    : castable) {
+    ? castableAll.filter((c) => !banned.some((b) => b.defId === obj(ctx, c).defId))
+    : castableAll) {
     if (!blocked(card)) castsOf(card);
     // Modal double-faced cards: the back face can be cast from hand too.
     // Secrets of Strixhaven (14a): a prepare creature's back is a spell that can't be cast from hand.
@@ -809,8 +914,9 @@ function priorityActions(
         if (!(sorcery || instant) || o.onceTurns?.[LOYALTY_KEY] === s.turn.number) return;
         if ((o.counters?.loyalty ?? 0) + a.cost.loyalty < 0) return;
       }
-      const tagged = isCreature(ctx, source)
-        ? manaSources(ctx, player, undefined, ['CreatureAbility'])
+      // Lorwyn Eclipsed (18b, red): restricted mana for abilities of sources of a type (Flamebraider).
+      const tagged = restrictedMana
+        ? manaSources(ctx, player, undefined, abilityTags(ctx, source))
         : sources;
       const own = a.cost.tapSelf ? tagged.filter((x) => x.id !== source) : tagged;
       // Heirloom Epic: creatures can pay for generic mana.
@@ -835,6 +941,16 @@ function priorityActions(
         return;
       // Reality Fracture (17a): Tenured Tethermage.
       if (a.cost.tapArtifacts && artifactsToTap(ctx, player).length < a.cost.tapArtifacts) return;
+      // Lorwyn Eclipsed (18b, multi-b): High Perfect Morcant, Kirol.
+      if (
+        a.cost.tapUntapped &&
+        untappedMatching(ctx, player, a.cost.tapUntapped.filter, source).length <
+          a.cost.tapUntapped.count
+      )
+        return;
+      // Lorwyn Eclipsed (18b, white): Kithkeeper.
+      if (a.cost.tapCreatures && creaturesToTap(ctx, player, undefined).length < a.cost.tapCreatures)
+        return;
       if (a.cost.crew && !crewFor(ctx, player, source, a.cost.crew)) return;
       if (
         a.cost.sacrificeArtifacts &&
@@ -918,7 +1034,10 @@ function priorityActions(
       // Villainous Syndication: one action per creature that could be tapped for the cost.
       if (a.cost.tapCreature) {
         const bases = out.splice(firstOfAbility);
-        const can = creaturesToTap(ctx, player, a.cost.tapCreature, source);
+        // A creature that is also a mana source can't both pay for the ability and be tapped for its cost.
+        const can = creaturesToTap(ctx, player, a.cost.tapCreature, source).filter((c) =>
+          canPayFrom(mana, usable.filter((x) => x.id !== c)),
+        );
         for (const base of bases)
           for (const tapCreature of can) out.push({ ...base, tapCreature } as Action);
       }
@@ -945,6 +1064,80 @@ function priorityActions(
         pick([]);
         for (const base of bases)
           for (const tapArtifacts of ways) out.push({ ...base, tapArtifacts } as Action);
+      }
+      // Lorwyn Eclipsed (18b, multi-b): "Tap three untapped Elves you control": one action for each way of choosing them
+      // (permanents that look alike are one way); the board picks them one at a time in any order.
+      if (a.cost.tapUntapped) {
+        const bases = out.splice(firstOfAbility);
+        const can = untappedMatching(ctx, player, a.cost.tapUntapped.filter, source);
+        const key = (id: ObjectId) => {
+          const o = obj(ctx, id);
+          return `${o.defId}|${o.isToken ? 1 : 0}|${o.plusOneCounters}|${JSON.stringify(o.counters ?? {})}|${o.summoningSick ? 1 : 0}`;
+        };
+        const ways: ObjectId[][] = [];
+        const seen = new Set<string>();
+        const pick = (chosen: ObjectId[]): void => {
+          if (chosen.length === a.cost.tapUntapped!.count) {
+            const k = chosen.map(key).join(',');
+            if (!seen.has(k)) {
+              seen.add(k);
+              ways.push(chosen);
+            }
+            return;
+          }
+          for (const id of can) if (!chosen.includes(id)) pick([...chosen, id]);
+        };
+        pick([]);
+        for (const base of bases)
+          for (const tapArtifacts of ways) out.push({ ...base, tapArtifacts } as Action);
+      }
+      // Lorwyn Eclipsed (18b, white): Kithkeeper, "tap three untapped creatures you control": one action for each set of
+      // creatures (creatures that look alike are one way); the board picks them one at a time, in any order.
+      if (a.cost.tapCreatures) {
+        const bases = out.splice(firstOfAbility);
+        const can = creaturesToTap(ctx, player, undefined);
+        const key = (id: ObjectId) => {
+          const o = obj(ctx, id);
+          const c = characteristics(ctx, id);
+          return `${o.defId}|${o.isToken ? 1 : 0}|${o.summoningSick ? 1 : 0}|${c.power}/${c.toughness}|${o.plusOneCounters}`;
+        };
+        const ways: ObjectId[][] = [];
+        const seen = new Set<string>();
+        const pick = (from: number, chosen: ObjectId[]): void => {
+          if (chosen.length === a.cost.tapCreatures) {
+            const k = chosen.map(key).sort().join(',');
+            if (!seen.has(k)) {
+              seen.add(k);
+              ways.push(chosen);
+            }
+            return;
+          }
+          for (let i = from; i < can.length; i++) pick(i + 1, [...chosen, can[i]!]);
+        };
+        pick(0, []);
+        for (const base of bases)
+          for (const tapCreatures of ways) out.push({ ...base, tapCreatures } as Action);
+      }
+      // Lorwyn Eclipsed (18c): Crew N: one action for each way of choosing the creatures to tap (smallest sets reaching N; creatures
+      // that look alike are one way); the board picks them one at a time, in any order.
+      if (a.cost.crew) {
+        const bases = out.splice(firstOfAbility);
+        const ways = crewWays(ctx, player, source, a.cost.crew);
+        for (const base of bases)
+          for (const tapCreatures of ways) out.push({ ...base, tapCreatures } as Action);
+      }
+      // Lorwyn Eclipsed (18a): "Remove a counter from this creature": one action for each choice of kinds (usually one).
+      if (a.cost.removeAnyCounters) {
+        const bases = out.splice(firstOfAbility);
+        const ways = counterRemovals(ctx, source, a.cost.removeAnyCounters);
+        for (const base of bases)
+          for (const removeKinds of ways) out.push({ ...base, removeKinds } as Action);
+      }
+      // Lorwyn Eclipsed (18a): Blight N in the cost: one action per creature you could put the counters on (none: no ability).
+      if (a.cost.blight) {
+        const bases = out.splice(firstOfAbility);
+        const can = blightCreatures(ctx, player);
+        for (const base of bases) for (const blight of can) out.push({ ...base, blight } as Action);
       }
       // Marvel Super Heroes: {X} in an ability's cost (Bruce Banner): every affordable X up to 10.
       if (mana?.x)
@@ -1047,7 +1240,11 @@ export function getLegalActions(ctx: Ctx, player: PlayerId): Action[] {
           continue;
         }
         for (const a of s.combat?.attackers ?? []) {
-          if (canBlock(ctx, id, a.id))
+          if (
+            canBlock(ctx, id, a.id) &&
+            // Lorwyn Eclipsed (18b, green): "can't be blocked by more than one creature".
+            d.declared.filter((x) => x.attacker === a.id).length < maxBlockers(ctx, a.id)
+          )
             out.push({ type: 'addBlock', player, blocker: id, attacker: a.id });
         }
       }
@@ -1139,9 +1336,19 @@ export function getLegalActions(ctx: Ctx, player: PlayerId): Action[] {
             !checkCondition(ctx, cd.kicker.onlyIf, player, obj(ctx, card))
           )
             continue;
+          // Lorwyn Eclipsed (18a): Celestial Reunion, kicked only if two creatures share a type you could choose.
+          if (
+            v.kicked &&
+            cd.kicker?.beholdChosenType !== undefined &&
+            beholdTypes(ctx, player, card, cd.kicker.beholdChosenType).length === 0
+          )
+            continue;
           // Reality Fracture (17c): the cast's behold (a kicker's, or Countersculpt's) is a choice too.
           const beholds = beholdChoices(ctx, player, card, cd, v);
           if (beholds.length === 0) continue;
+          // Lorwyn Eclipsed (18a): a blight as an additional cost (X is 0 for a free cast).
+          const blights = typeof v.blight === 'number' ? blightCreatures(ctx, player) : [undefined];
+          if (blights.length === 0) continue;
           // Additional costs: a card to discard (Sazacap's Brew), a creature or permanent to sacrifice, a forage.
           const extraDiscards = cd.discardToCast
             ? ps.hand.filter((id) => id !== card)
@@ -1160,7 +1367,7 @@ export function getLegalActions(ctx: Ctx, player: PlayerId): Action[] {
             ? castSacrificeOptions(ctx, player, cd, v)
             : [undefined];
           const forages = v.forage ? forageChoices(ctx, player) : [undefined];
-          const specs = v.spell?.targets ?? (cd.enchant ? [cd.enchant] : []);
+          const specs = castTargetSpecs(v.spell?.targets ?? (cd.enchant ? [cd.enchant] : []));
           for (const sacrificeMany of sacrificePrefixes(ctx, player, card, cd))
             for (const sacrifice of sacrificeable)
               for (const forage of forages) {
@@ -1177,6 +1384,8 @@ export function getLegalActions(ctx: Ctx, player: PlayerId): Action[] {
                   sacrificeMany,
                   freePay: d.pay,
                   freeLess: d.costLess,
+                  // Lorwyn Eclipsed (18b, red): a free cast of an optional blight (Cinder Strike) is the blighted variant.
+                  blight: typeof v.blight === 'number' ? 'x' : undefined,
                 };
                 const targetsOf = targetCombos(ctx, specs, {
                   controller: player,
@@ -1200,12 +1409,14 @@ export function getLegalActions(ctx: Ctx, player: PlayerId): Action[] {
                   if (!wardPayable(ctx, player, targets, zone === 'hand' ? 1 : 0)) continue;
                   for (const discard of vDiscards)
                     for (const beholdCard of beholds)
+                     for (const blight of blights)
                       out.push({
                         type: 'castSpell',
                         player,
                         card,
                         targets,
                         free: true,
+                        ...(blight ? { blight } : {}),
                         ...(beholdCard ? { beholdCard } : {}),
                         ...(v.beheld ? { beheld: true } : {}),
                         ...(v.mode !== undefined ? { mode: v.mode } : {}),
@@ -1223,6 +1434,37 @@ export function getLegalActions(ctx: Ctx, player: PlayerId): Action[] {
       }
       return out;
     }
+    // Lorwyn Eclipsed (18b, white): a spell's "any number of target ...", one at a time. Done (the targets so far) comes
+    // first, then each further target (that can pay its ward).
+    case 'spellTargets': {
+      const item = s.stack.find((x) => x.kind === 'spell' && x.id === d.spell);
+      const specs = item?.kind === 'spell' ? (spellOnStack(def(ctx, d.spell), item)?.targets ?? []) : [];
+      const spec = specs[specs.length - 1];
+      const pool = manaSources(ctx, player);
+      const payable = (targets: TargetChoice[]) =>
+        canPayFrom(wardCost(ctx, player, targets), pool) &&
+        wardPayable(ctx, player, targets) &&
+        wardLife(ctx, player, targets) <= s.players[player].life;
+      const out: Action[] = [{ type: 'chooseTargets', player, targets: d.picked }];
+      if (!spec) return out;
+      const key = (t: TargetChoice) => ('object' in t ? t.object.id : t.player);
+      const taken = new Set(d.picked.map(key));
+      for (const t of targetCandidates(ctx, spec, { controller: player, sourceId: d.spell }))
+        if (!taken.has(key(t)) && payable([...d.picked, t]))
+          out.push({ type: 'chooseTargets', player, targets: [...d.picked, t] });
+      return out;
+    }
+    // Lorwyn Eclipsed (18a): conspire, the creatures to tap one at a time.
+    case 'conspire':
+      return d.options.map((card) => ({ type: 'chooseCard', player, card }) as const);
+    // Lorwyn Eclipsed (18a): Dawnhand Dissident, which counter to remove next.
+    case 'payCounters':
+      return d.options.map((_, index) => ({ type: 'chooseOption', player, index }) as const);
+    // Lorwyn Eclipsed (18a): Celestial Reunion, the creature type and then each creature beheld.
+    case 'beholdType':
+      return d.chosenType === undefined
+        ? d.types.map((_, index) => ({ type: 'chooseOption', player, index }) as const)
+        : d.options.map((card) => ({ type: 'chooseCard', player, card }) as const);
     case 'chooseObject':
       return [
         ...d.options.map((card) => ({ type: 'chooseCard', player, card }) as const),
@@ -1289,7 +1531,13 @@ export function getLegalActions(ctx: Ctx, player: PlayerId): Action[] {
         const key = (t: TargetChoice) => ('object' in t ? t.object.id : t.player);
         const taken = new Set(picked.map(key));
         // Reality Fracture (17a): Seasoned Cryomancer, "up to that many target creatures".
-        const full = !!spec.maxFromAmount && picked.length >= (d.trigger.amount ?? 0);
+        const full =
+          (!!spec.maxFromAmount && picked.length >= (d.trigger.amount ?? 0)) ||
+          // Lorwyn Eclipsed (18b, special): Rooftop Percher, "up to two target cards".
+          (spec.maxTargets !== undefined && picked.length >= spec.maxTargets) ||
+          // Lorwyn Eclipsed (18b, green): Prismabasher, "up to X target creatures".
+          (spec.maxAmount !== undefined &&
+            picked.length >= countOf(ctx, player, spec.maxAmount, false, t.source.id));
         for (const t of full ? [] : targetCandidates(ctx, spec, src))
           if (
             !taken.has(key(t)) &&

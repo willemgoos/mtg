@@ -2,12 +2,14 @@ import {
   ARCHIVE_RARITY,
   cardDb,
   findDeck,
+  LORWYN_ECLIPSED_DECKS,
   PLAYABLE_DECKS,
   REALITY_FRACTURE_DECKS,
   registerDeck,
   SCRYFALL,
   slug,
 } from '@mtg/cards';
+import { ECL_BOOSTER_LIST } from '../../../packages/cards/src/ecl/booster-list.ts';
 import { FRA_BOOSTER_LIST } from '../../../packages/cards/src/fra/booster-list.ts';
 import { SOA_ARCHIVE_LIST } from '../../../packages/cards/src/sos/archive-list.ts';
 import { SOS_BOOSTER_LIST } from '../../../packages/cards/src/sos/booster-list.ts';
@@ -261,6 +263,24 @@ describe('expedition packs', () => {
       expect(uncommons.every((n) => rarityOf.get(n) === 'uncommon')).toBe(true);
       expect(['rare', 'mythic']).toContain(rarityOf.get(rare));
       expect(count('rare', 'mythic')).toBeGreaterThanOrEqual(1);
+    }
+  });
+
+  it('opens Lorwyn Eclipsed boosters with an ECL deck: seven commons, three uncommons, a rare and more', () => {
+    const ecl = LORWYN_ECLIPSED_DECKS[0]!;
+    expect(packSetOf({ deck: ecl.id })).toBe('ecl');
+    expect(packSetOf({ deck: 'jump-in:ecl-kithkin+ecl-merfolk' })).toBe('ecl');
+    const mixed = { deck: 'jump-in:ecl-kithkin+blb-bats' };
+    expect([0, 1].map((n) => packSetOf(mixed, n))).toEqual(['ecl', 'blb']);
+    const rarityOf = new Map(ECL_BOOSTER_LIST);
+    for (let seed = 0; seed < 20; seed++) {
+      const pack = rollPack({ kind: 'booster' }, seed, 0, 'ecl', EXP);
+      expect(new Set(pack).size).toBe(packSize);
+      for (const n of pack) expect(cardDb.has(slug(n)), n).toBe(true);
+      const { commons, uncommons, rare } = slots(pack);
+      expect(commons.every((n) => rarityOf.get(n) === 'common')).toBe(true);
+      expect(uncommons.every((n) => rarityOf.get(n) === 'uncommon')).toBe(true);
+      expect(['rare', 'mythic']).toContain(rarityOf.get(rare));
     }
   });
 

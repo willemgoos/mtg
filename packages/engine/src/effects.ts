@@ -35,6 +35,18 @@ import {
   unprepareObject,
 } from './context.ts';
 import { CREATURE_TYPES } from './creature-types.ts';
+import {
+  blightCreature,
+  blightCreatures,
+  counterKinds,
+  counterRemovals,
+  removeCounterKinds,
+  giveAllCreatureTypes,
+  loseAllCreatureTypes,
+  persistReturn,
+  returnBeholdExiled,
+  willPersist,
+} from './ecl-18a.ts';
 import { setMonarch } from './monarch.ts';
 import { JACE_TOKEN, jaceTokens } from './fra-pw-effects.ts';
 import { spellOnStack } from './spells.ts';
@@ -47,6 +59,7 @@ import { checkCondition, triggeredAbility } from './triggers.ts';
 import { addLore } from './sagas.ts';
 import { CHOOSERS } from './stx-13c-a-effects.ts';
 import { planeswalkersSurvive, tokenMultiplier } from './brawl-15a-w-effects.ts';
+import { crownReplacement } from './ecl-crown.ts';
 import { protectedFrom } from './brawl-15b-w-effects.ts';
 import { SOS_14B_C_CHOOSERS } from './sos-14b-c-effects.ts';
 import type {
@@ -145,12 +158,27 @@ export function dealDamage(
       if (has(src, 'lifelink')) gainLife(ctx, src.controller, amount);
       return;
     }
+    // Lorwyn Eclipsed (18c): excess damage is what a creature is dealt beyond lethal damage (Magmatic Galleon).
+    const toughness = characteristics(ctx, o.id).toughness;
+    const excess =
+      characteristics(ctx, o.id).types.includes('Creature') && amount > Math.max(0, toughness - o.damage)
+        ? amount - Math.max(0, toughness - o.damage)
+        : 0;
+    // Lorwyn Eclipsed (18a): wither, damage to a creature is dealt as -1/-1 counters.
+    if (has(src, 'wither')) addCounters(ctx, o.id, amount, '-1/-1', src.controller);
     // Wolverine: "that damage is dealt, but all other damage already dealt to him is healed".
-    o.damage = hasStaticKind(ctx, o.id, 'damageDoesntAccumulate') ? amount : o.damage + amount;
+    else o.damage = hasStaticKind(ctx, o.id, 'damageDoesntAccumulate') ? amount : o.damage + amount;
     if (has(src, 'deathtouch')) o.damagedByDeathtouch = true;
     // Hawkeye: "if Hawkeye dealt damage to it this turn".
     if (!o.damagedBy?.includes(src.id)) o.damagedBy = [...(o.damagedBy ?? []), src.id];
-    emit(ctx, { type: 'damageDealt', source: src.id, to, amount, combat });
+    emit(ctx, {
+      type: 'damageDealt',
+      source: src.id,
+      to,
+      amount,
+      combat,
+      ...(excess > 0 ? { excess } : {}),
+    });
   }
   if (has(src, 'lifelink')) gainLife(ctx, src.controller, amount);
 }
@@ -189,7 +217,8 @@ function doubling(ctx: Ctx, src: DamageSource, to: TargetChoice): number {
       if (
         a.kind === 'static' &&
         a.effect.kind === 'doubleDamage' &&
-        cardMatches(ctx, src.id, a.effect.source)
+        // Lorwyn Eclipsed (18b, red): Collective Inferno's filter reads the type chosen for it (the permanent with the static).
+        cardMatches(ctx, src.id, a.effect.source, id)
       )
         factor *= 2;
   }
@@ -211,6 +240,8 @@ function prevented(ctx: Ctx, src: DamageSource, to: TargetChoice, amount: number
   // Marvel Super Heroes Jumpstart (Squadron): Hyperion prevents all but 1 of damage to you and your Heroes.
   if (amount > 1 && allButOne(ctx, to)) amount = 1;
   if ('player' in to) {
+    // Lorwyn Eclipsed (18b, white): Morningtide's Light, from any source.
+    if (ctx.s.players[to.player].damagePrevented) return 0;
     if (src.controller === to.player) return amount;
     // Mystical Archive (16): Deflecting Palm, the next damage to you this turn is prevented and dealt to its source's controller.
     if (ctx.s.turn.deflect?.includes(to.player)) {
@@ -348,7 +379,7 @@ const PORTENT_TYPES = [
  * Reality Fracture (17a fixes): the creature types offered for "choose a creature type": every one (Scryfall's
  * catalog), those on creatures on the battlefield and in the chooser's hand first, then the rest, each part A to Z.
  */
-function creatureTypesOf(ctx: Ctx, player: PlayerId): string[] {
+export function creatureTypesOf(ctx: Ctx, player: PlayerId): string[] {
   const first = new Set<string>();
   const note = (id: ObjectId) => {
     const d = defOf(ctx, obj(ctx, id).defId);
@@ -544,7 +575,15 @@ export function counterSpell(ctx: Ctx, id: ObjectId, exile = false): void {
           (a) => a.kind === 'static' && a.effect.kind === 'instantsAndSorceriesUncounterable',
         ),
     );
-  if (def(ctx, item.id).uncounterable || protectedByStatic) return;
+  // Lorwyn Eclipsed (18b, red): Hexing Squelcher, "Spells you control can't be countered."
+  const protectedByAll = ctx.s.battlefield.some(
+    (b) =>
+      obj(ctx, b).controller === controller &&
+      def(ctx, b).abilities.some(
+        (a) => a.kind === 'static' && a.effect.kind === 'spellsYouControlUncounterable',
+      ),
+  );
+  if (def(ctx, item.id).uncounterable || protectedByStatic || protectedByAll) return;
   if (obj(ctx, item.id).cantBeCountered) return; // Reality Fracture (17c): Theorist's Proxy
   // Mystical Archive (16): Veil of Summer.
   if (ctx.s.turn.uncounterable?.includes(controller)) return;
@@ -600,12 +639,13 @@ export function damageSourceFor(ctx: Ctx, id: ObjectId, controller: PlayerId): D
   const o = ctx.s.objects[id];
   if (o && o.zone === 'battlefield') {
     const keywords = new Set<Keyword>();
-    for (const k of ['deathtouch', 'lifelink'] as const)
+    for (const k of ['deathtouch', 'lifelink', 'wither'] as const)
       if (hasKeyword(ctx, id, k)) keywords.add(k);
     return { id, controller: o.controller, keywords };
   }
   const defId = o?.defId;
-  const printed = defId ? defOf(ctx, defId).keywords : [];
+  // Lorwyn Eclipsed (18a): a spell that gained wither (Spinerock Tyrant).
+  const printed = defId ? [...defOf(ctx, defId).keywords, ...(o?.grantedKeywords ?? [])] : [];
   // Strixhaven (13c): Radiant Scrollwielder, "instant and sorcery spells you control have lifelink".
   if (
     defId &&
@@ -714,7 +754,7 @@ export function resolveRef(ctx: Ctx, es: EffectSource, ref: Ref): TargetChoice[]
     .map((c) => ({ object: { id: c.id, zcc: c.zcc } }));
 }
 
-function objectsOf(ctx: Ctx, es: EffectSource, ref: Ref): ObjectId[] {
+export function objectsOf(ctx: Ctx, es: EffectSource, ref: Ref): ObjectId[] {
   return resolveRef(ctx, es, ref).flatMap((t) => ('object' in t ? [t.object.id] : []));
 }
 
@@ -818,6 +858,7 @@ export function resolveAmount(ctx: Ctx, es: EffectSource, amount: Amount): numbe
   if ('event' in amount) return es.amount ?? 0;
   // Reality Fracture (17a fixes): Rise of the Deathbringer.
   if ('drawnThisWay' in amount) return es.drawnThisWay ?? 0;
+  if ('affectedThisWay' in amount) return es.affectedThisWay ?? 0; // Lorwyn Eclipsed (18b, blue)
   if ('exiledThisWay' in amount) return es.exiledThisWay ?? 0; // Reality Fracture (17c): Overwrite the Multiverse
   // Strixhaven (13c): life gained this turn (Fortifying Draught).
   if ('count' in amount && amount.count === 'lifeGainedThisTurn')
@@ -895,6 +936,60 @@ export function runEffects(
       i--;
       continue;
     }
+    // Lorwyn Eclipsed (18a): "remove a counter from this creature" (any kind, so the player picks the kind if there are several).
+    if (e.kind === 'removeCounters' && e.name === undefined) {
+      const id = objectsOf(ctx, es, e.from)[0];
+      const n = e.count !== undefined ? resolveAmount(ctx, es, e.count) : 1;
+      const ways = id && n > 0 ? counterRemovals(ctx, id, n) : [];
+      const named = (way: string[]): EffectDef[] =>
+        way.map((name) => ({ kind: 'removeCounters', from: e.from, name, count: 1 }));
+      list.splice(
+        i,
+        1,
+        ...(ways.length === 1 ? named(ways[0]!) : []),
+        ...(ways.length > 1
+          ? [
+              {
+                kind: 'choose',
+                options: ways.map((way) => ({
+                  label: `Remove ${way.join(', ')} ${way.length === 1 ? 'counter' : 'counters'}`,
+                  effects: named(way),
+                })),
+              } as EffectDef,
+            ]
+          : []),
+      );
+      i--;
+      continue;
+    }
+    // Lorwyn Eclipsed (18a): "remove any number of counters": one at a time, kind by kind, until they stop.
+    if (e.kind === 'removeAnyNumberOfCounters') {
+      const id = objectsOf(ctx, es, e.from)[0];
+      const kinds = id ? Object.keys(counterKinds(ctx, id)) : [];
+      list.splice(
+        i,
+        1,
+        ...(kinds.length
+          ? [
+              {
+                kind: 'choose',
+                options: [
+                  { label: 'Done', effects: [] },
+                  ...kinds.map((name) => ({
+                    label: `Remove a ${name} counter`,
+                    effects: [
+                      { kind: 'removeCounters', from: e.from, name, count: 1 },
+                      e,
+                    ] as EffectDef[],
+                  })),
+                ],
+              } as EffectDef,
+            ]
+          : []),
+      );
+      i--;
+      continue;
+    }
     // Bolt Bend: the caster chooses the new target among the other legal ones.
     if (e.kind === 'changeTarget') {
       const options = newTargetOptions(ctx, es, stackTargetId(es, e.what), true);
@@ -955,6 +1050,15 @@ export function runEffects(
       list.splice(i, 1, ...expanded);
       i--;
       continue;
+    }
+    // Lorwyn Eclipsed (18b, special): Mirrormind Crown, "the first time you would create one or more tokens each turn".
+    if (e.kind === 'createToken' || e.kind === 'tokenCopy') {
+      const crown = crownReplacement(ctx, es, e);
+      if (crown) {
+        list.splice(i, 1, crown);
+        i--;
+        continue;
+      }
     }
     if (e.kind === 'if') {
       // Replace it with the chosen branch (which may itself pause).
@@ -1036,7 +1140,11 @@ export function runEffects(
       // Final Fantasy (11c): The Darkness Crystal
       e.kind === 'putExiledWithSource' ||
       // Final Fantasy (11c): hideaway
-      e.kind === 'hideaway'
+      e.kind === 'hideaway' ||
+      // Lorwyn Eclipsed (18a): blight
+      e.kind === 'blight' ||
+      // Lorwyn Eclipsed (18c, theme decks): explore ("put the card back or put it into your graveyard")
+      e.kind === 'explore'
     ) {
       const lib = ctx.s.players[es.controller].library;
       const { controller, source, sourceDefId, targets, lkiPower, subject, amount, chosen, x } = es;
@@ -1058,6 +1166,8 @@ export function runEffects(
         // An impossible optional copy cannot be chosen or consume Iron Man's use.
         const copy = e.effects.length === 1 ? e.effects[0] : undefined;
         if (copy?.kind === 'copySpell' && !spellToCopy(ctx, es, copy.what)) continue;
+        // Lorwyn Eclipsed (18a): "you may pay {G}. If you do, transform": nothing to ask if you can't pay.
+        if (e.cost && !canPayFrom(e.cost, manaSources(ctx, controller))) continue;
         // Iron Man: declining preserves the use; stacked triggers share the original source ref.
         const key = e.oncePerTurn && `${source?.id}:${source?.zcc}:${e.oncePerTurn}`;
         if (key && ctx.s.turn.optionalUses?.includes(key)) continue;
@@ -1100,6 +1210,27 @@ export function runEffects(
           resume,
           thenPriority,
         };
+      } else if (e.kind === 'explore') {
+        // Lorwyn Eclipsed (18c): reveal the top card; a land goes to hand, otherwise a +1/+1 counter and the card stays on top or goes
+        // to the graveyard (asked like a surveil, which doesn't count as one). Explorers go one at a time.
+        const ids = objectsOf(ctx, es, e.what);
+        const top = lib[0];
+        if (!top || ids.length === 0) continue;
+        emit(ctx, { type: 'revealed', player: controller, id: top });
+        if (def(ctx, top).types.includes('Land')) {
+          moveObject(ctx, top, 'hand');
+          continue;
+        }
+        addCounters(ctx, ids[0]!, 1);
+        ctx.s.decision = {
+          kind: 'scry',
+          player: controller,
+          surveil: true,
+          explore: true,
+          cards: [top],
+          resume,
+          thenPriority,
+        };
       } else if (e.kind === 'punisher') {
         const opp = other(controller);
         const options = [
@@ -1120,7 +1251,7 @@ export function runEffects(
           thenPriority,
         };
       } else if (e.kind === 'exileTopChooseOne') {
-        const options = lib.slice(0, e.count);
+        const options = lib.slice(0, resolveAmount(ctx, es, e.count));
         if (options.length === 0) continue;
         for (const id of options) moveObject(ctx, id, 'exile');
         ctx.s.decision = {
@@ -1310,7 +1441,12 @@ export function runEffects(
         const pool =
           e.from === 'hand'
             ? ctx.s.players[controller].hand
-            : e.from === 'lastExiledWithSource'
+            : e.from === 'exileWithCounter'
+              ? // Lorwyn Eclipsed (18b, red): Goliath Daydreamer, "cards you own in exile with dream counters on them".
+                ctx.s.players[controller].exile.filter(
+                  (id) => ctx.s.objects[id]?.owner === controller && !!ctx.s.objects[id]?.counters?.[e.counter ?? ''],
+                )
+              : e.from === 'lastExiledWithSource'
               ? exiled.slice(-1)
               : exiled;
         // Final Fantasy (11c): "mana value less than or equal to that damage" (Buster Sword).
@@ -1523,7 +1659,8 @@ export function runEffects(
           thenPriority,
         };
       } else if (e.kind === 'chooseCreatureType') {
-        const types = creatureTypesOf(ctx, controller);
+        // Lorwyn Eclipsed (18b, special): "choose Elemental, Elf, ... or Treefolk" offers only those.
+        const types = e.from ?? creatureTypesOf(ctx, controller);
         ctx.s.decision = {
           kind: 'chooseOption',
           player: controller,
@@ -1585,7 +1722,12 @@ export function runEffects(
           cardMatches(
             ctx,
             id,
-            e.maxManaValueX ? { ...e.filter, maxManaValue: es.x ?? 0 } : e.filter,
+            e.maxManaValueX
+              ? { ...e.filter, maxManaValue: es.x ?? 0 }
+              : // Lorwyn Eclipsed (18b, white): Kinscaer Sentry.
+                e.maxManaValueAmount !== undefined
+                ? { ...e.filter, maxManaValue: resolveAmount(ctx, es, e.maxManaValueAmount) }
+                : e.filter,
           ),
         );
         if (options.length === 0) continue;
@@ -1661,21 +1803,33 @@ export function runEffects(
       } else if (e.kind === 'chooseFromOpponentHand') {
         const from = other(controller);
         let options = ctx.s.players[from].hand.filter(
-          (id) => !e.filter || cardMatches(ctx, id, e.filter),
+          (id) =>
+            (!e.filter || cardMatches(ctx, id, e.filter)) &&
+            // Lorwyn Eclipsed (18b, black): Taster of Wares, only the cards the opponent revealed.
+            (!e.among || e.among.includes(id)),
         );
+        // Taster of Wares: nothing revealed, nothing to choose.
+        if (e.among && options.length === 0) continue;
         // Klaw: they reveal only some cards (picked for them: the cheapest), and you choose among those.
         if (e.reveal !== undefined)
           options = [...options]
             .sort((a, b) => manaValue(def(ctx, a).manaCost) - manaValue(def(ctx, b).manaCost))
             .slice(0, resolveAmount(ctx, es, e.reveal));
+        // Lorwyn Eclipsed (18c): Lightstall Inquisitor: the opponent chooses from their own hand (nothing to ask if it's empty).
+        if (e.ownerChooses && options.length === 0) continue;
         ctx.s.decision = {
           kind: 'chooseFromHand',
-          player: controller,
+          player: e.ownerChooses ? from : controller,
           from,
           options,
           then: e.then,
+          ...(e.ownerChooses ? { ownerChooses: e.ownerChooses } : {}),
           ...(e.castable ? { castable: true } : {}),
           ...(e.castableIf ? { castableIf: e.castableIf } : {}), // Reality Fracture (17a): Null Summoner
+          // Lorwyn Eclipsed (18b, black): Taster of Wares.
+          ...(e.castableWhileControlling ? { castableWhileControlling: true } : {}),
+          ...(e.castableFilter ? { castableFilter: e.castableFilter } : {}),
+          ...(e.among ? { among: e.among } : {}),
           resume,
           thenPriority,
         };
@@ -1695,6 +1849,17 @@ export function runEffects(
         const doomed = e.permanents
           ? ctx.s.battlefield.map((id) => obj(ctx, id))
           : creaturesOnBattlefield(ctx);
+        // Lorwyn Eclipsed (18a): creatures destroyed together look back at each other (persist from Isilu).
+        ctx.persisting = new Set(
+          doomed
+            .filter(
+              (c) =>
+                matchesFilter(ctx, c.id, e.filter, es.source?.id) &&
+                !hasKeyword(ctx, c.id, 'indestructible') &&
+                willPersist(ctx, c.id),
+            )
+            .map((c) => c.id),
+        );
         for (const c of doomed) {
           if (
             !matchesFilter(ctx, c.id, e.filter, es.source?.id) ||
@@ -1705,6 +1870,7 @@ export function runEffects(
           moveObject(ctx, c.id, 'graveyard');
           died.push(c.id);
         }
+        delete ctx.persisting;
         // Avenge: "You gain 1 life for each creature destroyed this way."
         if (e.gainPerDestroyed) gainLife(ctx, controller, e.gainPerDestroyed * died.length);
         // Strixhaven (13c): Culling Ritual: one mana for each permanent destroyed.
@@ -1819,6 +1985,44 @@ export function runEffects(
           player: who,
           cost: e.cost,
           otherwise: e.otherwise,
+          resume,
+          thenPriority,
+        };
+      } else if (e.kind === 'blight') {
+        // Lorwyn Eclipsed (18a): the player chooses which creature they control gets the counters.
+        const who: PlayerId =
+          e.who === undefined || e.who === 'controller'
+            ? controller
+            : e.who === 'eachOpponent'
+              ? other(controller)
+              : (() => {
+                  const t = es.targets[e.who.target];
+                  return t && 'player' in t ? t.player : other(controller);
+                })();
+        const n = resolveAmount(ctx, es, e.amount);
+        const options = n > 0 ? blightCreatures(ctx, who) : [];
+        if (options.length === 0) {
+          list.splice(i + 1, 0, ...(e.otherwise ?? []));
+          continue;
+        }
+        if (options.length === 1 && !e.optional) {
+          // No real choice: it happens now, and "the blighted creature" is that creature.
+          blightCreature(ctx, who, options[0]!, n);
+          es = { ...es, chosen: { id: options[0]!, zcc: obj(ctx, options[0]!).zcc } };
+          list.splice(i + 1, 0, ...(e.then ?? []));
+          continue;
+        }
+        ctx.s.decision = {
+          kind: 'chooseObject',
+          player: who,
+          options,
+          optional: !!e.optional,
+          blight: n,
+          then: [
+            { kind: 'custom', handler: 'blightChosen', params: { amount: n, player: who } },
+            ...(e.then ?? []),
+          ],
+          otherwise: e.otherwise ?? [],
           resume,
           thenPriority,
         };
@@ -2109,8 +2313,9 @@ export function runEffects(
       } else {
         // Path to Exile: the exiled creature's controller searches their own library.
         const t = e.forControllerOf !== undefined ? es.targets[e.forControllerOf] : undefined;
-        const searcher =
-          (t && 'object' in t ? ctx.s.objects[t.object.id]?.controller : undefined) ?? controller;
+        const searcher = e.activePlayerSearches
+          ? ctx.s.turn.activePlayer // Lorwyn Eclipsed (18b, black): Mornsong Aria
+          : ((t && 'object' in t ? ctx.s.objects[t.object.id]?.controller : undefined) ?? controller);
         if (e.forControllerOf !== undefined && !t) continue;
         // Reality Fracture (17a): "up to 0 cards" (Fblthp with X = 0): the library is still shuffled.
         if (e.upTo !== undefined && resolveAmount(ctx, es, e.upTo) <= 0) {
@@ -2120,11 +2325,16 @@ export function runEffects(
           }
           continue;
         }
+        // Lorwyn Eclipsed (18a): Celestial Reunion, "mana value X or less" is the X chosen for the spell.
+        const searchFilter =
+          typeof e.filter === 'object' && e.filter.maxManaValue === 'x'
+            ? { ...e.filter, maxManaValue: es.x ?? 0 }
+            : e.filter;
         const options = ctx.s.players[searcher].library.filter((id) => {
-          if (typeof e.filter === 'object') {
+          if (typeof searchFilter === 'object') {
             // Strixhaven (13c): Rushed Rebirth: "a creature card with lesser mana value" than the one that died.
             const sub =
-              e.filter.lesserManaValueThanSubject && subject
+              searchFilter.lesserManaValueThanSubject && subject
                 ? ctx.s.objects[subject.id]
                 : undefined;
             if (
@@ -2133,11 +2343,11 @@ export function runEffects(
             )
               return false;
             // Mystical Archive (16): Bring to Light's filter looks at the colours spent on the spell.
-            return cardMatches(ctx, id, e.filter, es.source?.id);
+            return cardMatches(ctx, id, searchFilter, es.source?.id);
           }
           const d = defOf(ctx, obj(ctx, id).defId);
           const basic = d.supertypes.includes('Basic') && d.types.includes('Land');
-          return basic || (e.filter === 'basicLandOrGate' && d.subtypes.includes('Gate'));
+          return basic || (searchFilter === 'basicLandOrGate' && d.subtypes.includes('Gate'));
         });
         ctx.s.decision = {
           kind: 'searchLibrary',
@@ -2156,6 +2366,10 @@ export function runEffects(
           ...(e.differentNames ? { differentNames: true } : {}),
           // Reality Fracture (17a fixes): Loyal Tutor.
           ...(e.reveal ? { reveal: true } : {}),
+          // Lorwyn Eclipsed (18a): Celestial Reunion, the creature type its additional cost chose.
+          ...(e.battlefieldIfChosenType && es.source && ctx.s.objects[es.source.id]?.chosenType
+            ? { battlefieldIfType: ctx.s.objects[es.source.id]!.chosenType! }
+            : {}),
           resume,
           thenPriority,
         };
@@ -2169,7 +2383,7 @@ export function runEffects(
   return false;
 }
 
-function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
+export function runEffect(ctx: Ctx, es: EffectSource, e: EffectDef): void {
   // Reality Fracture (17c): counters this effect adds are put by its controller (Inspired Tethermage).
   const before = ctx.puttingPlayer;
   ctx.puttingPlayer = es.controller;
@@ -2243,10 +2457,13 @@ function runEffectInner(ctx: Ctx, es: EffectSource, e: EffectDef): void {
           ...(e.cantBeBlockedBy ? { cantBeBlockedBy: e.cantBeBlockedBy } : {}),
           ...(e.switchPT ? { switchPT: true } : {}),
           ...(e.counterOnCombatDamage ? { counterOnCombatDamage: true } : {}),
+          // Lorwyn Eclipsed (18c): Captain Howler, Sea Scourge
+          ...(e.drawOnCombatDamage ? { drawsFor: es.controller } : {}),
           ...(e.ignoreDefender ? { ignoreDefender: true } : {}),
           ...(e.sacrificeOnCombatDamage ? { sacrificeOnCombatDamage: true } : {}),
           ...(e.basePT ? { basePT: e.basePT } : {}),
           ...(e.becomesCreature ? { becomesCreature: true } : {}),
+          ...(e.becomesCreature && e.creatureOnly ? { creatureOnly: true } : {}),
           ...(e.creatureSubtype ? { creatureSubtype: e.creatureSubtype } : {}),
           ...(e.preventCombatDamage ? { preventCombatDamage: true } : {}),
           ...(e.mustBeBlocked ? { mustBeBlocked: true } : {}),
@@ -2405,11 +2622,18 @@ function runEffectInner(ctx: Ctx, es: EffectSource, e: EffectDef): void {
         for (const x of e.ifExcess) runEffect(ctx, es, x);
       return;
     }
-    case 'destroy':
-      for (const id of objectsOf(ctx, es, e.what))
+    case 'destroy': {
+      const ids = objectsOf(ctx, es, e.what);
+      // Lorwyn Eclipsed (18a): creatures destroyed together look back at each other (persist from Isilu).
+      ctx.persisting = new Set(
+        ids.filter((id) => !hasKeyword(ctx, id, 'indestructible') && willPersist(ctx, id)),
+      );
+      for (const id of ids)
         if (!hasKeyword(ctx, id, 'indestructible') && !useShield(ctx, id))
           moveObject(ctx, id, 'graveyard');
+      delete ctx.persisting;
       return;
+    }
     case 'sacrifice': {
       const ids = objectsOf(ctx, es, e.what);
       for (const id of ids) sacrifice(ctx, id);
@@ -2628,6 +2852,33 @@ function runEffectInner(ctx: Ctx, es: EffectSource, e: EffectDef): void {
         ...(ctx.s.extraTurns ?? []),
       ];
       return;
+    // Lorwyn Eclipsed (18a)
+    case 'allCreatureTypes':
+      for (const id of objectsOf(ctx, es, e.what)) giveAllCreatureTypes(ctx, id, e.duration);
+      return;
+    case 'loseCreatureTypes':
+      for (const id of objectsOf(ctx, es, e.what)) loseAllCreatureTypes(ctx, id);
+      return;
+    case 'returnBeholdExiled':
+      returnBeholdExiled(ctx, es);
+      return;
+    case 'persistReturn':
+      persistReturn(ctx, es);
+      return;
+    // Lorwyn Eclipsed (18b, white): Morningtide's Light.
+    case 'preventDamageToYouUntilYourNextTurn':
+      ctx.s.players[es.controller].damagePrevented = true;
+      return;
+    case 'blight':
+    case 'removeAnyNumberOfCounters':
+      return; // handled by runEffects
+    case 'removeCounters': {
+      // Named (the kinds chosen for an unnamed one were expanded into named ones).
+      const n = e.count !== undefined ? resolveAmount(ctx, es, e.count) : 1;
+      for (const id of objectsOf(ctx, es, e.from))
+        if (e.name) removeCounterKinds(ctx, id, Array<string>(Math.max(0, n)).fill(e.name));
+      return;
+    }
     case 'transform':
       for (const id of objectsOf(ctx, es, e.what))
         if (obj(ctx, id).zone === 'battlefield') transform(ctx, id);
@@ -2739,6 +2990,7 @@ function runEffectInner(ctx: Ctx, es: EffectSource, e: EffectDef): void {
     case 'bounce': {
       const ids = objectsOf(ctx, es, e.what);
       for (const id of ids) moveObject(ctx, id, 'hand');
+      es.affectedThisWay = ids.length; // Lorwyn Eclipsed (18b, blue): Wanderwine Farewell
       // Bob, Reluctant HYDRA Agent: "if you do".
       if (ids.length) for (const x of e.then ?? []) runEffect(ctx, es, x);
       return;
@@ -3091,15 +3343,7 @@ function runEffectInner(ctx: Ctx, es: EffectSource, e: EffectDef): void {
           player: es.controller,
         });
       return;
-    case 'explore':
-      for (const id of objectsOf(ctx, es, e.what)) {
-        const top = ctx.s.players[es.controller].library[0];
-        if (!top) continue;
-        emit(ctx, { type: 'revealed', player: es.controller, id: top });
-        // A nonland card stays on top (a simplification: never into the graveyard).
-        if (def(ctx, top).types.includes('Land')) moveObject(ctx, top, 'hand');
-        else addCounters(ctx, id, 1);
-      }
+    case 'explore': // Lorwyn Eclipsed (18c): handled by runEffects (the nonland card may go to the graveyard)
       return;
     case 'copyTopTrigger': {
       const top = [...ctx.s.stack]
@@ -3125,7 +3369,7 @@ function runEffectInner(ctx: Ctx, es: EffectSource, e: EffectDef): void {
         // Marvel Super Heroes: longer copies, and copies that stay creatures.
         if (e.until === 'yourNextTurn') self.copyUntilTurnOf = es.controller;
         else if (e.until === 'whileSource' && source) self.copyWhileSource = source.id;
-        else self.copyingUntilTurn = ctx.s.turn.number;
+        else if (!e.permanent) self.copyingUntilTurn = ctx.s.turn.number;
         if ((e.nonlegendary || obj(ctx, of).nonlegendary) && !self.nonlegendary) {
           self.nonlegendary = true;
           self.copyNonlegendary = true;
@@ -3335,6 +3579,13 @@ function runEffectInner(ctx: Ctx, es: EffectSource, e: EffectDef): void {
         copy.controller = es.controller;
         // Strixhaven (13c): Double Major.
         if (e.nonlegendary) copy.nonlegendary = true;
+        // Lorwyn Eclipsed (18a): Spinerock Tyrant, "those spells gain wither" (the original and the copy).
+        if (e.withWither) {
+          copy.grantedKeywords = [...(copy.grantedKeywords ?? []), 'wither'];
+          const original = ctx.s.objects[item.id];
+          if (original && !original.grantedKeywords?.includes('wither'))
+            original.grantedKeywords = [...(original.grantedKeywords ?? []), 'wither'];
+        }
         ctx.s.stack.push({
           kind: 'spell',
           id: copy.id,
@@ -3649,7 +3900,12 @@ function runEffectInner(ctx: Ctx, es: EffectSource, e: EffectDef): void {
             sourceDefId: es.sourceDefId,
             subject: es.source,
             effects: [
-              { kind: 'returnExiledCards', cards, ...(e.landsTapped ? { landsTapped: true } : {}) },
+              {
+                kind: 'returnExiledCards',
+                cards,
+                ...(e.landsTapped ? { landsTapped: true } : {}),
+                ...(e.allTapped ? { allTapped: true } : {}),
+              },
             ],
             fromTurn,
           });
@@ -3684,7 +3940,8 @@ function runEffectInner(ctx: Ctx, es: EffectSource, e: EffectDef): void {
       });
       for (const o of back) {
         moveObject(ctx, o.id, 'battlefield', { controller: o.owner });
-        if (e.landsTapped && def(ctx, o.id).types.includes('Land')) obj(ctx, o.id).tapped = true;
+        if (e.allTapped || (e.landsTapped && def(ctx, o.id).types.includes('Land')))
+          obj(ctx, o.id).tapped = true;
       }
       return;
     }
@@ -3806,7 +4063,10 @@ function runEffectInner(ctx: Ctx, es: EffectSource, e: EffectDef): void {
             : // Reality Fracture (17a): Flourishing Grapple.
               e.untilEndOfTurn
               ? { expires: 'endOfTurn' as const }
-              : { expires: 'untilYourNextTurn' as const }),
+              : // Lorwyn Eclipsed (18b, multi-b): Abigale, Eloquent First-Year.
+                e.permanent
+                ? { expires: 'permanent' as const }
+                : { expires: 'untilYourNextTurn' as const }),
           player: es.controller,
         });
         o.blank = true;

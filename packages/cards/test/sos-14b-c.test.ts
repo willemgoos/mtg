@@ -920,7 +920,8 @@ describe('colourless', () => {
     expect(hand(g)).toContain('plains');
     const coach = g.id('p1', 'strixhaven-skycoach');
     expect(keywords(g, coach)).toContain('flying');
-    activate(g, coach, 1);
+    // Crew 1: the Bear Cub is the one chosen to crew.
+    activate(g, coach, 1, [], { tapCreatures: [g.id('p1', 'bear-cub')] });
     done(g);
     expect(getCharacteristics(g.state, cardDb, coach).power).toBe(3);
     expect(g.obj(g.id('p1', 'bear-cub')).tapped).toBe(true);

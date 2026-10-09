@@ -40,6 +40,7 @@ import {
 } from './effects.ts';
 import { foodsOf, payForage } from './forage.ts';
 import {
+  abilityTags,
   anyTypeCost,
   artifactHelpers,
   colorsSpent,
@@ -58,6 +59,19 @@ import { addCosts, type CastVia, spellOnStack, spellTags, variantOf } from './sp
 import { isTargetLegal } from './targets.ts';
 import { useFreeCast } from './msh-analyzed.ts';
 import { revealBeheld } from './fra-pw-b-effects.ts';
+import {
+  beholdOfType,
+  beholdTypes,
+  blightCreature,
+  colorSplitOfPayment,
+  conspireOptions,
+  counterKinds,
+  creatureCounterOptions,
+  creatureCounterTotal,
+  exiledWithCastable,
+  hasConvoke,
+  removeCounterKinds,
+} from './ecl-18a.ts';
 import { checkCondition, triggeredAbility } from './triggers.ts';
 import { givePriority } from './turn.ts';
 import type {
@@ -116,6 +130,15 @@ export interface CastChoice {
   freeLess?: number | undefined;
   /** Strixhaven Brawl (15b, u): delve, the cards exiled from the graveyard. */
   delve?: number | undefined;
+  // Lorwyn Eclipsed (18a)
+  /** The creature that gets the -1/-1 counters of a blight cost. */
+  blight?: ObjectId | undefined;
+  /** Cast for its evoke cost. */
+  evoked?: boolean | undefined;
+  /** Conspire: tap two creatures as it's cast. */
+  conspire?: boolean | undefined;
+  /** Beheld for a flashback that beholds several cards. */
+  beholdCards?: ObjectId[] | undefined;
 }
 
 /** The creatures a kicked teamwork cast taps: the chosen ones, or the engine's pick (sparing mana sources if it can). */
@@ -172,6 +195,9 @@ function wardedTargets(ctx: Ctx, player: PlayerId, targets: readonly TargetChoic
       return [w.lifeEqualsPower ? { ...w, life: Math.max(0, power(ctx, o.id)) } : w];
     }
     if (hasKeyword(ctx, o.id, 'wardOne')) return [{ mana: { generic: 1, colored: {} } }];
+    // Lorwyn Eclipsed (18b, red): Hexing Squelcher grants "Ward—Pay 2 life."
+    if (hasKeyword(ctx, o.id, 'wardPayTwoLife'))
+      return [{ mana: { generic: 0, colored: {} }, life: 2 }];
     return [];
   });
 }
@@ -384,6 +410,8 @@ export function castCost(
         cost,
       );
   }
+  // Lorwyn Eclipsed (18c): Lightstall Inquisitor, "each spell cast this way costs {1} more".
+  if (o.zone === 'exile' && o.exileCastTax) cost = { ...cost, generic: cost.generic + o.exileCastTax };
   // Brawl: commander tax.
   if (o.zone === 'command') cost = { ...cost, generic: cost.generic + commanderTax(ctx, player) };
   let reduce = d.costReduction !== undefined ? amountFor(ctx, player, d.costReduction) : 0;
@@ -533,6 +561,7 @@ export function castSpell(
   const fromHand = o.zone === 'hand';
   // Reality Fracture (17a): Twinned Vision, "if this spell wasn't cast from your hand" (the stack item is gone by resolution).
   o.castFromHand = fromHand;
+  o.castFromGraveyardZone = o.zone === 'graveyard'; // Lorwyn Eclipsed (18b, black): Twilight Diviner
   // Rule 601.2: move to stack, choose targets, then pay costs.
   const cost = addCosts(
     choice.sneak ? d.sneak! : castCost(ctx, player, card, choice, targets),
@@ -543,7 +572,7 @@ export function castSpell(
     delete ctx.s.players[player].nextSpellDiscount;
   const teamwork = teamworkFor(ctx, player, card, choice);
   // Convoke: remembered for "each creature that convoked this spell" (Lethal Scheme).
-  const convokers = d.convoke
+  const convokers = hasConvoke(ctx, player, card)
     ? creatureHelpers(ctx, player, manaSources(ctx, player, undefined, spellTags(d, o.zone))).map(
         (h) => h.id,
       )
@@ -557,7 +586,7 @@ export function castSpell(
     spellTags(d, o.zone),
     [
       // Convoke: creatures pay for generic mana; improvise: artifacts do.
-      ...(d.convoke
+      ...(hasConvoke(ctx, player, card)
         ? creatureHelpers(ctx, player, manaSources(ctx, player, undefined, spellTags(d, o.zone)))
         : []),
       ...(hasImprovise(ctx, player, card)
@@ -576,6 +605,9 @@ export function castSpell(
       choice.forage !== 'graveyard' ? choice.forage : undefined,
       ...(teamwork ?? []),
       choice.sneak,
+      // Lorwyn Eclipsed (18a): a card beheld and exiled, and the creatures conspire may tap, aren't tapped for mana.
+      ...(v.beholdExile ? [choice.beholdCard] : []),
+      ...(choice.conspire ? conspireOptions(ctx, player, card) : []),
     ],
   );
   if (o.zone === 'command')
@@ -586,9 +618,27 @@ export function castSpell(
     player,
     payment.filter((id) => !convokers.includes(id)),
   );
+  // Lorwyn Eclipsed (18a): Dawnhand Dissident, how many counters this cast removes (read while the card is still in exile).
+  const payCounters =
+    choice.via === 'exiledWithSelf' ? (exiledWithCastable(ctx, player).get(card) ?? 0) : 0;
+  // Lorwyn Eclipsed (18a): the split of colours spent, for "if {W}{W} was spent to cast it".
+  const manaPaid = colorSplitOfPayment(
+    ctx,
+    player,
+    payment.filter((id) => !convokers.includes(id)),
+  );
   moveObject(ctx, card, 'stack', { controller: player });
   // Reality Fracture (17c): beholding a card from your hand reveals it (a permanent you control is only chosen).
-  if (choice.beholdCard !== undefined) revealBeheld(ctx, player, choice.beholdCard);
+  // Lorwyn Eclipsed (18a): "behold … and exile it" exiles the card instead (nothing is revealed).
+  if (choice.beholdCard !== undefined && v.beholdExile) {
+    moveObject(ctx, choice.beholdCard, 'exile');
+    const gone = ctx.s.objects[choice.beholdCard];
+    if (gone) o.beholdExiled = { id: gone.id, zcc: gone.zcc };
+  } else if (choice.beholdCard !== undefined) revealBeheld(ctx, player, choice.beholdCard);
+  for (const id of choice.beholdCards ?? []) revealBeheld(ctx, player, id);
+  // Lorwyn Eclipsed (18a): blight as an additional cost.
+  if (v.blight !== undefined && choice.blight !== undefined)
+    blightCreature(ctx, player, choice.blight, v.blight === 'x' ? (choice.x ?? 0) : v.blight);
   // Secrets of Strixhaven (14b): Soaring Stoneglider, exile two cards from your graveyard unless kicked.
   if (d.unkickedExilesGraveyard && !choice.kicked)
     for (let i = 0; i < d.unkickedExilesGraveyard; i++) {
@@ -649,6 +699,10 @@ export function castSpell(
     ...(choice.kickCount ? { kickCount: choice.kickCount } : {}),
     ...(choice.mode !== undefined ? { mode: choice.mode } : {}),
     ...(choice.kicked ? { kicked: true } : {}),
+    ...(choice.evoked ? { evoked: true } : {}),
+    ...(choice.conspire ? { conspire: true } : {}),
+    // Dawnhand Dissident: cast by removing counters from among your creatures.
+    ...(payCounters ? { payCounters } : {}),
     ...(flashback && !escaping ? { flashback: true } : {}),
     ...(choice.x ? { x: choice.x } : {}),
     ...(exiledValue ? { x: exiledValue } : {}),
@@ -671,6 +725,7 @@ export function castSpell(
   // Final Fantasy (11b): mana spent (convoking creatures don't spend mana).
   o.manaSpent = payment.filter((id) => !convokers.includes(id)).length;
   o.manaColors = manaColors;
+  o.manaPaid = manaPaid;
   if (teamwork) payTeamwork(ctx, teamwork);
   if (convokers.length) o.convokedBy = payment.filter((id) => convokers.includes(id));
   if (d.types.includes('Creature')) scryForAncestry(ctx, player, d, payment);
@@ -744,8 +799,209 @@ function finishCasting(
   const cast = (ctx.s.turn.spellsCast ??= { p1: 0, p2: 0 });
   emit(ctx, { type: 'spellCast', id: card, player, nth: ++cast[player] });
   noteTargets(ctx, player, targets);
+  return continueCasting(ctx, player, card, targets, 'targets');
+}
+
+/**
+ * The choices a cast makes one at a time once the spell is on the stack, in order: the creature type and creatures to behold
+ * (Celestial Reunion), the creatures to tap for conspire, ward's sacrifices. `from` is where to pick up. True: paused to ask.
+ */
+function continueCasting(
+  ctx: Ctx,
+  player: PlayerId,
+  card: ObjectId,
+  targets: TargetChoice[],
+  from: 'targets' | 'counters' | 'behold' | 'conspire' | 'ward',
+): boolean {
+  const item = ctx.s.stack.find((x) => x.kind === 'spell' && x.id === card);
+  const cd = def(ctx, card);
+  // Lorwyn Eclipsed (18b, white): "any number of target creatures" on a spell (Morningtide's Light): picked one at a time.
+  if (from === 'targets') {
+    from = 'counters';
+    const specs = item?.kind === 'spell' ? (spellOnStack(cd, item)?.targets ?? []) : [];
+    if (specs[specs.length - 1]?.anyNumber) {
+      ctx.s.decision = { kind: 'spellTargets', player, spell: card, picked: [], thenPriority: player };
+      return true;
+    }
+  }
+  // Lorwyn Eclipsed (18a): Dawnhand Dissident, counters removed from among your creatures one at a time.
+  if (from === 'counters' && item?.kind === 'spell' && item.payCounters) {
+    const options = creatureCounterOptions(ctx, player);
+    if (options.length > 0) {
+      payCountersStep(ctx, {
+        kind: 'payCounters',
+        player,
+        spell: card,
+        left: item.payCounters,
+        options,
+        targets,
+        thenPriority: player,
+      });
+      return true;
+    }
+  }
+  if (from === 'counters') from = 'behold';
+  // Lorwyn Eclipsed (18a): "choose a creature type and behold two creatures of that type".
+  if (
+    from === 'behold' &&
+    item?.kind === 'spell' &&
+    item.kicked &&
+    cd.kicker?.beholdChosenType !== undefined
+  ) {
+    const count = cd.kicker.beholdChosenType;
+    const types = beholdTypes(ctx, player, card, count);
+    if (types.length > 0) {
+      ctx.s.decision = {
+        kind: 'beholdType',
+        player,
+        spell: card,
+        count,
+        types,
+        options: [],
+        chosen: [],
+        targets,
+        thenPriority: player,
+      };
+      return true;
+    }
+  }
+  // Lorwyn Eclipsed (18a): conspire, the creatures to tap are chosen one at a time.
+  if (from !== 'ward' && item?.kind === 'spell' && item.conspire) {
+    const options = conspireOptions(ctx, player, card);
+    if (options.length >= 2) {
+      ctx.s.decision = {
+        kind: 'conspire',
+        player,
+        spell: card,
+        options,
+        chosen: [],
+        targets,
+        thenPriority: player,
+      };
+      return true;
+    }
+  }
   // Reality Fracture (17a fixes): ward's sacrifices are chosen (true: paused to ask which).
   return payWardSacrifices(ctx, player, targets, { thenPriority: player });
+}
+
+/**
+ * Lorwyn Eclipsed (18b, white): the targets picked so far for a spell's "any number of target ..." (the player's
+ * `chooseTargets` answer: one more, or the same list to finish). Finishing pays the ward of what was chosen and goes on
+ * with the rest of the cast.
+ */
+export function answerSpellTargets(ctx: Ctx, targets: TargetChoice[]): void {
+  const d = ctx.s.decision;
+  if (d.kind !== 'spellTargets') throw new Error('Not choosing spell targets');
+  if (targets.length === d.picked.length + 1) {
+    d.picked = targets;
+    return;
+  }
+  const item = ctx.s.stack.find((x) => x.kind === 'spell' && x.id === d.spell);
+  if (item?.kind !== 'spell') throw new Error('The spell is not on the stack');
+  const ward = wardCost(ctx, d.player, targets);
+  if (manaValue(ward) > 0) payMana(ctx, planPayment(ctx, d.player, ward, undefined));
+  changeLife(ctx, d.player, -wardLife(ctx, d.player, targets));
+  payWardExtras(ctx, d.player, targets);
+  noteTargets(ctx, d.player, targets);
+  item.targets = [...item.targets, ...targets];
+  if (continueCasting(ctx, d.player, d.spell, item.targets, 'counters')) return;
+  givePriority(ctx, d.thenPriority);
+}
+
+/** Dawnhand Dissident: one more counter removed (or the last of them), or all that remain if there is no real choice. */
+function payCountersStep(ctx: Ctx, d: Extract<Decision, { kind: 'payCounters' }>): void {
+  // With exactly as many counters as are left to remove, there is nothing to choose.
+  const total = creatureCounterTotal(ctx, d.player);
+  if (d.left > 0 && total <= d.left) {
+    for (const o of creatureCounterOptions(ctx, d.player)) {
+      const n = counterKinds(ctx, o.creature)[o.kind] ?? 0;
+      removeCounterKinds(ctx, o.creature, Array<string>(n).fill(o.kind));
+    }
+    d.left = 0;
+  }
+  if (d.left > 0) {
+    ctx.s.decision = { ...d, options: creatureCounterOptions(ctx, d.player) };
+    return;
+  }
+  if (continueCasting(ctx, d.player, d.spell, d.targets, 'behold')) return;
+  givePriority(ctx, d.thenPriority);
+}
+
+/** Dawnhand Dissident: the counter chosen (an index into `options`). */
+export function answerPayCounters(ctx: Ctx, index: number): void {
+  const d = ctx.s.decision;
+  if (d.kind !== 'payCounters') throw new Error('Not removing counters');
+  const pick = d.options[index];
+  if (!pick) throw new Error('No such counter');
+  removeCounterKinds(ctx, pick.creature, [pick.kind]);
+  payCountersStep(ctx, { ...d, left: d.left - 1 });
+}
+
+/** Celestial Reunion: the creature type chosen, then each creature beheld. */
+function beholdTypeStep(ctx: Ctx, d: Extract<Decision, { kind: 'beholdType' }>): void {
+  // With no real choice left, take what remains.
+  const need = d.count - d.chosen.length;
+  if (d.chosenType !== undefined && d.options.length <= need) {
+    d.chosen = [...d.chosen, ...d.options];
+    d.options = [];
+  }
+  if (d.chosenType === undefined || d.chosen.length < d.count) {
+    ctx.s.decision = d;
+    return;
+  }
+  for (const id of d.chosen) revealBeheld(ctx, d.player, id);
+  obj(ctx, d.spell).chosenType = d.chosenType;
+  if (continueCasting(ctx, d.player, d.spell, d.targets, 'conspire')) return;
+  givePriority(ctx, d.thenPriority);
+}
+
+/** Celestial Reunion: the creature type chosen (an index into `types`). */
+export function answerBeholdType(ctx: Ctx, index: number): void {
+  const d = ctx.s.decision;
+  if (d.kind !== 'beholdType' || d.chosenType !== undefined) throw new Error('Not choosing a type');
+  const chosenType = d.types[index];
+  if (chosenType === undefined) throw new Error('No such creature type');
+  beholdTypeStep(ctx, {
+    ...d,
+    chosenType,
+    options: beholdOfType(ctx, d.player, d.spell, chosenType),
+  });
+}
+
+/** Celestial Reunion: one creature beheld. */
+export function answerBeholdCreature(ctx: Ctx, creature: ObjectId): void {
+  const d = ctx.s.decision;
+  if (d.kind !== 'beholdType' || d.chosenType === undefined) throw new Error('Not beholding');
+  beholdTypeStep(ctx, {
+    ...d,
+    chosen: [...d.chosen, creature],
+    options: d.options.filter((id) => id !== creature),
+  });
+}
+
+/** Conspire: a creature chosen to tap (the first, then the second); then the spell is copied. */
+export function answerConspire(ctx: Ctx, creature: ObjectId): void {
+  const d = ctx.s.decision;
+  if (d.kind !== 'conspire') throw new Error('Not conspiring');
+  const chosen = [...d.chosen, creature];
+  if (chosen.length < 2) {
+    ctx.s.decision = { ...d, chosen, options: d.options.filter((id) => id !== creature) };
+    return;
+  }
+  for (const id of chosen) tap(ctx, id);
+  // "When you do, copy it and you may choose new targets for the copy."
+  const o = obj(ctx, d.spell);
+  ctx.s.pendingTriggers.push({
+    source: { id: o.id, zcc: o.zcc },
+    sourceDefId: o.defId,
+    abilityIndex: -1,
+    controller: d.player,
+    subject: { id: o.id, zcc: o.zcc },
+    inline: [{ kind: 'copySpell', what: 'subject', newTargets: true }],
+  });
+  if (continueCasting(ctx, d.player, d.spell, d.targets, 'ward')) return;
+  givePriority(ctx, d.thenPriority);
 }
 
 /**
@@ -915,6 +1171,9 @@ export function activateAbility(
   x?: number,
   tapCreature?: ObjectId,
   tapArtifacts?: ObjectId[],
+  blight?: ObjectId,
+  removeKinds?: string[],
+  tapCreatures?: ObjectId[],
 ): boolean {
   const a = activatedAbility(ctx, source, index);
   const src = obj(ctx, source);
@@ -932,10 +1191,16 @@ export function activateAbility(
     ),
     payWith,
     exclude,
-    // Shang-Chi's mana can pay for abilities of creature sources.
-    isCreature(ctx, source) ? ['CreatureAbility'] : undefined,
+    // Shang-Chi's mana can pay for abilities of creature sources; Eclipsed Realms' mana for sources of the chosen type.
+    abilityTags(ctx, source),
     a.cost.convoke ? creatureHelpers(ctx, player, manaSources(ctx, player, exclude), exclude) : [],
-    [sacrifice, forage !== 'graveyard' ? forage : undefined, tapCreature, ...(tapArtifacts ?? [])],
+    [
+      sacrifice,
+      forage !== 'graveyard' ? forage : undefined,
+      tapCreature,
+      ...(tapArtifacts ?? []),
+      ...(tapCreatures ?? []),
+    ],
   );
   if (discard) {
     // Strixhaven (13c): Uvilda exiles the card with three refine counters.
@@ -968,6 +1233,18 @@ export function activateAbility(
     const id = tapCreature && can.includes(tapCreature) ? tapCreature : can[0];
     if (id) tap(ctx, id);
   }
+  // Lorwyn Eclipsed (18b, white): Kithkeeper, "tap three untapped creatures you control" (the ones chosen).
+  if (a.cost.tapCreatures) {
+    const can = creaturesToTap(ctx, player, undefined);
+    const chosen = (tapCreatures ?? []).filter(
+      (id, i, all) => can.includes(id) && all.indexOf(id) === i,
+    );
+    for (const id of [...chosen, ...can.filter((id) => !chosen.includes(id))].slice(
+      0,
+      a.cost.tapCreatures,
+    ))
+      tap(ctx, id);
+  }
   // Reality Fracture (17a): Tenured Tethermage, "tap two untapped artifacts you control".
   if (a.cost.tapArtifacts) {
     const can = artifactsToTap(ctx, player);
@@ -980,8 +1257,28 @@ export function activateAbility(
     ))
       tap(ctx, id);
   }
+  // Lorwyn Eclipsed (18b, multi-b): High Perfect Morcant, Kirol, "tap three untapped Elves you control".
+  if (a.cost.tapUntapped) {
+    const can = untappedMatching(ctx, player, a.cost.tapUntapped.filter, source);
+    const chosen = (tapArtifacts ?? []).filter(
+      (id, i, all) => can.includes(id) && all.indexOf(id) === i,
+    );
+    for (const id of [...chosen, ...can.filter((id) => !chosen.includes(id))].slice(
+      0,
+      a.cost.tapUntapped.count,
+    ))
+      tap(ctx, id);
+  }
   if (a.cost.crew) {
-    const crew = crewFor(ctx, player, source, a.cost.crew) ?? [];
+    // Lorwyn Eclipsed (18c): the creatures the player chose to crew with (`tapCreatures`).
+    const chosenCrew = [...new Set(tapCreatures ?? [])].filter((id) => {
+      const o = ctx.s.objects[id];
+      return !!o && o.zone === 'battlefield' && o.controller === player && !o.tapped && id !== source;
+    });
+    const crew =
+      chosenCrew.reduce((t, id) => t + power(ctx, id), 0) >= a.cost.crew
+        ? chosenCrew
+        : (crewFor(ctx, player, source, a.cost.crew) ?? []);
     for (const id of crew) tap(ctx, id);
     // Final Fantasy (11c): crewed by (Balthier and Fran).
     const v = obj(ctx, source);
@@ -1012,6 +1309,10 @@ export function activateAbility(
   if (sacrifice) sacrificePermanent(ctx, sacrifice);
   changeLife(ctx, player, -wardLife(ctx, player, targets) - (a.cost.life ?? 0));
   payWardExtras(ctx, player, targets);
+  // Lorwyn Eclipsed (18a): Blight N in the cost.
+  if (a.cost.blight && blight !== undefined) blightCreature(ctx, player, blight, a.cost.blight);
+  // "Remove a counter from this creature": counters of the kinds chosen.
+  if (a.cost.removeAnyCounters) removeCounterKinds(ctx, source, removeKinds ?? []);
   if (a.cost.removeCounters) {
     const c = (src.counters ??= {});
     c[a.cost.removeCounters.name] =
@@ -1179,6 +1480,8 @@ export function resolveTop(ctx: Ctx): boolean {
     const o = obj(ctx, item.id);
     const d = defOf(ctx, o.defId);
     const spell = spellOnStack(d, item);
+    // Lorwyn Eclipsed (18a): "if this spell's additional cost was paid" (the `wasKicked` condition) works for instants and sorceries too.
+    if (item.kicked) o.kicked = true;
     if (spell) {
       const targets = checkTargets(ctx, spell.targets, item.targets, item.controller, item.id);
       if (!targets) {
@@ -1255,6 +1558,8 @@ export function resolveTop(ctx: Ctx): boolean {
       });
     }
     if (item.kicked) o.kicked = true;
+    // Lorwyn Eclipsed (18a): evoked, its sacrifice trigger is queued as it enters.
+    if (item.evoked) o.evoked = true;
     // Reality Fracture (17a): Null Summoner, Uldaros Theorix: "if you cast it".
     o.wasCast = true;
     // Multikicker: "enters with a +1/+1 counter for each time he was kicked".
@@ -1378,11 +1683,16 @@ export function attachAura(ctx: Ctx, aura: ObjectId, host: ObjectId): void {
         toughness: 0,
         keywords: [],
         loseAbilities: true,
+        // Lorwyn Eclipsed (18b, blue): Noggle the Mind, "is a colorless Noggle" (all other creature types and colors are lost).
+        ...(ab.effect.colorlessSubtype
+          ? { colorless: true, creatureSubtype: ab.effect.colorlessSubtype }
+          : {}),
         expires: 'whileSource',
         whileSourceId: aura,
         player: a.controller,
       });
       h.blank = true;
+      if (ab.effect.colorlessSubtype) h.colorless = true;
     }
     // Reality Fracture (17a): Puppet Crafting, the enchanted permanent is a creature while the Aura stays.
     if (ab.effect.kind === 'attached' && ab.effect.becomesCreature) {
@@ -1440,6 +1750,13 @@ export function finishResolution(ctx: Ctx, item: PausedResolution['item']): void
     if (!ps.includes(resolved.defId)) ps.push(resolved.defId);
     return moveObject(ctx, item.id, 'exile');
   }
+  // Lorwyn Eclipsed (18b, red): Goliath Daydreamer, "exile that card with a dream counter on it instead of putting it into your graveyard".
+  if (resolved?.dreamExile && !resolved.isToken && !resolved.spellCopyCard) {
+    moveObject(ctx, item.id, 'exile');
+    const dreamt = ctx.s.objects[item.id];
+    if (dreamt?.zone === 'exile') dreamt.counters = { ...dreamt.counters, dream: 1 };
+    return;
+  }
   if (item.libraryBottom) return moveObject(ctx, item.id, 'library', { position: 'bottom' });
   moveObject(ctx, item.id, item.exile || item.rebound ? 'exile' : 'graveyard');
   const o = ctx.s.objects[item.id];
@@ -1467,9 +1784,51 @@ function resume(ctx: Ctx, r: PausedResolution, thenPriority: PlayerId): void {
  * noncreature tokens, then the weakest creatures (the engine picks; a simplification).
  */
 /**
+ * Crew N: the untapped creatures `player` controls (not the Vehicle) with total power N or more, one list per way of choosing
+ * them (Lorwyn Eclipsed 18c: the player chooses, as the action's `tapCreatures`). Only smallest sets, so no creature is tapped
+ * for nothing; creatures that look alike are one way. The weakest crews come first.
+ */
+export function crewWays(
+  ctx: Ctx,
+  player: PlayerId,
+  vehicle: ObjectId,
+  n: number,
+): ObjectId[][] {
+  const can = ctx.s.battlefield
+    .filter((id) => {
+      const o = obj(ctx, id);
+      return id !== vehicle && o.controller === player && !o.tapped && isCreature(ctx, id);
+    })
+    .map((id) => ({ id, power: power(ctx, id) }))
+    .filter((c) => c.power > 0)
+    .sort((a, b) => a.power - b.power);
+  const key = (id: ObjectId) => {
+    const o = obj(ctx, id);
+    const c = characteristics(ctx, id);
+    return `${o.defId}|${o.isToken ? 1 : 0}|${o.summoningSick ? 1 : 0}|${c.power}/${c.toughness}|${o.plusOneCounters}`;
+  };
+  const ways: { ids: ObjectId[]; power: number }[] = [];
+  const seen = new Set<string>();
+  const pick = (from: number, chosen: typeof can, total: number): void => {
+    if (total >= n) {
+      // A smallest set: without its weakest member it would fall short.
+      if (total - chosen[0]!.power >= n) return;
+      const k = chosen.map((c) => key(c.id)).sort().join(',');
+      if (seen.has(k)) return;
+      seen.add(k);
+      ways.push({ ids: chosen.map((c) => c.id), power: total });
+      return;
+    }
+    for (let i = from; i < can.length; i++) pick(i + 1, [...chosen, can[i]!], total + can[i]!.power);
+  };
+  pick(0, [], 0);
+  return ways.sort((a, b) => a.power - b.power || a.ids.length - b.ids.length).map((w) => w.ids);
+}
+
+/**
  * Crew N: untapped creatures `player` controls (not the Vehicle) with total
- * power N or more. The engine picks: the smallest creatures that reach N
- * (a simplification). Null if they can't.
+ * power N or more. The smallest creatures that reach N, when no crew was chosen
+ * (the legal actions list every choice). Null if they can't.
  */
 export function crewFor(
   ctx: Ctx,
@@ -1613,6 +1972,24 @@ export function artifactsToTap(ctx: Ctx, player: PlayerId): ObjectId[] {
   });
 }
 
+/** Lorwyn Eclipsed (18b, multi-b): the untapped creatures `player` controls that match the filter (the source may be one). */
+export function untappedMatching(
+  ctx: Ctx,
+  player: PlayerId,
+  filter: CardFilter,
+  source?: ObjectId,
+): ObjectId[] {
+  return ctx.s.battlefield.filter((id) => {
+    const o = obj(ctx, id);
+    return (
+      o.controller === player &&
+      !o.tapped &&
+      isCreature(ctx, id) &&
+      matchesFilter(ctx, id, filter, source)
+    );
+  });
+}
+
 export function tokensToTap(ctx: Ctx, player: PlayerId, source?: ObjectId): ObjectId[] {
   return ctx.s.battlefield
     .filter((id) => {
@@ -1657,11 +2034,22 @@ export function answerChooseFromHand(ctx: Ctx, card: ObjectId | null): void {
   if (d.kind !== 'chooseFromHand') throw new Error('Not choosing from a hand');
   if (card) {
     moveObject(ctx, card, d.then === 'discard' ? 'graveyard' : 'exile');
-    if (d.castable) {
+    // Lorwyn Eclipsed (18c): Lightstall Inquisitor: the opponent chose it; they may play it while it stays exiled.
+    if (d.ownerChooses) {
+      const o = obj(ctx, card);
+      o.castableWhileExiled = true;
+      if (d.ownerChooses.tax) o.exileCastTax = d.ownerChooses.tax;
+      if (d.ownerChooses.landsTapped) o.exilePlayTapped = true;
+    }
+    // Lorwyn Eclipsed (18b, black): Taster of Wares, only an instant or sorcery card is castable.
+    if (d.castable && (!d.castableFilter || cardMatches(ctx, card, d.castableFilter))) {
       obj(ctx, card).castableBy = d.player;
       obj(ctx, card).anyMana = true;
       // Reality Fracture (17a): Null Summoner, "as long as there are seven or more cards in your graveyard".
       if (d.castableIf) obj(ctx, card).castableIf = d.castableIf;
+      // Taster of Wares: "for as long as you control this creature".
+      if (d.castableWhileControlling && d.resume.source)
+        obj(ctx, card).castableWhileControlling = d.resume.source;
     }
   }
   resume(ctx, d.resume, d.thenPriority);
@@ -1785,6 +2173,12 @@ export function answerScry(ctx: Ctx, top: readonly ObjectId[], bottom: readonly 
   const lib = ctx.s.players[d.player].library;
   lib.splice(0, d.cards.length);
   lib.unshift(...top);
+  // Lorwyn Eclipsed (18c): explore's nonland card goes back on top or into the graveyard (no scry or surveil happened).
+  if (d.explore) {
+    lib.unshift(...bottom);
+    for (const id of bottom) moveObject(ctx, id, 'graveyard');
+    return resume(ctx, d.resume, d.thenPriority);
+  }
   if (d.surveil) {
     // Surveil: "bottom" means the graveyard. Put them back on top first so moveObject finds them.
     lib.unshift(...bottom);
@@ -1983,7 +2377,9 @@ export function answerSearch(ctx: Ctx, card: ObjectId | null): void {
       d.to === 'battlefieldTapped' ||
       // Secrets of Strixhaven (14b): Zimone's Experiment: lands go onto the battlefield tapped.
       (d.landsTapped && def(ctx, card).types.includes('Land')) ||
-      (d.battlefieldOnYourTurn && ctx.s.turn.activePlayer === d.player);
+      (d.battlefieldOnYourTurn && ctx.s.turn.activePlayer === d.player) ||
+      // Lorwyn Eclipsed (18a): Celestial Reunion, a card of the chosen creature type.
+      (d.battlefieldIfType !== undefined && hasSubtype(ctx, card, d.battlefieldIfType));
     if (d.to === 'hideaway') {
       // Final Fantasy (11c): hideaway. Exiled face down, remembered by the land.
       moveObject(ctx, card, 'exile');

@@ -2,6 +2,10 @@ import type { Color } from '@mtg/engine';
 import { FRA_DECKS_1 } from './fra/decks-1.ts';
 import { FRA_DECKS_2 } from './fra/decks-2.ts';
 import { FRA_DECKS_3 } from './fra/decks-3.ts';
+import { ECL_THEME_DECKS } from './ecl/theme-deck-lists.ts';
+import { ECL_DECKS_2 } from './ecl/decks-2.ts';
+import { ECL_DECKS_1 } from './ecl/decks-1.ts';
+import { ECL_DECKS_3 } from './ecl/decks-3.ts';
 
 export interface Decklist {
   /** Stable key, e.g. for saved preferences. */
@@ -24,7 +28,7 @@ export interface Decklist {
    */
   series: 'starter' | 'colorChallenge' | 'jumpIn' | 'season' | 'brawl' | 'trophy' | 'sealed';
   /** A deck from another set than Foundations (shown in its own section). */
-  set?: 'blb' | 'msh' | 'msc' | 'fin' | 'fic' | 'stx' | 'sos' | 'soc' | 'fra';
+  set?: 'blb' | 'msh' | 'msc' | 'fin' | 'fic' | 'stx' | 'sos' | 'soc' | 'fra' | 'ecl';
   cards: [name: string, count: number][];
   /** Who made it, for decks made by a player ('trophy'). */
   credit?: string;
@@ -5973,6 +5977,9 @@ export const FINAL_FANTASY_BRAWL_DECKS: Decklist[] = [
   },
 ];
 
+/** Lorwyn Eclipsed (18c): our own two-colour decks, built from human-made lists and tuned against the starter decks. */
+export const LORWYN_ECLIPSED_DECKS: Decklist[] = [...ECL_DECKS_1, ...ECL_DECKS_2, ...ECL_DECKS_3];
+
 export const DECKS: Decklist[] = [
   ...ARENA_DECKS,
   ...COLOR_CHALLENGE_DECKS,
@@ -5990,4 +5997,6 @@ export const DECKS: Decklist[] = [
   ...SECRETS_OF_STRIXHAVEN_DECKS,
   ...STRIXHAVEN_BRAWL_DECKS,
   ...REALITY_FRACTURE_DECKS,
+  ...ECL_THEME_DECKS,
+  ...LORWYN_ECLIPSED_DECKS,
 ];

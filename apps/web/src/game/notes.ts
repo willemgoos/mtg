@@ -74,9 +74,23 @@ const KEYWORDS: Record<Keyword, { name: string; text: string }> = {
     name: 'Changeling',
     text: 'This is every creature type.',
   },
+  // Lorwyn Eclipsed (18a)
+  persist: {
+    name: 'Persist',
+    text: 'When this dies, if it had no -1/-1 counters on it, return it to the battlefield under its owner’s control with a -1/-1 counter on it.',
+  },
+  wither: {
+    name: 'Wither',
+    text: 'This deals damage to creatures in the form of -1/-1 counters.',
+  },
   wardOne: {
     name: 'Ward {1}',
     text: 'Whenever this becomes the target of a spell or ability an opponent controls, counter it unless that player pays {1}.',
+  },
+  // Lorwyn Eclipsed (18b, red)
+  wardPayTwoLife: {
+    name: 'Ward—Pay 2 life',
+    text: 'Whenever this becomes the target of a spell or ability an opponent controls, counter it unless that player pays 2 life.',
   },
   shroud: {
     name: 'Shroud',
@@ -176,6 +190,15 @@ export function cardNotes(view: GameState, defId: CardDefId, oid?: ObjectId | nu
       text: `${minus} -1/-1 counter${minus > 1 ? 's' : ''} (${signed(-minus)}/${signed(-minus)}).`,
     });
   }
+  // Lorwyn Eclipsed (18a)
+  if (o.evoked)
+    notes.push({
+      kind: 'status',
+      title: 'Evoked',
+      text: 'It was cast for its evoke cost: it’s sacrificed as it enters.',
+    });
+  if (o.allCreatureTypes !== undefined)
+    notes.push({ kind: 'effect', title: 'Creature types', text: 'It has all creature types.' });
   if (def.types.includes('Creature')) {
     const staticP = c.power - (def.power ?? 0) - o.plusOneCounters + minus - eotP;
     const staticT = c.toughness - (def.toughness ?? 0) - o.plusOneCounters + minus - eotT;

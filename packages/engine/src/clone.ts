@@ -51,6 +51,7 @@ export function cloneState(s: GameState): GameState {
       ...(s.turn.spellHistory ? { spellHistory: { ...s.turn.spellHistory } } : {}),
       ...(s.turn.optionalUses ? { optionalUses: s.turn.optionalUses.slice() } : {}),
       attackers: s.turn.attackers.slice(),
+      ...(s.turn.combatAttackers ? { combatAttackers: s.turn.combatAttackers.slice() } : {}), // Lorwyn Eclipsed (18c)
       lifeGains: { ...s.turn.lifeGains },
       ...(s.turn.lifeGained ? { lifeGained: { ...s.turn.lifeGained } } : {}),
       cardsDrawn: { ...s.turn.cardsDrawn },
@@ -68,6 +69,9 @@ export function cloneState(s: GameState): GameState {
       ...(s.turn.creaturesLost ? { creaturesLost: { ...s.turn.creaturesLost } } : {}),
       ...(s.turn.foodsSacrificed ? { foodsSacrificed: { ...s.turn.foodsSacrificed } } : {}),
       ...(s.turn.countersPut ? { countersPut: { ...s.turn.countersPut } } : {}), // Strixhaven Brawl (15b, multi)
+      ...(s.turn.creatureCountersBy ? { creatureCountersBy: s.turn.creatureCountersBy.slice() } : {}), // Lorwyn Eclipsed (18a)
+      ...(s.turn.creaturesEntered ? { creaturesEntered: s.turn.creaturesEntered.slice() } : {}), // Lorwyn Eclipsed (18b)
+      ...(s.turn.flyersEntered ? { flyersEntered: s.turn.flyersEntered.slice() } : {}),
       // Strixhaven Brawl (15b, pair): revolt.
       ...(s.turn.permanentsLeft ? { permanentsLeft: { ...s.turn.permanentsLeft } } : {}),
       ...(s.turn.hexproofPlayers ? { hexproofPlayers: s.turn.hexproofPlayers.slice() } : {}),
@@ -77,6 +81,7 @@ export function cloneState(s: GameState): GameState {
         ? { lastNoncombatDamaged: s.turn.lastNoncombatDamaged.slice() }
         : {}),
       ...(s.turn.moltenTide ? { moltenTide: s.turn.moltenTide.slice() } : {}),
+      ...(s.turn.firstTokensDone ? { firstTokensDone: s.turn.firstTokensDone.slice() } : {}), // Lorwyn Eclipsed (18b, special)
       ...(s.turn.instantLoyalty ? { instantLoyalty: s.turn.instantLoyalty.slice() } : {}),
       ...(s.turn.loyaltyActivated ? { loyaltyActivated: s.turn.loyaltyActivated.slice() } : {}), // Reality Fracture (17c)
       ...(s.turn.osteomancer ? { osteomancer: s.turn.osteomancer.slice() } : {}),

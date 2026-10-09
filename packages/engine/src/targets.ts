@@ -2,10 +2,18 @@ import { planeswalkersHexproof } from './brawl-15a-w-effects.ts';
 import { ignoresHexproofAndWard } from './brawl-15b-b-effects.ts';
 import { landsHaveHexproof } from './fra-green-effects.ts';
 import { protectedFrom } from './brawl-15b-w-effects.ts';
-import { cardMatches, hasKeyword, isCreature, matchesFilter } from './characteristics.ts';
+import {
+  cardMatches,
+  hasKeyword,
+  hasSubtype,
+  isCreature,
+  matchesFilter,
+  subtypesOf,
+} from './characteristics.ts';
 import { type Ctx, def, defOf, deref, obj, other, refOf } from './context.ts';
 import { manaValue } from './cost.ts';
 import { fromCreatureSource } from './msh-analyzed.ts';
+import { hexproofFromOwnColors } from './ecl-multi-b-effects.ts';
 import { checkCondition } from './triggers.ts';
 import type { ObjectId, PlayerId, TargetChoice, TargetSpec } from './types.ts';
 import { PLAYERS } from './types.ts';
@@ -77,6 +85,8 @@ function permanentOk(ctx: Ctx, spec: TargetSpec, id: ObjectId, src: TargetingSou
       def(ctx, src.sourceId).colors.includes('W')
     )
       return false;
+    // Lorwyn Eclipsed (18b, multi-b): Tam, Mindful First-Year.
+    if (src.sourceId && hexproofFromOwnColors(ctx, id, src.sourceId)) return false;
   }
   if (!lesserThanSubject(ctx, spec, id, src)) return false;
   if (spec.filter?.notSubject && id === src.subjectId) return false;
@@ -106,6 +116,8 @@ function abilityOk(ctx: Ctx, spec: TargetSpec, id: ObjectId, src: TargetingSourc
   if (!item || item.kind !== 'ability') return false;
   if (spec.controller === 'you' && item.controller !== src.controller) return false;
   if (spec.controller === 'opponent' && item.controller === src.controller) return false;
+  // Lorwyn Eclipsed (18b, multi-b): Kirol, "target triggered ability": an activated ability has the ability it was activated with.
+  if (spec.triggeredOnly && item.activated) return false;
   // Marvel Super Heroes Jumpstart (Analyzed): "from a creature source" (Echo, which may copy its own).
   if (spec.creatureSource) return fromCreatureSource(ctx, item);
   // An ability of the targeting source (Gogo copying its own ability).
@@ -178,13 +190,36 @@ export function targetCombos(
     const cands = targetCandidates(ctx, spec, src);
     const next: TargetChoice[][] = [];
     // The same object can't be chosen twice.
+    // Lorwyn Eclipsed (18b, multi-a, multi-b): "choose two" modes may name the same target (`modeStart`, `ofMode`):
+    // they are different instances of "target" (rule 115.3).
+    const from = spec.modeStart ?? 0;
     for (const c of combos)
-      for (const t of cands) if (!c.some((x) => same(x, t))) next.push([...c, t]);
+      for (const t of cands) {
+        if (
+          c.some(
+            (x, i) =>
+              i >= from &&
+              same(x, t) &&
+              !(spec.ofMode !== undefined && specs[i]?.ofMode !== undefined && specs[i]!.ofMode !== spec.ofMode),
+          )
+        )
+          continue;
+        // Lorwyn Eclipsed (18b, black): Unbury, two creature cards that share a creature type (each pair once).
+        if (spec.sharesCreatureTypeWithPrevious && !sharesTypeWithLast(ctx, c, t)) continue;
+        next.push([...c, t]);
+      }
     combos = next;
     if (combos.length === 0) break;
   }
   return [...done, ...combos];
 }
+
+/**
+ * Lorwyn Eclipsed (18b, white): the target specs a spell is cast with. A trailing "any number of target ..." spec
+ * (Morningtide's Light) is picked one at a time afterwards (the `spellTargets` decision), not listed here.
+ */
+export const castTargetSpecs = (specs: TargetSpec[]): TargetSpec[] =>
+  specs[specs.length - 1]?.anyNumber ? specs.slice(0, -1) : specs;
 
 /**
  * Reality Fracture (17a): Uldaros Theorix, "one target card of each card type". Can each of these cards
@@ -245,4 +280,22 @@ export function youHaveHexproof(ctx: Ctx, p: PlayerId): boolean {
         checkCondition(ctx, a.effect.condition, p, o),
     );
   });
+}
+
+/**
+ * Lorwyn Eclipsed (18b, black): Unbury, "two target creature cards that share a creature type". `t` is a later card than the
+ * one chosen just before it (so each pair is listed once) and the two share a creature type (a changeling shares with any
+ * creature card).
+ */
+function sharesTypeWithLast(ctx: Ctx, chosen: readonly TargetChoice[], t: TargetChoice): boolean {
+  const last = chosen[chosen.length - 1];
+  if (!last || !('object' in last) || !('object' in t)) return false;
+  if (t.object.id <= last.object.id) return false;
+  return sharesCreatureType(ctx, last.object.id, t.object.id);
+}
+
+export function sharesCreatureType(ctx: Ctx, a: ObjectId, b: ObjectId): boolean {
+  if (def(ctx, a).keywords.includes('changeling') || def(ctx, b).keywords.includes('changeling'))
+    return true;
+  return subtypesOf(ctx, a).some((st) => hasSubtype(ctx, b, st));
 }

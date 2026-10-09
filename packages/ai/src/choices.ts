@@ -107,6 +107,35 @@ export function chooseWardSacrifice(engine: Engine, s: GameState, legal: Action[
  * The type our creatures (and, a little, our hand) share most; for a spell that wipes or bounces everything else
  * (Kindred Judgment, Raise the Palisade) the type that keeps our creatures and not theirs.
  */
+/**
+ * Celestial Reunion: the creature type to behold. The one the most creature cards on its side of the table (battlefield, hand,
+ * graveyard) have is the one a creature it fetches is likeliest to share. The creatures themselves: the first.
+ */
+export function chooseBeholdType(
+  engine: Engine,
+  s: GameState,
+  me: PlayerId,
+  d: Extract<GameState['decision'], { kind: 'beholdType' }>,
+  legal: Action[],
+): Action {
+  if (d.chosenType !== undefined) return legal[0]!;
+  const seen = [
+    ...s.battlefield.filter((id) => s.objects[id]!.controller === me),
+    ...s.players[me].hand,
+    ...s.players[me].graveyard,
+  ];
+  let best = 0;
+  let bestCount = -1;
+  d.types.forEach((t, i) => {
+    const n = seen.filter((id) => defOf(engine, s, id)?.subtypes.includes(t)).length;
+    if (n > bestCount) {
+      best = i;
+      bestCount = n;
+    }
+  });
+  return { type: 'chooseOption', player: me, index: best };
+}
+
 export function chooseCreatureType(
   engine: Engine,
   s: GameState,
@@ -280,6 +309,14 @@ export function chooseScry(engine: Engine, s: GameState, me: PlayerId, legal: Ac
 
 /** Choosing from an opponent's hand (Thought-Stalker Warlock): their most expensive card. */
 export function chooseFromHand(engine: Engine, s: GameState, legal: Action[]): Action {
+  // Lorwyn Eclipsed (18c): Lightstall Inquisitor: choosing from our own hand, we give up the cheapest card (it can still be played).
+  if (s.decision.kind === 'chooseFromHand' && s.decision.ownerChooses) {
+    const cost = (a: Action) => {
+      const d = a.type === 'chooseCard' && a.card ? defOf(engine, s, a.card) : undefined;
+      return d ? manaValue(d.manaCost) : Infinity;
+    };
+    return legal.reduce((b, a) => (cost(a) < cost(b) ? a : b));
+  }
   const value = (a: Action) => {
     const d = a.type === 'chooseCard' && a.card ? defOf(engine, s, a.card) : undefined;
     return d ? manaValue(d.manaCost) : -1;

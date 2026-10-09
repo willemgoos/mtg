@@ -2,6 +2,8 @@ import { characteristics, countOf } from './characteristics.ts';
 import { MSH_EFFECTS } from './msh-effects.ts';
 // Reality Fracture (17a): black
 import { FRA_BLACK_EFFECTS } from './fra-black-effects.ts';
+// Lorwyn Eclipsed (18b, black)
+import { ECL_BLACK_EFFECTS, drawPrevented } from './ecl-black-effects.ts';
 import { FIN_EFFECTS } from './fin-effects.ts';
 import { FRA_COLORLESS_EFFECTS } from './fra-colorless-effects.ts';
 import { LOREHOLD_EFFECTS } from './stx-lorehold-effects.ts';
@@ -14,15 +16,23 @@ import { BRAWL_15A_RW_EFFECTS } from './brawl-15a-rw-effects.ts';
 import { BRAWL_15B_MULTI_EFFECTS } from './brawl-15b-multi-effects.ts';
 import { SOS_14B_D_EFFECTS } from './sos-14b-d-effects.ts';
 import { FRA_RED_EFFECTS } from './fra-red-effects.ts';
+import { ECL_MULTI_A_EFFECTS } from './ecl-multi-a-effects.ts';
+import { ECL_RED_EFFECTS } from './ecl-red-effects.ts';
 import { BRAWL_15B_R_EFFECTS } from './brawl-15b-r-effects.ts';
 import { BRAWL_15A_W_EFFECTS } from './brawl-15a-w-effects.ts';
 import { BRAWL_15B_B_EFFECTS } from './brawl-15b-b-effects.ts';
+import { ECL_18A_EFFECTS, willPersist } from './ecl-18a.ts';
+import { ECL_SPECIAL_EFFECTS } from './ecl-special-effects.ts';
+import { ECL_GREEN_EFFECTS } from './ecl-green-effects.ts';
+import { ECL_BLUE_EFFECTS } from './ecl-blue-effects.ts';
+import { ECL_WHITE_EFFECTS } from './ecl-white-effects.ts';
 import { BRAWL_15B_W_EFFECTS } from './brawl-15b-w-effects.ts';
 import { BRAWL_15B_U_EFFECTS } from './brawl-15b-u-effects.ts';
 import { BRAWL_15B_G_EFFECTS } from './brawl-15b-g-effects.ts';
 import { BRAWL_15B_PAIR_EFFECTS } from './brawl-15b-pair-effects.ts';
 import { ARCHIVE_16_EFFECTS } from './archive-16-effects.ts';
 import { FRA_MULTI_B_EFFECTS } from './fra-multi-b-effects.ts';
+import { ECL_MULTI_B_EFFECTS } from './ecl-multi-b-effects.ts';
 import { STX_13C_A_EFFECTS } from './stx-13c-a-effects.ts';
 import { STX_13C_B_EFFECTS } from './stx-13c-b-effects.ts';
 import { STX_13C_C_EFFECTS } from './stx-13c-c-effects.ts';
@@ -35,6 +45,7 @@ import { checkCondition } from './triggers.ts';
 import { type EffectSource, gainLife } from './effects.ts';
 import type {
   AbilityDef,
+  Color,
   ManaType,
   CardDb,
   CardDefId,
@@ -76,6 +87,8 @@ export interface Ctx {
   lifeGainChoices?: { choices: number[]; cursor: number };
   /** Already-delivered event prefix reconstructed by a replacement replay. */
   replayedEvents?: number;
+  /** Lorwyn Eclipsed (18a): creatures dying together that have persist, worked out before any of them moves (look-back). */
+  persisting?: Set<ObjectId>;
 }
 
 export function makeCtx(
@@ -98,6 +111,7 @@ const BUILT_IN_EFFECTS: Record<string, CustomEffect> = {
   ...MSH_EFFECTS,
   // Reality Fracture (17a): black.
   ...FRA_BLACK_EFFECTS,
+  ...ECL_BLACK_EFFECTS, // Lorwyn Eclipsed (18b, black)
   // Reality Fracture (17a, colorless).
   ...FRA_COLORLESS_EFFECTS,
   // Final Fantasy (11a).
@@ -130,12 +144,25 @@ const BUILT_IN_EFFECTS: Record<string, CustomEffect> = {
   ...SOS_14B_D_EFFECTS,
   // Reality Fracture (17a): red.
   ...FRA_RED_EFFECTS,
+  ...ECL_RED_EFFECTS, // Lorwyn Eclipsed (18b, red)
   // Strixhaven Brawl (15a), white and colourless.
   ...BRAWL_15A_W_EFFECTS,
   // Strixhaven Brawl (15a): red-white.
   ...BRAWL_15A_RW_EFFECTS,
   // Strixhaven Brawl (15b, black).
   ...BRAWL_15B_B_EFFECTS,
+  // Lorwyn Eclipsed (18a).
+  ...ECL_18A_EFFECTS,
+  // Lorwyn Eclipsed (18b, special).
+  ...ECL_SPECIAL_EFFECTS,
+  // Lorwyn Eclipsed (18b): green.
+  ...ECL_GREEN_EFFECTS,
+  // Lorwyn Eclipsed (18b): multi-a.
+  ...ECL_MULTI_A_EFFECTS,
+  // Lorwyn Eclipsed (18b): blue.
+  ...ECL_BLUE_EFFECTS,
+  // Lorwyn Eclipsed (18b): white.
+  ...ECL_WHITE_EFFECTS,
   // Strixhaven Brawl (15b): multicolour, colourless and lands.
   ...BRAWL_15B_MULTI_EFFECTS,
   // Strixhaven Brawl (15b), white.
@@ -152,6 +179,8 @@ const BUILT_IN_EFFECTS: Record<string, CustomEffect> = {
   ...ARCHIVE_16_EFFECTS,
   // Reality Fracture (17a): multi-b.
   ...FRA_MULTI_B_EFFECTS,
+  // Lorwyn Eclipsed (18b): multi-b.
+  ...ECL_MULTI_B_EFFECTS,
   // Strixhaven (13a): Learn: put the chosen Lesson from outside the game into your hand.
   learnFetch(ctx, es, params) {
     const ps = ctx.s.players[es.controller];
@@ -195,18 +224,51 @@ export function defOf(ctx: Ctx, defId: string): CardDefinition {
   return d;
 }
 
+const ALL_COLORS: Color[] = ['W', 'U', 'B', 'R', 'G'];
+
 export function def(ctx: Ctx, id: ObjectId): CardDefinition {
+  const d = defBase(ctx, id);
+  // Lorwyn Eclipsed (18b, multi-b): Tam, Mindful First-Year, "becomes all colors until end of turn".
+  const o = ctx.s.objects[id];
+  if (o?.allColorsTurn === ctx.s.turn.number && o.zone === 'battlefield')
+    return { ...d, colors: ALL_COLORS };
+  return d;
+}
+
+function defBase(ctx: Ctx, id: ObjectId): CardDefinition {
   const o = obj(ctx, id);
   const printed = defOf(ctx, o.defId);
   // Iron Man: a nonlegendary copy is nonlegendary for every rule, not just the legend rule.
-  const d = o.nonlegendary
+  const legal = o.nonlegendary
     ? { ...printed, supertypes: printed.supertypes.filter((t) => t !== 'Legendary') }
     : printed;
+  // Lorwyn Eclipsed (18b, special): "becomes the chosen color" (Puca's Eye), "becomes that color until end of turn" (Foraging Wickermaw).
+  const d0 =
+    o.colorOverride && (o.colorOverride.untilTurn ?? Infinity) >= ctx.s.turn.number
+      ? { ...legal, colors: o.colorOverride.colors }
+      : legal;
+  // Lorwyn Eclipsed (18b, blue): Noggle the Mind, "loses all colors".
+  const d = o.colorless ? colorlessDef(d0) : d0;
   if (o.foodBy !== undefined) {
     const aura = ctx.s.objects[o.foodBy];
     if (aura && aura.zone === 'battlefield' && aura.attachedTo === id) return foodDef(d);
   }
   if (o.blank) return blankDef(d);
+  // Lorwyn Eclipsed (18b, green): Shimmerwilds Growth, "enchanted land is the chosen color".
+  if (ctx.s.landColorAuras && o.zone === 'battlefield' && d.types.includes('Land')) {
+    for (const auraId of ctx.s.battlefield) {
+      const aura = ctx.s.objects[auraId];
+      if (
+        aura?.attachedTo === id &&
+        aura.chosenColor &&
+        aura.chosenColor !== 'C' &&
+        defOf(ctx, aura.defId).abilities.some(
+          (a) => a.kind === 'static' && a.effect.kind === 'landIsChosenColor',
+        )
+      )
+        return withExtraAbilities(ctx, o, { ...d, colors: [aura.chosenColor] });
+    }
+  }
   // Final Fantasy (11c): a land with a blight counter (Ultima, Origin of Oblivion).
   if (o.counters?.blight && o.zone === 'battlefield' && d.types.includes('Land'))
     return blightDef(d);
@@ -365,6 +427,19 @@ function foodDef(d: CardDefinition): CardDefinition {
     foodDefs.set(d, f);
   }
   return f;
+}
+
+const colorlessDefs = new WeakMap<CardDefinition, CardDefinition>();
+
+/** Lorwyn Eclipsed (18b, blue): a definition with no colors (Noggle the Mind). */
+function colorlessDef(d: CardDefinition): CardDefinition {
+  if (d.colors.length === 0) return d;
+  let c = colorlessDefs.get(d);
+  if (!c) {
+    c = { ...d, colors: [] };
+    colorlessDefs.set(d, c);
+  }
+  return c;
 }
 
 const blankDefs = new WeakMap<CardDefinition, CardDefinition>();
@@ -591,6 +666,14 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
     const x = ctx.s.objects[ref.id];
     if (x && x.zone === 'exile' && x.zcc === ref.zcc) moveObject(ctx, x.id, 'graveyard');
   }
+  // Lorwyn Eclipsed (18a): the counters of every kind it has as it leaves (Shadow Urchin).
+  const countersLeaving =
+    from === 'battlefield'
+      ? o.plusOneCounters + Object.values(o.counters ?? {}).reduce((a, b) => a + b, 0)
+      : 0;
+  // Lorwyn Eclipsed (18a): persist looks back at the battlefield as the creature dies.
+  const persists =
+    from === 'battlefield' && to === 'graveyard' && (ctx.persisting?.has(id) || willPersist(ctx, id));
   // Strixhaven Brawl (15b, pair): revolt.
   if (from === 'battlefield') (ctx.s.turn.permanentsLeft ??= { p1: 0, p2: 0 })[o.controller]++;
   if (from === 'battlefield') {
@@ -621,7 +704,16 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
   }
   // Secrets of Strixhaven (14a): a prepared permanent that leaves takes its copy with it; converge's colours go too.
   if (from === 'battlefield') unprepareObject(ctx, id);
-  if (to !== 'stack' && !(from === 'stack' && to === 'battlefield')) delete o.manaColors;
+  if (to !== 'stack' && !(from === 'stack' && to === 'battlefield')) {
+    delete o.manaColors;
+    // Lorwyn Eclipsed (18a): the colours spent, evoke and the card exiled by "behold … and exile it" stay while it's on the stack and battlefield.
+    delete o.manaPaid;
+    delete o.evoked;
+    if (o.beholdExiled) {
+      if (from === 'battlefield') o.lastBeholdExiled = o.beholdExiled;
+      delete o.beholdExiled;
+    }
+  }
   delete o.attachedTo;
   delete o.usedAbilities;
   delete o.dealtCombatDamage; // Reality Fracture (17a): Ruric Thar
@@ -629,6 +721,7 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
   delete o.kicked;
   delete o.wasCast; // Reality Fracture (17a)
   delete o.cantBeCountered; // Reality Fracture (17c): Theorist's Proxy
+  delete o.dreamExile; // Lorwyn Eclipsed (18b, red): Goliath Daydreamer
   if (from === 'battlefield') {
     if (o.counters) o.lastNamedCounters = o.counters;
     else delete o.lastNamedCounters;
@@ -636,7 +729,10 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
   delete o.counters;
   delete o.level;
   delete o.chosenColor;
+  if (from === 'battlefield' && o.chosenType) o.lastChosenType = o.chosenType; // Lorwyn Eclipsed (18b, special)
+  else delete o.lastChosenType;
   delete o.chosenType;
+  delete o.colorOverride; // Lorwyn Eclipsed (18b, special)
   delete o.exiledWith;
   delete o.foodBy;
   delete o.controlledBy;
@@ -672,6 +768,7 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
   if (from === 'exile') {
     delete o.castableBy;
     delete o.castableIf; // Reality Fracture (17a)
+    delete o.castableWhileControlling; // Lorwyn Eclipsed (18b, black)
     delete o.castableUntilTurn;
     delete o.anyMana;
     // Marvel Super Heroes Jumpstart (Analyzed): Victor Mancha's permission ends too.
@@ -696,6 +793,8 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
   if (from === 'exile') {
     // Reality Fracture (17a): Emrakul, the Exigent Doom.
     delete o.castableWhileExiled;
+    delete o.exileCastTax; // Lorwyn Eclipsed (18c)
+    delete o.exilePlayTapped;
     delete o.suspended;
     delete o.playFreeBy;
     delete o.plottedTurn; // Strixhaven Brawl (15b): plot
@@ -711,6 +810,9 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
   // Hellcat: it had no abilities as it left, so none of its own trigger.
   const leftBlank = from === 'battlefield' && !!o.blank;
   delete o.blank;
+  delete o.allColorsTurn; // Lorwyn Eclipsed (18b, multi-b)
+  delete o.exiledWithThisTurn;
+  delete o.colorless; // Lorwyn Eclipsed (18b, blue)
   delete o.resolutions;
   const src = zoneList(ctx, o, from);
   if (src) {
@@ -732,6 +834,11 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
       if (e.loseAbilities && a && a.zcc === e.affected.zcc)
         a.blank = ctx.s.effects.some(
           (x) => x.loseAbilities && x.affected.id === a.id && x.affected.zcc === a.zcc,
+        );
+      // Lorwyn Eclipsed (18b, blue): Noggle the Mind
+      if (e.colorless && a && a.zcc === e.affected.zcc)
+        a.colorless = ctx.s.effects.some(
+          (x) => x.colorless && x.affected.id === a.id && x.affected.zcc === a.zcc,
         );
     }
   }
@@ -867,6 +974,8 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
     ...(from === 'battlefield' && o.lastPower !== undefined ? { lastPower: o.lastPower } : {}),
     ...(leftController ? { controller: leftController } : {}),
     ...(exiledInstead ? { exiledInstead: true } : {}),
+    ...(persists ? { persist: true } : {}),
+    ...(from === 'battlefield' ? { lastCounterTotal: countersLeaving } : {}),
   });
   if (discarded && o.zone === 'graveyard') {
     o.discardedTurn = ctx.s.turn.number;
@@ -899,6 +1008,8 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
 export function addCounters(ctx: Ctx, id: ObjectId, n: number, name?: string, by?: PlayerId): void {
   if (n <= 0) return;
   const o = obj(ctx, id);
+  // Lorwyn Eclipsed (18b, blue): Blossombind, "can't have counters put on it".
+  if (o.zone === 'battlefield' && auraRestricts(ctx, id, 'noCounters')) return;
   // Secrets of Strixhaven (14b): Fractal Tender.
   o.anyCountersTurn = ctx.s.turn.number;
   // Hardened Scales, Kami of Whispered Hopes ("that many plus one +1/+1 counters"), Doc Samson (any
@@ -926,6 +1037,12 @@ export function addCounters(ctx: Ctx, id: ObjectId, n: number, name?: string, by
         !(a.effect.plusOneOnCreatures && (name || !defOf(ctx, o.defId).types.includes('Creature')))
       )
         n *= 2;
+  }
+  // Lorwyn Eclipsed (18a): Lasting Tarfire, "if you put a counter on a creature this turn".
+  if (def(ctx, id).types.includes('Creature')) {
+    const putBy = by ?? ctx.puttingPlayer ?? o.controller;
+    const list = (ctx.s.turn.creatureCountersBy ??= []);
+    if (!list.includes(putBy)) list.push(putBy);
   }
   if (name) {
     const c = (o.counters ??= {});
@@ -1001,6 +1118,8 @@ export function removeFromCombat(ctx: Ctx, id: ObjectId): void {
 }
 
 export function drawCard(ctx: Ctx, player: PlayerId, drawStepDraw = false): void {
+  // Lorwyn Eclipsed (18b, black): Mornsong Aria, "players can't draw cards".
+  if (drawPrevented(ctx)) return;
   // Marvel Super Heroes Jumpstart (Geniuses): Reed Richards, "the first time you would draw a card
   // each turn except the first card you draw during each of your draw steps, you draw four instead".
   if (!drawStepDraw && ctx.s.turn.number > 0 && !ctx.s.turn.extraDrawSeen?.includes(player)) {
@@ -1037,9 +1156,27 @@ export function tap(ctx: Ctx, id: ObjectId): void {
   emit(ctx, { type: 'tapped', id, ...(first ? { first } : {}) });
 }
 
+/** Lorwyn Eclipsed (18b, blue): an Aura on it says it can't become untapped (Blossombind) or can't have counters put on it. */
+export function auraRestricts(ctx: Ctx, id: ObjectId, what: 'cantBecomeUntapped' | 'noCounters'): boolean {
+  for (const a of ctx.s.battlefield) {
+    const ao = ctx.s.objects[a]!;
+    if (ao.attachedTo !== id) continue;
+    if (
+      defOf(ctx, ao.defId).abilities.some(
+        (ab) => ab.kind === 'static' && ab.effect.kind === 'attached' && ab.effect[what],
+      )
+    )
+      return true;
+  }
+  return false;
+}
+const cantBecomeUntapped = (ctx: Ctx, id: ObjectId) => auraRestricts(ctx, id, 'cantBecomeUntapped');
+
 export function untap(ctx: Ctx, id: ObjectId): void {
   const o = obj(ctx, id);
   if (!o.tapped) return;
+  // Lorwyn Eclipsed (18b, blue): Blossombind, "can't become untapped".
+  if (cantBecomeUntapped(ctx, id)) return;
   // "If a permanent with a stun counter would become untapped, instead remove a stun counter."
   if (o.counters?.stun) {
     o.counters.stun--;

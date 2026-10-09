@@ -18,10 +18,12 @@ import {
   FOUNDATIONS_DRAFT_POOL,
   FOUNDATIONS_JUMP_IN_POOL,
   FINAL_FANTASY_DECKS,
+  ECL_THEME_DECKS,
   FINAL_FANTASY_STARTER_KIT_DECKS,
   FINAL_FANTASY_POOL,
   STRIXHAVEN_DECKS,
   SECRETS_OF_STRIXHAVEN_DECKS,
+  LORWYN_ECLIPSED_DECKS,
   REALITY_FRACTURE_DECKS,
   STRIXHAVEN_POOL,
   SECRETS_OF_STRIXHAVEN_POOL,
@@ -31,6 +33,7 @@ import {
   MARVEL_BRAWL_POOL,
   FINAL_FANTASY_BRAWL_POOL,
   REALITY_FRACTURE_POOL,
+  LORWYN_ECLIPSED_POOL,
   OTHER_POOL,
   PLAYABLE_DECKS,
   parseManaCost,
@@ -76,6 +79,7 @@ describe('card data', () => {
         ...STRIXHAVEN_BRAWL_POOL,
         ...FINAL_FANTASY_BRAWL_POOL,
         ...REALITY_FRACTURE_POOL,
+        ...LORWYN_ECLIPSED_POOL,
       ].sort(),
     );
     for (const c of SCRYFALL) expect(c.image?.normal).toMatch(/^https:\/\/cards\.scryfall\.io\//);
@@ -163,7 +167,9 @@ describe('card data', () => {
         ...STRIXHAVEN_DECKS.map((d) => d.id),
         ...SECRETS_OF_STRIXHAVEN_DECKS.map((d) => d.id),
         ...REALITY_FRACTURE_DECKS.map((d) => d.id),
+        ...LORWYN_ECLIPSED_DECKS.map((d) => d.id),
         ...FINAL_FANTASY_STARTER_KIT_DECKS.map((d) => d.id),
+        ...ECL_THEME_DECKS.map((d) => d.id), // Lorwyn Eclipsed (18c)
         // Reality Fracture: the ten decks.
       ].sort(),
     );

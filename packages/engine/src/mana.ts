@@ -4,15 +4,19 @@ import {
   abilitiesLocked,
   canTapForAbility,
   countOf,
+  hasAllCreatureTypes,
   isCreature,
   matchesFilter,
   power,
+  subtypesOf,
 } from './characteristics.ts';
+import { CREATURE_TYPES } from './creature-types.ts';
 import { type Ctx, addCounters, def, emit, obj, sacrifice, tap } from './context.ts';
 import { manaValue, pipsOf } from './cost.ts';
 import { hamletColorless } from './sos-14b-c-effects.ts';
 import { yourLandColors } from './brawl-15b-g-effects.ts';
 import { checkCondition } from './triggers.ts';
+import { vividColors } from './ecl-18a.ts';
 import type { Color, ManaCost, ManaType, ObjectId, PlayerId } from './types.ts';
 
 export interface ManaSource {
@@ -55,6 +59,15 @@ function treasuresDouble(ctx: Ctx, player: PlayerId): boolean {
   );
 }
 
+/** Lorwyn Eclipsed (18b, red): a permanent anyone controls has Lavaleaper's mana ability (it affects every player). */
+function basicLandsAddExtra(ctx: Ctx): boolean {
+  return ctx.s.battlefield.some((id) =>
+    def(ctx, id).abilities.some(
+      (a) => a.kind === 'static' && a.effect.kind === 'basicLandsAddExtraMana',
+    ),
+  );
+}
+
 /** Final Fantasy (11c): `player` controls Ultima, Origin of Oblivion. */
 function extraColorless(ctx: Ctx, player: PlayerId): boolean {
   return ctx.s.battlefield.some(
@@ -66,8 +79,32 @@ function extraColorless(ctx: Ctx, player: PlayerId): boolean {
   );
 }
 
+
 /** Sources to tap; `pain` lists those that hurt (one entry per pip they pay). */
 export type Payment = ObjectId[] & { pain?: ObjectId[] };
+
+/**
+ * What restricted mana can be spent on when `source`'s ability is activated: 'CreatureAbility' for a creature (Shang-Chi), and
+ * `Ability:<subtype>` for each of its creature types ("abilities of Elemental sources": Flamebraider).
+ */
+export function abilityTags(ctx: Ctx, source: ObjectId): string[] {
+  const types = hasAllCreatureTypes(ctx, source) ? CREATURE_TYPES : subtypesOf(ctx, source);
+  return [...(isCreature(ctx, source) ? ['CreatureAbility'] : []), ...types.map((s) => `Ability:${s}`)];
+}
+
+/** Does `player` have mana that can only be spent on some things (floating, or from a source with "spend only")? */
+export function hasRestrictedMana(ctx: Ctx, player: PlayerId): boolean {
+  return (
+    (ctx.s.players[player].pool ?? []).some((p) => !!p.onlyFor) ||
+    ctx.s.battlefield.some(
+      (id) =>
+        obj(ctx, id).controller === player &&
+        def(ctx, id).abilities.some(
+          (a) => a.kind === 'mana' && (!!a.onlyFor || !!a.notForSpellsFromHand),
+        ),
+    )
+  );
+}
 
 /** Pool entries are mana sources with ids like "pool:p1:0". */
 const poolId = (player: PlayerId, i: number) => `pool:${player}:${i}`;
@@ -88,6 +125,8 @@ export function manaSources(
   forSubtypes: readonly string[] = [],
 ): ManaSource[] {
   const out: ManaSource[] = [];
+  // Lorwyn Eclipsed (18b, red): looked up once per call (Lavaleaper).
+  let lavaleaper: boolean | undefined;
   (ctx.s.players[player].pool ?? []).forEach(
     (p, i) =>
       (!p.onlyFor || forSubtypes.includes(p.onlyFor)) &&
@@ -110,6 +149,7 @@ export function manaSources(
     let units = 1;
     let pain: ManaType[] | undefined;
     let oneColor = false;
+    const vividUnits: Color[] = [];
     for (const a of def(ctx, id).abilities) {
       // Strixhaven Brawl (15b, g): Eldrazi Spawn and Scion tokens: "Sacrifice this token: Add {C}" needs no tap.
       if (a.kind !== 'mana' || (!a.cost.tapSelf && !a.cost.sacrificeSelf) || a.cost.mana) continue;
@@ -120,9 +160,19 @@ export function manaSources(
       )
         continue;
       // Unclaimed Territory: only for creature spells of the type chosen for it.
-      const only = a.onlyFor === 'chosenType' ? (obj(ctx, id).chosenType ?? '?') : a.onlyFor;
+      const only =
+        a.onlyFor === 'chosenType' || a.onlyFor === 'chosenTypeOrAbility'
+          ? (obj(ctx, id).chosenType ?? '?')
+          : a.onlyFor;
       if (a.onlyFor === 'chosenType' && !forSubtypes.includes('Creature')) continue;
-      if (only && !forSubtypes.includes(only)) continue;
+      // Lorwyn Eclipsed (18b, red, special): Flamebraider, "or activate abilities of Elemental sources", Eclipsed Realms
+      // (tag `Ability:<type>`).
+      if (
+        only &&
+        !forSubtypes.includes(only) &&
+        !((a.orAbilitiesOfSources || a.onlyFor === 'chosenTypeOrAbility') && forSubtypes.includes(`Ability:${only}`))
+      )
+        continue;
       // Reality Fracture (17a): Heartwood Crafter.
       if (a.notForSpellsFromHand && forSubtypes.includes('FromHand')) continue;
       if (a.ifChosen && obj(ctx, id).chosenColor !== a.produces) continue;
@@ -141,6 +191,12 @@ export function manaSources(
       // Strixhaven Brawl (15b, g): Incubation Druid.
       if (a.colorFrom === 'yourLands' && !yourLandColors(ctx, player).includes(a.produces))
         continue;
+      // Lorwyn Eclipsed (18b, green): Bloom Tender, one mana of each colour among permanents you control (a unit per colour).
+      if (a.vivid) {
+        if (!a.cost.tapSelf ? obj(ctx, id).tapped : !canTapForAbility(ctx, id)) continue;
+        for (const c of vividColors(ctx, player)) vividUnits.push(c);
+        continue;
+      }
       // Reality Fracture (17a fixes): Loot, the Nexus; Doc Samson: N mana of any one colour, none if N is 0.
       if (a.anyOneColor) {
         const n = a.perPower ? power(ctx, id) : countOf(ctx, player, a.amountOf ?? 1, false, id);
@@ -149,7 +205,7 @@ export function manaSources(
         oneColor = true;
         units = Math.max(units, n);
         produces ??= [];
-        for (const c of ['W', 'U', 'B', 'R', 'G'] as const)
+        for (const c of a.oneOf ?? (['W', 'U', 'B', 'R', 'G'] as const))
           if (!produces.includes(c)) produces.push(c);
         continue;
       }
@@ -175,6 +231,8 @@ export function manaSources(
       }
       if (!produces.includes(a.produces)) produces.push(a.produces);
     }
+    for (const c of vividUnits)
+      out.push({ id, produces: [c], isCreature: isCreature(ctx, id), sacrifice: false });
     // Secrets of Strixhaven (14b): Petrified Hamlet: lands with the chosen name have "{T}: Add {C}".
     if (
       def(ctx, id).types.includes('Land') &&
@@ -214,6 +272,12 @@ export function manaSources(
       if (def(ctx, id).subtypes.includes('Treasure') && treasuresDouble(ctx, player))
         units = Math.max(units, 2);
       for (let i = 1; i < units; i++) out.push({ ...src });
+      // Lorwyn Eclipsed (18b, red): Lavaleaper, "that player adds one mana of any type that land produced". The extra
+      // mana is the same type as the one the tap makes: a land that can make several types is tied to one.
+      if (def(ctx, id).supertypes.includes('Basic') && (lavaleaper ??= basicLandsAddExtra(ctx))) {
+        out.push({ ...src });
+        if (src.produces.length > 1) for (const x of out) if (x.id === id) x.oneColor = true;
+      }
       // Reality Fracture (17a): Molten Tide: "whenever you tap a Mountain for mana, add an additional {R}".
       if (
         ctx.s.turn.moltenTide?.includes(player) &&
@@ -440,7 +504,8 @@ export function creatureHelpers(
         !sources.some((x) => x.id === id)
       );
     })
-    .map((id) => ({ id, produces: ['C'], isCreature: true, sacrifice: false }));
+    // Lorwyn Eclipsed (18a): a convoking creature pays for {1} or for one mana of one of its colours.
+    .map((id) => ({ id, produces: [...def(ctx, id).colors], isCreature: true, sacrifice: false }));
 }
 
 /** Can `sources` pay this cost? (Precompute sources once when checking many costs.) */
