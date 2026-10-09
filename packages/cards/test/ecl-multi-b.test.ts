@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { getCharacteristics, getColors } from '@mtg/engine';
+import { createEngine, getCharacteristics, getColors, playRandomGame } from '@mtg/engine';
 import type { GameDriver } from '@mtg/engine/testing';
+import { createHeuristicBot, playMatch } from '../../ai/src/index.ts';
 import { cardDb } from '../src/index.ts';
 import { ECL_WORM } from '../src/ecl/multi-b.ts';
 import { all, cast, game, n, pt, settle } from './blb-helpers.ts';
@@ -1370,4 +1371,48 @@ describe('Twinflame Travelers', () => {
     done(g);
     expect(hand(g)).toHaveLength(3);
   });
+});
+
+describe('whole games with these cards', () => {
+  const ids = NAMES.map((name) => get(name).id);
+  const lands = ['plains', 'island', 'swamp', 'mountain', 'forest'];
+  const deck = (offset: number): string[] => [
+    ...ids,
+    ...ids.slice(offset % ids.length, (offset % ids.length) + 8),
+    ...Array.from({ length: 29 }, (_, i) => lands[(i + offset) % lands.length]!),
+  ];
+  const decks = { p1: deck(0), p2: deck(3) };
+  const engine = createEngine(cardDb);
+
+  it('random players finish games without stalling', () => {
+    const seen = new Set<string>();
+    for (let seed = 1; seed <= 5; seed++) {
+      const r = playRandomGame(engine, engine.newGame({ decks, seed }), seed * 7919, {
+        onEvents: (events) => {
+          for (const e of events)
+            if (e.type === 'objectMoved' && e.to === 'battlefield') seen.add(e.defId);
+        },
+      });
+      expect(r.truncated, `seed ${seed}`).toBe(false);
+      expect(r.final.decision.kind).toBe('gameOver');
+    }
+    // A fair share of the cards actually came into play.
+    expect(ids.filter((id) => seen.has(id)).length).toBeGreaterThanOrEqual(10);
+  }, 120_000);
+
+  it('heuristic bots play whole games too', () => {
+    const seen = new Set<string>();
+    for (let seed = 1; seed <= 3; seed++) {
+      const bot = createHeuristicBot(cardDb);
+      const r = playMatch(engine, decks, { p1: bot, p2: createHeuristicBot(cardDb) }, seed, {
+        maxActions: 3000,
+        onEvents: (events) => {
+          for (const e of events)
+            if (e.type === 'objectMoved' && e.to === 'battlefield') seen.add(e.defId);
+        },
+      });
+      expect(r.winner, `seed ${seed}`).not.toBeNull();
+    }
+    expect(ids.filter((id) => seen.has(id)).length).toBeGreaterThanOrEqual(5);
+  }, 120_000);
 });
