@@ -16,6 +16,16 @@ import { TARKIR_DRAGONSTORM_BEHAVIORS } from './tarkir-dragonstorm.ts';
  * Allowed sets, most preferred first: Foundations, then older core sets, then
  * Bloomburrow (late, so cards reprinted there keep their core-set printing).
  */
+/**
+ * Cards that show one set's printing whatever `SET_PREFERENCE` says: new cards of a set whose earlier printings come
+ * from a set ranked higher (Tarkir: Dragonstorm, 19b: the tri-lands would be Khans of Tarkir's, Craterhoof a Secret Lair).
+ */
+export const PRINTING_OVERRIDES: Record<string, string> = {
+  'Opulent Palace': 'tdm',
+  'Sandsteppe Citadel': 'tdm',
+  'Craterhoof Behemoth': 'tdm',
+};
+
 export const SET_PREFERENCE = [
   'fdn',
   'm21',

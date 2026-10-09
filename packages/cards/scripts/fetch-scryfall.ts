@@ -13,7 +13,7 @@ import { createGunzip } from 'node:zlib';
 import { Readable } from 'node:stream';
 import { pipeline } from 'node:stream/promises';
 import { fileURLToPath } from 'node:url';
-import { POOL, SET_PREFERENCE } from '../src/pool.ts';
+import { POOL, PRINTING_OVERRIDES, SET_PREFERENCE } from '../src/pool.ts';
 import type { ScryfallCard } from '../src/scryfall-types.ts';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -139,6 +139,8 @@ export async function* readBulk(file = cacheFile): AsyncGenerator<RawCard> {
 function printingRank(c: RawCard): number[] {
   const setRank = SET_PREFERENCE.indexOf(c.set);
   return [
+    // Tarkir: Dragonstorm (19b): a per-card printing wins over the set order.
+    PRINTING_OVERRIDES[c.name] === c.set ? 0 : 1,
     // A Marvel Commander reprint under a Marvel name shows that name (and its art).
     c.set === 'msc' && c.flavor_name ? 0 : 1,
     setRank < 0 ? 999 : setRank,
