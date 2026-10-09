@@ -12,6 +12,7 @@ import { type Ctx, createObject, def, defOf, obj, other } from './context.ts';
 import { manaValue } from './cost.ts';
 import { addLore } from './sagas.ts';
 import { countersOnLeft, spentColors } from './ecl-18a.ts';
+import { elementalTriggerCopies } from './ecl-multi-b-effects.ts';
 import { FIC_CONDITIONS } from './fic-effects.ts';
 import { FIN_CONDITIONS } from './fin-effects.ts';
 import type {
@@ -428,6 +429,10 @@ function queue(
   // Final Fantasy (11c): Cloud, Midgar Mercenary and The Masamune.
   if (a?.kind === 'triggered' && triggersTwice(ctx, o, a))
     ctx.s.pendingTriggers.push({ ...pending });
+  // Lorwyn Eclipsed (18b, multi-b): Twinflame Travelers, another Elemental's triggered ability triggers an additional time.
+  if (a?.kind === 'triggered')
+    for (let i = elementalTriggerCopies(ctx, { id: o.id, defId: o.defId, controller }); i > 0; i--)
+      ctx.s.pendingTriggers.push({ ...pending });
 }
 
 /** Calls `fn` for each triggered ability on each permanent on the battlefield. */
@@ -1528,6 +1533,16 @@ function detect(ctx: Ctx, ev: GameEvent): void {
       // Marvel Super Heroes Jumpstart (Tenacious/Rampaging): "whenever this creature blocks" (Atlas).
       const blockers = new Set(ev.blocks.map((b) => b.blocker));
       forEachBattlefieldTrigger(ctx, (o, a) => a.trigger.on === 'blocks' && blockers.has(o.id));
+      // Lorwyn Eclipsed (18b, multi-b): Doran, Besieged by Time, "whenever a creature you control ... blocks".
+      for (const id of blockers) {
+        const blocker = s.objects[id];
+        if (!blocker) continue;
+        forEachBattlefieldTrigger(
+          ctx,
+          (o, a) => a.trigger.on === 'creatureYouControlBlocks' && o.controller === blocker.controller,
+          blocker,
+        );
+      }
       // Reality Fracture (17a): Tetsuko Umezawa, Pursuer: "a creature an opponent controls ... blocks".
       for (const id of blockers) {
         const blocker = s.objects[id];

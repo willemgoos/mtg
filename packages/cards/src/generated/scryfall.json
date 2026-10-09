@@ -75239,6 +75239,585 @@
   }
  },
  {
+  "name": "Abigale, Eloquent First-Year",
+  "scryfallId": "bf708169-a307-494b-b8d8-baae53b2e2f2",
+  "oracleId": "48a773d0-c433-4463-b50f-b6d4604a042c",
+  "set": "ecl",
+  "collectorNumber": "204",
+  "rarity": "rare",
+  "manaCost": "{W/B}{W/B}",
+  "typeLine": "Legendary Creature — Bird Bard",
+  "oracleText": "Flying, first strike, lifelink\nWhen Abigale enters, up to one other target creature loses all abilities. Put a flying counter, a first strike counter, and a lifelink counter on that creature.",
+  "power": "1",
+  "toughness": "1",
+  "colors": [
+   "B",
+   "W"
+  ],
+  "keywords": [
+   "Flying",
+   "Lifelink",
+   "First strike"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/f/bf708169-a307-494b-b8d8-baae53b2e2f2.jpg?1783904418",
+   "normal": "https://cards.scryfall.io/normal/front/b/f/bf708169-a307-494b-b8d8-baae53b2e2f2.jpg?1783904418",
+   "large": "https://cards.scryfall.io/large/front/b/f/bf708169-a307-494b-b8d8-baae53b2e2f2.jpg?1783904418",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/f/bf708169-a307-494b-b8d8-baae53b2e2f2.jpg?1783904418"
+  }
+ },
+ {
+  "name": "Ashling's Command",
+  "scryfallId": "fe3a421d-07b6-4b94-b177-aec44c7fe689",
+  "oracleId": "9651d197-a408-4665-a292-58d5471f4ffc",
+  "set": "ecl",
+  "collectorNumber": "205",
+  "rarity": "rare",
+  "manaCost": "{3}{U}{R}",
+  "typeLine": "Kindred Instant — Elemental",
+  "oracleText": "Choose two —\n• Create a token that's a copy of target Elemental you control.\n• Target player draws two cards.\n• Ashling's Command deals 2 damage to each creature target player controls.\n• Target player creates two Treasure tokens.",
+  "colors": [
+   "R",
+   "U"
+  ],
+  "keywords": [
+   "Treasure"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/e/fe3a421d-07b6-4b94-b177-aec44c7fe689.jpg?1783904419",
+   "normal": "https://cards.scryfall.io/normal/front/f/e/fe3a421d-07b6-4b94-b177-aec44c7fe689.jpg?1783904419",
+   "large": "https://cards.scryfall.io/large/front/f/e/fe3a421d-07b6-4b94-b177-aec44c7fe689.jpg?1783904419",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/e/fe3a421d-07b6-4b94-b177-aec44c7fe689.jpg?1783904419"
+  }
+ },
+ {
+  "name": "Bre of Clan Stoutarm",
+  "scryfallId": "013cefb7-a059-45c2-81b0-187f35aac4a2",
+  "oracleId": "59384481-3ca0-49dd-b94f-d3680b336f1e",
+  "set": "ecl",
+  "collectorNumber": "207",
+  "rarity": "rare",
+  "manaCost": "{2}{R}{W}",
+  "typeLine": "Legendary Creature — Giant Warrior",
+  "oracleText": "{1}{W}, {T}: Another target creature you control gains flying and lifelink until end of turn.\nAt the beginning of your end step, if you gained life this turn, exile cards from the top of your library until you exile a nonland card. You may cast that card without paying its mana cost if the spell's mana value is less than or equal to the amount of life you gained this turn. Otherwise, put it into your hand.",
+  "power": "4",
+  "toughness": "4",
+  "colors": [
+   "R",
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/1/013cefb7-a059-45c2-81b0-187f35aac4a2.jpg?1783904415",
+   "normal": "https://cards.scryfall.io/normal/front/0/1/013cefb7-a059-45c2-81b0-187f35aac4a2.jpg?1783904415",
+   "large": "https://cards.scryfall.io/large/front/0/1/013cefb7-a059-45c2-81b0-187f35aac4a2.jpg?1783904415",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/1/013cefb7-a059-45c2-81b0-187f35aac4a2.jpg?1783904415"
+  }
+ },
+ {
+  "name": "Chitinous Graspling",
+  "scryfallId": "a9767360-d536-4902-9d2d-1f3474ce89d6",
+  "oracleId": "930035c6-cde7-40ac-98ef-0840812037db",
+  "set": "ecl",
+  "collectorNumber": "211",
+  "rarity": "common",
+  "manaCost": "{3}{G/U}",
+  "typeLine": "Creature — Shapeshifter",
+  "oracleText": "Changeling (This card is every creature type.)\nReach",
+  "power": "3",
+  "toughness": "4",
+  "colors": [
+   "G",
+   "U"
+  ],
+  "keywords": [
+   "Reach",
+   "Changeling"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/9/a9767360-d536-4902-9d2d-1f3474ce89d6.jpg?1783904419",
+   "normal": "https://cards.scryfall.io/normal/front/a/9/a9767360-d536-4902-9d2d-1f3474ce89d6.jpg?1783904419",
+   "large": "https://cards.scryfall.io/large/front/a/9/a9767360-d536-4902-9d2d-1f3474ce89d6.jpg?1783904419",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/9/a9767360-d536-4902-9d2d-1f3474ce89d6.jpg?1783904419"
+  }
+ },
+ {
+  "name": "Doran, Besieged by Time",
+  "scryfallId": "568aa70a-6765-486a-bd37-5d38b16c46de",
+  "oracleId": "dd35a377-0865-4b25-bd0f-aaead29a9f0e",
+  "set": "ecl",
+  "collectorNumber": "215",
+  "rarity": "rare",
+  "manaCost": "{1}{W}{B}{G}",
+  "typeLine": "Legendary Creature — Treefolk Druid",
+  "oracleText": "Each creature spell you cast with toughness greater than its power costs {1} less to cast.\nWhenever a creature you control attacks or blocks, it gets +X/+X until end of turn, where X is the difference between its power and toughness.",
+  "power": "0",
+  "toughness": "5",
+  "colors": [
+   "B",
+   "G",
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/6/568aa70a-6765-486a-bd37-5d38b16c46de.jpg?1783904413",
+   "normal": "https://cards.scryfall.io/normal/front/5/6/568aa70a-6765-486a-bd37-5d38b16c46de.jpg?1783904413",
+   "large": "https://cards.scryfall.io/large/front/5/6/568aa70a-6765-486a-bd37-5d38b16c46de.jpg?1783904413",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/6/568aa70a-6765-486a-bd37-5d38b16c46de.jpg?1783904413"
+  }
+ },
+ {
+  "name": "Eclipsed Elf",
+  "scryfallId": "9c8579f3-6125-4f22-b1c2-b7a0cfc50eed",
+  "oracleId": "7c89ef4d-b375-4644-ac8b-034effdbe98c",
+  "set": "ecl",
+  "collectorNumber": "218",
+  "rarity": "uncommon",
+  "manaCost": "{B/G}{B/G}{B/G}",
+  "typeLine": "Creature — Elf Scout",
+  "oracleText": "When this creature enters, look at the top four cards of your library. You may reveal an Elf, Swamp, or Forest card from among them and put it into your hand. Put the rest on the bottom of your library in a random order.",
+  "power": "3",
+  "toughness": "2",
+  "colors": [
+   "B",
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/c/9c8579f3-6125-4f22-b1c2-b7a0cfc50eed.jpg?1783904412",
+   "normal": "https://cards.scryfall.io/normal/front/9/c/9c8579f3-6125-4f22-b1c2-b7a0cfc50eed.jpg?1783904412",
+   "large": "https://cards.scryfall.io/large/front/9/c/9c8579f3-6125-4f22-b1c2-b7a0cfc50eed.jpg?1783904412",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/c/9c8579f3-6125-4f22-b1c2-b7a0cfc50eed.jpg?1783904412"
+  }
+ },
+ {
+  "name": "Eclipsed Flamekin",
+  "scryfallId": "d907ae44-cd07-4409-946c-e97f584d9a81",
+  "oracleId": "48c641df-d511-4e35-b623-9d1fdb5240da",
+  "set": "ecl",
+  "collectorNumber": "219",
+  "rarity": "uncommon",
+  "manaCost": "{1}{U/R}{U/R}",
+  "typeLine": "Creature — Elemental Scout",
+  "oracleText": "When this creature enters, look at the top four cards of your library. You may reveal an Elemental, Island, or Mountain card from among them and put it into your hand. Put the rest on the bottom of your library in a random order.",
+  "power": "1",
+  "toughness": "4",
+  "colors": [
+   "R",
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/9/d907ae44-cd07-4409-946c-e97f584d9a81.jpg?1783904412",
+   "normal": "https://cards.scryfall.io/normal/front/d/9/d907ae44-cd07-4409-946c-e97f584d9a81.jpg?1783904412",
+   "large": "https://cards.scryfall.io/large/front/d/9/d907ae44-cd07-4409-946c-e97f584d9a81.jpg?1783904412",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/9/d907ae44-cd07-4409-946c-e97f584d9a81.jpg?1783904412"
+  }
+ },
+ {
+  "name": "Feisty Spikeling",
+  "scryfallId": "f69f3a27-ecda-4d27-82fe-612ed57dbb28",
+  "oracleId": "fcf796fa-43ae-43d1-a124-776338bc3542",
+  "set": "ecl",
+  "collectorNumber": "223",
+  "rarity": "common",
+  "manaCost": "{1}{R/W}",
+  "typeLine": "Creature — Shapeshifter",
+  "oracleText": "Changeling (This card is every creature type.)\nDuring your turn, this creature has first strike.",
+  "power": "2",
+  "toughness": "1",
+  "colors": [
+   "R",
+   "W"
+  ],
+  "keywords": [
+   "Changeling"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/6/f69f3a27-ecda-4d27-82fe-612ed57dbb28.jpg?1783904409",
+   "normal": "https://cards.scryfall.io/normal/front/f/6/f69f3a27-ecda-4d27-82fe-612ed57dbb28.jpg?1783904409",
+   "large": "https://cards.scryfall.io/large/front/f/6/f69f3a27-ecda-4d27-82fe-612ed57dbb28.jpg?1783904409",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/6/f69f3a27-ecda-4d27-82fe-612ed57dbb28.jpg?1783904409"
+  }
+ },
+ {
+  "name": "Flaring Cinder",
+  "scryfallId": "0691a1a9-18e7-44b7-9a34-764b1ab45a76",
+  "oracleId": "f70d65bf-5f1c-4aee-9bd1-f5ee6974b058",
+  "set": "ecl",
+  "collectorNumber": "225",
+  "rarity": "common",
+  "manaCost": "{1}{U/R}{U/R}",
+  "typeLine": "Creature — Elemental Sorcerer",
+  "oracleText": "When this creature enters and whenever you cast a spell with mana value 4 or greater, you may discard a card. If you do, draw a card.",
+  "power": "3",
+  "toughness": "2",
+  "colors": [
+   "R",
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/6/0691a1a9-18e7-44b7-9a34-764b1ab45a76.jpg?1783904410",
+   "normal": "https://cards.scryfall.io/normal/front/0/6/0691a1a9-18e7-44b7-9a34-764b1ab45a76.jpg?1783904410",
+   "large": "https://cards.scryfall.io/large/front/0/6/0691a1a9-18e7-44b7-9a34-764b1ab45a76.jpg?1783904410",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/6/0691a1a9-18e7-44b7-9a34-764b1ab45a76.jpg?1783904410"
+  }
+ },
+ {
+  "name": "Glister Bairn",
+  "scryfallId": "dcccdd98-a1ba-41f4-a9ae-84d263da0af9",
+  "oracleId": "6a7229a8-1634-4278-ab50-0ec2b51edac1",
+  "set": "ecl",
+  "collectorNumber": "227",
+  "rarity": "uncommon",
+  "manaCost": "{2}{G/U}{G/U}{G/U}",
+  "typeLine": "Creature — Ouphe",
+  "oracleText": "Vivid — At the beginning of combat on your turn, another target creature you control gets +X/+X until end of turn, where X is the number of colors among permanents you control.",
+  "power": "1",
+  "toughness": "4",
+  "colors": [
+   "G",
+   "U"
+  ],
+  "keywords": [
+   "Vivid"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/c/dcccdd98-a1ba-41f4-a9ae-84d263da0af9.jpg?1783904407",
+   "normal": "https://cards.scryfall.io/normal/front/d/c/dcccdd98-a1ba-41f4-a9ae-84d263da0af9.jpg?1783904407",
+   "large": "https://cards.scryfall.io/large/front/d/c/dcccdd98-a1ba-41f4-a9ae-84d263da0af9.jpg?1783904407",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/c/dcccdd98-a1ba-41f4-a9ae-84d263da0af9.jpg?1783904407"
+  }
+ },
+ {
+  "name": "High Perfect Morcant",
+  "scryfallId": "dfe7b8bf-c150-4be0-aef4-e8bb6f09787a",
+  "oracleId": "dd27c5fa-4355-4e5c-8219-b74cfe209da0",
+  "set": "ecl",
+  "collectorNumber": "229",
+  "rarity": "rare",
+  "manaCost": "{2}{B}{G}",
+  "typeLine": "Legendary Creature — Elf Noble",
+  "oracleText": "Whenever High Perfect Morcant or another Elf you control enters, each opponent blights 1. (They each put a -1/-1 counter on a creature they control.)\nTap three untapped Elves you control: Proliferate. Activate only as a sorcery. (Choose any number of permanents and/or players, then give each another counter of each kind already there.)",
+  "power": "4",
+  "toughness": "4",
+  "colors": [
+   "B",
+   "G"
+  ],
+  "keywords": [
+   "Blight",
+   "Proliferate"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/f/dfe7b8bf-c150-4be0-aef4-e8bb6f09787a.jpg?1783904407",
+   "normal": "https://cards.scryfall.io/normal/front/d/f/dfe7b8bf-c150-4be0-aef4-e8bb6f09787a.jpg?1783904407",
+   "large": "https://cards.scryfall.io/large/front/d/f/dfe7b8bf-c150-4be0-aef4-e8bb6f09787a.jpg?1783904407",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/f/dfe7b8bf-c150-4be0-aef4-e8bb6f09787a.jpg?1783904407"
+  }
+ },
+ {
+  "name": "Hovel Hurler",
+  "scryfallId": "adc6a4c5-4e92-43ee-8d0c-204042965eb7",
+  "oracleId": "fb9cd9d0-8eea-4aa8-bb9c-bb0aac847421",
+  "set": "ecl",
+  "collectorNumber": "230",
+  "rarity": "uncommon",
+  "manaCost": "{3}{R/W}{R/W}",
+  "typeLine": "Creature — Giant Warrior",
+  "oracleText": "This creature enters with two -1/-1 counters on it.\n{R/W}{R/W}, Remove a counter from this creature: Another target creature you control gets +1/+0 and gains flying until end of turn. Activate only as a sorcery.",
+  "power": "6",
+  "toughness": "7",
+  "colors": [
+   "R",
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/d/adc6a4c5-4e92-43ee-8d0c-204042965eb7.jpg?1783904408",
+   "normal": "https://cards.scryfall.io/normal/front/a/d/adc6a4c5-4e92-43ee-8d0c-204042965eb7.jpg?1783904408",
+   "large": "https://cards.scryfall.io/large/front/a/d/adc6a4c5-4e92-43ee-8d0c-204042965eb7.jpg?1783904408",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/d/adc6a4c5-4e92-43ee-8d0c-204042965eb7.jpg?1783904408"
+  }
+ },
+ {
+  "name": "Kirol, Attentive First-Year",
+  "scryfallId": "c11cb0eb-819e-4905-ad95-e43618d3c81e",
+  "oracleId": "3a272fa9-5f28-43a4-95de-10cb511f1b43",
+  "set": "ecl",
+  "collectorNumber": "231",
+  "rarity": "rare",
+  "manaCost": "{1}{R/W}{R/W}",
+  "typeLine": "Legendary Creature — Vampire Cleric",
+  "oracleText": "Tap two untapped creatures you control: Copy target triggered ability you control. You may choose new targets for the copy. Activate only once each turn.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "R",
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/1/c11cb0eb-819e-4905-ad95-e43618d3c81e.jpg?1783904407",
+   "normal": "https://cards.scryfall.io/normal/front/c/1/c11cb0eb-819e-4905-ad95-e43618d3c81e.jpg?1783904407",
+   "large": "https://cards.scryfall.io/large/front/c/1/c11cb0eb-819e-4905-ad95-e43618d3c81e.jpg?1783904407",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/1/c11cb0eb-819e-4905-ad95-e43618d3c81e.jpg?1783904407"
+  }
+ },
+ {
+  "name": "Lluwen, Imperfect Naturalist",
+  "scryfallId": "127a30a6-c25a-448a-a242-dc04f273a854",
+  "oracleId": "81ff5764-72ce-4b9a-a14f-07413700d935",
+  "set": "ecl",
+  "collectorNumber": "232",
+  "rarity": "rare",
+  "manaCost": "{B/G}{B/G}",
+  "typeLine": "Legendary Creature — Elf Druid",
+  "oracleText": "When Lluwen enters, mill four cards, then you may put a creature or land card from among the milled cards on top of your library.\n{2}{B/G}{B/G}{B/G}, {T}, Discard a land card: Create a 1/1 black and green Worm creature token for each land card in your graveyard.",
+  "power": "1",
+  "toughness": "3",
+  "colors": [
+   "B",
+   "G"
+  ],
+  "keywords": [
+   "Mill"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/2/127a30a6-c25a-448a-a242-dc04f273a854.jpg?1783904408",
+   "normal": "https://cards.scryfall.io/normal/front/1/2/127a30a6-c25a-448a-a242-dc04f273a854.jpg?1783904408",
+   "large": "https://cards.scryfall.io/large/front/1/2/127a30a6-c25a-448a-a242-dc04f273a854.jpg?1783904408",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/2/127a30a6-c25a-448a-a242-dc04f273a854.jpg?1783904408"
+  }
+ },
+ {
+  "name": "Maralen, Fae Ascendant",
+  "scryfallId": "c50f5408-5b5c-41dc-807e-136233403a09",
+  "oracleId": "114e1d2c-cefc-4e2a-922e-3b2ceed1871d",
+  "set": "ecl",
+  "collectorNumber": "233",
+  "rarity": "rare",
+  "manaCost": "{2}{B}{G}{U}",
+  "typeLine": "Legendary Creature — Elf Faerie Noble",
+  "oracleText": "Flying\nWhenever Maralen or another Elf or Faerie you control enters, exile the top two cards of target opponent's library.\nOnce each turn, you may cast a spell with mana value less than or equal to the number of Elves and Faeries you control from among cards exiled with Maralen this turn without paying its mana cost.",
+  "power": "4",
+  "toughness": "5",
+  "colors": [
+   "B",
+   "G",
+   "U"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/5/c50f5408-5b5c-41dc-807e-136233403a09.jpg?1783904406",
+   "normal": "https://cards.scryfall.io/normal/front/c/5/c50f5408-5b5c-41dc-807e-136233403a09.jpg?1783904406",
+   "large": "https://cards.scryfall.io/large/front/c/5/c50f5408-5b5c-41dc-807e-136233403a09.jpg?1783904406",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/5/c50f5408-5b5c-41dc-807e-136233403a09.jpg?1783904406"
+  }
+ },
+ {
+  "name": "Morcant's Loyalist",
+  "scryfallId": "175c6b1c-8790-41a2-ae15-5031206c410f",
+  "oracleId": "b2c30683-cc7f-4341-add1-b08cb9b93eeb",
+  "set": "ecl",
+  "collectorNumber": "236",
+  "rarity": "uncommon",
+  "manaCost": "{1}{B}{G}",
+  "typeLine": "Creature — Elf Warrior",
+  "oracleText": "Other Elves you control get +1/+1.\nWhen this creature dies, return another target Elf card from your graveyard to your hand.",
+  "power": "3",
+  "toughness": "2",
+  "colors": [
+   "B",
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/7/175c6b1c-8790-41a2-ae15-5031206c410f.jpg?1783904405",
+   "normal": "https://cards.scryfall.io/normal/front/1/7/175c6b1c-8790-41a2-ae15-5031206c410f.jpg?1783904405",
+   "large": "https://cards.scryfall.io/large/front/1/7/175c6b1c-8790-41a2-ae15-5031206c410f.jpg?1783904405",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/7/175c6b1c-8790-41a2-ae15-5031206c410f.jpg?1783904405"
+  }
+ },
+ {
+  "name": "Prideful Feastling",
+  "scryfallId": "7578cb61-f606-4559-a10a-343a583228ab",
+  "oracleId": "faf2f368-a7e7-4427-bc03-929f294b1e03",
+  "set": "ecl",
+  "collectorNumber": "238",
+  "rarity": "common",
+  "manaCost": "{2}{W/B}",
+  "typeLine": "Creature — Shapeshifter",
+  "oracleText": "Changeling (This card is every creature type.)\nLifelink",
+  "power": "2",
+  "toughness": "3",
+  "colors": [
+   "B",
+   "W"
+  ],
+  "keywords": [
+   "Lifelink",
+   "Changeling"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/5/7578cb61-f606-4559-a10a-343a583228ab.jpg?1783904408",
+   "normal": "https://cards.scryfall.io/normal/front/7/5/7578cb61-f606-4559-a10a-343a583228ab.jpg?1783904408",
+   "large": "https://cards.scryfall.io/large/front/7/5/7578cb61-f606-4559-a10a-343a583228ab.jpg?1783904408",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/5/7578cb61-f606-4559-a10a-343a583228ab.jpg?1783904408"
+  }
+ },
+ {
+  "name": "Reaping Willow",
+  "scryfallId": "97c33cc2-3573-410a-908b-c0392fff524b",
+  "oracleId": "ce60402c-34cd-44fe-ae1d-4a5404298f5b",
+  "set": "ecl",
+  "collectorNumber": "240",
+  "rarity": "uncommon",
+  "manaCost": "{1}{W/B}{W/B}{W/B}",
+  "typeLine": "Creature — Treefolk Cleric",
+  "oracleText": "Lifelink\nThis creature enters with two -1/-1 counters on it.\n{1}{W/B}, Remove two counters from this creature: Return target creature card with mana value 3 or less from your graveyard to the battlefield. Activate only as a sorcery.",
+  "power": "3",
+  "toughness": "6",
+  "colors": [
+   "B",
+   "W"
+  ],
+  "keywords": [
+   "Lifelink"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/7/97c33cc2-3573-410a-908b-c0392fff524b.jpg?1783904404",
+   "normal": "https://cards.scryfall.io/normal/front/9/7/97c33cc2-3573-410a-908b-c0392fff524b.jpg?1783904404",
+   "large": "https://cards.scryfall.io/large/front/9/7/97c33cc2-3573-410a-908b-c0392fff524b.jpg?1783904404",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/7/97c33cc2-3573-410a-908b-c0392fff524b.jpg?1783904404"
+  }
+ },
+ {
+  "name": "Sanar, Innovative First-Year",
+  "scryfallId": "11215561-bbcd-4564-a2e4-a1d77d177a1d",
+  "oracleId": "2676ba6d-e7a7-48cf-9c86-6e2a11f03096",
+  "set": "ecl",
+  "collectorNumber": "241",
+  "rarity": "rare",
+  "manaCost": "{2}{U/R}{U/R}",
+  "typeLine": "Legendary Creature — Goblin Sorcerer",
+  "oracleText": "Vivid — At the beginning of your first main phase, reveal cards from the top of your library until you reveal X nonland cards, where X is the number of colors among permanents you control. For each of those colors, you may exile a card of that color from among the revealed cards. Then shuffle. You may cast the exiled cards this turn.",
+  "power": "2",
+  "toughness": "4",
+  "colors": [
+   "R",
+   "U"
+  ],
+  "keywords": [
+   "Vivid"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/1/11215561-bbcd-4564-a2e4-a1d77d177a1d.jpg?1783904403",
+   "normal": "https://cards.scryfall.io/normal/front/1/1/11215561-bbcd-4564-a2e4-a1d77d177a1d.jpg?1783904403",
+   "large": "https://cards.scryfall.io/large/front/1/1/11215561-bbcd-4564-a2e4-a1d77d177a1d.jpg?1783904403",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/1/11215561-bbcd-4564-a2e4-a1d77d177a1d.jpg?1783904403"
+  }
+ },
+ {
+  "name": "Stoic Grove-Guide",
+  "scryfallId": "3d5a3e25-c17a-47b1-a36d-d24d50e5bab3",
+  "oracleId": "96c4b51c-8a10-428c-a948-e1ba9c652bfd",
+  "set": "ecl",
+  "collectorNumber": "243",
+  "rarity": "common",
+  "manaCost": "{4}{B/G}",
+  "typeLine": "Creature — Elf Druid",
+  "oracleText": "{1}{B/G}, Exile this card from your graveyard: Create a 2/2 black and green Elf creature token. Activate only as a sorcery.",
+  "power": "5",
+  "toughness": "4",
+  "colors": [
+   "B",
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/d/3d5a3e25-c17a-47b1-a36d-d24d50e5bab3.jpg?1783904402",
+   "normal": "https://cards.scryfall.io/normal/front/3/d/3d5a3e25-c17a-47b1-a36d-d24d50e5bab3.jpg?1783904402",
+   "large": "https://cards.scryfall.io/large/front/3/d/3d5a3e25-c17a-47b1-a36d-d24d50e5bab3.jpg?1783904402",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/d/3d5a3e25-c17a-47b1-a36d-d24d50e5bab3.jpg?1783904402"
+  }
+ },
+ {
+  "name": "Tam, Mindful First-Year",
+  "scryfallId": "6cb0f825-b75b-4f2a-803c-08142ca07e76",
+  "oracleId": "096a878e-cff0-430a-90b5-031ecb9bfe1b",
+  "set": "ecl",
+  "collectorNumber": "245",
+  "rarity": "rare",
+  "manaCost": "{1}{G/U}",
+  "typeLine": "Legendary Creature — Gorgon Wizard",
+  "oracleText": "Each other creature you control has hexproof from each of its colors.\n{T}: Target creature you control becomes all colors until end of turn.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "G",
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/c/6cb0f825-b75b-4f2a-803c-08142ca07e76.jpg?1783904402",
+   "normal": "https://cards.scryfall.io/normal/front/6/c/6cb0f825-b75b-4f2a-803c-08142ca07e76.jpg?1783904402",
+   "large": "https://cards.scryfall.io/large/front/6/c/6cb0f825-b75b-4f2a-803c-08142ca07e76.jpg?1783904402",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/c/6cb0f825-b75b-4f2a-803c-08142ca07e76.jpg?1783904402"
+  }
+ },
+ {
+  "name": "Trystan's Command",
+  "scryfallId": "ba1d99ca-740a-481a-be89-615e40d56d06",
+  "oracleId": "ecc4e230-a546-4cb4-987c-87300060bbe2",
+  "set": "ecl",
+  "collectorNumber": "247",
+  "rarity": "rare",
+  "manaCost": "{4}{B}{G}",
+  "typeLine": "Kindred Sorcery — Elf",
+  "oracleText": "Choose two —\n• Create a token that's a copy of target Elf you control.\n• Return one or two target permanent cards from your graveyard to your hand.\n• Destroy target creature or enchantment.\n• Creatures target player controls get +3/+3 until end of turn. Untap them.",
+  "colors": [
+   "B",
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/a/ba1d99ca-740a-481a-be89-615e40d56d06.jpg?1783904401",
+   "normal": "https://cards.scryfall.io/normal/front/b/a/ba1d99ca-740a-481a-be89-615e40d56d06.jpg?1783904401",
+   "large": "https://cards.scryfall.io/large/front/b/a/ba1d99ca-740a-481a-be89-615e40d56d06.jpg?1783904401",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/a/ba1d99ca-740a-481a-be89-615e40d56d06.jpg?1783904401"
+  }
+ },
+ {
+  "name": "Twinflame Travelers",
+  "scryfallId": "5fc9f409-3aef-4403-bf17-6e9a72ecfada",
+  "oracleId": "341cf69a-246c-4eb5-910c-18c13a4c3dce",
+  "set": "ecl",
+  "collectorNumber": "248",
+  "rarity": "uncommon",
+  "manaCost": "{2}{U}{R}",
+  "typeLine": "Creature — Elemental Sorcerer",
+  "oracleText": "Flying\nIf a triggered ability of another Elemental you control triggers, it triggers an additional time.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "R",
+   "U"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/f/5fc9f409-3aef-4403-bf17-6e9a72ecfada.jpg?1783904400",
+   "normal": "https://cards.scryfall.io/normal/front/5/f/5fc9f409-3aef-4403-bf17-6e9a72ecfada.jpg?1783904400",
+   "large": "https://cards.scryfall.io/large/front/5/f/5fc9f409-3aef-4403-bf17-6e9a72ecfada.jpg?1783904400",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/f/5fc9f409-3aef-4403-bf17-6e9a72ecfada.jpg?1783904400"
+  }
+ },
+ {
   "name": "Changeling Wayfinder",
   "scryfallId": "6c6061aa-a4da-4115-85b6-d0aa22f2386c",
   "oracleId": "93409d98-93c8-4742-a635-2a4408e66c32",

@@ -1100,6 +1100,8 @@ export function cardMatches(
   )
     return false;
   if (obj(ctx, id).zone !== 'battlefield') {
+    // Lorwyn Eclipsed (18b, multi-b): Doran, "creature spells with toughness greater than their power" (printed, off the battlefield).
+    if (filter.toughnessGreaterThanPower && (d.toughness ?? 0) <= (d.power ?? 0)) return false;
     if (filter.hasKeyword && !d.keywords.includes(filter.hasKeyword)) return false;
     if (filter.lacksKeyword && d.keywords.includes(filter.lacksKeyword)) return false;
     if (filter.minPower !== undefined && (d.power ?? 0) < filter.minPower) return false;
