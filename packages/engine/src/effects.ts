@@ -204,7 +204,8 @@ function doubling(ctx: Ctx, src: DamageSource, to: TargetChoice): number {
       if (
         a.kind === 'static' &&
         a.effect.kind === 'doubleDamage' &&
-        cardMatches(ctx, src.id, a.effect.source)
+        // Lorwyn Eclipsed (18b, red): Collective Inferno's filter reads the type chosen for it (the permanent with the static).
+        cardMatches(ctx, src.id, a.effect.source, id)
       )
         factor *= 2;
   }
@@ -561,7 +562,15 @@ export function counterSpell(ctx: Ctx, id: ObjectId, exile = false): void {
           (a) => a.kind === 'static' && a.effect.kind === 'instantsAndSorceriesUncounterable',
         ),
     );
-  if (def(ctx, item.id).uncounterable || protectedByStatic) return;
+  // Lorwyn Eclipsed (18b, red): Hexing Squelcher, "Spells you control can't be countered."
+  const protectedByAll = ctx.s.battlefield.some(
+    (b) =>
+      obj(ctx, b).controller === controller &&
+      def(ctx, b).abilities.some(
+        (a) => a.kind === 'static' && a.effect.kind === 'spellsYouControlUncounterable',
+      ),
+  );
+  if (def(ctx, item.id).uncounterable || protectedByStatic || protectedByAll) return;
   if (obj(ctx, item.id).cantBeCountered) return; // Reality Fracture (17c): Theorist's Proxy
   // Mystical Archive (16): Veil of Summer.
   if (ctx.s.turn.uncounterable?.includes(controller)) return;
@@ -1206,7 +1215,7 @@ export function runEffects(
           thenPriority,
         };
       } else if (e.kind === 'exileTopChooseOne') {
-        const options = lib.slice(0, e.count);
+        const options = lib.slice(0, resolveAmount(ctx, es, e.count));
         if (options.length === 0) continue;
         for (const id of options) moveObject(ctx, id, 'exile');
         ctx.s.decision = {
@@ -1396,7 +1405,12 @@ export function runEffects(
         const pool =
           e.from === 'hand'
             ? ctx.s.players[controller].hand
-            : e.from === 'lastExiledWithSource'
+            : e.from === 'exileWithCounter'
+              ? // Lorwyn Eclipsed (18b, red): Goliath Daydreamer, "cards you own in exile with dream counters on them".
+                ctx.s.players[controller].exile.filter(
+                  (id) => ctx.s.objects[id]?.owner === controller && !!ctx.s.objects[id]?.counters?.[e.counter ?? ''],
+                )
+              : e.from === 'lastExiledWithSource'
               ? exiled.slice(-1)
               : exiled;
         // Final Fantasy (11c): "mana value less than or equal to that damage" (Buster Sword).

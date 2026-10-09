@@ -195,6 +195,9 @@ function wardedTargets(ctx: Ctx, player: PlayerId, targets: readonly TargetChoic
       return [w.lifeEqualsPower ? { ...w, life: Math.max(0, power(ctx, o.id)) } : w];
     }
     if (hasKeyword(ctx, o.id, 'wardOne')) return [{ mana: { generic: 1, colored: {} } }];
+    // Lorwyn Eclipsed (18b, red): Hexing Squelcher grants "Ward—Pay 2 life."
+    if (hasKeyword(ctx, o.id, 'wardPayTwoLife'))
+      return [{ mana: { generic: 0, colored: {} }, life: 2 }];
     return [];
   });
 }
@@ -1736,6 +1739,13 @@ export function finishResolution(ctx: Ctx, item: PausedResolution['item']): void
     const ps = (ctx.s.players[resolved.controller].paradigms ??= []);
     if (!ps.includes(resolved.defId)) ps.push(resolved.defId);
     return moveObject(ctx, item.id, 'exile');
+  }
+  // Lorwyn Eclipsed (18b, red): Goliath Daydreamer, "exile that card with a dream counter on it instead of putting it into your graveyard".
+  if (resolved?.dreamExile && !resolved.isToken && !resolved.spellCopyCard) {
+    moveObject(ctx, item.id, 'exile');
+    const dreamt = ctx.s.objects[item.id];
+    if (dreamt?.zone === 'exile') dreamt.counters = { ...dreamt.counters, dream: 1 };
+    return;
   }
   if (item.libraryBottom) return moveObject(ctx, item.id, 'library', { position: 'bottom' });
   moveObject(ctx, item.id, item.exile || item.rebound ? 'exile' : 'graveyard');

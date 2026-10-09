@@ -71,6 +71,9 @@ export type Keyword =
   | 'ward'
   /** Ward {1}, granted by another permanent (Long River Lurker, Innkeeper's Talent). */
   | 'wardOne'
+  // Lorwyn Eclipsed (18b, red): Hexing Squelcher
+  /** "Ward—Pay 2 life", granted by another permanent. */
+  | 'wardPayTwoLife'
   /** Can't be the target of spells or abilities (Whispersilk Cloak). */
   | 'shroud'
   /** Changeling: every creature type. */
@@ -429,6 +432,9 @@ export type AbilityDef =
        * Lorwyn Eclipsed (18b, special) 'chosenTypeOrAbility': a spell of the chosen type, or an ability of a source of the chosen type: Eclipsed Realms).
        */
       onlyFor?: string;
+      // Lorwyn Eclipsed (18b, red): Flamebraider
+      /** With `onlyFor`: the mana can also pay to activate abilities of sources of that subtype ("Elemental spells or abilities of Elemental sources"). */
+      orAbilitiesOfSources?: boolean;
       /** Makes two mana instead of one while this holds (Ilysian Caryatid). */
       doubleIf?: ConditionDef;
       /** Only if this is the color chosen for it (Uncharted Haven). */
@@ -712,7 +718,10 @@ export type TriggerDef =
         | 'targetsOpponentOrTheirCreature'
         // Reality Fracture (17a): Danitha, Sword of Hope
         /** An Equipment spell, or a spell that targets a creature you control. */
-        | 'equipmentOrTargetsYourCreature';
+        | 'equipmentOrTargetsYourCreature'
+        // Lorwyn Eclipsed (18b, red): Spinerock Tyrant
+        /** An instant or sorcery spell with a single target (exactly one chosen target). */
+        | 'instantOrSorceryOneTarget';
       /** The spell must also match this (Gev: a Lizard spell). */
       spell?: CardFilter;
       /** Any player's spell, cast when it isn't their turn (Vision). */
@@ -1284,6 +1293,9 @@ export interface CardFilter {
   // Secrets of Strixhaven (14b): Arnyn, Deathbloom Botanist
   /** Power or toughness at most this (printed, for a card that has left the battlefield). */
   maxPowerOrToughness?: number;
+  // Lorwyn Eclipsed (18b, red): Meek Attack
+  /** Power plus toughness at most this ("total power and toughness 5 or less"; printed, for a card not on the battlefield). */
+  maxPowerPlusToughness?: number;
   // Secrets of Strixhaven (14b): Mage Tower Referee
   /** Two or more colours. */
   multicolored?: boolean;
@@ -1808,7 +1820,7 @@ export type EffectDef =
       discardOnly?: boolean;
     }
   /** Exile the top N cards; choose one you may play until the end of your next turn (or of this turn). */
-  | { kind: 'exileTopChooseOne'; count: number; until?: 'endOfTurn' }
+  | { kind: 'exileTopChooseOne'; count: Amount; until?: 'endOfTurn' }
   /**
    * Look at an opponent's hand and choose a card matching the filter; they
    * discard it (Thought-Stalker Warlock) or it's exiled.
@@ -1852,7 +1864,10 @@ export type EffectDef =
        * Instead of a target: a card from your hand (West Coast Expansion) or
        * among the cards exiled with the source (Scarlet Witch), matching the filter.
        */
-      from?: 'hand' | 'exiledWithSource' | 'lastExiledWithSource';
+      from?: 'hand' | 'exiledWithSource' | 'lastExiledWithSource' | 'exileWithCounter';
+      // Lorwyn Eclipsed (18b, red): Goliath Daydreamer
+      /** With `from: 'exileWithCounter'`: cards you own in exile with a counter of this name on them. */
+      counter?: string;
       filter?: CardFilter;
       // Final Fantasy (11c): "with mana value less than or equal to that damage" (Buster Sword).
       maxManaValue?: Amount;
@@ -3295,7 +3310,12 @@ export type StaticDef =
   | { kind: 'graveyardSpellsCostLess'; amount: number }
   // Final Fantasy (11c): leftovers
   /** It can't be blocked except by `count` or more creatures (Relentless X-ATM092: three). */
-  | { kind: 'minBlockers'; count: number };
+  | { kind: 'minBlockers'; count: number }
+  // Lorwyn Eclipsed (18b, red): Lavaleaper, Hexing Squelcher
+  /** Whenever a player taps a basic land for mana, that player adds one more mana of any type that land produced (every player's lands). */
+  | { kind: 'basicLandsAddExtraMana' }
+  /** "Spells you control can't be countered." */
+  | { kind: 'spellsYouControlUncounterable' };
 
 export type CardDb = ReadonlyMap<CardDefId, CardDefinition>;
 
@@ -3475,6 +3495,9 @@ export interface GameObject {
   // Reality Fracture (17c): Theorist's Proxy
   /** This spell can't be countered (it was the next spell its controller cast after Theorist's Proxy's ability). */
   cantBeCountered?: boolean;
+  // Lorwyn Eclipsed (18b, red): Goliath Daydreamer
+  /** This spell is exiled with a dream counter on it, instead of going to the graveyard, as it resolves. */
+  dreamExile?: boolean;
   /** Extract Power: it may be played for free while exiled, by this player. */
   playFreeBy?: PlayerId;
   /** Mystical Archive (16): Mind's Desire: `playFreeBy` only lasts through this turn number. */

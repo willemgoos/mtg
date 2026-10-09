@@ -87,6 +87,11 @@ const KEYWORDS: Record<Keyword, { name: string; text: string }> = {
     name: 'Ward {1}',
     text: 'Whenever this becomes the target of a spell or ability an opponent controls, counter it unless that player pays {1}.',
   },
+  // Lorwyn Eclipsed (18b, red)
+  wardPayTwoLife: {
+    name: 'Ward—Pay 2 life',
+    text: 'Whenever this becomes the target of a spell or ability an opponent controls, counter it unless that player pays 2 life.',
+  },
   shroud: {
     name: 'Shroud',
     text: 'This can’t be the target of spells or abilities.',

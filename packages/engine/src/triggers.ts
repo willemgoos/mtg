@@ -604,6 +604,12 @@ function spellMatches(
           def(ctx, o.id).types.includes('Creature')
         );
       });
+    // Lorwyn Eclipsed (18b, red): Spinerock Tyrant, "an instant or sorcery spell with a single target".
+    case 'instantOrSorceryOneTarget':
+      return (
+        (spell.types.includes('Instant') || spell.types.includes('Sorcery')) &&
+        item?.targets.length === 1
+      );
     case 'instantOrSorceryTargetingArtifactOrLand':
       return (
         (spell.types.includes('Instant') || spell.types.includes('Sorcery')) &&

@@ -77906,6 +77906,901 @@
   }
  },
  {
+  "name": "Boldwyr Aggressor",
+  "scryfallId": "76bbccd2-8a90-49a7-921a-6565b495efdf",
+  "oracleId": "ab32c671-7686-435b-a987-14a08f6790eb",
+  "set": "ecl",
+  "collectorNumber": "125",
+  "rarity": "uncommon",
+  "manaCost": "{3}{R}{R}",
+  "typeLine": "Creature — Giant Warrior",
+  "oracleText": "Double strike\nOther Giants you control have double strike.",
+  "power": "2",
+  "toughness": "5",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Double strike"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/6/76bbccd2-8a90-49a7-921a-6565b495efdf.jpg?1783904452",
+   "normal": "https://cards.scryfall.io/normal/front/7/6/76bbccd2-8a90-49a7-921a-6565b495efdf.jpg?1783904452",
+   "large": "https://cards.scryfall.io/large/front/7/6/76bbccd2-8a90-49a7-921a-6565b495efdf.jpg?1783904452",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/6/76bbccd2-8a90-49a7-921a-6565b495efdf.jpg?1783904452"
+  }
+ },
+ {
+  "name": "Boneclub Berserker",
+  "scryfallId": "b3dbbe30-3d6e-46f8-92c1-caee995cba1a",
+  "oracleId": "a08f69f9-de48-46d6-8b75-31886159cf45",
+  "set": "ecl",
+  "collectorNumber": "126",
+  "rarity": "common",
+  "manaCost": "{3}{R}",
+  "typeLine": "Creature — Goblin Berserker",
+  "oracleText": "This creature gets +2/+0 for each other Goblin you control.",
+  "power": "2",
+  "toughness": "4",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/3/b3dbbe30-3d6e-46f8-92c1-caee995cba1a.jpg?1783904451",
+   "normal": "https://cards.scryfall.io/normal/front/b/3/b3dbbe30-3d6e-46f8-92c1-caee995cba1a.jpg?1783904451",
+   "large": "https://cards.scryfall.io/large/front/b/3/b3dbbe30-3d6e-46f8-92c1-caee995cba1a.jpg?1783904451",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/3/b3dbbe30-3d6e-46f8-92c1-caee995cba1a.jpg?1783904451"
+  }
+ },
+ {
+  "name": "Boulder Dash",
+  "scryfallId": "657a2a24-22d1-4bc2-9f22-ed361ae487e3",
+  "oracleId": "30a9ad0e-1b23-41ce-bacc-3b27f78ef628",
+  "set": "ecl",
+  "collectorNumber": "127",
+  "rarity": "uncommon",
+  "manaCost": "{1}{R}",
+  "typeLine": "Sorcery",
+  "oracleText": "Boulder Dash deals 2 damage to any target and 1 damage to any other target.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/5/657a2a24-22d1-4bc2-9f22-ed361ae487e3.jpg?1783904449",
+   "normal": "https://cards.scryfall.io/normal/front/6/5/657a2a24-22d1-4bc2-9f22-ed361ae487e3.jpg?1783904449",
+   "large": "https://cards.scryfall.io/large/front/6/5/657a2a24-22d1-4bc2-9f22-ed361ae487e3.jpg?1783904449",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/5/657a2a24-22d1-4bc2-9f22-ed361ae487e3.jpg?1783904449"
+  }
+ },
+ {
+  "name": "Brambleback Brute",
+  "scryfallId": "5ebb8365-c6e1-46e8-a242-6aa27b21e68a",
+  "oracleId": "eb25920a-3162-4838-b092-09cbd43332fd",
+  "set": "ecl",
+  "collectorNumber": "128",
+  "rarity": "common",
+  "manaCost": "{2}{R}",
+  "typeLine": "Creature — Giant Warrior",
+  "oracleText": "This creature enters with two -1/-1 counters on it.\n{1}{R}, Remove a counter from this creature: Target creature can't block this turn. Activate only as a sorcery.",
+  "power": "4",
+  "toughness": "5",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/e/5ebb8365-c6e1-46e8-a242-6aa27b21e68a.jpg?1783904453",
+   "normal": "https://cards.scryfall.io/normal/front/5/e/5ebb8365-c6e1-46e8-a242-6aa27b21e68a.jpg?1783904453",
+   "large": "https://cards.scryfall.io/large/front/5/e/5ebb8365-c6e1-46e8-a242-6aa27b21e68a.jpg?1783904453",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/e/5ebb8365-c6e1-46e8-a242-6aa27b21e68a.jpg?1783904453"
+  }
+ },
+ {
+  "name": "Burning Curiosity",
+  "scryfallId": "689ed288-6228-4d7e-b198-56a12b8be299",
+  "oracleId": "7f420633-901d-47f9-ae0f-0f5b0ea8359c",
+  "set": "ecl",
+  "collectorNumber": "129",
+  "rarity": "common",
+  "manaCost": "{2}{R}",
+  "typeLine": "Sorcery",
+  "oracleText": "As an additional cost to cast this spell, you may blight 1. (You may put a -1/-1 counter on a creature you control.)\nExile the top two cards of your library. If this spell's additional cost was paid, exile the top three cards instead. Until the end of your next turn, you may play those cards.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Blight"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/8/689ed288-6228-4d7e-b198-56a12b8be299.jpg?1783904452",
+   "normal": "https://cards.scryfall.io/normal/front/6/8/689ed288-6228-4d7e-b198-56a12b8be299.jpg?1783904452",
+   "large": "https://cards.scryfall.io/large/front/6/8/689ed288-6228-4d7e-b198-56a12b8be299.jpg?1783904452",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/8/689ed288-6228-4d7e-b198-56a12b8be299.jpg?1783904452"
+  }
+ },
+ {
+  "name": "Champion of the Path",
+  "scryfallId": "e369cd31-3e22-47eb-bf6a-00d823651710",
+  "oracleId": "b326ccd5-8ad2-441c-9d73-82ee6390dd36",
+  "set": "ecl",
+  "collectorNumber": "130",
+  "rarity": "rare",
+  "manaCost": "{3}{R}",
+  "typeLine": "Creature — Elemental Sorcerer",
+  "oracleText": "As an additional cost to cast this spell, behold an Elemental and exile it. (Exile an Elemental you control or an Elemental card from your hand.)\nWhenever another Elemental you control enters, it deals damage equal to its power to each opponent.\nWhen this creature leaves the battlefield, return the exiled card to its owner's hand.",
+  "power": "7",
+  "toughness": "3",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Behold"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/3/e369cd31-3e22-47eb-bf6a-00d823651710.jpg?1783904447",
+   "normal": "https://cards.scryfall.io/normal/front/e/3/e369cd31-3e22-47eb-bf6a-00d823651710.jpg?1783904447",
+   "large": "https://cards.scryfall.io/large/front/e/3/e369cd31-3e22-47eb-bf6a-00d823651710.jpg?1783904447",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/3/e369cd31-3e22-47eb-bf6a-00d823651710.jpg?1783904447"
+  }
+ },
+ {
+  "name": "Cinder Strike",
+  "scryfallId": "6fb6faa4-236c-4cae-9140-0981c44d2392",
+  "oracleId": "54421e69-d79e-4c2e-8ce6-96994d168835",
+  "set": "ecl",
+  "collectorNumber": "131",
+  "rarity": "common",
+  "manaCost": "{R}",
+  "typeLine": "Sorcery",
+  "oracleText": "As an additional cost to cast this spell, you may blight 1. (You may put a -1/-1 counter on a creature you control.)\nCinder Strike deals 2 damage to target creature. It deals 4 damage to that creature instead if this spell's additional cost was paid.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Blight"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/f/6fb6faa4-236c-4cae-9140-0981c44d2392.jpg?1783904450",
+   "normal": "https://cards.scryfall.io/normal/front/6/f/6fb6faa4-236c-4cae-9140-0981c44d2392.jpg?1783904450",
+   "large": "https://cards.scryfall.io/large/front/6/f/6fb6faa4-236c-4cae-9140-0981c44d2392.jpg?1783904450",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/f/6fb6faa4-236c-4cae-9140-0981c44d2392.jpg?1783904450"
+  }
+ },
+ {
+  "name": "Collective Inferno",
+  "scryfallId": "1ec084cc-997d-4079-b445-8f701ec3c277",
+  "oracleId": "649e4969-71d4-434f-85b0-205ec2c6b24f",
+  "set": "ecl",
+  "collectorNumber": "132",
+  "rarity": "rare",
+  "manaCost": "{3}{R}{R}",
+  "typeLine": "Enchantment",
+  "oracleText": "Convoke (Your creatures can help cast this spell. Each creature you tap while casting this spell pays for {1} or one mana of that creature's color.)\nAs this enchantment enters, choose a creature type.\nDouble all damage that sources you control of the chosen type would deal.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Double",
+   "Convoke"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/e/1ec084cc-997d-4079-b445-8f701ec3c277.jpg?1783904449",
+   "normal": "https://cards.scryfall.io/normal/front/1/e/1ec084cc-997d-4079-b445-8f701ec3c277.jpg?1783904449",
+   "large": "https://cards.scryfall.io/large/front/1/e/1ec084cc-997d-4079-b445-8f701ec3c277.jpg?1783904449",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/e/1ec084cc-997d-4079-b445-8f701ec3c277.jpg?1783904449"
+  }
+ },
+ {
+  "name": "Elder Auntie",
+  "scryfallId": "84678e98-2258-4ea1-aaf0-8ac4cc2ecf8d",
+  "oracleId": "079f0d7f-57a5-4101-a9e3-c5a57148b3fb",
+  "set": "ecl",
+  "collectorNumber": "133",
+  "rarity": "common",
+  "manaCost": "{2}{R}",
+  "typeLine": "Creature — Goblin Warlock",
+  "oracleText": "When this creature enters, create a 1/1 black and red Goblin creature token.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/4/84678e98-2258-4ea1-aaf0-8ac4cc2ecf8d.jpg?1783904448",
+   "normal": "https://cards.scryfall.io/normal/front/8/4/84678e98-2258-4ea1-aaf0-8ac4cc2ecf8d.jpg?1783904448",
+   "large": "https://cards.scryfall.io/large/front/8/4/84678e98-2258-4ea1-aaf0-8ac4cc2ecf8d.jpg?1783904448",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/4/84678e98-2258-4ea1-aaf0-8ac4cc2ecf8d.jpg?1783904448"
+  }
+ },
+ {
+  "name": "End-Blaze Epiphany",
+  "scryfallId": "0f0a90ae-b3b3-4f52-8997-eac514b29e57",
+  "oracleId": "00cfbea0-e862-468b-90d5-7478eb9847c0",
+  "set": "ecl",
+  "collectorNumber": "134",
+  "rarity": "rare",
+  "manaCost": "{X}{R}",
+  "typeLine": "Instant",
+  "oracleText": "End-Blaze Epiphany deals X damage to target creature. When that creature dies this turn, exile a number of cards from the top of your library equal to its power, then choose a card exiled this way. Until the end of your next turn, you may play that card.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/f/0f0a90ae-b3b3-4f52-8997-eac514b29e57.jpg?1783904455",
+   "normal": "https://cards.scryfall.io/normal/front/0/f/0f0a90ae-b3b3-4f52-8997-eac514b29e57.jpg?1783904455",
+   "large": "https://cards.scryfall.io/large/front/0/f/0f0a90ae-b3b3-4f52-8997-eac514b29e57.jpg?1783904455",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/f/0f0a90ae-b3b3-4f52-8997-eac514b29e57.jpg?1783904455"
+  }
+ },
+ {
+  "name": "Enraged Flamecaster",
+  "scryfallId": "104baa2c-75c5-44fc-a3b9-b19efcf3d7c2",
+  "oracleId": "e35d7886-8c03-471c-b598-118d7eceddb4",
+  "set": "ecl",
+  "collectorNumber": "135",
+  "rarity": "common",
+  "manaCost": "{2}{R}",
+  "typeLine": "Creature — Elemental Sorcerer",
+  "oracleText": "Reach\nWhenever you cast a spell with mana value 4 or greater, this creature deals 2 damage to each opponent.",
+  "power": "3",
+  "toughness": "2",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Reach"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/0/104baa2c-75c5-44fc-a3b9-b19efcf3d7c2.jpg?1783904448",
+   "normal": "https://cards.scryfall.io/normal/front/1/0/104baa2c-75c5-44fc-a3b9-b19efcf3d7c2.jpg?1783904448",
+   "large": "https://cards.scryfall.io/large/front/1/0/104baa2c-75c5-44fc-a3b9-b19efcf3d7c2.jpg?1783904448",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/0/104baa2c-75c5-44fc-a3b9-b19efcf3d7c2.jpg?1783904448"
+  }
+ },
+ {
+  "name": "Explosive Prodigy",
+  "scryfallId": "5515ea5e-ce28-4938-a31e-5e48522a5f93",
+  "oracleId": "22d059fc-4e47-44b5-9e21-4a56f1dff6a7",
+  "set": "ecl",
+  "collectorNumber": "136",
+  "rarity": "uncommon",
+  "manaCost": "{1}{R}",
+  "typeLine": "Creature — Elemental Sorcerer",
+  "oracleText": "Vivid — When this creature enters, it deals X damage to target creature an opponent controls, where X is the number of colors among permanents you control.",
+  "power": "1",
+  "toughness": "1",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Vivid"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/5/5515ea5e-ce28-4938-a31e-5e48522a5f93.jpg?1783904448",
+   "normal": "https://cards.scryfall.io/normal/front/5/5/5515ea5e-ce28-4938-a31e-5e48522a5f93.jpg?1783904448",
+   "large": "https://cards.scryfall.io/large/front/5/5/5515ea5e-ce28-4938-a31e-5e48522a5f93.jpg?1783904448",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/5/5515ea5e-ce28-4938-a31e-5e48522a5f93.jpg?1783904448"
+  }
+ },
+ {
+  "name": "Feed the Flames",
+  "scryfallId": "59740755-c353-4b6c-a84c-3b76133ce3ec",
+  "oracleId": "f474d244-d9be-4580-bf62-f97660e9c1a3",
+  "set": "ecl",
+  "collectorNumber": "137",
+  "rarity": "common",
+  "manaCost": "{3}{R}",
+  "typeLine": "Instant",
+  "oracleText": "Feed the Flames deals 5 damage to target creature. If that creature would die this turn, exile it instead.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/9/59740755-c353-4b6c-a84c-3b76133ce3ec.jpg?1783904449",
+   "normal": "https://cards.scryfall.io/normal/front/5/9/59740755-c353-4b6c-a84c-3b76133ce3ec.jpg?1783904449",
+   "large": "https://cards.scryfall.io/large/front/5/9/59740755-c353-4b6c-a84c-3b76133ce3ec.jpg?1783904449",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/9/59740755-c353-4b6c-a84c-3b76133ce3ec.jpg?1783904449"
+  }
+ },
+ {
+  "name": "Flame-Chain Mauler",
+  "scryfallId": "752d7e8e-0dd0-4ace-9c89-a8f9ce73775e",
+  "oracleId": "d6eef6a7-0cf4-4ee8-90e0-727a283c3be9",
+  "set": "ecl",
+  "collectorNumber": "138",
+  "rarity": "common",
+  "manaCost": "{1}{R}",
+  "typeLine": "Creature — Elemental Warrior",
+  "oracleText": "{1}{R}: This creature gets +1/+0 and gains menace until end of turn. (It can't be blocked except by two or more creatures.)",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/5/752d7e8e-0dd0-4ace-9c89-a8f9ce73775e.jpg?1783904447",
+   "normal": "https://cards.scryfall.io/normal/front/7/5/752d7e8e-0dd0-4ace-9c89-a8f9ce73775e.jpg?1783904447",
+   "large": "https://cards.scryfall.io/large/front/7/5/752d7e8e-0dd0-4ace-9c89-a8f9ce73775e.jpg?1783904447",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/5/752d7e8e-0dd0-4ace-9c89-a8f9ce73775e.jpg?1783904447"
+  }
+ },
+ {
+  "name": "Flamebraider",
+  "scryfallId": "b8aa428c-5a77-444f-b75e-a113e46fe4e0",
+  "oracleId": "c552bd73-ce75-40fd-9d80-9e90b6f45274",
+  "set": "ecl",
+  "collectorNumber": "139",
+  "rarity": "uncommon",
+  "manaCost": "{1}{R}",
+  "typeLine": "Creature — Elemental Bard",
+  "oracleText": "{T}: Add two mana in any combination of colors. Spend this mana only to cast Elemental spells or activate abilities of Elemental sources.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/8/b8aa428c-5a77-444f-b75e-a113e46fe4e0.jpg?1783904449",
+   "normal": "https://cards.scryfall.io/normal/front/b/8/b8aa428c-5a77-444f-b75e-a113e46fe4e0.jpg?1783904449",
+   "large": "https://cards.scryfall.io/large/front/b/8/b8aa428c-5a77-444f-b75e-a113e46fe4e0.jpg?1783904449",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/8/b8aa428c-5a77-444f-b75e-a113e46fe4e0.jpg?1783904449"
+  }
+ },
+ {
+  "name": "Flamekin Gildweaver",
+  "scryfallId": "b1628ece-a028-49d4-9065-ee997838c20a",
+  "oracleId": "bc8427fb-e5ee-4b44-9a4f-6d9f01b4b896",
+  "set": "ecl",
+  "collectorNumber": "140",
+  "rarity": "common",
+  "manaCost": "{3}{R}",
+  "typeLine": "Creature — Elemental Sorcerer",
+  "oracleText": "Trample\nWhen this creature enters, create a Treasure token. (It's an artifact with \"{T}, Sacrifice this token: Add one mana of any color.\")",
+  "power": "4",
+  "toughness": "3",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Treasure",
+   "Trample"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/1/b1628ece-a028-49d4-9065-ee997838c20a.jpg?1783904447",
+   "normal": "https://cards.scryfall.io/normal/front/b/1/b1628ece-a028-49d4-9065-ee997838c20a.jpg?1783904447",
+   "large": "https://cards.scryfall.io/large/front/b/1/b1628ece-a028-49d4-9065-ee997838c20a.jpg?1783904447",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/1/b1628ece-a028-49d4-9065-ee997838c20a.jpg?1783904447"
+  }
+ },
+ {
+  "name": "Giantfall",
+  "scryfallId": "1ac52728-adb3-4220-8392-73f7bd379ab4",
+  "oracleId": "77e5e7e3-b97b-4953-9df4-1aee509fbf2a",
+  "set": "ecl",
+  "collectorNumber": "141",
+  "rarity": "uncommon",
+  "manaCost": "{1}{R}",
+  "typeLine": "Instant",
+  "oracleText": "Choose one —\n• Target creature you control deals damage equal to its power to target creature an opponent controls.\n• Destroy target artifact.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/a/1ac52728-adb3-4220-8392-73f7bd379ab4.jpg?1783904444",
+   "normal": "https://cards.scryfall.io/normal/front/1/a/1ac52728-adb3-4220-8392-73f7bd379ab4.jpg?1783904444",
+   "large": "https://cards.scryfall.io/large/front/1/a/1ac52728-adb3-4220-8392-73f7bd379ab4.jpg?1783904444",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/a/1ac52728-adb3-4220-8392-73f7bd379ab4.jpg?1783904444"
+  }
+ },
+ {
+  "name": "Goatnap",
+  "scryfallId": "709d4928-e976-4c7c-ba09-cce95d1797b2",
+  "oracleId": "060e7187-0c7d-4022-9a1f-36a6f75314ca",
+  "set": "mh1",
+  "collectorNumber": "126",
+  "rarity": "common",
+  "manaCost": "{2}{R}",
+  "typeLine": "Sorcery",
+  "oracleText": "Gain control of target creature until end of turn. Untap that creature. It gains haste until end of turn. If that creature is a Goat, it also gets +3/+0 until end of turn.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/0/709d4928-e976-4c7c-ba09-cce95d1797b2.jpg?1783933112",
+   "normal": "https://cards.scryfall.io/normal/front/7/0/709d4928-e976-4c7c-ba09-cce95d1797b2.jpg?1783933112",
+   "large": "https://cards.scryfall.io/large/front/7/0/709d4928-e976-4c7c-ba09-cce95d1797b2.jpg?1783933112",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/0/709d4928-e976-4c7c-ba09-cce95d1797b2.jpg?1783933112"
+  }
+ },
+ {
+  "name": "Goliath Daydreamer",
+  "scryfallId": "88e8cd13-2a29-4df6-937c-1bed68fbeafa",
+  "oracleId": "9207facd-fbf9-4faa-ac44-6c0bcac81551",
+  "set": "ecl",
+  "collectorNumber": "143",
+  "rarity": "rare",
+  "manaCost": "{2}{R}{R}",
+  "typeLine": "Creature — Giant Wizard",
+  "oracleText": "Whenever you cast an instant or sorcery spell from your hand, exile that card with a dream counter on it instead of putting it into your graveyard as it resolves.\nWhenever this creature attacks, you may cast a spell from among cards you own in exile with dream counters on them without paying its mana cost.",
+  "power": "4",
+  "toughness": "4",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/8/88e8cd13-2a29-4df6-937c-1bed68fbeafa.jpg?1783904444",
+   "normal": "https://cards.scryfall.io/normal/front/8/8/88e8cd13-2a29-4df6-937c-1bed68fbeafa.jpg?1783904444",
+   "large": "https://cards.scryfall.io/large/front/8/8/88e8cd13-2a29-4df6-937c-1bed68fbeafa.jpg?1783904444",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/8/88e8cd13-2a29-4df6-937c-1bed68fbeafa.jpg?1783904444"
+  }
+ },
+ {
+  "name": "Gristle Glutton",
+  "scryfallId": "a4164af6-356e-4de2-8377-dbe70434a996",
+  "oracleId": "b7163800-41fc-410a-9650-50ae90842170",
+  "set": "ecl",
+  "collectorNumber": "144",
+  "rarity": "common",
+  "manaCost": "{1}{R}",
+  "typeLine": "Creature — Goblin Scout",
+  "oracleText": "{T}, Blight 1: Discard a card. If you do, draw a card. (To blight 1, put a -1/-1 counter on a creature you control.)",
+  "power": "1",
+  "toughness": "3",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Blight"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/4/a4164af6-356e-4de2-8377-dbe70434a996.jpg?1783904442",
+   "normal": "https://cards.scryfall.io/normal/front/a/4/a4164af6-356e-4de2-8377-dbe70434a996.jpg?1783904442",
+   "large": "https://cards.scryfall.io/large/front/a/4/a4164af6-356e-4de2-8377-dbe70434a996.jpg?1783904442",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/4/a4164af6-356e-4de2-8377-dbe70434a996.jpg?1783904442"
+  }
+ },
+ {
+  "name": "Hexing Squelcher",
+  "scryfallId": "674960ce-ff33-4d5e-a24a-a4582b2e9809",
+  "oracleId": "96c2d71e-0fc9-42aa-bc6b-6d0ae3f66f8b",
+  "set": "ecl",
+  "collectorNumber": "145",
+  "rarity": "rare",
+  "manaCost": "{1}{R}",
+  "typeLine": "Creature — Goblin Sorcerer",
+  "oracleText": "This spell can't be countered.\nWard—Pay 2 life.\nSpells you control can't be countered.\nOther creatures you control have \"Ward—Pay 2 life.\"",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Ward"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/7/674960ce-ff33-4d5e-a24a-a4582b2e9809.jpg?1783904442",
+   "normal": "https://cards.scryfall.io/normal/front/6/7/674960ce-ff33-4d5e-a24a-a4582b2e9809.jpg?1783904442",
+   "large": "https://cards.scryfall.io/large/front/6/7/674960ce-ff33-4d5e-a24a-a4582b2e9809.jpg?1783904442",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/7/674960ce-ff33-4d5e-a24a-a4582b2e9809.jpg?1783904442"
+  }
+ },
+ {
+  "name": "Impolite Entrance",
+  "scryfallId": "45be88d8-0be1-47a2-a1c1-d6e693fc706f",
+  "oracleId": "b77764fe-bc79-410a-995a-ac392f5b46b8",
+  "set": "ecl",
+  "collectorNumber": "146",
+  "rarity": "uncommon",
+  "manaCost": "{R}",
+  "typeLine": "Sorcery",
+  "oracleText": "Target creature gains trample and haste until end of turn.\nDraw a card.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/5/45be88d8-0be1-47a2-a1c1-d6e693fc706f.jpg?1783904443",
+   "normal": "https://cards.scryfall.io/normal/front/4/5/45be88d8-0be1-47a2-a1c1-d6e693fc706f.jpg?1783904443",
+   "large": "https://cards.scryfall.io/large/front/4/5/45be88d8-0be1-47a2-a1c1-d6e693fc706f.jpg?1783904443",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/5/45be88d8-0be1-47a2-a1c1-d6e693fc706f.jpg?1783904443"
+  }
+ },
+ {
+  "name": "Kindle the Inner Flame",
+  "scryfallId": "9a2adcea-f6b1-4611-b8b8-f19fdee2c571",
+  "oracleId": "c7ca6371-73bb-4717-a148-0804b8f4c1e6",
+  "set": "ecl",
+  "collectorNumber": "147",
+  "rarity": "uncommon",
+  "manaCost": "{3}{R}",
+  "typeLine": "Kindred Sorcery — Elemental",
+  "oracleText": "Create a token that's a copy of target creature you control, except it has haste and \"At the beginning of the end step, sacrifice this token.\"\nFlashback—{1}{R}, Behold three Elementals. (You may cast this card from your graveyard for its flashback cost. Then exile it. To behold an Elemental, choose an Elemental you control or reveal an Elemental card from your hand.)",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Behold",
+   "Flashback"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/a/9a2adcea-f6b1-4611-b8b8-f19fdee2c571.jpg?1783904442",
+   "normal": "https://cards.scryfall.io/normal/front/9/a/9a2adcea-f6b1-4611-b8b8-f19fdee2c571.jpg?1783904442",
+   "large": "https://cards.scryfall.io/large/front/9/a/9a2adcea-f6b1-4611-b8b8-f19fdee2c571.jpg?1783904442",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/a/9a2adcea-f6b1-4611-b8b8-f19fdee2c571.jpg?1783904442"
+  }
+ },
+ {
+  "name": "Kulrath Zealot",
+  "scryfallId": "3502685d-4e57-4c5c-94c6-ae69048cdfbf",
+  "oracleId": "d18ca75c-3572-4851-9580-27bafe10edd6",
+  "set": "ecl",
+  "collectorNumber": "148",
+  "rarity": "common",
+  "manaCost": "{5}{R}",
+  "typeLine": "Creature — Elemental Warrior",
+  "oracleText": "When this creature enters, exile the top card of your library. Until the end of your next turn, you may play that card.\nBasic landcycling {1}{R} ({1}{R}, Discard this card: Search your library for a basic land card, reveal it, put it into your hand, then shuffle.)",
+  "power": "6",
+  "toughness": "5",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Landcycling",
+   "Basic landcycling",
+   "Typecycling",
+   "Cycling"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/5/3502685d-4e57-4c5c-94c6-ae69048cdfbf.jpg?1783904441",
+   "normal": "https://cards.scryfall.io/normal/front/3/5/3502685d-4e57-4c5c-94c6-ae69048cdfbf.jpg?1783904441",
+   "large": "https://cards.scryfall.io/large/front/3/5/3502685d-4e57-4c5c-94c6-ae69048cdfbf.jpg?1783904441",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/5/3502685d-4e57-4c5c-94c6-ae69048cdfbf.jpg?1783904441"
+  }
+ },
+ {
+  "name": "Lasting Tarfire",
+  "scryfallId": "9c4a95ac-072f-4219-80a0-1ce71f1b8411",
+  "oracleId": "ff5502d2-37f5-4ad5-bee2-3a03ec973268",
+  "set": "ecl",
+  "collectorNumber": "149",
+  "rarity": "uncommon",
+  "manaCost": "{1}{R}",
+  "typeLine": "Enchantment",
+  "oracleText": "At the beginning of each end step, if you put a counter on a creature this turn, this enchantment deals 2 damage to each opponent.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/c/9c4a95ac-072f-4219-80a0-1ce71f1b8411.jpg?1783904443",
+   "normal": "https://cards.scryfall.io/normal/front/9/c/9c4a95ac-072f-4219-80a0-1ce71f1b8411.jpg?1783904443",
+   "large": "https://cards.scryfall.io/large/front/9/c/9c4a95ac-072f-4219-80a0-1ce71f1b8411.jpg?1783904443",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/c/9c4a95ac-072f-4219-80a0-1ce71f1b8411.jpg?1783904443"
+  }
+ },
+ {
+  "name": "Lavaleaper",
+  "scryfallId": "82902488-d178-4752-bcfb-dd3050654d23",
+  "oracleId": "a107fb84-6874-4964-a729-4425dad98330",
+  "set": "ecl",
+  "collectorNumber": "150",
+  "rarity": "rare",
+  "manaCost": "{3}{R}",
+  "typeLine": "Creature — Elemental",
+  "oracleText": "All creatures have haste.\nWhenever a player taps a basic land for mana, that player adds one mana of any type that land produced.",
+  "power": "4",
+  "toughness": "4",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/2/82902488-d178-4752-bcfb-dd3050654d23.jpg?1783904441",
+   "normal": "https://cards.scryfall.io/normal/front/8/2/82902488-d178-4752-bcfb-dd3050654d23.jpg?1783904441",
+   "large": "https://cards.scryfall.io/large/front/8/2/82902488-d178-4752-bcfb-dd3050654d23.jpg?1783904441",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/2/82902488-d178-4752-bcfb-dd3050654d23.jpg?1783904441"
+  }
+ },
+ {
+  "name": "Meek Attack",
+  "scryfallId": "21157461-5435-4879-80a9-100afc5bbf4c",
+  "oracleId": "b9fff42d-31cf-4edf-8353-4a3b996bb77b",
+  "set": "ecl",
+  "collectorNumber": "151",
+  "rarity": "mythic",
+  "manaCost": "{2}{R}",
+  "typeLine": "Enchantment",
+  "oracleText": "{1}{R}: You may put a creature card with total power and toughness 5 or less from your hand onto the battlefield. That creature gains haste. At the beginning of the next end step, sacrifice that creature.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/1/21157461-5435-4879-80a9-100afc5bbf4c.jpg?1783904442",
+   "normal": "https://cards.scryfall.io/normal/front/2/1/21157461-5435-4879-80a9-100afc5bbf4c.jpg?1783904442",
+   "large": "https://cards.scryfall.io/large/front/2/1/21157461-5435-4879-80a9-100afc5bbf4c.jpg?1783904442",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/1/21157461-5435-4879-80a9-100afc5bbf4c.jpg?1783904442"
+  }
+ },
+ {
+  "name": "Reckless Ransacking",
+  "scryfallId": "24a5b025-4cdb-416d-aad6-0fc7e8da3df2",
+  "oracleId": "ebcd198e-7fbd-46e0-a6d9-ff499e541978",
+  "set": "ecl",
+  "collectorNumber": "152",
+  "rarity": "common",
+  "manaCost": "{1}{R}",
+  "typeLine": "Instant",
+  "oracleText": "Target creature gets +3/+2 until end of turn. Create a Treasure token. (It's an artifact with \"{T}, Sacrifice this token: Add one mana of any color.\")",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Treasure"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/4/24a5b025-4cdb-416d-aad6-0fc7e8da3df2.jpg?1783904441",
+   "normal": "https://cards.scryfall.io/normal/front/2/4/24a5b025-4cdb-416d-aad6-0fc7e8da3df2.jpg?1783904441",
+   "large": "https://cards.scryfall.io/large/front/2/4/24a5b025-4cdb-416d-aad6-0fc7e8da3df2.jpg?1783904441",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/4/24a5b025-4cdb-416d-aad6-0fc7e8da3df2.jpg?1783904441"
+  }
+ },
+ {
+  "name": "Scuzzback Scrounger",
+  "scryfallId": "0ea4a895-19c0-47af-ad9c-5db88ea9ae05",
+  "oracleId": "af38d683-77a3-4599-ad2a-1c293ae01d45",
+  "set": "ecl",
+  "collectorNumber": "153",
+  "rarity": "rare",
+  "manaCost": "{1}{R}",
+  "typeLine": "Creature — Goblin Warrior",
+  "oracleText": "At the beginning of your first main phase, you may blight 1. If you do, create a Treasure token. (To blight 1, put a -1/-1 counter on a creature you control. A Treasure token is an artifact with \"{T}, Sacrifice this token: Add one mana of any color.\")",
+  "power": "3",
+  "toughness": "2",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Blight",
+   "Treasure"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/e/0ea4a895-19c0-47af-ad9c-5db88ea9ae05.jpg?1783904441",
+   "normal": "https://cards.scryfall.io/normal/front/0/e/0ea4a895-19c0-47af-ad9c-5db88ea9ae05.jpg?1783904441",
+   "large": "https://cards.scryfall.io/large/front/0/e/0ea4a895-19c0-47af-ad9c-5db88ea9ae05.jpg?1783904441",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/e/0ea4a895-19c0-47af-ad9c-5db88ea9ae05.jpg?1783904441"
+  }
+ },
+ {
+  "name": "Sizzling Changeling",
+  "scryfallId": "e58f0722-9ad1-4952-9aee-ea8137c58911",
+  "oracleId": "60ad7aaa-8ce6-4449-8e8d-4ccf925010db",
+  "set": "ecl",
+  "collectorNumber": "155",
+  "rarity": "uncommon",
+  "manaCost": "{2}{R}",
+  "typeLine": "Creature — Shapeshifter",
+  "oracleText": "Changeling (This card is every creature type.)\nWhen this creature dies, exile the top card of your library. Until the end of your next turn, you may play that card.",
+  "power": "3",
+  "toughness": "2",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Changeling"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/5/e58f0722-9ad1-4952-9aee-ea8137c58911.jpg?1783904440",
+   "normal": "https://cards.scryfall.io/normal/front/e/5/e58f0722-9ad1-4952-9aee-ea8137c58911.jpg?1783904440",
+   "large": "https://cards.scryfall.io/large/front/e/5/e58f0722-9ad1-4952-9aee-ea8137c58911.jpg?1783904440",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/5/e58f0722-9ad1-4952-9aee-ea8137c58911.jpg?1783904440"
+  }
+ },
+ {
+  "name": "Soul Immolation",
+  "scryfallId": "234b70df-8c34-4da7-946e-b8b55a8df390",
+  "oracleId": "338747e8-bed8-4e60-8b19-5c2b80799477",
+  "set": "ecl",
+  "collectorNumber": "156",
+  "rarity": "mythic",
+  "manaCost": "{3}{R}{R}",
+  "typeLine": "Sorcery",
+  "oracleText": "As an additional cost to cast this spell, blight X. X can't be greater than the greatest toughness among creatures you control. (Put X -1/-1 counters on a creature you control.)\nSoul Immolation deals X damage to each opponent and each creature they control.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/3/234b70df-8c34-4da7-946e-b8b55a8df390.jpg?1783904438",
+   "normal": "https://cards.scryfall.io/normal/front/2/3/234b70df-8c34-4da7-946e-b8b55a8df390.jpg?1783904438",
+   "large": "https://cards.scryfall.io/large/front/2/3/234b70df-8c34-4da7-946e-b8b55a8df390.jpg?1783904438",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/3/234b70df-8c34-4da7-946e-b8b55a8df390.jpg?1783904438"
+  }
+ },
+ {
+  "name": "Soulbright Seeker",
+  "scryfallId": "895ac890-608a-47de-8bc8-9337fd2064e8",
+  "oracleId": "762679dd-4345-43c3-929b-15959443aeb0",
+  "set": "ecl",
+  "collectorNumber": "157",
+  "rarity": "uncommon",
+  "manaCost": "{R}",
+  "typeLine": "Creature — Elemental Sorcerer",
+  "oracleText": "As an additional cost to cast this spell, behold an Elemental or pay {2}. (To behold an Elemental, choose an Elemental you control or reveal an Elemental card from your hand.)\n{R}: Target creature you control gains trample until end of turn. If this is the third time this ability has resolved this turn, add {R}{R}{R}{R}.",
+  "power": "2",
+  "toughness": "1",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Behold"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/9/895ac890-608a-47de-8bc8-9337fd2064e8.jpg?1783904438",
+   "normal": "https://cards.scryfall.io/normal/front/8/9/895ac890-608a-47de-8bc8-9337fd2064e8.jpg?1783904438",
+   "large": "https://cards.scryfall.io/large/front/8/9/895ac890-608a-47de-8bc8-9337fd2064e8.jpg?1783904438",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/9/895ac890-608a-47de-8bc8-9337fd2064e8.jpg?1783904438"
+  }
+ },
+ {
+  "name": "Sourbread Auntie",
+  "scryfallId": "32fd226f-d1c6-432c-b846-9482f1944363",
+  "oracleId": "6b087ae1-1412-4dd9-9b96-3b45be52d386",
+  "set": "ecl",
+  "collectorNumber": "158",
+  "rarity": "uncommon",
+  "manaCost": "{2}{R}{R}",
+  "typeLine": "Creature — Goblin Warrior",
+  "oracleText": "When this creature enters, you may blight 2. If you do, create two 1/1 black and red Goblin creature tokens. (To blight 2, put two -1/-1 counters on a creature you control.)",
+  "power": "4",
+  "toughness": "3",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Blight"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/2/32fd226f-d1c6-432c-b846-9482f1944363.jpg?1783904437",
+   "normal": "https://cards.scryfall.io/normal/front/3/2/32fd226f-d1c6-432c-b846-9482f1944363.jpg?1783904437",
+   "large": "https://cards.scryfall.io/large/front/3/2/32fd226f-d1c6-432c-b846-9482f1944363.jpg?1783904437",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/2/32fd226f-d1c6-432c-b846-9482f1944363.jpg?1783904437"
+  }
+ },
+ {
+  "name": "Spinerock Tyrant",
+  "scryfallId": "478bbb7a-4b96-4e04-921e-bdf23185de25",
+  "oracleId": "e35d4c62-5211-4785-b683-a83719195d87",
+  "set": "ecl",
+  "collectorNumber": "159",
+  "rarity": "mythic",
+  "manaCost": "{3}{R}{R}",
+  "typeLine": "Creature — Dragon",
+  "oracleText": "Flying\nWither (This deals damage to creatures in the form of -1/-1 counters.)\nWhenever you cast an instant or sorcery spell with a single target, you may copy it. If you do, those spells gain wither. You may choose new targets for the copy.",
+  "power": "6",
+  "toughness": "6",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Flying",
+   "Wither"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/7/478bbb7a-4b96-4e04-921e-bdf23185de25.jpg?1783904437",
+   "normal": "https://cards.scryfall.io/normal/front/4/7/478bbb7a-4b96-4e04-921e-bdf23185de25.jpg?1783904437",
+   "large": "https://cards.scryfall.io/large/front/4/7/478bbb7a-4b96-4e04-921e-bdf23185de25.jpg?1783904437",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/7/478bbb7a-4b96-4e04-921e-bdf23185de25.jpg?1783904437"
+  }
+ },
+ {
+  "name": "Squawkroaster",
+  "scryfallId": "4112f960-70af-4e2d-bcd4-9e9cf7aac4fb",
+  "oracleId": "6b79404b-2fae-41fb-994c-d4cd895e8f09",
+  "set": "ecl",
+  "collectorNumber": "160",
+  "rarity": "uncommon",
+  "manaCost": "{3}{R}",
+  "typeLine": "Creature — Elemental",
+  "oracleText": "Double strike\nVivid — Squawkroaster's power is equal to the number of colors among permanents you control.",
+  "power": "*",
+  "toughness": "4",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Double strike",
+   "Vivid"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/1/4112f960-70af-4e2d-bcd4-9e9cf7aac4fb.jpg?1783904436",
+   "normal": "https://cards.scryfall.io/normal/front/4/1/4112f960-70af-4e2d-bcd4-9e9cf7aac4fb.jpg?1783904436",
+   "large": "https://cards.scryfall.io/large/front/4/1/4112f960-70af-4e2d-bcd4-9e9cf7aac4fb.jpg?1783904436",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/1/4112f960-70af-4e2d-bcd4-9e9cf7aac4fb.jpg?1783904436"
+  }
+ },
+ {
+  "name": "Sting-Slinger",
+  "scryfallId": "386c5f73-fb8f-46c8-ad45-56e2c19b7d1f",
+  "oracleId": "945a4a4d-fdfd-4c39-9975-5b22d17a4e70",
+  "set": "ecl",
+  "collectorNumber": "161",
+  "rarity": "uncommon",
+  "manaCost": "{2}{R}",
+  "typeLine": "Creature — Goblin Warrior",
+  "oracleText": "{1}{R}, {T}, Blight 1: This creature deals 2 damage to each opponent. (To blight 1, put a -1/-1 counter on a creature you control.)",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Blight"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/8/386c5f73-fb8f-46c8-ad45-56e2c19b7d1f.jpg?1783904435",
+   "normal": "https://cards.scryfall.io/normal/front/3/8/386c5f73-fb8f-46c8-ad45-56e2c19b7d1f.jpg?1783904435",
+   "large": "https://cards.scryfall.io/large/front/3/8/386c5f73-fb8f-46c8-ad45-56e2c19b7d1f.jpg?1783904435",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/8/386c5f73-fb8f-46c8-ad45-56e2c19b7d1f.jpg?1783904435"
+  }
+ },
+ {
+  "name": "Tweeze",
+  "scryfallId": "3ceab0e6-1bb8-487d-ab4b-2da8457b970a",
+  "oracleId": "9a294cbd-df18-4ee0-acaa-e31390a7f508",
+  "set": "ecl",
+  "collectorNumber": "162",
+  "rarity": "common",
+  "manaCost": "{2}{R}",
+  "typeLine": "Instant",
+  "oracleText": "Tweeze deals 3 damage to any target. You may discard a card. If you do, draw a card.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/c/3ceab0e6-1bb8-487d-ab4b-2da8457b970a.jpg?1783904435",
+   "normal": "https://cards.scryfall.io/normal/front/3/c/3ceab0e6-1bb8-487d-ab4b-2da8457b970a.jpg?1783904435",
+   "large": "https://cards.scryfall.io/large/front/3/c/3ceab0e6-1bb8-487d-ab4b-2da8457b970a.jpg?1783904435",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/c/3ceab0e6-1bb8-487d-ab4b-2da8457b970a.jpg?1783904435"
+  }
+ },
+ {
+  "name": "Warren Torchmaster",
+  "scryfallId": "8f067a14-6667-4acf-b33d-e1149188a84d",
+  "oracleId": "20c3c8ab-e996-462e-a1f6-87421fc3ee55",
+  "set": "ecl",
+  "collectorNumber": "163",
+  "rarity": "uncommon",
+  "manaCost": "{1}{R}",
+  "typeLine": "Creature — Goblin Warrior",
+  "oracleText": "At the beginning of combat on your turn, you may blight 1. When you do, target creature gains haste until end of turn. (To blight 1, put a -1/-1 counter on a creature you control.)",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Blight"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/f/8f067a14-6667-4acf-b33d-e1149188a84d.jpg?1783904437",
+   "normal": "https://cards.scryfall.io/normal/front/8/f/8f067a14-6667-4acf-b33d-e1149188a84d.jpg?1783904437",
+   "large": "https://cards.scryfall.io/large/front/8/f/8f067a14-6667-4acf-b33d-e1149188a84d.jpg?1783904437",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/f/8f067a14-6667-4acf-b33d-e1149188a84d.jpg?1783904437"
+  }
+ },
+ {
   "name": "Surly Farrier",
   "scryfallId": "056f7f51-18a9-4d80-8928-decaf4d12c0d",
   "oracleId": "ef67c170-68aa-4ada-8cee-261a4dbb1b5d",

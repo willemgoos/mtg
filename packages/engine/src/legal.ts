@@ -32,7 +32,15 @@ import {
   hasConspire,
   hasConvoke,
 } from './ecl-18a.ts';
-import { abilityTags, artifactHelpers, canPayFrom, creatureHelpers, hasImprovise, manaSources } from './mana.ts';
+import {
+  abilityTags,
+  artifactHelpers,
+  canPayFrom,
+  creatureHelpers,
+  hasImprovise,
+  hasRestrictedMana,
+  manaSources,
+} from './mana.ts';
 import { type CastVia, castVariants, spellOnStack, spellTags } from './spells.ts';
 import {
   abilityManaCost,
@@ -426,6 +434,7 @@ function priorityActions(
   const ps = s.players[player];
   const sorcery = !!freeCards || sorceryTiming(ctx, player);
   const sources = manaSources(ctx, player);
+  const restrictedMana = hasRestrictedMana(ctx, player);
 
   // "You may cast (noncreature) spells as though they had flash."
   const flashFilters = s.battlefield.flatMap((id) =>
@@ -904,8 +913,10 @@ function priorityActions(
         if (!(sorcery || instant) || o.onceTurns?.[LOYALTY_KEY] === s.turn.number) return;
         if ((o.counters?.loyalty ?? 0) + a.cost.loyalty < 0) return;
       }
-      const tags = abilityTags(ctx, source);
-      const tagged = tags ? manaSources(ctx, player, undefined, tags) : sources;
+      // Lorwyn Eclipsed (18b, red): restricted mana for abilities of sources of a type (Flamebraider).
+      const tagged = restrictedMana
+        ? manaSources(ctx, player, undefined, abilityTags(ctx, source))
+        : sources;
       const own = a.cost.tapSelf ? tagged.filter((x) => x.id !== source) : tagged;
       // Heirloom Epic: creatures can pay for generic mana.
       const usable = a.cost.convoke
@@ -1361,6 +1372,8 @@ export function getLegalActions(ctx: Ctx, player: PlayerId): Action[] {
                   sacrificeMany,
                   freePay: d.pay,
                   freeLess: d.costLess,
+                  // Lorwyn Eclipsed (18b, red): a free cast of an optional blight (Cinder Strike) is the blighted variant.
+                  blight: typeof v.blight === 'number' ? 'x' : undefined,
                 };
                 const targetsOf = targetCombos(ctx, specs, {
                   controller: player,

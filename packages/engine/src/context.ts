@@ -17,6 +17,7 @@ import { BRAWL_15B_MULTI_EFFECTS } from './brawl-15b-multi-effects.ts';
 import { SOS_14B_D_EFFECTS } from './sos-14b-d-effects.ts';
 import { FRA_RED_EFFECTS } from './fra-red-effects.ts';
 import { ECL_MULTI_A_EFFECTS } from './ecl-multi-a-effects.ts';
+import { ECL_RED_EFFECTS } from './ecl-red-effects.ts';
 import { BRAWL_15B_R_EFFECTS } from './brawl-15b-r-effects.ts';
 import { BRAWL_15A_W_EFFECTS } from './brawl-15a-w-effects.ts';
 import { BRAWL_15B_B_EFFECTS } from './brawl-15b-b-effects.ts';
@@ -143,6 +144,7 @@ const BUILT_IN_EFFECTS: Record<string, CustomEffect> = {
   ...SOS_14B_D_EFFECTS,
   // Reality Fracture (17a): red.
   ...FRA_RED_EFFECTS,
+  ...ECL_RED_EFFECTS, // Lorwyn Eclipsed (18b, red)
   // Strixhaven Brawl (15a), white and colourless.
   ...BRAWL_15A_W_EFFECTS,
   // Strixhaven Brawl (15a): red-white.
@@ -719,6 +721,7 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
   delete o.kicked;
   delete o.wasCast; // Reality Fracture (17a)
   delete o.cantBeCountered; // Reality Fracture (17c): Theorist's Proxy
+  delete o.dreamExile; // Lorwyn Eclipsed (18b, red): Goliath Daydreamer
   if (from === 'battlefield') {
     if (o.counters) o.lastNamedCounters = o.counters;
     else delete o.lastNamedCounters;
