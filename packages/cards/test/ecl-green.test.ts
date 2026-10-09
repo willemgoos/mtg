@@ -701,10 +701,28 @@ describe('Celestial Reunion', () => {
         library: ['serra-angel', 'bear-cub', 'forest'],
       },
     });
-    const x2 = casts(g, 'celestial-reunion').find((a) => !a.kicked && a.x === 2)!;
+    const x2 = casts(g, 'celestial-reunion').find((a) => !a.kicked && a.x === 3)!;
     g.do(x2);
     done(g, { pick: ['bear-cub'] });
     expect(hand(g)).toEqual(['bear-cub']);
+  });
+  it('beholding two Elves, a found Elf enters the battlefield instead', () => {
+    const g = game({
+      p1: {
+        hand: ['celestial-reunion'],
+        battlefield: ['thornweald-archer', 'thornweald-archer', ...n('forest', 4)],
+        library: ['dawns-light-archer', 'forest'],
+      },
+    });
+    const kicked = casts(g, 'celestial-reunion').find((a) => a.kicked && a.x === 3)!;
+    g.do(kicked);
+    // The type (Elf: the only one the two Archers share besides Archer), then the search.
+    expect(g.decision.kind).toBe('beholdType');
+    const types = (g.decision as unknown as { types: string[] }).types;
+    g.do({ type: 'chooseOption', player: 'p1', index: types.indexOf('Elf') });
+    done(g, { pick: ['dawns-light-archer'] });
+    expect(bf(g, 'dawns-light-archer')).toHaveLength(1);
+    expect(hand(g)).toEqual([]);
   });
 });
 
