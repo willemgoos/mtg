@@ -18,7 +18,7 @@ import {
   maxBlockers,
   mustAttack,
 } from './combat.ts';
-import { type Ctx, def, obj, other, withBackFace } from './context.ts';
+import { type Ctx, def, obj, onBattlefield, other, withBackFace } from './context.ts';
 import { forageChoices } from './forage.ts';
 import {
   beholdExileOptions,
@@ -144,7 +144,10 @@ export function castableCards(ctx: Ctx, player: PlayerId): ObjectId[] {
       (obj(ctx, id).castableUntilTurn ?? ctx.s.turn.number) >= ctx.s.turn.number &&
       // Reality Fracture (17a): Null Summoner, only while its threshold holds.
       (!obj(ctx, id).castableIf ||
-        checkCondition(ctx, obj(ctx, id).castableIf, player, obj(ctx, id)))
+        checkCondition(ctx, obj(ctx, id).castableIf, player, obj(ctx, id))) &&
+      // Lorwyn Eclipsed (18b, black): Taster of Wares, for as long as you control the creature.
+      (!obj(ctx, id).castableWhileControlling ||
+        onBattlefield(ctx, obj(ctx, id).castableWhileControlling!)?.controller === player)
     )
       out.push(id);
   // Glarb: lands and big spells from the top of your library.

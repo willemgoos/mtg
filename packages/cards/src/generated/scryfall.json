@@ -77028,6 +77028,884 @@
   }
  },
  {
+  "name": "Barbed Bloodletter",
+  "scryfallId": "8ff1a13c-e338-42e9-8eb3-b303fabd67de",
+  "oracleId": "15febce7-8320-4591-9535-ef11c8adecc2",
+  "set": "ecl",
+  "collectorNumber": "86",
+  "rarity": "common",
+  "manaCost": "{1}{B}",
+  "typeLine": "Artifact — Equipment",
+  "oracleText": "Flash\nWhen this Equipment enters, attach it to target creature you control. That creature gains wither until end of turn. (It deals damage to creatures in the form of -1/-1 counters.)\nEquipped creature gets +1/+2.\nEquip {2}",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Equip",
+   "Flash"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/f/8ff1a13c-e338-42e9-8eb3-b303fabd67de.jpg?1783904474",
+   "normal": "https://cards.scryfall.io/normal/front/8/f/8ff1a13c-e338-42e9-8eb3-b303fabd67de.jpg?1783904474",
+   "large": "https://cards.scryfall.io/large/front/8/f/8ff1a13c-e338-42e9-8eb3-b303fabd67de.jpg?1783904474",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/f/8ff1a13c-e338-42e9-8eb3-b303fabd67de.jpg?1783904474"
+  }
+ },
+ {
+  "name": "Bile-Vial Boggart",
+  "scryfallId": "2c0fcf98-1f3c-4cff-9234-7f3d0c8b22e9",
+  "oracleId": "5a651557-ce08-46ba-aecd-0e4fbfdef3c0",
+  "set": "ecl",
+  "collectorNumber": "87",
+  "rarity": "common",
+  "manaCost": "{B}",
+  "typeLine": "Creature — Goblin Assassin",
+  "oracleText": "When this creature dies, put a -1/-1 counter on up to one target creature.",
+  "power": "1",
+  "toughness": "1",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/c/2c0fcf98-1f3c-4cff-9234-7f3d0c8b22e9.jpg?1783904471",
+   "normal": "https://cards.scryfall.io/normal/front/2/c/2c0fcf98-1f3c-4cff-9234-7f3d0c8b22e9.jpg?1783904471",
+   "large": "https://cards.scryfall.io/large/front/2/c/2c0fcf98-1f3c-4cff-9234-7f3d0c8b22e9.jpg?1783904471",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/c/2c0fcf98-1f3c-4cff-9234-7f3d0c8b22e9.jpg?1783904471"
+  }
+ },
+ {
+  "name": "Bitterbloom Bearer",
+  "scryfallId": "7127164d-f2a3-4d79-b6db-93507ff5ab47",
+  "oracleId": "5effb651-f9e0-4c14-8192-bd0e132b8d5d",
+  "set": "ecl",
+  "collectorNumber": "88",
+  "rarity": "mythic",
+  "manaCost": "{B}{B}",
+  "typeLine": "Creature — Faerie Rogue",
+  "oracleText": "Flash\nFlying\nAt the beginning of your upkeep, you lose 1 life and create a 1/1 blue and black Faerie creature token with flying.",
+  "power": "1",
+  "toughness": "1",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Flying",
+   "Flash"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/1/7127164d-f2a3-4d79-b6db-93507ff5ab47.jpg?1783904470",
+   "normal": "https://cards.scryfall.io/normal/front/7/1/7127164d-f2a3-4d79-b6db-93507ff5ab47.jpg?1783904470",
+   "large": "https://cards.scryfall.io/large/front/7/1/7127164d-f2a3-4d79-b6db-93507ff5ab47.jpg?1783904470",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/1/7127164d-f2a3-4d79-b6db-93507ff5ab47.jpg?1783904470"
+  }
+ },
+ {
+  "name": "Blighted Blackthorn",
+  "scryfallId": "3515531a-45d6-4fe0-96a3-7ca1ce545068",
+  "oracleId": "a294968e-9a7f-4d66-bde0-e775ae5f8197",
+  "set": "ecl",
+  "collectorNumber": "90",
+  "rarity": "common",
+  "manaCost": "{4}{B}",
+  "typeLine": "Creature — Treefolk Warlock",
+  "oracleText": "Whenever this creature enters or attacks, you may blight 2. If you do, you draw a card and lose 1 life. (To blight 2, put two -1/-1 counters on a creature you control.)",
+  "power": "3",
+  "toughness": "7",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Blight"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/5/3515531a-45d6-4fe0-96a3-7ca1ce545068.jpg?1783904473",
+   "normal": "https://cards.scryfall.io/normal/front/3/5/3515531a-45d6-4fe0-96a3-7ca1ce545068.jpg?1783904473",
+   "large": "https://cards.scryfall.io/large/front/3/5/3515531a-45d6-4fe0-96a3-7ca1ce545068.jpg?1783904473",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/5/3515531a-45d6-4fe0-96a3-7ca1ce545068.jpg?1783904473"
+  }
+ },
+ {
+  "name": "Blight Rot",
+  "scryfallId": "5201bdeb-ba47-459b-ac0d-603367914578",
+  "oracleId": "cf5b1cf9-dcd3-44d1-b8b2-338651ebb2a1",
+  "set": "ecl",
+  "collectorNumber": "89",
+  "rarity": "common",
+  "manaCost": "{2}{B}",
+  "typeLine": "Instant",
+  "oracleText": "Put four -1/-1 counters on target creature.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/2/5201bdeb-ba47-459b-ac0d-603367914578.jpg?1783904470",
+   "normal": "https://cards.scryfall.io/normal/front/5/2/5201bdeb-ba47-459b-ac0d-603367914578.jpg?1783904470",
+   "large": "https://cards.scryfall.io/large/front/5/2/5201bdeb-ba47-459b-ac0d-603367914578.jpg?1783904470",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/2/5201bdeb-ba47-459b-ac0d-603367914578.jpg?1783904470"
+  }
+ },
+ {
+  "name": "Bloodline Bidding",
+  "scryfallId": "877d9b75-ad2f-45a6-94d8-68e80d7db789",
+  "oracleId": "bdb9e933-f679-4930-b669-0d123db09d16",
+  "set": "ecl",
+  "collectorNumber": "91",
+  "rarity": "rare",
+  "manaCost": "{6}{B}{B}",
+  "typeLine": "Sorcery",
+  "oracleText": "Convoke (Your creatures can help cast this spell. Each creature you tap while casting this spell pays for {1} or one mana of that creature's color.)\nChoose a creature type. Return all creature cards of the chosen type from your graveyard to the battlefield.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Convoke"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/7/877d9b75-ad2f-45a6-94d8-68e80d7db789.jpg?1783904470",
+   "normal": "https://cards.scryfall.io/normal/front/8/7/877d9b75-ad2f-45a6-94d8-68e80d7db789.jpg?1783904470",
+   "large": "https://cards.scryfall.io/large/front/8/7/877d9b75-ad2f-45a6-94d8-68e80d7db789.jpg?1783904470",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/7/877d9b75-ad2f-45a6-94d8-68e80d7db789.jpg?1783904470"
+  }
+ },
+ {
+  "name": "Boggart Mischief",
+  "scryfallId": "aaeb9c9c-0f15-49dc-ae6d-2a958680f327",
+  "oracleId": "ac65ed8c-abe8-4044-9ce5-70b1370d0e19",
+  "set": "ecl",
+  "collectorNumber": "92",
+  "rarity": "uncommon",
+  "manaCost": "{2}{B}",
+  "typeLine": "Kindred Enchantment — Goblin",
+  "oracleText": "When this enchantment enters, you may blight 1. If you do, create two 1/1 black and red Goblin creature tokens. (To blight 1, put a -1/-1 counter on a creature you control.)\nWhenever a Goblin creature you control dies, each opponent loses 1 life and you gain 1 life.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Blight"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/a/aaeb9c9c-0f15-49dc-ae6d-2a958680f327.jpg?1783904469",
+   "normal": "https://cards.scryfall.io/normal/front/a/a/aaeb9c9c-0f15-49dc-ae6d-2a958680f327.jpg?1783904469",
+   "large": "https://cards.scryfall.io/large/front/a/a/aaeb9c9c-0f15-49dc-ae6d-2a958680f327.jpg?1783904469",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/a/aaeb9c9c-0f15-49dc-ae6d-2a958680f327.jpg?1783904469"
+  }
+ },
+ {
+  "name": "Boggart Prankster",
+  "scryfallId": "eb228ea6-9235-4093-aea7-708e743b1b44",
+  "oracleId": "1bcac664-835a-4474-8ca4-263801bde08e",
+  "set": "ecl",
+  "collectorNumber": "93",
+  "rarity": "common",
+  "manaCost": "{1}{B}",
+  "typeLine": "Creature — Goblin Warrior",
+  "oracleText": "Whenever you attack, target attacking Goblin you control gets +1/+0 until end of turn.",
+  "power": "1",
+  "toughness": "3",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/b/eb228ea6-9235-4093-aea7-708e743b1b44.jpg?1783904468",
+   "normal": "https://cards.scryfall.io/normal/front/e/b/eb228ea6-9235-4093-aea7-708e743b1b44.jpg?1783904468",
+   "large": "https://cards.scryfall.io/large/front/e/b/eb228ea6-9235-4093-aea7-708e743b1b44.jpg?1783904468",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/b/eb228ea6-9235-4093-aea7-708e743b1b44.jpg?1783904468"
+  }
+ },
+ {
+  "name": "Bogslither's Embrace",
+  "scryfallId": "4beca2e7-9c6d-493b-b15f-69e483a8dfff",
+  "oracleId": "21695c70-f746-4d77-b6d3-e2713a5c929e",
+  "set": "ecl",
+  "collectorNumber": "94",
+  "rarity": "common",
+  "manaCost": "{1}{B}",
+  "typeLine": "Sorcery",
+  "oracleText": "As an additional cost to cast this spell, blight 1 or pay {3}. (To blight 1, put a -1/-1 counter on a creature you control.)\nExile target creature.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Blight"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/b/4beca2e7-9c6d-493b-b15f-69e483a8dfff.jpg?1783904471",
+   "normal": "https://cards.scryfall.io/normal/front/4/b/4beca2e7-9c6d-493b-b15f-69e483a8dfff.jpg?1783904471",
+   "large": "https://cards.scryfall.io/large/front/4/b/4beca2e7-9c6d-493b-b15f-69e483a8dfff.jpg?1783904471",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/b/4beca2e7-9c6d-493b-b15f-69e483a8dfff.jpg?1783904471"
+  }
+ },
+ {
+  "name": "Champion of the Weird",
+  "scryfallId": "e600dd01-65ac-489c-a52a-decbc3a9a4f3",
+  "oracleId": "1726f9cd-6f18-4509-b95b-bca82ba795a4",
+  "set": "ecl",
+  "collectorNumber": "95",
+  "rarity": "rare",
+  "manaCost": "{3}{B}",
+  "typeLine": "Creature — Goblin Berserker",
+  "oracleText": "As an additional cost to cast this spell, behold a Goblin and exile it. (Exile a Goblin you control or a Goblin card from your hand.)\nPay 1 life, Blight 2: Target opponent blights 2. Activate only as a sorcery.\nWhen this creature leaves the battlefield, return the exiled card to its owner's hand.",
+  "power": "5",
+  "toughness": "5",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Blight",
+   "Behold"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/6/e600dd01-65ac-489c-a52a-decbc3a9a4f3.jpg?1783904467",
+   "normal": "https://cards.scryfall.io/normal/front/e/6/e600dd01-65ac-489c-a52a-decbc3a9a4f3.jpg?1783904467",
+   "large": "https://cards.scryfall.io/large/front/e/6/e600dd01-65ac-489c-a52a-decbc3a9a4f3.jpg?1783904467",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/6/e600dd01-65ac-489c-a52a-decbc3a9a4f3.jpg?1783904467"
+  }
+ },
+ {
+  "name": "Creakwood Safewright",
+  "scryfallId": "3bcc24cf-776a-4182-bf77-a611ad90b28f",
+  "oracleId": "f9b7bbea-ea20-400b-a5b7-4d6993d8777b",
+  "set": "ecl",
+  "collectorNumber": "96",
+  "rarity": "uncommon",
+  "manaCost": "{1}{B}",
+  "typeLine": "Creature — Elf Warrior",
+  "oracleText": "This creature enters with three -1/-1 counters on it.\nAt the beginning of your end step, if there is an Elf card in your graveyard and this creature has a -1/-1 counter on it, remove a -1/-1 counter from this creature.",
+  "power": "5",
+  "toughness": "5",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/b/3bcc24cf-776a-4182-bf77-a611ad90b28f.jpg?1783904467",
+   "normal": "https://cards.scryfall.io/normal/front/3/b/3bcc24cf-776a-4182-bf77-a611ad90b28f.jpg?1783904467",
+   "large": "https://cards.scryfall.io/large/front/3/b/3bcc24cf-776a-4182-bf77-a611ad90b28f.jpg?1783904467",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/b/3bcc24cf-776a-4182-bf77-a611ad90b28f.jpg?1783904467"
+  }
+ },
+ {
+  "name": "Darkness Descends",
+  "scryfallId": "c8aa3895-df83-4f8e-9e23-1a665614b662",
+  "oracleId": "a3435757-d049-4aaf-a2cb-897dd4940997",
+  "set": "ecl",
+  "collectorNumber": "97",
+  "rarity": "uncommon",
+  "manaCost": "{2}{B}{B}",
+  "typeLine": "Sorcery",
+  "oracleText": "Put two -1/-1 counters on each creature.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/8/c8aa3895-df83-4f8e-9e23-1a665614b662.jpg?1783904480",
+   "normal": "https://cards.scryfall.io/normal/front/c/8/c8aa3895-df83-4f8e-9e23-1a665614b662.jpg?1783904480",
+   "large": "https://cards.scryfall.io/large/front/c/8/c8aa3895-df83-4f8e-9e23-1a665614b662.jpg?1783904480",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/8/c8aa3895-df83-4f8e-9e23-1a665614b662.jpg?1783904480"
+  }
+ },
+ {
+  "name": "Dawnhand Dissident",
+  "scryfallId": "6ac1f765-f348-4813-88dc-26376e0f3f33",
+  "oracleId": "2cabf7a4-17af-45c7-b314-a84f5dc0d070",
+  "set": "ecl",
+  "collectorNumber": "98",
+  "rarity": "rare",
+  "manaCost": "{B}",
+  "typeLine": "Creature — Elf Warlock",
+  "oracleText": "{T}, Blight 1: Surveil 1.\n{T}, Blight 2: Exile target card from a graveyard.\nDuring your turn, you may cast creature spells from among cards you own exiled with this creature by removing three counters from among creatures you control in addition to paying their other costs.",
+  "power": "1",
+  "toughness": "2",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Blight",
+   "Surveil"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/a/6ac1f765-f348-4813-88dc-26376e0f3f33.jpg?1783904467",
+   "normal": "https://cards.scryfall.io/normal/front/6/a/6ac1f765-f348-4813-88dc-26376e0f3f33.jpg?1783904467",
+   "large": "https://cards.scryfall.io/large/front/6/a/6ac1f765-f348-4813-88dc-26376e0f3f33.jpg?1783904467",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/a/6ac1f765-f348-4813-88dc-26376e0f3f33.jpg?1783904467"
+  }
+ },
+ {
+  "name": "Dawnhand Eulogist",
+  "scryfallId": "75a97f69-f3dc-4d33-8008-c1f1a7c15a2f",
+  "oracleId": "57bbd80b-290f-461e-8dc6-26ba4d673fa9",
+  "set": "ecl",
+  "collectorNumber": "99",
+  "rarity": "common",
+  "manaCost": "{3}{B}",
+  "typeLine": "Creature — Elf Warlock",
+  "oracleText": "Menace (This creature can't be blocked except by two or more creatures.)\nWhen this creature enters, mill three cards. Then if there is an Elf card in your graveyard, each opponent loses 2 life and you gain 2 life. (To mill three cards, put the top three cards of your library into your graveyard.)",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Menace",
+   "Mill"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/5/75a97f69-f3dc-4d33-8008-c1f1a7c15a2f.jpg?1783904466",
+   "normal": "https://cards.scryfall.io/normal/front/7/5/75a97f69-f3dc-4d33-8008-c1f1a7c15a2f.jpg?1783904466",
+   "large": "https://cards.scryfall.io/large/front/7/5/75a97f69-f3dc-4d33-8008-c1f1a7c15a2f.jpg?1783904466",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/5/75a97f69-f3dc-4d33-8008-c1f1a7c15a2f.jpg?1783904466"
+  }
+ },
+ {
+  "name": "Dose of Dawnglow",
+  "scryfallId": "47414323-ca30-45b7-a0b2-6668312bee04",
+  "oracleId": "f852bc33-e2f8-43be-9e6e-7badd1f894ef",
+  "set": "ecl",
+  "collectorNumber": "100",
+  "rarity": "uncommon",
+  "manaCost": "{4}{B}",
+  "typeLine": "Instant",
+  "oracleText": "Return target creature card from your graveyard to the battlefield. Then if it isn't your main phase, blight 2. (Put two -1/-1 counters on a creature you control.)",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Blight"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/7/47414323-ca30-45b7-a0b2-6668312bee04.jpg?1783904465",
+   "normal": "https://cards.scryfall.io/normal/front/4/7/47414323-ca30-45b7-a0b2-6668312bee04.jpg?1783904465",
+   "large": "https://cards.scryfall.io/large/front/4/7/47414323-ca30-45b7-a0b2-6668312bee04.jpg?1783904465",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/7/47414323-ca30-45b7-a0b2-6668312bee04.jpg?1783904465"
+  }
+ },
+ {
+  "name": "Dream Seizer",
+  "scryfallId": "3573f425-9251-4c17-9619-15278ce5d8fb",
+  "oracleId": "c7e4bc5d-e1d9-4fbc-8d53-0cec73086828",
+  "set": "ecl",
+  "collectorNumber": "101",
+  "rarity": "common",
+  "manaCost": "{3}{B}",
+  "typeLine": "Creature — Faerie Rogue",
+  "oracleText": "Flying\nWhen this creature enters, you may blight 1. If you do, each opponent discards a card. (To blight 1, put a -1/-1 counter on a creature you control.)",
+  "power": "3",
+  "toughness": "2",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Blight",
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/5/3573f425-9251-4c17-9619-15278ce5d8fb.jpg?1783904466",
+   "normal": "https://cards.scryfall.io/normal/front/3/5/3573f425-9251-4c17-9619-15278ce5d8fb.jpg?1783904466",
+   "large": "https://cards.scryfall.io/large/front/3/5/3573f425-9251-4c17-9619-15278ce5d8fb.jpg?1783904466",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/5/3573f425-9251-4c17-9619-15278ce5d8fb.jpg?1783904466"
+  }
+ },
+ {
+  "name": "Gloom Ripper",
+  "scryfallId": "e9ee5d4f-05d1-4e3a-b8d6-f22d0fddedf7",
+  "oracleId": "78e1beca-840d-47b2-8759-cc31454fdf5a",
+  "set": "ecl",
+  "collectorNumber": "102",
+  "rarity": "rare",
+  "manaCost": "{3}{B}{B}",
+  "typeLine": "Creature — Elf Assassin",
+  "oracleText": "When this creature enters, target creature you control gets +X/+0 until end of turn and up to one target creature an opponent controls gets -0/-X until end of turn, where X is the number of Elves you control plus the number of Elf cards in your graveyard.",
+  "power": "4",
+  "toughness": "4",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/9/e9ee5d4f-05d1-4e3a-b8d6-f22d0fddedf7.jpg?1783904462",
+   "normal": "https://cards.scryfall.io/normal/front/e/9/e9ee5d4f-05d1-4e3a-b8d6-f22d0fddedf7.jpg?1783904462",
+   "large": "https://cards.scryfall.io/large/front/e/9/e9ee5d4f-05d1-4e3a-b8d6-f22d0fddedf7.jpg?1783904462",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/9/e9ee5d4f-05d1-4e3a-b8d6-f22d0fddedf7.jpg?1783904462"
+  }
+ },
+ {
+  "name": "Gnarlbark Elm",
+  "scryfallId": "1e9d65b6-22ff-49f2-8b2a-aeaef91088d3",
+  "oracleId": "a848ea46-347d-49c7-85c8-023cf836d0b3",
+  "set": "ecl",
+  "collectorNumber": "103",
+  "rarity": "uncommon",
+  "manaCost": "{2}{B}",
+  "typeLine": "Creature — Treefolk Warlock",
+  "oracleText": "This creature enters with two -1/-1 counters on it.\n{2}{B}, Remove two counters from this creature: Target creature gets -2/-2 until end of turn. Activate only as a sorcery.",
+  "power": "3",
+  "toughness": "4",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/e/1e9d65b6-22ff-49f2-8b2a-aeaef91088d3.jpg?1783904463",
+   "normal": "https://cards.scryfall.io/normal/front/1/e/1e9d65b6-22ff-49f2-8b2a-aeaef91088d3.jpg?1783904463",
+   "large": "https://cards.scryfall.io/large/front/1/e/1e9d65b6-22ff-49f2-8b2a-aeaef91088d3.jpg?1783904463",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/e/1e9d65b6-22ff-49f2-8b2a-aeaef91088d3.jpg?1783904463"
+  }
+ },
+ {
+  "name": "Graveshifter",
+  "scryfallId": "128c516b-7eb1-4f81-8b54-428bd0649d92",
+  "oracleId": "1eebc02a-9a64-49b0-8322-c5ce671457ce",
+  "set": "mh1",
+  "collectorNumber": "94",
+  "rarity": "uncommon",
+  "manaCost": "{3}{B}",
+  "typeLine": "Creature — Shapeshifter",
+  "oracleText": "Changeling (This card is every creature type.)\nWhen this creature enters, you may return target creature card from your graveyard to your hand.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Changeling"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/2/128c516b-7eb1-4f81-8b54-428bd0649d92.jpg?1783933125",
+   "normal": "https://cards.scryfall.io/normal/front/1/2/128c516b-7eb1-4f81-8b54-428bd0649d92.jpg?1783933125",
+   "large": "https://cards.scryfall.io/large/front/1/2/128c516b-7eb1-4f81-8b54-428bd0649d92.jpg?1783933125",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/2/128c516b-7eb1-4f81-8b54-428bd0649d92.jpg?1783933125"
+  }
+ },
+ {
+  "name": "Gutsplitter Gang",
+  "scryfallId": "9ff74349-693d-4373-a194-9796316dd1f1",
+  "oracleId": "322c1c8f-ef8a-4a9f-b9ce-927720bad1d6",
+  "set": "ecl",
+  "collectorNumber": "106",
+  "rarity": "uncommon",
+  "manaCost": "{3}{B}",
+  "typeLine": "Creature — Goblin Berserker",
+  "oracleText": "At the beginning of your first main phase, you may blight 2. If you don't, you lose 3 life. (To blight 2, put two -1/-1 counters on a creature you control.)",
+  "power": "6",
+  "toughness": "6",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Blight"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/f/9ff74349-693d-4373-a194-9796316dd1f1.jpg?1783904462",
+   "normal": "https://cards.scryfall.io/normal/front/9/f/9ff74349-693d-4373-a194-9796316dd1f1.jpg?1783904462",
+   "large": "https://cards.scryfall.io/large/front/9/f/9ff74349-693d-4373-a194-9796316dd1f1.jpg?1783904462",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/f/9ff74349-693d-4373-a194-9796316dd1f1.jpg?1783904462"
+  }
+ },
+ {
+  "name": "Heirloom Auntie",
+  "scryfallId": "cac251b2-d2cc-45b6-9ca8-678e0eab56ea",
+  "oracleId": "cc9523da-f48e-49ab-9989-a4031dafb426",
+  "set": "ecl",
+  "collectorNumber": "107",
+  "rarity": "common",
+  "manaCost": "{2}{B}",
+  "typeLine": "Creature — Goblin Warlock",
+  "oracleText": "This creature enters with two -1/-1 counters on it.\nWhenever another creature you control dies, surveil 1, then remove a -1/-1 counter from this creature. (To surveil 1, look at the top card of your library. You may put it into your graveyard.)",
+  "power": "4",
+  "toughness": "4",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Surveil"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/a/cac251b2-d2cc-45b6-9ca8-678e0eab56ea.jpg?1783904466",
+   "normal": "https://cards.scryfall.io/normal/front/c/a/cac251b2-d2cc-45b6-9ca8-678e0eab56ea.jpg?1783904466",
+   "large": "https://cards.scryfall.io/large/front/c/a/cac251b2-d2cc-45b6-9ca8-678e0eab56ea.jpg?1783904466",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/a/cac251b2-d2cc-45b6-9ca8-678e0eab56ea.jpg?1783904466"
+  }
+ },
+ {
+  "name": "Iron-Shield Elf",
+  "scryfallId": "9e0140b2-0185-4adb-b365-2611ce89a0e2",
+  "oracleId": "1c77b4da-b580-4ce9-b127-76de674f5694",
+  "set": "ecl",
+  "collectorNumber": "108",
+  "rarity": "uncommon",
+  "manaCost": "{1}{B}",
+  "typeLine": "Creature — Elf Warrior",
+  "oracleText": "Discard a card: This creature gains indestructible until end of turn. Tap it. (Damage and effects that say \"destroy\" don't destroy it. If its toughness is 0 or less, it still dies.)",
+  "power": "3",
+  "toughness": "1",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/e/9e0140b2-0185-4adb-b365-2611ce89a0e2.jpg?1783904461",
+   "normal": "https://cards.scryfall.io/normal/front/9/e/9e0140b2-0185-4adb-b365-2611ce89a0e2.jpg?1783904461",
+   "large": "https://cards.scryfall.io/large/front/9/e/9e0140b2-0185-4adb-b365-2611ce89a0e2.jpg?1783904461",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/e/9e0140b2-0185-4adb-b365-2611ce89a0e2.jpg?1783904461"
+  }
+ },
+ {
+  "name": "Moonglove Extractor",
+  "scryfallId": "8383e0ab-81b4-4a6b-b87b-dd9180dca1c2",
+  "oracleId": "980affa7-6308-4acd-af64-f804e574a89b",
+  "set": "ecl",
+  "collectorNumber": "109",
+  "rarity": "common",
+  "manaCost": "{2}{B}",
+  "typeLine": "Creature — Elf Warlock",
+  "oracleText": "Whenever this creature attacks, you draw a card and lose 1 life.",
+  "power": "2",
+  "toughness": "1",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/3/8383e0ab-81b4-4a6b-b87b-dd9180dca1c2.jpg?1783904463",
+   "normal": "https://cards.scryfall.io/normal/front/8/3/8383e0ab-81b4-4a6b-b87b-dd9180dca1c2.jpg?1783904463",
+   "large": "https://cards.scryfall.io/large/front/8/3/8383e0ab-81b4-4a6b-b87b-dd9180dca1c2.jpg?1783904463",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/3/8383e0ab-81b4-4a6b-b87b-dd9180dca1c2.jpg?1783904463"
+  }
+ },
+ {
+  "name": "Moonshadow",
+  "scryfallId": "2573e694-eaa0-42ca-b470-2ab507cbcec1",
+  "oracleId": "a3635b3f-839c-4fe5-83a5-7c70e8630184",
+  "set": "ecl",
+  "collectorNumber": "110",
+  "rarity": "mythic",
+  "manaCost": "{B}",
+  "typeLine": "Creature — Elemental",
+  "oracleText": "Menace\nThis creature enters with six -1/-1 counters on it.\nWhenever one or more permanent cards are put into your graveyard from anywhere while this creature has a -1/-1 counter on it, remove a -1/-1 counter from this creature.",
+  "power": "7",
+  "toughness": "7",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Menace"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/5/2573e694-eaa0-42ca-b470-2ab507cbcec1.jpg?1783904461",
+   "normal": "https://cards.scryfall.io/normal/front/2/5/2573e694-eaa0-42ca-b470-2ab507cbcec1.jpg?1783904461",
+   "large": "https://cards.scryfall.io/large/front/2/5/2573e694-eaa0-42ca-b470-2ab507cbcec1.jpg?1783904461",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/5/2573e694-eaa0-42ca-b470-2ab507cbcec1.jpg?1783904461"
+  }
+ },
+ {
+  "name": "Mornsong Aria",
+  "scryfallId": "9985c554-8338-46b1-ac36-526d2eb61570",
+  "oracleId": "8ca2f668-2a4d-4a1e-abcc-093ccbc29295",
+  "set": "ecl",
+  "collectorNumber": "111",
+  "rarity": "rare",
+  "manaCost": "{1}{B}{B}",
+  "typeLine": "Legendary Enchantment",
+  "oracleText": "Players can't draw cards or gain life.\nAt the beginning of each player's draw step, that player loses 3 life, searches their library for a card, puts it into their hand, then shuffles.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/9/9985c554-8338-46b1-ac36-526d2eb61570.jpg?1783904462",
+   "normal": "https://cards.scryfall.io/normal/front/9/9/9985c554-8338-46b1-ac36-526d2eb61570.jpg?1783904462",
+   "large": "https://cards.scryfall.io/large/front/9/9/9985c554-8338-46b1-ac36-526d2eb61570.jpg?1783904462",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/9/9985c554-8338-46b1-ac36-526d2eb61570.jpg?1783904462"
+  }
+ },
+ {
+  "name": "Mudbutton Cursetosser",
+  "scryfallId": "35bc841a-9a21-4c17-a60a-a3ee01472fcb",
+  "oracleId": "b63e5518-61f3-4cde-a799-5f3ee6aba70b",
+  "set": "ecl",
+  "collectorNumber": "112",
+  "rarity": "uncommon",
+  "manaCost": "{B}",
+  "typeLine": "Creature — Goblin Warlock",
+  "oracleText": "As an additional cost to cast this spell, behold a Goblin or pay {2}. (To behold a Goblin, choose a Goblin you control or reveal a Goblin card from your hand.)\nThis creature can't block.\nWhen this creature dies, destroy target creature an opponent controls with power 2 or less.",
+  "power": "2",
+  "toughness": "1",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Behold"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/5/35bc841a-9a21-4c17-a60a-a3ee01472fcb.jpg?1783904459",
+   "normal": "https://cards.scryfall.io/normal/front/3/5/35bc841a-9a21-4c17-a60a-a3ee01472fcb.jpg?1783904459",
+   "large": "https://cards.scryfall.io/large/front/3/5/35bc841a-9a21-4c17-a60a-a3ee01472fcb.jpg?1783904459",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/5/35bc841a-9a21-4c17-a60a-a3ee01472fcb.jpg?1783904459"
+  }
+ },
+ {
+  "name": "Nameless Inversion",
+  "scryfallId": "7a4944ac-839e-4aa1-8200-78cff36bb2ed",
+  "oracleId": "d6911456-42cb-4b23-a560-dc98784530f5",
+  "set": "ecl",
+  "collectorNumber": "113",
+  "rarity": "uncommon",
+  "manaCost": "{1}{B}",
+  "typeLine": "Kindred Instant — Shapeshifter",
+  "oracleText": "Changeling (This card is every creature type.)\nTarget creature gets +3/-3 and loses all creature types until end of turn.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Changeling"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/a/7a4944ac-839e-4aa1-8200-78cff36bb2ed.jpg?1783904457",
+   "normal": "https://cards.scryfall.io/normal/front/7/a/7a4944ac-839e-4aa1-8200-78cff36bb2ed.jpg?1783904457",
+   "large": "https://cards.scryfall.io/large/front/7/a/7a4944ac-839e-4aa1-8200-78cff36bb2ed.jpg?1783904457",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/a/7a4944ac-839e-4aa1-8200-78cff36bb2ed.jpg?1783904457"
+  }
+ },
+ {
+  "name": "Nightmare Sower",
+  "scryfallId": "35dfa0f9-faf3-4a85-b02d-0c5830783511",
+  "oracleId": "4121b7d9-5fbe-40e2-a2a6-d7633f423b5f",
+  "set": "ecl",
+  "collectorNumber": "114",
+  "rarity": "uncommon",
+  "manaCost": "{3}{B}",
+  "typeLine": "Creature — Faerie Assassin",
+  "oracleText": "Flying, lifelink\nWhenever you cast a spell during an opponent's turn, put a -1/-1 counter on up to one target creature.",
+  "power": "2",
+  "toughness": "3",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Flying",
+   "Lifelink"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/5/35dfa0f9-faf3-4a85-b02d-0c5830783511.jpg?1783904456",
+   "normal": "https://cards.scryfall.io/normal/front/3/5/35dfa0f9-faf3-4a85-b02d-0c5830783511.jpg?1783904456",
+   "large": "https://cards.scryfall.io/large/front/3/5/35dfa0f9-faf3-4a85-b02d-0c5830783511.jpg?1783904456",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/5/35dfa0f9-faf3-4a85-b02d-0c5830783511.jpg?1783904456"
+  }
+ },
+ {
+  "name": "Perfect Intimidation",
+  "scryfallId": "ff05b7f4-e0d0-4304-99b3-66ac804129fe",
+  "oracleId": "da099c34-74b2-4db8-8583-09bf2c56606f",
+  "set": "ecl",
+  "collectorNumber": "115",
+  "rarity": "uncommon",
+  "manaCost": "{3}{B}",
+  "typeLine": "Sorcery",
+  "oracleText": "Choose one or both —\n• Target opponent exiles two cards from their hand.\n• Remove all counters from target creature.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/f/ff05b7f4-e0d0-4304-99b3-66ac804129fe.jpg?1783904458",
+   "normal": "https://cards.scryfall.io/normal/front/f/f/ff05b7f4-e0d0-4304-99b3-66ac804129fe.jpg?1783904458",
+   "large": "https://cards.scryfall.io/large/front/f/f/ff05b7f4-e0d0-4304-99b3-66ac804129fe.jpg?1783904458",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/f/ff05b7f4-e0d0-4304-99b3-66ac804129fe.jpg?1783904458"
+  }
+ },
+ {
+  "name": "Requiting Hex",
+  "scryfallId": "f21b0fb7-91b6-403f-a81a-562665961276",
+  "oracleId": "eda16b31-33db-4ad2-901a-80fbe6273733",
+  "set": "ecl",
+  "collectorNumber": "116",
+  "rarity": "uncommon",
+  "manaCost": "{B}",
+  "typeLine": "Instant",
+  "oracleText": "As an additional cost to cast this spell, you may blight 1. (You may put a -1/-1 counter on a creature you control.)\nDestroy target creature with mana value 2 or less. If this spell's additional cost was paid, you gain 2 life.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Blight"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/2/f21b0fb7-91b6-403f-a81a-562665961276.jpg?1783904457",
+   "normal": "https://cards.scryfall.io/normal/front/f/2/f21b0fb7-91b6-403f-a81a-562665961276.jpg?1783904457",
+   "large": "https://cards.scryfall.io/large/front/f/2/f21b0fb7-91b6-403f-a81a-562665961276.jpg?1783904457",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/2/f21b0fb7-91b6-403f-a81a-562665961276.jpg?1783904457"
+  }
+ },
+ {
+  "name": "Retched Wretch",
+  "scryfallId": "c7a4d7f1-976a-4a28-97a9-ff089a241c9d",
+  "oracleId": "0d3b6e27-2f8b-42e0-9490-7b134e84bb6b",
+  "set": "ecl",
+  "collectorNumber": "117",
+  "rarity": "uncommon",
+  "manaCost": "{2}{B}",
+  "typeLine": "Creature — Goblin",
+  "oracleText": "When this creature dies, if it had a -1/-1 counter on it, return it to the battlefield under its owner's control and it loses all abilities.",
+  "power": "4",
+  "toughness": "2",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/7/c7a4d7f1-976a-4a28-97a9-ff089a241c9d.jpg?1783904456",
+   "normal": "https://cards.scryfall.io/normal/front/c/7/c7a4d7f1-976a-4a28-97a9-ff089a241c9d.jpg?1783904456",
+   "large": "https://cards.scryfall.io/large/front/c/7/c7a4d7f1-976a-4a28-97a9-ff089a241c9d.jpg?1783904456",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/7/c7a4d7f1-976a-4a28-97a9-ff089a241c9d.jpg?1783904456"
+  }
+ },
+ {
+  "name": "Scarblade Scout",
+  "scryfallId": "c2412fea-4591-4345-913f-edc2da9ad975",
+  "oracleId": "f6758e8f-5462-48a7-96d3-60d07b1563fc",
+  "set": "ecl",
+  "collectorNumber": "118",
+  "rarity": "common",
+  "manaCost": "{1}{B}",
+  "typeLine": "Creature — Elf Scout",
+  "oracleText": "Lifelink\nWhen this creature enters, mill two cards. (Put the top two cards of your library into your graveyard.)",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Lifelink",
+   "Mill"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/2/c2412fea-4591-4345-913f-edc2da9ad975.jpg?1783904456",
+   "normal": "https://cards.scryfall.io/normal/front/c/2/c2412fea-4591-4345-913f-edc2da9ad975.jpg?1783904456",
+   "large": "https://cards.scryfall.io/large/front/c/2/c2412fea-4591-4345-913f-edc2da9ad975.jpg?1783904456",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/2/c2412fea-4591-4345-913f-edc2da9ad975.jpg?1783904456"
+  }
+ },
+ {
+  "name": "Scarblade's Malice",
+  "scryfallId": "aea9b5c0-3b32-44be-9773-566b9daafa6b",
+  "oracleId": "66d57851-2844-4b9d-be78-e90fc620b750",
+  "set": "ecl",
+  "collectorNumber": "119",
+  "rarity": "common",
+  "manaCost": "{B}",
+  "typeLine": "Instant",
+  "oracleText": "Target creature you control gains deathtouch and lifelink until end of turn. When that creature dies this turn, create a 2/2 black and green Elf creature token.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/e/aea9b5c0-3b32-44be-9773-566b9daafa6b.jpg?1783904455",
+   "normal": "https://cards.scryfall.io/normal/front/a/e/aea9b5c0-3b32-44be-9773-566b9daafa6b.jpg?1783904455",
+   "large": "https://cards.scryfall.io/large/front/a/e/aea9b5c0-3b32-44be-9773-566b9daafa6b.jpg?1783904455",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/e/aea9b5c0-3b32-44be-9773-566b9daafa6b.jpg?1783904455"
+  }
+ },
+ {
+  "name": "Shimmercreep",
+  "scryfallId": "f7c02899-5f0f-4b38-bbbc-fbc8c46419a6",
+  "oracleId": "52244c23-7680-4bed-8ef8-8d10e289d3f7",
+  "set": "ecl",
+  "collectorNumber": "120",
+  "rarity": "uncommon",
+  "manaCost": "{4}{B}",
+  "typeLine": "Creature — Elemental",
+  "oracleText": "Menace (This creature can't be blocked except by two or more creatures.)\nVivid — When this creature enters, each opponent loses X life and you gain X life, where X is the number of colors among permanents you control.",
+  "power": "3",
+  "toughness": "5",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Menace",
+   "Vivid"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/7/f7c02899-5f0f-4b38-bbbc-fbc8c46419a6.jpg?1783904454",
+   "normal": "https://cards.scryfall.io/normal/front/f/7/f7c02899-5f0f-4b38-bbbc-fbc8c46419a6.jpg?1783904454",
+   "large": "https://cards.scryfall.io/large/front/f/7/f7c02899-5f0f-4b38-bbbc-fbc8c46419a6.jpg?1783904454",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/7/f7c02899-5f0f-4b38-bbbc-fbc8c46419a6.jpg?1783904454"
+  }
+ },
+ {
+  "name": "Taster of Wares",
+  "scryfallId": "bc0b64b6-8984-431c-8a2f-84402b429e2b",
+  "oracleId": "020aae46-cdba-4c37-9c54-283727c09994",
+  "set": "ecl",
+  "collectorNumber": "121",
+  "rarity": "rare",
+  "manaCost": "{2}{B}",
+  "typeLine": "Creature — Goblin Warlock",
+  "oracleText": "When this creature enters, target opponent reveals X cards from their hand, where X is the number of Goblins you control. You choose one of those cards. That player exiles it. If an instant or sorcery card is exiled this way, you may cast it for as long as you control this creature, and mana of any type can be spent to cast that spell.",
+  "power": "3",
+  "toughness": "2",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/c/bc0b64b6-8984-431c-8a2f-84402b429e2b.jpg?1783904460",
+   "normal": "https://cards.scryfall.io/normal/front/b/c/bc0b64b6-8984-431c-8a2f-84402b429e2b.jpg?1783904460",
+   "large": "https://cards.scryfall.io/large/front/b/c/bc0b64b6-8984-431c-8a2f-84402b429e2b.jpg?1783904460",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/c/bc0b64b6-8984-431c-8a2f-84402b429e2b.jpg?1783904460"
+  }
+ },
+ {
+  "name": "Twilight Diviner",
+  "scryfallId": "443b6f30-1493-4d48-93d9-a91e22a7ebb3",
+  "oracleId": "05d7222b-cc08-4f1f-8e35-6058599572ba",
+  "set": "ecl",
+  "collectorNumber": "122",
+  "rarity": "rare",
+  "manaCost": "{2}{B}",
+  "typeLine": "Creature — Elf Cleric",
+  "oracleText": "When this creature enters, surveil 2. (Look at the top two cards of your library, then put any number of them into your graveyard and the rest on top of your library in any order.)\nWhenever one or more other creatures you control enter, if they entered or were cast from a graveyard, create a token that's a copy of one of them. This ability triggers only once each turn.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Surveil"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/4/443b6f30-1493-4d48-93d9-a91e22a7ebb3.jpg?1783904455",
+   "normal": "https://cards.scryfall.io/normal/front/4/4/443b6f30-1493-4d48-93d9-a91e22a7ebb3.jpg?1783904455",
+   "large": "https://cards.scryfall.io/large/front/4/4/443b6f30-1493-4d48-93d9-a91e22a7ebb3.jpg?1783904455",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/4/443b6f30-1493-4d48-93d9-a91e22a7ebb3.jpg?1783904455"
+  }
+ },
+ {
+  "name": "Unbury",
+  "scryfallId": "b00766db-4109-4225-a62a-fa12fd526970",
+  "oracleId": "e2928d3c-b64a-443e-a1c1-fd204bb098ba",
+  "set": "ecl",
+  "collectorNumber": "123",
+  "rarity": "uncommon",
+  "manaCost": "{1}{B}",
+  "typeLine": "Instant",
+  "oracleText": "Choose one —\n• Return target creature card from your graveyard to your hand.\n• Return two target creature cards that share a creature type from your graveyard to your hand.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/0/b00766db-4109-4225-a62a-fa12fd526970.jpg?1783904454",
+   "normal": "https://cards.scryfall.io/normal/front/b/0/b00766db-4109-4225-a62a-fa12fd526970.jpg?1783904454",
+   "large": "https://cards.scryfall.io/large/front/b/0/b00766db-4109-4225-a62a-fa12fd526970.jpg?1783904454",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/0/b00766db-4109-4225-a62a-fa12fd526970.jpg?1783904454"
+  }
+ },
+ {
   "name": "Surly Farrier",
   "scryfallId": "056f7f51-18a9-4d80-8928-decaf4d12c0d",
   "oracleId": "ef67c170-68aa-4ada-8cee-261a4dbb1b5d",

@@ -2,7 +2,14 @@ import { planeswalkersHexproof } from './brawl-15a-w-effects.ts';
 import { ignoresHexproofAndWard } from './brawl-15b-b-effects.ts';
 import { landsHaveHexproof } from './fra-green-effects.ts';
 import { protectedFrom } from './brawl-15b-w-effects.ts';
-import { cardMatches, hasKeyword, isCreature, matchesFilter } from './characteristics.ts';
+import {
+  cardMatches,
+  hasKeyword,
+  hasSubtype,
+  isCreature,
+  matchesFilter,
+  subtypesOf,
+} from './characteristics.ts';
 import { type Ctx, def, defOf, deref, obj, other, refOf } from './context.ts';
 import { manaValue } from './cost.ts';
 import { fromCreatureSource } from './msh-analyzed.ts';
@@ -187,16 +194,20 @@ export function targetCombos(
     // they are different instances of "target" (rule 115.3).
     const from = spec.modeStart ?? 0;
     for (const c of combos)
-      for (const t of cands)
+      for (const t of cands) {
         if (
-          !c.some(
+          c.some(
             (x, i) =>
               i >= from &&
               same(x, t) &&
               !(spec.ofMode !== undefined && specs[i]?.ofMode !== undefined && specs[i]!.ofMode !== spec.ofMode),
           )
         )
-          next.push([...c, t]);
+          continue;
+        // Lorwyn Eclipsed (18b, black): Unbury, two creature cards that share a creature type (each pair once).
+        if (spec.sharesCreatureTypeWithPrevious && !sharesTypeWithLast(ctx, c, t)) continue;
+        next.push([...c, t]);
+      }
     combos = next;
     if (combos.length === 0) break;
   }
@@ -269,4 +280,22 @@ export function youHaveHexproof(ctx: Ctx, p: PlayerId): boolean {
         checkCondition(ctx, a.effect.condition, p, o),
     );
   });
+}
+
+/**
+ * Lorwyn Eclipsed (18b, black): Unbury, "two target creature cards that share a creature type". `t` is a later card than the
+ * one chosen just before it (so each pair is listed once) and the two share a creature type (a changeling shares with any
+ * creature card).
+ */
+function sharesTypeWithLast(ctx: Ctx, chosen: readonly TargetChoice[], t: TargetChoice): boolean {
+  const last = chosen[chosen.length - 1];
+  if (!last || !('object' in last) || !('object' in t)) return false;
+  if (t.object.id <= last.object.id) return false;
+  return sharesCreatureType(ctx, last.object.id, t.object.id);
+}
+
+export function sharesCreatureType(ctx: Ctx, a: ObjectId, b: ObjectId): boolean {
+  if (def(ctx, a).keywords.includes('changeling') || def(ctx, b).keywords.includes('changeling'))
+    return true;
+  return subtypesOf(ctx, a).some((st) => hasSubtype(ctx, b, st));
 }

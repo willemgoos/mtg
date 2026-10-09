@@ -2,6 +2,8 @@ import { characteristics, countOf } from './characteristics.ts';
 import { MSH_EFFECTS } from './msh-effects.ts';
 // Reality Fracture (17a): black
 import { FRA_BLACK_EFFECTS } from './fra-black-effects.ts';
+// Lorwyn Eclipsed (18b, black)
+import { ECL_BLACK_EFFECTS, drawPrevented } from './ecl-black-effects.ts';
 import { FIN_EFFECTS } from './fin-effects.ts';
 import { FRA_COLORLESS_EFFECTS } from './fra-colorless-effects.ts';
 import { LOREHOLD_EFFECTS } from './stx-lorehold-effects.ts';
@@ -108,6 +110,7 @@ const BUILT_IN_EFFECTS: Record<string, CustomEffect> = {
   ...MSH_EFFECTS,
   // Reality Fracture (17a): black.
   ...FRA_BLACK_EFFECTS,
+  ...ECL_BLACK_EFFECTS, // Lorwyn Eclipsed (18b, black)
   // Reality Fracture (17a, colorless).
   ...FRA_COLORLESS_EFFECTS,
   // Final Fantasy (11a).
@@ -762,6 +765,7 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
   if (from === 'exile') {
     delete o.castableBy;
     delete o.castableIf; // Reality Fracture (17a)
+    delete o.castableWhileControlling; // Lorwyn Eclipsed (18b, black)
     delete o.castableUntilTurn;
     delete o.anyMana;
     // Marvel Super Heroes Jumpstart (Analyzed): Victor Mancha's permission ends too.
@@ -1109,6 +1113,8 @@ export function removeFromCombat(ctx: Ctx, id: ObjectId): void {
 }
 
 export function drawCard(ctx: Ctx, player: PlayerId, drawStepDraw = false): void {
+  // Lorwyn Eclipsed (18b, black): Mornsong Aria, "players can't draw cards".
+  if (drawPrevented(ctx)) return;
   // Marvel Super Heroes Jumpstart (Geniuses): Reed Richards, "the first time you would draw a card
   // each turn except the first card you draw during each of your draw steps, you draw four instead".
   if (!drawStepDraw && ctx.s.turn.number > 0 && !ctx.s.turn.extraDrawSeen?.includes(player)) {

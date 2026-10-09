@@ -667,6 +667,17 @@ function detect(ctx: Ctx, ev: GameEvent): void {
       // graveyard from anywhere, counted per batch ("that many": Voracious Brood).
       if (ev.to === 'graveyard' && moved && !moved.isToken && movedDef.types.includes('Creature'))
         creatureCardToGraveyard(ctx, moved.owner);
+      // Lorwyn Eclipsed (18b, black): Moonshadow, permanent cards (not tokens) put into your graveyard from anywhere.
+      if (
+        ev.to === 'graveyard' &&
+        moved &&
+        !moved.isToken &&
+        movedDef.types.some((t) => t !== 'Instant' && t !== 'Sorcery')
+      )
+        forEachBattlefieldTrigger(
+          ctx,
+          (o, a) => a.trigger.on === 'permanentCardsToYourGraveyard' && o.controller === moved.owner,
+        );
       if (ev.to === 'battlefield' && moved && moved.zone === 'battlefield') {
         // A Saga enters with its first lore counter.
         if (movedDef.saga) addLore(ctx, moved.id);
@@ -683,6 +694,20 @@ function detect(ctx: Ctx, ev: GameEvent): void {
         const before = s.pendingTriggers.length;
         // Reality Fracture (17a): Karn, Argent Defender: artifacts and creatures entering don't cause abilities to trigger.
         const suppressed = etbSuppressed(ctx, movedDef);
+        // Lorwyn Eclipsed (18b, black): Twilight Diviner, a creature that entered from a graveyard or was cast from one.
+        if (
+          isCreature &&
+          !suppressed &&
+          (ev.from === 'graveyard' || (ev.from === 'stack' && moved.castFromGraveyardZone))
+        )
+          forEachBattlefieldTrigger(
+            ctx,
+            (o, a) =>
+              a.trigger.on === 'creaturesEnterFromOrCastFromGraveyard' &&
+              o.id !== moved.id &&
+              o.controller === moved.controller,
+            moved,
+          );
         forEachBattlefieldTrigger(
           ctx,
           (o, a) => {
@@ -2077,7 +2102,8 @@ function detect(ctx: Ctx, ev: GameEvent): void {
             // Reality Fracture (17c): The Theorist, Jace Beleren: each opponent's draw step.
             (a.trigger.whose === 'opponents'
               ? o.controller !== ev.activePlayer
-              : o.controller === ev.activePlayer),
+              : // Lorwyn Eclipsed (18b, black): Mornsong Aria, each player's draw step.
+                a.trigger.whose === 'each' || o.controller === ev.activePlayer),
         );
         return;
       }

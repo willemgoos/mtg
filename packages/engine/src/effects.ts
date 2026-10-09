@@ -1753,8 +1753,13 @@ export function runEffects(
       } else if (e.kind === 'chooseFromOpponentHand') {
         const from = other(controller);
         let options = ctx.s.players[from].hand.filter(
-          (id) => !e.filter || cardMatches(ctx, id, e.filter),
+          (id) =>
+            (!e.filter || cardMatches(ctx, id, e.filter)) &&
+            // Lorwyn Eclipsed (18b, black): Taster of Wares, only the cards the opponent revealed.
+            (!e.among || e.among.includes(id)),
         );
+        // Taster of Wares: nothing revealed, nothing to choose.
+        if (e.among && options.length === 0) continue;
         // Klaw: they reveal only some cards (picked for them: the cheapest), and you choose among those.
         if (e.reveal !== undefined)
           options = [...options]
@@ -1768,6 +1773,10 @@ export function runEffects(
           then: e.then,
           ...(e.castable ? { castable: true } : {}),
           ...(e.castableIf ? { castableIf: e.castableIf } : {}), // Reality Fracture (17a): Null Summoner
+          // Lorwyn Eclipsed (18b, black): Taster of Wares.
+          ...(e.castableWhileControlling ? { castableWhileControlling: true } : {}),
+          ...(e.castableFilter ? { castableFilter: e.castableFilter } : {}),
+          ...(e.among ? { among: e.among } : {}),
           resume,
           thenPriority,
         };
@@ -2251,8 +2260,9 @@ export function runEffects(
       } else {
         // Path to Exile: the exiled creature's controller searches their own library.
         const t = e.forControllerOf !== undefined ? es.targets[e.forControllerOf] : undefined;
-        const searcher =
-          (t && 'object' in t ? ctx.s.objects[t.object.id]?.controller : undefined) ?? controller;
+        const searcher = e.activePlayerSearches
+          ? ctx.s.turn.activePlayer // Lorwyn Eclipsed (18b, black): Mornsong Aria
+          : ((t && 'object' in t ? ctx.s.objects[t.object.id]?.controller : undefined) ?? controller);
         if (e.forControllerOf !== undefined && !t) continue;
         // Reality Fracture (17a): "up to 0 cards" (Fblthp with X = 0): the library is still shuffled.
         if (e.upTo !== undefined && resolveAmount(ctx, es, e.upTo) <= 0) {

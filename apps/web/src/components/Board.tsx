@@ -1366,11 +1366,13 @@ export function Board({
           <div className="mull">
             <h2>{nameOf(d.resume.sourceDefId)}</h2>
             <p>
-              Your opponent reveals their hand. Choose a card to{' '}
-              {d.then === 'discard' ? 'discard' : 'exile'}.
+              {d.among
+                ? 'Your opponent reveals these cards from their hand.'
+                : 'Your opponent reveals their hand.'}{' '}
+              Choose a card to {d.then === 'discard' ? 'discard' : 'exile'}.
             </p>
             <div className="mull__hand">
-              {view.players[d.from].hand.map((id, i) => (
+              {view.players[d.from].hand.filter((id) => !d.among || d.among.includes(id)).map((id, i) => (
                 <div key={id} className="mull__card" style={{ '--i': i } as React.CSSProperties}>
                   <Card
                     id={id}
