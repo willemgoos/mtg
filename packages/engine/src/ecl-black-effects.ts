@@ -12,7 +12,7 @@ import {
 } from './context.ts';
 import { changeLife, plusFoodTokens } from './effects.ts';
 import { type Chooser, CHOOSERS } from './stx-13c-a-effects.ts';
-import type { EffectDef, EffectSource, ObjectId, ObjectRef, PlayerId } from './types.ts';
+import type { CardDb, EffectDef, EffectSource, ObjectId, ObjectRef, PlayerId } from './types.ts';
 
 /**
  * Lorwyn Eclipsed (18b, black): one-off effects of the black cards, as custom effects, and the
@@ -26,11 +26,28 @@ const custom = (handler: string, params?: Record<string, unknown>): EffectDef =>
   ...(params ? { params } : {}),
 });
 
+const drawLockCache = new WeakMap<CardDb, ReadonlySet<string>>();
+
+/** Card definitions with "players can't draw cards" (computed once per database). */
+function drawLockDefs(db: CardDb): ReadonlySet<string> {
+  let set = drawLockCache.get(db);
+  if (!set) {
+    set = new Set(
+      [...db.values()]
+        .filter((d) =>
+          d.abilities.some((a) => a.kind === 'static' && a.effect.kind === 'playersCantDraw'),
+        )
+        .map((d) => d.id),
+    );
+    drawLockCache.set(db, set);
+  }
+  return set;
+}
+
 /** Mornsong Aria: "Players can't draw cards." */
 export function drawPrevented(ctx: Ctx): boolean {
-  return ctx.s.battlefield.some((id) =>
-    def(ctx, id).abilities.some((a) => a.kind === 'static' && a.effect.kind === 'playersCantDraw'),
-  );
+  const locks = drawLockDefs(ctx.db);
+  return locks.size > 0 && ctx.s.battlefield.some((id) => locks.has(obj(ctx, id).defId));
 }
 
 /** Puts a token copy of this (possibly gone) object onto the battlefield under the effect's controller. */

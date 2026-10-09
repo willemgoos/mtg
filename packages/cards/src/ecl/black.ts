@@ -1,6 +1,16 @@
 import type { Amount, CardDefinition, EffectDef, Ref, TargetSpec } from '@mtg/engine';
 import type { Behavior } from '../build.ts';
-import { draw, gain, mana, onEnter, pump, t0, when, yourCreature, yourCreatureCard } from '../blb/helpers.ts';
+import {
+  draw,
+  gain,
+  mana,
+  onEnter,
+  pump,
+  t0,
+  when,
+  yourCreature,
+  yourCreatureCard,
+} from '../blb/helpers.ts';
 import { combos, equip, mode } from '../fin/helpers.ts';
 import {
   blight,
@@ -40,7 +50,12 @@ const minusCounters = (amount: Amount, to: Ref): EffectDef => ({
   amount,
   to,
 });
-const removeMinusCounter: EffectDef = { kind: 'removeCounters', from: 'self', name: '-1/-1', count: 1 };
+const removeMinusCounter: EffectDef = {
+  kind: 'removeCounters',
+  from: 'self',
+  name: '-1/-1',
+  count: 1,
+};
 
 /** An Elf card in your graveyard (changelings are Elves too). */
 const elfCardsInGraveyard: Amount = { count: 'cardsInGraveyard', subtype: 'Elf' };
@@ -55,12 +70,7 @@ export const ECL_BLACK: Record<string, Behavior> = {
   // of turn." "Equipped creature gets +1/+2." Equip {2}.
   'Barbed Bloodletter': {
     abilities: [
-      when(
-        { on: 'etb' },
-        [yourCreature],
-        { kind: 'attach', to: t0 },
-        pump(t0, 0, 0, ['wither']),
-      ),
+      when({ on: 'etb' }, [yourCreature], { kind: 'attach', to: t0 }, pump(t0, 0, 0, ['wither'])),
       { kind: 'static', effect: { kind: 'attached', power: 1, toughness: 2 } },
       equip('{2}'),
     ],
@@ -97,7 +107,11 @@ export const ECL_BLACK: Record<string, Behavior> = {
   // Convoke. "Choose a creature type. Return all creature cards of the chosen type from your graveyard to the battlefield."
   'Bloodline Bidding': {
     convoke: true,
-    ...spell([], { kind: 'chooseCreatureType' }, { kind: 'custom', handler: 'eclReturnChosenType' }),
+    ...spell(
+      [],
+      { kind: 'chooseCreatureType' },
+      { kind: 'custom', handler: 'eclReturnChosenType' },
+    ),
   },
 
   // "When this enchantment enters, you may blight 1. If you do, create two 1/1 black and red Goblin creature tokens."
@@ -251,16 +265,12 @@ export const ECL_BLACK: Record<string, Behavior> = {
 
   // Changeling. "When this creature enters, you may return target creature card from your graveyard to your hand."
   Graveshifter: {
-    abilities: [
-      when({ on: 'etb' }, [yourCreatureCard(true)], { kind: 'returnToHand', what: t0 }),
-    ],
+    abilities: [when({ on: 'etb' }, [yourCreatureCard(true)], { kind: 'returnToHand', what: t0 })],
   },
 
   // "At the beginning of your first main phase, you may blight 2. If you don't, you lose 3 life."
   'Gutsplitter Gang': {
-    abilities: [
-      when({ on: 'beginningOfMain', which: 1 }, [], mayBlight(2, [], [lose(3)])),
-    ],
+    abilities: [when({ on: 'beginningOfMain', which: 1 }, [], mayBlight(2, [], [lose(3)]))],
   },
 
   // "This creature enters with two -1/-1 counters on it." "Whenever another creature you control dies, surveil 1, then
@@ -345,11 +355,10 @@ export const ECL_BLACK: Record<string, Behavior> = {
   },
 
   // Changeling. "Target creature gets +3/-3 and loses all creature types until end of turn."
-  'Nameless Inversion': spell(
-    [anyCreature],
-    pump(t0, 3, -3),
-    { kind: 'loseCreatureTypes', what: t0 },
-  ),
+  'Nameless Inversion': spell([anyCreature], pump(t0, 3, -3), {
+    kind: 'loseCreatureTypes',
+    what: t0,
+  }),
 
   // Flying, lifelink. "Whenever you cast a spell during an opponent's turn, put a -1/-1 counter on up to one target creature."
   'Nightmare Sower': {
@@ -414,15 +423,11 @@ export const ECL_BLACK: Record<string, Behavior> = {
 
   // "Target creature you control gains deathtouch and lifelink until end of turn. When that creature dies this turn, create a
   // 2/2 black and green Elf creature token."
-  "Scarblade's Malice": spell(
-    [yourCreature],
-    pump(t0, 0, 0, ['deathtouch', 'lifelink']),
-    {
-      kind: 'whenDiesThisTurn',
-      what: t0,
-      effects: [{ kind: 'createToken', token: ECL_ELF, count: 1 }],
-    },
-  ),
+  "Scarblade's Malice": spell([yourCreature], pump(t0, 0, 0, ['deathtouch', 'lifelink']), {
+    kind: 'whenDiesThisTurn',
+    what: t0,
+    effects: [{ kind: 'createToken', token: ECL_ELF, count: 1 }],
+  }),
 
   // Menace. "Vivid — When this creature enters, each opponent loses X life and you gain X life, where X is the number of
   // colors among permanents you control."
@@ -457,11 +462,10 @@ export const ECL_BLACK: Record<string, Behavior> = {
   // a creature type from your graveyard to your hand."
   Unbury: {
     modes: [
-      mode(
-        'Return target creature card from your graveyard to your hand',
-        [yourCreatureCard()],
-        { kind: 'returnToHand', what: t0 },
-      ),
+      mode('Return target creature card from your graveyard to your hand', [yourCreatureCard()], {
+        kind: 'returnToHand',
+        what: t0,
+      }),
       mode(
         'Return two target creature cards that share a creature type from your graveyard to your hand',
         [yourCreatureCard(), { ...yourCreatureCard(), sharesCreatureTypeWithPrevious: true }],

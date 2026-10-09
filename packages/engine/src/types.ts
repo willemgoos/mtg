@@ -4201,6 +4201,8 @@ export type Decision =
       // Lorwyn Eclipsed (18b, black): Taster of Wares
       castableWhileControlling?: boolean;
       castableFilter?: CardFilter;
+      /** Only these cards of their hand are revealed (and can be chosen); the rest stay hidden. */
+      among?: ObjectId[];
       resume: PausedResolution;
       thenPriority: PlayerId;
     }

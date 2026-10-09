@@ -40,7 +40,7 @@ export function redactFor(state: GameState, viewer: PlayerId, db?: CardDb): Game
           ? d.faceUp
           : // They reveal their hand while the viewer chooses from it.
             d.kind === 'chooseFromHand' && d.player === viewer && d.from === p
-            ? ps.hand
+            ? (d.among ?? ps.hand) // Lorwyn Eclipsed (18b, black): Taster of Wares, only the cards they chose to reveal
             : [];
     // Brawl: everyone knows which card a commander is, wherever it went (a simplification in a library).
     for (const id of hidden)

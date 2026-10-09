@@ -1757,6 +1757,7 @@ export function runEffects(
           // Lorwyn Eclipsed (18b, black): Taster of Wares.
           ...(e.castableWhileControlling ? { castableWhileControlling: true } : {}),
           ...(e.castableFilter ? { castableFilter: e.castableFilter } : {}),
+          ...(e.among ? { among: e.among } : {}),
           resume,
           thenPriority,
         };
