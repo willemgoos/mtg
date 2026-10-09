@@ -145,7 +145,6 @@ from) when it's fixed. Older phases keep their own "Simplifications" lists in `d
       engine's mana abilities take only tap or sacrifice costs), so they can't be used in the middle of paying for a spell.
 - [ ] Mirrormind Crown: tokens made by other sets' hand-written custom effects (Brawl, FIC) don't count as "creating
       tokens" for its once-each-turn.
-- [ ] Firdoch Core: the Kindred card type isn't in the engine, so it's only an Artifact (nothing in the pool cares).
 - [ ] Vinebred Brawler: "must be blocked if able" uses the existing Masamune enforcement: if the defender declares no block
       on it, the engine picks the blocker instead of the player.
 - [ ] Shimmerwilds Growth: the colour is chosen by an enters trigger (like Utopia Sprawl), not as it enters.

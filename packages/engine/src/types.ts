@@ -34,7 +34,15 @@ export interface ManaCost {
 // ---------------------------------------------------------------------------
 
 export type CardType =
-  'Creature' | 'Instant' | 'Sorcery' | 'Land' | 'Enchantment' | 'Artifact' | 'Planeswalker';
+  | 'Creature'
+  | 'Instant'
+  | 'Sorcery'
+  | 'Land'
+  | 'Enchantment'
+  | 'Artifact'
+  | 'Planeswalker'
+  // Lorwyn Eclipsed (18b): Kindred cards (Firdoch Core, Morcant's Eyes, Boggart Mischief, Nameless Inversion).
+  | 'Kindred';
 export type Supertype = 'Basic' | 'Legendary' | 'Snow'; // Strixhaven Brawl (15b, w/u/g): Snow
 
 export type Keyword =
