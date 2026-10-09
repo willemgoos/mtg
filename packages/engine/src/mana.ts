@@ -90,6 +90,20 @@ export function abilityTags(ctx: Ctx, source: ObjectId): string[] {
   return [...(isCreature(ctx, source) ? ['CreatureAbility'] : []), ...types.map((s) => `Ability:${s}`)];
 }
 
+/** Does `player` have mana that can only be spent on some things (floating, or from a source with "spend only")? */
+export function hasRestrictedMana(ctx: Ctx, player: PlayerId): boolean {
+  return (
+    (ctx.s.players[player].pool ?? []).some((p) => !!p.onlyFor) ||
+    ctx.s.battlefield.some(
+      (id) =>
+        obj(ctx, id).controller === player &&
+        def(ctx, id).abilities.some(
+          (a) => a.kind === 'mana' && (!!a.onlyFor || !!a.notForSpellsFromHand),
+        ),
+    )
+  );
+}
+
 /** Pool entries are mana sources with ids like "pool:p1:0". */
 const poolId = (player: PlayerId, i: number) => `pool:${player}:${i}`;
 const isPoolId = (id: ObjectId) => id.startsWith('pool:');
@@ -109,6 +123,8 @@ export function manaSources(
   forSubtypes: readonly string[] = [],
 ): ManaSource[] {
   const out: ManaSource[] = [];
+  // Lorwyn Eclipsed (18b, red): looked up once per call (Lavaleaper).
+  let lavaleaper: boolean | undefined;
   (ctx.s.players[player].pool ?? []).forEach(
     (p, i) =>
       (!p.onlyFor || forSubtypes.includes(p.onlyFor)) &&
@@ -243,7 +259,7 @@ export function manaSources(
       for (let i = 1; i < units; i++) out.push({ ...src });
       // Lorwyn Eclipsed (18b, red): Lavaleaper, "that player adds one mana of any type that land produced". The extra
       // mana is the same type as the one the tap makes: a land that can make several types is tied to one.
-      if (def(ctx, id).supertypes.includes('Basic') && basicLandsAddExtra(ctx)) {
+      if (def(ctx, id).supertypes.includes('Basic') && (lavaleaper ??= basicLandsAddExtra(ctx))) {
         out.push({ ...src });
         if (src.produces.length > 1) for (const x of out) if (x.id === id) x.oneColor = true;
       }
