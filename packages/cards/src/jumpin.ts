@@ -17,8 +17,8 @@ export interface Packet {
   /** Card shown on the packet. */
   face: string;
   blurb: string;
-  /** Bloomburrow, Marvel Super Heroes, Final Fantasy, Strixhaven, Secrets of Strixhaven or Reality Fracture (default Foundations). Packets of different sets pair freely. */
-  set?: 'blb' | 'msh' | 'fin' | 'stx' | 'sos' | 'fra' | 'ecl';
+  /** Bloomburrow, Marvel Super Heroes, Final Fantasy, Strixhaven, Secrets of Strixhaven, Reality Fracture, Lorwyn Eclipsed or Tarkir: Dragonstorm (default Foundations). Packets of different sets pair freely. */
+  set?: 'blb' | 'msh' | 'fin' | 'stx' | 'sos' | 'fra' | 'ecl' | 'tdm';
   /** Arena's own packet (default: ours). */
   source?: 'arena';
   /** Custom theme that deliberately borrows cards from multiple sets. */

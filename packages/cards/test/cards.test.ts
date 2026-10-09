@@ -34,6 +34,7 @@ import {
   FINAL_FANTASY_BRAWL_POOL,
   REALITY_FRACTURE_POOL,
   LORWYN_ECLIPSED_POOL,
+  TARKIR_DRAGONSTORM_POOL,
   OTHER_POOL,
   PLAYABLE_DECKS,
   parseManaCost,
@@ -80,6 +81,7 @@ describe('card data', () => {
         ...FINAL_FANTASY_BRAWL_POOL,
         ...REALITY_FRACTURE_POOL,
         ...LORWYN_ECLIPSED_POOL,
+        ...TARKIR_DRAGONSTORM_POOL,
       ].sort(),
     );
     for (const c of SCRYFALL) expect(c.image?.normal).toMatch(/^https:\/\/cards\.scryfall\.io\//);

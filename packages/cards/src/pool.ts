@@ -10,6 +10,7 @@ import { STRIXHAVEN_BRAWL_BEHAVIORS } from './strixhaven-brawl.ts';
 import { FINAL_FANTASY_BRAWL_BEHAVIORS } from './final-fantasy-brawl.ts';
 import { REALITY_FRACTURE_BEHAVIORS } from './reality-fracture.ts';
 import { LORWYN_ECLIPSED_BEHAVIORS } from './lorwyn-eclipsed.ts';
+import { TARKIR_DRAGONSTORM_BEHAVIORS } from './tarkir-dragonstorm.ts';
 
 /**
  * Allowed sets, most preferred first: Foundations, then older core sets, then
@@ -612,6 +613,9 @@ export const REALITY_FRACTURE_POOL = Object.keys(REALITY_FRACTURE_BEHAVIORS);
 /** Lorwyn Eclipsed cards (fronts only; the ten already in the pool are not repeated). */
 export const LORWYN_ECLIPSED_POOL = Object.keys(LORWYN_ECLIPSED_BEHAVIORS);
 
+/** Tarkir: Dragonstorm cards (fronts only; the 23 already in the pool are not repeated). */
+export const TARKIR_DRAGONSTORM_POOL = Object.keys(TARKIR_DRAGONSTORM_BEHAVIORS);
+
 export const POOL: { name: string }[] = [
   ...RED_POOL,
   ...GREEN_POOL,
@@ -632,6 +636,7 @@ export const POOL: { name: string }[] = [
   ...FINAL_FANTASY_BRAWL_POOL,
   ...REALITY_FRACTURE_POOL,
   ...LORWYN_ECLIPSED_POOL,
+  ...TARKIR_DRAGONSTORM_POOL,
 ].map((name) => ({
   name,
 }));
