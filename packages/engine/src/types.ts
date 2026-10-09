@@ -218,6 +218,12 @@ export interface CardDefinition {
     // Lorwyn Eclipsed (18a): "As an additional cost to cast this spell, you may blight N"
     /** The optional additional cost is blighting a creature you control N times (`cost` is {0}); paid, the spell is `kicked`. */
     blight?: number;
+    /**
+     * "You may choose a creature type and behold N creatures of that type" (Celestial Reunion): `cost` is {0}; paid, the spell is
+     * `kicked`, its caster picks the type and then the creatures one at a time, and the spell remembers the type
+     * (`searchLibrary.battlefieldIfChosenType`).
+     */
+    beholdChosenType?: number;
   };
   // Mystical Archive (16): Angel's Grace, Krosan Grip, Berserk
   /** Split second: while it is on the stack, nobody can cast spells or activate (non-mana) abilities. */
@@ -1212,7 +1218,7 @@ export interface CardFilter {
   /** Mana value at most this ('sourcePower': the source's power, e.g. as it died). */
   // Secrets of Strixhaven (14a): Moseo, 'lifeGainedThisTurn' is the life its controller gained this turn.
   // Secrets of Strixhaven (14b): Sundering Archaic, 'colorsSpent' is the number of colours spent to cast the source.
-  maxManaValue?: number | 'sourcePower' | 'lifeGainedThisTurn' | 'colorsSpent';
+  maxManaValue?: number | 'sourcePower' | 'lifeGainedThisTurn' | 'colorsSpent' | 'x';
   // Secrets of Strixhaven (14b): Arnyn, Deathbloom Botanist
   /** Power or toughness at most this (printed, for a card that has left the battlefield). */
   maxPowerOrToughness?: number;
@@ -2143,6 +2149,9 @@ export type EffectDef =
       // Reality Fracture (17a fixes): Loyal Tutor
       /** "Reveal it": the card found is shown to the opponent (a 'cardsRevealed' event). */
       reveal?: boolean;
+      // Lorwyn Eclipsed (18a): Celestial Reunion
+      /** If the spell's additional cost chose a creature type and the card found has it, it enters the battlefield instead of going to hand. */
+      battlefieldIfChosenType?: boolean;
     }
   /** Look at the top N; you may put a creature with mana value up to your land count onto the battlefield (Loot). */
   | { kind: 'lookForCreature'; count: number }
@@ -2907,6 +2916,12 @@ export type StaticDef =
   | { kind: 'noncreatureSpellsHaveConspire' }
   /** "Creature spells you cast have convoke." (Eirdu, Carrier of Dawn) */
   | { kind: 'creatureSpellsHaveConvoke' }
+  /**
+   * "You may cast <filter> spells from among cards you own exiled with this creature by removing N counters from among creatures
+   * you control in addition to paying their other costs" (Dawnhand Dissident; the cards are remembered by `exileGraveyardCard.track`).
+   * The counters are chosen one at a time as it is cast.
+   */
+  | { kind: 'castExiledWithSelf'; filter: CardFilter; removeCounters: number; yourTurnOnly?: boolean }
   /** "Your opponents can't cast spells during your turn" (Jennifer Walters). */
   | { kind: 'opponentsCantCastDuringYourTurn' }
   /** "You have hexproof", while the condition holds (Captain America, Super-Soldier). */
@@ -3514,6 +3529,8 @@ export type StackItem =
       evoked?: boolean;
       /** Conspire was chosen as it was cast: its caster picks the two creatures to tap, one at a time. */
       conspire?: boolean;
+      /** Cast from exile by removing this many counters from among creatures its caster controls (Dawnhand Dissident). */
+      payCounters?: number;
     }
   | {
       kind: 'ability';
@@ -4004,6 +4021,8 @@ export type Decision =
       // Reality Fracture (17a fixes): Loyal Tutor
       /** The card found is revealed. */
       reveal?: boolean;
+      /** Lorwyn Eclipsed (18a): Celestial Reunion: a card of this creature type goes onto the battlefield instead of into the hand. */
+      battlefieldIfType?: string;
       /** The land found becomes a Fractal creature (Emergent Sequence). */
       fractalLand?: boolean;
       /** If the card has one of these types, the source gets a +1/+1 counter (Oriq Loremage). */
@@ -4265,6 +4284,35 @@ export type Decision =
       targets: TargetChoice[];
       thenPriority: PlayerId;
     }
+  | {
+      // Lorwyn Eclipsed (18a): Dawnhand Dissident. Counters removed from among your creatures, one at a time (`options`: the creature
+      // and the kind of counter, answered with chooseOption).
+      kind: 'payCounters';
+      player: PlayerId;
+      spell: ObjectId;
+      left: number;
+      options: { creature: ObjectId; kind: string }[];
+      targets: TargetChoice[];
+      thenPriority: PlayerId;
+    }
+  | {
+      // Lorwyn Eclipsed (18a): Celestial Reunion. The creature type (`types`, answered with chooseOption), then the creatures to
+      // behold one at a time (`options`, answered with chooseCard). The ones in hand are revealed.
+      kind: 'beholdType';
+      player: PlayerId;
+      /** The spell on the stack. */
+      spell: ObjectId;
+      /** How many creatures of the type are beheld. */
+      count: number;
+      /** Creature types that at least `count` creatures you could behold have. */
+      types: string[];
+      chosenType?: string;
+      /** The creatures of the chosen type still to pick from. */
+      options: ObjectId[];
+      chosen: ObjectId[];
+      targets: TargetChoice[];
+      thenPriority: PlayerId;
+    }
   | { kind: 'gameOver' };
 
 export interface GameState {
@@ -4365,7 +4413,9 @@ export type Action =
         | 'now'
         | 'freeExact'
         | 'noctis'
-        | 'hades';
+        | 'hades'
+        // Lorwyn Eclipsed (18a): Dawnhand Dissident
+        | 'exiledWithSelf';
       /** Mockingbird: the creature to enter as a copy of. */
       copyOf?: ObjectId;
       /** Rottenmouth Viper: permanents sacrificed to make it cheaper. */

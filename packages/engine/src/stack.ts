@@ -59,9 +59,15 @@ import { isTargetLegal } from './targets.ts';
 import { useFreeCast } from './msh-analyzed.ts';
 import { revealBeheld } from './fra-pw-b-effects.ts';
 import {
+  beholdOfType,
+  beholdTypes,
   blightCreature,
   colorSplitOfPayment,
   conspireOptions,
+  counterKinds,
+  creatureCounterOptions,
+  creatureCounterTotal,
+  exiledWithCastable,
   hasConvoke,
   removeCounterKinds,
 } from './ecl-18a.ts';
@@ -605,6 +611,9 @@ export function castSpell(
     player,
     payment.filter((id) => !convokers.includes(id)),
   );
+  // Lorwyn Eclipsed (18a): Dawnhand Dissident, how many counters this cast removes (read while the card is still in exile).
+  const payCounters =
+    choice.via === 'exiledWithSelf' ? (exiledWithCastable(ctx, player).get(card) ?? 0) : 0;
   // Lorwyn Eclipsed (18a): the split of colours spent, for "if {W}{W} was spent to cast it".
   const manaPaid = colorSplitOfPayment(
     ctx,
@@ -685,6 +694,8 @@ export function castSpell(
     ...(choice.kicked ? { kicked: true } : {}),
     ...(choice.evoked ? { evoked: true } : {}),
     ...(choice.conspire ? { conspire: true } : {}),
+    // Dawnhand Dissident: cast by removing counters from among your creatures.
+    ...(payCounters ? { payCounters } : {}),
     ...(flashback && !escaping ? { flashback: true } : {}),
     ...(choice.x ? { x: choice.x } : {}),
     ...(exiledValue ? { x: exiledValue } : {}),
@@ -781,9 +792,65 @@ function finishCasting(
   const cast = (ctx.s.turn.spellsCast ??= { p1: 0, p2: 0 });
   emit(ctx, { type: 'spellCast', id: card, player, nth: ++cast[player] });
   noteTargets(ctx, player, targets);
-  // Lorwyn Eclipsed (18a): conspire, the creatures to tap are chosen one at a time (true: paused to ask which).
-  const castItem = ctx.s.stack.find((x) => x.kind === 'spell' && x.id === card);
-  if (castItem?.kind === 'spell' && castItem.conspire) {
+  return continueCasting(ctx, player, card, targets, 'counters');
+}
+
+/**
+ * The choices a cast makes one at a time once the spell is on the stack, in order: the creature type and creatures to behold
+ * (Celestial Reunion), the creatures to tap for conspire, ward's sacrifices. `from` is where to pick up. True: paused to ask.
+ */
+function continueCasting(
+  ctx: Ctx,
+  player: PlayerId,
+  card: ObjectId,
+  targets: TargetChoice[],
+  from: 'counters' | 'behold' | 'conspire' | 'ward',
+): boolean {
+  const item = ctx.s.stack.find((x) => x.kind === 'spell' && x.id === card);
+  const cd = def(ctx, card);
+  // Lorwyn Eclipsed (18a): Dawnhand Dissident, counters removed from among your creatures one at a time.
+  if (from === 'counters' && item?.kind === 'spell' && item.payCounters) {
+    const options = creatureCounterOptions(ctx, player);
+    if (options.length > 0) {
+      payCountersStep(ctx, {
+        kind: 'payCounters',
+        player,
+        spell: card,
+        left: item.payCounters,
+        options,
+        targets,
+        thenPriority: player,
+      });
+      return true;
+    }
+  }
+  if (from === 'counters') from = 'behold';
+  // Lorwyn Eclipsed (18a): "choose a creature type and behold two creatures of that type".
+  if (
+    from === 'behold' &&
+    item?.kind === 'spell' &&
+    item.kicked &&
+    cd.kicker?.beholdChosenType !== undefined
+  ) {
+    const count = cd.kicker.beholdChosenType;
+    const types = beholdTypes(ctx, player, card, count);
+    if (types.length > 0) {
+      ctx.s.decision = {
+        kind: 'beholdType',
+        player,
+        spell: card,
+        count,
+        types,
+        options: [],
+        chosen: [],
+        targets,
+        thenPriority: player,
+      };
+      return true;
+    }
+  }
+  // Lorwyn Eclipsed (18a): conspire, the creatures to tap are chosen one at a time.
+  if (from !== 'ward' && item?.kind === 'spell' && item.conspire) {
     const options = conspireOptions(ctx, player, card);
     if (options.length >= 2) {
       ctx.s.decision = {
@@ -800,6 +867,77 @@ function finishCasting(
   }
   // Reality Fracture (17a fixes): ward's sacrifices are chosen (true: paused to ask which).
   return payWardSacrifices(ctx, player, targets, { thenPriority: player });
+}
+
+/** Dawnhand Dissident: one more counter removed (or the last of them), or all that remain if there is no real choice. */
+function payCountersStep(ctx: Ctx, d: Extract<Decision, { kind: 'payCounters' }>): void {
+  // With exactly as many counters as are left to remove, there is nothing to choose.
+  const total = creatureCounterTotal(ctx, d.player);
+  if (d.left > 0 && total <= d.left) {
+    for (const o of creatureCounterOptions(ctx, d.player)) {
+      const n = counterKinds(ctx, o.creature)[o.kind] ?? 0;
+      removeCounterKinds(ctx, o.creature, Array<string>(n).fill(o.kind));
+    }
+    d.left = 0;
+  }
+  if (d.left > 0) {
+    ctx.s.decision = { ...d, options: creatureCounterOptions(ctx, d.player) };
+    return;
+  }
+  if (continueCasting(ctx, d.player, d.spell, d.targets, 'behold')) return;
+  givePriority(ctx, d.thenPriority);
+}
+
+/** Dawnhand Dissident: the counter chosen (an index into `options`). */
+export function answerPayCounters(ctx: Ctx, index: number): void {
+  const d = ctx.s.decision;
+  if (d.kind !== 'payCounters') throw new Error('Not removing counters');
+  const pick = d.options[index];
+  if (!pick) throw new Error('No such counter');
+  removeCounterKinds(ctx, pick.creature, [pick.kind]);
+  payCountersStep(ctx, { ...d, left: d.left - 1 });
+}
+
+/** Celestial Reunion: the creature type chosen, then each creature beheld. */
+function beholdTypeStep(ctx: Ctx, d: Extract<Decision, { kind: 'beholdType' }>): void {
+  // With no real choice left, take what remains.
+  const need = d.count - d.chosen.length;
+  if (d.chosenType !== undefined && d.options.length <= need) {
+    d.chosen = [...d.chosen, ...d.options];
+    d.options = [];
+  }
+  if (d.chosenType === undefined || d.chosen.length < d.count) {
+    ctx.s.decision = d;
+    return;
+  }
+  for (const id of d.chosen) revealBeheld(ctx, d.player, id);
+  obj(ctx, d.spell).chosenType = d.chosenType;
+  if (continueCasting(ctx, d.player, d.spell, d.targets, 'conspire')) return;
+  givePriority(ctx, d.thenPriority);
+}
+
+/** Celestial Reunion: the creature type chosen (an index into `types`). */
+export function answerBeholdType(ctx: Ctx, index: number): void {
+  const d = ctx.s.decision;
+  if (d.kind !== 'beholdType' || d.chosenType !== undefined) throw new Error('Not choosing a type');
+  const chosenType = d.types[index];
+  if (chosenType === undefined) throw new Error('No such creature type');
+  beholdTypeStep(ctx, {
+    ...d,
+    chosenType,
+    options: beholdOfType(ctx, d.player, d.spell, chosenType),
+  });
+}
+
+/** Celestial Reunion: one creature beheld. */
+export function answerBeholdCreature(ctx: Ctx, creature: ObjectId): void {
+  const d = ctx.s.decision;
+  if (d.kind !== 'beholdType' || d.chosenType === undefined) throw new Error('Not beholding');
+  beholdTypeStep(ctx, {
+    ...d,
+    chosen: [...d.chosen, creature],
+    options: d.options.filter((id) => id !== creature),
+  });
 }
 
 /** Conspire: a creature chosen to tap (the first, then the second); then the spell is copied. */
@@ -822,7 +960,7 @@ export function answerConspire(ctx: Ctx, creature: ObjectId): void {
     subject: { id: o.id, zcc: o.zcc },
     inline: [{ kind: 'copySpell', what: 'subject', newTargets: true }],
   });
-  if (payWardSacrifices(ctx, d.player, d.targets, { thenPriority: d.thenPriority })) return;
+  if (continueCasting(ctx, d.player, d.spell, d.targets, 'ward')) return;
   givePriority(ctx, d.thenPriority);
 }
 
@@ -2071,7 +2209,9 @@ export function answerSearch(ctx: Ctx, card: ObjectId | null): void {
       d.to === 'battlefieldTapped' ||
       // Secrets of Strixhaven (14b): Zimone's Experiment: lands go onto the battlefield tapped.
       (d.landsTapped && def(ctx, card).types.includes('Land')) ||
-      (d.battlefieldOnYourTurn && ctx.s.turn.activePlayer === d.player);
+      (d.battlefieldOnYourTurn && ctx.s.turn.activePlayer === d.player) ||
+      // Lorwyn Eclipsed (18a): Celestial Reunion, a card of the chosen creature type.
+      (d.battlefieldIfType !== undefined && hasSubtype(ctx, card, d.battlefieldIfType));
     if (d.to === 'hideaway') {
       // Final Fantasy (11c): hideaway. Exiled face down, remembered by the land.
       moveObject(ctx, card, 'exile');

@@ -20,7 +20,9 @@ export type CastVia =
   | 'now'
   | 'freeExact'
   | 'noctis'
-  | 'hades';
+  | 'hades'
+  // Lorwyn Eclipsed (18a): Dawnhand Dissident.
+  | 'exiledWithSelf';
 
 /** One way to cast a card: a mode, kicked or not, from hand or with flashback. */
 export interface CastVariant {
@@ -206,7 +208,7 @@ export function castVariants(d: CardDefinition, zone: ZoneName, via?: CastVia): 
         ? { ...v, cost: free }
         : via === 'festival'
           ? { ...v, life: 1 }
-          : via === 'conduit' || via === 'hades'
+          : via === 'conduit' || via === 'hades' || via === 'exiledWithSelf'
             ? v
             : via === 'noctis'
               ? { ...v, life: 3, finality: true }

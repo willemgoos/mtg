@@ -631,6 +631,98 @@ export const ECL: CardDefinition[] = [
       },
     ],
   }),
+  // Celestial Reunion: "you may choose a creature type and behold two creatures of that type. Search your library for a creature
+  // card with mana value X or less ... If the additional cost was paid and it is the chosen type, put it onto the battlefield."
+  card({
+    id: 'reunion',
+    types: ['Sorcery'],
+    colors: ['G'],
+    manaCost: { generic: 0, colored: { G: 1 }, x: 1 },
+    kicker: { cost: cost(0), beholdChosenType: 2 },
+    spell: {
+      targets: [],
+      effects: [
+        {
+          kind: 'searchLibrary',
+          filter: { types: ['Creature'], maxManaValue: 'x' },
+          to: 'hand',
+          battlefieldIfChosenType: true,
+          reveal: true,
+        },
+      ],
+    },
+  }),
+  creature('shifter', 1, 1, {
+    colors: ['G'],
+    keywords: ['changeling'],
+    manaCost: cost(1, { G: 1 }),
+  }),
+  // Dawnhand Dissident: "{T}, Blight 2: Exile target card from a graveyard. During your turn, you may cast creature spells from
+  // among cards you own exiled with this creature by removing three counters from among creatures you control."
+  creature('dissident', 1, 3, {
+    colors: ['B'],
+    abilities: [
+      {
+        kind: 'activated',
+        cost: { tapSelf: true, blight: 2 },
+        targets: [{ what: 'graveyardCard' }],
+        effects: [{ kind: 'exileGraveyardCard', what: { target: 0 }, track: true }],
+      },
+      {
+        kind: 'static',
+        effect: {
+          kind: 'castExiledWithSelf',
+          filter: { types: ['Creature'] },
+          removeCounters: 3,
+          yourTurnOnly: true,
+        },
+      },
+    ],
+  }),
+  // Chaos Spewer: "When this creature enters, you may pay {2}. If you don't, blight 2."
+  creature('spewer', 3, 3, {
+    colors: ['B'],
+    abilities: [
+      {
+        kind: 'triggered',
+        trigger: { on: 'etb' },
+        targets: [],
+        effects: [
+          {
+            kind: 'payOrElse',
+            who: 'controller',
+            cost: cost(2),
+            otherwise: [{ kind: 'blight', amount: 2 }],
+          },
+        ],
+      },
+    ],
+  }),
+  // Warren Torchmaster: "At the beginning of combat on your turn, you may blight 1. When you do, target creature gains haste."
+  creature('torchmaster', 2, 2, {
+    colors: ['R'],
+    abilities: [
+      {
+        kind: 'triggered',
+        trigger: { on: 'beginningOfCombat', whose: 'yours' },
+        targets: [],
+        effects: [
+          {
+            kind: 'blight',
+            amount: 1,
+            optional: true,
+            then: [{ kind: 'reflexiveTrigger', ability: 1 }],
+          },
+        ],
+      },
+      {
+        kind: 'triggered',
+        trigger: { on: 'reflexive' },
+        targets: [{ what: 'creature' }],
+        effects: [{ kind: 'pump', to: { target: 0 }, power: 0, toughness: 0, keywords: ['haste'] }],
+      },
+    ],
+  }),
 ];
 
 export const DB = new Map([...FIXTURES, ...ECL].map((c) => [c.id, c]));

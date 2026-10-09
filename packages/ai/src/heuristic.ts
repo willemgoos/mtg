@@ -13,6 +13,7 @@ import {
   chooseHandSwap,
   chooseLandToPlay,
   choosePickExiled,
+  chooseBeholdType,
   chooseCreatureType,
   chooseForageExile,
   chooseWardSacrifice,
@@ -76,6 +77,12 @@ export function createHeuristicBot(db: CardDb, name = 'heuristic'): Bot {
         case 'payOrCounter':
         case 'castFree':
         case 'conspire': // Lorwyn Eclipsed (18a): which two creatures to tap (blight's creature is a chooseObject)
+          return bestByEvaluation(engine, view, me, legal, 'stack');
+        // Lorwyn Eclipsed (18a): Celestial Reunion, the creature type to behold (the one it has most of), then any creatures.
+        case 'beholdType':
+          return chooseBeholdType(engine, view, me, d, legal);
+        // Lorwyn Eclipsed (18a): Dawnhand Dissident, the counters to remove (the evaluation likes losing -1/-1 counters).
+        case 'payCounters':
           return bestByEvaluation(engine, view, me, legal, 'stack');
         case 'chooseOption': {
           // Strixhaven (13a): Learn takes a Lesson if there is one (the first option), else the best by evaluation.

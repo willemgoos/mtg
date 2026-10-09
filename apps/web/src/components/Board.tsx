@@ -268,8 +268,8 @@ export function Board({
       if (d.options.includes(id)) act({ type: 'chooseCard', player: HUMAN, card: id });
       return;
     }
-    // Lorwyn Eclipsed (18a): conspire, the creatures to tap are clicked one at a time.
-    if (d.kind === 'conspire') {
+    // Lorwyn Eclipsed (18a): conspire, the creatures to tap are clicked one at a time; so are Celestial Reunion's.
+    if (d.kind === 'conspire' || d.kind === 'beholdType') {
       if (d.options.includes(id)) act({ type: 'chooseCard', player: HUMAN, card: id });
       return;
     }
@@ -376,7 +376,7 @@ export function Board({
       return legal.some((a) => a.type === 'chooseCard' && a.card === id) ? 'option' : null;
     if (myDecision && d.kind === 'forage') return d.foods.includes(id) ? 'option' : null;
     if (myDecision && d.kind === 'chooseObject') return d.options.includes(id) ? 'option' : null;
-    if (myDecision && d.kind === 'conspire')
+    if (myDecision && (d.kind === 'conspire' || d.kind === 'beholdType'))
       return d.chosen.includes(id) ? 'selected' : d.options.includes(id) ? 'option' : null;
     if (id === blocker) return 'selected';
     if (declaredAttackers.has(id)) return 'attacking';
@@ -749,6 +749,21 @@ export function Board({
         const left = 2 - d.chosen.length;
         return {
           prompt: `${nameOf(view.objects[d.spell]!.defId)}: conspire — tap ${left === 2 ? 'two untapped creatures' : 'one more untapped creature'} that share a color with it`,
+        };
+      }
+      // Lorwyn Eclipsed (18a): Dawnhand Dissident.
+      case 'payCounters':
+        return {
+          prompt: `${nameOf(view.objects[d.spell]!.defId)}: remove ${d.left} more counter${d.left > 1 ? 's' : ''} from among your creatures`,
+        };
+      // Lorwyn Eclipsed (18a): Celestial Reunion.
+      case 'beholdType': {
+        const name = nameOf(view.objects[d.spell]!.defId);
+        return {
+          prompt:
+            d.chosenType === undefined
+              ? `${name}: choose a creature type, then behold ${d.count} creatures of that type`
+              : `${name}: behold ${d.count - d.chosen.length} more ${d.chosenType} (click a creature you control or in your hand)`,
         };
       }
       case 'chooseFromHand':
@@ -1300,6 +1315,24 @@ export function Board({
           </div>
         </div>
       )}
+      {d.kind === 'payCounters' && d.player === HUMAN && (
+        <OptionMenu
+          title={`${nameOf(view.objects[d.spell]!.defId)}: remove ${d.left} more counter${d.left > 1 ? 's' : ''} from among your creatures`}
+          options={d.options.map((o) => ({
+            label: `Remove a ${o.kind} counter from ${nameOf(view.objects[o.creature]!.defId)}`,
+          }))}
+          noun="counter"
+          onPick={(index) => act({ type: 'chooseOption', player: HUMAN, index })}
+        />
+      )}
+      {d.kind === 'beholdType' && d.player === HUMAN && d.chosenType === undefined && (
+        <OptionMenu
+          title={`${nameOf(view.objects[d.spell]!.defId)}: choose a creature type to behold ${d.count} of`}
+          options={d.types.map((label) => ({ label }))}
+          noun="creature type"
+          onPick={(index) => act({ type: 'chooseOption', player: HUMAN, index })}
+        />
+      )}
       {d.kind === 'chooseOption' && d.player === HUMAN && (
         <OptionMenu
           title={`${nameOf(d.resume.sourceDefId)}: ${d.title ?? 'choose one'}`}
@@ -1638,6 +1671,8 @@ function castLabel(defId: CardDefId, a: Action, view: GameState): string {
   // Final Fantasy (11c): playing from the graveyard.
   if (a.via === 'noctis') return 'From your graveyard (pay 3 life)';
   if (a.via === 'hades') return 'From your graveyard';
+  // Lorwyn Eclipsed (18a): Dawnhand Dissident.
+  if (a.via === 'exiledWithSelf') return 'Cast it from exile (remove counters from your creatures)';
   if (a.paws) return pawLabel(defId, a.paws);
   const def = cardDb.get(defId);
   // Lorwyn Eclipsed (18a): evoke, conspire, blight as an optional or alternative cost, behold and exile.

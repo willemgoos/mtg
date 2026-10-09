@@ -893,6 +893,11 @@ function changeling(ctx: Ctx, id: ObjectId, subtype: string): boolean {
   return all > setter;
 }
 
+/** Is it every creature type (a changeling, or something that gained all creature types)? */
+export function hasAllCreatureTypes(ctx: Ctx, id: ObjectId): boolean {
+  return changeling(ctx, id, 'Goblin');
+}
+
 /** Has this subtype (printed, gained, or every creature type for a changeling). */
 export function hasSubtype(ctx: Ctx, id: ObjectId, subtype: string): boolean {
   return subtypesOf(ctx, id).includes(subtype) || changeling(ctx, id, subtype);
@@ -1181,7 +1186,14 @@ export function cardMatches(
               sourceId
               ? (obj(ctx, sourceId).manaColors?.length ?? 0)
               : 0
-            : filter.maxManaValue;
+            : filter.maxManaValue === 'x'
+              ? // Lorwyn Eclipsed (18a): Celestial Reunion, "mana value X or less" (the spell's X).
+                sourceId
+                ? (ctx.s.stack.find((i) => i.kind === 'spell' && i.id === sourceId)?.x ??
+                  obj(ctx, sourceId).xPaid ??
+                  0)
+                : 0
+              : filter.maxManaValue;
     if (mv > max) return false;
   }
   if (filter.other && id === sourceId) return false;

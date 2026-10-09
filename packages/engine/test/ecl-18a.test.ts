@@ -313,3 +313,60 @@ describe('blight as an effect', () => {
     expect(counters(g, g.id('p2', 'ogre'))).toBe(0);
   });
 });
+
+describe('blight with the older vocabulary', () => {
+  it('"you may pay {2}. If you do not, blight 2" (payOrElse)', () => {
+    const start = () =>
+      new Game(scenario({ p1: { hand: ['spewer'], battlefield: ['forest', 'forest', 'ogre'] } }));
+    const decline = start();
+    decline.do(casts(decline, 'p1', decline.id('p1', 'spewer', 'hand'))[0]!);
+    decline.passBoth();
+    decline.passBoth();
+    expect(decline.decision.kind).toBe('payOrCounter');
+    decline.do({ type: 'chooseEffect', player: 'p1', accept: false });
+    // Two creatures (the Spewer and the ogre): the player chooses which gets the two counters.
+    expect(decline.decision.kind).toBe('chooseObject');
+    decline.do({ type: 'chooseCard', player: 'p1', card: decline.id('p1', 'ogre') });
+    expect(counters(decline, decline.id('p1', 'ogre'))).toBe(2);
+
+    const pay = start();
+    pay.do(casts(pay, 'p1', pay.id('p1', 'spewer', 'hand'))[0]!);
+    pay.passBoth();
+    pay.passBoth();
+    pay.do({ type: 'chooseEffect', player: 'p1', accept: true });
+    expect(counters(pay, pay.id('p1', 'ogre'))).toBe(0);
+    expect(pay.decision.kind).toBe('priority');
+  });
+
+  it('"you may blight 1. When you do, target creature gains haste" (a reflexive trigger)', () => {
+    const g = new Game(
+      scenario({
+        step: 'main1',
+        p1: { battlefield: ['torchmaster', 'ogre'] },
+        p2: { battlefield: [] },
+      }),
+    );
+    const ogre = g.id('p1', 'ogre');
+    g.passUntilStep('beginCombat');
+    g.passBoth();
+    expect(g.decision.kind).toBe('chooseObject');
+    g.do({ type: 'chooseCard', player: 'p1', card: ogre });
+    expect(counters(g, ogre)).toBe(1);
+    // The reflexive trigger asks for its target.
+    expect(g.decision.kind).toBe('chooseTriggerTargets');
+    g.do(
+      g
+        .legal('p1')
+        .find(
+          (a) =>
+            a.type === 'chooseTargets' &&
+            a.targets.some((t) => 'object' in t && t.object.id === ogre),
+        )!,
+    );
+    g.passBoth();
+    const hasty = g.state.effects.some(
+      (e) => e.affected.id === ogre && e.keywords.includes('haste'),
+    );
+    expect(hasty).toBe(true);
+  });
+});

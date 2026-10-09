@@ -2243,11 +2243,16 @@ export function runEffects(
           }
           continue;
         }
+        // Lorwyn Eclipsed (18a): Celestial Reunion, "mana value X or less" is the X chosen for the spell.
+        const searchFilter =
+          typeof e.filter === 'object' && e.filter.maxManaValue === 'x'
+            ? { ...e.filter, maxManaValue: es.x ?? 0 }
+            : e.filter;
         const options = ctx.s.players[searcher].library.filter((id) => {
-          if (typeof e.filter === 'object') {
+          if (typeof searchFilter === 'object') {
             // Strixhaven (13c): Rushed Rebirth: "a creature card with lesser mana value" than the one that died.
             const sub =
-              e.filter.lesserManaValueThanSubject && subject
+              searchFilter.lesserManaValueThanSubject && subject
                 ? ctx.s.objects[subject.id]
                 : undefined;
             if (
@@ -2256,11 +2261,11 @@ export function runEffects(
             )
               return false;
             // Mystical Archive (16): Bring to Light's filter looks at the colours spent on the spell.
-            return cardMatches(ctx, id, e.filter, es.source?.id);
+            return cardMatches(ctx, id, searchFilter, es.source?.id);
           }
           const d = defOf(ctx, obj(ctx, id).defId);
           const basic = d.supertypes.includes('Basic') && d.types.includes('Land');
-          return basic || (e.filter === 'basicLandOrGate' && d.subtypes.includes('Gate'));
+          return basic || (searchFilter === 'basicLandOrGate' && d.subtypes.includes('Gate'));
         });
         ctx.s.decision = {
           kind: 'searchLibrary',
@@ -2279,6 +2284,10 @@ export function runEffects(
           ...(e.differentNames ? { differentNames: true } : {}),
           // Reality Fracture (17a fixes): Loyal Tutor.
           ...(e.reveal ? { reveal: true } : {}),
+          // Lorwyn Eclipsed (18a): Celestial Reunion, the creature type its additional cost chose.
+          ...(e.battlefieldIfChosenType && es.source && ctx.s.objects[es.source.id]?.chosenType
+            ? { battlefieldIfType: ctx.s.objects[es.source.id]!.chosenType! }
+            : {}),
           resume,
           thenPriority,
         };

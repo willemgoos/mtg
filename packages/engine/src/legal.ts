@@ -20,9 +20,11 @@ import { forageChoices } from './forage.ts';
 import {
   beholdExileOptions,
   beholdManyOptions,
+  beholdTypes,
   blightCreatures,
   conspireOptions,
   counterRemovals,
+  exiledWithCastable,
   greatestToughness,
   hasConspire,
   hasConvoke,
@@ -447,6 +449,8 @@ function priorityActions(
       (ts) => !sacrifice || !ts.some((t) => 'object' in t && t.object.id === sacrifice),
     );
 
+  // Lorwyn Eclipsed (18a): cards that can be cast only by removing counters (Dawnhand Dissident), set before casts are listed.
+  let exiledOnly = new Set<ObjectId>();
   const castsOf = (card: ObjectId): void => {
     const d = def(ctx, card);
     const zone = obj(ctx, card).zone;
@@ -529,7 +533,9 @@ function priorityActions(
           ? ['freeExact']
           : free
             ? ['free']
-            : [
+            : exiledOnly.has(card)
+              ? ['exiledWithSelf']
+              : [
                 ...(zone !== 'graveyard' ||
                 d.flashback ||
                 d.castFromGraveyardRemovingCounters ||
@@ -594,6 +600,13 @@ function priorityActions(
               blight: v.blight ? 'x' : undefined,
               evoked: v.evoked,
             };
+            // Lorwyn Eclipsed (18a): Celestial Reunion, kicked only if two creatures share a type you could choose.
+            if (
+              v.kicked &&
+              d.kicker?.beholdChosenType !== undefined &&
+              beholdTypes(ctx, player, card, d.kicker.beholdChosenType).length === 0
+            )
+              continue;
             // Teamwork: kicked only if there are creatures to tap.
             const teamwork = teamworkFor(ctx, player, card, { kicked: v.kicked });
             if (v.kicked && d.kicker?.teamwork !== undefined && !teamwork) continue;
@@ -766,9 +779,16 @@ function priorityActions(
       : now !== undefined
         ? [now]
         : (freeCards ?? castableCards(ctx, player));
+  // Lorwyn Eclipsed (18a): Dawnhand Dissident, cards exiled with it that can only be cast by removing counters.
+  const exiledWithCards =
+    silenced || freeCards || now !== undefined
+      ? new Map<ObjectId, number>()
+      : exiledWithCastable(ctx, player);
+  exiledOnly = new Set([...exiledWithCards.keys()].filter((c) => !castable.includes(c)));
+  const castableAll = [...castable, ...exiledOnly];
   for (const card of banned.length
-    ? castable.filter((c) => !banned.some((b) => b.defId === obj(ctx, c).defId))
-    : castable) {
+    ? castableAll.filter((c) => !banned.some((b) => b.defId === obj(ctx, c).defId))
+    : castableAll) {
     if (!blocked(card)) castsOf(card);
     // Modal double-faced cards: the back face can be cast from hand too.
     // Secrets of Strixhaven (14a): a prepare creature's back is a spell that can't be cast from hand.
@@ -1199,6 +1219,13 @@ export function getLegalActions(ctx: Ctx, player: PlayerId): Action[] {
             !checkCondition(ctx, cd.kicker.onlyIf, player, obj(ctx, card))
           )
             continue;
+          // Lorwyn Eclipsed (18a): Celestial Reunion, kicked only if two creatures share a type you could choose.
+          if (
+            v.kicked &&
+            cd.kicker?.beholdChosenType !== undefined &&
+            beholdTypes(ctx, player, card, cd.kicker.beholdChosenType).length === 0
+          )
+            continue;
           // Reality Fracture (17c): the cast's behold (a kicker's, or Countersculpt's) is a choice too.
           const beholds = beholdChoices(ctx, player, card, cd, v);
           if (beholds.length === 0) continue;
@@ -1291,6 +1318,14 @@ export function getLegalActions(ctx: Ctx, player: PlayerId): Action[] {
     // Lorwyn Eclipsed (18a): conspire, the creatures to tap one at a time.
     case 'conspire':
       return d.options.map((card) => ({ type: 'chooseCard', player, card }) as const);
+    // Lorwyn Eclipsed (18a): Dawnhand Dissident, which counter to remove next.
+    case 'payCounters':
+      return d.options.map((_, index) => ({ type: 'chooseOption', player, index }) as const);
+    // Lorwyn Eclipsed (18a): Celestial Reunion, the creature type and then each creature beheld.
+    case 'beholdType':
+      return d.chosenType === undefined
+        ? d.types.map((_, index) => ({ type: 'chooseOption', player, index }) as const)
+        : d.options.map((card) => ({ type: 'chooseCard', player, card }) as const);
     case 'chooseObject':
       return [
         ...d.options.map((card) => ({ type: 'chooseCard', player, card }) as const),
