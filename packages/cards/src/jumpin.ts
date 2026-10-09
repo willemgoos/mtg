@@ -25,6 +25,12 @@ export interface Packet {
   crossSet?: boolean;
   /** The twelve spells; the basic lands are added by `packetCards`. */
   spells: [name: string, count: number][];
+  /**
+   * Arena's random slots: each is a list of alternatives, exactly one of which is in the packet,
+   * chosen by `weight` (percent) when a Jump In deck is built (`dealPacket`). Without a deal the
+   * likeliest alternative is used (`defaultDeal`).
+   */
+  slots?: { card: string; weight: number }[][];
   /** Two-colour packets: their eight lands (default: eight basics of the colour). */
   lands?: [name: string, count: number][];
 }
@@ -1527,241 +1533,6 @@ const OWN_PACKETS: Packet[] = [
       ['Inspired Tethermage', 1],
     ],
   },
-  // Lorwyn Eclipsed (18c): Arena's packet names, colours and themes; the cards are our picks (Arena never published the lists).
-  {
-    id: 'ecl-kithkin',
-    name: 'Kithkin',
-    colors: ['W', 'G'],
-    face: "Brigid, Clachan's Heart",
-    blurb: 'Kithkin go wide and pump each other',
-    set: 'ecl',
-    spells: [
-      ["Brigid, Clachan's Heart", 1],
-      ['Kinsbaile Aspirant', 1],
-      ['Timid Shieldbearer', 2],
-      ['Surly Farrier', 1],
-      ['Crossroads Watcher', 1],
-      ['Wary Farmer', 1],
-      ['Gallant Fowlknight', 1],
-      ['Thoughtweft Lieutenant', 1],
-      ['Dundoolin Weaver', 1],
-      ['Eclipsed Kithkin', 1],
-      ['Mistmeadow Council', 1],
-    ],
-    lands: [
-      ['Selesnya Guildgate', 1],
-      ['Plains', 4],
-      ['Forest', 3],
-    ],
-  },
-  {
-    id: 'ecl-merfolk',
-    name: 'Merfolk',
-    colors: ['W', 'U'],
-    face: 'Deepway Navigator',
-    blurb: 'Merfolk tap each other to swim past blockers',
-    set: 'ecl',
-    spells: [
-      ['Deepway Navigator', 1],
-      ['Wanderbrine Trapper', 1],
-      ['Wanderbrine Preacher', 1],
-      ['Silvergill Peddler', 2],
-      ['Silvergill Mentor', 1],
-      ['Deepchannel Duelist', 1],
-      ['Meanders Guide', 1],
-      ['Wanderwine Distracter', 1],
-      ['Merrow Skyswimmer', 1],
-      ['Eclipsed Merrow', 1],
-      ['Spiral into Solitude', 1],
-    ],
-    lands: [
-      ['Azorius Guildgate', 1],
-      ['Plains', 4],
-      ['Island', 3],
-    ],
-  },
-  {
-    id: 'ecl-burdened',
-    name: 'Burdened',
-    colors: ['W'],
-    face: 'Slumbering Walker',
-    blurb: 'Creatures that enter with -1/-1 counters and shed them',
-    set: 'ecl',
-    spells: [
-      ['Slumbering Walker', 1],
-      ['Burdened Stoneback', 2],
-      ['Encumbered Reejerey', 2],
-      ['Reluctant Dounguard', 2],
-      ['Moonlit Lamenter', 1],
-      ['Timid Shieldbearer', 1],
-      ['Kinsbaile Aspirant', 1],
-      ['Pyrrhic Strike', 1],
-      ['Spiral into Solitude', 1],
-    ],
-  },
-  {
-    id: 'ecl-vivid',
-    name: 'Vivid',
-    colors: ['G'],
-    face: 'Aurora Awakener',
-    blurb: 'Vivid creatures grow with the colours you control',
-    set: 'ecl',
-    spells: [
-      ['Aurora Awakener', 1],
-      ['Luminollusk', 2],
-      ['Prismabasher', 1],
-      ['Wildvine Pummeler', 2],
-      ['Prismatic Undercurrents', 2],
-      ['Great Forest Druid', 1],
-      ['Crossroads Watcher', 1],
-      ['Safewright Cavalry', 1],
-      ['Pummeler for Hire', 1],
-    ],
-  },
-  {
-    id: 'ecl-elemental',
-    name: 'Elemental',
-    colors: ['U', 'R'],
-    face: 'Ashling, Rekindled',
-    blurb: 'Elementals that ramp each other and burn what stands in the way',
-    set: 'ecl',
-    spells: [
-      ['Ashling, Rekindled', 1],
-      ['Flamebraider', 1],
-      ['Summit Sentinel', 1],
-      ['Flame-Chain Mauler', 1],
-      ['Flaring Cinder', 1],
-      ['Eclipsed Flamekin', 1],
-      ['Twinflame Travelers', 1],
-      ['Stratosoarer', 1],
-      ['Kulrath Zealot', 1],
-      ['Sear', 1],
-      ['Tweeze', 1],
-      ['Feed the Flames', 1],
-    ],
-    lands: [
-      ['Eclipsed Realms', 1],
-      ['Evolving Wilds', 1],
-      ['Island', 3],
-      ['Mountain', 3],
-    ],
-  },
-  {
-    id: 'ecl-goblins',
-    name: 'Goblins',
-    colors: ['B', 'R'],
-    face: 'Grub, Storied Matriarch',
-    blurb: 'Goblins that swarm, scheme and sacrifice',
-    set: 'ecl',
-    spells: [
-      ['Grub, Storied Matriarch', 1],
-      ['Mudbutton Cursetosser', 1],
-      ['Boggart Prankster', 2],
-      ['Boggart Cursecrafter', 1],
-      ['Eclipsed Boggart', 1],
-      ['Heirloom Auntie', 1],
-      ['Elder Auntie', 1],
-      ['Chaos Spewer', 1],
-      ['Boneclub Berserker', 1],
-      ['Tweeze', 1],
-      ["Auntie's Sentence", 1],
-    ],
-    lands: [
-      ['Eclipsed Realms', 1],
-      ['Evolving Wilds', 1],
-      ['Swamp', 3],
-      ['Mountain', 3],
-    ],
-  },
-  {
-    id: 'ecl-elves',
-    name: 'Elves',
-    colors: ['B', 'G'],
-    face: 'High Perfect Morcant',
-    blurb: 'Elves that rally, grow and drain',
-    set: 'ecl',
-    spells: [
-      ['High Perfect Morcant', 1],
-      ['Scarblade Scout', 1],
-      ['Lys Alana Informant', 2],
-      ['Iron-Shield Elf', 1],
-      ['Eclipsed Elf', 1],
-      ['Moonglove Extractor', 1],
-      ["Morcant's Loyalist", 1],
-      ['Safewright Cavalry', 1],
-      ['Stoic Grove-Guide', 1],
-      ['Blight Rot', 1],
-      ['Assert Perfection', 1],
-    ],
-    lands: [
-      ['Eclipsed Realms', 1],
-      ['Evolving Wilds', 1],
-      ['Swamp', 3],
-      ['Forest', 3],
-    ],
-  },
-  {
-    id: 'ecl-flashy',
-    name: 'Flashy',
-    colors: ['U', 'B'],
-    face: 'Glen Elendra Guardian',
-    blurb: "Flash creatures and tricks on the opponent's turn",
-    set: 'ecl',
-    spells: [
-      ['Glen Elendra Guardian', 1],
-      ['Glamermite', 2],
-      ['Mischievous Sneakling', 2],
-      ['Unwelcome Sprite', 1],
-      ['Voracious Tome-Skimmer', 2],
-      ['Nightmare Sower', 1],
-      ['Glamer Gifter', 1],
-      ['Nameless Inversion', 1],
-      ['Blight Rot', 1],
-    ],
-    lands: [
-      ['Island', 4],
-      ['Swamp', 4],
-    ],
-  },
-  {
-    id: 'ecl-blighted',
-    name: 'Blighted',
-    colors: ['B'],
-    face: 'Champion of the Weird',
-    blurb: 'Put -1/-1 counters on your own creatures for cards and removal',
-    set: 'ecl',
-    spells: [
-      ['Champion of the Weird', 1],
-      ['Heirloom Auntie', 2],
-      ['Bile-Vial Boggart', 1],
-      ['Retched Wretch', 1],
-      ['Blighted Blackthorn', 2],
-      ['Dream Seizer', 1],
-      ['Gnarlbark Elm', 1],
-      ['Gutsplitter Gang', 1],
-      ['Blight Rot', 1],
-      ["Bogslither's Embrace", 1],
-    ],
-  },
-  {
-    id: 'ecl-giant',
-    name: 'Giant',
-    colors: ['R'],
-    face: 'Goliath Daydreamer',
-    blurb: 'Big Giants with double strike, backed by burn',
-    set: 'ecl',
-    spells: [
-      ['Goliath Daydreamer', 1],
-      ['Brambleback Brute', 3],
-      ['Boldwyr Aggressor', 2],
-      ['Sizzling Changeling', 1],
-      ['Flamekin Gildweaver', 1],
-      ['Giantfall', 1],
-      ['Sear', 1],
-      ['Cinder Strike', 1],
-      ['Feed the Flames', 1],
-    ],
-  },
 ];
 
 /**
@@ -3240,10 +3011,438 @@ export const MARVEL_JUMPSTART_PACKETS: Packet[] = [
   },
 ];
 
+/**
+ * MTG Arena's ten Lorwyn Eclipsed packets, from https://mtgabuddy.com/en/jump-in-packet-list
+ * (`scripts/data/arena-jumpin-packets.json`): the fixed cards and lands Arena lists, plus its random
+ * slots (one alternative of each, by percentage, when a deck is built). Packets are 18 or 19 cards.
+ */
+export const ARENA_ECL_PACKETS: Packet[] = [
+  {
+    id: 'ecl-kithkin',
+    name: 'Kithkin',
+    colors: ['W', 'G'],
+    face: 'Figure of Fable',
+    blurb: 'Kithkin go wide and pump each other',
+    set: 'ecl',
+    source: 'arena',
+    spells: [
+      ['Thoughtweft Lieutenant', 1],
+      ['Eclipsed Kithkin', 1],
+      ['Thoughtweft Imbuer', 1],
+      ['Mistmeadow Council', 1],
+      ['Thoughtweft Charge', 1],
+      ['Keep Out', 1],
+      ['Clachan Festival', 1],
+      ['Spiral into Solitude', 1],
+    ],
+    slots: [
+      [
+        { card: "Brigid's Command", weight: 50 },
+        { card: 'Figure of Fable', weight: 50 },
+      ],
+      [
+        { card: 'Kinsbaile Aspirant', weight: 50 },
+        { card: 'Goldmeadow Nomad', weight: 50 },
+      ],
+      [
+        { card: 'Surly Farrier', weight: 50 },
+        { card: 'Timid Shieldbearer', weight: 50 },
+      ],
+      [
+        { card: 'Wary Farmer', weight: 50 },
+        { card: 'Crossroads Watcher', weight: 50 },
+      ],
+    ],
+    lands: [
+      ['Temple Garden', 1],
+      ['Plains', 3],
+      ['Forest', 3],
+    ],
+  },
+  {
+    id: 'ecl-merfolk',
+    name: 'Merfolk',
+    colors: ['W', 'U'],
+    face: 'Deepchannel Duelist',
+    blurb: 'Merfolk tap and untap for value',
+    set: 'ecl',
+    source: 'arena',
+    spells: [
+      ['Wanderbrine Trapper', 1],
+      ['Deepchannel Duelist', 1],
+      ['Eclipsed Merrow', 1],
+      ['Gravelgill Scoundrel', 1],
+      ['Merrow Skyswimmer', 1],
+      ['Wanderwine Farewell', 1],
+      ['Liminal Hold', 1],
+    ],
+    slots: [
+      [
+        { card: 'Deepway Navigator', weight: 50 },
+        { card: "Sygg's Command", weight: 50 },
+      ],
+      [
+        { card: 'Silvergill Mentor', weight: 50 },
+        { card: 'Encumbered Reejerey', weight: 50 },
+      ],
+      [
+        { card: 'Pestered Wellguard', weight: 50 },
+        { card: 'Shore Lurker', weight: 50 },
+      ],
+      [
+        { card: 'Silvergill Peddler', weight: 50 },
+        { card: 'Tributary Vaulter', weight: 50 },
+      ],
+      [
+        { card: 'Appeal to Eirdu', weight: 50 },
+        { card: "Riverguard's Reflexes", weight: 50 },
+      ],
+    ],
+    lands: [
+      ['Hallowed Fountain', 1],
+      ['Plains', 3],
+      ['Island', 3],
+    ],
+  },
+  {
+    id: 'ecl-elemental',
+    name: 'Elemental',
+    colors: ['U', 'R'],
+    face: 'Flamebraider',
+    blurb: 'Elementals and spells that flood the board',
+    set: 'ecl',
+    source: 'arena',
+    spells: [
+      ['Flamebraider', 1],
+      ['Eclipsed Flamekin', 1],
+      ['Tanufel Rimespeaker', 1],
+      ['Twinflame Travelers', 1],
+      ['Summit Sentinel', 1],
+      ['Flaring Cinder', 1],
+      ['Feed the Flames', 1],
+      ['Temporal Cleansing', 1],
+    ],
+    slots: [
+      [
+        { card: 'Sunderflock', weight: 50 },
+        { card: "Ashling's Command", weight: 50 },
+      ],
+      [
+        { card: 'Giantfall', weight: 50 },
+        { card: 'Sear', weight: 50 },
+      ],
+      [
+        { card: 'Enraged Flamecaster', weight: 50 },
+        { card: 'Kulrath Mystic', weight: 50 },
+      ],
+      [
+        { card: 'Kulrath Zealot', weight: 50 },
+        { card: 'Stratosoarer', weight: 50 },
+      ],
+    ],
+    lands: [
+      ['Steam Vents', 1],
+      ['Island', 3],
+      ['Mountain', 3],
+    ],
+  },
+  {
+    id: 'ecl-goblins',
+    name: 'Goblins',
+    colors: ['B', 'R'],
+    face: 'Boggart Cursecrafter',
+    blurb: 'Goblins that sacrifice and burn',
+    set: 'ecl',
+    source: 'arena',
+    spells: [
+      ['Boggart Cursecrafter', 1],
+      ['Eclipsed Boggart', 1],
+      ['Sourbread Auntie', 1],
+      ['Bile-Vial Boggart', 1],
+      ['Unbury', 1],
+      ["Bogslither's Embrace", 1],
+      ['Burning Curiosity', 1],
+    ],
+    slots: [
+      [
+        { card: 'Scuzzback Scrounger', weight: 50 },
+        { card: "Grub's Command", weight: 50 },
+      ],
+      [
+        { card: 'Retched Wretch', weight: 50 },
+        { card: 'Boggart Mischief', weight: 50 },
+      ],
+      [
+        { card: 'Boggart Prankster', weight: 50 },
+        { card: 'Gristle Glutton', weight: 50 },
+      ],
+      [
+        { card: 'Elder Auntie', weight: 50 },
+        { card: 'Chaos Spewer', weight: 50 },
+      ],
+      [
+        { card: 'Cinder Strike', weight: 50 },
+        { card: "Auntie's Sentence", weight: 50 },
+      ],
+    ],
+    lands: [
+      ['Blood Crypt', 1],
+      ['Swamp', 3],
+      ['Mountain', 3],
+    ],
+  },
+  {
+    id: 'ecl-elves',
+    name: 'Elves',
+    colors: ['B', 'G'],
+    face: 'Lys Alana Dignitary',
+    blurb: 'Elves that grow and grind',
+    set: 'ecl',
+    source: 'arena',
+    spells: [
+      ['Lys Alana Dignitary', 1],
+      ['Eclipsed Elf', 1],
+      ["Morcant's Loyalist", 1],
+      ["Dawn's Light Archer", 1],
+      ['Stoic Grove-Guide', 1],
+      ['Midnight Tilling', 1],
+      ['Assert Perfection', 1],
+    ],
+    slots: [
+      [
+        { card: 'High Perfect Morcant', weight: 20 },
+        { card: "Trystan's Command", weight: 40 },
+        { card: 'Gloom Ripper', weight: 40 },
+      ],
+      [
+        { card: "Morcant's Eyes", weight: 50 },
+        { card: 'Creakwood Safewright', weight: 50 },
+      ],
+      [
+        { card: 'Blossoming Defense', weight: 50 },
+        { card: 'Nameless Inversion', weight: 50 },
+      ],
+      [
+        { card: 'Lys Alana Informant', weight: 50 },
+        { card: 'Scarblade Scout', weight: 50 },
+      ],
+      [
+        { card: 'Dawnhand Eulogist', weight: 50 },
+        { card: 'Safewright Cavalry', weight: 50 },
+      ],
+    ],
+    lands: [
+      ['Overgrown Tomb', 1],
+      ['Swamp', 3],
+      ['Forest', 3],
+    ],
+  },
+  {
+    id: 'ecl-flashy',
+    name: 'Flashy',
+    colors: ['U'],
+    face: 'Glamer Gifter',
+    blurb: 'Flash creatures and tricks',
+    set: 'ecl',
+    source: 'arena',
+    spells: [
+      ['Glamer Gifter', 1],
+      ['Voracious Tome-Skimmer', 1],
+      ['Illusion Spinners', 1],
+      ['Mischievous Sneakling', 1],
+      ['Glamermite', 1],
+      ['Wild Unraveling', 1],
+      ['Unexpected Assistance', 1],
+      ['Blossombind', 1],
+    ],
+    slots: [
+      [
+        { card: 'Loch Mare', weight: 20 },
+        { card: 'Flitterwing Nuisance', weight: 40 },
+        { card: 'Glen Elendra Guardian', weight: 40 },
+      ],
+      [
+        { card: 'Rimekin Recluse', weight: 50 },
+        { card: 'Unwelcome Sprite', weight: 50 },
+      ],
+      [
+        { card: 'Noggle the Mind', weight: 50 },
+        { card: 'Swat Away', weight: 50 },
+      ],
+      [
+        { card: 'Run Away Together', weight: 50 },
+        { card: "Aquitect's Defenses", weight: 50 },
+      ],
+    ],
+    lands: [['Island', 6]],
+  },
+  {
+    id: 'ecl-burdened',
+    name: 'Burdened',
+    colors: ['W'],
+    face: 'Burdened Stoneback',
+    blurb: 'White creatures with -1/-1 counters',
+    set: 'ecl',
+    source: 'arena',
+    spells: [
+      ['Burdened Stoneback', 1],
+      ['Encumbered Reejerey', 1],
+      ['Tributary Vaulter', 1],
+      ['Sun-Dappled Celebrant', 1],
+      ['Pyrrhic Strike', 1],
+      ["Evershrike's Gift", 1],
+      ['Liminal Hold', 1],
+    ],
+    slots: [
+      [
+        { card: 'Ajani, Outland Chaperone', weight: 20 },
+        { card: 'Rhys, the Evermore', weight: 40 },
+        { card: 'Slumbering Walker', weight: 40 },
+      ],
+      [
+        { card: 'Meanders Guide', weight: 50 },
+        { card: 'Moonlit Lamenter', weight: 50 },
+      ],
+      [
+        { card: 'Spiral into Solitude', weight: 50 },
+        { card: 'Wanderbrine Preacher', weight: 50 },
+      ],
+      [
+        { card: 'Shore Lurker', weight: 50 },
+        { card: 'Merrow Skyswimmer', weight: 50 },
+      ],
+      [
+        { card: 'Keep Out', weight: 50 },
+        { card: "Riverguard's Reflexes", weight: 50 },
+      ],
+    ],
+    lands: [['Plains', 6]],
+  },
+  {
+    id: 'ecl-blighted',
+    name: 'Blighted',
+    colors: ['B'],
+    face: 'Blighted Blackthorn',
+    blurb: 'Blight: put -1/-1 counters on your own creatures',
+    set: 'ecl',
+    source: 'arena',
+    spells: [
+      ['Iron-Shield Elf', 1],
+      ['Gnarlbark Elm', 1],
+      ['Reaping Willow', 1],
+      ['Scarblade Scout', 1],
+      ['Blighted Blackthorn', 1],
+      ['Requiting Hex', 1],
+      ['Blight Rot', 1],
+    ],
+    slots: [
+      [
+        { card: 'Moonshadow', weight: 20 },
+        { card: 'Dawnhand Dissident', weight: 40 },
+        { card: 'Shadow Urchin', weight: 40 },
+      ],
+      [
+        { card: 'Graveshifter', weight: 50 },
+        { card: 'Dream Seizer', weight: 50 },
+      ],
+      [
+        { card: 'Moonglove Extractor', weight: 50 },
+        { card: 'Heirloom Auntie', weight: 50 },
+      ],
+      [
+        { card: 'Changeling Wayfinder', weight: 50 },
+        { card: 'Prideful Feastling', weight: 50 },
+      ],
+      [
+        { card: "Scarblade's Malice", weight: 50 },
+        { card: 'Barbed Bloodletter', weight: 50 },
+      ],
+    ],
+    lands: [['Swamp', 6]],
+  },
+  {
+    id: 'ecl-giant',
+    name: 'Giant',
+    colors: ['R'],
+    face: 'Hovel Hurler',
+    blurb: 'Giants and big red spells',
+    set: 'ecl',
+    source: 'arena',
+    spells: [
+      ['Sizzling Changeling', 1],
+      ['Hovel Hurler', 1],
+      ['Boldwyr Aggressor', 1],
+      ['Feisty Spikeling', 1],
+      ['Brambleback Brute', 1],
+      ['Tweeze', 1],
+      ['Burning Curiosity', 1],
+    ],
+    slots: [
+      [
+        { card: 'Spinerock Tyrant', weight: 20 },
+        { card: 'Goliath Daydreamer', weight: 80 },
+      ],
+      [
+        { card: 'Impolite Entrance', weight: 50 },
+        { card: 'Goatnap', weight: 50 },
+      ],
+      [
+        { card: 'Boulder Dash', weight: 50 },
+        { card: 'Giantfall', weight: 50 },
+      ],
+      [
+        { card: 'Stalactite Dagger', weight: 50 },
+        { card: 'Flame-Chain Mauler', weight: 50 },
+      ],
+      [
+        { card: 'Flamekin Gildweaver', weight: 50 },
+        { card: 'Feed the Flames', weight: 50 },
+      ],
+    ],
+    lands: [['Mountain', 6]],
+  },
+  {
+    id: 'ecl-vivid',
+    name: 'Vivid',
+    colors: ['G'],
+    face: 'Great Forest Druid',
+    blurb: 'Vivid: count the colours you control',
+    set: 'ecl',
+    source: 'arena',
+    spells: [
+      ['Noggle Robber', 1],
+      ['Luminollusk', 1],
+      ['Glister Bairn', 1],
+      ['Prismabasher', 1],
+      ['Great Forest Druid', 1],
+      ['Wildvine Pummeler', 1],
+      ['Assert Perfection', 1],
+      ['Shimmerwilds Growth', 1],
+      ['Pitiless Fists', 1],
+    ],
+    slots: [
+      [
+        { card: 'Aurora Awakener', weight: 20 },
+        { card: 'Tam, Mindful First-Year', weight: 80 },
+      ],
+      [
+        { card: 'Gangly Stompling', weight: 50 },
+        { card: 'Wary Farmer', weight: 50 },
+      ],
+      [
+        { card: 'Unforgiving Aim', weight: 50 },
+        { card: "Gilt-Leaf's Embrace", weight: 50 },
+      ],
+    ],
+    lands: [['Forest', 6]],
+  },
+];
+
 export const PACKETS: Packet[] = [
   ...OWN_PACKETS,
   ...ARENA_BLB_PACKETS,
   ...ARENA_FDN_PACKETS,
+  ...ARENA_ECL_PACKETS,
   ...MARVEL_JUMPSTART_PACKETS,
 ];
 
@@ -3255,7 +3454,40 @@ const BASICS: Record<Color, string> = {
   G: 'Forest',
 };
 
-/** A packet's full 20 cards: its spells and its basic lands. */
-export function packetCards(p: Packet): [string, number][] {
-  return [...p.spells, ...(p.lands ?? [[BASICS[p.colors[0]!], PACKET_LANDS]])];
+/** One alternative per random slot: the index into each slot's list. */
+export type Deal = number[];
+
+/** The likeliest alternative of each slot (the first on ties): what a packet is without a deal. */
+export function defaultDeal(p: Packet): Deal {
+  return (p.slots ?? []).map((alts) => {
+    let best = 0;
+    alts.forEach((a, i) => {
+      if (a.weight > alts[best]!.weight) best = i;
+    });
+    return best;
+  });
+}
+
+/** Deals each random slot one alternative by its weight, using `random` (0 to 1). */
+export function dealPacket(p: Packet, random: () => number): Deal {
+  return (p.slots ?? []).map((alts) => {
+    let roll = random() * alts.reduce((s, a) => s + a.weight, 0);
+    for (let i = 0; i < alts.length; i++) {
+      roll -= alts[i]!.weight;
+      if (roll < 0) return i;
+    }
+    return alts.length - 1;
+  });
+}
+
+/** A packet's cards: its spells, the dealt alternative of each random slot, and its lands. */
+export function packetCards(p: Packet, deal: Deal = defaultDeal(p)): [string, number][] {
+  const spells = [...p.spells];
+  (p.slots ?? []).forEach((alts, i) => {
+    const card = (alts[deal[i] ?? 0] ?? alts[0]!).card;
+    const at = spells.findIndex(([n]) => n === card);
+    if (at >= 0) spells[at] = [card, spells[at]![1] + 1];
+    else spells.push([card, 1]);
+  });
+  return [...spells, ...(p.lands ?? [[BASICS[p.colors[0]!], PACKET_LANDS]])];
 }

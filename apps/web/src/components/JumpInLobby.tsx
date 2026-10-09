@@ -232,11 +232,7 @@ export function JumpInLobby({
               ))}
             </div>
           </div>
-          <button
-            className="hbtn hbtn--primary jl__play"
-            disabled={!!live}
-            onClick={onPlay}
-          >
+          <button className="hbtn hbtn--primary jl__play" disabled={!!live} onClick={onPlay}>
             Play
           </button>
         </div>
@@ -356,7 +352,7 @@ export function JumpInLobby({
               </div>
               <p className="jl__detail-blurb">{detail.blurb}</p>
               <ul className="jl__cards">
-                {packetCards(detail).map(([name, n]) => (
+                {packetCards({ ...detail, slots: undefined }).map(([name, n]) => (
                   <li
                     key={name}
                     className={isRare(name) ? 'is-rare' : ''}
@@ -367,10 +363,27 @@ export function JumpInLobby({
                     {name}
                   </li>
                 ))}
+                {detail.slots?.map((alts, k) => (
+                  <li key={`slot-${k}`} className="jl__slot">
+                    <span>1</span>
+                    {alts.map((a) => (
+                      <em
+                        key={a.card}
+                        className={isRare(a.card) ? 'is-rare' : ''}
+                        onMouseEnter={(e) =>
+                          setHover({ defId: slug(a.card), anchor: e.currentTarget })
+                        }
+                        onMouseLeave={() => setHover(null)}
+                      >
+                        {a.weight}% {a.card}
+                      </em>
+                    ))}
+                  </li>
+                ))}
               </ul>
             </>
           ) : (
-            <p className="jl__empty">Hover a packet to see its 20 cards.</p>
+            <p className="jl__empty">Hover a packet to see its cards.</p>
           )}
         </aside>
       </div>

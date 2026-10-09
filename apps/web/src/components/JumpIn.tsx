@@ -32,8 +32,8 @@ export const GROUPS = [
   { key: 'stx', name: 'Strixhaven', has: (p: Packet) => p.set === 'stx' },
   { key: 'sos', name: 'Secrets of Strixhaven', has: (p: Packet) => p.set === 'sos' },
   { key: 'fra', name: 'Reality Fracture', has: (p: Packet) => p.set === 'fra' },
-  { key: 'ecl', name: 'Lorwyn Eclipsed', has: (p: Packet) => p.set === 'ecl' },
-  { key: 'tdm', name: 'Tarkir: Dragonstorm', has: (p: Packet) => p.set === 'tdm' },
+  { key: 'ecl', name: 'Lorwyn Eclipsed · Arena', has: (p: Packet) => p.set === 'ecl' },
+  { key: 'tdm', name: 'Tarkir: Dragonstorm · Arena', has: (p: Packet) => p.set === 'tdm' },
 ] as const;
 
 type Group = (typeof GROUPS)[number]['key'];
@@ -75,7 +75,7 @@ export function JumpIn({
     if (!first) {
       setFirst(p);
       setOptions(offer('any', p));
-    } else onPick(jumpInId(first.id, p.id));
+    } else onPick(jumpInId(first.id, p.id, Math.random));
   };
   // The group picks where the first half comes from; the second can be from any group.
   const pickGroup = (g: Group) => {
@@ -147,6 +147,22 @@ export function JumpIn({
                 >
                   <span>{n > 1 ? `${n}×` : ''}</span>
                   {name}
+                </li>
+              ))}
+              {p.slots?.map((alts, k) => (
+                <li key={`slot-${k}`} className="jumpin__slot">
+                  {alts.map((a) => (
+                    <span
+                      key={a.card}
+                      className={isRare(a.card) ? 'is-rare' : ''}
+                      onMouseEnter={(e) =>
+                        setHover({ defId: slug(a.card), anchor: e.currentTarget })
+                      }
+                      onMouseLeave={() => setHover(null)}
+                    >
+                      {a.weight}% {a.card}
+                    </span>
+                  ))}
                 </li>
               ))}
             </ul>

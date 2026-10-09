@@ -2,7 +2,7 @@ import type { CardDb, CardDefId, CardDefinition, NewGameOptions, PlayerId } from
 import { BEHAVIORS, TOKENS } from './behaviors.ts';
 import { buildCard, slug } from './build.ts';
 import { DECKS, type Decklist } from './decks.ts';
-import { type Packet, PACKETS, packetCards } from './jumpin.ts';
+import { dealPacket, defaultDeal, type Deal, type Packet, PACKETS, packetCards } from './jumpin.ts';
 import scryfall from './generated/scryfall.json' with { type: 'json' };
 import basicArt from './generated/basic-art.json' with { type: 'json' };
 import foundations from './generated/foundations-pack-candidates.json' with { type: 'json' };
@@ -72,8 +72,11 @@ export {
   PACKET_LANDS,
   PACKETS,
   packetCards,
+  ARENA_ECL_PACKETS,
+  dealPacket,
+  defaultDeal,
 } from './jumpin.ts';
-export type { Packet } from './jumpin.ts';
+export type { Packet, Deal } from './jumpin.ts';
 export type { ScryfallCard } from './scryfall-types.ts';
 
 export const SCRYFALL: readonly ScryfallCard[] = scryfall as ScryfallCard[];
@@ -255,26 +258,94 @@ export const PLAYABLE_BRAWL_DECKS: readonly Decklist[] = DECKS.filter(
   (d) => isPlayable(d) && isBrawl(d),
 );
 
-/** Id of the deck made from two Jump In packets. */
-export const jumpInId = (a: string, b: string): string => `jump-in:${a}+${b}`;
+/**
+ * Id of the deck made from two Jump In packets: `jump-in:a+b` with the packets' likeliest cards in
+ * their random slots, or, with `random`, `jump-in:a+b~0110` where each digit is the alternative
+ * dealt to one random slot (a's slots, then b's). The id says exactly which cards are in the deck.
+ */
+export function jumpInId(a: string, b: string, random?: () => number): string {
+  const id = `jump-in:${a}+${b}`;
+  if (!random) return id;
+  const pa = PACKETS.find((p) => p.id === a);
+  const pb = PACKETS.find((p) => p.id === b);
+  const digits = [pa, pb].flatMap((p) => (p ? dealPacket(p, random) : [])).join('');
+  return digits ? `${id}~${digits}` : id;
+}
 export const isJumpIn = (id: string): boolean => id.startsWith('jump-in:');
+
+const JUMP_IN_ID = /^jump-in:([\w-]+)\+([\w-]+?)(?:~(\d+))?$/;
 
 /** The two packets of a Jump In deck id, if it is one. */
 export function jumpInPackets(id: string): [Packet, Packet] | undefined {
-  const m = /^jump-in:([\w-]+)\+([\w-]+)$/.exec(id);
+  const m = JUMP_IN_ID.exec(id);
   const a = PACKETS.find((p) => p.id === m?.[1]);
   const b = PACKETS.find((p) => p.id === m?.[2]);
   return a && b ? [a, b] : undefined;
 }
 
-/** Two packets shuffled together: 40 cards named after both themes, with the first one's face. */
-function jumpInDeck(id: string): Decklist | undefined {
+/** What was dealt to each packet's random slots, from the id (the likeliest cards if it has no deal). */
+export function jumpInDeals(id: string): [Deal, Deal] | undefined {
   const pair = jumpInPackets(id);
   if (!pair) return undefined;
+  const digits = JUMP_IN_ID.exec(id)![3];
+  const [a, b] = pair;
+  const na = a.slots?.length ?? 0;
+  const nb = b.slots?.length ?? 0;
+  if (digits === undefined) return [defaultDeal(a), defaultDeal(b)];
+  if (digits.length !== na + nb) return undefined;
+  const d = [...digits].map(Number);
+  return [d.slice(0, na), d.slice(na)];
+}
+
+const JUMP_IN_SIZE = 40;
+const BASIC_OF: Record<string, string> = {
+  W: 'Plains',
+  U: 'Island',
+  B: 'Swamp',
+  R: 'Mountain',
+  G: 'Forest',
+};
+
+/**
+ * Arena tops a Jump In deck up to 40 cards with basics balanced for the spells' costs: the missing
+ * lands are split between the colours by the mana symbols in the deck's costs (a hybrid symbol
+ * counts for both colours), by largest remainder.
+ */
+function addBasics(counts: Map<string, number>): void {
+  const missing = JUMP_IN_SIZE - [...counts.values()].reduce((s, n) => s + n, 0);
+  if (missing <= 0) return;
+  const symbols: Record<string, number> = { W: 0, U: 0, B: 0, R: 0, G: 0 };
+  for (const [name, n] of counts) {
+    const cost = scryfallById.get(slug(name))?.manaCost ?? '';
+    for (const m of cost.matchAll(/\{([^}]+)\}/g))
+      for (const c of m[1]!.split('/')) if (c in symbols) symbols[c]! += n;
+  }
+  const total = Object.values(symbols).reduce((s, n) => s + n, 0);
+  if (!total) return;
+  const share = Object.entries(symbols).map(([c, s]) => ({
+    c,
+    n: Math.floor((missing * s) / total),
+    rem: (missing * s) / total - Math.floor((missing * s) / total),
+  }));
+  let left = missing - share.reduce((s, x) => s + x.n, 0);
+  for (const x of [...share].sort((p, q) => q.rem - p.rem)) {
+    if (left-- <= 0) break;
+    x.n++;
+  }
+  for (const x of share)
+    if (x.n) counts.set(BASIC_OF[x.c]!, (counts.get(BASIC_OF[x.c]!) ?? 0) + x.n);
+}
+
+/** Two packets shuffled together: 40ish cards named after both themes, with the first one's face. */
+function jumpInDeck(id: string): Decklist | undefined {
+  const pair = jumpInPackets(id);
+  const deals = jumpInDeals(id);
+  if (!pair || !deals) return undefined;
   const [a, b] = pair;
   const counts = new Map<string, number>();
-  for (const [name, n] of [...packetCards(a), ...packetCards(b)])
+  for (const [name, n] of [...packetCards(a, deals[0]), ...packetCards(b, deals[1])])
     counts.set(name, (counts.get(name) ?? 0) + n);
+  addBasics(counts);
   return {
     id,
     name: `${a.name} + ${b.name}`,
