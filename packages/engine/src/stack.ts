@@ -1604,11 +1604,16 @@ export function attachAura(ctx: Ctx, aura: ObjectId, host: ObjectId): void {
         toughness: 0,
         keywords: [],
         loseAbilities: true,
+        // Lorwyn Eclipsed (18b, blue): Noggle the Mind, "is a colorless Noggle" (all other creature types and colors are lost).
+        ...(ab.effect.colorlessSubtype
+          ? { colorless: true, creatureSubtype: ab.effect.colorlessSubtype }
+          : {}),
         expires: 'whileSource',
         whileSourceId: aura,
         player: a.controller,
       });
       h.blank = true;
+      if (ab.effect.colorlessSubtype) h.colorless = true;
     }
     // Reality Fracture (17a): Puppet Crafting, the enchanted permanent is a creature while the Aura stays.
     if (ab.effect.kind === 'attached' && ab.effect.becomesCreature) {

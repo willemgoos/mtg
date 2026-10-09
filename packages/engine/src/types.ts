@@ -323,6 +323,9 @@ export interface CardDefinition {
    * (revealed; nothing else happens to it) makes the cost free, else the cast pays `pay` too. The cast action says which (`beheld`).
    */
   beholdOrPay?: { filter: CardFilter; pay: ManaCost };
+  // Lorwyn Eclipsed (18b, blue): Illusion Spinners
+  /** "You may cast this spell as though it had flash if <condition>." */
+  flashIf?: ConditionDef;
   /** Aura: what it enchants (chosen as a target when cast). */
   enchant?: TargetSpec;
   // Transform (Marvel Super Heroes)
@@ -602,6 +605,9 @@ export type TriggerDef =
   | {
       on: 'creatureYouControlDealsCombatDamage';
       toPlayer?: boolean;
+      // Lorwyn Eclipsed (18b, blue): Flitterwing Nuisance
+      /** To a player or a planeswalker (not to a creature). */
+      toPlayerOrPlaneswalker?: boolean;
       filter?: CardFilter;
       /** Any player's creature, not just yours (The Clone Saga's emblem: "a creature with the chosen name"). */
       anyController?: boolean;
@@ -1480,6 +1486,9 @@ export type Amount =
   // Reality Fracture (17c): Overwrite the Multiverse
   /** The number of permanents the latest `exile` effect of this resolution actually exiled. */
   | { exiledThisWay: true }
+  // Lorwyn Eclipsed (18b, blue): Wanderwine Farewell, Glen Elendra's Answer
+  /** How many things the latest `bounce` returned to hand, or `eclCounterAllOpponents` countered, in this resolution. */
+  | { affectedThisWay: true }
   /** Permanents you control matching the filter (Honored Dreyleader: Squirrels and Food). */
   | { count: 'permanentsYouControl'; filter: CardFilter; other?: boolean }
   /** The greatest mana value among cards in your graveyard (Wick's Patrol). */
@@ -2545,6 +2554,9 @@ export type EffectDef =
       what?: Ref;
       /** How long: until its controller's next turn, or while the source stays on the battlefield. */
       until?: 'yourNextTurn' | 'whileSource';
+      // Lorwyn Eclipsed (18b, blue): Mirrorform
+      /** No end: it stays a copy for as long as it is on the battlefield. */
+      permanent?: boolean;
       /** "Except he's a 4/4 Human Villain creature with vigilance" (Absorbing Man). */
       asCreature?: { power: number; toughness: number; subtypes: string[]; keywords: Keyword[] };
       // Strixhaven (13c): Echoing Equation
@@ -2840,6 +2852,13 @@ export type StaticDef =
       // Lorwyn Eclipsed (18a): Stalactite Dagger
       /** "Equipped creature ... is all creature types." */
       allCreatureTypes?: boolean;
+      // Lorwyn Eclipsed (18b, blue): Noggle the Mind, Blossombind
+      /** With `loseAbilities` and `basePT`: "is a colorless <subtype> ..." (loses all colors and all other creature types). */
+      colorlessSubtype?: string;
+      /** "Enchanted creature can't become untapped" (by any effect, not only the untap step). */
+      cantBecomeUntapped?: boolean;
+      /** "Enchanted creature can't have counters put on it." */
+      noCounters?: boolean;
     }
   // Reality Fracture (17a): Karn, Argent Defender
   /** "Artifacts and creatures entering the battlefield don't cause abilities to trigger." */
@@ -3412,6 +3431,9 @@ export interface GameObject {
   lastBeholdExiled?: ObjectRef;
   /** It has all creature types for good, from this timestamp (Oko, Lorwyn Liege's +2). */
   allCreatureTypes?: number;
+  // Lorwyn Eclipsed (18b, blue): Noggle the Mind
+  /** It has lost all its colors. */
+  colorless?: boolean;
 }
 
 /** A reference that goes stale when the object changes zones. */
@@ -3801,6 +3823,9 @@ export interface ContinuousEffect {
   allCreatureTypes?: boolean;
   /** It has no creature types (Nameless Inversion). */
   noCreatureTypes?: boolean;
+  // Lorwyn Eclipsed (18b, blue): Noggle the Mind
+  /** It is colorless. */
+  colorless?: boolean;
 }
 
 /** What an effect needs to know about the spell or ability producing it. */
@@ -3827,6 +3852,9 @@ export interface EffectSource {
   // Reality Fracture (17c): Overwrite the Multiverse
   /** Permanents its latest exile effect actually exiled ("the number of creatures exiled this way"). */
   exiledThisWay?: number;
+  // Lorwyn Eclipsed (18b, blue)
+  /** Permanents the latest `bounce` returned to hand / spells and abilities Glen Elendra's Answer countered. */
+  affectedThisWay?: number;
 }
 
 /**

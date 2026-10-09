@@ -833,6 +833,7 @@ export function resolveAmount(ctx: Ctx, es: EffectSource, amount: Amount): numbe
   if ('event' in amount) return es.amount ?? 0;
   // Reality Fracture (17a fixes): Rise of the Deathbringer.
   if ('drawnThisWay' in amount) return es.drawnThisWay ?? 0;
+  if ('affectedThisWay' in amount) return es.affectedThisWay ?? 0; // Lorwyn Eclipsed (18b, blue)
   if ('exiledThisWay' in amount) return es.exiledThisWay ?? 0; // Reality Fracture (17c): Overwrite the Multiverse
   // Strixhaven (13c): life gained this turn (Fortifying Draught).
   if ('count' in amount && amount.count === 'lifeGainedThisTurn')
@@ -2901,6 +2902,7 @@ function runEffectInner(ctx: Ctx, es: EffectSource, e: EffectDef): void {
     case 'bounce': {
       const ids = objectsOf(ctx, es, e.what);
       for (const id of ids) moveObject(ctx, id, 'hand');
+      es.affectedThisWay = ids.length; // Lorwyn Eclipsed (18b, blue): Wanderwine Farewell
       // Bob, Reluctant HYDRA Agent: "if you do".
       if (ids.length) for (const x of e.then ?? []) runEffect(ctx, es, x);
       return;
@@ -3287,7 +3289,7 @@ function runEffectInner(ctx: Ctx, es: EffectSource, e: EffectDef): void {
         // Marvel Super Heroes: longer copies, and copies that stay creatures.
         if (e.until === 'yourNextTurn') self.copyUntilTurnOf = es.controller;
         else if (e.until === 'whileSource' && source) self.copyWhileSource = source.id;
-        else self.copyingUntilTurn = ctx.s.turn.number;
+        else if (!e.permanent) self.copyingUntilTurn = ctx.s.turn.number;
         if ((e.nonlegendary || obj(ctx, of).nonlegendary) && !self.nonlegendary) {
           self.nonlegendary = true;
           self.copyNonlegendary = true;

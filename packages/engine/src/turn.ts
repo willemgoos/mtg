@@ -565,5 +565,10 @@ function endEffects(ctx: Ctx, ending: (e: ContinuousEffect) => boolean): void {
       o.blank = s.effects.some(
         (x) => x.loseAbilities && x.affected.id === o.id && x.affected.zcc === o.zcc,
       );
+    // Lorwyn Eclipsed (18b, blue): Noggle the Mind
+    if (e.colorless)
+      o.colorless = s.effects.some(
+        (x) => x.colorless && x.affected.id === o.id && x.affected.zcc === o.zcc,
+      );
   }
 }
