@@ -240,6 +240,16 @@ Morcant) 60.5%, Kulrath Tempest (U/R, Ashling, Rekindled) 49.8%. Packets (our pa
 random packets, 300 games): Elemental (Ashling, Rekindled) 43.0%, Goblins (Grub, Storied Matriarch) 44.7%, Elves (High
 Perfect Morcant) 48.0%. Mischievous Sneakling is U/B hybrid, so the Goblins deck leaves it out.
 
+**18c, enemy pairs and three packets done** (`ecl/decks-3.ts`, tests `ecl-decks-3.test.ts`). Bot vs bot, 20 games per seat
+against each of the ten Foundations starters (400 games): Willow's Reprieve (W/B, Emptiness) 46.8%, Hurlers and Giants (R/W,
+Bre of Clan Stoutarm) 50.5%, Treasure Trove Titans (R/G, Aurora Awakener) 61.3%, Prismatic Wilds (G/U, Wistfulness) 50.5%,
+Twilight Ambush (U/B, Bitterbloom Bearer) 47.8%. The first U/B lists (small flash creatures plus tricks and counters) sat at
+30-40%: the bot plays flash cards in its main phase anyway, so bodies and removal matter more than the tricks. Packets
+(`ecl-flashy`, `ecl-blighted`, `ecl-giant`; 300 games each against random packets from every set): Flashy (U/B, Glen Elendra
+Guardian) 42.7%, Blighted (B, Champion of the Weird) 48.3%, Giant (R, Goliath Daydreamer) 60.0%. Bug found by these games:
+the heuristic bot planned double blocks against "can't be blocked by more than one creature" (Safewright Cavalry) and the
+engine rejected them; `combatStats` now reports `maxBlockers` and `planBlocks` respects it.
+
 ## Phase 18d: boosters
 
 `PackSet` `'ecl'` in Expedition and a Season pack kind, sheets from the ECL booster list.
