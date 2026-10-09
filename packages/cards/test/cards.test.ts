@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { ECL_DECKS_3 } from '../src/ecl/decks-3.ts';
 import {
   BEHAVIORS,
   BLACK_POOL,
@@ -165,6 +166,7 @@ describe('card data', () => {
         ...STRIXHAVEN_DECKS.map((d) => d.id),
         ...SECRETS_OF_STRIXHAVEN_DECKS.map((d) => d.id),
         ...REALITY_FRACTURE_DECKS.map((d) => d.id),
+        ...ECL_DECKS_3.map((d) => d.id),
         ...FINAL_FANTASY_STARTER_KIT_DECKS.map((d) => d.id),
         // Reality Fracture: the ten decks.
       ].sort(),

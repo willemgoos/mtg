@@ -559,7 +559,7 @@ export function planBlocks(engine: Engine, view: GameState, me: PlayerId): Block
     const choices: ObjectId[][] = [[]];
     if (!a.menace) for (const b of free) choices.push([b]);
     // Relentless X-ATM092 needs three blockers: the bot doesn't try.
-    const top = a.minBlockers > 2 ? [] : free.slice(0, 4);
+    const top = a.minBlockers > 2 || a.maxBlockers < 2 ? [] : free.slice(0, 4);
     for (let i = 0; i < top.length; i++)
       for (let j = i + 1; j < top.length; j++) choices.push([top[i]!, top[j]!]);
 

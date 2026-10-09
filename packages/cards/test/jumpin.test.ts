@@ -107,6 +107,26 @@ describe('Jump In packets', () => {
     expect(deckById(jumpInId('fra-lifegain', 'angels')).set).toBeUndefined();
   });
 
+  it('builds the Flashy, Blighted and Giant Lorwyn Eclipsed packets, one rare each', () => {
+    for (const [id, colors] of [
+      ['ecl-flashy', 'U,B'],
+      ['ecl-blighted', 'B'],
+      ['ecl-giant', 'R'],
+    ] as const) {
+      const p = PACKETS.find((x) => x.id === id)!;
+      expect(p.set).toBe('ecl');
+      expect(p.colors.join()).toBe(colors);
+      expect(p.spells.reduce((n, [, k]) => n + k, 0)).toBe(12);
+      expect(packetCards(p).reduce((n, [, k]) => n + k, 0)).toBe(20);
+      let rares = 0;
+      for (const [name, k] of p.spells) {
+        const c = card.get(name)!;
+        if (c.rarity === 'rare' || c.rarity === 'mythic') rares += k;
+      }
+      expect(rares, p.name).toBe(1);
+    }
+  });
+
   it('pairs packets across sets; a pair from one set is of that set', () => {
     const mixed = deckById(jumpInId('goblins', 'blb-lizards'));
     expect(deckIds(mixed)).toHaveLength(40);
