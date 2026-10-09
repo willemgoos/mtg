@@ -809,7 +809,7 @@ export type TriggerDef =
   /** At the beginning of your draw step. */
   // Reality Fracture (17c): The Theorist, Jace Beleren
   /** `whose: 'opponents'`: at the beginning of each opponent's draw step. */
-  | { on: 'beginningOfDraw'; whose?: 'opponents' }
+  | { on: 'beginningOfDraw'; whose?: 'opponents' | 'each' } // Lorwyn Eclipsed (18b, black): 'each' (Mornsong Aria)
   /** Whenever a creature you control becomes the target of an opponent's spell or ability (Pawpatch Recruit). */
   | { on: 'yourCreatureTargetedByOpponent' }
   /** When this Class becomes level N. */
@@ -973,7 +973,15 @@ export type TriggerDef =
   /** "Whenever this creature transforms into <this face>" (the back faces). */
   | { on: 'transforms' }
   /** "When this creature leaves the battlefield" (to any zone; the Champions). */
-  | { on: 'leavesBattlefield' };
+  | { on: 'leavesBattlefield' }
+  // Lorwyn Eclipsed (18b, black)
+  /** Moonshadow: whenever one or more permanent cards (not tokens) are put into your graveyard from anywhere (use with `batch`). */
+  | { on: 'permanentCardsToYourGraveyard' }
+  /**
+   * Twilight Diviner: whenever one or more other creatures you control enter, if they entered or were cast from a graveyard
+   * (use with `batch` and `oncePerTurn`; the creatures that did are the `subjects`).
+   */
+  | { on: 'creaturesEnterFromOrCastFromGraveyard' };
 
 export type ConditionDef =
   // Strixhaven Brawl (15b, g): Orochi Merge-Keeper
@@ -1374,6 +1382,12 @@ export interface TargetSpec {
   // Reality Fracture (17c): Fatehold Charm
   /** With 'spell': a creature on the battlefield is a legal target too ("target spell or creature"). */
   orCreature?: boolean;
+  // Lorwyn Eclipsed (18b, black): Unbury
+  /**
+   * "Two target creature cards that share a creature type": this target must share a creature type with the target
+   * chosen just before it (each pair is listed once, the second target always the later card).
+   */
+  sharesCreatureTypeWithPrevious?: boolean;
 }
 
 /**
@@ -1726,6 +1740,13 @@ export type EffectDef =
       castableIf?: ConditionDef;
       /** They reveal this many cards (picked for them: the cheapest), and you choose among those (Klaw). */
       reveal?: Amount;
+      // Lorwyn Eclipsed (18b, black): Taster of Wares
+      /** Choose only among these cards (the ones the opponent revealed), if they're still in their hand. */
+      among?: ObjectId[];
+      /** With `castable`: only for as long as you control the source (the exiled card is castable with any mana type). */
+      castableWhileControlling?: boolean;
+      /** With `castable`: only a card matching this is castable (an instant or sorcery card). */
+      castableFilter?: CardFilter;
     }
   /** A player chooses one of these (the owner of target `ownerOf`, or the controller). */
   | {
@@ -2152,6 +2173,9 @@ export type EffectDef =
       // Lorwyn Eclipsed (18a): Celestial Reunion
       /** If the spell's additional cost chose a creature type and the card found has it, it enters the battlefield instead of going to hand. */
       battlefieldIfChosenType?: boolean;
+      // Lorwyn Eclipsed (18b, black): Mornsong Aria
+      /** The player whose turn it is searches (their own library, the card goes to their hand), not the controller. */
+      activePlayerSearches?: boolean;
     }
   /** Look at the top N; you may put a creature with mana value up to your land count onto the battlefield (Loot). */
   | { kind: 'lookForCreature'; count: number }
@@ -2911,6 +2935,9 @@ export type StaticDef =
   | { kind: 'conniveDrawsFirst' }
   /** "Noncreature spells you cast have improvise" (Ironheart). */
   | { kind: 'noncreatureSpellsHaveImprovise' }
+  // Lorwyn Eclipsed (18b, black): Mornsong Aria
+  /** "Players can't draw cards." */
+  | { kind: 'playersCantDraw' }
   // Lorwyn Eclipsed (18a): Raiding Schemes
   /** "Each noncreature spell you cast has conspire." */
   | { kind: 'noncreatureSpellsHaveConspire' }
@@ -3267,6 +3294,11 @@ export interface GameObject {
   // Marvel Super Heroes Jumpstart (Analyzed)
   /** In exile: `player` may play it for as long as they control `source` (Victor Mancha, Runaway). */
   playableWhileControlling?: { source: ObjectRef; player: PlayerId };
+  // Lorwyn Eclipsed (18b, black)
+  /** With `castableBy`: only while that player controls this permanent (Taster of Wares). */
+  castableWhileControlling?: ObjectRef;
+  /** The spell this object was cast as came from a graveyard (Twilight Diviner). */
+  castFromGraveyardZone?: boolean;
   // Reality Fracture (17a fixes): Hexhaven Dueling Arena
   /** The zone change (zcc) it was at when it last attacked: a creature that has changed zones since is a new object. */
   attackedZcc?: number;
@@ -4166,6 +4198,9 @@ export type Decision =
       castable?: boolean;
       // Reality Fracture (17a): Null Summoner
       castableIf?: ConditionDef;
+      // Lorwyn Eclipsed (18b, black): Taster of Wares
+      castableWhileControlling?: boolean;
+      castableFilter?: CardFilter;
       resume: PausedResolution;
       thenPriority: PlayerId;
     }

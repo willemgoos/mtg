@@ -555,6 +555,7 @@ export function castSpell(
   const fromHand = o.zone === 'hand';
   // Reality Fracture (17a): Twinned Vision, "if this spell wasn't cast from your hand" (the stack item is gone by resolution).
   o.castFromHand = fromHand;
+  o.castFromGraveyardZone = o.zone === 'graveyard'; // Lorwyn Eclipsed (18b, black): Twilight Diviner
   // Rule 601.2: move to stack, choose targets, then pay costs.
   const cost = addCosts(
     choice.sneak ? d.sneak! : castCost(ctx, player, card, choice, targets),
@@ -1883,11 +1884,15 @@ export function answerChooseFromHand(ctx: Ctx, card: ObjectId | null): void {
   if (d.kind !== 'chooseFromHand') throw new Error('Not choosing from a hand');
   if (card) {
     moveObject(ctx, card, d.then === 'discard' ? 'graveyard' : 'exile');
-    if (d.castable) {
+    // Lorwyn Eclipsed (18b, black): Taster of Wares, only an instant or sorcery card is castable.
+    if (d.castable && (!d.castableFilter || cardMatches(ctx, card, d.castableFilter))) {
       obj(ctx, card).castableBy = d.player;
       obj(ctx, card).anyMana = true;
       // Reality Fracture (17a): Null Summoner, "as long as there are seven or more cards in your graveyard".
       if (d.castableIf) obj(ctx, card).castableIf = d.castableIf;
+      // Taster of Wares: "for as long as you control this creature".
+      if (d.castableWhileControlling && d.resume.source)
+        obj(ctx, card).castableWhileControlling = d.resume.source;
     }
   }
   resume(ctx, d.resume, d.thenPriority);
