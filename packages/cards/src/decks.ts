@@ -2,6 +2,7 @@ import type { Color } from '@mtg/engine';
 import { FRA_DECKS_1 } from './fra/decks-1.ts';
 import { FRA_DECKS_2 } from './fra/decks-2.ts';
 import { FRA_DECKS_3 } from './fra/decks-3.ts';
+import { ECL_DECKS_1 } from './ecl/decks-1.ts';
 
 export interface Decklist {
   /** Stable key, e.g. for saved preferences. */
@@ -5973,6 +5974,9 @@ export const FINAL_FANTASY_BRAWL_DECKS: Decklist[] = [
   },
 ];
 
+/** Lorwyn Eclipsed (18c): our own two-colour decks, built from human-made lists and tuned against the starter decks. */
+export const LORWYN_ECLIPSED_DECKS: Decklist[] = [...ECL_DECKS_1];
+
 export const DECKS: Decklist[] = [
   ...ARENA_DECKS,
   ...COLOR_CHALLENGE_DECKS,
@@ -5990,4 +5994,5 @@ export const DECKS: Decklist[] = [
   ...SECRETS_OF_STRIXHAVEN_DECKS,
   ...STRIXHAVEN_BRAWL_DECKS,
   ...REALITY_FRACTURE_DECKS,
+  ...LORWYN_ECLIPSED_DECKS,
 ];

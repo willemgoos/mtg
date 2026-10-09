@@ -22,6 +22,7 @@ import {
   FINAL_FANTASY_POOL,
   STRIXHAVEN_DECKS,
   SECRETS_OF_STRIXHAVEN_DECKS,
+  LORWYN_ECLIPSED_DECKS,
   REALITY_FRACTURE_DECKS,
   STRIXHAVEN_POOL,
   SECRETS_OF_STRIXHAVEN_POOL,
@@ -165,6 +166,7 @@ describe('card data', () => {
         ...STRIXHAVEN_DECKS.map((d) => d.id),
         ...SECRETS_OF_STRIXHAVEN_DECKS.map((d) => d.id),
         ...REALITY_FRACTURE_DECKS.map((d) => d.id),
+        ...LORWYN_ECLIPSED_DECKS.map((d) => d.id),
         ...FINAL_FANTASY_STARTER_KIT_DECKS.map((d) => d.id),
         // Reality Fracture: the ten decks.
       ].sort(),

@@ -107,6 +107,25 @@ describe('Jump In packets', () => {
     expect(deckById(jumpInId('fra-lifegain', 'angels')).set).toBeUndefined();
   });
 
+  it('has four Lorwyn Eclipsed packets with Arena names and colours, one rare each', () => {
+    const ecl = PACKETS.filter((p) => p.set === 'ecl');
+    expect(ecl.map((p) => [p.name, p.colors.join('')])).toEqual([
+      ['Kithkin', 'WG'],
+      ['Merfolk', 'WU'],
+      ['Burdened', 'W'],
+      ['Vivid', 'G'],
+    ]);
+    for (const p of ecl) {
+      const rares = p.spells.filter(([n]) => ['rare', 'mythic'].includes(card.get(n)!.rarity));
+      expect(rares, p.name).toHaveLength(1);
+      expect(
+        p.spells.reduce((n, [, k]) => n + k, 0),
+        p.name,
+      ).toBe(12);
+    }
+    expect(deckById(jumpInId('ecl-kithkin', 'ecl-merfolk')).set).toBe('ecl');
+  });
+
   it('pairs packets across sets; a pair from one set is of that set', () => {
     const mixed = deckById(jumpInId('goblins', 'blb-lizards'));
     expect(deckIds(mixed)).toHaveLength(40);
