@@ -146,3 +146,10 @@ from) when it's fixed. Older phases keep their own "Simplifications" lists in `d
 - [ ] Mirrormind Crown: tokens made by other sets' hand-written custom effects (Brawl, FIC) don't count as "creating
       tokens" for its once-each-turn.
 - [ ] Firdoch Core: the Kindred card type isn't in the engine, so it's only an Artifact (nothing in the pool cares).
+- [ ] Vinebred Brawler: "must be blocked if able" uses the existing Masamune enforcement: if the defender declares no block
+      on it, the engine picks the blocker instead of the player.
+- [ ] Shimmerwilds Growth: the colour is chosen by an enters trigger (like Utopia Sprawl), not as it enters.
+- [ ] Aurora Awakener: an Aura it puts onto the battlefield can only enchant a permanent already there, not another card
+      entering at the same time.
+- [ ] `colorSplitOfPayment` / `colorsSpent` read the first mana source with a given id, so several mana entries from one
+      source (Bloom Tender, Utopia Sprawl) may report the wrong colours for "if {W}{W} was spent" and converge checks.
