@@ -220,6 +220,11 @@ decks), the two Starter Kit decks (Cloud 61%, Sephiroth 57%), ten FIN Jump In pa
 Season, and the seven Arena FIC Brawl decks (39–64% among the Brawl decks). Details and simplifications in
 `docs/final-fantasy-plan.md`.
 
+## Phase 18: Lorwyn Eclipsed
+
+Every ECL card, ten decks of our own, Arena's Pirates and Angels Theme Decks, Arena's ten Jump In packets (our card
+picks) and boosters. See `docs/lorwyn-eclipsed-plan.md`.
+
 ## Notes
 
 - Some cards will turn out to be one-offs. Put them in `custom` handlers instead of growing the engine vocabulary for a single card.

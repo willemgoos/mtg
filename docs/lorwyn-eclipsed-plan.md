@@ -195,6 +195,13 @@ control dies" (Boggart Mischief).
 group in `src/ecl/`, registered in `src/lorwyn-eclipsed.ts`, so parallel agents never edit the same registry lines. One
 agent per group, each in its own worktree, merged into `lorwyn-eclipsed`.
 
+**Done** (10 October 2026): all 268 cards, none left out (eight agents, about 600 tests in `cards/test/ecl-*.test.ts`).
+Each group's custom handlers are in `engine/src/ecl-<group>-effects.ts`. Merging unified a few pieces built twice: one
+`turn.creaturesEntered` log (cloned for the search bot's simulations), one same-target rule for modal "choose two" spells
+(`modeStart` and `ofMode`), one `Ability:<type>` tag scheme for type-restricted mana (Eclipsed Realms, Flamebraider), and
+`Kindred` became a card type. Two "tap N untapped creatures" costs remain (`tapUntapped` with a filter, multi-b;
+`tapCreatures`, Kithkeeper and crew): worth folding into one. Cards that aren't exact are in `docs/shortcuts.md`.
+
 ## Phase 18c: decks and Jump In
 
 - **Ten Jump In packets** with Arena's names, colours and themes (from Draftsim's list; Arena never published the card
@@ -220,6 +227,10 @@ agent per group, each in its own worktree, merged into `lorwyn-eclipsed`.
   Robber, G/U Glister Bairn, U/B Voracious Tome-Skimmer).
 - **Arena's two Theme Decks** (exact lists from mtg.wiki `Lorwyn_Eclipsed/Theme_Decks`, `source: 'arena'`): Pirates
   (U/R, needs 12 cards from other sets) and Angels (W/G, needs 7).
+
+**Arena's Theme Decks done** (`ecl/theme-decks.ts` for the 16 cards from other sets, `ecl/theme-deck-lists.ts`):
+Pirates 55%, Angels 71% against the ten Foundations starters (fixed official lists, not tuned). Explore now asks top or
+graveyard, and crew lets the player pick the creatures.
 
 **18c part 1 done** (`ecl/decks-1.ts`, tests `ecl-decks-1.test.ts`, packets in `jumpin.ts`). Decks, bot vs bot, 20 games per
 seat against each of the fourteen `source: 'arena'` starter decks: Clachan Banner (G/W Kithkin, face Brigid, Clachan's
@@ -254,6 +265,9 @@ engine rejected them; `combatStats` now reports `maxBlockers` and `planBlocks` r
 
 `PackSet` `'ecl'` in Expedition and a Season pack kind, sheets from the ECL booster list.
 
+**Done**: `lorwynEclipsedBoosterSheets()`, `PackSet` `'ecl'` in Expedition, Season pack kind `lorwynEclipsed` with the ten
+`ecl-*` decks as starters, Sealed, the deck builder's set names and card search. The wrapper shows Eirdu, Carrier of Dawn.
+
 ## Simplifications to revisit
 
-(none yet)
+See the Lorwyn Eclipsed section of `docs/shortcuts.md`.
