@@ -22,6 +22,7 @@ export const SETS = [
   { key: 'sos', name: 'Secrets of Strixhaven' },
   { key: 'fra', name: 'Reality Fracture' },
   { key: 'ecl', name: 'Lorwyn Eclipsed' },
+  { key: 'tdm', name: 'Tarkir: Dragonstorm' },
 ] as const;
 
 export type SetKey = (typeof SETS)[number]['key'];
