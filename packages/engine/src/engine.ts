@@ -265,14 +265,18 @@ function apply(ctx: Ctx, action: Action): void {
     }
     case 'passPriority':
       return passPriority(ctx, player);
-    case 'playLand':
+    case 'playLand': {
+      // Lorwyn Eclipsed (18c): Lightstall Inquisitor, "each land played this way enters tapped".
+      const playTapped = ctx.s.objects[action.card]?.exilePlayTapped;
       moveObject(ctx, action.card, 'battlefield', {
         controller: player,
         ...(action.back ? { transformed: true } : {}),
       });
+      if (playTapped) ctx.s.objects[action.card]!.tapped = true;
       ps.landsPlayedThisTurn++;
       s.turn.passed = [];
       return givePriority(ctx, player);
+    }
     case 'castSpell': {
       // Cast for free in the middle of a resolution (Daring Waverider).
       if (d.kind === 'castFree' && d.exact) {

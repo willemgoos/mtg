@@ -18,6 +18,7 @@ import {
   FOUNDATIONS_DRAFT_POOL,
   FOUNDATIONS_JUMP_IN_POOL,
   FINAL_FANTASY_DECKS,
+  ECL_THEME_DECKS,
   FINAL_FANTASY_STARTER_KIT_DECKS,
   FINAL_FANTASY_POOL,
   STRIXHAVEN_DECKS,
@@ -166,6 +167,7 @@ describe('card data', () => {
         ...SECRETS_OF_STRIXHAVEN_DECKS.map((d) => d.id),
         ...REALITY_FRACTURE_DECKS.map((d) => d.id),
         ...FINAL_FANTASY_STARTER_KIT_DECKS.map((d) => d.id),
+        ...ECL_THEME_DECKS.map((d) => d.id), // Lorwyn Eclipsed (18c)
         // Reality Fracture: the ten decks.
       ].sort(),
     );

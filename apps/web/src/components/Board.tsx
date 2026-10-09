@@ -543,7 +543,14 @@ export function Board({
                           })()
                         : // Lorwyn Eclipsed (18b, white): Kithkeeper.
                           first.type === 'activateAbility' && first.tapCreatures?.length
-                          ? 'creatures to tap'
+                          ? // Lorwyn Eclipsed (18c): Crew N.
+                            (() => {
+                              const ab = cardDb.get(view.objects[first.source]?.defId ?? '')
+                                ?.abilities[first.abilityIndex];
+                              return ab?.kind === 'activated' && ab.cost.crew
+                                ? 'creatures to crew with'
+                                : 'creatures to tap';
+                            })()
                           : null
           : null;
       const prompt = paying
@@ -1983,7 +1990,7 @@ function ScryOverlay({ game, onHover }: { game: GameSession; onHover: HoverFn })
     <div className="overlay overlay--mull">
       <div className="mull">
         <h2>
-          {d.surveil ? 'Surveil' : 'Scry'} {d.cards.length}
+          {d.explore ? 'Explore' : d.surveil ? 'Surveil' : 'Scry'} {d.explore ? '' : d.cards.length}
         </h2>
         <p>
           Click a card to put it{' '}

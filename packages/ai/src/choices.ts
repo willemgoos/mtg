@@ -309,6 +309,14 @@ export function chooseScry(engine: Engine, s: GameState, me: PlayerId, legal: Ac
 
 /** Choosing from an opponent's hand (Thought-Stalker Warlock): their most expensive card. */
 export function chooseFromHand(engine: Engine, s: GameState, legal: Action[]): Action {
+  // Lorwyn Eclipsed (18c): Lightstall Inquisitor: choosing from our own hand, we give up the cheapest card (it can still be played).
+  if (s.decision.kind === 'chooseFromHand' && s.decision.ownerChooses) {
+    const cost = (a: Action) => {
+      const d = a.type === 'chooseCard' && a.card ? defOf(engine, s, a.card) : undefined;
+      return d ? manaValue(d.manaCost) : Infinity;
+    };
+    return legal.reduce((b, a) => (cost(a) < cost(b) ? a : b));
+  }
   const value = (a: Action) => {
     const d = a.type === 'chooseCard' && a.card ? defOf(engine, s, a.card) : undefined;
     return d ? manaValue(d.manaCost) : -1;

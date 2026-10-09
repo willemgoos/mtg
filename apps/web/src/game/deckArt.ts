@@ -76,6 +76,8 @@ export const BLURBS: Record<string, string> = {
   'fin-road-trip': 'Ride the Road Trip with frogs, summons and Ignis in the lead.',
   'fin-starter-cloud': 'Cloud and his party of heroes chop up foes with swords.',
   'fin-starter-sephiroth': 'Sephiroth and a swarm of rats grind the opposing deck down.',
+  'ecl-theme-pirates': 'Pirates and Vehicles discard, cycle and crew their way to glory and treasure.',
+  'ecl-theme-angels': 'Angels of all sizes grow with lifegain and rule the skies.',
   'fic-revival-trance': 'Terra calls up spells from the graveyard in a three-colour deck.',
   'fic-limit-break': 'Cloud builds up for a mighty Limit Break with gear and big creatures.',
   'fic-counter-blitz': 'Tidus piles on counters and goes wide with green, white and blue.',

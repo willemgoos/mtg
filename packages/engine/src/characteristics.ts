@@ -189,7 +189,11 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
         if (st.filter && !cardMatches(ctx, id, st.filter, srcId)) continue;
         if (st.condition && !checkCondition(ctx, st.condition, src.controller, src)) continue;
         const opponents = st.affects === 'creaturesOpponentsControl';
-        if ((src.controller !== o.controller) !== opponents || !d.types.includes('Creature'))
+        if (
+          (src.controller !== o.controller) !== opponents ||
+          // Lorwyn Eclipsed (18c): Fearless Swashbuckler, "Vehicles you control have haste".
+          !(d.types.includes('Creature') || (st.anyPermanent && st.filter))
+        )
           continue;
         if (st.affects === 'otherCreaturesYouControl' && srcId === id) continue;
         if (st.filter?.subtype && !hasSubtype(ctx, id, st.filter.subtype)) continue;
@@ -1200,6 +1204,11 @@ export function cardMatches(
   if (filter.enteredThisTurn && obj(ctx, id).zoneTurn !== ctx.s.turn.number) return false;
   if (filter.leftAttacking && !obj(ctx, id).leftAttacking) return false;
   if (filter.attachedToSource && (!sourceId || obj(ctx, id).attachedTo !== sourceId)) return false;
+  // Lorwyn Eclipsed (18c): Subterranean Schooner, "target creature that crewed it this turn".
+  if (filter.crewedSource) {
+    const crewed = sourceId ? ctx.s.objects[sourceId]?.crewedBy : undefined;
+    if (crewed?.turn !== ctx.s.turn.number || !crewed.ids.includes(id)) return false;
+  }
   // Strixhaven Brawl (15b, w): Sage's Reverie, Role tokens, bestowed Auras, mentor.
   if (filter.attachedToCreature) {
     const host = obj(ctx, id).attachedTo;

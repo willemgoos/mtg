@@ -81581,5 +81581,397 @@
    "large": "https://cards.scryfall.io/large/front/d/b/db9aa986-ac2a-44bb-a88b-04c5d0d502b2.jpg?1783904399",
    "artCrop": "https://cards.scryfall.io/art_crop/front/d/b/db9aa986-ac2a-44bb-a88b-04c5d0d502b2.jpg?1783904399"
   }
+ },
+ {
+  "name": "Captain Howler, Sea Scourge",
+  "scryfallId": "0957c90f-e10d-40f8-a4be-9e9ef623dd43",
+  "oracleId": "46c99d67-8307-4af0-afd0-377714806614",
+  "set": "dft",
+  "collectorNumber": "194",
+  "rarity": "rare",
+  "manaCost": "{2}{U}{R}",
+  "typeLine": "Legendary Creature — Shark Pirate",
+  "oracleText": "Ward—{2}, Pay 2 life.\nWhenever you discard one or more cards, target creature gets +2/+0 until end of turn for each card discarded this way. Whenever that creature deals combat damage to a player this turn, you draw a card.",
+  "power": "5",
+  "toughness": "4",
+  "colors": [
+   "R",
+   "U"
+  ],
+  "keywords": [
+   "Ward"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/9/0957c90f-e10d-40f8-a4be-9e9ef623dd43.jpg?1783907861",
+   "normal": "https://cards.scryfall.io/normal/front/0/9/0957c90f-e10d-40f8-a4be-9e9ef623dd43.jpg?1783907861",
+   "large": "https://cards.scryfall.io/large/front/0/9/0957c90f-e10d-40f8-a4be-9e9ef623dd43.jpg?1783907861",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/9/0957c90f-e10d-40f8-a4be-9e9ef623dd43.jpg?1783907861"
+  }
+ },
+ {
+  "name": "Fearless Swashbuckler",
+  "scryfallId": "0d86d66b-481f-44ec-86d8-6fc91b52ef38",
+  "oracleId": "6a6cdb3e-c850-4b3c-bf4b-c53dd4eaf56e",
+  "set": "dft",
+  "collectorNumber": "204",
+  "rarity": "rare",
+  "manaCost": "{1}{U}{R}",
+  "typeLine": "Creature — Fish Pirate",
+  "oracleText": "Haste\nVehicles you control have haste.\nWhenever you attack, if a Pirate and a Vehicle attacked this combat, draw three cards, then discard two cards.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "R",
+   "U"
+  ],
+  "keywords": [
+   "Haste"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/d/0d86d66b-481f-44ec-86d8-6fc91b52ef38.jpg?1783907859",
+   "normal": "https://cards.scryfall.io/normal/front/0/d/0d86d66b-481f-44ec-86d8-6fc91b52ef38.jpg?1783907859",
+   "large": "https://cards.scryfall.io/large/front/0/d/0d86d66b-481f-44ec-86d8-6fc91b52ef38.jpg?1783907859",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/d/0d86d66b-481f-44ec-86d8-6fc91b52ef38.jpg?1783907859"
+  }
+ },
+ {
+  "name": "Inti, Seneschal of the Sun",
+  "scryfallId": "fa7a55aa-ae61-4933-b7a4-dcc55dac6fcd",
+  "oracleId": "176f5ba8-6e7b-4234-a298-b6164f51656f",
+  "set": "lci",
+  "collectorNumber": "156",
+  "rarity": "rare",
+  "manaCost": "{1}{R}",
+  "typeLine": "Legendary Creature — Human Knight",
+  "oracleText": "Whenever you attack, you may discard a card. When you do, put a +1/+1 counter on target attacking creature. It gains trample until end of turn.\nWhenever you discard one or more cards, exile the top card of your library. You may play that card until your next end step.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/a/fa7a55aa-ae61-4933-b7a4-dcc55dac6fcd.jpg?1783913759",
+   "normal": "https://cards.scryfall.io/normal/front/f/a/fa7a55aa-ae61-4933-b7a4-dcc55dac6fcd.jpg?1783913759",
+   "large": "https://cards.scryfall.io/large/front/f/a/fa7a55aa-ae61-4933-b7a4-dcc55dac6fcd.jpg?1783913759",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/a/fa7a55aa-ae61-4933-b7a4-dcc55dac6fcd.jpg?1783913759"
+  }
+ },
+ {
+  "name": "Marauding Mako",
+  "scryfallId": "9efbfd67-e0f5-43e0-9fff-1eb4a2bed0d8",
+  "oracleId": "e349be42-5f14-44a9-9608-281985c10e2d",
+  "set": "dft",
+  "collectorNumber": "138",
+  "rarity": "uncommon",
+  "manaCost": "{R}",
+  "typeLine": "Creature — Shark Pirate",
+  "oracleText": "Whenever you discard one or more cards, put that many +1/+1 counters on this creature.\nCycling {2} ({2}, Discard this card: Draw a card.)",
+  "power": "1",
+  "toughness": "1",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Cycling"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/e/9efbfd67-e0f5-43e0-9fff-1eb4a2bed0d8.jpg?1783907879",
+   "normal": "https://cards.scryfall.io/normal/front/9/e/9efbfd67-e0f5-43e0-9fff-1eb4a2bed0d8.jpg?1783907879",
+   "large": "https://cards.scryfall.io/large/front/9/e/9efbfd67-e0f5-43e0-9fff-1eb4a2bed0d8.jpg?1783907879",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/e/9efbfd67-e0f5-43e0-9fff-1eb4a2bed0d8.jpg?1783907879"
+  }
+ },
+ {
+  "name": "Scrounging Skyray",
+  "scryfallId": "d60bece3-6f63-4d9e-bca0-cef2d38f1472",
+  "oracleId": "3a46d85b-ce1a-4842-a342-92a5bddb1053",
+  "set": "dft",
+  "collectorNumber": "60",
+  "rarity": "uncommon",
+  "manaCost": "{1}{U}",
+  "typeLine": "Creature — Fish Pirate",
+  "oracleText": "Flying\nWhenever you discard one or more cards, put that many +1/+1 counters on this creature.\nCycling {2} ({2}, Discard this card: Draw a card.)",
+  "power": "1",
+  "toughness": "2",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Flying",
+   "Cycling"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/6/d60bece3-6f63-4d9e-bca0-cef2d38f1472.jpg?1783907904",
+   "normal": "https://cards.scryfall.io/normal/front/d/6/d60bece3-6f63-4d9e-bca0-cef2d38f1472.jpg?1783907904",
+   "large": "https://cards.scryfall.io/large/front/d/6/d60bece3-6f63-4d9e-bca0-cef2d38f1472.jpg?1783907904",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/6/d60bece3-6f63-4d9e-bca0-cef2d38f1472.jpg?1783907904"
+  }
+ },
+ {
+  "name": "Spyglass Siren",
+  "scryfallId": "41e54343-95e5-4dc4-9f18-e4a415fe5e0a",
+  "oracleId": "4ec9d9eb-14e2-47ea-88a2-d2394e363784",
+  "set": "lci",
+  "collectorNumber": "78",
+  "rarity": "uncommon",
+  "manaCost": "{U}",
+  "typeLine": "Creature — Siren Pirate",
+  "oracleText": "Flying\nWhen this creature enters, create a Map token. (It's an artifact with \"{1}, {T}, Sacrifice this token: Target creature you control explores. Activate only as a sorcery.\")",
+  "power": "1",
+  "toughness": "1",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Flying",
+   "Explore"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/1/41e54343-95e5-4dc4-9f18-e4a415fe5e0a.jpg?1783913788",
+   "normal": "https://cards.scryfall.io/normal/front/4/1/41e54343-95e5-4dc4-9f18-e4a415fe5e0a.jpg?1783913788",
+   "large": "https://cards.scryfall.io/large/front/4/1/41e54343-95e5-4dc4-9f18-e4a415fe5e0a.jpg?1783913788",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/1/41e54343-95e5-4dc4-9f18-e4a415fe5e0a.jpg?1783913788"
+  }
+ },
+ {
+  "name": "Staunch Crewmate",
+  "scryfallId": "143e9845-8a11-4fc4-b116-29a929985146",
+  "oracleId": "8ab49974-3f06-4b6b-a416-d6f872b3887f",
+  "set": "lci",
+  "collectorNumber": "79",
+  "rarity": "uncommon",
+  "manaCost": "{1}{U}",
+  "typeLine": "Creature — Human Pirate",
+  "oracleText": "When this creature enters, look at the top four cards of your library. You may reveal an artifact or Pirate card from among them and put it into your hand. Put the rest on the bottom of your library in a random order.",
+  "power": "2",
+  "toughness": "1",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/4/143e9845-8a11-4fc4-b116-29a929985146.jpg?1783913787",
+   "normal": "https://cards.scryfall.io/normal/front/1/4/143e9845-8a11-4fc4-b116-29a929985146.jpg?1783913787",
+   "large": "https://cards.scryfall.io/large/front/1/4/143e9845-8a11-4fc4-b116-29a929985146.jpg?1783913787",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/4/143e9845-8a11-4fc4-b116-29a929985146.jpg?1783913787"
+  }
+ },
+ {
+  "name": "Broadside Barrage",
+  "scryfallId": "d086e4e5-98fa-437e-85aa-d8849c94ce94",
+  "oracleId": "dbf9feb3-0751-47bd-a8dc-ed1c076cf8c7",
+  "set": "dft",
+  "collectorNumber": "192",
+  "rarity": "uncommon",
+  "manaCost": "{1}{U}{R}",
+  "typeLine": "Instant",
+  "oracleText": "Broadside Barrage deals 5 damage to target creature or planeswalker. Draw a card, then discard a card.",
+  "colors": [
+   "R",
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/0/d086e4e5-98fa-437e-85aa-d8849c94ce94.jpg?1783907862",
+   "normal": "https://cards.scryfall.io/normal/front/d/0/d086e4e5-98fa-437e-85aa-d8849c94ce94.jpg?1783907862",
+   "large": "https://cards.scryfall.io/large/front/d/0/d086e4e5-98fa-437e-85aa-d8849c94ce94.jpg?1783907862",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/0/d086e4e5-98fa-437e-85aa-d8849c94ce94.jpg?1783907862"
+  }
+ },
+ {
+  "name": "Gastal Thrillroller",
+  "scryfallId": "d8b1762b-ff03-4312-afcc-cb6b5f280ade",
+  "oracleId": "86d67952-19b8-4bb8-b7d7-b2751e86591c",
+  "set": "dft",
+  "collectorNumber": "129",
+  "rarity": "rare",
+  "manaCost": "{2}{R}",
+  "typeLine": "Artifact — Vehicle",
+  "oracleText": "Trample, haste\nWhen this Vehicle enters, it becomes an artifact creature until end of turn.\nCrew 2\n{2}{R}, Discard a card: Return this card from your graveyard to the battlefield with a finality counter on it. Activate only as a sorcery.",
+  "power": "4",
+  "toughness": "2",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Haste",
+   "Crew",
+   "Trample"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/8/d8b1762b-ff03-4312-afcc-cb6b5f280ade.jpg?1783907881",
+   "normal": "https://cards.scryfall.io/normal/front/d/8/d8b1762b-ff03-4312-afcc-cb6b5f280ade.jpg?1783907881",
+   "large": "https://cards.scryfall.io/large/front/d/8/d8b1762b-ff03-4312-afcc-cb6b5f280ade.jpg?1783907881",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/8/d8b1762b-ff03-4312-afcc-cb6b5f280ade.jpg?1783907881"
+  }
+ },
+ {
+  "name": "Subterranean Schooner",
+  "scryfallId": "94b6881a-b00e-4e90-92e6-602ed8e0e090",
+  "oracleId": "7f82bae3-feaa-4967-a843-32a4f72806d5",
+  "set": "lci",
+  "collectorNumber": "80",
+  "rarity": "rare",
+  "manaCost": "{1}{U}",
+  "typeLine": "Artifact — Vehicle",
+  "oracleText": "Whenever this Vehicle attacks, target creature that crewed it this turn explores. (Reveal the top card of your library. Put that card into your hand if it's a land. Otherwise, put a +1/+1 counter on that creature, then put the card back or put it into your graveyard.)\nCrew 1",
+  "power": "3",
+  "toughness": "4",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Crew",
+   "Explore"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/4/94b6881a-b00e-4e90-92e6-602ed8e0e090.jpg?1783913787",
+   "normal": "https://cards.scryfall.io/normal/front/9/4/94b6881a-b00e-4e90-92e6-602ed8e0e090.jpg?1783913787",
+   "large": "https://cards.scryfall.io/large/front/9/4/94b6881a-b00e-4e90-92e6-602ed8e0e090.jpg?1783913787",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/4/94b6881a-b00e-4e90-92e6-602ed8e0e090.jpg?1783913787"
+  }
+ },
+ {
+  "name": "Magmatic Galleon",
+  "scryfallId": "4471a833-11b9-4146-a9c0-84a6896c94d8",
+  "oracleId": "59322432-591a-4e8d-aff5-12ca1feb1028",
+  "set": "lci",
+  "collectorNumber": "157",
+  "rarity": "rare",
+  "manaCost": "{3}{R}{R}",
+  "typeLine": "Artifact — Vehicle",
+  "oracleText": "When this Vehicle enters, it deals 5 damage to target creature an opponent controls.\nWhenever one or more creatures your opponents control are dealt excess noncombat damage, create a Treasure token.\nCrew 2",
+  "power": "5",
+  "toughness": "5",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Treasure",
+   "Crew"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/4/4471a833-11b9-4146-a9c0-84a6896c94d8.jpg?1783913758",
+   "normal": "https://cards.scryfall.io/normal/front/4/4/4471a833-11b9-4146-a9c0-84a6896c94d8.jpg?1783913758",
+   "large": "https://cards.scryfall.io/large/front/4/4/4471a833-11b9-4146-a9c0-84a6896c94d8.jpg?1783913758",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/4/4471a833-11b9-4146-a9c0-84a6896c94d8.jpg?1783913758"
+  }
+ },
+ {
+  "name": "Lightstall Inquisitor",
+  "scryfallId": "635245e9-c27f-4a51-a6f1-bae62e696542",
+  "oracleId": "57012049-06d7-4354-8125-9ea9e742f14d",
+  "set": "eoe",
+  "collectorNumber": "24",
+  "rarity": "rare",
+  "manaCost": "{W}",
+  "typeLine": "Creature — Angel Wizard",
+  "oracleText": "Vigilance\nWhen this creature enters, each opponent exiles a card from their hand and may play that card for as long as it remains exiled. Each spell cast this way costs {1} more to cast. Each land played this way enters tapped.",
+  "power": "2",
+  "toughness": "1",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Vigilance"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/3/635245e9-c27f-4a51-a6f1-bae62e696542.jpg?1783905994",
+   "normal": "https://cards.scryfall.io/normal/front/6/3/635245e9-c27f-4a51-a6f1-bae62e696542.jpg?1783905994",
+   "large": "https://cards.scryfall.io/large/front/6/3/635245e9-c27f-4a51-a6f1-bae62e696542.jpg?1783905994",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/3/635245e9-c27f-4a51-a6f1-bae62e696542.jpg?1783905994"
+  }
+ },
+ {
+  "name": "Starfield Shepherd",
+  "scryfallId": "1226e575-aa78-4c68-be1d-6e5c2dc6315b",
+  "oracleId": "42fa99ab-d35f-4439-ab00-fe99bad626ac",
+  "set": "eoe",
+  "collectorNumber": "37",
+  "rarity": "uncommon",
+  "manaCost": "{3}{W}{W}",
+  "typeLine": "Creature — Angel",
+  "oracleText": "Flying\nWhen this creature enters, search your library for a basic Plains card or a creature card with mana value 1 or less, reveal it, put it into your hand, then shuffle.\nWarp {1}{W} (You may cast this card from your hand for its warp cost. Exile this creature at the beginning of the next end step, then you may cast it from exile on a later turn.)",
+  "power": "3",
+  "toughness": "2",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Flying",
+   "Warp"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/2/1226e575-aa78-4c68-be1d-6e5c2dc6315b.jpg?1783905988",
+   "normal": "https://cards.scryfall.io/normal/front/1/2/1226e575-aa78-4c68-be1d-6e5c2dc6315b.jpg?1783905988",
+   "large": "https://cards.scryfall.io/large/front/1/2/1226e575-aa78-4c68-be1d-6e5c2dc6315b.jpg?1783905988",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/2/1226e575-aa78-4c68-be1d-6e5c2dc6315b.jpg?1783905988"
+  }
+ },
+ {
+  "name": "Get Lost",
+  "scryfallId": "522aa72b-2b8c-484c-872b-f082101cee35",
+  "oracleId": "522dd417-364b-44ab-8ca9-fb55db5f26a6",
+  "set": "lci",
+  "collectorNumber": "14",
+  "rarity": "rare",
+  "manaCost": "{1}{W}",
+  "typeLine": "Instant",
+  "oracleText": "Destroy target creature, enchantment, or planeswalker. Its controller creates two Map tokens. (They're artifacts with \"{1}, {T}, Sacrifice this token: Target creature you control explores. Activate only as a sorcery.\")",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Explore"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/2/522aa72b-2b8c-484c-872b-f082101cee35.jpg?1783913812",
+   "normal": "https://cards.scryfall.io/normal/front/5/2/522aa72b-2b8c-484c-872b-f082101cee35.jpg?1783913812",
+   "large": "https://cards.scryfall.io/large/front/5/2/522aa72b-2b8c-484c-872b-f082101cee35.jpg?1783913812",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/2/522aa72b-2b8c-484c-872b-f082101cee35.jpg?1783913812"
+  }
+ },
+ {
+  "name": "Ride's End",
+  "scryfallId": "2f96b33b-c952-45ac-9626-40169b2bd4ef",
+  "oracleId": "89e209f3-c474-453f-9659-ccebfc88bc0f",
+  "set": "dft",
+  "collectorNumber": "25",
+  "rarity": "common",
+  "manaCost": "{4}{W}",
+  "typeLine": "Instant",
+  "oracleText": "This spell costs {3} less to cast if it targets a tapped permanent.\nExile target creature or Vehicle.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/f/2f96b33b-c952-45ac-9626-40169b2bd4ef.jpg?1783907915",
+   "normal": "https://cards.scryfall.io/normal/front/2/f/2f96b33b-c952-45ac-9626-40169b2bd4ef.jpg?1783907915",
+   "large": "https://cards.scryfall.io/large/front/2/f/2f96b33b-c952-45ac-9626-40169b2bd4ef.jpg?1783907915",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/f/2f96b33b-c952-45ac-9626-40169b2bd4ef.jpg?1783907915"
+  }
+ },
+ {
+  "name": "Split Up",
+  "scryfallId": "1bb9a5b1-48d2-453e-8991-c788bc63e482",
+  "oracleId": "2e82520a-9da3-49ae-b5c8-37e7ac8853fe",
+  "set": "dsk",
+  "collectorNumber": "32",
+  "rarity": "rare",
+  "manaCost": "{1}{W}{W}",
+  "typeLine": "Sorcery",
+  "oracleText": "Choose one —\n• Destroy all tapped creatures.\n• Destroy all untapped creatures.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/b/1bb9a5b1-48d2-453e-8991-c788bc63e482.jpg?1783909503",
+   "normal": "https://cards.scryfall.io/normal/front/1/b/1bb9a5b1-48d2-453e-8991-c788bc63e482.jpg?1783909503",
+   "large": "https://cards.scryfall.io/large/front/1/b/1bb9a5b1-48d2-453e-8991-c788bc63e482.jpg?1783909503",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/b/1bb9a5b1-48d2-453e-8991-c788bc63e482.jpg?1783909503"
+  }
  }
 ]

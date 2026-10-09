@@ -208,6 +208,9 @@ export interface CardDefinition {
     replacesCost?: boolean;
     /** Strixhaven (13c): what the alternative cost does, for the cast menu (Verdant Mastery). */
     altLabel?: string;
+    // Lorwyn Eclipsed (18c, theme decks): Starfield Shepherd
+    /** The alternative cost can only be used from your hand (Warp: cast from exile later, it costs its mana cost). */
+    handOnly?: boolean;
     /** Strixhaven Brawl (15b, u): life paid as part of the alternative cost (Tezzeret's Gambit: 2). */
     life?: number;
     // Mystical Archive (16): Daze, Force of Will
@@ -1030,7 +1033,10 @@ export type TriggerDef =
    * Twilight Diviner: whenever one or more other creatures you control enter, if they entered or were cast from a graveyard
    * (use with `batch` and `oncePerTurn`; the creatures that did are the `subjects`).
    */
-  | { on: 'creaturesEnterFromOrCastFromGraveyard' };
+  | { on: 'creaturesEnterFromOrCastFromGraveyard' }
+  // Lorwyn Eclipsed (18c, theme decks): Magmatic Galleon
+  /** Whenever one or more creatures your opponents control are dealt excess noncombat damage (use with `batch`; the amount is the excess). */
+  | { on: 'opponentCreaturesDealtExcessNoncombat' };
 
 export type ConditionDef =
   // Strixhaven Brawl (15b, g): Orochi Merge-Keeper
@@ -1260,7 +1266,10 @@ export type ConditionDef =
    * A creature entered the battlefield under your control this turn (even if it has left since). `other`: not the source itself
    * (Bristlebane Outrider, Thoughtweft Charge).
    */
-  | { kind: 'creatureEnteredThisTurn'; other?: boolean };
+  | { kind: 'creatureEnteredThisTurn'; other?: boolean }
+  // Lorwyn Eclipsed (18c, theme decks): Fearless Swashbuckler
+  /** You attacked with a creature matching the filter in this combat (even if it has left since). */
+  | { kind: 'attackedThisCombat'; filter: CardFilter };
 
 export interface CardFilter {
   anyOf?: CardFilter[];
@@ -1372,6 +1381,9 @@ export interface CardFilter {
   greaterPowerThanSource?: boolean;
   /** Not of the creature type chosen for the source (Raise the Palisade). */
   notChosenTypeOfSource?: boolean;
+  // Lorwyn Eclipsed (18c, theme decks): Subterranean Schooner
+  /** One of the creatures that crewed the source this turn ("target creature that crewed it this turn"). */
+  crewedSource?: boolean;
   // Strixhaven (13c): Silverquill Silencer, Plargg
   /** Has the card name chosen for the source. */
   chosenNameOfSource?: boolean;
@@ -1780,6 +1792,9 @@ export type EffectDef =
       // Final Fantasy (11c): leftovers
       /** It must be blocked this turn if able (Magitek Scythe). */
       mustBeBlocked?: boolean;
+      // Lorwyn Eclipsed (18c, theme decks): Captain Howler, Sea Scourge
+      /** "Whenever it deals combat damage to a player this turn, you draw a card." */
+      drawOnCombatDamage?: boolean;
     }
   // Strixhaven (13b): Maelstrom Muse
   /** The next instant or sorcery spell you cast this turn costs {amount} less (X is read now). */
@@ -1843,6 +1858,14 @@ export type EffectDef =
       castableWhileControlling?: boolean;
       /** With `castable`: only a card matching this is castable (an instant or sorcery card). */
       castableFilter?: CardFilter;
+      // Lorwyn Eclipsed (18c, theme decks): Lightstall Inquisitor
+      /** The opponent chooses the card from their own hand, and may play it for as long as it stays exiled. */
+      ownerChooses?: {
+        /** Each spell cast this way costs this much more. */
+        tax: number;
+        /** Each land played this way enters tapped. */
+        landsTapped: boolean;
+      };
     }
   /** A player chooses one of these (the owner of target `ownerOf`, or the controller). */
   | {
@@ -2876,6 +2899,9 @@ export type StaticDef =
       kind: 'anthem';
       affects: 'otherCreaturesYouControl' | 'creaturesYouControl' | 'creaturesOpponentsControl';
       filter?: CardFilter;
+      // Lorwyn Eclipsed (18c, theme decks): Fearless Swashbuckler ("Vehicles you control have haste")
+      /** Affects permanents matching the filter even when they aren't creatures (Vehicles). */
+      anyPermanent?: boolean;
       condition?: ConditionDef;
       power: Amount;
       toughness: Amount;
@@ -3415,6 +3441,11 @@ export interface GameObject {
   abilitiesUntilCast?: { card: ObjectId; ability: AbilityDef }[];
   /** In exile: its owner may cast it for as long as it remains there. */
   castableWhileExiled?: boolean;
+  // Lorwyn Eclipsed (18c, theme decks): Lightstall Inquisitor
+  /** In exile: each spell cast from there costs this much more. */
+  exileCastTax?: number;
+  /** In exile: a land played from there enters tapped. */
+  exilePlayTapped?: boolean;
   /** It has lost all abilities (an effect until its controller's next turn). */
   blank?: boolean;
   /** A Class's level (1 if unset). */
@@ -3812,6 +3843,9 @@ export interface TurnState {
   deflect?: PlayerId[];
   /** Creatures declared as attackers this turn, once per combat. */
   attackers: ObjectId[];
+  // Lorwyn Eclipsed (18c, theme decks): Fearless Swashbuckler
+  /** The creatures declared as attackers in the latest combat (even ones that have left since). */
+  combatAttackers?: ObjectId[];
   // Reality Fracture (17a): Hall of Echoes
   /** "The legend rule doesn't apply to permanents you control this turn." */
   noLegendRule?: PlayerId[];
@@ -4335,6 +4369,8 @@ export type Decision =
       player: PlayerId;
       /** Surveil: "bottom" cards go to the graveyard instead. */
       surveil?: boolean;
+      // Lorwyn Eclipsed (18c, theme decks): explore's "put the card back or put it into your graveyard" (a surveil that isn't one)
+      explore?: boolean;
       // Reality Fracture (17a): Enlightened Confidant
       /** Surveil: a card put into the graveyard with mana value at most this returns to the hand. */
       toHandMaxMv?: number;
@@ -4393,6 +4429,8 @@ export type Decision =
       castableFilter?: CardFilter;
       /** Only these cards of their hand are revealed (and can be chosen); the rest stay hidden. */
       among?: ObjectId[];
+      // Lorwyn Eclipsed (18c, theme decks): Lightstall Inquisitor
+      ownerChooses?: { tax: number; landsTapped: boolean };
       resume: PausedResolution;
       thenPriority: PlayerId;
     }
@@ -4709,7 +4747,7 @@ export type Action =
       /** The kinds of counters removed for `removeAnyCounters` ('-1/-1', '+1/+1', 'stun', ...), one entry for each. */
       removeKinds?: string[];
       // Lorwyn Eclipsed (18b, white): Kithkeeper
-      /** The creatures tapped for `tapCreatures` ("tap three untapped creatures you control"). */
+      /** The creatures tapped for `tapCreatures` ("tap three untapped creatures you control") or to crew (Lorwyn Eclipsed 18c). */
       tapCreatures?: ObjectId[];
     }
   | {
@@ -4767,7 +4805,15 @@ export type GameEvent =
       /** The counters of every kind it had as it left the battlefield (a token's too). */
       lastCounterTotal?: number;
     }
-  | { type: 'damageDealt'; source: ObjectId; to: TargetChoice; amount: number; combat: boolean }
+  | {
+      type: 'damageDealt';
+      source: ObjectId;
+      to: TargetChoice;
+      amount: number;
+      combat: boolean;
+      // Lorwyn Eclipsed (18c, theme decks): damage dealt to a creature beyond lethal damage
+      excess?: number;
+    }
   | { type: 'lifeChanged'; player: PlayerId; delta: number; life: number }
   | { type: 'tapped'; id: ObjectId; first?: boolean }
   /** A card went from its owner's hand to their graveyard (Doom Prevails). */

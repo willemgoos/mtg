@@ -51,6 +51,7 @@ export function cloneState(s: GameState): GameState {
       ...(s.turn.spellHistory ? { spellHistory: { ...s.turn.spellHistory } } : {}),
       ...(s.turn.optionalUses ? { optionalUses: s.turn.optionalUses.slice() } : {}),
       attackers: s.turn.attackers.slice(),
+      ...(s.turn.combatAttackers ? { combatAttackers: s.turn.combatAttackers.slice() } : {}), // Lorwyn Eclipsed (18c)
       lifeGains: { ...s.turn.lifeGains },
       ...(s.turn.lifeGained ? { lifeGained: { ...s.turn.lifeGained } } : {}),
       cardsDrawn: { ...s.turn.cardsDrawn },

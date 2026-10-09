@@ -196,6 +196,7 @@ export function startTurn(ctx: Ctx, player: PlayerId, noPowerUp = false): void {
   delete s.turn.noLegendRule;
   delete s.turn.lifeLostTotal;
   s.turn.attackers = [];
+  delete s.turn.combatAttackers; // Lorwyn Eclipsed (18c)
   s.turn.lifeGains = { p1: 0, p2: 0 };
   s.turn.creaturesDied = 0;
   s.turn.cardsDrawn = { p1: 0, p2: 0 };
@@ -398,6 +399,7 @@ export function confirmAttackers(ctx: Ctx): void {
     if (!hasKeyword(ctx, d.id, 'vigilance')) tap(ctx, d.id);
   }
   if (decl.length > 0) s.players[s.turn.activePlayer].attackedThisTurn = true;
+  s.turn.combatAttackers = decl.map((d) => d.id); // Lorwyn Eclipsed (18c): Fearless Swashbuckler
   for (const d of decl) {
     s.turn.attackers.push(d.id);
     // Reality Fracture (17a fixes): Hexhaven Dueling Arena: a creature that leaves and returns is a new object.

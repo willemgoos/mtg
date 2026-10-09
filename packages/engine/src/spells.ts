@@ -336,7 +336,7 @@ export function castVariants(d: CardDefinition, zone: ZoneName, via?: CastVia): 
       for (let i = 0; i < k; i++) c = addCosts(c, d.multikicker);
       out.push({ cost: c, spell: d.spell ?? null, kickCount: k, ...extra });
     }
-  if (d.kicker)
+  if (d.kicker && !(d.kicker.handOnly && zone !== 'hand'))
     out.push({
       kicked: true,
       // Strixhaven (13b): an alternative cost replaces the mana cost.

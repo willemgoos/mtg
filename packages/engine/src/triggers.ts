@@ -260,6 +260,14 @@ export function checkCondition(
         (id) => !!ctx.s.objects[id] && matchesFilter(ctx, id, c.filter, self?.id),
       ).length >= c.count
     );
+  // Lorwyn Eclipsed (18c, theme decks): Fearless Swashbuckler.
+  if (c.kind === 'attackedThisCombat')
+    return (
+      ctx.s.turn.activePlayer === controller &&
+      (ctx.s.turn.combatAttackers ?? []).some(
+        (id) => !!ctx.s.objects[id] && matchesFilter(ctx, id, c.filter, self?.id),
+      )
+    );
   if (c.kind === 'otherCreatureEnteredThisTurn')
     return !!ctx.s.turn.creaturesEntered?.some((f) => f.player === controller && f.id !== self?.id);
   if (c.kind === 'sourceHasCounter') return (self?.counters?.[c.name] ?? 0) > 0;
@@ -1188,6 +1196,7 @@ function detect(ctx: Ctx, ev: GameEvent): void {
           o.controller === ev.player &&
           (!a.trigger.filter || cardMatches(ctx, card.id, a.trigger.filter, o.id)),
         card,
+        1, // Lorwyn Eclipsed (18c): a batched trigger adds these up ("that many", Marauding Mako)
       );
       // Reality Fracture (17a): Tinybones, Pocket Nuisance: any player's discard (batched).
       forEachBattlefieldTrigger(ctx, (_o, a) => a.trigger.on === 'playerDiscards', card);
@@ -1702,6 +1711,19 @@ function detect(ctx: Ctx, ev: GameEvent): void {
               a.trigger.on === 'yourCreatureDealtDamage' && o.controller === hurt.controller,
             hurt,
             ev.amount,
+          );
+      }
+      // Lorwyn Eclipsed (18c): Magmatic Galleon, creatures an opponent controls are dealt excess noncombat damage.
+      if (!ev.combat && ev.excess && 'object' in ev.to) {
+        const hurt = s.objects[ev.to.object.id];
+        if (hurt?.zone === 'battlefield')
+          forEachBattlefieldTrigger(
+            ctx,
+            (o, a) =>
+              a.trigger.on === 'opponentCreaturesDealtExcessNoncombat' &&
+              o.controller !== hurt.controller,
+            hurt,
+            ev.excess,
           );
       }
       // Reality Fracture (17a): Massacre Girl, Most Wanted: an opponent is dealt noncombat damage (any source).

@@ -410,6 +410,8 @@ export function castCost(
         cost,
       );
   }
+  // Lorwyn Eclipsed (18c): Lightstall Inquisitor, "each spell cast this way costs {1} more".
+  if (o.zone === 'exile' && o.exileCastTax) cost = { ...cost, generic: cost.generic + o.exileCastTax };
   // Brawl: commander tax.
   if (o.zone === 'command') cost = { ...cost, generic: cost.generic + commanderTax(ctx, player) };
   let reduce = d.costReduction !== undefined ? amountFor(ctx, player, d.costReduction) : 0;
@@ -1268,7 +1270,15 @@ export function activateAbility(
       tap(ctx, id);
   }
   if (a.cost.crew) {
-    const crew = crewFor(ctx, player, source, a.cost.crew) ?? [];
+    // Lorwyn Eclipsed (18c): the creatures the player chose to crew with (`tapCreatures`).
+    const chosenCrew = [...new Set(tapCreatures ?? [])].filter((id) => {
+      const o = ctx.s.objects[id];
+      return !!o && o.zone === 'battlefield' && o.controller === player && !o.tapped && id !== source;
+    });
+    const crew =
+      chosenCrew.reduce((t, id) => t + power(ctx, id), 0) >= a.cost.crew
+        ? chosenCrew
+        : (crewFor(ctx, player, source, a.cost.crew) ?? []);
     for (const id of crew) tap(ctx, id);
     // Final Fantasy (11c): crewed by (Balthier and Fran).
     const v = obj(ctx, source);
@@ -1774,9 +1784,51 @@ function resume(ctx: Ctx, r: PausedResolution, thenPriority: PlayerId): void {
  * noncreature tokens, then the weakest creatures (the engine picks; a simplification).
  */
 /**
+ * Crew N: the untapped creatures `player` controls (not the Vehicle) with total power N or more, one list per way of choosing
+ * them (Lorwyn Eclipsed 18c: the player chooses, as the action's `tapCreatures`). Only smallest sets, so no creature is tapped
+ * for nothing; creatures that look alike are one way. The weakest crews come first.
+ */
+export function crewWays(
+  ctx: Ctx,
+  player: PlayerId,
+  vehicle: ObjectId,
+  n: number,
+): ObjectId[][] {
+  const can = ctx.s.battlefield
+    .filter((id) => {
+      const o = obj(ctx, id);
+      return id !== vehicle && o.controller === player && !o.tapped && isCreature(ctx, id);
+    })
+    .map((id) => ({ id, power: power(ctx, id) }))
+    .filter((c) => c.power > 0)
+    .sort((a, b) => a.power - b.power);
+  const key = (id: ObjectId) => {
+    const o = obj(ctx, id);
+    const c = characteristics(ctx, id);
+    return `${o.defId}|${o.isToken ? 1 : 0}|${o.summoningSick ? 1 : 0}|${c.power}/${c.toughness}|${o.plusOneCounters}`;
+  };
+  const ways: { ids: ObjectId[]; power: number }[] = [];
+  const seen = new Set<string>();
+  const pick = (from: number, chosen: typeof can, total: number): void => {
+    if (total >= n) {
+      // A smallest set: without its weakest member it would fall short.
+      if (total - chosen[0]!.power >= n) return;
+      const k = chosen.map((c) => key(c.id)).sort().join(',');
+      if (seen.has(k)) return;
+      seen.add(k);
+      ways.push({ ids: chosen.map((c) => c.id), power: total });
+      return;
+    }
+    for (let i = from; i < can.length; i++) pick(i + 1, [...chosen, can[i]!], total + can[i]!.power);
+  };
+  pick(0, [], 0);
+  return ways.sort((a, b) => a.power - b.power || a.ids.length - b.ids.length).map((w) => w.ids);
+}
+
+/**
  * Crew N: untapped creatures `player` controls (not the Vehicle) with total
- * power N or more. The engine picks: the smallest creatures that reach N
- * (a simplification). Null if they can't.
+ * power N or more. The smallest creatures that reach N, when no crew was chosen
+ * (the legal actions list every choice). Null if they can't.
  */
 export function crewFor(
   ctx: Ctx,
@@ -1982,6 +2034,13 @@ export function answerChooseFromHand(ctx: Ctx, card: ObjectId | null): void {
   if (d.kind !== 'chooseFromHand') throw new Error('Not choosing from a hand');
   if (card) {
     moveObject(ctx, card, d.then === 'discard' ? 'graveyard' : 'exile');
+    // Lorwyn Eclipsed (18c): Lightstall Inquisitor: the opponent chose it; they may play it while it stays exiled.
+    if (d.ownerChooses) {
+      const o = obj(ctx, card);
+      o.castableWhileExiled = true;
+      if (d.ownerChooses.tax) o.exileCastTax = d.ownerChooses.tax;
+      if (d.ownerChooses.landsTapped) o.exilePlayTapped = true;
+    }
     // Lorwyn Eclipsed (18b, black): Taster of Wares, only an instant or sorcery card is castable.
     if (d.castable && (!d.castableFilter || cardMatches(ctx, card, d.castableFilter))) {
       obj(ctx, card).castableBy = d.player;
@@ -2114,6 +2173,12 @@ export function answerScry(ctx: Ctx, top: readonly ObjectId[], bottom: readonly 
   const lib = ctx.s.players[d.player].library;
   lib.splice(0, d.cards.length);
   lib.unshift(...top);
+  // Lorwyn Eclipsed (18c): explore's nonland card goes back on top or into the graveyard (no scry or surveil happened).
+  if (d.explore) {
+    lib.unshift(...bottom);
+    for (const id of bottom) moveObject(ctx, id, 'graveyard');
+    return resume(ctx, d.resume, d.thenPriority);
+  }
   if (d.surveil) {
     // Surveil: "bottom" means the graveyard. Put them back on top first so moveObject finds them.
     lib.unshift(...bottom);
