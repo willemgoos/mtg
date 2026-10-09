@@ -1126,6 +1126,11 @@ export type ConditionDef =
   // Marvel Super Heroes
   /** The source entered the battlefield this turn. */
   | { kind: 'sourceEnteredThisTurn' }
+  // Lorwyn Eclipsed (18b, multi-a)
+  /** You attacked with at least `count` creatures matching the filter this turn (Deepway Navigator). */
+  | { kind: 'attackedWithAtLeast'; filter: CardFilter; count: number }
+  /** A creature other than the source entered the battlefield under your control this turn (Wary Farmer). */
+  | { kind: 'otherCreatureEnteredThisTurn' }
   /** You control a basic land. */
   | { kind: 'controlsBasicLand' }
   /** The source has a counter of this kind (a shield counter). */
@@ -1345,6 +1350,9 @@ export interface TargetSpec {
   filter?: CardFilter;
   /** "Up to": this target and the ones after it may be left out. */
   optional?: boolean;
+  // Lorwyn Eclipsed (18b, multi-a): the Commands
+  /** In a combined "choose two" spell: which chosen mode this target belongs to. Targets of different modes may be the same object. */
+  ofMode?: number;
   // Marvel Super Heroes Jumpstart (Blink)
   /**
    * "Any number of target ...": the last spec of a triggered ability only. Its
@@ -3667,6 +3675,9 @@ export interface TurnState {
   endTheTurn?: boolean;
   /** Flying Drone: creatures with flying that entered this turn, and who controlled them then. */
   flyersEntered?: { id: ObjectId; player: PlayerId }[];
+  // Lorwyn Eclipsed (18b, multi-a): Wary Farmer
+  /** Creatures that entered the battlefield this turn, and who controlled them then. */
+  creaturesEntered?: { id: ObjectId; player: PlayerId }[];
   // Final Fantasy (11a): saga creatures
   /** Players whose creatures are dealt no damage this turn (Summon: Alexander). */
   creaturesShielded?: PlayerId[];
@@ -3791,6 +3802,9 @@ export interface ContinuousEffect {
   // Strixhaven Brawl (15b, w): Alseid of Life's Bounty
   /** Protection from this colour (targeting and damage; not blocking). */
   protectionFrom?: Color;
+  // Lorwyn Eclipsed (18b, multi-a): Figure of Fable
+  /** Protection from everything controlled by anyone but this player ("protection from each of your opponents"). */
+  protectionFromOthersThan?: PlayerId;
   // Final Fantasy (11c): leftovers
   /** It must be blocked this turn if able (Magitek Scythe). */
   mustBeBlocked?: boolean;

@@ -47,10 +47,12 @@ export function protectedFrom(ctx: Ctx, targetId: ObjectId, sourceId: ObjectId):
   if (ctx.s.effects.length === 0) return false;
   return ctx.s.effects.some(
     (e) =>
-      e.protectionFrom !== undefined &&
       e.affected.id === targetId &&
       e.affected.zcc === target.zcc &&
-      colors.includes(e.protectionFrom),
+      ((e.protectionFrom !== undefined && colors.includes(e.protectionFrom)) ||
+        // Lorwyn Eclipsed (18b, multi-a): Figure of Fable, protection from each of your opponents.
+        (e.protectionFromOthersThan !== undefined &&
+          source.controller !== e.protectionFromOthersThan)),
   );
 }
 

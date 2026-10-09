@@ -239,6 +239,16 @@ export function checkCondition(
   if (c.kind === 'yourTurn') return ctx.s.turn.activePlayer === controller;
   // Marvel Super Heroes.
   if (c.kind === 'sourceEnteredThisTurn') return !!self && self.zoneTurn === ctx.s.turn.number;
+  // Lorwyn Eclipsed (18b, multi-a).
+  if (c.kind === 'attackedWithAtLeast')
+    return (
+      ctx.s.turn.activePlayer === controller &&
+      (ctx.s.turn.attackers ?? []).filter(
+        (id) => !!ctx.s.objects[id] && matchesFilter(ctx, id, c.filter, self?.id),
+      ).length >= c.count
+    );
+  if (c.kind === 'otherCreatureEnteredThisTurn')
+    return !!ctx.s.turn.creaturesEntered?.some((f) => f.player === controller && f.id !== self?.id);
   if (c.kind === 'sourceHasCounter') return (self?.counters?.[c.name] ?? 0) > 0;
   if (c.kind === 'anyPlayerControls')
     return ctx.s.battlefield.some((id) => matchesFilter(ctx, id, c.filter, self?.id));
@@ -641,6 +651,8 @@ function detect(ctx: Ctx, ev: GameEvent): void {
         // Flying Drone: "another creature with flying entered the battlefield under your control".
         if (isCreature && hasKeyword(ctx, moved.id, 'flying'))
           (s.turn.flyersEntered ??= []).push({ id: moved.id, player: moved.controller });
+        // Lorwyn Eclipsed (18b, multi-a): Wary Farmer, "if another creature entered the battlefield under your control this turn".
+        if (isCreature) (s.turn.creaturesEntered ??= []).push({ id: moved.id, player: moved.controller });
         const isLand = movedDef.types.includes('Land');
         const before = s.pendingTriggers.length;
         // Reality Fracture (17a): Karn, Argent Defender: artifacts and creatures entering don't cause abilities to trigger.

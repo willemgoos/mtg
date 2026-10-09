@@ -75237,5 +75237,527 @@
    "large": "https://cards.scryfall.io/large/front/b/3/b3d33df2-a77b-4c2e-ba7f-2cc9c1505f9b.jpg?1788878215",
    "artCrop": "https://cards.scryfall.io/art_crop/front/b/3/b3d33df2-a77b-4c2e-ba7f-2cc9c1505f9b.jpg?1788878215"
   }
+ },
+ {
+  "name": "Deepchannel Duelist",
+  "scryfallId": "1b742172-7118-45e7-9945-62bd77d94e85",
+  "oracleId": "c892d28c-4a78-4a7f-b8d5-c3663b819c5e",
+  "set": "ecl",
+  "collectorNumber": "213",
+  "rarity": "uncommon",
+  "manaCost": "{W}{U}",
+  "typeLine": "Creature — Merfolk Soldier",
+  "oracleText": "At the beginning of your end step, untap target Merfolk you control.\nOther Merfolk you control get +1/+1.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "U",
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/b/1b742172-7118-45e7-9945-62bd77d94e85.jpg?1783904414",
+   "normal": "https://cards.scryfall.io/normal/front/1/b/1b742172-7118-45e7-9945-62bd77d94e85.jpg?1783904414",
+   "large": "https://cards.scryfall.io/large/front/1/b/1b742172-7118-45e7-9945-62bd77d94e85.jpg?1783904414",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/b/1b742172-7118-45e7-9945-62bd77d94e85.jpg?1783904414"
+  }
+ },
+ {
+  "name": "Deepway Navigator",
+  "scryfallId": "d988e28b-fa60-4b60-8229-7a15932c784b",
+  "oracleId": "812df594-75af-494f-be09-5f9633aca46a",
+  "set": "ecl",
+  "collectorNumber": "214",
+  "rarity": "rare",
+  "manaCost": "{W}{U}",
+  "typeLine": "Creature — Merfolk Wizard",
+  "oracleText": "Flash\nWhen this creature enters, untap each other Merfolk you control.\nAs long as you attacked with three or more Merfolk this turn, Merfolk you control get +1/+0.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "U",
+   "W"
+  ],
+  "keywords": [
+   "Flash"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/9/d988e28b-fa60-4b60-8229-7a15932c784b.jpg?1783904413",
+   "normal": "https://cards.scryfall.io/normal/front/d/9/d988e28b-fa60-4b60-8229-7a15932c784b.jpg?1783904413",
+   "large": "https://cards.scryfall.io/large/front/d/9/d988e28b-fa60-4b60-8229-7a15932c784b.jpg?1783904413",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/9/d988e28b-fa60-4b60-8229-7a15932c784b.jpg?1783904413"
+  }
+ },
+ {
+  "name": "Eclipsed Merrow",
+  "scryfallId": "2352750d-404d-4928-9bdb-1b0db599b70f",
+  "oracleId": "a3a00b62-f07e-44ef-8d97-22a3e7a06f72",
+  "set": "ecl",
+  "collectorNumber": "221",
+  "rarity": "uncommon",
+  "manaCost": "{W/U}{W/U}{W/U}",
+  "typeLine": "Creature — Merfolk Scout",
+  "oracleText": "When this creature enters, look at the top four cards of your library. You may reveal a Merfolk, Plains, or Island card from among them and put it into your hand. Put the rest on the bottom of your library in a random order.",
+  "power": "2",
+  "toughness": "3",
+  "colors": [
+   "U",
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/3/2352750d-404d-4928-9bdb-1b0db599b70f.jpg?1783904411",
+   "normal": "https://cards.scryfall.io/normal/front/2/3/2352750d-404d-4928-9bdb-1b0db599b70f.jpg?1783904411",
+   "large": "https://cards.scryfall.io/large/front/2/3/2352750d-404d-4928-9bdb-1b0db599b70f.jpg?1783904411",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/3/2352750d-404d-4928-9bdb-1b0db599b70f.jpg?1783904411"
+  }
+ },
+ {
+  "name": "Merrow Skyswimmer",
+  "scryfallId": "075b419a-fd44-4a9a-8c40-474562b7e11a",
+  "oracleId": "d709f396-021f-49eb-adb5-374aa790eaae",
+  "set": "ecl",
+  "collectorNumber": "234",
+  "rarity": "common",
+  "manaCost": "{3}{W/U}{W/U}",
+  "typeLine": "Creature — Merfolk Soldier",
+  "oracleText": "Convoke (Your creatures can help cast this spell. Each creature you tap while casting this spell pays for {1} or one mana of that creature's color.)\nFlying, vigilance\nWhen this creature enters, create a 1/1 white and blue Merfolk creature token.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "U",
+   "W"
+  ],
+  "keywords": [
+   "Flying",
+   "Vigilance",
+   "Convoke"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/7/075b419a-fd44-4a9a-8c40-474562b7e11a.jpg?1783904404",
+   "normal": "https://cards.scryfall.io/normal/front/0/7/075b419a-fd44-4a9a-8c40-474562b7e11a.jpg?1783904404",
+   "large": "https://cards.scryfall.io/large/front/0/7/075b419a-fd44-4a9a-8c40-474562b7e11a.jpg?1783904404",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/7/075b419a-fd44-4a9a-8c40-474562b7e11a.jpg?1783904404"
+  }
+ },
+ {
+  "name": "Sygg's Command",
+  "scryfallId": "8bc13fc2-e254-4db5-ad4d-f92711a1a6ca",
+  "oracleId": "7fe5baab-b182-4cd9-bea5-912ce9b1464a",
+  "set": "ecl",
+  "collectorNumber": "244",
+  "rarity": "rare",
+  "manaCost": "{1}{W}{U}",
+  "typeLine": "Kindred Sorcery — Merfolk",
+  "oracleText": "Choose two —\n• Create a token that's a copy of target Merfolk you control.\n• Creatures target player controls gain lifelink until end of turn.\n• Target player draws a card.\n• Tap target creature. Put a stun counter on it.",
+  "colors": [
+   "U",
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/b/8bc13fc2-e254-4db5-ad4d-f92711a1a6ca.jpg?1783904402",
+   "normal": "https://cards.scryfall.io/normal/front/8/b/8bc13fc2-e254-4db5-ad4d-f92711a1a6ca.jpg?1783904402",
+   "large": "https://cards.scryfall.io/large/front/8/b/8bc13fc2-e254-4db5-ad4d-f92711a1a6ca.jpg?1783904402",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/b/8bc13fc2-e254-4db5-ad4d-f92711a1a6ca.jpg?1783904402"
+  }
+ },
+ {
+  "name": "Dream Harvest",
+  "scryfallId": "a4ebc0e7-02d7-4d38-9376-a39963e6d3fa",
+  "oracleId": "70b9497f-0dd6-4b66-9675-57c7041fe3c0",
+  "set": "ecl",
+  "collectorNumber": "216",
+  "rarity": "rare",
+  "manaCost": "{5}{U/B}{U/B}",
+  "typeLine": "Sorcery",
+  "oracleText": "Each opponent exiles cards from the top of their library until they have exiled cards with total mana value 5 or greater this way. Until end of turn, you may cast cards exiled this way without paying their mana costs.",
+  "colors": [
+   "B",
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/4/a4ebc0e7-02d7-4d38-9376-a39963e6d3fa.jpg?1783904413",
+   "normal": "https://cards.scryfall.io/normal/front/a/4/a4ebc0e7-02d7-4d38-9376-a39963e6d3fa.jpg?1783904413",
+   "large": "https://cards.scryfall.io/large/front/a/4/a4ebc0e7-02d7-4d38-9376-a39963e6d3fa.jpg?1783904413",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/4/a4ebc0e7-02d7-4d38-9376-a39963e6d3fa.jpg?1783904413"
+  }
+ },
+ {
+  "name": "Mischievous Sneakling",
+  "scryfallId": "3b66fa00-2fa6-4060-9e7f-8e3fde6deb73",
+  "oracleId": "fe7a4361-561a-4bab-921e-d01bab19dad3",
+  "set": "ecl",
+  "collectorNumber": "235",
+  "rarity": "common",
+  "manaCost": "{1}{U/B}",
+  "typeLine": "Creature — Shapeshifter",
+  "oracleText": "Changeling (This card is every creature type.)\nFlash",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "B",
+   "U"
+  ],
+  "keywords": [
+   "Flash",
+   "Changeling"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/b/3b66fa00-2fa6-4060-9e7f-8e3fde6deb73.jpg?1783904405",
+   "normal": "https://cards.scryfall.io/normal/front/3/b/3b66fa00-2fa6-4060-9e7f-8e3fde6deb73.jpg?1783904405",
+   "large": "https://cards.scryfall.io/large/front/3/b/3b66fa00-2fa6-4060-9e7f-8e3fde6deb73.jpg?1783904405",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/b/3b66fa00-2fa6-4060-9e7f-8e3fde6deb73.jpg?1783904405"
+  }
+ },
+ {
+  "name": "Voracious Tome-Skimmer",
+  "scryfallId": "1a696fe5-410c-4699-b1d1-1a9c771d664a",
+  "oracleId": "25b0876e-c995-486e-8536-6e68b76b9c86",
+  "set": "ecl",
+  "collectorNumber": "250",
+  "rarity": "uncommon",
+  "manaCost": "{U/B}{U/B}{U/B}",
+  "typeLine": "Creature — Faerie Rogue",
+  "oracleText": "Flying\nWhenever you cast a spell during an opponent's turn, you may pay 1 life. If you do, draw a card.",
+  "power": "2",
+  "toughness": "3",
+  "colors": [
+   "B",
+   "U"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/a/1a696fe5-410c-4699-b1d1-1a9c771d664a.jpg?1783904399",
+   "normal": "https://cards.scryfall.io/normal/front/1/a/1a696fe5-410c-4699-b1d1-1a9c771d664a.jpg?1783904399",
+   "large": "https://cards.scryfall.io/large/front/1/a/1a696fe5-410c-4699-b1d1-1a9c771d664a.jpg?1783904399",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/a/1a696fe5-410c-4699-b1d1-1a9c771d664a.jpg?1783904399"
+  }
+ },
+ {
+  "name": "Boggart Cursecrafter",
+  "scryfallId": "b0b67eb9-0d88-4f2c-8063-e8bedfa78556",
+  "oracleId": "5d58aefe-a3df-4e0a-b679-b967cd5fd2c6",
+  "set": "ecl",
+  "collectorNumber": "206",
+  "rarity": "uncommon",
+  "manaCost": "{B}{R}",
+  "typeLine": "Creature — Goblin Warlock",
+  "oracleText": "Deathtouch\nWhenever another Goblin you control dies, this creature deals 1 damage to each opponent.",
+  "power": "2",
+  "toughness": "3",
+  "colors": [
+   "B",
+   "R"
+  ],
+  "keywords": [
+   "Deathtouch"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/0/b0b67eb9-0d88-4f2c-8063-e8bedfa78556.jpg?1783904418",
+   "normal": "https://cards.scryfall.io/normal/front/b/0/b0b67eb9-0d88-4f2c-8063-e8bedfa78556.jpg?1783904418",
+   "large": "https://cards.scryfall.io/large/front/b/0/b0b67eb9-0d88-4f2c-8063-e8bedfa78556.jpg?1783904418",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/0/b0b67eb9-0d88-4f2c-8063-e8bedfa78556.jpg?1783904418"
+  }
+ },
+ {
+  "name": "Chaos Spewer",
+  "scryfallId": "b5918fa5-1d13-447b-8838-633b6b61e791",
+  "oracleId": "77217a66-4ba8-443f-b915-178cfcc233e1",
+  "set": "ecl",
+  "collectorNumber": "210",
+  "rarity": "common",
+  "manaCost": "{2}{B/R}",
+  "typeLine": "Creature — Goblin Warlock",
+  "oracleText": "When this creature enters, you may pay {2}. If you don't, blight 2. (To blight 2, put two -1/-1 counters on a creature you control.)",
+  "power": "5",
+  "toughness": "4",
+  "colors": [
+   "B",
+   "R"
+  ],
+  "keywords": [
+   "Blight"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/5/b5918fa5-1d13-447b-8838-633b6b61e791.jpg?1783904415",
+   "normal": "https://cards.scryfall.io/normal/front/b/5/b5918fa5-1d13-447b-8838-633b6b61e791.jpg?1783904415",
+   "large": "https://cards.scryfall.io/large/front/b/5/b5918fa5-1d13-447b-8838-633b6b61e791.jpg?1783904415",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/5/b5918fa5-1d13-447b-8838-633b6b61e791.jpg?1783904415"
+  }
+ },
+ {
+  "name": "Eclipsed Boggart",
+  "scryfallId": "0ac1d0b2-92a4-4a10-b2d1-e9bb90265cc3",
+  "oracleId": "9cc3b91b-ad70-4b01-b718-fda3819f84d0",
+  "set": "ecl",
+  "collectorNumber": "217",
+  "rarity": "uncommon",
+  "manaCost": "{B/R}{B/R}{B/R}",
+  "typeLine": "Creature — Goblin Scout",
+  "oracleText": "When this creature enters, look at the top four cards of your library. You may reveal a Goblin, Swamp, or Mountain card from among them and put it into your hand. Put the rest on the bottom of your library in a random order.",
+  "power": "2",
+  "toughness": "3",
+  "colors": [
+   "B",
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/a/0ac1d0b2-92a4-4a10-b2d1-e9bb90265cc3.jpg?1783904413",
+   "normal": "https://cards.scryfall.io/normal/front/0/a/0ac1d0b2-92a4-4a10-b2d1-e9bb90265cc3.jpg?1783904413",
+   "large": "https://cards.scryfall.io/large/front/0/a/0ac1d0b2-92a4-4a10-b2d1-e9bb90265cc3.jpg?1783904413",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/a/0ac1d0b2-92a4-4a10-b2d1-e9bb90265cc3.jpg?1783904413"
+  }
+ },
+ {
+  "name": "Shadow Urchin",
+  "scryfallId": "4e54c39b-6149-467b-a9a8-7ad09ca0cbd4",
+  "oracleId": "86bd332f-ba61-49a4-ad31-de4d7e3638c6",
+  "set": "ecl",
+  "collectorNumber": "242",
+  "rarity": "rare",
+  "manaCost": "{2}{B/R}",
+  "typeLine": "Creature — Ouphe",
+  "oracleText": "Whenever this creature attacks, blight 1. (Put a -1/-1 counter on a creature you control.)\nWhenever a creature you control with one or more counters on it dies, exile that many cards from the top of your library. Until your next end step, you may play those cards.",
+  "power": "3",
+  "toughness": "4",
+  "colors": [
+   "B",
+   "R"
+  ],
+  "keywords": [
+   "Blight"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/e/4e54c39b-6149-467b-a9a8-7ad09ca0cbd4.jpg?1783904402",
+   "normal": "https://cards.scryfall.io/normal/front/4/e/4e54c39b-6149-467b-a9a8-7ad09ca0cbd4.jpg?1783904402",
+   "large": "https://cards.scryfall.io/large/front/4/e/4e54c39b-6149-467b-a9a8-7ad09ca0cbd4.jpg?1783904402",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/e/4e54c39b-6149-467b-a9a8-7ad09ca0cbd4.jpg?1783904402"
+  }
+ },
+ {
+  "name": "Grub's Command",
+  "scryfallId": "73013908-feff-495a-a62e-1e19548ffe6f",
+  "oracleId": "8173e160-9a22-43f7-90d1-9ada043bc1b7",
+  "set": "ecl",
+  "collectorNumber": "228",
+  "rarity": "rare",
+  "manaCost": "{3}{B}{R}",
+  "typeLine": "Kindred Sorcery — Goblin",
+  "oracleText": "Choose two —\n• Create a token that's a copy of target Goblin you control.\n• Creatures target player controls get +1/+1 and gain haste until end of turn.\n• Destroy target artifact or creature.\n• Target player mills five cards, then puts each Goblin card milled this way into their hand.",
+  "colors": [
+   "B",
+   "R"
+  ],
+  "keywords": [
+   "Mill"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/3/73013908-feff-495a-a62e-1e19548ffe6f.jpg?1783904407",
+   "normal": "https://cards.scryfall.io/normal/front/7/3/73013908-feff-495a-a62e-1e19548ffe6f.jpg?1783904407",
+   "large": "https://cards.scryfall.io/large/front/7/3/73013908-feff-495a-a62e-1e19548ffe6f.jpg?1783904407",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/3/73013908-feff-495a-a62e-1e19548ffe6f.jpg?1783904407"
+  }
+ },
+ {
+  "name": "Gangly Stompling",
+  "scryfallId": "502000a7-a3c1-4259-aea5-ff01724396a1",
+  "oracleId": "60206d4e-4301-4d7a-a68e-46a2ad9fc407",
+  "set": "ecl",
+  "collectorNumber": "226",
+  "rarity": "common",
+  "manaCost": "{2}{R/G}",
+  "typeLine": "Creature — Shapeshifter",
+  "oracleText": "Changeling (This card is every creature type.)\nTrample",
+  "power": "4",
+  "toughness": "2",
+  "colors": [
+   "G",
+   "R"
+  ],
+  "keywords": [
+   "Trample",
+   "Changeling"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/0/502000a7-a3c1-4259-aea5-ff01724396a1.jpg?1783904409",
+   "normal": "https://cards.scryfall.io/normal/front/5/0/502000a7-a3c1-4259-aea5-ff01724396a1.jpg?1783904409",
+   "large": "https://cards.scryfall.io/large/front/5/0/502000a7-a3c1-4259-aea5-ff01724396a1.jpg?1783904409",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/0/502000a7-a3c1-4259-aea5-ff01724396a1.jpg?1783904409"
+  }
+ },
+ {
+  "name": "Noggle Robber",
+  "scryfallId": "0082ca96-10f3-4823-be16-117556b2afc3",
+  "oracleId": "a2f33166-6cfc-4dc5-8edc-088bf40f06b5",
+  "set": "ecl",
+  "collectorNumber": "237",
+  "rarity": "uncommon",
+  "manaCost": "{1}{R/G}{R/G}",
+  "typeLine": "Creature — Noggle Rogue",
+  "oracleText": "When this creature enters or dies, create a Treasure token. (It's an artifact with \"{T}, Sacrifice this token: Add one mana of any color.\")",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "G",
+   "R"
+  ],
+  "keywords": [
+   "Treasure"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/0/0082ca96-10f3-4823-be16-117556b2afc3.jpg?1783904408",
+   "normal": "https://cards.scryfall.io/normal/front/0/0/0082ca96-10f3-4823-be16-117556b2afc3.jpg?1783904408",
+   "large": "https://cards.scryfall.io/large/front/0/0/0082ca96-10f3-4823-be16-117556b2afc3.jpg?1783904408",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/0/0082ca96-10f3-4823-be16-117556b2afc3.jpg?1783904408"
+  }
+ },
+ {
+  "name": "Raiding Schemes",
+  "scryfallId": "0bab5da5-72a7-4340-9b53-492ab14a9f71",
+  "oracleId": "854cac11-9a22-4dea-8c1b-c49a4858a754",
+  "set": "ecl",
+  "collectorNumber": "239",
+  "rarity": "rare",
+  "manaCost": "{3}{R}{G}",
+  "typeLine": "Enchantment",
+  "oracleText": "Each noncreature spell you cast has conspire. (As you cast a noncreature spell, you may tap two untapped creatures you control that share a color with it. When you do, copy it and you may choose new targets for the copy. A copy of a permanent spell becomes a token.)",
+  "colors": [
+   "G",
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/b/0bab5da5-72a7-4340-9b53-492ab14a9f71.jpg?1783904405",
+   "normal": "https://cards.scryfall.io/normal/front/0/b/0bab5da5-72a7-4340-9b53-492ab14a9f71.jpg?1783904405",
+   "large": "https://cards.scryfall.io/large/front/0/b/0bab5da5-72a7-4340-9b53-492ab14a9f71.jpg?1783904405",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/b/0bab5da5-72a7-4340-9b53-492ab14a9f71.jpg?1783904405"
+  }
+ },
+ {
+  "name": "Eclipsed Kithkin",
+  "scryfallId": "29e1cfa4-0ad8-4228-9f7e-cbab114d1d5f",
+  "oracleId": "e6227840-6e3e-48c7-b4a4-42cfd8f14b68",
+  "set": "ecl",
+  "collectorNumber": "220",
+  "rarity": "uncommon",
+  "manaCost": "{G/W}{G/W}",
+  "typeLine": "Creature — Kithkin Scout",
+  "oracleText": "When this creature enters, look at the top four cards of your library. You may reveal a Kithkin, Forest, or Plains card from among them and put it into your hand. Put the rest on the bottom of your library in a random order.",
+  "power": "2",
+  "toughness": "1",
+  "colors": [
+   "G",
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/9/29e1cfa4-0ad8-4228-9f7e-cbab114d1d5f.jpg?1783904412",
+   "normal": "https://cards.scryfall.io/normal/front/2/9/29e1cfa4-0ad8-4228-9f7e-cbab114d1d5f.jpg?1783904412",
+   "large": "https://cards.scryfall.io/large/front/2/9/29e1cfa4-0ad8-4228-9f7e-cbab114d1d5f.jpg?1783904412",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/9/29e1cfa4-0ad8-4228-9f7e-cbab114d1d5f.jpg?1783904412"
+  }
+ },
+ {
+  "name": "Figure of Fable",
+  "scryfallId": "e0ef33dd-5f6d-48fa-8ef6-a8092868d50f",
+  "oracleId": "5d4ea910-3b16-4f98-89be-c1b2cfff4bf0",
+  "set": "ecl",
+  "collectorNumber": "224",
+  "rarity": "rare",
+  "manaCost": "{G/W}",
+  "typeLine": "Creature — Kithkin",
+  "oracleText": "{G/W}: This creature becomes a Kithkin Scout with base power and toughness 2/3.\n{1}{G/W}{G/W}: If this creature is a Scout, it becomes a Kithkin Soldier with base power and toughness 4/5.\n{3}{G/W}{G/W}{G/W}: If this creature is a Soldier, it becomes a Kithkin Avatar with base power and toughness 7/8 and protection from each of your opponents.",
+  "power": "1",
+  "toughness": "1",
+  "colors": [
+   "G",
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/0/e0ef33dd-5f6d-48fa-8ef6-a8092868d50f.jpg?1783904409",
+   "normal": "https://cards.scryfall.io/normal/front/e/0/e0ef33dd-5f6d-48fa-8ef6-a8092868d50f.jpg?1783904409",
+   "large": "https://cards.scryfall.io/large/front/e/0/e0ef33dd-5f6d-48fa-8ef6-a8092868d50f.jpg?1783904409",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/0/e0ef33dd-5f6d-48fa-8ef6-a8092868d50f.jpg?1783904409"
+  }
+ },
+ {
+  "name": "Thoughtweft Lieutenant",
+  "scryfallId": "2c54ec67-9317-455e-a045-fa4ed9cb676f",
+  "oracleId": "50dd9e17-6dae-4ff6-8a38-50088c71283f",
+  "set": "ecl",
+  "collectorNumber": "246",
+  "rarity": "uncommon",
+  "manaCost": "{G}{W}",
+  "typeLine": "Creature — Kithkin Soldier",
+  "oracleText": "Whenever this creature or another Kithkin you control enters, target creature you control gets +1/+1 and gains trample until end of turn.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "G",
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/c/2c54ec67-9317-455e-a045-fa4ed9cb676f.jpg?1783904401",
+   "normal": "https://cards.scryfall.io/normal/front/2/c/2c54ec67-9317-455e-a045-fa4ed9cb676f.jpg?1783904401",
+   "large": "https://cards.scryfall.io/large/front/2/c/2c54ec67-9317-455e-a045-fa4ed9cb676f.jpg?1783904401",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/c/2c54ec67-9317-455e-a045-fa4ed9cb676f.jpg?1783904401"
+  }
+ },
+ {
+  "name": "Wary Farmer",
+  "scryfallId": "22d20c0d-176d-49c9-aa0b-2c5778548cc5",
+  "oracleId": "63eed1f5-442f-433d-989c-397b88543162",
+  "set": "ecl",
+  "collectorNumber": "251",
+  "rarity": "common",
+  "manaCost": "{1}{G/W}{G/W}",
+  "typeLine": "Creature — Kithkin Citizen",
+  "oracleText": "At the beginning of your end step, if another creature entered the battlefield under your control this turn, surveil 1. (Look at the top card of your library. You may put it into your graveyard.)",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "G",
+   "W"
+  ],
+  "keywords": [
+   "Surveil"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/2/22d20c0d-176d-49c9-aa0b-2c5778548cc5.jpg?1783904399",
+   "normal": "https://cards.scryfall.io/normal/front/2/2/22d20c0d-176d-49c9-aa0b-2c5778548cc5.jpg?1783904399",
+   "large": "https://cards.scryfall.io/large/front/2/2/22d20c0d-176d-49c9-aa0b-2c5778548cc5.jpg?1783904399",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/2/22d20c0d-176d-49c9-aa0b-2c5778548cc5.jpg?1783904399"
+  }
+ },
+ {
+  "name": "Brigid's Command",
+  "scryfallId": "cf034777-3da7-4d5c-9213-5e9d235c315a",
+  "oracleId": "6487fc1b-5c83-4d09-94d3-175725bcb922",
+  "set": "ecl",
+  "collectorNumber": "208",
+  "rarity": "rare",
+  "manaCost": "{1}{G}{W}",
+  "typeLine": "Kindred Sorcery — Kithkin",
+  "oracleText": "Choose two —\n• Create a token that's a copy of target Kithkin you control.\n• Target player creates a 1/1 green and white Kithkin creature token.\n• Target creature you control gets +3/+3 until end of turn.\n• Target creature you control fights target creature an opponent controls.",
+  "colors": [
+   "G",
+   "W"
+  ],
+  "keywords": [
+   "Fight"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/f/cf034777-3da7-4d5c-9213-5e9d235c315a.jpg?1783904415",
+   "normal": "https://cards.scryfall.io/normal/front/c/f/cf034777-3da7-4d5c-9213-5e9d235c315a.jpg?1783904415",
+   "large": "https://cards.scryfall.io/large/front/c/f/cf034777-3da7-4d5c-9213-5e9d235c315a.jpg?1783904415",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/f/cf034777-3da7-4d5c-9213-5e9d235c315a.jpg?1783904415"
+  }
  }
 ]

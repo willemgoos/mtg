@@ -9,6 +9,7 @@ import {
 import { type Ctx, def, obj, other } from './context.ts';
 import { damageSourceFor, dealDamage, type DamageSource } from './effects.ts';
 import { checkCondition } from './triggers.ts';
+import { protectedFrom } from './brawl-15b-w-effects.ts';
 import { manaSources } from './mana.ts';
 import type { Attacker, ObjectId, PlayerId, StaticDef, TargetChoice } from './types.ts';
 
@@ -136,6 +137,9 @@ export function canBlock(ctx: Ctx, blocker: ObjectId, attacker: ObjectId): boole
       return false;
   // Strixhaven Brawl (15b, g): Mistcutter Hydra can't be blocked by blue creatures.
   if (hasKeyword(ctx, attacker, 'protectionBlue') && def(ctx, blocker).colors.includes('U'))
+    return false;
+  // Lorwyn Eclipsed (18b, multi-a): Figure of Fable, protection from each of your opponents: it can't be blocked by their creatures.
+  if (ctx.s.effects.some((e) => e.protectionFromOthersThan !== undefined) && protectedFrom(ctx, attacker, blocker))
     return false;
   // Marvel Super Heroes Jumpstart (Great Lakes Avengers): Doorman, until end of turn.
   for (const e of ctx.s.effects)
