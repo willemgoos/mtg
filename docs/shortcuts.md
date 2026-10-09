@@ -134,3 +134,15 @@ from) when it's fixed. Older phases keep their own "Simplifications" lists in `d
 - [x] Behold a Jace (Countersculpt, Theorist's Sanctum): you can't pick which Jace, and a Jace card in hand isn't revealed.
 - [ ] Theorist's Sanctum: "as this land enters, you may behold a Jace" is an enters-tapped land with an enters trigger that
       untaps it (the shock-land pattern), so in principle the opponent could respond before it untaps.
+
+## Lorwyn Eclipsed (`ecl/*.ts`, phase 18b)
+
+- [ ] "As this enters, choose a creature type" (Chronicle of Victory, Dawn-Blessed Pennant, Gathering Stone, Eclipsed
+      Realms) is an enters trigger, like earlier sets' cards, so in principle an opponent could respond before the type is
+      set.
+- [ ] Hallowed Fountain: the shock-land pattern (enters tapped, a prompt untaps it for 2 life).
+- [ ] Springleaf Drum and Foraging Wickermaw's `{1}` ability: mana abilities with a non-tap cost go on the stack (the
+      engine's mana abilities take only tap or sacrifice costs), so they can't be used in the middle of paying for a spell.
+- [ ] Mirrormind Crown: tokens made by other sets' hand-written custom effects (Brawl, FIC) don't count as "creating
+      tokens" for its once-each-turn.
+- [ ] Firdoch Core: the Kindred card type isn't in the engine, so it's only an Artifact (nothing in the pool cares).
