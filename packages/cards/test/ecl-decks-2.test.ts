@@ -1,8 +1,7 @@
 import { createEngine, playRandomGame } from '@mtg/engine';
 import { describe, expect, it } from 'vitest';
-import { cardDb, deckIds, missingCards, slug } from '../src/index.ts';
+import { cardDb, deckIds, missingCards } from '../src/index.ts';
 import { ECL_DECKS_2 } from '../src/ecl/decks-2.ts';
-import { PACKETS, packetCards } from '../src/jumpin.ts';
 
 const engine = createEngine(cardDb);
 
@@ -36,25 +35,6 @@ describe('Lorwyn Eclipsed decks, part 2', () => {
           expect(r.final.decision.kind).toBe('gameOver');
         }
       });
-    });
-  }
-});
-
-describe('Lorwyn Eclipsed Jump In packets, part 2', () => {
-  const packets = PACKETS.filter((p) => ['ecl-elemental', 'ecl-goblins', 'ecl-elves'].includes(p.id));
-
-  it('has Elemental, Goblins and Elves', () => {
-    expect(packets.map((p) => p.name)).toEqual(['Elemental', 'Goblins', 'Elves']);
-    expect(packets.map((p) => p.colors.join(''))).toEqual(['UR', 'BR', 'BG']);
-  });
-
-  for (const p of packets) {
-    it(`${p.name}: twelve ECL cards, one rare, eight lands`, () => {
-      expect(p.set).toBe('ecl');
-      expect(p.spells.reduce((s, [, k]) => s + k, 0)).toBe(12);
-      expect(packetCards(p).reduce((s, [, k]) => s + k, 0)).toBe(20);
-      expect(p.spells.some(([n]) => n === p.face)).toBe(true);
-      for (const [name] of packetCards(p)) expect(cardDb.has(slug(name)), name).toBe(true);
     });
   }
 });

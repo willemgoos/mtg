@@ -157,7 +157,7 @@ starter decks: Hare Raising 61%, Otter Limits 33% (a spells-matter deck the bots
 
 - Arena's ten Bloomburrow Jump In packets (`ARENA_BLB_PACKETS`), a "Bloomburrow · Arena" group next to ours. Five are
   two-colour, so packets now have `colors`; those get a gain-land and basics split by mana symbols. Sterling Hound (OTJ)
-  is the one card from outside the set. Arena swaps four slots per packet at random; we use the listed packets.
+  is the one card from outside the set. Arena swaps four slots per packet at random; we use the listed packets (the mechanism for random slots exists now, see the Lorwyn Eclipsed plan, 18c, and can be used for these later).
 - Ten 40-card Bloomburrow draft decks that went 7–0 to 7–2 in Arena's Premier Draft, one per colour pair, from
   [untapped.gg](https://mtga.untapped.gg/limited/draft/bloomburrow/trophy-decks) (series `trophy`, credited to their
   players). They have their own section in the deck grid, and Expedition elites and bosses play them.

@@ -422,3 +422,23 @@
   flex-wrap: wrap;
   overflow-x: visible;
 }
+
+/* An Arena random slot: one of the listed cards, by chance. */
+.jl__cards li.jl__slot {
+  flex-wrap: wrap;
+  align-items: baseline;
+}
+
+.jl__cards li.jl__slot em {
+  font-style: normal;
+  color: var(--h-muted);
+}
+
+.jl__cards li.jl__slot em + em::before {
+  content: '/ ';
+  color: var(--h-dim);
+}
+
+.jl__cards li.jl__slot em.is-rare {
+  color: var(--h-accent);
+}

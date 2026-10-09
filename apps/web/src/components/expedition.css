@@ -1056,3 +1056,15 @@
   gap: 0.75rem 1rem;
   margin: 0 auto 1rem;
 }
+
+/* An Arena random slot in a packet's list: the possible cards, each with its chance. */
+.shell .jumpin__list li.jumpin__slot {
+  display: flex;
+  flex-direction: column;
+  padding-left: 1.25rem;
+  color: var(--h-muted);
+}
+
+.shell .jumpin__list li.jumpin__slot span.is-rare {
+  color: var(--h-accent);
+}
