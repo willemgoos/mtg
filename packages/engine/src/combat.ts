@@ -9,8 +9,8 @@ import {
 import { type Ctx, def, obj, other } from './context.ts';
 import { damageSourceFor, dealDamage, type DamageSource } from './effects.ts';
 import { checkCondition } from './triggers.ts';
-import { manaSources } from './mana.ts';
 import { protectedFrom } from './brawl-15b-w-effects.ts';
+import { manaSources } from './mana.ts';
 import type { Attacker, ObjectId, PlayerId, StaticDef, TargetChoice } from './types.ts';
 
 /** Does `player` control a permanent with this static ability? */

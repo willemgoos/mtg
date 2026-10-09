@@ -183,10 +183,20 @@ export function targetCombos(
     const cands = targetCandidates(ctx, spec, src);
     const next: TargetChoice[][] = [];
     // The same object can't be chosen twice.
-    // Lorwyn Eclipsed (18b, multi-b): "choose two" modes may name the same target (`modeStart`).
+    // Lorwyn Eclipsed (18b, multi-a, multi-b): "choose two" modes may name the same target (`modeStart`, `ofMode`):
+    // they are different instances of "target" (rule 115.3).
     const from = spec.modeStart ?? 0;
     for (const c of combos)
-      for (const t of cands) if (!c.some((x, i) => i >= from && same(x, t))) next.push([...c, t]);
+      for (const t of cands)
+        if (
+          !c.some(
+            (x, i) =>
+              i >= from &&
+              same(x, t) &&
+              !(spec.ofMode !== undefined && specs[i]?.ofMode !== undefined && specs[i]!.ofMode !== spec.ofMode),
+          )
+        )
+          next.push([...c, t]);
     combos = next;
     if (combos.length === 0) break;
   }
