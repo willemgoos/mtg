@@ -190,7 +190,7 @@ describe('Jump In packets', () => {
       expect(id).toMatch(/^jump-in:ecl-vivid\+ecl-giant~\d{8}$/);
       // The same id always makes the same deck, with the dealt cards in it.
       expect(deckById(id).cards).toEqual(findDeck(id)!.cards);
-      expect(deckIds(deckById(id))).toHaveLength(36);
+      expect(deckIds(deckById(id))).toHaveLength(40);
       const [d1] = jumpInDeals(id)!;
       const names = deckById(id).cards.map(([n]) => n);
       for (const [i, alts] of vivid.slots!.entries()) expect(names).toContain(alts[d1[i]!]!.card);
@@ -198,6 +198,17 @@ describe('Jump In packets', () => {
         Array.from({ length: 30 }, (_, s) => jumpInId('ecl-vivid', 'ecl-giant', rng(s))),
       );
       expect(ids.size).toBeGreaterThan(5);
+    });
+
+    it('tops Arena pairs up to 40 with basics split by mana symbols', () => {
+      const d = deckById('jump-in:ecl-flashy+ecl-burdened');
+      expect(deckIds(d)).toHaveLength(40);
+      const n = (name: string) => d.cards.find(([c]) => c === name)?.[1] ?? 0;
+      // Blue-white: both colours get lands, nothing else does.
+      expect(n('Island')).toBeGreaterThan(6);
+      expect(n('Plains')).toBeGreaterThan(6);
+      expect(n('Swamp') + n('Mountain') + n('Forest')).toBe(0);
+      expect(deckIds(deckById('jump-in:angels+cats'))).toHaveLength(40);
     });
 
     it('default to the likeliest card, and ids without slots stay plain', () => {

@@ -235,7 +235,7 @@ Each group's custom handlers are in `engine/src/ecl-<group>-effects.ts`. Merging
   **Arena's packets measured** (fixed official lists, not tuned; heuristic bot, 300 games each, the packet plus a random
   one against two random packets from every set, random slots dealt per game, seats alternating): Kithkin 44.0%, Merfolk
   43.7%, Elemental 50.7%, Goblins 41.0%, Elves 47.0%, Flashy 39.0%, Burdened 53.7%, Blighted 53.3%, Giant 43.0%, Vivid
-  53.3%. (Our earlier self-picked lists scored 43-60%.) A pair of Arena ECL packets is 36-38 cards, not 40.
+  53.3%. (Our earlier self-picked lists scored 43-60%.) A pair of Arena ECL packets is 36-38 cards, so (as Arena does) the deck is topped up to 40 with basics split by the mana symbols of the pair's spells (`addBasics` in `index.ts`); the numbers above were measured before that top-up.
 
 - **Ten 60-card decks**, one per colour pair, `set: 'ecl'`, built from human-made lists (the archetype example decks
   from Wizards' draft overview and MTGAZone's archetype guide, scaled to 60 like the starter decks), each 45–65% against

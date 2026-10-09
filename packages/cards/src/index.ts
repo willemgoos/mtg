@@ -296,6 +296,45 @@ export function jumpInDeals(id: string): [Deal, Deal] | undefined {
   return [d.slice(0, na), d.slice(na)];
 }
 
+const JUMP_IN_SIZE = 40;
+const BASIC_OF: Record<string, string> = {
+  W: 'Plains',
+  U: 'Island',
+  B: 'Swamp',
+  R: 'Mountain',
+  G: 'Forest',
+};
+
+/**
+ * Arena tops a Jump In deck up to 40 cards with basics balanced for the spells' costs: the missing
+ * lands are split between the colours by the mana symbols in the deck's costs (a hybrid symbol
+ * counts for both colours), by largest remainder.
+ */
+function addBasics(counts: Map<string, number>): void {
+  const missing = JUMP_IN_SIZE - [...counts.values()].reduce((s, n) => s + n, 0);
+  if (missing <= 0) return;
+  const symbols: Record<string, number> = { W: 0, U: 0, B: 0, R: 0, G: 0 };
+  for (const [name, n] of counts) {
+    const cost = scryfallById.get(slug(name))?.manaCost ?? '';
+    for (const m of cost.matchAll(/\{([^}]+)\}/g))
+      for (const c of m[1]!.split('/')) if (c in symbols) symbols[c]! += n;
+  }
+  const total = Object.values(symbols).reduce((s, n) => s + n, 0);
+  if (!total) return;
+  const share = Object.entries(symbols).map(([c, s]) => ({
+    c,
+    n: Math.floor((missing * s) / total),
+    rem: (missing * s) / total - Math.floor((missing * s) / total),
+  }));
+  let left = missing - share.reduce((s, x) => s + x.n, 0);
+  for (const x of [...share].sort((p, q) => q.rem - p.rem)) {
+    if (left-- <= 0) break;
+    x.n++;
+  }
+  for (const x of share)
+    if (x.n) counts.set(BASIC_OF[x.c]!, (counts.get(BASIC_OF[x.c]!) ?? 0) + x.n);
+}
+
 /** Two packets shuffled together: 40ish cards named after both themes, with the first one's face. */
 function jumpInDeck(id: string): Decklist | undefined {
   const pair = jumpInPackets(id);
@@ -305,6 +344,7 @@ function jumpInDeck(id: string): Decklist | undefined {
   const counts = new Map<string, number>();
   for (const [name, n] of [...packetCards(a, deals[0]), ...packetCards(b, deals[1])])
     counts.set(name, (counts.get(name) ?? 0) + n);
+  addBasics(counts);
   return {
     id,
     name: `${a.name} + ${b.name}`,

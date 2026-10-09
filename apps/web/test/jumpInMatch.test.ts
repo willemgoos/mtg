@@ -33,7 +33,7 @@ describe('Jump In matches', () => {
     const them = jumpInPackets(s.them)!.map((p) => p.id);
     expect(them[0]).toBe(c);
     expect([a, b, c]).not.toContain(them[1]);
-    expect(deckById(s.them).cards.reduce((n, [, k]) => n + k, 0)).toBeGreaterThanOrEqual(36);
+    expect(deckById(s.them).cards.reduce((n, [, k]) => n + k, 0)).toBe(40);
   });
 
   it('deals your empty slots too, and only packets of the chosen sets', () => {
