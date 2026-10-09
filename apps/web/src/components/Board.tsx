@@ -268,6 +268,11 @@ export function Board({
       if (d.options.includes(id)) act({ type: 'chooseCard', player: HUMAN, card: id });
       return;
     }
+    // Lorwyn Eclipsed (18a): conspire, the creatures to tap are clicked one at a time.
+    if (d.kind === 'conspire') {
+      if (d.options.includes(id)) act({ type: 'chooseCard', player: HUMAN, card: id });
+      return;
+    }
     // Final Fantasy (11c): an ability on the stack is only clicked as a target.
     if (!view.objects[id]) return;
     const o = view.objects[id]!;
@@ -371,6 +376,8 @@ export function Board({
       return legal.some((a) => a.type === 'chooseCard' && a.card === id) ? 'option' : null;
     if (myDecision && d.kind === 'forage') return d.foods.includes(id) ? 'option' : null;
     if (myDecision && d.kind === 'chooseObject') return d.options.includes(id) ? 'option' : null;
+    if (myDecision && d.kind === 'conspire')
+      return d.chosen.includes(id) ? 'selected' : d.options.includes(id) ? 'option' : null;
     if (id === blocker) return 'selected';
     if (declaredAttackers.has(id)) return 'attacking';
     if (blocking.has(id)) return 'blocking';
@@ -494,7 +501,10 @@ export function Board({
               'a creature to sacrifice'
             : forageFood(first)
               ? 'a Food to sacrifice'
-              : first.discard
+              : // Lorwyn Eclipsed (18a): the creature a blight cost puts its -1/-1 counters on.
+                first.blight
+                ? 'a creature to put the -1/-1 counters on (blight)'
+                : first.discard
                 ? first.type === 'activateAbility' &&
                   exilesFromHand(view.objects[first.source]!.defId, first.abilityIndex)
                   ? 'an instant or sorcery card to exile'
@@ -663,6 +673,21 @@ export function Board({
       case 'pickCards':
         return { prompt: `Choose ${d.count} card${d.count > 1 ? 's' : ''} to keep` };
       case 'chooseObject':
+        // Lorwyn Eclipsed (18a): blight, the creature that gets the counters.
+        if (d.blight !== undefined) {
+          const what = d.blight === 1 ? 'a -1/-1 counter' : `${d.blight} -1/-1 counters`;
+          return {
+            prompt: `${nameOf(d.resume.sourceDefId)}: ${d.optional ? 'you may blight' : 'blight'} ${d.blight} — click a creature to put ${what} on`,
+            ...(d.optional
+              ? {
+                  secondary: [
+                    "Don't blight",
+                    () => act({ type: 'chooseCard', player: HUMAN, card: null }),
+                  ] as [string, () => void],
+                }
+              : {}),
+          };
+        }
         // Final Fantasy (11a): Garnet: any number of Sagas, one at a time.
         if (d.optional)
           return {
@@ -717,6 +742,13 @@ export function Board({
             `Leave in ${zone === 'library' ? 'library' : zone}`,
             () => act({ type: 'chooseEffect', player: HUMAN, accept: false }),
           ] as [string, () => void],
+        };
+      }
+      // Lorwyn Eclipsed (18a): conspire.
+      case 'conspire': {
+        const left = 2 - d.chosen.length;
+        return {
+          prompt: `${nameOf(view.objects[d.spell]!.defId)}: conspire — tap ${left === 2 ? 'two untapped creatures' : 'one more untapped creature'} that share a color with it`,
         };
       }
       case 'chooseFromHand':
@@ -1254,12 +1286,14 @@ export function Board({
       {d.kind === 'optionalEffect' && d.player === HUMAN && (
         <div className="menu">
           <div className="menu__box">
-            <div className="menu__title">{nameOf(d.resume.sourceDefId)}: optional effect</div>
+            <div className="menu__title">
+              {nameOf(d.resume.sourceDefId)}: {d.cost ? `you may pay ${manaText(d.cost)}` : 'optional effect'}
+            </div>
             {legal.map(
               (a) =>
                 a.type === 'chooseEffect' && (
                   <button key={String(a.accept)} className="btn btn--ghost" onClick={() => act(a)}>
-                    {a.accept ? 'Use ability' : 'Decline'}
+                    {a.accept ? (d.cost ? `Pay ${manaText(d.cost)}` : 'Use ability') : 'Decline'}
                   </button>
                 ),
             )}
@@ -1581,10 +1615,16 @@ function castLabel(defId: CardDefId, a: Action, view: GameState): string {
     return `Play ${face?.name ?? 'land'}`;
   }
   if (a.type !== 'castSpell' && a.type !== 'activateAbility') return '';
+  // Lorwyn Eclipsed (18a): which counters "Remove a counter" takes off.
+  if (a.type === 'activateAbility' && a.removeKinds?.length)
+    return `Remove ${[...new Set(a.removeKinds)].join(', ')} ${a.removeKinds.length === 1 ? 'counter' : 'counters'}`;
   if (a.forage)
     return a.forage === 'graveyard'
       ? 'Forage: exile three cards from your graveyard'
       : 'Forage: sacrifice a Food';
+  // Lorwyn Eclipsed (18a): Soul Immolation, "blight X".
+  if (a.type === 'castSpell' && a.x !== undefined && cardDb.get(defId)?.blightX)
+    return a.x ? `Blight ${a.x}` : 'X = 0 (no blight)';
   if (a.x !== undefined) return `X = ${a.x}`;
   if (a.type === 'activateAbility') return 'Activate';
   if (a.via === 'festival') return 'From your graveyard (pay 1 life)';
@@ -1600,6 +1640,27 @@ function castLabel(defId: CardDefId, a: Action, view: GameState): string {
   if (a.via === 'hades') return 'From your graveyard';
   if (a.paws) return pawLabel(defId, a.paws);
   const def = cardDb.get(defId);
+  // Lorwyn Eclipsed (18a): evoke, conspire, blight as an optional or alternative cost, behold and exile.
+  if (a.type === 'castSpell' && a.evoked && def?.evoke) return `Evoke ${manaText(def.evoke)}`;
+  if (a.type === 'castSpell' && a.conspire) return 'Conspire (tap two creatures that share a color)';
+  if (def?.blightOrPay)
+    return a.blight ? `Blight ${def.blightOrPay.amount}` : `Pay ${manaText(def.blightOrPay.pay)}`;
+  if (def?.kicker?.blight)
+    return a.kicked
+      ? def.modes
+        ? `Blight ${def.kicker.blight}: choose both modes`
+        : `Blight ${def.kicker.blight}`
+      : def.modes && a.mode !== undefined
+        ? (def.modes[a.mode]?.label ?? `Mode ${a.mode + 1}`)
+        : 'Cast without blighting';
+  if (a.type === 'castSpell' && a.beholdCards?.length)
+    return `Behold ${a.beholdCards.map((id) => nameOf(view.objects[id]?.defId ?? '')).join(', ')}`;
+  if (def?.beholdExile && a.type === 'castSpell' && a.beholdCard !== undefined) {
+    const o = view.objects[a.beholdCard];
+    return o
+      ? `Behold ${nameOf(o.defId)} and exile it${o.zone === 'hand' ? ' (from your hand)' : ''}`
+      : 'Behold and exile';
+  }
   if (a.type === 'castSpell' && a.sneak && def?.sneak) return `Sneak (${manaText(def.sneak)})`;
   // Final Fantasy (11a): an adventure land's Adventure.
   if (def?.adventure && a.back) {

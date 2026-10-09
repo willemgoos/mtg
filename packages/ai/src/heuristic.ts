@@ -75,6 +75,7 @@ export function createHeuristicBot(db: CardDb, name = 'heuristic'): Bot {
         case 'chooseObject':
         case 'payOrCounter':
         case 'castFree':
+        case 'conspire': // Lorwyn Eclipsed (18a): which two creatures to tap (blight's creature is a chooseObject)
           return bestByEvaluation(engine, view, me, legal, 'stack');
         case 'chooseOption': {
           // Strixhaven (13a): Learn takes a Lesson if there is one (the first option), else the best by evaluation.

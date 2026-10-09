@@ -39,6 +39,15 @@ export interface CastVariant {
   sacrifice?: boolean;
   /** Needs a forage as an additional cost (Feed the Cycle). */
   forage?: boolean;
+  // Lorwyn Eclipsed (18a)
+  /** Needs a blight as an additional cost: this many -1/-1 counters on a creature you control ('x': X of them). */
+  blight?: number | 'x';
+  /** Cast for its evoke cost. */
+  evoked?: boolean;
+  /** Needs a card beheld and exiled as an additional cost (the Champions). */
+  beholdExile?: boolean;
+  /** Needs several cards beheld (Kindle the Inner Flame's flashback). */
+  beholdMany?: boolean;
   /**
    * Needs a card discarded (true) or explicitly not (false): Bone Shards, Bitter Triumph (Strixhaven
    * Brawl (15b, b)), Titania, Rugged Rumbler ("discard a card or pay {2}").
@@ -70,6 +79,8 @@ export function spellTags(d: CardDefinition, zone?: ZoneName): string[] {
     d.types.includes('Instant') || d.types.includes('Sorcery') ? ['InstantOrSorcery'] : [];
   // Strixhaven Brawl (15b, pair): Troyan, Gutsy Explorer: spells with mana value 5 or greater or with {X}.
   const bigSpell = manaValue(d.manaCost) >= 5 || d.manaCost.x ? ['BigSpell'] : [];
+  // Lorwyn Eclipsed (18a): Ashling, Rimebound: "only to cast spells with mana value 4 or greater".
+  const fourOrMore = manaValue(d.manaCost) >= 4 ? ['MV4Plus'] : [];
   // Reality Fracture (17a): Heartwood Crafter: "can't be spent to cast spells from your hand".
   const fromHand = zone === 'hand' ? ['FromHand'] : [];
   return [
@@ -81,6 +92,7 @@ export function spellTags(d: CardDefinition, zone?: ZoneName): string[] {
     ...noncreature,
     ...instantOrSorcery,
     ...bigSpell,
+    ...fourOrMore,
   ];
 }
 
@@ -176,7 +188,7 @@ export function castVariants(d: CardDefinition, zone: ZoneName, via?: CastVia): 
   // additional costs (kicker) are still paid; an alternative cost can't be added.
   if (via === 'freeOnceEachTurn' || via === 'omnipresence' || via === 'freeExact')
     return castVariants(d.noManaCost ? { ...d, noManaCost: false } : d, 'hand')
-      .filter((v) => !(v.kicked && d.kicker?.replacesCost))
+      .filter((v) => !(v.kicked && d.kicker?.replacesCost) && !v.evoked)
       .map((v) => ({ ...v, cost: withoutManaCost(v.cost, d.manaCost) }));
   // Reality Fracture (17c): Chandra, Torch of Defiance: cast now, paying its costs as if from hand.
   if (via === 'now') return castVariants(d, 'hand');
@@ -184,7 +196,7 @@ export function castVariants(d: CardDefinition, zone: ZoneName, via?: CastVia): 
   // (kicker, a forage or {2} instead, the cost of a mode); an alternative cost can't be paid with it.
   if (via === 'free')
     return castVariants(d, 'hand')
-      .filter((v) => !(v.kicked && d.kicker?.replacesCost))
+      .filter((v) => !(v.kicked && d.kicker?.replacesCost) && !v.evoked)
       .map((v) => ({ ...v, cost: withoutManaCost(v.cost, d.manaCost) }));
   // Cast as if from hand, then adjusted for how.
   if (via) {
@@ -233,9 +245,14 @@ export function castVariants(d: CardDefinition, zone: ZoneName, via?: CastVia): 
     }));
   if (d.pawprints) return pawCombos(d).map((paws) => ({ paws, cost, spell: pawSpell(d, paws) }));
   // Reality Fracture (17a): Twinned Vision, "Flashback—{1}{U/R}{U/R}, Discard a card".
-  const extra = flashback
+  const extra: Partial<CastVariant> = flashback
     ? { flashback: true, ...life, ...(d.flashbackDiscard ? { discard: true } : {}) }
     : {};
+  // Lorwyn Eclipsed (18a): blight and behold-and-exile as mandatory additional costs.
+  if (d.blightToCast) extra.blight = d.blightToCast;
+  if (d.blightX) extra.blight = 'x';
+  if (d.beholdExile) extra.beholdExile = true;
+  if (flashback && d.flashbackBehold) extra.beholdMany = true;
   if (d.modes) {
     const modes: CastVariant[] = d.modes.map((spell, mode) => ({
       mode,
@@ -251,6 +268,7 @@ export function castVariants(d: CardDefinition, zone: ZoneName, via?: CastVia): 
         cost: addCosts(cost, d.kicker.cost),
         spell: d.kicker.spell,
         ...extra,
+        ...(d.kicker.blight ? { blight: d.kicker.blight } : {}),
       });
     return modes;
   }
@@ -273,6 +291,12 @@ export function castVariants(d: CardDefinition, zone: ZoneName, via?: CastVia): 
       { cost: addCosts(cost, d.forageOrPay), spell: d.spell ?? null, ...extra },
     ];
   // Reality Fracture (17c): Countersculpt, "behold a Jace or pay {1}".
+  // Lorwyn Eclipsed (18a): Bogslither's Embrace, Wild Unraveling, "blight N or pay <cost>".
+  if (d.blightOrPay)
+    return [
+      { cost, spell: d.spell ?? null, blight: d.blightOrPay.amount, ...extra },
+      { cost: addCosts(cost, d.blightOrPay.pay), spell: d.spell ?? null, ...extra },
+    ];
   if (d.beholdOrPay)
     return [
       { cost, spell: d.spell ?? null, beheld: true, ...extra },
@@ -319,7 +343,11 @@ export function castVariants(d: CardDefinition, zone: ZoneName, via?: CastVia): 
       // Mystical Archive (16): Force of Will also exiles a blue card from your hand.
       ...(d.kicker.exileFromHand ? { discard: true } : {}),
       ...extra,
+      // Lorwyn Eclipsed (18a): "you may blight N" as the optional additional cost.
+      ...(d.kicker.blight ? { blight: d.kicker.blight } : {}),
     });
+  // Lorwyn Eclipsed (18a): evoke, an alternative cost (not from a graveyard).
+  if (d.evoke && !flashback) out.push({ evoked: true, cost: d.evoke, spell: d.spell ?? null, ...extra });
   return out;
 }
 
@@ -337,6 +365,9 @@ export function variantOf(
     paws?: number[] | undefined;
     kickCount?: number | undefined;
     beheld?: boolean | undefined;
+    // Lorwyn Eclipsed (18a)
+    evoked?: boolean | undefined;
+    blight?: string | undefined;
   },
 ): CastVariant | undefined {
   return castVariants(d, zone, choice.via).find(
@@ -348,6 +379,9 @@ export function variantOf(
       !!v.sacrifice === !!choice.sacrifice &&
       !!v.forage === !!choice.forage &&
       !!v.beheld === !!choice.beheld &&
+      !!v.evoked === !!choice.evoked &&
+      // Lorwyn Eclipsed (18a): a blight of X may be of none (X = 0); otherwise the variant says whether a creature is blighted.
+      (v.blight === 'x' || !!v.blight === !!choice.blight) &&
       // Strixhaven Brawl (15b, b): a variant that says whether a card is discarded must agree.
       (v.discard === undefined || v.discard === !!choice.discard),
   );

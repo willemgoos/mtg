@@ -30,9 +30,12 @@ export function targetsOf(a: Action): TargetChoice[] {
     const tapped = a.type === 'activateAbility' ? a.tapCreature : undefined;
     // Reality Fracture (17a): Tenured Tethermage: the artifacts tapped for the cost are picked too.
     const tappedArtifacts = a.type === 'activateAbility' ? (a.tapArtifacts ?? []) : [];
+    // Lorwyn Eclipsed (18a): the creature a blight cost puts its -1/-1 counters on is picked too.
+    const blight = a.blight;
     const costs: TargetChoice[] = [
       a.sacrifice,
       forageFood(a),
+      blight,
       discard,
       copyOf,
       sneak,
@@ -141,10 +144,12 @@ export function castGroups(casts: readonly Action[]): Action[][] {
     }
     if (a.type !== 'castSpell' && a.type !== 'activateAbility') continue;
     const forage = a.forage ? (a.forage === 'graveyard' ? 'g' : 'f') : '';
+    // Lorwyn Eclipsed (18a): blighting or not, evoke, conspire and the kinds of counters removed are ways of paying too.
+    const blight = a.blight ? 'bl' : '';
     const key =
       a.type === 'castSpell'
-        ? `${a.mode ?? ''}:${a.kicked ? 'k' : ''}:${a.sacrifice ? 's' : ''}:${forage}:${a.x ?? ''}:${a.paws?.join() ?? ''}:${a.via ?? ''}:${a.back ? 'b' : ''}:${a.sneak ? 'sn' : ''}:${a.beheld ? 'bh' : ''}:${a.beholdCard ?? ''}`
-        : `${forage}:${a.x ?? ''}`;
+        ? `${a.mode ?? ''}:${a.kicked ? 'k' : ''}:${a.sacrifice ? 's' : ''}:${forage}:${a.x ?? ''}:${a.paws?.join() ?? ''}:${a.via ?? ''}:${a.back ? 'b' : ''}:${a.sneak ? 'sn' : ''}:${a.beheld ? 'bh' : ''}:${a.beholdCard ?? ''}:${blight}:${a.evoked ? 'ev' : ''}:${a.conspire ? 'cs' : ''}:${a.beholdCards?.join() ?? ''}`
+        : `${forage}:${a.x ?? ''}:${blight}:${a.removeKinds?.join() ?? ''}`;
     groups.set(key, [...(groups.get(key) ?? []), a]);
   }
   return [...groups.values()];

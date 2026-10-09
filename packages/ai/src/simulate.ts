@@ -88,6 +88,7 @@ function passiveAction(
     case 'chooseObject':
     case 'payOrCounter':
     case 'castFree':
+    case 'conspire': // Lorwyn Eclipsed (18a)
       // Reality Fracture (17a fixes): every creature type is on offer.
       if (d.kind === 'chooseOption' && d.title === 'Choose a creature type')
         return chooseCreatureType(engine, s, d.player, d);

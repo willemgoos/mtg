@@ -440,7 +440,8 @@ export function creatureHelpers(
         !sources.some((x) => x.id === id)
       );
     })
-    .map((id) => ({ id, produces: ['C'], isCreature: true, sacrifice: false }));
+    // Lorwyn Eclipsed (18a): a convoking creature pays for {1} or for one mana of one of its colours.
+    .map((id) => ({ id, produces: [...def(ctx, id).colors], isCreature: true, sacrifice: false }));
 }
 
 /** Can `sources` pay this cost? (Precompute sources once when checking many costs.) */
