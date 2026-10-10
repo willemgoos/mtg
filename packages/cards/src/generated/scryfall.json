@@ -22565,10 +22565,10 @@
   ],
   "keywords": [],
   "image": {
-   "small": "https://cards.scryfall.io/small/front/5/7/574f73a7-9ff7-4ce3-9f56-002af968d35a.jpg?1783934477",
-   "normal": "https://cards.scryfall.io/normal/front/5/7/574f73a7-9ff7-4ce3-9f56-002af968d35a.jpg?1783934477",
-   "large": "https://cards.scryfall.io/large/front/5/7/574f73a7-9ff7-4ce3-9f56-002af968d35a.jpg?1783934477",
-   "artCrop": "https://cards.scryfall.io/art_crop/front/5/7/574f73a7-9ff7-4ce3-9f56-002af968d35a.jpg?1783934477"
+   "small": "https://cards.scryfall.io/small/front/5/7/574f73a7-9ff7-4ce3-9f56-002af968d35a.jpg?1791030997",
+   "normal": "https://cards.scryfall.io/normal/front/5/7/574f73a7-9ff7-4ce3-9f56-002af968d35a.jpg?1791030997",
+   "large": "https://cards.scryfall.io/large/front/5/7/574f73a7-9ff7-4ce3-9f56-002af968d35a.jpg?1791030997",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/7/574f73a7-9ff7-4ce3-9f56-002af968d35a.jpg?1791030997"
   }
  },
  {
@@ -56614,10 +56614,10 @@
   ],
   "keywords": [],
   "image": {
-   "small": "https://cards.scryfall.io/small/front/2/9/29dd649c-86b5-40a1-94b0-5859d03be9cd.jpg?1787806940",
-   "normal": "https://cards.scryfall.io/normal/front/2/9/29dd649c-86b5-40a1-94b0-5859d03be9cd.jpg?1787806940",
-   "large": "https://cards.scryfall.io/large/front/2/9/29dd649c-86b5-40a1-94b0-5859d03be9cd.jpg?1787806940",
-   "artCrop": "https://cards.scryfall.io/art_crop/front/2/9/29dd649c-86b5-40a1-94b0-5859d03be9cd.jpg?1787806940"
+   "small": "https://cards.scryfall.io/small/front/2/9/29dd649c-86b5-40a1-94b0-5859d03be9cd.jpg?1791157577",
+   "normal": "https://cards.scryfall.io/normal/front/2/9/29dd649c-86b5-40a1-94b0-5859d03be9cd.jpg?1791157577",
+   "large": "https://cards.scryfall.io/large/front/2/9/29dd649c-86b5-40a1-94b0-5859d03be9cd.jpg?1791157577",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/9/29dd649c-86b5-40a1-94b0-5859d03be9cd.jpg?1791157577"
   }
  },
  {
@@ -70838,10 +70838,10 @@
    "Haste"
   ],
   "image": {
-   "small": "https://cards.scryfall.io/small/front/f/2/f27d50f0-d76e-4ce1-a8d9-d997af6a5b41.jpg?1789385716",
-   "normal": "https://cards.scryfall.io/normal/front/f/2/f27d50f0-d76e-4ce1-a8d9-d997af6a5b41.jpg?1789385716",
-   "large": "https://cards.scryfall.io/large/front/f/2/f27d50f0-d76e-4ce1-a8d9-d997af6a5b41.jpg?1789385716",
-   "artCrop": "https://cards.scryfall.io/art_crop/front/f/2/f27d50f0-d76e-4ce1-a8d9-d997af6a5b41.jpg?1789385716"
+   "small": "https://cards.scryfall.io/small/front/f/2/f27d50f0-d76e-4ce1-a8d9-d997af6a5b41.jpg?1791192275",
+   "normal": "https://cards.scryfall.io/normal/front/f/2/f27d50f0-d76e-4ce1-a8d9-d997af6a5b41.jpg?1791192275",
+   "large": "https://cards.scryfall.io/large/front/f/2/f27d50f0-d76e-4ce1-a8d9-d997af6a5b41.jpg?1791192275",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/2/f27d50f0-d76e-4ce1-a8d9-d997af6a5b41.jpg?1791192275"
   }
  },
  {
@@ -88464,6 +88464,690 @@
    "normal": "https://cards.scryfall.io/normal/front/2/d/2dcafdac-a293-4adc-a540-3b3f469cf6f3.jpg?1783907283",
    "large": "https://cards.scryfall.io/large/front/2/d/2dcafdac-a293-4adc-a540-3b3f469cf6f3.jpg?1783907283",
    "artCrop": "https://cards.scryfall.io/art_crop/front/2/d/2dcafdac-a293-4adc-a540-3b3f469cf6f3.jpg?1783907283"
+  }
+ },
+ {
+  "name": "Along the Crooked Way",
+  "scryfallId": "3696d65c-fffd-4685-bb2d-e8769bf476e3",
+  "oracleId": "f4437cb3-85f7-49b5-bb41-6a948549d987",
+  "set": "hob",
+  "collectorNumber": "60",
+  "rarity": "rare",
+  "manaCost": "{2}{B}",
+  "typeLine": "Enchantment",
+  "oracleText": "When this enchantment enters, return target creature card from your graveyard to your hand.\nWhenever a creature card leaves your graveyard, amass Goblins 1.\n{1}{B}: Goblins and Orcs you control gain menace until end of turn.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Amass"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/6/3696d65c-fffd-4685-bb2d-e8769bf476e3.jpg?1785412571",
+   "normal": "https://cards.scryfall.io/normal/front/3/6/3696d65c-fffd-4685-bb2d-e8769bf476e3.jpg?1785412571",
+   "large": "https://cards.scryfall.io/large/front/3/6/3696d65c-fffd-4685-bb2d-e8769bf476e3.jpg?1785412571",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/6/3696d65c-fffd-4685-bb2d-e8769bf476e3.jpg?1785412571"
+  }
+ },
+ {
+  "name": "Azog, Moria's Ruin",
+  "scryfallId": "135da718-affc-46ba-be57-c12c23b54dad",
+  "oracleId": "a8b018a7-0350-4ee0-9582-8d391018bdee",
+  "set": "hob",
+  "collectorNumber": "61",
+  "rarity": "rare",
+  "manaCost": "{2}{B}",
+  "typeLine": "Legendary Creature — Goblin Soldier",
+  "oracleText": "When Azog enters, destroy up to one other target creature. Its controller amasses Goblins X, where X is that creature's power. If you controlled that creature, draw a card. (To amass Goblins X, that player puts X +1/+1 counters on an Army they control. It's also a Goblin. If they don't control an Army, they create a 0/0 black Goblin Army creature token first.)",
+  "power": "1",
+  "toughness": "3",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Amass"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/3/135da718-affc-46ba-be57-c12c23b54dad.jpg?1784798028",
+   "normal": "https://cards.scryfall.io/normal/front/1/3/135da718-affc-46ba-be57-c12c23b54dad.jpg?1784798028",
+   "large": "https://cards.scryfall.io/large/front/1/3/135da718-affc-46ba-be57-c12c23b54dad.jpg?1784798028",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/3/135da718-affc-46ba-be57-c12c23b54dad.jpg?1784798028"
+  }
+ },
+ {
+  "name": "Bilbo's Deadly Slice",
+  "scryfallId": "17892c93-b9b2-4720-933b-998ed0200492",
+  "oracleId": "4c054431-3667-4e28-9d68-03b43447c35b",
+  "set": "hob",
+  "collectorNumber": "62",
+  "rarity": "common",
+  "manaCost": "{1}{B}{B}",
+  "typeLine": "Instant",
+  "oracleText": "Destroy target creature.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/7/17892c93-b9b2-4720-933b-998ed0200492.jpg?1785497075",
+   "normal": "https://cards.scryfall.io/normal/front/1/7/17892c93-b9b2-4720-933b-998ed0200492.jpg?1785497075",
+   "large": "https://cards.scryfall.io/large/front/1/7/17892c93-b9b2-4720-933b-998ed0200492.jpg?1785497075",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/7/17892c93-b9b2-4720-933b-998ed0200492.jpg?1785497075"
+  }
+ },
+ {
+  "name": "Crude Bent Blade",
+  "scryfallId": "fa8fd3c4-bd00-485d-80b1-2b67f5786fce",
+  "oracleId": "eec81460-899d-4b4c-b33c-ce2ca704df17",
+  "set": "hob",
+  "collectorNumber": "63",
+  "rarity": "common",
+  "manaCost": "{2}{B}",
+  "typeLine": "Artifact — Equipment",
+  "oracleText": "When this Equipment enters, target opponent sacrifices a creature of their choice.\nEquipped creature gets +2/+1.\nEquip {2} ({2}: Attach to target creature you control. Equip only as a sorcery.)",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Equip"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/a/fa8fd3c4-bd00-485d-80b1-2b67f5786fce.jpg?1785496297",
+   "normal": "https://cards.scryfall.io/normal/front/f/a/fa8fd3c4-bd00-485d-80b1-2b67f5786fce.jpg?1785496297",
+   "large": "https://cards.scryfall.io/large/front/f/a/fa8fd3c4-bd00-485d-80b1-2b67f5786fce.jpg?1785496297",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/a/fa8fd3c4-bd00-485d-80b1-2b67f5786fce.jpg?1785496297"
+  }
+ },
+ {
+  "name": "Desolation Prowler",
+  "scryfallId": "63c87009-ff1b-44b9-88b1-e26219094c67",
+  "oracleId": "ed9d4bb1-7335-45fd-b2ea-97b1f6491d7a",
+  "set": "hob",
+  "collectorNumber": "64",
+  "rarity": "uncommon",
+  "manaCost": "{1}{B}",
+  "typeLine": "Creature — Wolf",
+  "oracleText": "Pay 2 life: This creature gets +2/+2 until end of turn. Activate only once each turn.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/3/63c87009-ff1b-44b9-88b1-e26219094c67.jpg?1785237955",
+   "normal": "https://cards.scryfall.io/normal/front/6/3/63c87009-ff1b-44b9-88b1-e26219094c67.jpg?1785237955",
+   "large": "https://cards.scryfall.io/large/front/6/3/63c87009-ff1b-44b9-88b1-e26219094c67.jpg?1785237955",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/3/63c87009-ff1b-44b9-88b1-e26219094c67.jpg?1785237955"
+  }
+ },
+ {
+  "name": "Down, Down to Goblin-town",
+  "scryfallId": "b72e193c-e030-4936-9b79-c636eff750e1",
+  "oracleId": "e01860cd-0aa1-435a-9ef9-ee412bc458cd",
+  "set": "hob",
+  "collectorNumber": "65",
+  "rarity": "uncommon",
+  "manaCost": "{2}{B}",
+  "typeLine": "Enchantment — Saga",
+  "oracleText": "(As this Saga enters and after your draw step, add a lore counter. Sacrifice after IV.)\nI — Target opponent reveals their hand. You choose a nonland card from it. That player discards that card.\nII — Amass Goblins 1. (Put a +1/+1 counter on an Army you control. It's also a Goblin. If you don't control an Army, create a 0/0 black Goblin Army creature token first.)\nIII, IV — Target opponent loses 1 life and you gain 1 life.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Amass"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/7/b72e193c-e030-4936-9b79-c636eff750e1.jpg?1784733900",
+   "normal": "https://cards.scryfall.io/normal/front/b/7/b72e193c-e030-4936-9b79-c636eff750e1.jpg?1784733900",
+   "large": "https://cards.scryfall.io/large/front/b/7/b72e193c-e030-4936-9b79-c636eff750e1.jpg?1784733900",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/7/b72e193c-e030-4936-9b79-c636eff750e1.jpg?1784733900"
+  }
+ },
+ {
+  "name": "Dreaded Bat-Cloud",
+  "scryfallId": "67d52db5-597e-46d5-af39-c3a2de107d30",
+  "oracleId": "3cc64ce6-45e2-4dc3-9b28-d7206a131873",
+  "set": "hob",
+  "collectorNumber": "66",
+  "rarity": "uncommon",
+  "manaCost": "{4}{B}",
+  "typeLine": "Creature — Bat",
+  "oracleText": "This spell costs {3} less to cast if a creature died this turn.\nFlying, deathtouch",
+  "power": "4",
+  "toughness": "2",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Deathtouch",
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/7/67d52db5-597e-46d5-af39-c3a2de107d30.jpg?1785497085",
+   "normal": "https://cards.scryfall.io/normal/front/6/7/67d52db5-597e-46d5-af39-c3a2de107d30.jpg?1785497085",
+   "large": "https://cards.scryfall.io/large/front/6/7/67d52db5-597e-46d5-af39-c3a2de107d30.jpg?1785497085",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/7/67d52db5-597e-46d5-af39-c3a2de107d30.jpg?1785497085"
+  }
+ },
+ {
+  "name": "Front Porch Sentries",
+  "scryfallId": "07bfc803-e11b-47ab-9f25-0ace7e174200",
+  "oracleId": "b39f03cf-3d1a-42ad-903f-e3b3542878b0",
+  "set": "hob",
+  "collectorNumber": "67",
+  "rarity": "common",
+  "manaCost": "{1}{B}",
+  "typeLine": "Creature — Goblin Soldier",
+  "oracleText": "When this creature dies, target creature an opponent controls gets -1/-1 until end of turn.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/7/07bfc803-e11b-47ab-9f25-0ace7e174200.jpg?1785496282",
+   "normal": "https://cards.scryfall.io/normal/front/0/7/07bfc803-e11b-47ab-9f25-0ace7e174200.jpg?1785496282",
+   "large": "https://cards.scryfall.io/large/front/0/7/07bfc803-e11b-47ab-9f25-0ace7e174200.jpg?1785496282",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/7/07bfc803-e11b-47ab-9f25-0ace7e174200.jpg?1785496282"
+  }
+ },
+ {
+  "name": "Gathering of Darkness",
+  "scryfallId": "2ce066be-e5ad-4b93-8245-1b5018990d03",
+  "oracleId": "85e1556d-c4da-4979-a5db-4ce3842c7797",
+  "set": "hob",
+  "collectorNumber": "68",
+  "rarity": "uncommon",
+  "manaCost": "{3}{B}",
+  "typeLine": "Sorcery",
+  "oracleText": "Return up to one target creature card from your graveyard to your hand.\nAmass Goblins 3. (Put three +1/+1 counters on an Army you control. It's also a Goblin. If you don't control an Army, create a 0/0 black Goblin Army creature token first.)",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Amass"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/c/2ce066be-e5ad-4b93-8245-1b5018990d03.jpg?1784733910",
+   "normal": "https://cards.scryfall.io/normal/front/2/c/2ce066be-e5ad-4b93-8245-1b5018990d03.jpg?1784733910",
+   "large": "https://cards.scryfall.io/large/front/2/c/2ce066be-e5ad-4b93-8245-1b5018990d03.jpg?1784733910",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/c/2ce066be-e5ad-4b93-8245-1b5018990d03.jpg?1784733910"
+  }
+ },
+ {
+  "name": "Gnashing of Teeth",
+  "scryfallId": "5d485d70-c7b9-40a4-9089-5e7f1c2b9213",
+  "oracleId": "188a3f61-3f7c-450d-8ee7-e12ad13b86c6",
+  "set": "hob",
+  "collectorNumber": "69",
+  "rarity": "uncommon",
+  "manaCost": "{1}{B}{B}",
+  "typeLine": "Sorcery",
+  "oracleText": "Choose one —\n• Target creature gets -5/-5 until end of turn. If that creature would die this turn, exile it instead.\n• Creatures target player controls get -1/-1 until end of turn.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/d/5d485d70-c7b9-40a4-9089-5e7f1c2b9213.jpg?1784734464",
+   "normal": "https://cards.scryfall.io/normal/front/5/d/5d485d70-c7b9-40a4-9089-5e7f1c2b9213.jpg?1784734464",
+   "large": "https://cards.scryfall.io/large/front/5/d/5d485d70-c7b9-40a4-9089-5e7f1c2b9213.jpg?1784734464",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/d/5d485d70-c7b9-40a4-9089-5e7f1c2b9213.jpg?1784734464"
+  }
+ },
+ {
+  "name": "Gollum the Abandoned",
+  "scryfallId": "50d91ef3-6f5d-4255-8d47-be731b5dad30",
+  "oracleId": "8d88facd-cf7e-498e-ab6b-6bd021316162",
+  "set": "hob",
+  "collectorNumber": "72",
+  "rarity": "uncommon",
+  "manaCost": "{1}{B}",
+  "typeLine": "Legendary Creature — Halfling Horror",
+  "oracleText": "Gollum can't block.\nWhen Gollum enters, exile up to one target card from an opponent's graveyard. Each opponent loses 2 life.\n{2}, Sacrifice an artifact or creature: Return this card from your graveyard to your hand. Activate only as a sorcery.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/0/50d91ef3-6f5d-4255-8d47-be731b5dad30.jpg?1784733916",
+   "normal": "https://cards.scryfall.io/normal/front/5/0/50d91ef3-6f5d-4255-8d47-be731b5dad30.jpg?1784733916",
+   "large": "https://cards.scryfall.io/large/front/5/0/50d91ef3-6f5d-4255-8d47-be731b5dad30.jpg?1784733916",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/0/50d91ef3-6f5d-4255-8d47-be731b5dad30.jpg?1784733916"
+  }
+ },
+ {
+  "name": "Gollum, Riddle Master",
+  "scryfallId": "bbdc7e37-c65a-497a-92b7-a30a6e369c71",
+  "oracleId": "514b451b-814d-45fb-a2ba-8fe6f0bdad60",
+  "set": "hob",
+  "collectorNumber": "70",
+  "rarity": "mythic",
+  "manaCost": "{1}{B}",
+  "typeLine": "Legendary Creature — Halfling Horror",
+  "oracleText": "As Gollum enters, choose odd or even. (Zero is even.)\nWhenever an opponent casts a spell with mana value of the chosen quality, choose one that hasn't been chosen —\n• Put a +1/+1 counter on Gollum.\n• Each opponent loses 2 life and you gain 2 life.\n• Draw a card.",
+  "power": "3",
+  "toughness": "1",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/b/bbdc7e37-c65a-497a-92b7-a30a6e369c71.jpg?1784376959",
+   "normal": "https://cards.scryfall.io/normal/front/b/b/bbdc7e37-c65a-497a-92b7-a30a6e369c71.jpg?1784376959",
+   "large": "https://cards.scryfall.io/large/front/b/b/bbdc7e37-c65a-497a-92b7-a30a6e369c71.jpg?1784376959",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/b/bbdc7e37-c65a-497a-92b7-a30a6e369c71.jpg?1784376959"
+  }
+ },
+ {
+  "name": "Gollum, Silent Slinker",
+  "scryfallId": "6cfaa182-3fec-4907-8814-b4d29c33cec3",
+  "oracleId": "0296d57e-e5b9-456f-bb21-eb584adefb4c",
+  "set": "hob",
+  "collectorNumber": "71",
+  "rarity": "common",
+  "manaCost": "{3}{B}",
+  "typeLine": "Legendary Creature — Halfling Horror",
+  "oracleText": "Menace (This creature can't be blocked except by two or more creatures.)",
+  "power": "4",
+  "toughness": "3",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Menace"
+  ],
+  "back": "Meager Meal",
+  "adventure": true,
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/c/6cfaa182-3fec-4907-8814-b4d29c33cec3.jpg?1785323234",
+   "normal": "https://cards.scryfall.io/normal/front/6/c/6cfaa182-3fec-4907-8814-b4d29c33cec3.jpg?1785323234",
+   "large": "https://cards.scryfall.io/large/front/6/c/6cfaa182-3fec-4907-8814-b4d29c33cec3.jpg?1785323234",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/c/6cfaa182-3fec-4907-8814-b4d29c33cec3.jpg?1785323234"
+  }
+ },
+ {
+  "name": "Meager Meal",
+  "scryfallId": "6cfaa182-3fec-4907-8814-b4d29c33cec3",
+  "oracleId": "0296d57e-e5b9-456f-bb21-eb584adefb4c",
+  "set": "hob",
+  "collectorNumber": "71",
+  "rarity": "common",
+  "manaCost": "{B}",
+  "typeLine": "Sorcery — Adventure",
+  "oracleText": "Put a +1/+1 counter on up to one target creature. Target player gains 2 life. (Then exile this card. You may cast the creature later from exile.)",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "front": "Gollum, Silent Slinker",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/c/6cfaa182-3fec-4907-8814-b4d29c33cec3.jpg?1785323234",
+   "normal": "https://cards.scryfall.io/normal/front/6/c/6cfaa182-3fec-4907-8814-b4d29c33cec3.jpg?1785323234",
+   "large": "https://cards.scryfall.io/large/front/6/c/6cfaa182-3fec-4907-8814-b4d29c33cec3.jpg?1785323234",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/c/6cfaa182-3fec-4907-8814-b4d29c33cec3.jpg?1785323234"
+  }
+ },
+ {
+  "name": "Great Fierce Bee",
+  "scryfallId": "9d9ef88f-d208-4788-9553-cd672b3be1fe",
+  "oracleId": "37f82ad8-4f0b-4b17-abcc-03f43d4fdf1c",
+  "set": "hob",
+  "collectorNumber": "73",
+  "rarity": "common",
+  "manaCost": "{2}{B}",
+  "typeLine": "Creature — Insect",
+  "oracleText": "Flying\nWhenever one or more other creatures die, scry 1. (Look at the top card of your library. You may put that card on the bottom.)",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Scry",
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/d/9d9ef88f-d208-4788-9553-cd672b3be1fe.jpg?1785497086",
+   "normal": "https://cards.scryfall.io/normal/front/9/d/9d9ef88f-d208-4788-9553-cd672b3be1fe.jpg?1785497086",
+   "large": "https://cards.scryfall.io/large/front/9/d/9d9ef88f-d208-4788-9553-cd672b3be1fe.jpg?1785497086",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/d/9d9ef88f-d208-4788-9553-cd672b3be1fe.jpg?1785497086"
+  }
+ },
+ {
+  "name": "Great Ugly-Looking Goblin",
+  "scryfallId": "c87f6004-e1cf-42b2-9647-322bc4939339",
+  "oracleId": "27e17542-549b-4c05-8091-c10a245c916b",
+  "set": "hob",
+  "collectorNumber": "74",
+  "rarity": "uncommon",
+  "manaCost": "{5}{B}",
+  "typeLine": "Creature — Goblin Soldier",
+  "oracleText": "Each creature you control with a +1/+1 counter on it has menace. (It can't be blocked except by two or more creatures.)",
+  "power": "4",
+  "toughness": "4",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "back": "Clap! Snap!",
+  "adventure": true,
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/8/c87f6004-e1cf-42b2-9647-322bc4939339.jpg?1785237962",
+   "normal": "https://cards.scryfall.io/normal/front/c/8/c87f6004-e1cf-42b2-9647-322bc4939339.jpg?1785237962",
+   "large": "https://cards.scryfall.io/large/front/c/8/c87f6004-e1cf-42b2-9647-322bc4939339.jpg?1785237962",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/8/c87f6004-e1cf-42b2-9647-322bc4939339.jpg?1785237962"
+  }
+ },
+ {
+  "name": "Clap! Snap!",
+  "scryfallId": "c87f6004-e1cf-42b2-9647-322bc4939339",
+  "oracleId": "27e17542-549b-4c05-8091-c10a245c916b",
+  "set": "hob",
+  "collectorNumber": "74",
+  "rarity": "uncommon",
+  "manaCost": "{1}{B}",
+  "typeLine": "Sorcery — Adventure",
+  "oracleText": "Amass Goblins 2. (Then exile this card. You may cast the creature later from exile.)",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Amass"
+  ],
+  "front": "Great Ugly-Looking Goblin",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/8/c87f6004-e1cf-42b2-9647-322bc4939339.jpg?1785237962",
+   "normal": "https://cards.scryfall.io/normal/front/c/8/c87f6004-e1cf-42b2-9647-322bc4939339.jpg?1785237962",
+   "large": "https://cards.scryfall.io/large/front/c/8/c87f6004-e1cf-42b2-9647-322bc4939339.jpg?1785237962",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/8/c87f6004-e1cf-42b2-9647-322bc4939339.jpg?1785237962"
+  }
+ },
+ {
+  "name": "Head of the Hunt",
+  "scryfallId": "3ffe34d4-72f4-4562-a948-8909b9321e59",
+  "oracleId": "0523e271-5e0b-4e4b-9eac-86f915d18952",
+  "set": "hob",
+  "collectorNumber": "75",
+  "rarity": "rare",
+  "manaCost": "{2}{B}{B}",
+  "typeLine": "Creature — Wolf",
+  "oracleText": "Flash\nIf a creature an opponent controls would die, exile it instead. When you do, create a 2/2 green Wolf creature token.",
+  "power": "4",
+  "toughness": "3",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Flash"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/f/3ffe34d4-72f4-4562-a948-8909b9321e59.jpg?1785152416",
+   "normal": "https://cards.scryfall.io/normal/front/3/f/3ffe34d4-72f4-4562-a948-8909b9321e59.jpg?1785152416",
+   "large": "https://cards.scryfall.io/large/front/3/f/3ffe34d4-72f4-4562-a948-8909b9321e59.jpg?1785152416",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/f/3ffe34d4-72f4-4562-a948-8909b9321e59.jpg?1785152416"
+  }
+ },
+ {
+  "name": "Inside Information",
+  "scryfallId": "9763bd56-fa4b-4907-ad15-c3f040c5fc0a",
+  "oracleId": "66961bcb-f588-47a7-b3f3-12f4ac674477",
+  "set": "hob",
+  "collectorNumber": "76",
+  "rarity": "mythic",
+  "manaCost": "{X}{B}{B}",
+  "typeLine": "Sorcery",
+  "oracleText": "Exile the top X cards of target opponent's library. You may play those cards this turn. If you cast a spell this way, pay life equal to its mana value rather than pay its mana cost.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/7/9763bd56-fa4b-4907-ad15-c3f040c5fc0a.jpg?1785152426",
+   "normal": "https://cards.scryfall.io/normal/front/9/7/9763bd56-fa4b-4907-ad15-c3f040c5fc0a.jpg?1785152426",
+   "large": "https://cards.scryfall.io/large/front/9/7/9763bd56-fa4b-4907-ad15-c3f040c5fc0a.jpg?1785152426",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/7/9763bd56-fa4b-4907-ad15-c3f040c5fc0a.jpg?1785152426"
+  }
+ },
+ {
+  "name": "Nighthowl Pursuer",
+  "scryfallId": "d3cbe830-7e95-4019-89c4-cfb36bcf00f8",
+  "oracleId": "89aa97d0-1aef-4ed8-b29c-7943bb3d0e60",
+  "set": "hob",
+  "collectorNumber": "78",
+  "rarity": "uncommon",
+  "manaCost": "{B}",
+  "typeLine": "Creature — Wolf",
+  "oracleText": "Menace (This creature can't be blocked except by two or more creatures.)\nFerocious — Whenever this creature attacks while you control a creature with power 4 or greater, this creature gets +2/+2 until end of turn.",
+  "power": "1",
+  "toughness": "1",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Ferocious",
+   "Menace"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/3/d3cbe830-7e95-4019-89c4-cfb36bcf00f8.jpg?1784894860",
+   "normal": "https://cards.scryfall.io/normal/front/d/3/d3cbe830-7e95-4019-89c4-cfb36bcf00f8.jpg?1784894860",
+   "large": "https://cards.scryfall.io/large/front/d/3/d3cbe830-7e95-4019-89c4-cfb36bcf00f8.jpg?1784894860",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/3/d3cbe830-7e95-4019-89c4-cfb36bcf00f8.jpg?1784894860"
+  }
+ },
+ {
+  "name": "Rage into the Valley",
+  "scryfallId": "8651958c-3b94-47a9-a751-faf8f6236a42",
+  "oracleId": "8c7641b6-3a6c-4441-a98c-3b5d61d91f76",
+  "set": "hob",
+  "collectorNumber": "79",
+  "rarity": "common",
+  "manaCost": "{2}{B}",
+  "typeLine": "Sorcery",
+  "oracleText": "You draw a card and lose 1 life.\nAmass Goblins 2. (Put two +1/+1 counters on an Army you control. It's also a Goblin. If you don't control an Army, create a 0/0 black Goblin Army creature token first.)",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Amass"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/6/8651958c-3b94-47a9-a751-faf8f6236a42.jpg?1785496290",
+   "normal": "https://cards.scryfall.io/normal/front/8/6/8651958c-3b94-47a9-a751-faf8f6236a42.jpg?1785496290",
+   "large": "https://cards.scryfall.io/large/front/8/6/8651958c-3b94-47a9-a751-faf8f6236a42.jpg?1785496290",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/6/8651958c-3b94-47a9-a751-faf8f6236a42.jpg?1785496290"
+  }
+ },
+ {
+  "name": "Ravening Warg",
+  "scryfallId": "ea7b5052-b343-466d-879e-2a211657ef0a",
+  "oracleId": "8060d231-7477-441d-b249-8e75aa1d7791",
+  "set": "hob",
+  "collectorNumber": "80",
+  "rarity": "common",
+  "manaCost": "{1}{B}",
+  "typeLine": "Creature — Wolf",
+  "oracleText": "Deathtouch\nFerocious — Whenever this creature attacks while you control a creature with power 4 or greater, you gain 2 life.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Ferocious",
+   "Deathtouch"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/a/ea7b5052-b343-466d-879e-2a211657ef0a.jpg?1785497096",
+   "normal": "https://cards.scryfall.io/normal/front/e/a/ea7b5052-b343-466d-879e-2a211657ef0a.jpg?1785497096",
+   "large": "https://cards.scryfall.io/large/front/e/a/ea7b5052-b343-466d-879e-2a211657ef0a.jpg?1785497096",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/a/ea7b5052-b343-466d-879e-2a211657ef0a.jpg?1785497096"
+  }
+ },
+ {
+  "name": "Reverent Howl",
+  "scryfallId": "16765eb2-d497-4cd6-b683-20eac2f10bbf",
+  "oracleId": "86214b4c-a3ad-4372-b5fe-8f742a7a3d4c",
+  "set": "hob",
+  "collectorNumber": "81",
+  "rarity": "common",
+  "manaCost": "{2}{B}",
+  "typeLine": "Instant",
+  "oracleText": "Choose one —\n• Target player draws two cards and loses 2 life.\n• Target creature gets +2/+2 and gains lifelink until end of turn.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/6/16765eb2-d497-4cd6-b683-20eac2f10bbf.jpg?1785497096",
+   "normal": "https://cards.scryfall.io/normal/front/1/6/16765eb2-d497-4cd6-b683-20eac2f10bbf.jpg?1785497096",
+   "large": "https://cards.scryfall.io/large/front/1/6/16765eb2-d497-4cd6-b683-20eac2f10bbf.jpg?1785497096",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/6/16765eb2-d497-4cd6-b683-20eac2f10bbf.jpg?1785497096"
+  }
+ },
+ {
+  "name": "Rhovanion Rampager",
+  "scryfallId": "5ee45a5e-3650-47b3-8d31-6b1de9e27a14",
+  "oracleId": "008a11c1-d283-49fe-abd7-ff4fe8b1fe79",
+  "set": "hob",
+  "collectorNumber": "82",
+  "rarity": "rare",
+  "manaCost": "{2}{B}",
+  "typeLine": "Creature — Wolf",
+  "oracleText": "Whenever this creature attacks, you may sacrifice another creature. If you do, put a number of +1/+1 counters on this creature equal to the sacrificed creature's power.\nWhen this creature dies, amass Goblins X, where X is this creature's power. (Put X +1/+1 counters on an Army you control. It's also a Goblin. If you don't control an Army, create a 0/0 black Goblin Army creature token first.)",
+  "power": "3",
+  "toughness": "2",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Amass"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/e/5ee45a5e-3650-47b3-8d31-6b1de9e27a14.jpg?1785412699",
+   "normal": "https://cards.scryfall.io/normal/front/5/e/5ee45a5e-3650-47b3-8d31-6b1de9e27a14.jpg?1785412699",
+   "large": "https://cards.scryfall.io/large/front/5/e/5ee45a5e-3650-47b3-8d31-6b1de9e27a14.jpg?1785412699",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/e/5ee45a5e-3650-47b3-8d31-6b1de9e27a14.jpg?1785412699"
+  }
+ },
+ {
+  "name": "Stir Up Trouble",
+  "scryfallId": "fd145e3a-c889-4390-accb-863dbcc845ce",
+  "oracleId": "dda607bd-f419-4b7f-b052-a5ce6ce22bfe",
+  "set": "hob",
+  "collectorNumber": "84",
+  "rarity": "common",
+  "manaCost": "{B}",
+  "typeLine": "Sorcery",
+  "oracleText": "As an additional cost to cast this spell, sacrifice an artifact or creature or pay {4}.\nDestroy target creature.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/d/fd145e3a-c889-4390-accb-863dbcc845ce.jpg?1785497107",
+   "normal": "https://cards.scryfall.io/normal/front/f/d/fd145e3a-c889-4390-accb-863dbcc845ce.jpg?1785497107",
+   "large": "https://cards.scryfall.io/large/front/f/d/fd145e3a-c889-4390-accb-863dbcc845ce.jpg?1785497107",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/d/fd145e3a-c889-4390-accb-863dbcc845ce.jpg?1785497107"
+  }
+ },
+ {
+  "name": "Stony-Voiced Goblins",
+  "scryfallId": "6fcc3699-b475-4612-884d-81bd4f21e9c1",
+  "oracleId": "d1dceaa7-d33e-4067-9e1b-8a8978a12933",
+  "set": "hob",
+  "collectorNumber": "85",
+  "rarity": "common",
+  "manaCost": "{1}{B}",
+  "typeLine": "Creature — Goblin Bard",
+  "oracleText": "When this creature enters, each opponent discards a card.",
+  "power": "1",
+  "toughness": "1",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/f/6fcc3699-b475-4612-884d-81bd4f21e9c1.jpg?1785497106",
+   "normal": "https://cards.scryfall.io/normal/front/6/f/6fcc3699-b475-4612-884d-81bd4f21e9c1.jpg?1785497106",
+   "large": "https://cards.scryfall.io/large/front/6/f/6fcc3699-b475-4612-884d-81bd4f21e9c1.jpg?1785497106",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/f/6fcc3699-b475-4612-884d-81bd4f21e9c1.jpg?1785497106"
+  }
+ },
+ {
+  "name": "Supper for Spiders",
+  "scryfallId": "5b25e454-06bb-43ca-9a9f-57164f7a70c4",
+  "oracleId": "4d891515-39da-492e-ac19-1aa524245449",
+  "set": "hob",
+  "collectorNumber": "86",
+  "rarity": "rare",
+  "manaCost": "{1}{B}",
+  "typeLine": "Instant",
+  "oracleText": "Put onto the battlefield under your control all creature cards in your opponents' graveyards that were put there from the battlefield this turn. They are Food artifacts with \"{2}, {T}, Sacrifice this artifact: You gain 3 life.\" (They lose all other types and subtypes.)",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/b/5b25e454-06bb-43ca-9a9f-57164f7a70c4.jpg?1784376962",
+   "normal": "https://cards.scryfall.io/normal/front/5/b/5b25e454-06bb-43ca-9a9f-57164f7a70c4.jpg?1784376962",
+   "large": "https://cards.scryfall.io/large/front/5/b/5b25e454-06bb-43ca-9a9f-57164f7a70c4.jpg?1784376962",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/b/5b25e454-06bb-43ca-9a9f-57164f7a70c4.jpg?1784376962"
+  }
+ },
+ {
+  "name": "The Master of Lake-town",
+  "scryfallId": "3788ada6-34a9-41af-a31c-2d090550e503",
+  "oracleId": "89c3c81b-8960-4f79-b2ec-f13560058071",
+  "set": "hob",
+  "collectorNumber": "77",
+  "rarity": "rare",
+  "manaCost": "{1}{B}{B}",
+  "typeLine": "Legendary Creature — Human Advisor",
+  "oracleText": "Deathtouch\nWhenever a player loses life, that player mills that many cards. (Damage causes loss of life.)\nWhen The Master of Lake-town dies, draw a card for each graveyard with seven or more cards in it.",
+  "power": "3",
+  "toughness": "2",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Mill",
+   "Deathtouch"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/7/3788ada6-34a9-41af-a31c-2d090550e503.jpg?1784632114",
+   "normal": "https://cards.scryfall.io/normal/front/3/7/3788ada6-34a9-41af-a31c-2d090550e503.jpg?1784632114",
+   "large": "https://cards.scryfall.io/large/front/3/7/3788ada6-34a9-41af-a31c-2d090550e503.jpg?1784632114",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/7/3788ada6-34a9-41af-a31c-2d090550e503.jpg?1784632114"
+  }
+ },
+ {
+  "name": "The Sackville-Bagginses",
+  "scryfallId": "ed87b471-79f9-45ec-9188-69e970f6121e",
+  "oracleId": "e3a665f9-6e51-4e0d-923b-e9552d5978a4",
+  "set": "hob",
+  "collectorNumber": "83",
+  "rarity": "rare",
+  "manaCost": "{1}{B}",
+  "typeLine": "Legendary Creature — Halfling Citizen",
+  "oracleText": "When The Sackville-Bagginses enter, you may sacrifice another creature or artifact. If you do, draw a card and create a Treasure token.\nWhenever you sacrifice a token, target opponent loses 1 life.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Treasure"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/d/ed87b471-79f9-45ec-9188-69e970f6121e.jpg?1784894871",
+   "normal": "https://cards.scryfall.io/normal/front/e/d/ed87b471-79f9-45ec-9188-69e970f6121e.jpg?1784894871",
+   "large": "https://cards.scryfall.io/large/front/e/d/ed87b471-79f9-45ec-9188-69e970f6121e.jpg?1784894871",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/d/ed87b471-79f9-45ec-9188-69e970f6121e.jpg?1784894871"
   }
  }
 ]

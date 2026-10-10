@@ -574,7 +574,10 @@ function priorityActions(
           ? ['freeExact']
           : free
             ? ['free']
-            : exiledOnly.has(card)
+            : // The Hobbit (20b black): Inside Information, the cards exiled from an opponent's library.
+              zone === 'exile' && obj(ctx, card).lifeForMana && obj(ctx, card).castableBy === player
+              ? ['lifeForMana']
+              : exiledOnly.has(card)
               ? ['exiledWithSelf']
               : [
                 ...((zone !== 'graveyard' ||
@@ -627,6 +630,7 @@ function priorityActions(
               (via === 'freeOnceEachTurn' ||
                 via === 'omnipresence' ||
                 via === 'freeMatching' ||
+                via === 'lifeForMana' ||
                 (via === 'freeExact' && d.manaCost.x)) &&
               x
             )

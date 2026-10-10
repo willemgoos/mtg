@@ -195,6 +195,15 @@ from) when it's fixed. Older phases keep their own "Simplifications" lists in `d
 - [ ] Bifur, Melodic Rider (`subtypeTriggersTwice`): for a Dwarf that has left the battlefield (its dies trigger) the Dwarf type
       is read from its printed card (and changeling), not from effects that had made it a Dwarf.
 
+## The Hobbit (20b, black)
+
+- [ ] Gollum, Riddle Master: "As Gollum enters, choose odd or even" is made like every other "as this enters, choose" card of
+      the pool: an enters trigger that sets the choice (a spell cast in response to it sees no chosen quality yet).
+- [ ] The Master of Lake-town: "that player mills" is two triggers (one for your life loss, one for an opponent's), exact in a
+      two-player game.
+- [ ] Supper for Spiders: the Foods keep the card's own abilities (as the text says) and are artifacts, not creatures, from the
+      moment the arrival is processed; the engine sets that state right after moving the card, in the same resolution.
+
 ## Jump In slot cards (`jumpin-slots.ts`)
 
 - [ ] Polygraph Orb: collect evidence only offers cards with a mana value; the rules also let you exile lands and other

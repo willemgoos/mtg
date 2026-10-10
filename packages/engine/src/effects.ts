@@ -731,7 +731,9 @@ export function resolveRef(ctx: Ctx, es: EffectSource, ref: Ref): TargetChoice[]
   if (typeof ref === 'object' && 'controllerOf' in ref) {
     const t = es.targets[ref.controllerOf];
     const o = t && 'object' in t ? ctx.s.objects[t.object.id] : undefined;
-    return o ? [{ player: o.controller }] : [];
+    // The Hobbit (20b black): Azog, Moria's Ruin; a destroyed token is gone, but its controller was recorded.
+    const gone = t && 'object' in t ? ctx.s.turn.tokenLki?.[t.object.id] : undefined;
+    return o ? [{ player: o.controller }] : gone ? [{ player: gone.controller }] : [];
   }
   // Reality Fracture (17a): Clash of Elements, "its owner".
   if (typeof ref === 'object' && 'ownerOf' in ref) {
@@ -896,6 +898,12 @@ export function resolveAmount(ctx: Ctx, es: EffectSource, amount: Amount): numbe
     return o ? Math.max(0, o.zone === 'battlefield' ? power(ctx, o.id) : (def(ctx, o.id).power ?? 0)) : 0;
   }
   if ('powerOf' in amount) {
+    // The Hobbit (20b black): Rhovanion Rampager, "the sacrificed creature's power" (the permanent chosen, now gone: its last power).
+    if (amount.powerOf === 'chosen' && es.chosen) {
+      const c = ctx.s.objects[es.chosen.id];
+      if (!c) return Math.max(0, ctx.s.turn.tokenLki?.[es.chosen.id]?.power ?? 0);
+      if (c.zone !== 'battlefield' || c.zcc !== es.chosen.zcc) return Math.max(0, c.lastPower ?? 0);
+    }
     const ids = objectsOf(ctx, es, amount.powerOf);
     if (ids[0]) return Math.max(0, power(ctx, ids[0]));
     if (amount.powerOf === 'self') {
@@ -908,7 +916,11 @@ export function resolveAmount(ctx: Ctx, es: EffectSource, amount: Amount): numbe
     // The Hobbit (20a): Azog, Moria's Ruin, "where X is that creature's power" once the target was destroyed: its last known power.
     if (typeof amount.powerOf === 'object' && 'target' in amount.powerOf) {
       const t = es.targets[amount.powerOf.target];
-      if (t && 'object' in t) return Math.max(0, ctx.s.objects[t.object.id]?.lastPower ?? 0);
+      if (t && 'object' in t)
+        return Math.max(
+          0,
+          ctx.s.objects[t.object.id]?.lastPower ?? ctx.s.turn.tokenLki?.[t.object.id]?.power ?? 0, // The Hobbit (20b black): a token
+        );
     }
     return 0;
   }

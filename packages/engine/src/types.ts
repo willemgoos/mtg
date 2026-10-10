@@ -1022,7 +1022,15 @@ export type TriggerDef =
   /** Whenever an opponent loses life ("that many"), during your turn if `duringYourTurn` (Kefka, Ruler of Ruin). */
   | { on: 'opponentLosesLife'; duringYourTurn?: boolean }
   /** Whenever one or more cards leave your graveyard (Fang, Fearless l'Cie). */
-  | { on: 'cardsLeaveYourGraveyard' }
+  | {
+      on: 'cardsLeaveYourGraveyard';
+      // The Hobbit (20b black): Along the Crooked Way
+      /** Only cards matching this, each one on its own ("Whenever a creature card leaves your graveyard"; no `batch`). */
+      filter?: CardFilter;
+    }
+  // The Hobbit (20b black): The Master of Lake-town
+  /** Whenever a player loses life ("that many"): you, or an opponent. */
+  | { on: 'playerLosesLife'; whose: 'you' | 'opponent' }
   // Tarkir: Dragonstorm (19b, misc): Hollowmurk Siege, Stalwart Successor
   /** Whenever one or more counters (of any kind) are put on a creature you control; "that creature" is the subject. */
   | { on: 'counterPutOnYourCreature' }
@@ -1189,6 +1197,9 @@ export type ConditionDef =
   | { kind: 'sourcePowerAtLeast'; min: number }
   /** A chosen target is controlled by you (Dreamdew Entrancer). */
   | { kind: 'targetControlledByYou'; target: number }
+  // The Hobbit (20b black): Azog, Moria's Ruin
+  /** "If you controlled that creature": the target was under your control (as it last was, once it has left the battlefield). */
+  | { kind: 'targetWasControlledByYou'; target: number }
   // Secrets of Strixhaven (14a): Lluwen, Exchange Student
   /** The source isn't prepared. */
   | { kind: 'notPrepared' }
@@ -1442,6 +1453,9 @@ export interface CardFilter {
   notAttachedHost?: boolean;
   /** Its mana value is odd or even (Thanos). */
   manaValueParity?: 'odd' | 'even';
+  // The Hobbit (20b black): Gollum, Riddle Master; Great Ugly-Looking Goblin
+  /** Its mana value is the parity ('odd' or 'even') chosen for the source (stored as its `chosenType`). */
+  manaValueParityOfSource?: boolean;
   // Strixhaven Brawl (15b, pair)
   /** Enchanted by an Aura that the source's controller controls (Killian, Eriette). */
   enchantedByYourAura?: boolean;
@@ -3761,6 +3775,13 @@ export interface GameObject {
   linkedExile?: { owner: PlayerId; mv: number };
   /** Sugar Coat: the Aura that makes it a Food. */
   foodBy?: ObjectId;
+  // The Hobbit (20b black)
+  /** Supper for Spiders: it is a Food artifact (it loses its other types and subtypes, keeps its other characteristics) and has the Food ability. */
+  supperFood?: boolean;
+  /** This card (not a token) was put into a graveyard from the battlefield during this turn number (Supper for Spiders). */
+  diedTurn?: number;
+  /** Inside Information: its castable-by player may cast or play it paying life equal to its mana value rather than its mana cost. */
+  lifeForMana?: boolean;
   /** Jump In slots: the Imprisoned in the Moon making this a colorless land. */
   moonBy?: ObjectId;
   // Tarkir: Dragonstorm (19b, blue): Ringing Strike Mastery
@@ -4267,6 +4288,9 @@ export interface TurnState {
   /** Players whose Mountains add an additional {R} when tapped for mana this turn. */
   moltenTide?: PlayerId[];
   // Lorwyn Eclipsed (18b, special): Mirrormind Crown
+  // The Hobbit (20b black): Azog, Moria's Ruin
+  /** Tokens that left the battlefield this turn (they cease to exist): what they were, by id. */
+  tokenLki?: Record<ObjectId, { power: number; controller: PlayerId }>;
   /** Players whose first token creation this turn has happened ("the first time you would create one or more tokens each turn"). */
   firstTokensDone?: PlayerId[];
 }
@@ -5049,7 +5073,9 @@ export type Action =
         | 'noctis'
         | 'hades'
         // Lorwyn Eclipsed (18a): Dawnhand Dissident
-        | 'exiledWithSelf';
+        | 'exiledWithSelf'
+        // The Hobbit (20b black): Inside Information.
+        | 'lifeForMana';
       /** Mockingbird: the creature to enter as a copy of. */
       copyOf?: ObjectId;
       /** Rottenmouth Viper: permanents sacrificed to make it cheaper. */
@@ -5153,6 +5179,8 @@ export type GameEvent =
       controller?: PlayerId;
       // Final Fantasy (11b): the back face it showed as it left (Chaos dying shows Garland after).
       leftAs?: CardDefId;
+      /** The Hobbit (20b black): it left the battlefield as a Food artifact (Supper for Spiders), not as a creature. */
+      leftAsFood?: boolean;
       /** Strixhaven (13c): a creature exiled instead of dying (Valentin). */
       exiledInstead?: boolean;
       /** It had lost all its abilities as it left the battlefield (Hellcat): none of its own trigger. */

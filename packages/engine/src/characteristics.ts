@@ -1391,6 +1391,11 @@ function avengersFilter(
   const chosen = sourceId ? chosenTypeOf(ctx, sourceId) : undefined;
   if (filter.chosenTypeOfSource && !(chosen && hasSubtype(ctx, id, chosen))) return false;
   if (filter.notChosenTypeOfSource && chosen && hasSubtype(ctx, id, chosen)) return false;
+  // The Hobbit (20b black): Gollum, Riddle Master, "a spell with mana value of the chosen quality" (odd or even).
+  if (filter.manaValueParityOfSource) {
+    if (chosen !== 'odd' && chosen !== 'even') return false;
+    if ((manaValue(def(ctx, id).manaCost) % 2 === 1 ? 'odd' : 'even') !== chosen) return false;
+  }
   const o = obj(ctx, id);
   if (filter.modified) {
     const counters = o.plusOneCounters > 0 || Object.values(o.counters ?? {}).some((n) => n > 0);
