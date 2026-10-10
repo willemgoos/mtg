@@ -523,6 +523,16 @@ export function countOf(
       for (const id of ctx.s.players[p].graveyard) for (const t of def(ctx, id).types) types.add(t);
     return types.size;
   }
+  // Tarkir: Dragonstorm (19b, black): Hundred-Battle Veteran.
+  if (a.count === 'counterKindsAmongYourCreatures') {
+    const kinds = new Set<string>();
+    for (const c of creaturesOnBattlefield(ctx, player)) {
+      const o = obj(ctx, c.id);
+      if (o.plusOneCounters > 0) kinds.add('+1/+1');
+      for (const [k, n] of Object.entries(o.counters ?? {})) if (n > 0) kinds.add(k);
+    }
+    return kinds.size;
+  }
   if (a.count === 'differentPowersYouControl')
     return new Set(creaturesOnBattlefield(ctx, player).map((c) => power(ctx, c.id))).size;
   if (a.count === 'differentStudyManaValues')

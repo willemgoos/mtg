@@ -299,3 +299,10 @@ export function sharesCreatureType(ctx: Ctx, a: ObjectId, b: ObjectId): boolean 
     return true;
   return subtypesOf(ctx, a).some((st) => hasSubtype(ctx, b, st));
 }
+
+/** Tarkir: Dragonstorm (19b, black): are all these target cards in one graveyard? (Feral Deathgorger: "from a single graveyard".) */
+export function sameGraveyard(ctx: Ctx, chosen: readonly TargetChoice[]): boolean {
+  const owners = new Set<PlayerId>();
+  for (const t of chosen) if ('object' in t) owners.add(obj(ctx, t.object.id).owner);
+  return owners.size <= 1;
+}

@@ -227,6 +227,9 @@ export function castVariants(d: CardDefinition, zone: ZoneName, via?: CastVia): 
     );
   // Strixhaven Brawl (15a): Squee, the Immortal.
   if (zone === 'graveyard' && d.castFromGraveyardOrExile) return castVariants(d, 'hand');
+  // Tarkir: Dragonstorm (19b, black): Hundred-Battle Veteran, cast from the graveyard, it enters with a finality counter.
+  if (zone === 'graveyard' && d.castFromGraveyardFinality)
+    return castVariants(d, 'hand').map((v) => ({ ...v, finality: true }));
   // Mayhem: from the graveyard for its mayhem cost (legal.ts checks it was discarded this turn).
   if (zone === 'graveyard' && d.mayhem) return [{ cost: d.mayhem, spell: d.spell ?? null }];
   if (zone === 'graveyard' && d.castFromGraveyardRemovingCounters)

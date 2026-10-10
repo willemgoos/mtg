@@ -3562,7 +3562,12 @@ function runEffectInner(ctx: Ctx, es: EffectSource, e: EffectDef): void {
           power: 0,
           toughness: 0,
           keywords: [],
-          onDies: { effects: e.effects, controller: es.controller, sourceDefId: es.sourceDefId },
+          onDies: {
+            effects: e.effects,
+            controller: es.controller,
+            sourceDefId: es.sourceDefId,
+            ...(e.underYourControl ? { underControl: true } : {}), // Tarkir: Dragonstorm (19b, black)
+          },
           expires: 'endOfTurn',
         });
       return;
