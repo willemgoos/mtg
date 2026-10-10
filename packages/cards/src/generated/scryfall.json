@@ -93304,5 +93304,597 @@
    "large": "https://cards.scryfall.io/large/front/6/5/659b687f-4068-496f-81b2-7b606bf07ec1.jpg?1785496409",
    "artCrop": "https://cards.scryfall.io/art_crop/front/6/5/659b687f-4068-496f-81b2-7b606bf07ec1.jpg?1785496409"
   }
+ },
+ {
+  "name": "Bombadil's Song",
+  "scryfallId": "6391699e-987a-499f-9fec-96f2362760b9",
+  "oracleId": "60092fb4-98db-4f2d-a5d7-24b5f11c8acc",
+  "set": "ltr",
+  "collectorNumber": "154",
+  "rarity": "common",
+  "manaCost": "{1}{G}",
+  "typeLine": "Instant",
+  "oracleText": "Target creature you control gets +1/+1 and gains hexproof until end of turn. The Ring tempts you. (A creature with hexproof can't be the target of spells or abilities your opponents control.)",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/3/6391699e-987a-499f-9fec-96f2362760b9.jpg?1783916278",
+   "normal": "https://cards.scryfall.io/normal/front/6/3/6391699e-987a-499f-9fec-96f2362760b9.jpg?1783916278",
+   "large": "https://cards.scryfall.io/large/front/6/3/6391699e-987a-499f-9fec-96f2362760b9.jpg?1783916278",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/3/6391699e-987a-499f-9fec-96f2362760b9.jpg?1783916278"
+  }
+ },
+ {
+  "name": "Brandywine Farmer",
+  "scryfallId": "1c24b5fa-506d-4eaf-881b-bc282c74a16c",
+  "oracleId": "0fea3406-e5c7-4d5c-9890-6f1bc04a7cb8",
+  "set": "ltr",
+  "collectorNumber": "155",
+  "rarity": "common",
+  "manaCost": "{2}{G}",
+  "typeLine": "Creature — Halfling Peasant",
+  "oracleText": "When this creature enters or leaves the battlefield, create a Food token. (It's an artifact with \"{2}, {T}, Sacrifice this token: You gain 3 life.\")",
+  "power": "1",
+  "toughness": "1",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Food"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/c/1c24b5fa-506d-4eaf-881b-bc282c74a16c.jpg?1783916274",
+   "normal": "https://cards.scryfall.io/normal/front/1/c/1c24b5fa-506d-4eaf-881b-bc282c74a16c.jpg?1783916274",
+   "large": "https://cards.scryfall.io/large/front/1/c/1c24b5fa-506d-4eaf-881b-bc282c74a16c.jpg?1783916274",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/c/1c24b5fa-506d-4eaf-881b-bc282c74a16c.jpg?1783916274"
+  }
+ },
+ {
+  "name": "Celeborn the Wise",
+  "scryfallId": "2daf449a-5f3e-44fd-968e-55d8517ae797",
+  "oracleId": "64fa0416-16b7-4128-ac6c-f30373074a1e",
+  "set": "ltr",
+  "collectorNumber": "156",
+  "rarity": "uncommon",
+  "manaCost": "{3}{G}",
+  "typeLine": "Legendary Creature — Elf Noble",
+  "oracleText": "Whenever you attack with one or more Elves, scry 1.\nWhenever you scry, Celeborn gets +1/+1 until end of turn for each card looked at while scrying this way.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Scry"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/d/2daf449a-5f3e-44fd-968e-55d8517ae797.jpg?1783916273",
+   "normal": "https://cards.scryfall.io/normal/front/2/d/2daf449a-5f3e-44fd-968e-55d8517ae797.jpg?1783916273",
+   "large": "https://cards.scryfall.io/large/front/2/d/2daf449a-5f3e-44fd-968e-55d8517ae797.jpg?1783916273",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/d/2daf449a-5f3e-44fd-968e-55d8517ae797.jpg?1783916273"
+  }
+ },
+ {
+  "name": "Chance-Met Elves",
+  "scryfallId": "0aa57431-39e2-4152-8a30-1c1e8faef153",
+  "oracleId": "8958a6fe-76ef-45e3-8522-6bc13486b447",
+  "set": "ltr",
+  "collectorNumber": "157",
+  "rarity": "common",
+  "manaCost": "{2}{G}",
+  "typeLine": "Creature — Elf Warrior",
+  "oracleText": "Whenever you scry, put a +1/+1 counter on this creature. This ability triggers only once each turn.",
+  "power": "3",
+  "toughness": "2",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/a/0aa57431-39e2-4152-8a30-1c1e8faef153.jpg?1783916273",
+   "normal": "https://cards.scryfall.io/normal/front/0/a/0aa57431-39e2-4152-8a30-1c1e8faef153.jpg?1783916273",
+   "large": "https://cards.scryfall.io/large/front/0/a/0aa57431-39e2-4152-8a30-1c1e8faef153.jpg?1783916273",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/a/0aa57431-39e2-4152-8a30-1c1e8faef153.jpg?1783916273"
+  }
+ },
+ {
+  "name": "Dúnedain Rangers",
+  "scryfallId": "630e1e36-2f5d-44d4-9ff2-19ae75295016",
+  "oracleId": "7de2a364-4383-437a-b6d6-55e4721a0141",
+  "set": "ltr",
+  "collectorNumber": "159",
+  "rarity": "uncommon",
+  "manaCost": "{3}{G}",
+  "typeLine": "Creature — Human Ranger",
+  "oracleText": "Landfall — Whenever a land you control enters, if you don't control a Ring-bearer, the Ring tempts you.",
+  "power": "4",
+  "toughness": "4",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Landfall"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/3/630e1e36-2f5d-44d4-9ff2-19ae75295016.jpg?1783916273",
+   "normal": "https://cards.scryfall.io/normal/front/6/3/630e1e36-2f5d-44d4-9ff2-19ae75295016.jpg?1783916273",
+   "large": "https://cards.scryfall.io/large/front/6/3/630e1e36-2f5d-44d4-9ff2-19ae75295016.jpg?1783916273",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/3/630e1e36-2f5d-44d4-9ff2-19ae75295016.jpg?1783916273"
+  }
+ },
+ {
+  "name": "Elanor Gardner",
+  "scryfallId": "6165eb73-49a8-4337-aa5d-7d9d48b916c9",
+  "oracleId": "ad4c39d6-a8b3-4dd9-816d-09761fc9651d",
+  "set": "ltr",
+  "collectorNumber": "286",
+  "rarity": "rare",
+  "manaCost": "{3}{G}",
+  "typeLine": "Legendary Creature — Halfling Scout",
+  "oracleText": "When Elanor enters, create a Food token.\nAt the beginning of your end step, if you sacrificed a Food this turn, you may search your library for a basic land card, put that card onto the battlefield tapped, then shuffle.",
+  "power": "2",
+  "toughness": "4",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Food"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/1/6165eb73-49a8-4337-aa5d-7d9d48b916c9.jpg?1783916222",
+   "normal": "https://cards.scryfall.io/normal/front/6/1/6165eb73-49a8-4337-aa5d-7d9d48b916c9.jpg?1783916222",
+   "large": "https://cards.scryfall.io/large/front/6/1/6165eb73-49a8-4337-aa5d-7d9d48b916c9.jpg?1783916222",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/1/6165eb73-49a8-4337-aa5d-7d9d48b916c9.jpg?1783916222"
+  }
+ },
+ {
+  "name": "Enraged Huorn",
+  "scryfallId": "a9b48836-6d37-46eb-8c41-a3eeecc72ae1",
+  "oracleId": "8a7dbf4e-f121-40c5-a688-3398e04c1311",
+  "set": "ltr",
+  "collectorNumber": "162",
+  "rarity": "common",
+  "manaCost": "{4}{G}",
+  "typeLine": "Creature — Treefolk",
+  "oracleText": "Trample\nWhen this creature enters, the Ring tempts you.",
+  "power": "4",
+  "toughness": "5",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Trample"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/9/a9b48836-6d37-46eb-8c41-a3eeecc72ae1.jpg?1783916270",
+   "normal": "https://cards.scryfall.io/normal/front/a/9/a9b48836-6d37-46eb-8c41-a3eeecc72ae1.jpg?1783916270",
+   "large": "https://cards.scryfall.io/large/front/a/9/a9b48836-6d37-46eb-8c41-a3eeecc72ae1.jpg?1783916270",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/9/a9b48836-6d37-46eb-8c41-a3eeecc72ae1.jpg?1783916270"
+  }
+ },
+ {
+  "name": "Ent's Fury",
+  "scryfallId": "c7946af6-69ab-47a1-955c-1954a04752df",
+  "oracleId": "6bc3c7fd-e371-467f-973c-4c9f0d1ba0bc",
+  "set": "ltr",
+  "collectorNumber": "164",
+  "rarity": "common",
+  "manaCost": "{1}{G}",
+  "typeLine": "Sorcery",
+  "oracleText": "Put a +1/+1 counter on target creature you control if its power is 4 or greater. Then that creature gets +1/+1 until end of turn and fights target creature you don't control.",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Fight"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/7/c7946af6-69ab-47a1-955c-1954a04752df.jpg?1783916273",
+   "normal": "https://cards.scryfall.io/normal/front/c/7/c7946af6-69ab-47a1-955c-1954a04752df.jpg?1783916273",
+   "large": "https://cards.scryfall.io/large/front/c/7/c7946af6-69ab-47a1-955c-1954a04752df.jpg?1783916273",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/7/c7946af6-69ab-47a1-955c-1954a04752df.jpg?1783916273"
+  }
+ },
+ {
+  "name": "Entish Restoration",
+  "scryfallId": "cd4dbf80-187b-40e3-9e0b-526f78d9a34e",
+  "oracleId": "736017e2-bc33-49e8-812d-1639443fdb51",
+  "set": "ltr",
+  "collectorNumber": "163",
+  "rarity": "uncommon",
+  "manaCost": "{2}{G}",
+  "typeLine": "Instant",
+  "oracleText": "Sacrifice a land. Search your library for up to two basic land cards, put them onto the battlefield tapped, then shuffle. If you control a creature with power 4 or greater, instead search your library for up to three basic land cards, put them onto the battlefield tapped, then shuffle.",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/d/cd4dbf80-187b-40e3-9e0b-526f78d9a34e.jpg?1783916269",
+   "normal": "https://cards.scryfall.io/normal/front/c/d/cd4dbf80-187b-40e3-9e0b-526f78d9a34e.jpg?1783916269",
+   "large": "https://cards.scryfall.io/large/front/c/d/cd4dbf80-187b-40e3-9e0b-526f78d9a34e.jpg?1783916269",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/d/cd4dbf80-187b-40e3-9e0b-526f78d9a34e.jpg?1783916269"
+  }
+ },
+ {
+  "name": "Galadhrim Bow",
+  "scryfallId": "9df34f21-798f-440d-8b09-ec5b5c0b8c12",
+  "oracleId": "92225b59-4f39-4175-ad0d-88e96f4d906a",
+  "set": "ltr",
+  "collectorNumber": "167",
+  "rarity": "common",
+  "manaCost": "{2}{G}",
+  "typeLine": "Artifact — Equipment",
+  "oracleText": "Flash\nWhen this Equipment enters, attach it to target creature you control. Untap that creature.\nEquipped creature gets +1/+2 and has reach.\nEquip {2} ({2}: Attach to target creature you control. Equip only as a sorcery.)",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Equip",
+   "Flash"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/d/9df34f21-798f-440d-8b09-ec5b5c0b8c12.jpg?1783916269",
+   "normal": "https://cards.scryfall.io/normal/front/9/d/9df34f21-798f-440d-8b09-ec5b5c0b8c12.jpg?1783916269",
+   "large": "https://cards.scryfall.io/large/front/9/d/9df34f21-798f-440d-8b09-ec5b5c0b8c12.jpg?1783916269",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/d/9df34f21-798f-440d-8b09-ec5b5c0b8c12.jpg?1783916269"
+  }
+ },
+ {
+  "name": "Galadhrim Guide",
+  "scryfallId": "f4603f59-f899-4caf-a874-bf234d2045fb",
+  "oracleId": "9204de14-cbb6-40e5-9dcc-44cce3723e8e",
+  "set": "ltr",
+  "collectorNumber": "168",
+  "rarity": "common",
+  "manaCost": "{3}{G}",
+  "typeLine": "Creature — Elf Scout",
+  "oracleText": "When this creature enters, scry 2.",
+  "power": "3",
+  "toughness": "4",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Scry"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/4/f4603f59-f899-4caf-a874-bf234d2045fb.jpg?1783916268",
+   "normal": "https://cards.scryfall.io/normal/front/f/4/f4603f59-f899-4caf-a874-bf234d2045fb.jpg?1783916268",
+   "large": "https://cards.scryfall.io/large/front/f/4/f4603f59-f899-4caf-a874-bf234d2045fb.jpg?1783916268",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/4/f4603f59-f899-4caf-a874-bf234d2045fb.jpg?1783916268"
+  }
+ },
+ {
+  "name": "Gift of Strands",
+  "scryfallId": "8c54ee0c-1432-4f20-9a92-2cdfcbab30ac",
+  "oracleId": "7a7789e5-f2ac-49b2-943e-7d49e4727fb6",
+  "set": "ltr",
+  "collectorNumber": "170",
+  "rarity": "uncommon",
+  "manaCost": "{3}{G}",
+  "typeLine": "Enchantment — Aura",
+  "oracleText": "Flash\nEnchant creature\nWhen this Aura enters, scry 2.\nEnchanted creature gets +3/+3.",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Enchant",
+   "Flash",
+   "Scry"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/c/8c54ee0c-1432-4f20-9a92-2cdfcbab30ac.jpg?1783916267",
+   "normal": "https://cards.scryfall.io/normal/front/8/c/8c54ee0c-1432-4f20-9a92-2cdfcbab30ac.jpg?1783916267",
+   "large": "https://cards.scryfall.io/large/front/8/c/8c54ee0c-1432-4f20-9a92-2cdfcbab30ac.jpg?1783916267",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/c/8c54ee0c-1432-4f20-9a92-2cdfcbab30ac.jpg?1783916267"
+  }
+ },
+ {
+  "name": "Glorfindel, Dauntless Rescuer",
+  "scryfallId": "baf7a546-8a8b-4396-ab64-9a5b9abffe79",
+  "oracleId": "93842030-2017-4233-a7ac-7112361c019f",
+  "set": "ltr",
+  "collectorNumber": "171",
+  "rarity": "uncommon",
+  "manaCost": "{2}{G}",
+  "typeLine": "Legendary Creature — Elf Noble",
+  "oracleText": "Whenever you scry, choose one and Glorfindel gets +1/+1 until end of turn.\n• Glorfindel must be blocked this turn if able.\n• Glorfindel can't be blocked by more than one creature each combat this turn.",
+  "power": "3",
+  "toughness": "2",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/a/baf7a546-8a8b-4396-ab64-9a5b9abffe79.jpg?1783916266",
+   "normal": "https://cards.scryfall.io/normal/front/b/a/baf7a546-8a8b-4396-ab64-9a5b9abffe79.jpg?1783916266",
+   "large": "https://cards.scryfall.io/large/front/b/a/baf7a546-8a8b-4396-ab64-9a5b9abffe79.jpg?1783916266",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/a/baf7a546-8a8b-4396-ab64-9a5b9abffe79.jpg?1783916266"
+  }
+ },
+ {
+  "name": "Lothlórien Lookout",
+  "scryfallId": "4e3639c1-ebc3-4a0b-ab93-549e45aff0f7",
+  "oracleId": "ed839fae-3429-4ac5-997c-286d8e8cf05f",
+  "set": "ltr",
+  "collectorNumber": "175",
+  "rarity": "common",
+  "manaCost": "{1}{G}",
+  "typeLine": "Creature — Elf Scout",
+  "oracleText": "Whenever this creature attacks, scry 1.",
+  "power": "1",
+  "toughness": "3",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Scry"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/e/4e3639c1-ebc3-4a0b-ab93-549e45aff0f7.jpg?1783916266",
+   "normal": "https://cards.scryfall.io/normal/front/4/e/4e3639c1-ebc3-4a0b-ab93-549e45aff0f7.jpg?1783916266",
+   "large": "https://cards.scryfall.io/large/front/4/e/4e3639c1-ebc3-4a0b-ab93-549e45aff0f7.jpg?1783916266",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/e/4e3639c1-ebc3-4a0b-ab93-549e45aff0f7.jpg?1783916266"
+  }
+ },
+ {
+  "name": "Meriadoc Brandybuck",
+  "scryfallId": "885a3277-ef10-4dcf-ac63-eb8971cd627c",
+  "oracleId": "fec6a4a7-4ded-4062-b99b-c1826dea7113",
+  "set": "ltr",
+  "collectorNumber": "177",
+  "rarity": "uncommon",
+  "manaCost": "{1}{G}",
+  "typeLine": "Legendary Creature — Halfling Citizen",
+  "oracleText": "Whenever one or more Halflings you control attack a player, create a Food token. (It's an artifact with \"{2}, {T}, Sacrifice this token: You gain 3 life.\")",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Food"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/8/885a3277-ef10-4dcf-ac63-eb8971cd627c.jpg?1783916264",
+   "normal": "https://cards.scryfall.io/normal/front/8/8/885a3277-ef10-4dcf-ac63-eb8971cd627c.jpg?1783916264",
+   "large": "https://cards.scryfall.io/large/front/8/8/885a3277-ef10-4dcf-ac63-eb8971cd627c.jpg?1783916264",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/8/885a3277-ef10-4dcf-ac63-eb8971cd627c.jpg?1783916264"
+  }
+ },
+ {
+  "name": "Mirkwood Channeler",
+  "scryfallId": "ca533454-8bea-4e08-ab0b-e2f4affffaef",
+  "oracleId": "30f373d8-cd8c-4fb2-9383-9969fc547df9",
+  "set": "ltr",
+  "collectorNumber": "828",
+  "rarity": "rare",
+  "manaCost": "{3}{G}",
+  "typeLine": "Creature — Elf Druid",
+  "oracleText": "At the beginning of combat on your turn, target Elf you control gains trample and gets +X/+X until end of turn, where X is the number of Forests you control.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/a/ca533454-8bea-4e08-ab0b-e2f4affffaef.jpg?1783913960",
+   "normal": "https://cards.scryfall.io/normal/front/c/a/ca533454-8bea-4e08-ab0b-e2f4affffaef.jpg?1783913960",
+   "large": "https://cards.scryfall.io/large/front/c/a/ca533454-8bea-4e08-ab0b-e2f4affffaef.jpg?1783913960",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/a/ca533454-8bea-4e08-ab0b-e2f4affffaef.jpg?1783913960"
+  }
+ },
+ {
+  "name": "Mirkwood Spider",
+  "scryfallId": "ad961ba1-c74f-4a44-87fe-b30e2b63e378",
+  "oracleId": "07fb2903-b239-43d0-864b-c4437b7a5230",
+  "set": "ltr",
+  "collectorNumber": "178",
+  "rarity": "common",
+  "manaCost": "{G}",
+  "typeLine": "Creature — Spider",
+  "oracleText": "Deathtouch\nWhenever this creature attacks, target legendary creature you control gains deathtouch until end of turn.",
+  "power": "1",
+  "toughness": "1",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Deathtouch"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/d/ad961ba1-c74f-4a44-87fe-b30e2b63e378.jpg?1783916264",
+   "normal": "https://cards.scryfall.io/normal/front/a/d/ad961ba1-c74f-4a44-87fe-b30e2b63e378.jpg?1783916264",
+   "large": "https://cards.scryfall.io/large/front/a/d/ad961ba1-c74f-4a44-87fe-b30e2b63e378.jpg?1783916264",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/d/ad961ba1-c74f-4a44-87fe-b30e2b63e378.jpg?1783916264"
+  }
+ },
+ {
+  "name": "Mirrormere Guardian",
+  "scryfallId": "8315d7cc-fc2c-45b1-8340-11ff2af3beb5",
+  "oracleId": "97c188c4-3f27-428e-a4f6-4213f44898fc",
+  "set": "ltr",
+  "collectorNumber": "179",
+  "rarity": "common",
+  "manaCost": "{2}{G}",
+  "typeLine": "Creature — Dwarf Soldier",
+  "oracleText": "When this creature dies, the Ring tempts you.",
+  "power": "4",
+  "toughness": "2",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/3/8315d7cc-fc2c-45b1-8340-11ff2af3beb5.jpg?1783916264",
+   "normal": "https://cards.scryfall.io/normal/front/8/3/8315d7cc-fc2c-45b1-8340-11ff2af3beb5.jpg?1783916264",
+   "large": "https://cards.scryfall.io/large/front/8/3/8315d7cc-fc2c-45b1-8340-11ff2af3beb5.jpg?1783916264",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/3/8315d7cc-fc2c-45b1-8340-11ff2af3beb5.jpg?1783916264"
+  }
+ },
+ {
+  "name": "Peregrin Took",
+  "scryfallId": "f5baee8d-88e7-4468-94a9-66ca8e2caf15",
+  "oracleId": "188da0ad-8524-4fb2-915e-1876dc9df89f",
+  "set": "ltr",
+  "collectorNumber": "181",
+  "rarity": "uncommon",
+  "manaCost": "{2}{G}",
+  "typeLine": "Legendary Creature — Halfling Citizen",
+  "oracleText": "If one or more tokens would be created under your control, those tokens plus an additional Food token are created instead. (It's an artifact with \"{2}, {T}, Sacrifice this token: You gain 3 life.\")\nSacrifice three Foods: Draw a card.",
+  "power": "2",
+  "toughness": "3",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Food"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/5/f5baee8d-88e7-4468-94a9-66ca8e2caf15.jpg?1783916263",
+   "normal": "https://cards.scryfall.io/normal/front/f/5/f5baee8d-88e7-4468-94a9-66ca8e2caf15.jpg?1783916263",
+   "large": "https://cards.scryfall.io/large/front/f/5/f5baee8d-88e7-4468-94a9-66ca8e2caf15.jpg?1783916263",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/5/f5baee8d-88e7-4468-94a9-66ca8e2caf15.jpg?1783916263"
+  }
+ },
+ {
+  "name": "Pippin's Bravery",
+  "scryfallId": "bc60dc65-6813-4d57-877b-df195ed00d00",
+  "oracleId": "c7ec52b1-295a-4daa-86fd-dcbe6fb412d7",
+  "set": "ltr",
+  "collectorNumber": "182",
+  "rarity": "common",
+  "manaCost": "{G}",
+  "typeLine": "Instant",
+  "oracleText": "You may sacrifice a Food. If you do, target creature gets +4/+4 until end of turn. Otherwise, that creature gets +2/+2 until end of turn.",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/c/bc60dc65-6813-4d57-877b-df195ed00d00.jpg?1783916266",
+   "normal": "https://cards.scryfall.io/normal/front/b/c/bc60dc65-6813-4d57-877b-df195ed00d00.jpg?1783916266",
+   "large": "https://cards.scryfall.io/large/front/b/c/bc60dc65-6813-4d57-877b-df195ed00d00.jpg?1783916266",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/c/bc60dc65-6813-4d57-877b-df195ed00d00.jpg?1783916266"
+  }
+ },
+ {
+  "name": "Quickbeam, Upstart Ent",
+  "scryfallId": "b889037f-b95f-4756-80aa-04097d2818c3",
+  "oracleId": "9ad903c5-1528-44d6-b4b6-f05a2399d91f",
+  "set": "ltr",
+  "collectorNumber": "183",
+  "rarity": "uncommon",
+  "manaCost": "{4}{G}{G}",
+  "typeLine": "Legendary Creature — Treefolk",
+  "oracleText": "Whenever Quickbeam or another Treefolk you control enters, up to two target creatures each get +2/+2 and gain trample until end of turn.",
+  "power": "5",
+  "toughness": "6",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/8/b889037f-b95f-4756-80aa-04097d2818c3.jpg?1783916265",
+   "normal": "https://cards.scryfall.io/normal/front/b/8/b889037f-b95f-4756-80aa-04097d2818c3.jpg?1783916265",
+   "large": "https://cards.scryfall.io/large/front/b/8/b889037f-b95f-4756-80aa-04097d2818c3.jpg?1783916265",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/8/b889037f-b95f-4756-80aa-04097d2818c3.jpg?1783916265"
+  }
+ },
+ {
+  "name": "Revive the Shire",
+  "scryfallId": "46b7f493-1b57-4b07-8510-30703282f879",
+  "oracleId": "67afcfef-3f0c-4823-b690-01732f28a005",
+  "set": "ltr",
+  "collectorNumber": "185",
+  "rarity": "common",
+  "manaCost": "{1}{G}",
+  "typeLine": "Sorcery",
+  "oracleText": "Return target permanent card from your graveyard to your hand. Create a Food token. (It's an artifact with \"{2}, {T}, Sacrifice this token: You gain 3 life.\")",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Food"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/6/46b7f493-1b57-4b07-8510-30703282f879.jpg?1783916261",
+   "normal": "https://cards.scryfall.io/normal/front/4/6/46b7f493-1b57-4b07-8510-30703282f879.jpg?1783916261",
+   "large": "https://cards.scryfall.io/large/front/4/6/46b7f493-1b57-4b07-8510-30703282f879.jpg?1783916261",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/6/46b7f493-1b57-4b07-8510-30703282f879.jpg?1783916261"
+  }
+ },
+ {
+  "name": "Shower of Arrows",
+  "scryfallId": "92cd3884-18d1-4200-b28e-a52349ef37aa",
+  "oracleId": "efcbca5a-743c-4b16-a7cf-b07335b31ced",
+  "set": "ltr",
+  "collectorNumber": "188",
+  "rarity": "common",
+  "manaCost": "{2}{G}",
+  "typeLine": "Instant",
+  "oracleText": "Destroy target artifact, enchantment, or creature with flying. Scry 1.",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Scry"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/2/92cd3884-18d1-4200-b28e-a52349ef37aa.jpg?1783916261",
+   "normal": "https://cards.scryfall.io/normal/front/9/2/92cd3884-18d1-4200-b28e-a52349ef37aa.jpg?1783916261",
+   "large": "https://cards.scryfall.io/large/front/9/2/92cd3884-18d1-4200-b28e-a52349ef37aa.jpg?1783916261",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/2/92cd3884-18d1-4200-b28e-a52349ef37aa.jpg?1783916261"
+  }
+ },
+ {
+  "name": "Stew the Coneys",
+  "scryfallId": "bcc7c41c-f416-457e-91ba-1f338f45eeac",
+  "oracleId": "f6f1b8da-5e7c-4121-9b0f-fd6678b04991",
+  "set": "ltr",
+  "collectorNumber": "189",
+  "rarity": "uncommon",
+  "manaCost": "{2}{G}",
+  "typeLine": "Instant",
+  "oracleText": "Target creature you control deals damage equal to its power to target creature you don't control. Create a Food token. (It's an artifact with \"{2}, {T}, Sacrifice this token: You gain 3 life.\")",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Food"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/c/bcc7c41c-f416-457e-91ba-1f338f45eeac.jpg?1783916260",
+   "normal": "https://cards.scryfall.io/normal/front/b/c/bcc7c41c-f416-457e-91ba-1f338f45eeac.jpg?1783916260",
+   "large": "https://cards.scryfall.io/large/front/b/c/bcc7c41c-f416-457e-91ba-1f338f45eeac.jpg?1783916260",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/c/bcc7c41c-f416-457e-91ba-1f338f45eeac.jpg?1783916260"
+  }
+ },
+ {
+  "name": "Wose Pathfinder",
+  "scryfallId": "6589b339-9067-4e9b-bfdb-c49f8b3ef2d4",
+  "oracleId": "eb2ff7f2-b7fd-4984-a4e8-cf57b619c1a5",
+  "set": "ltr",
+  "collectorNumber": "190",
+  "rarity": "common",
+  "manaCost": "{1}{G}",
+  "typeLine": "Creature — Human Shaman",
+  "oracleText": "{T}: Add one mana of any color.\n{6}{G}, {T}: Another target creature gets +3/+3 and gains trample until end of turn.",
+  "power": "1",
+  "toughness": "1",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/5/6589b339-9067-4e9b-bfdb-c49f8b3ef2d4.jpg?1783916259",
+   "normal": "https://cards.scryfall.io/normal/front/6/5/6589b339-9067-4e9b-bfdb-c49f8b3ef2d4.jpg?1783916259",
+   "large": "https://cards.scryfall.io/large/front/6/5/6589b339-9067-4e9b-bfdb-c49f8b3ef2d4.jpg?1783916259",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/5/6589b339-9067-4e9b-bfdb-c49f8b3ef2d4.jpg?1783916259"
+  }
  }
 ]

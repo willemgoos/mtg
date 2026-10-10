@@ -66,6 +66,8 @@ export function checkCondition(
     c.kind === 'ringTemptedAtLeast'
   )
     return ringCondition(ctx, c, controller, self, subject);
+  // Lord of the Rings (21b green): Elanor Gardner, "if you sacrificed a Food this turn".
+  if (c.kind === 'sacrificedFoodThisTurn') return (ctx.s.turn.foodsSacrificed?.[controller] ?? 0) > 0;
   // The Hobbit (20b multicolour): Smaug, Wicked Worm, "if mana from a Treasure was spent to cast it" (the spell is the subject).
   if (c.kind === 'treasureManaSpent') return !!(subject ?? self)?.manaFromTreasure;
   // Secrets of Strixhaven (14b)

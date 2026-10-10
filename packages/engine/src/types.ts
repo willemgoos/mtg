@@ -1143,6 +1143,9 @@ export type ConditionDef =
   | { kind: 'hasRingBearer' }
   /** The Ring has tempted the controller `min` or more times this game ("four or more times"). */
   | { kind: 'ringTemptedAtLeast'; min: number }
+  // Lord of the Rings (21b green): Elanor Gardner
+  /** The controller sacrificed a Food this turn. */
+  | { kind: 'sacrificedFoodThisTurn' }
   // Strixhaven Brawl (15b, g): Orochi Merge-Keeper
   /** The source is modified (has counters, or an Equipment or Aura you control attached). */
   | { kind: 'sourceModified' }
@@ -1972,6 +1975,9 @@ export type EffectDef =
       // Final Fantasy (11c): leftovers
       /** It must be blocked this turn if able (Magitek Scythe). */
       mustBeBlocked?: boolean;
+      // Lord of the Rings (21b green): Glorfindel, Dauntless Rescuer
+      /** It can't be blocked by more than this many creatures this turn. */
+      maxBlockers?: number;
       // Lorwyn Eclipsed (18c, theme decks): Captain Howler, Sea Scourge
       /** "Whenever it deals combat damage to a player this turn, you draw a card." */
       drawOnCombatDamage?: boolean;
@@ -4546,6 +4552,9 @@ export interface ContinuousEffect {
   // Final Fantasy (11c): leftovers
   /** It must be blocked this turn if able (Magitek Scythe). */
   mustBeBlocked?: boolean;
+  // Lord of the Rings (21b green): Glorfindel, Dauntless Rescuer
+  /** It can't be blocked by more than this many creatures. */
+  maxBlockers?: number;
   /** As control reverts, an Equipment on a creature its controller doesn't control falls off (Stolen Uniform). */
   unattachOnRevert?: boolean;
   // Lorwyn Eclipsed (18a)
