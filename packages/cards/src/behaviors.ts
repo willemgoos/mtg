@@ -47,6 +47,11 @@ import {
   TARKIR_DRAGONSTORM_BEHAVIORS,
   TARKIR_DRAGONSTORM_TOKENS,
 } from './tarkir-dragonstorm.ts';
+import {
+  THE_HOBBIT_BACK_FACES,
+  THE_HOBBIT_BEHAVIORS,
+  THE_HOBBIT_TOKENS,
+} from './the-hobbit.ts';
 import { FOUNDATIONS_BATCH_BEHAVIORS } from './foundations-batch.ts';
 import { FOUNDATIONS_DRAFT_BEHAVIORS } from './foundations-draft.ts';
 import { FOUNDATIONS_JUMP_IN_BEHAVIORS } from './foundations-jumpin.ts';
@@ -203,6 +208,9 @@ export const BEHAVIORS: Record<string, Behavior> = {
   // Tarkir: Dragonstorm (phase 19).
   ...TARKIR_DRAGONSTORM_BEHAVIORS,
   ...TARKIR_DRAGONSTORM_BACK_FACES,
+  // The Hobbit (phase 20).
+  ...THE_HOBBIT_BEHAVIORS,
+  ...THE_HOBBIT_BACK_FACES,
   // ---------------------------------------------------------------- red
   Shock: burn(2),
   'Lightning Strike': burn(3),
@@ -2252,6 +2260,7 @@ export const TOKENS: CardDefinition[] = [
   ...REALITY_FRACTURE_TOKENS,
   ...LORWYN_ECLIPSED_TOKENS,
   ...TARKIR_DRAGONSTORM_TOKENS,
+  ...THE_HOBBIT_TOKENS,
   token('zombie-token', 'Zombie', 'B', ['Zombie'], 2, 2),
   token('komas-coil-token', "Koma's Coil", 'U', ['Serpent'], 3, 3),
   token('cat-beast-token', 'Cat Beast', 'W', ['Cat', 'Beast'], 2, 2),
