@@ -88465,5 +88465,697 @@
    "large": "https://cards.scryfall.io/large/front/2/d/2dcafdac-a293-4adc-a540-3b3f469cf6f3.jpg?1783907283",
    "artCrop": "https://cards.scryfall.io/art_crop/front/2/d/2dcafdac-a293-4adc-a540-3b3f469cf6f3.jpg?1783907283"
   }
+ },
+ {
+  "name": "Bard the Bowman",
+  "scryfallId": "0b84e232-428c-424a-848c-ef95debc6e50",
+  "oracleId": "ec076f5b-b0e3-4b6f-9293-a8fc42f20bd8",
+  "set": "hob",
+  "collectorNumber": "145",
+  "rarity": "uncommon",
+  "manaCost": "{1}{W}{U}",
+  "typeLine": "Legendary Creature — Human Archer",
+  "oracleText": "Reach\nWhenever you draw your second card each turn, put a +1/+1 counter on target creature. It gains lifelink until end of turn.",
+  "power": "1",
+  "toughness": "3",
+  "colors": [
+   "U",
+   "W"
+  ],
+  "keywords": [
+   "Reach"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/b/0b84e232-428c-424a-848c-ef95debc6e50.jpg?1784377009",
+   "normal": "https://cards.scryfall.io/normal/front/0/b/0b84e232-428c-424a-848c-ef95debc6e50.jpg?1784377009",
+   "large": "https://cards.scryfall.io/large/front/0/b/0b84e232-428c-424a-848c-ef95debc6e50.jpg?1784377009",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/b/0b84e232-428c-424a-848c-ef95debc6e50.jpg?1784377009"
+  }
+ },
+ {
+  "name": "Bard, King of Dale",
+  "scryfallId": "c05c2aa6-29c7-40f8-872e-91099b9225c4",
+  "oracleId": "d05db2c1-a19a-4803-8e8a-fa2f9b798181",
+  "set": "hob",
+  "collectorNumber": "144",
+  "rarity": "mythic",
+  "manaCost": "{4}{W}{U}",
+  "typeLine": "Legendary Creature — Human Noble Archer",
+  "oracleText": "Reach, vigilance\nIf you would draw a card except the first one you draw in each of your draw steps, draw two cards instead.\nIf one or more tokens would be created under your control, twice that many of those tokens are created instead.",
+  "power": "3",
+  "toughness": "5",
+  "colors": [
+   "U",
+   "W"
+  ],
+  "keywords": [
+   "Reach",
+   "Vigilance"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/0/c05c2aa6-29c7-40f8-872e-91099b9225c4.jpg?1784377008",
+   "normal": "https://cards.scryfall.io/normal/front/c/0/c05c2aa6-29c7-40f8-872e-91099b9225c4.jpg?1784377008",
+   "large": "https://cards.scryfall.io/large/front/c/0/c05c2aa6-29c7-40f8-872e-91099b9225c4.jpg?1784377008",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/0/c05c2aa6-29c7-40f8-872e-91099b9225c4.jpg?1784377008"
+  }
+ },
+ {
+  "name": "Bard's Company",
+  "scryfallId": "d14aa2ff-7bbd-47a6-8e36-481e56302a62",
+  "oracleId": "5c5bfbb2-0e63-4e43-b441-c4878983288f",
+  "set": "hob",
+  "collectorNumber": "146",
+  "rarity": "rare",
+  "manaCost": "{2}{W}{U}",
+  "typeLine": "Creature — Human Citizen",
+  "oracleText": "You may cast this spell as though it had flash if you control a Human.\nOther creatures you control get +1/+1.\nWhenever this creature enters or attacks, recruit. (Draw a card, then discard a card. If you discarded a nonland card, create a 1/1 white Human Soldier creature token.)",
+  "power": "2",
+  "toughness": "3",
+  "colors": [
+   "U",
+   "W"
+  ],
+  "keywords": [
+   "Recruit"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/1/d14aa2ff-7bbd-47a6-8e36-481e56302a62.jpg?1785152250",
+   "normal": "https://cards.scryfall.io/normal/front/d/1/d14aa2ff-7bbd-47a6-8e36-481e56302a62.jpg?1785152250",
+   "large": "https://cards.scryfall.io/large/front/d/1/d14aa2ff-7bbd-47a6-8e36-481e56302a62.jpg?1785152250",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/1/d14aa2ff-7bbd-47a6-8e36-481e56302a62.jpg?1785152250"
+  }
+ },
+ {
+  "name": "Bifur, Melodic Rider",
+  "scryfallId": "ee88cc80-8fbf-451c-b2b8-09158426c26a",
+  "oracleId": "b8d563e4-e2bc-4e8b-8841-6655beff9138",
+  "set": "hob",
+  "collectorNumber": "147",
+  "rarity": "uncommon",
+  "manaCost": "{4}{R/W}{R/W}",
+  "typeLine": "Legendary Creature — Dwarf Bard",
+  "oracleText": "Storied (If you control three or more artifacts, legendaries, and/or Sagas, you have an enduring story for the rest of the game.)\nWhenever Bifur enters or attacks, put a +1/+1 counter on target creature.\nAs long as you have an enduring story, if a triggered ability of a Dwarf you control triggers, that ability triggers an additional time.",
+  "power": "4",
+  "toughness": "5",
+  "colors": [
+   "R",
+   "W"
+  ],
+  "keywords": [
+   "Storied"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/e/ee88cc80-8fbf-451c-b2b8-09158426c26a.jpg?1784377019",
+   "normal": "https://cards.scryfall.io/normal/front/e/e/ee88cc80-8fbf-451c-b2b8-09158426c26a.jpg?1784377019",
+   "large": "https://cards.scryfall.io/large/front/e/e/ee88cc80-8fbf-451c-b2b8-09158426c26a.jpg?1784377019",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/e/ee88cc80-8fbf-451c-b2b8-09158426c26a.jpg?1784377019"
+  }
+ },
+ {
+  "name": "Bolg of the North",
+  "scryfallId": "7b2d2a7f-88e0-45a9-8579-a6736bcd66eb",
+  "oracleId": "88522a0f-5377-4522-97f4-4148bef954af",
+  "set": "hob",
+  "collectorNumber": "148",
+  "rarity": "uncommon",
+  "manaCost": "{3}{B}{R}",
+  "typeLine": "Legendary Creature — Goblin Soldier",
+  "oracleText": "When Bolg enters, you may sacrifice another creature. When you do, Bolg deals damage equal to that creature's power to another target creature. If excess damage was dealt this way, amass Goblins X, where X is that excess damage. (Put X +1/+1 counters on an Army you control. It's also a Goblin. If you don't control an Army, create a 0/0 black Goblin Army creature token first.)",
+  "power": "5",
+  "toughness": "5",
+  "colors": [
+   "B",
+   "R"
+  ],
+  "keywords": [
+   "Amass"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/b/7b2d2a7f-88e0-45a9-8579-a6736bcd66eb.jpg?1784377021",
+   "normal": "https://cards.scryfall.io/normal/front/7/b/7b2d2a7f-88e0-45a9-8579-a6736bcd66eb.jpg?1784377021",
+   "large": "https://cards.scryfall.io/large/front/7/b/7b2d2a7f-88e0-45a9-8579-a6736bcd66eb.jpg?1784377021",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/b/7b2d2a7f-88e0-45a9-8579-a6736bcd66eb.jpg?1784377021"
+  }
+ },
+ {
+  "name": "Bolg's Company",
+  "scryfallId": "ea3f5644-f7e3-40de-ada5-cea2e9113cfb",
+  "oracleId": "fa602f8f-1d80-4f6d-8b8f-d1a1f36037bd",
+  "set": "hob",
+  "collectorNumber": "149",
+  "rarity": "rare",
+  "manaCost": "{B}{R}",
+  "typeLine": "Creature — Goblin Soldier",
+  "oracleText": "This creature has haste as long as you control another Goblin.\n{T}, Sacrifice another Goblin: Add {B}{R}.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "B",
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/a/ea3f5644-f7e3-40de-ada5-cea2e9113cfb.jpg?1785497179",
+   "normal": "https://cards.scryfall.io/normal/front/e/a/ea3f5644-f7e3-40de-ada5-cea2e9113cfb.jpg?1785497179",
+   "large": "https://cards.scryfall.io/large/front/e/a/ea3f5644-f7e3-40de-ada5-cea2e9113cfb.jpg?1785497179",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/a/ea3f5644-f7e3-40de-ada5-cea2e9113cfb.jpg?1785497179"
+  }
+ },
+ {
+  "name": "Chief Warg's Company",
+  "scryfallId": "bbc634af-63d2-444a-8123-85f16fe3e364",
+  "oracleId": "372d7086-b7dc-4b6d-bdf6-e9ed9c995456",
+  "set": "hob",
+  "collectorNumber": "151",
+  "rarity": "rare",
+  "manaCost": "{1}{B}{G}",
+  "typeLine": "Creature — Wolf",
+  "oracleText": "Trample\nThis creature can't attack unless you control two or more other Wolves.\nAt the beginning of your upkeep, create a 2/2 green Wolf creature token.",
+  "power": "5",
+  "toughness": "3",
+  "colors": [
+   "B",
+   "G"
+  ],
+  "keywords": [
+   "Trample"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/b/bbc634af-63d2-444a-8123-85f16fe3e364.jpg?1784733927",
+   "normal": "https://cards.scryfall.io/normal/front/b/b/bbc634af-63d2-444a-8123-85f16fe3e364.jpg?1784733927",
+   "large": "https://cards.scryfall.io/large/front/b/b/bbc634af-63d2-444a-8123-85f16fe3e364.jpg?1784733927",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/b/bbc634af-63d2-444a-8123-85f16fe3e364.jpg?1784733927"
+  }
+ },
+ {
+  "name": "Dáin's Company",
+  "scryfallId": "36db4405-8589-481f-b627-f26087488337",
+  "oracleId": "ae03782f-8f05-4ce2-a049-005b1b688faf",
+  "set": "hob",
+  "collectorNumber": "152",
+  "rarity": "rare",
+  "manaCost": "{R}{W}",
+  "typeLine": "Creature — Dwarf Warrior",
+  "oracleText": "This creature has lifelink as long as you control another Dwarf.\nWhen this creature enters, look at the top four cards of your library. You may reveal a Dwarf or Equipment card from among them and put it into your hand. Put the rest on the bottom of your library in a random order.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "R",
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/6/36db4405-8589-481f-b627-f26087488337.jpg?1785236717",
+   "normal": "https://cards.scryfall.io/normal/front/3/6/36db4405-8589-481f-b627-f26087488337.jpg?1785236717",
+   "large": "https://cards.scryfall.io/large/front/3/6/36db4405-8589-481f-b627-f26087488337.jpg?1785236717",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/6/36db4405-8589-481f-b627-f26087488337.jpg?1785236717"
+  }
+ },
+ {
+  "name": "Duskwatch Hunter",
+  "scryfallId": "3685c783-d837-4466-a960-ab3098db64c3",
+  "oracleId": "6283e5ca-9924-478b-89a5-36924accb9aa",
+  "set": "hob",
+  "collectorNumber": "153",
+  "rarity": "common",
+  "manaCost": "{2}{B/G}",
+  "typeLine": "Creature — Wolf",
+  "oracleText": "This creature can't be blocked by tokens.\nWhen this creature enters, put a +1/+1 counter on target creature.",
+  "power": "3",
+  "toughness": "1",
+  "colors": [
+   "B",
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/6/3685c783-d837-4466-a960-ab3098db64c3.jpg?1785323286",
+   "normal": "https://cards.scryfall.io/normal/front/3/6/3685c783-d837-4466-a960-ab3098db64c3.jpg?1785323286",
+   "large": "https://cards.scryfall.io/large/front/3/6/3685c783-d837-4466-a960-ab3098db64c3.jpg?1785323286",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/6/3685c783-d837-4466-a960-ab3098db64c3.jpg?1785323286"
+  }
+ },
+ {
+  "name": "Dwalin, Weaponmaster",
+  "scryfallId": "196d9287-a37d-4b27-a83b-a5489a54f081",
+  "oracleId": "cee583b7-7cc3-40ea-a227-b760839ec291",
+  "set": "hob",
+  "collectorNumber": "154",
+  "rarity": "rare",
+  "manaCost": "{1}{R/W}",
+  "typeLine": "Legendary Creature — Dwarf Warrior",
+  "oracleText": "First strike\nWhenever Dwalin enters or attacks, put a hone counter on each Equipment you control. (Each hone counter on an Equipment grants +1/+0 to equipped creature.)",
+  "power": "2",
+  "toughness": "1",
+  "colors": [
+   "R",
+   "W"
+  ],
+  "keywords": [
+   "First strike"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/9/196d9287-a37d-4b27-a83b-a5489a54f081.jpg?1785496508",
+   "normal": "https://cards.scryfall.io/normal/front/1/9/196d9287-a37d-4b27-a83b-a5489a54f081.jpg?1785496508",
+   "large": "https://cards.scryfall.io/large/front/1/9/196d9287-a37d-4b27-a83b-a5489a54f081.jpg?1785496508",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/9/196d9287-a37d-4b27-a83b-a5489a54f081.jpg?1785496508"
+  }
+ },
+ {
+  "name": "Eagle's Rescue",
+  "scryfallId": "12c8f2cc-ac9d-4cf6-9025-efe366b4e07f",
+  "oracleId": "95e1c368-b58a-4e69-9583-587560ad558d",
+  "set": "hob",
+  "collectorNumber": "155",
+  "rarity": "uncommon",
+  "manaCost": "{2}{W/U}{W/U}",
+  "typeLine": "Enchantment — Aura",
+  "oracleText": "Enchant creature\nEnchanted creature gets +2/+2 and has flying.\n{2}{W/U}{W/U}: Return this card from your graveyard to the battlefield attached to target creature you control with power 1 or less. Activate only as a sorcery.",
+  "colors": [
+   "U",
+   "W"
+  ],
+  "keywords": [
+   "Enchant"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/2/12c8f2cc-ac9d-4cf6-9025-efe366b4e07f.jpg?1785236726",
+   "normal": "https://cards.scryfall.io/normal/front/1/2/12c8f2cc-ac9d-4cf6-9025-efe366b4e07f.jpg?1785236726",
+   "large": "https://cards.scryfall.io/large/front/1/2/12c8f2cc-ac9d-4cf6-9025-efe366b4e07f.jpg?1785236726",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/2/12c8f2cc-ac9d-4cf6-9025-efe366b4e07f.jpg?1785236726"
+  }
+ },
+ {
+  "name": "Fearsome Goblin Pair",
+  "scryfallId": "2efe2dc7-3eaa-47f6-b1ae-f974c4a8ae79",
+  "oracleId": "edbd3d4e-78a2-4c03-936d-dcb24cf7c87c",
+  "set": "hob",
+  "collectorNumber": "156",
+  "rarity": "uncommon",
+  "manaCost": "{2}{B/R}",
+  "typeLine": "Creature — Goblin Soldier",
+  "oracleText": "When this creature dies, amass Goblins 4. (Put four +1/+1 counters on an Army you control. It's also a Goblin. If you don't control an Army, create a 0/0 black Goblin Army creature token first.)",
+  "power": "1",
+  "toughness": "1",
+  "colors": [
+   "B",
+   "R"
+  ],
+  "keywords": [
+   "Amass"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/e/2efe2dc7-3eaa-47f6-b1ae-f974c4a8ae79.jpg?1785324572",
+   "normal": "https://cards.scryfall.io/normal/front/2/e/2efe2dc7-3eaa-47f6-b1ae-f974c4a8ae79.jpg?1785324572",
+   "large": "https://cards.scryfall.io/large/front/2/e/2efe2dc7-3eaa-47f6-b1ae-f974c4a8ae79.jpg?1785324572",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/e/2efe2dc7-3eaa-47f6-b1ae-f974c4a8ae79.jpg?1785324572"
+  }
+ },
+ {
+  "name": "Goblin Plate Mail",
+  "scryfallId": "cb982607-da37-4894-91a5-cf6307d4d703",
+  "oracleId": "eda99a16-6a7c-4f39-8a6b-a284e6afd3fc",
+  "set": "hob",
+  "collectorNumber": "157",
+  "rarity": "common",
+  "manaCost": "{1}{B/R}",
+  "typeLine": "Artifact — Equipment",
+  "oracleText": "When this Equipment enters, amass Goblins 1, then attach this Equipment to the amassed Army. (To amass Goblins 1, put a +1/+1 counter on an Army you control. It's also a Goblin. If you don't control an Army, create a 0/0 black Goblin Army creature token first.)\nEquipped creature gets +1/+0 and has menace.\nEquip {4}",
+  "colors": [
+   "B",
+   "R"
+  ],
+  "keywords": [
+   "Amass",
+   "Equip"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/b/cb982607-da37-4894-91a5-cf6307d4d703.jpg?1785323293",
+   "normal": "https://cards.scryfall.io/normal/front/c/b/cb982607-da37-4894-91a5-cf6307d4d703.jpg?1785323293",
+   "large": "https://cards.scryfall.io/large/front/c/b/cb982607-da37-4894-91a5-cf6307d4d703.jpg?1785323293",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/b/cb982607-da37-4894-91a5-cf6307d4d703.jpg?1785323293"
+  }
+ },
+ {
+  "name": "Large Bear",
+  "scryfallId": "50202288-f433-4b56-8f60-349bda7b4f6b",
+  "oracleId": "73346137-3117-4dc3-b5a4-1aca1da54548",
+  "set": "hob",
+  "collectorNumber": "159",
+  "rarity": "uncommon",
+  "manaCost": "{3}{B/G}{B/G}",
+  "typeLine": "Creature — Bear",
+  "oracleText": "Reach, trample, haste",
+  "power": "5",
+  "toughness": "5",
+  "colors": [
+   "B",
+   "G"
+  ],
+  "keywords": [
+   "Reach",
+   "Haste",
+   "Trample"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/0/50202288-f433-4b56-8f60-349bda7b4f6b.jpg?1785323294",
+   "normal": "https://cards.scryfall.io/normal/front/5/0/50202288-f433-4b56-8f60-349bda7b4f6b.jpg?1785323294",
+   "large": "https://cards.scryfall.io/large/front/5/0/50202288-f433-4b56-8f60-349bda7b4f6b.jpg?1785323294",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/0/50202288-f433-4b56-8f60-349bda7b4f6b.jpg?1785323294"
+  }
+ },
+ {
+  "name": "Mirkwood Nurturer",
+  "scryfallId": "704b45e4-566e-40f6-a33a-9151018b44e5",
+  "oracleId": "66630640-9605-44da-afdf-eb9d458d056f",
+  "set": "hob",
+  "collectorNumber": "160",
+  "rarity": "common",
+  "manaCost": "{2}{G/U}",
+  "typeLine": "Creature — Elf Ranger",
+  "oracleText": "When this creature enters, return up to one other target permanent you control to its owner's hand. If you do, put a +1/+1 counter on this creature.",
+  "power": "3",
+  "toughness": "2",
+  "colors": [
+   "G",
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/0/704b45e4-566e-40f6-a33a-9151018b44e5.jpg?1785323302",
+   "normal": "https://cards.scryfall.io/normal/front/7/0/704b45e4-566e-40f6-a33a-9151018b44e5.jpg?1785323302",
+   "large": "https://cards.scryfall.io/large/front/7/0/704b45e4-566e-40f6-a33a-9151018b44e5.jpg?1785323302",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/0/704b45e4-566e-40f6-a33a-9151018b44e5.jpg?1785323302"
+  }
+ },
+ {
+  "name": "Nori, Teller of Tales",
+  "scryfallId": "b05adb48-980c-49a0-9ce6-7c7f3f20715d",
+  "oracleId": "03253076-9add-4efb-9227-b0a062c86534",
+  "set": "hob",
+  "collectorNumber": "161",
+  "rarity": "common",
+  "manaCost": "{1}{R/W}",
+  "typeLine": "Legendary Creature — Dwarf Bard",
+  "oracleText": "Whenever Nori attacks, target attacking creature gains first strike until end of turn.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "R",
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/0/b05adb48-980c-49a0-9ce6-7c7f3f20715d.jpg?1785323303",
+   "normal": "https://cards.scryfall.io/normal/front/b/0/b05adb48-980c-49a0-9ce6-7c7f3f20715d.jpg?1785323303",
+   "large": "https://cards.scryfall.io/large/front/b/0/b05adb48-980c-49a0-9ce6-7c7f3f20715d.jpg?1785323303",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/0/b05adb48-980c-49a0-9ce6-7c7f3f20715d.jpg?1785323303"
+  }
+ },
+ {
+  "name": "Patient Instructor",
+  "scryfallId": "e4800508-8bb9-41bb-8712-b55fba7a80a5",
+  "oracleId": "bddd7e99-ec74-4ca6-9137-155b85695a95",
+  "set": "hob",
+  "collectorNumber": "162",
+  "rarity": "common",
+  "manaCost": "{2}{W/U}",
+  "typeLine": "Creature — Human Citizen",
+  "oracleText": "Vigilance\nWhen this creature enters, recruit. (Draw a card, then discard a card. If you discarded a nonland card, create a 1/1 white Human Soldier creature token.)",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "U",
+   "W"
+  ],
+  "keywords": [
+   "Vigilance",
+   "Recruit"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/4/e4800508-8bb9-41bb-8712-b55fba7a80a5.jpg?1785323310",
+   "normal": "https://cards.scryfall.io/normal/front/e/4/e4800508-8bb9-41bb-8712-b55fba7a80a5.jpg?1785323310",
+   "large": "https://cards.scryfall.io/large/front/e/4/e4800508-8bb9-41bb-8712-b55fba7a80a5.jpg?1785323310",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/4/e4800508-8bb9-41bb-8712-b55fba7a80a5.jpg?1785323310"
+  }
+ },
+ {
+  "name": "Silvan Reveler",
+  "scryfallId": "c71b74fb-fb0c-4953-b536-7a3f283c6918",
+  "oracleId": "11932191-4b19-49b1-bfe4-abb7b83b2e59",
+  "set": "hob",
+  "collectorNumber": "163",
+  "rarity": "uncommon",
+  "manaCost": "{2}{G}{U}",
+  "typeLine": "Creature — Elf Citizen",
+  "oracleText": "When this creature enters, draw a card, then discard a card. If you discard a land card this way, put it from your graveyard onto the battlefield tapped.\nLandfall — Whenever a land you control enters, you may pay {1}{G}{U}. If you do, return this card from your graveyard to your hand.",
+  "power": "3",
+  "toughness": "2",
+  "colors": [
+   "G",
+   "U"
+  ],
+  "keywords": [
+   "Landfall"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/7/c71b74fb-fb0c-4953-b536-7a3f283c6918.jpg?1784382379",
+   "normal": "https://cards.scryfall.io/normal/front/c/7/c71b74fb-fb0c-4953-b536-7a3f283c6918.jpg?1784382379",
+   "large": "https://cards.scryfall.io/large/front/c/7/c71b74fb-fb0c-4953-b536-7a3f283c6918.jpg?1784382379",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/7/c71b74fb-fb0c-4953-b536-7a3f283c6918.jpg?1784382379"
+  }
+ },
+ {
+  "name": "Smaug, Wicked Worm",
+  "scryfallId": "19cc91f0-e724-41ac-b6d8-9a293bd63b42",
+  "oracleId": "20535126-f811-4386-bdce-d73f30691724",
+  "set": "hob",
+  "collectorNumber": "164",
+  "rarity": "rare",
+  "manaCost": "{3}{B}{R}",
+  "typeLine": "Legendary Creature — Dragon",
+  "oracleText": "Flying\nWhen Smaug enters, create X tapped Treasure tokens, where X is the number of artifacts your opponents control.\nWhenever you cast a spell, if mana from a Treasure was spent to cast it, you draw a card and lose 1 life.",
+  "power": "5",
+  "toughness": "5",
+  "colors": [
+   "B",
+   "R"
+  ],
+  "keywords": [
+   "Flying",
+   "Treasure"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/9/19cc91f0-e724-41ac-b6d8-9a293bd63b42.jpg?1785323313",
+   "normal": "https://cards.scryfall.io/normal/front/1/9/19cc91f0-e724-41ac-b6d8-9a293bd63b42.jpg?1785323313",
+   "large": "https://cards.scryfall.io/large/front/1/9/19cc91f0-e724-41ac-b6d8-9a293bd63b42.jpg?1785323313",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/9/19cc91f0-e724-41ac-b6d8-9a293bd63b42.jpg?1785323313"
+  }
+ },
+ {
+  "name": "The Chief Warg",
+  "scryfallId": "c397a298-bf7f-49d7-a26a-206ccf9e8120",
+  "oracleId": "5ebe8de1-aa3d-410d-b43d-1685259c7a97",
+  "set": "hob",
+  "collectorNumber": "150",
+  "rarity": "uncommon",
+  "manaCost": "{2}{B}{G}",
+  "typeLine": "Legendary Creature — Wolf",
+  "oracleText": "Menace (This creature can't be blocked except by two or more creatures.)\nFerocious — Whenever you attack while you control a creature with power 4 or greater, you draw a card and lose 1 life.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "B",
+   "G"
+  ],
+  "keywords": [
+   "Ferocious",
+   "Menace"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/3/c397a298-bf7f-49d7-a26a-206ccf9e8120.jpg?1784377030",
+   "normal": "https://cards.scryfall.io/normal/front/c/3/c397a298-bf7f-49d7-a26a-206ccf9e8120.jpg?1784377030",
+   "large": "https://cards.scryfall.io/large/front/c/3/c397a298-bf7f-49d7-a26a-206ccf9e8120.jpg?1784377030",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/3/c397a298-bf7f-49d7-a26a-206ccf9e8120.jpg?1784377030"
+  }
+ },
+ {
+  "name": "The Great Goblin",
+  "scryfallId": "78d8f53e-537d-4eaa-99e3-cac57fa53d22",
+  "oracleId": "83dcfac0-6efd-4e37-9402-15f9889e84e1",
+  "set": "hob",
+  "collectorNumber": "158",
+  "rarity": "rare",
+  "manaCost": "{1}{B/R}{B/R}",
+  "typeLine": "Legendary Creature — Goblin Noble",
+  "oracleText": "Whenever you put one or more counters on a Goblin, Orc, or Army you control, The Great Goblin deals 2 damage to target opponent.\nWhenever another Goblin, Orc, or Army you control dies, exile the top card of your library. You may play it until the end of your next turn.",
+  "power": "3",
+  "toughness": "2",
+  "colors": [
+   "B",
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/8/78d8f53e-537d-4eaa-99e3-cac57fa53d22.jpg?1784798171",
+   "normal": "https://cards.scryfall.io/normal/front/7/8/78d8f53e-537d-4eaa-99e3-cac57fa53d22.jpg?1784798171",
+   "large": "https://cards.scryfall.io/large/front/7/8/78d8f53e-537d-4eaa-99e3-cac57fa53d22.jpg?1784798171",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/8/78d8f53e-537d-4eaa-99e3-cac57fa53d22.jpg?1784798171"
+  }
+ },
+ {
+  "name": "Thorin Oakenshield",
+  "scryfallId": "c7e18609-d1ed-4829-be11-f2ce2cfcbc49",
+  "oracleId": "bdd41af0-bbd1-4ecd-a699-99f006f5e5ce",
+  "set": "hob",
+  "collectorNumber": "165",
+  "rarity": "uncommon",
+  "manaCost": "{R}{W}",
+  "typeLine": "Legendary Creature — Dwarf Noble",
+  "oracleText": "Trample\nStoried (If you control three or more artifacts, legendaries, and/or Sagas, you have an enduring story for the rest of the game.)\nAs long as you have an enduring story, artifacts and creatures you control have ward {1}.",
+  "power": "3",
+  "toughness": "2",
+  "colors": [
+   "R",
+   "W"
+  ],
+  "keywords": [
+   "Trample",
+   "Storied"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/7/c7e18609-d1ed-4829-be11-f2ce2cfcbc49.jpg?1784377040",
+   "normal": "https://cards.scryfall.io/normal/front/c/7/c7e18609-d1ed-4829-be11-f2ce2cfcbc49.jpg?1784377040",
+   "large": "https://cards.scryfall.io/large/front/c/7/c7e18609-d1ed-4829-be11-f2ce2cfcbc49.jpg?1784377040",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/7/c7e18609-d1ed-4829-be11-f2ce2cfcbc49.jpg?1784377040"
+  }
+ },
+ {
+  "name": "Thranduil, Sindarin Liege",
+  "scryfallId": "481870ee-d1f7-421b-86e1-570ea933bbbc",
+  "oracleId": "f6771d32-395e-4832-b33d-cbc12dff1516",
+  "set": "hob",
+  "collectorNumber": "166",
+  "rarity": "uncommon",
+  "manaCost": "{2}{G/U}{G/U}",
+  "typeLine": "Legendary Creature — Elf Noble",
+  "oracleText": "Other Elves you control get +1/+1.\nLandfall — Whenever a land you control enters, create a 1/1 green Elf creature token.",
+  "power": "2",
+  "toughness": "3",
+  "colors": [
+   "G",
+   "U"
+  ],
+  "keywords": [
+   "Landfall"
+  ],
+  "back": "Silvan Rally",
+  "adventure": true,
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/8/481870ee-d1f7-421b-86e1-570ea933bbbc.jpg?1785412747",
+   "normal": "https://cards.scryfall.io/normal/front/4/8/481870ee-d1f7-421b-86e1-570ea933bbbc.jpg?1785412747",
+   "large": "https://cards.scryfall.io/large/front/4/8/481870ee-d1f7-421b-86e1-570ea933bbbc.jpg?1785412747",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/8/481870ee-d1f7-421b-86e1-570ea933bbbc.jpg?1785412747"
+  }
+ },
+ {
+  "name": "Silvan Rally",
+  "scryfallId": "481870ee-d1f7-421b-86e1-570ea933bbbc",
+  "oracleId": "f6771d32-395e-4832-b33d-cbc12dff1516",
+  "set": "hob",
+  "collectorNumber": "166",
+  "rarity": "uncommon",
+  "manaCost": "{1}{G/U}{G/U}",
+  "typeLine": "Sorcery — Adventure",
+  "oracleText": "Mill four cards, then put up to two land cards from among them into your hand. (Then exile this card. You may cast the creature later from exile.)",
+  "colors": [
+   "G",
+   "U"
+  ],
+  "keywords": [
+   "Mill"
+  ],
+  "front": "Thranduil, Sindarin Liege",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/8/481870ee-d1f7-421b-86e1-570ea933bbbc.jpg?1785412747",
+   "normal": "https://cards.scryfall.io/normal/front/4/8/481870ee-d1f7-421b-86e1-570ea933bbbc.jpg?1785412747",
+   "large": "https://cards.scryfall.io/large/front/4/8/481870ee-d1f7-421b-86e1-570ea933bbbc.jpg?1785412747",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/8/481870ee-d1f7-421b-86e1-570ea933bbbc.jpg?1785412747"
+  }
+ },
+ {
+  "name": "Thranduil, the Elvenking",
+  "scryfallId": "fe2fe8fa-3b99-44c1-bab9-922e5c864952",
+  "oracleId": "4a5f76e7-40be-4b06-9935-4a3b2672e1c2",
+  "set": "hob",
+  "collectorNumber": "167",
+  "rarity": "rare",
+  "manaCost": "{2}{B}{G}{U}",
+  "typeLine": "Legendary Creature — Elf Noble",
+  "oracleText": "Thranduil has all activated abilities of all Elf cards in your graveyard.\nWhenever another legendary Elf you control enters, draw two cards, then discard a card.",
+  "power": "5",
+  "toughness": "6",
+  "colors": [
+   "B",
+   "G",
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/e/fe2fe8fa-3b99-44c1-bab9-922e5c864952.jpg?1784377043",
+   "normal": "https://cards.scryfall.io/normal/front/f/e/fe2fe8fa-3b99-44c1-bab9-922e5c864952.jpg?1784377043",
+   "large": "https://cards.scryfall.io/large/front/f/e/fe2fe8fa-3b99-44c1-bab9-922e5c864952.jpg?1784377043",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/e/fe2fe8fa-3b99-44c1-bab9-922e5c864952.jpg?1784377043"
+  }
+ },
+ {
+  "name": "Thranduil's Company",
+  "scryfallId": "abdb9d4e-e6ca-409b-b589-0cf71724340b",
+  "oracleId": "2c195485-83f9-424f-854a-50c4f5b04182",
+  "set": "hob",
+  "collectorNumber": "168",
+  "rarity": "rare",
+  "manaCost": "{2}{G}{U}",
+  "typeLine": "Creature — Elf Soldier",
+  "oracleText": "As long as you control another Elf, you may play an additional land on each of your turns.\nLandfall — Whenever a land you control enters, put two +1/+1 counters on target creature you control. It gains vigilance until end of turn.",
+  "power": "3",
+  "toughness": "4",
+  "colors": [
+   "G",
+   "U"
+  ],
+  "keywords": [
+   "Landfall"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/b/abdb9d4e-e6ca-409b-b589-0cf71724340b.jpg?1785412736",
+   "normal": "https://cards.scryfall.io/normal/front/a/b/abdb9d4e-e6ca-409b-b589-0cf71724340b.jpg?1785412736",
+   "large": "https://cards.scryfall.io/large/front/a/b/abdb9d4e-e6ca-409b-b589-0cf71724340b.jpg?1785412736",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/b/abdb9d4e-e6ca-409b-b589-0cf71724340b.jpg?1785412736"
+  }
+ },
+ {
+  "name": "Tom, Bert, and William",
+  "scryfallId": "211a9764-3c60-46ba-bb53-e6692640ec8f",
+  "oracleId": "0ea58cfe-b37c-49a6-a3be-7e60065b8238",
+  "set": "hob",
+  "collectorNumber": "169",
+  "rarity": "rare",
+  "manaCost": "{3}{B}{G}",
+  "typeLine": "Legendary Creature — Troll",
+  "oracleText": "{1}, Sacrifice another creature: Draw cards equal to the sacrificed creature's power, then discard a card.\nWhen Tom, Bert, and William die, if they were a creature, return them to the battlefield. They're an artifact. (They're no longer a creature.)",
+  "power": "5",
+  "toughness": "5",
+  "colors": [
+   "B",
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/1/211a9764-3c60-46ba-bb53-e6692640ec8f.jpg?1783902784",
+   "normal": "https://cards.scryfall.io/normal/front/2/1/211a9764-3c60-46ba-bb53-e6692640ec8f.jpg?1783902784",
+   "large": "https://cards.scryfall.io/large/front/2/1/211a9764-3c60-46ba-bb53-e6692640ec8f.jpg?1783902784",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/1/211a9764-3c60-46ba-bb53-e6692640ec8f.jpg?1783902784"
+  }
  }
 ]

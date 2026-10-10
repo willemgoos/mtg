@@ -65,6 +65,7 @@ import { crownReplacement } from './ecl-crown.ts';
 import { extraEntryCounters } from './tdm-misc-effects.ts';
 import { protectedFrom } from './brawl-15b-w-effects.ts';
 import { amassPut, amassStep, recruitSteps } from './hob-20a.ts';
+import { HOB_MULTICOLOUR_EXPANDERS } from './hob-multicolour-effects.ts'; // The Hobbit (20b multicolour)
 import { SOS_14B_C_CHOOSERS } from './sos-14b-c-effects.ts';
 import type {
   AbilityDef,
@@ -995,6 +996,12 @@ export function runEffects(
     if (e.kind === 'repeat') {
       const n = resolveAmount(ctx, es, e.count);
       list.splice(i, 1, ...Array.from({ length: n }, () => e.effects).flat());
+      i--;
+      continue;
+    }
+    // The Hobbit (20b multicolour): a custom effect that turns into other effects (a prompt built from the current game state).
+    if (e.kind === 'custom' && HOB_MULTICOLOUR_EXPANDERS[e.handler]) {
+      list.splice(i, 1, ...HOB_MULTICOLOUR_EXPANDERS[e.handler]!(ctx, es, e.params));
       i--;
       continue;
     }
@@ -2212,6 +2219,8 @@ export function runEffects(
           ...(e.drawUnlessNonland !== undefined ? { drawUnlessNonland: e.drawUnlessNonland } : {}),
           // The Hobbit (20a): Recruit.
           ...(e.thenIfNonland ? { thenIfNonland: e.thenIfNonland } : {}),
+          // The Hobbit (20b multicolour): Silvan Reveler.
+          ...(e.landToBattlefieldTapped ? { landToBattlefieldTapped: true } : {}),
           resume,
           thenPriority,
         };

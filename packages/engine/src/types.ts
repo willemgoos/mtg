@@ -1025,7 +1025,14 @@ export type TriggerDef =
   | { on: 'cardsLeaveYourGraveyard' }
   // Tarkir: Dragonstorm (19b, misc): Hollowmurk Siege, Stalwart Successor
   /** Whenever one or more counters (of any kind) are put on a creature you control; "that creature" is the subject. */
-  | { on: 'counterPutOnYourCreature' }
+  | {
+      on: 'counterPutOnYourCreature';
+      // The Hobbit (20b multicolour): The Great Goblin
+      /** Only on creatures matching this ("a Goblin, Orc, or Army you control"). */
+      filter?: CardFilter;
+      /** Only counters you put (not ones an opponent's effect puts on your creature). */
+      byYou?: boolean;
+    }
   // Final Fantasy (11b): creatures and artifacts dying
   /**
    * Whenever this or another permanent you control matching the filter is put
@@ -1112,6 +1119,9 @@ export type ConditionDef =
   // Reality Fracture (17a): Null Summoner, Uldaros Theorix
   /** The source permanent was cast (not put onto the battlefield some other way). */
   | { kind: 'wasCast' }
+  // The Hobbit (20b multicolour): Smaug, Wicked Worm
+  /** The spell that caused the trigger had mana from a Treasure spent on it. */
+  | { kind: 'treasureManaSpent' }
   | { kind: 'controlsPermanents'; filter: CardFilter; min: number }
   | { kind: 'attackedThisTurn' }
   // Reality Fracture (17c): Kiora of Salt and Sand
@@ -2545,6 +2555,9 @@ export type EffectDef =
       // The Hobbit (20a): Recruit
       /** These effects follow once the discarding is done, only if a nonland card was discarded ("If you discarded a nonland card, ..."). */
       thenIfNonland?: EffectDef[];
+      // The Hobbit (20b multicolour): Silvan Reveler
+      /** A land card discarded this way is put from the graveyard onto the battlefield tapped. */
+      landToBattlefieldTapped?: boolean;
     }
   /** Put the top N cards of your library into your graveyard. */
   | {
@@ -3201,7 +3214,17 @@ export type StaticDef =
    */
   | { kind: 'firstTokensCopyEquipped' }
   /** You may play an additional land on each of your turns (Loot). */
-  | { kind: 'extraLandDrop' }
+  | { kind: 'extraLandDrop'; condition?: ConditionDef } // The Hobbit (20b multicolour): Thranduil's Company ("as long as you control another Elf")
+  // The Hobbit (20b multicolour)
+  /** "This creature can't attack unless <condition>" (Chief Warg's Company: you control two or more other Wolves). */
+  | { kind: 'cantAttackUnless'; condition: ConditionDef }
+  /**
+   * Bard, King of Dale: "If you would draw a card except the first one you draw in each of your draw steps, draw `count` cards
+   * instead" (every such draw, not only the first one each turn).
+   */
+  | { kind: 'everyExtraDrawBecomes'; count: number }
+  /** Thranduil, the Elvenking: this permanent has all activated abilities of all Elf cards in its controller's graveyard. */
+  | { kind: 'graveyardElfAbilities' }
   /** Prevent all combat damage dealt to and by this creature (Fog Bank). */
   | { kind: 'preventCombatDamage' }
   // Reality Fracture (17a): Loot, the Anomaly
@@ -3692,6 +3715,10 @@ export interface GameObject {
   // Strixhaven Brawl (15a): Enduring Courage
   /** It's not a creature (it came back as an enchantment). */
   notCreature?: boolean;
+  /** The Hobbit (20b multicolour): with `notCreature`, the type it is instead (Tom, Bert, and William come back as an artifact). */
+  notCreatureAs?: CardType;
+  /** The Hobbit (20b multicolour): mana from a Treasure was spent to cast it (Smaug, Wicked Worm). */
+  manaFromTreasure?: boolean;
   /** It wasn't a creature as it last left the battlefield. */
   lastNotCreature?: boolean;
   /** A card in exile its owner may play until the end of that turn (Strongbox Raider). */
@@ -4553,6 +4580,7 @@ export type Decision =
       drawUnlessNonland?: number;
       // The Hobbit (20a): Recruit
       thenIfNonland?: EffectDef[];
+      landToBattlefieldTapped?: boolean; // The Hobbit (20b multicolour): Silvan Reveler
       resume: PausedResolution;
       thenPriority: PlayerId;
     }
@@ -5220,7 +5248,7 @@ export type GameEvent =
   | { type: 'countersAdded'; id: ObjectId; count: number; player: PlayerId }
   // Tarkir: Dragonstorm (19b, misc): counters of any kind put on a creature
   /** Counters of any kind (+1/+1 or named) were put on a creature; `player` controls it. */
-  | { type: 'anyCountersAdded'; id: ObjectId; count: number; player: PlayerId }
+  | { type: 'anyCountersAdded'; id: ObjectId; count: number; player: PlayerId; by?: PlayerId }
   // Reality Fracture (17c): loyalty counters put on a planeswalker
   /** `player` controls the planeswalker; `by` is the player who put the counters. */
   | { type: 'loyaltyCountersAdded'; id: ObjectId; count: number; player: PlayerId; by: PlayerId }

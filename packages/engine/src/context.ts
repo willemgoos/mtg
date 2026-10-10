@@ -39,7 +39,8 @@ import { BRAWL_15B_G_EFFECTS } from './brawl-15b-g-effects.ts';
 import { BRAWL_15B_PAIR_EFFECTS } from './brawl-15b-pair-effects.ts';
 import { ARCHIVE_16_EFFECTS } from './archive-16-effects.ts';
 import { FRA_MULTI_B_EFFECTS } from './fra-multi-b-effects.ts';
-import { ECL_MULTI_B_EFFECTS } from './ecl-multi-b-effects.ts';
+import { ECL_MULTI_B_EFFECTS, defsWithStatic } from './ecl-multi-b-effects.ts';
+import { HOB_MULTICOLOUR_EFFECTS, withGraveyardElfAbilities } from './hob-multicolour-effects.ts'; // The Hobbit (20b multicolour)
 import { STX_13C_A_EFFECTS } from './stx-13c-a-effects.ts';
 import { STX_13C_B_EFFECTS } from './stx-13c-b-effects.ts';
 import { STX_13C_C_EFFECTS } from './stx-13c-c-effects.ts';
@@ -162,6 +163,7 @@ const BUILT_IN_EFFECTS: Record<string, CustomEffect> = {
   ...ECL_18A_EFFECTS,
   ...TDM_19A_EFFECTS,
   ...TDM_CLANS_B_EFFECTS, // Tarkir: Dragonstorm (19b, clans-b)
+  ...HOB_MULTICOLOUR_EFFECTS, // The Hobbit (20b multicolour)
   ...TDM_WHITE_EFFECTS, // Tarkir: Dragonstorm (19b, white)
   ...TDM_MISC_EFFECTS, // Tarkir: Dragonstorm (19b, misc)
   ...TDM_GREEN_EFFECTS, // Tarkir: Dragonstorm (19b): green
@@ -243,7 +245,12 @@ const ALL_COLORS: Color[] = ['W', 'U', 'B', 'R', 'G'];
 
 export function def(ctx: Ctx, id: ObjectId): CardDefinition {
   const o = obj(ctx, id);
-  const d = defBase(ctx, o);
+  const d0 = defBase(ctx, o);
+  // The Hobbit (20b multicolour): Thranduil, the Elvenking has the activated abilities of the Elf cards in your graveyard.
+  const d =
+    o.zone === 'battlefield' && defsWithStatic(ctx.db, 'graveyardElfAbilities').has(o.defId)
+      ? withGraveyardElfAbilities(ctx, o, d0)
+      : d0;
   // Lorwyn Eclipsed (18b, multi-b): Tam, Mindful First-Year, "becomes all colors until end of turn".
   if (ctx.s.colorChanges && o.allColorsTurn === ctx.s.turn.number && o.zone === 'battlefield')
     return { ...d, colors: ALL_COLORS };
@@ -756,6 +763,7 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
     if (o.notCreature) o.lastNotCreature = true;
     else delete o.lastNotCreature;
     delete o.notCreature;
+    delete o.notCreatureAs; // The Hobbit (20b multicolour)
     const host = o.attachedTo !== undefined ? ctx.s.objects[o.attachedTo] : undefined;
     if (host)
       o.lastAttachedTo = {
@@ -770,6 +778,7 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
     delete o.manaColors;
     // Lorwyn Eclipsed (18a): the colours spent, evoke and the card exiled by "behold … and exile it" stay while it's on the stack and battlefield.
     delete o.manaPaid;
+    delete o.manaFromTreasure; // The Hobbit (20b multicolour)
     delete o.evoked;
     if (o.beholdExiled) {
       if (from === 'battlefield') o.lastBeholdExiled = o.beholdExiled;
@@ -1125,7 +1134,7 @@ export function addCounters(ctx: Ctx, id: ObjectId, n: number, name?: string, by
         by: by ?? ctx.puttingPlayer ?? o.controller,
       });
     // Tarkir: Dragonstorm (19b, misc): counters of any kind on a creature.
-    else anyCreatureCounters(ctx, id, n);
+    else anyCreatureCounters(ctx, id, n, by);
     return;
   }
   o.plusOneCounters += n;
@@ -1139,14 +1148,21 @@ export function addCounters(ctx: Ctx, id: ObjectId, n: number, name?: string, by
     o.countersTimes = 1;
   }
   emit(ctx, { type: 'countersAdded', id, count: n, player: o.controller });
-  anyCreatureCounters(ctx, id, n); // Tarkir: Dragonstorm (19b, misc)
+  anyCreatureCounters(ctx, id, n, by); // Tarkir: Dragonstorm (19b, misc)
 }
 
 /** Tarkir: Dragonstorm (19b, misc): Stalwart Successor, Hollowmurk Siege: counters of any kind were put on a creature. */
-function anyCreatureCounters(ctx: Ctx, id: ObjectId, n: number): void {
+function anyCreatureCounters(ctx: Ctx, id: ObjectId, n: number, by?: PlayerId): void {
   if (!def(ctx, id).types.includes('Creature')) return;
   noteCreatureCounters(ctx, obj(ctx, id));
-  emit(ctx, { type: 'anyCountersAdded', id, count: n, player: obj(ctx, id).controller });
+  emit(ctx, {
+    type: 'anyCountersAdded',
+    id,
+    count: n,
+    player: obj(ctx, id).controller,
+    // The Hobbit (20b multicolour): The Great Goblin, "whenever you put one or more counters".
+    by: by ?? ctx.puttingPlayer ?? obj(ctx, id).controller,
+  });
 }
 
 /** Festival of Embers: `player` controls a permanent that exiles cards headed for their graveyard. */
@@ -1196,9 +1212,31 @@ export function removeFromCombat(ctx: Ctx, id: ObjectId): void {
   for (const a of c.attackers) a.blockers = a.blockers.filter((b) => b !== id);
 }
 
+/** The Hobbit (20b multicolour): inside Bard's replacement draw (the cards drawn instead are not replaced again). */
+let bardDrawing = false;
+
 export function drawCard(ctx: Ctx, player: PlayerId, drawStepDraw = false): void {
   // Lorwyn Eclipsed (18b, black): Mornsong Aria, "players can't draw cards".
   if (drawPrevented(ctx)) return;
+  // The Hobbit (20b multicolour): Bard, King of Dale, "if you would draw a card except the first one you draw in each of your
+  // draw steps, draw two cards instead" (the two cards are not replaced again).
+  if (!drawStepDraw && ctx.s.turn.number > 0 && !bardDrawing) {
+    let count = 0;
+    for (const id of ctx.s.battlefield)
+      if (obj(ctx, id).controller === player)
+        for (const a of def(ctx, id).abilities)
+          if (a.kind === 'static' && a.effect.kind === 'everyExtraDrawBecomes')
+            count = Math.max(count, a.effect.count);
+    if (count > 0) {
+      bardDrawing = true;
+      try {
+        for (let i = 0; i < count; i++) drawCard(ctx, player);
+      } finally {
+        bardDrawing = false;
+      }
+      return;
+    }
+  }
   // Marvel Super Heroes Jumpstart (Geniuses): Reed Richards, "the first time you would draw a card
   // each turn except the first card you draw during each of your draw steps, you draw four instead".
   if (!drawStepDraw && ctx.s.turn.number > 0 && !ctx.s.turn.extraDrawSeen?.includes(player)) {

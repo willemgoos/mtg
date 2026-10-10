@@ -172,3 +172,12 @@ The evaluation counts the enduring story and the way to it (`WEIGHTS.enduringSto
 permanent to use them); recruit's discard and amass's Army are chosen by the usual simulation; a bot with nothing better to do in
 its second main phase cycles a dead card (`chooseCycling` in `ai/src/heuristic.ts`: a spell costing more than its lands plus two,
 or a land with six in play; a land search is skipped with seven lands in play and hand). That applies to every set's cycling cards.
+
+## Phase 20b: multicolour (done)
+
+All 26 cards (`cards/src/hob/multicolour.ts`; tests `cards/test/hob-multicolour*.test.ts`, `ai/test/hob-multicolour.test.ts`). Engine: one-offs in
+`engine/src/hob-multicolour-effects.ts` (custom effects, `HOB_MULTICOLOUR_EXPANDERS` = custom effects that turn into other effects when they
+come up, used for Silvan Rally's and Bolg's prompts), hooks marked `// The Hobbit (20b multicolour)`: statics `cantAttackUnless`,
+`everyExtraDrawBecomes` (Bard, King of Dale), `graveyardElfAbilities` (Thranduil, the Elvenking), `extraLandDrop.condition`; condition
+`treasureManaSpent` (Smaug); `counterPutOnYourCreature` got `filter`/`byYou`; `discard.landToBattlefieldTapped` (Silvan Reveler); landfall
+triggers from the graveyard; `notCreatureAs` (Tom, Bert, and William come back as an artifact); hone counters grant +1/+0 (Dwalin).

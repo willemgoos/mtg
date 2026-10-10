@@ -327,7 +327,13 @@ function landDrops(ctx: Ctx, player: PlayerId): number {
   for (const id of ctx.s.battlefield) {
     if (obj(ctx, id).controller !== player) continue;
     for (const a of def(ctx, id).abilities)
-      if (a.kind === 'static' && a.effect.kind === 'extraLandDrop') n++;
+      if (
+        a.kind === 'static' &&
+        a.effect.kind === 'extraLandDrop' &&
+        // The Hobbit (20b multicolour): Thranduil's Company, "as long as you control another Elf".
+        checkCondition(ctx, a.effect.condition, player, obj(ctx, id))
+      )
+        n++;
   }
   return n;
 }
