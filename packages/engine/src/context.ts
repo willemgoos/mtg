@@ -44,6 +44,7 @@ import { ECL_WHITE_EFFECTS } from './ecl-white-effects.ts';
 import { HOB_WHITE_EFFECTS } from './hob-white-effects.ts'; // The Hobbit (20b white)
 import { LTR_BLUE_EFFECTS } from './ltr-blue-effects.ts'; // Lord of the Rings (21b blue)
 import { LTR_WHITE_EFFECTS } from './ltr-white-effects.ts'; // Lord of the Rings (21b white)
+import { LTR_WU_RARE_EFFECTS } from './ltr-wu-rare-effects.ts'; // Lord of the Rings (21d wu-rare)
 import { BRAWL_15B_W_EFFECTS } from './brawl-15b-w-effects.ts';
 import { BRAWL_15B_U_EFFECTS } from './brawl-15b-u-effects.ts';
 import { BRAWL_15B_G_EFFECTS } from './brawl-15b-g-effects.ts';
@@ -201,6 +202,7 @@ const BUILT_IN_EFFECTS: Record<string, CustomEffect> = {
   ...HOB_WHITE_EFFECTS, // The Hobbit (20b, white)
   ...LTR_BLUE_EFFECTS, // Lord of the Rings (21b blue)
   ...LTR_WHITE_EFFECTS, // Lord of the Rings (21b white)
+  ...LTR_WU_RARE_EFFECTS, // Lord of the Rings (21d wu-rare)
   // Strixhaven Brawl (15b): multicolour, colourless and lands.
   ...BRAWL_15B_MULTI_EFFECTS,
   // Strixhaven Brawl (15b), white.
@@ -1086,6 +1088,13 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
   const countersAmount =
     to === 'battlefield' ? defOf(ctx, o.defId).entersWithCountersAmount : undefined;
   if (countersAmount) addCounters(ctx, id, countOf(ctx, o.controller, countersAmount, false, id));
+  // Lord of the Rings (21d wu-rare): Dawn of a New Age, "enters with a hope counter on it for each creature you control".
+  const namedAmount =
+    to === 'battlefield' ? defOf(ctx, o.defId).entersWithNamedCountersAmount : undefined;
+  if (namedAmount) {
+    const n = countOf(ctx, o.controller, namedAmount.amount, false, id);
+    if (n > 0) addCounters(ctx, id, n, namedAmount.name);
+  }
   // Reality Fracture (17a): Graft Surgeon, Generous Revival: a permanent put onto the battlefield without being cast
   // still enters with its own counters (a spell resolving does this in stack.ts).
   if (to === 'battlefield' && from !== 'stack') {

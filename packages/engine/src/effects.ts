@@ -838,6 +838,7 @@ export function resolveAmount(ctx: Ctx, es: EffectSource, amount: Amount): numbe
   // Reality Fracture (17a): Dark Matter Manipulator, Recursive Recruitment
   if ('floorDiv' in amount)
     return Math.floor(resolveAmount(ctx, es, amount.amount) / amount.floorDiv);
+  if ('ltrPressMv' in amount) return ctx.s.turn.ltrPressMv ?? -1; // Lord of the Rings (21d wu-rare)
   if ('manaValueOf' in amount) {
     const id = objectsOf(ctx, es, amount.manaValueOf)[0];
     return id ? manaValue(def(ctx, id).manaCost) : 0;

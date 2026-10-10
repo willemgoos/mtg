@@ -213,6 +213,8 @@ export function startTurn(ctx: Ctx, player: PlayerId, noPowerUp = false): void {
     if (s.objects[id]!.copyUntilTurnOf === player) endCopy(ctx, s.objects[id]!);
   delete s.turn.toughnessDamage;
   delete s.turn.ltrToughnessRather; // Lord of the Rings (21b white)
+  delete s.turn.ltrFlashAll; // Lord of the Rings (21d wu-rare)
+  delete s.turn.ltrPressMv; // Lord of the Rings (21d wu-rare)
   // Avenge: whether the player whose turn just ended attacked during it.
   if (s.turn.number > 0) {
     const prev = s.players[s.turn.activePlayer];

@@ -271,3 +271,46 @@ behind `chooseCustom`, `detectLtrWhite`), with hooks marked `// Lord of the Ring
   fewer than three cards: the bottom). **Lembas**: a `selfToGraveyard` trigger running `ltrShuffleSelfIntoLibrary`.
 - No new decision kinds, so the bots needed nothing new. `Halfling` (Saradoc) is `ltr-halfling-token` in `LTR_WHITE_TOKENS`.
 - In tests, permanents put on the battlefield by the scenario are not tokens: Shire Shirriff's test sets `isToken` on the Food.
+
+## Phase 21d: white and blue rares (done)
+
+16/16 (8 white rares and mythics in `cards/src/ltr/white-rare.ts`, 8 blue in `ltr/blue-rare.ts`; the Tentacle token is `ltr-tentacle-token` in
+`LTR_BLUE_RARE_TOKENS`). Tests `cards/test/ltr-wu-rare-{white,white-2,white-3,blue,blue-2}.test.ts` with `ltr-wu-rare-helpers.ts`. Engine one-offs
+are in `engine/src/ltr-wu-rare-effects.ts`, hooks marked `// Lord of the Rings (21d wu-rare)`. Every card is exact except the note on Forge Anew.
+
+- **Boromir, Warden of the Tower**: `castSpell` trigger field `maxManaSpent` (0: "if no mana was spent to cast it"; reads `manaSpent`, which a
+  free cast leaves at 0), custom `ltrCounterSubject` counters the triggering spell.
+- **Dawn of a New Age**: card field `entersWithNamedCountersAmount` (`{ name, amount }`, applied in `moveObject` beside `entersWithCountersAmount`);
+  the end step is two `if`s on `sourceHadNamedCounter`.
+- **Forge Anew**: static `ltrEquipAtInstantSpeed` (with a condition, here `yourTurn`; read by `equipAtInstantSpeed` in `legal.ts`, which lifts
+  `sorcerySpeed` for equip abilities). "You may pay {0} rather than the equip cost of the first equip ability you activate during each of your turns"
+  reuses Kíli the Resourceful's `firstEquipFree` (condition `yourTurn`): the first equip costs {0}, with no option to pay the full cost instead. Paying
+  the full cost is never better (the discount is used up either way), the same reduction as Kíli's (see `docs/shortcuts.md`).
+- **Frodo, Sauron's Bane**: custom `ltrFrodoScout` / `ltrFrodoRogue` (a permanent creature-type replacement `setCreatureTypes`-style, a permanent
+  `basePT` 2/3 + lifelink effect, and the Rogue trigger added to `perpetualAbilities`), "that player loses the game" is `ltrOpponentLoses`
+  (honours `cantLose`).
+- **Gandalf the White**: `flashForAll` with an `anyOf` Legendary / Artifact filter, and static `ltrLegendaryArtifactTriggersTwice`:
+  `doubleLegendaryArtifactTriggers` runs after each event's triggers are queued (wrapped around `detect` in `collectTriggers`) and, when a legendary
+  permanent (a Ring-bearer counts) or an artifact entered or left the battlefield, pushes one more copy per Gandalf of every triggered ability of the
+  Gandalf controller's permanents it caused (inline keyword triggers like persist included; extra copies from Panharmonicon-style effects add, they
+  don't multiply). A Gandalf that left at the same time (the events of one batch) still counts, for leaves-the-battlefield triggers.
+- **The Battle of Bywater**, **War of the Last Alliance**: existing vocabulary (`destroyAll` with `minPower`, `searchLibrary` with `reveal`, saga
+  chapters, `ringTempts`).
+- **Borne Upon a Wind**: `TurnState.ltrFlashAll` (players; set by custom `ltrFlashAll`, read in the instant-speed check of `legal.ts`, cleared when a
+  turn starts).
+- **Goldberry, River-Daughter**: counters are moved raw (no "twice as many" replacements; the counters-added events fire): custom `ltrGoldberryGather`
+  and, for the second ability, the chooser `ltrGoldberryPick`: one counter at a time ("Move a verse counter (2 on Goldberry)"), "Done: draw a card"
+  from the second counter on, and when the last counter has moved the draw happens at once (`ltrGoldberryMove`).
+- **Lost Isle Calling**: all existing (`youScry`, `namedCountersOnSource`, `sourceHadNamedCounter` reading the counters as the exiled card had them,
+  `extraTurn`, `sorcerySpeed`, `exileSelf` cost).
+- **Press the Enemy**: target `spell` + `orPermanent` (opponent's, nonland); custom `ltrPressBounce` remembers the returned object's mana value in
+  `TurnState.ltrPressMv` (a spell on the stack counts its X; -1 if nothing was returned), then `castFree` from hand with `maxManaValue`
+  `{ ltrPressMv: true }` (new Amount).
+- **Rangers of Ithilien**, **Scroll of Isildur** (chapter I): custom `ltrGainControlWhileControlled` ("for as long as you control this creature/Saga":
+  a `whileSource` effect with the new `ContinuousEffect.whileControlledBy`; `endLapsedControlEffects` (state-based actions) ends it if another player
+  gains control of the source; leaving the battlefield already ended `whileSource` effects). Nothing happens if the source is gone by resolution.
+  The up-to-one target prompt appears even with no legal target (only the empty choice).
+- **Scroll of Isildur** II / III and **Storm of Saruman** (`castSpell` filter `second`, `copySpell` with `nonlegendary` and `newTargets`), **The Watcher in
+  the Water** (`entersTapped`, `entersWithNamedCounters: { stun: 9 }`, `drawCard` trigger with `opponentsTurn`, `creatureYouControlDies` on Tentacles
+  with two optional targets): existing vocabulary. A stun counter on a permanent that would untap is removed instead (already in the engine).
+- No new decision kinds, so the bots needed nothing new.

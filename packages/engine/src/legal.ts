@@ -20,6 +20,7 @@ import {
 } from './combat.ts';
 import { type Ctx, def, obj, onBattlefield, other, withBackFace } from './context.ts';
 import { forageChoices } from './forage.ts';
+import { equipAtInstantSpeed } from './ltr-wu-rare-effects.ts'; // Lord of the Rings (21d wu-rare)
 import {
   beholdExileOptions,
   beholdManyOptions,
@@ -519,6 +520,8 @@ function priorityActions(
         // Lorwyn Eclipsed (18b, blue): Illusion Spinners, "as though it had flash if you control a Faerie".
         (!!d.flashIf && checkCondition(ctx, d.flashIf, player, obj(ctx, card))) ||
         flashFilters.some((f) => cardMatches(ctx, card, f)) ||
+        // Lord of the Rings (21d wu-rare): Borne Upon a Wind, spells have flash this turn.
+        !!s.turn.ltrFlashAll?.includes(player) ||
         // Progenitor's Icon: spells of the chosen type have flash this turn.
         !!s.turn.flashTypes?.some((f) => f.player === player && d.subtypes.includes(f.type)) ||
         // Strixhaven Brawl (15b, u): Quicken, the next sorcery spell you cast this turn.
@@ -928,7 +931,7 @@ function priorityActions(
         (a.fromGraveyard ? 'graveyard' : a.fromHand ? 'hand' : 'battlefield') !== zone
       )
         return;
-      if (a.sorcerySpeed && !sorcery) return;
+      if (a.sorcerySpeed && !sorcery && !equipAtInstantSpeed(ctx, player, source, a)) return; // Lord of the Rings (21d wu-rare): Forge Anew
       // Strixhaven (13c): Academic Probation (no activated abilities), Revel in Silence (no loyalty abilities).
       if (
         s.effects.some(
