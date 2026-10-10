@@ -3296,6 +3296,12 @@ export type StaticDef =
   | { kind: 'cantBlock' }
   /** This permanent doesn't untap during its controller's untap step (The Hobbit (20a), Bombur: `unless` the condition holds). */
   | { kind: 'doesntUntap'; unless?: ConditionDef }
+  // Lord of the Rings (21b blue): Bewitching Leechcraft
+  /**
+   * "If this creature would untap during your untap step, remove a +1/+1 counter from it instead. If you do, untap it." (A
+   * replacement of the untap step: a creature without a +1/+1 counter stays tapped; an untapped creature loses nothing.)
+   */
+  | { kind: 'untapRemovesCounter' }
   /** You may cast spells (matching the filter) as though they had flash (High Fae Trickster), while the condition holds. */
   | { kind: 'flashForAll'; filter?: CardFilter; condition?: ConditionDef }
   /**

@@ -21,6 +21,7 @@ import { tickSuspend } from './suspend.ts';
 import { checkGameOver, runSBAs } from './sba.ts';
 import { pushTrigger, resolveTop } from './stack.ts';
 import { targetCombos } from './targets.ts';
+import { untapWithCounter } from './ltr-blue-effects.ts'; // Lord of the Rings (21b blue)
 import {
   checkCondition,
   collectTriggers,
@@ -334,7 +335,8 @@ function enterStep(ctx: Ctx, step: Step): void {
         const held = s.effects.some(
           (e) => e.doesntUntap && e.affected.id === id && e.affected.zcc === o.zcc,
         );
-        if (!stays && !auraStays && !held) untap(ctx, id);
+        // Lord of the Rings (21b blue): Bewitching Leechcraft, a +1/+1 counter instead of untapping.
+        if (!stays && !auraStays && !held && !untapWithCounter(ctx, id)) untap(ctx, id);
       }
       return advanceStep(ctx); // no priority in untap (rule 502.4)
 

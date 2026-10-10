@@ -40,6 +40,7 @@ import { TDM_BLUE_EFFECTS } from './tdm-blue-effects.ts';
 import { HOB_COLORLESS_EFFECTS } from './hob-colorless-effects.ts'; // The Hobbit (20b colorless)
 import { ECL_WHITE_EFFECTS } from './ecl-white-effects.ts';
 import { HOB_WHITE_EFFECTS } from './hob-white-effects.ts'; // The Hobbit (20b white)
+import { LTR_BLUE_EFFECTS } from './ltr-blue-effects.ts'; // Lord of the Rings (21b blue)
 import { BRAWL_15B_W_EFFECTS } from './brawl-15b-w-effects.ts';
 import { BRAWL_15B_U_EFFECTS } from './brawl-15b-u-effects.ts';
 import { BRAWL_15B_G_EFFECTS } from './brawl-15b-g-effects.ts';
@@ -193,6 +194,7 @@ const BUILT_IN_EFFECTS: Record<string, CustomEffect> = {
   // Lorwyn Eclipsed (18b): white.
   ...ECL_WHITE_EFFECTS,
   ...HOB_WHITE_EFFECTS, // The Hobbit (20b, white)
+  ...LTR_BLUE_EFFECTS, // Lord of the Rings (21b blue)
   // Strixhaven Brawl (15b): multicolour, colourless and lands.
   ...BRAWL_15B_MULTI_EFFECTS,
   // Strixhaven Brawl (15b), white.
