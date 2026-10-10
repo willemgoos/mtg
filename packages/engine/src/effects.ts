@@ -68,6 +68,7 @@ import { protectedFrom } from './brawl-15b-w-effects.ts';
 import { amassPut, amassStep, recruitSteps } from './hob-20a.ts';
 import { ringBearerOf, ringTemptSteps, runRingStep } from './ltr-21a.ts'; // Lord of the Rings (21a)
 import { HOB_MULTICOLOUR_EXPANDERS } from './hob-multicolour-effects.ts'; // The Hobbit (20b multicolour)
+import { LTR_BLUE_EXPANDERS } from './ltr-blue-effects.ts'; // Lord of the Rings (21b blue)
 import { SOS_14B_C_CHOOSERS } from './sos-14b-c-effects.ts';
 import type {
   AbilityDef,
@@ -1033,6 +1034,12 @@ export function runEffects(
     // The Hobbit (20b multicolour): a custom effect that turns into other effects (a prompt built from the current game state).
     if (e.kind === 'custom' && HOB_MULTICOLOUR_EXPANDERS[e.handler]) {
       list.splice(i, 1, ...HOB_MULTICOLOUR_EXPANDERS[e.handler]!(ctx, es, e.params));
+      i--;
+      continue;
+    }
+    // Lord of the Rings (21b blue): Minas Tirith Garrison's prompt, one Human at a time.
+    if (e.kind === 'custom' && LTR_BLUE_EXPANDERS[e.handler]) {
+      list.splice(i, 1, ...LTR_BLUE_EXPANDERS[e.handler]!(ctx, es, e.params));
       i--;
       continue;
     }

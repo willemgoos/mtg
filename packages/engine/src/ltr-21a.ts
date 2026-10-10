@@ -1,5 +1,6 @@
 import { isCreature, matchesFilter, power } from './characteristics.ts';
 import { type Ctx, def, emit, obj } from './context.ts';
+import { ltrBlueScriedFromGraveyard } from './ltr-blue-effects.ts'; // Lord of the Rings (21b blue)
 import { checkCondition, forEachBattlefieldTrigger, queue } from './triggers.ts';
 import type {
   AbilityDef,
@@ -327,6 +328,7 @@ export function detectLtr(ctx: Ctx, ev: GameEvent): void {
       return;
     }
     case 'scried':
+      ltrBlueScriedFromGraveyard(ctx, ev); // Lord of the Rings (21b blue): Council's Deliberation
       // Only a scry (not a surveil), with the number of cards looked at.
       if (!ev.surveil)
         forEachBattlefieldTrigger(

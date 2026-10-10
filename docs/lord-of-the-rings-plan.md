@@ -204,3 +204,27 @@ Engine pieces (`engine/src/ltr-green-effects.ts`, hooks marked `// Lord of the R
 - Entish Restoration: `sacrificeSeveral` (a land, your choice), then an `if` on "a creature with power 4 or greater" checked after the sacrifice, choosing the
   three-land or two-land search.
 - Nothing left out. "Sacrifice three Foods" lets the engine pick which Foods (they are all alike except a Lembas card).
+
+## Phase 21b: blue (done)
+
+All 22 blue cards, `cards/src/ltr/blue.ts` (tests `cards/test/ltr-blue{,-2,-3}.test.ts`, `ai/test/ltr-blue.test.ts`). One-off engine pieces in
+`engine/src/ltr-blue-effects.ts`, hooks marked `// Lord of the Rings (21b blue)`:
+
+- Custom effects (`LTR_BLUE_EFFECTS`, registered in `context.ts`): `ltrBillFerny` (Bill Ferny's second mode: the target opponent gains
+  control of the Horse for good, it leaves combat, Bill leaves combat, three Treasures), `ltrBathSongShuffle` (chapter III: any number
+  of target cards from your graveyard shuffled in, one shuffle), `ltrExileSelfFromGraveyard` (Council's Deliberation; sets
+  `exiledThisWay` so "if you do, draw" is an `if` on `{ exiledThisWay: true }`), `ltrTapOne`.
+- Expander `ltrGarrisonTap` (`LTR_BLUE_EXPANDERS`, hook beside the Hobbit multicolour expanders in `effects.ts`): Minas Tirith
+  Garrison's "tap any number of untapped Humans, draw a card for each" as a `choose` prompt one Human at a time (Done, or a Human; the
+  next prompt is built after each tap, so no list of subsets). Summoning-sick Humans can be tapped (it is an effect, not a cost).
+- "Whenever you scry" from the graveyard (`ltrBlueScriedFromGraveyard`, called from the `scried` case in `ltr-21a.ts`): the `fromGraveyard`
+  flag of `whenYouScry` did nothing before; Council's Deliberation needs it.
+- Static `untapRemovesCounter` (`types.ts`, next to `doesntUntap`; granted by Bewitching Leechcraft through `attached.grantAbilities`) and
+  `untapWithCounter` called from the untap step in `turn.ts`: a tapped creature with a +1/+1 counter loses one and untaps, one without
+  stays tapped, an untapped one loses nothing.
+- Existing pieces used: `amassOrcs`, `whenYouScry` with `maxFromAmount` (Elvish Mariner: "up to X", X the cards looked at; the target spec
+  has `optional` so the trigger still goes on the stack with none), `resolvedThisTurn` (Elrond), `onlyFor: 'InstantOrSorcery'` mana
+  (Pelargir Survivor), `ownedBySourceController` and `blink` (Meneldor), the `castSpell` filter `'second'` (Saruman the White), `ringTempts`.
+- Notes: a spell/trigger with an "any number / up to" target that must still resolve with none (The Bath Song's mana, Mariner) needs
+  `optional: true` on the spec, or choosing no targets drops the trigger. Ioreth's "two other target legendary creatures" lists both orders
+  of each pair as separate (equivalent) activations.
