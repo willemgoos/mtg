@@ -14,6 +14,7 @@ import { addLore } from './sagas.ts';
 import { countersOnLeft, spentColors } from './ecl-18a.ts';
 import { spellsCastThisTurn } from './tdm-19a.ts';
 import { elementalTriggerCopies } from './ecl-multi-b-effects.ts';
+import { hasEnduringStory, subtypeTriggerCopies } from './hob-20a.ts';
 import { FIC_CONDITIONS } from './fic-effects.ts';
 import { FIN_CONDITIONS } from './fin-effects.ts';
 import { doubleAttackTriggers, TDM_MISC_CONDITIONS } from './tdm-misc-effects.ts';
@@ -54,6 +55,8 @@ export function checkCondition(
   subject?: GameObject,
 ): boolean {
   if (!c) return true;
+  // The Hobbit (20a): Storied, "as long as you have an enduring story".
+  if (c.kind === 'enduringStory') return hasEnduringStory(ctx, controller);
   // Secrets of Strixhaven (14b)
   if (c.kind === 'cardsLeftGraveyardThisTurn')
     return (ctx.s.turn.leftGraveyard?.[controller] ?? 0) > 0;
@@ -391,7 +394,9 @@ export function checkCondition(
     // Strixhaven Brawl (15a): Sevinne's Reclamation, "if this spell was cast from a graveyard".
     case 'castFromGraveyard': {
       const item = ctx.s.stack.find((x) => x.kind === 'spell' && x.id === self.id);
-      return item?.kind === 'spell' && !!item.flashback;
+      // The Hobbit (20a): also as the spell resolves ("If this spell was cast from a graveyard, ... instead": Moment of Glory,
+      // Plunder the Trollshaws, Tidings of War), when its stack item is gone; the card remembers where it was cast from.
+      return (item?.kind === 'spell' && !!item.flashback) || !!self.castFromGraveyardZone;
     }
     // Reality Fracture (17a): Twinned Vision, "if this spell wasn't cast from your hand".
     case 'notCastFromHand':
@@ -490,6 +495,10 @@ function queue(
   // Lorwyn Eclipsed (18b, multi-b): Twinflame Travelers, another Elemental's triggered ability triggers an additional time.
   if (a?.kind === 'triggered')
     for (let i = elementalTriggerCopies(ctx, { id: o.id, defId: o.defId, controller }); i > 0; i--)
+      ctx.s.pendingTriggers.push({ ...pending });
+  // The Hobbit (20a): Bifur, Melodic Rider, a Dwarf's triggered ability triggers an additional time.
+  if (a?.kind === 'triggered')
+    for (let i = subtypeTriggerCopies(ctx, { id: o.id, defId: o.defId, controller }); i > 0; i--)
       ctx.s.pendingTriggers.push({ ...pending });
 }
 

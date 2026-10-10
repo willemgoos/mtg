@@ -37,6 +37,11 @@ export function describeEvent(e: GameEvent, s: GameState): string | null {
     // Reality Fracture (17a fixes): Loyal Tutor.
     case 'cardsRevealed':
       return `  ${e.player} reveals ${e.cards.map((c) => cardDb.get(c.defId)?.name ?? c.defId).join(', ')}`;
+    // The Hobbit (20a).
+    case 'amassed':
+      return `  ${e.player} amasses ${e.subtype}s ${e.amount}: ${name(e.id)}`;
+    case 'enduringStory':
+      return `  ${e.player} has an enduring story`;
     case 'transformed':
       return `  transforms into ${cardDb.get(e.defId)?.name}`;
     case 'gameOver':

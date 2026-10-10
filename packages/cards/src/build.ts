@@ -60,6 +60,10 @@ const KEYWORDS: Record<string, Keyword> = {
 
 /** Scryfall "keywords" that are really ability words or triggers we model as abilities. */
 export const KEYWORDS_AS_ABILITIES = new Set([
+  // The Hobbit (20a): the rules live in the behaviour (`recruit`, `amass()`, `storied`, `subtypecycling()` in hob-vocab.ts).
+  'Recruit',
+  'Storied',
+  'Halflingcycling',
   // Tarkir: Dragonstorm (19a): the rules live in the behaviour (`mobilize()`, `endure()`, `harmonize()`, `mayBeholdDragon()`; Flurry
   // and Renew are named abilities, "Flurry —", "Renew —").
   'Mobilize',

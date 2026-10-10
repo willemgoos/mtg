@@ -51,10 +51,12 @@ Bear 2/2, Elf 1/1, Wolf 2/2 (all green), Bird Soldier 4/4 flying, Stone Boulder 
 | Affinity (1: Cantankerous Keepers) | exists as cost reduction per matching permanent (`types.ts` "affinity") |
 | Ward (2: Gandalf, Wandering Wizard; Lake-town Mariners) | exists |
 
+The rows marked missing (amass, Recruit, Storied, the cycling family) were built in 20a; see "Phase 20a" below for the names.
+
 ## Phases
 
 - **20a**: engine groundwork for the missing mechanics above (amass Goblins, Recruit, Storied and the enduring story,
-  Halflingcycling / typecycling), with tests, bot handling and Arena-style prompts.
+  Halflingcycling / typecycling), with tests, bot handling and Arena-style prompts. **Done**, see "Phase 20a" below.
 - **20b**: every card, one agent per build group in worktrees (`scripts/data/hob-groups.json`, `scripts/hob-status.ts`,
   `src/hob/<group>.ts`, registered in `src/the-hobbit.ts`). Groups (front-face names): white 28, blue 28, black 27, red 29,
   green 28, multicolour 26 (gold and hybrid), colorless 22 (artifacts and lands); 188 in all. Back faces (adventure
@@ -69,3 +71,104 @@ Bear 2/2, Elf 1/1, Wolf 2/2 (all green), Bird Soldier 4/4 flying, Stone Boulder 
 stubs) and is registered in `behaviors.ts`, `pool.ts` (`THE_HOBBIT_POOL`), `index.ts`, `cards.test.ts`; the `'hob'` set key is
 in `decks.ts`, `jumpin.ts`, `JumpIn.tsx` and `jumpInMatch.ts`. `pnpm cards:fetch` takes cards by pool name, so HOB cards
 appear in `generated/scryfall.json` as their behaviours are added (the cached bulk file already has set `hob`).
+
+## Phase 20a: engine groundwork
+
+**Done** (10 October 2026; engine in `engine/src/hob-20a.ts` plus hooks marked `// The Hobbit (20a)`, tests
+`engine/test/hob-20a-*.test.ts` with the fixture cards in `hob-fixtures.ts`, `ai/test/hob-20a.test.ts`, `web/test/hob-notes.test.ts`,
+`cards/test/hob-vocab.test.ts`; card builders in `cards/src/hob-vocab.ts`). Every engine name is in `engine/src/types.ts` (search
+"The Hobbit (20a)"). **Nothing to register for the keywords**: `Recruit`, `Storied` and `Halflingcycling` are in
+`KEYWORDS_AS_ABILITIES` (`build.ts`); `Amass` and the other cycling names were known already. The tokens `hob-goblin-army-token` and
+`hob-human-soldier-token` (`hob/tokens.ts`, `HOB_SHARED_TOKENS`) are the ones amass and recruit make; the builders only name them, so
+`the-hobbit.ts` must register `HOB_SHARED_TOKENS` (it does not need anything else).
+
+Import from `../hob-vocab.ts` (in `src/hob/*.ts`). The example is the card the builder was made for.
+
+### Amass
+
+`amassGoblins(n, who?)` / `amass(subtype, n, { who?, token? })` (an effect). "Amass Goblins N": with no Army you control, a 0/0 black
+Goblin Army token first; then you choose an Army creature you control (a prompt when there are several: "Amass Goblins 2: choose an
+Army"), it gets N +1/+1 counters and becomes a Goblin for good. The effects after it see that Army as `'chosen'`. N is a number or
+any Amount. It goes through `createToken`, so token doublers (Bard, King of Dale) work: two Armies are made and you choose one. Amass 0
+makes the token (which dies as a 0/0 at the next state-based check). `amass('Zombie', 1)` replaces the old Lazotep Plating effect
+(`u15bAmass` is gone); another type (Orc) needs `{ token }` (no Orc Army is in the set). It emits an `amassed` event (the log says
+"amasses Goblins 2").
+
+- Goblin-town Flunkies: `when({ on: 'etb' }, [amassGoblins(1)])`; Fearsome Goblin Pair: a `dies` trigger with `amassGoblins(4)`;
+  Rhovanion Rampager: `dies` with `amassGoblins({ powerOf: 'self' })` (last known power); Misty Mountains Raider: `{ on: 'youAttack' }`;
+  Bothersome Noisemaker: `{ on: 'castSpell', filter: 'noncreature' }`; Along the Crooked Way: the `cardsLeaveYourGraveyard` trigger.
+- Rage into the Valley: `draw 1, loseLife 1, amassGoblins(2)`; Down, Down to Goblin-town chapter II and the Adventure spells
+  (Clap! Snap!): `amassGoblins(1)`, `amassGoblins(2)`.
+- Tidings of War: `{ kind: 'if', condition: { kind: 'castFromGraveyard' }, then: [amassGoblins(3)], else: [amassGoblins(1)] }` with
+  `flashback`. **`castFromGraveyard` now also holds as the spell resolves** (it was for cast triggers only); Moment of Glory and
+  Plunder the Trollshaws ("if this spell was cast from a graveyard, ... instead") use the same condition.
+- Goblin Plate Mail: `when({ on: 'etb' }, [amassGoblins(1), { kind: 'attach', to: 'chosen' }])` (attaches this Equipment to the amassed Army).
+- Azog, Moria's Ruin: `[{ kind: 'destroy', what: t0 }, amassGoblins({ powerOf: t0 }, { controllerOf: 0 })]`, then the "if you controlled
+  it, draw a card" part. `powerOf` a destroyed target is its last known power; `who` is the player who amasses (an opponent chooses
+  among their own Armies). Bolg of the North's "excess damage" amount is **not built** (a one-off for 20b).
+
+### Recruit
+
+`recruit` (an effect, no arguments) = draw a card, then discard a card (your choice, from the whole hand); if it was a nonland card,
+create a 1/1 white Human Soldier (`hob-human-soldier-token`). Nothing is discarded from an empty hand, and then no token. `discard`
+got `thenIfNonland: EffectDef[]` (effects that follow only if a nonland card was discarded), which recruit uses.
+
+- Patient Instructor, Long Lake Nuisance, Esgaroth Garrison: `when({ on: 'etb' }, [recruit])`; Lake-town Lookout: a `dies` trigger;
+  Bard's Company: an `etb` and an `attacks` trigger; Great Gilded Boat: `{ on: 'youAttack' }`.
+- The Mountain-king's Return chapter I: `[recruit]`; Celebrate the Mountain-king: a second `etb` trigger with `[recruit]`; Sound the
+  Trumpets: `counter`, then an `if` (the countered spell's mana value 2 or less) with `[recruit]`; The Queen of Dale: a
+  `castSpell` trigger with `filter: 'firstNoncreature'` for the opponent's spells (check `whose`) and `[recruit]`.
+
+### Storied and the enduring story
+
+- `storied` (an ability): the static `{ kind: 'storied' }`. While a permanent with it is on the battlefield, its controller gets the
+  designation (`PlayerState.enduringStory`) as soon as they control three different artifact, legendary and/or Saga permanents (the
+  Storied permanent may be one of them; a legendary artifact counts once). It is not a trigger and doesn't use the stack: it is
+  checked with the state-based actions (so before the legend rule or 0 toughness take a third permanent away), and it can't be lost.
+  Three artifacts without a Storied permanent earn nothing, even if one arrives later. The log says "p1 has an enduring story" and
+  the player badge shows a book with a tooltip.
+- `enduringStory` (a condition, `{ kind: 'enduringStory' }`): the designation, or the situation that gives it, for the permanent's
+  controller. It plugs into every `condition` there is:
+  - `storyPump(power, toughness, keywords?)` (a `while` static): Óin the Brave `storyPump(1, 0, ['haste'])`; Ori, Keeper of Songs
+    `storyPump(1, 0, ['vigilance'])`.
+  - `storyAnthem(power, toughness, filter?)` (an `anthem` static): Fíli the Pathfinder `storyAnthem(1, 1)`.
+  - `attackTax` has `condition`: Dáin, Lord of the Iron Hills
+    `{ kind: 'static', effect: { kind: 'attackTax', amount: 1, condition: enduringStory } }`.
+  - `doesntUntap` has `unless`: Bombur, Gentle Dreamer `{ kind: 'doesntUntap', unless: enduringStory }`.
+  - `storyTriggersTwice('Dwarf')`: Bifur, Melodic Rider ("if a triggered ability of a Dwarf you control triggers, that ability
+    triggers an additional time"; includes Bifur itself; the engine name is `subtypeTriggersTwice { subtype, condition? }`).
+  - `ifEnduringStory(then, else?)` (an `if` effect): Balin, Loremaster's "if you have an enduring story, Balin deals X damage".
+  - Thorin Oakenshield's "artifacts and creatures you control have ward {1}": an `anthem` static (`affects: 'creaturesYouControl'`, `anyPermanent: true`,
+    `filter: { anyOf: [{ types: ['Artifact'] }, { types: ['Creature'] }] }`, `power: 0, toughness: 0`) with `condition: enduringStory` and
+    `keywords: ['wardOne']` (the granted ward {1} keyword); tested with a fixture.
+  - **Not built** (one-offs for 20b): Kíli's "you may pay {0} rather than the equip cost of the first equip ability you activate each turn".
+- The tooltip of a Storied card says where the story stands ("Not yet: 2 of the 3 artifacts, legendaries and/or Sagas." / "You have
+  an enduring story."). The `Enduring Story` card of the set is only the designation's marker, not a token: nothing to build.
+
+### Landcycling, Mountaincycling, Halflingcycling
+
+`landcycling(cost)`, `basicLandcycling(cost)`, `subtypecycling(subtype, cost)`, `typecycling(name, cost, search)` (abilities; `cost` is a
+mana string like `'{2}'`): "{cost}, Discard this card: Search your library for a [land / basic land / <subtype>] card, reveal it, put
+it into your hand, then shuffle." Activated from the hand (`fromHand`; the discard is a cost). Last Light of Durin's Day
+`subtypecycling('Mountain', '{2}')`; Hobbit Hole `subtypecycling('Halfling', '{4}')` (beside its land abilities: "{T}, Sacrifice this land:
+search for a basic land, onto the battlefield tapped"). Plain `Cycling` is `cycling(cost)` in `fin/helpers.ts`.
+
+### Other vocabulary the set shares (all existing, listed so nobody rebuilds it)
+
+- `sacrificeLandForCounters(cost, subtypes)` (new): the five two-colour lands' "{2}{W}{U}, {T}, Sacrifice this land: Put two +1/+1
+  counters on target Human you control. Activate only as a sorcery." Lake-town `('{2}{W}{U}', ['Human'])`, Mirkwood
+  `('{2}{B}{G}', ['Bear', 'Spider', 'Wolf'])`, Iron Hills `['Dwarf']`, Goblin-town `['Goblin', 'Orc']`, Elvenking's Halls `['Elf']`. The
+  land enters tapped (`entersTapped`) and taps for its two colours as usual.
+- Drawing: the `drawSecondCard` trigger (Bard the Bowman, Lakeshore Apothecary, Master's Councillors; Gleaming Splendor with
+  `whose: 'opponents'`) and the `cardsDrawnThisTurn` condition (Lake-town Toymaker); Bard, King of Dale's replacements exist.
+- `lookAndTake` with an `anyOf` filter: Dáin's Company, Boughside Wanderers ("rest on the bottom in a random order").
+- Triggers twice: `equippedTriggersTwice` (Wizard's Staff); granted ward {1}: the `wardOne` keyword (Dwarven Mattock, Thorin Oakenshield).
+- Equipment attached as it enters: `{ kind: 'attach', to, what? }` (Dwarven Mattock, Dwarven Shortsword, Iron Hills Stalwart, Dáin Ironfoot).
+- Ferocious (`controlsCreature` with `minPower: 4`), Landfall, Treasure, Crew, Kicker, Flashback, Gift, Behold: as in the table above.
+
+### Bots
+
+The evaluation counts the enduring story and the way to it (`WEIGHTS.enduringStory`, `WEIGHTS.storyProgress`, only with a Storied
+permanent to use them); recruit's discard and amass's Army are chosen by the usual simulation; a bot with nothing better to do in
+its second main phase cycles a dead card (`chooseCycling` in `ai/src/heuristic.ts`: a spell costing more than its lands plus two,
+or a land with six in play; a land search is skipped with seven lands in play and hand). That applies to every set's cycling cards.

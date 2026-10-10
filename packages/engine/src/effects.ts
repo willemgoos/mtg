@@ -64,6 +64,7 @@ import { planeswalkersSurvive, tokenMultiplier } from './brawl-15a-w-effects.ts'
 import { crownReplacement } from './ecl-crown.ts';
 import { extraEntryCounters } from './tdm-misc-effects.ts';
 import { protectedFrom } from './brawl-15b-w-effects.ts';
+import { amassPut, amassStep, recruitSteps } from './hob-20a.ts';
 import { SOS_14B_C_CHOOSERS } from './sos-14b-c-effects.ts';
 import type {
   AbilityDef,
@@ -904,6 +905,11 @@ export function resolveAmount(ctx: Ctx, es: EffectSource, amount: Amount): numbe
     // Final Fantasy (11c): "its power" for a creature that died (Jenova's Mutants).
     if (amount.powerOf === 'subject' && es.subject)
       return Math.max(0, ctx.s.objects[es.subject.id]?.lastPower ?? 0);
+    // The Hobbit (20a): Azog, Moria's Ruin, "where X is that creature's power" once the target was destroyed: its last known power.
+    if (typeof amount.powerOf === 'object' && 'target' in amount.powerOf) {
+      const t = es.targets[amount.powerOf.target];
+      if (t && 'object' in t) return Math.max(0, ctx.s.objects[t.object.id]?.lastPower ?? 0);
+    }
     return 0;
   }
   if ('event' in amount) return es.amount ?? 0;
@@ -1069,6 +1075,18 @@ export function runEffects(
         1,
         ...(options.length ? [{ kind: 'choose', options: [keep, ...options] } as EffectDef] : []),
       );
+      i--;
+      continue;
+    }
+    // The Hobbit (20a): "amass <type> N" (the player is the controller, or the one `who` names) and "recruit".
+    if (e.kind === 'amass') {
+      const player = e.who === undefined ? es.controller : playersOf(ctx, es, e.who)[0];
+      list.splice(i, 1, ...(player ? amassStep(ctx, es, e, player, resolveAmount(ctx, es, e.amount)) : []));
+      i--;
+      continue;
+    }
+    if (e.kind === 'recruit') {
+      list.splice(i, 1, ...recruitSteps(e));
       i--;
       continue;
     }
@@ -1917,6 +1935,7 @@ export function runEffects(
         ctx.s.decision = {
           kind: 'chooseOption',
           player: e.opponent ? other(controller) : (owner ?? controller),
+          ...(e.title ? { title: e.title } : {}),
           options: e.options,
           resume,
           thenPriority,
@@ -2191,6 +2210,8 @@ export function runEffects(
           ...(e.then ? { then: e.then } : {}),
           // Reality Fracture (17c): Garruk, Veiled Butcher.
           ...(e.drawUnlessNonland !== undefined ? { drawUnlessNonland: e.drawUnlessNonland } : {}),
+          // The Hobbit (20a): Recruit.
+          ...(e.thenIfNonland ? { thenIfNonland: e.thenIfNonland } : {}),
           resume,
           thenPriority,
         };
@@ -3844,6 +3865,13 @@ function runEffectInner(ctx: Ctx, es: EffectSource, e: EffectDef): void {
     }
     case 'giftGiven':
       emit(ctx, { type: 'giftGiven', player: es.controller });
+      return;
+    // The Hobbit (20a): the counters and the type of amass (the Army was chosen before).
+    case 'amassPut':
+      amassPut(ctx, es, e, (id, n, by) => addCounters(ctx, id, n, undefined, by));
+      return;
+    case 'amass': // expanded by runEffects
+    case 'recruit':
       return;
     case 'tokenCopy': {
       const n = e.count !== undefined ? resolveAmount(ctx, es, e.count) : 1;

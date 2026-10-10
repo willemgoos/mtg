@@ -372,7 +372,13 @@ export function attackTax(ctx: Ctx, player: PlayerId): number {
   for (const id of ctx.s.battlefield) {
     if (obj(ctx, id).controller === player) continue;
     for (const a of def(ctx, id).abilities)
-      if (a.kind === 'static' && a.effect.kind === 'attackTax') tax += a.effect.amount;
+      if (
+        a.kind === 'static' &&
+        a.effect.kind === 'attackTax' &&
+        // The Hobbit (20a): Dáin, Lord of the Iron Hills, only with an enduring story.
+        checkCondition(ctx, a.effect.condition, obj(ctx, id).controller, obj(ctx, id))
+      )
+        tax += a.effect.amount;
   }
   return tax;
 }

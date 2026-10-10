@@ -93,23 +93,7 @@ export const BRAWL_15B_U_EFFECTS: Record<string, CustomEffect> = {
     seek(ctx, es.controller, (id) => def(ctx, id).types.includes('Land'));
   },
 
-  /**
-   * Amass Zombies 1 (Lazotep Plating): put a +1/+1 counter on an Army you control, which is also a Zombie;
-   * if you don't control one, first create a 0/0 black Zombie Army token.
-   */
-  u15bAmass(ctx, es) {
-    let army = ctx.s.battlefield.find(
-      (id) =>
-        obj(ctx, id).controller === es.controller &&
-        def(ctx, id).subtypes.includes('Army') &&
-        def(ctx, id).types.includes('Creature'),
-    );
-    if (army === undefined) army = makeToken(ctx, SOC_15B_U_ARMY, es.controller);
-    const o = obj(ctx, army);
-    if (!def(ctx, army).subtypes.includes('Zombie') && !o.addedSubtypes?.includes('Zombie'))
-      o.addedSubtypes = [...(o.addedSubtypes ?? []), 'Zombie'];
-    addCounters(ctx, army, 1);
-  },
+  // Amass Zombies 1 (Lazotep Plating) is the general amass effect now (The Hobbit (20a)), `amass()` in hob-vocab.ts.
 
   /**
    * Proliferate. Simplification: the engine chooses for you, adding one more of each kind of counter to every permanent

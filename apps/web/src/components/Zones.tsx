@@ -11,6 +11,7 @@ import {
 } from '@mtg/engine';
 import { useEffect } from 'react';
 import { Card, CardBack, type CardMark, cardImage, type HoverFn } from './Card.tsx';
+import { ENDURING_STORY_BADGE } from '../game/notes.ts';
 import { LifeCounter } from './LifeCounter.tsx';
 
 export interface ZoneHandlers {
@@ -380,6 +381,14 @@ export function PlayerBadge({
           <span className="badge__crown" title="The monarch: draws a card at their end step">
             <svg viewBox="0 0 24 16" aria-hidden>
               <path d="M2 14 L4 4 L9 9 L12 2 L15 9 L20 4 L22 14 Z" />
+            </svg>
+          </span>
+        )}
+        {/* The Hobbit (20a): the enduring story, a designation for the rest of the game. */}
+        {ps.enduringStory && (
+          <span className="badge__story" title={ENDURING_STORY_BADGE} data-testid="enduring-story">
+            <svg viewBox="0 0 24 24" aria-hidden>
+              <path d="M4 3h13a3 3 0 0 1 3 3v14H7a3 3 0 0 1-3-3Z M7 18h13M8 7h8M8 11h6" />
             </svg>
           </span>
         )}

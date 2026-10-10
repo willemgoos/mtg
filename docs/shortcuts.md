@@ -183,6 +183,18 @@ from) when it's fixed. Older phases keep their own "Simplifications" lists in `d
 - [ ] Teval, Arbiter of Virtue: the cast menu doesn't say which graveyard cards a delve cast will exile (they're picked
       one at a time after choosing it).
 
+## The Hobbit (engine, phase 20a)
+
+- [ ] Storied / the enduring story: the designation is recorded at the next state-based check (and whenever a condition is read,
+      the live situation counts as having it), so a Storied permanent whose third artifact, legendary or Saga enters and leaves
+      again inside one resolution, with no state-based check in between, doesn't give the story (the rules give it the moment
+      you control the third). Everything that waits for a priority or a state-based check is exact (the legend rule, 0 toughness).
+- [ ] Typecycling (Landcycling, Mountaincycling, Halflingcycling): it is activated from the hand and discards as a cost, but the
+      engine has no "whenever you cycle" event for any cycling card (none in the pool, The Hobbit has none). A changeling in the
+      library isn't found by a search for its types (the library filter reads printed subtypes).
+- [ ] Bifur, Melodic Rider (`subtypeTriggersTwice`): for a Dwarf that has left the battlefield (its dies trigger) the Dwarf type
+      is read from its printed card (and changeling), not from effects that had made it a Dwarf.
+
 ## Jump In slot cards (`jumpin-slots.ts`)
 
 - [ ] Polygraph Orb: collect evidence only offers cards with a mana value; the rules also let you exile lands and other

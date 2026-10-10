@@ -21,7 +21,12 @@ import { tickSuspend } from './suspend.ts';
 import { checkGameOver, runSBAs } from './sba.ts';
 import { pushTrigger, resolveTop } from './stack.ts';
 import { targetCombos } from './targets.ts';
-import { collectTriggers, nextPendingTriggerIndex, triggeredAbility } from './triggers.ts';
+import {
+  checkCondition,
+  collectTriggers,
+  nextPendingTriggerIndex,
+  triggeredAbility,
+} from './triggers.ts';
 import type { ContinuousEffect, ObjectId, PlayerId, Step } from './types.ts';
 
 export const HAND_SIZE = 7;
@@ -312,7 +317,11 @@ function enterStep(ctx: Ctx, step: Step): void {
         if (o.controller !== ap) continue;
         o.summoningSick = false;
         const stays = def(ctx, id).abilities.some(
-          (a) => a.kind === 'static' && a.effect.kind === 'doesntUntap',
+          (a) =>
+            a.kind === 'static' &&
+            a.effect.kind === 'doesntUntap' &&
+            // The Hobbit (20a): Bombur, Gentle Dreamer, "unless you have an enduring story".
+            !(a.effect.unless && checkCondition(ctx, a.effect.unless, ap, obj(ctx, id))),
         );
         const auraStays = s.battlefield.some(
           (source) =>

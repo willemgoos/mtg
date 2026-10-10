@@ -1101,6 +1101,9 @@ export type TriggerDef =
   | { on: 'opponentCreaturesDealtExcessNoncombat' };
 
 export type ConditionDef =
+  // The Hobbit (20a): Storied
+  /** "As long as you have an enduring story" / "if you have an enduring story": the permanent's controller has the designation. */
+  | { kind: 'enduringStory' }
   // Strixhaven Brawl (15b, g): Orochi Merge-Keeper
   /** The source is modified (has counters, or an Equipment or Aura you control attached). */
   | { kind: 'sourceModified' }
@@ -1285,7 +1288,7 @@ export type ConditionDef =
   /** The source is a creature right now (Great Hall of the Biblioplex once animated). */
   | { kind: 'sourceIsCreature' }
   // Strixhaven Brawl (15a): Sevinne's Reclamation
-  /** This spell was cast from a graveyard (flashback). */
+  /** This spell was cast from a graveyard (flashback), also read as it resolves (The Hobbit (20a)). */
   | { kind: 'castFromGraveyard' }
   // Reality Fracture (17a): Twinned Vision
   /** This spell wasn't cast from its owner's hand (flashback, from exile, a copy). */
@@ -1993,6 +1996,8 @@ export type EffectDef =
       ownerOf?: number;
       /** An opponent chooses (Bandit's Talent). */
       opponent?: boolean;
+      /** The heading of the prompt, after the card's name (The Hobbit (20a), amass: "Amass Goblins 2: choose an Army"). */
+      title?: string;
       options: { label: string; effects: EffectDef[] }[];
     }
   /**
@@ -2537,6 +2542,9 @@ export type EffectDef =
       // Reality Fracture (17c): Garruk, Veiled Butcher
       /** Once the discarding is done, the controller draws a card unless this player discarded at least this many nonland cards. */
       drawUnlessNonland?: number;
+      // The Hobbit (20a): Recruit
+      /** These effects follow once the discarding is done, only if a nonland card was discarded ("If you discarded a nonland card, ..."). */
+      thenIfNonland?: EffectDef[];
     }
   /** Put the top N cards of your library into your graveyard. */
   | {
@@ -2806,6 +2814,24 @@ export type EffectDef =
    * to `TDM_SPIRIT` ('tdm-spirit-token', a 0/0 white Spirit creature).
    */
   | { kind: 'endure'; amount: Amount; what?: Ref; token?: CardDefId }
+  // The Hobbit (20a): Amass, Recruit
+  /**
+   * "Amass <type> N" (rule 701.47): if the player controls no Army creature, they first create a 0/0 black <type> Army creature
+   * token (`token`, a 0/0 black <type> Army definition); then they choose an Army creature they control (asked when there are several), put N +1/+1 counters on it,
+   * and it becomes <type> in addition to its other types (for good). The chosen Army is "the amassed Army" (`'chosen'` in the
+   * effects that follow: Goblin Plate Mail attaches itself to it). N may be 0: the Army is still made and chosen. `subtype` is
+   * singular ('Goblin' for "amass Goblins"). `who` is the player who amasses (default the controller; Azog: `{ controllerOf: 0 }`,
+   * no player if the target is missing). `tokenMade` is internal (the token was created already).
+   */
+  | { kind: 'amass'; subtype: string; amount: Amount; token: CardDefId; who?: Ref; tokenMade?: boolean }
+  /** Internal: the second half of amass, the chosen Army gets its counters and its type. */
+  | { kind: 'amassPut'; army: ObjectId; subtype: string; amount: number; player: PlayerId }
+  /**
+   * "Recruit" (you recruit): draw a card, then discard a card; if you discarded a nonland card, create a 1/1 white Human Soldier
+   * creature token (`token`, default 'hob-human-soldier-token'). The discard is your choice. Nothing is discarded from an empty
+   * hand, and no token is made then.
+   */
+  | { kind: 'recruit'; token?: CardDefId }
   /** The controller scries N (asks them to order the top cards). */
   | {
       kind: 'scry';
@@ -3143,8 +3169,8 @@ export type StaticDef =
   /** Instant and sorcery spells you control have lifelink. */
   | { kind: 'instantsSorceriesLifelink' }
   | { kind: 'cantBlock' }
-  /** This permanent doesn't untap during its controller's untap step. */
-  | { kind: 'doesntUntap' }
+  /** This permanent doesn't untap during its controller's untap step (The Hobbit (20a), Bombur: `unless` the condition holds). */
+  | { kind: 'doesntUntap'; unless?: ConditionDef }
   /** You may cast spells (matching the filter) as though they had flash (High Fae Trickster), while the condition holds. */
   | { kind: 'flashForAll'; filter?: CardFilter; condition?: ConditionDef }
   /**
@@ -3332,6 +3358,19 @@ export type StaticDef =
   | { kind: 'hexproofFromOwnColors' }
   /** If a triggered ability of another Elemental you control triggers, it triggers an additional time (Twinflame Travelers). */
   | { kind: 'elementalTriggersTwice' }
+  // The Hobbit (20a): Storied
+  /**
+   * Storied (like Ascend): "If you control three or more artifacts, legendaries, and/or Sagas, you have an enduring story for the
+   * rest of the game." A static ability that works while the permanent is on the battlefield; it isn't a trigger and doesn't use
+   * the stack. Three different permanents count (a legendary artifact counts once). The designation is on the player
+   * (`PlayerState.enduringStory`) and can't be removed.
+   */
+  | { kind: 'storied' }
+  /**
+   * "If a triggered ability of a <subtype> you control triggers, that ability triggers an additional time" (Bifur, Melodic Rider:
+   * `condition: { kind: 'enduringStory' }`). Includes the source itself; each source adds one more time.
+   */
+  | { kind: 'subtypeTriggersTwice'; subtype: string; condition?: ConditionDef }
   /**
    * "Once each turn, you may cast a spell with mana value less than or equal to <amount> from among cards exiled with this
    * permanent this turn without paying its mana cost" (Maralen, Fae Ascendant). The cards are marked `exiledWithThisTurn`.
@@ -3435,7 +3474,8 @@ export type StaticDef =
     }
   // Doom Prevails (9e).
   /** Creatures can't attack you unless their controller pays this for each (Propaganda). */
-  | { kind: 'attackTax'; amount: number }
+  // The Hobbit (20a): Dáin, Lord of the Iron Hills (`condition`: only while it holds)
+  | { kind: 'attackTax'; amount: number; condition?: ConditionDef }
   /** Nonland cards in your hand have miracle {0}: the first card you draw each turn may be cast free (Molecule Man). */
   | { kind: 'miracleZero' }
   // Secrets of Strixhaven (14b): Lorehold, the Historian
@@ -3950,6 +3990,9 @@ export interface PlayerState {
   // Lorwyn Eclipsed (18b, white): Morningtide's Light
   /** "Prevent all damage that would be dealt to you" until this player's next turn begins. */
   damagePrevented?: boolean;
+  // The Hobbit (20a): Storied
+  /** The player has an enduring story (for the rest of the game; see the 'storied' static). */
+  enduringStory?: boolean;
   landsPlayedThisTurn: number;
   attackedThisTurn: boolean;
   drewFromEmptyLibrary: boolean;
@@ -4508,6 +4551,8 @@ export type Decision =
       then?: EffectDef[];
       // Reality Fracture (17c): Garruk, Veiled Butcher
       drawUnlessNonland?: number;
+      // The Hobbit (20a): Recruit
+      thenIfNonland?: EffectDef[];
       resume: PausedResolution;
       thenPriority: PlayerId;
     }
@@ -5158,6 +5203,11 @@ export type GameEvent =
   /** `nth`: how many cards that player has drawn this turn, including this one. */
   | { type: 'cardDrawn'; player: PlayerId; id: ObjectId; nth: number }
   | { type: 'shuffled'; player: PlayerId }
+  // The Hobbit (20a)
+  /** `player` got an enduring story (a third artifact, legendary or Saga while they control a Storied permanent). */
+  | { type: 'enduringStory'; player: PlayerId }
+  /** `player` amassed: `id` is the Army that got the counters, which is now `subtype` too. */
+  | { type: 'amassed'; player: PlayerId; id: ObjectId; subtype: string; amount: number }
   | { type: 'mulligan'; player: PlayerId; count: number }
   | { type: 'scried'; player: PlayerId; top: number; bottom: number }
   | { type: 'searched'; player: PlayerId; id: ObjectId }
