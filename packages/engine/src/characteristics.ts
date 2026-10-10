@@ -463,6 +463,7 @@ export function countOf(
       0,
     );
   if (a.count === 'creaturesYouLostThisTurn') return ctx.s.turn.creaturesLost?.[player] ?? 0;
+  if (a.count === 'permanentsSacrificedThisTurn') return ctx.s.turn.ltrSacrificed ?? 0; // Lord of the Rings (21d multi-rare)
   // Lorwyn Eclipsed (18b, white): Kinbinding.
   if (a.count === 'creaturesEnteredThisTurn')
     return ctx.s.turn.creaturesEntered?.filter((e) => e.player === player).length ?? 0;
@@ -561,7 +562,7 @@ export function countOf(
   if (a.count === 'cardsDiscardedThisTurn') return ctx.s.turn.discards?.[player] ?? 0;
   if (a.count === 'permanentsOpponentsControl')
     return ctx.s.battlefield.filter(
-      (id) => obj(ctx, id).controller !== player && matchesFilter(ctx, id, a.filter),
+      (id) => obj(ctx, id).controller !== player && matchesFilter(ctx, id, a.filter, sourceId), // Lord of the Rings (21d multi-rare): the source for "attached to it" (Shagrat)
     ).length;
   if (a.count === 'cardsInHand') return ctx.s.players[player].hand.length;
   // Strixhaven (13c)

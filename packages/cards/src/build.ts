@@ -352,7 +352,21 @@ export function wardCostOf(oracle: string): CardDefinition['wardCost'] | undefin
   // Reality Fracture (17a): Emrakul, the Exigent Doom.
   if (/Ward—Sacrifice three permanents\./.test(oracle))
     return { mana: none, sacrificePermanents: 3 };
-  const m = /Ward(?: |—)\{(\d+)\}(?:, Pay (\d+) life)?/.exec(oracle);
+  // (Lord of the Rings, 21d: "Vigilance, ward {1}" is lowercase after the first keyword: Pippin, Thorin Oakenshield, Koma.)
+  // Lord of the Rings (21d multi-rare): Sauron, the Dark Lord; Saruman of Many Colors.
+  if (/Ward—Sacrifice a legendary artifact or legendary creature\./.test(oracle))
+    return {
+      mana: none,
+      sacrificeMatching: {
+        anyOf: [
+          { types: ['Artifact'], supertypes: ['Legendary'] },
+          { types: ['Creature'], supertypes: ['Legendary'] },
+        ],
+      },
+    };
+  if (/Ward—Discard an enchantment, instant, or sorcery card\./.test(oracle))
+    return { mana: none, discardMatching: { types: ['Enchantment', 'Instant', 'Sorcery'] } };
+  const m = /[Ww]ard(?: |—)\{(\d+)\}(?:, Pay (\d+) life)?/.exec(oracle);
   if (!m) return undefined;
   return {
     mana: { generic: Number(m[1]), colored: {} },

@@ -53,6 +53,8 @@ export function protectedFrom(ctx: Ctx, targetId: ObjectId, sourceId: ObjectId):
       e.affected.id === targetId &&
       e.affected.zcc === target.zcc &&
       ((e.protectionFrom !== undefined && colors.includes(e.protectionFrom)) ||
+        // Lord of the Rings (21d multi-rare): Pippin, Guard of the Citadel, protection from a card type.
+        (e.protectionFromType !== undefined && def(ctx, sourceId).types.includes(e.protectionFromType)) ||
         // Lorwyn Eclipsed (18b, multi-a): Figure of Fable, protection from each of your opponents.
         (e.protectionFromOthersThan !== undefined &&
           source.controller !== e.protectionFromOthersThan)),

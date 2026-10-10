@@ -103,6 +103,9 @@ export interface SpellDef {
   escalate?: number;
   /** Strixhaven Brawl (15a): Battle Screech: the creatures tapped for `escalate` must match this (white). */
   escalateFilter?: CardFilter;
+  // Lord of the Rings (21d multi-rare): Flame of Anor
+  /** A mode (or combination of modes) that can be chosen only while this holds as the spell is cast ("if you control a Wizard as you cast this spell, you may choose two instead"). */
+  onlyIf?: ConditionDef;
 }
 
 export interface CardDefinition {
@@ -169,6 +172,11 @@ export interface CardDefinition {
     // Reality Fracture (17a): Emrakul, the Exigent Doom
     /** "Ward—Sacrifice three permanents." */
     sacrificePermanents?: number;
+    // Lord of the Rings (21d multi-rare): Sauron, the Dark Lord; Saruman of Many Colors
+    /** "Ward—Sacrifice a legendary artifact or legendary creature": a permanent matching this, chosen by the player. */
+    sacrificeMatching?: CardFilter;
+    /** "Ward—Discard an enchantment, instant, or sorcery card": a card in hand matching this, chosen by the player. */
+    discardMatching?: CardFilter;
   };
   /** "This spell can't be countered." */
   uncounterable?: boolean;
@@ -1076,6 +1084,20 @@ export type TriggerDef =
   | { on: 'playerLosesLife'; whose: 'you' | 'opponent' }
   // Tarkir: Dragonstorm (19b, misc): Hollowmurk Siege, Stalwart Successor
   /** Whenever one or more counters (of any kind) are put on a creature you control; "that creature" is the subject. */
+  // Lord of the Rings (21d multi-rare): Aragorn, Company Leader
+  /** Whenever you put one or more counters on this creature (all those put in one resolution are one trigger; the kinds are remembered). */
+  | { on: 'countersPutOnSelf' }
+  // Lord of the Rings (21d multi-rare): Shelob, Child of Ungoliant
+  /** Whenever another creature dealt damage this turn by a Spider you controlled dies (the creature is gone: the trigger's amount names the record in `ltrSpiderDamaged`). */
+  | { on: 'creatureDamagedBySpiderDies' }
+  // Lord of the Rings (21d multi-rare): King of the Oathbreakers
+  /** Whenever this or another Spirit you control becomes the target of a spell; "it" is the subject. */
+  | { on: 'spiritYouControlTargetedBySpell' }
+  /** Whenever this or another Spirit you control phases in; "it" is the subject. */
+  | { on: 'spiritYouControlPhasesIn' }
+  // Lord of the Rings (21d multi-rare): Tom Bombadil
+  /** Whenever the final chapter ability of a Saga you control resolves. */
+  | { on: 'finalChapterResolves' }
   | {
       on: 'counterPutOnYourCreature';
       // The Hobbit (20b multicolour): The Great Goblin
@@ -1481,6 +1503,9 @@ export interface CardFilter {
   // Lord of the Rings (21b red): Grishnákh, Brash Instigator
   /** Power at most that of the creature that caused the trigger ("power less than or equal to the amassed Army's power"). */
   maxPowerOfSubject?: boolean;
+  // Lord of the Rings (21d multi-rare): Saruman of Many Colors
+  /** Mana value at most that of the spell that caused the trigger ("equal or lesser mana value than that spell"). */
+  atMostManaValueOfSubject?: boolean;
   /** Mana value equal to the source's named counters plus `plus` (Wishing Well). */
   manaValueIsSourceCounters?: { name: string; plus: number };
   /** Not the creature that caused the trigger (Pawpatch Recruit). */
@@ -1818,6 +1843,9 @@ export type Amount =
   // Lord of the Rings (21b black): Nasty End, Gríma Wormtongue
   /** 1 if the creature sacrificed to pay for this was legendary, else 0. */
   | { sacrificedLegendary: true }
+  // Lord of the Rings (21d multi-rare): The Balrog, Durin's Bane
+  /** Permanents sacrificed this turn, by any player ("costs {1} less to cast for each permanent sacrificed this turn"). */
+  | { count: 'permanentsSacrificedThisTurn' }
   /** Creatures that died under your control this turn (Season of Loss). */
   | { count: 'creaturesYouLostThisTurn' }
   // Lorwyn Eclipsed (18b, white): Kinbinding
@@ -2779,7 +2807,13 @@ export type EffectDef =
   /** Put named counters on the source (Drake Hatcher), or on `to`. */
   | { kind: 'namedCounters'; name: string; amount: Amount; to?: Ref }
   /** Look at the top N, split them into two piles; an opponent picks one for your hand (Curator of Destinies). */
-  | { kind: 'piles'; count: number }
+  | {
+      kind: 'piles';
+      count: number;
+      // Lord of the Rings (21d multi-rare): Sauron's Ransom
+      /** An opponent separates the cards into the piles and you choose one for your hand (the other goes to your graveyard). */
+      opponentSplits?: boolean;
+    }
   /**
    * Reveal cards from the top of your library until a creature card; it goes
    * to your hand, the rest to the bottom in a random order.
@@ -3412,6 +3446,12 @@ export type StaticDef =
   | { kind: 'ltrDrawTwiceEmptyHand' }
   /** Thranduil, the Elvenking: this permanent has all activated abilities of all Elf cards in its controller's graveyard. */
   | { kind: 'graveyardElfAbilities' }
+  // Lord of the Rings (21d multi-rare): Sharkey, Tyrant of the Shire
+  /**
+   * Activated abilities of lands your opponents control can't be activated unless they're mana abilities, and this permanent has all
+   * those activated abilities (mana abilities excepted); mana of any type can be spent to activate its abilities.
+   */
+  | { kind: 'ltrOpponentLandAbilities' }
   /** Prevent all combat damage dealt to and by this creature (Fog Bank). */
   | { kind: 'preventCombatDamage' }
   // Reality Fracture (17a): Loot, the Anomaly
@@ -4012,6 +4052,13 @@ export interface GameObject {
   // The Hobbit (20b black)
   /** Supper for Spiders: it is a Food artifact (it loses its other types and subtypes, keeps its other characteristics) and has the Food ability. */
   supperFood?: boolean;
+  // Lord of the Rings (21d multi-rare): Aragorn, Company Leader
+  /** The kinds of counters put on it in each batch that set off its "counters put on this" trigger, by batch number (the trigger's amount). */
+  ltrCounterKinds?: Record<number, string[]>;
+  /** The number of the last such batch. */
+  ltrBatchSeq?: number;
+  /** Lord of the Rings (21d multi-rare): the mana value this spell had on the stack, X included (Saruman of Many Colors). */
+  ltrCastMV?: number;
   /** This card (not a token) was put into a graveyard from the battlefield during this turn number (Supper for Spiders). */
   diedTurn?: number;
   /** Inside Information: its castable-by player may cast or play it paying life equal to its mana value rather than its mana cost. */
@@ -4402,6 +4449,13 @@ export interface TurnState {
   toughnessDamage?: PlayerId[];
   /** Lord of the Rings (21b white): creatures (`id:zcc`) that assign combat damage equal to their toughness rather than their power this turn (Bill the Pony). */
   ltrToughnessRather?: string[];
+  // Lord of the Rings (21d multi-rare)
+  /** Players creatures attacked this turn (a player, not a planeswalker): Faramir, Prince of Ithilien. */
+  ltrAttackedPlayers?: PlayerId[];
+  /** Permanents sacrificed this turn: The Balrog, Durin's Bane. */
+  ltrSacrificed?: number;
+  /** Creatures dealt damage by a Spider this turn (Shelob): the creature, its card, and the Spider's controller. `n` numbers the record. */
+  ltrSpiderDamaged?: { id: ObjectId; zcc: number; by: PlayerId; defId: CardDefId; n: number }[];
   /** 0 during the mulligan phase. */
   number: number;
   activePlayer: PlayerId;
@@ -4664,6 +4718,9 @@ export interface ContinuousEffect {
   // Lorwyn Eclipsed (18b, multi-a): Figure of Fable
   /** Protection from everything controlled by anyone but this player ("protection from each of your opponents"). */
   protectionFromOthersThan?: PlayerId;
+  // Lord of the Rings (21d multi-rare): Pippin, Guard of the Citadel
+  /** Protection from this card type: sources that are cards (or permanents) of this type ("protection from creatures"). */
+  protectionFromType?: CardType;
   // Final Fantasy (11c): leftovers
   /** It must be blocked this turn if able (Magitek Scythe). */
   mustBeBlocked?: boolean;
@@ -4738,6 +4795,9 @@ export interface PausedResolution extends EffectSource {
     // Tarkir: Dragonstorm (19a): Omen
     /** Cast as an Omen: shuffled into its owner's library as it resolves. */
     omen?: boolean;
+    // Lord of the Rings (21d multi-rare): Tom Bombadil
+    /** The ability is a Saga's final chapter ability: when it has resolved, "the final chapter ability resolves" triggers. */
+    ltrFinalChapter?: { source: ObjectRef; controller: PlayerId };
   };
 }
 
@@ -4968,6 +5028,9 @@ export type Decision =
       kind: 'splitPiles';
       player: PlayerId;
       cards: ObjectId[];
+      // Lord of the Rings (21d multi-rare): Sauron's Ransom
+      /** Whose library the cards are from, when `player` (who splits them) isn't that player: the owner then chooses a pile. */
+      owner?: PlayerId;
       resume: PausedResolution;
       thenPriority: PlayerId;
     }
@@ -4976,6 +5039,9 @@ export type Decision =
       kind: 'choosePile';
       player: PlayerId;
       owner: PlayerId;
+      // Lord of the Rings (21d multi-rare): Sauron's Ransom
+      /** The owner chooses (an opponent split the piles): they see only the face-up pile. */
+      reversed?: boolean;
       faceUp: ObjectId[];
       faceDown: ObjectId[];
       resume: PausedResolution;
@@ -5192,6 +5258,9 @@ export type Decision =
       player: PlayerId;
       creatures: number;
       permanents: number;
+      // Lord of the Rings (21d multi-rare): Sauron, the Dark Lord; Saruman of Many Colors
+      /** Ward costs that name a kind of card ("a legendary artifact or legendary creature", "an enchantment, instant, or sorcery card"): paid after the plain ones, the first is asked now. */
+      filtered?: { kind: 'sacrifice' | 'discard'; filter: CardFilter }[];
       /** A forage still to pay once the sacrifices are made. */
       forage?: ObjectId | 'graveyard';
       /** The free cast this is paid for: once it's paid, that cast is finished. */
@@ -5512,6 +5581,9 @@ export type GameEvent =
   | { type: 'monarchChanged'; player: PlayerId }
   /** Vision: a permanent phased out or back in. */
   | { type: 'phased'; id: ObjectId; in: boolean }
+  // Lord of the Rings (21d multi-rare): Tom Bombadil
+  /** The final chapter ability of a Saga resolved (the Saga and the controller of the ability). */
+  | { type: 'finalChapterResolved'; source: ObjectRef; controller: PlayerId }
   | { type: 'untapped'; id: ObjectId }
   /** `nth`: how many spells that player has cast this turn, including this one. */
   | { type: 'spellCast'; id: ObjectId; player: PlayerId; nth?: number }
@@ -5563,7 +5635,16 @@ export type GameEvent =
   | { type: 'countersAdded'; id: ObjectId; count: number; player: PlayerId }
   // Tarkir: Dragonstorm (19b, misc): counters of any kind put on a creature
   /** Counters of any kind (+1/+1 or named) were put on a creature; `player` controls it. */
-  | { type: 'anyCountersAdded'; id: ObjectId; count: number; player: PlayerId; by?: PlayerId }
+  | {
+      type: 'anyCountersAdded';
+      id: ObjectId;
+      count: number;
+      player: PlayerId;
+      by?: PlayerId;
+      // Lord of the Rings (21d multi-rare): Aragorn, Company Leader
+      /** The kind of counter ('+1/+1' when absent). */
+      name?: string;
+    }
   // Reality Fracture (17c): loyalty counters put on a planeswalker
   /** `player` controls the planeswalker; `by` is the player who put the counters. */
   | { type: 'loyaltyCountersAdded'; id: ObjectId; count: number; player: PlayerId; by: PlayerId }

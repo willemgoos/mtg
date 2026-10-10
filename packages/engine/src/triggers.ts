@@ -23,6 +23,7 @@ import { detectLtrBrRare } from './ltr-br-rare-effects.ts'; // Lord of the Rings
 import { FIC_CONDITIONS } from './fic-effects.ts';
 import { FIN_CONDITIONS } from './fin-effects.ts';
 import { LTR_RED_CONDITIONS } from './ltr-red-effects.ts'; // Lord of the Rings (21b red)
+import { detectLtrMultiRare, LTR_MULTI_RARE_CONDITIONS } from './ltr-multi-rare-effects.ts'; // Lord of the Rings (21d multi-rare)
 import { doubleAttackTriggers, TDM_MISC_CONDITIONS } from './tdm-misc-effects.ts';
 import type {
   AbilityDef,
@@ -436,6 +437,7 @@ export function checkCondition(
         FIC_CONDITIONS[c.handler] ??
         FIN_CONDITIONS[c.handler] ??
         LTR_RED_CONDITIONS[c.handler] ?? // Lord of the Rings (21b red)
+        LTR_MULTI_RARE_CONDITIONS[c.handler] ?? // Lord of the Rings (21d multi-rare)
         TDM_MISC_CONDITIONS[c.handler]; // Tarkir: Dragonstorm (19b, misc)
       if (fn) return fn(ctx, controller, self, subject);
       throw new Error(`Custom condition "${c.handler}" not registered`);
@@ -760,6 +762,7 @@ function detect(ctx: Ctx, ev: GameEvent): void {
   detectLtrWhite(ctx, ev); // Lord of the Rings (21b white)
   detectLtrGcRare(ctx, ev); // Lord of the Rings (21d gc-rare)
   detectLtrBrRare(ctx, ev); // Lord of the Rings (21d br-rare)
+  detectLtrMultiRare(ctx, ev); // Lord of the Rings (21d multi-rare)
   detectAnimal(ctx, ev);
   switch (ev.type) {
     case 'objectMoved': {

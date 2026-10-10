@@ -18,6 +18,7 @@ import {
   chooseCreatureType,
   chooseLtrGcRare,
   chooseForageExile,
+  chooseProtectionType,
   chooseWardSacrifice,
   chooseFromHand,
   choosePile,
@@ -113,6 +114,10 @@ export function createHeuristicBot(db: CardDb, name = 'heuristic'): Bot {
             return { type: 'chooseOption', player: me, index: 0 };
           // Reality Fracture (17a fixes): every creature type is on offer.
           if (d.title === 'Choose a creature type') return chooseCreatureType(engine, view, me, d);
+          // Lord of the Rings (21d multi-rare): Pippin, Guard of the Citadel, protection from a card type: creatures when they have any
+          // (they can't block it or hurt it), else instants (their burn).
+          if (d.title === 'Protection from which card type?')
+            return chooseProtectionType(engine, view, me, d);
           // Reality Fracture (17a): Arc of Fortune.
           if (d.options[0]?.label.startsWith('Discard your hand'))
             return { type: 'chooseOption', player: me, index: chooseHandSwap(view, me) };
@@ -144,7 +149,7 @@ export function createHeuristicBot(db: CardDb, name = 'heuristic'): Bot {
         case 'splitPiles':
           return chooseSplit(engine, view, me, legal);
         case 'choosePile':
-          return choosePile(view, me);
+          return choosePile(view, me, engine);
         case 'declareAttackers':
           return nextAttackAction(engine, view, me, d.declared);
         case 'declareBlockers':
