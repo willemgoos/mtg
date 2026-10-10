@@ -4,6 +4,7 @@ import { willPersist } from './ecl-18a.ts';
 import { permanentHasStatic } from './fra-pw-effects.ts';
 import { updateEnduringStory } from './hob-20a.ts';
 import { isRingBearer, updateRingBearer } from './ltr-21a.ts';
+import { endLapsedControlEffects } from './ltr-wu-rare-effects.ts'; // Lord of the Rings (21d wu-rare)
 import { sagasToSacrifice } from './sagas.ts';
 import type { ObjectId, PlayerId } from './types.ts';
 import { PLAYERS } from './types.ts';
@@ -18,6 +19,7 @@ export function runSBAs(ctx: Ctx): void {
     // The Hobbit (20a): Storied isn't a trigger: the enduring story is had as soon as it's earned, before anything dies.
     updateEnduringStory(ctx);
     updateRingBearer(ctx); // Lord of the Rings (21a): a Ring-bearer that left or changed hands no longer is one
+    endLapsedControlEffects(ctx); // Lord of the Rings (21d wu-rare): "for as long as you control this" ended when it changed hands
     for (const p of PLAYERS) {
       const ps = ctx.s.players[p];
       // Mystical Archive (16): Angel's Grace, "you can't lose the game this turn".

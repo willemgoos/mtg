@@ -241,3 +241,6 @@ from) when it's fixed. Older phases keep their own "Simplifications" lists in `d
 - [ ] Delighted Halfling: the engine pays with sources, not chosen mana, so a Halfling that helps pay a legendary spell is
       treated as making its any-colour mana and the spell can't be countered, even where the player would have taken {C}
       (only different for a legendary spell with a {C} pip; none in the pool).
+- [ ] Forge Anew: "you may pay {0} rather than the equip cost of the first equip ability you activate during each of your
+      turns" always pays {0} (Kíli the Resourceful's `firstEquipFree`, with `yourTurn`); there is no option to pay the full
+      cost, which is never better since the first equip is used either way.

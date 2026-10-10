@@ -18,6 +18,7 @@ import { hasEnduringStory, subtypeTriggerCopies } from './hob-20a.ts';
 import { detectLtr, isRingBearer, ringCondition } from './ltr-21a.ts';
 import { detectLtrWhite } from './ltr-white-effects.ts'; // Lord of the Rings (21b white)
 import { detectLtrGcRare } from './ltr-gc-rare-effects.ts'; // Lord of the Rings (21d gc-rare)
+import { doubleLegendaryArtifactTriggers } from './ltr-wu-rare-effects.ts'; // Lord of the Rings (21d wu-rare)
 import { FIC_CONDITIONS } from './fic-effects.ts';
 import { FIN_CONDITIONS } from './fin-effects.ts';
 import { LTR_RED_CONDITIONS } from './ltr-red-effects.ts'; // Lord of the Rings (21b red)
@@ -1494,6 +1495,7 @@ function detect(ctx: Ctx, ev: GameEvent): void {
           targetsMatch(ctx, item, o.controller, a.trigger.targetFilter) &&
           // Final Fantasy (11b): "if at least four mana was spent to cast it".
           (spellObj.manaSpent ?? 0) >= (a.trigger.minManaSpent ?? 0) &&
+          (a.trigger.maxManaSpent === undefined || (spellObj.manaSpent ?? 0) <= a.trigger.maxManaSpent) && // Lord of the Rings (21d wu-rare)
           !a.fromGraveyard,
         spellObj,
         manaValueOf(spell),
@@ -2412,10 +2414,13 @@ export function collectTriggers(ctx: Ctx): void {
   ctx.batched.clear();
   const before = ctx.s.pendingTriggers.length;
   let attacked = false;
+  const batchStart = ctx.triggerCursor; // Lord of the Rings (21d wu-rare)
   while (ctx.triggerCursor < ctx.events.length) {
     const ev = ctx.events[ctx.triggerCursor++]!;
     if (ev.type === 'attackersDeclared') attacked = true;
+    const pendingBefore = ctx.s.pendingTriggers.length; // Lord of the Rings (21d wu-rare)
     detect(ctx, ev);
+    doubleLegendaryArtifactTriggers(ctx, ev, pendingBefore, batchStart); // Lord of the Rings (21d wu-rare)
   }
   // Tarkir: Dragonstorm (19b, misc): Windcrag Siege (Mardu), what the attack caused triggers an additional time.
   if (attacked) doubleAttackTriggers(ctx, before);

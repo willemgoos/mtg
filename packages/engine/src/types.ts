@@ -303,6 +303,8 @@ export interface CardDefinition {
   // Marvel Super Heroes Jumpstart (Tenacious/Rampaging)
   /** It enters with this many +1/+1 counters (Voracious Brood: one per creature card in your graveyard). */
   entersWithCountersAmount?: Amount;
+  /** Lord of the Rings (21d wu-rare): it enters with named counters, as many as the amount (Dawn of a New Age: a hope counter for each creature you control). */
+  entersWithNamedCountersAmount?: { name: string; amount: Amount };
   /** Costs {amount} less while the condition holds (Heroic Return, Avenge). */
   costReductionIf?: {
     condition: ConditionDef;
@@ -815,6 +817,8 @@ export type TriggerDef =
       // Final Fantasy (11b): mana spent
       /** "If at least N mana was spent to cast it" (Sahagin, Ultros). */
       minManaSpent?: number;
+      /** Lord of the Rings (21d wu-rare): "if no mana was spent to cast it" (Boromir, Warden of the Tower: `maxManaSpent: 0`). */
+      maxManaSpent?: number;
       // Strixhaven (13a): magecraft
       /** Magecraft: also when you copy a matching spell (a copy is not cast, so it has no mana spent). */
       orCopy?: boolean;
@@ -1764,6 +1768,8 @@ export type Amount =
   | { manaValueOfSubject: true }
   /** The mana value of a permanent (Feed the Swarm: "equal to that permanent's mana value"). */
   | { manaValueOf: Ref }
+  /** Lord of the Rings (21d wu-rare): the mana value Press the Enemy's returned spell or permanent had (-1 if it returned nothing). */
+  | { ltrPressMv: true }
   /** Blue mana symbols in the triggering spell's mana cost (Namor). */
   | { bluePipsOfSubject: true }
   /** "Draw cards equal to the difference" up to this hand size (The Ten Rings). */
@@ -3611,6 +3617,14 @@ export type StaticDef =
   // The Hobbit (20b white): Kíli the Resourceful
   /** "You may pay {0} rather than pay the equip cost of the first equip ability you activate each turn." */
   | { kind: 'firstEquipFree'; condition?: ConditionDef }
+  // Lord of the Rings (21d wu-rare)
+  /** "You may activate equip abilities any time you could cast an instant" (Forge Anew; with its condition: "during your turn"). */
+  | { kind: 'ltrEquipAtInstantSpeed'; condition?: ConditionDef }
+  /**
+   * "If a legendary permanent or an artifact entering or leaving the battlefield causes a triggered ability of a permanent you
+   * control to trigger, that ability triggers an additional time" (Gandalf the White).
+   */
+  | { kind: 'ltrLegendaryArtifactTriggersTwice' }
   /** This creature can't be blocked. */
   | { kind: 'cantBeBlocked' }
   /** "Other creatures you control have prowess" (Bria, Riptide Rogue). */
@@ -4471,6 +4485,11 @@ export interface TurnState {
   discards?: Record<PlayerId, number>;
   /** Creature types whose spells have flash this turn, per player (Progenitor's Icon). */
   flashTypes?: { player: PlayerId; type: string }[];
+  // Lord of the Rings (21d wu-rare)
+  /** Players who may cast spells this turn as though they had flash (Borne Upon a Wind). */
+  ltrFlashAll?: PlayerId[];
+  /** Press the Enemy: the mana value of the spell or permanent it returned (-1: it returned nothing). */
+  ltrPressMv?: number;
   /** Players with hexproof until end of turn (Dawn's Truce). */
   hexproofPlayers?: PlayerId[];
   /** Time Stop resolved: the turn skips to its cleanup step. */
@@ -4588,6 +4607,8 @@ export interface ContinuousEffect {
   expires: 'endOfTurn' | 'untilYourNextTurn' | 'whileSource' | 'permanent';
   /** Marvel Super Heroes: for 'whileSource', the permanent it lasts for. */
   whileSourceId?: ObjectId;
+  /** Lord of the Rings (21d wu-rare): for 'whileSource', it ends when `whileSourceId` is no longer controlled by this player ("for as long as you control this Saga"). */
+  whileControlledBy?: PlayerId;
   player?: PlayerId;
   // Doom Prevails (9e).
   /** Kang Dynasty: whenever it deals combat damage to a player, this player draws. */

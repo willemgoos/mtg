@@ -96202,6 +96202,364 @@
   }
  },
  {
+  "name": "Boromir, Warden of the Tower",
+  "scryfallId": "f6bc3720-2892-4dda-8f30-079a1ac8e1e2",
+  "oracleId": "d72b57e5-1c6e-4f02-968f-7e2dd24f0d3c",
+  "set": "ltr",
+  "collectorNumber": "4",
+  "rarity": "rare",
+  "manaCost": "{2}{W}",
+  "typeLine": "Legendary Creature — Human Soldier",
+  "oracleText": "Vigilance\nWhenever an opponent casts a spell, if no mana was spent to cast it, counter that spell.\nSacrifice Boromir: Creatures you control gain indestructible until end of turn. The Ring tempts you.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Vigilance"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/6/f6bc3720-2892-4dda-8f30-079a1ac8e1e2.jpg?1783916338",
+   "normal": "https://cards.scryfall.io/normal/front/f/6/f6bc3720-2892-4dda-8f30-079a1ac8e1e2.jpg?1783916338",
+   "large": "https://cards.scryfall.io/large/front/f/6/f6bc3720-2892-4dda-8f30-079a1ac8e1e2.jpg?1783916338",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/6/f6bc3720-2892-4dda-8f30-079a1ac8e1e2.jpg?1783916338"
+  }
+ },
+ {
+  "name": "Dawn of a New Age",
+  "scryfallId": "cb966ee6-bf1b-4bb6-9277-8de6f3918ae2",
+  "oracleId": "37df5ade-6a21-4b0c-89f8-e2e917589a8d",
+  "set": "ltr",
+  "collectorNumber": "5",
+  "rarity": "mythic",
+  "manaCost": "{1}{W}",
+  "typeLine": "Enchantment",
+  "oracleText": "This enchantment enters with a hope counter on it for each creature you control.\nAt the beginning of your end step, remove a hope counter from this enchantment. If you do, draw a card. Then if this enchantment has no hope counters on it, sacrifice it and you gain 4 life.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/b/cb966ee6-bf1b-4bb6-9277-8de6f3918ae2.jpg?1783916335",
+   "normal": "https://cards.scryfall.io/normal/front/c/b/cb966ee6-bf1b-4bb6-9277-8de6f3918ae2.jpg?1783916335",
+   "large": "https://cards.scryfall.io/large/front/c/b/cb966ee6-bf1b-4bb6-9277-8de6f3918ae2.jpg?1783916335",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/b/cb966ee6-bf1b-4bb6-9277-8de6f3918ae2.jpg?1783916335"
+  }
+ },
+ {
+  "name": "Flowering of the White Tree",
+  "scryfallId": "2203b2cd-48e5-471a-85fe-dc81012e5d61",
+  "oracleId": "3cda958a-f777-433d-850e-a6c8f581db4e",
+  "set": "ltr",
+  "collectorNumber": "15",
+  "rarity": "rare",
+  "manaCost": "{W}{W}",
+  "typeLine": "Legendary Enchantment",
+  "oracleText": "Legendary creatures you control get +2/+1 and have ward {1}.\nNonlegendary creatures you control get +1/+1.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/2/2203b2cd-48e5-471a-85fe-dc81012e5d61.jpg?1783916332",
+   "normal": "https://cards.scryfall.io/normal/front/2/2/2203b2cd-48e5-471a-85fe-dc81012e5d61.jpg?1783916332",
+   "large": "https://cards.scryfall.io/large/front/2/2/2203b2cd-48e5-471a-85fe-dc81012e5d61.jpg?1783916332",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/2/2203b2cd-48e5-471a-85fe-dc81012e5d61.jpg?1783916332"
+  }
+ },
+ {
+  "name": "Forge Anew",
+  "scryfallId": "7ff1d69b-53fe-469c-945b-ecb23c426cce",
+  "oracleId": "4df579df-fdbb-418a-af2d-709e140ee569",
+  "set": "sld",
+  "collectorNumber": "7002",
+  "rarity": "rare",
+  "manaCost": "{2}{W}",
+  "typeLine": "Enchantment",
+  "oracleText": "When this enchantment enters, return target Equipment card from your graveyard to the battlefield.\nDuring your turn, you may activate equip abilities any time you could cast an instant.\nYou may pay {0} rather than pay the equip cost of the first equip ability you activate during each of your turns.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/f/7ff1d69b-53fe-469c-945b-ecb23c426cce.jpg?1783996761",
+   "normal": "https://cards.scryfall.io/normal/front/7/f/7ff1d69b-53fe-469c-945b-ecb23c426cce.jpg?1783996761",
+   "large": "https://cards.scryfall.io/large/front/7/f/7ff1d69b-53fe-469c-945b-ecb23c426cce.jpg?1783996761",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/f/7ff1d69b-53fe-469c-945b-ecb23c426cce.jpg?1783996761"
+  }
+ },
+ {
+  "name": "Frodo, Sauron's Bane",
+  "scryfallId": "7d86dc2e-6f0c-4714-9d30-5d099d3b895c",
+  "oracleId": "8be62f5c-0ab2-4869-97a2-d8a69a3fde95",
+  "set": "ltr",
+  "collectorNumber": "18",
+  "rarity": "rare",
+  "manaCost": "{W}",
+  "typeLine": "Legendary Creature — Halfling Citizen",
+  "oracleText": "{W/B}{W/B}: If Frodo is a Citizen, it becomes a Halfling Scout with base power and toughness 2/3 and lifelink.\n{B}{B}{B}: If Frodo is a Scout, it becomes a Halfling Rogue with \"Whenever this creature deals combat damage to a player, that player loses the game if the Ring has tempted you four or more times this game. Otherwise, the Ring tempts you.\"",
+  "power": "1",
+  "toughness": "2",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/d/7d86dc2e-6f0c-4714-9d30-5d099d3b895c.jpg?1783916334",
+   "normal": "https://cards.scryfall.io/normal/front/7/d/7d86dc2e-6f0c-4714-9d30-5d099d3b895c.jpg?1783916334",
+   "large": "https://cards.scryfall.io/large/front/7/d/7d86dc2e-6f0c-4714-9d30-5d099d3b895c.jpg?1783916334",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/d/7d86dc2e-6f0c-4714-9d30-5d099d3b895c.jpg?1783916334"
+  }
+ },
+ {
+  "name": "Gandalf the White",
+  "scryfallId": "e384c20b-d0c1-4781-9d11-e89e5a6bf3fc",
+  "oracleId": "5b3b5f6a-375e-4479-9384-a942eda83f9b",
+  "set": "ltr",
+  "collectorNumber": "19",
+  "rarity": "mythic",
+  "manaCost": "{3}{W}{W}",
+  "typeLine": "Legendary Creature — Avatar Wizard",
+  "oracleText": "Flash\nYou may cast legendary spells and artifact spells as though they had flash.\nIf a legendary permanent or an artifact entering or leaving the battlefield causes a triggered ability of a permanent you control to trigger, that ability triggers an additional time.",
+  "power": "4",
+  "toughness": "5",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Flash"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/3/e384c20b-d0c1-4781-9d11-e89e5a6bf3fc.jpg?1783916333",
+   "normal": "https://cards.scryfall.io/normal/front/e/3/e384c20b-d0c1-4781-9d11-e89e5a6bf3fc.jpg?1783916333",
+   "large": "https://cards.scryfall.io/large/front/e/3/e384c20b-d0c1-4781-9d11-e89e5a6bf3fc.jpg?1783916333",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/3/e384c20b-d0c1-4781-9d11-e89e5a6bf3fc.jpg?1783916333"
+  }
+ },
+ {
+  "name": "The Battle of Bywater",
+  "scryfallId": "9bae7a4d-9117-43c5-a048-80a0ddadc034",
+  "oracleId": "a94c191d-a938-458e-bc1b-2f44fd8873a3",
+  "set": "ltr",
+  "collectorNumber": "2",
+  "rarity": "rare",
+  "manaCost": "{1}{W}{W}",
+  "typeLine": "Sorcery",
+  "oracleText": "Destroy all creatures with power 3 or greater. Then create a Food token for each creature you control. (It's an artifact with \"{2}, {T}, Sacrifice this token: You gain 3 life.\")",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Food"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/b/9bae7a4d-9117-43c5-a048-80a0ddadc034.jpg?1783916337",
+   "normal": "https://cards.scryfall.io/normal/front/9/b/9bae7a4d-9117-43c5-a048-80a0ddadc034.jpg?1783916337",
+   "large": "https://cards.scryfall.io/large/front/9/b/9bae7a4d-9117-43c5-a048-80a0ddadc034.jpg?1783916337",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/b/9bae7a4d-9117-43c5-a048-80a0ddadc034.jpg?1783916337"
+  }
+ },
+ {
+  "name": "War of the Last Alliance",
+  "scryfallId": "60ddf2cd-5b33-4c8a-a610-8e6a15404dde",
+  "oracleId": "e376702a-f56e-4e47-aa8c-3f80384d12a9",
+  "set": "ltr",
+  "collectorNumber": "36",
+  "rarity": "rare",
+  "manaCost": "{3}{W}",
+  "typeLine": "Enchantment — Saga",
+  "oracleText": "(As this Saga enters and after your draw step, add a lore counter. Sacrifice after III.)\nI, II — Search your library for a legendary creature card, reveal it, put it into your hand, then shuffle.\nIII — Creatures you control gain double strike until end of turn. The Ring tempts you.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/0/60ddf2cd-5b33-4c8a-a610-8e6a15404dde.jpg?1783916322",
+   "normal": "https://cards.scryfall.io/normal/front/6/0/60ddf2cd-5b33-4c8a-a610-8e6a15404dde.jpg?1783916322",
+   "large": "https://cards.scryfall.io/large/front/6/0/60ddf2cd-5b33-4c8a-a610-8e6a15404dde.jpg?1783916322",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/0/60ddf2cd-5b33-4c8a-a610-8e6a15404dde.jpg?1783916322"
+  }
+ },
+ {
+  "name": "Borne Upon a Wind",
+  "scryfallId": "41774567-35e8-462d-a463-0150c039521a",
+  "oracleId": "ce19962d-94f9-4b2b-b668-963c0acce308",
+  "set": "sld",
+  "collectorNumber": "2228",
+  "rarity": "rare",
+  "manaCost": "{1}{U}",
+  "typeLine": "Instant",
+  "oracleText": "You may cast spells this turn as though they had flash.\nDraw a card.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/1/41774567-35e8-462d-a463-0150c039521a.jpg?1783905126",
+   "normal": "https://cards.scryfall.io/normal/front/4/1/41774567-35e8-462d-a463-0150c039521a.jpg?1783905126",
+   "large": "https://cards.scryfall.io/large/front/4/1/41774567-35e8-462d-a463-0150c039521a.jpg?1783905126",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/1/41774567-35e8-462d-a463-0150c039521a.jpg?1783905126"
+  }
+ },
+ {
+  "name": "Goldberry, River-Daughter",
+  "scryfallId": "bf4f0a7c-620e-4ed8-8da3-fa6564e8a0cd",
+  "oracleId": "fca3545a-2956-49f9-8465-1c8937deb294",
+  "set": "ltr",
+  "collectorNumber": "52",
+  "rarity": "rare",
+  "manaCost": "{1}{U}",
+  "typeLine": "Legendary Creature — Nymph",
+  "oracleText": "{T}: Move a counter of each kind not on Goldberry from another target permanent you control onto Goldberry.\n{U}, {T}: Move one or more counters from Goldberry onto another target permanent you control. If you do, draw a card.",
+  "power": "1",
+  "toughness": "3",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/f/bf4f0a7c-620e-4ed8-8da3-fa6564e8a0cd.jpg?1783916317",
+   "normal": "https://cards.scryfall.io/normal/front/b/f/bf4f0a7c-620e-4ed8-8da3-fa6564e8a0cd.jpg?1783916317",
+   "large": "https://cards.scryfall.io/large/front/b/f/bf4f0a7c-620e-4ed8-8da3-fa6564e8a0cd.jpg?1783916317",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/f/bf4f0a7c-620e-4ed8-8da3-fa6564e8a0cd.jpg?1783916317"
+  }
+ },
+ {
+  "name": "Lost Isle Calling",
+  "scryfallId": "7b744230-8127-4d4f-9d40-75e7c2aab77c",
+  "oracleId": "0efbf29c-09a0-4472-83ad-8d692c0232a5",
+  "set": "ltr",
+  "collectorNumber": "61",
+  "rarity": "rare",
+  "manaCost": "{1}{U}",
+  "typeLine": "Enchantment",
+  "oracleText": "Whenever you scry, put a verse counter on this enchantment.\n{4}{U}{U}, Exile this enchantment: Draw a card for each verse counter on this enchantment. If it had seven or more verse counters on it, take an extra turn after this one. Activate only as a sorcery.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/b/7b744230-8127-4d4f-9d40-75e7c2aab77c.jpg?1783916313",
+   "normal": "https://cards.scryfall.io/normal/front/7/b/7b744230-8127-4d4f-9d40-75e7c2aab77c.jpg?1783916313",
+   "large": "https://cards.scryfall.io/large/front/7/b/7b744230-8127-4d4f-9d40-75e7c2aab77c.jpg?1783916313",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/b/7b744230-8127-4d4f-9d40-75e7c2aab77c.jpg?1783916313"
+  }
+ },
+ {
+  "name": "Press the Enemy",
+  "scryfallId": "dfa5380a-480c-4c61-ac52-5debc49c5df9",
+  "oracleId": "347a3622-4425-4ba4-821d-ef3d00beb058",
+  "set": "ltr",
+  "collectorNumber": "65",
+  "rarity": "rare",
+  "manaCost": "{2}{U}{U}",
+  "typeLine": "Instant",
+  "oracleText": "Return target spell or nonland permanent an opponent controls to its owner's hand. You may cast an instant or sorcery spell with equal or lesser mana value from your hand without paying its mana cost.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/f/dfa5380a-480c-4c61-ac52-5debc49c5df9.jpg?1783916313",
+   "normal": "https://cards.scryfall.io/normal/front/d/f/dfa5380a-480c-4c61-ac52-5debc49c5df9.jpg?1783916313",
+   "large": "https://cards.scryfall.io/large/front/d/f/dfa5380a-480c-4c61-ac52-5debc49c5df9.jpg?1783916313",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/f/dfa5380a-480c-4c61-ac52-5debc49c5df9.jpg?1783916313"
+  }
+ },
+ {
+  "name": "Rangers of Ithilien",
+  "scryfallId": "819b4208-7a29-41fa-947f-614bf669b300",
+  "oracleId": "4d5fd9f0-ecb3-4b91-ae55-f02336d7cf37",
+  "set": "ltr",
+  "collectorNumber": "66",
+  "rarity": "rare",
+  "manaCost": "{2}{U}{U}",
+  "typeLine": "Creature — Human Ranger",
+  "oracleText": "Vigilance\nWhen this creature enters, gain control of up to one target creature with lesser power for as long as you control this creature. Then the Ring tempts you.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Vigilance"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/1/819b4208-7a29-41fa-947f-614bf669b300.jpg?1783916313",
+   "normal": "https://cards.scryfall.io/normal/front/8/1/819b4208-7a29-41fa-947f-614bf669b300.jpg?1783916313",
+   "large": "https://cards.scryfall.io/large/front/8/1/819b4208-7a29-41fa-947f-614bf669b300.jpg?1783916313",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/1/819b4208-7a29-41fa-947f-614bf669b300.jpg?1783916313"
+  }
+ },
+ {
+  "name": "Scroll of Isildur",
+  "scryfallId": "195821f4-ba3d-4412-930f-f3656b319dfd",
+  "oracleId": "aa9a45a5-0250-465b-962e-f2d45dea26f9",
+  "set": "ltr",
+  "collectorNumber": "69",
+  "rarity": "rare",
+  "manaCost": "{2}{U}",
+  "typeLine": "Enchantment — Saga",
+  "oracleText": "(As this Saga enters and after your draw step, add a lore counter. Sacrifice after III.)\nI — Gain control of up to one target artifact for as long as you control this Saga. The Ring tempts you.\nII — Tap up to two target creatures. Put a stun counter on each of them.\nIII — Draw a card for each tapped creature target opponent controls.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/9/195821f4-ba3d-4412-930f-f3656b319dfd.jpg?1783916311",
+   "normal": "https://cards.scryfall.io/normal/front/1/9/195821f4-ba3d-4412-930f-f3656b319dfd.jpg?1783916311",
+   "large": "https://cards.scryfall.io/large/front/1/9/195821f4-ba3d-4412-930f-f3656b319dfd.jpg?1783916311",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/9/195821f4-ba3d-4412-930f-f3656b319dfd.jpg?1783916311"
+  }
+ },
+ {
+  "name": "Storm of Saruman",
+  "scryfallId": "52884e67-c742-4799-9afd-55bc70b2cf40",
+  "oracleId": "cf5f4860-e805-46a3-9352-a2c583e33403",
+  "set": "ltr",
+  "collectorNumber": "72",
+  "rarity": "mythic",
+  "manaCost": "{4}{U}{U}",
+  "typeLine": "Enchantment",
+  "oracleText": "Ward {3}\nWhenever you cast your second spell each turn, copy it, except the copy isn't legendary. You may choose new targets for the copy. (A copy of a permanent spell becomes a token.)",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Ward"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/2/52884e67-c742-4799-9afd-55bc70b2cf40.jpg?1783916312",
+   "normal": "https://cards.scryfall.io/normal/front/5/2/52884e67-c742-4799-9afd-55bc70b2cf40.jpg?1783916312",
+   "large": "https://cards.scryfall.io/large/front/5/2/52884e67-c742-4799-9afd-55bc70b2cf40.jpg?1783916312",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/2/52884e67-c742-4799-9afd-55bc70b2cf40.jpg?1783916312"
+  }
+ },
+ {
+  "name": "The Watcher in the Water",
+  "scryfallId": "1cb8e8bb-75a0-4b5e-b4b3-5d8f3795032d",
+  "oracleId": "a9ddb3dc-f289-46a1-af17-3a8523a26b0d",
+  "set": "ltr",
+  "collectorNumber": "75",
+  "rarity": "mythic",
+  "manaCost": "{3}{U}{U}",
+  "typeLine": "Legendary Creature — Kraken",
+  "oracleText": "The Watcher in the Water enters tapped with nine stun counters on it. (If a permanent with a stun counter would become untapped, remove one from it instead.)\nWhenever you draw a card during an opponent's turn, create a 1/1 blue Tentacle creature token.\nWhenever a Tentacle you control dies, untap up to one target Kraken and put a stun counter on up to one target nonland permanent.",
+  "power": "9",
+  "toughness": "9",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/c/1cb8e8bb-75a0-4b5e-b4b3-5d8f3795032d.jpg?1783916309",
+   "normal": "https://cards.scryfall.io/normal/front/1/c/1cb8e8bb-75a0-4b5e-b4b3-5d8f3795032d.jpg?1783916309",
+   "large": "https://cards.scryfall.io/large/front/1/c/1cb8e8bb-75a0-4b5e-b4b3-5d8f3795032d.jpg?1783916309",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/c/1cb8e8bb-75a0-4b5e-b4b3-5d8f3795032d.jpg?1783916309"
+  }
+ },
+ {
   "name": "Delighted Halfling",
   "scryfallId": "71384418-173a-4f77-adab-56e52fa23692",
   "oracleId": "f9d3b046-0b95-4103-a630-4b3fb88bb60b",
