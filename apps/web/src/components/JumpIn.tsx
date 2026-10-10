@@ -40,6 +40,11 @@ export const GROUPS = [
   { key: 'ecl', name: 'Lorwyn Eclipsed · Arena', has: (p: Packet) => p.set === 'ecl' },
   { key: 'tdm', name: 'Tarkir: Dragonstorm', has: (p: Packet) => p.set === 'tdm' },
   { key: 'hob', name: 'The Hobbit', has: (p: Packet) => p.set === 'hob' },
+  {
+    key: 'ltr',
+    name: 'The Lord of the Rings · Jumpstart',
+    has: (p: Packet) => p.set === 'ltr',
+  },
 ] as const;
 
 type Group = (typeof GROUPS)[number]['key'];

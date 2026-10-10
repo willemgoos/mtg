@@ -95,8 +95,9 @@ describe('Jump In packets', () => {
     expect(new Set(PACKETS.map((p) => p.id)).size).toBe(PACKETS.length);
     for (const p of PACKETS) {
       const cards = packetCards(p);
-      // Arena's packets with random slots are smaller (their own tests check the count).
-      if (!p.slots)
+      // Arena's packets with random slots are smaller, and so are the Lord of the Rings ones until their
+      // colour's random rares are built (their own tests check the count).
+      if (!p.slots && p.set !== 'ltr')
         expect(
           cards.reduce((n, [, k]) => n + k, 0),
           p.name,
@@ -174,6 +175,39 @@ describe('Jump In packets', () => {
     }
     expect(deckById(jumpInId('hob-dwarves', 'hob-erebor')).set).toBe('hob');
     expect(deckById(jumpInId('hob-dwarves', 'angels')).set).toBeUndefined();
+  });
+
+  it('has the 20 Lord of the Rings Jumpstart packets, equal to the official lists', () => {
+    const data = JSON.parse(
+      readFileSync(new URL('../scripts/data/ltr-jumpstart-packets.json', import.meta.url), 'utf8'),
+    ) as { packets: { name: string; cards: [string, number][] }[]; randomRares: string[] };
+    const ltr = PACKETS.filter((p) => p.set === 'ltr');
+    expect(ltr).toHaveLength(20);
+    for (const official of data.packets) {
+      const [theme, version] = official.name.split(' ');
+      const p = ltr.find((x) => x.id === `ltr-${theme!.toLowerCase()}-${version}`);
+      expect(p, official.name).toBeDefined();
+      expect(p!.source).toBe('arena');
+      // The 19 listed cards, whatever the random slot deals.
+      const merged = (l: [string, number][]) => {
+        const m = new Map<string, number>();
+        for (const [n, k] of l) m.set(n, (m.get(n) ?? 0) + k);
+        return sort([...m]);
+      };
+      const listed = packetCards({ ...p!, slots: undefined });
+      expect(merged(listed), official.name).toEqual(merged(official.cards));
+      // The random slot: one built LTR rare or mythic of the packet's colour.
+      for (const alts of p!.slots ?? []) {
+        expect(alts.length).toBeLessThanOrEqual(9);
+        for (const { card: name } of alts) {
+          expect(data.randomRares, name).toContain(name);
+          expect(card.get(name)!.colors, name).toEqual(p!.colors);
+        }
+      }
+    }
+    const d = deckById(jumpInId('ltr-riders-1', 'ltr-courageous-2'));
+    expect(d.set).toBe('ltr');
+    expect(total(d.cards)).toBe(40);
   });
 
   it("has Arena's ten Lorwyn Eclipsed packets, equal to the scraped lists", () => {

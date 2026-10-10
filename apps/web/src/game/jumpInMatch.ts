@@ -24,10 +24,10 @@ export const SETS = [
   { key: 'ecl', name: 'Lorwyn Eclipsed' },
   { key: 'tdm', name: 'Tarkir: Dragonstorm' },
   { key: 'hob', name: 'The Hobbit' },
+  { key: 'ltr', name: 'The Lord of the Rings' },
 ] as const;
 
 export type SetKey = (typeof SETS)[number]['key'];
-// 'ltr' joins SETS (and the Jump In groups) with the Lord of the Rings packets in 21c.
 export const setOf = (p: Packet): SetKey => (p.set ?? 'fdn') as SetKey;
 
 /** The packet is in one of the sets (none: no limit). */

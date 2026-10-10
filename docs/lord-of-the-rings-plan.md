@@ -50,8 +50,13 @@ The ten Jumpstart rares are LTR collector numbers 282–286 and 824–828.
   "whenever the Ring tempts you" and "is your Ring-bearer" checks, the emblem shown on the player badge), Orc amass on the
   existing amass, plus whatever else the mechanics table marks missing. Tests, bot handling, Arena-style prompts.
 - **21b**: the 124 fixed packet cards, one Sonnet agent per colour in worktrees (colorless goes with white).
-- **21c**: `LTR_JUMPSTART_PACKETS` in `jumpin.ts` (20 packets, `source` official, the random slot from the rares built so
-  far), the picker group, Quick match. **First point the user can play.**
+- **21c**: **Done.** `LTR_JUMPSTART_PACKETS` in `src/ltr/jumpstart.ts` (generated from the packet data, in `PACKETS`): ids
+  `ltr-<theme>-<1|2>`, `set: 'ltr'`, `source: 'arena'` (which now means "official": Arena's list or Wizards' paper one),
+  face = the theme's Jumpstart rare. The random slot is `randomRareSlot(colour)`: the mono-colour LTR rares of the packet's
+  colour (`LTR_RANDOM_RARES`, eight per colour) that have behaviour, equally likely; with none built yet the slot is left
+  out (19 cards) and the pair is topped up to 40 with basics like Arena's packets. Picker group "The Lord of the Rings ·
+  Jumpstart" (`JumpIn.tsx`), Quick match set `ltr` (`jumpInMatch.ts`). Test: `jumpin.test.ts` ("the 20 Lord of the Rings
+  Jumpstart packets, equal to the official lists").
 - **21d**: the 80 rares and mythics of the random slot, by group; each joins the slot once built.
 
 ## Mechanics (21a)
