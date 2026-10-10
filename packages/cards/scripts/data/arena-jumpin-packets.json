@@ -1,0 +1,7260 @@
+[
+ {
+  "name": "Abzan",
+  "set": "Tarkir: Dragonstorm (TDM)",
+  "theme": "-",
+  "count": 13,
+  "fixed": [
+   [
+    "Armament Dragon",
+    1
+   ],
+   [
+    "Fortress Kin-Guard",
+    1
+   ],
+   [
+    "Dusyut Earthcarver",
+    1
+   ],
+   [
+    "Unburied Earthcarver",
+    1
+   ],
+   [
+    "Kin-Tree Severance",
+    1
+   ],
+   [
+    "Knockout Maneuver",
+    1
+   ],
+   [
+    "Abzan Monument",
+    1
+   ],
+   [
+    "Sandsteppe Citadel",
+    1
+   ]
+  ],
+  "slots": [
+   [
+    [
+     20,
+     "Betor, Kin to All"
+    ],
+    [
+     40,
+     "Yathan Roadwatcher"
+    ],
+    [
+     40,
+     "Felothar, Dawn of the Abzan"
+    ]
+   ],
+   [
+    [
+     50,
+     "Krumar Initiate"
+    ],
+    [
+     50,
+     "Yathan Tombguard"
+    ]
+   ],
+   [
+    [
+     50,
+     "Duty Beyond Death"
+    ],
+    [
+     50,
+     "Wail of War"
+    ]
+   ],
+   [
+    [
+     50,
+     "Kin-Tree Nurturer"
+    ],
+    [
+     50,
+     "Sandskitter Outrider"
+    ]
+   ],
+   [
+    [
+     50,
+     "Dragon's Prey"
+    ],
+    [
+     50,
+     "Stormplain Detainment"
+    ]
+   ]
+  ]
+ },
+ {
+  "name": "Aesthetic",
+  "set": "Secrets of Strixhaven (SOS)",
+  "theme": "Controlling opponent while attacking with evasive creatures",
+  "count": 12,
+  "fixed": [
+   [
+    "Matterbending Mage",
+    1
+   ],
+   [
+    "Orysa, Tide Choreographer",
+    1
+   ],
+   [
+    "Homesickness",
+    1
+   ],
+   [
+    "Essence Scatter",
+    1
+   ],
+   [
+    "Run Behind",
+    1
+   ]
+  ],
+  "slots": [
+   [
+    [
+     20,
+     "Mathemagics"
+    ],
+    [
+     80,
+     "Skycoach Conductor"
+    ]
+   ],
+   [
+    [
+     50,
+     "Muse Seeker"
+    ],
+    [
+     50,
+     "Tester of the Tangential"
+    ]
+   ],
+   [
+    [
+     50,
+     "Campus Composer"
+    ],
+    [
+     50,
+     "Spellbook Seeker"
+    ]
+   ],
+   [
+    [
+     50,
+     "Divergent Equation"
+    ],
+    [
+     50,
+     "Fractalize"
+    ]
+   ],
+   [
+    [
+     50,
+     "Landscape Painter"
+    ],
+    [
+     50,
+     "Hydro-Channeler"
+    ]
+   ],
+   [
+    [
+     50,
+     "Deluge Virtuoso"
+    ],
+    [
+     50,
+     "Textbook Tabulator"
+    ]
+   ],
+   [
+    [
+     50,
+     "Banishing Betrayal"
+    ],
+    [
+     50,
+     "Procrastinate"
+    ]
+   ]
+  ]
+ },
+ {
+  "name": "Artifacts",
+  "set": "Aetherdrift (DFT)",
+  "theme": "Synergy with artifacts",
+  "count": 13,
+  "fixed": [
+   [
+    "Guidelight Synergist",
+    1
+   ],
+   [
+    "Memory Guardian",
+    1
+   ],
+   [
+    "Gearseeker Serpent",
+    1
+   ],
+   [
+    "Ride's End",
+    1
+   ],
+   [
+    "Lightshield Parry",
+    1
+   ],
+   [
+    "Voyage Home",
+    1
+   ],
+   [
+    "Guidelight Pathmaker",
+    1
+   ],
+   [
+    "Midnight Mangler",
+    1
+   ]
+  ],
+  "slots": [
+   [
+    [
+     20,
+     "Salvation Engine"
+    ],
+    [
+     40,
+     "Voyager Glidecar"
+    ],
+    [
+     40,
+     "Mendicant Core, Guidelight"
+    ]
+   ],
+   [
+    [
+     10,
+     "Muraganda Raceway"
+    ],
+    [
+     30,
+     "Amonkhet Raceway"
+    ],
+    [
+     60,
+     "Avishkar Raceway"
+    ]
+   ],
+   [
+    [
+     50,
+     "Nesting Bot"
+    ],
+    [
+     50,
+     "Aether Syphon"
+    ]
+   ],
+   [
+    [
+     50,
+     "Voyager Quickwelder"
+    ],
+    [
+     50,
+     "Guidelight Optimizer"
+    ]
+   ],
+   [
+    [
+     50,
+     "Spectral Interference"
+    ],
+    [
+     50,
+     "Stall Out"
+    ]
+   ]
+  ]
+ },
+ {
+  "name": "Artifacts",
+  "set": "Edge of Eternities (EOE)",
+  "theme": "Synergies with artifacts",
+  "count": 13,
+  "fixed": [
+   [
+    "Weftstalker Ardent",
+    1
+   ],
+   [
+    "Oreplate Pangolin",
+    1
+   ],
+   [
+    "Zookeeper Mechan",
+    1
+   ],
+   [
+    "Kavaron Turbodrone",
+    1
+   ],
+   [
+    "Plasma Bolt",
+    1
+   ],
+   [
+    "Debris Field Crusher",
+    1
+   ],
+   [
+    "Melded Moxite",
+    1
+   ],
+   [
+    "Kavaron, Memorial World",
+    1
+   ]
+  ],
+  "slots": [
+   [
+    [
+     20,
+     "Devastating Onslaught"
+    ],
+    [
+     40,
+     "Warmaker Gunship"
+    ],
+    [
+     40,
+     "Rust Harvester"
+    ]
+   ],
+   [
+    [
+     50,
+     "Kavaron Harrier"
+    ],
+    [
+     50,
+     "Slagdrill Scrapper"
+    ]
+   ],
+   [
+    [
+     50,
+     "Memorial Team Leader"
+    ],
+    [
+     50,
+     "Molecular Modifier"
+    ]
+   ],
+   [
+    [
+     50,
+     "Invasive Maneuvers"
+    ],
+    [
+     50,
+     "Cut Propulsion"
+    ]
+   ],
+   [
+    [
+     50,
+     "Kav Landseeker"
+    ],
+    [
+     50,
+     "Red Tiger Mechan"
+    ]
+   ]
+  ]
+ },
+ {
+  "name": "Bats",
+  "set": "Bloomburrow (BLB)",
+  "theme": "Bat tribal",
+  "count": 12,
+  "fixed": [
+   [
+    "Starseer Mentor",
+    1
+   ],
+   [
+    "Moonstone Harbinger",
+    1
+   ],
+   [
+    "Moonrise Cleric",
+    1
+   ],
+   [
+    "Starlit Soothsayer",
+    1
+   ],
+   [
+    "Wax-Wane Witness",
+    1
+   ],
+   [
+    "Three Tree Mascot",
+    1
+   ],
+   [
+    "Sonar Strike",
+    1
+   ],
+   [
+    "Nocturnal Hunger",
+    1
+   ]
+  ],
+  "slots": [
+   [
+    [
+     50,
+     "Zoraline, Cosmos Caller"
+    ],
+    [
+     50,
+     "Lunar Convocation"
+    ]
+   ],
+   [
+    [
+     50,
+     "Star Charter"
+    ],
+    [
+     50,
+     "Glidedive Duo"
+    ]
+   ],
+   [
+    [
+     50,
+     "Sinister Monolith"
+    ],
+    [
+     50,
+     "Stargaze"
+    ]
+   ],
+   [
+    [
+     50,
+     "Lifecreed Duo"
+    ],
+    [
+     50,
+     "Agate-Blade Assassin"
+    ]
+   ]
+  ]
+ },
+ {
+  "name": "Blighted",
+  "set": "Lorwyn Eclipsed (ECL)",
+  "theme": "Blight mechanic",
+  "count": 18,
+  "fixed": [
+   [
+    "Iron-Shield Elf",
+    1
+   ],
+   [
+    "Gnarlbark Elm",
+    1
+   ],
+   [
+    "Reaping Willow",
+    1
+   ],
+   [
+    "Scarblade Scout",
+    1
+   ],
+   [
+    "Blighted Blackthorn",
+    1
+   ],
+   [
+    "Requiting Hex",
+    1
+   ],
+   [
+    "Blight Rot",
+    1
+   ],
+   [
+    "Swamp",
+    6
+   ]
+  ],
+  "slots": [
+   [
+    [
+     20,
+     "Moonshadow"
+    ],
+    [
+     40,
+     "Dawnhand Dissident"
+    ],
+    [
+     40,
+     "Shadow Urchin"
+    ]
+   ],
+   [
+    [
+     50,
+     "Graveshifter"
+    ],
+    [
+     50,
+     "Dream Seizer"
+    ]
+   ],
+   [
+    [
+     50,
+     "Moonglove Extractor"
+    ],
+    [
+     50,
+     "Heirloom Auntie"
+    ]
+   ],
+   [
+    [
+     50,
+     "Changeling Wayfinder"
+    ],
+    [
+     50,
+     "Prideful Feastling"
+    ]
+   ],
+   [
+    [
+     50,
+     "Scarblade's Malice"
+    ],
+    [
+     50,
+     "Barbed Bloodletter"
+    ]
+   ]
+  ]
+ },
+ {
+  "name": "Burdened",
+  "set": "Lorwyn Eclipsed (ECL)",
+  "theme": "-",
+  "count": 18,
+  "fixed": [
+   [
+    "Burdened Stoneback",
+    1
+   ],
+   [
+    "Encumbered Reejerey",
+    1
+   ],
+   [
+    "Tributary Vaulter",
+    1
+   ],
+   [
+    "Sun-Dappled Celebrant",
+    1
+   ],
+   [
+    "Pyrrhic Strike",
+    1
+   ],
+   [
+    "Evershrike's Gift",
+    1
+   ],
+   [
+    "Liminal Hold",
+    1
+   ],
+   [
+    "Plains",
+    6
+   ]
+  ],
+  "slots": [
+   [
+    [
+     20,
+     "Ajani, Outland Chaperone"
+    ],
+    [
+     40,
+     "Rhys, the Evermore"
+    ],
+    [
+     40,
+     "Slumbering Walker"
+    ]
+   ],
+   [
+    [
+     50,
+     "Meanders Guide"
+    ],
+    [
+     50,
+     "Moonlit Lamenter"
+    ]
+   ],
+   [
+    [
+     50,
+     "Spiral into Solitude"
+    ],
+    [
+     50,
+     "Wanderbrine Preacher"
+    ]
+   ],
+   [
+    [
+     50,
+     "Shore Lurker"
+    ],
+    [
+     50,
+     "Merrow Skyswimmer"
+    ]
+   ],
+   [
+    [
+     50,
+     "Keep Out"
+    ],
+    [
+     50,
+     "Riverguard's Reflexes"
+    ]
+   ]
+  ]
+ },
+ {
+  "name": "Cats",
+  "set": "Foundations (FDN)",
+  "theme": "Cat tribal",
+  "count": 12,
+  "fixed": [
+   [
+    "Ingenious Leonin",
+    1
+   ],
+   [
+    "Dawnwing Marshal",
+    1
+   ],
+   [
+    "Savannah Lions",
+    1
+   ],
+   [
+    "Ajani's Pridemate",
+    1
+   ],
+   [
+    "Prideful Parent",
+    1
+   ],
+   [
+    "Felidar Savior",
+    1
+   ],
+   [
+    "Claws Out",
+    1
+   ],
+   [
+    "Evolving Wilds",
+    1
+   ]
+  ],
+  "slots": [
+   [
+    [
+     50,
+     "Arahbo, the First Fang"
+    ],
+    [
+     50,
+     "Regal Caracal"
+    ]
+   ],
+   [
+    [
+     50,
+     "Prayer of Binding"
+    ],
+    [
+     50,
+     "Valorous Stance"
+    ]
+   ],
+   [
+    [
+     50,
+     "Joust Through"
+    ],
+    [
+     50,
+     "Deadly Riposte"
+    ]
+   ],
+   [
+    [
+     50,
+     "Helpful Hunter"
+    ],
+    [
+     50,
+     "Felidar Cub"
+    ]
+   ]
+  ]
+ },
+ {
+  "name": "Cats",
+  "set": "Aetherdrift (DFT)",
+  "theme": "Cat tribal",
+  "count": 13,
+  "fixed": [
+   [
+    "Gloryheath Lynx",
+    1
+   ],
+   [
+    "Pride of the Road",
+    1
+   ],
+   [
+    "Leonin Surveyor",
+    1
+   ],
+   [
+    "Walking Sarcophagus",
+    1
+   ],
+   [
+    "Brightfield Mustang",
+    1
+   ],
+   [
+    "Spotcycle Scouter",
+    1
+   ],
+   [
+    "Skybox Ferry",
+    1
+   ]
+  ],
+  "slots": [
+   [
+    [
+     50,
+     "Basri, Tomorrow's Champion"
+    ],
+    [
+     50,
+     "Lifecraft Engine"
+    ]
+   ],
+   [
+    [
+     10,
+     "Muraganda Raceway"
+    ],
+    [
+     30,
+     "Amonkhet Raceway"
+    ],
+    [
+     60,
+     "Avishkar Raceway"
+    ]
+   ],
+   [
+    [
+     50,
+     "Gallant Strike"
+    ],
+    [
+     50,
+     "Detention Chariot"
+    ]
+   ],
+   [
+    [
+     50,
+     "Roadside Assistance"
+    ],
+    [
+     50,
+     "Cloudspire Captain"
+    ]
+   ],
+   [
+    [
+     50,
+     "Air Response Unit"
+    ],
+    [
+     50,
+     "Patchwork Banner"
+    ]
+   ],
+   [
+    [
+     50,
+     "Lotusguard Disciple"
+    ],
+    [
+     50,
+     "Daring Mechanic"
+    ]
+   ]
+  ]
+ },
+ {
+  "name": "Cosmic",
+  "set": "Edge of Eternities (EOE)",
+  "theme": "Play 2 spells by turn",
+  "count": 12,
+  "fixed": [
+   [
+    "Illvoi Infiltrator",
+    1
+   ],
+   [
+    "Uthros Psionicist",
+    1
+   ],
+   [
+    "Illvoi Galeblade",
+    1
+   ],
+   [
+    "Illvoi Operative",
+    1
+   ],
+   [
+    "Starbreach Whale",
+    1
+   ],
+   [
+    "Mental Modulation",
+    1
+   ],
+   [
+    "Tractor Beam",
+    1
+   ],
+   [
+    "Cryoshatter",
+    1
+   ]
+  ],
+  "slots": [
+   [
+    [
+     20,
+     "Quantum Riddler"
+    ],
+    [
+     80,
+     "Starwinder"
+    ]
+   ],
+   [
+    [
+     50,
+     "Mechan Navigator"
+    ],
+    [
+     50,
+     "Codecracker Hound"
+    ]
+   ],
+   [
+    [
+     50,
+     "Uthros Scanship"
+    ],
+    [
+     50,
+     "Gigastorm Titan"
+    ]
+   ],
+   [
+    [
+     50,
+     "Divert Disaster"
+    ],
+    [
+     50,
+     "Lost in Space"
+    ]
+   ]
+  ]
+ },
+ {
+  "name": "Delirium",
+  "set": "Duskmourn: House of Horror (DSK)",
+  "theme": "Delirium mechanic",
+  "count": 12,
+  "fixed": [
+   [
+    "Fear of Burning Alive",
+    1
+   ],
+   [
+    "Fear of Being Hunted",
+    1
+   ],
+   [
+    "Hand That Feeds",
+    1
+   ],
+   [
+    "Ripchain Razorkin",
+    1
+   ],
+   [
+    "Bedhead Beastie",
+    1
+   ],
+   [
+    "Violent Urge",
+    1
+   ],
+   [
+    "Impossible Inferno",
+    1
+   ],
+   [
+    "Vengeful Possession",
+    1
+   ]
+  ],
+  "slots": [
+   [
+    [
+     20,
+     "The Rollercrusher Ride"
+    ],
+    [
+     40,
+     "Fear of Missing Out"
+    ],
+    [
+     40,
+     "Enduring Courage"
+    ]
+   ],
+   [
+    [
+     50,
+     "Irreverent Gremlin"
+    ],
+    [
+     50,
+     "Piggy Bank"
+    ]
+   ],
+   [
+    [
+     50,
+     "Glassworks // Shattered Yard"
+    ],
+    [
+     50,
+     "Grab the Prize"
+    ]
+   ],
+   [
+    [
+     50,
+     "Scorching Dragonfire"
+    ],
+    [
+     50,
+     "Bear Trap"
+    ]
+   ]
+  ]
+ },
+ {
+  "name": "Discard",
+  "set": "Tarkir: Dragonstorm (TDM)",
+  "theme": "Discard mechanic",
+  "count": 13,
+  "fixed": [
+   [
+    "Unsparing Boltcaster",
+    1
+   ],
+   [
+    "Sunset Strikemaster",
+    1
+   ],
+   [
+    "Stormshriek Feral",
+    1
+   ],
+   [
+    "Rescue Leopard",
+    1
+   ],
+   [
+    "Meticulous Artisan",
+    1
+   ],
+   [
+    "Molten Exhale",
+    1
+   ],
+   [
+    "War Effort",
+    1
+   ],
+   [
+    "Evolving Wilds",
+    1
+   ]
+  ],
+  "slots": [
+   [
+    [
+     20,
+     "Stormscale Scion"
+    ],
+    [
+     40,
+     "Cori-Steel Cutter"
+    ],
+    [
+     40,
+     "Stadium Headliner"
+    ]
+   ],
+   [
+    [
+     50,
+     "Equilibrium Adept"
+    ],
+    [
+     50,
+     "Zurgo's Vanguard"
+    ]
+   ],
+   [
+    [
+     50,
+     "Breaching Dragonstorm"
+    ],
+    [
+     50,
+     "Iridescent Tiger"
+    ]
+   ],
+   [
+    [
+     50,
+     "Devoted Duelist"
+    ],
+    [
+     50,
+     "Jeskai Devotee"
+    ]
+   ],
+   [
+    [
+     50,
+     "Shock Brigade"
+    ],
+    [
+     50,
+     "Underfoot Underdogs"
+    ]
+   ]
+  ]
+ },
+ {
+  "name": "Drawing",
+  "set": "Foundations (FDN)",
+  "theme": "Draw several cards by turn",
+  "count": 12,
+  "fixed": [
+   [
+    "Spectral Sailor",
+    1
+   ],
+   [
+    "Mischievous Mystic",
+    1
+   ],
+   [
+    "Clinquant Skymage",
+    1
+   ],
+   [
+    "Erudite Wizard",
+    1
+   ],
+   [
+    "Strix Lookout",
+    1
+   ],
+   [
+    "Arcane Epiphany",
+    1
+   ],
+   [
+    "Eaten by Piranhas",
+    1
+   ],
+   [
+    "Evolving Wilds",
+    1
+   ]
+  ],
+  "slots": [
+   [
+    [
+     50,
+     "Homunculus Horde"
+    ],
+    [
+     50,
+     "Arcanis the Omnipotent"
+    ]
+   ],
+   [
+    [
+     50,
+     "Storm Fleet Spy"
+    ],
+    [
+     50,
+     "Skyship Buccaneer"
+    ]
+   ],
+   [
+    [
+     50,
+     "Refute"
+    ],
+    [
+     50,
+     "Into the Roil"
+    ]
+   ],
+   [
+    [
+     50,
+     "Think Twice"
+    ],
+    [
+     50,
+     "Quick Study"
+    ]
+   ]
+  ]
+ },
+ {
+  "name": "Eerie",
+  "set": "Duskmourn: House of Horror (DSK)",
+  "theme": "Eerie mechanic",
+  "count": 12,
+  "fixed": [
+   [
+    "Unwilling Vessel",
+    1
+   ],
+   [
+    "Fear of Falling",
+    1
+   ],
+   [
+    "Fear of Isolation",
+    1
+   ],
+   [
+    "Clammy Prowler",
+    1
+   ],
+   [
+    "Erratic Apparition",
+    1
+   ],
+   [
+    "Daggermaw Megalodon",
+    1
+   ],
+   [
+    "Bottomless Pool // Locker Room",
+    1
+   ],
+   [
+    "Underwater Tunnel // Slimy Aquarium",
+    1
+   ]
+  ],
+  "slots": [
+   [
+    [
+     20,
+     "Mirror Room // Fractured Realm"
+    ],
+    [
+     40,
+     "Enduring Curiosity"
+    ],
+    [
+     40,
+     "Entity Tracker"
+    ]
+   ],
+   [
+    [
+     50,
+     "Fear of Impostors"
+    ],
+    [
+     50,
+     "Fear of Failed Tests"
+    ]
+   ],
+   [
+    [
+     50,
+     "Stalked Researcher"
+    ],
+    [
+     50,
+     "Creeping Peeper"
+    ]
+   ],
+   [
+    [
+     50,
+     "Tunnel Surveyor"
+    ],
+    [
+     50,
+     "Underwater Tunnel // Slimy Aquarium"
+    ]
+   ]
+  ]
+ },
+ {
+  "name": "Elemental",
+  "set": "Lorwyn Eclipsed (ECL)",
+  "theme": "Elemental tribal",
+  "count": 19,
+  "fixed": [
+   [
+    "Flamebraider",
+    1
+   ],
+   [
+    "Eclipsed Flamekin",
+    1
+   ],
+   [
+    "Tanufel Rimespeaker",
+    1
+   ],
+   [
+    "Twinflame Travelers",
+    1
+   ],
+   [
+    "Summit Sentinel",
+    1
+   ],
+   [
+    "Flaring Cinder",
+    1
+   ],
+   [
+    "Feed the Flames",
+    1
+   ],
+   [
+    "Temporal Cleansing",
+    1
+   ],
+   [
+    "Steam Vents",
+    1
+   ],
+   [
+    "Island",
+    3
+   ],
+   [
+    "Mountain",
+    3
+   ]
+  ],
+  "slots": [
+   [
+    [
+     50,
+     "Sunderflock"
+    ],
+    [
+     50,
+     "Ashling's Command"
+    ]
+   ],
+   [
+    [
+     50,
+     "Giantfall"
+    ],
+    [
+     50,
+     "Sear"
+    ]
+   ],
+   [
+    [
+     50,
+     "Enraged Flamecaster"
+    ],
+    [
+     50,
+     "Kulrath Mystic"
+    ]
+   ],
+   [
+    [
+     50,
+     "Kulrath Zealot"
+    ],
+    [
+     50,
+     "Stratosoarer"
+    ]
+   ]
+  ]
+ },
+ {
+  "name": "Elves",
+  "set": "Foundations (FDN)",
+  "theme": "Elf tribal",
+  "count": 12,
+  "fixed": [
+   [
+    "Reclamation Sage",
+    1
+   ],
+   [
+    "Dwynen's Elite",
+    1
+   ],
+   [
+    "Llanowar Elves",
+    1
+   ],
+   [
+    "Druid of the Cowl",
+    1
+   ],
+   [
+    "Thornweald Archer",
+    1
+   ],
+   [
+    "Snakeskin Veil",
+    1
+   ],
+   [
+    "Bite Down",
+    1
+   ],
+   [
+    "Felling Blow",
+    1
+   ]
+  ],
+  "slots": [
+   [
+    [
+     50,
+     "Elvish Archdruid"
+    ],
+    [
+     50,
+     "Preposterous Proportions"
+    ]
+   ],
+   [
+    [
+     50,
+     "Dwynen, Gilt-Leaf Daen"
+    ],
+    [
+     50,
+     "Imperious Perfect"
+    ]
+   ],
+   [
+    [
+     50,
+     "Beast-Kin Ranger"
+    ],
+    [
+     50,
+     "Wildheart Invoker"
+    ]
+   ],
+   [
+    [
+     50,
+     "Elfsworn Giant"
+    ],
+    [
+     50,
+     "Tajuru Pathwarden"
+    ]
+   ]
+  ]
+ },
+ {
+  "name": "Elves",
+  "set": "Lorwyn Eclipsed (ECL)",
+  "theme": "Elf tribal",
+  "count": 19,
+  "fixed": [
+   [
+    "Lys Alana Dignitary",
+    1
+   ],
+   [
+    "Eclipsed Elf",
+    1
+   ],
+   [
+    "Morcant's Loyalist",
+    1
+   ],
+   [
+    "Dawn's Light Archer",
+    1
+   ],
+   [
+    "Stoic Grove-Guide",
+    1
+   ],
+   [
+    "Midnight Tilling",
+    1
+   ],
+   [
+    "Assert Perfection",
+    1
+   ],
+   [
+    "Overgrown Tomb",
+    1
+   ],
+   [
+    "Swamp",
+    3
+   ],
+   [
+    "Forest",
+    3
+   ]
+  ],
+  "slots": [
+   [
+    [
+     20,
+     "High Perfect Morcant"
+    ],
+    [
+     40,
+     "Trystan's Command"
+    ],
+    [
+     40,
+     "Gloom Ripper"
+    ]
+   ],
+   [
+    [
+     50,
+     "Morcant's Eyes"
+    ],
+    [
+     50,
+     "Creakwood Safewright"
+    ]
+   ],
+   [
+    [
+     50,
+     "Blossoming Defense"
+    ],
+    [
+     50,
+     "Nameless Inversion"
+    ]
+   ],
+   [
+    [
+     50,
+     "Lys Alana Informant"
+    ],
+    [
+     50,
+     "Scarblade Scout"
+    ]
+   ],
+   [
+    [
+     50,
+     "Dawnhand Eulogist"
+    ],
+    [
+     50,
+     "Safewright Cavalry"
+    ]
+   ]
+  ]
+ },
+ {
+  "name": "Encounter",
+  "set": "Tarkir: Dragonstorm (TDM)",
+  "theme": "Counters",
+  "count": 13,
+  "fixed": [
+   [
+    "Sage of the Fang",
+    1
+   ],
+   [
+    "Formation Breaker",
+    1
+   ],
+   [
+    "Trade Route Envoy",
+    1
+   ],
+   [
+    "Champion of Dusan",
+    1
+   ],
+   [
+    "Sagu Wildling",
+    1
+   ],
+   [
+    "Snakeskin Veil",
+    1
+   ],
+   [
+    "Synchronized Charge",
+    1
+   ],
+   [
+    "Knockout Maneuver",
+    1
+   ],
+   [
+    "Evolving Wilds",
+    1
+   ]
+  ],
+  "slots": [
+   [
+    [
+     50,
+     "Warden of the Grove"
+    ],
+    [
+     50,
+     "Lasyd Prowler"
+    ]
+   ],
+   [
+    [
+     50,
+     "Inspirited Vanguard"
+    ],
+    [
+     50,
+     "Rainveil Rejuvenator"
+    ]
+   ],
+   [
+    [
+     50,
+     "Sagu Pummeler"
+    ],
+    [
+     50,
+     "Dusyut Earthcarver"
+    ]
+   ],
+   [
+    [
+     50,
+     "Undergrowth Leopard"
+    ],
+    [
+     50,
+     "Ainok Wayfarer"
+    ]
+   ]
+  ]
+ },
+ {
+  "name": "Exhausted",
+  "set": "Aetherdrift (DFT)",
+  "theme": "Exhaust mechanic",
+  "count": 13,
+  "fixed": [
+   [
+    "Skyserpent Seeker",
+    1
+   ],
+   [
+    "Elvish Refueler",
+    1
+   ],
+   [
+    "Keen Buccaneer",
+    1
+   ],
+   [
+    "Trip Up",
+    1
+   ],
+   [
+    "Run Over",
+    1
+   ],
+   [
+    "Bestow Greatness",
+    1
+   ],
+   [
+    "Rangers' Aetherhive",
+    1
+   ],
+   [
+    "Rangers' Refueler",
+    1
+   ]
+  ],
+  "slots": [
+   [
+    [
+     50,
+     "Afterburner Expert"
+    ],
+    [
+     50,
+     "Sita Varma, Masked Racer"
+    ]
+   ],
+   [
+    [
+     10,
+     "Muraganda Raceway"
+    ],
+    [
+     30,
+     "Amonkhet Raceway"
+    ],
+    [
+     60,
+     "Avishkar Raceway"
+    ]
+   ],
+   [
+    [
+     50,
+     "Sabotage Strategist"
+    ],
+    [
+     50,
+     "Greenbelt Guardian"
+    ]
+   ],
+   [
+    [
+     50,
+     "Skystreak Engineer"
+    ],
+    [
+     50,
+     "Stampeding Scurryfoot"
+    ]
+   ],
+   [
+    [
+     50,
+     "Camera Launcher"
+    ],
+    [
+     50,
+     "Hazard of the Dunes"
+    ]
+   ]
+  ]
+ },
+ {
+  "name": "Exploring",
+  "set": "Bloomburrow (BLB)",
+  "theme": "Ramp stompy",
+  "count": 12,
+  "fixed": [
+   [
+    "Galewind Moose",
+    1
+   ],
+   [
+    "Hivespine Wolverine",
+    1
+   ],
+   [
+    "Bark-Knuckle Boxer",
+    1
+   ],
+   [
+    "Three Tree Rootweaver",
+    1
+   ],
+   [
+    "Pawpatch Formation",
+    1
+   ],
+   [
+    "Peerless Recycling",
+    1
+   ],
+   [
+    "Hunter's Talent",
+    1
+   ],
+   [
+    "Heaped Harvest",
+    1
+   ]
+  ],
+  "slots": [
+   [
+    [
+     20,
+     "Lumra, Bellow of the Woods"
+    ],
+    [
+     40,
+     "Tender Wildguide"
+    ],
+    [
+     40,
+     "Fecund Greenshell"
+    ]
+   ],
+   [
+    [
+     50,
+     "Clifftop Lookout"
+    ],
+    [
+     50,
+     "Brambleguard Veteran"
+    ]
+   ],
+   [
+    [
+     50,
+     "Stickytongue Sentinel"
+    ],
+    [
+     50,
+     "Bakersbane Duo"
+    ]
+   ],
+   [
+    [
+     50,
+     "Rust-Shield Rampager"
+    ],
+    [
+     50,
+     "Treeguard Duo"
+    ]
+   ]
+  ]
+ },
+ {
+  "name": "Field Trip",
+  "set": "Secrets of Strixhaven (SOS)",
+  "theme": "Ramping into big creatures",
+  "count": 12,
+  "fixed": [
+   [
+    "Emil, Vastlands Roamer",
+    1
+   ],
+   [
+    "Studious First-Year",
+    1
+   ],
+   [
+    "Hungry Graffalon",
+    1
+   ],
+   [
+    "Burrog Barrage",
+    1
+   ],
+   [
+    "Chelonian Tackle",
+    1
+   ],
+   [
+    "Wild Hypothesis",
+    1
+   ]
+  ],
+  "slots": [
+   [
+    [
+     20,
+     "Emeritus of Abundance"
+    ],
+    [
+     80,
+     "Vastlands Scavenger"
+    ]
+   ],
+   [
+    [
+     50,
+     "Infirmary Healer"
+    ],
+    [
+     50,
+     "Environmental Scientist"
+    ]
+   ],
+   [
+    [
+     50,
+     "Pestbrood Sloth"
+    ],
+    [
+     50,
+     "Aberrant Manawurm"
+    ]
+   ],
+   [
+    [
+     50,
+     "Zimone's Experiment"
+    ],
+    [
+     50,
+     "Additive Evolution"
+    ]
+   ],
+   [
+    [
+     50,
+     "Noxious Newt"
+    ],
+    [
+     50,
+     "Mindful Biomancer"
+    ]
+   ],
+   [
+    [
+     50,
+     "Glorious Decay"
+    ],
+    [
+     50,
+     "Oracle's Restoration"
+    ]
+   ]
+  ]
+ },
+ {
+  "name": "Flashy",
+  "set": "Lorwyn Eclipsed (ECL)",
+  "theme": "-",
+  "count": 18,
+  "fixed": [
+   [
+    "Glamer Gifter",
+    1
+   ],
+   [
+    "Voracious Tome-Skimmer",
+    1
+   ],
+   [
+    "Illusion Spinners",
+    1
+   ],
+   [
+    "Mischievous Sneakling",
+    1
+   ],
+   [
+    "Glamermite",
+    1
+   ],
+   [
+    "Wild Unraveling",
+    1
+   ],
+   [
+    "Unexpected Assistance",
+    1
+   ],
+   [
+    "Blossombind",
+    1
+   ],
+   [
+    "Island",
+    6
+   ]
+  ],
+  "slots": [
+   [
+    [
+     20,
+     "Loch Mare"
+    ],
+    [
+     40,
+     "Flitterwing Nuisance"
+    ],
+    [
+     40,
+     "Glen Elendra Guardian"
+    ]
+   ],
+   [
+    [
+     50,
+     "Rimekin Recluse"
+    ],
+    [
+     50,
+     "Unwelcome Sprite"
+    ]
+   ],
+   [
+    [
+     50,
+     "Noggle the Mind"
+    ],
+    [
+     50,
+     "Swat Away"
+    ]
+   ],
+   [
+    [
+     50,
+     "Run Away Together"
+    ],
+    [
+     50,
+     "Aquitect's Defenses"
+    ]
+   ]
+  ]
+ },
+ {
+  "name": "Flyers",
+  "set": "Foundations (FDN)",
+  "theme": "Flying creatures",
+  "count": 12,
+  "fixed": [
+   [
+    "Empyrean Eagle",
+    1
+   ],
+   [
+    "Cloudblazer",
+    1
+   ],
+   [
+    "Leonin Skyhunter",
+    1
+   ],
+   [
+    "Spectral Sailor",
+    1
+   ],
+   [
+    "Inspiring Overseer",
+    1
+   ],
+   [
+    "Faebloom Trick",
+    1
+   ],
+   [
+    "Fleeting Flight",
+    1
+   ],
+   [
+    "Azorius Guildgate",
+    1
+   ]
+  ],
+  "slots": [
+   [
+    [
+     20,
+     "Valkyrie's Call"
+    ],
+    [
+     40,
+     "High Fae Trickster"
+    ],
+    [
+     40,
+     "Celestial Armor"
+    ]
+   ],
+   [
+    [
+     50,
+     "Skyship Buccaneer"
+    ],
+    [
+     50,
+     "Clinquant Skymage"
+    ]
+   ],
+   [
+    [
+     50,
+     "Kitesail Corsair"
+    ],
+    [
+     50,
+     "Strix Lookout"
+    ]
+   ],
+   [
+    [
+     50,
+     "Luminous Rebuke"
+    ],
+    [
+     50,
+     "Pacifism"
+    ]
+   ]
+  ]
+ },
+ {
+  "name": "Frogs",
+  "set": "Bloomburrow (BLB)",
+  "theme": "Frog tribal",
+  "count": 12,
+  "fixed": [
+   [
+    "Lilysplash Mentor",
+    1
+   ],
+   [
+    "Long River Lurker",
+    1
+   ],
+   [
+    "Three Tree Scribe",
+    1
+   ],
+   [
+    "Pond Prophet",
+    1
+   ],
+   [
+    "Sunshower Druid",
+    1
+   ],
+   [
+    "Stickytongue Sentinel",
+    1
+   ],
+   [
+    "High Stride",
+    1
+   ],
+   [
+    "Polliwallop",
+    1
+   ]
+  ],
+  "slots": [
+   [
+    [
+     50,
+     "Clement, the Worrywort"
+    ],
+    [
+     50,
+     "Dreamdew Entrancer"
+    ]
+   ],
+   [
+    [
+     50,
+     "Splash Lasher"
+    ],
+    [
+     50,
+     "Run Away Together"
+    ]
+   ],
+   [
+    [
+     50,
+     "Bellowing Crier"
+    ],
+    [
+     50,
+     "Waterspout Warden"
+    ]
+   ],
+   [
+    [
+     50,
+     "Skyskipper Duo"
+    ],
+    [
+     50,
+     "Treeguard Duo"
+    ]
+   ]
+  ]
+ },
+ {
+  "name": "Fueled-Up",
+  "set": "Aetherdrift (DFT)",
+  "theme": "Start your engines! mechanic",
+  "count": 13,
+  "fixed": [
+   [
+    "Caelorna, Coral Tyrant",
+    1
+   ],
+   [
+    "Diversion Unit",
+    1
+   ],
+   [
+    "Howler's Heavy",
+    1
+   ],
+   [
+    "Keen Buccaneer",
+    1
+   ],
+   [
+    "Glitch Ghost Surveyor",
+    1
+   ],
+   [
+    "Aether Syphon",
+    1
+   ],
+   [
+    "Hulldrifter",
+    1
+   ]
+  ],
+  "slots": [
+   [
+    [
+     50,
+     "Thopter Fabricator"
+    ],
+    [
+     50,
+     "Vnwxt, Verbose Host"
+    ]
+   ],
+   [
+    [
+     10,
+     "Muraganda Raceway"
+    ],
+    [
+     30,
+     "Amonkhet Raceway"
+    ],
+    [
+     60,
+     "Avishkar Raceway"
+    ]
+   ],
+   [
+    [
+     50,
+     "Scrounging Skyray"
+    ],
+    [
+     50,
+     "Slick Imitator"
+    ]
+   ],
+   [
+    [
+     50,
+     "Trip Up"
+    ],
+    [
+     50,
+     "Flood the Engine"
+    ]
+   ],
+   [
+    [
+     50,
+     "Nimble Thopterist"
+    ],
+    [
+     50,
+     "Glitch Ghost Surveyor"
+    ]
+   ],
+   [
+    [
+     50,
+     "Guidelight Optimizer"
+    ],
+    [
+     50,
+     "Skystreak Engineer"
+    ]
+   ]
+  ]
+ },
+ {
+  "name": "Giant",
+  "set": "Lorwyn Eclipsed (ECL)",
+  "theme": "Giant tribal",
+  "count": 18,
+  "fixed": [
+   [
+    "Sizzling Changeling",
+    1
+   ],
+   [
+    "Hovel Hurler",
+    1
+   ],
+   [
+    "Boldwyr Aggressor",
+    1
+   ],
+   [
+    "Feisty Spikeling",
+    1
+   ],
+   [
+    "Brambleback Brute",
+    1
+   ],
+   [
+    "Tweeze",
+    1
+   ],
+   [
+    "Burning Curiosity",
+    1
+   ],
+   [
+    "Mountain",
+    6
+   ]
+  ],
+  "slots": [
+   [
+    [
+     20,
+     "Spinerock Tyrant"
+    ],
+    [
+     80,
+     "Goliath Daydreamer"
+    ]
+   ],
+   [
+    [
+     50,
+     "Impolite Entrance"
+    ],
+    [
+     50,
+     "Goatnap"
+    ]
+   ],
+   [
+    [
+     50,
+     "Boulder Dash"
+    ],
+    [
+     50,
+     "Giantfall"
+    ]
+   ],
+   [
+    [
+     50,
+     "Stalactite Dagger"
+    ],
+    [
+     50,
+     "Flame-Chain Mauler"
+    ]
+   ],
+   [
+    [
+     50,
+     "Flamekin Gildweaver"
+    ],
+    [
+     50,
+     "Feed the Flames"
+    ]
+   ]
+  ]
+ },
+ {
+  "name": "Goblin",
+  "set": "Foundations (FDN)",
+  "theme": "Goblin tribal",
+  "count": 12,
+  "fixed": [
+   [
+    "Volley Veteran",
+    1
+   ],
+   [
+    "Fiery Annihilation",
+    1
+   ],
+   [
+    "Goblin Surprise",
+    1
+   ],
+   [
+    "Goblin Negotiation",
+    1
+   ],
+   [
+    "Dragon Fodder",
+    1
+   ],
+   [
+    "Goblin Oriflamme",
+    1
+   ],
+   [
+    "Impact Tremors",
+    1
+   ],
+   [
+    "Evolving Wilds",
+    1
+   ]
+  ],
+  "slots": [
+   [
+    [
+     50,
+     "Dropkick Bomber"
+    ],
+    [
+     50,
+     "Krenko, Mob Boss"
+    ]
+   ],
+   [
+    [
+     50,
+     "Obliterating Bolt"
+    ],
+    [
+     50,
+     "Abrade"
+    ]
+   ],
+   [
+    [
+     50,
+     "Goblin Smuggler"
+    ],
+    [
+     50,
+     "Raging Redcap"
+    ]
+   ],
+   [
+    [
+     50,
+     "Sure Strike"
+    ],
+    [
+     50,
+     "Fanatical Firebrand"
+    ]
+   ]
+  ]
+ },
+ {
+  "name": "Goblins",
+  "set": "Lorwyn Eclipsed (ECL)",
+  "theme": "Goblin tribal",
+  "count": 19,
+  "fixed": [
+   [
+    "Boggart Cursecrafter",
+    1
+   ],
+   [
+    "Eclipsed Boggart",
+    1
+   ],
+   [
+    "Sourbread Auntie",
+    1
+   ],
+   [
+    "Bile-Vial Boggart",
+    1
+   ],
+   [
+    "Unbury",
+    1
+   ],
+   [
+    "Bogslither's Embrace",
+    1
+   ],
+   [
+    "Burning Curiosity",
+    1
+   ],
+   [
+    "Blood Crypt",
+    1
+   ],
+   [
+    "Swamp",
+    3
+   ],
+   [
+    "Mountain",
+    3
+   ]
+  ],
+  "slots": [
+   [
+    [
+     50,
+     "Scuzzback Scrounger"
+    ],
+    [
+     50,
+     "Grub's Command"
+    ]
+   ],
+   [
+    [
+     50,
+     "Retched Wretch"
+    ],
+    [
+     50,
+     "Boggart Mischief"
+    ]
+   ],
+   [
+    [
+     50,
+     "Boggart Prankster"
+    ],
+    [
+     50,
+     "Gristle Glutton"
+    ]
+   ],
+   [
+    [
+     50,
+     "Elder Auntie"
+    ],
+    [
+     50,
+     "Chaos Spewer"
+    ]
+   ],
+   [
+    [
+     50,
+     "Cinder Strike"
+    ],
+    [
+     50,
+     "Auntie's Sentence"
+    ]
+   ]
+  ]
+ },
+ {
+  "name": "Grave",
+  "set": "Secrets of Strixhaven (SOS)",
+  "theme": "Reanimate creatures from graveyard",
+  "count": 12,
+  "fixed": [
+   [
+    "Leech Collector",
+    1
+   ],
+   [
+    "Forum Necroscribe",
+    1
+   ],
+   [
+    "Adventurous Eater",
+    1
+   ],
+   [
+    "Sneering Shadewriter",
+    1
+   ],
+   [
+    "Last Gasp",
+    1
+   ],
+   [
+    "Wander Off",
+    1
+   ]
+  ],
+  "slots": [
+   [
+    [
+     20,
+     "Ral Zarek, Guest Lecturer"
+    ],
+    [
+     80,
+     "Grave Researcher"
+    ]
+   ],
+   [
+    [
+     50,
+     "Lecturing Scornmage"
+    ],
+    [
+     50,
+     "Burrog Banemaker"
+    ]
+   ],
+   [
+    [
+     50,
+     "Eternal Student"
+    ],
+    [
+     50,
+     "Cheerful Osteomancer"
+    ]
+   ],
+   [
+    [
+     50,
+     "Dissection Practice"
+    ],
+    [
+     50,
+     "Rabid Attack"
+    ]
+   ],
+   [
+    [
+     50,
+     "Melancholic Poet"
+    ],
+    [
+     50,
+     "Send in the Pest"
+    ]
+   ],
+   [
+    [
+     50,
+     "Cost of Brilliance"
+    ],
+    [
+     50,
+     "Pull from the Grave"
+    ]
+   ]
+  ]
+ },
+ {
+  "name": "Graveyard",
+  "set": "Aetherdrift (DFT)",
+  "theme": "Graveyard synergy",
+  "count": 13,
+  "fixed": [
+   [
+    "Wickerfolk Indomitable",
+    1
+   ],
+   [
+    "Ooze Patrol",
+    1
+   ],
+   [
+    "Deathless Pilot",
+    1
+   ],
+   [
+    "Wreckage Wickerfolk",
+    1
+   ],
+   [
+    "Pothole Mole",
+    1
+   ],
+   [
+    "Broodheart Engine",
+    1
+   ],
+   [
+    "Thundering Broodwagon",
+    1
+   ],
+   [
+    "Grim Bauble",
+    1
+   ]
+  ],
+  "slots": [
+   [
+    [
+     50,
+     "Bloodghast"
+    ],
+    [
+     50,
+     "Aatchik, Emerald Radian"
+    ]
+   ],
+   [
+    [
+     10,
+     "Muraganda Raceway"
+    ],
+    [
+     30,
+     "Amonkhet Raceway"
+    ],
+    [
+     60,
+     "Avishkar Raceway"
+    ]
+   ],
+   [
+    [
+     50,
+     "Wretched Doll"
+    ],
+    [
+     50,
+     "Carrion Cruiser"
+    ]
+   ],
+   [
+    [
+     50,
+     "Chitin Gravestalker"
+    ],
+    [
+     50,
+     "Migrating Ketradon"
+    ]
+   ],
+   [
+    [
+     50,
+     "Run Over"
+    ],
+    [
+     50,
+     "Spin Out"
+    ]
+   ]
+  ]
+ },
+ {
+  "name": "Graveyard",
+  "set": "Tarkir: Dragonstorm (TDM)",
+  "theme": "Graveyard synergy",
+  "count": 13,
+  "fixed": [
+   [
+    "Gurmag Rakshasa",
+    1
+   ],
+   [
+    "Unrooted Ancestor",
+    1
+   ],
+   [
+    "Hundred-Battle Veteran",
+    1
+   ],
+   [
+    "Alchemist's Assistant",
+    1
+   ],
+   [
+    "Unburied Earthcarver",
+    1
+   ],
+   [
+    "Abzan Devotee",
+    1
+   ],
+   [
+    "Worthy Cost",
+    1
+   ],
+   [
+    "Evolving Wilds",
+    1
+   ]
+  ],
+  "slots": [
+   [
+    [
+     50,
+     "Sidisi, Regent of the Mire"
+    ],
+    [
+     50,
+     "Avenger of the Fallen"
+    ]
+   ],
+   [
+    [
+     50,
+     "Wail of War"
+    ],
+    [
+     50,
+     "Desperate Measures"
+    ]
+   ],
+   [
+    [
+     50,
+     "Strategic Betrayal"
+    ],
+    [
+     50,
+     "Salt Road Skirmish"
+    ]
+   ],
+   [
+    [
+     50,
+     "Feral Deathgorger"
+    ],
+    [
+     50,
+     "Adorned Crocodile"
+    ]
+   ],
+   [
+    [
+     50,
+     "Cruel Truths"
+    ],
+    [
+     50,
+     "Aggressive Negotiations"
+    ]
+   ]
+  ]
+ },
+ {
+  "name": "Greenhouse",
+  "set": "Edge of Eternities (EOE)",
+  "theme": "+1/+1 counters",
+  "count": 13,
+  "fixed": [
+   [
+    "Meltstrider Eulogist",
+    1
+   ],
+   [
+    "Seedship Agrarian",
+    1
+   ],
+   [
+    "Lashwhip Predator",
+    1
+   ],
+   [
+    "Broodguard Elite",
+    1
+   ],
+   [
+    "Intrepid Tenderfoot",
+    1
+   ],
+   [
+    "Drix Fatemaker",
+    1
+   ],
+   [
+    "Biosynthic Burst",
+    1
+   ],
+   [
+    "Diplomatic Relations",
+    1
+   ],
+   [
+    "Atmospheric Greenhouse",
+    1
+   ],
+   [
+    "Evendo, Waking Haven",
+    1
+   ]
+  ],
+  "slots": [
+   [
+    [
+     20,
+     "Ouroboroid"
+    ],
+    [
+     40,
+     "Terrasymbiosis"
+    ],
+    [
+     40,
+     "Loading Zone"
+    ]
+   ],
+   [
+    [
+     50,
+     "Hemosymbic Mite"
+    ],
+    [
+     50,
+     "Blooming Stinger"
+    ]
+   ],
+   [
+    [
+     50,
+     "Skystinger"
+    ],
+    [
+     50,
+     "Thawbringer"
+    ]
+   ]
+  ]
+ },
+ {
+  "name": "Growth",
+  "set": "Foundations (FDN)",
+  "theme": "Creatures",
+  "count": 12,
+  "fixed": [
+   [
+    "Ruby, Daring Tracker",
+    1
+   ],
+   [
+    "Elvish Regrower",
+    1
+   ],
+   [
+    "Nessian Hornbeetle",
+    1
+   ],
+   [
+    "Battle-Rattle Shaman",
+    1
+   ],
+   [
+    "Courageous Goblin",
+    1
+   ],
+   [
+    "Gnarlid Colony",
+    1
+   ],
+   [
+    "Obliterating Bolt",
+    1
+   ],
+   [
+    "Gruul Guildgate",
+    1
+   ]
+  ],
+  "slots": [
+   [
+    [
+     33,
+     "Sylvan Scavenging"
+    ],
+    [
+     33,
+     "Flamewake Phoenix"
+    ],
+    [
+     34,
+     "Halana and Alena, Partners"
+    ]
+   ],
+   [
+    [
+     50,
+     "Bolt Bend"
+    ],
+    [
+     50,
+     "Bulk Up"
+    ]
+   ],
+   [
+    [
+     50,
+     "Treetop Snarespinner"
+    ],
+    [
+     50,
+     "Ambush Wolf"
+    ]
+   ],
+   [
+    [
+     50,
+     "Sure Strike"
+    ],
+    [
+     50,
+     "Giant Growth"
+    ]
+   ]
+  ]
+ },
+ {
+  "name": "Hares",
+  "set": "Foundations (FDN)",
+  "theme": "Rabbit tribal",
+  "count": 13,
+  "fixed": [
+   [
+    "Dauntless Veteran",
+    1
+   ],
+   [
+    "Hare Apparent",
+    7
+   ],
+   [
+    "Make a Stand",
+    1
+   ]
+  ],
+  "slots": [
+   [
+    [
+     50,
+     "Skyknight Squire"
+    ],
+    [
+     50,
+     "Raise the Past"
+    ]
+   ],
+   [
+    [
+     50,
+     "Syr Alin, the Lion's Claw"
+    ],
+    [
+     50,
+     "Mischievous Pup"
+    ]
+   ],
+   [
+    [
+     50,
+     "Crusader of Odric"
+    ],
+    [
+     50,
+     "Squad Rallier"
+    ]
+   ],
+   [
+    [
+     50,
+     "Make Your Move"
+    ],
+    [
+     50,
+     "Banishing Light"
+    ]
+   ]
+  ]
+ },
+ {
+  "name": "Jeskai",
+  "set": "Tarkir: Dragonstorm (TDM)",
+  "theme": "-",
+  "count": 13,
+  "fixed": [
+   [
+    "Cori Mountain Stalwart",
+    1
+   ],
+   [
+    "Fleeting Effigy",
+    1
+   ],
+   [
+    "Devoted Duelist",
+    1
+   ],
+   [
+    "Narset's Rebuke",
+    1
+   ],
+   [
+    "Riverwheel Sweep",
+    1
+   ],
+   [
+    "Wingspan Stride",
+    1
+   ],
+   [
+    "Jeskai Monument",
+    1
+   ],
+   [
+    "Mystic Monastery",
+    1
+   ]
+  ],
+  "slots": [
+   [
+    [
+     20,
+     "Shiko, Paragon of the Way"
+    ],
+    [
+     40,
+     "Narset, Jeskai Waymaster"
+    ],
+    [
+     40,
+     "Flamehold Grappler"
+    ]
+   ],
+   [
+    [
+     50,
+     "Overwhelming Surge"
+    ],
+    [
+     50,
+     "Fresh Start"
+    ]
+   ],
+   [
+    [
+     50,
+     "Wayspeaker Bodyguard"
+    ],
+    [
+     50,
+     "Equilibrium Adept"
+    ]
+   ],
+   [
+    [
+     50,
+     "Ringing Strike Mastery"
+    ],
+    [
+     50,
+     "Stormplain Detainment"
+    ]
+   ],
+   [
+    [
+     50,
+     "Humbling Elder"
+    ],
+    [
+     50,
+     "Lightfoot Technique"
+    ]
+   ]
+  ]
+ },
+ {
+  "name": "Kithkin",
+  "set": "Lorwyn Eclipsed (ECL)",
+  "theme": "Kithkin tribal",
+  "count": 19,
+  "fixed": [
+   [
+    "Thoughtweft Lieutenant",
+    1
+   ],
+   [
+    "Eclipsed Kithkin",
+    1
+   ],
+   [
+    "Thoughtweft Imbuer",
+    1
+   ],
+   [
+    "Mistmeadow Council",
+    1
+   ],
+   [
+    "Thoughtweft Charge",
+    1
+   ],
+   [
+    "Keep Out",
+    1
+   ],
+   [
+    "Clachan Festival",
+    1
+   ],
+   [
+    "Spiral into Solitude",
+    1
+   ],
+   [
+    "Temple Garden",
+    1
+   ],
+   [
+    "Plains",
+    3
+   ],
+   [
+    "Forest",
+    3
+   ]
+  ],
+  "slots": [
+   [
+    [
+     50,
+     "Brigid's Command"
+    ],
+    [
+     50,
+     "Figure of Fable"
+    ]
+   ],
+   [
+    [
+     50,
+     "Kinsbaile Aspirant"
+    ],
+    [
+     50,
+     "Goldmeadow Nomad"
+    ]
+   ],
+   [
+    [
+     50,
+     "Surly Farrier"
+    ],
+    [
+     50,
+     "Timid Shieldbearer"
+    ]
+   ],
+   [
+    [
+     50,
+     "Wary Farmer"
+    ],
+    [
+     50,
+     "Crossroads Watcher"
+    ]
+   ]
+  ]
+ },
+ {
+  "name": "Life",
+  "set": "Duskmourn: House of Horror (DSK)",
+  "theme": "Lifegain",
+  "count": 12,
+  "fixed": [
+   [
+    "Dashing Bloodsucker",
+    1
+   ],
+   [
+    "Osseous Sticktwister",
+    1
+   ],
+   [
+    "Balemurk Leech",
+    1
+   ],
+   [
+    "Fear of Lost Teeth",
+    1
+   ],
+   [
+    "Spectral Snatcher",
+    1
+   ],
+   [
+    "Withering Torment",
+    1
+   ],
+   [
+    "Commune with Evil",
+    1
+   ],
+   [
+    "Derelict Attic // Widow's Walk",
+    1
+   ]
+  ],
+  "slots": [
+   [
+    [
+     20,
+     "Meathook Massacre II"
+    ],
+    [
+     40,
+     "Enduring Tenacity"
+    ],
+    [
+     40,
+     "Unholy Annex // Ritual Chamber"
+    ]
+   ],
+   [
+    [
+     50,
+     "Let's Play a Game"
+    ],
+    [
+     50,
+     "Killer's Mask"
+    ]
+   ],
+   [
+    [
+     50,
+     "Winter's Intervention"
+    ],
+    [
+     50,
+     "Give In to Violence"
+    ]
+   ],
+   [
+    [
+     50,
+     "Fanatic of the Harrowing"
+    ],
+    [
+     50,
+     "Cracked Skull"
+    ]
+   ]
+  ]
+ },
+ {
+  "name": "Lizards",
+  "set": "Bloomburrow (BLB)",
+  "theme": "Lizard tribal",
+  "count": 12,
+  "fixed": [
+   [
+    "Reptilian Recruiter",
+    1
+   ],
+   [
+    "Flamecache Gecko",
+    1
+   ],
+   [
+    "Alania's Pathmaker",
+    1
+   ],
+   [
+    "Roughshod Duo",
+    1
+   ],
+   [
+    "Frilled Sparkshooter",
+    1
+   ],
+   [
+    "Rabid Gnaw",
+    1
+   ],
+   [
+    "Sazacap's Brew",
+    1
+   ],
+   [
+    "Hoarder's Overflow",
+    1
+   ]
+  ],
+  "slots": [
+   [
+    [
+     20,
+     "Dragonhawk, Fate's Tempest"
+    ],
+    [
+     40,
+     "Hearthborn Battler"
+    ],
+    [
+     40,
+     "Valley Flamecaller"
+    ]
+   ],
+   [
+    [
+     50,
+     "Quaketusk Boar"
+    ],
+    [
+     50,
+     "Teapot Slinger"
+    ]
+   ],
+   [
+    [
+     50,
+     "Blooming Blast"
+    ],
+    [
+     50,
+     "Playful Shove"
+    ]
+   ],
+   [
+    [
+     50,
+     "Raccoon Rallier"
+    ],
+    [
+     50,
+     "Steampath Charger"
+    ]
+   ]
+  ]
+ },
+ {
+  "name": "Lorehold",
+  "set": "Secrets of Strixhaven (SOS)",
+  "theme": "Flashback mechanic",
+  "count": 13,
+  "fixed": [
+   [
+    "Kirol, History Buff",
+    1
+   ],
+   [
+    "Practiced Scrollsmith",
+    1
+   ],
+   [
+    "Spirit Mascot",
+    1
+   ],
+   [
+    "Lorehold Charm",
+    1
+   ],
+   [
+    "Wilt in the Heat",
+    1
+   ],
+   [
+    "Pursue the Past",
+    1
+   ],
+   [
+    "Fields of Strife",
+    1
+   ]
+  ],
+  "slots": [
+   [
+    [
+     20,
+     "Lorehold, the Historian"
+    ],
+    [
+     40,
+     "Hardened Academic"
+    ],
+    [
+     40,
+     "Ark of Hunger"
+    ]
+   ],
+   [
+    [
+     50,
+     "Garrison Excavator"
+    ],
+    [
+     50,
+     "Startled Relic Sloth"
+    ]
+   ],
+   [
+    [
+     50,
+     "Colossus of the Blood Age"
+    ],
+    [
+     50,
+     "Molten Note"
+    ]
+   ],
+   [
+    [
+     50,
+     "Stone Docent"
+    ],
+    [
+     50,
+     "Owlin Historian"
+    ]
+   ],
+   [
+    [
+     50,
+     "Strife Scholar"
+    ],
+    [
+     50,
+     "Rubble Rouser"
+    ]
+   ],
+   [
+    [
+     50,
+     "Dig Site Inventory"
+    ],
+    [
+     50,
+     "Tome Blast"
+    ]
+   ]
+  ]
+ },
+ {
+  "name": "Luminaries",
+  "set": "Edge of Eternities (EOE)",
+  "theme": "+1/+1 counters",
+  "count": 13,
+  "fixed": [
+   [
+    "Rayblade Trooper",
+    1
+   ],
+   [
+    "Starport Security",
+    1
+   ],
+   [
+    "Dockworker Drone",
+    1
+   ],
+   [
+    "Knight Luminary",
+    1
+   ],
+   [
+    "Weftblade Enhancer",
+    1
+   ],
+   [
+    "Dual-Sun Technique",
+    1
+   ],
+   [
+    "Honor",
+    1
+   ],
+   [
+    "Banishing Light",
+    1
+   ],
+   [
+    "Auxiliary Boosters",
+    1
+   ],
+   [
+    "Adagia, Windswept Bastion",
+    1
+   ]
+  ],
+  "slots": [
+   [
+    [
+     20,
+     "Cosmogrand Zenith"
+    ],
+    [
+     80,
+     "Lumen-Class Frigate"
+    ]
+   ],
+   [
+    [
+     50,
+     "Dual-Sun Adepts"
+    ],
+    [
+     50,
+     "All-Fates Stalker"
+    ]
+   ],
+   [
+    [
+     50,
+     "Reroute Systems"
+    ],
+    [
+     50,
+     "Focus Fire"
+    ]
+   ]
+  ]
+ },
+ {
+  "name": "Manifest",
+  "set": "Duskmourn: House of Horror (DSK)",
+  "theme": "Manifest dread mechanic",
+  "count": 12,
+  "fixed": [
+   [
+    "Oblivious Bookworm",
+    1
+   ],
+   [
+    "Bashful Beastie",
+    1
+   ],
+   [
+    "Cryptid Inspector",
+    1
+   ],
+   [
+    "Growing Dread",
+    1
+   ],
+   [
+    "Stay Hidden, Stay Silent",
+    1
+   ],
+   [
+    "Underwater Tunnel // Slimy Aquarium",
+    1
+   ],
+   [
+    "Cursed Windbreaker",
+    1
+   ],
+   [
+    "Lakeside Shack",
+    1
+   ]
+  ],
+  "slots": [
+   [
+    [
+     20,
+     "Hauntwoods Shrieker"
+    ],
+    [
+     40,
+     "Valgavoth's Onslaught"
+    ],
+    [
+     40,
+     "Hedge Shredder"
+    ]
+   ],
+   [
+    [
+     50,
+     "Paranormal Analyst"
+    ],
+    [
+     50,
+     "Threats Around Every Corner"
+    ]
+   ],
+   [
+    [
+     50,
+     "Creeping Peeper"
+    ],
+    [
+     50,
+     "Manifest Dread"
+    ]
+   ],
+   [
+    [
+     50,
+     "Moldering Gym // Weight Room"
+    ],
+    [
+     50,
+     "Twist Reality"
+    ]
+   ]
+  ]
+ },
+ {
+  "name": "Mardu",
+  "set": "Tarkir: Dragonstorm (TDM)",
+  "theme": "Mobilize mechanic",
+  "count": 13,
+  "fixed": [
+   [
+    "Bone-Cairn Butcher",
+    1
+   ],
+   [
+    "Starry-Eyed Skyrider",
+    1
+   ],
+   [
+    "Bearer of Glory",
+    1
+   ],
+   [
+    "Riling Dawnbreaker",
+    1
+   ],
+   [
+    "Defibrillating Current",
+    1
+   ],
+   [
+    "Mardu Monument",
+    2
+   ],
+   [
+    "Nomad Outpost",
+    1
+   ]
+  ],
+  "slots": [
+   [
+    [
+     20,
+     "Neriv, Heart of the Storm"
+    ],
+    [
+     40,
+     "Zurgo, Thunder's Decree"
+    ],
+    [
+     40,
+     "Mardu Siegebreaker"
+    ]
+   ],
+   [
+    [
+     50,
+     "Zurgo's Vanguard"
+    ],
+    [
+     50,
+     "War Effort"
+    ]
+   ],
+   [
+    [
+     50,
+     "Nightblade Brigade"
+    ],
+    [
+     50,
+     "Shock Brigade"
+    ]
+   ],
+   [
+    [
+     50,
+     "Reigning Victor"
+    ],
+    [
+     50,
+     "Underfoot Underdogs"
+    ]
+   ],
+   [
+    [
+     50,
+     "Dragon's Prey"
+    ],
+    [
+     50,
+     "Coordinated Maneuver"
+    ]
+   ]
+  ]
+ },
+ {
+  "name": "Merfolk",
+  "set": "Lorwyn Eclipsed (ECL)",
+  "theme": "Merfolk tribal",
+  "count": 19,
+  "fixed": [
+   [
+    "Wanderbrine Trapper",
+    1
+   ],
+   [
+    "Deepchannel Duelist",
+    1
+   ],
+   [
+    "Eclipsed Merrow",
+    1
+   ],
+   [
+    "Gravelgill Scoundrel",
+    1
+   ],
+   [
+    "Merrow Skyswimmer",
+    1
+   ],
+   [
+    "Wanderwine Farewell",
+    1
+   ],
+   [
+    "Liminal Hold",
+    1
+   ],
+   [
+    "Hallowed Fountain",
+    1
+   ],
+   [
+    "Plains",
+    3
+   ],
+   [
+    "Island",
+    3
+   ]
+  ],
+  "slots": [
+   [
+    [
+     50,
+     "Deepway Navigator"
+    ],
+    [
+     50,
+     "Sygg's Command"
+    ]
+   ],
+   [
+    [
+     50,
+     "Silvergill Mentor"
+    ],
+    [
+     50,
+     "Encumbered Reejerey"
+    ]
+   ],
+   [
+    [
+     50,
+     "Pestered Wellguard"
+    ],
+    [
+     50,
+     "Shore Lurker"
+    ]
+   ],
+   [
+    [
+     50,
+     "Silvergill Peddler"
+    ],
+    [
+     50,
+     "Tributary Vaulter"
+    ]
+   ],
+   [
+    [
+     50,
+     "Appeal to Eirdu"
+    ],
+    [
+     50,
+     "Riverguard's Reflexes"
+    ]
+   ]
+  ]
+ },
+ {
+  "name": "Mice",
+  "set": "Bloomburrow (BLB)",
+  "theme": "Mouse tribal",
+  "count": 12,
+  "fixed": [
+   [
+    "Seedglaive Mentor",
+    1
+   ],
+   [
+    "Brambleguard Captain",
+    1
+   ],
+   [
+    "Flowerfoot Swordmaster",
+    1
+   ],
+   [
+    "Heartfire Hero",
+    1
+   ],
+   [
+    "Veteran Guardmouse",
+    1
+   ],
+   [
+    "Brave-Kin Duo",
+    1
+   ],
+   [
+    "Three Tree Mascot",
+    1
+   ],
+   [
+    "Mabel's Mettle",
+    1
+   ]
+  ],
+  "slots": [
+   [
+    [
+     50,
+     "Mabel, Heir to Cragflame"
+    ],
+    [
+     50,
+     "Manifold Mouse"
+    ]
+   ],
+   [
+    [
+     50,
+     "Feather of Flight"
+    ],
+    [
+     50,
+     "War Squeak"
+    ]
+   ],
+   [
+    [
+     50,
+     "Short Bow"
+    ],
+    [
+     50,
+     "Blacksmith's Talent"
+    ]
+   ],
+   [
+    [
+     50,
+     "Whiskerquill Scribe"
+    ],
+    [
+     50,
+     "Thistledown Players"
+    ]
+   ]
+  ]
+ },
+ {
+  "name": "Mill",
+  "set": "Tarkir: Dragonstorm (TDM)",
+  "theme": "Self-Mill",
+  "count": 13,
+  "fixed": [
+   [
+    "Kishla Trawlers",
+    1
+   ],
+   [
+    "Veteran Ice Climber",
+    1
+   ],
+   [
+    "Dragonstorm Forecaster",
+    1
+   ],
+   [
+    "Watcher of the Wayside",
+    1
+   ],
+   [
+    "Boulderborn Dragon",
+    1
+   ],
+   [
+    "Ringing Strike Mastery",
+    1
+   ],
+   [
+    "Essence Anchor",
+    1
+   ],
+   [
+    "Dragonstorm Globe",
+    1
+   ],
+   [
+    "Evolving Wilds",
+    1
+   ]
+  ],
+  "slots": [
+   [
+    [
+     50,
+     "Stillness in Motion"
+    ],
+    [
+     50,
+     "Marang River Regent"
+    ]
+   ],
+   [
+    [
+     50,
+     "Fresh Start"
+    ],
+    [
+     50,
+     "Ureni's Rebuff"
+    ]
+   ],
+   [
+    [
+     50,
+     "Dirgur Island Dragon"
+    ],
+    [
+     50,
+     "Iceridge Serpent"
+    ]
+   ],
+   [
+    [
+     50,
+     "Unending Whisper"
+    ],
+    [
+     50,
+     "Focus the Mind"
+    ]
+   ]
+  ]
+ },
+ {
+  "name": "Otters",
+  "set": "Bloomburrow (BLB)",
+  "theme": "Otter tribal",
+  "count": 12,
+  "fixed": [
+   [
+    "Stormcatch Mentor",
+    1
+   ],
+   [
+    "Coruscation Mage",
+    1
+   ],
+   [
+    "Harnesser of Storms",
+    1
+   ],
+   [
+    "Three Tree Mascot",
+    1
+   ],
+   [
+    "Valley Rally",
+    1
+   ],
+   [
+    "Conduct Electricity",
+    1
+   ],
+   [
+    "Otterball Antics",
+    1
+   ],
+   [
+    "Wildfire Howl",
+    1
+   ]
+  ],
+  "slots": [
+   [
+    [
+     20,
+     "Ral, Crackling Wit"
+    ],
+    [
+     40,
+     "Alania, Divergent Storm"
+    ],
+    [
+     40,
+     "Festival of Embers"
+    ]
+   ],
+   [
+    [
+     50,
+     "Daring Waverider"
+    ],
+    [
+     50,
+     "Eddymurk Crab"
+    ]
+   ],
+   [
+    [
+     50,
+     "Agate Assault"
+    ],
+    [
+     50,
+     "Dazzling Denial"
+    ]
+   ],
+   [
+    [
+     50,
+     "Kindlespark Duo"
+    ],
+    [
+     50,
+     "Tempest Angler"
+    ]
+   ]
+  ]
+ },
+ {
+  "name": "Primordial",
+  "set": "Aetherdrift (DFT)",
+  "theme": "-",
+  "count": 13,
+  "fixed": [
+   [
+    "Terrian, World Tyrant",
+    1
+   ],
+   [
+    "Fang-Druid Summoner",
+    1
+   ],
+   [
+    "Jibbirik Omnivore",
+    1
+   ],
+   [
+    "Beastrider Vanguard",
+    1
+   ],
+   [
+    "Run Over",
+    1
+   ],
+   [
+    "Rise from the Wreck",
+    1
+   ],
+   [
+    "Plow Through",
+    1
+   ]
+  ],
+  "slots": [
+   [
+    [
+     20,
+     "Thunderous Velocipede"
+    ],
+    [
+     40,
+     "Agonasaur Rex"
+    ],
+    [
+     40,
+     "Oviya, Automech Artisan"
+    ]
+   ],
+   [
+    [
+     10,
+     "Muraganda Raceway"
+    ],
+    [
+     30,
+     "Amonkhet Raceway"
+    ],
+    [
+     60,
+     "Avishkar Raceway"
+    ]
+   ],
+   [
+    [
+     50,
+     "Fang Guardian"
+    ],
+    [
+     50,
+     "Autarch Mammoth"
+    ]
+   ],
+   [
+    [
+     50,
+     "Thundering Broodwagon"
+    ],
+    [
+     50,
+     "Stampeding Scurryfoot"
+    ]
+   ],
+   [
+    [
+     50,
+     "Alacrian Jaguar"
+    ],
+    [
+     50,
+     "Migrating Ketradon"
+    ]
+   ],
+   [
+    [
+     50,
+     "Loxodon Surveyor"
+    ],
+    [
+     50,
+     "Silken Strength"
+    ]
+   ]
+  ]
+ },
+ {
+  "name": "Prismari",
+  "set": "Secrets of Strixhaven (SOS)",
+  "theme": "Opus mechanic",
+  "count": 13,
+  "fixed": [
+   [
+    "Sanar, Unfinished Genius",
+    1
+   ],
+   [
+    "Spectacular Skywhale",
+    1
+   ],
+   [
+    "Landscape Painter",
+    1
+   ],
+   [
+    "Vibrant Outburst",
+    1
+   ],
+   [
+    "Prismari Charm",
+    1
+   ],
+   [
+    "Visionary's Dance",
+    1
+   ],
+   [
+    "Spectacle Summit",
+    1
+   ]
+  ],
+  "slots": [
+   [
+    [
+     20,
+     "Prismari, the Inspiration"
+    ],
+    [
+     40,
+     "Traumatic Critique"
+    ],
+    [
+     40,
+     "Colorstorm Stallion"
+    ]
+   ],
+   [
+    [
+     50,
+     "Blazing Firesinger"
+    ],
+    [
+     50,
+     "Abstract Paintmage"
+    ]
+   ],
+   [
+    [
+     50,
+     "Rapturous Moment"
+    ],
+    [
+     50,
+     "Stress Dream"
+    ]
+   ],
+   [
+    [
+     50,
+     "Deluge Virtuoso"
+    ],
+    [
+     50,
+     "Elemental Mascot"
+    ]
+   ],
+   [
+    [
+     50,
+     "Muse's Encouragement"
+    ],
+    [
+     50,
+     "Stadium Tidalmage"
+    ]
+   ],
+   [
+    [
+     50,
+     "Unsubtle Mockery"
+    ],
+    [
+     50,
+     "Procrastinate"
+    ]
+   ]
+  ]
+ },
+ {
+  "name": "Pyrrhic",
+  "set": "Edge of Eternities (EOE)",
+  "theme": "-",
+  "count": 13,
+  "fixed": [
+   [
+    "Honored Knight-Captain",
+    1
+   ],
+   [
+    "Syr Vondam, the Lucent",
+    1
+   ],
+   [
+    "Knight Luminary",
+    1
+   ],
+   [
+    "Vote Out",
+    1
+   ],
+   [
+    "Embrace Oblivion",
+    1
+   ],
+   [
+    "Dubious Delicacy",
+    1
+   ],
+   [
+    "Auxiliary Boosters",
+    1
+   ],
+   [
+    "Scoured Barrens",
+    1
+   ]
+  ],
+  "slots": [
+   [
+    [
+     50,
+     "Syr Vondam, Sunstar Exemplar"
+    ],
+    [
+     50,
+     "Elegy Acolyte"
+    ]
+   ],
+   [
+    [
+     50,
+     "Timeline Culler"
+    ],
+    [
+     50,
+     "Susurian Voidborn"
+    ]
+   ],
+   [
+    [
+     50,
+     "Virus Beetle"
+    ],
+    [
+     50,
+     "Beamsaw Prospector"
+    ]
+   ],
+   [
+    [
+     50,
+     "Gravpack Monoist"
+    ],
+    [
+     50,
+     "Exosuit Savior"
+    ]
+   ],
+   [
+    [
+     50,
+     "Zealous Display"
+    ],
+    [
+     50,
+     "Squire's Lightblade"
+    ]
+   ]
+  ]
+ },
+ {
+  "name": "Quandrix",
+  "set": "Secrets of Strixhaven (SOS)",
+  "theme": "Increment mechanic",
+  "count": 13,
+  "fixed": [
+   [
+    "Cuboid Colony",
+    1
+   ],
+   [
+    "Paradox Surveyor",
+    1
+   ],
+   [
+    "Tam, Observant Sequencer",
+    1
+   ],
+   [
+    "Pterafractyl",
+    1
+   ],
+   [
+    "Quandrix Charm",
+    1
+   ],
+   [
+    "Proctor's Gaze",
+    1
+   ],
+   [
+    "Embrace the Paradox",
+    1
+   ],
+   [
+    "Procrastinate",
+    1
+   ],
+   [
+    "Paradox Gardens",
+    1
+   ]
+  ],
+  "slots": [
+   [
+    [
+     20,
+     "Quandrix, the Proof"
+    ],
+    [
+     40,
+     "Applied Geometry"
+    ],
+    [
+     40,
+     "Mind into Matter"
+    ]
+   ],
+   [
+    [
+     50,
+     "Tester of the Tangential"
+    ],
+    [
+     50,
+     "Infirmary Healer"
+    ]
+   ],
+   [
+    [
+     50,
+     "Matterbending Mage"
+    ],
+    [
+     50,
+     "Topiary Lecturer"
+    ]
+   ],
+   [
+    [
+     50,
+     "Fractal Tender"
+    ],
+    [
+     50,
+     "Fractal Mascot"
+    ]
+   ]
+  ]
+ },
+ {
+  "name": "Rabbits",
+  "set": "Bloomburrow (BLB)",
+  "theme": "Rabbit tribal",
+  "count": 12,
+  "fixed": [
+   [
+    "Harvestrite Host",
+    1
+   ],
+   [
+    "Warren Elder",
+    1
+   ],
+   [
+    "Rabbit Response",
+    1
+   ],
+   [
+    "Hop to It",
+    1
+   ],
+   [
+    "Builder's Talent",
+    1
+   ],
+   [
+    "Banishing Light",
+    1
+   ],
+   [
+    "Patchwork Banner",
+    1
+   ],
+   [
+    "Carrot Cake",
+    1
+   ]
+  ],
+  "slots": [
+   [
+    [
+     20,
+     "Warren Warleader"
+    ],
+    [
+     40,
+     "Valley Questcaller"
+    ],
+    [
+     40,
+     "Caretaker's Talent"
+    ]
+   ],
+   [
+    [
+     50,
+     "Seasoned Warrenguard"
+    ],
+    [
+     50,
+     "Lifecreed Duo"
+    ]
+   ],
+   [
+    [
+     50,
+     "Shrike Force"
+    ],
+    [
+     50,
+     "Intrepid Rabbit"
+    ]
+   ],
+   [
+    [
+     50,
+     "Driftgloom Coyote"
+    ],
+    [
+     50,
+     "Repel Calamity"
+    ]
+   ]
+  ]
+ },
+ {
+  "name": "Raiders",
+  "set": "Foundations (FDN)",
+  "theme": "Raid mechanic",
+  "count": 12,
+  "fixed": [
+   [
+    "Perforating Artist",
+    1
+   ],
+   [
+    "Garna, Bloodfist of Keld",
+    1
+   ],
+   [
+    "Strongbox Raider",
+    1
+   ],
+   [
+    "Sower of Chaos",
+    1
+   ],
+   [
+    "Sanguine Syphoner",
+    1
+   ],
+   [
+    "Goblin Smuggler",
+    1
+   ],
+   [
+    "Feed the Swarm",
+    1
+   ],
+   [
+    "Rakdos Guildgate",
+    1
+   ]
+  ],
+  "slots": [
+   [
+    [
+     50,
+     "Alesha, Who Laughs at Fate"
+    ],
+    [
+     50,
+     "Immersturm Predator"
+    ]
+   ],
+   [
+    [
+     50,
+     "Frenzied Goblin"
+    ],
+    [
+     50,
+     "Brazen Scourge"
+    ]
+   ],
+   [
+    [
+     50,
+     "Vengeful Bloodwitch"
+    ],
+    [
+     50,
+     "Heartfire Immolator"
+    ]
+   ],
+   [
+    [
+     50,
+     "Burst Lightning"
+    ],
+    [
+     50,
+     "Scorching Dragonfire"
+    ]
+   ]
+  ]
+ },
+ {
+  "name": "Rats",
+  "set": "Bloomburrow (BLB)",
+  "theme": "Rat tribal",
+  "count": 12,
+  "fixed": [
+   [
+    "Thought-Stalker Warlock",
+    1
+   ],
+   [
+    "Huskburster Swarm",
+    1
+   ],
+   [
+    "Thornplate Intimidator",
+    1
+   ],
+   [
+    "Scales of Shale",
+    1
+   ],
+   [
+    "Fell",
+    1
+   ],
+   [
+    "Ruthless Negotiation",
+    1
+   ],
+   [
+    "Psychic Whorl",
+    1
+   ],
+   [
+    "Bandit's Talent",
+    1
+   ]
+  ],
+  "slots": [
+   [
+    [
+     20,
+     "Rottenmouth Viper"
+    ],
+    [
+     40,
+     "Cruelclaw's Heist"
+    ],
+    [
+     40,
+     "Coiling Rebirth"
+    ]
+   ],
+   [
+    [
+     50,
+     "Consumed by Greed"
+    ],
+    [
+     50,
+     "Polygraph Orb"
+    ]
+   ],
+   [
+    [
+     50,
+     "Agate-Blade Assassin"
+    ],
+    [
+     50,
+     "Bonebind Orator"
+    ]
+   ],
+   [
+    [
+     50,
+     "Ravine Raider"
+    ],
+    [
+     50,
+     "Nezumi Informant"
+    ]
+   ]
+  ]
+ },
+ {
+  "name": "Revives",
+  "set": "Duskmourn: House of Horror (DSK)",
+  "theme": "Return creatures from the graveyard",
+  "count": 12,
+  "fixed": [
+   [
+    "Shroudstomper",
+    1
+   ],
+   [
+    "Valgavoth's Faithful",
+    1
+   ],
+   [
+    "Savior of the Small",
+    1
+   ],
+   [
+    "Innocuous Rat",
+    1
+   ],
+   [
+    "Possessed Goat",
+    1
+   ],
+   [
+    "Spectral Snatcher",
+    1
+   ],
+   [
+    "Live or Die",
+    1
+   ],
+   [
+    "Rite of the Moth",
+    1
+   ],
+   [
+    "Defiled Crypt // Cadaver Lab",
+    1
+   ]
+  ],
+  "slots": [
+   [
+    [
+     20,
+     "Funeral Room // Awakening Hall"
+    ],
+    [
+     40,
+     "Unstoppable Slasher"
+    ],
+    [
+     40,
+     "Come Back Wrong"
+    ]
+   ],
+   [
+    [
+     50,
+     "Appendage Amalgam"
+    ],
+    [
+     50,
+     "Fear of Surveillance"
+    ]
+   ],
+   [
+    [
+     50,
+     "Murder"
+    ],
+    [
+     50,
+     "Final Vengeance"
+    ]
+   ]
+  ]
+ },
+ {
+  "name": "Road Rage",
+  "set": "Aetherdrift (DFT)",
+  "theme": "-",
+  "count": 13,
+  "fixed": [
+   [
+    "Cloudspire Coordinator",
+    1
+   ],
+   [
+    "Canyon Vaulter",
+    1
+   ],
+   [
+    "Cloudspire Captain",
+    1
+   ],
+   [
+    "Endrider Catalyzer",
+    1
+   ],
+   [
+    "Dynamite Diver",
+    1
+   ],
+   [
+    "Collision Course",
+    1
+   ],
+   [
+    "Cloudspire Skycycle",
+    1
+   ],
+   [
+    "Spotcycle Scouter",
+    1
+   ]
+  ],
+  "slots": [
+   [
+    [
+     20,
+     "Valor's Flagship"
+    ],
+    [
+     40,
+     "Skyseer's Chariot"
+    ],
+    [
+     40,
+     "Kolodin, Triumph Caster"
+    ]
+   ],
+   [
+    [
+     10,
+     "Muraganda Raceway"
+    ],
+    [
+     30,
+     "Amonkhet Raceway"
+    ],
+    [
+     60,
+     "Avishkar Raceway"
+    ]
+   ],
+   [
+    [
+     50,
+     "Air Response Unit"
+    ],
+    [
+     50,
+     "Alacrian Armory"
+    ]
+   ],
+   [
+    [
+     50,
+     "Lightning Strike"
+    ],
+    [
+     50,
+     "Ride's End"
+    ]
+   ],
+   [
+    [
+     50,
+     "Daring Mechanic"
+    ],
+    [
+     50,
+     "Interface Ace"
+    ]
+   ]
+  ]
+ },
+ {
+  "name": "Room",
+  "set": "Duskmourn: House of Horror (DSK)",
+  "theme": "Room mechanic",
+  "count": 12,
+  "fixed": [
+   [
+    "Intruding Soulrager",
+    1
+   ],
+   [
+    "Infernal Phantom",
+    1
+   ],
+   [
+    "Ghostly Keybearer",
+    1
+   ],
+   [
+    "Rampaging Soulrager",
+    1
+   ],
+   [
+    "Smoky Lounge // Misty Salon",
+    1
+   ],
+   [
+    "Glassworks // Shattered Yard",
+    1
+   ],
+   [
+    "Keys to the House",
+    1
+   ],
+   [
+    "Peculiar Lighthouse",
+    1
+   ]
+  ],
+  "slots": [
+   [
+    [
+     50,
+     "Roaring Furnace // Steaming Sauna"
+    ],
+    [
+     50,
+     "Entity Tracker"
+    ]
+   ],
+   [
+    [
+     50,
+     "Fear of Impostors"
+    ],
+    [
+     50,
+     "Stay Hidden, Stay Silent"
+    ]
+   ],
+   [
+    [
+     50,
+     "Stalked Researcher"
+    ],
+    [
+     50,
+     "Erratic Apparition"
+    ]
+   ],
+   [
+    [
+     50,
+     "Ticket Booth // Tunnel of Hate"
+    ],
+    [
+     50,
+     "Underwater Tunnel // Slimy Aquarium"
+    ]
+   ]
+  ]
+ },
+ {
+  "name": "Sacrifice",
+  "set": "Duskmourn: House of Horror (DSK)",
+  "theme": "Sacrifice mechanic",
+  "count": 12,
+  "fixed": [
+   [
+    "Sawblade Skinripper",
+    1
+   ],
+   [
+    "Diversion Specialist",
+    1
+   ],
+   [
+    "Popular Egotist",
+    1
+   ],
+   [
+    "Piggy Bank",
+    1
+   ],
+   [
+    "Fear of Lost Teeth",
+    1
+   ],
+   [
+    "Boilerbilges Ripper",
+    1
+   ],
+   [
+    "Disturbing Mirth",
+    1
+   ],
+   [
+    "Razortrap Gorge",
+    1
+   ]
+  ],
+  "slots": [
+   [
+    [
+     50,
+     "Grievous Wound"
+    ],
+    [
+     50,
+     "Enduring Courage"
+    ]
+   ],
+   [
+    [
+     50,
+     "Sporogenic Infection"
+    ],
+    [
+     50,
+     "Derelict Attic // Widow's Walk"
+    ]
+   ],
+   [
+    [
+     50,
+     "Final Vengeance"
+    ],
+    [
+     50,
+     "Murder"
+    ]
+   ],
+   [
+    [
+     50,
+     "Give In to Violence"
+    ],
+    [
+     50,
+     "Winter's Intervention"
+    ]
+   ]
+  ]
+ },
+ {
+  "name": "Scribe",
+  "set": "Secrets of Strixhaven (SOS)",
+  "theme": "Making value with cards in graveyard",
+  "count": 12,
+  "fixed": [
+   [
+    "Ennis, Debate Moderator",
+    1
+   ],
+   [
+    "Spiritcall Enthusiast",
+    1
+   ],
+   [
+    "Elite Interceptor",
+    1
+   ],
+   [
+    "Eager Glyphmage",
+    1
+   ],
+   [
+    "Ascendant Dustspeaker",
+    1
+   ],
+   [
+    "Ajani's Response",
+    1
+   ],
+   [
+    "Dig Site Inventory",
+    1
+   ]
+  ],
+  "slots": [
+   [
+    [
+     20,
+     "Emeritus of Truce"
+    ],
+    [
+     80,
+     "Antiquities on the Loose"
+    ]
+   ],
+   [
+    [
+     50,
+     "Group Project"
+    ],
+    [
+     50,
+     "Soaring Stoneglider"
+    ]
+   ],
+   [
+    [
+     50,
+     "Daydream"
+    ],
+    [
+     50,
+     "Primary Research"
+    ]
+   ],
+   [
+    [
+     50,
+     "Stone Docent"
+    ],
+    [
+     50,
+     "Shattered Acolyte"
+    ]
+   ],
+   [
+    [
+     50,
+     "Rapier Wit"
+    ],
+    [
+     50,
+     "Interjection"
+    ]
+   ]
+  ]
+ },
+ {
+  "name": "Silverquill",
+  "set": "Secrets of Strixhaven (SOS)",
+  "theme": "Repartee mechanic",
+  "count": 13,
+  "fixed": [
+   [
+    "Scolding Administrator",
+    1
+   ],
+   [
+    "Abigale, Poet Laureate",
+    1
+   ],
+   [
+    "Stirring Honormancer",
+    1
+   ],
+   [
+    "Elite Interceptor",
+    1
+   ],
+   [
+    "Inkling Mascot",
+    1
+   ],
+   [
+    "Silverquill Charm",
+    1
+   ],
+   [
+    "Social Snub",
+    1
+   ],
+   [
+    "Forum of Amity",
+    1
+   ]
+  ],
+  "slots": [
+   [
+    [
+     20,
+     "Silverquill, the Disputant"
+    ],
+    [
+     40,
+     "Stirring Hopesinger"
+    ],
+    [
+     40,
+     "Conciliator's Duelist"
+    ]
+   ],
+   [
+    [
+     50,
+     "Snooping Page"
+    ],
+    [
+     50,
+     "Melancholic Poet"
+    ]
+   ],
+   [
+    [
+     50,
+     "Killian's Confidence"
+    ],
+    [
+     50,
+     "Render Speechless"
+    ]
+   ],
+   [
+    [
+     50,
+     "Rehearsed Debater"
+    ],
+    [
+     50,
+     "Imperious Inkmage"
+    ]
+   ],
+   [
+    [
+     50,
+     "Interjection"
+    ],
+    [
+     50,
+     "Masterful Flourish"
+    ]
+   ]
+  ]
+ },
+ {
+  "name": "Spellcraft",
+  "set": "Secrets of Strixhaven (SOS)",
+  "theme": "Casting instants and sorceries",
+  "count": 12,
+  "fixed": [
+   [
+    "Charging Strifeknight",
+    1
+   ],
+   [
+    "Pigment Wrangler",
+    1
+   ],
+   [
+    "Zealous Lorecaster",
+    1
+   ],
+   [
+    "Unsubtle Mockery",
+    1
+   ],
+   [
+    "Impractical Joke",
+    1
+   ],
+   [
+    "Artistic Process",
+    1
+   ],
+   [
+    "Living History",
+    1
+   ]
+  ],
+  "slots": [
+   [
+    [
+     20,
+     "Improvisation Capstone"
+    ],
+    [
+     80,
+     "Steal the Show"
+    ]
+   ],
+   [
+    [
+     50,
+     "Garrison Excavator"
+    ],
+    [
+     50,
+     "Tackle Artist"
+    ]
+   ],
+   [
+    [
+     50,
+     "Expressive Firedancer"
+    ],
+    [
+     50,
+     "Goblin Glasswright"
+    ]
+   ],
+   [
+    [
+     50,
+     "Rubble Rouser"
+    ],
+    [
+     50,
+     "Strife Scholar"
+    ]
+   ],
+   [
+    [
+     50,
+     "Tome Blast"
+    ],
+    [
+     50,
+     "Heated Argument"
+    ]
+   ]
+  ]
+ },
+ {
+  "name": "Squirrels",
+  "set": "Bloomburrow (BLB)",
+  "theme": "Squirrel tribal",
+  "count": 12,
+  "fixed": [
+   [
+    "Vinereap Mentor",
+    1
+   ],
+   [
+    "Bonecache Overseer",
+    1
+   ],
+   [
+    "Honored Dreyleader",
+    1
+   ],
+   [
+    "Corpseberry Cultivator",
+    1
+   ],
+   [
+    "Treetop Sentries",
+    1
+   ],
+   [
+    "Three Tree Mascot",
+    1
+   ],
+   [
+    "Feed the Cycle",
+    1
+   ],
+   [
+    "Cache Grab",
+    1
+   ]
+  ],
+  "slots": [
+   [
+    [
+     20,
+     "Ygra, Eater of All"
+    ],
+    [
+     40,
+     "Camellia, the Seedmiser"
+    ],
+    [
+     40,
+     "Osteomancer Adept"
+    ]
+   ],
+   [
+    [
+     50,
+     "Wick's Patrol"
+    ],
+    [
+     50,
+     "Downwind Ambusher"
+    ]
+   ],
+   [
+    [
+     50,
+     "Bushy Bodyguard"
+    ],
+    [
+     50,
+     "Curious Forager"
+    ]
+   ],
+   [
+    [
+     50,
+     "Bonebind Orator"
+    ],
+    [
+     50,
+     "Daggerfang Duo"
+    ]
+   ]
+  ]
+ },
+ {
+  "name": "Stations",
+  "set": "Edge of Eternities (EOE)",
+  "theme": "Stations",
+  "count": 12,
+  "fixed": [
+   [
+    "Sami, Ship's Engineer",
+    1
+   ],
+   [
+    "Dawnstrike Vanguard",
+    1
+   ],
+   [
+    "Starfighter Pilot",
+    1
+   ],
+   [
+    "Zookeeper Mechan",
+    1
+   ],
+   [
+    "Orbital Plunge",
+    1
+   ],
+   [
+    "Wedgelight Rammer",
+    1
+   ],
+   [
+    "Wind-Scarred Crag",
+    1
+   ]
+  ],
+  "slots": [
+   [
+    [
+     20,
+     "Dawnsire, Sunstar Dreadnought"
+    ],
+    [
+     80,
+     "Sunstar Chaplain"
+    ]
+   ],
+   [
+    [
+     50,
+     "Vaultguard Trooper"
+    ],
+    [
+     50,
+     "Rescue Skiff"
+    ]
+   ],
+   [
+    [
+     50,
+     "Frontline War-Rager"
+    ],
+    [
+     50,
+     "Flight-Deck Coordinator"
+    ]
+   ],
+   [
+    [
+     50,
+     "Squire's Lightblade"
+    ],
+    [
+     50,
+     "Rig for War"
+    ]
+   ],
+   [
+    [
+     50,
+     "Drill Too Deep"
+    ],
+    [
+     50,
+     "Melded Moxite"
+    ]
+   ]
+  ]
+ },
+ {
+  "name": "Strong",
+  "set": "Foundations (FDN)",
+  "theme": "+1/+1 counters",
+  "count": 12,
+  "fixed": [
+   [
+    "Good-Fortune Unicorn",
+    1
+   ],
+   [
+    "Wildwood Scourge",
+    1
+   ],
+   [
+    "Mild-Mannered Librarian",
+    1
+   ],
+   [
+    "Treetop Snarespinner",
+    1
+   ],
+   [
+    "Gnarlid Colony",
+    1
+   ],
+   [
+    "Felidar Savior",
+    1
+   ],
+   [
+    "Inspiring Call",
+    1
+   ],
+   [
+    "Selesnya Guildgate",
+    1
+   ]
+  ],
+  "slots": [
+   [
+    [
+     20,
+     "Quilled Greatwurm"
+    ],
+    [
+     40,
+     "Mossborn Hydra"
+    ],
+    [
+     40,
+     "Felidar Retreat"
+    ]
+   ],
+   [
+    [
+     50,
+     "Ordeal of Nylea"
+    ],
+    [
+     50,
+     "Ingenious Leonin"
+    ]
+   ],
+   [
+    [
+     50,
+     "Bite Down"
+    ],
+    [
+     50,
+     "Deadly Riposte"
+    ]
+   ],
+   [
+    [
+     50,
+     "Bushwhack"
+    ],
+    [
+     50,
+     "Pacifism"
+    ]
+   ]
+  ]
+ },
+ {
+  "name": "Sultai",
+  "set": "Tarkir: Dragonstorm (TDM)",
+  "theme": "-",
+  "count": 13,
+  "fixed": [
+   [
+    "Kheru Goldkeeper",
+    1
+   ],
+   [
+    "Kishla Skimmer",
+    1
+   ],
+   [
+    "Sagu Pummeler",
+    1
+   ],
+   [
+    "Agent of Kotis",
+    1
+   ],
+   [
+    "Ainok Wayfarer",
+    1
+   ],
+   [
+    "Lie in Wait",
+    1
+   ],
+   [
+    "Sultai Monument",
+    1
+   ],
+   [
+    "Opulent Palace",
+    1
+   ]
+  ],
+  "slots": [
+   [
+    [
+     20,
+     "Teval, Arbiter of Virtue"
+    ],
+    [
+     40,
+     "Kotis, the Fangkeeper"
+    ],
+    [
+     40,
+     "Fangkeeper's Familiar"
+    ]
+   ],
+   [
+    [
+     50,
+     "Alchemist's Assistant"
+    ],
+    [
+     50,
+     "Sage of the Fang"
+    ]
+   ],
+   [
+    [
+     50,
+     "Constrictor Sage"
+    ],
+    [
+     50,
+     "Knockout Maneuver"
+    ]
+   ],
+   [
+    [
+     50,
+     "Worthy Cost"
+    ],
+    [
+     50,
+     "Dragon's Prey"
+    ]
+   ],
+   [
+    [
+     50,
+     "Sagu Wildling"
+    ],
+    [
+     50,
+     "Feral Deathgorger"
+    ]
+   ]
+  ]
+ },
+ {
+  "name": "Summoned",
+  "set": "Duskmourn: House of Horror (DSK)",
+  "theme": "Ramp and synergy with graveyard",
+  "count": 12,
+  "fixed": [
+   [
+    "Altanak, the Thrice-Called",
+    1
+   ],
+   [
+    "House Cartographer",
+    1
+   ],
+   [
+    "Patchwork Beastie",
+    1
+   ],
+   [
+    "Wary Watchdog",
+    1
+   ],
+   [
+    "Under the Skin",
+    1
+   ],
+   [
+    "Say Its Name",
+    3
+   ]
+  ],
+  "slots": [
+   [
+    [
+     20,
+     "Overlord of the Hauntwoods"
+    ],
+    [
+     40,
+     "Enduring Vitality"
+    ],
+    [
+     40,
+     "Twitching Doll"
+    ]
+   ],
+   [
+    [
+     50,
+     "Cathartic Parting"
+    ],
+    [
+     50,
+     "Break Down the Door"
+    ]
+   ],
+   [
+    [
+     50,
+     "Moldering Gym // Weight Room"
+    ],
+    [
+     50,
+     "Spineseeker Centipede"
+    ]
+   ],
+   [
+    [
+     50,
+     "Bashful Beastie"
+    ],
+    [
+     50,
+     "Slavering Branchsnapper"
+    ]
+   ]
+  ]
+ },
+ {
+  "name": "Survival",
+  "set": "Duskmourn: House of Horror (DSK)",
+  "theme": "Survival mechanic",
+  "count": 12,
+  "fixed": [
+   [
+    "Shrewd Storyteller",
+    1
+   ],
+   [
+    "Savior of the Small",
+    1
+   ],
+   [
+    "Flesh Burrower",
+    1
+   ],
+   [
+    "Hardened Escort",
+    1
+   ],
+   [
+    "Grasping Longneck",
+    1
+   ],
+   [
+    "Sheltered by Ghosts",
+    1
+   ],
+   [
+    "Baseball Bat",
+    1
+   ],
+   [
+    "Etched Cornfield",
+    1
+   ]
+  ],
+  "slots": [
+   [
+    [
+     20,
+     "Tyvar, the Pummeler"
+    ],
+    [
+     40,
+     "Rip, Spawn Hunter"
+    ],
+    [
+     40,
+     "Dazzling Theater // Prop Room"
+    ]
+   ],
+   [
+    [
+     50,
+     "Orphans of the Wheat"
+    ],
+    [
+     50,
+     "Fear of Exposure"
+    ]
+   ],
+   [
+    [
+     50,
+     "Horrid Vigor"
+    ],
+    [
+     50,
+     "Jump Scare"
+    ]
+   ],
+   [
+    [
+     50,
+     "Cautious Survivor"
+    ],
+    [
+     50,
+     "Friendly Ghost"
+    ]
+   ]
+  ]
+ },
+ {
+  "name": "Synthesized",
+  "set": "Edge of Eternities (EOE)",
+  "theme": "-",
+  "count": 14,
+  "fixed": [
+   [
+    "Alpharael, Dreaming Acolyte",
+    1
+   ],
+   [
+    "Mechan Assembler",
+    1
+   ],
+   [
+    "Monoist Circuit-Feeder",
+    1
+   ],
+   [
+    "Mechan Shieldmate",
+    1
+   ],
+   [
+    "Cloudsculpt Technician",
+    1
+   ],
+   [
+    "Dubious Delicacy",
+    1
+   ],
+   [
+    "Nutrient Block",
+    1
+   ],
+   [
+    "Cryogen Relic",
+    1
+   ],
+   [
+    "Uthros, Titanic Godcore",
+    1
+   ],
+   [
+    "Dismal Backwater",
+    1
+   ]
+  ],
+  "slots": [
+   [
+    [
+     50,
+     "Requiem Monolith"
+    ],
+    [
+     50,
+     "Synthesizer Labship"
+    ]
+   ],
+   [
+    [
+     50,
+     "Umbral Collar Zealot"
+    ],
+    [
+     50,
+     "Steelswarm Operator"
+    ]
+   ],
+   [
+    [
+     50,
+     "Hullcarver"
+    ],
+    [
+     50,
+     "Virus Beetle"
+    ]
+   ],
+   [
+    [
+     50,
+     "Selfcraft Mechan"
+    ],
+    [
+     50,
+     "Gravblade Heavy"
+    ]
+   ]
+  ]
+ },
+ {
+  "name": "Teeny",
+  "set": "Duskmourn: House of Horror (DSK)",
+  "theme": "Creatures with power 2 or less",
+  "count": 12,
+  "fixed": [
+   [
+    "Lionheart Glimmer",
+    1
+   ],
+   [
+    "Glimmer Seeker",
+    1
+   ],
+   [
+    "Patched Plaything",
+    1
+   ],
+   [
+    "Unsettling Twins",
+    1
+   ],
+   [
+    "Living Phone",
+    1
+   ],
+   [
+    "Hardened Escort",
+    1
+   ],
+   [
+    "Shepherding Spirits",
+    1
+   ],
+   [
+    "Surgical Suite // Hospital Room",
+    1
+   ],
+   [
+    "Trapped in the Screen",
+    1
+   ]
+  ],
+  "slots": [
+   [
+    [
+     20,
+     "Overlord of the Mistmoors"
+    ],
+    [
+     40,
+     "Enduring Innocence"
+    ],
+    [
+     40,
+     "Toby, Beastie Befriender"
+    ]
+   ],
+   [
+    [
+     50,
+     "Exorcise"
+    ],
+    [
+     50,
+     "Unwanted Remake"
+    ]
+   ],
+   [
+    [
+     50,
+     "Jump Scare"
+    ],
+    [
+     50,
+     "Bear Trap"
+    ]
+   ]
+  ]
+ },
+ {
+  "name": "Temur",
+  "set": "Tarkir: Dragonstorm (TDM)",
+  "theme": "-",
+  "count": 13,
+  "fixed": [
+   [
+    "Snakeskin Veil",
+    1
+   ],
+   [
+    "Dragonclaw Strike",
+    1
+   ],
+   [
+    "Mammoth Bellow",
+    1
+   ],
+   [
+    "Synchronized Charge",
+    1
+   ],
+   [
+    "Roamer's Routine",
+    1
+   ],
+   [
+    "Temur Monument",
+    2
+   ],
+   [
+    "Frontier Bivouac",
+    1
+   ]
+  ],
+  "slots": [
+   [
+    [
+     20,
+     "Dragonback Assault"
+    ],
+    [
+     40,
+     "Songcrafter Mage"
+    ],
+    [
+     40,
+     "Temur Battlecrier"
+    ]
+   ],
+   [
+    [
+     50,
+     "Channeled Dragonfire"
+    ],
+    [
+     50,
+     "Ureni's Rebuff"
+    ]
+   ],
+   [
+    [
+     50,
+     "Unending Whisper"
+    ],
+    [
+     50,
+     "Wild Ride"
+    ]
+   ],
+   [
+    [
+     50,
+     "Rescue Leopard"
+    ],
+    [
+     50,
+     "Snowmelt Stag"
+    ]
+   ],
+   [
+    [
+     50,
+     "Dirgur Island Dragon"
+    ],
+    [
+     50,
+     "Temur Tawnyback"
+    ]
+   ]
+  ]
+ },
+ {
+  "name": "Terraforming",
+  "set": "Edge of Eternities (EOE)",
+  "theme": "-",
+  "count": 12,
+  "fixed": [
+   [
+    "Biomechan Engineer",
+    1
+   ],
+   [
+    "Eumidian Terrabotanist",
+    1
+   ],
+   [
+    "Gene Pollinator",
+    1
+   ],
+   [
+    "Galactic Wayfarer",
+    1
+   ],
+   [
+    "Mechanozoa",
+    1
+   ],
+   [
+    "Lost in Space",
+    1
+   ],
+   [
+    "Sami's Curiosity",
+    1
+   ],
+   [
+    "Eusocial Engineering",
+    1
+   ],
+   [
+    "Thornwood Falls",
+    1
+   ]
+  ],
+  "slots": [
+   [
+    [
+     50,
+     "Genemorph Imago"
+    ],
+    [
+     50,
+     "Extinguisher Battleship"
+    ]
+   ],
+   [
+    [
+     50,
+     "Mouth of the Storm"
+    ],
+    [
+     50,
+     "Glacier Godmaw"
+    ]
+   ],
+   [
+    [
+     50,
+     "Close Encounter"
+    ],
+    [
+     50,
+     "Meltstrider's Resolve"
+    ]
+   ]
+  ]
+ },
+ {
+  "name": "Threshold",
+  "set": "Bloomburrow (BLB)",
+  "theme": "Treshold mechanic",
+  "count": 12,
+  "fixed": [
+   [
+    "Mindwhisker",
+    1
+   ],
+   [
+    "Shoreline Looter",
+    1
+   ],
+   [
+    "Nightwhorl Hermit",
+    1
+   ],
+   [
+    "Bellowing Crier",
+    1
+   ],
+   [
+    "Thought Shucker",
+    1
+   ],
+   [
+    "Lightshell Duo",
+    1
+   ],
+   [
+    "Shore Up",
+    1
+   ],
+   [
+    "Sugar Coat",
+    1
+   ]
+  ],
+  "slots": [
+   [
+    [
+     20,
+     "Kitsa, Otterball Elite"
+    ],
+    [
+     40,
+     "Portent of Calamity"
+    ],
+    [
+     40,
+     "Azure Beastbinder"
+    ]
+   ],
+   [
+    [
+     50,
+     "Spellgyre"
+    ],
+    [
+     50,
+     "Long River's Pull"
+    ]
+   ],
+   [
+    [
+     50,
+     "Plumecreed Escort"
+    ],
+    [
+     50,
+     "Dire Downdraft"
+    ]
+   ],
+   [
+    [
+     50,
+     "Sterling Hound"
+    ],
+    [
+     50,
+     "Ephara's Dispersal"
+    ]
+   ]
+  ]
+ },
+ {
+  "name": "Threshold",
+  "set": "Foundations (FDN)",
+  "theme": "Threshold mechanic",
+  "count": 12,
+  "fixed": [
+   [
+    "Dreadwing Scavenger",
+    1
+   ],
+   [
+    "Cephalid Inkmage",
+    1
+   ],
+   [
+    "Billowing Shriekmass",
+    1
+   ],
+   [
+    "Rune-Sealed Wall",
+    1
+   ],
+   [
+    "Strix Lookout",
+    1
+   ],
+   [
+    "Uncharted Voyage",
+    1
+   ],
+   [
+    "Refute",
+    1
+   ],
+   [
+    "Dimir Guildgate",
+    1
+   ]
+  ],
+  "slots": [
+   [
+    [
+     50,
+     "Kiora, the Rising Tide"
+    ],
+    [
+     50,
+     "Dread Summons"
+    ]
+   ],
+   [
+    [
+     50,
+     "Chart a Course"
+    ],
+    [
+     50,
+     "Inspiration from Beyond"
+    ]
+   ],
+   [
+    [
+     50,
+     "Eaten by Piranhas"
+    ],
+    [
+     50,
+     "Imprisoned in the Moon"
+    ]
+   ],
+   [
+    [
+     50,
+     "Quick Study"
+    ],
+    [
+     50,
+     "Think Twice"
+    ]
+   ]
+  ]
+ },
+ {
+  "name": "Tokens",
+  "set": "Tarkir: Dragonstorm (TDM)",
+  "theme": "Tokens",
+  "count": 13,
+  "fixed": [
+   [
+    "Riling Dawnbreaker",
+    1
+   ],
+   [
+    "Fortress Kin-Guard",
+    1
+   ],
+   [
+    "Dragonback Lancer",
+    1
+   ],
+   [
+    "Rally the Monastery",
+    1
+   ],
+   [
+    "Coordinated Maneuver",
+    1
+   ],
+   [
+    "Osseous Exhale",
+    1
+   ],
+   [
+    "Static Snare",
+    1
+   ],
+   [
+    "Teeming Dragonstorm",
+    1
+   ],
+   [
+    "Evolving Wilds",
+    1
+   ]
+  ],
+  "slots": [
+   [
+    [
+     20,
+     "Elspeth, Storm Slayer"
+    ],
+    [
+     40,
+     "Sage of the Skies"
+    ],
+    [
+     40,
+     "Anafenza, Unyielding Lineage"
+    ]
+   ],
+   [
+    [
+     50,
+     "Starry-Eyed Skyrider"
+    ],
+    [
+     50,
+     "Dalkovan Packbeasts"
+    ]
+   ],
+   [
+    [
+     50,
+     "Sunpearl Kirin"
+    ],
+    [
+     50,
+     "Descendant of Storms"
+    ]
+   ],
+   [
+    [
+     50,
+     "Salt Road Packbeast"
+    ],
+    [
+     50,
+     "Bearer of Glory"
+    ]
+   ]
+  ]
+ },
+ {
+  "name": "Top Speed",
+  "set": "Aetherdrift (DFT)",
+  "theme": "-",
+  "count": 13,
+  "fixed": [
+   [
+    "Gastal Thrillseeker",
+    1
+   ],
+   [
+    "Endrider Spikespitter",
+    1
+   ],
+   [
+    "Prowcatcher Specialist",
+    1
+   ],
+   [
+    "Spin Out",
+    1
+   ],
+   [
+    "Lightning Strike",
+    1
+   ],
+   [
+    "Momentum Breaker",
+    1
+   ],
+   [
+    "Apocalypse Runner",
+    1
+   ],
+   [
+    "Burner Rocket",
+    1
+   ]
+  ],
+  "slots": [
+   [
+    [
+     20,
+     "Hazoret, Godseeker"
+    ],
+    [
+     40,
+     "Gas Guzzler"
+    ],
+    [
+     40,
+     "Burnout Bashtronaut"
+    ]
+   ],
+   [
+    [
+     10,
+     "Muraganda Raceway"
+    ],
+    [
+     30,
+     "Amonkhet Raceway"
+    ],
+    [
+     60,
+     "Avishkar Raceway"
+    ]
+   ],
+   [
+    [
+     50,
+     "Kalakscion, Hunger Tyrant"
+    ],
+    [
+     50,
+     "Tyrox, Saurid Tyrant"
+    ]
+   ],
+   [
+    [
+     50,
+     "Endrider Catalyzer"
+    ],
+    [
+     50,
+     "Grim Javelineer"
+    ]
+   ],
+   [
+    [
+     50,
+     "Mutant Surveyor"
+    ],
+    [
+     50,
+     "Kickoff Celebrations"
+    ]
+   ]
+  ]
+ },
+ {
+  "name": "Vivid",
+  "set": "Lorwyn Eclipsed (ECL)",
+  "theme": "Vivid mechanic",
+  "count": 18,
+  "fixed": [
+   [
+    "Noggle Robber",
+    1
+   ],
+   [
+    "Luminollusk",
+    1
+   ],
+   [
+    "Glister Bairn",
+    1
+   ],
+   [
+    "Prismabasher",
+    1
+   ],
+   [
+    "Great Forest Druid",
+    1
+   ],
+   [
+    "Wildvine Pummeler",
+    1
+   ],
+   [
+    "Assert Perfection",
+    1
+   ],
+   [
+    "Shimmerwilds Growth",
+    1
+   ],
+   [
+    "Pitiless Fists",
+    1
+   ],
+   [
+    "Forest",
+    6
+   ]
+  ],
+  "slots": [
+   [
+    [
+     20,
+     "Aurora Awakener"
+    ],
+    [
+     80,
+     "Tam, Mindful First-Year"
+    ]
+   ],
+   [
+    [
+     50,
+     "Gangly Stompling"
+    ],
+    [
+     50,
+     "Wary Farmer"
+    ]
+   ],
+   [
+    [
+     50,
+     "Unforgiving Aim"
+    ],
+    [
+     50,
+     "Gilt-Leaf's Embrace"
+    ]
+   ]
+  ]
+ },
+ {
+  "name": "Void",
+  "set": "Edge of Eternities (EOE)",
+  "theme": "-",
+  "count": 13,
+  "fixed": [
+   [
+    "Lightless Evangel",
+    1
+   ],
+   [
+    "Umbral Collar Zealot",
+    1
+   ],
+   [
+    "Gravpack Monoist",
+    1
+   ],
+   [
+    "Insatiable Skittermaw",
+    1
+   ],
+   [
+    "Swarm Culler",
+    1
+   ],
+   [
+    "Gravkill",
+    1
+   ],
+   [
+    "Tragic Trajectory",
+    1
+   ],
+   [
+    "Susur Secundi, Void Altar",
+    1
+   ]
+  ],
+  "slots": [
+   [
+    [
+     20,
+     "Sothera, the Supervoid"
+    ],
+    [
+     80,
+     "Xu-Ifit, Osteoharmonist"
+    ]
+   ],
+   [
+    [
+     50,
+     "Susurian Dirgecraft"
+    ],
+    [
+     50,
+     "Fell Gravship"
+    ]
+   ],
+   [
+    [
+     50,
+     "Virus Beetle"
+    ],
+    [
+     50,
+     "Beamsaw Prospector"
+    ]
+   ],
+   [
+    [
+     50,
+     "Perigee Beckoner"
+    ],
+    [
+     50,
+     "Comet Crawler"
+    ]
+   ],
+   [
+    [
+     50,
+     "Temporal Intervention"
+    ],
+    [
+     50,
+     "Decode Transmissions"
+    ]
+   ]
+  ]
+ },
+ {
+  "name": "Wayfaring",
+  "set": "Edge of Eternities (EOE)",
+  "theme": "Sacrifying lander tokens",
+  "count": 12,
+  "fixed": [
+   [
+    "Tannuk, Memorial Ensign",
+    1
+   ],
+   [
+    "Slagdrill Scrapper",
+    1
+   ],
+   [
+    "Galactic Wayfarer",
+    1
+   ],
+   [
+    "Icecave Crasher",
+    1
+   ],
+   [
+    "Orbital Plunge",
+    1
+   ],
+   [
+    "Larval Scoutlander",
+    1
+   ],
+   [
+    "Rugged Highlands",
+    1
+   ]
+  ],
+  "slots": [
+   [
+    [
+     50,
+     "Biotech Specialist"
+    ],
+    [
+     50,
+     "Mightform Harmonizer"
+    ]
+   ],
+   [
+    [
+     50,
+     "Terrapact Intimidator"
+    ],
+    [
+     50,
+     "Remnant Elemental"
+    ]
+   ],
+   [
+    [
+     50,
+     "Territorial Bruntar"
+    ],
+    [
+     50,
+     "Nebula Dragon"
+    ]
+   ],
+   [
+    [
+     50,
+     "Lithobraking"
+    ],
+    [
+     50,
+     "Seedship Impact"
+    ]
+   ],
+   [
+    [
+     50,
+     "Bombard"
+    ],
+    [
+     50,
+     "Biosynthic Burst"
+    ]
+   ]
+  ]
+ },
+ {
+  "name": "Witherbloom",
+  "set": "Secrets of Strixhaven (SOS)",
+  "theme": "Infusion mechanic",
+  "count": 13,
+  "fixed": [
+   [
+    "Teacher's Pest",
+    1
+   ],
+   [
+    "Lluwen, Exchange Student",
+    1
+   ],
+   [
+    "Bogwater Lumaret",
+    1
+   ],
+   [
+    "Pest Mascot",
+    1
+   ],
+   [
+    "Tenured Concocter",
+    1
+   ],
+   [
+    "Witherbloom Charm",
+    1
+   ],
+   [
+    "Grapple with Death",
+    1
+   ],
+   [
+    "Titan's Grave",
+    1
+   ]
+  ],
+  "slots": [
+   [
+    [
+     20,
+     "Witherbloom, the Balancer"
+    ],
+    [
+     40,
+     "Blech, Loafing Pest"
+    ],
+    [
+     40,
+     "Cauldron of Essence"
+    ]
+   ],
+   [
+    [
+     50,
+     "Essenceknit Scholar"
+    ],
+    [
+     50,
+     "Poisoner's Apprentice"
+    ]
+   ],
+   [
+    [
+     50,
+     "Old-Growth Educator"
+    ],
+    [
+     50,
+     "Pestbrood Sloth"
+    ]
+   ],
+   [
+    [
+     50,
+     "Root Manipulation"
+    ],
+    [
+     50,
+     "Mind Roots"
+    ]
+   ],
+   [
+    [
+     50,
+     "Send in the Pest"
+    ],
+    [
+     50,
+     "Burrog Banemaker"
+    ]
+   ]
+  ]
+ },
+ {
+  "name": "Wrecked",
+  "set": "Aetherdrift (DFT)",
+  "theme": "Discard synergies",
+  "count": 13,
+  "fixed": [
+   [
+    "Marauding Mako",
+    1
+   ],
+   [
+    "Greasewrench Goblin",
+    1
+   ],
+   [
+    "Pacesetter Paragon",
+    1
+   ],
+   [
+    "Thunderhead Gunner",
+    1
+   ],
+   [
+    "Magmakin Artillerist",
+    1
+   ],
+   [
+    "Fuel the Flames",
+    1
+   ],
+   [
+    "Crash and Burn",
+    1
+   ],
+   [
+    "Kickoff Celebrations",
+    1
+   ]
+  ],
+  "slots": [
+   [
+    [
+     50,
+     "Gastal Thrillroller"
+    ],
+    [
+     50,
+     "Monument to Endurance"
+    ]
+   ],
+   [
+    [
+     10,
+     "Muraganda Raceway"
+    ],
+    [
+     30,
+     "Amonkhet Raceway"
+    ],
+    [
+     60,
+     "Avishkar Raceway"
+    ]
+   ],
+   [
+    [
+     50,
+     "Endrider Spikespitter"
+    ],
+    [
+     50,
+     "Tyrox, Saurid Tyrant"
+    ]
+   ],
+   [
+    [
+     50,
+     "Clamorous Ironclad"
+    ],
+    [
+     50,
+     "Gilded Ghoda"
+    ]
+   ],
+   [
+    [
+     50,
+     "Lightning Strike"
+    ],
+    [
+     50,
+     "Pedal to the Metal"
+    ]
+   ]
+  ]
+ },
+ {
+  "name": "Zombie",
+  "set": "Foundations (FDN)",
+  "theme": "Zombie tribal",
+  "count": 12,
+  "fixed": [
+   [
+    "Maalfeld Twins",
+    1
+   ],
+   [
+    "Diregraf Ghoul",
+    1
+   ],
+   [
+    "Knight of Malice",
+    1
+   ],
+   [
+    "Vampire Gourmand",
+    1
+   ],
+   [
+    "Crow of Dark Tidings",
+    1
+   ],
+   [
+    "Hungry Ghoul",
+    1
+   ],
+   [
+    "Vampiric Rites",
+    1
+   ],
+   [
+    "Evolving Wilds",
+    1
+   ]
+  ],
+  "slots": [
+   [
+    [
+     20,
+     "Liliana, Dreadhorde General"
+    ],
+    [
+     40,
+     "Zul Ashur, Lich Lord"
+    ],
+    [
+     40,
+     "Midnight Reaper"
+    ]
+   ],
+   [
+    [
+     50,
+     "Deadly Plot"
+    ],
+    [
+     50,
+     "Hero's Downfall"
+    ]
+   ],
+   [
+    [
+     50,
+     "Soul-Shackled Zombie"
+    ],
+    [
+     50,
+     "Crypt Feaster"
+    ]
+   ],
+   [
+    [
+     50,
+     "Moment of Craving"
+    ],
+    [
+     50,
+     "Fake Your Own Death"
+    ]
+   ]
+  ]
+ },
+ {
+  "name": "Zombies",
+  "set": "Aetherdrift (DFT)",
+  "theme": "Zombie tribal",
+  "count": 13,
+  "fixed": [
+   [
+    "Risen Necroregent",
+    1
+   ],
+   [
+    "Shefet Archfiend",
+    1
+   ],
+   [
+    "Kalakscion, Hunger Tyrant",
+    1
+   ],
+   [
+    "Deathless Pilot",
+    1
+   ],
+   [
+    "Engine Rat",
+    1
+   ],
+   [
+    "Walking Sarcophagus",
+    1
+   ],
+   [
+    "Spin Out",
+    1
+   ],
+   [
+    "Hour of Victory",
+    1
+   ]
+  ],
+  "slots": [
+   [
+    [
+     20,
+     "Radiant Lotus"
+    ],
+    [
+     80,
+     "Cursecloth Wrappings"
+    ]
+   ],
+   [
+    [
+     10,
+     "Muraganda Raceway"
+    ],
+    [
+     30,
+     "Amonkhet Raceway"
+    ],
+    [
+     60,
+     "Avishkar Raceway"
+    ]
+   ],
+   [
+    [
+     50,
+     "Intimidation Tactics"
+    ],
+    [
+     50,
+     "Locust Spray"
+    ]
+   ],
+   [
+    [
+     50,
+     "Risky Shortcut"
+    ],
+    [
+     50,
+     "Ripclaw Wrangler"
+    ]
+   ],
+   [
+    [
+     50,
+     "Maximum Overdrive"
+    ],
+    [
+     50,
+     "Syphon Fuel"
+    ]
+   ]
+  ]
+ }
+]

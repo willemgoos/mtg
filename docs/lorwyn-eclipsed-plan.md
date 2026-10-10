@@ -27,18 +27,18 @@ stays out (see `docs/marvel-jumpstart-handoff.md` for the wording given to agent
 
 ## Mechanics
 
-| Mechanic | Cards | Engine today | Phase |
-| --- | --- | --- | --- |
-| **Blight N** (put N -1/-1 counters on a creature you control): costs, optional additional costs with "if this spell's additional cost was paid", effects | 24 | -1/-1 counters exist (FRA); one blight card (Brawl) | 18a |
-| -1/-1 counters elsewhere ("enters with two -1/-1 counters", "remove a counter") | ~48 mention them | exist | 18b |
-| **Changeling** | 16 | exists | 18b |
-| **Vivid** (number of colours among permanents you control) | 14 | similar counts exist | 18a |
-| **Behold** a type (and "behold … and exile it") | 12 | exists (Marvel, FRA) | 18a for the exile variant |
-| **Evoke** | 5 (the Elemental Incarnations) plus 2 mentions | none | 18a |
-| **First-main-phase transform** (the 7 two-faced legends) | 7 | transform exists | 18a |
-| Persist, wither, conspire | a few | none or partial | 18a |
-| "Gains all creature types" (Oko) | 1 | none | 18b |
-| Convoke, flash, stun counters, surveil, mill, landcycling, typecycling, Treasure, emblems | many | exist | 18b |
+| Mechanic                                                                                                                                                 | Cards                                          | Engine today                                        | Phase                     |
+| -------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------- | --------------------------------------------------- | ------------------------- |
+| **Blight N** (put N -1/-1 counters on a creature you control): costs, optional additional costs with "if this spell's additional cost was paid", effects | 24                                             | -1/-1 counters exist (FRA); one blight card (Brawl) | 18a                       |
+| -1/-1 counters elsewhere ("enters with two -1/-1 counters", "remove a counter")                                                                          | ~48 mention them                               | exist                                               | 18b                       |
+| **Changeling**                                                                                                                                           | 16                                             | exists                                              | 18b                       |
+| **Vivid** (number of colours among permanents you control)                                                                                               | 14                                             | similar counts exist                                | 18a                       |
+| **Behold** a type (and "behold … and exile it")                                                                                                          | 12                                             | exists (Marvel, FRA)                                | 18a for the exile variant |
+| **Evoke**                                                                                                                                                | 5 (the Elemental Incarnations) plus 2 mentions | none                                                | 18a                       |
+| **First-main-phase transform** (the 7 two-faced legends)                                                                                                 | 7                                              | transform exists                                    | 18a                       |
+| Persist, wither, conspire                                                                                                                                | a few                                          | none or partial                                     | 18a                       |
+| "Gains all creature types" (Oko)                                                                                                                         | 1                                              | none                                                | 18b                       |
+| Convoke, flash, stun counters, surveil, mill, landcycling, typecycling, Treasure, emblems                                                                | many                                           | exist                                               | 18b                       |
 
 ## Phase 18a: engine groundwork
 
@@ -60,20 +60,20 @@ The player always chooses the creature (a creature they control; a cost with no 
 creature to death is legal. The counters are the named counter `'-1/-1'` (`o.counters['-1/-1']`), which already counts in
 power/toughness and cancels against +1/+1 counters.
 
-| Where | Name | Example |
-| --- | --- | --- |
-| Ability cost | `cost: { blight: N, ... }` (action field `blight`: the creature) | Gristle Glutton `cost: { tapSelf: true, blight: 1 }`; from the graveyard (Evershrike's Gift) with `fromGraveyard: true`, `sorcerySpeed: true`; Champion of the Weird `{ life: 1, blight: 2 }` |
-| Mandatory additional cost | `blightToCast: N` | "As an additional cost, blight 2" |
-| Either/or additional cost | `blightOrPay: { amount: 1, pay: { generic: 3, colored: {} } }` | Bogslither's Embrace, Wild Unraveling (`{ amount: 2, pay: {1} }`) |
-| X additional cost | `blightX: true`; X is `{ x: true }`; X is limited to the greatest toughness among your creatures | Soul Immolation: `damage { amount: { x: true }, to: 'eachOpponent' }` and `to: { each: 'creature', controller: 'opponent' }` |
-| Optional additional cost | `kicker: { cost: ZERO, blight: N }` (builder `optionalBlight(N)`); "if the additional cost was paid" is `{ kind: 'wasKicked' }` and now works for instants and sorceries | Cinder Strike `if { condition: wasKicked, then: [damage 4], else: [damage 2] }`, Burning Curiosity, Requiting Hex |
-| Optional cost that changes the modes | `kicker: { cost: ZERO, blight: 2, spell: combineSpells([mode0, mode1]) }` (`combineSpells` is exported from `@mtg/engine`) | Pyrrhic Strike ("choose both instead") |
-| Effect | `{ kind: 'blight', amount, who?, optional?, then?, otherwise? }` (builders `blight`, `mayBlight`); `who`: `'controller'` (default), `'eachOpponent'`, `{ target: n }`; mandatory with one creature: no prompt | Dream Seizer `mayBlight(1, [discard each opponent])`; High Perfect Morcant `blight(1, { who: 'eachOpponent' })`; Champion of the Weird's ability `targets: [{ what: 'player', controller: 'opponent' }]`, `blight(2, { who: { target: 0 } })`; Shadow Urchin attacks: `blight(1)` |
-| "The blighted creature" | Ref `'chosen'` (builder constant `BLIGHTED`) inside `then` | Grub, Notorious Auntie `tokenCopy { of: 'chosen', attacking: true, ... }`; Blighted Blackthorn |
-| "If you don't" / "If you can't" | `otherwise: [...]` | Gutsplitter Gang `mayBlight(2, [], [loseLife 3])` |
-| "When you do" | `then: [{ kind: 'reflexiveTrigger', ability: i }]` | Warren Torchmaster |
-| "You may pay {2}. If you don't, blight 2" | `{ kind: 'payOrElse', who: 'controller', cost, otherwise: [blight(2)] }` | Chaos Spewer |
-| "If it isn't your main phase" | `{ kind: 'not', condition: { kind: 'yourStep', steps: ['main1', 'main2'] } }` | Dose of Dawnglow |
+| Where                                     | Name                                                                                                                                                                                                          | Example                                                                                                                                                                                                                                                                           |
+| ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Ability cost                              | `cost: { blight: N, ... }` (action field `blight`: the creature)                                                                                                                                              | Gristle Glutton `cost: { tapSelf: true, blight: 1 }`; from the graveyard (Evershrike's Gift) with `fromGraveyard: true`, `sorcerySpeed: true`; Champion of the Weird `{ life: 1, blight: 2 }`                                                                                     |
+| Mandatory additional cost                 | `blightToCast: N`                                                                                                                                                                                             | "As an additional cost, blight 2"                                                                                                                                                                                                                                                 |
+| Either/or additional cost                 | `blightOrPay: { amount: 1, pay: { generic: 3, colored: {} } }`                                                                                                                                                | Bogslither's Embrace, Wild Unraveling (`{ amount: 2, pay: {1} }`)                                                                                                                                                                                                                 |
+| X additional cost                         | `blightX: true`; X is `{ x: true }`; X is limited to the greatest toughness among your creatures                                                                                                              | Soul Immolation: `damage { amount: { x: true }, to: 'eachOpponent' }` and `to: { each: 'creature', controller: 'opponent' }`                                                                                                                                                      |
+| Optional additional cost                  | `kicker: { cost: ZERO, blight: N }` (builder `optionalBlight(N)`); "if the additional cost was paid" is `{ kind: 'wasKicked' }` and now works for instants and sorceries                                      | Cinder Strike `if { condition: wasKicked, then: [damage 4], else: [damage 2] }`, Burning Curiosity, Requiting Hex                                                                                                                                                                 |
+| Optional cost that changes the modes      | `kicker: { cost: ZERO, blight: 2, spell: combineSpells([mode0, mode1]) }` (`combineSpells` is exported from `@mtg/engine`)                                                                                    | Pyrrhic Strike ("choose both instead")                                                                                                                                                                                                                                            |
+| Effect                                    | `{ kind: 'blight', amount, who?, optional?, then?, otherwise? }` (builders `blight`, `mayBlight`); `who`: `'controller'` (default), `'eachOpponent'`, `{ target: n }`; mandatory with one creature: no prompt | Dream Seizer `mayBlight(1, [discard each opponent])`; High Perfect Morcant `blight(1, { who: 'eachOpponent' })`; Champion of the Weird's ability `targets: [{ what: 'player', controller: 'opponent' }]`, `blight(2, { who: { target: 0 } })`; Shadow Urchin attacks: `blight(1)` |
+| "The blighted creature"                   | Ref `'chosen'` (builder constant `BLIGHTED`) inside `then`                                                                                                                                                    | Grub, Notorious Auntie `tokenCopy { of: 'chosen', attacking: true, ... }`; Blighted Blackthorn                                                                                                                                                                                    |
+| "If you don't" / "If you can't"           | `otherwise: [...]`                                                                                                                                                                                            | Gutsplitter Gang `mayBlight(2, [], [loseLife 3])`                                                                                                                                                                                                                                 |
+| "When you do"                             | `then: [{ kind: 'reflexiveTrigger', ability: i }]`                                                                                                                                                            | Warren Torchmaster                                                                                                                                                                                                                                                                |
+| "You may pay {2}. If you don't, blight 2" | `{ kind: 'payOrElse', who: 'controller', cost, otherwise: [blight(2)] }`                                                                                                                                      | Chaos Spewer                                                                                                                                                                                                                                                                      |
+| "If it isn't your main phase"             | `{ kind: 'not', condition: { kind: 'yourStep', steps: ['main1', 'main2'] } }`                                                                                                                                 | Dose of Dawnglow                                                                                                                                                                                                                                                                  |
 
 No card says "whenever you blight", so there is no trigger for it (the engine emits a `blighted` event if one is ever needed).
 Blighting is never "putting counters on an opponent's creature": `who: 'eachOpponent'` makes the opponent choose among their creatures.
@@ -204,21 +204,38 @@ Each group's custom handlers are in `engine/src/ecl-<group>-effects.ts`. Merging
 
 ## Phase 18c: decks and Jump In
 
-- **Ten Jump In packets** with Arena's names, colours and themes (from Draftsim's list; Arena never published the card
-  lists, so the cards are our picks: twelve ECL cards with one rare or mythic, plus eight lands):
+- **Ten Jump In packets: Arena's own** (`ARENA_ECL_PACKETS`, `source: 'arena'`, "Lorwyn Eclipsed · Arena" group), from
+  [MTGABuddy's list](https://mtgabuddy.com/en/jump-in-packet-list) (`scripts/data/arena-jumpin-packets.json`): the fixed
+  cards and lands Arena lists (Temple Garden, Hallowed Fountain, Steam Vents, Blood Crypt, Overgrown Tomb, basics) plus its
+  random slots. Packets have 18 or 19 cards, not 20. Arena's colours differ from the first guess (the table):
 
-  | Packet | Colour | Theme |
-  | --- | --- | --- |
-  | Kithkin | W/G | Kithkin typal |
-  | Merfolk | W/U | Merfolk typal |
-  | Elemental | U/R | Elemental typal |
-  | Goblins | B/R | Goblin typal |
-  | Elves | B/G | Elf typal |
-  | Flashy | U/B | Flash matters |
-  | Burdened | W | -1/-1 counters |
-  | Blighted | B | Blight |
-  | Giant | R | Giant typal |
-  | Vivid | G | Vivid |
+  | Packet    | Colour | Theme           |
+  | --------- | ------ | --------------- |
+  | Kithkin   | W/G    | Kithkin typal   |
+  | Merfolk   | W/U    | Merfolk typal   |
+  | Elemental | U/R    | Elemental typal |
+  | Goblins   | B/R    | Goblin typal    |
+  | Elves     | B/G    | Elf typal       |
+  | Flashy    | U      | Flash matters   |
+  | Burdened  | W      | -1/-1 counters  |
+  | Blighted  | B      | Blight          |
+  | Giant     | R      | Giant typal     |
+  | Vivid     | G      | Vivid           |
+
+  **Random slots** (`Packet.slots`: per slot a list of `{ card, weight }` alternatives, weights in percent): when a Jump In
+  deck is built with a random source, `jumpInId(a, b, random)` deals one alternative per slot and writes the choices into
+  the deck id, `jump-in:a+b~0110` (one digit per slot, a's slots then b's, each digit the index of the dealt
+  alternative). The id alone says which cards the deck has, so saved games, replays and expedition runs rebuild the same
+  deck. `jumpInId(a, b)` without a random source (bots enumerating pairs, `JUMP_IN_DECKS`, old saved ids) uses the
+  likeliest alternative of each slot (`defaultDeal`). The lobby deals when a series starts (rematches keep the cards), the
+  Expedition Jump In pick deals when the second packet is taken. The packet list and preview show each slot as its
+  alternatives with their chance ("50% Sunderflock / 50% Ashling's Command"). Our older BLB and FDN Arena packets are
+  still fixed lists but can use `slots` later.
+
+  **Arena's packets measured** (fixed official lists, not tuned; heuristic bot, 300 games each, the packet plus a random
+  one against two random packets from every set, random slots dealt per game, seats alternating): Kithkin 44.0%, Merfolk
+  43.7%, Elemental 50.7%, Goblins 41.0%, Elves 47.0%, Flashy 39.0%, Burdened 53.7%, Blighted 53.3%, Giant 43.0%, Vivid
+  53.3%. (Our earlier self-picked lists scored 43-60%.) A pair of Arena ECL packets is 36-38 cards, so (as Arena does) the deck is topped up to 40 with basics split by the mana symbols of the pair's spells (`addBasics` in `index.ts`); the numbers above were measured before that top-up.
 
 - **Ten 60-card decks**, one per colour pair, `set: 'ecl'`, built from human-made lists (the archetype example decks
   from Wizards' draft overview and MTGAZone's archetype guide, scaled to 60 like the starter decks), each 45–65% against
