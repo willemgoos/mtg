@@ -203,3 +203,12 @@ come up, used for Silvan Rally's and Bolg's prompts), hooks marked `// The Hobbi
 `everyExtraDrawBecomes` (Bard, King of Dale), `graveyardElfAbilities` (Thranduil, the Elvenking), `extraLandDrop.condition`; condition
 `treasureManaSpent` (Smaug); `counterPutOnYourCreature` got `filter`/`byYou`; `discard.landToBattlefieldTapped` (Silvan Reveler); landfall
 triggers from the graveyard; `notCreatureAs` (Tom, Bert, and William come back as an artifact); hone counters grant +1/+0 (Dwalin).
+## Phase 20b: red (done)
+
+All 29 red cards, `cards/src/hob/red.ts` (tests `hob-red.test.ts`, `hob-red-2.test.ts`; one-off effects in `engine/src/hob-red-effects.ts`).
+Engine pieces added (marked `// The Hobbit (20b red)`): `reflexiveTrigger.subject` (Dáin Ironfoot: "when you do, attach it"), the
+`putFromHandOrLibrary` effect (Last Light: hand and library together, a library pick shuffles; `sacrificeSource` for "sacrifice it. If you
+do"), `GameObject.playableIf` (Flameshape's face-down exiled cards, hidden from the opponent in `redactFor`, playable while you control a
+Wizard), and `attacking` on the `totalPowerOfCreaturesYouControl` amount (Desert Were-Worm). Custom effects: `hobBalinDiscardDraw`,
+`hobThorinAttach` (reflexive damage only if an Equipment actually became attached), `hobGetawayBarrel`, `hobFlameshape`. Tokens: Axe and
+Stone Boulder live in `red.ts`.

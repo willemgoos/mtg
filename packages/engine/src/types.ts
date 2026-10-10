@@ -2519,7 +2519,13 @@ export type EffectDef =
    * triggers now; its targets are chosen as it goes on the stack (Quantum Entanglement,
    * Villainous Syndication, Rhino's Rampage).
    */
-  | { kind: 'reflexiveTrigger'; ability: number }
+  | {
+      kind: 'reflexiveTrigger';
+      ability: number;
+      // The Hobbit (20b red): Dáin Ironfoot ("attach it")
+      /** The permanent the reflexive ability's effects see as 'subject' ("it", "that creature"). */
+      subject?: Ref;
+    }
   /** Internal (Bolt Bend): the spell or ability on the stack with this id gets these targets. */
   | { kind: 'setStackTargets'; id: ObjectId; targets: TargetChoice[] }
   /** Internal (Loki Laufeyson): its controller may choose new targets for the copy just made ('chosen'). */
@@ -2840,6 +2846,18 @@ export type EffectDef =
     }
   /** Return all land cards from your graveyard to the battlefield tapped (World Shaper). */
   | { kind: 'returnLandsFromGraveyard' }
+  // The Hobbit (20b red): Last Light of Durin's Day
+  /**
+   * "Search your hand and/or library for a card matching the filter and put it onto the battlefield. If you search your library
+   * this way, shuffle." The player picks one card from the hand and the library together (or none, having searched the library
+   * for nothing); a library pick, or none, shuffles.
+   */
+  | {
+      kind: 'putFromHandOrLibrary';
+      filter: CardFilter;
+      /** "Sacrifice it. If you do, ...": the source is sacrificed first, and nothing else happens if it can't be. */
+      sacrificeSource?: boolean;
+    }
   | {
       kind: 'sacrifice';
       what: Ref;
@@ -3845,6 +3863,9 @@ export interface GameObject {
   // Marvel Super Heroes Jumpstart (Analyzed)
   /** In exile: `player` may play it for as long as they control `source` (Victor Mancha, Runaway). */
   playableWhileControlling?: { source: ObjectRef; player: PlayerId };
+  // The Hobbit (20b red): Gandalf, Goblins' Bane (Flameshape)
+  /** In its owner's exile: they may play it for as long as it stays exiled and this holds for them ("if you control a Wizard"). */
+  playableIf?: ConditionDef;
   // Lorwyn Eclipsed (18b, black)
   /** With `castableBy`: only while that player controls this permanent (Taster of Wares). */
   castableWhileControlling?: ObjectRef;
@@ -4641,6 +4662,9 @@ export type Decision =
       options: ObjectId[];
       /** Choosing from the graveyard instead of searching the library (Inspiration from Beyond). */
       fromGraveyard?: boolean;
+      // The Hobbit (20b red): Last Light of Durin's Day
+      /** With `fromGraveyard`: the options are in the hand and the library; a library pick (or none) shuffles the library afterwards. */
+      handOrLibrary?: boolean;
       /** Where the card goes. Default: hand. */
       to?:
         | 'hand'

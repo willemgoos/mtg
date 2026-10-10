@@ -673,7 +673,11 @@ export function countOf(
     a.count === 'totalPowerOfCreaturesYouControl'
       ? ctx.s.battlefield
           .filter(
-            (id) => obj(ctx, id).controller === player && def(ctx, id).types.includes('Creature'),
+            (id) =>
+              obj(ctx, id).controller === player &&
+              def(ctx, id).types.includes('Creature') &&
+              // The Hobbit (20b red): Desert Were-Worm, the total power of the attacking creatures.
+              (a.attacking === undefined || isAttacking(ctx, id) === a.attacking),
           )
           .reduce((n, id) => n + Math.max(0, power(ctx, id)), 0)
       : matching;
