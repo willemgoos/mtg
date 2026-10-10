@@ -44,6 +44,11 @@ import { ECL_WHITE_EFFECTS } from './ecl-white-effects.ts';
 import { HOB_WHITE_EFFECTS } from './hob-white-effects.ts'; // The Hobbit (20b white)
 import { LTR_BLUE_EFFECTS } from './ltr-blue-effects.ts'; // Lord of the Rings (21b blue)
 import { LTR_WHITE_EFFECTS } from './ltr-white-effects.ts'; // Lord of the Rings (21b white)
+import {
+  copiesOpponentLandAbilities,
+  LTR_MULTI_RARE_EFFECTS,
+  withOpponentLandAbilities,
+} from './ltr-multi-rare-effects.ts'; // Lord of the Rings (21d multi-rare)
 import { BRAWL_15B_W_EFFECTS } from './brawl-15b-w-effects.ts';
 import { BRAWL_15B_U_EFFECTS } from './brawl-15b-u-effects.ts';
 import { BRAWL_15B_G_EFFECTS } from './brawl-15b-g-effects.ts';
@@ -201,6 +206,7 @@ const BUILT_IN_EFFECTS: Record<string, CustomEffect> = {
   ...HOB_WHITE_EFFECTS, // The Hobbit (20b, white)
   ...LTR_BLUE_EFFECTS, // Lord of the Rings (21b blue)
   ...LTR_WHITE_EFFECTS, // Lord of the Rings (21b white)
+  ...LTR_MULTI_RARE_EFFECTS, // Lord of the Rings (21d multi-rare)
   // Strixhaven Brawl (15b): multicolour, colourless and lands.
   ...BRAWL_15B_MULTI_EFFECTS,
   // Strixhaven Brawl (15b), white.
@@ -272,11 +278,16 @@ export function def(ctx: Ctx, id: ObjectId): CardDefinition {
     o.zone === 'battlefield' && defsWithStatic(ctx.db, 'graveyardElfAbilities').has(o.defId)
       ? withGraveyardElfAbilities(ctx, o, d0)
       : d0;
+  // Lord of the Rings (21d multi-rare): Sharkey, Tyrant of the Shire has the activated abilities of its opponents' lands.
+  const dS =
+    o.zone === 'battlefield' && copiesOpponentLandAbilities(ctx.db, o.defId)
+      ? withOpponentLandAbilities(ctx, o, d)
+      : d;
   // Lorwyn Eclipsed (18b, multi-b): Tam, Mindful First-Year, "becomes all colors until end of turn".
   const d2 =
     ctx.s.colorChanges && o.allColorsTurn === ctx.s.turn.number && o.zone === 'battlefield'
-      ? { ...d, colors: ALL_COLORS }
-      : d;
+      ? { ...dS, colors: ALL_COLORS }
+      : dS;
   // Lord of the Rings (21a): the Ring's first ability, "your Ring-bearer is legendary" (most games have no Ring).
   return ctx.s.players[o.controller].ring ? withRingLegendary(ctx, o, d2) : d2;
 }
@@ -1201,7 +1212,7 @@ export function addCounters(ctx: Ctx, id: ObjectId, n: number, name?: string, by
         by: by ?? ctx.puttingPlayer ?? o.controller,
       });
     // Tarkir: Dragonstorm (19b, misc): counters of any kind on a creature.
-    else anyCreatureCounters(ctx, id, n, by);
+    else anyCreatureCounters(ctx, id, n, by, name); // Lord of the Rings (21d multi-rare): the kind of counter
     return;
   }
   o.plusOneCounters += n;
@@ -1219,7 +1230,7 @@ export function addCounters(ctx: Ctx, id: ObjectId, n: number, name?: string, by
 }
 
 /** Tarkir: Dragonstorm (19b, misc): Stalwart Successor, Hollowmurk Siege: counters of any kind were put on a creature. */
-function anyCreatureCounters(ctx: Ctx, id: ObjectId, n: number, by?: PlayerId): void {
+function anyCreatureCounters(ctx: Ctx, id: ObjectId, n: number, by?: PlayerId, name?: string): void {
   if (!def(ctx, id).types.includes('Creature')) return;
   noteCreatureCounters(ctx, obj(ctx, id));
   emit(ctx, {
@@ -1229,6 +1240,7 @@ function anyCreatureCounters(ctx: Ctx, id: ObjectId, n: number, by?: PlayerId): 
     player: obj(ctx, id).controller,
     // The Hobbit (20b multicolour): The Great Goblin, "whenever you put one or more counters".
     by: by ?? ctx.puttingPlayer ?? obj(ctx, id).controller,
+    ...(name ? { name } : {}), // Lord of the Rings (21d multi-rare): Aragorn, Company Leader
   });
 }
 
@@ -1268,6 +1280,7 @@ export function sacrifice(ctx: Ctx, id: ObjectId): void {
   const o = obj(ctx, id);
   if (def(ctx, id).subtypes.includes('Food'))
     (ctx.s.turn.foodsSacrificed ??= { p1: 0, p2: 0 })[o.controller]++;
+  ctx.s.turn.ltrSacrificed = (ctx.s.turn.ltrSacrificed ?? 0) + 1; // Lord of the Rings (21d multi-rare): The Balrog, Durin's Bane
   emit(ctx, { type: 'sacrificed', id, defId: o.defId, player: o.controller });
   moveObject(ctx, id, 'graveyard');
 }

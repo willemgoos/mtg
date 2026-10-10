@@ -75,6 +75,12 @@ import {
 } from './ecl-18a.ts';
 import { firstEquipFree, noteEquipActivation } from './hob-white-effects.ts'; // The Hobbit (20b white)
 import { isLegendaryNow } from './ltr-black-effects.ts'; // Lord of the Rings (21b black)
+import {
+  ltrFinalChapter,
+  ltrPayWardFiltered,
+  ltrWardCandidates,
+  ltrWardFilteredPayable,
+} from './ltr-multi-rare-effects.ts'; // Lord of the Rings (21d multi-rare)
 import { checkCondition, triggeredAbility } from './triggers.ts';
 import { givePriority } from './turn.ts';
 import type {
@@ -225,6 +231,7 @@ export function wardPayable(
   player: PlayerId,
   targets: readonly TargetChoice[],
   inHand = 0,
+  castCard?: ObjectId, // Lord of the Rings (21d multi-rare): the spell being cast can't be discarded to pay for ward
 ): boolean {
   const w = wardedTargets(ctx, player, targets);
   const discards = w.filter((x) => x.discard).length;
@@ -234,12 +241,25 @@ export function wardPayable(
   // Reality Fracture (17a): Emrakul, the Exigent Doom, ward—sacrifice three permanents.
   const permanents = w.reduce((n, x) => n + (x.sacrificePermanents ?? 0), 0);
   return (
+    ltrWardFilteredPayable(ctx, player, wardFilteredNeeds(ctx, player, targets), castCard) && // Lord of the Rings (21d multi-rare)
     ctx.s.players[player].hand.length - inHand >= discards &&
     foodsOf(ctx, player).length >= foods &&
     (creatures === 0 || creaturesOnBattlefield(ctx, player).length >= creatures) &&
     (permanents === 0 ||
       ctx.s.battlefield.filter((id) => obj(ctx, id).controller === player).length >= permanents)
   );
+}
+
+/** Lord of the Rings (21d multi-rare): the ward costs of these targets that name a kind of card (chosen one at a time on the stack). */
+export function wardFilteredNeeds(
+  ctx: Ctx,
+  player: PlayerId,
+  targets: readonly TargetChoice[],
+): { kind: 'sacrifice' | 'discard'; filter: CardFilter }[] {
+  return wardedTargets(ctx, player, targets).flatMap((w) => [
+    ...(w.sacrificeMatching ? [{ kind: 'sacrifice' as const, filter: w.sacrificeMatching }] : []),
+    ...(w.discardMatching ? [{ kind: 'discard' as const, filter: w.discardMatching }] : []),
+  ]);
 }
 
 /**
@@ -303,6 +323,7 @@ function nextWardSacrifice(
     thenPriority: PlayerId;
     forage?: ObjectId | 'graveyard';
     afterFree?: Extract<Decision, { kind: 'wardSacrifice' }>['afterFree'];
+    filtered?: Extract<Decision, { kind: 'wardSacrifice' }>['filtered']; // Lord of the Rings (21d multi-rare)
   },
 ): boolean {
   for (let guard = 0; guard < 100 && (creatures > 0 || permanents > 0); guard++) {
@@ -317,6 +338,25 @@ function nextWardSacrifice(
     if (creaturesOnly) creatures = 0;
     else permanents = 0;
   }
+  // Lord of the Rings (21d multi-rare): the costs that name a kind of card, one at a time (nothing to ask with a single choice).
+  let rest = after.filtered ?? [];
+  while (rest.length > 0) {
+    const [first, ...others] = rest;
+    const options = ltrWardCandidates(ctx, player, first!);
+    if (options.length > 1) {
+      ctx.s.decision = {
+        kind: 'wardSacrifice',
+        player,
+        creatures: 0,
+        permanents: 0,
+        ...after,
+        filtered: rest,
+      };
+      return true;
+    }
+    if (options.length === 1) ltrPayWardFiltered(ctx, first!, options[0]!);
+    rest = others;
+  }
   return false;
 }
 
@@ -328,20 +368,29 @@ function payWardSacrifices(
   after: Parameters<typeof nextWardSacrifice>[4],
 ): boolean {
   const { creatures, permanents } = wardSacrifices(ctx, player, targets);
-  return nextWardSacrifice(ctx, player, creatures, permanents, after);
+  const filtered = wardFilteredNeeds(ctx, player, targets); // Lord of the Rings (21d multi-rare)
+  return nextWardSacrifice(ctx, player, creatures, permanents, {
+    ...after,
+    ...(filtered.length ? { filtered } : {}),
+  });
 }
 
 /** One permanent sacrificed for ward; when all are, play goes on (after any forage). */
 export function answerWardSacrifice(ctx: Ctx, card: ObjectId): void {
   const d = ctx.s.decision;
   if (d.kind !== 'wardSacrifice') throw new Error('Not paying ward');
-  sacrificePermanent(ctx, card);
-  const creatures = d.creatures > 0 ? d.creatures - 1 : 0;
-  const permanents = d.creatures > 0 ? d.permanents : d.permanents - 1;
+  // Lord of the Rings (21d multi-rare): the plain sacrifices are made; this one is for the first cost that names a kind of card.
+  const named = d.creatures === 0 && d.permanents === 0 && !!d.filtered?.length;
+  if (named) ltrPayWardFiltered(ctx, d.filtered![0]!, card);
+  else sacrificePermanent(ctx, card);
+  const creatures = named ? 0 : d.creatures > 0 ? d.creatures - 1 : 0;
+  const permanents = named ? 0 : d.creatures > 0 ? d.permanents : d.permanents - 1;
+  const filtered = named ? d.filtered!.slice(1) : d.filtered;
   const after = {
     thenPriority: d.thenPriority,
     ...(d.forage !== undefined ? { forage: d.forage } : {}),
     ...(d.afterFree ? { afterFree: d.afterFree } : {}),
+    ...(filtered?.length ? { filtered } : {}),
   };
   if (nextWardSacrifice(ctx, d.player, creatures, permanents, after)) return;
   if (
@@ -1802,8 +1851,9 @@ export function resolveTop(ctx: Ctx): boolean {
     a.kind === 'triggered' && !a.targets.length && (a.optional || a.cost)
       ? [{ kind: 'may', effects: a.effects, ...(a.cost ? { cost: a.cost } : {}) }]
       : a.effects;
-  if (runEffects(ctx, es, effects, { kind: 'ability', id: item.id })) return true;
-  finishResolution(ctx, { kind: 'ability', id: item.id });
+  const done = { kind: 'ability' as const, id: item.id, ...ltrFinalChapter(ctx, a, item) }; // Lord of the Rings (21d multi-rare): Tom Bombadil
+  if (runEffects(ctx, es, effects, done)) return true;
+  finishResolution(ctx, done);
   return false;
 }
 
@@ -1909,6 +1959,7 @@ function isOmen(d: { subtypes: string[] }): boolean {
 /** Last step of resolving (rule 608.2n): an instant or sorcery goes to the graveyard. */
 export function finishResolution(ctx: Ctx, item: PausedResolution['item']): void {
   emit(ctx, { type: 'resolved', id: item.id });
+  if (item.ltrFinalChapter) emit(ctx, { type: 'finalChapterResolved', ...item.ltrFinalChapter }); // Lord of the Rings (21d multi-rare): Tom Bombadil
   if (item.kind !== 'spell') return;
   // A copy that returned itself to hand (Unexpected Results) has already ceased to exist.
   if (!ctx.s.objects[item.id]) return;
@@ -2865,7 +2916,8 @@ export function answerSplit(ctx: Ctx, faceUp: readonly ObjectId[]): void {
   ctx.s.decision = {
     kind: 'choosePile',
     player: other(d.player),
-    owner: d.player,
+    owner: d.owner ?? d.player, // Lord of the Rings (21d multi-rare): Sauron's Ransom, the cards' owner chooses
+    ...(d.owner ? { reversed: true } : {}),
     faceUp: d.cards.filter((id) => faceUp.includes(id)),
     faceDown: d.cards.filter((id) => !faceUp.includes(id)),
     resume: d.resume,

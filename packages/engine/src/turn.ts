@@ -289,6 +289,9 @@ export function startTurn(ctx: Ctx, player: PlayerId, noPowerUp = false): void {
   delete s.turn.noncombatDamaged;
   delete s.turn.moltenTide;
   delete s.turn.ltrDamageUnpreventable; // Lord of the Rings (21b red)
+  delete s.turn.ltrAttackedPlayers; // Lord of the Rings (21d multi-rare)
+  delete s.turn.ltrSacrificed; // Lord of the Rings (21d multi-rare)
+  delete s.turn.ltrSpiderDamaged; // Lord of the Rings (21d multi-rare)
   delete s.turn.firstTokensDone; // Lorwyn Eclipsed (18b, special)
   if (s.staggered?.some((x) => x.by === player))
     s.staggered = s.staggered.filter((x) => x.by !== player);

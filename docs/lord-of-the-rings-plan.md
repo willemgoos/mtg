@@ -271,3 +271,44 @@ behind `chooseCustom`, `detectLtrWhite`), with hooks marked `// Lord of the Ring
   fewer than three cards: the bottom). **Lembas**: a `selfToGraveyard` trigger running `ltrShuffleSelfIntoLibrary`.
 - No new decision kinds, so the bots needed nothing new. `Halfling` (Saradoc) is `ltr-halfling-token` in `LTR_WHITE_TOKENS`.
 - In tests, permanents put on the battlefield by the scenario are not tokens: Shire Shirriff's test sets `isToken` on the Food.
+
+## Phase 21d: multicolour rares (done)
+
+**Done**, 25/25 (`cards/src/ltr/multicolour-rare.ts`, tests `cards/test/ltr-multi-rare{,-2,-3,-4}.test.ts`). Every card is exact; nothing is left out.
+One-off engine pieces are in `engine/src/ltr-multi-rare-effects.ts` (custom effects, conditions, the chooser `ltrDoorsAttack`, `detectLtrMultiRare`),
+hooks marked `// Lord of the Rings (21d multi-rare)`:
+
+- **Ward that names a kind of card** (Sauron, the Dark Lord: "Ward—Sacrifice a legendary artifact or legendary creature"; Saruman of Many Colors:
+  "Ward—Discard an enchantment, instant, or sorcery card"): `wardCost.sacrificeMatching` / `discardMatching` (a `CardFilter`, parsed in `build.ts`
+  `wardCostOf`). `wardPayable` checks that different permanents / cards can pay every such cost (the spell being cast can't be discarded: the new
+  `castCard` argument); they are paid once the spell or ability is on the stack, one at a time, through the `wardSacrifice` decision's `filtered` list
+  (no prompt with a single choice; the player chooses, hand cards and permanents alike; `legal.ts`, `Board.tsx` prompt). A Ring-bearer is legendary.
+  `wardCostOf` now also reads a lowercase "ward {1}" after another keyword ("Vigilance, ward {1}": Pippin; Thorin Oakenshield, Koma, ... had the
+  default {2} before).
+- **Sharkey, Tyrant of the Shire**: static `ltrOpponentLandAbilities`. `def()` gives it the non-mana activated abilities of the lands its opponents
+  control with their mana costs as generic ("mana of any type"; `withOpponentLandAbilities`, same way as Thranduil's Elf abilities); `legal.ts` lists no
+  non-mana activated ability for a land whose opponent controls such a permanent (`landAbilitiesLocked`). The abilities use Sharkey as their source
+  ("sacrifice this land" sacrifices Sharkey).
+- **Sauron's Ransom**: the `piles` effect has `opponentSplits`: the opponent separates the top four cards (`splitPiles` with `owner`), then the owner
+  chooses a pile (`choosePile` with `reversed`; the owner sees only the face-up cards in `hidden.ts`, the opponent sees all four); bots split evenly and
+  take the face-up pile when it's worth more than the unseen cards (`ai/src/choices.ts`).
+- **Pippin**: `ContinuousEffect.protectionFromType`, read by `protectedFrom` (targeting, damage, blocking, attaching). The choice lists every card type
+  of the game and Battle (no card is a Battle); bots pick Creature when the opponent has creatures, else Instant.
+- **Aragorn, Company Leader**: trigger `countersPutOnSelf`; `anyCountersAdded` events carry the counter's `name`; all counters put on Aragorn in one
+  resolution are one trigger whose kinds are kept in `GameObject.ltrCounterKinds[amount]` (put one of each kind on the other creature).
+- **Shelob**: trigger `creatureDamagedBySpiderDies` (records in `TurnState.ltrSpiderDamaged` as damage is dealt by a Spider, whoever's; the record
+  number is the trigger's amount, so a token that is gone can still be copied). The copy is a token with the Hobbit's `supperFood` (Food artifact,
+  loses its other types, keeps its abilities).
+- **King of the Oathbreakers**: triggers `spiritYouControlTargetedBySpell` (the `targeted` event of a spell, not an ability) and
+  `spiritYouControlPhasesIn`; a phased-out permanent is no legal target (`targets.ts`).
+- **Tom Bombadil**: event `finalChapterResolved` (a Saga's last-chapter ability finished resolving: `ltrFinalChapter` on the paused-resolution item,
+  `finishResolution`), trigger `finalChapterResolves` with `oncePerTurn`; the reveal is the existing `revealUntil` to the battlefield.
+- **Saruman**: custom effect `ltrSarumanMill` (mills two, remembers the second spell's mana value X included on the spell object, and queues the
+  reflexive trigger only if cards were milled); card filter `atMostManaValueOfSubject`; the copy is the existing `exileCopyCastFree`.
+- **Gandalf the Grey**: `modesOnce` (as Gollum, Riddle Master). **Flame of Anor**: `SpellDef.onlyIf` (the three pairs of modes are castable only
+  while you control a Wizard; checked as the spell is cast, also for a free cast). **The Balrog**: Amount `permanentsSacrificedThisTurn` (any
+  player's sacrifices, counted in `sacrifice()`). **Faramir**: delayed trigger on the opponent's next end step (`ltrAtOpponentNextEndStep`),
+  condition `ltrNotAttackedYou` (`TurnState.ltrAttackedPlayers`, attacking a planeswalker doesn't count). **Doors of Durin**: the revealed creature
+  attacks the opponent, or you choose a planeswalker (`ltrDoorsAttack`). **Shagrat**: counts the Equipment attached to it whoever controls them
+  (`permanentsOpponentsControl` now passes the source for `attachedToSource`).
+- Everything else uses existing vocabulary (`whenRingTempts`, `whenYouScry`, `amassOrcs`, `otherCreatureEtb`, ...).

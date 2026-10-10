@@ -126,7 +126,7 @@ function passiveAction(
     case 'splitPiles':
       return chooseSplit(engine, s, d.player, engine.getLegalActions(s, d.player));
     case 'choosePile':
-      return choosePile(s, d.player);
+      return choosePile(s, d.player, engine);
     case 'chooseFromHand':
     case 'pickCards':
       return chooseFromHand(engine, s, engine.getLegalActions(s, d.player));

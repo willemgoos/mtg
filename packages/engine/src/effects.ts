@@ -2376,7 +2376,15 @@ export function runEffects(
       } else if (e.kind === 'piles') {
         const cards = lib.slice(0, e.count);
         if (cards.length === 0) continue;
-        ctx.s.decision = { kind: 'splitPiles', player: controller, cards, resume, thenPriority };
+        ctx.s.decision = {
+          kind: 'splitPiles',
+          // Lord of the Rings (21d multi-rare): Sauron's Ransom, an opponent splits the piles.
+          player: e.opponentSplits ? other(controller) : controller,
+          ...(e.opponentSplits ? { owner: controller } : {}),
+          cards,
+          resume,
+          thenPriority,
+        };
       } else if (e.kind === 'lookForCreature') {
         const looked = lib.slice(0, e.count);
         if (looked.length === 0) continue;

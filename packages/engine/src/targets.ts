@@ -15,6 +15,7 @@ import { type Ctx, def, defOf, deref, obj, other, refOf } from './context.ts';
 import { manaValue } from './cost.ts';
 import { fromCreatureSource } from './msh-analyzed.ts';
 import { ltrPowerWithinSubject } from './ltr-red-effects.ts'; // Lord of the Rings (21b red)
+import { ltrManaValueWithinSubject } from './ltr-multi-rare-effects.ts'; // Lord of the Rings (21d multi-rare)
 import { hexproofFromOwnColors } from './ecl-multi-b-effects.ts';
 import { checkCondition } from './triggers.ts';
 import type { ObjectId, PlayerId, TargetChoice, TargetSpec } from './types.ts';
@@ -59,6 +60,7 @@ function playerOk(ctx: Ctx, spec: TargetSpec, p: PlayerId, src: TargetingSource)
 function permanentOk(ctx: Ctx, spec: TargetSpec, id: ObjectId, src: TargetingSource): boolean {
   const o = ctx.s.objects[id];
   if (!o || o.zone !== 'battlefield') return false;
+  if (ctx.s.phasedOut?.some((p) => p.id === id)) return false; // Lord of the Rings (21d multi-rare): a phased-out permanent doesn't exist
   const walker = spec.what === 'any' && def(ctx, id).types.includes('Planeswalker');
   if (spec.what !== 'permanent' && !isCreature(ctx, id) && !walker) return false;
   if (spec.controller === 'you' && o.controller !== src.controller) return false;
@@ -147,6 +149,7 @@ function graveyardCardOk(ctx: Ctx, spec: TargetSpec, id: ObjectId, src: Targetin
   if (spec.controller === 'opponent' && o.owner === src.controller) return false;
   if (spec.filter?.other && id === src.sourceId) return false;
   if (!lesserThanSubject(ctx, spec, id, src)) return false;
+  if (!ltrManaValueWithinSubject(ctx, spec, id, src)) return false; // Lord of the Rings (21d multi-rare): Saruman of Many Colors
   return !spec.filter || cardMatches(ctx, id, spec.filter, src.sourceId);
 }
 
