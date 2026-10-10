@@ -17,6 +17,7 @@ import { elementalTriggerCopies } from './ecl-multi-b-effects.ts';
 import { hasEnduringStory, subtypeTriggerCopies } from './hob-20a.ts';
 import { detectLtr, isRingBearer, ringCondition } from './ltr-21a.ts';
 import { detectLtrWhite } from './ltr-white-effects.ts'; // Lord of the Rings (21b white)
+import { detectLtrBrRare } from './ltr-br-rare-effects.ts'; // Lord of the Rings (21d br-rare)
 import { FIC_CONDITIONS } from './fic-effects.ts';
 import { FIN_CONDITIONS } from './fin-effects.ts';
 import { LTR_RED_CONDITIONS } from './ltr-red-effects.ts'; // Lord of the Rings (21b red)
@@ -741,6 +742,7 @@ function detect(ctx: Ctx, ev: GameEvent): void {
   detectFic(ctx, ev);
   detectLtr(ctx, ev); // Lord of the Rings (21a)
   detectLtrWhite(ctx, ev); // Lord of the Rings (21b white)
+  detectLtrBrRare(ctx, ev); // Lord of the Rings (21d br-rare)
   detectAnimal(ctx, ev);
   switch (ev.type) {
     case 'objectMoved': {

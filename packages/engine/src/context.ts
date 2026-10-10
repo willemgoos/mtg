@@ -44,6 +44,8 @@ import { ECL_WHITE_EFFECTS } from './ecl-white-effects.ts';
 import { HOB_WHITE_EFFECTS } from './hob-white-effects.ts'; // The Hobbit (20b white)
 import { LTR_BLUE_EFFECTS } from './ltr-blue-effects.ts'; // Lord of the Rings (21b blue)
 import { LTR_WHITE_EFFECTS } from './ltr-white-effects.ts'; // Lord of the Rings (21b white)
+import { LTR_BR_RARE_EFFECTS } from './ltr-br-rare-effects.ts'; // Lord of the Rings (21d br-rare)
+import { isLegendaryNow } from './ltr-black-effects.ts'; // Lord of the Rings (21d br-rare)
 import { BRAWL_15B_W_EFFECTS } from './brawl-15b-w-effects.ts';
 import { BRAWL_15B_U_EFFECTS } from './brawl-15b-u-effects.ts';
 import { BRAWL_15B_G_EFFECTS } from './brawl-15b-g-effects.ts';
@@ -201,6 +203,7 @@ const BUILT_IN_EFFECTS: Record<string, CustomEffect> = {
   ...HOB_WHITE_EFFECTS, // The Hobbit (20b, white)
   ...LTR_BLUE_EFFECTS, // Lord of the Rings (21b blue)
   ...LTR_WHITE_EFFECTS, // Lord of the Rings (21b white)
+  ...LTR_BR_RARE_EFFECTS, // Lord of the Rings (21d br-rare)
   // Strixhaven Brawl (15b): multicolour, colourless and lands.
   ...BRAWL_15B_MULTI_EFFECTS,
   // Strixhaven Brawl (15b), white.
@@ -901,6 +904,7 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
     delete o.castableWhileControlling; // Lorwyn Eclipsed (18b, black)
     delete o.castableUntilTurn;
     delete o.anyMana;
+    delete o.ltrOwnExileCast; // Lord of the Rings (21d br-rare)
     // Marvel Super Heroes Jumpstart (Analyzed): Victor Mancha's permission ends too.
     delete o.playableWhileControlling;
     delete o.playableIf; // The Hobbit (20b red)
@@ -983,6 +987,8 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
   if (from === 'battlefield' && ctx.s.combat?.attackers.some((a) => a.id === id))
     o.leftAttacking = true;
   else delete o.leftAttacking;
+  // Lord of the Rings (21d br-rare): Éomer, Marshal of Rohan, "attacking legendary creatures" (a Ring-bearer is legendary).
+  const leftAttackingLegendary = !!o.leftAttacking && isLegendaryNow(ctx, id);
   if (from === 'battlefield') removeFromCombat(ctx, id);
   // A double-faced card shows its front again anywhere but the stack and the battlefield.
   const leftAs = from === 'battlefield' && o.front ? o.defId : undefined;
@@ -1116,6 +1122,7 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
     ...(exiledInstead ? { exiledInstead: true } : {}),
     ...(persists ? { persist: true } : {}),
     ...(from === 'battlefield' ? { lastCounterTotal: countersLeaving } : {}),
+    ...(leftAttackingLegendary ? { leftAttackingLegendary: true } : {}), // Lord of the Rings (21d br-rare)
   });
   if (discarded && o.zone === 'graveyard') {
     o.discardedTurn = ctx.s.turn.number;
@@ -1327,7 +1334,7 @@ export function drawCard(ctx: Ctx, player: PlayerId, drawStepDraw = false): void
   }
   moveObject(ctx, top, 'hand');
   const nth = ++ctx.s.turn.cardsDrawn[player];
-  emit(ctx, { type: 'cardDrawn', player, id: top, nth });
+  emit(ctx, { type: 'cardDrawn', player, id: top, nth, ...(drawStepDraw ? { drawStep: true } : {}) }); // Lord of the Rings (21d br-rare)
 }
 
 export function tap(ctx: Ctx, id: ObjectId): void {

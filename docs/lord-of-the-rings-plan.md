@@ -271,3 +271,35 @@ behind `chooseCustom`, `detectLtrWhite`), with hooks marked `// Lord of the Ring
   fewer than three cards: the bottom). **Lembas**: a `selfToGraveyard` trigger running `ltrShuffleSelfIntoLibrary`.
 - No new decision kinds, so the bots needed nothing new. `Halfling` (Saradoc) is `ltr-halfling-token` in `LTR_WHITE_TOKENS`.
 - In tests, permanents put on the battlefield by the scenario are not tokens: Shire Shirriff's test sets `isToken` on the Food.
+
+## Phase 21d: black and red rares (done)
+
+**Done**, 16/16 (`cards/src/ltr/black-rare.ts` 8, `ltr/red-rare.ts` 8; the Smaug token is `ltr-smaug-token` in `LTR_RED_RARE_TOKENS`). Tests
+`cards/test/ltr-br-rare{,-2,-3,-4}.test.ts` (every part of every card) and `ai/test/ltr-br-rare.test.ts` (six whole bot games with all 16 cards, and the Hew
+prompt). Everything is exact; nothing is left out. One-off engine pieces are in `engine/src/ltr-br-rare-effects.ts`, with hooks marked
+`// Lord of the Rings (21d br-rare)` (custom effects in `context.ts`, expanders in `effects.ts`, `detectLtrBrRare` in `triggers.ts`, the Saga control check in
+`sba.ts`, one turn field in `turn.ts`, two event fields in `context.ts`, the own-exile cast in `legal.ts`):
+
+- **Prompts built step by step** (`LTR_BR_RARE_EXPANDERS`, the same mechanism as Minas Tirith Garrison, and `chooseCustom` choosers for the other player's
+  choices): **Hew the Entwood** (lands one at a time, "Done" first, labelled by name, "(tapped)" and a number; then the artifact and land cards revealed, one at a
+  time, "Done" last; nonland cards enter first, lands tapped, the rest to the bottom in a random order; the bot takes the cards and sacrifices no land),
+  **Isildur's Fateful Strike** (the target's controller is read before the destroy, then they choose each card to exile from hand over four, one at a time, among
+  distinct card names), **Witch-king of Angmar** (the opponent picks among their creatures that dealt combat damage to you this turn; no prompt for one) and
+  **Display of Power** (one `copySpell` with the existing "choose new targets" step for each target). Spell targets use the existing `anyNumber` for spells
+  (Morningtide's Light); the card has `cantBeCopied`.
+- **Triggers**: `ltrOpponentExtraDraw` (Orcish Bowmasters; `cardDrawn` carries `drawStep` for the turn-based draw, so an extra draw in the draw step counts) and
+  `ltrAttackingLegendaryDies` (Éomer, Marshal of Rohan; `objectMoved` carries `leftAttackingLegendary`, a Ring-bearer counts; an Éomer that dies in the same run of
+  deaths looks back and still triggers, rule 603.10a). Witch-king remembers the creatures that dealt combat damage to each player in
+  `TurnState.ltrCombatDamagers` (cleared each turn). "Whenever one or more" is the existing `batch` / `oncePerTurn`.
+- **Sauron, the Necromancer** (`ltrSauronCopy`): the exiled card's token copy with `copyPT` 3/3, `creatureTypes` ['Wraith'] (the copy replaces the types), a black
+  `colorOverride` and menace; tapped and attacking the same defender Sauron attacks (the engine's convention for "tapped and attacking"); a delayed trigger at the
+  next end step exiles it unless Sauron is still your Ring-bearer.
+- **Shadow of the Enemy**: `castableBy` + `anyMana` (Cruelclaw's Heist) for the opponent's cards; the cards from your own graveyard use the new
+  `GameObject.ltrOwnExileCast` (listed in `castableCards` from your own exile).
+- **There and Back Again**: `ContinuousEffect.ltrWhileControlledBy` ("for as long as you control this Saga": `whileSource` plus a state-based check that ends it when
+  someone else controls the Saga). Smaug is a token with its own dies trigger (fourteen Treasures).
+- **Lobelia**: `diedThisTurn` target filter (21b white) on an opponent's creature card, then X Treasures for its power. **One Ring to Rule Them All**: `ringBearerPower`
+  mill, `destroyAll` with `nonlegendary` (the Ring-bearer is legendary), chapter III counts the opponent's graveyard (`ltrOneRingLoss`).
+- Existing vocabulary: Call of the Ring (upkeep `ringTempts`, `whenRingBearerChosen`, "pay 2 life" as a `may` after a life check), Isildur's Fateful Strike's
+  legendary-instant casting limit (`castOnlyIf`: a legendary creature or legendary planeswalker, a Ring-bearer included), Fall of Cair Andros (one trigger for each
+  creature dealt excess noncombat damage), Glóin (`historic`, `mustAttack` for goad), Moria Marauder (`exileTopPlayable`), Spiteful Banditry (X on the ETB).

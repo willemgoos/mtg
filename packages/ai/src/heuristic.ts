@@ -106,6 +106,10 @@ export function createHeuristicBot(db: CardDb, name = 'heuristic'): Bot {
           // The Hobbit (20b green): Through the Forest Gate lists the lands first and "Done" last: take every land.
           if (d.title?.startsWith('Through the Forest Gate'))
             return { type: 'chooseOption', player: me, index: 0 };
+          // Lord of the Rings (21d br-rare): Hew the Entwood. The bot sacrifices no land ("Done" is first) and takes every artifact and
+          // land card revealed (the cards come first, "Done" last).
+          if (d.title?.startsWith('Hew the Entwood'))
+            return { type: 'chooseOption', player: me, index: 0 };
           // Reality Fracture (17a fixes): every creature type is on offer.
           if (d.title === 'Choose a creature type') return chooseCreatureType(engine, view, me, d);
           // Reality Fracture (17a): Arc of Fortune.

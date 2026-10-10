@@ -842,6 +842,11 @@ export type TriggerDef =
   /** Whenever a player or permanent becomes the target of an ability you control (Loki, God of Mischief). */
   | { on: 'youTargetWithAbility' }
   | { on: 'drawCard'; whose: 'yours' | 'opponents' }
+  // Lord of the Rings (21d br-rare): Orcish Bowmasters, Éomer, Marshal of Rohan
+  /** Whenever an opponent draws a card except the first one they draw in each of their draw steps. */
+  | { on: 'ltrOpponentExtraDraw' }
+  /** Whenever one or more other attacking legendary creatures you control die (use with `oncePerTurn`; a Ring-bearer is legendary). */
+  | { on: 'ltrAttackingLegendaryDies' }
   // The Hobbit (20b blue): Elrond, Moon-Reader
   /** Whenever you activate an ability of a creature (a mana ability too). */
   | { on: 'youActivateCreatureAbility' }
@@ -3938,6 +3943,9 @@ export interface GameObject {
   // Strixhaven (13c): Silverquill Silencer
   /** The card name chosen for it as it entered. */
   chosenName?: CardDefId;
+  // Lord of the Rings (21d br-rare): Shadow of the Enemy
+  /** In its owner's exile with `castableBy`: that player may cast it from there (their own graveyard's cards). */
+  ltrOwnExileCast?: boolean;
   // Strixhaven (13c): Hofri Ghostforge
   /** A token copy: the exiled card that returns to its owner's graveyard when this leaves the battlefield. */
   hofriExiled?: ObjectRef;
@@ -4489,6 +4497,9 @@ export interface TurnState {
   // Lord of the Rings (21b red): Fear, Fire, Foes!
   /** "Damage can't be prevented this turn." */
   ltrDamageUnpreventable?: boolean;
+  // Lord of the Rings (21d br-rare): Witch-king of Angmar
+  /** The creatures that dealt combat damage to each player this turn (`id:zcc`). */
+  ltrCombatDamagers?: Partial<Record<PlayerId, string[]>>;
   // Lorwyn Eclipsed (18b, special): Mirrormind Crown
   // The Hobbit (20b black): Azog, Moria's Ruin
   /** Tokens that left the battlefield this turn (they cease to exist): what they were, by id. */
@@ -4603,6 +4614,9 @@ export interface ContinuousEffect {
   // Lord of the Rings (21b green): Glorfindel, Dauntless Rescuer
   /** It can't be blocked by more than this many creatures. */
   maxBlockers?: number;
+  // Lord of the Rings (21d br-rare): There and Back Again
+  /** With `whileSourceId`: it ends as soon as this player stops controlling the source ("for as long as you control this Saga"). */
+  ltrWhileControlledBy?: PlayerId;
   /** As control reverts, an Equipment on a creature its controller doesn't control falls off (Stolen Uniform). */
   unattachOnRevert?: boolean;
   // Lorwyn Eclipsed (18a)
@@ -5420,6 +5434,8 @@ export type GameEvent =
       persist?: boolean;
       /** The counters of every kind it had as it left the battlefield (a token's too). */
       lastCounterTotal?: number;
+      /** Lord of the Rings (21d br-rare): it left the battlefield attacking and legendary (a Ring-bearer counts). */
+      leftAttackingLegendary?: boolean;
     }
   | {
       type: 'damageDealt';
@@ -5459,7 +5475,14 @@ export type GameEvent =
   | { type: 'blockersDeclared'; blocks: { blocker: ObjectId; attacker: ObjectId }[] }
   | { type: 'stepChanged'; turn: number; step: Step; activePlayer: PlayerId }
   /** `nth`: how many cards that player has drawn this turn, including this one. */
-  | { type: 'cardDrawn'; player: PlayerId; id: ObjectId; nth: number }
+  | {
+      type: 'cardDrawn';
+      player: PlayerId;
+      id: ObjectId;
+      nth: number;
+      /** Lord of the Rings (21d br-rare): the draw of the draw step itself (the turn-based action). */
+      drawStep?: boolean;
+    }
   | { type: 'shuffled'; player: PlayerId }
   // The Hobbit (20a)
   /** `player` got an enduring story (a third artifact, legendary or Saga while they control a Storied permanent). */

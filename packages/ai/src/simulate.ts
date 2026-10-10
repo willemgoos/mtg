@@ -94,6 +94,9 @@ function passiveAction(
       // The Hobbit (20b green): Through the Forest Gate, take every land.
       if (d.kind === 'chooseOption' && d.title?.startsWith('Through the Forest Gate'))
         return { type: 'chooseOption', player: d.player, index: 0 };
+      // Lord of the Rings (21d br-rare): Hew the Entwood, no land sacrificed, every artifact and land card taken.
+      if (d.kind === 'chooseOption' && d.title?.startsWith('Hew the Entwood'))
+        return { type: 'chooseOption', player: d.player, index: 0 };
       // Reality Fracture (17a fixes): every creature type is on offer.
       if (d.kind === 'chooseOption' && d.title === 'Choose a creature type')
         return chooseCreatureType(engine, s, d.player, d);
