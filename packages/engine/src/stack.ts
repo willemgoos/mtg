@@ -1847,6 +1847,20 @@ export function attachAura(ctx: Ctx, aura: ObjectId, host: ObjectId): void {
       h.blank = true;
       if (ab.effect.colorlessSubtype) h.colorless = ctx.s.colorChanges = true;
     }
+    // Lord of the Rings (21b white): Fog on the Barrow-Downs, "enchanted creature is a Spirit" (all other creature types are lost).
+    if (ab.effect.kind === 'attached' && ab.effect.setCreatureSubtype) {
+      ctx.s.effects.push({
+        timestamp: newTimestamp(ctx),
+        affected: { id: host, zcc: h.zcc },
+        power: 0,
+        toughness: 0,
+        keywords: [],
+        creatureSubtype: ab.effect.setCreatureSubtype,
+        expires: 'whileSource',
+        whileSourceId: aura,
+        player: a.controller,
+      });
+    }
     // Reality Fracture (17a): Puppet Crafting, the enchanted permanent is a creature while the Aura stays.
     if (ab.effect.kind === 'attached' && ab.effect.becomesCreature) {
       ctx.s.effects.push({

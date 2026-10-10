@@ -1224,10 +1224,12 @@ function priorityActions(
       // Marvel Super Heroes: {X} in an ability's cost (Bruce Banner): every affordable X up to 10.
       // Tarkir: Dragonstorm (19a): with "X target creatures", X is at least 1 and no more than there are targets for.
       const xSpec = a.targets[a.targets.length - 1]?.xTargets ? a.targets[a.targets.length - 1] : undefined;
+      // Lord of the Rings (21b white): Ent-Draught Basin, "target creature with power X": X may be 0, and only creatures of power X are targets.
+      const powerX = a.targets.findIndex((t) => t.filter?.powerEqualsX);
       if (mana?.x)
-        for (const base of xSpec ? out.splice(firstOfAbility) : out.slice(firstOfAbility))
+        for (const base of xSpec || powerX >= 0 ? out.splice(firstOfAbility) : out.slice(firstOfAbility))
           for (
-            let x = 1;
+            let x = powerX >= 0 ? 0 : 1;
             x <=
             (xSpec ? Math.min(10, targetCandidates(ctx, xSpec, { controller: player, sourceId: source }).length) : 10);
             x++
@@ -1235,6 +1237,10 @@ function priorityActions(
             if (!canPayFrom({ ...mana, generic: mana.generic + x * mana.x }, usable)) break;
             // Tarkir: Dragonstorm (19a): Krumar Initiate, "Pay X life".
             if (a.cost.lifeX && x > ps.life) break;
+            if (powerX >= 0) {
+              const tg = (base as { targets: TargetChoice[] }).targets[powerX];
+              if (!tg || !('object' in tg) || characteristics(ctx, tg.object.id).power !== x) continue;
+            }
             out.push({ ...base, x } as Action);
           }
     });
