@@ -1481,6 +1481,9 @@ export interface CardFilter {
   // Secrets of Strixhaven (14b): Nita, Forum Conciliator
   /** Its controller doesn't own it. */
   notOwnedByController?: boolean;
+  // The Hobbit (20b white): The Eagles Are Coming!
+  /** Its owner is the controller of the source ("target creature you own"; the source is the spell). */
+  ownedBySourceController?: boolean;
   // Strixhaven Brawl (15b, w)
   /** Attached to a creature on the battlefield (Sage's Reverie: "each Aura you control that's attached to a creature"). */
   attachedToCreature?: boolean;
@@ -2455,6 +2458,9 @@ export type EffectDef =
       // Tarkir: Dragonstorm (19b, green): Claim Territory
       /** With `upTo`: the first card found goes to `to`, the ones after it here ("put one onto the battlefield tapped and the other into your hand"). */
       thenTo?: 'hand';
+      // The Hobbit (20b white): Roads Go Ever, Ever On
+      /** The cards found are exiled and remembered by the source ("exile them"; a later effect finds them with the source). */
+      exileWithSource?: boolean;
     }
   /** Look at the top N; you may put a creature with mana value up to your land count onto the battlefield (Loot). */
   | { kind: 'lookForCreature'; count: number }
@@ -3400,6 +3406,9 @@ export type StaticDef =
   // Marvel Super Heroes Jumpstart (Trained)
   /** "You may pay {0} rather than pay the power-up cost of the first power-up ability you activate during each of your turns" (Advancing the Spirit). */
   | { kind: 'firstPowerUpFree' }
+  // The Hobbit (20b white): Kíli the Resourceful
+  /** "You may pay {0} rather than pay the equip cost of the first equip ability you activate each turn." */
+  | { kind: 'firstEquipFree'; condition?: ConditionDef }
   /** This creature can't be blocked. */
   | { kind: 'cantBeBlocked' }
   /** "Other creatures you control have prowess" (Bria, Riptide Rogue). */
@@ -4125,6 +4134,9 @@ export interface TurnState {
   // Marvel Super Heroes Jumpstart (Trained)
   /** The active player has activated a power-up ability this turn (Advancing the Spirit frees only the first). */
   powerUpActivated?: boolean;
+  // The Hobbit (20b white): Kíli the Resourceful
+  /** The turn number in which each player last activated an equip ability (the first each turn may be free). */
+  equipActivated?: Partial<Record<PlayerId, number>>;
   /** Creatures these players control assign combat damage by toughness if greater (The Kingpin of Crime). Replaced, never mutated. */
   toughnessDamage?: PlayerId[];
   /** 0 during the mulligan phase. */
@@ -4307,6 +4319,9 @@ export interface ContinuousEffect {
   blinkOnCombatDamage?: boolean;
   /** It's an artifact creature (a crewed Vehicle). */
   becomesCreature?: boolean;
+  // The Hobbit (20b white): Stone by Sunlight
+  /** It's an artifact in addition to its other types. */
+  becomesArtifact?: boolean;
   // Reality Fracture (17a): Puppet Crafting
   /** With `becomesCreature`: a creature only, not an artifact too. */
   creatureOnly?: boolean;
@@ -4602,6 +4617,9 @@ export type Decision =
       // Tarkir: Dragonstorm (19b, misc): Ugin, Eye of the Storms
       /** The cards found are exiled; they may be cast free this turn. */
       exileFreeThisTurn?: boolean;
+      // The Hobbit (20b white): Roads Go Ever, Ever On
+      /** The cards found are exiled with the source. */
+      exileWithSource?: boolean;
       /** Each card taken must have a different name from the ones already taken. */
       differentNames?: boolean;
       // Tarkir: Dragonstorm (19b, green): Claim Territory

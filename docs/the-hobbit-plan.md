@@ -61,6 +61,10 @@ The rows marked missing (amass, Recruit, Storied, the cycling family) were built
   `src/hob/<group>.ts`, registered in `src/the-hobbit.ts`). Groups (front-face names): white 28, blue 28, black 27, red 29,
   green 28, multicolour 26 (gold and hybrid), colorless 22 (artifacts and lands); 188 in all. Back faces (adventure
   spells) go in each group's `_BACKS`; tokens used by one card live in the group file, shared ones are in `hob/tokens.ts`.
+  White (28/28, done): engine pieces in `engine/src/hob-white-effects.ts` (Kíli's free first equip `firstEquipFree`, Eagles' Birds,
+  Stone by Sunlight's artifact, Roads' exiled Plains, Bilbo's spell lock) plus hooks marked `// The Hobbit (20b white)`:
+  the `ownedBySourceController` filter, `becomesArtifact` continuous effect, `exileWithSource` search, a player target for
+  `searchLibrary.forControllerOf`. Tests `cards/test/hob-white*.test.ts`, `ai/test/hob-white.test.ts`.
 - **20c**: Arena's Jump In packets for HOB (`scripts/data/arena-jumpin-packets.json`, if Arena has them) and the untapped.gg
   trophy decks (`scripts/data/hob-trophy-decks.*`), one per colour pair.
 - **20d**: boosters in Expedition, Season and Sealed from `HOB_BOOSTER_LIST`.

@@ -2419,7 +2419,10 @@ export function runEffects(
         const t = e.forControllerOf !== undefined ? es.targets[e.forControllerOf] : undefined;
         const searcher = e.activePlayerSearches
           ? ctx.s.turn.activePlayer // Lorwyn Eclipsed (18b, black): Mornsong Aria
-          : ((t && 'object' in t ? ctx.s.objects[t.object.id]?.controller : undefined) ?? controller);
+          : ((t && 'object' in t ? ctx.s.objects[t.object.id]?.controller : undefined) ??
+            // The Hobbit (20b white): Settle the Wreckage, "that player may search" (a player target).
+            (t && 'player' in t ? t.player : undefined) ??
+            controller);
         if (e.forControllerOf !== undefined && !t) continue;
         // Reality Fracture (17a): "up to 0 cards" (Fblthp with X = 0): the library is still shuffled.
         if (e.upTo !== undefined && resolveAmount(ctx, es, e.upTo) <= 0) {
@@ -2475,6 +2478,7 @@ export function runEffects(
           // Reality Fracture (17a fixes): Loyal Tutor.
           ...(e.reveal ? { reveal: true } : {}),
           ...(e.exileFreeThisTurn ? { exileFreeThisTurn: true } : {}), // Tarkir: Dragonstorm (19b, misc): Ugin
+          ...(e.exileWithSource ? { exileWithSource: true } : {}), // The Hobbit (20b white): Roads Go Ever, Ever On
           // Lorwyn Eclipsed (18a): Celestial Reunion, the creature type its additional cost chose.
           ...(e.battlefieldIfChosenType && es.source && ctx.s.objects[es.source.id]?.chosenType
             ? { battlefieldIfType: ctx.s.objects[es.source.id]!.chosenType! }

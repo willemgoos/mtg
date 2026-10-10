@@ -61,6 +61,8 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
   let crewed = false;
   // Reality Fracture (17a): Puppet Crafting: a creature, but not an artifact too.
   let artifactToo = false;
+  // The Hobbit (20b white): Stone by Sunlight, an artifact in addition to its other types.
+  let becameArtifact = false;
   // Marvel Super Heroes Jumpstart (Great Lakes Avengers): Flatman switches power and toughness.
   let switched = false;
 
@@ -71,6 +73,7 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
         override = e.basePT;
         baseTimestamp = e.timestamp;
       }
+      if (e.becomesArtifact) becameArtifact = true; // The Hobbit (20b white)
       if (e.becomesCreature) {
         crewed = true;
         if (!e.creatureOnly) artifactToo = true;
@@ -294,7 +297,9 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
           ? [...d.types, 'Creature']
           : o.notCreature
             ? d.types.filter((x) => x !== 'Creature')
-            : d.types),
+            : becameArtifact && !d.types.includes('Artifact')
+              ? [...d.types, 'Artifact']
+              : d.types),
     subtypes,
     cantBlock,
     cantBeBlocked,
@@ -686,6 +691,12 @@ export function isType(ctx: Ctx, id: ObjectId, t: CardType): boolean {
   // Strixhaven Brawl (15a): Enduring Courage comes back as an enchantment that isn't a creature.
   if (t === 'Creature' && ctx.s.objects[id]?.notCreature) return false;
   return def(ctx, id).types.includes(t);
+}
+
+/** The Hobbit (20b white): an effect made it an artifact in addition to its other types (Stone by Sunlight). */
+export function isArtifactByEffect(ctx: Ctx, id: ObjectId): boolean {
+  const o = obj(ctx, id);
+  return ctx.s.effects.some((e) => e.becomesArtifact && e.affected.id === id && e.affected.zcc === o.zcc);
 }
 
 export function isCreature(ctx: Ctx, id: ObjectId): boolean {
@@ -1211,7 +1222,9 @@ export function cardMatches(
   // Reality Fracture (17a): Puppet Crafting makes a permanent a creature (so does a crewed Vehicle).
   const hasType = (t: CardType): boolean =>
     d.types.includes(t) ||
-    (t === 'Creature' && obj(ctx, id).zone === 'battlefield' && isCreature(ctx, id));
+    (t === 'Creature' && obj(ctx, id).zone === 'battlefield' && isCreature(ctx, id)) ||
+    // The Hobbit (20b white): Stone by Sunlight makes a creature an artifact too.
+    (t === 'Artifact' && obj(ctx, id).zone === 'battlefield' && isArtifactByEffect(ctx, id));
   if (filter.types && !filter.types.some(hasType)) return false;
   if (
     filter.subtypes &&
@@ -1236,6 +1249,14 @@ export function cardMatches(
   if (filter.nonlegendary && d.supertypes.includes('Legendary')) return false;
   // Secrets of Strixhaven (14b): Nita, Forum Conciliator ("a spell you don't own").
   if (filter.notOwnedByController && obj(ctx, id).owner === obj(ctx, id).controller) return false;
+  // The Hobbit (20b white): The Eagles Are Coming!, "target creature you own".
+  if (
+    filter.ownedBySourceController &&
+    sourceId &&
+    ctx.s.objects[sourceId] &&
+    obj(ctx, id).owner !== obj(ctx, sourceId).controller
+  )
+    return false;
   // Secrets of Strixhaven (14b): Matterbending Mage.
   if (filter.hasX && !d.manaCost.x) return false;
   if (filter.chosenNameOfSource) {

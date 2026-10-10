@@ -195,6 +195,17 @@ from) when it's fixed. Older phases keep their own "Simplifications" lists in `d
 - [ ] Bifur, Melodic Rider (`subtypeTriggersTwice`): for a Dwarf that has left the battlefield (its dies trigger) the Dwarf type
       is read from its printed card (and changeling), not from effects that had made it a Dwarf.
 
+## The Hobbit white (`hob/white.ts`, phase 20b)
+
+- [ ] An Unexpected Party: "as this enchantment enters, choose a creature type" is an enters trigger (the convention of the
+      earlier sets, see Lorwyn Eclipsed above), so in principle an opponent could respond before the type is set.
+- [ ] Kíli the Resourceful: "you may pay {0} rather than pay the equip cost of the first equip ability you activate each turn" is
+      applied automatically (the first equip activation each turn costs {0}); paying {0} is never worse, and which ability is
+      first is still the player's choice of order.
+- [ ] Moment of Glory: cast from a graveyard, the counters go on every creature you control at once (the target included),
+      which is the same result as "a counter on the target, and one on each other creature" (the engine can't name "each
+      creature other than the target").
+
 ## Jump In slot cards (`jumpin-slots.ts`)
 
 - [ ] Polygraph Orb: collect evidence only offers cards with a mana value; the rules also let you exile lands and other

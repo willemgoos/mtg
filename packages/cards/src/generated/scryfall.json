@@ -22565,10 +22565,10 @@
   ],
   "keywords": [],
   "image": {
-   "small": "https://cards.scryfall.io/small/front/5/7/574f73a7-9ff7-4ce3-9f56-002af968d35a.jpg?1783934477",
-   "normal": "https://cards.scryfall.io/normal/front/5/7/574f73a7-9ff7-4ce3-9f56-002af968d35a.jpg?1783934477",
-   "large": "https://cards.scryfall.io/large/front/5/7/574f73a7-9ff7-4ce3-9f56-002af968d35a.jpg?1783934477",
-   "artCrop": "https://cards.scryfall.io/art_crop/front/5/7/574f73a7-9ff7-4ce3-9f56-002af968d35a.jpg?1783934477"
+   "small": "https://cards.scryfall.io/small/front/5/7/574f73a7-9ff7-4ce3-9f56-002af968d35a.jpg?1791030997",
+   "normal": "https://cards.scryfall.io/normal/front/5/7/574f73a7-9ff7-4ce3-9f56-002af968d35a.jpg?1791030997",
+   "large": "https://cards.scryfall.io/large/front/5/7/574f73a7-9ff7-4ce3-9f56-002af968d35a.jpg?1791030997",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/7/574f73a7-9ff7-4ce3-9f56-002af968d35a.jpg?1791030997"
   }
  },
  {
@@ -56614,10 +56614,10 @@
   ],
   "keywords": [],
   "image": {
-   "small": "https://cards.scryfall.io/small/front/2/9/29dd649c-86b5-40a1-94b0-5859d03be9cd.jpg?1787806940",
-   "normal": "https://cards.scryfall.io/normal/front/2/9/29dd649c-86b5-40a1-94b0-5859d03be9cd.jpg?1787806940",
-   "large": "https://cards.scryfall.io/large/front/2/9/29dd649c-86b5-40a1-94b0-5859d03be9cd.jpg?1787806940",
-   "artCrop": "https://cards.scryfall.io/art_crop/front/2/9/29dd649c-86b5-40a1-94b0-5859d03be9cd.jpg?1787806940"
+   "small": "https://cards.scryfall.io/small/front/2/9/29dd649c-86b5-40a1-94b0-5859d03be9cd.jpg?1791157577",
+   "normal": "https://cards.scryfall.io/normal/front/2/9/29dd649c-86b5-40a1-94b0-5859d03be9cd.jpg?1791157577",
+   "large": "https://cards.scryfall.io/large/front/2/9/29dd649c-86b5-40a1-94b0-5859d03be9cd.jpg?1791157577",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/9/29dd649c-86b5-40a1-94b0-5859d03be9cd.jpg?1791157577"
   }
  },
  {
@@ -70838,10 +70838,10 @@
    "Haste"
   ],
   "image": {
-   "small": "https://cards.scryfall.io/small/front/f/2/f27d50f0-d76e-4ce1-a8d9-d997af6a5b41.jpg?1789385716",
-   "normal": "https://cards.scryfall.io/normal/front/f/2/f27d50f0-d76e-4ce1-a8d9-d997af6a5b41.jpg?1789385716",
-   "large": "https://cards.scryfall.io/large/front/f/2/f27d50f0-d76e-4ce1-a8d9-d997af6a5b41.jpg?1789385716",
-   "artCrop": "https://cards.scryfall.io/art_crop/front/f/2/f27d50f0-d76e-4ce1-a8d9-d997af6a5b41.jpg?1789385716"
+   "small": "https://cards.scryfall.io/small/front/f/2/f27d50f0-d76e-4ce1-a8d9-d997af6a5b41.jpg?1791192275",
+   "normal": "https://cards.scryfall.io/normal/front/f/2/f27d50f0-d76e-4ce1-a8d9-d997af6a5b41.jpg?1791192275",
+   "large": "https://cards.scryfall.io/large/front/f/2/f27d50f0-d76e-4ce1-a8d9-d997af6a5b41.jpg?1791192275",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/2/f27d50f0-d76e-4ce1-a8d9-d997af6a5b41.jpg?1791192275"
   }
  },
  {
@@ -88464,6 +88464,732 @@
    "normal": "https://cards.scryfall.io/normal/front/2/d/2dcafdac-a293-4adc-a540-3b3f469cf6f3.jpg?1783907283",
    "large": "https://cards.scryfall.io/large/front/2/d/2dcafdac-a293-4adc-a540-3b3f469cf6f3.jpg?1783907283",
    "artCrop": "https://cards.scryfall.io/art_crop/front/2/d/2dcafdac-a293-4adc-a540-3b3f469cf6f3.jpg?1783907283"
+  }
+ },
+ {
+  "name": "Belladonna Took",
+  "scryfallId": "88f0c189-c9ed-4ea3-ae62-3d8ac6c7fecf",
+  "oracleId": "011da9c5-aa8a-4fa0-b1f2-62b9f3760476",
+  "set": "hob",
+  "collectorNumber": "4",
+  "rarity": "rare",
+  "manaCost": "{1}{W}",
+  "typeLine": "Legendary Creature — Halfling Citizen",
+  "oracleText": "Whenever a token you control enters, you gain 1 life if this is the first time this ability has resolved this turn. If it's the second time, draw a card. If it's the third time, put a +1/+1 counter on each creature you control.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/8/88f0c189-c9ed-4ea3-ae62-3d8ac6c7fecf.jpg?1784894804",
+   "normal": "https://cards.scryfall.io/normal/front/8/8/88f0c189-c9ed-4ea3-ae62-3d8ac6c7fecf.jpg?1784894804",
+   "large": "https://cards.scryfall.io/large/front/8/8/88f0c189-c9ed-4ea3-ae62-3d8ac6c7fecf.jpg?1784894804",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/8/88f0c189-c9ed-4ea3-ae62-3d8ac6c7fecf.jpg?1784894804"
+  }
+ },
+ {
+  "name": "Bofur, Reliable Guardian",
+  "scryfallId": "6b8e6435-7de4-41d5-bc7d-8e24c11897d0",
+  "oracleId": "8a0e35ac-6c03-4922-b3b4-e419419fe3d7",
+  "set": "hob",
+  "collectorNumber": "6",
+  "rarity": "uncommon",
+  "manaCost": "{W}",
+  "typeLine": "Legendary Creature — Dwarf Scout",
+  "oracleText": "Lifelink",
+  "power": "1",
+  "toughness": "1",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Lifelink"
+  ],
+  "back": "Concerted Care",
+  "adventure": true,
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/b/6b8e6435-7de4-41d5-bc7d-8e24c11897d0.jpg?1785496981",
+   "normal": "https://cards.scryfall.io/normal/front/6/b/6b8e6435-7de4-41d5-bc7d-8e24c11897d0.jpg?1785496981",
+   "large": "https://cards.scryfall.io/large/front/6/b/6b8e6435-7de4-41d5-bc7d-8e24c11897d0.jpg?1785496981",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/b/6b8e6435-7de4-41d5-bc7d-8e24c11897d0.jpg?1785496981"
+  }
+ },
+ {
+  "name": "Concerted Care",
+  "scryfallId": "6b8e6435-7de4-41d5-bc7d-8e24c11897d0",
+  "oracleId": "8a0e35ac-6c03-4922-b3b4-e419419fe3d7",
+  "set": "hob",
+  "collectorNumber": "6",
+  "rarity": "uncommon",
+  "manaCost": "{1}{W}",
+  "typeLine": "Instant — Adventure",
+  "oracleText": "Target artifact or creature you control gains hexproof and indestructible until end of turn. (Then exile this card. You may cast the creature later from exile.)",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "front": "Bofur, Reliable Guardian",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/b/6b8e6435-7de4-41d5-bc7d-8e24c11897d0.jpg?1785496981",
+   "normal": "https://cards.scryfall.io/normal/front/6/b/6b8e6435-7de4-41d5-bc7d-8e24c11897d0.jpg?1785496981",
+   "large": "https://cards.scryfall.io/large/front/6/b/6b8e6435-7de4-41d5-bc7d-8e24c11897d0.jpg?1785496981",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/b/6b8e6435-7de4-41d5-bc7d-8e24c11897d0.jpg?1785496981"
+  }
+ },
+ {
+  "name": "Dáin, Lord of the Iron Hills",
+  "scryfallId": "99d27749-d16c-45e9-accc-6a01351c17f9",
+  "oracleId": "5b79b68a-db71-4638-824e-ab89b1716c86",
+  "set": "hob",
+  "collectorNumber": "8",
+  "rarity": "uncommon",
+  "manaCost": "{1}{W}",
+  "typeLine": "Legendary Creature — Dwarf Noble",
+  "oracleText": "Vigilance\nStoried (If you control three or more artifacts, legendaries, and/or Sagas, you have an enduring story for the rest of the game.)\nAs long as you have an enduring story, creatures can't attack you unless their controller pays {1} for each of those creatures.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Vigilance",
+   "Storied"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/9/99d27749-d16c-45e9-accc-6a01351c17f9.jpg?1785496921",
+   "normal": "https://cards.scryfall.io/normal/front/9/9/99d27749-d16c-45e9-accc-6a01351c17f9.jpg?1785496921",
+   "large": "https://cards.scryfall.io/large/front/9/9/99d27749-d16c-45e9-accc-6a01351c17f9.jpg?1785496921",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/9/99d27749-d16c-45e9-accc-6a01351c17f9.jpg?1785496921"
+  }
+ },
+ {
+  "name": "Dwarven Provisioner",
+  "scryfallId": "1f9a61a1-454e-4d5b-a6dd-1a79fe9dedf3",
+  "oracleId": "8fcab221-8737-4357-b8ee-bad9421739a3",
+  "set": "hob",
+  "collectorNumber": "9",
+  "rarity": "common",
+  "manaCost": "{1}{W}",
+  "typeLine": "Creature — Dwarf Citizen",
+  "oracleText": "{3}{W}: Creatures you control get +1/+1 until end of turn.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/f/1f9a61a1-454e-4d5b-a6dd-1a79fe9dedf3.jpg?1785496922",
+   "normal": "https://cards.scryfall.io/normal/front/1/f/1f9a61a1-454e-4d5b-a6dd-1a79fe9dedf3.jpg?1785496922",
+   "large": "https://cards.scryfall.io/large/front/1/f/1f9a61a1-454e-4d5b-a6dd-1a79fe9dedf3.jpg?1785496922",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/f/1f9a61a1-454e-4d5b-a6dd-1a79fe9dedf3.jpg?1785496922"
+  }
+ },
+ {
+  "name": "Eagle of the Great Shelf",
+  "scryfallId": "3feca644-5f65-4477-bbc8-d505cec6f3a5",
+  "oracleId": "cb4b4b63-682b-4439-9757-84cca7a27db2",
+  "set": "hob",
+  "collectorNumber": "11",
+  "rarity": "uncommon",
+  "manaCost": "{4}{W}",
+  "typeLine": "Creature — Bird Soldier",
+  "oracleText": "Flying\nWhenever this creature attacks, it gets +1/+1 until end of turn for each other creature you control.",
+  "power": "2",
+  "toughness": "5",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/f/3feca644-5f65-4477-bbc8-d505cec6f3a5.jpg?1784797947",
+   "normal": "https://cards.scryfall.io/normal/front/3/f/3feca644-5f65-4477-bbc8-d505cec6f3a5.jpg?1784797947",
+   "large": "https://cards.scryfall.io/large/front/3/f/3feca644-5f65-4477-bbc8-d505cec6f3a5.jpg?1784797947",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/f/3feca644-5f65-4477-bbc8-d505cec6f3a5.jpg?1784797947"
+  }
+ },
+ {
+  "name": "Esgaroth Garrison",
+  "scryfallId": "573f67b0-6ce8-4857-a703-4a5728640736",
+  "oracleId": "84597236-2cfc-4654-b126-a8ee252f4d14",
+  "set": "hob",
+  "collectorNumber": "13",
+  "rarity": "common",
+  "manaCost": "{4}{W}",
+  "typeLine": "Creature — Human Soldier",
+  "oracleText": "Esgaroth Garrison's power is equal to the number of creatures you control.\nWhen this creature enters, recruit. (Draw a card, then discard a card. If you discarded a nonland card, create a 1/1 white Human Soldier creature token.)",
+  "power": "*",
+  "toughness": "5",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Recruit"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/7/573f67b0-6ce8-4857-a703-4a5728640736.jpg?1785496934",
+   "normal": "https://cards.scryfall.io/normal/front/5/7/573f67b0-6ce8-4857-a703-4a5728640736.jpg?1785496934",
+   "large": "https://cards.scryfall.io/large/front/5/7/573f67b0-6ce8-4857-a703-4a5728640736.jpg?1785496934",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/7/573f67b0-6ce8-4857-a703-4a5728640736.jpg?1785496934"
+  }
+ },
+ {
+  "name": "Fíli the Pathfinder",
+  "scryfallId": "b02142f3-5e55-40dc-a02c-9113fb7d763c",
+  "oracleId": "c91c7d6b-a502-4b66-9509-3c1eda00e763",
+  "set": "hob",
+  "collectorNumber": "14",
+  "rarity": "rare",
+  "manaCost": "{3}{W}",
+  "typeLine": "Legendary Creature — Dwarf Scout",
+  "oracleText": "Storied (If you control three or more artifacts, legendaries, and/or Sagas, you have an enduring story for the rest of the game.)\nAs long as you have an enduring story, creatures you control get +1/+1.\nWhenever Fíli or another nontoken Dwarf you control enters, create a 2/2 red Dwarf creature token.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Storied"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/0/b02142f3-5e55-40dc-a02c-9113fb7d763c.jpg?1785496367",
+   "normal": "https://cards.scryfall.io/normal/front/b/0/b02142f3-5e55-40dc-a02c-9113fb7d763c.jpg?1785496367",
+   "large": "https://cards.scryfall.io/large/front/b/0/b02142f3-5e55-40dc-a02c-9113fb7d763c.jpg?1785496367",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/0/b02142f3-5e55-40dc-a02c-9113fb7d763c.jpg?1785496367"
+  }
+ },
+ {
+  "name": "Iron Hills Blacksmith",
+  "scryfallId": "370e09c2-36c5-4662-8350-1db798afad3e",
+  "oracleId": "9febdfa8-8af2-4aba-b2e6-cb2baad7e02b",
+  "set": "hob",
+  "collectorNumber": "16",
+  "rarity": "uncommon",
+  "manaCost": "{1}{W}",
+  "typeLine": "Creature — Dwarf Artificer",
+  "oracleText": "Double strike\nWhen this creature enters, create a colorless Equipment artifact token named Axe with \"Equipped creature gets +1/+0\" and equip {2}.",
+  "power": "1",
+  "toughness": "1",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Double strike"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/7/370e09c2-36c5-4662-8350-1db798afad3e.jpg?1784631771",
+   "normal": "https://cards.scryfall.io/normal/front/3/7/370e09c2-36c5-4662-8350-1db798afad3e.jpg?1784631771",
+   "large": "https://cards.scryfall.io/large/front/3/7/370e09c2-36c5-4662-8350-1db798afad3e.jpg?1784631771",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/7/370e09c2-36c5-4662-8350-1db798afad3e.jpg?1784631771"
+  }
+ },
+ {
+  "name": "Kíli the Resourceful",
+  "scryfallId": "1805532f-6d99-47d0-9529-5f5831a7fdc8",
+  "oracleId": "840de40b-590e-4bf0-8d16-22b0eff61202",
+  "set": "hob",
+  "collectorNumber": "17",
+  "rarity": "rare",
+  "manaCost": "{1}{W}",
+  "typeLine": "Legendary Creature — Dwarf Scout",
+  "oracleText": "Storied (If you control three or more artifacts, legendaries, and/or Sagas, you have an enduring story for the rest of the game.)\nAs long as you have an enduring story, you may pay {0} rather than pay the equip cost of the first equip ability you activate each turn.\nWhenever another Dwarf or Equipment you control enters, draw a card. This ability triggers only once each turn.",
+  "power": "1",
+  "toughness": "2",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Storied"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/8/1805532f-6d99-47d0-9529-5f5831a7fdc8.jpg?1785496242",
+   "normal": "https://cards.scryfall.io/normal/front/1/8/1805532f-6d99-47d0-9529-5f5831a7fdc8.jpg?1785496242",
+   "large": "https://cards.scryfall.io/large/front/1/8/1805532f-6d99-47d0-9529-5f5831a7fdc8.jpg?1785496242",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/8/1805532f-6d99-47d0-9529-5f5831a7fdc8.jpg?1785496242"
+  }
+ },
+ {
+  "name": "Lake-town Lookout",
+  "scryfallId": "178c4cf6-6b11-40e4-9673-c560d6818a6b",
+  "oracleId": "cf765efe-884c-48e2-9edb-9d45cf2756dd",
+  "set": "hob",
+  "collectorNumber": "18",
+  "rarity": "common",
+  "manaCost": "{W}",
+  "typeLine": "Creature — Human Scout",
+  "oracleText": "When this creature dies, recruit. (Draw a card, then discard a card. If you discarded a nonland card, create a 1/1 white Human Soldier creature token.)",
+  "power": "1",
+  "toughness": "1",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Recruit"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/7/178c4cf6-6b11-40e4-9673-c560d6818a6b.jpg?1785496946",
+   "normal": "https://cards.scryfall.io/normal/front/1/7/178c4cf6-6b11-40e4-9673-c560d6818a6b.jpg?1785496946",
+   "large": "https://cards.scryfall.io/large/front/1/7/178c4cf6-6b11-40e4-9673-c560d6818a6b.jpg?1785496946",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/7/178c4cf6-6b11-40e4-9673-c560d6818a6b.jpg?1785496946"
+  }
+ },
+ {
+  "name": "Lake-town Toymaker",
+  "scryfallId": "67304269-c595-4cf0-8dbf-fcb2e9e01fe2",
+  "oracleId": "0f208cd3-7673-4380-9cb8-5b6f09966ebd",
+  "set": "hob",
+  "collectorNumber": "19",
+  "rarity": "uncommon",
+  "manaCost": "{3}{W}",
+  "typeLine": "Creature — Human Artificer",
+  "oracleText": "At the beginning of combat on your turn, if you've drawn two or more cards this turn, another target creature you control gets +3/+0 and gains first strike until end of turn.",
+  "power": "3",
+  "toughness": "4",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/7/67304269-c595-4cf0-8dbf-fcb2e9e01fe2.jpg?1785496951",
+   "normal": "https://cards.scryfall.io/normal/front/6/7/67304269-c595-4cf0-8dbf-fcb2e9e01fe2.jpg?1785496951",
+   "large": "https://cards.scryfall.io/large/front/6/7/67304269-c595-4cf0-8dbf-fcb2e9e01fe2.jpg?1785496951",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/7/67304269-c595-4cf0-8dbf-fcb2e9e01fe2.jpg?1785496951"
+  }
+ },
+ {
+  "name": "Ori, Keeper of Songs",
+  "scryfallId": "c5727af5-a487-4b16-8278-81c3c928c417",
+  "oracleId": "69cc089a-abd3-4edb-bc79-f02daac70837",
+  "set": "hob",
+  "collectorNumber": "23",
+  "rarity": "common",
+  "manaCost": "{2}{W}",
+  "typeLine": "Legendary Creature — Dwarf Bard",
+  "oracleText": "Storied (If you control three or more artifacts, legendaries, and/or Sagas, you have an enduring story for the rest of the game.)\nAs long as you have an enduring story, Ori gets +1/+0 and has vigilance.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Storied"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/5/c5727af5-a487-4b16-8278-81c3c928c417.jpg?1785323179",
+   "normal": "https://cards.scryfall.io/normal/front/c/5/c5727af5-a487-4b16-8278-81c3c928c417.jpg?1785323179",
+   "large": "https://cards.scryfall.io/large/front/c/5/c5727af5-a487-4b16-8278-81c3c928c417.jpg?1785323179",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/5/c5727af5-a487-4b16-8278-81c3c928c417.jpg?1785323179"
+  }
+ },
+ {
+  "name": "The Queen of Dale",
+  "scryfallId": "c977fb5f-4436-41d0-af68-93b6d05897e5",
+  "oracleId": "a2ec1dd0-86c7-423d-b562-ed95b79bf8f7",
+  "set": "hob",
+  "collectorNumber": "24",
+  "rarity": "mythic",
+  "manaCost": "{1}{W}",
+  "typeLine": "Legendary Creature — Human Noble",
+  "oracleText": "Whenever an opponent casts their first noncreature spell each turn, you recruit. (Draw a card, then discard a card. If you discarded a nonland card, create a 1/1 white Human Soldier creature token.)",
+  "power": "2",
+  "toughness": "1",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Recruit"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/9/c977fb5f-4436-41d0-af68-93b6d05897e5.jpg?1784376948",
+   "normal": "https://cards.scryfall.io/normal/front/c/9/c977fb5f-4436-41d0-af68-93b6d05897e5.jpg?1784376948",
+   "large": "https://cards.scryfall.io/large/front/c/9/c977fb5f-4436-41d0-af68-93b6d05897e5.jpg?1784376948",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/9/c977fb5f-4436-41d0-af68-93b6d05897e5.jpg?1784376948"
+  }
+ },
+ {
+  "name": "Velvetwing Butterflies",
+  "scryfallId": "5cc0f994-5048-4898-926e-b56cbc97e0ca",
+  "oracleId": "70a702fe-1dd6-4d7b-a85a-45744ecad741",
+  "set": "hob",
+  "collectorNumber": "30",
+  "rarity": "common",
+  "manaCost": "{2}{W}",
+  "typeLine": "Creature — Insect",
+  "oracleText": "Flying",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "back": "Gaze in Wonder",
+  "adventure": true,
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/c/5cc0f994-5048-4898-926e-b56cbc97e0ca.jpg?1785497031",
+   "normal": "https://cards.scryfall.io/normal/front/5/c/5cc0f994-5048-4898-926e-b56cbc97e0ca.jpg?1785497031",
+   "large": "https://cards.scryfall.io/large/front/5/c/5cc0f994-5048-4898-926e-b56cbc97e0ca.jpg?1785497031",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/c/5cc0f994-5048-4898-926e-b56cbc97e0ca.jpg?1785497031"
+  }
+ },
+ {
+  "name": "Gaze in Wonder",
+  "scryfallId": "5cc0f994-5048-4898-926e-b56cbc97e0ca",
+  "oracleId": "70a702fe-1dd6-4d7b-a85a-45744ecad741",
+  "set": "hob",
+  "collectorNumber": "30",
+  "rarity": "common",
+  "manaCost": "{1}{W}",
+  "typeLine": "Instant — Adventure",
+  "oracleText": "Tap one or two target creatures. (Then exile this card. You may cast the creature later from exile.)",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "front": "Velvetwing Butterflies",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/c/5cc0f994-5048-4898-926e-b56cbc97e0ca.jpg?1785497031",
+   "normal": "https://cards.scryfall.io/normal/front/5/c/5cc0f994-5048-4898-926e-b56cbc97e0ca.jpg?1785497031",
+   "large": "https://cards.scryfall.io/large/front/5/c/5cc0f994-5048-4898-926e-b56cbc97e0ca.jpg?1785497031",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/c/5cc0f994-5048-4898-926e-b56cbc97e0ca.jpg?1785497031"
+  }
+ },
+ {
+  "name": "An Unexpected Party",
+  "scryfallId": "262d6907-f598-433a-8a11-cb8fd96a4adf",
+  "oracleId": "38503d34-f4f9-4eeb-9b1e-4fec1df921b3",
+  "set": "pw26",
+  "collectorNumber": "14",
+  "rarity": "rare",
+  "manaCost": "{2}{W}{W}",
+  "typeLine": "Enchantment",
+  "oracleText": "As this enchantment enters, choose a creature type.\nCreatures you control of the chosen type get +2/+2.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "back": "At the Door",
+  "adventure": true,
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/6/262d6907-f598-433a-8a11-cb8fd96a4adf.jpg?1787032029",
+   "normal": "https://cards.scryfall.io/normal/front/2/6/262d6907-f598-433a-8a11-cb8fd96a4adf.jpg?1787032029",
+   "large": "https://cards.scryfall.io/large/front/2/6/262d6907-f598-433a-8a11-cb8fd96a4adf.jpg?1787032029",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/6/262d6907-f598-433a-8a11-cb8fd96a4adf.jpg?1787032029"
+  }
+ },
+ {
+  "name": "At the Door",
+  "scryfallId": "262d6907-f598-433a-8a11-cb8fd96a4adf",
+  "oracleId": "38503d34-f4f9-4eeb-9b1e-4fec1df921b3",
+  "set": "pw26",
+  "collectorNumber": "14",
+  "rarity": "rare",
+  "manaCost": "{X}{2}{W}",
+  "typeLine": "Sorcery — Adventure",
+  "oracleText": "Create X 2/2 red Dwarf creature tokens. (Then exile this card. You may cast the enchantment later from exile.)",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "front": "An Unexpected Party",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/6/262d6907-f598-433a-8a11-cb8fd96a4adf.jpg?1787032029",
+   "normal": "https://cards.scryfall.io/normal/front/2/6/262d6907-f598-433a-8a11-cb8fd96a4adf.jpg?1787032029",
+   "large": "https://cards.scryfall.io/large/front/2/6/262d6907-f598-433a-8a11-cb8fd96a4adf.jpg?1787032029",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/6/262d6907-f598-433a-8a11-cb8fd96a4adf.jpg?1787032029"
+  }
+ },
+ {
+  "name": "Bilbo's Gambit",
+  "scryfallId": "45ad01f0-cda8-4931-82bb-cb4949e56ae9",
+  "oracleId": "ef71ef07-8a35-41ec-a851-d95e9e3a221b",
+  "set": "hob",
+  "collectorNumber": "5",
+  "rarity": "rare",
+  "manaCost": "{1}{W}",
+  "typeLine": "Instant",
+  "oracleText": "Gift a Treasure (You may promise an opponent a gift as you cast this spell. If you do, they create a Treasure token before its other effects. It's an artifact with \"{T}, Sacrifice this token: Add one mana of any color.\")\nReturn target spell to its owner's hand. If the gift was promised, players can't cast spells this turn.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Gift",
+   "Treasure"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/5/45ad01f0-cda8-4931-82bb-cb4949e56ae9.jpg?1784894818",
+   "normal": "https://cards.scryfall.io/normal/front/4/5/45ad01f0-cda8-4931-82bb-cb4949e56ae9.jpg?1784894818",
+   "large": "https://cards.scryfall.io/large/front/4/5/45ad01f0-cda8-4931-82bb-cb4949e56ae9.jpg?1784894818",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/5/45ad01f0-cda8-4931-82bb-cb4949e56ae9.jpg?1784894818"
+  }
+ },
+ {
+  "name": "Celebrate the Mountain-king",
+  "scryfallId": "42fbd61d-e1a6-465d-b1a3-f5ee0869d3af",
+  "oracleId": "d51136fa-3c13-48a5-83fd-51fe00010a4b",
+  "set": "hob",
+  "collectorNumber": "7",
+  "rarity": "uncommon",
+  "manaCost": "{3}{W}",
+  "typeLine": "Enchantment",
+  "oracleText": "When this enchantment enters, for each opponent, exile up to one target nonland permanent that player controls until this enchantment leaves the battlefield.\nWhen this enchantment enters, recruit. (Draw a card, then discard a card. If you discarded a nonland card, create a 1/1 white Human Soldier creature token.)",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Recruit"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/2/42fbd61d-e1a6-465d-b1a3-f5ee0869d3af.jpg?1785496910",
+   "normal": "https://cards.scryfall.io/normal/front/4/2/42fbd61d-e1a6-465d-b1a3-f5ee0869d3af.jpg?1785496910",
+   "large": "https://cards.scryfall.io/large/front/4/2/42fbd61d-e1a6-465d-b1a3-f5ee0869d3af.jpg?1785496910",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/2/42fbd61d-e1a6-465d-b1a3-f5ee0869d3af.jpg?1785496910"
+  }
+ },
+ {
+  "name": "Dwarven Shortsword",
+  "scryfallId": "f2341cf3-4d2c-4a4f-9aea-8834104a8910",
+  "oracleId": "9cc52afb-9788-46f6-9f9b-347513f8a64f",
+  "set": "hob",
+  "collectorNumber": "10",
+  "rarity": "common",
+  "manaCost": "{3}{W}",
+  "typeLine": "Artifact — Equipment",
+  "oracleText": "When this Equipment enters, create a 2/2 red Dwarf creature token, then attach this Equipment to it.\nEquipped creature gets +1/+2.\nEquip {2} ({2}: Attach to target creature you control. Equip only as a sorcery.)",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Equip"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/2/f2341cf3-4d2c-4a4f-9aea-8834104a8910.jpg?1785496931",
+   "normal": "https://cards.scryfall.io/normal/front/f/2/f2341cf3-4d2c-4a4f-9aea-8834104a8910.jpg?1785496931",
+   "large": "https://cards.scryfall.io/large/front/f/2/f2341cf3-4d2c-4a4f-9aea-8834104a8910.jpg?1785496931",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/2/f2341cf3-4d2c-4a4f-9aea-8834104a8910.jpg?1785496931"
+  }
+ },
+ {
+  "name": "Gleaming Splendor",
+  "scryfallId": "3b087bd4-bbb7-4963-bdb6-0a700ff19a04",
+  "oracleId": "c01aeaa5-1d3b-4493-9575-30175dcd780d",
+  "set": "hob",
+  "collectorNumber": "15",
+  "rarity": "mythic",
+  "manaCost": "{1}{W}",
+  "typeLine": "Enchantment",
+  "oracleText": "Whenever an opponent draws their second card each turn, you create a Treasure token.\n{2}{W}: Two target players each draw a card.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Treasure"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/b/3b087bd4-bbb7-4963-bdb6-0a700ff19a04.jpg?1785496942",
+   "normal": "https://cards.scryfall.io/normal/front/3/b/3b087bd4-bbb7-4963-bdb6-0a700ff19a04.jpg?1785496942",
+   "large": "https://cards.scryfall.io/large/front/3/b/3b087bd4-bbb7-4963-bdb6-0a700ff19a04.jpg?1785496942",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/b/3b087bd4-bbb7-4963-bdb6-0a700ff19a04.jpg?1785496942"
+  }
+ },
+ {
+  "name": "Magnificent End",
+  "scryfallId": "430c8916-1167-400b-9cad-d301f59d5e5d",
+  "oracleId": "82bdf9cb-61fe-4eaf-8762-c32002403d96",
+  "set": "hob",
+  "collectorNumber": "20",
+  "rarity": "common",
+  "manaCost": "{4}{W}",
+  "typeLine": "Instant",
+  "oracleText": "This spell costs {3} less to cast if it targets a tapped creature.\nMagnificent End deals 5 damage to target creature.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/3/430c8916-1167-400b-9cad-d301f59d5e5d.jpg?1785497008",
+   "normal": "https://cards.scryfall.io/normal/front/4/3/430c8916-1167-400b-9cad-d301f59d5e5d.jpg?1785497008",
+   "large": "https://cards.scryfall.io/large/front/4/3/430c8916-1167-400b-9cad-d301f59d5e5d.jpg?1785497008",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/3/430c8916-1167-400b-9cad-d301f59d5e5d.jpg?1785497008"
+  }
+ },
+ {
+  "name": "Moment of Glory",
+  "scryfallId": "0a6a6ff0-b1cd-4b06-bd31-612690094e0e",
+  "oracleId": "3d39db09-67b7-4a4e-9667-4e1b806f51a5",
+  "set": "hob",
+  "collectorNumber": "21",
+  "rarity": "common",
+  "manaCost": "{W}",
+  "typeLine": "Sorcery",
+  "oracleText": "Put a +1/+1 counter on target creature you control. If this spell was cast from a graveyard, also put a +1/+1 counter on each other creature you control.\nFlashback {4}{W} (You may cast this card from your graveyard for its flashback cost. Then exile it.)",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Flashback"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/a/0a6a6ff0-b1cd-4b06-bd31-612690094e0e.jpg?1785497012",
+   "normal": "https://cards.scryfall.io/normal/front/0/a/0a6a6ff0-b1cd-4b06-bd31-612690094e0e.jpg?1785497012",
+   "large": "https://cards.scryfall.io/large/front/0/a/0a6a6ff0-b1cd-4b06-bd31-612690094e0e.jpg?1785497012",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/a/0a6a6ff0-b1cd-4b06-bd31-612690094e0e.jpg?1785497012"
+  }
+ },
+ {
+  "name": "Roads Go Ever, Ever On",
+  "scryfallId": "b3c1ebd6-967f-4b8c-8f1f-442ce8c1da24",
+  "oracleId": "3cd3cdc9-2ed2-4cdf-b58a-12c3a2ef218b",
+  "set": "hob",
+  "collectorNumber": "25",
+  "rarity": "rare",
+  "manaCost": "{1}{W}",
+  "typeLine": "Enchantment — Saga",
+  "oracleText": "(As this Saga enters and after your draw step, add a lore counter. Sacrifice after IV.)\nI — Search your library for up to two basic Plains cards, exile them, then shuffle. You gain 2 life.\nII, III — Put a card exiled with this Saga into its owner's hand.\nIV — Whenever you attack this turn, target creature you control gets +1/+1 until end of turn for each Plains you control.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/3/b3c1ebd6-967f-4b8c-8f1f-442ce8c1da24.jpg?1784673434",
+   "normal": "https://cards.scryfall.io/normal/front/b/3/b3c1ebd6-967f-4b8c-8f1f-442ce8c1da24.jpg?1784673434",
+   "large": "https://cards.scryfall.io/large/front/b/3/b3c1ebd6-967f-4b8c-8f1f-442ce8c1da24.jpg?1784673434",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/3/b3c1ebd6-967f-4b8c-8f1f-442ce8c1da24.jpg?1784673434"
+  }
+ },
+ {
+  "name": "Settle the Wreckage",
+  "scryfallId": "ff3a48ee-27c6-45de-8252-5f488bc05e66",
+  "oracleId": "2a2ea189-b663-4f4a-bb23-ff7a4af25f71",
+  "set": "sld",
+  "collectorNumber": "2372",
+  "rarity": "rare",
+  "manaCost": "{2}{W}{W}",
+  "typeLine": "Instant",
+  "oracleText": "Exile all attacking creatures target player controls. That player may search their library for that many basic land cards, put those cards onto the battlefield tapped, then shuffle.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/f/ff3a48ee-27c6-45de-8252-5f488bc05e66.jpg?1783904215",
+   "normal": "https://cards.scryfall.io/normal/front/f/f/ff3a48ee-27c6-45de-8252-5f488bc05e66.jpg?1783904215",
+   "large": "https://cards.scryfall.io/large/front/f/f/ff3a48ee-27c6-45de-8252-5f488bc05e66.jpg?1783904215",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/f/ff3a48ee-27c6-45de-8252-5f488bc05e66.jpg?1783904215"
+  }
+ },
+ {
+  "name": "Stone by Sunlight",
+  "scryfallId": "c5752731-253c-4b41-bdd8-94c26d715206",
+  "oracleId": "7907bbf0-f6d9-4e5b-b5de-73cd94979f98",
+  "set": "hob",
+  "collectorNumber": "27",
+  "rarity": "uncommon",
+  "manaCost": "{1}{W}",
+  "typeLine": "Instant",
+  "oracleText": "Choose one —\n• Destroy target creature with power 4 or greater.\n• Until end of turn, target creature becomes an artifact in addition to its other types and gains indestructible. (Damage and effects that say \"destroy\" don't destroy it.)",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/5/c5752731-253c-4b41-bdd8-94c26d715206.jpg?1784631953",
+   "normal": "https://cards.scryfall.io/normal/front/c/5/c5752731-253c-4b41-bdd8-94c26d715206.jpg?1784631953",
+   "large": "https://cards.scryfall.io/large/front/c/5/c5752731-253c-4b41-bdd8-94c26d715206.jpg?1784631953",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/5/c5752731-253c-4b41-bdd8-94c26d715206.jpg?1784631953"
+  }
+ },
+ {
+  "name": "The Eagles Are Coming!",
+  "scryfallId": "0bda1b62-47fc-42c2-a841-ccad8ea0db48",
+  "oracleId": "169a4a77-12ff-4997-9550-bdcd456aa2f7",
+  "set": "hob",
+  "collectorNumber": "12",
+  "rarity": "rare",
+  "manaCost": "{1}{W}",
+  "typeLine": "Instant",
+  "oracleText": "Kicker {2}{W}{W} (You may pay an additional {2}{W}{W} as you cast this spell.)\nChoose target creature you own. If this spell was kicked, instead choose any number of target creatures you own. Return each chosen creature to your hand. At the beginning of the next upkeep, create a 4/4 white Bird Soldier creature token with flying for each creature returned to your hand this way.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Kicker"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/b/0bda1b62-47fc-42c2-a841-ccad8ea0db48.jpg?1784376936",
+   "normal": "https://cards.scryfall.io/normal/front/0/b/0bda1b62-47fc-42c2-a841-ccad8ea0db48.jpg?1784376936",
+   "large": "https://cards.scryfall.io/large/front/0/b/0bda1b62-47fc-42c2-a841-ccad8ea0db48.jpg?1784376936",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/b/0bda1b62-47fc-42c2-a841-ccad8ea0db48.jpg?1784376936"
+  }
+ },
+ {
+  "name": "The Mountain-king's Return",
+  "scryfallId": "68f4893d-e9a5-4f89-ade3-9ab78a834ad5",
+  "oracleId": "32ad5b3e-92c0-45be-b2e4-6f1794552f36",
+  "set": "hob",
+  "collectorNumber": "22",
+  "rarity": "uncommon",
+  "manaCost": "{2}{W}",
+  "typeLine": "Enchantment — Saga",
+  "oracleText": "(As this Saga enters and after your draw step, add a lore counter. Sacrifice after III.)\nI — Recruit. (Draw a card, then discard a card. If you discarded a nonland card, create a 1/1 white Human Soldier creature token.)\nII — Return target creature card with mana value 3 or less from your graveyard to the battlefield.\nIII — Put a +1/+1 counter on up to one target creature.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Recruit"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/8/68f4893d-e9a5-4f89-ade3-9ab78a834ad5.jpg?1787201116",
+   "normal": "https://cards.scryfall.io/normal/front/6/8/68f4893d-e9a5-4f89-ade3-9ab78a834ad5.jpg?1787201116",
+   "large": "https://cards.scryfall.io/large/front/6/8/68f4893d-e9a5-4f89-ade3-9ab78a834ad5.jpg?1787201116",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/8/68f4893d-e9a5-4f89-ade3-9ab78a834ad5.jpg?1787201116"
+  }
+ },
+ {
+  "name": "Thorin's Last Stand",
+  "scryfallId": "127367b6-9cfe-4516-9bfd-5b951468a25c",
+  "oracleId": "3c4da169-1e50-4790-abdc-214e7b8a2ad5",
+  "set": "hob",
+  "collectorNumber": "28",
+  "rarity": "common",
+  "manaCost": "{2}{W}{W}",
+  "typeLine": "Instant",
+  "oracleText": "Choose one —\n• Creatures you control get +2/+1 until end of turn.\n• Destroy target artifact or enchantment. You gain 2 life.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/2/127367b6-9cfe-4516-9bfd-5b951468a25c.jpg?1785497020",
+   "normal": "https://cards.scryfall.io/normal/front/1/2/127367b6-9cfe-4516-9bfd-5b951468a25c.jpg?1785497020",
+   "large": "https://cards.scryfall.io/large/front/1/2/127367b6-9cfe-4516-9bfd-5b951468a25c.jpg?1785497020",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/2/127367b6-9cfe-4516-9bfd-5b951468a25c.jpg?1785497020"
+  }
+ },
+ {
+  "name": "Vow to Erebor",
+  "scryfallId": "8d4f3eb5-fedf-45d6-8bd8-aacbe0ce33b2",
+  "oracleId": "f8961618-ae68-4d13-84eb-8b5464ce4971",
+  "set": "hob",
+  "collectorNumber": "31",
+  "rarity": "common",
+  "manaCost": "{1}{W}",
+  "typeLine": "Instant",
+  "oracleText": "Untap target creature you control. It gets +2/+2 until end of turn. If it's a Dwarf, you may attach an Equipment you control to it.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/d/8d4f3eb5-fedf-45d6-8bd8-aacbe0ce33b2.jpg?1785497034",
+   "normal": "https://cards.scryfall.io/normal/front/8/d/8d4f3eb5-fedf-45d6-8bd8-aacbe0ce33b2.jpg?1785497034",
+   "large": "https://cards.scryfall.io/large/front/8/d/8d4f3eb5-fedf-45d6-8bd8-aacbe0ce33b2.jpg?1785497034",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/d/8d4f3eb5-fedf-45d6-8bd8-aacbe0ce33b2.jpg?1785497034"
   }
  }
 ]
