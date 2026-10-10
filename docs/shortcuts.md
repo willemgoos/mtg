@@ -156,3 +156,13 @@ from) when it's fixed. Older phases keep their own "Simplifications" lists in `d
       planeswalker you could choose (the engine's "tapped and attacking" convention).
 - [ ] Collective Inferno, Rimefire Torque: "as this enters, choose a creature type" is an enters trigger (the convention
       above).
+
+## Tarkir: Dragonstorm (engine, phase 19a)
+
+- [ ] **The Sieges** ("As this enchantment enters, choose Abzan or Mardu"): the choice is made when an enters trigger resolves, not as
+      the permanent enters, so an opponent can respond to the trigger before it is made (to destroy it, say). The bots choose by
+      evaluation, which can't see what a Siege's abilities are worth (it picks the first option when they tie).
+- [ ] **The Devotees** ("{1}: Add {U}, {R}, or {W}. Activate only once each turn."): a real mana ability (no stack), but it isn't used
+      automatically while a cost is paid: the player activates it before casting (Arena does it for you). The heuristic bot uses it when
+      that makes a card castable.
+- [ ] **Mobilize and "tapped and attacking" tokens** attack the opponent, never a planeswalker (a legal choice, but the only one offered).
