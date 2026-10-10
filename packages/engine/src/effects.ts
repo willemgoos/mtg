@@ -60,6 +60,7 @@ import { addLore } from './sagas.ts';
 import { CHOOSERS } from './stx-13c-a-effects.ts';
 import { planeswalkersSurvive, tokenMultiplier } from './brawl-15a-w-effects.ts';
 import { crownReplacement } from './ecl-crown.ts';
+import { extraEntryCounters } from './tdm-misc-effects.ts';
 import { protectedFrom } from './brawl-15b-w-effects.ts';
 import { SOS_14B_C_CHOOSERS } from './sos-14b-c-effects.ts';
 import type {
@@ -2412,6 +2413,7 @@ export function runEffects(
           ...(e.differentNames ? { differentNames: true } : {}),
           // Reality Fracture (17a fixes): Loyal Tutor.
           ...(e.reveal ? { reveal: true } : {}),
+          ...(e.exileFreeThisTurn ? { exileFreeThisTurn: true } : {}), // Tarkir: Dragonstorm (19b, misc): Ugin
           // Lorwyn Eclipsed (18a): Celestial Reunion, the creature type its additional cost chose.
           ...(e.battlefieldIfChosenType && es.source && ctx.s.objects[es.source.id]?.chosenType
             ? { battlefieldIfType: ctx.s.objects[es.source.id]!.chosenType! }
@@ -2779,6 +2781,7 @@ function runEffectInner(ctx: Ctx, es: EffectSource, e: EffectDef): void {
             expires: 'endOfTurn',
           });
         ctx.s.battlefield.push(t.id);
+        addCounters(ctx, t.id, extraEntryCounters(ctx, t.id)); // Tarkir: Dragonstorm (19b, misc): Dragonstorm Globe
         emit(ctx, { type: 'objectMoved', id: t.id, defId: t.defId, from: null, to: 'battlefield' });
       }
       // Final Fantasy Commander (12e): Quina, "those tokens plus a 1/1 green Frog".
