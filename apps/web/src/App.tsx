@@ -48,45 +48,69 @@ import { clearGame, loadGame, type SavedGame } from './game/saved.ts';
 import { createSeasonRepository } from './game/seasonStorage.ts';
 import { BOT, type DeckChoice, HUMAN, useGame } from './game/useGame.ts';
 
-// Playable decks first; the rest show as "coming soon".
+/**
+ * A deck grid section. The filter bar picks by `group` (the set) and `kind`, so a set's
+ * starter and draft decks share one chip.
+ */
+type Section = {
+  title: string;
+  group: string;
+  kind?: 'starter' | 'draft';
+  blurb: string;
+  decks: Decklist[];
+};
 /** Deck grid sections, playable decks first within each. */
-const SECTIONS: { title: string; blurb: string; decks: Decklist[] }[] = [
+const SECTIONS: Section[] = [
   {
     title: 'Starter decks',
+    group: 'Foundations',
+    kind: 'starter' as const,
     blurb: 'Two-colour decks from Arena’s Starter Deck Duel',
     series: 'starter' as const,
   },
   {
     title: 'Foundations draft decks',
+    group: 'Foundations',
+    kind: 'draft' as const,
     blurb: '40-card decks that went 7–0 in Arena’s Premier Draft; they play each other',
     series: 'trophy' as const,
   },
   {
     title: 'Bloomburrow',
+    group: 'Bloomburrow',
+    kind: 'starter' as const,
     blurb: 'Two-colour Bloomburrow decks to face the starter decks: ours and the Starter Kit’s',
     series: 'starter' as const,
     set: 'blb' as const,
   },
   {
     title: 'Bloomburrow draft decks',
+    group: 'Bloomburrow',
+    kind: 'draft' as const,
     blurb: '40-card decks that went 7–0 to 7–2 in Arena’s Premier Draft; they play each other',
     series: 'trophy' as const,
     set: 'blb' as const,
   },
   {
     title: 'Marvel Super Heroes',
+    group: 'Marvel',
+    kind: 'starter' as const,
     blurb: 'Our two-colour decks from Marvel Super Heroes, built to face the starter decks',
     series: 'starter' as const,
     set: 'msh' as const,
   },
   {
     title: 'Marvel Super Heroes draft decks',
+    group: 'Marvel',
+    kind: 'draft' as const,
     blurb: '40-card decks that went 7–0 in Arena’s Premier Draft; they play each other',
     series: 'trophy' as const,
     set: 'msh' as const,
   },
   {
     title: 'Final Fantasy',
+    group: 'Final Fantasy',
+    kind: 'starter' as const,
     blurb:
       'Our two-colour decks from Final Fantasy, built to face the starter decks, and the Starter Kit’s Cloud and Sephiroth',
     series: 'starter' as const,
@@ -94,42 +118,55 @@ const SECTIONS: { title: string; blurb: string; decks: Decklist[] }[] = [
   },
   {
     title: 'Final Fantasy draft decks',
+    group: 'Final Fantasy',
+    kind: 'draft' as const,
     blurb: '40-card decks that went 7–0 in Arena’s Premier Draft; they play each other',
     series: 'trophy' as const,
     set: 'fin' as const,
   },
   {
     title: 'Strixhaven',
+    group: 'Strixhaven',
+    kind: 'starter' as const,
     blurb: 'Our two-colour decks from Strixhaven: School of Mages, built to face the starter decks',
     series: 'starter' as const,
     set: 'stx' as const,
   },
   {
     title: 'Secrets of Strixhaven',
+    group: 'Secrets of Strixhaven',
+    kind: 'starter' as const,
     blurb: 'Our two-colour decks from Secrets of Strixhaven, built to face the starter decks',
     series: 'starter' as const,
     set: 'sos' as const,
   },
   {
     title: 'Reality Fracture',
+    group: 'Reality Fracture',
+    kind: 'starter' as const,
     blurb: 'Our two-colour decks from Reality Fracture, built to face the starter decks',
     series: 'starter' as const,
     set: 'fra' as const,
   },
   {
     title: 'Lorwyn Eclipsed',
+    group: 'Lorwyn Eclipsed',
+    kind: 'starter' as const,
     blurb: 'Our two-colour decks from Lorwyn Eclipsed, built to face the starter decks',
     series: 'starter' as const,
     set: 'ecl' as const,
   },
   {
     title: 'Tarkir: Dragonstorm draft decks',
+    group: 'Tarkir: Dragonstorm',
+    kind: 'draft' as const,
     blurb: '40-card clan decks that went 7–1 or 7–2 in Arena’s Premier Draft; they play each other',
     series: 'trophy' as const,
     set: 'tdm' as const,
   },
   {
     title: 'Color Challenge',
+    group: 'Color Challenge',
     blurb: 'The mono-colour decks Sparky plays against new players',
     series: 'colorChallenge' as const,
   },
@@ -140,6 +177,8 @@ const SECTIONS: { title: string; blurb: string; decks: Decklist[] }[] = [
     ...s
   }: {
     title: string;
+    group: string;
+    kind?: 'starter' | 'draft';
     blurb: string;
     series: string;
     set?: 'blb' | 'msh' | 'fin' | 'stx' | 'sos' | 'fra' | 'ecl' | 'tdm';
@@ -153,19 +192,22 @@ const brawlDecks = (inSet: (d: Decklist) => boolean) => [
   ...DECKS.filter((d) => isBrawl(d) && inSet(d) && isPlayable(d)),
   ...DECKS.filter((d) => isBrawl(d) && inSet(d) && !isPlayable(d)),
 ];
-const BRAWL_SECTIONS: { title: string; blurb: string; decks: Decklist[] }[] = [
+const BRAWL_SECTIONS: Section[] = [
   {
     title: 'Brawl',
+    group: 'Brawl',
     blurb: '100-card singleton decks led by a legendary commander, 25 life',
     decks: brawlDecks((d) => d.set !== 'fic' && d.set !== 'soc' && d.set !== 'stx'),
   },
   {
     title: 'Final Fantasy',
+    group: 'Final Fantasy',
     blurb: 'Arena’s Final Fantasy Brawl decks, led by heroes of the series',
     decks: brawlDecks((d) => d.set === 'fic'),
   },
   {
     title: 'Strixhaven',
+    group: 'Strixhaven',
     blurb: 'Our Brawl decks led by Strixhaven’s commanders, built like Arena’s precons',
     decks: brawlDecks((d) => d.set === 'soc' || d.set === 'stx'),
   },
@@ -813,21 +855,31 @@ function Start({
   const name = isEvent(mode) ? EVENT_NAMES[mode] : '';
   const single = !isEvent(mode);
   const [season] = useState(seasonDecks);
-  /** The one section shown, or every section. */
+  /** The one set shown, or every set. */
   const [filter, setFilter] = useState<string | null>(null);
+  /** Starter or draft decks only, or both. */
+  const [kind, setKind] = useState<Section['kind'] | null>(null);
   // Expeditions can also set out with a deck built in Season mode.
-  const sections =
+  const sections: Section[] =
     mode === 'brawl'
       ? BRAWL_SECTIONS
       : mode === 'expedition' && season.length
         ? [
             SECTIONS[0]!,
-            { title: 'Your Season decks', blurb: 'Decks you built in Season mode', decks: season },
+            {
+              title: 'Your Season decks',
+              group: 'Season',
+              blurb: 'Decks you built in Season mode',
+              decks: season,
+            },
             ...SECTIONS.slice(1),
           ]
         : SECTIONS;
   // Jump In has its own packet browser (the lobby) instead of the deck grid.
-  const shown = mode === 'jumpIn' ? [] : sections.filter((s) => !filter || s.title === filter);
+  const inSet = sections.filter((s) => !filter || s.group === filter);
+  const shown = mode === 'jumpIn' ? [] : inSet.filter((s) => !kind || s.kind === kind);
+  const groups = [...new Set(sections.map((s) => s.group))];
+  const kinds = (['starter', 'draft'] as const).filter((k) => sections.some((s) => s.kind === k));
   const steps = mode === 'expedition' ? X.FLOORS : ROUNDS.length;
   const playable = (s: { decks: Decklist[] }) => s.decks.filter(isPlayable).length;
   const status = (d: Decklist): TileStatus | undefined => {
@@ -875,6 +927,7 @@ function Start({
                 className={`dseg__opt ${mode === m.id ? 'is-on' : ''}`}
                 onClick={() => {
                   setFilter(null);
+                  setKind(null);
                   onMode(m.id);
                 }}
               >
@@ -886,81 +939,99 @@ function Start({
 
         {mode === 'jumpIn' ? (
           lobby
-        ) : single ? (
-          <div className="dsetup">
-            <div className="dsetup__field">
-              <span className="dsetup__label">Opponent</span>
-              <div className="dseg dseg--sm" role="radiogroup" aria-label="Opponent">
-                {OPPONENTS.map((o) => (
-                  <button
-                    key={o.id}
-                    role="radio"
-                    aria-checked={opponent === o.id}
-                    className={`dseg__opt ${opponent === o.id ? 'is-on' : ''}`}
-                    onClick={() => onOpponent(o.id)}
-                  >
-                    {o.name}
-                  </button>
-                ))}
-              </div>
-              <span className="dsetup__hint">
-                {OPPONENTS.find((o) => o.id === opponent)?.blurb}
-              </span>
-            </div>
-            <label className="dsetup__field">
-              <span className="dsetup__label">Their deck</span>
-              <span className="dselect">
-                <select
-                  value={theirDeck ?? ''}
-                  onChange={(e) => onTheirDeck(e.target.value || null)}
-                >
-                  <option value="">Random</option>
-                  {sections.map((s) => (
-                    <optgroup key={s.title} label={s.title}>
-                      {s.decks.filter(isPlayable).map((d) => (
-                        <option key={d.id} value={d.id}>
-                          {d.name}
-                        </option>
-                      ))}
-                    </optgroup>
-                  ))}
-                </select>
-                <svg className="hico" viewBox="0 0 16 16" aria-hidden>
-                  <path d="m4 6 4 4 4-4" />
-                </svg>
-              </span>
-              <span className="dsetup__hint">
-                {theirDeck ? 'Always this deck' : 'A different deck from the same series'}
-              </span>
-            </label>
-          </div>
         ) : (
-          run && <RunBanner name={name} run={run} onContinue={onContinue} />
+          <>
+            {!single && run && <RunBanner name={name} run={run} onContinue={onContinue} />}
+            <div className="dsetup">
+              <div className="dsetup__field dsetup__sets">
+                <span className="dsetup__label">Sets</span>
+                <div className="dseg dseg--sm" role="radiogroup" aria-label="Sets">
+                  {[null, ...groups].map((g) => (
+                    <button
+                      key={g ?? 'all'}
+                      role="radio"
+                      aria-checked={filter === g}
+                      className={`dseg__opt ${filter === g ? 'is-on' : ''}`}
+                      onClick={() => setFilter(g)}
+                    >
+                      {g ?? 'All'}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              {kinds.length > 1 && (
+                <div className="dsetup__field">
+                  <span className="dsetup__label">Decks</span>
+                  <div className="dseg dseg--sm" role="radiogroup" aria-label="Decks">
+                    {[null, ...kinds].map((k) => (
+                      <button
+                        key={k ?? 'all'}
+                        role="radio"
+                        aria-checked={kind === k}
+                        disabled={!!k && !inSet.some((s) => s.kind === k && playable(s))}
+                        className={`dseg__opt ${kind === k ? 'is-on' : ''}`}
+                        onClick={() => setKind(k)}
+                      >
+                        {k === 'starter' ? 'Starter' : k === 'draft' ? 'Draft' : 'All'}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+              {single && (
+                <>
+                  <div className="dsetup__field">
+                    <span className="dsetup__label">Opponent</span>
+                    <div className="dseg dseg--sm" role="radiogroup" aria-label="Opponent">
+                      {OPPONENTS.map((o) => (
+                        <button
+                          key={o.id}
+                          role="radio"
+                          aria-checked={opponent === o.id}
+                          className={`dseg__opt ${opponent === o.id ? 'is-on' : ''}`}
+                          onClick={() => onOpponent(o.id)}
+                        >
+                          {o.name}
+                        </button>
+                      ))}
+                    </div>
+                    <span className="dsetup__hint">
+                      {OPPONENTS.find((o) => o.id === opponent)?.blurb}
+                    </span>
+                  </div>
+                  <label className="dsetup__field">
+                    <span className="dsetup__label">Their deck</span>
+                    <span className="dselect">
+                      <select
+                        value={theirDeck ?? ''}
+                        onChange={(e) => onTheirDeck(e.target.value || null)}
+                      >
+                        <option value="">Random</option>
+                        {sections.map((s) => (
+                          <optgroup key={s.title} label={s.title}>
+                            {s.decks.filter(isPlayable).map((d) => (
+                              <option key={d.id} value={d.id}>
+                                {d.name}
+                              </option>
+                            ))}
+                          </optgroup>
+                        ))}
+                      </select>
+                      <svg className="hico" viewBox="0 0 16 16" aria-hidden>
+                        <path d="m4 6 4 4 4-4" />
+                      </svg>
+                    </span>
+                    <span className="dsetup__hint">
+                      {theirDeck ? 'Always this deck' : 'A different deck from the same series'}
+                    </span>
+                  </label>
+                </>
+              )}
+            </div>
+          </>
         )}
 
-        {mode !== 'jumpIn' && (
-          <div className="dfilter" role="toolbar" aria-label="Deck series">
-            <button
-              aria-pressed={!filter}
-              className={`dfilter__chip ${!filter ? 'is-on' : ''}`}
-              onClick={() => setFilter(null)}
-            >
-              All <span>{sections.reduce((n, s) => n + playable(s), 0)}</span>
-            </button>
-            {sections.map((s) => (
-              <button
-                key={s.title}
-                aria-pressed={filter === s.title}
-                className={`dfilter__chip ${filter === s.title ? 'is-on' : ''}`}
-                onClick={() => setFilter(filter === s.title ? null : s.title)}
-              >
-                {s.title} <span>{playable(s)}</span>
-              </button>
-            ))}
-          </div>
-        )}
-
-        {mode === 'expedition' && !filter && (
+        {mode === 'expedition' && !filter && !kind && (
           <JumpInSection records={records} locked={running} onJumpIn={onJumpIn} />
         )}
         {shown.map((section) => (

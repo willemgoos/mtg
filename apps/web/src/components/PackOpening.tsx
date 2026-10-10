@@ -349,7 +349,7 @@ function OnePack({
     cards.forEach((name, i) => {
       if (busy.current.has(i)) return;
       const big = RANK[rarityOf(name)] >= RANK.rare;
-      t += big ? 450 : 110;
+      t += big ? 200 : 45;
       later(t, () => flip(i, !big));
       if (big) t += 500;
     });

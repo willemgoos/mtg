@@ -120,6 +120,21 @@
   min-width: 0;
 }
 
+/* The set picker takes its own row and wraps, like Jump In's. */
+.dsetup__sets {
+  flex: 1 1 100%;
+}
+
+.dsetup__sets .dseg {
+  flex-wrap: wrap;
+  overflow-x: visible;
+}
+
+.dseg__opt:disabled {
+  opacity: 0.35;
+  pointer-events: none;
+}
+
 .dsetup__label {
   font-size: 0.8125rem;
   font-weight: 500;
