@@ -402,6 +402,7 @@ describe("Puca's Eye", () => {
     const g2 = game({ p1: { battlefield: board } });
     const eye2 = g2.id('p1', 'pucas-eye');
     g2.obj(eye2).colorOverride = { colors: ['U'] };
+    g2.state.colorChanges = true;
     const act = abilityActions(g2, eye2, 1);
     expect(act).toHaveLength(1);
     const before = hand(g2).length;

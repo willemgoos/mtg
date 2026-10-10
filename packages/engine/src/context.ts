@@ -242,28 +242,33 @@ export function defOf(ctx: Ctx, defId: string): CardDefinition {
 const ALL_COLORS: Color[] = ['W', 'U', 'B', 'R', 'G'];
 
 export function def(ctx: Ctx, id: ObjectId): CardDefinition {
-  const d = defBase(ctx, id);
+  const o = obj(ctx, id);
+  const d = defBase(ctx, o);
   // Lorwyn Eclipsed (18b, multi-b): Tam, Mindful First-Year, "becomes all colors until end of turn".
-  const o = ctx.s.objects[id];
-  if (o?.allColorsTurn === ctx.s.turn.number && o.zone === 'battlefield')
+  if (ctx.s.colorChanges && o.allColorsTurn === ctx.s.turn.number && o.zone === 'battlefield')
     return { ...d, colors: ALL_COLORS };
   return d;
 }
 
-function defBase(ctx: Ctx, id: ObjectId): CardDefinition {
-  const o = obj(ctx, id);
+/** Lorwyn Eclipsed (18b): `d` with the colours the object was given or lost. */
+function recolored(ctx: Ctx, o: GameObject, d: CardDefinition): CardDefinition {
+  // Lorwyn Eclipsed (18b, special): "becomes the chosen color" (Puca's Eye), "becomes that color until end of turn" (Foraging Wickermaw).
+  const d0 =
+    o.colorOverride && (o.colorOverride.untilTurn ?? Infinity) >= ctx.s.turn.number
+      ? { ...d, colors: o.colorOverride.colors }
+      : d;
+  // Lorwyn Eclipsed (18b, blue): Noggle the Mind, "loses all colors".
+  return o.colorless ? colorlessDef(d0) : d0;
+}
+
+function defBase(ctx: Ctx, o: GameObject): CardDefinition {
+  const id = o.id;
   const printed = defOf(ctx, o.defId);
   // Iron Man: a nonlegendary copy is nonlegendary for every rule, not just the legend rule.
   const legal = o.nonlegendary
     ? { ...printed, supertypes: printed.supertypes.filter((t) => t !== 'Legendary') }
     : printed;
-  // Lorwyn Eclipsed (18b, special): "becomes the chosen color" (Puca's Eye), "becomes that color until end of turn" (Foraging Wickermaw).
-  const d0 =
-    o.colorOverride && (o.colorOverride.untilTurn ?? Infinity) >= ctx.s.turn.number
-      ? { ...legal, colors: o.colorOverride.colors }
-      : legal;
-  // Lorwyn Eclipsed (18b, blue): Noggle the Mind, "loses all colors".
-  const d = o.colorless ? colorlessDef(d0) : d0;
+  const d = ctx.s.colorChanges ? recolored(ctx, o, legal) : legal;
   if (o.foodBy !== undefined) {
     const aura = ctx.s.objects[o.foodBy];
     if (aura && aura.zone === 'battlefield' && aura.attachedTo === id) return foodDef(d);
@@ -309,19 +314,22 @@ function defBase(ctx: Ctx, id: ObjectId): CardDefinition {
   return withExtraAbilities(ctx, o, d);
 }
 
+/** Tarkir: Dragonstorm (19b, blue): `d` plus the abilities an attached Aura gives ("Enchanted creature has ..."). */
+function withAuraGrants(ctx: Ctx, o: GameObject, d: CardDefinition): CardDefinition {
+  const given = o.auraGrants!.flatMap((auraId) => {
+    const aura = ctx.s.objects[auraId];
+    if (!aura || aura.zone !== 'battlefield' || aura.attachedTo !== o.id) return [];
+    return (ctx.db.get(aura.defId)?.abilities ?? []).flatMap((a) =>
+      a.kind === 'static' && a.effect.kind === 'attached' ? (a.effect.grantAbilities ?? []) : [],
+    );
+  });
+  return given.length ? { ...d, abilities: [...d.abilities, ...given] } : d;
+}
+
 /** `d` plus the abilities the object was given for a while (until end of turn, perpetually, until it's cast). */
 function withExtraAbilities(ctx: Ctx, o: GameObject, d: CardDefinition): CardDefinition {
-  // Tarkir: Dragonstorm (19b, blue): abilities an attached Aura gives ("Enchanted creature has ...").
-  if (o.auraGrants?.length && o.zone === 'battlefield') {
-    const given = o.auraGrants.flatMap((auraId) => {
-      const aura = ctx.s.objects[auraId];
-      if (!aura || aura.zone !== 'battlefield' || aura.attachedTo !== o.id) return [];
-      return (ctx.db.get(aura.defId)?.abilities ?? []).flatMap((a) =>
-        a.kind === 'static' && a.effect.kind === 'attached' ? (a.effect.grantAbilities ?? []) : [],
-      );
-    });
-    if (given.length) d = { ...d, abilities: [...d.abilities, ...given] };
-  }
+  if (ctx.s.auraGrants && o.auraGrants?.length && o.zone === 'battlefield')
+    d = withAuraGrants(ctx, o, d);
   if (o.tempAbilities?.length || o.perpetualAbilities?.length || o.abilitiesUntilCast?.length)
     return {
       ...d,

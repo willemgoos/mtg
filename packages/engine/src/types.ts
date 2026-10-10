@@ -4885,6 +4885,10 @@ export interface GameState {
   creaturesAreFood?: boolean;
   // Lorwyn Eclipsed (18b, green): a Shimmerwilds Growth has been on the battlefield (lands may be recoloured: `def` looks for the Aura).
   landColorAuras?: boolean;
+  /** Lorwyn Eclipsed (18b): some object has had its colours changed (`allColorsTurn`, `colorOverride`, `colorless`); `def` checks them only then. */
+  colorChanges?: boolean;
+  /** Tarkir: Dragonstorm (19b, blue): an Aura has granted abilities (`auraGrants`); `def` checks them only then. */
+  auraGrants?: boolean;
   /** Abilities players have from emblems or effects (Season of the Bold, Ral). */
   emblems?: Emblem[];
   /** "At the beginning of the next end step, ...": fire at the first end step after `afterTurn` / this step. */

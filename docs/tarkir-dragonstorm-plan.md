@@ -218,8 +218,12 @@ main phase, Breaching Dragonstorm, Mardu Siegebreaker, Flamehold Grappler. Tempe
   colour with at least four spells (`THIRD_COLOUR_SPELLS`), so clan decks get rare offers, land upgrades and pips in all three
   colours; fewer is a splash and stays out.
 - **Tarkir: Dragonstorm is complete** (19a–19d). Merge `tarkir-dragonstorm` into `main` when it has been played.
-- Open check: `cards/test/brawl.test.ts` (random Brawl games) runs a little over its 240 s limit; time it on a quiet machine
-  against `main` to see whether 19a/19b made games slower.
+- **Brawl test timing (checked).** The random Brawl games took about 360 s here against 236 s on `main`. Games that play out
+  the same on both branches are about 40% slower: `def` and `manaSources` (both on every legal-action check) pick up Lorwyn
+  Eclipsed and Tarkir checks per object. `def` now reads its colour and Aura-grant fields only once a state flag says some
+  object has them (`colorChanges`, `auraGrants`); that is about 5% overall. The Brawl test limit is now 480 s. `fra-decks-3` (Grave Harvest) and `save-game` also time out on this branch
+  (they did before these fixes). A wider speed pass
+  (Lavaleaper's battlefield scan in `manaSources`, per-object reads in `legal.ts`) could win back the rest.
 
 ## Simplifications to revisit
 

@@ -1786,8 +1786,10 @@ export function attachAura(ctx: Ctx, aura: ObjectId, host: ObjectId): void {
     if (ab.kind !== 'static') continue;
     if (ab.effect.kind === 'enchantedIsFood') h.foodBy = aura;
     // Tarkir: Dragonstorm (19b, blue): Ringing Strike Mastery, "enchanted creature has '{5}: Untap this creature.'"
-    if (ab.effect.kind === 'attached' && ab.effect.grantAbilities?.length)
+    if (ab.effect.kind === 'attached' && ab.effect.grantAbilities?.length) {
       h.auraGrants = [...(h.auraGrants ?? []).filter((x) => x !== aura), aura];
+      ctx.s.auraGrants = true;
+    }
     // Marvel Super Heroes Jumpstart (Pym): Quantum Reduction, no window before it loses them.
     if (ab.effect.kind === 'attached' && ab.effect.loseAbilities) {
       ctx.s.effects.push({
@@ -1806,7 +1808,7 @@ export function attachAura(ctx: Ctx, aura: ObjectId, host: ObjectId): void {
         player: a.controller,
       });
       h.blank = true;
-      if (ab.effect.colorlessSubtype) h.colorless = true;
+      if (ab.effect.colorlessSubtype) h.colorless = ctx.s.colorChanges = true;
     }
     // Reality Fracture (17a): Puppet Crafting, the enchanted permanent is a creature while the Aura stays.
     if (ab.effect.kind === 'attached' && ab.effect.becomesCreature) {
