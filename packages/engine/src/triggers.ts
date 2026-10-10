@@ -12,6 +12,7 @@ import { type Ctx, createObject, def, defOf, obj, other } from './context.ts';
 import { manaValue } from './cost.ts';
 import { addLore } from './sagas.ts';
 import { countersOnLeft, spentColors } from './ecl-18a.ts';
+import { spellsCastThisTurn } from './tdm-19a.ts';
 import { elementalTriggerCopies } from './ecl-multi-b-effects.ts';
 import { FIC_CONDITIONS } from './fic-effects.ts';
 import { FIN_CONDITIONS } from './fin-effects.ts';
@@ -106,6 +107,11 @@ export function checkCondition(
   if (c.kind === 'opponentCastSpellThisTurn')
     return (ctx.s.turn.spellsCast?.[other(controller)] ?? 0) > 0;
   if (c.kind === 'sourceTapped') return !!self?.tapped;
+  // Tarkir: Dragonstorm (19a): "if you've cast two or more spells this turn".
+  if (c.kind === 'spellsCastThisTurn') {
+    const n = spellsCastThisTurn(ctx, c.who === 'opponent' ? other(controller) : controller, c.filter);
+    return n >= (c.min ?? 0) && n <= (c.max ?? Infinity);
+  }
   // Final Fantasy (11c): turn conditions.
   if (c.kind === 'noneCastThisTurn')
     return !(ctx.s.turn.castDefs?.[controller] ?? []).some((id) =>
@@ -639,6 +645,9 @@ function spellMatches(
           return !!o && o.zone === 'battlefield' && def(ctx, o.id).types.includes('Creature');
         })
       );
+    // Tarkir: Dragonstorm (19a): Flurry, counted among the caster's spells this turn, this one included.
+    case 'second':
+      return (ctx.s.turn.castDefs?.[spellCaster(ctx, item, self)] ?? []).length === 2;
     case 'third':
       return (ctx.s.turn.castDefs?.[spellCaster(ctx, item, self)] ?? []).length === 3;
     // Strixhaven Brawl (15b, w): Psemilla, "your first enchantment spell each turn".
@@ -1443,6 +1452,19 @@ function detect(ctx: Ctx, ev: GameEvent): void {
     }
     case 'attackersDeclared': {
       const ap = s.turn.activePlayer;
+      // Tarkir: Dragonstorm (19a): decayed, "when it attacks, sacrifice it at end of combat".
+      for (const id of ev.attackers) {
+        const attacker = s.objects[id];
+        if (!attacker || !hasKeyword(ctx, id, 'decayed')) continue;
+        (s.delayed ??= []).push({
+          controller: attacker.controller,
+          sourceDefId: attacker.defId,
+          subject: { id, zcc: attacker.zcc },
+          effects: [{ kind: 'sacrifice', what: 'subject' }],
+          fromTurn: s.turn.number,
+          at: 'endCombat',
+        });
+      }
       const attackedWith = (f: CardFilter | undefined, source?: ObjectId) =>
         ev.attackers.some((id) => !!s.objects[id] && matchesFilter(ctx, id, f, source));
       forEachBattlefieldTrigger(ctx, (o, a) => {
@@ -1574,6 +1596,19 @@ function detect(ctx: Ctx, ev: GameEvent): void {
             matchesFilter(ctx, id, t.filter),
           attacker,
         );
+      }
+      // Tarkir: Dragonstorm (19a): Dalkovan Encampment, "whenever you attack this turn" (an emblem), once for the whole attack.
+      for (const e of s.emblems ?? []) {
+        const em = e.ability;
+        if (em.kind !== 'triggered' || em.trigger.on !== 'youAttack' || e.controller !== ap) continue;
+        if (!attackedWith(em.trigger.filter)) continue;
+        s.pendingTriggers.push({
+          source: e.source,
+          sourceDefId: e.sourceDefId,
+          abilityIndex: -1,
+          controller: e.controller,
+          emblem: em,
+        });
       }
       // Reality Fracture (17c): Garruk, Curse Breaker: emblems that see creatures attack one of their controller's
       // opponents (a player, not a planeswalker): once, with every such attacker.
@@ -2172,10 +2207,10 @@ function detect(ctx: Ctx, ev: GameEvent): void {
         );
         return;
       }
-      if ((ev.step === 'end' || ev.step === 'upkeep') && s.delayed?.length) {
-        // "At the beginning of the next end step" (or upkeep): the ones due now.
-        const isDue = (d: { fromTurn: number; whose?: PlayerId; at?: 'upkeep' }) =>
-          (d.at === 'upkeep') === (ev.step === 'upkeep') &&
+      if ((ev.step === 'end' || ev.step === 'upkeep' || ev.step === 'endCombat') && s.delayed?.length) {
+        // "At the beginning of the next end step" (or upkeep, or end of combat): the ones due now.
+        const isDue = (d: { fromTurn: number; whose?: PlayerId; at?: 'upkeep' | 'endCombat' }) =>
+          (d.at ?? 'end') === (ev.step === 'endCombat' ? 'endCombat' : ev.step === 'upkeep' ? 'upkeep' : 'end') &&
           d.fromTurn <= ev.turn &&
           (!d.whose || d.whose === ev.activePlayer);
         const due = s.delayed.filter(isDue);
@@ -2239,8 +2274,10 @@ export function nextPendingTriggerIndex(ctx: Ctx): number {
 }
 
 /** Type and subtype checks against a card definition (for a permanent that has already left). */
-function defMatches(d: CardDefinition, f: CardFilter): boolean {
+export function defMatches(d: CardDefinition, f: CardFilter): boolean {
   if (f.types && !f.types.some((t) => d.types.includes(t))) return false;
+  // Tarkir: Dragonstorm (19a): "a noncreature spell".
+  if (f.notTypes && f.notTypes.some((t) => d.types.includes(t))) return false;
   if (f.hasKeyword && !d.keywords.includes(f.hasKeyword)) return false;
   // Secrets of Strixhaven (14b): Arnyn, Deathbloom Botanist (printed power and toughness).
   if (

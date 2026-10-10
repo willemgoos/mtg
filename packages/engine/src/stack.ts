@@ -139,6 +139,9 @@ export interface CastChoice {
   conspire?: boolean | undefined;
   /** Beheld for a flashback that beholds several cards. */
   beholdCards?: ObjectId[] | undefined;
+  // Tarkir: Dragonstorm (19a)
+  /** Harmonize: the untapped creature tapped to reduce the cost by its power. */
+  harmonizeTap?: ObjectId | undefined;
 }
 
 /** The creatures a kicked teamwork cast taps: the chosen ones, or the engine's pick (sparing mana sources if it can). */
@@ -492,6 +495,8 @@ export function castCost(
     }
   // Strixhaven Brawl (15b, u): delve pays for generic mana.
   if (choice.delve) reduce += choice.delve;
+  // Tarkir: Dragonstorm (19a): harmonize, tapping a creature reduces the generic cost by its power.
+  if (choice.harmonizeTap) reduce += Math.max(0, power(ctx, choice.harmonizeTap));
   // {X}: X is chosen as the spell is cast.
   if (cost.x) cost = { ...cost, generic: cost.generic + cost.x * (choice.x ?? 0), x: 0 };
   // Reality Fracture (17a): Thalia, the Survivor: your opponents' permanents make these spells cost more.
@@ -608,6 +613,7 @@ export function castSpell(
       // Lorwyn Eclipsed (18a): a card beheld and exiled, and the creatures conspire may tap, aren't tapped for mana.
       ...(v.beholdExile ? [choice.beholdCard] : []),
       ...(choice.conspire ? conspireOptions(ctx, player, card) : []),
+      choice.harmonizeTap, // Tarkir: Dragonstorm (19a): the creature tapped for harmonize isn't tapped for mana too
     ],
   );
   if (o.zone === 'command')
@@ -729,6 +735,9 @@ export function castSpell(
   if (teamwork) payTeamwork(ctx, teamwork);
   if (convokers.length) o.convokedBy = payment.filter((id) => convokers.includes(id));
   if (d.types.includes('Creature')) scryForAncestry(ctx, player, d, payment);
+  // Tarkir: Dragonstorm (19a): harmonize taps the creature.
+  if (choice.harmonizeTap && ctx.s.objects[choice.harmonizeTap]?.zone === 'battlefield')
+    tap(ctx, choice.harmonizeTap);
   // Escalate: tap a creature for each mode beyond the first.
   if (v.spell?.escalate)
     for (const id of escalateCrew(ctx, player, v.spell.escalate, v.spell.escalateFilter) ?? [])
@@ -906,6 +915,32 @@ export function answerSpellTargets(ctx: Ctx, targets: TargetChoice[]): void {
   noteTargets(ctx, d.player, targets);
   item.targets = [...item.targets, ...targets];
   if (continueCasting(ctx, d.player, d.spell, item.targets, 'counters')) return;
+  givePriority(ctx, d.thenPriority);
+}
+
+/**
+ * Tarkir: Dragonstorm (19a): one more of the X targets of an activated ability (the player's `chooseTargets` answer is the
+ * targets so far plus one). With all X, the ability has them (their ward is paid) and play goes on.
+ */
+export function answerAbilityTargets(ctx: Ctx, targets: TargetChoice[]): void {
+  const d = ctx.s.decision;
+  if (d.kind !== 'abilityTargets') throw new Error('Not choosing ability targets');
+  if (targets.length === d.picked.length + 1 && targets.length < d.need) {
+    d.picked = targets;
+    return;
+  }
+  // The last one (or, with no more targets to pick from, the ones so far).
+  if (targets.length !== d.picked.length + 1 && targets.length !== d.picked.length)
+    throw new Error('One more target at a time');
+  const item = ctx.s.stack.find((x) => x.kind === 'ability' && x.id === d.ability);
+  if (item?.kind !== 'ability') throw new Error('The ability is not on the stack');
+  const ward = wardCost(ctx, d.player, targets);
+  if (manaValue(ward) > 0) payMana(ctx, planPayment(ctx, d.player, ward, undefined));
+  changeLife(ctx, d.player, -wardLife(ctx, d.player, targets));
+  payWardExtras(ctx, d.player, targets);
+  noteTargets(ctx, d.player, targets, true);
+  item.targets = [...item.targets, ...targets];
+  if (payWardSacrifices(ctx, d.player, item.targets, { thenPriority: d.thenPriority })) return;
   givePriority(ctx, d.thenPriority);
 }
 
@@ -1307,7 +1342,11 @@ export function activateAbility(
   }
   const sacrificedPower = sacrifice ? power(ctx, sacrifice) : undefined;
   if (sacrifice) sacrificePermanent(ctx, sacrifice);
-  changeLife(ctx, player, -wardLife(ctx, player, targets) - (a.cost.life ?? 0));
+  changeLife(
+    ctx,
+    player,
+    -wardLife(ctx, player, targets) - (a.cost.life ?? 0) - (a.cost.lifeX ? (x ?? 0) : 0),
+  );
   payWardExtras(ctx, player, targets);
   // Lorwyn Eclipsed (18a): Blight N in the cost.
   if (a.cost.blight && blight !== undefined) blightCreature(ctx, player, blight, a.cost.blight);
@@ -1359,6 +1398,23 @@ export function activateAbility(
   ctx.s.stack.push(item);
   emit(ctx, { type: 'abilityActivated', id, source, player });
   noteTargets(ctx, player, targets, true);
+  // Tarkir: Dragonstorm (19a): a mana ability doesn't use the stack.
+  if (a.manaAbility) {
+    resolveTop(ctx);
+    return false;
+  }
+  // Tarkir: Dragonstorm (19a): "X target creatures", picked one at a time now that the ability is on the stack.
+  if (a.targets[a.targets.length - 1]?.xTargets && (x ?? 0) > 0) {
+    ctx.s.decision = {
+      kind: 'abilityTargets',
+      player,
+      ability: id,
+      picked: [],
+      need: x ?? 0,
+      thenPriority: player,
+    };
+    return true;
+  }
   // Reality Fracture (17a fixes): Gallia, Tragic Host.
   if (chooseGraveyardCard) {
     ctx.s.decision = {
@@ -1462,7 +1518,7 @@ function checkTargets(
   const src = sourceId ? { controller, sourceId } : { controller };
   // Marvel Super Heroes Jumpstart (Blink): an "any number" spec covers every target from its index on.
   const last = specs[specs.length - 1];
-  const specAt = (i: number) => specs[i] ?? (last?.anyNumber ? last : undefined);
+  const specAt = (i: number) => specs[i] ?? (last?.anyNumber || last?.xTargets ? last : undefined);
   const checked = targets.map((t, i) => {
     const spec = specAt(i);
     return spec && isTargetLegal(ctx, spec, t, src) ? t : null;
@@ -1505,7 +1561,9 @@ export function resolveTop(ctx: Ctx): boolean {
         // Rebound: cast from your hand, it's exiled and cast again at your next upkeep.
         ...(d.rebound && item.fromHand && !item.flashback ? { rebound: item.controller } : {}),
         // Final Fantasy (11a): an Adventure goes on an adventure (exile) as it resolves.
-        ...(o.front && defOf(ctx, o.front).adventure && !item.copy ? { adventure: true } : {}),
+        ...(o.front && defOf(ctx, o.front).adventure && !item.copy && !isOmen(d) ? { adventure: true } : {}),
+        // Tarkir: Dragonstorm (19a): an Omen is shuffled into its owner's library as it resolves.
+        ...(o.front && defOf(ctx, o.front).adventure && !item.copy && isOmen(d) ? { omen: true } : {}),
       };
       if (runEffects(ctx, es, spell.effects, paused)) return true;
       finishResolution(ctx, paused);
@@ -1717,6 +1775,11 @@ export function attachAura(ctx: Ctx, aura: ObjectId, host: ObjectId): void {
   }
 }
 
+/** Tarkir: Dragonstorm (19a): an Omen spell (the back face of an adventure-layout card with the Omen subtype). */
+function isOmen(d: { subtypes: string[] }): boolean {
+  return d.subtypes.includes('Omen');
+}
+
 /** Last step of resolving (rule 608.2n): an instant or sorcery goes to the graveyard. */
 export function finishResolution(ctx: Ctx, item: PausedResolution['item']): void {
   emit(ctx, { type: 'resolved', id: item.id });
@@ -1731,6 +1794,13 @@ export function finishResolution(ctx: Ctx, item: PausedResolution['item']): void
   if (ctx.s.objects[item.id]?.zone === 'exile') return;
   // Mystical Archive (16): Blue Sun's Zenith and Approach of the Second Sun put themselves into the library.
   if (ctx.s.objects[item.id]?.zone === 'library') return;
+  // Tarkir: Dragonstorm (19a): Omen. The card is shuffled into its owner's library (countered or fizzled, it goes to the graveyard).
+  if (item.omen) {
+    const owner = ctx.s.objects[item.id]!.owner;
+    moveObject(ctx, item.id, 'library');
+    shuffleLibrary(ctx, owner);
+    return;
+  }
   // Final Fantasy (11a): adventure lands. Its owner may play the land from exile later.
   if (item.adventure) {
     moveObject(ctx, item.id, 'exile');

@@ -62,6 +62,15 @@ const KEYWORDS: Record<Keyword, { name: string; text: string }> = {
     name: 'Protection from blue',
     text: 'Can’t be blocked, targeted or dealt damage by blue sources.',
   },
+  // Tarkir: Dragonstorm (19a)
+  protectionWhite: {
+    name: 'Protection from white',
+    text: 'Can’t be blocked, targeted, dealt damage, enchanted or equipped by white sources.',
+  },
+  protectionBlack: {
+    name: 'Protection from black',
+    text: 'Can’t be blocked, targeted, dealt damage, enchanted or equipped by black sources.',
+  },
   hexproofFromWhite: {
     name: 'Hexproof from white',
     text: 'This can’t be the target of white spells or abilities your opponents control.',
@@ -96,6 +105,11 @@ const KEYWORDS: Record<Keyword, { name: string; text: string }> = {
     name: 'Shroud',
     text: 'This can’t be the target of spells or abilities.',
   },
+  // Tarkir: Dragonstorm (19a)
+  decayed: {
+    name: 'Decayed',
+    text: 'This creature can’t block. When it attacks, sacrifice it at end of combat.',
+  },
 };
 
 const MECHANICS: Record<string, string> = {
@@ -115,6 +129,16 @@ const MECHANICS: Record<string, string> = {
     'This Aura is attached to what it enchants. If that leaves, the Aura goes to the graveyard.',
   Morbid: 'Checks whether a creature died this turn.',
   Affinity: 'This spell costs {1} less to cast for each of the named permanents you control.',
+  // Tarkir: Dragonstorm (19a)
+  Mobilize:
+    'Whenever this creature attacks, create that many tapped and attacking 1/1 red Warrior creature tokens. Sacrifice them at the beginning of the next end step.',
+  Endure:
+    'Put that many +1/+1 counters on the creature, or create a white Spirit creature token with that power and toughness.',
+  Harmonize:
+    'You may cast this card from your graveyard for its harmonize cost. You may tap a creature you control to reduce that cost by its power. Then exile this spell.',
+  Behold: 'Choose a permanent of that type you control, or reveal a card of that type from your hand.',
+  Flurry: 'Triggers when you cast your second spell each turn.',
+  Renew: 'Activate from your graveyard by exiling this card, only as a sorcery.',
 };
 
 const signed = (n: number) => (n >= 0 ? `+${n}` : `${n}`);
@@ -142,6 +166,17 @@ export function ruleNotes(
     const t = MECHANICS[m];
     if (t) notes.push({ kind: 'mechanic', title: m, text: t });
   }
+  // Tarkir: Dragonstorm (19a): an Omen is a spell side of a creature card (not a keyword on Scryfall).
+  const backId = cardDb.get(defId)?.back;
+  if (
+    /\bOmen\b/.test(sc?.typeLine ?? '') ||
+    (cardDb.get(defId)?.adventure && !!backId && !!cardDb.get(backId)?.subtypes.includes('Omen'))
+  )
+    notes.push({
+      kind: 'mechanic',
+      title: 'Omen',
+      text: 'After this spell resolves, shuffle this card into its owner’s library. Cast the creature instead and it stays on the battlefield.',
+    });
   return notes;
 }
 

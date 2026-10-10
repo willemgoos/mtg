@@ -488,6 +488,41 @@ function newTargetOptions(
 }
 
 /**
+ * Tarkir: Dragonstorm (19a): "it endures N": the controller chooses between N +1/+1 counters on the creature and an N/N white
+ * Spirit token. A creature that is no longer on the battlefield can only make the token.
+ */
+function endureStep(
+  ctx: Ctx,
+  es: EffectSource,
+  e: Extract<EffectDef, { kind: 'endure' }>,
+): EffectDef[] {
+  const n = resolveAmount(ctx, es, e.amount);
+  if (n <= 0) return [];
+  const what = e.what ?? 'self';
+  const token: EffectDef = {
+    kind: 'createToken',
+    token: e.token ?? 'tdm-spirit-token',
+    count: 1,
+    pt: n,
+  };
+  const id = objectsOf(ctx, es, what)[0];
+  if (id === undefined || ctx.s.objects[id]?.zone !== 'battlefield') return [token];
+  return [
+    {
+      kind: 'choose',
+      options: [
+        {
+          label: `Put ${n === 1 ? 'a' : n} +1/+1 counter${n === 1 ? '' : 's'} on ${def(ctx, id).name}`,
+          effects: [{ kind: 'counters', to: what, amount: n }],
+        },
+        { label: `Create a ${n}/${n} white Spirit creature token`, effects: [token] },
+      ],
+    },
+  ];
+}
+
+
+/**
  * Iron Fist, Hero for Hire; Rhino, Terrible Trampler: the next step of a 'divide': a choice of
  * one more target and how much it gets (the last target allowed gets all that's left), or the
  * finished split.
@@ -884,6 +919,11 @@ export function resolveAmount(ctx: Ctx, es: EffectSource, amount: Amount): numbe
     const id = objectsOf(ctx, es, amount.loyaltyOf)[0];
     return id ? (obj(ctx, id).counters?.loyalty ?? 0) : 0;
   }
+  // Tarkir: Dragonstorm (19a): Warden of the Grove, "the number of counters on this creature" (every kind).
+  if ('allCountersOn' in amount) {
+    const id = objectsOf(ctx, es, amount.allCountersOn)[0];
+    return id ? Object.values(counterKinds(ctx, id)).reduce((n, c) => n + c, 0) : 0;
+  }
   if ('countersOn' in amount) {
     const id = objectsOf(ctx, es, amount.countersOn)[0];
     if (id) return obj(ctx, id).plusOneCounters;
@@ -1013,6 +1053,12 @@ export function runEffects(
         1,
         ...(options.length ? [{ kind: 'choose', options: [keep, ...options] } as EffectDef] : []),
       );
+      i--;
+      continue;
+    }
+    // Tarkir: Dragonstorm (19a): "it endures N".
+    if (e.kind === 'endure') {
+      list.splice(i, 1, ...endureStep(ctx, es, e));
       i--;
       continue;
     }
@@ -2697,6 +2743,22 @@ function runEffectInner(ctx: Ctx, es: EffectSource, e: EffectDef): void {
         if (defOf(ctx, e.token).entersTapped || e.tapped) t.tapped = true;
         enterWithLoyalty(ctx, t.id); // Reality Fracture (17c): a planeswalker token
         if (e.counters) addCounters(ctx, t.id, resolveAmount(ctx, es, e.counters));
+        // Tarkir: Dragonstorm (19a): an X/X token (a 0/0 definition with its size set as it is created).
+        if (e.pt !== undefined) {
+          const size = resolveAmount(ctx, es, e.pt);
+          t.copyPT = { power: size, toughness: size };
+        }
+        // Tarkir: Dragonstorm (19a): mobilize, "sacrifice it at the beginning of the next end step".
+        if (e.sacrificeAt === 'nextEndStep') {
+          const late = ['end', 'cleanup'].includes(ctx.s.turn.step);
+          (ctx.s.delayed ??= []).push({
+            controller: es.controller,
+            sourceDefId: es.sourceDefId,
+            subject: { id: t.id, zcc: t.zcc },
+            effects: [{ kind: 'sacrifice', what: 'subject' }],
+            fromTurn: ctx.s.turn.number + (late ? 1 : 0),
+          });
+        }
         if (e.attacking && ctx.s.combat) {
           // "Tapped and attacking": attacking the same player, never declared (no attack triggers).
           t.tapped = true;
@@ -2707,13 +2769,13 @@ function runEffectInner(ctx: Ctx, es: EffectSource, e: EffectDef): void {
             blockers: [],
           });
         }
-        if (e.hasteThisTurn)
+        if (e.hasteThisTurn || e.keywordsThisTurn?.length)
           ctx.s.effects.push({
             timestamp: newTimestamp(ctx),
             affected: { id: t.id, zcc: t.zcc },
             power: 0,
             toughness: 0,
-            keywords: ['haste'],
+            keywords: [...(e.hasteThisTurn ? (['haste'] as const) : []), ...(e.keywordsThisTurn ?? [])],
             expires: 'endOfTurn',
           });
         ctx.s.battlefield.push(t.id);
@@ -3170,6 +3232,15 @@ function runEffectInner(ctx: Ctx, es: EffectSource, e: EffectDef): void {
             card = id;
             break;
           }
+        }
+      } else if (e.what === 'subject') {
+        // Tarkir: Dragonstorm (19a): Taigam, Master Opportunist, "exile the spell you cast with four time counters on it" (not countered).
+        const id = es.subject && ctx.s.objects[es.subject.id]?.zcc === es.subject.zcc ? es.subject.id : undefined;
+        const i = id ? ctx.s.stack.findIndex((x) => x.kind === 'spell' && x.id === id) : -1;
+        if (id && i >= 0) {
+          ctx.s.stack.splice(i, 1);
+          moveObject(ctx, id, 'exile');
+          card = id;
         }
       } else {
         card = (() => {

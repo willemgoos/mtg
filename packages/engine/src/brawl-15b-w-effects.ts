@@ -44,6 +44,9 @@ export function protectedFrom(ctx: Ctx, targetId: ObjectId, sourceId: ObjectId):
   const colors = def(ctx, sourceId).colors;
   // Printed protection from blue (Mistcutter Hydra, 15b g) is a keyword.
   if (colors.includes('U') && hasKeyword(ctx, targetId, 'protectionBlue')) return true;
+  // Tarkir: Dragonstorm (19a): Ureni, the Song Unending.
+  if (colors.includes('W') && hasKeyword(ctx, targetId, 'protectionWhite')) return true;
+  if (colors.includes('B') && hasKeyword(ctx, targetId, 'protectionBlack')) return true;
   if (ctx.s.effects.length === 0) return false;
   return ctx.s.effects.some(
     (e) =>

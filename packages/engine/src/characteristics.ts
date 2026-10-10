@@ -2,6 +2,7 @@ import { commanderTypes, isCommander } from './brawl.ts';
 import { type Ctx, def, defOf, obj, other } from './context.ts';
 import { manaValue } from './cost.ts';
 import { vividCount } from './ecl-18a.ts';
+import { spellsCastThisTurn } from './tdm-19a.ts';
 import { checkCondition } from './triggers.ts';
 import type {
   Amount,
@@ -258,6 +259,8 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
     for (const k of removed) granted.delete(k);
     keywords = granted;
   }
+  // Tarkir: Dragonstorm (19a): decayed creatures can't block.
+  if (keywords.has('decayed')) cantBlock = true;
   if (override) {
     power += override[0] - (basePower ?? base ?? o.copyPT?.power ?? d.power ?? 0);
     toughness += override[1] - (base ?? o.copyPT?.toughness ?? d.toughness ?? 0);
@@ -342,6 +345,13 @@ export function countOf(
   // Marvel Super Heroes (The Scarlet Witch): 'where X is her power'.
   if ('powerOf' in a)
     return a.powerOf === 'self' && sourceId ? Math.max(0, power(ctx, sourceId)) : 0;
+  // Tarkir: Dragonstorm (19a): every kind of counter on the source.
+  if ('allCountersOn' in a) {
+    const src = a.allCountersOn === 'self' && sourceId ? ctx.s.objects[sourceId] : undefined;
+    return src
+      ? src.plusOneCounters + Object.values(src.counters ?? {}).reduce((n, c) => n + c, 0)
+      : 0;
+  }
   // Strixhaven Brawl (15b, w): Glyph Elemental, "for each +1/+1 counter on this Aura".
   if ('countersOn' in a)
     return a.countersOn === 'self' && sourceId
@@ -482,6 +492,8 @@ export function countOf(
         .reduce((n, id) => n + manaValue(def(ctx, id).manaCost), 0)
     );
   if (a.count === 'commanderCasts') return ctx.s.players[player].commanderCasts ?? 0;
+  // Tarkir: Dragonstorm (19a): Narset, "the number of spells you've cast this turn".
+  if (a.count === 'spellsCastThisTurn') return spellsCastThisTurn(ctx, player, a.filter);
   // Doom Prevails (9e).
   if (a.count === 'cardsDiscardedThisTurn') return ctx.s.turn.discards?.[player] ?? 0;
   if (a.count === 'permanentsOpponentsControl')
@@ -1386,6 +1398,7 @@ const COUNTER_KEYWORDS: readonly Keyword[] = [
   'menace',
   'hexproof',
   'firstStrike',
+  'decayed', // Tarkir: Dragonstorm (19a): Rot-Curse Rakshasa's decayed counter
 ];
 
 const affectingDefsCache = new WeakMap<CardDb, ReadonlySet<CardDefId>>();

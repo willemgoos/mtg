@@ -60,6 +60,12 @@ export type Keyword =
   // Strixhaven Brawl (15b, g): Mistcutter Hydra
   /** Protection from blue: can't be targeted, damaged or blocked by blue sources. */
   | 'protectionBlue'
+  // Tarkir: Dragonstorm (19a): Ureni, the Song Unending ("protection from white and from black")
+  | 'protectionWhite'
+  | 'protectionBlack'
+  // Tarkir: Dragonstorm (19a): Rot-Curse Rakshasa
+  /** Decayed: can't block; when it attacks, sacrifice it at end of combat. A decayed counter gives it. */
+  | 'decayed'
   | 'defender'
   | 'flash'
   | 'indestructible'
@@ -340,6 +346,21 @@ export interface CardDefinition {
   // Lorwyn Eclipsed (18b, blue): Illusion Spinners
   /** "You may cast this spell as though it had flash if <condition>." */
   flashIf?: ConditionDef;
+  // Tarkir: Dragonstorm (19a): the Sieges
+  /**
+   * "As this enchantment enters, choose Abzan or Mardu": the options, each with the abilities it adds (the card's own `abilities`
+   * stay too). The cards package derives a hidden definition for each option (`variantOf`) and an enters trigger that makes
+   * the chosen player's permanent that definition (the `becomeVariant` effect); it shows the front again wherever it goes.
+   */
+  enterChoices?: { label: string; abilities: AbilityDef[] }[];
+  /** A derived definition: the card with this id, having made one of its `enterChoices`. Never in a deck or a hand. */
+  variantOf?: CardDefId;
+  // Tarkir: Dragonstorm (19a): Harmonize
+  /**
+   * Harmonize: with `flashback: <harmonize cost>`. Cast from the graveyard for that cost, then exiled. As it's cast you may tap an
+   * untapped creature you control to reduce the generic part of the cost by its power (the cast action's `harmonizeTap`).
+   */
+  harmonize?: boolean;
   /** Aura: what it enchants (chosen as a target when cast). */
   enchant?: TargetSpec;
   // Transform (Marvel Super Heroes)
@@ -503,6 +524,12 @@ export type AbilityDef =
       label?: string;
       /** Activated from the graveyard (Reassembling Skeleton). */
       fromGraveyard?: boolean;
+      // Tarkir: Dragonstorm (19a): the Devotees
+      /**
+       * A mana ability with a cost that is mana itself ("{1}: Add {U}, {R}, or {W}. Activate only once each turn."): it doesn't use the
+       * stack, so it resolves as soon as its cost is paid; the mana goes to your pool. Its effects are `addMana`.
+       */
+      manaAbility?: boolean;
       // Marvel Super Heroes Jumpstart (Great Lakes Avengers)
       /** Also activated from exile, with `fromGraveyard` (Mister Immortal). */
       fromExile?: boolean;
@@ -560,6 +587,8 @@ export interface CostDef {
   forage?: boolean;
   /** Pay this much life. */
   life?: number;
+  /** Tarkir: Dragonstorm (19a): "Pay X life" (Krumar Initiate), X the value chosen for the {X} in the mana cost; no more than your life. */
+  lifeX?: boolean;
   /** Discard a card (chosen when activating). */
   discard?: boolean;
   // Reality Fracture (17a): Solitary Cell
@@ -724,7 +753,10 @@ export type TriggerDef =
         | 'equipmentOrTargetsYourCreature'
         // Lorwyn Eclipsed (18b, red): Spinerock Tyrant
         /** An instant or sorcery spell with a single target (exactly one chosen target). */
-        | 'instantOrSorceryOneTarget';
+        | 'instantOrSorceryOneTarget'
+        // Tarkir: Dragonstorm (19a): Flurry
+        /** The caster's second spell this turn ("Flurry — Whenever you cast your second spell each turn"). */
+        | 'second';
       /** The spell must also match this (Gev: a Lizard spell). */
       spell?: CardFilter;
       /** Any player's spell, cast when it isn't their turn (Vision). */
@@ -1269,7 +1301,15 @@ export type ConditionDef =
   | { kind: 'creatureEnteredThisTurn'; other?: boolean }
   // Lorwyn Eclipsed (18c, theme decks): Fearless Swashbuckler
   /** You attacked with a creature matching the filter in this combat (even if it has left since). */
-  | { kind: 'attackedThisCombat'; filter: CardFilter };
+  | { kind: 'attackedThisCombat'; filter: CardFilter }
+  // Tarkir: Dragonstorm (19a): "if you've cast two or more spells this turn", "your second spell each turn"
+  /**
+   * The spells `who` (default: you) has cast this turn (matching the filter, by type and subtype; the spell being cast now is
+   * already counted, so "if you've cast another spell this turn" read as the spell is cast is `min: 2`; for a cost reduction
+   * read before it is cast, `min: 1`) number at least `min` and at most `max`. Focus the Mind: `min: 1`; Highspire Bell-Ringer
+   * ("the second spell you cast each turn") `min: 1, max: 1`; Effortless Master `min: 2`.
+   */
+  | { kind: 'spellsCastThisTurn'; min?: number; max?: number; filter?: CardFilter; who?: 'you' | 'opponent' };
 
 export interface CardFilter {
   anyOf?: CardFilter[];
@@ -1431,6 +1471,13 @@ export interface TargetSpec {
   filter?: CardFilter;
   /** "Up to": this target and the ones after it may be left out. */
   optional?: boolean;
+  // Tarkir: Dragonstorm (19a): Rot-Curse Rakshasa
+  /**
+   * An activated ability's last target spec: "X target creatures", X the value paid for {X} in its cost (at least 1). The
+   * targets are picked one at a time once the ability is on the stack (the `abilityTargets` decision), each a different one.
+   * Effects reach them as `{ targetsFrom: n }`.
+   */
+  xTargets?: boolean;
   // Lorwyn Eclipsed (18b, multi-a): the Commands
   /** In a combined "choose two" spell: which chosen mode this target belongs to. Targets of different modes may be the same object. */
   ofMode?: number;
@@ -1540,6 +1587,9 @@ export type Amount =
   | { powerOf: Ref }
   /** The number of +1/+1 counters on it (Mossborn Hydra doubles them). */
   | { countersOn: Ref }
+  // Tarkir: Dragonstorm (19a): Warden of the Grove
+  /** The number of counters of every kind on it ("the number of counters on this creature"). */
+  | { allCountersOn: Ref }
   | {
       count: 'creaturesYouControl' | 'landsYouControl' | 'totalPowerOfCreaturesYouControl';
       subtype?: string;
@@ -1616,6 +1666,9 @@ export type Amount =
   // Reality Fracture (17a): Ghalta the Immovable
   /** The greatest toughness among creatures you control. */
   | { count: 'greatestToughnessYouControl' }
+  // Tarkir: Dragonstorm (19a): Narset, Jeskai Waymaster
+  /** The spells you've cast this turn (matching the filter, by type and subtype). */
+  | { count: 'spellsCastThisTurn'; filter?: CardFilter }
   /** Creature cards you own in exile and in your graveyard (Huskburster Swarm). */
   | { count: 'creatureCardsInExileAndGraveyard' }
   // Strixhaven (13c): Show of Confidence
@@ -2606,6 +2659,13 @@ export type EffectDef =
       counters?: Amount;
       /** Created under the controller of this target instead (Beast Within: "its controller"). */
       forControllerOf?: number;
+      // Tarkir: Dragonstorm (19a)
+      /** "They gain menace and haste until end of turn" (Mardu Monument): these keywords until end of turn (`hasteThisTurn` is haste only). */
+      keywordsThisTurn?: Keyword[];
+      /** The token's base power and toughness are both this (an "X/X" token whose definition is 0/0: Spirits, Monument tokens). */
+      pt?: Amount;
+      /** "Sacrifice it at the beginning of the next end step" (mobilize, War Effort). */
+      sacrificeAt?: 'nextEndStep';
     }
   /** Return all land cards from your graveyard to the battlefield tapped (World Shaper). */
   | { kind: 'returnLandsFromGraveyard' }
@@ -2615,6 +2675,13 @@ export type EffectDef =
       /** "When you do" (Villainous Syndication): only if something was sacrificed. */
       then?: EffectDef[];
     }
+  // Tarkir: Dragonstorm (19a): Endure
+  /**
+   * "It endures N": put N +1/+1 counters on it, or create an N/N white Spirit token (the controller chooses; if it isn't on
+   * the battlefield, the token). `what` is the creature (default: this one; Warden of the Grove: 'subject'). `token` defaults
+   * to `TDM_SPIRIT` ('tdm-spirit-token', a 0/0 white Spirit creature).
+   */
+  | { kind: 'endure'; amount: Amount; what?: Ref; token?: CardDefId }
   /** The controller scries N (asks them to order the top cards). */
   | {
       kind: 'scry';
@@ -2635,7 +2702,10 @@ export type EffectDef =
    * land, or you decline or can't pay), `otherwise` happens.
    */
   | { kind: 'exileTopMayCast'; otherwise: EffectDef[] }
-  /** Exile a card with N time counters; it gains suspend (Kang Prime: the next nonland card from the top). */
+  /**
+   * Exile a card with N time counters; it gains suspend (Kang Prime: the next nonland card from the top). Tarkir: Dragonstorm (19a):
+   * 'subject' is the spell that caused the trigger, taken off the stack (not countered) into exile (Taigam, Master Opportunist).
+   */
   | { kind: 'suspend'; what: Ref | 'nextNonlandFromLibrary'; time: number }
   /** Unearth: the source returns from your graveyard with haste; it's exiled at the next end step or if it would die. */
   | { kind: 'unearth' }
@@ -2908,6 +2978,12 @@ export type StaticDef =
       keywords?: Keyword[];
     }
   | { kind: 'noLifeGain' }
+  // Tarkir: Dragonstorm (19a): Zurgo, Thunder's Decree
+  /**
+   * Permanents you control matching the filter can't be sacrificed (as an effect or a cost), during your end step if
+   * `duringYourEndStep` ("During your end step, Warrior tokens you control have 'This token can't be sacrificed.'").
+   */
+  | { kind: 'cantBeSacrificed'; filter: CardFilter; duringYourEndStep?: boolean }
   // Reality Fracture (17a): Thalia, the Survivor
   /** Spells matching the filter that your opponents cast cost {amount} more. */
   | { kind: 'opponentSpellsCostMore'; filter: CardFilter; amount: number }
@@ -3605,6 +3681,9 @@ export interface GameObject {
   // Secrets of Strixhaven (14b): Flashback
   /** In a graveyard: it has flashback (its mana cost) until the end of this turn number. */
   flashbackGrantedTurn?: number;
+  // Tarkir: Dragonstorm (19a): Songcrafter Mage
+  /** In a graveyard: it has harmonize (its mana cost) until the end of this turn number. */
+  harmonizeGrantedTurn?: number;
   /** Playing it from the graveyard this turn doesn't stop other spells (Ark of Hunger). */
   noSpellLock?: boolean;
   /** A copy of a card cast from exile (prepare, paradigm): it ceases to exist once it leaves the stack. */
@@ -4104,6 +4183,9 @@ export interface PausedResolution extends EffectSource {
     // Final Fantasy (11a): adventure lands
     /** Cast as an Adventure: exiled "on an adventure" as it resolves. */
     adventure?: boolean;
+    // Tarkir: Dragonstorm (19a): Omen
+    /** Cast as an Omen: shuffled into its owner's library as it resolves. */
+    omen?: boolean;
   };
 }
 
@@ -4152,8 +4234,8 @@ export interface DelayedTrigger {
   fromTurn: number;
   /** Only at this player's end step ("your next end step"). */
   whose?: PlayerId;
-  /** At the beginning of an upkeep instead of an end step (Arcane Denial). */
-  at?: 'upkeep';
+  /** At the beginning of an upkeep instead of an end step (Arcane Denial); 'endCombat': at the beginning of the end of combat step (decayed). */
+  at?: 'upkeep' | 'endCombat';
 }
 
 /** What Undying Malice / Fake Your Own Death grant. */
@@ -4547,6 +4629,17 @@ export type Decision =
       thenPriority: PlayerId;
     }
   | {
+      // Tarkir: Dragonstorm (19a): Renew — {X}{B}{B}: "X target creatures". Picked one at a time once the ability is on the stack:
+      // each `chooseTargets` action is `picked` plus one more; after `need` targets the ability has them all.
+      kind: 'abilityTargets';
+      player: PlayerId;
+      /** The ability on the stack. */
+      ability: ObjectId;
+      picked: TargetChoice[];
+      need: number;
+      thenPriority: PlayerId;
+    }
+  | {
       // Lorwyn Eclipsed (18a): Conspire. Tap two untapped creatures that share a colour with the spell, one at a time; then the spell is copied.
       kind: 'conspire';
       player: PlayerId;
@@ -4719,6 +4812,9 @@ export type Action =
       conspire?: boolean;
       /** The cards beheld for `flashbackBehold` (permanents you control, or cards in your hand, which are revealed). */
       beholdCards?: ObjectId[];
+      // Tarkir: Dragonstorm (19a)
+      /** Harmonize: the untapped creature you tap to reduce the cost by its power. */
+      harmonizeTap?: ObjectId;
     }
   | {
       type: 'activateAbility';

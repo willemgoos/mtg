@@ -10,7 +10,7 @@ import type {
   PendingTrigger,
   PlayerId,
 } from '@mtg/engine';
-import { getAbilities } from '@mtg/engine';
+import { getAbilities, getCharacteristics } from '@mtg/engine';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   castGroups,
@@ -153,6 +153,17 @@ export function Board({
     if (d.kind === 'spellTargets' && d.player === HUMAN && !targeting) {
       setTargeting(
         startTargeting(d.spell, nameOf(view.objects[d.spell]?.defId ?? ''), legal, d.picked),
+      );
+    }
+  }, [d, legal, targeting, view]);
+
+  // Tarkir: Dragonstorm (19a): "X target creatures" of an activated ability (Rot-Curse Rakshasa) are picked one at a time.
+  useEffect(() => {
+    if (d.kind === 'abilityTargets' && d.player === HUMAN && !targeting) {
+      const item = view.stack.find((x) => x.id === d.ability);
+      const source = item?.kind === 'ability' ? item.source.id : d.ability;
+      setTargeting(
+        startTargeting(source, nameOf(view.objects[source]?.defId ?? ''), legal, d.picked),
       );
     }
   }, [d, legal, targeting, view]);
@@ -1689,6 +1700,18 @@ function castLabel(defId: CardDefId, a: Action, view: GameState): string {
     return a.x ? `Blight ${a.x}` : 'X = 0 (no blight)';
   if (a.x !== undefined) return `X = ${a.x}`;
   if (a.type === 'activateAbility') return 'Activate';
+  // Tarkir: Dragonstorm (19a): harmonize (from the graveyard), with the creature tapped to reduce the cost.
+  if (a.type === 'castSpell' && view.objects[a.card]?.zone === 'graveyard') {
+    const d = cardDb.get(defId);
+    const granted = view.objects[a.card]?.harmonizeGrantedTurn !== undefined;
+    if (d?.harmonize || granted) {
+      const cost = d?.harmonize ? d.flashback : d?.manaCost;
+      const tapped = a.harmonizeTap ? view.objects[a.harmonizeTap] : undefined;
+      if (tapped)
+        return `Harmonize: tap ${nameOf(tapped.defId)} (power ${getCharacteristics(view, cardDb, tapped.id).power}) to pay less`;
+      return `Harmonize${cost ? ` ${manaText(cost)}` : ''}, tapping no creature`;
+    }
+  }
   if (a.via === 'festival') return 'From your graveyard (pay 1 life)';
   if (a.via === 'osteomancer') return 'From your graveyard (forage)';
   // Secrets of Strixhaven (14b): Zaffai and the Tempests (free, once a turn).
@@ -1726,10 +1749,10 @@ function castLabel(defId: CardDefId, a: Action, view: GameState): string {
       : 'Behold and exile';
   }
   if (a.type === 'castSpell' && a.sneak && def?.sneak) return `Sneak (${manaText(def.sneak)})`;
-  // Final Fantasy (11a): an adventure land's Adventure.
+  // Final Fantasy (11a): an adventure land's Adventure. Tarkir: Dragonstorm (19a): an Omen.
   if (def?.adventure && a.back) {
     const face = cardDb.get(def.back!);
-    return `Adventure: ${face?.name ?? ''} (${face ? manaText(face.manaCost) : ''})`;
+    return `${face?.subtypes.includes('Omen') ? 'Omen' : 'Adventure'}: ${face?.name ?? ''} (${face ? manaText(face.manaCost) : ''})`;
   }
   // A modal double-faced card: cast either face.
   if (def?.back) {

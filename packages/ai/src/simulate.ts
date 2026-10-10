@@ -83,6 +83,7 @@ function passiveAction(
       return engine.getLegalActions(s, d.player)[0]!;
     case 'chooseTriggerTargets':
     case 'spellTargets': // Lorwyn Eclipsed (18b, white)
+    case 'abilityTargets': // Tarkir: Dragonstorm (19a)
     case 'optionalEffect':
     case 'forage':
     case 'chooseOption':

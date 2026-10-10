@@ -22,6 +22,7 @@ import { BRAWL_15B_R_EFFECTS } from './brawl-15b-r-effects.ts';
 import { BRAWL_15A_W_EFFECTS } from './brawl-15a-w-effects.ts';
 import { BRAWL_15B_B_EFFECTS } from './brawl-15b-b-effects.ts';
 import { ECL_18A_EFFECTS, willPersist } from './ecl-18a.ts';
+import { cantBeSacrificed, TDM_19A_EFFECTS } from './tdm-19a.ts';
 import { ECL_SPECIAL_EFFECTS } from './ecl-special-effects.ts';
 import { ECL_GREEN_EFFECTS } from './ecl-green-effects.ts';
 import { ECL_BLUE_EFFECTS } from './ecl-blue-effects.ts';
@@ -153,6 +154,7 @@ const BUILT_IN_EFFECTS: Record<string, CustomEffect> = {
   ...BRAWL_15B_B_EFFECTS,
   // Lorwyn Eclipsed (18a).
   ...ECL_18A_EFFECTS,
+  ...TDM_19A_EFFECTS,
   // Lorwyn Eclipsed (18b, special).
   ...ECL_SPECIAL_EFFECTS,
   // Lorwyn Eclipsed (18b): green.
@@ -1103,6 +1105,8 @@ function exiledInsteadOfDying(ctx: Ctx, o: GameObject): boolean {
 
 /** Sacrifices a permanent: its controller puts it into its owner's graveyard. */
 export function sacrifice(ctx: Ctx, id: ObjectId): void {
+  // Tarkir: Dragonstorm (19a): Zurgo, Thunder's Decree.
+  if (cantBeSacrificed(ctx, id)) return;
   const o = obj(ctx, id);
   if (def(ctx, id).subtypes.includes('Food'))
     (ctx.s.turn.foodsSacrificed ??= { p1: 0, p2: 0 })[o.controller]++;

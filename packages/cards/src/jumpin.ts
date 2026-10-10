@@ -12,7 +12,7 @@ import type { Color } from '@mtg/engine';
 export interface Packet {
   id: string;
   name: string;
-  /** One colour, or two for multicolour themes. */
+  /** One colour, or two or three for multicolour themes (Tarkir: Dragonstorm: the clans). */
   colors: Color[];
   /** Card shown on the packet. */
   face: string;

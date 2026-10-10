@@ -4,6 +4,7 @@ import {
   cloneState,
   type Engine,
   type GameState,
+  getAbilities,
   getCharacteristics,
   manaValue,
   type ObjectId,
@@ -72,6 +73,7 @@ export function createHeuristicBot(db: CardDb, name = 'heuristic'): Bot {
           return pickCardToLose(engine, view, me, legal);
         case 'chooseTriggerTargets':
         case 'spellTargets': // Lorwyn Eclipsed (18b, white): Morningtide's Light
+        case 'abilityTargets': // Tarkir: Dragonstorm (19a): Rot-Curse Rakshasa's X targets
         case 'optionalEffect':
         case 'forage':
         case 'chooseObject':
@@ -227,6 +229,41 @@ function chooseJaceSurveil(
   return act;
 }
 
+/**
+ * Tarkir: Dragonstorm (19a): a Devotee's "{1}: Add {U}, {R}, or {W}" is a mana ability whose payoff the evaluation can't see (the
+ * mana waits in the pool). Activate one in our main phase when it makes a card in hand castable that wasn't.
+ */
+function chooseManaFixer(
+  engine: Engine,
+  view: GameState,
+  me: PlayerId,
+  legal: Action[],
+): Action | undefined {
+  if (view.turn.activePlayer !== me || view.stack.length > 0) return undefined;
+  if (view.turn.step !== 'main1' && view.turn.step !== 'main2') return undefined;
+  const fixers = legal.filter(
+    (a) =>
+      a.type === 'activateAbility' &&
+      (() => {
+        const ab = getAbilities(view, engine.db, a.source)[a.abilityIndex];
+        return ab?.kind === 'activated' && !!ab.manaAbility;
+      })(),
+  );
+  if (fixers.length === 0) return undefined;
+  const castable = (s: GameState) =>
+    new Set(
+      engine
+        .getLegalActions(s, me)
+        .flatMap((a) => (a.type === 'castSpell' ? [a.card] : [])),
+    );
+  const before = castable(view);
+  for (const act of fixers) {
+    const after = castable(engine.applyAction(cloneState(view), act).state);
+    for (const card of after) if (!before.has(card)) return act;
+  }
+  return undefined;
+}
+
 function choosePriorityAction(
   engine: Engine,
   view: GameState,
@@ -241,6 +278,8 @@ function choosePriorityAction(
   if (codie) return codie;
   const jace = chooseJaceSurveil(engine, view, me, legal);
   if (jace) return jace;
+  const fixer = chooseManaFixer(engine, view, me, legal);
+  if (fixer) return fixer;
   // Teamwork taps our creatures: never before our own attack (the evaluation can't see the lost attack).
   const beforeOurAttack =
     view.turn.activePlayer === me &&
@@ -248,6 +287,8 @@ function choosePriorityAction(
   const candidates = legal.filter(
     (a) =>
       !isJaceTokenAbility(engine, view, a, 0) && // the surveil is a rule (chooseJaceSurveil), not a score
+      // Tarkir: Dragonstorm (19a): harmonize taps a creature, which the evaluation can't see: never before our own attack.
+      !(beforeOurAttack && a.type === 'castSpell' && a.harmonizeTap) &&
       !isLastCardsDraw(engine, view, me, a) &&
       ((a.type === 'castSpell' &&
         !(
