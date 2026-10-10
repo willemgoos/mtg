@@ -222,3 +222,16 @@ Stone Boulder live in `red.ts`.
 the sheets once merged), `PackSet` `hob` in Expedition and Sealed, Season pack kind `theHobbit` (`THE_HOBBIT_SHEETS`; no HOB starters:
 no decks of our own), the deck builder set names and card search. The pack wrapper shows Smaug the Magnificent. Tests do not depend on
 the blue cards existing (counts are bounded by 188, not equal to it).
+## Phase 20c: untapped.gg trophy decks (done)
+
+- `THE_HOBBIT_TROPHY_DECKS` in `packages/cards/src/decks.ts`: the ten 7–0 Premier Draft lists (one per colour pair, from
+  `scripts/data/hob-trophy-decks.json`), ids `hob-trophy-{wu,ub,br,rg,gw,wb,ur,bg,rw,gu}`, `set: 'hob'`, shown as "The Hobbit draft decks"
+  in the deck picker (App.tsx). Every name resolved in the pool. The U/B list (Bpro) is mostly black with three blue cards; kept as the
+  official list.
+- Arena has no Hobbit Jump In packets, so the empty "The Hobbit · Arena" group (JumpIn.tsx) and the empty "The Hobbit" set in the Quick
+  match picker (jumpInMatch.ts) are removed, and `Packet.set` no longer lists `'hob'`.
+- Bot games (`packages/ai/test/hob-decks.test.ts`, 20 games): no errors or stuck games. A wider measurement (heuristic bots, 4 games per
+  pair of trophy decks, 2 per deck against each of the ten Foundations starter decks), games won: vs each other W/U 17%, U/B 33%, B/R 47%,
+  R/G 31%, G/W 53%, W/B 58%, U/R 39%, B/G 81%, R/W 61%, G/U 81%; vs the starters W/U 5%, U/B 20%, B/R 5%, R/G 85%, G/W 40%, W/B 15%,
+  U/R 25%, B/G 80%, R/W 55%, G/U 40%. The green decks (big bodies) do best, the bot plays the tempo and spell decks poorly; the cards
+  of the weakest decks (W/U, B/R) were checked to be cast and to reach the battlefield, so this is deck/bot strength, not a card bug.
