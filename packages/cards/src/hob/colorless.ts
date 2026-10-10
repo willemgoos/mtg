@@ -212,10 +212,7 @@ export const HOB_COLORLESS: Record<string, Behavior> = {
         },
         { kind: 'attach', to: t1 },
       ),
-      {
-        kind: 'static',
-        effect: { kind: 'attached', power: { namedCountersOnSource: 'hone' }, toughness: 0 },
-      },
+      // The +1/+0 per hone counter is the rule for every Equipment (characteristics.ts, Dwalin).
       equip('{3}'),
     ],
   },
