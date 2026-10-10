@@ -187,3 +187,20 @@ marked `// Lord of the Rings (21b red)`:
 Notable: Gimli, Counter of Kills deals its damage to `eachOpponent` ("that creature's controller" is always the one opponent in a
 two-player game). Other cards use only existing vocabulary (`amassOrcs`, `ringTempts`, reflexive triggers, `discardToCast`,
 `legendaryKeywords`, `costReduction` for affinity).
+
+## Phase 21b: green (done)
+
+**Done**, 25/25 (`cards/src/ltr/green.ts`, tests `cards/test/ltr-green.test.ts`). No card of the group has a back face or its own token. Everything is built
+from the 21a vocabulary (`ringTempts`, `noRingBearer`, `whenYouScry`, `cardsLookedAt`) and existing effects (Food, `youAttack` with a Halfling / Elf filter,
+`plusFoodToken` for Peregrin Took, `sacrificeArtifacts` + `sacrificeArtifactsFilter` Food for "Sacrifice three Foods", `fight`, `searchLibrary` with `upTo`).
+Engine pieces (`engine/src/ltr-green-effects.ts`, hooks marked `// Lord of the Rings (21b green)`):
+
+- Condition `sacrificedFoodThisTurn` (Elanor Gardner; reads `turn.foodsSacrificed`, which `sacrifice()` already fills).
+- Pump field `maxBlockers` (Glorfindel, Dauntless Rescuer: "can't be blocked by more than one creature each combat this turn"), kept on the active effect
+  and read by `maxBlockers()` in `combat.ts` beside the static one. "Must be blocked this turn if able" uses the existing pump `mustBeBlocked`. Glorfindel's
+  trigger is a modal triggered ability with the +1/+1 inside each mode (a modal trigger resolves only its chosen mode).
+- Pippin's Bravery: custom effect `ltrPippinsBravery` plus the chooser `ltrPippinsPick` (registered in `CHOOSERS`). With a Food you choose "Sacrifice a Food:
+  +4/+4" (then you pick which Food, via `sacrificeSeveral`) or "Don't sacrifice: +2/+2"; with no Food, "otherwise" gives +2/+2 straight away.
+- Entish Restoration: `sacrificeSeveral` (a land, your choice), then an `if` on "a creature with power 4 or greater" checked after the sacrifice, choosing the
+  three-land or two-land search.
+- Nothing left out. "Sacrifice three Foods" lets the engine pick which Foods (they are all alike except a Lembas card).

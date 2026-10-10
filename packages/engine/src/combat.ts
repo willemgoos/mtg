@@ -222,6 +222,11 @@ export function maxBlockers(ctx: Ctx, id: ObjectId): number {
   let n = Infinity;
   for (const a of def(ctx, id).abilities)
     if (a.kind === 'static' && a.effect.kind === 'maxBlockers') n = Math.min(n, a.effect.count);
+  // Lord of the Rings (21b green): Glorfindel, Dauntless Rescuer ("can't be blocked by more than one creature each combat this turn").
+  const o = obj(ctx, id);
+  for (const e of ctx.s.effects)
+    if (e.maxBlockers !== undefined && e.affected.id === id && e.affected.zcc === o.zcc)
+      n = Math.min(n, e.maxBlockers);
   return n;
 }
 

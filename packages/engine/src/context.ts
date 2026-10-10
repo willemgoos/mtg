@@ -34,6 +34,7 @@ import { TDM_CLANS_EFFECTS } from './tdm-clans-effects.ts'; // Tarkir: Dragonsto
 import { ECL_SPECIAL_EFFECTS } from './ecl-special-effects.ts';
 import { ECL_GREEN_EFFECTS } from './ecl-green-effects.ts';
 import { HOB_GREEN_EFFECTS } from './hob-green-effects.ts'; // The Hobbit (20b green)
+import { LTR_GREEN_EFFECTS } from './ltr-green-effects.ts'; // Lord of the Rings (21b green)
 import { TDM_GREEN_EFFECTS } from './tdm-green-effects.ts';
 import { ECL_BLUE_EFFECTS } from './ecl-blue-effects.ts';
 import { HOB_BLUE_EFFECTS } from './hob-blue-effects.ts'; // The Hobbit (20b blue)
@@ -180,6 +181,7 @@ const BUILT_IN_EFFECTS: Record<string, CustomEffect> = {
   ...TDM_GREEN_EFFECTS, // Tarkir: Dragonstorm (19b): green
   ...HOB_GREEN_EFFECTS, // The Hobbit (20b): green
   ...TDM_CLANS_EFFECTS, // Tarkir: Dragonstorm (19b, clans)
+  ...LTR_GREEN_EFFECTS, // Lord of the Rings (21b green)
   // Lorwyn Eclipsed (18b, special).
   ...ECL_SPECIAL_EFFECTS,
   // Lorwyn Eclipsed (18b): green.

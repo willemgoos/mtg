@@ -2673,6 +2673,7 @@ function runEffectInner(ctx: Ctx, es: EffectSource, e: EffectDef): void {
           ...(e.creatureSubtype ? { creatureSubtype: e.creatureSubtype } : {}),
           ...(e.preventCombatDamage ? { preventCombatDamage: true } : {}),
           ...(e.mustBeBlocked ? { mustBeBlocked: true } : {}),
+          ...(e.maxBlockers !== undefined ? { maxBlockers: e.maxBlockers } : {}), // Lord of the Rings (21b green)
           ...(e.preventDamageDealt ? { preventDamageDealt: true } : {}), // The Hobbit (20b blue)
           ...(e.whileSource && es.source
             ? { expires: 'whileSource' as const, whileSourceId: es.source.id } // The Hobbit (20b blue)
