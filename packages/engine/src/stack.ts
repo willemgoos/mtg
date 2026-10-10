@@ -73,6 +73,7 @@ import {
   hasConvoke,
   removeCounterKinds,
 } from './ecl-18a.ts';
+import { firstEquipFree, noteEquipActivation } from './hob-white-effects.ts'; // The Hobbit (20b white)
 import { checkCondition, triggeredAbility } from './triggers.ts';
 import { givePriority } from './turn.ts';
 import type {
@@ -1140,6 +1141,8 @@ export function abilityManaCost(
   targets?: readonly TargetChoice[] | 'best',
 ): ManaCost | undefined {
   const o = obj(ctx, source);
+  // The Hobbit (20b white): Kíli the Resourceful, the first equip ability each turn costs {0}.
+  if (a.cost.mana && firstEquipFree(ctx, o, a)) return { generic: 0, colored: {} };
   // Final Fantasy (11c): activated cost reduction (Balamb Garden), and Firion's cheaper equip.
   const less =
     (a.costReduction !== undefined
@@ -1453,6 +1456,7 @@ export function activateAbility(
   if (a.once || a.powerUp) (src.usedAbilities ??= []).push(index);
   // Marvel Super Heroes Jumpstart (Trained): Advancing the Spirit frees only the first power-up each turn.
   if (a.powerUp && player === ctx.s.turn.activePlayer) ctx.s.turn.powerUpActivated = true;
+  noteEquipActivation(ctx, player, source, a); // The Hobbit (20b white): Kíli the Resourceful
   if (a.cost.sacrificeSelf) {
     item.lkiPower = power(ctx, source);
     sacrificePermanent(ctx, source);
@@ -2566,6 +2570,11 @@ export function answerSearch(ctx: Ctx, card: ObjectId | null): void {
       const found = obj(ctx, card);
       found.playFreeBy = d.player;
       found.playFreeUntilTurn = ctx.s.turn.number;
+    } else if (d.exileWithSource) {
+      // The Hobbit (20b white): Roads Go Ever, Ever On, "exile them": remembered by the Saga.
+      moveObject(ctx, card, 'exile');
+      const src = d.resume.source && ctx.s.objects[d.resume.source.id];
+      if (src && src.zone === 'battlefield') (src.exiledWith ??= []).push(card);
     } else if (d.to === 'hideaway') {
       // Final Fantasy (11c): hideaway. Exiled face down, remembered by the land.
       moveObject(ctx, card, 'exile');
