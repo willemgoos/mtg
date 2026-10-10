@@ -1,9 +1,9 @@
 import { createEngine } from '@mtg/engine';
-import { cardDb, deckById, deckIds, THE_HOBBIT_TROPHY_DECKS } from '@mtg/cards';
+import { cardDb, deckById, deckIds, jumpInId, PACKETS, THE_HOBBIT_TROPHY_DECKS } from '@mtg/cards';
 import { describe, expect, it } from 'vitest';
 import { createHeuristicBot, playMatch } from '../src/index.ts';
 
-// The Hobbit (20c): seeded bot-vs-bot games with the ten untapped.gg 7–0 draft decks.
+// The Hobbit (20c): seeded bot-vs-bot games with the ten untapped.gg 7–0 draft decks, and with our Jump In packets.
 
 const engine = createEngine(cardDb);
 
@@ -31,6 +31,17 @@ describe('The Hobbit trophy decks', () => {
   it.each(THE_HOBBIT_TROPHY_DECKS.map((d) => [d.id]))(
     '%s plays a starter deck, error-free',
     (a) => play(a, 'arcane-aerialists'),
+    120_000,
+  );
+});
+
+describe('The Hobbit Jump In packets', () => {
+  const hob = PACKETS.filter((p) => p.set === 'hob').map((p) => p.id);
+  // Each packet with the one three further on (another colour), against the next such pair.
+  const pair = (i: number) => jumpInId(hob[i % 10]!, hob[(i + 3) % 10]!);
+  it.each(hob.map((_, i) => [pair(i), pair(i + 1)]))(
+    '%s plays %s to a result, error-free',
+    (a, b) => play(a, b),
     120_000,
   );
 });

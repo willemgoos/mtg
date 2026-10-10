@@ -124,7 +124,7 @@ describe('Jump In packets', () => {
   });
 
   it('has two base packets per colour in each set, before cross-set custom themes', () => {
-    for (const set of [undefined, 'blb', 'msh', 'fin', 'stx', 'sos', 'fra'])
+    for (const set of [undefined, 'blb', 'msh', 'fin', 'stx', 'sos', 'fra', 'hob'])
       for (const c of ['W', 'U', 'B', 'R', 'G'])
         expect(
           PACKETS.filter((p) => p.set === set && !p.source && !p.crossSet && p.colors.join() === c),
@@ -163,6 +163,17 @@ describe('Jump In packets', () => {
     );
     expect(deckById(jumpInId('fra-lifegain', 'fra-titans')).set).toBe('fra');
     expect(deckById(jumpInId('fra-lifegain', 'angels')).set).toBeUndefined();
+  });
+
+  it('builds ten The Hobbit packets of our own', () => {
+    const hob = PACKETS.filter((p) => p.set === 'hob');
+    expect(hob).toHaveLength(10);
+    for (const p of hob) {
+      expect(p.id.startsWith('hob-'), p.id).toBe(true);
+      expect(p.source).toBeUndefined();
+    }
+    expect(deckById(jumpInId('hob-dwarves', 'hob-erebor')).set).toBe('hob');
+    expect(deckById(jumpInId('hob-dwarves', 'angels')).set).toBeUndefined();
   });
 
   it("has Arena's ten Lorwyn Eclipsed packets, equal to the scraped lists", () => {

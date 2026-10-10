@@ -235,3 +235,14 @@ the blue cards existing (counts are bounded by 188, not equal to it).
   R/G 31%, G/W 53%, W/B 58%, U/R 39%, B/G 81%, R/W 61%, G/U 81%; vs the starters W/U 5%, U/B 20%, B/R 5%, R/G 85%, G/W 40%, W/B 15%,
   U/R 25%, B/G 80%, R/W 55%, G/U 40%. The green decks (big bodies) do best, the bot plays the tempo and spell decks poorly; the cards
   of the weakest decks (W/U, B/R) were checked to be cast and to reach the battlefield, so this is deck/bot strength, not a card bug.
+
+## Jump In packets of our own (done)
+
+At the user's request (Arena has none), ten packets of our own in `OWN_PACKETS` (`packages/cards/src/jumpin.ts`), two per colour,
+the usual shape (twelve spells, one rare or mythic, eight basics), HOB cards only, shown as "The Hobbit" in Jump In and the Quick
+match set picker again: Dwarves (W, Fíli), Lake-town (W, The Queen of Dale), Second Breakfast (U, Riddles in the Dark), Barrels (U,
+Roll-Roll-Roll-Roll), Goblin-town (B, Azog), Wargs (B, Head of the Hunt), Smaug's Hoard (R, Smaug the Magnificent), Erebor (R,
+Thorin, Mountain-king), Bears (G, Beorn the Fierce), Mirkwood (G, Cantankerous Keepers). Bot games in `ai/test/hob-decks.test.ts`.
+Measured (heuristic bots, 156 games among all 40 two-colour pairs), games won per packet: Bears 65%, Hoard 61%, Goblin-town 56%,
+Dwarves 55%, Lake-town 53%, Erebor 52%, Wargs 48%, Mirkwood 39%, Barrels 37%, Second Breakfast 34% (the bot plays the blue
+card-flow decks poorly, as with the trophy decks).
