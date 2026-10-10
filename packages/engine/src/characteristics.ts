@@ -1341,6 +1341,8 @@ export function cardMatches(
     if (!chosen || !hasSubtype(ctx, id, chosen)) return false;
   }
   if (filter.enteredThisTurn && obj(ctx, id).zoneTurn !== ctx.s.turn.number) return false;
+  // Lord of the Rings (21b white): Samwise the Stouthearted.
+  if (filter.diedThisTurn && obj(ctx, id).diedTurn !== ctx.s.turn.number) return false;
   if (filter.leftAttacking && !obj(ctx, id).leftAttacking) return false;
   if (filter.attachedToSource && (!sourceId || obj(ctx, id).attachedTo !== sourceId)) return false;
   // Lorwyn Eclipsed (18c): Subterranean Schooner, "target creature that crewed it this turn".

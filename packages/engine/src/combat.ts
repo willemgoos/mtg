@@ -424,6 +424,9 @@ function combatPower(ctx: Ctx, id: ObjectId): number {
     )
   )
     p = Math.max(p, characteristics(ctx, id).toughness);
+  // Lord of the Rings (21b white): Bill the Pony, toughness rather than power.
+  if (ctx.s.turn.ltrToughnessRather?.includes(`${id}:${obj(ctx, id).zcc}`))
+    return Math.max(0, characteristics(ctx, id).toughness);
   if (
     !ctx.s.turn.toughnessDamage?.includes(obj(ctx, id).controller) &&
     // Reality Fracture (17a): Ghalta the Immovable.

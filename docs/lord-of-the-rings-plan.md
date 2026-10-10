@@ -249,3 +249,25 @@ All 22 blue cards, `cards/src/ltr/blue.ts` (tests `cards/test/ltr-blue{,-2,-3}.t
   `creatureYouControlAttacks { subtype: 'Army' }`.
 - Nazgûl's "A deck can have up to nine cards named Nazgûl" is a deck-building rule: it is written in the card's comment only (as for
   Cid in Final Fantasy); nothing in the game enforces a copy limit, so no deck or packet is affected.
+## Phase 21b: white and colorless (done)
+
+**Done** (23/23 white, 5/5 colorless; `cards/src/ltr/white.ts` and `ltr/colorless.ts`, tests `cards/test/ltr-white{,-2,-3,-colorless}.test.ts` with
+`ltr-white-helpers.ts`). Every card is exact; nothing left out. Engine one-offs are in `engine/src/ltr-white-effects.ts` (custom effects, the choosers
+behind `chooseCustom`, `detectLtrWhite`), with hooks marked `// Lord of the Rings (21b white)`:
+
+- **Triggers** (`TriggerDef`, detected in `detectLtrWhite`, called from `detect` in `triggers.ts`): `youAttackWithAtLeast { min, filter? }` (Landroval:
+  two or more creatures attack a player, planeswalker attackers don't count), `dealsDamageToCreature { filter }` (East-Mark Cavalier, combat or not, the
+  damaged creature is the subject), `equippedBlocksOrBlocked` (Barrow-Blade, once for each creature on the other side, the subject).
+- **Filters**: `diedThisTurn` (a card put into a graveyard from the battlefield this turn, tokens excluded: Samwise, reads `GameObject.diedTurn`);
+  `powerEqualsX` (Ent-Draught Basin: `legal.ts` lists the {X} actions only for a target of power X, X may be 0; the custom effect `ltrPowerXCounter`
+  rechecks the power on resolution, so a changed power makes the target illegal).
+- **Aura**: `attached.setCreatureSubtype` (Fog on the Barrow-Downs: a `whileSource` continuous effect that replaces the creature types, made in `attachAura`).
+- **Bill the Pony**: `TurnState.ltrToughnessRather` (`id:zcc`), read in `combat.ts` `combatPower`: exactly the toughness, not "if greater" (the older
+  `assignToughness` is the Kingpin's "if greater" for the whole team).
+- **"Sacrifice X or pay, when you do" (Nimble Hobbit, Shire Shirriff)**: `chooseCustom` choosers `ltrNimbleHobbit` / `ltrShireShirriff`: one option for
+  each Food (or token) that looks different, one to pay {2}{W}, one to do neither (no prompt when there is nothing to do); the chosen option sacrifices or
+  pays, then fires the card's second ability (`{ on: 'reflexive' }`). The mana is paid automatically like any optional payment.
+- **Errand-Rider of Gondor**: `chooseCustom` `ltrBottomCard` (one option per card name in hand). **Lost to Legend**: `ltrFourthFromTop` (a library with
+  fewer than three cards: the bottom). **Lembas**: a `selfToGraveyard` trigger running `ltrShuffleSelfIntoLibrary`.
+- No new decision kinds, so the bots needed nothing new. `Halfling` (Saradoc) is `ltr-halfling-token` in `LTR_WHITE_TOKENS`.
+- In tests, permanents put on the battlefield by the scenario are not tokens: Shire Shirriff's test sets `isToken` on the Food.

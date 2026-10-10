@@ -16,6 +16,7 @@ import { spellsCastThisTurn } from './tdm-19a.ts';
 import { elementalTriggerCopies } from './ecl-multi-b-effects.ts';
 import { hasEnduringStory, subtypeTriggerCopies } from './hob-20a.ts';
 import { detectLtr, isRingBearer, ringCondition } from './ltr-21a.ts';
+import { detectLtrWhite } from './ltr-white-effects.ts'; // Lord of the Rings (21b white)
 import { FIC_CONDITIONS } from './fic-effects.ts';
 import { FIN_CONDITIONS } from './fin-effects.ts';
 import { LTR_RED_CONDITIONS } from './ltr-red-effects.ts'; // Lord of the Rings (21b red)
@@ -739,6 +740,7 @@ function detect(ctx: Ctx, ev: GameEvent): void {
   const s = ctx.s;
   detectFic(ctx, ev);
   detectLtr(ctx, ev); // Lord of the Rings (21a)
+  detectLtrWhite(ctx, ev); // Lord of the Rings (21b white)
   detectAnimal(ctx, ev);
   switch (ev.type) {
     case 'objectMoved': {

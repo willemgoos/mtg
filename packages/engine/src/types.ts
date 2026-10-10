@@ -1023,6 +1023,13 @@ export type TriggerDef =
   /** "Whenever you create a token" (once for each token; Rosie Cotton, Mirkwood Bats); the token matches the filter. The token is the subject. */
   | { on: 'youCreateToken'; filter?: CardFilter }
   // Final Fantasy (11c): rare triggers
+  // Lord of the Rings (21b white)
+  /** Whenever `min` or more creatures you control (matching the filter) attack a player (Landroval, Horizon Witness). */
+  | { on: 'youAttackWithAtLeast'; min: number; filter?: CardFilter }
+  /** Whenever this creature deals damage to a creature matching the filter, combat or not; that creature is the subject (East-Mark Cavalier). */
+  | { on: 'dealsDamageToCreature'; filter: CardFilter }
+  /** Whenever equipped creature blocks or becomes blocked by a creature: once for each such creature, the subject (Barrow-Blade). */
+  | { on: 'equippedBlocksOrBlocked' }
   /** Whenever you scry or surveil (Matoya, Archon Elder). */
   | { on: 'youScryOrSurveil' }
   /** Whenever you draw your third card each turn (Astrologian's Planisphere). */
@@ -1557,6 +1564,11 @@ export interface CardFilter {
   // Final Fantasy (11c): nonlegendary
   /** Has none of these supertypes (Ragnarok: a nonlegendary permanent card). */
   notSupertypes?: Supertype[];
+  // Lord of the Rings (21b white)
+  /** A card put into a graveyard from the battlefield this turn (Samwise the Stouthearted; tokens don't count). */
+  diedThisTurn?: boolean;
+  /** "Creature with power X": X is the value paid for the ability's {X}; the ability's actions only list targets of that power (Ent-Draught Basin). */
+  powerEqualsX?: boolean;
 }
 
 export interface TargetSpec {
@@ -3432,6 +3444,9 @@ export type StaticDef =
       // Lorwyn Eclipsed (18b, white): Bark of Doran
       /** "As long as equipped creature's toughness is greater than its power, it assigns combat damage equal to its toughness." */
       toughnessAssignsDamage?: boolean;
+      // Lord of the Rings (21b white): Fog on the Barrow-Downs
+      /** "Enchanted creature is a <subtype>" (it loses all other creature types) while the Aura stays. */
+      setCreatureSubtype?: string;
     }
   // Reality Fracture (17a): Karn, Argent Defender
   /** "Artifacts and creatures entering the battlefield don't cause abilities to trigger." */
@@ -4330,6 +4345,8 @@ export interface TurnState {
   equipActivated?: Partial<Record<PlayerId, number>>;
   /** Creatures these players control assign combat damage by toughness if greater (The Kingpin of Crime). Replaced, never mutated. */
   toughnessDamage?: PlayerId[];
+  /** Lord of the Rings (21b white): creatures (`id:zcc`) that assign combat damage equal to their toughness rather than their power this turn (Bill the Pony). */
+  ltrToughnessRather?: string[];
   /** 0 during the mulligan phase. */
   number: number;
   activePlayer: PlayerId;
