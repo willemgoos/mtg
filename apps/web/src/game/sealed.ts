@@ -6,6 +6,7 @@ import {
   type Build,
   type Counts,
   deckColors,
+  mainColors,
   MIN_DECK,
   PACK_SET_NAMES,
   type PackSet,
@@ -345,7 +346,7 @@ export function opponentFor(e: SealedEvent, n: number): { deck: Decklist; bot: B
   const short = MIN_DECK - size(main);
   const filled =
     short > 0 ? { ...main, [BASICS[dominant]]: (main[BASICS[dominant]] ?? 0) + short } : main;
-  const colors = deckColors(buildOf({ main: filled, side: {} })).slice(0, 2);
+  const colors = mainColors(buildOf({ main: filled, side: {} }));
   const deck = listOf(`sealed:${e.id}:${n}`, colorsName(colors), e.set, filled);
   registerDeck(deck);
   const roll = rng(derive(e.seed, BOT_SALT + n))();
@@ -451,6 +452,7 @@ export const SEASON_PACK_OF: Record<PackSet, SeasonPackKind> = {
   sos: 'secrets',
   fra: 'realityFracture',
   ecl: 'lorwynEclipsed',
+  tdm: 'tarkirDragonstorm',
 };
 
 /** What the event screen shows. */

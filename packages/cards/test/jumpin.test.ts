@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import {
   ARENA_BLB_PACKETS,
   ARENA_ECL_PACKETS,
+  ARENA_TDM_PACKETS,
   ARENA_FDN_PACKETS,
   cardDb,
   deckById,
@@ -52,8 +53,8 @@ describe('Jump In packets', () => {
     expect(new Set(PACKETS.map((p) => p.id)).size).toBe(PACKETS.length);
     for (const p of PACKETS) {
       const cards = packetCards(p);
-      // Arena's Lorwyn Eclipsed packets have 18 or 19 cards (their own test checks the count).
-      if (p.set !== 'ecl')
+      // Arena's Lorwyn Eclipsed and Tarkir: Dragonstorm packets are smaller (their own tests check the count).
+      if (p.set !== 'ecl' && p.set !== 'tdm')
         expect(
           cards.reduce((n, [, k]) => n + k, 0),
           p.name,
@@ -164,6 +165,58 @@ describe('Jump In packets', () => {
       expect(total(packetCards(p, dealPacket(p, Math.random))), p.name).toBe(list.count);
     }
     expect(deckById(jumpInId('ecl-kithkin', 'ecl-merfolk')).set).toBe('ecl');
+  });
+
+  it("has Arena's ten Tarkir: Dragonstorm packets, equal to the scraped lists", () => {
+    const tdm = PACKETS.filter((p) => p.set === 'tdm');
+    expect(tdm.map((p) => p.id)).toEqual(ARENA_TDM_PACKETS.map((p) => p.id));
+    const colours: Record<string, string> = {
+      Abzan: 'WBG',
+      Discard: 'R',
+      Encounter: 'G',
+      Graveyard: 'B',
+      Jeskai: 'WUR',
+      Mardu: 'WBR',
+      Mill: 'U',
+      Sultai: 'UBG',
+      Temur: 'URG',
+      Tokens: 'W',
+    };
+    expect(tdm.map((p) => p.name)).toEqual(Object.keys(colours));
+    const lists: ArenaPacket[] = JSON.parse(
+      readFileSync(new URL('../scripts/data/arena-jumpin-packets.json', import.meta.url), 'utf8'),
+    ).filter((x: ArenaPacket) => x.set.includes('(TDM)'));
+    expect(lists).toHaveLength(10);
+    const total = (cards: [string, number][]) => cards.reduce((n, [, k]) => n + k, 0);
+    for (const p of tdm) {
+      const list = lists.find((x) => x.name === p.name)!;
+      expect(p.source).toBe('arena');
+      expect(p.id).toBe(`tdm-${p.name.toLowerCase()}`);
+      expect(p.colors.join(''), p.name).toBe(colours[p.name]);
+      expect(sort([...p.spells, ...(p.lands ?? [])]), p.name).toEqual(sort(list.fixed));
+      expect(
+        p.slots?.map((s) => s.map((a) => [a.weight, a.card])),
+        p.name,
+      ).toEqual(list.slots);
+      for (const s of p.slots ?? [])
+        expect(
+          s.reduce((n, a) => n + a.weight, 0),
+          p.name,
+        ).toBe(100);
+      expect(total(packetCards(p)), p.name).toBe(list.count);
+      expect(total(packetCards(p, dealPacket(p, Math.random))), p.name).toBe(list.count);
+    }
+    // Two 13-card packets are topped up to 40 with basics of the clans' colours.
+    const d = deckById(jumpInId('tdm-abzan', 'tdm-mardu'));
+    expect(d.set).toBe('tdm');
+    expect(total(d.cards)).toBe(40);
+    const basics = new Map(
+      d.cards.filter(([n]) => ['Plains', 'Island', 'Swamp', 'Mountain', 'Forest'].includes(n)),
+    );
+    expect(total([...basics])).toBe(14);
+    expect(basics.has('Island')).toBe(false);
+    for (const b of ['Plains', 'Swamp', 'Forest', 'Mountain'])
+      expect(basics.get(b), b).toBeGreaterThan(0);
   });
 
   describe('random slots', () => {

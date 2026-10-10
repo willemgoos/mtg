@@ -74,7 +74,8 @@ export type SeasonPackKind =
   | 'strixhaven'
   | 'secrets'
   | 'realityFracture'
-  | 'lorwynEclipsed';
+  | 'lorwynEclipsed'
+  | 'tarkirDragonstorm';
 export const SEASON_PACK_KINDS: readonly SeasonPackKind[] = [
   'foundations',
   'bloomburrow',
@@ -84,6 +85,7 @@ export const SEASON_PACK_KINDS: readonly SeasonPackKind[] = [
   'secrets',
   'realityFracture',
   'lorwynEclipsed',
+  'tarkirDragonstorm',
 ];
 export interface SeasonMatch {
   id: number;

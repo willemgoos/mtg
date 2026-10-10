@@ -10,6 +10,7 @@ import type { ScryfallCard } from './scryfall-types.ts';
 import { SOS_BOOSTER_LIST } from './sos/booster-list.ts';
 import { FRA_BOOSTER_LIST } from './fra/booster-list.ts';
 import { ECL_BOOSTER_LIST } from './ecl/booster-list.ts';
+import { TDM_BOOSTER_LIST } from './tdm/booster-list.ts';
 import { STX_BOOSTER_LIST } from './stx/booster-list.ts';
 import { SOA_ARCHIVE_LIST } from './sos/archive-list.ts';
 import { STA_ARCHIVE_LIST } from './stx/archive-list.ts';
@@ -56,6 +57,7 @@ export {
   STRIXHAVEN_BRAWL_DECKS,
   MARVEL_TROPHY_DECKS,
   FINAL_FANTASY_TROPHY_DECKS,
+  TARKIR_DRAGONSTORM_TROPHY_DECKS,
   FINAL_FANTASY_DECKS,
   STRIXHAVEN_DECKS,
   SECRETS_OF_STRIXHAVEN_DECKS,
@@ -74,6 +76,7 @@ export {
   PACKETS,
   packetCards,
   ARENA_ECL_PACKETS,
+  ARENA_TDM_PACKETS,
   dealPacket,
   defaultDeal,
 } from './jumpin.ts';
@@ -107,6 +110,14 @@ export function realityFractureBoosterSheets(): BoosterSheets {
 /** Lorwyn Eclipsed's booster cards by ECL rarity (main set, no basics), the cards the pool has. */
 export function lorwynEclipsedBoosterSheets(): BoosterSheets {
   return boosterSheets(ECL_BOOSTER_LIST, (c) => cardDb.has(slug(c.name)));
+}
+
+/**
+ * Tarkir: Dragonstorm's booster cards by TDM rarity (the 271 `is:booster` cards, no basics), the cards the pool
+ * has. Reprints already in the pool (Craterhoof Behemoth, the tri-lands) keep their TDM rarity.
+ */
+export function tarkirDragonstormBoosterSheets(): BoosterSheets {
+  return boosterSheets(TDM_BOOSTER_LIST, (c) => cardDb.has(slug(c.name)));
 }
 
 /**

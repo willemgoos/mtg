@@ -41,9 +41,9 @@ instead of going to the graveyard.
 - **19a**: engine groundwork for the mechanics above, with tests, bot handling and Arena-style prompts. **Core done**, see "Phase 19a" below.
 - **19b**: every card, one agent per colour group in worktrees (`scripts/data/tdm-groups.json`, `scripts/tdm-status.ts`,
   `src/tdm/<group>.ts`, registered in `src/tarkir-dragonstorm.ts`).
-- **19c**: Arena's ten Jump In packets (`scripts/data/arena-jumpin-packets.json`, from MTGABuddy) and the ten untapped.gg
-  trophy decks.
-- **19d**: boosters in Expedition, Season and Sealed.
+- **19c**: Arena's ten Jump In packets (`scripts/data/arena-jumpin-packets.json`, from MTGABuddy) and the untapped.gg
+  trophy decks. **Done**, see "Status and handoff".
+- **19d**: boosters in Expedition, Season and Sealed. **Done**, see "Status and handoff".
 
 ## Phase 19a: engine groundwork
 
@@ -175,7 +175,8 @@ choice is made as the enters trigger resolves (an opponent can respond to the tr
 - Protection from white and from black (Ureni): the keywords `protectionWhite` and `protectionBlack` (no targeting, blocking, damage,
   enchanting or equipping by sources of that colour).
 - `colorsName` names three-colour decks (Abzan, Jeskai, Sultai, Mardu, Temur, and the shards) and a Jump In packet may have three colours.
-  Expedition, Season and Sealed still build two-colour decks (`deckColors(...).slice(0, 2)`): 19d.
+  Expedition and Sealed read a deck's colours with `mainColors` (19d): a third colour counts once the deck has four spells of it.
+  The deck suggester (`deckCompletion.ts`) still builds two colours and a splash.
 
 ### Bots and interface
 
@@ -203,10 +204,20 @@ main phase, Breaching Dragonstorm, Mardu Siegebreaker, Flamehold Grappler. Tempe
 - Merging unified a few duplicates (one single-graveyard target check, one `divide.atLeastOne`); the fetch script now gives
   adventure and Omen faces their colours; `PRINTING_OVERRIDES` in `pool.ts` pins the tri-lands and Craterhoof to TDM.
 - Lorwyn Eclipsed's Jump In packets are now Arena's own (random slots, topped up to 40); that is on this branch too.
-- **Next: 19c.** Arena's ten TDM Jump In packets from `scripts/data/arena-jumpin-packets.json` (same slot mechanism as
-  `ARENA_ECL_PACKETS`; three-colour packets). Human decks: only the eight curated untapped.gg trophy decks are public
-  (`scripts/data/tdm-trophy-decks.*`: Boros, Simic, Mardu, Sultai, Jeskai, Temur); find a human Abzan list; no decks of our own.
-- **Then 19d**: boosters; Expedition, Season and Sealed still cut deck colours to two (`deckColors(...).slice(0, 2)`).
+- **19c done.** `ARENA_TDM_PACKETS` in `jumpin.ts`: Arena's ten packets (five clans, three colours each, and five
+  mono-colour themes), 13 cards each with their random slots; the pair is topped up to 40 with basics by mana symbols.
+  `TARKIR_DRAGONSTORM_TROPHY_DECKS` in `decks.ts`: the seven decodable untapped.gg decks (Boros, Simic, Mardu, Sultai,
+  Jeskai, Temur and a five-colour Jeskai; 7–1 or 7–2, none went 7–0), shown as "Tarkir: Dragonstorm draft decks". Bot games in
+  `ai/test/tdm-decks.test.ts`.
+- **No Abzan deck.** No public human Abzan list was found: untapped.gg shows only its eight curated decks (every page and
+  locale), AetherHub's meta page gives card percentages, not lists, and 17lands has Abzan trophy decks but its API terms forbid
+  use outside 17lands.com. Following the rule (no decks of our own), Abzan has no trophy deck.
+- **19d done.** `tarkirDragonstormBoosterSheets()` (the 271 `is:booster` cards at their TDM rarity, reprints included), `PackSet`
+  `'tdm'` in Expedition and Sealed, Season pack kind `tarkirDragonstorm` (no TDM starters: there are no decks of our own), the deck
+  builder's set names and card search. The wrapper shows Ugin, Eye of the Storms. `mainColors` in `expedition.ts` keeps a third
+  colour with at least four spells (`THIRD_COLOUR_SPELLS`), so clan decks get rare offers, land upgrades and pips in all three
+  colours; fewer is a splash and stays out.
+- **Tarkir: Dragonstorm is complete** (19a–19d). Merge `tarkir-dragonstorm` into `main` when it has been played.
 - Open check: `cards/test/brawl.test.ts` (random Brawl games) runs a little over its 240 s limit; time it on a quiet machine
   against `main` to see whether 19a/19b made games slower.
 

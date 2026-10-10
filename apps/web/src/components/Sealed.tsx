@@ -4,6 +4,7 @@ import { artFor } from '../game/deckArt.ts';
 import {
   deckAdvice,
   deckColors,
+  mainColors,
   MIN_DECK,
   PACK_SET_NAMES,
   type PackSet,
@@ -664,11 +665,11 @@ function Hub({
             <span className="sealed-box__meta">
               {cards > 0 && (
                 <span className="deck__pips">
-                  {deckColors({ main: e.main, side: {}, opened: 0, packs: [], fresh: [] })
-                    .slice(0, 2)
-                    .map((c) => (
+                  {mainColors({ main: e.main, side: {}, opened: 0, packs: [], fresh: [] }).map(
+                    (c) => (
                       <span key={c} className={`pip pip--${c}`} />
-                    ))}
+                    ),
+                  )}
                 </span>
               )}
               {plural(cards, 'card')}

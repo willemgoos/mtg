@@ -6,6 +6,7 @@ import {
   slug,
   realityFractureBoosterSheets,
   lorwynEclipsedBoosterSheets,
+  tarkirDragonstormBoosterSheets,
   secretsOfStrixhavenArchiveSheets,
   secretsOfStrixhavenBoosterSheets,
   strixhavenArchiveSheets,
@@ -130,6 +131,15 @@ export const LORWYN_ECLIPSED_SHEETS = Object.fromEntries(
   ]),
 ) as Record<Rarity, string[]>;
 
+/** Tarkir: Dragonstorm's booster cards: the 271 booster cards we play (front faces, no basics). */
+const tdmCards = tarkirDragonstormBoosterSheets();
+export const TARKIR_DRAGONSTORM_SHEETS = Object.fromEntries(
+  RARITIES.map((rarity) => [
+    rarity,
+    tdmCards[rarity].map((c) => slug(c.name)).filter((id) => cardDb.has(id) && !isBasic(id)),
+  ]),
+) as Record<Rarity, string[]>;
+
 const SHEETS: Record<SeasonPackKind, Record<Rarity, string[]>> = {
   foundations: FOUNDATIONS_SHEETS,
   bloomburrow: BLOOMBURROW_SHEETS,
@@ -139,6 +149,7 @@ const SHEETS: Record<SeasonPackKind, Record<Rarity, string[]>> = {
   secrets: SECRETS_SHEETS,
   realityFracture: REALITY_FRACTURE_SHEETS,
   lorwynEclipsed: LORWYN_ECLIPSED_SHEETS,
+  tarkirDragonstorm: TARKIR_DRAGONSTORM_SHEETS,
 };
 const ARCHIVE: Partial<Record<SeasonPackKind, Record<Rarity, string[]>>> = {
   strixhaven: STRIXHAVEN_ARCHIVE_SHEETS,
