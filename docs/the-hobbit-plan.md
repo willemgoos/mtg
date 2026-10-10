@@ -61,6 +61,9 @@ The rows marked missing (amass, Recruit, Storied, the cycling family) were built
   `src/hob/<group>.ts`, registered in `src/the-hobbit.ts`). Groups (front-face names): white 28, blue 28, black 27, red 29,
   green 28, multicolour 26 (gold and hybrid), colorless 22 (artifacts and lands); 188 in all. Back faces (adventure
   spells) go in each group's `_BACKS`; tokens used by one card live in the group file, shared ones are in `hob/tokens.ts`.
+  - Blue (20b) **done**, 28/28: engine pieces in `engine/src/hob-blue-effects.ts` and hooks marked `// The Hobbit (20b blue)`
+    (Equipment that grants abilities, `creatureOnly` triggers-twice, `spellsFromOutsideHandCostLess`, `castFromYourGraveyard`,
+    `youActivateCreatureAbility`, `sharesCardTypeWithPrevious`, `graveyardsWithAtLeast`, pump `whileSource`/`preventDamageDealt`).
 - **20c**: Arena's Jump In packets for HOB (`scripts/data/arena-jumpin-packets.json`, if Arena has them) and the untapped.gg
   trophy decks (`scripts/data/hob-trophy-decks.*`), one per colour pair.
 - **20d**: boosters in Expedition, Season and Sealed from `HOB_BOOSTER_LIST`.

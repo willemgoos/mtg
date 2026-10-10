@@ -195,6 +195,12 @@ from) when it's fixed. Older phases keep their own "Simplifications" lists in `d
 - [ ] Bifur, Melodic Rider (`subtypeTriggersTwice`): for a Dwarf that has left the battlefield (its dies trigger) the Dwarf type
       is read from its printed card (and changeling), not from effects that had made it a Dwarf.
 
+## The Hobbit (blue, phase 20b)
+
+- [ ] Elrond, Moon-Reader: a creature tapped for mana while paying a cost activates its mana ability only if the creature has
+      a printed (or granted-as-ability) `mana` ability; a creature that gets "{T}: Add one mana" from another permanent's static
+      `grantMana` ability doesn't draw him a card. Its {5}{U}{U} takes "up to two" targets as two optional targets.
+
 ## Jump In slot cards (`jumpin-slots.ts`)
 
 - [ ] Polygraph Orb: collect evidence only offers cards with a mana value; the rules also let you exile lands and other
