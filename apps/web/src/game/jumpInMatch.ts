@@ -27,7 +27,8 @@ export const SETS = [
 ] as const;
 
 export type SetKey = (typeof SETS)[number]['key'];
-export const setOf = (p: Packet): SetKey => p.set ?? 'fdn';
+// 'ltr' joins SETS (and the Jump In groups) with the Lord of the Rings packets in 21c.
+export const setOf = (p: Packet): SetKey => (p.set ?? 'fdn') as SetKey;
 
 /** The packet is in one of the sets (none: no limit). */
 export const inSets = (p: Packet, sets: readonly SetKey[]) =>
