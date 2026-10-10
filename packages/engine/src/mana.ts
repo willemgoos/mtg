@@ -33,6 +33,8 @@ export interface ManaSource {
   // Reality Fracture (17a fixes): Loot, the Nexus; Doc Samson, Super Psychiatrist
   /** Every unit from this source (the entries with its id) must be the same colour: "N mana of any one color". */
   oneColor?: boolean;
+  /** Lord of the Rings (21d gc-rare): Mount Doom, using it costs 1 life. */
+  payLife?: boolean;
 }
 
 function lanternFor(ctx: Ctx, player: PlayerId): boolean {
@@ -81,7 +83,7 @@ function extraColorless(ctx: Ctx, player: PlayerId): boolean {
 
 
 /** Sources to tap; `pain` lists those that hurt (one entry per pip they pay). */
-export type Payment = ObjectId[] & { pain?: ObjectId[] };
+export type Payment = ObjectId[] & { pain?: ObjectId[]; life?: ObjectId[] /* Lord of the Rings (21d gc-rare): Mount Doom */ };
 
 /**
  * What restricted mana can be spent on when `source`'s ability is activated: 'CreatureAbility' for a creature (Shang-Chi), and
@@ -149,10 +151,16 @@ export function manaSources(
     let units = 1;
     let pain: ManaType[] | undefined;
     let oneColor = false;
+    let payLife = false; // Lord of the Rings (21d gc-rare): Mount Doom
     const vividUnits: Color[] = [];
     for (const a of def(ctx, id).abilities) {
       // Strixhaven Brawl (15b, g): Eldrazi Spawn and Scion tokens: "Sacrifice this token: Add {C}" needs no tap.
       if (a.kind !== 'mana' || (!a.cost.tapSelf && !a.cost.sacrificeSelf) || a.cost.mana) continue;
+      // Lord of the Rings (21d gc-rare): Mount Doom, "{T}, Pay 1 life: Add {B} or {R}".
+      if (a.cost.life) {
+        if (ctx.s.players[player].life < a.cost.life) continue;
+        payLife = true;
+      }
       // Strixhaven (13c): Spell Satchel: "Remove a book counter" as part of the cost.
       if (
         a.cost.removeCounters &&
@@ -256,6 +264,7 @@ export function manaSources(
         sacrifice,
         ...(pain ? { pain } : {}),
         ...(oneColor ? { oneColor } : {}),
+        ...(payLife ? { payLife } : {}),
       };
       out.push(src);
       // Final Fantasy (11c): Ultima, Origin of Oblivion ("tap a land for {C}, add an additional {C}").
@@ -342,9 +351,16 @@ export function manaSources(
         continue;
       }
       for (const id of ctx.s.battlefield) {
-        if (id === exclude || obj(ctx, id).controller !== player || out.some((x) => x.id === id))
-          continue;
+        if (id === exclude || obj(ctx, id).controller !== player) continue;
         if (!isCreature(ctx, id) || !matchesFilter(ctx, id, g.filter)) continue;
+        // Lord of the Rings (21d gc-rare): Elven Chorus. A creature that has a mana ability of its own gets the granted one besides.
+        const have = out.find((x) => x.id === id && !x.pool);
+        if (have) {
+          if (!granted(id)) continue;
+          for (const c of g.produces) if (!have.produces.includes(c)) have.produces.push(c);
+          continue;
+        }
+        if (out.some((x) => x.id === id)) continue;
         if (!canTapForAbility(ctx, id) || !granted(id)) continue;
         out.push({ id, produces: [...g.produces], isCreature: true, sacrifice: false });
       }
@@ -485,6 +501,7 @@ export function payMana(ctx: Ctx, sources: Readonly<Payment>): void {
   }
   for (const id of sources.pain ?? [])
     dealDamage(ctx, damageSourceFor(ctx, id, player), { player }, 1, false);
+  for (const _id of sources.life ?? []) changeLife(ctx, player, -1); // Lord of the Rings (21d gc-rare): Mount Doom
 }
 
 /**
@@ -539,6 +556,11 @@ export function planPayment(
   if (payWith) sources = sources.filter((s) => payWith.includes(s.id));
   const plan: Payment | null = findPayment(cost, sources);
   if (!plan) throw new Error('Cannot pay mana cost');
+  // Lord of the Rings (21d gc-rare): Mount Doom, each tap costs 1 life.
+  for (const id of new Set(plan)) {
+    const src = sources.find((s) => s.id === id);
+    if (src?.payLife) (plan.life ??= []).push(id);
+  }
   // The first entries pay the coloured pips: a painful colour there hurts.
   pipsOf(cost).forEach((pip, i) => {
     const src = sources.find((s) => s.id === plan[i]);

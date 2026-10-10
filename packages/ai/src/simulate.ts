@@ -12,6 +12,7 @@ import {
   chooseHandSwap,
   choosePickExiled,
   chooseCreatureType,
+  chooseLtrGcRare,
   chooseForageExile,
   chooseWardSacrifice,
   chooseFromHand,
@@ -100,6 +101,11 @@ function passiveAction(
       // Reality Fracture (17a): Arc of Fortune.
       if (d.kind === 'chooseOption' && d.options[0]?.label.startsWith('Discard your hand'))
         return { type: 'chooseOption', player: d.player, index: chooseHandSwap(s, d.player) };
+      // Lord of the Rings (21d gc-rare): Last March of the Ents, Mount Doom.
+      if (d.kind === 'chooseOption') {
+        const ltr = chooseLtrGcRare(engine, s, d.player, d);
+        if (ltr) return ltr;
+      }
       // A free cast can have tens of thousands of target splits (Magma Opus): don't list them when nested.
       if (d.kind === 'castFree' && depth >= 1)
         return { type: 'chooseEffect', player: d.player, accept: false };

@@ -70,6 +70,7 @@ import { ringBearerOf, ringTemptSteps, runRingStep } from './ltr-21a.ts'; // Lor
 import { opponentsCantGainLife, sacrificeAtEndOfCombat } from './ltr-black-effects.ts'; // Lord of the Rings (21b black)
 import { HOB_MULTICOLOUR_EXPANDERS } from './hob-multicolour-effects.ts'; // The Hobbit (20b multicolour)
 import { LTR_BLUE_EXPANDERS } from './ltr-blue-effects.ts'; // Lord of the Rings (21b blue)
+import { LTR_GC_RARE_EXPANDERS } from './ltr-gc-rare-effects.ts'; // Lord of the Rings (21d gc-rare)
 import { SOS_14B_C_CHOOSERS } from './sos-14b-c-effects.ts';
 import type {
   AbilityDef,
@@ -265,6 +266,7 @@ function prevented(ctx: Ctx, src: DamageSource, to: TargetChoice, amount: number
   if ('player' in to) {
     // Lorwyn Eclipsed (18b, white): Morningtide's Light, from any source.
     if (ctx.s.players[to.player].damagePrevented) return 0;
+    if (ctx.s.players[to.player].ltrProtected) return 0; // Lord of the Rings (21d gc-rare): The One Ring
     // Tarkir: Dragonstorm (19b, clans): New Way Forward, the next damage from the chosen source is prevented and reflected.
     if (ctx.s.turn.sourceShields && applySourceShield(ctx, src, to.player, amount) === 0) return 0;
     if (src.controller === to.player) return amount;
@@ -683,7 +685,10 @@ export function gainLife(ctx: Ctx, player: PlayerId, amount: number): void {
           sourceDefId: d.id, kind: 'add', amount: a.effect.amount,
           label: d.name + ': gain ' + a.effect.amount + ' additional life',
         });
-      if (a.effect.kind === 'doubleLifeGain')
+      if (
+        a.effect.kind === 'doubleLifeGain' &&
+        (a.effect.maxLife === undefined || ctx.s.players[player].life <= a.effect.maxLife) // Lord of the Rings (21d gc-rare): Phial of Galadriel
+      )
         replacements.push({
           sourceDefId: d.id, kind: 'double', amount: 2,
           label: d.name + ': gain twice as much life',
@@ -1043,6 +1048,12 @@ export function runEffects(
     // Lord of the Rings (21b blue): Minas Tirith Garrison's prompt, one Human at a time.
     if (e.kind === 'custom' && LTR_BLUE_EXPANDERS[e.handler]) {
       list.splice(i, 1, ...LTR_BLUE_EXPANDERS[e.handler]!(ctx, es, e.params));
+      i--;
+      continue;
+    }
+    // Lord of the Rings (21d gc-rare): Last March of the Ents, Mount Doom: prompts built one choice at a time.
+    if (e.kind === 'custom' && LTR_GC_RARE_EXPANDERS[e.handler]) {
+      list.splice(i, 1, ...LTR_GC_RARE_EXPANDERS[e.handler]!(ctx, es, e.params));
       i--;
       continue;
     }
@@ -3795,6 +3806,7 @@ function runEffectInner(ctx: Ctx, es: EffectSource, e: EffectDef): void {
             controller: es.controller,
             sourceDefId: es.sourceDefId,
             ...(e.underYourControl ? { underControl: true } : {}), // Tarkir: Dragonstorm (19b, black)
+            ...(e.byLastController ? { byLastController: true } : {}), // Lord of the Rings (21d gc-rare)
           },
           expires: 'endOfTurn',
         });

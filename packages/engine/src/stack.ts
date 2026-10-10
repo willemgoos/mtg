@@ -752,6 +752,17 @@ export function castSpell(
   o.manaColors = manaColors;
   o.manaPaid = manaPaid;
   if (fromTreasure) o.manaFromTreasure = true; // The Hobbit (20b multicolour)
+  // Lord of the Rings (21d gc-rare): Delighted Halfling, "spend this mana only to cast a legendary spell, and that spell can't be countered".
+  if (
+    d.supertypes.includes('Legendary') &&
+    payment.some(
+      (id) =>
+        !convokers.includes(id) &&
+        !!ctx.s.objects[id] &&
+        def(ctx, id).abilities.some((a) => a.kind === 'mana' && a.uncounterableSpell),
+    )
+  )
+    o.cantBeCountered = true;
   if (teamwork) payTeamwork(ctx, teamwork);
   if (convokers.length) o.convokedBy = payment.filter((id) => convokers.includes(id));
   if (d.types.includes('Creature')) scryForAncestry(ctx, player, d, payment);
@@ -1407,6 +1418,13 @@ export function activateAbility(
       if (card) moveObject(ctx, card, 'exile');
     }
   }
+  // Lord of the Rings (21d gc-rare): Mines of Moria, exile N cards from your graveyard (the player picks them when there are more).
+  let chooseGraveyardCards = 0;
+  if (a.cost.exileGraveyardCards) {
+    const gy = ctx.s.players[player].graveyard;
+    if (gy.length > a.cost.exileGraveyardCards) chooseGraveyardCards = a.cost.exileGraveyardCards;
+    else for (const gone of [...gy]) moveObject(ctx, gone, 'exile');
+  }
   // Jump In slots (Polygraph Orb): collect evidence. With more than one card that counts, the player picks them (after the
   // ability is on the stack, like Gallia's card); otherwise the one card goes.
   let collectEvidence = 0;
@@ -1504,6 +1522,16 @@ export function activateAbility(
       count: evidenceOptions(ctx, player, source).length,
       evidence: collectEvidence,
       source,
+      thenPriority: player,
+    };
+    return true;
+  }
+  // Lord of the Rings (21d gc-rare): Mines of Moria.
+  if (chooseGraveyardCards) {
+    ctx.s.decision = {
+      kind: 'forageExile',
+      player,
+      count: chooseGraveyardCards,
       thenPriority: player,
     };
     return true;

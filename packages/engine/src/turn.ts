@@ -22,6 +22,7 @@ import { checkGameOver, runSBAs } from './sba.ts';
 import { pushTrigger, resolveTop } from './stack.ts';
 import { targetCombos } from './targets.ts';
 import { untapWithCounter } from './ltr-blue-effects.ts'; // Lord of the Rings (21b blue)
+import { ltrKeepsGreenMana } from './ltr-gc-rare-effects.ts'; // Lord of the Rings (21d gc-rare)
 import {
   checkCondition,
   collectTriggers,
@@ -307,8 +308,14 @@ function enterStep(ctx: Ctx, step: Step): void {
   s.turn.step = step;
   s.turn.passed = [];
   // Unspent mana empties between steps (and all of it at the end of the turn).
-  for (const p of Object.values(s.players))
-    if (p.pool?.length) p.pool = step === 'cleanup' ? [] : p.pool.filter((m) => m.untilEndOfTurn);
+  for (const [pid, p] of Object.entries(s.players))
+    if (p.pool?.length)
+      p.pool = (step === 'cleanup' ? [] : p.pool.filter((m) => m.untilEndOfTurn)).concat(
+        // Lord of the Rings (21d gc-rare): Fangorn, Tree Shepherd, unspent green mana stays.
+        ltrKeepsGreenMana(ctx, pid as PlayerId)
+          ? p.pool.filter((m) => !m.untilEndOfTurn && m.produces.length === 1 && m.produces[0] === 'G')
+          : [],
+      );
   emit(ctx, { type: 'stepChanged', turn: s.turn.number, step, activePlayer: ap });
 
   switch (step) {

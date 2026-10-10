@@ -37,6 +37,51 @@ export function chooseHandSwap(s: GameState, me: PlayerId): number {
 }
 
 /**
+ * Lord of the Rings (21d gc-rare): Last March of the Ents ("put any number of creature cards from your hand onto the battlefield", one
+ * at a time: Done is the first option) and Mount Doom ("choose up to two creatures, then destroy the rest", one at a time: the first
+ * option stops). The bot puts in its most expensive creature card each time, and keeps its own best creatures, never an opponent's.
+ * Undefined for any other prompt.
+ */
+export function chooseLtrGcRare(
+  engine: Engine,
+  s: GameState,
+  me: PlayerId,
+  d: Extract<GameState['decision'], { kind: 'chooseOption' }>,
+): Action | undefined {
+  const title = d.title ?? '';
+  let best = 0;
+  let bestValue = -Infinity;
+  if (title.startsWith('Put creature cards from your hand') || title.startsWith('Put another creature card')) {
+    d.options.forEach((o, i) => {
+      if (i === 0) return;
+      const card = s.players[me].hand.find((id) => defOf(engine, s, id)?.name === o.label);
+      const v = card ? manaValue(defOf(engine, s, card)!.manaCost) : 0;
+      if (v > bestValue) {
+        best = i;
+        bestValue = v;
+      }
+    });
+    return { type: 'chooseOption', player: me, index: best };
+  }
+  if (title.startsWith('Mount Doom')) {
+    d.options.forEach((o, i) => {
+      if (i === 0 || !o.label.endsWith(' (yours)')) return;
+      const name = o.label.slice(0, -' (yours)'.length);
+      for (const id of s.battlefield) {
+        if (s.objects[id]!.controller !== me || defOf(engine, s, id)?.name !== name) continue;
+        const v = creatureValue(s, engine.db, id);
+        if (v > bestValue) {
+          best = i;
+          bestValue = v;
+        }
+      }
+    });
+    return { type: 'chooseOption', player: me, index: best };
+  }
+  return undefined;
+}
+
+/**
  * Which land to play. A land that enters tapped goes down on turns where one
  * more untapped mana wouldn't let us cast anything extra; otherwise we play
  * an untapped one. Ties go to the land adding a colour our hand needs.
