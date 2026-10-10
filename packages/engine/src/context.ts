@@ -5,6 +5,7 @@ import { FRA_BLACK_EFFECTS } from './fra-black-effects.ts';
 // Lorwyn Eclipsed (18b, black)
 import { ECL_BLACK_EFFECTS, drawPrevented } from './ecl-black-effects.ts';
 import { FIN_EFFECTS } from './fin-effects.ts';
+import { HOB_BLACK_EFFECTS } from './hob-black-effects.ts'; // The Hobbit (20b black)
 import { FRA_COLORLESS_EFFECTS } from './fra-colorless-effects.ts';
 import { LOREHOLD_EFFECTS } from './stx-lorehold-effects.ts';
 import { SOS_14A_EFFECTS } from './sos-14a-effects.ts';
@@ -123,6 +124,7 @@ const BUILT_IN_EFFECTS: Record<string, CustomEffect> = {
   // Reality Fracture (17a): black.
   ...FRA_BLACK_EFFECTS,
   ...ECL_BLACK_EFFECTS, // Lorwyn Eclipsed (18b, black)
+  ...HOB_BLACK_EFFECTS, // The Hobbit (20b black)
   // Reality Fracture (17a, colorless).
   ...FRA_COLORLESS_EFFECTS,
   // Final Fantasy (11a).
@@ -286,6 +288,8 @@ function defBase(ctx: Ctx, o: GameObject): CardDefinition {
     const aura = ctx.s.objects[o.foodBy];
     if (aura && aura.zone === 'battlefield' && aura.attachedTo === id) return foodDef(d);
   }
+  // The Hobbit (20b black): Supper for Spiders.
+  if (o.supperFood && o.zone === 'battlefield') return supperFoodDef(d);
   // Jump In slots: Imprisoned in the Moon.
   if (o.moonBy !== undefined) {
     const aura = ctx.s.objects[o.moonBy];
@@ -483,6 +487,27 @@ function foodDef(d: CardDefinition): CardDefinition {
       ],
     };
     foodDefs.set(d, f);
+  }
+  return f;
+}
+
+const supperFoodDefs = new WeakMap<CardDefinition, CardDefinition>();
+
+/**
+ * The Hobbit (20b black): what Supper for Spiders makes a creature card: a Food artifact that loses its other card types and
+ * subtypes (not supertypes, colours or abilities), with the Food ability besides. It has no power and toughness any more.
+ */
+function supperFoodDef(d: CardDefinition): CardDefinition {
+  let f = supperFoodDefs.get(d);
+  if (!f) {
+    const { power: _p, toughness: _t, loyalty: _l, ...rest } = d;
+    f = {
+      ...rest,
+      types: ['Artifact'],
+      subtypes: ['Food'],
+      abilities: [...d.abilities, ...foodDef(d).abilities],
+    };
+    supperFoodDefs.set(d, f);
   }
   return f;
 }
@@ -877,6 +902,11 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
   delete o.monstrous;
   delete o.usedModes;
   delete o.discardedTurn;
+  // The Hobbit (20b black): Supper for Spiders, "put there from the battlefield this turn"; it stops being a Food as it leaves.
+  const leftAsFood = from === 'battlefield' && !!o.supperFood; // it was no creature as it left: it didn't "die"
+  delete o.supperFood;
+  if (from === 'battlefield' && to === 'graveyard' && !o.isToken) o.diedTurn = ctx.s.turn.number;
+  else delete o.diedTurn;
   if (from === 'stack') delete o.convokedBy;
   delete o.kickCount;
   if (from === 'exile') {
@@ -886,6 +916,7 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
     delete o.exilePlayTapped;
     delete o.suspended;
     delete o.playFreeBy;
+    delete o.lifeForMana; // The Hobbit (20b black): Inside Information
     delete o.plottedTurn; // Strixhaven Brawl (15b): plot
   }
   // Cast through suspend: haste as it enters.
@@ -1060,6 +1091,7 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
     to,
     ...(opts.castFromNonHandBy ? { castFromNonHandBy: opts.castFromNonHandBy } : {}),
     ...(leftAs ? { leftAs } : {}),
+    ...(leftAsFood ? { leftAsFood: true } : {}),
     ...(leftBlank ? { leftBlank } : {}),
     // Final Fantasy (11c): "that creature's power" (Vincent Valentine).
     ...(from === 'battlefield' && o.lastPower !== undefined ? { lastPower: o.lastPower } : {}),
@@ -1080,6 +1112,9 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
       if (a.kind === 'static' && a.effect.kind === 'exileOpponentNontokenCreatures')
         gainLife(ctx, crystal.controller, a.effect.life);
   }
+  // The Hobbit (20b black): Azog, Moria's Ruin; what a token that left the battlefield was (its power and controller).
+  if (ceases && from === 'battlefield')
+    (ctx.s.turn.tokenLki ??= {})[id] = { power: o.lastPower ?? 0, controller: o.controller };
   if (ceases) delete ctx.s.objects[id];
   // Final Fantasy (11c): meld. The other half goes where the melded permanent went.
   const partner = meldPartner ? ctx.s.objects[meldPartner] : undefined;

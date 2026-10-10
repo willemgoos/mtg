@@ -216,6 +216,13 @@ export function checkCondition(
     const o = t && 'object' in t ? ctx.s.objects[t.object.id] : undefined;
     return !!o && o.zone === 'battlefield' && o.controller === controller;
   }
+  // The Hobbit (20b black): Azog, Moria's Ruin, "if you controlled that creature" (it was destroyed a moment ago).
+  if (c.kind === 'targetWasControlledByYou') {
+    const t = targets?.[c.target];
+    const o = t && 'object' in t ? ctx.s.objects[t.object.id] : undefined;
+    const gone = t && 'object' in t ? ctx.s.turn.tokenLki?.[t.object.id] : undefined; // a destroyed token
+    return o ? o.controller === controller : gone?.controller === controller;
+  }
   // Secrets of Strixhaven (14a): increment, "the amount of mana you spent is greater than this creature's power or toughness".
   if (c.kind === 'manaSpentExceedsLowestStat') {
     if (!self || !subject) return false;
@@ -431,6 +438,9 @@ function queue(
   }
   // "This ability triggers only once each turn."
   const printed = defOf(ctx, defId).abilities[index];
+  // The Hobbit (20b black): Gollum, Riddle Master; "choose one that hasn't been chosen" with every mode chosen: nothing to do.
+  if (printed?.kind === 'triggered' && printed.modesOnce && printed.modes && printed.modes.every((_, m) => o.usedModes?.includes(m)))
+    return;
   // An ability granted until end of turn (Root Manipulation on a Pest) sits after the printed ones
   // and has no printed counterpart to look up later, so the pending trigger carries it itself.
   const granted = printed ? undefined : def(ctx, o.id).abilities[index];
@@ -718,7 +728,9 @@ function detect(ctx: Ctx, ev: GameEvent): void {
   switch (ev.type) {
     case 'objectMoved': {
       const moved = s.objects[ev.id];
-      const movedDef = defOf(ctx, ev.defId);
+      // The Hobbit (20b black): Supper for Spiders, a creature card that came back as a Food artifact is no creature entering.
+      const movedDef =
+        moved?.supperFood && moved.zone === 'battlefield' ? def(ctx, moved.id) : defOf(ctx, ev.defId);
       // Marvel Super Heroes Jumpstart (Tenacious/Rampaging): creature cards put into your
       // graveyard from anywhere, counted per batch ("that many": Voracious Brood).
       if (ev.to === 'graveyard' && moved && !moved.isToken && movedDef.types.includes('Creature'))
@@ -993,12 +1005,17 @@ function detect(ctx: Ctx, ev: GameEvent): void {
       if (ev.from === 'graveyard' && ev.to !== 'graveyard' && moved && !moved.isToken)
         forEachBattlefieldTrigger(
           ctx,
-          (o, a) => a.trigger.on === 'cardsLeaveYourGraveyard' && o.controller === moved.owner,
+          (o, a) =>
+            a.trigger.on === 'cardsLeaveYourGraveyard' &&
+            o.controller === moved.owner &&
+            // The Hobbit (20b black): Along the Crooked Way, "a creature card leaves your graveyard".
+            (!a.trigger.filter || cardMatches(ctx, moved.id, a.trigger.filter)),
           moved,
         );
       if (
         ev.from === 'battlefield' &&
         ev.to === 'graveyard' &&
+        !ev.leftAsFood &&
         movedDef.types.includes('Creature')
       ) {
         // "Dies" triggers look back in time: the ability triggers from the graveyard card.
@@ -1370,6 +1387,16 @@ function detect(ctx: Ctx, ev: GameEvent): void {
           });
         }
       // Final Fantasy (11c): life loss triggers. "Whenever an opponent loses life" ("that many").
+      // The Hobbit (20b black): The Master of Lake-town, "whenever a player loses life, that player mills that many cards".
+      if (ev.delta < 0)
+        forEachBattlefieldTrigger(
+          ctx,
+          (o, a) =>
+            a.trigger.on === 'playerLosesLife' &&
+            (a.trigger.whose === 'you' ? o.controller === ev.player : o.controller !== ev.player),
+          undefined,
+          -ev.delta,
+        );
       if (ev.delta < 0)
         forEachBattlefieldTrigger(
           ctx,
@@ -2359,6 +2386,9 @@ export function nextPendingTriggerIndex(ctx: Ctx): number {
 /** Type and subtype checks against a card definition (for a permanent that has already left). */
 export function defMatches(d: CardDefinition, f: CardFilter): boolean {
   if (f.types && !f.types.some((t) => d.types.includes(t))) return false;
+  // The Hobbit (20b black): Sackville-Bagginses, "whenever you sacrifice a token".
+  if (f.token && !d.isToken) return false;
+  if (f.nontoken && d.isToken) return false;
   // Tarkir: Dragonstorm (19a): "a noncreature spell".
   if (f.notTypes && f.notTypes.some((t) => d.types.includes(t))) return false;
   if (f.hasKeyword && !d.keywords.includes(f.hasKeyword)) return false;

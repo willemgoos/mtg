@@ -215,6 +215,14 @@ from) when it's fixed. Older phases keep their own "Simplifications" lists in `d
 - [ ] Moment of Glory: cast from a graveyard, the counters go on every creature you control at once (the target included),
       which is the same result as "a counter on the target, and one on each other creature" (the engine can't name "each
       creature other than the target").
+## The Hobbit (20b, black)
+
+- [ ] Gollum, Riddle Master: "As Gollum enters, choose odd or even" is made like every other "as this enters, choose" card of
+      the pool: an enters trigger that sets the choice (a spell cast in response to it sees no chosen quality yet).
+- [ ] The Master of Lake-town: "that player mills" is two triggers (one for your life loss, one for an opponent's), exact in a
+      two-player game.
+- [ ] Supper for Spiders: the Foods keep the card's own abilities (as the text says) and are artifacts, not creatures, from the
+      moment the arrival is processed; the engine sets that state right after moving the card, in the same resolution.
 
 ## Jump In slot cards (`jumpin-slots.ts`)
 

@@ -65,6 +65,10 @@ The rows marked missing (amass, Recruit, Storied, the cycling family) were built
   Stone by Sunlight's artifact, Roads' exiled Plains, Bilbo's spell lock) plus hooks marked `// The Hobbit (20b white)`:
   the `ownedBySourceController` filter, `becomesArtifact` continuous effect, `exileWithSource` search, a player target for
   `searchLibrary.forControllerOf`. Tests `cards/test/hob-white*.test.ts`, `ai/test/hob-white.test.ts`.
+  - **Black done** (27/27): engine pieces in `engine/src/hob-black-effects.ts` (Inside Information, Supper for Spiders, Master of
+    Lake-town) and hooks marked `// The Hobbit (20b black)` (the `playerLosesLife` trigger, `cardsLeaveYourGraveyard` with a filter, the
+    `targetWasControlledByYou` condition, a token's last power/controller for Azog, the `lifeForMana` cast, the odd/even spell filter);
+    tests `cards/test/hob-black*.test.ts`.
 - **20c**: Arena's Jump In packets for HOB (`scripts/data/arena-jumpin-packets.json`, if Arena has them) and the untapped.gg
   trophy decks (`scripts/data/hob-trophy-decks.*`), one per colour pair.
 - **20d**: boosters in Expedition, Season and Sealed from `HOB_BOOSTER_LIST`.

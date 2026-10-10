@@ -22,6 +22,8 @@ export type CastVia =
   // Reality Fracture (17c): Chandra, Torch of Defiance: cast now, in the middle of a resolution, paying every cost.
   | 'now'
   | 'freeExact'
+  // The Hobbit (20b black): Inside Information, paying life equal to its mana value rather than its mana cost.
+  | 'lifeForMana'
   | 'noctis'
   | 'hades'
   // Lorwyn Eclipsed (18a): Dawnhand Dissident.
@@ -198,6 +200,12 @@ export function castVariants(d: CardDefinition, zone: ZoneName, via?: CastVia): 
     return castVariants(d.noManaCost ? { ...d, noManaCost: false } : d, 'hand')
       .filter((v) => !(v.kicked && d.kicker?.replacesCost) && !v.evoked)
       .map((v) => ({ ...v, cost: withoutManaCost(v.cost, d.manaCost) }));
+  // The Hobbit (20b black): Inside Information, "pay life equal to its mana value rather than pay its mana cost" (X is 0;
+  // additional costs are still paid; an alternative cost can't be used with it).
+  if (via === 'lifeForMana')
+    return castVariants(d, 'hand')
+      .filter((v) => !(v.kicked && d.kicker?.replacesCost) && !v.evoked)
+      .map((v) => ({ ...v, cost: withoutManaCost(v.cost, d.manaCost), life: manaValue(d.manaCost) }));
   // Reality Fracture (17c): Chandra, Torch of Defiance: cast now, paying its costs as if from hand.
   if (via === 'now') return castVariants(d, 'hand');
   // Reality Fracture (17a fixes): a free cast ("without paying its mana cost") still pays additional costs
