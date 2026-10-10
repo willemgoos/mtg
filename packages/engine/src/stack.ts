@@ -2590,6 +2590,8 @@ export function answerSearch(ctx: Ctx, card: ObjectId | null): void {
         obj(ctx, card).tapped = false;
     } else moveObject(ctx, card, 'hand');
     if (d.to !== 'hideaway') emit(ctx, { type: 'searched', player: d.player, id: card });
+    // The Hobbit (20b colorless): Elven Passage, the effects after the search see the card found as 'chosen'.
+    if (d.rememberFound) d.resume.chosen = { id: card, zcc: obj(ctx, card).zcc };
     // Reality Fracture (17a): Fblthp, Hexhaven Invigorator: "up to N cards", one more pick while some are left.
     if (d.remaining !== undefined && d.remaining > 1) {
       const options = d.options.filter(

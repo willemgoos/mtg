@@ -348,8 +348,16 @@ export function countOf(
         .map((id) => manaValue(def(ctx, id).manaCost)),
     );
   // Marvel Super Heroes (The Scarlet Witch): 'where X is her power'.
-  if ('powerOf' in a)
+  if ('powerOf' in a) {
+    // The Hobbit (20b colorless): Glamdring, "where X is equipped creature's power" (the creature the source is attached to).
+    if (a.powerOf === 'attached') {
+      const host = sourceId ? ctx.s.objects[sourceId]?.attachedTo : undefined;
+      return host && ctx.s.objects[host]?.zone === 'battlefield'
+        ? Math.max(0, power(ctx, host))
+        : 0;
+    }
     return a.powerOf === 'self' && sourceId ? Math.max(0, power(ctx, sourceId)) : 0;
+  }
   // Tarkir: Dragonstorm (19a): every kind of counter on the source.
   if ('allCountersOn' in a) {
     const src = a.allCountersOn === 'self' && sourceId ? ctx.s.objects[sourceId] : undefined;

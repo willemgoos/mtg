@@ -2461,6 +2461,8 @@ export function runEffects(
           ...(e.to !== 'hand' ? { to: e.to } : {}),
           ...(e.shuffle === false ? { shuffle: false } : {}),
           ...(e.untapIfLands ? { untapIfLands: e.untapIfLands } : {}),
+          // The Hobbit (20b colorless): Elven Passage.
+          ...(e.rememberFound ? { rememberFound: true } : {}),
           // Strixhaven (13c): Verdant Mastery, Emergent Sequence, Oriq Loremage.
           ...(e.forOpponent ? { forOpponent: true } : {}),
           ...(e.fractalLand ? { fractalLand: true } : {}),

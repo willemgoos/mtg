@@ -172,3 +172,11 @@ The evaluation counts the enduring story and the way to it (`WEIGHTS.enduringSto
 permanent to use them); recruit's discard and amass's Army are chosen by the usual simulation; a bot with nothing better to do in
 its second main phase cycles a dead card (`chooseCycling` in `ai/src/heuristic.ts`: a spell costing more than its lands plus two,
 or a land with six in play; a land search is skipped with seven lands in play and hand). That applies to every set's cycling cards.
+
+## Phase 20b: colorless group
+
+**Done** (22/22; `cards/src/hob/colorless.ts`, tests `cards/test/hob-colorless.test.ts`). Engine hooks, all marked `// The Hobbit (20b colorless)`:
+Amount `{ powerOf: 'attached' }` (Glamdring, `characteristics.ts`); cost flag `discardNamesLegendaryPermanent` (Key to the Side-Door,
+`legal.ts`); `searchLibrary.rememberFound` makes the card found `'chosen'` for the effects after it (Elven Passage, `stack.ts`/`effects.ts`);
+custom effects `hobBlackArrow` and `hobGleamOfDeath` in `engine/src/hob-colorless-effects.ts`. Hone counters are `namedCounters 'hone'`
+read by an `attached` static (`namedCountersOnSource`). Giant's Boulder's {1},{T} mana is a `manaAbility` (used by hand: activate it, then cast).
