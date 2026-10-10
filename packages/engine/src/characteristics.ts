@@ -111,6 +111,11 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
         if (!on) continue;
         power += st.power;
         toughness += st.toughness;
+        // Tarkir: Dragonstorm (19b, blue): Snowmelt Stag, base power and toughness while the condition holds.
+        if (st.kind === 'while' && st.basePT && o.timestamp >= baseTimestamp) {
+          override = st.basePT;
+          baseTimestamp = o.timestamp;
+        }
         if (st.kind === 'while' && st.cantBeBlocked) cantBeBlocked = true;
         if (st.keywords?.length) {
           granted ??= new Set(keywords);

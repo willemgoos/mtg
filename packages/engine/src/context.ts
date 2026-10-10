@@ -26,6 +26,7 @@ import { cantBeSacrificed, TDM_19A_EFFECTS } from './tdm-19a.ts';
 import { ECL_SPECIAL_EFFECTS } from './ecl-special-effects.ts';
 import { ECL_GREEN_EFFECTS } from './ecl-green-effects.ts';
 import { ECL_BLUE_EFFECTS } from './ecl-blue-effects.ts';
+import { TDM_BLUE_EFFECTS } from './tdm-blue-effects.ts';
 import { ECL_WHITE_EFFECTS } from './ecl-white-effects.ts';
 import { BRAWL_15B_W_EFFECTS } from './brawl-15b-w-effects.ts';
 import { BRAWL_15B_U_EFFECTS } from './brawl-15b-u-effects.ts';
@@ -163,6 +164,8 @@ const BUILT_IN_EFFECTS: Record<string, CustomEffect> = {
   ...ECL_MULTI_A_EFFECTS,
   // Lorwyn Eclipsed (18b): blue.
   ...ECL_BLUE_EFFECTS,
+  // Tarkir: Dragonstorm (19b): blue.
+  ...TDM_BLUE_EFFECTS,
   // Lorwyn Eclipsed (18b): white.
   ...ECL_WHITE_EFFECTS,
   // Strixhaven Brawl (15b): multicolour, colourless and lands.
@@ -297,7 +300,18 @@ function defBase(ctx: Ctx, id: ObjectId): CardDefinition {
 }
 
 /** `d` plus the abilities the object was given for a while (until end of turn, perpetually, until it's cast). */
-function withExtraAbilities(_ctx: Ctx, o: GameObject, d: CardDefinition): CardDefinition {
+function withExtraAbilities(ctx: Ctx, o: GameObject, d: CardDefinition): CardDefinition {
+  // Tarkir: Dragonstorm (19b, blue): abilities an attached Aura gives ("Enchanted creature has ...").
+  if (o.auraGrants?.length && o.zone === 'battlefield') {
+    const given = o.auraGrants.flatMap((auraId) => {
+      const aura = ctx.s.objects[auraId];
+      if (!aura || aura.zone !== 'battlefield' || aura.attachedTo !== o.id) return [];
+      return (ctx.db.get(aura.defId)?.abilities ?? []).flatMap((a) =>
+        a.kind === 'static' && a.effect.kind === 'attached' ? (a.effect.grantAbilities ?? []) : [],
+      );
+    });
+    if (given.length) d = { ...d, abilities: [...d.abilities, ...given] };
+  }
   if (o.tempAbilities?.length || o.perpetualAbilities?.length || o.abilitiesUntilCast?.length)
     return {
       ...d,
@@ -737,6 +751,7 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
   delete o.colorOverride; // Lorwyn Eclipsed (18b, special)
   delete o.exiledWith;
   delete o.foodBy;
+  delete o.auraGrants; // Tarkir: Dragonstorm (19b, blue)
   delete o.controlledBy;
   delete o.xPaid;
   delete o.abilitiesUntilCast; // Reality Fracture (17a): Emrakul, the Exigent Doom

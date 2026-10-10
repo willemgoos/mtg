@@ -1732,6 +1732,9 @@ export function attachAura(ctx: Ctx, aura: ObjectId, host: ObjectId): void {
   for (const ab of def(ctx, aura).abilities) {
     if (ab.kind !== 'static') continue;
     if (ab.effect.kind === 'enchantedIsFood') h.foodBy = aura;
+    // Tarkir: Dragonstorm (19b, blue): Ringing Strike Mastery, "enchanted creature has '{5}: Untap this creature.'"
+    if (ab.effect.kind === 'attached' && ab.effect.grantAbilities?.length)
+      h.auraGrants = [...(h.auraGrants ?? []).filter((x) => x !== aura), aura];
     // Marvel Super Heroes Jumpstart (Pym): Quantum Reduction, no window before it loses them.
     if (ab.effect.kind === 'attached' && ab.effect.loseAbilities) {
       ctx.s.effects.push({

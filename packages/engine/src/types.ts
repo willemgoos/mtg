@@ -3097,6 +3097,9 @@ export type StaticDef =
       cantBecomeUntapped?: boolean;
       /** "Enchanted creature can't have counters put on it." */
       noCounters?: boolean;
+      // Tarkir: Dragonstorm (19b, blue): Ringing Strike Mastery
+      /** "Enchanted creature has '{5}: Untap this creature.'": the activated abilities the enchanted permanent has while this stays attached. */
+      grantAbilities?: AbilityDef[];
       // Lorwyn Eclipsed (18b, white): Bark of Doran
       /** "As long as equipped creature's toughness is greater than its power, it assigns combat damage equal to its toughness." */
       toughnessAssignsDamage?: boolean;
@@ -3120,6 +3123,9 @@ export type StaticDef =
       cantBeBlocked?: boolean;
       /** Can't attack or block while the condition holds (Bast). */
       cantAttackOrBlock?: boolean;
+      // Tarkir: Dragonstorm (19b, blue): Snowmelt Stag
+      /** Base power and toughness while the condition holds ("During your turn, this creature has base power and toughness 5/2"). */
+      basePT?: [number, number];
     }
   /** Instant and sorcery spells you cast cost {N} less (Archmage of Runes). */
   | { kind: 'instantsAndSorceriesCostLess'; amount: number }
@@ -3551,6 +3557,9 @@ export interface GameObject {
   linkedExile?: { owner: PlayerId; mv: number };
   /** Sugar Coat: the Aura that makes it a Food. */
   foodBy?: ObjectId;
+  // Tarkir: Dragonstorm (19b, blue): Ringing Strike Mastery
+  /** The Auras attached to it that give it abilities (`attached.grantAbilities`). */
+  auraGrants?: ObjectId[];
   /** Someone other than its owner may cast it from exile, with any mana (Cruelclaw's Heist). */
   castableBy?: PlayerId;
   anyMana?: boolean;

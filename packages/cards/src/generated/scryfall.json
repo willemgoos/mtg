@@ -81973,5 +81973,873 @@
    "large": "https://cards.scryfall.io/large/front/1/b/1bb9a5b1-48d2-453e-8991-c788bc63e482.jpg?1783909503",
    "artCrop": "https://cards.scryfall.io/art_crop/front/1/b/1bb9a5b1-48d2-453e-8991-c788bc63e482.jpg?1783909503"
   }
+ },
+ {
+  "name": "Aegis Sculptor",
+  "scryfallId": "19c1417a-9719-46f6-8749-d92b93ce0529",
+  "oracleId": "3a75c56a-bdf7-490d-aa41-51d5eb8be46c",
+  "set": "tdm",
+  "collectorNumber": "35",
+  "rarity": "uncommon",
+  "manaCost": "{3}{U}",
+  "typeLine": "Creature — Bird Wizard",
+  "oracleText": "Flying\nWard {2} (Whenever this creature becomes the target of a spell or ability an opponent controls, counter it unless that player pays {2}.)\nAt the beginning of your upkeep, you may exile two cards from your graveyard. If you do, put a +1/+1 counter on this creature.",
+  "power": "2",
+  "toughness": "3",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Flying",
+   "Ward"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/9/19c1417a-9719-46f6-8749-d92b93ce0529.jpg?1783907401",
+   "normal": "https://cards.scryfall.io/normal/front/1/9/19c1417a-9719-46f6-8749-d92b93ce0529.jpg?1783907401",
+   "large": "https://cards.scryfall.io/large/front/1/9/19c1417a-9719-46f6-8749-d92b93ce0529.jpg?1783907401",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/9/19c1417a-9719-46f6-8749-d92b93ce0529.jpg?1783907401"
+  }
+ },
+ {
+  "name": "Agent of Kotis",
+  "scryfallId": "812d0462-0158-467f-951d-a7a121188a10",
+  "oracleId": "584fe1e4-029d-43fe-8c9e-6995dd392d65",
+  "set": "tdm",
+  "collectorNumber": "36",
+  "rarity": "common",
+  "manaCost": "{1}{U}",
+  "typeLine": "Creature — Human Rogue",
+  "oracleText": "Renew — {3}{U}, Exile this card from your graveyard: Put two +1/+1 counters on target creature. Activate only as a sorcery.",
+  "power": "2",
+  "toughness": "1",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Renew"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/1/812d0462-0158-467f-951d-a7a121188a10.jpg?1783907402",
+   "normal": "https://cards.scryfall.io/normal/front/8/1/812d0462-0158-467f-951d-a7a121188a10.jpg?1783907402",
+   "large": "https://cards.scryfall.io/large/front/8/1/812d0462-0158-467f-951d-a7a121188a10.jpg?1783907402",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/1/812d0462-0158-467f-951d-a7a121188a10.jpg?1783907402"
+  }
+ },
+ {
+  "name": "Ambling Stormshell",
+  "scryfallId": "c74d4a57-0f66-4965-9ed7-f88a08aa1d15",
+  "oracleId": "75070eaf-c931-46e5-9aa1-b849e33580c6",
+  "set": "tdm",
+  "collectorNumber": "37",
+  "rarity": "rare",
+  "manaCost": "{3}{U}{U}",
+  "typeLine": "Creature — Turtle",
+  "oracleText": "Ward {2}\nWhenever this creature attacks, put three stun counters on it and draw three cards. (If a permanent with a stun counter would become untapped, remove one from it instead.)\nWhenever you cast a Turtle spell, untap this creature.",
+  "power": "5",
+  "toughness": "9",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Ward"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/7/c74d4a57-0f66-4965-9ed7-f88a08aa1d15.jpg?1783907403",
+   "normal": "https://cards.scryfall.io/normal/front/c/7/c74d4a57-0f66-4965-9ed7-f88a08aa1d15.jpg?1783907403",
+   "large": "https://cards.scryfall.io/large/front/c/7/c74d4a57-0f66-4965-9ed7-f88a08aa1d15.jpg?1783907403",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/7/c74d4a57-0f66-4965-9ed7-f88a08aa1d15.jpg?1783907403"
+  }
+ },
+ {
+  "name": "Bewildering Blizzard",
+  "scryfallId": "91b25843-1aa0-484a-b6c7-0c284fe7214a",
+  "oracleId": "84469042-d48d-409f-a2c9-047058f13bc5",
+  "set": "tdm",
+  "collectorNumber": "38",
+  "rarity": "uncommon",
+  "manaCost": "{4}{U}{U}",
+  "typeLine": "Instant",
+  "oracleText": "Draw three cards. Creatures your opponents control get -3/-0 until end of turn.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/1/91b25843-1aa0-484a-b6c7-0c284fe7214a.jpg?1783907400",
+   "normal": "https://cards.scryfall.io/normal/front/9/1/91b25843-1aa0-484a-b6c7-0c284fe7214a.jpg?1783907400",
+   "large": "https://cards.scryfall.io/large/front/9/1/91b25843-1aa0-484a-b6c7-0c284fe7214a.jpg?1783907400",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/1/91b25843-1aa0-484a-b6c7-0c284fe7214a.jpg?1783907400"
+  }
+ },
+ {
+  "name": "Constrictor Sage",
+  "scryfallId": "b2f160d7-c832-4b83-8f2e-aaeb190add3f",
+  "oracleId": "abfb7234-c5cc-4e0b-9a67-d66473f918fc",
+  "set": "tdm",
+  "collectorNumber": "39",
+  "rarity": "uncommon",
+  "manaCost": "{4}{U}",
+  "typeLine": "Creature — Snake Wizard",
+  "oracleText": "When this creature enters, tap target creature an opponent controls and put a stun counter on it. (If a permanent with a stun counter would become untapped, remove one from it instead.)\nRenew — {2}{U}, Exile this card from your graveyard: Tap target creature an opponent controls and put a stun counter on it. Activate only as a sorcery.",
+  "power": "4",
+  "toughness": "4",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Renew"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/2/b2f160d7-c832-4b83-8f2e-aaeb190add3f.jpg?1783907399",
+   "normal": "https://cards.scryfall.io/normal/front/b/2/b2f160d7-c832-4b83-8f2e-aaeb190add3f.jpg?1783907399",
+   "large": "https://cards.scryfall.io/large/front/b/2/b2f160d7-c832-4b83-8f2e-aaeb190add3f.jpg?1783907399",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/2/b2f160d7-c832-4b83-8f2e-aaeb190add3f.jpg?1783907399"
+  }
+ },
+ {
+  "name": "Dirgur Island Dragon",
+  "scryfallId": "b1d21a9a-6b0c-4fbc-a427-81be885d326b",
+  "oracleId": "23cda76b-6e47-4922-a38d-93f7aae1eb00",
+  "set": "tdm",
+  "collectorNumber": "40",
+  "rarity": "common",
+  "manaCost": "{5}{U}",
+  "typeLine": "Creature — Dragon",
+  "oracleText": "Flying\nWard {2} (Whenever this creature becomes the target of a spell or ability an opponent controls, counter it unless that player pays {2}.)",
+  "power": "4",
+  "toughness": "4",
+  "colors": [],
+  "keywords": [
+   "Flying",
+   "Ward"
+  ],
+  "back": "Skimming Strike",
+  "adventure": true,
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/1/b1d21a9a-6b0c-4fbc-a427-81be885d326b.jpg?1783907398",
+   "normal": "https://cards.scryfall.io/normal/front/b/1/b1d21a9a-6b0c-4fbc-a427-81be885d326b.jpg?1783907398",
+   "large": "https://cards.scryfall.io/large/front/b/1/b1d21a9a-6b0c-4fbc-a427-81be885d326b.jpg?1783907398",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/1/b1d21a9a-6b0c-4fbc-a427-81be885d326b.jpg?1783907398"
+  }
+ },
+ {
+  "name": "Skimming Strike",
+  "scryfallId": "b1d21a9a-6b0c-4fbc-a427-81be885d326b",
+  "oracleId": "23cda76b-6e47-4922-a38d-93f7aae1eb00",
+  "set": "tdm",
+  "collectorNumber": "40",
+  "rarity": "common",
+  "manaCost": "{1}{U}",
+  "typeLine": "Instant — Omen",
+  "oracleText": "Tap up to one target creature. Draw a card. (Then shuffle this card into its owner's library.)",
+  "colors": [],
+  "keywords": [],
+  "front": "Dirgur Island Dragon",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/1/b1d21a9a-6b0c-4fbc-a427-81be885d326b.jpg?1783907398",
+   "normal": "https://cards.scryfall.io/normal/front/b/1/b1d21a9a-6b0c-4fbc-a427-81be885d326b.jpg?1783907398",
+   "large": "https://cards.scryfall.io/large/front/b/1/b1d21a9a-6b0c-4fbc-a427-81be885d326b.jpg?1783907398",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/1/b1d21a9a-6b0c-4fbc-a427-81be885d326b.jpg?1783907398"
+  }
+ },
+ {
+  "name": "Dispelling Exhale",
+  "scryfallId": "1c9af3f1-711e-42ae-803a-1100eba3fb13",
+  "oracleId": "dd3a4b64-0987-4e9b-a18d-c54365438857",
+  "set": "tdm",
+  "collectorNumber": "41",
+  "rarity": "common",
+  "manaCost": "{1}{U}",
+  "typeLine": "Instant",
+  "oracleText": "As an additional cost to cast this spell, you may behold a Dragon. (You may choose a Dragon you control or reveal a Dragon card from your hand.)\nCounter target spell unless its controller pays {2}. If a Dragon was beheld, counter that spell unless its controller pays {4} instead.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Behold"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/c/1c9af3f1-711e-42ae-803a-1100eba3fb13.jpg?1783907398",
+   "normal": "https://cards.scryfall.io/normal/front/1/c/1c9af3f1-711e-42ae-803a-1100eba3fb13.jpg?1783907398",
+   "large": "https://cards.scryfall.io/large/front/1/c/1c9af3f1-711e-42ae-803a-1100eba3fb13.jpg?1783907398",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/c/1c9af3f1-711e-42ae-803a-1100eba3fb13.jpg?1783907398"
+  }
+ },
+ {
+  "name": "Dragonologist",
+  "scryfallId": "8810ebb4-9e51-46f0-a54a-a0b4d77b762a",
+  "oracleId": "f6791df0-a37b-44dc-8bf3-40ac2304d188",
+  "set": "tdm",
+  "collectorNumber": "42",
+  "rarity": "rare",
+  "manaCost": "{2}{U}",
+  "typeLine": "Creature — Human Wizard",
+  "oracleText": "When this creature enters, look at the top six cards of your library. You may reveal an instant, sorcery, or Dragon card from among them and put it into your hand. Put the rest on the bottom of your library in a random order.\nUntapped Dragons you control have hexproof.",
+  "power": "1",
+  "toughness": "3",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/8/8810ebb4-9e51-46f0-a54a-a0b4d77b762a.jpg?1783907397",
+   "normal": "https://cards.scryfall.io/normal/front/8/8/8810ebb4-9e51-46f0-a54a-a0b4d77b762a.jpg?1783907397",
+   "large": "https://cards.scryfall.io/large/front/8/8/8810ebb4-9e51-46f0-a54a-a0b4d77b762a.jpg?1783907397",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/8/8810ebb4-9e51-46f0-a54a-a0b4d77b762a.jpg?1783907397"
+  }
+ },
+ {
+  "name": "Dragonstorm Forecaster",
+  "scryfallId": "75ec7a31-1893-493c-926b-dc3a8a770e72",
+  "oracleId": "02de8fa3-ac8d-47e5-b137-d5a0b7d8e951",
+  "set": "tdm",
+  "collectorNumber": "43",
+  "rarity": "uncommon",
+  "manaCost": "{U}",
+  "typeLine": "Creature — Human Scout",
+  "oracleText": "{2}, {T}: Search your library for a card named Dragonstorm Globe or Boulderborn Dragon, reveal it, put it into your hand, then shuffle.",
+  "power": "0",
+  "toughness": "3",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/5/75ec7a31-1893-493c-926b-dc3a8a770e72.jpg?1783907396",
+   "normal": "https://cards.scryfall.io/normal/front/7/5/75ec7a31-1893-493c-926b-dc3a8a770e72.jpg?1783907396",
+   "large": "https://cards.scryfall.io/large/front/7/5/75ec7a31-1893-493c-926b-dc3a8a770e72.jpg?1783907396",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/5/75ec7a31-1893-493c-926b-dc3a8a770e72.jpg?1783907396"
+  }
+ },
+ {
+  "name": "Essence Anchor",
+  "scryfallId": "e91c4509-918e-44ba-aa13-1991199fee9f",
+  "oracleId": "e28a3f0e-40bd-4293-b5eb-ec9d185c1e1c",
+  "set": "tdm",
+  "collectorNumber": "44",
+  "rarity": "uncommon",
+  "manaCost": "{2}{U}",
+  "typeLine": "Artifact",
+  "oracleText": "At the beginning of your upkeep, surveil 1. (Look at the top card of your library. You may put it into your graveyard.)\n{T}: Create a 2/2 black Zombie Druid creature token. Activate only during your turn and only if a card left your graveyard this turn.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Surveil"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/9/e91c4509-918e-44ba-aa13-1991199fee9f.jpg?1783907397",
+   "normal": "https://cards.scryfall.io/normal/front/e/9/e91c4509-918e-44ba-aa13-1991199fee9f.jpg?1783907397",
+   "large": "https://cards.scryfall.io/large/front/e/9/e91c4509-918e-44ba-aa13-1991199fee9f.jpg?1783907397",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/9/e91c4509-918e-44ba-aa13-1991199fee9f.jpg?1783907397"
+  }
+ },
+ {
+  "name": "Focus the Mind",
+  "scryfallId": "abb0ba34-6904-4c17-a04d-ea4f12c7cf21",
+  "oracleId": "695a84b5-96b0-4e48-b615-15624efab3b7",
+  "set": "tdm",
+  "collectorNumber": "45",
+  "rarity": "common",
+  "manaCost": "{4}{U}",
+  "typeLine": "Instant",
+  "oracleText": "This spell costs {2} less to cast if you've cast another spell this turn.\nDraw three cards, then discard a card.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/b/abb0ba34-6904-4c17-a04d-ea4f12c7cf21.jpg?1783907395",
+   "normal": "https://cards.scryfall.io/normal/front/a/b/abb0ba34-6904-4c17-a04d-ea4f12c7cf21.jpg?1783907395",
+   "large": "https://cards.scryfall.io/large/front/a/b/abb0ba34-6904-4c17-a04d-ea4f12c7cf21.jpg?1783907395",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/b/abb0ba34-6904-4c17-a04d-ea4f12c7cf21.jpg?1783907395"
+  }
+ },
+ {
+  "name": "Fresh Start",
+  "scryfallId": "96f7af08-ac05-45d0-979f-282943130c61",
+  "oracleId": "77f1734d-ea0b-4344-8a9e-9d1a34eb6164",
+  "set": "tdm",
+  "collectorNumber": "46",
+  "rarity": "uncommon",
+  "manaCost": "{1}{U}",
+  "typeLine": "Enchantment — Aura",
+  "oracleText": "Flash\nEnchant creature\nEnchanted creature gets -5/-0 and loses all abilities.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Enchant",
+   "Flash"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/6/96f7af08-ac05-45d0-979f-282943130c61.jpg?1783907395",
+   "normal": "https://cards.scryfall.io/normal/front/9/6/96f7af08-ac05-45d0-979f-282943130c61.jpg?1783907395",
+   "large": "https://cards.scryfall.io/large/front/9/6/96f7af08-ac05-45d0-979f-282943130c61.jpg?1783907395",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/6/96f7af08-ac05-45d0-979f-282943130c61.jpg?1783907395"
+  }
+ },
+ {
+  "name": "Highspire Bell-Ringer",
+  "scryfallId": "e75dccf7-2894-4c4a-b516-3eee73acddd3",
+  "oracleId": "6d2d250b-cdce-4075-8724-b52ad31664fb",
+  "set": "tdm",
+  "collectorNumber": "47",
+  "rarity": "common",
+  "manaCost": "{2}{U}",
+  "typeLine": "Creature — Djinn Monk",
+  "oracleText": "Flying\nThe second spell you cast each turn costs {1} less to cast.",
+  "power": "1",
+  "toughness": "4",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/7/e75dccf7-2894-4c4a-b516-3eee73acddd3.jpg?1783907394",
+   "normal": "https://cards.scryfall.io/normal/front/e/7/e75dccf7-2894-4c4a-b516-3eee73acddd3.jpg?1783907394",
+   "large": "https://cards.scryfall.io/large/front/e/7/e75dccf7-2894-4c4a-b516-3eee73acddd3.jpg?1783907394",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/7/e75dccf7-2894-4c4a-b516-3eee73acddd3.jpg?1783907394"
+  }
+ },
+ {
+  "name": "Humbling Elder",
+  "scryfallId": "3a84c3f8-0030-4653-880e-b2d19272f5fa",
+  "oracleId": "013bcab8-e527-4700-82c9-4cb9cb8a4807",
+  "set": "tdm",
+  "collectorNumber": "48",
+  "rarity": "common",
+  "manaCost": "{U}",
+  "typeLine": "Creature — Human Monk",
+  "oracleText": "Flash\nWhen this creature enters, target creature an opponent controls gets -2/-0 until end of turn.",
+  "power": "1",
+  "toughness": "2",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Flash"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/a/3a84c3f8-0030-4653-880e-b2d19272f5fa.jpg?1783907393",
+   "normal": "https://cards.scryfall.io/normal/front/3/a/3a84c3f8-0030-4653-880e-b2d19272f5fa.jpg?1783907393",
+   "large": "https://cards.scryfall.io/large/front/3/a/3a84c3f8-0030-4653-880e-b2d19272f5fa.jpg?1783907393",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/a/3a84c3f8-0030-4653-880e-b2d19272f5fa.jpg?1783907393"
+  }
+ },
+ {
+  "name": "Iceridge Serpent",
+  "scryfallId": "d13f117b-b8e4-48db-8ce9-5da9c7ce23a5",
+  "oracleId": "53f07529-c212-43e4-b5b6-086efeadda39",
+  "set": "tdm",
+  "collectorNumber": "49",
+  "rarity": "common",
+  "manaCost": "{4}{U}",
+  "typeLine": "Creature — Serpent",
+  "oracleText": "When this creature enters, return target creature an opponent controls to its owner's hand.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/1/d13f117b-b8e4-48db-8ce9-5da9c7ce23a5.jpg?1783907394",
+   "normal": "https://cards.scryfall.io/normal/front/d/1/d13f117b-b8e4-48db-8ce9-5da9c7ce23a5.jpg?1783907394",
+   "large": "https://cards.scryfall.io/large/front/d/1/d13f117b-b8e4-48db-8ce9-5da9c7ce23a5.jpg?1783907394",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/1/d13f117b-b8e4-48db-8ce9-5da9c7ce23a5.jpg?1783907394"
+  }
+ },
+ {
+  "name": "Kishla Trawlers",
+  "scryfallId": "190fbc55-e8e9-4077-9532-1de7406baabf",
+  "oracleId": "09277185-fccd-4747-aa79-f569c581022a",
+  "set": "tdm",
+  "collectorNumber": "50",
+  "rarity": "uncommon",
+  "manaCost": "{2}{U}",
+  "typeLine": "Creature — Human Citizen",
+  "oracleText": "When this creature enters, you may exile a creature card from your graveyard. When you do, return target instant or sorcery card from your graveyard to your hand.",
+  "power": "3",
+  "toughness": "2",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/9/190fbc55-e8e9-4077-9532-1de7406baabf.jpg?1783907393",
+   "normal": "https://cards.scryfall.io/normal/front/1/9/190fbc55-e8e9-4077-9532-1de7406baabf.jpg?1783907393",
+   "large": "https://cards.scryfall.io/large/front/1/9/190fbc55-e8e9-4077-9532-1de7406baabf.jpg?1783907393",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/9/190fbc55-e8e9-4077-9532-1de7406baabf.jpg?1783907393"
+  }
+ },
+ {
+  "name": "Marang River Regent",
+  "scryfallId": "f890bdc7-32e6-4492-bac7-7cabf54a8bfd",
+  "oracleId": "099b8d2c-b482-48dd-b6bc-dedf546d66c5",
+  "set": "tdm",
+  "collectorNumber": "51",
+  "rarity": "rare",
+  "manaCost": "{4}{U}{U}",
+  "typeLine": "Creature — Dragon",
+  "oracleText": "Flying\nWhen this creature enters, return up to two other target nonland permanents to their owners' hands.",
+  "power": "6",
+  "toughness": "7",
+  "colors": [],
+  "keywords": [
+   "Flying"
+  ],
+  "back": "Coil and Catch",
+  "adventure": true,
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/8/f890bdc7-32e6-4492-bac7-7cabf54a8bfd.jpg?1783907393",
+   "normal": "https://cards.scryfall.io/normal/front/f/8/f890bdc7-32e6-4492-bac7-7cabf54a8bfd.jpg?1783907393",
+   "large": "https://cards.scryfall.io/large/front/f/8/f890bdc7-32e6-4492-bac7-7cabf54a8bfd.jpg?1783907393",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/8/f890bdc7-32e6-4492-bac7-7cabf54a8bfd.jpg?1783907393"
+  }
+ },
+ {
+  "name": "Coil and Catch",
+  "scryfallId": "f890bdc7-32e6-4492-bac7-7cabf54a8bfd",
+  "oracleId": "099b8d2c-b482-48dd-b6bc-dedf546d66c5",
+  "set": "tdm",
+  "collectorNumber": "51",
+  "rarity": "rare",
+  "manaCost": "{3}{U}",
+  "typeLine": "Instant — Omen",
+  "oracleText": "Draw three cards, then discard a card. (Then shuffle this card into its owner's library.)",
+  "colors": [],
+  "keywords": [],
+  "front": "Marang River Regent",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/8/f890bdc7-32e6-4492-bac7-7cabf54a8bfd.jpg?1783907393",
+   "normal": "https://cards.scryfall.io/normal/front/f/8/f890bdc7-32e6-4492-bac7-7cabf54a8bfd.jpg?1783907393",
+   "large": "https://cards.scryfall.io/large/front/f/8/f890bdc7-32e6-4492-bac7-7cabf54a8bfd.jpg?1783907393",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/8/f890bdc7-32e6-4492-bac7-7cabf54a8bfd.jpg?1783907393"
+  }
+ },
+ {
+  "name": "Naga Fleshcrafter",
+  "scryfallId": "5df17423-9fdd-4432-8660-1d267c685595",
+  "oracleId": "a4f8012e-9880-45b0-9eba-d74c207d3242",
+  "set": "tdm",
+  "collectorNumber": "52",
+  "rarity": "rare",
+  "manaCost": "{3}{U}",
+  "typeLine": "Creature — Snake Shapeshifter",
+  "oracleText": "You may have this creature enter as a copy of any creature on the battlefield.\nRenew — {2}{U}, Exile this card from your graveyard: Put a +1/+1 counter on target nonlegendary creature you control. Each other creature you control becomes a copy of that creature until end of turn. Activate only as a sorcery.",
+  "power": "0",
+  "toughness": "0",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Renew"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/d/5df17423-9fdd-4432-8660-1d267c685595.jpg?1783907393",
+   "normal": "https://cards.scryfall.io/normal/front/5/d/5df17423-9fdd-4432-8660-1d267c685595.jpg?1783907393",
+   "large": "https://cards.scryfall.io/large/front/5/d/5df17423-9fdd-4432-8660-1d267c685595.jpg?1783907393",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/d/5df17423-9fdd-4432-8660-1d267c685595.jpg?1783907393"
+  }
+ },
+ {
+  "name": "Ringing Strike Mastery",
+  "scryfallId": "ff4fc7ec-05f5-479a-8fbb-31e12a67b57e",
+  "oracleId": "334ffdc4-9fe6-4a7f-bf5d-bcd88adab715",
+  "set": "tdm",
+  "collectorNumber": "53",
+  "rarity": "common",
+  "manaCost": "{U}",
+  "typeLine": "Enchantment — Aura",
+  "oracleText": "Enchant creature\nWhen this Aura enters, tap enchanted creature.\nEnchanted creature doesn't untap during its controller's untap step.\nEnchanted creature has \"{5}: Untap this creature.\"",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Enchant"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/f/ff4fc7ec-05f5-479a-8fbb-31e12a67b57e.jpg?1783907391",
+   "normal": "https://cards.scryfall.io/normal/front/f/f/ff4fc7ec-05f5-479a-8fbb-31e12a67b57e.jpg?1783907391",
+   "large": "https://cards.scryfall.io/large/front/f/f/ff4fc7ec-05f5-479a-8fbb-31e12a67b57e.jpg?1783907391",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/f/ff4fc7ec-05f5-479a-8fbb-31e12a67b57e.jpg?1783907391"
+  }
+ },
+ {
+  "name": "Riverwalk Technique",
+  "scryfallId": "043c25d5-13ee-4cab-98d5-fb89db9cf6e3",
+  "oracleId": "a123aab8-3f3a-4187-abcb-21a99dcf13bb",
+  "set": "tdm",
+  "collectorNumber": "54",
+  "rarity": "common",
+  "manaCost": "{3}{U}",
+  "typeLine": "Instant",
+  "oracleText": "Choose one —\n• The owner of target nonland permanent puts it on their choice of the top or bottom of their library.\n• Counter target noncreature spell.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/4/043c25d5-13ee-4cab-98d5-fb89db9cf6e3.jpg?1783907390",
+   "normal": "https://cards.scryfall.io/normal/front/0/4/043c25d5-13ee-4cab-98d5-fb89db9cf6e3.jpg?1783907390",
+   "large": "https://cards.scryfall.io/large/front/0/4/043c25d5-13ee-4cab-98d5-fb89db9cf6e3.jpg?1783907390",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/4/043c25d5-13ee-4cab-98d5-fb89db9cf6e3.jpg?1783907390"
+  }
+ },
+ {
+  "name": "Roiling Dragonstorm",
+  "scryfallId": "455f4c96-684b-4b14-bd21-6799da2e1fa7",
+  "oracleId": "6badc583-fabb-4d63-b70c-e7380acafc23",
+  "set": "tdm",
+  "collectorNumber": "55",
+  "rarity": "uncommon",
+  "manaCost": "{1}{U}",
+  "typeLine": "Enchantment",
+  "oracleText": "When this enchantment enters, draw two cards, then discard a card.\nWhen a Dragon you control enters, return this enchantment to its owner's hand.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/5/455f4c96-684b-4b14-bd21-6799da2e1fa7.jpg?1783907391",
+   "normal": "https://cards.scryfall.io/normal/front/4/5/455f4c96-684b-4b14-bd21-6799da2e1fa7.jpg?1783907391",
+   "large": "https://cards.scryfall.io/large/front/4/5/455f4c96-684b-4b14-bd21-6799da2e1fa7.jpg?1783907391",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/5/455f4c96-684b-4b14-bd21-6799da2e1fa7.jpg?1783907391"
+  }
+ },
+ {
+  "name": "Sibsig Appraiser",
+  "scryfallId": "670c5b96-bac6-449b-a2bd-cb43750d3911",
+  "oracleId": "5b51958d-533a-45e4-aac1-3c157670978b",
+  "set": "tdm",
+  "collectorNumber": "56",
+  "rarity": "common",
+  "manaCost": "{2}{U}",
+  "typeLine": "Creature — Zombie Advisor",
+  "oracleText": "When this creature enters, look at the top two cards of your library. Put one of them into your hand and the other into your graveyard.",
+  "power": "2",
+  "toughness": "1",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/7/670c5b96-bac6-449b-a2bd-cb43750d3911.jpg?1783907392",
+   "normal": "https://cards.scryfall.io/normal/front/6/7/670c5b96-bac6-449b-a2bd-cb43750d3911.jpg?1783907392",
+   "large": "https://cards.scryfall.io/large/front/6/7/670c5b96-bac6-449b-a2bd-cb43750d3911.jpg?1783907392",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/7/670c5b96-bac6-449b-a2bd-cb43750d3911.jpg?1783907392"
+  }
+ },
+ {
+  "name": "Snowmelt Stag",
+  "scryfallId": "a6b3b131-704a-4586-84f8-db465cd4a277",
+  "oracleId": "b25ccb64-e114-4d54-a07a-c8cd4560b511",
+  "set": "tdm",
+  "collectorNumber": "57",
+  "rarity": "common",
+  "manaCost": "{3}{U}",
+  "typeLine": "Creature — Elemental Elk",
+  "oracleText": "Vigilance\nDuring your turn, this creature has base power and toughness 5/2.\n{5}{U}{U}: This creature can't be blocked this turn.",
+  "power": "2",
+  "toughness": "5",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Vigilance"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/6/a6b3b131-704a-4586-84f8-db465cd4a277.jpg?1783907390",
+   "normal": "https://cards.scryfall.io/normal/front/a/6/a6b3b131-704a-4586-84f8-db465cd4a277.jpg?1783907390",
+   "large": "https://cards.scryfall.io/large/front/a/6/a6b3b131-704a-4586-84f8-db465cd4a277.jpg?1783907390",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/6/a6b3b131-704a-4586-84f8-db465cd4a277.jpg?1783907390"
+  }
+ },
+ {
+  "name": "Spectral Denial",
+  "scryfallId": "ee4e732a-1ffd-463d-92c2-26187659cfc3",
+  "oracleId": "f8536726-993b-4100-918c-e3c7177d4c65",
+  "set": "tdm",
+  "collectorNumber": "58",
+  "rarity": "uncommon",
+  "manaCost": "{X}{U}",
+  "typeLine": "Instant",
+  "oracleText": "This spell costs {1} less to cast for each creature you control with power 4 or greater.\nCounter target spell unless its controller pays {X}.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/e/ee4e732a-1ffd-463d-92c2-26187659cfc3.jpg?1783907388",
+   "normal": "https://cards.scryfall.io/normal/front/e/e/ee4e732a-1ffd-463d-92c2-26187659cfc3.jpg?1783907388",
+   "large": "https://cards.scryfall.io/large/front/e/e/ee4e732a-1ffd-463d-92c2-26187659cfc3.jpg?1783907388",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/e/ee4e732a-1ffd-463d-92c2-26187659cfc3.jpg?1783907388"
+  }
+ },
+ {
+  "name": "Stillness in Motion",
+  "scryfallId": "a6289251-17e4-4987-96b9-2fb1a8f90e2a",
+  "oracleId": "d73913ea-44d0-408f-9f8b-8e91843f2826",
+  "set": "tdm",
+  "collectorNumber": "59",
+  "rarity": "rare",
+  "manaCost": "{1}{U}",
+  "typeLine": "Enchantment",
+  "oracleText": "At the beginning of your upkeep, mill three cards. Then if your library has no cards in it, exile this enchantment and put five cards from your graveyard on top of your library in any order.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Mill"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/6/a6289251-17e4-4987-96b9-2fb1a8f90e2a.jpg?1783907388",
+   "normal": "https://cards.scryfall.io/normal/front/a/6/a6289251-17e4-4987-96b9-2fb1a8f90e2a.jpg?1783907388",
+   "large": "https://cards.scryfall.io/large/front/a/6/a6289251-17e4-4987-96b9-2fb1a8f90e2a.jpg?1783907388",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/6/a6289251-17e4-4987-96b9-2fb1a8f90e2a.jpg?1783907388"
+  }
+ },
+ {
+  "name": "Taigam, Master Opportunist",
+  "scryfallId": "8693d631-05f6-414d-9e49-6385746e8960",
+  "oracleId": "49f2cbc3-bd03-48e6-b1c4-d7f315b8579d",
+  "set": "tdm",
+  "collectorNumber": "60",
+  "rarity": "mythic",
+  "manaCost": "{1}{U}",
+  "typeLine": "Legendary Creature — Human Monk",
+  "oracleText": "Flurry — Whenever you cast your second spell each turn, copy it, then exile the spell you cast with four time counters on it. If it doesn't have suspend, it gains suspend. (At the beginning of its owner's upkeep, they remove a time counter. When the last is removed, they may play it without paying its mana cost. If it's a creature, it has haste.)",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Flurry"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/6/8693d631-05f6-414d-9e49-6385746e8960.jpg?1783907388",
+   "normal": "https://cards.scryfall.io/normal/front/8/6/8693d631-05f6-414d-9e49-6385746e8960.jpg?1783907388",
+   "large": "https://cards.scryfall.io/large/front/8/6/8693d631-05f6-414d-9e49-6385746e8960.jpg?1783907388",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/6/8693d631-05f6-414d-9e49-6385746e8960.jpg?1783907388"
+  }
+ },
+ {
+  "name": "Temur Devotee",
+  "scryfallId": "a2ef698e-5466-43bd-985d-020f2e5d8205",
+  "oracleId": "e444f072-ce24-4fd1-99eb-d20d12bc119a",
+  "set": "tdm",
+  "collectorNumber": "61",
+  "rarity": "common",
+  "manaCost": "{1}{U}",
+  "typeLine": "Creature — Human Druid",
+  "oracleText": "Defender\n{1}: Add {G}, {U}, or {R}. Activate only once each turn.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Defender"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/2/a2ef698e-5466-43bd-985d-020f2e5d8205.jpg?1783907387",
+   "normal": "https://cards.scryfall.io/normal/front/a/2/a2ef698e-5466-43bd-985d-020f2e5d8205.jpg?1783907387",
+   "large": "https://cards.scryfall.io/large/front/a/2/a2ef698e-5466-43bd-985d-020f2e5d8205.jpg?1783907387",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/2/a2ef698e-5466-43bd-985d-020f2e5d8205.jpg?1783907387"
+  }
+ },
+ {
+  "name": "Unending Whisper",
+  "scryfallId": "fc48180a-ccac-469f-938d-c050821d0160",
+  "oracleId": "c5da5c31-0cf1-4393-8701-eda7880ecebc",
+  "set": "tdm",
+  "collectorNumber": "62",
+  "rarity": "common",
+  "manaCost": "{U}",
+  "typeLine": "Sorcery",
+  "oracleText": "Draw a card.\nHarmonize {5}{U} (You may cast this card from your graveyard for its harmonize cost. You may tap a creature you control to reduce that cost by {X}, where X is its power. Then exile this spell.)",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Harmonize"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/c/fc48180a-ccac-469f-938d-c050821d0160.jpg?1783907385",
+   "normal": "https://cards.scryfall.io/normal/front/f/c/fc48180a-ccac-469f-938d-c050821d0160.jpg?1783907385",
+   "large": "https://cards.scryfall.io/large/front/f/c/fc48180a-ccac-469f-938d-c050821d0160.jpg?1783907385",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/c/fc48180a-ccac-469f-938d-c050821d0160.jpg?1783907385"
+  }
+ },
+ {
+  "name": "Ureni's Rebuff",
+  "scryfallId": "722716df-9cea-40a7-924b-c28497e227e6",
+  "oracleId": "c0b7e989-8194-484c-93aa-a44df0764a77",
+  "set": "tdm",
+  "collectorNumber": "63",
+  "rarity": "uncommon",
+  "manaCost": "{1}{U}",
+  "typeLine": "Sorcery",
+  "oracleText": "Return target creature to its owner's hand.\nHarmonize {5}{U} (You may cast this card from your graveyard for its harmonize cost. You may tap a creature you control to reduce that cost by {X}, where X is its power. Then exile this spell.)",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Harmonize"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/2/722716df-9cea-40a7-924b-c28497e227e6.jpg?1783907386",
+   "normal": "https://cards.scryfall.io/normal/front/7/2/722716df-9cea-40a7-924b-c28497e227e6.jpg?1783907386",
+   "large": "https://cards.scryfall.io/large/front/7/2/722716df-9cea-40a7-924b-c28497e227e6.jpg?1783907386",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/2/722716df-9cea-40a7-924b-c28497e227e6.jpg?1783907386"
+  }
+ },
+ {
+  "name": "Veteran Ice Climber",
+  "scryfallId": "bcccfd7b-2846-4552-a89a-2b868bc9ab20",
+  "oracleId": "ccaadf8d-22c0-4139-b734-03ac2fcb4494",
+  "set": "tdm",
+  "collectorNumber": "64",
+  "rarity": "uncommon",
+  "manaCost": "{1}{U}",
+  "typeLine": "Creature — Human Scout",
+  "oracleText": "Vigilance\nThis creature can't be blocked.\nWhenever this creature attacks, up to one target player mills cards equal to this creature's power. (They put that many cards from the top of their library into their graveyard.)",
+  "power": "1",
+  "toughness": "3",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Vigilance",
+   "Mill"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/c/bcccfd7b-2846-4552-a89a-2b868bc9ab20.jpg?1783907385",
+   "normal": "https://cards.scryfall.io/normal/front/b/c/bcccfd7b-2846-4552-a89a-2b868bc9ab20.jpg?1783907385",
+   "large": "https://cards.scryfall.io/large/front/b/c/bcccfd7b-2846-4552-a89a-2b868bc9ab20.jpg?1783907385",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/c/bcccfd7b-2846-4552-a89a-2b868bc9ab20.jpg?1783907385"
+  }
+ },
+ {
+  "name": "Whirlwing Stormbrood",
+  "scryfallId": "56a25eb1-bdb8-4f86-8d9a-3055ad1b2a13",
+  "oracleId": "4fbfc814-df10-4d61-ada9-c96cc8ee8d8c",
+  "set": "tdm",
+  "collectorNumber": "234",
+  "rarity": "uncommon",
+  "manaCost": "{4}{U}",
+  "typeLine": "Creature — Dragon",
+  "oracleText": "Flash\nFlying\nYou may cast sorcery spells and Dragon spells as though they had flash.",
+  "power": "4",
+  "toughness": "3",
+  "colors": [],
+  "keywords": [
+   "Flying",
+   "Flash"
+  ],
+  "back": "Dynamic Soar",
+  "adventure": true,
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/6/56a25eb1-bdb8-4f86-8d9a-3055ad1b2a13.jpg?1783907291",
+   "normal": "https://cards.scryfall.io/normal/front/5/6/56a25eb1-bdb8-4f86-8d9a-3055ad1b2a13.jpg?1783907291",
+   "large": "https://cards.scryfall.io/large/front/5/6/56a25eb1-bdb8-4f86-8d9a-3055ad1b2a13.jpg?1783907291",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/6/56a25eb1-bdb8-4f86-8d9a-3055ad1b2a13.jpg?1783907291"
+  }
+ },
+ {
+  "name": "Dynamic Soar",
+  "scryfallId": "56a25eb1-bdb8-4f86-8d9a-3055ad1b2a13",
+  "oracleId": "4fbfc814-df10-4d61-ada9-c96cc8ee8d8c",
+  "set": "tdm",
+  "collectorNumber": "234",
+  "rarity": "uncommon",
+  "manaCost": "{2}{G}",
+  "typeLine": "Sorcery — Omen",
+  "oracleText": "Put three +1/+1 counters on target creature you control. (Then shuffle this card into its owner's library.)",
+  "colors": [],
+  "keywords": [],
+  "front": "Whirlwing Stormbrood",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/6/56a25eb1-bdb8-4f86-8d9a-3055ad1b2a13.jpg?1783907291",
+   "normal": "https://cards.scryfall.io/normal/front/5/6/56a25eb1-bdb8-4f86-8d9a-3055ad1b2a13.jpg?1783907291",
+   "large": "https://cards.scryfall.io/large/front/5/6/56a25eb1-bdb8-4f86-8d9a-3055ad1b2a13.jpg?1783907291",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/6/56a25eb1-bdb8-4f86-8d9a-3055ad1b2a13.jpg?1783907291"
+  }
+ },
+ {
+  "name": "Wingblade Disciple",
+  "scryfallId": "71de7dca-0231-4407-86a0-c7fc95f5aaa0",
+  "oracleId": "c566317e-cd82-46c1-b506-f41256d815f6",
+  "set": "tdm",
+  "collectorNumber": "65",
+  "rarity": "uncommon",
+  "manaCost": "{2}{U}",
+  "typeLine": "Creature — Human Monk",
+  "oracleText": "Flying\nFlurry — Whenever you cast your second spell each turn, create a 1/1 white Bird creature token with flying.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Flying",
+   "Flurry"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/1/71de7dca-0231-4407-86a0-c7fc95f5aaa0.jpg?1783907385",
+   "normal": "https://cards.scryfall.io/normal/front/7/1/71de7dca-0231-4407-86a0-c7fc95f5aaa0.jpg?1783907385",
+   "large": "https://cards.scryfall.io/large/front/7/1/71de7dca-0231-4407-86a0-c7fc95f5aaa0.jpg?1783907385",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/1/71de7dca-0231-4407-86a0-c7fc95f5aaa0.jpg?1783907385"
+  }
+ },
+ {
+  "name": "Wingspan Stride",
+  "scryfallId": "339a0e24-c332-4558-bb60-f5504ddde88c",
+  "oracleId": "e75cee5d-ab02-4227-b36e-61c5d2f564a8",
+  "set": "tdm",
+  "collectorNumber": "66",
+  "rarity": "common",
+  "manaCost": "{U}",
+  "typeLine": "Enchantment — Aura",
+  "oracleText": "Enchant creature\nEnchanted creature gets +1/+1 and has flying.\n{2}{U}: Return this Aura to its owner's hand.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Enchant"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/3/339a0e24-c332-4558-bb60-f5504ddde88c.jpg?1783907384",
+   "normal": "https://cards.scryfall.io/normal/front/3/3/339a0e24-c332-4558-bb60-f5504ddde88c.jpg?1783907384",
+   "large": "https://cards.scryfall.io/large/front/3/3/339a0e24-c332-4558-bb60-f5504ddde88c.jpg?1783907384",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/3/339a0e24-c332-4558-bb60-f5504ddde88c.jpg?1783907384"
+  }
+ },
+ {
+  "name": "Winternight Stories",
+  "scryfallId": "64d9367c-f50c-4568-aa63-6760c44ecaeb",
+  "oracleId": "d64687e4-ec37-4db2-9e60-4626c7a3b011",
+  "set": "tdm",
+  "collectorNumber": "67",
+  "rarity": "rare",
+  "manaCost": "{2}{U}",
+  "typeLine": "Sorcery",
+  "oracleText": "Draw three cards. Then discard two cards unless you discard a creature card.\nHarmonize {4}{U} (You may cast this card from your graveyard for its harmonize cost. You may tap a creature you control to reduce that cost by {X}, where X is its power. Then exile this spell.)",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Harmonize"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/4/64d9367c-f50c-4568-aa63-6760c44ecaeb.jpg?1783907385",
+   "normal": "https://cards.scryfall.io/normal/front/6/4/64d9367c-f50c-4568-aa63-6760c44ecaeb.jpg?1783907385",
+   "large": "https://cards.scryfall.io/large/front/6/4/64d9367c-f50c-4568-aa63-6760c44ecaeb.jpg?1783907385",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/4/64d9367c-f50c-4568-aa63-6760c44ecaeb.jpg?1783907385"
+  }
  }
 ]
