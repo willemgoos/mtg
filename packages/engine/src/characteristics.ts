@@ -98,6 +98,10 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
       const st = a.effect;
       if (st.kind === 'cantBlock') cantBlock = true;
       else if (st.kind === 'cantBeBlocked') cantBeBlocked = true;
+      // The Hobbit (20b multicolour): Chief Warg's Company, "can't attack unless you control two or more other Wolves".
+      else if (st.kind === 'cantAttackUnless') {
+        if (!checkCondition(ctx, st.condition, o.controller, o)) cantAttack = true;
+      }
       // Bast: "can't attack or block unless you control three or more creatures".
       else if (
         st.kind === 'while' &&
@@ -144,6 +148,8 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
     const affecting = affectingDefs(ctx.db);
     for (const srcId of ctx.s.battlefield) {
       const src = obj(ctx, srcId);
+      // The Hobbit (20b multicolour): a hone counter on an Equipment grants +1/+0 to the equipped creature (Dwalin, Weaponmaster).
+      if (src.attachedTo === id && src.counters?.hone) power += src.counters.hone;
       if (!affecting.has(src.defId)) continue;
       for (const a of def(ctx, srcId).abilities) {
         if (a.kind !== 'static') continue;
@@ -299,7 +305,11 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
         : o.copyAsCreature && !d.types.includes('Creature')
           ? [...d.types, 'Creature']
           : o.notCreature
-            ? d.types.filter((x) => x !== 'Creature')
+            ? [
+                ...d.types.filter((x) => x !== 'Creature'),
+                // The Hobbit (20b multicolour): Tom, Bert, and William come back as an artifact.
+                ...(o.notCreatureAs && !d.types.includes(o.notCreatureAs) ? [o.notCreatureAs] : []),
+              ]
             : d.types),
     subtypes,
     cantBlock,
@@ -699,6 +709,7 @@ export function hasKeyword(ctx: Ctx, id: ObjectId, k: Keyword): boolean {
 export function isType(ctx: Ctx, id: ObjectId, t: CardType): boolean {
   // Strixhaven Brawl (15a): Enduring Courage comes back as an enchantment that isn't a creature.
   if (t === 'Creature' && ctx.s.objects[id]?.notCreature) return false;
+  if (t === ctx.s.objects[id]?.notCreatureAs && ctx.s.objects[id]?.notCreature) return true; // The Hobbit (20b multicolour)
   return def(ctx, id).types.includes(t);
 }
 

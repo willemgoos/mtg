@@ -636,6 +636,10 @@ export function castSpell(
     player,
     payment.filter((id) => !convokers.includes(id)),
   );
+  // The Hobbit (20b multicolour): Smaug, Wicked Worm, "mana from a Treasure was spent to cast it" (read before the Treasure goes).
+  const fromTreasure = payment.some(
+    (id) => !convokers.includes(id) && !!ctx.s.objects[id] && def(ctx, id).subtypes.includes('Treasure'),
+  );
   moveObject(ctx, card, 'stack', { controller: player });
   // Reality Fracture (17c): beholding a card from your hand reveals it (a permanent you control is only chosen).
   // Lorwyn Eclipsed (18a): "behold … and exile it" exiles the card instead (nothing is revealed).
@@ -736,6 +740,7 @@ export function castSpell(
   o.manaSpent = payment.filter((id) => !convokers.includes(id)).length;
   o.manaColors = manaColors;
   o.manaPaid = manaPaid;
+  if (fromTreasure) o.manaFromTreasure = true; // The Hobbit (20b multicolour)
   if (teamwork) payTeamwork(ctx, teamwork);
   if (convokers.length) o.convokedBy = payment.filter((id) => convokers.includes(id));
   if (d.types.includes('Creature')) scryForAncestry(ctx, player, d, payment);
@@ -2699,6 +2704,13 @@ export function answerDiscard(ctx: Ctx, card: ObjectId): void {
   if (d.kind !== 'discard') throw new Error('Not discarding');
   const nonland = !def(ctx, card).types.includes('Land');
   moveObject(ctx, card, d.exile ? 'exile' : 'graveyard');
+  // The Hobbit (20b multicolour): Silvan Reveler, "if you discard a land card this way, put it from your graveyard onto the
+  // battlefield tapped".
+  if (d.landToBattlefieldTapped && !nonland && ctx.s.objects[card]?.zone === 'graveyard') {
+    moveObject(ctx, card, 'battlefield', { controller: d.player });
+    const landed = ctx.s.objects[card];
+    if (landed?.zone === 'battlefield') landed.tapped = true;
+  }
   // Strixhaven (13c): Flamethrower Sonata.
   const dealt = d.damageTo !== undefined ? d.resume.targets[d.damageTo] : undefined;
   if (

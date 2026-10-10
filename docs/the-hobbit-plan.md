@@ -187,3 +187,11 @@ Amount `{ powerOf: 'attached' }` (Glamdring, `characteristics.ts`); cost flag `d
 `legal.ts`); `searchLibrary.rememberFound` makes the card found `'chosen'` for the effects after it (Elven Passage, `stack.ts`/`effects.ts`);
 custom effects `hobBlackArrow` and `hobGleamOfDeath` in `engine/src/hob-colorless-effects.ts`. Hone counters are `namedCounters 'hone'`
 read by an `attached` static (`namedCountersOnSource`). Giant's Boulder's {1},{T} mana is a `manaAbility` (used by hand: activate it, then cast).
+## Phase 20b: multicolour (done)
+
+All 26 cards (`cards/src/hob/multicolour.ts`; tests `cards/test/hob-multicolour*.test.ts`, `ai/test/hob-multicolour.test.ts`). Engine: one-offs in
+`engine/src/hob-multicolour-effects.ts` (custom effects, `HOB_MULTICOLOUR_EXPANDERS` = custom effects that turn into other effects when they
+come up, used for Silvan Rally's and Bolg's prompts), hooks marked `// The Hobbit (20b multicolour)`: statics `cantAttackUnless`,
+`everyExtraDrawBecomes` (Bard, King of Dale), `graveyardElfAbilities` (Thranduil, the Elvenking), `extraLandDrop.condition`; condition
+`treasureManaSpent` (Smaug); `counterPutOnYourCreature` got `filter`/`byYou`; `discard.landToBattlefieldTapped` (Silvan Reveler); landfall
+triggers from the graveyard; `notCreatureAs` (Tom, Bert, and William come back as an artifact); hone counters grant +1/+0 (Dwalin).

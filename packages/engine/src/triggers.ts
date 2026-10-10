@@ -57,6 +57,8 @@ export function checkCondition(
   if (!c) return true;
   // The Hobbit (20a): Storied, "as long as you have an enduring story".
   if (c.kind === 'enduringStory') return hasEnduringStory(ctx, controller);
+  // The Hobbit (20b multicolour): Smaug, Wicked Worm, "if mana from a Treasure was spent to cast it" (the spell is the subject).
+  if (c.kind === 'treasureManaSpent') return !!(subject ?? self)?.manaFromTreasure;
   // Secrets of Strixhaven (14b)
   if (c.kind === 'cardsLeftGraveyardThisTurn')
     return (ctx.s.turn.leftGraveyard?.[controller] ?? 0) > 0;
@@ -853,6 +855,11 @@ function detect(ctx: Ctx, ev: GameEvent): void {
         for (const id of s.players[moved.controller].graveyard) {
           const card = s.objects[id]!;
           def(ctx, id).abilities.forEach((a, i) => {
+            // The Hobbit (20b multicolour): Silvan Reveler, "Landfall — ... return this card from your graveyard to your hand".
+            if (a.kind === 'triggered' && a.fromGraveyard && a.trigger.on === 'landfall') {
+              if (!suppressed && isLand) queue(ctx, card, i, moved.controller, moved);
+              return;
+            }
             if (a.kind !== 'triggered' || !a.fromGraveyard || a.trigger.on !== 'otherCreatureEtb')
               return;
             if (!suppressed && isCreature && matchesFilter(ctx, moved.id, a.trigger.filter, id))
@@ -2054,7 +2061,12 @@ function detect(ctx: Ctx, ev: GameEvent): void {
       if (!target || target.zone !== 'battlefield') return;
       forEachBattlefieldTrigger(
         ctx,
-        (o, a) => a.trigger.on === 'counterPutOnYourCreature' && o.controller === target.controller,
+        (o, a) =>
+          a.trigger.on === 'counterPutOnYourCreature' &&
+          o.controller === target.controller &&
+          // The Hobbit (20b multicolour): The Great Goblin.
+          (!a.trigger.byYou || (ev.by ?? ev.player) === o.controller) &&
+          matchesFilter(ctx, target.id, a.trigger.filter, o.id),
         target,
         ev.count,
       );
