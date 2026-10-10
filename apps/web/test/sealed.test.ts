@@ -2,6 +2,7 @@ import { cardDb, findDeck, SCRYFALL, slug } from '@mtg/cards';
 import { describe, expect, it } from 'vitest';
 import { ECL_BOOSTER_LIST } from '../../../packages/cards/src/ecl/booster-list.ts';
 import { TDM_BOOSTER_LIST } from '../../../packages/cards/src/tdm/booster-list.ts';
+import { HOB_BOOSTER_LIST } from '../../../packages/cards/src/hob/booster-list.ts';
 import { PACK_SET_NAMES, type PackSet, rollPlayBooster, size } from '../src/game/expedition.ts';
 import {
   addSealedBasics,
@@ -49,6 +50,7 @@ const SETS = Object.keys(PACK_SET_NAMES) as PackSet[];
 const listRarity: Partial<Record<PackSet, Map<string, string>>> = {
   ecl: new Map<string, string>(ECL_BOOSTER_LIST),
   tdm: new Map<string, string>(TDM_BOOSTER_LIST),
+  hob: new Map<string, string>(HOB_BOOSTER_LIST),
 };
 const known = new Set(SCRYFALL.map((c) => c.name));
 
@@ -119,7 +121,7 @@ describe('sealed pool', () => {
     for (let seed = 1; seed <= 40; seed++) {
       const { cards, foil } = rollPlayBooster(seed, set);
       expect(cards).toHaveLength(14);
-      // ECL's and TDM's reprints keep an earlier printing's card data, so their rarities come from the booster list.
+      // ECL's, TDM's and HOB's reprints keep an earlier printing's card data, so their rarities come from the booster list.
       const rarity = (n: string) =>
         listRarity[set]?.get(n) ??
         (SCRYFALL.find((c) => c.name === n && c.set === set) ?? SCRYFALL.find((c) => c.name === n))

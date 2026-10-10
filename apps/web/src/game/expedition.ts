@@ -12,6 +12,7 @@ import {
   realityFractureBoosterSheets,
   lorwynEclipsedBoosterSheets,
   tarkirDragonstormBoosterSheets,
+  theHobbitBoosterSheets,
   secretsOfStrixhavenBoosterSheets,
   strixhavenArchiveSheets,
   strixhavenBoosterSheets,
@@ -1366,7 +1367,7 @@ export function summarize(r: ExpeditionRun): RunSummary {
 // ---------------------------------------------------------------------------
 
 /** The set a booster comes from: Foundations, or the set of a Bloomburrow, Marvel, Final Fantasy, Strixhaven or Reality Fracture deck. */
-export type PackSet = 'fdn' | 'blb' | 'msh' | 'fin' | 'stx' | 'sos' | 'fra' | 'ecl' | 'tdm';
+export type PackSet = 'fdn' | 'blb' | 'msh' | 'fin' | 'stx' | 'sos' | 'fra' | 'ecl' | 'tdm' | 'hob';
 
 /** Booster names, by set. */
 export const PACK_SET_NAMES: Record<PackSet, string> = {
@@ -1379,6 +1380,7 @@ export const PACK_SET_NAMES: Record<PackSet, string> = {
   fra: 'Reality Fracture',
   ecl: 'Lorwyn Eclipsed',
   tdm: 'Tarkir: Dragonstorm',
+  hob: 'The Hobbit',
 };
 
 const asPackSet = (set: string | undefined): PackSet =>
@@ -1389,12 +1391,13 @@ const asPackSet = (set: string | undefined): PackSet =>
   set === 'sos' ||
   set === 'fra' ||
   set === 'ecl' ||
-  set === 'tdm'
+  set === 'tdm' ||
+  set === 'hob'
     ? set
     : 'fdn';
 
 /**
- * The set of the run's `n`th booster: a Bloomburrow, Marvel, Final Fantasy, Strixhaven, Reality Fracture, Lorwyn Eclipsed or Tarkir: Dragonstorm deck opens that
+ * The set of the run's `n`th booster: a Bloomburrow, Marvel, Final Fantasy, Strixhaven, Reality Fracture, Lorwyn Eclipsed, Tarkir: Dragonstorm or The Hobbit deck opens that
  * set's boosters, and a Jump In deck mixing two sets alternates between them.
  */
 export function packSetOf(r: Pick<ExpeditionRun, 'deck'>, n = 0): PackSet {
@@ -1434,6 +1437,7 @@ const SHEETS = {
   fra: realityFractureBoosterSheets(),
   ecl: lorwynEclipsedBoosterSheets(),
   tdm: tarkirDragonstormBoosterSheets(),
+  hob: theHobbitBoosterSheets(),
 };
 type Sheet = (typeof SHEETS.fdn)['common'];
 /** Mystical Archive (16): STX and SOS boosters have one archive card in place of a common. */
