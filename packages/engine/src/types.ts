@@ -1309,7 +1309,12 @@ export type ConditionDef =
    * read before it is cast, `min: 1`) number at least `min` and at most `max`. Focus the Mind: `min: 1`; Highspire Bell-Ringer
    * ("the second spell you cast each turn") `min: 1, max: 1`; Effortless Master `min: 2`.
    */
-  | { kind: 'spellsCastThisTurn'; min?: number; max?: number; filter?: CardFilter; who?: 'you' | 'opponent' };
+  | { kind: 'spellsCastThisTurn'; min?: number; max?: number; filter?: CardFilter; who?: 'you' | 'opponent' }
+  // Tarkir: Dragonstorm (19b, clans-b): Karakyk Guardian, Sonic Shrieker
+  /** The source has dealt damage (any damage, to anyone) since it came to the battlefield ("hexproof as long as it hasn't dealt damage yet" is `not` of this). */
+  | { kind: 'sourceDealtDamage' }
+  /** Resolution-time "if": the player chosen as this target was dealt damage by the source during this resolution ("if a player is dealt damage this way"). */
+  | { kind: 'targetPlayerDamagedBySource'; target: number };
 
 export interface CardFilter {
   anyOf?: CardFilter[];
@@ -2009,6 +2014,9 @@ export type EffectDef =
       colorless?: boolean;
       /** Its rules text, shown on the board ("Creatures you control get +2/+2."). */
       label?: string;
+      // Tarkir: Dragonstorm (19b, clans-b): All-Out Assault ("when you next attack this turn")
+      /** It goes away once it has triggered (with `until: 'endOfTurn'`; 'youAttack' triggers). */
+      once?: boolean;
       // Marvel Super Heroes Jumpstart (Tricksters)
       /** Its trigger's filter only matches cards with this object's name (The Clone Saga). */
       namedLike?: Ref;
@@ -2406,7 +2414,9 @@ export type EffectDef =
    */
   | {
       kind: 'divide';
-      amount: number;
+      // Tarkir: Dragonstorm (19b, clans-b): Ureni ("X damage divided as you choose among any number of target creatures and/or planeswalkers")
+      /** The total to divide: a number, or an Amount worked out as it resolves. */
+      amount: Amount;
       maxTargets: number;
       spec: TargetSpec;
       give: 'damage' | 'counters';
@@ -2689,6 +2699,13 @@ export type EffectDef =
       /** Strixhaven (13b): the opponent scries (Ingenious Mastery). */ forOpponent?: boolean;
     }
   | { kind: 'custom'; handler: string; params?: Record<string, unknown> }
+  // Tarkir: Dragonstorm (19b, clans-b): All-Out Assault
+  /**
+   * "There is an additional combat phase after this phase followed by an additional main phase": cast in a main phase, the
+   * extra combat and the extra (postcombat) main phase come right after it, then the turn goes on as it would have. Does
+   * nothing outside a main phase. See `TurnState.extraPhases`.
+   */
+  | { kind: 'extraCombatThenMain' }
   // Doom Prevails (9e).
   /** The owner shuffles it into their library, then reveals the top card: a permanent card enters (Chaos Warp). */
   | { kind: 'chaosWarp'; what: Ref }
@@ -3133,6 +3150,9 @@ export type StaticDef =
       kind: 'spellsCostLess';
       filter: CardFilter;
       amount: Amount;
+      // Tarkir: Dragonstorm (19b, clans-b): Temur Battlecrier ("During your turn, spells you cast cost {1} less ...")
+      /** Only while this holds (checked for the permanent's controller). */
+      condition?: ConditionDef;
       /** Strixhaven Brawl (15b, pair): Zimone, Infinite Analyst: only the first spell with {X} you cast each turn. */
       firstXOnly?: boolean;
     }
@@ -3656,6 +3676,9 @@ export interface GameObject {
   // Reality Fracture (17a): Ruric Thar, Magecrusher
   /** It has dealt combat damage since it entered the battlefield. */
   dealtCombatDamage?: boolean;
+  // Tarkir: Dragonstorm (19b, clans-b): Karakyk Guardian
+  /** It has dealt damage (any damage) since it entered the battlefield. */
+  dealtDamage?: boolean;
   // Final Fantasy (11a): adventure lands
   /** In exile "on an adventure": its owner may play it (the land) from there. */
   onAdventure?: boolean;
@@ -3920,6 +3943,13 @@ export interface TurnState {
   passed: PlayerId[];
   /** Additional combat phases still to come this turn. */
   extraCombats: number;
+  // Tarkir: Dragonstorm (19b, clans-b): All-Out Assault
+  /**
+   * Extra combat + main phase pairs made by `extraCombatThenMain`, innermost last. 'pending': made, waiting for the current main
+   * phase to end; 'combat': in the extra combat; 'main': in the extra main phase (step 'main2'). `resume` is the step the turn
+   * returns to afterwards (the one that would have followed the main phase it was made in).
+   */
+  extraPhases?: { phase: 'pending' | 'combat' | 'main'; resume: Step }[];
   /** Mystical Archive (16): Angel's Grace: these players can't lose the game this turn and their life can't drop below 1. */
   cantLose?: PlayerId[];
   /** Mystical Archive (16): Veil of Summer: spells these players control can't be countered this turn. */

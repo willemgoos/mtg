@@ -65,6 +65,24 @@ export function checkCondition(
   if (c.kind === 'kickedAtLeast') return (self?.kickCount ?? 0) >= c.n;
   // Reality Fracture (17a): Ruric Thar, Magecrusher.
   if (c.kind === 'sourceDealtCombatDamage') return !!self?.dealtCombatDamage;
+  // Tarkir: Dragonstorm (19b, clans-b): Karakyk Guardian, Sonic Shrieker.
+  if (c.kind === 'sourceDealtDamage') return !!self?.dealtDamage;
+  if (c.kind === 'targetPlayerDamagedBySource') {
+    const t = targets?.[c.target];
+    return (
+      !!t &&
+      'player' in t &&
+      !!self &&
+      ctx.events.some(
+        (ev) =>
+          ev.type === 'damageDealt' &&
+          ev.source === self.id &&
+          'player' in ev.to &&
+          ev.to.player === t.player &&
+          ev.amount > 0,
+      )
+    );
+  }
   if (c.kind === 'sourceHasExiled')
     return !!self?.exiledWith?.some((id) => ctx.s.objects[id]?.zone === 'exile');
   // The Fantastic Four (9d).
@@ -1602,6 +1620,7 @@ function detect(ctx: Ctx, ev: GameEvent): void {
         const em = e.ability;
         if (em.kind !== 'triggered' || em.trigger.on !== 'youAttack' || e.controller !== ap) continue;
         if (!attackedWith(em.trigger.filter)) continue;
+        if (e.once) s.emblems = s.emblems!.filter((x) => x !== e); // Tarkir: Dragonstorm (19b, clans-b): All-Out Assault
         s.pendingTriggers.push({
           source: e.source,
           sourceDefId: e.sourceDefId,

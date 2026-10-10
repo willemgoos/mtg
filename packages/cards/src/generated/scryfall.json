@@ -82841,5 +82841,524 @@
    "large": "https://cards.scryfall.io/large/front/6/4/64d9367c-f50c-4568-aa63-6760c44ecaeb.jpg?1783907385",
    "artCrop": "https://cards.scryfall.io/art_crop/front/6/4/64d9367c-f50c-4568-aa63-6760c44ecaeb.jpg?1783907385"
   }
+ },
+ {
+  "name": "All-Out Assault",
+  "scryfallId": "b74876d8-f6a6-4b47-b960-b01a331bab01",
+  "oracleId": "de8c0e2d-3207-4bc6-83ef-91e33b26a981",
+  "set": "tdm",
+  "collectorNumber": "167",
+  "rarity": "mythic",
+  "manaCost": "{2}{R}{W}{B}",
+  "typeLine": "Enchantment",
+  "oracleText": "Creatures you control get +1/+1 and have deathtouch.\nWhen this enchantment enters, if it's your main phase, there is an additional combat phase after this phase followed by an additional main phase. When you next attack this turn, untap each creature you control.",
+  "colors": [
+   "B",
+   "R",
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/7/b74876d8-f6a6-4b47-b960-b01a331bab01.jpg?1783907330",
+   "normal": "https://cards.scryfall.io/normal/front/b/7/b74876d8-f6a6-4b47-b960-b01a331bab01.jpg?1783907330",
+   "large": "https://cards.scryfall.io/large/front/b/7/b74876d8-f6a6-4b47-b960-b01a331bab01.jpg?1783907330",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/7/b74876d8-f6a6-4b47-b960-b01a331bab01.jpg?1783907330"
+  }
+ },
+ {
+  "name": "Bone-Cairn Butcher",
+  "scryfallId": "78bf36bc-6702-4c5d-b52d-ab7217cc8787",
+  "oracleId": "449db6bf-d766-4d09-a7bd-9c45b3d4c4c3",
+  "set": "tdm",
+  "collectorNumber": "173",
+  "rarity": "uncommon",
+  "manaCost": "{1}{R}{W}{B}",
+  "typeLine": "Creature — Demon",
+  "oracleText": "Mobilize 2 (Whenever this creature attacks, create two tapped and attacking 1/1 red Warrior creature tokens. Sacrifice them at the beginning of the next end step.)\nAttacking tokens you control have deathtouch.",
+  "power": "4",
+  "toughness": "4",
+  "colors": [
+   "B",
+   "R",
+   "W"
+  ],
+  "keywords": [
+   "Mobilize"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/8/78bf36bc-6702-4c5d-b52d-ab7217cc8787.jpg?1783907326",
+   "normal": "https://cards.scryfall.io/normal/front/7/8/78bf36bc-6702-4c5d-b52d-ab7217cc8787.jpg?1783907326",
+   "large": "https://cards.scryfall.io/large/front/7/8/78bf36bc-6702-4c5d-b52d-ab7217cc8787.jpg?1783907326",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/8/78bf36bc-6702-4c5d-b52d-ab7217cc8787.jpg?1783907326"
+  }
+ },
+ {
+  "name": "Defibrillating Current",
+  "scryfallId": "bf3a18cf-03db-4eb0-8d53-0c1a71e184da",
+  "oracleId": "5a96b93b-bae6-48fb-87f5-05f3ffcf7ba9",
+  "set": "tdm",
+  "collectorNumber": "177",
+  "rarity": "uncommon",
+  "manaCost": "{2/R}{2/W}{2/B}",
+  "typeLine": "Sorcery",
+  "oracleText": "Defibrillating Current deals 4 damage to target creature or planeswalker and you gain 2 life.",
+  "colors": [
+   "B",
+   "R",
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/f/bf3a18cf-03db-4eb0-8d53-0c1a71e184da.jpg?1783907322",
+   "normal": "https://cards.scryfall.io/normal/front/b/f/bf3a18cf-03db-4eb0-8d53-0c1a71e184da.jpg?1783907322",
+   "large": "https://cards.scryfall.io/large/front/b/f/bf3a18cf-03db-4eb0-8d53-0c1a71e184da.jpg?1783907322",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/f/bf3a18cf-03db-4eb0-8d53-0c1a71e184da.jpg?1783907322"
+  }
+ },
+ {
+  "name": "Inevitable Defeat",
+  "scryfallId": "9d677980-b608-407e-9f17-790a81263f15",
+  "oracleId": "d68439b5-7011-4b1d-a7da-14ef0f4d9994",
+  "set": "tdm",
+  "collectorNumber": "194",
+  "rarity": "rare",
+  "manaCost": "{1}{R}{W}{B}",
+  "typeLine": "Instant",
+  "oracleText": "This spell can't be countered.\nExile target nonland permanent. Its controller loses 3 life and you gain 3 life.",
+  "colors": [
+   "B",
+   "R",
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/d/9d677980-b608-407e-9f17-790a81263f15.jpg?1783907309",
+   "normal": "https://cards.scryfall.io/normal/front/9/d/9d677980-b608-407e-9f17-790a81263f15.jpg?1783907309",
+   "large": "https://cards.scryfall.io/large/front/9/d/9d677980-b608-407e-9f17-790a81263f15.jpg?1783907309",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/d/9d677980-b608-407e-9f17-790a81263f15.jpg?1783907309"
+  }
+ },
+ {
+  "name": "Neriv, Heart of the Storm",
+  "scryfallId": "b58112b0-a05c-4b98-b650-fd27ad97789f",
+  "oracleId": "66290104-ac65-4eb5-bf00-89b944249e07",
+  "set": "tdm",
+  "collectorNumber": "210",
+  "rarity": "mythic",
+  "manaCost": "{1}{R}{W}{B}",
+  "typeLine": "Legendary Creature — Spirit Dragon",
+  "oracleText": "Flying\nIf a creature you control that entered this turn would deal damage, it deals twice that much damage instead.",
+  "power": "4",
+  "toughness": "5",
+  "colors": [
+   "B",
+   "R",
+   "W"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/5/b58112b0-a05c-4b98-b650-fd27ad97789f.jpg?1783907305",
+   "normal": "https://cards.scryfall.io/normal/front/b/5/b58112b0-a05c-4b98-b650-fd27ad97789f.jpg?1783907305",
+   "large": "https://cards.scryfall.io/large/front/b/5/b58112b0-a05c-4b98-b650-fd27ad97789f.jpg?1783907305",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/5/b58112b0-a05c-4b98-b650-fd27ad97789f.jpg?1783907305"
+  }
+ },
+ {
+  "name": "Reigning Victor",
+  "scryfallId": "a394112a-032b-4047-887a-6522cf7b83d5",
+  "oracleId": "b8c5e481-371c-4999-bb2c-347a2aa33171",
+  "set": "tdm",
+  "collectorNumber": "216",
+  "rarity": "common",
+  "manaCost": "{2/R}{2/W}{2/B}",
+  "typeLine": "Creature — Orc Warrior",
+  "oracleText": "Mobilize 1 (Whenever this creature attacks, create a tapped and attacking 1/1 red Warrior creature token. Sacrifice it at the beginning of the next end step.)\nWhen this creature enters, target creature gets +1/+0 and gains indestructible until end of turn. (Damage and effects that say \"destroy\" don't destroy it.)",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "B",
+   "R",
+   "W"
+  ],
+  "keywords": [
+   "Mobilize"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/3/a394112a-032b-4047-887a-6522cf7b83d5.jpg?1783907301",
+   "normal": "https://cards.scryfall.io/normal/front/a/3/a394112a-032b-4047-887a-6522cf7b83d5.jpg?1783907301",
+   "large": "https://cards.scryfall.io/large/front/a/3/a394112a-032b-4047-887a-6522cf7b83d5.jpg?1783907301",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/3/a394112a-032b-4047-887a-6522cf7b83d5.jpg?1783907301"
+  }
+ },
+ {
+  "name": "Sonic Shrieker",
+  "scryfallId": "7c231437-8bec-42e0-9175-af74c752b119",
+  "oracleId": "d317e3f1-553f-44f6-8543-d6d4c42534ad",
+  "set": "tdm",
+  "collectorNumber": "226",
+  "rarity": "uncommon",
+  "manaCost": "{2}{R}{W}{B}",
+  "typeLine": "Creature — Dragon",
+  "oracleText": "Flying\nWhen this creature enters, it deals 2 damage to any target and you gain 2 life. If a player is dealt damage this way, they discard a card.",
+  "power": "4",
+  "toughness": "4",
+  "colors": [
+   "B",
+   "R",
+   "W"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/c/7c231437-8bec-42e0-9175-af74c752b119.jpg?1783907297",
+   "normal": "https://cards.scryfall.io/normal/front/7/c/7c231437-8bec-42e0-9175-af74c752b119.jpg?1783907297",
+   "large": "https://cards.scryfall.io/large/front/7/c/7c231437-8bec-42e0-9175-af74c752b119.jpg?1783907297",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/c/7c231437-8bec-42e0-9175-af74c752b119.jpg?1783907297"
+  }
+ },
+ {
+  "name": "Thunder of Unity",
+  "scryfallId": "5c953b36-f5e4-4258-91cb-f07e799321f7",
+  "oracleId": "8419d1d5-bb0e-4a2d-bb6f-67957d035dde",
+  "set": "tdm",
+  "collectorNumber": "231",
+  "rarity": "rare",
+  "manaCost": "{R}{W}{B}",
+  "typeLine": "Enchantment — Saga",
+  "oracleText": "(As this Saga enters and after your draw step, add a lore counter. Sacrifice after III.)\nI — You draw two cards and you lose 2 life.\nII, III — Whenever a creature you control enters this turn, each opponent loses 1 life and you gain 1 life.",
+  "colors": [
+   "B",
+   "R",
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/c/5c953b36-f5e4-4258-91cb-f07e799321f7.jpg?1783907293",
+   "normal": "https://cards.scryfall.io/normal/front/5/c/5c953b36-f5e4-4258-91cb-f07e799321f7.jpg?1783907293",
+   "large": "https://cards.scryfall.io/large/front/5/c/5c953b36-f5e4-4258-91cb-f07e799321f7.jpg?1783907293",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/c/5c953b36-f5e4-4258-91cb-f07e799321f7.jpg?1783907293"
+  }
+ },
+ {
+  "name": "Mardu Siegebreaker",
+  "scryfallId": "3044b232-edf4-4000-9273-cc4653ad653a",
+  "oracleId": "1f82e4b9-e67f-4f34-ac4c-57b0b300ee42",
+  "set": "tdm",
+  "collectorNumber": "206",
+  "rarity": "rare",
+  "manaCost": "{1}{R}{W}{B}",
+  "typeLine": "Creature — Human Warrior",
+  "oracleText": "Deathtouch, haste\nWhen this creature enters, exile up to one other target creature you control until this creature leaves the battlefield.\nWhenever this creature attacks, for each opponent, create a tapped token that's a copy of the exiled card attacking that opponent. At the beginning of your next end step, sacrifice those tokens.",
+  "power": "4",
+  "toughness": "4",
+  "colors": [
+   "B",
+   "R",
+   "W"
+  ],
+  "keywords": [
+   "Haste",
+   "Deathtouch"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/0/3044b232-edf4-4000-9273-cc4653ad653a.jpg?1783907307",
+   "normal": "https://cards.scryfall.io/normal/front/3/0/3044b232-edf4-4000-9273-cc4653ad653a.jpg?1783907307",
+   "large": "https://cards.scryfall.io/large/front/3/0/3044b232-edf4-4000-9273-cc4653ad653a.jpg?1783907307",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/0/3044b232-edf4-4000-9273-cc4653ad653a.jpg?1783907307"
+  }
+ },
+ {
+  "name": "Zurgo, Thunder's Decree",
+  "scryfallId": "bd93fb95-4268-45dc-8f0d-590c481a526d",
+  "oracleId": "393d0bf8-5f2e-4eaa-91a1-9132429a7371",
+  "set": "tdm",
+  "collectorNumber": "237",
+  "rarity": "rare",
+  "manaCost": "{R}{W}{B}",
+  "typeLine": "Legendary Creature — Orc Warrior",
+  "oracleText": "Mobilize 2 (Whenever this creature attacks, create two tapped and attacking 1/1 red Warrior creature tokens. Sacrifice them at the beginning of the next end step.)\nDuring your end step, Warrior tokens you control have \"This token can't be sacrificed.\"",
+  "power": "2",
+  "toughness": "4",
+  "colors": [
+   "B",
+   "R",
+   "W"
+  ],
+  "keywords": [
+   "Mobilize"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/d/bd93fb95-4268-45dc-8f0d-590c481a526d.jpg?1783907290",
+   "normal": "https://cards.scryfall.io/normal/front/b/d/bd93fb95-4268-45dc-8f0d-590c481a526d.jpg?1783907290",
+   "large": "https://cards.scryfall.io/large/front/b/d/bd93fb95-4268-45dc-8f0d-590c481a526d.jpg?1783907290",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/d/bd93fb95-4268-45dc-8f0d-590c481a526d.jpg?1783907290"
+  }
+ },
+ {
+  "name": "Dragonback Assault",
+  "scryfallId": "d54cc838-d79d-433a-99fb-d6e4d1c1431d",
+  "oracleId": "413fb2db-f1a1-4d22-ac37-a52821d35ca2",
+  "set": "tdm",
+  "collectorNumber": "179",
+  "rarity": "mythic",
+  "manaCost": "{3}{G}{U}{R}",
+  "typeLine": "Enchantment",
+  "oracleText": "When this enchantment enters, it deals 3 damage to each creature and each planeswalker.\nLandfall — Whenever a land you control enters, create a 4/4 red Dragon creature token with flying.",
+  "colors": [
+   "G",
+   "R",
+   "U"
+  ],
+  "keywords": [
+   "Landfall"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/5/d54cc838-d79d-433a-99fb-d6e4d1c1431d.jpg?1783907321",
+   "normal": "https://cards.scryfall.io/normal/front/d/5/d54cc838-d79d-433a-99fb-d6e4d1c1431d.jpg?1783907321",
+   "large": "https://cards.scryfall.io/large/front/d/5/d54cc838-d79d-433a-99fb-d6e4d1c1431d.jpg?1783907321",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/5/d54cc838-d79d-433a-99fb-d6e4d1c1431d.jpg?1783907321"
+  }
+ },
+ {
+  "name": "Dragonclaw Strike",
+  "scryfallId": "bc7692ef-7091-4365-85a8-1edbd374f279",
+  "oracleId": "69e0d9f1-f9dd-4614-ad9f-13e7153710ce",
+  "set": "tdm",
+  "collectorNumber": "180",
+  "rarity": "uncommon",
+  "manaCost": "{2/G}{2/U}{2/R}",
+  "typeLine": "Sorcery",
+  "oracleText": "Double the power and toughness of target creature you control until end of turn. Then it fights up to one target creature an opponent controls. (Each deals damage equal to its power to the other.)",
+  "colors": [
+   "G",
+   "R",
+   "U"
+  ],
+  "keywords": [
+   "Fight",
+   "Double"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/c/bc7692ef-7091-4365-85a8-1edbd374f279.jpg?1783907322",
+   "normal": "https://cards.scryfall.io/normal/front/b/c/bc7692ef-7091-4365-85a8-1edbd374f279.jpg?1783907322",
+   "large": "https://cards.scryfall.io/large/front/b/c/bc7692ef-7091-4365-85a8-1edbd374f279.jpg?1783907322",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/c/bc7692ef-7091-4365-85a8-1edbd374f279.jpg?1783907322"
+  }
+ },
+ {
+  "name": "Eshki Dragonclaw",
+  "scryfallId": "0d369c44-78ee-4f3c-bf2b-cddba7fe26d4",
+  "oracleId": "85d87087-48ee-4dc8-a1c0-9c9ccb885adc",
+  "set": "tdm",
+  "collectorNumber": "182",
+  "rarity": "rare",
+  "manaCost": "{1}{G}{U}{R}",
+  "typeLine": "Legendary Creature — Human Warrior",
+  "oracleText": "Vigilance, trample, ward {1}\nAt the beginning of combat on your turn, if you've cast both a creature spell and a noncreature spell this turn, draw a card and put two +1/+1 counters on Eshki Dragonclaw.",
+  "power": "4",
+  "toughness": "4",
+  "colors": [
+   "G",
+   "R",
+   "U"
+  ],
+  "keywords": [
+   "Vigilance",
+   "Trample",
+   "Ward"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/d/0d369c44-78ee-4f3c-bf2b-cddba7fe26d4.jpg?1783907322",
+   "normal": "https://cards.scryfall.io/normal/front/0/d/0d369c44-78ee-4f3c-bf2b-cddba7fe26d4.jpg?1783907322",
+   "large": "https://cards.scryfall.io/large/front/0/d/0d369c44-78ee-4f3c-bf2b-cddba7fe26d4.jpg?1783907322",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/d/0d369c44-78ee-4f3c-bf2b-cddba7fe26d4.jpg?1783907322"
+  }
+ },
+ {
+  "name": "Karakyk Guardian",
+  "scryfallId": "a4c77b08-c3f6-4458-8636-f226f9843b6d",
+  "oracleId": "41129dc1-be88-4198-94f9-032817a79bc7",
+  "set": "tdm",
+  "collectorNumber": "198",
+  "rarity": "uncommon",
+  "manaCost": "{3}{G}{U}{R}",
+  "typeLine": "Creature — Dragon",
+  "oracleText": "Flying, vigilance, trample\nThis creature has hexproof as long as it hasn't dealt damage yet. (It can't be the target of spells or abilities your opponents control.)",
+  "power": "6",
+  "toughness": "5",
+  "colors": [
+   "G",
+   "R",
+   "U"
+  ],
+  "keywords": [
+   "Flying",
+   "Vigilance",
+   "Trample"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/4/a4c77b08-c3f6-4458-8636-f226f9843b6d.jpg?1783907312",
+   "normal": "https://cards.scryfall.io/normal/front/a/4/a4c77b08-c3f6-4458-8636-f226f9843b6d.jpg?1783907312",
+   "large": "https://cards.scryfall.io/large/front/a/4/a4c77b08-c3f6-4458-8636-f226f9843b6d.jpg?1783907312",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/4/a4c77b08-c3f6-4458-8636-f226f9843b6d.jpg?1783907312"
+  }
+ },
+ {
+  "name": "Mammoth Bellow",
+  "scryfallId": "468b17b4-79ce-4dfa-8873-a9cfc347e38f",
+  "oracleId": "6f2e4607-bece-42ba-a2a3-5dc50f246793",
+  "set": "tdm",
+  "collectorNumber": "205",
+  "rarity": "uncommon",
+  "manaCost": "{2}{G}{U}{R}",
+  "typeLine": "Sorcery",
+  "oracleText": "Create a 5/5 green Elephant creature token.\nHarmonize {5}{G}{U}{R} (You may cast this card from your graveyard for its harmonize cost. You may tap a creature you control to reduce that cost by {X}, where X is its power. Then exile this spell.)",
+  "colors": [
+   "G",
+   "R",
+   "U"
+  ],
+  "keywords": [
+   "Harmonize"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/6/468b17b4-79ce-4dfa-8873-a9cfc347e38f.jpg?1783907308",
+   "normal": "https://cards.scryfall.io/normal/front/4/6/468b17b4-79ce-4dfa-8873-a9cfc347e38f.jpg?1783907308",
+   "large": "https://cards.scryfall.io/large/front/4/6/468b17b4-79ce-4dfa-8873-a9cfc347e38f.jpg?1783907308",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/6/468b17b4-79ce-4dfa-8873-a9cfc347e38f.jpg?1783907308"
+  }
+ },
+ {
+  "name": "Roar of Endless Song",
+  "scryfallId": "7a9c3531-61a8-43f5-82a2-5166e5f5a6b9",
+  "oracleId": "a3570093-3c16-42e7-a83d-2ff611a891b5",
+  "set": "tdm",
+  "collectorNumber": "220",
+  "rarity": "rare",
+  "manaCost": "{2}{G}{U}{R}",
+  "typeLine": "Enchantment — Saga",
+  "oracleText": "(As this Saga enters and after your draw step, add a lore counter. Sacrifice after III.)\nI, II — Create a 5/5 green Elephant creature token.\nIII — Double the power and toughness of each creature you control until end of turn.",
+  "colors": [
+   "G",
+   "R",
+   "U"
+  ],
+  "keywords": [
+   "Double"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/a/7a9c3531-61a8-43f5-82a2-5166e5f5a6b9.jpg?1783907300",
+   "normal": "https://cards.scryfall.io/normal/front/7/a/7a9c3531-61a8-43f5-82a2-5166e5f5a6b9.jpg?1783907300",
+   "large": "https://cards.scryfall.io/large/front/7/a/7a9c3531-61a8-43f5-82a2-5166e5f5a6b9.jpg?1783907300",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/a/7a9c3531-61a8-43f5-82a2-5166e5f5a6b9.jpg?1783907300"
+  }
+ },
+ {
+  "name": "Songcrafter Mage",
+  "scryfallId": "9523bc07-49e5-409c-ae6b-b28e305eef36",
+  "oracleId": "13f0863f-ae54-4bea-8f01-7f3891797577",
+  "set": "tdm",
+  "collectorNumber": "225",
+  "rarity": "rare",
+  "manaCost": "{G}{U}{R}",
+  "typeLine": "Creature — Human Bard",
+  "oracleText": "Flash\nWhen this creature enters, target instant or sorcery card in your graveyard gains harmonize until end of turn. Its harmonize cost is equal to its mana cost. (You may cast that card from your graveyard for its harmonize cost. You may tap a creature you control to reduce that cost by {X}, where X is its power. Then exile the spell.)",
+  "power": "3",
+  "toughness": "2",
+  "colors": [
+   "G",
+   "R",
+   "U"
+  ],
+  "keywords": [
+   "Flash"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/5/9523bc07-49e5-409c-ae6b-b28e305eef36.jpg?1783907298",
+   "normal": "https://cards.scryfall.io/normal/front/9/5/9523bc07-49e5-409c-ae6b-b28e305eef36.jpg?1783907298",
+   "large": "https://cards.scryfall.io/large/front/9/5/9523bc07-49e5-409c-ae6b-b28e305eef36.jpg?1783907298",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/5/9523bc07-49e5-409c-ae6b-b28e305eef36.jpg?1783907298"
+  }
+ },
+ {
+  "name": "Temur Battlecrier",
+  "scryfallId": "72184791-0767-4108-920c-763e92dae2d4",
+  "oracleId": "fadf984c-c224-432a-87b9-b34f929b8409",
+  "set": "tdm",
+  "collectorNumber": "228",
+  "rarity": "rare",
+  "manaCost": "{G}{U}{R}",
+  "typeLine": "Creature — Orc Ranger",
+  "oracleText": "During your turn, spells you cast cost {1} less to cast for each creature you control with power 4 or greater.",
+  "power": "4",
+  "toughness": "3",
+  "colors": [
+   "G",
+   "R",
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/2/72184791-0767-4108-920c-763e92dae2d4.jpg?1783907297",
+   "normal": "https://cards.scryfall.io/normal/front/7/2/72184791-0767-4108-920c-763e92dae2d4.jpg?1783907297",
+   "large": "https://cards.scryfall.io/large/front/7/2/72184791-0767-4108-920c-763e92dae2d4.jpg?1783907297",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/2/72184791-0767-4108-920c-763e92dae2d4.jpg?1783907297"
+  }
+ },
+ {
+  "name": "Temur Tawnyback",
+  "scryfallId": "3cdb383f-bc04-46d1-aa3a-7459d57f1fec",
+  "oracleId": "889d26d6-9e6c-4cc0-8e8e-dd932f705a20",
+  "set": "tdm",
+  "collectorNumber": "229",
+  "rarity": "common",
+  "manaCost": "{2/G}{2/U}{2/R}",
+  "typeLine": "Creature — Beast",
+  "oracleText": "When this creature enters, draw a card, then discard a card.",
+  "power": "4",
+  "toughness": "3",
+  "colors": [
+   "G",
+   "R",
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/c/3cdb383f-bc04-46d1-aa3a-7459d57f1fec.jpg?1783907294",
+   "normal": "https://cards.scryfall.io/normal/front/3/c/3cdb383f-bc04-46d1-aa3a-7459d57f1fec.jpg?1783907294",
+   "large": "https://cards.scryfall.io/large/front/3/c/3cdb383f-bc04-46d1-aa3a-7459d57f1fec.jpg?1783907294",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/c/3cdb383f-bc04-46d1-aa3a-7459d57f1fec.jpg?1783907294"
+  }
+ },
+ {
+  "name": "Ureni, the Song Unending",
+  "scryfallId": "227802c0-4ff6-43a8-a850-ed0f546dc5ac",
+  "oracleId": "1c995c80-3301-409b-822b-9297aa260823",
+  "set": "tdm",
+  "collectorNumber": "233",
+  "rarity": "mythic",
+  "manaCost": "{5}{G}{U}{R}",
+  "typeLine": "Legendary Creature — Spirit Dragon",
+  "oracleText": "Flying, protection from white and from black\nWhen Ureni enters, it deals X damage divided as you choose among any number of target creatures and/or planeswalkers your opponents control, where X is the number of lands you control.",
+  "power": "10",
+  "toughness": "10",
+  "colors": [
+   "G",
+   "R",
+   "U"
+  ],
+  "keywords": [
+   "Flying",
+   "Protection"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/2/227802c0-4ff6-43a8-a850-ed0f546dc5ac.jpg?1783907290",
+   "normal": "https://cards.scryfall.io/normal/front/2/2/227802c0-4ff6-43a8-a850-ed0f546dc5ac.jpg?1783907290",
+   "large": "https://cards.scryfall.io/large/front/2/2/227802c0-4ff6-43a8-a850-ed0f546dc5ac.jpg?1783907290",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/2/227802c0-4ff6-43a8-a850-ed0f546dc5ac.jpg?1783907290"
+  }
  }
 ]

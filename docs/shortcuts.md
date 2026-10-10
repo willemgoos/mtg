@@ -166,3 +166,8 @@ from) when it's fixed. Older phases keep their own "Simplifications" lists in `d
       automatically while a cost is paid: the player activates it before casting (Arena does it for you). The heuristic bot uses it when
       that makes a card castable.
 - [ ] **Mobilize and "tapped and attacking" tokens** attack the opponent, never a planeswalker (a legal choice, but the only one offered).
+
+## Tarkir: Dragonstorm (`tdm/*.ts`, phase 19b)
+
+- [ ] Ureni of the Unwritten: X (the lands you control) is read as the ability resolves, not as it is put on the stack, and
+      the targets are chosen one at a time on resolution (like `divide`), so hexproof and ward don't apply at targeting.
