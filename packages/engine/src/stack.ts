@@ -2533,6 +2533,8 @@ export function answerSearch(ctx: Ctx, card: ObjectId | null): void {
       if (options.length > 0) {
         d.options = options;
         d.remaining--;
+        // Tarkir: Dragonstorm (19b, green): Claim Territory, the next one goes somewhere else.
+        if (d.thenTo) d.to = d.thenTo;
         return;
       }
     }

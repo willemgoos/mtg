@@ -1502,9 +1502,26 @@ export function getLegalActions(ctx: Ctx, player: PlayerId): Action[] {
       if (!spec) return out;
       const key = (t: TargetChoice) => ('object' in t ? t.object.id : t.player);
       const taken = new Set(d.picked.map(key));
-      for (const t of targetCandidates(ctx, spec, { controller: player, sourceId: d.spell }))
+      // Tarkir: Dragonstorm (19b, green): Rite of Renewal, "up to four target cards from their graveyard".
+      if (spec.maxTargets !== undefined && d.picked.length >= spec.maxTargets) return out;
+      const graveyardOwner =
+        spec.inGraveyardOfTarget !== undefined && item?.kind === 'spell'
+          ? item.targets[spec.inGraveyardOfTarget]
+          : undefined;
+      for (const t of targetCandidates(ctx, spec, { controller: player, sourceId: d.spell })) {
+        if (
+          spec.inGraveyardOfTarget !== undefined &&
+          !(
+            graveyardOwner &&
+            'player' in graveyardOwner &&
+            'object' in t &&
+            s.players[graveyardOwner.player].graveyard.includes(t.object.id)
+          )
+        )
+          continue;
         if (!taken.has(key(t)) && payable([...d.picked, t]))
           out.push({ type: 'chooseTargets', player, targets: [...d.picked, t] });
+      }
       return out;
     }
     // Tarkir: Dragonstorm (19a): "X target creatures" of an activated ability, one at a time (each a different one).
