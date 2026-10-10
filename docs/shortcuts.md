@@ -233,3 +233,11 @@ from) when it's fixed. Older phases keep their own "Simplifications" lists in `d
 
 - [ ] Polygraph Orb: collect evidence only offers cards with a mana value; the rules also let you exile lands and other
       mana value 0 cards along with them, which never helps pay the cost.
+
+## Lord of the Rings (21a engine, 21d green and colorless rares)
+
+- [ ] Triggered abilities with an intervening "if" check it only as they trigger, not again on resolution (engine-wide; it
+      matters for a double landfall with Dúnedain Rangers).
+- [ ] Delighted Halfling: the engine pays with sources, not chosen mana, so a Halfling that helps pay a legendary spell is
+      treated as making its any-colour mana and the spell can't be countered, even where the player would have taken {C}
+      (only different for a legendary spell with a {C} pip; none in the pool).
