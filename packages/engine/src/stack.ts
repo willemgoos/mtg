@@ -800,7 +800,12 @@ function finishCasting(
       controller: player,
       subject: { id: o.id, zcc: o.zcc },
       // Marvel Super Heroes Jumpstart (Scarlet): storm counts the spells cast before it (Grapeshot).
-      amount: a.trigger.perSacrificed ? sacrificed : (ctx.s.turn.spellsCast?.[player] ?? 0),
+      amount: a.trigger.perSacrificed
+        ? sacrificed
+        : // Tarkir: Dragonstorm (19b, red): Storm counts every player's spells cast before this one.
+          a.trigger.storm
+          ? (ctx.s.turn.spellsCast?.p1 ?? 0) + (ctx.s.turn.spellsCast?.p2 ?? 0)
+          : (ctx.s.turn.spellsCast?.[player] ?? 0),
     });
   });
   // Reality Fracture (17c): Theorist's Proxy: "the next spell you cast this turn can't be countered".
@@ -1410,6 +1415,9 @@ export function activateAbility(
         (src.counters?.loyalty ?? 0) + a.cost.loyalty - (a.cost.loyaltyX ? (x ?? 0) : 0);
   }
   payMana(ctx, payment);
+  // Tarkir: Dragonstorm (19b, red): Reverberating Summons, "Discard your hand" as a cost.
+  if (a.cost.discardHand)
+    for (const id of [...ctx.s.players[player].hand]) moveObject(ctx, id, 'graveyard');
   if (a.once || a.powerUp) (src.usedAbilities ??= []).push(index);
   // Marvel Super Heroes Jumpstart (Trained): Advancing the Spirit frees only the first power-up each turn.
   if (a.powerUp && player === ctx.s.turn.activePlayer) ctx.s.turn.powerUpActivated = true;
@@ -2500,6 +2508,8 @@ export function answerSearch(ctx: Ctx, card: ObjectId | null): void {
         controller: d.forOpponent ? other(d.player) : d.player,
       });
       if (d.to === 'battlefieldTapped' || d.landsTapped) obj(ctx, card).tapped = true;
+      // Tarkir: Dragonstorm (19b, red): Magmatic Hellkite, "tapped with a stun counter on it".
+      if (d.counter) (obj(ctx, card).counters ??= {})[d.counter] = 1;
       // Strixhaven (13c): Emergent Sequence.
       if (d.fractalLand) makeFractalLand(ctx, card);
       // Fabled Passage: untap it if you control enough lands.

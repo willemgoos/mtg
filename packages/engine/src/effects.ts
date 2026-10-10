@@ -554,7 +554,8 @@ function divideStep(
     e.give === 'damage' ? `${n} damage to` : `${n} +1/+1 counter${n === 1 ? '' : 's'} on`;
   const options: { label: string; effects: EffectDef[] }[] = [];
   // "Up to": choosing no targets at all.
-  if (!chosen.length) options.push({ label: 'No targets', effects: [] });
+  // Tarkir: Dragonstorm (19b, red): Twin Bolt, "one or two targets": at least one.
+  if (!chosen.length && !e.atLeastOne) options.push({ label: 'No targets', effects: [] });
   for (let n = left; n >= (last ? left : 1); n--)
     for (const t of cands)
       options.push({
@@ -1390,7 +1391,8 @@ export function runEffects(
           const d = def(ctx, id);
           if (
             !d.types.includes('Land') &&
-            manaValue(d.manaCost) <= max &&
+            // Tarkir: Dragonstorm (19b, red): Breaching Dragonstorm stops at the first nonland card.
+            (e.firstNonland || manaValue(d.manaCost) <= max) &&
             (!e.filter || cardMatches(ctx, id, e.filter)) // Strixhaven (13c): Plargg
           ) {
             hit = id;
@@ -1400,11 +1402,16 @@ export function runEffects(
         }
         // The misses go to the bottom in a random order.
         // Marvel Super Heroes Jumpstart (Scarlet): or stay in exile (Wanda's Vision).
-        if (!e.stayExiled) {
+        if (!e.stayExiled && !e.firstNonland) {
           shuffleInPlace(ctx.s.rng, exiled);
           for (const id of exiled) moveObject(ctx, id, 'library', { position: 'bottom' });
         }
         if (!hit) continue;
+        // Tarkir: Dragonstorm (19b, red): a card with a mana value above the limit can't be cast; it goes to your hand.
+        if (e.firstNonland && manaValue(def(ctx, hit).manaCost) > max) {
+          moveObject(ctx, hit, 'hand');
+          continue;
+        }
         const after: EffectDef = {
           kind: 'afterReveal',
           card: { id: hit, zcc: obj(ctx, hit).zcc },
@@ -2412,6 +2419,8 @@ export function runEffects(
           // Strixhaven (13c): Verdant Mastery, Emergent Sequence, Oriq Loremage.
           ...(e.forOpponent ? { forOpponent: true } : {}),
           ...(e.fractalLand ? { fractalLand: true } : {}),
+          // Tarkir: Dragonstorm (19b, red): Magmatic Hellkite, "with a stun counter on it".
+          ...(e.counter ? { counter: e.counter } : {}),
           ...(e.sourceCounterIfTypes ? { sourceCounterIfTypes: e.sourceCounterIfTypes } : {}),
           // Reality Fracture (17a): Fblthp, Hexhaven Invigorator.
           ...(e.upTo !== undefined ? { remaining: resolveAmount(ctx, es, e.upTo) } : {}),

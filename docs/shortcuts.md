@@ -174,3 +174,6 @@ from) when it's fixed. Older phases keep their own "Simplifications" lists in `d
 - [ ] United Battlefront, Wayspeaker Bodyguard: "noncreature, nonland permanent card" can't match a Battle (the engine has
       no Battle type; no Battle is in the pool).
 - [ ] Tempest Hawk: "a deck can have any number of cards named Tempest Hawk" isn't enforced by the deck builder.
+- [ ] Twin Bolt: "one or two targets" and the damage split are chosen as it resolves (the `divide` effect), not as it is cast.
+- [ ] Rite of Renewal: the cast menu shows three entries (return zero, one or two permanent cards) because a spell can't have
+      "up to two" targets followed by a required one; the rules are exact, the extra entries aren't on the card.

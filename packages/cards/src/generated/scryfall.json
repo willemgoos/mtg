@@ -84557,6 +84557,835 @@
   }
  },
  {
+  "name": "Breaching Dragonstorm",
+  "scryfallId": "e2c2a069-7553-4879-abfb-b2aa3349e4b8",
+  "oracleId": "5370ee80-0354-454f-a16e-ec133e432ecb",
+  "set": "tdm",
+  "collectorNumber": "101",
+  "rarity": "uncommon",
+  "manaCost": "{4}{R}",
+  "typeLine": "Enchantment",
+  "oracleText": "When this enchantment enters, exile cards from the top of your library until you exile a nonland card. You may cast it without paying its mana cost if that spell's mana value is 8 or less. If you don't, put that card into your hand.\nWhen a Dragon you control enters, return this enchantment to its owner's hand.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/2/e2c2a069-7553-4879-abfb-b2aa3349e4b8.jpg?1783907366",
+   "normal": "https://cards.scryfall.io/normal/front/e/2/e2c2a069-7553-4879-abfb-b2aa3349e4b8.jpg?1783907366",
+   "large": "https://cards.scryfall.io/large/front/e/2/e2c2a069-7553-4879-abfb-b2aa3349e4b8.jpg?1783907366",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/2/e2c2a069-7553-4879-abfb-b2aa3349e4b8.jpg?1783907366"
+  }
+ },
+ {
+  "name": "Channeled Dragonfire",
+  "scryfallId": "24204881-690c-4043-8771-20cb93385072",
+  "oracleId": "91179937-6f55-4d1b-8f06-2efe1c8fea7a",
+  "set": "tdm",
+  "collectorNumber": "102",
+  "rarity": "uncommon",
+  "manaCost": "{R}",
+  "typeLine": "Sorcery",
+  "oracleText": "Channeled Dragonfire deals 2 damage to any target.\nHarmonize {5}{R}{R} (You may cast this card from your graveyard for its harmonize cost. You may tap a creature you control to reduce that cost by {X}, where X is its power. Then exile this spell.)",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Harmonize"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/4/24204881-690c-4043-8771-20cb93385072.jpg?1783907364",
+   "normal": "https://cards.scryfall.io/normal/front/2/4/24204881-690c-4043-8771-20cb93385072.jpg?1783907364",
+   "large": "https://cards.scryfall.io/large/front/2/4/24204881-690c-4043-8771-20cb93385072.jpg?1783907364",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/4/24204881-690c-4043-8771-20cb93385072.jpg?1783907364"
+  }
+ },
+ {
+  "name": "Cori-Steel Cutter",
+  "scryfallId": "490eb213-9ae2-4b45-abec-6f1dfc83792a",
+  "oracleId": "46b1a169-bc32-47bf-b379-fa0c3d13878f",
+  "set": "tdm",
+  "collectorNumber": "103",
+  "rarity": "rare",
+  "manaCost": "{1}{R}",
+  "typeLine": "Artifact — Equipment",
+  "oracleText": "Equipped creature gets +1/+1 and has trample and haste.\nFlurry — Whenever you cast your second spell each turn, create a 1/1 white Monk creature token with prowess. You may attach this Equipment to it. (Whenever you cast a noncreature spell, the token gets +1/+1 until end of turn.)\nEquip {1}{R}",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Flurry",
+   "Equip"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/9/490eb213-9ae2-4b45-abec-6f1dfc83792a.jpg?1783907363",
+   "normal": "https://cards.scryfall.io/normal/front/4/9/490eb213-9ae2-4b45-abec-6f1dfc83792a.jpg?1783907363",
+   "large": "https://cards.scryfall.io/large/front/4/9/490eb213-9ae2-4b45-abec-6f1dfc83792a.jpg?1783907363",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/9/490eb213-9ae2-4b45-abec-6f1dfc83792a.jpg?1783907363"
+  }
+ },
+ {
+  "name": "Devoted Duelist",
+  "scryfallId": "bbf9c673-37b4-48ed-a9ea-13f8e3e6c47b",
+  "oracleId": "f7620c46-b3d8-4694-ac7c-a43933c86c22",
+  "set": "tdm",
+  "collectorNumber": "104",
+  "rarity": "common",
+  "manaCost": "{1}{R}",
+  "typeLine": "Creature — Goblin Monk",
+  "oracleText": "Haste\nFlurry — Whenever you cast your second spell each turn, this creature deals 1 damage to each opponent.",
+  "power": "2",
+  "toughness": "1",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Flurry",
+   "Haste"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/b/bbf9c673-37b4-48ed-a9ea-13f8e3e6c47b.jpg?1783907363",
+   "normal": "https://cards.scryfall.io/normal/front/b/b/bbf9c673-37b4-48ed-a9ea-13f8e3e6c47b.jpg?1783907363",
+   "large": "https://cards.scryfall.io/large/front/b/b/bbf9c673-37b4-48ed-a9ea-13f8e3e6c47b.jpg?1783907363",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/b/bbf9c673-37b4-48ed-a9ea-13f8e3e6c47b.jpg?1783907363"
+  }
+ },
+ {
+  "name": "Dracogenesis",
+  "scryfallId": "0d5674f9-22b2-45f9-902d-4fd245485c60",
+  "oracleId": "9b06f2bf-146d-4b30-b467-e16f1a942253",
+  "set": "tdm",
+  "collectorNumber": "105",
+  "rarity": "mythic",
+  "manaCost": "{6}{R}{R}",
+  "typeLine": "Enchantment",
+  "oracleText": "You may cast Dragon spells without paying their mana costs.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/d/0d5674f9-22b2-45f9-902d-4fd245485c60.jpg?1783907362",
+   "normal": "https://cards.scryfall.io/normal/front/0/d/0d5674f9-22b2-45f9-902d-4fd245485c60.jpg?1783907362",
+   "large": "https://cards.scryfall.io/large/front/0/d/0d5674f9-22b2-45f9-902d-4fd245485c60.jpg?1783907362",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/d/0d5674f9-22b2-45f9-902d-4fd245485c60.jpg?1783907362"
+  }
+ },
+ {
+  "name": "Equilibrium Adept",
+  "scryfallId": "a4ba6d74-c6be-4a5e-8859-b791bb6b8f51",
+  "oracleId": "42bf9435-02e6-428f-a93c-fe4652deb4fc",
+  "set": "tdm",
+  "collectorNumber": "106",
+  "rarity": "uncommon",
+  "manaCost": "{3}{R}",
+  "typeLine": "Creature — Dog Monk",
+  "oracleText": "When this creature enters, exile the top card of your library. Until the end of your next turn, you may play that card.\nFlurry — Whenever you cast your second spell each turn, this creature gains double strike until end of turn.",
+  "power": "2",
+  "toughness": "4",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Flurry"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/4/a4ba6d74-c6be-4a5e-8859-b791bb6b8f51.jpg?1783907361",
+   "normal": "https://cards.scryfall.io/normal/front/a/4/a4ba6d74-c6be-4a5e-8859-b791bb6b8f51.jpg?1783907361",
+   "large": "https://cards.scryfall.io/large/front/a/4/a4ba6d74-c6be-4a5e-8859-b791bb6b8f51.jpg?1783907361",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/4/a4ba6d74-c6be-4a5e-8859-b791bb6b8f51.jpg?1783907361"
+  }
+ },
+ {
+  "name": "Fire-Rim Form",
+  "scryfallId": "32dc1bf4-a135-449f-848f-361a5360fae1",
+  "oracleId": "89fb21dc-4cf2-4c9a-b0ae-cc6e10277fb6",
+  "set": "tdm",
+  "collectorNumber": "107",
+  "rarity": "common",
+  "manaCost": "{1}{R}",
+  "typeLine": "Enchantment — Aura",
+  "oracleText": "Flash\nEnchant creature\nWhen this Aura enters, enchanted creature gains first strike until end of turn.\nEnchanted creature gets +2/+0.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Enchant",
+   "Flash"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/2/32dc1bf4-a135-449f-848f-361a5360fae1.jpg?1783907362",
+   "normal": "https://cards.scryfall.io/normal/front/3/2/32dc1bf4-a135-449f-848f-361a5360fae1.jpg?1783907362",
+   "large": "https://cards.scryfall.io/large/front/3/2/32dc1bf4-a135-449f-848f-361a5360fae1.jpg?1783907362",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/2/32dc1bf4-a135-449f-848f-361a5360fae1.jpg?1783907362"
+  }
+ },
+ {
+  "name": "Fleeting Effigy",
+  "scryfallId": "1971fd6c-0a1c-41b2-93a6-886a176fbb73",
+  "oracleId": "d6d9b5d2-0ab6-4637-a468-5149b7c7d0cf",
+  "set": "tdm",
+  "collectorNumber": "108",
+  "rarity": "uncommon",
+  "manaCost": "{R}",
+  "typeLine": "Creature — Elemental",
+  "oracleText": "Haste\nAt the beginning of your end step, return this creature to its owner's hand. (Return it only if it's on the battlefield.)\n{2}{R}: This creature gets +2/+0 until end of turn.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Haste"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/9/1971fd6c-0a1c-41b2-93a6-886a176fbb73.jpg?1783907360",
+   "normal": "https://cards.scryfall.io/normal/front/1/9/1971fd6c-0a1c-41b2-93a6-886a176fbb73.jpg?1783907360",
+   "large": "https://cards.scryfall.io/large/front/1/9/1971fd6c-0a1c-41b2-93a6-886a176fbb73.jpg?1783907360",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/9/1971fd6c-0a1c-41b2-93a6-886a176fbb73.jpg?1783907360"
+  }
+ },
+ {
+  "name": "Iridescent Tiger",
+  "scryfallId": "e3abbc8b-2bf8-478e-a541-f8019d150054",
+  "oracleId": "ce09c5b0-9dd4-4f73-9f3f-dfbd829813e4",
+  "set": "tdm",
+  "collectorNumber": "109",
+  "rarity": "uncommon",
+  "manaCost": "{4}{R}",
+  "typeLine": "Creature — Cat",
+  "oracleText": "When this creature enters, if you cast it, add {W}{U}{B}{R}{G}.",
+  "power": "3",
+  "toughness": "4",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/3/e3abbc8b-2bf8-478e-a541-f8019d150054.jpg?1783907360",
+   "normal": "https://cards.scryfall.io/normal/front/e/3/e3abbc8b-2bf8-478e-a541-f8019d150054.jpg?1783907360",
+   "large": "https://cards.scryfall.io/large/front/e/3/e3abbc8b-2bf8-478e-a541-f8019d150054.jpg?1783907360",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/3/e3abbc8b-2bf8-478e-a541-f8019d150054.jpg?1783907360"
+  }
+ },
+ {
+  "name": "Jeskai Devotee",
+  "scryfallId": "27f31f9c-7149-4608-9b18-b3530a2efd4a",
+  "oracleId": "6dcdd313-6df7-4d44-a4cb-0346a4fdb4e1",
+  "set": "tdm",
+  "collectorNumber": "110",
+  "rarity": "common",
+  "manaCost": "{1}{R}",
+  "typeLine": "Creature — Orc Monk",
+  "oracleText": "Flurry — Whenever you cast your second spell each turn, this creature gets +1/+1 until end of turn.\n{1}: Add {U}, {R}, or {W}. Activate only once each turn.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Flurry"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/7/27f31f9c-7149-4608-9b18-b3530a2efd4a.jpg?1783907361",
+   "normal": "https://cards.scryfall.io/normal/front/2/7/27f31f9c-7149-4608-9b18-b3530a2efd4a.jpg?1783907361",
+   "large": "https://cards.scryfall.io/large/front/2/7/27f31f9c-7149-4608-9b18-b3530a2efd4a.jpg?1783907361",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/7/27f31f9c-7149-4608-9b18-b3530a2efd4a.jpg?1783907361"
+  }
+ },
+ {
+  "name": "Magmatic Hellkite",
+  "scryfallId": "b3b3aec8-d931-4c7f-86b5-1e7dfb717b59",
+  "oracleId": "2a3b29c3-f69d-4671-8907-600d21528153",
+  "set": "tdm",
+  "collectorNumber": "111",
+  "rarity": "rare",
+  "manaCost": "{2}{R}{R}",
+  "typeLine": "Creature — Dragon",
+  "oracleText": "Flying\nWhen this creature enters, destroy target nonbasic land an opponent controls. Its controller searches their library for a basic land card, puts it onto the battlefield tapped with a stun counter on it, then shuffles. (If a permanent with a stun counter would become untapped, remove one from it instead.)",
+  "power": "4",
+  "toughness": "5",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/3/b3b3aec8-d931-4c7f-86b5-1e7dfb717b59.jpg?1783907360",
+   "normal": "https://cards.scryfall.io/normal/front/b/3/b3b3aec8-d931-4c7f-86b5-1e7dfb717b59.jpg?1783907360",
+   "large": "https://cards.scryfall.io/large/front/b/3/b3b3aec8-d931-4c7f-86b5-1e7dfb717b59.jpg?1783907360",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/3/b3b3aec8-d931-4c7f-86b5-1e7dfb717b59.jpg?1783907360"
+  }
+ },
+ {
+  "name": "Meticulous Artisan",
+  "scryfallId": "baf4c9dd-0546-41ac-a7ba-0bc312fef31e",
+  "oracleId": "2b2b3b16-389c-4581-b889-b8a2e76f83a2",
+  "set": "tdm",
+  "collectorNumber": "112",
+  "rarity": "common",
+  "manaCost": "{3}{R}",
+  "typeLine": "Creature — Djinn Artificer",
+  "oracleText": "Prowess (Whenever you cast a noncreature spell, this creature gets +1/+1 until end of turn.)\nWhen this creature enters, create a Treasure token. (It's an artifact with \"{T}, Sacrifice this token: Add one mana of any color.\")",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Prowess",
+   "Treasure"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/a/baf4c9dd-0546-41ac-a7ba-0bc312fef31e.jpg?1783907359",
+   "normal": "https://cards.scryfall.io/normal/front/b/a/baf4c9dd-0546-41ac-a7ba-0bc312fef31e.jpg?1783907359",
+   "large": "https://cards.scryfall.io/large/front/b/a/baf4c9dd-0546-41ac-a7ba-0bc312fef31e.jpg?1783907359",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/a/baf4c9dd-0546-41ac-a7ba-0bc312fef31e.jpg?1783907359"
+  }
+ },
+ {
+  "name": "Molten Exhale",
+  "scryfallId": "0ab95aab-a4bf-4131-83a0-2c138b6f20c3",
+  "oracleId": "82aa1402-4b1c-4343-aba5-dd3271cc1ac5",
+  "set": "tdm",
+  "collectorNumber": "113",
+  "rarity": "common",
+  "manaCost": "{1}{R}",
+  "typeLine": "Sorcery",
+  "oracleText": "You may cast this spell as though it had flash if you behold a Dragon as an additional cost to cast it. (To behold a Dragon, choose a Dragon you control or reveal a Dragon card from your hand.)\nMolten Exhale deals 4 damage to target creature or planeswalker.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Behold"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/a/0ab95aab-a4bf-4131-83a0-2c138b6f20c3.jpg?1783907360",
+   "normal": "https://cards.scryfall.io/normal/front/0/a/0ab95aab-a4bf-4131-83a0-2c138b6f20c3.jpg?1783907360",
+   "large": "https://cards.scryfall.io/large/front/0/a/0ab95aab-a4bf-4131-83a0-2c138b6f20c3.jpg?1783907360",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/a/0ab95aab-a4bf-4131-83a0-2c138b6f20c3.jpg?1783907360"
+  }
+ },
+ {
+  "name": "Narset's Rebuke",
+  "scryfallId": "5098bd73-d51c-4db4-bf06-fd4854089d37",
+  "oracleId": "247075c5-62f8-41a1-91b3-562ff0aabb30",
+  "set": "tdm",
+  "collectorNumber": "114",
+  "rarity": "common",
+  "manaCost": "{4}{R}",
+  "typeLine": "Instant",
+  "oracleText": "Narset's Rebuke deals 5 damage to target creature. Add {U}{R}{W}. If that creature would die this turn, exile it instead.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/0/5098bd73-d51c-4db4-bf06-fd4854089d37.jpg?1783907358",
+   "normal": "https://cards.scryfall.io/normal/front/5/0/5098bd73-d51c-4db4-bf06-fd4854089d37.jpg?1783907358",
+   "large": "https://cards.scryfall.io/large/front/5/0/5098bd73-d51c-4db4-bf06-fd4854089d37.jpg?1783907358",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/0/5098bd73-d51c-4db4-bf06-fd4854089d37.jpg?1783907358"
+  }
+ },
+ {
+  "name": "Overwhelming Surge",
+  "scryfallId": "bd7af85f-354e-468a-990b-bd774e68240f",
+  "oracleId": "bc8a37f1-c36b-4d0f-82da-4558ff712565",
+  "set": "tdm",
+  "collectorNumber": "115",
+  "rarity": "uncommon",
+  "manaCost": "{2}{R}",
+  "typeLine": "Instant",
+  "oracleText": "Choose one or both —\n• Overwhelming Surge deals 3 damage to target creature.\n• Destroy target noncreature artifact.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/d/bd7af85f-354e-468a-990b-bd774e68240f.jpg?1783907357",
+   "normal": "https://cards.scryfall.io/normal/front/b/d/bd7af85f-354e-468a-990b-bd774e68240f.jpg?1783907357",
+   "large": "https://cards.scryfall.io/large/front/b/d/bd7af85f-354e-468a-990b-bd774e68240f.jpg?1783907357",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/d/bd7af85f-354e-468a-990b-bd774e68240f.jpg?1783907357"
+  }
+ },
+ {
+  "name": "Rescue Leopard",
+  "scryfallId": "056136a8-84be-477c-b654-63238fb8236e",
+  "oracleId": "d70ad04a-b940-4bb1-bcdc-408166e91723",
+  "set": "tdm",
+  "collectorNumber": "116",
+  "rarity": "common",
+  "manaCost": "{2}{R}",
+  "typeLine": "Creature — Cat",
+  "oracleText": "Whenever this creature becomes tapped, you may discard a card. If you do, draw a card.",
+  "power": "4",
+  "toughness": "2",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/5/056136a8-84be-477c-b654-63238fb8236e.jpg?1783907357",
+   "normal": "https://cards.scryfall.io/normal/front/0/5/056136a8-84be-477c-b654-63238fb8236e.jpg?1783907357",
+   "large": "https://cards.scryfall.io/large/front/0/5/056136a8-84be-477c-b654-63238fb8236e.jpg?1783907357",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/5/056136a8-84be-477c-b654-63238fb8236e.jpg?1783907357"
+  }
+ },
+ {
+  "name": "Reverberating Summons",
+  "scryfallId": "1af19ce8-bc0c-420c-9e3b-9059b4df32cb",
+  "oracleId": "1fd78bf7-43ba-4e09-834b-14bfc1fd9d0d",
+  "set": "tdm",
+  "collectorNumber": "117",
+  "rarity": "uncommon",
+  "manaCost": "{1}{R}",
+  "typeLine": "Enchantment",
+  "oracleText": "At the beginning of each combat, if you've cast two or more spells this turn, this enchantment becomes a 3/3 Monk creature with haste in addition to its other types until end of turn.\n{1}{R}, Discard your hand, Sacrifice this enchantment: Draw two cards.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/a/1af19ce8-bc0c-420c-9e3b-9059b4df32cb.jpg?1783907358",
+   "normal": "https://cards.scryfall.io/normal/front/1/a/1af19ce8-bc0c-420c-9e3b-9059b4df32cb.jpg?1783907358",
+   "large": "https://cards.scryfall.io/large/front/1/a/1af19ce8-bc0c-420c-9e3b-9059b4df32cb.jpg?1783907358",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/a/1af19ce8-bc0c-420c-9e3b-9059b4df32cb.jpg?1783907358"
+  }
+ },
+ {
+  "name": "Runescale Stormbrood",
+  "scryfallId": "317744d1-ed78-4b53-a4d8-8c7ecfd9c4ae",
+  "oracleId": "af7db15c-93af-4c7e-a028-42181d91a923",
+  "set": "tdm",
+  "collectorNumber": "221",
+  "rarity": "uncommon",
+  "manaCost": "{3}{R}",
+  "typeLine": "Creature — Dragon",
+  "oracleText": "Flying\nWhenever you cast a noncreature spell or a Dragon spell, this creature gets +2/+0 until end of turn.",
+  "power": "2",
+  "toughness": "4",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "back": "Chilling Screech",
+  "adventure": true,
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/1/317744d1-ed78-4b53-a4d8-8c7ecfd9c4ae.jpg?1783907299",
+   "normal": "https://cards.scryfall.io/normal/front/3/1/317744d1-ed78-4b53-a4d8-8c7ecfd9c4ae.jpg?1783907299",
+   "large": "https://cards.scryfall.io/large/front/3/1/317744d1-ed78-4b53-a4d8-8c7ecfd9c4ae.jpg?1783907299",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/1/317744d1-ed78-4b53-a4d8-8c7ecfd9c4ae.jpg?1783907299"
+  }
+ },
+ {
+  "name": "Chilling Screech",
+  "scryfallId": "317744d1-ed78-4b53-a4d8-8c7ecfd9c4ae",
+  "oracleId": "af7db15c-93af-4c7e-a028-42181d91a923",
+  "set": "tdm",
+  "collectorNumber": "221",
+  "rarity": "uncommon",
+  "manaCost": "{1}{U}",
+  "typeLine": "Instant — Omen",
+  "oracleText": "Counter target spell with mana value 2 or less. (Then shuffle this card into its owner's library.)",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "front": "Runescale Stormbrood",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/1/317744d1-ed78-4b53-a4d8-8c7ecfd9c4ae.jpg?1783907299",
+   "normal": "https://cards.scryfall.io/normal/front/3/1/317744d1-ed78-4b53-a4d8-8c7ecfd9c4ae.jpg?1783907299",
+   "large": "https://cards.scryfall.io/large/front/3/1/317744d1-ed78-4b53-a4d8-8c7ecfd9c4ae.jpg?1783907299",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/1/317744d1-ed78-4b53-a4d8-8c7ecfd9c4ae.jpg?1783907299"
+  }
+ },
+ {
+  "name": "Sarkhan, Dragon Ascendant",
+  "scryfallId": "c2200646-7b7c-489d-bbae-16b03e1d7fb2",
+  "oracleId": "71cb48e2-2328-471c-a04a-7b6461f378f4",
+  "set": "tdm",
+  "collectorNumber": "118",
+  "rarity": "rare",
+  "manaCost": "{1}{R}",
+  "typeLine": "Legendary Creature — Human Druid",
+  "oracleText": "When Sarkhan enters, you may behold a Dragon. If you do, create a Treasure token. (To behold a Dragon, choose a Dragon you control or reveal a Dragon card from your hand.)\nWhenever a Dragon you control enters, put a +1/+1 counter on Sarkhan. Until end of turn, Sarkhan becomes a Dragon in addition to his other types and gains flying.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Behold",
+   "Treasure"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/2/c2200646-7b7c-489d-bbae-16b03e1d7fb2.jpg?1783907353",
+   "normal": "https://cards.scryfall.io/normal/front/c/2/c2200646-7b7c-489d-bbae-16b03e1d7fb2.jpg?1783907353",
+   "large": "https://cards.scryfall.io/large/front/c/2/c2200646-7b7c-489d-bbae-16b03e1d7fb2.jpg?1783907353",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/2/c2200646-7b7c-489d-bbae-16b03e1d7fb2.jpg?1783907353"
+  }
+ },
+ {
+  "name": "Seize Opportunity",
+  "scryfallId": "f7818d28-b9a5-4341-9adc-666070b8878d",
+  "oracleId": "d0458ffe-9a61-443f-8e80-3d2dde224a4d",
+  "set": "tdm",
+  "collectorNumber": "119",
+  "rarity": "common",
+  "manaCost": "{2}{R}",
+  "typeLine": "Instant",
+  "oracleText": "Choose one —\n• Exile the top two cards of your library. Until the end of your next turn, you may play those cards.\n• Up to two target creatures each get +2/+1 until end of turn.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/7/f7818d28-b9a5-4341-9adc-666070b8878d.jpg?1783907355",
+   "normal": "https://cards.scryfall.io/normal/front/f/7/f7818d28-b9a5-4341-9adc-666070b8878d.jpg?1783907355",
+   "large": "https://cards.scryfall.io/large/front/f/7/f7818d28-b9a5-4341-9adc-666070b8878d.jpg?1783907355",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/7/f7818d28-b9a5-4341-9adc-666070b8878d.jpg?1783907355"
+  }
+ },
+ {
+  "name": "Shock Brigade",
+  "scryfallId": "66940466-8e9d-4a85-bfb0-e92189b7a121",
+  "oracleId": "8676e917-17dd-4047-99c4-402f2e909e16",
+  "set": "tdm",
+  "collectorNumber": "120",
+  "rarity": "common",
+  "manaCost": "{1}{R}",
+  "typeLine": "Creature — Goblin Soldier",
+  "oracleText": "Menace (This creature can't be blocked except by two or more creatures.)\nMobilize 1 (Whenever this creature attacks, create a tapped and attacking 1/1 red Warrior creature token. Sacrifice it at the beginning of the next end step.)",
+  "power": "1",
+  "toughness": "3",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Menace",
+   "Mobilize"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/6/66940466-8e9d-4a85-bfb0-e92189b7a121.jpg?1783907354",
+   "normal": "https://cards.scryfall.io/normal/front/6/6/66940466-8e9d-4a85-bfb0-e92189b7a121.jpg?1783907354",
+   "large": "https://cards.scryfall.io/large/front/6/6/66940466-8e9d-4a85-bfb0-e92189b7a121.jpg?1783907354",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/6/66940466-8e9d-4a85-bfb0-e92189b7a121.jpg?1783907354"
+  }
+ },
+ {
+  "name": "Shocking Sharpshooter",
+  "scryfallId": "4a10342d-ca04-4d1e-bca9-79f531951a16",
+  "oracleId": "fbb7735f-ec91-4ed4-b735-d94a76e68a80",
+  "set": "tdm",
+  "collectorNumber": "121",
+  "rarity": "uncommon",
+  "manaCost": "{1}{R}",
+  "typeLine": "Creature — Human Archer",
+  "oracleText": "Reach\nWhenever another creature you control enters, this creature deals 1 damage to target opponent.",
+  "power": "1",
+  "toughness": "3",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Reach"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/a/4a10342d-ca04-4d1e-bca9-79f531951a16.jpg?1783907353",
+   "normal": "https://cards.scryfall.io/normal/front/4/a/4a10342d-ca04-4d1e-bca9-79f531951a16.jpg?1783907353",
+   "large": "https://cards.scryfall.io/large/front/4/a/4a10342d-ca04-4d1e-bca9-79f531951a16.jpg?1783907353",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/a/4a10342d-ca04-4d1e-bca9-79f531951a16.jpg?1783907353"
+  }
+ },
+ {
+  "name": "Stadium Headliner",
+  "scryfallId": "37d4ab2a-a06a-4768-b5e1-e1def957d7f4",
+  "oracleId": "d8cfa20a-343e-4661-9f5a-a8265f6917a8",
+  "set": "tdm",
+  "collectorNumber": "122",
+  "rarity": "rare",
+  "manaCost": "{R}",
+  "typeLine": "Creature — Goblin Warrior",
+  "oracleText": "Mobilize 1 (Whenever this creature attacks, create a tapped and attacking 1/1 red Warrior creature token. Sacrifice it at the beginning of the next end step.)\n{1}{R}, Sacrifice this creature: It deals damage equal to the number of creatures you control to target creature.",
+  "power": "1",
+  "toughness": "1",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Mobilize"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/7/37d4ab2a-a06a-4768-b5e1-e1def957d7f4.jpg?1783907352",
+   "normal": "https://cards.scryfall.io/normal/front/3/7/37d4ab2a-a06a-4768-b5e1-e1def957d7f4.jpg?1783907352",
+   "large": "https://cards.scryfall.io/large/front/3/7/37d4ab2a-a06a-4768-b5e1-e1def957d7f4.jpg?1783907352",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/7/37d4ab2a-a06a-4768-b5e1-e1def957d7f4.jpg?1783907352"
+  }
+ },
+ {
+  "name": "Stormscale Scion",
+  "scryfallId": "0ac43386-bd32-425c-8776-cec00b064cbc",
+  "oracleId": "cf37426d-b0ad-42c3-81be-79701aa4e0cf",
+  "set": "tdm",
+  "collectorNumber": "123",
+  "rarity": "mythic",
+  "manaCost": "{4}{R}{R}",
+  "typeLine": "Creature — Dragon",
+  "oracleText": "Flying\nOther Dragons you control get +1/+1.\nStorm (When you cast this spell, copy it for each spell cast before it this turn. Copies become tokens.)",
+  "power": "4",
+  "toughness": "4",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Flying",
+   "Storm"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/a/0ac43386-bd32-425c-8776-cec00b064cbc.jpg?1783907349",
+   "normal": "https://cards.scryfall.io/normal/front/0/a/0ac43386-bd32-425c-8776-cec00b064cbc.jpg?1783907349",
+   "large": "https://cards.scryfall.io/large/front/0/a/0ac43386-bd32-425c-8776-cec00b064cbc.jpg?1783907349",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/a/0ac43386-bd32-425c-8776-cec00b064cbc.jpg?1783907349"
+  }
+ },
+ {
+  "name": "Stormshriek Feral",
+  "scryfallId": "0ec92c44-7cf0-48a5-a3ca-bc633496d887",
+  "oracleId": "e24916ff-7566-4f27-8e31-732311a4a88c",
+  "set": "tdm",
+  "collectorNumber": "124",
+  "rarity": "common",
+  "manaCost": "{4}{R}",
+  "typeLine": "Creature — Dragon",
+  "oracleText": "Flying, haste\n{1}{R}: This creature gets +1/+0 until end of turn.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Flying",
+   "Haste"
+  ],
+  "back": "Flush Out",
+  "adventure": true,
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/e/0ec92c44-7cf0-48a5-a3ca-bc633496d887.jpg?1783907352",
+   "normal": "https://cards.scryfall.io/normal/front/0/e/0ec92c44-7cf0-48a5-a3ca-bc633496d887.jpg?1783907352",
+   "large": "https://cards.scryfall.io/large/front/0/e/0ec92c44-7cf0-48a5-a3ca-bc633496d887.jpg?1783907352",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/e/0ec92c44-7cf0-48a5-a3ca-bc633496d887.jpg?1783907352"
+  }
+ },
+ {
+  "name": "Flush Out",
+  "scryfallId": "0ec92c44-7cf0-48a5-a3ca-bc633496d887",
+  "oracleId": "e24916ff-7566-4f27-8e31-732311a4a88c",
+  "set": "tdm",
+  "collectorNumber": "124",
+  "rarity": "common",
+  "manaCost": "{1}{R}",
+  "typeLine": "Sorcery — Omen",
+  "oracleText": "Discard a card. If you do, draw two cards. (Then shuffle this card into its owner's library.)",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "front": "Stormshriek Feral",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/e/0ec92c44-7cf0-48a5-a3ca-bc633496d887.jpg?1783907352",
+   "normal": "https://cards.scryfall.io/normal/front/0/e/0ec92c44-7cf0-48a5-a3ca-bc633496d887.jpg?1783907352",
+   "large": "https://cards.scryfall.io/large/front/0/e/0ec92c44-7cf0-48a5-a3ca-bc633496d887.jpg?1783907352",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/e/0ec92c44-7cf0-48a5-a3ca-bc633496d887.jpg?1783907352"
+  }
+ },
+ {
+  "name": "Summit Intimidator",
+  "scryfallId": "e3cba0b1-7c22-4e51-b9cf-5bf01e67a222",
+  "oracleId": "b772d35a-d365-47ce-b1dd-a2ba574c74ea",
+  "set": "tdm",
+  "collectorNumber": "125",
+  "rarity": "common",
+  "manaCost": "{3}{R}",
+  "typeLine": "Creature — Yeti",
+  "oracleText": "Reach\nWhen this creature enters, target creature can't block this turn.",
+  "power": "4",
+  "toughness": "3",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Reach"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/3/e3cba0b1-7c22-4e51-b9cf-5bf01e67a222.jpg?1783907351",
+   "normal": "https://cards.scryfall.io/normal/front/e/3/e3cba0b1-7c22-4e51-b9cf-5bf01e67a222.jpg?1783907351",
+   "large": "https://cards.scryfall.io/large/front/e/3/e3cba0b1-7c22-4e51-b9cf-5bf01e67a222.jpg?1783907351",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/3/e3cba0b1-7c22-4e51-b9cf-5bf01e67a222.jpg?1783907351"
+  }
+ },
+ {
+  "name": "Sunset Strikemaster",
+  "scryfallId": "f8f1a2f2-526d-4b2c-985b-0acfdc21a2ee",
+  "oracleId": "d81ade13-e7c7-4fe3-bb0c-5007ed9f1198",
+  "set": "tdm",
+  "collectorNumber": "126",
+  "rarity": "uncommon",
+  "manaCost": "{1}{R}",
+  "typeLine": "Creature — Human Monk",
+  "oracleText": "{T}: Add {R}.\n{2}{R}, {T}, Sacrifice this creature: It deals 6 damage to target creature with flying.",
+  "power": "3",
+  "toughness": "1",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/8/f8f1a2f2-526d-4b2c-985b-0acfdc21a2ee.jpg?1783907352",
+   "normal": "https://cards.scryfall.io/normal/front/f/8/f8f1a2f2-526d-4b2c-985b-0acfdc21a2ee.jpg?1783907352",
+   "large": "https://cards.scryfall.io/large/front/f/8/f8f1a2f2-526d-4b2c-985b-0acfdc21a2ee.jpg?1783907352",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/8/f8f1a2f2-526d-4b2c-985b-0acfdc21a2ee.jpg?1783907352"
+  }
+ },
+ {
+  "name": "Twin Bolt",
+  "scryfallId": "688d8e93-d071-4089-9ef9-565ac4ae9ae0",
+  "oracleId": "970dc070-3668-4584-9904-2897b27bb806",
+  "set": "tdm",
+  "collectorNumber": "128",
+  "rarity": "common",
+  "manaCost": "{1}{R}",
+  "typeLine": "Instant",
+  "oracleText": "Twin Bolt deals 2 damage divided as you choose among one or two targets.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/8/688d8e93-d071-4089-9ef9-565ac4ae9ae0.jpg?1783907351",
+   "normal": "https://cards.scryfall.io/normal/front/6/8/688d8e93-d071-4089-9ef9-565ac4ae9ae0.jpg?1783907351",
+   "large": "https://cards.scryfall.io/large/front/6/8/688d8e93-d071-4089-9ef9-565ac4ae9ae0.jpg?1783907351",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/8/688d8e93-d071-4089-9ef9-565ac4ae9ae0.jpg?1783907351"
+  }
+ },
+ {
+  "name": "Underfoot Underdogs",
+  "scryfallId": "049acc79-1d68-410f-a081-88a7d40e823a",
+  "oracleId": "3740b86d-b0e6-4837-b408-e7f62b95c787",
+  "set": "tdm",
+  "collectorNumber": "129",
+  "rarity": "common",
+  "manaCost": "{2}{R}",
+  "typeLine": "Creature — Goblin Warrior",
+  "oracleText": "When this creature enters, create a 1/1 red Goblin creature token.\n{1}, {T}: Target creature you control with power 2 or less can't be blocked this turn.",
+  "power": "1",
+  "toughness": "2",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/4/049acc79-1d68-410f-a081-88a7d40e823a.jpg?1783907351",
+   "normal": "https://cards.scryfall.io/normal/front/0/4/049acc79-1d68-410f-a081-88a7d40e823a.jpg?1783907351",
+   "large": "https://cards.scryfall.io/large/front/0/4/049acc79-1d68-410f-a081-88a7d40e823a.jpg?1783907351",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/4/049acc79-1d68-410f-a081-88a7d40e823a.jpg?1783907351"
+  }
+ },
+ {
+  "name": "Unsparing Boltcaster",
+  "scryfallId": "204f5e5e-d87f-4aee-84e3-28afe8e21591",
+  "oracleId": "0a56a33b-033f-4398-8dc1-e531be059710",
+  "set": "tdm",
+  "collectorNumber": "130",
+  "rarity": "uncommon",
+  "manaCost": "{2}{R}",
+  "typeLine": "Creature — Ogre Wizard",
+  "oracleText": "When this creature enters, it deals 5 damage to target creature an opponent controls that was dealt damage this turn.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/0/204f5e5e-d87f-4aee-84e3-28afe8e21591.jpg?1783907349",
+   "normal": "https://cards.scryfall.io/normal/front/2/0/204f5e5e-d87f-4aee-84e3-28afe8e21591.jpg?1783907349",
+   "large": "https://cards.scryfall.io/large/front/2/0/204f5e5e-d87f-4aee-84e3-28afe8e21591.jpg?1783907349",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/0/204f5e5e-d87f-4aee-84e3-28afe8e21591.jpg?1783907349"
+  }
+ },
+ {
+  "name": "War Effort",
+  "scryfallId": "dd7f0413-c009-4c08-b877-9c1b776cbf26",
+  "oracleId": "d9bc6841-9f71-46af-ac1f-a01caee290c1",
+  "set": "tdm",
+  "collectorNumber": "131",
+  "rarity": "uncommon",
+  "manaCost": "{3}{R}",
+  "typeLine": "Enchantment",
+  "oracleText": "Creatures you control get +1/+0.\nWhenever you attack, create a 1/1 red Warrior creature token that's tapped and attacking. Sacrifice it at the beginning of the next end step.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/d/dd7f0413-c009-4c08-b877-9c1b776cbf26.jpg?1783907348",
+   "normal": "https://cards.scryfall.io/normal/front/d/d/dd7f0413-c009-4c08-b877-9c1b776cbf26.jpg?1783907348",
+   "large": "https://cards.scryfall.io/large/front/d/d/dd7f0413-c009-4c08-b877-9c1b776cbf26.jpg?1783907348",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/d/dd7f0413-c009-4c08-b877-9c1b776cbf26.jpg?1783907348"
+  }
+ },
+ {
+  "name": "Wild Ride",
+  "scryfallId": "abc8c6f5-6135-428e-8476-1751f82623f9",
+  "oracleId": "61978202-538b-4f92-acfc-e95f4a6ce466",
+  "set": "tdm",
+  "collectorNumber": "132",
+  "rarity": "common",
+  "manaCost": "{R}",
+  "typeLine": "Sorcery",
+  "oracleText": "Target creature gets +3/+0 and gains haste until end of turn.\nHarmonize {4}{R} (You may cast this card from your graveyard for its harmonize cost. You may tap a creature you control to reduce that cost by {X}, where X is its power. Then exile this spell.)",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Harmonize"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/b/abc8c6f5-6135-428e-8476-1751f82623f9.jpg?1783907349",
+   "normal": "https://cards.scryfall.io/normal/front/a/b/abc8c6f5-6135-428e-8476-1751f82623f9.jpg?1783907349",
+   "large": "https://cards.scryfall.io/large/front/a/b/abc8c6f5-6135-428e-8476-1751f82623f9.jpg?1783907349",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/b/abc8c6f5-6135-428e-8476-1751f82623f9.jpg?1783907349"
+  }
+ },
+ {
+  "name": "Zurgo's Vanguard",
+  "scryfallId": "a1aa3501-5738-4063-a7f4-51d2600b0041",
+  "oracleId": "d6fdfd94-cef5-482c-83ed-11c5ba40abe9",
+  "set": "tdm",
+  "collectorNumber": "133",
+  "rarity": "uncommon",
+  "manaCost": "{2}{R}",
+  "typeLine": "Creature — Dog Soldier",
+  "oracleText": "Mobilize 1 (Whenever this creature attacks, create a tapped and attacking 1/1 red Warrior creature token. Sacrifice it at the beginning of the next end step.)\nZurgo's Vanguard's power is equal to the number of creatures you control.",
+  "power": "*",
+  "toughness": "3",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Mobilize"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/1/a1aa3501-5738-4063-a7f4-51d2600b0041.jpg?1783907348",
+   "normal": "https://cards.scryfall.io/normal/front/a/1/a1aa3501-5738-4063-a7f4-51d2600b0041.jpg?1783907348",
+   "large": "https://cards.scryfall.io/large/front/a/1/a1aa3501-5738-4063-a7f4-51d2600b0041.jpg?1783907348",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/1/a1aa3501-5738-4063-a7f4-51d2600b0041.jpg?1783907348"
+  }
+ },
+ {
   "name": "Auroral Procession",
   "scryfallId": "672f94ad-65d6-4c7d-925d-165ef264626f",
   "oracleId": "511d3de9-076b-4811-bddf-00623f98993f",
