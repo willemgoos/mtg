@@ -652,7 +652,8 @@ export function castSpell(
       if (gone) moveObject(ctx, gone, 'exile');
     }
   // Strixhaven Brawl (15b, u): delve exiles the least useful cards from your graveyard.
-  for (let i = 0; i < (choice.delve ?? 0); i++) {
+  // Tarkir: Dragonstorm (19b, clans): delve granted by Teval is chosen card by card once the spell is cast (below).
+  for (let i = 0; i < (d.delve ? (choice.delve ?? 0) : 0); i++) {
     const gone = graveyardCostCard(ctx, player, {}, card);
     if (gone) moveObject(ctx, gone, 'exile');
   }
@@ -746,6 +747,24 @@ export function castSpell(
   if (choice.via === 'conduit' && !o.noSpellLock) (ctx.s.turn.spellLock ??= []).push(player);
   // Secrets of Strixhaven (14b): Zaffai and the Tempests, once each turn.
   if (choice.via === 'zaffai') (ctx.s.turn.zaffaiUsed ??= []).push(player);
+  // Tarkir: Dragonstorm (19b, clans): Teval, "spells you cast have delve": the player chooses the cards to exile one at a time
+  // (nothing to choose when the whole graveyard is exiled or every card in it is the same).
+  if (choice.delve && !d.delve) {
+    const graveyard = ctx.s.players[player].graveyard.filter((id) => id !== card);
+    const alike = graveyard.every((id) => obj(ctx, id).defId === obj(ctx, graveyard[0]!).defId);
+    if (graveyard.length <= choice.delve || alike) {
+      for (const id of graveyard.slice(0, choice.delve)) moveObject(ctx, id, 'exile');
+    } else {
+      ctx.s.decision = {
+        kind: 'forageExile',
+        player,
+        count: choice.delve,
+        thenPriority: player,
+        castingSpell: { card, targets, sacrificed: choice.sacrificeMany?.length ?? 0 },
+      };
+      return true;
+    }
+  }
   // Runaways: escape chooses every exiled card without enumerating combinations.
   if (escaping && d.escapeExiles) {
     const graveyard = ctx.s.players[player].graveyard;
@@ -2104,6 +2123,12 @@ export function answerChooseFromHand(ctx: Ctx, card: ObjectId | null): void {
   if (d.kind !== 'chooseFromHand') throw new Error('Not choosing from a hand');
   if (card) {
     moveObject(ctx, card, d.then === 'discard' ? 'graveyard' : 'exile');
+    // Tarkir: Dragonstorm (19b, clans): Severance Priest, the exiled card's owner and mana value are remembered on the source.
+    if (d.linkToSource && d.then === 'exile' && d.resume.source) {
+      const src = ctx.s.objects[d.resume.source.id];
+      if (src && src.zone === 'battlefield' && src.zcc === d.resume.source.zcc)
+        src.linkedExile = { owner: obj(ctx, card).owner, mv: manaValue(def(ctx, card).manaCost) };
+    }
     // Lorwyn Eclipsed (18c): Lightstall Inquisitor: the opponent chose it; they may play it while it stays exiled.
     if (d.ownerChooses) {
       const o = obj(ctx, card);

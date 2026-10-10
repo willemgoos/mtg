@@ -223,6 +223,7 @@ export function startTurn(ctx: Ctx, player: PlayerId, noPowerUp = false): void {
   delete s.turn.uncounterable; // Mystical Archive (16): Veil of Summer
   delete s.turn.nextSpellUncounterable; // Reality Fracture (17c): Theorist's Proxy
   delete s.turn.deflect; // Mystical Archive (16): Deflecting Palm
+  delete s.turn.sourceShields; // Tarkir: Dragonstorm (19b, clans): New Way Forward
   delete s.turn.osteomancer;
   delete s.turn.spellLock;
   delete s.turn.discards;

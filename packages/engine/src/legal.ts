@@ -657,7 +657,8 @@ function priorityActions(
             )
               continue;
             // Strixhaven Brawl (15b, u): delve, exiling only as many cards as the cost needs.
-            if (d.delve) {
+            // Tarkir: Dragonstorm (19b, clans): Teval, Arbiter of Virtue, "spells you cast have delve".
+            if (d.delve || hasStatic(ctx, player, 'spellsHaveDelve')) {
               const most = Math.min(
                 ps.graveyard.filter((id) => id !== card).length,
                 v.cost.generic,
@@ -1326,7 +1327,11 @@ export function getLegalActions(ctx: Ctx, player: PlayerId): Action[] {
       ];
     case 'chooseFromHand':
       return d.options.length
-        ? d.options.map((card) => ({ type: 'chooseCard', player, card }) as const)
+        ? [
+            ...d.options.map((card) => ({ type: 'chooseCard', player, card }) as const),
+            // Tarkir: Dragonstorm (19b, clans): Severance Priest, "you may choose a nonland card".
+            ...(d.optional ? [{ type: 'chooseCard', player, card: null } as const] : []),
+          ]
         : [{ type: 'chooseCard', player, card: null }];
     case 'chooseOption':
       return d.options.map((_, index) => ({ type: 'chooseOption', player, index }) as const);

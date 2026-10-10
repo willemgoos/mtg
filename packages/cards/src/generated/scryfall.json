@@ -81973,5 +81973,777 @@
    "large": "https://cards.scryfall.io/large/front/1/b/1bb9a5b1-48d2-453e-8991-c788bc63e482.jpg?1783909503",
    "artCrop": "https://cards.scryfall.io/art_crop/front/1/b/1bb9a5b1-48d2-453e-8991-c788bc63e482.jpg?1783909503"
   }
+ },
+ {
+  "name": "Skirmish Rhino",
+  "scryfallId": "4a2e9ba1-c254-41e3-9845-4e81f9fec38d",
+  "oracleId": "40eb7f43-7cee-41a1-a4d1-f34ee125ccd1",
+  "set": "tdm",
+  "collectorNumber": "224",
+  "rarity": "uncommon",
+  "manaCost": "{W}{B}{G}",
+  "typeLine": "Creature — Rhino",
+  "oracleText": "Trample\nWhen this creature enters, each opponent loses 2 life and you gain 2 life.",
+  "power": "3",
+  "toughness": "4",
+  "colors": [
+   "B",
+   "G",
+   "W"
+  ],
+  "keywords": [
+   "Trample"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/a/4a2e9ba1-c254-41e3-9845-4e81f9fec38d.jpg?1783907295",
+   "normal": "https://cards.scryfall.io/normal/front/4/a/4a2e9ba1-c254-41e3-9845-4e81f9fec38d.jpg?1783907295",
+   "large": "https://cards.scryfall.io/large/front/4/a/4a2e9ba1-c254-41e3-9845-4e81f9fec38d.jpg?1783907295",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/a/4a2e9ba1-c254-41e3-9845-4e81f9fec38d.jpg?1783907295"
+  }
+ },
+ {
+  "name": "Reputable Merchant",
+  "scryfallId": "b7d0591e-7fb7-40ea-ba2a-cfe544d40216",
+  "oracleId": "62f09a5b-d7fb-44f4-9fab-719185b735ab",
+  "set": "tdm",
+  "collectorNumber": "217",
+  "rarity": "common",
+  "manaCost": "{2/W}{2/B}{2/G}",
+  "typeLine": "Creature — Human Citizen",
+  "oracleText": "When this creature enters or dies, put a +1/+1 counter on target creature you control.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "B",
+   "G",
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/7/b7d0591e-7fb7-40ea-ba2a-cfe544d40216.jpg?1783907299",
+   "normal": "https://cards.scryfall.io/normal/front/b/7/b7d0591e-7fb7-40ea-ba2a-cfe544d40216.jpg?1783907299",
+   "large": "https://cards.scryfall.io/large/front/b/7/b7d0591e-7fb7-40ea-ba2a-cfe544d40216.jpg?1783907299",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/7/b7d0591e-7fb7-40ea-ba2a-cfe544d40216.jpg?1783907299"
+  }
+ },
+ {
+  "name": "Severance Priest",
+  "scryfallId": "bc779a1b-128c-4c74-bebd-bdb687867f68",
+  "oracleId": "3a38bf69-511f-4851-870f-8a65641d832e",
+  "set": "tdm",
+  "collectorNumber": "222",
+  "rarity": "rare",
+  "manaCost": "{W}{B}{G}",
+  "typeLine": "Creature — Djinn Cleric",
+  "oracleText": "Deathtouch\nWhen this creature enters, target opponent reveals their hand. You may choose a nonland card from it. If you do, exile that card.\nWhen this creature leaves the battlefield, the exiled card's owner creates an X/X white Spirit creature token, where X is the mana value of the exiled card.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "B",
+   "G",
+   "W"
+  ],
+  "keywords": [
+   "Deathtouch"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/c/bc779a1b-128c-4c74-bebd-bdb687867f68.jpg?1783907299",
+   "normal": "https://cards.scryfall.io/normal/front/b/c/bc779a1b-128c-4c74-bebd-bdb687867f68.jpg?1783907299",
+   "large": "https://cards.scryfall.io/large/front/b/c/bc779a1b-128c-4c74-bebd-bdb687867f68.jpg?1783907299",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/c/bc779a1b-128c-4c74-bebd-bdb687867f68.jpg?1783907299"
+  }
+ },
+ {
+  "name": "Felothar, Dawn of the Abzan",
+  "scryfallId": "83e11f20-6524-4fba-9603-0b97e2d69aac",
+  "oracleId": "fd666669-ad23-4e41-b78c-1cd7b82eb8b4",
+  "set": "tdm",
+  "collectorNumber": "184",
+  "rarity": "rare",
+  "manaCost": "{W}{B}{G}",
+  "typeLine": "Legendary Creature — Human Warrior",
+  "oracleText": "Trample\nWhenever Felothar enters or attacks, you may sacrifice a nonland permanent. When you do, put a +1/+1 counter on each creature you control.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "B",
+   "G",
+   "W"
+  ],
+  "keywords": [
+   "Trample"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/3/83e11f20-6524-4fba-9603-0b97e2d69aac.jpg?1783907320",
+   "normal": "https://cards.scryfall.io/normal/front/8/3/83e11f20-6524-4fba-9603-0b97e2d69aac.jpg?1783907320",
+   "large": "https://cards.scryfall.io/large/front/8/3/83e11f20-6524-4fba-9603-0b97e2d69aac.jpg?1783907320",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/3/83e11f20-6524-4fba-9603-0b97e2d69aac.jpg?1783907320"
+  }
+ },
+ {
+  "name": "Yathan Roadwatcher",
+  "scryfallId": "8e77339b-dd82-481c-9ee2-4156ca69ad35",
+  "oracleId": "0c3d86b6-5dcd-4016-9b4a-d4f66b1e963f",
+  "set": "tdm",
+  "collectorNumber": "236",
+  "rarity": "rare",
+  "manaCost": "{1}{W}{B}{G}",
+  "typeLine": "Creature — Human Scout",
+  "oracleText": "When this creature enters, if you cast it, mill four cards. When you do, return target creature card with mana value 3 or less from your graveyard to the battlefield.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "B",
+   "G",
+   "W"
+  ],
+  "keywords": [
+   "Mill"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/e/8e77339b-dd82-481c-9ee2-4156ca69ad35.jpg?1783907289",
+   "normal": "https://cards.scryfall.io/normal/front/8/e/8e77339b-dd82-481c-9ee2-4156ca69ad35.jpg?1783907289",
+   "large": "https://cards.scryfall.io/large/front/8/e/8e77339b-dd82-481c-9ee2-4156ca69ad35.jpg?1783907289",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/e/8e77339b-dd82-481c-9ee2-4156ca69ad35.jpg?1783907289"
+  }
+ },
+ {
+  "name": "Armament Dragon",
+  "scryfallId": "17f61c01-0a41-4fa1-ac34-ffa83baad989",
+  "oracleId": "23c75386-8011-4ee4-97e2-eaafeb20b788",
+  "set": "tdm",
+  "collectorNumber": "168",
+  "rarity": "uncommon",
+  "manaCost": "{3}{W}{B}{G}",
+  "typeLine": "Creature — Dragon",
+  "oracleText": "Flying\nWhen this creature enters, distribute three +1/+1 counters among one, two, or three target creatures you control.",
+  "power": "3",
+  "toughness": "4",
+  "colors": [
+   "B",
+   "G",
+   "W"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/7/17f61c01-0a41-4fa1-ac34-ffa83baad989.jpg?1783907328",
+   "normal": "https://cards.scryfall.io/normal/front/1/7/17f61c01-0a41-4fa1-ac34-ffa83baad989.jpg?1783907328",
+   "large": "https://cards.scryfall.io/large/front/1/7/17f61c01-0a41-4fa1-ac34-ffa83baad989.jpg?1783907328",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/7/17f61c01-0a41-4fa1-ac34-ffa83baad989.jpg?1783907328"
+  }
+ },
+ {
+  "name": "Perennation",
+  "scryfallId": "ffe7071e-a214-44e8-a571-129f0db44f76",
+  "oracleId": "be5138fd-3e92-42b9-93c5-311e66bd443f",
+  "set": "tdm",
+  "collectorNumber": "212",
+  "rarity": "mythic",
+  "manaCost": "{3}{W}{B}{G}",
+  "typeLine": "Sorcery",
+  "oracleText": "Return target permanent card from your graveyard to the battlefield with a hexproof counter and an indestructible counter on it.",
+  "colors": [
+   "B",
+   "G",
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/f/ffe7071e-a214-44e8-a571-129f0db44f76.jpg?1783907302",
+   "normal": "https://cards.scryfall.io/normal/front/f/f/ffe7071e-a214-44e8-a571-129f0db44f76.jpg?1783907302",
+   "large": "https://cards.scryfall.io/large/front/f/f/ffe7071e-a214-44e8-a571-129f0db44f76.jpg?1783907302",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/f/ffe7071e-a214-44e8-a571-129f0db44f76.jpg?1783907302"
+  }
+ },
+ {
+  "name": "Revival of the Ancestors",
+  "scryfallId": "fd742ff5-f0ea-4f4b-911e-4c09e2154dba",
+  "oracleId": "5a848c1f-d11a-42fb-b9ce-663901fc9555",
+  "set": "tdm",
+  "collectorNumber": "218",
+  "rarity": "rare",
+  "manaCost": "{1}{W}{B}{G}",
+  "typeLine": "Enchantment — Saga",
+  "oracleText": "(As this Saga enters and after your draw step, add a lore counter. Sacrifice after III.)\nI — Create three 1/1 white Spirit creature tokens.\nII — Distribute three +1/+1 counters among one, two, or three target creatures you control.\nIII — Creatures you control gain trample and lifelink until end of turn.",
+  "colors": [
+   "B",
+   "G",
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/d/fd742ff5-f0ea-4f4b-911e-4c09e2154dba.jpg?1783907299",
+   "normal": "https://cards.scryfall.io/normal/front/f/d/fd742ff5-f0ea-4f4b-911e-4c09e2154dba.jpg?1783907299",
+   "large": "https://cards.scryfall.io/large/front/f/d/fd742ff5-f0ea-4f4b-911e-4c09e2154dba.jpg?1783907299",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/d/fd742ff5-f0ea-4f4b-911e-4c09e2154dba.jpg?1783907299"
+  }
+ },
+ {
+  "name": "Betor, Kin to All",
+  "scryfallId": "b475b071-5545-483e-a397-89451f258602",
+  "oracleId": "826a0db6-195a-4697-9bd6-f544b279e3cf",
+  "set": "tdm",
+  "collectorNumber": "172",
+  "rarity": "mythic",
+  "manaCost": "{2}{W}{B}{G}",
+  "typeLine": "Legendary Creature — Spirit Dragon",
+  "oracleText": "Flying\nAt the beginning of your end step, if creatures you control have total toughness 10 or greater, draw a card. Then if creatures you control have total toughness 20 or greater, untap each creature you control. Then if creatures you control have total toughness 40 or greater, each opponent loses half their life, rounded up.",
+  "power": "5",
+  "toughness": "7",
+  "colors": [
+   "B",
+   "G",
+   "W"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/4/b475b071-5545-483e-a397-89451f258602.jpg?1783907325",
+   "normal": "https://cards.scryfall.io/normal/front/b/4/b475b071-5545-483e-a397-89451f258602.jpg?1783907325",
+   "large": "https://cards.scryfall.io/large/front/b/4/b475b071-5545-483e-a397-89451f258602.jpg?1783907325",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/4/b475b071-5545-483e-a397-89451f258602.jpg?1783907325"
+  }
+ },
+ {
+  "name": "Monastery Messenger",
+  "scryfallId": "0c9eeced-6464-41f0-bbea-05b3af4cc005",
+  "oracleId": "325b88e1-ec7f-4d22-887c-a7f18a868bb0",
+  "set": "tdm",
+  "collectorNumber": "208",
+  "rarity": "common",
+  "manaCost": "{2/U}{2/R}{2/W}",
+  "typeLine": "Creature — Bird Scout",
+  "oracleText": "Flying, vigilance\nWhen this creature enters, put up to one target noncreature, nonland card from your graveyard on top of your library.",
+  "power": "2",
+  "toughness": "3",
+  "colors": [
+   "R",
+   "U",
+   "W"
+  ],
+  "keywords": [
+   "Flying",
+   "Vigilance"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/c/0c9eeced-6464-41f0-bbea-05b3af4cc005.jpg?1783907306",
+   "normal": "https://cards.scryfall.io/normal/front/0/c/0c9eeced-6464-41f0-bbea-05b3af4cc005.jpg?1783907306",
+   "large": "https://cards.scryfall.io/large/front/0/c/0c9eeced-6464-41f0-bbea-05b3af4cc005.jpg?1783907306",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/c/0c9eeced-6464-41f0-bbea-05b3af4cc005.jpg?1783907306"
+  }
+ },
+ {
+  "name": "Jeskai Shrinekeeper",
+  "scryfallId": "6ec8fa0b-c695-4326-aebd-042cb1974925",
+  "oracleId": "bb50b4f4-f0da-4283-821b-6d74bd20752f",
+  "set": "tdm",
+  "collectorNumber": "197",
+  "rarity": "uncommon",
+  "manaCost": "{2}{U}{R}{W}",
+  "typeLine": "Creature — Dragon",
+  "oracleText": "Flying, haste\nWhenever this creature deals combat damage to a player, you gain 1 life and draw a card.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "R",
+   "U",
+   "W"
+  ],
+  "keywords": [
+   "Flying",
+   "Haste"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/e/6ec8fa0b-c695-4326-aebd-042cb1974925.jpg?1783907312",
+   "normal": "https://cards.scryfall.io/normal/front/6/e/6ec8fa0b-c695-4326-aebd-042cb1974925.jpg?1783907312",
+   "large": "https://cards.scryfall.io/large/front/6/e/6ec8fa0b-c695-4326-aebd-042cb1974925.jpg?1783907312",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/e/6ec8fa0b-c695-4326-aebd-042cb1974925.jpg?1783907312"
+  }
+ },
+ {
+  "name": "Jeskai Brushmaster",
+  "scryfallId": "2eb06c36-cf7e-47a9-819e-adfc54284153",
+  "oracleId": "eff690a7-c2c7-4750-894c-0667d3151165",
+  "set": "tdm",
+  "collectorNumber": "195",
+  "rarity": "uncommon",
+  "manaCost": "{1}{U}{R}{W}",
+  "typeLine": "Creature — Orc Monk",
+  "oracleText": "Double strike\nProwess (Whenever you cast a noncreature spell, this creature gets +1/+1 until end of turn.)",
+  "power": "2",
+  "toughness": "4",
+  "colors": [
+   "R",
+   "U",
+   "W"
+  ],
+  "keywords": [
+   "Prowess",
+   "Double strike"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/e/2eb06c36-cf7e-47a9-819e-adfc54284153.jpg?1783907313",
+   "normal": "https://cards.scryfall.io/normal/front/2/e/2eb06c36-cf7e-47a9-819e-adfc54284153.jpg?1783907313",
+   "large": "https://cards.scryfall.io/large/front/2/e/2eb06c36-cf7e-47a9-819e-adfc54284153.jpg?1783907313",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/e/2eb06c36-cf7e-47a9-819e-adfc54284153.jpg?1783907313"
+  }
+ },
+ {
+  "name": "Jeskai Revelation",
+  "scryfallId": "3cac0ad3-5107-4ed6-a688-d44bbd65e407",
+  "oracleId": "61b6b1d1-4350-41c1-ac47-835b2831f24a",
+  "set": "tdm",
+  "collectorNumber": "196",
+  "rarity": "mythic",
+  "manaCost": "{4}{U}{R}{W}",
+  "typeLine": "Instant",
+  "oracleText": "Return target spell or permanent to its owner's hand. Jeskai Revelation deals 4 damage to any target. Create two 1/1 white Monk creature tokens with prowess. Draw two cards. You gain 4 life.",
+  "colors": [
+   "R",
+   "U",
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/c/3cac0ad3-5107-4ed6-a688-d44bbd65e407.jpg?1783907311",
+   "normal": "https://cards.scryfall.io/normal/front/3/c/3cac0ad3-5107-4ed6-a688-d44bbd65e407.jpg?1783907311",
+   "large": "https://cards.scryfall.io/large/front/3/c/3cac0ad3-5107-4ed6-a688-d44bbd65e407.jpg?1783907311",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/c/3cac0ad3-5107-4ed6-a688-d44bbd65e407.jpg?1783907311"
+  }
+ },
+ {
+  "name": "Narset, Jeskai Waymaster",
+  "scryfallId": "6b77cbc1-dbc8-44d9-aa29-15cbb19afecd",
+  "oracleId": "1a2a74b8-0689-4959-9348-02cc832194cf",
+  "set": "tdm",
+  "collectorNumber": "209",
+  "rarity": "rare",
+  "manaCost": "{U}{R}{W}",
+  "typeLine": "Legendary Creature — Human Monk",
+  "oracleText": "At the beginning of your end step, you may discard your hand. If you do, draw cards equal to the number of spells you've cast this turn.",
+  "power": "3",
+  "toughness": "4",
+  "colors": [
+   "R",
+   "U",
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/b/6b77cbc1-dbc8-44d9-aa29-15cbb19afecd.jpg?1783907303",
+   "normal": "https://cards.scryfall.io/normal/front/6/b/6b77cbc1-dbc8-44d9-aa29-15cbb19afecd.jpg?1783907303",
+   "large": "https://cards.scryfall.io/large/front/6/b/6b77cbc1-dbc8-44d9-aa29-15cbb19afecd.jpg?1783907303",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/b/6b77cbc1-dbc8-44d9-aa29-15cbb19afecd.jpg?1783907303"
+  }
+ },
+ {
+  "name": "Shiko, Paragon of the Way",
+  "scryfallId": "8138cf10-1e3e-483f-86ad-cc399192657d",
+  "oracleId": "d3bdd3f2-9e38-436a-93a3-f87d9f4d4f86",
+  "set": "tdm",
+  "collectorNumber": "223",
+  "rarity": "mythic",
+  "manaCost": "{2}{U}{R}{W}",
+  "typeLine": "Legendary Creature — Spirit Dragon",
+  "oracleText": "Flying, vigilance\nWhen Shiko enters, exile target nonland card with mana value 3 or less from your graveyard. Copy it, then you may cast the copy without paying its mana cost. (A copy of a permanent spell becomes a token.)",
+  "power": "4",
+  "toughness": "5",
+  "colors": [
+   "R",
+   "U",
+   "W"
+  ],
+  "keywords": [
+   "Flying",
+   "Vigilance"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/1/8138cf10-1e3e-483f-86ad-cc399192657d.jpg?1783907294",
+   "normal": "https://cards.scryfall.io/normal/front/8/1/8138cf10-1e3e-483f-86ad-cc399192657d.jpg?1783907294",
+   "large": "https://cards.scryfall.io/large/front/8/1/8138cf10-1e3e-483f-86ad-cc399192657d.jpg?1783907294",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/1/8138cf10-1e3e-483f-86ad-cc399192657d.jpg?1783907294"
+  }
+ },
+ {
+  "name": "Flamehold Grappler",
+  "scryfallId": "cc8443a6-282f-4218-9dc8-144b5570d891",
+  "oracleId": "e2d21635-182f-4ebf-a6f5-d4c1fd7f9705",
+  "set": "tdm",
+  "collectorNumber": "185",
+  "rarity": "rare",
+  "manaCost": "{U}{R}{W}",
+  "typeLine": "Creature — Human Monk",
+  "oracleText": "First strike\nWhen this creature enters, copy the next spell you cast this turn when you cast it. You may choose new targets for the copy. (A copy of a permanent spell becomes a token.)",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "R",
+   "U",
+   "W"
+  ],
+  "keywords": [
+   "First strike"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/c/cc8443a6-282f-4218-9dc8-144b5570d891.jpg?1783907318",
+   "normal": "https://cards.scryfall.io/normal/front/c/c/cc8443a6-282f-4218-9dc8-144b5570d891.jpg?1783907318",
+   "large": "https://cards.scryfall.io/large/front/c/c/cc8443a6-282f-4218-9dc8-144b5570d891.jpg?1783907318",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/c/cc8443a6-282f-4218-9dc8-144b5570d891.jpg?1783907318"
+  }
+ },
+ {
+  "name": "Riverwheel Sweep",
+  "scryfallId": "686fe623-ee50-407d-87c9-664fb039f4d9",
+  "oracleId": "917aef2b-0e6d-460e-8745-8da8423d1592",
+  "set": "tdm",
+  "collectorNumber": "219",
+  "rarity": "uncommon",
+  "manaCost": "{2/U}{2/R}{2/W}",
+  "typeLine": "Sorcery",
+  "oracleText": "Tap target creature. Put three stun counters on it. (If a permanent with a stun counter would become untapped, remove one from it instead.)\nExile the top two cards of your library. Choose one of them. Until the end of your next turn, you may play that card.",
+  "colors": [
+   "R",
+   "U",
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/8/686fe623-ee50-407d-87c9-664fb039f4d9.jpg?1783907299",
+   "normal": "https://cards.scryfall.io/normal/front/6/8/686fe623-ee50-407d-87c9-664fb039f4d9.jpg?1783907299",
+   "large": "https://cards.scryfall.io/large/front/6/8/686fe623-ee50-407d-87c9-664fb039f4d9.jpg?1783907299",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/8/686fe623-ee50-407d-87c9-664fb039f4d9.jpg?1783907299"
+  }
+ },
+ {
+  "name": "New Way Forward",
+  "scryfallId": "d9d48f9e-79f0-478c-9db0-ff7ac4a8f401",
+  "oracleId": "429368e6-3de1-4a44-a062-86cbbb73e243",
+  "set": "tdm",
+  "collectorNumber": "211",
+  "rarity": "rare",
+  "manaCost": "{2}{U}{R}{W}",
+  "typeLine": "Instant",
+  "oracleText": "The next time a source of your choice would deal damage to you this turn, prevent that damage. When damage is prevented this way, New Way Forward deals that much damage to that source's controller and you draw that many cards.",
+  "colors": [
+   "R",
+   "U",
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/9/d9d48f9e-79f0-478c-9db0-ff7ac4a8f401.jpg?1783907303",
+   "normal": "https://cards.scryfall.io/normal/front/d/9/d9d48f9e-79f0-478c-9db0-ff7ac4a8f401.jpg?1783907303",
+   "large": "https://cards.scryfall.io/large/front/d/9/d9d48f9e-79f0-478c-9db0-ff7ac4a8f401.jpg?1783907303",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/9/d9d48f9e-79f0-478c-9db0-ff7ac4a8f401.jpg?1783907303"
+  }
+ },
+ {
+  "name": "Rediscover the Way",
+  "scryfallId": "79d6decf-afd5-4e96-b87e-fd7ab7e3c068",
+  "oracleId": "680a8e14-053f-4cde-a060-e1b36873cf14",
+  "set": "tdm",
+  "collectorNumber": "215",
+  "rarity": "rare",
+  "manaCost": "{U}{R}{W}",
+  "typeLine": "Enchantment — Saga",
+  "oracleText": "(As this Saga enters and after your draw step, add a lore counter. Sacrifice after III.)\nI, II — Look at the top three cards of your library. Put one of them into your hand and the rest on the bottom of your library in any order.\nIII — Whenever you cast a noncreature spell this turn, target creature you control gains double strike until end of turn.",
+  "colors": [
+   "R",
+   "U",
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/9/79d6decf-afd5-4e96-b87e-fd7ab7e3c068.jpg?1783907303",
+   "normal": "https://cards.scryfall.io/normal/front/7/9/79d6decf-afd5-4e96-b87e-fd7ab7e3c068.jpg?1783907303",
+   "large": "https://cards.scryfall.io/large/front/7/9/79d6decf-afd5-4e96-b87e-fd7ab7e3c068.jpg?1783907303",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/9/79d6decf-afd5-4e96-b87e-fd7ab7e3c068.jpg?1783907303"
+  }
+ },
+ {
+  "name": "Death Begets Life",
+  "scryfallId": "1faab43d-587d-44f6-9516-c8e3965bbc20",
+  "oracleId": "53e86135-3b24-4618-bcc0-af4d81e672dd",
+  "set": "tdm",
+  "collectorNumber": "176",
+  "rarity": "mythic",
+  "manaCost": "{5}{B}{G}{U}",
+  "typeLine": "Sorcery",
+  "oracleText": "Destroy all creatures and enchantments. Draw a card for each permanent destroyed this way.",
+  "colors": [
+   "B",
+   "G",
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/f/1faab43d-587d-44f6-9516-c8e3965bbc20.jpg?1783907324",
+   "normal": "https://cards.scryfall.io/normal/front/1/f/1faab43d-587d-44f6-9516-c8e3965bbc20.jpg?1783907324",
+   "large": "https://cards.scryfall.io/large/front/1/f/1faab43d-587d-44f6-9516-c8e3965bbc20.jpg?1783907324",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/f/1faab43d-587d-44f6-9516-c8e3965bbc20.jpg?1783907324"
+  }
+ },
+ {
+  "name": "Awaken the Honored Dead",
+  "scryfallId": "14078a49-2230-4ad7-aea0-0c253813c646",
+  "oracleId": "5f694917-f434-4459-bc86-caf9ac1c80e7",
+  "set": "tdm",
+  "collectorNumber": "170",
+  "rarity": "rare",
+  "manaCost": "{B}{G}{U}",
+  "typeLine": "Enchantment — Saga",
+  "oracleText": "(As this Saga enters and after your draw step, add a lore counter. Sacrifice after III.)\nI — Destroy target nonland permanent.\nII — Mill three cards.\nIII — You may discard a card. When you do, return target creature or land card from your graveyard to your hand.",
+  "colors": [
+   "B",
+   "G",
+   "U"
+  ],
+  "keywords": [
+   "Mill"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/4/14078a49-2230-4ad7-aea0-0c253813c646.jpg?1783907325",
+   "normal": "https://cards.scryfall.io/normal/front/1/4/14078a49-2230-4ad7-aea0-0c253813c646.jpg?1783907325",
+   "large": "https://cards.scryfall.io/large/front/1/4/14078a49-2230-4ad7-aea0-0c253813c646.jpg?1783907325",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/4/14078a49-2230-4ad7-aea0-0c253813c646.jpg?1783907325"
+  }
+ },
+ {
+  "name": "Teval, Arbiter of Virtue",
+  "scryfallId": "27a93f5b-7b32-49f0-a179-b897828fe49a",
+  "oracleId": "f6cf359a-91cb-4b3c-8837-be53e4ed9c93",
+  "set": "tdm",
+  "collectorNumber": "230",
+  "rarity": "mythic",
+  "manaCost": "{2}{B}{G}{U}",
+  "typeLine": "Legendary Creature — Spirit Dragon",
+  "oracleText": "Flying, lifelink\nSpells you cast have delve. (Each card you exile from your graveyard while casting those spells pays for {1}.)\nWhenever you cast a spell, you lose life equal to its mana value.",
+  "power": "6",
+  "toughness": "6",
+  "colors": [
+   "B",
+   "G",
+   "U"
+  ],
+  "keywords": [
+   "Flying",
+   "Lifelink"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/7/27a93f5b-7b32-49f0-a179-b897828fe49a.jpg?1783907293",
+   "normal": "https://cards.scryfall.io/normal/front/2/7/27a93f5b-7b32-49f0-a179-b897828fe49a.jpg?1783907293",
+   "large": "https://cards.scryfall.io/large/front/2/7/27a93f5b-7b32-49f0-a179-b897828fe49a.jpg?1783907293",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/7/27a93f5b-7b32-49f0-a179-b897828fe49a.jpg?1783907293"
+  }
+ },
+ {
+  "name": "Rakshasa's Bargain",
+  "scryfallId": "5c409f4f-3b2c-4c33-b850-55b2a46f51ca",
+  "oracleId": "d87be8c6-7a1f-4db8-ada1-b1a030f03877",
+  "set": "tdm",
+  "collectorNumber": "214",
+  "rarity": "uncommon",
+  "manaCost": "{2/B}{2/G}{2/U}",
+  "typeLine": "Instant",
+  "oracleText": "Look at the top four cards of your library. Put two of them into your hand and the rest into your graveyard.",
+  "colors": [
+   "B",
+   "G",
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/c/5c409f4f-3b2c-4c33-b850-55b2a46f51ca.jpg?1783907303",
+   "normal": "https://cards.scryfall.io/normal/front/5/c/5c409f4f-3b2c-4c33-b850-55b2a46f51ca.jpg?1783907303",
+   "large": "https://cards.scryfall.io/large/front/5/c/5c409f4f-3b2c-4c33-b850-55b2a46f51ca.jpg?1783907303",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/c/5c409f4f-3b2c-4c33-b850-55b2a46f51ca.jpg?1783907303"
+  }
+ },
+ {
+  "name": "Fangkeeper's Familiar",
+  "scryfallId": "655fa2e1-3e1c-424c-b17a-daa7b8fface4",
+  "oracleId": "06343800-b555-4a13-ad4d-19e37d200138",
+  "set": "tdm",
+  "collectorNumber": "183",
+  "rarity": "rare",
+  "manaCost": "{1}{B}{G}{U}",
+  "typeLine": "Creature — Snake",
+  "oracleText": "Flash\nWhen this creature enters, choose one —\n• You gain 3 life and surveil 3. (Look at the top three cards of your library, then put any number of them into your graveyard and the rest on top of your library in any order.)\n• Destroy target enchantment.\n• Counter target creature spell.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "B",
+   "G",
+   "U"
+  ],
+  "keywords": [
+   "Surveil",
+   "Flash"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/5/655fa2e1-3e1c-424c-b17a-daa7b8fface4.jpg?1783907319",
+   "normal": "https://cards.scryfall.io/normal/front/6/5/655fa2e1-3e1c-424c-b17a-daa7b8fface4.jpg?1783907319",
+   "large": "https://cards.scryfall.io/large/front/6/5/655fa2e1-3e1c-424c-b17a-daa7b8fface4.jpg?1783907319",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/5/655fa2e1-3e1c-424c-b17a-daa7b8fface4.jpg?1783907319"
+  }
+ },
+ {
+  "name": "Lotuslight Dancers",
+  "scryfallId": "82aa2593-4a79-46f1-a2bd-b71fb504d0ab",
+  "oracleId": "83c8f1ca-194e-4cb6-9d5f-029133c1edbc",
+  "set": "tdm",
+  "collectorNumber": "204",
+  "rarity": "rare",
+  "manaCost": "{2}{B}{G}{U}",
+  "typeLine": "Creature — Zombie Bard",
+  "oracleText": "Lifelink\nWhen this creature enters, search your library for a black card, a green card, and a blue card. Put those cards into your graveyard, then shuffle.",
+  "power": "3",
+  "toughness": "6",
+  "colors": [
+   "B",
+   "G",
+   "U"
+  ],
+  "keywords": [
+   "Lifelink"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/2/82aa2593-4a79-46f1-a2bd-b71fb504d0ab.jpg?1783907308",
+   "normal": "https://cards.scryfall.io/normal/front/8/2/82aa2593-4a79-46f1-a2bd-b71fb504d0ab.jpg?1783907308",
+   "large": "https://cards.scryfall.io/large/front/8/2/82aa2593-4a79-46f1-a2bd-b71fb504d0ab.jpg?1783907308",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/2/82aa2593-4a79-46f1-a2bd-b71fb504d0ab.jpg?1783907308"
+  }
+ },
+ {
+  "name": "Kheru Goldkeeper",
+  "scryfallId": "8d11183a-57f5-4ddb-8a6e-15fff704b114",
+  "oracleId": "aef4ab0e-c81f-428c-ab23-64504a9fb989",
+  "set": "tdm",
+  "collectorNumber": "199",
+  "rarity": "uncommon",
+  "manaCost": "{1}{B}{G}{U}",
+  "typeLine": "Creature — Dragon",
+  "oracleText": "Flying\nWhenever one or more cards leave your graveyard during your turn, create a Treasure token. (It's an artifact with \"{T}, Sacrifice this token: Add one mana of any color.\")\nRenew — {2}{B}{G}{U}, Exile this card from your graveyard: Put two +1/+1 counters and a flying counter on target creature. Activate only as a sorcery.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "B",
+   "G",
+   "U"
+  ],
+  "keywords": [
+   "Flying",
+   "Renew",
+   "Treasure"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/d/8d11183a-57f5-4ddb-8a6e-15fff704b114.jpg?1783907312",
+   "normal": "https://cards.scryfall.io/normal/front/8/d/8d11183a-57f5-4ddb-8a6e-15fff704b114.jpg?1783907312",
+   "large": "https://cards.scryfall.io/large/front/8/d/8d11183a-57f5-4ddb-8a6e-15fff704b114.jpg?1783907312",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/d/8d11183a-57f5-4ddb-8a6e-15fff704b114.jpg?1783907312"
+  }
+ },
+ {
+  "name": "Lie in Wait",
+  "scryfallId": "96fff22c-282b-4849-82ce-890013b53262",
+  "oracleId": "4dc0831a-0eb1-4f7d-9591-6e670e180116",
+  "set": "tdm",
+  "collectorNumber": "203",
+  "rarity": "uncommon",
+  "manaCost": "{B}{G}{U}",
+  "typeLine": "Sorcery",
+  "oracleText": "Return target creature card from your graveyard to your hand. Lie in Wait deals damage equal to that card's power to target creature.",
+  "colors": [
+   "B",
+   "G",
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/6/96fff22c-282b-4849-82ce-890013b53262.jpg?1783907310",
+   "normal": "https://cards.scryfall.io/normal/front/9/6/96fff22c-282b-4849-82ce-890013b53262.jpg?1783907310",
+   "large": "https://cards.scryfall.io/large/front/9/6/96fff22c-282b-4849-82ce-890013b53262.jpg?1783907310",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/6/96fff22c-282b-4849-82ce-890013b53262.jpg?1783907310"
+  }
+ },
+ {
+  "name": "Kotis, the Fangkeeper",
+  "scryfallId": "d3736f17-f80b-4b2c-b919-2c963bc14682",
+  "oracleId": "2eb2f6a2-e31a-4d3e-93ce-100394899014",
+  "set": "tdm",
+  "collectorNumber": "202",
+  "rarity": "rare",
+  "manaCost": "{1}{B}{G}{U}",
+  "typeLine": "Legendary Creature — Zombie Warrior",
+  "oracleText": "Indestructible\nWhenever Kotis deals combat damage to a player, exile the top X cards of their library, where X is the amount of damage dealt. You may cast any number of spells with mana value X or less from among them without paying their mana costs.",
+  "power": "2",
+  "toughness": "1",
+  "colors": [
+   "B",
+   "G",
+   "U"
+  ],
+  "keywords": [
+   "Indestructible"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/3/d3736f17-f80b-4b2c-b919-2c963bc14682.jpg?1783907308",
+   "normal": "https://cards.scryfall.io/normal/front/d/3/d3736f17-f80b-4b2c-b919-2c963bc14682.jpg?1783907308",
+   "large": "https://cards.scryfall.io/large/front/d/3/d3736f17-f80b-4b2c-b919-2c963bc14682.jpg?1783907308",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/3/d3736f17-f80b-4b2c-b919-2c963bc14682.jpg?1783907308"
+  }
+ },
+ {
+  "name": "Gurmag Nightwatch",
+  "scryfallId": "de731430-6bbf-4782-953e-b69c46353959",
+  "oracleId": "fde50a0d-9bc6-45f4-873e-3de81a513fac",
+  "set": "tdm",
+  "collectorNumber": "190",
+  "rarity": "common",
+  "manaCost": "{2/B}{2/G}{2/U}",
+  "typeLine": "Creature — Human Ranger",
+  "oracleText": "When this creature enters, look at the top three cards of your library. You may put one of those cards back on top of your library. Put the rest into your graveyard.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "B",
+   "G",
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/e/de731430-6bbf-4782-953e-b69c46353959.jpg?1783907317",
+   "normal": "https://cards.scryfall.io/normal/front/d/e/de731430-6bbf-4782-953e-b69c46353959.jpg?1783907317",
+   "large": "https://cards.scryfall.io/large/front/d/e/de731430-6bbf-4782-953e-b69c46353959.jpg?1783907317",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/e/de731430-6bbf-4782-953e-b69c46353959.jpg?1783907317"
+  }
+ },
+ {
+  "name": "Call the Spirit Dragons",
+  "scryfallId": "b1ad91db-5f16-4392-baf1-f8400ec11e0a",
+  "oracleId": "3ceb23f5-abb1-4569-a1e4-1eed9a9babcf",
+  "set": "tdm",
+  "collectorNumber": "174",
+  "rarity": "mythic",
+  "manaCost": "{W}{U}{B}{R}{G}",
+  "typeLine": "Enchantment",
+  "oracleText": "Dragons you control have indestructible.\nAt the beginning of your upkeep, for each color, put a +1/+1 counter on a Dragon you control of that color. If you put +1/+1 counters on five Dragons this way, you win the game.",
+  "colors": [
+   "B",
+   "G",
+   "R",
+   "U",
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/1/b1ad91db-5f16-4392-baf1-f8400ec11e0a.jpg?1783907326",
+   "normal": "https://cards.scryfall.io/normal/front/b/1/b1ad91db-5f16-4392-baf1-f8400ec11e0a.jpg?1783907326",
+   "large": "https://cards.scryfall.io/large/front/b/1/b1ad91db-5f16-4392-baf1-f8400ec11e0a.jpg?1783907326",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/1/b1ad91db-5f16-4392-baf1-f8400ec11e0a.jpg?1783907326"
+  }
  }
 ]

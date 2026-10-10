@@ -58,6 +58,7 @@ import { nextInt, shuffleInPlace } from './rng.ts';
 import { checkCondition, triggeredAbility } from './triggers.ts';
 import { addLore } from './sagas.ts';
 import { CHOOSERS } from './stx-13c-a-effects.ts';
+import { applySourceShield } from './tdm-clans-effects.ts'; // Tarkir: Dragonstorm (19b, clans)
 import { planeswalkersSurvive, tokenMultiplier } from './brawl-15a-w-effects.ts';
 import { crownReplacement } from './ecl-crown.ts';
 import { protectedFrom } from './brawl-15b-w-effects.ts';
@@ -242,6 +243,8 @@ function prevented(ctx: Ctx, src: DamageSource, to: TargetChoice, amount: number
   if ('player' in to) {
     // Lorwyn Eclipsed (18b, white): Morningtide's Light, from any source.
     if (ctx.s.players[to.player].damagePrevented) return 0;
+    // Tarkir: Dragonstorm (19b, clans): New Way Forward, the next damage from the chosen source is prevented and reflected.
+    if (ctx.s.turn.sourceShields && applySourceShield(ctx, src, to.player, amount) === 0) return 0;
     if (src.controller === to.player) return amount;
     // Mystical Archive (16): Deflecting Palm, the next damage to you this turn is prevented and dealt to its source's controller.
     if (ctx.s.turn.deflect?.includes(to.player)) {
@@ -550,7 +553,7 @@ function divideStep(
     e.give === 'damage' ? `${n} damage to` : `${n} +1/+1 counter${n === 1 ? '' : 's'} on`;
   const options: { label: string; effects: EffectDef[] }[] = [];
   // "Up to": choosing no targets at all.
-  if (!chosen.length) options.push({ label: 'No targets', effects: [] });
+  if (!chosen.length && !e.atLeastOne) options.push({ label: 'No targets', effects: [] });
   for (let n = left; n >= (last ? left : 1); n--)
     for (const t of cands)
       options.push({
@@ -877,6 +880,13 @@ export function resolveAmount(ctx: Ctx, es: EffectSource, amount: Amount): numbe
     return checkCondition(ctx, amount.if, es.controller, self, es.targets)
       ? amount.then
       : (amount.else ?? 0);
+  }
+  // Tarkir: Dragonstorm (19b, clans): Lie in Wait, "that card's power" (the card a target slot named, wherever it is now).
+  if ('powerOfCard' in amount) {
+    const ref = amount.powerOfCard;
+    const t = typeof ref === 'object' && 'target' in ref ? es.targets[ref.target] : undefined;
+    const o = t && 'object' in t ? ctx.s.objects[t.object.id] : undefined;
+    return o ? Math.max(0, o.zone === 'battlefield' ? power(ctx, o.id) : (def(ctx, o.id).power ?? 0)) : 0;
   }
   if ('powerOf' in amount) {
     const ids = objectsOf(ctx, es, amount.powerOf);
@@ -1562,7 +1572,10 @@ export function runEffects(
       } else if (e.kind === 'castFreeFromTop') {
         // Marvel Super Heroes (Cosmic Cube, Doom Reigns Supreme).
         const who = e.from === 'yours' ? controller : other(controller);
-        const top = ctx.s.players[who].library.slice(0, e.count);
+        const top = ctx.s.players[who].library.slice(
+          0,
+          typeof e.count === 'number' ? e.count : resolveAmount(ctx, es, e.count), // Kotis: X, the damage dealt
+        );
         if (top.length === 0) continue;
         for (const id of top) moveObject(ctx, id, 'exile');
         const max = e.maxManaValue !== undefined ? resolveAmount(ctx, es, e.maxManaValue) : 99;
@@ -1583,6 +1596,7 @@ export function runEffects(
           player: controller,
           cards,
           ...rest,
+          ...(e.more ? { more: true } : {}), // Tarkir: Dragonstorm (19b, clans): Kotis, any number of spells
           resume,
           thenPriority,
         };
@@ -1876,6 +1890,8 @@ export function runEffects(
           ...(e.castableWhileControlling ? { castableWhileControlling: true } : {}),
           ...(e.castableFilter ? { castableFilter: e.castableFilter } : {}),
           ...(e.among ? { among: e.among } : {}),
+          ...(e.linkToSource ? { linkToSource: true } : {}), // Tarkir: Dragonstorm (19b, clans): Severance Priest
+          ...(e.optional ? { optional: true } : {}),
           resume,
           thenPriority,
         };
@@ -1919,6 +1935,8 @@ export function runEffects(
         delete ctx.persisting;
         // Avenge: "You gain 1 life for each creature destroyed this way."
         if (e.gainPerDestroyed) gainLife(ctx, controller, e.gainPerDestroyed * died.length);
+        // Tarkir: Dragonstorm (19b, clans): Death Begets Life, "draw a card for each permanent destroyed this way".
+        if (e.drawPerDestroyed) for (let k = 0; k < died.length; k++) drawCard(ctx, controller);
         // Strixhaven (13c): Culling Ritual: one mana for each permanent destroyed.
         if (e.manaPerDestroyed)
           for (let k = 0; k < died.length; k++)
@@ -2980,8 +2998,8 @@ function runEffectInner(ctx: Ctx, es: EffectSource, e: EffectDef): void {
       if (!t || !('object' in t)) return;
       const i = ctx.s.stack.findIndex((x) => x.kind === 'spell' && x.id === t.object.id);
       if (i < 0) {
-        // Reality Fracture (17c): Fatehold Charm, "target spell or creature".
-        const o = e.orCreature ? ctx.s.objects[t.object.id] : undefined;
+        // Reality Fracture (17c): Fatehold Charm, "target spell or creature"; Tarkir: Dragonstorm (19b, clans): Jeskai Revelation, "or permanent".
+        const o = e.orCreature || e.orPermanent ? ctx.s.objects[t.object.id] : undefined;
         if (o && o.zone === 'battlefield' && o.zcc === t.object.zcc) moveObject(ctx, o.id, 'hand');
         return;
       }
@@ -3117,6 +3135,8 @@ function runEffectInner(ctx: Ctx, es: EffectSource, e: EffectDef): void {
         });
       }
       if (e.counter) (o.counters ??= {})[e.counter] = 1;
+      // Tarkir: Dragonstorm (19b, clans): Perennation, a counter of each kind.
+      for (const c of e.counters ?? []) (o.counters ??= {})[c] = 1;
       if (e.addSubtype) o.addedSubtypes = [...(o.addedSubtypes ?? []), e.addSubtype];
       // Heroic Return, Winter Soldier: "if a Hero enters this way, it enters with counters".
       if (e.countersIf && cardMatches(ctx, o.id, e.countersIf.filter))

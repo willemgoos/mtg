@@ -96,6 +96,12 @@ export function createHeuristicBot(db: CardDb, name = 'heuristic'): Bot {
             return { type: 'chooseOption', player: me, index: 0 };
           // Strixhaven (13c): Augusta's "tap any number of creatures": the bot taps none ("Done" is first).
           if (d.title?.startsWith('Augusta')) return { type: 'chooseOption', player: me, index: 0 };
+          // Tarkir: Dragonstorm (19b, clans): Call the Spirit Dragons wins with counters on five different Dragons, so the bot picks a
+          // Dragon that hasn't got one yet this upkeep if there is one.
+          if (d.title?.startsWith('Call the Spirit Dragons')) {
+            const fresh = d.options.findIndex((o) => !o.label.endsWith('already has one'));
+            return { type: 'chooseOption', player: me, index: Math.max(0, fresh) };
+          }
           // Reality Fracture (17a fixes): every creature type is on offer.
           if (d.title === 'Choose a creature type') return chooseCreatureType(engine, view, me, d);
           // Reality Fracture (17a): Arc of Fortune.
