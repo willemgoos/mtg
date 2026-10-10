@@ -444,6 +444,9 @@ export interface CardDefinition {
   spree?: ManaCost[];
   /** The first target's mana value must equal X (Stolen by the Fae). */
   targetManaValueX?: boolean;
+  // Tarkir: Dragonstorm (19b, black): Hundred-Battle Veteran
+  /** "You may cast this card from your graveyard. If you do, it enters with a finality counter on it." */
+  castFromGraveyardFinality?: boolean;
 }
 
 export type AbilityDef =
@@ -655,6 +658,12 @@ export interface CostDef {
   // Lorwyn Eclipsed (18b, white): Kithkeeper
   /** "Tap three untapped creatures you control" (the source may be one of them; the player picks them on the board). */
   tapCreatures?: number;
+  // Tarkir: Dragonstorm (19b, black): Sidisi, Regent of the Mire
+  /**
+   * With `sacrificeCreature`: "sacrifice a creature with mana value X ... target creature card with mana value X plus 1": the
+   * first target's mana value is one more than the sacrificed creature's (the sacrifice and the target are offered as pairs).
+   */
+  sacrificeForTargetManaValue?: boolean;
 }
 
 export type TriggerDef =
@@ -1314,7 +1323,10 @@ export type ConditionDef =
   /** The source has dealt damage (any damage, to anyone) since it came to the battlefield ("hexproof as long as it hasn't dealt damage yet" is `not` of this). */
   | { kind: 'sourceDealtDamage' }
   /** Resolution-time "if": the player chosen as this target was dealt damage by the source during this resolution ("if a player is dealt damage this way"). */
-  | { kind: 'targetPlayerDamagedBySource'; target: number };
+  | { kind: 'targetPlayerDamagedBySource'; target: number }
+  // Tarkir: Dragonstorm (19b, black): The Sibsig Ceremony
+  /** The creature that caused the trigger (the one that entered) was cast, not put onto the battlefield some other way ("if you cast it"). */
+  | { kind: 'subjectWasCast' };
 
 export interface CardFilter {
   anyOf?: CardFilter[];
@@ -1535,7 +1547,7 @@ export interface TargetSpec {
    * chosen just before it (each pair is listed once, the second target always the later card).
    */
   sharesCreatureTypeWithPrevious?: boolean;
-  // Tarkir: Dragonstorm (19b, white): Arashin Sunshield
+  // Tarkir: Dragonstorm (19b, white, black): Arashin Sunshield, Feral Deathgorger
   /** With `anyNumber` and 'graveyardCard': all the targets are cards in the same graveyard ("up to two target cards from a single graveyard"). */
   singleGraveyard?: boolean;
 }
@@ -1791,7 +1803,10 @@ export type Amount =
   /** Instant and sorcery cards in your graveyard plus cards with flashback you own in exile (Seize the Storm). */
   | { count: 'instantsSorceriesInGraveyardPlusFlashbackInExile' }
   /** The greatest mana value among instant and sorcery spells you've cast this turn (Rootha). */
-  | { count: 'greatestInstantSorceryCastThisTurn' };
+  | { count: 'greatestInstantSorceryCastThisTurn' }
+  // Tarkir: Dragonstorm (19b, black): Hundred-Battle Veteran
+  /** The different kinds of counters among the creatures you control ("three or more different kinds of counters among creatures you control"). */
+  | { count: 'counterKindsAmongYourCreatures' };
 
 export type EffectDef =
   | { kind: 'may'; effects: EffectDef[]; cost?: ManaCost; oncePerTurn?: string }
@@ -2840,7 +2855,14 @@ export type EffectDef =
   /** Monstrosity N: if the source isn't monstrous, N +1/+1 counters and it becomes monstrous. */
   | { kind: 'monstrosity'; amount: number }
   /** If it dies this turn, these happen (Fight for the Throne). */
-  | { kind: 'whenDiesThisTurn'; what: Ref; effects: EffectDef[] }
+  | {
+      kind: 'whenDiesThisTurn';
+      what: Ref;
+      effects: EffectDef[];
+      // Tarkir: Dragonstorm (19b, black): Desperate Measures
+      /** Only if it dies under your control ("when it dies under your control this turn"). */
+      underYourControl?: boolean;
+    }
   /**
    * Reveal the top N: you may put a permanent card onto the battlefield (with a
    * named counter), then one into your hand; the rest go to the graveyard (Wakanda Forever!).
@@ -4164,7 +4186,13 @@ export interface ContinuousEffect {
   /** Its activated abilities can't be activated. */
   noActivate?: boolean;
   /** What happens if the affected creature dies while this lasts. */
-  onDies?: { effects: EffectDef[]; controller: PlayerId; sourceDefId: CardDefId };
+  onDies?: {
+    effects: EffectDef[];
+    controller: PlayerId;
+    sourceDefId: CardDefId;
+    /** Tarkir: Dragonstorm (19b, black): only if it died under `controller`'s control. */
+    underControl?: boolean;
+  };
   // Strixhaven Brawl (15b, w): Alseid of Life's Bounty
   /** Protection from this colour (targeting and damage; not blocking). */
   protectionFrom?: Color;

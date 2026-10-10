@@ -220,6 +220,8 @@ export function checkCondition(
   if (c.kind === 'notPrepared') return !self?.prepared;
   // Reality Fracture (17a): Null Summoner, Uldaros Theorix.
   if (c.kind === 'wasCast') return !!self?.wasCast;
+  // Tarkir: Dragonstorm (19b, black): The Sibsig Ceremony, "if you cast it" (the creature that entered).
+  if (c.kind === 'subjectWasCast') return !!subject?.wasCast;
   // Lorwyn Eclipsed (18a): evoke, and "if {W}{W} was spent to cast it".
   if (c.kind === 'wasEvoked') return !!self?.evoked;
   if (c.kind === 'putCounterOnCreatureThisTurn')
@@ -1033,6 +1035,8 @@ function detect(ctx: Ctx, ev: GameEvent): void {
         if (moved)
           for (const e of s.effects) {
             if (!e.onDies || e.affected.id !== ev.id || e.affected.zcc !== moved.zcc - 1) continue;
+            // Tarkir: Dragonstorm (19b, black): Desperate Measures, "when it dies under your control".
+            if (e.onDies.underControl && ev.controller !== e.onDies.controller) continue;
             s.pendingTriggers.push({
               source: { id: moved.id, zcc: moved.zcc },
               sourceDefId: e.onDies.sourceDefId,

@@ -54,6 +54,8 @@ const KEYWORDS: Record<string, Keyword> = {
   // Lorwyn Eclipsed (18a).
   Persist: 'persist',
   Wither: 'wither',
+  // Tarkir: Dragonstorm (19b, black): Rot-Curse Rakshasa.
+  Decayed: 'decayed',
 };
 
 /** Scryfall "keywords" that are really ability words or triggers we model as abilities. */

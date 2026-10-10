@@ -73,6 +73,7 @@ import { nameLocked } from './sos-14b-c-effects.ts';
 const NO_COST = { generic: 0, colored: {} };
 import {
   castTargetSpecs,
+  sameGraveyard,
   standForDistinctTypes,
   targetCandidates,
   targetCombos,
@@ -136,6 +137,7 @@ export function castableCards(ctx: Ctx, player: PlayerId): ObjectId[] {
       d.castFromGraveyardRemovingCounters ||
       d.castFromGraveyardWithDiscard ||
       d.castFromGraveyardOrExile ||
+      d.castFromGraveyardFinality || // Tarkir: Dragonstorm (19b, black)
       mayhemReady(ctx, id) ||
       graveyardVias(ctx, player, id).length
     )
@@ -577,6 +579,7 @@ function priorityActions(
                 d.castFromGraveyardRemovingCounters ||
                 d.castFromGraveyardWithDiscard ||
                 d.castFromGraveyardOrExile ||
+                d.castFromGraveyardFinality || // Tarkir: Dragonstorm (19b, black)
                 mayhemReady(ctx, card)) &&
                 !exiledOnlyFree
                   ? [undefined]
@@ -1025,6 +1028,17 @@ function priorityActions(
         // Tarkir: Dragonstorm (19a): a trailing "X target creatures" spec is picked afterwards, one at a time.
         const specs = a.targets[a.targets.length - 1]?.xTargets ? a.targets.slice(0, -1) : a.targets;
         for (const targets of combosFor(specs, source, sacrifice)) {
+          // Tarkir: Dragonstorm (19b, black): Sidisi, the target's mana value is the sacrificed creature's plus one.
+          if (a.cost.sacrificeForTargetManaValue && sacrifice) {
+            const first = targets[0];
+            if (
+              !first ||
+              !('object' in first) ||
+              manaValue(def(ctx, first.object.id).manaCost) !==
+                manaValue(def(ctx, sacrifice).manaCost) + 1
+            )
+              continue;
+          }
           const m = abilityManaCost(ctx, source, a, targets);
           if (m !== mana && !canPayFrom(m, usable)) continue;
           const ward = wardCost(ctx, player, targets);
@@ -1595,18 +1609,12 @@ export function getLegalActions(ctx: Ctx, player: PlayerId): Action[] {
           // Lorwyn Eclipsed (18b, green): Prismabasher, "up to X target creatures".
           (spec.maxAmount !== undefined &&
             picked.length >= countOf(ctx, player, spec.maxAmount, false, t.source.id));
-        // Tarkir: Dragonstorm (19b, white): Arashin Sunshield, all from a single graveyard.
-        const sameYard = (t: TargetChoice) =>
-          !spec.singleGraveyard ||
-          picked.length === 0 ||
-          picked.every(
-            (x) => 'object' in x && 'object' in t && obj(ctx, x.object.id).owner === obj(ctx, t.object.id).owner,
-          );
         for (const t of full ? [] : targetCandidates(ctx, spec, src))
           if (
             !taken.has(key(t)) &&
-            sameYard(t) &&
             payable([...picked, t]) &&
+            // Tarkir: Dragonstorm (19b, white, black): Arashin Sunshield, Feral Deathgorger, all in a single graveyard.
+            (!spec.singleGraveyard || sameGraveyard(ctx, [...picked, t])) &&
             // Reality Fracture (17a): Uldaros Theorix, one card of each card type.
             (!spec.onePerType ||
               standForDistinctTypes(
