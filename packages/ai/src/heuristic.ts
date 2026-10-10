@@ -103,6 +103,9 @@ export function createHeuristicBot(db: CardDb, name = 'heuristic'): Bot {
             const fresh = d.options.findIndex((o) => !o.label.endsWith('already has one'));
             return { type: 'chooseOption', player: me, index: Math.max(0, fresh) };
           }
+          // The Hobbit (20b green): Through the Forest Gate lists the lands first and "Done" last: take every land.
+          if (d.title?.startsWith('Through the Forest Gate'))
+            return { type: 'chooseOption', player: me, index: 0 };
           // Reality Fracture (17a fixes): every creature type is on offer.
           if (d.title === 'Choose a creature type') return chooseCreatureType(engine, view, me, d);
           // Reality Fracture (17a): Arc of Fortune.

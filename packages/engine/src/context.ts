@@ -29,6 +29,7 @@ import { extraEntryCounters, noteCreatureCounters, TDM_MISC_EFFECTS } from './td
 import { TDM_CLANS_EFFECTS } from './tdm-clans-effects.ts'; // Tarkir: Dragonstorm (19b, clans)
 import { ECL_SPECIAL_EFFECTS } from './ecl-special-effects.ts';
 import { ECL_GREEN_EFFECTS } from './ecl-green-effects.ts';
+import { HOB_GREEN_EFFECTS } from './hob-green-effects.ts'; // The Hobbit (20b green)
 import { TDM_GREEN_EFFECTS } from './tdm-green-effects.ts';
 import { ECL_BLUE_EFFECTS } from './ecl-blue-effects.ts';
 import { TDM_BLUE_EFFECTS } from './tdm-blue-effects.ts';
@@ -165,6 +166,7 @@ const BUILT_IN_EFFECTS: Record<string, CustomEffect> = {
   ...TDM_WHITE_EFFECTS, // Tarkir: Dragonstorm (19b, white)
   ...TDM_MISC_EFFECTS, // Tarkir: Dragonstorm (19b, misc)
   ...TDM_GREEN_EFFECTS, // Tarkir: Dragonstorm (19b): green
+  ...HOB_GREEN_EFFECTS, // The Hobbit (20b): green
   ...TDM_CLANS_EFFECTS, // Tarkir: Dragonstorm (19b, clans)
   // Lorwyn Eclipsed (18b, special).
   ...ECL_SPECIAL_EFFECTS,
@@ -335,13 +337,19 @@ function withAuraGrants(ctx: Ctx, o: GameObject, d: CardDefinition): CardDefinit
 function withExtraAbilities(ctx: Ctx, o: GameObject, d: CardDefinition): CardDefinition {
   if (ctx.s.auraGrants && o.auraGrants?.length && o.zone === 'battlefield')
     d = withAuraGrants(ctx, o, d);
-  if (o.tempAbilities?.length || o.perpetualAbilities?.length || o.abilitiesUntilCast?.length)
+  if (
+    o.tempAbilities?.length ||
+    o.perpetualAbilities?.length ||
+    o.abilitiesUntilCast?.length ||
+    o.hobGainedAbilities?.length // The Hobbit (20b green)
+  )
     return {
       ...d,
       abilities: [
         ...d.abilities,
         ...(o.tempAbilities ?? []),
         ...(o.perpetualAbilities ?? []),
+        ...(o.hobGainedAbilities ?? []), // The Hobbit (20b green): Down in the Valley
         // Reality Fracture (17a): Emrakul, the Exigent Doom: a land's mana ability until the card is cast.
         ...(o.abilitiesUntilCast ?? []).map((x) => x.ability),
       ],
@@ -750,6 +758,9 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
     if (o.addedSubtypes) o.lastAddedSubtypes = o.addedSubtypes;
     else delete o.lastAddedSubtypes;
     delete o.addedSubtypes;
+    // The Hobbit (20b green): what Beorn's Hospitality and Down in the Valley gained lasts while they stay.
+    delete o.hobLandsPT;
+    delete o.hobGainedAbilities;
     delete o.creatureTypes;
     delete o.creatureTypesTimestamp;
     // Strixhaven Brawl (15a): Enduring Courage: "if it was a creature".

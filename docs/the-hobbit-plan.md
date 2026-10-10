@@ -172,3 +172,10 @@ The evaluation counts the enduring story and the way to it (`WEIGHTS.enduringSto
 permanent to use them); recruit's discard and amass's Army are chosen by the usual simulation; a bot with nothing better to do in
 its second main phase cycles a dead card (`chooseCycling` in `ai/src/heuristic.ts`: a spell costing more than its lands plus two,
 or a land with six in play; a land search is skipped with seven lands in play and hand). That applies to every set's cycling cards.
+
+## Phase 20b: green (done)
+
+All 28 green cards (`src/hob/green.ts`, tests `hob-green*.test.ts`). Custom effects in `engine/src/hob-green-effects.ts`
+(Cantankerous Keepers, Part in Friendship, Through the Forest Gate with its land picker, Beorn the Fierce's Bear type, Beorn's
+Hospitality, Down in the Valley); hooks marked `// The Hobbit (20b green)`: `GameObject.hobLandsPT` / `hobGainedAbilities`
+(`types.ts`, `context.ts`, `characteristics.ts`), the Gate picker in `ai/src/heuristic.ts` and `simulate.ts`.

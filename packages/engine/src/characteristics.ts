@@ -38,7 +38,13 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
   const o = obj(ctx, id);
   const d = def(ctx, id);
   const onField = o.zone === 'battlefield';
-  const base = d.ptEquals !== undefined && onField ? countFor(ctx, o, d) : null;
+  const base =
+    d.ptEquals !== undefined && onField
+      ? countFor(ctx, o, d)
+      : // The Hobbit (20b green): Beorn's Hospitality, "power and toughness are each equal to the number of lands you control".
+        o.hobLandsPT && onField
+        ? countOf(ctx, o.controller, { count: 'landsYouControl' }, true)
+        : null;
   const basePower =
     d.powerEquals !== undefined && onField ? countOf(ctx, o.controller, d.powerEquals, true) : null;
   // Iron Suitcase: base-setting effects (including attached statics) share timestamp order.
@@ -1345,7 +1351,9 @@ function basePowerOf(ctx: Ctx, id: ObjectId): number {
       ? countOf(ctx, o.controller, d.powerEquals, true)
       : d.ptEquals !== undefined
         ? countFor(ctx, o, d)
-        : (o.copyPT?.power ?? d.power ?? 0);
+        : o.hobLandsPT // The Hobbit (20b green): Beorn's Hospitality
+          ? countOf(ctx, o.controller, { count: 'landsYouControl' }, true)
+          : (o.copyPT?.power ?? d.power ?? 0);
   base = basePTOverride(ctx, id)?.[0] ?? base;
   return base;
 }

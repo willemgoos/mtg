@@ -91,6 +91,9 @@ function passiveAction(
     case 'payOrCounter':
     case 'castFree':
     case 'conspire': // Lorwyn Eclipsed (18a)
+      // The Hobbit (20b green): Through the Forest Gate, take every land.
+      if (d.kind === 'chooseOption' && d.title?.startsWith('Through the Forest Gate'))
+        return { type: 'chooseOption', player: d.player, index: 0 };
       // Reality Fracture (17a fixes): every creature type is on offer.
       if (d.kind === 'chooseOption' && d.title === 'Choose a creature type')
         return chooseCreatureType(engine, s, d.player, d);

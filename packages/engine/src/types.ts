@@ -3681,6 +3681,11 @@ export interface GameObject {
   lastAttachedTo?: ObjectRef;
   /** Subtypes gained on top of the printed ones (Infernal Vessel's Demon). */
   addedSubtypes?: string[];
+  // The Hobbit (20b green): Beorn's Hospitality / Down in the Valley
+  /** Its power and toughness are each the number of lands its controller controls (Beorn's Hospitality, once it is a Bear). */
+  hobLandsPT?: boolean;
+  /** Abilities it gained for as long as it stays on the battlefield (Down in the Valley's landfall ability). */
+  hobGainedAbilities?: AbilityDef[];
   /** Caretakers: creature types replacing the printed ones. */
   creatureTypes?: string[];
   creatureTypesTimestamp?: number;

@@ -88465,5 +88465,696 @@
    "large": "https://cards.scryfall.io/large/front/2/d/2dcafdac-a293-4adc-a540-3b3f469cf6f3.jpg?1783907283",
    "artCrop": "https://cards.scryfall.io/art_crop/front/2/d/2dcafdac-a293-4adc-a540-3b3f469cf6f3.jpg?1783907283"
   }
+ },
+ {
+  "name": "Attercop",
+  "scryfallId": "81263d5d-e402-4813-9458-161112da27ab",
+  "oracleId": "45d652c4-188e-4f00-acdd-1be014922cbc",
+  "set": "hob",
+  "collectorNumber": "116",
+  "rarity": "common",
+  "manaCost": "{1}{G}",
+  "typeLine": "Creature — Spider",
+  "oracleText": "Reach, deathtouch\nLandfall — Whenever a land you control enters, this creature gets +1/+1 until end of turn.",
+  "power": "2",
+  "toughness": "1",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Reach",
+   "Deathtouch",
+   "Landfall"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/1/81263d5d-e402-4813-9458-161112da27ab.jpg?1785497157",
+   "normal": "https://cards.scryfall.io/normal/front/8/1/81263d5d-e402-4813-9458-161112da27ab.jpg?1785497157",
+   "large": "https://cards.scryfall.io/large/front/8/1/81263d5d-e402-4813-9458-161112da27ab.jpg?1785497157",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/1/81263d5d-e402-4813-9458-161112da27ab.jpg?1785497157"
+  }
+ },
+ {
+  "name": "Bejeweled Warg",
+  "scryfallId": "e95eba5c-e0d6-46b4-a0be-8e373b2185ea",
+  "oracleId": "051ff7e0-dd00-4467-8796-a5d1c21934ed",
+  "set": "hob",
+  "collectorNumber": "117",
+  "rarity": "rare",
+  "manaCost": "{1}{G}",
+  "typeLine": "Creature — Wolf",
+  "oracleText": "Trample\nWhenever this creature deals combat damage to a player, choose one —\n• Put a +1/+1 counter on target Wolf you control.\n• Create a Treasure token. (It's an artifact with \"{T}, Sacrifice this token: Add one mana of any color.\")",
+  "power": "3",
+  "toughness": "2",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Treasure",
+   "Trample"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/9/e95eba5c-e0d6-46b4-a0be-8e373b2185ea.jpg?1785496330",
+   "normal": "https://cards.scryfall.io/normal/front/e/9/e95eba5c-e0d6-46b4-a0be-8e373b2185ea.jpg?1785496330",
+   "large": "https://cards.scryfall.io/large/front/e/9/e95eba5c-e0d6-46b4-a0be-8e373b2185ea.jpg?1785496330",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/9/e95eba5c-e0d6-46b4-a0be-8e373b2185ea.jpg?1785496330"
+  }
+ },
+ {
+  "name": "Beorn the Fierce",
+  "scryfallId": "367d5f8b-77ee-47f7-bc71-972d62c280a9",
+  "oracleId": "30ca8e92-5955-46a1-86c1-094a873f518f",
+  "set": "hob",
+  "collectorNumber": "119",
+  "rarity": "mythic",
+  "manaCost": "{3}{G}{G}",
+  "typeLine": "Legendary Creature — Bear Shapeshifter Warrior",
+  "oracleText": "Trample\nOther Bears you control get +2/+2.\nAt the beginning of combat on your turn, put a trample counter on up to one target creature you control. It becomes a Bear in addition to its other types. Then if you control three or more Bears, draw two cards.",
+  "power": "6",
+  "toughness": "6",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Trample"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/6/367d5f8b-77ee-47f7-bc71-972d62c280a9.jpg?1784632151",
+   "normal": "https://cards.scryfall.io/normal/front/3/6/367d5f8b-77ee-47f7-bc71-972d62c280a9.jpg?1784632151",
+   "large": "https://cards.scryfall.io/large/front/3/6/367d5f8b-77ee-47f7-bc71-972d62c280a9.jpg?1784632151",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/6/367d5f8b-77ee-47f7-bc71-972d62c280a9.jpg?1784632151"
+  }
+ },
+ {
+  "name": "Beorn's Hospitality",
+  "scryfallId": "153ca57e-30f0-4ad7-ae9d-c55cbf0fd4c9",
+  "oracleId": "d9ed7252-11d1-432b-9101-ac08cd28826d",
+  "set": "hob",
+  "collectorNumber": "120",
+  "rarity": "uncommon",
+  "manaCost": "{1}{G}",
+  "typeLine": "Enchantment",
+  "oracleText": "Landfall — Whenever a land you control enters, put a +1/+1 counter on target creature you control.\n{5}{G}{G}: This enchantment becomes a Bear creature in addition to its other types and gains \"This creature's power and toughness are each equal to the number of lands you control.\" (This effect doesn't end.)",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Landfall"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/5/153ca57e-30f0-4ad7-ae9d-c55cbf0fd4c9.jpg?1785152153",
+   "normal": "https://cards.scryfall.io/normal/front/1/5/153ca57e-30f0-4ad7-ae9d-c55cbf0fd4c9.jpg?1785152153",
+   "large": "https://cards.scryfall.io/large/front/1/5/153ca57e-30f0-4ad7-ae9d-c55cbf0fd4c9.jpg?1785152153",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/5/153ca57e-30f0-4ad7-ae9d-c55cbf0fd4c9.jpg?1785152153"
+  }
+ },
+ {
+  "name": "Beorn, Reluctant Host",
+  "scryfallId": "804589b7-3ef9-473d-97cc-c61a2d41f70d",
+  "oracleId": "288da486-393c-4995-ad02-c5093a71970d",
+  "set": "hob",
+  "collectorNumber": "118",
+  "rarity": "common",
+  "manaCost": "{4}{G}",
+  "typeLine": "Legendary Creature — Human Bear Shapeshifter",
+  "oracleText": "Trample",
+  "power": "5",
+  "toughness": "5",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Trample"
+  ],
+  "back": "Till and Tend",
+  "adventure": true,
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/0/804589b7-3ef9-473d-97cc-c61a2d41f70d.jpg?1785323267",
+   "normal": "https://cards.scryfall.io/normal/front/8/0/804589b7-3ef9-473d-97cc-c61a2d41f70d.jpg?1785323267",
+   "large": "https://cards.scryfall.io/large/front/8/0/804589b7-3ef9-473d-97cc-c61a2d41f70d.jpg?1785323267",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/0/804589b7-3ef9-473d-97cc-c61a2d41f70d.jpg?1785323267"
+  }
+ },
+ {
+  "name": "Till and Tend",
+  "scryfallId": "804589b7-3ef9-473d-97cc-c61a2d41f70d",
+  "oracleId": "288da486-393c-4995-ad02-c5093a71970d",
+  "set": "hob",
+  "collectorNumber": "118",
+  "rarity": "common",
+  "manaCost": "{1}{G}",
+  "typeLine": "Sorcery — Adventure",
+  "oracleText": "You may play an additional land this turn. (Then exile this card. You may cast the creature later from exile.)",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "front": "Beorn, Reluctant Host",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/0/804589b7-3ef9-473d-97cc-c61a2d41f70d.jpg?1785323267",
+   "normal": "https://cards.scryfall.io/normal/front/8/0/804589b7-3ef9-473d-97cc-c61a2d41f70d.jpg?1785323267",
+   "large": "https://cards.scryfall.io/large/front/8/0/804589b7-3ef9-473d-97cc-c61a2d41f70d.jpg?1785323267",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/0/804589b7-3ef9-473d-97cc-c61a2d41f70d.jpg?1785323267"
+  }
+ },
+ {
+  "name": "Boughside Wanderers",
+  "scryfallId": "71bec005-2925-4944-be16-2cc5eb30f5d6",
+  "oracleId": "dc788b66-d03d-4066-be35-481be96ed2f7",
+  "set": "hob",
+  "collectorNumber": "121",
+  "rarity": "common",
+  "manaCost": "{4}{G}{G}",
+  "typeLine": "Creature — Elf Scout",
+  "oracleText": "When this creature enters, look at the top four cards of your library. You may reveal a permanent card from among them and put it into your hand. Put the rest on the bottom of your library in a random order.\nLandfall — Whenever a land you control enters, this creature gets +2/+2 until end of turn.",
+  "power": "4",
+  "toughness": "4",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Landfall"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/1/71bec005-2925-4944-be16-2cc5eb30f5d6.jpg?1785497158",
+   "normal": "https://cards.scryfall.io/normal/front/7/1/71bec005-2925-4944-be16-2cc5eb30f5d6.jpg?1785497158",
+   "large": "https://cards.scryfall.io/large/front/7/1/71bec005-2925-4944-be16-2cc5eb30f5d6.jpg?1785497158",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/1/71bec005-2925-4944-be16-2cc5eb30f5d6.jpg?1785497158"
+  }
+ },
+ {
+  "name": "Cantankerous Keepers",
+  "scryfallId": "fae46a70-a6d3-4584-859d-6c7425fb1508",
+  "oracleId": "77c97dad-17cc-4a28-a48b-907c044d9034",
+  "set": "hob",
+  "collectorNumber": "122",
+  "rarity": "rare",
+  "manaCost": "{5}{G}",
+  "typeLine": "Creature — Elf Soldier",
+  "oracleText": "Affinity for Elves (This spell costs {1} less to cast for each Elf you control.)\nWhen this creature enters, mill four cards, then put all Elf cards from among them into your hand.",
+  "power": "4",
+  "toughness": "3",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Affinity",
+   "Mill"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/a/fae46a70-a6d3-4584-859d-6c7425fb1508.jpg?1785152413",
+   "normal": "https://cards.scryfall.io/normal/front/f/a/fae46a70-a6d3-4584-859d-6c7425fb1508.jpg?1785152413",
+   "large": "https://cards.scryfall.io/large/front/f/a/fae46a70-a6d3-4584-859d-6c7425fb1508.jpg?1785152413",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/a/fae46a70-a6d3-4584-859d-6c7425fb1508.jpg?1785152413"
+  }
+ },
+ {
+  "name": "Dancing from Dark to Dawn",
+  "scryfallId": "550cd0b6-ca61-4db7-9d20-0b68c48066f9",
+  "oracleId": "5ba482e9-fbb0-4d9f-a3a9-414892bcdfed",
+  "set": "hob",
+  "collectorNumber": "123",
+  "rarity": "mythic",
+  "manaCost": "{3}{G}{G}",
+  "typeLine": "Enchantment",
+  "oracleText": "Whenever you cast a creature spell, put X +1/+1 counters on target creature you control, where X is that spell's mana value.\nLandfall — Whenever a land you control enters, create a 2/2 green Bear creature token.",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Landfall"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/5/550cd0b6-ca61-4db7-9d20-0b68c48066f9.jpg?1785236704",
+   "normal": "https://cards.scryfall.io/normal/front/5/5/550cd0b6-ca61-4db7-9d20-0b68c48066f9.jpg?1785236704",
+   "large": "https://cards.scryfall.io/large/front/5/5/550cd0b6-ca61-4db7-9d20-0b68c48066f9.jpg?1785236704",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/5/550cd0b6-ca61-4db7-9d20-0b68c48066f9.jpg?1785236704"
+  }
+ },
+ {
+  "name": "Down in the Valley",
+  "scryfallId": "c8aa5179-475b-4cc8-b21e-205b475eb4cf",
+  "oracleId": "e3491542-569e-48a8-b625-fa7c4aa2792a",
+  "set": "hob",
+  "collectorNumber": "124",
+  "rarity": "rare",
+  "manaCost": "{2}{G}",
+  "typeLine": "Enchantment — Saga",
+  "oracleText": "(As this Saga enters and after your draw step, add a lore counter. Sacrifice after IV.)\nI — Search your library for a basic land card, reveal it, put it into your hand, then shuffle.\nII — This Saga gains \"Landfall — Whenever a land you control enters, create a 1/1 green Elf creature token.\"\nIII, IV — Elves you control get +1/+0 and gain vigilance until end of turn.",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/8/c8aa5179-475b-4cc8-b21e-205b475eb4cf.jpg?1784895042",
+   "normal": "https://cards.scryfall.io/normal/front/c/8/c8aa5179-475b-4cc8-b21e-205b475eb4cf.jpg?1784895042",
+   "large": "https://cards.scryfall.io/large/front/c/8/c8aa5179-475b-4cc8-b21e-205b475eb4cf.jpg?1784895042",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/8/c8aa5179-475b-4cc8-b21e-205b475eb4cf.jpg?1784895042"
+  }
+ },
+ {
+  "name": "Galion, Elvenking's Butler",
+  "scryfallId": "985bd676-58c4-42c7-a570-1b413e9aa94c",
+  "oracleId": "9efb3aa4-0023-4e0e-8bd4-f4dff1b3be66",
+  "set": "hob",
+  "collectorNumber": "125",
+  "rarity": "uncommon",
+  "manaCost": "{2}{G}{G}",
+  "typeLine": "Legendary Creature — Elf Advisor",
+  "oracleText": "Whenever Galion attacks, choose up to one other target creature you control. Its base power and toughness become equal to Galion's power and toughness until end of turn.",
+  "power": "4",
+  "toughness": "4",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/8/985bd676-58c4-42c7-a570-1b413e9aa94c.jpg?1785152142",
+   "normal": "https://cards.scryfall.io/normal/front/9/8/985bd676-58c4-42c7-a570-1b413e9aa94c.jpg?1785152142",
+   "large": "https://cards.scryfall.io/large/front/9/8/985bd676-58c4-42c7-a570-1b413e9aa94c.jpg?1785152142",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/8/985bd676-58c4-42c7-a570-1b413e9aa94c.jpg?1785152142"
+  }
+ },
+ {
+  "name": "Gigantic Big Bear",
+  "scryfallId": "7d6ece3d-8e7a-41ad-974f-3c9748de4825",
+  "oracleId": "88d7bd11-7b1d-426c-8552-01448531c6ad",
+  "set": "hob",
+  "collectorNumber": "126",
+  "rarity": "rare",
+  "manaCost": "{5}{G}{G}",
+  "typeLine": "Creature — Bear",
+  "oracleText": "This spell can't be countered.\nHexproof, haste",
+  "power": "10",
+  "toughness": "7",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Hexproof",
+   "Haste"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/d/7d6ece3d-8e7a-41ad-974f-3c9748de4825.jpg?1785323269",
+   "normal": "https://cards.scryfall.io/normal/front/7/d/7d6ece3d-8e7a-41ad-974f-3c9748de4825.jpg?1785323269",
+   "large": "https://cards.scryfall.io/large/front/7/d/7d6ece3d-8e7a-41ad-974f-3c9748de4825.jpg?1785323269",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/d/7d6ece3d-8e7a-41ad-974f-3c9748de4825.jpg?1785323269"
+  }
+ },
+ {
+  "name": "Guardian of the Halls",
+  "scryfallId": "4265caec-8c28-44cd-8e6b-90b5af926d3c",
+  "oracleId": "c3fb2829-64f2-4795-b815-edcc5bbbc360",
+  "set": "hob",
+  "collectorNumber": "127",
+  "rarity": "common",
+  "manaCost": "{1}{G}",
+  "typeLine": "Creature — Elf Soldier",
+  "oracleText": "Trample\n{5}{G}{G}: Put three +1/+1 counters on this creature.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Trample"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/2/4265caec-8c28-44cd-8e6b-90b5af926d3c.jpg?1785497166",
+   "normal": "https://cards.scryfall.io/normal/front/4/2/4265caec-8c28-44cd-8e6b-90b5af926d3c.jpg?1785497166",
+   "large": "https://cards.scryfall.io/large/front/4/2/4265caec-8c28-44cd-8e6b-90b5af926d3c.jpg?1785497166",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/2/4265caec-8c28-44cd-8e6b-90b5af926d3c.jpg?1785497166"
+  }
+ },
+ {
+  "name": "Little Bear",
+  "scryfallId": "8a50858a-33b5-4c45-9c31-5956ae5a33a6",
+  "oracleId": "53c6c6bf-0256-424d-b937-1cc7d9e2d574",
+  "set": "hob",
+  "collectorNumber": "128",
+  "rarity": "common",
+  "manaCost": "{2}{G}",
+  "typeLine": "Creature — Bear",
+  "oracleText": "Flash\nWhen this creature enters, untap another target creature you control. If that creature is a Bear, put a +1/+1 counter on it.",
+  "power": "3",
+  "toughness": "2",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Flash"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/a/8a50858a-33b5-4c45-9c31-5956ae5a33a6.jpg?1785323276",
+   "normal": "https://cards.scryfall.io/normal/front/8/a/8a50858a-33b5-4c45-9c31-5956ae5a33a6.jpg?1785323276",
+   "large": "https://cards.scryfall.io/large/front/8/a/8a50858a-33b5-4c45-9c31-5956ae5a33a6.jpg?1785323276",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/a/8a50858a-33b5-4c45-9c31-5956ae5a33a6.jpg?1785323276"
+  }
+ },
+ {
+  "name": "Mirkwood Pathmaker",
+  "scryfallId": "50fbedc0-bc66-4ffb-87f6-a2df69995091",
+  "oracleId": "f1b36dde-9cde-46c8-8d5a-9ad93feba41f",
+  "set": "hob",
+  "collectorNumber": "129",
+  "rarity": "uncommon",
+  "manaCost": "{2}{G}",
+  "typeLine": "Creature — Elf Ranger",
+  "oracleText": "Mirkwood Pathmaker's power and toughness are each equal to the number of lands you control.",
+  "power": "*",
+  "toughness": "*",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/0/50fbedc0-bc66-4ffb-87f6-a2df69995091.jpg?1785152431",
+   "normal": "https://cards.scryfall.io/normal/front/5/0/50fbedc0-bc66-4ffb-87f6-a2df69995091.jpg?1785152431",
+   "large": "https://cards.scryfall.io/large/front/5/0/50fbedc0-bc66-4ffb-87f6-a2df69995091.jpg?1785152431",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/0/50fbedc0-bc66-4ffb-87f6-a2df69995091.jpg?1785152431"
+  }
+ },
+ {
+  "name": "Nasty Little Rabbit",
+  "scryfallId": "96bc7d25-2828-478a-8fe5-a1f4ede8c9c0",
+  "oracleId": "ee86cce6-c7c1-40a6-896b-cde9b86bb532",
+  "set": "hob",
+  "collectorNumber": "130",
+  "rarity": "uncommon",
+  "manaCost": "{G}",
+  "typeLine": "Creature — Rabbit",
+  "oracleText": "Ferocious — At the beginning of combat on your turn, if you control a creature with power 4 or greater, put a +1/+1 counter on this creature.",
+  "power": "1",
+  "toughness": "2",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Ferocious"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/6/96bc7d25-2828-478a-8fe5-a1f4ede8c9c0.jpg?1785324620",
+   "normal": "https://cards.scryfall.io/normal/front/9/6/96bc7d25-2828-478a-8fe5-a1f4ede8c9c0.jpg?1785324620",
+   "large": "https://cards.scryfall.io/large/front/9/6/96bc7d25-2828-478a-8fe5-a1f4ede8c9c0.jpg?1785324620",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/6/96bc7d25-2828-478a-8fe5-a1f4ede8c9c0.jpg?1785324620"
+  }
+ },
+ {
+  "name": "Old Fat Spider",
+  "scryfallId": "e0c0f842-40fe-4776-a988-a35216bcfd47",
+  "oracleId": "8790f842-e842-4bed-adf4-5b3cc5fd68a9",
+  "set": "hob",
+  "collectorNumber": "132",
+  "rarity": "uncommon",
+  "manaCost": "{4}{G}{G}",
+  "typeLine": "Creature — Spider",
+  "oracleText": "Reach\nThis creature can't be blocked by creatures with power 2 or less.\nWhenever this creature becomes the target of a spell or ability an opponent controls, draw a card.",
+  "power": "6",
+  "toughness": "7",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Reach"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/0/e0c0f842-40fe-4776-a988-a35216bcfd47.jpg?1785236709",
+   "normal": "https://cards.scryfall.io/normal/front/e/0/e0c0f842-40fe-4776-a988-a35216bcfd47.jpg?1785236709",
+   "large": "https://cards.scryfall.io/large/front/e/0/e0c0f842-40fe-4776-a988-a35216bcfd47.jpg?1785236709",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/0/e0c0f842-40fe-4776-a988-a35216bcfd47.jpg?1785236709"
+  }
+ },
+ {
+  "name": "Ordinary Bear",
+  "scryfallId": "0feb9817-56e1-465a-851c-b2fe202aa8ae",
+  "oracleId": "89a2fab8-b074-42aa-a871-d9c5de2d0895",
+  "set": "hob",
+  "collectorNumber": "133",
+  "rarity": "common",
+  "manaCost": "{3}{G}",
+  "typeLine": "Creature — Bear",
+  "oracleText": "",
+  "power": "4",
+  "toughness": "5",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/f/0feb9817-56e1-465a-851c-b2fe202aa8ae.jpg?1785323277",
+   "normal": "https://cards.scryfall.io/normal/front/0/f/0feb9817-56e1-465a-851c-b2fe202aa8ae.jpg?1785323277",
+   "large": "https://cards.scryfall.io/large/front/0/f/0feb9817-56e1-465a-851c-b2fe202aa8ae.jpg?1785323277",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/f/0feb9817-56e1-465a-851c-b2fe202aa8ae.jpg?1785323277"
+  }
+ },
+ {
+  "name": "Part in Friendship",
+  "scryfallId": "b4ff1eac-6d97-40ab-9b7c-c2fdca0917d9",
+  "oracleId": "e1a9c467-2d64-4e11-adf3-7333c923b187",
+  "set": "hob",
+  "collectorNumber": "134",
+  "rarity": "rare",
+  "manaCost": "{4}{G}",
+  "typeLine": "Enchantment",
+  "oracleText": "Whenever a nontoken creature you control dies, reveal cards from the top of your library until you reveal a creature card. If its mana value is less than or equal to the number of lands you control, put it onto the battlefield. Otherwise, put it into your hand. Put the rest on the bottom of your library in a random order. This ability triggers only once each turn.",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/4/b4ff1eac-6d97-40ab-9b7c-c2fdca0917d9.jpg?1784632164",
+   "normal": "https://cards.scryfall.io/normal/front/b/4/b4ff1eac-6d97-40ab-9b7c-c2fdca0917d9.jpg?1784632164",
+   "large": "https://cards.scryfall.io/large/front/b/4/b4ff1eac-6d97-40ab-9b7c-c2fdca0917d9.jpg?1784632164",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/4/b4ff1eac-6d97-40ab-9b7c-c2fdca0917d9.jpg?1784632164"
+  }
+ },
+ {
+  "name": "Quarrel",
+  "scryfallId": "5900a0b4-aa89-4019-94c9-7e9ea3b4792e",
+  "oracleId": "db05b114-2eb5-46bc-81e7-7e036d8eaab3",
+  "set": "hob",
+  "collectorNumber": "135",
+  "rarity": "common",
+  "manaCost": "{1}{G}",
+  "typeLine": "Instant",
+  "oracleText": "Target creature you control deals damage equal to its power to target creature an opponent controls.",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/9/5900a0b4-aa89-4019-94c9-7e9ea3b4792e.jpg?1785496166",
+   "normal": "https://cards.scryfall.io/normal/front/5/9/5900a0b4-aa89-4019-94c9-7e9ea3b4792e.jpg?1785496166",
+   "large": "https://cards.scryfall.io/large/front/5/9/5900a0b4-aa89-4019-94c9-7e9ea3b4792e.jpg?1785496166",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/9/5900a0b4-aa89-4019-94c9-7e9ea3b4792e.jpg?1785496166"
+  }
+ },
+ {
+  "name": "Radagast of Rhosgobel",
+  "scryfallId": "5741bbad-a6e4-45e0-b827-73f48c9975bf",
+  "oracleId": "84d648c7-655e-4590-a3e0-366a8a4a4cb3",
+  "set": "hob",
+  "collectorNumber": "136",
+  "rarity": "rare",
+  "manaCost": "{2}{G}{G}",
+  "typeLine": "Legendary Creature — Avatar Wizard",
+  "oracleText": "The first creature spell you cast each turn costs {2} less to cast and can be cast as though it had flash.",
+  "power": "2",
+  "toughness": "5",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/7/5741bbad-a6e4-45e0-b827-73f48c9975bf.jpg?1785496313",
+   "normal": "https://cards.scryfall.io/normal/front/5/7/5741bbad-a6e4-45e0-b827-73f48c9975bf.jpg?1785496313",
+   "large": "https://cards.scryfall.io/large/front/5/7/5741bbad-a6e4-45e0-b827-73f48c9975bf.jpg?1785496313",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/7/5741bbad-a6e4-45e0-b827-73f48c9975bf.jpg?1785496313"
+  }
+ },
+ {
+  "name": "The Notary Hobbits",
+  "scryfallId": "d876315f-b269-4254-a517-905c6e927462",
+  "oracleId": "dc20b29b-856e-4d45-99cd-5e12cfc2324d",
+  "set": "hob",
+  "collectorNumber": "131",
+  "rarity": "rare",
+  "manaCost": "{3}{G}{G}",
+  "typeLine": "Legendary Creature — Halfling Advisor",
+  "oracleText": "When The Notary Hobbits enter, if they're not a token, create two tokens that are copies of them, except the tokens aren't legendary.\n{T}: Add {C} for each Halfling you control.",
+  "power": "1",
+  "toughness": "1",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/8/d876315f-b269-4254-a517-905c6e927462.jpg?1785412540",
+   "normal": "https://cards.scryfall.io/normal/front/d/8/d876315f-b269-4254-a517-905c6e927462.jpg?1785412540",
+   "large": "https://cards.scryfall.io/large/front/d/8/d876315f-b269-4254-a517-905c6e927462.jpg?1785412540",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/8/d876315f-b269-4254-a517-905c6e927462.jpg?1785412540"
+  }
+ },
+ {
+  "name": "Through the Forest Gate",
+  "scryfallId": "880adfc8-69cf-4062-a804-e65b6cb6056d",
+  "oracleId": "acfe54b3-10e3-4fdb-b874-d39fde96c40a",
+  "set": "hob",
+  "collectorNumber": "137",
+  "rarity": "rare",
+  "manaCost": "{6}{G}{G}",
+  "typeLine": "Sorcery",
+  "oracleText": "Look at the top twenty cards of your library, put any number of land cards from among them onto the battlefield tapped, then shuffle. You gain 8 life.",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/8/880adfc8-69cf-4062-a804-e65b6cb6056d.jpg?1784895046",
+   "normal": "https://cards.scryfall.io/normal/front/8/8/880adfc8-69cf-4062-a804-e65b6cb6056d.jpg?1784895046",
+   "large": "https://cards.scryfall.io/large/front/8/8/880adfc8-69cf-4062-a804-e65b6cb6056d.jpg?1784895046",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/8/880adfc8-69cf-4062-a804-e65b6cb6056d.jpg?1784895046"
+  }
+ },
+ {
+  "name": "Troll Negotiations",
+  "scryfallId": "ca0f7bf4-b8a2-4ec4-ad7e-b639de9fa76a",
+  "oracleId": "6e275711-eb76-4924-ba38-c38a36d9d82a",
+  "set": "hob",
+  "collectorNumber": "138",
+  "rarity": "uncommon",
+  "manaCost": "{2}{G}{G}",
+  "typeLine": "Sorcery",
+  "oracleText": "Put two +1/+1 counters on target creature you control. Then it fights target creature an opponent controls. (Each deals damage equal to its power to the other.)",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Fight"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/a/ca0f7bf4-b8a2-4ec4-ad7e-b639de9fa76a.jpg?1785496323",
+   "normal": "https://cards.scryfall.io/normal/front/c/a/ca0f7bf4-b8a2-4ec4-ad7e-b639de9fa76a.jpg?1785496323",
+   "large": "https://cards.scryfall.io/large/front/c/a/ca0f7bf4-b8a2-4ec4-ad7e-b639de9fa76a.jpg?1785496323",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/a/ca0f7bf4-b8a2-4ec4-ad7e-b639de9fa76a.jpg?1785496323"
+  }
+ },
+ {
+  "name": "Warg Tactics",
+  "scryfallId": "b06d9cee-bb0f-4fe7-ab2a-b55d36461aec",
+  "oracleId": "d1663b51-37a1-45a0-b477-2d3e7dd0828e",
+  "set": "hob",
+  "collectorNumber": "139",
+  "rarity": "common",
+  "manaCost": "{1}{G}",
+  "typeLine": "Instant",
+  "oracleText": "Choose one —\n• Destroy target creature with flying.\n• Put a +1/+1 counter on target creature you control. It gains trample and hexproof until end of turn. (It can't be the target of spells or abilities your opponents control.)",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/0/b06d9cee-bb0f-4fe7-ab2a-b55d36461aec.jpg?1785497168",
+   "normal": "https://cards.scryfall.io/normal/front/b/0/b06d9cee-bb0f-4fe7-ab2a-b55d36461aec.jpg?1785497168",
+   "large": "https://cards.scryfall.io/large/front/b/0/b06d9cee-bb0f-4fe7-ab2a-b55d36461aec.jpg?1785497168",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/0/b06d9cee-bb0f-4fe7-ab2a-b55d36461aec.jpg?1785497168"
+  }
+ },
+ {
+  "name": "Wargling",
+  "scryfallId": "1ccbf823-846f-4f09-9c67-1deebb5d1d92",
+  "oracleId": "ce107656-f222-4d9a-9ba2-b33b4d47bdb5",
+  "set": "hob",
+  "collectorNumber": "140",
+  "rarity": "common",
+  "manaCost": "{1}{G}",
+  "typeLine": "Creature — Wolf",
+  "oracleText": "Ferocious — Whenever this creature attacks while you control a creature with power 4 or greater, until end of turn, this creature gets +1/+0 and creatures you control gain trample.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Ferocious"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/c/1ccbf823-846f-4f09-9c67-1deebb5d1d92.jpg?1785497175",
+   "normal": "https://cards.scryfall.io/normal/front/1/c/1ccbf823-846f-4f09-9c67-1deebb5d1d92.jpg?1785497175",
+   "large": "https://cards.scryfall.io/large/front/1/c/1ccbf823-846f-4f09-9c67-1deebb5d1d92.jpg?1785497175",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/c/1ccbf823-846f-4f09-9c67-1deebb5d1d92.jpg?1785497175"
+  }
+ },
+ {
+  "name": "Wilderland Scrounger",
+  "scryfallId": "63078f42-f404-4c61-86be-45d934393b0a",
+  "oracleId": "8a2946ad-7a7b-4cda-8591-da8c7da5e072",
+  "set": "hob",
+  "collectorNumber": "141",
+  "rarity": "uncommon",
+  "manaCost": "{4}{G}",
+  "typeLine": "Creature — Wolf",
+  "oracleText": "Ferocious — Whenever this creature attacks while you control a creature with power 4 or greater, put a +1/+1 counter on each creature you control.",
+  "power": "3",
+  "toughness": "6",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Ferocious"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/3/63078f42-f404-4c61-86be-45d934393b0a.jpg?1785236564",
+   "normal": "https://cards.scryfall.io/normal/front/6/3/63078f42-f404-4c61-86be-45d934393b0a.jpg?1785236564",
+   "large": "https://cards.scryfall.io/large/front/6/3/63078f42-f404-4c61-86be-45d934393b0a.jpg?1785236564",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/3/63078f42-f404-4c61-86be-45d934393b0a.jpg?1785236564"
+  }
+ },
+ {
+  "name": "Wood Elves",
+  "scryfallId": "6ef4a34e-f1f0-480f-86b8-f2776c824261",
+  "oracleId": "8973bd99-20f8-4867-90ef-50392147ee1b",
+  "set": "9ed",
+  "collectorNumber": "283★",
+  "rarity": "common",
+  "manaCost": "{2}{G}",
+  "typeLine": "Creature — Elf Scout",
+  "oracleText": "When this creature enters, search your library for a Forest card, put that card onto the battlefield, then shuffle.",
+  "power": "1",
+  "toughness": "1",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/e/6ef4a34e-f1f0-480f-86b8-f2776c824261.jpg?1783943910",
+   "normal": "https://cards.scryfall.io/normal/front/6/e/6ef4a34e-f1f0-480f-86b8-f2776c824261.jpg?1783943910",
+   "large": "https://cards.scryfall.io/large/front/6/e/6ef4a34e-f1f0-480f-86b8-f2776c824261.jpg?1783943910",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/e/6ef4a34e-f1f0-480f-86b8-f2776c824261.jpg?1783943910"
+  }
+ },
+ {
+  "name": "Woodland Weavemaster",
+  "scryfallId": "fe2b4bcf-56de-44d3-83af-aeb27f82c25e",
+  "oracleId": "28ffddca-a3c4-467d-a2dc-2c5e62393e11",
+  "set": "hob",
+  "collectorNumber": "143",
+  "rarity": "uncommon",
+  "manaCost": "{1}{G}",
+  "typeLine": "Creature — Elf Druid",
+  "oracleText": "Vigilance\nWhenever another Elf you control enters, this creature gets +1/+1 until end of turn.\n{T}: Add X mana of any one color, where X is this creature's power. Spend this mana only to cast Elf spells and activate abilities of Elf sources.",
+  "power": "1",
+  "toughness": "2",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Vigilance"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/e/fe2b4bcf-56de-44d3-83af-aeb27f82c25e.jpg?1785237990",
+   "normal": "https://cards.scryfall.io/normal/front/f/e/fe2b4bcf-56de-44d3-83af-aeb27f82c25e.jpg?1785237990",
+   "large": "https://cards.scryfall.io/large/front/f/e/fe2b4bcf-56de-44d3-83af-aeb27f82c25e.jpg?1785237990",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/e/fe2b4bcf-56de-44d3-83af-aeb27f82c25e.jpg?1785237990"
+  }
  }
 ]
