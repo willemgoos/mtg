@@ -77,6 +77,7 @@ export {
   packetCards,
   ARENA_ECL_PACKETS,
   ARENA_TDM_PACKETS,
+  ARENA_SOS_PACKETS,
   dealPacket,
   defaultDeal,
 } from './jumpin.ts';

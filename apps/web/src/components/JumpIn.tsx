@@ -30,7 +30,12 @@ export const GROUPS = [
   },
   { key: 'fin', name: 'Final Fantasy', has: (p: Packet) => p.set === 'fin' },
   { key: 'stx', name: 'Strixhaven', has: (p: Packet) => p.set === 'stx' },
-  { key: 'sos', name: 'Secrets of Strixhaven', has: (p: Packet) => p.set === 'sos' },
+  { key: 'sos', name: 'Secrets of Strixhaven', has: (p: Packet) => p.set === 'sos' && !p.source },
+  {
+    key: 'sos-arena',
+    name: 'Secrets of Strixhaven · Arena',
+    has: (p: Packet) => p.set === 'sos' && p.source === 'arena',
+  },
   { key: 'fra', name: 'Reality Fracture', has: (p: Packet) => p.set === 'fra' },
   { key: 'ecl', name: 'Lorwyn Eclipsed · Arena', has: (p: Packet) => p.set === 'ecl' },
   { key: 'tdm', name: 'Tarkir: Dragonstorm · Arena', has: (p: Packet) => p.set === 'tdm' },

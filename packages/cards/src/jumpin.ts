@@ -3853,12 +3853,452 @@ export const ARENA_TDM_PACKETS: Packet[] = [
   },
 ];
 
+/**
+ * MTG Arena's ten Secrets of Strixhaven packets, from https://mtgabuddy.com/en/jump-in-packet-list
+ * (`scripts/data/arena-jumpin-packets.json`): 12 or 13 cards each, the fixed ones and Arena's random slots
+ * (one alternative of each, by percentage, when a deck is built). The college packets are two colours
+ * with their college land; the basics come from the top-up to 40 (`addBasics` in `index.ts`).
+ */
+export const ARENA_SOS_PACKETS: Packet[] = [
+  {
+    id: 'sos-arena-aesthetic',
+    name: 'Aesthetic',
+    colors: ['U'],
+    face: 'Skycoach Conductor',
+    blurb: 'Control the board and attack with evasive creatures',
+    set: 'sos',
+    source: 'arena',
+    spells: [
+      ['Matterbending Mage', 1],
+      ['Orysa, Tide Choreographer', 1],
+      ['Homesickness', 1],
+      ['Essence Scatter', 1],
+      ['Run Behind', 1],
+    ],
+    slots: [
+      [
+        { card: 'Mathemagics', weight: 20 },
+        { card: 'Skycoach Conductor', weight: 80 },
+      ],
+      [
+        { card: 'Muse Seeker', weight: 50 },
+        { card: 'Tester of the Tangential', weight: 50 },
+      ],
+      [
+        { card: 'Campus Composer', weight: 50 },
+        { card: 'Spellbook Seeker', weight: 50 },
+      ],
+      [
+        { card: 'Divergent Equation', weight: 50 },
+        { card: 'Fractalize', weight: 50 },
+      ],
+      [
+        { card: 'Landscape Painter', weight: 50 },
+        { card: 'Hydro-Channeler', weight: 50 },
+      ],
+      [
+        { card: 'Deluge Virtuoso', weight: 50 },
+        { card: 'Textbook Tabulator', weight: 50 },
+      ],
+      [
+        { card: 'Banishing Betrayal', weight: 50 },
+        { card: 'Procrastinate', weight: 50 },
+      ],
+    ],
+    lands: [],
+  },
+  {
+    id: 'sos-arena-field-trip',
+    name: 'Field Trip',
+    colors: ['G'],
+    face: 'Emeritus of Abundance',
+    blurb: 'Ramp into big creatures',
+    set: 'sos',
+    source: 'arena',
+    spells: [
+      ['Emil, Vastlands Roamer', 1],
+      ['Studious First-Year', 1],
+      ['Hungry Graffalon', 1],
+      ['Burrog Barrage', 1],
+      ['Chelonian Tackle', 1],
+      ['Wild Hypothesis', 1],
+    ],
+    slots: [
+      [
+        { card: 'Emeritus of Abundance', weight: 20 },
+        { card: 'Vastlands Scavenger', weight: 80 },
+      ],
+      [
+        { card: 'Infirmary Healer', weight: 50 },
+        { card: 'Environmental Scientist', weight: 50 },
+      ],
+      [
+        { card: 'Pestbrood Sloth', weight: 50 },
+        { card: 'Aberrant Manawurm', weight: 50 },
+      ],
+      [
+        { card: "Zimone's Experiment", weight: 50 },
+        { card: 'Additive Evolution', weight: 50 },
+      ],
+      [
+        { card: 'Noxious Newt', weight: 50 },
+        { card: 'Mindful Biomancer', weight: 50 },
+      ],
+      [
+        { card: 'Glorious Decay', weight: 50 },
+        { card: "Oracle's Restoration", weight: 50 },
+      ],
+    ],
+    lands: [],
+  },
+  {
+    id: 'sos-arena-grave',
+    name: 'Grave',
+    colors: ['B'],
+    face: 'Ral Zarek, Guest Lecturer',
+    blurb: 'Bring creatures back from the graveyard',
+    set: 'sos',
+    source: 'arena',
+    spells: [
+      ['Leech Collector', 1],
+      ['Forum Necroscribe', 1],
+      ['Adventurous Eater', 1],
+      ['Sneering Shadewriter', 1],
+      ['Last Gasp', 1],
+      ['Wander Off', 1],
+    ],
+    slots: [
+      [
+        { card: 'Ral Zarek, Guest Lecturer', weight: 20 },
+        { card: 'Grave Researcher', weight: 80 },
+      ],
+      [
+        { card: 'Lecturing Scornmage', weight: 50 },
+        { card: 'Burrog Banemaker', weight: 50 },
+      ],
+      [
+        { card: 'Eternal Student', weight: 50 },
+        { card: 'Cheerful Osteomancer', weight: 50 },
+      ],
+      [
+        { card: 'Dissection Practice', weight: 50 },
+        { card: 'Rabid Attack', weight: 50 },
+      ],
+      [
+        { card: 'Melancholic Poet', weight: 50 },
+        { card: 'Send in the Pest', weight: 50 },
+      ],
+      [
+        { card: 'Cost of Brilliance', weight: 50 },
+        { card: 'Pull from the Grave', weight: 50 },
+      ],
+    ],
+    lands: [],
+  },
+  {
+    id: 'sos-arena-lorehold',
+    name: 'Lorehold',
+    colors: ['W', 'R'],
+    face: 'Lorehold, the Historian',
+    blurb: 'Flashback: cast spells again from the graveyard',
+    set: 'sos',
+    source: 'arena',
+    spells: [
+      ['Kirol, History Buff', 1],
+      ['Practiced Scrollsmith', 1],
+      ['Spirit Mascot', 1],
+      ['Lorehold Charm', 1],
+      ['Wilt in the Heat', 1],
+      ['Pursue the Past', 1],
+    ],
+    slots: [
+      [
+        { card: 'Lorehold, the Historian', weight: 20 },
+        { card: 'Hardened Academic', weight: 40 },
+        { card: 'Ark of Hunger', weight: 40 },
+      ],
+      [
+        { card: 'Garrison Excavator', weight: 50 },
+        { card: 'Startled Relic Sloth', weight: 50 },
+      ],
+      [
+        { card: 'Colossus of the Blood Age', weight: 50 },
+        { card: 'Molten Note', weight: 50 },
+      ],
+      [
+        { card: 'Stone Docent', weight: 50 },
+        { card: 'Owlin Historian', weight: 50 },
+      ],
+      [
+        { card: 'Strife Scholar', weight: 50 },
+        { card: 'Rubble Rouser', weight: 50 },
+      ],
+      [
+        { card: 'Dig Site Inventory', weight: 50 },
+        { card: 'Tome Blast', weight: 50 },
+      ],
+    ],
+    lands: [['Fields of Strife', 1]],
+  },
+  {
+    id: 'sos-arena-prismari',
+    name: 'Prismari',
+    colors: ['U', 'R'],
+    face: 'Prismari, the Inspiration',
+    blurb: 'Opus: instants and sorceries power up your creatures',
+    set: 'sos',
+    source: 'arena',
+    spells: [
+      ['Sanar, Unfinished Genius', 1],
+      ['Spectacular Skywhale', 1],
+      ['Landscape Painter', 1],
+      ['Vibrant Outburst', 1],
+      ['Prismari Charm', 1],
+      ["Visionary's Dance", 1],
+    ],
+    slots: [
+      [
+        { card: 'Prismari, the Inspiration', weight: 20 },
+        { card: 'Traumatic Critique', weight: 40 },
+        { card: 'Colorstorm Stallion', weight: 40 },
+      ],
+      [
+        { card: 'Blazing Firesinger', weight: 50 },
+        { card: 'Abstract Paintmage', weight: 50 },
+      ],
+      [
+        { card: 'Rapturous Moment', weight: 50 },
+        { card: 'Stress Dream', weight: 50 },
+      ],
+      [
+        { card: 'Deluge Virtuoso', weight: 50 },
+        { card: 'Elemental Mascot', weight: 50 },
+      ],
+      [
+        { card: "Muse's Encouragement", weight: 50 },
+        { card: 'Stadium Tidalmage', weight: 50 },
+      ],
+      [
+        { card: 'Unsubtle Mockery', weight: 50 },
+        { card: 'Procrastinate', weight: 50 },
+      ],
+    ],
+    lands: [['Spectacle Summit', 1]],
+  },
+  {
+    id: 'sos-arena-quandrix',
+    name: 'Quandrix',
+    colors: ['U', 'G'],
+    face: 'Quandrix, the Proof',
+    blurb: 'Increment: creatures that grow with counters',
+    set: 'sos',
+    source: 'arena',
+    spells: [
+      ['Cuboid Colony', 1],
+      ['Paradox Surveyor', 1],
+      ['Tam, Observant Sequencer', 1],
+      ['Pterafractyl', 1],
+      ['Quandrix Charm', 1],
+      ["Proctor's Gaze", 1],
+      ['Embrace the Paradox', 1],
+      ['Procrastinate', 1],
+    ],
+    slots: [
+      [
+        { card: 'Quandrix, the Proof', weight: 20 },
+        { card: 'Applied Geometry', weight: 40 },
+        { card: 'Mind into Matter', weight: 40 },
+      ],
+      [
+        { card: 'Tester of the Tangential', weight: 50 },
+        { card: 'Infirmary Healer', weight: 50 },
+      ],
+      [
+        { card: 'Matterbending Mage', weight: 50 },
+        { card: 'Topiary Lecturer', weight: 50 },
+      ],
+      [
+        { card: 'Fractal Tender', weight: 50 },
+        { card: 'Fractal Mascot', weight: 50 },
+      ],
+    ],
+    lands: [['Paradox Gardens', 1]],
+  },
+  {
+    id: 'sos-arena-scribe',
+    name: 'Scribe',
+    colors: ['W'],
+    face: 'Emeritus of Truce',
+    blurb: 'Value from cards in your graveyard',
+    set: 'sos',
+    source: 'arena',
+    spells: [
+      ['Ennis, Debate Moderator', 1],
+      ['Spiritcall Enthusiast', 1],
+      ['Elite Interceptor', 1],
+      ['Eager Glyphmage', 1],
+      ['Ascendant Dustspeaker', 1],
+      ["Ajani's Response", 1],
+      ['Dig Site Inventory', 1],
+    ],
+    slots: [
+      [
+        { card: 'Emeritus of Truce', weight: 20 },
+        { card: 'Antiquities on the Loose', weight: 80 },
+      ],
+      [
+        { card: 'Group Project', weight: 50 },
+        { card: 'Soaring Stoneglider', weight: 50 },
+      ],
+      [
+        { card: 'Daydream', weight: 50 },
+        { card: 'Primary Research', weight: 50 },
+      ],
+      [
+        { card: 'Stone Docent', weight: 50 },
+        { card: 'Shattered Acolyte', weight: 50 },
+      ],
+      [
+        { card: 'Rapier Wit', weight: 50 },
+        { card: 'Interjection', weight: 50 },
+      ],
+    ],
+    lands: [],
+  },
+  {
+    id: 'sos-arena-silverquill',
+    name: 'Silverquill',
+    colors: ['W', 'B'],
+    face: 'Silverquill, the Disputant',
+    blurb: 'Repartee: spells that target creatures pay off',
+    set: 'sos',
+    source: 'arena',
+    spells: [
+      ['Scolding Administrator', 1],
+      ['Abigale, Poet Laureate', 1],
+      ['Stirring Honormancer', 1],
+      ['Elite Interceptor', 1],
+      ['Inkling Mascot', 1],
+      ['Silverquill Charm', 1],
+      ['Social Snub', 1],
+    ],
+    slots: [
+      [
+        { card: 'Silverquill, the Disputant', weight: 20 },
+        { card: 'Stirring Hopesinger', weight: 40 },
+        { card: "Conciliator's Duelist", weight: 40 },
+      ],
+      [
+        { card: 'Snooping Page', weight: 50 },
+        { card: 'Melancholic Poet', weight: 50 },
+      ],
+      [
+        { card: "Killian's Confidence", weight: 50 },
+        { card: 'Render Speechless', weight: 50 },
+      ],
+      [
+        { card: 'Rehearsed Debater', weight: 50 },
+        { card: 'Imperious Inkmage', weight: 50 },
+      ],
+      [
+        { card: 'Interjection', weight: 50 },
+        { card: 'Masterful Flourish', weight: 50 },
+      ],
+    ],
+    lands: [['Forum of Amity', 1]],
+  },
+  {
+    id: 'sos-arena-spellcraft',
+    name: 'Spellcraft',
+    colors: ['R'],
+    face: 'Improvisation Capstone',
+    blurb: 'Instants and sorceries',
+    set: 'sos',
+    source: 'arena',
+    spells: [
+      ['Charging Strifeknight', 1],
+      ['Pigment Wrangler', 1],
+      ['Zealous Lorecaster', 1],
+      ['Unsubtle Mockery', 1],
+      ['Impractical Joke', 1],
+      ['Artistic Process', 1],
+      ['Living History', 1],
+    ],
+    slots: [
+      [
+        { card: 'Improvisation Capstone', weight: 20 },
+        { card: 'Steal the Show', weight: 80 },
+      ],
+      [
+        { card: 'Garrison Excavator', weight: 50 },
+        { card: 'Tackle Artist', weight: 50 },
+      ],
+      [
+        { card: 'Expressive Firedancer', weight: 50 },
+        { card: 'Goblin Glasswright', weight: 50 },
+      ],
+      [
+        { card: 'Rubble Rouser', weight: 50 },
+        { card: 'Strife Scholar', weight: 50 },
+      ],
+      [
+        { card: 'Tome Blast', weight: 50 },
+        { card: 'Heated Argument', weight: 50 },
+      ],
+    ],
+    lands: [],
+  },
+  {
+    id: 'sos-arena-witherbloom',
+    name: 'Witherbloom',
+    colors: ['B', 'G'],
+    face: 'Witherbloom, the Balancer',
+    blurb: 'Infusion: gain life to turn on bonuses',
+    set: 'sos',
+    source: 'arena',
+    spells: [
+      ["Teacher's Pest", 1],
+      ['Lluwen, Exchange Student', 1],
+      ['Bogwater Lumaret', 1],
+      ['Pest Mascot', 1],
+      ['Tenured Concocter', 1],
+      ['Witherbloom Charm', 1],
+      ['Grapple with Death', 1],
+    ],
+    slots: [
+      [
+        { card: 'Witherbloom, the Balancer', weight: 20 },
+        { card: 'Blech, Loafing Pest', weight: 40 },
+        { card: 'Cauldron of Essence', weight: 40 },
+      ],
+      [
+        { card: 'Essenceknit Scholar', weight: 50 },
+        { card: "Poisoner's Apprentice", weight: 50 },
+      ],
+      [
+        { card: 'Old-Growth Educator', weight: 50 },
+        { card: 'Pestbrood Sloth', weight: 50 },
+      ],
+      [
+        { card: 'Root Manipulation', weight: 50 },
+        { card: 'Mind Roots', weight: 50 },
+      ],
+      [
+        { card: 'Send in the Pest', weight: 50 },
+        { card: 'Burrog Banemaker', weight: 50 },
+      ],
+    ],
+    lands: [["Titan's Grave", 1]],
+  },
+];
+
 export const PACKETS: Packet[] = [
   ...OWN_PACKETS,
   ...ARENA_BLB_PACKETS,
   ...ARENA_FDN_PACKETS,
   ...ARENA_ECL_PACKETS,
   ...ARENA_TDM_PACKETS,
+  ...ARENA_SOS_PACKETS,
   ...MARVEL_JUMPSTART_PACKETS,
 ];
 
