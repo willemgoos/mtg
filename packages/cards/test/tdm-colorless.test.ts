@@ -743,7 +743,12 @@ describe('Watcher of the Wayside', () => {
 });
 
 describe('Maelstrom of the Spirit Dragon: Omen spells', () => {
-  const base = { manaCost: { generic: 0, colored: {} }, supertypes: [], keywords: [], abilities: [] };
+  const base = {
+    manaCost: { generic: 0, colored: {} },
+    supertypes: [],
+    keywords: [],
+    abilities: [],
+  };
   // A Dragon creature with an Omen spell side ({1}{R}), as the set's Omen Dragons are.
   const OMEN_DRAGON: CardDefinition = {
     ...base,
@@ -786,7 +791,7 @@ describe('Maelstrom of the Spirit Dragon: Omen spells', () => {
     const g = new GameDriver(
       engine,
       buildScenario(db, {
-        p1: { hand: ['shivan-fire'], battlefield: ['maelstrom-of-the-spirit-dragon', 'plains'] },
+        p1: { hand: ['flame-slash'], battlefield: ['maelstrom-of-the-spirit-dragon', 'plains'] },
       }),
     );
     expect(g.legal().some((a) => a.type === 'castSpell')).toBe(false);
