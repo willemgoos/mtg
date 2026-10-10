@@ -80,6 +80,7 @@ import {
 import { freeCastSource, playableWhileControlling } from './msh-analyzed.ts';
 import { exiledCastCards, exiledCastSource } from './ecl-multi-b-effects.ts';
 import { omnipresenceCastable } from './fra-green-effects.ts';
+import { freeMatchingCastable } from './tdm-red-effects.ts';
 import { permanentHasStatic } from './fra-pw-effects.ts';
 import { beholdOptions } from './fra-pw-b-effects.ts';
 import type {
@@ -589,6 +590,8 @@ function priorityActions(
                   : []),
                 // Reality Fracture (17a): Omnipresence.
                 ...(omnipresenceCastable(ctx, player, card) ? (['omnipresence'] as const) : []),
+                // Tarkir: Dragonstorm (19b, red): Dracogenesis.
+                ...(freeMatchingCastable(ctx, player, card) ? (['freeMatching'] as const) : []),
               ];
     for (const via of vias)
       for (const v of castVariants(d, zone, via)) {
@@ -618,6 +621,7 @@ function priorityActions(
             if (
               (via === 'freeOnceEachTurn' ||
                 via === 'omnipresence' ||
+                via === 'freeMatching' ||
                 (via === 'freeExact' && d.manaCost.x)) &&
               x
             )

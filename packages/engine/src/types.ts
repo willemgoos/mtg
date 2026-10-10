@@ -655,6 +655,9 @@ export interface CostDef {
   // Lorwyn Eclipsed (18b, white): Kithkeeper
   /** "Tap three untapped creatures you control" (the source may be one of them; the player picks them on the board). */
   tapCreatures?: number;
+  // Tarkir: Dragonstorm (19b, red): Reverberating Summons
+  /** "Discard your hand" as a cost (a hand of no cards is fine). */
+  discardHand?: boolean;
 }
 
 export type TriggerDef =
@@ -972,6 +975,9 @@ export type TriggerDef =
       on: 'castSelf';
       /** Strixhaven (13c): Plumb the Forbidden: only if creatures were sacrificed to cast it ("that many"). */
       perSacrificed?: boolean;
+      // Tarkir: Dragonstorm (19b, red): Stormscale Scion
+      /** Storm: "that many" is the number of spells cast this turn (by any player) before this one. */
+      storm?: boolean;
     }
   // Avengers Assemble (9b).
   /** Whenever this creature is dealt damage ("that much"): Hercules. */
@@ -2365,6 +2371,9 @@ export type EffectDef =
       // Lorwyn Eclipsed (18b, black): Mornsong Aria
       /** The player whose turn it is searches (their own library, the card goes to their hand), not the controller. */
       activePlayerSearches?: boolean;
+      // Tarkir: Dragonstorm (19b, red): Magmatic Hellkite
+      /** The card found enters the battlefield with one counter of this kind ("with a stun counter on it"). */
+      counter?: string;
     }
   /** Look at the top N; you may put a creature with mana value up to your land count onto the battlefield (Loot). */
   | { kind: 'lookForCreature'; count: number }
@@ -2411,6 +2420,9 @@ export type EffectDef =
       spec: TargetSpec;
       give: 'damage' | 'counters';
       each?: EffectDef[];
+      // Tarkir: Dragonstorm (19b, red): Twin Bolt
+      /** "One or two targets" rather than "up to": choosing no target at all isn't offered. */
+      atLeastOne?: boolean;
       /** Internal: the targets chosen so far and what each gets. */
       chosen?: { to: TargetChoice; n: number }[];
       /** Internal: the choosing is over; deal the damage or put the counters. */
@@ -2753,6 +2765,12 @@ export type EffectDef =
       // Marvel Super Heroes Jumpstart (Scarlet)
       /** The exiled cards (and the hit, if not cast) stay in exile (Wanda's Vision). */
       stayExiled?: boolean;
+      // Tarkir: Dragonstorm (19b, red): Breaching Dragonstorm
+      /**
+       * Stop at the first nonland card whatever its mana value: it may be cast free if its mana value is at most `max`, otherwise
+       * (or if it isn't cast) it goes to your hand (`orHand`); the lands exiled before it stay in exile.
+       */
+      firstNonland?: boolean;
     }
   // Strixhaven (13c)
   /** Jadzi: reveal the top card; a land goes onto the battlefield, a nonland card may be cast by paying `pay`. */
@@ -3316,6 +3334,9 @@ export type StaticDef =
    * without paying its mana cost (Vision, Spectral Synthezoid). Once for each such permanent.
    */
   | { kind: 'freeCastOncePerYourTurn'; filter: CardFilter }
+  // Tarkir: Dragonstorm (19b, red): Dracogenesis
+  /** "You may cast spells matching the filter without paying their mana costs." (A cast action 'freeMatching' beside the usual ones.) */
+  | { kind: 'castFreeMatching'; filter: CardFilter }
   /** Creatures matching the filter can't attack you while the condition holds (Queen Mother Ramonda). */
   | { kind: 'cantAttackYou'; filter: CardFilter; condition?: ConditionDef }
   // Final Fantasy (11c): rare statics
@@ -4779,6 +4800,8 @@ export type Action =
         | 'freeOnceEachTurn'
         // Reality Fracture (17a): Omnipresence.
         | 'omnipresence'
+        // Tarkir: Dragonstorm (19b, red): Dracogenesis.
+        | 'freeMatching'
         // Reality Fracture (17c): Chandra, Torch of Defiance.
         | 'now'
         | 'freeExact'

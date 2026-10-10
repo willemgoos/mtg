@@ -1720,6 +1720,8 @@ function castLabel(defId: CardDefId, a: Action, view: GameState): string {
   if (a.via === 'freeOnceEachTurn') return 'Cast free (once this turn)';
   // Reality Fracture (17a): Omnipresence.
   if (a.via === 'omnipresence') return 'Cast free (Omnipresence)';
+  // Tarkir: Dragonstorm (19b, red): Dracogenesis.
+  if (a.via === 'freeMatching') return 'Cast free (Dracogenesis)';
   // Final Fantasy (11c): playing from the graveyard.
   if (a.via === 'noctis') return 'From your graveyard (pay 3 life)';
   if (a.via === 'hades') return 'From your graveyard';
