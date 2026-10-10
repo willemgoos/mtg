@@ -991,17 +991,40 @@ export function abilitiesLocked(ctx: Ctx, id: ObjectId): boolean {
         def(ctx, src).abilities.some(
           (a) => a.kind === 'static' && a.effect.kind === 'attached' && a.effect.cantActivate,
         ),
-    ) ||
-    // Tarkir: Dragonstorm (19b, white): Clarion Conqueror, "activated abilities of artifacts, creatures, and planeswalkers can't be activated".
-    ctx.s.battlefield.some((src) =>
+    ) || lockedByStatic(ctx, id)
+  );
+}
+
+// Tarkir: Dragonstorm (19b, white): Clarion Conqueror, "activated abilities of artifacts, creatures, and planeswalkers can't be
+// activated". The cards with the static are found once per card database (this is asked for every ability of every permanent).
+const LOCKERS = new WeakMap<object, Set<string>>();
+function lockerDefs(ctx: Ctx): Set<string> {
+  let set = LOCKERS.get(ctx.db);
+  if (!set) {
+    set = new Set();
+    for (const d of ctx.db.values())
+      if (d.abilities.some((a) => a.kind === 'static' && a.effect.kind === 'noActivatedAbilities'))
+        set.add(d.id);
+    LOCKERS.set(ctx.db, set);
+  }
+  return set;
+}
+function lockedByStatic(ctx: Ctx, id: ObjectId): boolean {
+  const lockers = lockerDefs(ctx);
+  if (lockers.size === 0) return false;
+  for (const src of ctx.s.battlefield) {
+    if (!lockers.has(obj(ctx, src).defId)) continue;
+    if (
       def(ctx, src).abilities.some(
         (a) =>
           a.kind === 'static' &&
           a.effect.kind === 'noActivatedAbilities' &&
           matchesFilter(ctx, id, a.effect.filter),
-      ),
+      )
     )
-  );
+      return true;
+  }
+  return false;
 }
 
 export function matchesFilter(
