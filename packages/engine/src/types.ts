@@ -73,6 +73,9 @@ export type Keyword =
   | 'hexproofFromInstants'
   /** Can't be the target of white spells or abilities an opponent controls (Knight of Malice). */
   | 'hexproofFromWhite'
+  // Tarkir: Dragonstorm (19b, misc): Dragonfire Blade
+  /** Can't be the target of monocolored spells or abilities (sources with exactly one colour) an opponent controls. */
+  | 'hexproofFromMonocolored'
   /** Ward: targeting it costs an opponent `CardDefinition.wardCost` (default {2}). */
   | 'ward'
   /** Ward {1}, granted by another permanent (Long River Lurker, Innkeeper's Talent). */
@@ -547,6 +550,9 @@ export type AbilityDef =
       // Reality Fracture (17a): Warrior's Blades
       /** "This ability costs {1} less to activate for each +1/+1 counter on the creature it targets." */
       costReductionPerTargetCounter?: boolean;
+      // Tarkir: Dragonstorm (19b, misc): Dragonfire Blade
+      /** "This ability costs {1} less to activate for each color of the creature it targets." */
+      costReductionPerTargetColor?: boolean;
     }
   | {
       kind: 'triggered';
@@ -1005,6 +1011,9 @@ export type TriggerDef =
   | { on: 'opponentLosesLife'; duringYourTurn?: boolean }
   /** Whenever one or more cards leave your graveyard (Fang, Fearless l'Cie). */
   | { on: 'cardsLeaveYourGraveyard' }
+  // Tarkir: Dragonstorm (19b, misc): Hollowmurk Siege, Stalwart Successor
+  /** Whenever one or more counters (of any kind) are put on a creature you control; "that creature" is the subject. */
+  | { on: 'counterPutOnYourCreature' }
   // Final Fantasy (11b): creatures and artifacts dying
   /**
    * Whenever this or another permanent you control matching the filter is put
@@ -2394,6 +2403,9 @@ export type EffectDef =
       // Lorwyn Eclipsed (18b, black): Mornsong Aria
       /** The player whose turn it is searches (their own library, the card goes to their hand), not the controller. */
       activePlayerSearches?: boolean;
+      // Tarkir: Dragonstorm (19b, misc): Ugin, Eye of the Storms
+      /** The cards found are exiled, and you may cast them without paying their mana costs until end of turn. */
+      exileFreeThisTurn?: boolean;
     }
   /** Look at the top N; you may put a creature with mana value up to your land count onto the battlefield (Loot). */
   | { kind: 'lookForCreature'; count: number }
@@ -3477,7 +3489,12 @@ export type StaticDef =
   | { kind: 'spellsYouControlUncounterable' }
   // Tarkir: Dragonstorm (19b, white): Clarion Conqueror
   /** Activated abilities of permanents matching the filter (mana and loyalty abilities too) can't be activated, whoever controls them. */
-  | { kind: 'noActivatedAbilities'; filter: CardFilter };
+  | { kind: 'noActivatedAbilities'; filter: CardFilter }
+  // Tarkir: Dragonstorm (19b, misc): Dragonstorm Globe, Windcrag Siege
+  /** Each permanent matching the filter that enters under your control enters with an additional +1/+1 counter (Dragonstorm Globe: Dragons). */
+  | { kind: 'entersWithExtraCounter'; filter: CardFilter }
+  /** If a creature attacking causes a triggered ability of a permanent you control to trigger, that ability triggers an additional time (Windcrag Siege, Mardu). */
+  | { kind: 'attackTriggersTwice' };
 
 export type CardDb = ReadonlyMap<CardDefId, CardDefinition>;
 
@@ -3770,6 +3787,9 @@ export interface GameObject {
   /** +1/+1 counters were put on it this many times during turn `countersTurn` (Botanical Brawler). */
   countersTurn?: number;
   countersTimes?: number;
+  // Tarkir: Dragonstorm (19b, misc): Stalwart Successor
+  /** Counters of any kind were put on it this many times during turn `turn`. */
+  anyCountersTimes?: { turn: number; times: number };
   // Final Fantasy Commander (12f).
   /** Exiled from a graveyard to be cast this turn: it counts as cast from a graveyard (Emet-Selch). */
   fromGraveyardCast?: boolean;
@@ -4433,6 +4453,9 @@ export type Decision =
       // Reality Fracture (17a): Fblthp, Knows the Way; Hexhaven Invigorator
       /** "Up to N cards": how many more may be taken (one at a time). */
       remaining?: number;
+      // Tarkir: Dragonstorm (19b, misc): Ugin, Eye of the Storms
+      /** The cards found are exiled; they may be cast free this turn. */
+      exileFreeThisTurn?: boolean;
       /** Each card taken must have a different name from the ones already taken. */
       differentNames?: boolean;
       // Reality Fracture (17a fixes): Loyal Tutor
@@ -5028,6 +5051,9 @@ export type GameEvent =
   | { type: 'cardsRevealed'; player: PlayerId; cards: { id: ObjectId; defId: CardDefId }[] }
   /** +1/+1 counters were put on a permanent. */
   | { type: 'countersAdded'; id: ObjectId; count: number; player: PlayerId }
+  // Tarkir: Dragonstorm (19b, misc): counters of any kind put on a creature
+  /** Counters of any kind (+1/+1 or named) were put on a creature; `player` controls it. */
+  | { type: 'anyCountersAdded'; id: ObjectId; count: number; player: PlayerId }
   // Reality Fracture (17c): loyalty counters put on a planeswalker
   /** `player` controls the planeswalker; `by` is the player who put the counters. */
   | { type: 'loyaltyCountersAdded'; id: ObjectId; count: number; player: PlayerId; by: PlayerId }

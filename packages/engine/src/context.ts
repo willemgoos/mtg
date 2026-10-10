@@ -25,6 +25,7 @@ import { ECL_18A_EFFECTS, willPersist } from './ecl-18a.ts';
 import { cantBeSacrificed, TDM_19A_EFFECTS } from './tdm-19a.ts';
 import { TDM_CLANS_B_EFFECTS } from './tdm-clans-b-effects.ts';
 import { TDM_WHITE_EFFECTS } from './tdm-white-effects.ts';
+import { extraEntryCounters, noteCreatureCounters, TDM_MISC_EFFECTS } from './tdm-misc-effects.ts';
 import { ECL_SPECIAL_EFFECTS } from './ecl-special-effects.ts';
 import { ECL_GREEN_EFFECTS } from './ecl-green-effects.ts';
 import { ECL_BLUE_EFFECTS } from './ecl-blue-effects.ts';
@@ -160,6 +161,7 @@ const BUILT_IN_EFFECTS: Record<string, CustomEffect> = {
   ...TDM_19A_EFFECTS,
   ...TDM_CLANS_B_EFFECTS, // Tarkir: Dragonstorm (19b, clans-b)
   ...TDM_WHITE_EFFECTS, // Tarkir: Dragonstorm (19b, white)
+  ...TDM_MISC_EFFECTS, // Tarkir: Dragonstorm (19b, misc)
   // Lorwyn Eclipsed (18b, special).
   ...ECL_SPECIAL_EFFECTS,
   // Lorwyn Eclipsed (18b): green.
@@ -979,6 +981,8 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
       addCounters(ctx, id, ed.entersWithCounters);
     for (const [k, v] of Object.entries(ed.entersWithNamedCounters ?? {}))
       (o.counters ??= {})[k] = (o.counters[k] ?? 0) + v;
+    // Tarkir: Dragonstorm (19b, misc): Dragonstorm Globe (a spell resolving does this in stack.ts).
+    addCounters(ctx, id, extraEntryCounters(ctx, id));
   }
   // Ygra entering or leaving changes what the other creatures are.
   if ((from === 'battlefield' || to === 'battlefield') && makesFood(defOf(ctx, o.defId)))
@@ -1079,6 +1083,8 @@ export function addCounters(ctx: Ctx, id: ObjectId, n: number, name?: string, by
         player: o.controller,
         by: by ?? ctx.puttingPlayer ?? o.controller,
       });
+    // Tarkir: Dragonstorm (19b, misc): counters of any kind on a creature.
+    else anyCreatureCounters(ctx, id, n);
     return;
   }
   o.plusOneCounters += n;
@@ -1092,6 +1098,14 @@ export function addCounters(ctx: Ctx, id: ObjectId, n: number, name?: string, by
     o.countersTimes = 1;
   }
   emit(ctx, { type: 'countersAdded', id, count: n, player: o.controller });
+  anyCreatureCounters(ctx, id, n); // Tarkir: Dragonstorm (19b, misc)
+}
+
+/** Tarkir: Dragonstorm (19b, misc): Stalwart Successor, Hollowmurk Siege: counters of any kind were put on a creature. */
+function anyCreatureCounters(ctx: Ctx, id: ObjectId, n: number): void {
+  if (!def(ctx, id).types.includes('Creature')) return;
+  noteCreatureCounters(ctx, obj(ctx, id));
+  emit(ctx, { type: 'anyCountersAdded', id, count: n, player: obj(ctx, id).controller });
 }
 
 /** Festival of Embers: `player` controls a permanent that exiles cards headed for their graveyard. */

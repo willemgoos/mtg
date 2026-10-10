@@ -16,6 +16,7 @@ import { spellsCastThisTurn } from './tdm-19a.ts';
 import { elementalTriggerCopies } from './ecl-multi-b-effects.ts';
 import { FIC_CONDITIONS } from './fic-effects.ts';
 import { FIN_CONDITIONS } from './fin-effects.ts';
+import { doubleAttackTriggers, TDM_MISC_CONDITIONS } from './tdm-misc-effects.ts';
 import type {
   AbilityDef,
   EffectDef,
@@ -398,7 +399,8 @@ export function checkCondition(
     case 'custom': {
       // Final Fantasy Commander (12): one-off conditions.
       // Final Fantasy (11d): and FIN one-offs.
-      const fn = FIC_CONDITIONS[c.handler] ?? FIN_CONDITIONS[c.handler];
+      const fn =
+        FIC_CONDITIONS[c.handler] ?? FIN_CONDITIONS[c.handler] ?? TDM_MISC_CONDITIONS[c.handler]; // Tarkir: Dragonstorm (19b, misc)
       if (fn) return fn(ctx, controller, self, subject);
       throw new Error(`Custom condition "${c.handler}" not registered`);
     }
@@ -2030,6 +2032,18 @@ function detect(ctx: Ctx, ev: GameEvent): void {
       );
       return;
     }
+    // Tarkir: Dragonstorm (19b, misc): Hollowmurk Siege, Stalwart Successor.
+    case 'anyCountersAdded': {
+      const target = s.objects[ev.id];
+      if (!target || target.zone !== 'battlefield') return;
+      forEachBattlefieldTrigger(
+        ctx,
+        (o, a) => a.trigger.on === 'counterPutOnYourCreature' && o.controller === target.controller,
+        target,
+        ev.count,
+      );
+      return;
+    }
     // Reality Fracture (17c): Inspired Tethermage.
     case 'loyaltyCountersAdded': {
       const target = s.objects[ev.id];
@@ -2282,10 +2296,15 @@ function detect(ctx: Ctx, ev: GameEvent): void {
 /** Scans events emitted since the last call and queues any triggered abilities. */
 export function collectTriggers(ctx: Ctx): void {
   ctx.batched.clear();
+  const before = ctx.s.pendingTriggers.length;
+  let attacked = false;
   while (ctx.triggerCursor < ctx.events.length) {
     const ev = ctx.events[ctx.triggerCursor++]!;
+    if (ev.type === 'attackersDeclared') attacked = true;
     detect(ctx, ev);
   }
+  // Tarkir: Dragonstorm (19b, misc): Windcrag Siege (Mardu), what the attack caused triggers an additional time.
+  if (attacked) doubleAttackTriggers(ctx, before);
 }
 
 /** APNAP: the active player's triggers go on the stack first. */

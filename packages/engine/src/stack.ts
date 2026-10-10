@@ -58,6 +58,7 @@ import { shuffleLibrary } from './setup.ts';
 import { addCosts, type CastVia, spellOnStack, spellTags, variantOf } from './spells.ts';
 import { isTargetLegal } from './targets.ts';
 import { useFreeCast } from './msh-analyzed.ts';
+import { extraEntryCounters } from './tdm-misc-effects.ts';
 import { revealBeheld } from './fra-pw-b-effects.ts';
 import {
   beholdOfType,
@@ -1118,7 +1119,9 @@ export function abilityManaCost(
     // Firion's copies' own discount, and "equip abilities you activate cost less" (Fighter Class).
     (a.cost.mana ? equipDiscount(ctx, o, a, targets) : 0) +
     // Reality Fracture (17a): Warrior's Blades, "{1} less for each +1/+1 counter on the creature it targets".
-    (a.costReductionPerTargetCounter ? counterDiscount(ctx, o.controller, targets) : 0);
+    (a.costReductionPerTargetCounter ? counterDiscount(ctx, o.controller, targets) : 0) +
+    // Tarkir: Dragonstorm (19b, misc): Dragonfire Blade, "{1} less for each color of the creature it targets".
+    (a.costReductionPerTargetColor ? colorDiscount(ctx, o.controller, targets) : 0);
   if (less && a.cost.mana && !a.powerUp)
     return reduceCost(a.cost.mana, { generic: Math.min(less, a.cost.mana.generic), colored: {} });
   if (!a.powerUp || !a.cost.mana) return a.cost.mana;
@@ -1162,6 +1165,26 @@ function counterDiscount(
     );
   const t = targets?.[0];
   return t && 'object' in t ? (ctx.s.objects[t.object.id]?.plusOneCounters ?? 0) : 0;
+}
+
+// Tarkir: Dragonstorm (19b, misc): Dragonfire Blade
+/** The colors of the creature a cost-reducing ability targets ('best': the most on a creature of yours). */
+function colorDiscount(
+  ctx: Ctx,
+  player: PlayerId,
+  targets?: readonly TargetChoice[] | 'best',
+): number {
+  if (targets === 'best')
+    return Math.max(
+      0,
+      ...ctx.s.battlefield
+        .filter((id) => obj(ctx, id).controller === player && isCreature(ctx, id))
+        .map((id) => def(ctx, id).colors.length),
+    );
+  const t = targets?.[0];
+  return t && 'object' in t && ctx.s.objects[t.object.id]
+    ? def(ctx, t.object.id).colors.length
+    : 0;
 }
 
 // Final Fantasy Commander (12b): equip cost reductions.
@@ -1661,6 +1684,7 @@ export function resolveTop(ctx: Ctx): boolean {
     // Strixhaven Brawl (15b, pair): Altered Ego, X additional +1/+1 counters if it copied.
     if (item.copyOf && d.entersAsCopy?.xCounters && item.x) addCounters(ctx, o.id, item.x);
     addCounters(ctx, o.id, bonusCounters(ctx, item.controller, o.id, d.subtypes));
+    addCounters(ctx, o.id, extraEntryCounters(ctx, o.id)); // Tarkir: Dragonstorm (19b, misc): Dragonstorm Globe
     // A permanent's gift (Scrapshooter): the opponent gets it as it resolves.
     if (item.kicked && d.kicker?.as === 'gift' && d.kicker.gift)
       runEffects(
@@ -2455,7 +2479,13 @@ export function answerSearch(ctx: Ctx, card: ObjectId | null): void {
       (d.battlefieldOnYourTurn && ctx.s.turn.activePlayer === d.player) ||
       // Lorwyn Eclipsed (18a): Celestial Reunion, a card of the chosen creature type.
       (d.battlefieldIfType !== undefined && hasSubtype(ctx, card, d.battlefieldIfType));
-    if (d.to === 'hideaway') {
+    if (d.exileFreeThisTurn) {
+      // Tarkir: Dragonstorm (19b, misc): Ugin, Eye of the Storms: exiled; castable without paying its mana cost this turn.
+      moveObject(ctx, card, 'exile');
+      const found = obj(ctx, card);
+      found.playFreeBy = d.player;
+      found.playFreeUntilTurn = ctx.s.turn.number;
+    } else if (d.to === 'hideaway') {
       // Final Fantasy (11c): hideaway. Exiled face down, remembered by the land.
       moveObject(ctx, card, 'exile');
       const land = d.resume.source && ctx.s.objects[d.resume.source.id];

@@ -85,6 +85,13 @@ function permanentOk(ctx: Ctx, spec: TargetSpec, id: ObjectId, src: TargetingSou
       def(ctx, src.sourceId).colors.includes('W')
     )
       return false;
+    // Tarkir: Dragonstorm (19b, misc): Dragonfire Blade, hexproof from monocolored.
+    if (
+      hasKeyword(ctx, id, 'hexproofFromMonocolored') &&
+      src.sourceId &&
+      def(ctx, src.sourceId).colors.length === 1
+    )
+      return false;
     // Lorwyn Eclipsed (18b, multi-b): Tam, Mindful First-Year.
     if (src.sourceId && hexproofFromOwnColors(ctx, id, src.sourceId)) return false;
   }
