@@ -2,7 +2,7 @@ import type { CardDefinition } from '@mtg/engine';
 import type { Behavior } from '../build.ts';
 
 /**
- * Tarkir: Dragonstorm (19b): all three-colour (clan) cards and the five-colour one. Printed characteristics come from Scryfall;
+ * Tarkir: Dragonstorm (19b): the Abzan, Jeskai and Sultai cards and the five-colour one (Mardu and Temur are in clans-b.ts). Printed characteristics come from Scryfall;
  * this file has the rules text. An Omen card's spell side is keyed by its own
  * name in TDM_CLANS_BACKS. See docs/tarkir-dragonstorm-plan.md.
  */

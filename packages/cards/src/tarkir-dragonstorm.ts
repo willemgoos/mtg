@@ -7,6 +7,7 @@ import { TDM_RED, TDM_RED_BACKS, TDM_RED_TOKENS } from './tdm/red.ts';
 import { TDM_GREEN, TDM_GREEN_BACKS, TDM_GREEN_TOKENS } from './tdm/green.ts';
 import { TDM_TWO_COLOUR, TDM_TWO_COLOUR_BACKS, TDM_TWO_COLOUR_TOKENS } from './tdm/two-colour.ts';
 import { TDM_CLANS, TDM_CLANS_BACKS, TDM_CLANS_TOKENS } from './tdm/clans.ts';
+import { TDM_CLANS_B, TDM_CLANS_B_BACKS, TDM_CLANS_B_TOKENS } from './tdm/clans-b.ts';
 import { TDM_COLORLESS, TDM_COLORLESS_BACKS, TDM_COLORLESS_TOKENS } from './tdm/colorless.ts';
 import { TDM_SHARED_TOKENS } from './tdm/tokens.ts';
 
@@ -23,6 +24,7 @@ export const TARKIR_DRAGONSTORM_BEHAVIORS: Record<string, Behavior> = {
   ...TDM_GREEN,
   ...TDM_TWO_COLOUR,
   ...TDM_CLANS,
+  ...TDM_CLANS_B,
   ...TDM_COLORLESS,
 };
 
@@ -35,6 +37,7 @@ export const TARKIR_DRAGONSTORM_BACK_FACES: Record<string, Behavior> = {
   ...TDM_GREEN_BACKS,
   ...TDM_TWO_COLOUR_BACKS,
   ...TDM_CLANS_BACKS,
+  ...TDM_CLANS_B_BACKS,
   ...TDM_COLORLESS_BACKS,
 };
 
@@ -48,5 +51,6 @@ export const TARKIR_DRAGONSTORM_TOKENS: CardDefinition[] = [
   ...TDM_GREEN_TOKENS,
   ...TDM_TWO_COLOUR_TOKENS,
   ...TDM_CLANS_TOKENS,
+  ...TDM_CLANS_B_TOKENS,
   ...TDM_COLORLESS_TOKENS,
 ];
