@@ -9,6 +9,7 @@ import {
 import { type Ctx, def, obj, other } from './context.ts';
 import { damageSourceFor, dealDamage, type DamageSource } from './effects.ts';
 import { checkCondition } from './triggers.ts';
+import { ringCantBeBlockedBy } from './ltr-21a.ts'; // Lord of the Rings (21a)
 import { protectedFrom } from './brawl-15b-w-effects.ts';
 import { manaSources } from './mana.ts';
 import type { Attacker, ObjectId, PlayerId, StaticDef, TargetChoice } from './types.ts';
@@ -140,6 +141,8 @@ export function canBlock(ctx: Ctx, blocker: ObjectId, attacker: ObjectId): boole
     return false;
   // Lorwyn Eclipsed (18b, special): protection from a colour granted for a while (Sygg, Wanderbrine Shield) also stops blocks.
   if (protectedFrom(ctx, attacker, blocker)) return false;
+  // Lord of the Rings (21a): the Ring's first ability, the Ring-bearer can't be blocked by creatures with greater power.
+  if (ringCantBeBlockedBy(ctx, attacker, blocker)) return false;
   // Marvel Super Heroes Jumpstart (Great Lakes Avengers): Doorman, until end of turn.
   for (const e of ctx.s.effects)
     if (

@@ -711,6 +711,8 @@ export function Board({
       case 'pickCards':
         return { prompt: `Choose ${d.count} card${d.count > 1 ? 's' : ''} to keep` };
       case 'chooseObject':
+        // The Lord of the Rings (21a): "the Ring tempts you".
+        if (d.ringBearer) return { prompt: 'Choose your Ring-bearer — click a creature' };
         // Lorwyn Eclipsed (18a): blight, the creature that gets the counters.
         if (d.blight !== undefined) {
           const what = d.blight === 1 ? 'a -1/-1 counter' : `${d.blight} -1/-1 counters`;

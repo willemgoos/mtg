@@ -42,6 +42,9 @@ export function describeEvent(e: GameEvent, s: GameState): string | null {
       return `  ${e.player} amasses ${e.subtype}s ${e.amount}: ${name(e.id)}`;
     case 'enduringStory':
       return `  ${e.player} has an enduring story`;
+    // The Lord of the Rings (21a).
+    case 'ringTempted':
+      return `  The Ring tempts ${e.player} (${e.tempted})${e.bearer ? `: ${name(e.bearer)} is the Ring-bearer` : ''}`;
     case 'transformed':
       return `  transforms into ${cardDb.get(e.defId)?.name}`;
     case 'gameOver':

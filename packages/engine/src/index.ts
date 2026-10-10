@@ -32,3 +32,4 @@ export { HIDDEN_CARD, redactFor, redactEvents, determinize } from './hidden.ts';
 export { combineSpells } from './spells.ts';
 export { variantIdOf } from './tdm-19a.ts'; // Tarkir: Dragonstorm (19a)
 export { hasEnduringStory, storyProgress } from './hob-20a.ts'; // The Hobbit (20a)
+export { isRingBearer, ringBearerOf, ringLevel, ringStatus, THE_RING } from './ltr-21a.ts'; // Lord of the Rings (21a)

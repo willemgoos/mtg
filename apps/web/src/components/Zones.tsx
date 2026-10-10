@@ -7,11 +7,12 @@ import {
   getCharacteristics,
   type ObjectId,
   type PlayerId,
+  ringStatus,
   type Step,
 } from '@mtg/engine';
 import { useEffect } from 'react';
 import { Card, CardBack, type CardMark, cardImage, type HoverFn } from './Card.tsx';
-import { ENDURING_STORY_BADGE } from '../game/notes.ts';
+import { ENDURING_STORY_BADGE, ringBadgeText } from '../game/notes.ts';
 import { LifeCounter } from './LifeCounter.tsx';
 
 export interface ZoneHandlers {
@@ -25,8 +26,10 @@ export interface ZoneHandlers {
 }
 
 /** Small labels on a permanent: a Class's level and named counters (stun, finality, stash). */
-function cardTags(o: GameObject, def: CardDefinition | undefined): string[] {
+function cardTags(o: GameObject, def: CardDefinition | undefined, view: GameState): string[] {
   const tags: string[] = [];
+  // The Lord of the Rings (21a): your Ring-bearer.
+  if (ringStatus(view, o.controller).bearer === o.id) tags.push('Ring-bearer');
   if (def?.subtypes.includes('Class')) tags.push(`Level ${o.level ?? 1}`);
   // Secrets of Strixhaven (14a): a prepared creature (its spell's copy can be cast from beside the hand).
   if (o.prepared !== undefined) tags.push('Prepared');
@@ -106,7 +109,7 @@ export function Battlefield({
               : {})}
             // Reality Fracture (17c): a planeswalker's loyalty (the Jace token has no printed number to look at).
             {...(def?.types.includes('Planeswalker') ? { loyalty: o.counters?.loyalty ?? 0 } : {})}
-            tags={cardTags(o, def)}
+            tags={cardTags(o, def, view)}
             onClick={() => h.onCard(id)}
             onHover={h.onHover}
           />
@@ -362,6 +365,7 @@ export function PlayerBadge({
   const ps = view.players[player];
   const step = active ? view.turn.step : null;
   const emblems = (view.emblems ?? []).filter((e) => e.controller === player);
+  const ring = ringStatus(view, player);
   return (
     <div
       className={`badge ${targetable ? 'badge--target' : ''} ${active ? 'badge--active' : ''} ${
@@ -390,6 +394,23 @@ export function PlayerBadge({
             <svg viewBox="0 0 24 24" aria-hidden>
               <path d="M4 3h13a3 3 0 0 1 3 3v14H7a3 3 0 0 1-3-3Z M7 18h13M8 7h8M8 11h6" />
             </svg>
+          </span>
+        )}
+        {/* The Lord of the Rings (21a): the Ring, its level on a gold ring; the tooltip says what it does. */}
+        {ring.tempted > 0 && (
+          <span
+            className="badge__ring"
+            title={ringBadgeText(
+              ring.tempted,
+              ring.bearer ? cardDb.get(view.objects[ring.bearer]?.defId ?? '')?.name : undefined,
+            )}
+            data-testid="ring"
+            data-level={ring.level}
+          >
+            <svg viewBox="0 0 24 24" aria-hidden>
+              <circle cx="12" cy="12" r="8" />
+            </svg>
+            <span className="badge__ring-level">{ring.level}</span>
           </span>
         )}
       </div>

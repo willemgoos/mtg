@@ -3,6 +3,7 @@ import {
   type GameState,
   getCharacteristics,
   manaValue,
+  ringStatus,
   storyProgress,
   type Keyword,
   type ObjectId,
@@ -52,6 +53,12 @@ export const WEIGHTS = {
   enduringStory: 1.5,
   /** Each of the three artifacts, legendaries and Sagas toward the enduring story, while a Storied permanent waits for it. */
   storyProgress: 0.4,
+  /**
+   * The Lord of the Rings (21a): each ability the Ring has gained (loot on attacking, the blockers' sacrifice, 3 life), and the Ring-bearer
+   * itself: each Ring level makes a Ring-bearer that can attack and is hard to stop worth more.
+   */
+  ringLevel: 0.6,
+  ringBearer: 0.45,
 };
 /** Each loyalty counter on a planeswalker. */
 export const LOYALTY = 0.4;
@@ -108,6 +115,29 @@ function storyValue(s: GameState, db: CardDb, p: PlayerId): number {
   const { has, storied, count } = storyProgress(s, db, p);
   if (has) return WEIGHTS.enduringStory;
   return storied ? WEIGHTS.storyProgress * count : 0;
+}
+
+/**
+ * The Lord of the Rings (21a): the worth of `p`'s Ring: its level, and how well the Ring-bearer carries it. The Ring-bearer can't be
+ * blocked by creatures with greater power and makes the Ring's attack abilities work when it attacks, so a creature that can attack,
+ * has power, evades or is hard to kill carries it best (a defender carries only the legendary status).
+ */
+function ringValue(s: GameState, db: CardDb, p: PlayerId): number {
+  const { level, bearer } = ringStatus(s, p);
+  if (level === 0) return 0;
+  let v = WEIGHTS.ringLevel * level;
+  if (bearer) {
+    const c = getCharacteristics(s, db, bearer);
+    const attacks = !c.keywords.has('defender') && !c.cantAttack;
+    const quality =
+      (attacks ? 1 : 0) +
+      0.2 * Math.min(Math.max(c.power, 0), 6) +
+      0.05 * Math.min(Math.max(c.toughness, 0), 8) +
+      (c.keywords.has('flying') ? 0.8 : 0) +
+      (c.keywords.has('menace') || c.keywords.has('trample') ? 0.2 : 0);
+    v += WEIGHTS.ringBearer * level * quality;
+  }
+  return v;
 }
 
 /** Cards `p` will get to cast later: suspended, rebound, or exiled and castable by them. */
@@ -170,6 +200,8 @@ export function evaluate(s: GameState, db: CardDb, me: PlayerId): number {
   v += OMEN_RETURN * CARD_IN_HAND * (omensCast(s, db, me) - omensCast(s, db, opp));
   // The Hobbit (20a): the enduring story, and the permanents on the way to it (only with a Storied permanent to use them).
   v += storyValue(s, db, me) - storyValue(s, db, opp);
+  // The Lord of the Rings (21a): the Ring, and how well its bearer carries it (this is what picks the Ring-bearer).
+  v += ringValue(s, db, me) - ringValue(s, db, opp);
   // Cards still to come: rebound and suspend, free or stolen cards in exile.
   v += WEIGHTS.laterCard * CARD_IN_HAND * (laterCards(s, me) - laterCards(s, opp));
 

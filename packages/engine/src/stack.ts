@@ -2388,7 +2388,7 @@ export function answerScry(ctx: Ctx, top: readonly ObjectId[], bottom: readonly 
   // Reality Fracture (17a): Surveillance Phantasm, "as long as you've scried or surveilled this turn".
   const seen = (ctx.s.turn.scriedOrSurveilled ??= []);
   if (!seen.includes(d.player)) seen.push(d.player);
-  emit(ctx, { type: 'scried', player: d.player, top: top.length, bottom: bottom.length });
+  emit(ctx, { type: 'scried', player: d.player, top: top.length, bottom: bottom.length, ...(d.surveil ? { surveil: true } : {}) });
   resume(ctx, d.resume, d.thenPriority);
 }
 

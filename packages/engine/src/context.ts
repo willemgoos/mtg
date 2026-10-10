@@ -5,6 +5,7 @@ import { FRA_BLACK_EFFECTS } from './fra-black-effects.ts';
 // Lorwyn Eclipsed (18b, black)
 import { ECL_BLACK_EFFECTS, drawPrevented } from './ecl-black-effects.ts';
 import { FIN_EFFECTS } from './fin-effects.ts';
+import { withRingLegendary } from './ltr-21a.ts'; // Lord of the Rings (21a)
 import { HOB_BLACK_EFFECTS } from './hob-black-effects.ts'; // The Hobbit (20b black)
 import { FRA_COLORLESS_EFFECTS } from './fra-colorless-effects.ts';
 import { LOREHOLD_EFFECTS } from './stx-lorehold-effects.ts';
@@ -264,9 +265,12 @@ export function def(ctx: Ctx, id: ObjectId): CardDefinition {
       ? withGraveyardElfAbilities(ctx, o, d0)
       : d0;
   // Lorwyn Eclipsed (18b, multi-b): Tam, Mindful First-Year, "becomes all colors until end of turn".
-  if (ctx.s.colorChanges && o.allColorsTurn === ctx.s.turn.number && o.zone === 'battlefield')
-    return { ...d, colors: ALL_COLORS };
-  return d;
+  const d2 =
+    ctx.s.colorChanges && o.allColorsTurn === ctx.s.turn.number && o.zone === 'battlefield'
+      ? { ...d, colors: ALL_COLORS }
+      : d;
+  // Lord of the Rings (21a): the Ring's first ability, "your Ring-bearer is legendary" (most games have no Ring).
+  return ctx.s.players[o.controller].ring ? withRingLegendary(ctx, o, d2) : d2;
 }
 
 /** Lorwyn Eclipsed (18b): `d` with the colours the object was given or lost. */

@@ -3,6 +3,7 @@ import { type Ctx, def, emit, moveObject, obj, sacrifice } from './context.ts';
 import { willPersist } from './ecl-18a.ts';
 import { permanentHasStatic } from './fra-pw-effects.ts';
 import { updateEnduringStory } from './hob-20a.ts';
+import { isRingBearer, updateRingBearer } from './ltr-21a.ts';
 import { sagasToSacrifice } from './sagas.ts';
 import type { ObjectId, PlayerId } from './types.ts';
 import { PLAYERS } from './types.ts';
@@ -16,6 +17,7 @@ export function runSBAs(ctx: Ctx): void {
     let changed = false;
     // The Hobbit (20a): Storied isn't a trigger: the enduring story is had as soon as it's earned, before anything dies.
     updateEnduringStory(ctx);
+    updateRingBearer(ctx); // Lord of the Rings (21a): a Ring-bearer that left or changed hands no longer is one
     for (const p of PLAYERS) {
       const ps = ctx.s.players[p];
       // Mystical Archive (16): Angel's Grace, "you can't lose the game this turn".
@@ -133,7 +135,7 @@ function extraLegends(ctx: Ctx): ObjectId[] {
   const out: ObjectId[] = [];
   for (const id of ctx.s.battlefield) {
     // Helm of the Host's copies aren't legendary.
-    if (!def(ctx, id).supertypes.includes('Legendary') || obj(ctx, id).nonlegendary) continue;
+    if (!def(ctx, id).supertypes.includes('Legendary') || (obj(ctx, id).nonlegendary && !isRingBearer(ctx, obj(ctx, id)))) continue;
     const o = obj(ctx, id);
     // Council of Reeds: "The legend rule doesn't apply to creatures you control."
     if (def(ctx, id).types.includes('Creature') && legendRuleOff(ctx, o.controller)) continue;

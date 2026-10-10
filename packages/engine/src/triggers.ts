@@ -15,6 +15,7 @@ import { countersOnLeft, spentColors } from './ecl-18a.ts';
 import { spellsCastThisTurn } from './tdm-19a.ts';
 import { elementalTriggerCopies } from './ecl-multi-b-effects.ts';
 import { hasEnduringStory, subtypeTriggerCopies } from './hob-20a.ts';
+import { detectLtr, isRingBearer, ringCondition } from './ltr-21a.ts';
 import { FIC_CONDITIONS } from './fic-effects.ts';
 import { FIN_CONDITIONS } from './fin-effects.ts';
 import { doubleAttackTriggers, TDM_MISC_CONDITIONS } from './tdm-misc-effects.ts';
@@ -57,6 +58,14 @@ export function checkCondition(
   if (!c) return true;
   // The Hobbit (20a): Storied, "as long as you have an enduring story".
   if (c.kind === 'enduringStory') return hasEnduringStory(ctx, controller);
+  // Lord of the Rings (21a): the Ring, "if you chose a creature other than this one as your Ring-bearer", "is your Ring-bearer".
+  if (
+    c.kind === 'ringBearerChosenOther' ||
+    c.kind === 'isRingBearer' ||
+    c.kind === 'hasRingBearer' ||
+    c.kind === 'ringTemptedAtLeast'
+  )
+    return ringCondition(ctx, c, controller, self, subject);
   // The Hobbit (20b multicolour): Smaug, Wicked Worm, "if mana from a Treasure was spent to cast it" (the spell is the subject).
   if (c.kind === 'treasureManaSpent') return !!(subject ?? self)?.manaFromTreasure;
   // Secrets of Strixhaven (14b)
@@ -421,7 +430,7 @@ export function checkCondition(
   }
 }
 
-function queue(
+export function queue(
   ctx: Ctx,
   o: GameObject,
   index: number,
@@ -489,8 +498,7 @@ function queue(
   const d = defOf(ctx, o.defId);
   if (
     o.zone === 'battlefield' &&
-    !o.nonlegendary &&
-    d.supertypes.includes('Legendary') &&
+    ((!o.nonlegendary && d.supertypes.includes('Legendary')) || isRingBearer(ctx, o)) && // Lord of the Rings (21a): a Ring-bearer is legendary
     d.types.includes('Creature') &&
     ctx.s.battlefield.some(
       (id) =>
@@ -515,7 +523,7 @@ function queue(
 }
 
 /** Calls `fn` for each triggered ability on each permanent on the battlefield. */
-function forEachBattlefieldTrigger(
+export function forEachBattlefieldTrigger(
   ctx: Ctx,
   fn: (o: GameObject, a: Triggered, index: number) => boolean,
   subject?: GameObject,
@@ -724,6 +732,7 @@ function spellMatches(
 function detect(ctx: Ctx, ev: GameEvent): void {
   const s = ctx.s;
   detectFic(ctx, ev);
+  detectLtr(ctx, ev); // Lord of the Rings (21a)
   detectAnimal(ctx, ev);
   switch (ev.type) {
     case 'objectMoved': {

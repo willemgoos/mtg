@@ -66,6 +66,7 @@ import { crownReplacement } from './ecl-crown.ts';
 import { extraEntryCounters } from './tdm-misc-effects.ts';
 import { protectedFrom } from './brawl-15b-w-effects.ts';
 import { amassPut, amassStep, recruitSteps } from './hob-20a.ts';
+import { ringBearerOf, ringTemptSteps, runRingStep } from './ltr-21a.ts'; // Lord of the Rings (21a)
 import { HOB_MULTICOLOUR_EXPANDERS } from './hob-multicolour-effects.ts'; // The Hobbit (20b multicolour)
 import { SOS_14B_C_CHOOSERS } from './sos-14b-c-effects.ts';
 import type {
@@ -770,6 +771,11 @@ export function resolveRef(ctx: Ctx, es: EffectSource, ref: Ref): TargetChoice[]
     const o = es.subject && onBattlefield(ctx, es.subject);
     return o ? [{ object: { id: o.id, zcc: o.zcc } }] : [];
   }
+  // Lord of the Rings (21a): "your Ring-bearer".
+  if (ref === 'ringBearer') {
+    const o = ringBearerOf(ctx, es.controller);
+    return o ? [{ object: { id: o.id, zcc: o.zcc } }] : [];
+  }
   if (ref === 'chosen') {
     const o = es.chosen && onBattlefield(ctx, es.chosen);
     return o ? [{ object: { id: o.id, zcc: o.zcc } }] : [];
@@ -1120,6 +1126,12 @@ export function runEffects(
       i--;
       continue;
     }
+    // Lord of the Rings (21a): "the Ring tempts you".
+    if (e.kind === 'ringTempts') {
+      list.splice(i, 1, ...ringTemptSteps(ctx, es));
+      i--;
+      continue;
+    }
     // Tarkir: Dragonstorm (19a): "it endures N".
     if (e.kind === 'endure') {
       list.splice(i, 1, ...endureStep(ctx, es, e));
@@ -1302,7 +1314,7 @@ export function runEffects(
           if (e.amount > 0) {
             if (!ctx.s.turn.scriedOrSurveilled?.includes(scryer))
               ctx.s.turn.scriedOrSurveilled = [...(ctx.s.turn.scriedOrSurveilled ?? []), scryer];
-            emit(ctx, { type: 'scried', player: scryer, top: 0, bottom: 0 });
+            emit(ctx, { type: 'scried', player: scryer, top: 0, bottom: 0, ...(e.kind === 'surveil' ? { surveil: true } : {}) });
           }
           continue;
         }
@@ -1919,7 +1931,7 @@ export function runEffects(
         const sourceId = es.source?.id;
         const options = ctx.s.battlefield.filter(
           (id) =>
-            id !== sourceId &&
+            (id !== sourceId || !!e.includeSource) && // Lord of the Rings (21a): the Ring-bearer may be the source
             // Vial Smasher: a permanent an opponent controls.
             (obj(ctx, id).controller === controller) !== !!e.opponents &&
             matchesFilter(ctx, id, e.filter, sourceId),
@@ -1932,6 +1944,7 @@ export function runEffects(
           kind: 'chooseObject',
           player: controller,
           options,
+          ...(e.ringBearer ? { ringBearer: true } : {}), // Lord of the Rings (21a): "Choose your Ring-bearer"
           then: e.then,
           otherwise: e.otherwise ?? [],
           resume,
@@ -3976,6 +3989,11 @@ function runEffectInner(ctx: Ctx, es: EffectSource, e: EffectDef): void {
       return;
     case 'amass': // expanded by runEffects
     case 'recruit':
+    case 'ringTempts': // Lord of the Rings (21a)
+      return;
+    // Lord of the Rings (21a): a step of the Ring tempting a player.
+    case 'ringStep':
+      runRingStep(ctx, es, e);
       return;
     case 'tokenCopy': {
       const n = e.count !== undefined ? resolveAmount(ctx, es, e.count) : 1;

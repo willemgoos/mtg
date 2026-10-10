@@ -4855,6 +4855,40 @@ body {
   stroke-linejoin: round;
 }
 
+/* The Lord of the Rings (21a): the Ring, a gold ring with its level, on the portrait's lower left corner. */
+.badge__ring {
+  position: absolute;
+  left: -0.375rem;
+  bottom: -0.375rem;
+  display: grid;
+  place-items: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  background: #2b1d08;
+  box-shadow:
+    0 0 0 0.0625rem #e2b53a,
+    0 0.125rem 0.375rem rgba(0, 0, 0, 0.7);
+}
+
+.badge__ring svg {
+  position: absolute;
+  inset: 0.125rem;
+  width: calc(100% - 0.25rem);
+  height: calc(100% - 0.25rem);
+  fill: none;
+  stroke: #f1d27a;
+  stroke-width: 2.4;
+}
+
+.badge__ring-level {
+  position: relative;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  line-height: 1;
+  color: #f1d27a;
+}
+
 /* Emblems (and "until your next turn" effects) of a player, beside the portrait; the text is in the tooltip. */
 .badge__emblems {
   display: flex;

@@ -1013,6 +1013,15 @@ export type TriggerDef =
   | { on: 'creatureYouControlBecomesBlocked'; filter?: CardFilter }
   /** Whenever a creature you control becomes tapped for the first time this turn, during your turn. */
   | { on: 'creatureYouControlFirstTappedOnYourTurn' }
+  // Lord of the Rings (21a): the Ring, scry, tokens
+  /** "Whenever the Ring tempts you": after you chose your Ring-bearer (the creature, if any, is the subject). Also from the graveyard (`fromGraveyard`: Ringwraiths). */
+  | { on: 'ringTempts' }
+  /** "Whenever you choose a creature as your Ring-bearer" (Call of the Ring): every time, even the creature that already is one. The creature is the subject. */
+  | { on: 'ringBearerChosen' }
+  /** "Whenever you scry" (not surveil); amount: the cards looked at while scrying ("for each card looked at while scrying this way"). */
+  | { on: 'youScry' }
+  /** "Whenever you create a token" (once for each token; Rosie Cotton, Mirkwood Bats); the token matches the filter. The token is the subject. */
+  | { on: 'youCreateToken'; filter?: CardFilter }
   // Final Fantasy (11c): rare triggers
   /** Whenever you scry or surveil (Matoya, Archon Elder). */
   | { on: 'youScryOrSurveil' }
@@ -1125,6 +1134,15 @@ export type ConditionDef =
   // The Hobbit (20a): Storied
   /** "As long as you have an enduring story" / "if you have an enduring story": the permanent's controller has the designation. */
   | { kind: 'enduringStory' }
+  // Lord of the Rings (21a): the Ring
+  /** The permanent that caused the trigger (the subject: the creature chosen as the Ring-bearer) is a creature other than this one ("if you chose a creature other than Faramir as your Ring-bearer"). */
+  | { kind: 'ringBearerChosenOther' }
+  /** This permanent is its controller's Ring-bearer ("unless Sauron is your Ring-bearer"). */
+  | { kind: 'isRingBearer' }
+  /** The controller has a Ring-bearer (they have chosen one that is still on the battlefield under their control); `not` it for "if you don't control a Ring-bearer". */
+  | { kind: 'hasRingBearer' }
+  /** The Ring has tempted the controller `min` or more times this game ("four or more times"). */
+  | { kind: 'ringTemptedAtLeast'; min: number }
   // Strixhaven Brawl (15b, g): Orochi Merge-Keeper
   /** The source is modified (has counters, or an Equipment or Aura you control attached). */
   | { kind: 'sourceModified' }
@@ -1642,6 +1660,8 @@ export type Ref =
     }
   /** The object that caused the trigger ("that creature"). */
   | 'subject'
+  // Lord of the Rings (21a): "your Ring-bearer" (nothing without one)
+  | 'ringBearer'
   | {
       each: 'creature';
       controller?: 'you' | 'opponent';
@@ -2379,6 +2399,11 @@ export type EffectDef =
       filter?: CardFilter;
       /** A permanent an opponent controls instead (Vial Smasher: one of their planeswalkers). */
       opponents?: boolean;
+      // Lord of the Rings (21a): choosing your Ring-bearer
+      /** The source may be chosen too (the Ring's creature may be the permanent that tempted you). */
+      includeSource?: boolean;
+      /** The prompt is "Choose your Ring-bearer". */
+      ringBearer?: boolean;
       then: EffectDef[];
       otherwise?: EffectDef[];
     }
@@ -2900,6 +2925,24 @@ export type EffectDef =
    * no player if the target is missing). `tokenMade` is internal (the token was created already).
    */
   | { kind: 'amass'; subtype: string; amount: Amount; token: CardDefId; who?: Ref; tokenMade?: boolean }
+  // Lord of the Rings (21a): the Ring tempts you
+  /**
+   * "The Ring tempts you" (rule 701.54): you get the Ring emblem if you don't have it, the Ring gains its next ability (up to four),
+   * you choose a creature you control as your Ring-bearer (a prompt when there are several; the choice replaces any earlier
+   * Ring-bearer, even the same creature again; with no creature, no one is chosen), then the abilities that trigger on it trigger.
+   */
+  | { kind: 'ringTempts' }
+  /**
+   * Internal steps of `ringTempts`: 'level' (the emblem, the next ability), 'bearer' (`creature`, or the chosen permanent, becomes the
+   * Ring-bearer), 'tempted' (it happened: "whenever the Ring tempts you"), 'sacrificeAtEndOfCombat' (the Ring's third ability:
+   * the subject is sacrificed at end of combat). `player` is who is tempted (default: the controller).
+   */
+  | {
+      kind: 'ringStep';
+      step: 'level' | 'bearer' | 'tempted' | 'sacrificeAtEndOfCombat';
+      player?: PlayerId;
+      creature?: ObjectId;
+    }
   /** Internal: the second half of amass, the chosen Army gets its counters and its type. */
   | { kind: 'amassPut'; army: ObjectId; subtype: string; amount: number; player: PlayerId }
   /**
@@ -4113,6 +4156,12 @@ export interface PlayerState {
   // The Hobbit (20a): Storied
   /** The player has an enduring story (for the rest of the game; see the 'storied' static). */
   enduringStory?: boolean;
+  // Lord of the Rings (21a): the Ring
+  /**
+   * The Ring emblem (rule 701.54): how many times the Ring has tempted this player (its level is that, at most 4), and their
+   * Ring-bearer. `chosenNow`: a Ring-bearer was chosen during the temptation in progress. Replaced, never mutated.
+   */
+  ring?: { tempted: number; bearer?: ObjectRef; chosenNow?: boolean };
   landsPlayedThisTurn: number;
   attackedThisTurn: boolean;
   drewFromEmptyLibrary: boolean;
@@ -4939,6 +4988,8 @@ export type Decision =
       optional?: boolean;
       /** Lorwyn Eclipsed (18a): choosing the creature to blight: this many -1/-1 counters go on it. */
       blight?: number;
+      /** Lord of the Rings (21a): choosing your Ring-bearer. */
+      ringBearer?: boolean;
       then: EffectDef[];
       otherwise: EffectDef[];
       resume: PausedResolution;
@@ -5356,8 +5407,14 @@ export type GameEvent =
   | { type: 'enduringStory'; player: PlayerId }
   /** `player` amassed: `id` is the Army that got the counters, which is now `subtype` too. */
   | { type: 'amassed'; player: PlayerId; id: ObjectId; subtype: string; amount: number }
+  // Lord of the Rings (21a)
+  /** The Ring tempted `player` (`tempted`: how many times now); `bearer` is the creature they chose as Ring-bearer this time, if any. */
+  | { type: 'ringTempted'; player: PlayerId; tempted: number; bearer?: ObjectId }
+  /** `player` chose `id` as their Ring-bearer (it replaces any earlier one). */
+  | { type: 'ringBearerChosen'; player: PlayerId; id: ObjectId }
   | { type: 'mulligan'; player: PlayerId; count: number }
-  | { type: 'scried'; player: PlayerId; top: number; bottom: number }
+  /** `surveil` (Lord of the Rings 21a): it was a surveil, not a scry. */
+  | { type: 'scried'; player: PlayerId; top: number; bottom: number; surveil?: boolean }
   | { type: 'searched'; player: PlayerId; id: ObjectId }
   /** A card revealed from a library and put into its owner's hand. */
   | { type: 'revealed'; player: PlayerId; id: ObjectId }
