@@ -172,3 +172,13 @@ The evaluation counts the enduring story and the way to it (`WEIGHTS.enduringSto
 permanent to use them); recruit's discard and amass's Army are chosen by the usual simulation; a bot with nothing better to do in
 its second main phase cycles a dead card (`chooseCycling` in `ai/src/heuristic.ts`: a spell costing more than its lands plus two,
 or a land with six in play; a land search is skipped with seven lands in play and hand). That applies to every set's cycling cards.
+
+## Phase 20b: red (done)
+
+All 29 red cards, `cards/src/hob/red.ts` (tests `hob-red.test.ts`, `hob-red-2.test.ts`; one-off effects in `engine/src/hob-red-effects.ts`).
+Engine pieces added (marked `// The Hobbit (20b red)`): `reflexiveTrigger.subject` (Dáin Ironfoot: "when you do, attach it"), the
+`putFromHandOrLibrary` effect (Last Light: hand and library together, a library pick shuffles; `sacrificeSource` for "sacrifice it. If you
+do"), `GameObject.playableIf` (Flameshape's face-down exiled cards, hidden from the opponent in `redactFor`, playable while you control a
+Wizard), and `attacking` on the `totalPowerOfCreaturesYouControl` amount (Desert Were-Worm). Custom effects: `hobBalinDiscardDraw`,
+`hobThorinAttach` (reflexive damage only if an Equipment actually became attached), `hobGetawayBarrel`, `hobFlameshape`. Tokens: Axe and
+Stone Boulder live in `red.ts`.

@@ -2507,6 +2507,8 @@ function bonusCounters(
 export function answerSearch(ctx: Ctx, card: ObjectId | null): void {
   const d = ctx.s.decision;
   if (d.kind !== 'searchLibrary') throw new Error('Not searching');
+  // The Hobbit (20b red): Last Light of Durin's Day, a card found in the library means a shuffle.
+  const fromLibrary = !!d.handOrLibrary && card !== null && obj(ctx, card).zone === 'library';
   if (card !== null) {
     // Strixhaven (13c): Ardent Dustspeaker puts a graveyard card on the bottom of the library.
     if (d.fromGraveyard && d.to === 'libraryBottom') {
@@ -2538,6 +2540,10 @@ export function answerSearch(ctx: Ctx, card: ObjectId | null): void {
         if (put.zone === 'battlefield') d.resume.chosen = { id: put.id, zcc: put.zcc };
       } else moveObject(ctx, card, 'hand');
       squirrelFood(ctx, d, card);
+      if (fromLibrary) {
+        emit(ctx, { type: 'searched', player: d.player, id: card });
+        shuffleLibrary(ctx, d.player);
+      }
       return resume(ctx, d.resume, d.thenPriority);
     }
     // Reality Fracture (17a fixes): Loyal Tutor, "reveal it": shown to everyone.
@@ -2620,6 +2626,7 @@ export function answerSearch(ctx: Ctx, card: ObjectId | null): void {
   }
   if (d.fromGraveyard) {
     squirrelFood(ctx, d, null);
+    if (d.handOrLibrary) shuffleLibrary(ctx, d.player); // The Hobbit (20b red): searched the library, found nothing
     return resume(ctx, d.resume, d.thenPriority);
   }
   // Strixhaven (13c): Explore the Vastlands: now choose from what's left of the cards looked at.

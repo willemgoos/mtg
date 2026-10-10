@@ -31,7 +31,9 @@ export function redactFor(state: GameState, viewer: PlayerId, db?: CardDb): Game
     const ps = s.players[p];
     // Strixhaven (13a): the opponent's sideboard is not known.
     if (p !== viewer && ps.sideboard) ps.sideboard = ps.sideboard.map(() => HIDDEN_CARD);
-    const hidden = p === viewer ? ps.library : [...ps.library, ...ps.hand];
+    // The Hobbit (20b red): Flameshape exiles cards face down; only their owner knows what they are.
+    const faceDown = p === viewer ? [] : ps.exile.filter((id) => !!state.objects[id]?.playableIf);
+    const hidden = p === viewer ? ps.library : [...ps.library, ...ps.hand, ...faceDown];
     const d = state.decision;
     const seen =
       p === viewer

@@ -191,6 +191,11 @@ export function castableCards(ctx: Ctx, player: PlayerId): ObjectId[] {
   }
   // Marvel Super Heroes Jumpstart (Analyzed): Victor Mancha, for as long as you control him.
   for (const id of playableWhileControlling(ctx, player)) if (!out.includes(id)) out.push(id);
+  // The Hobbit (20b red): Flameshape, your exiled cards you may play while a condition holds (you control a Wizard).
+  for (const id of ps.exile) {
+    const o = obj(ctx, id);
+    if (o.playableIf && !out.includes(id) && checkCondition(ctx, o.playableIf, player, o)) out.push(id);
+  }
   // Strongbox Raider: exiled cards you may play for a while.
   for (const id of ps.exile) {
     const until = obj(ctx, id).playableUntilTurn;
@@ -1603,7 +1608,8 @@ export function getLegalActions(ctx: Ctx, player: PlayerId): Action[] {
       const seen = new Set<string>();
       const out: Action[] = [];
       for (const card of d.options) {
-        const defId = obj(ctx, card).defId;
+        // The Hobbit (20b red): hand and library copies of a card differ (a library pick shuffles).
+        const defId = obj(ctx, card).defId + (d.handOrLibrary ? ':' + obj(ctx, card).zone : '');
         if (seen.has(defId)) continue;
         seen.add(defId);
         out.push({ type: 'chooseCard', player, card });

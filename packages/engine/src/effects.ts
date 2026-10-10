@@ -56,6 +56,7 @@ import { phaseOut } from './phasing.ts';
 import { foodsOf } from './forage.ts';
 import { canPayFrom, manaSources, manaValue } from './mana.ts';
 import { nextInt, shuffleInPlace } from './rng.ts';
+import { shuffleLibrary } from './setup.ts'; // The Hobbit (20b red)
 import { checkCondition, triggeredAbility } from './triggers.ts';
 import { addLore } from './sagas.ts';
 import { CHOOSERS } from './stx-13c-a-effects.ts';
@@ -1183,6 +1184,7 @@ export function runEffects(
       e.kind === 'chooseYourPermanent' ||
       e.kind === 'counterUnlessPays' ||
       e.kind === 'putFromHandOrGraveyard' ||
+      e.kind === 'putFromHandOrLibrary' || // The Hobbit (20b red)
       e.kind === 'chooseColor' ||
       e.kind === 'chooseCreatureType' ||
       e.kind === 'millThenTake' ||
@@ -1802,6 +1804,32 @@ export function runEffects(
           // Strixhaven (13c): Search for Blex: any number, each costing life.
           ...(e.upTo ? { upTo: true } : {}),
           ...(e.lifePerCard ? { lifePerCard: e.lifePerCard } : {}),
+          resume,
+          thenPriority,
+        };
+      } else if (e.kind === 'putFromHandOrLibrary') {
+        // The Hobbit (20b red): Last Light of Durin's Day. Hand and library together; a library pick (or none) shuffles.
+        if (e.sacrificeSource) {
+          const self = es.source && onBattlefield(ctx, es.source);
+          if (!self) continue;
+          sacrifice(ctx, self.id);
+        }
+        const ps = ctx.s.players[controller];
+        const options = [...ps.hand, ...ps.library].filter((id) =>
+          cardMatches(ctx, id, e.filter, es.source?.id),
+        );
+        if (options.length === 0) {
+          shuffleLibrary(ctx, controller);
+          continue;
+        }
+        ctx.s.decision = {
+          kind: 'searchLibrary',
+          player: controller,
+          options,
+          fromGraveyard: true,
+          handOrLibrary: true,
+          to: 'battlefield',
+          shuffle: false,
           resume,
           thenPriority,
         };
@@ -2632,15 +2660,20 @@ function runEffectInner(ctx: Ctx, es: EffectSource, e: EffectDef): void {
       return;
     }
     // Quantum Entanglement, Villainous Syndication, Rhino's Rampage: "when you do".
-    case 'reflexiveTrigger':
+    case 'reflexiveTrigger': {
+      // The Hobbit (20b red): Dáin Ironfoot, the reflexive ability may carry 'subject' ('it').
+      const subjectId = e.subject ? objectsOf(ctx, es, e.subject)[0] : undefined;
+      const subjectObj = subjectId ? ctx.s.objects[subjectId] : undefined;
       if (es.source)
         ctx.s.pendingTriggers.push({
           source: es.source,
           sourceDefId: es.sourceDefId,
           abilityIndex: e.ability,
           controller: es.controller,
+          ...(subjectObj ? { subject: { id: subjectObj.id, zcc: subjectObj.zcc } } : {}),
         });
       return;
+    }
     // Iron Fist, Hero for Hire; Rhino, Terrible Trampler: the finished split (chosen by runEffects).
     case 'divide': {
       const chosen = e.chosen ?? [];
@@ -3720,6 +3753,7 @@ function runEffectInner(ctx: Ctx, es: EffectSource, e: EffectDef): void {
     case 'chooseYourPermanent':
     case 'counterUnlessPays':
     case 'putFromHandOrGraveyard':
+    case 'putFromHandOrLibrary': // The Hobbit (20b red)
     case 'revealPutAndTake':
     case 'pickFromCards':
       return; // handled by runEffects

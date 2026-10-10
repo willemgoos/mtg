@@ -18,6 +18,7 @@ import { SOS_14B_D_EFFECTS } from './sos-14b-d-effects.ts';
 import { FRA_RED_EFFECTS } from './fra-red-effects.ts';
 import { ECL_MULTI_A_EFFECTS } from './ecl-multi-a-effects.ts';
 import { ECL_RED_EFFECTS } from './ecl-red-effects.ts';
+import { HOB_RED_EFFECTS } from './hob-red-effects.ts'; // The Hobbit (20b red)
 import { BRAWL_15B_R_EFFECTS } from './brawl-15b-r-effects.ts';
 import { BRAWL_15A_W_EFFECTS } from './brawl-15a-w-effects.ts';
 import { BRAWL_15B_B_EFFECTS } from './brawl-15b-b-effects.ts';
@@ -152,6 +153,7 @@ const BUILT_IN_EFFECTS: Record<string, CustomEffect> = {
   // Reality Fracture (17a): red.
   ...FRA_RED_EFFECTS,
   ...ECL_RED_EFFECTS, // Lorwyn Eclipsed (18b, red)
+  ...HOB_RED_EFFECTS, // The Hobbit (20b, red)
   // Strixhaven Brawl (15a), white and colourless.
   ...BRAWL_15A_W_EFFECTS,
   // Strixhaven Brawl (15a): red-white.
@@ -838,6 +840,7 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
     delete o.anyMana;
     // Marvel Super Heroes Jumpstart (Analyzed): Victor Mancha's permission ends too.
     delete o.playableWhileControlling;
+    delete o.playableIf; // The Hobbit (20b red)
   }
   // Secrets of Strixhaven (14b): Ennis, "if one or more cards were put into exile this turn".
   if (to === 'exile' && from !== 'exile' && !o.isToken)
