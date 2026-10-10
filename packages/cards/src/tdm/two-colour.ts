@@ -193,7 +193,11 @@ export const TDM_TWO_COLOUR: Record<string, Behavior> = {
   'Stalwart Successor': {
     abilities: [
       plus(
-        when({ on: 'counterPutOnYourCreature' }, [], { kind: 'counters', to: 'subject', amount: 1 }),
+        when({ on: 'counterPutOnYourCreature' }, [], {
+          kind: 'counters',
+          to: 'subject',
+          amount: 1,
+        }),
         { condition: customCondition('subjectFirstAnyCounters') },
       ),
     ],

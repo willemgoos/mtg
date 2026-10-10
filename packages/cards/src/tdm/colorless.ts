@@ -144,7 +144,9 @@ export const TDM_COLORLESS: Record<string, Behavior> = {
           {
             kind: 'if',
             condition: controlsDragon,
-            then: [{ kind: 'searchLibrary', filter: 'basicLand', to: 'battlefieldTapped', reveal: true }],
+            then: [
+              { kind: 'searchLibrary', filter: 'basicLand', to: 'battlefieldTapped', reveal: true },
+            ],
             else: [{ kind: 'searchLibrary', filter: 'basicLand', to: 'libraryTop', reveal: true }],
           },
         ],
@@ -220,7 +222,11 @@ export const TDM_COLORLESS: Record<string, Behavior> = {
   ),
   // "When this artifact enters, search your library for a basic Forest, Island, or Mountain card, reveal it, put it into your hand,
   // then shuffle. {3}{G}{U}{R}, {T}, Sacrifice this artifact: Create a 5/5 green Elephant creature token. Activate only as a sorcery."
-  'Temur Monument': monument(['Forest', 'Island', 'Mountain'], '{3}{G}{U}{R}', token(TDM_ELEPHANT, 1)),
+  'Temur Monument': monument(
+    ['Forest', 'Island', 'Mountain'],
+    '{3}{G}{U}{R}',
+    token(TDM_ELEPHANT, 1),
+  ),
   // "When you cast this spell, exile up to one target permanent that's one or more colors. Whenever you cast a colorless spell, exile
   // up to one target permanent that's one or more colors. +2: You gain 3 life and draw a card. 0: Add {C}{C}{C}. −11: Search your
   // library for any number of colorless nonland cards, exile them, then shuffle. Until end of turn, you may cast those cards

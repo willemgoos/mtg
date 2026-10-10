@@ -1,13 +1,6 @@
 import { cardMatches } from './characteristics.ts';
 import { type Ctx, type CustomEffect, addCounters, def, obj } from './context.ts';
-import type {
-  CardDb,
-  CardDefId,
-  GameObject,
-  ObjectId,
-  PlayerId,
-  StaticDef,
-} from './types.ts';
+import type { CardDb, CardDefId, GameObject, ObjectId, PlayerId, StaticDef } from './types.ts';
 
 /**
  * Tarkir: Dragonstorm (19b, misc): the one-offs of the two-colour and colourless cards (Dragonstorm Globe, Windcrag Siege, Stalwart
@@ -108,7 +101,12 @@ export function noteCreatureCounters(ctx: Ctx, o: GameObject): void {
 /** Condition handlers (`{ kind: 'custom', handler }`), checked by triggers.ts. */
 export const TDM_MISC_CONDITIONS: Record<
   string,
-  (ctx: Ctx, controller: PlayerId, self: GameObject | undefined, subject: GameObject | undefined) => boolean
+  (
+    ctx: Ctx,
+    controller: PlayerId,
+    self: GameObject | undefined,
+    subject: GameObject | undefined,
+  ) => boolean
 > = {
   /** Stalwart Successor: it's the first time counters have been put on the creature that caused the trigger this turn. */
   subjectFirstAnyCounters: (ctx, _p, _self, subject) =>

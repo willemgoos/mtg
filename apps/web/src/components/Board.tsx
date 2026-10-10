@@ -1913,7 +1913,7 @@ function SearchOverlay({ game, onHover }: { game: GameSession; onHover: HoverFn 
         <p>
           {d.kind === 'searchLibrary' && d.remaining !== undefined
             ? // Reality Fracture (17a): "up to N cards" (Fblthp, Knows the Way; Hexhaven Invigorator).
-              `Choose up to ${d.remaining} ${d.remaining === 1 ? 'card' : 'cards'}, one at a time${d.differentNames ? ', each with a different name,' : ''} to put ${d.to && d.to !== 'hand' ? 'onto the battlefield' : 'into your hand'}.`
+              `Choose ${d.exileFreeThisTurn ? 'any number of' : `up to ${d.remaining}`} ${d.remaining === 1 ? 'card' : 'cards'}, one at a time${d.differentNames ? ', each with a different name,' : ''} to ${d.exileFreeThisTurn ? 'exile (until end of turn you may cast them without paying their mana costs)' : `put ${d.to && d.to !== 'hand' ? 'onto the battlefield' : 'into your hand'}`}.`
             : d.kind === 'searchLibrary' && d.to === 'hideaway'
               ? 'Choose a card to exile face down.'
               : d.kind === 'searchLibrary' && d.to === 'libraryBottom'
@@ -1922,7 +1922,9 @@ function SearchOverlay({ game, onHover }: { game: GameSession; onHover: HoverFn 
                 : d.kind === 'searchLibrary' && d.to === 'castFree'
                   ? 'Choose a card to exile; you may cast it without paying its mana cost.'
                   : d.kind === 'searchLibrary' && d.to && d.to !== 'hand'
-                    ? 'Choose a card to put onto the battlefield.'
+                    ? d.to === 'libraryTop'
+                      ? 'Choose a card to put on top of your library.'
+                      : 'Choose a card to put onto the battlefield.'
                     : d.kind === 'searchLibrary' && d.canBin
                       ? // Strixhaven (13c): The Biblioplex
                         'An instant or sorcery card may go into your hand; otherwise you may put it into your graveyard.'
