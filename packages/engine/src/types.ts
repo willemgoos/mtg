@@ -842,6 +842,9 @@ export type TriggerDef =
   /** Whenever a player or permanent becomes the target of an ability you control (Loki, God of Mischief). */
   | { on: 'youTargetWithAbility' }
   | { on: 'drawCard'; whose: 'yours' | 'opponents' }
+  // The Hobbit (20b blue): Elrond, Moon-Reader
+  /** Whenever you activate an ability of a creature (a mana ability too). */
+  | { on: 'youActivateCreatureAbility' }
   /** Whenever a source you control deals noncombat damage to an opponent ("that many"). */
   | { on: 'yourNoncombatDamageToOpponent' }
   /** Whenever this creature becomes blocked. */
@@ -1604,6 +1607,8 @@ export interface TargetSpec {
    * chosen just before it (each pair is listed once, the second target always the later card).
    */
   sharesCreatureTypeWithPrevious?: boolean;
+  /** The Hobbit (20b blue): Burglar's Plot, "two target nonland permanents that share a card type" (each pair listed once). */
+  sharesCardTypeWithPrevious?: boolean;
   // Tarkir: Dragonstorm (19b, white, black): Arashin Sunshield, Feral Deathgorger
   /** With `anyNumber` and 'graveyardCard': all the targets are cards in the same graveyard ("up to two target cards from a single graveyard"). */
   singleGraveyard?: boolean;
@@ -1678,6 +1683,8 @@ export type Amount =
   | { allCountersOn: Ref }
   | {
       count: 'creaturesYouControl' | 'landsYouControl' | 'totalPowerOfCreaturesYouControl';
+      /** The Hobbit (20b blue): only creatures with this keyword count (The Lord of the Eagles: flying). */
+      hasKeyword?: Keyword;
       subtype?: string;
       max?: number;
       named?: CardDefId;
@@ -1687,6 +1694,9 @@ export type Amount =
       basicOnly?: boolean;
     }
   | { multiply: number; amount: Amount }
+  // The Hobbit (20b blue): Master's Councillors
+  /** The number of graveyards (of any player) with at least this many cards in them. */
+  | { graveyardsWithAtLeast: number }
   // Reality Fracture (17a): Dark Matter Manipulator, Recursive Recruitment
   /** The amount divided by `floorDiv`, rounded down ("for every seven cards in your graveyard"). */
   | { floorDiv: number; amount: Amount }
@@ -1897,6 +1907,11 @@ export type EffectDef =
       to: Ref;
       /** Lasts until your next turn instead (For the Common Good). */
       untilYourNextTurn?: boolean;
+      // The Hobbit (20b blue): Old Fat Spider Can't See Me
+      /** Lasts for as long as the source stays on the battlefield instead ("for as long as this Saga remains on the battlefield"). */
+      whileSource?: boolean;
+      /** All damage that would be dealt by the creature is prevented (for the duration). */
+      preventDamageDealt?: boolean;
       power: Amount;
       toughness: Amount;
       keywords?: Keyword[];
@@ -2240,6 +2255,8 @@ export type EffectDef =
       // Secrets of Strixhaven (14b): Vastlands Scavenger (Bind to Life)
       /** The card goes onto the battlefield instead of into your hand. */
       to?: 'battlefield';
+      /** The Hobbit (20b blue): Speak Secrets, "put an instant or sorcery card from among them into your hand" (not optional). */
+      required?: boolean;
     }
   /** Look at the top N; put `take` of them into your hand and the rest into your graveyard (Stargaze). */
   | {
@@ -2349,6 +2366,8 @@ export type EffectDef =
       // Final Fantasy (11a): saga creatures
       /** "Return it to the battlefield transformed" (Dion, Crystal Fragments). */
       transformed?: boolean;
+      /** The Hobbit (20b blue): Gone Fishing, every permanent is exiled before any of them returns. */
+      together?: boolean;
     }
   /**
    * Choose a permanent you control matching the filter (other than the
@@ -2916,6 +2935,12 @@ export type EffectDef =
    * land, or you decline or can't pay), `otherwise` happens.
    */
   | { kind: 'exileTopMayCast'; otherwise: EffectDef[] }
+  // The Hobbit (20b blue): Bilbo, Thief in the Night
+  /**
+   * You may cast one card matching the filter from your graveyard now (paying its costs; timing ignored). `exileInstantsSorceries`:
+   * if an instant or sorcery spell cast this way would be put into your graveyard, exile it instead.
+   */
+  | { kind: 'castFromYourGraveyard'; filter: CardFilter; exileInstantsSorceries?: boolean }
   /**
    * Exile a card with N time counters; it gains suspend (Kang Prime: the next nonland card from the top). Tarkir: Dragonstorm (19a):
    * 'subject' is the spell that caused the trigger, taken off the stack (not countered) into exile (Taigam, Master Opportunist).
@@ -3601,7 +3626,10 @@ export type StaticDef =
    */
   | { kind: 'exileOpponentNontokenCreatures'; life: number }
   /** While this is equipped, its triggered abilities and its Equipment's trigger twice (Cloud). */
-  | { kind: 'equippedTriggersTwice' }
+  | {
+      kind: 'equippedTriggersTwice';
+      creatureOnly?: boolean; /* The Hobbit (20b blue): Wizard's Staff, only the creature's own abilities */
+    }
   /** Whenever you tap a land for {C}, add an additional {C} (Ultima, Origin of Oblivion). */
   | { kind: 'extraColorlessFromLands' }
   // Final Fantasy (11c): damage doubling
@@ -3682,6 +3710,9 @@ export type StaticDef =
   | { kind: 'attacksWithCounterDespiteDefender' }
   /** Spells you cast from your graveyard cost {amount} less (Emet-Selch of the Third Seat). */
   | { kind: 'graveyardSpellsCostLess'; amount: number }
+  // The Hobbit (20b blue): Bilbo, Thief in the Night
+  /** Spells you cast from anywhere other than your hand cost {amount} less. */
+  | { kind: 'spellsFromOutsideHandCostLess'; amount: number }
   // Final Fantasy (11c): leftovers
   /** It can't be blocked except by `count` or more creatures (Relentless X-ATM092: three). */
   | { kind: 'minBlockers'; count: number }
@@ -4411,6 +4442,8 @@ export interface ContinuousEffect {
   creatureSubtype?: string;
   /** Combat damage that would be dealt to it is prevented (Fleeting Flight). */
   preventCombatDamage?: boolean;
+  /** The Hobbit (20b blue): all damage that would be dealt by this creature is prevented (Old Fat Spider Can't See Me). */
+  preventDamageDealt?: boolean;
   /** Base power and toughness. */
   basePT?: [number, number];
   /** Control change: who controlled it before (restored when this expires). */
@@ -4950,6 +4983,8 @@ export type Decision =
       fullCost?: boolean;
       /** Effects that happen if none of the cards is cast, before the resolution goes on. */
       ifNotCast?: EffectDef[];
+      /** The Hobbit (20b blue): an instant or sorcery cast this way is exiled instead of going to the graveyard. */
+      exileInstantsSorceries?: boolean;
       /** Any number of these may be cast: after one is, the rest are offered again. */
       more?: boolean;
       // Reality Fracture (17a): Uldaros Theorix
@@ -5304,6 +5339,8 @@ export type GameEvent =
   | { type: 'prepared'; id: ObjectId; player: PlayerId }
   | { type: 'unprepared'; id: ObjectId; player: PlayerId }
   | { type: 'abilityActivated'; id: ObjectId; source: ObjectId; player: PlayerId }
+  /** The Hobbit (20b blue): `player` tapped a creature for mana to pay a cost (activating its mana ability). */
+  | { type: 'creatureManaAbility'; id: ObjectId; player: PlayerId }
   | { type: 'triggerStacked'; id: ObjectId; source: ObjectId; player: PlayerId }
   | { type: 'resolved'; id: ObjectId }
   | { type: 'fizzled'; id: ObjectId }

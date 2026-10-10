@@ -427,6 +427,13 @@ export function castCost(
         for (const a of def(ctx, id).abilities)
           if (a.kind === 'static' && a.effect.kind === 'graveyardSpellsCostLess')
             reduce += a.effect.amount;
+  // The Hobbit (20b blue): Bilbo, Thief in the Night, spells cast from anywhere other than your hand cost {1} less.
+  if (o.zone !== 'hand')
+    for (const id of ctx.s.battlefield)
+      if (obj(ctx, id).controller === player)
+        for (const a of def(ctx, id).abilities)
+          if (a.kind === 'static' && a.effect.kind === 'spellsFromOutsideHandCostLess')
+            reduce += a.effect.amount;
   // Heroic Return, Avenge: "costs {2} less if ...".
   if (d.costReductionIf && checkCondition(ctx, d.costReductionIf.condition, player, o))
     reduce += d.costReductionIf.amount;

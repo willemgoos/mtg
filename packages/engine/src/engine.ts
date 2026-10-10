@@ -304,7 +304,12 @@ function apply(ctx: Ctx, action: Action): void {
           paws: action.paws,
           discard: action.discard,
           via: d.fullCost ? 'now' : 'free', // Reality Fracture (17c): Chandra, Torch of Defiance
-          exileAfter: d.exileAfter,
+          // The Hobbit (20b blue): Bilbo, Thief in the Night, only an instant or sorcery is exiled.
+          exileAfter:
+            d.exileAfter ||
+            (!!d.exileInstantsSorceries &&
+              (def(ctx, action.card).types.includes('Instant') ||
+                def(ctx, action.card).types.includes('Sorcery'))),
           freePay: d.pay,
           freeLess: d.costLess,
           // Reality Fracture (17a fixes): additional costs of a free cast.

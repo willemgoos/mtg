@@ -2138,6 +2138,12 @@ function detect(ctx: Ctx, ev: GameEvent): void {
         ctx,
         (o, a) => a.trigger.on === 'opponentActivatesAbility' && o.controller !== ev.player,
       );
+      // The Hobbit (20b blue): Elrond, Moon-Reader, an ability of a creature.
+      if (s.objects[ev.source]?.zone === 'battlefield' && isCreatureNow(ctx, ev.source))
+        forEachBattlefieldTrigger(
+          ctx,
+          (o, a) => a.trigger.on === 'youActivateCreatureAbility' && o.controller === ev.player,
+        );
       // Reality Fracture (17c): loyalty abilities (Ajani Unrelenting, Way of the Mind Sculptor, Gideon the Oathless).
       if (item?.kind === 'ability' && item.activated?.cost.loyalty !== undefined) {
         const cost = item.activated.cost;
@@ -2154,6 +2160,13 @@ function detect(ctx: Ctx, ev: GameEvent): void {
       }
       return;
     }
+    // The Hobbit (20b blue): Elrond, Moon-Reader, a creature tapped for mana (its mana ability is activated).
+    case 'creatureManaAbility':
+      forEachBattlefieldTrigger(
+        ctx,
+        (o, a) => a.trigger.on === 'youActivateCreatureAbility' && o.controller === ev.player,
+      );
+      return;
     case 'tappedForTeamwork': {
       const o = s.objects[ev.id];
       if (!o) return;
@@ -2559,9 +2572,16 @@ function triggersTwice(ctx: Ctx, o: GameObject, a: Triggered): boolean {
       ? ctx.s.objects[o.attachedTo]
       : undefined;
   if (!host || host.zone !== 'battlefield') return false;
+  const twice = def(ctx, host.id).abilities.filter(
+    (x) => x.kind === 'static' && x.effect.kind === 'equippedTriggersTwice',
+  );
+  if (twice.length === 0) return false;
+  // The Hobbit (20b blue): Wizard's Staff gives only the equipped creature's own abilities the extra trigger.
   if (
-    !def(ctx, host.id).abilities.some(
-      (x) => x.kind === 'static' && x.effect.kind === 'equippedTriggersTwice',
+    o.id !== host.id &&
+    twice.every(
+      (x) =>
+        x.kind === 'static' && x.effect.kind === 'equippedTriggersTwice' && x.effect.creatureOnly,
     )
   )
     return false;

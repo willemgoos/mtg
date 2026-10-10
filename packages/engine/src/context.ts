@@ -34,6 +34,7 @@ import { ECL_GREEN_EFFECTS } from './ecl-green-effects.ts';
 import { HOB_GREEN_EFFECTS } from './hob-green-effects.ts'; // The Hobbit (20b green)
 import { TDM_GREEN_EFFECTS } from './tdm-green-effects.ts';
 import { ECL_BLUE_EFFECTS } from './ecl-blue-effects.ts';
+import { HOB_BLUE_EFFECTS } from './hob-blue-effects.ts'; // The Hobbit (20b blue)
 import { TDM_BLUE_EFFECTS } from './tdm-blue-effects.ts';
 import { HOB_COLORLESS_EFFECTS } from './hob-colorless-effects.ts'; // The Hobbit (20b colorless)
 import { ECL_WHITE_EFFECTS } from './ecl-white-effects.ts';
@@ -184,6 +185,7 @@ const BUILT_IN_EFFECTS: Record<string, CustomEffect> = {
   ...ECL_MULTI_A_EFFECTS,
   // Lorwyn Eclipsed (18b): blue.
   ...ECL_BLUE_EFFECTS,
+  ...HOB_BLUE_EFFECTS, // The Hobbit (20b blue)
   // Tarkir: Dragonstorm (19b): blue.
   ...TDM_BLUE_EFFECTS,
   ...HOB_COLORLESS_EFFECTS, // The Hobbit (20b colorless)

@@ -69,6 +69,9 @@ The rows marked missing (amass, Recruit, Storied, the cycling family) were built
     Lake-town) and hooks marked `// The Hobbit (20b black)` (the `playerLosesLife` trigger, `cardsLeaveYourGraveyard` with a filter, the
     `targetWasControlledByYou` condition, a token's last power/controller for Azog, the `lifeForMana` cast, the odd/even spell filter);
     tests `cards/test/hob-black*.test.ts`.
+  - Blue (20b) **done**, 28/28: engine pieces in `engine/src/hob-blue-effects.ts` and hooks marked `// The Hobbit (20b blue)`
+    (Equipment that grants abilities, `creatureOnly` triggers-twice, `spellsFromOutsideHandCostLess`, `castFromYourGraveyard`,
+    `youActivateCreatureAbility`, `sharesCardTypeWithPrevious`, `graveyardsWithAtLeast`, pump `whileSource`/`preventDamageDealt`).
 - **20c**: Arena's Jump In packets for HOB (`scripts/data/arena-jumpin-packets.json`, if Arena has them) and the untapped.gg
   trophy decks (`scripts/data/hob-trophy-decks.*`), one per colour pair.
 - **20d**: boosters in Expedition, Season and Sealed from `HOB_BOOSTER_LIST`.

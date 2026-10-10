@@ -464,7 +464,11 @@ export function payMana(ctx: Ctx, sources: Readonly<Payment>): void {
     if (isPoolId(id)) continue;
     // A Treasure that taps for two (Goldspan Dragon) is listed twice: the first unit sacrifices it.
     if (!ctx.s.objects[id]) continue;
+    // The Hobbit (20b blue): Elrond, Moon-Reader, a creature tapped for mana activates its mana ability.
+    const tapsForMana =
+      isCreature(ctx, id) && def(ctx, id).abilities.some((a) => a.kind === 'mana');
     tap(ctx, id);
+    if (tapsForMana) emit(ctx, { type: 'creatureManaAbility', id, player });
     if (def(ctx, id).abilities.some((a) => a.kind === 'mana' && a.cost.sacrificeSelf))
       sacrifice(ctx, id);
     // Strixhaven (13c): Spell Satchel loses a book counter; Strixhaven Stadium gains a point counter.

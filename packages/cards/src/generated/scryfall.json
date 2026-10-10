@@ -89193,6 +89193,762 @@
   }
  },
  {
+  "name": "Wizard's Staff",
+  "scryfallId": "0de529a7-bdc5-4581-a169-1ad123bc099a",
+  "oracleId": "30c3c700-46f4-4a77-8c45-5c7e3a21bd62",
+  "set": "hob",
+  "collectorNumber": "59",
+  "rarity": "rare",
+  "manaCost": "{1}{U}",
+  "typeLine": "Artifact — Equipment",
+  "oracleText": "Equipped creature has prowess. (Whenever its controller casts a noncreature spell, that creature gets +1/+1 until end of turn.)\nIf a triggered ability of equipped creature triggers, that ability triggers an additional time.\nEquip Wizard {1}\nEquip {3}",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Equip"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/d/0de529a7-bdc5-4581-a169-1ad123bc099a.jpg?1785152406",
+   "normal": "https://cards.scryfall.io/normal/front/0/d/0de529a7-bdc5-4581-a169-1ad123bc099a.jpg?1785152406",
+   "large": "https://cards.scryfall.io/large/front/0/d/0de529a7-bdc5-4581-a169-1ad123bc099a.jpg?1785152406",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/d/0de529a7-bdc5-4581-a169-1ad123bc099a.jpg?1785152406"
+  }
+ },
+ {
+  "name": "Uncover the Moon-Letters",
+  "scryfallId": "79edf5f6-f6b6-4271-bd2a-14a980f30616",
+  "oracleId": "4c67359d-5590-4eb0-827e-b411967ee238",
+  "set": "hob",
+  "collectorNumber": "57",
+  "rarity": "rare",
+  "manaCost": "{3}{U}",
+  "typeLine": "Enchantment",
+  "oracleText": "Whenever you cast a noncreature spell, you may draw X cards, where X is the amount of mana spent to cast that spell. If you do, discard two cards.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/9/79edf5f6-f6b6-4271-bd2a-14a980f30616.jpg?1785496445",
+   "normal": "https://cards.scryfall.io/normal/front/7/9/79edf5f6-f6b6-4271-bd2a-14a980f30616.jpg?1785496445",
+   "large": "https://cards.scryfall.io/large/front/7/9/79edf5f6-f6b6-4271-bd2a-14a980f30616.jpg?1785496445",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/9/79edf5f6-f6b6-4271-bd2a-14a980f30616.jpg?1785496445"
+  }
+ },
+ {
+  "name": "Gandalf, Wandering Wizard",
+  "scryfallId": "1f8403a2-849c-4a59-b0ed-c8803995028d",
+  "oracleId": "c996bc53-184d-4dc3-8244-e8d9528516a0",
+  "set": "hob",
+  "collectorNumber": "41",
+  "rarity": "common",
+  "manaCost": "{4}{U}",
+  "typeLine": "Legendary Creature — Avatar Wizard",
+  "oracleText": "Ward {3} (Whenever this creature becomes the target of a spell or ability an opponent controls, counter it unless that player pays {3}.)\n{6}: Gandalf's owner shuffles him into their library and draws three cards.",
+  "power": "4",
+  "toughness": "5",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Ward"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/f/1f8403a2-849c-4a59-b0ed-c8803995028d.jpg?1785496472",
+   "normal": "https://cards.scryfall.io/normal/front/1/f/1f8403a2-849c-4a59-b0ed-c8803995028d.jpg?1785496472",
+   "large": "https://cards.scryfall.io/large/front/1/f/1f8403a2-849c-4a59-b0ed-c8803995028d.jpg?1785496472",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/f/1f8403a2-849c-4a59-b0ed-c8803995028d.jpg?1785496472"
+  }
+ },
+ {
+  "name": "Riddles in the Dark",
+  "scryfallId": "a6129286-7437-4ba4-be55-586a22cd67ca",
+  "oracleId": "78bed291-0ec7-466f-bc7a-9dae7d0b56ae",
+  "set": "hob",
+  "collectorNumber": "53",
+  "rarity": "rare",
+  "manaCost": "{2}{U}",
+  "typeLine": "Instant",
+  "oracleText": "Look at the top four cards of your library and separate them into a face-down pile and a face-up pile. An opponent chooses one of the piles. Put that pile into your hand and the other into your graveyard.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/6/a6129286-7437-4ba4-be55-586a22cd67ca.jpg?1783902787",
+   "normal": "https://cards.scryfall.io/normal/front/a/6/a6129286-7437-4ba4-be55-586a22cd67ca.jpg?1783902787",
+   "large": "https://cards.scryfall.io/large/front/a/6/a6129286-7437-4ba4-be55-586a22cd67ca.jpg?1783902787",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/6/a6129286-7437-4ba4-be55-586a22cd67ca.jpg?1783902787"
+  }
+ },
+ {
+  "name": "Most Decrepit Old Bird",
+  "scryfallId": "2d838feb-89f2-4cdb-a5ab-ec880f28d873",
+  "oracleId": "34d34f2c-06ff-4acf-8f2f-ff867774b777",
+  "set": "hob",
+  "collectorNumber": "49",
+  "rarity": "rare",
+  "manaCost": "{U}",
+  "typeLine": "Creature — Bird",
+  "oracleText": "Flying\nThreshold — This creature gets +1/+1 as long as there are seven or more cards in your graveyard.",
+  "power": "1",
+  "toughness": "1",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Flying",
+   "Threshold"
+  ],
+  "back": "Speak Secrets",
+  "adventure": true,
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/d/2d838feb-89f2-4cdb-a5ab-ec880f28d873.jpg?1785236659",
+   "normal": "https://cards.scryfall.io/normal/front/2/d/2d838feb-89f2-4cdb-a5ab-ec880f28d873.jpg?1785236659",
+   "large": "https://cards.scryfall.io/large/front/2/d/2d838feb-89f2-4cdb-a5ab-ec880f28d873.jpg?1785236659",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/d/2d838feb-89f2-4cdb-a5ab-ec880f28d873.jpg?1785236659"
+  }
+ },
+ {
+  "name": "Speak Secrets",
+  "scryfallId": "2d838feb-89f2-4cdb-a5ab-ec880f28d873",
+  "oracleId": "34d34f2c-06ff-4acf-8f2f-ff867774b777",
+  "set": "hob",
+  "collectorNumber": "49",
+  "rarity": "rare",
+  "manaCost": "{1}{U}",
+  "typeLine": "Sorcery — Adventure",
+  "oracleText": "Mill four cards, then put an instant or sorcery card from among them into your hand.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Mill"
+  ],
+  "front": "Most Decrepit Old Bird",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/d/2d838feb-89f2-4cdb-a5ab-ec880f28d873.jpg?1785236659",
+   "normal": "https://cards.scryfall.io/normal/front/2/d/2d838feb-89f2-4cdb-a5ab-ec880f28d873.jpg?1785236659",
+   "large": "https://cards.scryfall.io/large/front/2/d/2d838feb-89f2-4cdb-a5ab-ec880f28d873.jpg?1785236659",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/d/2d838feb-89f2-4cdb-a5ab-ec880f28d873.jpg?1785236659"
+  }
+ },
+ {
+  "name": "Elrond, Moon-Reader",
+  "scryfallId": "fbcb310c-be73-46f8-8e65-8632454ccc6e",
+  "oracleId": "3f4d6f91-95ad-4687-8899-5a21a0abb49e",
+  "set": "hob",
+  "collectorNumber": "36",
+  "rarity": "mythic",
+  "manaCost": "{2}{U}",
+  "typeLine": "Legendary Creature — Elf Noble",
+  "oracleText": "Whenever you activate an ability of a creature, draw a card. This ability triggers only once each turn.\n{5}{U}{U}: Exile up to two other target nonland permanents you control. Return those cards to the battlefield under their owner's control at the beginning of the next end step.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/b/fbcb310c-be73-46f8-8e65-8632454ccc6e.jpg?1784376948",
+   "normal": "https://cards.scryfall.io/normal/front/f/b/fbcb310c-be73-46f8-8e65-8632454ccc6e.jpg?1784376948",
+   "large": "https://cards.scryfall.io/large/front/f/b/fbcb310c-be73-46f8-8e65-8632454ccc6e.jpg?1784376948",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/b/fbcb310c-be73-46f8-8e65-8632454ccc6e.jpg?1784376948"
+  }
+ },
+ {
+  "name": "Lake-town Mariners",
+  "scryfallId": "4202a678-a5f4-47f9-9c18-e88ab9ad20a4",
+  "oracleId": "dba1d231-6b03-44ad-ab8c-be0c8fe1b6db",
+  "set": "hob",
+  "collectorNumber": "44",
+  "rarity": "uncommon",
+  "manaCost": "{4}{U}{U}",
+  "typeLine": "Creature — Human Citizen",
+  "oracleText": "Vigilance\nWard {2} (Whenever this creature becomes the target of a spell or ability an opponent controls, counter it unless that player pays {2}.)",
+  "power": "6",
+  "toughness": "5",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Vigilance",
+   "Ward"
+  ],
+  "back": "Gone Fishing",
+  "adventure": true,
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/2/4202a678-a5f4-47f9-9c18-e88ab9ad20a4.jpg?1785237929",
+   "normal": "https://cards.scryfall.io/normal/front/4/2/4202a678-a5f4-47f9-9c18-e88ab9ad20a4.jpg?1785237929",
+   "large": "https://cards.scryfall.io/large/front/4/2/4202a678-a5f4-47f9-9c18-e88ab9ad20a4.jpg?1785237929",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/2/4202a678-a5f4-47f9-9c18-e88ab9ad20a4.jpg?1785237929"
+  }
+ },
+ {
+  "name": "Gone Fishing",
+  "scryfallId": "4202a678-a5f4-47f9-9c18-e88ab9ad20a4",
+  "oracleId": "dba1d231-6b03-44ad-ab8c-be0c8fe1b6db",
+  "set": "hob",
+  "collectorNumber": "44",
+  "rarity": "uncommon",
+  "manaCost": "{3}{U}",
+  "typeLine": "Instant — Adventure",
+  "oracleText": "Exile two target creatures and/or lands you control, then return them to the battlefield under their owner's control.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "front": "Lake-town Mariners",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/2/4202a678-a5f4-47f9-9c18-e88ab9ad20a4.jpg?1785237929",
+   "normal": "https://cards.scryfall.io/normal/front/4/2/4202a678-a5f4-47f9-9c18-e88ab9ad20a4.jpg?1785237929",
+   "large": "https://cards.scryfall.io/large/front/4/2/4202a678-a5f4-47f9-9c18-e88ab9ad20a4.jpg?1785237929",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/2/4202a678-a5f4-47f9-9c18-e88ab9ad20a4.jpg?1785237929"
+  }
+ },
+ {
+  "name": "Bilbo, Thief in the Night",
+  "scryfallId": "484c7f83-8339-4ae1-8350-68ce1f7d05a3",
+  "oracleId": "72a9a85d-7cfc-4b3c-82db-9d35be6c0982",
+  "set": "hob",
+  "collectorNumber": "33",
+  "rarity": "mythic",
+  "manaCost": "{1}{U}",
+  "typeLine": "Legendary Creature — Halfling Rogue",
+  "oracleText": "Spells you cast from anywhere other than your hand cost {1} less to cast.\nWhenever Bilbo attacks, you may cast an artifact, instant, or sorcery spell from your graveyard. If an instant or sorcery spell cast this way would be put into your graveyard, exile it instead.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/8/484c7f83-8339-4ae1-8350-68ce1f7d05a3.jpg?1783902786",
+   "normal": "https://cards.scryfall.io/normal/front/4/8/484c7f83-8339-4ae1-8350-68ce1f7d05a3.jpg?1783902786",
+   "large": "https://cards.scryfall.io/large/front/4/8/484c7f83-8339-4ae1-8350-68ce1f7d05a3.jpg?1783902786",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/8/484c7f83-8339-4ae1-8350-68ce1f7d05a3.jpg?1783902786"
+  }
+ },
+ {
+  "name": "Old Fat Spider Can't See Me",
+  "scryfallId": "4a865cea-f947-4736-8ace-ba478fceeb22",
+  "oracleId": "e4402d21-bb7f-4777-bc8d-b24bf2faccb0",
+  "set": "hob",
+  "collectorNumber": "50",
+  "rarity": "uncommon",
+  "manaCost": "{2}{U}",
+  "typeLine": "Enchantment — Saga",
+  "oracleText": "(As this Saga enters and after your draw step, add a lore counter. Sacrifice after IV.)\nI — Target creature you control gains hexproof for as long as this Saga remains on the battlefield.\nII — Prevent all damage that would be dealt by up to one target creature for as long as this Saga remains on the battlefield.\nIII, IV — Draw a card.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/a/4a865cea-f947-4736-8ace-ba478fceeb22.jpg?1787201066",
+   "normal": "https://cards.scryfall.io/normal/front/4/a/4a865cea-f947-4736-8ace-ba478fceeb22.jpg?1787201066",
+   "large": "https://cards.scryfall.io/large/front/4/a/4a865cea-f947-4736-8ace-ba478fceeb22.jpg?1787201066",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/a/4a865cea-f947-4736-8ace-ba478fceeb22.jpg?1787201066"
+  }
+ },
+ {
+  "name": "Bilbo Baggins, Burglar",
+  "scryfallId": "6a109b3e-9f5b-4625-abb7-6b992c10530b",
+  "oracleId": "fa85f9e6-69ff-4669-b70a-440aa7b16c97",
+  "set": "hob",
+  "collectorNumber": "34",
+  "rarity": "common",
+  "manaCost": "{2}{U}",
+  "typeLine": "Legendary Creature — Halfling Rogue",
+  "oracleText": "When Bilbo Baggins enters, draw a card.",
+  "power": "2",
+  "toughness": "1",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "back": "Take a Glance",
+  "adventure": true,
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/a/6a109b3e-9f5b-4625-abb7-6b992c10530b.jpg?1785323194",
+   "normal": "https://cards.scryfall.io/normal/front/6/a/6a109b3e-9f5b-4625-abb7-6b992c10530b.jpg?1785323194",
+   "large": "https://cards.scryfall.io/large/front/6/a/6a109b3e-9f5b-4625-abb7-6b992c10530b.jpg?1785323194",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/a/6a109b3e-9f5b-4625-abb7-6b992c10530b.jpg?1785323194"
+  }
+ },
+ {
+  "name": "Take a Glance",
+  "scryfallId": "6a109b3e-9f5b-4625-abb7-6b992c10530b",
+  "oracleId": "fa85f9e6-69ff-4669-b70a-440aa7b16c97",
+  "set": "hob",
+  "collectorNumber": "34",
+  "rarity": "common",
+  "manaCost": "{U}",
+  "typeLine": "Sorcery — Adventure",
+  "oracleText": "Scry 2. (Then exile this card. You may cast the creature later from exile.)",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Scry"
+  ],
+  "front": "Bilbo Baggins, Burglar",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/a/6a109b3e-9f5b-4625-abb7-6b992c10530b.jpg?1785323194",
+   "normal": "https://cards.scryfall.io/normal/front/6/a/6a109b3e-9f5b-4625-abb7-6b992c10530b.jpg?1785323194",
+   "large": "https://cards.scryfall.io/large/front/6/a/6a109b3e-9f5b-4625-abb7-6b992c10530b.jpg?1785323194",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/a/6a109b3e-9f5b-4625-abb7-6b992c10530b.jpg?1785323194"
+  }
+ },
+ {
+  "name": "Fateful Discovery",
+  "scryfallId": "a1142fa1-b861-4876-aa48-402af35aaa63",
+  "oracleId": "72c6174c-fa2c-4ff2-b76e-eb6e890e97c9",
+  "set": "hob",
+  "collectorNumber": "40",
+  "rarity": "mythic",
+  "manaCost": "{3}{U}{U}",
+  "typeLine": "Enchantment",
+  "oracleText": "Whenever an artifact you control enters, draw a card.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/1/a1142fa1-b861-4876-aa48-402af35aaa63.jpg?1785323213",
+   "normal": "https://cards.scryfall.io/normal/front/a/1/a1142fa1-b861-4876-aa48-402af35aaa63.jpg?1785323213",
+   "large": "https://cards.scryfall.io/large/front/a/1/a1142fa1-b861-4876-aa48-402af35aaa63.jpg?1785323213",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/1/a1142fa1-b861-4876-aa48-402af35aaa63.jpg?1785323213"
+  }
+ },
+ {
+  "name": "Bilbo, Luckwearer",
+  "scryfallId": "09f8b967-96fa-4c2b-b331-85b3704770c0",
+  "oracleId": "a73d9109-36e0-40ea-ab06-5c5f7eb4ac54",
+  "set": "pw26",
+  "collectorNumber": "15",
+  "rarity": "rare",
+  "manaCost": "{1}{U}",
+  "typeLine": "Legendary Creature — Halfling Rogue",
+  "oracleText": "Bilbo can't be blocked.\nWhenever Bilbo deals combat damage to a player, draw a card, then discard a card.",
+  "power": "1",
+  "toughness": "1",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "back": "Burglar's Plot",
+  "adventure": true,
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/9/09f8b967-96fa-4c2b-b331-85b3704770c0.jpg?1787478163",
+   "normal": "https://cards.scryfall.io/normal/front/0/9/09f8b967-96fa-4c2b-b331-85b3704770c0.jpg?1787478163",
+   "large": "https://cards.scryfall.io/large/front/0/9/09f8b967-96fa-4c2b-b331-85b3704770c0.jpg?1787478163",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/9/09f8b967-96fa-4c2b-b331-85b3704770c0.jpg?1787478163"
+  }
+ },
+ {
+  "name": "Burglar's Plot",
+  "scryfallId": "09f8b967-96fa-4c2b-b331-85b3704770c0",
+  "oracleId": "a73d9109-36e0-40ea-ab06-5c5f7eb4ac54",
+  "set": "pw26",
+  "collectorNumber": "15",
+  "rarity": "rare",
+  "manaCost": "{4}{U}",
+  "typeLine": "Sorcery — Adventure",
+  "oracleText": "Exchange control of two target nonland permanents that share a card type. (Then exile this card. You may cast the creature later from exile.)",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "front": "Bilbo, Luckwearer",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/9/09f8b967-96fa-4c2b-b331-85b3704770c0.jpg?1787478163",
+   "normal": "https://cards.scryfall.io/normal/front/0/9/09f8b967-96fa-4c2b-b331-85b3704770c0.jpg?1787478163",
+   "large": "https://cards.scryfall.io/large/front/0/9/09f8b967-96fa-4c2b-b331-85b3704770c0.jpg?1787478163",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/9/09f8b967-96fa-4c2b-b331-85b3704770c0.jpg?1787478163"
+  }
+ },
+ {
+  "name": "The Lord of the Eagles",
+  "scryfallId": "fa0554fc-9448-4ae2-8712-4f4f7af3c7b4",
+  "oracleId": "3b38f314-d997-4c2a-b4c9-40dbe780993d",
+  "set": "hob",
+  "collectorNumber": "46",
+  "rarity": "rare",
+  "manaCost": "{7}{U}{U}",
+  "typeLine": "Legendary Creature — Bird Noble",
+  "oracleText": "Flash\nThis spell costs {X} less to cast, where X is the total power of creatures you control with flying.\nFlying",
+  "power": "8",
+  "toughness": "8",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Flying",
+   "Flash"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/a/fa0554fc-9448-4ae2-8712-4f4f7af3c7b4.jpg?1784636060",
+   "normal": "https://cards.scryfall.io/normal/front/f/a/fa0554fc-9448-4ae2-8712-4f4f7af3c7b4.jpg?1784636060",
+   "large": "https://cards.scryfall.io/large/front/f/a/fa0554fc-9448-4ae2-8712-4f4f7af3c7b4.jpg?1784636060",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/a/fa0554fc-9448-4ae2-8712-4f4f7af3c7b4.jpg?1784636060"
+  }
+ },
+ {
+  "name": "Elvenking's Harper",
+  "scryfallId": "9c50656d-c74a-4e90-9ef7-afa237682516",
+  "oracleId": "7d070a95-49ea-4aea-b512-dbb0006a00ee",
+  "set": "hob",
+  "collectorNumber": "38",
+  "rarity": "common",
+  "manaCost": "{1}{U}",
+  "typeLine": "Creature — Elf Bard",
+  "oracleText": "{4}{U}: Target creature can't be blocked this turn.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/c/9c50656d-c74a-4e90-9ef7-afa237682516.jpg?1785497043",
+   "normal": "https://cards.scryfall.io/normal/front/9/c/9c50656d-c74a-4e90-9ef7-afa237682516.jpg?1785497043",
+   "large": "https://cards.scryfall.io/large/front/9/c/9c50656d-c74a-4e90-9ef7-afa237682516.jpg?1785497043",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/c/9c50656d-c74a-4e90-9ef7-afa237682516.jpg?1785497043"
+  }
+ },
+ {
+  "name": "Confusticate and Bebother",
+  "scryfallId": "9de48690-e5ae-495a-addf-305f1db7ec21",
+  "oracleId": "7a7d9887-3cc4-4fb9-9109-1315903ace45",
+  "set": "hob",
+  "collectorNumber": "35",
+  "rarity": "common",
+  "manaCost": "{2}{U}",
+  "typeLine": "Instant",
+  "oracleText": "Choose one —\n• Counter target spell unless its controller pays {4}.\n• Draw two cards, then discard a card.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/d/9de48690-e5ae-495a-addf-305f1db7ec21.jpg?1785496428",
+   "normal": "https://cards.scryfall.io/normal/front/9/d/9de48690-e5ae-495a-addf-305f1db7ec21.jpg?1785496428",
+   "large": "https://cards.scryfall.io/large/front/9/d/9de48690-e5ae-495a-addf-305f1db7ec21.jpg?1785496428",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/d/9de48690-e5ae-495a-addf-305f1db7ec21.jpg?1785496428"
+  }
+ },
+ {
+  "name": "Roll-Roll-Roll-Roll",
+  "scryfallId": "a2e4099e-86bd-461f-87fa-7f7850ae7eec",
+  "oracleId": "aa913409-7a7a-4e74-82ff-7ff8195585ad",
+  "set": "hob",
+  "collectorNumber": "54",
+  "rarity": "rare",
+  "manaCost": "{2}{U}",
+  "typeLine": "Enchantment — Saga",
+  "oracleText": "(As this Saga enters and after your draw step, add a lore counter. Sacrifice after IV.)\nI, II, III, IV — Exile up to one target creature or land you control. If you do, return it to the battlefield under its owner's control at the beginning of the next end step.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/2/a2e4099e-86bd-461f-87fa-7f7850ae7eec.jpg?1785152396",
+   "normal": "https://cards.scryfall.io/normal/front/a/2/a2e4099e-86bd-461f-87fa-7f7850ae7eec.jpg?1785152396",
+   "large": "https://cards.scryfall.io/large/front/a/2/a2e4099e-86bd-461f-87fa-7f7850ae7eec.jpg?1785152396",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/2/a2e4099e-86bd-461f-87fa-7f7850ae7eec.jpg?1785152396"
+  }
+ },
+ {
+  "name": "Lakeshore Apothecary",
+  "scryfallId": "abfbb255-a39b-4df5-bfb6-5298584e89f0",
+  "oracleId": "80bcb154-b4be-4bbd-bbc1-b116a59045b7",
+  "set": "hob",
+  "collectorNumber": "43",
+  "rarity": "common",
+  "manaCost": "{1}{U}",
+  "typeLine": "Creature — Human Cleric",
+  "oracleText": "Vigilance\nWhenever you draw your second card each turn, put a +1/+1 counter on this creature.",
+  "power": "1",
+  "toughness": "2",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Vigilance"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/b/abfbb255-a39b-4df5-bfb6-5298584e89f0.jpg?1785497053",
+   "normal": "https://cards.scryfall.io/normal/front/a/b/abfbb255-a39b-4df5-bfb6-5298584e89f0.jpg?1785497053",
+   "large": "https://cards.scryfall.io/large/front/a/b/abfbb255-a39b-4df5-bfb6-5298584e89f0.jpg?1785497053",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/b/abfbb255-a39b-4df5-bfb6-5298584e89f0.jpg?1785497053"
+  }
+ },
+ {
+  "name": "Ravenhill Flock",
+  "scryfallId": "acbb4d32-2771-469e-a6de-0df15155cc62",
+  "oracleId": "7f961374-00b0-40df-83eb-9ced2bb519aa",
+  "set": "hob",
+  "collectorNumber": "52",
+  "rarity": "uncommon",
+  "manaCost": "{3}{U}",
+  "typeLine": "Creature — Bird",
+  "oracleText": "Flying\nWhenever you draw a card, put a +1/+1 counter on this creature.",
+  "power": "1",
+  "toughness": "2",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/c/acbb4d32-2771-469e-a6de-0df15155cc62.jpg?1784714603",
+   "normal": "https://cards.scryfall.io/normal/front/a/c/acbb4d32-2771-469e-a6de-0df15155cc62.jpg?1784714603",
+   "large": "https://cards.scryfall.io/large/front/a/c/acbb4d32-2771-469e-a6de-0df15155cc62.jpg?1784714603",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/c/acbb4d32-2771-469e-a6de-0df15155cc62.jpg?1784714603"
+  }
+ },
+ {
+  "name": "Enchanted River's Grasp",
+  "scryfallId": "ad40a4b9-9fab-49c1-8e9f-6e0776966833",
+  "oracleId": "fcc9f3bc-0bc3-4189-a4d0-9698594b99a8",
+  "set": "hob",
+  "collectorNumber": "39",
+  "rarity": "common",
+  "manaCost": "{2}{U}",
+  "typeLine": "Enchantment — Aura",
+  "oracleText": "Enchant creature\nWhen this Aura enters, tap enchanted creature and remove all counters from it.\nEnchanted creature loses all abilities and doesn't untap during its controller's untap step.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Enchant"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/d/ad40a4b9-9fab-49c1-8e9f-6e0776966833.jpg?1785497045",
+   "normal": "https://cards.scryfall.io/normal/front/a/d/ad40a4b9-9fab-49c1-8e9f-6e0776966833.jpg?1785497045",
+   "large": "https://cards.scryfall.io/large/front/a/d/ad40a4b9-9fab-49c1-8e9f-6e0776966833.jpg?1785497045",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/d/ad40a4b9-9fab-49c1-8e9f-6e0776966833.jpg?1785497045"
+  }
+ },
+ {
+  "name": "Mirkwood Meditator",
+  "scryfallId": "ad7ed4e6-3fe2-40f1-909b-a03b2a3c941a",
+  "oracleId": "399cd159-7376-421c-b001-c26f1cbadced",
+  "set": "hob",
+  "collectorNumber": "48",
+  "rarity": "common",
+  "manaCost": "{2}{U}",
+  "typeLine": "Creature — Elf Druid",
+  "oracleText": "Landfall — Whenever a land you control enters, you may have this creature's base power and toughness become 4/2 until end of turn.",
+  "power": "2",
+  "toughness": "4",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Landfall"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/d/ad7ed4e6-3fe2-40f1-909b-a03b2a3c941a.jpg?1785497064",
+   "normal": "https://cards.scryfall.io/normal/front/a/d/ad7ed4e6-3fe2-40f1-909b-a03b2a3c941a.jpg?1785497064",
+   "large": "https://cards.scryfall.io/large/front/a/d/ad7ed4e6-3fe2-40f1-909b-a03b2a3c941a.jpg?1785497064",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/d/ad7ed4e6-3fe2-40f1-909b-a03b2a3c941a.jpg?1785497064"
+  }
+ },
+ {
+  "name": "Master's Councillors",
+  "scryfallId": "addcefdd-e012-4adf-9052-e60376a8d2d3",
+  "oracleId": "b9079564-5c86-4765-988a-f2334e016fa6",
+  "set": "hob",
+  "collectorNumber": "47",
+  "rarity": "uncommon",
+  "manaCost": "{1}{U}",
+  "typeLine": "Creature — Human Advisor",
+  "oracleText": "Vigilance\nThis creature gets +2/+0 for each graveyard with seven or more cards in it.\nWhenever you draw your second card each turn, target player mills three cards. (They put the top three cards of their library into their graveyard.)",
+  "power": "1",
+  "toughness": "3",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Vigilance",
+   "Mill"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/d/addcefdd-e012-4adf-9052-e60376a8d2d3.jpg?1784798124",
+   "normal": "https://cards.scryfall.io/normal/front/a/d/addcefdd-e012-4adf-9052-e60376a8d2d3.jpg?1784798124",
+   "large": "https://cards.scryfall.io/large/front/a/d/addcefdd-e012-4adf-9052-e60376a8d2d3.jpg?1784798124",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/d/addcefdd-e012-4adf-9052-e60376a8d2d3.jpg?1784798124"
+  }
+ },
+ {
+  "name": "Plunder the Trollshaws",
+  "scryfallId": "afb73190-b9bd-4744-a011-a37cd9c0148d",
+  "oracleId": "526f520e-b4bb-4215-9c6b-afc298744f06",
+  "set": "hob",
+  "collectorNumber": "51",
+  "rarity": "common",
+  "manaCost": "{1}{U}",
+  "typeLine": "Instant",
+  "oracleText": "Draw a card. If this spell was cast from a graveyard, draw two cards instead.\nFlashback {3}{U} (You may cast this card from your graveyard for its flashback cost. Then exile it.)",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Flashback"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/f/afb73190-b9bd-4744-a011-a37cd9c0148d.jpg?1785496438",
+   "normal": "https://cards.scryfall.io/normal/front/a/f/afb73190-b9bd-4744-a011-a37cd9c0148d.jpg?1785496438",
+   "large": "https://cards.scryfall.io/large/front/a/f/afb73190-b9bd-4744-a011-a37cd9c0148d.jpg?1785496438",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/f/afb73190-b9bd-4744-a011-a37cd9c0148d.jpg?1785496438"
+  }
+ },
+ {
+  "name": "Great Gilded Boat",
+  "scryfallId": "b2fb3995-5b43-4776-88b2-346d353edee0",
+  "oracleId": "d4607026-80b2-4fa6-99d5-694cd3b43868",
+  "set": "hob",
+  "collectorNumber": "42",
+  "rarity": "rare",
+  "manaCost": "{2}{U}",
+  "typeLine": "Artifact — Vehicle",
+  "oracleText": "Whenever you attack, recruit. (Draw a card, then discard a card. If you discarded a nonland card, create a 1/1 white Human Soldier creature token.)\nCrew 2 (Tap any number of creatures you control with total power 2 or more: This Vehicle becomes an artifact creature until end of turn.)",
+  "power": "4",
+  "toughness": "4",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Crew",
+   "Recruit"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/2/b2fb3995-5b43-4776-88b2-346d353edee0.jpg?1784862975",
+   "normal": "https://cards.scryfall.io/normal/front/b/2/b2fb3995-5b43-4776-88b2-346d353edee0.jpg?1784862975",
+   "large": "https://cards.scryfall.io/large/front/b/2/b2fb3995-5b43-4776-88b2-346d353edee0.jpg?1784862975",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/2/b2fb3995-5b43-4776-88b2-346d353edee0.jpg?1784862975"
+  }
+ },
+ {
+  "name": "Elven Raft-Steerer",
+  "scryfallId": "c141695c-c108-41d5-85cb-1f7485d9d533",
+  "oracleId": "d0f62148-1015-49b8-b61f-a4332325a6b0",
+  "set": "hob",
+  "collectorNumber": "37",
+  "rarity": "uncommon",
+  "manaCost": "{2}{U}",
+  "typeLine": "Creature — Elf Pilot",
+  "oracleText": "Landfall — Whenever a land you control enters, choose one —\n• Tap target creature an opponent controls.\n• Untap target creature you control.",
+  "power": "3",
+  "toughness": "2",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Landfall"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/1/c141695c-c108-41d5-85cb-1f7485d9d533.jpg?1784632054",
+   "normal": "https://cards.scryfall.io/normal/front/c/1/c141695c-c108-41d5-85cb-1f7485d9d533.jpg?1784632054",
+   "large": "https://cards.scryfall.io/large/front/c/1/c141695c-c108-41d5-85cb-1f7485d9d533.jpg?1784632054",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/1/c141695c-c108-41d5-85cb-1f7485d9d533.jpg?1784632054"
+  }
+ },
+ {
+  "name": "Long Lake Nuisance",
+  "scryfallId": "cd5af94d-6321-4834-8e5f-e5d0261b3ef3",
+  "oracleId": "a833fdf1-db0c-4846-8452-d3b2059c2355",
+  "set": "hob",
+  "collectorNumber": "45",
+  "rarity": "common",
+  "manaCost": "{3}{U}",
+  "typeLine": "Creature — Bird",
+  "oracleText": "Flying\nWhen this creature enters, recruit. (Draw a card, then discard a card. If you discarded a nonland card, create a 1/1 white Human Soldier creature token.)",
+  "power": "3",
+  "toughness": "1",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Flying",
+   "Recruit"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/d/cd5af94d-6321-4834-8e5f-e5d0261b3ef3.jpg?1785497055",
+   "normal": "https://cards.scryfall.io/normal/front/c/d/cd5af94d-6321-4834-8e5f-e5d0261b3ef3.jpg?1785497055",
+   "large": "https://cards.scryfall.io/large/front/c/d/cd5af94d-6321-4834-8e5f-e5d0261b3ef3.jpg?1785497055",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/d/cd5af94d-6321-4834-8e5f-e5d0261b3ef3.jpg?1785497055"
+  }
+ },
+ {
+  "name": "Sound the Trumpets",
+  "scryfallId": "dd32a1dd-3541-4572-a717-1deabc14b827",
+  "oracleId": "dbcf2a79-b455-43ac-9cf0-9e63708800f4",
+  "set": "hob",
+  "collectorNumber": "55",
+  "rarity": "uncommon",
+  "manaCost": "{1}{U}{U}",
+  "typeLine": "Instant",
+  "oracleText": "Counter target spell. If that spell's mana value was 2 or less, recruit. (Draw a card, then discard a card. If you discarded a nonland card, create a 1/1 white Human Soldier creature token.)",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Recruit"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/d/dd32a1dd-3541-4572-a717-1deabc14b827.jpg?1784760160",
+   "normal": "https://cards.scryfall.io/normal/front/d/d/dd32a1dd-3541-4572-a717-1deabc14b827.jpg?1784760160",
+   "large": "https://cards.scryfall.io/large/front/d/d/dd32a1dd-3541-4572-a717-1deabc14b827.jpg?1784760160",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/d/dd32a1dd-3541-4572-a717-1deabc14b827.jpg?1784760160"
+  }
+ },
+ {
+  "name": "Uneasy Partings",
+  "scryfallId": "e49866d4-966a-40f9-b08d-18e5af6d726b",
+  "oracleId": "15211eaa-d906-4b95-8942-2f49d3cb4b81",
+  "set": "hob",
+  "collectorNumber": "58",
+  "rarity": "common",
+  "manaCost": "{3}{U}",
+  "typeLine": "Instant",
+  "oracleText": "This spell costs {1} less to cast if it targets an attacking nontoken creature.\nTarget creature's owner puts it on their choice of the top or bottom of their library.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/4/e49866d4-966a-40f9-b08d-18e5af6d726b.jpg?1785497074",
+   "normal": "https://cards.scryfall.io/normal/front/e/4/e49866d4-966a-40f9-b08d-18e5af6d726b.jpg?1785497074",
+   "large": "https://cards.scryfall.io/large/front/e/4/e49866d4-966a-40f9-b08d-18e5af6d726b.jpg?1785497074",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/4/e49866d4-966a-40f9-b08d-18e5af6d726b.jpg?1785497074"
+  }
+ },
+ {
+  "name": "Thranduil's Decree",
+  "scryfallId": "e4ded4c1-0e3e-47c5-8fdc-e7c187f68b12",
+  "oracleId": "d7cba934-02ad-4677-bb4d-50808b01b4f9",
+  "set": "hob",
+  "collectorNumber": "56",
+  "rarity": "uncommon",
+  "manaCost": "{4}{U}{U}",
+  "typeLine": "Instant",
+  "oracleText": "Counter target spell. If a permanent spell is countered this way, exile it instead of putting it into its owner's graveyard. You may cast that card without paying its mana cost for as long as it remains exiled.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/4/e4ded4c1-0e3e-47c5-8fdc-e7c187f68b12.jpg?1784760181",
+   "normal": "https://cards.scryfall.io/normal/front/e/4/e4ded4c1-0e3e-47c5-8fdc-e7c187f68b12.jpg?1784760181",
+   "large": "https://cards.scryfall.io/large/front/e/4/e4ded4c1-0e3e-47c5-8fdc-e7c187f68b12.jpg?1784760181",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/4/e4ded4c1-0e3e-47c5-8fdc-e7c187f68b12.jpg?1784760181"
+  }
+ },
+ {
   "name": "Along the Crooked Way",
   "scryfallId": "3696d65c-fffd-4685-bb2d-e8769bf476e3",
   "oracleId": "f4437cb3-85f7-49b5-bb41-6a948549d987",

@@ -223,6 +223,11 @@ from) when it's fixed. Older phases keep their own "Simplifications" lists in `d
       two-player game.
 - [ ] Supper for Spiders: the Foods keep the card's own abilities (as the text says) and are artifacts, not creatures, from the
       moment the arrival is processed; the engine sets that state right after moving the card, in the same resolution.
+## The Hobbit (blue, phase 20b)
+
+- [ ] Elrond, Moon-Reader: a creature tapped for mana while paying a cost activates its mana ability only if the creature has
+      a printed (or granted-as-ability) `mana` ability; a creature that gets "{T}: Add one mana" from another permanent's static
+      `grantMana` ability doesn't draw him a card. Its {5}{U}{U} takes "up to two" targets as two optional targets.
 
 ## Jump In slot cards (`jumpin-slots.ts`)
 

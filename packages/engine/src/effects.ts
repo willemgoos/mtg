@@ -245,6 +245,16 @@ function prevented(ctx: Ctx, src: DamageSource, to: TargetChoice, amount: number
   if ('object' in to && useShield(ctx, to.object.id)) return 0;
   if (ctx.s.battlefield.some((id) => hasStaticKind(ctx, id, 'damageCantBePrevented')))
     return amount;
+  // The Hobbit (20b blue): Old Fat Spider Can't See Me, "prevent all damage that would be dealt by" the creature.
+  if (
+    ctx.s.effects.some(
+      (x) =>
+        x.preventDamageDealt &&
+        x.affected.id === src.id &&
+        x.affected.zcc === ctx.s.objects[src.id]?.zcc,
+    )
+  )
+    return 0;
   // Marvel Super Heroes Jumpstart (Squadron): Hyperion prevents all but 1 of damage to you and your Heroes.
   if (amount > 1 && allButOne(ctx, to)) amount = 1;
   if ('player' in to) {
@@ -1218,6 +1228,7 @@ export function runEffects(
       e.kind === 'revealUntilCastable' ||
       e.kind === 'revealTopCastOrPlay' ||
       e.kind === 'exileTopMayCast' || // Reality Fracture (17c): Chandra, Torch of Defiance
+      e.kind === 'castFromYourGraveyard' || // The Hobbit (20b blue): Bilbo, Thief in the Night
       e.kind === 'takeStudyCard' ||
       e.kind === 'expressiveIteration' ||
       e.kind === 'castFreeFromTop' ||
@@ -1508,6 +1519,21 @@ export function runEffects(
           cards: [top],
           fullCost: true,
           ifNotCast: e.otherwise,
+          resume,
+          thenPriority,
+        };
+      } else if (e.kind === 'castFromYourGraveyard') {
+        // The Hobbit (20b blue): Bilbo, Thief in the Night. You may cast a matching card from your graveyard, paying its costs.
+        const cards = ctx.s.players[controller].graveyard.filter(
+          (id) => !def(ctx, id).types.includes('Land') && cardMatches(ctx, id, e.filter),
+        );
+        if (cards.length === 0) continue;
+        ctx.s.decision = {
+          kind: 'castFree',
+          player: controller,
+          cards,
+          fullCost: true,
+          ...(e.exileInstantsSorceries ? { exileInstantsSorceries: true } : {}),
           resume,
           thenPriority,
         };
@@ -1802,6 +1828,7 @@ export function runEffects(
           fromGraveyard: true,
           shuffle: false,
           // Secrets of Strixhaven (14b): Bind to Life puts it onto the battlefield.
+          ...(e.required ? { required: true } : {}), // The Hobbit (20b blue): Speak Secrets, "put an instant or sorcery card" (not "may")
           ...(e.to ? { to: e.to } : {}),
           ...(e.squirrelFood ? { squirrelFood: true } : {}),
           resume,
@@ -2631,9 +2658,12 @@ function runEffectInner(ctx: Ctx, es: EffectSource, e: EffectDef): void {
           ...(e.creatureSubtype ? { creatureSubtype: e.creatureSubtype } : {}),
           ...(e.preventCombatDamage ? { preventCombatDamage: true } : {}),
           ...(e.mustBeBlocked ? { mustBeBlocked: true } : {}),
-          ...(e.untilYourNextTurn
-            ? { expires: 'untilYourNextTurn' as const, player: es.controller }
-            : { expires: 'endOfTurn' as const }),
+          ...(e.preventDamageDealt ? { preventDamageDealt: true } : {}), // The Hobbit (20b blue)
+          ...(e.whileSource && es.source
+            ? { expires: 'whileSource' as const, whileSourceId: es.source.id } // The Hobbit (20b blue)
+            : e.untilYourNextTurn
+              ? { expires: 'untilYourNextTurn' as const, player: es.controller }
+              : { expires: 'endOfTurn' as const }),
         });
       }
       return;
@@ -2773,6 +2803,19 @@ function runEffectInner(ctx: Ctx, es: EffectSource, e: EffectDef): void {
         obj(ctx, what).attachedTo = to;
         // An Equipment gets a new timestamp when it becomes attached (Iron Suitcase layering).
         obj(ctx, what).timestamp = newTimestamp(ctx);
+        // The Hobbit (20b blue): Wizard's Staff, "Equipped creature has prowess": Equipment gives abilities as an Aura does.
+        if (
+          def(ctx, what).abilities.some(
+            (a) =>
+              a.kind === 'static' &&
+              a.effect.kind === 'attached' &&
+              a.effect.grantAbilities?.length,
+          )
+        ) {
+          const h = obj(ctx, to);
+          h.auraGrants = [...(h.auraGrants ?? []).filter((x) => x !== what), what];
+          ctx.s.auraGrants = true;
+        }
       }
       return;
     }
@@ -4199,13 +4242,9 @@ function runEffectInner(ctx: Ctx, es: EffectSource, e: EffectDef): void {
       if (e.named) (o.counters ??= {})[e.named] = 1;
       return;
     }
-    case 'blink':
-      for (const id of objectsOf(ctx, es, e.what)) {
-        const owner = obj(ctx, id).owner;
-        const token = obj(ctx, id).isToken;
-        moveObject(ctx, id, 'exile');
-        // A token ceases to exist in exile.
-        if (token || !ctx.s.objects[id]) continue;
+    case 'blink': {
+      const exiled: { id: ObjectId; owner: PlayerId }[] = [];
+      const bring = ({ id, owner }: { id: ObjectId; owner: PlayerId }) => {
         // Final Fantasy (11a): "return it to the battlefield transformed".
         moveObject(ctx, id, 'battlefield', {
           controller: owner,
@@ -4213,8 +4252,20 @@ function runEffectInner(ctx: Ctx, es: EffectSource, e: EffectDef): void {
         });
         if (e.tapped) obj(ctx, id).tapped = true;
         if (e.counters) addCounters(ctx, id, e.counters);
+      };
+      for (const id of objectsOf(ctx, es, e.what)) {
+        const owner = obj(ctx, id).owner;
+        const token = obj(ctx, id).isToken;
+        moveObject(ctx, id, 'exile');
+        // A token ceases to exist in exile.
+        if (token || !ctx.s.objects[id]) continue;
+        // The Hobbit (20b blue): Gone Fishing, "exile two target ..., then return them": all leave before any returns.
+        if (e.together) exiled.push({ id, owner });
+        else bring({ id, owner });
       }
+      for (const x of exiled) bring(x);
       return;
+    }
     case 'revealUntil': {
       const lib = ctx.s.players[es.controller].library;
       const i = lib.findIndex((id) => cardMatches(ctx, id, e.filter));

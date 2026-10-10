@@ -346,6 +346,11 @@ export function countOf(
 ): number {
   if (typeof a === 'number') return a;
   if ('multiply' in a) return a.multiply * countOf(ctx, player, a.amount, printed, sourceId);
+  // The Hobbit (20b blue): Master's Councillors, "each graveyard with seven or more cards in it".
+  if ('graveyardsWithAtLeast' in a)
+    return (['p1', 'p2'] as const).filter(
+      (p) => ctx.s.players[p].graveyard.length >= a.graveyardsWithAtLeast,
+    ).length;
   // Reality Fracture (17a): Dark Matter Manipulator, Recursive Recruitment
   if ('floorDiv' in a)
     return Math.floor(countOf(ctx, player, a.amount, printed, sourceId) / a.floorDiv);
@@ -677,7 +682,9 @@ export function countOf(
               obj(ctx, id).controller === player &&
               def(ctx, id).types.includes('Creature') &&
               // The Hobbit (20b red): Desert Were-Worm, the total power of the attacking creatures.
-              (a.attacking === undefined || isAttacking(ctx, id) === a.attacking),
+              (a.attacking === undefined || isAttacking(ctx, id) === a.attacking) &&
+              // The Hobbit (20b blue): The Lord of the Eagles, "creatures you control with flying".
+              (!a.hasKeyword || hasKeyword(ctx, id, a.hasKeyword)),
           )
           .reduce((n, id) => n + Math.max(0, power(ctx, id)), 0)
       : matching;
