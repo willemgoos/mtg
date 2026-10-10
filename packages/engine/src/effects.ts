@@ -1954,6 +1954,8 @@ export function runEffects(
           ...(e.restToGraveyard ? { restToGraveyard: true } : {}),
           // Strixhaven (13c): The Biblioplex
           ...(e.canBin ? { canBin: true } : {}),
+          // Tarkir: Dragonstorm (19b, green): Traveling Botanist.
+          ...(e.reveal ? { reveal: true } : {}),
           // Final Fantasy (11b): look for a land (Ignis Scientia).
           ...(e.to ? { to: e.to } : {}),
           // Secrets of Strixhaven (14a): Follow the Lumarets.
@@ -2410,6 +2412,8 @@ export function runEffects(
           // Reality Fracture (17a): Fblthp, Hexhaven Invigorator.
           ...(e.upTo !== undefined ? { remaining: resolveAmount(ctx, es, e.upTo) } : {}),
           ...(e.differentNames ? { differentNames: true } : {}),
+          // Tarkir: Dragonstorm (19b, green): Claim Territory.
+          ...(e.thenTo ? { thenTo: e.thenTo } : {}),
           // Reality Fracture (17a fixes): Loyal Tutor.
           ...(e.reveal ? { reveal: true } : {}),
           // Lorwyn Eclipsed (18a): Celestial Reunion, the creature type its additional cost chose.

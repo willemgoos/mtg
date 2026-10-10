@@ -2111,6 +2111,19 @@ function detect(ctx: Ctx, ev: GameEvent): void {
           o,
         );
       }
+      // Tarkir: Dragonstorm (19b, green): Surrak, Elusive Hunter, a creature or a creature spell (on the stack).
+      for (const id of ev.ids) {
+        const o = s.objects[id];
+        if (!o || !def(ctx, id).types.includes('Creature')) continue;
+        const onStack = o.zone === 'stack' ? s.stack.find((x) => x.kind === 'spell' && x.id === id) : undefined;
+        const owner = o.zone === 'battlefield' ? o.controller : onStack?.controller;
+        if (!owner || owner === ev.player) continue;
+        forEachBattlefieldTrigger(
+          ctx,
+          (src, a) => a.trigger.on === 'creatureOrSpellTargetedByOpponent' && src.controller === owner,
+          o,
+        );
+      }
       // Black Bolt: "whenever this becomes the target of a spell or ability an opponent controls".
       for (const id of ev.ids) {
         const o = s.objects[id];

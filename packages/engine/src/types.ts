@@ -893,6 +893,9 @@ export type TriggerDef =
   | { on: 'beginningOfDraw'; whose?: 'opponents' | 'each' } // Lorwyn Eclipsed (18b, black): 'each' (Mornsong Aria)
   /** Whenever a creature you control becomes the target of an opponent's spell or ability (Pawpatch Recruit). */
   | { on: 'yourCreatureTargetedByOpponent' }
+  // Tarkir: Dragonstorm (19b, green): Surrak, Elusive Hunter
+  /** Whenever a creature you control or a creature spell you control becomes the target of a spell or ability an opponent controls ("that creature" is the subject). */
+  | { on: 'creatureOrSpellTargetedByOpponent' }
   /** When this Class becomes level N. */
   | { on: 'becomesLevel'; level: number }
   // Teamwork (Marvel Super Heroes)
@@ -1530,6 +1533,12 @@ export interface TargetSpec {
    * chosen just before it (each pair is listed once, the second target always the later card).
    */
   sharesCreatureTypeWithPrevious?: boolean;
+  // Tarkir: Dragonstorm (19b, green): Rite of Renewal
+  /**
+   * With `anyNumber` on a spell: a card in the graveyard of the player chosen as target `n` ("up to four target cards from their
+   * graveyard"). A spell's `maxTargets` is kept to as the targets are picked one at a time.
+   */
+  inGraveyardOfTarget?: number;
 }
 
 /**
@@ -2365,6 +2374,9 @@ export type EffectDef =
       // Lorwyn Eclipsed (18b, black): Mornsong Aria
       /** The player whose turn it is searches (their own library, the card goes to their hand), not the controller. */
       activePlayerSearches?: boolean;
+      // Tarkir: Dragonstorm (19b, green): Claim Territory
+      /** With `upTo`: the first card found goes to `to`, the ones after it here ("put one onto the battlefield tapped and the other into your hand"). */
+      thenTo?: 'hand';
     }
   /** Look at the top N; you may put a creature with mana value up to your land count onto the battlefield (Loot). */
   | { kind: 'lookForCreature'; count: number }
@@ -2586,6 +2598,9 @@ export type EffectDef =
       // Strixhaven (13c): The Biblioplex
       /** The card looked at may instead be put into your graveyard. */
       canBin?: boolean;
+      // Tarkir: Dragonstorm (19b, green): Traveling Botanist
+      /** The card taken is revealed. */
+      reveal?: boolean;
       // Final Fantasy (11b): look for a land
       /** The card taken goes onto the battlefield tapped instead (Ignis Scientia: a land). */
       // Foundations: 'libraryTop', it goes back on top (Gutless Plunderer, with `restToGraveyard`).
@@ -4356,6 +4371,9 @@ export type Decision =
       remaining?: number;
       /** Each card taken must have a different name from the ones already taken. */
       differentNames?: boolean;
+      // Tarkir: Dragonstorm (19b, green): Claim Territory
+      /** After the first card, the destination is this. */
+      thenTo?: 'hand';
       // Reality Fracture (17a fixes): Loyal Tutor
       /** The card found is revealed. */
       reveal?: boolean;
