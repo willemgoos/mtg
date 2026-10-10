@@ -455,6 +455,8 @@ export function castCost(
           a.kind === 'static' &&
           a.effect.kind === 'spellsCostLess' &&
           cardMatches(ctx, card, a.effect.filter, id) &&
+          // Tarkir: Dragonstorm (19b, clans-b): Temur Battlecrier, "during your turn".
+          checkCondition(ctx, a.effect.condition, player, obj(ctx, id)) &&
           // Strixhaven Brawl (15b, pair): Zimone, Infinite Analyst: only before you've cast a spell with {X} this turn.
           !(
             a.effect.firstXOnly &&

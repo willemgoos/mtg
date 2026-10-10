@@ -132,6 +132,8 @@ export function dealDamage(
   amount *= doubling(ctx, src, to);
   amount = prevented(ctx, src, to, amount);
   if (amount <= 0) return;
+  // Tarkir: Dragonstorm (19b, clans-b): Karakyk Guardian, "as long as it hasn't dealt damage yet".
+  if (ctx.s.objects[src.id]?.zone === 'battlefield') ctx.s.objects[src.id]!.dealtDamage = true;
   // Reality Fracture (17a): Ruric Thar, "as long as they haven't dealt combat damage yet".
   if (combat && ctx.s.objects[src.id]?.zone === 'battlefield')
     ctx.s.objects[src.id]!.dealtCombatDamage = true;
@@ -533,7 +535,8 @@ function divideStep(
   e: Extract<EffectDef, { kind: 'divide' }>,
 ): EffectDef[] {
   const chosen = e.chosen ?? [];
-  const left = e.amount - chosen.reduce((n, c) => n + c.n, 0);
+  // Tarkir: Dragonstorm (19b, clans-b): Ureni, the total may be an Amount (the lands you control).
+  const left = resolveAmount(ctx, es, e.amount) - chosen.reduce((n, c) => n + c.n, 0);
   const finish: EffectDef = { ...e, done: true };
   if (left <= 0 || chosen.length >= e.maxTargets) return chosen.length ? [finish] : [];
   const same = (a: TargetChoice, b: TargetChoice) =>
@@ -2631,6 +2634,16 @@ function runEffectInner(ctx: Ctx, es: EffectSource, e: EffectDef): void {
     case 'extraCombat':
       ctx.s.turn.extraCombats++;
       return;
+    // Tarkir: Dragonstorm (19b, clans-b): All-Out Assault, an extra combat and main phase right after this main phase.
+    case 'extraCombatThenMain': {
+      const step = ctx.s.turn.step;
+      if (step !== 'main1' && step !== 'main2') return;
+      (ctx.s.turn.extraPhases ??= []).push({
+        phase: 'pending',
+        resume: step === 'main1' ? 'beginCombat' : 'end',
+      });
+      return;
+    }
     case 'attach': {
       const what = e.what
         ? objectsOf(ctx, es, e.what)[0]
@@ -3746,6 +3759,8 @@ function runEffectInner(ctx: Ctx, es: EffectSource, e: EffectDef): void {
         ...(e.until === 'nextSpellThisTurn' ? { untilTurn: ctx.s.turn.number, once: true } : {}),
         // Final Fantasy (11c): "until end of turn" (Summon: Leviathan); Strixhaven (13c): First Day of Class.
         ...(e.until === 'endOfTurn' ? { untilTurn: ctx.s.turn.number } : {}),
+        // Tarkir: Dragonstorm (19b, clans-b): All-Out Assault, "when you next attack this turn".
+        ...(e.once ? { once: true } : {}),
         // Reality Fracture (17c): Jace, Reality Sculptor, Garruk, Curse Breaker: "until your next turn".
         ...(e.until === 'yourNextTurn' ? { untilTurnOf: es.controller } : {}),
         ...(e.label ? { label: e.label } : {}),
