@@ -21,6 +21,7 @@ import { FRA_RED_EFFECTS } from './fra-red-effects.ts';
 import { ECL_MULTI_A_EFFECTS } from './ecl-multi-a-effects.ts';
 import { ECL_RED_EFFECTS } from './ecl-red-effects.ts';
 import { HOB_RED_EFFECTS } from './hob-red-effects.ts'; // The Hobbit (20b red)
+import { LTR_RED_EFFECTS } from './ltr-red-effects.ts'; // Lord of the Rings (21b red)
 import { BRAWL_15B_R_EFFECTS } from './brawl-15b-r-effects.ts';
 import { BRAWL_15A_W_EFFECTS } from './brawl-15a-w-effects.ts';
 import { BRAWL_15B_B_EFFECTS } from './brawl-15b-b-effects.ts';
@@ -162,6 +163,7 @@ const BUILT_IN_EFFECTS: Record<string, CustomEffect> = {
   ...FRA_RED_EFFECTS,
   ...ECL_RED_EFFECTS, // Lorwyn Eclipsed (18b, red)
   ...HOB_RED_EFFECTS, // The Hobbit (20b, red)
+  ...LTR_RED_EFFECTS, // Lord of the Rings (21b, red)
   // Strixhaven Brawl (15a), white and colourless.
   ...BRAWL_15A_W_EFFECTS,
   // Strixhaven Brawl (15a): red-white.

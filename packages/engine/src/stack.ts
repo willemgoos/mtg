@@ -1602,8 +1602,11 @@ function checkTargets(
   targets: readonly TargetChoice[],
   controller: PlayerId,
   sourceId: ObjectId | undefined,
+  ltrSubjectId?: ObjectId, // Lord of the Rings (21b red): Grishnákh's "power at most the Army's"
 ): (TargetChoice | null)[] | null {
-  const src = sourceId ? { controller, sourceId } : { controller };
+  const src = sourceId
+    ? { controller, sourceId, ...(ltrSubjectId ? { ltrSubjectId } : {}) }
+    : { controller };
   // Marvel Super Heroes Jumpstart (Blink): an "any number" spec covers every target from its index on.
   const last = specs[specs.length - 1];
   const specAt = (i: number) => specs[i] ?? (last?.anyNumber || last?.xTargets ? last : undefined);
@@ -1765,7 +1768,14 @@ export function resolveTop(ctx: Ctx): boolean {
   }
 
   const a = abilityOf(ctx, item);
-  const targets = checkTargets(ctx, a.targets, item.targets, item.controller, item.source.id);
+  const targets = checkTargets(
+    ctx,
+    a.targets,
+    item.targets,
+    item.controller,
+    item.source.id,
+    item.subject?.id,
+  );
   if (!targets) {
     emit(ctx, { type: 'fizzled', id: item.id });
     return false;

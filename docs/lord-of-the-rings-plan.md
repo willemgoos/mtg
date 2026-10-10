@@ -164,3 +164,26 @@ Bombadil, mana-spending riders (Pelargir Survivor, Delighted Halfling, Sharkey, 
 legendary spells with flash (Gandalf the White), Radagast / Doors of Durin / Horn of the Mark look-and-take variants, Nazgûl's nine-copies deck
 rule. Triggered abilities' intervening "if" are checked as they trigger only (engine-wide), which matters for none of the Ring cards except in
 rare double-landfall cases of Dúnedain Rangers.
+
+## Phase 21b: red (done)
+
+All 24 red packet cards (`ltr/red.ts`, tests `cards/test/ltr-red.test.ts` and `ltr-red-2.test.ts`; no tokens of its own: Orc Army and
+Treasure are shared, the Human Soldier is `hob-human-soldier-token`). Engine one-offs are in `engine/src/ltr-red-effects.ts`, with hooks
+marked `// Lord of the Rings (21b red)`:
+
+- **Fear, Fire, Foes!**: `ltrDamageUnpreventable` sets `turn.ltrDamageUnpreventable` (cleared at the next turn's start; read by `prevented`,
+  by the Diamond Weapon check in `dealDamage` and by combat damage), `ltrDamageSameController` deals the "1 damage to each other creature
+  with the same controller" to the creatures the target's controller controls.
+- **Battle-Scarred Goblin**: `ltrDamageBlockers` (1 damage to each creature blocking it when the trigger resolves).
+- **Smite the Deathless**: `ContinuousEffect.loseKeywords` ("loses indestructible until end of turn", applied with the other removals in
+  `characteristics.ts`), made by `ltrLoseIndestructible`; the exile is the existing `exileIfDies` pump.
+- **Olog-hai Crusher**: static `cantBlockUnless` (beside `cantAttackUnless`).
+- **Grishnákh, Brash Instigator**: card filter `maxPowerOfSubject` ("power less than or equal to the amassed Army's power"); the Army is
+  the reflexive trigger's subject. Targets are rechecked on resolution against the Army (`checkTargets` passes `item.subject` as
+  `ltrSubjectId`, read only by this filter; its last known power if it has left).
+- **Riders of the Mark**: `ltrRidersReturn` (returns it, then makes Human Soldiers equal to its toughness as it left).
+- **Éomer**: custom condition `ltrControlsGreatestPower` (a tie for the greatest power counts).
+
+Notable: Gimli, Counter of Kills deals its damage to `eachOpponent` ("that creature's controller" is always the one opponent in a
+two-player game). Other cards use only existing vocabulary (`amassOrcs`, `ringTempts`, reflexive triggers, `discardToCast`,
+`legendaryKeywords`, `costReduction` for affinity).

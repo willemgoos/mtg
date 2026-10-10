@@ -14,6 +14,7 @@ import {
 import { type Ctx, def, defOf, deref, obj, other, refOf } from './context.ts';
 import { manaValue } from './cost.ts';
 import { fromCreatureSource } from './msh-analyzed.ts';
+import { ltrPowerWithinSubject } from './ltr-red-effects.ts'; // Lord of the Rings (21b red)
 import { hexproofFromOwnColors } from './ecl-multi-b-effects.ts';
 import { checkCondition } from './triggers.ts';
 import type { ObjectId, PlayerId, TargetChoice, TargetSpec } from './types.ts';
@@ -25,6 +26,8 @@ export interface TargetingSource {
   sourceId?: ObjectId;
   /** What caused a trigger (Clement: "with lesser mana value"). */
   subjectId?: ObjectId;
+  /** Lord of the Rings (21b red): the subject, passed when a trigger's targets are rechecked on resolution (Grishnákh). */
+  ltrSubjectId?: ObjectId;
 }
 
 /** "With lesser mana value" than the creature that caused the trigger (Clement, Jackdaw Savior). */
@@ -97,6 +100,7 @@ function permanentOk(ctx: Ctx, spec: TargetSpec, id: ObjectId, src: TargetingSou
     if (src.sourceId && hexproofFromOwnColors(ctx, id, src.sourceId)) return false;
   }
   if (!lesserThanSubject(ctx, spec, id, src)) return false;
+  if (!ltrPowerWithinSubject(ctx, spec, id, src)) return false; // Lord of the Rings (21b red)
   if (spec.filter?.notSubject && id === src.subjectId) return false;
   return matchesFilter(ctx, id, spec.filter, src.sourceId);
 }

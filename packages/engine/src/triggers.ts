@@ -18,6 +18,7 @@ import { hasEnduringStory, subtypeTriggerCopies } from './hob-20a.ts';
 import { detectLtr, isRingBearer, ringCondition } from './ltr-21a.ts';
 import { FIC_CONDITIONS } from './fic-effects.ts';
 import { FIN_CONDITIONS } from './fin-effects.ts';
+import { LTR_RED_CONDITIONS } from './ltr-red-effects.ts'; // Lord of the Rings (21b red)
 import { doubleAttackTriggers, TDM_MISC_CONDITIONS } from './tdm-misc-effects.ts';
 import type {
   AbilityDef,
@@ -423,7 +424,10 @@ export function checkCondition(
       // Final Fantasy Commander (12): one-off conditions.
       // Final Fantasy (11d): and FIN one-offs.
       const fn =
-        FIC_CONDITIONS[c.handler] ?? FIN_CONDITIONS[c.handler] ?? TDM_MISC_CONDITIONS[c.handler]; // Tarkir: Dragonstorm (19b, misc)
+        FIC_CONDITIONS[c.handler] ??
+        FIN_CONDITIONS[c.handler] ??
+        LTR_RED_CONDITIONS[c.handler] ?? // Lord of the Rings (21b red)
+        TDM_MISC_CONDITIONS[c.handler]; // Tarkir: Dragonstorm (19b, misc)
       if (fn) return fn(ctx, controller, self, subject);
       throw new Error(`Custom condition "${c.handler}" not registered`);
     }

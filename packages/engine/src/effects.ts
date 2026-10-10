@@ -132,6 +132,7 @@ export function dealDamage(
     combat &&
     'object' in to &&
     hasStaticKind(ctx, to.object.id, 'preventCombatDamageToSelf') &&
+    !ctx.s.turn.ltrDamageUnpreventable && // Lord of the Rings (21b red)
     !ctx.s.battlefield.some((id) => hasStaticKind(ctx, id, 'damageCantBePrevented'))
   )
     return;
@@ -246,6 +247,7 @@ function prevented(ctx: Ctx, src: DamageSource, to: TargetChoice, amount: number
   if ('object' in to && useShield(ctx, to.object.id)) return 0;
   if (ctx.s.battlefield.some((id) => hasStaticKind(ctx, id, 'damageCantBePrevented')))
     return amount;
+  if (ctx.s.turn.ltrDamageUnpreventable) return amount; // Lord of the Rings (21b red): Fear, Fire, Foes!
   // The Hobbit (20b blue): Old Fat Spider Can't See Me, "prevent all damage that would be dealt by" the creature.
   if (
     ctx.s.effects.some(

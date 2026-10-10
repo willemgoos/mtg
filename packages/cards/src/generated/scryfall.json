@@ -93304,5 +93304,560 @@
    "large": "https://cards.scryfall.io/large/front/6/5/659b687f-4068-496f-81b2-7b606bf07ec1.jpg?1785496409",
    "artCrop": "https://cards.scryfall.io/art_crop/front/6/5/659b687f-4068-496f-81b2-7b606bf07ec1.jpg?1785496409"
   }
+ },
+ {
+  "name": "Assault on Osgiliath",
+  "scryfallId": "2549b70a-6bd0-4c9b-96b7-4ab775a30cd3",
+  "oracleId": "d2aa50d2-d22d-495e-afc9-23a51c8c8f32",
+  "set": "ltr",
+  "collectorNumber": "285",
+  "rarity": "rare",
+  "manaCost": "{X}{R}{R}{R}",
+  "typeLine": "Sorcery",
+  "oracleText": "Amass Orcs X, then Goblins and Orcs you control gain double strike and haste until end of turn. (To amass Orcs X, put X +1/+1 counters on an Army you control. It's also an Orc. If you don't control an Army, create a 0/0 black Orc Army creature token first.)",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Amass"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/5/2549b70a-6bd0-4c9b-96b7-4ab775a30cd3.jpg?1783916220",
+   "normal": "https://cards.scryfall.io/normal/front/2/5/2549b70a-6bd0-4c9b-96b7-4ab775a30cd3.jpg?1783916220",
+   "large": "https://cards.scryfall.io/large/front/2/5/2549b70a-6bd0-4c9b-96b7-4ab775a30cd3.jpg?1783916220",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/5/2549b70a-6bd0-4c9b-96b7-4ab775a30cd3.jpg?1783916220"
+  }
+ },
+ {
+  "name": "Battle-Scarred Goblin",
+  "scryfallId": "b91859de-1983-4c9c-a9e6-289c7dba1eb4",
+  "oracleId": "3e765710-e567-4af0-b5f5-7c182649b757",
+  "set": "ltr",
+  "collectorNumber": "115",
+  "rarity": "common",
+  "manaCost": "{1}{R}",
+  "typeLine": "Creature — Goblin Warrior",
+  "oracleText": "Whenever this creature becomes blocked, it deals 1 damage to each creature blocking it.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/9/b91859de-1983-4c9c-a9e6-289c7dba1eb4.jpg?1783916289",
+   "normal": "https://cards.scryfall.io/normal/front/b/9/b91859de-1983-4c9c-a9e6-289c7dba1eb4.jpg?1783916289",
+   "large": "https://cards.scryfall.io/large/front/b/9/b91859de-1983-4c9c-a9e6-289c7dba1eb4.jpg?1783916289",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/9/b91859de-1983-4c9c-a9e6-289c7dba1eb4.jpg?1783916289"
+  }
+ },
+ {
+  "name": "Book of Mazarbul",
+  "scryfallId": "04dcef75-6f98-4233-ae32-6fe41724c8e0",
+  "oracleId": "4598c221-b111-4bde-b4dc-673186c4efe6",
+  "set": "ltr",
+  "collectorNumber": "116",
+  "rarity": "uncommon",
+  "manaCost": "{2}{R}",
+  "typeLine": "Enchantment — Saga",
+  "oracleText": "(As this Saga enters and after your draw step, add a lore counter. Sacrifice after III.)\nI — Amass Orcs 1. (Put a +1/+1 counter on an Army you control. It's also an Orc. If you don't control an Army, create a 0/0 black Orc Army creature token first.)\nII — Amass Orcs 2.\nIII — Creatures you control get +1/+0 and gain menace until end of turn.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Amass"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/4/04dcef75-6f98-4233-ae32-6fe41724c8e0.jpg?1783916289",
+   "normal": "https://cards.scryfall.io/normal/front/0/4/04dcef75-6f98-4233-ae32-6fe41724c8e0.jpg?1783916289",
+   "large": "https://cards.scryfall.io/large/front/0/4/04dcef75-6f98-4233-ae32-6fe41724c8e0.jpg?1783916289",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/4/04dcef75-6f98-4233-ae32-6fe41724c8e0.jpg?1783916289"
+  }
+ },
+ {
+  "name": "Erebor Flamesmith",
+  "scryfallId": "552730c5-e3a6-468f-91b2-82c272dda400",
+  "oracleId": "6eb93545-a1a6-4447-82c5-421d8e9f023d",
+  "set": "ltr",
+  "collectorNumber": "122",
+  "rarity": "common",
+  "manaCost": "{1}{R}",
+  "typeLine": "Creature — Dwarf Artificer",
+  "oracleText": "Whenever you cast an instant or sorcery spell, this creature deals 1 damage to each opponent.",
+  "power": "2",
+  "toughness": "1",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/5/552730c5-e3a6-468f-91b2-82c272dda400.jpg?1783916288",
+   "normal": "https://cards.scryfall.io/normal/front/5/5/552730c5-e3a6-468f-91b2-82c272dda400.jpg?1783916288",
+   "large": "https://cards.scryfall.io/large/front/5/5/552730c5-e3a6-468f-91b2-82c272dda400.jpg?1783916288",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/5/552730c5-e3a6-468f-91b2-82c272dda400.jpg?1783916288"
+  }
+ },
+ {
+  "name": "Erkenbrand, Lord of Westfold",
+  "scryfallId": "38f81e68-cddd-47f4-b1d1-a297c3298c25",
+  "oracleId": "8cac919f-3bb8-49cb-b4e4-4dd0dcd7746c",
+  "set": "ltr",
+  "collectorNumber": "123",
+  "rarity": "uncommon",
+  "manaCost": "{3}{R}",
+  "typeLine": "Legendary Creature — Human Soldier",
+  "oracleText": "Whenever Erkenbrand or another Human you control enters, creatures you control get +1/+0 until end of turn.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/8/38f81e68-cddd-47f4-b1d1-a297c3298c25.jpg?1783916288",
+   "normal": "https://cards.scryfall.io/normal/front/3/8/38f81e68-cddd-47f4-b1d1-a297c3298c25.jpg?1783916288",
+   "large": "https://cards.scryfall.io/large/front/3/8/38f81e68-cddd-47f4-b1d1-a297c3298c25.jpg?1783916288",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/8/38f81e68-cddd-47f4-b1d1-a297c3298c25.jpg?1783916288"
+  }
+ },
+ {
+  "name": "Fear, Fire, Foes!",
+  "scryfallId": "37be98a4-0cba-46b4-be93-a9805fe77160",
+  "oracleId": "35a0e085-df04-454d-b4d3-42db387bbad0",
+  "set": "ltr",
+  "collectorNumber": "125",
+  "rarity": "uncommon",
+  "manaCost": "{X}{R}",
+  "typeLine": "Sorcery",
+  "oracleText": "Damage can't be prevented this turn. Fear, Fire, Foes! deals X damage to target creature and 1 damage to each other creature with the same controller.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/7/37be98a4-0cba-46b4-be93-a9805fe77160.jpg?1783916286",
+   "normal": "https://cards.scryfall.io/normal/front/3/7/37be98a4-0cba-46b4-be93-a9805fe77160.jpg?1783916286",
+   "large": "https://cards.scryfall.io/large/front/3/7/37be98a4-0cba-46b4-be93-a9805fe77160.jpg?1783916286",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/7/37be98a4-0cba-46b4-be93-a9805fe77160.jpg?1783916286"
+  }
+ },
+ {
+  "name": "Foray of Orcs",
+  "scryfallId": "5fea0c66-c776-4dc7-a235-f3822521cacd",
+  "oracleId": "60bfcaef-9014-4707-b681-cc3920bf223e",
+  "set": "ltr",
+  "collectorNumber": "128",
+  "rarity": "uncommon",
+  "manaCost": "{3}{R}",
+  "typeLine": "Sorcery",
+  "oracleText": "Amass Orcs 2. When you do, Foray of Orcs deals X damage to target creature an opponent controls, where X is the amassed Army's power. (To amass Orcs 2, put two +1/+1 counters on an Army you control. It's also an Orc. If you don't control an Army, create a 0/0 black Orc Army creature token first.)",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Amass"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/f/5fea0c66-c776-4dc7-a235-f3822521cacd.jpg?1783916288",
+   "normal": "https://cards.scryfall.io/normal/front/5/f/5fea0c66-c776-4dc7-a235-f3822521cacd.jpg?1783916288",
+   "large": "https://cards.scryfall.io/large/front/5/f/5fea0c66-c776-4dc7-a235-f3822521cacd.jpg?1783916288",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/f/5fea0c66-c776-4dc7-a235-f3822521cacd.jpg?1783916288"
+  }
+ },
+ {
+  "name": "Gimli's Axe",
+  "scryfallId": "d8999b6c-e501-48d0-ae51-a35b96f996ec",
+  "oracleId": "773b40b1-72f0-48a0-b210-2afa5df5485e",
+  "set": "ltr",
+  "collectorNumber": "130",
+  "rarity": "common",
+  "manaCost": "{2}{R}",
+  "typeLine": "Artifact — Equipment",
+  "oracleText": "Equipped creature gets +3/+0.\nAs long as equipped creature is legendary, it has menace. (It can't be blocked except by two or more creatures.)\nEquip {2} ({2}: Attach to target creature you control. Equip only as a sorcery.)",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Equip"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/8/d8999b6c-e501-48d0-ae51-a35b96f996ec.jpg?1783916284",
+   "normal": "https://cards.scryfall.io/normal/front/d/8/d8999b6c-e501-48d0-ae51-a35b96f996ec.jpg?1783916284",
+   "large": "https://cards.scryfall.io/large/front/d/8/d8999b6c-e501-48d0-ae51-a35b96f996ec.jpg?1783916284",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/8/d8999b6c-e501-48d0-ae51-a35b96f996ec.jpg?1783916284"
+  }
+ },
+ {
+  "name": "Gimli's Fury",
+  "scryfallId": "efde011d-8732-49b3-9204-8b114a3d81ba",
+  "oracleId": "1b550c27-14b0-45fb-b17e-fcb061dc6ad0",
+  "set": "ltr",
+  "collectorNumber": "131",
+  "rarity": "common",
+  "manaCost": "{1}{R}",
+  "typeLine": "Instant",
+  "oracleText": "Target creature gets +3/+2 until end of turn. If it's legendary, it also gains trample until end of turn.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/f/efde011d-8732-49b3-9204-8b114a3d81ba.jpg?1783916284",
+   "normal": "https://cards.scryfall.io/normal/front/e/f/efde011d-8732-49b3-9204-8b114a3d81ba.jpg?1783916284",
+   "large": "https://cards.scryfall.io/large/front/e/f/efde011d-8732-49b3-9204-8b114a3d81ba.jpg?1783916284",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/f/efde011d-8732-49b3-9204-8b114a3d81ba.jpg?1783916284"
+  }
+ },
+ {
+  "name": "Gimli, Counter of Kills",
+  "scryfallId": "28b41c48-0715-49d9-98e5-e82b706da816",
+  "oracleId": "96ebcd8b-ae3c-47b0-b895-bfc9848713e5",
+  "set": "ltr",
+  "collectorNumber": "129",
+  "rarity": "uncommon",
+  "manaCost": "{3}{R}",
+  "typeLine": "Legendary Creature — Dwarf Warrior",
+  "oracleText": "Trample\nWhenever a creature an opponent controls dies, Gimli deals 1 damage to that creature's controller.",
+  "power": "4",
+  "toughness": "3",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Trample"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/8/28b41c48-0715-49d9-98e5-e82b706da816.jpg?1783916283",
+   "normal": "https://cards.scryfall.io/normal/front/2/8/28b41c48-0715-49d9-98e5-e82b706da816.jpg?1783916283",
+   "large": "https://cards.scryfall.io/large/front/2/8/28b41c48-0715-49d9-98e5-e82b706da816.jpg?1783916283",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/8/28b41c48-0715-49d9-98e5-e82b706da816.jpg?1783916283"
+  }
+ },
+ {
+  "name": "Goblin Fireleaper",
+  "scryfallId": "ec120dae-8c40-4053-9341-1f7774464634",
+  "oracleId": "c5fa1631-8685-49e1-baad-86ef72a9499c",
+  "set": "ltr",
+  "collectorNumber": "133",
+  "rarity": "uncommon",
+  "manaCost": "{1}{R}",
+  "typeLine": "Creature — Goblin Warrior",
+  "oracleText": "{1}{R}: This creature gets +1/+0 until end of turn.\nWhen this creature dies, it deals damage equal to its power to target creature an opponent controls.",
+  "power": "1",
+  "toughness": "1",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/c/ec120dae-8c40-4053-9341-1f7774464634.jpg?1783916283",
+   "normal": "https://cards.scryfall.io/normal/front/e/c/ec120dae-8c40-4053-9341-1f7774464634.jpg?1783916283",
+   "large": "https://cards.scryfall.io/large/front/e/c/ec120dae-8c40-4053-9341-1f7774464634.jpg?1783916283",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/c/ec120dae-8c40-4053-9341-1f7774464634.jpg?1783916283"
+  }
+ },
+ {
+  "name": "Grishnákh, Brash Instigator",
+  "scryfallId": "6385e769-f805-499d-9f47-494533362152",
+  "oracleId": "1f139012-fa71-4f5f-8c57-6847bff95678",
+  "set": "ltr",
+  "collectorNumber": "134",
+  "rarity": "uncommon",
+  "manaCost": "{2}{R}",
+  "typeLine": "Legendary Creature — Goblin Soldier",
+  "oracleText": "When Grishnákh enters, amass Orcs 2. When you do, until end of turn, gain control of target nonlegendary creature an opponent controls with power less than or equal to the amassed Army's power. Untap that creature. It gains haste until end of turn.",
+  "power": "1",
+  "toughness": "1",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Amass"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/3/6385e769-f805-499d-9f47-494533362152.jpg?1783916282",
+   "normal": "https://cards.scryfall.io/normal/front/6/3/6385e769-f805-499d-9f47-494533362152.jpg?1783916282",
+   "large": "https://cards.scryfall.io/large/front/6/3/6385e769-f805-499d-9f47-494533362152.jpg?1783916282",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/3/6385e769-f805-499d-9f47-494533362152.jpg?1783916282"
+  }
+ },
+ {
+  "name": "Haradrim Spearmaster",
+  "scryfallId": "6050cf98-cdce-4825-9ab8-2294a2b63faf",
+  "oracleId": "4da49285-e577-487f-9997-ba49f2b5753e",
+  "set": "ltr",
+  "collectorNumber": "135",
+  "rarity": "common",
+  "manaCost": "{2}{R}",
+  "typeLine": "Creature — Human Warrior",
+  "oracleText": "Reach\nAt the beginning of combat on your turn, another target creature you control gets +1/+0 until end of turn.",
+  "power": "2",
+  "toughness": "3",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Reach"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/0/6050cf98-cdce-4825-9ab8-2294a2b63faf.jpg?1783916282",
+   "normal": "https://cards.scryfall.io/normal/front/6/0/6050cf98-cdce-4825-9ab8-2294a2b63faf.jpg?1783916282",
+   "large": "https://cards.scryfall.io/large/front/6/0/6050cf98-cdce-4825-9ab8-2294a2b63faf.jpg?1783916282",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/0/6050cf98-cdce-4825-9ab8-2294a2b63faf.jpg?1783916282"
+  }
+ },
+ {
+  "name": "Olog-hai Crusher",
+  "scryfallId": "c33bf593-62e0-491a-a31a-328bce6d8735",
+  "oracleId": "fb6f04bc-3514-49b2-9d17-f80980d996a8",
+  "set": "ltr",
+  "collectorNumber": "140",
+  "rarity": "common",
+  "manaCost": "{3}{R}",
+  "typeLine": "Creature — Troll Soldier",
+  "oracleText": "Trample\nThis creature can't block unless you control a Goblin or Orc.",
+  "power": "4",
+  "toughness": "4",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Trample"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/3/c33bf593-62e0-491a-a31a-328bce6d8735.jpg?1783916280",
+   "normal": "https://cards.scryfall.io/normal/front/c/3/c33bf593-62e0-491a-a31a-328bce6d8735.jpg?1783916280",
+   "large": "https://cards.scryfall.io/large/front/c/3/c33bf593-62e0-491a-a31a-328bce6d8735.jpg?1783916280",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/3/c33bf593-62e0-491a-a31a-328bce6d8735.jpg?1783916280"
+  }
+ },
+ {
+  "name": "Quarrel's End",
+  "scryfallId": "5a7e61a6-c602-4089-ae45-828d8e516a63",
+  "oracleId": "fc46649d-9d84-4082-9d2d-fbb7ce91c6a4",
+  "set": "ltr",
+  "collectorNumber": "141",
+  "rarity": "common",
+  "manaCost": "{2}{R}",
+  "typeLine": "Sorcery",
+  "oracleText": "As an additional cost to cast this spell, discard a card.\nDraw two cards and create a 1/1 white Human Soldier creature token.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/a/5a7e61a6-c602-4089-ae45-828d8e516a63.jpg?1783916280",
+   "normal": "https://cards.scryfall.io/normal/front/5/a/5a7e61a6-c602-4089-ae45-828d8e516a63.jpg?1783916280",
+   "large": "https://cards.scryfall.io/large/front/5/a/5a7e61a6-c602-4089-ae45-828d8e516a63.jpg?1783916280",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/a/5a7e61a6-c602-4089-ae45-828d8e516a63.jpg?1783916280"
+  }
+ },
+ {
+  "name": "Rally at the Hornburg",
+  "scryfallId": "ee7292f7-1c7e-449c-9c52-7584d6a14c2c",
+  "oracleId": "7d3f542a-de64-4de8-9de0-0e25004467f1",
+  "set": "ltr",
+  "collectorNumber": "142",
+  "rarity": "common",
+  "manaCost": "{1}{R}",
+  "typeLine": "Sorcery",
+  "oracleText": "Create two 1/1 white Human Soldier creature tokens. Humans you control gain haste until end of turn.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/e/ee7292f7-1c7e-449c-9c52-7584d6a14c2c.jpg?1783916278",
+   "normal": "https://cards.scryfall.io/normal/front/e/e/ee7292f7-1c7e-449c-9c52-7584d6a14c2c.jpg?1783916278",
+   "large": "https://cards.scryfall.io/large/front/e/e/ee7292f7-1c7e-449c-9c52-7584d6a14c2c.jpg?1783916278",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/e/ee7292f7-1c7e-449c-9c52-7584d6a14c2c.jpg?1783916278"
+  }
+ },
+ {
+  "name": "Relentless Rohirrim",
+  "scryfallId": "21b7606a-6a4c-4bf0-b311-1883383161d2",
+  "oracleId": "1212cc74-ff66-479e-8e1b-504446e1c6d9",
+  "set": "ltr",
+  "collectorNumber": "144",
+  "rarity": "common",
+  "manaCost": "{3}{R}",
+  "typeLine": "Creature — Human Knight",
+  "oracleText": "When this creature enters, the Ring tempts you.",
+  "power": "4",
+  "toughness": "3",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/1/21b7606a-6a4c-4bf0-b311-1883383161d2.jpg?1783916280",
+   "normal": "https://cards.scryfall.io/normal/front/2/1/21b7606a-6a4c-4bf0-b311-1883383161d2.jpg?1783916280",
+   "large": "https://cards.scryfall.io/large/front/2/1/21b7606a-6a4c-4bf0-b311-1883383161d2.jpg?1783916280",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/1/21b7606a-6a4c-4bf0-b311-1883383161d2.jpg?1783916280"
+  }
+ },
+ {
+  "name": "Riders of the Mark",
+  "scryfallId": "de77686e-c4c1-4d38-a05c-03eb7363fc0b",
+  "oracleId": "c7031047-5109-482f-b2e9-14800b9279bf",
+  "set": "ltr",
+  "collectorNumber": "827",
+  "rarity": "rare",
+  "manaCost": "{6}{R}",
+  "typeLine": "Creature — Human Knight",
+  "oracleText": "Affinity for Humans (This spell costs {1} less to cast for each Human you control.)\nTrample, haste\nAt the beginning of your end step, if this creature attacked this turn, return it to its owner's hand. If you do, create a number of 1/1 white Human Soldier creature tokens equal to its toughness.",
+  "power": "7",
+  "toughness": "4",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Affinity",
+   "Haste",
+   "Trample"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/e/de77686e-c4c1-4d38-a05c-03eb7363fc0b.jpg?1783913966",
+   "normal": "https://cards.scryfall.io/normal/front/d/e/de77686e-c4c1-4d38-a05c-03eb7363fc0b.jpg?1783913966",
+   "large": "https://cards.scryfall.io/large/front/d/e/de77686e-c4c1-4d38-a05c-03eb7363fc0b.jpg?1783913966",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/e/de77686e-c4c1-4d38-a05c-03eb7363fc0b.jpg?1783913966"
+  }
+ },
+ {
+  "name": "Rising of the Day",
+  "scryfallId": "d4fbcac6-8ac9-44a8-9d1a-03d0799ac253",
+  "oracleId": "434a20f8-3f87-4004-9155-0f196fc2257e",
+  "set": "ltr",
+  "collectorNumber": "145",
+  "rarity": "uncommon",
+  "manaCost": "{2}{R}",
+  "typeLine": "Enchantment",
+  "oracleText": "Creatures you control have haste.\nLegendary creatures you control get +1/+0.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/4/d4fbcac6-8ac9-44a8-9d1a-03d0799ac253.jpg?1783916282",
+   "normal": "https://cards.scryfall.io/normal/front/d/4/d4fbcac6-8ac9-44a8-9d1a-03d0799ac253.jpg?1783916282",
+   "large": "https://cards.scryfall.io/large/front/d/4/d4fbcac6-8ac9-44a8-9d1a-03d0799ac253.jpg?1783916282",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/4/d4fbcac6-8ac9-44a8-9d1a-03d0799ac253.jpg?1783916282"
+  }
+ },
+ {
+  "name": "Rohirrim Lancer",
+  "scryfallId": "2f506f9f-4c0d-44e8-9f81-8403d808d0e4",
+  "oracleId": "504fac88-1674-4157-becb-0204ab8844bf",
+  "set": "ltr",
+  "collectorNumber": "146",
+  "rarity": "common",
+  "manaCost": "{R}",
+  "typeLine": "Creature — Human Knight",
+  "oracleText": "Menace (This creature can't be blocked except by two or more creatures.)\nWhen this creature dies, the Ring tempts you.",
+  "power": "1",
+  "toughness": "1",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Menace"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/f/2f506f9f-4c0d-44e8-9f81-8403d808d0e4.jpg?1783916278",
+   "normal": "https://cards.scryfall.io/normal/front/2/f/2f506f9f-4c0d-44e8-9f81-8403d808d0e4.jpg?1783916278",
+   "large": "https://cards.scryfall.io/large/front/2/f/2f506f9f-4c0d-44e8-9f81-8403d808d0e4.jpg?1783916278",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/f/2f506f9f-4c0d-44e8-9f81-8403d808d0e4.jpg?1783916278"
+  }
+ },
+ {
+  "name": "Rush the Room",
+  "scryfallId": "f525b727-acde-427b-9c33-20964e8cf613",
+  "oracleId": "223fefa3-64a7-457f-90a2-89973640f554",
+  "set": "ltr",
+  "collectorNumber": "147",
+  "rarity": "common",
+  "manaCost": "{R}",
+  "typeLine": "Instant",
+  "oracleText": "Target creature gets +1/+0 and gains first strike until end of turn. If it's a Goblin or Orc, it also gains haste until end of turn.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/5/f525b727-acde-427b-9c33-20964e8cf613.jpg?1783916277",
+   "normal": "https://cards.scryfall.io/normal/front/f/5/f525b727-acde-427b-9c33-20964e8cf613.jpg?1783916277",
+   "large": "https://cards.scryfall.io/large/front/f/5/f525b727-acde-427b-9c33-20964e8cf613.jpg?1783916277",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/5/f525b727-acde-427b-9c33-20964e8cf613.jpg?1783916277"
+  }
+ },
+ {
+  "name": "Smite the Deathless",
+  "scryfallId": "8b716fcc-c4cc-4987-be82-2897a9888d23",
+  "oracleId": "37994591-3494-4314-a7da-49c112b0866f",
+  "set": "ltr",
+  "collectorNumber": "148",
+  "rarity": "common",
+  "manaCost": "{1}{R}",
+  "typeLine": "Instant",
+  "oracleText": "Smite the Deathless deals 3 damage to target creature. That creature loses indestructible until end of turn. If that creature would die this turn, exile it instead.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/b/8b716fcc-c4cc-4987-be82-2897a9888d23.jpg?1783916277",
+   "normal": "https://cards.scryfall.io/normal/front/8/b/8b716fcc-c4cc-4987-be82-2897a9888d23.jpg?1783916277",
+   "large": "https://cards.scryfall.io/large/front/8/b/8b716fcc-c4cc-4987-be82-2897a9888d23.jpg?1783916277",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/b/8b716fcc-c4cc-4987-be82-2897a9888d23.jpg?1783916277"
+  }
+ },
+ {
+  "name": "Swarming of Moria",
+  "scryfallId": "0a1bd073-4351-4c56-9b07-4430d0d83084",
+  "oracleId": "c96402dc-1509-4136-bbfd-c86a85e3ee6f",
+  "set": "ltr",
+  "collectorNumber": "150",
+  "rarity": "common",
+  "manaCost": "{2}{R}",
+  "typeLine": "Sorcery",
+  "oracleText": "Create a Treasure token. (It's an artifact with \"{T}, Sacrifice this token: Add one mana of any color.\")\nAmass Orcs 2. (Put two +1/+1 counters on an Army you control. It's also an Orc. If you don't control an Army, create a 0/0 black Orc Army creature token first.)",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Amass",
+   "Treasure"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/a/0a1bd073-4351-4c56-9b07-4430d0d83084.jpg?1783916276",
+   "normal": "https://cards.scryfall.io/normal/front/0/a/0a1bd073-4351-4c56-9b07-4430d0d83084.jpg?1783916276",
+   "large": "https://cards.scryfall.io/large/front/0/a/0a1bd073-4351-4c56-9b07-4430d0d83084.jpg?1783916276",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/a/0a1bd073-4351-4c56-9b07-4430d0d83084.jpg?1783916276"
+  }
+ },
+ {
+  "name": "Éomer of the Riddermark",
+  "scryfallId": "d920fcaf-4988-4186-962d-cdda25d79e7b",
+  "oracleId": "c07340bb-04b6-4a80-9999-727b8ab3534d",
+  "set": "ltr",
+  "collectorNumber": "121",
+  "rarity": "uncommon",
+  "manaCost": "{4}{R}",
+  "typeLine": "Legendary Creature — Human Knight",
+  "oracleText": "Haste\nWhenever Éomer attacks, if you control a creature with the greatest power among creatures on the battlefield, create a 1/1 white Human Soldier creature token.",
+  "power": "5",
+  "toughness": "4",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Haste"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/9/d920fcaf-4988-4186-962d-cdda25d79e7b.jpg?1783916289",
+   "normal": "https://cards.scryfall.io/normal/front/d/9/d920fcaf-4988-4186-962d-cdda25d79e7b.jpg?1783916289",
+   "large": "https://cards.scryfall.io/large/front/d/9/d920fcaf-4988-4186-962d-cdda25d79e7b.jpg?1783916289",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/9/d920fcaf-4988-4186-962d-cdda25d79e7b.jpg?1783916289"
+  }
  }
 ]

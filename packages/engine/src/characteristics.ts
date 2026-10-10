@@ -94,6 +94,11 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
         granted ??= new Set(keywords);
         for (const k of e.keywords) granted.add(k);
       }
+      // Lord of the Rings (21b red): Smite the Deathless, "loses indestructible until end of turn".
+      if (e.loseKeywords?.length) {
+        granted ??= new Set(keywords);
+        for (const k of e.loseKeywords) removed.add(k);
+      }
     }
     // Its own static abilities that only affect itself.
     for (const a of d.abilities) {
@@ -104,6 +109,10 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
       // The Hobbit (20b multicolour): Chief Warg's Company, "can't attack unless you control two or more other Wolves".
       else if (st.kind === 'cantAttackUnless') {
         if (!checkCondition(ctx, st.condition, o.controller, o)) cantAttack = true;
+      }
+      // Lord of the Rings (21b red): Olog-hai Crusher, "can't block unless you control a Goblin or Orc".
+      else if (st.kind === 'cantBlockUnless') {
+        if (!checkCondition(ctx, st.condition, o.controller, o)) cantBlock = true;
       }
       // Bast: "can't attack or block unless you control three or more creatures".
       else if (

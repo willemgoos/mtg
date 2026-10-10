@@ -1444,6 +1444,9 @@ export interface CardFilter {
   other?: boolean;
   /** Mana value less than that of the creature that caused the trigger (Clement). */
   lesserManaValueThanSubject?: boolean;
+  // Lord of the Rings (21b red): Grishnákh, Brash Instigator
+  /** Power at most that of the creature that caused the trigger ("power less than or equal to the amassed Army's power"). */
+  maxPowerOfSubject?: boolean;
   /** Mana value equal to the source's named counters plus `plus` (Wishing Well). */
   manaValueIsSourceCounters?: { name: string; plus: number };
   /** Not the creature that caused the trigger (Pawpatch Recruit). */
@@ -3330,6 +3333,9 @@ export type StaticDef =
   // The Hobbit (20b multicolour)
   /** "This creature can't attack unless <condition>" (Chief Warg's Company: you control two or more other Wolves). */
   | { kind: 'cantAttackUnless'; condition: ConditionDef }
+  // Lord of the Rings (21b red): Olog-hai Crusher
+  /** "This creature can't block unless <condition>". */
+  | { kind: 'cantBlockUnless'; condition: ConditionDef }
   /**
    * Bard, King of Dale: "If you would draw a card except the first one you draw in each of your draw steps, draw `count` cards
    * instead" (every such draw, not only the first one each turn).
@@ -4438,6 +4444,9 @@ export interface TurnState {
   // Reality Fracture (17a): Molten Tide
   /** Players whose Mountains add an additional {R} when tapped for mana this turn. */
   moltenTide?: PlayerId[];
+  // Lord of the Rings (21b red): Fear, Fire, Foes!
+  /** "Damage can't be prevented this turn." */
+  ltrDamageUnpreventable?: boolean;
   // Lorwyn Eclipsed (18b, special): Mirrormind Crown
   // The Hobbit (20b black): Azog, Moria's Ruin
   /** Tokens that left the battlefield this turn (they cease to exist): what they were, by id. */
@@ -4474,6 +4483,9 @@ export interface ContinuousEffect {
   returnWhenDies?: ReturnWhenDies;
   /** Loses all abilities. */
   loseAbilities?: boolean;
+  // Lord of the Rings (21b red): Smite the Deathless
+  /** Loses these keywords (until end of turn: "loses indestructible"). */
+  loseKeywords?: Keyword[];
   /** Sacrificed when it deals combat damage (Dropkick Bomber). */
   sacrificeOnCombatDamage?: boolean;
   /** Doesn't untap during its controller's untap step (Spider-Woman, Secret Agent). */
