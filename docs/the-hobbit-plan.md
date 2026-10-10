@@ -74,7 +74,7 @@ The rows marked missing (amass, Recruit, Storied, the cycling family) were built
     `youActivateCreatureAbility`, `sharesCardTypeWithPrevious`, `graveyardsWithAtLeast`, pump `whileSource`/`preventDamageDealt`).
 - **20c**: Arena's Jump In packets for HOB (`scripts/data/arena-jumpin-packets.json`, if Arena has them) and the untapped.gg
   trophy decks (`scripts/data/hob-trophy-decks.*`), one per colour pair.
-- **20d**: boosters in Expedition, Season and Sealed from `HOB_BOOSTER_LIST`.
+- **20d**: boosters in Expedition, Season and Sealed from `HOB_BOOSTER_LIST`. **Done**, see "Phase 20d: boosters".
 
 ## Wiring done (20 wiring)
 
@@ -215,3 +215,10 @@ do"), `GameObject.playableIf` (Flameshape's face-down exiled cards, hidden from 
 Wizard), and `attacking` on the `totalPowerOfCreaturesYouControl` amount (Desert Were-Worm). Custom effects: `hobBalinDiscardDraw`,
 `hobThorinAttach` (reflexive damage only if an Equipment actually became attached), `hobGetawayBarrel`, `hobFlameshape`. Tokens: Axe and
 Stone Boulder live in `red.ts`.
+
+## Phase 20d: boosters (done)
+
+`theHobbitBoosterSheets()` (the 188 `HOB_BOOSTER_LIST` cards at their HOB rarity, filtered to cards the pool has, so the blue cards join
+the sheets once merged), `PackSet` `hob` in Expedition and Sealed, Season pack kind `theHobbit` (`THE_HOBBIT_SHEETS`; no HOB starters:
+no decks of our own), the deck builder set names and card search. The pack wrapper shows Smaug the Magnificent. Tests do not depend on
+the blue cards existing (counts are bounded by 188, not equal to it).

@@ -38,6 +38,7 @@ export const SETS: { code: string; name: string }[] = [
   { code: 'soc', name: 'Secrets of Strixhaven Commander' },
   { code: 'ecl', name: 'Lorwyn Eclipsed' },
   { code: 'tdm', name: 'Tarkir: Dragonstorm' },
+  { code: 'hob', name: 'The Hobbit' },
   { code: 'msh', name: 'Marvel Super Heroes' },
   { code: 'msc', name: 'Marvel Commander' },
 ];

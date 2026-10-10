@@ -40,6 +40,7 @@ const BOOSTER_FACE: Partial<Record<PackSet, string>> = {
   fra: 'Emrakul, the Exigent Doom',
   ecl: 'Eirdu, Carrier of Dawn',
   tdm: 'Ugin, Eye of the Storms',
+  hob: 'Smaug the Magnificent',
 };
 
 /** Art for a pack: the first rare of its set and colour, or the set's face or first mythic. */
