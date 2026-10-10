@@ -2534,7 +2534,8 @@ export function answerSearch(ctx: Ctx, card: ObjectId | null): void {
     for (const id of d.looked)
       if (id !== card && obj(ctx, id).zone === 'library') moveObject(ctx, id, 'graveyard');
   } else if (d.looked) {
-    const rest = d.looked.filter((id) => id !== card);
+    // (Tarkir: Dragonstorm (19b): cards already taken, "up to N", are no longer in the library.)
+    const rest = d.looked.filter((id) => id !== card && ctx.s.objects[id]?.zone === 'library');
     for (const id of rest) lib.splice(lib.indexOf(id), 1);
     shuffleInPlace(ctx.s.rng, rest);
     lib.push(...rest);

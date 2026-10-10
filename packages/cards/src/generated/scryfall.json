@@ -81973,5 +81973,786 @@
    "large": "https://cards.scryfall.io/large/front/1/b/1bb9a5b1-48d2-453e-8991-c788bc63e482.jpg?1783909503",
    "artCrop": "https://cards.scryfall.io/art_crop/front/1/b/1bb9a5b1-48d2-453e-8991-c788bc63e482.jpg?1783909503"
   }
+ },
+ {
+  "name": "Anafenza, Unyielding Lineage",
+  "scryfallId": "29957f49-9a6b-42f6-b2fb-b48f653ab725",
+  "oracleId": "659bc01c-fa60-4d00-bdad-5bca1d2a978f",
+  "set": "tdm",
+  "collectorNumber": "2",
+  "rarity": "rare",
+  "manaCost": "{2}{W}",
+  "typeLine": "Legendary Creature — Spirit Soldier",
+  "oracleText": "Flash\nFirst strike\nWhenever another nontoken creature you control dies, Anafenza endures 2. (Put two +1/+1 counters on it or create a 2/2 white Spirit creature token.)",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "First strike",
+   "Flash",
+   "Endure"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/9/29957f49-9a6b-42f6-b2fb-b48f653ab725.jpg?1783907422",
+   "normal": "https://cards.scryfall.io/normal/front/2/9/29957f49-9a6b-42f6-b2fb-b48f653ab725.jpg?1783907422",
+   "large": "https://cards.scryfall.io/large/front/2/9/29957f49-9a6b-42f6-b2fb-b48f653ab725.jpg?1783907422",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/9/29957f49-9a6b-42f6-b2fb-b48f653ab725.jpg?1783907422"
+  }
+ },
+ {
+  "name": "Arashin Sunshield",
+  "scryfallId": "dd7102d8-90b3-45a1-b66d-dcca469b1fb6",
+  "oracleId": "1175d482-d8a2-467f-bc50-2f4b241966bb",
+  "set": "tdm",
+  "collectorNumber": "3",
+  "rarity": "common",
+  "manaCost": "{3}{W}",
+  "typeLine": "Creature — Human Warrior",
+  "oracleText": "When this creature enters, exile up to two target cards from a single graveyard.\n{W}, {T}: Tap target creature.",
+  "power": "3",
+  "toughness": "4",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/d/dd7102d8-90b3-45a1-b66d-dcca469b1fb6.jpg?1783907420",
+   "normal": "https://cards.scryfall.io/normal/front/d/d/dd7102d8-90b3-45a1-b66d-dcca469b1fb6.jpg?1783907420",
+   "large": "https://cards.scryfall.io/large/front/d/d/dd7102d8-90b3-45a1-b66d-dcca469b1fb6.jpg?1783907420",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/d/dd7102d8-90b3-45a1-b66d-dcca469b1fb6.jpg?1783907420"
+  }
+ },
+ {
+  "name": "Bearer of Glory",
+  "scryfallId": "d6d91e42-43db-428d-a4dd-ef9d40306314",
+  "oracleId": "963947d5-5fe4-49cd-be0c-0bdb5f7bcbb6",
+  "set": "tdm",
+  "collectorNumber": "4",
+  "rarity": "common",
+  "manaCost": "{1}{W}",
+  "typeLine": "Creature — Human Soldier",
+  "oracleText": "During your turn, this creature has first strike.\n{4}{W}: Creatures you control get +1/+1 until end of turn.",
+  "power": "2",
+  "toughness": "1",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/6/d6d91e42-43db-428d-a4dd-ef9d40306314.jpg?1783907420",
+   "normal": "https://cards.scryfall.io/normal/front/d/6/d6d91e42-43db-428d-a4dd-ef9d40306314.jpg?1783907420",
+   "large": "https://cards.scryfall.io/large/front/d/6/d6d91e42-43db-428d-a4dd-ef9d40306314.jpg?1783907420",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/6/d6d91e42-43db-428d-a4dd-ef9d40306314.jpg?1783907420"
+  }
+ },
+ {
+  "name": "Clarion Conqueror",
+  "scryfallId": "f892d156-371c-4391-8ae6-25513c5032b0",
+  "oracleId": "f1266a1b-bae6-4ded-b4d5-7586a5b6c5d0",
+  "set": "tdm",
+  "collectorNumber": "5",
+  "rarity": "rare",
+  "manaCost": "{2}{W}",
+  "typeLine": "Creature — Dragon",
+  "oracleText": "Flying\nActivated abilities of artifacts, creatures, and planeswalkers can't be activated.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/8/f892d156-371c-4391-8ae6-25513c5032b0.jpg?1783907419",
+   "normal": "https://cards.scryfall.io/normal/front/f/8/f892d156-371c-4391-8ae6-25513c5032b0.jpg?1783907419",
+   "large": "https://cards.scryfall.io/large/front/f/8/f892d156-371c-4391-8ae6-25513c5032b0.jpg?1783907419",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/8/f892d156-371c-4391-8ae6-25513c5032b0.jpg?1783907419"
+  }
+ },
+ {
+  "name": "Dalkovan Packbeasts",
+  "scryfallId": "4df7b253-6107-47d6-b650-cb4d3e0aec6b",
+  "oracleId": "cdd1a043-bd47-4197-be26-e2f7d3f1d209",
+  "set": "tdm",
+  "collectorNumber": "7",
+  "rarity": "uncommon",
+  "manaCost": "{2}{W}",
+  "typeLine": "Creature — Ox",
+  "oracleText": "Vigilance\nMobilize 3 (Whenever this creature attacks, create three tapped and attacking 1/1 red Warrior creature tokens. Sacrifice them at the beginning of the next end step.)",
+  "power": "0",
+  "toughness": "4",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Vigilance",
+   "Mobilize"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/d/4df7b253-6107-47d6-b650-cb4d3e0aec6b.jpg?1783907417",
+   "normal": "https://cards.scryfall.io/normal/front/4/d/4df7b253-6107-47d6-b650-cb4d3e0aec6b.jpg?1783907417",
+   "large": "https://cards.scryfall.io/large/front/4/d/4df7b253-6107-47d6-b650-cb4d3e0aec6b.jpg?1783907417",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/d/4df7b253-6107-47d6-b650-cb4d3e0aec6b.jpg?1783907417"
+  }
+ },
+ {
+  "name": "Descendant of Storms",
+  "scryfallId": "f632be90-9e7f-41f8-a52e-a2952354d730",
+  "oracleId": "ca773c52-ca64-463c-99cf-e71b59d2cff7",
+  "set": "tdm",
+  "collectorNumber": "8",
+  "rarity": "uncommon",
+  "manaCost": "{W}",
+  "typeLine": "Creature — Human Soldier",
+  "oracleText": "Whenever this creature attacks, you may pay {1}{W}. If you do, it endures 1. (Put a +1/+1 counter on it or create a 1/1 white Spirit creature token.)",
+  "power": "2",
+  "toughness": "1",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Endure"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/6/f632be90-9e7f-41f8-a52e-a2952354d730.jpg?1783907415",
+   "normal": "https://cards.scryfall.io/normal/front/f/6/f632be90-9e7f-41f8-a52e-a2952354d730.jpg?1783907415",
+   "large": "https://cards.scryfall.io/large/front/f/6/f632be90-9e7f-41f8-a52e-a2952354d730.jpg?1783907415",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/6/f632be90-9e7f-41f8-a52e-a2952354d730.jpg?1783907415"
+  }
+ },
+ {
+  "name": "Dragonback Lancer",
+  "scryfallId": "0200a8c5-3293-48d0-a523-ba148680f588",
+  "oracleId": "7875c063-19c3-4e6e-81d8-1a378a4e16e5",
+  "set": "tdm",
+  "collectorNumber": "9",
+  "rarity": "common",
+  "manaCost": "{3}{W}",
+  "typeLine": "Creature — Human Soldier",
+  "oracleText": "Flying\nMobilize 1 (Whenever this creature attacks, create a tapped and attacking 1/1 red Warrior creature token. Sacrifice it at the beginning of the next end step.)",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Flying",
+   "Mobilize"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/2/0200a8c5-3293-48d0-a523-ba148680f588.jpg?1783907416",
+   "normal": "https://cards.scryfall.io/normal/front/0/2/0200a8c5-3293-48d0-a523-ba148680f588.jpg?1783907416",
+   "large": "https://cards.scryfall.io/large/front/0/2/0200a8c5-3293-48d0-a523-ba148680f588.jpg?1783907416",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/2/0200a8c5-3293-48d0-a523-ba148680f588.jpg?1783907416"
+  }
+ },
+ {
+  "name": "Fortress Kin-Guard",
+  "scryfallId": "b647a018-1d70-43a1-a265-928bcd863689",
+  "oracleId": "fa3ed0f6-e44e-433d-80d3-824de5e6135a",
+  "set": "tdm",
+  "collectorNumber": "12",
+  "rarity": "common",
+  "manaCost": "{1}{W}",
+  "typeLine": "Creature — Dog Soldier",
+  "oracleText": "When this creature enters, it endures 1. (Put a +1/+1 counter on it or create a 1/1 white Spirit creature token.)",
+  "power": "1",
+  "toughness": "2",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Endure"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/6/b647a018-1d70-43a1-a265-928bcd863689.jpg?1783907414",
+   "normal": "https://cards.scryfall.io/normal/front/b/6/b647a018-1d70-43a1-a265-928bcd863689.jpg?1783907414",
+   "large": "https://cards.scryfall.io/large/front/b/6/b647a018-1d70-43a1-a265-928bcd863689.jpg?1783907414",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/6/b647a018-1d70-43a1-a265-928bcd863689.jpg?1783907414"
+  }
+ },
+ {
+  "name": "Loxodon Battle Priest",
+  "scryfallId": "a527cdb0-f54a-4b53-83a0-6b3e8cafa45e",
+  "oracleId": "8cf4ddb0-2a83-4d8f-b636-7ba3c81ea4ca",
+  "set": "tdm",
+  "collectorNumber": "15",
+  "rarity": "uncommon",
+  "manaCost": "{4}{W}",
+  "typeLine": "Creature — Elephant Cleric",
+  "oracleText": "At the beginning of combat on your turn, put a +1/+1 counter on another target creature you control.",
+  "power": "3",
+  "toughness": "5",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/5/a527cdb0-f54a-4b53-83a0-6b3e8cafa45e.jpg?1783907410",
+   "normal": "https://cards.scryfall.io/normal/front/a/5/a527cdb0-f54a-4b53-83a0-6b3e8cafa45e.jpg?1783907410",
+   "large": "https://cards.scryfall.io/large/front/a/5/a527cdb0-f54a-4b53-83a0-6b3e8cafa45e.jpg?1783907410",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/5/a527cdb0-f54a-4b53-83a0-6b3e8cafa45e.jpg?1783907410"
+  }
+ },
+ {
+  "name": "Mardu Devotee",
+  "scryfallId": "da45e9b0-a4f6-413b-9e62-666c511eb5b0",
+  "oracleId": "24ee57b5-a505-4264-97ca-8b8dfb12298e",
+  "set": "tdm",
+  "collectorNumber": "16",
+  "rarity": "common",
+  "manaCost": "{W}",
+  "typeLine": "Creature — Human Scout",
+  "oracleText": "When this creature enters, scry 2. (Look at the top two cards of your library, then put any number of them on the bottom and the rest on top in any order.)\n{1}: Add {R}, {W}, or {B}. Activate only once each turn.",
+  "power": "1",
+  "toughness": "2",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Scry"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/a/da45e9b0-a4f6-413b-9e62-666c511eb5b0.jpg?1783907411",
+   "normal": "https://cards.scryfall.io/normal/front/d/a/da45e9b0-a4f6-413b-9e62-666c511eb5b0.jpg?1783907411",
+   "large": "https://cards.scryfall.io/large/front/d/a/da45e9b0-a4f6-413b-9e62-666c511eb5b0.jpg?1783907411",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/a/da45e9b0-a4f6-413b-9e62-666c511eb5b0.jpg?1783907411"
+  }
+ },
+ {
+  "name": "Poised Practitioner",
+  "scryfallId": "bb25366d-a647-4c5e-bcc7-7e54659aacbd",
+  "oracleId": "e08debdc-2db5-4562-8a02-4158bfc0db88",
+  "set": "tdm",
+  "collectorNumber": "18",
+  "rarity": "common",
+  "manaCost": "{2}{W}",
+  "typeLine": "Creature — Human Monk",
+  "oracleText": "Flurry — Whenever you cast your second spell each turn, put a +1/+1 counter on this creature. Scry 1. (Look at the top card of your library. You may put that card on the bottom.)",
+  "power": "2",
+  "toughness": "3",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Flurry",
+   "Scry"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/b/bb25366d-a647-4c5e-bcc7-7e54659aacbd.jpg?1783907411",
+   "normal": "https://cards.scryfall.io/normal/front/b/b/bb25366d-a647-4c5e-bcc7-7e54659aacbd.jpg?1783907411",
+   "large": "https://cards.scryfall.io/large/front/b/b/bb25366d-a647-4c5e-bcc7-7e54659aacbd.jpg?1783907411",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/b/bb25366d-a647-4c5e-bcc7-7e54659aacbd.jpg?1783907411"
+  }
+ },
+ {
+  "name": "Riling Dawnbreaker",
+  "scryfallId": "312f7072-3bf8-449f-bfb7-93727ef26c66",
+  "oracleId": "1fc31651-70fe-4a58-9b7e-7359510bba51",
+  "set": "tdm",
+  "collectorNumber": "21",
+  "rarity": "common",
+  "manaCost": "{4}{W}",
+  "typeLine": "Creature — Dragon",
+  "oracleText": "Flying, vigilance\nAt the beginning of combat on your turn, another target creature you control gets +1/+0 until end of turn.",
+  "power": "3",
+  "toughness": "4",
+  "colors": [],
+  "keywords": [
+   "Flying",
+   "Vigilance"
+  ],
+  "back": "Signaling Roar",
+  "adventure": true,
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/1/312f7072-3bf8-449f-bfb7-93727ef26c66.jpg?1783907410",
+   "normal": "https://cards.scryfall.io/normal/front/3/1/312f7072-3bf8-449f-bfb7-93727ef26c66.jpg?1783907410",
+   "large": "https://cards.scryfall.io/large/front/3/1/312f7072-3bf8-449f-bfb7-93727ef26c66.jpg?1783907410",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/1/312f7072-3bf8-449f-bfb7-93727ef26c66.jpg?1783907410"
+  }
+ },
+ {
+  "name": "Signaling Roar",
+  "scryfallId": "312f7072-3bf8-449f-bfb7-93727ef26c66",
+  "oracleId": "1fc31651-70fe-4a58-9b7e-7359510bba51",
+  "set": "tdm",
+  "collectorNumber": "21",
+  "rarity": "common",
+  "manaCost": "{1}{W}",
+  "typeLine": "Sorcery — Omen",
+  "oracleText": "Create a 2/2 white Soldier creature token. (Then shuffle this card into its owner's library.)",
+  "colors": [],
+  "keywords": [],
+  "front": "Riling Dawnbreaker",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/1/312f7072-3bf8-449f-bfb7-93727ef26c66.jpg?1783907410",
+   "normal": "https://cards.scryfall.io/normal/front/3/1/312f7072-3bf8-449f-bfb7-93727ef26c66.jpg?1783907410",
+   "large": "https://cards.scryfall.io/large/front/3/1/312f7072-3bf8-449f-bfb7-93727ef26c66.jpg?1783907410",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/1/312f7072-3bf8-449f-bfb7-93727ef26c66.jpg?1783907410"
+  }
+ },
+ {
+  "name": "Sage of the Skies",
+  "scryfallId": "6ade6918-6d1d-448d-ab56-93996051e9a9",
+  "oracleId": "cfc7cef7-0a95-49f8-970f-abff2cacd82d",
+  "set": "tdm",
+  "collectorNumber": "22",
+  "rarity": "rare",
+  "manaCost": "{2}{W}",
+  "typeLine": "Creature — Human Monk",
+  "oracleText": "When you cast this spell, if you've cast another spell this turn, copy this spell. (The copy becomes a token.)\nFlying, lifelink",
+  "power": "2",
+  "toughness": "3",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Flying",
+   "Lifelink"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/a/6ade6918-6d1d-448d-ab56-93996051e9a9.jpg?1783907412",
+   "normal": "https://cards.scryfall.io/normal/front/6/a/6ade6918-6d1d-448d-ab56-93996051e9a9.jpg?1783907412",
+   "large": "https://cards.scryfall.io/large/front/6/a/6ade6918-6d1d-448d-ab56-93996051e9a9.jpg?1783907412",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/a/6ade6918-6d1d-448d-ab56-93996051e9a9.jpg?1783907412"
+  }
+ },
+ {
+  "name": "Salt Road Packbeast",
+  "scryfallId": "98d548c9-42bc-4155-8211-0aea801c3724",
+  "oracleId": "50261b9d-48f2-4bad-a35b-14f13b3cdd32",
+  "set": "tdm",
+  "collectorNumber": "23",
+  "rarity": "common",
+  "manaCost": "{5}{W}",
+  "typeLine": "Creature — Beast",
+  "oracleText": "Affinity for creatures (This spell costs {1} less to cast for each creature you control.)\nWhen this creature enters, draw a card.",
+  "power": "4",
+  "toughness": "3",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Affinity"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/8/98d548c9-42bc-4155-8211-0aea801c3724.jpg?1783907408",
+   "normal": "https://cards.scryfall.io/normal/front/9/8/98d548c9-42bc-4155-8211-0aea801c3724.jpg?1783907408",
+   "large": "https://cards.scryfall.io/large/front/9/8/98d548c9-42bc-4155-8211-0aea801c3724.jpg?1783907408",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/8/98d548c9-42bc-4155-8211-0aea801c3724.jpg?1783907408"
+  }
+ },
+ {
+  "name": "Starry-Eyed Skyrider",
+  "scryfallId": "4b3cc15e-1c82-454e-b541-4ab47c44814e",
+  "oracleId": "04e615e6-4088-4170-904c-f2d4bcebed59",
+  "set": "tdm",
+  "collectorNumber": "25",
+  "rarity": "uncommon",
+  "manaCost": "{2}{W}",
+  "typeLine": "Creature — Human Scout",
+  "oracleText": "Flying\nWhenever this creature attacks, another target creature you control gains flying until end of turn.\nAttacking tokens you control have flying.",
+  "power": "1",
+  "toughness": "3",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/b/4b3cc15e-1c82-454e-b541-4ab47c44814e.jpg?1783907409",
+   "normal": "https://cards.scryfall.io/normal/front/4/b/4b3cc15e-1c82-454e-b541-4ab47c44814e.jpg?1783907409",
+   "large": "https://cards.scryfall.io/large/front/4/b/4b3cc15e-1c82-454e-b541-4ab47c44814e.jpg?1783907409",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/b/4b3cc15e-1c82-454e-b541-4ab47c44814e.jpg?1783907409"
+  }
+ },
+ {
+  "name": "Sunpearl Kirin",
+  "scryfallId": "18292b9c-0f42-4ce2-8b85-35d06cf45a63",
+  "oracleId": "f17b9356-a329-4f89-b690-afc2eaff4977",
+  "set": "tdm",
+  "collectorNumber": "29",
+  "rarity": "uncommon",
+  "manaCost": "{1}{W}",
+  "typeLine": "Creature — Kirin",
+  "oracleText": "Flash\nFlying\nWhen this creature enters, return up to one other target nonland permanent you control to its owner's hand. If it was a token, draw a card.",
+  "power": "2",
+  "toughness": "1",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Flying",
+   "Flash"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/8/18292b9c-0f42-4ce2-8b85-35d06cf45a63.jpg?1783907404",
+   "normal": "https://cards.scryfall.io/normal/front/1/8/18292b9c-0f42-4ce2-8b85-35d06cf45a63.jpg?1783907404",
+   "large": "https://cards.scryfall.io/large/front/1/8/18292b9c-0f42-4ce2-8b85-35d06cf45a63.jpg?1783907404",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/8/18292b9c-0f42-4ce2-8b85-35d06cf45a63.jpg?1783907404"
+  }
+ },
+ {
+  "name": "Tempest Hawk",
+  "scryfallId": "422f9453-ab12-4e3c-8c51-be87391395a1",
+  "oracleId": "7423b3b9-56eb-4cf2-8ada-135918219c4b",
+  "set": "tdm",
+  "collectorNumber": "31",
+  "rarity": "common",
+  "manaCost": "{2}{W}",
+  "typeLine": "Creature — Bird",
+  "oracleText": "Flying\nWhenever this creature deals combat damage to a player, you may search your library for a card named Tempest Hawk, reveal it, put it into your hand, then shuffle.\nA deck can have any number of cards named Tempest Hawk.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/2/422f9453-ab12-4e3c-8c51-be87391395a1.jpg?1783907402",
+   "normal": "https://cards.scryfall.io/normal/front/4/2/422f9453-ab12-4e3c-8c51-be87391395a1.jpg?1783907402",
+   "large": "https://cards.scryfall.io/large/front/4/2/422f9453-ab12-4e3c-8c51-be87391395a1.jpg?1783907402",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/2/422f9453-ab12-4e3c-8c51-be87391395a1.jpg?1783907402"
+  }
+ },
+ {
+  "name": "Twinmaw Stormbrood",
+  "scryfallId": "2999e3b1-6510-42b2-9429-28c07a64a44f",
+  "oracleId": "ff812a78-3fe7-47bc-9984-1c2380cff5b1",
+  "set": "tdm",
+  "collectorNumber": "232",
+  "rarity": "uncommon",
+  "manaCost": "{5}{W}",
+  "typeLine": "Creature — Dragon",
+  "oracleText": "Flying\nWhen this creature enters, you gain 5 life.",
+  "power": "5",
+  "toughness": "4",
+  "colors": [],
+  "keywords": [
+   "Flying"
+  ],
+  "back": "Charring Bite",
+  "adventure": true,
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/9/2999e3b1-6510-42b2-9429-28c07a64a44f.jpg?1783907291",
+   "normal": "https://cards.scryfall.io/normal/front/2/9/2999e3b1-6510-42b2-9429-28c07a64a44f.jpg?1783907291",
+   "large": "https://cards.scryfall.io/large/front/2/9/2999e3b1-6510-42b2-9429-28c07a64a44f.jpg?1783907291",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/9/2999e3b1-6510-42b2-9429-28c07a64a44f.jpg?1783907291"
+  }
+ },
+ {
+  "name": "Charring Bite",
+  "scryfallId": "2999e3b1-6510-42b2-9429-28c07a64a44f",
+  "oracleId": "ff812a78-3fe7-47bc-9984-1c2380cff5b1",
+  "set": "tdm",
+  "collectorNumber": "232",
+  "rarity": "uncommon",
+  "manaCost": "{1}{R}",
+  "typeLine": "Sorcery — Omen",
+  "oracleText": "Charring Bite deals 5 damage to target creature without flying. (Then shuffle this card into its owner's library.)",
+  "colors": [],
+  "keywords": [
+   "Flying"
+  ],
+  "front": "Twinmaw Stormbrood",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/9/2999e3b1-6510-42b2-9429-28c07a64a44f.jpg?1783907291",
+   "normal": "https://cards.scryfall.io/normal/front/2/9/2999e3b1-6510-42b2-9429-28c07a64a44f.jpg?1783907291",
+   "large": "https://cards.scryfall.io/large/front/2/9/2999e3b1-6510-42b2-9429-28c07a64a44f.jpg?1783907291",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/9/2999e3b1-6510-42b2-9429-28c07a64a44f.jpg?1783907291"
+  }
+ },
+ {
+  "name": "Voice of Victory",
+  "scryfallId": "ec3de5f4-bb55-4ab9-995f-f3e0dc22c1bb",
+  "oracleId": "b12cbda1-ac09-49eb-96b3-a4df27bc37ea",
+  "set": "tdm",
+  "collectorNumber": "33",
+  "rarity": "rare",
+  "manaCost": "{1}{W}",
+  "typeLine": "Creature — Human Bard",
+  "oracleText": "Mobilize 2 (Whenever this creature attacks, create two tapped and attacking 1/1 red Warrior creature tokens. Sacrifice them at the beginning of the next end step.)\nYour opponents can't cast spells during your turn.",
+  "power": "1",
+  "toughness": "3",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Mobilize"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/c/ec3de5f4-bb55-4ab9-995f-f3e0dc22c1bb.jpg?1783907401",
+   "normal": "https://cards.scryfall.io/normal/front/e/c/ec3de5f4-bb55-4ab9-995f-f3e0dc22c1bb.jpg?1783907401",
+   "large": "https://cards.scryfall.io/large/front/e/c/ec3de5f4-bb55-4ab9-995f-f3e0dc22c1bb.jpg?1783907401",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/c/ec3de5f4-bb55-4ab9-995f-f3e0dc22c1bb.jpg?1783907401"
+  }
+ },
+ {
+  "name": "Wayspeaker Bodyguard",
+  "scryfallId": "5e5b2324-69fe-4105-b6f8-14dfbe359d59",
+  "oracleId": "b93eaf66-91b3-44da-851c-79810901be0c",
+  "set": "tdm",
+  "collectorNumber": "34",
+  "rarity": "uncommon",
+  "manaCost": "{3}{W}",
+  "typeLine": "Creature — Orc Monk",
+  "oracleText": "When this creature enters, return target nonland permanent card with mana value 2 or less from your graveyard to your hand.\nFlurry — Whenever you cast your second spell each turn, tap target creature an opponent controls.",
+  "power": "3",
+  "toughness": "4",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Flurry"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/e/5e5b2324-69fe-4105-b6f8-14dfbe359d59.jpg?1783907402",
+   "normal": "https://cards.scryfall.io/normal/front/5/e/5e5b2324-69fe-4105-b6f8-14dfbe359d59.jpg?1783907402",
+   "large": "https://cards.scryfall.io/large/front/5/e/5e5b2324-69fe-4105-b6f8-14dfbe359d59.jpg?1783907402",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/e/5e5b2324-69fe-4105-b6f8-14dfbe359d59.jpg?1783907402"
+  }
+ },
+ {
+  "name": "Coordinated Maneuver",
+  "scryfallId": "c6569487-53c5-4b91-877d-e4e31bfa90c0",
+  "oracleId": "6ff39311-565e-4414-b32b-eb24c70b3090",
+  "set": "tdm",
+  "collectorNumber": "6",
+  "rarity": "common",
+  "manaCost": "{1}{W}",
+  "typeLine": "Instant",
+  "oracleText": "Choose one —\n• Coordinated Maneuver deals damage equal to the number of creatures you control to target creature or planeswalker.\n• Destroy target enchantment.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/6/c6569487-53c5-4b91-877d-e4e31bfa90c0.jpg?1783907419",
+   "normal": "https://cards.scryfall.io/normal/front/c/6/c6569487-53c5-4b91-877d-e4e31bfa90c0.jpg?1783907419",
+   "large": "https://cards.scryfall.io/large/front/c/6/c6569487-53c5-4b91-877d-e4e31bfa90c0.jpg?1783907419",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/6/c6569487-53c5-4b91-877d-e4e31bfa90c0.jpg?1783907419"
+  }
+ },
+ {
+  "name": "Lightfoot Technique",
+  "scryfallId": "baac1a41-d44d-4184-9147-b4233e73de65",
+  "oracleId": "601b7481-19fc-4779-950e-883a9a22aec3",
+  "set": "tdm",
+  "collectorNumber": "14",
+  "rarity": "common",
+  "manaCost": "{1}{W}",
+  "typeLine": "Instant",
+  "oracleText": "Put a +1/+1 counter on target creature. It gains flying and indestructible until end of turn. (Damage and effects that say \"destroy\" don't destroy it.)",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/a/baac1a41-d44d-4184-9147-b4233e73de65.jpg?1783907413",
+   "normal": "https://cards.scryfall.io/normal/front/b/a/baac1a41-d44d-4184-9147-b4233e73de65.jpg?1783907413",
+   "large": "https://cards.scryfall.io/large/front/b/a/baac1a41-d44d-4184-9147-b4233e73de65.jpg?1783907413",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/a/baac1a41-d44d-4184-9147-b4233e73de65.jpg?1783907413"
+  }
+ },
+ {
+  "name": "Osseous Exhale",
+  "scryfallId": "2300da2f-2297-4c2f-90c1-11ce2b42d91f",
+  "oracleId": "8d84a706-080c-4fb2-b1b9-3dbb3294fb7b",
+  "set": "tdm",
+  "collectorNumber": "17",
+  "rarity": "common",
+  "manaCost": "{1}{W}",
+  "typeLine": "Instant",
+  "oracleText": "As an additional cost to cast this spell, you may behold a Dragon. (You may choose a Dragon you control or reveal a Dragon card from your hand.)\nOsseous Exhale deals 5 damage to target attacking or blocking creature. If a Dragon was beheld, you gain 2 life.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Behold"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/3/2300da2f-2297-4c2f-90c1-11ce2b42d91f.jpg?1783907412",
+   "normal": "https://cards.scryfall.io/normal/front/2/3/2300da2f-2297-4c2f-90c1-11ce2b42d91f.jpg?1783907412",
+   "large": "https://cards.scryfall.io/large/front/2/3/2300da2f-2297-4c2f-90c1-11ce2b42d91f.jpg?1783907412",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/3/2300da2f-2297-4c2f-90c1-11ce2b42d91f.jpg?1783907412"
+  }
+ },
+ {
+  "name": "Rally the Monastery",
+  "scryfallId": "b56e0037-8143-4c13-83e1-0c3f44e685ea",
+  "oracleId": "3f6101a5-3038-45b0-8302-b2e4127b9510",
+  "set": "tdm",
+  "collectorNumber": "19",
+  "rarity": "uncommon",
+  "manaCost": "{3}{W}",
+  "typeLine": "Instant",
+  "oracleText": "This spell costs {2} less to cast if you've cast another spell this turn.\nChoose one —\n• Create two 1/1 white Monk creature tokens with prowess.\n• Up to two target creatures you control each get +2/+2 until end of turn.\n• Destroy target creature with power 4 or greater.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/5/b56e0037-8143-4c13-83e1-0c3f44e685ea.jpg?1783907407",
+   "normal": "https://cards.scryfall.io/normal/front/b/5/b56e0037-8143-4c13-83e1-0c3f44e685ea.jpg?1783907407",
+   "large": "https://cards.scryfall.io/large/front/b/5/b56e0037-8143-4c13-83e1-0c3f44e685ea.jpg?1783907407",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/5/b56e0037-8143-4c13-83e1-0c3f44e685ea.jpg?1783907407"
+  }
+ },
+ {
+  "name": "Rebellious Strike",
+  "scryfallId": "c9bafe19-3bd6-4da0-b3e5-e0b89262504c",
+  "oracleId": "4f3d7102-f8ce-42d4-94eb-f69b695773d1",
+  "set": "tdm",
+  "collectorNumber": "20",
+  "rarity": "common",
+  "manaCost": "{1}{W}",
+  "typeLine": "Instant",
+  "oracleText": "Target creature gets +3/+0 until end of turn.\nDraw a card.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/9/c9bafe19-3bd6-4da0-b3e5-e0b89262504c.jpg?1783907410",
+   "normal": "https://cards.scryfall.io/normal/front/c/9/c9bafe19-3bd6-4da0-b3e5-e0b89262504c.jpg?1783907410",
+   "large": "https://cards.scryfall.io/large/front/c/9/c9bafe19-3bd6-4da0-b3e5-e0b89262504c.jpg?1783907410",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/9/c9bafe19-3bd6-4da0-b3e5-e0b89262504c.jpg?1783907410"
+  }
+ },
+ {
+  "name": "Smile at Death",
+  "scryfallId": "ae2da18f-0d7d-446c-b463-8bf170ed95da",
+  "oracleId": "9228f04c-506f-4453-a335-e66876b8ce8d",
+  "set": "tdm",
+  "collectorNumber": "24",
+  "rarity": "mythic",
+  "manaCost": "{3}{W}{W}",
+  "typeLine": "Enchantment",
+  "oracleText": "At the beginning of your upkeep, return up to two target creature cards with power 2 or less from your graveyard to the battlefield. Put a +1/+1 counter on each of those creatures.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/e/ae2da18f-0d7d-446c-b463-8bf170ed95da.jpg?1783907405",
+   "normal": "https://cards.scryfall.io/normal/front/a/e/ae2da18f-0d7d-446c-b463-8bf170ed95da.jpg?1783907405",
+   "large": "https://cards.scryfall.io/large/front/a/e/ae2da18f-0d7d-446c-b463-8bf170ed95da.jpg?1783907405",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/e/ae2da18f-0d7d-446c-b463-8bf170ed95da.jpg?1783907405"
+  }
+ },
+ {
+  "name": "Static Snare",
+  "scryfallId": "1ce50932-03a6-48bc-8aee-bc8defd896cf",
+  "oracleId": "b5b742d2-f19b-47c9-84bd-e85d975900e6",
+  "set": "tdm",
+  "collectorNumber": "26",
+  "rarity": "uncommon",
+  "manaCost": "{4}{W}",
+  "typeLine": "Enchantment",
+  "oracleText": "Flash\nThis spell costs {1} less to cast for each attacking creature.\nWhen this enchantment enters, exile target artifact or creature an opponent controls until this enchantment leaves the battlefield.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Flash"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/c/1ce50932-03a6-48bc-8aee-bc8defd896cf.jpg?1783907407",
+   "normal": "https://cards.scryfall.io/normal/front/1/c/1ce50932-03a6-48bc-8aee-bc8defd896cf.jpg?1783907407",
+   "large": "https://cards.scryfall.io/large/front/1/c/1ce50932-03a6-48bc-8aee-bc8defd896cf.jpg?1783907407",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/c/1ce50932-03a6-48bc-8aee-bc8defd896cf.jpg?1783907407"
+  }
+ },
+ {
+  "name": "Stormbeacon Blade",
+  "scryfallId": "f2f12684-c80a-422b-9c3f-ed4f31742b9d",
+  "oracleId": "f4b3ee43-fc01-425f-8322-29bf6d16cb3f",
+  "set": "tdm",
+  "collectorNumber": "27",
+  "rarity": "uncommon",
+  "manaCost": "{1}{W}",
+  "typeLine": "Artifact — Equipment",
+  "oracleText": "Equipped creature gets +3/+0.\nWhenever equipped creature attacks, draw a card if you control three or more attacking creatures.\nEquip {2} ({2}: Attach to target creature you control. Equip only as a sorcery.)",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Equip"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/2/f2f12684-c80a-422b-9c3f-ed4f31742b9d.jpg?1783907406",
+   "normal": "https://cards.scryfall.io/normal/front/f/2/f2f12684-c80a-422b-9c3f-ed4f31742b9d.jpg?1783907406",
+   "large": "https://cards.scryfall.io/large/front/f/2/f2f12684-c80a-422b-9c3f-ed4f31742b9d.jpg?1783907406",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/2/f2f12684-c80a-422b-9c3f-ed4f31742b9d.jpg?1783907406"
+  }
+ },
+ {
+  "name": "Stormplain Detainment",
+  "scryfallId": "39f3aab5-7b54-4b55-8114-c6f9f79c255d",
+  "oracleId": "4ad9c550-5605-4ffe-8e27-e9f2d9ada000",
+  "set": "tdm",
+  "collectorNumber": "28",
+  "rarity": "common",
+  "manaCost": "{2}{W}",
+  "typeLine": "Enchantment",
+  "oracleText": "When this enchantment enters, exile target nonland permanent an opponent controls until this enchantment leaves the battlefield.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/9/39f3aab5-7b54-4b55-8114-c6f9f79c255d.jpg?1783907401",
+   "normal": "https://cards.scryfall.io/normal/front/3/9/39f3aab5-7b54-4b55-8114-c6f9f79c255d.jpg?1783907401",
+   "large": "https://cards.scryfall.io/large/front/3/9/39f3aab5-7b54-4b55-8114-c6f9f79c255d.jpg?1783907401",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/9/39f3aab5-7b54-4b55-8114-c6f9f79c255d.jpg?1783907401"
+  }
+ },
+ {
+  "name": "Teeming Dragonstorm",
+  "scryfallId": "3b9d771f-24dc-4ed6-8051-62df576a2ba5",
+  "oracleId": "2154cc68-41a4-4e88-9fe0-e0150dc0be45",
+  "set": "tdm",
+  "collectorNumber": "30",
+  "rarity": "uncommon",
+  "manaCost": "{3}{W}",
+  "typeLine": "Enchantment",
+  "oracleText": "When this enchantment enters, create two 2/2 white Soldier creature tokens.\nWhen a Dragon you control enters, return this enchantment to its owner's hand.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/b/3b9d771f-24dc-4ed6-8051-62df576a2ba5.jpg?1783907404",
+   "normal": "https://cards.scryfall.io/normal/front/3/b/3b9d771f-24dc-4ed6-8051-62df576a2ba5.jpg?1783907404",
+   "large": "https://cards.scryfall.io/large/front/3/b/3b9d771f-24dc-4ed6-8051-62df576a2ba5.jpg?1783907404",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/b/3b9d771f-24dc-4ed6-8051-62df576a2ba5.jpg?1783907404"
+  }
+ },
+ {
+  "name": "United Battlefront",
+  "scryfallId": "dff398be-4ba4-4976-9acc-be99d2e07a61",
+  "oracleId": "892a83a0-a3cb-4cfb-9106-4008e4e75c0f",
+  "set": "tdm",
+  "collectorNumber": "32",
+  "rarity": "rare",
+  "manaCost": "{3}{W}",
+  "typeLine": "Sorcery",
+  "oracleText": "Look at the top seven cards of your library. Put up to two noncreature, nonland permanent cards with mana value 3 or less from among them onto the battlefield. Put the rest on the bottom of your library in a random order.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/f/dff398be-4ba4-4976-9acc-be99d2e07a61.jpg?1783907400",
+   "normal": "https://cards.scryfall.io/normal/front/d/f/dff398be-4ba4-4976-9acc-be99d2e07a61.jpg?1783907400",
+   "large": "https://cards.scryfall.io/large/front/d/f/dff398be-4ba4-4976-9acc-be99d2e07a61.jpg?1783907400",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/f/dff398be-4ba4-4976-9acc-be99d2e07a61.jpg?1783907400"
+  }
  }
 ]

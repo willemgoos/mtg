@@ -23,6 +23,7 @@ import { BRAWL_15A_W_EFFECTS } from './brawl-15a-w-effects.ts';
 import { BRAWL_15B_B_EFFECTS } from './brawl-15b-b-effects.ts';
 import { ECL_18A_EFFECTS, willPersist } from './ecl-18a.ts';
 import { cantBeSacrificed, TDM_19A_EFFECTS } from './tdm-19a.ts';
+import { TDM_WHITE_EFFECTS } from './tdm-white-effects.ts';
 import { ECL_SPECIAL_EFFECTS } from './ecl-special-effects.ts';
 import { ECL_GREEN_EFFECTS } from './ecl-green-effects.ts';
 import { ECL_BLUE_EFFECTS } from './ecl-blue-effects.ts';
@@ -155,6 +156,7 @@ const BUILT_IN_EFFECTS: Record<string, CustomEffect> = {
   // Lorwyn Eclipsed (18a).
   ...ECL_18A_EFFECTS,
   ...TDM_19A_EFFECTS,
+  ...TDM_WHITE_EFFECTS, // Tarkir: Dragonstorm (19b, white)
   // Lorwyn Eclipsed (18b, special).
   ...ECL_SPECIAL_EFFECTS,
   // Lorwyn Eclipsed (18b): green.

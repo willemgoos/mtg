@@ -482,6 +482,9 @@ export function countOf(
     return ctx.s.turn.creaturesExiled?.[player === 'p1' ? 'p2' : 'p1'] ?? 0;
   // Wakanda Forever (9c).
   if (a.count === 'creaturesOnBattlefield') return creaturesOnBattlefield(ctx).length;
+  // Tarkir: Dragonstorm (19b, white): Static Snare.
+  if (a.count === 'attackingCreatures')
+    return (ctx.s.combat?.attackers ?? []).filter((x) => isCreature(ctx, x.id)).length;
   if (a.count === 'totalManaValue')
     return (
       ctx.s.battlefield
@@ -981,12 +984,23 @@ export function canTapForAbility(ctx: Ctx, id: ObjectId): boolean {
 // Marvel Super Heroes Jumpstart (Wakanda)
 /** An Aura on it says "its activated abilities can't be activated" (Secure Detention). */
 export function abilitiesLocked(ctx: Ctx, id: ObjectId): boolean {
-  return ctx.s.battlefield.some(
-    (src) =>
-      obj(ctx, src).attachedTo === id &&
+  return (
+    ctx.s.battlefield.some(
+      (src) =>
+        obj(ctx, src).attachedTo === id &&
+        def(ctx, src).abilities.some(
+          (a) => a.kind === 'static' && a.effect.kind === 'attached' && a.effect.cantActivate,
+        ),
+    ) ||
+    // Tarkir: Dragonstorm (19b, white): Clarion Conqueror, "activated abilities of artifacts, creatures, and planeswalkers can't be activated".
+    ctx.s.battlefield.some((src) =>
       def(ctx, src).abilities.some(
-        (a) => a.kind === 'static' && a.effect.kind === 'attached' && a.effect.cantActivate,
+        (a) =>
+          a.kind === 'static' &&
+          a.effect.kind === 'noActivatedAbilities' &&
+          matchesFilter(ctx, id, a.effect.filter),
       ),
+    )
   );
 }
 
