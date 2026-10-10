@@ -171,3 +171,6 @@ from) when it's fixed. Older phases keep their own "Simplifications" lists in `d
 
 - [ ] Ureni of the Unwritten: X (the lands you control) is read as the ability resolves, not as it is put on the stack, and
       the targets are chosen one at a time on resolution (like `divide`), so hexproof and ward don't apply at targeting.
+- [ ] United Battlefront, Wayspeaker Bodyguard: "noncreature, nonland permanent card" can't match a Battle (the engine has
+      no Battle type; no Battle is in the pool).
+- [ ] Tempest Hawk: "a deck can have any number of cards named Tempest Hawk" isn't enforced by the deck builder.

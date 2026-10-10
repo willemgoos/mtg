@@ -1963,6 +1963,8 @@ export function runEffects(
           ...(e.followUp ? { followUp: e.followUp } : {}),
           // Secrets of Strixhaven (14b): Zimone's Experiment.
           ...(e.landsTapped ? { landsTapped: true } : {}),
+          // Tarkir: Dragonstorm (19b, white): United Battlefront.
+          ...(e.upTo ? { remaining: e.upTo } : {}),
           resume,
           thenPriority,
         };

@@ -487,6 +487,9 @@ export function countOf(
     return ctx.s.turn.creaturesExiled?.[player === 'p1' ? 'p2' : 'p1'] ?? 0;
   // Wakanda Forever (9c).
   if (a.count === 'creaturesOnBattlefield') return creaturesOnBattlefield(ctx).length;
+  // Tarkir: Dragonstorm (19b, white): Static Snare.
+  if (a.count === 'attackingCreatures')
+    return (ctx.s.combat?.attackers ?? []).filter((x) => isCreature(ctx, x.id)).length;
   if (a.count === 'totalManaValue')
     return (
       ctx.s.battlefield
@@ -986,13 +989,47 @@ export function canTapForAbility(ctx: Ctx, id: ObjectId): boolean {
 // Marvel Super Heroes Jumpstart (Wakanda)
 /** An Aura on it says "its activated abilities can't be activated" (Secure Detention). */
 export function abilitiesLocked(ctx: Ctx, id: ObjectId): boolean {
-  return ctx.s.battlefield.some(
-    (src) =>
-      obj(ctx, src).attachedTo === id &&
-      def(ctx, src).abilities.some(
-        (a) => a.kind === 'static' && a.effect.kind === 'attached' && a.effect.cantActivate,
-      ),
+  return (
+    ctx.s.battlefield.some(
+      (src) =>
+        obj(ctx, src).attachedTo === id &&
+        def(ctx, src).abilities.some(
+          (a) => a.kind === 'static' && a.effect.kind === 'attached' && a.effect.cantActivate,
+        ),
+    ) || lockedByStatic(ctx, id)
   );
+}
+
+// Tarkir: Dragonstorm (19b, white): Clarion Conqueror, "activated abilities of artifacts, creatures, and planeswalkers can't be
+// activated". The cards with the static are found once per card database (this is asked for every ability of every permanent).
+const LOCKERS = new WeakMap<object, Set<string>>();
+function lockerDefs(ctx: Ctx): Set<string> {
+  let set = LOCKERS.get(ctx.db);
+  if (!set) {
+    set = new Set();
+    for (const d of ctx.db.values())
+      if (d.abilities.some((a) => a.kind === 'static' && a.effect.kind === 'noActivatedAbilities'))
+        set.add(d.id);
+    LOCKERS.set(ctx.db, set);
+  }
+  return set;
+}
+function lockedByStatic(ctx: Ctx, id: ObjectId): boolean {
+  const lockers = lockerDefs(ctx);
+  if (lockers.size === 0) return false;
+  for (const src of ctx.s.battlefield) {
+    if (!lockers.has(obj(ctx, src).defId)) continue;
+    if (
+      def(ctx, src).abilities.some(
+        (a) =>
+          a.kind === 'static' &&
+          a.effect.kind === 'noActivatedAbilities' &&
+          matchesFilter(ctx, id, a.effect.filter),
+      )
+    )
+      return true;
+  }
+  return false;
 }
 
 export function matchesFilter(

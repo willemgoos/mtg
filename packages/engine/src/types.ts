@@ -1535,6 +1535,9 @@ export interface TargetSpec {
    * chosen just before it (each pair is listed once, the second target always the later card).
    */
   sharesCreatureTypeWithPrevious?: boolean;
+  // Tarkir: Dragonstorm (19b, white): Arashin Sunshield
+  /** With `anyNumber` and 'graveyardCard': all the targets are cards in the same graveyard ("up to two target cards from a single graveyard"). */
+  singleGraveyard?: boolean;
 }
 
 /**
@@ -1733,6 +1736,9 @@ export type Amount =
   // Wakanda Forever (9c).
   /** Creatures on the battlefield (Vanquish the Horde). */
   | { count: 'creaturesOnBattlefield' }
+  // Tarkir: Dragonstorm (19b, white): Static Snare ("costs {1} less to cast for each attacking creature")
+  /** The attacking creatures, whoever controls them. */
+  | { count: 'attackingCreatures' }
   /** Total mana value of permanents you control matching the filter (Metalwork Colossus). */
   | { count: 'totalManaValue'; filter: CardFilter }
   /** Times you've cast your commander from the command zone (Hatut Zeraze Strike Force). */
@@ -2599,12 +2605,15 @@ export type EffectDef =
       // Final Fantasy (11b): look for a land
       /** The card taken goes onto the battlefield tapped instead (Ignis Scientia: a land). */
       // Foundations: 'libraryTop', it goes back on top (Gutless Plunderer, with `restToGraveyard`).
-      to?: 'battlefieldTapped' | 'libraryTop';
+      to?: 'battlefield' | 'battlefieldTapped' | 'libraryTop';
       // Secrets of Strixhaven (14a): Follow the Lumarets. After the first pick, choose another card matching this from the rest.
       followUp?: CardFilter;
       // Secrets of Strixhaven (14b): Zimone's Experiment
       /** Lands taken go onto the battlefield tapped, other cards into your hand; one more pick follows the first. */
       landsTapped?: boolean;
+      // Tarkir: Dragonstorm (19b, white): United Battlefront
+      /** "Put up to N ... from among them": one at a time, stopping whenever the player likes; the rest go to the bottom in a random order. */
+      upTo?: number;
     }
   /** Exile the top N; you may play them until the end of this turn or of your next turn. */
   | {
@@ -3443,7 +3452,10 @@ export type StaticDef =
   /** Whenever a player taps a basic land for mana, that player adds one more mana of any type that land produced (every player's lands). */
   | { kind: 'basicLandsAddExtraMana' }
   /** "Spells you control can't be countered." */
-  | { kind: 'spellsYouControlUncounterable' };
+  | { kind: 'spellsYouControlUncounterable' }
+  // Tarkir: Dragonstorm (19b, white): Clarion Conqueror
+  /** Activated abilities of permanents matching the filter (mana and loyalty abilities too) can't be activated, whoever controls them. */
+  | { kind: 'noActivatedAbilities'; filter: CardFilter };
 
 export type CardDb = ReadonlyMap<CardDefId, CardDefinition>;
 

@@ -1595,9 +1595,17 @@ export function getLegalActions(ctx: Ctx, player: PlayerId): Action[] {
           // Lorwyn Eclipsed (18b, green): Prismabasher, "up to X target creatures".
           (spec.maxAmount !== undefined &&
             picked.length >= countOf(ctx, player, spec.maxAmount, false, t.source.id));
+        // Tarkir: Dragonstorm (19b, white): Arashin Sunshield, all from a single graveyard.
+        const sameYard = (t: TargetChoice) =>
+          !spec.singleGraveyard ||
+          picked.length === 0 ||
+          picked.every(
+            (x) => 'object' in x && 'object' in t && obj(ctx, x.object.id).owner === obj(ctx, t.object.id).owner,
+          );
         for (const t of full ? [] : targetCandidates(ctx, spec, src))
           if (
             !taken.has(key(t)) &&
+            sameYard(t) &&
             payable([...picked, t]) &&
             // Reality Fracture (17a): Uldaros Theorix, one card of each card type.
             (!spec.onePerType ||
