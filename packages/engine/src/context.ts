@@ -26,6 +26,7 @@ import { cantBeSacrificed, TDM_19A_EFFECTS } from './tdm-19a.ts';
 import { TDM_CLANS_B_EFFECTS } from './tdm-clans-b-effects.ts';
 import { TDM_WHITE_EFFECTS } from './tdm-white-effects.ts';
 import { extraEntryCounters, noteCreatureCounters, TDM_MISC_EFFECTS } from './tdm-misc-effects.ts';
+import { TDM_CLANS_EFFECTS } from './tdm-clans-effects.ts'; // Tarkir: Dragonstorm (19b, clans)
 import { ECL_SPECIAL_EFFECTS } from './ecl-special-effects.ts';
 import { ECL_GREEN_EFFECTS } from './ecl-green-effects.ts';
 import { TDM_GREEN_EFFECTS } from './tdm-green-effects.ts';
@@ -164,6 +165,7 @@ const BUILT_IN_EFFECTS: Record<string, CustomEffect> = {
   ...TDM_WHITE_EFFECTS, // Tarkir: Dragonstorm (19b, white)
   ...TDM_MISC_EFFECTS, // Tarkir: Dragonstorm (19b, misc)
   ...TDM_GREEN_EFFECTS, // Tarkir: Dragonstorm (19b): green
+  ...TDM_CLANS_EFFECTS, // Tarkir: Dragonstorm (19b, clans)
   // Lorwyn Eclipsed (18b, special).
   ...ECL_SPECIAL_EFFECTS,
   // Lorwyn Eclipsed (18b): green.

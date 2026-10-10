@@ -196,6 +196,20 @@ Kotis, Ugin's cast triggers, Call the Spirit Dragons, Karakyk Guardian ("hasn't 
 main phase, Breaching Dragonstorm, Mardu Siegebreaker, Flamehold Grappler. Tempest Hawk's "any number of copies" is already handled
 (`copyLimit` in `season.ts`).
 
+## Status and handoff (10 October 2026)
+
+- **19a done.** **19b done**: all 271 cards (eight agents, merged on `tarkir-dragonstorm`; all `tdm-*` tests pass).
+  `pnpm --filter @mtg/cards exec tsx scripts/tdm-status.ts` shows 271/271. Rules gaps are in `docs/shortcuts.md`.
+- Merging unified a few duplicates (one single-graveyard target check, one `divide.atLeastOne`); the fetch script now gives
+  adventure and Omen faces their colours; `PRINTING_OVERRIDES` in `pool.ts` pins the tri-lands and Craterhoof to TDM.
+- Lorwyn Eclipsed's Jump In packets are now Arena's own (random slots, topped up to 40); that is on this branch too.
+- **Next: 19c.** Arena's ten TDM Jump In packets from `scripts/data/arena-jumpin-packets.json` (same slot mechanism as
+  `ARENA_ECL_PACKETS`; three-colour packets). Human decks: only the eight curated untapped.gg trophy decks are public
+  (`scripts/data/tdm-trophy-decks.*`: Boros, Simic, Mardu, Sultai, Jeskai, Temur); find a human Abzan list; no decks of our own.
+- **Then 19d**: boosters; Expedition, Season and Sealed still cut deck colours to two (`deckColors(...).slice(0, 2)`).
+- Open check: `cards/test/brawl.test.ts` (random Brawl games) runs a little over its 240 s limit; time it on a quiet machine
+  against `main` to see whether 19a/19b made games slower.
+
 ## Simplifications to revisit
 
 See the Tarkir: Dragonstorm section of `docs/shortcuts.md`.

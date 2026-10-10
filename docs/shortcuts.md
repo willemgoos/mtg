@@ -177,3 +177,7 @@ from) when it's fixed. Older phases keep their own "Simplifications" lists in `d
 - [ ] Twin Bolt: "one or two targets" and the damage split are chosen as it resolves (the `divide` effect), not as it is cast.
 - [ ] Rite of Renewal: the cast menu shows three entries (return zero, one or two permanent cards) because a spell can't have
       "up to two" targets followed by a required one; the rules are exact, the extra entries aren't on the card.
+- [ ] Armament Dragon, Revival of the Ancestors: the targets of "distribute counters among one, two or three targets" are
+      chosen as it resolves (the `divide` effect), so an opponent can't respond to the targeting.
+- [ ] Teval, Arbiter of Virtue: the cast menu doesn't say which graveyard cards a delve cast will exile (they're picked
+      one at a time after choosing it).

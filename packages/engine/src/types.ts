@@ -1548,6 +1548,9 @@ export interface TargetSpec {
   // Reality Fracture (17c): Fatehold Charm
   /** With 'spell': a creature on the battlefield is a legal target too ("target spell or creature"). */
   orCreature?: boolean;
+  // Tarkir: Dragonstorm (19b, clans): Jeskai Revelation
+  /** With 'spell': any permanent on the battlefield is a legal target too ("target spell or permanent"). */
+  orPermanent?: boolean;
   // Lorwyn Eclipsed (18b, multi-b): Kirol, Attentive First-Year
   /** With `abilitiesOnly`: triggered abilities only ("target triggered ability"). */
   triggeredOnly?: boolean;
@@ -1629,6 +1632,9 @@ export type Ref =
 export type Amount =
   | number
   | { powerOf: Ref }
+  // Tarkir: Dragonstorm (19b, clans): Lie in Wait
+  /** The power of the card a target slot named, in whatever zone it is now (its printed power off the battlefield): "that card's power". */
+  | { powerOfCard: Ref }
   /** The number of +1/+1 counters on it (Mossborn Hydra doubles them). */
   | { countersOn: Ref }
   // Tarkir: Dragonstorm (19a): Warden of the Grove
@@ -1947,6 +1953,11 @@ export type EffectDef =
       kind: 'chooseFromOpponentHand';
       filter?: CardFilter;
       then: 'discard' | 'exile';
+      // Tarkir: Dragonstorm (19b, clans): Severance Priest
+      /** Remember the exiled card's owner and mana value on the source (`linkedExile`) for "the exiled card's owner creates ...". */
+      linkToSource?: boolean;
+      /** "You may choose a card": choosing none is allowed too. */
+      optional?: boolean;
       /** You may cast the exiled card while it stays exiled, with any mana (Cruelclaw's Heist). */
       castable?: boolean;
       // Reality Fracture (17a): Null Summoner
@@ -2328,7 +2339,13 @@ export type EffectDef =
    * Return a target spell on the stack to its owner's hand. Reality Fracture (17c): `orCreature`, the target may be a
    * creature on the battlefield instead (Fatehold Charm).
    */
-  | { kind: 'returnSpellToHand'; what: Ref; orCreature?: boolean }
+  | {
+      kind: 'returnSpellToHand';
+      what: Ref;
+      orCreature?: boolean;
+      // Tarkir: Dragonstorm (19b, clans): Jeskai Revelation, "target spell or permanent"
+      orPermanent?: boolean;
+    }
   /** Reveal cards from the top until one matches; it goes to hand or onto the battlefield tapped, the rest to the bottom. */
   | {
       kind: 'revealUntil';
@@ -2475,7 +2492,7 @@ export type EffectDef =
       spec: TargetSpec;
       give: 'damage' | 'counters';
       each?: EffectDef[];
-      // Tarkir: Dragonstorm (19b, red): Twin Bolt
+      // Tarkir: Dragonstorm (19b, red, clans): Twin Bolt, Armament Dragon, Revival of the Ancestors
       /** "One or two targets" rather than "up to": choosing no target at all isn't offered. */
       atLeastOne?: boolean;
       /** Internal: the targets chosen so far and what each gets. */
@@ -2530,12 +2547,15 @@ export type EffectDef =
    */
   | {
       kind: 'castFreeFromTop';
-      count: number;
+      count: number | Amount; // Tarkir: Dragonstorm (19b, clans): Kotis, "the top X cards" (X the damage dealt)
       from: 'yours' | 'opponents';
       maxManaValue?: Amount;
       rest: 'bottom' | 'exile';
       // Strixhaven (13c): Velomachus Lorehold (an instant or sorcery)
       filter?: CardFilter;
+      // Tarkir: Dragonstorm (19b, clans): Kotis, the Fangkeeper
+      /** "Any number of spells": after each one cast, the others may be cast too. */
+      more?: boolean;
     }
   /** Copy the topmost ability you control on the stack from an artifact source (Scientist Supreme). */
   | { kind: 'copyArtifactAbility' }
@@ -2615,6 +2635,9 @@ export type EffectDef =
       kind: 'returnToBattlefield';
       what: Ref;
       counter?: string;
+      // Tarkir: Dragonstorm (19b, clans): Perennation
+      /** Several counters, one of each kind, as it enters ("with a hexproof counter and an indestructible counter on it"). */
+      counters?: string[];
       /** It enters tapped (Deadly Plot, Grim Reaper). */
       tapped?: boolean;
       /** "Tapped and attacking" (Grim Reaper, Lethal Legionnaire). */
@@ -2638,6 +2661,9 @@ export type EffectDef =
       gainPerDestroyed?: number;
       /** Strixhaven (13c): Culling Ritual: add one mana of one of these colours for each permanent destroyed. */
       manaPerDestroyed?: ManaType[];
+      // Tarkir: Dragonstorm (19b, clans): Death Begets Life
+      /** Draw a card for each permanent destroyed this way. */
+      drawPerDestroyed?: boolean;
     }
   /** Look at the top N; you may take a card matching the filter into your hand; the rest go to the bottom at random. */
   | {
@@ -3273,6 +3299,9 @@ export type StaticDef =
   | { kind: 'conniveDrawsFirst' }
   /** "Noncreature spells you cast have improvise" (Ironheart). */
   | { kind: 'noncreatureSpellsHaveImprovise' }
+  // Tarkir: Dragonstorm (19b, clans): Teval, Arbiter of Virtue
+  /** "Spells you cast have delve." */
+  | { kind: 'spellsHaveDelve' }
   // Lorwyn Eclipsed (18b, multi-b)
   /** Each other creature you control has hexproof from each of its colors (Tam, Mindful First-Year). */
   | { kind: 'hexproofFromOwnColors' }
@@ -4049,6 +4078,12 @@ export interface TurnState {
   nextSpellUncounterable?: PlayerId[];
   /** Mystical Archive (16): Deflecting Palm: the next damage to these players this turn is prevented and dealt to its source's controller. */
   deflect?: PlayerId[];
+  // Tarkir: Dragonstorm (19b, clans): New Way Forward
+  /**
+   * "The next time a source of your choice would deal damage to you this turn, prevent that damage. When damage is prevented this
+   * way, New Way Forward deals that much damage to that source's controller and you draw that many cards."
+   */
+  sourceShields?: { player: PlayerId; source: ObjectId; by: ObjectId }[];
   /** Creatures declared as attackers this turn, once per combat. */
   attackers: ObjectId[];
   // Lorwyn Eclipsed (18c, theme decks): Fearless Swashbuckler
@@ -4654,6 +4689,10 @@ export type Decision =
       among?: ObjectId[];
       // Lorwyn Eclipsed (18c, theme decks): Lightstall Inquisitor
       ownerChooses?: { tax: number; landsTapped: boolean };
+      // Tarkir: Dragonstorm (19b, clans): Severance Priest
+      linkToSource?: boolean;
+      /** The chooser may also choose no card ("You may choose a nonland card"). */
+      optional?: boolean;
       resume: PausedResolution;
       thenPriority: PlayerId;
     }

@@ -1405,13 +1405,13 @@ export function Board({
                 </div>
               ))}
             </div>
-            {d.options.length === 0 && (
+            {(d.options.length === 0 || d.optional) && (
               <div className="mull__buttons">
                 <button
                   className="btn btn--ghost"
                   onClick={() => act({ type: 'chooseCard', player: HUMAN, card: null })}
                 >
-                  Nothing to choose
+                  {d.options.length === 0 ? 'Nothing to choose' : 'Choose no card'}
                 </button>
               </div>
             )}
