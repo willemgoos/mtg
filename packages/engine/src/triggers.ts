@@ -19,6 +19,7 @@ import { detectLtr, isRingBearer, ringCondition } from './ltr-21a.ts';
 import { detectLtrWhite } from './ltr-white-effects.ts'; // Lord of the Rings (21b white)
 import { detectLtrGcRare } from './ltr-gc-rare-effects.ts'; // Lord of the Rings (21d gc-rare)
 import { doubleLegendaryArtifactTriggers } from './ltr-wu-rare-effects.ts'; // Lord of the Rings (21d wu-rare)
+import { detectLtrBrRare } from './ltr-br-rare-effects.ts'; // Lord of the Rings (21d br-rare)
 import { FIC_CONDITIONS } from './fic-effects.ts';
 import { FIN_CONDITIONS } from './fin-effects.ts';
 import { LTR_RED_CONDITIONS } from './ltr-red-effects.ts'; // Lord of the Rings (21b red)
@@ -758,6 +759,7 @@ function detect(ctx: Ctx, ev: GameEvent): void {
   detectLtr(ctx, ev); // Lord of the Rings (21a)
   detectLtrWhite(ctx, ev); // Lord of the Rings (21b white)
   detectLtrGcRare(ctx, ev); // Lord of the Rings (21d gc-rare)
+  detectLtrBrRare(ctx, ev); // Lord of the Rings (21d br-rare)
   detectAnimal(ctx, ev);
   switch (ev.type) {
     case 'objectMoved': {

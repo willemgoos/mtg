@@ -71,6 +71,7 @@ import { opponentsCantGainLife, sacrificeAtEndOfCombat } from './ltr-black-effec
 import { HOB_MULTICOLOUR_EXPANDERS } from './hob-multicolour-effects.ts'; // The Hobbit (20b multicolour)
 import { LTR_BLUE_EXPANDERS } from './ltr-blue-effects.ts'; // Lord of the Rings (21b blue)
 import { LTR_GC_RARE_EXPANDERS } from './ltr-gc-rare-effects.ts'; // Lord of the Rings (21d gc-rare)
+import { LTR_BR_RARE_EXPANDERS } from './ltr-br-rare-effects.ts'; // Lord of the Rings (21d br-rare)
 import { SOS_14B_C_CHOOSERS } from './sos-14b-c-effects.ts';
 import type {
   AbilityDef,
@@ -1055,6 +1056,12 @@ export function runEffects(
     // Lord of the Rings (21d gc-rare): Last March of the Ents, Mount Doom: prompts built one choice at a time.
     if (e.kind === 'custom' && LTR_GC_RARE_EXPANDERS[e.handler]) {
       list.splice(i, 1, ...LTR_GC_RARE_EXPANDERS[e.handler]!(ctx, es, e.params));
+      i--;
+      continue;
+    }
+    // Lord of the Rings (21d br-rare): prompts built from the state the earlier effects left (Hew the Entwood, Isildur's Fateful Strike, ...).
+    if (e.kind === 'custom' && LTR_BR_RARE_EXPANDERS[e.handler]) {
+      list.splice(i, 1, ...LTR_BR_RARE_EXPANDERS[e.handler]!(ctx, es, e.params));
       i--;
       continue;
     }

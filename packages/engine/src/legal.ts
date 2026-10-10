@@ -166,6 +166,10 @@ export function castableCards(ctx: Ctx, player: PlayerId): ObjectId[] {
         onBattlefield(ctx, obj(ctx, id).castableWhileControlling!)?.controller === player)
     )
       out.push(id);
+  // Lord of the Rings (21d br-rare): Shadow of the Enemy, the creature cards exiled from your own graveyard.
+  for (const id of ps.exile)
+    if (obj(ctx, id).ltrOwnExileCast && obj(ctx, id).castableBy === player && !out.includes(id))
+      out.push(id);
   // Glarb: lands and big spells from the top of your library.
   const topCard = ps.library[0];
   if (topCard && !out.includes(topCard))
