@@ -17,6 +17,7 @@ import { elementalTriggerCopies } from './ecl-multi-b-effects.ts';
 import { hasEnduringStory, subtypeTriggerCopies } from './hob-20a.ts';
 import { detectLtr, isRingBearer, ringCondition } from './ltr-21a.ts';
 import { detectLtrWhite } from './ltr-white-effects.ts'; // Lord of the Rings (21b white)
+import { detectLtrGcRare } from './ltr-gc-rare-effects.ts'; // Lord of the Rings (21d gc-rare)
 import { FIC_CONDITIONS } from './fic-effects.ts';
 import { FIN_CONDITIONS } from './fin-effects.ts';
 import { LTR_RED_CONDITIONS } from './ltr-red-effects.ts'; // Lord of the Rings (21b red)
@@ -312,6 +313,9 @@ export function checkCondition(
         (id) => !!ctx.s.objects[id] && matchesFilter(ctx, id, c.filter, self?.id),
       ).length >= c.count
     );
+  // Lord of the Rings (21d gc-rare): Minas Tirith, "if you attacked with two or more creatures this turn".
+  if (c.kind === 'ltrAttackedWith')
+    return ctx.s.turn.activePlayer === controller && new Set(ctx.s.turn.attackers).size >= c.count;
   // Lorwyn Eclipsed (18c, theme decks): Fearless Swashbuckler.
   if (c.kind === 'attackedThisCombat')
     return (
@@ -665,6 +669,17 @@ function spellMatches(
         return !!o && o.zone === 'battlefield' && def(ctx, o.id).types.includes('Creature');
       });
     // Reality Fracture (17a): Danitha, Spear of Agony
+    // Lord of the Rings (21d gc-rare): Legolas, Master Archer, "a spell that targets a creature you don't control".
+    case 'ltrTargetsOtherCreature':
+      return !!item?.targets.some((x) => {
+        const o = 'object' in x ? ctx.s.objects[x.object.id] : undefined;
+        return (
+          !!o &&
+          o.zone === 'battlefield' &&
+          o.controller !== self.controller &&
+          def(ctx, o.id).types.includes('Creature')
+        );
+      });
     case 'targetsOpponentOrTheirCreature':
       return !!item?.targets.some((x) => {
         if ('player' in x) return x.player !== self.controller;
@@ -741,6 +756,7 @@ function detect(ctx: Ctx, ev: GameEvent): void {
   detectFic(ctx, ev);
   detectLtr(ctx, ev); // Lord of the Rings (21a)
   detectLtrWhite(ctx, ev); // Lord of the Rings (21b white)
+  detectLtrGcRare(ctx, ev); // Lord of the Rings (21d gc-rare)
   detectAnimal(ctx, ev);
   switch (ev.type) {
     case 'objectMoved': {
@@ -1093,7 +1109,7 @@ function detect(ctx: Ctx, ev: GameEvent): void {
               source: { id: moved.id, zcc: moved.zcc },
               sourceDefId: e.onDies.sourceDefId,
               abilityIndex: -1,
-              controller: e.onDies.controller,
+              controller: e.onDies.byLastController ? (ev.controller ?? e.onDies.controller) : e.onDies.controller, // Lord of the Rings (21d gc-rare)
               subject: { id: moved.id, zcc: moved.zcc },
               inline: e.onDies.effects,
             });

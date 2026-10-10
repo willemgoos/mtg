@@ -16,6 +16,7 @@ import {
   choosePickExiled,
   chooseBeholdType,
   chooseCreatureType,
+  chooseLtrGcRare,
   chooseForageExile,
   chooseWardSacrifice,
   chooseFromHand,
@@ -111,6 +112,11 @@ export function createHeuristicBot(db: CardDb, name = 'heuristic'): Bot {
           // Reality Fracture (17a): Arc of Fortune.
           if (d.options[0]?.label.startsWith('Discard your hand'))
             return { type: 'chooseOption', player: me, index: chooseHandSwap(view, me) };
+          // Lord of the Rings (21d gc-rare): Last March of the Ents, Mount Doom.
+          {
+            const ltr = chooseLtrGcRare(engine, view, me, d);
+            if (ltr) return ltr;
+          }
           return bestByEvaluation(engine, view, me, legal, 'stack');
         }
         case 'chooseFromHand':

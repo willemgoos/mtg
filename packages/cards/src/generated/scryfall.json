@@ -96200,5 +96200,494 @@
    "large": "https://cards.scryfall.io/large/front/f/6/f6d04970-12c7-460f-a7bc-beb97b161246.jpg?1783915182",
    "artCrop": "https://cards.scryfall.io/art_crop/front/f/6/f6d04970-12c7-460f-a7bc-beb97b161246.jpg?1783915182"
   }
+ },
+ {
+  "name": "Delighted Halfling",
+  "scryfallId": "71384418-173a-4f77-adab-56e52fa23692",
+  "oracleId": "f9d3b046-0b95-4103-a630-4b3fb88bb60b",
+  "set": "ltr",
+  "collectorNumber": "158",
+  "rarity": "rare",
+  "manaCost": "{G}",
+  "typeLine": "Creature — Halfling Citizen",
+  "oracleText": "{T}: Add {C}.\n{T}: Add one mana of any color. Spend this mana only to cast a legendary spell, and that spell can't be countered.",
+  "power": "1",
+  "toughness": "2",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/1/71384418-173a-4f77-adab-56e52fa23692.jpg?1783916276",
+   "normal": "https://cards.scryfall.io/normal/front/7/1/71384418-173a-4f77-adab-56e52fa23692.jpg?1783916276",
+   "large": "https://cards.scryfall.io/large/front/7/1/71384418-173a-4f77-adab-56e52fa23692.jpg?1783916276",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/1/71384418-173a-4f77-adab-56e52fa23692.jpg?1783916276"
+  }
+ },
+ {
+  "name": "Elven Chorus",
+  "scryfallId": "616cfb94-3faf-44fe-bf04-e90643765e48",
+  "oracleId": "4d5df2d9-06bf-4bec-9be0-dabe75a858fb",
+  "set": "ltr",
+  "collectorNumber": "160",
+  "rarity": "rare",
+  "manaCost": "{3}{G}",
+  "typeLine": "Enchantment",
+  "oracleText": "You may look at the top card of your library any time.\nYou may cast creature spells from the top of your library.\nCreatures you control have \"{T}: Add one mana of any color.\"",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/1/616cfb94-3faf-44fe-bf04-e90643765e48.jpg?1783916271",
+   "normal": "https://cards.scryfall.io/normal/front/6/1/616cfb94-3faf-44fe-bf04-e90643765e48.jpg?1783916271",
+   "large": "https://cards.scryfall.io/large/front/6/1/616cfb94-3faf-44fe-bf04-e90643765e48.jpg?1783916271",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/1/616cfb94-3faf-44fe-bf04-e90643765e48.jpg?1783916271"
+  }
+ },
+ {
+  "name": "Fall of Gil-galad",
+  "scryfallId": "fbaab2c0-ea18-4b2f-b75b-506cbbea97e1",
+  "oracleId": "c248537f-e28f-47cb-9e47-a6eb05e1af63",
+  "set": "ltr",
+  "collectorNumber": "165",
+  "rarity": "rare",
+  "manaCost": "{1}{G}",
+  "typeLine": "Enchantment — Saga",
+  "oracleText": "(As this Saga enters and after your draw step, add a lore counter. Sacrifice after III.)\nI — Scry 2.\nII — Put two +1/+1 counters on target creature you control.\nIII — Until end of turn, target creature you control gains \"When this creature dies, draw two cards.\" Then that creature fights up to one other target creature.",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Fight",
+   "Scry"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/b/fbaab2c0-ea18-4b2f-b75b-506cbbea97e1.jpg?1783916271",
+   "normal": "https://cards.scryfall.io/normal/front/f/b/fbaab2c0-ea18-4b2f-b75b-506cbbea97e1.jpg?1783916271",
+   "large": "https://cards.scryfall.io/large/front/f/b/fbaab2c0-ea18-4b2f-b75b-506cbbea97e1.jpg?1783916271",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/b/fbaab2c0-ea18-4b2f-b75b-506cbbea97e1.jpg?1783916271"
+  }
+ },
+ {
+  "name": "Fangorn, Tree Shepherd",
+  "scryfallId": "0fb0f946-2127-4aa3-88ac-9bd2e94d8983",
+  "oracleId": "04166d20-88c9-4c89-be9d-3e422f90959a",
+  "set": "ltr",
+  "collectorNumber": "166",
+  "rarity": "rare",
+  "manaCost": "{4}{G}{G}{G}",
+  "typeLine": "Legendary Creature — Treefolk",
+  "oracleText": "Treefolk you control have vigilance.\nWhenever one or more Treefolk you control attack, add twice that much {G}.\nYou don't lose unspent green mana as steps and phases end.",
+  "power": "4",
+  "toughness": "10",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/f/0fb0f946-2127-4aa3-88ac-9bd2e94d8983.jpg?1783916269",
+   "normal": "https://cards.scryfall.io/normal/front/0/f/0fb0f946-2127-4aa3-88ac-9bd2e94d8983.jpg?1783916269",
+   "large": "https://cards.scryfall.io/large/front/0/f/0fb0f946-2127-4aa3-88ac-9bd2e94d8983.jpg?1783916269",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/f/0fb0f946-2127-4aa3-88ac-9bd2e94d8983.jpg?1783916269"
+  }
+ },
+ {
+  "name": "Last March of the Ents",
+  "scryfallId": "7f1b99e0-ffb7-4f98-8ee5-4357bb79dd2e",
+  "oracleId": "3999cd64-ff5c-4e2c-8aa6-d14f9f8a2b4c",
+  "set": "ltr",
+  "collectorNumber": "172",
+  "rarity": "mythic",
+  "manaCost": "{6}{G}{G}",
+  "typeLine": "Sorcery",
+  "oracleText": "This spell can't be countered.\nDraw cards equal to the greatest toughness among creatures you control, then put any number of creature cards from your hand onto the battlefield.",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/f/7f1b99e0-ffb7-4f98-8ee5-4357bb79dd2e.jpg?1783916273",
+   "normal": "https://cards.scryfall.io/normal/front/7/f/7f1b99e0-ffb7-4f98-8ee5-4357bb79dd2e.jpg?1783916273",
+   "large": "https://cards.scryfall.io/large/front/7/f/7f1b99e0-ffb7-4f98-8ee5-4357bb79dd2e.jpg?1783916273",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/f/7f1b99e0-ffb7-4f98-8ee5-4357bb79dd2e.jpg?1783916273"
+  }
+ },
+ {
+  "name": "Legolas, Master Archer",
+  "scryfallId": "a9405577-c1dc-48e0-b2aa-6237c569d02e",
+  "oracleId": "5e99497f-7c73-49ae-88b3-78d5d74ba9ea",
+  "set": "ltr",
+  "collectorNumber": "173",
+  "rarity": "rare",
+  "manaCost": "{1}{G}{G}",
+  "typeLine": "Legendary Creature — Elf Archer",
+  "oracleText": "Reach\nWhenever you cast a spell that targets Legolas, put a +1/+1 counter on Legolas.\nWhenever you cast a spell that targets a creature you don't control, Legolas deals damage equal to its power to up to one target creature.",
+  "power": "1",
+  "toughness": "4",
+  "colors": [
+   "G"
+  ],
+  "keywords": [
+   "Reach"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/9/a9405577-c1dc-48e0-b2aa-6237c569d02e.jpg?1783916270",
+   "normal": "https://cards.scryfall.io/normal/front/a/9/a9405577-c1dc-48e0-b2aa-6237c569d02e.jpg?1783916270",
+   "large": "https://cards.scryfall.io/large/front/a/9/a9405577-c1dc-48e0-b2aa-6237c569d02e.jpg?1783916270",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/9/a9405577-c1dc-48e0-b2aa-6237c569d02e.jpg?1783916270"
+  }
+ },
+ {
+  "name": "Radagast the Brown",
+  "scryfallId": "b3988120-ebbe-4d24-9bb4-8c5331a14034",
+  "oracleId": "dfa47d0d-17f0-4a12-89d3-0d3c7f3db8c6",
+  "set": "ltr",
+  "collectorNumber": "184",
+  "rarity": "mythic",
+  "manaCost": "{2}{G}{G}",
+  "typeLine": "Legendary Creature — Avatar Wizard",
+  "oracleText": "Whenever Radagast or another nontoken creature you control enters, look at the top X cards of your library, where X is that creature's mana value. You may reveal a creature card that doesn't share a creature type with a creature you control from among those cards and put it into your hand. Put the rest on the bottom of your library in a random order.",
+  "power": "2",
+  "toughness": "5",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/3/b3988120-ebbe-4d24-9bb4-8c5331a14034.jpg?1783916261",
+   "normal": "https://cards.scryfall.io/normal/front/b/3/b3988120-ebbe-4d24-9bb4-8c5331a14034.jpg?1783916261",
+   "large": "https://cards.scryfall.io/large/front/b/3/b3988120-ebbe-4d24-9bb4-8c5331a14034.jpg?1783916261",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/3/b3988120-ebbe-4d24-9bb4-8c5331a14034.jpg?1783916261"
+  }
+ },
+ {
+  "name": "The Ring Goes South",
+  "scryfallId": "3c8a4c7d-527c-49ea-a115-a9e747c0fd03",
+  "oracleId": "3d36f0ab-d333-4a08-ad1b-5b7e1ddb647c",
+  "set": "ltr",
+  "collectorNumber": "186",
+  "rarity": "rare",
+  "manaCost": "{3}{G}",
+  "typeLine": "Sorcery",
+  "oracleText": "The Ring tempts you. Then reveal cards from the top of your library until you reveal X land cards, where X is the number of legendary creatures you control. Put those land cards onto the battlefield tapped and the rest on the bottom of your library in a random order.",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/c/3c8a4c7d-527c-49ea-a115-a9e747c0fd03.jpg?1783916261",
+   "normal": "https://cards.scryfall.io/normal/front/3/c/3c8a4c7d-527c-49ea-a115-a9e747c0fd03.jpg?1783916261",
+   "large": "https://cards.scryfall.io/large/front/3/c/3c8a4c7d-527c-49ea-a115-a9e747c0fd03.jpg?1783916261",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/c/3c8a4c7d-527c-49ea-a115-a9e747c0fd03.jpg?1783916261"
+  }
+ },
+ {
+  "name": "Andúril, Flame of the West",
+  "scryfallId": "7e7b9eea-a224-4db1-a089-cb385f7af20c",
+  "oracleId": "e6521404-8474-4727-b2d0-537d15d8a63f",
+  "set": "ltr",
+  "collectorNumber": "236",
+  "rarity": "mythic",
+  "manaCost": "{3}",
+  "typeLine": "Legendary Artifact — Equipment",
+  "oracleText": "Equipped creature gets +3/+1.\nWhenever equipped creature attacks, create two tapped 1/1 white Spirit creature tokens with flying. If that creature is legendary, instead create two of those tokens that are tapped and attacking.\nEquip {2}",
+  "colors": [],
+  "keywords": [
+   "Equip"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/e/7e7b9eea-a224-4db1-a089-cb385f7af20c.jpg?1783916241",
+   "normal": "https://cards.scryfall.io/normal/front/7/e/7e7b9eea-a224-4db1-a089-cb385f7af20c.jpg?1783916241",
+   "large": "https://cards.scryfall.io/large/front/7/e/7e7b9eea-a224-4db1-a089-cb385f7af20c.jpg?1783916241",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/e/7e7b9eea-a224-4db1-a089-cb385f7af20c.jpg?1783916241"
+  }
+ },
+ {
+  "name": "Barad-dûr",
+  "scryfallId": "eb5038af-06b0-401e-8dea-a1a8483788ae",
+  "oracleId": "88159872-d37d-4847-b048-e4a9af6437bd",
+  "set": "ltr",
+  "collectorNumber": "253",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Legendary Land",
+  "oracleText": "Barad-dûr enters tapped unless you control a legendary creature.\n{T}: Add {B}.\n{X}{X}{B}, {T}: Amass Orcs X. Activate only if a creature died this turn.",
+  "colors": [],
+  "keywords": [
+   "Amass"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/b/eb5038af-06b0-401e-8dea-a1a8483788ae.jpg?1783916238",
+   "normal": "https://cards.scryfall.io/normal/front/e/b/eb5038af-06b0-401e-8dea-a1a8483788ae.jpg?1783916238",
+   "large": "https://cards.scryfall.io/large/front/e/b/eb5038af-06b0-401e-8dea-a1a8483788ae.jpg?1783916238",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/b/eb5038af-06b0-401e-8dea-a1a8483788ae.jpg?1783916238"
+  }
+ },
+ {
+  "name": "Glamdring",
+  "scryfallId": "8296ebf7-45ed-4b38-acf2-b48d9fb3e706",
+  "oracleId": "52826984-44cb-48dc-a737-bb02983ffea8",
+  "set": "ltr",
+  "collectorNumber": "239",
+  "rarity": "mythic",
+  "manaCost": "{2}",
+  "typeLine": "Legendary Artifact — Equipment",
+  "oracleText": "Equipped creature has first strike and gets +1/+0 for each instant and sorcery card in your graveyard.\nWhenever equipped creature deals combat damage to a player, you may cast an instant or sorcery spell from your hand with mana value less than or equal to that damage without paying its mana cost.\nEquip {3}",
+  "colors": [],
+  "keywords": [
+   "Equip"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/2/8296ebf7-45ed-4b38-acf2-b48d9fb3e706.jpg?1783916240",
+   "normal": "https://cards.scryfall.io/normal/front/8/2/8296ebf7-45ed-4b38-acf2-b48d9fb3e706.jpg?1783916240",
+   "large": "https://cards.scryfall.io/large/front/8/2/8296ebf7-45ed-4b38-acf2-b48d9fb3e706.jpg?1783916240",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/2/8296ebf7-45ed-4b38-acf2-b48d9fb3e706.jpg?1783916240"
+  }
+ },
+ {
+  "name": "Horn of Gondor",
+  "scryfallId": "b14eaeec-d7ce-462a-90d3-2ae5ff605fdb",
+  "oracleId": "88777fc0-286d-47fc-8e94-1e289b4964c4",
+  "set": "ltr",
+  "collectorNumber": "240",
+  "rarity": "rare",
+  "manaCost": "{3}",
+  "typeLine": "Legendary Artifact",
+  "oracleText": "When Horn of Gondor enters, create a 1/1 white Human Soldier creature token.\n{3}, {T}: Create X 1/1 white Human Soldier creature tokens, where X is the number of Humans you control.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/1/b14eaeec-d7ce-462a-90d3-2ae5ff605fdb.jpg?1783916239",
+   "normal": "https://cards.scryfall.io/normal/front/b/1/b14eaeec-d7ce-462a-90d3-2ae5ff605fdb.jpg?1783916239",
+   "large": "https://cards.scryfall.io/large/front/b/1/b14eaeec-d7ce-462a-90d3-2ae5ff605fdb.jpg?1783916239",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/1/b14eaeec-d7ce-462a-90d3-2ae5ff605fdb.jpg?1783916239"
+  }
+ },
+ {
+  "name": "Horn of the Mark",
+  "scryfallId": "dd86b71f-d736-426f-bf15-013bc8da1a08",
+  "oracleId": "9b836c32-84f0-41ae-b7d9-67b92c743c60",
+  "set": "ltr",
+  "collectorNumber": "241",
+  "rarity": "rare",
+  "manaCost": "{2}",
+  "typeLine": "Legendary Artifact",
+  "oracleText": "Whenever two or more creatures you control attack a player, look at the top five cards of your library. You may reveal a creature card from among them and put it into your hand. Put the rest on the bottom of your library in a random order.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/d/dd86b71f-d736-426f-bf15-013bc8da1a08.jpg?1783916240",
+   "normal": "https://cards.scryfall.io/normal/front/d/d/dd86b71f-d736-426f-bf15-013bc8da1a08.jpg?1783916240",
+   "large": "https://cards.scryfall.io/large/front/d/d/dd86b71f-d736-426f-bf15-013bc8da1a08.jpg?1783916240",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/d/dd86b71f-d736-426f-bf15-013bc8da1a08.jpg?1783916240"
+  }
+ },
+ {
+  "name": "Minas Tirith",
+  "scryfallId": "b38b6760-616f-4b11-8ce7-ac1223c7fd53",
+  "oracleId": "7b0d7e62-0287-454a-8702-b0bfa7b41245",
+  "set": "ltr",
+  "collectorNumber": "256",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Legendary Land",
+  "oracleText": "Minas Tirith enters tapped unless you control a legendary creature.\n{T}: Add {W}.\n{1}{W}, {T}: Draw a card. Activate only if you attacked with two or more creatures this turn.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/3/b38b6760-616f-4b11-8ce7-ac1223c7fd53.jpg?1783916236",
+   "normal": "https://cards.scryfall.io/normal/front/b/3/b38b6760-616f-4b11-8ce7-ac1223c7fd53.jpg?1783916236",
+   "large": "https://cards.scryfall.io/large/front/b/3/b38b6760-616f-4b11-8ce7-ac1223c7fd53.jpg?1783916236",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/3/b38b6760-616f-4b11-8ce7-ac1223c7fd53.jpg?1783916236"
+  }
+ },
+ {
+  "name": "Mines of Moria",
+  "scryfallId": "0be723d6-4ada-4c3f-b87b-8ab83a4bbb8f",
+  "oracleId": "583cdebe-0195-45be-bd2e-5765f07cb902",
+  "set": "ltr",
+  "collectorNumber": "257",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Legendary Land",
+  "oracleText": "Mines of Moria enters tapped unless you control a legendary creature.\n{T}: Add {R}.\n{3}{R}, {T}, Exile three cards from your graveyard: Create two Treasure tokens.",
+  "colors": [],
+  "keywords": [
+   "Treasure"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/b/0be723d6-4ada-4c3f-b87b-8ab83a4bbb8f.jpg?1783916232",
+   "normal": "https://cards.scryfall.io/normal/front/0/b/0be723d6-4ada-4c3f-b87b-8ab83a4bbb8f.jpg?1783916232",
+   "large": "https://cards.scryfall.io/large/front/0/b/0be723d6-4ada-4c3f-b87b-8ab83a4bbb8f.jpg?1783916232",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/b/0be723d6-4ada-4c3f-b87b-8ab83a4bbb8f.jpg?1783916232"
+  }
+ },
+ {
+  "name": "Mithril Coat",
+  "scryfallId": "0fd1fc09-a09d-45e6-8a07-3a8a83b4e6ec",
+  "oracleId": "3dc364f3-3094-4660-80ca-9418588c7fde",
+  "set": "ltr",
+  "collectorNumber": "245",
+  "rarity": "rare",
+  "manaCost": "{3}",
+  "typeLine": "Legendary Artifact — Equipment",
+  "oracleText": "Flash\nIndestructible\nWhen Mithril Coat enters, attach it to target legendary creature you control.\nEquipped creature has indestructible.\nEquip {3}",
+  "colors": [],
+  "keywords": [
+   "Indestructible",
+   "Equip",
+   "Flash"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/f/0fd1fc09-a09d-45e6-8a07-3a8a83b4e6ec.jpg?1783916237",
+   "normal": "https://cards.scryfall.io/normal/front/0/f/0fd1fc09-a09d-45e6-8a07-3a8a83b4e6ec.jpg?1783916237",
+   "large": "https://cards.scryfall.io/large/front/0/f/0fd1fc09-a09d-45e6-8a07-3a8a83b4e6ec.jpg?1783916237",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/f/0fd1fc09-a09d-45e6-8a07-3a8a83b4e6ec.jpg?1783916237"
+  }
+ },
+ {
+  "name": "Mount Doom",
+  "scryfallId": "b5bc71a1-2344-4bc6-aa60-658cec19d0d6",
+  "oracleId": "995c8dac-fd27-468a-abd4-02372cf0c850",
+  "set": "ltr",
+  "collectorNumber": "258",
+  "rarity": "mythic",
+  "manaCost": "",
+  "typeLine": "Legendary Land",
+  "oracleText": "{T}, Pay 1 life: Add {B} or {R}.\n{1}{B}{R}, {T}: Mount Doom deals 1 damage to each opponent.\n{5}{B}{R}, {T}, Sacrifice Mount Doom and a legendary artifact: Choose up to two creatures, then destroy the rest. Activate only as a sorcery.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/5/b5bc71a1-2344-4bc6-aa60-658cec19d0d6.jpg?1783916235",
+   "normal": "https://cards.scryfall.io/normal/front/b/5/b5bc71a1-2344-4bc6-aa60-658cec19d0d6.jpg?1783916235",
+   "large": "https://cards.scryfall.io/large/front/b/5/b5bc71a1-2344-4bc6-aa60-658cec19d0d6.jpg?1783916235",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/5/b5bc71a1-2344-4bc6-aa60-658cec19d0d6.jpg?1783916235"
+  }
+ },
+ {
+  "name": "Palantír of Orthanc",
+  "scryfallId": "6efb6a69-562c-4d95-858d-b067444cfd7e",
+  "oracleId": "7798a4d9-1c1d-48e6-b9a2-ecd6aec1efa7",
+  "set": "ltr",
+  "collectorNumber": "247",
+  "rarity": "mythic",
+  "manaCost": "{3}",
+  "typeLine": "Legendary Artifact",
+  "oracleText": "At the beginning of your end step, put an influence counter on Palantír of Orthanc and scry 2. Then target opponent may have you draw a card. If that player doesn't, you mill X cards, where X is the number of influence counters on Palantír of Orthanc, and that player loses life equal to the total mana value of those cards.",
+  "colors": [],
+  "keywords": [
+   "Mill",
+   "Scry"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/e/6efb6a69-562c-4d95-858d-b067444cfd7e.jpg?1783916235",
+   "normal": "https://cards.scryfall.io/normal/front/6/e/6efb6a69-562c-4d95-858d-b067444cfd7e.jpg?1783916235",
+   "large": "https://cards.scryfall.io/large/front/6/e/6efb6a69-562c-4d95-858d-b067444cfd7e.jpg?1783916235",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/e/6efb6a69-562c-4d95-858d-b067444cfd7e.jpg?1783916235"
+  }
+ },
+ {
+  "name": "Phial of Galadriel",
+  "scryfallId": "ac6d60fe-681b-495e-813c-c8418f3f29e5",
+  "oracleId": "08f17ebc-c0fd-493f-84b3-e9250694543e",
+  "set": "ltr",
+  "collectorNumber": "248",
+  "rarity": "rare",
+  "manaCost": "{3}",
+  "typeLine": "Legendary Artifact",
+  "oracleText": "If you would draw a card while you have no cards in hand, draw two cards instead.\nIf you would gain life while you have 5 or less life, you gain twice that much life instead.\n{T}: Add one mana of any color.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/c/ac6d60fe-681b-495e-813c-c8418f3f29e5.jpg?1783916236",
+   "normal": "https://cards.scryfall.io/normal/front/a/c/ac6d60fe-681b-495e-813c-c8418f3f29e5.jpg?1783916236",
+   "large": "https://cards.scryfall.io/large/front/a/c/ac6d60fe-681b-495e-813c-c8418f3f29e5.jpg?1783916236",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/c/ac6d60fe-681b-495e-813c-c8418f3f29e5.jpg?1783916236"
+  }
+ },
+ {
+  "name": "Rivendell",
+  "scryfallId": "bacd500c-1389-4314-a53e-0ad510d6fb79",
+  "oracleId": "2550099d-b3e2-4eb6-9f36-0fc412828ca6",
+  "set": "ltr",
+  "collectorNumber": "259",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Legendary Land",
+  "oracleText": "Rivendell enters tapped unless you control a legendary creature.\n{T}: Add {U}.\n{1}{U}, {T}: Scry 2. Activate only if you control a legendary creature.",
+  "colors": [],
+  "keywords": [
+   "Scry"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/a/bacd500c-1389-4314-a53e-0ad510d6fb79.jpg?1783916232",
+   "normal": "https://cards.scryfall.io/normal/front/b/a/bacd500c-1389-4314-a53e-0ad510d6fb79.jpg?1783916232",
+   "large": "https://cards.scryfall.io/large/front/b/a/bacd500c-1389-4314-a53e-0ad510d6fb79.jpg?1783916232",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/a/bacd500c-1389-4314-a53e-0ad510d6fb79.jpg?1783916232"
+  }
+ },
+ {
+  "name": "Sting, the Glinting Dagger",
+  "scryfallId": "afbec7e7-f5b9-407e-bf96-2e088710e791",
+  "oracleId": "973c49a1-8425-40b9-8bdc-2c2434222314",
+  "set": "ltr",
+  "collectorNumber": "250",
+  "rarity": "rare",
+  "manaCost": "{2}",
+  "typeLine": "Legendary Artifact — Equipment",
+  "oracleText": "Equipped creature gets +1/+1 and has haste.\nAt the beginning of each combat, untap equipped creature.\nEquipped creature has first strike as long as it's blocking or blocked by a Goblin or Orc.\nEquip {2}",
+  "colors": [],
+  "keywords": [
+   "Equip"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/f/afbec7e7-f5b9-407e-bf96-2e088710e791.jpg?1783916234",
+   "normal": "https://cards.scryfall.io/normal/front/a/f/afbec7e7-f5b9-407e-bf96-2e088710e791.jpg?1783916234",
+   "large": "https://cards.scryfall.io/large/front/a/f/afbec7e7-f5b9-407e-bf96-2e088710e791.jpg?1783916234",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/f/afbec7e7-f5b9-407e-bf96-2e088710e791.jpg?1783916234"
+  }
+ },
+ {
+  "name": "The One Ring",
+  "scryfallId": "d5806e68-1054-458e-866d-1f2470f682b2",
+  "oracleId": "3aa83ed2-f48b-4ce6-a614-2c54ddf50538",
+  "set": "ltr",
+  "collectorNumber": "246",
+  "rarity": "mythic",
+  "manaCost": "{4}",
+  "typeLine": "Legendary Artifact",
+  "oracleText": "Indestructible\nWhen The One Ring enters, if you cast it, you gain protection from everything until your next turn.\nAt the beginning of your upkeep, you lose 1 life for each burden counter on The One Ring.\n{T}: Put a burden counter on The One Ring, then draw a card for each burden counter on The One Ring.",
+  "colors": [],
+  "keywords": [
+   "Indestructible"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/5/d5806e68-1054-458e-866d-1f2470f682b2.jpg?1790212038",
+   "normal": "https://cards.scryfall.io/normal/front/d/5/d5806e68-1054-458e-866d-1f2470f682b2.jpg?1790212038",
+   "large": "https://cards.scryfall.io/large/front/d/5/d5806e68-1054-458e-866d-1f2470f682b2.jpg?1790212038",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/5/d5806e68-1054-458e-866d-1f2470f682b2.jpg?1790212038"
+  }
+ },
+ {
+  "name": "The Shire",
+  "scryfallId": "d5178a1b-588b-4414-a370-ac6eed51187a",
+  "oracleId": "9abf9a0e-8e7d-406b-a01d-d4870b30134e",
+  "set": "ltr",
+  "collectorNumber": "260",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Legendary Land",
+  "oracleText": "The Shire enters tapped unless you control a legendary creature.\n{T}: Add {G}.\n{1}{G}, {T}, Tap an untapped creature you control: Create a Food token.",
+  "colors": [],
+  "keywords": [
+   "Food"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/5/d5178a1b-588b-4414-a370-ac6eed51187a.jpg?1783916234",
+   "normal": "https://cards.scryfall.io/normal/front/d/5/d5178a1b-588b-4414-a370-ac6eed51187a.jpg?1783916234",
+   "large": "https://cards.scryfall.io/large/front/d/5/d5178a1b-588b-4414-a370-ac6eed51187a.jpg?1783916234",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/5/d5178a1b-588b-4414-a370-ac6eed51187a.jpg?1783916234"
+  }
  }
 ]

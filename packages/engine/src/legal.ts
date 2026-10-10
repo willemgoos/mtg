@@ -1014,6 +1014,8 @@ function priorityActions(
         !graveyardCostCard(ctx, player, a.cost.exileFromGraveyard, source)
       )
         return;
+      // Lord of the Rings (21d gc-rare): Mines of Moria, "exile three cards from your graveyard".
+      if (a.cost.exileGraveyardCards && ps.graveyard.length < a.cost.exileGraveyardCards) return;
       // Jump In slots (Polygraph Orb): collect evidence.
       if (
         a.cost.collectEvidence &&

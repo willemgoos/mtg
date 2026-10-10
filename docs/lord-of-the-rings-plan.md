@@ -276,3 +276,37 @@ behind `chooseCustom`, `detectLtrWhite`), with hooks marked `// Lord of the Ring
   fewer than three cards: the bottom). **Lembas**: a `selfToGraveyard` trigger running `ltrShuffleSelfIntoLibrary`.
 - No new decision kinds, so the bots needed nothing new. `Halfling` (Saradoc) is `ltr-halfling-token` in `LTR_WHITE_TOKENS`.
 - In tests, permanents put on the battlefield by the scenario are not tokens: Shire Shirriff's test sets `isToken` on the Food.
+
+## Phase 21d: green and colorless rares (done)
+
+**Done**, 8/8 green (`ltr/green-rare.ts`) and 15/15 colorless (`ltr/colorless-rare.ts`) rares and mythics of the packets' random slot; every card is
+exact, nothing left out. Tests `cards/test/ltr-gc-rare{,-2,-3,-4}.test.ts`, `ai/test/ltr-gc-rare.test.ts`. No new tokens (Spirit, Human Soldier,
+Treasure, Food, Orc Army are shared). Engine pieces in `engine/src/ltr-gc-rare-effects.ts`, hooks marked `// Lord of the Rings (21d gc-rare)`:
+
+- **Custom effects / expanders** (one choice at a time, never a list of subsets): `ltrLastMarch` (Last March of the Ents: "Done" or one creature
+  card by name, the chosen ones enter together at the end), `ltrMountDoom` (choose up to two creatures, then `destroyAll` with the new filter
+  `ltrExceptIds`), `ltrRingGoesSouth` (reveal until X lands, X after the temptation, the Ring-bearer counts), `ltrPalantirMill` (the
+  opponent's `choose` with `opponent: true`), `ltrProtection` (The One Ring).
+- **The One Ring**: `PlayerState.ltrProtected` ("protection from everything" until their next turn: cleared in `phaseIn`). `playerOk` refuses any
+  targeting of the player (their own spells too) and `prevented` prevents all damage to them; life loss is not stopped.
+- **Fangorn**: trigger `youAttackCounted` (once, with the number of matching attackers as the amount; `detectLtrGcRare`) and the static
+  `ltrKeepGreenMana` (the pool keeps single-`G` entries at the end of every step and at cleanup).
+- **Legolas**: castSpell filter `ltrTargetsOtherCreature` (a spell that targets a creature its caster doesn't control); the other ability uses
+  the existing `targetsSelf`.
+- **Radagast**: card filter `ltrNoSharedType` (a creature card that shares no creature type with a creature its owner controls; changelings
+  share with everything) in `lookAndTake`; the amount is `{ manaValueOf: 'self' | 'subject' }`.
+- **Fall of Gil-galad**: the existing `whenDiesThisTurn`, with the new `byLastController` (whoever controlled the creature as it died draws).
+- **Delighted Halfling**: mana ability flag `uncounterableSpell` (with `onlyFor: 'Legendary'`): a legendary spell paid with a Halfling is
+  `cantBeCountered`. The engine pays with sources, not with chosen mana, so a Halfling that helps pay a legendary spell is taken to make its
+  restricted mana (never worse for the player). The card itself gets `uncounterable: false` (the text is about the spell, not the card).
+- **Elven Chorus**: `grantMana` now also gives the granted mana to a creature that already taps for mana (Llanowar Elves make any color).
+- **Phial of Galadriel**: statics `ltrDrawTwiceEmptyHand` (checked in `drawCard`, the two cards aren't replaced again) and `doubleLifeGain` with
+  `maxLife: 5`.
+- **Sting**: `attached.combatKeywords` (keywords only while blocking or blocked by a creature matching the filter).
+- **Minas Tirith**: condition `ltrAttackedWith` (different creatures declared as attackers this turn, dead ones included).
+- **Mines of Moria**: cost `exileGraveyardCards: N` (picked one at a time with the `forageExile` decision when there are more; it is not a
+  forage). **Mount Doom**: a mana ability with `cost.life` (each tap pays the life, `ManaSource.payLife`, `Payment.life`).
+- Existing pieces used: `castFree` from hand with `maxManaValue` (Glamdring), `equippedAttacks` + `subjectMatches` (Andúril), `lookAndTake`
+  with `reveal` (Horn of the Mark), `amassOrcs({ x: true })` (Barad-dûr), `namedCounters` / `namedCountersOnSource` (The One Ring, Palantír).
+- Bots: `chooseLtrGcRare` (`ai/src/choices.ts`) answers Last March (its most expensive creature card first) and Mount Doom (keeps its own best
+  creatures, never an opponent's); everything else is existing decisions.

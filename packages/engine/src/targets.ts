@@ -51,6 +51,7 @@ function playerOk(ctx: Ctx, spec: TargetSpec, p: PlayerId, src: TargetingSource)
   if (p !== src.controller && youHaveHexproof(ctx, p)) return false;
   // Mystical Archive (16): Teferi's Protection, "protection from everything".
   if (p !== src.controller && ctx.s.players[p].lifeFrozen) return false;
+  if (ctx.s.players[p].ltrProtected) return false; // Lord of the Rings (21d gc-rare): The One Ring (protection from everything, yours too)
   if (spec.controller === 'you' && p !== src.controller) return false;
   if (spec.controller === 'opponent' && p !== other(src.controller)) return false;
   return true;

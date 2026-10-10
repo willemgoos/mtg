@@ -3,6 +3,7 @@ import { type Ctx, def, defOf, obj, other } from './context.ts';
 import { manaValue } from './cost.ts';
 import { vividCount } from './ecl-18a.ts';
 import { staticallyCreature } from './ltr-black-effects.ts'; // Lord of the Rings (21b black)
+import { ltrCombatKeywordsApply, ltrGcRareFilterFails } from './ltr-gc-rare-effects.ts'; // Lord of the Rings (21d gc-rare)
 import { spellsCastThisTurn } from './tdm-19a.ts';
 import { checkCondition } from './triggers.ts';
 import type {
@@ -198,6 +199,11 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
           if (st.legendaryKeywords?.length && d.supertypes.includes('Legendary')) {
             granted ??= new Set(keywords);
             for (const k of st.legendaryKeywords) granted.add(k);
+          }
+          // Lord of the Rings (21d gc-rare): Sting, the Glinting Dagger, first strike while blocking or blocked by a Goblin or Orc.
+          if (st.combatKeywords && ltrCombatKeywordsApply(ctx, id, st.combatKeywords.filter)) {
+            granted ??= new Set(keywords);
+            for (const k of st.combatKeywords.keywords) granted.add(k);
           }
           if (st.attackingKeywords?.length && isAttacking(ctx, id)) {
             granted ??= new Set(keywords);
@@ -1114,6 +1120,7 @@ export function matchesFilter(
   sourceId?: ObjectId,
 ): boolean {
   if (!filter) return true;
+  if ((filter.ltrExceptIds || filter.ltrNoSharedType) && ltrGcRareFilterFails(ctx, id, filter)) return false; // Lord of the Rings (21d gc-rare)
   // Type/subtype-only conditions must not recurse through their own static ability.
   const needsComputed =
     filter.maxPower !== undefined ||
@@ -1250,6 +1257,7 @@ export function cardMatches(
 ): boolean {
   const d = def(ctx, id);
   const subtypes = subtypesOf(ctx, id);
+  if ((filter.ltrExceptIds || filter.ltrNoSharedType) && ltrGcRareFilterFails(ctx, id, filter)) return false; // Lord of the Rings (21d gc-rare)
   if (
     filter.anyOf &&
     !filter.anyOf.some((branch) =>

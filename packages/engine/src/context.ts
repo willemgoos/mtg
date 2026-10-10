@@ -44,6 +44,7 @@ import { ECL_WHITE_EFFECTS } from './ecl-white-effects.ts';
 import { HOB_WHITE_EFFECTS } from './hob-white-effects.ts'; // The Hobbit (20b white)
 import { LTR_BLUE_EFFECTS } from './ltr-blue-effects.ts'; // Lord of the Rings (21b blue)
 import { LTR_WHITE_EFFECTS } from './ltr-white-effects.ts'; // Lord of the Rings (21b white)
+import { LTR_GC_RARE_EFFECTS, ltrDrawsTwice } from './ltr-gc-rare-effects.ts'; // Lord of the Rings (21d gc-rare)
 import { BRAWL_15B_W_EFFECTS } from './brawl-15b-w-effects.ts';
 import { BRAWL_15B_U_EFFECTS } from './brawl-15b-u-effects.ts';
 import { BRAWL_15B_G_EFFECTS } from './brawl-15b-g-effects.ts';
@@ -201,6 +202,7 @@ const BUILT_IN_EFFECTS: Record<string, CustomEffect> = {
   ...HOB_WHITE_EFFECTS, // The Hobbit (20b, white)
   ...LTR_BLUE_EFFECTS, // Lord of the Rings (21b blue)
   ...LTR_WHITE_EFFECTS, // Lord of the Rings (21b white)
+  ...LTR_GC_RARE_EFFECTS, // Lord of the Rings (21d gc-rare)
   // Strixhaven Brawl (15b): multicolour, colourless and lands.
   ...BRAWL_15B_MULTI_EFFECTS,
   // Strixhaven Brawl (15b), white.
@@ -1281,6 +1283,7 @@ export function removeFromCombat(ctx: Ctx, id: ObjectId): void {
 
 /** The Hobbit (20b multicolour): inside Bard's replacement draw (the cards drawn instead are not replaced again). */
 let bardDrawing = false;
+let phialDrawing = false; // Lord of the Rings (21d gc-rare)
 
 export function drawCard(ctx: Ctx, player: PlayerId, drawStepDraw = false): void {
   // Lorwyn Eclipsed (18b, black): Mornsong Aria, "players can't draw cards".
@@ -1318,6 +1321,18 @@ export function drawCard(ctx: Ctx, player: PlayerId, drawStepDraw = false): void
       for (let i = 0; i < count; i++) drawCard(ctx, player);
       return;
     }
+  }
+  // Lord of the Rings (21d gc-rare): Phial of Galadriel, "if you would draw a card while you have no cards in hand, draw two
+  // cards instead" (the two are not replaced again).
+  if (!phialDrawing && ltrDrawsTwice(ctx, player)) {
+    phialDrawing = true;
+    try {
+      drawCard(ctx, player, drawStepDraw);
+      drawCard(ctx, player, drawStepDraw);
+    } finally {
+      phialDrawing = false;
+    }
+    return;
   }
   const p = ctx.s.players[player];
   const top = p.library[0];

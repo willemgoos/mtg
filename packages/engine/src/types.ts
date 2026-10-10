@@ -467,6 +467,9 @@ export type AbilityDef =
       orAbilitiesOfSources?: boolean;
       /** Makes two mana instead of one while this holds (Ilysian Caryatid). */
       doubleIf?: ConditionDef;
+      // Lord of the Rings (21d gc-rare): Delighted Halfling
+      /** "...and that spell can't be countered" (with `onlyFor`: the spell this mana is spent on). */
+      uncounterableSpell?: boolean;
       /** Only if this is the color chosen for it (Uncharted Haven). */
       ifChosen?: boolean;
       // Brawl staples.
@@ -679,6 +682,9 @@ export interface CostDef {
   // Tarkir: Dragonstorm (19b, red): Reverberating Summons
   /** "Discard your hand" as a cost (a hand of no cards is fine). */
   discardHand?: boolean;
+  // Lord of the Rings (21d gc-rare): Mines of Moria
+  /** Exile this many cards from your graveyard (chosen one at a time when there are more). */
+  exileGraveyardCards?: number;
 }
 
 export type TriggerDef =
@@ -772,6 +778,9 @@ export type TriggerDef =
         // Reality Fracture (17a): Danitha, Spear of Agony
         /** A spell that targets an opponent or a creature an opponent controls. */
         | 'targetsOpponentOrTheirCreature'
+        // Lord of the Rings (21d gc-rare): Legolas, Master Archer
+        /** A spell that targets a creature its caster doesn't control (the source's controller). */
+        | 'ltrTargetsOtherCreature'
         // Reality Fracture (17a): Danitha, Sword of Hope
         /** An Equipment spell, or a spell that targets a creature you control. */
         | 'equipmentOrTargetsYourCreature'
@@ -1026,6 +1035,9 @@ export type TriggerDef =
   // Lord of the Rings (21b white)
   /** Whenever `min` or more creatures you control (matching the filter) attack a player (Landroval, Horizon Witness). */
   | { on: 'youAttackWithAtLeast'; min: number; filter?: CardFilter }
+  // Lord of the Rings (21d gc-rare): Fangorn, Tree Shepherd
+  /** Whenever one or more creatures you control (matching the filter) attack; the amount is how many of them attacked ("twice that much"). */
+  | { on: 'youAttackCounted'; filter?: CardFilter }
   /** Whenever this creature deals damage to a creature matching the filter, combat or not; that creature is the subject (East-Mark Cavalier). */
   | { on: 'dealsDamageToCreature'; filter: CardFilter }
   /** Whenever equipped creature blocks or becomes blocked by a creature: once for each such creature, the subject (Barrow-Blade). */
@@ -1315,6 +1327,9 @@ export type ConditionDef =
   // Lorwyn Eclipsed (18b, multi-a)
   /** You attacked with at least `count` creatures matching the filter this turn (Deepway Navigator). */
   | { kind: 'attackedWithAtLeast'; filter: CardFilter; count: number }
+  // Lord of the Rings (21d gc-rare): Minas Tirith
+  /** You attacked with at least `count` different creatures this turn (even ones that have left the battlefield since). */
+  | { kind: 'ltrAttackedWith'; count: number }
   /** A creature other than the source entered the battlefield under your control this turn (Wary Farmer). */
   | { kind: 'otherCreatureEnteredThisTurn' }
   /** You control a basic land. */
@@ -1569,6 +1584,11 @@ export interface CardFilter {
   diedThisTurn?: boolean;
   /** "Creature with power X": X is the value paid for the ability's {X}; the ability's actions only list targets of that power (Ent-Draught Basin). */
   powerEqualsX?: boolean;
+  // Lord of the Rings (21d gc-rare)
+  /** A creature card that shares no creature type with a creature its controller controls (Radagast the Brown). */
+  ltrNoSharedType?: boolean;
+  /** None of these objects (Mount Doom: "destroy the rest"). */
+  ltrExceptIds?: ObjectId[];
 }
 
 export interface TargetSpec {
@@ -3133,6 +3153,9 @@ export type EffectDef =
       // Tarkir: Dragonstorm (19b, black): Desperate Measures
       /** Only if it dies under your control ("when it dies under your control this turn"). */
       underYourControl?: boolean;
+      // Lord of the Rings (21d gc-rare): Fall of Gil-galad
+      /** The controller of the ability is the creature's controller when it dies ("When this creature dies, draw two cards"). */
+      byLastController?: boolean;
     }
   /**
    * Reveal the top N: you may put a permanent card onto the battlefield (with a
@@ -3371,6 +3394,11 @@ export type StaticDef =
    * instead" (every such draw, not only the first one each turn).
    */
   | { kind: 'everyExtraDrawBecomes'; count: number }
+  // Lord of the Rings (21d gc-rare)
+  /** "You don't lose unspent green mana as steps and phases end" (Fangorn, Tree Shepherd). */
+  | { kind: 'ltrKeepGreenMana' }
+  /** "If you would draw a card while you have no cards in hand, draw two cards instead" (Phial of Galadriel). */
+  | { kind: 'ltrDrawTwiceEmptyHand' }
   /** Thranduil, the Elvenking: this permanent has all activated abilities of all Elf cards in its controller's graveyard. */
   | { kind: 'graveyardElfAbilities' }
   /** Prevent all combat damage dealt to and by this creature (Fog Bank). */
@@ -3447,6 +3475,9 @@ export type StaticDef =
       // Lord of the Rings (21b white): Fog on the Barrow-Downs
       /** "Enchanted creature is a <subtype>" (it loses all other creature types) while the Aura stays. */
       setCreatureSubtype?: string;
+      // Lord of the Rings (21d gc-rare): Sting, the Glinting Dagger
+      /** These keywords only while the creature is blocking or blocked by a creature matching the filter. */
+      combatKeywords?: { filter: CardFilter; keywords: Keyword[] };
     }
   // Reality Fracture (17a): Karn, Argent Defender
   /** "Artifacts and creatures entering the battlefield don't cause abilities to trigger." */
@@ -3702,7 +3733,7 @@ export type StaticDef =
   | { kind: 'cantAttackYou'; filter: CardFilter; condition?: ConditionDef }
   // Final Fantasy (11c): rare statics
   /** If you would gain life, you gain twice that much instead (The Wind Crystal). */
-  | { kind: 'doubleLifeGain' }
+  | { kind: 'doubleLifeGain'; maxLife?: number /* Lord of the Rings (21d gc-rare): Phial of Galadriel, only while you have this much life or less */ }
   /** If an opponent would mill cards, they mill that many plus `amount` instead (The Water Crystal). */
   | { kind: 'opponentsMillMore'; amount: number }
   /**
@@ -4224,6 +4255,8 @@ export interface PlayerState {
   // Mystical Archive (16): Teferi's Protection, Approach of the Second Sun
   /** Their life total can't change and they have protection from everything, until their next untap step. */
   lifeFrozen?: boolean;
+  /** Lord of the Rings (21d gc-rare): The One Ring, "protection from everything" until their next turn. */
+  ltrProtected?: boolean;
   /** How many spells named Approach of the Second Sun they have cast this game. */
   approachCasts?: number;
   /** They attacked during their most recent turn before the current one (Avenge). */
@@ -4590,6 +4623,8 @@ export interface ContinuousEffect {
     sourceDefId: CardDefId;
     /** Tarkir: Dragonstorm (19b, black): only if it died under `controller`'s control. */
     underControl?: boolean;
+    /** Lord of the Rings (21d gc-rare): the ability is controlled by whoever controlled it as it died. */
+    byLastController?: boolean;
   };
   // Strixhaven Brawl (15b, w): Alseid of Life's Bounty
   /** Protection from this colour (targeting and damage; not blocking). */
