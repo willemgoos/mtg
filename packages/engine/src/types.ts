@@ -1772,6 +1772,9 @@ export type Amount =
   | { count: 'opponentCreaturesExiledThisTurn' }
   /** The power of the creature sacrificed to pay for this (Wick). */
   | { sacrificedPower: true }
+  // Lord of the Rings (21b black): Nasty End, Gríma Wormtongue
+  /** 1 if the creature sacrificed to pay for this was legendary, else 0. */
+  | { sacrificedLegendary: true }
   /** Creatures that died under your control this turn (Season of Loss). */
   | { count: 'creaturesYouLostThisTurn' }
   // Lorwyn Eclipsed (18b, white): Kinbinding
@@ -2894,8 +2897,8 @@ export type EffectDef =
       keywordsThisTurn?: Keyword[];
       /** The token's base power and toughness are both this (an "X/X" token whose definition is 0/0: Spirits, Monument tokens). */
       pt?: Amount;
-      /** "Sacrifice it at the beginning of the next end step" (mobilize, War Effort). */
-      sacrificeAt?: 'nextEndStep';
+      /** "Sacrifice it at the beginning of the next end step" (mobilize, War Effort); Lord of the Rings (21b black): 'endCombat' (Mordor Trebuchet). */
+      sacrificeAt?: 'nextEndStep' | 'endCombat';
     }
   /** Return all land cards from your graveyard to the battlefield tapped (World Shaper). */
   | { kind: 'returnLandsFromGraveyard' }
@@ -3282,6 +3285,9 @@ export type StaticDef =
       keywords?: Keyword[];
     }
   | { kind: 'noLifeGain' }
+  // Lord of the Rings (21b black): Gríma Wormtongue
+  /** "Your opponents can't gain life." */
+  | { kind: 'opponentsCantGainLife' }
   // Tarkir: Dragonstorm (19a): Zurgo, Thunder's Decree
   /**
    * Permanents you control matching the filter can't be sacrificed (as an effect or a cost), during your end step if
@@ -3449,6 +3455,9 @@ export type StaticDef =
       // Tarkir: Dragonstorm (19b, blue): Snowmelt Stag
       /** Base power and toughness while the condition holds ("During your turn, this creature has base power and toughness 5/2"). */
       basePT?: [number, number];
+      // Lord of the Rings (21b black): Grond, the Gatebreaker
+      /** It is an artifact creature while the condition holds (a Vehicle: "as long as it's your turn and you control an Army"). */
+      becomesCreature?: boolean;
     }
   /** Instant and sorcery spells you cast cost {N} less (Archmage of Runes). */
   | { kind: 'instantsAndSorceriesCostLess'; amount: number }
@@ -4246,6 +4255,8 @@ export type StackItem =
       // Strixhaven (13b): Tend the Pests
       /** The power of the creature sacrificed as an additional cost to cast it. */
       lkiPower?: number;
+      /** Lord of the Rings (21b black): the sacrificed creature was legendary. */
+      lkiLegendary?: boolean;
       /** Times it was kicked (multikicker). */
       kickCount?: number;
       /** Cast from exile (Klaw). */
@@ -4271,6 +4282,8 @@ export type StackItem =
       targets: TargetChoice[];
       /** Source's power when it left the battlefield (e.g. sacrificed as a cost). */
       lkiPower?: number;
+      /** Lord of the Rings (21b black): the creature sacrificed as a cost was legendary. */
+      lkiLegendary?: boolean;
       subject?: ObjectRef;
       /** Vulture, Feathered Fiend: every creature that set off a batched trigger ("those creatures"). */
       subjects?: ObjectRef[];
@@ -4594,6 +4607,8 @@ export interface EffectSource {
   /** Chosen targets; null where the target became illegal. */
   targets: (TargetChoice | null)[];
   lkiPower?: number;
+  /** Lord of the Rings (21b black): the creature sacrificed as a cost was legendary. */
+  lkiLegendary?: boolean;
   /** What caused the trigger. */
   subject?: ObjectRef;
   /** Vulture, Feathered Fiend: every creature that set off a batched trigger. */

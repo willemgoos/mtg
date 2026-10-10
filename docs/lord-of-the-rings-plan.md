@@ -228,3 +228,24 @@ All 22 blue cards, `cards/src/ltr/blue.ts` (tests `cards/test/ltr-blue{,-2,-3}.t
 - Notes: a spell/trigger with an "any number / up to" target that must still resolve with none (The Bath Song's mana, Mariner) needs
   `optional: true` on the spec, or choosing no targets drops the trigger. Ioreth's "two other target legendary creatures" lists both orders
   of each pair as separate (equivalent) activations.
+
+## Phase 21b: black (done)
+
+25/25 black packet cards, in `packages/cards/src/ltr/black.ts` (the Ballistic Boulder token is in `LTR_BLACK_TOKENS`); tests
+`cards/test/ltr-black.test.ts` and `ltr-black-2.test.ts`. Engine pieces in `engine/src/ltr-black-effects.ts`, hooks marked
+`// Lord of the Rings (21b black)`:
+
+- **Gríma Wormtongue**: static `opponentsCantGainLife` (checked in `gainLife`; `noLifeGain` is the "players" version). "If the sacrificed
+  creature was legendary" (Gríma, Nasty End): the Amount `{ sacrificedLegendary: true }` (1 or 0), read from `lkiLegendary`, which
+  `castSpell` / `activateAbility` set from the creature sacrificed as a cost (a Ring-bearer counts as legendary) and which travels beside
+  `lkiPower` through the stack item, the paused resolution and spell copies.
+- **Mordor Trebuchet**: `createToken` with `sacrificeAt: 'endCombat'` (a delayed trigger at the end of combat step) next to `attacking`;
+  the trigger is `youAttack` with `subtypes: ['Goblin', 'Orc']` (once per attack).
+- **Grond, the Gatebreaker**: the `while` static has `becomesCreature` ("is an artifact creature as long as ..."): `characteristics` and
+  `isCreature` (via `staticallyCreature`) honour it; the condition is `all [yourTurn, controlsPermanents Army]`. Crew 3 is the usual crew.
+- Not new engine work: Gorbag is `creatureYouControlDealsCombatDamage` (`toPlayer`, Goblin or Orc) + `may { sacrifice 'subject', then
+  reflexiveTrigger }` with a modal `reflexive` ability; Voracious Fell Beast is `opponentSacrifices` with `then: [food]`; Bitter Downfall
+  is `costReductionIfTarget { damaged: true }`; Lash of the Balrog is `sacrificeOrPay`; March from the Black Gate is
+  `creatureYouControlAttacks { subtype: 'Army' }`.
+- Nazgûl's "A deck can have up to nine cards named Nazgûl" is a deck-building rule: it is written in the card's comment only (as for
+  Cid in Final Fantasy); nothing in the game enforces a copy limit, so no deck or packet is affected.

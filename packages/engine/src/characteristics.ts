@@ -2,6 +2,7 @@ import { commanderTypes, isCommander } from './brawl.ts';
 import { type Ctx, def, defOf, obj, other } from './context.ts';
 import { manaValue } from './cost.ts';
 import { vividCount } from './ecl-18a.ts';
+import { staticallyCreature } from './ltr-black-effects.ts'; // Lord of the Rings (21b black)
 import { spellsCastThisTurn } from './tdm-19a.ts';
 import { checkCondition } from './triggers.ts';
 import type {
@@ -139,6 +140,11 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
           baseTimestamp = o.timestamp;
         }
         if (st.kind === 'while' && st.cantBeBlocked) cantBeBlocked = true;
+        // Lord of the Rings (21b black): Grond, the Gatebreaker, an artifact creature while the condition holds.
+        if (st.kind === 'while' && st.becomesCreature) {
+          crewed = true;
+          artifactToo = true;
+        }
         if (st.keywords?.length) {
           granted ??= new Set(keywords);
           for (const k of st.keywords) granted.add(k);
@@ -749,7 +755,10 @@ export function isCreature(ctx: Ctx, id: ObjectId): boolean {
   const o = obj(ctx, id);
   return (
     o.zone === 'battlefield' &&
-    ctx.s.effects.some((e) => e.becomesCreature && e.affected.id === id && e.affected.zcc === o.zcc)
+    (ctx.s.effects.some(
+      (e) => e.becomesCreature && e.affected.id === id && e.affected.zcc === o.zcc,
+    ) ||
+      staticallyCreature(ctx, id)) // Lord of the Rings (21b black): Grond, the Gatebreaker
   );
 }
 
