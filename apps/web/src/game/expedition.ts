@@ -11,6 +11,7 @@ import {
   secretsOfStrixhavenArchiveSheets,
   realityFractureBoosterSheets,
   lorwynEclipsedBoosterSheets,
+  tarkirDragonstormBoosterSheets,
   secretsOfStrixhavenBoosterSheets,
   strixhavenArchiveSheets,
   strixhavenBoosterSheets,
@@ -808,7 +809,7 @@ function pactOffer(r: ExpeditionRun): PactId | undefined {
  */
 function rareOffer(r: ExpeditionRun, salt: number, count = 3, mythic = false): string[] {
   const next = rng((r.seed ^ Math.imul(r.path.length * 31 + salt, 0x68e31da4)) >>> 0);
-  const colors = deckColors(r.build).slice(0, 2);
+  const colors = mainColors(r.build);
   const sheets = SHEETS[packSetOf(r, r.path.length + salt)];
   const rares = mythic ? sheets.mythic : [...sheets.rare, ...sheets.mythic];
   const fits = rares.filter(
@@ -1068,7 +1069,7 @@ export const landCopies = (name: string): number =>
 
 /** Special lands that suit your deck: they make only its colours, or are utility lands. */
 export function landsFor(b: Build): string[] {
-  const colors = deckColors(b).slice(0, 2);
+  const colors = mainColors(b);
   return SCRYFALL.filter((c) => {
     if (!c.typeLine.includes('Land') || c.typeLine.startsWith('Basic') || c.front) return false;
     if (UTILITY_LANDS.includes(c.name)) return true;
@@ -1365,7 +1366,7 @@ export function summarize(r: ExpeditionRun): RunSummary {
 // ---------------------------------------------------------------------------
 
 /** The set a booster comes from: Foundations, or the set of a Bloomburrow, Marvel, Final Fantasy, Strixhaven or Reality Fracture deck. */
-export type PackSet = 'fdn' | 'blb' | 'msh' | 'fin' | 'stx' | 'sos' | 'fra' | 'ecl';
+export type PackSet = 'fdn' | 'blb' | 'msh' | 'fin' | 'stx' | 'sos' | 'fra' | 'ecl' | 'tdm';
 
 /** Booster names, by set. */
 export const PACK_SET_NAMES: Record<PackSet, string> = {
@@ -1377,15 +1378,23 @@ export const PACK_SET_NAMES: Record<PackSet, string> = {
   fin: 'Final Fantasy',
   fra: 'Reality Fracture',
   ecl: 'Lorwyn Eclipsed',
+  tdm: 'Tarkir: Dragonstorm',
 };
 
 const asPackSet = (set: string | undefined): PackSet =>
-  set === 'blb' || set === 'msh' || set === 'fin' || set === 'stx' || set === 'sos' || set === 'fra' || set === 'ecl'
+  set === 'blb' ||
+  set === 'msh' ||
+  set === 'fin' ||
+  set === 'stx' ||
+  set === 'sos' ||
+  set === 'fra' ||
+  set === 'ecl' ||
+  set === 'tdm'
     ? set
     : 'fdn';
 
 /**
- * The set of the run's `n`th booster: a Bloomburrow, Marvel, Final Fantasy, Strixhaven, Reality Fracture or Lorwyn Eclipsed deck opens that
+ * The set of the run's `n`th booster: a Bloomburrow, Marvel, Final Fantasy, Strixhaven, Reality Fracture, Lorwyn Eclipsed or Tarkir: Dragonstorm deck opens that
  * set's boosters, and a Jump In deck mixing two sets alternates between them.
  */
 export function packSetOf(r: Pick<ExpeditionRun, 'deck'>, n = 0): PackSet {
@@ -1424,6 +1433,7 @@ const SHEETS = {
   sos: secretsOfStrixhavenBoosterSheets(),
   fra: realityFractureBoosterSheets(),
   ecl: lorwynEclipsedBoosterSheets(),
+  tdm: tarkirDragonstormBoosterSheets(),
 };
 type Sheet = (typeof SHEETS.fdn)['common'];
 /** Mystical Archive (16): STX and SOS boosters have one archive card in place of a common. */
@@ -1705,6 +1715,20 @@ export function deckColors(b: Build): Color[] {
   return COLORS.filter((c) => n.get(c)).sort((a, b) => n.get(b)! - n.get(a)!);
 }
 
+/** Spell copies of a third colour that make it one of the deck's colours rather than a splash. */
+export const THIRD_COLOUR_SPELLS = 4;
+
+/**
+ * The colours the deck is built in: its two most-played, and a third when it plays at least
+ * `THIRD_COLOUR_SPELLS` spells of it (Tarkir: Dragonstorm's clan decks); fewer is a splash.
+ */
+export function mainColors(b: Build): Color[] {
+  const n = spellColors(b.main);
+  const sorted = deckColors(b);
+  const third = sorted[2];
+  return third && n.get(third)! >= THIRD_COLOUR_SPELLS ? sorted.slice(0, 3) : sorted.slice(0, 2);
+}
+
 /**
  * The colours each spell in the deck needs, as spell copies per colour. A
  * hybrid symbol ({W/B}) needs only one of its colours: the one the rest of the
@@ -1757,7 +1781,7 @@ export function seasonDecklist(
   const rank = (c: (typeof spells)[number]) =>
     (c.typeLine.includes('Creature') ? 10 : 0) + (RARITY_SCORE[c.rarity] ?? 0) + mv(c.name) / 10;
   const face = [...spells].sort((a, b) => rank(b) - rank(a))[0]?.name ?? cards[0]?.[0] ?? 'Plains';
-  const colors = deckColors({
+  const colors = mainColors({
     main: Object.fromEntries(cards),
     side: {},
     opened: 0,
@@ -1767,7 +1791,7 @@ export function seasonDecklist(
   return {
     id: `season:${saveId}:${deck.id}`,
     name: deck.name,
-    colors: colors.length ? colors.slice(0, 2) : ['W'],
+    colors: colors.length ? colors : ['W'],
     face,
     source: 'custom',
     series: 'season',
@@ -1778,10 +1802,10 @@ export function seasonDecklist(
 /** The run's deck as a decklist, for the board and the deck view. */
 export function runDeck(r: ExpeditionRun): Decklist {
   const base = deckById(r.deck);
-  const colors = deckColors(r.build);
+  const colors = mainColors(r.build);
   return {
     ...base,
-    colors: colors.length ? colors.slice(0, 2) : base.colors,
+    colors: colors.length ? colors : base.colors,
     cards: Object.entries(r.build.main),
   };
 }

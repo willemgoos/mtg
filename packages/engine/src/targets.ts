@@ -85,6 +85,13 @@ function permanentOk(ctx: Ctx, spec: TargetSpec, id: ObjectId, src: TargetingSou
       def(ctx, src.sourceId).colors.includes('W')
     )
       return false;
+    // Tarkir: Dragonstorm (19b, misc): Dragonfire Blade, hexproof from monocolored.
+    if (
+      hasKeyword(ctx, id, 'hexproofFromMonocolored') &&
+      src.sourceId &&
+      def(ctx, src.sourceId).colors.length === 1
+    )
+      return false;
     // Lorwyn Eclipsed (18b, multi-b): Tam, Mindful First-Year.
     if (src.sourceId && hexproofFromOwnColors(ctx, id, src.sourceId)) return false;
   }
@@ -149,6 +156,11 @@ export function targetCandidates(ctx: Ctx, spec: TargetSpec, src: TargetingSourc
   if (spec.what === 'spell' && spec.orCreature)
     for (const id of ctx.s.battlefield)
       if (permanentOk(ctx, { ...spec, what: 'creature' }, id, src))
+        out.push({ object: refOf(obj(ctx, id)) });
+  // Tarkir: Dragonstorm (19b, clans): "target spell or permanent".
+  if (spec.what === 'spell' && spec.orPermanent)
+    for (const id of ctx.s.battlefield)
+      if (permanentOk(ctx, { ...spec, what: 'permanent' }, id, src))
         out.push({ object: refOf(obj(ctx, id)) });
   if (spec.what === 'spell') {
     for (const item of ctx.s.stack)
@@ -262,6 +274,8 @@ export function isTargetLegal(
   if (!o) return false;
   if (spec.what === 'spell' && spec.orCreature && o.zone === 'battlefield')
     return permanentOk(ctx, { ...spec, what: 'creature' }, o.id, src);
+  if (spec.what === 'spell' && spec.orPermanent && o.zone === 'battlefield')
+    return permanentOk(ctx, { ...spec, what: 'permanent' }, o.id, src);
   if (spec.what === 'spell') return spellOk(ctx, spec, o.id, src);
   return spec.what === 'graveyardCard'
     ? graveyardCardOk(ctx, spec, o.id, src)
@@ -298,4 +312,11 @@ export function sharesCreatureType(ctx: Ctx, a: ObjectId, b: ObjectId): boolean 
   if (def(ctx, a).keywords.includes('changeling') || def(ctx, b).keywords.includes('changeling'))
     return true;
   return subtypesOf(ctx, a).some((st) => hasSubtype(ctx, b, st));
+}
+
+/** Tarkir: Dragonstorm (19b, black): are all these target cards in one graveyard? (Feral Deathgorger: "from a single graveyard".) */
+export function sameGraveyard(ctx: Ctx, chosen: readonly TargetChoice[]): boolean {
+  const owners = new Set<PlayerId>();
+  for (const t of chosen) if ('object' in t) owners.add(obj(ctx, t.object.id).owner);
+  return owners.size <= 1;
 }

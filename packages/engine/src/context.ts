@@ -22,9 +22,16 @@ import { BRAWL_15B_R_EFFECTS } from './brawl-15b-r-effects.ts';
 import { BRAWL_15A_W_EFFECTS } from './brawl-15a-w-effects.ts';
 import { BRAWL_15B_B_EFFECTS } from './brawl-15b-b-effects.ts';
 import { ECL_18A_EFFECTS, willPersist } from './ecl-18a.ts';
+import { cantBeSacrificed, TDM_19A_EFFECTS } from './tdm-19a.ts';
+import { TDM_CLANS_B_EFFECTS } from './tdm-clans-b-effects.ts';
+import { TDM_WHITE_EFFECTS } from './tdm-white-effects.ts';
+import { extraEntryCounters, noteCreatureCounters, TDM_MISC_EFFECTS } from './tdm-misc-effects.ts';
+import { TDM_CLANS_EFFECTS } from './tdm-clans-effects.ts'; // Tarkir: Dragonstorm (19b, clans)
 import { ECL_SPECIAL_EFFECTS } from './ecl-special-effects.ts';
 import { ECL_GREEN_EFFECTS } from './ecl-green-effects.ts';
+import { TDM_GREEN_EFFECTS } from './tdm-green-effects.ts';
 import { ECL_BLUE_EFFECTS } from './ecl-blue-effects.ts';
+import { TDM_BLUE_EFFECTS } from './tdm-blue-effects.ts';
 import { ECL_WHITE_EFFECTS } from './ecl-white-effects.ts';
 import { BRAWL_15B_W_EFFECTS } from './brawl-15b-w-effects.ts';
 import { BRAWL_15B_U_EFFECTS } from './brawl-15b-u-effects.ts';
@@ -153,6 +160,12 @@ const BUILT_IN_EFFECTS: Record<string, CustomEffect> = {
   ...BRAWL_15B_B_EFFECTS,
   // Lorwyn Eclipsed (18a).
   ...ECL_18A_EFFECTS,
+  ...TDM_19A_EFFECTS,
+  ...TDM_CLANS_B_EFFECTS, // Tarkir: Dragonstorm (19b, clans-b)
+  ...TDM_WHITE_EFFECTS, // Tarkir: Dragonstorm (19b, white)
+  ...TDM_MISC_EFFECTS, // Tarkir: Dragonstorm (19b, misc)
+  ...TDM_GREEN_EFFECTS, // Tarkir: Dragonstorm (19b): green
+  ...TDM_CLANS_EFFECTS, // Tarkir: Dragonstorm (19b, clans)
   // Lorwyn Eclipsed (18b, special).
   ...ECL_SPECIAL_EFFECTS,
   // Lorwyn Eclipsed (18b): green.
@@ -161,6 +174,8 @@ const BUILT_IN_EFFECTS: Record<string, CustomEffect> = {
   ...ECL_MULTI_A_EFFECTS,
   // Lorwyn Eclipsed (18b): blue.
   ...ECL_BLUE_EFFECTS,
+  // Tarkir: Dragonstorm (19b): blue.
+  ...TDM_BLUE_EFFECTS,
   // Lorwyn Eclipsed (18b): white.
   ...ECL_WHITE_EFFECTS,
   // Strixhaven Brawl (15b): multicolour, colourless and lands.
@@ -227,28 +242,33 @@ export function defOf(ctx: Ctx, defId: string): CardDefinition {
 const ALL_COLORS: Color[] = ['W', 'U', 'B', 'R', 'G'];
 
 export function def(ctx: Ctx, id: ObjectId): CardDefinition {
-  const d = defBase(ctx, id);
+  const o = obj(ctx, id);
+  const d = defBase(ctx, o);
   // Lorwyn Eclipsed (18b, multi-b): Tam, Mindful First-Year, "becomes all colors until end of turn".
-  const o = ctx.s.objects[id];
-  if (o?.allColorsTurn === ctx.s.turn.number && o.zone === 'battlefield')
+  if (ctx.s.colorChanges && o.allColorsTurn === ctx.s.turn.number && o.zone === 'battlefield')
     return { ...d, colors: ALL_COLORS };
   return d;
 }
 
-function defBase(ctx: Ctx, id: ObjectId): CardDefinition {
-  const o = obj(ctx, id);
+/** Lorwyn Eclipsed (18b): `d` with the colours the object was given or lost. */
+function recolored(ctx: Ctx, o: GameObject, d: CardDefinition): CardDefinition {
+  // Lorwyn Eclipsed (18b, special): "becomes the chosen color" (Puca's Eye), "becomes that color until end of turn" (Foraging Wickermaw).
+  const d0 =
+    o.colorOverride && (o.colorOverride.untilTurn ?? Infinity) >= ctx.s.turn.number
+      ? { ...d, colors: o.colorOverride.colors }
+      : d;
+  // Lorwyn Eclipsed (18b, blue): Noggle the Mind, "loses all colors".
+  return o.colorless ? colorlessDef(d0) : d0;
+}
+
+function defBase(ctx: Ctx, o: GameObject): CardDefinition {
+  const id = o.id;
   const printed = defOf(ctx, o.defId);
   // Iron Man: a nonlegendary copy is nonlegendary for every rule, not just the legend rule.
   const legal = o.nonlegendary
     ? { ...printed, supertypes: printed.supertypes.filter((t) => t !== 'Legendary') }
     : printed;
-  // Lorwyn Eclipsed (18b, special): "becomes the chosen color" (Puca's Eye), "becomes that color until end of turn" (Foraging Wickermaw).
-  const d0 =
-    o.colorOverride && (o.colorOverride.untilTurn ?? Infinity) >= ctx.s.turn.number
-      ? { ...legal, colors: o.colorOverride.colors }
-      : legal;
-  // Lorwyn Eclipsed (18b, blue): Noggle the Mind, "loses all colors".
-  const d = o.colorless ? colorlessDef(d0) : d0;
+  const d = ctx.s.colorChanges ? recolored(ctx, o, legal) : legal;
   if (o.foodBy !== undefined) {
     const aura = ctx.s.objects[o.foodBy];
     if (aura && aura.zone === 'battlefield' && aura.attachedTo === id) return foodDef(d);
@@ -294,8 +314,22 @@ function defBase(ctx: Ctx, id: ObjectId): CardDefinition {
   return withExtraAbilities(ctx, o, d);
 }
 
+/** Tarkir: Dragonstorm (19b, blue): `d` plus the abilities an attached Aura gives ("Enchanted creature has ..."). */
+function withAuraGrants(ctx: Ctx, o: GameObject, d: CardDefinition): CardDefinition {
+  const given = o.auraGrants!.flatMap((auraId) => {
+    const aura = ctx.s.objects[auraId];
+    if (!aura || aura.zone !== 'battlefield' || aura.attachedTo !== o.id) return [];
+    return (ctx.db.get(aura.defId)?.abilities ?? []).flatMap((a) =>
+      a.kind === 'static' && a.effect.kind === 'attached' ? (a.effect.grantAbilities ?? []) : [],
+    );
+  });
+  return given.length ? { ...d, abilities: [...d.abilities, ...given] } : d;
+}
+
 /** `d` plus the abilities the object was given for a while (until end of turn, perpetually, until it's cast). */
-function withExtraAbilities(_ctx: Ctx, o: GameObject, d: CardDefinition): CardDefinition {
+function withExtraAbilities(ctx: Ctx, o: GameObject, d: CardDefinition): CardDefinition {
+  if (ctx.s.auraGrants && o.auraGrants?.length && o.zone === 'battlefield')
+    d = withAuraGrants(ctx, o, d);
   if (o.tempAbilities?.length || o.perpetualAbilities?.length || o.abilitiesUntilCast?.length)
     return {
       ...d,
@@ -717,6 +751,7 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
   delete o.attachedTo;
   delete o.usedAbilities;
   delete o.dealtCombatDamage; // Reality Fracture (17a): Ruric Thar
+  delete o.dealtDamage; // Tarkir: Dragonstorm (19b, clans-b): Karakyk Guardian
   delete o.exiledUntilLeaves;
   delete o.kicked;
   delete o.wasCast; // Reality Fracture (17a)
@@ -735,6 +770,7 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
   delete o.colorOverride; // Lorwyn Eclipsed (18b, special)
   delete o.exiledWith;
   delete o.foodBy;
+  delete o.auraGrants; // Tarkir: Dragonstorm (19b, blue)
   delete o.controlledBy;
   delete o.xPaid;
   delete o.abilitiesUntilCast; // Reality Fracture (17a): Emrakul, the Exigent Doom
@@ -957,6 +993,8 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
       addCounters(ctx, id, ed.entersWithCounters);
     for (const [k, v] of Object.entries(ed.entersWithNamedCounters ?? {}))
       (o.counters ??= {})[k] = (o.counters[k] ?? 0) + v;
+    // Tarkir: Dragonstorm (19b, misc): Dragonstorm Globe (a spell resolving does this in stack.ts).
+    addCounters(ctx, id, extraEntryCounters(ctx, id));
   }
   // Ygra entering or leaving changes what the other creatures are.
   if ((from === 'battlefield' || to === 'battlefield') && makesFood(defOf(ctx, o.defId)))
@@ -1057,6 +1095,8 @@ export function addCounters(ctx: Ctx, id: ObjectId, n: number, name?: string, by
         player: o.controller,
         by: by ?? ctx.puttingPlayer ?? o.controller,
       });
+    // Tarkir: Dragonstorm (19b, misc): counters of any kind on a creature.
+    else anyCreatureCounters(ctx, id, n);
     return;
   }
   o.plusOneCounters += n;
@@ -1070,6 +1110,14 @@ export function addCounters(ctx: Ctx, id: ObjectId, n: number, name?: string, by
     o.countersTimes = 1;
   }
   emit(ctx, { type: 'countersAdded', id, count: n, player: o.controller });
+  anyCreatureCounters(ctx, id, n); // Tarkir: Dragonstorm (19b, misc)
+}
+
+/** Tarkir: Dragonstorm (19b, misc): Stalwart Successor, Hollowmurk Siege: counters of any kind were put on a creature. */
+function anyCreatureCounters(ctx: Ctx, id: ObjectId, n: number): void {
+  if (!def(ctx, id).types.includes('Creature')) return;
+  noteCreatureCounters(ctx, obj(ctx, id));
+  emit(ctx, { type: 'anyCountersAdded', id, count: n, player: obj(ctx, id).controller });
 }
 
 /** Festival of Embers: `player` controls a permanent that exiles cards headed for their graveyard. */
@@ -1103,6 +1151,8 @@ function exiledInsteadOfDying(ctx: Ctx, o: GameObject): boolean {
 
 /** Sacrifices a permanent: its controller puts it into its owner's graveyard. */
 export function sacrifice(ctx: Ctx, id: ObjectId): void {
+  // Tarkir: Dragonstorm (19a): Zurgo, Thunder's Decree.
+  if (cantBeSacrificed(ctx, id)) return;
   const o = obj(ctx, id);
   if (def(ctx, id).subtypes.includes('Food'))
     (ctx.s.turn.foodsSacrificed ??= { p1: 0, p2: 0 })[o.controller]++;

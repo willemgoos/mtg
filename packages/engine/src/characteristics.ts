@@ -2,6 +2,7 @@ import { commanderTypes, isCommander } from './brawl.ts';
 import { type Ctx, def, defOf, obj, other } from './context.ts';
 import { manaValue } from './cost.ts';
 import { vividCount } from './ecl-18a.ts';
+import { spellsCastThisTurn } from './tdm-19a.ts';
 import { checkCondition } from './triggers.ts';
 import type {
   Amount,
@@ -110,6 +111,11 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
         if (!on) continue;
         power += st.power;
         toughness += st.toughness;
+        // Tarkir: Dragonstorm (19b, blue): Snowmelt Stag, base power and toughness while the condition holds.
+        if (st.kind === 'while' && st.basePT && o.timestamp >= baseTimestamp) {
+          override = st.basePT;
+          baseTimestamp = o.timestamp;
+        }
         if (st.kind === 'while' && st.cantBeBlocked) cantBeBlocked = true;
         if (st.keywords?.length) {
           granted ??= new Set(keywords);
@@ -258,6 +264,8 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
     for (const k of removed) granted.delete(k);
     keywords = granted;
   }
+  // Tarkir: Dragonstorm (19a): decayed creatures can't block.
+  if (keywords.has('decayed')) cantBlock = true;
   if (override) {
     power += override[0] - (basePower ?? base ?? o.copyPT?.power ?? d.power ?? 0);
     toughness += override[1] - (base ?? o.copyPT?.toughness ?? d.toughness ?? 0);
@@ -342,6 +350,13 @@ export function countOf(
   // Marvel Super Heroes (The Scarlet Witch): 'where X is her power'.
   if ('powerOf' in a)
     return a.powerOf === 'self' && sourceId ? Math.max(0, power(ctx, sourceId)) : 0;
+  // Tarkir: Dragonstorm (19a): every kind of counter on the source.
+  if ('allCountersOn' in a) {
+    const src = a.allCountersOn === 'self' && sourceId ? ctx.s.objects[sourceId] : undefined;
+    return src
+      ? src.plusOneCounters + Object.values(src.counters ?? {}).reduce((n, c) => n + c, 0)
+      : 0;
+  }
   // Strixhaven Brawl (15b, w): Glyph Elemental, "for each +1/+1 counter on this Aura".
   if ('countersOn' in a)
     return a.countersOn === 'self' && sourceId
@@ -472,6 +487,9 @@ export function countOf(
     return ctx.s.turn.creaturesExiled?.[player === 'p1' ? 'p2' : 'p1'] ?? 0;
   // Wakanda Forever (9c).
   if (a.count === 'creaturesOnBattlefield') return creaturesOnBattlefield(ctx).length;
+  // Tarkir: Dragonstorm (19b, white): Static Snare.
+  if (a.count === 'attackingCreatures')
+    return (ctx.s.combat?.attackers ?? []).filter((x) => isCreature(ctx, x.id)).length;
   if (a.count === 'totalManaValue')
     return (
       ctx.s.battlefield
@@ -482,6 +500,8 @@ export function countOf(
         .reduce((n, id) => n + manaValue(def(ctx, id).manaCost), 0)
     );
   if (a.count === 'commanderCasts') return ctx.s.players[player].commanderCasts ?? 0;
+  // Tarkir: Dragonstorm (19a): Narset, "the number of spells you've cast this turn".
+  if (a.count === 'spellsCastThisTurn') return spellsCastThisTurn(ctx, player, a.filter);
   // Doom Prevails (9e).
   if (a.count === 'cardsDiscardedThisTurn') return ctx.s.turn.discards?.[player] ?? 0;
   if (a.count === 'permanentsOpponentsControl')
@@ -510,6 +530,16 @@ export function countOf(
     for (const p of ['p1', 'p2'] as const)
       for (const id of ctx.s.players[p].graveyard) for (const t of def(ctx, id).types) types.add(t);
     return types.size;
+  }
+  // Tarkir: Dragonstorm (19b, black): Hundred-Battle Veteran.
+  if (a.count === 'counterKindsAmongYourCreatures') {
+    const kinds = new Set<string>();
+    for (const c of creaturesOnBattlefield(ctx, player)) {
+      const o = obj(ctx, c.id);
+      if (o.plusOneCounters > 0) kinds.add('+1/+1');
+      for (const [k, n] of Object.entries(o.counters ?? {})) if (n > 0) kinds.add(k);
+    }
+    return kinds.size;
   }
   if (a.count === 'differentPowersYouControl')
     return new Set(creaturesOnBattlefield(ctx, player).map((c) => power(ctx, c.id))).size;
@@ -969,13 +999,47 @@ export function canTapForAbility(ctx: Ctx, id: ObjectId): boolean {
 // Marvel Super Heroes Jumpstart (Wakanda)
 /** An Aura on it says "its activated abilities can't be activated" (Secure Detention). */
 export function abilitiesLocked(ctx: Ctx, id: ObjectId): boolean {
-  return ctx.s.battlefield.some(
-    (src) =>
-      obj(ctx, src).attachedTo === id &&
-      def(ctx, src).abilities.some(
-        (a) => a.kind === 'static' && a.effect.kind === 'attached' && a.effect.cantActivate,
-      ),
+  return (
+    ctx.s.battlefield.some(
+      (src) =>
+        obj(ctx, src).attachedTo === id &&
+        def(ctx, src).abilities.some(
+          (a) => a.kind === 'static' && a.effect.kind === 'attached' && a.effect.cantActivate,
+        ),
+    ) || lockedByStatic(ctx, id)
   );
+}
+
+// Tarkir: Dragonstorm (19b, white): Clarion Conqueror, "activated abilities of artifacts, creatures, and planeswalkers can't be
+// activated". The cards with the static are found once per card database (this is asked for every ability of every permanent).
+const LOCKERS = new WeakMap<object, Set<string>>();
+function lockerDefs(ctx: Ctx): Set<string> {
+  let set = LOCKERS.get(ctx.db);
+  if (!set) {
+    set = new Set();
+    for (const d of ctx.db.values())
+      if (d.abilities.some((a) => a.kind === 'static' && a.effect.kind === 'noActivatedAbilities'))
+        set.add(d.id);
+    LOCKERS.set(ctx.db, set);
+  }
+  return set;
+}
+function lockedByStatic(ctx: Ctx, id: ObjectId): boolean {
+  const lockers = lockerDefs(ctx);
+  if (lockers.size === 0) return false;
+  for (const src of ctx.s.battlefield) {
+    if (!lockers.has(obj(ctx, src).defId)) continue;
+    if (
+      def(ctx, src).abilities.some(
+        (a) =>
+          a.kind === 'static' &&
+          a.effect.kind === 'noActivatedAbilities' &&
+          matchesFilter(ctx, id, a.effect.filter),
+      )
+    )
+      return true;
+  }
+  return false;
 }
 
 export function matchesFilter(
@@ -1386,6 +1450,7 @@ const COUNTER_KEYWORDS: readonly Keyword[] = [
   'menace',
   'hexproof',
   'firstStrike',
+  'decayed', // Tarkir: Dragonstorm (19a): Rot-Curse Rakshasa's decayed counter
 ];
 
 const affectingDefsCache = new WeakMap<CardDb, ReadonlySet<CardDefId>>();

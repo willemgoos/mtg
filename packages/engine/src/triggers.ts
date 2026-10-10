@@ -12,9 +12,11 @@ import { type Ctx, createObject, def, defOf, obj, other } from './context.ts';
 import { manaValue } from './cost.ts';
 import { addLore } from './sagas.ts';
 import { countersOnLeft, spentColors } from './ecl-18a.ts';
+import { spellsCastThisTurn } from './tdm-19a.ts';
 import { elementalTriggerCopies } from './ecl-multi-b-effects.ts';
 import { FIC_CONDITIONS } from './fic-effects.ts';
 import { FIN_CONDITIONS } from './fin-effects.ts';
+import { doubleAttackTriggers, TDM_MISC_CONDITIONS } from './tdm-misc-effects.ts';
 import type {
   AbilityDef,
   EffectDef,
@@ -64,6 +66,24 @@ export function checkCondition(
   if (c.kind === 'kickedAtLeast') return (self?.kickCount ?? 0) >= c.n;
   // Reality Fracture (17a): Ruric Thar, Magecrusher.
   if (c.kind === 'sourceDealtCombatDamage') return !!self?.dealtCombatDamage;
+  // Tarkir: Dragonstorm (19b, clans-b): Karakyk Guardian, Sonic Shrieker.
+  if (c.kind === 'sourceDealtDamage') return !!self?.dealtDamage;
+  if (c.kind === 'targetPlayerDamagedBySource') {
+    const t = targets?.[c.target];
+    return (
+      !!t &&
+      'player' in t &&
+      !!self &&
+      ctx.events.some(
+        (ev) =>
+          ev.type === 'damageDealt' &&
+          ev.source === self.id &&
+          'player' in ev.to &&
+          ev.to.player === t.player &&
+          ev.amount > 0,
+      )
+    );
+  }
   if (c.kind === 'sourceHasExiled')
     return !!self?.exiledWith?.some((id) => ctx.s.objects[id]?.zone === 'exile');
   // The Fantastic Four (9d).
@@ -106,6 +126,11 @@ export function checkCondition(
   if (c.kind === 'opponentCastSpellThisTurn')
     return (ctx.s.turn.spellsCast?.[other(controller)] ?? 0) > 0;
   if (c.kind === 'sourceTapped') return !!self?.tapped;
+  // Tarkir: Dragonstorm (19a): "if you've cast two or more spells this turn".
+  if (c.kind === 'spellsCastThisTurn') {
+    const n = spellsCastThisTurn(ctx, c.who === 'opponent' ? other(controller) : controller, c.filter);
+    return n >= (c.min ?? 0) && n <= (c.max ?? Infinity);
+  }
   // Final Fantasy (11c): turn conditions.
   if (c.kind === 'noneCastThisTurn')
     return !(ctx.s.turn.castDefs?.[controller] ?? []).some((id) =>
@@ -196,6 +221,8 @@ export function checkCondition(
   if (c.kind === 'notPrepared') return !self?.prepared;
   // Reality Fracture (17a): Null Summoner, Uldaros Theorix.
   if (c.kind === 'wasCast') return !!self?.wasCast;
+  // Tarkir: Dragonstorm (19b, black): The Sibsig Ceremony, "if you cast it" (the creature that entered).
+  if (c.kind === 'subjectWasCast') return !!subject?.wasCast;
   // Lorwyn Eclipsed (18a): evoke, and "if {W}{W} was spent to cast it".
   if (c.kind === 'wasEvoked') return !!self?.evoked;
   if (c.kind === 'putCounterOnCreatureThisTurn')
@@ -372,7 +399,8 @@ export function checkCondition(
     case 'custom': {
       // Final Fantasy Commander (12): one-off conditions.
       // Final Fantasy (11d): and FIN one-offs.
-      const fn = FIC_CONDITIONS[c.handler] ?? FIN_CONDITIONS[c.handler];
+      const fn =
+        FIC_CONDITIONS[c.handler] ?? FIN_CONDITIONS[c.handler] ?? TDM_MISC_CONDITIONS[c.handler]; // Tarkir: Dragonstorm (19b, misc)
       if (fn) return fn(ctx, controller, self, subject);
       throw new Error(`Custom condition "${c.handler}" not registered`);
     }
@@ -639,6 +667,9 @@ function spellMatches(
           return !!o && o.zone === 'battlefield' && def(ctx, o.id).types.includes('Creature');
         })
       );
+    // Tarkir: Dragonstorm (19a): Flurry, counted among the caster's spells this turn, this one included.
+    case 'second':
+      return (ctx.s.turn.castDefs?.[spellCaster(ctx, item, self)] ?? []).length === 2;
     case 'third':
       return (ctx.s.turn.castDefs?.[spellCaster(ctx, item, self)] ?? []).length === 3;
     // Strixhaven Brawl (15b, w): Psemilla, "your first enchantment spell each turn".
@@ -1006,6 +1037,8 @@ function detect(ctx: Ctx, ev: GameEvent): void {
         if (moved)
           for (const e of s.effects) {
             if (!e.onDies || e.affected.id !== ev.id || e.affected.zcc !== moved.zcc - 1) continue;
+            // Tarkir: Dragonstorm (19b, black): Desperate Measures, "when it dies under your control".
+            if (e.onDies.underControl && ev.controller !== e.onDies.controller) continue;
             s.pendingTriggers.push({
               source: { id: moved.id, zcc: moved.zcc },
               sourceDefId: e.onDies.sourceDefId,
@@ -1443,6 +1476,19 @@ function detect(ctx: Ctx, ev: GameEvent): void {
     }
     case 'attackersDeclared': {
       const ap = s.turn.activePlayer;
+      // Tarkir: Dragonstorm (19a): decayed, "when it attacks, sacrifice it at end of combat".
+      for (const id of ev.attackers) {
+        const attacker = s.objects[id];
+        if (!attacker || !hasKeyword(ctx, id, 'decayed')) continue;
+        (s.delayed ??= []).push({
+          controller: attacker.controller,
+          sourceDefId: attacker.defId,
+          subject: { id, zcc: attacker.zcc },
+          effects: [{ kind: 'sacrifice', what: 'subject' }],
+          fromTurn: s.turn.number,
+          at: 'endCombat',
+        });
+      }
       const attackedWith = (f: CardFilter | undefined, source?: ObjectId) =>
         ev.attackers.some((id) => !!s.objects[id] && matchesFilter(ctx, id, f, source));
       forEachBattlefieldTrigger(ctx, (o, a) => {
@@ -1574,6 +1620,20 @@ function detect(ctx: Ctx, ev: GameEvent): void {
             matchesFilter(ctx, id, t.filter),
           attacker,
         );
+      }
+      // Tarkir: Dragonstorm (19a): Dalkovan Encampment, "whenever you attack this turn" (an emblem), once for the whole attack.
+      for (const e of s.emblems ?? []) {
+        const em = e.ability;
+        if (em.kind !== 'triggered' || em.trigger.on !== 'youAttack' || e.controller !== ap) continue;
+        if (!attackedWith(em.trigger.filter)) continue;
+        if (e.once) s.emblems = s.emblems!.filter((x) => x !== e); // Tarkir: Dragonstorm (19b, clans-b): All-Out Assault
+        s.pendingTriggers.push({
+          source: e.source,
+          sourceDefId: e.sourceDefId,
+          abilityIndex: -1,
+          controller: e.controller,
+          emblem: em,
+        });
       }
       // Reality Fracture (17c): Garruk, Curse Breaker: emblems that see creatures attack one of their controller's
       // opponents (a player, not a planeswalker): once, with every such attacker.
@@ -1972,6 +2032,18 @@ function detect(ctx: Ctx, ev: GameEvent): void {
       );
       return;
     }
+    // Tarkir: Dragonstorm (19b, misc): Hollowmurk Siege, Stalwart Successor.
+    case 'anyCountersAdded': {
+      const target = s.objects[ev.id];
+      if (!target || target.zone !== 'battlefield') return;
+      forEachBattlefieldTrigger(
+        ctx,
+        (o, a) => a.trigger.on === 'counterPutOnYourCreature' && o.controller === target.controller,
+        target,
+        ev.count,
+      );
+      return;
+    }
     // Reality Fracture (17c): Inspired Tethermage.
     case 'loyaltyCountersAdded': {
       const target = s.objects[ev.id];
@@ -2076,6 +2148,19 @@ function detect(ctx: Ctx, ev: GameEvent): void {
           o,
         );
       }
+      // Tarkir: Dragonstorm (19b, green): Surrak, Elusive Hunter, a creature or a creature spell (on the stack).
+      for (const id of ev.ids) {
+        const o = s.objects[id];
+        if (!o || !def(ctx, id).types.includes('Creature')) continue;
+        const onStack = o.zone === 'stack' ? s.stack.find((x) => x.kind === 'spell' && x.id === id) : undefined;
+        const owner = o.zone === 'battlefield' ? o.controller : onStack?.controller;
+        if (!owner || owner === ev.player) continue;
+        forEachBattlefieldTrigger(
+          ctx,
+          (src, a) => a.trigger.on === 'creatureOrSpellTargetedByOpponent' && src.controller === owner,
+          o,
+        );
+      }
       // Black Bolt: "whenever this becomes the target of a spell or ability an opponent controls".
       for (const id of ev.ids) {
         const o = s.objects[id];
@@ -2172,10 +2257,10 @@ function detect(ctx: Ctx, ev: GameEvent): void {
         );
         return;
       }
-      if ((ev.step === 'end' || ev.step === 'upkeep') && s.delayed?.length) {
-        // "At the beginning of the next end step" (or upkeep): the ones due now.
-        const isDue = (d: { fromTurn: number; whose?: PlayerId; at?: 'upkeep' }) =>
-          (d.at === 'upkeep') === (ev.step === 'upkeep') &&
+      if ((ev.step === 'end' || ev.step === 'upkeep' || ev.step === 'endCombat') && s.delayed?.length) {
+        // "At the beginning of the next end step" (or upkeep, or end of combat): the ones due now.
+        const isDue = (d: { fromTurn: number; whose?: PlayerId; at?: 'upkeep' | 'endCombat' }) =>
+          (d.at ?? 'end') === (ev.step === 'endCombat' ? 'endCombat' : ev.step === 'upkeep' ? 'upkeep' : 'end') &&
           d.fromTurn <= ev.turn &&
           (!d.whose || d.whose === ev.activePlayer);
         const due = s.delayed.filter(isDue);
@@ -2224,10 +2309,15 @@ function detect(ctx: Ctx, ev: GameEvent): void {
 /** Scans events emitted since the last call and queues any triggered abilities. */
 export function collectTriggers(ctx: Ctx): void {
   ctx.batched.clear();
+  const before = ctx.s.pendingTriggers.length;
+  let attacked = false;
   while (ctx.triggerCursor < ctx.events.length) {
     const ev = ctx.events[ctx.triggerCursor++]!;
+    if (ev.type === 'attackersDeclared') attacked = true;
     detect(ctx, ev);
   }
+  // Tarkir: Dragonstorm (19b, misc): Windcrag Siege (Mardu), what the attack caused triggers an additional time.
+  if (attacked) doubleAttackTriggers(ctx, before);
 }
 
 /** APNAP: the active player's triggers go on the stack first. */
@@ -2239,8 +2329,10 @@ export function nextPendingTriggerIndex(ctx: Ctx): number {
 }
 
 /** Type and subtype checks against a card definition (for a permanent that has already left). */
-function defMatches(d: CardDefinition, f: CardFilter): boolean {
+export function defMatches(d: CardDefinition, f: CardFilter): boolean {
   if (f.types && !f.types.some((t) => d.types.includes(t))) return false;
+  // Tarkir: Dragonstorm (19a): "a noncreature spell".
+  if (f.notTypes && f.notTypes.some((t) => d.types.includes(t))) return false;
   if (f.hasKeyword && !d.keywords.includes(f.hasKeyword)) return false;
   // Secrets of Strixhaven (14b): Arnyn, Deathbloom Botanist (printed power and toughness).
   if (

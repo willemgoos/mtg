@@ -4,6 +4,7 @@ import {
   cloneState,
   type Engine,
   type GameState,
+  getAbilities,
   getCharacteristics,
   manaValue,
   type ObjectId,
@@ -34,6 +35,7 @@ import {
   scoreAction,
   settle,
   bestByEvaluation,
+  capPerSource,
 } from './simulate.ts';
 import { type Bot, other, viewEngine } from './view.ts';
 
@@ -72,6 +74,7 @@ export function createHeuristicBot(db: CardDb, name = 'heuristic'): Bot {
           return pickCardToLose(engine, view, me, legal);
         case 'chooseTriggerTargets':
         case 'spellTargets': // Lorwyn Eclipsed (18b, white): Morningtide's Light
+        case 'abilityTargets': // Tarkir: Dragonstorm (19a): Rot-Curse Rakshasa's X targets
         case 'optionalEffect':
         case 'forage':
         case 'chooseObject':
@@ -94,6 +97,12 @@ export function createHeuristicBot(db: CardDb, name = 'heuristic'): Bot {
             return { type: 'chooseOption', player: me, index: 0 };
           // Strixhaven (13c): Augusta's "tap any number of creatures": the bot taps none ("Done" is first).
           if (d.title?.startsWith('Augusta')) return { type: 'chooseOption', player: me, index: 0 };
+          // Tarkir: Dragonstorm (19b, clans): Call the Spirit Dragons wins with counters on five different Dragons, so the bot picks a
+          // Dragon that hasn't got one yet this upkeep if there is one.
+          if (d.title?.startsWith('Call the Spirit Dragons')) {
+            const fresh = d.options.findIndex((o) => !o.label.endsWith('already has one'));
+            return { type: 'chooseOption', player: me, index: Math.max(0, fresh) };
+          }
           // Reality Fracture (17a fixes): every creature type is on offer.
           if (d.title === 'Choose a creature type') return chooseCreatureType(engine, view, me, d);
           // Reality Fracture (17a): Arc of Fortune.
@@ -111,6 +120,7 @@ export function createHeuristicBot(db: CardDb, name = 'heuristic'): Bot {
         case 'searchLibrary':
           return chooseSearch(engine, view, me, legal);
         case 'sacrifice':
+        case 'sacrificeSeveral': // one at a time, so the least valuable each time
           return chooseSacrifice(engine, view, legal);
         case 'wardSacrifice':
           return chooseWardSacrifice(engine, view, legal);
@@ -227,6 +237,41 @@ function chooseJaceSurveil(
   return act;
 }
 
+/**
+ * Tarkir: Dragonstorm (19a): a Devotee's "{1}: Add {U}, {R}, or {W}" is a mana ability whose payoff the evaluation can't see (the
+ * mana waits in the pool). Activate one in our main phase when it makes a card in hand castable that wasn't.
+ */
+function chooseManaFixer(
+  engine: Engine,
+  view: GameState,
+  me: PlayerId,
+  legal: Action[],
+): Action | undefined {
+  if (view.turn.activePlayer !== me || view.stack.length > 0) return undefined;
+  if (view.turn.step !== 'main1' && view.turn.step !== 'main2') return undefined;
+  const fixers = legal.filter(
+    (a) =>
+      a.type === 'activateAbility' &&
+      (() => {
+        const ab = getAbilities(view, engine.db, a.source)[a.abilityIndex];
+        return ab?.kind === 'activated' && !!ab.manaAbility;
+      })(),
+  );
+  if (fixers.length === 0) return undefined;
+  const castable = (s: GameState) =>
+    new Set(
+      engine
+        .getLegalActions(s, me)
+        .flatMap((a) => (a.type === 'castSpell' ? [a.card] : [])),
+    );
+  const before = castable(view);
+  for (const act of fixers) {
+    const after = castable(engine.applyAction(cloneState(view), act).state);
+    for (const card of after) if (!before.has(card)) return act;
+  }
+  return undefined;
+}
+
 function choosePriorityAction(
   engine: Engine,
   view: GameState,
@@ -241,13 +286,17 @@ function choosePriorityAction(
   if (codie) return codie;
   const jace = chooseJaceSurveil(engine, view, me, legal);
   if (jace) return jace;
+  const fixer = chooseManaFixer(engine, view, me, legal);
+  if (fixer) return fixer;
   // Teamwork taps our creatures: never before our own attack (the evaluation can't see the lost attack).
   const beforeOurAttack =
     view.turn.activePlayer === me &&
     (view.turn.step === 'main1' || view.turn.step === 'beginCombat');
-  const candidates = legal.filter(
+  const candidates = capPerSource(legal).filter(
     (a) =>
       !isJaceTokenAbility(engine, view, a, 0) && // the surveil is a rule (chooseJaceSurveil), not a score
+      // Tarkir: Dragonstorm (19a): harmonize taps a creature, which the evaluation can't see: never before our own attack.
+      !(beforeOurAttack && a.type === 'castSpell' && a.harmonizeTap) &&
       !isLastCardsDraw(engine, view, me, a) &&
       ((a.type === 'castSpell' &&
         !(

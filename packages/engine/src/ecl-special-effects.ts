@@ -39,6 +39,7 @@ export const ECL_SPECIAL_EFFECTS: Record<string, CustomEffect> = {
     const p = params as { color: Color; until?: 'endOfTurn' } | undefined;
     const o = es.source && ctx.s.objects[es.source.id];
     if (!p || !o || o.zone !== 'battlefield' || o.zcc !== es.source!.zcc) return;
+    ctx.s.colorChanges = true;
     o.colorOverride = {
       colors: [p.color],
       ...(p.until === 'endOfTurn' ? { untilTurn: ctx.s.turn.number } : {}),

@@ -10,7 +10,7 @@ import type {
   PendingTrigger,
   PlayerId,
 } from '@mtg/engine';
-import { getAbilities } from '@mtg/engine';
+import { getAbilities, getCharacteristics } from '@mtg/engine';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   castGroups,
@@ -153,6 +153,17 @@ export function Board({
     if (d.kind === 'spellTargets' && d.player === HUMAN && !targeting) {
       setTargeting(
         startTargeting(d.spell, nameOf(view.objects[d.spell]?.defId ?? ''), legal, d.picked),
+      );
+    }
+  }, [d, legal, targeting, view]);
+
+  // Tarkir: Dragonstorm (19a): "X target creatures" of an activated ability (Rot-Curse Rakshasa) are picked one at a time.
+  useEffect(() => {
+    if (d.kind === 'abilityTargets' && d.player === HUMAN && !targeting) {
+      const item = view.stack.find((x) => x.id === d.ability);
+      const source = item?.kind === 'ability' ? item.source.id : d.ability;
+      setTargeting(
+        startTargeting(source, nameOf(view.objects[source]?.defId ?? ''), legal, d.picked),
       );
     }
   }, [d, legal, targeting, view]);
@@ -1394,13 +1405,13 @@ export function Board({
                 </div>
               ))}
             </div>
-            {d.options.length === 0 && (
+            {(d.options.length === 0 || d.optional) && (
               <div className="mull__buttons">
                 <button
                   className="btn btn--ghost"
                   onClick={() => act({ type: 'chooseCard', player: HUMAN, card: null })}
                 >
-                  Nothing to choose
+                  {d.options.length === 0 ? 'Nothing to choose' : 'Choose no card'}
                 </button>
               </div>
             )}
@@ -1689,6 +1700,18 @@ function castLabel(defId: CardDefId, a: Action, view: GameState): string {
     return a.x ? `Blight ${a.x}` : 'X = 0 (no blight)';
   if (a.x !== undefined) return `X = ${a.x}`;
   if (a.type === 'activateAbility') return 'Activate';
+  // Tarkir: Dragonstorm (19a): harmonize (from the graveyard), with the creature tapped to reduce the cost.
+  if (a.type === 'castSpell' && view.objects[a.card]?.zone === 'graveyard') {
+    const d = cardDb.get(defId);
+    const granted = view.objects[a.card]?.harmonizeGrantedTurn !== undefined;
+    if (d?.harmonize || granted) {
+      const cost = d?.harmonize ? d.flashback : d?.manaCost;
+      const tapped = a.harmonizeTap ? view.objects[a.harmonizeTap] : undefined;
+      if (tapped)
+        return `Harmonize: tap ${nameOf(tapped.defId)} (power ${getCharacteristics(view, cardDb, tapped.id).power}) to pay less`;
+      return `Harmonize${cost ? ` ${manaText(cost)}` : ''}, tapping no creature`;
+    }
+  }
   if (a.via === 'festival') return 'From your graveyard (pay 1 life)';
   if (a.via === 'osteomancer') return 'From your graveyard (forage)';
   // Secrets of Strixhaven (14b): Zaffai and the Tempests (free, once a turn).
@@ -1697,6 +1720,8 @@ function castLabel(defId: CardDefId, a: Action, view: GameState): string {
   if (a.via === 'freeOnceEachTurn') return 'Cast free (once this turn)';
   // Reality Fracture (17a): Omnipresence.
   if (a.via === 'omnipresence') return 'Cast free (Omnipresence)';
+  // Tarkir: Dragonstorm (19b, red): Dracogenesis.
+  if (a.via === 'freeMatching') return 'Cast free (Dracogenesis)';
   // Final Fantasy (11c): playing from the graveyard.
   if (a.via === 'noctis') return 'From your graveyard (pay 3 life)';
   if (a.via === 'hades') return 'From your graveyard';
@@ -1726,10 +1751,10 @@ function castLabel(defId: CardDefId, a: Action, view: GameState): string {
       : 'Behold and exile';
   }
   if (a.type === 'castSpell' && a.sneak && def?.sneak) return `Sneak (${manaText(def.sneak)})`;
-  // Final Fantasy (11a): an adventure land's Adventure.
+  // Final Fantasy (11a): an adventure land's Adventure. Tarkir: Dragonstorm (19a): an Omen.
   if (def?.adventure && a.back) {
     const face = cardDb.get(def.back!);
-    return `Adventure: ${face?.name ?? ''} (${face ? manaText(face.manaCost) : ''})`;
+    return `${face?.subtypes.includes('Omen') ? 'Omen' : 'Adventure'}: ${face?.name ?? ''} (${face ? manaText(face.manaCost) : ''})`;
   }
   // A modal double-faced card: cast either face.
   if (def?.back) {
@@ -1890,7 +1915,7 @@ function SearchOverlay({ game, onHover }: { game: GameSession; onHover: HoverFn 
         <p>
           {d.kind === 'searchLibrary' && d.remaining !== undefined
             ? // Reality Fracture (17a): "up to N cards" (Fblthp, Knows the Way; Hexhaven Invigorator).
-              `Choose up to ${d.remaining} ${d.remaining === 1 ? 'card' : 'cards'}, one at a time${d.differentNames ? ', each with a different name,' : ''} to put ${d.to && d.to !== 'hand' ? 'onto the battlefield' : 'into your hand'}.`
+              `Choose ${d.exileFreeThisTurn ? 'any number of' : `up to ${d.remaining}`} ${d.remaining === 1 ? 'card' : 'cards'}, one at a time${d.differentNames ? ', each with a different name,' : ''} to ${d.exileFreeThisTurn ? 'exile (until end of turn you may cast them without paying their mana costs)' : `put ${d.to && d.to !== 'hand' ? 'onto the battlefield' : 'into your hand'}`}.`
             : d.kind === 'searchLibrary' && d.to === 'hideaway'
               ? 'Choose a card to exile face down.'
               : d.kind === 'searchLibrary' && d.to === 'libraryBottom'
@@ -1899,7 +1924,9 @@ function SearchOverlay({ game, onHover }: { game: GameSession; onHover: HoverFn 
                 : d.kind === 'searchLibrary' && d.to === 'castFree'
                   ? 'Choose a card to exile; you may cast it without paying its mana cost.'
                   : d.kind === 'searchLibrary' && d.to && d.to !== 'hand'
-                    ? 'Choose a card to put onto the battlefield.'
+                    ? d.to === 'libraryTop'
+                      ? 'Choose a card to put on top of your library.'
+                      : 'Choose a card to put onto the battlefield.'
                     : d.kind === 'searchLibrary' && d.canBin
                       ? // Strixhaven (13c): The Biblioplex
                         'An instant or sorcery card may go into your hand; otherwise you may put it into your graveyard.'

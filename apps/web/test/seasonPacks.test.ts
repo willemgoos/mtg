@@ -1,5 +1,6 @@
 import { SCRYFALL, cardDb, slug } from '@mtg/cards';
 import { ECL_BOOSTER_LIST } from '../../../packages/cards/src/ecl/booster-list.ts';
+import { TDM_BOOSTER_LIST } from '../../../packages/cards/src/tdm/booster-list.ts';
 import { FRA_BOOSTER_LIST } from '../../../packages/cards/src/fra/booster-list.ts';
 import { SOS_BOOSTER_LIST } from '../../../packages/cards/src/sos/booster-list.ts';
 import { STX_BOOSTER_LIST } from '../../../packages/cards/src/stx/booster-list.ts';
@@ -21,6 +22,7 @@ import {
   BLOOMBURROW_SHEETS,
   FINAL_FANTASY_SHEETS,
   LORWYN_ECLIPSED_SHEETS,
+  TARKIR_DRAGONSTORM_SHEETS,
   MARVEL_SHEETS,
   REALITY_FRACTURE_SHEETS,
   SECRETS_SHEETS,
@@ -237,6 +239,27 @@ describe('Season Bloomburrow packs', () => {
     const starters = SEASON_STARTERS.filter((d) => d.set === 'ecl');
     expect(starters).toHaveLength(10);
     for (const d of starters) expect(d.series).toBe('starter');
+  });
+
+  it('sells Tarkir: Dragonstorm boosters with all 271 booster cards at their TDM rarity, and no TDM starters', () => {
+    const rarityOf = new Map(TDM_BOOSTER_LIST);
+    const all = Object.values(TARKIR_DRAGONSTORM_SHEETS).flat();
+    expect(all).toHaveLength(271);
+    expect(new Set(all).size).toBe(271);
+    for (const [rarity, sheet] of Object.entries(TARKIR_DRAGONSTORM_SHEETS))
+      for (const id of sheet) {
+        expect(cardDb.has(id), id).toBe(true);
+        expect(rarityOf.get(SCRYFALL.find((x) => slug(x.name) === id)!.name), id).toBe(rarity);
+      }
+    let save = { ...fresh(), coins: 1000 };
+    save = buySeasonPack(save, 1, 'tarkirDragonstorm');
+    expect(save.packs[0]!.kind).toBe('tarkirDragonstorm');
+    const opened = openSeasonPack(save, save.packs[0]!.id, packGenerator('tarkirDragonstorm'), 2);
+    const cards = opened.lastPack!.rewards.flatMap((r) => (r.kind === 'card' ? [r.cardId] : []));
+    expect(cards.length).toBeGreaterThan(0);
+    for (const id of cards) expect(all, id).toContain(id);
+    // No decks of our own for Tarkir: Dragonstorm, so none on sale.
+    expect(SEASON_STARTERS.filter((d) => d.set === 'tdm')).toHaveLength(0);
   });
 
   it('offers the Bloomburrow decks as starters', () => {

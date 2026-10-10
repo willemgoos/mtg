@@ -12,13 +12,13 @@ import type { Color } from '@mtg/engine';
 export interface Packet {
   id: string;
   name: string;
-  /** One colour, or two for multicolour themes. */
+  /** One colour, or two or three for multicolour themes (Tarkir: Dragonstorm: the clans). */
   colors: Color[];
   /** Card shown on the packet. */
   face: string;
   blurb: string;
-  /** Bloomburrow, Marvel Super Heroes, Final Fantasy, Strixhaven, Secrets of Strixhaven or Reality Fracture (default Foundations). Packets of different sets pair freely. */
-  set?: 'blb' | 'msh' | 'fin' | 'stx' | 'sos' | 'fra' | 'ecl';
+  /** Bloomburrow, Marvel Super Heroes, Final Fantasy, Strixhaven, Secrets of Strixhaven, Reality Fracture, Lorwyn Eclipsed or Tarkir: Dragonstorm (default Foundations). Packets of different sets pair freely. */
+  set?: 'blb' | 'msh' | 'fin' | 'stx' | 'sos' | 'fra' | 'ecl' | 'tdm';
   /** Arena's own packet (default: ours). */
   source?: 'arena';
   /** Custom theme that deliberately borrows cards from multiple sets. */
@@ -3438,11 +3438,427 @@ export const ARENA_ECL_PACKETS: Packet[] = [
   },
 ];
 
+/**
+ * MTG Arena's ten Tarkir: Dragonstorm packets, from https://mtgabuddy.com/en/jump-in-packet-list
+ * (`scripts/data/arena-jumpin-packets.json`): 13 cards each, eight or nine fixed (one of them a land) and
+ * five or four random slots. The clan packets are three colours; the basics come
+ * from the top-up to 40 (`addBasics` in `index.ts`).
+ */
+export const ARENA_TDM_PACKETS: Packet[] = [
+  {
+    id: 'tdm-abzan',
+    name: 'Abzan',
+    colors: ['W', 'B', 'G'],
+    face: 'Betor, Kin to All',
+    blurb: 'The Abzan clan endures and grows its creatures',
+    set: 'tdm',
+    source: 'arena',
+    spells: [
+      ['Armament Dragon', 1],
+      ['Fortress Kin-Guard', 1],
+      ['Dusyut Earthcarver', 1],
+      ['Unburied Earthcarver', 1],
+      ['Kin-Tree Severance', 1],
+      ['Knockout Maneuver', 1],
+      ['Abzan Monument', 1],
+    ],
+    slots: [
+      [
+        { card: 'Betor, Kin to All', weight: 20 },
+        { card: 'Yathan Roadwatcher', weight: 40 },
+        { card: 'Felothar, Dawn of the Abzan', weight: 40 },
+      ],
+      [
+        { card: 'Krumar Initiate', weight: 50 },
+        { card: 'Yathan Tombguard', weight: 50 },
+      ],
+      [
+        { card: 'Duty Beyond Death', weight: 50 },
+        { card: 'Wail of War', weight: 50 },
+      ],
+      [
+        { card: 'Kin-Tree Nurturer', weight: 50 },
+        { card: 'Sandskitter Outrider', weight: 50 },
+      ],
+      [
+        { card: "Dragon's Prey", weight: 50 },
+        { card: 'Stormplain Detainment', weight: 50 },
+      ],
+    ],
+    lands: [['Sandsteppe Citadel', 1]],
+  },
+  {
+    id: 'tdm-discard',
+    name: 'Discard',
+    colors: ['R'],
+    face: 'Stormscale Scion',
+    blurb: 'Discard and loot your way into a burst of spells',
+    set: 'tdm',
+    source: 'arena',
+    spells: [
+      ['Unsparing Boltcaster', 1],
+      ['Sunset Strikemaster', 1],
+      ['Stormshriek Feral', 1],
+      ['Rescue Leopard', 1],
+      ['Meticulous Artisan', 1],
+      ['Molten Exhale', 1],
+      ['War Effort', 1],
+    ],
+    slots: [
+      [
+        { card: 'Stormscale Scion', weight: 20 },
+        { card: 'Cori-Steel Cutter', weight: 40 },
+        { card: 'Stadium Headliner', weight: 40 },
+      ],
+      [
+        { card: 'Equilibrium Adept', weight: 50 },
+        { card: "Zurgo's Vanguard", weight: 50 },
+      ],
+      [
+        { card: 'Breaching Dragonstorm', weight: 50 },
+        { card: 'Iridescent Tiger', weight: 50 },
+      ],
+      [
+        { card: 'Devoted Duelist', weight: 50 },
+        { card: 'Jeskai Devotee', weight: 50 },
+      ],
+      [
+        { card: 'Shock Brigade', weight: 50 },
+        { card: 'Underfoot Underdogs', weight: 50 },
+      ],
+    ],
+    lands: [['Evolving Wilds', 1]],
+  },
+  {
+    id: 'tdm-encounter',
+    name: 'Encounter',
+    colors: ['G'],
+    face: 'Warden of the Grove',
+    blurb: 'Grow your creatures with +1/+1 counters',
+    set: 'tdm',
+    source: 'arena',
+    spells: [
+      ['Sage of the Fang', 1],
+      ['Formation Breaker', 1],
+      ['Trade Route Envoy', 1],
+      ['Champion of Dusan', 1],
+      ['Sagu Wildling', 1],
+      ['Snakeskin Veil', 1],
+      ['Synchronized Charge', 1],
+      ['Knockout Maneuver', 1],
+    ],
+    slots: [
+      [
+        { card: 'Warden of the Grove', weight: 50 },
+        { card: 'Lasyd Prowler', weight: 50 },
+      ],
+      [
+        { card: 'Inspirited Vanguard', weight: 50 },
+        { card: 'Rainveil Rejuvenator', weight: 50 },
+      ],
+      [
+        { card: 'Sagu Pummeler', weight: 50 },
+        { card: 'Dusyut Earthcarver', weight: 50 },
+      ],
+      [
+        { card: 'Undergrowth Leopard', weight: 50 },
+        { card: 'Ainok Wayfarer', weight: 50 },
+      ],
+    ],
+    lands: [['Evolving Wilds', 1]],
+  },
+  {
+    id: 'tdm-graveyard',
+    name: 'Graveyard',
+    colors: ['B'],
+    face: 'Sidisi, Regent of the Mire',
+    blurb: 'Fill the graveyard and bring creatures back',
+    set: 'tdm',
+    source: 'arena',
+    spells: [
+      ['Gurmag Rakshasa', 1],
+      ['Unrooted Ancestor', 1],
+      ['Hundred-Battle Veteran', 1],
+      ["Alchemist's Assistant", 1],
+      ['Unburied Earthcarver', 1],
+      ['Abzan Devotee', 1],
+      ['Worthy Cost', 1],
+    ],
+    slots: [
+      [
+        { card: 'Sidisi, Regent of the Mire', weight: 50 },
+        { card: 'Avenger of the Fallen', weight: 50 },
+      ],
+      [
+        { card: 'Wail of War', weight: 50 },
+        { card: 'Desperate Measures', weight: 50 },
+      ],
+      [
+        { card: 'Strategic Betrayal', weight: 50 },
+        { card: 'Salt Road Skirmish', weight: 50 },
+      ],
+      [
+        { card: 'Feral Deathgorger', weight: 50 },
+        { card: 'Adorned Crocodile', weight: 50 },
+      ],
+      [
+        { card: 'Cruel Truths', weight: 50 },
+        { card: 'Aggressive Negotiations', weight: 50 },
+      ],
+    ],
+    lands: [['Evolving Wilds', 1]],
+  },
+  {
+    id: 'tdm-jeskai',
+    name: 'Jeskai',
+    colors: ['W', 'U', 'R'],
+    face: 'Shiko, Paragon of the Way',
+    blurb: 'Flurry: cast two spells a turn for bonuses',
+    set: 'tdm',
+    source: 'arena',
+    spells: [
+      ['Cori Mountain Stalwart', 1],
+      ['Fleeting Effigy', 1],
+      ['Devoted Duelist', 1],
+      ["Narset's Rebuke", 1],
+      ['Riverwheel Sweep', 1],
+      ['Wingspan Stride', 1],
+      ['Jeskai Monument', 1],
+    ],
+    slots: [
+      [
+        { card: 'Shiko, Paragon of the Way', weight: 20 },
+        { card: 'Narset, Jeskai Waymaster', weight: 40 },
+        { card: 'Flamehold Grappler', weight: 40 },
+      ],
+      [
+        { card: 'Overwhelming Surge', weight: 50 },
+        { card: 'Fresh Start', weight: 50 },
+      ],
+      [
+        { card: 'Wayspeaker Bodyguard', weight: 50 },
+        { card: 'Equilibrium Adept', weight: 50 },
+      ],
+      [
+        { card: 'Ringing Strike Mastery', weight: 50 },
+        { card: 'Stormplain Detainment', weight: 50 },
+      ],
+      [
+        { card: 'Humbling Elder', weight: 50 },
+        { card: 'Lightfoot Technique', weight: 50 },
+      ],
+    ],
+    lands: [['Mystic Monastery', 1]],
+  },
+  {
+    id: 'tdm-mardu',
+    name: 'Mardu',
+    colors: ['W', 'B', 'R'],
+    face: 'Neriv, Heart of the Storm',
+    blurb: 'Mobilize Warriors and attack every turn',
+    set: 'tdm',
+    source: 'arena',
+    spells: [
+      ['Bone-Cairn Butcher', 1],
+      ['Starry-Eyed Skyrider', 1],
+      ['Bearer of Glory', 1],
+      ['Riling Dawnbreaker', 1],
+      ['Defibrillating Current', 1],
+      ['Mardu Monument', 2],
+    ],
+    slots: [
+      [
+        { card: 'Neriv, Heart of the Storm', weight: 20 },
+        { card: "Zurgo, Thunder's Decree", weight: 40 },
+        { card: 'Mardu Siegebreaker', weight: 40 },
+      ],
+      [
+        { card: "Zurgo's Vanguard", weight: 50 },
+        { card: 'War Effort', weight: 50 },
+      ],
+      [
+        { card: 'Nightblade Brigade', weight: 50 },
+        { card: 'Shock Brigade', weight: 50 },
+      ],
+      [
+        { card: 'Reigning Victor', weight: 50 },
+        { card: 'Underfoot Underdogs', weight: 50 },
+      ],
+      [
+        { card: "Dragon's Prey", weight: 50 },
+        { card: 'Coordinated Maneuver', weight: 50 },
+      ],
+    ],
+    lands: [['Nomad Outpost', 1]],
+  },
+  {
+    id: 'tdm-mill',
+    name: 'Mill',
+    colors: ['U'],
+    face: 'Stillness in Motion',
+    blurb: 'Mill yourself and turn the graveyard into value',
+    set: 'tdm',
+    source: 'arena',
+    spells: [
+      ['Kishla Trawlers', 1],
+      ['Veteran Ice Climber', 1],
+      ['Dragonstorm Forecaster', 1],
+      ['Watcher of the Wayside', 1],
+      ['Boulderborn Dragon', 1],
+      ['Ringing Strike Mastery', 1],
+      ['Essence Anchor', 1],
+      ['Dragonstorm Globe', 1],
+    ],
+    slots: [
+      [
+        { card: 'Stillness in Motion', weight: 50 },
+        { card: 'Marang River Regent', weight: 50 },
+      ],
+      [
+        { card: 'Fresh Start', weight: 50 },
+        { card: "Ureni's Rebuff", weight: 50 },
+      ],
+      [
+        { card: 'Dirgur Island Dragon', weight: 50 },
+        { card: 'Iceridge Serpent', weight: 50 },
+      ],
+      [
+        { card: 'Unending Whisper', weight: 50 },
+        { card: 'Focus the Mind', weight: 50 },
+      ],
+    ],
+    lands: [['Evolving Wilds', 1]],
+  },
+  {
+    id: 'tdm-sultai',
+    name: 'Sultai',
+    colors: ['U', 'B', 'G'],
+    face: 'Teval, Arbiter of Virtue',
+    blurb: 'Renew and harmonize from a stocked graveyard',
+    set: 'tdm',
+    source: 'arena',
+    spells: [
+      ['Kheru Goldkeeper', 1],
+      ['Kishla Skimmer', 1],
+      ['Sagu Pummeler', 1],
+      ['Agent of Kotis', 1],
+      ['Ainok Wayfarer', 1],
+      ['Lie in Wait', 1],
+      ['Sultai Monument', 1],
+    ],
+    slots: [
+      [
+        { card: 'Teval, Arbiter of Virtue', weight: 20 },
+        { card: 'Kotis, the Fangkeeper', weight: 40 },
+        { card: "Fangkeeper's Familiar", weight: 40 },
+      ],
+      [
+        { card: "Alchemist's Assistant", weight: 50 },
+        { card: 'Sage of the Fang', weight: 50 },
+      ],
+      [
+        { card: 'Constrictor Sage', weight: 50 },
+        { card: 'Knockout Maneuver', weight: 50 },
+      ],
+      [
+        { card: 'Worthy Cost', weight: 50 },
+        { card: "Dragon's Prey", weight: 50 },
+      ],
+      [
+        { card: 'Sagu Wildling', weight: 50 },
+        { card: 'Feral Deathgorger', weight: 50 },
+      ],
+    ],
+    lands: [['Opulent Palace', 1]],
+  },
+  {
+    id: 'tdm-temur',
+    name: 'Temur',
+    colors: ['U', 'R', 'G'],
+    face: 'Dragonback Assault',
+    blurb: 'Big creatures and harmonize',
+    set: 'tdm',
+    source: 'arena',
+    spells: [
+      ['Snakeskin Veil', 1],
+      ['Dragonclaw Strike', 1],
+      ['Mammoth Bellow', 1],
+      ['Synchronized Charge', 1],
+      ["Roamer's Routine", 1],
+      ['Temur Monument', 2],
+    ],
+    slots: [
+      [
+        { card: 'Dragonback Assault', weight: 20 },
+        { card: 'Songcrafter Mage', weight: 40 },
+        { card: 'Temur Battlecrier', weight: 40 },
+      ],
+      [
+        { card: 'Channeled Dragonfire', weight: 50 },
+        { card: "Ureni's Rebuff", weight: 50 },
+      ],
+      [
+        { card: 'Unending Whisper', weight: 50 },
+        { card: 'Wild Ride', weight: 50 },
+      ],
+      [
+        { card: 'Rescue Leopard', weight: 50 },
+        { card: 'Snowmelt Stag', weight: 50 },
+      ],
+      [
+        { card: 'Dirgur Island Dragon', weight: 50 },
+        { card: 'Temur Tawnyback', weight: 50 },
+      ],
+    ],
+    lands: [['Frontier Bivouac', 1]],
+  },
+  {
+    id: 'tdm-tokens',
+    name: 'Tokens',
+    colors: ['W'],
+    face: 'Elspeth, Storm Slayer',
+    blurb: 'Go wide with tokens and pump the team',
+    set: 'tdm',
+    source: 'arena',
+    spells: [
+      ['Riling Dawnbreaker', 1],
+      ['Fortress Kin-Guard', 1],
+      ['Dragonback Lancer', 1],
+      ['Rally the Monastery', 1],
+      ['Coordinated Maneuver', 1],
+      ['Osseous Exhale', 1],
+      ['Static Snare', 1],
+      ['Teeming Dragonstorm', 1],
+    ],
+    slots: [
+      [
+        { card: 'Elspeth, Storm Slayer', weight: 20 },
+        { card: 'Sage of the Skies', weight: 40 },
+        { card: 'Anafenza, Unyielding Lineage', weight: 40 },
+      ],
+      [
+        { card: 'Starry-Eyed Skyrider', weight: 50 },
+        { card: 'Dalkovan Packbeasts', weight: 50 },
+      ],
+      [
+        { card: 'Sunpearl Kirin', weight: 50 },
+        { card: 'Descendant of Storms', weight: 50 },
+      ],
+      [
+        { card: 'Salt Road Packbeast', weight: 50 },
+        { card: 'Bearer of Glory', weight: 50 },
+      ],
+    ],
+    lands: [['Evolving Wilds', 1]],
+  },
+];
+
 export const PACKETS: Packet[] = [
   ...OWN_PACKETS,
   ...ARENA_BLB_PACKETS,
   ...ARENA_FDN_PACKETS,
   ...ARENA_ECL_PACKETS,
+  ...ARENA_TDM_PACKETS,
   ...MARVEL_JUMPSTART_PACKETS,
 ];
 

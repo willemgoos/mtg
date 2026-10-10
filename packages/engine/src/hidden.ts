@@ -1,5 +1,5 @@
 import { cloneState } from './clone.ts';
-import { createRng, shuffleInPlace } from './rng.ts';
+import { createRng, nextInt, shuffleInPlace } from './rng.ts';
 import type {
   CardDb,
   CardDefId,
@@ -138,15 +138,14 @@ export function determinize(
       // A permanent copying another card (Mirage Mirror, Mockingbird) is still its own card in the list.
       const card = o.originalDefId ?? o.defId;
       const i = remaining.indexOf(card);
-      if (i < 0) throw new Error(`${card} (${id}) is not in ${p}'s decklist`);
-      remaining.splice(i, 1);
+      // Not in the list: it came from outside the deck (a Lesson that Learn fetched from the sideboard).
+      if (i >= 0) remaining.splice(i, 1);
     }
-    if (remaining.length !== hidden.length)
-      throw new Error(
-        `${p}: ${hidden.length} hidden cards but ${remaining.length} unaccounted for`,
-      );
     shuffleInPlace(rng, remaining);
-    hidden.forEach((id, i) => (s.objects[id]!.defId = remaining[i]!));
+    // Cards from outside the deck can be hidden too: guess those from the list.
+    while (remaining.length < hidden.length && decks[p].length)
+      remaining.push(decks[p][nextInt(rng, decks[p].length)]!);
+    hidden.forEach((id, i) => (s.objects[id]!.defId = remaining[i] ?? s.objects[id]!.defId));
   }
   // Reuse the same physical-card assignment by object ID in the original
   // snapshot. Sample only once, so a card drawn before the choice stays known.

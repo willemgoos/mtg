@@ -17,6 +17,8 @@ export type CastVia =
   | 'freeOnceEachTurn'
   // Reality Fracture (17a): Omnipresence.
   | 'omnipresence'
+  // Tarkir: Dragonstorm (19b, red): Dracogenesis.
+  | 'freeMatching'
   // Reality Fracture (17c): Chandra, Torch of Defiance: cast now, in the middle of a resolution, paying every cost.
   | 'now'
   | 'freeExact'
@@ -192,7 +194,7 @@ export function castVariants(d: CardDefinition, zone: ZoneName, via?: CastVia): 
   if (d.noManaCost && !d.flashback && via !== 'freeExact') return [];
   // Marvel Super Heroes Jumpstart (Analyzed): without paying its mana cost, so X is 0 and
   // additional costs (kicker) are still paid; an alternative cost can't be added.
-  if (via === 'freeOnceEachTurn' || via === 'omnipresence' || via === 'freeExact')
+  if (via === 'freeOnceEachTurn' || via === 'omnipresence' || via === 'freeMatching' || via === 'freeExact')
     return castVariants(d.noManaCost ? { ...d, noManaCost: false } : d, 'hand')
       .filter((v) => !(v.kicked && d.kicker?.replacesCost) && !v.evoked)
       .map((v) => ({ ...v, cost: withoutManaCost(v.cost, d.manaCost) }));
@@ -227,6 +229,9 @@ export function castVariants(d: CardDefinition, zone: ZoneName, via?: CastVia): 
     );
   // Strixhaven Brawl (15a): Squee, the Immortal.
   if (zone === 'graveyard' && d.castFromGraveyardOrExile) return castVariants(d, 'hand');
+  // Tarkir: Dragonstorm (19b, black): Hundred-Battle Veteran, cast from the graveyard, it enters with a finality counter.
+  if (zone === 'graveyard' && d.castFromGraveyardFinality)
+    return castVariants(d, 'hand').map((v) => ({ ...v, finality: true }));
   // Mayhem: from the graveyard for its mayhem cost (legal.ts checks it was discarded this turn).
   if (zone === 'graveyard' && d.mayhem) return [{ cost: d.mayhem, spell: d.spell ?? null }];
   if (zone === 'graveyard' && d.castFromGraveyardRemovingCounters)

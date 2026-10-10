@@ -60,6 +60,12 @@ export type Keyword =
   // Strixhaven Brawl (15b, g): Mistcutter Hydra
   /** Protection from blue: can't be targeted, damaged or blocked by blue sources. */
   | 'protectionBlue'
+  // Tarkir: Dragonstorm (19a): Ureni, the Song Unending ("protection from white and from black")
+  | 'protectionWhite'
+  | 'protectionBlack'
+  // Tarkir: Dragonstorm (19a): Rot-Curse Rakshasa
+  /** Decayed: can't block; when it attacks, sacrifice it at end of combat. A decayed counter gives it. */
+  | 'decayed'
   | 'defender'
   | 'flash'
   | 'indestructible'
@@ -67,6 +73,9 @@ export type Keyword =
   | 'hexproofFromInstants'
   /** Can't be the target of white spells or abilities an opponent controls (Knight of Malice). */
   | 'hexproofFromWhite'
+  // Tarkir: Dragonstorm (19b, misc): Dragonfire Blade
+  /** Can't be the target of monocolored spells or abilities (sources with exactly one colour) an opponent controls. */
+  | 'hexproofFromMonocolored'
   /** Ward: targeting it costs an opponent `CardDefinition.wardCost` (default {2}). */
   | 'ward'
   /** Ward {1}, granted by another permanent (Long River Lurker, Innkeeper's Talent). */
@@ -340,6 +349,21 @@ export interface CardDefinition {
   // Lorwyn Eclipsed (18b, blue): Illusion Spinners
   /** "You may cast this spell as though it had flash if <condition>." */
   flashIf?: ConditionDef;
+  // Tarkir: Dragonstorm (19a): the Sieges
+  /**
+   * "As this enchantment enters, choose Abzan or Mardu": the options, each with the abilities it adds (the card's own `abilities`
+   * stay too). The cards package derives a hidden definition for each option (`variantOf`) and an enters trigger that makes
+   * the chosen player's permanent that definition (the `becomeVariant` effect); it shows the front again wherever it goes.
+   */
+  enterChoices?: { label: string; abilities: AbilityDef[] }[];
+  /** A derived definition: the card with this id, having made one of its `enterChoices`. Never in a deck or a hand. */
+  variantOf?: CardDefId;
+  // Tarkir: Dragonstorm (19a): Harmonize
+  /**
+   * Harmonize: with `flashback: <harmonize cost>`. Cast from the graveyard for that cost, then exiled. As it's cast you may tap an
+   * untapped creature you control to reduce the generic part of the cost by its power (the cast action's `harmonizeTap`).
+   */
+  harmonize?: boolean;
   /** Aura: what it enchants (chosen as a target when cast). */
   enchant?: TargetSpec;
   // Transform (Marvel Super Heroes)
@@ -423,6 +447,9 @@ export interface CardDefinition {
   spree?: ManaCost[];
   /** The first target's mana value must equal X (Stolen by the Fae). */
   targetManaValueX?: boolean;
+  // Tarkir: Dragonstorm (19b, black): Hundred-Battle Veteran
+  /** "You may cast this card from your graveyard. If you do, it enters with a finality counter on it." */
+  castFromGraveyardFinality?: boolean;
 }
 
 export type AbilityDef =
@@ -503,6 +530,12 @@ export type AbilityDef =
       label?: string;
       /** Activated from the graveyard (Reassembling Skeleton). */
       fromGraveyard?: boolean;
+      // Tarkir: Dragonstorm (19a): the Devotees
+      /**
+       * A mana ability with a cost that is mana itself ("{1}: Add {U}, {R}, or {W}. Activate only once each turn."): it doesn't use the
+       * stack, so it resolves as soon as its cost is paid; the mana goes to your pool. Its effects are `addMana`.
+       */
+      manaAbility?: boolean;
       // Marvel Super Heroes Jumpstart (Great Lakes Avengers)
       /** Also activated from exile, with `fromGraveyard` (Mister Immortal). */
       fromExile?: boolean;
@@ -517,6 +550,9 @@ export type AbilityDef =
       // Reality Fracture (17a): Warrior's Blades
       /** "This ability costs {1} less to activate for each +1/+1 counter on the creature it targets." */
       costReductionPerTargetCounter?: boolean;
+      // Tarkir: Dragonstorm (19b, misc): Dragonfire Blade
+      /** "This ability costs {1} less to activate for each color of the creature it targets." */
+      costReductionPerTargetColor?: boolean;
     }
   | {
       kind: 'triggered';
@@ -560,6 +596,8 @@ export interface CostDef {
   forage?: boolean;
   /** Pay this much life. */
   life?: number;
+  /** Tarkir: Dragonstorm (19a): "Pay X life" (Krumar Initiate), X the value chosen for the {X} in the mana cost; no more than your life. */
+  lifeX?: boolean;
   /** Discard a card (chosen when activating). */
   discard?: boolean;
   // Reality Fracture (17a): Solitary Cell
@@ -626,6 +664,15 @@ export interface CostDef {
   // Lorwyn Eclipsed (18b, white): Kithkeeper
   /** "Tap three untapped creatures you control" (the source may be one of them; the player picks them on the board). */
   tapCreatures?: number;
+  // Tarkir: Dragonstorm (19b, black): Sidisi, Regent of the Mire
+  /**
+   * With `sacrificeCreature`: "sacrifice a creature with mana value X ... target creature card with mana value X plus 1": the
+   * first target's mana value is one more than the sacrificed creature's (the sacrifice and the target are offered as pairs).
+   */
+  sacrificeForTargetManaValue?: boolean;
+  // Tarkir: Dragonstorm (19b, red): Reverberating Summons
+  /** "Discard your hand" as a cost (a hand of no cards is fine). */
+  discardHand?: boolean;
 }
 
 export type TriggerDef =
@@ -724,7 +771,10 @@ export type TriggerDef =
         | 'equipmentOrTargetsYourCreature'
         // Lorwyn Eclipsed (18b, red): Spinerock Tyrant
         /** An instant or sorcery spell with a single target (exactly one chosen target). */
-        | 'instantOrSorceryOneTarget';
+        | 'instantOrSorceryOneTarget'
+        // Tarkir: Dragonstorm (19a): Flurry
+        /** The caster's second spell this turn ("Flurry — Whenever you cast your second spell each turn"). */
+        | 'second';
       /** The spell must also match this (Gev: a Lizard spell). */
       spell?: CardFilter;
       /** Any player's spell, cast when it isn't their turn (Vision). */
@@ -861,6 +911,9 @@ export type TriggerDef =
   | { on: 'beginningOfDraw'; whose?: 'opponents' | 'each' } // Lorwyn Eclipsed (18b, black): 'each' (Mornsong Aria)
   /** Whenever a creature you control becomes the target of an opponent's spell or ability (Pawpatch Recruit). */
   | { on: 'yourCreatureTargetedByOpponent' }
+  // Tarkir: Dragonstorm (19b, green): Surrak, Elusive Hunter
+  /** Whenever a creature you control or a creature spell you control becomes the target of a spell or ability an opponent controls ("that creature" is the subject). */
+  | { on: 'creatureOrSpellTargetedByOpponent' }
   /** When this Class becomes level N. */
   | { on: 'becomesLevel'; level: number }
   // Teamwork (Marvel Super Heroes)
@@ -940,6 +993,9 @@ export type TriggerDef =
       on: 'castSelf';
       /** Strixhaven (13c): Plumb the Forbidden: only if creatures were sacrificed to cast it ("that many"). */
       perSacrificed?: boolean;
+      // Tarkir: Dragonstorm (19b, red): Stormscale Scion
+      /** Storm: "that many" is the number of spells cast this turn (by any player) before this one. */
+      storm?: boolean;
     }
   // Avengers Assemble (9b).
   /** Whenever this creature is dealt damage ("that much"): Hercules. */
@@ -964,6 +1020,9 @@ export type TriggerDef =
   | { on: 'opponentLosesLife'; duringYourTurn?: boolean }
   /** Whenever one or more cards leave your graveyard (Fang, Fearless l'Cie). */
   | { on: 'cardsLeaveYourGraveyard' }
+  // Tarkir: Dragonstorm (19b, misc): Hollowmurk Siege, Stalwart Successor
+  /** Whenever one or more counters (of any kind) are put on a creature you control; "that creature" is the subject. */
+  | { on: 'counterPutOnYourCreature' }
   // Final Fantasy (11b): creatures and artifacts dying
   /**
    * Whenever this or another permanent you control matching the filter is put
@@ -1269,7 +1328,23 @@ export type ConditionDef =
   | { kind: 'creatureEnteredThisTurn'; other?: boolean }
   // Lorwyn Eclipsed (18c, theme decks): Fearless Swashbuckler
   /** You attacked with a creature matching the filter in this combat (even if it has left since). */
-  | { kind: 'attackedThisCombat'; filter: CardFilter };
+  | { kind: 'attackedThisCombat'; filter: CardFilter }
+  // Tarkir: Dragonstorm (19a): "if you've cast two or more spells this turn", "your second spell each turn"
+  /**
+   * The spells `who` (default: you) has cast this turn (matching the filter, by type and subtype; the spell being cast now is
+   * already counted, so "if you've cast another spell this turn" read as the spell is cast is `min: 2`; for a cost reduction
+   * read before it is cast, `min: 1`) number at least `min` and at most `max`. Focus the Mind: `min: 1`; Highspire Bell-Ringer
+   * ("the second spell you cast each turn") `min: 1, max: 1`; Effortless Master `min: 2`.
+   */
+  | { kind: 'spellsCastThisTurn'; min?: number; max?: number; filter?: CardFilter; who?: 'you' | 'opponent' }
+  // Tarkir: Dragonstorm (19b, clans-b): Karakyk Guardian, Sonic Shrieker
+  /** The source has dealt damage (any damage, to anyone) since it came to the battlefield ("hexproof as long as it hasn't dealt damage yet" is `not` of this). */
+  | { kind: 'sourceDealtDamage' }
+  /** Resolution-time "if": the player chosen as this target was dealt damage by the source during this resolution ("if a player is dealt damage this way"). */
+  | { kind: 'targetPlayerDamagedBySource'; target: number }
+  // Tarkir: Dragonstorm (19b, black): The Sibsig Ceremony
+  /** The creature that caused the trigger (the one that entered) was cast, not put onto the battlefield some other way ("if you cast it"). */
+  | { kind: 'subjectWasCast' };
 
 export interface CardFilter {
   anyOf?: CardFilter[];
@@ -1431,6 +1506,13 @@ export interface TargetSpec {
   filter?: CardFilter;
   /** "Up to": this target and the ones after it may be left out. */
   optional?: boolean;
+  // Tarkir: Dragonstorm (19a): Rot-Curse Rakshasa
+  /**
+   * An activated ability's last target spec: "X target creatures", X the value paid for {X} in its cost (at least 1). The
+   * targets are picked one at a time once the ability is on the stack (the `abilityTargets` decision), each a different one.
+   * Effects reach them as `{ targetsFrom: n }`.
+   */
+  xTargets?: boolean;
   // Lorwyn Eclipsed (18b, multi-a): the Commands
   /** In a combined "choose two" spell: which chosen mode this target belongs to. Targets of different modes may be the same object. */
   ofMode?: number;
@@ -1466,6 +1548,9 @@ export interface TargetSpec {
   // Reality Fracture (17c): Fatehold Charm
   /** With 'spell': a creature on the battlefield is a legal target too ("target spell or creature"). */
   orCreature?: boolean;
+  // Tarkir: Dragonstorm (19b, clans): Jeskai Revelation
+  /** With 'spell': any permanent on the battlefield is a legal target too ("target spell or permanent"). */
+  orPermanent?: boolean;
   // Lorwyn Eclipsed (18b, multi-b): Kirol, Attentive First-Year
   /** With `abilitiesOnly`: triggered abilities only ("target triggered ability"). */
   triggeredOnly?: boolean;
@@ -1483,6 +1568,15 @@ export interface TargetSpec {
    * chosen just before it (each pair is listed once, the second target always the later card).
    */
   sharesCreatureTypeWithPrevious?: boolean;
+  // Tarkir: Dragonstorm (19b, white, black): Arashin Sunshield, Feral Deathgorger
+  /** With `anyNumber` and 'graveyardCard': all the targets are cards in the same graveyard ("up to two target cards from a single graveyard"). */
+  singleGraveyard?: boolean;
+  // Tarkir: Dragonstorm (19b, green): Rite of Renewal
+  /**
+   * With `anyNumber` on a spell: a card in the graveyard of the player chosen as target `n` ("up to four target cards from their
+   * graveyard"). A spell's `maxTargets` is kept to as the targets are picked one at a time.
+   */
+  inGraveyardOfTarget?: number;
 }
 
 /**
@@ -1538,8 +1632,14 @@ export type Ref =
 export type Amount =
   | number
   | { powerOf: Ref }
+  // Tarkir: Dragonstorm (19b, clans): Lie in Wait
+  /** The power of the card a target slot named, in whatever zone it is now (its printed power off the battlefield): "that card's power". */
+  | { powerOfCard: Ref }
   /** The number of +1/+1 counters on it (Mossborn Hydra doubles them). */
   | { countersOn: Ref }
+  // Tarkir: Dragonstorm (19a): Warden of the Grove
+  /** The number of counters of every kind on it ("the number of counters on this creature"). */
+  | { allCountersOn: Ref }
   | {
       count: 'creaturesYouControl' | 'landsYouControl' | 'totalPowerOfCreaturesYouControl';
       subtype?: string;
@@ -1616,6 +1716,9 @@ export type Amount =
   // Reality Fracture (17a): Ghalta the Immovable
   /** The greatest toughness among creatures you control. */
   | { count: 'greatestToughnessYouControl' }
+  // Tarkir: Dragonstorm (19a): Narset, Jeskai Waymaster
+  /** The spells you've cast this turn (matching the filter, by type and subtype). */
+  | { count: 'spellsCastThisTurn'; filter?: CardFilter }
   /** Creature cards you own in exile and in your graveyard (Huskburster Swarm). */
   | { count: 'creatureCardsInExileAndGraveyard' }
   // Strixhaven (13c): Show of Confidence
@@ -1675,6 +1778,9 @@ export type Amount =
   // Wakanda Forever (9c).
   /** Creatures on the battlefield (Vanquish the Horde). */
   | { count: 'creaturesOnBattlefield' }
+  // Tarkir: Dragonstorm (19b, white): Static Snare ("costs {1} less to cast for each attacking creature")
+  /** The attacking creatures, whoever controls them. */
+  | { count: 'attackingCreatures' }
   /** Total mana value of permanents you control matching the filter (Metalwork Colossus). */
   | { count: 'totalManaValue'; filter: CardFilter }
   /** Times you've cast your commander from the command zone (Hatut Zeraze Strike Force). */
@@ -1727,7 +1833,10 @@ export type Amount =
   /** Instant and sorcery cards in your graveyard plus cards with flashback you own in exile (Seize the Storm). */
   | { count: 'instantsSorceriesInGraveyardPlusFlashbackInExile' }
   /** The greatest mana value among instant and sorcery spells you've cast this turn (Rootha). */
-  | { count: 'greatestInstantSorceryCastThisTurn' };
+  | { count: 'greatestInstantSorceryCastThisTurn' }
+  // Tarkir: Dragonstorm (19b, black): Hundred-Battle Veteran
+  /** The different kinds of counters among the creatures you control ("three or more different kinds of counters among creatures you control"). */
+  | { count: 'counterKindsAmongYourCreatures' };
 
 export type EffectDef =
   | { kind: 'may'; effects: EffectDef[]; cost?: ManaCost; oncePerTurn?: string }
@@ -1844,6 +1953,11 @@ export type EffectDef =
       kind: 'chooseFromOpponentHand';
       filter?: CardFilter;
       then: 'discard' | 'exile';
+      // Tarkir: Dragonstorm (19b, clans): Severance Priest
+      /** Remember the exiled card's owner and mana value on the source (`linkedExile`) for "the exiled card's owner creates ...". */
+      linkToSource?: boolean;
+      /** "You may choose a card": choosing none is allowed too. */
+      optional?: boolean;
       /** You may cast the exiled card while it stays exiled, with any mana (Cruelclaw's Heist). */
       castable?: boolean;
       // Reality Fracture (17a): Null Summoner
@@ -1956,6 +2070,9 @@ export type EffectDef =
       colorless?: boolean;
       /** Its rules text, shown on the board ("Creatures you control get +2/+2."). */
       label?: string;
+      // Tarkir: Dragonstorm (19b, clans-b): All-Out Assault ("when you next attack this turn")
+      /** It goes away once it has triggered (with `until: 'endOfTurn'`; 'youAttack' triggers). */
+      once?: boolean;
       // Marvel Super Heroes Jumpstart (Tricksters)
       /** Its trigger's filter only matches cards with this object's name (The Clone Saga). */
       namedLike?: Ref;
@@ -2222,7 +2339,13 @@ export type EffectDef =
    * Return a target spell on the stack to its owner's hand. Reality Fracture (17c): `orCreature`, the target may be a
    * creature on the battlefield instead (Fatehold Charm).
    */
-  | { kind: 'returnSpellToHand'; what: Ref; orCreature?: boolean }
+  | {
+      kind: 'returnSpellToHand';
+      what: Ref;
+      orCreature?: boolean;
+      // Tarkir: Dragonstorm (19b, clans): Jeskai Revelation, "target spell or permanent"
+      orPermanent?: boolean;
+    }
   /** Reveal cards from the top until one matches; it goes to hand or onto the battlefield tapped, the rest to the bottom. */
   | {
       kind: 'revealUntil';
@@ -2312,6 +2435,15 @@ export type EffectDef =
       // Lorwyn Eclipsed (18b, black): Mornsong Aria
       /** The player whose turn it is searches (their own library, the card goes to their hand), not the controller. */
       activePlayerSearches?: boolean;
+      // Tarkir: Dragonstorm (19b, misc): Ugin, Eye of the Storms
+      /** The cards found are exiled, and you may cast them without paying their mana costs until end of turn. */
+      exileFreeThisTurn?: boolean;
+      // Tarkir: Dragonstorm (19b, red): Magmatic Hellkite
+      /** The card found enters the battlefield with one counter of this kind ("with a stun counter on it"). */
+      counter?: string;
+      // Tarkir: Dragonstorm (19b, green): Claim Territory
+      /** With `upTo`: the first card found goes to `to`, the ones after it here ("put one onto the battlefield tapped and the other into your hand"). */
+      thenTo?: 'hand';
     }
   /** Look at the top N; you may put a creature with mana value up to your land count onto the battlefield (Loot). */
   | { kind: 'lookForCreature'; count: number }
@@ -2353,11 +2485,16 @@ export type EffectDef =
    */
   | {
       kind: 'divide';
-      amount: number;
+      // Tarkir: Dragonstorm (19b, clans-b): Ureni ("X damage divided as you choose among any number of target creatures and/or planeswalkers")
+      /** The total to divide: a number, or an Amount worked out as it resolves. */
+      amount: Amount;
       maxTargets: number;
       spec: TargetSpec;
       give: 'damage' | 'counters';
       each?: EffectDef[];
+      // Tarkir: Dragonstorm (19b, red, clans): Twin Bolt, Armament Dragon, Revival of the Ancestors
+      /** "One or two targets" rather than "up to": choosing no target at all isn't offered. */
+      atLeastOne?: boolean;
       /** Internal: the targets chosen so far and what each gets. */
       chosen?: { to: TargetChoice; n: number }[];
       /** Internal: the choosing is over; deal the damage or put the counters. */
@@ -2410,12 +2547,15 @@ export type EffectDef =
    */
   | {
       kind: 'castFreeFromTop';
-      count: number;
+      count: number | Amount; // Tarkir: Dragonstorm (19b, clans): Kotis, "the top X cards" (X the damage dealt)
       from: 'yours' | 'opponents';
       maxManaValue?: Amount;
       rest: 'bottom' | 'exile';
       // Strixhaven (13c): Velomachus Lorehold (an instant or sorcery)
       filter?: CardFilter;
+      // Tarkir: Dragonstorm (19b, clans): Kotis, the Fangkeeper
+      /** "Any number of spells": after each one cast, the others may be cast too. */
+      more?: boolean;
     }
   /** Copy the topmost ability you control on the stack from an artifact source (Scientist Supreme). */
   | { kind: 'copyArtifactAbility' }
@@ -2495,6 +2635,9 @@ export type EffectDef =
       kind: 'returnToBattlefield';
       what: Ref;
       counter?: string;
+      // Tarkir: Dragonstorm (19b, clans): Perennation
+      /** Several counters, one of each kind, as it enters ("with a hexproof counter and an indestructible counter on it"). */
+      counters?: string[];
       /** It enters tapped (Deadly Plot, Grim Reaper). */
       tapped?: boolean;
       /** "Tapped and attacking" (Grim Reaper, Lethal Legionnaire). */
@@ -2518,6 +2661,9 @@ export type EffectDef =
       gainPerDestroyed?: number;
       /** Strixhaven (13c): Culling Ritual: add one mana of one of these colours for each permanent destroyed. */
       manaPerDestroyed?: ManaType[];
+      // Tarkir: Dragonstorm (19b, clans): Death Begets Life
+      /** Draw a card for each permanent destroyed this way. */
+      drawPerDestroyed?: boolean;
     }
   /** Look at the top N; you may take a card matching the filter into your hand; the rest go to the bottom at random. */
   | {
@@ -2533,15 +2679,21 @@ export type EffectDef =
       // Strixhaven (13c): The Biblioplex
       /** The card looked at may instead be put into your graveyard. */
       canBin?: boolean;
+      // Tarkir: Dragonstorm (19b, green): Traveling Botanist
+      /** The card taken is revealed. */
+      reveal?: boolean;
       // Final Fantasy (11b): look for a land
       /** The card taken goes onto the battlefield tapped instead (Ignis Scientia: a land). */
       // Foundations: 'libraryTop', it goes back on top (Gutless Plunderer, with `restToGraveyard`).
-      to?: 'battlefieldTapped' | 'libraryTop';
+      to?: 'battlefield' | 'battlefieldTapped' | 'libraryTop';
       // Secrets of Strixhaven (14a): Follow the Lumarets. After the first pick, choose another card matching this from the rest.
       followUp?: CardFilter;
       // Secrets of Strixhaven (14b): Zimone's Experiment
       /** Lands taken go onto the battlefield tapped, other cards into your hand; one more pick follows the first. */
       landsTapped?: boolean;
+      // Tarkir: Dragonstorm (19b, white): United Battlefront
+      /** "Put up to N ... from among them": one at a time, stopping whenever the player likes; the rest go to the bottom in a random order. */
+      upTo?: number;
     }
   /** Exile the top N; you may play them until the end of this turn or of your next turn. */
   | {
@@ -2606,6 +2758,13 @@ export type EffectDef =
       counters?: Amount;
       /** Created under the controller of this target instead (Beast Within: "its controller"). */
       forControllerOf?: number;
+      // Tarkir: Dragonstorm (19a)
+      /** "They gain menace and haste until end of turn" (Mardu Monument): these keywords until end of turn (`hasteThisTurn` is haste only). */
+      keywordsThisTurn?: Keyword[];
+      /** The token's base power and toughness are both this (an "X/X" token whose definition is 0/0: Spirits, Monument tokens). */
+      pt?: Amount;
+      /** "Sacrifice it at the beginning of the next end step" (mobilize, War Effort). */
+      sacrificeAt?: 'nextEndStep';
     }
   /** Return all land cards from your graveyard to the battlefield tapped (World Shaper). */
   | { kind: 'returnLandsFromGraveyard' }
@@ -2615,6 +2774,13 @@ export type EffectDef =
       /** "When you do" (Villainous Syndication): only if something was sacrificed. */
       then?: EffectDef[];
     }
+  // Tarkir: Dragonstorm (19a): Endure
+  /**
+   * "It endures N": put N +1/+1 counters on it, or create an N/N white Spirit token (the controller chooses; if it isn't on
+   * the battlefield, the token). `what` is the creature (default: this one; Warden of the Grove: 'subject'). `token` defaults
+   * to `TDM_SPIRIT` ('tdm-spirit-token', a 0/0 white Spirit creature).
+   */
+  | { kind: 'endure'; amount: Amount; what?: Ref; token?: CardDefId }
   /** The controller scries N (asks them to order the top cards). */
   | {
       kind: 'scry';
@@ -2622,6 +2788,13 @@ export type EffectDef =
       /** Strixhaven (13b): the opponent scries (Ingenious Mastery). */ forOpponent?: boolean;
     }
   | { kind: 'custom'; handler: string; params?: Record<string, unknown> }
+  // Tarkir: Dragonstorm (19b, clans-b): All-Out Assault
+  /**
+   * "There is an additional combat phase after this phase followed by an additional main phase": cast in a main phase, the
+   * extra combat and the extra (postcombat) main phase come right after it, then the turn goes on as it would have. Does
+   * nothing outside a main phase. See `TurnState.extraPhases`.
+   */
+  | { kind: 'extraCombatThenMain' }
   // Doom Prevails (9e).
   /** The owner shuffles it into their library, then reveals the top card: a permanent card enters (Chaos Warp). */
   | { kind: 'chaosWarp'; what: Ref }
@@ -2635,7 +2808,10 @@ export type EffectDef =
    * land, or you decline or can't pay), `otherwise` happens.
    */
   | { kind: 'exileTopMayCast'; otherwise: EffectDef[] }
-  /** Exile a card with N time counters; it gains suspend (Kang Prime: the next nonland card from the top). */
+  /**
+   * Exile a card with N time counters; it gains suspend (Kang Prime: the next nonland card from the top). Tarkir: Dragonstorm (19a):
+   * 'subject' is the spell that caused the trigger, taken off the stack (not countered) into exile (Taigam, Master Opportunist).
+   */
   | { kind: 'suspend'; what: Ref | 'nextNonlandFromLibrary'; time: number }
   /** Unearth: the source returns from your graveyard with haste; it's exiled at the next end step or if it would die. */
   | { kind: 'unearth' }
@@ -2683,6 +2859,12 @@ export type EffectDef =
       // Marvel Super Heroes Jumpstart (Scarlet)
       /** The exiled cards (and the hit, if not cast) stay in exile (Wanda's Vision). */
       stayExiled?: boolean;
+      // Tarkir: Dragonstorm (19b, red): Breaching Dragonstorm
+      /**
+       * Stop at the first nonland card whatever its mana value: it may be cast free if its mana value is at most `max`, otherwise
+       * (or if it isn't cast) it goes to your hand (`orHand`); the lands exiled before it stay in exile.
+       */
+      firstNonland?: boolean;
     }
   // Strixhaven (13c)
   /** Jadzi: reveal the top card; a land goes onto the battlefield, a nonland card may be cast by paying `pay`. */
@@ -2744,7 +2926,14 @@ export type EffectDef =
   /** Monstrosity N: if the source isn't monstrous, N +1/+1 counters and it becomes monstrous. */
   | { kind: 'monstrosity'; amount: number }
   /** If it dies this turn, these happen (Fight for the Throne). */
-  | { kind: 'whenDiesThisTurn'; what: Ref; effects: EffectDef[] }
+  | {
+      kind: 'whenDiesThisTurn';
+      what: Ref;
+      effects: EffectDef[];
+      // Tarkir: Dragonstorm (19b, black): Desperate Measures
+      /** Only if it dies under your control ("when it dies under your control this turn"). */
+      underYourControl?: boolean;
+    }
   /**
    * Reveal the top N: you may put a permanent card onto the battlefield (with a
    * named counter), then one into your hand; the rest go to the graveyard (Wakanda Forever!).
@@ -2908,6 +3097,12 @@ export type StaticDef =
       keywords?: Keyword[];
     }
   | { kind: 'noLifeGain' }
+  // Tarkir: Dragonstorm (19a): Zurgo, Thunder's Decree
+  /**
+   * Permanents you control matching the filter can't be sacrificed (as an effect or a cost), during your end step if
+   * `duringYourEndStep` ("During your end step, Warrior tokens you control have 'This token can't be sacrificed.'").
+   */
+  | { kind: 'cantBeSacrificed'; filter: CardFilter; duringYourEndStep?: boolean }
   // Reality Fracture (17a): Thalia, the Survivor
   /** Spells matching the filter that your opponents cast cost {amount} more. */
   | { kind: 'opponentSpellsCostMore'; filter: CardFilter; amount: number }
@@ -3021,6 +3216,9 @@ export type StaticDef =
       cantBecomeUntapped?: boolean;
       /** "Enchanted creature can't have counters put on it." */
       noCounters?: boolean;
+      // Tarkir: Dragonstorm (19b, blue): Ringing Strike Mastery
+      /** "Enchanted creature has '{5}: Untap this creature.'": the activated abilities the enchanted permanent has while this stays attached. */
+      grantAbilities?: AbilityDef[];
       // Lorwyn Eclipsed (18b, white): Bark of Doran
       /** "As long as equipped creature's toughness is greater than its power, it assigns combat damage equal to its toughness." */
       toughnessAssignsDamage?: boolean;
@@ -3044,6 +3242,9 @@ export type StaticDef =
       cantBeBlocked?: boolean;
       /** Can't attack or block while the condition holds (Bast). */
       cantAttackOrBlock?: boolean;
+      // Tarkir: Dragonstorm (19b, blue): Snowmelt Stag
+      /** Base power and toughness while the condition holds ("During your turn, this creature has base power and toughness 5/2"). */
+      basePT?: [number, number];
     }
   /** Instant and sorcery spells you cast cost {N} less (Archmage of Runes). */
   | { kind: 'instantsAndSorceriesCostLess'; amount: number }
@@ -3051,6 +3252,9 @@ export type StaticDef =
       kind: 'spellsCostLess';
       filter: CardFilter;
       amount: Amount;
+      // Tarkir: Dragonstorm (19b, clans-b): Temur Battlecrier ("During your turn, spells you cast cost {1} less ...")
+      /** Only while this holds (checked for the permanent's controller). */
+      condition?: ConditionDef;
       /** Strixhaven Brawl (15b, pair): Zimone, Infinite Analyst: only the first spell with {X} you cast each turn. */
       firstXOnly?: boolean;
     }
@@ -3095,6 +3299,9 @@ export type StaticDef =
   | { kind: 'conniveDrawsFirst' }
   /** "Noncreature spells you cast have improvise" (Ironheart). */
   | { kind: 'noncreatureSpellsHaveImprovise' }
+  // Tarkir: Dragonstorm (19b, clans): Teval, Arbiter of Virtue
+  /** "Spells you cast have delve." */
+  | { kind: 'spellsHaveDelve' }
   // Lorwyn Eclipsed (18b, multi-b)
   /** Each other creature you control has hexproof from each of its colors (Tam, Mindful First-Year). */
   | { kind: 'hexproofFromOwnColors' }
@@ -3240,6 +3447,9 @@ export type StaticDef =
    * without paying its mana cost (Vision, Spectral Synthezoid). Once for each such permanent.
    */
   | { kind: 'freeCastOncePerYourTurn'; filter: CardFilter }
+  // Tarkir: Dragonstorm (19b, red): Dracogenesis
+  /** "You may cast spells matching the filter without paying their mana costs." (A cast action 'freeMatching' beside the usual ones.) */
+  | { kind: 'castFreeMatching'; filter: CardFilter }
   /** Creatures matching the filter can't attack you while the condition holds (Queen Mother Ramonda). */
   | { kind: 'cantAttackYou'; filter: CardFilter; condition?: ConditionDef }
   // Final Fantasy (11c): rare statics
@@ -3341,7 +3551,15 @@ export type StaticDef =
   /** Whenever a player taps a basic land for mana, that player adds one more mana of any type that land produced (every player's lands). */
   | { kind: 'basicLandsAddExtraMana' }
   /** "Spells you control can't be countered." */
-  | { kind: 'spellsYouControlUncounterable' };
+  | { kind: 'spellsYouControlUncounterable' }
+  // Tarkir: Dragonstorm (19b, white): Clarion Conqueror
+  /** Activated abilities of permanents matching the filter (mana and loyalty abilities too) can't be activated, whoever controls them. */
+  | { kind: 'noActivatedAbilities'; filter: CardFilter }
+  // Tarkir: Dragonstorm (19b, misc): Dragonstorm Globe, Windcrag Siege
+  /** Each permanent matching the filter that enters under your control enters with an additional +1/+1 counter (Dragonstorm Globe: Dragons). */
+  | { kind: 'entersWithExtraCounter'; filter: CardFilter }
+  /** If a creature attacking causes a triggered ability of a permanent you control to trigger, that ability triggers an additional time (Windcrag Siege, Mardu). */
+  | { kind: 'attackTriggersTwice' };
 
 export type CardDb = ReadonlyMap<CardDefId, CardDefinition>;
 
@@ -3475,6 +3693,9 @@ export interface GameObject {
   linkedExile?: { owner: PlayerId; mv: number };
   /** Sugar Coat: the Aura that makes it a Food. */
   foodBy?: ObjectId;
+  // Tarkir: Dragonstorm (19b, blue): Ringing Strike Mastery
+  /** The Auras attached to it that give it abilities (`attached.grantAbilities`). */
+  auraGrants?: ObjectId[];
   /** Someone other than its owner may cast it from exile, with any mana (Cruelclaw's Heist). */
   castableBy?: PlayerId;
   anyMana?: boolean;
@@ -3571,6 +3792,9 @@ export interface GameObject {
   // Reality Fracture (17a): Ruric Thar, Magecrusher
   /** It has dealt combat damage since it entered the battlefield. */
   dealtCombatDamage?: boolean;
+  // Tarkir: Dragonstorm (19b, clans-b): Karakyk Guardian
+  /** It has dealt damage (any damage) since it entered the battlefield. */
+  dealtDamage?: boolean;
   // Final Fantasy (11a): adventure lands
   /** In exile "on an adventure": its owner may play it (the land) from there. */
   onAdventure?: boolean;
@@ -3605,6 +3829,9 @@ export interface GameObject {
   // Secrets of Strixhaven (14b): Flashback
   /** In a graveyard: it has flashback (its mana cost) until the end of this turn number. */
   flashbackGrantedTurn?: number;
+  // Tarkir: Dragonstorm (19a): Songcrafter Mage
+  /** In a graveyard: it has harmonize (its mana cost) until the end of this turn number. */
+  harmonizeGrantedTurn?: number;
   /** Playing it from the graveyard this turn doesn't stop other spells (Ark of Hunger). */
   noSpellLock?: boolean;
   /** A copy of a card cast from exile (prepare, paradigm): it ceases to exist once it leaves the stack. */
@@ -3625,6 +3852,9 @@ export interface GameObject {
   /** +1/+1 counters were put on it this many times during turn `countersTurn` (Botanical Brawler). */
   countersTurn?: number;
   countersTimes?: number;
+  // Tarkir: Dragonstorm (19b, misc): Stalwart Successor
+  /** Counters of any kind were put on it this many times during turn `turn`. */
+  anyCountersTimes?: { turn: number; times: number };
   // Final Fantasy Commander (12f).
   /** Exiled from a graveyard to be cast this turn: it counts as cast from a graveyard (Emet-Selch). */
   fromGraveyardCast?: boolean;
@@ -3832,6 +4062,13 @@ export interface TurnState {
   passed: PlayerId[];
   /** Additional combat phases still to come this turn. */
   extraCombats: number;
+  // Tarkir: Dragonstorm (19b, clans-b): All-Out Assault
+  /**
+   * Extra combat + main phase pairs made by `extraCombatThenMain`, innermost last. 'pending': made, waiting for the current main
+   * phase to end; 'combat': in the extra combat; 'main': in the extra main phase (step 'main2'). `resume` is the step the turn
+   * returns to afterwards (the one that would have followed the main phase it was made in).
+   */
+  extraPhases?: { phase: 'pending' | 'combat' | 'main'; resume: Step }[];
   /** Mystical Archive (16): Angel's Grace: these players can't lose the game this turn and their life can't drop below 1. */
   cantLose?: PlayerId[];
   /** Mystical Archive (16): Veil of Summer: spells these players control can't be countered this turn. */
@@ -3841,6 +4078,12 @@ export interface TurnState {
   nextSpellUncounterable?: PlayerId[];
   /** Mystical Archive (16): Deflecting Palm: the next damage to these players this turn is prevented and dealt to its source's controller. */
   deflect?: PlayerId[];
+  // Tarkir: Dragonstorm (19b, clans): New Way Forward
+  /**
+   * "The next time a source of your choice would deal damage to you this turn, prevent that damage. When damage is prevented this
+   * way, New Way Forward deals that much damage to that source's controller and you draw that many cards."
+   */
+  sourceShields?: { player: PlayerId; source: ObjectId; by: ObjectId }[];
   /** Creatures declared as attackers this turn, once per combat. */
   attackers: ObjectId[];
   // Lorwyn Eclipsed (18c, theme decks): Fearless Swashbuckler
@@ -4034,7 +4277,13 @@ export interface ContinuousEffect {
   /** Its activated abilities can't be activated. */
   noActivate?: boolean;
   /** What happens if the affected creature dies while this lasts. */
-  onDies?: { effects: EffectDef[]; controller: PlayerId; sourceDefId: CardDefId };
+  onDies?: {
+    effects: EffectDef[];
+    controller: PlayerId;
+    sourceDefId: CardDefId;
+    /** Tarkir: Dragonstorm (19b, black): only if it died under `controller`'s control. */
+    underControl?: boolean;
+  };
   // Strixhaven Brawl (15b, w): Alseid of Life's Bounty
   /** Protection from this colour (targeting and damage; not blocking). */
   protectionFrom?: Color;
@@ -4104,6 +4353,9 @@ export interface PausedResolution extends EffectSource {
     // Final Fantasy (11a): adventure lands
     /** Cast as an Adventure: exiled "on an adventure" as it resolves. */
     adventure?: boolean;
+    // Tarkir: Dragonstorm (19a): Omen
+    /** Cast as an Omen: shuffled into its owner's library as it resolves. */
+    omen?: boolean;
   };
 }
 
@@ -4152,8 +4404,8 @@ export interface DelayedTrigger {
   fromTurn: number;
   /** Only at this player's end step ("your next end step"). */
   whose?: PlayerId;
-  /** At the beginning of an upkeep instead of an end step (Arcane Denial). */
-  at?: 'upkeep';
+  /** At the beginning of an upkeep instead of an end step (Arcane Denial); 'endCombat': at the beginning of the end of combat step (decayed). */
+  at?: 'upkeep' | 'endCombat';
 }
 
 /** What Undying Malice / Fake Your Own Death grant. */
@@ -4272,8 +4524,14 @@ export type Decision =
       // Reality Fracture (17a): Fblthp, Knows the Way; Hexhaven Invigorator
       /** "Up to N cards": how many more may be taken (one at a time). */
       remaining?: number;
+      // Tarkir: Dragonstorm (19b, misc): Ugin, Eye of the Storms
+      /** The cards found are exiled; they may be cast free this turn. */
+      exileFreeThisTurn?: boolean;
       /** Each card taken must have a different name from the ones already taken. */
       differentNames?: boolean;
+      // Tarkir: Dragonstorm (19b, green): Claim Territory
+      /** After the first card, the destination is this. */
+      thenTo?: 'hand';
       // Reality Fracture (17a fixes): Loyal Tutor
       /** The card found is revealed. */
       reveal?: boolean;
@@ -4431,6 +4689,10 @@ export type Decision =
       among?: ObjectId[];
       // Lorwyn Eclipsed (18c, theme decks): Lightstall Inquisitor
       ownerChooses?: { tax: number; landsTapped: boolean };
+      // Tarkir: Dragonstorm (19b, clans): Severance Priest
+      linkToSource?: boolean;
+      /** The chooser may also choose no card ("You may choose a nonland card"). */
+      optional?: boolean;
       resume: PausedResolution;
       thenPriority: PlayerId;
     }
@@ -4547,6 +4809,17 @@ export type Decision =
       thenPriority: PlayerId;
     }
   | {
+      // Tarkir: Dragonstorm (19a): Renew — {X}{B}{B}: "X target creatures". Picked one at a time once the ability is on the stack:
+      // each `chooseTargets` action is `picked` plus one more; after `need` targets the ability has them all.
+      kind: 'abilityTargets';
+      player: PlayerId;
+      /** The ability on the stack. */
+      ability: ObjectId;
+      picked: TargetChoice[];
+      need: number;
+      thenPriority: PlayerId;
+    }
+  | {
       // Lorwyn Eclipsed (18a): Conspire. Tap two untapped creatures that share a colour with the spell, one at a time; then the spell is copied.
       kind: 'conspire';
       player: PlayerId;
@@ -4612,6 +4885,10 @@ export interface GameState {
   creaturesAreFood?: boolean;
   // Lorwyn Eclipsed (18b, green): a Shimmerwilds Growth has been on the battlefield (lands may be recoloured: `def` looks for the Aura).
   landColorAuras?: boolean;
+  /** Lorwyn Eclipsed (18b): some object has had its colours changed (`allColorsTurn`, `colorOverride`, `colorless`); `def` checks them only then. */
+  colorChanges?: boolean;
+  /** Tarkir: Dragonstorm (19b, blue): an Aura has granted abilities (`auraGrants`); `def` checks them only then. */
+  auraGrants?: boolean;
   /** Abilities players have from emblems or effects (Season of the Bold, Ral). */
   emblems?: Emblem[];
   /** "At the beginning of the next end step, ...": fire at the first end step after `afterTurn` / this step. */
@@ -4686,6 +4963,8 @@ export type Action =
         | 'freeOnceEachTurn'
         // Reality Fracture (17a): Omnipresence.
         | 'omnipresence'
+        // Tarkir: Dragonstorm (19b, red): Dracogenesis.
+        | 'freeMatching'
         // Reality Fracture (17c): Chandra, Torch of Defiance.
         | 'now'
         | 'freeExact'
@@ -4719,6 +4998,9 @@ export type Action =
       conspire?: boolean;
       /** The cards beheld for `flashbackBehold` (permanents you control, or cards in your hand, which are revealed). */
       beholdCards?: ObjectId[];
+      // Tarkir: Dragonstorm (19a)
+      /** Harmonize: the untapped creature you tap to reduce the cost by its power. */
+      harmonizeTap?: ObjectId;
     }
   | {
       type: 'activateAbility';
@@ -4853,6 +5135,9 @@ export type GameEvent =
   | { type: 'cardsRevealed'; player: PlayerId; cards: { id: ObjectId; defId: CardDefId }[] }
   /** +1/+1 counters were put on a permanent. */
   | { type: 'countersAdded'; id: ObjectId; count: number; player: PlayerId }
+  // Tarkir: Dragonstorm (19b, misc): counters of any kind put on a creature
+  /** Counters of any kind (+1/+1 or named) were put on a creature; `player` controls it. */
+  | { type: 'anyCountersAdded'; id: ObjectId; count: number; player: PlayerId }
   // Reality Fracture (17c): loyalty counters put on a planeswalker
   /** `player` controls the planeswalker; `by` is the player who put the counters. */
   | { type: 'loyaltyCountersAdded'; id: ObjectId; count: number; player: PlayerId; by: PlayerId }

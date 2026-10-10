@@ -108,6 +108,25 @@ export function passPriority(ctx: Ctx, player: PlayerId): void {
   }
 }
 
+/**
+ * Tarkir: Dragonstorm (19b, clans-b): All-Out Assault. When a main phase ends: a pending extra combat starts, or the extra main
+ * phase ends and the turn returns to where it would have gone. Undefined: the usual next step.
+ */
+function afterMain(ctx: Ctx): Step | undefined {
+  const phases = ctx.s.turn.extraPhases;
+  const extra = phases?.at(-1);
+  if (!phases || !extra) return undefined;
+  if (extra.phase === 'pending') {
+    extra.phase = 'combat';
+    return 'beginCombat';
+  }
+  if (extra.phase === 'main') {
+    phases.pop();
+    return extra.resume;
+  }
+  return undefined;
+}
+
 function nextStep(ctx: Ctx, step: Step): Step | 'nextTurn' {
   switch (step) {
     case 'untap':
@@ -117,7 +136,7 @@ function nextStep(ctx: Ctx, step: Step): Step | 'nextTurn' {
     case 'draw':
       return 'main1';
     case 'main1':
-      return 'beginCombat';
+      return afterMain(ctx) ?? 'beginCombat';
     case 'beginCombat':
       return 'declareAttackers';
     case 'declareAttackers':
@@ -129,14 +148,21 @@ function nextStep(ctx: Ctx, step: Step): Step | 'nextTurn' {
       return 'combatDamage';
     case 'combatDamage':
       return 'endCombat';
-    case 'endCombat':
+    case 'endCombat': {
+      // Tarkir: Dragonstorm (19b, clans-b): All-Out Assault, the extra combat is followed by an extra main phase.
+      const extra = ctx.s.turn.extraPhases?.at(-1);
+      if (extra?.phase === 'combat') {
+        extra.phase = 'main';
+        return 'main2';
+      }
       if (ctx.s.turn.extraCombats > 0) {
         ctx.s.turn.extraCombats--;
         return 'beginCombat';
       }
       return 'main2';
+    }
     case 'main2':
-      return 'end';
+      return afterMain(ctx) ?? 'end';
     case 'end':
       // Final Fantasy (11c): "there is an additional end step after this step" (Y'shtola Rhul).
       if (ctx.s.turn.extraEndSteps) {
@@ -190,6 +216,7 @@ export function startTurn(ctx: Ctx, player: PlayerId, noPowerUp = false): void {
   const p = s.players[player];
   p.landsPlayedThisTurn = 0;
   s.turn.extraCombats = 0;
+  delete s.turn.extraPhases; // Tarkir: Dragonstorm (19b, clans-b)
   // Final Fantasy Commander (12b).
   delete s.turn.extraLands;
   // Reality Fracture (17a): Hall of Echoes.
@@ -223,6 +250,7 @@ export function startTurn(ctx: Ctx, player: PlayerId, noPowerUp = false): void {
   delete s.turn.uncounterable; // Mystical Archive (16): Veil of Summer
   delete s.turn.nextSpellUncounterable; // Reality Fracture (17c): Theorist's Proxy
   delete s.turn.deflect; // Mystical Archive (16): Deflecting Palm
+  delete s.turn.sourceShields; // Tarkir: Dragonstorm (19b, clans): New Way Forward
   delete s.turn.osteomancer;
   delete s.turn.spellLock;
   delete s.turn.discards;

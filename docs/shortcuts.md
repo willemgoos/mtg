@@ -156,3 +156,28 @@ from) when it's fixed. Older phases keep their own "Simplifications" lists in `d
       planeswalker you could choose (the engine's "tapped and attacking" convention).
 - [ ] Collective Inferno, Rimefire Torque: "as this enters, choose a creature type" is an enters trigger (the convention
       above).
+
+## Tarkir: Dragonstorm (engine, phase 19a)
+
+- [ ] **The Sieges** ("As this enchantment enters, choose Abzan or Mardu"): the choice is made when an enters trigger resolves, not as
+      the permanent enters, so an opponent can respond to the trigger before it is made (to destroy it, say). The bots choose by
+      evaluation, which can't see what a Siege's abilities are worth (it picks the first option when they tie).
+- [ ] **The Devotees** ("{1}: Add {U}, {R}, or {W}. Activate only once each turn."): a real mana ability (no stack), but it isn't used
+      automatically while a cost is paid: the player activates it before casting (Arena does it for you). The heuristic bot uses it when
+      that makes a card castable.
+- [ ] **Mobilize and "tapped and attacking" tokens** attack the opponent, never a planeswalker (a legal choice, but the only one offered).
+
+## Tarkir: Dragonstorm (`tdm/*.ts`, phase 19b)
+
+- [ ] Ureni of the Unwritten: X (the lands you control) is read as the ability resolves, not as it is put on the stack, and
+      the targets are chosen one at a time on resolution (like `divide`), so hexproof and ward don't apply at targeting.
+- [ ] United Battlefront, Wayspeaker Bodyguard: "noncreature, nonland permanent card" can't match a Battle (the engine has
+      no Battle type; no Battle is in the pool).
+- [ ] Tempest Hawk: "a deck can have any number of cards named Tempest Hawk" isn't enforced by the deck builder.
+- [ ] Twin Bolt: "one or two targets" and the damage split are chosen as it resolves (the `divide` effect), not as it is cast.
+- [ ] Rite of Renewal: the cast menu shows three entries (return zero, one or two permanent cards) because a spell can't have
+      "up to two" targets followed by a required one; the rules are exact, the extra entries aren't on the card.
+- [ ] Armament Dragon, Revival of the Ancestors: the targets of "distribute counters among one, two or three targets" are
+      chosen as it resolves (the `divide` effect), so an opponent can't respond to the targeting.
+- [ ] Teval, Arbiter of Virtue: the cast menu doesn't say which graveyard cards a delve cast will exile (they're picked
+      one at a time after choosing it).

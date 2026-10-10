@@ -123,6 +123,12 @@ const SECTIONS: { title: string; blurb: string; decks: Decklist[] }[] = [
     set: 'ecl' as const,
   },
   {
+    title: 'Tarkir: Dragonstorm draft decks',
+    blurb: '40-card clan decks that went 7–1 or 7–2 in Arena’s Premier Draft; they play each other',
+    series: 'trophy' as const,
+    set: 'tdm' as const,
+  },
+  {
     title: 'Color Challenge',
     blurb: 'The mono-colour decks Sparky plays against new players',
     series: 'colorChallenge' as const,
@@ -136,7 +142,7 @@ const SECTIONS: { title: string; blurb: string; decks: Decklist[] }[] = [
     title: string;
     blurb: string;
     series: string;
-    set?: 'blb' | 'msh' | 'fin' | 'stx' | 'sos' | 'fra' | 'ecl';
+    set?: 'blb' | 'msh' | 'fin' | 'stx' | 'sos' | 'fra' | 'ecl' | 'tdm';
   }) => {
     const decks = DECKS.filter((d) => d.series === series && d.set === set);
     return { ...s, decks: [...decks.filter(isPlayable), ...decks.filter((d) => !isPlayable(d))] };
@@ -558,7 +564,13 @@ export function App() {
         mode={startMode}
         onMode={setMode}
         run={isEvent(startMode) ? summaries[startMode] : null}
-        records={!isEvent(startMode) ? {} : startMode === 'gauntlet' ? gauntlet.records : expedition.records}
+        records={
+          !isEvent(startMode)
+            ? {}
+            : startMode === 'gauntlet'
+              ? gauntlet.records
+              : expedition.records
+        }
         onContinue={() => isEvent(startMode) && setHub(startMode)}
         onRun={(deck) => isEvent(startMode) && beginRun(startMode, deck)}
         onJumpIn={() => setJumping(true)}
@@ -627,7 +639,7 @@ export function App() {
 
 function runLabel(name: string, run: RunSummary | null): string {
   if (!run) return name;
-  return `${name} · ${run.status === 'playing' ? run.label ?? `${run.unit} ${run.step} of ${run.steps}` : 'Final result'}`;
+  return `${name} · ${run.status === 'playing' ? (run.label ?? `${run.unit} ${run.step} of ${run.steps}`) : 'Final result'}`;
 }
 
 const clearsOf = (s: { records: Record<string, DeckRecord> }) =>

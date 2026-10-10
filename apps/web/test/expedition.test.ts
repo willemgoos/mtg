@@ -10,6 +10,7 @@ import {
   slug,
 } from '@mtg/cards';
 import { ECL_BOOSTER_LIST } from '../../../packages/cards/src/ecl/booster-list.ts';
+import { TDM_BOOSTER_LIST } from '../../../packages/cards/src/tdm/booster-list.ts';
 import { FRA_BOOSTER_LIST } from '../../../packages/cards/src/fra/booster-list.ts';
 import { SOA_ARCHIVE_LIST } from '../../../packages/cards/src/sos/archive-list.ts';
 import { SOS_BOOSTER_LIST } from '../../../packages/cards/src/sos/booster-list.ts';
@@ -80,6 +81,7 @@ import {
   type BoonId,
   type PactId,
   deckColors,
+  mainColors,
   spellColors,
 } from '../src/game/expedition.ts';
 
@@ -263,6 +265,23 @@ describe('expedition packs', () => {
       expect(uncommons.every((n) => rarityOf.get(n) === 'uncommon')).toBe(true);
       expect(['rare', 'mythic']).toContain(rarityOf.get(rare));
       expect(count('rare', 'mythic')).toBeGreaterThanOrEqual(1);
+    }
+  });
+
+  it('opens Tarkir: Dragonstorm boosters with a TDM deck: seven commons, three uncommons, a rare and more', () => {
+    expect(packSetOf({ deck: 'tdm-trophy-sultai' })).toBe('tdm');
+    expect(packSetOf({ deck: 'jump-in:tdm-abzan+tdm-mill' })).toBe('tdm');
+    const mixed = { deck: 'jump-in:tdm-jeskai+ecl-kithkin' };
+    expect([0, 1].map((n) => packSetOf(mixed, n))).toEqual(['tdm', 'ecl']);
+    const rarityOf = new Map(TDM_BOOSTER_LIST);
+    for (let seed = 0; seed < 20; seed++) {
+      const pack = rollPack({ kind: 'booster' }, seed, 0, 'tdm', EXP);
+      expect(new Set(pack).size).toBe(packSize);
+      for (const n of pack) expect(cardDb.has(slug(n)), n).toBe(true);
+      const { commons, uncommons, rare } = slots(pack);
+      expect(commons.every((n) => rarityOf.get(n) === 'common')).toBe(true);
+      expect(uncommons.every((n) => rarityOf.get(n) === 'uncommon')).toBe(true);
+      expect(['rare', 'mythic']).toContain(rarityOf.get(rare));
     }
   });
 
@@ -1192,6 +1211,15 @@ describe('deck colours', () => {
   it('counts a hybrid card as the colour the deck already plays', () => {
     expect(new Set(spellColors(main).keys())).toEqual(new Set(['B', 'R']));
     expect(new Set(deckColors(build(main)))).toEqual(new Set(['B', 'R']));
+  });
+
+  it('keeps a third colour with four or more spells, not a splash', () => {
+    const clan = { ...main, 'Sibsig Appraiser': 2, 'Dirgur Island Dragon': 2 };
+    expect(mainColors(build(clan))).toHaveLength(3);
+    expect(new Set(mainColors(build(clan)))).toEqual(new Set(['B', 'R', 'U']));
+    expect(mainColors(build({ ...main, 'Dirgur Island Dragon': 3 }))).toHaveLength(2);
+    // Clan lands and rares fit a three-colour deck.
+    expect(landsFor(build({ ...clan, Island: 1 }))).toContain('Crumbling Necropolis');
   });
 
   it("doesn't warn about colours only hybrid cards could use", () => {

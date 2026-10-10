@@ -6,6 +6,7 @@ import {
   type Build,
   type Counts,
   deckColors,
+  mainColors,
   MIN_DECK,
   PACK_SET_NAMES,
   type PackSet,
@@ -274,8 +275,30 @@ const MONO: Record<Color, string> = {
   G: 'Green',
 };
 
-/** Arena's guild name for two colours (in either order), a colour word for one, else 'Colourless'. */
+// Tarkir: Dragonstorm (19a): the three-colour wedges (Khans of Tarkir clans) and shards, by the colours in WUBRG order.
+const THREE_COLOURS: Record<string, string> = {
+  WBG: 'Abzan',
+  WUR: 'Jeskai',
+  UBG: 'Sultai',
+  WBR: 'Mardu',
+  URG: 'Temur',
+  WUG: 'Bant',
+  WUB: 'Esper',
+  UBR: 'Grixis',
+  BRG: 'Jund',
+  WRG: 'Naya',
+};
+
+/**
+ * Arena's guild name for two colours (in either order), the clan or shard name for three, a colour word for one, else 'Colourless'.
+ */
 export function colorsName(colors: Color[]): string {
+  if (colors.length === 3) {
+    const order = ['W', 'U', 'B', 'R', 'G'];
+    const key = [...colors].sort((a, b) => order.indexOf(a) - order.indexOf(b)).join('');
+    return THREE_COLOURS[key] ?? 'Three colours';
+  }
+  if (colors.length > 3) return colors.length === 4 ? 'Four colours' : 'Five colours';
   if (colors.length >= 2) {
     const [a, b] = colors;
     return GUILDS[`${a}${b}`] ?? GUILDS[`${b}${a}`] ?? 'Colourless';
@@ -323,7 +346,7 @@ export function opponentFor(e: SealedEvent, n: number): { deck: Decklist; bot: B
   const short = MIN_DECK - size(main);
   const filled =
     short > 0 ? { ...main, [BASICS[dominant]]: (main[BASICS[dominant]] ?? 0) + short } : main;
-  const colors = deckColors(buildOf({ main: filled, side: {} })).slice(0, 2);
+  const colors = mainColors(buildOf({ main: filled, side: {} }));
   const deck = listOf(`sealed:${e.id}:${n}`, colorsName(colors), e.set, filled);
   registerDeck(deck);
   const roll = rng(derive(e.seed, BOT_SALT + n))();
@@ -429,6 +452,7 @@ export const SEASON_PACK_OF: Record<PackSet, SeasonPackKind> = {
   sos: 'secrets',
   fra: 'realityFracture',
   ecl: 'lorwynEclipsed',
+  tdm: 'tarkirDragonstorm',
 };
 
 /** What the event screen shows. */

@@ -176,11 +176,12 @@ export function castGroups(casts: readonly Action[]): Action[][] {
     }
     if (a.type !== 'castSpell' && a.type !== 'activateAbility') continue;
     const forage = a.forage ? (a.forage === 'graveyard' ? 'g' : 'f') : '';
+    // Tarkir: Dragonstorm (19a): harmonize, the creature tapped is a way of paying too.
     // Lorwyn Eclipsed (18a): blighting or not, evoke, conspire and the kinds of counters removed are ways of paying too.
     const blight = a.blight ? 'bl' : '';
     const key =
       a.type === 'castSpell'
-        ? `${a.mode ?? ''}:${a.kicked ? 'k' : ''}:${a.sacrifice ? 's' : ''}:${forage}:${a.x ?? ''}:${a.paws?.join() ?? ''}:${a.via ?? ''}:${a.back ? 'b' : ''}:${a.sneak ? 'sn' : ''}:${a.beheld ? 'bh' : ''}:${a.beholdCard ?? ''}:${blight}:${a.evoked ? 'ev' : ''}:${a.conspire ? 'cs' : ''}:${a.beholdCards?.join() ?? ''}`
+        ? `${a.mode ?? ''}:${a.kicked ? 'k' : ''}:${a.sacrifice ? 's' : ''}:${forage}:${a.x ?? ''}:${a.paws?.join() ?? ''}:${a.via ?? ''}:${a.back ? 'b' : ''}:${a.sneak ? 'sn' : ''}:${a.beheld ? 'bh' : ''}:${a.beholdCard ?? ''}:${blight}:${a.evoked ? 'ev' : ''}:${a.conspire ? 'cs' : ''}:${a.beholdCards?.join() ?? ''}:${a.harmonizeTap ?? ''}`
         : `${forage}:${a.x ?? ''}:${blight}:${a.removeKinds?.join() ?? ''}`;
     groups.set(key, [...(groups.get(key) ?? []), a]);
   }

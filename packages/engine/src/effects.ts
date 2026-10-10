@@ -58,8 +58,10 @@ import { nextInt, shuffleInPlace } from './rng.ts';
 import { checkCondition, triggeredAbility } from './triggers.ts';
 import { addLore } from './sagas.ts';
 import { CHOOSERS } from './stx-13c-a-effects.ts';
+import { applySourceShield } from './tdm-clans-effects.ts'; // Tarkir: Dragonstorm (19b, clans)
 import { planeswalkersSurvive, tokenMultiplier } from './brawl-15a-w-effects.ts';
 import { crownReplacement } from './ecl-crown.ts';
+import { extraEntryCounters } from './tdm-misc-effects.ts';
 import { protectedFrom } from './brawl-15b-w-effects.ts';
 import { SOS_14B_C_CHOOSERS } from './sos-14b-c-effects.ts';
 import type {
@@ -132,6 +134,8 @@ export function dealDamage(
   amount *= doubling(ctx, src, to);
   amount = prevented(ctx, src, to, amount);
   if (amount <= 0) return;
+  // Tarkir: Dragonstorm (19b, clans-b): Karakyk Guardian, "as long as it hasn't dealt damage yet".
+  if (ctx.s.objects[src.id]?.zone === 'battlefield') ctx.s.objects[src.id]!.dealtDamage = true;
   // Reality Fracture (17a): Ruric Thar, "as long as they haven't dealt combat damage yet".
   if (combat && ctx.s.objects[src.id]?.zone === 'battlefield')
     ctx.s.objects[src.id]!.dealtCombatDamage = true;
@@ -242,6 +246,8 @@ function prevented(ctx: Ctx, src: DamageSource, to: TargetChoice, amount: number
   if ('player' in to) {
     // Lorwyn Eclipsed (18b, white): Morningtide's Light, from any source.
     if (ctx.s.players[to.player].damagePrevented) return 0;
+    // Tarkir: Dragonstorm (19b, clans): New Way Forward, the next damage from the chosen source is prevented and reflected.
+    if (ctx.s.turn.sourceShields && applySourceShield(ctx, src, to.player, amount) === 0) return 0;
     if (src.controller === to.player) return amount;
     // Mystical Archive (16): Deflecting Palm, the next damage to you this turn is prevented and dealt to its source's controller.
     if (ctx.s.turn.deflect?.includes(to.player)) {
@@ -488,6 +494,41 @@ function newTargetOptions(
 }
 
 /**
+ * Tarkir: Dragonstorm (19a): "it endures N": the controller chooses between N +1/+1 counters on the creature and an N/N white
+ * Spirit token. A creature that is no longer on the battlefield can only make the token.
+ */
+function endureStep(
+  ctx: Ctx,
+  es: EffectSource,
+  e: Extract<EffectDef, { kind: 'endure' }>,
+): EffectDef[] {
+  const n = resolveAmount(ctx, es, e.amount);
+  if (n <= 0) return [];
+  const what = e.what ?? 'self';
+  const token: EffectDef = {
+    kind: 'createToken',
+    token: e.token ?? 'tdm-spirit-token',
+    count: 1,
+    pt: n,
+  };
+  const id = objectsOf(ctx, es, what)[0];
+  if (id === undefined || ctx.s.objects[id]?.zone !== 'battlefield') return [token];
+  return [
+    {
+      kind: 'choose',
+      options: [
+        {
+          label: `Put ${n === 1 ? 'a' : n} +1/+1 counter${n === 1 ? '' : 's'} on ${def(ctx, id).name}`,
+          effects: [{ kind: 'counters', to: what, amount: n }],
+        },
+        { label: `Create a ${n}/${n} white Spirit creature token`, effects: [token] },
+      ],
+    },
+  ];
+}
+
+
+/**
  * Iron Fist, Hero for Hire; Rhino, Terrible Trampler: the next step of a 'divide': a choice of
  * one more target and how much it gets (the last target allowed gets all that's left), or the
  * finished split.
@@ -498,7 +539,8 @@ function divideStep(
   e: Extract<EffectDef, { kind: 'divide' }>,
 ): EffectDef[] {
   const chosen = e.chosen ?? [];
-  const left = e.amount - chosen.reduce((n, c) => n + c.n, 0);
+  // Tarkir: Dragonstorm (19b, clans-b): Ureni, the total may be an Amount (the lands you control).
+  const left = resolveAmount(ctx, es, e.amount) - chosen.reduce((n, c) => n + c.n, 0);
   const finish: EffectDef = { ...e, done: true };
   if (left <= 0 || chosen.length >= e.maxTargets) return chosen.length ? [finish] : [];
   const same = (a: TargetChoice, b: TargetChoice) =>
@@ -515,7 +557,8 @@ function divideStep(
     e.give === 'damage' ? `${n} damage to` : `${n} +1/+1 counter${n === 1 ? '' : 's'} on`;
   const options: { label: string; effects: EffectDef[] }[] = [];
   // "Up to": choosing no targets at all.
-  if (!chosen.length) options.push({ label: 'No targets', effects: [] });
+  // Tarkir: Dragonstorm (19b, red, clans): Twin Bolt, Armament Dragon, "one or two (or three) targets": at least one.
+  if (!chosen.length && !e.atLeastOne) options.push({ label: 'No targets', effects: [] });
   for (let n = left; n >= (last ? left : 1); n--)
     for (const t of cands)
       options.push({
@@ -843,6 +886,13 @@ export function resolveAmount(ctx: Ctx, es: EffectSource, amount: Amount): numbe
       ? amount.then
       : (amount.else ?? 0);
   }
+  // Tarkir: Dragonstorm (19b, clans): Lie in Wait, "that card's power" (the card a target slot named, wherever it is now).
+  if ('powerOfCard' in amount) {
+    const ref = amount.powerOfCard;
+    const t = typeof ref === 'object' && 'target' in ref ? es.targets[ref.target] : undefined;
+    const o = t && 'object' in t ? ctx.s.objects[t.object.id] : undefined;
+    return o ? Math.max(0, o.zone === 'battlefield' ? power(ctx, o.id) : (def(ctx, o.id).power ?? 0)) : 0;
+  }
   if ('powerOf' in amount) {
     const ids = objectsOf(ctx, es, amount.powerOf);
     if (ids[0]) return Math.max(0, power(ctx, ids[0]));
@@ -883,6 +933,11 @@ export function resolveAmount(ctx: Ctx, es: EffectSource, amount: Amount): numbe
   if ('loyaltyOf' in amount) {
     const id = objectsOf(ctx, es, amount.loyaltyOf)[0];
     return id ? (obj(ctx, id).counters?.loyalty ?? 0) : 0;
+  }
+  // Tarkir: Dragonstorm (19a): Warden of the Grove, "the number of counters on this creature" (every kind).
+  if ('allCountersOn' in amount) {
+    const id = objectsOf(ctx, es, amount.allCountersOn)[0];
+    return id ? Object.values(counterKinds(ctx, id)).reduce((n, c) => n + c, 0) : 0;
   }
   if ('countersOn' in amount) {
     const id = objectsOf(ctx, es, amount.countersOn)[0];
@@ -1013,6 +1068,12 @@ export function runEffects(
         1,
         ...(options.length ? [{ kind: 'choose', options: [keep, ...options] } as EffectDef] : []),
       );
+      i--;
+      continue;
+    }
+    // Tarkir: Dragonstorm (19a): "it endures N".
+    if (e.kind === 'endure') {
+      list.splice(i, 1, ...endureStep(ctx, es, e));
       i--;
       continue;
     }
@@ -1340,7 +1401,8 @@ export function runEffects(
           const d = def(ctx, id);
           if (
             !d.types.includes('Land') &&
-            manaValue(d.manaCost) <= max &&
+            // Tarkir: Dragonstorm (19b, red): Breaching Dragonstorm stops at the first nonland card.
+            (e.firstNonland || manaValue(d.manaCost) <= max) &&
             (!e.filter || cardMatches(ctx, id, e.filter)) // Strixhaven (13c): Plargg
           ) {
             hit = id;
@@ -1350,11 +1412,16 @@ export function runEffects(
         }
         // The misses go to the bottom in a random order.
         // Marvel Super Heroes Jumpstart (Scarlet): or stay in exile (Wanda's Vision).
-        if (!e.stayExiled) {
+        if (!e.stayExiled && !e.firstNonland) {
           shuffleInPlace(ctx.s.rng, exiled);
           for (const id of exiled) moveObject(ctx, id, 'library', { position: 'bottom' });
         }
         if (!hit) continue;
+        // Tarkir: Dragonstorm (19b, red): a card with a mana value above the limit can't be cast; it goes to your hand.
+        if (e.firstNonland && manaValue(def(ctx, hit).manaCost) > max) {
+          moveObject(ctx, hit, 'hand');
+          continue;
+        }
         const after: EffectDef = {
           kind: 'afterReveal',
           card: { id: hit, zcc: obj(ctx, hit).zcc },
@@ -1516,7 +1583,10 @@ export function runEffects(
       } else if (e.kind === 'castFreeFromTop') {
         // Marvel Super Heroes (Cosmic Cube, Doom Reigns Supreme).
         const who = e.from === 'yours' ? controller : other(controller);
-        const top = ctx.s.players[who].library.slice(0, e.count);
+        const top = ctx.s.players[who].library.slice(
+          0,
+          typeof e.count === 'number' ? e.count : resolveAmount(ctx, es, e.count), // Kotis: X, the damage dealt
+        );
         if (top.length === 0) continue;
         for (const id of top) moveObject(ctx, id, 'exile');
         const max = e.maxManaValue !== undefined ? resolveAmount(ctx, es, e.maxManaValue) : 99;
@@ -1537,6 +1607,7 @@ export function runEffects(
           player: controller,
           cards,
           ...rest,
+          ...(e.more ? { more: true } : {}), // Tarkir: Dragonstorm (19b, clans): Kotis, any number of spells
           resume,
           thenPriority,
         };
@@ -1830,6 +1901,8 @@ export function runEffects(
           ...(e.castableWhileControlling ? { castableWhileControlling: true } : {}),
           ...(e.castableFilter ? { castableFilter: e.castableFilter } : {}),
           ...(e.among ? { among: e.among } : {}),
+          ...(e.linkToSource ? { linkToSource: true } : {}), // Tarkir: Dragonstorm (19b, clans): Severance Priest
+          ...(e.optional ? { optional: true } : {}),
           resume,
           thenPriority,
         };
@@ -1873,6 +1946,8 @@ export function runEffects(
         delete ctx.persisting;
         // Avenge: "You gain 1 life for each creature destroyed this way."
         if (e.gainPerDestroyed) gainLife(ctx, controller, e.gainPerDestroyed * died.length);
+        // Tarkir: Dragonstorm (19b, clans): Death Begets Life, "draw a card for each permanent destroyed this way".
+        if (e.drawPerDestroyed) for (let k = 0; k < died.length; k++) drawCard(ctx, controller);
         // Strixhaven (13c): Culling Ritual: one mana for each permanent destroyed.
         if (e.manaPerDestroyed)
           for (let k = 0; k < died.length; k++)
@@ -1908,12 +1983,16 @@ export function runEffects(
           ...(e.restToGraveyard ? { restToGraveyard: true } : {}),
           // Strixhaven (13c): The Biblioplex
           ...(e.canBin ? { canBin: true } : {}),
+          // Tarkir: Dragonstorm (19b, green): Traveling Botanist.
+          ...(e.reveal ? { reveal: true } : {}),
           // Final Fantasy (11b): look for a land (Ignis Scientia).
           ...(e.to ? { to: e.to } : {}),
           // Secrets of Strixhaven (14a): Follow the Lumarets.
           ...(e.followUp ? { followUp: e.followUp } : {}),
           // Secrets of Strixhaven (14b): Zimone's Experiment.
           ...(e.landsTapped ? { landsTapped: true } : {}),
+          // Tarkir: Dragonstorm (19b, white): United Battlefront.
+          ...(e.upTo ? { remaining: e.upTo } : {}),
           resume,
           thenPriority,
         };
@@ -2360,12 +2439,17 @@ export function runEffects(
           // Strixhaven (13c): Verdant Mastery, Emergent Sequence, Oriq Loremage.
           ...(e.forOpponent ? { forOpponent: true } : {}),
           ...(e.fractalLand ? { fractalLand: true } : {}),
+          // Tarkir: Dragonstorm (19b, red): Magmatic Hellkite, "with a stun counter on it".
+          ...(e.counter ? { counter: e.counter } : {}),
           ...(e.sourceCounterIfTypes ? { sourceCounterIfTypes: e.sourceCounterIfTypes } : {}),
           // Reality Fracture (17a): Fblthp, Hexhaven Invigorator.
           ...(e.upTo !== undefined ? { remaining: resolveAmount(ctx, es, e.upTo) } : {}),
           ...(e.differentNames ? { differentNames: true } : {}),
+          // Tarkir: Dragonstorm (19b, green): Claim Territory.
+          ...(e.thenTo ? { thenTo: e.thenTo } : {}),
           // Reality Fracture (17a fixes): Loyal Tutor.
           ...(e.reveal ? { reveal: true } : {}),
+          ...(e.exileFreeThisTurn ? { exileFreeThisTurn: true } : {}), // Tarkir: Dragonstorm (19b, misc): Ugin
           // Lorwyn Eclipsed (18a): Celestial Reunion, the creature type its additional cost chose.
           ...(e.battlefieldIfChosenType && es.source && ctx.s.objects[es.source.id]?.chosenType
             ? { battlefieldIfType: ctx.s.objects[es.source.id]!.chosenType! }
@@ -2585,6 +2669,16 @@ function runEffectInner(ctx: Ctx, es: EffectSource, e: EffectDef): void {
     case 'extraCombat':
       ctx.s.turn.extraCombats++;
       return;
+    // Tarkir: Dragonstorm (19b, clans-b): All-Out Assault, an extra combat and main phase right after this main phase.
+    case 'extraCombatThenMain': {
+      const step = ctx.s.turn.step;
+      if (step !== 'main1' && step !== 'main2') return;
+      (ctx.s.turn.extraPhases ??= []).push({
+        phase: 'pending',
+        resume: step === 'main1' ? 'beginCombat' : 'end',
+      });
+      return;
+    }
     case 'attach': {
       const what = e.what
         ? objectsOf(ctx, es, e.what)[0]
@@ -2697,6 +2791,22 @@ function runEffectInner(ctx: Ctx, es: EffectSource, e: EffectDef): void {
         if (defOf(ctx, e.token).entersTapped || e.tapped) t.tapped = true;
         enterWithLoyalty(ctx, t.id); // Reality Fracture (17c): a planeswalker token
         if (e.counters) addCounters(ctx, t.id, resolveAmount(ctx, es, e.counters));
+        // Tarkir: Dragonstorm (19a): an X/X token (a 0/0 definition with its size set as it is created).
+        if (e.pt !== undefined) {
+          const size = resolveAmount(ctx, es, e.pt);
+          t.copyPT = { power: size, toughness: size };
+        }
+        // Tarkir: Dragonstorm (19a): mobilize, "sacrifice it at the beginning of the next end step".
+        if (e.sacrificeAt === 'nextEndStep') {
+          const late = ['end', 'cleanup'].includes(ctx.s.turn.step);
+          (ctx.s.delayed ??= []).push({
+            controller: es.controller,
+            sourceDefId: es.sourceDefId,
+            subject: { id: t.id, zcc: t.zcc },
+            effects: [{ kind: 'sacrifice', what: 'subject' }],
+            fromTurn: ctx.s.turn.number + (late ? 1 : 0),
+          });
+        }
         if (e.attacking && ctx.s.combat) {
           // "Tapped and attacking": attacking the same player, never declared (no attack triggers).
           t.tapped = true;
@@ -2707,16 +2817,17 @@ function runEffectInner(ctx: Ctx, es: EffectSource, e: EffectDef): void {
             blockers: [],
           });
         }
-        if (e.hasteThisTurn)
+        if (e.hasteThisTurn || e.keywordsThisTurn?.length)
           ctx.s.effects.push({
             timestamp: newTimestamp(ctx),
             affected: { id: t.id, zcc: t.zcc },
             power: 0,
             toughness: 0,
-            keywords: ['haste'],
+            keywords: [...(e.hasteThisTurn ? (['haste'] as const) : []), ...(e.keywordsThisTurn ?? [])],
             expires: 'endOfTurn',
           });
         ctx.s.battlefield.push(t.id);
+        addCounters(ctx, t.id, extraEntryCounters(ctx, t.id)); // Tarkir: Dragonstorm (19b, misc): Dragonstorm Globe
         emit(ctx, { type: 'objectMoved', id: t.id, defId: t.defId, from: null, to: 'battlefield' });
       }
       // Final Fantasy Commander (12e): Quina, "those tokens plus a 1/1 green Frog".
@@ -2918,8 +3029,8 @@ function runEffectInner(ctx: Ctx, es: EffectSource, e: EffectDef): void {
       if (!t || !('object' in t)) return;
       const i = ctx.s.stack.findIndex((x) => x.kind === 'spell' && x.id === t.object.id);
       if (i < 0) {
-        // Reality Fracture (17c): Fatehold Charm, "target spell or creature".
-        const o = e.orCreature ? ctx.s.objects[t.object.id] : undefined;
+        // Reality Fracture (17c): Fatehold Charm, "target spell or creature"; Tarkir: Dragonstorm (19b, clans): Jeskai Revelation, "or permanent".
+        const o = e.orCreature || e.orPermanent ? ctx.s.objects[t.object.id] : undefined;
         if (o && o.zone === 'battlefield' && o.zcc === t.object.zcc) moveObject(ctx, o.id, 'hand');
         return;
       }
@@ -3055,6 +3166,8 @@ function runEffectInner(ctx: Ctx, es: EffectSource, e: EffectDef): void {
         });
       }
       if (e.counter) (o.counters ??= {})[e.counter] = 1;
+      // Tarkir: Dragonstorm (19b, clans): Perennation, a counter of each kind.
+      for (const c of e.counters ?? []) (o.counters ??= {})[c] = 1;
       if (e.addSubtype) o.addedSubtypes = [...(o.addedSubtypes ?? []), e.addSubtype];
       // Heroic Return, Winter Soldier: "if a Hero enters this way, it enters with counters".
       if (e.countersIf && cardMatches(ctx, o.id, e.countersIf.filter))
@@ -3170,6 +3283,15 @@ function runEffectInner(ctx: Ctx, es: EffectSource, e: EffectDef): void {
             card = id;
             break;
           }
+        }
+      } else if (e.what === 'subject') {
+        // Tarkir: Dragonstorm (19a): Taigam, Master Opportunist, "exile the spell you cast with four time counters on it" (not countered).
+        const id = es.subject && ctx.s.objects[es.subject.id]?.zcc === es.subject.zcc ? es.subject.id : undefined;
+        const i = id ? ctx.s.stack.findIndex((x) => x.kind === 'spell' && x.id === id) : -1;
+        if (id && i >= 0) {
+          ctx.s.stack.splice(i, 1);
+          moveObject(ctx, id, 'exile');
+          card = id;
         }
       } else {
         card = (() => {
@@ -3491,7 +3613,12 @@ function runEffectInner(ctx: Ctx, es: EffectSource, e: EffectDef): void {
           power: 0,
           toughness: 0,
           keywords: [],
-          onDies: { effects: e.effects, controller: es.controller, sourceDefId: es.sourceDefId },
+          onDies: {
+            effects: e.effects,
+            controller: es.controller,
+            sourceDefId: es.sourceDefId,
+            ...(e.underYourControl ? { underControl: true } : {}), // Tarkir: Dragonstorm (19b, black)
+          },
           expires: 'endOfTurn',
         });
       return;
@@ -3675,6 +3802,8 @@ function runEffectInner(ctx: Ctx, es: EffectSource, e: EffectDef): void {
         ...(e.until === 'nextSpellThisTurn' ? { untilTurn: ctx.s.turn.number, once: true } : {}),
         // Final Fantasy (11c): "until end of turn" (Summon: Leviathan); Strixhaven (13c): First Day of Class.
         ...(e.until === 'endOfTurn' ? { untilTurn: ctx.s.turn.number } : {}),
+        // Tarkir: Dragonstorm (19b, clans-b): All-Out Assault, "when you next attack this turn".
+        ...(e.once ? { once: true } : {}),
         // Reality Fracture (17c): Jace, Reality Sculptor, Garruk, Curse Breaker: "until your next turn".
         ...(e.until === 'yourNextTurn' ? { untilTurnOf: es.controller } : {}),
         ...(e.label ? { label: e.label } : {}),

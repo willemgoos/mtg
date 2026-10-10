@@ -13,7 +13,7 @@ import { createGunzip } from 'node:zlib';
 import { Readable } from 'node:stream';
 import { pipeline } from 'node:stream/promises';
 import { fileURLToPath } from 'node:url';
-import { POOL, SET_PREFERENCE } from '../src/pool.ts';
+import { POOL, PRINTING_OVERRIDES, SET_PREFERENCE } from '../src/pool.ts';
 import type { ScryfallCard } from '../src/scryfall-types.ts';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -139,6 +139,8 @@ export async function* readBulk(file = cacheFile): AsyncGenerator<RawCard> {
 function printingRank(c: RawCard): number[] {
   const setRank = SET_PREFERENCE.indexOf(c.set);
   return [
+    // Tarkir: Dragonstorm (19b): a per-card printing wins over the set order.
+    PRINTING_OVERRIDES[c.name] === c.set ? 0 : 1,
     // A Marvel Commander reprint under a Marvel name shows that name (and its art).
     c.set === 'msc' && c.flavor_name ? 0 : 1,
     setRank < 0 ? 999 : setRank,
@@ -244,10 +246,12 @@ function faceRecords(c: RawCard, faces: RawFace[]): ScryfallCard[] {
     const prepare = c.layout === PREPARE;
     // A prepare spell is coloured by its own cost (else the card's colours); faces list none.
     const spellColors = [...new Set((f.mana_cost ?? '').match(/[WUBRG]/g) ?? [])];
+    // Tarkir: Dragonstorm (19b): an Adventure/Omen card's faces list no colours: the creature has the card's, the spell its cost's.
+    const adventure = c.layout === ADVENTURE;
     const colors =
-      prepare && i === 1 && spellColors.length
+      (prepare || adventure) && i === 1 && spellColors.length
         ? spellColors
-        : (f.colors ?? (prepare ? c.colors : undefined) ?? []);
+        : (f.colors ?? (prepare || adventure ? c.colors : undefined) ?? []);
     return {
       name: prepare && i === 1 ? `${f.name} (${front.name})` : f.name,
       ...(prepare && i === 1 ? { flavorName: f.name } : {}),

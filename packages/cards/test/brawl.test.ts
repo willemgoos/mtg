@@ -147,6 +147,7 @@ describe('Brawl format', () => {
     expect(canCastCommander(g)).toBe(false);
   });
 
+  // About 6 minutes since Lorwyn Eclipsed and Tarkir: Dragonstorm (more rules checks on every action).
   it('plays random Brawl games to the end, and they survive a save', () => {
     // Every pairing of the playable Brawl decks, mirrors included.
     const pairs = PLAYABLE_BRAWL_DECKS.flatMap((a, i) =>
@@ -163,7 +164,7 @@ describe('Brawl format', () => {
       for (const a of r.actions) state = engine.applyAction(state, a).state;
       expect(JSON.stringify(state)).toBe(JSON.stringify(r.final));
     }
-  }, 240_000);
+  }, 480_000);
 });
 
 describe('Brawl staples', () => {

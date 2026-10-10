@@ -287,6 +287,7 @@ export const ECL_MULTI_B_EFFECTS: Record<string, CustomEffect> = {
     const o = ctx.s.objects[t.object.id];
     if (!o || o.zone !== 'battlefield' || o.zcc !== t.object.zcc) return;
     o.allColorsTurn = ctx.s.turn.number;
+    ctx.s.colorChanges = true;
   },
 };
 

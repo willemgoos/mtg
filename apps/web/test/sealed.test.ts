@@ -1,6 +1,7 @@
 import { cardDb, findDeck, SCRYFALL, slug } from '@mtg/cards';
 import { describe, expect, it } from 'vitest';
 import { ECL_BOOSTER_LIST } from '../../../packages/cards/src/ecl/booster-list.ts';
+import { TDM_BOOSTER_LIST } from '../../../packages/cards/src/tdm/booster-list.ts';
 import { PACK_SET_NAMES, type PackSet, rollPlayBooster, size } from '../src/game/expedition.ts';
 import {
   addSealedBasics,
@@ -45,7 +46,10 @@ import { packGenerator } from '../src/game/seasonPacks.ts';
 import { createSeasonRepository, validateSeasonSave } from '../src/game/seasonStorage.ts';
 
 const SETS = Object.keys(PACK_SET_NAMES) as PackSet[];
-const eclRarity = new Map<string, string>(ECL_BOOSTER_LIST);
+const listRarity: Partial<Record<PackSet, Map<string, string>>> = {
+  ecl: new Map<string, string>(ECL_BOOSTER_LIST),
+  tdm: new Map<string, string>(TDM_BOOSTER_LIST),
+};
 const known = new Set(SCRYFALL.map((c) => c.name));
 
 /** A Season repository on in-memory storage, with one save "a". */
@@ -115,9 +119,9 @@ describe('sealed pool', () => {
     for (let seed = 1; seed <= 40; seed++) {
       const { cards, foil } = rollPlayBooster(seed, set);
       expect(cards).toHaveLength(14);
-      // ECL's reprints keep an earlier printing's card data, so its rarities come from the booster list.
+      // ECL's and TDM's reprints keep an earlier printing's card data, so their rarities come from the booster list.
       const rarity = (n: string) =>
-        (set === 'ecl' ? eclRarity.get(n) : undefined) ??
+        listRarity[set]?.get(n) ??
         (SCRYFALL.find((c) => c.name === n && c.set === set) ?? SCRYFALL.find((c) => c.name === n))
           ?.rarity;
       const archive = set === 'stx' || set === 'sos';
@@ -219,6 +223,13 @@ describe('sealed opponents', () => {
     expect(colorsName(['W', 'U'])).toBe('Azorius');
     expect(colorsName(['U', 'W'])).toBe('Azorius');
     expect(colorsName(['R'])).toBe('Red');
+    // Tarkir: Dragonstorm (19a): three colours are a clan or shard, in any order.
+    expect(colorsName(['G', 'W', 'B'])).toBe('Abzan');
+    expect(colorsName(['R', 'U', 'W'])).toBe('Jeskai');
+    expect(colorsName(['B', 'R', 'W'])).toBe('Mardu');
+    expect(colorsName(['G', 'U', 'B'])).toBe('Sultai');
+    expect(colorsName(['U', 'R', 'G'])).toBe('Temur');
+    expect(colorsName(['W', 'U', 'B', 'R'])).toBe('Four colours');
     expect(colorsName([])).toBe('Colourless');
   });
 

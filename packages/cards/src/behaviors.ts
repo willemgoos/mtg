@@ -42,6 +42,11 @@ import {
   LORWYN_ECLIPSED_BEHAVIORS,
   LORWYN_ECLIPSED_TOKENS,
 } from './lorwyn-eclipsed.ts';
+import {
+  TARKIR_DRAGONSTORM_BACK_FACES,
+  TARKIR_DRAGONSTORM_BEHAVIORS,
+  TARKIR_DRAGONSTORM_TOKENS,
+} from './tarkir-dragonstorm.ts';
 import { FOUNDATIONS_BATCH_BEHAVIORS } from './foundations-batch.ts';
 import { FOUNDATIONS_DRAFT_BEHAVIORS } from './foundations-draft.ts';
 import { FOUNDATIONS_JUMP_IN_BEHAVIORS } from './foundations-jumpin.ts';
@@ -193,6 +198,9 @@ export const BEHAVIORS: Record<string, Behavior> = {
   // Lorwyn Eclipsed (phase 18).
   ...LORWYN_ECLIPSED_BEHAVIORS,
   ...LORWYN_ECLIPSED_BACK_FACES,
+  // Tarkir: Dragonstorm (phase 19).
+  ...TARKIR_DRAGONSTORM_BEHAVIORS,
+  ...TARKIR_DRAGONSTORM_BACK_FACES,
   // ---------------------------------------------------------------- red
   Shock: burn(2),
   'Lightning Strike': burn(3),
@@ -2241,6 +2249,7 @@ export const TOKENS: CardDefinition[] = [
   ...FINAL_FANTASY_BRAWL_TOKENS,
   ...REALITY_FRACTURE_TOKENS,
   ...LORWYN_ECLIPSED_TOKENS,
+  ...TARKIR_DRAGONSTORM_TOKENS,
   token('zombie-token', 'Zombie', 'B', ['Zombie'], 2, 2),
   token('komas-coil-token', "Koma's Coil", 'U', ['Serpent'], 3, 3),
   token('cat-beast-token', 'Cat Beast', 'W', ['Cat', 'Beast'], 2, 2),

@@ -87,6 +87,8 @@ export function cloneState(s: GameState): GameState {
       ...(s.turn.osteomancer ? { osteomancer: s.turn.osteomancer.slice() } : {}),
       ...(s.turn.cantLose ? { cantLose: s.turn.cantLose.slice() } : {}),
       ...(s.turn.deflect ? { deflect: s.turn.deflect.slice() } : {}),
+      // Tarkir: Dragonstorm (19b, clans): New Way Forward.
+      ...(s.turn.sourceShields ? { sourceShields: s.turn.sourceShields.map((x) => ({ ...x })) } : {}),
       ...(s.turn.uncounterable ? { uncounterable: s.turn.uncounterable.slice() } : {}),
       // Reality Fracture (17c): Theorist's Proxy.
       ...(s.turn.nextSpellUncounterable
