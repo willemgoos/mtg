@@ -1110,6 +1110,13 @@ function detect(ctx: Ctx, ev: GameEvent): void {
               !(t.filter.subtype && moved?.lastAddedSubtypes?.includes(t.filter.subtype))
             )
               return false;
+            // Jump In slots (Valkyrie's Call): a creature that became an Angel isn't a non-Angel.
+            if (
+              t.on === 'creatureYouControlDies' &&
+              t.filter?.notSubtype &&
+              moved?.lastAddedSubtypes?.includes(t.filter.notSubtype)
+            )
+              return false;
             // Lorwyn Eclipsed (18a): Shadow Urchin, "a creature you control with one or more counters on it dies".
             if (
               t.on === 'creatureYouControlDies' &&
@@ -2347,6 +2354,8 @@ export function defMatches(d: CardDefinition, f: CardFilter): boolean {
     d.subtypes.includes(st) || (d.keywords.includes('changeling') && !NON_CREATURE_SUBTYPES.has(st));
   if (f.subtype && !hasType(f.subtype)) return false;
   if (f.subtypes && !f.subtypes.some(hasType)) return false;
+  // Jump In slots (Valkyrie's Call): "a non-Angel creature".
+  if (f.notSubtype && hasType(f.notSubtype)) return false;
   // Final Fantasy (11c): "legendary creature spell" (Serah Farron).
   if (f.supertypes && !f.supertypes.some((t) => d.supertypes.includes(t))) return false;
   return true;

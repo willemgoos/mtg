@@ -29,6 +29,7 @@ export {
   BLUE_POOL,
   FOUNDATIONS_DRAFT_POOL,
   FOUNDATIONS_JUMP_IN_POOL,
+  JUMP_IN_SLOT_POOL,
   GREEN_POOL,
   LAND_POOL,
   MARVEL_BRAWL_POOL,
@@ -77,6 +78,7 @@ export {
   packetCards,
   ARENA_ECL_PACKETS,
   ARENA_TDM_PACKETS,
+  ARENA_SOS_PACKETS,
   dealPacket,
   defaultDeal,
 } from './jumpin.ts';

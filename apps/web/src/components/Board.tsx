@@ -525,44 +525,44 @@ export function Board({
                 first.blight
                 ? 'a creature to put the -1/-1 counters on (blight)'
                 : first.discard
-                ? first.type === 'activateAbility' &&
-                  exilesFromHand(view.objects[first.source]!.defId, first.abilityIndex)
-                  ? 'an instant or sorcery card to exile'
-                  : first.type === 'activateAbility' &&
-                      discardsSameName(view.objects[first.source]!.defId, first.abilityIndex)
-                    ? 'another card with the same name to discard'
-                    : // Strixhaven (13c): Draconic Intervention exiles a card from your graveyard.
-                      first.type === 'castSpell' &&
-                        cardDb.get(view.objects[first.card]?.defId ?? '')?.exileFromGraveyardToCast
-                      ? 'an instant or sorcery card to exile from your graveyard'
-                      : 'a card to discard'
-                : first.type === 'castSpell' && first.copyOf
-                  ? 'a creature to copy (or skip)'
-                  : first.type === 'castSpell' && first.sneak
-                    ? 'an unblocked attacker to return'
-                    : first.type === 'activateAbility' && first.tapCreature
-                      ? 'a creature to tap'
-                      : first.type === 'activateAbility' && first.tapArtifacts?.length
-                        ? // Lorwyn Eclipsed (18b, multi-b): "tap three untapped Elves" (High Perfect Morcant, Kirol).
-                          (() => {
-                            const ab = cardDb.get(view.objects[first.source]?.defId ?? '')?.abilities[
-                              first.abilityIndex
-                            ];
-                            return ab?.kind === 'activated' && ab.cost.tapUntapped
-                              ? 'untapped creatures to tap'
-                              : 'artifacts to tap';
-                          })()
-                        : // Lorwyn Eclipsed (18b, white): Kithkeeper.
-                          first.type === 'activateAbility' && first.tapCreatures?.length
-                          ? // Lorwyn Eclipsed (18c): Crew N.
+                  ? first.type === 'activateAbility' &&
+                    exilesFromHand(view.objects[first.source]!.defId, first.abilityIndex)
+                    ? 'an instant or sorcery card to exile'
+                    : first.type === 'activateAbility' &&
+                        discardsSameName(view.objects[first.source]!.defId, first.abilityIndex)
+                      ? 'another card with the same name to discard'
+                      : // Strixhaven (13c): Draconic Intervention exiles a card from your graveyard.
+                        first.type === 'castSpell' &&
+                          cardDb.get(view.objects[first.card]?.defId ?? '')
+                            ?.exileFromGraveyardToCast
+                        ? 'an instant or sorcery card to exile from your graveyard'
+                        : 'a card to discard'
+                  : first.type === 'castSpell' && first.copyOf
+                    ? 'a creature to copy (or skip)'
+                    : first.type === 'castSpell' && first.sneak
+                      ? 'an unblocked attacker to return'
+                      : first.type === 'activateAbility' && first.tapCreature
+                        ? 'a creature to tap'
+                        : first.type === 'activateAbility' && first.tapArtifacts?.length
+                          ? // Lorwyn Eclipsed (18b, multi-b): "tap three untapped Elves" (High Perfect Morcant, Kirol).
                             (() => {
                               const ab = cardDb.get(view.objects[first.source]?.defId ?? '')
                                 ?.abilities[first.abilityIndex];
-                              return ab?.kind === 'activated' && ab.cost.crew
-                                ? 'creatures to crew with'
-                                : 'creatures to tap';
+                              return ab?.kind === 'activated' && ab.cost.tapUntapped
+                                ? 'untapped creatures to tap'
+                                : 'artifacts to tap';
                             })()
-                          : null
+                          : // Lorwyn Eclipsed (18b, white): Kithkeeper.
+                            first.type === 'activateAbility' && first.tapCreatures?.length
+                            ? // Lorwyn Eclipsed (18c): Crew N.
+                              (() => {
+                                const ab = cardDb.get(view.objects[first.source]?.defId ?? '')
+                                  ?.abilities[first.abilityIndex];
+                                return ab?.kind === 'activated' && ab.cost.crew
+                                  ? 'creatures to crew with'
+                                  : 'creatures to tap';
+                              })()
+                            : null
           : null;
       const prompt = paying
         ? `${targeting.label}: choose ${paying}`
@@ -808,9 +808,12 @@ export function Board({
         return { prompt: 'Choose a card from your opponent’s hand' };
       case 'forageExile':
         return {
-          prompt: d.filter
-            ? 'Exile a card from your graveyard'
-            : `Forage: exile ${d.count} more card${d.count > 1 ? 's' : ''} from your graveyard`,
+          prompt:
+            d.evidence !== undefined
+              ? `Collect evidence: exile cards from your graveyard, mana value ${d.evidence} to go`
+              : d.filter
+                ? 'Exile a card from your graveyard'
+                : `Forage: exile ${d.count} more card${d.count > 1 ? 's' : ''} from your graveyard`,
         };
       case 'priority': {
         const top = view.stack[view.stack.length - 1];
@@ -1189,13 +1192,13 @@ export function Board({
                   d.fullCost
                   ? 'You may cast it, paying its costs.'
                   : d.pay
-                  ? `You may cast it by paying ${manaText(d.pay)} rather than its mana cost.`
-                  : d.costLess
-                    ? `You may cast it; it costs {${d.costLess}} less.`
-                    : // Reality Fracture (17a): Uldaros Theorix, total mana value left.
-                      d.budget !== undefined
-                      ? `You may cast any number of them without paying their mana costs (total mana value ${d.budget} or less left).`
-                      : 'You may cast it without paying its mana cost.'}
+                    ? `You may cast it by paying ${manaText(d.pay)} rather than its mana cost.`
+                    : d.costLess
+                      ? `You may cast it; it costs {${d.costLess}} less.`
+                      : // Reality Fracture (17a): Uldaros Theorix, total mana value left.
+                        d.budget !== undefined
+                        ? `You may cast any number of them without paying their mana costs (total mana value ${d.budget} or less left).`
+                        : 'You may cast it without paying its mana cost.'}
             </p>
             <div className="mull__hand">
               {d.cards.map((id, i) => {
@@ -1274,11 +1277,15 @@ export function Board({
       {d.kind === 'forageExile' && d.player === HUMAN && (
         <div className="overlay overlay--mull">
           <div className="mull">
-            <h2>{d.filter ? 'Exile a card' : 'Forage'}</h2>
+            <h2>
+              {d.evidence !== undefined ? 'Collect evidence' : d.filter ? 'Exile a card' : 'Forage'}
+            </h2>
             <p>
-              {d.filter
-                ? 'Choose a card to exile from your graveyard.'
-                : `Exile ${d.count} more card${d.count > 1 ? 's' : ''} from your graveyard.`}
+              {d.evidence !== undefined
+                ? `Exile cards from your graveyard until their total mana value is enough: ${d.evidence} to go.`
+                : d.filter
+                  ? 'Choose a card to exile from your graveyard.'
+                  : `Exile ${d.count} more card${d.count > 1 ? 's' : ''} from your graveyard.`}
             </p>
             <div className="mull__hand">
               {legal.flatMap((a, i) =>
@@ -1340,7 +1347,8 @@ export function Board({
         <div className="menu">
           <div className="menu__box">
             <div className="menu__title">
-              {nameOf(d.resume.sourceDefId)}: {d.cost ? `you may pay ${manaText(d.cost)}` : 'optional effect'}
+              {nameOf(d.resume.sourceDefId)}:{' '}
+              {d.cost ? `you may pay ${manaText(d.cost)}` : 'optional effect'}
             </div>
             {legal.map(
               (a) =>
@@ -1390,20 +1398,22 @@ export function Board({
               Choose a card to {d.then === 'discard' ? 'discard' : 'exile'}.
             </p>
             <div className="mull__hand">
-              {view.players[d.from].hand.filter((id) => !d.among || d.among.includes(id)).map((id, i) => (
-                <div key={id} className="mull__card" style={{ '--i': i } as React.CSSProperties}>
-                  <Card
-                    id={id}
-                    defId={view.objects[id]!.defId}
-                    size="mull"
-                    mark={d.options.includes(id) ? 'option' : null}
-                    {...(d.options.includes(id)
-                      ? { onClick: () => act({ type: 'chooseCard', player: HUMAN, card: id }) }
-                      : {})}
-                    onHover={setHover}
-                  />
-                </div>
-              ))}
+              {view.players[d.from].hand
+                .filter((id) => !d.among || d.among.includes(id))
+                .map((id, i) => (
+                  <div key={id} className="mull__card" style={{ '--i': i } as React.CSSProperties}>
+                    <Card
+                      id={id}
+                      defId={view.objects[id]!.defId}
+                      size="mull"
+                      mark={d.options.includes(id) ? 'option' : null}
+                      {...(d.options.includes(id)
+                        ? { onClick: () => act({ type: 'chooseCard', player: HUMAN, card: id }) }
+                        : {})}
+                      onHover={setHover}
+                    />
+                  </div>
+                ))}
             </div>
             {(d.options.length === 0 || d.optional) && (
               <div className="mull__buttons">
@@ -1731,7 +1741,8 @@ function castLabel(defId: CardDefId, a: Action, view: GameState): string {
   const def = cardDb.get(defId);
   // Lorwyn Eclipsed (18a): evoke, conspire, blight as an optional or alternative cost, behold and exile.
   if (a.type === 'castSpell' && a.evoked && def?.evoke) return `Evoke ${manaText(def.evoke)}`;
-  if (a.type === 'castSpell' && a.conspire) return 'Conspire (tap two creatures that share a color)';
+  if (a.type === 'castSpell' && a.conspire)
+    return 'Conspire (tap two creatures that share a color)';
   if (def?.blightOrPay)
     return a.blight ? `Blight ${def.blightOrPay.amount}` : `Pay ${manaText(def.blightOrPay.pay)}`;
   if (def?.kicker?.blight)

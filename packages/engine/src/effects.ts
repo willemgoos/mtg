@@ -6,6 +6,7 @@ import {
   countOf,
   creaturesOnBattlefield,
   hasKeyword,
+  isCreature,
   lifeGainPrevented,
   matchesFilter,
   power,
@@ -1299,7 +1300,10 @@ export function runEffects(
           ...(e.discardOnly
             ? []
             : ctx.s.battlefield.filter(
-                (id) => obj(ctx, id).controller === opp && !def(ctx, id).types.includes('Land'),
+                (id) =>
+                  obj(ctx, id).controller === opp &&
+                  // Jump In slots (Polygraph Orb): "or sacrifice a creature".
+                  (e.sacrificeCreature ? isCreature(ctx, id) : !def(ctx, id).types.includes('Land')),
               )),
           ...ctx.s.players[opp].hand,
         ];
@@ -2996,12 +3000,24 @@ function runEffectInner(ctx: Ctx, es: EffectSource, e: EffectDef): void {
       return;
     case 'mill': {
       const players = e.who ? playersOf(ctx, es, e.who) : [es.controller];
+      let creatures = 0;
       for (const p of players)
         for (const id of ctx.s.players[p].library.slice(
           0,
           millCount(ctx, p, resolveAmount(ctx, es, e.count)),
-        ))
+        )) {
           moveObject(ctx, id, 'graveyard');
+          // Jump In slots (Dread Summons): "for each creature card put into a graveyard this way".
+          if (obj(ctx, id).zone === 'graveyard' && def(ctx, id).types.includes('Creature'))
+            creatures++;
+        }
+      if (e.creatureTokens && creatures > 0)
+        runEffect(ctx, es, {
+          kind: 'createToken',
+          token: e.creatureTokens.token,
+          count: creatures,
+          ...(e.creatureTokens.tapped ? { tapped: true } : {}),
+        });
       return;
     }
     case 'counter': {
@@ -3048,9 +3064,13 @@ function runEffectInner(ctx: Ctx, es: EffectSource, e: EffectDef): void {
             moveObject(ctx, id, 'hand');
       return;
     case 'reanimateAll':
-      for (const p of Object.keys(ctx.s.players) as PlayerId[])
+      // Jump In slots (Raise the Past): only your graveyard, only cards matching the filter.
+      for (const p of e.yours ? [es.controller] : (Object.keys(ctx.s.players) as PlayerId[]))
         for (const id of [...ctx.s.players[p].graveyard])
-          if (def(ctx, id).types.includes('Creature'))
+          if (
+            def(ctx, id).types.includes('Creature') &&
+            (!e.filter || cardMatches(ctx, id, e.filter, es.source?.id))
+          )
             moveObject(ctx, id, 'battlefield', { controller: es.controller });
       return;
     case 'tokenCopyOf': {
@@ -3169,6 +3189,11 @@ function runEffectInner(ctx: Ctx, es: EffectSource, e: EffectDef): void {
       // Tarkir: Dragonstorm (19b, clans): Perennation, a counter of each kind.
       for (const c of e.counters ?? []) (o.counters ??= {})[c] = 1;
       if (e.addSubtype) o.addedSubtypes = [...(o.addedSubtypes ?? []), e.addSubtype];
+      // Jump In slots (Valkyrie's Call): "with a +1/+1 counter on it. It has flying".
+      if (e.plusOneCounters && obj(ctx, o.id).zone === 'battlefield')
+        addCounters(ctx, o.id, e.plusOneCounters);
+      if (e.keywords?.length && obj(ctx, o.id).zone === 'battlefield')
+        o.grantedKeywords = [...(o.grantedKeywords ?? []), ...e.keywords];
       // Heroic Return, Winter Soldier: "if a Hero enters this way, it enters with counters".
       if (e.countersIf && cardMatches(ctx, o.id, e.countersIf.filter))
         addCounters(ctx, o.id, e.countersIf.count);

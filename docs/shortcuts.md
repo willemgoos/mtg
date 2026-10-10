@@ -6,8 +6,9 @@ from) when it's fixed. Older phases keep their own "Simplifications" lists in `d
 
 ## Packets
 
-- [ ] Arena's Bloomburrow and Foundations Jump In packets use their listed cards; Arena's random alternates for four slots per
-      packet aren't modelled (`packages/cards/src/jumpin.ts`).
+- [x] Arena's Bloomburrow and Foundations Jump In packets use their listed cards; Arena's random alternates for four slots per
+      packet aren't modelled (`packages/cards/src/jumpin.ts`). Fixed: every Arena packet (Bloomburrow, Foundations, Secrets of
+      Strixhaven, Lorwyn Eclipsed, Tarkir: Dragonstorm) has Arena's random slots with their odds.
 - [x] Thriving lands may choose their own colour as the "other" colour (`msh/jumpstart.ts`).
 
 ## Bloomburrow Starter Kit (`blb/others.ts`)
@@ -181,3 +182,8 @@ from) when it's fixed. Older phases keep their own "Simplifications" lists in `d
       chosen as it resolves (the `divide` effect), so an opponent can't respond to the targeting.
 - [ ] Teval, Arbiter of Virtue: the cast menu doesn't say which graveyard cards a delve cast will exile (they're picked
       one at a time after choosing it).
+
+## Jump In slot cards (`jumpin-slots.ts`)
+
+- [ ] Polygraph Orb: collect evidence only offers cards with a mana value; the rules also let you exile lands and other
+      mana value 0 cards along with them, which never helps pay the cost.

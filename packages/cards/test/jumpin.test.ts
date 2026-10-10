@@ -4,6 +4,7 @@ import {
   ARENA_BLB_PACKETS,
   ARENA_ECL_PACKETS,
   ARENA_TDM_PACKETS,
+  ARENA_SOS_PACKETS,
   ARENA_FDN_PACKETS,
   cardDb,
   deckById,
@@ -18,6 +19,7 @@ import {
   MARVEL_JUMPSTART_PACKETS,
   PACKETS,
   packetCards,
+  type Packet,
   SCRYFALL,
   slug,
 } from '../src/index.ts';
@@ -35,6 +37,46 @@ interface ArenaPacket {
   slots: [number, string][][];
 }
 const sort = (l: [string, number][]) => [...l].sort((a, b) => a[0].localeCompare(b[0]));
+const total = (cards: [string, number][]) => cards.reduce((n, [, k]) => n + k, 0);
+
+/**
+ * Arena packets equal the scraped lists: fixed cards and lands, slots with weights adding to 100, the card count.
+ * `extraLand`: a land the list leaves out may be added (Bloomburrow's gain-lands, from Wizards' announcement).
+ */
+function expectArenaLists(
+  packets: Packet[],
+  tag: string,
+  names: Record<string, string> = {},
+  extraLand = false,
+) {
+  const lists: ArenaPacket[] = JSON.parse(
+    readFileSync(new URL('../scripts/data/arena-jumpin-packets.json', import.meta.url), 'utf8'),
+  ).filter((x: ArenaPacket) => x.set.includes(`(${tag})`));
+  expect(packets.length).toBe(lists.length);
+  for (const p of packets) {
+    const list = lists.find((x) => x.name === (names[p.name] ?? p.name))!;
+    expect(list, p.name).toBeDefined();
+    expect(p.source).toBe('arena');
+    const listed = new Set(list.fixed.map(([n]) => n));
+    const extra = extraLand ? (p.lands ?? []).filter(([n]) => !listed.has(n)) : [];
+    expect(extra.length, p.name).toBeLessThanOrEqual(1);
+    const lands = (p.lands ?? []).filter((l) => !extra.includes(l));
+    expect(sort([...p.spells, ...lands]), p.name).toEqual(sort(list.fixed));
+    expect(
+      p.slots?.map((s) => s.map((a) => [a.weight, a.card])),
+      p.name,
+    ).toEqual(list.slots);
+    for (const s of p.slots ?? [])
+      expect(
+        s.reduce((n, a) => n + a.weight, 0),
+        p.name,
+      ).toBe(100);
+    expect(total(packetCards(p)), p.name).toBe(list.count + total(extra));
+    expect(total(packetCards(p, dealPacket(p, Math.random))), p.name).toBe(
+      list.count + total(extra),
+    );
+  }
+}
 
 describe('Jump In packets', () => {
   it.each(MARVEL_JUMPSTART_PACKETS.map((p) => p.name))(
@@ -53,8 +95,8 @@ describe('Jump In packets', () => {
     expect(new Set(PACKETS.map((p) => p.id)).size).toBe(PACKETS.length);
     for (const p of PACKETS) {
       const cards = packetCards(p);
-      // Arena's Lorwyn Eclipsed and Tarkir: Dragonstorm packets are smaller (their own tests check the count).
-      if (p.set !== 'ecl' && p.set !== 'tdm')
+      // Arena's packets with random slots are smaller (their own tests check the count).
+      if (!p.slots)
         expect(
           cards.reduce((n, [, k]) => n + k, 0),
           p.name,
@@ -183,29 +225,11 @@ describe('Jump In packets', () => {
       Tokens: 'W',
     };
     expect(tdm.map((p) => p.name)).toEqual(Object.keys(colours));
-    const lists: ArenaPacket[] = JSON.parse(
-      readFileSync(new URL('../scripts/data/arena-jumpin-packets.json', import.meta.url), 'utf8'),
-    ).filter((x: ArenaPacket) => x.set.includes('(TDM)'));
-    expect(lists).toHaveLength(10);
-    const total = (cards: [string, number][]) => cards.reduce((n, [, k]) => n + k, 0);
     for (const p of tdm) {
-      const list = lists.find((x) => x.name === p.name)!;
-      expect(p.source).toBe('arena');
       expect(p.id).toBe(`tdm-${p.name.toLowerCase()}`);
       expect(p.colors.join(''), p.name).toBe(colours[p.name]);
-      expect(sort([...p.spells, ...(p.lands ?? [])]), p.name).toEqual(sort(list.fixed));
-      expect(
-        p.slots?.map((s) => s.map((a) => [a.weight, a.card])),
-        p.name,
-      ).toEqual(list.slots);
-      for (const s of p.slots ?? [])
-        expect(
-          s.reduce((n, a) => n + a.weight, 0),
-          p.name,
-        ).toBe(100);
-      expect(total(packetCards(p)), p.name).toBe(list.count);
-      expect(total(packetCards(p, dealPacket(p, Math.random))), p.name).toBe(list.count);
     }
+    expectArenaLists(tdm, 'TDM');
     // Two 13-card packets are topped up to 40 with basics of the clans' colours.
     const d = deckById(jumpInId('tdm-abzan', 'tdm-mardu'));
     expect(d.set).toBe('tdm');
@@ -217,6 +241,33 @@ describe('Jump In packets', () => {
     expect(basics.has('Island')).toBe(false);
     for (const b of ['Plains', 'Swamp', 'Forest', 'Mountain'])
       expect(basics.get(b), b).toBeGreaterThan(0);
+  });
+
+  it("has Arena's ten Secrets of Strixhaven packets next to ours, equal to the scraped lists", () => {
+    const sos = PACKETS.filter((p) => p.set === 'sos' && p.source === 'arena');
+    expect(sos.map((p) => p.id)).toEqual(ARENA_SOS_PACKETS.map((p) => p.id));
+    const colours: Record<string, string> = {
+      Aesthetic: 'U',
+      'Field Trip': 'G',
+      Grave: 'B',
+      Lorehold: 'WR',
+      Prismari: 'UR',
+      Quandrix: 'UG',
+      Scribe: 'W',
+      Silverquill: 'WB',
+      Spellcraft: 'R',
+      Witherbloom: 'BG',
+    };
+    expect(sos.map((p) => p.name)).toEqual(Object.keys(colours));
+    for (const p of sos) {
+      expect(p.id).toBe(`sos-arena-${p.name.toLowerCase().replace(' ', '-')}`);
+      expect(p.colors.join(''), p.name).toBe(colours[p.name]);
+    }
+    expectArenaLists(sos, 'SOS');
+    expect(PACKETS.filter((p) => p.set === 'sos' && !p.source)).toHaveLength(10);
+    const d = deckById(jumpInId('sos-arena-lorehold', 'sos-arena-grave'));
+    expect(d.set).toBe('sos');
+    expect(d.cards.reduce((n, [, k]) => n + k, 0)).toBe(40);
   });
 
   describe('random slots', () => {
@@ -313,33 +364,29 @@ describe('Jump In packets', () => {
     expect(jumpInPackets(d.id)?.map((p) => p.name)).toEqual(['Ten Rings', 'Cats']);
   });
 
-  it("has Arena's ten Bloomburrow packets; two-colour ones bring both colours of land", () => {
+  it("has Arena's ten Bloomburrow packets, equal to the scraped lists with their random slots", () => {
     expect(ARENA_BLB_PACKETS).toHaveLength(10);
+    expectArenaLists(ARENA_BLB_PACKETS, 'BLB', {}, true);
     const d = deckById(jumpInId('blb-arena-bats', 'blb-arena-rats'));
     expect(d.colors).toEqual(['W', 'B']);
     expect(d.set).toBe('blb');
     expect(deckIds(d)).toHaveLength(40);
-    expect(d.cards).toEqual(
-      expect.arrayContaining([
-        ['Scoured Barrens', 1],
-        ['Plains', 4],
-        ['Swamp', 11],
-      ]),
-    );
+    // The packets' own land, then basics of both colours for the top-up to 40.
+    const counts = new Map(d.cards);
+    expect(counts.get('Scoured Barrens')).toBe(1);
+    expect(counts.get('Plains')).toBeGreaterThan(0);
+    expect(counts.get('Swamp')).toBeGreaterThan(0);
   });
 
-  it("has Arena's eleven Foundations packets, each with its own land", () => {
+  it("has Arena's eleven Foundations packets, equal to the scraped lists with their random slots", () => {
     expect(ARENA_FDN_PACKETS).toHaveLength(11);
+    expectArenaLists(ARENA_FDN_PACKETS, 'FDN', { Goblins: 'Goblin', Zombies: 'Zombie' });
     const d = deckById(jumpInId('fdn-arena-flyers', 'fdn-arena-hares'));
     expect(d.set).toBeUndefined();
     expect(deckIds(d)).toHaveLength(40);
-    expect(d.cards).toEqual(
-      expect.arrayContaining([
-        ['Hare Apparent', 7],
-        ['Azorius Guildgate', 1],
-        ['Plains', 11],
-        ['Island', 4],
-      ]),
-    );
+    const counts = new Map(d.cards);
+    expect(counts.get('Azorius Guildgate')).toBe(1);
+    expect(counts.get('Plains')).toBeGreaterThan(0);
+    expect(counts.get('Island')).toBeGreaterThan(0);
   });
 });

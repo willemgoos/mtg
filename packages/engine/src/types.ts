@@ -653,6 +653,9 @@ export interface CostDef {
   // Lorwyn Eclipsed (18a): Blight N
   /** Blight N: put N -1/-1 counters on a creature you control (chosen when activating). */
   blight?: number;
+  // Jump In slots (Polygraph Orb)
+  /** Collect evidence N: exile cards from your graveyard with total mana value N or greater (chosen one at a time). */
+  collectEvidence?: number;
   /** "Remove a counter from this creature" / "Remove two counters from this creature": counters of any kinds, chosen when activating. */
   removeAnyCounters?: number;
   // Lorwyn Eclipsed (18b, multi-b): High Perfect Morcant, Kirol
@@ -1942,6 +1945,9 @@ export type EffectDef =
       life: number;
       /** Strixhaven (13c): Professor Onyx: only a discard avoids it ("may discard a card, if they don't lose 3 life"). */
       discardOnly?: boolean;
+      // Jump In slots (Polygraph Orb)
+      /** "Unless they discard a card or sacrifice a creature": only creatures may be sacrificed. */
+      sacrificeCreature?: boolean;
     }
   /** Exile the top N cards; choose one you may play until the end of your next turn (or of this turn). */
   | { kind: 'exileTopChooseOne'; count: Amount; until?: 'endOfTurn' }
@@ -2533,7 +2539,14 @@ export type EffectDef =
       drawUnlessNonland?: number;
     }
   /** Put the top N cards of your library into your graveyard. */
-  | { kind: 'mill'; count: Amount; who?: Ref }
+  | {
+      kind: 'mill';
+      count: Amount;
+      who?: Ref;
+      // Jump In slots (Dread Summons)
+      /** "For each creature card put into a graveyard this way, you create a tapped <token>." */
+      creatureTokens?: { token: CardDefId; tapped?: boolean };
+    }
   // Connive (Marvel Super Heroes)
   /** It connives: its controller draws, then discards; a nonland discard puts a +1/+1 counter on it. */
   | { kind: 'connive'; what: Ref }
@@ -2578,7 +2591,14 @@ export type EffectDef =
       exceptChosen?: boolean;
     }
   /** Put all creature cards from all graveyards onto the battlefield under your control. */
-  | { kind: 'reanimateAll' }
+  | {
+      kind: 'reanimateAll';
+      // Jump In slots (Raise the Past)
+      /** Only from your graveyard ("return all creature cards ... from your graveyard"). */
+      yours?: boolean;
+      /** Only creature cards matching this (mana value 2 or less). */
+      filter?: CardFilter;
+    }
   /** Exile the target graveyard card and create a token copy of it (Abyssal Harvester). */
   | {
       kind: 'tokenCopyOf';
@@ -2649,6 +2669,11 @@ export type EffectDef =
       countersIf?: { filter: CardFilter; count: number };
       // Marvel Super Heroes: "is a Hero in addition to its other types" (Thunderbolts Conspiracy).
       addSubtype?: string;
+      // Jump In slots (Valkyrie's Call)
+      /** It enters with this many +1/+1 counters. */
+      plusOneCounters?: number;
+      /** "It has flying": keywords it has for as long as it stays. */
+      keywords?: Keyword[];
     }
   /** Destroy all creatures (matching the filter). `returnOne`: then return one of yours that died (Starfall Invocation). */
   | {
@@ -3397,6 +3422,9 @@ export type StaticDef =
   | { kind: 'damageCantBePrevented' }
   /** The enchanted permanent is a colorless Food artifact with no other abilities (Sugar Coat). */
   | { kind: 'enchantedIsFood' }
+  // Jump In slots (Imprisoned in the Moon)
+  /** "Enchanted permanent is a colorless land with '{T}: Add {C}' and loses all other card types and abilities." */
+  | { kind: 'enchantedIsColorlessLand' }
   /** Creatures your opponents control matching nothing in particular have base toughness N (Maha). */
   | { kind: 'opponentsBaseToughness'; toughness: number }
   /** Creatures your opponents control that would die are exiled instead (Vren). */
@@ -3693,6 +3721,8 @@ export interface GameObject {
   linkedExile?: { owner: PlayerId; mv: number };
   /** Sugar Coat: the Aura that makes it a Food. */
   foodBy?: ObjectId;
+  /** Jump In slots: the Imprisoned in the Moon making this a colorless land. */
+  moonBy?: ObjectId;
   // Tarkir: Dragonstorm (19b, blue): Ringing Strike Mastery
   /** The Auras attached to it that give it abilities (`attached.grantAbilities`). */
   auraGrants?: ObjectId[];
@@ -4654,6 +4684,9 @@ export type Decision =
   | {
       /** Forage by exiling cards from the graveyard, one at a time. */
       kind: 'forageExile';
+      // Jump In slots (Polygraph Orb)
+      /** Collect evidence: the mana value still to exile; cards are picked until it is reached. */
+      evidence?: number;
       /** Runaways: the spell is cast only after all additional costs are paid. */
       castingSpell?: { card: ObjectId; targets: TargetChoice[]; sacrificed: number };
       player: PlayerId;

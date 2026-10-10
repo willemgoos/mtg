@@ -1,6 +1,7 @@
 import { BLOOMBURROW_BEHAVIORS } from './bloomburrow.ts';
 import { FOUNDATIONS_DRAFT_BEHAVIORS } from './foundations-draft.ts';
 import { FOUNDATIONS_JUMP_IN_BEHAVIORS } from './foundations-jumpin.ts';
+import { JUMP_IN_SLOT_BEHAVIORS } from './jumpin-slots.ts';
 import { MARVEL_BEHAVIORS } from './marvel.ts';
 import { MARVEL_BRAWL_BEHAVIORS } from './marvel-brawl.ts';
 import { FINAL_FANTASY_BEHAVIORS } from './final-fantasy.ts';
@@ -596,6 +597,8 @@ export const LAND_POOL = [
 
 /** Foundations cards from Arena's Foundations Jump In packets. */
 export const FOUNDATIONS_JUMP_IN_POOL = Object.keys(FOUNDATIONS_JUMP_IN_BEHAVIORS);
+/** Cards only the Jump In packets' random slots play. */
+export const JUMP_IN_SLOT_POOL = Object.keys(JUMP_IN_SLOT_BEHAVIORS);
 /** Foundations cards for the draft trophy decks and the rest of Arena's Jump In packets. */
 export const FOUNDATIONS_DRAFT_POOL = Object.keys(FOUNDATIONS_DRAFT_BEHAVIORS);
 
@@ -634,6 +637,7 @@ export const POOL: { name: string }[] = [
   ...BLACK_POOL,
   ...OTHER_POOL,
   ...FOUNDATIONS_JUMP_IN_POOL,
+  ...JUMP_IN_SLOT_POOL,
   ...FOUNDATIONS_DRAFT_POOL,
   ...LAND_POOL,
   ...BLOOMBURROW_POOL,

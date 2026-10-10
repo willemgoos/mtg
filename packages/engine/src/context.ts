@@ -273,6 +273,11 @@ function defBase(ctx: Ctx, o: GameObject): CardDefinition {
     const aura = ctx.s.objects[o.foodBy];
     if (aura && aura.zone === 'battlefield' && aura.attachedTo === id) return foodDef(d);
   }
+  // Jump In slots: Imprisoned in the Moon.
+  if (o.moonBy !== undefined) {
+    const aura = ctx.s.objects[o.moonBy];
+    if (aura && aura.zone === 'battlefield' && aura.attachedTo === id) return moonDef(d);
+  }
   if (o.blank) return blankDef(d);
   // Lorwyn Eclipsed (18b, green): Shimmerwilds Growth, "enchanted land is the chosen color".
   if (ctx.s.landColorAuras && o.zone === 'battlefield' && d.types.includes('Land')) {
@@ -461,6 +466,29 @@ function foodDef(d: CardDefinition): CardDefinition {
     foodDefs.set(d, f);
   }
   return f;
+}
+
+const moonDefs = new WeakMap<CardDefinition, CardDefinition>();
+
+/**
+ * Jump In slots: what Imprisoned in the Moon makes a permanent: a colorless land with only "{T}: Add {C}". Its supertypes
+ * (legendary) stay: they aren't card types.
+ */
+function moonDef(d: CardDefinition): CardDefinition {
+  let m = moonDefs.get(d);
+  if (!m) {
+    const { power: _p, toughness: _t, loyalty: _l, ...rest } = d;
+    m = {
+      ...rest,
+      colors: [],
+      types: ['Land'],
+      subtypes: [],
+      keywords: [],
+      abilities: [{ kind: 'mana', cost: { tapSelf: true }, produces: 'C' }],
+    };
+    moonDefs.set(d, m);
+  }
+  return m;
 }
 
 const colorlessDefs = new WeakMap<CardDefinition, CardDefinition>();
@@ -770,6 +798,7 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
   delete o.colorOverride; // Lorwyn Eclipsed (18b, special)
   delete o.exiledWith;
   delete o.foodBy;
+  delete o.moonBy; // Jump In slots
   delete o.auraGrants; // Tarkir: Dragonstorm (19b, blue)
   delete o.controlledBy;
   delete o.xPaid;

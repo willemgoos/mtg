@@ -1389,6 +1389,14 @@ export function activateAbility(
       if (card) moveObject(ctx, card, 'exile');
     }
   }
+  // Jump In slots (Polygraph Orb): collect evidence. With more than one card that counts, the player picks them (after the
+  // ability is on the stack, like Gallia's card); otherwise the one card goes.
+  let collectEvidence = 0;
+  if (a.cost.collectEvidence) {
+    const options = evidenceOptions(ctx, player, source);
+    if (options.length > 1) collectEvidence = a.cost.collectEvidence;
+    else for (const id of options) moveObject(ctx, id, 'exile');
+  }
   const sacrificedPower = sacrifice ? power(ctx, sacrifice) : undefined;
   if (sacrifice) sacrificePermanent(ctx, sacrifice);
   changeLife(
@@ -1463,6 +1471,18 @@ export function activateAbility(
       ability: id,
       picked: [],
       need: x ?? 0,
+      thenPriority: player,
+    };
+    return true;
+  }
+  if (collectEvidence) {
+    ctx.s.decision = {
+      kind: 'forageExile',
+      player,
+      // Saved games are JSON: a count, not Infinity (the evidence ends it).
+      count: evidenceOptions(ctx, player, source).length,
+      evidence: collectEvidence,
+      source,
       thenPriority: player,
     };
     return true;
@@ -1785,6 +1805,7 @@ export function attachAura(ctx: Ctx, aura: ObjectId, host: ObjectId): void {
   for (const ab of def(ctx, aura).abilities) {
     if (ab.kind !== 'static') continue;
     if (ab.effect.kind === 'enchantedIsFood') h.foodBy = aura;
+    if (ab.effect.kind === 'enchantedIsColorlessLand') h.moonBy = aura; // Jump In slots: Imprisoned in the Moon
     // Tarkir: Dragonstorm (19b, blue): Ringing Strike Mastery, "enchanted creature has '{5}: Untap this creature.'"
     if (ab.effect.kind === 'attached' && ab.effect.grantAbilities?.length) {
       h.auraGrants = [...(h.auraGrants ?? []).filter((x) => x !== aura), aura];
@@ -2042,6 +2063,21 @@ export function graveyardCostCard(
   return graveyardCostOptions(ctx, player, filter, source)[0] ?? null;
 }
 
+/** Jump In slots (Polygraph Orb): the cards collect evidence may exile: those in the graveyard with a mana value, never `source`. */
+export function evidenceOptions(ctx: Ctx, player: PlayerId, source?: ObjectId): ObjectId[] {
+  return ctx.s.players[player].graveyard.filter(
+    (id) => id !== source && manaValue(def(ctx, id).manaCost) > 0,
+  );
+}
+
+/** Jump In slots (Polygraph Orb): collect evidence N can be paid: the graveyard holds mana value N or more. */
+export function canCollectEvidence(ctx: Ctx, player: PlayerId, n: number, source?: ObjectId): boolean {
+  return (
+    evidenceOptions(ctx, player, source).reduce((t, id) => t + manaValue(def(ctx, id).manaCost), 0) >=
+    n
+  );
+}
+
 /** Reality Fracture (17a fixes): every card a graveyard cost could exile, least useful first. */
 export function graveyardCostOptions(
   ctx: Ctx,
@@ -2267,9 +2303,14 @@ export function answerChooseOption(ctx: Ctx, index: number): void {
 export function answerForageExile(ctx: Ctx, card: ObjectId): void {
   const d = ctx.s.decision;
   if (d.kind !== 'forageExile') throw new Error('Not foraging');
+  // Jump In slots (Polygraph Orb): collect evidence goes on until the mana value is reached.
+  const mv = manaValue(def(ctx, card).manaCost);
   moveObject(ctx, card, 'exile');
   d.count--;
-  if (d.count > 0 && ctx.s.players[d.player].graveyard.length > 0) return;
+  if (d.evidence !== undefined) {
+    d.evidence -= mv;
+    if (d.evidence > 0 && evidenceOptions(ctx, d.player, d.source).length > 0) return;
+  } else if (d.count > 0 && ctx.s.players[d.player].graveyard.length > 0) return;
   if (
     d.castingSpell &&
     finishCasting(

@@ -8815,6 +8815,216 @@
   }
  },
  {
+  "name": "Polygraph Orb",
+  "scryfallId": "a6cc4c6f-4a84-4d42-89fa-7405f7ad6ba0",
+  "oracleId": "bb039957-9e88-48cf-b41c-38d42eb87251",
+  "set": "mkm",
+  "collectorNumber": "99",
+  "rarity": "uncommon",
+  "manaCost": "{4}{B}",
+  "typeLine": "Artifact",
+  "oracleText": "When this artifact enters, look at the top four cards of your library. Put two of them into your hand and the rest into your graveyard. You lose 2 life.\n{2}, {T}, Collect evidence 3: Each opponent loses 3 life unless they discard a card or sacrifice a creature. (To collect evidence 3, exile cards with total mana value 3 or greater from your graveyard.)",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Collect evidence"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/6/a6cc4c6f-4a84-4d42-89fa-7405f7ad6ba0.jpg?1783912893",
+   "normal": "https://cards.scryfall.io/normal/front/a/6/a6cc4c6f-4a84-4d42-89fa-7405f7ad6ba0.jpg?1783912893",
+   "large": "https://cards.scryfall.io/large/front/a/6/a6cc4c6f-4a84-4d42-89fa-7405f7ad6ba0.jpg?1783912893",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/6/a6cc4c6f-4a84-4d42-89fa-7405f7ad6ba0.jpg?1783912893"
+  }
+ },
+ {
+  "name": "Nezumi Informant",
+  "scryfallId": "e36fbff8-471e-4cf8-8946-e1e5cdf598af",
+  "oracleId": "a70ffefb-840c-48c3-a59d-e12306086bb6",
+  "set": "mom",
+  "collectorNumber": "120",
+  "rarity": "common",
+  "manaCost": "{1}{B}",
+  "typeLine": "Creature — Rat Rogue",
+  "oracleText": "When this creature enters, each opponent discards a card.",
+  "power": "1",
+  "toughness": "1",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/3/e36fbff8-471e-4cf8-8946-e1e5cdf598af.jpg?1783917003",
+   "normal": "https://cards.scryfall.io/normal/front/e/3/e36fbff8-471e-4cf8-8946-e1e5cdf598af.jpg?1783917003",
+   "large": "https://cards.scryfall.io/large/front/e/3/e36fbff8-471e-4cf8-8946-e1e5cdf598af.jpg?1783917003",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/3/e36fbff8-471e-4cf8-8946-e1e5cdf598af.jpg?1783917003"
+  }
+ },
+ {
+  "name": "Ephara's Dispersal",
+  "scryfallId": "b0bcc71f-72ec-4a76-9393-ed3ea61eeeb6",
+  "oracleId": "1e0bb57a-f5c7-45e9-b5b9-5bb3ec930108",
+  "set": "mom",
+  "collectorNumber": "55",
+  "rarity": "common",
+  "manaCost": "{2}{U}",
+  "typeLine": "Instant",
+  "oracleText": "This spell costs {2} less to cast if it targets an attacking creature.\nReturn target creature to its owner's hand. Surveil 2. (Look at the top two cards of your library, then put any number of them into your graveyard and the rest on top of your library in any order.)",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Surveil"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/0/b0bcc71f-72ec-4a76-9393-ed3ea61eeeb6.jpg?1783917039",
+   "normal": "https://cards.scryfall.io/normal/front/b/0/b0bcc71f-72ec-4a76-9393-ed3ea61eeeb6.jpg?1783917039",
+   "large": "https://cards.scryfall.io/large/front/b/0/b0bcc71f-72ec-4a76-9393-ed3ea61eeeb6.jpg?1783917039",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/0/b0bcc71f-72ec-4a76-9393-ed3ea61eeeb6.jpg?1783917039"
+  }
+ },
+ {
+  "name": "Valkyrie's Call",
+  "scryfallId": "0e1f1ff2-fa8f-4d38-b631-2d6e08e614c8",
+  "oracleId": "27400927-9aba-4fb3-90c4-490d01969e60",
+  "set": "fdn",
+  "collectorNumber": "27",
+  "rarity": "mythic",
+  "manaCost": "{3}{W}{W}",
+  "typeLine": "Enchantment",
+  "oracleText": "Whenever a nontoken, non-Angel creature you control dies, return that card to the battlefield under its owner's control with a +1/+1 counter on it. It has flying and is an Angel in addition to its other types.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/e/0e1f1ff2-fa8f-4d38-b631-2d6e08e614c8.jpg?1783909122",
+   "normal": "https://cards.scryfall.io/normal/front/0/e/0e1f1ff2-fa8f-4d38-b631-2d6e08e614c8.jpg?1783909122",
+   "large": "https://cards.scryfall.io/large/front/0/e/0e1f1ff2-fa8f-4d38-b631-2d6e08e614c8.jpg?1783909122",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/e/0e1f1ff2-fa8f-4d38-b631-2d6e08e614c8.jpg?1783909122"
+  }
+ },
+ {
+  "name": "Flamewake Phoenix",
+  "scryfallId": "a94f008e-48a0-406b-83fa-99cd396831f8",
+  "oracleId": "9e43805d-3576-47d4-9331-524869ab99d0",
+  "set": "fdn",
+  "collectorNumber": "198",
+  "rarity": "rare",
+  "manaCost": "{1}{R}{R}",
+  "typeLine": "Creature — Phoenix",
+  "oracleText": "Flying, haste\nThis creature attacks each combat if able.\nFerocious — At the beginning of combat on your turn, if you control a creature with power 4 or greater, you may pay {R}. If you do, return this card from your graveyard to the battlefield.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Flying",
+   "Ferocious",
+   "Haste"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/9/a94f008e-48a0-406b-83fa-99cd396831f8.jpg?1783909067",
+   "normal": "https://cards.scryfall.io/normal/front/a/9/a94f008e-48a0-406b-83fa-99cd396831f8.jpg?1783909067",
+   "large": "https://cards.scryfall.io/large/front/a/9/a94f008e-48a0-406b-83fa-99cd396831f8.jpg?1783909067",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/9/a94f008e-48a0-406b-83fa-99cd396831f8.jpg?1783909067"
+  }
+ },
+ {
+  "name": "Raise the Past",
+  "scryfallId": "6c6be129-56da-4fe7-a6bd-6a1d402c09e1",
+  "oracleId": "a69a24d0-ca58-4a44-8af1-a3bd1608d2f9",
+  "set": "fdn",
+  "collectorNumber": "22",
+  "rarity": "rare",
+  "manaCost": "{2}{W}{W}",
+  "typeLine": "Sorcery",
+  "oracleText": "Return all creature cards with mana value 2 or less from your graveyard to the battlefield.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/c/6c6be129-56da-4fe7-a6bd-6a1d402c09e1.jpg?1783909124",
+   "normal": "https://cards.scryfall.io/normal/front/6/c/6c6be129-56da-4fe7-a6bd-6a1d402c09e1.jpg?1783909124",
+   "large": "https://cards.scryfall.io/large/front/6/c/6c6be129-56da-4fe7-a6bd-6a1d402c09e1.jpg?1783909124",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/c/6c6be129-56da-4fe7-a6bd-6a1d402c09e1.jpg?1783909124"
+  }
+ },
+ {
+  "name": "Immersturm Predator",
+  "scryfallId": "52dfc234-e87a-4594-8dcf-0a2f95eedc97",
+  "oracleId": "fcb6c6d4-ea8d-49cf-b6df-377084bdb757",
+  "set": "fdn",
+  "collectorNumber": "660",
+  "rarity": "rare",
+  "manaCost": "{2}{B}{R}",
+  "typeLine": "Creature — Vampire Dragon",
+  "oracleText": "Flying\nWhenever this creature becomes tapped, exile up to one target card from a graveyard and put a +1/+1 counter on this creature.\nSacrifice another creature: This creature gains indestructible until end of turn. Tap it.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "B",
+   "R"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/2/52dfc234-e87a-4594-8dcf-0a2f95eedc97.jpg?1783908910",
+   "normal": "https://cards.scryfall.io/normal/front/5/2/52dfc234-e87a-4594-8dcf-0a2f95eedc97.jpg?1783908910",
+   "large": "https://cards.scryfall.io/large/front/5/2/52dfc234-e87a-4594-8dcf-0a2f95eedc97.jpg?1783908910",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/2/52dfc234-e87a-4594-8dcf-0a2f95eedc97.jpg?1783908910"
+  }
+ },
+ {
+  "name": "Dread Summons",
+  "scryfallId": "dfb5dd33-6e5b-4d78-92fa-678c9f01c606",
+  "oracleId": "642fa01d-025e-44dd-8360-5325e5a28282",
+  "set": "fdn",
+  "collectorNumber": "604",
+  "rarity": "rare",
+  "manaCost": "{X}{B}{B}",
+  "typeLine": "Sorcery",
+  "oracleText": "Each player mills X cards. For each creature card put into a graveyard this way, you create a tapped 2/2 black Zombie creature token. (To mill a card, a player puts the top card of their library into their graveyard.)",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Mill"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/f/dfb5dd33-6e5b-4d78-92fa-678c9f01c606.jpg?1783908931",
+   "normal": "https://cards.scryfall.io/normal/front/d/f/dfb5dd33-6e5b-4d78-92fa-678c9f01c606.jpg?1783908931",
+   "large": "https://cards.scryfall.io/large/front/d/f/dfb5dd33-6e5b-4d78-92fa-678c9f01c606.jpg?1783908931",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/f/dfb5dd33-6e5b-4d78-92fa-678c9f01c606.jpg?1783908931"
+  }
+ },
+ {
+  "name": "Imprisoned in the Moon",
+  "scryfallId": "ee28e147-6622-4399-a314-c14a5c912dd0",
+  "oracleId": "339a7418-9a29-4eae-a3c2-ea590d175936",
+  "set": "fdn",
+  "collectorNumber": "156",
+  "rarity": "uncommon",
+  "manaCost": "{2}{U}",
+  "typeLine": "Enchantment — Aura",
+  "oracleText": "Enchant creature, land, or planeswalker\nEnchanted permanent is a colorless land with \"{T}: Add {C}\" and loses all other card types and abilities.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Enchant"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/e/ee28e147-6622-4399-a314-c14a5c912dd0.jpg?1783909080",
+   "normal": "https://cards.scryfall.io/normal/front/e/e/ee28e147-6622-4399-a314-c14a5c912dd0.jpg?1783909080",
+   "large": "https://cards.scryfall.io/large/front/e/e/ee28e147-6622-4399-a314-c14a5c912dd0.jpg?1783909080",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/e/ee28e147-6622-4399-a314-c14a5c912dd0.jpg?1783909080"
+  }
+ },
+ {
   "name": "Squad Rallier",
   "scryfallId": "65e1ee86-6f08-4aa0-bf63-ae12028ef080",
   "oracleId": "e0b15374-b4f6-48e0-8477-4eb5d5c2a938",
