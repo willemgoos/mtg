@@ -255,6 +255,9 @@ export const KEYWORDS_AS_ABILITIES = new Set([
   'Adapt',
   'Delve',
   'Ninjutsu',
+  // Jump In slots: Polygraph Orb, Flamewake Phoenix (rules text lives in the behaviour).
+  'Collect evidence',
+  'Ferocious',
 ]);
 
 const BASIC_MANA: Record<string, ManaType> = {

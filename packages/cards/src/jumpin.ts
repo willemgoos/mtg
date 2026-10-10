@@ -1538,9 +1538,9 @@ const OWN_PACKETS: Packet[] = [
 /**
  * MTG Arena's ten Bloomburrow packets (July 2024), from
  * https://magic.wizards.com/en/news/mtg-arena/jump-in-packets-update-for-bloomburrow.
- * Arena swaps a few cards for alternates at random; these are the listed
- * packets. Arena also picks the lands; two-colour packets get a gain-land and
- * basics split by their mana symbols.
+ * The cards and Arena's random slots are from https://mtgabuddy.com/en/jump-in-packet-list
+ * (`scripts/data/arena-jumpin-packets.json`), 12 cards each; two-colour packets also get a gain-land (Wizards'
+ * announcement), and the pair is topped up to 40 with basics split by mana symbols.
  */
 export const ARENA_BLB_PACKETS: Packet[] = [
   {
@@ -1552,24 +1552,34 @@ export const ARENA_BLB_PACKETS: Packet[] = [
     set: 'blb',
     source: 'arena',
     spells: [
-      ['Zoraline, Cosmos Caller', 1],
       ['Starseer Mentor', 1],
-      ['Moonrise Cleric', 1],
-      ['Lifecreed Duo', 1],
-      ['Star Charter', 1],
-      ['Sonar Strike', 1],
-      ['Starlit Soothsayer', 1],
-      ['Sinister Monolith', 1],
-      ['Nocturnal Hunger', 1],
-      ['Wax-Wane Witness', 1],
       ['Moonstone Harbinger', 1],
+      ['Moonrise Cleric', 1],
+      ['Starlit Soothsayer', 1],
+      ['Wax-Wane Witness', 1],
       ['Three Tree Mascot', 1],
+      ['Sonar Strike', 1],
+      ['Nocturnal Hunger', 1],
     ],
-    lands: [
-      ['Scoured Barrens', 1],
-      ['Plains', 4],
-      ['Swamp', 3],
+    slots: [
+      [
+        { card: 'Zoraline, Cosmos Caller', weight: 50 },
+        { card: 'Lunar Convocation', weight: 50 },
+      ],
+      [
+        { card: 'Star Charter', weight: 50 },
+        { card: 'Glidedive Duo', weight: 50 },
+      ],
+      [
+        { card: 'Sinister Monolith', weight: 50 },
+        { card: 'Stargaze', weight: 50 },
+      ],
+      [
+        { card: 'Lifecreed Duo', weight: 50 },
+        { card: 'Agate-Blade Assassin', weight: 50 },
+      ],
     ],
+    lands: [['Scoured Barrens', 1]],
   },
   {
     id: 'blb-arena-otters',
@@ -1580,24 +1590,35 @@ export const ARENA_BLB_PACKETS: Packet[] = [
     set: 'blb',
     source: 'arena',
     spells: [
-      ['Alania, Divergent Storm', 1],
       ['Stormcatch Mentor', 1],
-      ['Agate Assault', 1],
-      ['Otterball Antics', 1],
-      ['Daring Waverider', 1],
-      ['Wildfire Howl', 1],
-      ['Kindlespark Duo', 1],
       ['Coruscation Mage', 1],
       ['Harnesser of Storms', 1],
-      ['Conduct Electricity', 1],
-      ['Valley Rally', 1],
       ['Three Tree Mascot', 1],
+      ['Valley Rally', 1],
+      ['Conduct Electricity', 1],
+      ['Otterball Antics', 1],
+      ['Wildfire Howl', 1],
     ],
-    lands: [
-      ['Swiftwater Cliffs', 1],
-      ['Island', 2],
-      ['Mountain', 5],
+    slots: [
+      [
+        { card: 'Ral, Crackling Wit', weight: 20 },
+        { card: 'Alania, Divergent Storm', weight: 40 },
+        { card: 'Festival of Embers', weight: 40 },
+      ],
+      [
+        { card: 'Daring Waverider', weight: 50 },
+        { card: 'Eddymurk Crab', weight: 50 },
+      ],
+      [
+        { card: 'Agate Assault', weight: 50 },
+        { card: 'Dazzling Denial', weight: 50 },
+      ],
+      [
+        { card: 'Kindlespark Duo', weight: 50 },
+        { card: 'Tempest Angler', weight: 50 },
+      ],
     ],
+    lands: [['Swiftwater Cliffs', 1]],
   },
   {
     id: 'blb-arena-squirrels',
@@ -1608,24 +1629,35 @@ export const ARENA_BLB_PACKETS: Packet[] = [
     set: 'blb',
     source: 'arena',
     spells: [
-      ['Camellia, the Seedmiser', 1],
       ['Vinereap Mentor', 1],
-      ['Corpseberry Cultivator', 1],
-      ['Bonebind Orator', 1],
       ['Bonecache Overseer', 1],
-      ["Wick's Patrol", 1],
-      ['Treetop Sentries', 1],
-      ['Cache Grab', 1],
-      ['Bushy Bodyguard', 1],
-      ['Feed the Cycle', 1],
       ['Honored Dreyleader', 1],
+      ['Corpseberry Cultivator', 1],
+      ['Treetop Sentries', 1],
       ['Three Tree Mascot', 1],
+      ['Feed the Cycle', 1],
+      ['Cache Grab', 1],
     ],
-    lands: [
-      ['Jungle Hollow', 1],
-      ['Swamp', 4],
-      ['Forest', 3],
+    slots: [
+      [
+        { card: 'Ygra, Eater of All', weight: 20 },
+        { card: 'Camellia, the Seedmiser', weight: 40 },
+        { card: 'Osteomancer Adept', weight: 40 },
+      ],
+      [
+        { card: "Wick's Patrol", weight: 50 },
+        { card: 'Downwind Ambusher', weight: 50 },
+      ],
+      [
+        { card: 'Bushy Bodyguard', weight: 50 },
+        { card: 'Curious Forager', weight: 50 },
+      ],
+      [
+        { card: 'Bonebind Orator', weight: 50 },
+        { card: 'Daggerfang Duo', weight: 50 },
+      ],
     ],
+    lands: [['Jungle Hollow', 1]],
   },
   {
     id: 'blb-arena-mice',
@@ -1636,24 +1668,34 @@ export const ARENA_BLB_PACKETS: Packet[] = [
     set: 'blb',
     source: 'arena',
     spells: [
-      ['Mabel, Heir to Cragflame', 1],
       ['Seedglaive Mentor', 1],
-      ['Veteran Guardmouse', 1],
-      ['Brave-Kin Duo', 1],
       ['Brambleguard Captain', 1],
       ['Flowerfoot Swordmaster', 1],
-      ["Mabel's Mettle", 1],
-      ['Whiskerquill Scribe', 1],
-      ['War Squeak', 1],
-      ['Short Bow', 1],
       ['Heartfire Hero', 1],
+      ['Veteran Guardmouse', 1],
+      ['Brave-Kin Duo', 1],
       ['Three Tree Mascot', 1],
+      ["Mabel's Mettle", 1],
     ],
-    lands: [
-      ['Wind-Scarred Crag', 1],
-      ['Mountain', 4],
-      ['Plains', 3],
+    slots: [
+      [
+        { card: 'Mabel, Heir to Cragflame', weight: 50 },
+        { card: 'Manifold Mouse', weight: 50 },
+      ],
+      [
+        { card: 'Feather of Flight', weight: 50 },
+        { card: 'War Squeak', weight: 50 },
+      ],
+      [
+        { card: 'Short Bow', weight: 50 },
+        { card: "Blacksmith's Talent", weight: 50 },
+      ],
+      [
+        { card: 'Whiskerquill Scribe', weight: 50 },
+        { card: 'Thistledown Players', weight: 50 },
+      ],
     ],
+    lands: [['Wind-Scarred Crag', 1]],
   },
   {
     id: 'blb-arena-frogs',
@@ -1664,24 +1706,34 @@ export const ARENA_BLB_PACKETS: Packet[] = [
     set: 'blb',
     source: 'arena',
     spells: [
-      ['Clement, the Worrywort', 1],
       ['Lilysplash Mentor', 1],
-      ['Pond Prophet', 1],
-      ['Bellowing Crier', 1],
-      ['Splash Lasher', 1],
-      ['Skyskipper Duo', 1],
       ['Long River Lurker', 1],
       ['Three Tree Scribe', 1],
-      ['High Stride', 1],
+      ['Pond Prophet', 1],
       ['Sunshower Druid', 1],
       ['Stickytongue Sentinel', 1],
+      ['High Stride', 1],
       ['Polliwallop', 1],
     ],
-    lands: [
-      ['Thornwood Falls', 1],
-      ['Forest', 4],
-      ['Island', 3],
+    slots: [
+      [
+        { card: 'Clement, the Worrywort', weight: 50 },
+        { card: 'Dreamdew Entrancer', weight: 50 },
+      ],
+      [
+        { card: 'Splash Lasher', weight: 50 },
+        { card: 'Run Away Together', weight: 50 },
+      ],
+      [
+        { card: 'Bellowing Crier', weight: 50 },
+        { card: 'Waterspout Warden', weight: 50 },
+      ],
+      [
+        { card: 'Skyskipper Duo', weight: 50 },
+        { card: 'Treeguard Duo', weight: 50 },
+      ],
     ],
+    lands: [['Thornwood Falls', 1]],
   },
   {
     id: 'blb-arena-rabbits',
@@ -1692,19 +1744,35 @@ export const ARENA_BLB_PACKETS: Packet[] = [
     set: 'blb',
     source: 'arena',
     spells: [
-      ['Valley Questcaller', 1],
       ['Harvestrite Host', 1],
-      ['Hop to It', 1],
-      ['Seasoned Warrenguard', 1],
-      ["Builder's Talent", 1],
-      ['Rabbit Response', 1],
       ['Warren Elder', 1],
-      ['Intrepid Rabbit', 1],
+      ['Rabbit Response', 1],
+      ['Hop to It', 1],
+      ["Builder's Talent", 1],
       ['Banishing Light', 1],
-      ['Driftgloom Coyote', 1],
-      ['Carrot Cake', 1],
       ['Patchwork Banner', 1],
+      ['Carrot Cake', 1],
     ],
+    slots: [
+      [
+        { card: 'Warren Warleader', weight: 20 },
+        { card: 'Valley Questcaller', weight: 40 },
+        { card: "Caretaker's Talent", weight: 40 },
+      ],
+      [
+        { card: 'Seasoned Warrenguard', weight: 50 },
+        { card: 'Lifecreed Duo', weight: 50 },
+      ],
+      [
+        { card: 'Shrike Force', weight: 50 },
+        { card: 'Intrepid Rabbit', weight: 50 },
+      ],
+      [
+        { card: 'Driftgloom Coyote', weight: 50 },
+        { card: 'Repel Calamity', weight: 50 },
+      ],
+    ],
+    lands: [],
   },
   {
     id: 'blb-arena-rats',
@@ -1715,19 +1783,35 @@ export const ARENA_BLB_PACKETS: Packet[] = [
     set: 'blb',
     source: 'arena',
     spells: [
-      ["Cruelclaw's Heist", 1],
-      ['Fell', 1],
-      ["Bandit's Talent", 1],
       ['Thought-Stalker Warlock', 1],
-      ['Thornplate Intimidator', 1],
-      ['Agate-Blade Assassin', 1],
-      ['Ravine Raider', 1],
-      ['Ruthless Negotiation', 1],
-      ['Consumed by Greed', 1],
       ['Huskburster Swarm', 1],
+      ['Thornplate Intimidator', 1],
       ['Scales of Shale', 1],
+      ['Fell', 1],
+      ['Ruthless Negotiation', 1],
       ['Psychic Whorl', 1],
+      ["Bandit's Talent", 1],
     ],
+    slots: [
+      [
+        { card: 'Rottenmouth Viper', weight: 20 },
+        { card: "Cruelclaw's Heist", weight: 40 },
+        { card: 'Coiling Rebirth', weight: 40 },
+      ],
+      [
+        { card: 'Consumed by Greed', weight: 50 },
+        { card: 'Polygraph Orb', weight: 50 },
+      ],
+      [
+        { card: 'Agate-Blade Assassin', weight: 50 },
+        { card: 'Bonebind Orator', weight: 50 },
+      ],
+      [
+        { card: 'Ravine Raider', weight: 50 },
+        { card: 'Nezumi Informant', weight: 50 },
+      ],
+    ],
+    lands: [],
   },
   {
     id: 'blb-arena-lizards',
@@ -1738,19 +1822,35 @@ export const ARENA_BLB_PACKETS: Packet[] = [
     set: 'blb',
     source: 'arena',
     spells: [
-      ['Hearthborn Battler', 1],
-      ['Quaketusk Boar', 1],
       ['Reptilian Recruiter', 1],
-      ["Alania's Pathmaker", 1],
-      ['Raccoon Rallier', 1],
-      ['Roughshod Duo', 1],
       ['Flamecache Gecko', 1],
+      ["Alania's Pathmaker", 1],
+      ['Roughshod Duo', 1],
       ['Frilled Sparkshooter', 1],
-      ['Blooming Blast', 1],
       ['Rabid Gnaw', 1],
       ["Sazacap's Brew", 1],
       ["Hoarder's Overflow", 1],
     ],
+    slots: [
+      [
+        { card: "Dragonhawk, Fate's Tempest", weight: 20 },
+        { card: 'Hearthborn Battler', weight: 40 },
+        { card: 'Valley Flamecaller', weight: 40 },
+      ],
+      [
+        { card: 'Quaketusk Boar', weight: 50 },
+        { card: 'Teapot Slinger', weight: 50 },
+      ],
+      [
+        { card: 'Blooming Blast', weight: 50 },
+        { card: 'Playful Shove', weight: 50 },
+      ],
+      [
+        { card: 'Raccoon Rallier', weight: 50 },
+        { card: 'Steampath Charger', weight: 50 },
+      ],
+    ],
+    lands: [],
   },
   {
     id: 'blb-arena-threshold',
@@ -1761,19 +1861,35 @@ export const ARENA_BLB_PACKETS: Packet[] = [
     set: 'blb',
     source: 'arena',
     spells: [
-      ['Spellgyre', 1],
-      ['Sugar Coat', 1],
-      ['Portent of Calamity', 1],
-      ['Dire Downdraft', 1],
       ['Mindwhisker', 1],
+      ['Shoreline Looter', 1],
       ['Nightwhorl Hermit', 1],
       ['Bellowing Crier', 1],
       ['Thought Shucker', 1],
       ['Lightshell Duo', 1],
-      ['Shoreline Looter', 1],
-      ['Sterling Hound', 1],
       ['Shore Up', 1],
+      ['Sugar Coat', 1],
     ],
+    slots: [
+      [
+        { card: 'Kitsa, Otterball Elite', weight: 20 },
+        { card: 'Portent of Calamity', weight: 40 },
+        { card: 'Azure Beastbinder', weight: 40 },
+      ],
+      [
+        { card: 'Spellgyre', weight: 50 },
+        { card: "Long River's Pull", weight: 50 },
+      ],
+      [
+        { card: 'Plumecreed Escort', weight: 50 },
+        { card: 'Dire Downdraft', weight: 50 },
+      ],
+      [
+        { card: 'Sterling Hound', weight: 50 },
+        { card: "Ephara's Dispersal", weight: 50 },
+      ],
+    ],
+    lands: [],
   },
   {
     id: 'blb-arena-exploring',
@@ -1784,28 +1900,44 @@ export const ARENA_BLB_PACKETS: Packet[] = [
     set: 'blb',
     source: 'arena',
     spells: [
-      ['Tender Wildguide', 1],
       ['Galewind Moose', 1],
       ['Hivespine Wolverine', 1],
       ['Bark-Knuckle Boxer', 1],
-      ["Hunter's Talent", 1],
-      ['Clifftop Lookout', 1],
       ['Three Tree Rootweaver', 1],
-      ['Stickytongue Sentinel', 1],
-      ['Rust-Shield Rampager', 1],
-      ['Heaped Harvest', 1],
       ['Pawpatch Formation', 1],
       ['Peerless Recycling', 1],
+      ["Hunter's Talent", 1],
+      ['Heaped Harvest', 1],
     ],
+    slots: [
+      [
+        { card: 'Lumra, Bellow of the Woods', weight: 20 },
+        { card: 'Tender Wildguide', weight: 40 },
+        { card: 'Fecund Greenshell', weight: 40 },
+      ],
+      [
+        { card: 'Clifftop Lookout', weight: 50 },
+        { card: 'Brambleguard Veteran', weight: 50 },
+      ],
+      [
+        { card: 'Stickytongue Sentinel', weight: 50 },
+        { card: 'Bakersbane Duo', weight: 50 },
+      ],
+      [
+        { card: 'Rust-Shield Rampager', weight: 50 },
+        { card: 'Treeguard Duo', weight: 50 },
+      ],
+    ],
+    lands: [],
   },
 ];
 
 /**
  * MTG Arena's eleven Foundations packets (November 2024), from
  * https://magic.wizards.com/en/news/mtg-arena/jump-in-packets-update-for-foundations.
- * Like the Bloomburrow ones, these are the listed packets. Arena adds the
- * lands: the packet's own (a guildgate or Evolving Wilds), then basics split
- * by mana symbols.
+ * The cards, the packet's own land (a guildgate or Evolving Wilds) and Arena's random slots are from
+ * https://mtgabuddy.com/en/jump-in-packet-list (`scripts/data/arena-jumpin-packets.json`); the pair is topped up to
+ * 40 with basics split by mana symbols.
  */
 export const ARENA_FDN_PACKETS: Packet[] = [
   {
@@ -1816,23 +1948,34 @@ export const ARENA_FDN_PACKETS: Packet[] = [
     blurb: 'Flyers, and tricks at instant speed',
     source: 'arena',
     spells: [
-      ['High Fae Trickster', 1],
       ['Empyrean Eagle', 1],
       ['Cloudblazer', 1],
       ['Leonin Skyhunter', 1],
-      ['Faebloom Trick', 1],
-      ['Kitesail Corsair', 1],
-      ['Inspiring Overseer', 1],
-      ['Skyship Buccaneer', 1],
       ['Spectral Sailor', 1],
-      ['Luminous Rebuke', 1],
+      ['Inspiring Overseer', 1],
+      ['Faebloom Trick', 1],
       ['Fleeting Flight', 1],
     ],
-    lands: [
-      ['Azorius Guildgate', 1],
-      ['Plains', 4],
-      ['Island', 4],
+    slots: [
+      [
+        { card: "Valkyrie's Call", weight: 20 },
+        { card: 'High Fae Trickster', weight: 40 },
+        { card: 'Celestial Armor', weight: 40 },
+      ],
+      [
+        { card: 'Skyship Buccaneer', weight: 50 },
+        { card: 'Clinquant Skymage', weight: 50 },
+      ],
+      [
+        { card: 'Kitesail Corsair', weight: 50 },
+        { card: 'Strix Lookout', weight: 50 },
+      ],
+      [
+        { card: 'Luminous Rebuke', weight: 50 },
+        { card: 'Pacifism', weight: 50 },
+      ],
     ],
+    lands: [['Azorius Guildgate', 1]],
   },
   {
     id: 'fdn-arena-threshold',
@@ -1842,23 +1985,33 @@ export const ARENA_FDN_PACKETS: Packet[] = [
     blurb: 'Fill the graveyard; seven cards turns it on',
     source: 'arena',
     spells: [
-      ['Kiora, the Rising Tide', 1],
       ['Dreadwing Scavenger', 1],
       ['Cephalid Inkmage', 1],
       ['Billowing Shriekmass', 1],
       ['Rune-Sealed Wall', 1],
-      ['Chart a Course', 1],
-      ['Eaten by Piranhas', 1],
-      ['Uncharted Voyage', 1],
-      ['Quick Study', 1],
       ['Strix Lookout', 1],
+      ['Uncharted Voyage', 1],
       ['Refute', 1],
     ],
-    lands: [
-      ['Dimir Guildgate', 1],
-      ['Island', 6],
-      ['Swamp', 2],
+    slots: [
+      [
+        { card: 'Kiora, the Rising Tide', weight: 50 },
+        { card: 'Dread Summons', weight: 50 },
+      ],
+      [
+        { card: 'Chart a Course', weight: 50 },
+        { card: 'Inspiration from Beyond', weight: 50 },
+      ],
+      [
+        { card: 'Eaten by Piranhas', weight: 50 },
+        { card: 'Imprisoned in the Moon', weight: 50 },
+      ],
+      [
+        { card: 'Quick Study', weight: 50 },
+        { card: 'Think Twice', weight: 50 },
+      ],
     ],
+    lands: [['Dimir Guildgate', 1]],
   },
   {
     id: 'fdn-arena-raiders',
@@ -1868,23 +2021,33 @@ export const ARENA_FDN_PACKETS: Packet[] = [
     blurb: 'Attackers that make every death hurt',
     source: 'arena',
     spells: [
-      ['Alesha, Who Laughs at Fate', 1],
       ['Perforating Artist', 1],
       ['Garna, Bloodfist of Keld', 1],
-      ['Sower of Chaos', 1],
       ['Strongbox Raider', 1],
-      ['Frenzied Goblin', 1],
+      ['Sower of Chaos', 1],
       ['Sanguine Syphoner', 1],
       ['Goblin Smuggler', 1],
-      ['Burst Lightning', 1],
       ['Feed the Swarm', 1],
-      ['Vengeful Bloodwitch', 1],
     ],
-    lands: [
-      ['Rakdos Guildgate', 1],
-      ['Mountain', 5],
-      ['Swamp', 3],
+    slots: [
+      [
+        { card: 'Alesha, Who Laughs at Fate', weight: 50 },
+        { card: 'Immersturm Predator', weight: 50 },
+      ],
+      [
+        { card: 'Frenzied Goblin', weight: 50 },
+        { card: 'Brazen Scourge', weight: 50 },
+      ],
+      [
+        { card: 'Vengeful Bloodwitch', weight: 50 },
+        { card: 'Heartfire Immolator', weight: 50 },
+      ],
+      [
+        { card: 'Burst Lightning', weight: 50 },
+        { card: 'Scorching Dragonfire', weight: 50 },
+      ],
     ],
+    lands: [['Rakdos Guildgate', 1]],
   },
   {
     id: 'fdn-arena-growth',
@@ -1894,23 +2057,34 @@ export const ARENA_FDN_PACKETS: Packet[] = [
     blurb: 'Big creatures and the burn to clear the way',
     source: 'arena',
     spells: [
-      ['Sylvan Scavenging', 1],
       ['Ruby, Daring Tracker', 1],
       ['Elvish Regrower', 1],
       ['Nessian Hornbeetle', 1],
-      ['Bolt Bend', 1],
-      ['Courageous Goblin', 1],
       ['Battle-Rattle Shaman', 1],
-      ['Treetop Snarespinner', 1],
+      ['Courageous Goblin', 1],
       ['Gnarlid Colony', 1],
-      ['Sure Strike', 1],
       ['Obliterating Bolt', 1],
     ],
-    lands: [
-      ['Gruul Guildgate', 1],
-      ['Forest', 5],
-      ['Mountain', 3],
+    slots: [
+      [
+        { card: 'Sylvan Scavenging', weight: 33 },
+        { card: 'Flamewake Phoenix', weight: 33 },
+        { card: 'Halana and Alena, Partners', weight: 34 },
+      ],
+      [
+        { card: 'Bolt Bend', weight: 50 },
+        { card: 'Bulk Up', weight: 50 },
+      ],
+      [
+        { card: 'Treetop Snarespinner', weight: 50 },
+        { card: 'Ambush Wolf', weight: 50 },
+      ],
+      [
+        { card: 'Sure Strike', weight: 50 },
+        { card: 'Giant Growth', weight: 50 },
+      ],
     ],
+    lands: [['Gruul Guildgate', 1]],
   },
   {
     id: 'fdn-arena-strong',
@@ -1920,23 +2094,34 @@ export const ARENA_FDN_PACKETS: Packet[] = [
     blurb: '+1/+1 counters that keep growing',
     source: 'arena',
     spells: [
-      ['Mossborn Hydra', 1],
-      ['Inspiring Call', 1],
       ['Good-Fortune Unicorn', 1],
-      ['Ordeal of Nylea', 1],
       ['Wildwood Scourge', 1],
       ['Mild-Mannered Librarian', 1],
-      ['Bite Down', 1],
       ['Treetop Snarespinner', 1],
       ['Gnarlid Colony', 1],
-      ['Bushwhack', 1],
       ['Felidar Savior', 1],
+      ['Inspiring Call', 1],
     ],
-    lands: [
-      ['Selesnya Guildgate', 1],
-      ['Forest', 6],
-      ['Plains', 2],
+    slots: [
+      [
+        { card: 'Quilled Greatwurm', weight: 20 },
+        { card: 'Mossborn Hydra', weight: 40 },
+        { card: 'Felidar Retreat', weight: 40 },
+      ],
+      [
+        { card: 'Ordeal of Nylea', weight: 50 },
+        { card: 'Ingenious Leonin', weight: 50 },
+      ],
+      [
+        { card: 'Bite Down', weight: 50 },
+        { card: 'Deadly Riposte', weight: 50 },
+      ],
+      [
+        { card: 'Bushwhack', weight: 50 },
+        { card: 'Pacifism', weight: 50 },
+      ],
     ],
+    lands: [['Selesnya Guildgate', 1]],
   },
   {
     id: 'fdn-arena-cats',
@@ -1946,22 +2131,33 @@ export const ARENA_FDN_PACKETS: Packet[] = [
     blurb: 'Cats that pounce together',
     source: 'arena',
     spells: [
-      ['Arahbo, the First Fang', 1],
       ['Ingenious Leonin', 1],
-      ['Prideful Parent', 1],
       ['Dawnwing Marshal', 1],
-      ['Felidar Savior', 1],
       ['Savannah Lions', 1],
-      ['Helpful Hunter', 1],
       ["Ajani's Pridemate", 1],
-      ['Prayer of Binding', 1],
-      ['Joust Through', 1],
+      ['Prideful Parent', 1],
+      ['Felidar Savior', 1],
       ['Claws Out', 1],
     ],
-    lands: [
-      ['Evolving Wilds', 1],
-      ['Plains', 8],
+    slots: [
+      [
+        { card: 'Arahbo, the First Fang', weight: 50 },
+        { card: 'Regal Caracal', weight: 50 },
+      ],
+      [
+        { card: 'Prayer of Binding', weight: 50 },
+        { card: 'Valorous Stance', weight: 50 },
+      ],
+      [
+        { card: 'Joust Through', weight: 50 },
+        { card: 'Deadly Riposte', weight: 50 },
+      ],
+      [
+        { card: 'Helpful Hunter', weight: 50 },
+        { card: 'Felidar Cub', weight: 50 },
+      ],
     ],
+    lands: [['Evolving Wilds', 1]],
   },
   {
     id: 'fdn-arena-drawing',
@@ -1971,22 +2167,33 @@ export const ARENA_FDN_PACKETS: Packet[] = [
     blurb: 'Draw two a turn and cash in',
     source: 'arena',
     spells: [
-      ['Homunculus Horde', 1],
-      ['Erudite Wizard', 1],
-      ['Refute', 1],
       ['Spectral Sailor', 1],
-      ['Arcane Epiphany', 1],
       ['Mischievous Mystic', 1],
       ['Clinquant Skymage', 1],
-      ['Storm Fleet Spy', 1],
-      ['Eaten by Piranhas', 1],
+      ['Erudite Wizard', 1],
       ['Strix Lookout', 1],
-      ['Think Twice', 1],
+      ['Arcane Epiphany', 1],
+      ['Eaten by Piranhas', 1],
     ],
-    lands: [
-      ['Evolving Wilds', 1],
-      ['Island', 8],
+    slots: [
+      [
+        { card: 'Homunculus Horde', weight: 50 },
+        { card: 'Arcanis the Omnipotent', weight: 50 },
+      ],
+      [
+        { card: 'Storm Fleet Spy', weight: 50 },
+        { card: 'Skyship Buccaneer', weight: 50 },
+      ],
+      [
+        { card: 'Refute', weight: 50 },
+        { card: 'Into the Roil', weight: 50 },
+      ],
+      [
+        { card: 'Think Twice', weight: 50 },
+        { card: 'Quick Study', weight: 50 },
+      ],
     ],
+    lands: [['Evolving Wilds', 1]],
   },
   {
     id: 'fdn-arena-zombies',
@@ -1996,22 +2203,34 @@ export const ARENA_FDN_PACKETS: Packet[] = [
     blurb: 'Zombies and deathtouch that drain',
     source: 'arena',
     spells: [
-      ['Zul Ashur, Lich Lord', 1],
       ['Maalfeld Twins', 1],
-      ['Soul-Shackled Zombie', 1],
-      ['Crow of Dark Tidings', 1],
-      ['Hungry Ghoul', 1],
-      ['Deadly Plot', 1],
-      ['Moment of Craving', 1],
-      ['Vampiric Rites', 1],
       ['Diregraf Ghoul', 1],
       ['Knight of Malice', 1],
       ['Vampire Gourmand', 1],
+      ['Crow of Dark Tidings', 1],
+      ['Hungry Ghoul', 1],
+      ['Vampiric Rites', 1],
     ],
-    lands: [
-      ['Evolving Wilds', 1],
-      ['Swamp', 8],
+    slots: [
+      [
+        { card: 'Liliana, Dreadhorde General', weight: 20 },
+        { card: 'Zul Ashur, Lich Lord', weight: 40 },
+        { card: 'Midnight Reaper', weight: 40 },
+      ],
+      [
+        { card: 'Deadly Plot', weight: 50 },
+        { card: "Hero's Downfall", weight: 50 },
+      ],
+      [
+        { card: 'Soul-Shackled Zombie', weight: 50 },
+        { card: 'Crypt Feaster', weight: 50 },
+      ],
+      [
+        { card: 'Moment of Craving', weight: 50 },
+        { card: 'Fake Your Own Death', weight: 50 },
+      ],
     ],
+    lands: [['Evolving Wilds', 1]],
   },
   {
     id: 'fdn-arena-goblins',
@@ -2021,22 +2240,33 @@ export const ARENA_FDN_PACKETS: Packet[] = [
     blurb: 'A goblin horde and Impact Tremors',
     source: 'arena',
     spells: [
-      ['Dropkick Bomber', 1],
-      ['Dragon Fodder', 1],
-      ['Goblin Surprise', 1],
-      ['Impact Tremors', 1],
-      ['Goblin Negotiation', 1],
-      ['Goblin Oriflamme', 1],
-      ['Goblin Smuggler', 1],
       ['Volley Veteran', 1],
-      ['Sure Strike', 1],
       ['Fiery Annihilation', 1],
-      ['Obliterating Bolt', 1],
+      ['Goblin Surprise', 1],
+      ['Goblin Negotiation', 1],
+      ['Dragon Fodder', 1],
+      ['Goblin Oriflamme', 1],
+      ['Impact Tremors', 1],
     ],
-    lands: [
-      ['Evolving Wilds', 1],
-      ['Mountain', 8],
+    slots: [
+      [
+        { card: 'Dropkick Bomber', weight: 50 },
+        { card: 'Krenko, Mob Boss', weight: 50 },
+      ],
+      [
+        { card: 'Obliterating Bolt', weight: 50 },
+        { card: 'Abrade', weight: 50 },
+      ],
+      [
+        { card: 'Goblin Smuggler', weight: 50 },
+        { card: 'Raging Redcap', weight: 50 },
+      ],
+      [
+        { card: 'Sure Strike', weight: 50 },
+        { card: 'Fanatical Firebrand', weight: 50 },
+      ],
     ],
+    lands: [['Evolving Wilds', 1]],
   },
   {
     id: 'fdn-arena-hares',
@@ -2046,15 +2276,29 @@ export const ARENA_FDN_PACKETS: Packet[] = [
     blurb: 'Seven Hare Apparents',
     source: 'arena',
     spells: [
-      ['Hare Apparent', 7],
-      ['Crusader of Odric', 1],
-      ["Syr Alin, the Lion's Claw", 1],
-      ['Make a Stand', 1],
-      ['Make Your Move', 1],
       ['Dauntless Veteran', 1],
-      ['Skyknight Squire', 1],
+      ['Hare Apparent', 7],
+      ['Make a Stand', 1],
     ],
-    lands: [['Plains', 7]],
+    slots: [
+      [
+        { card: 'Skyknight Squire', weight: 50 },
+        { card: 'Raise the Past', weight: 50 },
+      ],
+      [
+        { card: "Syr Alin, the Lion's Claw", weight: 50 },
+        { card: 'Mischievous Pup', weight: 50 },
+      ],
+      [
+        { card: 'Crusader of Odric', weight: 50 },
+        { card: 'Squad Rallier', weight: 50 },
+      ],
+      [
+        { card: 'Make Your Move', weight: 50 },
+        { card: 'Banishing Light', weight: 50 },
+      ],
+    ],
+    lands: [],
   },
   {
     id: 'fdn-arena-elves',
@@ -2064,19 +2308,34 @@ export const ARENA_FDN_PACKETS: Packet[] = [
     blurb: 'An elf lord and elves that fight',
     source: 'arena',
     spells: [
-      ['Elvish Archdruid', 1],
-      ['Dwynen, Gilt-Leaf Daen', 1],
       ['Reclamation Sage', 1],
       ["Dwynen's Elite", 1],
       ['Llanowar Elves', 1],
-      ['Beast-Kin Ranger', 1],
-      ['Elfsworn Giant', 1],
       ['Druid of the Cowl', 1],
-      ['Felling Blow', 1],
-      ['Bite Down', 1],
-      ['Snakeskin Veil', 1],
       ['Thornweald Archer', 1],
+      ['Snakeskin Veil', 1],
+      ['Bite Down', 1],
+      ['Felling Blow', 1],
     ],
+    slots: [
+      [
+        { card: 'Elvish Archdruid', weight: 50 },
+        { card: 'Preposterous Proportions', weight: 50 },
+      ],
+      [
+        { card: 'Dwynen, Gilt-Leaf Daen', weight: 50 },
+        { card: 'Imperious Perfect', weight: 50 },
+      ],
+      [
+        { card: 'Beast-Kin Ranger', weight: 50 },
+        { card: 'Wildheart Invoker', weight: 50 },
+      ],
+      [
+        { card: 'Elfsworn Giant', weight: 50 },
+        { card: 'Tajuru Pathwarden', weight: 50 },
+      ],
+    ],
+    lands: [],
   },
 ];
 

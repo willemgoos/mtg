@@ -39,17 +39,29 @@ interface ArenaPacket {
 const sort = (l: [string, number][]) => [...l].sort((a, b) => a[0].localeCompare(b[0]));
 const total = (cards: [string, number][]) => cards.reduce((n, [, k]) => n + k, 0);
 
-/** Arena packets equal the scraped lists: fixed cards and lands, slots with weights adding to 100, the card count. */
-function expectArenaLists(packets: Packet[], tag: string) {
+/**
+ * Arena packets equal the scraped lists: fixed cards and lands, slots with weights adding to 100, the card count.
+ * `extraLand`: a land the list leaves out may be added (Bloomburrow's gain-lands, from Wizards' announcement).
+ */
+function expectArenaLists(
+  packets: Packet[],
+  tag: string,
+  names: Record<string, string> = {},
+  extraLand = false,
+) {
   const lists: ArenaPacket[] = JSON.parse(
     readFileSync(new URL('../scripts/data/arena-jumpin-packets.json', import.meta.url), 'utf8'),
   ).filter((x: ArenaPacket) => x.set.includes(`(${tag})`));
   expect(packets.length).toBe(lists.length);
   for (const p of packets) {
-    const list = lists.find((x) => x.name === p.name)!;
+    const list = lists.find((x) => x.name === (names[p.name] ?? p.name))!;
     expect(list, p.name).toBeDefined();
     expect(p.source).toBe('arena');
-    expect(sort([...p.spells, ...(p.lands ?? [])]), p.name).toEqual(sort(list.fixed));
+    const listed = new Set(list.fixed.map(([n]) => n));
+    const extra = extraLand ? (p.lands ?? []).filter(([n]) => !listed.has(n)) : [];
+    expect(extra.length, p.name).toBeLessThanOrEqual(1);
+    const lands = (p.lands ?? []).filter((l) => !extra.includes(l));
+    expect(sort([...p.spells, ...lands]), p.name).toEqual(sort(list.fixed));
     expect(
       p.slots?.map((s) => s.map((a) => [a.weight, a.card])),
       p.name,
@@ -59,8 +71,10 @@ function expectArenaLists(packets: Packet[], tag: string) {
         s.reduce((n, a) => n + a.weight, 0),
         p.name,
       ).toBe(100);
-    expect(total(packetCards(p)), p.name).toBe(list.count);
-    expect(total(packetCards(p, dealPacket(p, Math.random))), p.name).toBe(list.count);
+    expect(total(packetCards(p)), p.name).toBe(list.count + total(extra));
+    expect(total(packetCards(p, dealPacket(p, Math.random))), p.name).toBe(
+      list.count + total(extra),
+    );
   }
 }
 
@@ -350,33 +364,29 @@ describe('Jump In packets', () => {
     expect(jumpInPackets(d.id)?.map((p) => p.name)).toEqual(['Ten Rings', 'Cats']);
   });
 
-  it("has Arena's ten Bloomburrow packets; two-colour ones bring both colours of land", () => {
+  it("has Arena's ten Bloomburrow packets, equal to the scraped lists with their random slots", () => {
     expect(ARENA_BLB_PACKETS).toHaveLength(10);
+    expectArenaLists(ARENA_BLB_PACKETS, 'BLB', {}, true);
     const d = deckById(jumpInId('blb-arena-bats', 'blb-arena-rats'));
     expect(d.colors).toEqual(['W', 'B']);
     expect(d.set).toBe('blb');
     expect(deckIds(d)).toHaveLength(40);
-    expect(d.cards).toEqual(
-      expect.arrayContaining([
-        ['Scoured Barrens', 1],
-        ['Plains', 4],
-        ['Swamp', 11],
-      ]),
-    );
+    // The packets' own land, then basics of both colours for the top-up to 40.
+    const counts = new Map(d.cards);
+    expect(counts.get('Scoured Barrens')).toBe(1);
+    expect(counts.get('Plains')).toBeGreaterThan(0);
+    expect(counts.get('Swamp')).toBeGreaterThan(0);
   });
 
-  it("has Arena's eleven Foundations packets, each with its own land", () => {
+  it("has Arena's eleven Foundations packets, equal to the scraped lists with their random slots", () => {
     expect(ARENA_FDN_PACKETS).toHaveLength(11);
+    expectArenaLists(ARENA_FDN_PACKETS, 'FDN', { Goblins: 'Goblin', Zombies: 'Zombie' });
     const d = deckById(jumpInId('fdn-arena-flyers', 'fdn-arena-hares'));
     expect(d.set).toBeUndefined();
     expect(deckIds(d)).toHaveLength(40);
-    expect(d.cards).toEqual(
-      expect.arrayContaining([
-        ['Hare Apparent', 7],
-        ['Azorius Guildgate', 1],
-        ['Plains', 11],
-        ['Island', 4],
-      ]),
-    );
+    const counts = new Map(d.cards);
+    expect(counts.get('Azorius Guildgate')).toBe(1);
+    expect(counts.get('Plains')).toBeGreaterThan(0);
+    expect(counts.get('Island')).toBeGreaterThan(0);
   });
 });

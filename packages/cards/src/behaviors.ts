@@ -50,6 +50,7 @@ import {
 import { FOUNDATIONS_BATCH_BEHAVIORS } from './foundations-batch.ts';
 import { FOUNDATIONS_DRAFT_BEHAVIORS } from './foundations-draft.ts';
 import { FOUNDATIONS_JUMP_IN_BEHAVIORS } from './foundations-jumpin.ts';
+import { JUMP_IN_SLOT_BEHAVIORS } from './jumpin-slots.ts';
 
 // Helpers for the common shapes.
 const t0 = { target: 0 } as const;
@@ -176,6 +177,7 @@ const dualLandBehaviors = (): Record<string, Behavior> =>
 export const BEHAVIORS: Record<string, Behavior> = {
   ...FOUNDATIONS_BATCH_BEHAVIORS,
   ...FOUNDATIONS_JUMP_IN_BEHAVIORS,
+  ...JUMP_IN_SLOT_BEHAVIORS,
   ...FOUNDATIONS_DRAFT_BEHAVIORS,
   ...BLOOMBURROW_BEHAVIORS,
   ...MARVEL_BEHAVIORS,

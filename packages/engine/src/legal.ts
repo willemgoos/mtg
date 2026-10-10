@@ -54,6 +54,8 @@ import {
   crewWays,
   escalateCrew,
   artifactsToSacrifice,
+  canCollectEvidence,
+  evidenceOptions,
   graveyardCostCard,
   graveyardCostOptions,
   countersYouControl,
@@ -997,6 +999,12 @@ function priorityActions(
         !graveyardCostCard(ctx, player, a.cost.exileFromGraveyard, source)
       )
         return;
+      // Jump In slots (Polygraph Orb): collect evidence.
+      if (
+        a.cost.collectEvidence &&
+        !canCollectEvidence(ctx, player, a.cost.collectEvidence, source)
+      )
+        return;
       // Strixhaven (13c): Uvilda exiles an instant or sorcery from hand.
       const discardFilter = a.cost.discardFilter ?? {};
       const discards = a.cost.exileRefine
@@ -1577,10 +1585,13 @@ export function getLegalActions(ctx: Ctx, player: PlayerId): Action[] {
       ];
     case 'forageExile':
       // Reality Fracture (17a fixes): Gallia, Tragic Host: a cost with a filter takes only matching cards.
+      // Jump In slots (Polygraph Orb): collect evidence takes cards with a mana value.
       return (
-        d.filter && d.source !== undefined
-          ? graveyardCostOptions(ctx, player, d.filter, d.source)
-          : s.players[player].graveyard
+        d.evidence !== undefined
+          ? evidenceOptions(ctx, player, d.source)
+          : d.filter && d.source !== undefined
+            ? graveyardCostOptions(ctx, player, d.filter, d.source)
+            : s.players[player].graveyard
       ).map((card) => ({ type: 'chooseCard', player, card }) as const);
     case 'punisher':
       return [
