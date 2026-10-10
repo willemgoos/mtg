@@ -58,6 +58,11 @@ const KEYWORDS: Record<string, Keyword> = {
 
 /** Scryfall "keywords" that are really ability words or triggers we model as abilities. */
 export const KEYWORDS_AS_ABILITIES = new Set([
+  // Tarkir: Dragonstorm (19a): the rules live in the behaviour (`mobilize()`, `endure()`, `harmonize()`, `mayBeholdDragon()`; Flurry
+  // and Renew are named abilities, "Flurry —", "Renew —").
+  'Mobilize',
+  'Endure',
+  'Harmonize',
   // Lorwyn Eclipsed (18a): the cost or effect lives in the behaviour (`evoke`, `conspire`, `Amount` `vivid`).
   'Evoke',
   'Conspire',
@@ -306,6 +311,10 @@ export function mapKeywords(scryfall: readonly string[], oracle = ''): Keyword[]
     if (k === 'Protection') {
       // Alseid of Life's Bounty (15b, w) only grants it: the keyword is in its rules text, not a printed one.
       if (/protection from blue/i.test(oracle)) out.push('protectionBlue');
+      // Tarkir: Dragonstorm (19a): Ureni, the Song Unending, "Flying, protection from white and from black" (a printed line).
+      if (/^(?:[^.\n]*, )?protection from white/im.test(oracle)) out.push('protectionWhite');
+      if (/^(?:[^.\n]*, )?protection from white and from black/im.test(oracle))
+        out.push('protectionBlack');
       continue;
     }
     if (k === 'Ward') {

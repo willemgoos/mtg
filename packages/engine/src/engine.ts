@@ -42,6 +42,7 @@ import {
   answerForageExile,
   answerConspire,
   answerSpellTargets,
+  answerAbilityTargets,
   answerBeholdType,
   answerPayCounters,
   answerBeholdCreature,
@@ -363,6 +364,7 @@ function apply(ctx: Ctx, action: Action): void {
           evoked: action.evoked,
           conspire: action.conspire,
           beholdCards: action.beholdCards,
+          harmonizeTap: action.harmonizeTap, // Tarkir: Dragonstorm (19a)
         },
         action.payWith,
       );
@@ -430,6 +432,7 @@ function apply(ctx: Ctx, action: Action): void {
     case 'chooseTargets': {
       // Lorwyn Eclipsed (18b, white): a spell's "any number of target ...", one at a time.
       if (d.kind === 'spellTargets') return answerSpellTargets(ctx, action.targets);
+      if (d.kind === 'abilityTargets') return answerAbilityTargets(ctx, action.targets); // Tarkir: Dragonstorm (19a)
       if (d.kind !== 'chooseTriggerTargets') throw new IllegalActionError(action);
       // Marvel Super Heroes Jumpstart (Blink): one more "any number" target; the decision stays.
       if (d.picked && action.targets.length === d.picked.length + 1) {

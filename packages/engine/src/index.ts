@@ -30,3 +30,4 @@ export { playRandomGame } from './random-play.ts';
 export type { RandomGameResult } from './random-play.ts';
 export { HIDDEN_CARD, redactFor, redactEvents, determinize } from './hidden.ts';
 export { combineSpells } from './spells.ts';
+export { variantIdOf } from './tdm-19a.ts'; // Tarkir: Dragonstorm (19a)

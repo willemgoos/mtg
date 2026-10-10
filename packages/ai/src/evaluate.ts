@@ -87,6 +87,14 @@ function precombatPayoffs(s: GameState, db: CardDb, me: PlayerId): number {
   }).length;
 }
 
+/** Tarkir: Dragonstorm (19a): the share of a card an Omen spell keeps by going back into the library. */
+const OMEN_RETURN = 0.75;
+
+/** Omen spells `p` has cast this turn. */
+function omensCast(s: GameState, db: CardDb, p: PlayerId): number {
+  return (s.turn.castDefs?.[p] ?? []).filter((id) => !!db.get(id)?.subtypes.includes('Omen')).length;
+}
+
 /** Cards `p` will get to cast later: suspended, rebound, or exiled and castable by them. */
 function laterCards(s: GameState, p: PlayerId): number {
   let n = 0;
@@ -142,6 +150,9 @@ export function evaluate(s: GameState, db: CardDb, me: PlayerId): number {
   if (s.monarch) v += s.monarch === me ? WEIGHTS.monarch : -WEIGHTS.monarch;
   // The Fantastic Four: before combat, a noncreature spell switches on "at the beginning of combat" payoffs.
   v += WEIGHTS.combatPayoff * precombatPayoffs(s, db, me);
+  // Tarkir: Dragonstorm (19a): an Omen cast this turn is shuffled back into its owner's library, so it isn't a card lost
+  // (it will be drawn again as a creature): worth most of the card it left the hand as.
+  v += OMEN_RETURN * CARD_IN_HAND * (omensCast(s, db, me) - omensCast(s, db, opp));
   // Cards still to come: rebound and suspend, free or stolen cards in exile.
   v += WEIGHTS.laterCard * CARD_IN_HAND * (laterCards(s, me) - laterCards(s, opp));
 

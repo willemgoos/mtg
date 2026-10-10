@@ -14,6 +14,7 @@ import { STX_BOOSTER_LIST } from './stx/booster-list.ts';
 import { SOA_ARCHIVE_LIST } from './sos/archive-list.ts';
 import { STA_ARCHIVE_LIST } from './stx/archive-list.ts';
 import { bestowAura } from './soc/cards-15b-w.ts';
+import { enterChoiceVariants, withEnterChoice } from './tdm-vocab.ts';
 
 /** Full-art basic land images by set, then basic land name (scripts/fetch-basic-art.ts). */
 export const BASIC_ART: Record<string, Record<string, string[]>> = basicArt;
@@ -172,8 +173,12 @@ function withBackIdentity(c: CardDefinition): CardDefinition {
   return { ...c, colorIdentity: (['W', 'U', 'B', 'R', 'G'] as const).filter((x) => ids.has(x)) };
 }
 
+// Tarkir: Dragonstorm (19a): the Sieges ("As this enters, choose Abzan or Mardu") have a hidden definition for each choice.
+const ENTER_CHOICE_VARIANTS = BUILT.flatMap(enterChoiceVariants);
+
 export const CARDS: readonly CardDefinition[] = [
-  ...BUILT.map(withBackIdentity),
+  ...BUILT.map(withBackIdentity).map(withEnterChoice),
+  ...ENTER_CHOICE_VARIANTS,
   ...TOKENS,
   ...BESTOW_AURAS,
 ];
@@ -183,6 +188,11 @@ export const cardDb: CardDb = new Map(CARDS.map((c) => [c.id, c]));
 /** Scryfall data by card id, for image hotlinking in the UI. */
 export const scryfallById: ReadonlyMap<CardDefId, ScryfallCard> = new Map([
   ...SCRYFALL.map((sc): [CardDefId, ScryfallCard] => [slug(sc.name), sc]),
+  // Tarkir: Dragonstorm (19a): a Siege that has made its choice shows its card.
+  ...ENTER_CHOICE_VARIANTS.flatMap((c): [CardDefId, ScryfallCard][] => {
+    const sc = SCRYFALL.find((x) => slug(x.name) === c.variantOf);
+    return sc ? [[c.id, sc]] : [];
+  }),
   // A bestowed creature shows its card.
   ...BESTOW_AURAS.flatMap((c): [CardDefId, ScryfallCard][] => {
     const sc = SCRYFALL.find((x) => slug(x.name) === c.bestowFront);

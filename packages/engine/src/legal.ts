@@ -32,6 +32,7 @@ import {
   hasConspire,
   hasConvoke,
 } from './ecl-18a.ts';
+import { cantBeSacrificed, harmonizeTaps, isHarmonizeCast } from './tdm-19a.ts';
 import {
   abilityTags,
   artifactHelpers,
@@ -515,7 +516,7 @@ function priorityActions(
     // {X}: every affordable value (up to 10).
     // Secrets of Strixhaven (14b): Molten Note's flashback cost has no {X}.
     const xsAll =
-      d.manaCost.x && !(zone === 'graveyard' && d.flashback)
+      d.manaCost.x && !(zone === 'graveyard' && d.flashback && !d.harmonize)
         ? Array.from(
             { length: Math.min(10, Math.floor(pool.length / d.manaCost.x)) + 1 },
             (_, x) => x,
@@ -686,7 +687,16 @@ function priorityActions(
             const base = castCost(ctx, player, card, choice);
             // Strixhaven (13b): Killian also lowers the cost by what the spell targets.
             const targetDiscount = !!d.costReductionIfTarget || hasTargetCostReduction(ctx, player);
-            if (!canPayFrom(base, pool) && !targetDiscount) continue;
+            // Tarkir: Dragonstorm (19a): harmonize, a tapped creature may make the cost payable.
+            const harmonizing = isHarmonizeCast(ctx, card, via);
+            const hTaps: (ObjectId | undefined)[] = harmonizing
+              ? [undefined, ...harmonizeTaps(ctx, player).filter((t) => {
+                  const less = castCost(ctx, player, card, { ...choice, harmonizeTap: t });
+                  return less.generic < base.generic;
+                })]
+              : [undefined];
+            if (!canPayFrom(base, pool) && !targetDiscount && !(harmonizing && hTaps.length > 1))
+              continue;
             const extra = {
               ...(v.mode !== undefined ? { mode: v.mode } : {}),
               ...(v.kicked ? { kicked: true } : {}),
@@ -721,7 +731,7 @@ function priorityActions(
                 const ward = wardCost(ctx, player, targets);
                 // Dire Downdraft costs less with some targets.
                 const cost = targetDiscount ? castCost(ctx, player, card, choice, targets) : base;
-                if ((ward.generic || targetDiscount) && !canPayFrom(addCosts(cost, ward), pool))
+                if ((ward.generic || targetDiscount) && !harmonizing && !canPayFrom(addCosts(cost, ward), pool))
                   continue;
                 if (wardLife(ctx, player, targets) > s.players[player].life) continue;
                 if (!wardPayable(ctx, player, targets, zone === 'hand' ? 1 : 0)) continue;
@@ -751,9 +761,17 @@ function priorityActions(
                           // Lorwyn Eclipsed (18a): a card beheld and exiled isn't tapped for mana.
                           ...(v.beholdExile ? [beholdCard] : []),
                         ];
-                        if (spent.some((id) => id && pool.some((p) => p.id === id))) {
-                          const rest = pool.filter((p) => !spent.includes(p.id));
-                          if (!canPayFrom(addCosts(cost, ward), rest)) continue;
+                       for (const hTap of hTaps) {
+                        // Tarkir: Dragonstorm (19a): harmonize, the creature tapped isn't tapped for mana too.
+                        const costH = hTap
+                          ? castCost(ctx, player, card, { ...choice, harmonizeTap: hTap }, targets)
+                          : cost;
+                        if (
+                          harmonizing ||
+                          spent.some((id) => id && pool.some((p) => p.id === id))
+                        ) {
+                          const rest = pool.filter((p) => !spent.includes(p.id) && p.id !== hTap);
+                          if (!canPayFrom(addCosts(costH, ward), rest)) continue;
                         }
                         const action: Action = {
                           type: 'castSpell',
@@ -761,6 +779,7 @@ function priorityActions(
                           card,
                           targets,
                           ...extra,
+                          ...(hTap ? { harmonizeTap: hTap } : {}),
                           ...(sacrifice ? { sacrifice } : {}),
                           ...(forage ? { forage } : {}),
                           ...(discard ? { discard } : {}),
@@ -778,6 +797,7 @@ function priorityActions(
                           )
                         )
                           out.push({ ...action, conspire: true });
+                       }
                       }
               }
             }
@@ -951,6 +971,8 @@ function priorityActions(
       // Lorwyn Eclipsed (18b, white): Kithkeeper.
       if (a.cost.tapCreatures && creaturesToTap(ctx, player, undefined).length < a.cost.tapCreatures)
         return;
+      // Tarkir: Dragonstorm (19a): Zurgo, Thunder's Decree, a token that can't be sacrificed.
+      if (a.cost.sacrificeSelf && cantBeSacrificed(ctx, source)) return;
       if (a.cost.crew && !crewFor(ctx, player, source, a.cost.crew)) return;
       if (
         a.cost.sacrificeArtifacts &&
@@ -985,20 +1007,24 @@ function priorityActions(
       if (rc && (obj(ctx, source).counters?.[rc.name] ?? 0) < rc.count) return;
       const forages = a.cost.forage ? forageChoices(ctx, player) : [undefined];
       if (forages.length === 0) return;
-      const sacrificeable = a.cost.sacrificePermanent
-        ? s.battlefield.filter(
-            (id) =>
-              obj(ctx, id).controller === player &&
-              matchesFilter(ctx, id, a.cost.sacrificePermanent, source),
-          )
-        : a.cost.sacrificeFilter
-          ? creatures.filter((id) => matchesFilter(ctx, id, a.cost.sacrificeFilter, source))
-          : creatures;
+      const sacrificeable = (
+        a.cost.sacrificePermanent
+          ? s.battlefield.filter(
+              (id) =>
+                obj(ctx, id).controller === player &&
+                matchesFilter(ctx, id, a.cost.sacrificePermanent, source),
+            )
+          : a.cost.sacrificeFilter
+            ? creatures.filter((id) => matchesFilter(ctx, id, a.cost.sacrificeFilter, source))
+            : creatures
+      ).filter((id) => !cantBeSacrificed(ctx, id)); // Tarkir: Dragonstorm (19a)
       const sacrifices =
         a.cost.sacrificeCreature || a.cost.sacrificePermanent ? sacrificeable : [undefined];
       const firstOfAbility = out.length;
       for (const sacrifice of sacrifices) {
-        for (const targets of combosFor(a.targets, source, sacrifice)) {
+        // Tarkir: Dragonstorm (19a): a trailing "X target creatures" spec is picked afterwards, one at a time.
+        const specs = a.targets[a.targets.length - 1]?.xTargets ? a.targets.slice(0, -1) : a.targets;
+        for (const targets of combosFor(specs, source, sacrifice)) {
           const m = abilityManaCost(ctx, source, a, targets);
           if (m !== mana && !canPayFrom(m, usable)) continue;
           const ward = wardCost(ctx, player, targets);
@@ -1140,10 +1166,19 @@ function priorityActions(
         for (const base of bases) for (const blight of can) out.push({ ...base, blight } as Action);
       }
       // Marvel Super Heroes: {X} in an ability's cost (Bruce Banner): every affordable X up to 10.
+      // Tarkir: Dragonstorm (19a): with "X target creatures", X is at least 1 and no more than there are targets for.
+      const xSpec = a.targets[a.targets.length - 1]?.xTargets ? a.targets[a.targets.length - 1] : undefined;
       if (mana?.x)
-        for (const base of out.slice(firstOfAbility))
-          for (let x = 1; x <= 10; x++) {
+        for (const base of xSpec ? out.splice(firstOfAbility) : out.slice(firstOfAbility))
+          for (
+            let x = 1;
+            x <=
+            (xSpec ? Math.min(10, targetCandidates(ctx, xSpec, { controller: player, sourceId: source }).length) : 10);
+            x++
+          ) {
             if (!canPayFrom({ ...mana, generic: mana.generic + x * mana.x }, usable)) break;
+            // Tarkir: Dragonstorm (19a): Krumar Initiate, "Pay X life".
+            if (a.cost.lifeX && x > ps.life) break;
             out.push({ ...base, x } as Action);
           }
     });
@@ -1452,6 +1487,28 @@ export function getLegalActions(ctx: Ctx, player: PlayerId): Action[] {
       for (const t of targetCandidates(ctx, spec, { controller: player, sourceId: d.spell }))
         if (!taken.has(key(t)) && payable([...d.picked, t]))
           out.push({ type: 'chooseTargets', player, targets: [...d.picked, t] });
+      return out;
+    }
+    // Tarkir: Dragonstorm (19a): "X target creatures" of an activated ability, one at a time (each a different one).
+    case 'abilityTargets': {
+      const item = s.stack.find((x) => x.kind === 'ability' && x.id === d.ability);
+      const spec =
+        item?.kind === 'ability' ? item.activated?.targets[item.activated.targets.length - 1] : undefined;
+      if (item?.kind !== 'ability' || !spec) return [{ type: 'chooseTargets', player, targets: d.picked }];
+      const pool = manaSources(ctx, player);
+      const key = (t: TargetChoice) => ('object' in t ? t.object.id : t.player);
+      const taken = new Set(d.picked.map(key));
+      const out: Action[] = [];
+      for (const t of targetCandidates(ctx, spec, { controller: player, sourceId: item.source.id }))
+        if (
+          !taken.has(key(t)) &&
+          canPayFrom(wardCost(ctx, player, [...d.picked, t]), pool) &&
+          wardPayable(ctx, player, [...d.picked, t]) &&
+          wardLife(ctx, player, [...d.picked, t]) <= s.players[player].life
+        )
+          out.push({ type: 'chooseTargets', player, targets: [...d.picked, t] });
+      // No candidate left that can be paid for: carry on with the targets so far.
+      if (out.length === 0) out.push({ type: 'chooseTargets', player, targets: d.picked });
       return out;
     }
     // Lorwyn Eclipsed (18a): conspire, the creatures to tap one at a time.

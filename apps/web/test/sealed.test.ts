@@ -219,6 +219,13 @@ describe('sealed opponents', () => {
     expect(colorsName(['W', 'U'])).toBe('Azorius');
     expect(colorsName(['U', 'W'])).toBe('Azorius');
     expect(colorsName(['R'])).toBe('Red');
+    // Tarkir: Dragonstorm (19a): three colours are a clan or shard, in any order.
+    expect(colorsName(['G', 'W', 'B'])).toBe('Abzan');
+    expect(colorsName(['R', 'U', 'W'])).toBe('Jeskai');
+    expect(colorsName(['B', 'R', 'W'])).toBe('Mardu');
+    expect(colorsName(['G', 'U', 'B'])).toBe('Sultai');
+    expect(colorsName(['U', 'R', 'G'])).toBe('Temur');
+    expect(colorsName(['W', 'U', 'B', 'R'])).toBe('Four colours');
     expect(colorsName([])).toBe('Colourless');
   });
 
