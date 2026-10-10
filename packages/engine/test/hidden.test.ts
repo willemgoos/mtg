@@ -68,6 +68,19 @@ describe('hidden information', () => {
     expect(determinize(redactFor(s, 'p1'), decks, 42)).toEqual(d);
   });
 
+  it('determinize accepts cards from outside the decklist (a Lesson fetched by Learn)', () => {
+    const v = redactFor(newGame(), 'p1');
+    // p1 shows a card that isn't in the list; p2 has one hidden card more than the list accounts for.
+    v.objects[v.players.p1.hand[0]!]!.defId = 'shock';
+    const extra = { ...v.objects[v.players.p2.hand[0]!]!, id: 'o999' };
+    v.objects.o999 = extra;
+    v.players.p2.hand.push('o999');
+    const d = determinize(v, decks, 5);
+    expect(d.objects[v.players.p1.hand[0]!]!.defId).toBe('shock');
+    for (const o of Object.values(d.objects)) expect(o.defId).not.toBe(HIDDEN_CARD);
+    expect(decks.p2).toContain(d.objects.o999!.defId);
+  });
+
   it('a determinized mid-game state can be played to completion', () => {
     const r = playRandomGame(engine, newGame(9), 1, { maxActions: 150 });
     const d = determinize(redactFor(r.final, 'p2'), decks, 7);

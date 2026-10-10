@@ -159,6 +159,40 @@ export function scoreAction(
   return evaluate(simulate(engine, s, action, horizon, depth), engine.db, me);
 }
 
+/** At most `cap` of `options`, evenly spread (the first included). */
+export function evenSample<T>(options: readonly T[], cap: number): readonly T[] {
+  if (options.length <= cap) return options;
+  return Array.from({ length: cap }, (_, k) => options[Math.floor((k * options.length) / cap)]!);
+}
+
+/**
+ * Casts and activations with at most `cap` options per card or ability, evenly spread. Crackle with Power's "up to X
+ * targets" can offer thousands of target splits, and each option is a simulation.
+ */
+export function capPerSource(legal: readonly Action[], cap = 48): Action[] {
+  if (legal.length <= cap) return [...legal];
+  const groups = new Map<string, Action[]>();
+  for (const a of legal) {
+    const key =
+      a.type === 'castSpell'
+        ? `c:${a.card}`
+        : a.type === 'activateAbility'
+          ? `a:${a.source}:${a.abilityIndex}`
+          : undefined;
+    if (!key) continue;
+    if (groups.has(key)) groups.get(key)!.push(a);
+    else groups.set(key, [a]);
+  }
+  const dropped = new Set<Action>();
+  for (const g of groups.values()) {
+    if (g.length <= cap) continue;
+    const kept = new Set(evenSample(g, cap));
+    for (const a of g) if (!kept.has(a)) dropped.add(a);
+  }
+  // Order kept: ties go to the earliest option.
+  return dropped.size ? legal.filter((a) => !dropped.has(a)) : [...legal];
+}
+
 /** The option with the best evaluation for `me` (first option when too deep). */
 export function bestByEvaluation(
   engine: Engine,
@@ -172,12 +206,7 @@ export function bestByEvaluation(
   let best = options[0]!;
   let bestScore = -Infinity;
   // A free cast of Magma Opus has tens of thousands of target splits: score an even sample (the first option included).
-  const cap = depth > 0 ? 12 : 48;
-  const sample =
-    options.length > cap
-      ? Array.from({ length: cap }, (_, k) => options[Math.floor((k * options.length) / cap)]!)
-      : options;
-  for (const a of sample) {
+  for (const a of evenSample(options, depth > 0 ? 12 : 48)) {
     const v = scoreAction(engine, s, a, me, horizon, depth);
     if (v > bestScore) {
       bestScore = v;

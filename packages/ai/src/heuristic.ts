@@ -35,6 +35,7 @@ import {
   scoreAction,
   settle,
   bestByEvaluation,
+  capPerSource,
 } from './simulate.ts';
 import { type Bot, other, viewEngine } from './view.ts';
 
@@ -119,6 +120,7 @@ export function createHeuristicBot(db: CardDb, name = 'heuristic'): Bot {
         case 'searchLibrary':
           return chooseSearch(engine, view, me, legal);
         case 'sacrifice':
+        case 'sacrificeSeveral': // one at a time, so the least valuable each time
           return chooseSacrifice(engine, view, legal);
         case 'wardSacrifice':
           return chooseWardSacrifice(engine, view, legal);
@@ -290,7 +292,7 @@ function choosePriorityAction(
   const beforeOurAttack =
     view.turn.activePlayer === me &&
     (view.turn.step === 'main1' || view.turn.step === 'beginCombat');
-  const candidates = legal.filter(
+  const candidates = capPerSource(legal).filter(
     (a) =>
       !isJaceTokenAbility(engine, view, a, 0) && // the surveil is a rule (chooseJaceSurveil), not a score
       // Tarkir: Dragonstorm (19a): harmonize taps a creature, which the evaluation can't see: never before our own attack.

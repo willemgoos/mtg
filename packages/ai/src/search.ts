@@ -15,7 +15,7 @@ import {
 } from '@mtg/engine';
 import { evaluate } from './evaluate.ts';
 import { createHeuristicBot, planAttacks, planBlocks, planWalkerAttacks } from './heuristic.ts';
-import { type Block, inCombat, quickBlocks, scoreAction } from './simulate.ts';
+import { type Block, capPerSource, inCombat, quickBlocks, scoreAction } from './simulate.ts';
 import { type Bot, other, viewEngine } from './view.ts';
 
 export interface SearchOptions {
@@ -126,6 +126,7 @@ export function createSearchBot(
 
   /** Casts/activations, keeping the best few target choices per source. */
   function priorityArms(v: GameState, me: PlayerId, legal: Action[]): Arm[] {
+    legal = capPerSource(legal);
     const pass = legal.find((a) => a.type === 'passPriority')!;
     const groups = new Map<string, Action[]>();
     for (const a of legal) {
