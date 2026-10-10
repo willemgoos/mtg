@@ -74,6 +74,7 @@ import {
   removeCounterKinds,
 } from './ecl-18a.ts';
 import { firstEquipFree, noteEquipActivation } from './hob-white-effects.ts'; // The Hobbit (20b white)
+import { isLegendaryNow } from './ltr-black-effects.ts'; // Lord of the Rings (21b black)
 import { checkCondition, triggeredAbility } from './triggers.ts';
 import { givePriority } from './turn.ts';
 import type {
@@ -702,6 +703,7 @@ export function castSpell(
   // Final Fantasy (11b): "Kicker—Return a land you control to its owner's hand".
   // Strixhaven (13b): the sacrificed creature's power (Tend the Pests).
   const sacrificedPower = choice.sacrifice ? power(ctx, choice.sacrifice) : undefined;
+  const sacrificedLegendary = !!choice.sacrifice && isLegendaryNow(ctx, choice.sacrifice); // Lord of the Rings (21b black)
   if (choice.sacrifice && choice.kicked && d.kicker?.returnLand)
     moveObject(ctx, choice.sacrifice, 'hand');
   else if (choice.sacrifice) sacrificePermanent(ctx, choice.sacrifice);
@@ -729,6 +731,7 @@ export function castSpell(
     ...(choice.x ? { x: choice.x } : {}),
     ...(exiledValue ? { x: exiledValue } : {}),
     ...(sacrificedPower !== undefined ? { lkiPower: sacrificedPower } : {}),
+    ...(sacrificedLegendary ? { lkiLegendary: true } : {}), // Lord of the Rings (21b black)
     ...(choice.paws ? { paws: choice.paws } : {}),
     ...(v.finality ? { finality: true } : {}),
     ...(choice.copyOf ? { copyOf: choice.copyOf } : {}),
@@ -1413,6 +1416,7 @@ export function activateAbility(
     else for (const id of options) moveObject(ctx, id, 'exile');
   }
   const sacrificedPower = sacrifice ? power(ctx, sacrifice) : undefined;
+  const sacrificedLegendary = !!sacrifice && isLegendaryNow(ctx, sacrifice); // Lord of the Rings (21b black)
   if (sacrifice) sacrificePermanent(ctx, sacrifice);
   changeLife(
     ctx,
@@ -1439,6 +1443,7 @@ export function activateAbility(
     controller: player,
     targets,
     ...(sacrificedPower !== undefined ? { lkiPower: sacrificedPower } : {}),
+    ...(sacrificedLegendary ? { lkiLegendary: true } : {}), // Lord of the Rings (21b black)
     // The ability itself, in case the source's abilities change (or it's gone).
     activated: a,
     ...(x !== undefined ? { x } : {}),
@@ -1640,6 +1645,7 @@ export function resolveTop(ctx: Ctx): boolean {
         targets,
         ...(item.x !== undefined ? { x: item.x } : {}),
         ...(item.lkiPower !== undefined ? { lkiPower: item.lkiPower } : {}),
+        ...(item.lkiLegendary ? { lkiLegendary: true } : {}), // Lord of the Rings (21b black)
       };
       const paused = {
         kind: 'spell' as const,
@@ -1776,6 +1782,7 @@ export function resolveTop(ctx: Ctx): boolean {
     sourceDefId: item.sourceDefId,
     targets,
     ...(item.lkiPower !== undefined ? { lkiPower: item.lkiPower } : {}),
+    ...(item.lkiLegendary ? { lkiLegendary: true } : {}), // Lord of the Rings (21b black)
     ...(item.x !== undefined ? { x: item.x } : {}),
     ...(item.subject ? { subject: item.subject } : {}),
     ...(item.subjects ? { subjects: item.subjects } : {}),

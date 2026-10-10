@@ -67,6 +67,7 @@ import { extraEntryCounters } from './tdm-misc-effects.ts';
 import { protectedFrom } from './brawl-15b-w-effects.ts';
 import { amassPut, amassStep, recruitSteps } from './hob-20a.ts';
 import { ringBearerOf, ringTemptSteps, runRingStep } from './ltr-21a.ts'; // Lord of the Rings (21a)
+import { opponentsCantGainLife, sacrificeAtEndOfCombat } from './ltr-black-effects.ts'; // Lord of the Rings (21b black)
 import { HOB_MULTICOLOUR_EXPANDERS } from './hob-multicolour-effects.ts'; // The Hobbit (20b multicolour)
 import { SOS_14B_C_CHOOSERS } from './sos-14b-c-effects.ts';
 import type {
@@ -666,6 +667,7 @@ export function changeLife(ctx: Ctx, player: PlayerId, delta: number): void {
 
 export function gainLife(ctx: Ctx, player: PlayerId, amount: number): void {
   if (amount <= 0 || ctx.s.players[player].lifeFrozen || lifeGainPrevented(ctx)) return;
+  if (opponentsCantGainLife(ctx, player)) return; // Lord of the Rings (21b black): Gríma Wormtongue
   // Caretakers: the affected player orders noncommuting life-gain replacements.
   const replacements: LifeGainReplacement[] = [];
   for (const id of ctx.s.battlefield) {
@@ -956,6 +958,7 @@ export function resolveAmount(ctx: Ctx, es: EffectSource, amount: Amount): numbe
     return o ? def(ctx, o.id).colors.length : 0;
   }
   if ('sacrificedPower' in amount) return Math.max(0, es.lkiPower ?? 0);
+  if ('sacrificedLegendary' in amount) return es.lkiLegendary ? 1 : 0; // Lord of the Rings (21b black)
   if ('x' in amount) {
     const x = es.x ?? (es.source && ctx.s.objects[es.source.id]?.xPaid) ?? 0;
     return x * (amount.times ?? 1) + (amount.plus ?? 0);
@@ -1271,13 +1274,14 @@ export function runEffects(
       e.kind === 'explore'
     ) {
       const lib = ctx.s.players[es.controller].library;
-      const { controller, source, sourceDefId, targets, lkiPower, subject, amount, chosen, x } = es;
+      const { controller, source, sourceDefId, targets, lkiPower, lkiLegendary, subject, amount, chosen, x } = es;
       const resume: PausedResolution = {
         controller,
         source,
         sourceDefId,
         targets,
         ...(lkiPower !== undefined ? { lkiPower } : {}),
+        ...(lkiLegendary ? { lkiLegendary } : {}), // Lord of the Rings (21b black)
         ...(subject ? { subject } : {}),
         ...(amount !== undefined ? { amount } : {}),
         ...(chosen ? { chosen } : {}),
@@ -2948,6 +2952,7 @@ function runEffectInner(ctx: Ctx, es: EffectSource, e: EffectDef): void {
             fromTurn: ctx.s.turn.number + (late ? 1 : 0),
           });
         }
+        if (e.sacrificeAt === 'endCombat') sacrificeAtEndOfCombat(ctx, es, t); // Lord of the Rings (21b black): Mordor Trebuchet
         if (e.attacking && ctx.s.combat) {
           // "Tapped and attacking": attacking the same player, never declared (no attack triggers).
           t.tapped = true;
@@ -3888,6 +3893,7 @@ function runEffectInner(ctx: Ctx, es: EffectSource, e: EffectDef): void {
           ...(item.kickCount ? { kickCount: item.kickCount } : {}),
           ...(item.copyOf ? { copyOf: item.copyOf } : {}),
           ...(item.lkiPower !== undefined ? { lkiPower: item.lkiPower } : {}),
+          ...(item.lkiLegendary ? { lkiLegendary: true } : {}), // Lord of the Rings (21b black)
           copy: true,
           ...(e.hasteSacrifice ? { hasteSacrifice: true } : {}),
         });
