@@ -11,6 +11,7 @@ import { SOS_BOOSTER_LIST } from './sos/booster-list.ts';
 import { FRA_BOOSTER_LIST } from './fra/booster-list.ts';
 import { ECL_BOOSTER_LIST } from './ecl/booster-list.ts';
 import { TDM_BOOSTER_LIST } from './tdm/booster-list.ts';
+import { HOB_BOOSTER_LIST } from './hob/booster-list.ts';
 import { STX_BOOSTER_LIST } from './stx/booster-list.ts';
 import { SOA_ARCHIVE_LIST } from './sos/archive-list.ts';
 import { STA_ARCHIVE_LIST } from './stx/archive-list.ts';
@@ -41,6 +42,7 @@ export {
   REALITY_FRACTURE_POOL,
   LORWYN_ECLIPSED_POOL,
   TARKIR_DRAGONSTORM_POOL,
+  THE_HOBBIT_POOL,
   OTHER_POOL,
   RED_POOL,
   WHITE_POOL,
@@ -59,6 +61,7 @@ export {
   MARVEL_TROPHY_DECKS,
   FINAL_FANTASY_TROPHY_DECKS,
   TARKIR_DRAGONSTORM_TROPHY_DECKS,
+  THE_HOBBIT_TROPHY_DECKS,
   FINAL_FANTASY_DECKS,
   STRIXHAVEN_DECKS,
   SECRETS_OF_STRIXHAVEN_DECKS,
@@ -120,6 +123,14 @@ export function lorwynEclipsedBoosterSheets(): BoosterSheets {
  */
 export function tarkirDragonstormBoosterSheets(): BoosterSheets {
   return boosterSheets(TDM_BOOSTER_LIST, (c) => cardDb.has(slug(c.name)));
+}
+
+/**
+ * The Hobbit's booster cards by HOB rarity (the 188 main-set cards, no basics), the cards the pool has,
+ * so the blue cards join the sheets as they are built.
+ */
+export function theHobbitBoosterSheets(): BoosterSheets {
+  return boosterSheets(HOB_BOOSTER_LIST, (c) => cardDb.has(slug(c.name)));
 }
 
 /**

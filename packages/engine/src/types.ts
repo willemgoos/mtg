@@ -644,6 +644,9 @@ export interface CostDef {
   // Secrets of Strixhaven (14b): Page, Loose Leaf
   /** Discard another card with the same name as the source (with `discard`). */
   discardSameName?: boolean;
+  // The Hobbit (20b colorless): Key to the Side-Door
+  /** With `discard`: only a legendary card with the same name as a legendary permanent you control. */
+  discardNamesLegendaryPermanent?: boolean;
   // Strixhaven Brawl (15b, multi): Call the Crash
   /** Suspend N: exile this card from your hand with N time counters on it. */
   suspendSelf?: number;
@@ -839,6 +842,9 @@ export type TriggerDef =
   /** Whenever a player or permanent becomes the target of an ability you control (Loki, God of Mischief). */
   | { on: 'youTargetWithAbility' }
   | { on: 'drawCard'; whose: 'yours' | 'opponents' }
+  // The Hobbit (20b blue): Elrond, Moon-Reader
+  /** Whenever you activate an ability of a creature (a mana ability too). */
+  | { on: 'youActivateCreatureAbility' }
   /** Whenever a source you control deals noncombat damage to an opponent ("that many"). */
   | { on: 'yourNoncombatDamageToOpponent' }
   /** Whenever this creature becomes blocked. */
@@ -1022,10 +1028,25 @@ export type TriggerDef =
   /** Whenever an opponent loses life ("that many"), during your turn if `duringYourTurn` (Kefka, Ruler of Ruin). */
   | { on: 'opponentLosesLife'; duringYourTurn?: boolean }
   /** Whenever one or more cards leave your graveyard (Fang, Fearless l'Cie). */
-  | { on: 'cardsLeaveYourGraveyard' }
+  | {
+      on: 'cardsLeaveYourGraveyard';
+      // The Hobbit (20b black): Along the Crooked Way
+      /** Only cards matching this, each one on its own ("Whenever a creature card leaves your graveyard"; no `batch`). */
+      filter?: CardFilter;
+    }
+  // The Hobbit (20b black): The Master of Lake-town
+  /** Whenever a player loses life ("that many"): you, or an opponent. */
+  | { on: 'playerLosesLife'; whose: 'you' | 'opponent' }
   // Tarkir: Dragonstorm (19b, misc): Hollowmurk Siege, Stalwart Successor
   /** Whenever one or more counters (of any kind) are put on a creature you control; "that creature" is the subject. */
-  | { on: 'counterPutOnYourCreature' }
+  | {
+      on: 'counterPutOnYourCreature';
+      // The Hobbit (20b multicolour): The Great Goblin
+      /** Only on creatures matching this ("a Goblin, Orc, or Army you control"). */
+      filter?: CardFilter;
+      /** Only counters you put (not ones an opponent's effect puts on your creature). */
+      byYou?: boolean;
+    }
   // Final Fantasy (11b): creatures and artifacts dying
   /**
    * Whenever this or another permanent you control matching the filter is put
@@ -1101,6 +1122,9 @@ export type TriggerDef =
   | { on: 'opponentCreaturesDealtExcessNoncombat' };
 
 export type ConditionDef =
+  // The Hobbit (20a): Storied
+  /** "As long as you have an enduring story" / "if you have an enduring story": the permanent's controller has the designation. */
+  | { kind: 'enduringStory' }
   // Strixhaven Brawl (15b, g): Orochi Merge-Keeper
   /** The source is modified (has counters, or an Equipment or Aura you control attached). */
   | { kind: 'sourceModified' }
@@ -1109,6 +1133,9 @@ export type ConditionDef =
   // Reality Fracture (17a): Null Summoner, Uldaros Theorix
   /** The source permanent was cast (not put onto the battlefield some other way). */
   | { kind: 'wasCast' }
+  // The Hobbit (20b multicolour): Smaug, Wicked Worm
+  /** The spell that caused the trigger had mana from a Treasure spent on it. */
+  | { kind: 'treasureManaSpent' }
   | { kind: 'controlsPermanents'; filter: CardFilter; min: number }
   | { kind: 'attackedThisTurn' }
   // Reality Fracture (17c): Kiora of Salt and Sand
@@ -1186,6 +1213,9 @@ export type ConditionDef =
   | { kind: 'sourcePowerAtLeast'; min: number }
   /** A chosen target is controlled by you (Dreamdew Entrancer). */
   | { kind: 'targetControlledByYou'; target: number }
+  // The Hobbit (20b black): Azog, Moria's Ruin
+  /** "If you controlled that creature": the target was under your control (as it last was, once it has left the battlefield). */
+  | { kind: 'targetWasControlledByYou'; target: number }
   // Secrets of Strixhaven (14a): Lluwen, Exchange Student
   /** The source isn't prepared. */
   | { kind: 'notPrepared' }
@@ -1285,7 +1315,7 @@ export type ConditionDef =
   /** The source is a creature right now (Great Hall of the Biblioplex once animated). */
   | { kind: 'sourceIsCreature' }
   // Strixhaven Brawl (15a): Sevinne's Reclamation
-  /** This spell was cast from a graveyard (flashback). */
+  /** This spell was cast from a graveyard (flashback), also read as it resolves (The Hobbit (20a)). */
   | { kind: 'castFromGraveyard' }
   // Reality Fracture (17a): Twinned Vision
   /** This spell wasn't cast from its owner's hand (flashback, from exile, a copy). */
@@ -1439,6 +1469,9 @@ export interface CardFilter {
   notAttachedHost?: boolean;
   /** Its mana value is odd or even (Thanos). */
   manaValueParity?: 'odd' | 'even';
+  // The Hobbit (20b black): Gollum, Riddle Master; Great Ugly-Looking Goblin
+  /** Its mana value is the parity ('odd' or 'even') chosen for the source (stored as its `chosenType`). */
+  manaValueParityOfSource?: boolean;
   // Strixhaven Brawl (15b, pair)
   /** Enchanted by an Aura that the source's controller controls (Killian, Eriette). */
   enchantedByYourAura?: boolean;
@@ -1478,6 +1511,9 @@ export interface CardFilter {
   // Secrets of Strixhaven (14b): Nita, Forum Conciliator
   /** Its controller doesn't own it. */
   notOwnedByController?: boolean;
+  // The Hobbit (20b white): The Eagles Are Coming!
+  /** Its owner is the controller of the source ("target creature you own"; the source is the spell). */
+  ownedBySourceController?: boolean;
   // Strixhaven Brawl (15b, w)
   /** Attached to a creature on the battlefield (Sage's Reverie: "each Aura you control that's attached to a creature"). */
   attachedToCreature?: boolean;
@@ -1571,6 +1607,8 @@ export interface TargetSpec {
    * chosen just before it (each pair is listed once, the second target always the later card).
    */
   sharesCreatureTypeWithPrevious?: boolean;
+  /** The Hobbit (20b blue): Burglar's Plot, "two target nonland permanents that share a card type" (each pair listed once). */
+  sharesCardTypeWithPrevious?: boolean;
   // Tarkir: Dragonstorm (19b, white, black): Arashin Sunshield, Feral Deathgorger
   /** With `anyNumber` and 'graveyardCard': all the targets are cards in the same graveyard ("up to two target cards from a single graveyard"). */
   singleGraveyard?: boolean;
@@ -1645,6 +1683,8 @@ export type Amount =
   | { allCountersOn: Ref }
   | {
       count: 'creaturesYouControl' | 'landsYouControl' | 'totalPowerOfCreaturesYouControl';
+      /** The Hobbit (20b blue): only creatures with this keyword count (The Lord of the Eagles: flying). */
+      hasKeyword?: Keyword;
       subtype?: string;
       max?: number;
       named?: CardDefId;
@@ -1654,6 +1694,9 @@ export type Amount =
       basicOnly?: boolean;
     }
   | { multiply: number; amount: Amount }
+  // The Hobbit (20b blue): Master's Councillors
+  /** The number of graveyards (of any player) with at least this many cards in them. */
+  | { graveyardsWithAtLeast: number }
   // Reality Fracture (17a): Dark Matter Manipulator, Recursive Recruitment
   /** The amount divided by `floorDiv`, rounded down ("for every seven cards in your graveyard"). */
   | { floorDiv: number; amount: Amount }
@@ -1864,6 +1907,11 @@ export type EffectDef =
       to: Ref;
       /** Lasts until your next turn instead (For the Common Good). */
       untilYourNextTurn?: boolean;
+      // The Hobbit (20b blue): Old Fat Spider Can't See Me
+      /** Lasts for as long as the source stays on the battlefield instead ("for as long as this Saga remains on the battlefield"). */
+      whileSource?: boolean;
+      /** All damage that would be dealt by the creature is prevented (for the duration). */
+      preventDamageDealt?: boolean;
       power: Amount;
       toughness: Amount;
       keywords?: Keyword[];
@@ -1993,6 +2041,8 @@ export type EffectDef =
       ownerOf?: number;
       /** An opponent chooses (Bandit's Talent). */
       opponent?: boolean;
+      /** The heading of the prompt, after the card's name (The Hobbit (20a), amass: "Amass Goblins 2: choose an Army"). */
+      title?: string;
       options: { label: string; effects: EffectDef[] }[];
     }
   /**
@@ -2205,6 +2255,8 @@ export type EffectDef =
       // Secrets of Strixhaven (14b): Vastlands Scavenger (Bind to Life)
       /** The card goes onto the battlefield instead of into your hand. */
       to?: 'battlefield';
+      /** The Hobbit (20b blue): Speak Secrets, "put an instant or sorcery card from among them into your hand" (not optional). */
+      required?: boolean;
     }
   /** Look at the top N; put `take` of them into your hand and the rest into your graveyard (Stargaze). */
   | {
@@ -2314,6 +2366,8 @@ export type EffectDef =
       // Final Fantasy (11a): saga creatures
       /** "Return it to the battlefield transformed" (Dion, Crystal Fragments). */
       transformed?: boolean;
+      /** The Hobbit (20b blue): Gone Fishing, every permanent is exiled before any of them returns. */
+      together?: boolean;
     }
   /**
    * Choose a permanent you control matching the filter (other than the
@@ -2438,6 +2492,9 @@ export type EffectDef =
       // Lorwyn Eclipsed (18a): Celestial Reunion
       /** If the spell's additional cost chose a creature type and the card found has it, it enters the battlefield instead of going to hand. */
       battlefieldIfChosenType?: boolean;
+      // The Hobbit (20b colorless): Elven Passage
+      /** The card found is 'chosen' for the effects after the search ("untap that land"). */
+      rememberFound?: boolean;
       // Lorwyn Eclipsed (18b, black): Mornsong Aria
       /** The player whose turn it is searches (their own library, the card goes to their hand), not the controller. */
       activePlayerSearches?: boolean;
@@ -2450,6 +2507,9 @@ export type EffectDef =
       // Tarkir: Dragonstorm (19b, green): Claim Territory
       /** With `upTo`: the first card found goes to `to`, the ones after it here ("put one onto the battlefield tapped and the other into your hand"). */
       thenTo?: 'hand';
+      // The Hobbit (20b white): Roads Go Ever, Ever On
+      /** The cards found are exiled and remembered by the source ("exile them"; a later effect finds them with the source). */
+      exileWithSource?: boolean;
     }
   /** Look at the top N; you may put a creature with mana value up to your land count onto the battlefield (Loot). */
   | { kind: 'lookForCreature'; count: number }
@@ -2478,7 +2538,13 @@ export type EffectDef =
    * triggers now; its targets are chosen as it goes on the stack (Quantum Entanglement,
    * Villainous Syndication, Rhino's Rampage).
    */
-  | { kind: 'reflexiveTrigger'; ability: number }
+  | {
+      kind: 'reflexiveTrigger';
+      ability: number;
+      // The Hobbit (20b red): Dáin Ironfoot ("attach it")
+      /** The permanent the reflexive ability's effects see as 'subject' ("it", "that creature"). */
+      subject?: Ref;
+    }
   /** Internal (Bolt Bend): the spell or ability on the stack with this id gets these targets. */
   | { kind: 'setStackTargets'; id: ObjectId; targets: TargetChoice[] }
   /** Internal (Loki Laufeyson): its controller may choose new targets for the copy just made ('chosen'). */
@@ -2537,6 +2603,12 @@ export type EffectDef =
       // Reality Fracture (17c): Garruk, Veiled Butcher
       /** Once the discarding is done, the controller draws a card unless this player discarded at least this many nonland cards. */
       drawUnlessNonland?: number;
+      // The Hobbit (20a): Recruit
+      /** These effects follow once the discarding is done, only if a nonland card was discarded ("If you discarded a nonland card, ..."). */
+      thenIfNonland?: EffectDef[];
+      // The Hobbit (20b multicolour): Silvan Reveler
+      /** A land card discarded this way is put from the graveyard onto the battlefield tapped. */
+      landToBattlefieldTapped?: boolean;
     }
   /** Put the top N cards of your library into your graveyard. */
   | {
@@ -2793,6 +2865,18 @@ export type EffectDef =
     }
   /** Return all land cards from your graveyard to the battlefield tapped (World Shaper). */
   | { kind: 'returnLandsFromGraveyard' }
+  // The Hobbit (20b red): Last Light of Durin's Day
+  /**
+   * "Search your hand and/or library for a card matching the filter and put it onto the battlefield. If you search your library
+   * this way, shuffle." The player picks one card from the hand and the library together (or none, having searched the library
+   * for nothing); a library pick, or none, shuffles.
+   */
+  | {
+      kind: 'putFromHandOrLibrary';
+      filter: CardFilter;
+      /** "Sacrifice it. If you do, ...": the source is sacrificed first, and nothing else happens if it can't be. */
+      sacrificeSource?: boolean;
+    }
   | {
       kind: 'sacrifice';
       what: Ref;
@@ -2806,6 +2890,24 @@ export type EffectDef =
    * to `TDM_SPIRIT` ('tdm-spirit-token', a 0/0 white Spirit creature).
    */
   | { kind: 'endure'; amount: Amount; what?: Ref; token?: CardDefId }
+  // The Hobbit (20a): Amass, Recruit
+  /**
+   * "Amass <type> N" (rule 701.47): if the player controls no Army creature, they first create a 0/0 black <type> Army creature
+   * token (`token`, a 0/0 black <type> Army definition); then they choose an Army creature they control (asked when there are several), put N +1/+1 counters on it,
+   * and it becomes <type> in addition to its other types (for good). The chosen Army is "the amassed Army" (`'chosen'` in the
+   * effects that follow: Goblin Plate Mail attaches itself to it). N may be 0: the Army is still made and chosen. `subtype` is
+   * singular ('Goblin' for "amass Goblins"). `who` is the player who amasses (default the controller; Azog: `{ controllerOf: 0 }`,
+   * no player if the target is missing). `tokenMade` is internal (the token was created already).
+   */
+  | { kind: 'amass'; subtype: string; amount: Amount; token: CardDefId; who?: Ref; tokenMade?: boolean }
+  /** Internal: the second half of amass, the chosen Army gets its counters and its type. */
+  | { kind: 'amassPut'; army: ObjectId; subtype: string; amount: number; player: PlayerId }
+  /**
+   * "Recruit" (you recruit): draw a card, then discard a card; if you discarded a nonland card, create a 1/1 white Human Soldier
+   * creature token (`token`, default 'hob-human-soldier-token'). The discard is your choice. Nothing is discarded from an empty
+   * hand, and no token is made then.
+   */
+  | { kind: 'recruit'; token?: CardDefId }
   /** The controller scries N (asks them to order the top cards). */
   | {
       kind: 'scry';
@@ -2833,6 +2935,12 @@ export type EffectDef =
    * land, or you decline or can't pay), `otherwise` happens.
    */
   | { kind: 'exileTopMayCast'; otherwise: EffectDef[] }
+  // The Hobbit (20b blue): Bilbo, Thief in the Night
+  /**
+   * You may cast one card matching the filter from your graveyard now (paying its costs; timing ignored). `exileInstantsSorceries`:
+   * if an instant or sorcery spell cast this way would be put into your graveyard, exile it instead.
+   */
+  | { kind: 'castFromYourGraveyard'; filter: CardFilter; exileInstantsSorceries?: boolean }
   /**
    * Exile a card with N time counters; it gains suspend (Kang Prime: the next nonland card from the top). Tarkir: Dragonstorm (19a):
    * 'subject' is the spell that caused the trigger, taken off the stack (not countered) into exile (Taigam, Master Opportunist).
@@ -3143,8 +3251,8 @@ export type StaticDef =
   /** Instant and sorcery spells you control have lifelink. */
   | { kind: 'instantsSorceriesLifelink' }
   | { kind: 'cantBlock' }
-  /** This permanent doesn't untap during its controller's untap step. */
-  | { kind: 'doesntUntap' }
+  /** This permanent doesn't untap during its controller's untap step (The Hobbit (20a), Bombur: `unless` the condition holds). */
+  | { kind: 'doesntUntap'; unless?: ConditionDef }
   /** You may cast spells (matching the filter) as though they had flash (High Fae Trickster), while the condition holds. */
   | { kind: 'flashForAll'; filter?: CardFilter; condition?: ConditionDef }
   /**
@@ -3175,7 +3283,17 @@ export type StaticDef =
    */
   | { kind: 'firstTokensCopyEquipped' }
   /** You may play an additional land on each of your turns (Loot). */
-  | { kind: 'extraLandDrop' }
+  | { kind: 'extraLandDrop'; condition?: ConditionDef } // The Hobbit (20b multicolour): Thranduil's Company ("as long as you control another Elf")
+  // The Hobbit (20b multicolour)
+  /** "This creature can't attack unless <condition>" (Chief Warg's Company: you control two or more other Wolves). */
+  | { kind: 'cantAttackUnless'; condition: ConditionDef }
+  /**
+   * Bard, King of Dale: "If you would draw a card except the first one you draw in each of your draw steps, draw `count` cards
+   * instead" (every such draw, not only the first one each turn).
+   */
+  | { kind: 'everyExtraDrawBecomes'; count: number }
+  /** Thranduil, the Elvenking: this permanent has all activated abilities of all Elf cards in its controller's graveyard. */
+  | { kind: 'graveyardElfAbilities' }
   /** Prevent all combat damage dealt to and by this creature (Fog Bank). */
   | { kind: 'preventCombatDamage' }
   // Reality Fracture (17a): Loot, the Anomaly
@@ -3332,6 +3450,19 @@ export type StaticDef =
   | { kind: 'hexproofFromOwnColors' }
   /** If a triggered ability of another Elemental you control triggers, it triggers an additional time (Twinflame Travelers). */
   | { kind: 'elementalTriggersTwice' }
+  // The Hobbit (20a): Storied
+  /**
+   * Storied (like Ascend): "If you control three or more artifacts, legendaries, and/or Sagas, you have an enduring story for the
+   * rest of the game." A static ability that works while the permanent is on the battlefield; it isn't a trigger and doesn't use
+   * the stack. Three different permanents count (a legendary artifact counts once). The designation is on the player
+   * (`PlayerState.enduringStory`) and can't be removed.
+   */
+  | { kind: 'storied' }
+  /**
+   * "If a triggered ability of a <subtype> you control triggers, that ability triggers an additional time" (Bifur, Melodic Rider:
+   * `condition: { kind: 'enduringStory' }`). Includes the source itself; each source adds one more time.
+   */
+  | { kind: 'subtypeTriggersTwice'; subtype: string; condition?: ConditionDef }
   /**
    * "Once each turn, you may cast a spell with mana value less than or equal to <amount> from among cards exiled with this
    * permanent this turn without paying its mana cost" (Maralen, Fae Ascendant). The cards are marked `exiledWithThisTurn`.
@@ -3361,6 +3492,9 @@ export type StaticDef =
   // Marvel Super Heroes Jumpstart (Trained)
   /** "You may pay {0} rather than pay the power-up cost of the first power-up ability you activate during each of your turns" (Advancing the Spirit). */
   | { kind: 'firstPowerUpFree' }
+  // The Hobbit (20b white): Kíli the Resourceful
+  /** "You may pay {0} rather than pay the equip cost of the first equip ability you activate each turn." */
+  | { kind: 'firstEquipFree'; condition?: ConditionDef }
   /** This creature can't be blocked. */
   | { kind: 'cantBeBlocked' }
   /** "Other creatures you control have prowess" (Bria, Riptide Rogue). */
@@ -3435,7 +3569,8 @@ export type StaticDef =
     }
   // Doom Prevails (9e).
   /** Creatures can't attack you unless their controller pays this for each (Propaganda). */
-  | { kind: 'attackTax'; amount: number }
+  // The Hobbit (20a): Dáin, Lord of the Iron Hills (`condition`: only while it holds)
+  | { kind: 'attackTax'; amount: number; condition?: ConditionDef }
   /** Nonland cards in your hand have miracle {0}: the first card you draw each turn may be cast free (Molecule Man). */
   | { kind: 'miracleZero' }
   // Secrets of Strixhaven (14b): Lorehold, the Historian
@@ -3491,7 +3626,10 @@ export type StaticDef =
    */
   | { kind: 'exileOpponentNontokenCreatures'; life: number }
   /** While this is equipped, its triggered abilities and its Equipment's trigger twice (Cloud). */
-  | { kind: 'equippedTriggersTwice' }
+  | {
+      kind: 'equippedTriggersTwice';
+      creatureOnly?: boolean; /* The Hobbit (20b blue): Wizard's Staff, only the creature's own abilities */
+    }
   /** Whenever you tap a land for {C}, add an additional {C} (Ultima, Origin of Oblivion). */
   | { kind: 'extraColorlessFromLands' }
   // Final Fantasy (11c): damage doubling
@@ -3572,6 +3710,9 @@ export type StaticDef =
   | { kind: 'attacksWithCounterDespiteDefender' }
   /** Spells you cast from your graveyard cost {amount} less (Emet-Selch of the Third Seat). */
   | { kind: 'graveyardSpellsCostLess'; amount: number }
+  // The Hobbit (20b blue): Bilbo, Thief in the Night
+  /** Spells you cast from anywhere other than your hand cost {amount} less. */
+  | { kind: 'spellsFromOutsideHandCostLess'; amount: number }
   // Final Fantasy (11c): leftovers
   /** It can't be blocked except by `count` or more creatures (Relentless X-ATM092: three). */
   | { kind: 'minBlockers'; count: number }
@@ -3641,6 +3782,11 @@ export interface GameObject {
   lastAttachedTo?: ObjectRef;
   /** Subtypes gained on top of the printed ones (Infernal Vessel's Demon). */
   addedSubtypes?: string[];
+  // The Hobbit (20b green): Beorn's Hospitality / Down in the Valley
+  /** Its power and toughness are each the number of lands its controller controls (Beorn's Hospitality, once it is a Bear). */
+  hobLandsPT?: boolean;
+  /** Abilities it gained for as long as it stays on the battlefield (Down in the Valley's landfall ability). */
+  hobGainedAbilities?: AbilityDef[];
   /** Caretakers: creature types replacing the printed ones. */
   creatureTypes?: string[];
   creatureTypesTimestamp?: number;
@@ -3652,6 +3798,10 @@ export interface GameObject {
   // Strixhaven Brawl (15a): Enduring Courage
   /** It's not a creature (it came back as an enchantment). */
   notCreature?: boolean;
+  /** The Hobbit (20b multicolour): with `notCreature`, the type it is instead (Tom, Bert, and William come back as an artifact). */
+  notCreatureAs?: CardType;
+  /** The Hobbit (20b multicolour): mana from a Treasure was spent to cast it (Smaug, Wicked Worm). */
+  manaFromTreasure?: boolean;
   /** It wasn't a creature as it last left the battlefield. */
   lastNotCreature?: boolean;
   /** A card in exile its owner may play until the end of that turn (Strongbox Raider). */
@@ -3721,6 +3871,13 @@ export interface GameObject {
   linkedExile?: { owner: PlayerId; mv: number };
   /** Sugar Coat: the Aura that makes it a Food. */
   foodBy?: ObjectId;
+  // The Hobbit (20b black)
+  /** Supper for Spiders: it is a Food artifact (it loses its other types and subtypes, keeps its other characteristics) and has the Food ability. */
+  supperFood?: boolean;
+  /** This card (not a token) was put into a graveyard from the battlefield during this turn number (Supper for Spiders). */
+  diedTurn?: number;
+  /** Inside Information: its castable-by player may cast or play it paying life equal to its mana value rather than its mana cost. */
+  lifeForMana?: boolean;
   /** Jump In slots: the Imprisoned in the Moon making this a colorless land. */
   moonBy?: ObjectId;
   // Tarkir: Dragonstorm (19b, blue): Ringing Strike Mastery
@@ -3737,6 +3894,9 @@ export interface GameObject {
   // Marvel Super Heroes Jumpstart (Analyzed)
   /** In exile: `player` may play it for as long as they control `source` (Victor Mancha, Runaway). */
   playableWhileControlling?: { source: ObjectRef; player: PlayerId };
+  // The Hobbit (20b red): Gandalf, Goblins' Bane (Flameshape)
+  /** In its owner's exile: they may play it for as long as it stays exiled and this holds for them ("if you control a Wizard"). */
+  playableIf?: ConditionDef;
   // Lorwyn Eclipsed (18b, black)
   /** With `castableBy`: only while that player controls this permanent (Taster of Wares). */
   castableWhileControlling?: ObjectRef;
@@ -3950,6 +4110,9 @@ export interface PlayerState {
   // Lorwyn Eclipsed (18b, white): Morningtide's Light
   /** "Prevent all damage that would be dealt to you" until this player's next turn begins. */
   damagePrevented?: boolean;
+  // The Hobbit (20a): Storied
+  /** The player has an enduring story (for the rest of the game; see the 'storied' static). */
+  enduringStory?: boolean;
   landsPlayedThisTurn: number;
   attackedThisTurn: boolean;
   drewFromEmptyLibrary: boolean;
@@ -4082,6 +4245,9 @@ export interface TurnState {
   // Marvel Super Heroes Jumpstart (Trained)
   /** The active player has activated a power-up ability this turn (Advancing the Spirit frees only the first). */
   powerUpActivated?: boolean;
+  // The Hobbit (20b white): Kíli the Resourceful
+  /** The turn number in which each player last activated an equip ability (the first each turn may be free). */
+  equipActivated?: Partial<Record<PlayerId, number>>;
   /** Creatures these players control assign combat damage by toughness if greater (The Kingpin of Crime). Replaced, never mutated. */
   toughnessDamage?: PlayerId[];
   /** 0 during the mulligan phase. */
@@ -4224,6 +4390,9 @@ export interface TurnState {
   /** Players whose Mountains add an additional {R} when tapped for mana this turn. */
   moltenTide?: PlayerId[];
   // Lorwyn Eclipsed (18b, special): Mirrormind Crown
+  // The Hobbit (20b black): Azog, Moria's Ruin
+  /** Tokens that left the battlefield this turn (they cease to exist): what they were, by id. */
+  tokenLki?: Record<ObjectId, { power: number; controller: PlayerId }>;
   /** Players whose first token creation this turn has happened ("the first time you would create one or more tokens each turn"). */
   firstTokensDone?: PlayerId[];
 }
@@ -4264,12 +4433,17 @@ export interface ContinuousEffect {
   blinkOnCombatDamage?: boolean;
   /** It's an artifact creature (a crewed Vehicle). */
   becomesCreature?: boolean;
+  // The Hobbit (20b white): Stone by Sunlight
+  /** It's an artifact in addition to its other types. */
+  becomesArtifact?: boolean;
   // Reality Fracture (17a): Puppet Crafting
   /** With `becomesCreature`: a creature only, not an artifact too. */
   creatureOnly?: boolean;
   creatureSubtype?: string;
   /** Combat damage that would be dealt to it is prevented (Fleeting Flight). */
   preventCombatDamage?: boolean;
+  /** The Hobbit (20b blue): all damage that would be dealt by this creature is prevented (Old Fat Spider Can't See Me). */
+  preventDamageDealt?: boolean;
   /** Base power and toughness. */
   basePT?: [number, number];
   /** Control change: who controlled it before (restored when this expires). */
@@ -4508,6 +4682,9 @@ export type Decision =
       then?: EffectDef[];
       // Reality Fracture (17c): Garruk, Veiled Butcher
       drawUnlessNonland?: number;
+      // The Hobbit (20a): Recruit
+      thenIfNonland?: EffectDef[];
+      landToBattlefieldTapped?: boolean; // The Hobbit (20b multicolour): Silvan Reveler
       resume: PausedResolution;
       thenPriority: PlayerId;
     }
@@ -4518,6 +4695,9 @@ export type Decision =
       options: ObjectId[];
       /** Choosing from the graveyard instead of searching the library (Inspiration from Beyond). */
       fromGraveyard?: boolean;
+      // The Hobbit (20b red): Last Light of Durin's Day
+      /** With `fromGraveyard`: the options are in the hand and the library; a library pick (or none) shuffles the library afterwards. */
+      handOrLibrary?: boolean;
       /** Where the card goes. Default: hand. */
       to?:
         | 'hand'
@@ -4557,6 +4737,9 @@ export type Decision =
       // Tarkir: Dragonstorm (19b, misc): Ugin, Eye of the Storms
       /** The cards found are exiled; they may be cast free this turn. */
       exileFreeThisTurn?: boolean;
+      // The Hobbit (20b white): Roads Go Ever, Ever On
+      /** The cards found are exiled with the source. */
+      exileWithSource?: boolean;
       /** Each card taken must have a different name from the ones already taken. */
       differentNames?: boolean;
       // Tarkir: Dragonstorm (19b, green): Claim Territory
@@ -4567,6 +4750,8 @@ export type Decision =
       reveal?: boolean;
       /** Lorwyn Eclipsed (18a): Celestial Reunion: a card of this creature type goes onto the battlefield instead of into the hand. */
       battlefieldIfType?: string;
+      // The Hobbit (20b colorless): Elven Passage
+      rememberFound?: boolean;
       /** The land found becomes a Fractal creature (Emergent Sequence). */
       fractalLand?: boolean;
       /** If the card has one of these types, the source gets a +1/+1 counter (Oriq Loremage). */
@@ -4798,6 +4983,8 @@ export type Decision =
       fullCost?: boolean;
       /** Effects that happen if none of the cards is cast, before the resolution goes on. */
       ifNotCast?: EffectDef[];
+      /** The Hobbit (20b blue): an instant or sorcery cast this way is exiled instead of going to the graveyard. */
+      exileInstantsSorceries?: boolean;
       /** Any number of these may be cast: after one is, the rest are offered again. */
       more?: boolean;
       // Reality Fracture (17a): Uldaros Theorix
@@ -5004,7 +5191,9 @@ export type Action =
         | 'noctis'
         | 'hades'
         // Lorwyn Eclipsed (18a): Dawnhand Dissident
-        | 'exiledWithSelf';
+        | 'exiledWithSelf'
+        // The Hobbit (20b black): Inside Information.
+        | 'lifeForMana';
       /** Mockingbird: the creature to enter as a copy of. */
       copyOf?: ObjectId;
       /** Rottenmouth Viper: permanents sacrificed to make it cheaper. */
@@ -5108,6 +5297,8 @@ export type GameEvent =
       controller?: PlayerId;
       // Final Fantasy (11b): the back face it showed as it left (Chaos dying shows Garland after).
       leftAs?: CardDefId;
+      /** The Hobbit (20b black): it left the battlefield as a Food artifact (Supper for Spiders), not as a creature. */
+      leftAsFood?: boolean;
       /** Strixhaven (13c): a creature exiled instead of dying (Valentin). */
       exiledInstead?: boolean;
       /** It had lost all its abilities as it left the battlefield (Hellcat): none of its own trigger. */
@@ -5148,6 +5339,8 @@ export type GameEvent =
   | { type: 'prepared'; id: ObjectId; player: PlayerId }
   | { type: 'unprepared'; id: ObjectId; player: PlayerId }
   | { type: 'abilityActivated'; id: ObjectId; source: ObjectId; player: PlayerId }
+  /** The Hobbit (20b blue): `player` tapped a creature for mana to pay a cost (activating its mana ability). */
+  | { type: 'creatureManaAbility'; id: ObjectId; player: PlayerId }
   | { type: 'triggerStacked'; id: ObjectId; source: ObjectId; player: PlayerId }
   | { type: 'resolved'; id: ObjectId }
   | { type: 'fizzled'; id: ObjectId }
@@ -5158,6 +5351,11 @@ export type GameEvent =
   /** `nth`: how many cards that player has drawn this turn, including this one. */
   | { type: 'cardDrawn'; player: PlayerId; id: ObjectId; nth: number }
   | { type: 'shuffled'; player: PlayerId }
+  // The Hobbit (20a)
+  /** `player` got an enduring story (a third artifact, legendary or Saga while they control a Storied permanent). */
+  | { type: 'enduringStory'; player: PlayerId }
+  /** `player` amassed: `id` is the Army that got the counters, which is now `subtype` too. */
+  | { type: 'amassed'; player: PlayerId; id: ObjectId; subtype: string; amount: number }
   | { type: 'mulligan'; player: PlayerId; count: number }
   | { type: 'scried'; player: PlayerId; top: number; bottom: number }
   | { type: 'searched'; player: PlayerId; id: ObjectId }
@@ -5170,7 +5368,7 @@ export type GameEvent =
   | { type: 'countersAdded'; id: ObjectId; count: number; player: PlayerId }
   // Tarkir: Dragonstorm (19b, misc): counters of any kind put on a creature
   /** Counters of any kind (+1/+1 or named) were put on a creature; `player` controls it. */
-  | { type: 'anyCountersAdded'; id: ObjectId; count: number; player: PlayerId }
+  | { type: 'anyCountersAdded'; id: ObjectId; count: number; player: PlayerId; by?: PlayerId }
   // Reality Fracture (17c): loyalty counters put on a planeswalker
   /** `player` controls the planeswalker; `by` is the player who put the counters. */
   | { type: 'loyaltyCountersAdded'; id: ObjectId; count: number; player: PlayerId; by: PlayerId }

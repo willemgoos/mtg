@@ -453,6 +453,7 @@ export const SEASON_PACK_OF: Record<PackSet, SeasonPackKind> = {
   fra: 'realityFracture',
   ecl: 'lorwynEclipsed',
   tdm: 'tarkirDragonstorm',
+  hob: 'theHobbit',
 };
 
 /** What the event screen shows. */

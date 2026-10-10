@@ -165,6 +165,14 @@ const SECTIONS: Section[] = [
     set: 'tdm' as const,
   },
   {
+    title: 'The Hobbit draft decks',
+    group: 'The Hobbit',
+    kind: 'draft' as const,
+    blurb: '40-card two-colour decks that went 7–0 in Arena’s Premier Draft; they play each other',
+    series: 'trophy' as const,
+    set: 'hob' as const,
+  },
+  {
     title: 'Color Challenge',
     group: 'Color Challenge',
     blurb: 'The mono-colour decks Sparky plays against new players',
@@ -181,7 +189,7 @@ const SECTIONS: Section[] = [
     kind?: 'starter' | 'draft';
     blurb: string;
     series: string;
-    set?: 'blb' | 'msh' | 'fin' | 'stx' | 'sos' | 'fra' | 'ecl' | 'tdm';
+    set?: 'blb' | 'msh' | 'fin' | 'stx' | 'sos' | 'fra' | 'ecl' | 'tdm' | 'hob';
   }) => {
     const decks = DECKS.filter((d) => d.series === series && d.set === set);
     return { ...s, decks: [...decks.filter(isPlayable), ...decks.filter((d) => !isPlayable(d))] };

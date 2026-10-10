@@ -4830,6 +4830,31 @@ body {
   stroke-width: 1;
 }
 
+/* The Hobbit (20a): the enduring story, a small book on the portrait's lower corner. */
+.badge__story {
+  position: absolute;
+  right: -0.375rem;
+  bottom: -0.375rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  padding: 0.1875rem;
+  border-radius: 50%;
+  background: #3b2a12;
+  box-shadow:
+    0 0 0 0.0625rem #e2b53a,
+    0 0.125rem 0.375rem rgba(0, 0, 0, 0.7);
+}
+
+.badge__story svg {
+  display: block;
+  width: 100%;
+  fill: none;
+  stroke: #f1d27a;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
 /* Emblems (and "until your next turn" effects) of a player, beside the portrait; the text is in the tooltip. */
 .badge__emblems {
   display: flex;

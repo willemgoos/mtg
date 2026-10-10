@@ -2,6 +2,7 @@ import { creaturesOnBattlefield, hasKeyword, isCreature, toughness } from './cha
 import { type Ctx, def, emit, moveObject, obj, sacrifice } from './context.ts';
 import { willPersist } from './ecl-18a.ts';
 import { permanentHasStatic } from './fra-pw-effects.ts';
+import { updateEnduringStory } from './hob-20a.ts';
 import { sagasToSacrifice } from './sagas.ts';
 import type { ObjectId, PlayerId } from './types.ts';
 import { PLAYERS } from './types.ts';
@@ -13,6 +14,8 @@ import { PLAYERS } from './types.ts';
 export function runSBAs(ctx: Ctx): void {
   for (;;) {
     let changed = false;
+    // The Hobbit (20a): Storied isn't a trigger: the enduring story is had as soon as it's earned, before anything dies.
+    updateEnduringStory(ctx);
     for (const p of PLAYERS) {
       const ps = ctx.s.players[p];
       // Mystical Archive (16): Angel's Grace, "you can't lose the game this turn".

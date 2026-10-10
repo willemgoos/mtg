@@ -5,6 +5,7 @@ import { FRA_BLACK_EFFECTS } from './fra-black-effects.ts';
 // Lorwyn Eclipsed (18b, black)
 import { ECL_BLACK_EFFECTS, drawPrevented } from './ecl-black-effects.ts';
 import { FIN_EFFECTS } from './fin-effects.ts';
+import { HOB_BLACK_EFFECTS } from './hob-black-effects.ts'; // The Hobbit (20b black)
 import { FRA_COLORLESS_EFFECTS } from './fra-colorless-effects.ts';
 import { LOREHOLD_EFFECTS } from './stx-lorehold-effects.ts';
 import { SOS_14A_EFFECTS } from './sos-14a-effects.ts';
@@ -18,6 +19,7 @@ import { SOS_14B_D_EFFECTS } from './sos-14b-d-effects.ts';
 import { FRA_RED_EFFECTS } from './fra-red-effects.ts';
 import { ECL_MULTI_A_EFFECTS } from './ecl-multi-a-effects.ts';
 import { ECL_RED_EFFECTS } from './ecl-red-effects.ts';
+import { HOB_RED_EFFECTS } from './hob-red-effects.ts'; // The Hobbit (20b red)
 import { BRAWL_15B_R_EFFECTS } from './brawl-15b-r-effects.ts';
 import { BRAWL_15A_W_EFFECTS } from './brawl-15a-w-effects.ts';
 import { BRAWL_15B_B_EFFECTS } from './brawl-15b-b-effects.ts';
@@ -29,17 +31,22 @@ import { extraEntryCounters, noteCreatureCounters, TDM_MISC_EFFECTS } from './td
 import { TDM_CLANS_EFFECTS } from './tdm-clans-effects.ts'; // Tarkir: Dragonstorm (19b, clans)
 import { ECL_SPECIAL_EFFECTS } from './ecl-special-effects.ts';
 import { ECL_GREEN_EFFECTS } from './ecl-green-effects.ts';
+import { HOB_GREEN_EFFECTS } from './hob-green-effects.ts'; // The Hobbit (20b green)
 import { TDM_GREEN_EFFECTS } from './tdm-green-effects.ts';
 import { ECL_BLUE_EFFECTS } from './ecl-blue-effects.ts';
+import { HOB_BLUE_EFFECTS } from './hob-blue-effects.ts'; // The Hobbit (20b blue)
 import { TDM_BLUE_EFFECTS } from './tdm-blue-effects.ts';
+import { HOB_COLORLESS_EFFECTS } from './hob-colorless-effects.ts'; // The Hobbit (20b colorless)
 import { ECL_WHITE_EFFECTS } from './ecl-white-effects.ts';
+import { HOB_WHITE_EFFECTS } from './hob-white-effects.ts'; // The Hobbit (20b white)
 import { BRAWL_15B_W_EFFECTS } from './brawl-15b-w-effects.ts';
 import { BRAWL_15B_U_EFFECTS } from './brawl-15b-u-effects.ts';
 import { BRAWL_15B_G_EFFECTS } from './brawl-15b-g-effects.ts';
 import { BRAWL_15B_PAIR_EFFECTS } from './brawl-15b-pair-effects.ts';
 import { ARCHIVE_16_EFFECTS } from './archive-16-effects.ts';
 import { FRA_MULTI_B_EFFECTS } from './fra-multi-b-effects.ts';
-import { ECL_MULTI_B_EFFECTS } from './ecl-multi-b-effects.ts';
+import { ECL_MULTI_B_EFFECTS, defsWithStatic } from './ecl-multi-b-effects.ts';
+import { HOB_MULTICOLOUR_EFFECTS, withGraveyardElfAbilities } from './hob-multicolour-effects.ts'; // The Hobbit (20b multicolour)
 import { STX_13C_A_EFFECTS } from './stx-13c-a-effects.ts';
 import { STX_13C_B_EFFECTS } from './stx-13c-b-effects.ts';
 import { STX_13C_C_EFFECTS } from './stx-13c-c-effects.ts';
@@ -119,6 +126,7 @@ const BUILT_IN_EFFECTS: Record<string, CustomEffect> = {
   // Reality Fracture (17a): black.
   ...FRA_BLACK_EFFECTS,
   ...ECL_BLACK_EFFECTS, // Lorwyn Eclipsed (18b, black)
+  ...HOB_BLACK_EFFECTS, // The Hobbit (20b black)
   // Reality Fracture (17a, colorless).
   ...FRA_COLORLESS_EFFECTS,
   // Final Fantasy (11a).
@@ -152,6 +160,7 @@ const BUILT_IN_EFFECTS: Record<string, CustomEffect> = {
   // Reality Fracture (17a): red.
   ...FRA_RED_EFFECTS,
   ...ECL_RED_EFFECTS, // Lorwyn Eclipsed (18b, red)
+  ...HOB_RED_EFFECTS, // The Hobbit (20b, red)
   // Strixhaven Brawl (15a), white and colourless.
   ...BRAWL_15A_W_EFFECTS,
   // Strixhaven Brawl (15a): red-white.
@@ -162,9 +171,11 @@ const BUILT_IN_EFFECTS: Record<string, CustomEffect> = {
   ...ECL_18A_EFFECTS,
   ...TDM_19A_EFFECTS,
   ...TDM_CLANS_B_EFFECTS, // Tarkir: Dragonstorm (19b, clans-b)
+  ...HOB_MULTICOLOUR_EFFECTS, // The Hobbit (20b multicolour)
   ...TDM_WHITE_EFFECTS, // Tarkir: Dragonstorm (19b, white)
   ...TDM_MISC_EFFECTS, // Tarkir: Dragonstorm (19b, misc)
   ...TDM_GREEN_EFFECTS, // Tarkir: Dragonstorm (19b): green
+  ...HOB_GREEN_EFFECTS, // The Hobbit (20b): green
   ...TDM_CLANS_EFFECTS, // Tarkir: Dragonstorm (19b, clans)
   // Lorwyn Eclipsed (18b, special).
   ...ECL_SPECIAL_EFFECTS,
@@ -174,10 +185,13 @@ const BUILT_IN_EFFECTS: Record<string, CustomEffect> = {
   ...ECL_MULTI_A_EFFECTS,
   // Lorwyn Eclipsed (18b): blue.
   ...ECL_BLUE_EFFECTS,
+  ...HOB_BLUE_EFFECTS, // The Hobbit (20b blue)
   // Tarkir: Dragonstorm (19b): blue.
   ...TDM_BLUE_EFFECTS,
+  ...HOB_COLORLESS_EFFECTS, // The Hobbit (20b colorless)
   // Lorwyn Eclipsed (18b): white.
   ...ECL_WHITE_EFFECTS,
+  ...HOB_WHITE_EFFECTS, // The Hobbit (20b, white)
   // Strixhaven Brawl (15b): multicolour, colourless and lands.
   ...BRAWL_15B_MULTI_EFFECTS,
   // Strixhaven Brawl (15b), white.
@@ -243,7 +257,12 @@ const ALL_COLORS: Color[] = ['W', 'U', 'B', 'R', 'G'];
 
 export function def(ctx: Ctx, id: ObjectId): CardDefinition {
   const o = obj(ctx, id);
-  const d = defBase(ctx, o);
+  const d0 = defBase(ctx, o);
+  // The Hobbit (20b multicolour): Thranduil, the Elvenking has the activated abilities of the Elf cards in your graveyard.
+  const d =
+    o.zone === 'battlefield' && defsWithStatic(ctx.db, 'graveyardElfAbilities').has(o.defId)
+      ? withGraveyardElfAbilities(ctx, o, d0)
+      : d0;
   // Lorwyn Eclipsed (18b, multi-b): Tam, Mindful First-Year, "becomes all colors until end of turn".
   if (ctx.s.colorChanges && o.allColorsTurn === ctx.s.turn.number && o.zone === 'battlefield')
     return { ...d, colors: ALL_COLORS };
@@ -273,6 +292,8 @@ function defBase(ctx: Ctx, o: GameObject): CardDefinition {
     const aura = ctx.s.objects[o.foodBy];
     if (aura && aura.zone === 'battlefield' && aura.attachedTo === id) return foodDef(d);
   }
+  // The Hobbit (20b black): Supper for Spiders.
+  if (o.supperFood && o.zone === 'battlefield') return supperFoodDef(d);
   // Jump In slots: Imprisoned in the Moon.
   if (o.moonBy !== undefined) {
     const aura = ctx.s.objects[o.moonBy];
@@ -335,13 +356,19 @@ function withAuraGrants(ctx: Ctx, o: GameObject, d: CardDefinition): CardDefinit
 function withExtraAbilities(ctx: Ctx, o: GameObject, d: CardDefinition): CardDefinition {
   if (ctx.s.auraGrants && o.auraGrants?.length && o.zone === 'battlefield')
     d = withAuraGrants(ctx, o, d);
-  if (o.tempAbilities?.length || o.perpetualAbilities?.length || o.abilitiesUntilCast?.length)
+  if (
+    o.tempAbilities?.length ||
+    o.perpetualAbilities?.length ||
+    o.abilitiesUntilCast?.length ||
+    o.hobGainedAbilities?.length // The Hobbit (20b green)
+  )
     return {
       ...d,
       abilities: [
         ...d.abilities,
         ...(o.tempAbilities ?? []),
         ...(o.perpetualAbilities ?? []),
+        ...(o.hobGainedAbilities ?? []), // The Hobbit (20b green): Down in the Valley
         // Reality Fracture (17a): Emrakul, the Exigent Doom: a land's mana ability until the card is cast.
         ...(o.abilitiesUntilCast ?? []).map((x) => x.ability),
       ],
@@ -464,6 +491,27 @@ function foodDef(d: CardDefinition): CardDefinition {
       ],
     };
     foodDefs.set(d, f);
+  }
+  return f;
+}
+
+const supperFoodDefs = new WeakMap<CardDefinition, CardDefinition>();
+
+/**
+ * The Hobbit (20b black): what Supper for Spiders makes a creature card: a Food artifact that loses its other card types and
+ * subtypes (not supertypes, colours or abilities), with the Food ability besides. It has no power and toughness any more.
+ */
+function supperFoodDef(d: CardDefinition): CardDefinition {
+  let f = supperFoodDefs.get(d);
+  if (!f) {
+    const { power: _p, toughness: _t, loyalty: _l, ...rest } = d;
+    f = {
+      ...rest,
+      types: ['Artifact'],
+      subtypes: ['Food'],
+      abilities: [...d.abilities, ...foodDef(d).abilities],
+    };
+    supperFoodDefs.set(d, f);
   }
   return f;
 }
@@ -750,12 +798,16 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
     if (o.addedSubtypes) o.lastAddedSubtypes = o.addedSubtypes;
     else delete o.lastAddedSubtypes;
     delete o.addedSubtypes;
+    // The Hobbit (20b green): what Beorn's Hospitality and Down in the Valley gained lasts while they stay.
+    delete o.hobLandsPT;
+    delete o.hobGainedAbilities;
     delete o.creatureTypes;
     delete o.creatureTypesTimestamp;
     // Strixhaven Brawl (15a): Enduring Courage: "if it was a creature".
     if (o.notCreature) o.lastNotCreature = true;
     else delete o.lastNotCreature;
     delete o.notCreature;
+    delete o.notCreatureAs; // The Hobbit (20b multicolour)
     const host = o.attachedTo !== undefined ? ctx.s.objects[o.attachedTo] : undefined;
     if (host)
       o.lastAttachedTo = {
@@ -770,6 +822,7 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
     delete o.manaColors;
     // Lorwyn Eclipsed (18a): the colours spent, evoke and the card exiled by "behold … and exile it" stay while it's on the stack and battlefield.
     delete o.manaPaid;
+    delete o.manaFromTreasure; // The Hobbit (20b multicolour)
     delete o.evoked;
     if (o.beholdExiled) {
       if (from === 'battlefield') o.lastBeholdExiled = o.beholdExiled;
@@ -838,6 +891,7 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
     delete o.anyMana;
     // Marvel Super Heroes Jumpstart (Analyzed): Victor Mancha's permission ends too.
     delete o.playableWhileControlling;
+    delete o.playableIf; // The Hobbit (20b red)
   }
   // Secrets of Strixhaven (14b): Ennis, "if one or more cards were put into exile this turn".
   if (to === 'exile' && from !== 'exile' && !o.isToken)
@@ -853,6 +907,11 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
   delete o.monstrous;
   delete o.usedModes;
   delete o.discardedTurn;
+  // The Hobbit (20b black): Supper for Spiders, "put there from the battlefield this turn"; it stops being a Food as it leaves.
+  const leftAsFood = from === 'battlefield' && !!o.supperFood; // it was no creature as it left: it didn't "die"
+  delete o.supperFood;
+  if (from === 'battlefield' && to === 'graveyard' && !o.isToken) o.diedTurn = ctx.s.turn.number;
+  else delete o.diedTurn;
   if (from === 'stack') delete o.convokedBy;
   delete o.kickCount;
   if (from === 'exile') {
@@ -862,6 +921,7 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
     delete o.exilePlayTapped;
     delete o.suspended;
     delete o.playFreeBy;
+    delete o.lifeForMana; // The Hobbit (20b black): Inside Information
     delete o.plottedTurn; // Strixhaven Brawl (15b): plot
   }
   // Cast through suspend: haste as it enters.
@@ -1036,6 +1096,7 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
     to,
     ...(opts.castFromNonHandBy ? { castFromNonHandBy: opts.castFromNonHandBy } : {}),
     ...(leftAs ? { leftAs } : {}),
+    ...(leftAsFood ? { leftAsFood: true } : {}),
     ...(leftBlank ? { leftBlank } : {}),
     // Final Fantasy (11c): "that creature's power" (Vincent Valentine).
     ...(from === 'battlefield' && o.lastPower !== undefined ? { lastPower: o.lastPower } : {}),
@@ -1056,6 +1117,9 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
       if (a.kind === 'static' && a.effect.kind === 'exileOpponentNontokenCreatures')
         gainLife(ctx, crystal.controller, a.effect.life);
   }
+  // The Hobbit (20b black): Azog, Moria's Ruin; what a token that left the battlefield was (its power and controller).
+  if (ceases && from === 'battlefield')
+    (ctx.s.turn.tokenLki ??= {})[id] = { power: o.lastPower ?? 0, controller: o.controller };
   if (ceases) delete ctx.s.objects[id];
   // Final Fantasy (11c): meld. The other half goes where the melded permanent went.
   const partner = meldPartner ? ctx.s.objects[meldPartner] : undefined;
@@ -1125,7 +1189,7 @@ export function addCounters(ctx: Ctx, id: ObjectId, n: number, name?: string, by
         by: by ?? ctx.puttingPlayer ?? o.controller,
       });
     // Tarkir: Dragonstorm (19b, misc): counters of any kind on a creature.
-    else anyCreatureCounters(ctx, id, n);
+    else anyCreatureCounters(ctx, id, n, by);
     return;
   }
   o.plusOneCounters += n;
@@ -1139,14 +1203,21 @@ export function addCounters(ctx: Ctx, id: ObjectId, n: number, name?: string, by
     o.countersTimes = 1;
   }
   emit(ctx, { type: 'countersAdded', id, count: n, player: o.controller });
-  anyCreatureCounters(ctx, id, n); // Tarkir: Dragonstorm (19b, misc)
+  anyCreatureCounters(ctx, id, n, by); // Tarkir: Dragonstorm (19b, misc)
 }
 
 /** Tarkir: Dragonstorm (19b, misc): Stalwart Successor, Hollowmurk Siege: counters of any kind were put on a creature. */
-function anyCreatureCounters(ctx: Ctx, id: ObjectId, n: number): void {
+function anyCreatureCounters(ctx: Ctx, id: ObjectId, n: number, by?: PlayerId): void {
   if (!def(ctx, id).types.includes('Creature')) return;
   noteCreatureCounters(ctx, obj(ctx, id));
-  emit(ctx, { type: 'anyCountersAdded', id, count: n, player: obj(ctx, id).controller });
+  emit(ctx, {
+    type: 'anyCountersAdded',
+    id,
+    count: n,
+    player: obj(ctx, id).controller,
+    // The Hobbit (20b multicolour): The Great Goblin, "whenever you put one or more counters".
+    by: by ?? ctx.puttingPlayer ?? obj(ctx, id).controller,
+  });
 }
 
 /** Festival of Embers: `player` controls a permanent that exiles cards headed for their graveyard. */
@@ -1196,9 +1267,31 @@ export function removeFromCombat(ctx: Ctx, id: ObjectId): void {
   for (const a of c.attackers) a.blockers = a.blockers.filter((b) => b !== id);
 }
 
+/** The Hobbit (20b multicolour): inside Bard's replacement draw (the cards drawn instead are not replaced again). */
+let bardDrawing = false;
+
 export function drawCard(ctx: Ctx, player: PlayerId, drawStepDraw = false): void {
   // Lorwyn Eclipsed (18b, black): Mornsong Aria, "players can't draw cards".
   if (drawPrevented(ctx)) return;
+  // The Hobbit (20b multicolour): Bard, King of Dale, "if you would draw a card except the first one you draw in each of your
+  // draw steps, draw two cards instead" (the two cards are not replaced again).
+  if (!drawStepDraw && ctx.s.turn.number > 0 && !bardDrawing) {
+    let count = 0;
+    for (const id of ctx.s.battlefield)
+      if (obj(ctx, id).controller === player)
+        for (const a of def(ctx, id).abilities)
+          if (a.kind === 'static' && a.effect.kind === 'everyExtraDrawBecomes')
+            count = Math.max(count, a.effect.count);
+    if (count > 0) {
+      bardDrawing = true;
+      try {
+        for (let i = 0; i < count; i++) drawCard(ctx, player);
+      } finally {
+        bardDrawing = false;
+      }
+      return;
+    }
+  }
   // Marvel Super Heroes Jumpstart (Geniuses): Reed Richards, "the first time you would draw a card
   // each turn except the first card you draw during each of your draw steps, you draw four instead".
   if (!drawStepDraw && ctx.s.turn.number > 0 && !ctx.s.turn.extraDrawSeen?.includes(player)) {

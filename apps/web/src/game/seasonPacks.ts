@@ -7,6 +7,7 @@ import {
   realityFractureBoosterSheets,
   lorwynEclipsedBoosterSheets,
   tarkirDragonstormBoosterSheets,
+  theHobbitBoosterSheets,
   secretsOfStrixhavenArchiveSheets,
   secretsOfStrixhavenBoosterSheets,
   strixhavenArchiveSheets,
@@ -140,6 +141,15 @@ export const TARKIR_DRAGONSTORM_SHEETS = Object.fromEntries(
   ]),
 ) as Record<Rarity, string[]>;
 
+/** The Hobbit's booster cards: the 188 booster cards we play (front faces, no basics). */
+const hobCards = theHobbitBoosterSheets();
+export const THE_HOBBIT_SHEETS = Object.fromEntries(
+  RARITIES.map((rarity) => [
+    rarity,
+    hobCards[rarity].map((c) => slug(c.name)).filter((id) => cardDb.has(id) && !isBasic(id)),
+  ]),
+) as Record<Rarity, string[]>;
+
 const SHEETS: Record<SeasonPackKind, Record<Rarity, string[]>> = {
   foundations: FOUNDATIONS_SHEETS,
   bloomburrow: BLOOMBURROW_SHEETS,
@@ -150,6 +160,7 @@ const SHEETS: Record<SeasonPackKind, Record<Rarity, string[]>> = {
   realityFracture: REALITY_FRACTURE_SHEETS,
   lorwynEclipsed: LORWYN_ECLIPSED_SHEETS,
   tarkirDragonstorm: TARKIR_DRAGONSTORM_SHEETS,
+  theHobbit: THE_HOBBIT_SHEETS,
 };
 const ARCHIVE: Partial<Record<SeasonPackKind, Record<Rarity, string[]>>> = {
   strixhaven: STRIXHAVEN_ARCHIVE_SHEETS,

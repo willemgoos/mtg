@@ -183,6 +183,52 @@ from) when it's fixed. Older phases keep their own "Simplifications" lists in `d
 - [ ] Teval, Arbiter of Virtue: the cast menu doesn't say which graveyard cards a delve cast will exile (they're picked
       one at a time after choosing it).
 
+## The Hobbit (engine, phase 20a)
+
+- [ ] Storied / the enduring story: the designation is recorded at the next state-based check (and whenever a condition is read,
+      the live situation counts as having it), so a Storied permanent whose third artifact, legendary or Saga enters and leaves
+      again inside one resolution, with no state-based check in between, doesn't give the story (the rules give it the moment
+      you control the third). Everything that waits for a priority or a state-based check is exact (the legend rule, 0 toughness).
+- [ ] Typecycling (Landcycling, Mountaincycling, Halflingcycling): it is activated from the hand and discards as a cost, but the
+      engine has no "whenever you cycle" event for any cycling card (none in the pool, The Hobbit has none). A changeling in the
+      library isn't found by a search for its types (the library filter reads printed subtypes).
+- [ ] Bifur, Melodic Rider (`subtypeTriggersTwice`): for a Dwarf that has left the battlefield (its dies trigger) the Dwarf type
+      is read from its printed card (and changeling), not from effects that had made it a Dwarf.
+
+## The Hobbit (colorless group, phase 20b)
+
+- [ ] Troop of Ponies: two successive searches (the first basic goes onto the battlefield tapped, the second into your hand, one
+      shuffle at the end) instead of one search for up to two cards that you then split. With only one basic found it always
+      goes onto the battlefield (the rules let you choose); Cultivate works the same way.
+- [ ] Orcrist, Goblin-cleaver: the "choose a creature type" prompt offers the types of the creatures you control (a type none
+      of them has would only make no Treasure).
+- [ ] Sting, Bilbo's Sword: "creature target opponent controls" counts the creatures the opponent controls (the game has one
+      opponent, who is the target).
+
+## The Hobbit white (`hob/white.ts`, phase 20b)
+
+- [ ] An Unexpected Party: "as this enchantment enters, choose a creature type" is an enters trigger (the convention of the
+      earlier sets, see Lorwyn Eclipsed above), so in principle an opponent could respond before the type is set.
+- [ ] Kíli the Resourceful: "you may pay {0} rather than pay the equip cost of the first equip ability you activate each turn" is
+      applied automatically (the first equip activation each turn costs {0}); paying {0} is never worse, and which ability is
+      first is still the player's choice of order.
+- [ ] Moment of Glory: cast from a graveyard, the counters go on every creature you control at once (the target included),
+      which is the same result as "a counter on the target, and one on each other creature" (the engine can't name "each
+      creature other than the target").
+## The Hobbit (20b, black)
+
+- [ ] Gollum, Riddle Master: "As Gollum enters, choose odd or even" is made like every other "as this enters, choose" card of
+      the pool: an enters trigger that sets the choice (a spell cast in response to it sees no chosen quality yet).
+- [ ] The Master of Lake-town: "that player mills" is two triggers (one for your life loss, one for an opponent's), exact in a
+      two-player game.
+- [ ] Supper for Spiders: the Foods keep the card's own abilities (as the text says) and are artifacts, not creatures, from the
+      moment the arrival is processed; the engine sets that state right after moving the card, in the same resolution.
+## The Hobbit (blue, phase 20b)
+
+- [ ] Elrond, Moon-Reader: a creature tapped for mana while paying a cost activates its mana ability only if the creature has
+      a printed (or granted-as-ability) `mana` ability; a creature that gets "{T}: Add one mana" from another permanent's static
+      `grantMana` ability doesn't draw him a card. Its {5}{U}{U} takes "up to two" targets as two optional targets.
+
 ## Jump In slot cards (`jumpin-slots.ts`)
 
 - [ ] Polygraph Orb: collect evidence only offers cards with a mana value; the rules also let you exile lands and other

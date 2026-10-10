@@ -5,6 +5,7 @@ import {
   getCharacteristics,
   type Keyword,
   type ObjectId,
+  storyProgress,
 } from '@mtg/engine';
 
 /** An info box shown beside the hover preview (Arena-style keyword and status tooltips). */
@@ -117,6 +118,14 @@ const KEYWORDS: Record<Keyword, { name: string; text: string }> = {
   },
 };
 
+/** The Hobbit (20a): Storied, as the keyword's tooltip and the rule behind the player badge. */
+export const ENDURING_STORY_RULE =
+  'If you control three or more artifacts, legendaries, and/or Sagas, you have an enduring story for the rest of the game.';
+
+/** The tooltip of the enduring-story badge on a player: what it is and what it does for the cards that ask for it. */
+export const ENDURING_STORY_BADGE =
+  'Enduring story: this player controlled three or more artifacts, legendaries and/or Sagas with a Storied permanent on the battlefield. They keep it for the rest of the game.';
+
 const MECHANICS: Record<string, string> = {
   Prowess: 'Whenever you cast a noncreature spell, this creature gets +1/+1 until end of turn.',
   Landfall: 'Triggers whenever a land you control enters.',
@@ -144,6 +153,22 @@ const MECHANICS: Record<string, string> = {
   Behold: 'Choose a permanent of that type you control, or reveal a card of that type from your hand.',
   Flurry: 'Triggers when you cast your second spell each turn.',
   Renew: 'Activate from your graveyard by exiling this card, only as a sorcery.',
+  // The Hobbit (20a)
+  Amass:
+    'Put that many +1/+1 counters on an Army you control. It becomes the named type too. If you don’t control an Army, first create a 0/0 black Army creature token of that type.',
+  Recruit:
+    'Draw a card, then discard a card. If you discarded a nonland card, create a 1/1 white Human Soldier creature token.',
+  Storied: ENDURING_STORY_RULE,
+  Cycling: '{Cost}, Discard this card: Draw a card.',
+  Landcycling: '{Cost}, Discard this card: Search your library for a land card, reveal it, put it into your hand, then shuffle.',
+  'Basic landcycling':
+    '{Cost}, Discard this card: Search your library for a basic land card, reveal it, put it into your hand, then shuffle.',
+  Mountaincycling:
+    '{Cost}, Discard this card: Search your library for a Mountain card, reveal it, put it into your hand, then shuffle.',
+  Halflingcycling:
+    '{Cost}, Discard this card: Search your library for a Halfling card, reveal it, put it into your hand, then shuffle.',
+  Typecycling:
+    '{Cost}, Discard this card: Search your library for a card of the named type, reveal it, put it into your hand, then shuffle.',
 };
 
 const signed = (n: number) => (n >= 0 ? `+${n}` : `${n}`);
@@ -197,6 +222,21 @@ export function cardNotes(view: GameState, defId: CardDefId, oid?: ObjectId | nu
   const c = onBattlefield ? getCharacteristics(view, cardDb, o.id) : null;
   // Keywords: what it has now (including granted ones).
   const notes = ruleNotes(defId, c ? c.keywords : def.keywords);
+  // The Hobbit (20a): Storied also says whether its controller has the enduring story yet, and how close they are.
+  if (o && def.abilities.some((a) => a.kind === 'static' && a.effect.kind === 'storied')) {
+    const owner = o.zone === 'battlefield' ? o.controller : o.owner;
+    const p = storyProgress(view, cardDb, owner);
+    const has = !!view.players[owner]?.enduringStory || p.has;
+    notes.push({
+      kind: 'effect',
+      title: 'Enduring story',
+      text: has
+        ? 'You have an enduring story.'
+        : o.zone === 'battlefield'
+          ? `Not yet: ${p.count} of the 3 artifacts, legendaries and/or Sagas.`
+          : 'Not yet: it works while this is on the battlefield.',
+    });
+  }
   if (!o || !onBattlefield || !c) return notes;
 
   // What is changing this permanent right now.

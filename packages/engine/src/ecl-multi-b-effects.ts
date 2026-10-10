@@ -48,7 +48,7 @@ const COLOR_NAMES: Record<Color, string> = {
 
 const staticDefsCache = new WeakMap<CardDb, Map<string, ReadonlySet<CardDefId>>>();
 
-function defsWithStatic(db: CardDb, kind: StaticDef['kind']): ReadonlySet<CardDefId> {
+export function defsWithStatic(db: CardDb, kind: StaticDef['kind']): ReadonlySet<CardDefId> {
   let byKind = staticDefsCache.get(db);
   if (!byKind) staticDefsCache.set(db, (byKind = new Map()));
   let ids = byKind.get(kind);

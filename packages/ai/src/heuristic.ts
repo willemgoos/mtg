@@ -103,6 +103,9 @@ export function createHeuristicBot(db: CardDb, name = 'heuristic'): Bot {
             const fresh = d.options.findIndex((o) => !o.label.endsWith('already has one'));
             return { type: 'chooseOption', player: me, index: Math.max(0, fresh) };
           }
+          // The Hobbit (20b green): Through the Forest Gate lists the lands first and "Done" last: take every land.
+          if (d.title?.startsWith('Through the Forest Gate'))
+            return { type: 'chooseOption', player: me, index: 0 };
           // Reality Fracture (17a fixes): every creature type is on offer.
           if (d.title === 'Choose a creature type') return chooseCreatureType(engine, view, me, d);
           // Reality Fracture (17a): Arc of Fortune.
@@ -272,6 +275,50 @@ function chooseManaFixer(
   return undefined;
 }
 
+/** Land subtypes: a search for one of these is a search for a land. */
+const LAND_SUBTYPES = new Set(['Plains', 'Island', 'Swamp', 'Mountain', 'Forest']);
+
+/**
+ * The Hobbit (20a): cycling and typecycling are neutral to the evaluation (a card for a card, and mana it can't see), so they get a
+ * rule: in our second main phase, when nothing else is worth doing, cycle a card that is dead in hand: a spell costing more than
+ * we can reach soon (more than our lands plus two) or a land we don't need (six lands in play). A search for a land is skipped when
+ * we have all the lands we want (seven in play and hand together).
+ */
+function chooseCycling(
+  engine: Engine,
+  view: GameState,
+  me: PlayerId,
+  legal: Action[],
+): Action | undefined {
+  if (view.turn.activePlayer !== me || view.stack.length > 0 || view.turn.step !== 'main2')
+    return undefined;
+  const isLand = (id: ObjectId) => !!engine.db.get(view.objects[id]!.defId)?.types.includes('Land');
+  const inPlay = view.battlefield.filter(
+    (id) => view.objects[id]!.controller === me && isLand(id),
+  ).length;
+  const inHand = view.players[me].hand.filter(isLand).length;
+  for (const a of legal) {
+    if (a.type !== 'activateAbility') continue;
+    const o = view.objects[a.source];
+    if (!o || o.zone !== 'hand') continue;
+    const ab = getAbilities(view, engine.db, a.source)[a.abilityIndex];
+    if (ab?.kind !== 'activated' || !ab.fromHand || !ab.cost.discardSelf) continue;
+    const d = engine.db.get(o.defId);
+    if (!d) continue;
+    const dead = d.types.includes('Land') ? inPlay >= 6 : manaValue(d.manaCost) > inPlay + 2;
+    if (!dead) continue;
+    const first = ab.effects[0];
+    const filter = first?.kind === 'searchLibrary' ? first.filter : undefined;
+    const forLand =
+      filter === 'basicLand' ||
+      (typeof filter === 'object' &&
+        (filter.types?.includes('Land') || LAND_SUBTYPES.has(filter.subtype ?? '')));
+    if (forLand && inPlay + inHand >= 7) continue;
+    return a;
+  }
+  return undefined;
+}
+
 function choosePriorityAction(
   engine: Engine,
   view: GameState,
@@ -324,6 +371,8 @@ function choosePriorityAction(
       best = a;
     }
   }
+  // The Hobbit (20a): nothing better to do: cycle a dead card.
+  if (best === pass) return chooseCycling(engine, view, me, legal) ?? best;
   return best;
 }
 

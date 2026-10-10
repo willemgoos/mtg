@@ -73,6 +73,7 @@ import {
   hasConvoke,
   removeCounterKinds,
 } from './ecl-18a.ts';
+import { firstEquipFree, noteEquipActivation } from './hob-white-effects.ts'; // The Hobbit (20b white)
 import { checkCondition, triggeredAbility } from './triggers.ts';
 import { givePriority } from './turn.ts';
 import type {
@@ -426,6 +427,13 @@ export function castCost(
         for (const a of def(ctx, id).abilities)
           if (a.kind === 'static' && a.effect.kind === 'graveyardSpellsCostLess')
             reduce += a.effect.amount;
+  // The Hobbit (20b blue): Bilbo, Thief in the Night, spells cast from anywhere other than your hand cost {1} less.
+  if (o.zone !== 'hand')
+    for (const id of ctx.s.battlefield)
+      if (obj(ctx, id).controller === player)
+        for (const a of def(ctx, id).abilities)
+          if (a.kind === 'static' && a.effect.kind === 'spellsFromOutsideHandCostLess')
+            reduce += a.effect.amount;
   // Heroic Return, Avenge: "costs {2} less if ...".
   if (d.costReductionIf && checkCondition(ctx, d.costReductionIf.condition, player, o))
     reduce += d.costReductionIf.amount;
@@ -636,6 +644,10 @@ export function castSpell(
     player,
     payment.filter((id) => !convokers.includes(id)),
   );
+  // The Hobbit (20b multicolour): Smaug, Wicked Worm, "mana from a Treasure was spent to cast it" (read before the Treasure goes).
+  const fromTreasure = payment.some(
+    (id) => !convokers.includes(id) && !!ctx.s.objects[id] && def(ctx, id).subtypes.includes('Treasure'),
+  );
   moveObject(ctx, card, 'stack', { controller: player });
   // Reality Fracture (17c): beholding a card from your hand reveals it (a permanent you control is only chosen).
   // Lorwyn Eclipsed (18a): "behold … and exile it" exiles the card instead (nothing is revealed).
@@ -736,6 +748,7 @@ export function castSpell(
   o.manaSpent = payment.filter((id) => !convokers.includes(id)).length;
   o.manaColors = manaColors;
   o.manaPaid = manaPaid;
+  if (fromTreasure) o.manaFromTreasure = true; // The Hobbit (20b multicolour)
   if (teamwork) payTeamwork(ctx, teamwork);
   if (convokers.length) o.convokedBy = payment.filter((id) => convokers.includes(id));
   if (d.types.includes('Creature')) scryForAncestry(ctx, player, d, payment);
@@ -1135,6 +1148,8 @@ export function abilityManaCost(
   targets?: readonly TargetChoice[] | 'best',
 ): ManaCost | undefined {
   const o = obj(ctx, source);
+  // The Hobbit (20b white): Kíli the Resourceful, the first equip ability each turn costs {0}.
+  if (a.cost.mana && firstEquipFree(ctx, o, a)) return { generic: 0, colored: {} };
   // Final Fantasy (11c): activated cost reduction (Balamb Garden), and Firion's cheaper equip.
   const less =
     (a.costReduction !== undefined
@@ -1448,6 +1463,7 @@ export function activateAbility(
   if (a.once || a.powerUp) (src.usedAbilities ??= []).push(index);
   // Marvel Super Heroes Jumpstart (Trained): Advancing the Spirit frees only the first power-up each turn.
   if (a.powerUp && player === ctx.s.turn.activePlayer) ctx.s.turn.powerUpActivated = true;
+  noteEquipActivation(ctx, player, source, a); // The Hobbit (20b white): Kíli the Resourceful
   if (a.cost.sacrificeSelf) {
     item.lkiPower = power(ctx, source);
     sacrificePermanent(ctx, source);
@@ -2507,6 +2523,8 @@ function bonusCounters(
 export function answerSearch(ctx: Ctx, card: ObjectId | null): void {
   const d = ctx.s.decision;
   if (d.kind !== 'searchLibrary') throw new Error('Not searching');
+  // The Hobbit (20b red): Last Light of Durin's Day, a card found in the library means a shuffle.
+  const fromLibrary = !!d.handOrLibrary && card !== null && obj(ctx, card).zone === 'library';
   if (card !== null) {
     // Strixhaven (13c): Ardent Dustspeaker puts a graveyard card on the bottom of the library.
     if (d.fromGraveyard && d.to === 'libraryBottom') {
@@ -2538,6 +2556,10 @@ export function answerSearch(ctx: Ctx, card: ObjectId | null): void {
         if (put.zone === 'battlefield') d.resume.chosen = { id: put.id, zcc: put.zcc };
       } else moveObject(ctx, card, 'hand');
       squirrelFood(ctx, d, card);
+      if (fromLibrary) {
+        emit(ctx, { type: 'searched', player: d.player, id: card });
+        shuffleLibrary(ctx, d.player);
+      }
       return resume(ctx, d.resume, d.thenPriority);
     }
     // Reality Fracture (17a fixes): Loyal Tutor, "reveal it": shown to everyone.
@@ -2561,6 +2583,11 @@ export function answerSearch(ctx: Ctx, card: ObjectId | null): void {
       const found = obj(ctx, card);
       found.playFreeBy = d.player;
       found.playFreeUntilTurn = ctx.s.turn.number;
+    } else if (d.exileWithSource) {
+      // The Hobbit (20b white): Roads Go Ever, Ever On, "exile them": remembered by the Saga.
+      moveObject(ctx, card, 'exile');
+      const src = d.resume.source && ctx.s.objects[d.resume.source.id];
+      if (src && src.zone === 'battlefield') (src.exiledWith ??= []).push(card);
     } else if (d.to === 'hideaway') {
       // Final Fantasy (11c): hideaway. Exiled face down, remembered by the land.
       moveObject(ctx, card, 'exile');
@@ -2590,6 +2617,8 @@ export function answerSearch(ctx: Ctx, card: ObjectId | null): void {
         obj(ctx, card).tapped = false;
     } else moveObject(ctx, card, 'hand');
     if (d.to !== 'hideaway') emit(ctx, { type: 'searched', player: d.player, id: card });
+    // The Hobbit (20b colorless): Elven Passage, the effects after the search see the card found as 'chosen'.
+    if (d.rememberFound) d.resume.chosen = { id: card, zcc: obj(ctx, card).zcc };
     // Reality Fracture (17a): Fblthp, Hexhaven Invigorator: "up to N cards", one more pick while some are left.
     if (d.remaining !== undefined && d.remaining > 1) {
       const options = d.options.filter(
@@ -2620,6 +2649,7 @@ export function answerSearch(ctx: Ctx, card: ObjectId | null): void {
   }
   if (d.fromGraveyard) {
     squirrelFood(ctx, d, null);
+    if (d.handOrLibrary) shuffleLibrary(ctx, d.player); // The Hobbit (20b red): searched the library, found nothing
     return resume(ctx, d.resume, d.thenPriority);
   }
   // Strixhaven (13c): Explore the Vastlands: now choose from what's left of the cards looked at.
@@ -2697,6 +2727,13 @@ export function answerDiscard(ctx: Ctx, card: ObjectId): void {
   if (d.kind !== 'discard') throw new Error('Not discarding');
   const nonland = !def(ctx, card).types.includes('Land');
   moveObject(ctx, card, d.exile ? 'exile' : 'graveyard');
+  // The Hobbit (20b multicolour): Silvan Reveler, "if you discard a land card this way, put it from your graveyard onto the
+  // battlefield tapped".
+  if (d.landToBattlefieldTapped && !nonland && ctx.s.objects[card]?.zone === 'graveyard') {
+    moveObject(ctx, card, 'battlefield', { controller: d.player });
+    const landed = ctx.s.objects[card];
+    if (landed?.zone === 'battlefield') landed.tapped = true;
+  }
   // Strixhaven (13c): Flamethrower Sonata.
   const dealt = d.damageTo !== undefined ? d.resume.targets[d.damageTo] : undefined;
   if (
@@ -2746,6 +2783,10 @@ export function answerDiscard(ctx: Ctx, card: ObjectId): void {
       if (d.tokenPerNonland && d.nonlandDiscarded)
         after.push({ kind: 'createToken', token: d.tokenPerNonland, count: d.nonlandDiscarded });
       continueWith(ctx, d.resume, after, d.thenPriority);
+    } else if (d.thenIfNonland) {
+      // The Hobbit (20a): Recruit, "if you discarded a nonland card".
+      if (d.nonlandDiscarded) continueWith(ctx, d.resume, d.thenIfNonland, d.thenPriority);
+      else resume(ctx, d.resume, d.thenPriority);
     } else if (d.then) {
       // Reality Fracture (17a): "If you do" (Tether Technician, Improvised Act).
       continueWith(ctx, d.resume, d.then, d.thenPriority);

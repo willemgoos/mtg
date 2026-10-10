@@ -2,23 +2,31 @@
  * Writes src/<set>/booster-list.ts: every card in a set's booster packs with
  * its rarity in that set. The generated scryfall.json keeps one printing per
  * card, so cards reprinted in a preferred set lose their `set`; this list doesn't.
- * Run from packages/cards: node scripts/fetch-booster-list.ts stx|sos|fra|ecl|tdm
+ * Run from packages/cards: node scripts/fetch-booster-list.ts stx|sos|fra|ecl|tdm|hob
  *
  * STX: Scryfall `is:booster`. SOS: Scryfall marks no card `is:booster`, so it is
  * the main-set cards (numeric collector numbers up to 280), basics left out.
  * FRA: the same (collector numbers 1 to 280 are the 280 nonbasic main-set cards).
  * ECL: the same, collector numbers 1 to 268 (basics are 269 to 283).
  * TDM: Scryfall `is:booster` (271 cards, collector numbers 1 to 271).
+ * HOB: Scryfall marks no card `is:booster`: collector numbers 1 to 188 (189 to 198 are basics).
  */
 import { writeFileSync } from 'node:fs';
 
 const set = process.argv[2];
-if (set !== 'stx' && set !== 'sos' && set !== 'fra' && set !== 'ecl' && set !== 'tdm')
-  throw new Error('usage: fetch-booster-list.ts stx|sos|fra|ecl|tdm');
+if (
+  set !== 'stx' &&
+  set !== 'sos' &&
+  set !== 'fra' &&
+  set !== 'ecl' &&
+  set !== 'tdm' &&
+  set !== 'hob'
+)
+  throw new Error('usage: fetch-booster-list.ts stx|sos|fra|ecl|tdm|hob');
 const query =
   set === 'stx' || set === 'tdm'
     ? `set:${set} is:booster`
-    : `set:${set} cn>=1 cn<=${set === 'ecl' ? 268 : 280} -t:basic -is:promo`;
+    : `set:${set} cn>=1 cn<=${set === 'ecl' ? 268 : set === 'hob' ? 188 : 280} -t:basic -is:promo`;
 
 const headers = { 'User-Agent': 'mtg-personal-client/0.1', Accept: 'application/json' };
 interface C {

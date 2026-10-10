@@ -3,6 +3,7 @@ import {
   type GameState,
   getCharacteristics,
   manaValue,
+  storyProgress,
   type Keyword,
   type ObjectId,
   type PlayerId,
@@ -44,6 +45,13 @@ export const WEIGHTS = {
   combatPayoff: 1.5,
   /** Cards still to come (rebound, suspend, castable in exile), relative to a card in hand. */
   laterCard: 1,
+  /**
+   * The Hobbit (20a): having an enduring story. What it does shows in the creatures' stats while the Storied permanents live; the
+   * designation itself stays for the rest of the game, which is worth a little more.
+   */
+  enduringStory: 1.5,
+  /** Each of the three artifacts, legendaries and Sagas toward the enduring story, while a Storied permanent waits for it. */
+  storyProgress: 0.4,
 };
 /** Each loyalty counter on a planeswalker. */
 export const LOYALTY = 0.4;
@@ -93,6 +101,13 @@ const OMEN_RETURN = 0.75;
 /** Omen spells `p` has cast this turn. */
 function omensCast(s: GameState, db: CardDb, p: PlayerId): number {
   return (s.turn.castDefs?.[p] ?? []).filter((id) => !!db.get(id)?.subtypes.includes('Omen')).length;
+}
+
+/** The Hobbit (20a): the worth of `p`'s enduring story, or of the way to it. */
+function storyValue(s: GameState, db: CardDb, p: PlayerId): number {
+  const { has, storied, count } = storyProgress(s, db, p);
+  if (has) return WEIGHTS.enduringStory;
+  return storied ? WEIGHTS.storyProgress * count : 0;
 }
 
 /** Cards `p` will get to cast later: suspended, rebound, or exiled and castable by them. */
@@ -153,6 +168,8 @@ export function evaluate(s: GameState, db: CardDb, me: PlayerId): number {
   // Tarkir: Dragonstorm (19a): an Omen cast this turn is shuffled back into its owner's library, so it isn't a card lost
   // (it will be drawn again as a creature): worth most of the card it left the hand as.
   v += OMEN_RETURN * CARD_IN_HAND * (omensCast(s, db, me) - omensCast(s, db, opp));
+  // The Hobbit (20a): the enduring story, and the permanents on the way to it (only with a Storied permanent to use them).
+  v += storyValue(s, db, me) - storyValue(s, db, opp);
   // Cards still to come: rebound and suspend, free or stolen cards in exile.
   v += WEIGHTS.laterCard * CARD_IN_HAND * (laterCards(s, me) - laterCards(s, opp));
 

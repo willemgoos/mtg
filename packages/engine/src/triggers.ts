@@ -14,6 +14,7 @@ import { addLore } from './sagas.ts';
 import { countersOnLeft, spentColors } from './ecl-18a.ts';
 import { spellsCastThisTurn } from './tdm-19a.ts';
 import { elementalTriggerCopies } from './ecl-multi-b-effects.ts';
+import { hasEnduringStory, subtypeTriggerCopies } from './hob-20a.ts';
 import { FIC_CONDITIONS } from './fic-effects.ts';
 import { FIN_CONDITIONS } from './fin-effects.ts';
 import { doubleAttackTriggers, TDM_MISC_CONDITIONS } from './tdm-misc-effects.ts';
@@ -54,6 +55,10 @@ export function checkCondition(
   subject?: GameObject,
 ): boolean {
   if (!c) return true;
+  // The Hobbit (20a): Storied, "as long as you have an enduring story".
+  if (c.kind === 'enduringStory') return hasEnduringStory(ctx, controller);
+  // The Hobbit (20b multicolour): Smaug, Wicked Worm, "if mana from a Treasure was spent to cast it" (the spell is the subject).
+  if (c.kind === 'treasureManaSpent') return !!(subject ?? self)?.manaFromTreasure;
   // Secrets of Strixhaven (14b)
   if (c.kind === 'cardsLeftGraveyardThisTurn')
     return (ctx.s.turn.leftGraveyard?.[controller] ?? 0) > 0;
@@ -210,6 +215,13 @@ export function checkCondition(
     const t = targets?.[c.target];
     const o = t && 'object' in t ? ctx.s.objects[t.object.id] : undefined;
     return !!o && o.zone === 'battlefield' && o.controller === controller;
+  }
+  // The Hobbit (20b black): Azog, Moria's Ruin, "if you controlled that creature" (it was destroyed a moment ago).
+  if (c.kind === 'targetWasControlledByYou') {
+    const t = targets?.[c.target];
+    const o = t && 'object' in t ? ctx.s.objects[t.object.id] : undefined;
+    const gone = t && 'object' in t ? ctx.s.turn.tokenLki?.[t.object.id] : undefined; // a destroyed token
+    return o ? o.controller === controller : gone?.controller === controller;
   }
   // Secrets of Strixhaven (14a): increment, "the amount of mana you spent is greater than this creature's power or toughness".
   if (c.kind === 'manaSpentExceedsLowestStat') {
@@ -391,7 +403,9 @@ export function checkCondition(
     // Strixhaven Brawl (15a): Sevinne's Reclamation, "if this spell was cast from a graveyard".
     case 'castFromGraveyard': {
       const item = ctx.s.stack.find((x) => x.kind === 'spell' && x.id === self.id);
-      return item?.kind === 'spell' && !!item.flashback;
+      // The Hobbit (20a): also as the spell resolves ("If this spell was cast from a graveyard, ... instead": Moment of Glory,
+      // Plunder the Trollshaws, Tidings of War), when its stack item is gone; the card remembers where it was cast from.
+      return (item?.kind === 'spell' && !!item.flashback) || !!self.castFromGraveyardZone;
     }
     // Reality Fracture (17a): Twinned Vision, "if this spell wasn't cast from your hand".
     case 'notCastFromHand':
@@ -424,6 +438,9 @@ function queue(
   }
   // "This ability triggers only once each turn."
   const printed = defOf(ctx, defId).abilities[index];
+  // The Hobbit (20b black): Gollum, Riddle Master; "choose one that hasn't been chosen" with every mode chosen: nothing to do.
+  if (printed?.kind === 'triggered' && printed.modesOnce && printed.modes && printed.modes.every((_, m) => o.usedModes?.includes(m)))
+    return;
   // An ability granted until end of turn (Root Manipulation on a Pest) sits after the printed ones
   // and has no printed counterpart to look up later, so the pending trigger carries it itself.
   const granted = printed ? undefined : def(ctx, o.id).abilities[index];
@@ -490,6 +507,10 @@ function queue(
   // Lorwyn Eclipsed (18b, multi-b): Twinflame Travelers, another Elemental's triggered ability triggers an additional time.
   if (a?.kind === 'triggered')
     for (let i = elementalTriggerCopies(ctx, { id: o.id, defId: o.defId, controller }); i > 0; i--)
+      ctx.s.pendingTriggers.push({ ...pending });
+  // The Hobbit (20a): Bifur, Melodic Rider, a Dwarf's triggered ability triggers an additional time.
+  if (a?.kind === 'triggered')
+    for (let i = subtypeTriggerCopies(ctx, { id: o.id, defId: o.defId, controller }); i > 0; i--)
       ctx.s.pendingTriggers.push({ ...pending });
 }
 
@@ -707,7 +728,9 @@ function detect(ctx: Ctx, ev: GameEvent): void {
   switch (ev.type) {
     case 'objectMoved': {
       const moved = s.objects[ev.id];
-      const movedDef = defOf(ctx, ev.defId);
+      // The Hobbit (20b black): Supper for Spiders, a creature card that came back as a Food artifact is no creature entering.
+      const movedDef =
+        moved?.supperFood && moved.zone === 'battlefield' ? def(ctx, moved.id) : defOf(ctx, ev.defId);
       // Marvel Super Heroes Jumpstart (Tenacious/Rampaging): creature cards put into your
       // graveyard from anywhere, counted per batch ("that many": Voracious Brood).
       if (ev.to === 'graveyard' && moved && !moved.isToken && movedDef.types.includes('Creature'))
@@ -844,6 +867,11 @@ function detect(ctx: Ctx, ev: GameEvent): void {
         for (const id of s.players[moved.controller].graveyard) {
           const card = s.objects[id]!;
           def(ctx, id).abilities.forEach((a, i) => {
+            // The Hobbit (20b multicolour): Silvan Reveler, "Landfall — ... return this card from your graveyard to your hand".
+            if (a.kind === 'triggered' && a.fromGraveyard && a.trigger.on === 'landfall') {
+              if (!suppressed && isLand) queue(ctx, card, i, moved.controller, moved);
+              return;
+            }
             if (a.kind !== 'triggered' || !a.fromGraveyard || a.trigger.on !== 'otherCreatureEtb')
               return;
             if (!suppressed && isCreature && matchesFilter(ctx, moved.id, a.trigger.filter, id))
@@ -977,12 +1005,17 @@ function detect(ctx: Ctx, ev: GameEvent): void {
       if (ev.from === 'graveyard' && ev.to !== 'graveyard' && moved && !moved.isToken)
         forEachBattlefieldTrigger(
           ctx,
-          (o, a) => a.trigger.on === 'cardsLeaveYourGraveyard' && o.controller === moved.owner,
+          (o, a) =>
+            a.trigger.on === 'cardsLeaveYourGraveyard' &&
+            o.controller === moved.owner &&
+            // The Hobbit (20b black): Along the Crooked Way, "a creature card leaves your graveyard".
+            (!a.trigger.filter || cardMatches(ctx, moved.id, a.trigger.filter)),
           moved,
         );
       if (
         ev.from === 'battlefield' &&
         ev.to === 'graveyard' &&
+        !ev.leftAsFood &&
         movedDef.types.includes('Creature')
       ) {
         // "Dies" triggers look back in time: the ability triggers from the graveyard card.
@@ -1354,6 +1387,16 @@ function detect(ctx: Ctx, ev: GameEvent): void {
           });
         }
       // Final Fantasy (11c): life loss triggers. "Whenever an opponent loses life" ("that many").
+      // The Hobbit (20b black): The Master of Lake-town, "whenever a player loses life, that player mills that many cards".
+      if (ev.delta < 0)
+        forEachBattlefieldTrigger(
+          ctx,
+          (o, a) =>
+            a.trigger.on === 'playerLosesLife' &&
+            (a.trigger.whose === 'you' ? o.controller === ev.player : o.controller !== ev.player),
+          undefined,
+          -ev.delta,
+        );
       if (ev.delta < 0)
         forEachBattlefieldTrigger(
           ctx,
@@ -2045,7 +2088,12 @@ function detect(ctx: Ctx, ev: GameEvent): void {
       if (!target || target.zone !== 'battlefield') return;
       forEachBattlefieldTrigger(
         ctx,
-        (o, a) => a.trigger.on === 'counterPutOnYourCreature' && o.controller === target.controller,
+        (o, a) =>
+          a.trigger.on === 'counterPutOnYourCreature' &&
+          o.controller === target.controller &&
+          // The Hobbit (20b multicolour): The Great Goblin.
+          (!a.trigger.byYou || (ev.by ?? ev.player) === o.controller) &&
+          matchesFilter(ctx, target.id, a.trigger.filter, o.id),
         target,
         ev.count,
       );
@@ -2090,6 +2138,12 @@ function detect(ctx: Ctx, ev: GameEvent): void {
         ctx,
         (o, a) => a.trigger.on === 'opponentActivatesAbility' && o.controller !== ev.player,
       );
+      // The Hobbit (20b blue): Elrond, Moon-Reader, an ability of a creature.
+      if (s.objects[ev.source]?.zone === 'battlefield' && isCreatureNow(ctx, ev.source))
+        forEachBattlefieldTrigger(
+          ctx,
+          (o, a) => a.trigger.on === 'youActivateCreatureAbility' && o.controller === ev.player,
+        );
       // Reality Fracture (17c): loyalty abilities (Ajani Unrelenting, Way of the Mind Sculptor, Gideon the Oathless).
       if (item?.kind === 'ability' && item.activated?.cost.loyalty !== undefined) {
         const cost = item.activated.cost;
@@ -2106,6 +2160,13 @@ function detect(ctx: Ctx, ev: GameEvent): void {
       }
       return;
     }
+    // The Hobbit (20b blue): Elrond, Moon-Reader, a creature tapped for mana (its mana ability is activated).
+    case 'creatureManaAbility':
+      forEachBattlefieldTrigger(
+        ctx,
+        (o, a) => a.trigger.on === 'youActivateCreatureAbility' && o.controller === ev.player,
+      );
+      return;
     case 'tappedForTeamwork': {
       const o = s.objects[ev.id];
       if (!o) return;
@@ -2338,6 +2399,9 @@ export function nextPendingTriggerIndex(ctx: Ctx): number {
 /** Type and subtype checks against a card definition (for a permanent that has already left). */
 export function defMatches(d: CardDefinition, f: CardFilter): boolean {
   if (f.types && !f.types.some((t) => d.types.includes(t))) return false;
+  // The Hobbit (20b black): Sackville-Bagginses, "whenever you sacrifice a token".
+  if (f.token && !d.isToken) return false;
+  if (f.nontoken && d.isToken) return false;
   // Tarkir: Dragonstorm (19a): "a noncreature spell".
   if (f.notTypes && f.notTypes.some((t) => d.types.includes(t))) return false;
   if (f.hasKeyword && !d.keywords.includes(f.hasKeyword)) return false;
@@ -2508,9 +2572,16 @@ function triggersTwice(ctx: Ctx, o: GameObject, a: Triggered): boolean {
       ? ctx.s.objects[o.attachedTo]
       : undefined;
   if (!host || host.zone !== 'battlefield') return false;
+  const twice = def(ctx, host.id).abilities.filter(
+    (x) => x.kind === 'static' && x.effect.kind === 'equippedTriggersTwice',
+  );
+  if (twice.length === 0) return false;
+  // The Hobbit (20b blue): Wizard's Staff gives only the equipped creature's own abilities the extra trigger.
   if (
-    !def(ctx, host.id).abilities.some(
-      (x) => x.kind === 'static' && x.effect.kind === 'equippedTriggersTwice',
+    o.id !== host.id &&
+    twice.every(
+      (x) =>
+        x.kind === 'static' && x.effect.kind === 'equippedTriggersTwice' && x.effect.creatureOnly,
     )
   )
     return false;

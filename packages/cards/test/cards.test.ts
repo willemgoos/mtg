@@ -8,6 +8,7 @@ import {
   MARVEL_TROPHY_DECKS,
   FINAL_FANTASY_TROPHY_DECKS,
   TARKIR_DRAGONSTORM_TROPHY_DECKS,
+  THE_HOBBIT_TROPHY_DECKS,
   BLOOMBURROW_POOL,
   MARVEL_DECKS,
   MARVEL_POOL,
@@ -37,6 +38,7 @@ import {
   REALITY_FRACTURE_POOL,
   LORWYN_ECLIPSED_POOL,
   TARKIR_DRAGONSTORM_POOL,
+  THE_HOBBIT_POOL,
   OTHER_POOL,
   PLAYABLE_DECKS,
   parseManaCost,
@@ -85,6 +87,7 @@ describe('card data', () => {
         ...REALITY_FRACTURE_POOL,
         ...LORWYN_ECLIPSED_POOL,
         ...TARKIR_DRAGONSTORM_POOL,
+        ...THE_HOBBIT_POOL,
       ].sort(),
     );
     for (const c of SCRYFALL) expect(c.image?.normal).toMatch(/^https:\/\/cards\.scryfall\.io\//);
@@ -168,6 +171,7 @@ describe('card data', () => {
         ...MARVEL_TROPHY_DECKS.map((d) => d.id),
         ...FINAL_FANTASY_TROPHY_DECKS.map((d) => d.id),
         ...TARKIR_DRAGONSTORM_TROPHY_DECKS.map((d) => d.id),
+        ...THE_HOBBIT_TROPHY_DECKS.map((d) => d.id),
         ...MARVEL_DECKS.map((d) => d.id),
         ...FINAL_FANTASY_DECKS.map((d) => d.id),
         ...STRIXHAVEN_DECKS.map((d) => d.id),

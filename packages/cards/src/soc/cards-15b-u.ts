@@ -10,6 +10,7 @@ import { type Behavior, parseManaCost as mana } from '../build.ts';
 import { draw, pump, t0, t1, when, yours } from '../blb/helpers.ts';
 import { investigate } from '../msh/helpers.ts';
 import { tapFor } from '../msc/helpers.ts';
+import { amass } from '../hob-vocab.ts';
 
 /**
  * Strixhaven Brawl (15b): the blue cards of the Brawl decks. Printed
@@ -350,7 +351,7 @@ export const BRAWL_15B_U: Record<string, Behavior> = {
     },
     kicker: overload('{1}{U}', { targets: [], effects: [pump(yours, 0, 1, ['hexproof'])] }),
   },
-  'Lazotep Plating': spell([], custom('u15bAmass'), { kind: 'playerHexproof' }),
+  'Lazotep Plating': spell([], amass('Zombie', 1), { kind: 'playerHexproof' }),
 
   // ------------------------------------------------------------ big spells
   'Part the Waterveil': {

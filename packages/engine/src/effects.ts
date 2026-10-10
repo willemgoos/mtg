@@ -56,6 +56,7 @@ import { phaseOut } from './phasing.ts';
 import { foodsOf } from './forage.ts';
 import { canPayFrom, manaSources, manaValue } from './mana.ts';
 import { nextInt, shuffleInPlace } from './rng.ts';
+import { shuffleLibrary } from './setup.ts'; // The Hobbit (20b red)
 import { checkCondition, triggeredAbility } from './triggers.ts';
 import { addLore } from './sagas.ts';
 import { CHOOSERS } from './stx-13c-a-effects.ts';
@@ -64,6 +65,8 @@ import { planeswalkersSurvive, tokenMultiplier } from './brawl-15a-w-effects.ts'
 import { crownReplacement } from './ecl-crown.ts';
 import { extraEntryCounters } from './tdm-misc-effects.ts';
 import { protectedFrom } from './brawl-15b-w-effects.ts';
+import { amassPut, amassStep, recruitSteps } from './hob-20a.ts';
+import { HOB_MULTICOLOUR_EXPANDERS } from './hob-multicolour-effects.ts'; // The Hobbit (20b multicolour)
 import { SOS_14B_C_CHOOSERS } from './sos-14b-c-effects.ts';
 import type {
   AbilityDef,
@@ -242,6 +245,16 @@ function prevented(ctx: Ctx, src: DamageSource, to: TargetChoice, amount: number
   if ('object' in to && useShield(ctx, to.object.id)) return 0;
   if (ctx.s.battlefield.some((id) => hasStaticKind(ctx, id, 'damageCantBePrevented')))
     return amount;
+  // The Hobbit (20b blue): Old Fat Spider Can't See Me, "prevent all damage that would be dealt by" the creature.
+  if (
+    ctx.s.effects.some(
+      (x) =>
+        x.preventDamageDealt &&
+        x.affected.id === src.id &&
+        x.affected.zcc === ctx.s.objects[src.id]?.zcc,
+    )
+  )
+    return 0;
   // Marvel Super Heroes Jumpstart (Squadron): Hyperion prevents all but 1 of damage to you and your Heroes.
   if (amount > 1 && allButOne(ctx, to)) amount = 1;
   if ('player' in to) {
@@ -730,7 +743,9 @@ export function resolveRef(ctx: Ctx, es: EffectSource, ref: Ref): TargetChoice[]
   if (typeof ref === 'object' && 'controllerOf' in ref) {
     const t = es.targets[ref.controllerOf];
     const o = t && 'object' in t ? ctx.s.objects[t.object.id] : undefined;
-    return o ? [{ player: o.controller }] : [];
+    // The Hobbit (20b black): Azog, Moria's Ruin; a destroyed token is gone, but its controller was recorded.
+    const gone = t && 'object' in t ? ctx.s.turn.tokenLki?.[t.object.id] : undefined;
+    return o ? [{ player: o.controller }] : gone ? [{ player: gone.controller }] : [];
   }
   // Reality Fracture (17a): Clash of Elements, "its owner".
   if (typeof ref === 'object' && 'ownerOf' in ref) {
@@ -895,6 +910,12 @@ export function resolveAmount(ctx: Ctx, es: EffectSource, amount: Amount): numbe
     return o ? Math.max(0, o.zone === 'battlefield' ? power(ctx, o.id) : (def(ctx, o.id).power ?? 0)) : 0;
   }
   if ('powerOf' in amount) {
+    // The Hobbit (20b black): Rhovanion Rampager, "the sacrificed creature's power" (the permanent chosen, now gone: its last power).
+    if (amount.powerOf === 'chosen' && es.chosen) {
+      const c = ctx.s.objects[es.chosen.id];
+      if (!c) return Math.max(0, ctx.s.turn.tokenLki?.[es.chosen.id]?.power ?? 0);
+      if (c.zone !== 'battlefield' || c.zcc !== es.chosen.zcc) return Math.max(0, c.lastPower ?? 0);
+    }
     const ids = objectsOf(ctx, es, amount.powerOf);
     if (ids[0]) return Math.max(0, power(ctx, ids[0]));
     if (amount.powerOf === 'self') {
@@ -904,6 +925,15 @@ export function resolveAmount(ctx: Ctx, es: EffectSource, amount: Amount): numbe
     // Final Fantasy (11c): "its power" for a creature that died (Jenova's Mutants).
     if (amount.powerOf === 'subject' && es.subject)
       return Math.max(0, ctx.s.objects[es.subject.id]?.lastPower ?? 0);
+    // The Hobbit (20a): Azog, Moria's Ruin, "where X is that creature's power" once the target was destroyed: its last known power.
+    if (typeof amount.powerOf === 'object' && 'target' in amount.powerOf) {
+      const t = es.targets[amount.powerOf.target];
+      if (t && 'object' in t)
+        return Math.max(
+          0,
+          ctx.s.objects[t.object.id]?.lastPower ?? ctx.s.turn.tokenLki?.[t.object.id]?.power ?? 0, // The Hobbit (20b black): a token
+        );
+    }
     return 0;
   }
   if ('event' in amount) return es.amount ?? 0;
@@ -992,6 +1022,12 @@ export function runEffects(
       i--;
       continue;
     }
+    // The Hobbit (20b multicolour): a custom effect that turns into other effects (a prompt built from the current game state).
+    if (e.kind === 'custom' && HOB_MULTICOLOUR_EXPANDERS[e.handler]) {
+      list.splice(i, 1, ...HOB_MULTICOLOUR_EXPANDERS[e.handler]!(ctx, es, e.params));
+      i--;
+      continue;
+    }
     // Lorwyn Eclipsed (18a): "remove a counter from this creature" (any kind, so the player picks the kind if there are several).
     if (e.kind === 'removeCounters' && e.name === undefined) {
       const id = objectsOf(ctx, es, e.from)[0];
@@ -1069,6 +1105,18 @@ export function runEffects(
         1,
         ...(options.length ? [{ kind: 'choose', options: [keep, ...options] } as EffectDef] : []),
       );
+      i--;
+      continue;
+    }
+    // The Hobbit (20a): "amass <type> N" (the player is the controller, or the one `who` names) and "recruit".
+    if (e.kind === 'amass') {
+      const player = e.who === undefined ? es.controller : playersOf(ctx, es, e.who)[0];
+      list.splice(i, 1, ...(player ? amassStep(ctx, es, e, player, resolveAmount(ctx, es, e.amount)) : []));
+      i--;
+      continue;
+    }
+    if (e.kind === 'recruit') {
+      list.splice(i, 1, ...recruitSteps(e));
       i--;
       continue;
     }
@@ -1165,6 +1213,7 @@ export function runEffects(
       e.kind === 'chooseYourPermanent' ||
       e.kind === 'counterUnlessPays' ||
       e.kind === 'putFromHandOrGraveyard' ||
+      e.kind === 'putFromHandOrLibrary' || // The Hobbit (20b red)
       e.kind === 'chooseColor' ||
       e.kind === 'chooseCreatureType' ||
       e.kind === 'millThenTake' ||
@@ -1179,6 +1228,7 @@ export function runEffects(
       e.kind === 'revealUntilCastable' ||
       e.kind === 'revealTopCastOrPlay' ||
       e.kind === 'exileTopMayCast' || // Reality Fracture (17c): Chandra, Torch of Defiance
+      e.kind === 'castFromYourGraveyard' || // The Hobbit (20b blue): Bilbo, Thief in the Night
       e.kind === 'takeStudyCard' ||
       e.kind === 'expressiveIteration' ||
       e.kind === 'castFreeFromTop' ||
@@ -1469,6 +1519,21 @@ export function runEffects(
           cards: [top],
           fullCost: true,
           ifNotCast: e.otherwise,
+          resume,
+          thenPriority,
+        };
+      } else if (e.kind === 'castFromYourGraveyard') {
+        // The Hobbit (20b blue): Bilbo, Thief in the Night. You may cast a matching card from your graveyard, paying its costs.
+        const cards = ctx.s.players[controller].graveyard.filter(
+          (id) => !def(ctx, id).types.includes('Land') && cardMatches(ctx, id, e.filter),
+        );
+        if (cards.length === 0) continue;
+        ctx.s.decision = {
+          kind: 'castFree',
+          player: controller,
+          cards,
+          fullCost: true,
+          ...(e.exileInstantsSorceries ? { exileInstantsSorceries: true } : {}),
           resume,
           thenPriority,
         };
@@ -1763,6 +1828,7 @@ export function runEffects(
           fromGraveyard: true,
           shuffle: false,
           // Secrets of Strixhaven (14b): Bind to Life puts it onto the battlefield.
+          ...(e.required ? { required: true } : {}), // The Hobbit (20b blue): Speak Secrets, "put an instant or sorcery card" (not "may")
           ...(e.to ? { to: e.to } : {}),
           ...(e.squirrelFood ? { squirrelFood: true } : {}),
           resume,
@@ -1784,6 +1850,32 @@ export function runEffects(
           // Strixhaven (13c): Search for Blex: any number, each costing life.
           ...(e.upTo ? { upTo: true } : {}),
           ...(e.lifePerCard ? { lifePerCard: e.lifePerCard } : {}),
+          resume,
+          thenPriority,
+        };
+      } else if (e.kind === 'putFromHandOrLibrary') {
+        // The Hobbit (20b red): Last Light of Durin's Day. Hand and library together; a library pick (or none) shuffles.
+        if (e.sacrificeSource) {
+          const self = es.source && onBattlefield(ctx, es.source);
+          if (!self) continue;
+          sacrifice(ctx, self.id);
+        }
+        const ps = ctx.s.players[controller];
+        const options = [...ps.hand, ...ps.library].filter((id) =>
+          cardMatches(ctx, id, e.filter, es.source?.id),
+        );
+        if (options.length === 0) {
+          shuffleLibrary(ctx, controller);
+          continue;
+        }
+        ctx.s.decision = {
+          kind: 'searchLibrary',
+          player: controller,
+          options,
+          fromGraveyard: true,
+          handOrLibrary: true,
+          to: 'battlefield',
+          shuffle: false,
           resume,
           thenPriority,
         };
@@ -1917,6 +2009,7 @@ export function runEffects(
         ctx.s.decision = {
           kind: 'chooseOption',
           player: e.opponent ? other(controller) : (owner ?? controller),
+          ...(e.title ? { title: e.title } : {}),
           options: e.options,
           resume,
           thenPriority,
@@ -2191,6 +2284,10 @@ export function runEffects(
           ...(e.then ? { then: e.then } : {}),
           // Reality Fracture (17c): Garruk, Veiled Butcher.
           ...(e.drawUnlessNonland !== undefined ? { drawUnlessNonland: e.drawUnlessNonland } : {}),
+          // The Hobbit (20a): Recruit.
+          ...(e.thenIfNonland ? { thenIfNonland: e.thenIfNonland } : {}),
+          // The Hobbit (20b multicolour): Silvan Reveler.
+          ...(e.landToBattlefieldTapped ? { landToBattlefieldTapped: true } : {}),
           resume,
           thenPriority,
         };
@@ -2398,7 +2495,10 @@ export function runEffects(
         const t = e.forControllerOf !== undefined ? es.targets[e.forControllerOf] : undefined;
         const searcher = e.activePlayerSearches
           ? ctx.s.turn.activePlayer // Lorwyn Eclipsed (18b, black): Mornsong Aria
-          : ((t && 'object' in t ? ctx.s.objects[t.object.id]?.controller : undefined) ?? controller);
+          : ((t && 'object' in t ? ctx.s.objects[t.object.id]?.controller : undefined) ??
+            // The Hobbit (20b white): Settle the Wreckage, "that player may search" (a player target).
+            (t && 'player' in t ? t.player : undefined) ??
+            controller);
         if (e.forControllerOf !== undefined && !t) continue;
         // Reality Fracture (17a): "up to 0 cards" (Fblthp with X = 0): the library is still shuffled.
         if (e.upTo !== undefined && resolveAmount(ctx, es, e.upTo) <= 0) {
@@ -2440,6 +2540,8 @@ export function runEffects(
           ...(e.to !== 'hand' ? { to: e.to } : {}),
           ...(e.shuffle === false ? { shuffle: false } : {}),
           ...(e.untapIfLands ? { untapIfLands: e.untapIfLands } : {}),
+          // The Hobbit (20b colorless): Elven Passage.
+          ...(e.rememberFound ? { rememberFound: true } : {}),
           // Strixhaven (13c): Verdant Mastery, Emergent Sequence, Oriq Loremage.
           ...(e.forOpponent ? { forOpponent: true } : {}),
           ...(e.fractalLand ? { fractalLand: true } : {}),
@@ -2454,6 +2556,7 @@ export function runEffects(
           // Reality Fracture (17a fixes): Loyal Tutor.
           ...(e.reveal ? { reveal: true } : {}),
           ...(e.exileFreeThisTurn ? { exileFreeThisTurn: true } : {}), // Tarkir: Dragonstorm (19b, misc): Ugin
+          ...(e.exileWithSource ? { exileWithSource: true } : {}), // The Hobbit (20b white): Roads Go Ever, Ever On
           // Lorwyn Eclipsed (18a): Celestial Reunion, the creature type its additional cost chose.
           ...(e.battlefieldIfChosenType && es.source && ctx.s.objects[es.source.id]?.chosenType
             ? { battlefieldIfType: ctx.s.objects[es.source.id]!.chosenType! }
@@ -2555,9 +2658,12 @@ function runEffectInner(ctx: Ctx, es: EffectSource, e: EffectDef): void {
           ...(e.creatureSubtype ? { creatureSubtype: e.creatureSubtype } : {}),
           ...(e.preventCombatDamage ? { preventCombatDamage: true } : {}),
           ...(e.mustBeBlocked ? { mustBeBlocked: true } : {}),
-          ...(e.untilYourNextTurn
-            ? { expires: 'untilYourNextTurn' as const, player: es.controller }
-            : { expires: 'endOfTurn' as const }),
+          ...(e.preventDamageDealt ? { preventDamageDealt: true } : {}), // The Hobbit (20b blue)
+          ...(e.whileSource && es.source
+            ? { expires: 'whileSource' as const, whileSourceId: es.source.id } // The Hobbit (20b blue)
+            : e.untilYourNextTurn
+              ? { expires: 'untilYourNextTurn' as const, player: es.controller }
+              : { expires: 'endOfTurn' as const }),
         });
       }
       return;
@@ -2611,15 +2717,20 @@ function runEffectInner(ctx: Ctx, es: EffectSource, e: EffectDef): void {
       return;
     }
     // Quantum Entanglement, Villainous Syndication, Rhino's Rampage: "when you do".
-    case 'reflexiveTrigger':
+    case 'reflexiveTrigger': {
+      // The Hobbit (20b red): Dáin Ironfoot, the reflexive ability may carry 'subject' ('it').
+      const subjectId = e.subject ? objectsOf(ctx, es, e.subject)[0] : undefined;
+      const subjectObj = subjectId ? ctx.s.objects[subjectId] : undefined;
       if (es.source)
         ctx.s.pendingTriggers.push({
           source: es.source,
           sourceDefId: es.sourceDefId,
           abilityIndex: e.ability,
           controller: es.controller,
+          ...(subjectObj ? { subject: { id: subjectObj.id, zcc: subjectObj.zcc } } : {}),
         });
       return;
+    }
     // Iron Fist, Hero for Hire; Rhino, Terrible Trampler: the finished split (chosen by runEffects).
     case 'divide': {
       const chosen = e.chosen ?? [];
@@ -2692,6 +2803,19 @@ function runEffectInner(ctx: Ctx, es: EffectSource, e: EffectDef): void {
         obj(ctx, what).attachedTo = to;
         // An Equipment gets a new timestamp when it becomes attached (Iron Suitcase layering).
         obj(ctx, what).timestamp = newTimestamp(ctx);
+        // The Hobbit (20b blue): Wizard's Staff, "Equipped creature has prowess": Equipment gives abilities as an Aura does.
+        if (
+          def(ctx, what).abilities.some(
+            (a) =>
+              a.kind === 'static' &&
+              a.effect.kind === 'attached' &&
+              a.effect.grantAbilities?.length,
+          )
+        ) {
+          const h = obj(ctx, to);
+          h.auraGrants = [...(h.auraGrants ?? []).filter((x) => x !== what), what];
+          ctx.s.auraGrants = true;
+        }
       }
       return;
     }
@@ -3699,6 +3823,7 @@ function runEffectInner(ctx: Ctx, es: EffectSource, e: EffectDef): void {
     case 'chooseYourPermanent':
     case 'counterUnlessPays':
     case 'putFromHandOrGraveyard':
+    case 'putFromHandOrLibrary': // The Hobbit (20b red)
     case 'revealPutAndTake':
     case 'pickFromCards':
       return; // handled by runEffects
@@ -3844,6 +3969,13 @@ function runEffectInner(ctx: Ctx, es: EffectSource, e: EffectDef): void {
     }
     case 'giftGiven':
       emit(ctx, { type: 'giftGiven', player: es.controller });
+      return;
+    // The Hobbit (20a): the counters and the type of amass (the Army was chosen before).
+    case 'amassPut':
+      amassPut(ctx, es, e, (id, n, by) => addCounters(ctx, id, n, undefined, by));
+      return;
+    case 'amass': // expanded by runEffects
+    case 'recruit':
       return;
     case 'tokenCopy': {
       const n = e.count !== undefined ? resolveAmount(ctx, es, e.count) : 1;
@@ -4110,13 +4242,9 @@ function runEffectInner(ctx: Ctx, es: EffectSource, e: EffectDef): void {
       if (e.named) (o.counters ??= {})[e.named] = 1;
       return;
     }
-    case 'blink':
-      for (const id of objectsOf(ctx, es, e.what)) {
-        const owner = obj(ctx, id).owner;
-        const token = obj(ctx, id).isToken;
-        moveObject(ctx, id, 'exile');
-        // A token ceases to exist in exile.
-        if (token || !ctx.s.objects[id]) continue;
+    case 'blink': {
+      const exiled: { id: ObjectId; owner: PlayerId }[] = [];
+      const bring = ({ id, owner }: { id: ObjectId; owner: PlayerId }) => {
         // Final Fantasy (11a): "return it to the battlefield transformed".
         moveObject(ctx, id, 'battlefield', {
           controller: owner,
@@ -4124,8 +4252,20 @@ function runEffectInner(ctx: Ctx, es: EffectSource, e: EffectDef): void {
         });
         if (e.tapped) obj(ctx, id).tapped = true;
         if (e.counters) addCounters(ctx, id, e.counters);
+      };
+      for (const id of objectsOf(ctx, es, e.what)) {
+        const owner = obj(ctx, id).owner;
+        const token = obj(ctx, id).isToken;
+        moveObject(ctx, id, 'exile');
+        // A token ceases to exist in exile.
+        if (token || !ctx.s.objects[id]) continue;
+        // The Hobbit (20b blue): Gone Fishing, "exile two target ..., then return them": all leave before any returns.
+        if (e.together) exiled.push({ id, owner });
+        else bring({ id, owner });
       }
+      for (const x of exiled) bring(x);
       return;
+    }
     case 'revealUntil': {
       const lib = ctx.s.players[es.controller].library;
       const i = lib.findIndex((id) => cardMatches(ctx, id, e.filter));

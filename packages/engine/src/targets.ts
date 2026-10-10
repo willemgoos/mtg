@@ -4,6 +4,7 @@ import { landsHaveHexproof } from './fra-green-effects.ts';
 import { protectedFrom } from './brawl-15b-w-effects.ts';
 import {
   cardMatches,
+  characteristics,
   hasKeyword,
   hasSubtype,
   isCreature,
@@ -218,6 +219,8 @@ export function targetCombos(
           continue;
         // Lorwyn Eclipsed (18b, black): Unbury, two creature cards that share a creature type (each pair once).
         if (spec.sharesCreatureTypeWithPrevious && !sharesTypeWithLast(ctx, c, t)) continue;
+        // The Hobbit (20b blue): Burglar's Plot, two target permanents that share a card type (each pair once).
+        if (spec.sharesCardTypeWithPrevious && !sharesCardTypeWithLast(ctx, c, t)) continue;
         next.push([...c, t]);
       }
     combos = next;
@@ -306,6 +309,24 @@ function sharesTypeWithLast(ctx: Ctx, chosen: readonly TargetChoice[], t: Target
   if (!last || !('object' in last) || !('object' in t)) return false;
   if (t.object.id <= last.object.id) return false;
   return sharesCreatureType(ctx, last.object.id, t.object.id);
+}
+
+/** The Hobbit (20b blue): `t` is a later object than the one chosen just before it, and the two share a card type. */
+function sharesCardTypeWithLast(
+  ctx: Ctx,
+  chosen: readonly TargetChoice[],
+  t: TargetChoice,
+): boolean {
+  const last = chosen[chosen.length - 1];
+  if (!last || !('object' in last) || !('object' in t)) return false;
+  if (t.object.id <= last.object.id) return false;
+  return sharesCardType(ctx, last.object.id, t.object.id);
+}
+
+/** The Hobbit (20b blue): do these two share a card type? */
+export function sharesCardType(ctx: Ctx, a: ObjectId, b: ObjectId): boolean {
+  const ta = characteristics(ctx, a).types;
+  return characteristics(ctx, b).types.some((x) => ta.includes(x));
 }
 
 export function sharesCreatureType(ctx: Ctx, a: ObjectId, b: ObjectId): boolean {

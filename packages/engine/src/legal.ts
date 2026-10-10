@@ -191,6 +191,11 @@ export function castableCards(ctx: Ctx, player: PlayerId): ObjectId[] {
   }
   // Marvel Super Heroes Jumpstart (Analyzed): Victor Mancha, for as long as you control him.
   for (const id of playableWhileControlling(ctx, player)) if (!out.includes(id)) out.push(id);
+  // The Hobbit (20b red): Flameshape, your exiled cards you may play while a condition holds (you control a Wizard).
+  for (const id of ps.exile) {
+    const o = obj(ctx, id);
+    if (o.playableIf && !out.includes(id) && checkCondition(ctx, o.playableIf, player, o)) out.push(id);
+  }
   // Strongbox Raider: exiled cards you may play for a while.
   for (const id of ps.exile) {
     const until = obj(ctx, id).playableUntilTurn;
@@ -327,7 +332,13 @@ function landDrops(ctx: Ctx, player: PlayerId): number {
   for (const id of ctx.s.battlefield) {
     if (obj(ctx, id).controller !== player) continue;
     for (const a of def(ctx, id).abilities)
-      if (a.kind === 'static' && a.effect.kind === 'extraLandDrop') n++;
+      if (
+        a.kind === 'static' &&
+        a.effect.kind === 'extraLandDrop' &&
+        // The Hobbit (20b multicolour): Thranduil's Company, "as long as you control another Elf".
+        checkCondition(ctx, a.effect.condition, player, obj(ctx, id))
+      )
+        n++;
   }
   return n;
 }
@@ -574,7 +585,10 @@ function priorityActions(
           ? ['freeExact']
           : free
             ? ['free']
-            : exiledOnly.has(card)
+            : // The Hobbit (20b black): Inside Information, the cards exiled from an opponent's library.
+              zone === 'exile' && obj(ctx, card).lifeForMana && obj(ctx, card).castableBy === player
+              ? ['lifeForMana']
+              : exiledOnly.has(card)
               ? ['exiledWithSelf']
               : [
                 ...((zone !== 'graveyard' ||
@@ -627,6 +641,7 @@ function priorityActions(
               (via === 'freeOnceEachTurn' ||
                 via === 'omnipresence' ||
                 via === 'freeMatching' ||
+                via === 'lifeForMana' ||
                 (via === 'freeExact' && d.manaCost.x)) &&
               x
             )
@@ -1013,8 +1028,22 @@ function priorityActions(
           ? // Secrets of Strixhaven (14b): Page, Loose Leaf discards another card with its name.
             a.cost.discardSameName
             ? ps.hand.filter((id) => id !== source && obj(ctx, id).defId === obj(ctx, source).defId)
-            : // Reality Fracture (17a): Solitary Cell, "Discard a legendary card".
-              a.cost.discardFilter
+            : // The Hobbit (20b colorless): Key to the Side-Door, a legendary card named like a legendary permanent you control.
+              a.cost.discardNamesLegendaryPermanent
+              ? ps.hand.filter((id) => {
+                  const d = def(ctx, id);
+                  return (
+                    d.supertypes.includes('Legendary') &&
+                    s.battlefield.some(
+                      (b) =>
+                        obj(ctx, b).controller === player &&
+                        def(ctx, b).supertypes.includes('Legendary') &&
+                        def(ctx, b).name === d.name,
+                    )
+                  );
+                })
+              : // Reality Fracture (17a): Solitary Cell, "Discard a legendary card".
+                a.cost.discardFilter
               ? ps.hand.filter((id) => cardMatches(ctx, id, discardFilter))
               : ps.hand
           : [undefined];
@@ -1603,7 +1632,8 @@ export function getLegalActions(ctx: Ctx, player: PlayerId): Action[] {
       const seen = new Set<string>();
       const out: Action[] = [];
       for (const card of d.options) {
-        const defId = obj(ctx, card).defId;
+        // The Hobbit (20b red): hand and library copies of a card differ (a library pick shuffles).
+        const defId = obj(ctx, card).defId + (d.handOrLibrary ? ':' + obj(ctx, card).zone : '');
         if (seen.has(defId)) continue;
         seen.add(defId);
         out.push({ type: 'chooseCard', player, card });

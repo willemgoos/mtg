@@ -12,6 +12,7 @@ import { FINAL_FANTASY_BRAWL_BEHAVIORS } from './final-fantasy-brawl.ts';
 import { REALITY_FRACTURE_BEHAVIORS } from './reality-fracture.ts';
 import { LORWYN_ECLIPSED_BEHAVIORS } from './lorwyn-eclipsed.ts';
 import { TARKIR_DRAGONSTORM_BEHAVIORS } from './tarkir-dragonstorm.ts';
+import { THE_HOBBIT_BEHAVIORS } from './the-hobbit.ts';
 
 /**
  * Allowed sets, most preferred first: Foundations, then older core sets, then
@@ -143,6 +144,8 @@ export const SET_PREFERENCE = [
   'sta',
   // Reality Fracture (17a): last, so no earlier card changes printing.
   'fra',
+  // The Hobbit (20a): last, so no earlier card changes printing.
+  'hob',
 ];
 
 export const RED_POOL = [
@@ -629,6 +632,9 @@ export const LORWYN_ECLIPSED_POOL = Object.keys(LORWYN_ECLIPSED_BEHAVIORS);
 /** Tarkir: Dragonstorm cards (fronts only; the 23 already in the pool are not repeated). */
 export const TARKIR_DRAGONSTORM_POOL = Object.keys(TARKIR_DRAGONSTORM_BEHAVIORS);
 
+/** The Hobbit cards (fronts only; none was in the pool before, the basics aren't repeated). */
+export const THE_HOBBIT_POOL = Object.keys(THE_HOBBIT_BEHAVIORS);
+
 export const POOL: { name: string }[] = [
   ...RED_POOL,
   ...GREEN_POOL,
@@ -651,6 +657,7 @@ export const POOL: { name: string }[] = [
   ...REALITY_FRACTURE_POOL,
   ...LORWYN_ECLIPSED_POOL,
   ...TARKIR_DRAGONSTORM_POOL,
+  ...THE_HOBBIT_POOL,
 ].map((name) => ({
   name,
 }));

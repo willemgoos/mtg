@@ -38,7 +38,7 @@ export const GROUPS = [
   },
   { key: 'fra', name: 'Reality Fracture', has: (p: Packet) => p.set === 'fra' },
   { key: 'ecl', name: 'Lorwyn Eclipsed · Arena', has: (p: Packet) => p.set === 'ecl' },
-  { key: 'tdm', name: 'Tarkir: Dragonstorm · Arena', has: (p: Packet) => p.set === 'tdm' },
+  { key: 'tdm', name: 'Tarkir: Dragonstorm', has: (p: Packet) => p.set === 'tdm' },
 ] as const;
 
 type Group = (typeof GROUPS)[number]['key'];

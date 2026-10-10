@@ -38,7 +38,13 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
   const o = obj(ctx, id);
   const d = def(ctx, id);
   const onField = o.zone === 'battlefield';
-  const base = d.ptEquals !== undefined && onField ? countFor(ctx, o, d) : null;
+  const base =
+    d.ptEquals !== undefined && onField
+      ? countFor(ctx, o, d)
+      : // The Hobbit (20b green): Beorn's Hospitality, "power and toughness are each equal to the number of lands you control".
+        o.hobLandsPT && onField
+        ? countOf(ctx, o.controller, { count: 'landsYouControl' }, true)
+        : null;
   const basePower =
     d.powerEquals !== undefined && onField ? countOf(ctx, o.controller, d.powerEquals, true) : null;
   // Iron Suitcase: base-setting effects (including attached statics) share timestamp order.
@@ -61,6 +67,8 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
   let crewed = false;
   // Reality Fracture (17a): Puppet Crafting: a creature, but not an artifact too.
   let artifactToo = false;
+  // The Hobbit (20b white): Stone by Sunlight, an artifact in addition to its other types.
+  let becameArtifact = false;
   // Marvel Super Heroes Jumpstart (Great Lakes Avengers): Flatman switches power and toughness.
   let switched = false;
 
@@ -71,6 +79,7 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
         override = e.basePT;
         baseTimestamp = e.timestamp;
       }
+      if (e.becomesArtifact) becameArtifact = true; // The Hobbit (20b white)
       if (e.becomesCreature) {
         crewed = true;
         if (!e.creatureOnly) artifactToo = true;
@@ -92,6 +101,10 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
       const st = a.effect;
       if (st.kind === 'cantBlock') cantBlock = true;
       else if (st.kind === 'cantBeBlocked') cantBeBlocked = true;
+      // The Hobbit (20b multicolour): Chief Warg's Company, "can't attack unless you control two or more other Wolves".
+      else if (st.kind === 'cantAttackUnless') {
+        if (!checkCondition(ctx, st.condition, o.controller, o)) cantAttack = true;
+      }
       // Bast: "can't attack or block unless you control three or more creatures".
       else if (
         st.kind === 'while' &&
@@ -138,6 +151,8 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
     const affecting = affectingDefs(ctx.db);
     for (const srcId of ctx.s.battlefield) {
       const src = obj(ctx, srcId);
+      // The Hobbit (20b multicolour): a hone counter on an Equipment grants +1/+0 to the equipped creature (Dwalin, Weaponmaster).
+      if (src.attachedTo === id && src.counters?.hone) power += src.counters.hone;
       if (!affecting.has(src.defId)) continue;
       for (const a of def(ctx, srcId).abilities) {
         if (a.kind !== 'static') continue;
@@ -293,8 +308,14 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
         : o.copyAsCreature && !d.types.includes('Creature')
           ? [...d.types, 'Creature']
           : o.notCreature
-            ? d.types.filter((x) => x !== 'Creature')
-            : d.types),
+            ? [
+                ...d.types.filter((x) => x !== 'Creature'),
+                // The Hobbit (20b multicolour): Tom, Bert, and William come back as an artifact.
+                ...(o.notCreatureAs && !d.types.includes(o.notCreatureAs) ? [o.notCreatureAs] : []),
+              ]
+            : becameArtifact && !d.types.includes('Artifact')
+              ? [...d.types, 'Artifact']
+              : d.types),
     subtypes,
     cantBlock,
     cantBeBlocked,
@@ -325,6 +346,11 @@ export function countOf(
 ): number {
   if (typeof a === 'number') return a;
   if ('multiply' in a) return a.multiply * countOf(ctx, player, a.amount, printed, sourceId);
+  // The Hobbit (20b blue): Master's Councillors, "each graveyard with seven or more cards in it".
+  if ('graveyardsWithAtLeast' in a)
+    return (['p1', 'p2'] as const).filter(
+      (p) => ctx.s.players[p].graveyard.length >= a.graveyardsWithAtLeast,
+    ).length;
   // Reality Fracture (17a): Dark Matter Manipulator, Recursive Recruitment
   if ('floorDiv' in a)
     return Math.floor(countOf(ctx, player, a.amount, printed, sourceId) / a.floorDiv);
@@ -348,8 +374,16 @@ export function countOf(
         .map((id) => manaValue(def(ctx, id).manaCost)),
     );
   // Marvel Super Heroes (The Scarlet Witch): 'where X is her power'.
-  if ('powerOf' in a)
+  if ('powerOf' in a) {
+    // The Hobbit (20b colorless): Glamdring, "where X is equipped creature's power" (the creature the source is attached to).
+    if (a.powerOf === 'attached') {
+      const host = sourceId ? ctx.s.objects[sourceId]?.attachedTo : undefined;
+      return host && ctx.s.objects[host]?.zone === 'battlefield'
+        ? Math.max(0, power(ctx, host))
+        : 0;
+    }
     return a.powerOf === 'self' && sourceId ? Math.max(0, power(ctx, sourceId)) : 0;
+  }
   // Tarkir: Dragonstorm (19a): every kind of counter on the source.
   if ('allCountersOn' in a) {
     const src = a.allCountersOn === 'self' && sourceId ? ctx.s.objects[sourceId] : undefined;
@@ -644,7 +678,13 @@ export function countOf(
     a.count === 'totalPowerOfCreaturesYouControl'
       ? ctx.s.battlefield
           .filter(
-            (id) => obj(ctx, id).controller === player && def(ctx, id).types.includes('Creature'),
+            (id) =>
+              obj(ctx, id).controller === player &&
+              def(ctx, id).types.includes('Creature') &&
+              // The Hobbit (20b red): Desert Were-Worm, the total power of the attacking creatures.
+              (a.attacking === undefined || isAttacking(ctx, id) === a.attacking) &&
+              // The Hobbit (20b blue): The Lord of the Eagles, "creatures you control with flying".
+              (!a.hasKeyword || hasKeyword(ctx, id, a.hasKeyword)),
           )
           .reduce((n, id) => n + Math.max(0, power(ctx, id)), 0)
       : matching;
@@ -685,7 +725,14 @@ export function hasKeyword(ctx: Ctx, id: ObjectId, k: Keyword): boolean {
 export function isType(ctx: Ctx, id: ObjectId, t: CardType): boolean {
   // Strixhaven Brawl (15a): Enduring Courage comes back as an enchantment that isn't a creature.
   if (t === 'Creature' && ctx.s.objects[id]?.notCreature) return false;
+  if (t === ctx.s.objects[id]?.notCreatureAs && ctx.s.objects[id]?.notCreature) return true; // The Hobbit (20b multicolour)
   return def(ctx, id).types.includes(t);
+}
+
+/** The Hobbit (20b white): an effect made it an artifact in addition to its other types (Stone by Sunlight). */
+export function isArtifactByEffect(ctx: Ctx, id: ObjectId): boolean {
+  const o = obj(ctx, id);
+  return ctx.s.effects.some((e) => e.becomesArtifact && e.affected.id === id && e.affected.zcc === o.zcc);
 }
 
 export function isCreature(ctx: Ctx, id: ObjectId): boolean {
@@ -1211,7 +1258,9 @@ export function cardMatches(
   // Reality Fracture (17a): Puppet Crafting makes a permanent a creature (so does a crewed Vehicle).
   const hasType = (t: CardType): boolean =>
     d.types.includes(t) ||
-    (t === 'Creature' && obj(ctx, id).zone === 'battlefield' && isCreature(ctx, id));
+    (t === 'Creature' && obj(ctx, id).zone === 'battlefield' && isCreature(ctx, id)) ||
+    // The Hobbit (20b white): Stone by Sunlight makes a creature an artifact too.
+    (t === 'Artifact' && obj(ctx, id).zone === 'battlefield' && isArtifactByEffect(ctx, id));
   if (filter.types && !filter.types.some(hasType)) return false;
   if (
     filter.subtypes &&
@@ -1236,6 +1285,14 @@ export function cardMatches(
   if (filter.nonlegendary && d.supertypes.includes('Legendary')) return false;
   // Secrets of Strixhaven (14b): Nita, Forum Conciliator ("a spell you don't own").
   if (filter.notOwnedByController && obj(ctx, id).owner === obj(ctx, id).controller) return false;
+  // The Hobbit (20b white): The Eagles Are Coming!, "target creature you own".
+  if (
+    filter.ownedBySourceController &&
+    sourceId &&
+    ctx.s.objects[sourceId] &&
+    obj(ctx, id).owner !== obj(ctx, sourceId).controller
+  )
+    return false;
   // Secrets of Strixhaven (14b): Matterbending Mage.
   if (filter.hasX && !d.manaCost.x) return false;
   if (filter.chosenNameOfSource) {
@@ -1345,7 +1402,9 @@ function basePowerOf(ctx: Ctx, id: ObjectId): number {
       ? countOf(ctx, o.controller, d.powerEquals, true)
       : d.ptEquals !== undefined
         ? countFor(ctx, o, d)
-        : (o.copyPT?.power ?? d.power ?? 0);
+        : o.hobLandsPT // The Hobbit (20b green): Beorn's Hospitality
+          ? countOf(ctx, o.controller, { count: 'landsYouControl' }, true)
+          : (o.copyPT?.power ?? d.power ?? 0);
   base = basePTOverride(ctx, id)?.[0] ?? base;
   return base;
 }
@@ -1391,6 +1450,11 @@ function avengersFilter(
   const chosen = sourceId ? chosenTypeOf(ctx, sourceId) : undefined;
   if (filter.chosenTypeOfSource && !(chosen && hasSubtype(ctx, id, chosen))) return false;
   if (filter.notChosenTypeOfSource && chosen && hasSubtype(ctx, id, chosen)) return false;
+  // The Hobbit (20b black): Gollum, Riddle Master, "a spell with mana value of the chosen quality" (odd or even).
+  if (filter.manaValueParityOfSource) {
+    if (chosen !== 'odd' && chosen !== 'even') return false;
+    if ((manaValue(def(ctx, id).manaCost) % 2 === 1 ? 'odd' : 'even') !== chosen) return false;
+  }
   const o = obj(ctx, id);
   if (filter.modified) {
     const counters = o.plusOneCounters > 0 || Object.values(o.counters ?? {}).some((n) => n > 0);
