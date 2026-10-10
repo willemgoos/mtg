@@ -1013,8 +1013,22 @@ function priorityActions(
           ? // Secrets of Strixhaven (14b): Page, Loose Leaf discards another card with its name.
             a.cost.discardSameName
             ? ps.hand.filter((id) => id !== source && obj(ctx, id).defId === obj(ctx, source).defId)
-            : // Reality Fracture (17a): Solitary Cell, "Discard a legendary card".
-              a.cost.discardFilter
+            : // The Hobbit (20b colorless): Key to the Side-Door, a legendary card named like a legendary permanent you control.
+              a.cost.discardNamesLegendaryPermanent
+              ? ps.hand.filter((id) => {
+                  const d = def(ctx, id);
+                  return (
+                    d.supertypes.includes('Legendary') &&
+                    s.battlefield.some(
+                      (b) =>
+                        obj(ctx, b).controller === player &&
+                        def(ctx, b).supertypes.includes('Legendary') &&
+                        def(ctx, b).name === d.name,
+                    )
+                  );
+                })
+              : // Reality Fracture (17a): Solitary Cell, "Discard a legendary card".
+                a.cost.discardFilter
               ? ps.hand.filter((id) => cardMatches(ctx, id, discardFilter))
               : ps.hand
           : [undefined];

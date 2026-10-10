@@ -195,6 +195,16 @@ from) when it's fixed. Older phases keep their own "Simplifications" lists in `d
 - [ ] Bifur, Melodic Rider (`subtypeTriggersTwice`): for a Dwarf that has left the battlefield (its dies trigger) the Dwarf type
       is read from its printed card (and changeling), not from effects that had made it a Dwarf.
 
+## The Hobbit (colorless group, phase 20b)
+
+- [ ] Troop of Ponies: two successive searches (the first basic goes onto the battlefield tapped, the second into your hand, one
+      shuffle at the end) instead of one search for up to two cards that you then split. With only one basic found it always
+      goes onto the battlefield (the rules let you choose); Cultivate works the same way.
+- [ ] Orcrist, Goblin-cleaver: the "choose a creature type" prompt offers the types of the creatures you control (a type none
+      of them has would only make no Treasure).
+- [ ] Sting, Bilbo's Sword: "creature target opponent controls" counts the creatures the opponent controls (the game has one
+      opponent, who is the target).
+
 ## Jump In slot cards (`jumpin-slots.ts`)
 
 - [ ] Polygraph Orb: collect evidence only offers cards with a mana value; the rules also let you exile lands and other

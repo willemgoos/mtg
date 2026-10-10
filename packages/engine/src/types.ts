@@ -644,6 +644,9 @@ export interface CostDef {
   // Secrets of Strixhaven (14b): Page, Loose Leaf
   /** Discard another card with the same name as the source (with `discard`). */
   discardSameName?: boolean;
+  // The Hobbit (20b colorless): Key to the Side-Door
+  /** With `discard`: only a legendary card with the same name as a legendary permanent you control. */
+  discardNamesLegendaryPermanent?: boolean;
   // Strixhaven Brawl (15b, multi): Call the Crash
   /** Suspend N: exile this card from your hand with N time counters on it. */
   suspendSelf?: number;
@@ -2443,6 +2446,9 @@ export type EffectDef =
       // Lorwyn Eclipsed (18a): Celestial Reunion
       /** If the spell's additional cost chose a creature type and the card found has it, it enters the battlefield instead of going to hand. */
       battlefieldIfChosenType?: boolean;
+      // The Hobbit (20b colorless): Elven Passage
+      /** The card found is 'chosen' for the effects after the search ("untap that land"). */
+      rememberFound?: boolean;
       // Lorwyn Eclipsed (18b, black): Mornsong Aria
       /** The player whose turn it is searches (their own library, the card goes to their hand), not the controller. */
       activePlayerSearches?: boolean;
@@ -4617,6 +4623,8 @@ export type Decision =
       reveal?: boolean;
       /** Lorwyn Eclipsed (18a): Celestial Reunion: a card of this creature type goes onto the battlefield instead of into the hand. */
       battlefieldIfType?: string;
+      // The Hobbit (20b colorless): Elven Passage
+      rememberFound?: boolean;
       /** The land found becomes a Fractal creature (Emergent Sequence). */
       fractalLand?: boolean;
       /** If the card has one of these types, the source gets a +1/+1 counter (Oriq Loremage). */

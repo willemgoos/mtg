@@ -179,3 +179,11 @@ All 28 green cards (`src/hob/green.ts`, tests `hob-green*.test.ts`). Custom effe
 (Cantankerous Keepers, Part in Friendship, Through the Forest Gate with its land picker, Beorn the Fierce's Bear type, Beorn's
 Hospitality, Down in the Valley); hooks marked `// The Hobbit (20b green)`: `GameObject.hobLandsPT` / `hobGainedAbilities`
 (`types.ts`, `context.ts`, `characteristics.ts`), the Gate picker in `ai/src/heuristic.ts` and `simulate.ts`.
+
+## Phase 20b: colorless group
+
+**Done** (22/22; `cards/src/hob/colorless.ts`, tests `cards/test/hob-colorless.test.ts`). Engine hooks, all marked `// The Hobbit (20b colorless)`:
+Amount `{ powerOf: 'attached' }` (Glamdring, `characteristics.ts`); cost flag `discardNamesLegendaryPermanent` (Key to the Side-Door,
+`legal.ts`); `searchLibrary.rememberFound` makes the card found `'chosen'` for the effects after it (Elven Passage, `stack.ts`/`effects.ts`);
+custom effects `hobBlackArrow` and `hobGleamOfDeath` in `engine/src/hob-colorless-effects.ts`. Hone counters are `namedCounters 'hone'`
+read by an `attached` static (`namedCountersOnSource`). Giant's Boulder's {1},{T} mana is a `manaAbility` (used by hand: activate it, then cast).

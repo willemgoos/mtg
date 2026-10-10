@@ -89156,5 +89156,533 @@
    "large": "https://cards.scryfall.io/large/front/f/e/fe2b4bcf-56de-44d3-83af-aeb27f82c25e.jpg?1785237990",
    "artCrop": "https://cards.scryfall.io/art_crop/front/f/e/fe2b4bcf-56de-44d3-83af-aeb27f82c25e.jpg?1785237990"
   }
+ },
+ {
+  "name": "Dwarven Mattock",
+  "scryfallId": "92c6f09d-b525-4e8c-a87c-a74df9dc3b1e",
+  "oracleId": "f75bb13b-41fc-4614-b35e-f456069ce9c6",
+  "set": "hob",
+  "collectorNumber": "172",
+  "rarity": "uncommon",
+  "manaCost": "{2}",
+  "typeLine": "Artifact — Equipment",
+  "oracleText": "When this Equipment enters, attach it to target Dwarf you control.\nEquipped creature gets +2/+2 and has ward {1}. (Whenever equipped creature becomes the target of a spell or ability an opponent controls, counter it unless that player pays {1}.)\nEquip {3} ({3}: Attach to target creature you control. Equip only as a sorcery.)",
+  "colors": [],
+  "keywords": [
+   "Equip"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/2/92c6f09d-b525-4e8c-a87c-a74df9dc3b1e.jpg?1785412768",
+   "normal": "https://cards.scryfall.io/normal/front/9/2/92c6f09d-b525-4e8c-a87c-a74df9dc3b1e.jpg?1785412768",
+   "large": "https://cards.scryfall.io/large/front/9/2/92c6f09d-b525-4e8c-a87c-a74df9dc3b1e.jpg?1785412768",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/2/92c6f09d-b525-4e8c-a87c-a74df9dc3b1e.jpg?1785412768"
+  }
+ },
+ {
+  "name": "Elven Passage",
+  "scryfallId": "dd1fd2ab-2565-4798-a832-fc849df82f74",
+  "oracleId": "97a2cd39-6b54-496b-b3ac-dab9dfed7edc",
+  "set": "hob",
+  "collectorNumber": "181",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "{T}, Pay 1 life, Sacrifice this land: Search your library for a basic land card, put it onto the battlefield tapped, then shuffle. You may behold an Elf. If you do, untap that land. (To behold an Elf, choose an Elf you control or reveal an Elf card from your hand.)",
+  "colors": [],
+  "keywords": [
+   "Behold"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/d/dd1fd2ab-2565-4798-a832-fc849df82f74.jpg?1785323319",
+   "normal": "https://cards.scryfall.io/normal/front/d/d/dd1fd2ab-2565-4798-a832-fc849df82f74.jpg?1785323319",
+   "large": "https://cards.scryfall.io/large/front/d/d/dd1fd2ab-2565-4798-a832-fc849df82f74.jpg?1785323319",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/d/dd1fd2ab-2565-4798-a832-fc849df82f74.jpg?1785323319"
+  }
+ },
+ {
+  "name": "Elvenking's Halls",
+  "scryfallId": "cd477096-41b1-4907-9cb3-852cb22c9ba2",
+  "oracleId": "a91e0154-14a9-4681-8236-04db231592a4",
+  "set": "hob",
+  "collectorNumber": "182",
+  "rarity": "common",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "This land enters tapped.\n{T}: Add {G} or {U}.\n{2}{G}{U}, {T}, Sacrifice this land: Put two +1/+1 counters on target Elf you control. Activate only as a sorcery.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/d/cd477096-41b1-4907-9cb3-852cb22c9ba2.jpg?1785323590",
+   "normal": "https://cards.scryfall.io/normal/front/c/d/cd477096-41b1-4907-9cb3-852cb22c9ba2.jpg?1785323590",
+   "large": "https://cards.scryfall.io/large/front/c/d/cd477096-41b1-4907-9cb3-852cb22c9ba2.jpg?1785323590",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/d/cd477096-41b1-4907-9cb3-852cb22c9ba2.jpg?1785323590"
+  }
+ },
+ {
+  "name": "Giant's Boulder",
+  "scryfallId": "ce254758-c928-4b43-a952-13fac1845668",
+  "oracleId": "80433c2c-5196-42e0-b9fa-d7b12783f5fd",
+  "set": "hob",
+  "collectorNumber": "173",
+  "rarity": "common",
+  "manaCost": "{1}",
+  "typeLine": "Artifact",
+  "oracleText": "When this artifact enters, scry 2. (Look at the top two cards of your library, then put any number of them on the bottom and the rest on top in any order.)\n{1}, {T}: Add one mana of any color.\n{7}, {T}, Sacrifice this artifact: Destroy target permanent.",
+  "colors": [],
+  "keywords": [
+   "Scry"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/e/ce254758-c928-4b43-a952-13fac1845668.jpg?1785497186",
+   "normal": "https://cards.scryfall.io/normal/front/c/e/ce254758-c928-4b43-a952-13fac1845668.jpg?1785497186",
+   "large": "https://cards.scryfall.io/large/front/c/e/ce254758-c928-4b43-a952-13fac1845668.jpg?1785497186",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/e/ce254758-c928-4b43-a952-13fac1845668.jpg?1785497186"
+  }
+ },
+ {
+  "name": "Glamdring, Foe-hammer",
+  "scryfallId": "a5cfbfde-783e-46ca-b3cf-11f16209d6cb",
+  "oracleId": "2802069f-201e-43a7-b5d3-43a95951a2ec",
+  "set": "hob",
+  "collectorNumber": "174",
+  "rarity": "rare",
+  "manaCost": "{2}",
+  "typeLine": "Legendary Artifact — Equipment",
+  "oracleText": "Instant and sorcery spells you cast cost {X} less to cast, where X is equipped creature's power.\nEquip {2}",
+  "colors": [],
+  "keywords": [
+   "Equip"
+  ],
+  "back": "Gleam of Death",
+  "adventure": true,
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/5/a5cfbfde-783e-46ca-b3cf-11f16209d6cb.jpg?1785496394",
+   "normal": "https://cards.scryfall.io/normal/front/a/5/a5cfbfde-783e-46ca-b3cf-11f16209d6cb.jpg?1785496394",
+   "large": "https://cards.scryfall.io/large/front/a/5/a5cfbfde-783e-46ca-b3cf-11f16209d6cb.jpg?1785496394",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/5/a5cfbfde-783e-46ca-b3cf-11f16209d6cb.jpg?1785496394"
+  }
+ },
+ {
+  "name": "Gleam of Death",
+  "scryfallId": "a5cfbfde-783e-46ca-b3cf-11f16209d6cb",
+  "oracleId": "2802069f-201e-43a7-b5d3-43a95951a2ec",
+  "set": "hob",
+  "collectorNumber": "174",
+  "rarity": "rare",
+  "manaCost": "{3}{U}",
+  "typeLine": "Sorcery — Adventure",
+  "oracleText": "Mill six cards, then put all instant and sorcery cards from among them into your hand. (Then exile this card. You may cast the artifact later from exile.)",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Mill"
+  ],
+  "front": "Glamdring, Foe-hammer",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/5/a5cfbfde-783e-46ca-b3cf-11f16209d6cb.jpg?1785496394",
+   "normal": "https://cards.scryfall.io/normal/front/a/5/a5cfbfde-783e-46ca-b3cf-11f16209d6cb.jpg?1785496394",
+   "large": "https://cards.scryfall.io/large/front/a/5/a5cfbfde-783e-46ca-b3cf-11f16209d6cb.jpg?1785496394",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/5/a5cfbfde-783e-46ca-b3cf-11f16209d6cb.jpg?1785496394"
+  }
+ },
+ {
+  "name": "Goblin-town",
+  "scryfallId": "d76df9d0-56cf-4351-a5e8-e6ae6fc791d1",
+  "oracleId": "98d20908-6d68-4d31-b719-207f93c9b402",
+  "set": "hob",
+  "collectorNumber": "183",
+  "rarity": "common",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "This land enters tapped.\n{T}: Add {B} or {R}.\n{2}{B}{R}, {T}, Sacrifice this land: Put two +1/+1 counters on target Goblin or Orc you control. Activate only as a sorcery.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/7/d76df9d0-56cf-4351-a5e8-e6ae6fc791d1.jpg?1785323613",
+   "normal": "https://cards.scryfall.io/normal/front/d/7/d76df9d0-56cf-4351-a5e8-e6ae6fc791d1.jpg?1785323613",
+   "large": "https://cards.scryfall.io/large/front/d/7/d76df9d0-56cf-4351-a5e8-e6ae6fc791d1.jpg?1785323613",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/7/d76df9d0-56cf-4351-a5e8-e6ae6fc791d1.jpg?1785323613"
+  }
+ },
+ {
+  "name": "Hobbit Hole",
+  "scryfallId": "0365c439-30bf-4d32-a791-166751bdb996",
+  "oracleId": "17492186-9814-4c41-8111-1f000a96c212",
+  "set": "hob",
+  "collectorNumber": "184",
+  "rarity": "common",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "{T}, Sacrifice this land: Search your library for a basic land card, put it onto the battlefield tapped, then shuffle.\nHalflingcycling {4} ({4}, Discard this card: Search your library for a Halfling card, reveal it, put it into your hand, then shuffle.)",
+  "colors": [],
+  "keywords": [
+   "Cycling",
+   "Halflingcycling"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/3/0365c439-30bf-4d32-a791-166751bdb996.jpg?1785323332",
+   "normal": "https://cards.scryfall.io/normal/front/0/3/0365c439-30bf-4d32-a791-166751bdb996.jpg?1785323332",
+   "large": "https://cards.scryfall.io/large/front/0/3/0365c439-30bf-4d32-a791-166751bdb996.jpg?1785323332",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/3/0365c439-30bf-4d32-a791-166751bdb996.jpg?1785323332"
+  }
+ },
+ {
+  "name": "Iron Hills",
+  "scryfallId": "78045c43-5cbe-48ff-837d-e7c6baac2937",
+  "oracleId": "a71e8d07-1a49-47a0-834e-de87d750a200",
+  "set": "hob",
+  "collectorNumber": "185",
+  "rarity": "common",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "This land enters tapped.\n{T}: Add {R} or {W}.\n{2}{R}{W}, {T}, Sacrifice this land: Put two +1/+1 counters on target Dwarf you control. Activate only as a sorcery.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/8/78045c43-5cbe-48ff-837d-e7c6baac2937.jpg?1785323594",
+   "normal": "https://cards.scryfall.io/normal/front/7/8/78045c43-5cbe-48ff-837d-e7c6baac2937.jpg?1785323594",
+   "large": "https://cards.scryfall.io/large/front/7/8/78045c43-5cbe-48ff-837d-e7c6baac2937.jpg?1785323594",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/8/78045c43-5cbe-48ff-837d-e7c6baac2937.jpg?1785323594"
+  }
+ },
+ {
+  "name": "Key to the Side-Door",
+  "scryfallId": "898c14a2-d897-4341-83ed-eee666df9648",
+  "oracleId": "76c036df-44f5-4021-b7fc-656147351341",
+  "set": "hob",
+  "collectorNumber": "175",
+  "rarity": "uncommon",
+  "manaCost": "{1}",
+  "typeLine": "Artifact",
+  "oracleText": "{2}, {T}: Target creature can't be blocked this turn.\n{1}, {T}, Discard a legendary card with the same name as a legendary permanent you control: Draw two cards.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/9/898c14a2-d897-4341-83ed-eee666df9648.jpg?1785412757",
+   "normal": "https://cards.scryfall.io/normal/front/8/9/898c14a2-d897-4341-83ed-eee666df9648.jpg?1785412757",
+   "large": "https://cards.scryfall.io/large/front/8/9/898c14a2-d897-4341-83ed-eee666df9648.jpg?1785412757",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/9/898c14a2-d897-4341-83ed-eee666df9648.jpg?1785412757"
+  }
+ },
+ {
+  "name": "Lake-town",
+  "scryfallId": "2fbd0584-81a7-4c47-8af1-1c8635899a97",
+  "oracleId": "717c6beb-81c6-43ed-aab0-aedfc1cbac33",
+  "set": "hob",
+  "collectorNumber": "186",
+  "rarity": "common",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "This land enters tapped.\n{T}: Add {W} or {U}.\n{2}{W}{U}, {T}, Sacrifice this land: Put two +1/+1 counters on target Human you control. Activate only as a sorcery.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/f/2fbd0584-81a7-4c47-8af1-1c8635899a97.jpg?1785323601",
+   "normal": "https://cards.scryfall.io/normal/front/2/f/2fbd0584-81a7-4c47-8af1-1c8635899a97.jpg?1785323601",
+   "large": "https://cards.scryfall.io/large/front/2/f/2fbd0584-81a7-4c47-8af1-1c8635899a97.jpg?1785323601",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/f/2fbd0584-81a7-4c47-8af1-1c8635899a97.jpg?1785323601"
+  }
+ },
+ {
+  "name": "Long-Bodied Grey Dog",
+  "scryfallId": "d1a1e520-1fe2-4529-8afb-c187bb80da3c",
+  "oracleId": "6f83da19-fd89-44ec-88f3-0c3fddfbd1b2",
+  "set": "hob",
+  "collectorNumber": "1",
+  "rarity": "common",
+  "manaCost": "{3}",
+  "typeLine": "Creature — Dog",
+  "oracleText": "Flash\nReach\nWhen this creature enters, create a tapped Treasure token. (It's an artifact with \"{T}, Sacrifice this token: Add one mana of any color.\")",
+  "power": "2",
+  "toughness": "2",
+  "colors": [],
+  "keywords": [
+   "Reach",
+   "Treasure",
+   "Flash"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/1/d1a1e520-1fe2-4529-8afb-c187bb80da3c.jpg?1785639260",
+   "normal": "https://cards.scryfall.io/normal/front/d/1/d1a1e520-1fe2-4529-8afb-c187bb80da3c.jpg?1785639260",
+   "large": "https://cards.scryfall.io/large/front/d/1/d1a1e520-1fe2-4529-8afb-c187bb80da3c.jpg?1785639260",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/1/d1a1e520-1fe2-4529-8afb-c187bb80da3c.jpg?1785639260"
+  }
+ },
+ {
+  "name": "Mirkwood",
+  "scryfallId": "612cf954-f86c-4629-99df-4874d56fded3",
+  "oracleId": "cd49aa99-bf84-4edd-aecc-6dae78b73412",
+  "set": "hob",
+  "collectorNumber": "188",
+  "rarity": "common",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "This land enters tapped.\n{T}: Add {B} or {G}.\n{2}{B}{G}, {T}, Sacrifice this land: Put two +1/+1 counters on target Bear, Spider, or Wolf you control. Activate only as a sorcery.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/1/612cf954-f86c-4629-99df-4874d56fded3.jpg?1785323344",
+   "normal": "https://cards.scryfall.io/normal/front/6/1/612cf954-f86c-4629-99df-4874d56fded3.jpg?1785323344",
+   "large": "https://cards.scryfall.io/large/front/6/1/612cf954-f86c-4629-99df-4874d56fded3.jpg?1785323344",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/1/612cf954-f86c-4629-99df-4874d56fded3.jpg?1785323344"
+  }
+ },
+ {
+  "name": "My Precious",
+  "scryfallId": "15ae4d50-be2f-412c-bb6b-b0a06b60474a",
+  "oracleId": "2e728381-6db0-4c66-883d-82d718fef833",
+  "set": "hob",
+  "collectorNumber": "176",
+  "rarity": "rare",
+  "manaCost": "{3}",
+  "typeLine": "Legendary Artifact — Equipment",
+  "oracleText": "Equipped creature has hexproof and can't be blocked.\nEquip—{2}, Pay 2 life.",
+  "colors": [],
+  "keywords": [
+   "Equip"
+  ],
+  "back": "Allure of Power",
+  "adventure": true,
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/5/15ae4d50-be2f-412c-bb6b-b0a06b60474a.jpg?1783902783",
+   "normal": "https://cards.scryfall.io/normal/front/1/5/15ae4d50-be2f-412c-bb6b-b0a06b60474a.jpg?1783902783",
+   "large": "https://cards.scryfall.io/large/front/1/5/15ae4d50-be2f-412c-bb6b-b0a06b60474a.jpg?1783902783",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/5/15ae4d50-be2f-412c-bb6b-b0a06b60474a.jpg?1783902783"
+  }
+ },
+ {
+  "name": "Allure of Power",
+  "scryfallId": "15ae4d50-be2f-412c-bb6b-b0a06b60474a",
+  "oracleId": "2e728381-6db0-4c66-883d-82d718fef833",
+  "set": "hob",
+  "collectorNumber": "176",
+  "rarity": "rare",
+  "manaCost": "{1}{B}",
+  "typeLine": "Instant — Adventure",
+  "oracleText": "As an additional cost to cast this spell, sacrifice a creature.\nDraw two cards.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "front": "My Precious",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/5/15ae4d50-be2f-412c-bb6b-b0a06b60474a.jpg?1783902783",
+   "normal": "https://cards.scryfall.io/normal/front/1/5/15ae4d50-be2f-412c-bb6b-b0a06b60474a.jpg?1783902783",
+   "large": "https://cards.scryfall.io/large/front/1/5/15ae4d50-be2f-412c-bb6b-b0a06b60474a.jpg?1783902783",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/5/15ae4d50-be2f-412c-bb6b-b0a06b60474a.jpg?1783902783"
+  }
+ },
+ {
+  "name": "Old Thrush",
+  "scryfallId": "3ad02b56-13ec-46ef-92bd-ae078b8bb517",
+  "oracleId": "c8259b0e-131f-44f0-86d4-7c4d711b328d",
+  "set": "hob",
+  "collectorNumber": "2",
+  "rarity": "common",
+  "manaCost": "{2}",
+  "typeLine": "Creature — Bird",
+  "oracleText": "Flying\nWhen this creature enters, you gain 2 life. You may search your library for a basic land card, reveal it, then shuffle and put that card on top.",
+  "power": "1",
+  "toughness": "2",
+  "colors": [],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/a/3ad02b56-13ec-46ef-92bd-ae078b8bb517.jpg?1785639558",
+   "normal": "https://cards.scryfall.io/normal/front/3/a/3ad02b56-13ec-46ef-92bd-ae078b8bb517.jpg?1785639558",
+   "large": "https://cards.scryfall.io/large/front/3/a/3ad02b56-13ec-46ef-92bd-ae078b8bb517.jpg?1785639558",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/a/3ad02b56-13ec-46ef-92bd-ae078b8bb517.jpg?1785639558"
+  }
+ },
+ {
+  "name": "Orcrist, Goblin-cleaver",
+  "scryfallId": "f54f1c1d-6a22-43e9-a842-0a1ae25b323c",
+  "oracleId": "cc65821a-1893-4087-b461-35cf9fd26c71",
+  "set": "hob",
+  "collectorNumber": "177",
+  "rarity": "mythic",
+  "manaCost": "{3}",
+  "typeLine": "Legendary Artifact — Equipment",
+  "oracleText": "Equipped creature gets +2/+2 and has trample.\nWhenever equipped creature deals combat damage to a player, choose a creature type. Create a Treasure token for each creature you control of that type.\nEquip {3}",
+  "colors": [],
+  "keywords": [
+   "Treasure",
+   "Equip"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/5/f54f1c1d-6a22-43e9-a842-0a1ae25b323c.jpg?1784798240",
+   "normal": "https://cards.scryfall.io/normal/front/f/5/f54f1c1d-6a22-43e9-a842-0a1ae25b323c.jpg?1784798240",
+   "large": "https://cards.scryfall.io/large/front/f/5/f54f1c1d-6a22-43e9-a842-0a1ae25b323c.jpg?1784798240",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/5/f54f1c1d-6a22-43e9-a842-0a1ae25b323c.jpg?1784798240"
+  }
+ },
+ {
+  "name": "Sting, Bilbo's Sword",
+  "scryfallId": "d6a8d698-c454-42c4-ad4e-9a7625d5569f",
+  "oracleId": "9779f32c-b1a2-42a3-8e78-14c28c3ad254",
+  "set": "hob",
+  "collectorNumber": "178",
+  "rarity": "rare",
+  "manaCost": "{2}",
+  "typeLine": "Legendary Artifact — Equipment",
+  "oracleText": "Flash\nWhen Sting enters, put a hone counter on Sting for each creature target opponent controls. Attach Sting to up to one target creature you control. (Each hone counter on an Equipment grants +1/+0 to equipped creature.)\nEquip {3}",
+  "colors": [],
+  "keywords": [
+   "Equip",
+   "Flash"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/6/d6a8d698-c454-42c4-ad4e-9a7625d5569f.jpg?1784377051",
+   "normal": "https://cards.scryfall.io/normal/front/d/6/d6a8d698-c454-42c4-ad4e-9a7625d5569f.jpg?1784377051",
+   "large": "https://cards.scryfall.io/large/front/d/6/d6a8d698-c454-42c4-ad4e-9a7625d5569f.jpg?1784377051",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/6/d6a8d698-c454-42c4-ad4e-9a7625d5569f.jpg?1784377051"
+  }
+ },
+ {
+  "name": "The Arkenstone",
+  "scryfallId": "a56a88ba-fcfa-4b56-bdae-a080b297b871",
+  "oracleId": "09f09d0a-6054-4545-b81e-0295773cc5f0",
+  "set": "hob",
+  "collectorNumber": "170",
+  "rarity": "mythic",
+  "manaCost": "{5}",
+  "typeLine": "Legendary Artifact",
+  "oracleText": "Creatures you control get +1/+1.\nAt the beginning of your end step, draw a card.",
+  "colors": [],
+  "keywords": [],
+  "back": "Seek the Heart",
+  "adventure": true,
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/5/a56a88ba-fcfa-4b56-bdae-a080b297b871.jpg?1783902783",
+   "normal": "https://cards.scryfall.io/normal/front/a/5/a56a88ba-fcfa-4b56-bdae-a080b297b871.jpg?1783902783",
+   "large": "https://cards.scryfall.io/large/front/a/5/a56a88ba-fcfa-4b56-bdae-a080b297b871.jpg?1783902783",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/5/a56a88ba-fcfa-4b56-bdae-a080b297b871.jpg?1783902783"
+  }
+ },
+ {
+  "name": "Seek the Heart",
+  "scryfallId": "a56a88ba-fcfa-4b56-bdae-a080b297b871",
+  "oracleId": "09f09d0a-6054-4545-b81e-0295773cc5f0",
+  "set": "hob",
+  "collectorNumber": "170",
+  "rarity": "mythic",
+  "manaCost": "{2}{W}",
+  "typeLine": "Sorcery — Adventure",
+  "oracleText": "Search your library for a legendary creature card, reveal it, put it into your hand, then shuffle. (Then exile this card. You may cast the artifact later from exile.)",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "front": "The Arkenstone",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/5/a56a88ba-fcfa-4b56-bdae-a080b297b871.jpg?1783902783",
+   "normal": "https://cards.scryfall.io/normal/front/a/5/a56a88ba-fcfa-4b56-bdae-a080b297b871.jpg?1783902783",
+   "large": "https://cards.scryfall.io/large/front/a/5/a56a88ba-fcfa-4b56-bdae-a080b297b871.jpg?1783902783",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/5/a56a88ba-fcfa-4b56-bdae-a080b297b871.jpg?1783902783"
+  }
+ },
+ {
+  "name": "The Black Arrow",
+  "scryfallId": "ab181190-d53d-4972-8cd5-8e54b45f2276",
+  "oracleId": "cb2803ee-825b-420e-b404-c7c44f15ec15",
+  "set": "hob",
+  "collectorNumber": "171",
+  "rarity": "uncommon",
+  "manaCost": "{3}",
+  "typeLine": "Legendary Artifact — Equipment",
+  "oracleText": "Flash\nWhen The Black Arrow enters, it deals 1 damage to any target. If a Dragon is dealt damage this way, destroy it.\nEquipped creature gets +1/+1 and has reach.\nEquip {1} ({1}: Attach to target creature you control. Equip only as a sorcery.)",
+  "colors": [],
+  "keywords": [
+   "Equip",
+   "Flash"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/b/ab181190-d53d-4972-8cd5-8e54b45f2276.jpg?1785496386",
+   "normal": "https://cards.scryfall.io/normal/front/a/b/ab181190-d53d-4972-8cd5-8e54b45f2276.jpg?1785496386",
+   "large": "https://cards.scryfall.io/large/front/a/b/ab181190-d53d-4972-8cd5-8e54b45f2276.jpg?1785496386",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/b/ab181190-d53d-4972-8cd5-8e54b45f2276.jpg?1785496386"
+  }
+ },
+ {
+  "name": "The Lonely Mountain",
+  "scryfallId": "b39ebc4d-a01a-4401-ab3a-bf6142c93b47",
+  "oracleId": "3678c06f-8a33-4a6d-bf20-5b92d5c05a95",
+  "set": "hob",
+  "collectorNumber": "187",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Land — Mountain",
+  "oracleText": "({T}: Add {R}.)\nThis land enters tapped unless you control an Equipment.\n{4}{R}, {T}: Create a 2/2 red Dwarf creature token. This ability costs {1} less to activate for each Equipment you control. Activate only as a sorcery.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/3/b39ebc4d-a01a-4401-ab3a-bf6142c93b47.jpg?1784543511",
+   "normal": "https://cards.scryfall.io/normal/front/b/3/b39ebc4d-a01a-4401-ab3a-bf6142c93b47.jpg?1784543511",
+   "large": "https://cards.scryfall.io/large/front/b/3/b39ebc4d-a01a-4401-ab3a-bf6142c93b47.jpg?1784543511",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/3/b39ebc4d-a01a-4401-ab3a-bf6142c93b47.jpg?1784543511"
+  }
+ },
+ {
+  "name": "Thrór's Map",
+  "scryfallId": "ad0dba36-d056-4bc1-987a-391da26ad267",
+  "oracleId": "925cacdc-6d09-4fbd-9258-9f0539da180c",
+  "set": "hob",
+  "collectorNumber": "179",
+  "rarity": "uncommon",
+  "manaCost": "{2}",
+  "typeLine": "Legendary Artifact",
+  "oracleText": "When Thrór's Map enters, search your library for a basic land card, reveal it, put it into your hand, then shuffle.\n{2}, {T}: Draw a card, then discard a card.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/d/ad0dba36-d056-4bc1-987a-391da26ad267.jpg?1785458557",
+   "normal": "https://cards.scryfall.io/normal/front/a/d/ad0dba36-d056-4bc1-987a-391da26ad267.jpg?1785458557",
+   "large": "https://cards.scryfall.io/large/front/a/d/ad0dba36-d056-4bc1-987a-391da26ad267.jpg?1785458557",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/d/ad0dba36-d056-4bc1-987a-391da26ad267.jpg?1785458557"
+  }
+ },
+ {
+  "name": "Troop of Ponies",
+  "scryfallId": "0b4b1c59-bcec-4779-9e27-0e6f9feb4e11",
+  "oracleId": "bb52b3c3-09f0-4506-b7c0-250ab0b91866",
+  "set": "hob",
+  "collectorNumber": "3",
+  "rarity": "uncommon",
+  "manaCost": "{2}",
+  "typeLine": "Creature — Horse",
+  "oracleText": "{2}, {T}, Sacrifice this creature: Search your library for up to two basic land cards, reveal them, put one onto the battlefield tapped and the other into your hand, then shuffle.",
+  "power": "2",
+  "toughness": "1",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/b/0b4b1c59-bcec-4779-9e27-0e6f9feb4e11.jpg?1785639568",
+   "normal": "https://cards.scryfall.io/normal/front/0/b/0b4b1c59-bcec-4779-9e27-0e6f9feb4e11.jpg?1785639568",
+   "large": "https://cards.scryfall.io/large/front/0/b/0b4b1c59-bcec-4779-9e27-0e6f9feb4e11.jpg?1785639568",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/b/0b4b1c59-bcec-4779-9e27-0e6f9feb4e11.jpg?1785639568"
+  }
+ },
+ {
+  "name": "Well-Worn Spatula",
+  "scryfallId": "659b687f-4068-496f-81b2-7b606bf07ec1",
+  "oracleId": "3cc333a1-c854-4b7c-8002-910e48222371",
+  "set": "hob",
+  "collectorNumber": "180",
+  "rarity": "common",
+  "manaCost": "{1}",
+  "typeLine": "Artifact — Equipment",
+  "oracleText": "When this Equipment enters, you gain 2 life.\nEquipped creature gets +1/+1.\nEquip {1} ({1}: Attach to target creature you control. Equip only as a sorcery.)",
+  "colors": [],
+  "keywords": [
+   "Equip"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/5/659b687f-4068-496f-81b2-7b606bf07ec1.jpg?1785496409",
+   "normal": "https://cards.scryfall.io/normal/front/6/5/659b687f-4068-496f-81b2-7b606bf07ec1.jpg?1785496409",
+   "large": "https://cards.scryfall.io/large/front/6/5/659b687f-4068-496f-81b2-7b606bf07ec1.jpg?1785496409",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/5/659b687f-4068-496f-81b2-7b606bf07ec1.jpg?1785496409"
+  }
  }
 ]
