@@ -69,7 +69,12 @@ function revealTop(ctx: Ctx, player: PlayerId): ObjectId | undefined {
 }
 
 /** A creature that was put onto the battlefield "attacking" joins the combat, attacking this player or planeswalker. */
-function joinAttack(ctx: Ctx, id: ObjectId, defender: PlayerId, planeswalker?: ObjectId): void {
+export function joinAttack(
+  ctx: Ctx,
+  id: ObjectId,
+  defender: PlayerId,
+  planeswalker?: ObjectId,
+): void {
   const combat = ctx.s.combat;
   const o = ctx.s.objects[id];
   if (!combat || !o || o.zone !== 'battlefield') return;

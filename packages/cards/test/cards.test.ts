@@ -9,6 +9,7 @@ import {
   FINAL_FANTASY_TROPHY_DECKS,
   TARKIR_DRAGONSTORM_TROPHY_DECKS,
   THE_HOBBIT_TROPHY_DECKS,
+  LORD_OF_THE_RINGS_TROPHY_DECKS,
   BLOOMBURROW_POOL,
   MARVEL_DECKS,
   MARVEL_POOL,
@@ -27,6 +28,7 @@ import {
   STRIXHAVEN_DECKS,
   SECRETS_OF_STRIXHAVEN_DECKS,
   LORWYN_ECLIPSED_DECKS,
+  LORD_OF_THE_RINGS_DECKS,
   REALITY_FRACTURE_DECKS,
   STRIXHAVEN_POOL,
   SECRETS_OF_STRIXHAVEN_POOL,
@@ -137,7 +139,7 @@ describe('card data', () => {
     });
   });
 
-  it('decks are 60 cards (draft decks 40) and legal (max 4 non-basic copies), with unique ids', () => {
+  it('decks are 60 cards (draft decks 40) and legal (max 4 non-basic copies outside Limited), with unique ids', () => {
     const basics = ['Plains', 'Island', 'Swamp', 'Mountain', 'Forest'];
     for (const d of DECKS.filter((x) => x.series !== 'brawl')) {
       expect(deckIds(d), d.name).toHaveLength(d.series === 'trophy' ? 40 : 60);
@@ -145,8 +147,12 @@ describe('card data', () => {
         d.cards.map(([name]) => name),
         d.name,
       ).toContain(d.face);
-      for (const [name, n] of d.cards)
-        if (!basics.includes(name)) expect(n, name).toBeLessThanOrEqual(4);
+      // Draft decks are Limited: any number of copies of a card the player drafted.
+      // Nazgûl: "A deck can have up to nine cards named Nazgûl."
+      if (d.series !== 'trophy')
+        for (const [name, n] of d.cards)
+          if (!basics.includes(name))
+            expect(n, name).toBeLessThanOrEqual(name === 'Nazgûl' ? 9 : 4);
     }
     expect(new Set(DECKS.map((d) => d.id)).size).toBe(DECKS.length);
   });
@@ -174,12 +180,14 @@ describe('card data', () => {
         ...FINAL_FANTASY_TROPHY_DECKS.map((d) => d.id),
         ...TARKIR_DRAGONSTORM_TROPHY_DECKS.map((d) => d.id),
         ...THE_HOBBIT_TROPHY_DECKS.map((d) => d.id),
+        ...LORD_OF_THE_RINGS_TROPHY_DECKS.map((d) => d.id),
         ...MARVEL_DECKS.map((d) => d.id),
         ...FINAL_FANTASY_DECKS.map((d) => d.id),
         ...STRIXHAVEN_DECKS.map((d) => d.id),
         ...SECRETS_OF_STRIXHAVEN_DECKS.map((d) => d.id),
         ...REALITY_FRACTURE_DECKS.map((d) => d.id),
         ...LORWYN_ECLIPSED_DECKS.map((d) => d.id),
+        ...LORD_OF_THE_RINGS_DECKS.map((d) => d.id),
         ...FINAL_FANTASY_STARTER_KIT_DECKS.map((d) => d.id),
         ...ECL_THEME_DECKS.map((d) => d.id), // Lorwyn Eclipsed (18c)
         // Reality Fracture: the ten decks.

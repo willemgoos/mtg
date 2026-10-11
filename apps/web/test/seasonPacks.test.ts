@@ -2,6 +2,7 @@ import { SCRYFALL, cardDb, slug } from '@mtg/cards';
 import { ECL_BOOSTER_LIST } from '../../../packages/cards/src/ecl/booster-list.ts';
 import { TDM_BOOSTER_LIST } from '../../../packages/cards/src/tdm/booster-list.ts';
 import { HOB_BOOSTER_LIST } from '../../../packages/cards/src/hob/booster-list.ts';
+import { LTR_BOOSTER_LIST } from '../../../packages/cards/src/ltr/booster-list.ts';
 import { FRA_BOOSTER_LIST } from '../../../packages/cards/src/fra/booster-list.ts';
 import { SOS_BOOSTER_LIST } from '../../../packages/cards/src/sos/booster-list.ts';
 import { STX_BOOSTER_LIST } from '../../../packages/cards/src/stx/booster-list.ts';
@@ -25,6 +26,7 @@ import {
   LORWYN_ECLIPSED_SHEETS,
   TARKIR_DRAGONSTORM_SHEETS,
   THE_HOBBIT_SHEETS,
+  LORD_OF_THE_RINGS_SHEETS,
   MARVEL_SHEETS,
   REALITY_FRACTURE_SHEETS,
   SECRETS_SHEETS,
@@ -285,6 +287,26 @@ describe('Season Bloomburrow packs', () => {
     // No decks of our own for The Hobbit, so none on sale.
     expect(SEASON_STARTERS.filter((d) => d.set === 'hob')).toHaveLength(0);
   });
+
+  it('sells The Lord of the Rings boosters with its booster cards at their LTR rarity (the pool has them)', () => {
+    const rarityOf = new Map(LTR_BOOSTER_LIST);
+    const all = Object.values(LORD_OF_THE_RINGS_SHEETS).flat();
+    expect(all.length).toBeGreaterThan(0);
+    expect(all.length).toBeLessThanOrEqual(261);
+    expect(new Set(all).size).toBe(all.length);
+    for (const [rarity, sheet] of Object.entries(LORD_OF_THE_RINGS_SHEETS))
+      for (const id of sheet) {
+        expect(cardDb.has(id), id).toBe(true);
+        expect(rarityOf.get(SCRYFALL.find((x) => slug(x.name) === id)!.name), id).toBe(rarity);
+      }
+    let save = { ...fresh(), coins: 1000 };
+    save = buySeasonPack(save, 1, 'lordOfTheRings');
+    expect(save.packs[0]!.kind).toBe('lordOfTheRings');
+    const opened = openSeasonPack(save, save.packs[0]!.id, packGenerator('lordOfTheRings'), 2);
+    const cards = opened.lastPack!.rewards.flatMap((r) => (r.kind === 'card' ? [r.cardId] : []));
+    expect(cards.length).toBeGreaterThan(0);
+    for (const id of cards) expect(all, id).toContain(id);
+      });
 
   it('offers the Bloomburrow decks as starters', () => {
     expect(SEASON_STARTERS.some((d) => d.id === 'blb-forage-and-feast')).toBe(true);

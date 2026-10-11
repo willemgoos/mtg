@@ -196,6 +196,19 @@ export function manaSources(
         continue;
       if (a.colorFrom === 'legendaries' && !legendaryColors(ctx, player).includes(a.produces))
         continue;
+      // Lord of the Rings (22 colorless): The Grey Havens.
+      if (
+        a.colorFrom === 'legendaryCreatureCardsInGraveyard' &&
+        !ctx.s.players[player].graveyard.some((id) => {
+          const d = def(ctx, id);
+          return (
+            d.supertypes.includes('Legendary') &&
+            d.types.includes('Creature') &&
+            (d.colors as ManaType[]).includes(a.produces)
+          );
+        })
+      )
+        continue;
       // Strixhaven Brawl (15b, g): Incubation Druid.
       if (a.colorFrom === 'yourLands' && !yourLandColors(ctx, player).includes(a.produces))
         continue;

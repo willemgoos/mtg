@@ -1,3 +1,4 @@
+import { blockedWithLegendaryThisTurn, sharesColorWithYourLegendary } from './ltr-main-rules.ts'; // Lord of the Rings (22)
 import { commanderTypes, isCommander } from './brawl.ts';
 import { type Ctx, def, defOf, obj, other } from './context.ts';
 import { manaValue } from './cost.ts';
@@ -188,6 +189,8 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
           }
           if (st.cantAttackOrBlock) cantAttack = cantBlock = true;
           if (st.cantBeBlocked) cantBeBlocked = true;
+          // Lord of the Rings Starter Kit: Bilbo's Ring, "during your turn, ... can't be blocked".
+          if (st.yourTurnCantBeBlocked && ctx.s.turn.activePlayer === src.controller) cantBeBlocked = true;
           if (st.loseKeywords?.length) {
             granted ??= new Set(keywords);
             for (const k of st.loseKeywords) removed.add(k);
@@ -1281,6 +1284,12 @@ export function cardMatches(
       (d.power ?? 0) + (d.toughness ?? 0) > filter.maxPowerPlusToughness
     )
       return false;
+    // Lord of the Rings (22 blue): Stern Scolding, a creature spell with power or toughness 2 or less.
+    if (
+      filter.maxPowerOrToughness !== undefined &&
+      Math.min(d.power ?? 0, d.toughness ?? 0) > filter.maxPowerOrToughness
+    )
+      return false;
   }
   // Reality Fracture (17a): Puppet Crafting makes a permanent a creature (so does a crewed Vehicle).
   const hasType = (t: CardType): boolean =>
@@ -1295,6 +1304,7 @@ export function cardMatches(
   )
     return false;
   if (filter.colors && !filter.colors.some((color) => d.colors.includes(color))) return false;
+  if (filter.ltrSharesColorWithYourLegendary && !sharesColorWithYourLegendary(ctx, id)) return false; // Lord of the Rings (22 multicolour)
   if (filter.notTypes?.some(hasType)) return false;
   // Mystical Archive (16): Doom Blade.
   if (filter.notColors?.some((c) => d.colors.includes(c))) return false;
@@ -1366,6 +1376,7 @@ export function cardMatches(
     if (!h || h.zone !== 'battlefield' || !isCreature(ctx, h.id)) return false;
   }
   if (filter.hostOfSource && (!sourceId || obj(ctx, sourceId).attachedTo !== id)) return false;
+  if (filter.blockedWithLegendaryThisTurn && !blockedWithLegendaryThisTurn(ctx, id)) return false; // Lord of the Rings (22 white)
   if (filter.lesserPowerThanSource && sourceId) {
     const s = obj(ctx, sourceId);
     const ref =

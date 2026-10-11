@@ -1,3 +1,4 @@
+import { ltrNotedTypeCounters } from './ltr-main-rules.ts'; // Lord of the Rings (22)
 import { creaturesOnBattlefield, power } from './characteristics.ts';
 import { ignoresHexproofAndWard } from './brawl-15b-b-effects.ts';
 import {
@@ -730,6 +731,8 @@ export function castSpell(
     ctx.s.players[player].creatureBoons!--;
     o.bonusCounters = (o.bonusCounters ?? 0) + 1;
   }
+  // Lord of the Rings (22 green): Long List of the Ents.
+  if (d.types.includes('Creature')) ltrNotedTypeCounters(ctx, player, o);
   // Secrets of Strixhaven (14a): prepare. Casting the copy unprepares its creature.
   const preparer = o.preparedBy !== undefined ? ctx.s.objects[o.preparedBy] : undefined;
   if (preparer && preparer.prepared === card) {

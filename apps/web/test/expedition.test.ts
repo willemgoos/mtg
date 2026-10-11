@@ -12,6 +12,7 @@ import {
 import { ECL_BOOSTER_LIST } from '../../../packages/cards/src/ecl/booster-list.ts';
 import { TDM_BOOSTER_LIST } from '../../../packages/cards/src/tdm/booster-list.ts';
 import { HOB_BOOSTER_LIST } from '../../../packages/cards/src/hob/booster-list.ts';
+import { LTR_BOOSTER_LIST } from '../../../packages/cards/src/ltr/booster-list.ts';
 import { FRA_BOOSTER_LIST } from '../../../packages/cards/src/fra/booster-list.ts';
 import { SOA_ARCHIVE_LIST } from '../../../packages/cards/src/sos/archive-list.ts';
 import { SOS_BOOSTER_LIST } from '../../../packages/cards/src/sos/booster-list.ts';
@@ -290,6 +291,19 @@ describe('expedition packs', () => {
     const rarityOf = new Map(HOB_BOOSTER_LIST);
     for (let seed = 0; seed < 20; seed++) {
       const pack = rollPack({ kind: 'booster' }, seed, 0, 'hob', EXP);
+      expect(new Set(pack).size).toBe(packSize);
+      for (const n of pack) expect(cardDb.has(slug(n)), n).toBe(true);
+      const { commons, uncommons, rare } = slots(pack);
+      expect(commons.every((n) => rarityOf.get(n) === 'common')).toBe(true);
+      expect(uncommons.every((n) => rarityOf.get(n) === 'uncommon')).toBe(true);
+      expect(['rare', 'mythic']).toContain(rarityOf.get(rare));
+    }
+  });
+
+  it('opens The Lord of the Rings boosters: seven commons, three uncommons, a rare and more', () => {
+    const rarityOf = new Map(LTR_BOOSTER_LIST);
+    for (let seed = 0; seed < 20; seed++) {
+      const pack = rollPack({ kind: 'booster' }, seed, 0, 'ltr', EXP);
       expect(new Set(pack).size).toBe(packSize);
       for (const n of pack) expect(cardDb.has(slug(n)), n).toBe(true);
       const { commons, uncommons, rare } = slots(pack);

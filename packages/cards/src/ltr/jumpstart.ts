@@ -63,7 +63,7 @@ export const LTR_RANDOM_RARES: Record<'W' | 'U' | 'B' | 'R' | 'G', string[]> = {
 
 function randomRareSlot(color: 'W' | 'U' | 'B' | 'R' | 'G'): Pick<Packet, 'slots'> {
   const built = LTR_RANDOM_RARES[color].filter((n) => n in LORD_OF_THE_RINGS_BEHAVIORS);
-  return built.length ? { slots: [built.map((card) => ({ card, weight: 1 }))] } : {};
+  return built.length ? { slots: [built.map((card) => ({ card, weight: 100 / built.length }))] } : {};
 }
 
 export const LTR_JUMPSTART_PACKETS: Packet[] = [

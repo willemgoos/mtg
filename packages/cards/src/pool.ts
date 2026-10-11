@@ -149,6 +149,8 @@ export const SET_PREFERENCE = [
   'hob',
   // The Lord of the Rings (21): after The Hobbit, so no earlier card changes printing.
   'ltr',
+  // The Lord of the Rings Starter Kit (22): Graypelt Refuge is printed in the commander decks (LTC), last of all.
+  'ltc',
 ];
 
 export const RED_POOL = [

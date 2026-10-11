@@ -290,7 +290,16 @@ function prevented(ctx: Ctx, src: DamageSource, to: TargetChoice, amount: number
   // Strixhaven Brawl (15b, w): protection from a colour prevents damage from sources of that colour.
   if (protectedFrom(ctx, host, src.id)) return 0;
   // Marvel Super Heroes: "Prevent all damage that would be dealt to Black Panther."
-  if (hasStaticKind(ctx, host, 'preventDamageToSelf')) return 0;
+  if (
+    def(ctx, host).abilities.some(
+      (a) =>
+        a.kind === 'static' &&
+        a.effect.kind === 'preventDamageToSelf' &&
+        // Lord of the Rings Starter Kit: Frodo, Determined Hero, only during your turn.
+        checkCondition(ctx, a.effect.condition, obj(ctx, host).controller, obj(ctx, host)),
+    )
+  )
+    return 0;
   // Final Fantasy (11a): Summon: Alexander prevents all damage to its controller's creatures this turn.
   if (ctx.s.turn.creaturesShielded?.includes(obj(ctx, host).controller)) return 0;
   const habit = ctx.s.battlefield.some(
@@ -996,9 +1005,14 @@ export function resolveAmount(ctx: Ctx, es: EffectSource, amount: Amount): numbe
       return ctx.s.objects[es.source.id]?.lastCounters ?? 0;
     return 0;
   }
+  // Lord of the Rings (22 multicolour): The Mouth of Sauron, cards in the target player's graveyard.
+  const ofTarget =
+    'count' in amount && amount.count === 'cardsInGraveyard' && amount.ofTarget !== undefined
+      ? es.targets[amount.ofTarget]
+      : undefined;
   return countOf(
     ctx,
-    es.controller,
+    ofTarget && 'player' in ofTarget ? ofTarget.player : es.controller,
     amount,
     false,
     es.source ? onBattlefield(ctx, es.source)?.id : undefined,
@@ -2274,6 +2288,11 @@ export function runEffects(
           const most = Math.max(...options.map((id) => power(ctx, id)));
           options = options.filter((id) => power(ctx, id) === most);
         }
+        // Lord of the Rings Starter Kit: Witch-king, Bringer of Ruin.
+        if (e.leastPower) {
+          const least = Math.min(...options.map((id) => power(ctx, id)));
+          options = options.filter((id) => power(ctx, id) === least);
+        }
         // Secrets of Strixhaven (14b): End of the Hunt.
         if (e.greatestManaValue) {
           const most = Math.max(...options.map((id) => manaValue(def(ctx, id).manaCost)));
@@ -2389,6 +2408,7 @@ export function runEffects(
           options,
           fromGraveyard: true,
           shuffle: false,
+          ...(e.toBattlefield ? { to: 'battlefield' as const } : {}), // Lord of the Rings (22 multicolour)
           resume,
           thenPriority,
         };
@@ -2655,13 +2675,21 @@ function runEffectInner(ctx: Ctx, es: EffectSource, e: EffectDef): void {
         // Nova Flame: "each other creature".
         if (e.exceptFrom && 'object' in t && t.object.id === src.id) continue;
         const hit =
-          (e.excessTokens || e.ifExcess) && 'object' in t
+          (e.excessTokens || e.ifExcess || e.excessToController) && 'object' in t
             ? onBattlefield(ctx, t.object)
             : undefined;
         const before = hit?.damage ?? 0;
         const lethal = hit ? Math.max(0, characteristics(ctx, hit.id).toughness - before) : 0;
         // Reality Fracture (17c): a planeswalker's lethal damage is its loyalty (rule 120.4a).
         const walker = hit && def(ctx, hit.id).types.includes('Planeswalker');
+        // Lord of the Rings (22 multicolour): Gandalf's Sanction, the excess goes to the creature's controller instead.
+        if (e.excessToController && hit && !walker) {
+          const needed = has(src, 'deathtouch') ? Math.min(1, lethal) : lethal;
+          const toCreature = Math.min(amount, needed);
+          if (toCreature > 0) dealDamage(ctx, src, t, toCreature, false);
+          if (amount > toCreature) dealDamage(ctx, src, { player: hit.controller }, amount - toCreature, false);
+          continue;
+        }
         dealDamage(ctx, src, t, amount, false);
         // Goblin Negotiation: the damage beyond what was lethal.
         const excess = !hit
@@ -2714,7 +2742,11 @@ function runEffectInner(ctx: Ctx, es: EffectSource, e: EffectDef): void {
           ...(e.maxBlockers !== undefined ? { maxBlockers: e.maxBlockers } : {}), // Lord of the Rings (21b green)
           ...(e.preventDamageDealt ? { preventDamageDealt: true } : {}), // The Hobbit (20b blue)
           ...(e.whileSource && es.source
-            ? { expires: 'whileSource' as const, whileSourceId: es.source.id } // The Hobbit (20b blue)
+            ? {
+                expires: 'whileSource' as const, // The Hobbit (20b blue)
+                whileSourceId: es.source.id,
+                ...(e.whileYouControlSource ? { whileControlledBy: es.controller } : {}), // Lord of the Rings (22 white)
+              }
             : e.untilYourNextTurn
               ? { expires: 'untilYourNextTurn' as const, player: es.controller }
               : { expires: 'endOfTurn' as const }),

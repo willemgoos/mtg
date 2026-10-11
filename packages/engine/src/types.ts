@@ -491,7 +491,13 @@ export type AbilityDef =
        * Only if the colour is in your commander's colour identity (Command
        * Tower), or a land an opponent controls could make it (Exotic Orchard).
        */
-      colorFrom?: 'commander' | 'opponentLands' | 'legendaries' | 'yourLands';
+      colorFrom?:
+        | 'commander'
+        | 'opponentLands'
+        | 'legendaries'
+        | 'yourLands'
+        // Lord of the Rings (22 colorless): The Grey Havens, "any color among legendary creature cards in your graveyard"
+        | 'legendaryCreatureCardsInGraveyard';
       // Strixhaven Brawl (15b, g): Incubation Druid, Astral Cornucopia
       /** Makes three mana instead of one while this holds. */
       tripleIf?: ConditionDef;
@@ -704,7 +710,14 @@ export type TriggerDef =
   | { on: 'dies' }
   | { on: 'otherCreatureDies'; controller: 'you' | 'opponent' | 'any'; nontoken?: boolean }
   /** Whenever this or another creature you control (matching the filter, as printed) dies. */
-  | { on: 'creatureYouControlDies'; nontoken?: boolean; filter?: CardFilter }
+  | {
+      on: 'creatureYouControlDies';
+      nontoken?: boolean;
+      filter?: CardFilter;
+      // Lord of the Rings (22 red): Warbeast of Gorgoroth
+      /** Another creature only if its power was at least this as it left the battlefield (last known information); this one always. */
+      minLastPower?: number;
+    }
   /** Whenever a creature you control deals combat damage (on your turn); "that creature", "that much". */
   | {
       on: 'creatureYouControlDealsCombatDamage';
@@ -1299,6 +1312,12 @@ export type ConditionDef =
   | { kind: 'revolt' }
   /** The condition doesn't hold. */
   | { kind: 'not'; condition: ConditionDef }
+  // Lord of the Rings (22 multicolour): Uglúk of the White Hand, "if that creature was a Goblin or Orc"
+  /** The subject had one of these subtypes as it left the battlefield (or has it now). */
+  | { kind: 'subjectHadSubtype'; subtypes: string[] }
+  // Lord of the Rings Starter Kit: The Balrog, Flame of Udûn
+  /** The subject is a legendary card (as printed: it has died). */
+  | { kind: 'subjectWasLegendary' }
   // Secrets of Strixhaven (14b)
   /** The source has at least `min` of this named counter (Comforting Counsel: growth). */
   | { kind: 'sourceNamedCounters'; name: string; min: number }
@@ -1601,6 +1620,12 @@ export interface CardFilter {
   hostOfSource?: boolean;
   /** Power less than the source's (mentor); for an Aura source, less than the power of the creature it enchants. */
   lesserPowerThanSource?: boolean;
+  // Lord of the Rings (22 white)
+  /** Blocked or was blocked by a legendary creature this turn (You Cannot Pass!). */
+  blockedWithLegendaryThisTurn?: boolean;
+  // Lord of the Rings (22 multicolour)
+  /** Shares a color with a legendary creature its owner controls (Ringsight: a card in your library). */
+  ltrSharesColorWithYourLegendary?: boolean;
   // Strixhaven Brawl (15b, u): Wash Away
   /** A spell on the stack that wasn't cast from its owner's hand. */
   notCastFromHand?: boolean;
@@ -1815,6 +1840,9 @@ export type Amount =
   | {
       count: 'cardsInGraveyard';
       types?: CardType[];
+      // Lord of the Rings (22 multicolour): The Mouth of Sauron, "in that player's graveyard"
+      /** The graveyard of the player this target slot names, not yours. */
+      ofTarget?: number;
       named?: CardDefId;
       plus?: number;
       // Final Fantasy (11b): "each Artificer card in your graveyard" (Cid); "noncreature, nonland" (Esper Ramuh).
@@ -2000,6 +2028,9 @@ export type EffectDef =
       // Reality Fracture (17c): Violent Echoes
       /** If excess damage was dealt to a creature or planeswalker this way, these effects follow; `{ event: 'amount' }` is the excess. */
       ifExcess?: EffectDef[];
+      // Lord of the Rings (22 multicolour): Gandalf's Sanction
+      /** "Excess damage is dealt to that creature's controller instead": the creature takes only lethal damage. */
+      excessToController?: boolean;
     }
   /** Until end of turn (or until your next turn). */
   | {
@@ -2010,6 +2041,9 @@ export type EffectDef =
       // The Hobbit (20b blue): Old Fat Spider Can't See Me
       /** Lasts for as long as the source stays on the battlefield instead ("for as long as this Saga remains on the battlefield"). */
       whileSource?: boolean;
+      // Lord of the Rings (22 white): Tale of Tinúviel
+      /** With `whileSource`: also ends when you stop controlling the source ("for as long as you control this Saga"). */
+      whileYouControlSource?: boolean;
       /** All damage that would be dealt by the creature is prevented (for the duration). */
       preventDamageDealt?: boolean;
       power: Amount;
@@ -2530,7 +2564,7 @@ export type EffectDef =
   | {
       kind: 'putInLibrary';
       what: Ref;
-      position: 'top' | 'bottom' | 'second';
+      position: 'top' | 'bottom' | 'second' | 'fifth';
       // Final Fantasy (11b): "shuffles it into their library" (Ice Magic).
       shuffle?: boolean;
     }
@@ -2769,6 +2803,9 @@ export type EffectDef =
       types: CardType[];
       /** Strixhaven (13c): not the permanent chosen earlier in this resolution (Deadly Brew: "another"). */
       exceptChosen?: boolean;
+      // Lord of the Rings (22 multicolour): Rise of the Witch-king
+      /** To the battlefield instead of your hand. */
+      toBattlefield?: boolean;
     }
   /** Put all creature cards from all graveyards onto the battlefield under your control. */
   | {
@@ -2922,6 +2959,9 @@ export type EffectDef =
       kind: 'opponentSacrifices';
       gainToughness?: boolean;
       greatestPower?: boolean;
+      // Lord of the Rings Starter Kit: Witch-king, Bringer of Ruin
+      /** Only among the creatures with the least power. */
+      leastPower?: boolean;
       /** Secrets of Strixhaven (14b): End of the Hunt: only among those with the greatest mana value. */
       greatestManaValue?: boolean;
       /** A permanent matching this instead of a creature. */
@@ -3334,6 +3374,9 @@ export type StaticDef =
       kind: 'extraCounters';
       amount: number;
       creaturesOnly?: boolean;
+      // Lord of the Rings (22 multicolour): Mauhúr, Uruk-hai Captain (an Army, Goblin, or Orc you control)
+      /** Only on permanents matching this. */
+      filter?: CardFilter;
       /** Counters of any kind, not just +1/+1 counters (Doc Samson). */
       anyCounters?: boolean;
     }
@@ -3493,6 +3536,9 @@ export type StaticDef =
       addSubtypes?: string[];
       /** Keywords it has only during its controller's turn (Dragoon's Lance: flying). */
       yourTurnKeywords?: Keyword[];
+      // Lord of the Rings Starter Kit: Bilbo's Ring
+      /** It can't be blocked during its controller's turn. */
+      yourTurnCantBeBlocked?: boolean;
       // Final Fantasy Commander (12b).
       /** Base power and toughness equal to its controller's life total (Aettir and Priwen). */
       basePTLife?: boolean;
@@ -3601,7 +3647,11 @@ export type StaticDef =
   /** "Creatures with flying can't block creatures you control" (Storm, Windrider). */
   | { kind: 'flyersCantBlockYours' }
   /** "Prevent all damage that would be dealt to this creature" (Black Panther, Hope Enduring). */
-  | { kind: 'preventDamageToSelf' }
+  | {
+      kind: 'preventDamageToSelf';
+      // Lord of the Rings Starter Kit: Frodo, Determined Hero, "during your turn"
+      condition?: ConditionDef;
+    }
   // Marvel Super Heroes Jumpstart (Squadron)
   /** "If a source would deal damage to you or a <filter> you control, prevent all but 1 of that damage" (Hyperion). */
   | { kind: 'preventAllButOne'; filter: CardFilter }
@@ -3678,7 +3728,11 @@ export type StaticDef =
   | { kind: 'cantBeBlockedBy'; filter: CardFilter }
   // Lorwyn Eclipsed (18b, green)
   /** "This creature must be blocked if able" (Vinebred Brawler); enforced like The Masamune's. */
-  | { kind: 'mustBeBlockedIfAble' }
+  | {
+      kind: 'mustBeBlockedIfAble';
+      // Lord of the Rings (22 multicolour): Frodo Baggins, "as long as Frodo Baggins is your Ring-bearer"
+      condition?: ConditionDef;
+    }
   /** "This creature can't be blocked by more than N creatures" (Safewright Cavalry: one). */
   | { kind: 'maxBlockers'; count: number }
   /** An Aura: "Enchanted land is the chosen color" (Shimmerwilds Growth); the land has only the Aura's `chosenColor` while attached. */
@@ -4178,6 +4232,9 @@ export interface GameObject {
   loreRemovedTurn?: number;
   /** It enters with this many more +1/+1 counters (Summon: Fenrir's next creature spell). */
   bonusCounters?: number;
+  // Lord of the Rings (22 green)
+  /** Long List of the Ents: the creature types noted for this Saga. */
+  ltrNotedTypes?: string[];
   // Final Fantasy (11c): rare triggers
   /** The creature chosen for it as it entered (Zenos yae Galvus). */
   chosenObject?: ObjectRef;
@@ -4452,6 +4509,17 @@ export interface TurnState {
   // Lord of the Rings (21d multi-rare)
   /** Players creatures attacked this turn (a player, not a planeswalker): Faramir, Prince of Ithilien. */
   ltrAttackedPlayers?: PlayerId[];
+  // Lord of the Rings (22 white)
+  /** Creatures that blocked or were blocked by a legendary creature this turn: You Cannot Pass!. */
+  ltrBlockedWithLegendary?: { id: ObjectId; zcc: number }[];
+  // Lord of the Rings (22 red)
+  /** Fire of Orthanc: creatures without flying can't block this turn. */
+  ltrOnlyFlyersBlock?: boolean;
+  /** Long List of the Ents: the next creature spell of this type the player casts this turn enters with a +1/+1 counter. */
+  ltrNotedTypeBoons?: { player: PlayerId; type: string }[];
+  // Lord of the Rings Starter Kit
+  /** Fires of Mount Doom: cards exiled to play this turn; playing one queues that Fires' `ability`. */
+  ltrFiresExiled?: { id: ObjectId; source: ObjectRef; controller: PlayerId; ability: number }[];
   /** Permanents sacrificed this turn: The Balrog, Durin's Bane. */
   ltrSacrificed?: number;
   /** Creatures dealt damage by a Spider this turn (Shelob): the creature, its card, and the Spider's controller. `n` numbers the record. */

@@ -173,6 +173,22 @@ const SECTIONS: Section[] = [
     set: 'hob' as const,
   },
   {
+    title: 'The Lord of the Rings',
+    group: 'The Lord of the Rings',
+    kind: 'starter' as const,
+    blurb: 'The Starter Kit’s two decks, Arena’s six Story Decks and four Arena players’ Constructed decks',
+    series: 'starter' as const,
+    set: 'ltr' as const,
+  },
+  {
+    title: 'The Lord of the Rings draft decks',
+    group: 'The Lord of the Rings',
+    kind: 'draft' as const,
+    blurb: '40-card two-colour decks that went 7–0 in Arena’s Premier Draft; they play each other',
+    series: 'trophy' as const,
+    set: 'ltr' as const,
+  },
+  {
     title: 'Color Challenge',
     group: 'Color Challenge',
     blurb: 'The mono-colour decks Sparky plays against new players',
@@ -189,7 +205,7 @@ const SECTIONS: Section[] = [
     kind?: 'starter' | 'draft';
     blurb: string;
     series: string;
-    set?: 'blb' | 'msh' | 'fin' | 'stx' | 'sos' | 'fra' | 'ecl' | 'tdm' | 'hob';
+    set?: 'blb' | 'msh' | 'fin' | 'stx' | 'sos' | 'fra' | 'ecl' | 'tdm' | 'hob' | 'ltr';
   }) => {
     const decks = DECKS.filter((d) => d.series === series && d.set === set);
     return { ...s, decks: [...decks.filter(isPlayable), ...decks.filter((d) => !isPlayable(d))] };

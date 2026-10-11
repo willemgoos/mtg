@@ -375,7 +375,7 @@ export function JumpInLobby({
                         }
                         onMouseLeave={() => setHover(null)}
                       >
-                        {a.weight}% {a.card}
+                        {+a.weight.toFixed(1)}% {a.card}
                       </em>
                     ))}
                   </li>

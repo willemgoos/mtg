@@ -13,6 +13,7 @@ import {
   lorwynEclipsedBoosterSheets,
   tarkirDragonstormBoosterSheets,
   theHobbitBoosterSheets,
+  lordOfTheRingsBoosterSheets,
   secretsOfStrixhavenBoosterSheets,
   strixhavenArchiveSheets,
   strixhavenBoosterSheets,
@@ -1367,7 +1368,18 @@ export function summarize(r: ExpeditionRun): RunSummary {
 // ---------------------------------------------------------------------------
 
 /** The set a booster comes from: Foundations, or the set of a Bloomburrow, Marvel, Final Fantasy, Strixhaven or Reality Fracture deck. */
-export type PackSet = 'fdn' | 'blb' | 'msh' | 'fin' | 'stx' | 'sos' | 'fra' | 'ecl' | 'tdm' | 'hob';
+export type PackSet =
+  | 'fdn'
+  | 'blb'
+  | 'msh'
+  | 'fin'
+  | 'stx'
+  | 'sos'
+  | 'fra'
+  | 'ecl'
+  | 'tdm'
+  | 'hob'
+  | 'ltr';
 
 /** Booster names, by set. */
 export const PACK_SET_NAMES: Record<PackSet, string> = {
@@ -1381,6 +1393,7 @@ export const PACK_SET_NAMES: Record<PackSet, string> = {
   ecl: 'Lorwyn Eclipsed',
   tdm: 'Tarkir: Dragonstorm',
   hob: 'The Hobbit',
+  ltr: 'The Lord of the Rings',
 };
 
 const asPackSet = (set: string | undefined): PackSet =>
@@ -1392,7 +1405,8 @@ const asPackSet = (set: string | undefined): PackSet =>
   set === 'fra' ||
   set === 'ecl' ||
   set === 'tdm' ||
-  set === 'hob'
+  set === 'hob' ||
+  set === 'ltr'
     ? set
     : 'fdn';
 
@@ -1438,6 +1452,7 @@ const SHEETS = {
   ecl: lorwynEclipsedBoosterSheets(),
   tdm: tarkirDragonstormBoosterSheets(),
   hob: theHobbitBoosterSheets(),
+  ltr: lordOfTheRingsBoosterSheets(),
 };
 type Sheet = (typeof SHEETS.fdn)['common'];
 /** Mystical Archive (16): STX and SOS boosters have one archive card in place of a common. */

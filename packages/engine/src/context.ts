@@ -1,4 +1,4 @@
-import { characteristics, countOf } from './characteristics.ts';
+import { characteristics, countOf, matchesFilter } from './characteristics.ts';
 import { MSH_EFFECTS } from './msh-effects.ts';
 // Reality Fracture (17a): black
 import { FRA_BLACK_EFFECTS } from './fra-black-effects.ts';
@@ -53,6 +53,7 @@ import {
   LTR_MULTI_RARE_EFFECTS,
   withOpponentLandAbilities,
 } from './ltr-multi-rare-effects.ts'; // Lord of the Rings (21d multi-rare)
+import { LTR_MAIN_EFFECTS } from './ltr-main-effects.ts'; // Lord of the Rings (22)
 import { BRAWL_15B_W_EFFECTS } from './brawl-15b-w-effects.ts';
 import { BRAWL_15B_U_EFFECTS } from './brawl-15b-u-effects.ts';
 import { BRAWL_15B_G_EFFECTS } from './brawl-15b-g-effects.ts';
@@ -214,6 +215,7 @@ const BUILT_IN_EFFECTS: Record<string, CustomEffect> = {
   ...LTR_WU_RARE_EFFECTS, // Lord of the Rings (21d wu-rare)
   ...LTR_BR_RARE_EFFECTS, // Lord of the Rings (21d br-rare)
   ...LTR_MULTI_RARE_EFFECTS, // Lord of the Rings (21d multi-rare)
+  ...LTR_MAIN_EFFECTS, // Lord of the Rings (22)
   // Strixhaven Brawl (15b): multicolour, colourless and lands.
   ...BRAWL_15B_MULTI_EFFECTS,
   // Strixhaven Brawl (15b), white.
@@ -706,7 +708,8 @@ export interface MoveOptions {
   castFromNonHandBy?: PlayerId;
   /** Library position; default top. */
   // 'second': second from the top (Trickster's Stratagem, Marvel Super Heroes).
-  position?: 'top' | 'bottom' | 'second';
+  // Lord of the Rings Starter Kit: Gandalf, White Rider ('fifth')
+  position?: 'top' | 'bottom' | 'second' | 'fifth';
   controller?: PlayerId;
   // Final Fantasy (11a): saga creatures
   /** Onto the battlefield showing its back face ("return it transformed"). */
@@ -1098,6 +1101,7 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
   const dst = ceases ? null : zoneList(ctx, o, to);
   if (dst) {
     if (to === 'library' && opts.position === 'second') dst.splice(1, 0, id);
+    else if (to === 'library' && opts.position === 'fifth') dst.splice(4, 0, id);
     else if (to === 'library' && opts.position !== 'bottom') dst.unshift(id);
     else dst.push(id);
   }
@@ -1193,7 +1197,8 @@ export function addCounters(ctx: Ctx, id: ObjectId, n: number, name?: string, by
         a.kind === 'static' &&
         a.effect.kind === 'extraCounters' &&
         (name ? a.effect.anyCounters : true) &&
-        (!a.effect.creaturesOnly || defOf(ctx, o.defId).types.includes('Creature'))
+        (!a.effect.creaturesOnly || defOf(ctx, o.defId).types.includes('Creature')) &&
+        (!a.effect.filter || matchesFilter(ctx, id, a.effect.filter)) // Lord of the Rings (22 multicolour)
       )
         n += a.effect.amount;
   }

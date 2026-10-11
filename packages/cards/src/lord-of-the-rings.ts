@@ -13,6 +13,14 @@ import { LTR_RED_RARE, LTR_RED_RARE_BACKS, LTR_RED_RARE_TOKENS } from './ltr/red
 import { LTR_GREEN_RARE, LTR_GREEN_RARE_BACKS, LTR_GREEN_RARE_TOKENS } from './ltr/green-rare.ts';
 import { LTR_MULTICOLOUR_RARE, LTR_MULTICOLOUR_RARE_BACKS, LTR_MULTICOLOUR_RARE_TOKENS } from './ltr/multicolour-rare.ts';
 import { LTR_COLORLESS_RARE, LTR_COLORLESS_RARE_BACKS, LTR_COLORLESS_RARE_TOKENS } from './ltr/colorless-rare.ts';
+import { LTR_WHITE_MAIN, LTR_WHITE_MAIN_BACKS, LTR_WHITE_MAIN_TOKENS } from './ltr/white-main.ts';
+import { LTR_BLUE_MAIN, LTR_BLUE_MAIN_BACKS, LTR_BLUE_MAIN_TOKENS } from './ltr/blue-main.ts';
+import { LTR_BLACK_MAIN, LTR_BLACK_MAIN_BACKS, LTR_BLACK_MAIN_TOKENS } from './ltr/black-main.ts';
+import { LTR_RED_MAIN, LTR_RED_MAIN_BACKS, LTR_RED_MAIN_TOKENS } from './ltr/red-main.ts';
+import { LTR_GREEN_MAIN, LTR_GREEN_MAIN_BACKS, LTR_GREEN_MAIN_TOKENS } from './ltr/green-main.ts';
+import { LTR_MULTICOLOUR_MAIN, LTR_MULTICOLOUR_MAIN_BACKS, LTR_MULTICOLOUR_MAIN_TOKENS } from './ltr/multicolour-main.ts';
+import { LTR_COLORLESS_MAIN, LTR_COLORLESS_MAIN_BACKS, LTR_COLORLESS_MAIN_TOKENS } from './ltr/colorless-main.ts';
+import { LTR_STARTER_KIT, LTR_STARTER_KIT_BACKS, LTR_STARTER_KIT_TOKENS } from './ltr/starter-kit.ts';
 import { LTR_SHARED_TOKENS } from './ltr/tokens.ts';
 
 /**
@@ -34,6 +42,14 @@ export const LORD_OF_THE_RINGS_BEHAVIORS: Record<string, Behavior> = {
   ...LTR_GREEN_RARE,
   ...LTR_MULTICOLOUR_RARE,
   ...LTR_COLORLESS_RARE,
+  ...LTR_WHITE_MAIN,
+  ...LTR_BLUE_MAIN,
+  ...LTR_BLACK_MAIN,
+  ...LTR_RED_MAIN,
+  ...LTR_GREEN_MAIN,
+  ...LTR_MULTICOLOUR_MAIN,
+  ...LTR_COLORLESS_MAIN,
+  ...LTR_STARTER_KIT,
 };
 
 /** Back faces: not cards of their own, so not in the pool. */
@@ -51,6 +67,14 @@ export const LORD_OF_THE_RINGS_BACK_FACES: Record<string, Behavior> = {
   ...LTR_GREEN_RARE_BACKS,
   ...LTR_MULTICOLOUR_RARE_BACKS,
   ...LTR_COLORLESS_RARE_BACKS,
+  ...LTR_WHITE_MAIN_BACKS,
+  ...LTR_BLUE_MAIN_BACKS,
+  ...LTR_BLACK_MAIN_BACKS,
+  ...LTR_RED_MAIN_BACKS,
+  ...LTR_GREEN_MAIN_BACKS,
+  ...LTR_MULTICOLOUR_MAIN_BACKS,
+  ...LTR_COLORLESS_MAIN_BACKS,
+  ...LTR_STARTER_KIT_BACKS,
 };
 
 /** The Lord of the Rings tokens (the shared Orc Army, Spirit, ... and the one-card tokens). */
@@ -69,4 +93,12 @@ export const LORD_OF_THE_RINGS_TOKENS: CardDefinition[] = [
   ...LTR_GREEN_RARE_TOKENS,
   ...LTR_MULTICOLOUR_RARE_TOKENS,
   ...LTR_COLORLESS_RARE_TOKENS,
+  ...LTR_WHITE_MAIN_TOKENS,
+  ...LTR_BLUE_MAIN_TOKENS,
+  ...LTR_BLACK_MAIN_TOKENS,
+  ...LTR_RED_MAIN_TOKENS,
+  ...LTR_GREEN_MAIN_TOKENS,
+  ...LTR_MULTICOLOUR_MAIN_TOKENS,
+  ...LTR_COLORLESS_MAIN_TOKENS,
+  ...LTR_STARTER_KIT_TOKENS,
 ];

@@ -7,7 +7,8 @@
  *
  * The groups (scripts/data/ltr-groups.json, front-face names) split the 204 Jumpstart
  * cards: the fixed packet cards per colour plus `colorless` (21b), and the random-slot
- * rares and mythics as `<colour>-rare`, `multicolour-rare` and `colorless-rare` (21d).
+ * rares and mythics as `<colour>-rare`, `multicolour-rare` and `colorless-rare` (21d), and
+ * the other main-set cards as `<colour>-main`, `multicolour-main` and `colorless-main` (22).
  */
 import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';

@@ -294,6 +294,10 @@ export function startTurn(ctx: Ctx, player: PlayerId, noPowerUp = false): void {
   delete s.turn.ltrDamageUnpreventable; // Lord of the Rings (21b red)
   delete s.turn.ltrCombatDamagers; // Lord of the Rings (21d br-rare)
   delete s.turn.ltrAttackedPlayers; // Lord of the Rings (21d multi-rare)
+  delete s.turn.ltrBlockedWithLegendary; // Lord of the Rings (22 white)
+  delete s.turn.ltrOnlyFlyersBlock; // Lord of the Rings (22 red)
+  delete s.turn.ltrNotedTypeBoons; // Lord of the Rings (22 green)
+  delete s.turn.ltrFiresExiled; // Lord of the Rings Starter Kit
   delete s.turn.ltrSacrificed; // Lord of the Rings (21d multi-rare)
   delete s.turn.ltrSpiderDamaged; // Lord of the Rings (21d multi-rare)
   delete s.turn.firstTokensDone; // Lorwyn Eclipsed (18b, special)

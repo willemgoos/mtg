@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { ECL_BOOSTER_LIST } from '../../../packages/cards/src/ecl/booster-list.ts';
 import { TDM_BOOSTER_LIST } from '../../../packages/cards/src/tdm/booster-list.ts';
 import { HOB_BOOSTER_LIST } from '../../../packages/cards/src/hob/booster-list.ts';
+import { LTR_BOOSTER_LIST } from '../../../packages/cards/src/ltr/booster-list.ts';
 import { PACK_SET_NAMES, type PackSet, rollPlayBooster, size } from '../src/game/expedition.ts';
 import {
   addSealedBasics,
@@ -51,6 +52,7 @@ const listRarity: Partial<Record<PackSet, Map<string, string>>> = {
   ecl: new Map<string, string>(ECL_BOOSTER_LIST),
   tdm: new Map<string, string>(TDM_BOOSTER_LIST),
   hob: new Map<string, string>(HOB_BOOSTER_LIST),
+  ltr: new Map<string, string>(LTR_BOOSTER_LIST),
 };
 const known = new Set(SCRYFALL.map((c) => c.name));
 

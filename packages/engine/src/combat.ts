@@ -102,6 +102,8 @@ export function canBlock(ctx: Ctx, blocker: ObjectId, attacker: ObjectId): boole
   if (b.zone !== 'battlefield' || b.tapped) return false;
   const bc = characteristics(ctx, blocker);
   if (!bc.types.includes('Creature') || bc.cantBlock) return false;
+  // Lord of the Rings (22 red): Fire of Orthanc, "creatures without flying can't block this turn".
+  if (ctx.s.turn.ltrOnlyFlyersBlock && !bc.keywords.has('flying')) return false;
   const a = ctx.s.combat?.attackers.find((x) => x.id === attacker);
   if (!a || b.controller !== a.defender) return false;
   if (characteristics(ctx, attacker).cantBeBlocked) return false;
@@ -187,7 +189,12 @@ export function mustBeBlocked(ctx: Ctx, id: ObjectId): boolean {
     return true;
   // Lorwyn Eclipsed (18b, green): Vinebred Brawler.
   if (
-    def(ctx, id).abilities.some((a) => a.kind === 'static' && a.effect.kind === 'mustBeBlockedIfAble')
+    def(ctx, id).abilities.some(
+      (a) =>
+        a.kind === 'static' &&
+        a.effect.kind === 'mustBeBlockedIfAble' &&
+        checkCondition(ctx, a.effect.condition, o.controller, o), // Lord of the Rings (22 multicolour)
+    )
   )
     return true;
   return ctx.s.battlefield.some(

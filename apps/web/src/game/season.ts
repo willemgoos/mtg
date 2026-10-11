@@ -7,6 +7,7 @@ import {
   SECRETS_OF_STRIXHAVEN_DECKS,
   REALITY_FRACTURE_DECKS,
   LORWYN_ECLIPSED_DECKS,
+  LORD_OF_THE_RINGS_DECKS,
   cardDb,
   deckIds,
   isPlayable,
@@ -52,6 +53,7 @@ export const SEASON_STARTERS = [
   ...SECRETS_OF_STRIXHAVEN_DECKS,
   ...REALITY_FRACTURE_DECKS.filter((d) => d.series === 'starter'),
   ...LORWYN_ECLIPSED_DECKS.filter((d) => d.series === 'starter'),
+  ...LORD_OF_THE_RINGS_DECKS,
 ].filter(isPlayable);
 /** Decks a Season bot can play: mostly Jump In pairs, plus the starter and Color Challenge decks. */
 export const isSeasonOpponent = (id: string): boolean => OPPONENT_DECKS.some((d) => d.id === id);
@@ -76,7 +78,8 @@ export type SeasonPackKind =
   | 'realityFracture'
   | 'lorwynEclipsed'
   | 'tarkirDragonstorm'
-  | 'theHobbit';
+  | 'theHobbit'
+  | 'lordOfTheRings';
 export const SEASON_PACK_KINDS: readonly SeasonPackKind[] = [
   'foundations',
   'bloomburrow',
@@ -88,6 +91,7 @@ export const SEASON_PACK_KINDS: readonly SeasonPackKind[] = [
   'lorwynEclipsed',
   'tarkirDragonstorm',
   'theHobbit',
+  'lordOfTheRings',
 ];
 export interface SeasonMatch {
   id: number;

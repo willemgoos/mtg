@@ -4,6 +4,7 @@ import {
   countOf,
   creaturesOnBattlefield,
   hasKeyword,
+  hasSubtype,
   isCreature as isCreatureNow,
   matchesFilter,
   NON_CREATURE_SUBTYPES,
@@ -24,6 +25,7 @@ import { FIC_CONDITIONS } from './fic-effects.ts';
 import { FIN_CONDITIONS } from './fin-effects.ts';
 import { LTR_RED_CONDITIONS } from './ltr-red-effects.ts'; // Lord of the Rings (21b red)
 import { detectLtrMultiRare, LTR_MULTI_RARE_CONDITIONS } from './ltr-multi-rare-effects.ts'; // Lord of the Rings (21d multi-rare)
+import { detectLtrMain } from './ltr-main-rules.ts'; // Lord of the Rings (22)
 import { doubleAttackTriggers, TDM_MISC_CONDITIONS } from './tdm-misc-effects.ts';
 import type {
   AbilityDef,
@@ -175,6 +177,16 @@ export function checkCondition(
     return (ctx.s.turn.noncombatDamaged ?? []).includes(other(controller));
   if (c.kind === 'opponentDealtNoncombatDamageLastTurn')
     return (ctx.s.turn.lastNoncombatDamaged ?? []).includes(other(controller));
+  // Lord of the Rings (22 multicolour): Uglúk of the White Hand, the dead creature's last known types.
+  if (c.kind === 'subjectHadSubtype') {
+    if (!subject) return false;
+    if (subject.zone === 'battlefield') return c.subtypes.some((t) => hasSubtype(ctx, subject.id, t));
+    const last = subject.lastSubtypes ?? def(ctx, subject.id).subtypes;
+    return c.subtypes.some((t) => last.includes(t));
+  }
+  // Lord of the Rings Starter Kit: The Balrog, Flame of Udûn, "when a legendary creature ... dies".
+  if (c.kind === 'subjectWasLegendary')
+    return !!subject && def(ctx, subject.id).supertypes.includes('Legendary');
   if (c.kind === 'subjectMatches')
     return !!subject && subject.zone === 'battlefield' && matchesFilter(ctx, subject.id, c.filter);
   if (c.kind === 'sourceDamagedSubject') return !!self && !!subject?.damagedBy?.includes(self.id);
@@ -763,6 +775,7 @@ function detect(ctx: Ctx, ev: GameEvent): void {
   detectLtrGcRare(ctx, ev); // Lord of the Rings (21d gc-rare)
   detectLtrBrRare(ctx, ev); // Lord of the Rings (21d br-rare)
   detectLtrMultiRare(ctx, ev); // Lord of the Rings (21d multi-rare)
+  detectLtrMain(ctx, ev); // Lord of the Rings (22)
   detectAnimal(ctx, ev);
   switch (ev.type) {
     case 'objectMoved': {
@@ -1171,6 +1184,13 @@ function detect(ctx: Ctx, ev: GameEvent): void {
             if (t.on !== 'otherCreatureDies' && t.on !== 'creatureYouControlDies') return false;
             if (o.id === ev.id) return false;
             if (t.nontoken && wasToken) return false;
+            // Lord of the Rings (22 red): Warbeast of Gorgoroth, power 4 or greater as it died.
+            if (
+              t.on === 'creatureYouControlDies' &&
+              t.minLastPower !== undefined &&
+              (ev.lastPower ?? 0) < t.minLastPower
+            )
+              return false;
             if (
               t.on === 'creatureYouControlDies' &&
               t.filter &&

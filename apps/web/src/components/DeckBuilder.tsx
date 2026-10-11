@@ -83,6 +83,7 @@ const SET_NAMES: Record<string, string> = {
   ecl: 'Lorwyn Eclipsed',
   tdm: 'Tarkir: Dragonstorm',
   hob: 'The Hobbit',
+  ltr: 'The Lord of the Rings',
 };
 const setLabel = (code: string) => SET_NAMES[code] ?? code.toUpperCase();
 

@@ -3,8 +3,8 @@
 Target: the 20 official paper **LotR Jumpstart** packets (Volume 1: Courageous, Tricksy, Mordor, Marauders, Journey;
 Volume 2: Mortals, Cunning, Orcish, Riders, Elven; two versions of each), exact contents, random slot included, in the Jump
 In picker as "The Lord of the Rings · Jumpstart". Arena never had LotR Jump In packets, so these are the official lists
-(the user's rule: official lists first). The LTR main set is on Arena, and every card here is too. **Not in scope:** the rest
-of the main set, boosters, draft decks (possible later phases).
+(the user's rule: official lists first). The LTR main set is on Arena, and every card here is too. **Not in scope (21):** the rest
+of the main set, boosters, draft decks (possible later phases; the main set and the draft decks are phase 22, below).
 
 One branch, `lord-of-the-rings`, one sub-phase at a time. Read `docs/the-hobbit-plan.md` first (and
 `docs/tarkir-dragonstorm-plan.md` behind it): this plan reuses their rules, wiring and agent setup and doesn't repeat them.
@@ -423,3 +423,66 @@ hooks marked `// Lord of the Rings (21d multi-rare)`:
   attacks the opponent, or you choose a planeswalker (`ltrDoorsAttack`). **Shagrat**: counts the Equipment attached to it whoever controls them
   (`permanentsOpponentsControl` now passes the source for `attachedToSource`).
 - Everything else uses existing vocabulary (`whenRingTempts`, `whenYouScry`, `amassOrcs`, `otherCreatureEtb`, ...).
+
+## Phase 22: the rest of the main set and the draft decks (done)
+
+The 66 main-set commons and uncommons that no Jumpstart packet has (Reprieve was already in the pool), so every non-basic LTR
+card (collector numbers 1–281) is built, and Arena draft decks become possible. Build groups `<colour>-main`, `multicolour-main`
+and `colorless-main` in `ltr-groups.json` (white 8, blue 10, black 7, red 8, green 7, multicolour 20, colorless 6); files
+`cards/src/ltr/<group>.ts`; tests `cards/test/ltr-<colour>-main.test.ts` and `ltr-multi-main.test.ts` (multicolour and colorless).
+Engine one-offs: rules hooks in `engine/src/ltr-main-rules.ts` (no registrations at load, so `characteristics.ts`, `triggers.ts`
+and `stack.ts` can import it), choosers and custom effects in `engine/src/ltr-main-effects.ts`; hooks marked
+`// Lord of the Rings (22 <group>)`:
+
+- **You Cannot Pass!**: `TurnState.ltrBlockedWithLegendary` (recorded as blockers are declared) and the filter
+  `blockedWithLegendaryThisTurn`.
+- **Tale of Tinúviel**: `pump` with `whileSource` and `whileYouControlSource` ("for as long as you control this Saga"; ended by
+  `endLapsedControlEffects`).
+- **Stern Scolding**: `maxPowerOrToughness` now also checks spells (printed power and toughness, in `cardMatches`).
+- **Morgul-Knife Wound**: the Aura carries the upkeep trigger (`beginningOfUpkeep` / `enchantedController`); the chooser
+  `ltrPayLifeOrExileHost` asks the enchanted creature's controller (pay 2 life only with at least 2).
+- **Fire of Orthanc**: `TurnState.ltrOnlyFlyersBlock`, checked in `canBlock` (creatures that arrive later too).
+- **Warbeast of Gorgoroth**: `creatureYouControlDies` with `minLastPower` (the other creature's power as it died; Warbeast itself
+  always counts).
+- **Elven Farsight**: `ltrRevealTopDrawIfCreature`.
+- **Long List of the Ents**: chooser `ltrNoteCreatureType` (types not yet noted for the Saga, `GameObject.ltrNotedTypes`; ones on
+  the battlefield and in hand first), `TurnState.ltrNotedTypeBoons`, used up by the next creature spell of that type you cast
+  this turn (`ltrNotedTypeCounters` in `castSpell`, as `bonusCounters`).
+- **Mauhúr**: `extraCounters` with a `filter`. **Frodo Baggins**: `mustBeBlockedIfAble` with a `condition` (`isRingBearer`).
+  **Gandalf's Sanction**: `damage` with `excessToController`. **The Mouth of Sauron**: `cardsInGraveyard` with `ofTarget`.
+  **Ringsight**: filter `ltrSharesColorWithYourLegendary`. **Rise of the Witch-king**: `returnFromGraveyard` with
+  `toBattlefield`. **Shadowfax**: chooser `ltrShadowfaxPut` (it attacks what Shadowfax attacks; `joinAttack` is exported).
+  **Uglúk**: condition `subjectHadSubtype` (the dead creature's last known types). **The Grey Havens**: `colorFrom`
+  `legendaryCreatureCardsInGraveyard`.
+- **Great Hall of the Citadel**, **Wizard's Rockets**, **Shire Scarecrow**: activated `addMana` (as Vivi Ornitier): the engine
+  doesn't use mana abilities with a mana cost to pay. Great Hall's mana is `onlyFor: 'Legendary'`.
+
+**Draft decks**: `LORD_OF_THE_RINGS_TROPHY_DECKS` (`cards/src/decks.ts`), ten 7–0 Premier Draft decks, one per colour pair, from
+untapped.gg (`scripts/data/ltr-trophy-decks.md` and `.json`), in Quick match as "The Lord of the Rings draft decks". Draft decks
+may run more than four copies of a card (one has five Birthday Escape); `cards.test.ts` no longer caps copies for `trophy` decks.
+Bot games: `ai/test/ltr-decks.test.ts`.
+
+**Boosters**: `LTR_BOOSTER_LIST` (`cards/src/ltr/booster-list.ts`, the 261 main-set cards 1–281 without basics, from
+`scripts/fetch-booster-list.ts ltr`), `lordOfTheRingsBoosterSheets()`; `PackSet` `'ltr'` in Expedition, Season pack kind
+`lordOfTheRings`, Sealed, the deck builder's set names and card search. The wrapper shows The One Ring.
+
+**60-card decks** (`LORD_OF_THE_RINGS_DECKS`, series `starter`, in Quick match as "The Lord of the Rings" and in Season), all
+human-made:
+
+- The **Starter Kit**'s Fellowship of the Ring (G/W) and Might of Mordor (B/R) (`ltr/starter-kit-decks.ts`, from mtg.wiki
+  `Lord_of_the_Rings_Starter_Kit`; unlocked on Arena with the kit's codes). Its 13 new cards are in `ltr/starter-kit.ts`
+  (tests `ltr-starter-kit.test.ts`): the ten exclusives, Knight of the Keep, Goblin Assailant and Graypelt Refuge (an LTC
+  printing: `ltc` is now last in `SET_PREFERENCE`). Engine: `opponentSacrifices` `leastPower` (Witch-king),
+  `preventDamageToSelf` with a `condition` (Frodo, Determined Hero), `attached` `yourTurnCantBeBlocked` (Bilbo's Ring), library
+  position `'fifth'` (Gandalf, White Rider), condition `subjectWasLegendary` (The Balrog), Gollum's guessing choosers
+  (`ltrGollumOrder`, `ltrGollumKind`, `ltrGollumGuess` for the opponent), Fires of Mount Doom's exile (`TurnState.ltrFiresExiled`;
+  playing the card from exile queues Fires' reflexive ability in `detectLtrMain`).
+- **Arena's six Story Decks** (`ltr/story-decks.ts`, from mtg.wiki `Lord_of_the_Rings_Story_decks`): Galadriel's Elves,
+  Hobbit's Journey, Rivalry, Saruman's Descent, Sauron's Army, The Wedding. The seventh is a Historic Brawl deck. Nazgûl may have
+  nine copies (`cards.test.ts` allows it).
+- **Four Arena players' lists** (`ltr/constructed-decks.ts`): j2sjosh's Izzet Spells, Boros Beats, The Ents Are Coming and
+  Hungry, Hungry Hobbits for the LTR Constructed Midweek Magic event, from MTG Arena Zone (blocked to scripts; read from the
+  Wayback Machine's July 2023 copy).
+
+Being human-made, they aren't tuned against the starter decks; `ai/test/ltr-decks.test.ts` checks each plays a starter deck to
+a result. An earlier attempt at generated decks (the trophy decks' most-played cards scaled to 60) won 16–44% and was dropped.
