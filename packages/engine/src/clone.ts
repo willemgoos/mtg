@@ -35,6 +35,8 @@ export function cloneState(s: GameState): GameState {
     ...(p.castBans ? { castBans: p.castBans.slice() } : {}),
     // Secrets of Strixhaven (14a): paradigm.
     ...(p.paradigms ? { paradigms: p.paradigms.slice() } : {}),
+    // Lord of the Rings (21a): the Ring.
+    ...(p.ring ? { ring: { ...p.ring } } : {}),
   });
   const phased = s.phasedOut ? { phasedOut: s.phasedOut.slice() } : {};
   return {

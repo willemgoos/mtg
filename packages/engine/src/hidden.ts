@@ -40,7 +40,10 @@ export function redactFor(state: GameState, viewer: PlayerId, db?: CardDb): Game
         ? knownLibraryCards(state, viewer, db)
         : d.kind === 'choosePile' && d.player === viewer && d.owner === p
           ? d.faceUp
-          : // They reveal their hand while the viewer chooses from it.
+          : // Lord of the Rings (21d multi-rare): Sauron's Ransom, the opponent who separates the cards sees them all.
+            d.kind === 'splitPiles' && d.player === viewer && d.owner === p
+            ? d.cards
+            : // They reveal their hand while the viewer chooses from it.
             d.kind === 'chooseFromHand' && d.player === viewer && d.from === p
             ? (d.among ?? ps.hand) // Lorwyn Eclipsed (18b, black): Taster of Wares, only the cards they chose to reveal
             : [];
@@ -81,7 +84,8 @@ function knownLibraryCards(s: GameState, viewer: PlayerId, db: CardDb | undefine
     out.push(...(d.looked ?? s.players[viewer].library));
   if (d.kind === 'splitPiles' && d.player === viewer) out.push(...d.cards);
   // The owner knows both piles; the chooser only sees the face-up one (checked below for the owner's library).
-  if (d.kind === 'choosePile' && d.owner === viewer) out.push(...d.faceUp, ...d.faceDown);
+  if (d.kind === 'choosePile' && d.owner === viewer)
+    out.push(...d.faceUp, ...(d.reversed ? [] : d.faceDown)); // Lord of the Rings (21d multi-rare): Sauron's Ransom, the owner who chooses sees only the face-up pile
   const top = s.players[viewer].library[0];
   const vizier = (id: ObjectId) =>
     s.objects[id]!.controller === viewer &&

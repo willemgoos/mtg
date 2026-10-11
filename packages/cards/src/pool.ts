@@ -13,6 +13,7 @@ import { REALITY_FRACTURE_BEHAVIORS } from './reality-fracture.ts';
 import { LORWYN_ECLIPSED_BEHAVIORS } from './lorwyn-eclipsed.ts';
 import { TARKIR_DRAGONSTORM_BEHAVIORS } from './tarkir-dragonstorm.ts';
 import { THE_HOBBIT_BEHAVIORS } from './the-hobbit.ts';
+import { LORD_OF_THE_RINGS_BEHAVIORS } from './lord-of-the-rings.ts';
 
 /**
  * Allowed sets, most preferred first: Foundations, then older core sets, then
@@ -146,6 +147,8 @@ export const SET_PREFERENCE = [
   'fra',
   // The Hobbit (20a): last, so no earlier card changes printing.
   'hob',
+  // The Lord of the Rings (21): after The Hobbit, so no earlier card changes printing.
+  'ltr',
 ];
 
 export const RED_POOL = [
@@ -635,6 +638,9 @@ export const TARKIR_DRAGONSTORM_POOL = Object.keys(TARKIR_DRAGONSTORM_BEHAVIORS)
 /** The Hobbit cards (fronts only; none was in the pool before, the basics aren't repeated). */
 export const THE_HOBBIT_POOL = Object.keys(THE_HOBBIT_BEHAVIORS);
 
+/** The Lord of the Rings cards (fronts only; Reprieve was in the pool before and is not repeated). */
+export const LORD_OF_THE_RINGS_POOL = Object.keys(LORD_OF_THE_RINGS_BEHAVIORS);
+
 export const POOL: { name: string }[] = [
   ...RED_POOL,
   ...GREEN_POOL,
@@ -658,6 +664,7 @@ export const POOL: { name: string }[] = [
   ...LORWYN_ECLIPSED_POOL,
   ...TARKIR_DRAGONSTORM_POOL,
   ...THE_HOBBIT_POOL,
+  ...LORD_OF_THE_RINGS_POOL,
 ].map((name) => ({
   name,
 }));

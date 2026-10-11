@@ -21,6 +21,8 @@ import { tickSuspend } from './suspend.ts';
 import { checkGameOver, runSBAs } from './sba.ts';
 import { pushTrigger, resolveTop } from './stack.ts';
 import { targetCombos } from './targets.ts';
+import { untapWithCounter } from './ltr-blue-effects.ts'; // Lord of the Rings (21b blue)
+import { ltrKeepsGreenMana } from './ltr-gc-rare-effects.ts'; // Lord of the Rings (21d gc-rare)
 import {
   checkCondition,
   collectTriggers,
@@ -211,6 +213,9 @@ export function startTurn(ctx: Ctx, player: PlayerId, noPowerUp = false): void {
   for (const id of s.battlefield)
     if (s.objects[id]!.copyUntilTurnOf === player) endCopy(ctx, s.objects[id]!);
   delete s.turn.toughnessDamage;
+  delete s.turn.ltrToughnessRather; // Lord of the Rings (21b white)
+  delete s.turn.ltrFlashAll; // Lord of the Rings (21d wu-rare)
+  delete s.turn.ltrPressMv; // Lord of the Rings (21d wu-rare)
   // Avenge: whether the player whose turn just ended attacked during it.
   if (s.turn.number > 0) {
     const prev = s.players[s.turn.activePlayer];
@@ -286,6 +291,11 @@ export function startTurn(ctx: Ctx, player: PlayerId, noPowerUp = false): void {
   else delete s.turn.lastNoncombatDamaged;
   delete s.turn.noncombatDamaged;
   delete s.turn.moltenTide;
+  delete s.turn.ltrDamageUnpreventable; // Lord of the Rings (21b red)
+  delete s.turn.ltrCombatDamagers; // Lord of the Rings (21d br-rare)
+  delete s.turn.ltrAttackedPlayers; // Lord of the Rings (21d multi-rare)
+  delete s.turn.ltrSacrificed; // Lord of the Rings (21d multi-rare)
+  delete s.turn.ltrSpiderDamaged; // Lord of the Rings (21d multi-rare)
   delete s.turn.firstTokensDone; // Lorwyn Eclipsed (18b, special)
   if (s.staggered?.some((x) => x.by === player))
     s.staggered = s.staggered.filter((x) => x.by !== player);
@@ -304,8 +314,14 @@ function enterStep(ctx: Ctx, step: Step): void {
   s.turn.step = step;
   s.turn.passed = [];
   // Unspent mana empties between steps (and all of it at the end of the turn).
-  for (const p of Object.values(s.players))
-    if (p.pool?.length) p.pool = step === 'cleanup' ? [] : p.pool.filter((m) => m.untilEndOfTurn);
+  for (const [pid, p] of Object.entries(s.players))
+    if (p.pool?.length)
+      p.pool = (step === 'cleanup' ? [] : p.pool.filter((m) => m.untilEndOfTurn)).concat(
+        // Lord of the Rings (21d gc-rare): Fangorn, Tree Shepherd, unspent green mana stays.
+        ltrKeepsGreenMana(ctx, pid as PlayerId)
+          ? p.pool.filter((m) => !m.untilEndOfTurn && m.produces.length === 1 && m.produces[0] === 'G')
+          : [],
+      );
   emit(ctx, { type: 'stepChanged', turn: s.turn.number, step, activePlayer: ap });
 
   switch (step) {
@@ -334,7 +350,8 @@ function enterStep(ctx: Ctx, step: Step): void {
         const held = s.effects.some(
           (e) => e.doesntUntap && e.affected.id === id && e.affected.zcc === o.zcc,
         );
-        if (!stays && !auraStays && !held) untap(ctx, id);
+        // Lord of the Rings (21b blue): Bewitching Leechcraft, a +1/+1 counter instead of untapping.
+        if (!stays && !auraStays && !held && !untapWithCounter(ctx, id)) untap(ctx, id);
       }
       return advanceStep(ctx); // no priority in untap (rule 502.4)
 

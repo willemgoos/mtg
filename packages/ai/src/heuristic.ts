@@ -16,7 +16,9 @@ import {
   choosePickExiled,
   chooseBeholdType,
   chooseCreatureType,
+  chooseLtrGcRare,
   chooseForageExile,
+  chooseProtectionType,
   chooseWardSacrifice,
   chooseFromHand,
   choosePile,
@@ -106,11 +108,24 @@ export function createHeuristicBot(db: CardDb, name = 'heuristic'): Bot {
           // The Hobbit (20b green): Through the Forest Gate lists the lands first and "Done" last: take every land.
           if (d.title?.startsWith('Through the Forest Gate'))
             return { type: 'chooseOption', player: me, index: 0 };
+          // Lord of the Rings (21d br-rare): Hew the Entwood. The bot sacrifices no land ("Done" is first) and takes every artifact and
+          // land card revealed (the cards come first, "Done" last).
+          if (d.title?.startsWith('Hew the Entwood'))
+            return { type: 'chooseOption', player: me, index: 0 };
           // Reality Fracture (17a fixes): every creature type is on offer.
           if (d.title === 'Choose a creature type') return chooseCreatureType(engine, view, me, d);
+          // Lord of the Rings (21d multi-rare): Pippin, Guard of the Citadel, protection from a card type: creatures when they have any
+          // (they can't block it or hurt it), else instants (their burn).
+          if (d.title === 'Protection from which card type?')
+            return chooseProtectionType(engine, view, me, d);
           // Reality Fracture (17a): Arc of Fortune.
           if (d.options[0]?.label.startsWith('Discard your hand'))
             return { type: 'chooseOption', player: me, index: chooseHandSwap(view, me) };
+          // Lord of the Rings (21d gc-rare): Last March of the Ents, Mount Doom.
+          {
+            const ltr = chooseLtrGcRare(engine, view, me, d);
+            if (ltr) return ltr;
+          }
           return bestByEvaluation(engine, view, me, legal, 'stack');
         }
         case 'chooseFromHand':
@@ -134,7 +149,7 @@ export function createHeuristicBot(db: CardDb, name = 'heuristic'): Bot {
         case 'splitPiles':
           return chooseSplit(engine, view, me, legal);
         case 'choosePile':
-          return choosePile(view, me);
+          return choosePile(view, me, engine);
         case 'declareAttackers':
           return nextAttackAction(engine, view, me, d.declared);
         case 'declareBlockers':

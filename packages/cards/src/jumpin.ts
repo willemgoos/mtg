@@ -1,4 +1,5 @@
 import type { Color } from '@mtg/engine';
+import { LTR_JUMPSTART_PACKETS } from './ltr/jumpstart.ts';
 
 /**
  * Themed half-decks for Jump In!, Arena's mode where you pick two 20-card
@@ -17,9 +18,9 @@ export interface Packet {
   /** Card shown on the packet. */
   face: string;
   blurb: string;
-  /** Bloomburrow, Marvel Super Heroes, Final Fantasy, Strixhaven, Secrets of Strixhaven, Reality Fracture, Lorwyn Eclipsed, Tarkir: Dragonstorm or The Hobbit (default Foundations). Packets of different sets pair freely. */
-  set?: 'blb' | 'msh' | 'fin' | 'stx' | 'sos' | 'fra' | 'ecl' | 'tdm' | 'hob';
-  /** Arena's own packet (default: ours). */
+  /** Bloomburrow, Marvel Super Heroes, Final Fantasy, Strixhaven, Secrets of Strixhaven, Reality Fracture, Lorwyn Eclipsed, Tarkir: Dragonstorm, The Hobbit or The Lord of the Rings (default Foundations). Packets of different sets pair freely. */
+  set?: 'blb' | 'msh' | 'fin' | 'stx' | 'sos' | 'fra' | 'ecl' | 'tdm' | 'hob' | 'ltr';
+  /** An official packet, Arena's or Wizards' paper Jumpstart list (default: ours). */
   source?: 'arena';
   /** Custom theme that deliberately borrows cards from multiple sets. */
   crossSet?: boolean;
@@ -4763,6 +4764,7 @@ export const PACKETS: Packet[] = [
   ...ARENA_TDM_PACKETS,
   ...ARENA_SOS_PACKETS,
   ...MARVEL_JUMPSTART_PACKETS,
+  ...LTR_JUMPSTART_PACKETS,
 ];
 
 const BASICS: Record<Color, string> = {

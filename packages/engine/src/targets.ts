@@ -14,6 +14,8 @@ import {
 import { type Ctx, def, defOf, deref, obj, other, refOf } from './context.ts';
 import { manaValue } from './cost.ts';
 import { fromCreatureSource } from './msh-analyzed.ts';
+import { ltrPowerWithinSubject } from './ltr-red-effects.ts'; // Lord of the Rings (21b red)
+import { ltrManaValueWithinSubject } from './ltr-multi-rare-effects.ts'; // Lord of the Rings (21d multi-rare)
 import { hexproofFromOwnColors } from './ecl-multi-b-effects.ts';
 import { checkCondition } from './triggers.ts';
 import type { ObjectId, PlayerId, TargetChoice, TargetSpec } from './types.ts';
@@ -25,6 +27,8 @@ export interface TargetingSource {
   sourceId?: ObjectId;
   /** What caused a trigger (Clement: "with lesser mana value"). */
   subjectId?: ObjectId;
+  /** Lord of the Rings (21b red): the subject, passed when a trigger's targets are rechecked on resolution (Grishnákh). */
+  ltrSubjectId?: ObjectId;
 }
 
 /** "With lesser mana value" than the creature that caused the trigger (Clement, Jackdaw Savior). */
@@ -48,6 +52,7 @@ function playerOk(ctx: Ctx, spec: TargetSpec, p: PlayerId, src: TargetingSource)
   if (p !== src.controller && youHaveHexproof(ctx, p)) return false;
   // Mystical Archive (16): Teferi's Protection, "protection from everything".
   if (p !== src.controller && ctx.s.players[p].lifeFrozen) return false;
+  if (ctx.s.players[p].ltrProtected) return false; // Lord of the Rings (21d gc-rare): The One Ring (protection from everything, yours too)
   if (spec.controller === 'you' && p !== src.controller) return false;
   if (spec.controller === 'opponent' && p !== other(src.controller)) return false;
   return true;
@@ -56,6 +61,7 @@ function playerOk(ctx: Ctx, spec: TargetSpec, p: PlayerId, src: TargetingSource)
 function permanentOk(ctx: Ctx, spec: TargetSpec, id: ObjectId, src: TargetingSource): boolean {
   const o = ctx.s.objects[id];
   if (!o || o.zone !== 'battlefield') return false;
+  if (ctx.s.phasedOut?.some((p) => p.id === id)) return false; // Lord of the Rings (21d multi-rare): a phased-out permanent doesn't exist
   const walker = spec.what === 'any' && def(ctx, id).types.includes('Planeswalker');
   if (spec.what !== 'permanent' && !isCreature(ctx, id) && !walker) return false;
   if (spec.controller === 'you' && o.controller !== src.controller) return false;
@@ -97,6 +103,7 @@ function permanentOk(ctx: Ctx, spec: TargetSpec, id: ObjectId, src: TargetingSou
     if (src.sourceId && hexproofFromOwnColors(ctx, id, src.sourceId)) return false;
   }
   if (!lesserThanSubject(ctx, spec, id, src)) return false;
+  if (!ltrPowerWithinSubject(ctx, spec, id, src)) return false; // Lord of the Rings (21b red)
   if (spec.filter?.notSubject && id === src.subjectId) return false;
   return matchesFilter(ctx, id, spec.filter, src.sourceId);
 }
@@ -143,6 +150,7 @@ function graveyardCardOk(ctx: Ctx, spec: TargetSpec, id: ObjectId, src: Targetin
   if (spec.controller === 'opponent' && o.owner === src.controller) return false;
   if (spec.filter?.other && id === src.sourceId) return false;
   if (!lesserThanSubject(ctx, spec, id, src)) return false;
+  if (!ltrManaValueWithinSubject(ctx, spec, id, src)) return false; // Lord of the Rings (21d multi-rare): Saruman of Many Colors
   return !spec.filter || cardMatches(ctx, id, spec.filter, src.sourceId);
 }
 

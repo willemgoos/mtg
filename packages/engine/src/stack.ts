@@ -74,6 +74,13 @@ import {
   removeCounterKinds,
 } from './ecl-18a.ts';
 import { firstEquipFree, noteEquipActivation } from './hob-white-effects.ts'; // The Hobbit (20b white)
+import { isLegendaryNow } from './ltr-black-effects.ts'; // Lord of the Rings (21b black)
+import {
+  ltrFinalChapter,
+  ltrPayWardFiltered,
+  ltrWardCandidates,
+  ltrWardFilteredPayable,
+} from './ltr-multi-rare-effects.ts'; // Lord of the Rings (21d multi-rare)
 import { checkCondition, triggeredAbility } from './triggers.ts';
 import { givePriority } from './turn.ts';
 import type {
@@ -224,6 +231,7 @@ export function wardPayable(
   player: PlayerId,
   targets: readonly TargetChoice[],
   inHand = 0,
+  castCard?: ObjectId, // Lord of the Rings (21d multi-rare): the spell being cast can't be discarded to pay for ward
 ): boolean {
   const w = wardedTargets(ctx, player, targets);
   const discards = w.filter((x) => x.discard).length;
@@ -233,12 +241,25 @@ export function wardPayable(
   // Reality Fracture (17a): Emrakul, the Exigent Doom, ward—sacrifice three permanents.
   const permanents = w.reduce((n, x) => n + (x.sacrificePermanents ?? 0), 0);
   return (
+    ltrWardFilteredPayable(ctx, player, wardFilteredNeeds(ctx, player, targets), castCard) && // Lord of the Rings (21d multi-rare)
     ctx.s.players[player].hand.length - inHand >= discards &&
     foodsOf(ctx, player).length >= foods &&
     (creatures === 0 || creaturesOnBattlefield(ctx, player).length >= creatures) &&
     (permanents === 0 ||
       ctx.s.battlefield.filter((id) => obj(ctx, id).controller === player).length >= permanents)
   );
+}
+
+/** Lord of the Rings (21d multi-rare): the ward costs of these targets that name a kind of card (chosen one at a time on the stack). */
+export function wardFilteredNeeds(
+  ctx: Ctx,
+  player: PlayerId,
+  targets: readonly TargetChoice[],
+): { kind: 'sacrifice' | 'discard'; filter: CardFilter }[] {
+  return wardedTargets(ctx, player, targets).flatMap((w) => [
+    ...(w.sacrificeMatching ? [{ kind: 'sacrifice' as const, filter: w.sacrificeMatching }] : []),
+    ...(w.discardMatching ? [{ kind: 'discard' as const, filter: w.discardMatching }] : []),
+  ]);
 }
 
 /**
@@ -302,6 +323,7 @@ function nextWardSacrifice(
     thenPriority: PlayerId;
     forage?: ObjectId | 'graveyard';
     afterFree?: Extract<Decision, { kind: 'wardSacrifice' }>['afterFree'];
+    filtered?: Extract<Decision, { kind: 'wardSacrifice' }>['filtered']; // Lord of the Rings (21d multi-rare)
   },
 ): boolean {
   for (let guard = 0; guard < 100 && (creatures > 0 || permanents > 0); guard++) {
@@ -316,6 +338,25 @@ function nextWardSacrifice(
     if (creaturesOnly) creatures = 0;
     else permanents = 0;
   }
+  // Lord of the Rings (21d multi-rare): the costs that name a kind of card, one at a time (nothing to ask with a single choice).
+  let rest = after.filtered ?? [];
+  while (rest.length > 0) {
+    const [first, ...others] = rest;
+    const options = ltrWardCandidates(ctx, player, first!);
+    if (options.length > 1) {
+      ctx.s.decision = {
+        kind: 'wardSacrifice',
+        player,
+        creatures: 0,
+        permanents: 0,
+        ...after,
+        filtered: rest,
+      };
+      return true;
+    }
+    if (options.length === 1) ltrPayWardFiltered(ctx, first!, options[0]!);
+    rest = others;
+  }
   return false;
 }
 
@@ -327,20 +368,29 @@ function payWardSacrifices(
   after: Parameters<typeof nextWardSacrifice>[4],
 ): boolean {
   const { creatures, permanents } = wardSacrifices(ctx, player, targets);
-  return nextWardSacrifice(ctx, player, creatures, permanents, after);
+  const filtered = wardFilteredNeeds(ctx, player, targets); // Lord of the Rings (21d multi-rare)
+  return nextWardSacrifice(ctx, player, creatures, permanents, {
+    ...after,
+    ...(filtered.length ? { filtered } : {}),
+  });
 }
 
 /** One permanent sacrificed for ward; when all are, play goes on (after any forage). */
 export function answerWardSacrifice(ctx: Ctx, card: ObjectId): void {
   const d = ctx.s.decision;
   if (d.kind !== 'wardSacrifice') throw new Error('Not paying ward');
-  sacrificePermanent(ctx, card);
-  const creatures = d.creatures > 0 ? d.creatures - 1 : 0;
-  const permanents = d.creatures > 0 ? d.permanents : d.permanents - 1;
+  // Lord of the Rings (21d multi-rare): the plain sacrifices are made; this one is for the first cost that names a kind of card.
+  const named = d.creatures === 0 && d.permanents === 0 && !!d.filtered?.length;
+  if (named) ltrPayWardFiltered(ctx, d.filtered![0]!, card);
+  else sacrificePermanent(ctx, card);
+  const creatures = named ? 0 : d.creatures > 0 ? d.creatures - 1 : 0;
+  const permanents = named ? 0 : d.creatures > 0 ? d.permanents : d.permanents - 1;
+  const filtered = named ? d.filtered!.slice(1) : d.filtered;
   const after = {
     thenPriority: d.thenPriority,
     ...(d.forage !== undefined ? { forage: d.forage } : {}),
     ...(d.afterFree ? { afterFree: d.afterFree } : {}),
+    ...(filtered?.length ? { filtered } : {}),
   };
   if (nextWardSacrifice(ctx, d.player, creatures, permanents, after)) return;
   if (
@@ -702,6 +752,7 @@ export function castSpell(
   // Final Fantasy (11b): "Kicker—Return a land you control to its owner's hand".
   // Strixhaven (13b): the sacrificed creature's power (Tend the Pests).
   const sacrificedPower = choice.sacrifice ? power(ctx, choice.sacrifice) : undefined;
+  const sacrificedLegendary = !!choice.sacrifice && isLegendaryNow(ctx, choice.sacrifice); // Lord of the Rings (21b black)
   if (choice.sacrifice && choice.kicked && d.kicker?.returnLand)
     moveObject(ctx, choice.sacrifice, 'hand');
   else if (choice.sacrifice) sacrificePermanent(ctx, choice.sacrifice);
@@ -729,6 +780,7 @@ export function castSpell(
     ...(choice.x ? { x: choice.x } : {}),
     ...(exiledValue ? { x: exiledValue } : {}),
     ...(sacrificedPower !== undefined ? { lkiPower: sacrificedPower } : {}),
+    ...(sacrificedLegendary ? { lkiLegendary: true } : {}), // Lord of the Rings (21b black)
     ...(choice.paws ? { paws: choice.paws } : {}),
     ...(v.finality ? { finality: true } : {}),
     ...(choice.copyOf ? { copyOf: choice.copyOf } : {}),
@@ -749,6 +801,17 @@ export function castSpell(
   o.manaColors = manaColors;
   o.manaPaid = manaPaid;
   if (fromTreasure) o.manaFromTreasure = true; // The Hobbit (20b multicolour)
+  // Lord of the Rings (21d gc-rare): Delighted Halfling, "spend this mana only to cast a legendary spell, and that spell can't be countered".
+  if (
+    d.supertypes.includes('Legendary') &&
+    payment.some(
+      (id) =>
+        !convokers.includes(id) &&
+        !!ctx.s.objects[id] &&
+        def(ctx, id).abilities.some((a) => a.kind === 'mana' && a.uncounterableSpell),
+    )
+  )
+    o.cantBeCountered = true;
   if (teamwork) payTeamwork(ctx, teamwork);
   if (convokers.length) o.convokedBy = payment.filter((id) => convokers.includes(id));
   if (d.types.includes('Creature')) scryForAncestry(ctx, player, d, payment);
@@ -1404,6 +1467,13 @@ export function activateAbility(
       if (card) moveObject(ctx, card, 'exile');
     }
   }
+  // Lord of the Rings (21d gc-rare): Mines of Moria, exile N cards from your graveyard (the player picks them when there are more).
+  let chooseGraveyardCards = 0;
+  if (a.cost.exileGraveyardCards) {
+    const gy = ctx.s.players[player].graveyard;
+    if (gy.length > a.cost.exileGraveyardCards) chooseGraveyardCards = a.cost.exileGraveyardCards;
+    else for (const gone of [...gy]) moveObject(ctx, gone, 'exile');
+  }
   // Jump In slots (Polygraph Orb): collect evidence. With more than one card that counts, the player picks them (after the
   // ability is on the stack, like Gallia's card); otherwise the one card goes.
   let collectEvidence = 0;
@@ -1413,6 +1483,7 @@ export function activateAbility(
     else for (const id of options) moveObject(ctx, id, 'exile');
   }
   const sacrificedPower = sacrifice ? power(ctx, sacrifice) : undefined;
+  const sacrificedLegendary = !!sacrifice && isLegendaryNow(ctx, sacrifice); // Lord of the Rings (21b black)
   if (sacrifice) sacrificePermanent(ctx, sacrifice);
   changeLife(
     ctx,
@@ -1439,6 +1510,7 @@ export function activateAbility(
     controller: player,
     targets,
     ...(sacrificedPower !== undefined ? { lkiPower: sacrificedPower } : {}),
+    ...(sacrificedLegendary ? { lkiLegendary: true } : {}), // Lord of the Rings (21b black)
     // The ability itself, in case the source's abilities change (or it's gone).
     activated: a,
     ...(x !== undefined ? { x } : {}),
@@ -1499,6 +1571,16 @@ export function activateAbility(
       count: evidenceOptions(ctx, player, source).length,
       evidence: collectEvidence,
       source,
+      thenPriority: player,
+    };
+    return true;
+  }
+  // Lord of the Rings (21d gc-rare): Mines of Moria.
+  if (chooseGraveyardCards) {
+    ctx.s.decision = {
+      kind: 'forageExile',
+      player,
+      count: chooseGraveyardCards,
       thenPriority: player,
     };
     return true;
@@ -1602,8 +1684,11 @@ function checkTargets(
   targets: readonly TargetChoice[],
   controller: PlayerId,
   sourceId: ObjectId | undefined,
+  ltrSubjectId?: ObjectId, // Lord of the Rings (21b red): Grishnákh's "power at most the Army's"
 ): (TargetChoice | null)[] | null {
-  const src = sourceId ? { controller, sourceId } : { controller };
+  const src = sourceId
+    ? { controller, sourceId, ...(ltrSubjectId ? { ltrSubjectId } : {}) }
+    : { controller };
   // Marvel Super Heroes Jumpstart (Blink): an "any number" spec covers every target from its index on.
   const last = specs[specs.length - 1];
   const specAt = (i: number) => specs[i] ?? (last?.anyNumber || last?.xTargets ? last : undefined);
@@ -1640,6 +1725,7 @@ export function resolveTop(ctx: Ctx): boolean {
         targets,
         ...(item.x !== undefined ? { x: item.x } : {}),
         ...(item.lkiPower !== undefined ? { lkiPower: item.lkiPower } : {}),
+        ...(item.lkiLegendary ? { lkiLegendary: true } : {}), // Lord of the Rings (21b black)
       };
       const paused = {
         kind: 'spell' as const,
@@ -1765,7 +1851,14 @@ export function resolveTop(ctx: Ctx): boolean {
   }
 
   const a = abilityOf(ctx, item);
-  const targets = checkTargets(ctx, a.targets, item.targets, item.controller, item.source.id);
+  const targets = checkTargets(
+    ctx,
+    a.targets,
+    item.targets,
+    item.controller,
+    item.source.id,
+    item.subject?.id,
+  );
   if (!targets) {
     emit(ctx, { type: 'fizzled', id: item.id });
     return false;
@@ -1776,6 +1869,7 @@ export function resolveTop(ctx: Ctx): boolean {
     sourceDefId: item.sourceDefId,
     targets,
     ...(item.lkiPower !== undefined ? { lkiPower: item.lkiPower } : {}),
+    ...(item.lkiLegendary ? { lkiLegendary: true } : {}), // Lord of the Rings (21b black)
     ...(item.x !== undefined ? { x: item.x } : {}),
     ...(item.subject ? { subject: item.subject } : {}),
     ...(item.subjects ? { subjects: item.subjects } : {}),
@@ -1785,8 +1879,9 @@ export function resolveTop(ctx: Ctx): boolean {
     a.kind === 'triggered' && !a.targets.length && (a.optional || a.cost)
       ? [{ kind: 'may', effects: a.effects, ...(a.cost ? { cost: a.cost } : {}) }]
       : a.effects;
-  if (runEffects(ctx, es, effects, { kind: 'ability', id: item.id })) return true;
-  finishResolution(ctx, { kind: 'ability', id: item.id });
+  const done = { kind: 'ability' as const, id: item.id, ...ltrFinalChapter(ctx, a, item) }; // Lord of the Rings (21d multi-rare): Tom Bombadil
+  if (runEffects(ctx, es, effects, done)) return true;
+  finishResolution(ctx, done);
   return false;
 }
 
@@ -1847,6 +1942,20 @@ export function attachAura(ctx: Ctx, aura: ObjectId, host: ObjectId): void {
       h.blank = true;
       if (ab.effect.colorlessSubtype) h.colorless = ctx.s.colorChanges = true;
     }
+    // Lord of the Rings (21b white): Fog on the Barrow-Downs, "enchanted creature is a Spirit" (all other creature types are lost).
+    if (ab.effect.kind === 'attached' && ab.effect.setCreatureSubtype) {
+      ctx.s.effects.push({
+        timestamp: newTimestamp(ctx),
+        affected: { id: host, zcc: h.zcc },
+        power: 0,
+        toughness: 0,
+        keywords: [],
+        creatureSubtype: ab.effect.setCreatureSubtype,
+        expires: 'whileSource',
+        whileSourceId: aura,
+        player: a.controller,
+      });
+    }
     // Reality Fracture (17a): Puppet Crafting, the enchanted permanent is a creature while the Aura stays.
     if (ab.effect.kind === 'attached' && ab.effect.becomesCreature) {
       ctx.s.effects.push({
@@ -1878,6 +1987,7 @@ function isOmen(d: { subtypes: string[] }): boolean {
 /** Last step of resolving (rule 608.2n): an instant or sorcery goes to the graveyard. */
 export function finishResolution(ctx: Ctx, item: PausedResolution['item']): void {
   emit(ctx, { type: 'resolved', id: item.id });
+  if (item.ltrFinalChapter) emit(ctx, { type: 'finalChapterResolved', ...item.ltrFinalChapter }); // Lord of the Rings (21d multi-rare): Tom Bombadil
   if (item.kind !== 'spell') return;
   // A copy that returned itself to hand (Unexpected Results) has already ceased to exist.
   if (!ctx.s.objects[item.id]) return;
@@ -2388,7 +2498,7 @@ export function answerScry(ctx: Ctx, top: readonly ObjectId[], bottom: readonly 
   // Reality Fracture (17a): Surveillance Phantasm, "as long as you've scried or surveilled this turn".
   const seen = (ctx.s.turn.scriedOrSurveilled ??= []);
   if (!seen.includes(d.player)) seen.push(d.player);
-  emit(ctx, { type: 'scried', player: d.player, top: top.length, bottom: bottom.length });
+  emit(ctx, { type: 'scried', player: d.player, top: top.length, bottom: bottom.length, ...(d.surveil ? { surveil: true } : {}) });
   resume(ctx, d.resume, d.thenPriority);
 }
 
@@ -2834,7 +2944,8 @@ export function answerSplit(ctx: Ctx, faceUp: readonly ObjectId[]): void {
   ctx.s.decision = {
     kind: 'choosePile',
     player: other(d.player),
-    owner: d.player,
+    owner: d.owner ?? d.player, // Lord of the Rings (21d multi-rare): Sauron's Ransom, the cards' owner chooses
+    ...(d.owner ? { reversed: true } : {}),
     faceUp: d.cards.filter((id) => faceUp.includes(id)),
     faceDown: d.cards.filter((id) => !faceUp.includes(id)),
     resume: d.resume,

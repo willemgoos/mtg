@@ -15,8 +15,15 @@ import { countersOnLeft, spentColors } from './ecl-18a.ts';
 import { spellsCastThisTurn } from './tdm-19a.ts';
 import { elementalTriggerCopies } from './ecl-multi-b-effects.ts';
 import { hasEnduringStory, subtypeTriggerCopies } from './hob-20a.ts';
+import { detectLtr, isRingBearer, ringCondition } from './ltr-21a.ts';
+import { detectLtrWhite } from './ltr-white-effects.ts'; // Lord of the Rings (21b white)
+import { detectLtrGcRare } from './ltr-gc-rare-effects.ts'; // Lord of the Rings (21d gc-rare)
+import { doubleLegendaryArtifactTriggers } from './ltr-wu-rare-effects.ts'; // Lord of the Rings (21d wu-rare)
+import { detectLtrBrRare } from './ltr-br-rare-effects.ts'; // Lord of the Rings (21d br-rare)
 import { FIC_CONDITIONS } from './fic-effects.ts';
 import { FIN_CONDITIONS } from './fin-effects.ts';
+import { LTR_RED_CONDITIONS } from './ltr-red-effects.ts'; // Lord of the Rings (21b red)
+import { detectLtrMultiRare, LTR_MULTI_RARE_CONDITIONS } from './ltr-multi-rare-effects.ts'; // Lord of the Rings (21d multi-rare)
 import { doubleAttackTriggers, TDM_MISC_CONDITIONS } from './tdm-misc-effects.ts';
 import type {
   AbilityDef,
@@ -57,6 +64,16 @@ export function checkCondition(
   if (!c) return true;
   // The Hobbit (20a): Storied, "as long as you have an enduring story".
   if (c.kind === 'enduringStory') return hasEnduringStory(ctx, controller);
+  // Lord of the Rings (21a): the Ring, "if you chose a creature other than this one as your Ring-bearer", "is your Ring-bearer".
+  if (
+    c.kind === 'ringBearerChosenOther' ||
+    c.kind === 'isRingBearer' ||
+    c.kind === 'hasRingBearer' ||
+    c.kind === 'ringTemptedAtLeast'
+  )
+    return ringCondition(ctx, c, controller, self, subject);
+  // Lord of the Rings (21b green): Elanor Gardner, "if you sacrificed a Food this turn".
+  if (c.kind === 'sacrificedFoodThisTurn') return (ctx.s.turn.foodsSacrificed?.[controller] ?? 0) > 0;
   // The Hobbit (20b multicolour): Smaug, Wicked Worm, "if mana from a Treasure was spent to cast it" (the spell is the subject).
   if (c.kind === 'treasureManaSpent') return !!(subject ?? self)?.manaFromTreasure;
   // Secrets of Strixhaven (14b)
@@ -299,6 +316,9 @@ export function checkCondition(
         (id) => !!ctx.s.objects[id] && matchesFilter(ctx, id, c.filter, self?.id),
       ).length >= c.count
     );
+  // Lord of the Rings (21d gc-rare): Minas Tirith, "if you attacked with two or more creatures this turn".
+  if (c.kind === 'ltrAttackedWith')
+    return ctx.s.turn.activePlayer === controller && new Set(ctx.s.turn.attackers).size >= c.count;
   // Lorwyn Eclipsed (18c, theme decks): Fearless Swashbuckler.
   if (c.kind === 'attackedThisCombat')
     return (
@@ -414,14 +434,18 @@ export function checkCondition(
       // Final Fantasy Commander (12): one-off conditions.
       // Final Fantasy (11d): and FIN one-offs.
       const fn =
-        FIC_CONDITIONS[c.handler] ?? FIN_CONDITIONS[c.handler] ?? TDM_MISC_CONDITIONS[c.handler]; // Tarkir: Dragonstorm (19b, misc)
+        FIC_CONDITIONS[c.handler] ??
+        FIN_CONDITIONS[c.handler] ??
+        LTR_RED_CONDITIONS[c.handler] ?? // Lord of the Rings (21b red)
+        LTR_MULTI_RARE_CONDITIONS[c.handler] ?? // Lord of the Rings (21d multi-rare)
+        TDM_MISC_CONDITIONS[c.handler]; // Tarkir: Dragonstorm (19b, misc)
       if (fn) return fn(ctx, controller, self, subject);
       throw new Error(`Custom condition "${c.handler}" not registered`);
     }
   }
 }
 
-function queue(
+export function queue(
   ctx: Ctx,
   o: GameObject,
   index: number,
@@ -489,8 +513,7 @@ function queue(
   const d = defOf(ctx, o.defId);
   if (
     o.zone === 'battlefield' &&
-    !o.nonlegendary &&
-    d.supertypes.includes('Legendary') &&
+    ((!o.nonlegendary && d.supertypes.includes('Legendary')) || isRingBearer(ctx, o)) && // Lord of the Rings (21a): a Ring-bearer is legendary
     d.types.includes('Creature') &&
     ctx.s.battlefield.some(
       (id) =>
@@ -515,7 +538,7 @@ function queue(
 }
 
 /** Calls `fn` for each triggered ability on each permanent on the battlefield. */
-function forEachBattlefieldTrigger(
+export function forEachBattlefieldTrigger(
   ctx: Ctx,
   fn: (o: GameObject, a: Triggered, index: number) => boolean,
   subject?: GameObject,
@@ -650,6 +673,17 @@ function spellMatches(
         return !!o && o.zone === 'battlefield' && def(ctx, o.id).types.includes('Creature');
       });
     // Reality Fracture (17a): Danitha, Spear of Agony
+    // Lord of the Rings (21d gc-rare): Legolas, Master Archer, "a spell that targets a creature you don't control".
+    case 'ltrTargetsOtherCreature':
+      return !!item?.targets.some((x) => {
+        const o = 'object' in x ? ctx.s.objects[x.object.id] : undefined;
+        return (
+          !!o &&
+          o.zone === 'battlefield' &&
+          o.controller !== self.controller &&
+          def(ctx, o.id).types.includes('Creature')
+        );
+      });
     case 'targetsOpponentOrTheirCreature':
       return !!item?.targets.some((x) => {
         if ('player' in x) return x.player !== self.controller;
@@ -724,6 +758,11 @@ function spellMatches(
 function detect(ctx: Ctx, ev: GameEvent): void {
   const s = ctx.s;
   detectFic(ctx, ev);
+  detectLtr(ctx, ev); // Lord of the Rings (21a)
+  detectLtrWhite(ctx, ev); // Lord of the Rings (21b white)
+  detectLtrGcRare(ctx, ev); // Lord of the Rings (21d gc-rare)
+  detectLtrBrRare(ctx, ev); // Lord of the Rings (21d br-rare)
+  detectLtrMultiRare(ctx, ev); // Lord of the Rings (21d multi-rare)
   detectAnimal(ctx, ev);
   switch (ev.type) {
     case 'objectMoved': {
@@ -1076,7 +1115,7 @@ function detect(ctx: Ctx, ev: GameEvent): void {
               source: { id: moved.id, zcc: moved.zcc },
               sourceDefId: e.onDies.sourceDefId,
               abilityIndex: -1,
-              controller: e.onDies.controller,
+              controller: e.onDies.byLastController ? (ev.controller ?? e.onDies.controller) : e.onDies.controller, // Lord of the Rings (21d gc-rare)
               subject: { id: moved.id, zcc: moved.zcc },
               inline: e.onDies.effects,
             });
@@ -1461,6 +1500,7 @@ function detect(ctx: Ctx, ev: GameEvent): void {
           targetsMatch(ctx, item, o.controller, a.trigger.targetFilter) &&
           // Final Fantasy (11b): "if at least four mana was spent to cast it".
           (spellObj.manaSpent ?? 0) >= (a.trigger.minManaSpent ?? 0) &&
+          (a.trigger.maxManaSpent === undefined || (spellObj.manaSpent ?? 0) <= a.trigger.maxManaSpent) && // Lord of the Rings (21d wu-rare)
           !a.fromGraveyard,
         spellObj,
         manaValueOf(spell),
@@ -2379,10 +2419,13 @@ export function collectTriggers(ctx: Ctx): void {
   ctx.batched.clear();
   const before = ctx.s.pendingTriggers.length;
   let attacked = false;
+  const batchStart = ctx.triggerCursor; // Lord of the Rings (21d wu-rare)
   while (ctx.triggerCursor < ctx.events.length) {
     const ev = ctx.events[ctx.triggerCursor++]!;
     if (ev.type === 'attackersDeclared') attacked = true;
+    const pendingBefore = ctx.s.pendingTriggers.length; // Lord of the Rings (21d wu-rare)
     detect(ctx, ev);
+    doubleLegendaryArtifactTriggers(ctx, ev, pendingBefore, batchStart); // Lord of the Rings (21d wu-rare)
   }
   // Tarkir: Dragonstorm (19b, misc): Windcrag Siege (Mardu), what the attack caused triggers an additional time.
   if (attacked) doubleAttackTriggers(ctx, before);

@@ -37,6 +37,51 @@ export function chooseHandSwap(s: GameState, me: PlayerId): number {
 }
 
 /**
+ * Lord of the Rings (21d gc-rare): Last March of the Ents ("put any number of creature cards from your hand onto the battlefield", one
+ * at a time: Done is the first option) and Mount Doom ("choose up to two creatures, then destroy the rest", one at a time: the first
+ * option stops). The bot puts in its most expensive creature card each time, and keeps its own best creatures, never an opponent's.
+ * Undefined for any other prompt.
+ */
+export function chooseLtrGcRare(
+  engine: Engine,
+  s: GameState,
+  me: PlayerId,
+  d: Extract<GameState['decision'], { kind: 'chooseOption' }>,
+): Action | undefined {
+  const title = d.title ?? '';
+  let best = 0;
+  let bestValue = -Infinity;
+  if (title.startsWith('Put creature cards from your hand') || title.startsWith('Put another creature card')) {
+    d.options.forEach((o, i) => {
+      if (i === 0) return;
+      const card = s.players[me].hand.find((id) => defOf(engine, s, id)?.name === o.label);
+      const v = card ? manaValue(defOf(engine, s, card)!.manaCost) : 0;
+      if (v > bestValue) {
+        best = i;
+        bestValue = v;
+      }
+    });
+    return { type: 'chooseOption', player: me, index: best };
+  }
+  if (title.startsWith('Mount Doom')) {
+    d.options.forEach((o, i) => {
+      if (i === 0 || !o.label.endsWith(' (yours)')) return;
+      const name = o.label.slice(0, -' (yours)'.length);
+      for (const id of s.battlefield) {
+        if (s.objects[id]!.controller !== me || defOf(engine, s, id)?.name !== name) continue;
+        const v = creatureValue(s, engine.db, id);
+        if (v > bestValue) {
+          best = i;
+          bestValue = v;
+        }
+      }
+    });
+    return { type: 'chooseOption', player: me, index: best };
+  }
+  return undefined;
+}
+
+/**
  * Which land to play. A land that enters tapped goes down on turns where one
  * more untapped mana wouldn't let us cast anything extra; otherwise we play
  * an untapped one. Ties go to the land adding a colour our hand needs.
@@ -231,6 +276,23 @@ export function choosePickExiled(
   return legal.reduce((best, a) => (score(a) > score(best) ? a : best));
 }
 
+/**
+ * Lord of the Rings (21d multi-rare): Pippin, Guard of the Citadel, the card type to protect from: creatures when they have any (they
+ * can't block it or hurt it), else instants (their burn).
+ */
+export function chooseProtectionType(
+  engine: Engine,
+  s: GameState,
+  me: PlayerId,
+  d: Extract<GameState['decision'], { kind: 'chooseOption' }>,
+): Action {
+  const theirCreatures = s.battlefield.some(
+    (id) => s.objects[id]!.controller !== me && defOf(engine, s, id)?.types.includes('Creature'),
+  );
+  const at = d.options.findIndex((o) => o.label === (theirCreatures ? 'Creature' : 'Instant'));
+  return { type: 'chooseOption', player: me, index: Math.max(0, at) };
+}
+
 /** Curator of Destinies (splitting): the best card alone face up, the rest face down. */
 export function chooseSplit(engine: Engine, s: GameState, me: PlayerId, legal: Action[]): Action {
   const d = s.decision;
@@ -239,6 +301,20 @@ export function chooseSplit(engine: Engine, s: GameState, me: PlayerId, legal: A
     const c = defOf(engine, s, id);
     return !c || c.types.includes('Land') ? 0 : manaValue(c.manaCost);
   };
+  // Lord of the Rings (21d multi-rare): Sauron's Ransom, we separate the cards and the other player takes one pile: keep the piles as even
+  // as we can (the lighter pile face up), so that neither pile is worth much more.
+  if (d.owner) {
+    const total = (ids: readonly ObjectId[]) => ids.reduce((n, id) => n + value(id) + 1, 0);
+    const all = total(d.cards);
+    const score = (a: Action) => {
+      if (a.type !== 'splitPiles') return Infinity;
+      const up = total(a.faceUp);
+      const down = all - up;
+      // The most either pile is worth; the face-up pile is the lighter one on a tie.
+      return Math.max(up, down) * 1000 + (up <= down ? 0 : 1);
+    };
+    return legal.reduce((best, a) => (score(a) < score(best) ? a : best));
+  }
   const best = [...d.cards].sort((a, b) => value(b) - value(a))[0]!;
   return (
     legal.find((a) => a.type === 'splitPiles' && a.faceUp.length === 1 && a.faceUp[0] === best) ??
@@ -247,9 +323,20 @@ export function chooseSplit(engine: Engine, s: GameState, me: PlayerId, legal: A
 }
 
 /** Curator of Destinies (choosing for the opponent's hand): the smaller pile, ties to face down. */
-export function choosePile(s: GameState, me: PlayerId): Action {
+export function choosePile(s: GameState, me: PlayerId, engine?: Engine): Action {
   const d = s.decision;
   if (d.kind !== 'choosePile') throw new Error('not choosing a pile');
+  // Lord of the Rings (21d multi-rare): Sauron's Ransom, the pile for our own hand: we see only the face-up cards, so weigh them
+  // against the face-down cards at about two mana value each.
+  if (d.reversed) {
+    const value = (id: ObjectId) => {
+      const c = engine ? defOf(engine, s, id) : undefined;
+      return c ? (c.types.includes('Land') ? 1 : 1 + manaValue(c.manaCost)) : 3;
+    };
+    const up = d.faceUp.reduce((n, id) => n + value(id), 0);
+    const down = d.faceDown.length * 3;
+    return { type: 'choosePile', player: me, pile: up >= down ? 'faceUp' : 'faceDown' };
+  }
   const pile = d.faceUp.length < d.faceDown.length ? 'faceUp' : 'faceDown';
   return { type: 'choosePile', player: me, pile };
 }

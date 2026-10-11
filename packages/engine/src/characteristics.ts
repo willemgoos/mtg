@@ -2,6 +2,8 @@ import { commanderTypes, isCommander } from './brawl.ts';
 import { type Ctx, def, defOf, obj, other } from './context.ts';
 import { manaValue } from './cost.ts';
 import { vividCount } from './ecl-18a.ts';
+import { staticallyCreature } from './ltr-black-effects.ts'; // Lord of the Rings (21b black)
+import { ltrCombatKeywordsApply, ltrGcRareFilterFails } from './ltr-gc-rare-effects.ts'; // Lord of the Rings (21d gc-rare)
 import { spellsCastThisTurn } from './tdm-19a.ts';
 import { checkCondition } from './triggers.ts';
 import type {
@@ -94,6 +96,11 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
         granted ??= new Set(keywords);
         for (const k of e.keywords) granted.add(k);
       }
+      // Lord of the Rings (21b red): Smite the Deathless, "loses indestructible until end of turn".
+      if (e.loseKeywords?.length) {
+        granted ??= new Set(keywords);
+        for (const k of e.loseKeywords) removed.add(k);
+      }
     }
     // Its own static abilities that only affect itself.
     for (const a of d.abilities) {
@@ -104,6 +111,10 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
       // The Hobbit (20b multicolour): Chief Warg's Company, "can't attack unless you control two or more other Wolves".
       else if (st.kind === 'cantAttackUnless') {
         if (!checkCondition(ctx, st.condition, o.controller, o)) cantAttack = true;
+      }
+      // Lord of the Rings (21b red): Olog-hai Crusher, "can't block unless you control a Goblin or Orc".
+      else if (st.kind === 'cantBlockUnless') {
+        if (!checkCondition(ctx, st.condition, o.controller, o)) cantBlock = true;
       }
       // Bast: "can't attack or block unless you control three or more creatures".
       else if (
@@ -130,6 +141,11 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
           baseTimestamp = o.timestamp;
         }
         if (st.kind === 'while' && st.cantBeBlocked) cantBeBlocked = true;
+        // Lord of the Rings (21b black): Grond, the Gatebreaker, an artifact creature while the condition holds.
+        if (st.kind === 'while' && st.becomesCreature) {
+          crewed = true;
+          artifactToo = true;
+        }
         if (st.keywords?.length) {
           granted ??= new Set(keywords);
           for (const k of st.keywords) granted.add(k);
@@ -183,6 +199,11 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
           if (st.legendaryKeywords?.length && d.supertypes.includes('Legendary')) {
             granted ??= new Set(keywords);
             for (const k of st.legendaryKeywords) granted.add(k);
+          }
+          // Lord of the Rings (21d gc-rare): Sting, the Glinting Dagger, first strike while blocking or blocked by a Goblin or Orc.
+          if (st.combatKeywords && ltrCombatKeywordsApply(ctx, id, st.combatKeywords.filter)) {
+            granted ??= new Set(keywords);
+            for (const k of st.combatKeywords.keywords) granted.add(k);
           }
           if (st.attackingKeywords?.length && isAttacking(ctx, id)) {
             granted ??= new Set(keywords);
@@ -442,6 +463,7 @@ export function countOf(
       0,
     );
   if (a.count === 'creaturesYouLostThisTurn') return ctx.s.turn.creaturesLost?.[player] ?? 0;
+  if (a.count === 'permanentsSacrificedThisTurn') return ctx.s.turn.ltrSacrificed ?? 0; // Lord of the Rings (21d multi-rare)
   // Lorwyn Eclipsed (18b, white): Kinbinding.
   if (a.count === 'creaturesEnteredThisTurn')
     return ctx.s.turn.creaturesEntered?.filter((e) => e.player === player).length ?? 0;
@@ -540,7 +562,7 @@ export function countOf(
   if (a.count === 'cardsDiscardedThisTurn') return ctx.s.turn.discards?.[player] ?? 0;
   if (a.count === 'permanentsOpponentsControl')
     return ctx.s.battlefield.filter(
-      (id) => obj(ctx, id).controller !== player && matchesFilter(ctx, id, a.filter),
+      (id) => obj(ctx, id).controller !== player && matchesFilter(ctx, id, a.filter, sourceId), // Lord of the Rings (21d multi-rare): the source for "attached to it" (Shagrat)
     ).length;
   if (a.count === 'cardsInHand') return ctx.s.players[player].hand.length;
   // Strixhaven (13c)
@@ -740,7 +762,10 @@ export function isCreature(ctx: Ctx, id: ObjectId): boolean {
   const o = obj(ctx, id);
   return (
     o.zone === 'battlefield' &&
-    ctx.s.effects.some((e) => e.becomesCreature && e.affected.id === id && e.affected.zcc === o.zcc)
+    (ctx.s.effects.some(
+      (e) => e.becomesCreature && e.affected.id === id && e.affected.zcc === o.zcc,
+    ) ||
+      staticallyCreature(ctx, id)) // Lord of the Rings (21b black): Grond, the Gatebreaker
   );
 }
 
@@ -1096,6 +1121,7 @@ export function matchesFilter(
   sourceId?: ObjectId,
 ): boolean {
   if (!filter) return true;
+  if ((filter.ltrExceptIds || filter.ltrNoSharedType) && ltrGcRareFilterFails(ctx, id, filter)) return false; // Lord of the Rings (21d gc-rare)
   // Type/subtype-only conditions must not recurse through their own static ability.
   const needsComputed =
     filter.maxPower !== undefined ||
@@ -1232,6 +1258,7 @@ export function cardMatches(
 ): boolean {
   const d = def(ctx, id);
   const subtypes = subtypesOf(ctx, id);
+  if ((filter.ltrExceptIds || filter.ltrNoSharedType) && ltrGcRareFilterFails(ctx, id, filter)) return false; // Lord of the Rings (21d gc-rare)
   if (
     filter.anyOf &&
     !filter.anyOf.some((branch) =>
@@ -1323,6 +1350,8 @@ export function cardMatches(
     if (!chosen || !hasSubtype(ctx, id, chosen)) return false;
   }
   if (filter.enteredThisTurn && obj(ctx, id).zoneTurn !== ctx.s.turn.number) return false;
+  // Lord of the Rings (21b white): Samwise the Stouthearted.
+  if (filter.diedThisTurn && obj(ctx, id).diedTurn !== ctx.s.turn.number) return false;
   if (filter.leftAttacking && !obj(ctx, id).leftAttacking) return false;
   if (filter.attachedToSource && (!sourceId || obj(ctx, id).attachedTo !== sourceId)) return false;
   // Lorwyn Eclipsed (18c): Subterranean Schooner, "target creature that crewed it this turn".

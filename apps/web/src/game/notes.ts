@@ -5,6 +5,7 @@ import {
   getCharacteristics,
   type Keyword,
   type ObjectId,
+  ringStatus,
   storyProgress,
 } from '@mtg/engine';
 
@@ -126,6 +127,30 @@ export const ENDURING_STORY_RULE =
 export const ENDURING_STORY_BADGE =
   'Enduring story: this player controlled three or more artifacts, legendaries and/or Sagas with a Storied permanent on the battlefield. They keep it for the rest of the game.';
 
+/** The Lord of the Rings (21a): the Ring's four abilities, in the order it gains them. */
+export const RING_ABILITIES: readonly string[] = [
+  'Your Ring-bearer is legendary and can’t be blocked by creatures with greater power.',
+  'Whenever your Ring-bearer attacks, draw a card, then discard a card.',
+  'Whenever your Ring-bearer becomes blocked by a creature, that creature’s controller sacrifices it at end of combat.',
+  'Whenever your Ring-bearer deals combat damage to a player, each opponent loses 3 life.',
+];
+
+/** The rule behind "the Ring tempts you" (the keyword action's tooltip). */
+export const RING_TEMPTS_RULE =
+  'The Ring tempts you: you get the Ring, which gains its next ability (to four), and you choose a creature you control as your Ring-bearer.';
+
+/** The tooltip of the Ring on a player's badge: how often it tempted them, the Ring-bearer and the abilities the Ring has now. */
+export function ringBadgeText(tempted: number, bearerName?: string): string {
+  const level = Math.min(4, tempted);
+  const times = `${tempted} time${tempted === 1 ? '' : 's'}`;
+  return [
+    `The Ring: it has tempted this player ${times}.`,
+    bearerName ? `Ring-bearer: ${bearerName}.` : 'No Ring-bearer right now.',
+    ...RING_ABILITIES.slice(0, level).map((a, i) => `${i + 1}. ${a}`),
+    ...(level < 4 ? [`The next time it tempts them: ${RING_ABILITIES[level]}`] : []),
+  ].join(' ');
+}
+
 const MECHANICS: Record<string, string> = {
   Prowess: 'Whenever you cast a noncreature spell, this creature gets +1/+1 until end of turn.',
   Landfall: 'Triggers whenever a land you control enters.',
@@ -153,6 +178,8 @@ const MECHANICS: Record<string, string> = {
   Behold: 'Choose a permanent of that type you control, or reveal a card of that type from your hand.',
   Flurry: 'Triggers when you cast your second spell each turn.',
   Renew: 'Activate from your graveyard by exiling this card, only as a sorcery.',
+  // The Lord of the Rings (21a)
+  'The Ring tempts you': RING_TEMPTS_RULE,
   // The Hobbit (20a)
   Amass:
     'Put that many +1/+1 counters on an Army you control. It becomes the named type too. If you don’t control an Army, first create a 0/0 black Army creature token of that type.',
@@ -236,6 +263,16 @@ export function cardNotes(view: GameState, defId: CardDefId, oid?: ObjectId | nu
           ? `Not yet: ${p.count} of the 3 artifacts, legendaries and/or Sagas.`
           : 'Not yet: it works while this is on the battlefield.',
     });
+  }
+  // The Lord of the Rings (21a): the Ring-bearer says what the Ring does for it.
+  if (o && onBattlefield) {
+    const ring = ringStatus(view, o.controller);
+    if (ring.bearer === o.id && ring.level > 0)
+      notes.push({
+        kind: 'status',
+        title: 'Ring-bearer',
+        text: RING_ABILITIES.slice(0, ring.level).join(' '),
+      });
   }
   if (!o || !onBattlefield || !c) return notes;
 

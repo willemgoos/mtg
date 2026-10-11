@@ -27,6 +27,7 @@ export function phaseIn(ctx: Ctx, player: PlayerId): void {
   const s = ctx.s;
   // Mystical Archive (16): Teferi's Protection ends at their next untap step.
   delete s.players[player].lifeFrozen;
+  delete s.players[player].ltrProtected; // Lord of the Rings (21d gc-rare): The One Ring
   if (!s.phasedOut?.length) return;
   const back = s.phasedOut.filter((p) => p.player === player);
   s.phasedOut = s.phasedOut.filter((p) => p.player !== player);

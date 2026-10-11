@@ -127,6 +127,9 @@ const TOKEN_TEXT: Record<string, string> = {
   'food-token': '{2}, {T}, Sacrifice: You gain 3 life.',
   // Reality Fracture (17c): the Jace planeswalker token.
   'fra-jace-token': '−1: Surveil 1.\n−3: Draw a card.',
+  // The Lord of the Rings (21a): the Ring (its abilities as it has gained them are on the player's badge).
+  'ltr-the-ring':
+    'Your Ring-bearer is legendary and can’t be blocked by creatures with greater power.\nWhenever your Ring-bearer attacks, draw a card, then discard a card.\nWhenever your Ring-bearer becomes blocked by a creature, that creature’s controller sacrifices it at end of combat.\nWhenever your Ring-bearer deals combat damage to a player, each opponent loses 3 life.',
 };
 
 function TokenFace({ defId }: { defId: CardDefId }) {
@@ -150,7 +153,7 @@ function TokenFace({ defId }: { defId: CardDefId }) {
       <div className="token__name">{def.name}</div>
       <div className="token__art" />
       <div className="token__type">
-        Token {def.types.join(' ')} — {def.subtypes.join(' ')}
+        {def.id === 'ltr-the-ring' ? 'Emblem' : `Token ${def.types.join(' ')} — ${def.subtypes.join(' ')}`}
       </div>
       <div className="token__text">
         {creature

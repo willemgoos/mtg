@@ -9,6 +9,7 @@ import {
 import { type Ctx, def, obj, other } from './context.ts';
 import { damageSourceFor, dealDamage, type DamageSource } from './effects.ts';
 import { checkCondition } from './triggers.ts';
+import { ringCantBeBlockedBy } from './ltr-21a.ts'; // Lord of the Rings (21a)
 import { protectedFrom } from './brawl-15b-w-effects.ts';
 import { manaSources } from './mana.ts';
 import type { Attacker, ObjectId, PlayerId, StaticDef, TargetChoice } from './types.ts';
@@ -140,6 +141,8 @@ export function canBlock(ctx: Ctx, blocker: ObjectId, attacker: ObjectId): boole
     return false;
   // Lorwyn Eclipsed (18b, special): protection from a colour granted for a while (Sygg, Wanderbrine Shield) also stops blocks.
   if (protectedFrom(ctx, attacker, blocker)) return false;
+  // Lord of the Rings (21a): the Ring's first ability, the Ring-bearer can't be blocked by creatures with greater power.
+  if (ringCantBeBlockedBy(ctx, attacker, blocker)) return false;
   // Marvel Super Heroes Jumpstart (Great Lakes Avengers): Doorman, until end of turn.
   for (const e of ctx.s.effects)
     if (
@@ -219,6 +222,11 @@ export function maxBlockers(ctx: Ctx, id: ObjectId): number {
   let n = Infinity;
   for (const a of def(ctx, id).abilities)
     if (a.kind === 'static' && a.effect.kind === 'maxBlockers') n = Math.min(n, a.effect.count);
+  // Lord of the Rings (21b green): Glorfindel, Dauntless Rescuer ("can't be blocked by more than one creature each combat this turn").
+  const o = obj(ctx, id);
+  for (const e of ctx.s.effects)
+    if (e.maxBlockers !== undefined && e.affected.id === id && e.affected.zcc === o.zcc)
+      n = Math.min(n, e.maxBlockers);
   return n;
 }
 
@@ -338,11 +346,13 @@ export function dealCombatDamage(ctx: Ctx, firstStrikeStep: boolean): void {
   }
 
   // Fog Bank: combat damage to or from it is prevented.
-  const unpreventable = ctx.s.battlefield.some((id) =>
-    def(ctx, id).abilities.some(
-      (a) => a.kind === 'static' && a.effect.kind === 'damageCantBePrevented',
-    ),
-  );
+  const unpreventable =
+    ctx.s.turn.ltrDamageUnpreventable === true || // Lord of the Rings (21b red): Fear, Fire, Foes!
+    ctx.s.battlefield.some((id) =>
+      def(ctx, id).abilities.some(
+        (a) => a.kind === 'static' && a.effect.kind === 'damageCantBePrevented',
+      ),
+    );
   const prevented = (id: ObjectId) =>
     !unpreventable &&
     def(ctx, id).abilities.some(
@@ -414,6 +424,9 @@ function combatPower(ctx: Ctx, id: ObjectId): number {
     )
   )
     p = Math.max(p, characteristics(ctx, id).toughness);
+  // Lord of the Rings (21b white): Bill the Pony, toughness rather than power.
+  if (ctx.s.turn.ltrToughnessRather?.includes(`${id}:${obj(ctx, id).zcc}`))
+    return Math.max(0, characteristics(ctx, id).toughness);
   if (
     !ctx.s.turn.toughnessDamage?.includes(obj(ctx, id).controller) &&
     // Reality Fracture (17a): Ghalta the Immovable.

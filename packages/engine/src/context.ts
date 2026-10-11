@@ -5,6 +5,7 @@ import { FRA_BLACK_EFFECTS } from './fra-black-effects.ts';
 // Lorwyn Eclipsed (18b, black)
 import { ECL_BLACK_EFFECTS, drawPrevented } from './ecl-black-effects.ts';
 import { FIN_EFFECTS } from './fin-effects.ts';
+import { withRingLegendary } from './ltr-21a.ts'; // Lord of the Rings (21a)
 import { HOB_BLACK_EFFECTS } from './hob-black-effects.ts'; // The Hobbit (20b black)
 import { FRA_COLORLESS_EFFECTS } from './fra-colorless-effects.ts';
 import { LOREHOLD_EFFECTS } from './stx-lorehold-effects.ts';
@@ -20,6 +21,7 @@ import { FRA_RED_EFFECTS } from './fra-red-effects.ts';
 import { ECL_MULTI_A_EFFECTS } from './ecl-multi-a-effects.ts';
 import { ECL_RED_EFFECTS } from './ecl-red-effects.ts';
 import { HOB_RED_EFFECTS } from './hob-red-effects.ts'; // The Hobbit (20b red)
+import { LTR_RED_EFFECTS } from './ltr-red-effects.ts'; // Lord of the Rings (21b red)
 import { BRAWL_15B_R_EFFECTS } from './brawl-15b-r-effects.ts';
 import { BRAWL_15A_W_EFFECTS } from './brawl-15a-w-effects.ts';
 import { BRAWL_15B_B_EFFECTS } from './brawl-15b-b-effects.ts';
@@ -32,6 +34,7 @@ import { TDM_CLANS_EFFECTS } from './tdm-clans-effects.ts'; // Tarkir: Dragonsto
 import { ECL_SPECIAL_EFFECTS } from './ecl-special-effects.ts';
 import { ECL_GREEN_EFFECTS } from './ecl-green-effects.ts';
 import { HOB_GREEN_EFFECTS } from './hob-green-effects.ts'; // The Hobbit (20b green)
+import { LTR_GREEN_EFFECTS } from './ltr-green-effects.ts'; // Lord of the Rings (21b green)
 import { TDM_GREEN_EFFECTS } from './tdm-green-effects.ts';
 import { ECL_BLUE_EFFECTS } from './ecl-blue-effects.ts';
 import { HOB_BLUE_EFFECTS } from './hob-blue-effects.ts'; // The Hobbit (20b blue)
@@ -39,6 +42,17 @@ import { TDM_BLUE_EFFECTS } from './tdm-blue-effects.ts';
 import { HOB_COLORLESS_EFFECTS } from './hob-colorless-effects.ts'; // The Hobbit (20b colorless)
 import { ECL_WHITE_EFFECTS } from './ecl-white-effects.ts';
 import { HOB_WHITE_EFFECTS } from './hob-white-effects.ts'; // The Hobbit (20b white)
+import { LTR_BLUE_EFFECTS } from './ltr-blue-effects.ts'; // Lord of the Rings (21b blue)
+import { LTR_WHITE_EFFECTS } from './ltr-white-effects.ts'; // Lord of the Rings (21b white)
+import { LTR_GC_RARE_EFFECTS, ltrDrawsTwice } from './ltr-gc-rare-effects.ts'; // Lord of the Rings (21d gc-rare)
+import { LTR_WU_RARE_EFFECTS } from './ltr-wu-rare-effects.ts'; // Lord of the Rings (21d wu-rare)
+import { LTR_BR_RARE_EFFECTS } from './ltr-br-rare-effects.ts'; // Lord of the Rings (21d br-rare)
+import { isLegendaryNow } from './ltr-black-effects.ts'; // Lord of the Rings (21d br-rare)
+import {
+  copiesOpponentLandAbilities,
+  LTR_MULTI_RARE_EFFECTS,
+  withOpponentLandAbilities,
+} from './ltr-multi-rare-effects.ts'; // Lord of the Rings (21d multi-rare)
 import { BRAWL_15B_W_EFFECTS } from './brawl-15b-w-effects.ts';
 import { BRAWL_15B_U_EFFECTS } from './brawl-15b-u-effects.ts';
 import { BRAWL_15B_G_EFFECTS } from './brawl-15b-g-effects.ts';
@@ -161,6 +175,7 @@ const BUILT_IN_EFFECTS: Record<string, CustomEffect> = {
   ...FRA_RED_EFFECTS,
   ...ECL_RED_EFFECTS, // Lorwyn Eclipsed (18b, red)
   ...HOB_RED_EFFECTS, // The Hobbit (20b, red)
+  ...LTR_RED_EFFECTS, // Lord of the Rings (21b, red)
   // Strixhaven Brawl (15a), white and colourless.
   ...BRAWL_15A_W_EFFECTS,
   // Strixhaven Brawl (15a): red-white.
@@ -177,6 +192,7 @@ const BUILT_IN_EFFECTS: Record<string, CustomEffect> = {
   ...TDM_GREEN_EFFECTS, // Tarkir: Dragonstorm (19b): green
   ...HOB_GREEN_EFFECTS, // The Hobbit (20b): green
   ...TDM_CLANS_EFFECTS, // Tarkir: Dragonstorm (19b, clans)
+  ...LTR_GREEN_EFFECTS, // Lord of the Rings (21b green)
   // Lorwyn Eclipsed (18b, special).
   ...ECL_SPECIAL_EFFECTS,
   // Lorwyn Eclipsed (18b): green.
@@ -192,6 +208,12 @@ const BUILT_IN_EFFECTS: Record<string, CustomEffect> = {
   // Lorwyn Eclipsed (18b): white.
   ...ECL_WHITE_EFFECTS,
   ...HOB_WHITE_EFFECTS, // The Hobbit (20b, white)
+  ...LTR_BLUE_EFFECTS, // Lord of the Rings (21b blue)
+  ...LTR_WHITE_EFFECTS, // Lord of the Rings (21b white)
+  ...LTR_GC_RARE_EFFECTS, // Lord of the Rings (21d gc-rare)
+  ...LTR_WU_RARE_EFFECTS, // Lord of the Rings (21d wu-rare)
+  ...LTR_BR_RARE_EFFECTS, // Lord of the Rings (21d br-rare)
+  ...LTR_MULTI_RARE_EFFECTS, // Lord of the Rings (21d multi-rare)
   // Strixhaven Brawl (15b): multicolour, colourless and lands.
   ...BRAWL_15B_MULTI_EFFECTS,
   // Strixhaven Brawl (15b), white.
@@ -263,10 +285,18 @@ export function def(ctx: Ctx, id: ObjectId): CardDefinition {
     o.zone === 'battlefield' && defsWithStatic(ctx.db, 'graveyardElfAbilities').has(o.defId)
       ? withGraveyardElfAbilities(ctx, o, d0)
       : d0;
+  // Lord of the Rings (21d multi-rare): Sharkey, Tyrant of the Shire has the activated abilities of its opponents' lands.
+  const dS =
+    o.zone === 'battlefield' && copiesOpponentLandAbilities(ctx.db, o.defId)
+      ? withOpponentLandAbilities(ctx, o, d)
+      : d;
   // Lorwyn Eclipsed (18b, multi-b): Tam, Mindful First-Year, "becomes all colors until end of turn".
-  if (ctx.s.colorChanges && o.allColorsTurn === ctx.s.turn.number && o.zone === 'battlefield')
-    return { ...d, colors: ALL_COLORS };
-  return d;
+  const d2 =
+    ctx.s.colorChanges && o.allColorsTurn === ctx.s.turn.number && o.zone === 'battlefield'
+      ? { ...dS, colors: ALL_COLORS }
+      : dS;
+  // Lord of the Rings (21a): the Ring's first ability, "your Ring-bearer is legendary" (most games have no Ring).
+  return ctx.s.players[o.controller].ring ? withRingLegendary(ctx, o, d2) : d2;
 }
 
 /** Lorwyn Eclipsed (18b): `d` with the colours the object was given or lost. */
@@ -889,6 +919,7 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
     delete o.castableWhileControlling; // Lorwyn Eclipsed (18b, black)
     delete o.castableUntilTurn;
     delete o.anyMana;
+    delete o.ltrOwnExileCast; // Lord of the Rings (21d br-rare)
     // Marvel Super Heroes Jumpstart (Analyzed): Victor Mancha's permission ends too.
     delete o.playableWhileControlling;
     delete o.playableIf; // The Hobbit (20b red)
@@ -971,6 +1002,8 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
   if (from === 'battlefield' && ctx.s.combat?.attackers.some((a) => a.id === id))
     o.leftAttacking = true;
   else delete o.leftAttacking;
+  // Lord of the Rings (21d br-rare): Éomer, Marshal of Rohan, "attacking legendary creatures" (a Ring-bearer is legendary).
+  const leftAttackingLegendary = !!o.leftAttacking && isLegendaryNow(ctx, id);
   if (from === 'battlefield') removeFromCombat(ctx, id);
   // A double-faced card shows its front again anywhere but the stack and the battlefield.
   const leftAs = from === 'battlefield' && o.front ? o.defId : undefined;
@@ -1074,6 +1107,13 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
   const countersAmount =
     to === 'battlefield' ? defOf(ctx, o.defId).entersWithCountersAmount : undefined;
   if (countersAmount) addCounters(ctx, id, countOf(ctx, o.controller, countersAmount, false, id));
+  // Lord of the Rings (21d wu-rare): Dawn of a New Age, "enters with a hope counter on it for each creature you control".
+  const namedAmount =
+    to === 'battlefield' ? defOf(ctx, o.defId).entersWithNamedCountersAmount : undefined;
+  if (namedAmount) {
+    const n = countOf(ctx, o.controller, namedAmount.amount, false, id);
+    if (n > 0) addCounters(ctx, id, n, namedAmount.name);
+  }
   // Reality Fracture (17a): Graft Surgeon, Generous Revival: a permanent put onto the battlefield without being cast
   // still enters with its own counters (a spell resolving does this in stack.ts).
   if (to === 'battlefield' && from !== 'stack') {
@@ -1104,6 +1144,7 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
     ...(exiledInstead ? { exiledInstead: true } : {}),
     ...(persists ? { persist: true } : {}),
     ...(from === 'battlefield' ? { lastCounterTotal: countersLeaving } : {}),
+    ...(leftAttackingLegendary ? { leftAttackingLegendary: true } : {}), // Lord of the Rings (21d br-rare)
   });
   if (discarded && o.zone === 'graveyard') {
     o.discardedTurn = ctx.s.turn.number;
@@ -1189,7 +1230,7 @@ export function addCounters(ctx: Ctx, id: ObjectId, n: number, name?: string, by
         by: by ?? ctx.puttingPlayer ?? o.controller,
       });
     // Tarkir: Dragonstorm (19b, misc): counters of any kind on a creature.
-    else anyCreatureCounters(ctx, id, n, by);
+    else anyCreatureCounters(ctx, id, n, by, name); // Lord of the Rings (21d multi-rare): the kind of counter
     return;
   }
   o.plusOneCounters += n;
@@ -1207,7 +1248,7 @@ export function addCounters(ctx: Ctx, id: ObjectId, n: number, name?: string, by
 }
 
 /** Tarkir: Dragonstorm (19b, misc): Stalwart Successor, Hollowmurk Siege: counters of any kind were put on a creature. */
-function anyCreatureCounters(ctx: Ctx, id: ObjectId, n: number, by?: PlayerId): void {
+function anyCreatureCounters(ctx: Ctx, id: ObjectId, n: number, by?: PlayerId, name?: string): void {
   if (!def(ctx, id).types.includes('Creature')) return;
   noteCreatureCounters(ctx, obj(ctx, id));
   emit(ctx, {
@@ -1217,6 +1258,7 @@ function anyCreatureCounters(ctx: Ctx, id: ObjectId, n: number, by?: PlayerId): 
     player: obj(ctx, id).controller,
     // The Hobbit (20b multicolour): The Great Goblin, "whenever you put one or more counters".
     by: by ?? ctx.puttingPlayer ?? obj(ctx, id).controller,
+    ...(name ? { name } : {}), // Lord of the Rings (21d multi-rare): Aragorn, Company Leader
   });
 }
 
@@ -1256,6 +1298,7 @@ export function sacrifice(ctx: Ctx, id: ObjectId): void {
   const o = obj(ctx, id);
   if (def(ctx, id).subtypes.includes('Food'))
     (ctx.s.turn.foodsSacrificed ??= { p1: 0, p2: 0 })[o.controller]++;
+  ctx.s.turn.ltrSacrificed = (ctx.s.turn.ltrSacrificed ?? 0) + 1; // Lord of the Rings (21d multi-rare): The Balrog, Durin's Bane
   emit(ctx, { type: 'sacrificed', id, defId: o.defId, player: o.controller });
   moveObject(ctx, id, 'graveyard');
 }
@@ -1269,6 +1312,7 @@ export function removeFromCombat(ctx: Ctx, id: ObjectId): void {
 
 /** The Hobbit (20b multicolour): inside Bard's replacement draw (the cards drawn instead are not replaced again). */
 let bardDrawing = false;
+let phialDrawing = false; // Lord of the Rings (21d gc-rare)
 
 export function drawCard(ctx: Ctx, player: PlayerId, drawStepDraw = false): void {
   // Lorwyn Eclipsed (18b, black): Mornsong Aria, "players can't draw cards".
@@ -1307,6 +1351,18 @@ export function drawCard(ctx: Ctx, player: PlayerId, drawStepDraw = false): void
       return;
     }
   }
+  // Lord of the Rings (21d gc-rare): Phial of Galadriel, "if you would draw a card while you have no cards in hand, draw two
+  // cards instead" (the two are not replaced again).
+  if (!phialDrawing && ltrDrawsTwice(ctx, player)) {
+    phialDrawing = true;
+    try {
+      drawCard(ctx, player, drawStepDraw);
+      drawCard(ctx, player, drawStepDraw);
+    } finally {
+      phialDrawing = false;
+    }
+    return;
+  }
   const p = ctx.s.players[player];
   const top = p.library[0];
   if (top === undefined) {
@@ -1315,7 +1371,7 @@ export function drawCard(ctx: Ctx, player: PlayerId, drawStepDraw = false): void
   }
   moveObject(ctx, top, 'hand');
   const nth = ++ctx.s.turn.cardsDrawn[player];
-  emit(ctx, { type: 'cardDrawn', player, id: top, nth });
+  emit(ctx, { type: 'cardDrawn', player, id: top, nth, ...(drawStepDraw ? { drawStep: true } : {}) }); // Lord of the Rings (21d br-rare)
 }
 
 export function tap(ctx: Ctx, id: ObjectId): void {

@@ -20,6 +20,7 @@ import {
 } from './combat.ts';
 import { type Ctx, def, obj, onBattlefield, other, withBackFace } from './context.ts';
 import { forageChoices } from './forage.ts';
+import { equipAtInstantSpeed } from './ltr-wu-rare-effects.ts'; // Lord of the Rings (21d wu-rare)
 import {
   beholdExileOptions,
   beholdManyOptions,
@@ -86,6 +87,7 @@ import { omnipresenceCastable } from './fra-green-effects.ts';
 import { freeMatchingCastable } from './tdm-red-effects.ts';
 import { permanentHasStatic } from './fra-pw-effects.ts';
 import { beholdOptions } from './fra-pw-b-effects.ts';
+import { landAbilitiesLocked, ltrWardCandidates } from './ltr-multi-rare-effects.ts'; // Lord of the Rings (21d multi-rare)
 import type {
   Action,
   CardDefinition,
@@ -164,6 +166,10 @@ export function castableCards(ctx: Ctx, player: PlayerId): ObjectId[] {
       (!obj(ctx, id).castableWhileControlling ||
         onBattlefield(ctx, obj(ctx, id).castableWhileControlling!)?.controller === player)
     )
+      out.push(id);
+  // Lord of the Rings (21d br-rare): Shadow of the Enemy, the creature cards exiled from your own graveyard.
+  for (const id of ps.exile)
+    if (obj(ctx, id).ltrOwnExileCast && obj(ctx, id).castableBy === player && !out.includes(id))
       out.push(id);
   // Glarb: lands and big spells from the top of your library.
   const topCard = ps.library[0];
@@ -519,6 +525,8 @@ function priorityActions(
         // Lorwyn Eclipsed (18b, blue): Illusion Spinners, "as though it had flash if you control a Faerie".
         (!!d.flashIf && checkCondition(ctx, d.flashIf, player, obj(ctx, card))) ||
         flashFilters.some((f) => cardMatches(ctx, card, f)) ||
+        // Lord of the Rings (21d wu-rare): Borne Upon a Wind, spells have flash this turn.
+        !!s.turn.ltrFlashAll?.includes(player) ||
         // Progenitor's Icon: spells of the chosen type have flash this turn.
         !!s.turn.flashTypes?.some((f) => f.player === player && d.subtypes.includes(f.type)) ||
         // Strixhaven Brawl (15b, u): Quicken, the next sorcery spell you cast this turn.
@@ -673,6 +681,8 @@ function priorityActions(
             // Teamwork: kicked only if there are creatures to tap.
             const teamwork = teamworkFor(ctx, player, card, { kicked: v.kicked });
             if (v.kicked && d.kicker?.teamwork !== undefined && !teamwork) continue;
+            // Lord of the Rings (21d multi-rare): Flame of Anor, two modes only while you control a Wizard.
+            if (v.spell?.onlyIf && !checkCondition(ctx, v.spell.onlyIf, player, obj(ctx, card))) continue;
             // Mystical Archive (16): Akroma's Will, Jeska's Will: both modes only with a commander.
             if (
               v.kicked &&
@@ -759,7 +769,7 @@ function priorityActions(
                 if ((ward.generic || targetDiscount) && !harmonizing && !canPayFrom(addCosts(cost, ward), pool))
                   continue;
                 if (wardLife(ctx, player, targets) > s.players[player].life) continue;
-                if (!wardPayable(ctx, player, targets, zone === 'hand' ? 1 : 0)) continue;
+                if (!wardPayable(ctx, player, targets, zone === 'hand' ? 1 : 0, card)) continue;
                 // Strixhaven Brawl (15b, b): Bone Shards and Bitter Triumph: this way of casting discards a card.
                 const vDiscards = v.discard
                   ? ps.hand.filter(
@@ -928,7 +938,7 @@ function priorityActions(
         (a.fromGraveyard ? 'graveyard' : a.fromHand ? 'hand' : 'battlefield') !== zone
       )
         return;
-      if (a.sorcerySpeed && !sorcery) return;
+      if (a.sorcerySpeed && !sorcery && !equipAtInstantSpeed(ctx, player, source, a)) return; // Lord of the Rings (21d wu-rare): Forge Anew
       // Strixhaven (13c): Academic Probation (no activated abilities), Revel in Silence (no loyalty abilities).
       if (
         s.effects.some(
@@ -942,6 +952,7 @@ function priorityActions(
       if (nameLocked(ctx, source)) return;
       // Marvel Super Heroes Jumpstart (Wakanda): Secure Detention.
       if (zone === 'battlefield' && abilitiesLocked(ctx, source)) return;
+      if (zone === 'battlefield' && landAbilitiesLocked(ctx, source)) return; // Lord of the Rings (21d multi-rare): Sharkey, Tyrant of the Shire
       if ((a.once || a.powerUp) && obj(ctx, source).usedAbilities?.includes(abilityIndex)) return;
       if (a.powerUp && s.turn.noPowerUp) return;
       if (a.oncePerTurn && obj(ctx, source).onceTurns?.[-1 - abilityIndex] === s.turn.number)
@@ -1014,6 +1025,8 @@ function priorityActions(
         !graveyardCostCard(ctx, player, a.cost.exileFromGraveyard, source)
       )
         return;
+      // Lord of the Rings (21d gc-rare): Mines of Moria, "exile three cards from your graveyard".
+      if (a.cost.exileGraveyardCards && ps.graveyard.length < a.cost.exileGraveyardCards) return;
       // Jump In slots (Polygraph Orb): collect evidence.
       if (
         a.cost.collectEvidence &&
@@ -1224,10 +1237,12 @@ function priorityActions(
       // Marvel Super Heroes: {X} in an ability's cost (Bruce Banner): every affordable X up to 10.
       // Tarkir: Dragonstorm (19a): with "X target creatures", X is at least 1 and no more than there are targets for.
       const xSpec = a.targets[a.targets.length - 1]?.xTargets ? a.targets[a.targets.length - 1] : undefined;
+      // Lord of the Rings (21b white): Ent-Draught Basin, "target creature with power X": X may be 0, and only creatures of power X are targets.
+      const powerX = a.targets.findIndex((t) => t.filter?.powerEqualsX);
       if (mana?.x)
-        for (const base of xSpec ? out.splice(firstOfAbility) : out.slice(firstOfAbility))
+        for (const base of xSpec || powerX >= 0 ? out.splice(firstOfAbility) : out.slice(firstOfAbility))
           for (
-            let x = 1;
+            let x = powerX >= 0 ? 0 : 1;
             x <=
             (xSpec ? Math.min(10, targetCandidates(ctx, xSpec, { controller: player, sourceId: source }).length) : 10);
             x++
@@ -1235,6 +1250,10 @@ function priorityActions(
             if (!canPayFrom({ ...mana, generic: mana.generic + x * mana.x }, usable)) break;
             // Tarkir: Dragonstorm (19a): Krumar Initiate, "Pay X life".
             if (a.cost.lifeX && x > ps.life) break;
+            if (powerX >= 0) {
+              const tg = (base as { targets: TargetChoice[] }).targets[powerX];
+              if (!tg || !('object' in tg) || characteristics(ctx, tg.object.id).power !== x) continue;
+            }
             out.push({ ...base, x } as Action);
           }
     });
@@ -1392,9 +1411,11 @@ export function getLegalActions(ctx: Ctx, player: PlayerId): Action[] {
       return d.options.map((_, index) => ({ type: 'chooseOption', player, index }) as const);
     // Reality Fracture (17a fixes): ward's sacrifices.
     case 'wardSacrifice':
-      return wardSacrificeOptions(ctx, player, d.creatures > 0).map(
-        (card) => ({ type: 'chooseCard', player, card }) as const,
-      );
+      return (
+        d.creatures === 0 && d.permanents === 0 && d.filtered?.length // Lord of the Rings (21d multi-rare): a cost naming a kind of card
+          ? ltrWardCandidates(ctx, player, d.filtered[0]!)
+          : wardSacrificeOptions(ctx, player, d.creatures > 0)
+      ).map((card) => ({ type: 'chooseCard', player, card }) as const);
     case 'sacrificeSeveral':
       return d.options.map((card) => ({ type: 'chooseCard', player, card }) as const);
     case 'castFree': {
@@ -1422,6 +1443,8 @@ export function getLegalActions(ctx: Ctx, player: PlayerId): Action[] {
         // Strixhaven (13c): a cast that costs {1} (Jadzi) or is {4} cheaper (Uvilda).
         for (const v of castVariants(cd, zone, 'free')) {
           if ((v.life ?? 0) > ps.life) continue;
+          // Lord of the Rings (21d multi-rare): Flame of Anor, two modes only while you control a Wizard.
+          if (v.spell?.onlyIf && !checkCondition(ctx, v.spell.onlyIf, player, obj(ctx, card))) continue;
           // Teamwork: kicked only if there are creatures to tap; some kickers have a condition.
           const teamwork = teamworkFor(ctx, player, card, { kicked: v.kicked });
           if (v.kicked && cd.kicker?.teamwork !== undefined && !teamwork) continue;
@@ -1501,7 +1524,7 @@ export function getLegalActions(ctx: Ctx, player: PlayerId): Action[] {
                   const rest = pool.filter((p) => !spent.includes(p.id));
                   if (!canPayFrom(addCosts(cost, ward), rest)) continue;
                   if (wardLife(ctx, player, targets) > ps.life) continue;
-                  if (!wardPayable(ctx, player, targets, zone === 'hand' ? 1 : 0)) continue;
+                  if (!wardPayable(ctx, player, targets, zone === 'hand' ? 1 : 0, card)) continue;
                   for (const discard of vDiscards)
                     for (const beholdCard of beholds)
                      for (const blight of blights)

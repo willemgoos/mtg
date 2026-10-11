@@ -66,7 +66,12 @@ import { crownReplacement } from './ecl-crown.ts';
 import { extraEntryCounters } from './tdm-misc-effects.ts';
 import { protectedFrom } from './brawl-15b-w-effects.ts';
 import { amassPut, amassStep, recruitSteps } from './hob-20a.ts';
+import { ringBearerOf, ringTemptSteps, runRingStep } from './ltr-21a.ts'; // Lord of the Rings (21a)
+import { opponentsCantGainLife, sacrificeAtEndOfCombat } from './ltr-black-effects.ts'; // Lord of the Rings (21b black)
 import { HOB_MULTICOLOUR_EXPANDERS } from './hob-multicolour-effects.ts'; // The Hobbit (20b multicolour)
+import { LTR_BLUE_EXPANDERS } from './ltr-blue-effects.ts'; // Lord of the Rings (21b blue)
+import { LTR_GC_RARE_EXPANDERS } from './ltr-gc-rare-effects.ts'; // Lord of the Rings (21d gc-rare)
+import { LTR_BR_RARE_EXPANDERS } from './ltr-br-rare-effects.ts'; // Lord of the Rings (21d br-rare)
 import { SOS_14B_C_CHOOSERS } from './sos-14b-c-effects.ts';
 import type {
   AbilityDef,
@@ -131,6 +136,7 @@ export function dealDamage(
     combat &&
     'object' in to &&
     hasStaticKind(ctx, to.object.id, 'preventCombatDamageToSelf') &&
+    !ctx.s.turn.ltrDamageUnpreventable && // Lord of the Rings (21b red)
     !ctx.s.battlefield.some((id) => hasStaticKind(ctx, id, 'damageCantBePrevented'))
   )
     return;
@@ -245,6 +251,7 @@ function prevented(ctx: Ctx, src: DamageSource, to: TargetChoice, amount: number
   if ('object' in to && useShield(ctx, to.object.id)) return 0;
   if (ctx.s.battlefield.some((id) => hasStaticKind(ctx, id, 'damageCantBePrevented')))
     return amount;
+  if (ctx.s.turn.ltrDamageUnpreventable) return amount; // Lord of the Rings (21b red): Fear, Fire, Foes!
   // The Hobbit (20b blue): Old Fat Spider Can't See Me, "prevent all damage that would be dealt by" the creature.
   if (
     ctx.s.effects.some(
@@ -260,6 +267,7 @@ function prevented(ctx: Ctx, src: DamageSource, to: TargetChoice, amount: number
   if ('player' in to) {
     // Lorwyn Eclipsed (18b, white): Morningtide's Light, from any source.
     if (ctx.s.players[to.player].damagePrevented) return 0;
+    if (ctx.s.players[to.player].ltrProtected) return 0; // Lord of the Rings (21d gc-rare): The One Ring
     // Tarkir: Dragonstorm (19b, clans): New Way Forward, the next damage from the chosen source is prevented and reflected.
     if (ctx.s.turn.sourceShields && applySourceShield(ctx, src, to.player, amount) === 0) return 0;
     if (src.controller === to.player) return amount;
@@ -665,6 +673,7 @@ export function changeLife(ctx: Ctx, player: PlayerId, delta: number): void {
 
 export function gainLife(ctx: Ctx, player: PlayerId, amount: number): void {
   if (amount <= 0 || ctx.s.players[player].lifeFrozen || lifeGainPrevented(ctx)) return;
+  if (opponentsCantGainLife(ctx, player)) return; // Lord of the Rings (21b black): Gríma Wormtongue
   // Caretakers: the affected player orders noncommuting life-gain replacements.
   const replacements: LifeGainReplacement[] = [];
   for (const id of ctx.s.battlefield) {
@@ -677,7 +686,10 @@ export function gainLife(ctx: Ctx, player: PlayerId, amount: number): void {
           sourceDefId: d.id, kind: 'add', amount: a.effect.amount,
           label: d.name + ': gain ' + a.effect.amount + ' additional life',
         });
-      if (a.effect.kind === 'doubleLifeGain')
+      if (
+        a.effect.kind === 'doubleLifeGain' &&
+        (a.effect.maxLife === undefined || ctx.s.players[player].life <= a.effect.maxLife) // Lord of the Rings (21d gc-rare): Phial of Galadriel
+      )
         replacements.push({
           sourceDefId: d.id, kind: 'double', amount: 2,
           label: d.name + ': gain twice as much life',
@@ -770,6 +782,11 @@ export function resolveRef(ctx: Ctx, es: EffectSource, ref: Ref): TargetChoice[]
     const o = es.subject && onBattlefield(ctx, es.subject);
     return o ? [{ object: { id: o.id, zcc: o.zcc } }] : [];
   }
+  // Lord of the Rings (21a): "your Ring-bearer".
+  if (ref === 'ringBearer') {
+    const o = ringBearerOf(ctx, es.controller);
+    return o ? [{ object: { id: o.id, zcc: o.zcc } }] : [];
+  }
   if (ref === 'chosen') {
     const o = es.chosen && onBattlefield(ctx, es.chosen);
     return o ? [{ object: { id: o.id, zcc: o.zcc } }] : [];
@@ -827,6 +844,7 @@ export function resolveAmount(ctx: Ctx, es: EffectSource, amount: Amount): numbe
   // Reality Fracture (17a): Dark Matter Manipulator, Recursive Recruitment
   if ('floorDiv' in amount)
     return Math.floor(resolveAmount(ctx, es, amount.amount) / amount.floorDiv);
+  if ('ltrPressMv' in amount) return ctx.s.turn.ltrPressMv ?? -1; // Lord of the Rings (21d wu-rare)
   if ('manaValueOf' in amount) {
     const id = objectsOf(ctx, es, amount.manaValueOf)[0];
     return id ? manaValue(def(ctx, id).manaCost) : 0;
@@ -950,6 +968,7 @@ export function resolveAmount(ctx: Ctx, es: EffectSource, amount: Amount): numbe
     return o ? def(ctx, o.id).colors.length : 0;
   }
   if ('sacrificedPower' in amount) return Math.max(0, es.lkiPower ?? 0);
+  if ('sacrificedLegendary' in amount) return es.lkiLegendary ? 1 : 0; // Lord of the Rings (21b black)
   if ('x' in amount) {
     const x = es.x ?? (es.source && ctx.s.objects[es.source.id]?.xPaid) ?? 0;
     return x * (amount.times ?? 1) + (amount.plus ?? 0);
@@ -1025,6 +1044,24 @@ export function runEffects(
     // The Hobbit (20b multicolour): a custom effect that turns into other effects (a prompt built from the current game state).
     if (e.kind === 'custom' && HOB_MULTICOLOUR_EXPANDERS[e.handler]) {
       list.splice(i, 1, ...HOB_MULTICOLOUR_EXPANDERS[e.handler]!(ctx, es, e.params));
+      i--;
+      continue;
+    }
+    // Lord of the Rings (21b blue): Minas Tirith Garrison's prompt, one Human at a time.
+    if (e.kind === 'custom' && LTR_BLUE_EXPANDERS[e.handler]) {
+      list.splice(i, 1, ...LTR_BLUE_EXPANDERS[e.handler]!(ctx, es, e.params));
+      i--;
+      continue;
+    }
+    // Lord of the Rings (21d gc-rare): Last March of the Ents, Mount Doom: prompts built one choice at a time.
+    if (e.kind === 'custom' && LTR_GC_RARE_EXPANDERS[e.handler]) {
+      list.splice(i, 1, ...LTR_GC_RARE_EXPANDERS[e.handler]!(ctx, es, e.params));
+      i--;
+      continue;
+    }
+    // Lord of the Rings (21d br-rare): prompts built from the state the earlier effects left (Hew the Entwood, Isildur's Fateful Strike, ...).
+    if (e.kind === 'custom' && LTR_BR_RARE_EXPANDERS[e.handler]) {
+      list.splice(i, 1, ...LTR_BR_RARE_EXPANDERS[e.handler]!(ctx, es, e.params));
       i--;
       continue;
     }
@@ -1117,6 +1154,12 @@ export function runEffects(
     }
     if (e.kind === 'recruit') {
       list.splice(i, 1, ...recruitSteps(e));
+      i--;
+      continue;
+    }
+    // Lord of the Rings (21a): "the Ring tempts you".
+    if (e.kind === 'ringTempts') {
+      list.splice(i, 1, ...ringTemptSteps(ctx, es));
       i--;
       continue;
     }
@@ -1259,13 +1302,14 @@ export function runEffects(
       e.kind === 'explore'
     ) {
       const lib = ctx.s.players[es.controller].library;
-      const { controller, source, sourceDefId, targets, lkiPower, subject, amount, chosen, x } = es;
+      const { controller, source, sourceDefId, targets, lkiPower, lkiLegendary, subject, amount, chosen, x } = es;
       const resume: PausedResolution = {
         controller,
         source,
         sourceDefId,
         targets,
         ...(lkiPower !== undefined ? { lkiPower } : {}),
+        ...(lkiLegendary ? { lkiLegendary } : {}), // Lord of the Rings (21b black)
         ...(subject ? { subject } : {}),
         ...(amount !== undefined ? { amount } : {}),
         ...(chosen ? { chosen } : {}),
@@ -1302,7 +1346,7 @@ export function runEffects(
           if (e.amount > 0) {
             if (!ctx.s.turn.scriedOrSurveilled?.includes(scryer))
               ctx.s.turn.scriedOrSurveilled = [...(ctx.s.turn.scriedOrSurveilled ?? []), scryer];
-            emit(ctx, { type: 'scried', player: scryer, top: 0, bottom: 0 });
+            emit(ctx, { type: 'scried', player: scryer, top: 0, bottom: 0, ...(e.kind === 'surveil' ? { surveil: true } : {}) });
           }
           continue;
         }
@@ -1919,7 +1963,7 @@ export function runEffects(
         const sourceId = es.source?.id;
         const options = ctx.s.battlefield.filter(
           (id) =>
-            id !== sourceId &&
+            (id !== sourceId || !!e.includeSource) && // Lord of the Rings (21a): the Ring-bearer may be the source
             // Vial Smasher: a permanent an opponent controls.
             (obj(ctx, id).controller === controller) !== !!e.opponents &&
             matchesFilter(ctx, id, e.filter, sourceId),
@@ -1932,6 +1976,7 @@ export function runEffects(
           kind: 'chooseObject',
           player: controller,
           options,
+          ...(e.ringBearer ? { ringBearer: true } : {}), // Lord of the Rings (21a): "Choose your Ring-bearer"
           then: e.then,
           otherwise: e.otherwise ?? [],
           resume,
@@ -2350,7 +2395,15 @@ export function runEffects(
       } else if (e.kind === 'piles') {
         const cards = lib.slice(0, e.count);
         if (cards.length === 0) continue;
-        ctx.s.decision = { kind: 'splitPiles', player: controller, cards, resume, thenPriority };
+        ctx.s.decision = {
+          kind: 'splitPiles',
+          // Lord of the Rings (21d multi-rare): Sauron's Ransom, an opponent splits the piles.
+          player: e.opponentSplits ? other(controller) : controller,
+          ...(e.opponentSplits ? { owner: controller } : {}),
+          cards,
+          resume,
+          thenPriority,
+        };
       } else if (e.kind === 'lookForCreature') {
         const looked = lib.slice(0, e.count);
         if (looked.length === 0) continue;
@@ -2658,6 +2711,7 @@ function runEffectInner(ctx: Ctx, es: EffectSource, e: EffectDef): void {
           ...(e.creatureSubtype ? { creatureSubtype: e.creatureSubtype } : {}),
           ...(e.preventCombatDamage ? { preventCombatDamage: true } : {}),
           ...(e.mustBeBlocked ? { mustBeBlocked: true } : {}),
+          ...(e.maxBlockers !== undefined ? { maxBlockers: e.maxBlockers } : {}), // Lord of the Rings (21b green)
           ...(e.preventDamageDealt ? { preventDamageDealt: true } : {}), // The Hobbit (20b blue)
           ...(e.whileSource && es.source
             ? { expires: 'whileSource' as const, whileSourceId: es.source.id } // The Hobbit (20b blue)
@@ -2935,6 +2989,7 @@ function runEffectInner(ctx: Ctx, es: EffectSource, e: EffectDef): void {
             fromTurn: ctx.s.turn.number + (late ? 1 : 0),
           });
         }
+        if (e.sacrificeAt === 'endCombat') sacrificeAtEndOfCombat(ctx, es, t); // Lord of the Rings (21b black): Mordor Trebuchet
         if (e.attacking && ctx.s.combat) {
           // "Tapped and attacking": attacking the same player, never declared (no attack triggers).
           t.tapped = true;
@@ -3767,6 +3822,7 @@ function runEffectInner(ctx: Ctx, es: EffectSource, e: EffectDef): void {
             controller: es.controller,
             sourceDefId: es.sourceDefId,
             ...(e.underYourControl ? { underControl: true } : {}), // Tarkir: Dragonstorm (19b, black)
+            ...(e.byLastController ? { byLastController: true } : {}), // Lord of the Rings (21d gc-rare)
           },
           expires: 'endOfTurn',
         });
@@ -3875,6 +3931,7 @@ function runEffectInner(ctx: Ctx, es: EffectSource, e: EffectDef): void {
           ...(item.kickCount ? { kickCount: item.kickCount } : {}),
           ...(item.copyOf ? { copyOf: item.copyOf } : {}),
           ...(item.lkiPower !== undefined ? { lkiPower: item.lkiPower } : {}),
+          ...(item.lkiLegendary ? { lkiLegendary: true } : {}), // Lord of the Rings (21b black)
           copy: true,
           ...(e.hasteSacrifice ? { hasteSacrifice: true } : {}),
         });
@@ -3976,6 +4033,11 @@ function runEffectInner(ctx: Ctx, es: EffectSource, e: EffectDef): void {
       return;
     case 'amass': // expanded by runEffects
     case 'recruit':
+    case 'ringTempts': // Lord of the Rings (21a)
+      return;
+    // Lord of the Rings (21a): a step of the Ring tempting a player.
+    case 'ringStep':
+      runRingStep(ctx, es, e);
       return;
     case 'tokenCopy': {
       const n = e.count !== undefined ? resolveAmount(ctx, es, e.count) : 1;

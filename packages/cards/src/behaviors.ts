@@ -52,6 +52,11 @@ import {
   THE_HOBBIT_BEHAVIORS,
   THE_HOBBIT_TOKENS,
 } from './the-hobbit.ts';
+import {
+  LORD_OF_THE_RINGS_BACK_FACES,
+  LORD_OF_THE_RINGS_BEHAVIORS,
+  LORD_OF_THE_RINGS_TOKENS,
+} from './lord-of-the-rings.ts';
 import { FOUNDATIONS_BATCH_BEHAVIORS } from './foundations-batch.ts';
 import { FOUNDATIONS_DRAFT_BEHAVIORS } from './foundations-draft.ts';
 import { FOUNDATIONS_JUMP_IN_BEHAVIORS } from './foundations-jumpin.ts';
@@ -211,6 +216,9 @@ export const BEHAVIORS: Record<string, Behavior> = {
   // The Hobbit (phase 20).
   ...THE_HOBBIT_BEHAVIORS,
   ...THE_HOBBIT_BACK_FACES,
+  // The Lord of the Rings (phase 21).
+  ...LORD_OF_THE_RINGS_BEHAVIORS,
+  ...LORD_OF_THE_RINGS_BACK_FACES,
   // ---------------------------------------------------------------- red
   Shock: burn(2),
   'Lightning Strike': burn(3),
@@ -2261,6 +2269,7 @@ export const TOKENS: CardDefinition[] = [
   ...LORWYN_ECLIPSED_TOKENS,
   ...TARKIR_DRAGONSTORM_TOKENS,
   ...THE_HOBBIT_TOKENS,
+  ...LORD_OF_THE_RINGS_TOKENS,
   token('zombie-token', 'Zombie', 'B', ['Zombie'], 2, 2),
   token('komas-coil-token', "Koma's Coil", 'U', ['Serpent'], 3, 3),
   token('cat-beast-token', 'Cat Beast', 'W', ['Cat', 'Beast'], 2, 2),

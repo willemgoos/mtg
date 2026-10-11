@@ -657,7 +657,7 @@ export function Board({
       case 'splitPiles':
         return { prompt: 'Split the cards into two piles' };
       case 'choosePile':
-        return { prompt: 'Choose a pile for your opponent' };
+        return { prompt: d.reversed ? 'Choose a pile for your hand' : 'Choose a pile for your opponent' };
       case 'scry':
         return { prompt: `Scry ${d.cards.length}` };
       case 'searchLibrary':
@@ -672,7 +672,12 @@ export function Board({
           prompt:
             d.creatures > 0
               ? 'Ward: sacrifice a creature'
-              : `Ward: sacrifice ${d.permanents === 1 ? 'a permanent' : `${d.permanents} more permanents`}`,
+              : d.permanents === 0 && d.filtered?.length
+                ? // Lord of the Rings (21d multi-rare): Sauron, the Dark Lord; Saruman of Many Colors
+                  d.filtered[0]!.kind === 'discard'
+                  ? 'Ward: discard a card from your hand'
+                  : 'Ward: sacrifice a permanent'
+                : `Ward: sacrifice ${d.permanents === 1 ? 'a permanent' : `${d.permanents} more permanents`}`,
         };
       case 'punisher':
         return { prompt: `Sacrifice, discard, or lose ${d.life} life` };
@@ -711,6 +716,8 @@ export function Board({
       case 'pickCards':
         return { prompt: `Choose ${d.count} card${d.count > 1 ? 's' : ''} to keep` };
       case 'chooseObject':
+        // The Lord of the Rings (21a): "the Ring tempts you".
+        if (d.ringBearer) return { prompt: 'Choose your Ring-bearer — click a creature' };
         // Lorwyn Eclipsed (18a): blight, the creature that gets the counters.
         if (d.blight !== undefined) {
           const what = d.blight === 1 ? 'a -1/-1 counter' : `${d.blight} -1/-1 counters`;
@@ -1518,10 +1525,18 @@ function SplitPilesOverlay({ game, onHover }: { game: GameSession; onHover: Hove
     <div className="overlay overlay--mull">
       <div className="mull">
         <h2>Split into two piles</h2>
-        <p>
-          Click cards to put them in the face-up pile; the rest are face down. Your opponent picks a
-          pile for your hand, and the other goes to your graveyard.
-        </p>
+        {d.owner ? (
+          <p>
+            Click cards to put them in the face-up pile; the rest are face down (either pile may be
+            empty). Your opponent picks a pile for their hand, and the other goes to their
+            graveyard.
+          </p>
+        ) : (
+          <p>
+            Click cards to put them in the face-up pile; the rest are face down. Your opponent
+            picks a pile for your hand, and the other goes to your graveyard.
+          </p>
+        )}
         <div className="mull__hand">
           {d.cards.map((id, i) => (
             <div
@@ -1569,7 +1584,14 @@ function ChoosePileOverlay({ game, onHover }: { game: GameSession; onHover: Hove
     <div className="overlay overlay--mull">
       <div className="mull">
         <h2>Choose a pile</h2>
-        <p>The pile you choose goes to your opponent's hand; the other goes to their graveyard.</p>
+        {d.reversed ? (
+          <p>
+            Only the face-up cards are shown. The pile you choose goes to your hand; the other
+            goes to your graveyard.
+          </p>
+        ) : (
+          <p>The pile you choose goes to your opponent's hand; the other goes to their graveyard.</p>
+        )}
         <div className="mull__hand">
           {d.faceUp.map((id, i) => (
             <div key={id} className="mull__card" style={{ '--i': i } as React.CSSProperties}>
