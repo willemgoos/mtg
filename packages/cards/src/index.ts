@@ -5,6 +5,7 @@ import { DECKS, type Decklist } from './decks.ts';
 import { dealPacket, defaultDeal, type Deal, type Packet, PACKETS, packetCards } from './jumpin.ts';
 import scryfall from './generated/scryfall.json' with { type: 'json' };
 import basicArt from './generated/basic-art.json' with { type: 'json' };
+import tokenArt from './generated/token-art.json' with { type: 'json' };
 import foundations from './generated/foundations-pack-candidates.json' with { type: 'json' };
 import type { ScryfallCard } from './scryfall-types.ts';
 import { SOS_BOOSTER_LIST } from './sos/booster-list.ts';
@@ -21,6 +22,8 @@ import { enterChoiceVariants, withEnterChoice } from './tdm-vocab.ts';
 
 /** Full-art basic land images by set, then basic land name (scripts/fetch-basic-art.ts). */
 export const BASIC_ART: Record<string, Record<string, string[]>> = basicArt;
+/** Token images by token id: Scryfall's printing of each token (scripts/fetch-token-art.ts). */
+export const TOKEN_ART: Readonly<Record<string, string>> = tokenArt;
 
 export { BEHAVIORS, TOKENS } from './behaviors.ts';
 export { buildCard, slug, parseManaCost, parseTypeLine } from './build.ts';

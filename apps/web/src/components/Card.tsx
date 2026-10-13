@@ -1,4 +1,4 @@
-import { cardDb, scryfallById } from '@mtg/cards';
+import { cardDb, scryfallById, TOKEN_ART } from '@mtg/cards';
 import type { CardDefId, ObjectId } from '@mtg/engine';
 import { type MouseEvent, useRef } from 'react';
 import { basicImage } from '../game/basicArt.ts';
@@ -18,9 +18,11 @@ export type CardMark =
 /** Hover callback: the card and where it is on screen (for placing the preview). */
 export type HoverFn = (defId: CardDefId | null, anchor?: Element) => void;
 
-/** A card's image; a basic land (by its object id) gets the art of its deck's set. */
+/** A card's image; a basic land (by its object id) gets the art of its deck's set, a token its printed token. */
 export function cardImage(defId: CardDefId, id?: ObjectId | null): string | null {
-  return basicImage(defId, id) ?? scryfallById.get(defId)?.image?.normal ?? null;
+  return (
+    basicImage(defId, id) ?? scryfallById.get(defId)?.image?.normal ?? TOKEN_ART[defId] ?? null
+  );
 }
 
 export interface CardProps {
@@ -153,7 +155,9 @@ function TokenFace({ defId }: { defId: CardDefId }) {
       <div className="token__name">{def.name}</div>
       <div className="token__art" />
       <div className="token__type">
-        {def.id === 'ltr-the-ring' ? 'Emblem' : `Token ${def.types.join(' ')} — ${def.subtypes.join(' ')}`}
+        {def.id === 'ltr-the-ring'
+          ? 'Emblem'
+          : `Token ${def.types.join(' ')} — ${def.subtypes.join(' ')}`}
       </div>
       <div className="token__text">
         {creature
