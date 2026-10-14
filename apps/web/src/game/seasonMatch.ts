@@ -1,4 +1,4 @@
-import { cardDb, describeEvent, pickOpponent } from '@mtg/cards';
+import { cardDb, describeEvent, pickConstructedOpponent } from '@mtg/cards';
 import { nextInt, redactEvents, redactFor, type Action } from '@mtg/engine';
 import type { SavedGame } from './saved.ts';
 import type { LogLine } from './useGame.ts';
@@ -11,11 +11,11 @@ import {
   type SeasonSave,
 } from './season.ts';
 
-/** Persist both independent selections; opponents are mostly Jump In pairs (see pickOpponent). */
+/** Persist both independent selections; opponents play 60-card decks like yours (see pickConstructedOpponent). */
 export function queueSeasonMatch(save: SeasonSave, now: number): SeasonSave {
   requireSeason(!save.match, 'Resume or abandon the current match first');
   const next = structuredClone(save);
-  const opponent = pickOpponent((n) => nextInt(next.rng, n));
+  const opponent = pickConstructedOpponent((n) => nextInt(next.rng, n));
   const skill = nextInt(next.rng, 100);
   const bot = skill < 25 ? 'easy' : skill < 75 ? 'heuristic' : 'search';
   const seed = nextInt(next.rng, 0x80000000);

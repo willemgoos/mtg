@@ -447,6 +447,12 @@ export const TROPHY_DECKS: readonly Decklist[] = PLAYABLE_DECKS.filter(
 /** Every deck a bot can play. */
 export const OPPONENT_DECKS: readonly Decklist[] = OPPONENT_GROUPS.flatMap(([, d]) => d);
 
+/** The 60-card opponents, for constructed play like Season: no 40-card Jump In pairs. */
+const CONSTRUCTED_GROUPS = OPPONENT_GROUPS.filter(([, d]) => d !== JUMP_IN_DECKS);
+export const CONSTRUCTED_OPPONENT_DECKS: readonly Decklist[] = CONSTRUCTED_GROUPS.flatMap(
+  ([, d]) => d,
+);
+
 /**
  * A bot's deck id, never the same as `you`. `int(n)` is the caller's random
  * integer below n, so picks follow the caller's seed. Decks already `met`
@@ -458,11 +464,30 @@ export function pickOpponent(
   you?: string,
   met: readonly string[] = [],
 ): string {
-  let roll = int(10);
-  const group = OPPONENT_GROUPS.find(([tenths]) => (roll -= tenths) < 0)![1];
+  return pickFrom(OPPONENT_GROUPS, int, you, met);
+}
+
+/** Like `pickOpponent`, but only from the 60-card decks. */
+export function pickConstructedOpponent(
+  int: (n: number) => number,
+  you?: string,
+  met: readonly string[] = [],
+): string {
+  return pickFrom(CONSTRUCTED_GROUPS, int, you, met);
+}
+
+function pickFrom(
+  groups: typeof OPPONENT_GROUPS,
+  int: (n: number) => number,
+  you?: string,
+  met: readonly string[] = [],
+): string {
+  let roll = int(groups.reduce((sum, [tenths]) => sum + tenths, 0));
+  const group = groups.find(([tenths]) => (roll -= tenths) < 0)![1];
+  const all = groups.flatMap(([, d]) => d);
   const others = (ds: readonly Decklist[]) => ds.filter((d) => d.id !== you);
   const unmet = (ds: readonly Decklist[]) => others(ds).filter((d) => !met.includes(d.id));
-  const from = [unmet(group), unmet(OPPONENT_DECKS), others(group)].find((ds) => ds.length)!;
+  const from = [unmet(group), unmet(all), others(group)].find((ds) => ds.length)!;
   return from[int(from.length)]!.id;
 }
 

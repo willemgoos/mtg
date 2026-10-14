@@ -1,3 +1,4 @@
+import { deckIds, JUMP_IN_DECKS } from '@mtg/cards';
 import { describe, expect, it } from 'vitest';
 import {
   beginSeasonMatch,
@@ -227,6 +228,19 @@ describe('Season storage and backups', () => {
     begun.match!.actions = [];
     begun.match!.decks.p2[0] = 'missing';
     expect(() => validateSeasonSave(begun)).toThrow();
+  });
+
+  it('no longer starts Jump In matches but still loads one from an older save', () => {
+    const { repository } = fixture();
+    const save = repository.load().saves[0]!;
+    const pair = JUMP_IN_DECKS[0]!;
+    expect(() => beginSeasonMatch(save, pair.id, 'easy', 1, 'p1', 101)).toThrow();
+    const begun = beginSeasonMatch(save, opponent, 'easy', 1, 'p1', 101);
+    begun.match!.opponentDeckId = pair.id;
+    begun.match!.decks.p2 = deckIds(pair);
+    expect(() => validateSeasonSave(begun)).not.toThrow();
+    begun.match!.opponentDeckId = opponent;
+    expect(() => validateSeasonSave(begun)).toThrow('Invalid match deck size');
   });
 
   it('surfaces write failures and preserves the previous durable state', () => {

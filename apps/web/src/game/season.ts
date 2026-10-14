@@ -11,6 +11,7 @@ import {
   cardDb,
   deckIds,
   isPlayable,
+  CONSTRUCTED_OPPONENT_DECKS,
   OPPONENT_DECKS,
   SCRYFALL,
   slug,
@@ -55,8 +56,12 @@ export const SEASON_STARTERS = [
   ...LORWYN_ECLIPSED_DECKS.filter((d) => d.series === 'starter'),
   ...LORD_OF_THE_RINGS_DECKS,
 ].filter(isPlayable);
-/** Decks a Season bot can play: mostly Jump In pairs, plus the starter and Color Challenge decks. */
-export const isSeasonOpponent = (id: string): boolean => OPPONENT_DECKS.some((d) => d.id === id);
+/** Decks a Season bot can play: the 60-card starter and Color Challenge decks. */
+export const isSeasonOpponent = (id: string): boolean =>
+  CONSTRUCTED_OPPONENT_DECKS.some((d) => d.id === id);
+/** Saves from before Season went all-60 may hold a match against a Jump In pair; let it finish. */
+export const isLegacySeasonOpponent = (id: string): boolean =>
+  OPPONENT_DECKS.some((d) => d.id === id);
 const engine = createEngine(cardDb);
 
 export interface SeasonDeck {
@@ -479,7 +484,7 @@ export function beginSeasonMatch(
   const own = save.decks.find((d) => d.id === save.selectedDeckId)!;
   requireSeason(own, 'Unknown selected deck');
   requireSeason(deckErrors(save, own).length === 0, deckErrors(save, own).join('; '));
-  const opponent = OPPONENT_DECKS.find((d) => d.id === opponentDeckId);
+  const opponent = CONSTRUCTED_OPPONENT_DECKS.find((d) => d.id === opponentDeckId);
   requireSeason(opponent, 'Unknown opponent deck');
   const next = draft(save, now);
   natural(next.nextMatchId + 1);

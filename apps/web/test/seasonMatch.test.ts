@@ -26,9 +26,9 @@ describe('Season playable match integration', () => {
     expect(tally.search).toBeLessThan(130);
     const opponents = samples.map((s) => s.match!.opponentDeckId);
     expect(new Set(opponents).size).toBeGreaterThan(45);
-    const jumpIns = opponents.filter((id) => id.startsWith('jump-in:')).length;
-    expect(jumpIns).toBeGreaterThan(240);
-    expect(jumpIns).toBeLessThan(320);
+    // Constructed like yours: never a 40-card Jump In pair.
+    expect(opponents.filter((id) => id.startsWith('jump-in:'))).toEqual([]);
+    for (const s of samples) expect(s.match!.decks.p2.length).toBeGreaterThanOrEqual(60);
     expect(queueSeasonMatch(fresh(), 101)).toEqual(queueSeasonMatch(fresh(), 101));
     expect(queueSeasonMatch(fresh(), 101).rng).not.toEqual(fresh().rng);
   });
@@ -80,5 +80,6 @@ describe('Season playable match integration', () => {
     const settled = finishSeasonMatch(terminal, 102);
     expect(settled).toEqual(paid);
     expect(finishSeasonMatch(settled, 103)).toBe(settled);
-  });
+    // A random game between two 60-card decks runs long, and every save replays it.
+  }, 30_000);
 });
