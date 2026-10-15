@@ -172,6 +172,25 @@ function play(cues: Cue[], before: Map<ObjectId, DOMRect>, me: PlayerId): void {
             width: 3,
           });
           burst(p.x, p.y, colorOf(c.hue), { n: 26, speed: [2, 6], size: [4, 8] });
+          // Then what it did lands: each target flashes in the spell's colour.
+          later(140, () => {
+            for (const t of c.targets ?? []) {
+              const el = 'player' in t ? playerEl(t.player) : cardEl(t.object.id);
+              if (!el) continue;
+              const tr = el.getBoundingClientRect();
+              const tp = mid(tr);
+              ring(tp.x, tp.y, colorOf(c.hue), {
+                r0: tr.width * 0.35,
+                r1: tr.width * 0.9,
+                life: 24,
+                width: 3,
+              });
+              el.animate(
+                [{ filter: 'brightness(1.7) saturate(1.2)' }, { filter: 'brightness(1)' }],
+                { duration: 420, easing: 'ease-out' },
+              );
+            }
+          });
         }
         break;
       }

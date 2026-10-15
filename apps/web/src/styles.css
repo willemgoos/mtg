@@ -39,7 +39,7 @@
   --arena-slate: #1c232c;
   --arena-rim: #c9a35b;
   /* How far the resting hand sinks below the screen edge, in card heights. */
-  --hand-sink: 0.55;
+  --hand-sink: 0.5;
 
   /* Playmat cloth: a deep tint per mana colour. */
   --mat-W: #3b3524;
@@ -74,6 +74,8 @@
   --hw: calc(var(--k) * 9.8);
   --hh: calc(var(--hw) * 1.3968);
   --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  /* Quick out, long settle: hand cards answer the pointer at once. */
+  --ease-pop: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 * {
@@ -759,15 +761,22 @@ body {
     translateY(calc(var(--abs) * var(--abs) * 0.1563rem)) rotate(calc(var(--o) * 2.6deg));
   transform-origin: 50% 120%;
   transition:
-    transform 0.3s var(--ease),
-    translate 0.3s var(--ease);
-  animation: draw 0.45s var(--ease) backwards;
+    transform 0.24s var(--ease-pop),
+    translate 0.24s var(--ease-pop);
+  animation: draw 0.55s var(--ease-pop) backwards;
 }
 
+/* The lifted slot keeps the pointer's hover while the enlarged card (the hover
+   preview) stands in for it; see HoverPreview. */
 .hand__slot:hover {
   z-index: 50;
   transform: translateX(calc(-50% + var(--o) * var(--spread)))
     translateY(calc(var(--hh) * var(--hand-sink) * -1)) scale(1.04);
+  transition-duration: 0.14s;
+}
+
+.table:has(> .hover--hand) :is(.hand__slot, .hand-extra__slot):hover .card {
+  opacity: 0;
 }
 
 /* Expose both neighbours even when a large hand needs a tight fan. */
@@ -787,36 +796,27 @@ body {
   translate: calc(var(--spread) * -0.18) 0;
 }
 
-/* The hovered card leans toward the pointer; see tilt() in Zones.tsx. */
-.hand__slot .card__body {
-  transition:
-    transform 0.15s ease-out,
-    box-shadow 0.2s ease;
+/* Castable cards: Arena's bright rim, strongest along the top edge, the only
+   part of a resting hand card on screen. */
+.hand__slot .mark-playable .card__body,
+.hand-extra__slot .mark-playable .card__body {
+  box-shadow:
+    0 0 0 0.125rem var(--brass-hi),
+    0 -0.375rem 1.25rem rgba(246, 195, 91, 0.6),
+    0 0 0.5rem rgba(246, 195, 91, 0.45),
+    0 0.5rem 1.125rem rgba(0, 0, 0, 0.6);
 }
 
-.hand__slot:hover .card__body {
-  transform: translate(-50%, -50%) perspective(40rem) rotateX(var(--tilt-x, 0deg))
-    rotateY(var(--tilt-y, 0deg));
-}
-
-.hand__slot:hover .card__body::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  pointer-events: none;
-  background: radial-gradient(
-    circle at var(--sheen-x, 50%) var(--sheen-y, 30%),
-    rgba(255, 255, 255, 0.32),
-    rgba(255, 255, 255, 0) 55%
-  );
-  mix-blend-mode: soft-light;
-}
-
+/* A drawn card arrives from the library, turning into its place in the fan. */
 @keyframes draw {
   from {
     opacity: 0;
-    translate: 40vw 0.625rem;
+    translate: 40vw -2rem;
+    scale: 0.85;
+    rotate: 14deg;
+  }
+  35% {
+    opacity: 1;
   }
 }
 
@@ -1072,10 +1072,11 @@ body {
 }
 
 .strip__phase {
+  position: relative;
   display: grid;
   place-items: center;
-  width: 2.125rem;
-  height: 2.125rem;
+  width: 2.375rem;
+  height: 2.375rem;
   border-radius: 50%;
   color: rgba(236, 228, 210, 0.45);
   background: rgba(10, 12, 14, 0.62);
@@ -1086,9 +1087,78 @@ body {
     box-shadow 0.3s;
 }
 
+.strip__btn {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  font: inherit;
+  color: inherit;
+  background: none;
+}
+
+button.strip__btn {
+  cursor: var(--cursor-hover, pointer);
+}
+
+.strip__phase:has(button.strip__btn:hover) {
+  color: rgba(236, 228, 210, 0.95);
+  box-shadow: inset 0 0 0 0.0625rem rgba(217, 180, 106, 0.7);
+}
+
+.strip__btn:focus-visible {
+  outline: 0.125rem solid var(--brass-hi);
+  outline-offset: 0.125rem;
+}
+
+/* A phase stop (Arena): a lit brass pip on the rim. */
+.strip__phase.is-stop::after {
+  content: '';
+  position: absolute;
+  top: -0.0625rem;
+  right: -0.0625rem;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: var(--brass-hi);
+  box-shadow:
+    0 0 0 0.125rem rgba(10, 12, 14, 0.9),
+    0 0 0.5rem rgba(246, 195, 91, 0.8);
+  pointer-events: none;
+}
+
+/* The live phase names itself (and its step) under the strip. */
+.strip__caption {
+  position: absolute;
+  top: calc(100% + 0.375rem);
+  left: 50%;
+  translate: -50% 0;
+  z-index: 2;
+  padding: 0.125rem 0.5rem;
+  border-radius: 999px;
+  white-space: nowrap;
+  font-family: var(--caps);
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  color: #ffd9a0;
+  background: rgba(10, 12, 14, 0.82);
+  box-shadow: inset 0 0 0 0.0625rem rgba(242, 132, 31, 0.45);
+  pointer-events: none;
+  animation: fade-in 0.2s both;
+}
+
+/* My seat sits just above the hand: the caption goes over the strip instead. */
+.side--me .strip__caption {
+  top: auto;
+  bottom: calc(100% + 0.375rem);
+}
+
 .strip__phase svg {
-  width: 1.125rem;
-  height: 1.125rem;
+  width: 1.25rem;
+  height: 1.25rem;
   fill: none;
   stroke: currentColor;
   stroke-width: 1.7;
@@ -1109,13 +1179,13 @@ body {
 }
 
 .side--opp .strip__phase {
-  width: 1.75rem;
-  height: 1.75rem;
+  width: 2rem;
+  height: 2rem;
 }
 
 .side--opp .strip__phase svg {
-  width: 0.9375rem;
-  height: 0.9375rem;
+  width: 1.0625rem;
+  height: 1.0625rem;
 }
 
 /* Library and graveyard: small piles at the right edge, either side of the midline. */
@@ -1555,6 +1625,38 @@ body {
 
 .drawer--settings {
   gap: 0.875rem;
+  overflow-y: auto;
+}
+
+.drawer__hint {
+  margin: 0;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: var(--muted);
+}
+
+.hotkeys {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 0.375rem 0.75rem;
+  margin: 0;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.hotkeys dt {
+  justify-self: start;
+  padding: 0.0625rem 0.375rem;
+  border-radius: 0.25rem;
+  font-variant-numeric: tabular-nums;
+  color: #f1e4c4;
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow: inset 0 -0.0625rem 0 rgba(217, 180, 106, 0.35);
+}
+
+.hotkeys dd {
+  margin: 0;
+  align-self: center;
 }
 
 .drawer__actions {
@@ -2507,6 +2609,76 @@ body {
   }
 }
 
+/* A hovered hand card grows out of its slot to full size (Arena), then leans
+   toward the pointer (tilt() in Zones.tsx). */
+.hover--hand .hover-preview {
+  position: relative;
+  transform-origin: 50% 100%;
+  transform: perspective(60rem) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+  transition: transform 0.18s ease-out;
+  animation: hand-pop 0.2s var(--ease-pop);
+}
+
+.hover--hand .hover-preview::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: radial-gradient(
+    circle at var(--sheen-x, 50%) var(--sheen-y, 70%),
+    rgba(255, 255, 255, 0.22),
+    rgba(255, 255, 255, 0) 50%
+  );
+  mix-blend-mode: soft-light;
+}
+
+.hover--hand .notes,
+.hover--hand .hover-preview--other {
+  animation: hand-pop-aside 0.24s var(--ease-pop) 0.06s backwards;
+}
+
+@keyframes hand-pop {
+  from {
+    translate: var(--pop-x) var(--pop-y);
+    scale: var(--pop-s);
+    box-shadow: 0 0 0 0.0625rem rgba(0, 0, 0, 0.8);
+  }
+}
+
+@keyframes hand-pop-aside {
+  from {
+    opacity: 0;
+    translate: 0 1rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hover--hand .hover-preview {
+    transform: none;
+    animation: preview-in 0.12s ease-out;
+  }
+
+  .hover--hand .hover-preview::after {
+    content: none;
+  }
+
+  .hover--hand .notes,
+  .hover--hand .hover-preview--other {
+    animation: none;
+  }
+
+  .hand__slot {
+    animation-name: draw-fade;
+  }
+}
+
+@keyframes draw-fade {
+  from {
+    opacity: 0;
+  }
+}
+
 /* ==========================================================================
    Drag to play
    ========================================================================== */
@@ -2517,6 +2689,58 @@ body {
 
 .hand__slot.is-dragging {
   opacity: 0.25;
+}
+
+/* Pulled up out of the hand: the slot goes and the fan closes behind it. */
+.hand__slot.is-lifted {
+  display: none;
+}
+
+/* Why a hand card can't be played: a short note above it (see refuse() in Board). */
+.nope {
+  position: fixed;
+  z-index: 95;
+  max-width: 20rem;
+  padding: 0.4375rem 0.875rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1.3;
+  text-align: center;
+  color: #f6ead0;
+  background: rgba(20, 12, 10, 0.94);
+  box-shadow:
+    0 0 0 0.0625rem rgba(214, 96, 70, 0.7),
+    0 0.5rem 1.5rem rgba(0, 0, 0, 0.6);
+  pointer-events: none;
+  translate: -50% calc(-100% - 0.625rem);
+  animation:
+    nope-in 0.18s var(--ease-pop),
+    fade-out 0.3s ease-in 1.9s forwards;
+}
+
+@keyframes nope-in {
+  from {
+    opacity: 0;
+    scale: 0.92;
+  }
+}
+
+@keyframes fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+/* Keyboard focus on a card (Tab): a bright rim. */
+.card:focus {
+  outline: none;
+}
+
+.card:focus-visible .card__body {
+  box-shadow:
+    0 0 0 0.1875rem var(--brass-hi),
+    0 0 1.25rem rgba(246, 195, 91, 0.6),
+    0 0.5rem 1.125rem rgba(0, 0, 0, 0.6);
 }
 
 /* Keep the insertion positions steady while the dragged card follows the pointer. */

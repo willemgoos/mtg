@@ -24,7 +24,7 @@ export type Cue =
   | { kind: 'mana'; id: ObjectId; hue: Hue }
   | { kind: 'cast'; id: ObjectId; hue: Hue }
   /** A non-permanent spell finishing on the stack (or fizzling). */
-  | { kind: 'resolve'; id: ObjectId; hue: Hue; fizzled: boolean }
+  | { kind: 'resolve'; id: ObjectId; hue: Hue; fizzled: boolean; targets?: TargetChoice[] }
   | { kind: 'attack'; id: ObjectId; defender: PlayerId }
   | { kind: 'block'; blocker: ObjectId; attacker: ObjectId }
   | { kind: 'hit'; source: ObjectId; to: TargetChoice; amount: number; hue: Hue; combat: boolean }
@@ -132,5 +132,22 @@ export function juiceFor(events: GameEvent[], view: GameState, me: PlayerId): Cu
         break;
     }
   }
+  // A resolving spell's targets light up, except those its damage already marks.
+  const hit = new Set(cues.flatMap((c) => (c.kind === 'hit' ? [targetKey(c.to)] : [])));
+  for (const c of cues) {
+    if (c.kind !== 'resolve') continue;
+    const targets = (spellTargets.get(c.id) ?? []).filter((t) => !hit.has(targetKey(t)));
+    spellTargets.delete(c.id);
+    if (!c.fizzled && targets.length) c.targets = targets;
+  }
+  // Partial views (tests) may leave the stack out.
+  for (const it of view.stack ?? []) {
+    if (it.kind === 'spell' && it.targets.length) spellTargets.set(it.id, it.targets);
+  }
   return cues;
 }
+
+/** What each spell seen on the stack targets, for when it resolves (the stack is gone by then). */
+const spellTargets = new Map<ObjectId, TargetChoice[]>();
+
+const targetKey = (t: TargetChoice) => ('player' in t ? `p:${t.player}` : `o:${t.object.id}`);

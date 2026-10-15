@@ -12,6 +12,7 @@ import {
   targetKey,
   targetOptions,
 } from '../src/game/interaction.ts';
+import { whyNot } from '../src/game/whyNot.ts';
 
 const engine = createEngine(cardDb);
 const settings = { fullControl: false, passTurn: null };
@@ -146,5 +147,37 @@ describe('auto-pass', () => {
     // p2 can't respond, but still stops so the spell is seen before it resolves.
     expect(g.legal('p2')).toHaveLength(1);
     expect(shouldAutoPass(g.state, g.legal('p2'), 'p2', settings)).toBe(false);
+  });
+
+  it('follows phase stops, Ctrl held and F6', () => {
+    const at = (step: 'upkeep' | 'main1') =>
+      buildScenario(cardDb, { step, p1: { hand: ['shock'], battlefield: ['mountain'] } });
+    const pass = (s: ReturnType<typeof at>, more: object) =>
+      shouldAutoPass(s, engine.getLegalActions(s, 'p1'), 'p1', { ...settings, ...more });
+
+    // A stop on my upkeep halts there; with my main stop taken off, main passes.
+    expect(pass(at('upkeep'), { stops: { mine: ['upkeep'], theirs: [] } })).toBe(false);
+    expect(pass(at('main1'), { stops: { mine: [], theirs: [] } })).toBe(true);
+    // Ctrl held is full control for the moment.
+    expect(pass(at('upkeep'), { hold: true })).toBe(false);
+    // F6 passes even my main phase until the turn it aims for.
+    const main = at('main1');
+    expect(pass(main, { passUntil: main.turn.number + 2 })).toBe(true);
+    expect(pass(main, { passUntil: main.turn.number })).toBe(false);
+  });
+});
+
+describe('why a hand card cannot be played', () => {
+  it('names the timing, the land drop or the mana', () => {
+    const upkeep = buildScenario(cardDb, { step: 'upkeep', p1: { hand: ['mountain'] } });
+    const land = new GameDriver(engine, upkeep).id('p1', 'mountain', 'hand');
+    expect(whyNot(upkeep, land, 'p1')).toBe(
+      'Lands are played in your main phase, with the stack empty',
+    );
+
+    const broke = buildScenario(cardDb, { p1: { hand: ['shock'] } });
+    const shock = new GameDriver(engine, broke).id('p1', 'shock', 'hand');
+    expect(whyNot(broke, shock, 'p1')).toBe('Not enough mana');
+    expect(whyNot(broke, shock, 'p2')).toBe('Wait until you have priority');
   });
 });

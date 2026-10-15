@@ -180,23 +180,21 @@ function withAttachments(view: GameState, ids: ObjectId[]): ObjectId[] {
 // Hands
 // ---------------------------------------------------------------------------
 
-/** A hovered hand card leans toward the pointer, with a sheen that follows it (Balatro, Marvel Snap). */
+/**
+ * The enlarged hand card (see HoverPreview) leans toward the pointer, with a
+ * sheen that follows it (Balatro, Marvel Snap). The pointer stays over the
+ * slot underneath, so the slot drives it.
+ */
 function tilt(e: React.PointerEvent<HTMLElement>) {
-  if (e.pointerType !== 'mouse') return;
-  const el = e.currentTarget;
-  const r = el.getBoundingClientRect();
-  const x = (e.clientX - r.left) / r.width;
-  const y = (e.clientY - r.top) / r.height;
-  el.style.setProperty('--tilt-x', `${(0.5 - y) * 14}deg`);
-  el.style.setProperty('--tilt-y', `${(x - 0.5) * 18}deg`);
-  el.style.setProperty('--sheen-x', `${x * 100}%`);
-  el.style.setProperty('--sheen-y', `${y * 100}%`);
-}
-
-function untilt(e: React.PointerEvent<HTMLElement>) {
-  for (const p of ['--tilt-x', '--tilt-y', '--sheen-x', '--sheen-y']) {
-    e.currentTarget.style.removeProperty(p);
-  }
+  const card = document.querySelector<HTMLElement>('.hover--hand');
+  if (e.pointerType !== 'mouse' || !card) return;
+  const r = e.currentTarget.getBoundingClientRect();
+  const x = Math.max(0, Math.min(1, (e.clientX - r.left) / r.width));
+  const y = Math.max(0, Math.min(1, (e.clientY - r.top) / r.height));
+  card.style.setProperty('--tilt-x', `${(0.5 - y) * 7}deg`);
+  card.style.setProperty('--tilt-y', `${(x - 0.5) * 10}deg`);
+  card.style.setProperty('--sheen-x', `${x * 100}%`);
+  card.style.setProperty('--sheen-y', `${y * 100}%`);
 }
 
 export function Hand({
@@ -205,6 +203,7 @@ export function Hand({
   h,
   extras = [],
   order,
+  lifted,
 }: {
   view: GameState;
   player: PlayerId;
@@ -212,9 +211,12 @@ export function Hand({
   /** Castable cards from elsewhere (flashback, top of library), shown beside the hand. */
   extras?: { id: ObjectId; label: string }[];
   order?: ObjectId[];
+  /** A card dragged up out of the hand: the others close the gap it left (Arena). */
+  lifted?: ObjectId | null;
 }) {
   const hand = order ?? view.players[player].hand;
-  const n = hand.length;
+  const fan = lifted ? hand.filter((id) => id !== lifted) : hand;
+  const n = fan.length;
   return (
     <div className="hand" style={{ '--n': n, '--extras': extras.length } as React.CSSProperties}>
       {extras.length > 0 && (
@@ -224,6 +226,7 @@ export function Hand({
               key={id}
               className={`hand-extra__slot ${h.dragging === id ? 'is-dragging' : ''}`}
               onPointerDown={(e) => h.onHandPointerDown?.(id, e)}
+              onPointerMove={tilt}
             >
               <span className="hand-extra__label">{label}</span>
               <Card
@@ -238,19 +241,20 @@ export function Hand({
           ))}
         </div>
       )}
-      {hand.map((id, i) => {
-        const offset = i - (n - 1) / 2;
+      {hand.map((id) => {
+        const offset = fan.indexOf(id) - (n - 1) / 2;
         return (
           <div
             key={id}
-            className={`hand__slot ${h.dragging === id ? 'is-dragging' : ''}`}
+            className={`hand__slot ${h.dragging === id ? 'is-dragging' : ''} ${
+              lifted === id ? 'is-lifted' : ''
+            }`}
             onPointerDown={(e) => h.onHandPointerDown?.(id, e)}
             onPointerMove={tilt}
-            onPointerLeave={untilt}
             onAnimationEnd={(e) => {
               // Moving this keyed node during reordering can replay its CSS
               // entrance animation. Arrival is a one-time effect for this slot.
-              if (e.target === e.currentTarget && e.animationName === 'draw')
+              if (e.target === e.currentTarget && e.animationName.startsWith('draw'))
                 e.currentTarget.style.animation = 'none';
             }}
             style={{ '--o': offset, '--abs': Math.abs(offset) } as React.CSSProperties}
@@ -349,6 +353,7 @@ export function PlayerBadge({
   priority,
   onClick,
   command,
+  stops,
 }: {
   view: GameState;
   player: PlayerId;
@@ -361,6 +366,8 @@ export function PlayerBadge({
   onClick: () => void;
   /** Brawl: the command zone, beside the portrait. */
   command?: React.ReactNode;
+  /** Phase stops on this player's turn, set by clicking the strip. */
+  stops?: StripStops;
 }) {
   const ps = view.players[player];
   const step = active ? view.turn.step : null;
@@ -372,7 +379,7 @@ export function PlayerBadge({
         priority ? 'badge--priority' : ''
       }`}
     >
-      <PhaseStrip phases={PHASES.slice(0, 3)} step={step} />
+      <PhaseStrip phases={PHASES.slice(0, 3)} step={step} stops={stops} />
       <div
         className="badge__portrait"
         style={{ backgroundImage: `url("${art}")` }}
@@ -414,7 +421,7 @@ export function PlayerBadge({
           </span>
         )}
       </div>
-      <PhaseStrip phases={PHASES.slice(3)} step={step} />
+      <PhaseStrip phases={PHASES.slice(3)} step={step} stops={stops} />
       {command}
       {/* Reality Fracture (17c): emblems and "until your next turn" effects, with their text on hover. */}
       {emblems.length > 0 && (
@@ -436,22 +443,64 @@ export function PlayerBadge({
   );
 }
 
-function PhaseStrip({ phases, step }: { phases: Phase[]; step: Step | null }) {
+/** Phase stops for one seat's strip: which are set, and how to flip one. */
+export interface StripStops {
+  steps: Step[];
+  /** Whose turn these stops apply to, for the tooltip. */
+  whose: 'your' | 'their';
+  onToggle: (steps: Step[], on: boolean) => void;
+}
+
+/**
+ * The live phase is lit, with its name (and step) in a caption under it.
+ * Clicking a phase sets a stop there, as on Arena: auto-pass halts at it on
+ * that player's turn. A stop shows as a small brass pip.
+ */
+function PhaseStrip({
+  phases,
+  step,
+  stops,
+}: {
+  phases: Phase[];
+  step: Step | null;
+  stops?: StripStops;
+}) {
   return (
     <ol className="strip">
       {phases.map((p) => {
         const on = !!step && p.steps.includes(step);
         const label = on && step && STEP_LABEL[step] ? `${p.label}: ${STEP_LABEL[step]}` : p.label;
+        const stopped = !!stops && p.stop.some((s) => stops.steps.includes(s));
+        const hint = stops
+          ? `${label}. ${stopped ? 'Stops' : 'Click to stop'} here on ${stops.whose} turn`
+          : label;
+        const icon = (
+          <svg viewBox="0 0 18 18" aria-hidden>
+            <path d={PHASE_ICON[p.icon]} />
+          </svg>
+        );
         return (
           <li
             key={p.icon}
-            className={`strip__phase ${on ? 'is-on' : ''}`}
-            title={label}
-            aria-label={label}
+            className={`strip__phase ${on ? 'is-on' : ''} ${stopped ? 'is-stop' : ''}`}
           >
-            <svg viewBox="0 0 18 18" aria-hidden>
-              <path d={PHASE_ICON[p.icon]} />
-            </svg>
+            {stops ? (
+              <button
+                type="button"
+                className="strip__btn"
+                title={hint}
+                aria-label={hint}
+                aria-pressed={stopped}
+                onClick={() => stops.onToggle(p.stop, !stopped)}
+              >
+                {icon}
+              </button>
+            ) : (
+              <span className="strip__btn" title={label} aria-label={label}>
+                {icon}
+              </span>
+            )}
+            {on && <span className="strip__caption">{label}</span>}
           </li>
         );
       })}
@@ -594,12 +643,14 @@ interface Phase {
   label: string;
   icon: PhaseIcon;
   steps: Step[];
+  /** Where a stop on this phase halts auto-pass: its priority windows worth acting in. */
+  stop: Step[];
 }
 
 const PHASES: Phase[] = [
-  { label: 'Beginning', icon: 'untap', steps: ['untap', 'upkeep'] },
-  { label: 'Draw', icon: 'draw', steps: ['draw'] },
-  { label: 'Main', icon: 'main', steps: ['main1'] },
+  { label: 'Beginning', icon: 'untap', steps: ['untap', 'upkeep'], stop: ['upkeep'] },
+  { label: 'Draw', icon: 'draw', steps: ['draw'], stop: ['draw'] },
+  { label: 'Main', icon: 'main', steps: ['main1'], stop: ['main1'] },
   {
     label: 'Combat',
     icon: 'combat',
@@ -611,9 +662,11 @@ const PHASES: Phase[] = [
       'combatDamage',
       'endCombat',
     ],
+    // Before attacks, and once attackers are known (blocks always stop).
+    stop: ['beginCombat', 'declareAttackers'],
   },
-  { label: 'Second main', icon: 'main2', steps: ['main2'] },
-  { label: 'End', icon: 'end', steps: ['end', 'cleanup'] },
+  { label: 'Second main', icon: 'main2', steps: ['main2'], stop: ['main2'] },
+  { label: 'End', icon: 'end', steps: ['end', 'cleanup'], stop: ['end'] },
 ];
 
 /** 18×18 line icons, one per phase. */

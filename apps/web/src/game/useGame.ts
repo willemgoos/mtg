@@ -13,7 +13,12 @@ import {
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { BotKind, BotRequest, BotResponse } from './bot.worker.ts';
 import { setBasicArt, trackBasics } from './basicArt.ts';
-import { type PassSettings, shouldAutoPass } from './interaction.ts';
+import {
+  DEFAULT_STOPS,
+  type PassSettings,
+  type PhaseStops,
+  shouldAutoPass,
+} from './interaction.ts';
 import { type SavedGame, saveGame } from './saved.ts';
 
 export const HUMAN: PlayerId = 'p1';
@@ -30,6 +35,27 @@ export interface DeckChoice {
 
 const engine = createEngine(cardDb);
 const BOTH = ['p1', 'p2'] as const;
+
+/** Phase stops carry over between games, as on Arena. */
+const STOPS_KEY = 'mtg.stops';
+
+function loadStops(): PhaseStops {
+  try {
+    const s = JSON.parse(localStorage.getItem(STOPS_KEY) ?? 'null') as PhaseStops | null;
+    if (Array.isArray(s?.mine) && Array.isArray(s?.theirs)) return s;
+  } catch {
+    // Unreadable: fall back to the defaults.
+  }
+  return DEFAULT_STOPS;
+}
+
+function saveStops(s: PhaseStops | undefined): void {
+  try {
+    if (s) localStorage.setItem(STOPS_KEY, JSON.stringify(s));
+  } catch {
+    // Storage full or blocked: stops just won't persist.
+  }
+}
 
 export interface LogLine {
   id: number;
@@ -107,7 +133,12 @@ export function useGame(
   trackBasics(state);
   const [log, setLog] = useState<LogLine[]>(() => resume?.log ?? []);
   const [batch, setBatch] = useState<EventBatch>({ seq: 0, events: [] });
-  const [settings, setSettings] = useState<PassSettings>({ fullControl: false, passTurn: null });
+  const [settings, setSettings] = useState<PassSettings>(() => ({
+    fullControl: false,
+    passTurn: null,
+    stops: loadStops(),
+  }));
+  useEffect(() => saveStops(settings.stops), [settings.stops]);
   const logId = useRef(resume?.log.length ? resume.log.at(-1)!.id + 1 : 0);
   const requestId = useRef(0);
 
@@ -193,11 +224,13 @@ export function useGame(
     if (!persistAction) saveGame({ choice, seed, opponent, state, log });
   }, [choice, seed, opponent, state, log, persistAction]);
 
-  // "End turn" only lasts for the turn it was pressed in.
+  // "End turn" only lasts for the turn it was pressed in; F6 until the turn it aims for.
   useEffect(() => {
     if (settings.passTurn !== null && settings.passTurn !== state.turn.number)
       setSettings((s) => ({ ...s, passTurn: null }));
-  }, [state.turn.number, settings.passTurn]);
+    if (settings.passUntil != null && state.turn.number >= settings.passUntil)
+      setSettings((s) => ({ ...s, passUntil: null }));
+  }, [state.turn.number, settings.passTurn, settings.passUntil]);
 
   if (error) throw error;
 

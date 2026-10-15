@@ -1,4 +1,4 @@
-import type { Action, GameState, ObjectId, PlayerId, TargetChoice } from '@mtg/engine';
+import type { Action, GameState, ObjectId, PlayerId, Step, TargetChoice } from '@mtg/engine';
 
 /** Stable key for a target: "player:p1" or "obj:o12". */
 export type TargetKey = string;
@@ -201,10 +201,24 @@ export function permanentActions(legal: readonly Action[], id: ObjectId): Action
 // Auto-pass (Arena-style: only stop when there's something worth deciding)
 // ---------------------------------------------------------------------------
 
+/** Arena's phase stops: the steps where auto-pass halts, on your turn and on the opponent's. */
+export interface PhaseStops {
+  mine: Step[];
+  theirs: Step[];
+}
+
+/** Arena's defaults: both of your main phases. */
+export const DEFAULT_STOPS: PhaseStops = { mine: ['main1', 'main2'], theirs: [] };
+
 export interface PassSettings {
   fullControl: boolean;
   /** Keep passing until this turn number is over ("End turn" button). */
   passTurn: number | null;
+  /** Keep passing until this turn number starts (F6: to my next turn). */
+  passUntil?: number | null;
+  /** Ctrl held: full control for as long as it's down. */
+  hold?: boolean;
+  stops?: PhaseStops;
 }
 
 export function shouldAutoPass(
@@ -220,13 +234,15 @@ export function shouldAutoPass(
   const top = s.stack[s.stack.length - 1];
   if (top && top.controller !== me) return false;
   if (legal.length <= 1) return true;
-  if (settings.fullControl) return false;
+  if (settings.fullControl || settings.hold) return false;
   if (top) return true; // let my own spells resolve
   if (settings.passTurn === s.turn.number) return true;
+  if (settings.passUntil != null && s.turn.number < settings.passUntil) return true;
 
   const myTurn = s.turn.activePlayer === me;
   const step = s.turn.step;
-  if (myTurn && (step === 'main1' || step === 'main2')) return false;
+  const stops = settings.stops ?? DEFAULT_STOPS;
+  if ((myTurn ? stops.mine : stops.theirs).includes(step)) return false;
   // After blocks, stop so combat tricks can be cast.
   if (step === 'declareBlockers' && !!s.combat?.attackers.length) return false;
   return true;

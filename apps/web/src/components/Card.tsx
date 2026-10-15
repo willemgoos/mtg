@@ -50,6 +50,14 @@ export interface CardProps {
   style?: React.CSSProperties;
 }
 
+/** Enter or Space on a focused card clicks it, without reaching the board's hotkeys. */
+function pressOnKey(e: React.KeyboardEvent<HTMLElement>) {
+  if (e.key !== 'Enter' && e.key !== ' ') return;
+  e.preventDefault();
+  e.stopPropagation();
+  e.currentTarget.click();
+}
+
 export function Card(p: CardProps) {
   const def = cardDb.get(p.defId);
   const img = cardImage(p.defId, p.id);
@@ -95,6 +103,21 @@ export function Card(p: CardProps) {
       onClick={p.onClick}
       onMouseEnter={(e) => p.onHover?.(p.defId, e.currentTarget)}
       onMouseLeave={() => p.onHover?.(null)}
+      // Keyboard: Tab to a card shows its preview; Enter or Space clicks it.
+      tabIndex={p.onClick ? 0 : undefined}
+      role={p.onClick ? 'button' : undefined}
+      aria-label={p.onClick ? def?.name : undefined}
+      onKeyDown={p.onClick ? pressOnKey : undefined}
+      onFocus={(e) => {
+        if (!e.currentTarget.matches(':focus-visible')) return;
+        e.currentTarget.dataset.kbd = '';
+        p.onHover?.(p.defId, e.currentTarget);
+      }}
+      onBlur={(e) => {
+        if (e.currentTarget.dataset.kbd === undefined) return;
+        delete e.currentTarget.dataset.kbd;
+        p.onHover?.(null);
+      }}
     >
       <div key={face.current.n} className={`card__body ${face.current.n ? 'is-flipping' : ''}`}>
         {img ? (

@@ -2,6 +2,7 @@ import type { ObjectId } from '@mtg/engine';
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { flyFrom } from './useFlip.ts';
 import { handIndexAt, moveHandCard } from './handOrder.ts';
+import { play } from './sound.ts';
 
 /** Pointer travel before a press on a hand card becomes a drag (below it, it's a click). */
 const THRESHOLD = 8;
@@ -31,6 +32,47 @@ function overHand(x: number, y: number, startY: number): boolean {
   return !document.elementFromPoint(x, y)?.closest('.action, .drawer, .corner');
 }
 
+/** A card let go short of a play, on its way back to the hand. */
+interface SnapBack {
+  id: ObjectId;
+  /** Where the ghost was let go. */
+  from: DOMRect;
+  lean: number;
+  /** Let go over the board but not playable: the player is told why. */
+  rejected: boolean;
+}
+
+/**
+ * A card let go short of a play flies back into its hand slot from where the
+ * ghost was, leaning as the ghost did. Slots are fanned (rotated), so the
+ * offset is turned into the slot's own frame.
+ */
+function flyBack(s: SnapBack | null) {
+  if (!s || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const card = document.querySelector<HTMLElement>(
+    `.hand [data-oid="${s.id}"], .hand-extra [data-oid="${s.id}"]`,
+  );
+  const slot = card?.parentElement;
+  if (!card || !slot) return;
+  const r = card.getBoundingClientRect();
+  const t = getComputedStyle(slot).transform;
+  const turn = t && t !== 'none' ? new DOMMatrixReadOnly(t) : null;
+  const a = turn ? Math.atan2(turn.b, turn.a) : 0;
+  const dx = s.from.left + s.from.width / 2 - (r.left + r.width / 2);
+  const dy = s.from.top + s.from.height / 2 - (r.top + r.height / 2);
+  card.animate(
+    [
+      {
+        translate: `${dx * Math.cos(a) + dy * Math.sin(a)}px ${dy * Math.cos(a) - dx * Math.sin(a)}px`,
+        rotate: `${s.lean - (a * 180) / Math.PI}deg`,
+        zIndex: 60,
+      },
+      { translate: '0px 0px', rotate: '0deg', zIndex: 60 },
+    ],
+    { duration: 300, easing: 'cubic-bezier(0.16, 1, 0.3, 1)' },
+  );
+}
+
 /** Is the point over the battlefield (above the hand, not on the action button or a drawer)? */
 export function overBoard(x: number, y: number): boolean {
   const me = document.querySelector('.side--me')?.getBoundingClientRect();
@@ -50,6 +92,8 @@ export function useHandDrag(opts: {
   onReorder: (order: ObjectId[]) => void;
   canPlay: (id: ObjectId) => boolean;
   onDrop: (id: ObjectId, x: number, y: number) => void;
+  /** A card let go over the board that can't be played there: say why. */
+  onReject?: (id: ObjectId) => void;
 }) {
   const latest = useRef(opts);
   latest.current = opts;
@@ -58,8 +102,14 @@ export function useHandDrag(opts: {
   /** Swing: the card leans against the way it's pulled, then settles (see swing()). */
   const lean = useRef({ now: 0, target: 0, lastX: 0, frame: 0 });
   const ghostRef = useRef<HTMLDivElement>(null);
+  /** The enlarged hover card a drag began from: the ghost shrinks out of it. */
+  const popFrom = useRef<DOMRect | null>(null);
+  /** A card let go anywhere but a play: it flies back from where the ghost was. */
+  const snapBack = useRef<SnapBack | null>(null);
   const justDropped = useRef(false);
   const [dragging, setDragging] = useState<ObjectId | null>(null);
+  /** The dragged card while it's above the hand: the rest of the hand closes up. */
+  const [lifted, setLifted] = useState<ObjectId | null>(null);
   const [overBattlefield, setOverBattlefield] = useState(false);
 
   const place = () => {
@@ -139,8 +189,11 @@ export function useHandDrag(opts: {
       if (!p.active) {
         if (Math.hypot(e.clientX - p.x0, e.clientY - p.y0) < THRESHOLD) return;
         p.active = true;
+        popFrom.current =
+          document.querySelector('.hover--hand .hover-preview')?.getBoundingClientRect() ?? null;
         lean.current = { now: 0, target: 0, lastX: e.clientX, frame: lean.current.frame };
         setDragging(p.id);
+        play('pluck', { gain: 0.45 });
       }
       pos.current = { x: e.clientX - p.dx, y: e.clientY - p.dy };
       const l = lean.current;
@@ -149,6 +202,7 @@ export function useHandDrag(opts: {
       if (!l.frame) l.frame = requestAnimationFrame(swing);
       place();
       reorder(p, e.clientX, e.clientY);
+      setLifted(p.centres.length && !overHand(e.clientX, e.clientY, p.y0) ? p.id : null);
       const over = canDrop(p, e.clientX, e.clientY);
       setOverBattlefield(over);
       board()?.classList.toggle('is-drop', over);
@@ -162,7 +216,9 @@ export function useHandDrag(opts: {
       board()?.classList.remove('is-drop');
       cancelAnimationFrame(lean.current.frame);
       lean.current.frame = 0;
+      const ghost = ghostRef.current?.firstElementChild?.getBoundingClientRect();
       setDragging(null);
+      setLifted(null);
       setOverBattlefield(false);
       // The click that may follow this pointerup belongs to the drag, not a card click.
       justDropped.current = true;
@@ -171,10 +227,22 @@ export function useHandDrag(opts: {
         // The card flies to the table from where it was let go, not from the hand.
         flyFrom(p.id, ghostRef.current);
         latest.current.onDrop(p.id, e.clientX, e.clientY);
-      } else if (e.type === 'pointerup' && overHand(e.clientX, e.clientY, p.y0)) {
+        return;
+      }
+      const rejected =
+        e.type === 'pointerup' &&
+        overBoard(e.clientX, e.clientY) &&
+        !latest.current.canPlay(p.id);
+      if (e.type === 'pointerup' && overHand(e.clientX, e.clientY, p.y0)) {
         reorder(p, e.clientX, e.clientY);
       } else if (p.centres.length) {
         latest.current.onReorder(p.order);
+      }
+      if (ghost) {
+        snapBack.current = { id: p.id, from: ghost, lean: -3 + lean.current.now, rejected };
+        play('slide', { gain: 0.3 });
+      } else if (rejected) {
+        latest.current.onReject?.(p.id);
       }
     };
     const cancel = () => {
@@ -200,13 +268,38 @@ export function useHandDrag(opts: {
     };
   }, []);
 
-  // Position the ghost before its first paint.
+  // Position the ghost before its first paint. Picked up from the enlarged
+  // hover card, it starts at that card's size and shrinks into the grip.
   useLayoutEffect(() => {
-    if (dragging) place();
+    if (!dragging) {
+      const s = snapBack.current;
+      snapBack.current = null;
+      // Back in its slot (the hand has reopened): say why it wasn't played, then fly it home.
+      if (s?.rejected) latest.current.onReject?.(s.id);
+      flyBack(s);
+      return;
+    }
+    place();
+    const from = popFrom.current;
+    popFrom.current = null;
+    const card = ghostRef.current?.firstElementChild;
+    if (!from || !card || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const r = card.getBoundingClientRect();
+    card.animate(
+      [
+        {
+          transformOrigin: '0 0',
+          transform: `translate(${from.left - r.left}px, ${from.top - r.top}px) scale(${from.width / r.width})`,
+        },
+        { transformOrigin: '0 0', transform: 'none' },
+      ],
+      { duration: 220, easing: 'cubic-bezier(0.16, 1, 0.3, 1)' },
+    );
   }, [dragging]);
 
   return {
     dragging,
+    lifted,
     overBattlefield,
     ghostRef,
     onHandPointerDown,

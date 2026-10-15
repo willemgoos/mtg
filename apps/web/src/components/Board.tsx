@@ -14,6 +14,7 @@ import { getAbilities, getCharacteristics } from '@mtg/engine';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   castGroups,
+  DEFAULT_STOPS,
   forageFood,
   handActions,
   isTargeting,
@@ -50,6 +51,7 @@ import {
   StackView,
   type PileZone,
   PileViewer,
+  type StripStops,
   ZonePiles,
   type ZoneHandlers,
 } from './Zones.tsx';
@@ -57,7 +59,8 @@ import { ArenaBackdrop } from './ArenaBackdrop.tsx';
 import { HoverPreview, type HoverState } from './Preview.tsx';
 import { UiSize } from './UiSize.tsx';
 import { SoundControl } from './SoundControl.tsx';
-import { heartbeat, playEvents, playHover } from '../game/sound.ts';
+import { heartbeat, play, playEvents, playHover } from '../game/sound.ts';
+import { whyNot } from '../game/whyNot.ts';
 import { isLethal } from '../game/lethal.ts';
 import { startTeamPick, type TeamPick, teamOptions, teamPower } from '../game/teamwork.ts';
 import { type Hint, hintFor } from '../game/hint.ts';
@@ -242,13 +245,50 @@ export function Board({
     () => reconcileHandOrder(view.players[HUMAN].hand, handOrder),
     [view.players[HUMAN].hand, handOrder],
   );
+  /** Why the last hand card the player tried couldn't be played, shown above it. */
+  const [nope, setNope] = useState<{ text: string; x: number; y: number; seq: number } | null>(
+    null,
+  );
+  useEffect(() => {
+    if (!nope) return;
+    const t = setTimeout(() => setNope(null), 2200);
+    return () => clearTimeout(t);
+  }, [nope]);
+  /** A hand card that can't be played: it shakes, with the reason above it (Arena). */
+  const refuse = (id: ObjectId, shake = true) => {
+    const el =
+      document.querySelector<HTMLElement>('.hover--hand .hover-preview') ??
+      document.querySelector<HTMLElement>(`.hand [data-oid="${id}"]`);
+    if (!el) return;
+    const r = el.getBoundingClientRect();
+    setNope((n) => ({
+      text: whyNot(view, id, HUMAN),
+      x: r.left + r.width / 2,
+      y: Math.max(r.top, 0),
+      seq: (n?.seq ?? 0) + 1,
+    }));
+    play('tick', { gain: 0.6 });
+    if (shake && !matchMedia('(prefers-reduced-motion: reduce)').matches)
+      el.animate(
+        ['0', '-0.4rem', '0.4rem', '-0.25rem', '0.15rem', '0'].map((x) => ({ translate: `${x} 0` })),
+        { duration: 320, easing: 'ease-out' },
+      );
+  };
+
   const drag = useHandDrag({
     hand: orderedHand,
     canReorder: () => !targeting && d.kind !== 'gameOver',
     onReorder: setHandOrder,
     canPlay: (id) => myDecision && !targeting && playable(id).length > 0,
     onDrop: dropCard,
+    // The card flies back to its slot, which says enough without a shake.
+    onReject: (id) => !targeting && refuse(id, false),
   });
+  // A picked-up card can vanish from under the pointer (the hand closes up),
+  // so it never sees mouseleave: drop its preview as the drag starts.
+  useEffect(() => {
+    if (drag.dragging) setHoverState(null);
+  }, [drag.dragging]);
 
   /** While dragging a targeted spell, its possible first targets light up. */
   const dragTargets = useMemo(() => {
@@ -269,7 +309,10 @@ export function Board({
         : [...teamPick.chosen, id];
       return setTeamPick({ ...teamPick, chosen });
     }
-    if (!myDecision) return;
+    if (!myDecision) {
+      if (view.objects[id]?.zone === 'hand') refuse(id);
+      return;
+    }
     if (d.kind === 'sacrifice') {
       if (d.options.includes(id)) act({ type: 'chooseCard', player: HUMAN, card: id });
       return;
@@ -307,6 +350,7 @@ export function Board({
       const ability = legal.find((a) => a.type === 'activateAbility' && a.source === id);
       if (ability?.type === 'activateAbility') return activate(id, ability.abilityIndex);
       if (acts[0]) act(acts[0]);
+      else if (o.zone === 'hand' && d.kind === 'priority') refuse(id);
       return;
     }
     const acts = permanentActions(legal, id);
@@ -490,7 +534,11 @@ export function Board({
     d.kind === 'priority' &&
     !legal.some((a) => a.type === 'playLand' || a.type === 'castSpell');
   const secondary = bar.secondary && (
-    <button className="abtn abtn--second" onClick={bar.secondary[1]}>
+    <button
+      className="abtn abtn--second"
+      title={bar.secondary[0] === 'End turn' ? 'End turn (Enter)' : undefined}
+      onClick={bar.secondary[1]}
+    >
       {bar.secondary[0]}
     </button>
   );
@@ -853,14 +901,66 @@ export function Board({
     }
   }
 
-  // Space = primary button, Escape = cancel, H = hint.
+  // Arena's hotkeys: Space = primary button, Enter = pass the turn, F6 = pass
+  // to my next turn, Ctrl held = full control, Ctrl+Shift = full control on or
+  // off. Escape = cancel, H = hint.
   const barRef = useRef(bar);
   barRef.current = bar;
   const askRef = useRef(askHint);
   askRef.current = askHint;
+  const passTo = (until: Partial<typeof settings>) => {
+    setSettings((s) => ({ ...s, ...until }));
+    if (myDecision && d.kind === 'priority' && !targeting)
+      act({ type: 'passPriority', player: HUMAN });
+  };
+  /** A seat's phase strip sets stops for that player's turns. */
+  const stopsFor = (side: 'mine' | 'theirs'): StripStops => ({
+    steps: (settings.stops ?? DEFAULT_STOPS)[side],
+    whose: side === 'mine' ? 'your' : 'their',
+    onToggle: (steps, on) =>
+      setSettings((s) => {
+        const all = s.stops ?? DEFAULT_STOPS;
+        const rest = all[side].filter((x) => !steps.includes(x));
+        return { ...s, stops: { ...all, [side]: on ? [...rest, ...steps] : rest } };
+      }),
+  });
+
+  const passRef = useRef<{ turn: () => void; toMine: () => void }>(null!);
+  passRef.current = {
+    turn: () => passTo({ passTurn: state.turn.number }),
+    toMine: () =>
+      passTo({ passUntil: state.turn.number + (state.turn.activePlayer === HUMAN ? 2 : 1) }),
+  };
+  useEffect(() => {
+    const hold = (on: boolean) => setSettings((s) => (!!s.hold === on ? s : { ...s, hold: on }));
+    const onUp = (e: KeyboardEvent) => {
+      if (e.key === 'Control') hold(false);
+    };
+    const onBlur = () => hold(false);
+    window.addEventListener('keyup', onUp);
+    window.addEventListener('blur', onBlur);
+    return () => {
+      window.removeEventListener('keyup', onUp);
+      window.removeEventListener('blur', onBlur);
+    };
+  }, [setSettings]);
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === ' ' && barRef.current.primary) {
+      // A focused control (button, field) keeps Enter for itself.
+      const inControl = (e.target as Element | null)?.closest?.(
+        'button, input, select, textarea, a',
+      );
+      if (e.ctrlKey && e.shiftKey && (e.key === 'Shift' || e.key === 'Control')) {
+        if (!e.repeat) setSettings((s) => ({ ...s, fullControl: !s.fullControl }));
+      } else if (e.key === 'Control') {
+        if (!e.repeat) setSettings((s) => (s.hold ? s : { ...s, hold: true }));
+      } else if (e.key === 'Enter' && !inControl && !e.repeat) {
+        e.preventDefault();
+        passRef.current.turn();
+      } else if (e.key === 'F6') {
+        e.preventDefault();
+        passRef.current.toMine();
+      } else if (e.key === ' ' && barRef.current.primary) {
         e.preventDefault();
         barRef.current.primary[1]();
       } else if (e.key === 'h' || e.key === 'H') {
@@ -925,6 +1025,7 @@ export function Board({
             priority={priorityOf === BOT}
             onClick={() => onPlayer(BOT)}
             command={<CommandSlot view={view} player={BOT} h={h} />}
+            stops={stopsFor('theirs')}
           />
           <OpponentHand count={view.players[BOT].hand.length} />
         </header>
@@ -946,13 +1047,21 @@ export function Board({
             priority={priorityOf === HUMAN}
             onClick={() => onPlayer(HUMAN)}
             command={<CommandSlot view={view} player={HUMAN} h={h} />}
+            stops={stopsFor('mine')}
           />
           {!!view.players[HUMAN].pool?.length && (
             <div className="floating-mana" title="Mana in your pool: spent first">
               Floating {view.players[HUMAN].pool!.map((m) => `{${m.produces.join('/')}}`).join('')}
             </div>
           )}
-          <Hand view={view} player={HUMAN} h={h} extras={extras} order={orderedHand} />
+          <Hand
+            view={view}
+            player={HUMAN}
+            h={h}
+            extras={extras}
+            order={orderedHand}
+            lifted={drag.lifted}
+          />
         </footer>
       </main>
 
@@ -1024,7 +1133,7 @@ export function Board({
             </button>
             <button
               className={`abtn abtn--icon ${settings.fullControl ? 'is-on' : ''}`}
-              title={`Full control: stop at every priority (${settings.fullControl ? 'on' : 'off'})`}
+              title={`Full control: stop at every priority (${settings.fullControl ? 'on' : 'off'}). Hold Ctrl for a moment of it, Ctrl+Shift switches it`}
               aria-label="Full control"
               aria-pressed={settings.fullControl}
               onClick={() => setSettings((s) => ({ ...s, fullControl: !s.fullControl }))}
@@ -1099,6 +1208,27 @@ export function Board({
             />
             Full control (stop at every priority)
           </label>
+          <p className="drawer__hint">
+            Click a phase beside a portrait to stop there on that player’s turn.
+          </p>
+          <dl className="hotkeys">
+            <dt>Space</dt>
+            <dd>The main button: pass, resolve, done</dd>
+            <dt>Enter</dt>
+            <dd>Pass the rest of this turn</dd>
+            <dt>F6</dt>
+            <dd>Pass until your next turn</dd>
+            <dt>Ctrl</dt>
+            <dd>Hold for full control</dd>
+            <dt>Ctrl+Shift</dt>
+            <dd>Full control on or off</dd>
+            <dt>Tab</dt>
+            <dd>Move between cards; Enter plays one</dd>
+            <dt>H</dt>
+            <dd>Hint</dd>
+            <dt>Esc</dt>
+            <dd>Cancel</dd>
+          </dl>
           <UiSize />
           <SoundControl />
           <div className="drawer__actions">
@@ -1500,6 +1630,16 @@ export function Board({
         </div>
       )}
       {!drag.dragging && <HoverPreview hover={hover} notes={notes} />}
+      {nope && (
+        <div
+          key={nope.seq}
+          className="nope"
+          role="status"
+          style={{ left: nope.x, top: nope.y }}
+        >
+          {nope.text}
+        </div>
+      )}
 
       <Arrows specs={arrows} deps={[state, targeting]} />
       <Floaters batch={batch} />

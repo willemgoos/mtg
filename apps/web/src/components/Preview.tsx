@@ -56,7 +56,22 @@ export function HoverPreview({ hover, notes }: { hover: HoverState | null; notes
   let left = gap;
   let top = (innerHeight - h) / 2;
   let height = h;
-  if (a) {
+  /** A hand card grows out of its slot (Arena): where the enlarged card starts from. */
+  let pop: React.CSSProperties | null = null;
+  if (a && hover.anchor?.closest('.hand__slot, .hand-extra__slot')) {
+    top = innerHeight - gap / 2 - h;
+    const centre = a.left + a.width / 2;
+    left = centre - w / 2;
+    rightSide = left + w + notesW <= innerWidth - gap;
+    if (!rightSide) left -= notesW;
+    left = clamp(left, gap, innerWidth - w - notesW - gap);
+    const previewLeft = rightSide ? left : left + notesW;
+    pop = {
+      '--pop-x': `${centre - (previewLeft + w / 2)}px`,
+      '--pop-y': `${a.bottom - (top + h)}px`,
+      '--pop-s': a.width / w,
+    } as React.CSSProperties;
+  } else if (a) {
     // Above the card when it fits (below when it fits better), so the row you're
     // moving along stays uncovered. The preview may shrink a little to fit;
     // only when neither side has room does it go beside the card.
@@ -84,8 +99,10 @@ export function HoverPreview({ hover, notes }: { hover: HoverState | null; notes
     cardImage(hover.defId, hover.anchor?.closest('[data-oid]')?.getAttribute('data-oid'));
   return (
     <div
-      className={`hover ${rightSide ? '' : 'hover--flip'}`}
-      style={{ left, top, height }}
+      // A new element per card, so each hovered hand card replays its pop.
+      key={pop ? (hover.anchor?.closest('[data-oid]')?.getAttribute('data-oid') ?? hover.defId) : 0}
+      className={`hover ${rightSide ? '' : 'hover--flip'} ${pop ? 'hover--hand' : ''}`}
+      style={{ left, top, height, ...pop }}
       aria-hidden
     >
       <div className="hover-preview" style={{ width: height * ASPECT, height }}>
