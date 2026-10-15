@@ -1,4 +1,4 @@
-import { cardDb } from '@mtg/cards';
+import { cardDb, findDeck } from '@mtg/cards';
 import { createEngine, playRandomGame } from '@mtg/engine';
 import { describe, expect, it } from 'vitest';
 import { createSeasonSave, replaySeasonMatch, SEASON_STARTERS } from '../src/game/season.ts';
@@ -28,6 +28,10 @@ describe('Season playable match integration', () => {
     expect(new Set(opponents).size).toBeGreaterThan(45);
     // Constructed like yours: never a 40-card Jump In pair.
     expect(opponents.filter((id) => id.startsWith('jump-in:'))).toEqual([]);
+    // Every deck equally likely: the five Color Challenge decks are about 5% of
+    // matches, not the third they took when weighted as a group.
+    const challenges = opponents.filter((id) => findDeck(id)!.series === 'colorChallenge');
+    expect(challenges.length).toBeLessThan(45);
     for (const s of samples) expect(s.match!.decks.p2.length).toBeGreaterThanOrEqual(60);
     expect(queueSeasonMatch(fresh(), 101)).toEqual(queueSeasonMatch(fresh(), 101));
     expect(queueSeasonMatch(fresh(), 101).rng).not.toEqual(fresh().rng);

@@ -448,10 +448,15 @@ export const TROPHY_DECKS: readonly Decklist[] = PLAYABLE_DECKS.filter(
 export const OPPONENT_DECKS: readonly Decklist[] = OPPONENT_GROUPS.flatMap(([, d]) => d);
 
 /** The 60-card opponents, for constructed play like Season: no 40-card Jump In pairs. */
-const CONSTRUCTED_GROUPS = OPPONENT_GROUPS.filter(([, d]) => d !== JUMP_IN_DECKS);
-export const CONSTRUCTED_OPPONENT_DECKS: readonly Decklist[] = CONSTRUCTED_GROUPS.flatMap(
-  ([, d]) => d,
-);
+export const CONSTRUCTED_OPPONENT_DECKS: readonly Decklist[] = OPPONENT_GROUPS.filter(
+  ([, d]) => d !== JUMP_IN_DECKS,
+).flatMap(([, d]) => d);
+
+/**
+ * One group, so every 60-card deck is equally likely. Weighted like
+ * OPPONENT_GROUPS, the five Color Challenge decks would take a third of matches.
+ */
+const CONSTRUCTED_GROUPS: typeof OPPONENT_GROUPS = [[1, CONSTRUCTED_OPPONENT_DECKS]];
 
 /**
  * A bot's deck id, never the same as `you`. `int(n)` is the caller's random
