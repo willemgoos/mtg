@@ -28,10 +28,14 @@ export function DeckView({
   deck,
   onBack,
   onPlay,
+  backLabel = 'Decks',
+  playLabel = 'Play this deck',
 }: {
   deck: Decklist;
   onBack: () => void;
   onPlay: () => void;
+  backLabel?: string;
+  playLabel?: string;
 }) {
   const entries = useDeckEntries(deck);
   const [hover, setHoverState] = useState<HoverState | null>(null);
@@ -54,7 +58,7 @@ export function DeckView({
     >
       <header className="deckview__head">
         <button className="btn btn--ghost" onClick={onBack}>
-          ← Decks
+          ← {backLabel}
         </button>
         <div
           className="deckview__banner"
@@ -70,7 +74,7 @@ export function DeckView({
           <p>{BLURBS[deck.id] ?? deck.credit}</p>
         </div>
         <button className="btn btn--primary deckview__play" disabled={!playable} onClick={onPlay}>
-          {playable ? 'Play this deck' : 'Coming soon'}
+          {playable ? playLabel : 'Coming soon'}
         </button>
       </header>
       <div className="deckview__body">

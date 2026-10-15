@@ -1611,48 +1611,238 @@
   background: rgba(255, 255, 255, 0.12);
 }
 
-.swelcome__title {
+.swelcome__top .swelcome__title {
   display: flex;
-  flex-direction: column;
   align-items: center;
   gap: 0.75rem;
-  max-width: 44rem;
-  margin: 0 auto;
-  padding: 0.5rem 1.5rem 2rem;
-  text-align: center;
-}
-
-.swelcome__title .stag {
-  align-self: center;
 }
 
 .swelcome__title h1 {
   margin: 0;
   font-family: var(--h-font);
-  font-size: clamp(2.25rem, 4vw, 3.25rem);
+  font-size: 1.375rem;
   font-weight: 600;
-  line-height: 1.05;
-  letter-spacing: -0.035em;
+  letter-spacing: -0.025em;
   color: #fff;
 }
 
-.swelcome__title p {
-  margin: 0;
-  font-size: 1rem;
+.swelcome__lede {
+  max-width: 46rem;
+  margin: 0 auto 1rem;
+  padding: 0 1.5rem;
+  font-size: 0.9375rem;
   line-height: 1.55;
+  text-align: center;
   color: var(--h-muted);
+}
+
+.swelcome__body {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  border-top: 0.0625rem solid var(--h-line);
+}
+
+.swelcome__browse {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.swelcome__filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem 1.5rem;
+  padding: 1rem 1.5rem;
+  border-bottom: 0.0625rem solid var(--h-line);
+}
+
+.schips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+}
+
+.schip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  height: 2rem;
+  padding: 0 0.75rem;
+  border: 0;
+  border-radius: 999px;
+  font-family: var(--h-font);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--h-muted);
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: inset 0 0 0 0.0625rem var(--h-line);
+  cursor: var(--cursor-hover, pointer);
+  transition:
+    color 0.15s,
+    background 0.15s;
+}
+
+.schip span {
+  font-variant-numeric: tabular-nums;
+  color: var(--h-dim);
+}
+
+.schip:hover {
+  color: var(--h-text);
+  background: rgba(255, 255, 255, 0.09);
+}
+
+.schip.is-on {
+  color: #111;
+  background: var(--h-text);
+  box-shadow: none;
+}
+
+.schip.is-on span {
+  color: rgba(0, 0, 0, 0.55);
+}
+
+.scolors {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.scolor {
+  display: grid;
+  place-items: center;
+  width: 2.125rem;
+  height: 2.125rem;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.04);
+  box-shadow: inset 0 0 0 0.0625rem var(--h-line);
+  opacity: 0.55;
+  cursor: var(--cursor-hover, pointer);
+  transition:
+    opacity 0.15s,
+    background 0.15s;
+}
+
+.scolor .pip {
+  width: 1.125rem;
+  height: 1.125rem;
+}
+
+.scolor:hover {
+  opacity: 0.9;
+}
+
+.scolor.is-on {
+  opacity: 1;
+  background: rgba(255, 255, 255, 0.12);
+  box-shadow: inset 0 0 0 0.09375rem var(--h-text);
 }
 
 .swelcome__decks {
   flex: 1;
   min-height: 0;
-  display: grid;
-  grid-template-columns: repeat(5, minmax(0, 15rem));
-  justify-content: center;
-  align-content: center;
-  gap: 1rem;
   padding: 0.5rem 1.5rem 2rem;
   overflow-y: auto;
+}
+
+.swelcome__set h2 {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin: 1.25rem 0 0.75rem;
+  font-family: var(--h-font);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--h-muted);
+}
+
+.swelcome__set h2 span {
+  font-weight: 500;
+  color: var(--h-dim);
+}
+
+.swelcome__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(13.5rem, 1fr));
+  gap: 0.875rem;
+}
+
+.swelcome__none {
+  margin: 3rem 0;
+  text-align: center;
+  color: var(--h-muted);
+}
+
+/* The chosen deck, beside the list: art, blurb, curve and every card. */
+.sdetail {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  width: 24rem;
+  min-height: 0;
+  border-left: 0.0625rem solid var(--h-line);
+  background: rgba(0, 0, 0, 0.35);
+}
+
+.sdetail__banner {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  padding: 6.5rem 1.25rem 1.125rem;
+  background:
+    linear-gradient(to bottom, transparent 10%, rgba(11, 12, 14, 0.96) 85%),
+    var(--art) center 25% / cover no-repeat;
+}
+
+.sdetail__banner .spip-row {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+}
+
+.sdetail__set {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--h-muted);
+}
+
+.sdetail__banner h2 {
+  margin: 0;
+  font-family: var(--h-font);
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  color: #fff;
+}
+
+.sdetail__banner p {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--h-muted);
+}
+
+.sdetail__all {
+  align-self: flex-start;
+  margin-top: 0.5rem;
+}
+
+.sdetail .decklist {
+  flex: 1;
+  width: auto;
+  min-height: 0;
+  border-left: 0;
+  background: none;
 }
 
 .swelcome__bar {

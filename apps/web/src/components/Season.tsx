@@ -31,8 +31,12 @@ import type { SavedGame } from '../game/saved.ts';
 import { useGame } from '../game/useGame.ts';
 import { artFor, BLURBS } from '../game/deckArt.ts';
 import { deckStrength } from '../game/deckStrength.ts';
+import { type DeckEntry, useDeckEntries } from '../game/deckView.ts';
+import { ruleNotes } from '../game/notes.ts';
 import { Board } from './Board.tsx';
-import { DeckBuilder } from './DeckBuilder.tsx';
+import { DeckBuilder, setLabel } from './DeckBuilder.tsx';
+import { DeckList, DeckView } from './DeckView.tsx';
+import { HoverPreview, type HoverState } from './Preview.tsx';
 import { ErrorBoundary } from './ErrorBoundary.tsx';
 import { BoosterReveal, wildcardName } from './PackOpening.tsx';
 import { UiSize } from './UiSize.tsx';
@@ -627,6 +631,18 @@ function RenameDialog({
 
 /* ---------------------------------------------------------------- welcome */
 
+const COLOR_ORDER: Color[] = ['W', 'U', 'B', 'R', 'G'];
+const COLOR_NAMES: Record<Color, string> = {
+  W: 'White',
+  U: 'Blue',
+  B: 'Black',
+  R: 'Red',
+  G: 'Green',
+};
+const setOf = (d: Decklist) => d.set ?? 'fdn';
+/** The starter decks by set, in the order the store sells them. */
+const STARTER_SETS = [...new Set(SEASON_STARTERS.map(setOf))];
+
 function SeasonWelcome({
   mode,
   save,
@@ -647,8 +663,34 @@ function SeasonWelcome({
   const [name, setName] = useState(
     mode === 'reset' ? save!.name : mode === 'first' ? 'My Season' : '',
   );
+  const [set, setSet] = useState<string | null>(null);
+  const [colors, setColors] = useState<Color[]>([]);
   const [viewing, setViewing] = useState(false);
   const deck = SEASON_STARTERS.find((d) => d.id === starter)!;
+  const shown = SEASON_STARTERS.filter(
+    (d) => (!set || setOf(d) === set) && colors.every((c) => d.colors.includes(c)),
+  );
+  // By set while browsing everything; a colour search is one grid, each tile naming its set.
+  const flat = colors.length > 0 && !set;
+  const groups = flat
+    ? [{ code: null, decks: shown }]
+    : STARTER_SETS.map((code) => ({
+        code,
+        decks: shown.filter((d) => setOf(d) === code),
+      })).filter((g) => g.decks.length);
+  const toggleColor = (c: Color) =>
+    setColors((cs) => (cs.includes(c) ? cs.filter((x) => x !== c) : [...cs, c]));
+
+  if (viewing)
+    return (
+      <DeckView
+        deck={deck}
+        backLabel="Starter decks"
+        playLabel="Choose this deck"
+        onBack={() => setViewing(false)}
+        onPlay={() => setViewing(false)}
+      />
+    );
   return (
     <div className="swelcome">
       <div className="swelcome__wash" style={{ backgroundImage: `url("${artFor(deck)}")` }} />
@@ -656,28 +698,86 @@ function SeasonWelcome({
         <button className="hbtn hbtn--ghost" onClick={onCancel}>
           {mode === 'first' ? 'Home' : 'Cancel'}
         </button>
+        <div className="swelcome__title">
+          <span className="stag">{mode === 'reset' ? 'Reset save' : 'Season'}</span>
+          <h1>{mode === 'reset' ? `Start ${save!.name} over` : 'Choose your first deck'}</h1>
+        </div>
         <UiSize />
       </header>
-      <div className="swelcome__title">
-        <span className="stag">{mode === 'reset' ? 'Reset save' : 'Season'}</span>
-        <h1>{mode === 'reset' ? `Start ${save!.name} over` : 'Choose your first deck'}</h1>
-        <p>
-          {mode === 'reset'
-            ? 'This save’s collection, coins, decks and unfinished match are erased. Other saves are kept.'
-            : 'Its 60 cards start your collection, with 400 coins to spend on packs. Win matches to earn more, and build your own decks as your collection grows.'}
-        </p>
-      </div>
-      <div className="swelcome__decks" role="radiogroup" aria-label="Starter deck">
-        {SEASON_STARTERS.map((d, i) => (
-          <DeckTile
-            key={d.id}
-            deck={d}
-            index={i}
-            sub={BLURBS[d.id] ?? ''}
-            selected={d.id === starter}
-            onClick={() => setStarter(d.id)}
-          />
-        ))}
+      <p className="swelcome__lede">
+        {mode === 'reset'
+          ? 'This save’s collection, coins, decks and unfinished match are erased. Other saves are kept.'
+          : 'Its 60 cards start your collection, with 400 coins to spend on packs. Win matches to earn more, and build your own decks as your collection grows.'}
+      </p>
+      <div className="swelcome__body">
+        <section className="swelcome__browse" aria-label="Starter decks">
+          <div className="swelcome__filters">
+            <div className="schips" role="group" aria-label="Set">
+              <button
+                className={`schip ${set === null ? 'is-on' : ''}`}
+                onClick={() => setSet(null)}
+              >
+                All sets <span>{SEASON_STARTERS.length}</span>
+              </button>
+              {STARTER_SETS.map((code) => (
+                <button
+                  key={code}
+                  className={`schip ${set === code ? 'is-on' : ''}`}
+                  aria-pressed={set === code}
+                  onClick={() => setSet(set === code ? null : code)}
+                >
+                  {setLabel(code)}{' '}
+                  <span>{SEASON_STARTERS.filter((d) => setOf(d) === code).length}</span>
+                </button>
+              ))}
+            </div>
+            <div className="scolors" role="group" aria-label="Colours">
+              {COLOR_ORDER.map((c) => (
+                <button
+                  key={c}
+                  className={`scolor ${colors.includes(c) ? 'is-on' : ''}`}
+                  aria-pressed={colors.includes(c)}
+                  aria-label={COLOR_NAMES[c]}
+                  title={COLOR_NAMES[c]}
+                  onClick={() => toggleColor(c)}
+                >
+                  <span className={`pip pip--${c}`} />
+                </button>
+              ))}
+            </div>
+          </div>
+          <div className="swelcome__decks" role="radiogroup" aria-label="Starter deck">
+            {groups.map((g) => (
+              <section key={g.code ?? 'all'} className="swelcome__set">
+                <h2>
+                  {g.code ? setLabel(g.code) : colors.map((c) => COLOR_NAMES[c]).join(' and ')}
+                  <span>{g.decks.length}</span>
+                </h2>
+                <div className="swelcome__grid">
+                  {g.decks.map((d, i) => (
+                    <DeckTile
+                      key={d.id}
+                      deck={d}
+                      index={i}
+                      sub={flat ? setLabel(setOf(d)) : (BLURBS[d.id] ?? '')}
+                      selected={d.id === starter}
+                      onClick={() => setStarter(d.id)}
+                    />
+                  ))}
+                </div>
+              </section>
+            ))}
+            {!groups.length && (
+              <p className="swelcome__none">
+                No starter deck has all of those colours.{' '}
+                <button className="slink" onClick={() => setColors([])}>
+                  Clear colours
+                </button>
+              </p>
+            )}
+          </div>
+        </section>
+        <StarterDetail key={deck.id} deck={deck} onViewAll={() => setViewing(true)} />
       </div>
       <form
         className="swelcome__bar"
@@ -693,9 +793,6 @@ function SeasonWelcome({
             ))}
           </span>
           <strong>{deck.name}</strong>
-          <button type="button" className="slink" onClick={() => setViewing(true)}>
-            View decklist
-          </button>
         </div>
         {mode !== 'reset' && (
           <label className="swelcome__name">
@@ -727,19 +824,39 @@ function SeasonWelcome({
           {mode === 'reset' ? 'Erase and start over' : 'Start Season'}
         </button>
       </form>
-      {viewing && (
-        <Modal title={deck.name} onClose={() => setViewing(false)}>
-          <ul className="slist">
-            {deck.cards.map(([card, n]) => (
-              <li key={card}>
-                <span className="slist__n">{n}</span>
-                <span className="slist__name">{card}</span>
-              </li>
-            ))}
-          </ul>
-        </Modal>
-      )}
     </div>
+  );
+}
+
+/** The chosen starter deck: its art and blurb, the mana curve and every card, previewed on hover. */
+function StarterDetail({ deck, onViewAll }: { deck: Decklist; onViewAll: () => void }) {
+  const entries = useDeckEntries(deck);
+  const [hover, setHoverState] = useState<HoverState | null>(null);
+  const setHover = (e: DeckEntry | null, anchor?: Element) =>
+    setHoverState(
+      e ? { defId: e.defId ?? slug(e.name), anchor: anchor ?? null, image: e.image } : null,
+    );
+  return (
+    <aside className="sdetail" aria-label={`${deck.name} decklist`}>
+      <div
+        className="sdetail__banner"
+        style={{ '--art': `url("${artFor(deck)}")` } as CSSProperties}
+      >
+        <span className="spip-row">
+          {deck.colors.map((c) => (
+            <span key={c} className={`pip pip--${c}`} />
+          ))}
+        </span>
+        <span className="sdetail__set">{setLabel(setOf(deck))}</span>
+        <h2>{deck.name}</h2>
+        {BLURBS[deck.id] && <p>{BLURBS[deck.id]}</p>}
+        <button type="button" className="hbtn hbtn--ghost sdetail__all" onClick={onViewAll}>
+          View all cards
+        </button>
+      </div>
+      <DeckList entries={entries} onHover={setHover} />
+      <HoverPreview hover={hover} notes={hover ? ruleNotes(hover.defId) : []} />
+    </aside>
   );
 }
 

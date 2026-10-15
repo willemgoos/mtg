@@ -85,7 +85,7 @@ const SET_NAMES: Record<string, string> = {
   hob: 'The Hobbit',
   ltr: 'The Lord of the Rings',
 };
-const setLabel = (code: string) => SET_NAMES[code] ?? code.toUpperCase();
+export const setLabel = (code: string) => SET_NAMES[code] ?? code.toUpperCase();
 
 /** Small preferences, remembered between visits (when storage is available). */
 const PREFS = 'mtg.deckBuilder.';
