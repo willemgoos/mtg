@@ -1,7 +1,8 @@
 import { cardDb, scryfallById, TOKEN_ART } from '@mtg/cards';
-import type { CardDefId, ObjectId } from '@mtg/engine';
+import type { CardDefId, Keyword, ObjectId } from '@mtg/engine';
 import { type MouseEvent, useRef } from 'react';
 import { basicImage } from '../game/basicArt.ts';
+import { KeywordIcons } from './KeywordIcons.tsx';
 
 export type CardSize = 'hand' | 'field' | 'land' | 'stack' | 'preview' | 'mull';
 export type CardMark =
@@ -41,6 +42,8 @@ export interface CardProps {
   /** A planeswalker's loyalty (shown in the bottom corner like Arena). */
   loyalty?: number;
   sick?: boolean;
+  /** A creature's current keywords, shown as icons along the bottom of its frame. */
+  keywords?: Iterable<Keyword>;
   /** An Equipment attached to the creature before it. */
   attached?: boolean;
   /** Small labels: a Class's level, named counters (stun, finality). */
@@ -133,6 +136,7 @@ export function Card(p: CardProps) {
             {p.power}/{p.toughness! - (p.damage ?? 0)}
           </span>
         )}
+        {p.keywords && <KeywordIcons keywords={p.keywords} />}
         {!!p.counters && <span className="card__counters">+{p.counters}</span>}
         {p.loyalty !== undefined && <span className="card__loyalty">{p.loyalty}</span>}
         {!!p.tags?.length && (

@@ -59,9 +59,21 @@ export function Battlefield({
   h: ZoneHandlers;
 }) {
   const mine = view.battlefield.filter((id) => view.objects[id]!.controller === player);
+  // As on Arena: creatures (and what is attached to them) up front; lands, then other
+  // permanents (artifacts, enchantments, planeswalkers), in the back row.
+  const isCreature = (id: ObjectId) =>
+    getCharacteristics(view, cardDb, id).types.includes('Creature');
+  const upFront = (id: ObjectId) => {
+    const host = view.objects[id]!.attachedTo;
+    return isCreature(id) || (host !== undefined && mine.includes(host) && isCreature(host));
+  };
   const nonLands = withAttachments(
     view,
-    mine.filter((id) => !isLand(view, id)),
+    mine.filter((id) => !isLand(view, id) && upFront(id)),
+  );
+  const others = withAttachments(
+    view,
+    mine.filter((id) => !isLand(view, id) && !upFront(id)),
   );
   const lands = mine.filter((id) => isLand(view, id));
   const groups = new Map<CardDefId, ObjectId[]>();
@@ -105,6 +117,7 @@ export function Battlefield({
                   baseToughness: o.copyPT?.toughness ?? def?.toughness ?? 0,
                   damage: o.damage,
                   counters: o.plusOneCounters,
+                  keywords: c.keywords,
                 }
               : {})}
             // Reality Fracture (17c): a planeswalker's loyalty (the Jace token has no printed number to look at).
@@ -120,28 +133,58 @@ export function Battlefield({
 
   const landRow = (
     <div className="row row--lands">
-      {[...groups].map(([defId, ids]) => (
-        <div
-          className="land-stack"
-          key={defId}
-          style={{ '--n': ids.length } as React.CSSProperties}
-        >
-          {ids.map((id, i) => (
-            <Card
-              key={id}
-              id={id}
-              defId={defId}
-              size="land"
-              tapped={view.objects[id]!.tapped}
-              mark={h.markOf(id)}
-              style={{ '--i': i } as React.CSSProperties}
-              onClick={() => h.onCard(id)}
-              onHover={h.onHover}
-            />
-          ))}
-          {ids.length > 1 && <span className="land-stack__count">{ids.length}</span>}
-        </div>
-      ))}
+      {[...groups].map(([defId, ids]) => {
+        // Arena splits a name's lands into an untapped and a tapped pile. One element
+        // holds both, so a land that taps slides across (and turns) instead of remounting.
+        const nu = ids.filter((id) => !view.objects[id]!.tapped).length;
+        const nt = ids.length - nu;
+        let u = 0;
+        let t = 0;
+        return (
+          <div
+            className="land-stack"
+            key={defId}
+            style={{ '--nu': nu, '--nt': nt, '--a': +!!nu, '--b': +!!nt } as React.CSSProperties}
+          >
+            {ids.map((id) => {
+              const tapped = !!view.objects[id]!.tapped;
+              return (
+                <Card
+                  key={id}
+                  id={id}
+                  defId={defId}
+                  size="land"
+                  tapped={tapped}
+                  mark={h.markOf(id)}
+                  style={{ '--i': tapped ? t++ : u++, '--t': +tapped } as React.CSSProperties}
+                  onClick={() => h.onCard(id)}
+                  onHover={h.onHover}
+                />
+              );
+            })}
+            {nu > 1 && <span className="land-stack__count">×{nu}</span>}
+            {nt > 1 && <span className="land-stack__count land-stack__count--tapped">×{nt}</span>}
+          </div>
+        );
+      })}
+      {others.map((id) => {
+        const o = view.objects[id]!;
+        const def = cardDb.get(o.defId);
+        return (
+          <Card
+            key={id}
+            id={id}
+            defId={o.defId}
+            size="land"
+            tapped={o.tapped}
+            mark={h.markOf(id)}
+            {...(def?.types.includes('Planeswalker') ? { loyalty: o.counters?.loyalty ?? 0 } : {})}
+            tags={cardTags(o, def, view)}
+            onClick={() => h.onCard(id)}
+            onHover={h.onHover}
+          />
+        );
+      })}
     </div>
   );
 
