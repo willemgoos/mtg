@@ -166,6 +166,17 @@ workshop.
 
 ## Decision log
 
+### 2026-10-15 — Matchmaking by deck strength implemented
+
+`apps/web/src/game/deckStrength.ts` scores a deck 0–100 from card quality (60,
+the average Limited rating of its non-land cards), removal (20), rares and mythics
+(10) and curve (10). Season picks opponents from the 60-card starter and Color
+Challenge decks on a bell curve around the player's score (spread 8) with a small
+floor, so any deck can still turn up. The identical list is excluded, since it
+would otherwise be the likeliest pick. Opponent scores currently run from 23 to 84
+(median 55); the Foundations starters score 31–59. The deck editor shows the score
+and its parts. Weights still need playtesting.
+
 ### 2026-09-30 — Phase 3 implemented
 
 Delivered the shop, eight-reward pack sampler/reveal, wildcard tracks, Vault claims,

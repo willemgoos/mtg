@@ -200,6 +200,7 @@ export function DeckBuilder({
   min,
   tips = [],
   tools,
+  extraStats,
   onAdd,
   onRemove,
   onBuildPair,
@@ -223,6 +224,8 @@ export function DeckBuilder({
   tips?: readonly string[];
   /** Extra buttons for the top bar, e.g. a mode's "Suggest a deck". */
   tools?: ReactNode;
+  /** A mode's own line under the deck stats, e.g. Season's deck strength. */
+  extraStats?: ReactNode;
   onAdd: (name: string) => void;
   onRemove: (name: string) => void;
   /** Builds a whole deck in this colour pair (a mode's own deck builder). Without it, colour advice only shows cards. */
@@ -930,6 +933,7 @@ export function DeckBuilder({
               ))}
             </div>
           )}
+          {extraStats}
         </div>
 
         <div className="dbk__tabs">

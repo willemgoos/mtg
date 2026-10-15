@@ -28,8 +28,8 @@ describe('Season playable match integration', () => {
     expect(new Set(opponents).size).toBeGreaterThan(45);
     // Constructed like yours: never a 40-card Jump In pair.
     expect(opponents.filter((id) => id.startsWith('jump-in:'))).toEqual([]);
-    // Every deck equally likely: the five Color Challenge decks are about 5% of
-    // matches, not the third they took when weighted as a group.
+    // Picked by deck strength, not by group: the five Color Challenge decks no
+    // longer take the third of matches they had when weighted as a group.
     const challenges = opponents.filter((id) => findDeck(id)!.series === 'colorChallenge');
     expect(challenges.length).toBeLessThan(45);
     for (const s of samples) expect(s.match!.decks.p2.length).toBeGreaterThanOrEqual(60);

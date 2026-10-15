@@ -30,6 +30,7 @@ import { packGenerator } from '../game/seasonPacks.ts';
 import type { SavedGame } from '../game/saved.ts';
 import { useGame } from '../game/useGame.ts';
 import { artFor, BLURBS } from '../game/deckArt.ts';
+import { deckStrength } from '../game/deckStrength.ts';
 import { Board } from './Board.tsx';
 import { DeckBuilder } from './DeckBuilder.tsx';
 import { ErrorBoundary } from './ErrorBoundary.tsx';
@@ -275,10 +276,11 @@ export function Season({ onHome }: { onHome: () => void }) {
       <BoosterReveal
         key={receipt.packId}
         set={
-          (['blb', 'msh', 'fin', 'stx', 'sos', 'fra', 'ecl', 'tdm', 'hob', 'ltr'] as const).find((set) =>
-            receipt.rewards.some(
-              (r) => r.kind === 'card' && SEASON_CARDS.get(r.cardId)?.set === set,
-            ),
+          (['blb', 'msh', 'fin', 'stx', 'sos', 'fra', 'ecl', 'tdm', 'hob', 'ltr'] as const).find(
+            (set) =>
+              receipt.rewards.some(
+                (r) => r.kind === 'card' && SEASON_CARDS.get(r.cardId)?.set === set,
+              ),
           ) ?? 'fdn'
         }
         cards={receipt.rewards.map((r) =>
@@ -1038,10 +1040,44 @@ function SeasonEditor({
           )}
         </>
       }
+      extraStats={<StrengthStat cards={deck.cards} />}
       onAdd={(card) => move(card, 1)}
       onRemove={(card) => move(card, -1)}
       onDone={onBack}
     />
+  );
+}
+
+/** The deck's strength score and its parts; Season picks opponents near it. */
+function StrengthStat({ cards }: { cards: Counts }) {
+  const s = deckStrength(cards);
+  const parts: [string, number, number][] = [
+    ['Card quality', s.quality, 60],
+    ['Removal', s.removal, 20],
+    ['Rares', s.rares, 10],
+    ['Curve', s.curve, 10],
+  ];
+  return (
+    <div className="sstrength">
+      <span className="sstrength__head">
+        Deck strength <strong>{s.score}</strong> / 100
+      </span>
+      <span className="dbk__meter">
+        <i style={{ width: `${s.score}%` }} />
+      </span>
+      <dl className="sstrength__parts">
+        {parts.map(([part, points, max]) => (
+          <div key={part}>
+            <dt>{part}</dt>
+            <dd>
+              {Math.round(points)}
+              <small> / {max}</small>
+            </dd>
+          </div>
+        ))}
+      </dl>
+      <span className="sstrength__note">Opponents are matched to this score.</span>
+    </div>
   );
 }
 

@@ -447,16 +447,13 @@ export const TROPHY_DECKS: readonly Decklist[] = PLAYABLE_DECKS.filter(
 /** Every deck a bot can play. */
 export const OPPONENT_DECKS: readonly Decklist[] = OPPONENT_GROUPS.flatMap(([, d]) => d);
 
-/** The 60-card opponents, for constructed play like Season: no 40-card Jump In pairs. */
+/**
+ * The 60-card opponents, for constructed play like Season: no 40-card Jump In
+ * pairs. Season picks from them by deck strength (apps/web deckStrength.ts).
+ */
 export const CONSTRUCTED_OPPONENT_DECKS: readonly Decklist[] = OPPONENT_GROUPS.filter(
   ([, d]) => d !== JUMP_IN_DECKS,
 ).flatMap(([, d]) => d);
-
-/**
- * One group, so every 60-card deck is equally likely. Weighted like
- * OPPONENT_GROUPS, the five Color Challenge decks would take a third of matches.
- */
-const CONSTRUCTED_GROUPS: typeof OPPONENT_GROUPS = [[1, CONSTRUCTED_OPPONENT_DECKS]];
 
 /**
  * A bot's deck id, never the same as `you`. `int(n)` is the caller's random
@@ -470,15 +467,6 @@ export function pickOpponent(
   met: readonly string[] = [],
 ): string {
   return pickFrom(OPPONENT_GROUPS, int, you, met);
-}
-
-/** Like `pickOpponent`, but only from the 60-card decks. */
-export function pickConstructedOpponent(
-  int: (n: number) => number,
-  you?: string,
-  met: readonly string[] = [],
-): string {
-  return pickFrom(CONSTRUCTED_GROUPS, int, you, met);
 }
 
 function pickFrom(
