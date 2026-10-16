@@ -1195,6 +1195,82 @@
   color: var(--h-muted);
 }
 
+/* Salvage: spare copies fill a meter that pays wildcards (as in Expedition). */
+.ssalvage {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.625rem 1rem;
+  margin: 0 0 1rem;
+  padding: 0.75rem 1rem;
+  border-radius: var(--h-radius);
+  background: rgba(255, 255, 255, 0.03);
+  box-shadow: inset 0 0 0 0.0625rem var(--h-line);
+}
+
+.ssalvage.is-on {
+  background: rgba(244, 177, 62, 0.07);
+  box-shadow: inset 0 0 0 0.0625rem rgba(244, 177, 62, 0.4);
+}
+
+.ssalvage__meter {
+  flex: none;
+  width: 8rem;
+  height: 0.5rem;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.ssalvage__meter span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--h-accent);
+  transition: width 0.3s;
+}
+
+.ssalvage__text {
+  flex: 1;
+  min-width: 16rem;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--h-muted);
+}
+
+.ssalvage__text strong {
+  color: var(--h-text);
+}
+
+.ssalvage__text .wildcard-icon,
+.ssalvage__text svg {
+  vertical-align: -0.125rem;
+}
+
+.ssalvage__hint {
+  margin: -0.5rem 0 1rem;
+}
+
+.scard.is-locked {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.scard__spare {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  translate: -50% 0;
+  padding: 0.0625rem 0.5rem;
+  border-radius: 0.375rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+  color: #111;
+  background: var(--h-accent);
+  box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.5);
+}
+
 .stoast {
   margin: 0 0 1rem;
   padding: 0.625rem 0.875rem;

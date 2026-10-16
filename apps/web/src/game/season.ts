@@ -16,6 +16,7 @@ import {
   SCRYFALL,
   slug,
 } from '@mtg/cards';
+import { RARE_EVERY, SALVAGE_METER, SALVAGE_POINTS } from './expedition.ts';
 import {
   createEngine,
   createRng,
@@ -140,6 +141,10 @@ export interface SeasonSave {
   } | null;
   /** Optional for Phase 1/2 saves; initialized on their first new pack opening. */
   wildcardMisses?: WildcardMisses;
+  /** Salvage points toward the next wildcard (absent on saves from before salvage). */
+  salvage?: number;
+  /** Salvage meters filled so far; every third pays a rare wildcard, as in Expedition. */
+  salvageFills?: number;
   rng: RngState;
   nextPackId: number;
   nextMatchId: number;
@@ -390,6 +395,40 @@ export function craftSeasonCard(save: SeasonSave, id: string, now: number): Seas
   const next = draft(save, now);
   next.wildcards[rarity]--;
   grantCard(next, id);
+  return next;
+}
+/** Copies of a card that no deck uses: the ones salvage can break down. */
+export function spareCopies(save: SeasonSave, id: string): number {
+  const used = Math.max(0, ...save.decks.map((d) => d.cards[id] ?? 0));
+  return Math.max(0, (save.collection[id] ?? 0) - used);
+}
+/** Which wildcard the next full salvage meter pays. */
+export const nextSalvageWildcard = (save: SeasonSave): Rarity =>
+  ((save.salvageFills ?? 0) + 1) % RARE_EVERY === 0 ? 'rare' : 'uncommon';
+/**
+ * Breaks down one spare copy, Expedition's way: it fills the salvage meter by its rarity, and a
+ * full meter pays an uncommon wildcard (every third a rare). Copies a deck uses are kept, so
+ * salvage never breaks a deck.
+ */
+export function salvageSeasonCard(save: SeasonSave, id: string, now: number): SeasonSave {
+  const card = collectible(id);
+  requireSeason(!isBasic(id), 'Basic lands are unlimited');
+  requireSeason(spareCopies(save, id) > 0, 'No spare copy: every copy is in a deck');
+  const points = SALVAGE_POINTS[card.rarity];
+  requireSeason(points, 'Cannot salvage this card');
+  const next = draft(save, now);
+  const left = next.collection[id]! - 1;
+  if (left) next.collection[id] = left;
+  else delete next.collection[id];
+  let meter = (next.salvage ?? 0) + points;
+  let fills = next.salvageFills ?? 0;
+  while (meter >= SALVAGE_METER) {
+    meter -= SALVAGE_METER;
+    fills++;
+    addWildcard(next, fills % RARE_EVERY === 0 ? 'rare' : 'uncommon');
+  }
+  next.salvage = meter;
+  next.salvageFills = fills;
   return next;
 }
 /** Sampler must resolve rare/mythic duplicate protection before returning slots. */

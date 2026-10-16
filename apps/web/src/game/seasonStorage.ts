@@ -1,3 +1,4 @@
+import { SALVAGE_METER } from './expedition.ts';
 import {
   collectible,
   createSeasonSave,
@@ -138,6 +139,11 @@ export function validateSeasonSave(value: unknown): SeasonSave {
       requireSeason((misses[key] as number) < max, 'Invalid wildcard misses');
     }
   }
+  if (s.salvage !== undefined) {
+    natural(s.salvage);
+    requireSeason(s.salvage < SALVAGE_METER, 'Invalid salvage meter');
+  }
+  if (s.salvageFills !== undefined) natural(s.salvageFills);
   const tracks = record(s.tracks);
   for (const key of ['uncommon', 'rareMythic', 'rareRewards']) natural(tracks[key]);
   requireSeason(

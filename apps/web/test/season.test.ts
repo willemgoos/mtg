@@ -17,15 +17,20 @@ import {
   SEASON_STARTERS,
   SEASON_CARDS,
   copyLimit,
+  salvageSeasonCard,
   selectSeasonDeck,
+  spareCopies,
   type PackGenerator,
   type PackReward,
   type Rarity,
+  type SeasonSave,
 } from '../src/game/season.ts';
+import { validateSeasonSave } from '../src/game/seasonStorage.ts';
 import { passToTurn } from './seasonFixtures.ts';
 
 const starter = SEASON_STARTERS[0]!.id;
 const opponent = SEASON_STARTERS[1]!.id;
+const isBasicId = (id: string) => SEASON_CARDS.get(id)?.typeLine.startsWith('Basic') ?? false;
 const fresh = () => createSeasonSave('save-a', 'My Season', starter, 7, 100);
 const engine = createEngine(cardDb);
 const cardOf = (rarity: Rarity) =>
@@ -219,6 +224,61 @@ describe('Season collection and economy', () => {
     expect(save.vaultPoints).toBe(6);
     expect(save.wildcards).toEqual({ common: 0, uncommon: 6, rare: 4, mythic: 2 });
     expect(() => claimSeasonVault(save, 105)).toThrow('not ready');
+  });
+});
+
+describe('Season salvage', () => {
+  /** A save that owns `n` copies of `id` that no deck uses. */
+  const withSpare = (id: string, n: number) => {
+    const s = fresh();
+    s.collection[id] = n;
+    return s;
+  };
+
+  it('breaks down spare copies into meter points and pays wildcards like Expedition', () => {
+    const rare = cardOf('rare');
+    let s = withSpare(rare, 4);
+    s = salvageSeasonCard(s, rare, 101);
+    s = salvageSeasonCard(s, rare, 102);
+    expect(s.collection[rare]).toBe(2);
+    expect(s.salvage).toBe(8);
+    expect(s.wildcards.uncommon).toBe(fresh().wildcards.uncommon);
+    s = salvageSeasonCard(s, rare, 103);
+    // 12 points: one meter filled, 2 carried over.
+    expect(s.salvage).toBe(2);
+    expect(s.salvageFills).toBe(1);
+    expect(s.wildcards.uncommon).toBe(fresh().wildcards.uncommon + 1);
+    s = salvageSeasonCard(s, rare, 104);
+    expect(s.collection[rare]).toBeUndefined();
+    expect(() => validateSeasonSave(s)).not.toThrow();
+  });
+
+  it('pays a rare wildcard every third meter', () => {
+    const mythic = cardOf('mythic');
+    let s: SeasonSave = { ...withSpare(mythic, 4), salvage: 0, salvageFills: 1 };
+    s = salvageSeasonCard(s, mythic, 101);
+    s = salvageSeasonCard(s, mythic, 102);
+    // 16 points fill the second meter (an uncommon wildcard)...
+    expect(s.wildcards.uncommon).toBe(fresh().wildcards.uncommon + 1);
+    s = salvageSeasonCard(s, mythic, 103);
+    // ...and the third (6 + 8 = 14 points) fills the third meter: a rare one.
+    expect(s.salvageFills).toBe(3);
+    expect(s.salvage).toBe(4);
+    expect(s.wildcards.rare).toBe(fresh().wildcards.rare + 1);
+  });
+
+  it('keeps every copy a deck uses', () => {
+    const s = fresh();
+    const [id, n] = Object.entries(s.decks[0]!.cards).find(([c]) => !isBasicId(c))!;
+    expect(spareCopies(s, id)).toBe(s.collection[id]! - n);
+    if (!spareCopies(s, id)) expect(() => salvageSeasonCard(s, id, 101)).toThrow('No spare copy');
+    const lands = Object.keys(s.decks[0]!.cards).find(isBasicId)!;
+    expect(() => salvageSeasonCard(s, lands, 101)).toThrow();
+  });
+
+  it('rejects a corrupt salvage meter', () => {
+    expect(() => validateSeasonSave({ ...fresh(), salvage: 10 })).toThrow('Invalid salvage meter');
+    expect(() => validateSeasonSave({ ...fresh(), salvage: -1 })).toThrow();
   });
 });
 

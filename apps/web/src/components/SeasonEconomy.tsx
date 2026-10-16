@@ -9,6 +9,9 @@ import {
   copyLimit,
   craftSeasonCard,
   isBasic,
+  nextSalvageWildcard,
+  salvageSeasonCard,
+  spareCopies,
   PACK_PRICE,
   RARITIES,
   SEASON_CARDS,
@@ -36,6 +39,7 @@ import {
   packsWith,
 } from '../game/seasonPacks.ts';
 import { type CardRole, cardRoles, ROLES } from '../game/cardRoles.ts';
+import { SALVAGE_METER, SALVAGE_POINTS } from '../game/expedition.ts';
 import { manaValue } from '../game/deckView.ts';
 import { rateCard } from '../game/limitedRating.ts';
 import { PACK_SET_NAMES, type PackSet } from '../game/expedition.ts';
@@ -848,7 +852,8 @@ export function SeasonCollection({
 }: Props & { compact?: boolean; onStore?: () => void }) {
   const start = compact ? 'all' : 'owned';
   const [query, setQuery] = useState('');
-  const [ownership, setOwnership] = useState<'all' | 'owned' | 'missing'>(start);
+  const [ownership, setOwnership] = useState<'all' | 'owned' | 'missing' | 'spare'>(start);
+  const [salvaging, setSalvaging] = useState(false);
   const [rarities, setRarities] = useState<ReadonlySet<string>>(new Set());
   const [colors, setColors] = useState<ReadonlySet<string>>(new Set());
   const [roles, setRoles] = useState<ReadonlySet<CardRole>>(new Set());
@@ -870,7 +875,10 @@ export function SeasonCollection({
       (!roles.size || [...roles].every((r) => f.roles.includes(r))) &&
       (!types.size || [...types].some((t) => c.typeLine.includes(t))) &&
       (!pack || f.packs.includes(pack)) &&
-      (ownership === 'all' || (ownership === 'owned') === (save.collection[id] ?? 0) > 0) &&
+      (ownership === 'all' ||
+        (ownership === 'spare'
+          ? spareCopies(save, id) > 0
+          : (ownership === 'owned') === (save.collection[id] ?? 0) > 0)) &&
       (!q || `${c.name} ${c.typeLine} ${c.oracleText}`.toLowerCase().includes(q)),
   );
   const cards =
@@ -897,6 +905,27 @@ export function SeasonCollection({
     .sort((a, b) => b.count - a.count);
   const packless = wanted.filter((f) => !f.packs.length).length;
   const owned = all.filter(({ id }) => (save.collection[id] ?? 0) > 0).length;
+  const meter = save.salvage ?? 0;
+  const payout = nextSalvageWildcard(save);
+  function salvage(id: string) {
+    const c = SEASON_CARDS.get(id)!;
+    const before = save.wildcards;
+    let after: SeasonSave | undefined;
+    if (
+      !update((s) => {
+        after = salvageSeasonCard(s, id, now(s));
+        return after;
+      }) ||
+      !after
+    )
+      return;
+    const won = RARITIES.find((r) => after!.wildcards[r] > before[r]);
+    setNotice(
+      won
+        ? `Salvaged ${c.name}. The meter filled: +1 ${won} wildcard.`
+        : `Salvaged ${c.name} (+${SALVAGE_POINTS[c.rarity]}). Salvage ${after.salvage ?? 0}/${SALVAGE_METER}.`,
+    );
+  }
   const chosenFacts = chosen ? all.find((f) => f.id === chosen) : undefined;
   const card = chosen ? collectible(chosen) : null;
   const count = chosen ? (save.collection[chosen] ?? 0) : 0;
@@ -947,9 +976,15 @@ export function SeasonCollection({
           ))}
         </div>
         <div className="seg" role="group" aria-label="Ownership">
-          {(['all', 'owned', 'missing'] as const).map((o) => (
+          {(['all', 'owned', 'missing', 'spare'] as const).map((o) => (
             <button key={o} aria-pressed={ownership === o} onClick={() => setOwnership(o)}>
-              {o === 'all' ? 'All' : o === 'owned' ? 'Owned' : 'Missing'}
+              {o === 'all'
+                ? 'All'
+                : o === 'owned'
+                  ? 'Owned'
+                  : o === 'missing'
+                    ? 'Missing'
+                    : 'Spare'}
             </button>
           ))}
         </div>
@@ -1089,6 +1124,35 @@ export function SeasonCollection({
           )}
         </div>
       )}
+      <div className={`ssalvage ${salvaging ? 'is-on' : ''}`}>
+        <div className="ssalvage__meter" aria-label={`Salvage ${meter} of ${SALVAGE_METER}`}>
+          <span style={{ width: `${(meter / SALVAGE_METER) * 100}%` }} />
+        </div>
+        <span className="ssalvage__text">
+          <strong>
+            Salvage {meter}/{SALVAGE_METER}
+          </strong>{' '}
+          · a full meter pays {payout === 'rare' ? 'a' : 'an'} <WildcardIcon rarity={payout} />{' '}
+          {payout} wildcard. Spare copies break down for common {SALVAGE_POINTS.common}, uncommon{' '}
+          {SALVAGE_POINTS.uncommon}, rare {SALVAGE_POINTS.rare}, mythic {SALVAGE_POINTS.mythic}.
+          Copies in a deck are kept.
+        </span>
+        <button
+          className={`hbtn ${salvaging ? 'hbtn--primary' : 'hbtn--ghost'}`}
+          aria-pressed={salvaging}
+          onClick={() => {
+            setSalvaging((v) => !v);
+            setNotice('');
+          }}
+        >
+          {salvaging ? 'Done salvaging' : 'Salvage cards'}
+        </button>
+      </div>
+      {salvaging && (
+        <p className="sfine ssalvage__hint">
+          Click a card to break down one spare copy. Cards with no spare are dimmed.
+        </p>
+      )}
       {notice && (
         <p className="stoast" role="status">
           {notice}
@@ -1097,12 +1161,19 @@ export function SeasonCollection({
       <div className="sgrid">
         {cards.map(({ id, card: c, rating }) => {
           const n = save.collection[id] ?? 0;
+          const spare = salvaging ? spareCopies(save, id) : 0;
           return (
             <button
               key={id}
-              className={`scard ${n ? '' : 'is-missing'}`}
-              aria-label={`${c.name}, ${c.rarity}, ${n} owned`}
+              className={`scard ${n ? '' : 'is-missing'} ${salvaging && !spare ? 'is-locked' : ''}`}
+              aria-label={
+                salvaging
+                  ? `Salvage ${c.name}, ${spare} spare`
+                  : `${c.name}, ${c.rarity}, ${n} owned`
+              }
+              disabled={salvaging && !spare}
               onClick={() => {
+                if (salvaging) return salvage(id);
                 setChosen(id);
                 setNotice('');
               }}
@@ -1115,6 +1186,11 @@ export function SeasonCollection({
               {sort === 'best' && (
                 <span className="scard__rating" title="Limited rating, 0 to 5">
                   {rating.toFixed(1)}
+                </span>
+              )}
+              {salvaging && spare > 0 && (
+                <span className="scard__spare">
+                  {spare} spare · +{SALVAGE_POINTS[c.rarity]}
                 </span>
               )}
               <OwnedPips id={id} count={n} />
@@ -1161,7 +1237,19 @@ export function SeasonCollection({
               )}
               <div className="scraft__own">
                 <OwnedPips id={chosen} count={count} />
-                <span>{count} owned</span>
+                <span>
+                  {count} owned
+                  {count > 0 && `, ${spareCopies(save, chosen)} spare`}
+                </span>
+                {spareCopies(save, chosen) > 0 && (
+                  <button
+                    className="hbtn hbtn--ghost"
+                    title="Break down one copy no deck uses"
+                    onClick={() => salvage(chosen)}
+                  >
+                    Salvage one (+{SALVAGE_POINTS[card.rarity]})
+                  </button>
+                )}
               </div>
               {error && (
                 <p role="alert" className="swarn">
