@@ -11,7 +11,8 @@ function createBot(kind: BotKind, decks: Record<PlayerId, CardDefId[]>, seed: nu
   if (kind === 'search')
     return createSearchBot(cardDb, decks, { seed, rollouts: 128, timeMs: 1500 });
   if (kind === 'heuristic') return createHeuristicBot(cardDb);
-  if (kind === 'easy') return createEasyBot(cardDb, { seed });
+  // The Novice makes level 4's mistakes (EASY_LEVELS says level 4 is roughly the Novice).
+  if (kind === 'easy') return createEasyBot(cardDb, { seed, ...EASY_LEVELS[3] });
   const level = EASY_LEVELS[Number(kind.slice('level'.length)) - 1];
   return createEasyBot(cardDb, { seed, ...level });
 }

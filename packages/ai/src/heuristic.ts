@@ -28,7 +28,7 @@ import {
   chooseScry,
   chooseSearch,
 } from './choices.ts';
-import { evaluate, lifeValue } from './evaluate.ts';
+import { creatureValue, evaluate, lifeValue } from './evaluate.ts';
 import {
   type Block,
   blockOptions,
@@ -45,6 +45,21 @@ import { type Bot, other, viewEngine } from './view.ts';
 const MARGIN = 0.05;
 /** A simulated outcome at least this good is a won game (see evaluate). */
 const WIN = 10000;
+/**
+ * Attack weights (exported so experiments can change them).
+ */
+export const ATTACK = {
+  /** How much of the life the opponent's crack-back would cost counts against tapping attackers. */
+  crackback: 0.5,
+  /**
+   * The chance a player with two or more lands open and a card in hand has a combat trick (less with one land
+   * open, none tapped out or with an empty hand). Players attack and block around open mana.
+   */
+  trick: 0.3,
+};
+
+/** The pump a feared combat trick gives (Giant Growth). */
+const TRICK_PUMP = 3;
 
 /**
  * One-ply lookahead bot: for each legal action it simulates to the end of the
@@ -276,11 +291,14 @@ function chooseManaFixer(
       })(),
   );
   if (fixers.length === 0) return undefined;
+  // Spells cast now: not a creature that waits for combat (the mana would be gone by then).
   const castable = (s: GameState) =>
     new Set(
       engine
         .getLegalActions(s, me)
-        .flatMap((a) => (a.type === 'castSpell' ? [a.card] : [])),
+        .flatMap((a) =>
+          a.type === 'castSpell' && !waitsForCombat(engine, s, me, a) ? [a.card] : [],
+        ),
     );
   const before = castable(view);
   for (const act of fixers) {
@@ -334,6 +352,27 @@ function chooseCycling(
   return undefined;
 }
 
+/**
+ * A creature spell to cast after combat instead of before it: players do that so the opponent blocks without seeing
+ * it. Only a creature that can't change this turn's combat (no haste, no triggered or static ability: an enters trigger
+ * or an anthem could), cast as the creature (not an Omen's other face or another way of casting), and only before an
+ * attack we can make. The evaluation can't tell the difference, so the bot waits by rule.
+ */
+function waitsForCombat(engine: Engine, view: GameState, me: PlayerId, a: Action): boolean {
+  if (a.type !== 'castSpell' || a.back || a.via) return false;
+  if (view.turn.activePlayer !== me || view.turn.step !== 'main1') return false;
+  const def = engine.db.get(view.objects[a.card]!.defId);
+  if (!def?.types.includes('Creature') || def.keywords.includes('haste')) return false;
+  if (def.abilities.some((x) => x.kind === 'triggered' || x.kind === 'static')) return false;
+  return view.battlefield.some((id) => {
+    const o = view.objects[id]!;
+    if (o.controller !== me || o.tapped || !engine.db.get(o.defId)?.types.includes('Creature'))
+      return false;
+    const k = getCharacteristics(view, engine.db, id).keywords;
+    return !k.has('defender') && (!o.summoningSick || k.has('haste'));
+  });
+}
+
 function choosePriorityAction(
   engine: Engine,
   view: GameState,
@@ -360,6 +399,7 @@ function choosePriorityAction(
       // Tarkir: Dragonstorm (19a): harmonize taps a creature, which the evaluation can't see: never before our own attack.
       !(beforeOurAttack && a.type === 'castSpell' && a.harmonizeTap) &&
       !isLastCardsDraw(engine, view, me, a) &&
+      !waitsForCombat(engine, view, me, a) &&
       ((a.type === 'castSpell' &&
         !(
           beforeOurAttack &&
@@ -427,11 +467,62 @@ function crackbackPenalty(engine: Engine, s: GameState, me: PlayerId): number {
   }
   const life = s.players[me].life;
   if (unblocked >= life) return 300;
-  return 0.5 * (lifeValue(life) - lifeValue(life - unblocked));
+  return ATTACK.crackback * (lifeValue(life) - lifeValue(life - unblocked));
 }
 
 /** Where attackers go when not at the player: attacker id to the planeswalker it attacks (Reality Fracture 17c). */
 export type WalkerAttacks = ReadonlyMap<ObjectId, ObjectId>;
+
+/** The chance `p` has a combat trick ready (see ATTACK.trick). */
+function trickChance(engine: Engine, view: GameState, p: PlayerId): number {
+  if (view.players[p].hand.length === 0) return 0;
+  const open = view.battlefield.filter((id) => {
+    const o = view.objects[id]!;
+    return o.controller === p && !o.tapped && !!engine.db.get(o.defId)?.types.includes('Land');
+  }).length;
+  return ATTACK.trick * Math.min(1, open / 2);
+}
+
+/**
+ * What a combat trick from `trickster` could cost `me`: the most valuable of our creatures that a pumped creature
+ * of theirs would kill in this combat and that survives it as simulated (one trick kills one creature; ones the
+ * simulation already loses aren't counted twice). `exposed` lists our creatures and the creatures of theirs they meet.
+ */
+function trickRisk(
+  engine: Engine,
+  view: GameState,
+  sim: GameState,
+  me: PlayerId,
+  exposed: { id: ObjectId; by: ObjectId[] }[],
+): number {
+  if (sim.winner) return 0;
+  const chance = trickChance(engine, view, other(me));
+  if (chance === 0) return 0;
+  let worst = 0;
+  for (const { id, by } of exposed) {
+    if (sim.objects[id]?.zone !== 'battlefield' || sim.objects[id]!.controller !== me) continue;
+    const mine = combatStats(engine, view, id);
+    const killed = by.some((b) => {
+      const them = combatStats(engine, view, b);
+      return them.deathtouch || them.power + TRICK_PUMP >= mine.toughness;
+    });
+    if (killed) worst = Math.max(worst, creatureValue(sim, engine.db, id));
+  }
+  return chance * worst;
+}
+
+/** The opponent's untapped creatures that could block `attacker` (fliers only by fliers and reach). */
+function possibleBlockers(engine: Engine, view: GameState, attacker: ObjectId): ObjectId[] {
+  const owner = view.objects[attacker]!.controller;
+  const flying = getCharacteristics(view, engine.db, attacker).keywords.has('flying');
+  return view.battlefield.filter((id) => {
+    const o = view.objects[id]!;
+    if (o.controller === owner || o.tapped || !engine.db.get(o.defId)?.types.includes('Creature'))
+      return false;
+    const k = getCharacteristics(view, engine.db, id).keywords;
+    return !flying || k.has('flying') || k.has('reach');
+  });
+}
 
 function scoreAttack(
   engine: Engine,
@@ -452,7 +543,13 @@ function scoreAttack(
   };
   engine.applyActionInPlace(sim, { type: 'confirmAttackers', player: me }, { trusted: true });
   settle(engine, sim, 'combat');
-  return evaluate(sim, engine.db, me) - (sim.winner ? 0 : crackbackPenalty(engine, sim, me));
+  if (sim.winner) return evaluate(sim, engine.db, me);
+  const exposed = attackers.map((id) => ({ id, by: possibleBlockers(engine, view, id) }));
+  return (
+    evaluate(sim, engine.db, me) -
+    crackbackPenalty(engine, sim, me) -
+    trickRisk(engine, view, sim, me, exposed)
+  );
 }
 
 /** The planeswalkers `me`'s opponent controls. */
@@ -649,7 +746,18 @@ function scoreBlocks(engine: Engine, view: GameState, me: PlayerId, blocks: Bloc
   sim.decision = { kind: 'declareBlockers', player: me, declared: blocks.map((b) => ({ ...b })) };
   engine.applyActionInPlace(sim, { type: 'confirmBlockers', player: me }, { trusted: true });
   settle(engine, sim, 'combat');
-  return evaluate(sim, engine.db, me);
+  // A lost game scores the same however it is lost, so blocks planned one attacker at a time against a lethal attack
+  // would all tie and none be made. Losing by less is better, so the blocks that bring it back from lethal build up,
+  // and of those the ones that cost the least (the chump blocker worth least).
+  if (sim.winner && sim.winner !== me && sim.winner !== 'draw') {
+    sim.winner = null;
+    return -WIN + 10 * sim.players[me].life + evaluate(sim, engine.db, me);
+  }
+  const exposed = [...new Set(blocks.map((b) => b.blocker))].map((id) => ({
+    id,
+    by: blocks.filter((b) => b.blocker === id).map((b) => b.attacker),
+  }));
+  return evaluate(sim, engine.db, me) - trickRisk(engine, view, sim, me, exposed);
 }
 
 /**

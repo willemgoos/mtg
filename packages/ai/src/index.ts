@@ -3,6 +3,7 @@ export { viewEngine } from './view.ts';
 export { evaluate, creatureValue, lifeValue } from './evaluate.ts';
 export { settle, simulate, scoreAction, quickBlocks } from './simulate.ts';
 export {
+  ATTACK,
   createHeuristicBot,
   planAttacks,
   planAttackTargets,

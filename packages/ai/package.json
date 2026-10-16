@@ -9,7 +9,8 @@
   "scripts": {
     "typecheck": "tsc -p tsconfig.json",
     "arena": "tsx scripts/arena.ts",
-    "levels": "tsx scripts/levels.ts"
+    "levels": "tsx scripts/levels.ts",
+    "aggression": "tsx scripts/aggression.ts"
   },
   "dependencies": {
     "@mtg/engine": "workspace:*"

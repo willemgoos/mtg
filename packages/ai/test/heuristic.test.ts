@@ -49,8 +49,16 @@ describe('heuristic bot: spells', () => {
     expect(choose(g).type).toBe('passPriority');
   });
 
+  it('waits until after combat to cast a creature that cannot change it', () => {
+    const g = game({
+      p1: { hand: ['magnigoth-sentry'], battlefield: [...lands('forest', 4), 'bear-cub'] },
+    });
+    expect(choose(g).type).toBe('passPriority');
+  });
+
   it('casts creatures in its main phase', () => {
     const g = game({
+      step: 'main2',
       p1: { hand: ['bear-cub', 'magnigoth-sentry'], battlefield: lands('forest', 4) },
     });
     const taken = botActs(g, 'p1');
@@ -144,6 +152,22 @@ describe('heuristic bot: combat', () => {
     g.passBoth().attack(g.id('p1', 'fire-elemental')).passBoth();
     botActs(g, 'p2');
     expect(g.state.combat!.attackers[0]!.blockers).toHaveLength(1);
+  });
+
+  it('chump-blocks enough attackers to survive when no single block would', () => {
+    const g = game({
+      step: 'beginCombat',
+      p1: { battlefield: ['fire-elemental', 'fire-elemental', 'fire-elemental'] },
+      p2: { life: 8, battlefield: ['swab-goblin', 'swab-goblin', 'swab-goblin'] },
+    });
+    const attackers = g.state.battlefield.filter((id) => g.obj(id).controller === 'p1');
+    g.passBoth()
+      .attack(...attackers)
+      .passBoth();
+    botActs(g, 'p2');
+    // 15 damage at 8 life: one chump block leaves 10, two leave 5.
+    const blocked = g.state.combat!.attackers.filter((a) => a.blockers.length > 0);
+    expect(blocked.length).toBeGreaterThanOrEqual(2);
   });
 });
 

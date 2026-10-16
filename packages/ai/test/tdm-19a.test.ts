@@ -257,6 +257,8 @@ describe('bots and three-colour mana', () => {
 
   it('uses a Devotee to fix its colours when that lets it cast a spell', () => {
     const g = game({
+      // After combat: before it, a creature the Devotee could attack with waits for combat (and so does the fixing).
+      step: 'main2',
       p1: { hand: ['tricolour'], battlefield: ['plains', 'plains', 'mountain', 'devotee'] },
       p2: {},
     });
