@@ -3,7 +3,17 @@ import { EASY_LEVELS } from '../src/index.ts';
 
 describe('easy bot levels', () => {
   it('make fewer mistakes at every step', () => {
-    const keys = ['holdChance', 'skipAttackChance', 'skipBlockChance', 'skipLandChance'] as const;
+    const keys = [
+      'holdChance',
+      'skipAttackChance',
+      'skipBlockChance',
+      'flyerChance',
+      'badBlockChance',
+      'faceBurnChance',
+      'weakTargetChance',
+      'dropAttackerChance',
+      'badAttackChance',
+    ] as const;
     for (let i = 1; i < EASY_LEVELS.length; i++)
       for (const k of keys)
         expect(EASY_LEVELS[i]![k] ?? 0, `level ${i + 1} ${k}`).toBeLessThanOrEqual(
