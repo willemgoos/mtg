@@ -60,6 +60,25 @@ describe('Season playable match integration', () => {
     expect(recordSeasonAction(resolved, 1, action, 103)).toBe(resolved);
   });
 
+  it('replays from a cached prefix exactly as from the start, and not from a different game', () => {
+    const engine = createEngine(cardDb);
+    const begun = queueSeasonMatch(fresh(), 101);
+    const played = playRandomGame(engine, replaySeasonMatch(begun.match!).state, 5);
+    const upTo = (n: number) => ({ ...begun.match!, actions: played.actions.slice(0, n) });
+    const full = (n: number) => replaySeasonMatch(upTo(n), () => {});
+    for (const n of [40, 41, 80, 60, 81])
+      expect(replaySeasonMatch(structuredClone(upTo(n)))).toEqual(full(n));
+    // Same actions, different setup: the cache must not carry over.
+    const other = { ...upTo(40), seed: begun.match!.seed + 1 };
+    expect(replaySeasonMatch({ ...other, actions: [] })).toEqual(
+      replaySeasonMatch({ ...other, actions: [] }, () => {}),
+    );
+    // A changed earlier action is replayed from the start, so it is still checked.
+    const tampered = structuredClone(upTo(81));
+    tampered.actions[10] = { type: 'concede', player: 'p2' };
+    expect(() => replaySeasonMatch(tampered)).toThrow();
+  });
+
   it('commits a terminal action and its reward together, and restores an unpaid imported result', () => {
     const engine = createEngine(cardDb);
     const begun = queueSeasonMatch(fresh(), 101);

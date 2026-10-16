@@ -447,25 +447,57 @@ export function claimSeasonVault(save: SeasonSave, now: number): SeasonSave {
   return next;
 }
 
+/**
+ * Recent replays, so saving one more action replays only that action instead of the whole
+ * match (every action is saved, and each save checks the match several times). The engine is
+ * deterministic and never changes a state in place, so a replay that begins with the same
+ * setup and actions can carry on from where a cached one ended.
+ */
+interface Replayed {
+  setup: string;
+  actions: string[];
+  state: GameState;
+  playerTurnsBegun: number;
+}
+const replays: Replayed[] = [];
+const REPLAYS_KEPT = 8;
+
 /** Rebuild and validate a match without trusting imported opaque GameState. */
 export function replaySeasonMatch(
   match: SeasonMatch,
   onStep?: (state: GameState, events: GameEvent[]) => void,
 ) {
-  let state = engine.newGame({
-    decks: match.decks,
-    seed: match.seed,
-    startingPlayer: match.startingPlayer,
-    ...(match.smoothing ? { handSmoothing: ['p1', 'p2'] as const } : {}),
-  });
-  let playerTurnsBegun = state.turn.number > 0 && state.turn.activePlayer === 'p1' ? 1 : 0;
-  for (const action of match.actions) {
+  const setup = JSON.stringify([match.decks, match.seed, match.startingPlayer, !!match.smoothing]);
+  const actions = match.actions.map((a) => JSON.stringify(a));
+  // Events aren't kept, so a replay that reports each step starts from the beginning.
+  const from = onStep
+    ? undefined
+    : replays.find(
+        (r) =>
+          r.setup === setup &&
+          r.actions.length <= actions.length &&
+          r.actions.every((a, i) => a === actions[i]),
+      );
+  let state =
+    from?.state ??
+    engine.newGame({
+      decks: match.decks,
+      seed: match.seed,
+      startingPlayer: match.startingPlayer,
+      ...(match.smoothing ? { handSmoothing: ['p1', 'p2'] as const } : {}),
+    });
+  let playerTurnsBegun =
+    from?.playerTurnsBegun ?? (state.turn.number > 0 && state.turn.activePlayer === 'p1' ? 1 : 0);
+  for (const action of match.actions.slice(from?.actions.length ?? 0)) {
     const previousTurn = state.turn.number;
     const result = engine.applyAction(state, action);
     state = result.state;
     onStep?.(state, result.events);
     if (state.turn.number !== previousTurn && state.turn.activePlayer === 'p1') playerTurnsBegun++;
   }
+  if (from) replays.splice(replays.indexOf(from), 1);
+  replays.unshift({ setup, actions, state, playerTurnsBegun });
+  replays.length = Math.min(replays.length, REPLAYS_KEPT);
   return { state, playerTurnsBegun };
 }
 export function beginSeasonMatch(
