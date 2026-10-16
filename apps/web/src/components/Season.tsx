@@ -424,7 +424,13 @@ export function Season({ onHome }: { onHome: () => void }) {
           />
         )}
         {save && view === 'collection' && (
-          <SeasonCollection key={save.id} save={save} update={update} error={error} />
+          <SeasonCollection
+            key={save.id}
+            save={save}
+            update={update}
+            error={error}
+            onStore={() => setView('store')}
+          />
         )}
         {save && view === 'packs' && (
           <SeasonPacks

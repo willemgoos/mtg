@@ -1,4 +1,4 @@
-import { type Decklist, slug } from '@mtg/cards';
+import { type Decklist, type ScryfallCard, slug } from '@mtg/cards';
 import type { Color } from '@mtg/engine';
 import { type CSSProperties, type ReactNode, useEffect, useMemo, useRef, useState } from 'react';
 import {
@@ -14,6 +14,7 @@ import {
   SEASON_CARDS,
   SEASON_STARTERS,
   STARTER_PRICE,
+  type Counts,
   type Rarity,
   type SeasonPackKind,
   type SeasonSave,
@@ -32,7 +33,11 @@ import {
   SECRETS_SHEETS,
   STRIXHAVEN_ARCHIVE_SHEETS,
   STRIXHAVEN_SHEETS,
+  packsWith,
 } from '../game/seasonPacks.ts';
+import { type CardRole, cardRoles, ROLES } from '../game/cardRoles.ts';
+import { manaValue } from '../game/deckView.ts';
+import { rateCard } from '../game/limitedRating.ts';
 import { PACK_SET_NAMES, type PackSet } from '../game/expedition.ts';
 import { artFor, BLURBS } from '../game/deckArt.ts';
 import { packArt } from './PackOpening.tsx';
@@ -743,11 +748,6 @@ const group = (c: { colors: string[]; typeLine: string }) =>
       : c.colors.length
         ? ORDER.indexOf(c.colors[0]!)
         : 7;
-const manaValue = (cost: string) =>
-  [...cost.matchAll(/{([^}]+)}/g)].reduce(
-    (n, [, sym]) => n + (/^d+$/.test(sym!) ? Number(sym) : sym === 'X' ? 0 : 1),
-    0,
-  );
 const toggle = <T,>(set: ReadonlySet<T>, v: T) => {
   const next = new Set(set);
   if (!next.delete(v)) next.add(v);
@@ -782,38 +782,134 @@ function OwnedPips({ id, count }: { id: string; count: number }) {
   );
 }
 
-export function SeasonCollection({ save, update, error, compact }: Props & { compact?: boolean }) {
+/** Card types to filter by, as on Arena. */
+const TYPES = [
+  'Creature',
+  'Instant',
+  'Sorcery',
+  'Artifact',
+  'Enchantment',
+  'Planeswalker',
+  'Land',
+] as const;
+type Sort = 'collection' | 'best' | 'cost' | 'name';
+const SORTS: [Sort, string][] = [
+  ['collection', 'Collection order'],
+  ['best', 'Best first'],
+  ['cost', 'Mana value'],
+  ['name', 'Name'],
+];
+const packTitle = (kind: SeasonPackKind) => BOOSTERS.find((b) => b.kind === kind)?.title ?? kind;
+
+/** What the browser filters and sorts on, worked out once per card. */
+interface CardFacts {
+  id: string;
+  card: ScryfallCard;
+  roles: CardRole[];
+  packs: readonly SeasonPackKind[];
+  rating: number;
+  manaValue: number;
+}
+let facts: CardFacts[] | null = null;
+function allFacts(): CardFacts[] {
+  facts ??= [...SEASON_CARDS]
+    .filter(([id]) => !isBasic(id))
+    .map(([id, card]) => ({
+      id,
+      card,
+      roles: cardRoles(card),
+      packs: packsWith(id),
+      rating: rateCard(card.name),
+      manaValue: manaValue(card.manaCost ?? ''),
+    }))
+    .sort(
+      (a, b) =>
+        group(a.card) - group(b.card) ||
+        a.manaValue - b.manaValue ||
+        a.card.name.localeCompare(b.card.name),
+    );
+  return facts;
+}
+/** A deck's colours: those of its spells (lands don't decide what you can cast). */
+const deckColors = (cards: Counts) =>
+  new Set(
+    Object.keys(cards).flatMap((id) => {
+      const c = SEASON_CARDS.get(id);
+      return c && !c.typeLine.includes('Land') ? c.colors : [];
+    }),
+  );
+
+export function SeasonCollection({
+  save,
+  update,
+  error,
+  compact,
+  onStore,
+}: Props & { compact?: boolean; onStore?: () => void }) {
   const start = compact ? 'all' : 'owned';
   const [query, setQuery] = useState('');
   const [ownership, setOwnership] = useState<'all' | 'owned' | 'missing'>(start);
   const [rarities, setRarities] = useState<ReadonlySet<string>>(new Set());
   const [colors, setColors] = useState<ReadonlySet<string>>(new Set());
+  const [roles, setRoles] = useState<ReadonlySet<CardRole>>(new Set());
+  const [types, setTypes] = useState<ReadonlySet<string>>(new Set());
+  const [pack, setPack] = useState<SeasonPackKind | null>(null);
+  const [deckId, setDeckId] = useState<string | null>(null);
+  const [sort, setSort] = useState<Sort>('collection');
   const [chosen, setChosen] = useState<string | null>(null);
   const [notice, setNotice] = useState('');
-  const all = useMemo(
-    () =>
-      [...SEASON_CARDS]
-        .filter(([id]) => !isBasic(id))
-        .sort(
-          ([, a], [, b]) =>
-            group(a) - group(b) ||
-            manaValue(a.manaCost) - manaValue(b.manaCost) ||
-            a.name.localeCompare(b.name),
-        ),
-    [],
-  );
+  const all = useMemo(allFacts, []);
+  const deck = save.decks.find((d) => d.id === deckId);
+  const fits = useMemo(() => deck && deckColors(deck.cards), [deck]);
   const q = query.trim().toLowerCase();
-  const cards = all.filter(
-    ([id, c]) =>
+  const shown = all.filter(
+    ({ id, card: c, ...f }) =>
       (!rarities.size || rarities.has(c.rarity)) &&
       (!colors.size || (c.colors.length ? c.colors.some((x) => colors.has(x)) : colors.has('C'))) &&
+      (!fits || c.colors.every((x) => fits.has(x))) &&
+      (!roles.size || [...roles].every((r) => f.roles.includes(r))) &&
+      (!types.size || [...types].some((t) => c.typeLine.includes(t))) &&
+      (!pack || f.packs.includes(pack)) &&
       (ownership === 'all' || (ownership === 'owned') === (save.collection[id] ?? 0) > 0) &&
       (!q || `${c.name} ${c.typeLine} ${c.oracleText}`.toLowerCase().includes(q)),
   );
-  const owned = all.filter(([id]) => (save.collection[id] ?? 0) > 0).length;
+  const cards =
+    sort === 'collection'
+      ? shown
+      : [...shown].sort((a, b) =>
+          sort === 'best'
+            ? b.rating - a.rating || a.card.name.localeCompare(b.card.name)
+            : sort === 'cost'
+              ? a.manaValue - b.manaValue || a.card.name.localeCompare(b.card.name)
+              : a.card.name.localeCompare(b.card.name),
+        );
+  // Where the cards shown but not owned come from: the packs worth buying for them.
+  const wanted = cards.filter(({ id }) => !(save.collection[id] ?? 0));
+  const byPack = BOOSTERS.map(({ kind }) => {
+    const inPack = wanted.filter((f) => f.packs.includes(kind));
+    return {
+      kind,
+      count: inPack.length,
+      rares: inPack.filter((f) => f.card.rarity === 'rare' || f.card.rarity === 'mythic').length,
+    };
+  })
+    .filter((p) => p.count)
+    .sort((a, b) => b.count - a.count);
+  const packless = wanted.filter((f) => !f.packs.length).length;
+  const owned = all.filter(({ id }) => (save.collection[id] ?? 0) > 0).length;
+  const chosenFacts = chosen ? all.find((f) => f.id === chosen) : undefined;
   const card = chosen ? collectible(chosen) : null;
   const count = chosen ? (save.collection[chosen] ?? 0) : 0;
-  const filtered = q || rarities.size || colors.size || ownership !== start;
+  const filtered =
+    q ||
+    rarities.size ||
+    colors.size ||
+    roles.size ||
+    types.size ||
+    pack ||
+    deckId ||
+    sort !== 'collection' ||
+    ownership !== start;
   return (
     <section className={`scoll ${compact ? 'scoll--compact' : ''}`} aria-label="Collection cards">
       <div className="sfilters">
@@ -864,6 +960,11 @@ export function SeasonCollection({ save, update, error, compact }: Props & { com
               setQuery('');
               setRarities(new Set());
               setColors(new Set());
+              setRoles(new Set());
+              setTypes(new Set());
+              setPack(null);
+              setDeckId(null);
+              setSort('collection');
               setOwnership(start);
             }}
           >
@@ -874,14 +975,127 @@ export function SeasonCollection({ save, update, error, compact }: Props & { com
           {filtered ? `${cards.length} shown · ` : ''}
           {owned}/{all.length} collected
         </span>
+        <div className="sfilters__row">
+          <span className="sfilters__label">Does</span>
+          <div
+            className="sfilters__group sfilters__group--wrap"
+            role="group"
+            aria-label="What it does"
+          >
+            {ROLES.map((r) => (
+              <button
+                key={r.id}
+                className="chip chip--plain"
+                title={r.hint}
+                aria-pressed={roles.has(r.id)}
+                onClick={() => setRoles((s) => toggle(s, r.id))}
+              >
+                {r.label}
+              </button>
+            ))}
+          </div>
+        </div>
+        <div className="sfilters__row">
+          <span className="sfilters__label">Type</span>
+          <div
+            className="sfilters__group sfilters__group--wrap"
+            role="group"
+            aria-label="Card type"
+          >
+            {TYPES.map((t) => (
+              <button
+                key={t}
+                className="chip chip--plain"
+                aria-pressed={types.has(t)}
+                onClick={() => setTypes((s) => toggle(s, t))}
+              >
+                {t}
+              </button>
+            ))}
+          </div>
+          <label className="sfilters__select">
+            <span>Pack</span>
+            <select
+              value={pack ?? ''}
+              onChange={(e) => setPack((e.target.value || null) as SeasonPackKind | null)}
+            >
+              <option value="">Any pack</option>
+              {BOOSTERS.map((b) => (
+                <option key={b.kind} value={b.kind}>
+                  {b.title}
+                </option>
+              ))}
+            </select>
+          </label>
+          {save.decks.length > 0 && (
+            <label
+              className="sfilters__select"
+              title="Only cards you can cast in that deck's colours"
+            >
+              <span>Fits deck</span>
+              <select value={deckId ?? ''} onChange={(e) => setDeckId(e.target.value || null)}>
+                <option value="">Any deck</option>
+                {save.decks.map((d) => (
+                  <option key={d.id} value={d.id}>
+                    {d.name}
+                  </option>
+                ))}
+              </select>
+            </label>
+          )}
+          <label className="sfilters__select">
+            <span>Sort</span>
+            <select value={sort} onChange={(e) => setSort(e.target.value as Sort)}>
+              {SORTS.map(([id, label]) => (
+                <option key={id} value={id}>
+                  {label}
+                </option>
+              ))}
+            </select>
+          </label>
+        </div>
       </div>
+      {byPack.length > 0 && ownership !== 'owned' && (
+        <div className="swhere" aria-label="Packs with these cards">
+          <span className="swhere__title">
+            {wanted.length} {wanted.length === 1 ? 'card' : 'cards'} here you don’t own, by pack
+          </span>
+          <div className="swhere__packs">
+            {byPack.map((p) => (
+              <button
+                key={p.kind}
+                className="swhere__pack"
+                aria-pressed={pack === p.kind}
+                title={`Show only cards from ${packTitle(p.kind)} packs`}
+                onClick={() => setPack(pack === p.kind ? null : p.kind)}
+              >
+                <strong>{packTitle(p.kind)}</strong>
+                <span>
+                  {p.count}
+                  {p.rares > 0 && ` · ${p.rares} rare${p.rares === 1 ? '' : 's'}`}
+                </span>
+              </button>
+            ))}
+          </div>
+          {packless > 0 && (
+            <span className="swhere__title">
+              {packless} in no pack on sale: craft {packless === 1 ? 'it' : 'them'}
+            </span>
+          )}
+          {onStore && (
+            <button className="slink" onClick={onStore}>
+              Go to Store
+            </button>
+          )}
+        </div>
+      )}
       {notice && (
         <p className="stoast" role="status">
           {notice}
         </p>
       )}
       <div className="sgrid">
-        {cards.map(([id, c]) => {
+        {cards.map(({ id, card: c, rating }) => {
           const n = save.collection[id] ?? 0;
           return (
             <button
@@ -897,6 +1111,11 @@ export function SeasonCollection({ save, update, error, compact }: Props & { com
                 <img loading="lazy" src={c.image.normal} alt="" draggable={false} />
               ) : (
                 <span className="scard__name">{c.name}</span>
+              )}
+              {sort === 'best' && (
+                <span className="scard__rating" title="Limited rating, 0 to 5">
+                  {rating.toFixed(1)}
+                </span>
               )}
               <OwnedPips id={id} count={n} />
             </button>
@@ -915,6 +1134,31 @@ export function SeasonCollection({ save, update, error, compact }: Props & { com
               </span>
               <p className="scraft__type">{card.typeLine}</p>
               <p className="scraft__oracle">{card.oracleText}</p>
+              {chosenFacts && (
+                <dl className="scraft__facts">
+                  <dt>Rating</dt>
+                  <dd>
+                    <strong>{chosenFacts.rating.toFixed(1)}</strong> of 5{' '}
+                    <span className="sfine">(rough Limited pick order)</span>
+                  </dd>
+                  {chosenFacts.roles.length > 0 && (
+                    <>
+                      <dt>Does</dt>
+                      <dd className="scraft__tags">
+                        {chosenFacts.roles.map((r) => (
+                          <span key={r}>{ROLES.find((x) => x.id === r)!.label}</span>
+                        ))}
+                      </dd>
+                    </>
+                  )}
+                  <dt>In packs</dt>
+                  <dd className="scraft__tags">
+                    {chosenFacts.packs.length
+                      ? chosenFacts.packs.map((k) => <span key={k}>{packTitle(k)}</span>)
+                      : 'Not in any pack on sale: craft it with a wildcard'}
+                  </dd>
+                </dl>
+              )}
               <div className="scraft__own">
                 <OwnedPips id={chosen} count={count} />
                 <span>{count} owned</span>

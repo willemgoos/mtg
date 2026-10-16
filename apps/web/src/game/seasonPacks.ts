@@ -178,6 +178,16 @@ const ARCHIVE: Partial<Record<SeasonPackKind, Record<Rarity, string[]>>> = {
   secrets: SECRETS_ARCHIVE_SHEETS,
 };
 
+/** Card id -> the boosters that can contain it (archive slots included), in store order. */
+const PACKS_WITH = new Map<string, SeasonPackKind[]>();
+for (const [kind, sheets] of Object.entries(SHEETS) as [SeasonPackKind, Record<Rarity, string[]>][])
+  for (const sheet of [sheets, ARCHIVE[kind]])
+    for (const id of Object.values(sheet ?? {}).flat()) {
+      const kinds = PACKS_WITH.get(id) ?? [];
+      if (!kinds.includes(kind)) PACKS_WITH.set(id, [...kinds, kind]);
+    }
+export const packsWith = (id: string): readonly SeasonPackKind[] => PACKS_WITH.get(id) ?? [];
+
 /** The pack generator for a kind of booster. */
 export const packGenerator =
   (kind: SeasonPackKind): PackGenerator =>

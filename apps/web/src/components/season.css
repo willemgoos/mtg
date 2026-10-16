@@ -1086,6 +1086,108 @@
   background: rgba(255, 255, 255, 0.12);
 }
 
+.sfilters__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1rem;
+  flex-basis: 100%;
+}
+
+.sfilters__label {
+  min-width: 2.5rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--h-dim);
+}
+
+.sfilters__group--wrap {
+  flex-wrap: wrap;
+}
+
+.chip--plain {
+  height: 1.75rem;
+  text-transform: none;
+}
+
+.sfilters__select {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8125rem;
+  color: var(--h-muted);
+}
+
+.sfilters__select select {
+  height: 2rem;
+  padding: 0 0.5rem;
+  border: 0;
+  border-radius: 0.5rem;
+  font: inherit;
+  color: var(--h-text);
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: inset 0 0 0 0.0625rem var(--h-line);
+  cursor: var(--cursor-hover, pointer);
+}
+
+.sfilters__select select option {
+  color: #111;
+}
+
+/* Where the shown cards you don't own come from. */
+.swhere {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.625rem 1rem;
+  margin: 0 0 1.25rem;
+}
+
+.swhere__title {
+  font-size: 0.8125rem;
+  color: var(--h-muted);
+}
+
+.swhere__packs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+}
+
+.swhere__pack {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  height: 2rem;
+  padding: 0 0.75rem;
+  border: 0;
+  border-radius: 0.5rem;
+  font-family: var(--h-font);
+  font-size: 0.8125rem;
+  color: var(--h-text);
+  background: rgba(244, 177, 62, 0.08);
+  box-shadow: inset 0 0 0 0.0625rem rgba(244, 177, 62, 0.25);
+  cursor: var(--cursor-hover, pointer);
+  line-height: 2rem;
+}
+
+.swhere__pack strong {
+  font-weight: 600;
+}
+
+.swhere__pack span {
+  font-variant-numeric: tabular-nums;
+  color: var(--h-muted);
+}
+
+.swhere__pack:hover,
+.swhere__pack[aria-pressed='true'] {
+  background: rgba(244, 177, 62, 0.18);
+  box-shadow: inset 0 0 0 0.0625rem var(--h-accent);
+}
+
 .sfilters__count {
   margin-left: auto;
   font-size: 0.8125rem;
@@ -1124,6 +1226,24 @@
   color: var(--h-text);
   background: none;
   cursor: var(--cursor-hover, pointer);
+}
+
+.scard {
+  position: relative;
+}
+
+.scard__rating {
+  position: absolute;
+  top: 0.375rem;
+  right: 0.375rem;
+  padding: 0.0625rem 0.375rem;
+  border-radius: 0.375rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: #111;
+  background: var(--h-accent);
+  box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.5);
 }
 
 .scard img,
@@ -1235,6 +1355,42 @@
   line-height: 1.55;
   white-space: pre-line;
   color: var(--h-muted);
+}
+
+.scraft__facts {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.5rem 0.875rem;
+  margin: 0;
+  font-size: 0.875rem;
+}
+
+.scraft__facts dt {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  line-height: 1.6rem;
+  color: var(--h-dim);
+}
+
+.scraft__facts dd {
+  margin: 0;
+  line-height: 1.6rem;
+  color: var(--h-text);
+}
+
+.scraft__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3125rem;
+}
+
+.scraft__tags span {
+  padding: 0 0.5rem;
+  border-radius: 0.375rem;
+  font-size: 0.8125rem;
+  background: rgba(255, 255, 255, 0.07);
 }
 
 .scraft__own {
