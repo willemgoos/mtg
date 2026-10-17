@@ -9,6 +9,7 @@ import {
   tarkirDragonstormBoosterSheets,
   theHobbitBoosterSheets,
   lordOfTheRingsBoosterSheets,
+  wildsOfEldraineBoosterSheets,
   secretsOfStrixhavenArchiveSheets,
   secretsOfStrixhavenBoosterSheets,
   strixhavenArchiveSheets,
@@ -160,6 +161,15 @@ export const LORD_OF_THE_RINGS_SHEETS = Object.fromEntries(
   ]),
 ) as Record<Rarity, string[]>;
 
+/** Wilds of Eldraine's booster cards: the main-set cards (front faces, no basics). */
+const woeCards = wildsOfEldraineBoosterSheets();
+export const WILDS_OF_ELDRAINE_SHEETS = Object.fromEntries(
+  RARITIES.map((rarity) => [
+    rarity,
+    woeCards[rarity].map((c) => slug(c.name)).filter((id) => cardDb.has(id) && !isBasic(id)),
+  ]),
+) as Record<Rarity, string[]>;
+
 const SHEETS: Record<SeasonPackKind, Record<Rarity, string[]>> = {
   foundations: FOUNDATIONS_SHEETS,
   bloomburrow: BLOOMBURROW_SHEETS,
@@ -172,6 +182,7 @@ const SHEETS: Record<SeasonPackKind, Record<Rarity, string[]>> = {
   tarkirDragonstorm: TARKIR_DRAGONSTORM_SHEETS,
   theHobbit: THE_HOBBIT_SHEETS,
   lordOfTheRings: LORD_OF_THE_RINGS_SHEETS,
+  wildsOfEldraine: WILDS_OF_ELDRAINE_SHEETS,
 };
 const ARCHIVE: Partial<Record<SeasonPackKind, Record<Rarity, string[]>>> = {
   strixhaven: STRIXHAVEN_ARCHIVE_SHEETS,

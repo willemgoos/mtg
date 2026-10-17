@@ -40,6 +40,7 @@ export const SETS: { code: string; name: string }[] = [
   { code: 'tdm', name: 'Tarkir: Dragonstorm' },
   { code: 'hob', name: 'The Hobbit' },
   { code: 'ltr', name: 'The Lord of the Rings' },
+  { code: 'woe', name: 'Wilds of Eldraine' },
   { code: 'msh', name: 'Marvel Super Heroes' },
   { code: 'msc', name: 'Marvel Commander' },
 ];

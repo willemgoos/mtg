@@ -32,6 +32,7 @@ import {
   TARKIR_DRAGONSTORM_SHEETS,
   THE_HOBBIT_SHEETS,
   LORD_OF_THE_RINGS_SHEETS,
+  WILDS_OF_ELDRAINE_SHEETS,
   SECRETS_ARCHIVE_SHEETS,
   SECRETS_SHEETS,
   STRIXHAVEN_ARCHIVE_SHEETS,
@@ -331,6 +332,12 @@ const BOOSTERS: { kind: SeasonPackKind; set: PackSet; title: string; count: numb
     title: 'The Lord of the Rings',
     count: Object.values(LORD_OF_THE_RINGS_SHEETS).reduce((n, sheet) => n + sheet.length, 0),
   },
+  {
+    kind: 'wildsOfEldraine',
+    set: 'woe',
+    title: 'Wilds of Eldraine',
+    count: Object.values(WILDS_OF_ELDRAINE_SHEETS).reduce((n, sheet) => n + sheet.length, 0),
+  },
 ];
 
 /** The set of a pack kind (for its art). */
@@ -355,7 +362,9 @@ export const packSetOfKind = (kind: SeasonPackKind): PackSet =>
                     ? 'hob'
                     : kind === 'lordOfTheRings'
                       ? 'ltr'
-                      : 'fdn';
+                      : kind === 'wildsOfEldraine'
+                        ? 'woe'
+                        : 'fdn';
 
 export function Booster({
   onClick,
@@ -417,6 +426,7 @@ export function SeasonStore({
     tarkirDragonstorm: 0,
     theHobbit: 0,
     lordOfTheRings: 0,
+    wildsOfEldraine: 0,
   });
   const list = SEASON_STARTERS.find((d) => d.id === starter);
   const buy = (n: number, kind: SeasonPackKind) => {

@@ -496,6 +496,7 @@ export const SEASON_PACK_OF: Record<PackSet, SeasonPackKind> = {
   tdm: 'tarkirDragonstorm',
   hob: 'theHobbit',
   ltr: 'lordOfTheRings',
+  woe: 'wildsOfEldraine',
 };
 
 /** What the event screen shows. */

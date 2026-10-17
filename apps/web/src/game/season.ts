@@ -8,6 +8,7 @@ import {
   REALITY_FRACTURE_DECKS,
   LORWYN_ECLIPSED_DECKS,
   LORD_OF_THE_RINGS_DECKS,
+  WILDS_OF_ELDRAINE_STORY_DECKS,
   cardDb,
   deckIds,
   isPlayable,
@@ -56,6 +57,7 @@ export const SEASON_STARTERS = [
   ...REALITY_FRACTURE_DECKS.filter((d) => d.series === 'starter'),
   ...LORWYN_ECLIPSED_DECKS.filter((d) => d.series === 'starter'),
   ...LORD_OF_THE_RINGS_DECKS,
+  ...WILDS_OF_ELDRAINE_STORY_DECKS,
 ].filter(isPlayable);
 /** Decks a Season bot can play: the 60-card starter and Color Challenge decks. */
 export const isSeasonOpponent = (id: string): boolean =>
@@ -85,7 +87,8 @@ export type SeasonPackKind =
   | 'lorwynEclipsed'
   | 'tarkirDragonstorm'
   | 'theHobbit'
-  | 'lordOfTheRings';
+  | 'lordOfTheRings'
+  | 'wildsOfEldraine';
 export const SEASON_PACK_KINDS: readonly SeasonPackKind[] = [
   'foundations',
   'bloomburrow',
@@ -98,6 +101,7 @@ export const SEASON_PACK_KINDS: readonly SeasonPackKind[] = [
   'tarkirDragonstorm',
   'theHobbit',
   'lordOfTheRings',
+  'wildsOfEldraine',
 ];
 export interface SeasonMatch {
   id: number;

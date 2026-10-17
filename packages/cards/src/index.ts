@@ -14,6 +14,7 @@ import { ECL_BOOSTER_LIST } from './ecl/booster-list.ts';
 import { TDM_BOOSTER_LIST } from './tdm/booster-list.ts';
 import { HOB_BOOSTER_LIST } from './hob/booster-list.ts';
 import { LTR_BOOSTER_LIST } from './ltr/booster-list.ts';
+import { WOE_BOOSTER_LIST } from './woe/booster-list.ts';
 import { STX_BOOSTER_LIST } from './stx/booster-list.ts';
 import { SOA_ARCHIVE_LIST } from './sos/archive-list.ts';
 import { STA_ARCHIVE_LIST } from './stx/archive-list.ts';
@@ -146,6 +147,11 @@ export function theHobbitBoosterSheets(): BoosterSheets {
 /** The Lord of the Rings' booster cards by LTR rarity (the 261 main-set cards, no basics), the cards the pool has. */
 export function lordOfTheRingsBoosterSheets(): BoosterSheets {
   return boosterSheets(LTR_BOOSTER_LIST, (c) => cardDb.has(slug(c.name)));
+}
+
+/** Wilds of Eldraine's booster cards by WOE rarity (the 261 main-set cards, no basics), the cards the pool has. */
+export function wildsOfEldraineBoosterSheets(): BoosterSheets {
+  return boosterSheets(WOE_BOOSTER_LIST, (c) => cardDb.has(slug(c.name)));
 }
 
 /**
