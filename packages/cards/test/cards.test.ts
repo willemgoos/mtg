@@ -42,6 +42,7 @@ import {
   TARKIR_DRAGONSTORM_POOL,
   THE_HOBBIT_POOL,
   LORD_OF_THE_RINGS_POOL,
+  WILDS_OF_ELDRAINE_POOL,
   OTHER_POOL,
   PLAYABLE_DECKS,
   parseManaCost,
@@ -92,6 +93,7 @@ describe('card data', () => {
         ...TARKIR_DRAGONSTORM_POOL,
         ...THE_HOBBIT_POOL,
         ...LORD_OF_THE_RINGS_POOL,
+        ...WILDS_OF_ELDRAINE_POOL,
       ].sort(),
     );
     for (const c of SCRYFALL) expect(c.image?.normal).toMatch(/^https:\/\/cards\.scryfall\.io\//);

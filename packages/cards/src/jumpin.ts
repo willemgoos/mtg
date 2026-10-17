@@ -18,8 +18,8 @@ export interface Packet {
   /** Card shown on the packet. */
   face: string;
   blurb: string;
-  /** Bloomburrow, Marvel Super Heroes, Final Fantasy, Strixhaven, Secrets of Strixhaven, Reality Fracture, Lorwyn Eclipsed, Tarkir: Dragonstorm, The Hobbit or The Lord of the Rings (default Foundations). Packets of different sets pair freely. */
-  set?: 'blb' | 'msh' | 'fin' | 'stx' | 'sos' | 'fra' | 'ecl' | 'tdm' | 'hob' | 'ltr';
+  /** Bloomburrow, Marvel Super Heroes, Final Fantasy, Strixhaven, Secrets of Strixhaven, Reality Fracture, Lorwyn Eclipsed, Tarkir: Dragonstorm, The Hobbit, The Lord of the Rings or Wilds of Eldraine (default Foundations). Packets of different sets pair freely. */
+  set?: 'blb' | 'msh' | 'fin' | 'stx' | 'sos' | 'fra' | 'ecl' | 'tdm' | 'hob' | 'ltr' | 'woe';
   /** An official packet, Arena's or Wizards' paper Jumpstart list (default: ours). */
   source?: 'arena';
   /** Custom theme that deliberately borrows cards from multiple sets. */

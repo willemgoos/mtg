@@ -14,6 +14,7 @@ import { LORWYN_ECLIPSED_BEHAVIORS } from './lorwyn-eclipsed.ts';
 import { TARKIR_DRAGONSTORM_BEHAVIORS } from './tarkir-dragonstorm.ts';
 import { THE_HOBBIT_BEHAVIORS } from './the-hobbit.ts';
 import { LORD_OF_THE_RINGS_BEHAVIORS } from './lord-of-the-rings.ts';
+import { WILDS_OF_ELDRAINE_BEHAVIORS } from './wilds-of-eldraine.ts';
 
 /**
  * Allowed sets, most preferred first: Foundations, then older core sets, then
@@ -643,6 +644,9 @@ export const THE_HOBBIT_POOL = Object.keys(THE_HOBBIT_BEHAVIORS);
 /** The Lord of the Rings cards (fronts only; Reprieve was in the pool before and is not repeated). */
 export const LORD_OF_THE_RINGS_POOL = Object.keys(LORD_OF_THE_RINGS_BEHAVIORS);
 
+/** The Wilds of Eldraine cards (fronts only; cards already in the pool are not repeated). */
+export const WILDS_OF_ELDRAINE_POOL = Object.keys(WILDS_OF_ELDRAINE_BEHAVIORS);
+
 export const POOL: { name: string }[] = [
   ...RED_POOL,
   ...GREEN_POOL,
@@ -667,6 +671,7 @@ export const POOL: { name: string }[] = [
   ...TARKIR_DRAGONSTORM_POOL,
   ...THE_HOBBIT_POOL,
   ...LORD_OF_THE_RINGS_POOL,
+  ...WILDS_OF_ELDRAINE_POOL,
 ].map((name) => ({
   name,
 }));
