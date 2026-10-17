@@ -1694,7 +1694,16 @@ export interface TargetSpec {
    * 'permanent': any permanent (narrow with filter.types / nonland);
    * 'graveyardCard': a card in a graveyard (controller 'you' = your graveyard).
    */
-  what: 'any' | 'creature' | 'player' | 'permanent' | 'graveyardCard' | 'spell';
+  what:
+    | 'any'
+    | 'creature'
+    | 'player'
+    | 'permanent'
+    | 'graveyardCard'
+    | 'spell'
+    // Wilds of Eldraine (23b green): Sentinel of Lost Lore, "target card you own in exile that has an Adventure"
+    /** A card in exile (`controller`: its owner: 'you' / 'opponent'). */
+    | 'exileCard';
   controller?: 'you' | 'opponent';
   filter?: CardFilter;
   /** "Up to": this target and the ones after it may be left out. */
@@ -3019,6 +3028,11 @@ export type EffectDef =
       // Wilds of Eldraine (23b blue): Farsight Ritual
       /** Not optional: with `upTo`, exactly that many cards if there are that many to take ("put two of them into your hand"). */
       required?: boolean;
+      // Wilds of Eldraine (23b green): Feral Encounter, Commune with Nature
+      /** The card taken is exiled and may be cast this turn instead of going to your hand (the rest go to the bottom in a random order). */
+      exilePlayable?: boolean;
+      /** The rest go to the bottom in any order: they stay on top for now (as `restOnTop`) and a following `woeBottomOrder` effect lets the player order them. */
+      restInAnyOrder?: boolean;
     }
   /** Exile the top N; you may play them until the end of this turn or of your next turn. */
   | {
@@ -5188,6 +5202,11 @@ export type Decision =
       battlefieldOnYourTurn?: boolean;
       /** The looked-at cards not taken stay on top (Herald's Horn). */
       restOnTop?: boolean;
+      // Wilds of Eldraine (23b green): Feral Encounter, Commune with Nature
+      /** The card taken is exiled; it may be cast this turn. */
+      exilePlayable?: boolean;
+      /** The rest stay on top (`restOnTop`) only until the player orders them on the bottom. */
+      restInAnyOrder?: boolean;
       /** Marvel Super Heroes: the cards not taken go to the graveyard. */
       restToGraveyard?: boolean;
       // Final Fantasy (11c): The Darkness Crystal ("tapped ... with two additional +1/+1 counters").

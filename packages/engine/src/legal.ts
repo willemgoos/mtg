@@ -1585,7 +1585,10 @@ export function getLegalActions(ctx: Ctx, player: PlayerId): Action[] {
       const out: Action[] = [{ type: 'chooseTargets', player, targets: d.picked }];
       if (!spec) return out;
       const key = (t: TargetChoice) => ('object' in t ? t.object.id : t.player);
-      const taken = new Set(d.picked.map(key));
+      // Wilds of Eldraine (23b green): Graceful Takedown, the targets chosen with the cast are taken too ("up to one other target").
+      const taken = new Set(
+        [...(item?.kind === 'spell' && spec?.ofMode === undefined ? item.targets : []), ...d.picked].map(key),
+      );
       // Tarkir: Dragonstorm (19b, green): Rite of Renewal, "up to four target cards from their graveyard".
       if (spec.maxTargets !== undefined && d.picked.length >= spec.maxTargets) return out;
       const graveyardOwner =

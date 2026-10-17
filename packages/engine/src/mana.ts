@@ -349,6 +349,8 @@ export function manaSources(
       if (g.otherPermanents) {
         for (const id of ctx.s.battlefield) {
           if (id === exclude || id === src || obj(ctx, id).controller !== player) continue;
+          // Wilds of Eldraine (23b green): Night of the Sweets' Revenge, "Foods you control have '{T}: Add {G}'" (the filter names them).
+          if (!matchesFilter(ctx, id, g.filter)) continue;
           const have = out.find((x) => x.id === id && !x.pool);
           if (have) {
             for (const c of g.produces) if (!have.produces.includes(c)) have.produces.push(c);

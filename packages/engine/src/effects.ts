@@ -71,6 +71,7 @@ import { opponentsCantGainLife, sacrificeAtEndOfCombat } from './ltr-black-effec
 import { HOB_MULTICOLOUR_EXPANDERS } from './hob-multicolour-effects.ts'; // The Hobbit (20b multicolour)
 import { WOE_MULTI_EXPANDERS } from './woe-multi-effects.ts'; // Wilds of Eldraine (23b multi)
 import { LTR_BLUE_EXPANDERS } from './ltr-blue-effects.ts'; // Lord of the Rings (21b blue)
+import { WOE_GREEN_EXPANDERS } from './woe-green-effects.ts'; // Wilds of Eldraine (23b green)
 import { LTR_GC_RARE_EXPANDERS } from './ltr-gc-rare-effects.ts'; // Lord of the Rings (21d gc-rare)
 import { LTR_BR_RARE_EXPANDERS } from './ltr-br-rare-effects.ts'; // Lord of the Rings (21d br-rare)
 import { SOS_14B_C_CHOOSERS } from './sos-14b-c-effects.ts';
@@ -952,7 +953,11 @@ export function resolveAmount(ctx: Ctx, es: EffectSource, amount: Amount): numbe
     const ids = objectsOf(ctx, es, amount.powerOf);
     if (ids[0]) return Math.max(0, power(ctx, ids[0]));
     if (amount.powerOf === 'self') {
-      const last = es.lkiPower ?? (es.source && ctx.s.objects[es.source.id]?.lastPower);
+      const last =
+        es.lkiPower ??
+        (es.source && ctx.s.objects[es.source.id]?.lastPower) ??
+        // Wilds of Eldraine (23b green): Gruff Triplets, a token that died has ceased to exist.
+        (es.source && ctx.s.turn.tokenLki?.[es.source.id]?.power);
       return Math.max(0, last ?? 0);
     }
     // Final Fantasy (11c): "its power" for a creature that died (Jenova's Mutants).
@@ -1076,6 +1081,12 @@ export function runEffects(
     // Lord of the Rings (21b blue): Minas Tirith Garrison's prompt, one Human at a time.
     if (e.kind === 'custom' && LTR_BLUE_EXPANDERS[e.handler]) {
       list.splice(i, 1, ...LTR_BLUE_EXPANDERS[e.handler]!(ctx, es, e.params));
+      i--;
+      continue;
+    }
+    // Wilds of Eldraine (23b green): Commune with Nature's bottom order, one card at a time.
+    if (e.kind === 'custom' && WOE_GREEN_EXPANDERS[e.handler]) {
+      list.splice(i, 1, ...WOE_GREEN_EXPANDERS[e.handler]!(ctx, es, e.params));
       i--;
       continue;
     }
@@ -2151,7 +2162,10 @@ export function runEffects(
           options: looked.filter((id) => cardMatches(ctx, id, e.filter, es.source?.id)),
           looked,
           ...(e.battlefieldOnYourTurn ? { battlefieldOnYourTurn: true } : {}),
-          ...(e.restOnTop ? { restOnTop: true } : {}),
+          ...(e.restOnTop || e.restInAnyOrder ? { restOnTop: true } : {}),
+          // Wilds of Eldraine (23b green): Feral Encounter, Commune with Nature
+          ...(e.exilePlayable ? { exilePlayable: true } : {}),
+          ...(e.restInAnyOrder ? { restInAnyOrder: true } : {}),
           ...(e.restToGraveyard ? { restToGraveyard: true } : {}),
           // Strixhaven (13c): The Biblioplex
           ...(e.canBin ? { canBin: true } : {}),
