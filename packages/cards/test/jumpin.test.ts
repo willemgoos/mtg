@@ -4,6 +4,7 @@ import {
   ARENA_BLB_PACKETS,
   ARENA_ECL_PACKETS,
   ARENA_TDM_PACKETS,
+  ARENA_WOE_PACKETS,
   ARENA_SOS_PACKETS,
   ARENA_FDN_PACKETS,
   cardDb,
@@ -48,6 +49,8 @@ function expectArenaLists(
   tag: string,
   names: Record<string, string> = {},
   extraLand = false,
+  /** Packets whose scraped list is short of the card count it states (name: cards missing). */
+  short: Record<string, number> = {},
 ) {
   const lists: ArenaPacket[] = JSON.parse(
     readFileSync(new URL('../scripts/data/arena-jumpin-packets.json', import.meta.url), 'utf8'),
@@ -71,10 +74,9 @@ function expectArenaLists(
         s.reduce((n, a) => n + a.weight, 0),
         p.name,
       ).toBe(100);
-    expect(total(packetCards(p)), p.name).toBe(list.count + total(extra));
-    expect(total(packetCards(p, dealPacket(p, Math.random))), p.name).toBe(
-      list.count + total(extra),
-    );
+    const count = list.count + total(extra) - (short[p.name] ?? 0);
+    expect(total(packetCards(p)), p.name).toBe(count);
+    expect(total(packetCards(p, dealPacket(p, Math.random))), p.name).toBe(count);
   }
 }
 
@@ -286,6 +288,34 @@ describe('Jump In packets', () => {
     expect(basics.has('Island')).toBe(false);
     for (const b of ['Plains', 'Swamp', 'Forest', 'Mountain'])
       expect(basics.get(b), b).toBeGreaterThan(0);
+  });
+
+  it("has Arena's ten Wilds of Eldraine packets, equal to the scraped lists", () => {
+    const woe = PACKETS.filter((p) => p.set === 'woe');
+    expect(woe.map((p) => p.id)).toEqual(ARENA_WOE_PACKETS.map((p) => p.id));
+    const colours: Record<string, string> = {
+      Charmed: 'W',
+      Apprentice: 'U',
+      Bittersweet: 'B',
+      Celebration: 'R',
+      Hungry: 'G',
+      Freezing: 'WU',
+      Faeries: 'UB',
+      Rats: 'BR',
+      Monsters: 'RG',
+      'Dress Up': 'WG',
+    };
+    expect(woe.map((p) => p.name)).toEqual(Object.keys(colours));
+    for (const p of woe) {
+      expect(p.id).toBe(`woe-${p.name.toLowerCase().replace(' ', '-')}`);
+      expect(p.colors.join(''), p.name).toBe(colours[p.name]);
+    }
+    // The scrape lists 11 cards for Bittersweet (7 fixed, 4 random) but says 12: the twelfth is unknown.
+    expectArenaLists(woe, 'WOE', {}, false, { Bittersweet: 1 });
+    // Two 12-card packets are topped up to 40 with basics.
+    const d = deckById(jumpInId('woe-charmed', 'woe-rats'));
+    expect(d.set).toBe('woe');
+    expect(total(d.cards)).toBe(40);
   });
 
   it("has Arena's ten Secrets of Strixhaven packets next to ours, equal to the scraped lists", () => {

@@ -29,6 +29,7 @@ import {
   SECRETS_OF_STRIXHAVEN_DECKS,
   LORWYN_ECLIPSED_DECKS,
   LORD_OF_THE_RINGS_DECKS,
+  WILDS_OF_ELDRAINE_STORY_DECKS,
   REALITY_FRACTURE_DECKS,
   STRIXHAVEN_POOL,
   SECRETS_OF_STRIXHAVEN_POOL,
@@ -190,6 +191,7 @@ describe('card data', () => {
         ...REALITY_FRACTURE_DECKS.map((d) => d.id),
         ...LORWYN_ECLIPSED_DECKS.map((d) => d.id),
         ...LORD_OF_THE_RINGS_DECKS.map((d) => d.id),
+        ...WILDS_OF_ELDRAINE_STORY_DECKS.map((d) => d.id),
         ...FINAL_FANTASY_STARTER_KIT_DECKS.map((d) => d.id),
         ...ECL_THEME_DECKS.map((d) => d.id), // Lorwyn Eclipsed (18c)
         // Reality Fracture: the ten decks.
