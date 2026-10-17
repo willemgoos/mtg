@@ -78,6 +78,7 @@ import { SOS_14B_C_CHOOSERS } from './sos-14b-c-effects.ts';
 import { runAnimate, runCreateRole } from './woe-23a.ts'; // Wilds of Eldraine (23a)
 import { WOE_WHITE_CHOOSERS, woeCreatureDamagePrevented } from './woe-white-effects.ts'; // Wilds of Eldraine (23b white)
 import { payLife } from './woe-black-effects.ts'; // Wilds of Eldraine (23b black)
+import { noteSpellDamage } from './woe-red-effects.ts'; // Wilds of Eldraine (23b red)
 import type {
   AbilityDef,
   CardDefId,
@@ -198,6 +199,7 @@ export function dealDamage(
       combat,
       ...(excess > 0 ? { excess } : {}),
     });
+    noteSpellDamage(ctx, src.id, o.id, amount); // Wilds of Eldraine (23b red): Imodane, the Pyrohammer
   }
   if (has(src, 'lifelink')) gainLife(ctx, src.controller, amount);
 }

@@ -977,7 +977,8 @@ function priorityActions(
       const tagged = restrictedMana
         ? manaSources(ctx, player, undefined, abilityTags(ctx, source))
         : sources;
-      const own = a.cost.tapSelf ? tagged.filter((x) => x.id !== source) : tagged;
+      // Wilds of Eldraine (23b red): a Treasure can not pay for "{2}, Sacrifice this artifact" by being sacrificed for mana.
+      const own = a.cost.tapSelf || a.cost.sacrificeSelf ? tagged.filter((x) => x.id !== source) : tagged;
       // Heirloom Epic: creatures can pay for generic mana.
       const usable = a.cost.convoke
         ? [...own, ...creatureHelpers(ctx, player, own, a.cost.tapSelf ? source : undefined)]

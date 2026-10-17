@@ -10,6 +10,7 @@ import { spellsCastThisTurn } from './tdm-19a.ts';
 import { checkCondition } from './triggers.ts';
 import { defHasAdventure } from './woe-23a.ts'; // Wilds of Eldraine (23a)
 import { powerLessThan } from './woe-blue-effects.ts'; // Wilds of Eldraine (23b blue)
+import { attachedToSourceCount } from './woe-red-effects.ts'; // Wilds of Eldraine (23b red)
 import type {
   Amount,
   CardDb,
@@ -481,6 +482,8 @@ export function countOf(
           (!a.filter || cardMatches(ctx, id, a.filter)),
       ).length
     );
+  // Wilds of Eldraine (23b red): Kellan, the Fae-Blooded, "for each Aura and Equipment attached to Kellan".
+  if (a.count === 'attachedToSource') return attachedToSourceCount(ctx, a.filter, sourceId);
   // Wilds of Eldraine (23a): Rowdy Research, "for each creature that attacked this turn".
   if (a.count === 'creaturesAttackedThisTurn') return new Set(ctx.s.turn.attackers).size;
   if (a.count === 'greatestManaValueInGraveyard')

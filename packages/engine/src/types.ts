@@ -1203,6 +1203,14 @@ export type TriggerDef =
   // Lorwyn Eclipsed (18c, theme decks): Magmatic Galleon
   /** Whenever one or more creatures your opponents control are dealt excess noncombat damage (use with `batch`; the amount is the excess). */
   | { on: 'opponentCreaturesDealtExcessNoncombat' }
+  // Wilds of Eldraine (23b red): Skewer Slinger, Imodane, the Pyrohammer
+  /** Whenever this creature blocks or becomes blocked by a creature: once for each such creature, the subject. */
+  | { on: 'blocksOrBecomesBlocked' }
+  /**
+   * Whenever an instant or sorcery spell you control that targets only a single creature deals damage to that creature
+   * (the amount is the damage dealt).
+   */
+  | { on: 'yourSpellDamagesItsSingleTarget' }
   // Wilds of Eldraine (23a): Hylda of the Icy Crown, Icewrought Sentry, Solitary Sanctuary, Sharae of Numbing Depths
   /**
    * Whenever you tap an untapped creature an opponent controls (with a spell or ability you control: the `tap` effect); the
@@ -1900,6 +1908,9 @@ export type Amount =
       /** Only cards matching this. */
       filter?: CardFilter;
     }
+  // Wilds of Eldraine (23b red): Kellan, the Fae-Blooded
+  /** The permanents of any controller attached to the source that match the filter ("for each Aura and Equipment attached to Kellan"). */
+  | { count: 'attachedToSource'; filter: CardFilter }
   // Wilds of Eldraine (23a): Rowdy Research, Witchstalker Frenzy
   /** "For each creature that attacked this turn": the different creatures declared as attackers this turn (by any player). */
   | { count: 'creaturesAttackedThisTurn' }
@@ -3899,6 +3910,14 @@ export type StaticDef =
   | { kind: 'graveyardToExile' }
   /** Other creatures are Food artifacts with the Food ability (Ygra). */
   | { kind: 'creaturesAreFood' }
+  // Wilds of Eldraine (23b red): Food Fight, Goddric, Cloaked Reveler
+  /** "Artifacts you control have '<ability>'": every artifact its controller controls has this activated ability (Food Fight). */
+  | { kind: 'artifactsYouControlHave'; ability: AbilityDef }
+  /**
+   * As long as celebration holds (two or more nonland permanents entered under your control this turn), this creature has
+   * exactly these creature types (it loses all others) and these abilities (Goddric, Cloaked Reveler).
+   */
+  | { kind: 'becomesWhileCelebrating'; subtypes: string[]; abilities: AbilityDef[] }
   /** The first instant or sorcery you cast each turn costs {U} less per land with a flood counter (Eluge). */
   | { kind: 'floodDiscount' }
   /** Damage can't be prevented (Sunspine Lynx). */
@@ -4261,6 +4280,9 @@ export interface GameObject {
   castableWhileControlling?: ObjectRef;
   /** The spell this object was cast as came from a graveyard (Twilight Diviner). */
   castFromGraveyardZone?: boolean;
+  // Wilds of Eldraine (23b red): Imodane, the Pyrohammer
+  /** A resolving instant or sorcery spell: the targets it was put on the stack with (read by "targets only a single creature"). */
+  woeSpellTargets?: TargetChoice[];
   // Reality Fracture (17a fixes): Hexhaven Dueling Arena
   /** The zone change (zcc) it was at when it last attacked: a creature that has changed zones since is a new object. */
   attackedZcc?: number;
@@ -5561,6 +5583,8 @@ export interface GameState {
   creaturesAreFood?: boolean;
   // Lorwyn Eclipsed (18b, green): a Shimmerwilds Growth has been on the battlefield (lands may be recoloured: `def` looks for the Aura).
   landColorAuras?: boolean;
+  /** Wilds of Eldraine (23b red): a Food Fight ("Artifacts you control have ...") has been on the battlefield; `def` looks for it only then. */
+  woeArtifactGrants?: boolean;
   /** Lorwyn Eclipsed (18b): some object has had its colours changed (`allColorsTurn`, `colorOverride`, `colorless`); `def` checks them only then. */
   colorChanges?: boolean;
   /** Tarkir: Dragonstorm (19b, blue): an Aura has granted abilities (`auraGrants`); `def` checks them only then. */
