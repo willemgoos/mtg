@@ -27,7 +27,9 @@ export type CastVia =
   | 'noctis'
   | 'hades'
   // Lorwyn Eclipsed (18a): Dawnhand Dissident.
-  | 'exiledWithSelf';
+  | 'exiledWithSelf'
+  // Wilds of Eldraine (23d main): Mosswood Dreadknight, its Adventure from the graveyard.
+  | 'woeAdventure';
 
 /** One way to cast a card: a mode, kicked or not, from hand or with flashback. */
 export interface CastVariant {
@@ -222,7 +224,7 @@ export function castVariants(d: CardDefinition, zone: ZoneName, via?: CastVia): 
         ? { ...v, cost: free }
         : via === 'festival'
           ? { ...v, life: 1 }
-          : via === 'conduit' || via === 'hades' || via === 'exiledWithSelf'
+          : via === 'conduit' || via === 'hades' || via === 'exiledWithSelf' || via === 'woeAdventure'
             ? v
             : via === 'noctis'
               ? { ...v, life: 3, finality: true }

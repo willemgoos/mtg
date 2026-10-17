@@ -32,8 +32,19 @@ export function redactFor(state: GameState, viewer: PlayerId, db?: CardDb): Game
     // Strixhaven (13a): the opponent's sideboard is not known.
     if (p !== viewer && ps.sideboard) ps.sideboard = ps.sideboard.map(() => HIDDEN_CARD);
     // The Hobbit (20b red): Flameshape exiles cards face down; only their owner knows what they are.
-    const faceDown = p === viewer ? [] : ps.exile.filter((id) => !!state.objects[id]?.playableIf);
-    const hidden = p === viewer ? ps.library : [...ps.library, ...ps.hand, ...faceDown];
+    // Wilds of Eldraine (23d main): Beseech the Mirror, Expensive Taste: exiled face down, only the player who may look sees it.
+    const faceDown =
+      p === viewer
+        ? ps.exile.filter((id) => {
+            const looker = state.objects[id]?.woeFaceDown;
+            return looker !== undefined && looker !== viewer;
+          })
+        : ps.exile.filter(
+            (id) =>
+              !!state.objects[id]?.playableIf ||
+              (state.objects[id]?.woeFaceDown !== undefined && state.objects[id]?.woeFaceDown !== viewer),
+          );
+    const hidden = p === viewer ? [...ps.library, ...faceDown] : [...ps.library, ...ps.hand, ...faceDown];
     const d = state.decision;
     const seen =
       p === viewer

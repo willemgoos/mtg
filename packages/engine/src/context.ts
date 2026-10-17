@@ -5,6 +5,7 @@ import { FRA_BLACK_EFFECTS } from './fra-black-effects.ts';
 // Lorwyn Eclipsed (18b, black)
 import { ECL_BLACK_EFFECTS, drawPrevented } from './ecl-black-effects.ts';
 import { WOE_BLACK_EFFECTS } from './woe-black-effects.ts'; // Wilds of Eldraine (23b black)
+import { WOE_MAIN_EFFECTS, everflameDef } from './woe-main-effects.ts'; // Wilds of Eldraine (23d main)
 import { FIN_EFFECTS } from './fin-effects.ts';
 import { withRingLegendary } from './ltr-21a.ts'; // Lord of the Rings (21a)
 import { HOB_BLACK_EFFECTS } from './hob-black-effects.ts'; // The Hobbit (20b black)
@@ -88,6 +89,7 @@ import type {
   GameEvent,
   GameObject,
   GameState,
+  Keyword,
   ObjectId,
   ObjectRef,
   PlayerId,
@@ -202,6 +204,7 @@ const BUILT_IN_EFFECTS: Record<string, CustomEffect> = {
   ...TDM_CLANS_EFFECTS, // Tarkir: Dragonstorm (19b, clans)
   ...LTR_GREEN_EFFECTS, // Lord of the Rings (21b green)
   ...WOE_GREEN_EFFECTS, // Wilds of Eldraine (23b green)
+  ...WOE_MAIN_EFFECTS, // Wilds of Eldraine (23d main)
   // Lorwyn Eclipsed (18b, special).
   ...ECL_SPECIAL_EFFECTS,
   // Lorwyn Eclipsed (18b): green.
@@ -366,7 +369,15 @@ function defBase(ctx: Ctx, o: GameObject): CardDefinition {
     return blightDef(d);
   // Marvel Super Heroes Jumpstart (Young Avengers): a copy that keeps some of its own abilities.
   if (o.copyKeptAbilities && o.originalDefId)
-    return keptAbilitiesDef(d, defOf(ctx, o.originalDefId), o.copyKeptAbilities);
+    return keptAbilitiesDef(
+      d,
+      defOf(ctx, o.originalDefId),
+      o.copyKeptAbilities,
+      !!o.copyKeepsName, // Wilds of Eldraine (23d main): Likeness Looter keeps no name, only an ability and flying
+      o.copyAddedKeywords,
+    );
+  // Wilds of Eldraine (23d main): The Irencrag has become Everflame, Heroes' Legacy.
+  if (o.woeEverflame && o.zone === 'battlefield') return everflameDef(d);
   // Ygra: other creatures are Food artifacts with the Food ability.
   if (
     ctx.s.creaturesAreFood &&
@@ -471,7 +482,29 @@ const keptAbilitiesDefs = new WeakMap<CardDefinition, WeakMap<CardDefinition, Ca
  * his name is Hulkling, ... and he has this ability"). The kept abilities come after the copied
  * ones, so the copied abilities keep their indices; triggers map the kept ones back (queue).
  */
-function keptAbilitiesDef(d: CardDefinition, own: CardDefinition, kept: number[]): CardDefinition {
+function keptAbilitiesDef(
+  d: CardDefinition,
+  own: CardDefinition,
+  kept: number[],
+  keepName = true,
+  addedKeywords: Keyword[] = [],
+): CardDefinition {
+  // Wilds of Eldraine (23d main): Likeness Looter keeps its ability and gains flying, but takes the copied name.
+  if (!keepName) {
+    const key = `${own.id}|${kept.join(',')}|${addedKeywords.join(',')}`;
+    let bySig = keptNoNameDefs.get(d);
+    if (!bySig) keptNoNameDefs.set(d, (bySig = new Map()));
+    let g = bySig.get(key);
+    if (!g) {
+      g = {
+        ...d,
+        keywords: [...d.keywords, ...addedKeywords.filter((k) => !d.keywords.includes(k))],
+        abilities: [...d.abilities, ...kept.flatMap((i) => own.abilities[i] ?? [])],
+      };
+      bySig.set(key, g);
+    }
+    return g;
+  }
   let byOwn = keptAbilitiesDefs.get(d);
   if (!byOwn) keptAbilitiesDefs.set(d, (byOwn = new WeakMap()));
   let f = byOwn.get(own);
@@ -485,6 +518,8 @@ function keptAbilitiesDef(d: CardDefinition, own: CardDefinition, kept: number[]
   }
   return f;
 }
+
+const keptNoNameDefs = new WeakMap<CardDefinition, Map<string, CardDefinition>>();
 
 /** Recomputes whether a Ygra is on the battlefield (after setting up a position directly). */
 export function refreshCreaturesAreFood(ctx: Ctx): void {
@@ -836,6 +871,7 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
   if (from === 'battlefield') {
     const c = characteristics(ctx, id);
     o.lastPower = c.power;
+    o.lastDamage = o.damage; // Wilds of Eldraine (23d main): Tangled Colony
     o.lastSubtypes = [...c.subtypes];
     o.lastCounters = o.plusOneCounters;
     if (to === 'graveyard' && c.types.includes('Creature')) {
@@ -917,6 +953,7 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
     delete o.copyKeepsName;
     // Marvel Super Heroes Jumpstart (Young Avengers).
     delete o.copyKeptAbilities;
+    delete o.copyAddedKeywords; // Wilds of Eldraine (23d main): Likeness Looter
   }
   // Marvel Super Heroes (Secret Invasion): a copy lasting while this stays ends as it leaves.
   if (from === 'battlefield')
@@ -932,6 +969,7 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
   // A stolen card's permission ends when it leaves exile.
   if (from === 'exile') {
     delete o.castableBy;
+    delete o.woeFaceDown; // Wilds of Eldraine (23d main)
     delete o.castableIf; // Reality Fracture (17a)
     delete o.castableWhileControlling; // Lorwyn Eclipsed (18b, black)
     delete o.castableUntilTurn;
@@ -1178,7 +1216,11 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
   }
   // The Hobbit (20b black): Azog, Moria's Ruin; what a token that left the battlefield was (its power and controller).
   if (ceases && from === 'battlefield')
-    (ctx.s.turn.tokenLki ??= {})[id] = { power: o.lastPower ?? 0, controller: o.controller };
+    (ctx.s.turn.tokenLki ??= {})[id] = {
+      power: o.lastPower ?? 0,
+      controller: o.controller,
+      damage: o.lastDamage ?? 0, // Wilds of Eldraine (23d main): Tangled Colony
+    };
   if (ceases) delete ctx.s.objects[id];
   // Final Fantasy (11c): meld. The other half goes where the melded permanent went.
   const partner = meldPartner ? ctx.s.objects[meldPartner] : undefined;

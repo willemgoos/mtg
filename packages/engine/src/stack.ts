@@ -78,6 +78,7 @@ import {
 import { firstEquipFree, noteEquipActivation } from './hob-white-effects.ts'; // The Hobbit (20b white)
 import { isLegendaryNow } from './ltr-black-effects.ts'; // Lord of the Rings (21b black)
 import { noteWoeCast, payLife } from './woe-black-effects.ts'; // Wilds of Eldraine (23b black)
+import { woeLandActivationCost } from './woe-main-effects.ts'; // Wilds of Eldraine (23d main)
 import {
   ltrFinalChapter,
   ltrPayWardFiltered,
@@ -638,6 +639,7 @@ export function castSpell(
   // Reality Fracture (17a): Twinned Vision, "if this spell wasn't cast from your hand" (the stack item is gone by resolution).
   o.castFromHand = fromHand;
   o.castFromGraveyardZone = o.zone === 'graveyard'; // Lorwyn Eclipsed (18b, black): Twilight Diviner
+  o.castFromExileZone = o.zone === 'exile'; // Wilds of Eldraine (23d main): Extraordinary Journey
   // Rule 601.2: move to stack, choose targets, then pay costs.
   const cost = addCosts(
     choice.sneak ? d.sneak! : castCost(ctx, player, card, choice, targets),
@@ -1225,7 +1227,12 @@ export function abilityManaCost(
   targets?: readonly TargetChoice[] | 'best',
 ): ManaCost | undefined {
   // Wilds of Eldraine (23b multi): Agatha of the Vile Cauldron's discount, Agatha's Soul Cauldron's any-colour mana.
-  return woeActivationCost(ctx, source, a, abilityManaCostBase(ctx, source, a, targets));
+  // Wilds of Eldraine (23d main): Blossoming Tortoise, "activated abilities of lands you control cost {1} less".
+  return woeLandActivationCost(
+    ctx,
+    source,
+    woeActivationCost(ctx, source, a, abilityManaCostBase(ctx, source, a, targets)),
+  );
 }
 
 function abilityManaCostBase(
