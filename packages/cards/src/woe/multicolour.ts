@@ -32,7 +32,7 @@ const plus = (a: AbilityDef, extra: object): AbilityDef => ({ ...a, ...extra }) 
 /** Hylda of the Icy Crown's 4/4 white and blue Elemental creature token. */
 export const WOE_ELEMENTAL_WU = 'woe-elemental-white-blue-token';
 /** Totentanz's 1/1 black Rat creature token with "This token can't block." */
-export const WOE_RAT_CANT_BLOCK = 'woe-rat-cant-block-token';
+export const WOE_RAT_CANT_BLOCK = 'woe-rat-token'; // black.ts makes it
 
 const food: EffectDef = { kind: 'createToken', token: 'food-token', count: 1 };
 const sacrificeFood = { sacrificePermanent: { subtype: 'Food' } } as const;
@@ -330,21 +330,6 @@ export const WOE_MULTICOLOUR_TOKENS: CardDefinition[] = [
     toughness: 4,
     keywords: [],
     abilities: [],
-    isToken: true,
-  },
-  // A 1/1 black Rat creature token with "This token can't block." (Totentanz, Swarm Piper).
-  {
-    id: WOE_RAT_CANT_BLOCK,
-    name: 'Rat',
-    manaCost: NO_COST,
-    colors: ['B'],
-    types: ['Creature'],
-    supertypes: [],
-    subtypes: ['Rat'],
-    power: 1,
-    toughness: 1,
-    keywords: [],
-    abilities: [{ kind: 'static', effect: { kind: 'cantBlock' } }],
     isToken: true,
   },
 ];

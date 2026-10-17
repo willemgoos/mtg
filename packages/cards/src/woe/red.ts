@@ -1,4 +1,4 @@
-import type { AbilityDef, CardDefinition, EffectDef, TargetSpec } from '@mtg/engine';
+import type { CardDefinition, EffectDef, TargetSpec } from '@mtg/engine';
 import { type Behavior, parseManaCost as mana } from '../build.ts';
 import { draw, pump, t0, t1, when, yours } from '../blb/helpers.ts';
 import { equip } from '../msc/helpers.ts';
@@ -20,8 +20,8 @@ import {
  * by its own name in WOE_RED_BACKS. See docs/wilds-of-eldraine-plan.md.
  */
 
-const RAT = 'woe-rat-token';
-const KNIGHT = 'woe-knight-token';
+const RAT = 'woe-rat-token'; // black.ts makes it
+const KNIGHT = 'woe-w-knight-token'; // white.ts makes it
 
 const creature: TargetSpec = { what: 'creature' };
 const yourCreature: TargetSpec = { what: 'creature', controller: 'you' };
@@ -589,38 +589,5 @@ export const WOE_RED_BACKS: Record<string, Behavior> = {
   },
 };
 
-const noMana = { generic: 0, colored: {} };
-
-/** Tokens only this group's cards make. */
-export const WOE_RED_TOKENS: CardDefinition[] = [
-  // "1/1 black Rat creature token with 'This token can't block.'" (Red and black cards make it.)
-  {
-    id: RAT,
-    name: 'Rat',
-    manaCost: noMana,
-    colors: ['B'],
-    types: ['Creature'],
-    supertypes: [],
-    subtypes: ['Rat'],
-    power: 1,
-    toughness: 1,
-    keywords: [],
-    abilities: [{ kind: 'static', effect: { kind: 'cantBlock' } } satisfies AbilityDef],
-    isToken: true,
-  },
-  // "2/2 white Knight creature token with vigilance."
-  {
-    id: KNIGHT,
-    name: 'Knight',
-    manaCost: noMana,
-    colors: ['W'],
-    types: ['Creature'],
-    supertypes: [],
-    subtypes: ['Knight'],
-    power: 2,
-    toughness: 2,
-    keywords: ['vigilance'],
-    abilities: [],
-    isToken: true,
-  },
-];
+/** Tokens only this group's cards make (the Rat is black.ts's, the Knight white.ts's). */
+export const WOE_RED_TOKENS: CardDefinition[] = [];

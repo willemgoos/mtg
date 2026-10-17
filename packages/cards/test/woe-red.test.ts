@@ -40,7 +40,7 @@ describe('printed characteristics', () => {
       true,
     ]);
     expect(rat.abilities).toEqual([{ kind: 'static', effect: { kind: 'cantBlock' } }]);
-    const knight = cardDb.get('woe-knight-token')!;
+    const knight = cardDb.get('woe-w-knight-token')!;
     expect([knight.power, knight.toughness, knight.colors, knight.keywords]).toEqual([
       2,
       2,

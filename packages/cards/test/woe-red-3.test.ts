@@ -358,7 +358,7 @@ describe('Imodane’s Recruiter // Train Troops', () => {
     });
     castAdventure(g, 'imodanes-recruiter');
     resolve(g);
-    const knights = ids(g, 'woe-knight-token');
+    const knights = ids(g, 'woe-w-knight-token');
     expect(knights).toHaveLength(2);
     for (const k of knights) {
       expect(pt(g, k)).toEqual([2, 2]);
