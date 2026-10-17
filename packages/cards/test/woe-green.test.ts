@@ -1199,10 +1199,10 @@ describe('Welcome to Sweettooth', () => {
     });
     cast(g, 'welcome-to-sweettooth');
     done(g);
-    const [human] = bf(g, 'woe-green-human-token');
+    const [human] = bf(g, 'woe-w-human-token');
     expect(human).toBeDefined();
     expect(pt(g, human!)).toEqual([1, 1]);
-    expect(cardDb.get('woe-green-human-token')!.colors).toEqual(['W']);
+    expect(cardDb.get('woe-w-human-token')!.colors).toEqual(['W']);
     expect(chars(g, human!).subtypes).toEqual(['Human']);
     nextMain(g);
     expect(bf(g, 'food-token')).toHaveLength(1);
@@ -1476,7 +1476,7 @@ describe('Return from the Wilds', () => {
     const island = g.state.battlefield.find((id) => g.obj(id).defId === 'island')!;
     expect(island).toBeDefined();
     expect(g.obj(island).tapped).toBe(true);
-    expect(bf(g, 'woe-green-human-token')).toHaveLength(1);
+    expect(bf(g, 'woe-w-human-token')).toHaveLength(1);
     expect(bf(g, 'food-token')).toHaveLength(0);
   });
   it('land and Food', () => {
@@ -1484,7 +1484,7 @@ describe('Return from the Wilds', () => {
     castMode(g, [/land/, /Food/]);
     done(g);
     expect(bf(g, 'food-token')).toHaveLength(1);
-    expect(bf(g, 'woe-green-human-token')).toHaveLength(0);
+    expect(bf(g, 'woe-w-human-token')).toHaveLength(0);
     expect(g.state.battlefield.filter((id) => g.obj(id).tapped)).toHaveLength(3 + 1);
   });
   it('Human and Food, no land', () => {
@@ -1492,7 +1492,7 @@ describe('Return from the Wilds', () => {
     castMode(g, [/Human/, /Food/]);
     done(g);
     expect(bf(g, 'food-token')).toHaveLength(1);
-    expect(bf(g, 'woe-green-human-token')).toHaveLength(1);
+    expect(bf(g, 'woe-w-human-token')).toHaveLength(1);
     expect(g.state.battlefield.filter((id) => g.obj(id).defId === 'forest')).toHaveLength(3);
   });
   it('can not choose the same mode twice', () => {

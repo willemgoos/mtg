@@ -27,7 +27,7 @@ import {
  */
 
 /** The 1/1 white Human creature token (Return from the Wilds, Welcome to Sweettooth). */
-const HUMAN = 'woe-green-human-token';
+const HUMAN = 'woe-w-human-token'; // white.ts makes it
 const human: EffectDef = { kind: 'createToken', token: HUMAN, count: 1 };
 
 const custom = (handler: string, params?: Record<string, unknown>): EffectDef => ({
@@ -618,20 +618,4 @@ export const WOE_GREEN_BACKS: Record<string, Behavior> = {
 };
 
 /** Tokens only this group's cards make. */
-export const WOE_GREEN_TOKENS: CardDefinition[] = [
-  // Return from the Wilds, Welcome to Sweettooth: "a 1/1 white Human creature token".
-  {
-    id: HUMAN,
-    name: 'Human',
-    manaCost: { generic: 0, colored: {} },
-    colors: ['W'],
-    types: ['Creature'],
-    supertypes: [],
-    subtypes: ['Human'],
-    power: 1,
-    toughness: 1,
-    keywords: [],
-    abilities: [],
-    isToken: true,
-  },
-];
+export const WOE_GREEN_TOKENS: CardDefinition[] = []; // the Human is white.ts's

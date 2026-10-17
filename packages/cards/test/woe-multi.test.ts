@@ -929,7 +929,7 @@ describe('The Goose Mother', () => {
 });
 
 describe('Totentanz, Swarm Piper', () => {
-  const rats = (g: Game) => tokensOf(g, 'woe-rat-cant-block-token');
+  const rats = (g: Game) => tokensOf(g, 'woe-rat-token');
   const kill = (g: Game, spell: string, target: string) => {
     const a = casts(g, spell).find((c) => targetsObject(c, target));
     if (!a) throw new Error(`can't ${spell} ${target}`);
@@ -978,9 +978,9 @@ describe('Totentanz, Swarm Piper', () => {
   });
   it('{1}{B}: target attacking Rat you control gains deathtouch until end of turn', () => {
     const g = game({
-      p1: { battlefield: ['totentanz-swarm-piper', 'woe-rat-cant-block-token', 'swamp', 'swamp'] },
+      p1: { battlefield: ['totentanz-swarm-piper', 'woe-rat-token', 'swamp', 'swamp'] },
     });
-    const rat = g.id('p1', 'woe-rat-cant-block-token');
+    const rat = g.id('p1', 'woe-rat-token');
     g.obj(rat).isToken = true;
     // Not attacking: no legal target.
     expect(abilityActions(g, g.id('p1', 'totentanz-swarm-piper'), 2)).toHaveLength(0);
