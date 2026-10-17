@@ -1,0 +1,1168 @@
+{
+ "source": "https://magic.wizards.com/en/news/mtg-arena/wilds-of-eldraine-story-decks",
+ "released": "2023-09-06",
+ "decks": [
+  {
+   "name": "Gruff 'n' Tuff",
+   "cards": [
+    [
+     "Graceful Takedown",
+     4
+    ],
+    [
+     "Swamp",
+     5
+    ],
+    [
+     "Rootrider Faun",
+     4
+    ],
+    [
+     "Tanglespan Lookout",
+     4
+    ],
+    [
+     "Gruff Triplets",
+     3
+    ],
+    [
+     "Restless Cottage",
+     2
+    ],
+    [
+     "Faunsbane Troll",
+     1
+    ],
+    [
+     "Return from the Wilds",
+     4
+    ],
+    [
+     "Forest",
+     10
+    ],
+    [
+     "Spellscorn Coven",
+     2
+    ],
+    [
+     "Elusive Otter",
+     2
+    ],
+    [
+     "Not Dead After All",
+     4
+    ],
+    [
+     "Troublemaker Ouphe",
+     4
+    ],
+    [
+     "Restless Vinestalk",
+     2
+    ],
+    [
+     "Island",
+     5
+    ],
+    [
+     "Beanstalk Wurm",
+     4
+    ]
+   ],
+   "count": 60
+  },
+  {
+   "name": "Heroic Quests",
+   "cards": [
+    [
+     "Kellan, the Fae-Blooded",
+     2
+    ],
+    [
+     "Forest",
+     3
+    ],
+    [
+     "Ruby, Daring Tracker",
+     3
+    ],
+    [
+     "Mountain",
+     7
+    ],
+    [
+     "Restless Bivouac",
+     2
+    ],
+    [
+     "A Tale for the Ages",
+     2
+    ],
+    [
+     "Plains",
+     6
+    ],
+    [
+     "Break the Spell",
+     2
+    ],
+    [
+     "Return Triumphant",
+     4
+    ],
+    [
+     "Protective Parents",
+     3
+    ],
+    [
+     "Crystal Grotto",
+     2
+    ],
+    [
+     "Evolving Wilds",
+     2
+    ],
+    [
+     "Edgewall Inn",
+     2
+    ],
+    [
+     "Agatha's Soul Cauldron",
+     1
+    ],
+    [
+     "Eriette's Tempting Apple",
+     2
+    ],
+    [
+     "Hylda's Crown of Winter",
+     1
+    ],
+    [
+     "Embereth Veteran",
+     4
+    ],
+    [
+     "Kindled Heroism",
+     2
+    ],
+    [
+     "Kellan's Lightblades",
+     4
+    ],
+    [
+     "Merry Bards",
+     2
+    ],
+    [
+     "Cut In",
+     2
+    ],
+    [
+     "Brave the Wilds",
+     2
+    ]
+   ],
+   "count": 60
+  },
+  {
+   "name": "Brawl at the Ball",
+   "cards": [
+    [
+     "Ash, Party Crasher",
+     2
+    ],
+    [
+     "Plains",
+     10
+    ],
+    [
+     "Restless Bivouac",
+     2
+    ],
+    [
+     "Armory Mice",
+     4
+    ],
+    [
+     "Gallant Pie-Wielder",
+     2
+    ],
+    [
+     "Stockpiling Celebrant",
+     4
+    ],
+    [
+     "Pests of Honor",
+     2
+    ],
+    [
+     "Stroke of Midnight",
+     3
+    ],
+    [
+     "Expel the Interlopers",
+     1
+    ],
+    [
+     "Bespoke Battlegarb",
+     3
+    ],
+    [
+     "Food Fight",
+     1
+    ],
+    [
+     "Cut In",
+     4
+    ],
+    [
+     "Skewer Slinger",
+     4
+    ],
+    [
+     "Belligerent of the Ball",
+     2
+    ],
+    [
+     "Goddric, Cloaked Reveler",
+     2
+    ],
+    [
+     "Evolving Wilds",
+     2
+    ],
+    [
+     "Grand Ball Guest",
+     2
+    ],
+    [
+     "Mountain",
+     10
+    ]
+   ],
+   "count": 60
+  },
+  {
+   "name": "Red Riding, Witch Fighting",
+   "cards": [
+    [
+     "Ruby, Daring Tracker",
+     3
+    ],
+    [
+     "Agatha of the Vile Cauldron",
+     1
+    ],
+    [
+     "Agatha's Champion",
+     3
+    ],
+    [
+     "Agatha's Soul Cauldron",
+     1
+    ],
+    [
+     "Edgewall Inn",
+     2
+    ],
+    [
+     "Feral Encounter",
+     2
+    ],
+    [
+     "Territorial Witchstalker",
+     4
+    ],
+    [
+     "Brave the Wilds",
+     2
+    ],
+    [
+     "Leaping Ambush",
+     2
+    ],
+    [
+     "Commune with Nature",
+     2
+    ],
+    [
+     "Bellowing Bruiser",
+     2
+    ],
+    [
+     "Witchstalker Frenzy",
+     4
+    ],
+    [
+     "Witch's Mark",
+     4
+    ],
+    [
+     "Boundary Lands Ranger",
+     2
+    ],
+    [
+     "Hollow Scavenger",
+     2
+    ],
+    [
+     "Mountain",
+     11
+    ],
+    [
+     "Forest",
+     13
+    ]
+   ],
+   "count": 60
+  },
+  {
+   "name": "Awaken for Peace",
+   "cards": [
+    [
+     "Will, Scion of Peace",
+     2
+    ],
+    [
+     "Heartflame Duelist",
+     4
+    ],
+    [
+     "Tenacious Tomeseeker",
+     4
+    ],
+    [
+     "Vantress Transmuter",
+     2
+    ],
+    [
+     "Imodane's Recruiter",
+     2
+    ],
+    [
+     "Imodane, the Pyrohammer",
+     2
+    ],
+    [
+     "Succumb to the Cold",
+     2
+    ],
+    [
+     "Gadwick's First Duel",
+     2
+    ],
+    [
+     "Moment of Valor",
+     4
+    ],
+    [
+     "Knight of Doves",
+     2
+    ],
+    [
+     "Archon's Glory",
+     4
+    ],
+    [
+     "Savior of the Sleeping",
+     2
+    ],
+    [
+     "Cursed Courtier",
+     4
+    ],
+    [
+     "Restless Bivouac",
+     2
+    ],
+    [
+     "Restless Spire",
+     2
+    ],
+    [
+     "Plains",
+     11
+    ],
+    [
+     "Island",
+     7
+    ],
+    [
+     "Mountain",
+     2
+    ]
+   ],
+   "count": 60
+  },
+  {
+   "name": "Slumber for War",
+   "cards": [
+    [
+     "Rowan, Scion of War",
+     2
+    ],
+    [
+     "Mountain",
+     8
+    ],
+    [
+     "Eriette of the Charmed Apple",
+     1
+    ],
+    [
+     "Rowan's Grim Search",
+     4
+    ],
+    [
+     "Stonesplitter Bolt",
+     4
+    ],
+    [
+     "Restless Bivouac",
+     2
+    ],
+    [
+     "Restless Fortress",
+     2
+    ],
+    [
+     "Eriette's Tempting Apple",
+     3
+    ],
+    [
+     "Twisted Fealty",
+     4
+    ],
+    [
+     "Charming Scoundrel",
+     2
+    ],
+    [
+     "Eriette's Whisper",
+     4
+    ],
+    [
+     "Prophetic Prism",
+     2
+    ],
+    [
+     "Callous Sell-Sword",
+     2
+    ],
+    [
+     "Eerie Interference",
+     2
+    ],
+    [
+     "Glass Casket",
+     2
+    ],
+    [
+     "Conceited Witch",
+     2
+    ],
+    [
+     "Ashiok's Reaper",
+     2
+    ],
+    [
+     "Swamp",
+     10
+    ],
+    [
+     "Plains",
+     2
+    ]
+   ],
+   "count": 60
+  },
+  {
+   "name": "Piping-Hot Pests",
+   "cards": [
+    [
+     "Totentanz, Swarm Piper",
+     3
+    ],
+    [
+     "Mountain",
+     10
+    ],
+    [
+     "Lord Skitter, Sewer King",
+     2
+    ],
+    [
+     "Edgewall Pack",
+     2
+    ],
+    [
+     "Song of Totentanz",
+     2
+    ],
+    [
+     "Redcap Gutter-Dweller",
+     1
+    ],
+    [
+     "Gnawing Crescendo",
+     2
+    ],
+    [
+     "Ratcatcher Trainee",
+     4
+    ],
+    [
+     "Twisted Sewer-Witch",
+     2
+    ],
+    [
+     "Voracious Vermin",
+     4
+    ],
+    [
+     "Lord Skitter's Butcher",
+     3
+    ],
+    [
+     "Lord Skitter's Blessing",
+     1
+    ],
+    [
+     "Rat Out",
+     4
+    ],
+    [
+     "Old Flitterfang",
+     2
+    ],
+    [
+     "Edgewall Inn",
+     2
+    ],
+    [
+     "Evolving Wilds",
+     2
+    ],
+    [
+     "Harried Spearguard",
+     4
+    ],
+    [
+     "Swamp",
+     10
+    ]
+   ],
+   "count": 60
+  },
+  {
+   "name": "Insomniacs Anonymous",
+   "cards": [
+    [
+     "Glass Casket",
+     2
+    ],
+    [
+     "Eriette of the Charmed Apple",
+     1
+    ],
+    [
+     "Neva, Stalked by Nightmares",
+     4
+    ],
+    [
+     "Restless Fortress",
+     2
+    ],
+    [
+     "Eerie Interference",
+     2
+    ],
+    [
+     "Hopeless Nightmare",
+     3
+    ],
+    [
+     "Eriette's Whisper",
+     4
+    ],
+    [
+     "Ashiok, Wicked Manipulator",
+     1
+    ],
+    [
+     "Eriette's Tempting Apple",
+     2
+    ],
+    [
+     "Taken by Nightmares",
+     3
+    ],
+    [
+     "The Witch's Vanity",
+     2
+    ],
+    [
+     "Slumbering Keepguard",
+     4
+    ],
+    [
+     "Cursed Courtier",
+     2
+    ],
+    [
+     "Dream Spoilers",
+     2
+    ],
+    [
+     "Ashiok's Reaper",
+     2
+    ],
+    [
+     "Wicked Visitor",
+     2
+    ],
+    [
+     "Swamp",
+     12
+    ],
+    [
+     "Plains",
+     10
+    ]
+   ],
+   "count": 60
+  },
+  {
+   "name": "Bad Apprenticeship",
+   "cards": [
+    [
+     "Aquatic Alchemist",
+     3
+    ],
+    [
+     "Mountain",
+     10
+    ],
+    [
+     "Living Lectern",
+     3
+    ],
+    [
+     "Frolicking Familiar",
+     4
+    ],
+    [
+     "Water Wings",
+     2
+    ],
+    [
+     "Johann, Apprentice Sorcerer",
+     3
+    ],
+    [
+     "Island",
+     12
+    ],
+    [
+     "Scalding Viper",
+     2
+    ],
+    [
+     "Restless Spire",
+     2
+    ],
+    [
+     "The Apprentice's Folly",
+     2
+    ],
+    [
+     "Quick Study",
+     3
+    ],
+    [
+     "Johann's Stopgap",
+     2
+    ],
+    [
+     "Splashy Spellcaster",
+     4
+    ],
+    [
+     "Torch the Tower",
+     4
+    ],
+    [
+     "Frantic Firebolt",
+     4
+    ]
+   ],
+   "count": 60
+  },
+  {
+   "name": "Hylda's Icy Reach",
+   "cards": [
+    [
+     "Frostbridge Guard",
+     4
+    ],
+    [
+     "Break the Spell",
+     2
+    ],
+    [
+     "Plunge into Winter",
+     3
+    ],
+    [
+     "Solitary Sanctuary",
+     3
+    ],
+    [
+     "Rimefur Reindeer",
+     3
+    ],
+    [
+     "Hylda of the Icy Crown",
+     1
+    ],
+    [
+     "Sharae of Numbing Depths",
+     3
+    ],
+    [
+     "Crystal Grotto",
+     4
+    ],
+    [
+     "Bitter Chill",
+     2
+    ],
+    [
+     "Freeze in Place",
+     3
+    ],
+    [
+     "Ice Out",
+     2
+    ],
+    [
+     "Succumb to the Cold",
+     4
+    ],
+    [
+     "Icewrought Sentry",
+     2
+    ],
+    [
+     "Farsight Ritual",
+     2
+    ],
+    [
+     "Hylda's Crown of Winter",
+     2
+    ],
+    [
+     "Plains",
+     10
+    ],
+    [
+     "Island",
+     10
+    ]
+   ],
+   "count": 60
+  },
+  {
+   "name": "Giant's Loot",
+   "cards": [
+    [
+     "Beluna Grandsquall",
+     2
+    ],
+    [
+     "Forest",
+     11
+    ],
+    [
+     "Mountain",
+     4
+    ],
+    [
+     "Troyan, Gutsy Explorer",
+     2
+    ],
+    [
+     "Restless Vinestalk",
+     2
+    ],
+    [
+     "Restless Spire",
+     2
+    ],
+    [
+     "Tempest Hart",
+     4
+    ],
+    [
+     "Disdainful Stroke",
+     2
+    ],
+    [
+     "Stormkeld Prowler",
+     2
+    ],
+    [
+     "Galvanic Giant",
+     3
+    ],
+    [
+     "Beluna's Gatekeeper",
+     2
+    ],
+    [
+     "Grabby Giant",
+     2
+    ],
+    [
+     "Two-Headed Hunter",
+     2
+    ],
+    [
+     "Up the Beanstalk",
+     3
+    ],
+    [
+     "Skybeast Tracker",
+     2
+    ],
+    [
+     "Beanstalk Wurm",
+     4
+    ],
+    [
+     "Thunderous Debut",
+     2
+    ],
+    [
+     "Stormkeld Vanguard",
+     2
+    ],
+    [
+     "Collector's Vault",
+     2
+    ],
+    [
+     "Island",
+     5
+    ]
+   ],
+   "count": 60
+  },
+  {
+   "name": "Candy and Crumbs",
+   "cards": [
+    [
+     "Greta, Sweettooth Scourge",
+     3
+    ],
+    [
+     "Restless Cottage",
+     2
+    ],
+    [
+     "Mintstrosity",
+     4
+    ],
+    [
+     "Sugar Rush",
+     2
+    ],
+    [
+     "Candy Grapple",
+     2
+    ],
+    [
+     "Back for Seconds",
+     4
+    ],
+    [
+     "Experimental Confectioner",
+     1
+    ],
+    [
+     "Gumdrop Poisoner",
+     2
+    ],
+    [
+     "Tough Cookie",
+     4
+    ],
+    [
+     "Syr Ginger, the Meal Ender",
+     2
+    ],
+    [
+     "Gingerbrute",
+     2
+    ],
+    [
+     "Candy Trail",
+     2
+    ],
+    [
+     "Welcome to Sweettooth",
+     4
+    ],
+    [
+     "Sweettooth Witch",
+     2
+    ],
+    [
+     "Scream Puff",
+     2
+    ],
+    [
+     "Swamp",
+     14
+    ],
+    [
+     "Forest",
+     8
+    ]
+   ],
+   "count": 60
+  },
+  {
+   "name": "Beanstalk Blitz",
+   "cards": [
+    [
+     "Troyan, Gutsy Explorer",
+     3
+    ],
+    [
+     "Restless Vinestalk",
+     2
+    ],
+    [
+     "The Goose Mother",
+     2
+    ],
+    [
+     "Tempest Hart",
+     2
+    ],
+    [
+     "Beluna's Gatekeeper",
+     2
+    ],
+    [
+     "Up the Beanstalk",
+     3
+    ],
+    [
+     "Skybeast Tracker",
+     2
+    ],
+    [
+     "Stormkeld Vanguard",
+     3
+    ],
+    [
+     "Thunderous Debut",
+     2
+    ],
+    [
+     "Beanstalk Wurm",
+     4
+    ],
+    [
+     "Hamlet Glutton",
+     2
+    ],
+    [
+     "Edgewall Inn",
+     2
+    ],
+    [
+     "Evolving Wilds",
+     2
+    ],
+    [
+     "Galvanic Giant",
+     2
+    ],
+    [
+     "Scarecrow Guide",
+     2
+    ],
+    [
+     "Collector's Vault",
+     2
+    ],
+    [
+     "Island",
+     10
+    ],
+    [
+     "Forest",
+     13
+    ]
+   ],
+   "count": 60
+  },
+  {
+   "name": "Beauty and the Beasts",
+   "cards": [
+    [
+     "Besotted Knight",
+     4
+    ],
+    [
+     "Curse of the Werefox",
+     4
+    ],
+    [
+     "Syr Armont, the Redeemer",
+     4
+    ],
+    [
+     "Yenna, Redtooth Regent",
+     2
+    ],
+    [
+     "Redtooth Genealogist",
+     4
+    ],
+    [
+     "Redtooth Vanguard",
+     2
+    ],
+    [
+     "Bestial Bloodline",
+     2
+    ],
+    [
+     "Royal Treatment",
+     2
+    ],
+    [
+     "Hopeful Vigil",
+     4
+    ],
+    [
+     "Werefox Bodyguard",
+     2
+    ],
+    [
+     "Evolving Wilds",
+     2
+    ],
+    [
+     "Ferocious Werefox",
+     4
+    ],
+    [
+     "Sentinel of Lost Lore",
+     2
+    ],
+    [
+     "Forest",
+     12
+    ],
+    [
+     "Plains",
+     10
+    ]
+   ],
+   "count": 60
+  },
+  {
+   "name": "Zzzzz...",
+   "cards": [
+    [
+     "Obyra, Dreaming Duelist",
+     3
+    ],
+    [
+     "Talion, the Kindly Lord",
+     1
+    ],
+    [
+     "Sleep-Cursed Faerie",
+     2
+    ],
+    [
+     "Spell Stutter",
+     2
+    ],
+    [
+     "Talion's Messenger",
+     2
+    ],
+    [
+     "Mocking Sprite",
+     2
+    ],
+    [
+     "Chancellor of Tales",
+     2
+    ],
+    [
+     "Storyteller Pixie",
+     2
+    ],
+    [
+     "Obyra's Attendants",
+     4
+    ],
+    [
+     "Into the Fae Court",
+     2
+    ],
+    [
+     "Rowdy Research",
+     1
+    ],
+    [
+     "Faerie Dreamthief",
+     1
+    ],
+    [
+     "Barrow Naughty",
+     2
+    ],
+    [
+     "Dream Spoilers",
+     2
+    ],
+    [
+     "Faerie Fencing",
+     4
+    ],
+    [
+     "Evolving Wilds",
+     2
+    ],
+    [
+     "High Fae Negotiator",
+     2
+    ],
+    [
+     "Spellscorn Coven",
+     2
+    ],
+    [
+     "Swamp",
+     10
+    ],
+    [
+     "Island",
+     12
+    ]
+   ],
+   "count": 60
+  }
+ ]
+}
