@@ -2,7 +2,6 @@ import {
   abilitiesLocked,
   canTapForAbility,
   cardMatches,
-  countOf,
   characteristics,
   creaturesOnBattlefield,
   isCreature,

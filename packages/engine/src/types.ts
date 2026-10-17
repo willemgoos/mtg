@@ -1996,9 +1996,9 @@ export type Amount =
   | { count: 'opponentCreatureCardsInGraveyard' }
   // Wilds of Eldraine (23d main)
   /** Cruel Somnophage: the number of creature cards in all graveyards. */
-  | { count: 'woeCreatureCardsInAllGraveyards' }
+  | { woeCreatureCardsInAllGraveyards: true }
   /** Tangled Colony: the damage dealt to the source this turn (last known, once it has died). */
-  | { count: 'woeDamageOnSelf' }
+  | { woeDamageOnSelf: true }
   // The Fantastic Four (9d).
   /** Colours among permanents you control and spells you've cast this turn (First Family). */
   | { count: 'colorsAmongPermanentsAndSpells' }

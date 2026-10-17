@@ -175,7 +175,7 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
       const src = obj(ctx, srcId);
       // The Hobbit (20b multicolour): a hone counter on an Equipment grants +1/+0 to the equipped creature (Dwalin, Weaponmaster).
       if (src.attachedTo === id && src.counters?.hone) power += src.counters.hone;
-      if (!affecting.has(src.defId)) continue;
+      if (!affecting.has(src.defId) && !src.woeEverflame) continue; // Wilds of Eldraine (23d main): Everflame
       for (const a of def(ctx, srcId).abilities) {
         if (a.kind !== 'static') continue;
         const st = a.effect;

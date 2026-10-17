@@ -66,13 +66,13 @@ function staticCount(ctx: Ctx, player: PlayerId, kind: StaticDef['kind']): numbe
 
 /** Cruel Somnophage ("creature cards in all graveyards"), Tangled Colony ("the damage dealt to it this turn"). */
 export function woeMainAmount(ctx: Ctx, a: Amount, sourceId?: ObjectId): number | undefined {
-  if (typeof a !== 'object' || !('count' in a)) return undefined;
-  if (a.count === 'woeCreatureCardsInAllGraveyards')
+  if (typeof a !== 'object') return undefined;
+  if ('woeCreatureCardsInAllGraveyards' in a)
     return PLAYERS.reduce(
       (n, p) => n + ctx.s.players[p].graveyard.filter((id) => isCreatureCard(ctx, id)).length,
       0,
     );
-  if (a.count === 'woeDamageOnSelf') {
+  if ('woeDamageOnSelf' in a) {
     if (!sourceId) return 0;
     const o = ctx.s.objects[sourceId];
     if (!o) return ctx.s.turn.tokenLki?.[sourceId]?.damage ?? 0;
@@ -297,6 +297,12 @@ export const WOE_MAIN_EFFECTS: Record<string, CustomEffect> = {
     const o = ctx.s.objects[id];
     if (o && o.zone === 'graveyard' && o.owner === es.controller)
       moveObject(ctx, id, 'battlefield', { controller: es.controller });
+  },
+
+  /** Fell Horseman: "When this creature dies, put it on the bottom of its owner's library." (A token has already ceased to exist.) */
+  woeMainBottomSelf(ctx, es) {
+    const o = es.source ? ctx.s.objects[es.source.id] : undefined;
+    if (o && o.zone === 'graveyard') moveObject(ctx, o.id, 'library', { position: 'bottom' });
   },
 
   /** Beseech the Mirror: the card found stays exiled face down. */

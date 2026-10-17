@@ -44,7 +44,7 @@ export function redactFor(state: GameState, viewer: PlayerId, db?: CardDb): Game
               !!state.objects[id]?.playableIf ||
               (state.objects[id]?.woeFaceDown !== undefined && state.objects[id]?.woeFaceDown !== viewer),
           );
-    const hidden = p === viewer ? ps.library : [...ps.library, ...ps.hand, ...faceDown];
+    const hidden = p === viewer ? [...ps.library, ...faceDown] : [...ps.library, ...ps.hand, ...faceDown];
     const d = state.decision;
     const seen =
       p === viewer

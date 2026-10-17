@@ -31,6 +31,7 @@ export const WOE_GREEN_MAIN: Record<string, Behavior> = {
           kind: 'anthem',
           affects: 'creaturesYouControl',
           filter: { types: ['Land'] },
+          anyPermanent: true,
           power: 1,
           toughness: 1,
         },

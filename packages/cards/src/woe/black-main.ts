@@ -47,7 +47,7 @@ export const WOE_BLACK_MAIN: Record<string, Behavior> = {
 
   // "Cruel Somnophage's power and toughness are each equal to the number of creature cards in all graveyards." (The Adventure is
   // Can't Wake Up.)
-  'Cruel Somnophage': { ptEquals: { count: 'woeCreatureCardsInAllGraveyards' } },
+  'Cruel Somnophage': { ptEquals: { woeCreatureCardsInAllGraveyards: true } },
 
   // Menace, trample. "At the beginning of your upkeep, you may sacrifice an artifact, enchantment, or token. If you don't, tap this
   // creature."
@@ -80,7 +80,7 @@ export const WOE_BLACK_MAIN: Record<string, Behavior> = {
   // "When this creature dies, put it on the bottom of its owner's library." (The Adventure is Deathly Ride.)
   'Fell Horseman': {
     abilities: [
-      when({ on: 'dies' }, [], { kind: 'putInLibrary', what: 'self', position: 'bottom' }),
+      when({ on: 'dies' }, [], custom('woeMainBottomSelf')),
     ],
   },
 
@@ -153,7 +153,7 @@ export const WOE_BLACK_MAIN: Record<string, Behavior> = {
       when({ on: 'dies' }, [], {
         kind: 'createToken',
         token: WOE_RAT,
-        count: { count: 'woeDamageOnSelf' },
+        count: { woeDamageOnSelf: true },
       }),
     ],
   },

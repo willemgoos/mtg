@@ -131,6 +131,7 @@ export function manaSources(
   const out: ManaSource[] = [];
   // Lorwyn Eclipsed (18b, red): looked up once per call (Lavaleaper).
   let lavaleaper: boolean | undefined;
+  let triple: number | undefined; // Wilds of Eldraine (23d main): Virtue of Strength, looked up once per call
   (ctx.s.players[player].pool ?? []).forEach(
     (p, i) =>
       (!p.onlyFor || forSubtypes.includes(p.onlyFor)) &&
@@ -304,7 +305,7 @@ export function manaSources(
       }
       // Wilds of Eldraine (23d main): Virtue of Strength, "if you tap a basic land for mana, it produces three times as much".
       if (def(ctx, id).supertypes.includes('Basic')) {
-        const more = woeTripleExtra(ctx, player);
+        const more = (triple ??= woeTripleExtra(ctx, player));
         for (let i = 0; i < more; i++) out.push({ ...src });
         if (more > 0 && src.produces.length > 1) for (const x of out) if (x.id === id) x.oneColor = true;
       }
