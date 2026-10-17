@@ -3,6 +3,7 @@
  * (exported as @mtg/engine/testing). Not used by the engine itself.
  */
 import { createObject, makeCtx, refreshCreaturesAreFood } from './context.ts';
+import { refreshWoeArtifactGrants } from './woe-red-effects.ts'; // Wilds of Eldraine (23b red)
 import type { Engine } from './engine.ts';
 import { emptyState, putInCommandZone } from './setup.ts';
 import type {
@@ -104,6 +105,7 @@ export function buildScenario(db: CardDb, spec: ScenarioSpec = {}): GameState {
   }
   s.decision = { kind: 'priority', player: active };
   refreshCreaturesAreFood(ctx);
+  refreshWoeArtifactGrants(ctx); // Wilds of Eldraine (23b red)
   return s;
 }
 

@@ -40,6 +40,8 @@ import {
   capPerSource,
 } from './simulate.ts';
 import { type Bot, other, viewEngine } from './view.ts';
+import { celebrating, chooseAnimateToAttack, hasCelebrationPayoff } from './woe.ts'; // Wilds of Eldraine (23a)
+import { chooseLandColor, chooseTalionNumber } from './woe.ts'; // Wilds of Eldraine (23b multi)
 
 /** Minimum improvement over passing before the bot spends a card or mana. */
 const MARGIN = 0.05;
@@ -140,6 +142,12 @@ export function createHeuristicBot(db: CardDb, name = 'heuristic'): Bot {
           {
             const ltr = chooseLtrGcRare(engine, view, me, d);
             if (ltr) return ltr;
+          }
+          // Wilds of Eldraine (23b multi): Talion's number, Edgewall Inn's color.
+          {
+            const woe =
+              chooseTalionNumber(engine.db, view, me, d) ?? chooseLandColor(engine.db, view, me, d);
+            if (woe) return woe;
           }
           return bestByEvaluation(engine, view, me, legal, 'stack');
         }
@@ -364,6 +372,8 @@ function waitsForCombat(engine: Engine, view: GameState, me: PlayerId, a: Action
   const def = engine.db.get(view.objects[a.card]!.defId);
   if (!def?.types.includes('Creature') || def.keywords.includes('haste')) return false;
   if (def.abilities.some((x) => x.kind === 'triggered' || x.kind === 'static')) return false;
+  // Wilds of Eldraine (23a): a permanent entering may switch celebration on before combat.
+  if (hasCelebrationPayoff(view, engine.db, me) && !celebrating(view, me)) return false;
   return view.battlefield.some((id) => {
     const o = view.objects[id]!;
     if (o.controller !== me || o.tapped || !engine.db.get(o.defId)?.types.includes('Creature'))
@@ -427,6 +437,11 @@ function choosePriorityAction(
     }
   }
   // The Hobbit (20a): nothing better to do: cycle a dead card.
+  // Wilds of Eldraine (23a): a Restless land that would attack.
+  if (best === pass) {
+    const animate = chooseAnimateToAttack(engine, view, me, legal, planAttacks);
+    if (animate) return animate;
+  }
   if (best === pass) return chooseCycling(engine, view, me, legal) ?? best;
   return best;
 }

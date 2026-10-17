@@ -42,7 +42,7 @@ const shockland = (a: ManaType, b: ManaType): Behavior => ({
     // Paid as it enters: here a "may" as it enters that untaps it (a simplification).
     onEnter(
       [],
-      may({ kind: 'loseLife', who: 'controller', amount: 2 }, { kind: 'untap', what: 'self' }),
+      may({ kind: 'loseLife', who: 'controller', amount: 2, payment: true }, { kind: 'untap', what: 'self' }),
     ),
   ],
 });

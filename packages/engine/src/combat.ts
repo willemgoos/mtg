@@ -10,6 +10,7 @@ import { type Ctx, def, obj, other } from './context.ts';
 import { damageSourceFor, dealDamage, type DamageSource } from './effects.ts';
 import { checkCondition } from './triggers.ts';
 import { ringCantBeBlockedBy } from './ltr-21a.ts'; // Lord of the Rings (21a)
+import { canBlockOnlyAllows } from './woe-blue-effects.ts'; // Wilds of Eldraine (23b blue)
 import { protectedFrom } from './brawl-15b-w-effects.ts';
 import { manaSources } from './mana.ts';
 import type { Attacker, ObjectId, PlayerId, StaticDef, TargetChoice } from './types.ts';
@@ -107,6 +108,8 @@ export function canBlock(ctx: Ctx, blocker: ObjectId, attacker: ObjectId): boole
   const a = ctx.s.combat?.attackers.find((x) => x.id === attacker);
   if (!a || b.controller !== a.defender) return false;
   if (characteristics(ctx, attacker).cantBeBlocked) return false;
+  // Wilds of Eldraine (23b blue): the Faerie token, "this token can block only creatures with flying".
+  if (!canBlockOnlyAllows(ctx, blocker, attacker)) return false;
   // Storm, Windrider: "Creatures with flying can't block creatures you control."
   if (
     bc.keywords.has('flying') &&

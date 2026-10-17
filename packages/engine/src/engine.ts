@@ -394,6 +394,7 @@ function apply(ctx: Ctx, action: Action): void {
         action.blight, // Lorwyn Eclipsed (18a)
         action.removeKinds,
         action.tapCreatures, // Lorwyn Eclipsed (18b, white)
+        action.sacrificeMany, // Wilds of Eldraine (23b white)
       );
       return paused ? undefined : givePriority(ctx, player);
     }

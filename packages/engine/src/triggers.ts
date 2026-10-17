@@ -18,6 +18,7 @@ import { elementalTriggerCopies } from './ecl-multi-b-effects.ts';
 import { hasEnduringStory, subtypeTriggerCopies } from './hob-20a.ts';
 import { detectLtr, isRingBearer, ringCondition } from './ltr-21a.ts';
 import { detectLtrWhite } from './ltr-white-effects.ts'; // Lord of the Rings (21b white)
+import { detectWoeRed } from './woe-red-effects.ts'; // Wilds of Eldraine (23b red)
 import { detectLtrGcRare } from './ltr-gc-rare-effects.ts'; // Lord of the Rings (21d gc-rare)
 import { doubleLegendaryArtifactTriggers } from './ltr-wu-rare-effects.ts'; // Lord of the Rings (21d wu-rare)
 import { detectLtrBrRare } from './ltr-br-rare-effects.ts'; // Lord of the Rings (21d br-rare)
@@ -27,9 +28,20 @@ import { LTR_RED_CONDITIONS } from './ltr-red-effects.ts'; // Lord of the Rings 
 import { detectLtrMultiRare, LTR_MULTI_RARE_CONDITIONS } from './ltr-multi-rare-effects.ts'; // Lord of the Rings (21d multi-rare)
 import { detectLtrMain } from './ltr-main-rules.ts'; // Lord of the Rings (22)
 import { doubleAttackTriggers, TDM_MISC_CONDITIONS } from './tdm-misc-effects.ts';
+import { WOE_BLACK_CONDITIONS } from './woe-black-effects.ts'; // Wilds of Eldraine (23b black)
+import { woeCombatEmblems } from './woe-green-effects.ts'; // Wilds of Eldraine (23b green)
+import { woeEnterExtraTriggers } from './woe-main-effects.ts'; // Wilds of Eldraine (23d main)
+import {
+  celebrating,
+  defHasAdventure,
+  detectTapOpponentCreature,
+  noteNonlandEntered,
+  ownsInExile,
+} from './woe-23a.ts'; // Wilds of Eldraine (23a)
 import type {
   AbilityDef,
   EffectDef,
+  CardDb,
   CardDefinition,
   ConditionDef,
   Emblem,
@@ -158,7 +170,7 @@ export function checkCondition(
   // Final Fantasy (11c): turn conditions.
   if (c.kind === 'noneCastThisTurn')
     return !(ctx.s.turn.castDefs?.[controller] ?? []).some((id) =>
-      defMatches(defOf(ctx, id), c.filter),
+      defMatches(defOf(ctx, id), c.filter, ctx.db),
     );
   if (c.kind === 'yourEarlyTurn')
     // Turns alternate, so each player's Nth turn comes by turn 2N (extra turns aside).
@@ -273,6 +285,10 @@ export function checkCondition(
     return (counters?.[c.name] ?? 0) >= (c.min ?? 1);
   }
   if (c.kind === 'manaSpentColors') return !!self && spentColors(ctx, self.id, c.colors);
+  // Wilds of Eldraine (23a): celebration, and "if you own a card in exile that has an Adventure".
+  if (c.kind === 'celebration') return celebrating(ctx, controller);
+  if (c.kind === 'ownsInExile')
+    return ownsInExile(ctx, controller, (id) => cardMatches(ctx, id, c.filter, self?.id));
   // Lorwyn Eclipsed (18b, green): Bristlebane Outrider, Thoughtweft Charge.
   if (c.kind === 'creatureEnteredThisTurn')
     return !!ctx.s.turn.creaturesEntered?.some(
@@ -450,7 +466,8 @@ export function checkCondition(
         FIN_CONDITIONS[c.handler] ??
         LTR_RED_CONDITIONS[c.handler] ?? // Lord of the Rings (21b red)
         LTR_MULTI_RARE_CONDITIONS[c.handler] ?? // Lord of the Rings (21d multi-rare)
-        TDM_MISC_CONDITIONS[c.handler]; // Tarkir: Dragonstorm (19b, misc)
+        TDM_MISC_CONDITIONS[c.handler] ?? // Tarkir: Dragonstorm (19b, misc)
+        WOE_BLACK_CONDITIONS[c.handler]; // Wilds of Eldraine (23b black)
       if (fn) return fn(ctx, controller, self, subject);
       throw new Error(`Custom condition "${c.handler}" not registered`);
     }
@@ -772,6 +789,7 @@ function detect(ctx: Ctx, ev: GameEvent): void {
   detectFic(ctx, ev);
   detectLtr(ctx, ev); // Lord of the Rings (21a)
   detectLtrWhite(ctx, ev); // Lord of the Rings (21b white)
+  detectWoeRed(ctx, ev); // Wilds of Eldraine (23b red)
   detectLtrGcRare(ctx, ev); // Lord of the Rings (21d gc-rare)
   detectLtrBrRare(ctx, ev); // Lord of the Rings (21d br-rare)
   detectLtrMultiRare(ctx, ev); // Lord of the Rings (21d multi-rare)
@@ -807,6 +825,7 @@ function detect(ctx: Ctx, ev: GameEvent): void {
           s.landColorAuras = true;
         // Lorwyn Eclipsed (18b, green, multi-a): "a creature entered the battlefield under your control this turn" (also Wary Farmer).
         if (isCreature) (s.turn.creaturesEntered ??= []).push({ id: moved.id, player: moved.controller });
+        noteNonlandEntered(ctx, moved); // Wilds of Eldraine (23a): celebration
         // Flying Drone: "another creature with flying entered the battlefield under your control".
         if (isCreature && hasKeyword(ctx, moved.id, 'flying'))
           (s.turn.flyersEntered ??= []).push({ id: moved.id, player: moved.controller });
@@ -826,6 +845,18 @@ function detect(ctx: Ctx, ev: GameEvent): void {
               a.trigger.on === 'creaturesEnterFromOrCastFromGraveyard' &&
               o.id !== moved.id &&
               o.controller === moved.controller,
+            moved,
+          );
+        // Wilds of Eldraine (23d main): Extraordinary Journey, a nontoken creature that entered from exile or was cast from exile.
+        if (
+          isCreature &&
+          !suppressed &&
+          !moved.isToken &&
+          (ev.from === 'exile' || (ev.from === 'stack' && moved.castFromExileZone))
+        )
+          forEachBattlefieldTrigger(
+            ctx,
+            (_o, a) => a.trigger.on === 'woeNontokenCreaturesEnterFromExile',
             moved,
           );
         forEachBattlefieldTrigger(
@@ -888,6 +919,8 @@ function detect(ctx: Ctx, ev: GameEvent): void {
         }
         // Final Fantasy (11c): entering permanents. Traveling Chocobo: a land or Bird you
         // control entering triggers your permanents' abilities an additional time.
+        // Wilds of Eldraine (23d main): Virtue of Knowledge (counted before Traveling Chocobo's copies are added: the extra times add up).
+        const woeExtra = woeEnterExtraTriggers(ctx, before);
         const twice = s.battlefield.filter(
           (id) =>
             obj(ctx, id).controller === moved.controller &&
@@ -904,6 +937,7 @@ function detect(ctx: Ctx, ev: GameEvent): void {
             .filter((t) => t.controller === moved.controller);
           for (let k = 0; k < twice; k++) for (const t of caused) s.pendingTriggers.push({ ...t });
         }
+        woeExtra(); // Wilds of Eldraine (23d main)
         // Lorwyn Eclipsed (18a): evoke, "when it enters, if its evoke cost was paid, sacrifice it". It goes on the
         // stack first, so it resolves after the enter triggers.
         if (moved.evoked && !suppressed)
@@ -922,6 +956,12 @@ function detect(ctx: Ctx, ev: GameEvent): void {
             // The Hobbit (20b multicolour): Silvan Reveler, "Landfall — ... return this card from your graveyard to your hand".
             if (a.kind === 'triggered' && a.fromGraveyard && a.trigger.on === 'landfall') {
               if (!suppressed && isLand) queue(ctx, card, i, moved.controller, moved);
+              return;
+            }
+            // Wilds of Eldraine (23b green): Redtooth Vanguard, "whenever an enchantment you control enters" (from your graveyard).
+            if (a.kind === 'triggered' && a.fromGraveyard && a.trigger.on === 'otherPermanentEtb') {
+              if (!suppressed && matchesFilter(ctx, moved.id, a.trigger.filter, id))
+                queue(ctx, card, i, moved.controller, moved);
               return;
             }
             if (a.kind !== 'triggered' || !a.fromGraveyard || a.trigger.on !== 'otherCreatureEtb')
@@ -1022,7 +1062,7 @@ function detect(ctx: Ctx, ev: GameEvent): void {
         if (moved)
           movedDef.abilities.forEach((a, i) => {
             if (a.kind !== 'triggered' || a.trigger.on !== 'permanentYouControlDies') return;
-            if (a.trigger.other || !defMatches(movedDef, a.trigger.filter)) return;
+            if (a.trigger.other || !defMatches(movedDef, a.trigger.filter, ctx.db)) return;
             if ((moved.lastCounters ?? 0) < (a.trigger.filter.minPlusOneCounters ?? 0)) return;
             if (checkCondition(ctx, a.condition, moved.owner, moved))
               queue(ctx, moved, i, moved.owner, moved);
@@ -1033,7 +1073,7 @@ function detect(ctx: Ctx, ev: GameEvent): void {
             a.trigger.on === 'permanentYouControlDies' &&
             o.id !== ev.id &&
             o.controller === diedUnder &&
-            defMatches(movedDef, a.trigger.filter) &&
+            defMatches(movedDef, a.trigger.filter, ctx.db) &&
             // Strixhaven (13c): Embrose, "a creature you control with a +1/+1 counter on it".
             (moved?.lastCounters ?? 0) >= (a.trigger.filter.minPlusOneCounters ?? 0),
           moved,
@@ -1073,8 +1113,9 @@ function detect(ctx: Ctx, ev: GameEvent): void {
         // "Dies" triggers look back in time: the ability triggers from the graveyard card.
         // Strixhaven (13a): a token that died has already ceased to exist, but its own dies trigger
         // still happens (Pest: "When this token dies, you gain 1 life"). A stand-in carries the trigger.
+        // Wilds of Eldraine (23b green): Gruff Triplets, a token that is a copy of a card has that card's (non-token) definition.
         const ghost: GameObject | null =
-          !moved && movedDef.isToken && ev.controller
+          !moved && ev.controller
             ? ({
                 id: ev.id,
                 defId: ev.defId,
@@ -1099,7 +1140,7 @@ function detect(ctx: Ctx, ev: GameEvent): void {
           const t = a.trigger;
           if (t.on !== 'dies' && t.on !== 'creatureYouControlDies') return;
           if (t.on === 'creatureYouControlDies' && t.nontoken && (!card || card.isToken)) return;
-          if (t.on === 'creatureYouControlDies' && t.filter && !defMatches(movedDef, t.filter))
+          if (t.on === 'creatureYouControlDies' && t.filter && !defMatches(movedDef, t.filter, ctx.db))
             return;
           // Lorwyn Eclipsed (18a): Shadow Urchin, "a creature you control with one or more counters on it dies".
           if (
@@ -1197,6 +1238,7 @@ function detect(ctx: Ctx, ev: GameEvent): void {
               !defMatches(
                 moved?.lastSubtypes ? { ...movedDef, subtypes: moved.lastSubtypes } : movedDef,
                 t.filter,
+                ctx.db,
               ) &&
               // Final Fantasy (11c): a type it gained (Jenova's Mutants).
               !(t.filter.subtype && moved?.lastAddedSubtypes?.includes(t.filter.subtype))
@@ -1252,7 +1294,7 @@ function detect(ctx: Ctx, ev: GameEvent): void {
               if (a.kind !== 'triggered' || !a.fromGraveyard) return;
               if (a.trigger.on !== 'creatureYouControlDies') return;
               if (a.trigger.nontoken && wasToken) return;
-              if (a.trigger.filter && !defMatches(movedDef, a.trigger.filter)) return;
+              if (a.trigger.filter && !defMatches(movedDef, a.trigger.filter, ctx.db)) return;
               if (checkCondition(ctx, a.condition, diedUnder, g)) queue(ctx, g, i, diedUnder);
             });
           }
@@ -1281,7 +1323,17 @@ function detect(ctx: Ctx, ev: GameEvent): void {
       }
       // Final Fantasy (11c): emblems that see a creature die (Sephiroth), and Zenos's chosen creature.
       if (ev.from === 'battlefield' && ev.to === 'graveyard' && movedDef.types.includes('Creature'))
-        emblemTriggers(ctx, (t) => t.on === 'otherCreatureDies', moved, true);
+        emblemTriggers(
+          ctx,
+          (t, e) =>
+            t.on === 'otherCreatureDies' &&
+            // Wilds of Eldraine (23b red): Gnawing Crescendo, "a nontoken creature you control dies this turn".
+            !(t.nontoken && (!moved || moved.isToken)) &&
+            (t.controller === 'any' ||
+              (t.controller === 'you') === ((ev.controller ?? moved?.controller) === e.controller)),
+          moved,
+          true,
+        );
       if (ev.from === 'battlefield')
         forEachBattlefieldTrigger(
           ctx,
@@ -1824,6 +1876,8 @@ function detect(ctx: Ctx, ev: GameEvent): void {
       return;
     }
     case 'tapped': {
+      // Wilds of Eldraine (23a): "whenever you tap an untapped creature an opponent controls".
+      detectTapOpponentCreature(ctx, ev);
       // Strixhaven Brawl (15b, r): Magda, Brazen Outlaw: whenever a Dwarf you control becomes tapped.
       const tappedNow = s.objects[ev.id];
       if (tappedNow && tappedNow.zone === 'battlefield')
@@ -2080,7 +2134,7 @@ function detect(ctx: Ctx, ev: GameEvent): void {
           o.controller === ev.player &&
           // Strixhaven Brawl (15b, b): Gixian Infiltrator, "another permanent".
           !(a.trigger.filter.other && o.id === ev.id) &&
-          defMatches(d, a.trigger.filter),
+          defMatches(d, a.trigger.filter, ctx.db),
       );
       // Strixhaven Brawl (15b, multi): Mayhem Devil, "whenever a player sacrifices a permanent".
       forEachBattlefieldTrigger(ctx, (_o, a) => a.trigger.on === 'playerSacrifices');
@@ -2320,6 +2374,7 @@ function detect(ctx: Ctx, ev: GameEvent): void {
             (a.trigger.whose === 'each' || o.controller === ev.activePlayer) &&
             !a.fromGraveyard,
         );
+        woeCombatEmblems(ctx, ev.activePlayer); // Wilds of Eldraine (23b green): Feral Encounter
         // Reality Fracture (17a): Darklight Phoenix returns itself from your graveyard.
         for (const gid of s.players[ev.activePlayer].graveyard) {
           const card = s.objects[gid]!;
@@ -2460,8 +2515,11 @@ export function nextPendingTriggerIndex(ctx: Ctx): number {
 }
 
 /** Type and subtype checks against a card definition (for a permanent that has already left). */
-export function defMatches(d: CardDefinition, f: CardFilter): boolean {
+export function defMatches(d: CardDefinition, f: CardFilter, db?: CardDb): boolean {
   if (f.types && !f.types.some((t) => d.types.includes(t))) return false;
+  // Wilds of Eldraine (23a): "a card that has an Adventure" (not an Omen; without the card database, no card has one).
+  if (f.hasAdventure && !(db && defHasAdventure(db, d))) return false;
+  if (f.anyOf && !f.anyOf.some((branch) => defMatches(d, branch, db))) return false;
   // The Hobbit (20b black): Sackville-Bagginses, "whenever you sacrifice a token".
   if (f.token && !d.isToken) return false;
   if (f.nontoken && d.isToken) return false;

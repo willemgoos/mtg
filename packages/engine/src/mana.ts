@@ -1,5 +1,7 @@
 import { commanderColors, legendaryColors, opponentLandColors } from './brawl.ts';
-import { changeLife, damageSourceFor, dealDamage } from './effects.ts';
+import { damageSourceFor, dealDamage } from './effects.ts';
+import { payLife } from './woe-black-effects.ts'; // Wilds of Eldraine (23b black)
+import { woeTripleExtra } from './woe-main-effects.ts'; // Wilds of Eldraine (23d main)
 import {
   abilitiesLocked,
   canTapForAbility,
@@ -129,6 +131,7 @@ export function manaSources(
   const out: ManaSource[] = [];
   // Lorwyn Eclipsed (18b, red): looked up once per call (Lavaleaper).
   let lavaleaper: boolean | undefined;
+  let triple: number | undefined; // Wilds of Eldraine (23d main): Virtue of Strength, looked up once per call
   (ctx.s.players[player].pool ?? []).forEach(
     (p, i) =>
       (!p.onlyFor || forSubtypes.includes(p.onlyFor)) &&
@@ -300,6 +303,12 @@ export function manaSources(
         out.push({ ...src });
         if (src.produces.length > 1) for (const x of out) if (x.id === id) x.oneColor = true;
       }
+      // Wilds of Eldraine (23d main): Virtue of Strength, "if you tap a basic land for mana, it produces three times as much".
+      if (def(ctx, id).supertypes.includes('Basic')) {
+        const more = (triple ??= woeTripleExtra(ctx, player));
+        for (let i = 0; i < more; i++) out.push({ ...src });
+        if (more > 0 && src.produces.length > 1) for (const x of out) if (x.id === id) x.oneColor = true;
+      }
       // Reality Fracture (17a): Molten Tide: "whenever you tap a Mountain for mana, add an additional {R}".
       if (
         ctx.s.turn.moltenTide?.includes(player) &&
@@ -348,6 +357,8 @@ export function manaSources(
       if (g.otherPermanents) {
         for (const id of ctx.s.battlefield) {
           if (id === exclude || id === src || obj(ctx, id).controller !== player) continue;
+          // Wilds of Eldraine (23b green): Night of the Sweets' Revenge, "Foods you control have '{T}: Add {G}'" (the filter names them).
+          if (!matchesFilter(ctx, id, g.filter)) continue;
           const have = out.find((x) => x.id === id && !x.pool);
           if (have) {
             for (const c of g.produces) if (!have.produces.includes(c)) have.produces.push(c);
@@ -486,7 +497,7 @@ export function payMana(ctx: Ctx, sources: Readonly<Payment>): void {
     .sort((a, b) => b - a);
   for (const i of fromPool) {
     // Mystical Archive (16): Channel, mana that costs 1 life to use.
-    if (ctx.s.players[player].pool![i]?.lifeCost) changeLife(ctx, player, -1);
+    if (ctx.s.players[player].pool![i]?.lifeCost) payLife(ctx, player, 1); // Wilds of Eldraine (23b black)
     ctx.s.players[player].pool!.splice(i, 1);
   }
   for (const id of sources) {
@@ -514,7 +525,7 @@ export function payMana(ctx: Ctx, sources: Readonly<Payment>): void {
   }
   for (const id of sources.pain ?? [])
     dealDamage(ctx, damageSourceFor(ctx, id, player), { player }, 1, false);
-  for (const _id of sources.life ?? []) changeLife(ctx, player, -1); // Lord of the Rings (21d gc-rare): Mount Doom
+  for (const _id of sources.life ?? []) payLife(ctx, player, 1); // Lord of the Rings (21d gc-rare): Mount Doom
 }
 
 /**

@@ -154,6 +154,15 @@ function graveyardCardOk(ctx: Ctx, spec: TargetSpec, id: ObjectId, src: Targetin
   return !spec.filter || cardMatches(ctx, id, spec.filter, src.sourceId);
 }
 
+/** Wilds of Eldraine (23b green): Sentinel of Lost Lore, a card in exile (`controller`: its owner). */
+function exileCardOk(ctx: Ctx, spec: TargetSpec, id: ObjectId, src: TargetingSource): boolean {
+  const o = ctx.s.objects[id];
+  if (!o || o.zone !== 'exile') return false;
+  if (spec.controller === 'you' && o.owner !== src.controller) return false;
+  if (spec.controller === 'opponent' && o.owner === src.controller) return false;
+  return !spec.filter || cardMatches(ctx, id, spec.filter, src.sourceId);
+}
+
 export function targetCandidates(ctx: Ctx, spec: TargetSpec, src: TargetingSource): TargetChoice[] {
   const out: TargetChoice[] = [];
   if (spec.what === 'creature' || spec.what === 'any' || spec.what === 'permanent') {
@@ -186,6 +195,11 @@ export function targetCandidates(ctx: Ctx, spec: TargetSpec, src: TargetingSourc
       for (const id of ctx.s.players[p].graveyard)
         if (graveyardCardOk(ctx, spec, id, src)) out.push({ object: refOf(obj(ctx, id)) });
   }
+  // Wilds of Eldraine (23b green): Sentinel of Lost Lore.
+  if (spec.what === 'exileCard')
+    for (const p of PLAYERS)
+      for (const id of ctx.s.players[p].exile)
+        if (exileCardOk(ctx, spec, id, src)) out.push({ object: refOf(obj(ctx, id)) });
   if (spec.what === 'player' || spec.what === 'any') {
     for (const p of PLAYERS) if (playerOk(ctx, spec, p, src)) out.push({ player: p });
   }
@@ -288,6 +302,7 @@ export function isTargetLegal(
   if (spec.what === 'spell' && spec.orPermanent && o.zone === 'battlefield')
     return permanentOk(ctx, { ...spec, what: 'permanent' }, o.id, src);
   if (spec.what === 'spell') return spellOk(ctx, spec, o.id, src);
+  if (spec.what === 'exileCard') return exileCardOk(ctx, spec, o.id, src); // Wilds of Eldraine (23b green)
   return spec.what === 'graveyardCard'
     ? graveyardCardOk(ctx, spec, o.id, src)
     : permanentOk(ctx, spec, o.id, src);

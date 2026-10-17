@@ -84,6 +84,7 @@ const SET_NAMES: Record<string, string> = {
   tdm: 'Tarkir: Dragonstorm',
   hob: 'The Hobbit',
   ltr: 'The Lord of the Rings',
+  woe: 'Wilds of Eldraine',
 };
 export const setLabel = (code: string) => SET_NAMES[code] ?? code.toUpperCase();
 

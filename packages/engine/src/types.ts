@@ -209,7 +209,13 @@ export interface CardDefinition {
      * Kicker under another name: 'offspring' (a creature also makes a 1/1 token
      * copy) or 'gift' (a free promise of a gift to an opponent).
      */
-    as?: 'offspring' | 'gift' | 'overload';
+    as?: 'offspring' | 'gift' | 'overload' | 'bargain';
+    // Wilds of Eldraine (23a): bargain
+    /**
+     * "This spell costs {N} less to cast if it's bargained" (Hamlet Glutton, Ice Out, Johann's Stopgap): taken off the generic part
+     * of the kicked (bargained) cast's cost.
+     */
+    costReduction?: number;
     /** A permanent's gift: given to an opponent as it resolves, if promised (Scrapshooter). */
     gift?: EffectDef;
     // Teamwork (Marvel Super Heroes)
@@ -366,6 +372,8 @@ export interface CardDefinition {
    * the chosen player's permanent that definition (the `becomeVariant` effect); it shows the front again wherever it goes.
    */
   enterChoices?: { label: string; abilities: AbilityDef[] }[];
+  /** Wilds of Eldraine (23b multi): the heading of the `enterChoices` prompt ("Talion, the Kindly Lord: choose a number between 1 and 10"). */
+  enterChoiceTitle?: string;
   /** A derived definition: the card with this id, having made one of its `enterChoices`. Never in a deck or a hand. */
   variantOf?: CardDefId;
   // Tarkir: Dragonstorm (19a): Harmonize
@@ -701,6 +709,9 @@ export interface CostDef {
   // Lord of the Rings (21d gc-rare): Mines of Moria
   /** Exile this many cards from your graveyard (chosen one at a time when there are more). */
   exileGraveyardCards?: number;
+  // Wilds of Eldraine (23b white): Dutiful Griffin
+  /** "Sacrifice two enchantments": sacrifice this many permanents matching the filter (chosen when activating, in the action's `sacrificeMany`). */
+  sacrificePermanents?: { count: number; filter: CardFilter };
 }
 
 export type TriggerDef =
@@ -1189,9 +1200,26 @@ export type TriggerDef =
    * (use with `batch` and `oncePerTurn`; the creatures that did are the `subjects`).
    */
   | { on: 'creaturesEnterFromOrCastFromGraveyard' }
+  // Wilds of Eldraine (23d main)
+  /** Extraordinary Journey: whenever one or more nontoken creatures enter, if any entered from exile or was cast from exile (use with `oncePerTurn`). */
+  | { on: 'woeNontokenCreaturesEnterFromExile' }
   // Lorwyn Eclipsed (18c, theme decks): Magmatic Galleon
   /** Whenever one or more creatures your opponents control are dealt excess noncombat damage (use with `batch`; the amount is the excess). */
-  | { on: 'opponentCreaturesDealtExcessNoncombat' };
+  | { on: 'opponentCreaturesDealtExcessNoncombat' }
+  // Wilds of Eldraine (23b red): Skewer Slinger, Imodane, the Pyrohammer
+  /** Whenever this creature blocks or becomes blocked by a creature: once for each such creature, the subject. */
+  | { on: 'blocksOrBecomesBlocked' }
+  /**
+   * Whenever an instant or sorcery spell you control that targets only a single creature deals damage to that creature
+   * (the amount is the damage dealt).
+   */
+  | { on: 'yourSpellDamagesItsSingleTarget' }
+  // Wilds of Eldraine (23a): Hylda of the Icy Crown, Icewrought Sentry, Solitary Sanctuary, Sharae of Numbing Depths
+  /**
+   * Whenever you tap an untapped creature an opponent controls (with a spell or ability you control: the `tap` effect); the
+   * creature is the subject. With `batch` (and `oncePerTurn`): "whenever you tap one or more untapped creatures your opponents control".
+   */
+  | { on: 'youTapOpponentCreature' };
 
 export type ConditionDef =
   // The Hobbit (20a): Storied
@@ -1470,7 +1498,12 @@ export type ConditionDef =
   | { kind: 'targetPlayerDamagedBySource'; target: number }
   // Tarkir: Dragonstorm (19b, black): The Sibsig Ceremony
   /** The creature that caused the trigger (the one that entered) was cast, not put onto the battlefield some other way ("if you cast it"). */
-  | { kind: 'subjectWasCast' };
+  | { kind: 'subjectWasCast' }
+  // Wilds of Eldraine (23a)
+  /** Celebration: two or more nonland permanents entered the battlefield under your control this turn. */
+  | { kind: 'celebration' }
+  /** You own a card in exile matching the filter (Howling Galefang: "a card in exile that has an Adventure"). */
+  | { kind: 'ownsInExile'; filter: CardFilter };
 
 export interface CardFilter {
   anyOf?: CardFilter[];
@@ -1538,6 +1571,9 @@ export interface CardFilter {
   attackedThisTurn?: boolean;
   /** Toughness greater than its power (Fecund Greenshell). */
   toughnessGreaterThanPower?: boolean;
+  // Wilds of Eldraine (23b blue): Elusive Otter
+  /** Power less than the source's power ("creatures with power less than this creature's power"). */
+  powerLessThanSource?: boolean;
   // Marvel Super Heroes Jumpstart (Marvelous)
   /** Power greater than its base power (Ms. Marvel, Elastic Ally). */
   powerAboveBase?: boolean;
@@ -1643,11 +1679,28 @@ export interface CardFilter {
   diedThisTurn?: boolean;
   /** "Creature with power X": X is the value paid for the ability's {X}; the ability's actions only list targets of that power (Ent-Draught Basin). */
   powerEqualsX?: boolean;
+  // Wilds of Eldraine (23d main): Likeness Looter, "target creature card in your graveyard with mana value X"
+  /** An activated ability's target whose mana value is the X paid. */
+  manaValueEqualsX?: boolean;
   // Lord of the Rings (21d gc-rare)
   /** A creature card that shares no creature type with a creature its controller controls (Radagast the Brown). */
   ltrNoSharedType?: boolean;
   /** None of these objects (Mount Doom: "destroy the rest"). */
   ltrExceptIds?: ObjectId[];
+  // Wilds of Eldraine (23a)
+  /**
+   * A card that has an Adventure (an adventurer card: its back face is an Adventure spell, not an Omen). As a spell it matches only
+   * when cast as the creature or enchantment ("permanent spells you cast that have an Adventure"); an Adventure spell is matched by
+   * `subtype: 'Adventure'`.
+   */
+  hasAdventure?: boolean;
+  // Wilds of Eldraine (23b multi)
+  /** A spell whose mana value, power or toughness is this number (Talion, the Kindly Lord). */
+  manaValuePowerOrToughness?: number;
+  /** Doesn't have the same name as a token its controller (the source's controller) controls (The Apprentice's Folly). */
+  nameNotOfYourToken?: boolean;
+  /** Doesn't have the same name as another permanent its controller (the source's controller) controls (Yenna, Redtooth Regent). */
+  nameUniqueAmongYourPermanents?: boolean;
 }
 
 export interface TargetSpec {
@@ -1655,7 +1708,16 @@ export interface TargetSpec {
    * 'permanent': any permanent (narrow with filter.types / nonland);
    * 'graveyardCard': a card in a graveyard (controller 'you' = your graveyard).
    */
-  what: 'any' | 'creature' | 'player' | 'permanent' | 'graveyardCard' | 'spell';
+  what:
+    | 'any'
+    | 'creature'
+    | 'player'
+    | 'permanent'
+    | 'graveyardCard'
+    | 'spell'
+    // Wilds of Eldraine (23b green): Sentinel of Lost Lore, "target card you own in exile that has an Adventure"
+    /** A card in exile (`controller`: its owner: 'you' / 'opponent'). */
+    | 'exileCard';
   controller?: 'you' | 'opponent';
   filter?: CardFilter;
   /** "Up to": this target and the ones after it may be left out. */
@@ -1848,7 +1910,16 @@ export type Amount =
       // Final Fantasy (11b): "each Artificer card in your graveyard" (Cid); "noncreature, nonland" (Esper Ramuh).
       subtype?: string;
       notTypes?: CardType[];
+      // Wilds of Eldraine (23a): Frantic Firebolt, Hearth Elemental ("instant cards, sorcery cards, and/or have an Adventure")
+      /** Only cards matching this. */
+      filter?: CardFilter;
     }
+  // Wilds of Eldraine (23b red): Kellan, the Fae-Blooded
+  /** The permanents of any controller attached to the source that match the filter ("for each Aura and Equipment attached to Kellan"). */
+  | { count: 'attachedToSource'; filter: CardFilter }
+  // Wilds of Eldraine (23a): Rowdy Research, Witchstalker Frenzy
+  /** "For each creature that attacked this turn": the different creatures declared as attackers this turn (by any player). */
+  | { count: 'creaturesAttackedThisTurn' }
   /** The amount from the trigger event ("that much damage"). */
   | { event: 'amount' }
   // Reality Fracture (17a fixes): Rise of the Deathbringer
@@ -1923,6 +1994,11 @@ export type Amount =
   // Marvel Super Heroes Jumpstart (Lethal)
   /** Creature cards in the opponent's graveyard (Origin of Black Widow). */
   | { count: 'opponentCreatureCardsInGraveyard' }
+  // Wilds of Eldraine (23d main)
+  /** Cruel Somnophage: the number of creature cards in all graveyards. */
+  | { woeCreatureCardsInAllGraveyards: true }
+  /** Tangled Colony: the damage dealt to the source this turn (last known, once it has died). */
+  | { woeDamageOnSelf: true }
   // The Fantastic Four (9d).
   /** Colours among permanents you control and spells you've cast this turn (First Family). */
   | { count: 'colorsAmongPermanentsAndSpells' }
@@ -2418,6 +2494,32 @@ export type EffectDef =
   | { kind: 'playerHexproof' }
   /** Tap two untapped tokens: this Vehicle becomes an artifact creature until end of turn. */
   | { kind: 'becomeCreature'; what: Ref }
+  // Wilds of Eldraine (23a): Roles
+  /**
+   * "Create a <role> Role token attached to <to>": for each creature `to` names that is on the battlefield, a Role token (the
+   * definition `role`) under your control, entering attached to it. If you then control more than one Role on that creature the
+   * older ones are put into the graveyard (rule 303.7, a state-based action). Nothing is made for a creature that is gone.
+   */
+  | { kind: 'createRole'; role: CardDefId; to: Ref }
+  // Wilds of Eldraine (23a): the Restless lands, Brave the Wilds, Tough Cookie
+  /**
+   * "<It> becomes a P/T <colors> <subtype> creature [with <keywords>] [and "<abilities>"] until end of turn. It's still a land.":
+   * it keeps its card types (a land stays a land, an artifact an artifact) and becomes a creature with base power and toughness
+   * P/T. `colors` replaces its colours, `subtype` is its creature type, `keywords` and `abilities` are what it gains. `permanent`:
+   * the effect has no end ("becomes a 3/3 Elemental creature with haste that's still a land": Brave the Wilds); `abilities` are
+   * for the until-end-of-turn kind only.
+   */
+  | {
+      kind: 'animate';
+      what: Ref;
+      power: number;
+      toughness: number;
+      colors?: Color[];
+      subtype?: string;
+      keywords?: Keyword[];
+      abilities?: AbilityDef[];
+      permanent?: boolean;
+    }
   /** Until end of turn you may cast creature spells from your graveyard by foraging (Osteomancer Adept). */
   | { kind: 'osteomancer' }
   /** Raise this Class's level by one. */
@@ -2487,6 +2589,9 @@ export type EffectDef =
       // Lorwyn Eclipsed (18b, white): Kinscaer Sentry
       /** Mana value at most this amount, read as the effect resolves ("where X is the number of attacking creatures you control"). */
       maxManaValueAmount?: Amount;
+      // Wilds of Eldraine (23d main): Blossoming Tortoise, "return a land card" (not "you may")
+      /** You must choose a card when there is one. */
+      required?: boolean;
     }
   // Strixhaven (13c)
   /** The resolving spell returns to its owner's hand rather than the graveyard (Journey to the Oracle). */
@@ -2608,7 +2713,15 @@ export type EffectDef =
       /** Search your library (Bushwhack, Circuitous Route). Shuffles afterwards unless `shuffle` is false. */
       kind: 'searchLibrary';
       filter: 'basicLand' | 'basicLandOrGate' | CardFilter;
-      to: 'hand' | 'battlefieldTapped' | 'battlefield' | 'graveyard' | 'libraryTop' | 'castFree';
+      to:
+        | 'hand'
+        | 'battlefieldTapped'
+        | 'battlefield'
+        | 'graveyard'
+        | 'libraryTop'
+        | 'castFree'
+        // Wilds of Eldraine (23d main): Beseech the Mirror, "exile it face down"
+        | 'hideaway';
       /** Unrestricted tutors cannot fail to find a card in a nonempty library. */
       required?: boolean;
       shuffle?: boolean;
@@ -2739,6 +2852,9 @@ export type EffectDef =
       // Reality Fracture (17a): Seasoned Cryomancer
       /** Once the discarding is done, if any nonland card was discarded, the reflexive ability at this index triggers ("that many"). */
       reflexiveOnNonland?: number;
+      // Wilds of Eldraine (23b blue): Talion's Messenger
+      /** Once a card has been discarded, the reflexive ability at this index triggers ("when you discard a card this way"). */
+      reflexiveOnAny?: number;
       // Reality Fracture (17a): Tether Technician, Improvised Act
       /** "If you do": these effects follow once a card was discarded (not if the hand was empty). */
       then?: EffectDef[];
@@ -2942,6 +3058,14 @@ export type EffectDef =
       // Tarkir: Dragonstorm (19b, white): United Battlefront
       /** "Put up to N ... from among them": one at a time, stopping whenever the player likes; the rest go to the bottom in a random order. */
       upTo?: number;
+      // Wilds of Eldraine (23b blue): Farsight Ritual
+      /** Not optional: with `upTo`, exactly that many cards if there are that many to take ("put two of them into your hand"). */
+      required?: boolean;
+      // Wilds of Eldraine (23b green): Feral Encounter, Commune with Nature
+      /** The card taken is exiled and may be cast this turn instead of going to your hand (the rest go to the bottom in a random order). */
+      exilePlayable?: boolean;
+      /** The rest go to the bottom in any order: they stay on top for now (as `restOnTop`) and a following `woeBottomOrder` effect lets the player order them. */
+      restInAnyOrder?: boolean;
     }
   /** Exile the top N; you may play them until the end of this turn or of your next turn. */
   | {
@@ -2993,7 +3117,14 @@ export type EffectDef =
     }
   | { kind: 'destroy'; what: Ref }
   | { kind: 'gainLife'; who: Ref; amount: Amount }
-  | { kind: 'loseLife'; who: Ref; amount: Amount }
+  | {
+      kind: 'loseLife';
+      who: Ref;
+      amount: Amount;
+      // Wilds of Eldraine (23b black): Ashiok, Wicked Manipulator
+      /** "Pay N life" as an effect (a shock land's "you may pay 2 life"): a cost, not a loss, so Ashiok's replacement applies. */
+      payment?: boolean;
+    }
   | { kind: 'draw'; who: Ref; amount: Amount }
   | {
       kind: 'createToken';
@@ -3389,6 +3520,9 @@ export type StaticDef =
   // Strixhaven Brawl (15a): Anointed Procession
   /** If an effect would create one or more tokens under your control, it creates twice that many instead. */
   | { kind: 'doubleTokens' }
+  // Wilds of Eldraine (23b black): Ashiok, Wicked Manipulator
+  /** If you would pay life while your library has at least that many cards in it, exile that many cards from the top of it instead. */
+  | { kind: 'woePayLifeExilesLibrary' }
   // Strixhaven Brawl (15a): Deification (simplified: every planeswalker type)
   /** Planeswalkers you control have hexproof; while you control a creature, damage can't remove their last loyalty counter. */
   | { kind: 'planeswalkerProtection' }
@@ -3406,6 +3540,9 @@ export type StaticDef =
       power: Amount;
       toughness: Amount;
       keywords?: Keyword[];
+      // Wilds of Eldraine (23b white): Archon of the Wild Rose
+      /** Base power and toughness of the creatures it affects (counters and other bonuses still apply on top). */
+      basePT?: [number, number];
     }
   | { kind: 'noLifeGain' }
   // Lord of the Rings (21b black): Gríma Wormtongue
@@ -3432,6 +3569,9 @@ export type StaticDef =
   /** Instant and sorcery spells you control have lifelink. */
   | { kind: 'instantsSorceriesLifelink' }
   | { kind: 'cantBlock' }
+  // Wilds of Eldraine (23b blue): the Faerie token
+  /** "This creature can block only creatures matching the filter" (the Faerie token: creatures with flying). */
+  | { kind: 'canBlockOnly'; filter: CardFilter }
   /** This permanent doesn't untap during its controller's untap step (The Hobbit (20a), Bombur: `unless` the condition holds). */
   | { kind: 'doesntUntap'; unless?: ConditionDef }
   // Lord of the Rings (21b blue): Bewitching Leechcraft
@@ -3720,6 +3860,13 @@ export type StaticDef =
    * control to trigger, that ability triggers an additional time" (Gandalf the White).
    */
   | { kind: 'ltrLegendaryArtifactTriggersTwice' }
+  // Wilds of Eldraine (23d main)
+  /** Virtue of Knowledge: if a permanent entering causes a triggered ability of a permanent you control to trigger, it triggers an additional time. */
+  | { kind: 'woeEntersTriggerTwice' }
+  /** Virtue of Strength: if you tap a basic land for mana, it produces three times as much of that mana instead. */
+  | { kind: 'woeTripleBasicMana' }
+  /** Blossoming Tortoise: activated abilities of lands you control cost {N} less to activate (the generic part only, down to nothing). */
+  | { kind: 'woeLandAbilitiesCostLess'; amount: number }
   /** This creature can't be blocked. */
   | { kind: 'cantBeBlocked' }
   /** "Other creatures you control have prowess" (Bria, Riptide Rogue). */
@@ -3770,15 +3917,36 @@ export type StaticDef =
   | {
       kind: 'playFromTop';
       filter: CardFilter;
+      // Wilds of Eldraine (23b multi): Johann, Apprentice Sorcerer
+      /** "Once each turn": only one spell a turn may be cast this way. */
+      oncePerTurn?: boolean;
       // Final Fantasy (11c): "as long as The Lunar Whale attacked this turn".
       condition?: ConditionDef;
     }
+  // Wilds of Eldraine (23b multi)
+  /**
+   * Activated abilities of creatures you control cost {N} less to activate (N an Amount, counted for this permanent), but not to
+   * less than one mana (Agatha of the Vile Cauldron).
+   */
+  | { kind: 'activatedAbilitiesCostLess'; amount: Amount }
+  /** You may spend mana as though it were mana of any color to activate abilities of creatures you control (Agatha's Soul Cauldron). */
+  | { kind: 'anyColorForCreatureAbilities' }
+  /** Creatures you control with +1/+1 counters have all activated abilities of the creature cards exiled with this (Agatha's Soul Cauldron). */
+  | { kind: 'cauldronAbilities' }
   /** During your turn, cast instants and sorceries from your graveyard by paying 1 life more (Festival of Embers). */
   | { kind: 'castFromGraveyardForLife' }
   /** Cards and tokens that would go to your graveyard are exiled instead (Festival of Embers). */
   | { kind: 'graveyardToExile' }
   /** Other creatures are Food artifacts with the Food ability (Ygra). */
   | { kind: 'creaturesAreFood' }
+  // Wilds of Eldraine (23b red): Food Fight, Goddric, Cloaked Reveler
+  /** "Artifacts you control have '<ability>'": every artifact its controller controls has this activated ability (Food Fight). */
+  | { kind: 'artifactsYouControlHave'; ability: AbilityDef }
+  /**
+   * As long as celebration holds (two or more nonland permanents entered under your control this turn), this creature has
+   * exactly these creature types (it loses all others) and these abilities (Goddric, Cloaked Reveler).
+   */
+  | { kind: 'becomesWhileCelebrating'; subtypes: string[]; abilities: AbilityDef[] }
   /** The first instant or sorcery you cast each turn costs {U} less per land with a flood counter (Eluge). */
   | { kind: 'floodDiscount' }
   /** Damage can't be prevented (Sunspine Lynx). */
@@ -4007,6 +4175,19 @@ export interface GameObject {
   kicked?: boolean;
   /** Its power as it last left the battlefield (last known information). */
   lastPower?: number;
+  // Wilds of Eldraine (23d main)
+  /** The damage marked on it as it last left the battlefield (Tangled Colony). */
+  lastDamage?: number;
+  /** It was cast from exile (Extraordinary Journey: "entered from exile or was cast from exile"). */
+  castFromExileZone?: boolean;
+  /** Exiled face down: only this player may look at it (Beseech the Mirror, Expensive Taste). */
+  woeFaceDown?: PlayerId;
+  /** The Irencrag has become Everflame, Heroes' Legacy for good. */
+  woeEverflame?: boolean;
+  /** Mosswood Dreadknight: this player may cast its Adventure from their graveyard through the end of this turn number (while it stays at this zone change). */
+  woeAdventureCast?: { player: PlayerId; zcc: number; until: number };
+  /** Likeness Looter: the keywords its copy has besides the copied ones. */
+  copyAddedKeywords?: Keyword[];
   /** What it was attached to as it last left the battlefield (for "when enchanted creature dies"). */
   lastAttachedTo?: ObjectRef;
   /** Subtypes gained on top of the printed ones (Infernal Vessel's Demon). */
@@ -4141,6 +4322,9 @@ export interface GameObject {
   castableWhileControlling?: ObjectRef;
   /** The spell this object was cast as came from a graveyard (Twilight Diviner). */
   castFromGraveyardZone?: boolean;
+  // Wilds of Eldraine (23b red): Imodane, the Pyrohammer
+  /** A resolving instant or sorcery spell: the targets it was put on the stack with (read by "targets only a single creature"). */
+  woeSpellTargets?: TargetChoice[];
   // Reality Fracture (17a fixes): Hexhaven Dueling Arena
   /** The zone change (zcc) it was at when it last attacked: a creature that has changed zones since is a new object. */
   attackedZcc?: number;
@@ -4290,6 +4474,9 @@ export interface GameObject {
   // Final Fantasy Commander (12f).
   /** Exiled from a graveyard to be cast this turn: it counts as cast from a graveyard (Emet-Selch). */
   fromGraveyardCast?: boolean;
+  // Wilds of Eldraine (23b black): Faerie Fencing
+  /** As this spell was cast, its caster controlled a Faerie. */
+  controlledFaerieAtCast?: boolean;
   // Reality Fracture (17a): Null Summoner, Uldaros Theorix
   /** It entered the battlefield as a spell that was cast. */
   wasCast?: boolean;
@@ -4346,6 +4533,11 @@ export interface PlayerState {
   // Strixhaven (13b): Maelstrom Muse
   /** The next instant or sorcery spell cast on `turn` costs `amount` less. */
   nextSpellDiscount?: { turn: number; amount: number };
+  // Wilds of Eldraine (23b multi)
+  /** Rowan, Will: spells of these colours cost {X} less this turn, X the life lost or gained this turn (one entry for each activation). */
+  woeLifeDiscounts?: { turn: number; by: 'lifeLost' | 'lifeGained'; colors: Color[] }[];
+  /** Johann: the turn a spell was last cast from the top of this player's library with an "once each turn" permission. */
+  woeTopCastTurn?: number;
   // Strixhaven Brawl (15a): Patchplate Resolute
   /** One-time boons: the next creature spells you cast (one each) enter with an additional +1/+1 counter. */
   creatureBoons?: number;
@@ -4629,6 +4821,8 @@ export interface TurnState {
   // Lorwyn Eclipsed (18b, green, multi-a): Bristlebane Outrider, Thoughtweft Charge, Wary Farmer
   /** Creatures that entered the battlefield this turn, and who controlled them then. */
   creaturesEntered?: { id: ObjectId; player: PlayerId }[];
+  /** Wilds of Eldraine (23a): celebration, the nonland permanents that entered the battlefield under each player's control this turn. */
+  nonlandEntered?: Partial<Record<PlayerId, number>>;
   // Final Fantasy (11a): saga creatures
   /** Players whose creatures are dealt no damage this turn (Summon: Alexander). */
   creaturesShielded?: PlayerId[];
@@ -4671,13 +4865,16 @@ export interface TurnState {
   // Lord of the Rings (21b red): Fear, Fire, Foes!
   /** "Damage can't be prevented this turn." */
   ltrDamageUnpreventable?: boolean;
+  // Wilds of Eldraine (23b white): Eerie Interference
+  /** Players whose creatures (and the players themselves) are dealt no damage by creatures this turn. */
+  woeCreatureDamagePrevented?: PlayerId[];
   // Lord of the Rings (21d br-rare): Witch-king of Angmar
   /** The creatures that dealt combat damage to each player this turn (`id:zcc`). */
   ltrCombatDamagers?: Partial<Record<PlayerId, string[]>>;
   // Lorwyn Eclipsed (18b, special): Mirrormind Crown
   // The Hobbit (20b black): Azog, Moria's Ruin
   /** Tokens that left the battlefield this turn (they cease to exist): what they were, by id. */
-  tokenLki?: Record<ObjectId, { power: number; controller: PlayerId }>;
+  tokenLki?: Record<ObjectId, { power: number; controller: PlayerId; damage?: number }>;
   /** Players whose first token creation this turn has happened ("the first time you would create one or more tokens each turn"). */
   firstTokensDone?: PlayerId[];
 }
@@ -4983,6 +5180,7 @@ export type Decision =
       drawAfter?: number;
       tokenPerNonland?: string;
       reflexiveOnNonland?: number; // Reality Fracture (17a): Seasoned Cryomancer
+      reflexiveOnAny?: number; // Wilds of Eldraine (23b blue): Talion's Messenger
       nonlandDiscarded?: number;
       // Reality Fracture (17a): Tether Technician
       then?: EffectDef[];
@@ -5068,6 +5266,11 @@ export type Decision =
       battlefieldOnYourTurn?: boolean;
       /** The looked-at cards not taken stay on top (Herald's Horn). */
       restOnTop?: boolean;
+      // Wilds of Eldraine (23b green): Feral Encounter, Commune with Nature
+      /** The card taken is exiled; it may be cast this turn. */
+      exilePlayable?: boolean;
+      /** The rest stay on top (`restOnTop`) only until the player orders them on the bottom. */
+      restInAnyOrder?: boolean;
       /** Marvel Super Heroes: the cards not taken go to the graveyard. */
       restToGraveyard?: boolean;
       // Final Fantasy (11c): The Darkness Crystal ("tapped ... with two additional +1/+1 counters").
@@ -5422,10 +5625,14 @@ export interface GameState {
   creaturesAreFood?: boolean;
   // Lorwyn Eclipsed (18b, green): a Shimmerwilds Growth has been on the battlefield (lands may be recoloured: `def` looks for the Aura).
   landColorAuras?: boolean;
+  /** Wilds of Eldraine (23b red): a Food Fight ("Artifacts you control have ...") has been on the battlefield; `def` looks for it only then. */
+  woeArtifactGrants?: boolean;
   /** Lorwyn Eclipsed (18b): some object has had its colours changed (`allColorsTurn`, `colorOverride`, `colorless`); `def` checks them only then. */
   colorChanges?: boolean;
   /** Tarkir: Dragonstorm (19b, blue): an Aura has granted abilities (`auraGrants`); `def` checks them only then. */
   auraGrants?: boolean;
+  /** Wilds of Eldraine (23b multi): Agatha's Soul Cauldron has exiled a creature card; `def` checks the abilities it gives only then. */
+  woeCauldron?: boolean;
   /** Abilities players have from emblems or effects (Season of the Bold, Ral). */
   emblems?: Emblem[];
   /** "At the beginning of the next end step, ...": fire at the first end step after `afterTurn` / this step. */
@@ -5510,7 +5717,9 @@ export type Action =
         // Lorwyn Eclipsed (18a): Dawnhand Dissident
         | 'exiledWithSelf'
         // The Hobbit (20b black): Inside Information.
-        | 'lifeForMana';
+        | 'lifeForMana'
+        // Wilds of Eldraine (23d main): Mosswood Dreadknight, its Adventure from the graveyard.
+        | 'woeAdventure';
       /** Mockingbird: the creature to enter as a copy of. */
       copyOf?: ObjectId;
       /** Rottenmouth Viper: permanents sacrificed to make it cheaper. */
@@ -5570,6 +5779,9 @@ export type Action =
       // Lorwyn Eclipsed (18b, white): Kithkeeper
       /** The creatures tapped for `tapCreatures` ("tap three untapped creatures you control") or to crew (Lorwyn Eclipsed 18c). */
       tapCreatures?: ObjectId[];
+      // Wilds of Eldraine (23b white): Dutiful Griffin
+      /** The permanents sacrificed for `sacrificePermanents` ("sacrifice two enchantments"). */
+      sacrificeMany?: ObjectId[];
     }
   | {
       type: 'addAttacker';
@@ -5640,7 +5852,13 @@ export type GameEvent =
       excess?: number;
     }
   | { type: 'lifeChanged'; player: PlayerId; delta: number; life: number }
-  | { type: 'tapped'; id: ObjectId; first?: boolean }
+  | {
+      type: 'tapped';
+      id: ObjectId;
+      first?: boolean;
+      /** Wilds of Eldraine (23a): the controller of the spell or ability that tapped it (the `tap` effect). */
+      by?: PlayerId;
+    }
   /** A card went from its owner's hand to their graveyard (Doom Prevails). */
   | { type: 'discarded'; id: ObjectId; player: PlayerId }
   /** A creature connived (Doom Prevails). */

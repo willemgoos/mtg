@@ -14,6 +14,7 @@ import { ECL_BOOSTER_LIST } from './ecl/booster-list.ts';
 import { TDM_BOOSTER_LIST } from './tdm/booster-list.ts';
 import { HOB_BOOSTER_LIST } from './hob/booster-list.ts';
 import { LTR_BOOSTER_LIST } from './ltr/booster-list.ts';
+import { WOE_BOOSTER_LIST } from './woe/booster-list.ts';
 import { STX_BOOSTER_LIST } from './stx/booster-list.ts';
 import { SOA_ARCHIVE_LIST } from './sos/archive-list.ts';
 import { STA_ARCHIVE_LIST } from './stx/archive-list.ts';
@@ -48,6 +49,7 @@ export {
   TARKIR_DRAGONSTORM_POOL,
   THE_HOBBIT_POOL,
   LORD_OF_THE_RINGS_POOL,
+  WILDS_OF_ELDRAINE_POOL,
   OTHER_POOL,
   RED_POOL,
   WHITE_POOL,
@@ -73,6 +75,7 @@ export {
   SECRETS_OF_STRIXHAVEN_DECKS,
   LORWYN_ECLIPSED_DECKS,
   LORD_OF_THE_RINGS_DECKS,
+  WILDS_OF_ELDRAINE_STORY_DECKS,
   REALITY_FRACTURE_DECKS,
   FINAL_FANTASY_STARTER_KIT_DECKS,
   FINAL_FANTASY_BRAWL_DECKS,
@@ -88,6 +91,7 @@ export {
   packetCards,
   ARENA_ECL_PACKETS,
   ARENA_TDM_PACKETS,
+  ARENA_WOE_PACKETS,
   ARENA_SOS_PACKETS,
   dealPacket,
   defaultDeal,
@@ -143,6 +147,11 @@ export function theHobbitBoosterSheets(): BoosterSheets {
 /** The Lord of the Rings' booster cards by LTR rarity (the 261 main-set cards, no basics), the cards the pool has. */
 export function lordOfTheRingsBoosterSheets(): BoosterSheets {
   return boosterSheets(LTR_BOOSTER_LIST, (c) => cardDb.has(slug(c.name)));
+}
+
+/** Wilds of Eldraine's booster cards by WOE rarity (the 261 main-set cards, no basics), the cards the pool has. */
+export function wildsOfEldraineBoosterSheets(): BoosterSheets {
+  return boosterSheets(WOE_BOOSTER_LIST, (c) => cardDb.has(slug(c.name)));
 }
 
 /**

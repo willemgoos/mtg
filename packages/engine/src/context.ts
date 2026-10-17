@@ -4,6 +4,8 @@ import { MSH_EFFECTS } from './msh-effects.ts';
 import { FRA_BLACK_EFFECTS } from './fra-black-effects.ts';
 // Lorwyn Eclipsed (18b, black)
 import { ECL_BLACK_EFFECTS, drawPrevented } from './ecl-black-effects.ts';
+import { WOE_BLACK_EFFECTS } from './woe-black-effects.ts'; // Wilds of Eldraine (23b black)
+import { WOE_MAIN_EFFECTS, everflameDef } from './woe-main-effects.ts'; // Wilds of Eldraine (23d main)
 import { FIN_EFFECTS } from './fin-effects.ts';
 import { withRingLegendary } from './ltr-21a.ts'; // Lord of the Rings (21a)
 import { HOB_BLACK_EFFECTS } from './hob-black-effects.ts'; // The Hobbit (20b black)
@@ -33,6 +35,7 @@ import { extraEntryCounters, noteCreatureCounters, TDM_MISC_EFFECTS } from './td
 import { TDM_CLANS_EFFECTS } from './tdm-clans-effects.ts'; // Tarkir: Dragonstorm (19b, clans)
 import { ECL_SPECIAL_EFFECTS } from './ecl-special-effects.ts';
 import { ECL_GREEN_EFFECTS } from './ecl-green-effects.ts';
+import { WOE_GREEN_EFFECTS } from './woe-green-effects.ts'; // Wilds of Eldraine (23b green)
 import { HOB_GREEN_EFFECTS } from './hob-green-effects.ts'; // The Hobbit (20b green)
 import { LTR_GREEN_EFFECTS } from './ltr-green-effects.ts'; // Lord of the Rings (21b green)
 import { TDM_GREEN_EFFECTS } from './tdm-green-effects.ts';
@@ -41,9 +44,11 @@ import { HOB_BLUE_EFFECTS } from './hob-blue-effects.ts'; // The Hobbit (20b blu
 import { TDM_BLUE_EFFECTS } from './tdm-blue-effects.ts';
 import { HOB_COLORLESS_EFFECTS } from './hob-colorless-effects.ts'; // The Hobbit (20b colorless)
 import { ECL_WHITE_EFFECTS } from './ecl-white-effects.ts';
+import { WOE_WHITE_EFFECTS } from './woe-white-effects.ts'; // Wilds of Eldraine (23b white)
 import { HOB_WHITE_EFFECTS } from './hob-white-effects.ts'; // The Hobbit (20b white)
 import { LTR_BLUE_EFFECTS } from './ltr-blue-effects.ts'; // Lord of the Rings (21b blue)
 import { LTR_WHITE_EFFECTS } from './ltr-white-effects.ts'; // Lord of the Rings (21b white)
+import { WOE_RED_EFFECTS, woeRedApplies, woeRedDef } from './woe-red-effects.ts'; // Wilds of Eldraine (23b red)
 import { LTR_GC_RARE_EFFECTS, ltrDrawsTwice } from './ltr-gc-rare-effects.ts'; // Lord of the Rings (21d gc-rare)
 import { LTR_WU_RARE_EFFECTS } from './ltr-wu-rare-effects.ts'; // Lord of the Rings (21d wu-rare)
 import { LTR_BR_RARE_EFFECTS } from './ltr-br-rare-effects.ts'; // Lord of the Rings (21d br-rare)
@@ -62,6 +67,7 @@ import { ARCHIVE_16_EFFECTS } from './archive-16-effects.ts';
 import { FRA_MULTI_B_EFFECTS } from './fra-multi-b-effects.ts';
 import { ECL_MULTI_B_EFFECTS, defsWithStatic } from './ecl-multi-b-effects.ts';
 import { HOB_MULTICOLOUR_EFFECTS, withGraveyardElfAbilities } from './hob-multicolour-effects.ts'; // The Hobbit (20b multicolour)
+import { WOE_MULTI_EFFECTS, withCauldronAbilities } from './woe-multi-effects.ts'; // Wilds of Eldraine (23b multi)
 import { STX_13C_A_EFFECTS } from './stx-13c-a-effects.ts';
 import { STX_13C_B_EFFECTS } from './stx-13c-b-effects.ts';
 import { STX_13C_C_EFFECTS } from './stx-13c-c-effects.ts';
@@ -83,6 +89,7 @@ import type {
   GameEvent,
   GameObject,
   GameState,
+  Keyword,
   ObjectId,
   ObjectRef,
   PlayerId,
@@ -141,6 +148,7 @@ const BUILT_IN_EFFECTS: Record<string, CustomEffect> = {
   // Reality Fracture (17a): black.
   ...FRA_BLACK_EFFECTS,
   ...ECL_BLACK_EFFECTS, // Lorwyn Eclipsed (18b, black)
+  ...WOE_BLACK_EFFECTS, // Wilds of Eldraine (23b black)
   ...HOB_BLACK_EFFECTS, // The Hobbit (20b black)
   // Reality Fracture (17a, colorless).
   ...FRA_COLORLESS_EFFECTS,
@@ -188,12 +196,15 @@ const BUILT_IN_EFFECTS: Record<string, CustomEffect> = {
   ...TDM_19A_EFFECTS,
   ...TDM_CLANS_B_EFFECTS, // Tarkir: Dragonstorm (19b, clans-b)
   ...HOB_MULTICOLOUR_EFFECTS, // The Hobbit (20b multicolour)
+  ...WOE_MULTI_EFFECTS, // Wilds of Eldraine (23b multi)
   ...TDM_WHITE_EFFECTS, // Tarkir: Dragonstorm (19b, white)
   ...TDM_MISC_EFFECTS, // Tarkir: Dragonstorm (19b, misc)
   ...TDM_GREEN_EFFECTS, // Tarkir: Dragonstorm (19b): green
   ...HOB_GREEN_EFFECTS, // The Hobbit (20b): green
   ...TDM_CLANS_EFFECTS, // Tarkir: Dragonstorm (19b, clans)
   ...LTR_GREEN_EFFECTS, // Lord of the Rings (21b green)
+  ...WOE_GREEN_EFFECTS, // Wilds of Eldraine (23b green)
+  ...WOE_MAIN_EFFECTS, // Wilds of Eldraine (23d main)
   // Lorwyn Eclipsed (18b, special).
   ...ECL_SPECIAL_EFFECTS,
   // Lorwyn Eclipsed (18b): green.
@@ -208,9 +219,11 @@ const BUILT_IN_EFFECTS: Record<string, CustomEffect> = {
   ...HOB_COLORLESS_EFFECTS, // The Hobbit (20b colorless)
   // Lorwyn Eclipsed (18b): white.
   ...ECL_WHITE_EFFECTS,
+  ...WOE_WHITE_EFFECTS, // Wilds of Eldraine (23b white)
   ...HOB_WHITE_EFFECTS, // The Hobbit (20b, white)
   ...LTR_BLUE_EFFECTS, // Lord of the Rings (21b blue)
   ...LTR_WHITE_EFFECTS, // Lord of the Rings (21b white)
+  ...WOE_RED_EFFECTS, // Wilds of Eldraine (23b red)
   ...LTR_GC_RARE_EFFECTS, // Lord of the Rings (21d gc-rare)
   ...LTR_WU_RARE_EFFECTS, // Lord of the Rings (21d wu-rare)
   ...LTR_BR_RARE_EFFECTS, // Lord of the Rings (21d br-rare)
@@ -283,10 +296,12 @@ export function def(ctx: Ctx, id: ObjectId): CardDefinition {
   const o = obj(ctx, id);
   const d0 = defBase(ctx, o);
   // The Hobbit (20b multicolour): Thranduil, the Elvenking has the activated abilities of the Elf cards in your graveyard.
-  const d =
+  const dE =
     o.zone === 'battlefield' && defsWithStatic(ctx.db, 'graveyardElfAbilities').has(o.defId)
       ? withGraveyardElfAbilities(ctx, o, d0)
       : d0;
+  // Wilds of Eldraine (23b multi): Agatha's Soul Cauldron gives creatures with +1/+1 counters the abilities of the creature cards it exiled.
+  const d = ctx.s.woeCauldron && o.zone === 'battlefield' ? withCauldronAbilities(ctx, id, dE) : dE;
   // Lord of the Rings (21d multi-rare): Sharkey, Tyrant of the Shire has the activated abilities of its opponents' lands.
   const dS =
     o.zone === 'battlefield' && copiesOpponentLandAbilities(ctx.db, o.defId)
@@ -297,8 +312,10 @@ export function def(ctx: Ctx, id: ObjectId): CardDefinition {
     ctx.s.colorChanges && o.allColorsTurn === ctx.s.turn.number && o.zone === 'battlefield'
       ? { ...dS, colors: ALL_COLORS }
       : dS;
+  // Wilds of Eldraine (23b red): Food Fight's "Artifacts you control have ...", Goddric's celebration.
+  const dW = o.zone === 'battlefield' && woeRedApplies(ctx, d2) ? woeRedDef(ctx, o, d2) : d2;
   // Lord of the Rings (21a): the Ring's first ability, "your Ring-bearer is legendary" (most games have no Ring).
-  return ctx.s.players[o.controller].ring ? withRingLegendary(ctx, o, d2) : d2;
+  return ctx.s.players[o.controller].ring ? withRingLegendary(ctx, o, dW) : dW;
 }
 
 /** Lorwyn Eclipsed (18b): `d` with the colours the object was given or lost. */
@@ -352,7 +369,15 @@ function defBase(ctx: Ctx, o: GameObject): CardDefinition {
     return blightDef(d);
   // Marvel Super Heroes Jumpstart (Young Avengers): a copy that keeps some of its own abilities.
   if (o.copyKeptAbilities && o.originalDefId)
-    return keptAbilitiesDef(d, defOf(ctx, o.originalDefId), o.copyKeptAbilities);
+    return keptAbilitiesDef(
+      d,
+      defOf(ctx, o.originalDefId),
+      o.copyKeptAbilities,
+      !!o.copyKeepsName, // Wilds of Eldraine (23d main): Likeness Looter keeps no name, only an ability and flying
+      o.copyAddedKeywords,
+    );
+  // Wilds of Eldraine (23d main): The Irencrag has become Everflame, Heroes' Legacy.
+  if (o.woeEverflame && o.zone === 'battlefield') return everflameDef(d);
   // Ygra: other creatures are Food artifacts with the Food ability.
   if (
     ctx.s.creaturesAreFood &&
@@ -457,7 +482,29 @@ const keptAbilitiesDefs = new WeakMap<CardDefinition, WeakMap<CardDefinition, Ca
  * his name is Hulkling, ... and he has this ability"). The kept abilities come after the copied
  * ones, so the copied abilities keep their indices; triggers map the kept ones back (queue).
  */
-function keptAbilitiesDef(d: CardDefinition, own: CardDefinition, kept: number[]): CardDefinition {
+function keptAbilitiesDef(
+  d: CardDefinition,
+  own: CardDefinition,
+  kept: number[],
+  keepName = true,
+  addedKeywords: Keyword[] = [],
+): CardDefinition {
+  // Wilds of Eldraine (23d main): Likeness Looter keeps its ability and gains flying, but takes the copied name.
+  if (!keepName) {
+    const key = `${own.id}|${kept.join(',')}|${addedKeywords.join(',')}`;
+    let bySig = keptNoNameDefs.get(d);
+    if (!bySig) keptNoNameDefs.set(d, (bySig = new Map()));
+    let g = bySig.get(key);
+    if (!g) {
+      g = {
+        ...d,
+        keywords: [...d.keywords, ...addedKeywords.filter((k) => !d.keywords.includes(k))],
+        abilities: [...d.abilities, ...kept.flatMap((i) => own.abilities[i] ?? [])],
+      };
+      bySig.set(key, g);
+    }
+    return g;
+  }
   let byOwn = keptAbilitiesDefs.get(d);
   if (!byOwn) keptAbilitiesDefs.set(d, (byOwn = new WeakMap()));
   let f = byOwn.get(own);
@@ -471,6 +518,8 @@ function keptAbilitiesDef(d: CardDefinition, own: CardDefinition, kept: number[]
   }
   return f;
 }
+
+const keptNoNameDefs = new WeakMap<CardDefinition, Map<string, CardDefinition>>();
 
 /** Recomputes whether a Ygra is on the battlefield (after setting up a position directly). */
 export function refreshCreaturesAreFood(ctx: Ctx): void {
@@ -822,6 +871,7 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
   if (from === 'battlefield') {
     const c = characteristics(ctx, id);
     o.lastPower = c.power;
+    o.lastDamage = o.damage; // Wilds of Eldraine (23d main): Tangled Colony
     o.lastSubtypes = [...c.subtypes];
     o.lastCounters = o.plusOneCounters;
     if (to === 'graveyard' && c.types.includes('Creature')) {
@@ -903,6 +953,7 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
     delete o.copyKeepsName;
     // Marvel Super Heroes Jumpstart (Young Avengers).
     delete o.copyKeptAbilities;
+    delete o.copyAddedKeywords; // Wilds of Eldraine (23d main): Likeness Looter
   }
   // Marvel Super Heroes (Secret Invasion): a copy lasting while this stays ends as it leaves.
   if (from === 'battlefield')
@@ -918,6 +969,7 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
   // A stolen card's permission ends when it leaves exile.
   if (from === 'exile') {
     delete o.castableBy;
+    delete o.woeFaceDown; // Wilds of Eldraine (23d main)
     delete o.castableIf; // Reality Fracture (17a)
     delete o.castableWhileControlling; // Lorwyn Eclipsed (18b, black)
     delete o.castableUntilTurn;
@@ -1164,7 +1216,11 @@ export function moveObject(ctx: Ctx, id: ObjectId, to: ZoneName, opts: MoveOptio
   }
   // The Hobbit (20b black): Azog, Moria's Ruin; what a token that left the battlefield was (its power and controller).
   if (ceases && from === 'battlefield')
-    (ctx.s.turn.tokenLki ??= {})[id] = { power: o.lastPower ?? 0, controller: o.controller };
+    (ctx.s.turn.tokenLki ??= {})[id] = {
+      power: o.lastPower ?? 0,
+      controller: o.controller,
+      damage: o.lastDamage ?? 0, // Wilds of Eldraine (23d main): Tangled Colony
+    };
   if (ceases) delete ctx.s.objects[id];
   // Final Fantasy (11c): meld. The other half goes where the melded permanent went.
   const partner = meldPartner ? ctx.s.objects[meldPartner] : undefined;
@@ -1379,14 +1435,15 @@ export function drawCard(ctx: Ctx, player: PlayerId, drawStepDraw = false): void
   emit(ctx, { type: 'cardDrawn', player, id: top, nth, ...(drawStepDraw ? { drawStep: true } : {}) }); // Lord of the Rings (21d br-rare)
 }
 
-export function tap(ctx: Ctx, id: ObjectId): void {
+export function tap(ctx: Ctx, id: ObjectId, by?: PlayerId): void {
   const o = obj(ctx, id);
   if (o.tapped) return;
   o.tapped = true;
   // Captain America, Living Legend cares about the first time each turn.
   const first = o.firstTappedTurn !== ctx.s.turn.number;
   o.firstTappedTurn = ctx.s.turn.number;
-  emit(ctx, { type: 'tapped', id, ...(first ? { first } : {}) });
+  // Wilds of Eldraine (23a): `by`, the controller of the spell or ability that tapped it.
+  emit(ctx, { type: 'tapped', id, ...(first ? { first } : {}), ...(by ? { by } : {}) });
 }
 
 /** Lorwyn Eclipsed (18b, blue): an Aura on it says it can't become untapped (Blossombind) or can't have counters put on it. */

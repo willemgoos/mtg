@@ -42,6 +42,7 @@ const BOOSTER_FACE: Partial<Record<PackSet, string>> = {
   tdm: 'Ugin, Eye of the Storms',
   hob: 'Smaug the Magnificent',
   ltr: 'The One Ring',
+  woe: 'Ashiok, Wicked Manipulator',
 };
 
 /** Art for a pack: the first rare of its set and colour, or the set's face or first mythic. */

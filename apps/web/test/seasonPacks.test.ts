@@ -3,6 +3,7 @@ import { ECL_BOOSTER_LIST } from '../../../packages/cards/src/ecl/booster-list.t
 import { TDM_BOOSTER_LIST } from '../../../packages/cards/src/tdm/booster-list.ts';
 import { HOB_BOOSTER_LIST } from '../../../packages/cards/src/hob/booster-list.ts';
 import { LTR_BOOSTER_LIST } from '../../../packages/cards/src/ltr/booster-list.ts';
+import { WOE_BOOSTER_LIST } from '../../../packages/cards/src/woe/booster-list.ts';
 import { FRA_BOOSTER_LIST } from '../../../packages/cards/src/fra/booster-list.ts';
 import { SOS_BOOSTER_LIST } from '../../../packages/cards/src/sos/booster-list.ts';
 import { STX_BOOSTER_LIST } from '../../../packages/cards/src/stx/booster-list.ts';
@@ -27,6 +28,7 @@ import {
   TARKIR_DRAGONSTORM_SHEETS,
   THE_HOBBIT_SHEETS,
   LORD_OF_THE_RINGS_SHEETS,
+  WILDS_OF_ELDRAINE_SHEETS,
   MARVEL_SHEETS,
   REALITY_FRACTURE_SHEETS,
   SECRETS_SHEETS,
@@ -306,7 +308,28 @@ describe('Season Bloomburrow packs', () => {
     const cards = opened.lastPack!.rewards.flatMap((r) => (r.kind === 'card' ? [r.cardId] : []));
     expect(cards.length).toBeGreaterThan(0);
     for (const id of cards) expect(all, id).toContain(id);
-      });
+  });
+
+  it('sells Wilds of Eldraine boosters with its booster cards at their WOE rarity, and the Story Decks as starters', () => {
+    const rarityOf = new Map(WOE_BOOSTER_LIST);
+    const all = Object.values(WILDS_OF_ELDRAINE_SHEETS).flat();
+    expect(all.length).toBeGreaterThan(0);
+    expect(all.length).toBeLessThanOrEqual(261);
+    expect(new Set(all).size).toBe(all.length);
+    for (const [rarity, sheet] of Object.entries(WILDS_OF_ELDRAINE_SHEETS))
+      for (const id of sheet) {
+        expect(cardDb.has(id), id).toBe(true);
+        expect(rarityOf.get(SCRYFALL.find((x) => slug(x.name) === id)!.name), id).toBe(rarity);
+      }
+    let save = { ...fresh(), coins: 1000 };
+    save = buySeasonPack(save, 1, 'wildsOfEldraine');
+    expect(save.packs[0]!.kind).toBe('wildsOfEldraine');
+    const opened = openSeasonPack(save, save.packs[0]!.id, packGenerator('wildsOfEldraine'), 2);
+    const cards = opened.lastPack!.rewards.flatMap((r) => (r.kind === 'card' ? [r.cardId] : []));
+    expect(cards.length).toBeGreaterThan(0);
+    for (const id of cards) expect(all, id).toContain(id);
+    expect(SEASON_STARTERS.filter((d) => d.set === 'woe')).toHaveLength(15);
+  });
 
   it('offers the Bloomburrow decks as starters', () => {
     expect(SEASON_STARTERS.some((d) => d.id === 'blb-forage-and-feast')).toBe(true);

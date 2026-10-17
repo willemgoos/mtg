@@ -1,4 +1,5 @@
 import { ltrNotedTypeCounters } from './ltr-main-rules.ts'; // Lord of the Rings (22)
+import { permanentsToSacrifice } from './woe-white-effects.ts'; // Wilds of Eldraine (23b white)
 import { creaturesOnBattlefield, power } from './characteristics.ts';
 import { ignoresHexproofAndWard } from './brawl-15b-b-effects.ts';
 import {
@@ -76,6 +77,8 @@ import {
 } from './ecl-18a.ts';
 import { firstEquipFree, noteEquipActivation } from './hob-white-effects.ts'; // The Hobbit (20b white)
 import { isLegendaryNow } from './ltr-black-effects.ts'; // Lord of the Rings (21b black)
+import { noteWoeCast, payLife } from './woe-black-effects.ts'; // Wilds of Eldraine (23b black)
+import { woeLandActivationCost } from './woe-main-effects.ts'; // Wilds of Eldraine (23d main)
 import {
   ltrFinalChapter,
   ltrPayWardFiltered,
@@ -84,6 +87,7 @@ import {
 } from './ltr-multi-rare-effects.ts'; // Lord of the Rings (21d multi-rare)
 import { checkCondition, triggeredAbility } from './triggers.ts';
 import { givePriority } from './turn.ts';
+import { woeActivationCost, woeLifeDiscount, woeNoteTopCast } from './woe-multi-effects.ts'; // Wilds of Eldraine (23b multi)
 import type {
   AbilityDef,
   CardDefinition,
@@ -488,6 +492,8 @@ export function castCost(
   // Heroic Return, Avenge: "costs {2} less if ...".
   if (d.costReductionIf && checkCondition(ctx, d.costReductionIf.condition, player, o))
     reduce += d.costReductionIf.amount;
+  // Wilds of Eldraine (23a): bargain, "this spell costs {2} less to cast if it's bargained".
+  if (choice.kicked && d.kicker?.costReduction) reduce += d.kicker.costReduction;
   const first = targets?.[0];
   if (
     d.costReductionIfTarget &&
@@ -540,6 +546,8 @@ export function castCost(
         )
           reduce += a.effect.amount;
       }
+  // Wilds of Eldraine (23b multi): Rowan, Scion of War; Will, Scion of Peace.
+  reduce += woeLifeDiscount(ctx, player, card);
   // Strixhaven (13b): Maelstrom Muse's "next instant or sorcery costs less".
   const discount = ctx.s.players[player].nextSpellDiscount;
   if (
@@ -611,6 +619,8 @@ export function castSpell(
   }
   // Marvel Super Heroes Jumpstart (Analyzed): Vision's once this turn is used (while it's in hand).
   if (choice.via === 'freeOnceEachTurn') useFreeCast(ctx, player, card);
+  // Wilds of Eldraine (23b multi): Johann, Apprentice Sorcerer, "once each turn, you may cast an instant or sorcery spell from the top of your library".
+  if (o.zone === 'library') woeNoteTopCast(ctx, player, card);
   const d = defOf(ctx, o.defId);
   const v = choice.sneak
     ? { cost: d.sneak!, spell: d.spell ?? null }
@@ -629,6 +639,7 @@ export function castSpell(
   // Reality Fracture (17a): Twinned Vision, "if this spell wasn't cast from your hand" (the stack item is gone by resolution).
   o.castFromHand = fromHand;
   o.castFromGraveyardZone = o.zone === 'graveyard'; // Lorwyn Eclipsed (18b, black): Twilight Diviner
+  o.castFromExileZone = o.zone === 'exile'; // Wilds of Eldraine (23d main): Extraordinary Journey
   // Rule 601.2: move to stack, choose targets, then pay costs.
   const cost = addCosts(
     choice.sneak ? d.sneak! : castCost(ctx, player, card, choice, targets),
@@ -760,10 +771,12 @@ export function castSpell(
     moveObject(ctx, choice.sacrifice, 'hand');
   else if (choice.sacrifice) sacrificePermanent(ctx, choice.sacrifice);
   if (v.removeCounters) removeCounters(ctx, player, v.removeCounters);
-  changeLife(ctx, player, -wardLife(ctx, player, targets) - (v.life ?? 0));
+  payLife(ctx, player, wardLife(ctx, player, targets)); // Wilds of Eldraine (23b black): Ashiok pays life by exiling cards
+  payLife(ctx, player, v.life ?? 0);
   // Toxic Deluge: "As an additional cost to cast this spell, pay X life."
-  if (d.payXLife && choice.x) changeLife(ctx, player, -choice.x);
+  if (d.payXLife && choice.x) payLife(ctx, player, choice.x);
   payWardExtras(ctx, player, targets);
+  noteWoeCast(ctx, player, o); // Wilds of Eldraine (23b black): Faerie Fencing
   ctx.s.stack.push({
     kind: 'spell',
     castBy: player,
@@ -1016,7 +1029,7 @@ export function answerSpellTargets(ctx: Ctx, targets: TargetChoice[]): void {
   if (item?.kind !== 'spell') throw new Error('The spell is not on the stack');
   const ward = wardCost(ctx, d.player, targets);
   if (manaValue(ward) > 0) payMana(ctx, planPayment(ctx, d.player, ward, undefined));
-  changeLife(ctx, d.player, -wardLife(ctx, d.player, targets));
+  payLife(ctx, d.player, wardLife(ctx, d.player, targets));
   payWardExtras(ctx, d.player, targets);
   noteTargets(ctx, d.player, targets);
   item.targets = [...item.targets, ...targets];
@@ -1042,7 +1055,7 @@ export function answerAbilityTargets(ctx: Ctx, targets: TargetChoice[]): void {
   if (item?.kind !== 'ability') throw new Error('The ability is not on the stack');
   const ward = wardCost(ctx, d.player, targets);
   if (manaValue(ward) > 0) payMana(ctx, planPayment(ctx, d.player, ward, undefined));
-  changeLife(ctx, d.player, -wardLife(ctx, d.player, targets));
+  payLife(ctx, d.player, wardLife(ctx, d.player, targets));
   payWardExtras(ctx, d.player, targets);
   noteTargets(ctx, d.player, targets, true);
   item.targets = [...item.targets, ...targets];
@@ -1213,6 +1226,21 @@ export function abilityManaCost(
   /** Final Fantasy (11d): the chosen targets ('best': the cheapest any target could make it). */
   targets?: readonly TargetChoice[] | 'best',
 ): ManaCost | undefined {
+  // Wilds of Eldraine (23b multi): Agatha of the Vile Cauldron's discount, Agatha's Soul Cauldron's any-colour mana.
+  // Wilds of Eldraine (23d main): Blossoming Tortoise, "activated abilities of lands you control cost {1} less".
+  return woeLandActivationCost(
+    ctx,
+    source,
+    woeActivationCost(ctx, source, a, abilityManaCostBase(ctx, source, a, targets)),
+  );
+}
+
+function abilityManaCostBase(
+  ctx: Ctx,
+  source: ObjectId,
+  a: ReturnType<typeof activatedAbility>,
+  targets?: readonly TargetChoice[] | 'best',
+): ManaCost | undefined {
   const o = obj(ctx, source);
   // The Hobbit (20b white): Kíli the Resourceful, the first equip ability each turn costs {0}.
   if (a.cost.mana && firstEquipFree(ctx, o, a)) return { generic: 0, colored: {} };
@@ -1339,12 +1367,13 @@ export function activateAbility(
   blight?: ObjectId,
   removeKinds?: string[],
   tapCreatures?: ObjectId[],
+  sacrificeMany?: ObjectId[], // Wilds of Eldraine (23b white)
 ): boolean {
   const a = activatedAbility(ctx, source, index);
   const src = obj(ctx, source);
   const mana = abilityManaCost(ctx, source, a, targets);
   const sourceRef = { id: source, zcc: src.zcc };
-  const exclude = a.cost.tapSelf ? source : undefined;
+  const exclude = a.cost.tapSelf || a.cost.sacrificeSelf ? source : undefined; // Wilds of Eldraine (23b red): sacrificed, so not a mana source either
   const payment = planPayment(
     ctx,
     player,
@@ -1365,6 +1394,7 @@ export function activateAbility(
       tapCreature,
       ...(tapArtifacts ?? []),
       ...(tapCreatures ?? []),
+      ...(sacrificeMany ?? []),
     ],
   );
   if (discard) {
@@ -1488,11 +1518,13 @@ export function activateAbility(
   const sacrificedPower = sacrifice ? power(ctx, sacrifice) : undefined;
   const sacrificedLegendary = !!sacrifice && isLegendaryNow(ctx, sacrifice); // Lord of the Rings (21b black)
   if (sacrifice) sacrificePermanent(ctx, sacrifice);
-  changeLife(
-    ctx,
-    player,
-    -wardLife(ctx, player, targets) - (a.cost.life ?? 0) - (a.cost.lifeX ? (x ?? 0) : 0),
-  );
+  // Wilds of Eldraine (23b white): Dutiful Griffin, "sacrifice two enchantments".
+  if (a.cost.sacrificePermanents)
+    for (const id of permanentsToSacrifice(ctx, player, source, a.cost.sacrificePermanents, sacrificeMany))
+      sacrificePermanent(ctx, id);
+  payLife(ctx, player, wardLife(ctx, player, targets));
+  payLife(ctx, player, a.cost.life ?? 0);
+  payLife(ctx, player, a.cost.lifeX ? (x ?? 0) : 0);
   payWardExtras(ctx, player, targets);
   // Lorwyn Eclipsed (18a): Blight N in the cost.
   if (a.cost.blight && blight !== undefined) blightCreature(ctx, player, blight, a.cost.blight);
@@ -1634,7 +1666,8 @@ export function pushTrigger(
     if (src) src.usedModes = [...(src.usedModes ?? []), mode];
   }
   const life = ability.targets.length && ability.lifeCost ? ability.lifeCost : 0;
-  changeLife(ctx, t.controller, -wardLife(ctx, t.controller, targets) - life);
+  payLife(ctx, t.controller, wardLife(ctx, t.controller, targets));
+  payLife(ctx, t.controller, life);
   payWardExtras(ctx, t.controller, targets);
   const id = newId(ctx);
   ctx.s.stack.push({
@@ -1721,6 +1754,8 @@ export function resolveTop(ctx: Ctx): boolean {
         moveObject(ctx, item.id, item.flashback ? 'exile' : 'graveyard');
         return false;
       }
+      // Wilds of Eldraine (23b red): Imodane, the Pyrohammer, "an instant or sorcery spell that targets only a single creature".
+      o.woeSpellTargets = [...item.targets];
       const es: EffectSource = {
         controller: item.controller,
         source: { id: o.id, zcc: o.zcc },
@@ -2696,6 +2731,10 @@ export function answerSearch(ctx: Ctx, card: ObjectId | null): void {
       const found = obj(ctx, card);
       found.playFreeBy = d.player;
       found.playFreeUntilTurn = ctx.s.turn.number;
+    } else if (d.exilePlayable) {
+      // Wilds of Eldraine (23b green): Feral Encounter, "exile a creature card from among them ... you may cast the exiled card this turn".
+      moveObject(ctx, card, 'exile');
+      obj(ctx, card).playableUntilTurn = ctx.s.turn.number;
     } else if (d.exileWithSource) {
       // The Hobbit (20b white): Roads Go Ever, Ever On, "exile them": remembered by the Saga.
       moveObject(ctx, card, 'exile');
@@ -2889,6 +2928,14 @@ export function answerDiscard(ctx: Ctx, card: ObjectId): void {
         abilityIndex: d.reflexiveOnNonland,
         controller: d.resume.controller,
         amount: d.nonlandDiscarded,
+      });
+    // Wilds of Eldraine (23b blue): Talion's Messenger: "when you discard a card this way".
+    if (d.reflexiveOnAny !== undefined && d.resume.source)
+      ctx.s.pendingTriggers.push({
+        source: d.resume.source,
+        sourceDefId: d.resume.sourceDefId,
+        abilityIndex: d.reflexiveOnAny,
+        controller: d.resume.controller,
       });
     // Strixhaven Brawl (15a): Seasoned Pyromancer: draw, then a token for each nonland card.
     if (d.drawAfter) {

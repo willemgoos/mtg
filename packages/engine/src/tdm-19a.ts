@@ -74,7 +74,7 @@ export function spellsCastThisTurn(ctx: Ctx, player: PlayerId, filter?: CardFilt
   if (!filter) return cast.length;
   return cast.filter((id) => {
     const d = ctx.db.get(id);
-    return !!d && defMatches(d, filter);
+    return !!d && defMatches(d, filter, ctx.db);
   }).length;
 }
 

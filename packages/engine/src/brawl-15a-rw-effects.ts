@@ -67,7 +67,7 @@ const BRAWL_15A_RW_CHOOSERS: Record<string, Chooser> = {
         {
           label: 'Pay 2 life',
           effects: [
-            { kind: 'loseLife', who: 'controller', amount: 2 },
+            { kind: 'loseLife', who: 'controller', amount: 2, payment: true },
             { kind: 'untap', what: 'self' },
           ],
         },

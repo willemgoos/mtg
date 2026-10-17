@@ -64,6 +64,7 @@ import { whyNot } from '../game/whyNot.ts';
 import { isLethal } from '../game/lethal.ts';
 import { startTeamPick, type TeamPick, teamOptions, teamPower } from '../game/teamwork.ts';
 import { type Hint, hintFor } from '../game/hint.ts';
+import { BARGAIN_PROMPT, bargainCastLabel } from '../game/woe.ts'; // Wilds of Eldraine (23a)
 
 const nameOf = (defId: CardDefId) => {
   const d = cardDb.get(defId);
@@ -410,7 +411,10 @@ export function Board({
   const options = useMemo(() => (targeting ? targetOptions(targeting) : null), [targeting]);
   /** Targets that are cards in a graveyard (not on the board): chosen from an overlay. */
   const graveyardOptions = [...(options?.values() ?? [])].flatMap((t) =>
-    'object' in t && view.objects[t.object.id]?.zone === 'graveyard' ? [t.object.id] : [],
+    // Wilds of Eldraine (23b green): Sentinel of Lost Lore targets cards in exile too.
+    'object' in t && ['graveyard', 'exile'].includes(view.objects[t.object.id]?.zone ?? '')
+      ? [t.object.id]
+      : [],
   );
   const declaredAttackers = new Set(
     d.kind === 'declareAttackers'
@@ -563,7 +567,17 @@ export function Board({
       const paying =
         targeting.chosen.length === 0 &&
         (first?.type === 'castSpell' || first?.type === 'activateAbility')
-          ? first.sacrifice
+          ? // Wilds of Eldraine (23b white): Dutiful Griffin, "sacrifice two enchantments".
+            first.type === 'activateAbility' && first.sacrificeMany?.length
+            ? (() => {
+                const ab = cardDb.get(view.objects[first.source]?.defId ?? '')?.abilities[
+                  first.abilityIndex
+                ];
+                const type =
+                  ab?.kind === 'activated' ? ab.cost.sacrificePermanents?.filter.types?.[0] : undefined;
+                return `${type ? `${type.toLowerCase()}s` : 'permanents'} to sacrifice`;
+              })()
+            : first.sacrifice
             ? (first.type === 'castSpell' &&
                 kickPermanentPrompt(view.objects[first.card]?.defId, first)) ||
               'a creature to sacrifice'
@@ -1454,7 +1468,11 @@ export function Board({
         <div className="overlay overlay--mull">
           <div className="mull">
             <h2>{targeting.label}</h2>
-            <p>Choose a card from a graveyard.</p>
+            <p>
+              {graveyardOptions.every((id) => view.objects[id]?.zone === 'exile')
+                ? 'Choose an exiled card.'
+                : 'Choose a card from a graveyard.'}
+            </p>
             <div className="mull__hand">
               {graveyardOptions.map((id, i) => (
                 <div key={id} className="mull__card" style={{ '--i': i } as React.CSSProperties}>
@@ -1567,17 +1585,39 @@ export function Board({
       )}
       {d.kind === 'chooseTriggerTargets' &&
         d.player === HUMAN &&
+        !targeting &&
         legal.some((a) => a.type === 'chooseTargets' && a.mode !== undefined) && (
           <div className="menu">
             <div className="menu__box">
               <div className="menu__title">{nameOf(d.trigger.sourceDefId)}: choose one</div>
-              {legal.map((a) =>
-                a.type === 'chooseTargets' && a.mode !== undefined ? (
-                  <button key={a.mode} className="btn btn--ghost" onClick={() => act(a)}>
-                    {triggerModeLabel(d.trigger, a.mode)}
-                  </button>
-                ) : null,
-              )}
+              {/* Wilds of Eldraine (23b green): a mode with several choices of target (Sentinel of Lost Lore) goes on to the targets. */}
+              {[
+                ...legal
+                  .reduce((byMode, a) => {
+                    if (a.type === 'chooseTargets' && a.mode !== undefined)
+                      byMode.set(a.mode, [...(byMode.get(a.mode) ?? []), a]);
+                    return byMode;
+                  }, new Map<number, Action[]>())
+                  .entries(),
+              ].map(([mode, acts]) => (
+                <button
+                  key={mode}
+                  className="btn btn--ghost"
+                  onClick={() =>
+                    acts.length === 1 || acts.every((a) => targetsOf(a).length === 0)
+                      ? act(acts[0]!)
+                      : setTargeting(
+                          startTargeting(
+                            d.trigger.source.id,
+                            triggerModeLabel(d.trigger, mode),
+                            acts,
+                          ),
+                        )
+                  }
+                >
+                  {triggerModeLabel(d.trigger, mode)}
+                </button>
+              ))}
             </div>
           </div>
         )}
@@ -1846,6 +1886,8 @@ function kickPermanentPrompt(defId: CardDefId | undefined, a: Action): string | 
   if (a.type !== 'castSpell' || !a.kicked || !defId) return null;
   const kicker = cardDb.get(defId)?.kicker;
   if (kicker?.returnLand) return 'a land to return to your hand';
+  // Wilds of Eldraine (23a): bargain.
+  if (kicker?.as === 'bargain') return BARGAIN_PROMPT;
   if (kicker?.sacrifice) return 'an artifact or creature to sacrifice';
   return null;
 }
@@ -1973,6 +2015,8 @@ function castLabel(defId: CardDefId, a: Action, view: GameState): string {
   if (!def?.kicker) return 'Cast';
   if (def.kicker.as === 'overload')
     return a.kicked ? `Overload (each, ${manaText(def.kicker.cost)} more)` : 'One target';
+  // Wilds of Eldraine (23a): bargain, the optional sacrifice (Arena: "Bargain" / "Don't bargain").
+  if (def.kicker.as === 'bargain') return bargainCastLabel(def.kicker, !!a.kicked);
   if (def.kicker.as === 'gift')
     return a.kicked ? `Promise ${giftText(def)} to your opponent` : 'No gift';
   if (def.kicker.as === 'offspring')
@@ -2088,10 +2132,13 @@ function SearchOverlay({ game, onHover }: { game: GameSession; onHover: HoverFn 
         <p>
           {d.kind === 'searchLibrary' && d.remaining !== undefined
             ? // Reality Fracture (17a): "up to N cards" (Fblthp, Knows the Way; Hexhaven Invigorator).
-              `Choose ${d.exileFreeThisTurn ? 'any number of' : `up to ${d.remaining}`} ${d.remaining === 1 ? 'card' : 'cards'}, one at a time${d.differentNames ? ', each with a different name,' : ''} to ${d.exileFreeThisTurn ? 'exile (until end of turn you may cast them without paying their mana costs)' : `put ${d.to && d.to !== 'hand' ? 'onto the battlefield' : 'into your hand'}`}.`
+              `Choose ${d.exileFreeThisTurn ? 'any number of' : d.required ? `${d.remaining}` : `up to ${d.remaining}`} ${d.remaining === 1 ? 'card' : 'cards'}, one at a time${d.differentNames ? ', each with a different name,' : ''} to ${d.exileFreeThisTurn ? 'exile (until end of turn you may cast them without paying their mana costs)' : `put ${d.to && d.to !== 'hand' ? 'onto the battlefield' : 'into your hand'}`}.`
             : d.kind === 'searchLibrary' && d.to === 'hideaway'
               ? 'Choose a card to exile face down.'
-              : d.kind === 'searchLibrary' && d.to === 'libraryBottom'
+              : d.kind === 'searchLibrary' && d.exilePlayable
+                ? // Wilds of Eldraine (23b green): Feral Encounter
+                  'Choose a creature card to exile; you may cast it this turn.'
+                : d.kind === 'searchLibrary' && d.to === 'libraryBottom'
                 ? // Strixhaven (13c): Ardent Dustspeaker
                   'Choose a card to put on the bottom of your library.'
                 : d.kind === 'searchLibrary' && d.to === 'castFree'
@@ -2107,7 +2154,9 @@ function SearchOverlay({ game, onHover }: { game: GameSession; onHover: HoverFn 
           {d.kind === 'searchLibrary' && d.fromGraveyard
             ? ''
             : d.kind === 'searchLibrary' && d.looked
-              ? d.restOnTop
+              ? d.restInAnyOrder
+                ? 'The rest go to the bottom in any order.' // Wilds of Eldraine (23b green): Commune with Nature
+                : d.restOnTop
                 ? 'The rest stay on top.'
                 : 'The rest go to the bottom.'
               : 'Your library is then shuffled.'}

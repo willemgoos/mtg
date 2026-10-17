@@ -83,7 +83,7 @@ const shockIsland: Behavior = {
     when({ on: 'etb' }, [], {
       kind: 'may',
       effects: [
-        { kind: 'loseLife', who: 'controller', amount: 3 },
+        { kind: 'loseLife', who: 'controller', amount: 3, payment: true },
         { kind: 'untap', what: 'self' },
       ],
     }),

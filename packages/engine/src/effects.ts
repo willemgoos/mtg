@@ -69,10 +69,17 @@ import { amassPut, amassStep, recruitSteps } from './hob-20a.ts';
 import { ringBearerOf, ringTemptSteps, runRingStep } from './ltr-21a.ts'; // Lord of the Rings (21a)
 import { opponentsCantGainLife, sacrificeAtEndOfCombat } from './ltr-black-effects.ts'; // Lord of the Rings (21b black)
 import { HOB_MULTICOLOUR_EXPANDERS } from './hob-multicolour-effects.ts'; // The Hobbit (20b multicolour)
+import { WOE_MULTI_EXPANDERS } from './woe-multi-effects.ts'; // Wilds of Eldraine (23b multi)
 import { LTR_BLUE_EXPANDERS } from './ltr-blue-effects.ts'; // Lord of the Rings (21b blue)
+import { WOE_GREEN_EXPANDERS } from './woe-green-effects.ts'; // Wilds of Eldraine (23b green)
 import { LTR_GC_RARE_EXPANDERS } from './ltr-gc-rare-effects.ts'; // Lord of the Rings (21d gc-rare)
 import { LTR_BR_RARE_EXPANDERS } from './ltr-br-rare-effects.ts'; // Lord of the Rings (21d br-rare)
 import { SOS_14B_C_CHOOSERS } from './sos-14b-c-effects.ts';
+import { runAnimate, runCreateRole } from './woe-23a.ts'; // Wilds of Eldraine (23a)
+import { WOE_WHITE_CHOOSERS, woeCreatureDamagePrevented } from './woe-white-effects.ts'; // Wilds of Eldraine (23b white)
+import { payLife } from './woe-black-effects.ts'; // Wilds of Eldraine (23b black)
+import { woeMainAmount } from './woe-main-effects.ts'; // Wilds of Eldraine (23d main)
+import { noteSpellDamage } from './woe-red-effects.ts'; // Wilds of Eldraine (23b red)
 import type {
   AbilityDef,
   CardDefId,
@@ -193,6 +200,7 @@ export function dealDamage(
       combat,
       ...(excess > 0 ? { excess } : {}),
     });
+    noteSpellDamage(ctx, src.id, o.id, amount); // Wilds of Eldraine (23b red): Imodane, the Pyrohammer
   }
   if (has(src, 'lifelink')) gainLife(ctx, src.controller, amount);
 }
@@ -262,6 +270,8 @@ function prevented(ctx: Ctx, src: DamageSource, to: TargetChoice, amount: number
     )
   )
     return 0;
+  // Wilds of Eldraine (23b white): Eerie Interference, damage from creatures to you and your creatures.
+  if (woeCreatureDamagePrevented(ctx, src.id, to)) return 0;
   // Marvel Super Heroes Jumpstart (Squadron): Hyperion prevents all but 1 of damage to you and your Heroes.
   if (amount > 1 && allButOne(ctx, to)) amount = 1;
   if ('player' in to) {
@@ -850,6 +860,11 @@ function playersOf(ctx: Ctx, es: EffectSource, ref: Ref): PlayerId[] {
 export function resolveAmount(ctx: Ctx, es: EffectSource, amount: Amount): number {
   if (typeof amount === 'number') return amount;
   if ('multiply' in amount) return amount.multiply * resolveAmount(ctx, es, amount.amount);
+  // Wilds of Eldraine (23d main): Cruel Somnophage, Tangled Colony.
+  {
+    const woe = woeMainAmount(ctx, amount, es.source?.id);
+    if (woe !== undefined) return woe;
+  }
   // Reality Fracture (17a): Dark Matter Manipulator, Recursive Recruitment
   if ('floorDiv' in amount)
     return Math.floor(resolveAmount(ctx, es, amount.amount) / amount.floorDiv);
@@ -946,7 +961,11 @@ export function resolveAmount(ctx: Ctx, es: EffectSource, amount: Amount): numbe
     const ids = objectsOf(ctx, es, amount.powerOf);
     if (ids[0]) return Math.max(0, power(ctx, ids[0]));
     if (amount.powerOf === 'self') {
-      const last = es.lkiPower ?? (es.source && ctx.s.objects[es.source.id]?.lastPower);
+      const last =
+        es.lkiPower ??
+        (es.source && ctx.s.objects[es.source.id]?.lastPower) ??
+        // Wilds of Eldraine (23b green): Gruff Triplets, a token that died has ceased to exist.
+        (es.source && ctx.s.turn.tokenLki?.[es.source.id]?.power);
       return Math.max(0, last ?? 0);
     }
     // Final Fantasy (11c): "its power" for a creature that died (Jenova's Mutants).
@@ -1061,9 +1080,21 @@ export function runEffects(
       i--;
       continue;
     }
+    // Wilds of Eldraine (23b multi): Yenna's copy, which asks where an Aura copy goes.
+    if (e.kind === 'custom' && WOE_MULTI_EXPANDERS[e.handler]) {
+      list.splice(i, 1, ...WOE_MULTI_EXPANDERS[e.handler]!(ctx, es, e.params));
+      i--;
+      continue;
+    }
     // Lord of the Rings (21b blue): Minas Tirith Garrison's prompt, one Human at a time.
     if (e.kind === 'custom' && LTR_BLUE_EXPANDERS[e.handler]) {
       list.splice(i, 1, ...LTR_BLUE_EXPANDERS[e.handler]!(ctx, es, e.params));
+      i--;
+      continue;
+    }
+    // Wilds of Eldraine (23b green): Commune with Nature's bottom order, one card at a time.
+    if (e.kind === 'custom' && WOE_GREEN_EXPANDERS[e.handler]) {
+      list.splice(i, 1, ...WOE_GREEN_EXPANDERS[e.handler]!(ctx, es, e.params));
       i--;
       continue;
     }
@@ -1818,7 +1849,11 @@ export function runEffects(
         };
       } else if (e.kind === 'chooseCustom') {
         // Strixhaven (13c): a handler builds the options (and says who chooses).
-        const made = (CHOOSERS[e.handler] ?? SOS_14B_C_CHOOSERS[e.handler])?.(ctx, es, e.params);
+        const made = (
+          CHOOSERS[e.handler] ??
+          SOS_14B_C_CHOOSERS[e.handler] ??
+          WOE_WHITE_CHOOSERS[e.handler] // Wilds of Eldraine (23b white)
+        )?.(ctx, es, e.params);
         if (!made || made.options.length === 0) continue;
         ctx.s.decision = {
           kind: 'chooseOption',
@@ -1970,6 +2005,7 @@ export function runEffects(
           shuffle: false,
           ...(e.counter ? { counter: e.counter } : {}),
           ...(e.attackingIf ? { attackingIf: e.attackingIf } : {}),
+          ...(e.required ? { required: true } : {}), // Wilds of Eldraine (23d main): Blossoming Tortoise
           resume,
           thenPriority,
         };
@@ -2135,7 +2171,10 @@ export function runEffects(
           options: looked.filter((id) => cardMatches(ctx, id, e.filter, es.source?.id)),
           looked,
           ...(e.battlefieldOnYourTurn ? { battlefieldOnYourTurn: true } : {}),
-          ...(e.restOnTop ? { restOnTop: true } : {}),
+          ...(e.restOnTop || e.restInAnyOrder ? { restOnTop: true } : {}),
+          // Wilds of Eldraine (23b green): Feral Encounter, Commune with Nature
+          ...(e.exilePlayable ? { exilePlayable: true } : {}),
+          ...(e.restInAnyOrder ? { restInAnyOrder: true } : {}),
           ...(e.restToGraveyard ? { restToGraveyard: true } : {}),
           // Strixhaven (13c): The Biblioplex
           ...(e.canBin ? { canBin: true } : {}),
@@ -2149,6 +2188,8 @@ export function runEffects(
           ...(e.landsTapped ? { landsTapped: true } : {}),
           // Tarkir: Dragonstorm (19b, white): United Battlefront.
           ...(e.upTo ? { remaining: e.upTo } : {}),
+          // Wilds of Eldraine (23b blue): Farsight Ritual.
+          ...(e.required ? { required: true } : {}),
           resume,
           thenPriority,
         };
@@ -2341,6 +2382,8 @@ export function runEffects(
           ...(e.reflexiveOnNonland !== undefined
             ? { reflexiveOnNonland: e.reflexiveOnNonland }
             : {}),
+          // Wilds of Eldraine (23b blue): Talion's Messenger.
+          ...(e.reflexiveOnAny !== undefined ? { reflexiveOnAny: e.reflexiveOnAny } : {}),
           ...(e.filter ? { filter: e.filter } : {}),
           ...(e.exile ? { exile: true } : {}),
           ...(e.damageTo !== undefined ? { damageTo: e.damageTo } : {}),
@@ -2956,7 +2999,9 @@ function runEffectInner(ctx: Ctx, es: EffectSource, e: EffectDef): void {
     }
     case 'loseLife': {
       const n = resolveAmount(ctx, es, e.amount);
-      for (const p of playersOf(ctx, es, e.who)) changeLife(ctx, p, -n);
+      for (const p of playersOf(ctx, es, e.who))
+        if (e.payment) payLife(ctx, p, n); // Wilds of Eldraine (23b black): Ashiok, Wicked Manipulator
+        else changeLife(ctx, p, -n);
       return;
     }
     case 'draw': {
@@ -3349,7 +3394,15 @@ function runEffectInner(ctx: Ctx, es: EffectSource, e: EffectDef): void {
         for (const id of [...ctx.s.players[p].graveyard]) moveObject(ctx, id, 'exile');
       return;
     case 'tap':
-      for (const id of objectsOf(ctx, es, e.what)) tap(ctx, id);
+      // Wilds of Eldraine (23a): "whenever you tap an untapped creature an opponent controls" knows who tapped it.
+      for (const id of objectsOf(ctx, es, e.what)) tap(ctx, id, es.controller);
+      return;
+    // Wilds of Eldraine (23a): Roles, and "becomes a creature until end of turn, it's still a land".
+    case 'createRole':
+      runCreateRole(ctx, es, e);
+      return;
+    case 'animate':
+      runAnimate(ctx, es, e);
       return;
     // Secrets of Strixhaven (14a): prepare
     case 'prepare':

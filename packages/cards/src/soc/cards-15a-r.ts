@@ -170,7 +170,7 @@ export const BRAWL_15A_R_BACKS: Record<string, Behavior> = {
       onEnter({
         kind: 'may',
         effects: [
-          { kind: 'loseLife', who: 'controller', amount: 3 },
+          { kind: 'loseLife', who: 'controller', amount: 3, payment: true },
           { kind: 'untap', what: 'self' },
         ],
       }),

@@ -167,7 +167,7 @@ export const ECL_MULTI_A: Record<string, Behavior> = {
           {
             kind: 'may',
             effects: [
-              { kind: 'loseLife', who: 'controller', amount: 1 },
+              { kind: 'loseLife', who: 'controller', amount: 1, payment: true },
               { kind: 'draw', who: 'controller', amount: 1 },
             ],
           },

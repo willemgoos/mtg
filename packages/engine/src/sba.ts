@@ -7,6 +7,7 @@ import { isRingBearer, updateRingBearer } from './ltr-21a.ts';
 import { endLapsedControlEffects } from './ltr-wu-rare-effects.ts'; // Lord of the Rings (21d wu-rare)
 import { expireControlEffects } from './ltr-br-rare-effects.ts'; // Lord of the Rings (21d br-rare)
 import { sagasToSacrifice } from './sagas.ts';
+import { rolesSBA } from './woe-23a.ts'; // Wilds of Eldraine (23a)
 import type { ObjectId, PlayerId } from './types.ts';
 import { PLAYERS } from './types.ts';
 
@@ -109,6 +110,8 @@ export function runSBAs(ctx: Ctx): void {
     }
     for (const id of orphanedAuras) moveObject(ctx, id, 'graveyard');
     if (orphanedAuras.length) changed = true;
+    // Wilds of Eldraine (23a): rule 303.7, a permanent keeps only the newest Role each player controls on it.
+    if (rolesSBA(ctx)) changed = true;
     // Kitnap: control ends when the Aura is no longer on it.
     for (const id of ctx.s.battlefield) {
       const o = obj(ctx, id);

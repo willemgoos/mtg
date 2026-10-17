@@ -244,3 +244,27 @@ from) when it's fixed. Older phases keep their own "Simplifications" lists in `d
 - [ ] Forge Anew: "you may pay {0} rather than the equip cost of the first equip ability you activate during each of your
       turns" always pays {0} (Kíli the Resourceful's `firstEquipFree`, with `yourTurn`); there is no option to pay the full
       cost, which is never better since the first equip is used either way.
+
+## Wilds of Eldraine (`woe/*.ts`, phase 23b)
+
+- [ ] Grove's Bounty, Stolen Goodies: the targets and the split are chosen as the spell resolves, one at a time (the `divide`
+      effect, like Ureni), not as it is cast, so hexproof and ward don't apply at targeting.
+- [ ] Icewrought Sentry, Snaremaster Sprite: "you may pay {N}. When you do, tap target creature" chooses the target before the
+      payment (the trigger's `cost`), the reverse of the printed order; the outcome is the same.
+- [ ] Hylda of the Icy Crown: the {1} is paid and the mode chosen when the trigger is put on the stack, not on resolution
+      followed by a reflexive trigger.
+- [ ] Talion, the Kindly Lord and Edgewall Inn: "As this enters, choose ..." is an enters trigger (as the Tarkir Sieges), so the
+      choice can be responded to before it is made.
+- [ ] Johann, Apprentice Sorcerer: the once-per-turn top-of-library cast also counts a cast that another permission (Glarb)
+      could have covered.
+- [ ] Realm-Scorcher Hellkite (bargained): its four mana of any colours have their colours chosen as they are spent (the
+      existing `addMana` pattern), not as they are added.
+
+## Wilds of Eldraine (`woe/*-main.ts`, phase 23d)
+
+- [ ] Three Bowls of Porridge: the three modes are three separate abilities, each usable once ("choose one that hasn't been
+      chosen"); the card shows three abilities instead of one modal one.
+- [ ] Rankle's Prank: "each player sacrifices two creatures" runs as two single sacrifices per player in sequence, not
+      simultaneously.
+- [ ] The End: "any number of cards" with that name is chosen as a count per zone (graveyard, hand, library), not card by card.
+- [ ] Ego Drain: with no nonland card in the opponent's hand, the caster still clicks through an empty choice before the exile.

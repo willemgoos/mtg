@@ -34,6 +34,8 @@ export function targetsOf(a: Action): TargetChoice[] {
     const blight = a.blight;
     // Lorwyn Eclipsed (18b, white): Kithkeeper: the creatures tapped for "tap three untapped creatures" (any order).
     const tappedCreatures = a.type === 'activateAbility' ? (a.tapCreatures ?? []) : [];
+    // Wilds of Eldraine (23b white): Dutiful Griffin: the enchantments sacrificed for "sacrifice two enchantments".
+    const sacrificedMany = a.type === 'activateAbility' ? (a.sacrificeMany ?? []) : [];
     const costs: TargetChoice[] = [
       a.sacrifice,
       forageFood(a),
@@ -44,6 +46,7 @@ export function targetsOf(a: Action): TargetChoice[] {
       tapped,
       ...tappedArtifacts,
       ...tappedCreatures,
+      ...sacrificedMany,
     ].flatMap((id) => (id ? [{ object: { id, zcc: -1 } }] : []));
     return [...costs, ...a.targets];
   }

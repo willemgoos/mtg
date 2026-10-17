@@ -2,7 +2,6 @@ import {
   abilitiesLocked,
   canTapForAbility,
   cardMatches,
-  countOf,
   characteristics,
   creaturesOnBattlefield,
   isCreature,
@@ -34,6 +33,8 @@ import {
   hasConvoke,
 } from './ecl-18a.ts';
 import { cantBeSacrificed, harmonizeTaps, isHarmonizeCast } from './tdm-19a.ts';
+import { canSacrificePermanents, sacrificeWays } from './woe-white-effects.ts'; // Wilds of Eldraine (23b white)
+import { woeAdventureReady, woeTargetLimit } from './woe-main-effects.ts'; // Wilds of Eldraine (23d main)
 import {
   abilityTags,
   artifactHelpers,
@@ -144,6 +145,7 @@ export function castableCards(ctx: Ctx, player: PlayerId): ObjectId[] {
       d.castFromGraveyardOrExile ||
       d.castFromGraveyardFinality || // Tarkir: Dragonstorm (19b, black)
       mayhemReady(ctx, id) ||
+      woeAdventureReady(ctx, player, id) || // Wilds of Eldraine (23d main): Mosswood Dreadknight
       graveyardVias(ctx, player, id).length
     )
       out.push(id);
@@ -183,6 +185,8 @@ export function castableCards(ctx: Ctx, player: PlayerId): ObjectId[] {
           cardMatches(ctx, topCard, a.effect.filter) &&
           // Final Fantasy (11c): The Lunar Whale, as long as it attacked this turn.
           checkCondition(ctx, a.effect.condition, player, obj(ctx, id)) &&
+          // Wilds of Eldraine (23b multi): Johann, Apprentice Sorcerer, once each turn.
+          !(a.effect.oncePerTurn && ps.woeTopCastTurn === ctx.s.turn.number) &&
           !out.includes(topCard)
         )
           out.push(topCard);
@@ -314,6 +318,8 @@ export function graveyardVias(
   if (d.types.includes('Artifact') && hasStatic(ctx, player, 'castArtifactsFromGraveyard'))
     out.push('noctis');
   if (playsFromGraveyard(ctx, player)) out.push('hades');
+  // Wilds of Eldraine (23d main): Mosswood Dreadknight (only the Adventure side: `d` is the Adventure while its face is checked).
+  if (d.subtypes.includes('Adventure') && woeAdventureReady(ctx, player, card)) out.push('woeAdventure');
   return out;
 }
 
@@ -892,7 +898,9 @@ function priorityActions(
         obj(ctx, card).zone === 'hand' ||
         now !== undefined ||
         // Strixhaven Brawl (15a): Disturb, from the graveyard.
-        (obj(ctx, card).zone === 'graveyard' && def(ctx, card).disturb))
+        (obj(ctx, card).zone === 'graveyard' && def(ctx, card).disturb) ||
+        // Wilds of Eldraine (23d main): Mosswood Dreadknight, its Adventure from the graveyard.
+        woeAdventureReady(ctx, player, card))
     ) {
       const from = out.length;
       withBackFace(ctx, card, () => {
@@ -974,7 +982,8 @@ function priorityActions(
       const tagged = restrictedMana
         ? manaSources(ctx, player, undefined, abilityTags(ctx, source))
         : sources;
-      const own = a.cost.tapSelf ? tagged.filter((x) => x.id !== source) : tagged;
+      // Wilds of Eldraine (23b red): a Treasure can not pay for "{2}, Sacrifice this artifact" by being sacrificed for mana.
+      const own = a.cost.tapSelf || a.cost.sacrificeSelf ? tagged.filter((x) => x.id !== source) : tagged;
       // Heirloom Epic: creatures can pay for generic mana.
       const usable = a.cost.convoke
         ? [...own, ...creatureHelpers(ctx, player, own, a.cost.tapSelf ? source : undefined)]
@@ -1006,6 +1015,12 @@ function priorityActions(
         return;
       // Lorwyn Eclipsed (18b, white): Kithkeeper.
       if (a.cost.tapCreatures && creaturesToTap(ctx, player, undefined).length < a.cost.tapCreatures)
+        return;
+      // Wilds of Eldraine (23b white): Dutiful Griffin, "sacrifice two enchantments".
+      if (
+        a.cost.sacrificePermanents &&
+        !canSacrificePermanents(ctx, player, source, a.cost.sacrificePermanents)
+      )
         return;
       // Tarkir: Dragonstorm (19a): Zurgo, Thunder's Decree, a token that can't be sacrificed.
       if (a.cost.sacrificeSelf && cantBeSacrificed(ctx, source)) return;
@@ -1213,6 +1228,16 @@ function priorityActions(
         for (const base of bases)
           for (const tapCreatures of ways) out.push({ ...base, tapCreatures } as Action);
       }
+      // Wilds of Eldraine (23b white): Dutiful Griffin, "sacrifice two enchantments": one action for each way of choosing them
+      // (permanents that look alike are one way); the board picks them one at a time.
+      if (a.cost.sacrificePermanents) {
+        const bases = out.splice(firstOfAbility);
+        const ways = sacrificeWays(ctx, player, source, a.cost.sacrificePermanents).filter(
+          (way) => !mana || canPayFrom(mana, usable.filter((p) => !way.includes(p.id))),
+        );
+        for (const base of bases)
+          for (const sacrificeMany of ways) out.push({ ...base, sacrificeMany } as Action);
+      }
       // Lorwyn Eclipsed (18c): Crew N: one action for each way of choosing the creatures to tap (smallest sets reaching N; creatures
       // that look alike are one way); the board picks them one at a time, in any order.
       if (a.cost.crew) {
@@ -1239,10 +1264,12 @@ function priorityActions(
       const xSpec = a.targets[a.targets.length - 1]?.xTargets ? a.targets[a.targets.length - 1] : undefined;
       // Lord of the Rings (21b white): Ent-Draught Basin, "target creature with power X": X may be 0, and only creatures of power X are targets.
       const powerX = a.targets.findIndex((t) => t.filter?.powerEqualsX);
+      // Wilds of Eldraine (23d main): Likeness Looter, "target creature card in your graveyard with mana value X".
+      const valueX = a.targets.findIndex((t) => t.filter?.manaValueEqualsX);
       if (mana?.x)
-        for (const base of xSpec || powerX >= 0 ? out.splice(firstOfAbility) : out.slice(firstOfAbility))
+        for (const base of xSpec || powerX >= 0 || valueX >= 0 ? out.splice(firstOfAbility) : out.slice(firstOfAbility))
           for (
-            let x = powerX >= 0 ? 0 : 1;
+            let x = powerX >= 0 || valueX >= 0 ? 0 : 1;
             x <=
             (xSpec ? Math.min(10, targetCandidates(ctx, xSpec, { controller: player, sourceId: source }).length) : 10);
             x++
@@ -1253,6 +1280,10 @@ function priorityActions(
             if (powerX >= 0) {
               const tg = (base as { targets: TargetChoice[] }).targets[powerX];
               if (!tg || !('object' in tg) || characteristics(ctx, tg.object.id).power !== x) continue;
+            }
+            if (valueX >= 0) {
+              const tg = (base as { targets: TargetChoice[] }).targets[valueX];
+              if (!tg || !('object' in tg) || manaValue(def(ctx, tg.object.id).manaCost) !== x) continue;
             }
             out.push({ ...base, x } as Action);
           }
@@ -1566,7 +1597,10 @@ export function getLegalActions(ctx: Ctx, player: PlayerId): Action[] {
       const out: Action[] = [{ type: 'chooseTargets', player, targets: d.picked }];
       if (!spec) return out;
       const key = (t: TargetChoice) => ('object' in t ? t.object.id : t.player);
-      const taken = new Set(d.picked.map(key));
+      // Wilds of Eldraine (23b green): Graceful Takedown, the targets chosen with the cast are taken too ("up to one other target").
+      const taken = new Set(
+        [...(item?.kind === 'spell' && spec?.ofMode === undefined ? item.targets : []), ...d.picked].map(key),
+      );
       // Tarkir: Dragonstorm (19b, green): Rite of Renewal, "up to four target cards from their graveyard".
       if (spec.maxTargets !== undefined && d.picked.length >= spec.maxTargets) return out;
       const graveyardOwner =
@@ -1698,7 +1732,7 @@ export function getLegalActions(ctx: Ctx, player: PlayerId): Action[] {
           (spec.maxTargets !== undefined && picked.length >= spec.maxTargets) ||
           // Lorwyn Eclipsed (18b, green): Prismabasher, "up to X target creatures".
           (spec.maxAmount !== undefined &&
-            picked.length >= countOf(ctx, player, spec.maxAmount, false, t.source.id));
+            picked.length >= woeTargetLimit(ctx, player, spec.maxAmount, t.source.id)); // Wilds of Eldraine (23d main): X
         for (const t of full ? [] : targetCandidates(ctx, spec, src))
           if (
             !taken.has(key(t)) &&
@@ -1724,7 +1758,8 @@ export function getLegalActions(ctx: Ctx, player: PlayerId): Action[] {
           for (const targets of targetCombos(ctx, m.targets, src))
             if (payable(targets)) out.push({ type: 'chooseTargets', player, targets, mode });
         });
-        if (out.length === 0) out.push({ type: 'chooseTargets', player, targets: [] });
+        // Wilds of Eldraine (23b multi): "you may pay {1}. When you do, choose one" (Hylda of the Icy Crown): paying is optional.
+        if (out.length === 0 || a.cost) out.push({ type: 'chooseTargets', player, targets: [] });
         return out;
       }
       for (const targets of targetCombos(ctx, a.targets, src))
