@@ -49,8 +49,6 @@ function expectArenaLists(
   tag: string,
   names: Record<string, string> = {},
   extraLand = false,
-  /** Packets whose scraped list is short of the card count it states (name: cards missing). */
-  short: Record<string, number> = {},
 ) {
   const lists: ArenaPacket[] = JSON.parse(
     readFileSync(new URL('../scripts/data/arena-jumpin-packets.json', import.meta.url), 'utf8'),
@@ -74,7 +72,7 @@ function expectArenaLists(
         s.reduce((n, a) => n + a.weight, 0),
         p.name,
       ).toBe(100);
-    const count = list.count + total(extra) - (short[p.name] ?? 0);
+    const count = list.count + total(extra);
     expect(total(packetCards(p)), p.name).toBe(count);
     expect(total(packetCards(p, dealPacket(p, Math.random))), p.name).toBe(count);
   }
@@ -310,8 +308,7 @@ describe('Jump In packets', () => {
       expect(p.id).toBe(`woe-${p.name.toLowerCase().replace(' ', '-')}`);
       expect(p.colors.join(''), p.name).toBe(colours[p.name]);
     }
-    // The scrape lists 11 cards for Bittersweet (7 fixed, 4 random) but says 12: the twelfth is unknown.
-    expectArenaLists(woe, 'WOE', {}, false, { Bittersweet: 1 });
+    expectArenaLists(woe, 'WOE');
     // Two 12-card packets are topped up to 40 with basics.
     const d = deckById(jumpInId('woe-charmed', 'woe-rats'));
     expect(d.set).toBe('woe');

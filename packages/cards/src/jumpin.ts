@@ -4846,7 +4846,7 @@ export const ARENA_WOE_PACKETS: Packet[] = [
     set: 'woe',
     source: 'arena',
     spells: [
-      ['Mintstrosity', 1],
+      ['Mintstrosity', 2],
       ['Sweettooth Witch', 1],
       ['High Fae Negotiator', 1],
       ["The Witch's Vanity", 1],
