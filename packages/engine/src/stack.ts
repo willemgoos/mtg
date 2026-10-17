@@ -2698,6 +2698,10 @@ export function answerSearch(ctx: Ctx, card: ObjectId | null): void {
       const found = obj(ctx, card);
       found.playFreeBy = d.player;
       found.playFreeUntilTurn = ctx.s.turn.number;
+    } else if (d.exilePlayable) {
+      // Wilds of Eldraine (23b green): Feral Encounter, "exile a creature card from among them ... you may cast the exiled card this turn".
+      moveObject(ctx, card, 'exile');
+      obj(ctx, card).playableUntilTurn = ctx.s.turn.number;
     } else if (d.exileWithSource) {
       // The Hobbit (20b white): Roads Go Ever, Ever On, "exile them": remembered by the Saga.
       moveObject(ctx, card, 'exile');

@@ -27,6 +27,7 @@ import { LTR_RED_CONDITIONS } from './ltr-red-effects.ts'; // Lord of the Rings 
 import { detectLtrMultiRare, LTR_MULTI_RARE_CONDITIONS } from './ltr-multi-rare-effects.ts'; // Lord of the Rings (21d multi-rare)
 import { detectLtrMain } from './ltr-main-rules.ts'; // Lord of the Rings (22)
 import { doubleAttackTriggers, TDM_MISC_CONDITIONS } from './tdm-misc-effects.ts';
+import { woeCombatEmblems } from './woe-green-effects.ts'; // Wilds of Eldraine (23b green)
 import {
   celebrating,
   defHasAdventure,
@@ -937,6 +938,12 @@ function detect(ctx: Ctx, ev: GameEvent): void {
               if (!suppressed && isLand) queue(ctx, card, i, moved.controller, moved);
               return;
             }
+            // Wilds of Eldraine (23b green): Redtooth Vanguard, "whenever an enchantment you control enters" (from your graveyard).
+            if (a.kind === 'triggered' && a.fromGraveyard && a.trigger.on === 'otherPermanentEtb') {
+              if (!suppressed && matchesFilter(ctx, moved.id, a.trigger.filter, id))
+                queue(ctx, card, i, moved.controller, moved);
+              return;
+            }
             if (a.kind !== 'triggered' || !a.fromGraveyard || a.trigger.on !== 'otherCreatureEtb')
               return;
             if (!suppressed && isCreature && matchesFilter(ctx, moved.id, a.trigger.filter, id))
@@ -1086,8 +1093,9 @@ function detect(ctx: Ctx, ev: GameEvent): void {
         // "Dies" triggers look back in time: the ability triggers from the graveyard card.
         // Strixhaven (13a): a token that died has already ceased to exist, but its own dies trigger
         // still happens (Pest: "When this token dies, you gain 1 life"). A stand-in carries the trigger.
+        // Wilds of Eldraine (23b green): Gruff Triplets, a token that is a copy of a card has that card's (non-token) definition.
         const ghost: GameObject | null =
-          !moved && movedDef.isToken && ev.controller
+          !moved && ev.controller
             ? ({
                 id: ev.id,
                 defId: ev.defId,
@@ -2336,6 +2344,7 @@ function detect(ctx: Ctx, ev: GameEvent): void {
             (a.trigger.whose === 'each' || o.controller === ev.activePlayer) &&
             !a.fromGraveyard,
         );
+        woeCombatEmblems(ctx, ev.activePlayer); // Wilds of Eldraine (23b green): Feral Encounter
         // Reality Fracture (17a): Darklight Phoenix returns itself from your graveyard.
         for (const gid of s.players[ev.activePlayer].graveyard) {
           const card = s.objects[gid]!;
