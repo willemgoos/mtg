@@ -69,6 +69,7 @@ import { amassPut, amassStep, recruitSteps } from './hob-20a.ts';
 import { ringBearerOf, ringTemptSteps, runRingStep } from './ltr-21a.ts'; // Lord of the Rings (21a)
 import { opponentsCantGainLife, sacrificeAtEndOfCombat } from './ltr-black-effects.ts'; // Lord of the Rings (21b black)
 import { HOB_MULTICOLOUR_EXPANDERS } from './hob-multicolour-effects.ts'; // The Hobbit (20b multicolour)
+import { WOE_MULTI_EXPANDERS } from './woe-multi-effects.ts'; // Wilds of Eldraine (23b multi)
 import { LTR_BLUE_EXPANDERS } from './ltr-blue-effects.ts'; // Lord of the Rings (21b blue)
 import { LTR_GC_RARE_EXPANDERS } from './ltr-gc-rare-effects.ts'; // Lord of the Rings (21d gc-rare)
 import { LTR_BR_RARE_EXPANDERS } from './ltr-br-rare-effects.ts'; // Lord of the Rings (21d br-rare)
@@ -1062,6 +1063,12 @@ export function runEffects(
     // The Hobbit (20b multicolour): a custom effect that turns into other effects (a prompt built from the current game state).
     if (e.kind === 'custom' && HOB_MULTICOLOUR_EXPANDERS[e.handler]) {
       list.splice(i, 1, ...HOB_MULTICOLOUR_EXPANDERS[e.handler]!(ctx, es, e.params));
+      i--;
+      continue;
+    }
+    // Wilds of Eldraine (23b multi): Yenna's copy, which asks where an Aura copy goes.
+    if (e.kind === 'custom' && WOE_MULTI_EXPANDERS[e.handler]) {
+      list.splice(i, 1, ...WOE_MULTI_EXPANDERS[e.handler]!(ctx, es, e.params));
       i--;
       continue;
     }

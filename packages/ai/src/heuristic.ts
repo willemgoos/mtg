@@ -41,6 +41,7 @@ import {
 } from './simulate.ts';
 import { type Bot, other, viewEngine } from './view.ts';
 import { celebrating, chooseAnimateToAttack, hasCelebrationPayoff } from './woe.ts'; // Wilds of Eldraine (23a)
+import { chooseLandColor, chooseTalionNumber } from './woe.ts'; // Wilds of Eldraine (23b multi)
 
 /** Minimum improvement over passing before the bot spends a card or mana. */
 const MARGIN = 0.05;
@@ -141,6 +142,12 @@ export function createHeuristicBot(db: CardDb, name = 'heuristic'): Bot {
           {
             const ltr = chooseLtrGcRare(engine, view, me, d);
             if (ltr) return ltr;
+          }
+          // Wilds of Eldraine (23b multi): Talion's number, Edgewall Inn's color.
+          {
+            const woe =
+              chooseTalionNumber(engine.db, view, me, d) ?? chooseLandColor(engine.db, view, me, d);
+            if (woe) return woe;
           }
           return bestByEvaluation(engine, view, me, legal, 'stack');
         }

@@ -101772,5 +101772,868 @@
    "large": "https://cards.scryfall.io/large/front/4/e/4ea4993c-d1ba-4b33-955b-e0874fd2132f.jpg?1783915113",
    "artCrop": "https://cards.scryfall.io/art_crop/front/4/e/4ea4993c-d1ba-4b33-955b-e0874fd2132f.jpg?1783915113"
   }
+ },
+ {
+  "name": "Agatha of the Vile Cauldron",
+  "scryfallId": "d6c48f07-63b7-4a60-8da6-ce77405abf1e",
+  "oracleId": "f398d222-f8e7-4983-9a77-267adef7f551",
+  "set": "woe",
+  "collectorNumber": "199",
+  "rarity": "mythic",
+  "manaCost": "{R}{G}",
+  "typeLine": "Legendary Creature — Human Warlock",
+  "oracleText": "Activated abilities of creatures you control cost {X} less to activate, where X is Agatha's power. This effect can't reduce the mana in that cost to less than one mana.\n{4}{R}{G}: Other creatures you control get +1/+1 and gain trample and haste until end of turn.",
+  "power": "1",
+  "toughness": "1",
+  "colors": [
+   "G",
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/6/d6c48f07-63b7-4a60-8da6-ce77405abf1e.jpg?1783915073",
+   "normal": "https://cards.scryfall.io/normal/front/d/6/d6c48f07-63b7-4a60-8da6-ce77405abf1e.jpg?1783915073",
+   "large": "https://cards.scryfall.io/large/front/d/6/d6c48f07-63b7-4a60-8da6-ce77405abf1e.jpg?1783915073",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/6/d6c48f07-63b7-4a60-8da6-ce77405abf1e.jpg?1783915073"
+  }
+ },
+ {
+  "name": "Ash, Party Crasher",
+  "scryfallId": "d51e6610-25b6-4d8e-92d7-c50a2ff844ff",
+  "oracleId": "1bc701e2-913a-45d5-bc3f-16f87e7e2653",
+  "set": "woe",
+  "collectorNumber": "201",
+  "rarity": "uncommon",
+  "manaCost": "{R}{W}",
+  "typeLine": "Legendary Creature — Human Peasant",
+  "oracleText": "Haste\nCelebration — Whenever Ash attacks, if two or more nonland permanents entered the battlefield under your control this turn, put a +1/+1 counter on Ash.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "R",
+   "W"
+  ],
+  "keywords": [
+   "Celebration",
+   "Haste"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/5/d51e6610-25b6-4d8e-92d7-c50a2ff844ff.jpg?1783915073",
+   "normal": "https://cards.scryfall.io/normal/front/d/5/d51e6610-25b6-4d8e-92d7-c50a2ff844ff.jpg?1783915073",
+   "large": "https://cards.scryfall.io/large/front/d/5/d51e6610-25b6-4d8e-92d7-c50a2ff844ff.jpg?1783915073",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/5/d51e6610-25b6-4d8e-92d7-c50a2ff844ff.jpg?1783915073"
+  }
+ },
+ {
+  "name": "Beluna Grandsquall",
+  "scryfallId": "3f5acc0d-33a6-476f-95ca-a1ad788334dd",
+  "oracleId": "06374e6d-62fa-4833-81cd-b4d0a35e7365",
+  "set": "woe",
+  "collectorNumber": "220",
+  "rarity": "mythic",
+  "manaCost": "{G}{U}{R}",
+  "typeLine": "Legendary Creature — Giant Noble",
+  "oracleText": "Trample\nPermanent spells you cast that have an Adventure cost {1} less to cast.",
+  "power": "4",
+  "toughness": "4",
+  "colors": [
+   "G",
+   "R",
+   "U"
+  ],
+  "keywords": [
+   "Trample"
+  ],
+  "back": "Seek Thrills",
+  "adventure": true,
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/f/3f5acc0d-33a6-476f-95ca-a1ad788334dd.jpg?1783915067",
+   "normal": "https://cards.scryfall.io/normal/front/3/f/3f5acc0d-33a6-476f-95ca-a1ad788334dd.jpg?1783915067",
+   "large": "https://cards.scryfall.io/large/front/3/f/3f5acc0d-33a6-476f-95ca-a1ad788334dd.jpg?1783915067",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/f/3f5acc0d-33a6-476f-95ca-a1ad788334dd.jpg?1783915067"
+  }
+ },
+ {
+  "name": "Seek Thrills",
+  "scryfallId": "3f5acc0d-33a6-476f-95ca-a1ad788334dd",
+  "oracleId": "06374e6d-62fa-4833-81cd-b4d0a35e7365",
+  "set": "woe",
+  "collectorNumber": "220",
+  "rarity": "mythic",
+  "manaCost": "{2}{G}{U}{R}",
+  "typeLine": "Instant — Adventure",
+  "oracleText": "Mill seven cards. Then put all cards that have an Adventure from among the milled cards into your hand.",
+  "colors": [
+   "G",
+   "U",
+   "R"
+  ],
+  "keywords": [
+   "Mill"
+  ],
+  "front": "Beluna Grandsquall",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/f/3f5acc0d-33a6-476f-95ca-a1ad788334dd.jpg?1783915067",
+   "normal": "https://cards.scryfall.io/normal/front/3/f/3f5acc0d-33a6-476f-95ca-a1ad788334dd.jpg?1783915067",
+   "large": "https://cards.scryfall.io/large/front/3/f/3f5acc0d-33a6-476f-95ca-a1ad788334dd.jpg?1783915067",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/f/3f5acc0d-33a6-476f-95ca-a1ad788334dd.jpg?1783915067"
+  }
+ },
+ {
+  "name": "Faunsbane Troll",
+  "scryfallId": "2d8bd585-c5ea-46f8-8e11-f33c067f2f8e",
+  "oracleId": "b707c131-de13-4d4d-839d-b9f47d62f090",
+  "set": "woe",
+  "collectorNumber": "203",
+  "rarity": "rare",
+  "manaCost": "{2}{B}{G}",
+  "typeLine": "Creature — Troll",
+  "oracleText": "When this creature enters, create a Monster Role token attached to it. (Enchanted creature gets +1/+1 and has trample.)\n{1}, Sacrifice an Aura attached to this creature: This creature fights target creature you don't control. If that creature would die this turn, exile it instead. Activate only as a sorcery.",
+  "power": "4",
+  "toughness": "4",
+  "colors": [
+   "B",
+   "G"
+  ],
+  "keywords": [
+   "Role token",
+   "Fight"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/d/2d8bd585-c5ea-46f8-8e11-f33c067f2f8e.jpg?1783915072",
+   "normal": "https://cards.scryfall.io/normal/front/2/d/2d8bd585-c5ea-46f8-8e11-f33c067f2f8e.jpg?1783915072",
+   "large": "https://cards.scryfall.io/large/front/2/d/2d8bd585-c5ea-46f8-8e11-f33c067f2f8e.jpg?1783915072",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/d/2d8bd585-c5ea-46f8-8e11-f33c067f2f8e.jpg?1783915072"
+  }
+ },
+ {
+  "name": "Greta, Sweettooth Scourge",
+  "scryfallId": "2cfd365e-34d1-4224-b925-119000311934",
+  "oracleId": "00173df7-a584-410c-af1d-ada9c791056a",
+  "set": "woe",
+  "collectorNumber": "205",
+  "rarity": "uncommon",
+  "manaCost": "{1}{B}{G}",
+  "typeLine": "Legendary Creature — Human Warrior",
+  "oracleText": "When Greta enters, create a Food token. (It's an artifact with \"{2}, {T}, Sacrifice this token: You gain 3 life.\")\n{G}, Sacrifice a Food: Put a +1/+1 counter on target creature. Activate only as a sorcery.\n{1}{B}, Sacrifice a Food: You draw a card and you lose 1 life.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "B",
+   "G"
+  ],
+  "keywords": [
+   "Food"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/c/2cfd365e-34d1-4224-b925-119000311934.jpg?1783915071",
+   "normal": "https://cards.scryfall.io/normal/front/2/c/2cfd365e-34d1-4224-b925-119000311934.jpg?1783915071",
+   "large": "https://cards.scryfall.io/large/front/2/c/2cfd365e-34d1-4224-b925-119000311934.jpg?1783915071",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/c/2cfd365e-34d1-4224-b925-119000311934.jpg?1783915071"
+  }
+ },
+ {
+  "name": "Hylda of the Icy Crown",
+  "scryfallId": "ae9231fd-053d-4b84-a7a8-86063465bc49",
+  "oracleId": "1733c71b-fd28-48dd-8a3d-41afd4b22f0e",
+  "set": "woe",
+  "collectorNumber": "206",
+  "rarity": "mythic",
+  "manaCost": "{2}{W}{U}",
+  "typeLine": "Legendary Creature — Human Warlock",
+  "oracleText": "Whenever you tap an untapped creature an opponent controls, you may pay {1}. When you do, choose one —\n• Create a 4/4 white and blue Elemental creature token.\n• Put a +1/+1 counter on each creature you control.\n• Scry 2, then draw a card.",
+  "power": "3",
+  "toughness": "4",
+  "colors": [
+   "U",
+   "W"
+  ],
+  "keywords": [
+   "Scry"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/e/ae9231fd-053d-4b84-a7a8-86063465bc49.jpg?1783915071",
+   "normal": "https://cards.scryfall.io/normal/front/a/e/ae9231fd-053d-4b84-a7a8-86063465bc49.jpg?1783915071",
+   "large": "https://cards.scryfall.io/large/front/a/e/ae9231fd-053d-4b84-a7a8-86063465bc49.jpg?1783915071",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/e/ae9231fd-053d-4b84-a7a8-86063465bc49.jpg?1783915071"
+  }
+ },
+ {
+  "name": "Johann, Apprentice Sorcerer",
+  "scryfallId": "b88a762d-19ed-451d-a3a9-b3e7eea40f67",
+  "oracleId": "8068f80f-88ee-4c0b-a0fb-3a6337f83f22",
+  "set": "woe",
+  "collectorNumber": "207",
+  "rarity": "uncommon",
+  "manaCost": "{2}{U}{R}",
+  "typeLine": "Legendary Creature — Human Wizard Sorcerer",
+  "oracleText": "You may look at the top card of your library any time.\nOnce each turn, you may cast an instant or sorcery spell from the top of your library. (You still pay its costs. Timing rules still apply.)",
+  "power": "2",
+  "toughness": "5",
+  "colors": [
+   "R",
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/8/b88a762d-19ed-451d-a3a9-b3e7eea40f67.jpg?1783915071",
+   "normal": "https://cards.scryfall.io/normal/front/b/8/b88a762d-19ed-451d-a3a9-b3e7eea40f67.jpg?1783915071",
+   "large": "https://cards.scryfall.io/large/front/b/8/b88a762d-19ed-451d-a3a9-b3e7eea40f67.jpg?1783915071",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/8/b88a762d-19ed-451d-a3a9-b3e7eea40f67.jpg?1783915071"
+  }
+ },
+ {
+  "name": "Obyra, Dreaming Duelist",
+  "scryfallId": "63ce03ee-279b-4955-98e3-9ce1990f8b7b",
+  "oracleId": "4162e60f-9d70-4b8c-a838-df57b83c208d",
+  "set": "woe",
+  "collectorNumber": "210",
+  "rarity": "uncommon",
+  "manaCost": "{U}{B}",
+  "typeLine": "Legendary Creature — Faerie Warrior",
+  "oracleText": "Flash\nFlying\nWhenever another Faerie you control enters, each opponent loses 1 life.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "B",
+   "U"
+  ],
+  "keywords": [
+   "Flying",
+   "Flash"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/3/63ce03ee-279b-4955-98e3-9ce1990f8b7b.jpg?1783915071",
+   "normal": "https://cards.scryfall.io/normal/front/6/3/63ce03ee-279b-4955-98e3-9ce1990f8b7b.jpg?1783915071",
+   "large": "https://cards.scryfall.io/large/front/6/3/63ce03ee-279b-4955-98e3-9ce1990f8b7b.jpg?1783915071",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/3/63ce03ee-279b-4955-98e3-9ce1990f8b7b.jpg?1783915071"
+  }
+ },
+ {
+  "name": "Rowan, Scion of War",
+  "scryfallId": "4ee179ab-a15b-4bd6-b7f8-1e1abeeb31b7",
+  "oracleId": "333c15c6-c8fd-4cdd-89d2-06b921edeb8b",
+  "set": "woe",
+  "collectorNumber": "211",
+  "rarity": "mythic",
+  "manaCost": "{1}{B}{R}",
+  "typeLine": "Legendary Creature — Human Wizard",
+  "oracleText": "Menace\n{T}: Spells you cast this turn that are black and/or red cost {X} less to cast, where X is the amount of life you lost this turn. Activate only as a sorcery.",
+  "power": "4",
+  "toughness": "2",
+  "colors": [
+   "B",
+   "R"
+  ],
+  "keywords": [
+   "Menace"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/e/4ee179ab-a15b-4bd6-b7f8-1e1abeeb31b7.jpg?1783915070",
+   "normal": "https://cards.scryfall.io/normal/front/4/e/4ee179ab-a15b-4bd6-b7f8-1e1abeeb31b7.jpg?1783915070",
+   "large": "https://cards.scryfall.io/large/front/4/e/4ee179ab-a15b-4bd6-b7f8-1e1abeeb31b7.jpg?1783915070",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/e/4ee179ab-a15b-4bd6-b7f8-1e1abeeb31b7.jpg?1783915070"
+  }
+ },
+ {
+  "name": "Sharae of Numbing Depths",
+  "scryfallId": "600bc36a-3ef0-459c-9a93-94ec45b8c3d9",
+  "oracleId": "c736935a-e006-4a67-b942-e8ccf1cd9abb",
+  "set": "woe",
+  "collectorNumber": "213",
+  "rarity": "uncommon",
+  "manaCost": "{2}{W}{U}",
+  "typeLine": "Legendary Creature — Merfolk Wizard",
+  "oracleText": "When Sharae enters, tap target creature an opponent controls and put a stun counter on it. (If a permanent with a stun counter would become untapped, remove one from it instead.)\nWhenever you tap one or more untapped creatures your opponents control, draw a card. This ability triggers only once each turn.",
+  "power": "2",
+  "toughness": "3",
+  "colors": [
+   "U",
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/0/600bc36a-3ef0-459c-9a93-94ec45b8c3d9.jpg?1783915068",
+   "normal": "https://cards.scryfall.io/normal/front/6/0/600bc36a-3ef0-459c-9a93-94ec45b8c3d9.jpg?1783915068",
+   "large": "https://cards.scryfall.io/large/front/6/0/600bc36a-3ef0-459c-9a93-94ec45b8c3d9.jpg?1783915068",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/0/600bc36a-3ef0-459c-9a93-94ec45b8c3d9.jpg?1783915068"
+  }
+ },
+ {
+  "name": "Syr Armont, the Redeemer",
+  "scryfallId": "85050609-baf0-430a-ab33-83a6ea6d4741",
+  "oracleId": "53fc09e1-1e5d-4f22-b623-2c5c770183ab",
+  "set": "woe",
+  "collectorNumber": "214",
+  "rarity": "uncommon",
+  "manaCost": "{3}{G}{W}",
+  "typeLine": "Legendary Creature — Human Knight",
+  "oracleText": "When Syr Armont enters, create a Monster Role token attached to another target creature you control. (If you control another Role on it, put that one into the graveyard. Enchanted creature gets +1/+1 and has trample.)\nEnchanted creatures you control get +1/+1.",
+  "power": "4",
+  "toughness": "4",
+  "colors": [
+   "G",
+   "W"
+  ],
+  "keywords": [
+   "Role token"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/5/85050609-baf0-430a-ab33-83a6ea6d4741.jpg?1783915070",
+   "normal": "https://cards.scryfall.io/normal/front/8/5/85050609-baf0-430a-ab33-83a6ea6d4741.jpg?1783915070",
+   "large": "https://cards.scryfall.io/large/front/8/5/85050609-baf0-430a-ab33-83a6ea6d4741.jpg?1783915070",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/5/85050609-baf0-430a-ab33-83a6ea6d4741.jpg?1783915070"
+  }
+ },
+ {
+  "name": "Talion, the Kindly Lord",
+  "scryfallId": "62a6b452-c796-45c6-b4d1-0ae3d675e38e",
+  "oracleId": "a019e34d-00c4-4687-9d41-fe550bf1dbdc",
+  "set": "woe",
+  "collectorNumber": "215",
+  "rarity": "mythic",
+  "manaCost": "{2}{U}{B}",
+  "typeLine": "Legendary Creature — Faerie Noble",
+  "oracleText": "Flying\nAs Talion enters, choose a number between 1 and 10.\nWhenever an opponent casts a spell with mana value, power, or toughness equal to the chosen number, that player loses 2 life and you draw a card.",
+  "power": "3",
+  "toughness": "4",
+  "colors": [
+   "B",
+   "U"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/2/62a6b452-c796-45c6-b4d1-0ae3d675e38e.jpg?1783915070",
+   "normal": "https://cards.scryfall.io/normal/front/6/2/62a6b452-c796-45c6-b4d1-0ae3d675e38e.jpg?1783915070",
+   "large": "https://cards.scryfall.io/large/front/6/2/62a6b452-c796-45c6-b4d1-0ae3d675e38e.jpg?1783915070",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/2/62a6b452-c796-45c6-b4d1-0ae3d675e38e.jpg?1783915070"
+  }
+ },
+ {
+  "name": "The Apprentice's Folly",
+  "scryfallId": "0edb58bb-8ff3-4e34-b3d1-d83b5bd8c178",
+  "oracleId": "f45542a0-0d49-4b56-9c3e-663ff8d0529a",
+  "set": "woe",
+  "collectorNumber": "200",
+  "rarity": "rare",
+  "manaCost": "{2}{U}{R}",
+  "typeLine": "Enchantment — Saga",
+  "oracleText": "(As this Saga enters and after your draw step, add a lore counter. Sacrifice after III.)\nI, II — Choose target nontoken creature you control that doesn't have the same name as a token you control. Create a token that's a copy of it, except it isn't legendary, is a Reflection in addition to its other types, and has haste.\nIII — Sacrifice all Reflections you control.",
+  "colors": [
+   "R",
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/e/0edb58bb-8ff3-4e34-b3d1-d83b5bd8c178.jpg?1783915073",
+   "normal": "https://cards.scryfall.io/normal/front/0/e/0edb58bb-8ff3-4e34-b3d1-d83b5bd8c178.jpg?1783915073",
+   "large": "https://cards.scryfall.io/large/front/0/e/0edb58bb-8ff3-4e34-b3d1-d83b5bd8c178.jpg?1783915073",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/e/0edb58bb-8ff3-4e34-b3d1-d83b5bd8c178.jpg?1783915073"
+  }
+ },
+ {
+  "name": "The Goose Mother",
+  "scryfallId": "a094fa16-256f-4fb1-9738-3025085d1941",
+  "oracleId": "de595f1b-3f7d-45e0-a31b-ed23e5d1ee48",
+  "set": "soc",
+  "collectorNumber": "312",
+  "rarity": "rare",
+  "manaCost": "{X}{G}{U}",
+  "typeLine": "Legendary Creature — Bird Hydra",
+  "oracleText": "Flying\nThe Goose Mother enters with X +1/+1 counters on it.\nWhen The Goose Mother enters, create half X Food tokens, rounded up.\nWhenever The Goose Mother attacks, you may sacrifice a Food. If you do, draw a card.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "G",
+   "U"
+  ],
+  "keywords": [
+   "Flying",
+   "Food"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/0/a094fa16-256f-4fb1-9738-3025085d1941.jpg?1783903751",
+   "normal": "https://cards.scryfall.io/normal/front/a/0/a094fa16-256f-4fb1-9738-3025085d1941.jpg?1783903751",
+   "large": "https://cards.scryfall.io/large/front/a/0/a094fa16-256f-4fb1-9738-3025085d1941.jpg?1783903751",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/0/a094fa16-256f-4fb1-9738-3025085d1941.jpg?1783903751"
+  }
+ },
+ {
+  "name": "Totentanz, Swarm Piper",
+  "scryfallId": "1422d6db-fe5b-4a89-951a-fbd7985a29fc",
+  "oracleId": "cfa46f8f-b3ec-4ee0-acdd-622f3177e02a",
+  "set": "woe",
+  "collectorNumber": "216",
+  "rarity": "uncommon",
+  "manaCost": "{1}{B}{R}",
+  "typeLine": "Legendary Creature — Human Warlock Bard",
+  "oracleText": "Whenever Totentanz or another nontoken creature you control dies, create a 1/1 black Rat creature token with \"This token can't block.\"\n{1}{B}: Target attacking Rat you control gains deathtouch until end of turn.",
+  "power": "2",
+  "toughness": "3",
+  "colors": [
+   "B",
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/4/1422d6db-fe5b-4a89-951a-fbd7985a29fc.jpg?1783915068",
+   "normal": "https://cards.scryfall.io/normal/front/1/4/1422d6db-fe5b-4a89-951a-fbd7985a29fc.jpg?1783915068",
+   "large": "https://cards.scryfall.io/large/front/1/4/1422d6db-fe5b-4a89-951a-fbd7985a29fc.jpg?1783915068",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/4/1422d6db-fe5b-4a89-951a-fbd7985a29fc.jpg?1783915068"
+  }
+ },
+ {
+  "name": "Will, Scion of Peace",
+  "scryfallId": "162088ea-5f99-4244-9427-2fdfb2168fc3",
+  "oracleId": "4ecb8653-db8c-468a-853d-420ff62a7a8a",
+  "set": "woe",
+  "collectorNumber": "218",
+  "rarity": "mythic",
+  "manaCost": "{1}{W}{U}",
+  "typeLine": "Legendary Creature — Human Wizard",
+  "oracleText": "Vigilance\n{T}: Spells you cast this turn that are white and/or blue cost {X} less to cast, where X is the amount of life you gained this turn. Activate only as a sorcery.",
+  "power": "2",
+  "toughness": "4",
+  "colors": [
+   "U",
+   "W"
+  ],
+  "keywords": [
+   "Vigilance"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/6/162088ea-5f99-4244-9427-2fdfb2168fc3.jpg?1783915068",
+   "normal": "https://cards.scryfall.io/normal/front/1/6/162088ea-5f99-4244-9427-2fdfb2168fc3.jpg?1783915068",
+   "large": "https://cards.scryfall.io/large/front/1/6/162088ea-5f99-4244-9427-2fdfb2168fc3.jpg?1783915068",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/6/162088ea-5f99-4244-9427-2fdfb2168fc3.jpg?1783915068"
+  }
+ },
+ {
+  "name": "Yenna, Redtooth Regent",
+  "scryfallId": "e635d461-254a-434e-8e5d-dea61dd8ca4f",
+  "oracleId": "0adede77-5181-4190-8066-4797cefe0189",
+  "set": "woe",
+  "collectorNumber": "219",
+  "rarity": "rare",
+  "manaCost": "{2}{G}{W}",
+  "typeLine": "Legendary Creature — Elf Noble",
+  "oracleText": "{2}, {T}: Choose target enchantment you control that doesn't have the same name as another permanent you control. Create a token that's a copy of it, except it isn't legendary. If the token is an Aura, untap Yenna, then scry 2. Activate only as a sorcery.",
+  "power": "4",
+  "toughness": "4",
+  "colors": [
+   "G",
+   "W"
+  ],
+  "keywords": [
+   "Scry"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/6/e635d461-254a-434e-8e5d-dea61dd8ca4f.jpg?1783915066",
+   "normal": "https://cards.scryfall.io/normal/front/e/6/e635d461-254a-434e-8e5d-dea61dd8ca4f.jpg?1783915066",
+   "large": "https://cards.scryfall.io/large/front/e/6/e635d461-254a-434e-8e5d-dea61dd8ca4f.jpg?1783915066",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/6/e635d461-254a-434e-8e5d-dea61dd8ca4f.jpg?1783915066"
+  }
+ },
+ {
+  "name": "Agatha's Soul Cauldron",
+  "scryfallId": "019b51b0-e5c6-4208-922b-7736686dddcd",
+  "oracleId": "c259e16f-2a44-4552-8678-815f757a02e8",
+  "set": "woe",
+  "collectorNumber": "242",
+  "rarity": "mythic",
+  "manaCost": "{2}",
+  "typeLine": "Legendary Artifact",
+  "oracleText": "You may spend mana as though it were mana of any color to activate abilities of creatures you control.\nCreatures you control with +1/+1 counters on them have all activated abilities of all creature cards exiled with Agatha's Soul Cauldron.\n{T}: Exile target card from a graveyard. When a creature card is exiled this way, put a +1/+1 counter on target creature you control.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/1/019b51b0-e5c6-4208-922b-7736686dddcd.jpg?1783915059",
+   "normal": "https://cards.scryfall.io/normal/front/0/1/019b51b0-e5c6-4208-922b-7736686dddcd.jpg?1783915059",
+   "large": "https://cards.scryfall.io/large/front/0/1/019b51b0-e5c6-4208-922b-7736686dddcd.jpg?1783915059",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/1/019b51b0-e5c6-4208-922b-7736686dddcd.jpg?1783915059"
+  }
+ },
+ {
+  "name": "Candy Trail",
+  "scryfallId": "1a860925-d912-49e5-9ddc-41ab26916bb3",
+  "oracleId": "7c8e4f29-53e0-4242-8ef8-7a9476dce178",
+  "set": "woe",
+  "collectorNumber": "243",
+  "rarity": "common",
+  "manaCost": "{1}",
+  "typeLine": "Artifact — Food Clue",
+  "oracleText": "When this artifact enters, scry 2.\n{2}, {T}, Sacrifice this artifact: You gain 3 life and draw a card.",
+  "colors": [],
+  "keywords": [
+   "Scry"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/a/1a860925-d912-49e5-9ddc-41ab26916bb3.jpg?1783915060",
+   "normal": "https://cards.scryfall.io/normal/front/1/a/1a860925-d912-49e5-9ddc-41ab26916bb3.jpg?1783915060",
+   "large": "https://cards.scryfall.io/large/front/1/a/1a860925-d912-49e5-9ddc-41ab26916bb3.jpg?1783915060",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/a/1a860925-d912-49e5-9ddc-41ab26916bb3.jpg?1783915060"
+  }
+ },
+ {
+  "name": "Collector's Vault",
+  "scryfallId": "967a4f27-8cd6-437d-8c05-8aedbc7ddc4b",
+  "oracleId": "f460ff80-8175-43f7-9810-540cf3817085",
+  "set": "woe",
+  "collectorNumber": "244",
+  "rarity": "uncommon",
+  "manaCost": "{2}",
+  "typeLine": "Artifact",
+  "oracleText": "{2}, {T}: Draw a card, then discard a card. Create a Treasure token. (It's an artifact with \"{T}, Sacrifice this token: Add one mana of any color.\")",
+  "colors": [],
+  "keywords": [
+   "Treasure"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/6/967a4f27-8cd6-437d-8c05-8aedbc7ddc4b.jpg?1783915060",
+   "normal": "https://cards.scryfall.io/normal/front/9/6/967a4f27-8cd6-437d-8c05-8aedbc7ddc4b.jpg?1783915060",
+   "large": "https://cards.scryfall.io/large/front/9/6/967a4f27-8cd6-437d-8c05-8aedbc7ddc4b.jpg?1783915060",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/6/967a4f27-8cd6-437d-8c05-8aedbc7ddc4b.jpg?1783915060"
+  }
+ },
+ {
+  "name": "Eriette's Tempting Apple",
+  "scryfallId": "5b61711f-8982-4ff0-86ba-01e0125cd705",
+  "oracleId": "b26a2875-c704-491a-b82d-07c316e53611",
+  "set": "woe",
+  "collectorNumber": "245",
+  "rarity": "uncommon",
+  "manaCost": "{4}",
+  "typeLine": "Legendary Artifact — Food",
+  "oracleText": "When Eriette's Tempting Apple enters, gain control of target creature until end of turn. Untap that creature. It gains haste until end of turn.\n{2}, {T}, Sacrifice Eriette's Tempting Apple: You gain 3 life.\n{2}, {T}, Sacrifice Eriette's Tempting Apple: Target opponent loses 3 life.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/b/5b61711f-8982-4ff0-86ba-01e0125cd705.jpg?1783915060",
+   "normal": "https://cards.scryfall.io/normal/front/5/b/5b61711f-8982-4ff0-86ba-01e0125cd705.jpg?1783915060",
+   "large": "https://cards.scryfall.io/large/front/5/b/5b61711f-8982-4ff0-86ba-01e0125cd705.jpg?1783915060",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/b/5b61711f-8982-4ff0-86ba-01e0125cd705.jpg?1783915060"
+  }
+ },
+ {
+  "name": "Gingerbrute",
+  "scryfallId": "81ff4bca-f552-4e89-affe-31d6c91c82fc",
+  "oracleId": "10b8d4c7-7553-4d76-b643-d98b80701e13",
+  "set": "j25",
+  "collectorNumber": "751",
+  "rarity": "common",
+  "manaCost": "{1}",
+  "typeLine": "Artifact Creature — Food Golem",
+  "oracleText": "Haste (This creature can attack and {T} as soon as it comes under your control.)\n{1}: This creature can't be blocked this turn except by creatures with haste.\n{2}, {T}, Sacrifice this creature: You gain 3 life.",
+  "power": "1",
+  "toughness": "1",
+  "colors": [],
+  "keywords": [
+   "Haste"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/1/81ff4bca-f552-4e89-affe-31d6c91c82fc.jpg?1783908607",
+   "normal": "https://cards.scryfall.io/normal/front/8/1/81ff4bca-f552-4e89-affe-31d6c91c82fc.jpg?1783908607",
+   "large": "https://cards.scryfall.io/large/front/8/1/81ff4bca-f552-4e89-affe-31d6c91c82fc.jpg?1783908607",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/1/81ff4bca-f552-4e89-affe-31d6c91c82fc.jpg?1783908607"
+  }
+ },
+ {
+  "name": "Hylda's Crown of Winter",
+  "scryfallId": "b0d4a6c0-f00e-45a7-9c88-899460007020",
+  "oracleId": "a8291d04-240e-456b-8c86-1fb4eb460476",
+  "set": "woe",
+  "collectorNumber": "247",
+  "rarity": "rare",
+  "manaCost": "{3}",
+  "typeLine": "Legendary Artifact",
+  "oracleText": "{1}, {T}: Tap target creature. This ability costs {1} less to activate during your turn.\n{3}, Sacrifice Hylda's Crown of Winter: Draw a card for each tapped creature your opponents control.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/0/b0d4a6c0-f00e-45a7-9c88-899460007020.jpg?1783915057",
+   "normal": "https://cards.scryfall.io/normal/front/b/0/b0d4a6c0-f00e-45a7-9c88-899460007020.jpg?1783915057",
+   "large": "https://cards.scryfall.io/large/front/b/0/b0d4a6c0-f00e-45a7-9c88-899460007020.jpg?1783915057",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/0/b0d4a6c0-f00e-45a7-9c88-899460007020.jpg?1783915057"
+  }
+ },
+ {
+  "name": "Prophetic Prism",
+  "scryfallId": "261d621b-4dc3-49a0-a08b-40618270bec6",
+  "oracleId": "134a9877-5cfb-4a2a-a0f0-930dce45f58b",
+  "set": "j25",
+  "collectorNumber": "758",
+  "rarity": "common",
+  "manaCost": "{2}",
+  "typeLine": "Artifact",
+  "oracleText": "When this artifact enters, draw a card.\n{1}, {T}: Add one mana of any color.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/6/261d621b-4dc3-49a0-a08b-40618270bec6.jpg?1783908606",
+   "normal": "https://cards.scryfall.io/normal/front/2/6/261d621b-4dc3-49a0-a08b-40618270bec6.jpg?1783908606",
+   "large": "https://cards.scryfall.io/large/front/2/6/261d621b-4dc3-49a0-a08b-40618270bec6.jpg?1783908606",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/6/261d621b-4dc3-49a0-a08b-40618270bec6.jpg?1783908606"
+  }
+ },
+ {
+  "name": "Scarecrow Guide",
+  "scryfallId": "3dc08461-bec6-4a18-b782-da4c92abb789",
+  "oracleId": "cf7bb5d4-c33f-4879-a793-6d6f2a4d94be",
+  "set": "woe",
+  "collectorNumber": "250",
+  "rarity": "common",
+  "manaCost": "{2}",
+  "typeLine": "Artifact Creature — Scarecrow",
+  "oracleText": "Reach\n{1}: Add one mana of any color. Activate only once each turn.",
+  "power": "2",
+  "toughness": "1",
+  "colors": [],
+  "keywords": [
+   "Reach"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/d/3dc08461-bec6-4a18-b782-da4c92abb789.jpg?1783915057",
+   "normal": "https://cards.scryfall.io/normal/front/3/d/3dc08461-bec6-4a18-b782-da4c92abb789.jpg?1783915057",
+   "large": "https://cards.scryfall.io/large/front/3/d/3dc08461-bec6-4a18-b782-da4c92abb789.jpg?1783915057",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/d/3dc08461-bec6-4a18-b782-da4c92abb789.jpg?1783915057"
+  }
+ },
+ {
+  "name": "Syr Ginger, the Meal Ender",
+  "scryfallId": "7fbdba12-1369-41ae-b0e9-c405c0f0a2e5",
+  "oracleId": "2eb16535-718f-4b88-92bc-96429d796327",
+  "set": "woe",
+  "collectorNumber": "252",
+  "rarity": "rare",
+  "manaCost": "{2}",
+  "typeLine": "Legendary Artifact Creature — Food Knight",
+  "oracleText": "Syr Ginger has trample, hexproof, and haste as long as an opponent controls a planeswalker.\nWhenever another artifact you control is put into a graveyard from the battlefield, put a +1/+1 counter on Syr Ginger and scry 1.\n{2}, {T}, Sacrifice Syr Ginger: You gain life equal to its power.",
+  "power": "3",
+  "toughness": "1",
+  "colors": [],
+  "keywords": [
+   "Scry"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/f/7fbdba12-1369-41ae-b0e9-c405c0f0a2e5.jpg?1783915057",
+   "normal": "https://cards.scryfall.io/normal/front/7/f/7fbdba12-1369-41ae-b0e9-c405c0f0a2e5.jpg?1783915057",
+   "large": "https://cards.scryfall.io/large/front/7/f/7fbdba12-1369-41ae-b0e9-c405c0f0a2e5.jpg?1783915057",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/f/7fbdba12-1369-41ae-b0e9-c405c0f0a2e5.jpg?1783915057"
+  }
+ },
+ {
+  "name": "Crystal Grotto",
+  "scryfallId": "6f6f9d3d-600d-43f3-a915-612e5d53aaa1",
+  "oracleId": "f15fb0cc-8e96-4f03-94d0-b51410415afd",
+  "set": "woe",
+  "collectorNumber": "254",
+  "rarity": "common",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "When this land enters, scry 1.\n{T}: Add {C}.\n{1}, {T}: Add one mana of any color.",
+  "colors": [],
+  "keywords": [
+   "Scry"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/f/6f6f9d3d-600d-43f3-a915-612e5d53aaa1.jpg?1783915057",
+   "normal": "https://cards.scryfall.io/normal/front/6/f/6f6f9d3d-600d-43f3-a915-612e5d53aaa1.jpg?1783915057",
+   "large": "https://cards.scryfall.io/large/front/6/f/6f6f9d3d-600d-43f3-a915-612e5d53aaa1.jpg?1783915057",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/f/6f6f9d3d-600d-43f3-a915-612e5d53aaa1.jpg?1783915057"
+  }
+ },
+ {
+  "name": "Edgewall Inn",
+  "scryfallId": "ec435e54-628a-43bd-8804-cbc37e375bce",
+  "oracleId": "4dfd33e8-7e30-493b-8564-f7df5f0257aa",
+  "set": "woe",
+  "collectorNumber": "255",
+  "rarity": "uncommon",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "This land enters tapped.\nAs this land enters, choose a color.\n{T}: Add one mana of the chosen color.\n{3}, {T}, Sacrifice this land: Return target card that has an Adventure from your graveyard to your hand.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/c/ec435e54-628a-43bd-8804-cbc37e375bce.jpg?1783915055",
+   "normal": "https://cards.scryfall.io/normal/front/e/c/ec435e54-628a-43bd-8804-cbc37e375bce.jpg?1783915055",
+   "large": "https://cards.scryfall.io/large/front/e/c/ec435e54-628a-43bd-8804-cbc37e375bce.jpg?1783915055",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/c/ec435e54-628a-43bd-8804-cbc37e375bce.jpg?1783915055"
+  }
+ },
+ {
+  "name": "Restless Bivouac",
+  "scryfallId": "b85e0aed-bfb2-4aa8-a754-849c4d9a6a58",
+  "oracleId": "b3c7b46f-c9ab-40ca-b50b-a4e0d0bd9be8",
+  "set": "woe",
+  "collectorNumber": "257",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "This land enters tapped.\n{T}: Add {R} or {W}.\n{1}{R}{W}: This land becomes a 2/2 red and white Ox creature until end of turn. It's still a land.\nWhenever this land attacks, put a +1/+1 counter on target creature you control.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/8/b85e0aed-bfb2-4aa8-a754-849c4d9a6a58.jpg?1783915056",
+   "normal": "https://cards.scryfall.io/normal/front/b/8/b85e0aed-bfb2-4aa8-a754-849c4d9a6a58.jpg?1783915056",
+   "large": "https://cards.scryfall.io/large/front/b/8/b85e0aed-bfb2-4aa8-a754-849c4d9a6a58.jpg?1783915056",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/8/b85e0aed-bfb2-4aa8-a754-849c4d9a6a58.jpg?1783915056"
+  }
+ },
+ {
+  "name": "Restless Fortress",
+  "scryfallId": "675213bb-28d7-460c-a4f3-950f5b9090af",
+  "oracleId": "8b3726f1-20b8-42ec-8f9b-b361515c3f05",
+  "set": "woe",
+  "collectorNumber": "259",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "This land enters tapped.\n{T}: Add {W} or {B}.\n{2}{W}{B}: This land becomes a 1/4 white and black Nightmare creature until end of turn. It's still a land.\nWhenever this land attacks, defending player loses 2 life and you gain 2 life.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/7/675213bb-28d7-460c-a4f3-950f5b9090af.jpg?1783915055",
+   "normal": "https://cards.scryfall.io/normal/front/6/7/675213bb-28d7-460c-a4f3-950f5b9090af.jpg?1783915055",
+   "large": "https://cards.scryfall.io/large/front/6/7/675213bb-28d7-460c-a4f3-950f5b9090af.jpg?1783915055",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/7/675213bb-28d7-460c-a4f3-950f5b9090af.jpg?1783915055"
+  }
+ },
+ {
+  "name": "Restless Spire",
+  "scryfallId": "fbf4552a-643a-4dc7-a2ae-8e3af5c1ceef",
+  "oracleId": "0ca4e80e-c19c-4b74-b531-c5a4dc5a8ba9",
+  "set": "soc",
+  "collectorNumber": "399",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "This land enters tapped.\n{T}: Add {U} or {R}.\n{U}{R}: Until end of turn, this land becomes a 2/1 blue and red Elemental creature with \"During your turn, this creature has first strike.\" It's still a land.\nWhenever this land attacks, scry 1.",
+  "colors": [],
+  "keywords": [
+   "Scry"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/b/fbf4552a-643a-4dc7-a2ae-8e3af5c1ceef.jpg?1783903720",
+   "normal": "https://cards.scryfall.io/normal/front/f/b/fbf4552a-643a-4dc7-a2ae-8e3af5c1ceef.jpg?1783903720",
+   "large": "https://cards.scryfall.io/large/front/f/b/fbf4552a-643a-4dc7-a2ae-8e3af5c1ceef.jpg?1783903720",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/b/fbf4552a-643a-4dc7-a2ae-8e3af5c1ceef.jpg?1783903720"
+  }
+ },
+ {
+  "name": "Restless Vinestalk",
+  "scryfallId": "e5f3161d-3f69-4b06-ab73-c31fc0c1520c",
+  "oracleId": "0935faa2-fb90-48db-8a92-906ba0f374c7",
+  "set": "woe",
+  "collectorNumber": "261",
+  "rarity": "rare",
+  "manaCost": "",
+  "typeLine": "Land",
+  "oracleText": "This land enters tapped.\n{T}: Add {G} or {U}.\n{3}{G}{U}: Until end of turn, this land becomes a 5/5 green and blue Plant creature with trample. It's still a land.\nWhenever this land attacks, up to one other target creature has base power and toughness 3/3 until end of turn.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/5/e5f3161d-3f69-4b06-ab73-c31fc0c1520c.jpg?1783915055",
+   "normal": "https://cards.scryfall.io/normal/front/e/5/e5f3161d-3f69-4b06-ab73-c31fc0c1520c.jpg?1783915055",
+   "large": "https://cards.scryfall.io/large/front/e/5/e5f3161d-3f69-4b06-ab73-c31fc0c1520c.jpg?1783915055",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/5/e5f3161d-3f69-4b06-ab73-c31fc0c1520c.jpg?1783915055"
+  }
+ },
+ {
+  "name": "The Autonomous Furnace",
+  "scryfallId": "c16f96f5-a2a6-4ac4-bdae-326cee92bf2e",
+  "oracleId": "e2dd05d5-312e-47f1-873e-c0741ee6ef4a",
+  "set": "one",
+  "collectorNumber": "247",
+  "rarity": "common",
+  "manaCost": "",
+  "typeLine": "Land — Sphere",
+  "oracleText": "This land enters tapped.\n{T}: Add {R}.\n{1}{R}, {T}, Sacrifice this land: Draw a card.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/1/c16f96f5-a2a6-4ac4-bdae-326cee92bf2e.jpg?1783917984",
+   "normal": "https://cards.scryfall.io/normal/front/c/1/c16f96f5-a2a6-4ac4-bdae-326cee92bf2e.jpg?1783917984",
+   "large": "https://cards.scryfall.io/large/front/c/1/c16f96f5-a2a6-4ac4-bdae-326cee92bf2e.jpg?1783917984",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/1/c16f96f5-a2a6-4ac4-bdae-326cee92bf2e.jpg?1783917984"
+  }
+ },
+ {
+  "name": "The Dross Pits",
+  "scryfallId": "19d469f1-2219-4466-9f8a-769ee43e28db",
+  "oracleId": "8110fe69-c66c-4e2c-86ee-dcc8dc9a13d1",
+  "set": "one",
+  "collectorNumber": "251",
+  "rarity": "common",
+  "manaCost": "",
+  "typeLine": "Land — Sphere",
+  "oracleText": "This land enters tapped.\n{T}: Add {B}.\n{1}{B}, {T}, Sacrifice this land: Draw a card.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/9/19d469f1-2219-4466-9f8a-769ee43e28db.jpg?1783917981",
+   "normal": "https://cards.scryfall.io/normal/front/1/9/19d469f1-2219-4466-9f8a-769ee43e28db.jpg?1783917981",
+   "large": "https://cards.scryfall.io/large/front/1/9/19d469f1-2219-4466-9f8a-769ee43e28db.jpg?1783917981",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/9/19d469f1-2219-4466-9f8a-769ee43e28db.jpg?1783917981"
+  }
+ },
+ {
+  "name": "The Fair Basilica",
+  "scryfallId": "01d6ba55-7bc0-41c6-84be-8cd528e46a05",
+  "oracleId": "8618f8e8-fd86-47e3-905d-e6624b599b9b",
+  "set": "one",
+  "collectorNumber": "252",
+  "rarity": "common",
+  "manaCost": "",
+  "typeLine": "Land — Sphere",
+  "oracleText": "This land enters tapped.\n{T}: Add {W}.\n{1}{W}, {T}, Sacrifice this land: Draw a card.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/1/01d6ba55-7bc0-41c6-84be-8cd528e46a05.jpg?1783917982",
+   "normal": "https://cards.scryfall.io/normal/front/0/1/01d6ba55-7bc0-41c6-84be-8cd528e46a05.jpg?1783917982",
+   "large": "https://cards.scryfall.io/large/front/0/1/01d6ba55-7bc0-41c6-84be-8cd528e46a05.jpg?1783917982",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/1/01d6ba55-7bc0-41c6-84be-8cd528e46a05.jpg?1783917982"
+  }
+ },
+ {
+  "name": "The Hunter Maze",
+  "scryfallId": "6389c242-2139-4f12-af30-2b080a1c5e83",
+  "oracleId": "b0ea4975-a944-4585-8711-60f203cffa4a",
+  "set": "one",
+  "collectorNumber": "253",
+  "rarity": "common",
+  "manaCost": "",
+  "typeLine": "Land — Sphere",
+  "oracleText": "This land enters tapped.\n{T}: Add {G}.\n{1}{G}, {T}, Sacrifice this land: Draw a card.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/3/6389c242-2139-4f12-af30-2b080a1c5e83.jpg?1783917981",
+   "normal": "https://cards.scryfall.io/normal/front/6/3/6389c242-2139-4f12-af30-2b080a1c5e83.jpg?1783917981",
+   "large": "https://cards.scryfall.io/large/front/6/3/6389c242-2139-4f12-af30-2b080a1c5e83.jpg?1783917981",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/3/6389c242-2139-4f12-af30-2b080a1c5e83.jpg?1783917981"
+  }
+ },
+ {
+  "name": "The Surgical Bay",
+  "scryfallId": "acb6a9c1-fdc5-4148-9798-c48f7fa8bdd7",
+  "oracleId": "db9c155f-b342-41bb-9e1a-50358fb9f40e",
+  "set": "sld",
+  "collectorNumber": "2163",
+  "rarity": "common",
+  "manaCost": "",
+  "typeLine": "Land — Sphere",
+  "oracleText": "This land enters tapped.\n{T}: Add {U}.\n{1}{U}, {T}, Sacrifice this land: Draw a card.",
+  "colors": [],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/c/acb6a9c1-fdc5-4148-9798-c48f7fa8bdd7.jpg?1783904680",
+   "normal": "https://cards.scryfall.io/normal/front/a/c/acb6a9c1-fdc5-4148-9798-c48f7fa8bdd7.jpg?1783904680",
+   "large": "https://cards.scryfall.io/large/front/a/c/acb6a9c1-fdc5-4148-9798-c48f7fa8bdd7.jpg?1783904680",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/c/acb6a9c1-fdc5-4148-9798-c48f7fa8bdd7.jpg?1783904680"
+  }
  }
 ]

@@ -5,6 +5,7 @@ import { manaValue } from './cost.ts';
 import { vividCount } from './ecl-18a.ts';
 import { staticallyCreature } from './ltr-black-effects.ts'; // Lord of the Rings (21b black)
 import { ltrCombatKeywordsApply, ltrGcRareFilterFails } from './ltr-gc-rare-effects.ts'; // Lord of the Rings (21d gc-rare)
+import { woeMultiFilterFails } from './woe-multi-effects.ts'; // Wilds of Eldraine (23b multi)
 import { spellsCastThisTurn } from './tdm-19a.ts';
 import { checkCondition } from './triggers.ts';
 import { defHasAdventure } from './woe-23a.ts'; // Wilds of Eldraine (23a)
@@ -1147,6 +1148,9 @@ export function matchesFilter(
 ): boolean {
   if (!filter) return true;
   if ((filter.ltrExceptIds || filter.ltrNoSharedType) && ltrGcRareFilterFails(ctx, id, filter)) return false; // Lord of the Rings (21d gc-rare)
+  if (filter.manaValuePowerOrToughness !== undefined || filter.nameNotOfYourToken || filter.nameUniqueAmongYourPermanents) {
+    if (woeMultiFilterFails(ctx, id, filter, sourceId)) return false; // Wilds of Eldraine (23b multi)
+  }
   // Type/subtype-only conditions must not recurse through their own static ability.
   const needsComputed =
     filter.maxPower !== undefined ||
@@ -1288,6 +1292,9 @@ export function cardMatches(
   // Wilds of Eldraine (23a): "a card that has an Adventure" (as a spell: cast as the creature or enchantment, not as the Adventure).
   if (filter.hasAdventure && !defHasAdventure(ctx.db, d)) return false;
   if ((filter.ltrExceptIds || filter.ltrNoSharedType) && ltrGcRareFilterFails(ctx, id, filter)) return false; // Lord of the Rings (21d gc-rare)
+  if (filter.manaValuePowerOrToughness !== undefined || filter.nameNotOfYourToken || filter.nameUniqueAmongYourPermanents) {
+    if (woeMultiFilterFails(ctx, id, filter, sourceId)) return false; // Wilds of Eldraine (23b multi)
+  }
   if (
     filter.anyOf &&
     !filter.anyOf.some((branch) =>

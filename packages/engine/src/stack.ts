@@ -85,6 +85,7 @@ import {
 } from './ltr-multi-rare-effects.ts'; // Lord of the Rings (21d multi-rare)
 import { checkCondition, triggeredAbility } from './triggers.ts';
 import { givePriority } from './turn.ts';
+import { woeActivationCost, woeLifeDiscount, woeNoteTopCast } from './woe-multi-effects.ts'; // Wilds of Eldraine (23b multi)
 import type {
   AbilityDef,
   CardDefinition,
@@ -543,6 +544,8 @@ export function castCost(
         )
           reduce += a.effect.amount;
       }
+  // Wilds of Eldraine (23b multi): Rowan, Scion of War; Will, Scion of Peace.
+  reduce += woeLifeDiscount(ctx, player, card);
   // Strixhaven (13b): Maelstrom Muse's "next instant or sorcery costs less".
   const discount = ctx.s.players[player].nextSpellDiscount;
   if (
@@ -614,6 +617,8 @@ export function castSpell(
   }
   // Marvel Super Heroes Jumpstart (Analyzed): Vision's once this turn is used (while it's in hand).
   if (choice.via === 'freeOnceEachTurn') useFreeCast(ctx, player, card);
+  // Wilds of Eldraine (23b multi): Johann, Apprentice Sorcerer, "once each turn, you may cast an instant or sorcery spell from the top of your library".
+  if (o.zone === 'library') woeNoteTopCast(ctx, player, card);
   const d = defOf(ctx, o.defId);
   const v = choice.sneak
     ? { cost: d.sneak!, spell: d.spell ?? null }
@@ -1214,6 +1219,16 @@ export function abilityManaCost(
   source: ObjectId,
   a: ReturnType<typeof activatedAbility>,
   /** Final Fantasy (11d): the chosen targets ('best': the cheapest any target could make it). */
+  targets?: readonly TargetChoice[] | 'best',
+): ManaCost | undefined {
+  // Wilds of Eldraine (23b multi): Agatha of the Vile Cauldron's discount, Agatha's Soul Cauldron's any-colour mana.
+  return woeActivationCost(ctx, source, a, abilityManaCostBase(ctx, source, a, targets));
+}
+
+function abilityManaCostBase(
+  ctx: Ctx,
+  source: ObjectId,
+  a: ReturnType<typeof activatedAbility>,
   targets?: readonly TargetChoice[] | 'best',
 ): ManaCost | undefined {
   const o = obj(ctx, source);
