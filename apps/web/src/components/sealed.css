@@ -62,6 +62,17 @@
   background-size: cover;
 }
 
+/* Chaos: four sets' booster art in the four corners. */
+.shell .sealed-set__art--chaos {
+  background-position:
+    0 0,
+    100% 0,
+    0 100%,
+    100% 100%;
+  background-repeat: no-repeat;
+  background-size: 50% 50%;
+}
+
 .shell .sealed-set__name {
   padding: 0.625rem 0.75rem 0;
   font-size: 0.9375rem;

@@ -6,7 +6,6 @@ import {
   deckColors,
   mainColors,
   MIN_DECK,
-  PACK_SET_NAMES,
   type PackSet,
   size,
 } from '../game/expedition.ts';
@@ -26,12 +25,16 @@ import {
   SEALED_LOSSES,
   SEALED_PACKS,
   SEALED_PRIZES,
+  SEALED_SET_NAMES,
   SEALED_WINS,
   type SealedEvent,
+  type SealedSet,
   type SealedState,
   sealedBoosters,
+  sealedPackSets,
   sealedPlayerDeck,
   sealedPromo,
+  sealedPromoSet,
   startSealed,
   statusOf,
 } from '../game/sealed.ts';
@@ -67,8 +70,16 @@ function seasonInfo(): SeasonInfo {
   }
 }
 
-const SETS = Object.keys(PACK_SET_NAMES) as PackSet[];
+const SETS = Object.keys(SEALED_SET_NAMES) as SealedSet[];
 const setArt = (set: PackSet) => packArt({ kind: 'booster' }, set);
+/** The art for an event before its deck has cards: its set's booster (Chaos: the promo's set). */
+const eventArt = (e: SealedEvent) => setArt(sealedPromoSet(e));
+/** Chaos's tile: four sets' booster art, one in each corner. */
+const CHAOS_TILE: PackSet[] = ['fdn', 'blb', 'fin', 'tdm'];
+const tileStyle = (set: SealedSet) =>
+  set === 'chaos'
+    ? { backgroundImage: CHAOS_TILE.map((s) => `url("${setArt(s)}")`).join(', ') }
+    : { backgroundImage: `url("${setArt(set)}")` };
 const SKILLS: Record<string, string> = {
   easy: 'Novice',
   heuristic: 'Apprentice',
@@ -95,7 +106,7 @@ export function sealedRunSummary(e: SealedEvent | null): RunSummary | null {
     lives: SEALED_LOSSES,
     label: `${plural(e.wins, 'win')} · ${plural(e.losses, 'loss')}`,
     name: deck.name,
-    art: size(e.main) ? artFor(deck) : setArt(e.set),
+    art: size(e.main) ? artFor(deck) : eventArt(e),
   };
 }
 
@@ -207,7 +218,7 @@ function Picker({
   onMenu: () => void;
   onSeason: () => void;
 }) {
-  const [set, setSet] = useState<PackSet>(
+  const [set, setSet] = useState<SealedSet>(
     () =>
       SETS.slice().sort(
         (a, b) => (state.records[b]?.events ?? 0) - (state.records[a]?.events ?? 0),
@@ -225,7 +236,10 @@ function Picker({
       <div className="start__title">
         <span className="start__eyebrow">Sealed</span>
         <h1>Choose a set</h1>
-        <p>Open six boosters of it and build a deck from what you find.</p>
+        <p>
+          Open six boosters of it and build a deck from what you find. Chaos opens six different
+          sets.
+        </p>
       </div>
 
       <div className="sealed-sets" role="radiogroup" aria-label="Set">
@@ -240,10 +254,10 @@ function Picker({
               onClick={() => setSet(s)}
             >
               <span
-                className="sealed-set__art"
-                style={{ backgroundImage: `url("${setArt(s)}")` }}
+                className={`sealed-set__art ${s === 'chaos' ? 'sealed-set__art--chaos' : ''}`}
+                style={tileStyle(s)}
               />
-              <span className="sealed-set__name">{PACK_SET_NAMES[s]}</span>
+              <span className="sealed-set__name">{SEALED_SET_NAMES[s]}</span>
               <span className="sealed-set__rec">
                 {rec?.events
                   ? `Best ${plural(rec.best, 'win')} · ${rec.events}×`
@@ -295,7 +309,7 @@ function Picker({
 
       <div className="gauntlet__actions">
         <button className="btn btn--primary btn--big" onClick={start}>
-          Open {PACK_SET_NAMES[set]} packs
+          Open {SEALED_SET_NAMES[set]} packs
         </button>
         <button className="btn btn--ghost" onClick={onMenu}>
           Main menu
@@ -348,7 +362,7 @@ function PromoReveal({ event, onDone }: { event: SealedEvent; onDone: () => void
     <div className="start shell sealed sealed--promo">
       <UiSize />
       <div className="start__title">
-        <span className="start__eyebrow">Sealed · {PACK_SET_NAMES[event.set]}</span>
+        <span className="start__eyebrow">Sealed · {SEALED_SET_NAMES[event.set]}</span>
         <h1>Prerelease promo</h1>
         <p>
           {up
@@ -395,6 +409,7 @@ function Reveal({
   onDone: () => void;
 }) {
   const packs = useMemo(() => sealedBoosters(event), [event.seed, event.set]);
+  const sets = useMemo(() => sealedPackSets(event), [event.seed, event.set]);
   // The promo comes first (-1), then the packs.
   const [index, setIndex] = useState(-1);
   const last = index === packs.length - 1;
@@ -406,7 +421,7 @@ function Reveal({
         key={index}
         cards={packs[index]!.cards}
         foil={packs[index]!.foil}
-        set={event.set}
+        set={sets[index]!}
         eyebrow={`Sealed · Pack ${index + 1} of ${packs.length}`}
         note={
           event.poolGranted && save
@@ -456,7 +471,7 @@ function Builder({
     <DeckBuilder
       name="Your deck"
       colors={deckColors(build)}
-      art={size(event.main) ? artFor(deck) : setArt(event.set)}
+      art={size(event.main) ? artFor(deck) : eventArt(event)}
       deck={event.main}
       pool={event.side}
       basics
@@ -486,11 +501,13 @@ function Builder({
 // Event screen and summary
 // ---------------------------------------------------------------------------
 
-const prizeText = (p: { coins: number; packs: number }, set: PackSet) =>
+const prizeText = (p: { coins: number; packs: number }, set: SealedSet) =>
   p.coins || p.packs
     ? [
         p.coins ? `${p.coins} coins` : '',
-        p.packs ? plural(p.packs, `${PACK_SET_NAMES[set]} pack`) : '',
+        p.packs
+          ? plural(p.packs, set === 'chaos' ? 'random pack' : `${SEALED_SET_NAMES[set]} pack`)
+          : '',
       ]
         .filter(Boolean)
         .join(' and ')
@@ -601,7 +618,7 @@ function Hub({
           : `Match ${matchNumber(e) + 1}`;
   const sub =
     status === 'playing'
-      ? `${PACK_SET_NAMES[e.set]} · ${SEALED_WINS} wins or ${SEALED_LOSSES} losses`
+      ? `${SEALED_SET_NAMES[e.set]} · ${SEALED_WINS} wins or ${SEALED_LOSSES} losses`
       : status === 'won'
         ? 'A perfect run. The full prize is yours.'
         : status === 'out'
@@ -612,7 +629,7 @@ function Hub({
     <div className={`start shell sealed sealed--${status}`}>
       <UiSize />
       <div className="start__title">
-        <span className="start__eyebrow">Sealed · {PACK_SET_NAMES[e.set]}</span>
+        <span className="start__eyebrow">Sealed · {SEALED_SET_NAMES[e.set]}</span>
         <h1>{headline}</h1>
         <p>{sub}</p>
       </div>
@@ -657,7 +674,7 @@ function Hub({
         <section className="sealed-box">
           <span
             className="sealed-box__art"
-            style={{ backgroundImage: `url("${cards ? artFor(deck) : setArt(e.set)}")` }}
+            style={{ backgroundImage: `url("${cards ? artFor(deck) : eventArt(e)}")` }}
           />
           <div className="sealed-box__text">
             <span className="sealed-box__label">Your deck</span>

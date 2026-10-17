@@ -21,21 +21,25 @@ import {
   opponentFor,
   paySealedPrize,
   prizeFor,
+  prizePackSets,
   recordSealedMatch,
   registerSealedDecks,
   resignSealed,
   saveSealed,
   SEALED_PRIZES,
   sealedDeckCards,
+  sealedPackSets,
   sealedPacks,
   sealedPool,
   sealedPromo,
+  sealedPromoSet,
   sealedPlayerDeck,
   SEASON_PACK_OF,
   startSealed,
   startSealedMatch,
   statusOf,
   summarizeSealed,
+  type SealedSet,
   type SealedState,
 } from '../src/game/sealed.ts';
 import {
@@ -70,7 +74,7 @@ const saveOf = (repo: ReturnType<typeof seasonFixture>, id = 'a'): SeasonSave =>
   repo.load().saves.find((s) => s.id === id)!;
 
 /** An event with a suggested deck, ready for matches. */
-const ready = (set: PackSet = 'fdn', seed = 7, save: string | null = 'a'): SealedState =>
+const ready = (set: SealedSet = 'fdn', seed = 7, save: string | null = 'a'): SealedState =>
   applySealedSuggestion(startSealed(emptySealed(), set, seed, save));
 
 let nextSeed = 1000;
@@ -453,6 +457,80 @@ describe('sealed and the Season save', () => {
       }
       expect(() => validateSeasonSave(structuredClone(save))).not.toThrow();
     }
+  });
+});
+
+describe('chaos sealed', () => {
+  it('opens six different sets, the same ones for the same seed', () => {
+    const seen = new Set<PackSet>();
+    for (let seed = 1; seed <= 40; seed++) {
+      const sets = sealedPackSets({ seed, set: 'chaos' });
+      expect(sets).toHaveLength(6);
+      expect(new Set(sets).size).toBe(6);
+      for (const set of sets) expect(SETS).toContain(set);
+      expect(sealedPackSets({ seed, set: 'chaos' })).toEqual(sets);
+      expect(sets).toContain(sealedPromoSet({ seed, set: 'chaos' }));
+      sets.forEach((set) => seen.add(set));
+    }
+    // Over many events every set turns up.
+    expect(seen.size).toBe(SETS.length);
+    expect(sealedPackSets({ seed: 1, set: 'chaos' })).not.toEqual(
+      sealedPackSets({ seed: 2, set: 'chaos' }),
+    );
+  });
+
+  it('keeps one set for a normal event', () => {
+    expect(sealedPackSets({ seed: 5, set: 'blb' })).toEqual(Array(6).fill('blb'));
+    expect(sealedPromoSet({ seed: 5, set: 'blb' })).toBe('blb');
+  });
+
+  it('builds a pool, a deck and legal opponents', () => {
+    const s = ready('chaos', 11);
+    const e = s.event!;
+    expect(sealedPool(e).length).toBeGreaterThan(70);
+    expect(canPlay(e)).toBe(true);
+    expect(sealedPlayerDeck(e).name).toBe('Chaos Sealed');
+    expect(sealedPlayerDeck(e).set).toBeUndefined();
+    for (let n = 0; n < 4; n++) {
+      const { deck } = opponentFor(e, n);
+      expect(deck.cards.reduce((t, [, k]) => t + k, 0)).toBeGreaterThanOrEqual(40);
+    }
+    expect(summarizeSealed(e).set).toBe('chaos');
+  });
+
+  it('keeps its own record', () => {
+    let s = ready('chaos', 3);
+    for (let i = 0; i < 2; i++) s = play(s, 'win');
+    s = resignSealed(s);
+    expect(s.records.chaos).toEqual({ events: 1, best: 2, sevenWins: 0 });
+    expect(s.records.fdn).toBeUndefined();
+  });
+
+  it('pays packs of random sets, the same ones for the same seed', () => {
+    const sets = prizePackSets({ seed: 9, set: 'chaos' }, 3);
+    expect(sets).toHaveLength(3);
+    for (const set of sets) expect(SETS).toContain(set);
+    expect(prizePackSets({ seed: 9, set: 'chaos' }, 3)).toEqual(sets);
+    expect(prizePackSets({ seed: 9, set: 'fin' }, 2)).toEqual(['fin', 'fin']);
+
+    const repo = seasonFixture();
+    let s = grantSealedPool(ready('chaos', 9, 'a'), repo, 150);
+    const before = saveOf(repo);
+    for (let i = 0; i < 7; i++) s = play(s, 'win');
+    expect(paySealedPrize(s, repo, 200).event!.prizePaid).toBe(true);
+    const after = saveOf(repo);
+    expect(after.packs.map((p) => p.kind)).toEqual(sets.map((set) => SEASON_PACK_OF[set]));
+    expect(after.coins).toBe(before.coins + 700);
+  });
+
+  it('survives a reload', () => {
+    const store = new Map<string, string>();
+    installStorage(store);
+    const s = ready('chaos', 21);
+    saveSealed(s);
+    const loaded = loadSealed();
+    expect(loaded.event).toEqual(s.event);
+    expect(loaded.records.chaos?.events).toBe(1);
   });
 });
 

@@ -50,10 +50,18 @@ export const SEALED_LOSSES = 3;
 
 export type SealedStatus = 'playing' | 'won' | 'out' | 'resigned';
 
+/**
+ * What an event opens: six boosters of one set, or Chaos, as in Arena's Chaos Sealed: each
+ * booster from a different set, picked at random from the seed.
+ */
+export type SealedSet = PackSet | 'chaos';
+
+export const SEALED_SET_NAMES: Record<SealedSet, string> = { ...PACK_SET_NAMES, chaos: 'Chaos' };
+
 export interface SealedEvent {
   id: string;
   seed: number;
-  set: PackSet;
+  set: SealedSet;
   /** The Season save that was active when the event started (it gets the cards and prizes). */
   seasonSaveId: string | null;
   /** The deck: card name -> copies. Basic lands live only here, never in `side`. */
@@ -88,7 +96,7 @@ export interface SealedRecord {
 
 export interface SealedState {
   event: SealedEvent | null;
-  records: Partial<Record<PackSet, SealedRecord>>;
+  records: Partial<Record<SealedSet, SealedRecord>>;
 }
 
 export const emptySealed = (): SealedState => ({ event: null, records: {} });
@@ -105,6 +113,10 @@ const PLAYER_SALT = 0;
 const FOE_SALT = 1000;
 const BOT_SALT = 5000;
 const PROMO_SALT = 9000;
+const CHAOS_SALT = 9500;
+
+/** Every set with boosters, in a fixed order (Chaos picks from these). */
+const PACK_SETS = Object.keys(PACK_SET_NAMES) as PackSet[];
 
 const isBasic = (name: string) => Object.values(BASICS).includes(name);
 const byName = new Map(SCRYFALL.map((c) => [c.name, c]));
@@ -113,10 +125,22 @@ const byName = new Map(SCRYFALL.map((c) => [c.name, c]));
 // Pool
 // ---------------------------------------------------------------------------
 
+/** Each booster's set: the event's set six times, or for Chaos six different sets from the seed. */
+export function sealedPackSets(event: Pick<SealedEvent, 'seed' | 'set'>): PackSet[] {
+  if (event.set !== 'chaos') return Array<PackSet>(SEALED_PACKS).fill(event.set);
+  const r = rng(derive(event.seed, CHAOS_SALT));
+  const sets = PACK_SETS.slice();
+  for (let i = sets.length - 1; i > 0; i--) {
+    const j = Math.floor(r() * (i + 1));
+    [sets[i], sets[j]] = [sets[j]!, sets[i]!];
+  }
+  return sets.slice(0, SEALED_PACKS);
+}
+
 /** The six Play Boosters (14 cards each) of the event's pool. Deterministic from the event seed. */
 export function sealedBoosters(event: Pick<SealedEvent, 'seed' | 'set'>): PlayBooster[] {
-  return Array.from({ length: SEALED_PACKS }, (_, i) =>
-    rollPlayBooster(derive(event.seed, PLAYER_SALT + i), event.set),
+  return sealedPackSets(event).map((set, i) =>
+    rollPlayBooster(derive(event.seed, PLAYER_SALT + i), set),
   );
 }
 
@@ -124,12 +148,19 @@ export function sealedBoosters(event: Pick<SealedEvent, 'seed' | 'set'>): PlayBo
 export const sealedPacks = (event: Pick<SealedEvent, 'seed' | 'set'>): string[][] =>
   sealedBoosters(event).map((b) => b.cards);
 
+/** The promo's set: the event's, or for Chaos one of the six boosters' sets. */
+export function sealedPromoSet(event: Pick<SealedEvent, 'seed' | 'set'>): PackSet {
+  if (event.set !== 'chaos') return event.set;
+  const sets = sealedPackSets(event);
+  return sets[Math.floor(rng(derive(event.seed, PROMO_SALT + 1))() * sets.length)]!;
+}
+
 /**
  * The event's prerelease promo: one extra rare (a mythic one time in eight) of the set, on top of the
  * six boosters.
  */
 export function sealedPromo(event: Pick<SealedEvent, 'seed' | 'set'>): string {
-  return rollRare(derive(event.seed, PROMO_SALT), event.set);
+  return rollRare(derive(event.seed, PROMO_SALT), sealedPromoSet(event));
 }
 
 /** Every card of the pool: the promo, then the six boosters' cards. Basic lands are free, so not in it. */
@@ -145,7 +176,7 @@ const countOf = (names: string[]): Counts => {
 /** Starts an event (the pool begins in `side`, so build a deck). Ignored while one is in progress. */
 export function startSealed(
   s: SealedState,
-  set: PackSet,
+  set: SealedSet,
   seed: number,
   seasonSaveId: string | null,
 ): SealedState {
@@ -306,15 +337,22 @@ export function colorsName(colors: Color[]): string {
   return colors[0] ? MONO[colors[0]] : 'Colourless';
 }
 
-function listOf(id: string, name: string, set: PackSet, main: Counts): Decklist {
+function listOf(id: string, name: string, set: SealedSet, main: Counts): Decklist {
   const cards = Object.fromEntries(Object.entries(main).map(([n, k]) => [slug(n), k]));
   const base = seasonDecklist('sealed', { id, name, cards });
-  return { ...base, id, name, series: 'sealed', ...(set === 'fdn' ? {} : { set }) };
+  // A Chaos deck belongs to no one set, so it counts as Foundations (for its basic lands' art).
+  return {
+    ...base,
+    id,
+    name,
+    series: 'sealed',
+    ...(set === 'fdn' || set === 'chaos' ? {} : { set }),
+  };
 }
 
 /** The player's deck as a decklist (id `sealed:<eventId>:you`), registered so it can be played and viewed by id. */
 export function sealedPlayerDeck(e: SealedEvent): Decklist {
-  const list = listOf(`sealed:${e.id}:you`, `${PACK_SET_NAMES[e.set]} Sealed`, e.set, e.main);
+  const list = listOf(`sealed:${e.id}:you`, `${SEALED_SET_NAMES[e.set]} Sealed`, e.set, e.main);
   registerDeck(list);
   return list;
 }
@@ -336,7 +374,10 @@ export const BOT_ODDS = (wins: number): [easy: number, heuristic: number, search
         ? [0, 0.65, 0.35]
         : [0, 0.45, 0.55];
 
-/** The opponent of match `n`: a deck from six boosters of its own, and a bot skill. Registers the deck. */
+/**
+ * The opponent of match `n`: a deck from six boosters of its own (for Chaos, six sets of its own
+ * too), and a bot skill. Registers the deck.
+ */
 export function opponentFor(e: SealedEvent, n: number): { deck: Decklist; bot: BotKind } {
   const foe = derive(e.seed, FOE_SALT + n);
   const pool = countOf(sealedPool({ seed: foe, set: e.set }));
@@ -427,7 +468,7 @@ export function resignSealed(s: SealedState): SealedState {
 // Prizes
 // ---------------------------------------------------------------------------
 
-/** What an event pays, by wins (0 to 7): coins and Season packs of the event's set. */
+/** What an event pays, by wins (0 to 7): coins and Season packs of the event's set (Chaos: random sets). */
 export const SEALED_PRIZES: readonly { coins: number; packs: number }[] = [
   { coins: 0, packs: 0 },
   { coins: 50, packs: 0 },
@@ -459,7 +500,7 @@ export const SEASON_PACK_OF: Record<PackSet, SeasonPackKind> = {
 
 /** What the event screen shows. */
 export interface SealedSummary {
-  set: PackSet;
+  set: SealedSet;
   status: SealedStatus;
   wins: number;
   losses: number;
@@ -509,6 +550,13 @@ function inSeason(
   }
 }
 
+/** The sets of the `n` prize packs: the event's set, or for Chaos a random set each (from the seed). */
+export function prizePackSets(e: Pick<SealedEvent, 'seed' | 'set'>, n: number): PackSet[] {
+  if (e.set !== 'chaos') return Array<PackSet>(n).fill(e.set);
+  const r = rng(derive(e.seed, CHAOS_SALT + 1));
+  return Array.from({ length: n }, () => PACK_SETS[Math.floor(r() * PACK_SETS.length)]!);
+}
+
 /**
  * Adds the pool's cards to the event's Season save, once (when the packs are opened). Returns
  * the state with the event marked as granted; unchanged without a save or if it can't be written.
@@ -536,7 +584,7 @@ export function paySealedPrize(s: SealedState, repo: SeasonUpdater, now: number)
     // Nothing to pay, but the save must still exist for the flag to mean anything.
     return inSeason(repo, e, (save) => save, now) ? paid() : s;
   }
-  const kinds = Array<SeasonPackKind>(packs).fill(SEASON_PACK_OF[e.set]);
+  const kinds = prizePackSets(e, packs).map((set) => SEASON_PACK_OF[set]);
   return inSeason(repo, e, (save, t) => awardSeasonPrize(save, { coins, packs: kinds }, t), now)
     ? paid()
     : s;
@@ -548,7 +596,7 @@ export function paySealedPrize(s: SealedState, repo: SeasonUpdater, now: number)
 
 const KEY = 'mtg.sealed.v1';
 const VERSION = 1;
-const SETS = Object.keys(PACK_SET_NAMES) as PackSet[];
+const SETS = Object.keys(SEALED_SET_NAMES) as SealedSet[];
 
 const isCounts = (c: unknown): c is Counts =>
   !!c &&
