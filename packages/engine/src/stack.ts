@@ -488,6 +488,8 @@ export function castCost(
   // Heroic Return, Avenge: "costs {2} less if ...".
   if (d.costReductionIf && checkCondition(ctx, d.costReductionIf.condition, player, o))
     reduce += d.costReductionIf.amount;
+  // Wilds of Eldraine (23a): bargain, "this spell costs {2} less to cast if it's bargained".
+  if (choice.kicked && d.kicker?.costReduction) reduce += d.kicker.costReduction;
   const first = targets?.[0];
   if (
     d.costReductionIfTarget &&

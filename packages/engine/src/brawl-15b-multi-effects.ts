@@ -1,3 +1,4 @@
+import { runAnimate } from './woe-23a.ts'; // Wilds of Eldraine (23a)
 import { characteristics, creaturesOnBattlefield } from './characteristics.ts';
 import {
   type Ctx,
@@ -8,7 +9,6 @@ import {
   defOf,
   emit,
   moveObject,
-  newTimestamp,
   obj,
   other,
 } from './context.ts';
@@ -114,19 +114,8 @@ export const BRAWL_15B_MULTI_EFFECTS: Record<string, CustomEffect> = {
   },
   /** Restless Cottage: until end of turn it becomes a 4/4 Horror creature (still a land). */
   restlessCottageAnimate(ctx, es) {
-    const self = es.source && ctx.s.objects[es.source.id];
-    if (!self || self.zone !== 'battlefield') return;
-    self.addedSubtypes = [...(self.addedSubtypes ?? []), 'Horror'];
-    ctx.s.effects.push({
-      timestamp: newTimestamp(ctx),
-      affected: { id: self.id, zcc: self.zcc },
-      power: 0,
-      toughness: 0,
-      keywords: [],
-      becomesCreature: true,
-      basePT: [4, 4],
-      expires: 'endOfTurn',
-    });
+    // Wilds of Eldraine (23a): now the `animate` effect (kept for old saves): a 4/4 black and green Horror until end of turn.
+    runAnimate(ctx, es, { kind: 'animate', what: 'self', power: 4, toughness: 4, colors: ['B', 'G'], subtype: 'Horror' });
   },
   /** The World Tree: search your library for any number of God cards and put them onto the battlefield. */
   worldTreeGods(ctx, es) {

@@ -209,7 +209,13 @@ export interface CardDefinition {
      * Kicker under another name: 'offspring' (a creature also makes a 1/1 token
      * copy) or 'gift' (a free promise of a gift to an opponent).
      */
-    as?: 'offspring' | 'gift' | 'overload';
+    as?: 'offspring' | 'gift' | 'overload' | 'bargain';
+    // Wilds of Eldraine (23a): bargain
+    /**
+     * "This spell costs {N} less to cast if it's bargained" (Hamlet Glutton, Ice Out, Johann's Stopgap): taken off the generic part
+     * of the kicked (bargained) cast's cost.
+     */
+    costReduction?: number;
     /** A permanent's gift: given to an opponent as it resolves, if promised (Scrapshooter). */
     gift?: EffectDef;
     // Teamwork (Marvel Super Heroes)
@@ -1191,7 +1197,13 @@ export type TriggerDef =
   | { on: 'creaturesEnterFromOrCastFromGraveyard' }
   // Lorwyn Eclipsed (18c, theme decks): Magmatic Galleon
   /** Whenever one or more creatures your opponents control are dealt excess noncombat damage (use with `batch`; the amount is the excess). */
-  | { on: 'opponentCreaturesDealtExcessNoncombat' };
+  | { on: 'opponentCreaturesDealtExcessNoncombat' }
+  // Wilds of Eldraine (23a): Hylda of the Icy Crown, Icewrought Sentry, Solitary Sanctuary, Sharae of Numbing Depths
+  /**
+   * Whenever you tap an untapped creature an opponent controls (with a spell or ability you control: the `tap` effect); the
+   * creature is the subject. With `batch` (and `oncePerTurn`): "whenever you tap one or more untapped creatures your opponents control".
+   */
+  | { on: 'youTapOpponentCreature' };
 
 export type ConditionDef =
   // The Hobbit (20a): Storied
@@ -1470,7 +1482,12 @@ export type ConditionDef =
   | { kind: 'targetPlayerDamagedBySource'; target: number }
   // Tarkir: Dragonstorm (19b, black): The Sibsig Ceremony
   /** The creature that caused the trigger (the one that entered) was cast, not put onto the battlefield some other way ("if you cast it"). */
-  | { kind: 'subjectWasCast' };
+  | { kind: 'subjectWasCast' }
+  // Wilds of Eldraine (23a)
+  /** Celebration: two or more nonland permanents entered the battlefield under your control this turn. */
+  | { kind: 'celebration' }
+  /** You own a card in exile matching the filter (Howling Galefang: "a card in exile that has an Adventure"). */
+  | { kind: 'ownsInExile'; filter: CardFilter };
 
 export interface CardFilter {
   anyOf?: CardFilter[];
@@ -1648,6 +1665,13 @@ export interface CardFilter {
   ltrNoSharedType?: boolean;
   /** None of these objects (Mount Doom: "destroy the rest"). */
   ltrExceptIds?: ObjectId[];
+  // Wilds of Eldraine (23a)
+  /**
+   * A card that has an Adventure (an adventurer card: its back face is an Adventure spell, not an Omen). As a spell it matches only
+   * when cast as the creature or enchantment ("permanent spells you cast that have an Adventure"); an Adventure spell is matched by
+   * `subtype: 'Adventure'`.
+   */
+  hasAdventure?: boolean;
 }
 
 export interface TargetSpec {
@@ -1848,7 +1872,13 @@ export type Amount =
       // Final Fantasy (11b): "each Artificer card in your graveyard" (Cid); "noncreature, nonland" (Esper Ramuh).
       subtype?: string;
       notTypes?: CardType[];
+      // Wilds of Eldraine (23a): Frantic Firebolt, Hearth Elemental ("instant cards, sorcery cards, and/or have an Adventure")
+      /** Only cards matching this. */
+      filter?: CardFilter;
     }
+  // Wilds of Eldraine (23a): Rowdy Research, Witchstalker Frenzy
+  /** "For each creature that attacked this turn": the different creatures declared as attackers this turn (by any player). */
+  | { count: 'creaturesAttackedThisTurn' }
   /** The amount from the trigger event ("that much damage"). */
   | { event: 'amount' }
   // Reality Fracture (17a fixes): Rise of the Deathbringer
@@ -2418,6 +2448,32 @@ export type EffectDef =
   | { kind: 'playerHexproof' }
   /** Tap two untapped tokens: this Vehicle becomes an artifact creature until end of turn. */
   | { kind: 'becomeCreature'; what: Ref }
+  // Wilds of Eldraine (23a): Roles
+  /**
+   * "Create a <role> Role token attached to <to>": for each creature `to` names that is on the battlefield, a Role token (the
+   * definition `role`) under your control, entering attached to it. If you then control more than one Role on that creature the
+   * older ones are put into the graveyard (rule 303.7, a state-based action). Nothing is made for a creature that is gone.
+   */
+  | { kind: 'createRole'; role: CardDefId; to: Ref }
+  // Wilds of Eldraine (23a): the Restless lands, Brave the Wilds, Tough Cookie
+  /**
+   * "<It> becomes a P/T <colors> <subtype> creature [with <keywords>] [and "<abilities>"] until end of turn. It's still a land.":
+   * it keeps its card types (a land stays a land, an artifact an artifact) and becomes a creature with base power and toughness
+   * P/T. `colors` replaces its colours, `subtype` is its creature type, `keywords` and `abilities` are what it gains. `permanent`:
+   * the effect has no end ("becomes a 3/3 Elemental creature with haste that's still a land": Brave the Wilds); `abilities` are
+   * for the until-end-of-turn kind only.
+   */
+  | {
+      kind: 'animate';
+      what: Ref;
+      power: number;
+      toughness: number;
+      colors?: Color[];
+      subtype?: string;
+      keywords?: Keyword[];
+      abilities?: AbilityDef[];
+      permanent?: boolean;
+    }
   /** Until end of turn you may cast creature spells from your graveyard by foraging (Osteomancer Adept). */
   | { kind: 'osteomancer' }
   /** Raise this Class's level by one. */
@@ -4629,6 +4685,8 @@ export interface TurnState {
   // Lorwyn Eclipsed (18b, green, multi-a): Bristlebane Outrider, Thoughtweft Charge, Wary Farmer
   /** Creatures that entered the battlefield this turn, and who controlled them then. */
   creaturesEntered?: { id: ObjectId; player: PlayerId }[];
+  /** Wilds of Eldraine (23a): celebration, the nonland permanents that entered the battlefield under each player's control this turn. */
+  nonlandEntered?: Partial<Record<PlayerId, number>>;
   // Final Fantasy (11a): saga creatures
   /** Players whose creatures are dealt no damage this turn (Summon: Alexander). */
   creaturesShielded?: PlayerId[];
@@ -5640,7 +5698,13 @@ export type GameEvent =
       excess?: number;
     }
   | { type: 'lifeChanged'; player: PlayerId; delta: number; life: number }
-  | { type: 'tapped'; id: ObjectId; first?: boolean }
+  | {
+      type: 'tapped';
+      id: ObjectId;
+      first?: boolean;
+      /** Wilds of Eldraine (23a): the controller of the spell or ability that tapped it (the `tap` effect). */
+      by?: PlayerId;
+    }
   /** A card went from its owner's hand to their graveyard (Doom Prevails). */
   | { type: 'discarded'; id: ObjectId; player: PlayerId }
   /** A creature connived (Doom Prevails). */

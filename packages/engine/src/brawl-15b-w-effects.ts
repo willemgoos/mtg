@@ -12,6 +12,7 @@ import {
 } from './context.ts';
 import { tokenMultiplier } from './brawl-15a-w-effects.ts';
 import { type Chooser, CHOOSERS } from './stx-13c-a-effects.ts';
+import { createRoleToken } from './woe-23a.ts'; // Wilds of Eldraine (23a)
 import type { Color, EffectDef, ObjectId, PlayerId, TargetChoice } from './types.ts';
 
 /**
@@ -122,29 +123,10 @@ export const BRAWL_15B_W_EFFECTS: Record<string, CustomEffect> = {
     }
   },
 
-  /** Spellbook Vendor: a Sorcerer Role token attached to the target creature; another Role you control on it goes away. */
+  /** Spellbook Vendor: a Sorcerer Role token attached to the target creature (now the `createRole` effect; kept for old saves). */
   createRole(ctx, es) {
     const host = targetOnBattlefield(ctx, es.targets[0]);
-    if (!host) return;
-    for (const id of [...ctx.s.battlefield]) {
-      const r = obj(ctx, id);
-      if (
-        r.attachedTo === host.id &&
-        r.controller === es.controller &&
-        def(ctx, id).subtypes.includes('Role')
-      )
-        moveObject(ctx, id, 'graveyard');
-    }
-    const role = createObject(ctx, SORCERER_ROLE, es.controller, 'battlefield', true);
-    role.attachedTo = host.id;
-    ctx.s.battlefield.push(role.id);
-    emit(ctx, {
-      type: 'objectMoved',
-      id: role.id,
-      defId: role.defId,
-      from: null,
-      to: 'battlefield',
-    });
+    if (host) createRoleToken(ctx, SORCERER_ROLE, es.controller, host.id);
   },
 
   /** A Room's ability that unlocks its other door (Surgical Suite // Hospital Room). */

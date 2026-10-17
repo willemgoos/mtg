@@ -8,6 +8,7 @@ import type {
 } from '@mtg/engine';
 import { type Behavior, parseManaCost as mana } from '../build.ts';
 import { drain, food, gain, onEnter, t0, when, yourCreature } from '../blb/helpers.ts';
+import { animateSelf } from '../woe-vocab.ts';
 import {
   combos,
   cycling,
@@ -372,13 +373,12 @@ export const BRAWL_15B_MULTI: Record<string, Behavior> = {
     entersTapped: true,
     abilities: [
       ...pair('B', 'G'),
-      {
-        kind: 'activated',
-        cost: { mana: mana('{2}{B}{G}') },
-        targets: [],
-        effects: [custom('restlessCottageAnimate')],
-        label: '{2}{B}{G}: becomes a 4/4 Horror creature until end of turn',
-      },
+      // Wilds of Eldraine (23a): "{2}{B}{G}: This land becomes a 4/4 black and green Horror creature until end of turn. It's still a land."
+      animateSelf(
+        mana('{2}{B}{G}'),
+        { power: 4, toughness: 4, colors: ['B', 'G'], subtype: 'Horror' },
+        '{2}{B}{G}: becomes a 4/4 black and green Horror creature until end of turn',
+      ),
       when({ on: 'attacks' }, [{ what: 'graveyardCard', optional: true }], food, {
         kind: 'exileGraveyardCard',
         what: t0,

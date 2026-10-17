@@ -2,6 +2,7 @@ import type { AbilityDef, CardDefinition, CardFilter, EffectDef, TargetSpec } fr
 import { type Behavior, parseManaCost as mana } from '../build.ts';
 import { draw, drain, gain, t0, when, yourCreature } from '../blb/helpers.ts';
 import { tapFor, unlessYouControlType } from '../msc/helpers.ts';
+import { roleToken } from '../woe-vocab.ts';
 
 /**
  * Strixhaven Brawl (15b, black): the black cards of the Brawl precons that the
@@ -96,21 +97,8 @@ export const BRAWL_15B_B_TOKENS: CardDefinition[] = [
   tokenDef(WORM, 'Worm', ['B', 'G'], ['Worm'], 1, 1),
   tokenDef(HARPY, 'Harpy', ['B'], ['Harpy'], 1, 1, ['flying']),
   // The Wicked Role: enchanted creature gets +1/+1; when the token is put into a graveyard, each opponent loses 1 life.
-  {
-    id: WICKED_ROLE,
-    name: 'Wicked Role',
-    manaCost: { generic: 0, colored: {} },
-    colors: ['B'],
-    types: ['Enchantment'],
-    supertypes: [],
-    subtypes: ['Aura', 'Role'],
-    keywords: [],
-    abilities: [
-      { kind: 'static', effect: { kind: 'attached', power: 1, toughness: 1 } },
-      when({ on: 'tokenToGraveyard' }, [], { kind: 'loseLife', who: 'eachOpponent', amount: 1 }),
-    ],
-    isToken: true,
-  },
+  // Wilds of Eldraine (23a): the shared Role definition (a colorless Aura token), under this set's id.
+  roleToken('Wicked', WICKED_ROLE),
 ];
 
 // ------------------------------------------------------------ shapes
@@ -392,11 +380,8 @@ export const BRAWL_15B_B: Record<string, Behavior> = {
   },
   "Lord Skitter's Blessing": {
     abilities: [
-      when({ on: 'etb' }, [yourCreature], token(WICKED_ROLE), {
-        kind: 'attach',
-        what: 'chosen',
-        to: t0,
-      }),
+      // "Create a Wicked Role token attached to target creature you control" (another Role you control on it goes: rule 303.7).
+      when({ on: 'etb' }, [yourCreature], { kind: 'createRole', role: WICKED_ROLE, to: t0 }),
       {
         ...when(
           { on: 'beginningOfDraw' },

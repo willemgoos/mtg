@@ -14,6 +14,7 @@ import {
   yourCreature,
 } from '../fin/helpers.ts';
 import { storm } from '../stx/archive.ts';
+import { roleToken } from '../woe-vocab.ts';
 
 /**
  * Mystical Archive (16, SOA): the Secrets of Strixhaven Mystical Archive cards no
@@ -42,23 +43,6 @@ const MONSTER_ROLE = 'archive-monster-role-token';
 const APE = 'archive-ape-token';
 const LIZARD_8 = 'archive-lizard-8-token';
 
-const role = (
-  id: string,
-  name: string,
-  color: 'W' | 'R',
-  keywords: CardDefinition['keywords'],
-): CardDefinition => ({
-  id,
-  name,
-  manaCost: free,
-  colors: [color],
-  types: ['Enchantment'],
-  supertypes: [],
-  subtypes: ['Aura', 'Role'],
-  keywords: [],
-  abilities: [{ kind: 'static', effect: { kind: 'attached', power: 1, toughness: 1, keywords } }],
-  isToken: true,
-});
 const creatureToken = (
   id: string,
   name: string,
@@ -83,10 +67,9 @@ const creatureToken = (
 
 /** Tokens made by the Mystical Archive's cards. */
 export const SOS_ARCHIVE_TOKENS: CardDefinition[] = [
-  // "Enchanted creature gets +1/+1 and has ward {1}."
-  role(ROYAL_ROLE, 'Royal Role', 'W', ['wardOne']),
-  // "Enchanted creature gets +1/+1 and has trample."
-  role(MONSTER_ROLE, 'Monster Role', 'R', ['trample']),
+  // Wilds of Eldraine (23a): the shared Role definitions (a colorless Aura token), under this set's ids.
+  roleToken('Royal', ROYAL_ROLE),
+  roleToken('Monster', MONSTER_ROLE),
   creatureToken(APE, 'Ape', 'G', 'Ape', 3, 3),
   creatureToken(LIZARD_8, 'Lizard', 'R', 'Lizard', 8, 8),
 ];
@@ -350,10 +333,11 @@ export const SOS_ARCHIVE: Record<string, Behavior> = {
       kicker: { cost: free, spell: combos(modes, [2])[0]!, onlyIf: youControlCommander },
     };
   })(),
+  // "Target creature gets +2/+0 until end of turn. Create a Monster Role token attached to it."
   'Monstrous Rage': spell(
-    [yourCreature],
+    [aCreature],
     { kind: 'pump', to: t0, power: 2, toughness: 0 },
-    custom('archiveRole', { role: MONSTER_ROLE }),
+    { kind: 'createRole', role: MONSTER_ROLE, to: t0 },
   ),
   'Pyretic Ritual': spell([], { kind: 'addMana', mana: [['R'], ['R'], ['R']] }),
   'Subterranean Tremors': spell(
@@ -414,7 +398,7 @@ export const SOS_ARCHIVE: Record<string, Behavior> = {
   'Royal Treatment': spell(
     [yourCreature],
     { kind: 'pump', to: t0, power: 0, toughness: 0, keywords: ['hexproof'] },
-    custom('archiveRole', { role: ROYAL_ROLE }),
+    { kind: 'createRole', role: ROYAL_ROLE, to: t0 },
   ),
   'Shamanic Revelation': spell(
     [],

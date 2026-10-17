@@ -73,6 +73,7 @@ import { LTR_BLUE_EXPANDERS } from './ltr-blue-effects.ts'; // Lord of the Rings
 import { LTR_GC_RARE_EXPANDERS } from './ltr-gc-rare-effects.ts'; // Lord of the Rings (21d gc-rare)
 import { LTR_BR_RARE_EXPANDERS } from './ltr-br-rare-effects.ts'; // Lord of the Rings (21d br-rare)
 import { SOS_14B_C_CHOOSERS } from './sos-14b-c-effects.ts';
+import { runAnimate, runCreateRole } from './woe-23a.ts'; // Wilds of Eldraine (23a)
 import type {
   AbilityDef,
   CardDefId,
@@ -3349,7 +3350,15 @@ function runEffectInner(ctx: Ctx, es: EffectSource, e: EffectDef): void {
         for (const id of [...ctx.s.players[p].graveyard]) moveObject(ctx, id, 'exile');
       return;
     case 'tap':
-      for (const id of objectsOf(ctx, es, e.what)) tap(ctx, id);
+      // Wilds of Eldraine (23a): "whenever you tap an untapped creature an opponent controls" knows who tapped it.
+      for (const id of objectsOf(ctx, es, e.what)) tap(ctx, id, es.controller);
+      return;
+    // Wilds of Eldraine (23a): Roles, and "becomes a creature until end of turn, it's still a land".
+    case 'createRole':
+      runCreateRole(ctx, es, e);
+      return;
+    case 'animate':
+      runAnimate(ctx, es, e);
       return;
     // Secrets of Strixhaven (14a): prepare
     case 'prepare':

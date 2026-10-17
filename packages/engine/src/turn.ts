@@ -241,6 +241,7 @@ export function startTurn(ctx: Ctx, player: PlayerId, noPowerUp = false): void {
   delete s.turn.extraDrawSeen;
   delete s.turn.flyersEntered; // Marvel Super Heroes Jumpstart (Soaring): Flying Drone
   delete s.turn.creaturesEntered; // Lorwyn Eclipsed (18b, green, multi-a)
+  delete s.turn.nonlandEntered; // Wilds of Eldraine (23a): celebration
   s.turn.manaSpent = { p1: 0, p2: 0 };
   s.turn.lifeLost = { p1: 0, p2: 0 };
   s.turn.spellsCast = { p1: 0, p2: 0 };

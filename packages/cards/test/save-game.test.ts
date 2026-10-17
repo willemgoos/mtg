@@ -22,5 +22,5 @@ describe('saved games', () => {
       });
       expect(JSON.stringify(state), `seed ${seed}`).toBe(JSON.stringify(r.final));
     }
-  }, 90_000);
+  }, 150_000); // about 88 s on wilds-of-eldraine before 23a, about 90-95 s after (each set adds checks): over the old 90 s limit
 });

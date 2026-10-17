@@ -10,6 +10,7 @@ import {
   type PlayerId,
 } from '@mtg/engine';
 import { other } from './view.ts';
+import { celebrationCombatPayoffs } from './woe.ts'; // Wilds of Eldraine (23a)
 
 const KEYWORD_VALUE: Partial<Record<Keyword, number>> = {
   flying: 1.5,
@@ -195,6 +196,8 @@ export function evaluate(s: GameState, db: CardDb, me: PlayerId): number {
   if (s.monarch) v += s.monarch === me ? WEIGHTS.monarch : -WEIGHTS.monarch;
   // The Fantastic Four: before combat, a noncreature spell switches on "at the beginning of combat" payoffs.
   v += WEIGHTS.combatPayoff * precombatPayoffs(s, db, me);
+  // Wilds of Eldraine (23a): celebration, "at the beginning of combat, if two or more nonland permanents entered ...".
+  v += WEIGHTS.combatPayoff * celebrationCombatPayoffs(s, db, me);
   // Tarkir: Dragonstorm (19a): an Omen cast this turn is shuffled back into its owner's library, so it isn't a card lost
   // (it will be drawn again as a creature): worth most of the card it left the hand as.
   v += OMEN_RETURN * CARD_IN_HAND * (omensCast(s, db, me) - omensCast(s, db, opp));

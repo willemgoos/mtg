@@ -21,7 +21,7 @@ function graveyardChoices(ctx: Ctx, es: EffectSource, filter?: CardFilter): Obje
   for (const id of ctx.s.players[es.controller].graveyard) {
     const o = ctx.s.objects[id]!;
     const d = ctx.db.get(o.defId);
-    if (!d || (filter && !defMatches(d, filter))) continue;
+    if (!d || (filter && !defMatches(d, filter, ctx.db))) continue;
     if (seen.has(d.id)) continue;
     seen.add(d.id);
     out.push(id);
@@ -32,7 +32,7 @@ function graveyardChoices(ctx: Ctx, es: EffectSource, filter?: CardFilter): Obje
 const cardsIn = (ctx: Ctx, es: EffectSource, filter?: CardFilter): number =>
   ctx.s.players[es.controller].graveyard.filter((id) => {
     const d = ctx.db.get(ctx.s.objects[id]!.defId);
-    return !!d && (!filter || defMatches(d, filter));
+    return !!d && (!filter || defMatches(d, filter, ctx.db));
   }).length;
 
 export const TDM_BLUE_EFFECTS: Record<string, CustomEffect> = {
