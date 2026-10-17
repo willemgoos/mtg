@@ -244,3 +244,18 @@ from) when it's fixed. Older phases keep their own "Simplifications" lists in `d
 - [ ] Forge Anew: "you may pay {0} rather than the equip cost of the first equip ability you activate during each of your
       turns" always pays {0} (Kíli the Resourceful's `firstEquipFree`, with `yourTurn`); there is no option to pay the full
       cost, which is never better since the first equip is used either way.
+
+## Wilds of Eldraine (`woe/*.ts`, phase 23b)
+
+- [ ] Grove's Bounty, Stolen Goodies: the targets and the split are chosen as the spell resolves, one at a time (the `divide`
+      effect, like Ureni), not as it is cast, so hexproof and ward don't apply at targeting.
+- [ ] Icewrought Sentry, Snaremaster Sprite: "you may pay {N}. When you do, tap target creature" chooses the target before the
+      payment (the trigger's `cost`), the reverse of the printed order; the outcome is the same.
+- [ ] Hylda of the Icy Crown: the {1} is paid and the mode chosen when the trigger is put on the stack, not on resolution
+      followed by a reflexive trigger.
+- [ ] Talion, the Kindly Lord and Edgewall Inn: "As this enters, choose ..." is an enters trigger (as the Tarkir Sieges), so the
+      choice can be responded to before it is made.
+- [ ] Johann, Apprentice Sorcerer: the once-per-turn top-of-library cast also counts a cast that another permission (Glarb)
+      could have covered.
+- [ ] Realm-Scorcher Hellkite (bargained): its four mana of any colours have their colours chosen as they are spent (the
+      existing `addMana` pattern), not as they are added.
