@@ -99902,5 +99902,1105 @@
    "large": "https://cards.scryfall.io/large/front/0/7/07e81ace-4d75-4d79-ab99-c42288580def.jpg?1783915873",
    "artCrop": "https://cards.scryfall.io/art_crop/front/0/7/07e81ace-4d75-4d79-ab99-c42288580def.jpg?1783915873"
   }
+ },
+ {
+  "name": "Belligerent of the Ball",
+  "scryfallId": "6658398a-46a5-4f41-9b1b-4a47f2822cf8",
+  "oracleId": "2be2f6c8-d8df-4e5c-a0c1-7566183bbe81",
+  "set": "woe",
+  "collectorNumber": "120",
+  "rarity": "uncommon",
+  "manaCost": "{2}{R}",
+  "typeLine": "Creature — Ogre Warrior",
+  "oracleText": "Celebration — At the beginning of combat on your turn, if two or more nonland permanents entered the battlefield under your control this turn, target creature you control gets +1/+0 and gains menace until end of turn. (It can't be blocked except by two or more creatures.)",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Celebration"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/6/6658398a-46a5-4f41-9b1b-4a47f2822cf8.jpg?1783915098",
+   "normal": "https://cards.scryfall.io/normal/front/6/6/6658398a-46a5-4f41-9b1b-4a47f2822cf8.jpg?1783915098",
+   "large": "https://cards.scryfall.io/large/front/6/6/6658398a-46a5-4f41-9b1b-4a47f2822cf8.jpg?1783915098",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/6/6658398a-46a5-4f41-9b1b-4a47f2822cf8.jpg?1783915098"
+  }
+ },
+ {
+  "name": "Bellowing Bruiser",
+  "scryfallId": "26ece013-f3ef-4c12-9dea-b2789f61f8a0",
+  "oracleId": "cdb84830-faf2-4beb-8d57-ad696d75876b",
+  "set": "woe",
+  "collectorNumber": "121",
+  "rarity": "common",
+  "manaCost": "{4}{R}",
+  "typeLine": "Creature — Ogre",
+  "oracleText": "Haste",
+  "power": "4",
+  "toughness": "4",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Haste"
+  ],
+  "back": "Beat a Path",
+  "adventure": true,
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/6/26ece013-f3ef-4c12-9dea-b2789f61f8a0.jpg?1783915098",
+   "normal": "https://cards.scryfall.io/normal/front/2/6/26ece013-f3ef-4c12-9dea-b2789f61f8a0.jpg?1783915098",
+   "large": "https://cards.scryfall.io/large/front/2/6/26ece013-f3ef-4c12-9dea-b2789f61f8a0.jpg?1783915098",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/6/26ece013-f3ef-4c12-9dea-b2789f61f8a0.jpg?1783915098"
+  }
+ },
+ {
+  "name": "Beat a Path",
+  "scryfallId": "26ece013-f3ef-4c12-9dea-b2789f61f8a0",
+  "oracleId": "cdb84830-faf2-4beb-8d57-ad696d75876b",
+  "set": "woe",
+  "collectorNumber": "121",
+  "rarity": "common",
+  "manaCost": "{2}{R}",
+  "typeLine": "Sorcery — Adventure",
+  "oracleText": "Up to two target creatures can't block this turn. (Then exile this card. You may cast the creature later from exile.)",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "front": "Bellowing Bruiser",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/6/26ece013-f3ef-4c12-9dea-b2789f61f8a0.jpg?1783915098",
+   "normal": "https://cards.scryfall.io/normal/front/2/6/26ece013-f3ef-4c12-9dea-b2789f61f8a0.jpg?1783915098",
+   "large": "https://cards.scryfall.io/large/front/2/6/26ece013-f3ef-4c12-9dea-b2789f61f8a0.jpg?1783915098",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/6/26ece013-f3ef-4c12-9dea-b2789f61f8a0.jpg?1783915098"
+  }
+ },
+ {
+  "name": "Bespoke Battlegarb",
+  "scryfallId": "a28ecd59-9166-473c-bafc-cb3c54c21388",
+  "oracleId": "b2ff15b8-1be4-4f94-b4cc-aa959a50288e",
+  "set": "woe",
+  "collectorNumber": "122",
+  "rarity": "common",
+  "manaCost": "{1}{R}",
+  "typeLine": "Artifact — Equipment",
+  "oracleText": "Equipped creature gets +2/+0.\nCelebration — At the beginning of combat on your turn, if two or more nonland permanents entered the battlefield under your control this turn, attach this Equipment to up to one target creature you control.\nEquip {2} ({2}: Attach to target creature you control. Equip only as a sorcery.)",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Celebration",
+   "Equip"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/2/a28ecd59-9166-473c-bafc-cb3c54c21388.jpg?1783915097",
+   "normal": "https://cards.scryfall.io/normal/front/a/2/a28ecd59-9166-473c-bafc-cb3c54c21388.jpg?1783915097",
+   "large": "https://cards.scryfall.io/large/front/a/2/a28ecd59-9166-473c-bafc-cb3c54c21388.jpg?1783915097",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/2/a28ecd59-9166-473c-bafc-cb3c54c21388.jpg?1783915097"
+  }
+ },
+ {
+  "name": "Boundary Lands Ranger",
+  "scryfallId": "ccdcbb1d-702e-4832-8eed-7ed3deffefe3",
+  "oracleId": "1189b5d5-ca8f-4b4e-a5f1-91122a485cf3",
+  "set": "woe",
+  "collectorNumber": "123",
+  "rarity": "uncommon",
+  "manaCost": "{1}{R}",
+  "typeLine": "Creature — Human Ranger",
+  "oracleText": "At the beginning of combat on your turn, if you control a creature with power 4 or greater, you may discard a card. If you do, draw a card.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/c/ccdcbb1d-702e-4832-8eed-7ed3deffefe3.jpg?1783915097",
+   "normal": "https://cards.scryfall.io/normal/front/c/c/ccdcbb1d-702e-4832-8eed-7ed3deffefe3.jpg?1783915097",
+   "large": "https://cards.scryfall.io/large/front/c/c/ccdcbb1d-702e-4832-8eed-7ed3deffefe3.jpg?1783915097",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/c/ccdcbb1d-702e-4832-8eed-7ed3deffefe3.jpg?1783915097"
+  }
+ },
+ {
+  "name": "Charming Scoundrel",
+  "scryfallId": "c8090bcf-e17a-4110-a518-77ccd045b18f",
+  "oracleId": "9eec304d-ffcb-4287-b877-280ac1e4f496",
+  "set": "woe",
+  "collectorNumber": "124",
+  "rarity": "rare",
+  "manaCost": "{1}{R}",
+  "typeLine": "Creature — Human Rogue",
+  "oracleText": "Haste\nWhen this creature enters, choose one —\n• Discard a card, then draw a card.\n• Create a Treasure token.\n• Create a Wicked Role token attached to target creature you control.",
+  "power": "1",
+  "toughness": "1",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Role token",
+   "Treasure",
+   "Haste"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/8/c8090bcf-e17a-4110-a518-77ccd045b18f.jpg?1783915097",
+   "normal": "https://cards.scryfall.io/normal/front/c/8/c8090bcf-e17a-4110-a518-77ccd045b18f.jpg?1783915097",
+   "large": "https://cards.scryfall.io/large/front/c/8/c8090bcf-e17a-4110-a518-77ccd045b18f.jpg?1783915097",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/8/c8090bcf-e17a-4110-a518-77ccd045b18f.jpg?1783915097"
+  }
+ },
+ {
+  "name": "Cut In",
+  "scryfallId": "8ea4d40a-7657-4ff8-9fc2-915b99432275",
+  "oracleId": "9b205900-ec39-455e-900b-615ece08a07f",
+  "set": "woe",
+  "collectorNumber": "125",
+  "rarity": "common",
+  "manaCost": "{3}{R}",
+  "typeLine": "Sorcery",
+  "oracleText": "Cut In deals 4 damage to target creature.\nCreate a Young Hero Role token attached to up to one target creature you control. (If you control another Role on it, put that one into the graveyard. Enchanted creature has \"Whenever this creature attacks, if its toughness is 3 or less, put a +1/+1 counter on it.\")",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Role token"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/e/8ea4d40a-7657-4ff8-9fc2-915b99432275.jpg?1783915097",
+   "normal": "https://cards.scryfall.io/normal/front/8/e/8ea4d40a-7657-4ff8-9fc2-915b99432275.jpg?1783915097",
+   "large": "https://cards.scryfall.io/large/front/8/e/8ea4d40a-7657-4ff8-9fc2-915b99432275.jpg?1783915097",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/e/8ea4d40a-7657-4ff8-9fc2-915b99432275.jpg?1783915097"
+  }
+ },
+ {
+  "name": "Edgewall Pack",
+  "scryfallId": "acda9d02-00fc-49e2-a9f3-176e9c0a8c5f",
+  "oracleId": "ef702a1a-4ace-43e0-8e86-dcceb0b1e4d5",
+  "set": "woe",
+  "collectorNumber": "126",
+  "rarity": "common",
+  "manaCost": "{3}{R}",
+  "typeLine": "Creature — Dog",
+  "oracleText": "Menace (This creature can't be blocked except by two or more creatures.)\nWhen this creature enters, create a 1/1 black Rat creature token with \"This token can't block.\"",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Menace"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/c/acda9d02-00fc-49e2-a9f3-176e9c0a8c5f.jpg?1783915097",
+   "normal": "https://cards.scryfall.io/normal/front/a/c/acda9d02-00fc-49e2-a9f3-176e9c0a8c5f.jpg?1783915097",
+   "large": "https://cards.scryfall.io/large/front/a/c/acda9d02-00fc-49e2-a9f3-176e9c0a8c5f.jpg?1783915097",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/c/acda9d02-00fc-49e2-a9f3-176e9c0a8c5f.jpg?1783915097"
+  }
+ },
+ {
+  "name": "Embereth Veteran",
+  "scryfallId": "bc7130b8-3168-421f-912a-46ed5b769807",
+  "oracleId": "2c232056-9dd6-4a78-be08-3bff19daa88d",
+  "set": "woe",
+  "collectorNumber": "127",
+  "rarity": "uncommon",
+  "manaCost": "{R}",
+  "typeLine": "Creature — Human Knight",
+  "oracleText": "{1}, Sacrifice this creature: Create a Young Hero Role token attached to another target creature. (If you control another Role on it, put that one into the graveyard. Enchanted creature has \"Whenever this creature attacks, if its toughness is 3 or less, put a +1/+1 counter on it.\")",
+  "power": "2",
+  "toughness": "1",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Role token"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/c/bc7130b8-3168-421f-912a-46ed5b769807.jpg?1783915096",
+   "normal": "https://cards.scryfall.io/normal/front/b/c/bc7130b8-3168-421f-912a-46ed5b769807.jpg?1783915096",
+   "large": "https://cards.scryfall.io/large/front/b/c/bc7130b8-3168-421f-912a-46ed5b769807.jpg?1783915096",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/c/bc7130b8-3168-421f-912a-46ed5b769807.jpg?1783915096"
+  }
+ },
+ {
+  "name": "Food Fight",
+  "scryfallId": "1a7cc43c-6e8c-41d2-a885-24604dfc7e7f",
+  "oracleId": "00571e7f-4e40-4a07-a529-34580e942338",
+  "set": "woe",
+  "collectorNumber": "129",
+  "rarity": "rare",
+  "manaCost": "{1}{R}",
+  "typeLine": "Enchantment",
+  "oracleText": "Artifacts you control have \"{2}, Sacrifice this artifact: It deals damage to any target equal to 1 plus the number of permanents named Food Fight you control.\"",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/a/1a7cc43c-6e8c-41d2-a885-24604dfc7e7f.jpg?1783915094",
+   "normal": "https://cards.scryfall.io/normal/front/1/a/1a7cc43c-6e8c-41d2-a885-24604dfc7e7f.jpg?1783915094",
+   "large": "https://cards.scryfall.io/large/front/1/a/1a7cc43c-6e8c-41d2-a885-24604dfc7e7f.jpg?1783915094",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/a/1a7cc43c-6e8c-41d2-a885-24604dfc7e7f.jpg?1783915094"
+  }
+ },
+ {
+  "name": "Frantic Firebolt",
+  "scryfallId": "efd85f5a-258b-4ced-bf9e-3abe7fe72395",
+  "oracleId": "f1882cc8-c81a-4131-b639-1bd6e083f8ba",
+  "set": "woe",
+  "collectorNumber": "130",
+  "rarity": "common",
+  "manaCost": "{2}{R}",
+  "typeLine": "Instant",
+  "oracleText": "Frantic Firebolt deals X damage to target creature, where X is 2 plus the number of cards in your graveyard that are instant cards, sorcery cards, and/or have an Adventure.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/f/efd85f5a-258b-4ced-bf9e-3abe7fe72395.jpg?1783915094",
+   "normal": "https://cards.scryfall.io/normal/front/e/f/efd85f5a-258b-4ced-bf9e-3abe7fe72395.jpg?1783915094",
+   "large": "https://cards.scryfall.io/large/front/e/f/efd85f5a-258b-4ced-bf9e-3abe7fe72395.jpg?1783915094",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/f/efd85f5a-258b-4ced-bf9e-3abe7fe72395.jpg?1783915094"
+  }
+ },
+ {
+  "name": "Gnawing Crescendo",
+  "scryfallId": "254fc64a-9734-44a6-8869-ab03512f1a99",
+  "oracleId": "0332f7b5-dad3-4fd0-b86c-78bd8301f59d",
+  "set": "woe",
+  "collectorNumber": "131",
+  "rarity": "common",
+  "manaCost": "{2}{R}",
+  "typeLine": "Instant",
+  "oracleText": "Creatures you control get +2/+0 until end of turn. Whenever a nontoken creature you control dies this turn, create a 1/1 black Rat creature token with \"This token can't block.\"",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/5/254fc64a-9734-44a6-8869-ab03512f1a99.jpg?1783915094",
+   "normal": "https://cards.scryfall.io/normal/front/2/5/254fc64a-9734-44a6-8869-ab03512f1a99.jpg?1783915094",
+   "large": "https://cards.scryfall.io/large/front/2/5/254fc64a-9734-44a6-8869-ab03512f1a99.jpg?1783915094",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/5/254fc64a-9734-44a6-8869-ab03512f1a99.jpg?1783915094"
+  }
+ },
+ {
+  "name": "Goddric, Cloaked Reveler",
+  "scryfallId": "fe93ef82-51de-40ad-9b52-8f3fd11c144f",
+  "oracleId": "35b2b172-5fbc-4e4d-a011-390ee1b6c848",
+  "set": "woe",
+  "collectorNumber": "132",
+  "rarity": "rare",
+  "manaCost": "{1}{R}{R}",
+  "typeLine": "Legendary Creature — Human Noble",
+  "oracleText": "Haste\nCelebration — As long as two or more nonland permanents entered the battlefield under your control this turn, Goddric is a Dragon with base power and toughness 4/4, flying, and \"{R}: Dragons you control get +1/+0 until end of turn.\" (He loses all other creature types.)",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Flying",
+   "Celebration",
+   "Haste"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/e/fe93ef82-51de-40ad-9b52-8f3fd11c144f.jpg?1783915094",
+   "normal": "https://cards.scryfall.io/normal/front/f/e/fe93ef82-51de-40ad-9b52-8f3fd11c144f.jpg?1783915094",
+   "large": "https://cards.scryfall.io/large/front/f/e/fe93ef82-51de-40ad-9b52-8f3fd11c144f.jpg?1783915094",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/e/fe93ef82-51de-40ad-9b52-8f3fd11c144f.jpg?1783915094"
+  }
+ },
+ {
+  "name": "Grabby Giant",
+  "scryfallId": "fab7646a-61e8-446b-9dba-ac6e0db82f10",
+  "oracleId": "e6f59807-eaf6-4889-8c89-2ac915afefff",
+  "set": "woe",
+  "collectorNumber": "133",
+  "rarity": "common",
+  "manaCost": "{3}{R}",
+  "typeLine": "Creature — Giant",
+  "oracleText": "Reach\n{2}{R}, Sacrifice an artifact or land: Draw a card.",
+  "power": "4",
+  "toughness": "3",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Reach"
+  ],
+  "back": "That's Mine",
+  "adventure": true,
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/a/fab7646a-61e8-446b-9dba-ac6e0db82f10.jpg?1783915094",
+   "normal": "https://cards.scryfall.io/normal/front/f/a/fab7646a-61e8-446b-9dba-ac6e0db82f10.jpg?1783915094",
+   "large": "https://cards.scryfall.io/large/front/f/a/fab7646a-61e8-446b-9dba-ac6e0db82f10.jpg?1783915094",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/a/fab7646a-61e8-446b-9dba-ac6e0db82f10.jpg?1783915094"
+  }
+ },
+ {
+  "name": "That's Mine",
+  "scryfallId": "fab7646a-61e8-446b-9dba-ac6e0db82f10",
+  "oracleId": "e6f59807-eaf6-4889-8c89-2ac915afefff",
+  "set": "woe",
+  "collectorNumber": "133",
+  "rarity": "common",
+  "manaCost": "{1}{R}",
+  "typeLine": "Instant — Adventure",
+  "oracleText": "Create a Treasure token. (Then exile this card. You may cast the creature later from exile.)",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Treasure"
+  ],
+  "front": "Grabby Giant",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/a/fab7646a-61e8-446b-9dba-ac6e0db82f10.jpg?1783915094",
+   "normal": "https://cards.scryfall.io/normal/front/f/a/fab7646a-61e8-446b-9dba-ac6e0db82f10.jpg?1783915094",
+   "large": "https://cards.scryfall.io/large/front/f/a/fab7646a-61e8-446b-9dba-ac6e0db82f10.jpg?1783915094",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/a/fab7646a-61e8-446b-9dba-ac6e0db82f10.jpg?1783915094"
+  }
+ },
+ {
+  "name": "Grand Ball Guest",
+  "scryfallId": "d6e75228-16af-42b0-8441-ed253a660cc9",
+  "oracleId": "0b0fdb28-f7b1-4c30-9f2c-14a9074da22d",
+  "set": "woe",
+  "collectorNumber": "134",
+  "rarity": "common",
+  "manaCost": "{1}{R}",
+  "typeLine": "Creature — Human Peasant",
+  "oracleText": "Celebration — This creature gets +1/+1 and has trample as long as two or more nonland permanents entered the battlefield under your control this turn.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Celebration"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/6/d6e75228-16af-42b0-8441-ed253a660cc9.jpg?1783915093",
+   "normal": "https://cards.scryfall.io/normal/front/d/6/d6e75228-16af-42b0-8441-ed253a660cc9.jpg?1783915093",
+   "large": "https://cards.scryfall.io/large/front/d/6/d6e75228-16af-42b0-8441-ed253a660cc9.jpg?1783915093",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/6/d6e75228-16af-42b0-8441-ed253a660cc9.jpg?1783915093"
+  }
+ },
+ {
+  "name": "Harried Spearguard",
+  "scryfallId": "1db79785-4f55-445f-93f2-14c6e4606fc5",
+  "oracleId": "e3542d0f-fcee-4df7-aa95-b55138caa2ab",
+  "set": "woe",
+  "collectorNumber": "135",
+  "rarity": "common",
+  "manaCost": "{R}",
+  "typeLine": "Creature — Human Soldier",
+  "oracleText": "Haste\nWhen this creature dies, create a 1/1 black Rat creature token with \"This token can't block.\"",
+  "power": "1",
+  "toughness": "1",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Haste"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/d/1db79785-4f55-445f-93f2-14c6e4606fc5.jpg?1783915094",
+   "normal": "https://cards.scryfall.io/normal/front/1/d/1db79785-4f55-445f-93f2-14c6e4606fc5.jpg?1783915094",
+   "large": "https://cards.scryfall.io/large/front/1/d/1db79785-4f55-445f-93f2-14c6e4606fc5.jpg?1783915094",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/d/1db79785-4f55-445f-93f2-14c6e4606fc5.jpg?1783915094"
+  }
+ },
+ {
+  "name": "Imodane's Recruiter",
+  "scryfallId": "4dbaa855-3f8e-42e6-8ec8-5ffbc5c8acf0",
+  "oracleId": "50bee80e-89df-48c2-b608-ba66ff3e794a",
+  "set": "woe",
+  "collectorNumber": "229",
+  "rarity": "uncommon",
+  "manaCost": "{2}{R}",
+  "typeLine": "Creature — Human Knight",
+  "oracleText": "When this creature enters, creatures you control get +1/+0 and gain haste until end of turn.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "back": "Train Troops",
+  "adventure": true,
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/d/4dbaa855-3f8e-42e6-8ec8-5ffbc5c8acf0.jpg?1783915064",
+   "normal": "https://cards.scryfall.io/normal/front/4/d/4dbaa855-3f8e-42e6-8ec8-5ffbc5c8acf0.jpg?1783915064",
+   "large": "https://cards.scryfall.io/large/front/4/d/4dbaa855-3f8e-42e6-8ec8-5ffbc5c8acf0.jpg?1783915064",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/d/4dbaa855-3f8e-42e6-8ec8-5ffbc5c8acf0.jpg?1783915064"
+  }
+ },
+ {
+  "name": "Train Troops",
+  "scryfallId": "4dbaa855-3f8e-42e6-8ec8-5ffbc5c8acf0",
+  "oracleId": "50bee80e-89df-48c2-b608-ba66ff3e794a",
+  "set": "woe",
+  "collectorNumber": "229",
+  "rarity": "uncommon",
+  "manaCost": "{4}{W}",
+  "typeLine": "Sorcery — Adventure",
+  "oracleText": "Create two 2/2 white Knight creature tokens with vigilance. (Then exile this card. You may cast the creature later from exile.)",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "front": "Imodane's Recruiter",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/d/4dbaa855-3f8e-42e6-8ec8-5ffbc5c8acf0.jpg?1783915064",
+   "normal": "https://cards.scryfall.io/normal/front/4/d/4dbaa855-3f8e-42e6-8ec8-5ffbc5c8acf0.jpg?1783915064",
+   "large": "https://cards.scryfall.io/large/front/4/d/4dbaa855-3f8e-42e6-8ec8-5ffbc5c8acf0.jpg?1783915064",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/d/4dbaa855-3f8e-42e6-8ec8-5ffbc5c8acf0.jpg?1783915064"
+  }
+ },
+ {
+  "name": "Imodane, the Pyrohammer",
+  "scryfallId": "14b44833-0482-4b47-a594-4050bb87f1a5",
+  "oracleId": "d70d4686-2c35-4149-aed1-7e3b9e022702",
+  "set": "woe",
+  "collectorNumber": "137",
+  "rarity": "rare",
+  "manaCost": "{2}{R}{R}",
+  "typeLine": "Legendary Creature — Human Knight",
+  "oracleText": "Whenever an instant or sorcery spell you control that targets only a single creature deals damage to that creature, Imodane deals that much damage to each opponent.",
+  "power": "4",
+  "toughness": "4",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/4/14b44833-0482-4b47-a594-4050bb87f1a5.jpg?1783915094",
+   "normal": "https://cards.scryfall.io/normal/front/1/4/14b44833-0482-4b47-a594-4050bb87f1a5.jpg?1783915094",
+   "large": "https://cards.scryfall.io/large/front/1/4/14b44833-0482-4b47-a594-4050bb87f1a5.jpg?1783915094",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/4/14b44833-0482-4b47-a594-4050bb87f1a5.jpg?1783915094"
+  }
+ },
+ {
+  "name": "Kellan, the Fae-Blooded",
+  "scryfallId": "ec5e2680-8b42-4571-ab45-4936aec51901",
+  "oracleId": "10c48d19-d91f-4674-b186-477acaf08e5a",
+  "set": "woe",
+  "collectorNumber": "230",
+  "rarity": "mythic",
+  "manaCost": "{2}{R}",
+  "typeLine": "Legendary Creature — Human Faerie",
+  "oracleText": "Double strike\nOther creatures you control get +1/+0 for each Aura and Equipment attached to Kellan.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Double strike"
+  ],
+  "back": "Birthright Boon",
+  "adventure": true,
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/c/ec5e2680-8b42-4571-ab45-4936aec51901.jpg?1783915063",
+   "normal": "https://cards.scryfall.io/normal/front/e/c/ec5e2680-8b42-4571-ab45-4936aec51901.jpg?1783915063",
+   "large": "https://cards.scryfall.io/large/front/e/c/ec5e2680-8b42-4571-ab45-4936aec51901.jpg?1783915063",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/c/ec5e2680-8b42-4571-ab45-4936aec51901.jpg?1783915063"
+  }
+ },
+ {
+  "name": "Birthright Boon",
+  "scryfallId": "ec5e2680-8b42-4571-ab45-4936aec51901",
+  "oracleId": "10c48d19-d91f-4674-b186-477acaf08e5a",
+  "set": "woe",
+  "collectorNumber": "230",
+  "rarity": "mythic",
+  "manaCost": "{1}{W}",
+  "typeLine": "Sorcery — Adventure",
+  "oracleText": "Search your library for an Aura or Equipment card, reveal it, put it into your hand, then shuffle.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "front": "Kellan, the Fae-Blooded",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/c/ec5e2680-8b42-4571-ab45-4936aec51901.jpg?1783915063",
+   "normal": "https://cards.scryfall.io/normal/front/e/c/ec5e2680-8b42-4571-ab45-4936aec51901.jpg?1783915063",
+   "large": "https://cards.scryfall.io/large/front/e/c/ec5e2680-8b42-4571-ab45-4936aec51901.jpg?1783915063",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/c/ec5e2680-8b42-4571-ab45-4936aec51901.jpg?1783915063"
+  }
+ },
+ {
+  "name": "Kindled Heroism",
+  "scryfallId": "22a6d05e-e566-4a85-bcf8-9d0fbea3dd14",
+  "oracleId": "c1ed20c0-f75d-4aca-8874-6955bd9fb21b",
+  "set": "woe",
+  "collectorNumber": "138",
+  "rarity": "common",
+  "manaCost": "{R}",
+  "typeLine": "Instant",
+  "oracleText": "Target creature gets +1/+0 and gains first strike until end of turn. Scry 1.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Scry"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/2/22a6d05e-e566-4a85-bcf8-9d0fbea3dd14.jpg?1783915093",
+   "normal": "https://cards.scryfall.io/normal/front/2/2/22a6d05e-e566-4a85-bcf8-9d0fbea3dd14.jpg?1783915093",
+   "large": "https://cards.scryfall.io/large/front/2/2/22a6d05e-e566-4a85-bcf8-9d0fbea3dd14.jpg?1783915093",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/2/22a6d05e-e566-4a85-bcf8-9d0fbea3dd14.jpg?1783915093"
+  }
+ },
+ {
+  "name": "Korvold and the Noble Thief",
+  "scryfallId": "a811b2cb-ffc7-4100-ac3e-bc4125842bb2",
+  "oracleId": "bcae7f20-b601-4669-b3a7-c32ed0c6b9d3",
+  "set": "woe",
+  "collectorNumber": "139",
+  "rarity": "uncommon",
+  "manaCost": "{3}{R}",
+  "typeLine": "Enchantment — Saga",
+  "oracleText": "(As this Saga enters and after your draw step, add a lore counter. Sacrifice after III.)\nI, II — Create a Treasure token. (It's an artifact with \"{T}, Sacrifice this token: Add one mana of any color.\")\nIII — Exile the top three cards of target opponent's library. You may play those cards this turn.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Treasure"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/8/a811b2cb-ffc7-4100-ac3e-bc4125842bb2.jpg?1783915092",
+   "normal": "https://cards.scryfall.io/normal/front/a/8/a811b2cb-ffc7-4100-ac3e-bc4125842bb2.jpg?1783915092",
+   "large": "https://cards.scryfall.io/large/front/a/8/a811b2cb-ffc7-4100-ac3e-bc4125842bb2.jpg?1783915092",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/8/a811b2cb-ffc7-4100-ac3e-bc4125842bb2.jpg?1783915092"
+  }
+ },
+ {
+  "name": "Merry Bards",
+  "scryfallId": "b0058b9b-e919-45eb-9da0-690f62aa252e",
+  "oracleId": "699fa8e6-84f5-4010-a8fe-7b2e4f280ef9",
+  "set": "woe",
+  "collectorNumber": "140",
+  "rarity": "common",
+  "manaCost": "{2}{R}",
+  "typeLine": "Creature — Human Bard",
+  "oracleText": "When this creature enters, you may pay {1}. When you do, create a Young Hero Role token attached to target creature you control. (If you control another Role on it, put that one into the graveyard. Enchanted creature has \"Whenever this creature attacks, if its toughness is 3 or less, put a +1/+1 counter on it.\")",
+  "power": "3",
+  "toughness": "2",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Role token"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/0/b0058b9b-e919-45eb-9da0-690f62aa252e.jpg?1783915092",
+   "normal": "https://cards.scryfall.io/normal/front/b/0/b0058b9b-e919-45eb-9da0-690f62aa252e.jpg?1783915092",
+   "large": "https://cards.scryfall.io/large/front/b/0/b0058b9b-e919-45eb-9da0-690f62aa252e.jpg?1783915092",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/0/b0058b9b-e919-45eb-9da0-690f62aa252e.jpg?1783915092"
+  }
+ },
+ {
+  "name": "Minecart Daredevil",
+  "scryfallId": "5b2a02f3-3921-4f40-9ffa-70bc08b052e1",
+  "oracleId": "df555f60-2164-49dc-be67-00aca9eb0d45",
+  "set": "woe",
+  "collectorNumber": "141",
+  "rarity": "common",
+  "manaCost": "{2}{R}",
+  "typeLine": "Creature — Dwarf Knight",
+  "oracleText": "",
+  "power": "4",
+  "toughness": "2",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "back": "Ride the Rails",
+  "adventure": true,
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/b/5b2a02f3-3921-4f40-9ffa-70bc08b052e1.jpg?1783915093",
+   "normal": "https://cards.scryfall.io/normal/front/5/b/5b2a02f3-3921-4f40-9ffa-70bc08b052e1.jpg?1783915093",
+   "large": "https://cards.scryfall.io/large/front/5/b/5b2a02f3-3921-4f40-9ffa-70bc08b052e1.jpg?1783915093",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/b/5b2a02f3-3921-4f40-9ffa-70bc08b052e1.jpg?1783915093"
+  }
+ },
+ {
+  "name": "Ride the Rails",
+  "scryfallId": "5b2a02f3-3921-4f40-9ffa-70bc08b052e1",
+  "oracleId": "df555f60-2164-49dc-be67-00aca9eb0d45",
+  "set": "woe",
+  "collectorNumber": "141",
+  "rarity": "common",
+  "manaCost": "{1}{R}",
+  "typeLine": "Instant — Adventure",
+  "oracleText": "Target creature gets +2/+1 until end of turn. (Then exile this card. You may cast the creature later from exile.)",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "front": "Minecart Daredevil",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/b/5b2a02f3-3921-4f40-9ffa-70bc08b052e1.jpg?1783915093",
+   "normal": "https://cards.scryfall.io/normal/front/5/b/5b2a02f3-3921-4f40-9ffa-70bc08b052e1.jpg?1783915093",
+   "large": "https://cards.scryfall.io/large/front/5/b/5b2a02f3-3921-4f40-9ffa-70bc08b052e1.jpg?1783915093",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/b/5b2a02f3-3921-4f40-9ffa-70bc08b052e1.jpg?1783915093"
+  }
+ },
+ {
+  "name": "Picnic Ruiner",
+  "scryfallId": "66485c3e-3b21-4db4-ac12-af04e35b49b1",
+  "oracleId": "334fba11-e500-40fd-a142-41ff553642b5",
+  "set": "woe",
+  "collectorNumber": "232",
+  "rarity": "uncommon",
+  "manaCost": "{1}{R}",
+  "typeLine": "Creature — Goblin Rogue",
+  "oracleText": "Whenever this creature attacks while you control a creature with power 4 or greater, this creature gains double strike until end of turn.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "back": "Stolen Goodies",
+  "adventure": true,
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/6/66485c3e-3b21-4db4-ac12-af04e35b49b1.jpg?1783915064",
+   "normal": "https://cards.scryfall.io/normal/front/6/6/66485c3e-3b21-4db4-ac12-af04e35b49b1.jpg?1783915064",
+   "large": "https://cards.scryfall.io/large/front/6/6/66485c3e-3b21-4db4-ac12-af04e35b49b1.jpg?1783915064",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/6/66485c3e-3b21-4db4-ac12-af04e35b49b1.jpg?1783915064"
+  }
+ },
+ {
+  "name": "Stolen Goodies",
+  "scryfallId": "66485c3e-3b21-4db4-ac12-af04e35b49b1",
+  "oracleId": "334fba11-e500-40fd-a142-41ff553642b5",
+  "set": "woe",
+  "collectorNumber": "232",
+  "rarity": "uncommon",
+  "manaCost": "{3}{G}",
+  "typeLine": "Sorcery — Adventure",
+  "oracleText": "Distribute three +1/+1 counters among any number of target creatures you control.",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "front": "Picnic Ruiner",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/6/66485c3e-3b21-4db4-ac12-af04e35b49b1.jpg?1783915064",
+   "normal": "https://cards.scryfall.io/normal/front/6/6/66485c3e-3b21-4db4-ac12-af04e35b49b1.jpg?1783915064",
+   "large": "https://cards.scryfall.io/large/front/6/6/66485c3e-3b21-4db4-ac12-af04e35b49b1.jpg?1783915064",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/6/66485c3e-3b21-4db4-ac12-af04e35b49b1.jpg?1783915064"
+  }
+ },
+ {
+  "name": "Raging Battle Mouse",
+  "scryfallId": "4d0ab162-540e-4999-902c-9dacd6687aca",
+  "oracleId": "9ffe4d90-b46c-4606-89cb-1b724104f6ea",
+  "set": "woe",
+  "collectorNumber": "143",
+  "rarity": "rare",
+  "manaCost": "{1}{R}",
+  "typeLine": "Creature — Mouse",
+  "oracleText": "The second spell you cast each turn costs {1} less to cast.\nCelebration — At the beginning of combat on your turn, if two or more nonland permanents entered the battlefield under your control this turn, target creature you control gets +1/+1 until end of turn.",
+  "power": "2",
+  "toughness": "1",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Celebration"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/d/4d0ab162-540e-4999-902c-9dacd6687aca.jpg?1783915090",
+   "normal": "https://cards.scryfall.io/normal/front/4/d/4d0ab162-540e-4999-902c-9dacd6687aca.jpg?1783915090",
+   "large": "https://cards.scryfall.io/large/front/4/d/4d0ab162-540e-4999-902c-9dacd6687aca.jpg?1783915090",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/d/4d0ab162-540e-4999-902c-9dacd6687aca.jpg?1783915090"
+  }
+ },
+ {
+  "name": "Ratcatcher Trainee",
+  "scryfallId": "7f4c0959-a107-4d61-9e51-256b2955f6ba",
+  "oracleId": "ecc91e38-90fa-4d89-b262-d5f36dce5be4",
+  "set": "woe",
+  "collectorNumber": "144",
+  "rarity": "common",
+  "manaCost": "{1}{R}",
+  "typeLine": "Creature — Human Peasant",
+  "oracleText": "During your turn, this creature has first strike.",
+  "power": "2",
+  "toughness": "1",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "back": "Pest Problem",
+  "adventure": true,
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/f/7f4c0959-a107-4d61-9e51-256b2955f6ba.jpg?1783915090",
+   "normal": "https://cards.scryfall.io/normal/front/7/f/7f4c0959-a107-4d61-9e51-256b2955f6ba.jpg?1783915090",
+   "large": "https://cards.scryfall.io/large/front/7/f/7f4c0959-a107-4d61-9e51-256b2955f6ba.jpg?1783915090",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/f/7f4c0959-a107-4d61-9e51-256b2955f6ba.jpg?1783915090"
+  }
+ },
+ {
+  "name": "Pest Problem",
+  "scryfallId": "7f4c0959-a107-4d61-9e51-256b2955f6ba",
+  "oracleId": "ecc91e38-90fa-4d89-b262-d5f36dce5be4",
+  "set": "woe",
+  "collectorNumber": "144",
+  "rarity": "common",
+  "manaCost": "{2}{R}",
+  "typeLine": "Instant — Adventure",
+  "oracleText": "Create two 1/1 black Rat creature tokens with \"This token can't block.\" (Then exile this card. You may cast the creature later from exile.)",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "front": "Ratcatcher Trainee",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/f/7f4c0959-a107-4d61-9e51-256b2955f6ba.jpg?1783915090",
+   "normal": "https://cards.scryfall.io/normal/front/7/f/7f4c0959-a107-4d61-9e51-256b2955f6ba.jpg?1783915090",
+   "large": "https://cards.scryfall.io/large/front/7/f/7f4c0959-a107-4d61-9e51-256b2955f6ba.jpg?1783915090",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/f/7f4c0959-a107-4d61-9e51-256b2955f6ba.jpg?1783915090"
+  }
+ },
+ {
+  "name": "Realm-Scorcher Hellkite",
+  "scryfallId": "845b3c26-05da-4a09-a6c9-4ea4166104a7",
+  "oracleId": "50ace222-57f1-477f-9e06-155d7b403512",
+  "set": "woe",
+  "collectorNumber": "145",
+  "rarity": "mythic",
+  "manaCost": "{4}{R}{R}",
+  "typeLine": "Creature — Dragon",
+  "oracleText": "Bargain (You may sacrifice an artifact, enchantment, or token as you cast this spell.)\nFlying, haste\nWhen this creature enters, if it was bargained, add four mana in any combination of colors.\n{1}{R}: This creature deals 1 damage to any target.",
+  "power": "4",
+  "toughness": "6",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Flying",
+   "Haste",
+   "Bargain"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/4/845b3c26-05da-4a09-a6c9-4ea4166104a7.jpg?1783915090",
+   "normal": "https://cards.scryfall.io/normal/front/8/4/845b3c26-05da-4a09-a6c9-4ea4166104a7.jpg?1783915090",
+   "large": "https://cards.scryfall.io/large/front/8/4/845b3c26-05da-4a09-a6c9-4ea4166104a7.jpg?1783915090",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/4/845b3c26-05da-4a09-a6c9-4ea4166104a7.jpg?1783915090"
+  }
+ },
+ {
+  "name": "Redcap Gutter-Dweller",
+  "scryfallId": "c6c7f55a-bcc7-4ca3-853d-fc6e260d9429",
+  "oracleId": "ada48353-4c86-44d6-83a5-e7e3c703b948",
+  "set": "fdn",
+  "collectorNumber": "631",
+  "rarity": "rare",
+  "manaCost": "{2}{R}{R}",
+  "typeLine": "Creature — Goblin Warrior",
+  "oracleText": "Menace\nWhen this creature enters, create two 1/1 black Rat creature tokens with \"This token can't block.\"\nAt the beginning of your upkeep, you may sacrifice another creature. If you do, put a +1/+1 counter on this creature and exile the top card of your library. You may play that card this turn.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Menace"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/6/c6c7f55a-bcc7-4ca3-853d-fc6e260d9429.jpg?1783908920",
+   "normal": "https://cards.scryfall.io/normal/front/c/6/c6c7f55a-bcc7-4ca3-853d-fc6e260d9429.jpg?1783908920",
+   "large": "https://cards.scryfall.io/large/front/c/6/c6c7f55a-bcc7-4ca3-853d-fc6e260d9429.jpg?1783908920",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/6/c6c7f55a-bcc7-4ca3-853d-fc6e260d9429.jpg?1783908920"
+  }
+ },
+ {
+  "name": "Redcap Thief",
+  "scryfallId": "cda6bdeb-a0d6-46ca-ba8c-317ee0096416",
+  "oracleId": "e055bc6d-d395-4f85-8e15-3bce65b7fcca",
+  "set": "woe",
+  "collectorNumber": "147",
+  "rarity": "common",
+  "manaCost": "{2}{R}",
+  "typeLine": "Creature — Goblin Rogue",
+  "oracleText": "When this creature enters, create a Treasure token. (It's an artifact with \"{T}, Sacrifice this token: Add one mana of any color.\")",
+  "power": "2",
+  "toughness": "3",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Treasure"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/d/cda6bdeb-a0d6-46ca-ba8c-317ee0096416.jpg?1783915089",
+   "normal": "https://cards.scryfall.io/normal/front/c/d/cda6bdeb-a0d6-46ca-ba8c-317ee0096416.jpg?1783915089",
+   "large": "https://cards.scryfall.io/large/front/c/d/cda6bdeb-a0d6-46ca-ba8c-317ee0096416.jpg?1783915089",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/d/cda6bdeb-a0d6-46ca-ba8c-317ee0096416.jpg?1783915089"
+  }
+ },
+ {
+  "name": "Scalding Viper",
+  "scryfallId": "58e72bfb-6f64-4647-afb6-b5ad4737121c",
+  "oracleId": "12c71296-1243-49e6-a196-8b016a7b635c",
+  "set": "woe",
+  "collectorNumber": "235",
+  "rarity": "rare",
+  "manaCost": "{1}{R}",
+  "typeLine": "Creature — Elemental Snake",
+  "oracleText": "Whenever an opponent casts a spell with mana value 3 or less, this creature deals 1 damage to that player.",
+  "power": "2",
+  "toughness": "1",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "back": "Steam Clean",
+  "adventure": true,
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/8/58e72bfb-6f64-4647-afb6-b5ad4737121c.jpg?1783915062",
+   "normal": "https://cards.scryfall.io/normal/front/5/8/58e72bfb-6f64-4647-afb6-b5ad4737121c.jpg?1783915062",
+   "large": "https://cards.scryfall.io/large/front/5/8/58e72bfb-6f64-4647-afb6-b5ad4737121c.jpg?1783915062",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/8/58e72bfb-6f64-4647-afb6-b5ad4737121c.jpg?1783915062"
+  }
+ },
+ {
+  "name": "Steam Clean",
+  "scryfallId": "58e72bfb-6f64-4647-afb6-b5ad4737121c",
+  "oracleId": "12c71296-1243-49e6-a196-8b016a7b635c",
+  "set": "woe",
+  "collectorNumber": "235",
+  "rarity": "rare",
+  "manaCost": "{1}{U}",
+  "typeLine": "Sorcery — Adventure",
+  "oracleText": "Return target nonland permanent to its owner's hand. (Then exile this card. You may cast the creature later from exile.)",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "front": "Scalding Viper",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/8/58e72bfb-6f64-4647-afb6-b5ad4737121c.jpg?1783915062",
+   "normal": "https://cards.scryfall.io/normal/front/5/8/58e72bfb-6f64-4647-afb6-b5ad4737121c.jpg?1783915062",
+   "large": "https://cards.scryfall.io/large/front/5/8/58e72bfb-6f64-4647-afb6-b5ad4737121c.jpg?1783915062",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/8/58e72bfb-6f64-4647-afb6-b5ad4737121c.jpg?1783915062"
+  }
+ },
+ {
+  "name": "Skewer Slinger",
+  "scryfallId": "e78e50ca-d27b-45db-91fa-7fef3cad16d0",
+  "oracleId": "2e8433a2-ad71-4d30-84fe-12b709197824",
+  "set": "woe",
+  "collectorNumber": "149",
+  "rarity": "common",
+  "manaCost": "{1}{R}",
+  "typeLine": "Creature — Dwarf Knight",
+  "oracleText": "Reach\nWhenever this creature blocks or becomes blocked by a creature, this creature deals 1 damage to that creature.",
+  "power": "1",
+  "toughness": "3",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Reach"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/7/e78e50ca-d27b-45db-91fa-7fef3cad16d0.jpg?1783915089",
+   "normal": "https://cards.scryfall.io/normal/front/e/7/e78e50ca-d27b-45db-91fa-7fef3cad16d0.jpg?1783915089",
+   "large": "https://cards.scryfall.io/large/front/e/7/e78e50ca-d27b-45db-91fa-7fef3cad16d0.jpg?1783915089",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/7/e78e50ca-d27b-45db-91fa-7fef3cad16d0.jpg?1783915089"
+  }
+ },
+ {
+  "name": "Song of Totentanz",
+  "scryfallId": "940e8bb7-0251-4fac-945c-d83618c10447",
+  "oracleId": "5f4d0c87-7d59-41d5-9910-86765a0c144b",
+  "set": "woe",
+  "collectorNumber": "150",
+  "rarity": "rare",
+  "manaCost": "{X}{R}",
+  "typeLine": "Sorcery",
+  "oracleText": "Create X 1/1 black Rat creature tokens with \"This token can't block.\" Creatures you control gain haste until end of turn.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/4/940e8bb7-0251-4fac-945c-d83618c10447.jpg?1783915088",
+   "normal": "https://cards.scryfall.io/normal/front/9/4/940e8bb7-0251-4fac-945c-d83618c10447.jpg?1783915088",
+   "large": "https://cards.scryfall.io/large/front/9/4/940e8bb7-0251-4fac-945c-d83618c10447.jpg?1783915088",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/4/940e8bb7-0251-4fac-945c-d83618c10447.jpg?1783915088"
+  }
+ },
+ {
+  "name": "Stonesplitter Bolt",
+  "scryfallId": "fb22f79c-3075-439d-a072-ceaabe35d76f",
+  "oracleId": "1322734c-3c3e-4885-a6d2-d6460a16fca2",
+  "set": "woe",
+  "collectorNumber": "151",
+  "rarity": "uncommon",
+  "manaCost": "{X}{R}",
+  "typeLine": "Instant",
+  "oracleText": "Bargain (You may sacrifice an artifact, enchantment, or token as you cast this spell.)\nStonesplitter Bolt deals X damage to target creature or planeswalker. If this spell was bargained, it deals twice X damage to that permanent instead.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Bargain"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/b/fb22f79c-3075-439d-a072-ceaabe35d76f.jpg?1783915088",
+   "normal": "https://cards.scryfall.io/normal/front/f/b/fb22f79c-3075-439d-a072-ceaabe35d76f.jpg?1783915088",
+   "large": "https://cards.scryfall.io/large/front/f/b/fb22f79c-3075-439d-a072-ceaabe35d76f.jpg?1783915088",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/b/fb22f79c-3075-439d-a072-ceaabe35d76f.jpg?1783915088"
+  }
+ },
+ {
+  "name": "Tattered Ratter",
+  "scryfallId": "30f505b4-d61c-4da8-ab45-37125260d556",
+  "oracleId": "ba36f27a-08fc-46a5-bc55-2a71091cebcc",
+  "set": "woe",
+  "collectorNumber": "152",
+  "rarity": "uncommon",
+  "manaCost": "{1}{R}",
+  "typeLine": "Creature — Human Peasant",
+  "oracleText": "Whenever a Rat you control becomes blocked, it gets +2/+0 until end of turn.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/0/30f505b4-d61c-4da8-ab45-37125260d556.jpg?1783915087",
+   "normal": "https://cards.scryfall.io/normal/front/3/0/30f505b4-d61c-4da8-ab45-37125260d556.jpg?1783915087",
+   "large": "https://cards.scryfall.io/large/front/3/0/30f505b4-d61c-4da8-ab45-37125260d556.jpg?1783915087",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/0/30f505b4-d61c-4da8-ab45-37125260d556.jpg?1783915087"
+  }
+ },
+ {
+  "name": "Twisted Fealty",
+  "scryfallId": "382d6085-79b9-48f7-8949-9f44dde2c753",
+  "oracleId": "a5ae75de-0dff-44bf-9dc6-5895ab3ae731",
+  "set": "woe",
+  "collectorNumber": "154",
+  "rarity": "uncommon",
+  "manaCost": "{2}{R}",
+  "typeLine": "Sorcery",
+  "oracleText": "Gain control of target creature until end of turn. Untap that creature. It gains haste until end of turn.\nCreate a Wicked Role token attached to up to one target creature. (If you control another Role on it, put that one into the graveyard. Enchanted creature gets +1/+1. When this token is put into a graveyard, each opponent loses 1 life.)",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Role token"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/8/382d6085-79b9-48f7-8949-9f44dde2c753.jpg?1783915087",
+   "normal": "https://cards.scryfall.io/normal/front/3/8/382d6085-79b9-48f7-8949-9f44dde2c753.jpg?1783915087",
+   "large": "https://cards.scryfall.io/large/front/3/8/382d6085-79b9-48f7-8949-9f44dde2c753.jpg?1783915087",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/8/382d6085-79b9-48f7-8949-9f44dde2c753.jpg?1783915087"
+  }
+ },
+ {
+  "name": "Two-Headed Hunter",
+  "scryfallId": "70c12e75-7e65-4706-b976-e47835910928",
+  "oracleId": "0f222f3d-f02b-42b9-aedf-fb7ed92d4889",
+  "set": "woe",
+  "collectorNumber": "155",
+  "rarity": "uncommon",
+  "manaCost": "{4}{R}",
+  "typeLine": "Creature — Giant",
+  "oracleText": "Menace (This creature can't be blocked except by two or more creatures.)",
+  "power": "5",
+  "toughness": "4",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Menace"
+  ],
+  "back": "Twice the Rage",
+  "adventure": true,
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/0/70c12e75-7e65-4706-b976-e47835910928.jpg?1783915087",
+   "normal": "https://cards.scryfall.io/normal/front/7/0/70c12e75-7e65-4706-b976-e47835910928.jpg?1783915087",
+   "large": "https://cards.scryfall.io/large/front/7/0/70c12e75-7e65-4706-b976-e47835910928.jpg?1783915087",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/0/70c12e75-7e65-4706-b976-e47835910928.jpg?1783915087"
+  }
+ },
+ {
+  "name": "Twice the Rage",
+  "scryfallId": "70c12e75-7e65-4706-b976-e47835910928",
+  "oracleId": "0f222f3d-f02b-42b9-aedf-fb7ed92d4889",
+  "set": "woe",
+  "collectorNumber": "155",
+  "rarity": "uncommon",
+  "manaCost": "{1}{R}",
+  "typeLine": "Instant — Adventure",
+  "oracleText": "Target creature gains double strike until end of turn. (Then exile this card. You may cast the creature later from exile.)",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "front": "Two-Headed Hunter",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/0/70c12e75-7e65-4706-b976-e47835910928.jpg?1783915087",
+   "normal": "https://cards.scryfall.io/normal/front/7/0/70c12e75-7e65-4706-b976-e47835910928.jpg?1783915087",
+   "large": "https://cards.scryfall.io/large/front/7/0/70c12e75-7e65-4706-b976-e47835910928.jpg?1783915087",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/0/70c12e75-7e65-4706-b976-e47835910928.jpg?1783915087"
+  }
+ },
+ {
+  "name": "Witch's Mark",
+  "scryfallId": "0685afcb-06f6-4d18-b8c2-510764558dc1",
+  "oracleId": "00807825-88e5-4b88-8527-a49f553a91be",
+  "set": "woe",
+  "collectorNumber": "158",
+  "rarity": "common",
+  "manaCost": "{1}{R}",
+  "typeLine": "Sorcery",
+  "oracleText": "You may discard a card. If you do, draw two cards.\nCreate a Wicked Role token attached to up to one target creature you control. (If you control another Role on it, put that one into the graveyard. Enchanted creature gets +1/+1. When this token is put into a graveyard, each opponent loses 1 life.)",
+  "colors": [
+   "R"
+  ],
+  "keywords": [
+   "Role token"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/6/0685afcb-06f6-4d18-b8c2-510764558dc1.jpg?1783915086",
+   "normal": "https://cards.scryfall.io/normal/front/0/6/0685afcb-06f6-4d18-b8c2-510764558dc1.jpg?1783915086",
+   "large": "https://cards.scryfall.io/large/front/0/6/0685afcb-06f6-4d18-b8c2-510764558dc1.jpg?1783915086",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/6/0685afcb-06f6-4d18-b8c2-510764558dc1.jpg?1783915086"
+  }
+ },
+ {
+  "name": "Witchstalker Frenzy",
+  "scryfallId": "649025a7-79d1-4d7c-b1db-d46bcf5a1ae2",
+  "oracleId": "f46befcb-6a7f-4f5e-8634-393cbf4b3308",
+  "set": "woe",
+  "collectorNumber": "159",
+  "rarity": "uncommon",
+  "manaCost": "{3}{R}",
+  "typeLine": "Instant",
+  "oracleText": "This spell costs {1} less to cast for each creature that attacked this turn.\nWitchstalker Frenzy deals 5 damage to target creature.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/4/649025a7-79d1-4d7c-b1db-d46bcf5a1ae2.jpg?1783915086",
+   "normal": "https://cards.scryfall.io/normal/front/6/4/649025a7-79d1-4d7c-b1db-d46bcf5a1ae2.jpg?1783915086",
+   "large": "https://cards.scryfall.io/large/front/6/4/649025a7-79d1-4d7c-b1db-d46bcf5a1ae2.jpg?1783915086",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/4/649025a7-79d1-4d7c-b1db-d46bcf5a1ae2.jpg?1783915086"
+  }
  }
 ]

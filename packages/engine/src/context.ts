@@ -44,6 +44,7 @@ import { ECL_WHITE_EFFECTS } from './ecl-white-effects.ts';
 import { HOB_WHITE_EFFECTS } from './hob-white-effects.ts'; // The Hobbit (20b white)
 import { LTR_BLUE_EFFECTS } from './ltr-blue-effects.ts'; // Lord of the Rings (21b blue)
 import { LTR_WHITE_EFFECTS } from './ltr-white-effects.ts'; // Lord of the Rings (21b white)
+import { WOE_RED_EFFECTS, woeRedApplies, woeRedDef } from './woe-red-effects.ts'; // Wilds of Eldraine (23b red)
 import { LTR_GC_RARE_EFFECTS, ltrDrawsTwice } from './ltr-gc-rare-effects.ts'; // Lord of the Rings (21d gc-rare)
 import { LTR_WU_RARE_EFFECTS } from './ltr-wu-rare-effects.ts'; // Lord of the Rings (21d wu-rare)
 import { LTR_BR_RARE_EFFECTS } from './ltr-br-rare-effects.ts'; // Lord of the Rings (21d br-rare)
@@ -211,6 +212,7 @@ const BUILT_IN_EFFECTS: Record<string, CustomEffect> = {
   ...HOB_WHITE_EFFECTS, // The Hobbit (20b, white)
   ...LTR_BLUE_EFFECTS, // Lord of the Rings (21b blue)
   ...LTR_WHITE_EFFECTS, // Lord of the Rings (21b white)
+  ...WOE_RED_EFFECTS, // Wilds of Eldraine (23b red)
   ...LTR_GC_RARE_EFFECTS, // Lord of the Rings (21d gc-rare)
   ...LTR_WU_RARE_EFFECTS, // Lord of the Rings (21d wu-rare)
   ...LTR_BR_RARE_EFFECTS, // Lord of the Rings (21d br-rare)
@@ -297,8 +299,10 @@ export function def(ctx: Ctx, id: ObjectId): CardDefinition {
     ctx.s.colorChanges && o.allColorsTurn === ctx.s.turn.number && o.zone === 'battlefield'
       ? { ...dS, colors: ALL_COLORS }
       : dS;
+  // Wilds of Eldraine (23b red): Food Fight's "Artifacts you control have ...", Goddric's celebration.
+  const dW = o.zone === 'battlefield' && woeRedApplies(ctx, d2) ? woeRedDef(ctx, o, d2) : d2;
   // Lord of the Rings (21a): the Ring's first ability, "your Ring-bearer is legendary" (most games have no Ring).
-  return ctx.s.players[o.controller].ring ? withRingLegendary(ctx, o, d2) : d2;
+  return ctx.s.players[o.controller].ring ? withRingLegendary(ctx, o, dW) : dW;
 }
 
 /** Lorwyn Eclipsed (18b): `d` with the colours the object was given or lost. */

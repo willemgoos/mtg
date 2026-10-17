@@ -18,6 +18,7 @@ import { elementalTriggerCopies } from './ecl-multi-b-effects.ts';
 import { hasEnduringStory, subtypeTriggerCopies } from './hob-20a.ts';
 import { detectLtr, isRingBearer, ringCondition } from './ltr-21a.ts';
 import { detectLtrWhite } from './ltr-white-effects.ts'; // Lord of the Rings (21b white)
+import { detectWoeRed } from './woe-red-effects.ts'; // Wilds of Eldraine (23b red)
 import { detectLtrGcRare } from './ltr-gc-rare-effects.ts'; // Lord of the Rings (21d gc-rare)
 import { doubleLegendaryArtifactTriggers } from './ltr-wu-rare-effects.ts'; // Lord of the Rings (21d wu-rare)
 import { detectLtrBrRare } from './ltr-br-rare-effects.ts'; // Lord of the Rings (21d br-rare)
@@ -784,6 +785,7 @@ function detect(ctx: Ctx, ev: GameEvent): void {
   detectFic(ctx, ev);
   detectLtr(ctx, ev); // Lord of the Rings (21a)
   detectLtrWhite(ctx, ev); // Lord of the Rings (21b white)
+  detectWoeRed(ctx, ev); // Wilds of Eldraine (23b red)
   detectLtrGcRare(ctx, ev); // Lord of the Rings (21d gc-rare)
   detectLtrBrRare(ctx, ev); // Lord of the Rings (21d br-rare)
   detectLtrMultiRare(ctx, ev); // Lord of the Rings (21d multi-rare)
@@ -1295,7 +1297,17 @@ function detect(ctx: Ctx, ev: GameEvent): void {
       }
       // Final Fantasy (11c): emblems that see a creature die (Sephiroth), and Zenos's chosen creature.
       if (ev.from === 'battlefield' && ev.to === 'graveyard' && movedDef.types.includes('Creature'))
-        emblemTriggers(ctx, (t) => t.on === 'otherCreatureDies', moved, true);
+        emblemTriggers(
+          ctx,
+          (t, e) =>
+            t.on === 'otherCreatureDies' &&
+            // Wilds of Eldraine (23b red): Gnawing Crescendo, "a nontoken creature you control dies this turn".
+            !(t.nontoken && (!moved || moved.isToken)) &&
+            (t.controller === 'any' ||
+              (t.controller === 'you') === ((ev.controller ?? moved?.controller) === e.controller)),
+          moved,
+          true,
+        );
       if (ev.from === 'battlefield')
         forEachBattlefieldTrigger(
           ctx,

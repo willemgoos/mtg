@@ -1346,7 +1346,7 @@ export function activateAbility(
   const src = obj(ctx, source);
   const mana = abilityManaCost(ctx, source, a, targets);
   const sourceRef = { id: source, zcc: src.zcc };
-  const exclude = a.cost.tapSelf ? source : undefined;
+  const exclude = a.cost.tapSelf || a.cost.sacrificeSelf ? source : undefined; // Wilds of Eldraine (23b red): sacrificed, so not a mana source either
   const payment = planPayment(
     ctx,
     player,
@@ -1723,6 +1723,8 @@ export function resolveTop(ctx: Ctx): boolean {
         moveObject(ctx, item.id, item.flashback ? 'exile' : 'graveyard');
         return false;
       }
+      // Wilds of Eldraine (23b red): Imodane, the Pyrohammer, "an instant or sorcery spell that targets only a single creature".
+      o.woeSpellTargets = [...item.targets];
       const es: EffectSource = {
         controller: item.controller,
         source: { id: o.id, zcc: o.zcc },

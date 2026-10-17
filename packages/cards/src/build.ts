@@ -306,6 +306,17 @@ export function parseTypeLine(line: string) {
   return { supertypes, types, subtypes };
 }
 
+/** Wilds of Eldraine (23b red): is this keyword named only inside a "Celebration —" paragraph of the rules text? */
+function onlyInCelebration(keyword: string, oracle: string): boolean {
+  const named = new RegExp(`\\b${keyword}\\b`, 'i');
+  const lines = oracle.split('\n');
+  const celebration = (l: string) => l.startsWith('Celebration —');
+  return (
+    lines.some((l) => celebration(l) && named.test(l)) &&
+    !lines.some((l) => !celebration(l) && named.test(l))
+  );
+}
+
 export function mapKeywords(scryfall: readonly string[], oracle = ''): Keyword[] {
   const out: Keyword[] = [];
   // "Hexproof from instants" shows up as both "Hexproof from" and "Hexproof".
@@ -332,7 +343,10 @@ export function mapKeywords(scryfall: readonly string[], oracle = ''): Keyword[]
       continue;
     }
     const mapped = KEYWORDS[k];
-    if (mapped) out.push(mapped);
+    if (mapped) {
+      // Wilds of Eldraine (23b red): a keyword that only a Celebration paragraph names is given there, not printed (Goddric).
+      if (!onlyInCelebration(k, oracle)) out.push(mapped);
+    }
     // Named abilities ("Street Justice — ...") are labels with no rules of their own.
     else if (oracle.includes(`${k} —`)) continue;
     else if (!KEYWORDS_AS_ABILITIES.has(k)) throw new Error(`Unsupported keyword "${k}"`);
