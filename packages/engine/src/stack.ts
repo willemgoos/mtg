@@ -76,6 +76,7 @@ import {
 } from './ecl-18a.ts';
 import { firstEquipFree, noteEquipActivation } from './hob-white-effects.ts'; // The Hobbit (20b white)
 import { isLegendaryNow } from './ltr-black-effects.ts'; // Lord of the Rings (21b black)
+import { noteWoeCast, payLife } from './woe-black-effects.ts'; // Wilds of Eldraine (23b black)
 import {
   ltrFinalChapter,
   ltrPayWardFiltered,
@@ -762,10 +763,12 @@ export function castSpell(
     moveObject(ctx, choice.sacrifice, 'hand');
   else if (choice.sacrifice) sacrificePermanent(ctx, choice.sacrifice);
   if (v.removeCounters) removeCounters(ctx, player, v.removeCounters);
-  changeLife(ctx, player, -wardLife(ctx, player, targets) - (v.life ?? 0));
+  payLife(ctx, player, wardLife(ctx, player, targets)); // Wilds of Eldraine (23b black): Ashiok pays life by exiling cards
+  payLife(ctx, player, v.life ?? 0);
   // Toxic Deluge: "As an additional cost to cast this spell, pay X life."
-  if (d.payXLife && choice.x) changeLife(ctx, player, -choice.x);
+  if (d.payXLife && choice.x) payLife(ctx, player, choice.x);
   payWardExtras(ctx, player, targets);
+  noteWoeCast(ctx, player, o); // Wilds of Eldraine (23b black): Faerie Fencing
   ctx.s.stack.push({
     kind: 'spell',
     castBy: player,
@@ -1018,7 +1021,7 @@ export function answerSpellTargets(ctx: Ctx, targets: TargetChoice[]): void {
   if (item?.kind !== 'spell') throw new Error('The spell is not on the stack');
   const ward = wardCost(ctx, d.player, targets);
   if (manaValue(ward) > 0) payMana(ctx, planPayment(ctx, d.player, ward, undefined));
-  changeLife(ctx, d.player, -wardLife(ctx, d.player, targets));
+  payLife(ctx, d.player, wardLife(ctx, d.player, targets));
   payWardExtras(ctx, d.player, targets);
   noteTargets(ctx, d.player, targets);
   item.targets = [...item.targets, ...targets];
@@ -1044,7 +1047,7 @@ export function answerAbilityTargets(ctx: Ctx, targets: TargetChoice[]): void {
   if (item?.kind !== 'ability') throw new Error('The ability is not on the stack');
   const ward = wardCost(ctx, d.player, targets);
   if (manaValue(ward) > 0) payMana(ctx, planPayment(ctx, d.player, ward, undefined));
-  changeLife(ctx, d.player, -wardLife(ctx, d.player, targets));
+  payLife(ctx, d.player, wardLife(ctx, d.player, targets));
   payWardExtras(ctx, d.player, targets);
   noteTargets(ctx, d.player, targets, true);
   item.targets = [...item.targets, ...targets];
@@ -1490,11 +1493,9 @@ export function activateAbility(
   const sacrificedPower = sacrifice ? power(ctx, sacrifice) : undefined;
   const sacrificedLegendary = !!sacrifice && isLegendaryNow(ctx, sacrifice); // Lord of the Rings (21b black)
   if (sacrifice) sacrificePermanent(ctx, sacrifice);
-  changeLife(
-    ctx,
-    player,
-    -wardLife(ctx, player, targets) - (a.cost.life ?? 0) - (a.cost.lifeX ? (x ?? 0) : 0),
-  );
+  payLife(ctx, player, wardLife(ctx, player, targets));
+  payLife(ctx, player, a.cost.life ?? 0);
+  payLife(ctx, player, a.cost.lifeX ? (x ?? 0) : 0);
   payWardExtras(ctx, player, targets);
   // Lorwyn Eclipsed (18a): Blight N in the cost.
   if (a.cost.blight && blight !== undefined) blightCreature(ctx, player, blight, a.cost.blight);
@@ -1636,7 +1637,8 @@ export function pushTrigger(
     if (src) src.usedModes = [...(src.usedModes ?? []), mode];
   }
   const life = ability.targets.length && ability.lifeCost ? ability.lifeCost : 0;
-  changeLife(ctx, t.controller, -wardLife(ctx, t.controller, targets) - life);
+  payLife(ctx, t.controller, wardLife(ctx, t.controller, targets));
+  payLife(ctx, t.controller, life);
   payWardExtras(ctx, t.controller, targets);
   const id = newId(ctx);
   ctx.s.stack.push({

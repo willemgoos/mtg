@@ -3049,7 +3049,14 @@ export type EffectDef =
     }
   | { kind: 'destroy'; what: Ref }
   | { kind: 'gainLife'; who: Ref; amount: Amount }
-  | { kind: 'loseLife'; who: Ref; amount: Amount }
+  | {
+      kind: 'loseLife';
+      who: Ref;
+      amount: Amount;
+      // Wilds of Eldraine (23b black): Ashiok, Wicked Manipulator
+      /** "Pay N life" as an effect (a shock land's "you may pay 2 life"): a cost, not a loss, so Ashiok's replacement applies. */
+      payment?: boolean;
+    }
   | { kind: 'draw'; who: Ref; amount: Amount }
   | {
       kind: 'createToken';
@@ -3445,6 +3452,9 @@ export type StaticDef =
   // Strixhaven Brawl (15a): Anointed Procession
   /** If an effect would create one or more tokens under your control, it creates twice that many instead. */
   | { kind: 'doubleTokens' }
+  // Wilds of Eldraine (23b black): Ashiok, Wicked Manipulator
+  /** If you would pay life while your library has at least that many cards in it, exile that many cards from the top of it instead. */
+  | { kind: 'woePayLifeExilesLibrary' }
   // Strixhaven Brawl (15a): Deification (simplified: every planeswalker type)
   /** Planeswalkers you control have hexproof; while you control a creature, damage can't remove their last loyalty counter. */
   | { kind: 'planeswalkerProtection' }
@@ -4346,6 +4356,9 @@ export interface GameObject {
   // Final Fantasy Commander (12f).
   /** Exiled from a graveyard to be cast this turn: it counts as cast from a graveyard (Emet-Selch). */
   fromGraveyardCast?: boolean;
+  // Wilds of Eldraine (23b black): Faerie Fencing
+  /** As this spell was cast, its caster controlled a Faerie. */
+  controlledFaerieAtCast?: boolean;
   // Reality Fracture (17a): Null Summoner, Uldaros Theorix
   /** It entered the battlefield as a spell that was cast. */
   wasCast?: boolean;

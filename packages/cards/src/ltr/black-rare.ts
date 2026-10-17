@@ -39,7 +39,7 @@ export const LTR_BLACK_RARE: Record<string, Behavior> = {
           then: [
             {
               kind: 'may',
-              effects: [{ kind: 'loseLife', who: 'controller', amount: 2 }, draw(1)],
+              effects: [{ kind: 'loseLife', who: 'controller', amount: 2, payment: true }, draw(1)],
             },
           ],
         },

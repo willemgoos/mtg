@@ -99902,5 +99902,938 @@
    "large": "https://cards.scryfall.io/large/front/0/7/07e81ace-4d75-4d79-ab99-c42288580def.jpg?1783915873",
    "artCrop": "https://cards.scryfall.io/art_crop/front/0/7/07e81ace-4d75-4d79-ab99-c42288580def.jpg?1783915873"
   }
+ },
+ {
+  "name": "Ashiok's Reaper",
+  "scryfallId": "83957fe0-6500-420c-9b7a-2448a1c1d3b3",
+  "oracleId": "6f1e5571-ddda-4cea-84ef-36a571d8fd51",
+  "set": "woe",
+  "collectorNumber": "79",
+  "rarity": "uncommon",
+  "manaCost": "{3}{B}",
+  "typeLine": "Creature — Nightmare",
+  "oracleText": "Whenever an enchantment you control is put into a graveyard from the battlefield, draw a card.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/3/83957fe0-6500-420c-9b7a-2448a1c1d3b3.jpg?1783915111",
+   "normal": "https://cards.scryfall.io/normal/front/8/3/83957fe0-6500-420c-9b7a-2448a1c1d3b3.jpg?1783915111",
+   "large": "https://cards.scryfall.io/large/front/8/3/83957fe0-6500-420c-9b7a-2448a1c1d3b3.jpg?1783915111",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/3/83957fe0-6500-420c-9b7a-2448a1c1d3b3.jpg?1783915111"
+  }
+ },
+ {
+  "name": "Ashiok, Wicked Manipulator",
+  "scryfallId": "6c4d0db1-74a5-42c0-ac95-e696585d8022",
+  "oracleId": "67d66678-a8e6-4f80-bade-1f1daf4b0610",
+  "set": "woe",
+  "collectorNumber": "78",
+  "rarity": "mythic",
+  "manaCost": "{3}{B}{B}",
+  "typeLine": "Legendary Planeswalker — Ashiok",
+  "oracleText": "If you would pay life while your library has at least that many cards in it, exile that many cards from the top of your library instead.\n+1: Look at the top two cards of your library. Exile one of them and put the other into your hand.\n−2: Create two 1/1 black Nightmare creature tokens with \"At the beginning of combat on your turn, if a card was put into exile this turn, put a +1/+1 counter on this token.\"\n−7: Target player exiles the top X cards of their library, where X is the total mana value of cards you own in exile.",
+  "loyalty": "5",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/c/6c4d0db1-74a5-42c0-ac95-e696585d8022.jpg?1783915111",
+   "normal": "https://cards.scryfall.io/normal/front/6/c/6c4d0db1-74a5-42c0-ac95-e696585d8022.jpg?1783915111",
+   "large": "https://cards.scryfall.io/large/front/6/c/6c4d0db1-74a5-42c0-ac95-e696585d8022.jpg?1783915111",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/c/6c4d0db1-74a5-42c0-ac95-e696585d8022.jpg?1783915111"
+  }
+ },
+ {
+  "name": "Back for Seconds",
+  "scryfallId": "660845b5-96fa-4484-822b-aa0508801306",
+  "oracleId": "ee3d21b9-58b4-480c-bae3-26de50f1a5c6",
+  "set": "woe",
+  "collectorNumber": "80",
+  "rarity": "uncommon",
+  "manaCost": "{2}{B}",
+  "typeLine": "Sorcery",
+  "oracleText": "Bargain (You may sacrifice an artifact, enchantment, or token as you cast this spell.)\nReturn up to two target creature cards from your graveyard to your hand. If this spell was bargained, you may put one of those cards with mana value 4 or less onto the battlefield instead of putting it into your hand.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Bargain"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/6/660845b5-96fa-4484-822b-aa0508801306.jpg?1783915111",
+   "normal": "https://cards.scryfall.io/normal/front/6/6/660845b5-96fa-4484-822b-aa0508801306.jpg?1783915111",
+   "large": "https://cards.scryfall.io/large/front/6/6/660845b5-96fa-4484-822b-aa0508801306.jpg?1783915111",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/6/660845b5-96fa-4484-822b-aa0508801306.jpg?1783915111"
+  }
+ },
+ {
+  "name": "Barrow Naughty",
+  "scryfallId": "67da5ad8-4de2-4bd4-8b95-f2657e1fdee5",
+  "oracleId": "95664c29-9801-4dfc-9dbd-465abf6bb4ee",
+  "set": "woe",
+  "collectorNumber": "81",
+  "rarity": "common",
+  "manaCost": "{1}{B}",
+  "typeLine": "Creature — Faerie",
+  "oracleText": "Flying\nThis creature has lifelink as long as you control another Faerie.\n{2}{B}: This creature gets +1/+0 until end of turn.",
+  "power": "1",
+  "toughness": "3",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/7/67da5ad8-4de2-4bd4-8b95-f2657e1fdee5.jpg?1783915111",
+   "normal": "https://cards.scryfall.io/normal/front/6/7/67da5ad8-4de2-4bd4-8b95-f2657e1fdee5.jpg?1783915111",
+   "large": "https://cards.scryfall.io/large/front/6/7/67da5ad8-4de2-4bd4-8b95-f2657e1fdee5.jpg?1783915111",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/7/67da5ad8-4de2-4bd4-8b95-f2657e1fdee5.jpg?1783915111"
+  }
+ },
+ {
+  "name": "Callous Sell-Sword",
+  "scryfallId": "770ee3da-d33e-466f-9a2e-ad2d08ef5012",
+  "oracleId": "0e7405e3-e9e6-4213-a73f-e0c01a7d6721",
+  "set": "woe",
+  "collectorNumber": "221",
+  "rarity": "uncommon",
+  "manaCost": "{1}{B}",
+  "typeLine": "Creature — Human Soldier",
+  "oracleText": "This creature enters with a +1/+1 counter on it for each creature that died under your control this turn.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "back": "Burn Together",
+  "adventure": true,
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/7/770ee3da-d33e-466f-9a2e-ad2d08ef5012.jpg?1783915066",
+   "normal": "https://cards.scryfall.io/normal/front/7/7/770ee3da-d33e-466f-9a2e-ad2d08ef5012.jpg?1783915066",
+   "large": "https://cards.scryfall.io/large/front/7/7/770ee3da-d33e-466f-9a2e-ad2d08ef5012.jpg?1783915066",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/7/770ee3da-d33e-466f-9a2e-ad2d08ef5012.jpg?1783915066"
+  }
+ },
+ {
+  "name": "Burn Together",
+  "scryfallId": "770ee3da-d33e-466f-9a2e-ad2d08ef5012",
+  "oracleId": "0e7405e3-e9e6-4213-a73f-e0c01a7d6721",
+  "set": "woe",
+  "collectorNumber": "221",
+  "rarity": "uncommon",
+  "manaCost": "{R}",
+  "typeLine": "Sorcery — Adventure",
+  "oracleText": "Target creature you control deals damage equal to its power to any other target. Then sacrifice it.",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "front": "Callous Sell-Sword",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/7/770ee3da-d33e-466f-9a2e-ad2d08ef5012.jpg?1783915066",
+   "normal": "https://cards.scryfall.io/normal/front/7/7/770ee3da-d33e-466f-9a2e-ad2d08ef5012.jpg?1783915066",
+   "large": "https://cards.scryfall.io/large/front/7/7/770ee3da-d33e-466f-9a2e-ad2d08ef5012.jpg?1783915066",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/7/770ee3da-d33e-466f-9a2e-ad2d08ef5012.jpg?1783915066"
+  }
+ },
+ {
+  "name": "Candy Grapple",
+  "scryfallId": "190d97bc-dbef-496d-9bd1-b785bdf8a964",
+  "oracleId": "9588a7fd-bbe5-4a81-9a7e-d8e8f6c0537d",
+  "set": "woe",
+  "collectorNumber": "83",
+  "rarity": "common",
+  "manaCost": "{1}{B}",
+  "typeLine": "Instant",
+  "oracleText": "Bargain (You may sacrifice an artifact, enchantment, or token as you cast this spell.)\nTarget creature gets -3/-3 until end of turn. If this spell was bargained, that creature gets -5/-5 until end of turn instead.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Bargain"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/9/190d97bc-dbef-496d-9bd1-b785bdf8a964.jpg?1783915109",
+   "normal": "https://cards.scryfall.io/normal/front/1/9/190d97bc-dbef-496d-9bd1-b785bdf8a964.jpg?1783915109",
+   "large": "https://cards.scryfall.io/large/front/1/9/190d97bc-dbef-496d-9bd1-b785bdf8a964.jpg?1783915109",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/9/190d97bc-dbef-496d-9bd1-b785bdf8a964.jpg?1783915109"
+  }
+ },
+ {
+  "name": "Conceited Witch",
+  "scryfallId": "f8a0c0f6-fef9-42c5-934d-a2855c11b440",
+  "oracleId": "1c751201-24ba-4e5c-bf44-71c3e4693a92",
+  "set": "woe",
+  "collectorNumber": "84",
+  "rarity": "common",
+  "manaCost": "{2}{B}",
+  "typeLine": "Creature — Human Warlock",
+  "oracleText": "Menace (This creature can't be blocked except by two or more creatures.)",
+  "power": "2",
+  "toughness": "3",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Menace"
+  ],
+  "back": "Price of Beauty",
+  "adventure": true,
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/8/f8a0c0f6-fef9-42c5-934d-a2855c11b440.jpg?1783915109",
+   "normal": "https://cards.scryfall.io/normal/front/f/8/f8a0c0f6-fef9-42c5-934d-a2855c11b440.jpg?1783915109",
+   "large": "https://cards.scryfall.io/large/front/f/8/f8a0c0f6-fef9-42c5-934d-a2855c11b440.jpg?1783915109",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/8/f8a0c0f6-fef9-42c5-934d-a2855c11b440.jpg?1783915109"
+  }
+ },
+ {
+  "name": "Price of Beauty",
+  "scryfallId": "f8a0c0f6-fef9-42c5-934d-a2855c11b440",
+  "oracleId": "1c751201-24ba-4e5c-bf44-71c3e4693a92",
+  "set": "woe",
+  "collectorNumber": "84",
+  "rarity": "common",
+  "manaCost": "{B}",
+  "typeLine": "Sorcery — Adventure",
+  "oracleText": "Create a Wicked Role token attached to target creature you control. (Then exile this card. You may cast the creature later from exile.)",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Role token"
+  ],
+  "front": "Conceited Witch",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/8/f8a0c0f6-fef9-42c5-934d-a2855c11b440.jpg?1783915109",
+   "normal": "https://cards.scryfall.io/normal/front/f/8/f8a0c0f6-fef9-42c5-934d-a2855c11b440.jpg?1783915109",
+   "large": "https://cards.scryfall.io/large/front/f/8/f8a0c0f6-fef9-42c5-934d-a2855c11b440.jpg?1783915109",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/8/f8a0c0f6-fef9-42c5-934d-a2855c11b440.jpg?1783915109"
+  }
+ },
+ {
+  "name": "Dream Spoilers",
+  "scryfallId": "4efd1963-fe71-42c1-8ad7-53fd80145ca6",
+  "oracleId": "07c3e91c-3593-4797-b7be-ef4fb2913cef",
+  "set": "woe",
+  "collectorNumber": "85",
+  "rarity": "uncommon",
+  "manaCost": "{3}{B}",
+  "typeLine": "Creature — Faerie Warlock",
+  "oracleText": "Flying\nWhenever you cast a spell during an opponent's turn, up to one target creature an opponent controls gets -1/-1 until end of turn.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/e/4efd1963-fe71-42c1-8ad7-53fd80145ca6.jpg?1783915109",
+   "normal": "https://cards.scryfall.io/normal/front/4/e/4efd1963-fe71-42c1-8ad7-53fd80145ca6.jpg?1783915109",
+   "large": "https://cards.scryfall.io/large/front/4/e/4efd1963-fe71-42c1-8ad7-53fd80145ca6.jpg?1783915109",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/e/4efd1963-fe71-42c1-8ad7-53fd80145ca6.jpg?1783915109"
+  }
+ },
+ {
+  "name": "Eriette's Whisper",
+  "scryfallId": "dfed2acf-9ac8-447b-94f5-7db3a713c991",
+  "oracleId": "27ca3201-a374-4a9d-b0ba-93b391f36844",
+  "set": "woe",
+  "collectorNumber": "88",
+  "rarity": "common",
+  "manaCost": "{3}{B}",
+  "typeLine": "Sorcery",
+  "oracleText": "Target opponent discards two cards. Create a Wicked Role token attached to up to one target creature you control. (If you control another Role on it, put that one into the graveyard. Enchanted creature gets +1/+1. When this token is put into a graveyard, each opponent loses 1 life.)",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Role token"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/f/dfed2acf-9ac8-447b-94f5-7db3a713c991.jpg?1783915109",
+   "normal": "https://cards.scryfall.io/normal/front/d/f/dfed2acf-9ac8-447b-94f5-7db3a713c991.jpg?1783915109",
+   "large": "https://cards.scryfall.io/large/front/d/f/dfed2acf-9ac8-447b-94f5-7db3a713c991.jpg?1783915109",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/f/dfed2acf-9ac8-447b-94f5-7db3a713c991.jpg?1783915109"
+  }
+ },
+ {
+  "name": "Experimental Confectioner",
+  "scryfallId": "49aaf5db-9418-4b97-97da-736c674905d4",
+  "oracleId": "87f82d15-5b6b-400f-8a15-d45a2a735f7d",
+  "set": "woe",
+  "collectorNumber": "314",
+  "rarity": "uncommon",
+  "manaCost": "{2}{B}",
+  "typeLine": "Creature — Human Peasant",
+  "oracleText": "When this creature enters, create a Food token. (It's an artifact with \"{2}, {T}, Sacrifice this token: You gain 3 life.\")\nWhenever you sacrifice a Food, create a 1/1 black Rat creature token with \"This token can't block.\"",
+  "power": "2",
+  "toughness": "3",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Food"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/9/49aaf5db-9418-4b97-97da-736c674905d4.jpg?1783915040",
+   "normal": "https://cards.scryfall.io/normal/front/4/9/49aaf5db-9418-4b97-97da-736c674905d4.jpg?1783915040",
+   "large": "https://cards.scryfall.io/large/front/4/9/49aaf5db-9418-4b97-97da-736c674905d4.jpg?1783915040",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/9/49aaf5db-9418-4b97-97da-736c674905d4.jpg?1783915040"
+  }
+ },
+ {
+  "name": "Faerie Dreamthief",
+  "scryfallId": "57ca2ec5-442d-4909-be28-93c50fbc5f7a",
+  "oracleId": "d6e68414-80cb-4e08-ae84-b084a3f4b6de",
+  "set": "woe",
+  "collectorNumber": "89",
+  "rarity": "uncommon",
+  "manaCost": "{B}",
+  "typeLine": "Creature — Faerie Warlock",
+  "oracleText": "Flying\nWhen this creature enters, surveil 1. (Look at the top card of your library. You may put it into your graveyard.)\n{2}{B}, Exile this card from your graveyard: You draw a card and you lose 1 life.",
+  "power": "1",
+  "toughness": "1",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Flying",
+   "Surveil"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/7/57ca2ec5-442d-4909-be28-93c50fbc5f7a.jpg?1783915108",
+   "normal": "https://cards.scryfall.io/normal/front/5/7/57ca2ec5-442d-4909-be28-93c50fbc5f7a.jpg?1783915108",
+   "large": "https://cards.scryfall.io/large/front/5/7/57ca2ec5-442d-4909-be28-93c50fbc5f7a.jpg?1783915108",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/7/57ca2ec5-442d-4909-be28-93c50fbc5f7a.jpg?1783915108"
+  }
+ },
+ {
+  "name": "Faerie Fencing",
+  "scryfallId": "6bdcaf24-4352-47cf-a043-899be47ab1bb",
+  "oracleId": "450a9b73-9024-4103-b9f9-216a2f395cff",
+  "set": "woe",
+  "collectorNumber": "90",
+  "rarity": "uncommon",
+  "manaCost": "{X}{B}",
+  "typeLine": "Instant",
+  "oracleText": "Target creature gets -X/-X until end of turn. That creature gets an additional -3/-3 until end of turn if you controlled a Faerie as you cast this spell.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/b/6bdcaf24-4352-47cf-a043-899be47ab1bb.jpg?1783915108",
+   "normal": "https://cards.scryfall.io/normal/front/6/b/6bdcaf24-4352-47cf-a043-899be47ab1bb.jpg?1783915108",
+   "large": "https://cards.scryfall.io/large/front/6/b/6bdcaf24-4352-47cf-a043-899be47ab1bb.jpg?1783915108",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/b/6bdcaf24-4352-47cf-a043-899be47ab1bb.jpg?1783915108"
+  }
+ },
+ {
+  "name": "Feed the Cauldron",
+  "scryfallId": "0cfd18a5-e06a-4cb5-b78e-de18ec641321",
+  "oracleId": "21153db6-552a-4956-a53a-a9dfb6968629",
+  "set": "woe",
+  "collectorNumber": "91",
+  "rarity": "common",
+  "manaCost": "{2}{B}",
+  "typeLine": "Instant",
+  "oracleText": "Destroy target creature with mana value 3 or less. If it's your turn, create a Food token. (It's an artifact with \"{2}, {T}, Sacrifice this token: You gain 3 life.\")",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Food"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/c/0cfd18a5-e06a-4cb5-b78e-de18ec641321.jpg?1783915107",
+   "normal": "https://cards.scryfall.io/normal/front/0/c/0cfd18a5-e06a-4cb5-b78e-de18ec641321.jpg?1783915107",
+   "large": "https://cards.scryfall.io/large/front/0/c/0cfd18a5-e06a-4cb5-b78e-de18ec641321.jpg?1783915107",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/c/0cfd18a5-e06a-4cb5-b78e-de18ec641321.jpg?1783915107"
+  }
+ },
+ {
+  "name": "Gumdrop Poisoner",
+  "scryfallId": "5cb01d4d-91c2-41c6-981e-b4135a1e1e36",
+  "oracleId": "4f5ebbb8-f49b-488f-bb85-888aaa918bdd",
+  "set": "woe",
+  "collectorNumber": "93",
+  "rarity": "rare",
+  "manaCost": "{2}{B}",
+  "typeLine": "Creature — Human Warlock",
+  "oracleText": "Lifelink\nWhen this creature enters, up to one target creature gets -X/-X until end of turn, where X is the amount of life you gained this turn.",
+  "power": "3",
+  "toughness": "2",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Lifelink"
+  ],
+  "back": "Tempt with Treats",
+  "adventure": true,
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/c/5cb01d4d-91c2-41c6-981e-b4135a1e1e36.jpg?1783915106",
+   "normal": "https://cards.scryfall.io/normal/front/5/c/5cb01d4d-91c2-41c6-981e-b4135a1e1e36.jpg?1783915106",
+   "large": "https://cards.scryfall.io/large/front/5/c/5cb01d4d-91c2-41c6-981e-b4135a1e1e36.jpg?1783915106",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/c/5cb01d4d-91c2-41c6-981e-b4135a1e1e36.jpg?1783915106"
+  }
+ },
+ {
+  "name": "Tempt with Treats",
+  "scryfallId": "5cb01d4d-91c2-41c6-981e-b4135a1e1e36",
+  "oracleId": "4f5ebbb8-f49b-488f-bb85-888aaa918bdd",
+  "set": "woe",
+  "collectorNumber": "93",
+  "rarity": "rare",
+  "manaCost": "{B}",
+  "typeLine": "Instant — Adventure",
+  "oracleText": "Create a Food token. (Then exile this card. You may cast the creature later from exile.)",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Food"
+  ],
+  "front": "Gumdrop Poisoner",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/c/5cb01d4d-91c2-41c6-981e-b4135a1e1e36.jpg?1783915106",
+   "normal": "https://cards.scryfall.io/normal/front/5/c/5cb01d4d-91c2-41c6-981e-b4135a1e1e36.jpg?1783915106",
+   "large": "https://cards.scryfall.io/large/front/5/c/5cb01d4d-91c2-41c6-981e-b4135a1e1e36.jpg?1783915106",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/c/5cb01d4d-91c2-41c6-981e-b4135a1e1e36.jpg?1783915106"
+  }
+ },
+ {
+  "name": "High Fae Negotiator",
+  "scryfallId": "f0fc77e7-154d-4433-93b3-1a1dee34791b",
+  "oracleId": "90ecd452-333a-43b0-be08-a61f3779b3bd",
+  "set": "woe",
+  "collectorNumber": "94",
+  "rarity": "uncommon",
+  "manaCost": "{3}{B}{B}",
+  "typeLine": "Creature — Faerie Warlock",
+  "oracleText": "Bargain (You may sacrifice an artifact, enchantment, or token as you cast this spell.)\nFlying\nWhen this creature enters, if it was bargained, each opponent loses 3 life and you gain 3 life.",
+  "power": "3",
+  "toughness": "5",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Flying",
+   "Bargain"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/0/f0fc77e7-154d-4433-93b3-1a1dee34791b.jpg?1783915107",
+   "normal": "https://cards.scryfall.io/normal/front/f/0/f0fc77e7-154d-4433-93b3-1a1dee34791b.jpg?1783915107",
+   "large": "https://cards.scryfall.io/large/front/f/0/f0fc77e7-154d-4433-93b3-1a1dee34791b.jpg?1783915107",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/0/f0fc77e7-154d-4433-93b3-1a1dee34791b.jpg?1783915107"
+  }
+ },
+ {
+  "name": "Hopeless Nightmare",
+  "scryfallId": "2c2ee817-9ca9-4f09-bc71-7994c19a9470",
+  "oracleId": "5e63b69c-d901-4a01-8dfa-88e044856239",
+  "set": "woe",
+  "collectorNumber": "95",
+  "rarity": "common",
+  "manaCost": "{B}",
+  "typeLine": "Enchantment",
+  "oracleText": "When this enchantment enters, each opponent discards a card and loses 2 life.\nWhen this enchantment is put into a graveyard from the battlefield, scry 2.\n{2}{B}: Sacrifice this enchantment.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Scry"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/c/2c2ee817-9ca9-4f09-bc71-7994c19a9470.jpg?1783915106",
+   "normal": "https://cards.scryfall.io/normal/front/2/c/2c2ee817-9ca9-4f09-bc71-7994c19a9470.jpg?1783915106",
+   "large": "https://cards.scryfall.io/large/front/2/c/2c2ee817-9ca9-4f09-bc71-7994c19a9470.jpg?1783915106",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/c/2c2ee817-9ca9-4f09-bc71-7994c19a9470.jpg?1783915106"
+  }
+ },
+ {
+  "name": "Lord Skitter's Butcher",
+  "scryfallId": "21b31d2b-ef66-4e16-a75e-4e27eb5ebfe9",
+  "oracleId": "467f756f-75db-4748-99d3-62651776adfe",
+  "set": "woe",
+  "collectorNumber": "99",
+  "rarity": "uncommon",
+  "manaCost": "{2}{B}",
+  "typeLine": "Creature — Rat Peasant",
+  "oracleText": "When this creature enters, choose one —\n• Create a 1/1 black Rat creature token with \"This token can't block.\"\n• You may sacrifice another creature. If you do, scry 2, then draw a card.\n• Creatures you control gain menace until end of turn.",
+  "power": "2",
+  "toughness": "3",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Scry"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/1/21b31d2b-ef66-4e16-a75e-4e27eb5ebfe9.jpg?1783915105",
+   "normal": "https://cards.scryfall.io/normal/front/2/1/21b31d2b-ef66-4e16-a75e-4e27eb5ebfe9.jpg?1783915105",
+   "large": "https://cards.scryfall.io/large/front/2/1/21b31d2b-ef66-4e16-a75e-4e27eb5ebfe9.jpg?1783915105",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/1/21b31d2b-ef66-4e16-a75e-4e27eb5ebfe9.jpg?1783915105"
+  }
+ },
+ {
+  "name": "Lord Skitter, Sewer King",
+  "scryfallId": "729877be-4894-4ef5-9e60-de8a8fb2bdc0",
+  "oracleId": "f5bed085-bb7a-4250-9599-b2a8a95e6b6f",
+  "set": "woe",
+  "collectorNumber": "97",
+  "rarity": "rare",
+  "manaCost": "{2}{B}",
+  "typeLine": "Legendary Creature — Rat Noble",
+  "oracleText": "Whenever another Rat you control enters, exile up to one target card from an opponent's graveyard.\nAt the beginning of combat on your turn, create a 1/1 black Rat creature token with \"This token can't block.\"",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/2/729877be-4894-4ef5-9e60-de8a8fb2bdc0.jpg?1783915106",
+   "normal": "https://cards.scryfall.io/normal/front/7/2/729877be-4894-4ef5-9e60-de8a8fb2bdc0.jpg?1783915106",
+   "large": "https://cards.scryfall.io/large/front/7/2/729877be-4894-4ef5-9e60-de8a8fb2bdc0.jpg?1783915106",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/2/729877be-4894-4ef5-9e60-de8a8fb2bdc0.jpg?1783915106"
+  }
+ },
+ {
+  "name": "Mintstrosity",
+  "scryfallId": "d902f154-6fe8-4b97-aa67-4d4696abf887",
+  "oracleId": "c8c88c33-b8df-4b19-b12c-79c9709af8f1",
+  "set": "woe",
+  "collectorNumber": "100",
+  "rarity": "common",
+  "manaCost": "{1}{B}",
+  "typeLine": "Creature — Horror",
+  "oracleText": "When this creature dies, create a Food token. (It's an artifact with \"{2}, {T}, Sacrifice this token: You gain 3 life.\")",
+  "power": "3",
+  "toughness": "1",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Food"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/9/d902f154-6fe8-4b97-aa67-4d4696abf887.jpg?1783915104",
+   "normal": "https://cards.scryfall.io/normal/front/d/9/d902f154-6fe8-4b97-aa67-4d4696abf887.jpg?1783915104",
+   "large": "https://cards.scryfall.io/large/front/d/9/d902f154-6fe8-4b97-aa67-4d4696abf887.jpg?1783915104",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/9/d902f154-6fe8-4b97-aa67-4d4696abf887.jpg?1783915104"
+  }
+ },
+ {
+  "name": "Not Dead After All",
+  "scryfallId": "d01a2b68-efe6-4027-846d-db7b19d9eef6",
+  "oracleId": "380c367f-73ea-485f-a37b-5af0ba160893",
+  "set": "woe",
+  "collectorNumber": "101",
+  "rarity": "common",
+  "manaCost": "{B}",
+  "typeLine": "Instant",
+  "oracleText": "Until end of turn, target creature you control gains \"When this creature dies, return it to the battlefield tapped under its owner's control, then create a Wicked Role token attached to it.\" (Enchanted creature gets +1/+1. When this token is put into a graveyard, each opponent loses 1 life.)",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Role token"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/0/d01a2b68-efe6-4027-846d-db7b19d9eef6.jpg?1783915104",
+   "normal": "https://cards.scryfall.io/normal/front/d/0/d01a2b68-efe6-4027-846d-db7b19d9eef6.jpg?1783915104",
+   "large": "https://cards.scryfall.io/large/front/d/0/d01a2b68-efe6-4027-846d-db7b19d9eef6.jpg?1783915104",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/0/d01a2b68-efe6-4027-846d-db7b19d9eef6.jpg?1783915104"
+  }
+ },
+ {
+  "name": "Old Flitterfang",
+  "scryfallId": "67c77d6f-de14-423c-bf55-0fb289171004",
+  "oracleId": "f95bdf0d-5bd1-4215-b143-0930973807ce",
+  "set": "woe",
+  "collectorNumber": "316",
+  "rarity": "uncommon",
+  "manaCost": "{4}{B}",
+  "typeLine": "Legendary Creature — Rat Faerie",
+  "oracleText": "Flying\nAt the beginning of each end step, if a creature died this turn, create a Food token. (It's an artifact with \"{2}, {T}, Sacrifice this token: You gain 3 life.\")\n{2}{B}, Sacrifice another creature or artifact: Old Flitterfang gets +2/+2 until end of turn.",
+  "power": "3",
+  "toughness": "4",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Flying",
+   "Food"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/7/67c77d6f-de14-423c-bf55-0fb289171004.jpg?1783915039",
+   "normal": "https://cards.scryfall.io/normal/front/6/7/67c77d6f-de14-423c-bf55-0fb289171004.jpg?1783915039",
+   "large": "https://cards.scryfall.io/large/front/6/7/67c77d6f-de14-423c-bf55-0fb289171004.jpg?1783915039",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/7/67c77d6f-de14-423c-bf55-0fb289171004.jpg?1783915039"
+  }
+ },
+ {
+  "name": "Rat Out",
+  "scryfallId": "f2c42755-bf91-4c75-95c6-d2a60ba3492a",
+  "oracleId": "37043e1e-4556-45f7-9484-15dd8ed5272b",
+  "set": "woe",
+  "collectorNumber": "103",
+  "rarity": "common",
+  "manaCost": "{B}",
+  "typeLine": "Instant",
+  "oracleText": "Up to one target creature gets -1/-1 until end of turn. You create a 1/1 black Rat creature token with \"This token can't block.\"",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/2/f2c42755-bf91-4c75-95c6-d2a60ba3492a.jpg?1783915104",
+   "normal": "https://cards.scryfall.io/normal/front/f/2/f2c42755-bf91-4c75-95c6-d2a60ba3492a.jpg?1783915104",
+   "large": "https://cards.scryfall.io/large/front/f/2/f2c42755-bf91-4c75-95c6-d2a60ba3492a.jpg?1783915104",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/2/f2c42755-bf91-4c75-95c6-d2a60ba3492a.jpg?1783915104"
+  }
+ },
+ {
+  "name": "Rowan's Grim Search",
+  "scryfallId": "1be6786e-0569-42dd-b03c-82da7b32a14f",
+  "oracleId": "f60234e4-9b53-47a5-a21a-82c80b5af072",
+  "set": "woe",
+  "collectorNumber": "104",
+  "rarity": "common",
+  "manaCost": "{2}{B}",
+  "typeLine": "Instant",
+  "oracleText": "Bargain (You may sacrifice an artifact, enchantment, or token as you cast this spell.)\nIf this spell was bargained, look at the top four cards of your library, then put up to two of them back on top of your library in any order and the rest into your graveyard.\nYou draw two cards and you lose 2 life.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Bargain"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/b/1be6786e-0569-42dd-b03c-82da7b32a14f.jpg?1783915104",
+   "normal": "https://cards.scryfall.io/normal/front/1/b/1be6786e-0569-42dd-b03c-82da7b32a14f.jpg?1783915104",
+   "large": "https://cards.scryfall.io/large/front/1/b/1be6786e-0569-42dd-b03c-82da7b32a14f.jpg?1783915104",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/b/1be6786e-0569-42dd-b03c-82da7b32a14f.jpg?1783915104"
+  }
+ },
+ {
+  "name": "Scream Puff",
+  "scryfallId": "c62d0ae9-5a82-40bf-b8bb-9c2e2d55d458",
+  "oracleId": "b46ddf4b-7ed8-49c4-8828-f0fbbc023c1f",
+  "set": "woe",
+  "collectorNumber": "105",
+  "rarity": "common",
+  "manaCost": "{4}{B}",
+  "typeLine": "Creature — Horror",
+  "oracleText": "Deathtouch\nWhenever this creature deals combat damage to a player, create a Food token. (It's an artifact with \"{2}, {T}, Sacrifice this token: You gain 3 life.\")",
+  "power": "4",
+  "toughness": "5",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Food",
+   "Deathtouch"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/6/c62d0ae9-5a82-40bf-b8bb-9c2e2d55d458.jpg?1783915103",
+   "normal": "https://cards.scryfall.io/normal/front/c/6/c62d0ae9-5a82-40bf-b8bb-9c2e2d55d458.jpg?1783915103",
+   "large": "https://cards.scryfall.io/large/front/c/6/c62d0ae9-5a82-40bf-b8bb-9c2e2d55d458.jpg?1783915103",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/6/c62d0ae9-5a82-40bf-b8bb-9c2e2d55d458.jpg?1783915103"
+  }
+ },
+ {
+  "name": "Spellscorn Coven",
+  "scryfallId": "8c112f62-6034-4636-a75b-4a45bc916a91",
+  "oracleId": "9357fc7f-c9d0-4ce2-a6dd-0ff1f24bfc56",
+  "set": "woe",
+  "collectorNumber": "237",
+  "rarity": "uncommon",
+  "manaCost": "{3}{B}",
+  "typeLine": "Creature — Faerie Warlock",
+  "oracleText": "Flying\nWhen this creature enters, each opponent discards a card.",
+  "power": "2",
+  "toughness": "3",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "back": "Take It Back",
+  "adventure": true,
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/c/8c112f62-6034-4636-a75b-4a45bc916a91.jpg?1783915062",
+   "normal": "https://cards.scryfall.io/normal/front/8/c/8c112f62-6034-4636-a75b-4a45bc916a91.jpg?1783915062",
+   "large": "https://cards.scryfall.io/large/front/8/c/8c112f62-6034-4636-a75b-4a45bc916a91.jpg?1783915062",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/c/8c112f62-6034-4636-a75b-4a45bc916a91.jpg?1783915062"
+  }
+ },
+ {
+  "name": "Take It Back",
+  "scryfallId": "8c112f62-6034-4636-a75b-4a45bc916a91",
+  "oracleId": "9357fc7f-c9d0-4ce2-a6dd-0ff1f24bfc56",
+  "set": "woe",
+  "collectorNumber": "237",
+  "rarity": "uncommon",
+  "manaCost": "{2}{U}",
+  "typeLine": "Instant — Adventure",
+  "oracleText": "Return target spell to its owner's hand. (Then exile this card. You may cast the creature later from exile.)",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "front": "Spellscorn Coven",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/c/8c112f62-6034-4636-a75b-4a45bc916a91.jpg?1783915062",
+   "normal": "https://cards.scryfall.io/normal/front/8/c/8c112f62-6034-4636-a75b-4a45bc916a91.jpg?1783915062",
+   "large": "https://cards.scryfall.io/large/front/8/c/8c112f62-6034-4636-a75b-4a45bc916a91.jpg?1783915062",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/c/8c112f62-6034-4636-a75b-4a45bc916a91.jpg?1783915062"
+  }
+ },
+ {
+  "name": "Stingblade Assassin",
+  "scryfallId": "b71b7dd9-6a1d-4c71-873b-782a0a2e7d1d",
+  "oracleId": "7938112a-3832-42b4-b123-27a42c06a290",
+  "set": "woe",
+  "collectorNumber": "109",
+  "rarity": "common",
+  "manaCost": "{3}{B}",
+  "typeLine": "Creature — Faerie Assassin",
+  "oracleText": "Flash\nFlying\nWhen this creature enters, destroy target creature an opponent controls that was dealt damage this turn.",
+  "power": "3",
+  "toughness": "1",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Flying",
+   "Flash"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/7/b71b7dd9-6a1d-4c71-873b-782a0a2e7d1d.jpg?1783915103",
+   "normal": "https://cards.scryfall.io/normal/front/b/7/b71b7dd9-6a1d-4c71-873b-782a0a2e7d1d.jpg?1783915103",
+   "large": "https://cards.scryfall.io/large/front/b/7/b71b7dd9-6a1d-4c71-873b-782a0a2e7d1d.jpg?1783915103",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/7/b71b7dd9-6a1d-4c71-873b-782a0a2e7d1d.jpg?1783915103"
+  }
+ },
+ {
+  "name": "Sugar Rush",
+  "scryfallId": "a638c9ba-45d6-4b50-a8ab-ef580a0a5d8e",
+  "oracleId": "57085b8e-a85e-4d50-a7d2-9bddfdaf411c",
+  "set": "woe",
+  "collectorNumber": "110",
+  "rarity": "common",
+  "manaCost": "{1}{B}",
+  "typeLine": "Instant",
+  "oracleText": "Target creature gets +3/+0 until end of turn.\nDraw a card.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/6/a638c9ba-45d6-4b50-a8ab-ef580a0a5d8e.jpg?1783915102",
+   "normal": "https://cards.scryfall.io/normal/front/a/6/a638c9ba-45d6-4b50-a8ab-ef580a0a5d8e.jpg?1783915102",
+   "large": "https://cards.scryfall.io/large/front/a/6/a638c9ba-45d6-4b50-a8ab-ef580a0a5d8e.jpg?1783915102",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/6/a638c9ba-45d6-4b50-a8ab-ef580a0a5d8e.jpg?1783915102"
+  }
+ },
+ {
+  "name": "Sweettooth Witch",
+  "scryfallId": "a6bdb984-06f8-4bca-a943-17fe5db97682",
+  "oracleId": "635b854d-de71-4c85-9755-8c97bf3cba36",
+  "set": "woe",
+  "collectorNumber": "111",
+  "rarity": "common",
+  "manaCost": "{2}{B}",
+  "typeLine": "Creature — Human Warlock",
+  "oracleText": "When this creature enters, create a Food token. (It's an artifact with \"{2}, {T}, Sacrifice this token: You gain 3 life.\")\n{2}, Sacrifice a Food: Target player loses 2 life.",
+  "power": "3",
+  "toughness": "2",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Food"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/6/a6bdb984-06f8-4bca-a943-17fe5db97682.jpg?1783915102",
+   "normal": "https://cards.scryfall.io/normal/front/a/6/a6bdb984-06f8-4bca-a943-17fe5db97682.jpg?1783915102",
+   "large": "https://cards.scryfall.io/large/front/a/6/a6bdb984-06f8-4bca-a943-17fe5db97682.jpg?1783915102",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/6/a6bdb984-06f8-4bca-a943-17fe5db97682.jpg?1783915102"
+  }
+ },
+ {
+  "name": "Taken by Nightmares",
+  "scryfallId": "f858d83d-a13e-4ffa-a91d-d695e5e5d71a",
+  "oracleId": "e5557c9f-e4c2-41af-9fcc-371409e1dec6",
+  "set": "woe",
+  "collectorNumber": "112",
+  "rarity": "uncommon",
+  "manaCost": "{2}{B}{B}",
+  "typeLine": "Instant",
+  "oracleText": "Exile target creature. If you control an enchantment, scry 2.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Scry"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/8/f858d83d-a13e-4ffa-a91d-d695e5e5d71a.jpg?1783915100",
+   "normal": "https://cards.scryfall.io/normal/front/f/8/f858d83d-a13e-4ffa-a91d-d695e5e5d71a.jpg?1783915100",
+   "large": "https://cards.scryfall.io/large/front/f/8/f858d83d-a13e-4ffa-a91d-d695e5e5d71a.jpg?1783915100",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/8/f858d83d-a13e-4ffa-a91d-d695e5e5d71a.jpg?1783915100"
+  }
+ },
+ {
+  "name": "The Witch's Vanity",
+  "scryfallId": "47ca4926-b5ac-405a-8b58-f8db6df400ff",
+  "oracleId": "ad2793f3-a36f-4a09-a38f-eb98ce0a2b79",
+  "set": "woe",
+  "collectorNumber": "119",
+  "rarity": "uncommon",
+  "manaCost": "{1}{B}",
+  "typeLine": "Enchantment — Saga",
+  "oracleText": "(As this Saga enters and after your draw step, add a lore counter. Sacrifice after III.)\nI — Destroy target creature an opponent controls with mana value 2 or less.\nII — Create a Food token. (It's an artifact with \"{2}, {T}, Sacrifice this token: You gain 3 life.\")\nIII — Create a Wicked Role token attached to target creature you control.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Role token",
+   "Food"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/7/47ca4926-b5ac-405a-8b58-f8db6df400ff.jpg?1783915098",
+   "normal": "https://cards.scryfall.io/normal/front/4/7/47ca4926-b5ac-405a-8b58-f8db6df400ff.jpg?1783915098",
+   "large": "https://cards.scryfall.io/large/front/4/7/47ca4926-b5ac-405a-8b58-f8db6df400ff.jpg?1783915098",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/7/47ca4926-b5ac-405a-8b58-f8db6df400ff.jpg?1783915098"
+  }
+ },
+ {
+  "name": "Twisted Sewer-Witch",
+  "scryfallId": "d6e3ddf7-582d-4923-be30-8428e52237e4",
+  "oracleId": "99c9920a-f84b-4626-9fe5-d94cc62cd277",
+  "set": "woe",
+  "collectorNumber": "114",
+  "rarity": "uncommon",
+  "manaCost": "{3}{B}{B}",
+  "typeLine": "Creature — Human Warlock",
+  "oracleText": "When this creature enters, create a 1/1 black Rat creature token with \"This creature can't block.\" Then for each Rat you control, create a Wicked Role token attached to that Rat. (If you control another Role on it, put that one into the graveyard. Enchanted creature gets +1/+1. When this token is put into a graveyard, each opponent loses 1 life.)",
+  "power": "3",
+  "toughness": "4",
+  "colors": [
+   "B"
+  ],
+  "keywords": [
+   "Role token"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/6/d6e3ddf7-582d-4923-be30-8428e52237e4.jpg?1783915101",
+   "normal": "https://cards.scryfall.io/normal/front/d/6/d6e3ddf7-582d-4923-be30-8428e52237e4.jpg?1783915101",
+   "large": "https://cards.scryfall.io/large/front/d/6/d6e3ddf7-582d-4923-be30-8428e52237e4.jpg?1783915101",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/6/d6e3ddf7-582d-4923-be30-8428e52237e4.jpg?1783915101"
+  }
+ },
+ {
+  "name": "Virtue of Persistence",
+  "scryfallId": "0e48e154-a1e0-49c8-888a-a1f6b568aa39",
+  "oracleId": "fae36da0-bf9c-484f-b2fe-dd8ab2effc5c",
+  "set": "sld",
+  "collectorNumber": "2129",
+  "rarity": "mythic",
+  "manaCost": "{5}{B}{B}",
+  "typeLine": "Enchantment",
+  "oracleText": "At the beginning of your upkeep, put target creature card from a graveyard onto the battlefield under your control.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "back": "Locthwain Scorn",
+  "adventure": true,
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/e/0e48e154-a1e0-49c8-888a-a1f6b568aa39.jpg?1790743551",
+   "normal": "https://cards.scryfall.io/normal/front/0/e/0e48e154-a1e0-49c8-888a-a1f6b568aa39.jpg?1790743551",
+   "large": "https://cards.scryfall.io/large/front/0/e/0e48e154-a1e0-49c8-888a-a1f6b568aa39.jpg?1790743551",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/e/0e48e154-a1e0-49c8-888a-a1f6b568aa39.jpg?1790743551"
+  }
+ },
+ {
+  "name": "Locthwain Scorn",
+  "scryfallId": "0e48e154-a1e0-49c8-888a-a1f6b568aa39",
+  "oracleId": "fae36da0-bf9c-484f-b2fe-dd8ab2effc5c",
+  "set": "sld",
+  "collectorNumber": "2129",
+  "rarity": "mythic",
+  "manaCost": "{1}{B}",
+  "typeLine": "Sorcery — Adventure",
+  "oracleText": "Target creature gets -3/-3 until end of turn. You gain 2 life.",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "front": "Virtue of Persistence",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/e/0e48e154-a1e0-49c8-888a-a1f6b568aa39.jpg?1790743551",
+   "normal": "https://cards.scryfall.io/normal/front/0/e/0e48e154-a1e0-49c8-888a-a1f6b568aa39.jpg?1790743551",
+   "large": "https://cards.scryfall.io/large/front/0/e/0e48e154-a1e0-49c8-888a-a1f6b568aa39.jpg?1790743551",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/e/0e48e154-a1e0-49c8-888a-a1f6b568aa39.jpg?1790743551"
+  }
+ },
+ {
+  "name": "Voracious Vermin",
+  "scryfallId": "8059be65-3c73-49bb-a3b6-c346ce2f9fa4",
+  "oracleId": "8d36d80e-9934-4b56-bf3c-2b18a6da3d2d",
+  "set": "woe",
+  "collectorNumber": "116",
+  "rarity": "common",
+  "manaCost": "{2}{B}",
+  "typeLine": "Creature — Rat",
+  "oracleText": "When this creature enters, create a 1/1 black Rat creature token with \"This token can't block.\"\nWhenever another creature you control dies, put a +1/+1 counter on this creature.",
+  "power": "2",
+  "toughness": "1",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/0/8059be65-3c73-49bb-a3b6-c346ce2f9fa4.jpg?1783915099",
+   "normal": "https://cards.scryfall.io/normal/front/8/0/8059be65-3c73-49bb-a3b6-c346ce2f9fa4.jpg?1783915099",
+   "large": "https://cards.scryfall.io/large/front/8/0/8059be65-3c73-49bb-a3b6-c346ce2f9fa4.jpg?1783915099",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/0/8059be65-3c73-49bb-a3b6-c346ce2f9fa4.jpg?1783915099"
+  }
+ },
+ {
+  "name": "Wicked Visitor",
+  "scryfallId": "e26ec4b8-0012-48c4-9ccb-0f062df0c250",
+  "oracleId": "10330a79-a416-40da-bf5a-8b7cbd9a0498",
+  "set": "woe",
+  "collectorNumber": "118",
+  "rarity": "common",
+  "manaCost": "{1}{B}",
+  "typeLine": "Creature — Nightmare",
+  "oracleText": "Whenever an enchantment you control is put into a graveyard from the battlefield, each opponent loses 1 life.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "B"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/2/e26ec4b8-0012-48c4-9ccb-0f062df0c250.jpg?1783915099",
+   "normal": "https://cards.scryfall.io/normal/front/e/2/e26ec4b8-0012-48c4-9ccb-0f062df0c250.jpg?1783915099",
+   "large": "https://cards.scryfall.io/large/front/e/2/e26ec4b8-0012-48c4-9ccb-0f062df0c250.jpg?1783915099",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/2/e26ec4b8-0012-48c4-9ccb-0f062df0c250.jpg?1783915099"
+  }
  }
 ]

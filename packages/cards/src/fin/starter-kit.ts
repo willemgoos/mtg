@@ -78,9 +78,9 @@ export const STARTER_KIT: Record<string, Behavior> = {
         effects: [
           {
             kind: 'may',
-            // "Pay 1 life" as losing 1 life.
+            // "Pay 1 life" (a payment, for Ashiok, Wicked Manipulator's replacement).
             effects: [
-              { kind: 'loseLife', who: 'controller', amount: 1 },
+              { kind: 'loseLife', who: 'controller', amount: 1, payment: true },
               { kind: 'draw', who: 'controller', amount: 1 },
               { kind: 'counters', to: 'self', amount: 1 },
             ],

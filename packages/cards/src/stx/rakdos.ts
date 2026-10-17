@@ -37,7 +37,7 @@ export const RAKDOS: Record<string, Behavior> = {
       when({ on: 'attacks' }, [], {
         kind: 'may',
         effects: [
-          { kind: 'loseLife', who: 'controller', amount: 2 },
+          { kind: 'loseLife', who: 'controller', amount: 2, payment: true },
           { kind: 'pump', to: 'self', power: 0, toughness: 0, keywords: ['flying'] },
         ],
       }),

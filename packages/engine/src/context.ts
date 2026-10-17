@@ -4,6 +4,7 @@ import { MSH_EFFECTS } from './msh-effects.ts';
 import { FRA_BLACK_EFFECTS } from './fra-black-effects.ts';
 // Lorwyn Eclipsed (18b, black)
 import { ECL_BLACK_EFFECTS, drawPrevented } from './ecl-black-effects.ts';
+import { WOE_BLACK_EFFECTS } from './woe-black-effects.ts'; // Wilds of Eldraine (23b black)
 import { FIN_EFFECTS } from './fin-effects.ts';
 import { withRingLegendary } from './ltr-21a.ts'; // Lord of the Rings (21a)
 import { HOB_BLACK_EFFECTS } from './hob-black-effects.ts'; // The Hobbit (20b black)
@@ -141,6 +142,7 @@ const BUILT_IN_EFFECTS: Record<string, CustomEffect> = {
   // Reality Fracture (17a): black.
   ...FRA_BLACK_EFFECTS,
   ...ECL_BLACK_EFFECTS, // Lorwyn Eclipsed (18b, black)
+  ...WOE_BLACK_EFFECTS, // Wilds of Eldraine (23b black)
   ...HOB_BLACK_EFFECTS, // The Hobbit (20b black)
   // Reality Fracture (17a, colorless).
   ...FRA_COLORLESS_EFFECTS,
