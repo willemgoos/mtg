@@ -4756,12 +4756,411 @@ export const ARENA_SOS_PACKETS: Packet[] = [
   },
 ];
 
+/**
+ * MTG Arena's ten Wilds of Eldraine packets, from https://mtgabuddy.com/en/jump-in-packet-list
+ * (`scripts/data/arena-jumpin-packets.json`): 12 cards each, seven or eight fixed (one of them a land
+ * in most) and four or five random slots; the colour packets are mono-colour or two-colour. The basics
+ * come from the top-up to 40 (`addBasics` in `index.ts`).
+ */
+export const ARENA_WOE_PACKETS: Packet[] = [
+  {
+    id: 'woe-charmed',
+    name: 'Charmed',
+    colors: ['W'],
+    face: 'The Princess Takes Flight',
+    blurb: 'Knights and enchantments protect the realm with a little charm',
+    set: 'woe',
+    source: 'arena',
+    spells: [
+      ['Slumbering Keepguard', 1],
+      ['Hopeful Vigil', 1],
+      ['Cursed Courtier', 1],
+      ['Knight of Doves', 1],
+      ['Dutiful Griffin', 1],
+      ['Cooped Up', 1],
+      ['The Princess Takes Flight', 1],
+    ],
+    slots: [
+      [
+        { card: 'Spellbook Vendor', weight: 80 },
+        { card: 'Virtue of Loyalty', weight: 20 },
+      ],
+      [
+        { card: 'Rimefur Reindeer', weight: 50 },
+        { card: 'Besotted Knight', weight: 50 },
+      ],
+      [
+        { card: 'Break the Spell', weight: 50 },
+        { card: 'Return Triumphant', weight: 50 },
+      ],
+      [
+        { card: "Archon's Glory", weight: 50 },
+        { card: "Kellan's Lightblades", weight: 50 },
+      ],
+    ],
+    lands: [['The Fair Basilica', 1]],
+  },
+  {
+    id: 'woe-apprentice',
+    name: 'Apprentice',
+    colors: ['U'],
+    face: 'Ingenious Prodigy',
+    blurb: 'Wizards cast cheap spells and outwit the opposition',
+    set: 'woe',
+    source: 'arena',
+    spells: [
+      ['Aquatic Alchemist', 1],
+      ['Mocking Sprite', 1],
+      ['Vantress Transmuter', 1],
+      ["Beluna's Gatekeeper", 1],
+      ["Gadwick's First Duel", 1],
+      ['Succumb to the Cold', 1],
+      ['Quick Study', 1],
+    ],
+    slots: [
+      [
+        { card: 'Ingenious Prodigy', weight: 50 },
+        { card: 'Horned Loch-Whale', weight: 50 },
+      ],
+      [
+        { card: 'Picklock Prankster', weight: 50 },
+        { card: 'Tenacious Tomeseeker', weight: 50 },
+      ],
+      [
+        { card: 'Splashy Spellcaster', weight: 50 },
+        { card: 'Chancellor of Tales', weight: 50 },
+      ],
+      [
+        { card: 'Water Wings', weight: 50 },
+        { card: "Johann's Stopgap", weight: 50 },
+      ],
+    ],
+    lands: [['The Surgical Bay', 1]],
+  },
+  {
+    id: 'woe-bittersweet',
+    name: 'Bittersweet',
+    colors: ['B'],
+    face: 'Gumdrop Poisoner',
+    blurb: 'Sweet-toothed witches poison and haunt what is left',
+    set: 'woe',
+    source: 'arena',
+    spells: [
+      ['Mintstrosity', 1],
+      ['Sweettooth Witch', 1],
+      ['High Fae Negotiator', 1],
+      ["The Witch's Vanity", 1],
+      ['Back for Seconds', 1],
+      ['Taken by Nightmares', 1],
+    ],
+    slots: [
+      [
+        { card: 'Gumdrop Poisoner', weight: 80 },
+        { card: 'Virtue of Persistence', weight: 20 },
+      ],
+      [
+        { card: 'Conceited Witch', weight: 50 },
+        { card: 'Voracious Vermin', weight: 50 },
+      ],
+      [
+        { card: 'Stingblade Assassin', weight: 50 },
+        { card: 'Scream Puff', weight: 50 },
+      ],
+      [
+        { card: 'Candy Grapple', weight: 50 },
+        { card: "Rowan's Grim Search", weight: 50 },
+      ],
+    ],
+    lands: [['The Dross Pits', 1]],
+  },
+  {
+    id: 'woe-celebration',
+    name: 'Celebration',
+    colors: ['R'],
+    face: 'Goddric, Cloaked Reveler',
+    blurb: 'Party crashers swing wide and burn what is in the way',
+    set: 'woe',
+    source: 'arena',
+    spells: [
+      ['Embereth Veteran', 1],
+      ['Grand Ball Guest', 1],
+      ['Belligerent of the Ball', 1],
+      ['Edgewall Pack', 1],
+      ['Torch the Tower', 1],
+      ['Bespoke Battlegarb', 1],
+      ['Korvold and the Noble Thief', 1],
+    ],
+    slots: [
+      [
+        { card: 'Ratcatcher Trainee', weight: 50 },
+        { card: 'Skewer Slinger', weight: 50 },
+      ],
+      [
+        { card: 'Raging Battle Mouse', weight: 50 },
+        { card: 'Goddric, Cloaked Reveler', weight: 50 },
+      ],
+      [
+        { card: 'Redcap Thief', weight: 50 },
+        { card: 'Merry Bards', weight: 50 },
+      ],
+      [
+        { card: 'Frantic Firebolt', weight: 50 },
+        { card: 'Cut In', weight: 50 },
+      ],
+    ],
+    lands: [['The Autonomous Furnace', 1]],
+  },
+  {
+    id: 'woe-hungry',
+    name: 'Hungry',
+    colors: ['G'],
+    face: 'Bramble Familiar',
+    blurb: 'Food-loving beasts and giants grow big and hit hard',
+    set: 'woe',
+    source: 'arena',
+    spells: [
+      ['Tough Cookie', 1],
+      ['Welcome to Sweettooth', 1],
+      ['Hollow Scavenger', 1],
+      ["Agatha's Champion", 1],
+      ['Hamlet Glutton', 1],
+      ["Night of the Sweets' Revenge", 1],
+      ['Curse of the Werefox', 1],
+    ],
+    slots: [
+      [
+        { card: 'Bramble Familiar', weight: 50 },
+        { card: 'Elvish Archivist', weight: 50 },
+      ],
+      [
+        { card: 'Skybeast Tracker', weight: 50 },
+        { card: 'Beanstalk Wurm', weight: 50 },
+      ],
+      [
+        { card: 'Leaping Ambush', weight: 50 },
+        { card: 'Titanic Growth', weight: 50 },
+      ],
+      [
+        { card: 'Brave the Wilds', weight: 50 },
+        { card: 'Return from the Wilds', weight: 50 },
+      ],
+    ],
+    lands: [['The Hunter Maze', 1]],
+  },
+  {
+    id: 'woe-freezing',
+    name: 'Freezing',
+    colors: ['W', 'U'],
+    face: 'Hylda of the Icy Crown',
+    blurb: 'Freeze creatures in place and let Hylda finish the job',
+    set: 'woe',
+    source: 'arena',
+    spells: [
+      ['Snaremaster Sprite', 1],
+      ['Frostbridge Guard', 1],
+      ['Living Lectern', 1],
+      ['Icewrought Sentry', 1],
+      ['Sharae of Numbing Depths', 1],
+      ['Charmed Clothier', 1],
+      ['Solitary Sanctuary', 1],
+    ],
+    slots: [
+      [
+        { card: 'Protective Parents', weight: 50 },
+        { card: 'Stockpiling Celebrant', weight: 50 },
+      ],
+      [
+        { card: 'Plunge into Winter', weight: 50 },
+        { card: 'Freeze in Place', weight: 50 },
+      ],
+      [
+        { card: 'Bitter Chill', weight: 50 },
+        { card: 'Threadbind Clique', weight: 50 },
+      ],
+      [
+        { card: "Hylda's Crown of Winter", weight: 80 },
+        { card: 'Hylda of the Icy Crown', weight: 20 },
+      ],
+      [
+        { card: 'The Fair Basilica', weight: 50 },
+        { card: 'The Surgical Bay', weight: 50 },
+      ],
+    ],
+    lands: [],
+  },
+  {
+    id: 'woe-faeries',
+    name: 'Faeries',
+    colors: ['U', 'B'],
+    face: 'Obyra, Dreaming Duelist',
+    blurb: 'Faeries flicker in, trick the opponent and strike from the dark',
+    set: 'woe',
+    source: 'arena',
+    spells: [
+      ['Obyra, Dreaming Duelist', 1],
+      ['Barrow Naughty', 1],
+      ['Mocking Sprite', 1],
+      ["Obyra's Attendants", 1],
+      ['Faerie Fencing', 1],
+      ['Spell Stutter', 1],
+      ['Into the Fae Court', 1],
+    ],
+    slots: [
+      [
+        { card: 'Faerie Dreamthief', weight: 50 },
+        { card: 'Picklock Prankster', weight: 50 },
+      ],
+      [
+        { card: "Talion's Messenger", weight: 80 },
+        { card: 'Talion, the Kindly Lord', weight: 20 },
+      ],
+      [
+        { card: 'Spellscorn Coven', weight: 50 },
+        { card: 'Dream Spoilers', weight: 50 },
+      ],
+      [
+        { card: 'Feed the Cauldron', weight: 50 },
+        { card: 'Misleading Motes', weight: 50 },
+      ],
+      [
+        { card: 'The Surgical Bay', weight: 50 },
+        { card: 'The Dross Pits', weight: 50 },
+      ],
+    ],
+    lands: [],
+  },
+  {
+    id: 'woe-rats',
+    name: 'Rats',
+    colors: ['B', 'R'],
+    face: 'Lord Skitter, Sewer King',
+    blurb: 'A rat swarm gnaws through the opposition under Lord Skitter',
+    set: 'woe',
+    source: 'arena',
+    spells: [
+      ['Harried Spearguard', 1],
+      ['Ratcatcher Trainee', 1],
+      ['Totentanz, Swarm Piper', 1],
+      ["Lord Skitter's Butcher", 1],
+      ['Twisted Sewer-Witch', 1],
+      ['Rat Out', 1],
+      ['Gnawing Crescendo', 1],
+    ],
+    slots: [
+      [
+        { card: 'Tattered Ratter', weight: 50 },
+        { card: 'Callous Sell-Sword', weight: 50 },
+      ],
+      [
+        { card: 'Lord Skitter, Sewer King', weight: 50 },
+        { card: 'Redcap Gutter-Dweller', weight: 50 },
+      ],
+      [
+        { card: 'Stingblade Assassin', weight: 50 },
+        { card: 'Edgewall Pack', weight: 50 },
+      ],
+      [
+        { card: 'Torch the Tower', weight: 50 },
+        { card: 'Candy Grapple', weight: 50 },
+      ],
+      [
+        { card: 'The Dross Pits', weight: 50 },
+        { card: 'The Autonomous Furnace', weight: 50 },
+      ],
+    ],
+    lands: [],
+  },
+  {
+    id: 'woe-monsters',
+    name: 'Monsters',
+    colors: ['R', 'G'],
+    face: 'Ruby, Daring Tracker',
+    blurb: 'Werefoxes, giants and wurms smash through with monstrous rage',
+    set: 'woe',
+    source: 'arena',
+    spells: [
+      ['Territorial Witchstalker', 1],
+      ['Ruby, Daring Tracker', 1],
+      ['Ferocious Werefox', 1],
+      ['Beanstalk Wurm', 1],
+      ['Stormkeld Vanguard', 1],
+      ['Monstrous Rage', 1],
+      ['Curse of the Werefox', 1],
+    ],
+    slots: [
+      [
+        { card: 'Picnic Ruiner', weight: 50 },
+        { card: 'Boundary Lands Ranger', weight: 50 },
+      ],
+      [
+        { card: 'Minecart Daredevil', weight: 50 },
+        { card: 'Verdant Outrider', weight: 50 },
+      ],
+      [
+        { card: "The Huntsman's Redemption", weight: 80 },
+        { card: 'Realm-Scorcher Hellkite', weight: 20 },
+      ],
+      [
+        { card: 'Bestial Bloodline', weight: 50 },
+        { card: "Witch's Mark", weight: 50 },
+      ],
+      [
+        { card: 'The Autonomous Furnace', weight: 50 },
+        { card: 'The Hunter Maze', weight: 50 },
+      ],
+    ],
+    lands: [],
+  },
+  {
+    id: 'woe-dress-up',
+    name: 'Dress Up',
+    colors: ['W', 'G'],
+    face: 'Yenna, Redtooth Regent',
+    blurb: 'Aura-clad creatures and knights dressed to impress',
+    set: 'woe',
+    source: 'arena',
+    spells: [
+      ['Toadstool Admirer', 1],
+      ['Unassuming Sage', 1],
+      ['Redtooth Genealogist', 1],
+      ['Syr Armont, the Redeemer', 1],
+      ['Royal Treatment', 1],
+      ['Cooped Up', 1],
+      ['Graceful Takedown', 1],
+    ],
+    slots: [
+      [
+        { card: 'Troublemaker Ouphe', weight: 50 },
+        { card: 'Armory Mice', weight: 50 },
+      ],
+      [
+        { card: 'Woodland Acolyte', weight: 50 },
+        { card: 'Tanglespan Lookout', weight: 50 },
+      ],
+      [
+        { card: 'Yenna, Redtooth Regent', weight: 50 },
+        { card: 'Archon of the Wild Rose', weight: 50 },
+      ],
+      [
+        { card: 'Tuinvale Guide', weight: 50 },
+        { card: 'Besotted Knight', weight: 50 },
+      ],
+      [
+        { card: 'The Hunter Maze', weight: 50 },
+        { card: 'The Fair Basilica', weight: 50 },
+      ],
+    ],
+    lands: [],
+  },
+];
+
 export const PACKETS: Packet[] = [
   ...OWN_PACKETS,
   ...ARENA_BLB_PACKETS,
   ...ARENA_FDN_PACKETS,
   ...ARENA_ECL_PACKETS,
   ...ARENA_TDM_PACKETS,
+  ...ARENA_WOE_PACKETS,
   ...ARENA_SOS_PACKETS,
   ...MARVEL_JUMPSTART_PACKETS,
   ...LTR_JUMPSTART_PACKETS,

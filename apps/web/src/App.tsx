@@ -189,6 +189,14 @@ const SECTIONS: Section[] = [
     set: 'ltr' as const,
   },
   {
+    title: 'Wilds of Eldraine story decks',
+    group: 'Wilds of Eldraine',
+    kind: 'starter' as const,
+    blurb: 'Arena’s fifteen Story Decks: ten two-colour and five three-colour 60-card decks',
+    series: 'starter' as const,
+    set: 'woe' as const,
+  },
+  {
     title: 'Color Challenge',
     group: 'Color Challenge',
     blurb: 'The mono-colour decks Sparky plays against new players',
@@ -205,7 +213,7 @@ const SECTIONS: Section[] = [
     kind?: 'starter' | 'draft';
     blurb: string;
     series: string;
-    set?: 'blb' | 'msh' | 'fin' | 'stx' | 'sos' | 'fra' | 'ecl' | 'tdm' | 'hob' | 'ltr';
+    set?: 'blb' | 'msh' | 'fin' | 'stx' | 'sos' | 'fra' | 'ecl' | 'tdm' | 'hob' | 'ltr' | 'woe';
   }) => {
     const decks = DECKS.filter((d) => d.series === series && d.set === set);
     return { ...s, decks: [...decks.filter(isPlayable), ...decks.filter((d) => !isPlayable(d))] };

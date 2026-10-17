@@ -25,6 +25,7 @@ export const SETS = [
   { key: 'tdm', name: 'Tarkir: Dragonstorm' },
   { key: 'hob', name: 'The Hobbit' },
   { key: 'ltr', name: 'The Lord of the Rings' },
+  { key: 'woe', name: 'Wilds of Eldraine' },
 ] as const;
 
 export type SetKey = (typeof SETS)[number]['key'];
