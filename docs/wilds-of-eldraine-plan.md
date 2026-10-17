@@ -197,6 +197,12 @@ block.
 
 ## Status and handoff
 
-- **23a done** (17 October 2026) on its own branch; see "Phase 23a" above. 23b can start once it and the set wiring are merged.
+- **Wilds of Eldraine is complete** (23a–23d, 17 October 2026), merged into `main`. Rules gaps are in the two Wilds of Eldraine
+  sections of `docs/shortcuts.md`.
+- **23a done**: see "Phase 23a" above.
+- **23b done**: the 209 Story Deck and Jump In cards, six Sonnet agents (white, blue, black, red, green, and multicolour with
+  colorless and lands). Shared tokens: the Rat is `woe-rat-token` (black.ts), the Knight, Human and Bird are white.ts's.
 - **23c done** (17 October 2026): `WILDS_OF_ELDRAINE_STORY_DECKS` (decks.ts, generated from `woe-story-decks.json`; ten two-colour, five three-colour; blurbs in `deckArt.ts`, art from the face card) in `DECKS` and a "Wilds of Eldraine story decks" group in the deck picker (App.tsx); `ARENA_WOE_PACKETS` (jumpin.ts, from the ten WOE entries of `arena-jumpin-packets.json`) in `PACKETS`, the Jump In picker group and Quick match set `woe`. Tests: `woe-story-decks.test.ts` (cards), `jumpin.test.ts`, `woe-decks.test.ts` (ai; `WOE_WINRATES=1` prints wins). Bittersweet has two Mintstrosity (Wizards lists it on two lines). Five packets have their land as a random slot, so they have `lands: []`. Season/Expedition are not wired: they read booster sheets, and WOE has none until 23d.
 - **23d done** (17 October 2026): all 256 WOE cards are built (23b: 209 cards in six groups; 23d: the other 47 main-set cards, see `woe-status.ts`). Boosters: `packages/cards/src/woe/booster-list.ts` (`fetch-booster-list.ts woe`, collector numbers 1 to 261 at WOE rarity) and `wildsOfEldraineBoosterSheets()`; `PackSet` `woe` in Expedition and Sealed (Chaos Sealed follows the set list), Season pack kind `wildsOfEldraine` (`WILDS_OF_ELDRAINE_SHEETS`) with the 15 Story Decks in `SEASON_STARTERS` (like Lord of the Rings), the deck builder set name and card search set. The pack wrapper shows Ashiok, Wicked Manipulator. Tests in `expedition.test.ts`, `sealed.test.ts`, `seasonPacks.test.ts`.
+- **Tests:** the full suite passes except `fra-decks-3` (Grave Harvest's random games take about 20 s against the 5 s default;
+  it fails the same way on `main`). `foundations-batch` takes about 56 s here against 50 s on `main` (limit 60 s).
