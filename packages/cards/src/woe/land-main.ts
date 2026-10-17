@@ -2,11 +2,16 @@ import type { CardDefinition } from '@mtg/engine';
 import type { Behavior } from '../build.ts';
 
 /**
- * Wilds of Eldraine (23): land (rest of the main set) cards. Printed characteristics come
- * from Scryfall; this file has the rules text. A back face (Adventure spell side) is keyed
- * by its own name in WOE_LAND_MAIN_BACKS. See docs/wilds-of-eldraine-plan.md.
+ * Wilds of Eldraine (23d): the basic lands of the set (their mana abilities come from the basic land types).
+ * See docs/wilds-of-eldraine-plan.md.
  */
-export const WOE_LAND_MAIN: Record<string, Behavior> = {};
+export const WOE_LAND_MAIN: Record<string, Behavior> = {
+  Plains: {},
+  Island: {},
+  Swamp: {},
+  Mountain: {},
+  Forest: {},
+};
 
 /** Back faces: keyed by their own names. */
 export const WOE_LAND_MAIN_BACKS: Record<string, Behavior> = {};

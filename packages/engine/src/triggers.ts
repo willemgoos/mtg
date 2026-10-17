@@ -29,6 +29,7 @@ import { detectLtrMain } from './ltr-main-rules.ts'; // Lord of the Rings (22)
 import { doubleAttackTriggers, TDM_MISC_CONDITIONS } from './tdm-misc-effects.ts';
 import { WOE_BLACK_CONDITIONS } from './woe-black-effects.ts'; // Wilds of Eldraine (23b black)
 import { woeCombatEmblems } from './woe-green-effects.ts'; // Wilds of Eldraine (23b green)
+import { woeEnterExtraTriggers } from './woe-main-effects.ts'; // Wilds of Eldraine (23d main)
 import {
   celebrating,
   defHasAdventure,
@@ -844,6 +845,18 @@ function detect(ctx: Ctx, ev: GameEvent): void {
               o.controller === moved.controller,
             moved,
           );
+        // Wilds of Eldraine (23d main): Extraordinary Journey, a nontoken creature that entered from exile or was cast from exile.
+        if (
+          isCreature &&
+          !suppressed &&
+          !moved.isToken &&
+          (ev.from === 'exile' || (ev.from === 'stack' && moved.castFromExileZone))
+        )
+          forEachBattlefieldTrigger(
+            ctx,
+            (_o, a) => a.trigger.on === 'woeNontokenCreaturesEnterFromExile',
+            moved,
+          );
         forEachBattlefieldTrigger(
           ctx,
           (o, a) => {
@@ -904,6 +917,8 @@ function detect(ctx: Ctx, ev: GameEvent): void {
         }
         // Final Fantasy (11c): entering permanents. Traveling Chocobo: a land or Bird you
         // control entering triggers your permanents' abilities an additional time.
+        // Wilds of Eldraine (23d main): Virtue of Knowledge (counted before Traveling Chocobo's copies are added: the extra times add up).
+        const woeExtra = woeEnterExtraTriggers(ctx, before);
         const twice = s.battlefield.filter(
           (id) =>
             obj(ctx, id).controller === moved.controller &&
@@ -920,6 +935,7 @@ function detect(ctx: Ctx, ev: GameEvent): void {
             .filter((t) => t.controller === moved.controller);
           for (let k = 0; k < twice; k++) for (const t of caused) s.pendingTriggers.push({ ...t });
         }
+        woeExtra(); // Wilds of Eldraine (23d main)
         // Lorwyn Eclipsed (18a): evoke, "when it enters, if its evoke cost was paid, sacrifice it". It goes on the
         // stack first, so it resolves after the enter triggers.
         if (moved.evoked && !suppressed)

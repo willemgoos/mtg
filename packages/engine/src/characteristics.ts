@@ -6,6 +6,7 @@ import { vividCount } from './ecl-18a.ts';
 import { staticallyCreature } from './ltr-black-effects.ts'; // Lord of the Rings (21b black)
 import { ltrCombatKeywordsApply, ltrGcRareFilterFails } from './ltr-gc-rare-effects.ts'; // Lord of the Rings (21d gc-rare)
 import { woeMultiFilterFails } from './woe-multi-effects.ts'; // Wilds of Eldraine (23b multi)
+import { woeMainAmount } from './woe-main-effects.ts'; // Wilds of Eldraine (23d main)
 import { spellsCastThisTurn } from './tdm-19a.ts';
 import { checkCondition } from './triggers.ts';
 import { defHasAdventure } from './woe-23a.ts'; // Wilds of Eldraine (23a)
@@ -386,6 +387,11 @@ export function countOf(
 ): number {
   if (typeof a === 'number') return a;
   if ('multiply' in a) return a.multiply * countOf(ctx, player, a.amount, printed, sourceId);
+  // Wilds of Eldraine (23d main): Cruel Somnophage, Tangled Colony.
+  {
+    const woe = woeMainAmount(ctx, a, sourceId);
+    if (woe !== undefined) return woe;
+  }
   // The Hobbit (20b blue): Master's Councillors, "each graveyard with seven or more cards in it".
   if ('graveyardsWithAtLeast' in a)
     return (['p1', 'p2'] as const).filter(

@@ -1200,6 +1200,9 @@ export type TriggerDef =
    * (use with `batch` and `oncePerTurn`; the creatures that did are the `subjects`).
    */
   | { on: 'creaturesEnterFromOrCastFromGraveyard' }
+  // Wilds of Eldraine (23d main)
+  /** Extraordinary Journey: whenever one or more nontoken creatures enter, if any entered from exile or was cast from exile (use with `oncePerTurn`). */
+  | { on: 'woeNontokenCreaturesEnterFromExile' }
   // Lorwyn Eclipsed (18c, theme decks): Magmatic Galleon
   /** Whenever one or more creatures your opponents control are dealt excess noncombat damage (use with `batch`; the amount is the excess). */
   | { on: 'opponentCreaturesDealtExcessNoncombat' }
@@ -1668,6 +1671,9 @@ export interface CardFilter {
   diedThisTurn?: boolean;
   /** "Creature with power X": X is the value paid for the ability's {X}; the ability's actions only list targets of that power (Ent-Draught Basin). */
   powerEqualsX?: boolean;
+  // Wilds of Eldraine (23d main): Likeness Looter, "target creature card in your graveyard with mana value X"
+  /** An activated ability's target whose mana value is the X paid. */
+  manaValueEqualsX?: boolean;
   // Lord of the Rings (21d gc-rare)
   /** A creature card that shares no creature type with a creature its controller controls (Radagast the Brown). */
   ltrNoSharedType?: boolean;
@@ -1977,6 +1983,11 @@ export type Amount =
   // Marvel Super Heroes Jumpstart (Lethal)
   /** Creature cards in the opponent's graveyard (Origin of Black Widow). */
   | { count: 'opponentCreatureCardsInGraveyard' }
+  // Wilds of Eldraine (23d main)
+  /** Cruel Somnophage: the number of creature cards in all graveyards. */
+  | { count: 'woeCreatureCardsInAllGraveyards' }
+  /** Tangled Colony: the damage dealt to the source this turn (last known, once it has died). */
+  | { count: 'woeDamageOnSelf' }
   // The Fantastic Four (9d).
   /** Colours among permanents you control and spells you've cast this turn (First Family). */
   | { count: 'colorsAmongPermanentsAndSpells' }
@@ -2567,6 +2578,9 @@ export type EffectDef =
       // Lorwyn Eclipsed (18b, white): Kinscaer Sentry
       /** Mana value at most this amount, read as the effect resolves ("where X is the number of attacking creatures you control"). */
       maxManaValueAmount?: Amount;
+      // Wilds of Eldraine (23d main): Blossoming Tortoise, "return a land card" (not "you may")
+      /** You must choose a card when there is one. */
+      required?: boolean;
     }
   // Strixhaven (13c)
   /** The resolving spell returns to its owner's hand rather than the graveyard (Journey to the Oracle). */
@@ -2688,7 +2702,15 @@ export type EffectDef =
       /** Search your library (Bushwhack, Circuitous Route). Shuffles afterwards unless `shuffle` is false. */
       kind: 'searchLibrary';
       filter: 'basicLand' | 'basicLandOrGate' | CardFilter;
-      to: 'hand' | 'battlefieldTapped' | 'battlefield' | 'graveyard' | 'libraryTop' | 'castFree';
+      to:
+        | 'hand'
+        | 'battlefieldTapped'
+        | 'battlefield'
+        | 'graveyard'
+        | 'libraryTop'
+        | 'castFree'
+        // Wilds of Eldraine (23d main): Beseech the Mirror, "exile it face down"
+        | 'hideaway';
       /** Unrestricted tutors cannot fail to find a card in a nonempty library. */
       required?: boolean;
       shuffle?: boolean;
@@ -3827,6 +3849,13 @@ export type StaticDef =
    * control to trigger, that ability triggers an additional time" (Gandalf the White).
    */
   | { kind: 'ltrLegendaryArtifactTriggersTwice' }
+  // Wilds of Eldraine (23d main)
+  /** Virtue of Knowledge: if a permanent entering causes a triggered ability of a permanent you control to trigger, it triggers an additional time. */
+  | { kind: 'woeEntersTriggerTwice' }
+  /** Virtue of Strength: if you tap a basic land for mana, it produces three times as much of that mana instead. */
+  | { kind: 'woeTripleBasicMana' }
+  /** Blossoming Tortoise: activated abilities of lands you control cost {N} less to activate (the generic part only, down to nothing). */
+  | { kind: 'woeLandAbilitiesCostLess'; amount: number }
   /** This creature can't be blocked. */
   | { kind: 'cantBeBlocked' }
   /** "Other creatures you control have prowess" (Bria, Riptide Rogue). */
@@ -4127,6 +4156,19 @@ export interface GameObject {
   kicked?: boolean;
   /** Its power as it last left the battlefield (last known information). */
   lastPower?: number;
+  // Wilds of Eldraine (23d main)
+  /** The damage marked on it as it last left the battlefield (Tangled Colony). */
+  lastDamage?: number;
+  /** It was cast from exile (Extraordinary Journey: "entered from exile or was cast from exile"). */
+  castFromExileZone?: boolean;
+  /** Exiled face down: only this player may look at it (Beseech the Mirror, Expensive Taste). */
+  woeFaceDown?: PlayerId;
+  /** The Irencrag has become Everflame, Heroes' Legacy for good. */
+  woeEverflame?: boolean;
+  /** Mosswood Dreadknight: this player may cast its Adventure from their graveyard through the end of this turn number (while it stays at this zone change). */
+  woeAdventureCast?: { player: PlayerId; zcc: number; until: number };
+  /** Likeness Looter: the keywords its copy has besides the copied ones. */
+  copyAddedKeywords?: Keyword[];
   /** What it was attached to as it last left the battlefield (for "when enchanted creature dies"). */
   lastAttachedTo?: ObjectRef;
   /** Subtypes gained on top of the printed ones (Infernal Vessel's Demon). */
@@ -4810,7 +4852,7 @@ export interface TurnState {
   // Lorwyn Eclipsed (18b, special): Mirrormind Crown
   // The Hobbit (20b black): Azog, Moria's Ruin
   /** Tokens that left the battlefield this turn (they cease to exist): what they were, by id. */
-  tokenLki?: Record<ObjectId, { power: number; controller: PlayerId }>;
+  tokenLki?: Record<ObjectId, { power: number; controller: PlayerId; damage?: number }>;
   /** Players whose first token creation this turn has happened ("the first time you would create one or more tokens each turn"). */
   firstTokensDone?: PlayerId[];
 }
@@ -5651,7 +5693,9 @@ export type Action =
         // Lorwyn Eclipsed (18a): Dawnhand Dissident
         | 'exiledWithSelf'
         // The Hobbit (20b black): Inside Information.
-        | 'lifeForMana';
+        | 'lifeForMana'
+        // Wilds of Eldraine (23d main): Mosswood Dreadknight, its Adventure from the graveyard.
+        | 'woeAdventure';
       /** Mockingbird: the creature to enter as a copy of. */
       copyOf?: ObjectId;
       /** Rottenmouth Viper: permanents sacrificed to make it cheaper. */

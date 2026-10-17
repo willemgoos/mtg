@@ -1,6 +1,7 @@
 import { commanderColors, legendaryColors, opponentLandColors } from './brawl.ts';
 import { damageSourceFor, dealDamage } from './effects.ts';
 import { payLife } from './woe-black-effects.ts'; // Wilds of Eldraine (23b black)
+import { woeTripleExtra } from './woe-main-effects.ts'; // Wilds of Eldraine (23d main)
 import {
   abilitiesLocked,
   canTapForAbility,
@@ -300,6 +301,12 @@ export function manaSources(
       if (def(ctx, id).supertypes.includes('Basic') && (lavaleaper ??= basicLandsAddExtra(ctx))) {
         out.push({ ...src });
         if (src.produces.length > 1) for (const x of out) if (x.id === id) x.oneColor = true;
+      }
+      // Wilds of Eldraine (23d main): Virtue of Strength, "if you tap a basic land for mana, it produces three times as much".
+      if (def(ctx, id).supertypes.includes('Basic')) {
+        const more = woeTripleExtra(ctx, player);
+        for (let i = 0; i < more; i++) out.push({ ...src });
+        if (more > 0 && src.produces.length > 1) for (const x of out) if (x.id === id) x.oneColor = true;
       }
       // Reality Fracture (17a): Molten Tide: "whenever you tap a Mountain for mana, add an additional {R}".
       if (

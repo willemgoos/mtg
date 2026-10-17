@@ -35,6 +35,7 @@ import {
 } from './ecl-18a.ts';
 import { cantBeSacrificed, harmonizeTaps, isHarmonizeCast } from './tdm-19a.ts';
 import { canSacrificePermanents, sacrificeWays } from './woe-white-effects.ts'; // Wilds of Eldraine (23b white)
+import { woeAdventureReady, woeTargetLimit } from './woe-main-effects.ts'; // Wilds of Eldraine (23d main)
 import {
   abilityTags,
   artifactHelpers,
@@ -145,6 +146,7 @@ export function castableCards(ctx: Ctx, player: PlayerId): ObjectId[] {
       d.castFromGraveyardOrExile ||
       d.castFromGraveyardFinality || // Tarkir: Dragonstorm (19b, black)
       mayhemReady(ctx, id) ||
+      woeAdventureReady(ctx, player, id) || // Wilds of Eldraine (23d main): Mosswood Dreadknight
       graveyardVias(ctx, player, id).length
     )
       out.push(id);
@@ -317,6 +319,8 @@ export function graveyardVias(
   if (d.types.includes('Artifact') && hasStatic(ctx, player, 'castArtifactsFromGraveyard'))
     out.push('noctis');
   if (playsFromGraveyard(ctx, player)) out.push('hades');
+  // Wilds of Eldraine (23d main): Mosswood Dreadknight (only the Adventure side: `d` is the Adventure while its face is checked).
+  if (d.subtypes.includes('Adventure') && woeAdventureReady(ctx, player, card)) out.push('woeAdventure');
   return out;
 }
 
@@ -895,7 +899,9 @@ function priorityActions(
         obj(ctx, card).zone === 'hand' ||
         now !== undefined ||
         // Strixhaven Brawl (15a): Disturb, from the graveyard.
-        (obj(ctx, card).zone === 'graveyard' && def(ctx, card).disturb))
+        (obj(ctx, card).zone === 'graveyard' && def(ctx, card).disturb) ||
+        // Wilds of Eldraine (23d main): Mosswood Dreadknight, its Adventure from the graveyard.
+        woeAdventureReady(ctx, player, card))
     ) {
       const from = out.length;
       withBackFace(ctx, card, () => {
@@ -1258,10 +1264,12 @@ function priorityActions(
       const xSpec = a.targets[a.targets.length - 1]?.xTargets ? a.targets[a.targets.length - 1] : undefined;
       // Lord of the Rings (21b white): Ent-Draught Basin, "target creature with power X": X may be 0, and only creatures of power X are targets.
       const powerX = a.targets.findIndex((t) => t.filter?.powerEqualsX);
+      // Wilds of Eldraine (23d main): Likeness Looter, "target creature card in your graveyard with mana value X".
+      const valueX = a.targets.findIndex((t) => t.filter?.manaValueEqualsX);
       if (mana?.x)
-        for (const base of xSpec || powerX >= 0 ? out.splice(firstOfAbility) : out.slice(firstOfAbility))
+        for (const base of xSpec || powerX >= 0 || valueX >= 0 ? out.splice(firstOfAbility) : out.slice(firstOfAbility))
           for (
-            let x = powerX >= 0 ? 0 : 1;
+            let x = powerX >= 0 || valueX >= 0 ? 0 : 1;
             x <=
             (xSpec ? Math.min(10, targetCandidates(ctx, xSpec, { controller: player, sourceId: source }).length) : 10);
             x++
@@ -1272,6 +1280,10 @@ function priorityActions(
             if (powerX >= 0) {
               const tg = (base as { targets: TargetChoice[] }).targets[powerX];
               if (!tg || !('object' in tg) || characteristics(ctx, tg.object.id).power !== x) continue;
+            }
+            if (valueX >= 0) {
+              const tg = (base as { targets: TargetChoice[] }).targets[valueX];
+              if (!tg || !('object' in tg) || manaValue(def(ctx, tg.object.id).manaCost) !== x) continue;
             }
             out.push({ ...base, x } as Action);
           }
@@ -1720,7 +1732,7 @@ export function getLegalActions(ctx: Ctx, player: PlayerId): Action[] {
           (spec.maxTargets !== undefined && picked.length >= spec.maxTargets) ||
           // Lorwyn Eclipsed (18b, green): Prismabasher, "up to X target creatures".
           (spec.maxAmount !== undefined &&
-            picked.length >= countOf(ctx, player, spec.maxAmount, false, t.source.id));
+            picked.length >= woeTargetLimit(ctx, player, spec.maxAmount, t.source.id)); // Wilds of Eldraine (23d main): X
         for (const t of full ? [] : targetCandidates(ctx, spec, src))
           if (
             !taken.has(key(t)) &&

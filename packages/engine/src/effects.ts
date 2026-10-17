@@ -78,6 +78,7 @@ import { SOS_14B_C_CHOOSERS } from './sos-14b-c-effects.ts';
 import { runAnimate, runCreateRole } from './woe-23a.ts'; // Wilds of Eldraine (23a)
 import { WOE_WHITE_CHOOSERS, woeCreatureDamagePrevented } from './woe-white-effects.ts'; // Wilds of Eldraine (23b white)
 import { payLife } from './woe-black-effects.ts'; // Wilds of Eldraine (23b black)
+import { woeMainAmount } from './woe-main-effects.ts'; // Wilds of Eldraine (23d main)
 import type {
   AbilityDef,
   CardDefId,
@@ -857,6 +858,11 @@ function playersOf(ctx: Ctx, es: EffectSource, ref: Ref): PlayerId[] {
 export function resolveAmount(ctx: Ctx, es: EffectSource, amount: Amount): number {
   if (typeof amount === 'number') return amount;
   if ('multiply' in amount) return amount.multiply * resolveAmount(ctx, es, amount.amount);
+  // Wilds of Eldraine (23d main): Cruel Somnophage, Tangled Colony.
+  {
+    const woe = woeMainAmount(ctx, amount, es.source?.id);
+    if (woe !== undefined) return woe;
+  }
   // Reality Fracture (17a): Dark Matter Manipulator, Recursive Recruitment
   if ('floorDiv' in amount)
     return Math.floor(resolveAmount(ctx, es, amount.amount) / amount.floorDiv);
@@ -1997,6 +2003,7 @@ export function runEffects(
           shuffle: false,
           ...(e.counter ? { counter: e.counter } : {}),
           ...(e.attackingIf ? { attackingIf: e.attackingIf } : {}),
+          ...(e.required ? { required: true } : {}), // Wilds of Eldraine (23d main): Blossoming Tortoise
           resume,
           thenPriority,
         };
