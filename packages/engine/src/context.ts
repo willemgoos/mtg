@@ -62,6 +62,7 @@ import { ARCHIVE_16_EFFECTS } from './archive-16-effects.ts';
 import { FRA_MULTI_B_EFFECTS } from './fra-multi-b-effects.ts';
 import { ECL_MULTI_B_EFFECTS, defsWithStatic } from './ecl-multi-b-effects.ts';
 import { HOB_MULTICOLOUR_EFFECTS, withGraveyardElfAbilities } from './hob-multicolour-effects.ts'; // The Hobbit (20b multicolour)
+import { WOE_MULTI_EFFECTS, withCauldronAbilities } from './woe-multi-effects.ts'; // Wilds of Eldraine (23b multi)
 import { STX_13C_A_EFFECTS } from './stx-13c-a-effects.ts';
 import { STX_13C_B_EFFECTS } from './stx-13c-b-effects.ts';
 import { STX_13C_C_EFFECTS } from './stx-13c-c-effects.ts';
@@ -188,6 +189,7 @@ const BUILT_IN_EFFECTS: Record<string, CustomEffect> = {
   ...TDM_19A_EFFECTS,
   ...TDM_CLANS_B_EFFECTS, // Tarkir: Dragonstorm (19b, clans-b)
   ...HOB_MULTICOLOUR_EFFECTS, // The Hobbit (20b multicolour)
+  ...WOE_MULTI_EFFECTS, // Wilds of Eldraine (23b multi)
   ...TDM_WHITE_EFFECTS, // Tarkir: Dragonstorm (19b, white)
   ...TDM_MISC_EFFECTS, // Tarkir: Dragonstorm (19b, misc)
   ...TDM_GREEN_EFFECTS, // Tarkir: Dragonstorm (19b): green
@@ -283,10 +285,12 @@ export function def(ctx: Ctx, id: ObjectId): CardDefinition {
   const o = obj(ctx, id);
   const d0 = defBase(ctx, o);
   // The Hobbit (20b multicolour): Thranduil, the Elvenking has the activated abilities of the Elf cards in your graveyard.
-  const d =
+  const dE =
     o.zone === 'battlefield' && defsWithStatic(ctx.db, 'graveyardElfAbilities').has(o.defId)
       ? withGraveyardElfAbilities(ctx, o, d0)
       : d0;
+  // Wilds of Eldraine (23b multi): Agatha's Soul Cauldron gives creatures with +1/+1 counters the abilities of the creature cards it exiled.
+  const d = ctx.s.woeCauldron && o.zone === 'battlefield' ? withCauldronAbilities(ctx, id, dE) : dE;
   // Lord of the Rings (21d multi-rare): Sharkey, Tyrant of the Shire has the activated abilities of its opponents' lands.
   const dS =
     o.zone === 'battlefield' && copiesOpponentLandAbilities(ctx.db, o.defId)

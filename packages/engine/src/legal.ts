@@ -183,6 +183,8 @@ export function castableCards(ctx: Ctx, player: PlayerId): ObjectId[] {
           cardMatches(ctx, topCard, a.effect.filter) &&
           // Final Fantasy (11c): The Lunar Whale, as long as it attacked this turn.
           checkCondition(ctx, a.effect.condition, player, obj(ctx, id)) &&
+          // Wilds of Eldraine (23b multi): Johann, Apprentice Sorcerer, once each turn.
+          !(a.effect.oncePerTurn && ps.woeTopCastTurn === ctx.s.turn.number) &&
           !out.includes(topCard)
         )
           out.push(topCard);
@@ -1724,7 +1726,8 @@ export function getLegalActions(ctx: Ctx, player: PlayerId): Action[] {
           for (const targets of targetCombos(ctx, m.targets, src))
             if (payable(targets)) out.push({ type: 'chooseTargets', player, targets, mode });
         });
-        if (out.length === 0) out.push({ type: 'chooseTargets', player, targets: [] });
+        // Wilds of Eldraine (23b multi): "you may pay {1}. When you do, choose one" (Hylda of the Icy Crown): paying is optional.
+        if (out.length === 0 || a.cost) out.push({ type: 'chooseTargets', player, targets: [] });
         return out;
       }
       for (const targets of targetCombos(ctx, a.targets, src))

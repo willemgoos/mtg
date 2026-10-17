@@ -110,3 +110,80 @@ export function chooseAnimateToAttack(
   }
   return null;
 }
+
+// ---------------------------------------------------------------------------
+// Wilds of Eldraine (23b multi): Talion, the Kindly Lord's number, Edgewall Inn's color
+// ---------------------------------------------------------------------------
+
+/** How common each mana value is among spells (a prior for a number to name when nothing has been seen). */
+const NUMBER_PRIOR = [0, 3, 6, 6, 5, 4, 2, 1, 0, 0, 0];
+
+/**
+ * Talion: "choose a number between 1 and 10" (the options are the numbers). The bot names the number that matches the most
+ * cards of the opponent it has seen (mana value, power or toughness), else a common mana value.
+ */
+export function chooseTalionNumber(
+  db: CardDb,
+  s: GameState,
+  me: PlayerId,
+  d: Extract<GameState['decision'], { kind: 'chooseOption' }>,
+): Action | undefined {
+  if (d.options.length !== 10 || !d.options.every((o, i) => o.label === String(i + 1)))
+    return undefined;
+  const opp: PlayerId = me === 'p1' ? 'p2' : 'p1';
+  const seen = [...s.battlefield, ...s.players[opp].graveyard, ...s.players[opp].exile].filter(
+    (id) => s.objects[id]?.owner === opp,
+  );
+  let best = 0;
+  let bestScore = -1;
+  for (let n = 1; n <= 10; n++) {
+    let score = NUMBER_PRIOR[n]!;
+    for (const id of seen) {
+      const c = db.get(s.objects[id]!.defId);
+      if (!c || c.types.includes('Land')) continue;
+      const mv =
+        c.manaCost.generic + Object.values(c.manaCost.colored).reduce((a, b) => a + (b ?? 0), 0);
+      if (mv === n || c.power === n || c.toughness === n) score += 4;
+    }
+    if (score > bestScore) {
+      bestScore = score;
+      best = n - 1;
+    }
+  }
+  return { type: 'chooseOption', player: me, index: best };
+}
+
+const COLOR_LABELS: Record<string, string> = {
+  White: 'W',
+  Blue: 'U',
+  Black: 'B',
+  Red: 'R',
+  Green: 'G',
+};
+
+/**
+ * "Choose a color" for a land (Edgewall Inn): the color most needed by the cards in hand and on the battlefield (mana symbols in
+ * their costs), the first on offer on a tie.
+ */
+export function chooseLandColor(
+  db: CardDb,
+  s: GameState,
+  me: PlayerId,
+  d: Extract<GameState['decision'], { kind: 'chooseOption' }>,
+): Action | undefined {
+  if (d.options.length === 0 || !d.options.every((o) => o.label in COLOR_LABELS)) return undefined;
+  const need: Record<string, number> = {};
+  for (const id of [...s.players[me].hand, ...s.battlefield]) {
+    const o = s.objects[id]!;
+    if (o.controller !== me) continue;
+    const c = db.get(o.defId);
+    if (!c || c.types.includes('Land')) continue;
+    for (const [k, v] of Object.entries(c.manaCost.colored)) need[k] = (need[k] ?? 0) + (v ?? 0);
+  }
+  let best = 0;
+  d.options.forEach((o, i) => {
+    if ((need[COLOR_LABELS[o.label]!] ?? 0) > (need[COLOR_LABELS[d.options[best]!.label]!] ?? 0))
+      best = i;
+  });
+  return { type: 'chooseOption', player: me, index: best };
+}

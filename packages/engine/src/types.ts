@@ -372,6 +372,8 @@ export interface CardDefinition {
    * the chosen player's permanent that definition (the `becomeVariant` effect); it shows the front again wherever it goes.
    */
   enterChoices?: { label: string; abilities: AbilityDef[] }[];
+  /** Wilds of Eldraine (23b multi): the heading of the `enterChoices` prompt ("Talion, the Kindly Lord: choose a number between 1 and 10"). */
+  enterChoiceTitle?: string;
   /** A derived definition: the card with this id, having made one of its `enterChoices`. Never in a deck or a hand. */
   variantOf?: CardDefId;
   // Tarkir: Dragonstorm (19a): Harmonize
@@ -1672,6 +1674,13 @@ export interface CardFilter {
    * `subtype: 'Adventure'`.
    */
   hasAdventure?: boolean;
+  // Wilds of Eldraine (23b multi)
+  /** A spell whose mana value, power or toughness is this number (Talion, the Kindly Lord). */
+  manaValuePowerOrToughness?: number;
+  /** Doesn't have the same name as a token its controller (the source's controller) controls (The Apprentice's Folly). */
+  nameNotOfYourToken?: boolean;
+  /** Doesn't have the same name as another permanent its controller (the source's controller) controls (Yenna, Redtooth Regent). */
+  nameUniqueAmongYourPermanents?: boolean;
 }
 
 export interface TargetSpec {
@@ -3826,9 +3835,22 @@ export type StaticDef =
   | {
       kind: 'playFromTop';
       filter: CardFilter;
+      // Wilds of Eldraine (23b multi): Johann, Apprentice Sorcerer
+      /** "Once each turn": only one spell a turn may be cast this way. */
+      oncePerTurn?: boolean;
       // Final Fantasy (11c): "as long as The Lunar Whale attacked this turn".
       condition?: ConditionDef;
     }
+  // Wilds of Eldraine (23b multi)
+  /**
+   * Activated abilities of creatures you control cost {N} less to activate (N an Amount, counted for this permanent), but not to
+   * less than one mana (Agatha of the Vile Cauldron).
+   */
+  | { kind: 'activatedAbilitiesCostLess'; amount: Amount }
+  /** You may spend mana as though it were mana of any color to activate abilities of creatures you control (Agatha's Soul Cauldron). */
+  | { kind: 'anyColorForCreatureAbilities' }
+  /** Creatures you control with +1/+1 counters have all activated abilities of the creature cards exiled with this (Agatha's Soul Cauldron). */
+  | { kind: 'cauldronAbilities' }
   /** During your turn, cast instants and sorceries from your graveyard by paying 1 life more (Festival of Embers). */
   | { kind: 'castFromGraveyardForLife' }
   /** Cards and tokens that would go to your graveyard are exiled instead (Festival of Embers). */
@@ -4402,6 +4424,11 @@ export interface PlayerState {
   // Strixhaven (13b): Maelstrom Muse
   /** The next instant or sorcery spell cast on `turn` costs `amount` less. */
   nextSpellDiscount?: { turn: number; amount: number };
+  // Wilds of Eldraine (23b multi)
+  /** Rowan, Will: spells of these colours cost {X} less this turn, X the life lost or gained this turn (one entry for each activation). */
+  woeLifeDiscounts?: { turn: number; by: 'lifeLost' | 'lifeGained'; colors: Color[] }[];
+  /** Johann: the turn a spell was last cast from the top of this player's library with an "once each turn" permission. */
+  woeTopCastTurn?: number;
   // Strixhaven Brawl (15a): Patchplate Resolute
   /** One-time boons: the next creature spells you cast (one each) enter with an additional +1/+1 counter. */
   creatureBoons?: number;
@@ -5484,6 +5511,8 @@ export interface GameState {
   colorChanges?: boolean;
   /** Tarkir: Dragonstorm (19b, blue): an Aura has granted abilities (`auraGrants`); `def` checks them only then. */
   auraGrants?: boolean;
+  /** Wilds of Eldraine (23b multi): Agatha's Soul Cauldron has exiled a creature card; `def` checks the abilities it gives only then. */
+  woeCauldron?: boolean;
   /** Abilities players have from emblems or effects (Season of the Bold, Ral). */
   emblems?: Emblem[];
   /** "At the beginning of the next end step, ...": fire at the first end step after `afterTurn` / this step. */

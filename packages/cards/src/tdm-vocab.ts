@@ -209,6 +209,7 @@ export function withEnterChoice(c: CardDefinition): CardDefinition {
         effects: [
           {
             kind: 'choose',
+            ...(c.enterChoiceTitle ? { title: c.enterChoiceTitle } : {}), // Wilds of Eldraine (23b multi)
             options: c.enterChoices.map((ch) => ({
               label: ch.label,
               effects: [{ kind: 'custom', handler: 'becomeVariant', params: { label: ch.label } }],
