@@ -1379,14 +1379,15 @@ export function drawCard(ctx: Ctx, player: PlayerId, drawStepDraw = false): void
   emit(ctx, { type: 'cardDrawn', player, id: top, nth, ...(drawStepDraw ? { drawStep: true } : {}) }); // Lord of the Rings (21d br-rare)
 }
 
-export function tap(ctx: Ctx, id: ObjectId): void {
+export function tap(ctx: Ctx, id: ObjectId, by?: PlayerId): void {
   const o = obj(ctx, id);
   if (o.tapped) return;
   o.tapped = true;
   // Captain America, Living Legend cares about the first time each turn.
   const first = o.firstTappedTurn !== ctx.s.turn.number;
   o.firstTappedTurn = ctx.s.turn.number;
-  emit(ctx, { type: 'tapped', id, ...(first ? { first } : {}) });
+  // Wilds of Eldraine (23a): `by`, the controller of the spell or ability that tapped it.
+  emit(ctx, { type: 'tapped', id, ...(first ? { first } : {}), ...(by ? { by } : {}) });
 }
 
 /** Lorwyn Eclipsed (18b, blue): an Aura on it says it can't become untapped (Blossombind) or can't have counters put on it. */

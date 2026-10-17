@@ -1,6 +1,7 @@
 import type { AbilityDef, Amount, CardDefinition, CardFilter, EffectDef, TargetSpec } from '@mtg/engine';
 import { type Behavior, parseManaCost as mana, slug } from '../build.ts';
 import { draw, t0, when, yourCreature } from '../blb/helpers.ts';
+import { roleToken } from '../woe-vocab.ts';
 
 /**
  * Strixhaven Brawl (15b, white): the white cards of the Brawl decks other than Quintorius
@@ -61,27 +62,8 @@ export const BRAWL_15B_W_TOKENS: CardDefinition[] = [
   }),
   token(SOC_15B_NYMPH, 'Nymph', ['W'], ['Nymph'], 2, 2, [], { types: ['Enchantment', 'Creature'] }),
   // The Sorcerer Role (Spellbook Vendor): "Enchanted creature gets +1/+1 and has 'Whenever this creature attacks, scry 1.'"
-  // (the scry is the Role's own trigger on its host attacking).
-  {
-    id: SOC_15B_SORCERER_ROLE,
-    name: 'Sorcerer Role',
-    manaCost: { generic: 0, colored: {} },
-    colors: ['U'],
-    types: ['Enchantment'],
-    supertypes: [],
-    subtypes: ['Aura', 'Role'],
-    keywords: [],
-    enchant: { what: 'creature' },
-    abilities: [
-      { kind: 'static', effect: { kind: 'attached', power: 1, toughness: 1 } },
-      when(
-        { on: 'creatureYouControlAttacks', filter: { hostOfSource: true } },
-        [],
-        { kind: 'scry', amount: 1 },
-      ),
-    ],
-    isToken: true,
-  },
+  // Wilds of Eldraine (23a): the shared Role definition (the creature has the scry trigger), under this set's id.
+  roleToken('Sorcerer', SOC_15B_SORCERER_ROLE),
 ];
 
 // ---------------------------------------------------------------- shared shapes
@@ -488,7 +470,7 @@ export const BRAWL_15B_W: Record<string, Behavior> = {
         trigger: { on: 'beginningOfCombat', whose: 'yours' },
         cost: mana('{1}'),
         targets: [yourCreature],
-        effects: [custom('createRole')],
+        effects: [{ kind: 'createRole', role: SOC_15B_SORCERER_ROLE, to: t0 }],
       },
     ],
   },

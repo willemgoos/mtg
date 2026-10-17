@@ -178,6 +178,11 @@ const MECHANICS: Record<string, string> = {
   Behold: 'Choose a permanent of that type you control, or reveal a card of that type from your hand.',
   Flurry: 'Triggers when you cast your second spell each turn.',
   Renew: 'Activate from your graveyard by exiling this card, only as a sorcery.',
+  // Wilds of Eldraine (23a)
+  'Role token':
+    'A Role is an Aura token attached to a creature. If a player puts a second Role on the same creature, their first Role is put into the graveyard.',
+  Bargain: 'You may sacrifice an artifact, enchantment, or token as you cast this spell for an additional effect.',
+  Celebration: 'Checks whether two or more nonland permanents entered the battlefield under your control this turn.',
   // The Lord of the Rings (21a)
   'The Ring tempts you': RING_TEMPTS_RULE,
   // The Hobbit (20a)
@@ -233,6 +238,13 @@ export function ruleNotes(
       kind: 'mechanic',
       title: 'Omen',
       text: 'After this spell resolves, shuffle this card into its owner’s library. Cast the creature instead and it stays on the battlefield.',
+    });
+  // Wilds of Eldraine (23a): an Adventure (not a keyword on Scryfall either).
+  if (cardDb.get(defId)?.adventure && !!backId && !!cardDb.get(backId)?.subtypes.includes('Adventure'))
+    notes.push({
+      kind: 'mechanic',
+      title: 'Adventure',
+      text: 'Cast the Adventure, and the card goes into exile instead of your graveyard. Later you may cast the creature (or enchantment) from exile.',
     });
   return notes;
 }
@@ -305,6 +317,23 @@ export function cardNotes(view: GameState, defId: CardDefId, oid?: ObjectId | nu
       kind: 'effect',
       title: 'Counters',
       text: `${minus} -1/-1 counter${minus > 1 ? 's' : ''} (${signed(-minus)}/${signed(-minus)}).`,
+    });
+  }
+  // Wilds of Eldraine (23a): stun counters, and the Role a player has on it.
+  const stun = o.counters?.stun ?? 0;
+  if (stun)
+    notes.push({
+      kind: 'effect',
+      title: 'Stun counters',
+      text: `${stun} stun counter${stun > 1 ? 's' : ''}: if it would become untapped, remove a stun counter from it instead.`,
+    });
+  for (const id of view.battlefield) {
+    const r = view.objects[id];
+    if (r?.attachedTo !== o.id || !cardDb.get(r.defId)?.subtypes.includes('Role')) continue;
+    notes.push({
+      kind: 'effect',
+      title: cardDb.get(r.defId)!.name,
+      text: 'A Role on this creature. If the Role’s controller puts another Role on it, this one is put into the graveyard.',
     });
   }
   // Lorwyn Eclipsed (18a)

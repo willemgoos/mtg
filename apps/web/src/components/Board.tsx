@@ -64,6 +64,7 @@ import { whyNot } from '../game/whyNot.ts';
 import { isLethal } from '../game/lethal.ts';
 import { startTeamPick, type TeamPick, teamOptions, teamPower } from '../game/teamwork.ts';
 import { type Hint, hintFor } from '../game/hint.ts';
+import { BARGAIN_PROMPT, bargainCastLabel } from '../game/woe.ts'; // Wilds of Eldraine (23a)
 
 const nameOf = (defId: CardDefId) => {
   const d = cardDb.get(defId);
@@ -1846,6 +1847,8 @@ function kickPermanentPrompt(defId: CardDefId | undefined, a: Action): string | 
   if (a.type !== 'castSpell' || !a.kicked || !defId) return null;
   const kicker = cardDb.get(defId)?.kicker;
   if (kicker?.returnLand) return 'a land to return to your hand';
+  // Wilds of Eldraine (23a): bargain.
+  if (kicker?.as === 'bargain') return BARGAIN_PROMPT;
   if (kicker?.sacrifice) return 'an artifact or creature to sacrifice';
   return null;
 }
@@ -1973,6 +1976,8 @@ function castLabel(defId: CardDefId, a: Action, view: GameState): string {
   if (!def?.kicker) return 'Cast';
   if (def.kicker.as === 'overload')
     return a.kicked ? `Overload (each, ${manaText(def.kicker.cost)} more)` : 'One target';
+  // Wilds of Eldraine (23a): bargain, the optional sacrifice (Arena: "Bargain" / "Don't bargain").
+  if (def.kicker.as === 'bargain') return bargainCastLabel(def.kicker, !!a.kicked);
   if (def.kicker.as === 'gift')
     return a.kicked ? `Promise ${giftText(def)} to your opponent` : 'No gift';
   if (def.kicker.as === 'offspring')

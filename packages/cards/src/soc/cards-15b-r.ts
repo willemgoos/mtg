@@ -247,6 +247,7 @@ export const BRAWL_15B_R: Record<string, Behavior> = {
     // Bargain: sacrifice an artifact, enchantment or token as you cast it.
     kicker: {
       cost: { generic: 0, colored: {} },
+      as: 'bargain', // Wilds of Eldraine (23a): the cast menu says "Bargain"
       sacrifice: { anyOf: [artifact, { types: ['Enchantment'] }, { token: true }] },
       spell: {
         targets: [{ what: 'permanent', filter: { types: ['Creature', 'Planeswalker'] } }],

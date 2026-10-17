@@ -3,7 +3,6 @@ import {
   type Ctx,
   type CustomEffect,
   addCounters,
-  createObject,
   def,
   emit,
   moveObject,
@@ -13,8 +12,9 @@ import {
   sacrifice,
 } from './context.ts';
 import { manaValue } from './cost.ts';
-import { changeLife, counterSpell, plusFoodTokens } from './effects.ts';
+import { changeLife, counterSpell } from './effects.ts';
 import { shuffleLibrary } from './setup.ts';
+import { createRoleToken } from './woe-23a.ts'; // Wilds of Eldraine (23a)
 import { type Chooser, CHOOSERS } from './stx-13c-a-effects.ts';
 import type { Color, EffectDef, EffectSource, ObjectId, PlayerId } from './types.ts';
 
@@ -40,38 +40,11 @@ function targetId(ctx: Ctx, es: EffectSource, i: number): ObjectId | undefined {
   return o && o.zcc === t.object.zcc ? o.id : undefined;
 }
 
-/** A token (by definition id) put onto the battlefield under `controller`. */
-function putToken(ctx: Ctx, defId: string, controller: PlayerId) {
-  const token = createObject(ctx, defId, controller, 'battlefield', true);
-  ctx.s.battlefield.push(token.id);
-  emit(ctx, {
-    type: 'objectMoved',
-    id: token.id,
-    defId: token.defId,
-    from: null,
-    to: 'battlefield',
-  });
-  plusFoodTokens(ctx, controller); // Tippy-Toe
-  return token;
-}
-
 export const ARCHIVE_16_EFFECTS: Record<string, CustomEffect> = {
-  /** Royal Treatment, Monster Role: a Role token attached to the target creature; another Role you control on it goes away. */
+  /** Royal Treatment, Monster Role: a Role token attached to the target creature (now the `createRole` effect; kept for old saves). */
   archiveRole(ctx, es, params) {
-    const role = (params as { role: string }).role;
     const host = targetId(ctx, es, 0);
-    if (host === undefined || obj(ctx, host).zone !== 'battlefield') return;
-    for (const id of [...ctx.s.battlefield]) {
-      const r = obj(ctx, id);
-      if (
-        r.attachedTo === host &&
-        r.controller === es.controller &&
-        def(ctx, id).subtypes.includes('Role')
-      )
-        moveObject(ctx, id, 'graveyard');
-    }
-    const token = putToken(ctx, role, es.controller);
-    token.attachedTo = host;
+    if (host !== undefined) createRoleToken(ctx, (params as { role: string }).role, es.controller, host);
   },
 
   /** Blue Sun's Zenith: shuffle this spell into its owner's library. */

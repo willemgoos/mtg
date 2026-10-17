@@ -7,6 +7,7 @@ import { staticallyCreature } from './ltr-black-effects.ts'; // Lord of the Ring
 import { ltrCombatKeywordsApply, ltrGcRareFilterFails } from './ltr-gc-rare-effects.ts'; // Lord of the Rings (21d gc-rare)
 import { spellsCastThisTurn } from './tdm-19a.ts';
 import { checkCondition } from './triggers.ts';
+import { defHasAdventure } from './woe-23a.ts'; // Wilds of Eldraine (23a)
 import type {
   Amount,
   CardDb,
@@ -258,6 +259,14 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
           )
         )
           continue;
+        // Wilds of Eldraine (23a): A Tale for the Ages, "enchanted creatures you control".
+        if (
+          st.filter?.enchanted &&
+          !ctx.s.battlefield.some(
+            (e) => obj(ctx, e).attachedTo === id && def(ctx, e).subtypes.includes('Aura'),
+          )
+        )
+          continue;
         if (
           st.filter?.chosenTypeOfSource &&
           !(src.chosenType && hasSubtype(ctx, id, src.chosenType))
@@ -408,6 +417,9 @@ export function countOf(
     }
     return a.powerOf === 'self' && sourceId ? Math.max(0, power(ctx, sourceId)) : 0;
   }
+  // Wilds of Eldraine (23a): the Young Hero Role, "if its toughness is 3 or less" (the source's toughness, read in a condition).
+  if ('toughnessOf' in a && a.toughnessOf === 'self' && sourceId && ctx.s.objects[sourceId]?.zone === 'battlefield')
+    return toughness(ctx, sourceId);
   // Tarkir: Dragonstorm (19a): every kind of counter on the source.
   if ('allCountersOn' in a) {
     const src = a.allCountersOn === 'self' && sourceId ? ctx.s.objects[sourceId] : undefined;
@@ -457,9 +469,13 @@ export function countOf(
           (!a.types || a.types.some((t: CardType) => def(ctx, id).types.includes(t))) &&
           // Final Fantasy (11b): by subtype, and without some types.
           (!a.subtype || hasSubtype(ctx, id, a.subtype)) &&
-          (!a.notTypes || !a.notTypes.some((t: CardType) => def(ctx, id).types.includes(t))),
+          (!a.notTypes || !a.notTypes.some((t: CardType) => def(ctx, id).types.includes(t))) &&
+          // Wilds of Eldraine (23a): Frantic Firebolt, "instant cards, sorcery cards, and/or have an Adventure".
+          (!a.filter || cardMatches(ctx, id, a.filter)),
       ).length
     );
+  // Wilds of Eldraine (23a): Rowdy Research, "for each creature that attacked this turn".
+  if (a.count === 'creaturesAttackedThisTurn') return new Set(ctx.s.turn.attackers).size;
   if (a.count === 'greatestManaValueInGraveyard')
     return ctx.s.players[player].graveyard.reduce(
       (n, id) => Math.max(n, manaValueOfDef(def(ctx, id))),
@@ -1261,6 +1277,8 @@ export function cardMatches(
 ): boolean {
   const d = def(ctx, id);
   const subtypes = subtypesOf(ctx, id);
+  // Wilds of Eldraine (23a): "a card that has an Adventure" (as a spell: cast as the creature or enchantment, not as the Adventure).
+  if (filter.hasAdventure && !defHasAdventure(ctx.db, d)) return false;
   if ((filter.ltrExceptIds || filter.ltrNoSharedType) && ltrGcRareFilterFails(ctx, id, filter)) return false; // Lord of the Rings (21d gc-rare)
   if (
     filter.anyOf &&
