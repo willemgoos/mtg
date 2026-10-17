@@ -27,6 +27,7 @@ import { LTR_RED_CONDITIONS } from './ltr-red-effects.ts'; // Lord of the Rings 
 import { detectLtrMultiRare, LTR_MULTI_RARE_CONDITIONS } from './ltr-multi-rare-effects.ts'; // Lord of the Rings (21d multi-rare)
 import { detectLtrMain } from './ltr-main-rules.ts'; // Lord of the Rings (22)
 import { doubleAttackTriggers, TDM_MISC_CONDITIONS } from './tdm-misc-effects.ts';
+import { WOE_BLACK_CONDITIONS } from './woe-black-effects.ts'; // Wilds of Eldraine (23b black)
 import {
   celebrating,
   defHasAdventure,
@@ -462,7 +463,8 @@ export function checkCondition(
         FIN_CONDITIONS[c.handler] ??
         LTR_RED_CONDITIONS[c.handler] ?? // Lord of the Rings (21b red)
         LTR_MULTI_RARE_CONDITIONS[c.handler] ?? // Lord of the Rings (21d multi-rare)
-        TDM_MISC_CONDITIONS[c.handler]; // Tarkir: Dragonstorm (19b, misc)
+        TDM_MISC_CONDITIONS[c.handler] ?? // Tarkir: Dragonstorm (19b, misc)
+        WOE_BLACK_CONDITIONS[c.handler]; // Wilds of Eldraine (23b black)
       if (fn) return fn(ctx, controller, self, subject);
       throw new Error(`Custom condition "${c.handler}" not registered`);
     }

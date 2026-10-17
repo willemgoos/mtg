@@ -16,6 +16,7 @@ import {
 import { manaValue } from './cost.ts';
 import { changeLife, dealDamage, damageSourceFor, plusFoodTokens } from './effects.ts';
 import { nextInt } from './rng.ts';
+import { payLife } from './woe-black-effects.ts'; // Wilds of Eldraine (23b black)
 import { shuffleLibrary } from './setup.ts';
 import type { GameObject, ObjectId, PlayerId } from './types.ts';
 
@@ -319,7 +320,7 @@ export const FIC_EFFECTS: Record<string, CustomEffect> = {
     const spell = es.subject && ctx.s.objects[es.subject.id];
     const x = spell ? mv(ctx, spell.id) : 0;
     if (ctx.s.players[es.controller].life <= x) return;
-    changeLife(ctx, es.controller, -x);
+    payLife(ctx, es.controller, x); // Wilds of Eldraine (23b black): Ashiok, Wicked Manipulator
     const hero = tokenCopyOfCard(ctx, 'fin-hero-token', es.controller);
     addCounters(ctx, hero.id, x);
   },

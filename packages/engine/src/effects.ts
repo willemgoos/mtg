@@ -76,6 +76,7 @@ import { LTR_BR_RARE_EXPANDERS } from './ltr-br-rare-effects.ts'; // Lord of the
 import { SOS_14B_C_CHOOSERS } from './sos-14b-c-effects.ts';
 import { runAnimate, runCreateRole } from './woe-23a.ts'; // Wilds of Eldraine (23a)
 import { WOE_WHITE_CHOOSERS, woeCreatureDamagePrevented } from './woe-white-effects.ts'; // Wilds of Eldraine (23b white)
+import { payLife } from './woe-black-effects.ts'; // Wilds of Eldraine (23b black)
 import type {
   AbilityDef,
   CardDefId,
@@ -2975,7 +2976,9 @@ function runEffectInner(ctx: Ctx, es: EffectSource, e: EffectDef): void {
     }
     case 'loseLife': {
       const n = resolveAmount(ctx, es, e.amount);
-      for (const p of playersOf(ctx, es, e.who)) changeLife(ctx, p, -n);
+      for (const p of playersOf(ctx, es, e.who))
+        if (e.payment) payLife(ctx, p, n); // Wilds of Eldraine (23b black): Ashiok, Wicked Manipulator
+        else changeLife(ctx, p, -n);
       return;
     }
     case 'draw': {

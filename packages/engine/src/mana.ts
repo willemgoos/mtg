@@ -1,5 +1,6 @@
 import { commanderColors, legendaryColors, opponentLandColors } from './brawl.ts';
-import { changeLife, damageSourceFor, dealDamage } from './effects.ts';
+import { damageSourceFor, dealDamage } from './effects.ts';
+import { payLife } from './woe-black-effects.ts'; // Wilds of Eldraine (23b black)
 import {
   abilitiesLocked,
   canTapForAbility,
@@ -486,7 +487,7 @@ export function payMana(ctx: Ctx, sources: Readonly<Payment>): void {
     .sort((a, b) => b - a);
   for (const i of fromPool) {
     // Mystical Archive (16): Channel, mana that costs 1 life to use.
-    if (ctx.s.players[player].pool![i]?.lifeCost) changeLife(ctx, player, -1);
+    if (ctx.s.players[player].pool![i]?.lifeCost) payLife(ctx, player, 1); // Wilds of Eldraine (23b black)
     ctx.s.players[player].pool!.splice(i, 1);
   }
   for (const id of sources) {
@@ -514,7 +515,7 @@ export function payMana(ctx: Ctx, sources: Readonly<Payment>): void {
   }
   for (const id of sources.pain ?? [])
     dealDamage(ctx, damageSourceFor(ctx, id, player), { player }, 1, false);
-  for (const _id of sources.life ?? []) changeLife(ctx, player, -1); // Lord of the Rings (21d gc-rare): Mount Doom
+  for (const _id of sources.life ?? []) payLife(ctx, player, 1); // Lord of the Rings (21d gc-rare): Mount Doom
 }
 
 /**
