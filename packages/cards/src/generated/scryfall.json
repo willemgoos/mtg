@@ -99902,5 +99902,919 @@
    "large": "https://cards.scryfall.io/large/front/0/7/07e81ace-4d75-4d79-ab99-c42288580def.jpg?1783915873",
    "artCrop": "https://cards.scryfall.io/art_crop/front/0/7/07e81ace-4d75-4d79-ab99-c42288580def.jpg?1783915873"
   }
+ },
+ {
+  "name": "Archon of the Wild Rose",
+  "scryfallId": "00174be7-0dc8-43b9-81b6-f25a8c3fb4eb",
+  "oracleId": "180efbd4-0f77-41cc-8ae2-2e6ccf853d10",
+  "set": "woe",
+  "collectorNumber": "1",
+  "rarity": "rare",
+  "manaCost": "{2}{W}{W}",
+  "typeLine": "Creature — Archon",
+  "oracleText": "Flying\nOther creatures you control that are enchanted by Auras you control have base power and toughness 4/4 and have flying.",
+  "power": "4",
+  "toughness": "4",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/0/00174be7-0dc8-43b9-81b6-f25a8c3fb4eb.jpg?1783915137",
+   "normal": "https://cards.scryfall.io/normal/front/0/0/00174be7-0dc8-43b9-81b6-f25a8c3fb4eb.jpg?1783915137",
+   "large": "https://cards.scryfall.io/large/front/0/0/00174be7-0dc8-43b9-81b6-f25a8c3fb4eb.jpg?1783915137",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/0/00174be7-0dc8-43b9-81b6-f25a8c3fb4eb.jpg?1783915137"
+  }
+ },
+ {
+  "name": "Armory Mice",
+  "scryfallId": "4b041949-6fb6-40a6-9329-f209be537219",
+  "oracleId": "68f7d1bf-48c7-483e-b17f-a60008854b46",
+  "set": "woe",
+  "collectorNumber": "3",
+  "rarity": "common",
+  "manaCost": "{1}{W}",
+  "typeLine": "Creature — Mouse",
+  "oracleText": "Celebration — This creature gets +0/+2 as long as two or more nonland permanents entered the battlefield under your control this turn.",
+  "power": "3",
+  "toughness": "1",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Celebration"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/b/4b041949-6fb6-40a6-9329-f209be537219.jpg?1783915136",
+   "normal": "https://cards.scryfall.io/normal/front/4/b/4b041949-6fb6-40a6-9329-f209be537219.jpg?1783915136",
+   "large": "https://cards.scryfall.io/large/front/4/b/4b041949-6fb6-40a6-9329-f209be537219.jpg?1783915136",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/b/4b041949-6fb6-40a6-9329-f209be537219.jpg?1783915136"
+  }
+ },
+ {
+  "name": "Besotted Knight",
+  "scryfallId": "5980a930-c7f8-45e1-a18a-87734d9ed09e",
+  "oracleId": "c7b6d2cd-9105-404b-88f0-a67037fb2120",
+  "set": "woe",
+  "collectorNumber": "4",
+  "rarity": "common",
+  "manaCost": "{3}{W}",
+  "typeLine": "Creature — Human Knight",
+  "oracleText": "",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "back": "Betroth the Beast",
+  "adventure": true,
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/9/5980a930-c7f8-45e1-a18a-87734d9ed09e.jpg?1783915136",
+   "normal": "https://cards.scryfall.io/normal/front/5/9/5980a930-c7f8-45e1-a18a-87734d9ed09e.jpg?1783915136",
+   "large": "https://cards.scryfall.io/large/front/5/9/5980a930-c7f8-45e1-a18a-87734d9ed09e.jpg?1783915136",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/9/5980a930-c7f8-45e1-a18a-87734d9ed09e.jpg?1783915136"
+  }
+ },
+ {
+  "name": "Betroth the Beast",
+  "scryfallId": "5980a930-c7f8-45e1-a18a-87734d9ed09e",
+  "oracleId": "c7b6d2cd-9105-404b-88f0-a67037fb2120",
+  "set": "woe",
+  "collectorNumber": "4",
+  "rarity": "common",
+  "manaCost": "{W}",
+  "typeLine": "Sorcery — Adventure",
+  "oracleText": "Create a Royal Role token attached to target creature you control. (Enchanted creature gets +1/+1 and has ward {1}.)",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Role token"
+  ],
+  "front": "Besotted Knight",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/9/5980a930-c7f8-45e1-a18a-87734d9ed09e.jpg?1783915136",
+   "normal": "https://cards.scryfall.io/normal/front/5/9/5980a930-c7f8-45e1-a18a-87734d9ed09e.jpg?1783915136",
+   "large": "https://cards.scryfall.io/large/front/5/9/5980a930-c7f8-45e1-a18a-87734d9ed09e.jpg?1783915136",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/9/5980a930-c7f8-45e1-a18a-87734d9ed09e.jpg?1783915136"
+  }
+ },
+ {
+  "name": "Charmed Clothier",
+  "scryfallId": "994f4473-dfc9-45cd-8528-945db3aa6a9a",
+  "oracleId": "ad0e6b12-a6bd-4860-9eac-68b2492d9567",
+  "set": "woe",
+  "collectorNumber": "6",
+  "rarity": "common",
+  "manaCost": "{4}{W}",
+  "typeLine": "Creature — Faerie Advisor",
+  "oracleText": "Flying\nWhen this creature enters, create a Royal Role token attached to another target creature you control. (If you control another Role on it, put that one into the graveyard. Enchanted creature gets +1/+1 and has ward {1}.)",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Flying",
+   "Role token"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/9/994f4473-dfc9-45cd-8528-945db3aa6a9a.jpg?1783915135",
+   "normal": "https://cards.scryfall.io/normal/front/9/9/994f4473-dfc9-45cd-8528-945db3aa6a9a.jpg?1783915135",
+   "large": "https://cards.scryfall.io/large/front/9/9/994f4473-dfc9-45cd-8528-945db3aa6a9a.jpg?1783915135",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/9/994f4473-dfc9-45cd-8528-945db3aa6a9a.jpg?1783915135"
+  }
+ },
+ {
+  "name": "Cursed Courtier",
+  "scryfallId": "3d2d5a71-d6e1-4c96-9a53-0e370047a56e",
+  "oracleId": "17916cf9-1e6c-41bd-96ce-2b050d828838",
+  "set": "woe",
+  "collectorNumber": "9",
+  "rarity": "uncommon",
+  "manaCost": "{2}{W}",
+  "typeLine": "Creature — Human Noble",
+  "oracleText": "Lifelink\nWhen this creature enters, create a Cursed Role token attached to it. (Enchanted creature is 1/1.)",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Lifelink",
+   "Role token"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/d/3d2d5a71-d6e1-4c96-9a53-0e370047a56e.jpg?1783915134",
+   "normal": "https://cards.scryfall.io/normal/front/3/d/3d2d5a71-d6e1-4c96-9a53-0e370047a56e.jpg?1783915134",
+   "large": "https://cards.scryfall.io/large/front/3/d/3d2d5a71-d6e1-4c96-9a53-0e370047a56e.jpg?1783915134",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/d/3d2d5a71-d6e1-4c96-9a53-0e370047a56e.jpg?1783915134"
+  }
+ },
+ {
+  "name": "Dutiful Griffin",
+  "scryfallId": "b8e40377-990f-41ea-8dd2-62a998dcd128",
+  "oracleId": "f91ff377-a997-4f24-926c-76edcbf91a6c",
+  "set": "woe",
+  "collectorNumber": "11",
+  "rarity": "uncommon",
+  "manaCost": "{3}{W}{W}",
+  "typeLine": "Creature — Griffin",
+  "oracleText": "Flying\n{2}{W}, Sacrifice two enchantments: Return this card from your graveyard to your hand.",
+  "power": "4",
+  "toughness": "4",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/8/b8e40377-990f-41ea-8dd2-62a998dcd128.jpg?1783915133",
+   "normal": "https://cards.scryfall.io/normal/front/b/8/b8e40377-990f-41ea-8dd2-62a998dcd128.jpg?1783915133",
+   "large": "https://cards.scryfall.io/large/front/b/8/b8e40377-990f-41ea-8dd2-62a998dcd128.jpg?1783915133",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/8/b8e40377-990f-41ea-8dd2-62a998dcd128.jpg?1783915133"
+  }
+ },
+ {
+  "name": "Frostbridge Guard",
+  "scryfallId": "b9dec431-a20e-4c1c-9855-904779756509",
+  "oracleId": "515c1604-59f0-45b4-91be-d2f20fdd3e1e",
+  "set": "woe",
+  "collectorNumber": "14",
+  "rarity": "common",
+  "manaCost": "{1}{W}",
+  "typeLine": "Creature — Elemental Soldier",
+  "oracleText": "{2}{W}, {T}: Tap target creature.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/9/b9dec431-a20e-4c1c-9855-904779756509.jpg?1783915132",
+   "normal": "https://cards.scryfall.io/normal/front/b/9/b9dec431-a20e-4c1c-9855-904779756509.jpg?1783915132",
+   "large": "https://cards.scryfall.io/large/front/b/9/b9dec431-a20e-4c1c-9855-904779756509.jpg?1783915132",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/9/b9dec431-a20e-4c1c-9855-904779756509.jpg?1783915132"
+  }
+ },
+ {
+  "name": "Gallant Pie-Wielder",
+  "scryfallId": "e053d330-d0a2-4468-afba-42bf165b8fbf",
+  "oracleId": "fba2fa87-3f2a-4a9f-a19e-a1f9dada4118",
+  "set": "woe",
+  "collectorNumber": "15",
+  "rarity": "uncommon",
+  "manaCost": "{2}{W}",
+  "typeLine": "Creature — Dwarf Knight",
+  "oracleText": "First strike\nCelebration — This creature has double strike as long as two or more nonland permanents entered the battlefield under your control this turn.",
+  "power": "2",
+  "toughness": "3",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Celebration",
+   "First strike"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/0/e053d330-d0a2-4468-afba-42bf165b8fbf.jpg?1783915132",
+   "normal": "https://cards.scryfall.io/normal/front/e/0/e053d330-d0a2-4468-afba-42bf165b8fbf.jpg?1783915132",
+   "large": "https://cards.scryfall.io/large/front/e/0/e053d330-d0a2-4468-afba-42bf165b8fbf.jpg?1783915132",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/0/e053d330-d0a2-4468-afba-42bf165b8fbf.jpg?1783915132"
+  }
+ },
+ {
+  "name": "Heartflame Duelist",
+  "scryfallId": "811b283f-22f3-47b1-a802-11dc8c25d0ee",
+  "oracleId": "3ca07da2-29a1-40ce-a7f3-4838e95ca1d9",
+  "set": "woe",
+  "collectorNumber": "228",
+  "rarity": "rare",
+  "manaCost": "{1}{W}",
+  "typeLine": "Creature — Human Knight",
+  "oracleText": "Instant and sorcery spells you control have lifelink.",
+  "power": "3",
+  "toughness": "1",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "back": "Heartflame Slash",
+  "adventure": true,
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/1/811b283f-22f3-47b1-a802-11dc8c25d0ee.jpg?1783915065",
+   "normal": "https://cards.scryfall.io/normal/front/8/1/811b283f-22f3-47b1-a802-11dc8c25d0ee.jpg?1783915065",
+   "large": "https://cards.scryfall.io/large/front/8/1/811b283f-22f3-47b1-a802-11dc8c25d0ee.jpg?1783915065",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/1/811b283f-22f3-47b1-a802-11dc8c25d0ee.jpg?1783915065"
+  }
+ },
+ {
+  "name": "Heartflame Slash",
+  "scryfallId": "811b283f-22f3-47b1-a802-11dc8c25d0ee",
+  "oracleId": "3ca07da2-29a1-40ce-a7f3-4838e95ca1d9",
+  "set": "woe",
+  "collectorNumber": "228",
+  "rarity": "rare",
+  "manaCost": "{2}{R}",
+  "typeLine": "Instant — Adventure",
+  "oracleText": "Heartflame Slash deals 3 damage to any target. (Then exile this card. You may cast the creature later from exile.)",
+  "colors": [
+   "R"
+  ],
+  "keywords": [],
+  "front": "Heartflame Duelist",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/1/811b283f-22f3-47b1-a802-11dc8c25d0ee.jpg?1783915065",
+   "normal": "https://cards.scryfall.io/normal/front/8/1/811b283f-22f3-47b1-a802-11dc8c25d0ee.jpg?1783915065",
+   "large": "https://cards.scryfall.io/large/front/8/1/811b283f-22f3-47b1-a802-11dc8c25d0ee.jpg?1783915065",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/1/811b283f-22f3-47b1-a802-11dc8c25d0ee.jpg?1783915065"
+  }
+ },
+ {
+  "name": "Knight of Doves",
+  "scryfallId": "b4f33617-ad19-4d42-ab94-6f21a7fb3dd4",
+  "oracleId": "d2e6fbcb-ebbd-40e8-8a01-b675fcacaf8e",
+  "set": "woe",
+  "collectorNumber": "19",
+  "rarity": "uncommon",
+  "manaCost": "{2}{W}",
+  "typeLine": "Creature — Human Knight",
+  "oracleText": "Whenever an enchantment you control is put into a graveyard from the battlefield, create a 1/1 white Bird creature token with flying.",
+  "power": "1",
+  "toughness": "3",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/4/b4f33617-ad19-4d42-ab94-6f21a7fb3dd4.jpg?1783915132",
+   "normal": "https://cards.scryfall.io/normal/front/b/4/b4f33617-ad19-4d42-ab94-6f21a7fb3dd4.jpg?1783915132",
+   "large": "https://cards.scryfall.io/large/front/b/4/b4f33617-ad19-4d42-ab94-6f21a7fb3dd4.jpg?1783915132",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/4/b4f33617-ad19-4d42-ab94-6f21a7fb3dd4.jpg?1783915132"
+  }
+ },
+ {
+  "name": "Pests of Honor",
+  "scryfallId": "5671c2a0-51e8-4d5e-8409-87abd6c0a8ab",
+  "oracleId": "c2a4066a-f911-4622-beb2-683e7e10822f",
+  "set": "woe",
+  "collectorNumber": "310",
+  "rarity": "uncommon",
+  "manaCost": "{2}{W}",
+  "typeLine": "Creature — Mouse",
+  "oracleText": "Celebration — At the beginning of combat on your turn, if two or more nonland permanents entered the battlefield under your control this turn, put a +1/+1 counter on this creature.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Celebration"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/6/5671c2a0-51e8-4d5e-8409-87abd6c0a8ab.jpg?1783915040",
+   "normal": "https://cards.scryfall.io/normal/front/5/6/5671c2a0-51e8-4d5e-8409-87abd6c0a8ab.jpg?1783915040",
+   "large": "https://cards.scryfall.io/large/front/5/6/5671c2a0-51e8-4d5e-8409-87abd6c0a8ab.jpg?1783915040",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/6/5671c2a0-51e8-4d5e-8409-87abd6c0a8ab.jpg?1783915040"
+  }
+ },
+ {
+  "name": "Protective Parents",
+  "scryfallId": "68cc9653-80ef-4606-a0ec-6d4228fdb118",
+  "oracleId": "d9717522-358b-41ac-9183-8a6b3981f921",
+  "set": "woe",
+  "collectorNumber": "24",
+  "rarity": "common",
+  "manaCost": "{2}{W}",
+  "typeLine": "Creature — Human Peasant",
+  "oracleText": "When this creature dies, create a Young Hero Role token attached to up to one target creature you control. (If you control another Role on it, put that one into the graveyard. Enchanted creature has \"Whenever this creature attacks, if its toughness is 3 or less, put a +1/+1 counter on it.\")",
+  "power": "3",
+  "toughness": "2",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Role token"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/8/68cc9653-80ef-4606-a0ec-6d4228fdb118.jpg?1783915130",
+   "normal": "https://cards.scryfall.io/normal/front/6/8/68cc9653-80ef-4606-a0ec-6d4228fdb118.jpg?1783915130",
+   "large": "https://cards.scryfall.io/large/front/6/8/68cc9653-80ef-4606-a0ec-6d4228fdb118.jpg?1783915130",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/8/68cc9653-80ef-4606-a0ec-6d4228fdb118.jpg?1783915130"
+  }
+ },
+ {
+  "name": "Rimefur Reindeer",
+  "scryfallId": "60acc0b7-6842-44aa-a7cc-c5d315d90287",
+  "oracleId": "66dc3237-3543-4fc2-96f1-c8d1eff7c04c",
+  "set": "woe",
+  "collectorNumber": "27",
+  "rarity": "common",
+  "manaCost": "{3}{W}",
+  "typeLine": "Creature — Elk",
+  "oracleText": "Whenever an enchantment you control enters, tap target creature an opponent controls.",
+  "power": "3",
+  "toughness": "4",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/0/60acc0b7-6842-44aa-a7cc-c5d315d90287.jpg?1783915128",
+   "normal": "https://cards.scryfall.io/normal/front/6/0/60acc0b7-6842-44aa-a7cc-c5d315d90287.jpg?1783915128",
+   "large": "https://cards.scryfall.io/large/front/6/0/60acc0b7-6842-44aa-a7cc-c5d315d90287.jpg?1783915128",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/0/60acc0b7-6842-44aa-a7cc-c5d315d90287.jpg?1783915128"
+  }
+ },
+ {
+  "name": "Savior of the Sleeping",
+  "scryfallId": "7b4979d9-fafb-4e0e-868f-f4772109d7a7",
+  "oracleId": "412eb5ec-bf13-45fb-94b3-c41e62b19d1d",
+  "set": "woe",
+  "collectorNumber": "28",
+  "rarity": "common",
+  "manaCost": "{2}{W}",
+  "typeLine": "Creature — Human Knight",
+  "oracleText": "Vigilance\nWhenever an enchantment you control is put into a graveyard from the battlefield, put a +1/+1 counter on this creature.",
+  "power": "2",
+  "toughness": "3",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Vigilance"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/b/7b4979d9-fafb-4e0e-868f-f4772109d7a7.jpg?1783915126",
+   "normal": "https://cards.scryfall.io/normal/front/7/b/7b4979d9-fafb-4e0e-868f-f4772109d7a7.jpg?1783915126",
+   "large": "https://cards.scryfall.io/large/front/7/b/7b4979d9-fafb-4e0e-868f-f4772109d7a7.jpg?1783915126",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/b/7b4979d9-fafb-4e0e-868f-f4772109d7a7.jpg?1783915126"
+  }
+ },
+ {
+  "name": "Stockpiling Celebrant",
+  "scryfallId": "0214ebc6-c59f-4170-8dd2-ce07caa6e6ad",
+  "oracleId": "171150fb-dbe1-4a07-a7ac-5f45762a26b0",
+  "set": "woe",
+  "collectorNumber": "32",
+  "rarity": "common",
+  "manaCost": "{2}{W}",
+  "typeLine": "Creature — Dwarf Knight",
+  "oracleText": "When this creature enters, you may return another target nonland permanent you control to its owner's hand. If you do, scry 2.",
+  "power": "3",
+  "toughness": "2",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Scry"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/2/0214ebc6-c59f-4170-8dd2-ce07caa6e6ad.jpg?1783915126",
+   "normal": "https://cards.scryfall.io/normal/front/0/2/0214ebc6-c59f-4170-8dd2-ce07caa6e6ad.jpg?1783915126",
+   "large": "https://cards.scryfall.io/large/front/0/2/0214ebc6-c59f-4170-8dd2-ce07caa6e6ad.jpg?1783915126",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/2/0214ebc6-c59f-4170-8dd2-ce07caa6e6ad.jpg?1783915126"
+  }
+ },
+ {
+  "name": "Tuinvale Guide",
+  "scryfallId": "01334fed-781e-4864-83fd-d37f787a778b",
+  "oracleId": "dab16c93-9788-46e0-9345-838ebeda8d54",
+  "set": "woe",
+  "collectorNumber": "36",
+  "rarity": "common",
+  "manaCost": "{3}{W}",
+  "typeLine": "Creature — Faerie Scout",
+  "oracleText": "Flying\nCelebration — This creature gets +1/+0 and has lifelink as long as two or more nonland permanents entered the battlefield under your control this turn.",
+  "power": "2",
+  "toughness": "3",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Flying",
+   "Celebration"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/1/01334fed-781e-4864-83fd-d37f787a778b.jpg?1783915125",
+   "normal": "https://cards.scryfall.io/normal/front/0/1/01334fed-781e-4864-83fd-d37f787a778b.jpg?1783915125",
+   "large": "https://cards.scryfall.io/large/front/0/1/01334fed-781e-4864-83fd-d37f787a778b.jpg?1783915125",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/1/01334fed-781e-4864-83fd-d37f787a778b.jpg?1783915125"
+  }
+ },
+ {
+  "name": "Unassuming Sage",
+  "scryfallId": "a66fbaeb-1624-43b3-83e2-a37ce7588a5a",
+  "oracleId": "1cf4e16b-2273-41c7-9bcd-0cdc78e12198",
+  "set": "woe",
+  "collectorNumber": "37",
+  "rarity": "common",
+  "manaCost": "{1}{W}",
+  "typeLine": "Creature — Human Peasant Wizard",
+  "oracleText": "When this creature enters, you may pay {2}. If you do, create a Sorcerer Role token attached to it. (Enchanted creature gets +1/+1 and has \"Whenever this creature attacks, scry 1.\")",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Role token",
+   "Scry"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/6/a66fbaeb-1624-43b3-83e2-a37ce7588a5a.jpg?1783915126",
+   "normal": "https://cards.scryfall.io/normal/front/a/6/a66fbaeb-1624-43b3-83e2-a37ce7588a5a.jpg?1783915126",
+   "large": "https://cards.scryfall.io/large/front/a/6/a66fbaeb-1624-43b3-83e2-a37ce7588a5a.jpg?1783915126",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/6/a66fbaeb-1624-43b3-83e2-a37ce7588a5a.jpg?1783915126"
+  }
+ },
+ {
+  "name": "Werefox Bodyguard",
+  "scryfallId": "4494dfa1-1343-417e-b0c5-2b096442dd0e",
+  "oracleId": "d5ee2ced-29f4-430f-962e-2f930b92624c",
+  "set": "woe",
+  "collectorNumber": "39",
+  "rarity": "rare",
+  "manaCost": "{1}{W}{W}",
+  "typeLine": "Creature — Elf Fox Knight",
+  "oracleText": "Flash\nWhen this creature enters, exile up to one other target non-Fox creature until this creature leaves the battlefield.\n{1}{W}, Sacrifice this creature: You gain 2 life.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Flash"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/4/4494dfa1-1343-417e-b0c5-2b096442dd0e.jpg?1783915124",
+   "normal": "https://cards.scryfall.io/normal/front/4/4/4494dfa1-1343-417e-b0c5-2b096442dd0e.jpg?1783915124",
+   "large": "https://cards.scryfall.io/large/front/4/4/4494dfa1-1343-417e-b0c5-2b096442dd0e.jpg?1783915124",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/4/4494dfa1-1343-417e-b0c5-2b096442dd0e.jpg?1783915124"
+  }
+ },
+ {
+  "name": "Woodland Acolyte",
+  "scryfallId": "b9f10623-4783-4773-b9c8-a5a2bcfdb5d9",
+  "oracleId": "ba610f08-61a7-47fe-9a80-32b5ce51b118",
+  "set": "woe",
+  "collectorNumber": "241",
+  "rarity": "uncommon",
+  "manaCost": "{2}{W}",
+  "typeLine": "Creature — Human Cleric",
+  "oracleText": "When this creature enters, draw a card.",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "back": "Mend the Wilds",
+  "adventure": true,
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/9/b9f10623-4783-4773-b9c8-a5a2bcfdb5d9.jpg?1783915061",
+   "normal": "https://cards.scryfall.io/normal/front/b/9/b9f10623-4783-4773-b9c8-a5a2bcfdb5d9.jpg?1783915061",
+   "large": "https://cards.scryfall.io/large/front/b/9/b9f10623-4783-4773-b9c8-a5a2bcfdb5d9.jpg?1783915061",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/9/b9f10623-4783-4773-b9c8-a5a2bcfdb5d9.jpg?1783915061"
+  }
+ },
+ {
+  "name": "Mend the Wilds",
+  "scryfallId": "b9f10623-4783-4773-b9c8-a5a2bcfdb5d9",
+  "oracleId": "ba610f08-61a7-47fe-9a80-32b5ce51b118",
+  "set": "woe",
+  "collectorNumber": "241",
+  "rarity": "uncommon",
+  "manaCost": "{G}",
+  "typeLine": "Instant — Adventure",
+  "oracleText": "Put target permanent card from your graveyard on top of your library. (Then exile this card. You may cast the creature later from exile.)",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "front": "Woodland Acolyte",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/9/b9f10623-4783-4773-b9c8-a5a2bcfdb5d9.jpg?1783915061",
+   "normal": "https://cards.scryfall.io/normal/front/b/9/b9f10623-4783-4773-b9c8-a5a2bcfdb5d9.jpg?1783915061",
+   "large": "https://cards.scryfall.io/large/front/b/9/b9f10623-4783-4773-b9c8-a5a2bcfdb5d9.jpg?1783915061",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/9/b9f10623-4783-4773-b9c8-a5a2bcfdb5d9.jpg?1783915061"
+  }
+ },
+ {
+  "name": "A Tale for the Ages",
+  "scryfallId": "ca0c8d3b-ce30-4da5-a6a8-9bdcb3c757f9",
+  "oracleId": "682a0770-8fe0-4142-aa0c-b60af3628a33",
+  "set": "woe",
+  "collectorNumber": "34",
+  "rarity": "rare",
+  "manaCost": "{1}{W}",
+  "typeLine": "Enchantment",
+  "oracleText": "Enchanted creatures you control get +2/+2.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/a/ca0c8d3b-ce30-4da5-a6a8-9bdcb3c757f9.jpg?1783915126",
+   "normal": "https://cards.scryfall.io/normal/front/c/a/ca0c8d3b-ce30-4da5-a6a8-9bdcb3c757f9.jpg?1783915126",
+   "large": "https://cards.scryfall.io/large/front/c/a/ca0c8d3b-ce30-4da5-a6a8-9bdcb3c757f9.jpg?1783915126",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/a/ca0c8d3b-ce30-4da5-a6a8-9bdcb3c757f9.jpg?1783915126"
+  }
+ },
+ {
+  "name": "Archon's Glory",
+  "scryfallId": "e71768e7-4ef7-4fb2-838b-eb3a7f662d38",
+  "oracleId": "bc5631ae-494e-4987-8d17-57674bfbdb9f",
+  "set": "woe",
+  "collectorNumber": "2",
+  "rarity": "common",
+  "manaCost": "{W}",
+  "typeLine": "Instant",
+  "oracleText": "Bargain (You may sacrifice an artifact, enchantment, or token as you cast this spell.)\nTarget creature gets +2/+2 until end of turn. If this spell was bargained, that creature also gains flying and lifelink until end of turn.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Bargain"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/7/e71768e7-4ef7-4fb2-838b-eb3a7f662d38.jpg?1783915136",
+   "normal": "https://cards.scryfall.io/normal/front/e/7/e71768e7-4ef7-4fb2-838b-eb3a7f662d38.jpg?1783915136",
+   "large": "https://cards.scryfall.io/large/front/e/7/e71768e7-4ef7-4fb2-838b-eb3a7f662d38.jpg?1783915136",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/7/e71768e7-4ef7-4fb2-838b-eb3a7f662d38.jpg?1783915136"
+  }
+ },
+ {
+  "name": "Break the Spell",
+  "scryfallId": "f7094fc0-1d26-429c-9b49-37718c4a5c80",
+  "oracleId": "b9d51e07-851f-4b7b-bffe-7c1efff0714c",
+  "set": "woe",
+  "collectorNumber": "5",
+  "rarity": "common",
+  "manaCost": "{W}",
+  "typeLine": "Instant",
+  "oracleText": "Destroy target enchantment. If a permanent you controlled or a token was destroyed this way, draw a card.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/7/f7094fc0-1d26-429c-9b49-37718c4a5c80.jpg?1783915136",
+   "normal": "https://cards.scryfall.io/normal/front/f/7/f7094fc0-1d26-429c-9b49-37718c4a5c80.jpg?1783915136",
+   "large": "https://cards.scryfall.io/large/front/f/7/f7094fc0-1d26-429c-9b49-37718c4a5c80.jpg?1783915136",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/7/f7094fc0-1d26-429c-9b49-37718c4a5c80.jpg?1783915136"
+  }
+ },
+ {
+  "name": "Cooped Up",
+  "scryfallId": "8acb8758-09c5-4e19-ada1-904e36ece1fc",
+  "oracleId": "3e8bcb44-b875-4fe4-b96f-97a20cbfec93",
+  "set": "woe",
+  "collectorNumber": "8",
+  "rarity": "common",
+  "manaCost": "{1}{W}",
+  "typeLine": "Enchantment — Aura",
+  "oracleText": "Enchant creature\nEnchanted creature can't attack or block.\n{2}{W}: Exile enchanted creature.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Enchant"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/a/8acb8758-09c5-4e19-ada1-904e36ece1fc.jpg?1783915134",
+   "normal": "https://cards.scryfall.io/normal/front/8/a/8acb8758-09c5-4e19-ada1-904e36ece1fc.jpg?1783915134",
+   "large": "https://cards.scryfall.io/large/front/8/a/8acb8758-09c5-4e19-ada1-904e36ece1fc.jpg?1783915134",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/a/8acb8758-09c5-4e19-ada1-904e36ece1fc.jpg?1783915134"
+  }
+ },
+ {
+  "name": "Eerie Interference",
+  "scryfallId": "42a74545-75c8-4a6b-bee1-ac5665d9bcf0",
+  "oracleId": "35ba0e70-da7c-4ed9-b8ec-7dd5c5ce110e",
+  "set": "woe",
+  "collectorNumber": "12",
+  "rarity": "uncommon",
+  "manaCost": "{2}{W}",
+  "typeLine": "Instant",
+  "oracleText": "Prevent all damage that would be dealt to you and creatures you control this turn by creatures.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/2/42a74545-75c8-4a6b-bee1-ac5665d9bcf0.jpg?1783915133",
+   "normal": "https://cards.scryfall.io/normal/front/4/2/42a74545-75c8-4a6b-bee1-ac5665d9bcf0.jpg?1783915133",
+   "large": "https://cards.scryfall.io/large/front/4/2/42a74545-75c8-4a6b-bee1-ac5665d9bcf0.jpg?1783915133",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/2/42a74545-75c8-4a6b-bee1-ac5665d9bcf0.jpg?1783915133"
+  }
+ },
+ {
+  "name": "Expel the Interlopers",
+  "scryfallId": "1094eef0-6c57-4bfa-a584-f708b87354fb",
+  "oracleId": "744b7e93-c893-4770-a3bb-6a45b7f8e4f7",
+  "set": "woe",
+  "collectorNumber": "13",
+  "rarity": "rare",
+  "manaCost": "{3}{W}{W}",
+  "typeLine": "Sorcery",
+  "oracleText": "Choose a number between 0 and 10. Destroy all creatures with power greater than or equal to the chosen number.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/0/1094eef0-6c57-4bfa-a584-f708b87354fb.jpg?1783915132",
+   "normal": "https://cards.scryfall.io/normal/front/1/0/1094eef0-6c57-4bfa-a584-f708b87354fb.jpg?1783915132",
+   "large": "https://cards.scryfall.io/large/front/1/0/1094eef0-6c57-4bfa-a584-f708b87354fb.jpg?1783915132",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/0/1094eef0-6c57-4bfa-a584-f708b87354fb.jpg?1783915132"
+  }
+ },
+ {
+  "name": "Glass Casket",
+  "scryfallId": "02c5c395-ee8b-47fd-ac52-256354c19cdf",
+  "oracleId": "d9167046-7908-4d16-8cc1-3eb02d1ba547",
+  "set": "woe",
+  "collectorNumber": "16",
+  "rarity": "uncommon",
+  "manaCost": "{1}{W}",
+  "typeLine": "Artifact",
+  "oracleText": "When this artifact enters, exile target creature an opponent controls with mana value 3 or less until this artifact leaves the battlefield.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/2/02c5c395-ee8b-47fd-ac52-256354c19cdf.jpg?1783915132",
+   "normal": "https://cards.scryfall.io/normal/front/0/2/02c5c395-ee8b-47fd-ac52-256354c19cdf.jpg?1783915132",
+   "large": "https://cards.scryfall.io/large/front/0/2/02c5c395-ee8b-47fd-ac52-256354c19cdf.jpg?1783915132",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/2/02c5c395-ee8b-47fd-ac52-256354c19cdf.jpg?1783915132"
+  }
+ },
+ {
+  "name": "Hopeful Vigil",
+  "scryfallId": "d382fd32-b1f5-4ec7-9d42-fc2915ed3bc9",
+  "oracleId": "33fff722-5cc5-4d0e-b788-166b3edb1223",
+  "set": "woe",
+  "collectorNumber": "17",
+  "rarity": "common",
+  "manaCost": "{1}{W}",
+  "typeLine": "Enchantment",
+  "oracleText": "When this enchantment enters, create a 2/2 white Knight creature token with vigilance.\nWhen this enchantment is put into a graveyard from the battlefield, scry 2.\n{2}{W}: Sacrifice this enchantment.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Scry"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/3/d382fd32-b1f5-4ec7-9d42-fc2915ed3bc9.jpg?1783915131",
+   "normal": "https://cards.scryfall.io/normal/front/d/3/d382fd32-b1f5-4ec7-9d42-fc2915ed3bc9.jpg?1783915131",
+   "large": "https://cards.scryfall.io/large/front/d/3/d382fd32-b1f5-4ec7-9d42-fc2915ed3bc9.jpg?1783915131",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/3/d382fd32-b1f5-4ec7-9d42-fc2915ed3bc9.jpg?1783915131"
+  }
+ },
+ {
+  "name": "Kellan's Lightblades",
+  "scryfallId": "0cc727a6-f875-49b1-b7a4-67f22fbc3d50",
+  "oracleId": "4b803bf2-025a-4bf6-9d3c-a28d714b4781",
+  "set": "woe",
+  "collectorNumber": "18",
+  "rarity": "common",
+  "manaCost": "{1}{W}",
+  "typeLine": "Instant",
+  "oracleText": "Bargain (You may sacrifice an artifact, enchantment, or token as you cast this spell.)\nKellan's Lightblades deals 3 damage to target attacking or blocking creature. If this spell was bargained, destroy that creature instead.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Bargain"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/c/0cc727a6-f875-49b1-b7a4-67f22fbc3d50.jpg?1783915131",
+   "normal": "https://cards.scryfall.io/normal/front/0/c/0cc727a6-f875-49b1-b7a4-67f22fbc3d50.jpg?1783915131",
+   "large": "https://cards.scryfall.io/large/front/0/c/0cc727a6-f875-49b1-b7a4-67f22fbc3d50.jpg?1783915131",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/c/0cc727a6-f875-49b1-b7a4-67f22fbc3d50.jpg?1783915131"
+  }
+ },
+ {
+  "name": "Moment of Valor",
+  "scryfallId": "6f257fd6-24a4-4cc1-89e0-99cf5d821e3a",
+  "oracleId": "bfac8072-2bbc-43ca-b141-9cd0799840f7",
+  "set": "woe",
+  "collectorNumber": "20",
+  "rarity": "common",
+  "manaCost": "{2}{W}",
+  "typeLine": "Instant",
+  "oracleText": "Choose one —\n• Untap target creature. It gets +1/+0 and gains indestructible until end of turn.\n• Destroy target creature with power 4 or greater.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/f/6f257fd6-24a4-4cc1-89e0-99cf5d821e3a.jpg?1783915130",
+   "normal": "https://cards.scryfall.io/normal/front/6/f/6f257fd6-24a4-4cc1-89e0-99cf5d821e3a.jpg?1783915130",
+   "large": "https://cards.scryfall.io/large/front/6/f/6f257fd6-24a4-4cc1-89e0-99cf5d821e3a.jpg?1783915130",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/f/6f257fd6-24a4-4cc1-89e0-99cf5d821e3a.jpg?1783915130"
+  }
+ },
+ {
+  "name": "Plunge into Winter",
+  "scryfallId": "fe4aceba-f386-457c-bc68-6382eda46754",
+  "oracleId": "a272f15d-caa2-40e9-894f-19638bd5f375",
+  "set": "woe",
+  "collectorNumber": "22",
+  "rarity": "common",
+  "manaCost": "{1}{W}",
+  "typeLine": "Instant",
+  "oracleText": "Tap up to one target creature. Scry 1, then draw a card.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Scry"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/e/fe4aceba-f386-457c-bc68-6382eda46754.jpg?1783915131",
+   "normal": "https://cards.scryfall.io/normal/front/f/e/fe4aceba-f386-457c-bc68-6382eda46754.jpg?1783915131",
+   "large": "https://cards.scryfall.io/large/front/f/e/fe4aceba-f386-457c-bc68-6382eda46754.jpg?1783915131",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/e/fe4aceba-f386-457c-bc68-6382eda46754.jpg?1783915131"
+  }
+ },
+ {
+  "name": "Return Triumphant",
+  "scryfallId": "f5209c13-9591-48eb-8d6c-112b3bdd429a",
+  "oracleId": "a4814615-ffa2-4692-86bc-3a1b7fc2acc8",
+  "set": "woe",
+  "collectorNumber": "26",
+  "rarity": "common",
+  "manaCost": "{1}{W}",
+  "typeLine": "Sorcery",
+  "oracleText": "Return target creature card with mana value 3 or less from your graveyard to the battlefield. Create a Young Hero Role token attached to it. (Enchanted creature has \"Whenever this creature attacks, if its toughness is 3 or less, put a +1/+1 counter on it.\" If you put another Role on the creature later, put this one into the graveyard.)",
+  "colors": [
+   "W"
+  ],
+  "keywords": [
+   "Role token"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/5/f5209c13-9591-48eb-8d6c-112b3bdd429a.jpg?1783915128",
+   "normal": "https://cards.scryfall.io/normal/front/f/5/f5209c13-9591-48eb-8d6c-112b3bdd429a.jpg?1783915128",
+   "large": "https://cards.scryfall.io/large/front/f/5/f5209c13-9591-48eb-8d6c-112b3bdd429a.jpg?1783915128",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/5/f5209c13-9591-48eb-8d6c-112b3bdd429a.jpg?1783915128"
+  }
+ },
+ {
+  "name": "Solitary Sanctuary",
+  "scryfallId": "d155693c-def0-4290-b662-ab9932e07fe5",
+  "oracleId": "4c0a8eed-f2e2-4821-8011-6e6ad2081936",
+  "set": "woe",
+  "collectorNumber": "30",
+  "rarity": "uncommon",
+  "manaCost": "{2}{W}",
+  "typeLine": "Enchantment",
+  "oracleText": "When this enchantment enters, tap target creature an opponent controls and put a stun counter on it. (If a permanent with a stun counter would become untapped, remove one from it instead.)\nWhenever you tap an untapped creature an opponent controls, put a +1/+1 counter on target creature you control.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/1/d155693c-def0-4290-b662-ab9932e07fe5.jpg?1783915126",
+   "normal": "https://cards.scryfall.io/normal/front/d/1/d155693c-def0-4290-b662-ab9932e07fe5.jpg?1783915126",
+   "large": "https://cards.scryfall.io/large/front/d/1/d155693c-def0-4290-b662-ab9932e07fe5.jpg?1783915126",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/1/d155693c-def0-4290-b662-ab9932e07fe5.jpg?1783915126"
+  }
+ },
+ {
+  "name": "Stroke of Midnight",
+  "scryfallId": "ab135925-d924-456d-851a-6ccdaaf27271",
+  "oracleId": "9a107e48-3d50-4941-95b1-10f2b29a4245",
+  "set": "fdn",
+  "collectorNumber": "148",
+  "rarity": "uncommon",
+  "manaCost": "{2}{W}",
+  "typeLine": "Instant",
+  "oracleText": "Destroy target nonland permanent. Its controller creates a 1/1 white Human creature token.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/b/ab135925-d924-456d-851a-6ccdaaf27271.jpg?1783909083",
+   "normal": "https://cards.scryfall.io/normal/front/a/b/ab135925-d924-456d-851a-6ccdaaf27271.jpg?1783909083",
+   "large": "https://cards.scryfall.io/large/front/a/b/ab135925-d924-456d-851a-6ccdaaf27271.jpg?1783909083",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/b/ab135925-d924-456d-851a-6ccdaaf27271.jpg?1783909083"
+  }
+ },
+ {
+  "name": "The Princess Takes Flight",
+  "scryfallId": "dad7bd06-22e4-40f8-bda9-bcdbb2d8f632",
+  "oracleId": "70d52457-1867-482c-ba7a-1f7dacc4514f",
+  "set": "woe",
+  "collectorNumber": "23",
+  "rarity": "uncommon",
+  "manaCost": "{2}{W}",
+  "typeLine": "Enchantment — Saga",
+  "oracleText": "(As this Saga enters and after your draw step, add a lore counter. Sacrifice after III.)\nI — Exile up to one target creature.\nII — Target creature you control gets +2/+2 and gains flying until end of turn.\nIII — Return the exiled card to the battlefield under its owner's control.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/a/dad7bd06-22e4-40f8-bda9-bcdbb2d8f632.jpg?1783915128",
+   "normal": "https://cards.scryfall.io/normal/front/d/a/dad7bd06-22e4-40f8-bda9-bcdbb2d8f632.jpg?1783915128",
+   "large": "https://cards.scryfall.io/large/front/d/a/dad7bd06-22e4-40f8-bda9-bcdbb2d8f632.jpg?1783915128",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/a/dad7bd06-22e4-40f8-bda9-bcdbb2d8f632.jpg?1783915128"
+  }
+ },
+ {
+  "name": "Virtue of Loyalty",
+  "scryfallId": "ea7e7daf-7c06-4c74-8bcf-e42c1f611861",
+  "oracleId": "f61f4307-4eec-476a-97e5-d4d3da2b54c3",
+  "set": "woe",
+  "collectorNumber": "38",
+  "rarity": "mythic",
+  "manaCost": "{3}{W}{W}",
+  "typeLine": "Enchantment",
+  "oracleText": "At the beginning of your end step, put a +1/+1 counter on each creature you control. Untap those creatures.",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "back": "Ardenvale Fealty",
+  "adventure": true,
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/a/ea7e7daf-7c06-4c74-8bcf-e42c1f611861.jpg?1783915127",
+   "normal": "https://cards.scryfall.io/normal/front/e/a/ea7e7daf-7c06-4c74-8bcf-e42c1f611861.jpg?1783915127",
+   "large": "https://cards.scryfall.io/large/front/e/a/ea7e7daf-7c06-4c74-8bcf-e42c1f611861.jpg?1783915127",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/a/ea7e7daf-7c06-4c74-8bcf-e42c1f611861.jpg?1783915127"
+  }
+ },
+ {
+  "name": "Ardenvale Fealty",
+  "scryfallId": "ea7e7daf-7c06-4c74-8bcf-e42c1f611861",
+  "oracleId": "f61f4307-4eec-476a-97e5-d4d3da2b54c3",
+  "set": "woe",
+  "collectorNumber": "38",
+  "rarity": "mythic",
+  "manaCost": "{1}{W}",
+  "typeLine": "Instant — Adventure",
+  "oracleText": "Create a 2/2 white Knight creature token with vigilance. (Then exile this card. You may cast the enchantment later from exile.)",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "front": "Virtue of Loyalty",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/a/ea7e7daf-7c06-4c74-8bcf-e42c1f611861.jpg?1783915127",
+   "normal": "https://cards.scryfall.io/normal/front/e/a/ea7e7daf-7c06-4c74-8bcf-e42c1f611861.jpg?1783915127",
+   "large": "https://cards.scryfall.io/large/front/e/a/ea7e7daf-7c06-4c74-8bcf-e42c1f611861.jpg?1783915127",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/a/ea7e7daf-7c06-4c74-8bcf-e42c1f611861.jpg?1783915127"
+  }
  }
 ]

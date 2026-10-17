@@ -707,6 +707,9 @@ export interface CostDef {
   // Lord of the Rings (21d gc-rare): Mines of Moria
   /** Exile this many cards from your graveyard (chosen one at a time when there are more). */
   exileGraveyardCards?: number;
+  // Wilds of Eldraine (23b white): Dutiful Griffin
+  /** "Sacrifice two enchantments": sacrifice this many permanents matching the filter (chosen when activating, in the action's `sacrificeMany`). */
+  sacrificePermanents?: { count: number; filter: CardFilter };
 }
 
 export type TriggerDef =
@@ -3462,6 +3465,9 @@ export type StaticDef =
       power: Amount;
       toughness: Amount;
       keywords?: Keyword[];
+      // Wilds of Eldraine (23b white): Archon of the Wild Rose
+      /** Base power and toughness of the creatures it affects (counters and other bonuses still apply on top). */
+      basePT?: [number, number];
     }
   | { kind: 'noLifeGain' }
   // Lord of the Rings (21b black): Gríma Wormtongue
@@ -4729,6 +4735,9 @@ export interface TurnState {
   // Lord of the Rings (21b red): Fear, Fire, Foes!
   /** "Damage can't be prevented this turn." */
   ltrDamageUnpreventable?: boolean;
+  // Wilds of Eldraine (23b white): Eerie Interference
+  /** Players whose creatures (and the players themselves) are dealt no damage by creatures this turn. */
+  woeCreatureDamagePrevented?: PlayerId[];
   // Lord of the Rings (21d br-rare): Witch-king of Angmar
   /** The creatures that dealt combat damage to each player this turn (`id:zcc`). */
   ltrCombatDamagers?: Partial<Record<PlayerId, string[]>>;
@@ -5628,6 +5637,9 @@ export type Action =
       // Lorwyn Eclipsed (18b, white): Kithkeeper
       /** The creatures tapped for `tapCreatures` ("tap three untapped creatures you control") or to crew (Lorwyn Eclipsed 18c). */
       tapCreatures?: ObjectId[];
+      // Wilds of Eldraine (23b white): Dutiful Griffin
+      /** The permanents sacrificed for `sacrificePermanents` ("sacrifice two enchantments"). */
+      sacrificeMany?: ObjectId[];
     }
   | {
       type: 'addAttacker';

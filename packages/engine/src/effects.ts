@@ -74,6 +74,7 @@ import { LTR_GC_RARE_EXPANDERS } from './ltr-gc-rare-effects.ts'; // Lord of the
 import { LTR_BR_RARE_EXPANDERS } from './ltr-br-rare-effects.ts'; // Lord of the Rings (21d br-rare)
 import { SOS_14B_C_CHOOSERS } from './sos-14b-c-effects.ts';
 import { runAnimate, runCreateRole } from './woe-23a.ts'; // Wilds of Eldraine (23a)
+import { WOE_WHITE_CHOOSERS, woeCreatureDamagePrevented } from './woe-white-effects.ts'; // Wilds of Eldraine (23b white)
 import type {
   AbilityDef,
   CardDefId,
@@ -263,6 +264,8 @@ function prevented(ctx: Ctx, src: DamageSource, to: TargetChoice, amount: number
     )
   )
     return 0;
+  // Wilds of Eldraine (23b white): Eerie Interference, damage from creatures to you and your creatures.
+  if (woeCreatureDamagePrevented(ctx, src.id, to)) return 0;
   // Marvel Super Heroes Jumpstart (Squadron): Hyperion prevents all but 1 of damage to you and your Heroes.
   if (amount > 1 && allButOne(ctx, to)) amount = 1;
   if ('player' in to) {
@@ -1819,7 +1822,11 @@ export function runEffects(
         };
       } else if (e.kind === 'chooseCustom') {
         // Strixhaven (13c): a handler builds the options (and says who chooses).
-        const made = (CHOOSERS[e.handler] ?? SOS_14B_C_CHOOSERS[e.handler])?.(ctx, es, e.params);
+        const made = (
+          CHOOSERS[e.handler] ??
+          SOS_14B_C_CHOOSERS[e.handler] ??
+          WOE_WHITE_CHOOSERS[e.handler] // Wilds of Eldraine (23b white)
+        )?.(ctx, es, e.params);
         if (!made || made.options.length === 0) continue;
         ctx.s.decision = {
           kind: 'chooseOption',

@@ -285,6 +285,11 @@ export function characteristics(ctx: Ctx, id: ObjectId): Characteristics {
         if (st.filter?.tapped !== undefined && o.tapped !== st.filter.tapped) continue;
         if (st.filter?.colors && !st.filter.colors.some((color) => d.colors.includes(color)))
           continue;
+        // Wilds of Eldraine (23b white): Archon of the Wild Rose, base power and toughness.
+        if (st.basePT && src.timestamp >= baseTimestamp) {
+          override = st.basePT;
+          baseTimestamp = src.timestamp;
+        }
         power += countOf(ctx, src.controller, st.power, false, srcId);
         toughness += countOf(ctx, src.controller, st.toughness, false, srcId);
         if (st.keywords?.length) {

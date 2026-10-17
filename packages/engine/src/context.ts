@@ -41,6 +41,7 @@ import { HOB_BLUE_EFFECTS } from './hob-blue-effects.ts'; // The Hobbit (20b blu
 import { TDM_BLUE_EFFECTS } from './tdm-blue-effects.ts';
 import { HOB_COLORLESS_EFFECTS } from './hob-colorless-effects.ts'; // The Hobbit (20b colorless)
 import { ECL_WHITE_EFFECTS } from './ecl-white-effects.ts';
+import { WOE_WHITE_EFFECTS } from './woe-white-effects.ts'; // Wilds of Eldraine (23b white)
 import { HOB_WHITE_EFFECTS } from './hob-white-effects.ts'; // The Hobbit (20b white)
 import { LTR_BLUE_EFFECTS } from './ltr-blue-effects.ts'; // Lord of the Rings (21b blue)
 import { LTR_WHITE_EFFECTS } from './ltr-white-effects.ts'; // Lord of the Rings (21b white)
@@ -208,6 +209,7 @@ const BUILT_IN_EFFECTS: Record<string, CustomEffect> = {
   ...HOB_COLORLESS_EFFECTS, // The Hobbit (20b colorless)
   // Lorwyn Eclipsed (18b): white.
   ...ECL_WHITE_EFFECTS,
+  ...WOE_WHITE_EFFECTS, // Wilds of Eldraine (23b white)
   ...HOB_WHITE_EFFECTS, // The Hobbit (20b, white)
   ...LTR_BLUE_EFFECTS, // Lord of the Rings (21b blue)
   ...LTR_WHITE_EFFECTS, // Lord of the Rings (21b white)

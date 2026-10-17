@@ -564,7 +564,17 @@ export function Board({
       const paying =
         targeting.chosen.length === 0 &&
         (first?.type === 'castSpell' || first?.type === 'activateAbility')
-          ? first.sacrifice
+          ? // Wilds of Eldraine (23b white): Dutiful Griffin, "sacrifice two enchantments".
+            first.type === 'activateAbility' && first.sacrificeMany?.length
+            ? (() => {
+                const ab = cardDb.get(view.objects[first.source]?.defId ?? '')?.abilities[
+                  first.abilityIndex
+                ];
+                const type =
+                  ab?.kind === 'activated' ? ab.cost.sacrificePermanents?.filter.types?.[0] : undefined;
+                return `${type ? `${type.toLowerCase()}s` : 'permanents'} to sacrifice`;
+              })()
+            : first.sacrifice
             ? (first.type === 'castSpell' &&
                 kickPermanentPrompt(view.objects[first.card]?.defId, first)) ||
               'a creature to sacrifice'

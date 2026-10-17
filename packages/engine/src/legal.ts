@@ -34,6 +34,7 @@ import {
   hasConvoke,
 } from './ecl-18a.ts';
 import { cantBeSacrificed, harmonizeTaps, isHarmonizeCast } from './tdm-19a.ts';
+import { canSacrificePermanents, sacrificeWays } from './woe-white-effects.ts'; // Wilds of Eldraine (23b white)
 import {
   abilityTags,
   artifactHelpers,
@@ -1007,6 +1008,12 @@ function priorityActions(
       // Lorwyn Eclipsed (18b, white): Kithkeeper.
       if (a.cost.tapCreatures && creaturesToTap(ctx, player, undefined).length < a.cost.tapCreatures)
         return;
+      // Wilds of Eldraine (23b white): Dutiful Griffin, "sacrifice two enchantments".
+      if (
+        a.cost.sacrificePermanents &&
+        !canSacrificePermanents(ctx, player, source, a.cost.sacrificePermanents)
+      )
+        return;
       // Tarkir: Dragonstorm (19a): Zurgo, Thunder's Decree, a token that can't be sacrificed.
       if (a.cost.sacrificeSelf && cantBeSacrificed(ctx, source)) return;
       if (a.cost.crew && !crewFor(ctx, player, source, a.cost.crew)) return;
@@ -1212,6 +1219,16 @@ function priorityActions(
         pick(0, []);
         for (const base of bases)
           for (const tapCreatures of ways) out.push({ ...base, tapCreatures } as Action);
+      }
+      // Wilds of Eldraine (23b white): Dutiful Griffin, "sacrifice two enchantments": one action for each way of choosing them
+      // (permanents that look alike are one way); the board picks them one at a time.
+      if (a.cost.sacrificePermanents) {
+        const bases = out.splice(firstOfAbility);
+        const ways = sacrificeWays(ctx, player, source, a.cost.sacrificePermanents).filter(
+          (way) => !mana || canPayFrom(mana, usable.filter((p) => !way.includes(p.id))),
+        );
+        for (const base of bases)
+          for (const sacrificeMany of ways) out.push({ ...base, sacrificeMany } as Action);
       }
       // Lorwyn Eclipsed (18c): Crew N: one action for each way of choosing the creatures to tap (smallest sets reaching N; creatures
       // that look alike are one way); the board picks them one at a time, in any order.

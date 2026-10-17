@@ -1,4 +1,5 @@
 import { ltrNotedTypeCounters } from './ltr-main-rules.ts'; // Lord of the Rings (22)
+import { permanentsToSacrifice } from './woe-white-effects.ts'; // Wilds of Eldraine (23b white)
 import { creaturesOnBattlefield, power } from './characteristics.ts';
 import { ignoresHexproofAndWard } from './brawl-15b-b-effects.ts';
 import {
@@ -1341,6 +1342,7 @@ export function activateAbility(
   blight?: ObjectId,
   removeKinds?: string[],
   tapCreatures?: ObjectId[],
+  sacrificeMany?: ObjectId[], // Wilds of Eldraine (23b white)
 ): boolean {
   const a = activatedAbility(ctx, source, index);
   const src = obj(ctx, source);
@@ -1367,6 +1369,7 @@ export function activateAbility(
       tapCreature,
       ...(tapArtifacts ?? []),
       ...(tapCreatures ?? []),
+      ...(sacrificeMany ?? []),
     ],
   );
   if (discard) {
@@ -1490,6 +1493,10 @@ export function activateAbility(
   const sacrificedPower = sacrifice ? power(ctx, sacrifice) : undefined;
   const sacrificedLegendary = !!sacrifice && isLegendaryNow(ctx, sacrifice); // Lord of the Rings (21b black)
   if (sacrifice) sacrificePermanent(ctx, sacrifice);
+  // Wilds of Eldraine (23b white): Dutiful Griffin, "sacrifice two enchantments".
+  if (a.cost.sacrificePermanents)
+    for (const id of permanentsToSacrifice(ctx, player, source, a.cost.sacrificePermanents, sacrificeMany))
+      sacrificePermanent(ctx, id);
   changeLife(
     ctx,
     player,

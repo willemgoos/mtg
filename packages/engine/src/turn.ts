@@ -293,6 +293,7 @@ export function startTurn(ctx: Ctx, player: PlayerId, noPowerUp = false): void {
   delete s.turn.noncombatDamaged;
   delete s.turn.moltenTide;
   delete s.turn.ltrDamageUnpreventable; // Lord of the Rings (21b red)
+  delete s.turn.woeCreatureDamagePrevented; // Wilds of Eldraine (23b white)
   delete s.turn.ltrCombatDamagers; // Lord of the Rings (21d br-rare)
   delete s.turn.ltrAttackedPlayers; // Lord of the Rings (21d multi-rare)
   delete s.turn.ltrBlockedWithLegendary; // Lord of the Rings (22 white)
