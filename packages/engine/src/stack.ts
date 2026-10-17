@@ -2899,6 +2899,14 @@ export function answerDiscard(ctx: Ctx, card: ObjectId): void {
         controller: d.resume.controller,
         amount: d.nonlandDiscarded,
       });
+    // Wilds of Eldraine (23b blue): Talion's Messenger: "when you discard a card this way".
+    if (d.reflexiveOnAny !== undefined && d.resume.source)
+      ctx.s.pendingTriggers.push({
+        source: d.resume.source,
+        sourceDefId: d.resume.sourceDefId,
+        abilityIndex: d.reflexiveOnAny,
+        controller: d.resume.controller,
+      });
     // Strixhaven Brawl (15a): Seasoned Pyromancer: draw, then a token for each nonland card.
     if (d.drawAfter) {
       const after: EffectDef[] = [{ kind: 'draw', who: 'controller', amount: d.drawAfter }];

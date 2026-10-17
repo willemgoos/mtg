@@ -2157,6 +2157,8 @@ export function runEffects(
           ...(e.landsTapped ? { landsTapped: true } : {}),
           // Tarkir: Dragonstorm (19b, white): United Battlefront.
           ...(e.upTo ? { remaining: e.upTo } : {}),
+          // Wilds of Eldraine (23b blue): Farsight Ritual.
+          ...(e.required ? { required: true } : {}),
           resume,
           thenPriority,
         };
@@ -2349,6 +2351,8 @@ export function runEffects(
           ...(e.reflexiveOnNonland !== undefined
             ? { reflexiveOnNonland: e.reflexiveOnNonland }
             : {}),
+          // Wilds of Eldraine (23b blue): Talion's Messenger.
+          ...(e.reflexiveOnAny !== undefined ? { reflexiveOnAny: e.reflexiveOnAny } : {}),
           ...(e.filter ? { filter: e.filter } : {}),
           ...(e.exile ? { exile: true } : {}),
           ...(e.damageTo !== undefined ? { damageTo: e.damageTo } : {}),

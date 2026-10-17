@@ -2103,7 +2103,7 @@ function SearchOverlay({ game, onHover }: { game: GameSession; onHover: HoverFn 
         <p>
           {d.kind === 'searchLibrary' && d.remaining !== undefined
             ? // Reality Fracture (17a): "up to N cards" (Fblthp, Knows the Way; Hexhaven Invigorator).
-              `Choose ${d.exileFreeThisTurn ? 'any number of' : `up to ${d.remaining}`} ${d.remaining === 1 ? 'card' : 'cards'}, one at a time${d.differentNames ? ', each with a different name,' : ''} to ${d.exileFreeThisTurn ? 'exile (until end of turn you may cast them without paying their mana costs)' : `put ${d.to && d.to !== 'hand' ? 'onto the battlefield' : 'into your hand'}`}.`
+              `Choose ${d.exileFreeThisTurn ? 'any number of' : d.required ? `${d.remaining}` : `up to ${d.remaining}`} ${d.remaining === 1 ? 'card' : 'cards'}, one at a time${d.differentNames ? ', each with a different name,' : ''} to ${d.exileFreeThisTurn ? 'exile (until end of turn you may cast them without paying their mana costs)' : `put ${d.to && d.to !== 'hand' ? 'onto the battlefield' : 'into your hand'}`}.`
             : d.kind === 'searchLibrary' && d.to === 'hideaway'
               ? 'Choose a card to exile face down.'
               : d.kind === 'searchLibrary' && d.to === 'libraryBottom'

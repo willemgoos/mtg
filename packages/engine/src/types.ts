@@ -1558,6 +1558,9 @@ export interface CardFilter {
   attackedThisTurn?: boolean;
   /** Toughness greater than its power (Fecund Greenshell). */
   toughnessGreaterThanPower?: boolean;
+  // Wilds of Eldraine (23b blue): Elusive Otter
+  /** Power less than the source's power ("creatures with power less than this creature's power"). */
+  powerLessThanSource?: boolean;
   // Marvel Super Heroes Jumpstart (Marvelous)
   /** Power greater than its base power (Ms. Marvel, Elastic Ally). */
   powerAboveBase?: boolean;
@@ -2798,6 +2801,9 @@ export type EffectDef =
       // Reality Fracture (17a): Seasoned Cryomancer
       /** Once the discarding is done, if any nonland card was discarded, the reflexive ability at this index triggers ("that many"). */
       reflexiveOnNonland?: number;
+      // Wilds of Eldraine (23b blue): Talion's Messenger
+      /** Once a card has been discarded, the reflexive ability at this index triggers ("when you discard a card this way"). */
+      reflexiveOnAny?: number;
       // Reality Fracture (17a): Tether Technician, Improvised Act
       /** "If you do": these effects follow once a card was discarded (not if the hand was empty). */
       then?: EffectDef[];
@@ -3001,6 +3007,9 @@ export type EffectDef =
       // Tarkir: Dragonstorm (19b, white): United Battlefront
       /** "Put up to N ... from among them": one at a time, stopping whenever the player likes; the rest go to the bottom in a random order. */
       upTo?: number;
+      // Wilds of Eldraine (23b blue): Farsight Ritual
+      /** Not optional: with `upTo`, exactly that many cards if there are that many to take ("put two of them into your hand"). */
+      required?: boolean;
     }
   /** Exile the top N; you may play them until the end of this turn or of your next turn. */
   | {
@@ -3494,6 +3503,9 @@ export type StaticDef =
   /** Instant and sorcery spells you control have lifelink. */
   | { kind: 'instantsSorceriesLifelink' }
   | { kind: 'cantBlock' }
+  // Wilds of Eldraine (23b blue): the Faerie token
+  /** "This creature can block only creatures matching the filter" (the Faerie token: creatures with flying). */
+  | { kind: 'canBlockOnly'; filter: CardFilter }
   /** This permanent doesn't untap during its controller's untap step (The Hobbit (20a), Bombur: `unless` the condition holds). */
   | { kind: 'doesntUntap'; unless?: ConditionDef }
   // Lord of the Rings (21b blue): Bewitching Leechcraft
@@ -5050,6 +5062,7 @@ export type Decision =
       drawAfter?: number;
       tokenPerNonland?: string;
       reflexiveOnNonland?: number; // Reality Fracture (17a): Seasoned Cryomancer
+      reflexiveOnAny?: number; // Wilds of Eldraine (23b blue): Talion's Messenger
       nonlandDiscarded?: number;
       // Reality Fracture (17a): Tether Technician
       then?: EffectDef[];
