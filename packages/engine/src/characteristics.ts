@@ -8,6 +8,7 @@ import { ltrCombatKeywordsApply, ltrGcRareFilterFails } from './ltr-gc-rare-effe
 import { spellsCastThisTurn } from './tdm-19a.ts';
 import { checkCondition } from './triggers.ts';
 import { defHasAdventure } from './woe-23a.ts'; // Wilds of Eldraine (23a)
+import { powerLessThan } from './woe-blue-effects.ts'; // Wilds of Eldraine (23b blue)
 import type {
   Amount,
   CardDb,
@@ -1240,6 +1241,8 @@ export function matchesFilter(
     const ch = characteristics(ctx, id);
     if (ch.toughness <= ch.power) return false;
   }
+  // Wilds of Eldraine (23b blue): Elusive Otter.
+  if (filter.powerLessThanSource && !powerLessThan(ctx, id, sourceId)) return false;
   // Marvel Super Heroes Jumpstart (Marvelous): Ms. Marvel, Elastic Ally.
   if (filter.powerAboveBase && characteristics(ctx, id).power <= basePowerOf(ctx, id)) return false;
   if (filter.chosenTypeOfSource) {

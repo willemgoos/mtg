@@ -99902,5 +99902,961 @@
    "large": "https://cards.scryfall.io/large/front/0/7/07e81ace-4d75-4d79-ab99-c42288580def.jpg?1783915873",
    "artCrop": "https://cards.scryfall.io/art_crop/front/0/7/07e81ace-4d75-4d79-ab99-c42288580def.jpg?1783915873"
   }
+ },
+ {
+  "name": "Aquatic Alchemist",
+  "scryfallId": "e6f03f21-aeb9-428b-9167-b2604919bdd8",
+  "oracleId": "a78b063a-7f74-465a-9670-34f927f4bfe9",
+  "set": "woe",
+  "collectorNumber": "40",
+  "rarity": "common",
+  "manaCost": "{1}{U}",
+  "typeLine": "Creature — Elemental",
+  "oracleText": "Whenever you cast your first instant or sorcery spell each turn, this creature gets +2/+0 until end of turn.",
+  "power": "1",
+  "toughness": "3",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "back": "Bubble Up",
+  "adventure": true,
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/6/e6f03f21-aeb9-428b-9167-b2604919bdd8.jpg?1783915124",
+   "normal": "https://cards.scryfall.io/normal/front/e/6/e6f03f21-aeb9-428b-9167-b2604919bdd8.jpg?1783915124",
+   "large": "https://cards.scryfall.io/large/front/e/6/e6f03f21-aeb9-428b-9167-b2604919bdd8.jpg?1783915124",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/6/e6f03f21-aeb9-428b-9167-b2604919bdd8.jpg?1783915124"
+  }
+ },
+ {
+  "name": "Bubble Up",
+  "scryfallId": "e6f03f21-aeb9-428b-9167-b2604919bdd8",
+  "oracleId": "a78b063a-7f74-465a-9670-34f927f4bfe9",
+  "set": "woe",
+  "collectorNumber": "40",
+  "rarity": "common",
+  "manaCost": "{2}{U}",
+  "typeLine": "Sorcery — Adventure",
+  "oracleText": "Put target instant or sorcery card from your graveyard on top of your library. (Then exile this card. You may cast the creature later from exile.)",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "front": "Aquatic Alchemist",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/6/e6f03f21-aeb9-428b-9167-b2604919bdd8.jpg?1783915124",
+   "normal": "https://cards.scryfall.io/normal/front/e/6/e6f03f21-aeb9-428b-9167-b2604919bdd8.jpg?1783915124",
+   "large": "https://cards.scryfall.io/large/front/e/6/e6f03f21-aeb9-428b-9167-b2604919bdd8.jpg?1783915124",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/6/e6f03f21-aeb9-428b-9167-b2604919bdd8.jpg?1783915124"
+  }
+ },
+ {
+  "name": "Beluna's Gatekeeper",
+  "scryfallId": "5c1d410e-4237-4963-b015-54d26730e63d",
+  "oracleId": "52fd9309-b849-419a-8d19-5882c00a72b4",
+  "set": "woe",
+  "collectorNumber": "43",
+  "rarity": "common",
+  "manaCost": "{5}{U}",
+  "typeLine": "Creature — Giant Soldier",
+  "oracleText": "",
+  "power": "6",
+  "toughness": "5",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "back": "Entry Denied",
+  "adventure": true,
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/c/5c1d410e-4237-4963-b015-54d26730e63d.jpg?1783915123",
+   "normal": "https://cards.scryfall.io/normal/front/5/c/5c1d410e-4237-4963-b015-54d26730e63d.jpg?1783915123",
+   "large": "https://cards.scryfall.io/large/front/5/c/5c1d410e-4237-4963-b015-54d26730e63d.jpg?1783915123",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/c/5c1d410e-4237-4963-b015-54d26730e63d.jpg?1783915123"
+  }
+ },
+ {
+  "name": "Entry Denied",
+  "scryfallId": "5c1d410e-4237-4963-b015-54d26730e63d",
+  "oracleId": "52fd9309-b849-419a-8d19-5882c00a72b4",
+  "set": "woe",
+  "collectorNumber": "43",
+  "rarity": "common",
+  "manaCost": "{1}{U}",
+  "typeLine": "Sorcery — Adventure",
+  "oracleText": "Return target creature you don't control with mana value 3 or less to its owner's hand. (Then exile this card. You may cast the creature later from exile.)",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "front": "Beluna's Gatekeeper",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/c/5c1d410e-4237-4963-b015-54d26730e63d.jpg?1783915123",
+   "normal": "https://cards.scryfall.io/normal/front/5/c/5c1d410e-4237-4963-b015-54d26730e63d.jpg?1783915123",
+   "large": "https://cards.scryfall.io/large/front/5/c/5c1d410e-4237-4963-b015-54d26730e63d.jpg?1783915123",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/c/5c1d410e-4237-4963-b015-54d26730e63d.jpg?1783915123"
+  }
+ },
+ {
+  "name": "Bitter Chill",
+  "scryfallId": "888e3c71-e21d-4e77-b1b6-09769f9cd3d6",
+  "oracleId": "be0dcad2-8e84-4e9f-b69c-837b40b8fb83",
+  "set": "woe",
+  "collectorNumber": "44",
+  "rarity": "uncommon",
+  "manaCost": "{1}{U}",
+  "typeLine": "Enchantment — Aura",
+  "oracleText": "Enchant creature\nWhen this Aura enters, tap enchanted creature.\nEnchanted creature doesn't untap during its controller's untap step.\nWhen this Aura is put into a graveyard from the battlefield, you may pay {1}. If you do, scry 1, then draw a card.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Enchant",
+   "Scry"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/8/888e3c71-e21d-4e77-b1b6-09769f9cd3d6.jpg?1783915122",
+   "normal": "https://cards.scryfall.io/normal/front/8/8/888e3c71-e21d-4e77-b1b6-09769f9cd3d6.jpg?1783915122",
+   "large": "https://cards.scryfall.io/large/front/8/8/888e3c71-e21d-4e77-b1b6-09769f9cd3d6.jpg?1783915122",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/8/888e3c71-e21d-4e77-b1b6-09769f9cd3d6.jpg?1783915122"
+  }
+ },
+ {
+  "name": "Chancellor of Tales",
+  "scryfallId": "f67bd5ef-305b-4bf7-990b-3014778b14a0",
+  "oracleId": "529f259a-df66-4283-bc28-de3933c42e67",
+  "set": "woe",
+  "collectorNumber": "45",
+  "rarity": "uncommon",
+  "manaCost": "{3}{U}",
+  "typeLine": "Creature — Faerie Advisor",
+  "oracleText": "Flying\nWhenever you cast an Adventure spell, you may copy it. You may choose new targets for the copy.",
+  "power": "2",
+  "toughness": "3",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/6/f67bd5ef-305b-4bf7-990b-3014778b14a0.jpg?1783915122",
+   "normal": "https://cards.scryfall.io/normal/front/f/6/f67bd5ef-305b-4bf7-990b-3014778b14a0.jpg?1783915122",
+   "large": "https://cards.scryfall.io/large/front/f/6/f67bd5ef-305b-4bf7-990b-3014778b14a0.jpg?1783915122",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/6/f67bd5ef-305b-4bf7-990b-3014778b14a0.jpg?1783915122"
+  }
+ },
+ {
+  "name": "Elusive Otter",
+  "scryfallId": "bdb79d68-c3af-4091-b7db-005247191da8",
+  "oracleId": "54175132-2c44-4749-8dfd-d08dcc63e4b3",
+  "set": "soc",
+  "collectorNumber": "306",
+  "rarity": "rare",
+  "manaCost": "{U}",
+  "typeLine": "Creature — Otter",
+  "oracleText": "Prowess (Whenever you cast a noncreature spell, this creature gets +1/+1 until end of turn.)\nCreatures with power less than this creature's power can't block it.",
+  "power": "1",
+  "toughness": "1",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Prowess"
+  ],
+  "back": "Grove's Bounty",
+  "adventure": true,
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/d/bdb79d68-c3af-4091-b7db-005247191da8.jpg?1783903753",
+   "normal": "https://cards.scryfall.io/normal/front/b/d/bdb79d68-c3af-4091-b7db-005247191da8.jpg?1783903753",
+   "large": "https://cards.scryfall.io/large/front/b/d/bdb79d68-c3af-4091-b7db-005247191da8.jpg?1783903753",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/d/bdb79d68-c3af-4091-b7db-005247191da8.jpg?1783903753"
+  }
+ },
+ {
+  "name": "Grove's Bounty",
+  "scryfallId": "bdb79d68-c3af-4091-b7db-005247191da8",
+  "oracleId": "54175132-2c44-4749-8dfd-d08dcc63e4b3",
+  "set": "soc",
+  "collectorNumber": "306",
+  "rarity": "rare",
+  "manaCost": "{X}{G}",
+  "typeLine": "Sorcery — Adventure",
+  "oracleText": "Distribute X +1/+1 counters among any number of target creatures you control. (Then exile this card. You may cast the creature later from exile.)",
+  "colors": [
+   "G"
+  ],
+  "keywords": [],
+  "front": "Elusive Otter",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/d/bdb79d68-c3af-4091-b7db-005247191da8.jpg?1783903753",
+   "normal": "https://cards.scryfall.io/normal/front/b/d/bdb79d68-c3af-4091-b7db-005247191da8.jpg?1783903753",
+   "large": "https://cards.scryfall.io/large/front/b/d/bdb79d68-c3af-4091-b7db-005247191da8.jpg?1783903753",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/d/bdb79d68-c3af-4091-b7db-005247191da8.jpg?1783903753"
+  }
+ },
+ {
+  "name": "Farsight Ritual",
+  "scryfallId": "c958257e-fa70-4fa3-90a1-0497967abef3",
+  "oracleId": "7de66ba3-6e97-4e0a-928e-7ce45dee278b",
+  "set": "woe",
+  "collectorNumber": "49",
+  "rarity": "rare",
+  "manaCost": "{2}{U}{U}",
+  "typeLine": "Instant",
+  "oracleText": "Bargain (You may sacrifice an artifact, enchantment, or token as you cast this spell.)\nLook at the top four cards of your library. If this spell was bargained, look at the top eight cards of your library instead. Put two of them into your hand and the rest on the bottom of your library in a random order.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Bargain"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/9/c958257e-fa70-4fa3-90a1-0497967abef3.jpg?1783915120",
+   "normal": "https://cards.scryfall.io/normal/front/c/9/c958257e-fa70-4fa3-90a1-0497967abef3.jpg?1783915120",
+   "large": "https://cards.scryfall.io/large/front/c/9/c958257e-fa70-4fa3-90a1-0497967abef3.jpg?1783915120",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/9/c958257e-fa70-4fa3-90a1-0497967abef3.jpg?1783915120"
+  }
+ },
+ {
+  "name": "Freeze in Place",
+  "scryfallId": "1a8bb9c7-2c4b-48a1-806e-742addb72b4b",
+  "oracleId": "8bf90bb0-f9c1-49c8-905e-32747e921e92",
+  "set": "woe",
+  "collectorNumber": "50",
+  "rarity": "common",
+  "manaCost": "{1}{U}",
+  "typeLine": "Sorcery",
+  "oracleText": "Tap target creature an opponent controls and put three stun counters on it. Scry 2. (If a permanent with a stun counter would become untapped, remove one from it instead.)",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Scry"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/a/1a8bb9c7-2c4b-48a1-806e-742addb72b4b.jpg?1783915120",
+   "normal": "https://cards.scryfall.io/normal/front/1/a/1a8bb9c7-2c4b-48a1-806e-742addb72b4b.jpg?1783915120",
+   "large": "https://cards.scryfall.io/large/front/1/a/1a8bb9c7-2c4b-48a1-806e-742addb72b4b.jpg?1783915120",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/a/1a8bb9c7-2c4b-48a1-806e-742addb72b4b.jpg?1783915120"
+  }
+ },
+ {
+  "name": "Gadwick's First Duel",
+  "scryfallId": "af07c47f-8b4e-43cb-b469-2efb82aa5590",
+  "oracleId": "322e3bc1-2dfa-4d5f-848f-a82d9ce02a67",
+  "set": "woe",
+  "collectorNumber": "51",
+  "rarity": "uncommon",
+  "manaCost": "{1}{U}",
+  "typeLine": "Enchantment — Saga",
+  "oracleText": "(As this Saga enters and after your draw step, add a lore counter. Sacrifice after III.)\nI — Create a Cursed Role token attached to up to one target creature. (If you control another Role on it, put that one into the graveyard. Enchanted creature is 1/1.)\nII — Scry 2.\nIII — When you next cast an instant or sorcery spell with mana value 3 or less this turn, copy that spell. You may choose new targets for the copy.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Role token",
+   "Scry"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/a/f/af07c47f-8b4e-43cb-b469-2efb82aa5590.jpg?1783915120",
+   "normal": "https://cards.scryfall.io/normal/front/a/f/af07c47f-8b4e-43cb-b469-2efb82aa5590.jpg?1783915120",
+   "large": "https://cards.scryfall.io/large/front/a/f/af07c47f-8b4e-43cb-b469-2efb82aa5590.jpg?1783915120",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/a/f/af07c47f-8b4e-43cb-b469-2efb82aa5590.jpg?1783915120"
+  }
+ },
+ {
+  "name": "Galvanic Giant",
+  "scryfallId": "60976109-30ad-4f12-99eb-c5ef560fcf1b",
+  "oracleId": "48ab8ba0-0e85-4656-a798-ceb961fb02ce",
+  "set": "woe",
+  "collectorNumber": "52",
+  "rarity": "uncommon",
+  "manaCost": "{3}{U}",
+  "typeLine": "Creature — Giant Wizard",
+  "oracleText": "Whenever you cast a spell with mana value 5 or greater, tap target creature an opponent controls and put a stun counter on it.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "back": "Storm Reading",
+  "adventure": true,
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/0/60976109-30ad-4f12-99eb-c5ef560fcf1b.jpg?1783915121",
+   "normal": "https://cards.scryfall.io/normal/front/6/0/60976109-30ad-4f12-99eb-c5ef560fcf1b.jpg?1783915121",
+   "large": "https://cards.scryfall.io/large/front/6/0/60976109-30ad-4f12-99eb-c5ef560fcf1b.jpg?1783915121",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/0/60976109-30ad-4f12-99eb-c5ef560fcf1b.jpg?1783915121"
+  }
+ },
+ {
+  "name": "Storm Reading",
+  "scryfallId": "60976109-30ad-4f12-99eb-c5ef560fcf1b",
+  "oracleId": "48ab8ba0-0e85-4656-a798-ceb961fb02ce",
+  "set": "woe",
+  "collectorNumber": "52",
+  "rarity": "uncommon",
+  "manaCost": "{5}{U}{U}",
+  "typeLine": "Instant — Adventure",
+  "oracleText": "Draw four cards, then discard two cards. (Then exile this card. You may cast the creature later from exile.)",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "front": "Galvanic Giant",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/6/0/60976109-30ad-4f12-99eb-c5ef560fcf1b.jpg?1783915121",
+   "normal": "https://cards.scryfall.io/normal/front/6/0/60976109-30ad-4f12-99eb-c5ef560fcf1b.jpg?1783915121",
+   "large": "https://cards.scryfall.io/large/front/6/0/60976109-30ad-4f12-99eb-c5ef560fcf1b.jpg?1783915121",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/6/0/60976109-30ad-4f12-99eb-c5ef560fcf1b.jpg?1783915121"
+  }
+ },
+ {
+  "name": "Horned Loch-Whale",
+  "scryfallId": "96a05063-0556-42e4-8d4c-8e92be160ef5",
+  "oracleId": "adca3929-4ecc-45bc-932e-604bcc32550a",
+  "set": "woe",
+  "collectorNumber": "53",
+  "rarity": "rare",
+  "manaCost": "{4}{U}{U}",
+  "typeLine": "Creature — Whale",
+  "oracleText": "Flash\nWard {2}\nThis creature enters tapped unless it's your turn.",
+  "power": "6",
+  "toughness": "6",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Ward",
+   "Flash"
+  ],
+  "back": "Lagoon Breach",
+  "adventure": true,
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/6/96a05063-0556-42e4-8d4c-8e92be160ef5.jpg?1783915120",
+   "normal": "https://cards.scryfall.io/normal/front/9/6/96a05063-0556-42e4-8d4c-8e92be160ef5.jpg?1783915120",
+   "large": "https://cards.scryfall.io/large/front/9/6/96a05063-0556-42e4-8d4c-8e92be160ef5.jpg?1783915120",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/6/96a05063-0556-42e4-8d4c-8e92be160ef5.jpg?1783915120"
+  }
+ },
+ {
+  "name": "Lagoon Breach",
+  "scryfallId": "96a05063-0556-42e4-8d4c-8e92be160ef5",
+  "oracleId": "adca3929-4ecc-45bc-932e-604bcc32550a",
+  "set": "woe",
+  "collectorNumber": "53",
+  "rarity": "rare",
+  "manaCost": "{1}{U}",
+  "typeLine": "Instant — Adventure",
+  "oracleText": "The owner of target attacking creature you don't control puts it on their choice of the top or bottom of their library.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "front": "Horned Loch-Whale",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/6/96a05063-0556-42e4-8d4c-8e92be160ef5.jpg?1783915120",
+   "normal": "https://cards.scryfall.io/normal/front/9/6/96a05063-0556-42e4-8d4c-8e92be160ef5.jpg?1783915120",
+   "large": "https://cards.scryfall.io/large/front/9/6/96a05063-0556-42e4-8d4c-8e92be160ef5.jpg?1783915120",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/6/96a05063-0556-42e4-8d4c-8e92be160ef5.jpg?1783915120"
+  }
+ },
+ {
+  "name": "Ice Out",
+  "scryfallId": "88ffafda-c852-497a-8156-4f759cdf3693",
+  "oracleId": "fed3bc35-4269-48f0-9133-a595ce49c2d1",
+  "set": "woe",
+  "collectorNumber": "54",
+  "rarity": "common",
+  "manaCost": "{1}{U}{U}",
+  "typeLine": "Instant",
+  "oracleText": "Bargain (You may sacrifice an artifact, enchantment, or token as you cast this spell.)\nThis spell costs {1} less to cast if it's bargained.\nCounter target spell.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Bargain"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/8/88ffafda-c852-497a-8156-4f759cdf3693.jpg?1783915120",
+   "normal": "https://cards.scryfall.io/normal/front/8/8/88ffafda-c852-497a-8156-4f759cdf3693.jpg?1783915120",
+   "large": "https://cards.scryfall.io/large/front/8/8/88ffafda-c852-497a-8156-4f759cdf3693.jpg?1783915120",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/8/88ffafda-c852-497a-8156-4f759cdf3693.jpg?1783915120"
+  }
+ },
+ {
+  "name": "Icewrought Sentry",
+  "scryfallId": "859419d3-cd15-4362-98b3-a7ff98e29692",
+  "oracleId": "0828d891-f7c3-4e51-b42e-6ce88d48ac8b",
+  "set": "woe",
+  "collectorNumber": "55",
+  "rarity": "uncommon",
+  "manaCost": "{2}{U}",
+  "typeLine": "Creature — Elemental Soldier",
+  "oracleText": "Vigilance\nWhenever this creature attacks, you may pay {1}{U}. When you do, tap target creature an opponent controls.\nWhenever you tap an untapped creature an opponent controls, this creature gets +2/+1 until end of turn.",
+  "power": "2",
+  "toughness": "3",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Vigilance"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/5/859419d3-cd15-4362-98b3-a7ff98e29692.jpg?1783915119",
+   "normal": "https://cards.scryfall.io/normal/front/8/5/859419d3-cd15-4362-98b3-a7ff98e29692.jpg?1783915119",
+   "large": "https://cards.scryfall.io/large/front/8/5/859419d3-cd15-4362-98b3-a7ff98e29692.jpg?1783915119",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/5/859419d3-cd15-4362-98b3-a7ff98e29692.jpg?1783915119"
+  }
+ },
+ {
+  "name": "Into the Fae Court",
+  "scryfallId": "969b13bb-6411-41f9-b6b4-af4ffca62e17",
+  "oracleId": "8db0a379-4cf2-43a7-932b-c5646a604578",
+  "set": "woe",
+  "collectorNumber": "57",
+  "rarity": "common",
+  "manaCost": "{3}{U}{U}",
+  "typeLine": "Sorcery",
+  "oracleText": "Draw three cards. Create a 1/1 blue Faerie creature token with flying and \"This token can block only creatures with flying.\"",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/9/6/969b13bb-6411-41f9-b6b4-af4ffca62e17.jpg?1783915119",
+   "normal": "https://cards.scryfall.io/normal/front/9/6/969b13bb-6411-41f9-b6b4-af4ffca62e17.jpg?1783915119",
+   "large": "https://cards.scryfall.io/large/front/9/6/969b13bb-6411-41f9-b6b4-af4ffca62e17.jpg?1783915119",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/9/6/969b13bb-6411-41f9-b6b4-af4ffca62e17.jpg?1783915119"
+  }
+ },
+ {
+  "name": "Johann's Stopgap",
+  "scryfallId": "31408397-36f5-479f-b822-fa97411b7872",
+  "oracleId": "c7b235e1-746e-4467-be54-4e11e2bf6362",
+  "set": "woe",
+  "collectorNumber": "58",
+  "rarity": "common",
+  "manaCost": "{3}{U}",
+  "typeLine": "Sorcery",
+  "oracleText": "Bargain (You may sacrifice an artifact, enchantment, or token as you cast this spell.)\nThis spell costs {2} less to cast if it's bargained.\nReturn target nonland permanent to its owner's hand. Draw a card.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Bargain"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/1/31408397-36f5-479f-b822-fa97411b7872.jpg?1783915118",
+   "normal": "https://cards.scryfall.io/normal/front/3/1/31408397-36f5-479f-b822-fa97411b7872.jpg?1783915118",
+   "large": "https://cards.scryfall.io/large/front/3/1/31408397-36f5-479f-b822-fa97411b7872.jpg?1783915118",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/1/31408397-36f5-479f-b822-fa97411b7872.jpg?1783915118"
+  }
+ },
+ {
+  "name": "Living Lectern",
+  "scryfallId": "169afcaf-7ebf-4590-9e51-2a1a5eb3ac76",
+  "oracleId": "061e7fb2-2c04-4845-b60a-0e2512a2dec1",
+  "set": "woe",
+  "collectorNumber": "59",
+  "rarity": "common",
+  "manaCost": "{1}{U}",
+  "typeLine": "Artifact Creature — Construct",
+  "oracleText": "{1}, Sacrifice this creature: Draw a card. Create a Sorcerer Role token attached to up to one other target creature you control. Activate only as a sorcery. (If you control another Role on it, put that one into the graveyard. Enchanted creature gets +1/+1 and has \"Whenever this creature attacks, scry 1.\")",
+  "power": "0",
+  "toughness": "4",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Role token",
+   "Scry"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/6/169afcaf-7ebf-4590-9e51-2a1a5eb3ac76.jpg?1783915118",
+   "normal": "https://cards.scryfall.io/normal/front/1/6/169afcaf-7ebf-4590-9e51-2a1a5eb3ac76.jpg?1783915118",
+   "large": "https://cards.scryfall.io/large/front/1/6/169afcaf-7ebf-4590-9e51-2a1a5eb3ac76.jpg?1783915118",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/6/169afcaf-7ebf-4590-9e51-2a1a5eb3ac76.jpg?1783915118"
+  }
+ },
+ {
+  "name": "Misleading Motes",
+  "scryfallId": "4c6c7a43-c3d1-450e-834a-54e1b9def1cd",
+  "oracleId": "09eec5a2-7835-4b24-9dd1-594612ee9152",
+  "set": "woe",
+  "collectorNumber": "61",
+  "rarity": "common",
+  "manaCost": "{3}{U}",
+  "typeLine": "Instant",
+  "oracleText": "Target creature's owner puts it on their choice of the top or bottom of their library.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/c/4c6c7a43-c3d1-450e-834a-54e1b9def1cd.jpg?1783915117",
+   "normal": "https://cards.scryfall.io/normal/front/4/c/4c6c7a43-c3d1-450e-834a-54e1b9def1cd.jpg?1783915117",
+   "large": "https://cards.scryfall.io/large/front/4/c/4c6c7a43-c3d1-450e-834a-54e1b9def1cd.jpg?1783915117",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/c/4c6c7a43-c3d1-450e-834a-54e1b9def1cd.jpg?1783915117"
+  }
+ },
+ {
+  "name": "Obyra's Attendants",
+  "scryfallId": "0001e77a-7fff-49d2-a55c-42f6fdf6db08",
+  "oracleId": "396b088d-f9af-4ee1-843f-dbe1633f9cc8",
+  "set": "woe",
+  "collectorNumber": "63",
+  "rarity": "common",
+  "manaCost": "{4}{U}",
+  "typeLine": "Creature — Faerie Wizard",
+  "oracleText": "Flying",
+  "power": "3",
+  "toughness": "4",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "back": "Desperate Parry",
+  "adventure": true,
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/0/0001e77a-7fff-49d2-a55c-42f6fdf6db08.jpg?1783915116",
+   "normal": "https://cards.scryfall.io/normal/front/0/0/0001e77a-7fff-49d2-a55c-42f6fdf6db08.jpg?1783915116",
+   "large": "https://cards.scryfall.io/large/front/0/0/0001e77a-7fff-49d2-a55c-42f6fdf6db08.jpg?1783915116",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/0/0001e77a-7fff-49d2-a55c-42f6fdf6db08.jpg?1783915116"
+  }
+ },
+ {
+  "name": "Desperate Parry",
+  "scryfallId": "0001e77a-7fff-49d2-a55c-42f6fdf6db08",
+  "oracleId": "396b088d-f9af-4ee1-843f-dbe1633f9cc8",
+  "set": "woe",
+  "collectorNumber": "63",
+  "rarity": "common",
+  "manaCost": "{1}{U}",
+  "typeLine": "Instant — Adventure",
+  "oracleText": "Target creature gets -4/-0 until end of turn. (Then exile this card. You may cast the creature later from exile.)",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "front": "Obyra's Attendants",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/0/0/0001e77a-7fff-49d2-a55c-42f6fdf6db08.jpg?1783915116",
+   "normal": "https://cards.scryfall.io/normal/front/0/0/0001e77a-7fff-49d2-a55c-42f6fdf6db08.jpg?1783915116",
+   "large": "https://cards.scryfall.io/large/front/0/0/0001e77a-7fff-49d2-a55c-42f6fdf6db08.jpg?1783915116",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/0/0/0001e77a-7fff-49d2-a55c-42f6fdf6db08.jpg?1783915116"
+  }
+ },
+ {
+  "name": "Picklock Prankster",
+  "scryfallId": "5ebac73a-1ecf-4e6d-87b1-ea560bfeb064",
+  "oracleId": "22d82f4c-2896-477e-8d20-8fe43acd4ba2",
+  "set": "woe",
+  "collectorNumber": "64",
+  "rarity": "uncommon",
+  "manaCost": "{1}{U}",
+  "typeLine": "Creature — Faerie Rogue",
+  "oracleText": "Flying, vigilance",
+  "power": "1",
+  "toughness": "3",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Flying",
+   "Vigilance"
+  ],
+  "back": "Free the Fae",
+  "adventure": true,
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/e/5ebac73a-1ecf-4e6d-87b1-ea560bfeb064.jpg?1783915116",
+   "normal": "https://cards.scryfall.io/normal/front/5/e/5ebac73a-1ecf-4e6d-87b1-ea560bfeb064.jpg?1783915116",
+   "large": "https://cards.scryfall.io/large/front/5/e/5ebac73a-1ecf-4e6d-87b1-ea560bfeb064.jpg?1783915116",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/e/5ebac73a-1ecf-4e6d-87b1-ea560bfeb064.jpg?1783915116"
+  }
+ },
+ {
+  "name": "Free the Fae",
+  "scryfallId": "5ebac73a-1ecf-4e6d-87b1-ea560bfeb064",
+  "oracleId": "22d82f4c-2896-477e-8d20-8fe43acd4ba2",
+  "set": "woe",
+  "collectorNumber": "64",
+  "rarity": "uncommon",
+  "manaCost": "{1}{U}",
+  "typeLine": "Instant — Adventure",
+  "oracleText": "Mill four cards. Then put an instant, sorcery, or Faerie card from among the milled cards into your hand.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Mill"
+  ],
+  "front": "Picklock Prankster",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/5/e/5ebac73a-1ecf-4e6d-87b1-ea560bfeb064.jpg?1783915116",
+   "normal": "https://cards.scryfall.io/normal/front/5/e/5ebac73a-1ecf-4e6d-87b1-ea560bfeb064.jpg?1783915116",
+   "large": "https://cards.scryfall.io/large/front/5/e/5ebac73a-1ecf-4e6d-87b1-ea560bfeb064.jpg?1783915116",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/5/e/5ebac73a-1ecf-4e6d-87b1-ea560bfeb064.jpg?1783915116"
+  }
+ },
+ {
+  "name": "Rowdy Research",
+  "scryfallId": "89b7e901-5ba4-4374-9eeb-96354279a123",
+  "oracleId": "1a33a5c2-5aa1-48e5-95a8-d52cdce980de",
+  "set": "woe",
+  "collectorNumber": "312",
+  "rarity": "uncommon",
+  "manaCost": "{6}{U}",
+  "typeLine": "Instant",
+  "oracleText": "This spell costs {1} less to cast for each creature that attacked this turn.\nDraw three cards.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/8/9/89b7e901-5ba4-4374-9eeb-96354279a123.jpg?1783915040",
+   "normal": "https://cards.scryfall.io/normal/front/8/9/89b7e901-5ba4-4374-9eeb-96354279a123.jpg?1783915040",
+   "large": "https://cards.scryfall.io/large/front/8/9/89b7e901-5ba4-4374-9eeb-96354279a123.jpg?1783915040",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/8/9/89b7e901-5ba4-4374-9eeb-96354279a123.jpg?1783915040"
+  }
+ },
+ {
+  "name": "Sleep-Cursed Faerie",
+  "scryfallId": "31051436-68f2-457e-8293-2b10ccf7684e",
+  "oracleId": "a17633aa-b1a7-4ae5-b051-6747975d8a2f",
+  "set": "woe",
+  "collectorNumber": "66",
+  "rarity": "rare",
+  "manaCost": "{U}",
+  "typeLine": "Creature — Faerie Wizard",
+  "oracleText": "Flying, ward {2}\nThis creature enters tapped with three stun counters on it. (If it would become untapped, remove a stun counter from it instead.)\n{1}{U}: Untap this creature.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Flying",
+   "Ward"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/1/31051436-68f2-457e-8293-2b10ccf7684e.jpg?1783915116",
+   "normal": "https://cards.scryfall.io/normal/front/3/1/31051436-68f2-457e-8293-2b10ccf7684e.jpg?1783915116",
+   "large": "https://cards.scryfall.io/large/front/3/1/31051436-68f2-457e-8293-2b10ccf7684e.jpg?1783915116",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/1/31051436-68f2-457e-8293-2b10ccf7684e.jpg?1783915116"
+  }
+ },
+ {
+  "name": "Snaremaster Sprite",
+  "scryfallId": "eaa37390-5c32-46ae-89d1-c094c9aa01e5",
+  "oracleId": "b0632f1b-14e5-4534-b2c5-af9d557fdcc0",
+  "set": "woe",
+  "collectorNumber": "68",
+  "rarity": "common",
+  "manaCost": "{U}",
+  "typeLine": "Creature — Faerie Wizard",
+  "oracleText": "Flying\nWhen this creature enters, you may pay {2}. When you do, tap target creature an opponent controls and put a stun counter on it. (If a permanent with a stun counter would become untapped, remove one from it instead.)",
+  "power": "1",
+  "toughness": "1",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/e/a/eaa37390-5c32-46ae-89d1-c094c9aa01e5.jpg?1783915115",
+   "normal": "https://cards.scryfall.io/normal/front/e/a/eaa37390-5c32-46ae-89d1-c094c9aa01e5.jpg?1783915115",
+   "large": "https://cards.scryfall.io/large/front/e/a/eaa37390-5c32-46ae-89d1-c094c9aa01e5.jpg?1783915115",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/e/a/eaa37390-5c32-46ae-89d1-c094c9aa01e5.jpg?1783915115"
+  }
+ },
+ {
+  "name": "Spell Stutter",
+  "scryfallId": "24447e36-a42f-40a9-ad44-e904b6f9b276",
+  "oracleId": "f9bf996e-ae14-40a3-a8d8-f5725ddaa270",
+  "set": "woe",
+  "collectorNumber": "69",
+  "rarity": "common",
+  "manaCost": "{1}{U}",
+  "typeLine": "Instant",
+  "oracleText": "Counter target spell unless its controller pays {2} plus an additional {1} for each Faerie you control.",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/2/4/24447e36-a42f-40a9-ad44-e904b6f9b276.jpg?1783915115",
+   "normal": "https://cards.scryfall.io/normal/front/2/4/24447e36-a42f-40a9-ad44-e904b6f9b276.jpg?1783915115",
+   "large": "https://cards.scryfall.io/large/front/2/4/24447e36-a42f-40a9-ad44-e904b6f9b276.jpg?1783915115",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/2/4/24447e36-a42f-40a9-ad44-e904b6f9b276.jpg?1783915115"
+  }
+ },
+ {
+  "name": "Splashy Spellcaster",
+  "scryfallId": "73ebd7f0-a54d-43a8-a5ee-9d6835308794",
+  "oracleId": "21486218-70ec-4c60-9844-8f7c80912333",
+  "set": "woe",
+  "collectorNumber": "70",
+  "rarity": "uncommon",
+  "manaCost": "{3}{U}",
+  "typeLine": "Creature — Elemental Wizard",
+  "oracleText": "Whenever you cast an instant or sorcery spell, create a Sorcerer Role token attached to up to one other target creature you control. (If you control another Role on it, put that one into the graveyard. Enchanted creature gets +1/+1 and has \"Whenever this creature attacks, scry 1.\")",
+  "power": "2",
+  "toughness": "4",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Role token",
+   "Scry"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/7/3/73ebd7f0-a54d-43a8-a5ee-9d6835308794.jpg?1783915114",
+   "normal": "https://cards.scryfall.io/normal/front/7/3/73ebd7f0-a54d-43a8-a5ee-9d6835308794.jpg?1783915114",
+   "large": "https://cards.scryfall.io/large/front/7/3/73ebd7f0-a54d-43a8-a5ee-9d6835308794.jpg?1783915114",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/7/3/73ebd7f0-a54d-43a8-a5ee-9d6835308794.jpg?1783915114"
+  }
+ },
+ {
+  "name": "Stormkeld Prowler",
+  "scryfallId": "ff065dbf-77e3-45a8-bcca-aff9eaeb151f",
+  "oracleId": "d9c0e089-92ca-4fbd-9ddd-1802ac3553c9",
+  "set": "woe",
+  "collectorNumber": "71",
+  "rarity": "common",
+  "manaCost": "{1}{U}",
+  "typeLine": "Creature — Human Rogue",
+  "oracleText": "Whenever you cast a spell with mana value 5 or greater, put two +1/+1 counters on this creature.",
+  "power": "2",
+  "toughness": "1",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/f/f/ff065dbf-77e3-45a8-bcca-aff9eaeb151f.jpg?1783915114",
+   "normal": "https://cards.scryfall.io/normal/front/f/f/ff065dbf-77e3-45a8-bcca-aff9eaeb151f.jpg?1783915114",
+   "large": "https://cards.scryfall.io/large/front/f/f/ff065dbf-77e3-45a8-bcca-aff9eaeb151f.jpg?1783915114",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/f/f/ff065dbf-77e3-45a8-bcca-aff9eaeb151f.jpg?1783915114"
+  }
+ },
+ {
+  "name": "Storyteller Pixie",
+  "scryfallId": "b9f4cf85-2120-4897-aecd-4ee4b02d6f9b",
+  "oracleId": "51bb6d3b-be6a-435d-8a80-0c0f0161892d",
+  "set": "woe",
+  "collectorNumber": "313",
+  "rarity": "uncommon",
+  "manaCost": "{3}{U}",
+  "typeLine": "Creature — Faerie Wizard",
+  "oracleText": "Flying\nWhenever you cast an Adventure spell, draw a card.",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/b/9/b9f4cf85-2120-4897-aecd-4ee4b02d6f9b.jpg?1783915040",
+   "normal": "https://cards.scryfall.io/normal/front/b/9/b9f4cf85-2120-4897-aecd-4ee4b02d6f9b.jpg?1783915040",
+   "large": "https://cards.scryfall.io/large/front/b/9/b9f4cf85-2120-4897-aecd-4ee4b02d6f9b.jpg?1783915040",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/b/9/b9f4cf85-2120-4897-aecd-4ee4b02d6f9b.jpg?1783915040"
+  }
+ },
+ {
+  "name": "Succumb to the Cold",
+  "scryfallId": "c14d9fc0-bfbf-4359-93bf-5e53466965d6",
+  "oracleId": "73992788-8084-459c-8375-9ccc8579c5d7",
+  "set": "woe",
+  "collectorNumber": "72",
+  "rarity": "uncommon",
+  "manaCost": "{2}{U}",
+  "typeLine": "Instant",
+  "oracleText": "Tap one or two target creatures an opponent controls. Put a stun counter on each of them. (If a permanent with a stun counter would become untapped, remove one from it instead.)",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/1/c14d9fc0-bfbf-4359-93bf-5e53466965d6.jpg?1783915114",
+   "normal": "https://cards.scryfall.io/normal/front/c/1/c14d9fc0-bfbf-4359-93bf-5e53466965d6.jpg?1783915114",
+   "large": "https://cards.scryfall.io/large/front/c/1/c14d9fc0-bfbf-4359-93bf-5e53466965d6.jpg?1783915114",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/1/c14d9fc0-bfbf-4359-93bf-5e53466965d6.jpg?1783915114"
+  }
+ },
+ {
+  "name": "Talion's Messenger",
+  "scryfallId": "35fb0640-5b04-4687-b863-46a8b8d36809",
+  "oracleId": "3a721a4c-696b-44d1-858d-20040bd01909",
+  "set": "woe",
+  "collectorNumber": "73",
+  "rarity": "rare",
+  "manaCost": "{2}{U}",
+  "typeLine": "Creature — Faerie Noble",
+  "oracleText": "Flying\nWhenever you attack with one or more Faeries, draw a card, then discard a card. When you discard a card this way, put a +1/+1 counter on target Faerie you control.",
+  "power": "1",
+  "toughness": "3",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/3/5/35fb0640-5b04-4687-b863-46a8b8d36809.jpg?1783915114",
+   "normal": "https://cards.scryfall.io/normal/front/3/5/35fb0640-5b04-4687-b863-46a8b8d36809.jpg?1783915114",
+   "large": "https://cards.scryfall.io/large/front/3/5/35fb0640-5b04-4687-b863-46a8b8d36809.jpg?1783915114",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/3/5/35fb0640-5b04-4687-b863-46a8b8d36809.jpg?1783915114"
+  }
+ },
+ {
+  "name": "Tenacious Tomeseeker",
+  "scryfallId": "c40be735-0780-459b-8dd2-a298575beaab",
+  "oracleId": "b07bf08b-d9ec-429f-be6d-a7afa27c60c4",
+  "set": "woe",
+  "collectorNumber": "74",
+  "rarity": "uncommon",
+  "manaCost": "{2}{U}",
+  "typeLine": "Creature — Human Knight",
+  "oracleText": "Bargain (You may sacrifice an artifact, enchantment, or token as you cast this spell.)\nWhen this creature enters, if it was bargained, return target instant or sorcery card from your graveyard to your hand.",
+  "power": "3",
+  "toughness": "2",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Bargain"
+  ],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/c/4/c40be735-0780-459b-8dd2-a298575beaab.jpg?1783915113",
+   "normal": "https://cards.scryfall.io/normal/front/c/4/c40be735-0780-459b-8dd2-a298575beaab.jpg?1783915113",
+   "large": "https://cards.scryfall.io/large/front/c/4/c40be735-0780-459b-8dd2-a298575beaab.jpg?1783915113",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/c/4/c40be735-0780-459b-8dd2-a298575beaab.jpg?1783915113"
+  }
+ },
+ {
+  "name": "Threadbind Clique",
+  "scryfallId": "dd6ed252-c262-4062-97ba-75c50d6b5579",
+  "oracleId": "bd575e82-99e7-44c7-ab93-d33f5678e1ad",
+  "set": "woe",
+  "collectorNumber": "239",
+  "rarity": "uncommon",
+  "manaCost": "{3}{U}",
+  "typeLine": "Creature — Faerie",
+  "oracleText": "Flying",
+  "power": "3",
+  "toughness": "3",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Flying"
+  ],
+  "back": "Rip the Seams",
+  "adventure": true,
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/d/dd6ed252-c262-4062-97ba-75c50d6b5579.jpg?1783915061",
+   "normal": "https://cards.scryfall.io/normal/front/d/d/dd6ed252-c262-4062-97ba-75c50d6b5579.jpg?1783915061",
+   "large": "https://cards.scryfall.io/large/front/d/d/dd6ed252-c262-4062-97ba-75c50d6b5579.jpg?1783915061",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/d/dd6ed252-c262-4062-97ba-75c50d6b5579.jpg?1783915061"
+  }
+ },
+ {
+  "name": "Rip the Seams",
+  "scryfallId": "dd6ed252-c262-4062-97ba-75c50d6b5579",
+  "oracleId": "bd575e82-99e7-44c7-ab93-d33f5678e1ad",
+  "set": "woe",
+  "collectorNumber": "239",
+  "rarity": "uncommon",
+  "manaCost": "{2}{W}",
+  "typeLine": "Instant — Adventure",
+  "oracleText": "Destroy target tapped creature. (Then exile this card. You may cast the creature later from exile.)",
+  "colors": [
+   "W"
+  ],
+  "keywords": [],
+  "front": "Threadbind Clique",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/d/d/dd6ed252-c262-4062-97ba-75c50d6b5579.jpg?1783915061",
+   "normal": "https://cards.scryfall.io/normal/front/d/d/dd6ed252-c262-4062-97ba-75c50d6b5579.jpg?1783915061",
+   "large": "https://cards.scryfall.io/large/front/d/d/dd6ed252-c262-4062-97ba-75c50d6b5579.jpg?1783915061",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/d/d/dd6ed252-c262-4062-97ba-75c50d6b5579.jpg?1783915061"
+  }
+ },
+ {
+  "name": "Vantress Transmuter",
+  "scryfallId": "11507fa1-ef9e-41c9-b987-be57a03bd0df",
+  "oracleId": "89ae3475-9063-4700-a7bd-47d5dcd43a3b",
+  "set": "woe",
+  "collectorNumber": "75",
+  "rarity": "common",
+  "manaCost": "{3}{U}",
+  "typeLine": "Creature — Human Wizard",
+  "oracleText": "",
+  "power": "3",
+  "toughness": "4",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "back": "Croaking Curse",
+  "adventure": true,
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/1/11507fa1-ef9e-41c9-b987-be57a03bd0df.jpg?1783915112",
+   "normal": "https://cards.scryfall.io/normal/front/1/1/11507fa1-ef9e-41c9-b987-be57a03bd0df.jpg?1783915112",
+   "large": "https://cards.scryfall.io/large/front/1/1/11507fa1-ef9e-41c9-b987-be57a03bd0df.jpg?1783915112",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/1/11507fa1-ef9e-41c9-b987-be57a03bd0df.jpg?1783915112"
+  }
+ },
+ {
+  "name": "Croaking Curse",
+  "scryfallId": "11507fa1-ef9e-41c9-b987-be57a03bd0df",
+  "oracleId": "89ae3475-9063-4700-a7bd-47d5dcd43a3b",
+  "set": "woe",
+  "collectorNumber": "75",
+  "rarity": "common",
+  "manaCost": "{1}{U}",
+  "typeLine": "Sorcery — Adventure",
+  "oracleText": "Tap target creature. Create a Cursed Role token attached to it. (Enchanted creature is 1/1.)",
+  "colors": [
+   "U"
+  ],
+  "keywords": [
+   "Role token"
+  ],
+  "front": "Vantress Transmuter",
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/1/1/11507fa1-ef9e-41c9-b987-be57a03bd0df.jpg?1783915112",
+   "normal": "https://cards.scryfall.io/normal/front/1/1/11507fa1-ef9e-41c9-b987-be57a03bd0df.jpg?1783915112",
+   "large": "https://cards.scryfall.io/large/front/1/1/11507fa1-ef9e-41c9-b987-be57a03bd0df.jpg?1783915112",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/1/1/11507fa1-ef9e-41c9-b987-be57a03bd0df.jpg?1783915112"
+  }
+ },
+ {
+  "name": "Water Wings",
+  "scryfallId": "4ea4993c-d1ba-4b33-955b-e0874fd2132f",
+  "oracleId": "17f8e8cb-cd1b-4d94-9efa-ce268e8e7096",
+  "set": "woe",
+  "collectorNumber": "77",
+  "rarity": "common",
+  "manaCost": "{1}{U}",
+  "typeLine": "Instant",
+  "oracleText": "Until end of turn, target creature you control has base power and toughness 4/4 and gains flying and hexproof. (It can't be the target of spells or abilities your opponents control.)",
+  "colors": [
+   "U"
+  ],
+  "keywords": [],
+  "image": {
+   "small": "https://cards.scryfall.io/small/front/4/e/4ea4993c-d1ba-4b33-955b-e0874fd2132f.jpg?1783915113",
+   "normal": "https://cards.scryfall.io/normal/front/4/e/4ea4993c-d1ba-4b33-955b-e0874fd2132f.jpg?1783915113",
+   "large": "https://cards.scryfall.io/large/front/4/e/4ea4993c-d1ba-4b33-955b-e0874fd2132f.jpg?1783915113",
+   "artCrop": "https://cards.scryfall.io/art_crop/front/4/e/4ea4993c-d1ba-4b33-955b-e0874fd2132f.jpg?1783915113"
+  }
  }
 ]
