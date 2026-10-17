@@ -259,3 +259,12 @@ from) when it's fixed. Older phases keep their own "Simplifications" lists in `d
       could have covered.
 - [ ] Realm-Scorcher Hellkite (bargained): its four mana of any colours have their colours chosen as they are spent (the
       existing `addMana` pattern), not as they are added.
+
+## Wilds of Eldraine (`woe/*-main.ts`, phase 23d)
+
+- [ ] Three Bowls of Porridge: the three modes are three separate abilities, each usable once ("choose one that hasn't been
+      chosen"); the card shows three abilities instead of one modal one.
+- [ ] Rankle's Prank: "each player sacrifices two creatures" runs as two single sacrifices per player in sequence, not
+      simultaneously.
+- [ ] The End: "any number of cards" with that name is chosen as a count per zone (graveyard, hand, library), not card by card.
+- [ ] Ego Drain: with no nonland card in the opponent's hand, the caster still clicks through an empty choice before the exile.
