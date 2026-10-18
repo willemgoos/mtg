@@ -1664,10 +1664,23 @@ export function salvageCard(s: ExpeditionState, name: string): ExpeditionState {
   });
 }
 
-/** Cards a wildcard of this rarity can redeem: that rarity from the run's set (both, for Jump In). */
-export function wildcardCards(r: ExpeditionRun, rarity: WildcardRarity): string[] {
-  const sets = new Set([packSetOf(r, 0), packSetOf(r, 1)]);
-  const names = [...sets].flatMap((set) => SHEETS[set][rarity].map((c) => c.name));
+/** The run's own sets (both, for Jump In): the redeem screen shows these first. */
+export function runPackSets(r: ExpeditionRun): PackSet[] {
+  return [...new Set([packSetOf(r, 0), packSetOf(r, 1)])];
+}
+
+/** Every set with boosters, in the order the redeem screen lists them. */
+export const ALL_PACK_SETS = Object.keys(PACK_SET_NAMES) as PackSet[];
+
+/**
+ * Cards a wildcard of this rarity can redeem: that rarity from the given sets (default: every set with
+ * boosters, as Arena's wildcards redeem any card). A card counts at the rarity it has in that set's boosters.
+ */
+export function wildcardCards(
+  rarity: WildcardRarity,
+  sets: readonly PackSet[] = ALL_PACK_SETS,
+): string[] {
+  const names = sets.flatMap((set) => SHEETS[set][rarity].map((c) => c.name));
   return [...new Set(names)].sort((a, b) => a.localeCompare(b));
 }
 
@@ -1679,7 +1692,7 @@ export function redeemWildcard(
 ): ExpeditionState {
   return withRun(s, (r) => {
     if (r.pending || wildcardsOf(r.build, rarity) < 1) return r;
-    if (!wildcardCards(r, rarity).includes(name)) return r;
+    if (!wildcardCards(rarity).includes(name)) return r;
     const b = r.build;
     return {
       ...r,

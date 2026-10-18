@@ -42,6 +42,7 @@ import {
   MIN_DECK,
   moveCard,
   type NodeKind,
+  type PackSet,
   openPacks,
   reachable,
   runDeck,
@@ -55,6 +56,8 @@ import {
   isWildcardReward,
   type MapNode,
   redeemWildcard,
+  runPackSets,
+  ALL_PACK_SETS,
   RARE_EVERY,
   salvageCard,
   SALVAGE_METER,
@@ -71,6 +74,7 @@ import { useCardFilters } from './CardFilters.tsx';
 import { DeckBuilder } from './DeckBuilder.tsx';
 import './home.css';
 import './expedition.css';
+import './cardsearch.css'; // the redeem screen's set picker
 import { PackOpening, packName } from './PackOpening.tsx';
 import { HoverPreview, type HoverState } from './Preview.tsx';
 import { UiSize } from './UiSize.tsx';
@@ -1350,7 +1354,7 @@ function Merchant({
 
 /**
  * Break down cards you don't want: each copy fills the meter by its rarity, and a full
- * meter pays a wildcard. Wildcards are redeemed here for any card of their rarity.
+ * meter pays a wildcard. Wildcards are redeemed here for any card of their rarity, from any set with boosters.
  */
 function Salvage({
   run,
@@ -1363,6 +1367,10 @@ function Salvage({
 }) {
   const [hover, setHover] = useState<HoverState | null>(null);
   const [choice, setRedeeming] = useState<WildcardRarity | null>(null);
+  // The redeem list: the run's own set(s) at first, or every set, or one set.
+  const [redeemFrom, setRedeemFrom] = useState<'run' | 'all' | PackSet>('run');
+  const redeemSets =
+    redeemFrom === 'run' ? runPackSets(run) : redeemFrom === 'all' ? ALL_PACK_SETS : [redeemFrom];
   const b = run.build;
   const redeeming = choice && wildcardsOf(b, choice) > 0 ? choice : null;
   const picker = useCardFilters();
@@ -1384,11 +1392,36 @@ function Salvage({
         <div className="start__title">
           <span className="start__eyebrow">Expedition · Wildcard</span>
           <h1>Redeem {redeeming} wildcard</h1>
-          <p>Choose any {redeeming} card. It goes into your collection.</p>
+          <p>
+            Choose any {redeeming} card, from this run's set or any other. It goes into your
+            collection.
+          </p>
         </div>
-        {picker.bar()}
+        {picker.bar(
+          <label className="csearch__select">
+            <span>Set</span>
+            <select
+              value={redeemFrom}
+              onChange={(e) => setRedeemFrom(e.target.value as typeof redeemFrom)}
+            >
+              <option value="run">
+                This run (
+                {runPackSets(run)
+                  .map((s) => PACK_SET_NAMES[s])
+                  .join(', ')}
+                )
+              </option>
+              <option value="all">All sets</option>
+              {ALL_PACK_SETS.map((s) => (
+                <option key={s} value={s}>
+                  {PACK_SET_NAMES[s]}
+                </option>
+              ))}
+            </select>
+          </label>,
+        )}
         <div className="merchant__cards">
-          {wildcardCards(run, redeeming)
+          {wildcardCards(redeeming, redeemSets)
             .filter(picker.test)
             .map((name) => (
               <button

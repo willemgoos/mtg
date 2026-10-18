@@ -26,6 +26,8 @@ import {
   salvageCard,
   SALVAGE_METER,
   wildcardCards,
+  runPackSets,
+  PACK_SET_NAMES,
   wildcardsOf,
   applySuggestion,
   camp,
@@ -1169,9 +1171,24 @@ describe('expedition salvage', () => {
     s = salvageCard(s, named('mythic'));
     s = salvageCard(s, named('mythic'));
     expect(wildcardsOf(s.run!.build, 'uncommon')).toBe(1);
-    const pick = wildcardCards(s.run!, 'uncommon')[0]!;
+    const pick = wildcardCards('uncommon', runPackSets(s.run!))[0]!;
     expect(redeemWildcard(s, 'rare', pick)).toEqual(s);
     expect(redeemWildcard(s, 'uncommon', named('rare'))).toEqual(s);
+    s = redeemWildcard(s, 'uncommon', pick);
+    expect(wildcardsOf(s.run!.build, 'uncommon')).toBe(0);
+    expect(s.run!.build.side[pick]).toBe(1);
+  });
+
+  it('redeems a wildcard for a card of its rarity from another set', () => {
+    let s = withSide(started(), { [named('mythic')]: 2 });
+    s = salvageCard(s, named('mythic'));
+    s = salvageCard(s, named('mythic'));
+    const own = new Set(wildcardCards('uncommon', runPackSets(s.run!)));
+    const other = (Object.keys(PACK_SET_NAMES) as (keyof typeof PACK_SET_NAMES)[]).find(
+      (set) => !runPackSets(s.run!).includes(set),
+    )!;
+    const pick = wildcardCards('uncommon', [other]).find((n) => !own.has(n))!;
+    expect(wildcardCards('uncommon')).toContain(pick);
     s = redeemWildcard(s, 'uncommon', pick);
     expect(wildcardsOf(s.run!.build, 'uncommon')).toBe(0);
     expect(s.run!.build.side[pick]).toBe(1);
