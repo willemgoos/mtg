@@ -318,6 +318,11 @@ export function Board({
       if (d.options.includes(id)) act({ type: 'chooseCard', player: HUMAN, card: id });
       return;
     }
+    // "Sacrifice N <kind>" (The Goose Mother's Food, Daemogoth Titan): one permanent per click.
+    if (d.kind === 'sacrificeSeveral') {
+      if (d.options.includes(id)) act({ type: 'chooseCard', player: HUMAN, card: id });
+      return;
+    }
     // Reality Fracture (17a fixes): ward's sacrifices.
     if (d.kind === 'wardSacrifice') {
       if (legal.some((a) => a.type === 'chooseCard' && a.card === id))
@@ -440,6 +445,7 @@ export function Board({
           ? 'option'
           : null;
     if (myDecision && d.kind === 'sacrifice') return d.options.includes(id) ? 'option' : null;
+    if (myDecision && d.kind === 'sacrificeSeveral') return d.options.includes(id) ? 'option' : null;
     if (myDecision && d.kind === 'wardSacrifice')
       return legal.some((a) => a.type === 'chooseCard' && a.card === id) ? 'option' : null;
     if (myDecision && d.kind === 'forage') return d.foods.includes(id) ? 'option' : null;
@@ -728,6 +734,10 @@ export function Board({
         return { prompt: 'Search your library' };
       case 'sacrifice':
         return { prompt: 'Choose a creature to sacrifice' };
+      case 'sacrificeSeveral':
+        return {
+          prompt: `${nameOf(d.resume.sourceDefId)}: sacrifice ${d.count === 1 ? 'a permanent' : `${d.count} permanents`} (click to choose)`,
+        };
       // Reality Fracture (17a fixes): ward's sacrifices.
       case 'wardSacrifice':
         return {
