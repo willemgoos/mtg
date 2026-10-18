@@ -1068,3 +1068,13 @@
 .shell .jumpin__list li.jumpin__slot span.is-rare {
   color: var(--h-accent);
 }
+
+/* The second filter row: what the card does, its type, deck fit and sort. */
+.shell .xfilters__more {
+  display: flex;
+  flex-basis: 100%;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem 0.75rem;
+}

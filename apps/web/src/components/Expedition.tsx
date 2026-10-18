@@ -74,7 +74,6 @@ import { useCardFilters } from './CardFilters.tsx';
 import { DeckBuilder } from './DeckBuilder.tsx';
 import './home.css';
 import './expedition.css';
-import './cardsearch.css'; // the redeem screen's set picker
 import { PackOpening, packName } from './PackOpening.tsx';
 import { HoverPreview, type HoverState } from './Preview.tsx';
 import { UiSize } from './UiSize.tsx';
@@ -1373,15 +1372,28 @@ function Salvage({
     redeemFrom === 'run' ? runPackSets(run) : redeemFrom === 'all' ? ALL_PACK_SETS : [redeemFrom];
   const b = run.build;
   const redeeming = choice && wildcardsOf(b, choice) > 0 ? choice : null;
-  const picker = useCardFilters();
-  const filters = useCardFilters({ rarity: true });
+  // The deck's colours (its spells'), for "Fits my deck".
+  const deckColours = useMemo(
+    () =>
+      new Set(
+        Object.keys(b.main).flatMap((n) => {
+          const c = scryfallById.get(slug(n));
+          return c && !c.typeLine.includes('Land') ? c.colors : [];
+        }),
+      ),
+    [b.main],
+  );
+  const picker = useCardFilters({ more: true, deckColours });
+  const filters = useCardFilters({ rarity: true, more: true, deckColours });
   const [where, setWhere] = useState<'all' | 'spare' | 'deck'>('all');
   const cards = useMemo(() => pickable(run, 'mirror'), [run]);
-  const shown = cards.filter(
-    (n) =>
-      filters.test(n) &&
-      (where === 'all' || (where === 'spare' ? (b.side[n] ?? 0) > 0 : (b.main[n] ?? 0) > 0)),
-  );
+  const shown = filters
+    .sort(cards)
+    .filter(
+      (n) =>
+        filters.test(n) &&
+        (where === 'all' || (where === 'spare' ? (b.side[n] ?? 0) > 0 : (b.main[n] ?? 0) > 0)),
+    );
   const meter = b.salvage ?? 0;
   const untilRare = RARE_EVERY - ((b.fills ?? 0) % RARE_EVERY);
   const kinds: WildcardRarity[] = ['uncommon', 'rare'];
@@ -1421,7 +1433,8 @@ function Salvage({
           </label>,
         )}
         <div className="merchant__cards">
-          {wildcardCards(redeeming, redeemSets)
+          {picker
+            .sort(wildcardCards(redeeming, redeemSets))
             .filter(picker.test)
             .map((name) => (
               <button
