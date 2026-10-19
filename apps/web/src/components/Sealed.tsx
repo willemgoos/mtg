@@ -39,9 +39,11 @@ import {
   statusOf,
 } from '../game/sealed.ts';
 import { createSeasonRepository } from '../game/seasonStorage.ts';
+import { ruleNotes } from '../game/notes.ts';
 import { play } from '../game/sound.ts';
 import { DeckBuilder } from './DeckBuilder.tsx';
-import { BoosterReveal, packArt } from './PackOpening.tsx';
+import { BoosterReveal, packArt, RANK, rarityOf } from './PackOpening.tsx';
+import { HoverPreview, type HoverState } from './Preview.tsx';
 import { UiSize } from './UiSize.tsx';
 import './home.css';
 import './expedition.css';
@@ -412,9 +414,11 @@ function Reveal({
   const sets = useMemo(() => sealedPackSets(event), [event.seed, event.set]);
   // The promo comes first (-1), then the packs.
   const [index, setIndex] = useState(-1);
+  const [all, setAll] = useState(false);
   const last = index === packs.length - 1;
   const save = event.seasonSaveId ? info.names[event.seasonSaveId] : undefined;
   if (index < 0) return <PromoReveal event={event} onDone={() => setIndex(0)} />;
+  if (all) return <AllPacks packs={packs} onDone={onDone} />;
   return (
     <>
       <BoosterReveal
@@ -432,11 +436,67 @@ function Reveal({
         onDone={() => (last ? onDone() : setIndex(index + 1))}
       />
       <div className="shell sealed-skip">
+        <button className="btn btn--ghost" onClick={() => setAll(true)}>
+          Open all
+        </button>
         <button className="btn btn--ghost" onClick={onDone}>
           Skip to deck
         </button>
       </div>
     </>
+  );
+}
+
+/** "Open all": every pack's cards face up on one screen, best first, instead of pack by pack. */
+function AllPacks({
+  packs,
+  onDone,
+}: {
+  packs: readonly { cards: string[]; foil?: number }[];
+  onDone: () => void;
+}) {
+  const cards = useMemo(
+    () =>
+      packs
+        .flatMap((p) => p.cards.map((name, i) => ({ name, foil: i === p.foil })))
+        .sort(
+          (a, b) => RANK[rarityOf(b.name)] - RANK[rarityOf(a.name)] || a.name.localeCompare(b.name),
+        ),
+    [packs],
+  );
+  const [hover, setHover] = useState<HoverState | null>(null);
+  return (
+    <div className="start shell sealed-all">
+      <UiSize />
+      <div className="start__title">
+        <span className="start__eyebrow">Sealed · All {packs.length} packs</span>
+        <h1>Your pool</h1>
+        <p>Every card is in your pool, rares and mythics first.</p>
+      </div>
+      <div className="sealed-all__grid">
+        {cards.map(({ name, foil }, i) => {
+          const defId = slug(name);
+          const img = scryfallById.get(defId)?.image?.normal;
+          return (
+            <span
+              key={i}
+              className={`sealed-all__card sealed-all__card--${rarityOf(name)} ${foil ? 'is-foil' : ''}`}
+              style={{ '--i': i } as React.CSSProperties}
+              onMouseEnter={(e) => setHover({ defId, anchor: e.currentTarget })}
+              onMouseLeave={() => setHover(null)}
+            >
+              {img ? <img src={img} alt={name} draggable={false} /> : name}
+            </span>
+          );
+        })}
+      </div>
+      <div className="gauntlet__actions">
+        <button className="btn btn--primary btn--big" onClick={onDone}>
+          Build deck
+        </button>
+      </div>
+      <HoverPreview hover={hover} notes={hover ? ruleNotes(hover.defId) : []} />
+    </div>
   );
 }
 

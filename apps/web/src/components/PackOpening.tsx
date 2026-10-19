@@ -60,13 +60,13 @@ export function packArt(p: Pack, set: PackSet = 'fdn'): string {
 
 const packGlow = (p: Pack) => (p.kind === 'color' ? `var(--mana-${p.color})` : 'var(--brass)');
 
-type Rarity = 'common' | 'uncommon' | 'rare' | 'mythic';
-const RANK: Record<Rarity, number> = { common: 0, uncommon: 1, rare: 2, mythic: 3 };
+export type Rarity = 'common' | 'uncommon' | 'rare' | 'mythic';
+export const RANK: Record<Rarity, number> = { common: 0, uncommon: 1, rare: 2, mythic: 3 };
 /** Season packs can hold wildcards: they travel through the reveal as `Wildcard: <rarity>`. */
 const WILDCARD = 'Wildcard: ';
 export const wildcardName = (rarity: Rarity) => `${WILDCARD}${rarity}`;
 /** A Mystical Archive card shows its archive rarity, not that of the printing the game has for it. */
-const rarityOf = (name: string) =>
+export const rarityOf = (name: string) =>
   (name.startsWith(WILDCARD)
     ? name.slice(WILDCARD.length)
     : (ARCHIVE_RARITY.get(name) ?? scryfallById.get(slug(name))?.rarity ?? 'common')) as Rarity;
