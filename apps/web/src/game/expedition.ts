@@ -1849,7 +1849,7 @@ const COLOR_WORDS: Record<Color, string> = {
   G: 'green',
 };
 const RARITY_SCORE: Record<string, number> = { common: 1, uncommon: 2, rare: 3, mythic: 4 };
-const isLand = (name: string) => byName.get(name)?.typeLine.includes('Land') ?? false;
+export const isLand = (name: string) => byName.get(name)?.typeLine.includes('Land') ?? false;
 const colorsOf = (name: string) => (byName.get(name)?.colors ?? []) as Color[];
 const mv = (name: string) => manaValue(byName.get(name)?.manaCost ?? '');
 
@@ -1936,14 +1936,19 @@ export function castable(name: string, colors: readonly Color[]): boolean {
  * The best 23 spells for a deck: highest rated first, with a shape a person
  * would want: about 15 creatures, a handful of cheap plays and few expensive cards.
  */
-export function pickSpells(cards: readonly string[], fill = true): string[] {
-  const rest = [...cards].sort((a, b) => rateCard(b) - rateCard(a) || mv(a) - mv(b));
+export function pickSpells(
+  cards: readonly string[],
+  fill = true,
+  /** How good each card looks to the builder; a bot that misjudges cards passes its own. */
+  rate: (name: string) => number = rateCard,
+): string[] {
+  const rest = [...cards].sort((a, b) => rate(b) - rate(a) || mv(a) - mv(b));
   const picked: string[] = [];
   const count = (pred: (n: string) => boolean) => picked.filter(pred).length;
   while (picked.length < SPELLS_PER_40 && rest.length) {
     const left = SPELLS_PER_40 - picked.length;
     const wantCreatures = Math.max(0, 15 - count(isCreature));
-    const wantCheap = Math.max(0, 5 - count((n) => mv(n) <= 2 && rateCard(n) >= 2));
+    const wantCheap = Math.max(0, 5 - count((n) => mv(n) <= 2 && rate(n) >= 2));
     let best = -1;
     let bestScore = -Infinity;
     for (let i = 0; i < rest.length; i++) {
@@ -1956,9 +1961,9 @@ export function pickSpells(cards: readonly string[], fill = true): string[] {
       )
         continue;
       if (wantCreatures >= left && !isCreature(n)) continue;
-      let s = rateCard(n);
+      let s = rate(n);
       if (wantCreatures && isCreature(n)) s += 0.35;
-      if (wantCheap && cost <= 2 && rateCard(n) >= 2) s += 0.3;
+      if (wantCheap && cost <= 2 && rate(n) >= 2) s += 0.3;
       if (s > bestScore) {
         bestScore = s;
         best = i;
@@ -1973,8 +1978,10 @@ export function pickSpells(cards: readonly string[], fill = true): string[] {
 }
 
 /** How strong a deck is: quality counts more than depth (filler adds little). */
-export const deckStrength = (spells: readonly string[]) =>
-  spells.reduce((k, n) => k + Math.max(0, rateCard(n) - 1.5), 0);
+export const deckStrength = (
+  spells: readonly string[],
+  rate: (name: string) => number = rateCard,
+) => spells.reduce((k, n) => k + Math.max(0, rate(n) - 1.5), 0);
 
 /** Whether the pool can make colour `c` besides its basics: a land, rock or fetch for it. */
 export const canFix = (pool: Counts, c: Color) =>
@@ -2003,15 +2010,17 @@ export function scorePair(
   pool: Counts,
   pair: readonly Color[],
   fill = true,
+  rate: (name: string) => number = rateCard,
 ): { spells: string[]; score: number } {
   const spells = pickSpells(
     copies.filter((n) => castable(n, pair)),
     fill,
+    rate,
   );
   const fixing = Object.keys(pool).filter(
     (n) => isLand(n) && landColors(n).length === 2 && landColors(n).every((c) => pair.includes(c)),
   ).length;
-  return { spells, score: deckStrength(spells) + 0.3 * Math.min(fixing, 3) };
+  return { spells, score: deckStrength(spells, rate) + 0.3 * Math.min(fixing, 3) };
 }
 
 /**
@@ -2024,8 +2033,13 @@ export function scorePair(
 export function suggestDeck(
   b: Build,
   /** Build this colour pair instead of the strongest one. */
-  opts: { colors?: readonly [Color, Color] } = {},
+  opts: {
+    colors?: readonly [Color, Color];
+    /** How good each card looks (default: its real rating); a bot's misjudgements go here. */
+    rate?: (name: string) => number;
+  } = {},
 ): Pick<Build, 'main' | 'side'> {
+  const rate = opts.rate ?? rateCard;
   const pool: Counts = {};
   for (const [n, k] of [...Object.entries(b.main), ...Object.entries(b.side)])
     if (!isBasic(n)) pool[n] = (pool[n] ?? 0) + k;
@@ -2038,7 +2052,7 @@ export function suggestDeck(
   let spells: string[] = [];
   let best = -Infinity;
   for (const pair of opts.colors ? [[...opts.colors]] : colourPairList()) {
-    const s = scorePair(copies, pool, pair);
+    const s = scorePair(copies, pool, pair, true, rate);
     if (s.score > best) [best, two, spells] = [s.score, pair, s.spells];
   }
 
@@ -2048,19 +2062,19 @@ export function suggestDeck(
       .filter((n) => !castable(n, two) && castable(n, [...two, c]) && colorsOf(n).includes(c))
       .filter((n) => {
         const pips = [...(byName.get(n)?.manaCost ?? '').matchAll(/\{[^}]*[WUBRG][^}]*\}/g)];
-        return pips.length === 1 && mv(n) <= 5 && rateCard(n) >= 4;
+        return pips.length === 1 && mv(n) <= 5 && rate(n) >= 4;
       })
-      .sort((x, y) => rateCard(y) - rateCard(x))
+      .sort((x, y) => rate(y) - rate(x))
       .slice(0, 2);
   const options = COLORS.filter((c) => !two.includes(c) && canFix(pool, c))
     .map((c) => ({ c, cards: bombs(c) }))
     .filter((o) => o.cards.length)
-    .sort((x, y) => rateCard(y.cards[0]!) - rateCard(x.cards[0]!));
+    .sort((x, y) => rate(y.cards[0]!) - rate(x.cards[0]!));
   if (options.length && spells.length >= SPELLS_PER_40) {
     const { cards } = options[0]!;
     // Replace the weakest cards, but only when the bomb is clearly better.
-    const weakest = [...spells].sort((x, y) => rateCard(x) - rateCard(y));
-    const swaps = cards.filter((n, i) => rateCard(n) - rateCard(weakest[i]!) >= 1);
+    const weakest = [...spells].sort((x, y) => rate(x) - rate(y));
+    const swaps = cards.filter((n, i) => rate(n) - rate(weakest[i]!) >= 1);
     if (swaps.length) {
       swaps.forEach((n, i) => spells.splice(spells.indexOf(weakest[i]!), 1, n));
     }
@@ -2070,13 +2084,11 @@ export function suggestDeck(
     const spare = (extra: readonly Color[]) => {
       const left = [...copies];
       for (const n of spells) left.splice(left.indexOf(n), 1);
-      return left
-        .filter((n) => castable(n, [...two, ...extra]))
-        .sort((x, y) => rateCard(y) - rateCard(x));
+      return left.filter((n) => castable(n, [...two, ...extra])).sort((x, y) => rate(y) - rate(x));
     };
     const third = COLORS.filter((c) => !two.includes(c))
       .map((c) => ({ c, fill: spare([c]).slice(0, SPELLS_PER_40 - spells.length) }))
-      .sort((x, y) => deckStrength(y.fill) - deckStrength(x.fill))[0];
+      .sort((x, y) => deckStrength(y.fill, rate) - deckStrength(x.fill, rate))[0];
     if (third) spells.push(...third.fill);
     if (spells.length < SPELLS_PER_40)
       spells.push(...spare(COLORS).slice(0, SPELLS_PER_40 - spells.length));

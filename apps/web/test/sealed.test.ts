@@ -5,7 +5,16 @@ import { TDM_BOOSTER_LIST } from '../../../packages/cards/src/tdm/booster-list.t
 import { HOB_BOOSTER_LIST } from '../../../packages/cards/src/hob/booster-list.ts';
 import { LTR_BOOSTER_LIST } from '../../../packages/cards/src/ltr/booster-list.ts';
 import { WOE_BOOSTER_LIST } from '../../../packages/cards/src/woe/booster-list.ts';
-import { PACK_SET_NAMES, type PackSet, rollPlayBooster, size } from '../src/game/expedition.ts';
+import {
+  type Counts,
+  deckStrength,
+  isLand,
+  PACK_SET_NAMES,
+  type PackSet,
+  rollPlayBooster,
+  size,
+  suggestDeck,
+} from '../src/game/expedition.ts';
 import {
   addSealedBasics,
   applySealedSuggestion,
@@ -18,6 +27,7 @@ import {
   loadSealed,
   markSealedRevealed,
   matchNumber,
+  misjudged,
   moveSealedCard,
   opponentFor,
   paySealedPrize,
@@ -218,7 +228,7 @@ describe('sealed opponents', () => {
       return tough / 300;
     };
     expect(share(6)).toBeGreaterThan(share(0));
-  });
+  }, 60_000);
 
   it('start gently: no Master before 2 wins, no Novice from 3 wins', () => {
     const e = ready('fdn', 3).event!;
@@ -227,7 +237,41 @@ describe('sealed opponents', () => {
       expect(opponentFor({ ...e, seed: n, wins: 1 }, n).bot).not.toBe('search');
       expect(opponentFor({ ...e, seed: n, wins: 3 }, n).bot).not.toBe('easy');
     }
-  });
+  }, 60_000);
+
+  it('build worse decks the weaker they are, but every skill slips sometimes', () => {
+    const spells = (main: Counts) =>
+      Object.entries(main).flatMap(([n, k]) => (isLand(n) ? [] : Array<string>(k).fill(n)));
+    const build = (pool: Counts, rate?: (n: string) => number) =>
+      spells(suggestDeck({ main: {}, side: pool, opened: 0, packs: [], fresh: [] }, { rate }).main);
+    const same = (a: string[], b: string[]) => a.sort().join() === b.sort().join();
+    const tally = {
+      easy: { strength: 0, slips: 0 },
+      heuristic: { strength: 0, slips: 0 },
+      search: { strength: 0, slips: 0 },
+    };
+    let best = 0;
+    const N = 30;
+    for (let seed = 0; seed < N; seed++) {
+      const pool: Counts = {};
+      for (const n of sealedPool({ seed, set: 'fdn' })) pool[n] = (pool[n] ?? 0) + 1;
+      const ideal = build(pool);
+      best += deckStrength(ideal);
+      for (const bot of ['easy', 'heuristic', 'search'] as const) {
+        const deck = build(pool, misjudged(bot, seed));
+        tally[bot].strength += deckStrength(deck);
+        if (!same(deck, ideal)) tally[bot].slips++;
+      }
+    }
+    expect(best).toBeGreaterThan(tally.search.strength);
+    expect(tally.search.strength).toBeGreaterThan(tally.easy.strength);
+    expect(tally.heuristic.strength).toBeGreaterThan(tally.easy.strength);
+    expect(tally.search.slips).toBeGreaterThan(0);
+    expect(tally.easy.slips).toBeGreaterThan(tally.search.slips);
+    // A Master's deck stays close to the best one; a Novice's gives up a fair bit.
+    expect(tally.search.strength / best).toBeGreaterThan(0.99);
+    expect(tally.easy.strength / best).toBeLessThan(0.97);
+  }, 60_000);
 
   it('are named after their colours', () => {
     expect(colorsName(['W', 'U'])).toBe('Azorius');

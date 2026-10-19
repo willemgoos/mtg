@@ -4,8 +4,10 @@ import type { BotKind } from './bot.worker.ts';
 import {
   BASICS,
   type Build,
+  castable,
   type Counts,
   deckColors,
+  isLand,
   mainColors,
   MIN_DECK,
   PACK_SET_NAMES,
@@ -18,6 +20,7 @@ import {
   suggestDeck,
 } from './expedition.ts';
 import { rng } from './gauntlet.ts';
+import { rateCard } from './limitedRating.ts';
 import {
   awardSeasonPrize,
   grantSeasonCards,
@@ -29,8 +32,9 @@ import {
  * Sealed: Arena's event against bots. You pick a set and open six boosters (72 cards), build a
  * 40-card deck from the pool with free basics, then play best-of-one matches until you have
  * seven wins or three losses. Each opponent opens six boosters of its own and builds a deck
- * with the same suggester as the "Suggest a deck" button; its skill is random, leaning
- * tougher as your wins go up. Draws are replayed.
+ * with the same suggester as the "Suggest a deck" button, but misjudging some cards the way a
+ * player would (Novices a lot, Masters barely); its skill is random, leaning tougher as your
+ * wins go up. Draws are replayed.
  *
  * An event belongs to the Season save that was active when it started: opening the pool adds
  * its cards to that save's collection and the end of the event pays coins and Season packs
@@ -112,6 +116,7 @@ const derive = (seed: number, salt: number): number =>
 const PLAYER_SALT = 0;
 const FOE_SALT = 1000;
 const BOT_SALT = 5000;
+const MISJUDGE_SALT = 7000;
 const PROMO_SALT = 9000;
 const CHAOS_SALT = 9500;
 
@@ -375,25 +380,94 @@ export const BOT_ODDS = (wins: number): [easy: number, heuristic: number, search
         : [0, 0.45, 0.55];
 
 /**
+ * How far off a bot's eye for cards is, by skill: every card in its pool looks up to this much
+ * better or worse than its rating (the same for each copy, like a player who over- or
+ * underrates a card). Small slips swap a filler card; big ones can cost a Novice its best
+ * colours, its curve or its bomb.
+ */
+export const MISJUDGE: Record<SealedBot, number> = { easy: 1.2, heuristic: 0.6, search: 0.15 };
+
+/** Chance a bot also miscounts its lands: 16 or 18 instead of 17. */
+export const LAND_SLIP: Record<SealedBot, number> = { easy: 0.35, heuristic: 0.15, search: 0.04 };
+
+type SealedBot = 'easy' | 'heuristic' | 'search';
+
+/** A seeded string hash, so each card gets its own misjudgement. */
+const hashName = (name: string, seed: number): number => {
+  let h = seed >>> 0;
+  for (let i = 0; i < name.length; i++) h = Math.imul(h ^ name.charCodeAt(i), 0x01000193) >>> 0;
+  return h;
+};
+
+/** How good cards look to a bot of skill `bot`: the real rating plus a fixed slip per card. */
+export function misjudged(bot: SealedBot, seed: number): (name: string) => number {
+  const spread = MISJUDGE[bot];
+  const seen = new Map<string, number>();
+  return (name) => {
+    let r = seen.get(name);
+    if (r === undefined) {
+      const roll = rng(hashName(name, seed));
+      // Triangular around zero: most cards are judged about right, a few way off.
+      r = rateCard(name) + (roll() + roll() - 1) * spread;
+      seen.set(name, r);
+    }
+    return r;
+  };
+}
+
+/**
  * The opponent of match `n`: a deck from six boosters of its own (for Chaos, six sets of its own
- * too), and a bot skill. Registers the deck.
+ * too), and a bot skill. The deck is built like the "Suggest a deck" button, but through the
+ * bot's own eyes: every skill makes mistakes, Masters barely any and Novices quite a few.
+ * Registers the deck.
  */
 export function opponentFor(e: SealedEvent, n: number): { deck: Decklist; bot: BotKind } {
   const foe = derive(e.seed, FOE_SALT + n);
+  const roll = rng(derive(e.seed, BOT_SALT + n));
+  const [easy, heuristic] = BOT_ODDS(e.wins);
+  const skill = roll();
+  const bot: SealedBot = skill < easy ? 'easy' : skill < easy + heuristic ? 'heuristic' : 'search';
+  const rate = misjudged(bot, derive(e.seed, MISJUDGE_SALT + n));
   const pool = countOf(sealedPool({ seed: foe, set: e.set }));
-  const { main } = suggestDeck({ main: {}, side: pool, opened: 0, packs: [], fresh: [] });
+  const { main } = suggestDeck({ main: {}, side: pool, opened: 0, packs: [], fresh: [] }, { rate });
   // Whatever the suggester does, a bot deck is always a legal 40.
   const dominant = deckColors({ main, side: {}, opened: 0, packs: [], fresh: [] })[0] ?? 'G';
   const short = MIN_DECK - size(main);
   const filled =
     short > 0 ? { ...main, [BASICS[dominant]]: (main[BASICS[dominant]] ?? 0) + short } : main;
   const colors = mainColors(buildOf({ main: filled, side: {} }));
+  if (roll() < LAND_SLIP[bot]) miscountLands(filled, pool, colors, BASICS[dominant], rate, roll());
   const deck = listOf(`sealed:${e.id}:${n}`, colorsName(colors), e.set, filled);
   registerDeck(deck);
-  const roll = rng(derive(e.seed, BOT_SALT + n))();
-  const [easy, heuristic] = BOT_ODDS(e.wins);
-  const bot: BotKind = roll < easy ? 'easy' : roll < easy + heuristic ? 'heuristic' : 'search';
   return { deck, bot };
+}
+
+/**
+ * A land too many (the weakest-looking spell makes way for a basic) or one too few (a basic
+ * makes way for the best-looking spell left in the pool). Changes `main` in place.
+ */
+function miscountLands(
+  main: Counts,
+  pool: Counts,
+  colors: readonly Color[],
+  basic: string,
+  rate: (name: string) => number,
+  coin: number,
+): void {
+  const spells = Object.keys(main).filter((n) => !isLand(n));
+  if (coin < 0.5) {
+    const weakest = spells.sort((a, b) => rate(a) - rate(b))[0];
+    if (!weakest) return;
+    if (!--main[weakest]!) delete main[weakest];
+    main[basic] = (main[basic] ?? 0) + 1;
+    return;
+  }
+  const spare = Object.keys(pool)
+    .filter((n) => !isLand(n) && (pool[n] ?? 0) > (main[n] ?? 0) && castable(n, colors))
+    .sort((a, b) => rate(b) - rate(a))[0];
+  if (!spare || !main[basic]) return;
+  if (!--main[basic]) delete main[basic];
+  main[spare] = (main[spare] ?? 0) + 1;
 }
 
 /** The opponent of the match to play now. */
