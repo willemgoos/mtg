@@ -43,6 +43,27 @@ function cardTags(o: GameObject, def: CardDefinition | undefined, view: GameStat
 const isLand = (s: GameState, id: ObjectId) =>
   !!cardDb.get(s.objects[id]!.defId)?.types.includes('Land');
 
+/**
+ * Arena piles identical permanents into one stack with an "×N" tag, so a dozen Foods or Rat tokens
+ * don't run off the board. `keyOf` says what must match (null: shown on its own); the piles keep the
+ * order of their first card.
+ */
+function piles(ids: ObjectId[], keyOf: (id: ObjectId) => string | null): ObjectId[][] {
+  const out: ObjectId[][] = [];
+  const byKey = new Map<string, ObjectId[]>();
+  for (const id of ids) {
+    const key = keyOf(id);
+    const pile = key === null ? undefined : byKey.get(key);
+    if (pile) pile.push(id);
+    else {
+      const fresh = [id];
+      out.push(fresh);
+      if (key !== null) byKey.set(key, fresh);
+    }
+  }
+  return out;
+}
+
 // ---------------------------------------------------------------------------
 // Battlefield
 // ---------------------------------------------------------------------------
@@ -82,50 +103,97 @@ export function Battlefield({
     groups.set(d, [...(groups.get(d) ?? []), id]);
   }
 
-  // Cards tucked behind a creature (Equipment) don't take a slot of their own.
-  const slots = nonLands.filter((id) => view.objects[id]!.attachedTo === undefined).length;
+  // Something attached to it, or attached to something: never piled.
+  const linked = (id: ObjectId) =>
+    view.objects[id]!.attachedTo !== undefined ||
+    mine.some((x) => view.objects[x]!.attachedTo === id);
+  // Creature tokens pile when everything shown on them matches (size, counters, damage, tapped,
+  // summoning sickness, keywords, labels, and how the board marks them right now).
+  const creaturePiles = piles(nonLands, (id) => {
+    const o = view.objects[id]!;
+    if (!o.isToken || linked(id)) return null;
+    const c = getCharacteristics(view, cardDb, id);
+    return [
+      o.defId,
+      o.tapped,
+      o.summoningSick,
+      c.power,
+      c.toughness,
+      o.plusOneCounters,
+      o.damage,
+      [...c.keywords].sort().join(','),
+      cardTags(o, cardDb.get(o.defId), view).join(','),
+      h.markOf(id) ?? '',
+    ].join('|');
+  });
+  // The back row's other permanents (Food, Treasure, Clues, enchantments) pile by name and labels.
+  const otherPiles = piles(others, (id) => {
+    const o = view.objects[id]!;
+    const def = cardDb.get(o.defId);
+    if (linked(id) || def?.types.includes('Planeswalker')) return null;
+    return [o.defId, cardTags(o, def, view).join(','), h.markOf(id) ?? ''].join('|');
+  });
+
+  // Cards tucked behind a creature (Equipment) don't take a slot of their own; a pile takes one.
+  const slots = creaturePiles.filter((p) => view.objects[p[0]!]!.attachedTo === undefined).length;
   const creatures = (
     <div
       className="row row--creatures"
       style={{ '--n': Math.max(1, slots) } as React.CSSProperties}
     >
-      {nonLands.map((id) => {
-        const o = view.objects[id]!;
-        const def = cardDb.get(o.defId);
-        const c = getCharacteristics(view, cardDb, id);
-        const creature = def?.types.includes('Creature');
+      {creaturePiles.map((pile) => {
+        const card = (id: ObjectId, i?: number) => {
+          const o = view.objects[id]!;
+          const def = cardDb.get(o.defId);
+          const c = getCharacteristics(view, cardDb, id);
+          const creature = def?.types.includes('Creature');
+          return (
+            <Card
+              key={id}
+              {...(i !== undefined ? { style: { '--i': i } as React.CSSProperties } : {})}
+              id={id}
+              defId={o.defId}
+              size="field"
+              tapped={o.tapped}
+              attached={o.attachedTo !== undefined}
+              mark={h.markOf(id)}
+              sick={
+                creature &&
+                o.summoningSick &&
+                !c.keywords.has('haste') &&
+                o.controller === view.turn.activePlayer
+              }
+              {...(creature
+                ? {
+                    power: c.power,
+                    toughness: c.toughness,
+                    basePower: o.copyPT?.power ?? def?.power ?? 0,
+                    baseToughness: o.copyPT?.toughness ?? def?.toughness ?? 0,
+                    damage: o.damage,
+                    counters: o.plusOneCounters,
+                    keywords: c.keywords,
+                  }
+                : {})}
+              // Reality Fracture (17c): a planeswalker's loyalty (the Jace token has no printed number to look at).
+              {...(def?.types.includes('Planeswalker')
+                ? { loyalty: o.counters?.loyalty ?? 0 }
+                : {})}
+              tags={cardTags(o, def, view)}
+              onClick={() => h.onCard(id)}
+              onHover={h.onHover}
+            />
+          );
+        };
+        if (pile.length === 1) return card(pile[0]!);
         return (
-          <Card
-            key={id}
-            id={id}
-            defId={o.defId}
-            size="field"
-            tapped={o.tapped}
-            attached={o.attachedTo !== undefined}
-            mark={h.markOf(id)}
-            sick={
-              creature &&
-              o.summoningSick &&
-              !c.keywords.has('haste') &&
-              o.controller === view.turn.activePlayer
-            }
-            {...(creature
-              ? {
-                  power: c.power,
-                  toughness: c.toughness,
-                  basePower: o.copyPT?.power ?? def?.power ?? 0,
-                  baseToughness: o.copyPT?.toughness ?? def?.toughness ?? 0,
-                  damage: o.damage,
-                  counters: o.plusOneCounters,
-                  keywords: c.keywords,
-                }
-              : {})}
-            // Reality Fracture (17c): a planeswalker's loyalty (the Jace token has no printed number to look at).
-            {...(def?.types.includes('Planeswalker') ? { loyalty: o.counters?.loyalty ?? 0 } : {})}
-            tags={cardTags(o, def, view)}
-            onClick={() => h.onCard(id)}
-            onHover={h.onHover}
-          />
+          <div
+            key={pile[0]}
+            className={`token-pile ${view.objects[pile[0]!]!.tapped ? 'is-tapped' : ''}`}
+            style={{ '--n': pile.length } as React.CSSProperties}
+          >
+            {pile.map((id, i) => card(id, i))}
+            <span className="land-stack__count">×{pile.length}</span>
+          </div>
         );
       })}
     </div>
@@ -167,22 +235,47 @@ export function Battlefield({
           </div>
         );
       })}
-      {others.map((id) => {
-        const o = view.objects[id]!;
-        const def = cardDb.get(o.defId);
+      {otherPiles.map((pile) => {
+        const card = (id: ObjectId, style?: React.CSSProperties) => {
+          const o = view.objects[id]!;
+          const def = cardDb.get(o.defId);
+          return (
+            <Card
+              key={id}
+              id={id}
+              defId={o.defId}
+              size="land"
+              tapped={o.tapped}
+              mark={h.markOf(id)}
+              {...(style ? { style } : {})}
+              {...(def?.types.includes('Planeswalker')
+                ? { loyalty: o.counters?.loyalty ?? 0 }
+                : {})}
+              tags={cardTags(o, def, view)}
+              onClick={() => h.onCard(id)}
+              onHover={h.onHover}
+            />
+          );
+        };
+        if (pile.length === 1) return card(pile[0]!);
+        // Like a land pile: untapped and tapped copies side by side, each with its count.
+        const nu = pile.filter((id) => !view.objects[id]!.tapped).length;
+        const nt = pile.length - nu;
+        let u = 0;
+        let t = 0;
         return (
-          <Card
-            key={id}
-            id={id}
-            defId={o.defId}
-            size="land"
-            tapped={o.tapped}
-            mark={h.markOf(id)}
-            {...(def?.types.includes('Planeswalker') ? { loyalty: o.counters?.loyalty ?? 0 } : {})}
-            tags={cardTags(o, def, view)}
-            onClick={() => h.onCard(id)}
-            onHover={h.onHover}
-          />
+          <div
+            className="land-stack"
+            key={pile[0]}
+            style={{ '--nu': nu, '--nt': nt, '--a': +!!nu, '--b': +!!nt } as React.CSSProperties}
+          >
+            {pile.map((id) => {
+              const tapped = !!view.objects[id]!.tapped;
+              return card(id, { '--i': tapped ? t++ : u++, '--t': +tapped } as React.CSSProperties);
+            })}
+            {nu > 1 && <span className="land-stack__count">×{nu}</span>}
+            {nt > 1 && <span className="land-stack__count land-stack__count--tapped">×{nt}</span>}
+          </div>
         );
       })}
     </div>

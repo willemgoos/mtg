@@ -683,6 +683,23 @@ body {
   top: calc((var(--lh) - var(--lw) * 0.82) / 2 - 0.375rem);
 }
 
+/* Identical creature tokens: one slot, the copies fanned a little behind each other (Arena's pile). */
+.token-pile {
+  --pile-step: 0.9375rem;
+  position: relative;
+  display: flex;
+  flex: none;
+  align-items: inherit;
+}
+
+.token-pile .card + .card {
+  margin-left: calc(var(--pile-step) - var(--w));
+}
+
+.token-pile.is-tapped .card + .card {
+  margin-left: calc(var(--pile-step) - var(--h));
+}
+
 /* ---- Tokens and card back ---- */
 
 .token {
