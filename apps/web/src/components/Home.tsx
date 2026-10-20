@@ -160,7 +160,7 @@ export function Home({
       id: 'box',
       badge: 'New mode',
       title: 'Box Brawl',
-      text: 'Crack a whole booster box, pick a legend from it as your commander, build a 60-card Brawl deck and take on bots with boxes of their own.',
+      text: 'Split a booster box with a bot, pick a legend from your half as your commander, build a 60-card Brawl deck and take on bots.',
       cta: runs.box ? 'Continue' : 'Open a box',
       art: BOX_ART,
       cards: [],
@@ -274,7 +274,7 @@ export function Home({
             <ModeTile
               name="Box Brawl"
               art={runs.box?.art ?? BOX_ART}
-              blurb="Open a whole box, pick a legend, build a 60-card Brawl deck"
+              blurb="Split a box, pick a legend, build a 60-card Brawl deck"
               run={runs.box}
               on={mode === 'box'}
               onClick={() => onMode('box')}

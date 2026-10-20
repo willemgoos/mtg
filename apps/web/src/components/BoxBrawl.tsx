@@ -6,7 +6,7 @@ import {
   BOX_LANDS,
   BOX_LOSSES,
   BOX_MAIN,
-  BOX_PACKS,
+  HALF_PACKS,
   BOX_SET_NAMES,
   BOX_WINS,
   type BoxEvent,
@@ -92,7 +92,7 @@ export function boxRunSummary(e: BoxEvent | null): RunSummary | null {
 type Update = (f: (s: BoxState) => BoxState) => void;
 
 /**
- * Box Brawl: pick a set, open a whole box, choose a commander from its legends, build a 60-card
+ * Box Brawl: pick a set, open half a box, choose a commander from its legends, build a 60-card
  * Brawl deck and play until three wins or two losses. No event is the set picker, an unopened
  * box the reveal, no commander the commander pick, and otherwise the event screen (or the deck
  * builder while you edit).
@@ -187,8 +187,8 @@ function Picker({
         <span className="start__eyebrow">Box Brawl</span>
         <h1>Choose a box</h1>
         <p>
-          Open a whole booster box, pick a legend from it as your commander and build a Brawl deck
-          around it. Bots open boxes of their own.
+          Split a booster box with your first opponent, pick a legend from your half as your
+          commander and build a Brawl deck around it. Later opponents bring half a box of their own.
         </p>
       </div>
 
@@ -221,7 +221,7 @@ function Picker({
       <div className="sealed-info">
         <ul className="sealed-rules">
           <li>
-            <strong>{BOX_PACKS}</strong> boosters
+            <strong>{HALF_PACKS}</strong> boosters (half a box)
           </li>
           <li>
             <strong>{BOX_DECK}</strong>-card deck with a commander
@@ -287,7 +287,7 @@ function Reveal({ event, onDone }: { event: BoxEvent; onDone: () => void }) {
   );
 }
 
-/** "Open all": the whole box face up, each card once with its count, rares and mythics first. */
+/** "Open all": your half of the box face up, each card once with its count, rares and mythics first. */
 function WholeBox({
   packs,
   onDone,

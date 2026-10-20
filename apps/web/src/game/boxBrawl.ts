@@ -23,13 +23,14 @@ import { rateCard } from './limitedRating.ts';
 import { BOT_ODDS, derive, misjudged } from './sealed.ts';
 
 /*
- * Box Brawl: open a whole booster box of one set (36 Play Boosters), pick a legendary creature
- * from it as your commander and build a 60-card Brawl deck around it (the commander and 59
+ * Box Brawl: split a booster box of one set (36 Play Boosters) with your first opponent, 18
+ * each, pick a legendary creature from your half as your commander and build a 60-card Brawl deck around it (the commander and 59
  * cards of its colour identity, basics free). A box has repeats, so unlike Brawl the deck may
  * hold more than one copy of a card. Then play best-of-one Brawl games (25 life, commander
- * tax) against bots that opened boxes of their own, until three wins or two losses.
+ * tax) against bots, until three wins or two losses. The first opponent plays the other half of
+ * your box; later ones bring a half of a box of their own.
  *
- * A box with no legendary creature in it offers five random ones of the set instead.
+ * A half with no legendary creature in it offers five random ones of the set instead.
  *
  * Box Brawl stands apart from Season: it keeps no cards and pays no prize (a box is a lot of
  * cards). Everything is pure state plus localStorage; the box, every opponent and its skill
@@ -40,6 +41,8 @@ import { BOT_ODDS, derive, misjudged } from './sealed.ts';
  */
 
 export const BOX_PACKS = 36;
+/** Each player opens half the box. */
+export const HALF_PACKS = BOX_PACKS / 2;
 /** The deck: the commander and 59 more. */
 export const BOX_DECK = 60;
 export const BOX_MAIN = BOX_DECK - 1;
@@ -97,6 +100,9 @@ export interface BoxState {
   records: Partial<Record<PackSet, BoxRecord>>;
 }
 
+/** One player's half of a box: `half` 0 (yours, the default) or 1 (the opponent's). */
+export type BoxHalf = Pick<BoxEvent, 'seed' | 'set'> & { half?: 0 | 1 };
+
 export const emptyBox = (): BoxState => ({ event: null, records: {} });
 
 const PLAYER_SALT = 20000;
@@ -138,8 +144,8 @@ export const fits = (name: string, identity: readonly Color[]): boolean =>
 
 const boosterCache = new Map<string, PlayBooster[]>();
 
-/** The box's 36 Play Boosters. Deterministic from the seed. */
-export function boxBoosters(e: Pick<BoxEvent, 'seed' | 'set'>): PlayBooster[] {
+/** The 18 Play Boosters of one half of the box (the box's 36 are deterministic from the seed). */
+export function boxBoosters(e: BoxHalf): PlayBooster[] {
   const key = `${e.seed}:${e.set}`;
   let packs = boosterCache.get(key);
   if (!packs) {
@@ -148,7 +154,8 @@ export function boxBoosters(e: Pick<BoxEvent, 'seed' | 'set'>): PlayBooster[] {
     );
     boosterCache.set(key, packs);
   }
-  return packs;
+  const from = (e.half ?? 0) * HALF_PACKS;
+  return packs.slice(from, from + HALF_PACKS);
 }
 
 const countOf = (names: string[]): Counts => {
@@ -157,8 +164,8 @@ const countOf = (names: string[]): Counts => {
   return c;
 };
 
-/** The box's cards (basic lands are free, so not in it). */
-export const boxPool = (e: Pick<BoxEvent, 'seed' | 'set'>): Counts =>
+/** The half's cards (basic lands are free, so not in it). */
+export const boxPool = (e: BoxHalf): Counts =>
   countOf(
     boxBoosters(e)
       .flatMap((b) => b.cards)
@@ -182,10 +189,10 @@ function setLegends(set: PackSet): string[] {
 }
 
 /**
- * Who can lead a deck from this box: its legendary creatures, best first; a box without any
+ * Who can lead a deck from this half: its legendary creatures, best first; a half without any
  * gets five random legends of its set instead (from the seed).
  */
-export function commanderChoices(e: Pick<BoxEvent, 'seed' | 'set'>): {
+export function commanderChoices(e: BoxHalf): {
   names: string[];
   gifted: boolean;
 } {
@@ -195,10 +202,10 @@ export function commanderChoices(e: Pick<BoxEvent, 'seed' | 'set'>): {
   return own.length ? { names: own, gifted: false } : { names: giftedLegends(e), gifted: true };
 }
 
-/** Five random legends of the set (from the seed), for a box without one. */
-export function giftedLegends(e: Pick<BoxEvent, 'seed' | 'set'>): string[] {
+/** Five random legends of the set (from the seed), for a half without one. */
+export function giftedLegends(e: BoxHalf): string[] {
   const all = setLegends(e.set).slice();
-  const r = rng(derive(e.seed, LEGEND_SALT));
+  const r = rng(derive(e.seed, LEGEND_SALT + (e.half ?? 0)));
   for (let i = all.length - 1; i > 0; i--) {
     const j = Math.floor(r() * (i + 1));
     [all[i], all[j]] = [all[j]!, all[i]!];
@@ -217,7 +224,7 @@ function withEvent(s: BoxState, f: (e: BoxEvent) => BoxEvent): BoxState {
   return event === s.event ? s : { ...s, event };
 }
 
-/** Starts an event: the box begins in `side`. Ignored while one is in progress. */
+/** Starts an event: your half of the box begins in `side`. Ignored while one is in progress. */
 export function startBox(s: BoxState, set: PackSet, seed: number): BoxState {
   if (s.event && !s.event.finished) return s;
   const rec = s.records[set] ?? { events: 0, best: 0, titles: 0 };
@@ -433,7 +440,7 @@ export const RECOMMENDED = 3;
 const rankCache = new Map<string, string[]>();
 
 /**
- * The commander choices, strongest deck first: each legend's suggested deck from the whole box,
+ * The commander choices, strongest deck first: each legend's suggested deck from your whole half,
  * judged as a bot judges its own (the deck plus the commander itself).
  */
 export function rankCommanders(e: Pick<BoxEvent, 'seed' | 'set'>): string[] {
@@ -506,7 +513,7 @@ type BoxBot = 'easy' | 'heuristic' | 'search';
 const foeCache = new Map<string, { deck: Decklist; bot: BotKind }>();
 
 /**
- * The opponent of game `n`: a box of its own, the legend from it that makes the strongest deck
+ * The opponent of game `n`: a half box (see `foe` below), the legend from it that makes the strongest deck
  * (through the bot's own eyes, so it misjudges cards as Sealed's bots do), and a bot skill that
  * leans tougher as your wins go up. Registers the deck.
  */
@@ -517,7 +524,8 @@ export function boxOpponent(e: BoxEvent, n: number): { deck: Decklist; bot: BotK
     registerDeck(cached.deck);
     return cached;
   }
-  const foe = { seed: derive(e.seed, FOE_SALT + n), set: e.set };
+  // The first opponent has the other half of your box; later ones a half of a box of their own.
+  const foe: BoxHalf = { seed: n ? derive(e.seed, FOE_SALT + n) : e.seed, set: e.set, half: 1 };
   const roll = rng(derive(e.seed, BOT_SALT + n));
   const [easy, heuristic] = BOT_ODDS(e.wins * 2);
   const skill = roll();
@@ -607,7 +615,8 @@ export const resignBox = (s: BoxState): BoxState =>
 // ---------------------------------------------------------------------------
 
 const KEY = 'mtg.boxBrawl.v1';
-const VERSION = 1;
+/** 2: you open half the box (an event saved with a whole box is dropped). */
+const VERSION = 2;
 
 const isCounts = (c: unknown): c is Counts =>
   !!c &&

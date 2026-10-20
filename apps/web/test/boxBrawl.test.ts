@@ -6,7 +6,7 @@ import {
   BOX_LOSSES,
   BOX_LANDS,
   BOX_MAIN,
-  BOX_PACKS,
+  HALF_PACKS,
   BOX_WINS,
   boxBoosters,
   boxOpponent,
@@ -46,10 +46,11 @@ function built(seed = 7, set: (typeof ALL_PACK_SETS)[number] = 'fdn'): BoxState 
 }
 
 describe('Box Brawl box', () => {
-  it('opens 36 Play Boosters, the same ones for a seed', () => {
+  it('opens half a box (18 Play Boosters), the same ones for a seed', () => {
     const e = started().event!;
-    expect(boxBoosters(e)).toHaveLength(BOX_PACKS);
-    expect(size(e.side)).toBeGreaterThan(BOX_PACKS * 12);
+    expect(boxBoosters(e)).toHaveLength(HALF_PACKS);
+    expect(size(e.side)).toBeGreaterThan(HALF_PACKS * 12);
+    expect(size(e.side)).toBeLessThan(HALF_PACKS * 15);
     expect(boxPool(e)).toEqual(boxPool({ seed: 7, set: 'fdn' }));
     expect(Object.keys(e.side).some((n) => n === 'Forest' || n === 'Plains')).toBe(false);
   });
@@ -171,6 +172,19 @@ describe('Box Brawl opponents', () => {
       expect(deck.cards.every(([c]) => fits(c, identityOf(deck.commander!)))).toBe(true);
     }
     expect(boxOpponent(e, 0).deck.id).not.toBe(boxOpponent(e, 1).deck.id);
+  });
+
+  it('the first one plays the other half of your box', () => {
+    const e = built().event!;
+    const mine = boxBoosters(e);
+    const theirs = boxBoosters({ ...e, half: 1 });
+    expect(theirs).toHaveLength(HALF_PACKS);
+    expect(theirs.some((p) => mine.includes(p))).toBe(false);
+    const pool = boxPool({ ...e, half: 1 });
+    const foe = boxOpponent(e, 0).deck;
+    for (const [c, k] of [...foe.cards, [foe.commander!, 1] as const])
+      if (!/^(Plains|Island|Swamp|Mountain|Forest)$/.test(c))
+        expect(k, c).toBeLessThanOrEqual(pool[c] ?? (foe.commander === c ? 1 : 0));
   });
 
   it('play a whole Brawl game against your deck', () => {
